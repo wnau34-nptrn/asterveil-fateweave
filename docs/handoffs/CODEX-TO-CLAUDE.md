@@ -1,5 +1,10 @@
 # Codex → Claude handoff
 
+## 2026-10-31 — PR #121 เซรีส A7-002 merged `52001f5`
+
+- แก้ conflict กับ #123: คงการถอด thiran/wila A7 และเพิ่มชุดท่าเซรีสครบ (attack/circle/echo + hit/block/down, 41 เฟรม); typecheck/lint/vitest 1341 ผ่าน, Playwright unit-a7 + unit-loading 30/30 ในเครื่อง, CI quality + 4 shards ผ่าน
+- ปิด Codex PR #117; #122 (A7-003 โอดราน/อิโซลด์) ค้างไว้ตาม OD-14; ถัดไป W8
+
 ## 2026-10-31 — Claude ตรวจ PR #124 ART-CHAR-CLASS-NEW-002 (เคล/วินน์/แอสทริด): ผ่าน เจ้าของอนุมัติภาพแล้ว
 
 - เจ้าของ “อนุมัติ” 2026-10-31 (ตรง) → PR #124 merged `3ed0f685` ภาพอยู่ใน `incoming/ART-CHAR-CLASS-NEW-002/` การ append เข้า `units_mercs`/`portraits_mercs`/`gear_items`/`skill_icons` และ actorArt ทำใน P03 (P03-01/02) พร้อมกฎ เพราะยังไม่มี content ของ kael/wynne/astrid; แอนิเมชันสั่ง Codex ตอน P03 ตาม OD-14

@@ -1,5 +1,11 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-31 — เซรีส A7-002 merged (PR #121 `52001f5`) → เปิดแชต W8
+
+- PR #121 (ท่าเซรีส `lalin` A7-002, เจ้าของอนุมัติ motion “อนุมัติ” 2026-10-30) merge เข้ากับฐานที่ถอด thiran/wila A7 แล้ว (#123): registry มีเฉพาะ metta/lalin, lalin 41 เฟรม down 40; quality + browser 4 shards ผ่านบน `276584a0`; ปิด Codex PR #117
+- PR #124 ภาพนิ่งเคล/วินน์/แอสทริด เจ้าของอนุมัติ 2026-10-31 merged `3ed0f685` (incoming เท่านั้น นำเข้าใน P03)
+- เงื่อนไขเปิด W8 ครบ (เซรีส + R3 merged) → เปิดแชต W8 ตามข้อความด้านล่าง (Opus); โอดราน/อิโซลด์พักตาม OD-14 (#122 ค้างไว้ ไม่นำเข้า)
+
 ## 2026-10-30 — เพลง/เงา R3 นำเข้าแล้ว (`claude/song-shadow-r3`) เจ้าของอนุมัติ motion แล้ว (“อนุมัติ” 2026-10-30)
 
 R3 (PR #111) แทนเพลง R2/เงา R1 ในเกม: atlas 27 เฟรม (R3×21 + note/decoy เดิม) 4.66 MiB decoded, finale-mend/finale-dread ตาม heal/barrier จริง, solo ที่ผู้รับ. คลิป 22 รายการ `docs/combat-presentation/song-shadow-r3-slice/` + Artifact https://claude.ai/artifact/AzESrmF88nzGGXxzi9rgJT. ค้าง: เจ้าของอนุมัติ motion → merge PR + Pages → ปิด PR #111; แชต W8 รอ PR เซรีส (`claude/cerise-a7-002`) merge ด้วย (ตอนนี้ยังไม่ตรวจพบว่า merge)
