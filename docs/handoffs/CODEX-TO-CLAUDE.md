@@ -1,5 +1,34 @@
 # Codex → Claude handoff
 
+## 2026-10-31 — เจ้าของอนุมัติ push / merge / deploy เข้าเกมจริง
+
+- เจ้าของสั่งโดยตรง “อนุมัติให้ push และ merge deploy เข้าเกมขริง” หลังตรวจรอบลบ ก/ข/ค; ข้อจำกัด remote ของรายการก่อนหน้าได้รับคำอนุญาตปลายทางแล้ว
+- Push `codex/p02-mobile-ui-polish` ไป `wnau34-nptrn/asterveil-fateweave` แล้ว; เปิด PR เข้า `feature/fateweave-initial-prototype` และรอ CI ก่อน merge/Pages ไม่มีการส่งเข้า `main`
+- Runtime ล่าสุด `b728890` (ต่อจาก `82c8d9a`); local typecheck/lint/unit 1392/build ผ่าน, browser รอบ polish 140 ข้อและรอบชื่อซ้ำ 10 ข้อผ่านตามรายการด้านล่าง; การเผยแพร่รอบนี้ยังรอผล CI/merge/deploy
+
+## 2026-10-31 — เจ้าของยกเลิกอักษร ก/ข/ค ต่อท้ายศัตรูชื่อซ้ำ (Codex)
+
+- ข้อตัดสินเจ้าของ: “ไม่เอา ก ข ค ได้มั้ย ตัวชื่อซ้ำก็เป็นตัวซ้ำถูกแล้วนะ” — ใช้ชื่อชนิดเดียวกันเหมือนกันทุกตัว แทนแนวทางคงอักษร/อธิบายกำลังเสริมของรายการก่อนหน้า
+- สาขา `codex/p02-mobile-ui-polish` ต่อจาก `b955159` (ฐานเกม `193ce1c`); ยังไม่มี PR/merge และยังไม่ push เพราะ automatic approval review บล็อกการส่ง source ไป remote ตามที่แจ้งในงานก่อนหน้า คำอนุญาตปลายทางยังค้าง
+- เปลี่ยนเฉพาะการแสดงผล: `actorName` ไม่เติมอักษรแล้ว จึงตรงกันทั้งชื่อเหนือหัว คิว/รายละเอียดเทิร์น เจตนา แท็บสถานะ accessibility และบันทึก ลบ `twinLetter`/markup/CSS/คำอธิบาย ก/ข/ค ที่ไม่ใช้ ชื่อเต็มยังอยู่ใน title เหนือหัว; ID ช่อง เป้าหมาย คำสั่ง กฎ เซฟ v45 และตัวเลขสมดุลไม่เปลี่ยน
+- ไฟล์: `src/ui/th.ts`, `battle-ui.ts`, `styles.css`, `portrait.css`; `tests/four-slots.test.ts`, `tests/browser/team-five.spec.ts`; handoff นี้/`CLAUDE-TO-CODEX-DEV-TH.md`/`NEW-CHAT-HANDOFF-TH.md`
+- ผลตรวจ: typecheck/lint/`npm test` (1392/1392, 99 files)/build ผ่าน; Playwright `team-five.spec.ts` + `status.spec.ts` **10/10 ผ่าน** (ทั้ง 5v5, ชื่อศัตรูซ้ำเท่ากันในสนาม/คิว, วิญญาณบอสเริ่มแรก, ร่ายครั้งเดียว, keyboard, reduced-motion และหน้าต่างสถานะหลาย viewport) ใช้ Chromium `/usr/bin/chromium` ตาม `PLAYWRIGHT_CHROMIUM_EXECUTABLE`; ไม่อ้างผล 140 ข้อของรายการก่อนเป็นผลรันใหม่
+- ภาพ 390px ส่งในแชต: `/tmp/fateweave-no-suffix/team-five-rift-legion-390.png` และ `team-five-warden-390.png` (ภาพใหม่ ไม่มีอักษรต่อท้าย) — Chromium จำลอง ไม่ใช่มือถือจริง/iOS
+- ค้างเดิม: push/PR/CI/merge/Pages รออนุญาตปลายทางตาม auto-review; ภาพวาด calm เป็นงานแยก, P02-03 คนจริง/อุปกรณ์จริงไม่อยู่ในงานนี้
+
+## 2026-10-31 — P02 UI polish ที่ 390px (Codex)
+
+- ฐาน: fetch `origin/feature/fateweave-initial-prototype` ล่าสุด `193ce1c` (รวม P02 PR #127 merge `4d0d2a2`, save v45); สาขางาน `codex/p02-mobile-ui-polish` → PR เข้าสาขาเกม (runtime commit `82c8d9a`; ยังไม่มี PR/merge: automatic approval review ปฏิเสธ push ไป remote โดยระบุว่า source egress ต้องได้รับอนุญาตปลายทางชัดเจนจากเจ้าของในแชต; ไม่ลองส่งผ่านช่องทางอื่น) ไม่ใช้ `main`
+- เปลี่ยนเฉพาะ DOM/CSS: คิวขอข้อมูลจาก `upcomingTurns` เดิมให้พอจำนวนคนที่ยืนอยู่ (อย่างน้อยแปด ตามเดิม) จึงเห็นครบสิบใน 5v5; เลื่อนแนวนอน/โฟกัสคีย์บอร์ดได้ ปุ่ม 44px พร้อม “คิว 10 · เลื่อนดู →”; ยกเลิกการซ่อนช่องท้ายบนจอแคบ
+- ชื่อซ้ำคง ก/ข/ค ประจำตัวให้ตรงสนาม/คิว/บันทึก เพิ่มคำอธิบายใน ⓘ สถานะและรายละเอียดคิวว่ารวมกำลังเสริมที่ยังไม่ถูกเรียก (วิญญาณ b3 จึงเป็น ข ตั้งแต่แรก); ไม่เปลี่ยน ID หรือการเรียกพวก
+- หน้าทีมค่าย/กระเป๋าที่ ≤400px เป็นสามคอลัมน์ เรียงช่อง 1–5 ตามเดิม แสดงชื่อ/HP/อาชีพ/แนวโดยไม่ตัดข้อความ; HUD ศึกยังห้าคนแถวเดียว
+- จุดล้าเพิ่มขอบและขนาด/พื้นที่ข้างชื่อ; การ์ดรับสกิลขอบทองมีพื้นและคำ “ร่าย” พร้อมคำแนะนำสำหรับ screen reader; จองความสูง HUD เท่ากันทุกสกิลเพื่อไม่ให้สนามขยับเมื่อเลือกสกิล; calm ใช้ไอคอนเส้นเดิมในกรอบเขียวให้อ่านง่ายขึ้น (ยังไม่มีภาพวาดใหม่)
+- ไฟล์ runtime: `src/ui/battle-ui.ts`, `portrait.css`, `world.css`, `battle-skin.css`; เทสต์: `tests/browser/team-five.spec.ts`, `combat.spec.ts`; เอกสาร: handoff นี้, `CLAUDE-TO-CODEX-DEV-TH.md`, `NEW-CHAT-HANDOFF-TH.md` ไม่แตะ `src/core/battle`, `src/core/save`, `src/content`, atlas หรือ playback timing
+- ผลตรวจ: `npm run typecheck`, `npm run lint`, `npm test` (1392/1392, 99 files), `npm run build` ผ่าน; Playwright `team-five.spec.ts` 5/5 + `combat.spec.ts` 46/46 + `world.spec.ts` 89/89 = **140/140 ผ่าน** (17.2 นาที) บน Chromium `/usr/bin/chromium` (export `PLAYWRIGHT_CHROMIUM_EXECUTABLE`) / reduced-motion / คีย์บอร์ด / 390px และ viewport regression 320px–desktop; หน้า `http://127.0.0.1:5173/` title `Asterveil · Fateweave`, มีเนื้อหา, ไม่มี Vite error overlay และ console/page error 0; ใช้ Playwright ตามคำสั่งเจ้าของ (Browser skill มีแต่ไม่มีเครื่องมือ runtime ที่เรียกได้); ชุดแรกพบสนามขยับจาก cue “ร่าย” แล้วแก้ความสูงก่อนทดสอบซ้ำ ไม่ใช้ผลเก่าแทนผลโค้ดสุดท้าย
+- ภาพให้เจ้าของดูในแชต (390×844 CSS px, DPR2; ไม่ใช่มือถือจริง): `/tmp/fateweave-final/team-five-rift-legion-turn2-390.png` (HUD+คิว), `team-five-fatigue-info-390.png`, `team-five-warden-390.png` (สถานะสองกรณี), `team-five-bag-390.png`, `team-five-bag-items-390.png` (กระเป๋าสองแท็บ), `team-five-camp-390.png`; ไม่เก็บ screenshot/log ชั่วคราวใน repo
+- ข้อตัดสินเจ้าของ: สั่ง polish UI เท่านั้น รักษาปุ่ม ≥44px/ภาษาไทย/keyboard/reduced-motion; ยังไม่มีคำตัดสินภาพรอบนี้จากเจ้าของ ไม่ถือว่าผ่านเทสต์คือ owner visual approval
+- งานค้าง: push/PR/CI/merge/Pages ยังไม่ทำเพราะ automatic approval review ปฏิเสธ remote push ต้องขอเจ้าของระบุอนุญาตปลายทาง GitHub ให้ชัดเจน (ไม่ถือว่า CI ผ่านจาก local tests); ภาพวาด calm เป็นงาน art/atlas แยก; P02-03 คนจริง/อุปกรณ์จริงและ iOS Safari ยังไม่ทดสอบ; ปัญหาสมดุลบอสป่าทึบเดิมไม่อยู่ใน scope นี้ ไม่มีการแก้กฎ/เซฟ/ตัวเลขสมดุล
+
 ## 2026-10-31 — P02 ทีมห้า/สำรองตามบท/ความเหนื่อยล้า/เซฟ v45 (Claude, PR #127 merged `4d0d2a2`, เจ้าของ “อนุมัติ” 2026-10-31)
 
 - กฎ: `MAX_SIDE` 5, `ENEMY_SLOTS` + `f3`/`b3` ต่อท้าย, เรียกกำลังเสริมเฉพาะเมื่อมีที่, `HeroDefinition.fatigue` + `tired()` ตัดดาเมจ/การรักษาตรง; world: `PARTY_SLOTS` 5, `reserveSlots(profile,map)` [3,4,5], `run.reserveSlots`/`run.fatigue`, `fatigueCut/fatigueStep`, `rest` −5, ยา `calm`, A6c สำรอง +25% หลังชนะ; content: `thorn-host`, `rift-legion`, บอสแผนที่ 1/2 115/145%, อีลิทประตูป่า 135%

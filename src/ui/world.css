@@ -350,7 +350,13 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 }
 /* Thai above/below marks need line boxes taller than Latin text when overflow clips for ellipsis. */
 .hud-location h1, .world-hero b, .world-hero small, .objective-text { line-height: 1.55; padding-block: 1px; }
-@container game (max-width: 400px)  { .team-card .lane { display: none; } }
+/* Three readable columns in team management; the battle HUD keeps five in one row. */
+@container game (max-width: 400px) {
+  .team-grid:not(.bench) { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .team-card { padding: 8px 6px; }
+  .team-card b, .team-card small { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+  .team-card .lane { font-size: 11px; }
+}
 
 /* ---------- Lobby (ค่ายทหารรับจ้าง) — L1, glass UI over the title painting until lobby art exists ---------- */
 .lobby-view { position: absolute; inset: 0; display: block; max-width: none;

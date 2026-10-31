@@ -34,7 +34,22 @@ for (const id of ['rift-legion', 'thorn-host']) test(`5v5 field ${id} at 390px: 
   const cards = await page.locator('#party .hero-card').evaluateAll(els => els.map(e => e.getBoundingClientRect().top));
   expect(cards).toHaveLength(5); expect(new Set(cards.map(Math.round)).size).toBe(1);
   await expect(page.locator('#intent')).not.toBeEmpty();
-  for (const [id, w, h] of await page.locator('.field-target:not([disabled]), .command-dock button:visible').evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return [e.id || e.className, r.width, r.height] as const; })))
+  // Owner: identical foes keep the same name; no ก/ข/ค suffix on the field or queue.
+  const spiritNames = page.locator('[data-field-label^=b] .field-unit-name');
+  if (id === 'rift-legion') expect(await spiritNames.allTextContents()).toEqual(Array(3).fill('Lv8 วิญญาณรอยแยก'));
+  expect(await page.locator('#turn-order .turn-icon').evaluateAll(els => els.map(e => e.getAttribute('aria-label')).filter(t => / [กขค] · SPD/.test(t ?? '')))).toEqual([]);
+  // All ten turns remain available at native touch size. Keyboard focus scrolls the last one into view;
+  // inspection must not issue a command or change the save.
+  await expect(page.locator('#turn-order .turn-slot')).toHaveCount(10);
+  await expect(page.locator('.queue-hint')).toHaveText('คิว 10 · เลื่อนดู →');
+  const beforeInspect = await page.evaluate(k => localStorage.getItem(k), key);
+  const lastTurn = page.locator('#turn-order .turn-icon').last();
+  await lastTurn.focus(); await page.keyboard.press('Enter');
+  await expect(page.locator('#turn-detail')).toBeVisible();
+  expect(await lastTurn.evaluate(el => { const a = el.getBoundingClientRect(), b = el.closest('ol')!.getBoundingClientRect(); return a.left >= b.left && a.right <= b.right; })).toBe(true);
+  await page.keyboard.press('Escape');
+  expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(beforeInspect);
+  for (const [id, w, h] of await page.locator('.field-target:not([disabled]), .command-dock button:visible, #turn-order .turn-icon').evaluateAll(els => els.map(e => { const r = e.getBoundingClientRect(); return [e.id || e.className, r.width, r.height] as const; })))
     expect(Math.min(w as number, h as number), String(id)).toBeGreaterThanOrEqual(44);
   // Keyboard: slot keys select, Escape cancels, a valid target click commits once.
   await page.keyboard.press('1'); await expect(page.locator('#action-attack')).toHaveAttribute('aria-pressed', 'true');
@@ -54,6 +69,7 @@ for (const id of ['rift-legion', 'thorn-host']) test(`5v5 field ${id} at 390px: 
   // Owner 2026-10-31: the mage's ward (a move for our side) is cast by tapping Seren's card in the HUD, once.
   await expect(page.locator('#action-ward')).toBeEnabled({ timeout: 20000 }); await page.locator('#action-ward').click();
   await expect(page.locator('#party #hero-healer.hud-target.valid-target')).toBeEnabled();
+  await expect(page.locator('#party #hero-healer .hud-cast-cue')).toHaveText('ร่าย');
   if (dir) { await page.waitForTimeout(400); await page.screenshot({ path: `${dir}/team-five-${id}-turn2-390.png` }); }
   const box = await page.locator('#party #hero-healer').boundingBox(); expect(Math.min(box!.width, box!.height)).toBeGreaterThanOrEqual(44);
   await page.locator('#party #hero-healer').click();
@@ -66,10 +82,14 @@ test('map bag team tab: five on the field, the reserve and fatigue at 390px', as
   const page = await context.newPage(); const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await open(page, null);
   // The calming draught asks who drinks it, then eases that member's fatigue (7 → 3).
-  await page.keyboard.press('b'); await page.locator('#potion-calm').click(); await page.locator('#calm-guardian').click();
+  await page.keyboard.press('b');
+  if (dir) await page.screenshot({ path: `${dir}/team-five-bag-items-390.png` });
+  await page.locator('#potion-calm').click(); await page.locator('#calm-guardian').click();
   await expect.poll(() => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.fatigue.guardian, key)).toBe(3);
   await page.locator('#bag-tab-team, [role=tab]:has-text("ทีม")').first().click();
   await expect(page.locator('[data-fatigue]').first()).toBeVisible();
+  expect(await page.locator('.team-grid').first().evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(3);
+  expect(await page.locator('.team-card b, .team-card small').evaluateAll(els => els.filter(e => e.scrollWidth > e.clientWidth + 1).map(e => e.textContent))).toEqual([]);
   if (dir) await page.screenshot({ path: `${dir}/team-five-bag-390.png`, fullPage: false });
   expect(errors).toEqual([]); await context.close();
 });
@@ -98,6 +118,9 @@ test('the rift warden stands with two guards from round 1 (owner 2026-10-31) at 
   const start = page.locator('[data-ui=start]'); if (await start.isVisible({ timeout: 3000 }).catch(() => false)) await start.click();
   await expect(page.locator('#action-attack')).toBeEnabled({ timeout: 20000 }); await page.waitForTimeout(500);
   for (const foe of ['f1', 'f2', 'b3']) await expect(page.locator(`[data-field-unit=${foe}]`)).toBeVisible();
+  await page.locator('#battle-info').click();
+  await page.locator('#status-unit-b3').click();
+  await expect(page.locator('#status-details h3')).toHaveText('Lv10 วิญญาณรอยแยก');
   if (dir) await page.screenshot({ path: `${dir}/team-five-warden-390.png` });
   expect(errors).toEqual([]); await context.close();
 });
