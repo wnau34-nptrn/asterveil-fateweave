@@ -1,5 +1,15 @@
 # Codex → Claude handoff
 
+## 2026-10-31 — เจ้าของยกเลิกอักษร ก/ข/ค ต่อท้ายศัตรูชื่อซ้ำ (Codex)
+
+- ข้อตัดสินเจ้าของ: “ไม่เอา ก ข ค ได้มั้ย ตัวชื่อซ้ำก็เป็นตัวซ้ำถูกแล้วนะ” — ใช้ชื่อชนิดเดียวกันเหมือนกันทุกตัว แทนแนวทางคงอักษร/อธิบายกำลังเสริมของรายการก่อนหน้า
+- สาขา `codex/p02-mobile-ui-polish` ต่อจาก `b955159` (ฐานเกม `193ce1c`); ยังไม่มี PR/merge และยังไม่ push เพราะ automatic approval review บล็อกการส่ง source ไป remote ตามที่แจ้งในงานก่อนหน้า คำอนุญาตปลายทางยังค้าง
+- เปลี่ยนเฉพาะการแสดงผล: `actorName` ไม่เติมอักษรแล้ว จึงตรงกันทั้งชื่อเหนือหัว คิว/รายละเอียดเทิร์น เจตนา แท็บสถานะ accessibility และบันทึก ลบ `twinLetter`/markup/CSS/คำอธิบาย ก/ข/ค ที่ไม่ใช้ ชื่อเต็มยังอยู่ใน title เหนือหัว; ID ช่อง เป้าหมาย คำสั่ง กฎ เซฟ v45 และตัวเลขสมดุลไม่เปลี่ยน
+- ไฟล์: `src/ui/th.ts`, `battle-ui.ts`, `styles.css`, `portrait.css`; `tests/four-slots.test.ts`, `tests/browser/team-five.spec.ts`; handoff นี้/`CLAUDE-TO-CODEX-DEV-TH.md`/`NEW-CHAT-HANDOFF-TH.md`
+- ผลตรวจ: typecheck/lint/`npm test` (1392/1392, 99 files)/build ผ่าน; Playwright `team-five.spec.ts` + `status.spec.ts` **10/10 ผ่าน** (ทั้ง 5v5, ชื่อศัตรูซ้ำเท่ากันในสนาม/คิว, วิญญาณบอสเริ่มแรก, ร่ายครั้งเดียว, keyboard, reduced-motion และหน้าต่างสถานะหลาย viewport) ใช้ Chromium `/usr/bin/chromium` ตาม `PLAYWRIGHT_CHROMIUM_EXECUTABLE`; ไม่อ้างผล 140 ข้อของรายการก่อนเป็นผลรันใหม่
+- ภาพ 390px ส่งในแชต: `/tmp/fateweave-no-suffix/team-five-rift-legion-390.png` และ `team-five-warden-390.png` (ภาพใหม่ ไม่มีอักษรต่อท้าย) — Chromium จำลอง ไม่ใช่มือถือจริง/iOS
+- ค้างเดิม: push/PR/CI/merge/Pages รออนุญาตปลายทางตาม auto-review; ภาพวาด calm เป็นงานแยก, P02-03 คนจริง/อุปกรณ์จริงไม่อยู่ในงานนี้
+
 ## 2026-10-31 — P02 UI polish ที่ 390px (Codex)
 
 - ฐาน: fetch `origin/feature/fateweave-initial-prototype` ล่าสุด `193ce1c` (รวม P02 PR #127 merge `4d0d2a2`, save v45); สาขางาน `codex/p02-mobile-ui-polish` → PR เข้าสาขาเกม (runtime commit `82c8d9a`; ยังไม่มี PR/merge: automatic approval review ปฏิเสธ push ไป remote โดยระบุว่า source egress ต้องได้รับอนุญาตปลายทางชัดเจนจากเจ้าของในแชต; ไม่ลองส่งผ่านช่องทางอื่น) ไม่ใช้ `main`

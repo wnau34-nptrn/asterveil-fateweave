@@ -34,6 +34,10 @@ for (const id of ['rift-legion', 'thorn-host']) test(`5v5 field ${id} at 390px: 
   const cards = await page.locator('#party .hero-card').evaluateAll(els => els.map(e => e.getBoundingClientRect().top));
   expect(cards).toHaveLength(5); expect(new Set(cards.map(Math.round)).size).toBe(1);
   await expect(page.locator('#intent')).not.toBeEmpty();
+  // Owner: identical foes keep the same name; no ก/ข/ค suffix on the field or queue.
+  const spiritNames = page.locator('[data-field-label^=b] .field-unit-name');
+  if (id === 'rift-legion') expect(await spiritNames.allTextContents()).toEqual(Array(3).fill('Lv8 วิญญาณรอยแยก'));
+  expect(await page.locator('#turn-order .turn-icon').evaluateAll(els => els.map(e => e.getAttribute('aria-label')).filter(t => / [กขค] · SPD/.test(t ?? '')))).toEqual([]);
   // All ten turns remain available at native touch size. Keyboard focus scrolls the last one into view;
   // inspection must not issue a command or change the save.
   await expect(page.locator('#turn-order .turn-slot')).toHaveCount(10);
@@ -115,9 +119,8 @@ test('the rift warden stands with two guards from round 1 (owner 2026-10-31) at 
   await expect(page.locator('#action-attack')).toBeEnabled({ timeout: 20000 }); await page.waitForTimeout(500);
   for (const foe of ['f1', 'f2', 'b3']) await expect(page.locator(`[data-field-unit=${foe}]`)).toBeVisible();
   await page.locator('#battle-info').click();
-  await expect(page.locator('.twin-note')).toContainText('กำลังเสริมที่ยังไม่ถูกเรียก');
   await page.locator('#status-unit-b3').click();
-  await expect(page.locator('#status-details h3')).toContainText('ข');
+  await expect(page.locator('#status-details h3')).toHaveText('Lv10 วิญญาณรอยแยก');
   if (dir) await page.screenshot({ path: `${dir}/team-five-warden-390.png` });
   expect(errors).toEqual([]); await context.close();
 });

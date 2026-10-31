@@ -541,9 +541,6 @@ main { width: 100%; max-width: 1600px; flex: 1; min-height: 0; display: flex; fl
 #field-statuses { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 .field-unit-info { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 2px; pointer-events: none; font-size: 9px; line-height: 11px; color: #f0f5ff; text-shadow: 0 1px 2px #07101f, 1px 0 2px #07101f; }
 .field-unit-name { display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.field-unit-name.twin-name { display: flex; justify-content: center; gap: 3px; }
-.twin-name .twin-main { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-.twin-name .twin-letter { flex: none; color: #ffe1a3; }
 .field-unit-info.ally .field-unit-name, .field-unit-info.ally .field-hp-value { display: none; }
 .field-health { width: 52px; max-width: 100%; text-align: center; flex-shrink: 1; min-width: 0; }
 .field-hp-value { display: block; white-space: nowrap; }

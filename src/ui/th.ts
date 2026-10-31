@@ -25,21 +25,12 @@ export const heroText: Record<string, { name: string; role: string; help: string
 };
 const names: Record<string, string> = { lio: 'ลิโอ', brann: 'แบรนน์', sefa: 'เซฟา', toma: 'โทมะ', mira: 'มิร่า', garran: 'การ์แรน', guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', party: 'ทั้งทีม' };
 const foeLabel = (e: EncounterDefinition['enemies'][number]) => e.displayName ?? e.name;
-// Two or more foes of the same kind are told apart as ก/ข/ค… from the top of the field down (P02: a column of three
-// stands f1, f3, f2), then front before back; '' for a foe without a twin.
-const FIELD_RANK: Readonly<Record<string, number>> = { f1: 0, b1: 0, f3: 1, b3: 1, f2: 2, b2: 2 };
-export function twinLetter(id: string, data: EncounterDefinition): string {
-  const foe = data.enemies.find(e => e.id === id); if (!foe) return '';
-  const twins = data.enemies.map((e, i) => ({ e, i })).filter(({ e }) => foeLabel(e) === foeLabel(foe))
-    .sort((a, b) => (FIELD_RANK[a.e.id] ?? 0) - (FIELD_RANK[b.e.id] ?? 0) || a.i - b.i);
-  return twins.length > 1 ? 'กขคงจฉ'[twins.findIndex(t => t.e === foe)]! : '';
-}
 export function actorName(id: string | undefined, data: EncounterDefinition): string {
   // Enemies carry the battle's monster level (2D-1).
-  // Two foes of the same kind are told apart as ก/ข in slot order.
   const foe = id ? data.enemies.find(e => e.id === id) : undefined;
   if (foe) {
-    const twin = twinLetter(foe.id, data); const name = twin ? `${foeLabel(foe)} ${twin}` : foeLabel(foe);
+    // Identical foes share their displayed name; targeting still uses the stable actor ID.
+    const name = foeLabel(foe);
     return data.level ? `Lv${data.level} ${name}` : name;
   }
   return id ? heroText[id]?.name ?? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';

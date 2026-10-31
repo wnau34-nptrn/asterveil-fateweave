@@ -64,7 +64,6 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #battle-view .hero-card.hud-target:disabled { opacity: .55; }
 #battle-view .hero-card.hud-target.valid-target { background: #3b3020; }
 #battle-view .hud-cast-cue { display: block; color: #ffe0a1; font-size: 10px; line-height: 12px; }
-.twin-note { color: #e0c9ff; }
 .potion-art-icon { border: 1px solid #86dfc299; border-radius: 12px; background: radial-gradient(circle, #356459, #102f32); color: #b7ffe0; }
 .potion-art-icon .icon { width: 28px; height: 28px; }
 #battle-view .command-dock { padding: 0 6px 6px; margin: 0; background: transparent; }

@@ -8,7 +8,7 @@ import type { BattleKind } from '../core/world/types';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleScene } from '../game/scenes/BattleScene';
 import { fatigueDot, fatigueSection } from './fatigue';
-import { actorName, twinLetter, eventThai, heroText, intentName, intentRuleThai, intentTargetThai, reasonThai, skillDescription } from './th';
+import { actorName, eventThai, heroText, intentName, intentRuleThai, intentTargetThai, reasonThai, skillDescription } from './th';
 import { portrait } from './portraits';
 import { artOf } from '../game/visuals/assets';
 import { riftBackdropFrame } from '../game/visuals/rift-backdrop';
@@ -317,7 +317,7 @@ export class BattleUI {
     const actor = this.displayState.heroes.find(h => h.id === id) ?? this.displayState.enemies.find(e => e.id === id);
     if (!def || !actor) return;
     const popup = this.root.querySelector<HTMLElement>('#turn-detail')!;
-    popup.querySelector('p')!.textContent = `${actorName(id, d)} · SPD ${def.speed} · เลือด ${actor.hp}/${def.maxHp}${twinLetter(id, d) && this.displayState.enemies.some(e => e.absent && twinLetter(e.id, d)) ? ' · ก/ข/ค นับรวมกำลังเสริมที่ยังไม่ถูกเรียก อักษรคงเดิมตลอดศึก' : ''}`;
+    popup.querySelector('p')!.textContent = `${actorName(id, d)} · SPD ${def.speed} · เลือด ${actor.hp}/${def.maxHp}`;
     popup.showPopover(); const bounds = gameBounds(), anchor = button.getBoundingClientRect();
     popup.style.left = `${Math.max(bounds.left + 8, Math.min(bounds.right - popup.offsetWidth - 8, anchor.left))}px`;
     popup.style.top = `${Math.min(bounds.bottom - popup.offsetHeight - 8, anchor.bottom + 4)}px`;
@@ -584,9 +584,8 @@ export class BattleUI {
       const enemy = d.enemies.some(e => e.id === a.id);
       const label = `${actorName(a.id, d)} · ${rows.map(r => `${r.kind === 'buff' ? 'บัฟ' : 'ดีบัฟ'} ${r.name}: ${r.duration}`).join(' · ')} · รายละเอียดที่ปุ่มข้อมูล แท็บสถานะ`;
       // Standard grid: a foe's name stands above its head, every HP/status panel under the feet (owner 2026-10-22).
-      // A twin's letter stays visible when a long name is cut (P02: three of a kind can stand in a column).
-      const twin = enemy ? twinLetter(a.id, d) : ''; const full = actorName(a.id, d);
-      const name = twin ? `<span class="field-unit-name twin-name" title="${escapeHtml(full)}"><span class="twin-main">${escapeHtml(full.slice(0, -twin.length - 1))}</span><b class="twin-letter">${twin}</b></span>` : `<span class="field-unit-name">${escapeHtml(full)}</span>`, above = slot.label && enemy ? slot.label : undefined;
+      const full = actorName(a.id, d);
+      const name = `<span class="field-unit-name" title="${escapeHtml(full)}">${escapeHtml(full)}</span>`, above = slot.label && enemy ? slot.label : undefined;
       const tag = above ? `<div class="field-unit-label" data-field-label="${a.id}" style="left:${above.x}px;top:${above.y}px;width:${above.width}px;height:${above.height}px;opacity:${actor.hp > 0 ? 1 : .4}">${name}</div>` : '';
       return `${tag}<div class="field-unit-info ${slot.compact ? 'compact' : ''} ${slot.tiny ? 'tiny' : ''} ${slot.side ? 'side' : ''} ${slot.label ? 'grid' : ''} ${enemy ? 'enemy' : 'ally'}" data-field-unit="${a.id}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px;--field-icon:${slot.iconSize}px;opacity:${actor.hp > 0 ? 1 : .4}">${slot.label ? '' : name}<span class="field-health" aria-label="${escapeHtml(actorName(a.id, d))} HP ${actor.hp}/${a.maxHp}"><span class="field-hp-value">${actor.hp}/${a.maxHp}</span><span class="field-hp-track"><span style="width:${actor.hp / a.maxHp * 100}%;background:#${a.color.toString(16).padStart(6, '0')}"></span></span></span>${rows.length ? `<span class="field-statuses" data-status-actor="${a.id}" role="img" aria-label="${escapeHtml(label)}">${rows.slice(0, slot.maxIcons).map(r => `<span class="field-status ${r.kind}" data-status="${r.id}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > slot.maxIcons ? `<span class="field-status-more" aria-hidden="true">+${rows.length - slot.maxIcons}</span>` : ''}</span>` : ''}</div>`;
     }).join(''));
@@ -597,9 +596,7 @@ export class BattleUI {
     const actors = [...d.heroes, ...d.enemies.filter(e => !s.enemies.find(v => v.id === e.id)?.absent)];
     if (!actors.some(a => a.id === this.inspectedActorId)) this.inspectedActorId = this.heroId;
     const states = [...s.heroes, ...s.enemies];
-    const pendingTwins = d.enemies.some(e => s.enemies.find(v => v.id === e.id)?.absent && twinLetter(e.id, d));
-    this.set('status-frame', (this.presentation ? `รอบ ${s.round} · สถานะตามจังหวะที่กำลังแสดง` : `รอบ ${s.round} · ${s.outcome === 'active' ? 'สถานะปัจจุบัน' : 'จบการต่อสู้แล้ว'}`)
-      + (pendingTwins ? '<br><span class="twin-note">ชื่อ ก/ข/ค นับรวมกำลังเสริมที่ยังไม่ถูกเรียก · อักษรประจำตัวคงเดิมตลอดศึก</span>' : ''));
+    this.set('status-frame', this.presentation ? `รอบ ${s.round} · สถานะตามจังหวะที่กำลังแสดง` : `รอบ ${s.round} · ${s.outcome === 'active' ? 'สถานะปัจจุบัน' : 'จบการต่อสู้แล้ว'}`);
     this.set('status-units', actors.map(a => {
       const actor = states.find(v => v.id === a.id)!;
       const rows = unitStatuses(s, d, a.id), ally = d.heroes.some(h => h.id === a.id);

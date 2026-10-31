@@ -39,11 +39,11 @@ describe('four foe slots', () => {
     expect(roundOrder(createBattle(tied), tied)).toEqual(['guardian', 'tracer', 'weaver', 'healer', 'f1', 'f2', 'b1', 'b2']);
     expect(roundOrder(createBattle(d), d)).toHaveLength(8);
   });
-  it('repeated kinds start one move apart and twins are named ก/ข', () => {
+  it('repeated kinds start one move apart and share their displayed name', () => {
     const { intents } = foes(2, [['f1', SPECIES.dewSlime], ['f2', SPECIES.dewSlime]]);
     const first = (id: string) => intents.find(i => i.sourceId === id)!.targetSlot;
     expect(first('f1')).not.toBe(first('f2'));
-    expect(actorName('f1', slimeNest)).toBe('Lv2 สไลม์น้ำค้าง ก'); expect(actorName('f2', slimeNest)).toBe('Lv2 สไลม์น้ำค้าง ข');
+    expect(actorName('f1', slimeNest)).toBe('Lv2 สไลม์น้ำค้าง'); expect(actorName('f2', slimeNest)).toBe('Lv2 สไลม์น้ำค้าง');
     expect(actorName('b1', slimeNest)).toBe('Lv2 สไลม์ถ่านไฟ');
   });
 });
