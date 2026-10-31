@@ -23,7 +23,7 @@ for (const [width, height, touch] of [[320,568,true], [390,844,true], [1366,768,
     run.found = Array.from({ length: 12 }, () => ({ uid: 0, slot: 'body' as const, rarity: 0 as const, level: 3, affixes: [] }));
     run.campXp = xpAt(6);
     reveal(run, map);
-    const raw = JSON.stringify({ version: 44, ...game }); parseGame(raw, map, encounterById);
+    const raw = JSON.stringify({ version: 45, ...game }); parseGame(raw, map, encounterById);
     await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw });
     await page.goto('./'); await page.locator('#continue').click(); await page.locator('#move-up').click();
     await expect(page.locator('#summary-title')).toContainText('สำเร็จการเดินทาง');

@@ -31,7 +31,7 @@ test('summary shots 390x844', async ({ browser }) => {
   ];
   run.campXp = xpAt(6);
   reveal(run, map);
-  const raw = JSON.stringify({ version: 44, ...game }); parseGame(raw, map, encounterById);
+  const raw = JSON.stringify({ version: 45, ...game }); parseGame(raw, map, encounterById);
   await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw });
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#move-up').click();
   await expect(page.locator('#summary-title')).toBeVisible(); await page.waitForTimeout(200);

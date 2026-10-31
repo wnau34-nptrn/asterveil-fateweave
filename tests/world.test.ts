@@ -180,12 +180,13 @@ describe('expedition rules', () => {
     expect(swapMembers(s, 'tracer', 'weaver').event.type).toBe('blocked');
     s = swapMembers(s, 'tracer-b', 'tracer').state;
     expect(s.roster).toEqual({ deployed: ['guardian', 'tracer-b', 'weaver', 'healer'], reserve: ['tracer', 'weaver-b'] });
-    expect(moveMember(s, 'weaver-b').event.type).toBe('blocked'); // party is full
-    s = moveMember(s, 'healer').state; s = moveMember(s, 'weaver-b').state;
-    expect(s.roster).toEqual({ deployed: ['guardian', 'tracer-b', 'weaver', 'weaver-b'], reserve: ['tracer', 'healer'] });
-    for (const id of ['tracer-b', 'weaver']) s = moveMember(s, id).state;
+    s = moveMember(s, 'weaver-b').state; // P02: the fifth field slot
+    expect(s.roster).toEqual({ deployed: ['guardian', 'tracer-b', 'weaver', 'healer', 'weaver-b'], reserve: ['tracer'] });
+    expect(moveMember(s, 'tracer').event.type).toBe('blocked'); // party is full (five)
+    for (const id of ['healer', 'tracer-b', 'weaver']) s = moveMember(s, id).state;
     expect(s.roster).toEqual({ deployed: ['guardian', 'weaver-b'], reserve: ['tracer', 'healer', 'tracer-b', 'weaver'] });
-    expect(moveMember(s, 'weaver-b').event.type).toBe('blocked'); // reserve is full
+    expect(moveMember(s, 'weaver-b').event.type).toBe('blocked'); // reserve is full (a run from before v45 keeps four)
+    expect(moveMember({ ...s, reserveSlots: 5 }, 'weaver-b').event.type).toBe('roster');
     let solo: ExpeditionState = { ...fresh(4), position: camp };
     for (const id of ['tracer', 'weaver', 'healer']) solo = moveMember(solo, id).state;
     expect(solo.roster.deployed).toEqual(['guardian']); expect(moveMember(solo, 'guardian').event.type).toBe('blocked');
@@ -283,7 +284,8 @@ describe('lobby profile', () => {
       const id = boardOffers(q, map, rosterLookup)[i]!; q = hire(q, map, rosterLookup, i).profile;
       expect(q.company.at(-1)).toBe(id); expect(q.members[id]).toEqual({ stars: 1, dupes: 0 });
     }
-    expect(q.party.reserve).toHaveLength(4); expect(q.company).toHaveLength(8);
+    // P02: hires join the reserve up to the chapter's slots (three before map 1 is cleared).
+    expect(q.party.reserve).toHaveLength(3); expect(q.company).toHaveLength(8);
   });
   it('upgrades with duplicates and ore, lets one seal replace one duplicate, and caps at ★5', () => {
     let p = rich({ bank: { ore: 500, gold: 0, seal: 1, dust: 0 } });
@@ -306,13 +308,13 @@ describe('lobby profile', () => {
     let p: Profile = { ...rich(), company: ['guardian', 'tracer', 'weaver', 'healer', 'guardian-b', 'tracer-b'],
       members: { ...rich().members, 'guardian-b': { stars: 1, dupes: 0 }, 'tracer-b': { stars: 1, dupes: 0 } } };
     expect(groupOf(p, 'guardian-b')).toBe('bench');
-    p = placeMember(p, 'guardian-b', 'deployed', 'guardian').profile;
+    p = placeMember(p, map, 'guardian-b', 'deployed', 'guardian').profile;
     expect(p.party.deployed).toEqual(['guardian-b', 'tracer', 'weaver', 'healer']); expect(groupOf(p, 'guardian')).toBe('bench');
-    p = placeMember(p, 'guardian', 'reserve').profile; p = placeMember(p, 'healer', 'bench').profile;
+    p = placeMember(p, map, 'guardian', 'reserve').profile; p = placeMember(p, map, 'healer', 'bench').profile;
     expect(p.party).toEqual({ deployed: ['guardian-b', 'tracer', 'weaver'], reserve: ['guardian'] });
-    expect(placeMember(p, 'tracer-b', 'deployed').profile.party.deployed).toEqual(['guardian-b', 'tracer', 'weaver', 'tracer-b']);
-    let solo = rich(); for (const id of ['tracer', 'weaver', 'healer']) solo = placeMember(solo, id, 'bench').profile;
-    expect(placeMember(solo, 'guardian', 'bench').event).toEqual({ type: 'blocked', reason: 'last' });
+    expect(placeMember(p, map, 'tracer-b', 'deployed').profile.party.deployed).toEqual(['guardian-b', 'tracer', 'weaver', 'tracer-b']);
+    let solo = rich(); for (const id of ['tracer', 'weaver', 'healer']) solo = placeMember(solo, map, id, 'bench').profile;
+    expect(placeMember(solo, map, 'guardian', 'bench').event).toEqual({ type: 'blocked', reason: 'last' });
     const run = departure(p, map, rosterLookup, 3);
     expect(run.roster).toEqual(p.party); expect(Object.keys(run.hp)).toEqual(['guardian-b', 'tracer', 'weaver', 'guardian']);
   });
@@ -372,7 +374,7 @@ describe('game save', () => {
   const game = (run: ExpeditionState | null = fresh(), profile = newProfile(map, 4)) => ({ profile, run });
   const v6 = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 6, profile, run });
   // Saves before v35 forgive battle commands that no longer replay (four-slot migration), so command checks use v35.
-  const current = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 44, profile, run });
+  const current = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 45, profile, run });
   it('round-trips the profile and an in-progress battle by replay', () => {
     const storage = memory(); let s = fresh(3);
     while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;

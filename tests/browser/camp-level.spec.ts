@@ -61,7 +61,7 @@ test('an old save moves to the camp level once, says so, and keeps a backup', as
   const raw = JSON.stringify(legacy); await seed(page, raw);
   await expect(page.locator('#lobby-view [role=status]').first()).toContainText('ย้ายเซฟเป็นเลเวลค่ายแล้ว · ค่าย Lv7 ตามเซฟาที่ก้าวหน้าที่สุด');
   await page.screenshot({ path: info.outputPath('camp-migration-390.png') });
-  const now = JSON.parse(await saved(page)); expect(now.version).toBe(44); expect(now.profile.campXp).toBe(xpAt(7) + 30);
+  const now = JSON.parse(await saved(page)); expect(now.version).toBe(45); expect(now.profile.campXp).toBe(xpAt(7) + 30);
   expect(await page.evaluate(k => localStorage.getItem(k), legacyBackupKey(43))).toBe(raw);
   await page.reload(); await page.locator('#continue').click();
   await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('#lobby-view')).not.toContainText('ย้ายเซฟ');

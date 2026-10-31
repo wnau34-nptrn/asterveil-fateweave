@@ -441,11 +441,12 @@ export function wornSets(rules: EquipmentRules, gear: Gear | undefined): { id: S
 }
 export const itemOwner = (item: Item): string => item.hero ? `เฉพาะ${heroText[item.hero]?.name ?? ''}` : 'ใส่ได้ทุกคน';
 // ---- Map potions (2D-5) ----
-export const potionIcon = { salve: 'potionSalve', tonic: 'potionTonic', repel: 'potionRepel' } as const;
+export const potionIcon = { salve: 'potionSalve', tonic: 'potionTonic', repel: 'potionRepel', calm: 'potionCalm' } as const;
 export const potionText: Record<PotionId, { name: string; help: (r: PotionRules) => string }> = {
   salve: { name: 'ยาฟื้นแผล', help: r => `ฟื้นเลือด ${r.salvePercent}% ให้สมาชิกที่ยังยืนอยู่ 1 คน` },
   tonic: { name: 'ยาฟื้นหมู่', help: r => `ฟื้นเลือด ${r.tonicPercent}% ให้ทุกคนที่ยังยืนอยู่` },
   repel: { name: 'ยาไล่อสูร', help: r => `${r.repelSteps} ก้าวถัดไปไม่เจอศัตรูสุ่ม (บอสยังขวางทาง)` },
+  calm: { name: 'ยาฟื้นความเหนื่อย', help: r => `ลดความเหนื่อยล้า ${r.calmRecover} แต้มให้สมาชิก 1 คน` },
 };
 // ---- Camp NPCs (ART-CHAR-NPC-001): names, roles and a few lines each (live Thai text, never baked into art). ----
 export const npcText: Record<'smith' | 'broker' | 'trainer' | 'keeper' | 'herbalist' | 'scout', { name: string; role: string; lines: readonly string[] }> = {

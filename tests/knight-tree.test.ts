@@ -63,7 +63,7 @@ describe('save v34', () => {
   const raw = (game: Parameters<typeof saveGame>[1]) => { let out = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { out = v; } }, game); return out; };
   it('round-trips tree ranks, grants and loadouts and rejects a locked loadout', () => {
     const p = chooseLoadout(learn({ ...knightAt(6, 3), members: { ...knightAt(6, 3).members, guardian: { stars: 3, dupes: 0, grants: ['c1s'] } } }, 'b1', 'b2'), map, lookup, 'guardian', ['challenge', 'rally']).profile;
-    const text = raw({ profile: p, run: null }); expect(JSON.parse(text).version).toBe(44);
+    const text = raw({ profile: p, run: null }); expect(JSON.parse(text).version).toBe(45);
     expect(parseGame(text, map, lookup).profile.members.guardian).toEqual(p.members.guardian);
     const bad = JSON.parse(text); bad.profile.members.guardian.loadout = ['rouse']; expect(() => parseGame(JSON.stringify(bad), map, lookup)).toThrow();
   });

@@ -45,7 +45,7 @@ describe('map 2: เส้นทางป่าทึบ', () => {
     for (const seed of [1, 2, 3]) {
       let s = depart(p, map, lookup, seed).run; expect(s.guests).toBeUndefined(); expect(s.arrivals).toEqual(['garran']); expect(s.members.garran).toBeUndefined();
       const walk = (to: Point) => { for (let g = 0; g < 300 && (s.position.x !== to.x || s.position.y !== to.y) && !s.completed; g++) { s = move(s, map, route(s.position, to, { boss: true })[0]!, lookup).state; if (s.battle) s = fight(s); } };
-      walk(findTiles(map, 'camp').find(c => c.y > 7)!); expect(s.recruited).toEqual(['garran']); expect(s.arrivals).toBeUndefined(); expect(levelOf(map, s)).toBeGreaterThanOrEqual(4); expect(s.roster.reserve).toContain('garran'); if (canRest(s, map)) s = rest(s, map, lookup).state;
+      walk(findTiles(map, 'camp').find(c => c.y > 7)!); expect(s.recruited).toEqual(['garran']); expect(s.arrivals).toBeUndefined(); expect(levelOf(map, s)).toBeGreaterThanOrEqual(4); expect([...s.roster.deployed, ...s.roster.reserve]).toContain('garran'); if (canRest(s, map)) s = rest(s, map, lookup).state;
       walk(findTiles(map, 'camp').find(c => c.y < 7)!); if (canRest(s, map)) s = rest(s, map, lookup).state;
       walk(findTiles(map, 'goal')[0]!);
       expect(s.completed).toBe(true); expect(s.elitesDefeated).toContain('forest-gate');

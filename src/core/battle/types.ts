@@ -70,6 +70,9 @@ export interface HeroDefinition {
   gear?: HeroGear;
   // Skill levels from tomes (save v37): Lv2–5 per active skill (missing = Lv1). See `skillLevelBonus` in the engine.
   skillLevels?: Partial<Record<ActionId, number>>;
+  // Fatigue (P02, OD-11): percent cut to this hero's hits and direct healing, fixed when the battle starts (world
+  // `fatigueCut`). Never touches SPD, turns, barriers or songs. Missing = 0.
+  fatigue?: number;
 }
 // Four foe slots (A7 step 2, owner 2026-10-22): `id` is the field position `f1`/`f2` (front row) or `b1`/`b2` (back row),
 // 1–4 foes per encounter and at most two per row. `row` must match the id; front-row foes screen the back row.
@@ -78,10 +81,12 @@ export interface HeroDefinition {
 // Hard-mode traits (master plan A9): thorns answers a hero's hit, veilguard blunts hits on a foe that is neither marked
 // nor corroded, enrage strengthens its moves below a share of its HP. Numbers come from `rules.traits`.
 export type EnemyTrait = 'thorns' | 'veilguard' | 'enrage';
-export type EnemySlot = 'f1' | 'f2' | 'b1' | 'b2';
+// P02 (OD-05): two more slots appended (`f3` front, `b3` back) so a side can stand 3/2 or 2/3; at most five foes stand
+// at once and at most three per row. The first four ids keep their order (SPD tie-breaks follow the encounter list).
+export type EnemySlot = 'f1' | 'f2' | 'b1' | 'b2' | 'f3' | 'b3';
 // `reserve`: a minion that waits off the field until a boss phase summons it (owner 2026-10-22).
 export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?: boolean; boss?: boolean; reserve?: boolean; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[] }
-// Enemy moves aim at a party slot (0-3 in deployment order), not a named hero, so any
+// Enemy moves aim at a party slot (0-4 in deployment order), not a named hero, so any
 // mercenary in that slot is the target. The resolved hero id is stored on Intent.
 // `unstoppable` (boss signature moves, owner 2026-10-22): Bash and Sigil cannot cancel it; Guard, Ward and taunts still answer it.
 // Boss phases (owner 2026-10-22): `phase` puts the move in that phase's cycle (missing = the opening cycle); `all` hits

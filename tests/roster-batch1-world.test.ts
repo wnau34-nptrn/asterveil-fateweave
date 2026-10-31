@@ -49,7 +49,7 @@ describe('C12 Batch 1 catalog and hiring', () => {
     let p = newProfile(map, 1);
     p.company = heroCatalog(lookup, map).slice(0, 8).map(h => h.id);
     p.members = Object.fromEntries(p.company.map(id => [id, { stars: 1, dupes: 0 }]));
-    p.party = { deployed: p.company.slice(0, 4), reserve: p.company.slice(4) };
+    p.party = { deployed: p.company.slice(0, 5), reserve: p.company.slice(5) };
     p.bank.gold = 200;
     p = offerOf(p, 'metta');
     const index = boardOffers(p, map, lookup).indexOf('metta');
@@ -59,10 +59,10 @@ describe('C12 Batch 1 catalog and hiring', () => {
     expect(next.profile.party).toEqual(p.party);
     expect(next.profile.members.metta).toEqual({ stars: 1, dupes: 0 });
     expect(parseGame(write({ profile: next.profile, run: null }), map, lookup).profile.taken).toEqual([index]);
-    expect(placeMember(next.profile, 'metta', 'deployed').event).toEqual({ type: 'blocked', reason: 'full' });
-    const swapped = placeMember(next.profile, 'metta', 'deployed', p.party.deployed[0]);
-    expect(swapped.profile.party.deployed).toHaveLength(4);
-    expect(swapped.profile.party.reserve).toHaveLength(4);
+    expect(placeMember(next.profile, map, 'metta', 'deployed').event).toEqual({ type: 'blocked', reason: 'full' });
+    const swapped = placeMember(next.profile, map, 'metta', 'deployed', p.party.deployed[0]);
+    expect(swapped.profile.party.deployed).toHaveLength(5);
+    expect(swapped.profile.party.reserve).toHaveLength(3);
     expect(swapped.profile.company).toEqual(next.profile.company);
   });
   it('a duplicate at a full 4+4 roster changes only the member duplicate count, gold and taken index', () => {
@@ -126,7 +126,7 @@ describe('C12 v42 → v43 migration', () => {
     expect(boardOffers(migrated.profile, map, lookup)).toEqual(boardOffers(p, legacyMap, lookup));
     expect(migrated.profile.taken).toEqual([1]);
     expect(migrated.profile.company.some(id => added.includes(id))).toBe(false);
-    expect(JSON.parse(write(migrated)).version).toBe(44);
+    expect(JSON.parse(write(migrated)).version).toBe(45);
     expect(parseGame(write(migrated), map, lookup)).toEqual({ profile: migrated.profile, run: null });
     const refreshed = refreshBoard(migrated.profile, map).profile;
     expect(refreshed.boardPool).toBeUndefined();

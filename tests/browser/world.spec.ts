@@ -306,7 +306,7 @@ test('lobby market (4A): the broker sheet redraws the board for gold twice per r
   await page.locator('#buy-gearbox').click(); await expect(page.locator('.lobby-result')).toContainText('หีบอุปกรณ์');
   p = await savedProfile(page);
   expect(p.members.tracer!.dupes).toBe(1); expect(p.shop).toEqual({ contract: 1, gearbox: 1 }); expect(p.items).toHaveLength(1); expect(p.items[0]!.rarity).toBeGreaterThanOrEqual(2);
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(44);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(45);
   expect(issues).toEqual([]);
 });
 
@@ -496,7 +496,7 @@ test('camp travel (4B) and optional elite returns (4C): rest brings the meadow e
   const start = findTiles(map, 'start')[0]!; await reachable(page, `#travel-${start.x}-${start.y}`); await page.locator(`#travel-${start.x}-${start.y}`).click();
   await expect(page.locator('#world-message')).toContainText('วาร์ปกลับทางเข้าด่าน');
   run = await saved(page); expect(run.position).toEqual(start);
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(44);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(45);
   expect(issues).toEqual([]);
 });
 
@@ -507,7 +507,7 @@ test('the smith smelts ore into veil dust, capped per return; saved v18', async 
   await page.locator('#forge-tab-smelt').click();await page.locator('#forge-target').selectOption('5');await reachable(page,'#forge-smelt');await page.locator('#forge-smelt').click();await page.locator('#forge-confirm').click();
   await expect(page.locator('.lobby-result')).toContainText('หลอมแร่ดาวเป็นฝุ่นดาว 5');
   const p = await savedProfile(page); expect(p.bank.dust).toBe(5); expect(p.bank.ore).toBe(500 - 5 * f.smeltOre); expect(p.smelted).toBe(5);
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(44);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(45);
 });
 
 test('the camp name shows in the lobby and the crest button renames it (owner 2026-10-21)', async ({ page }) => {
@@ -851,7 +851,7 @@ test('puzzles: rune stones in order open the vault door, a boulder fills its pit
   }
   await expect(page.locator('#world-message')).toContainText('ประตูหินเปิด'); await expect(page.locator(`.puzzle-door[data-door="${runes.id}"]`)).toHaveClass(/open/);
   let raw = await page.evaluate(k => JSON.parse(localStorage.getItem(k)!), key);
-  expect(raw.version).toBe(44); expect(raw.run.solved).toContain(runes.id);
+  expect(raw.version).toBe(45); expect(raw.run.solved).toContain(runes.id);
   // Walk through the door to the vault chest.
   await page.evaluate(([k, x, y]) => { const s = JSON.parse(localStorage.getItem(k as string)!); s.run.position = { x: (x as number) - 1, y }; localStorage.setItem(k as string, JSON.stringify(s)); }, [key, runes.door.x, runes.door.y]);
   await page.reload(); await page.locator('#continue').click();
@@ -891,7 +891,7 @@ test('map events: stepping on one opens its choices; the shrine heals with a wou
   await page.locator('#event-pray').click(); await expect(page.locator('#event-dialog')).toBeHidden();
   await expect(page.locator('#world-message')).toContainText('ศาลประทานพร');
   let raw = await page.evaluate(k => JSON.parse(localStorage.getItem(k)!), key);
-  expect(raw.version).toBe(44); expect(raw.run.eventsDone).toEqual([shrine.id]); expect(raw.run.members.guardian.wound).toBe(5); expect(raw.run.hp.guardian).toBeGreaterThan(20);
+  expect(raw.version).toBe(45); expect(raw.run.eventsDone).toEqual([shrine.id]); expect(raw.run.members.guardian.wound).toBe(5); expect(raw.run.hp.guardian).toBeGreaterThan(20);
   await expect(page.locator(`.event-mark[data-event="${shrine.id}"]`)).toBeHidden();
   // The merchant stays open between trades.
   await page.evaluate(([k, x, y]) => { const s = JSON.parse(localStorage.getItem(k as string)!); s.run.position = { x, y: (y as number) + 1 }; s.run.resources.ore = 24; localStorage.setItem(k as string, JSON.stringify(s)); }, [key, merchant.x, merchant.y]);
@@ -926,7 +926,7 @@ for (const viewport of viewports) {
     const camp = findTiles(map, 'camp')[1]!;
     // A full pack (three-digit resources, potions and found gear) is the widest the bag capsule gets.
     const issues = await open(page, base({ position: camp, hp: { guardian: 50, tracer: 0, weaver: 10, healer: 46 }, resources: { ore: 128, gold: 96, ember: 3, seal: 12 },
-      potions: { salve: 3, tonic: 2, repel: 1 }, found: [{ uid: 0, slot: 'head', rarity: 0, level: 3, affixes: [] }, { uid: 0, slot: 'boots', rarity: 0, level: 3, affixes: [] }] }));
+      potions: { salve: 3, tonic: 2, repel: 1, calm: 0 }, found: [{ uid: 0, slot: 'head', rarity: 0, level: 3, affixes: [] }, { uid: 0, slot: 'boots', rarity: 0, level: 3, affixes: [] }] }));
     expect(await page.evaluate(() => ({ x: scrollX, y: scrollY, overflow: document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth }))).toEqual({ x: 0, y: 0, overflow: false });
     // The map fills the portrait game frame, including on a wider desktop viewport.
     expect(await page.locator('#map-viewport').boundingBox()).toEqual(await page.locator('#app').boundingBox());
@@ -1042,7 +1042,7 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   await page.screenshot({ path: info.outputPath('bag-team.png') });
   await page.locator('#pack-content .team-card.empty.target').first().click();
   await expect.poll(async () => (await saved(page)).roster).toEqual({ deployed: ['guardian', 'tracer', 'weaver'], reserve: ['healer'] });
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(44);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(45);
   expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
   expect(issues).toEqual([]);
 });
@@ -1165,7 +1165,7 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-talents-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(44); expect(saved.profile.members.guardian.talents).toEqual({ c1s: 1, a1: 2 }); expect(saved.profile.members.guardian.loadout).toEqual(['guard', 'rally']);
+  expect(saved.version).toBe(45); expect(saved.profile.members.guardian.talents).toEqual({ c1s: 1, a1: 2 }); expect(saved.profile.members.guardian.loadout).toEqual(['guard', 'rally']);
   // Back to the team sheet: the card shows the new max HP.
   await page.locator('#camp-character-dialog [data-world=character-close]').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
   await expect(page.locator('#lobby-member-guardian')).toContainText(`เลือด ${Math.round(76 * (100 + 9 + 10) / 100)}`);
@@ -1214,7 +1214,7 @@ test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salva
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-gear-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(44); expect(saved.profile.members.guardian.gear.charm.uid).toBe(4); expect(saved.profile.items.map((i: { uid: number }) => i.uid)).toEqual([3]);
+  expect(saved.version).toBe(45); expect(saved.profile.members.guardian.gear.charm.uid).toBe(4); expect(saved.profile.items.map((i: { uid: number }) => i.uid)).toEqual([3]);
   expect(saved.profile.bank).toMatchObject({ ore: 7, dust: 5 });
 });
 
@@ -1257,12 +1257,12 @@ test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-forge-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(44); expect(saved.profile.items).toHaveLength(1); expect(saved.profile.items[0]).toMatchObject({ uid: 1, rarity: 2 });
+  expect(saved.version).toBe(45); expect(saved.profile.items).toHaveLength(1); expect(saved.profile.items[0]).toMatchObject({ uid: 1, rarity: 2 });
   expect(saved.profile.bank).toMatchObject({ ore: 96, gold: 0, seal: 0, dust: 19 }); expect(saved.profile.forge).toBeGreaterThan(0);
 });
 
 test('potions: brew in the lobby, pack 3 on departure, drink a salve and a repel on the map', async ({ page }, info) => {
-  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 200, gold: 0, seal: 0, dust: 40 }, potions: { salve: 3, tonic: 0, repel: 0 } } as Profile;
+  const profile = { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 200, gold: 0, seal: 0, dust: 40 }, potions: { salve: 3, tonic: 0, repel: 0, calm: 0 } } as Profile;
   await seed(page, null, profile);
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator('#lobby-tab-brew').click();
@@ -1277,7 +1277,7 @@ test('potions: brew in the lobby, pack 3 on departure, drink a salve and a repel
   await page.locator('[data-lobby="close"]').click(); await page.locator('#lobby-depart').click();
   await expect(page.locator('#world-pack')).toHaveAttribute('aria-label', /กระเป๋า/);
   let saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.run.potions).toEqual({ salve: 3, tonic: 0, repel: 1 }); expect(saved.profile.potions).toEqual({ salve: 1, tonic: 0, repel: 0 });
+  expect(saved.run.potions).toEqual({ salve: 3, tonic: 0, repel: 1, calm: 0 }); expect(saved.profile.potions).toEqual({ salve: 1, tonic: 0, repel: 0, calm: 0 });
   // Hurt the knight in the save, reload, and drink a salve from the pack.
   saved.run.hp.guardian = 10; await page.evaluate(raw => localStorage.setItem('asterveil.fateweave.expedition.v1', raw), JSON.stringify(saved));
   await page.evaluate(() => sessionStorage.setItem('playtest-seeded', 'yes')); await page.reload(); await page.locator('#continue').click();
@@ -1291,7 +1291,7 @@ test('potions: brew in the lobby, pack 3 on departure, drink a salve and a repel
   await page.locator('[data-world="pack-close"]').click();
   await expect(page.locator('#danger-chip')).toContainText('ไล่อสูร 10 ก้าว');
   saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
-  expect(saved.version).toBe(44); expect(saved.run.potions).toEqual({ salve: 2, tonic: 0, repel: 0 }); expect(saved.run.repel).toBe(10); expect(saved.run.hp.guardian).toBeGreaterThan(10);
+  expect(saved.version).toBe(45); expect(saved.run.potions).toEqual({ salve: 2, tonic: 0, repel: 0, calm: 0 }); expect(saved.run.repel).toBe(10); expect(saved.run.hp.guardian).toBeGreaterThan(10);
 });
 
 test('camp NPCs stand at their stations, open their service when tapped and greet with a line', async ({ page }, info) => {

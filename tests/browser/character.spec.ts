@@ -13,7 +13,7 @@ async function open(page: Page) {
   profile.company.push('mira'); profile.members.mira = { stars: 1, dupes: 0}; profile.campXp = Math.max(profile.campXp, xpAt(2)); profile.party.reserve = ['mira'];
   const game = depart(profile, map, encounterById, 1234); game.run.hp.guardian = 11; game.run.hp.healer = 0;
   game.run.found = [{ uid: 0, slot: 'body', rarity: 3, level: 4, affixes: affixPool(map.equipment, 'body').slice(0, 3) }, { uid: 0, slot: 'weapon', hero: 'tracer', rarity: 0, level: 2, affixes: [] }];
-  const raw = JSON.stringify({ version: 44, ...game }); parseGame(raw, map, encounterById);
+  const raw = JSON.stringify({ version: 45, ...game }); parseGame(raw, map, encounterById);
   await page.addInitScript(({key,raw}) => { if (!sessionStorage.getItem('character-seeded')) { localStorage.setItem(key, raw); sessionStorage.setItem('character-seeded', 'yes'); } }, {key,raw});
   await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#world-view')).toBeVisible();
 }
@@ -71,7 +71,7 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await expect(page.locator('#pack-dialog')).not.toBeVisible(); await page.keyboard.press('Escape');
     await expect(page.locator('#pack-dialog')).toBeVisible(); await expect(page.locator('#bag-member-guardian')).toBeFocused(); await expect(page.locator('#bag-tab-gear')).toHaveAttribute('aria-selected','true');
     await page.keyboard.press('Escape'); await expect(page.locator('#world-pack')).toBeFocused();
-    expect(JSON.parse(await saved(page)).version).toBe(44); expect(errors).toEqual([]); await context.close();
+    expect(JSON.parse(await saved(page)).version).toBe(45); expect(errors).toEqual([]); await context.close();
   });
 }
 

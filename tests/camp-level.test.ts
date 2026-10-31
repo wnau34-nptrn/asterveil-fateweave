@@ -48,7 +48,7 @@ describe('camp level thresholds and cap', () => {
   });
   it('every owned member, in the team, the reserve, the camp or just hired, fights at the camp level', () => {
     let p = { ...veteran(), campXp: xpAt(6), bank: { ore: 0, gold: 999, seal: 0, dust: 0 } };
-    p = placeMember(p, 'healer', 'bench').profile; expect(p.party.deployed).not.toContain('healer');
+    p = placeMember(p, map, 'healer', 'bench').profile; expect(p.party.deployed).not.toContain('healer');
     const offer = boardOffers(p, map, lookup).findIndex(id => !p.company.includes(id));
     p = hire(p, map, lookup, offer).profile; const hired = p.company.at(-1)!;
     expect(p.members[hired]).toEqual({ stars: 1, dupes: 0 });
@@ -140,7 +140,7 @@ describe('camp archive', () => {
     const before = structuredClone(p.members.mira);
     p = setArchived(p, 'mira', true).profile; expect(p.archived).toEqual(['mira']); expect(p.members.mira).toEqual(before);
     expect(parseGame(write({ profile: p, run: null }), map, lookup).profile).toEqual(p);
-    expect(placeMember(p, 'mira', 'reserve').profile.archived).toBeUndefined();
+    expect(placeMember(p, map, 'mira', 'reserve').profile.archived).toBeUndefined();
     expect(setArchived(p, 'mira', false).profile.archived).toBeUndefined();
     expect(dismiss(p, map, 'mira').profile.archived).toBeUndefined();
     const bad = JSON.parse(write({ profile: p, run: null })); bad.profile.archived = ['guardian'];
