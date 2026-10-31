@@ -138,7 +138,7 @@ test('a new ค่ายทหารรับจ้าง: the Knight fights the
   // The starter recruitment: three offers, Escape cannot skip it, each pick has its scene.
   const draft = page.locator('#draft-dialog'); await expect(draft).toBeVisible(); await expect(draft.locator('.draft-board li')).toHaveCount(3);
   let run = await saved(page); expect(run.recruited).toEqual(['tracer']); expect(run.guests).toBeUndefined();
-  expect(run.arrivals).toEqual({ weaver: 1 }); expect(run.roster.deployed).toEqual(['guardian', 'tracer']); expect(run.draft!.left).toBe(2);
+  expect(run.arrivals).toEqual(['weaver']); expect(run.roster.deployed).toEqual(['guardian', 'tracer']); expect(run.draft!.left).toBe(2);
   await page.keyboard.press('Escape'); await expect(draft).toBeVisible();
   const first = run.draft!.offers[1]!;
   await page.locator('#draft-1').click(); await expect(draft).toBeHidden();
@@ -156,7 +156,7 @@ test('Aira comes back as the map 1 boss fight starts: her scene plays before the
   const data = battleData(s, ruinsMap, encounterById)!; let b = battleState(s, ruinsMap, encounterById)!;
   while (b.outcome === 'active') { const l = battleLesson(b, data)!; b = resolveCommand(b, data, { beat: b.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }).state; }
   s = finishBattle(recordBattle(s, ruinsMap, encounterById, b.commands), ruinsMap, encounterById).state;
-  s = draftPick(draftPick(s, ruinsMap, 0, encounterById).state, ruinsMap, 0, encounterById).state; expect(s.arrivals).toEqual({ weaver: 1 });
+  s = draftPick(draftPick(s, ruinsMap, 0, encounterById).state, ruinsMap, 0, encounterById).state; expect(s.arrivals).toEqual(['weaver']);
   const [boss] = findTiles(ruinsMap, 'boss'); const steps = [['up', 0, 1], ['down', 0, -1], ['left', 1, 0], ['right', -1, 0]] as const;
   const [dir, dx, dy] = steps.find(([, dx, dy]) => { const k = tileAt(ruinsMap, { x: boss!.x + dx, y: boss!.y + dy })?.kind; return !!k && k !== 'wall' && k !== 'goal'; })!;
   s.position = { x: boss!.x + dx, y: boss!.y + dy }; reveal(s, ruinsMap);
@@ -1157,8 +1157,9 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn, #camp-character-dialog .loadout-skill, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('lobby-talents.png') });
   // Another member's tree from the picker.
+  // P01: Lyra shares the camp level, so she has points of her own to spend.
   await page.locator('#camp-character-member-tracer').click(); await expect(page.locator('#camp-character-dialog .talent-tree')).toHaveAttribute('aria-label', /ไลรา/);
-  await expect(page.locator('#camp-character-talent-a1')).toHaveAttribute('aria-label', /แต้มไม่พอ/);
+  await expect(page.locator('#camp-character-talent-a1')).toHaveAttribute('aria-label', /ลงได้ 1 แต้ม/);
   await page.locator('#camp-character-member-guardian').click();
   await page.setViewportSize({ width: 390, height: 844 }); await page.locator('#camp-character-talent-c4').scrollIntoViewIfNeeded();
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
