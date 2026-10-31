@@ -1,4 +1,4 @@
-**เจ้าของอนุมัติ “อนุมัติ” 2026-10-31 → PR #125 merge `9a36736` (quality + browser 4 shards ผ่านบน `393090d`), Pages ตามมาจาก push นี้**
+**เจ้าของอนุมัติ “อนุมัติ” 2026-10-31 → PR #125 merge `9a36736` (quality + browser 4 shards ผ่านบน `393090d`), เผยแพร่แล้วผ่าน Pages run 41168061842 (build + browser 4 shards + deploy สำเร็จ 2026-10-31 12:09 Bangkok)**
 
 # W8 — ปิดแผน animation/VFX: ตาราง coverage, A11 ตรวจสนามรวม, งบภาพ, แก้ VFX อ่านยาก, แผงวัดมือถือ (2026-10-31)
 

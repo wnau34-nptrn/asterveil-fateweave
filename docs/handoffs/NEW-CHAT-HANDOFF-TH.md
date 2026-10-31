@@ -1,6 +1,20 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
-## 2026-10-31 — W8 ปิดแผน animation/VFX: เจ้าของอนุมัติ, PR #125 merged `9a36736`
+## 2026-10-31 — W8 ปิดแผน animation/VFX: เจ้าของอนุมัติ, PR #125 merged `9a36736`, Pages 41168061842 สำเร็จ
+
+### ข้อความเปิดแชต P01 (model Opus)
+
+```text
+ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขาเกม feature/fateweave-initial-prototype (ไม่ใช่ main) เริ่มด้วย git fetch แล้วยืนยันว่า HEAD ตรงกับ origin (W8 ปิดแล้ว: PR #125 merge 9a36736, Pages 41168061842)
+อ่าน AGENTS.md, CLAUDE.md, docs/DEVELOPMENT_PLAN_TH.md (P01 + ลำดับ OD-13), docs/design/OWNER_DECISIONS_TH.md (OD-01–OD-14), docs/design/p00/SHARED_PROGRESSION_TEAM_SPEC_TH.md, docs/design/p00/MIGRATION_ACCEPTANCE_TH.md, docs/validation/p00/README.md, หัวข้อบนสุดของ docs/handoffs/NEW-CHAT-HANDOFF-TH.md; ใช้ skill fateweave-rules-and-sim ก่อนแตะ core/save/world/content
+งาน P01 เลเวลค่ายร่วมและการถือครอง ตามลำดับ PR ในสเปก P00 (P01-A/B):
+1) P01-01 camp progression authority: Lv/EXP ของค่ายเดียว, XP ได้ครั้งเดียวต่อกิจกรรม (ไม่คูณจำนวนคน), เพดานตามเนื้อหา; ทุก owned ID รวมคนใหม่/สำรอง/นอกทีมใช้ Lv ค่าย
+2) P01-02 ถือครองครบแค็ตตาล็อก (ตาม OD-14: 15 อาชีพ × 1 ตัว; โอดราน thiran/อิโซลด์ wila คงในเซฟเดิมแต่ไม่มีการรับใหม่), UI ค้นหา/กรอง/เก็บเข้าคลังไม่ทำลายทุน, duplicate ID และการรับจากเรื่อง/บอร์ด
+3) P01-03 migration เซฟ (bump version จาก v43) อิงความก้าวหน้าสูงสุดของคนที่ถือครอง ไม่รวม EXP ทุกคน; ตรวจ cap, partial EXP, grants, คำสั่งค้าง, โหลดซ้ำ; สรุปให้ผู้เล่น
+ทีมสนามยังเป็น 4 (ทีม 5 คือ P02); ดาว/แต้มต้นไม้ใหม่เป็น P04 — ไม่ทำในงานนี้ ตัวเลขเป็นร่าง ตรวจด้วย npm run sim เทียบ baseline P00
+เทสต์ unit (เซฟเก่า/ใหม่, reward-once, replay) + sim + browser ที่เกี่ยว, CI เต็มบน PR เข้าสาขาเกม, merge/Pages ตาม standing authorization; อัปเดต handoff/แผน/issue #69 เมื่อจบ
+Chromium: export PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium; npm ci
+```
 
 - ผลรวม `docs/validation/w8-field-audit/README_TH.md`; ค้าง: ผลมือถือจริงจาก `?perf=1`; งบ download ไลรา/เซรีส (ต้องเลือกวิธีที่เปลี่ยนภาพ); โอดราน/อิโซลด์ OD-14
 - หลัง merge: ลำดับ OD-13 → P01
