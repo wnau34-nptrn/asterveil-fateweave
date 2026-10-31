@@ -69,6 +69,10 @@
 - สนามเต็ม 8 ตัว ทุก encounter อยู่ในงบภาพ และไม่สะสม texture ข้าม encounter
 - ทุกชุดมีคลิป 390px, release proof และ approval ของเจ้าของ
 
+## สถานะ W8 (ปิดแผน) — 2026-10-31, PR รอเจ้าของอนุมัติ
+
+สาขา `claude/w8-animation-vfx-close` ([ผลรวม](../validation/w8-field-audit/README_TH.md)): ตาราง coverage สร้างจากโค้ดแล้ว (`npm run coverage:presentation`, เทสต์ล้มเมื่อค้าง) — 36 identities, 73 ActionId, 40 ชื่อท่าศัตรู/phase; ท่าร่างกาย procedural เหลือเฉพาะโอดราน/อิโซลด์ที่พักตาม OD-14; VFX ที่ไม่ใช่ภาพเฉพาะมีแต่ชุดร่วม/โค้ดที่ตั้งใจ (Rift Beam ย้ายมาใช้ภาพ Rift Bolt) · A11: ทุก encounter ทีม 5 แย่สุด 40.0 MiB ≤64 MiB, ไม่สะสม texture ข้าม encounter (VFX เฉพาะ encounter ถูกปล่อยแล้ว) · repack render-identical: VFX preload 124.4 → 67.8 MiB · Rift Bolt/Veil Quake/ribbon/Rounddance/Deepbeat แก้ใน module · แผง `?perf=1` รอผลมือถือจริง · เกณฑ์ §4 ที่ยังเปิด: approval เจ้าของสำหรับชุดนี้, งบ download ไลรา/เซรีส (ต้องเปลี่ยนภาพ), โอดราน/อิโซลด์ (OD-14)
+
 ## 5. คำสั่งงานภาพชุดแรก (W1) — copy-ready สำหรับ Codex
 
 ### ART-UNIT-ANIMATION-A3-001 — เซเรน + เห็ดหมอผีกลวง

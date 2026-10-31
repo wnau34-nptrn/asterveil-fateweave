@@ -1,813 +1,813 @@
 {
-  "frames": {
-    "ember-spark_impact": {
-      "frame": {
-        "x": 384,
-        "y": 452,
-        "w": 224,
-        "h": 223
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 16,
-        "w": 224,
-        "h": 223
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "ember-spark_prepare": {
-      "frame": {
-        "x": 223,
-        "y": 0,
-        "w": 203,
-        "h": 224
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 26,
-        "y": 16,
-        "w": 203,
-        "h": 224
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "ember-spark_settle": {
-      "frame": {
-        "x": 389,
-        "y": 1106,
-        "w": 224,
-        "h": 163
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 46,
-        "w": 224,
-        "h": 163
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "ember-spark_travel": {
-      "frame": {
-        "x": 620,
-        "y": 1456,
-        "w": 224,
-        "h": 115
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 70,
-        "w": 224,
-        "h": 115
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "rift-bolt-foe_impact": {
-      "frame": {
-        "x": 444,
-        "y": 678,
-        "w": 224,
-        "h": 216
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 20,
-        "w": 224,
-        "h": 216
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "rift-bolt-foe_prepare": {
-      "frame": {
-        "x": 172,
-        "y": 452,
-        "w": 210,
-        "h": 224
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 23,
-        "y": 16,
-        "w": 210,
-        "h": 224
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "rift-bolt-foe_settle": {
-      "frame": {
-        "x": 226,
-        "y": 897,
-        "w": 224,
-        "h": 204
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 26,
-        "w": 224,
-        "h": 204
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "rift-bolt-foe_travel": {
-      "frame": {
-        "x": 678,
-        "y": 1603,
-        "w": 224,
-        "h": 97
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 79,
-        "w": 224,
-        "h": 97
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "rift-needle_impact": {
-      "frame": {
-        "x": 637,
-        "y": 226,
-        "w": 209,
-        "h": 224
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 23,
-        "y": 16,
-        "w": 209,
-        "h": 224
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "rift-needle_prepare": {
-      "frame": {
-        "x": 432,
-        "y": 226,
-        "w": 203,
-        "h": 224
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 26,
-        "y": 16,
-        "w": 203,
-        "h": 224
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "rift-needle_settle": {
-      "frame": {
-        "x": 848,
-        "y": 226,
-        "w": 73,
-        "h": 224
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 91,
-        "y": 16,
-        "w": 73,
-        "h": 224
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "rift-needle_travel": {
-      "frame": {
-        "x": 452,
-        "y": 1711,
-        "w": 224,
-        "h": 49
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 103,
-        "w": 224,
-        "h": 49
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "rune-lash_impact": {
-      "frame": {
-        "x": 215,
-        "y": 226,
-        "w": 215,
-        "h": 224
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 20,
-        "y": 16,
-        "w": 215,
-        "h": 224
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "rune-lash_prepare": {
-      "frame": {
-        "x": 452,
-        "y": 897,
-        "w": 224,
-        "h": 200
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 28,
-        "w": 224,
-        "h": 200
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "rune-lash_settle": {
-      "frame": {
-        "x": 678,
-        "y": 1292,
-        "w": 224,
-        "h": 151
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 52,
-        "w": 224,
-        "h": 151
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "rune-lash_travel": {
-      "frame": {
-        "x": 0,
-        "y": 1603,
-        "w": 224,
-        "h": 106
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 75,
-        "w": 224,
-        "h": 106
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "seed-spark_impact": {
-      "frame": {
-        "x": 0,
-        "y": 0,
-        "w": 221,
-        "h": 224
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 17,
-        "y": 16,
-        "w": 221,
-        "h": 224
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "seed-spark_prepare": {
-      "frame": {
-        "x": 0,
-        "y": 1106,
-        "w": 161,
-        "h": 184
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 47,
-        "y": 36,
-        "w": 161,
-        "h": 184
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "seed-spark_settle": {
-      "frame": {
-        "x": 163,
-        "y": 1106,
-        "w": 224,
-        "h": 165
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 45,
-        "w": 224,
-        "h": 165
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "seed-spark_travel": {
-      "frame": {
-        "x": 394,
-        "y": 1456,
-        "w": 224,
-        "h": 116
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 70,
-        "w": 224,
-        "h": 116
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "shard-burst_impact": {
-      "frame": {
-        "x": 670,
-        "y": 678,
-        "w": 224,
-        "h": 212
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 22,
-        "w": 224,
-        "h": 212
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "shard-burst_prepare": {
-      "frame": {
-        "x": 610,
-        "y": 452,
-        "w": 224,
-        "h": 220
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 18,
-        "w": 224,
-        "h": 220
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "shard-burst_settle": {
-      "frame": {
-        "x": 0,
-        "y": 452,
-        "w": 170,
-        "h": 224
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 43,
-        "y": 16,
-        "w": 170,
-        "h": 224
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "shard-burst_travel": {
-      "frame": {
-        "x": 452,
-        "y": 1292,
-        "w": 224,
-        "h": 153
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 51,
-        "w": 224,
-        "h": 153
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "spore-dust_impact": {
-      "frame": {
-        "x": 627,
-        "y": 0,
-        "w": 210,
-        "h": 224
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 23,
-        "y": 16,
-        "w": 210,
-        "h": 224
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "spore-dust_prepare": {
-      "frame": {
-        "x": 0,
-        "y": 678,
-        "w": 224,
-        "h": 217
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 19,
-        "w": 224,
-        "h": 217
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "spore-dust_settle": {
-      "frame": {
-        "x": 0,
-        "y": 897,
-        "w": 224,
-        "h": 207
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 24,
-        "w": 224,
-        "h": 207
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "spore-dust_travel": {
-      "frame": {
-        "x": 226,
-        "y": 1603,
-        "w": 224,
-        "h": 105
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 75,
-        "w": 224,
-        "h": 105
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "spore-hex_impact": {
-      "frame": {
-        "x": 428,
-        "y": 0,
-        "w": 197,
-        "h": 224
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 29,
-        "y": 16,
-        "w": 197,
-        "h": 224
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "spore-hex_prepare": {
-      "frame": {
-        "x": 226,
-        "y": 678,
-        "w": 216,
-        "h": 216
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 20,
-        "y": 20,
-        "w": 216,
-        "h": 216
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "spore-hex_settle": {
-      "frame": {
-        "x": 678,
-        "y": 897,
-        "w": 224,
-        "h": 192
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 32,
-        "w": 224,
-        "h": 192
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "spore-hex_travel": {
-      "frame": {
-        "x": 452,
-        "y": 1603,
-        "w": 224,
-        "h": 100
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 78,
-        "w": 224,
-        "h": 100
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "star-flame_impact": {
-      "frame": {
-        "x": 0,
-        "y": 226,
-        "w": 213,
-        "h": 224
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 21,
-        "y": 16,
-        "w": 213,
-        "h": 224
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "star-flame_prepare": {
-      "frame": {
-        "x": 0,
-        "y": 1456,
-        "w": 166,
-        "h": 145
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 45,
-        "y": 55,
-        "w": 166,
-        "h": 145
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "star-flame_settle": {
-      "frame": {
-        "x": 615,
-        "y": 1106,
-        "w": 224,
-        "h": 162
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 47,
-        "w": 224,
-        "h": 162
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "star-flame_travel": {
-      "frame": {
-        "x": 0,
-        "y": 1711,
-        "w": 224,
-        "h": 93
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 81,
-        "w": 224,
-        "h": 93
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "veil-quake_impact": {
-      "frame": {
-        "x": 226,
-        "y": 1292,
-        "w": 224,
-        "h": 157
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 67,
-        "w": 224,
-        "h": 157
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "veil-quake_prepare": {
-      "frame": {
-        "x": 0,
-        "y": 1292,
-        "w": 224,
-        "h": 162
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 62,
-        "w": 224,
-        "h": 162
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "veil-quake_settle": {
-      "frame": {
-        "x": 168,
-        "y": 1456,
-        "w": 224,
-        "h": 124
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 100,
-        "w": 224,
-        "h": 124
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    },
-    "veil-quake_travel": {
-      "frame": {
-        "x": 226,
-        "y": 1711,
-        "w": 224,
-        "h": 78
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 16,
-        "y": 146,
-        "w": 224,
-        "h": 78
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      }
-    }
+ "frames": {
+  "ember-spark_impact": {
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 224,
+    "h": 223
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 16,
+    "w": 224,
+    "h": 223
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
   },
-  "meta": {
-    "image": "foe_signature_fx.webp",
-    "format": "RGBA8888",
-    "size": {
-      "w": 1024,
-      "h": 1804
-    },
-    "scale": "1"
+  "ember-spark_prepare": {
+   "frame": {
+    "x": 432,
+    "y": 675,
+    "w": 203,
+    "h": 224
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 26,
+    "y": 16,
+    "w": 203,
+    "h": 224
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "ember-spark_settle": {
+   "frame": {
+    "x": 227,
+    "y": 1095,
+    "w": 224,
+    "h": 163
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 46,
+    "w": 224,
+    "h": 163
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "ember-spark_travel": {
+   "frame": {
+    "x": 453,
+    "y": 1418,
+    "w": 224,
+    "h": 115
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 70,
+    "w": 224,
+    "h": 115
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "rift-bolt-foe_impact": {
+   "frame": {
+    "x": 676,
+    "y": 220,
+    "w": 224,
+    "h": 216
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 20,
+    "w": 224,
+    "h": 216
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "rift-bolt-foe_prepare": {
+   "frame": {
+    "x": 667,
+    "y": 438,
+    "w": 210,
+    "h": 224
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 23,
+    "y": 16,
+    "w": 210,
+    "h": 224
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "rift-bolt-foe_settle": {
+   "frame": {
+    "x": 1,
+    "y": 667,
+    "w": 224,
+    "h": 204
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 26,
+    "w": 224,
+    "h": 204
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "rift-bolt-foe_travel": {
+   "frame": {
+    "x": 679,
+    "y": 1534,
+    "w": 224,
+    "h": 97
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 79,
+    "w": 224,
+    "h": 97
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "rift-needle_impact": {
+   "frame": {
+    "x": 428,
+    "y": 449,
+    "w": 209,
+    "h": 224
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 23,
+    "y": 16,
+    "w": 209,
+    "h": 224
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "rift-needle_prepare": {
+   "frame": {
+    "x": 227,
+    "y": 675,
+    "w": 203,
+    "h": 224
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 26,
+    "y": 16,
+    "w": 203,
+    "h": 224
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "rift-needle_settle": {
+   "frame": {
+    "x": 679,
+    "y": 1633,
+    "w": 73,
+    "h": 224
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 91,
+    "y": 16,
+    "w": 73,
+    "h": 224
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "rift-needle_travel": {
+   "frame": {
+    "x": 1,
+    "y": 1634,
+    "w": 224,
+    "h": 49
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 103,
+    "w": 224,
+    "h": 49
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "rune-lash_impact": {
+   "frame": {
+    "x": 450,
+    "y": 223,
+    "w": 215,
+    "h": 224
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 20,
+    "y": 16,
+    "w": 215,
+    "h": 224
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "rune-lash_prepare": {
+   "frame": {
+    "x": 1,
+    "y": 873,
+    "w": 224,
+    "h": 200
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 28,
+    "w": 224,
+    "h": 200
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "rune-lash_settle": {
+   "frame": {
+    "x": 679,
+    "y": 1263,
+    "w": 224,
+    "h": 151
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 52,
+    "w": 224,
+    "h": 151
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "rune-lash_travel": {
+   "frame": {
+    "x": 227,
+    "y": 1419,
+    "w": 224,
+    "h": 106
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 75,
+    "w": 224,
+    "h": 106
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "seed-spark_impact": {
+   "frame": {
+    "x": 227,
+    "y": 1,
+    "w": 221,
+    "h": 224
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 17,
+    "y": 16,
+    "w": 221,
+    "h": 224
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "seed-spark_prepare": {
+   "frame": {
+    "x": 1,
+    "y": 452,
+    "w": 161,
+    "h": 184
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 47,
+    "y": 36,
+    "w": 161,
+    "h": 184
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "seed-spark_settle": {
+   "frame": {
+    "x": 1,
+    "y": 1075,
+    "w": 224,
+    "h": 165
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 45,
+    "w": 224,
+    "h": 165
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "seed-spark_travel": {
+   "frame": {
+    "x": 679,
+    "y": 1416,
+    "w": 224,
+    "h": 116
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 70,
+    "w": 224,
+    "h": 116
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "shard-burst_impact": {
+   "frame": {
+    "x": 216,
+    "y": 227,
+    "w": 224,
+    "h": 212
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 22,
+    "w": 224,
+    "h": 212
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "shard-burst_prepare": {
+   "frame": {
+    "x": 450,
+    "y": 1,
+    "w": 224,
+    "h": 220
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 18,
+    "w": 224,
+    "h": 220
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "shard-burst_settle": {
+   "frame": {
+    "x": 453,
+    "y": 901,
+    "w": 170,
+    "h": 224
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 43,
+    "y": 16,
+    "w": 170,
+    "h": 224
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "shard-burst_travel": {
+   "frame": {
+    "x": 453,
+    "y": 1263,
+    "w": 224,
+    "h": 153
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 51,
+    "w": 224,
+    "h": 153
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "spore-dust_impact": {
+   "frame": {
+    "x": 216,
+    "y": 441,
+    "w": 210,
+    "h": 224
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 23,
+    "y": 16,
+    "w": 210,
+    "h": 224
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "spore-dust_prepare": {
+   "frame": {
+    "x": 676,
+    "y": 1,
+    "w": 224,
+    "h": 217
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 19,
+    "w": 224,
+    "h": 217
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "spore-dust_settle": {
+   "frame": {
+    "x": 639,
+    "y": 664,
+    "w": 224,
+    "h": 207
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 24,
+    "w": 224,
+    "h": 207
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "spore-dust_travel": {
+   "frame": {
+    "x": 227,
+    "y": 1527,
+    "w": 224,
+    "h": 105
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 75,
+    "w": 224,
+    "h": 105
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "spore-hex_impact": {
+   "frame": {
+    "x": 637,
+    "y": 873,
+    "w": 197,
+    "h": 224
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 29,
+    "y": 16,
+    "w": 197,
+    "h": 224
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "spore-hex_prepare": {
+   "frame": {
+    "x": 227,
+    "y": 1634,
+    "w": 216,
+    "h": 216
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 20,
+    "y": 20,
+    "w": 216,
+    "h": 216
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "spore-hex_settle": {
+   "frame": {
+    "x": 227,
+    "y": 901,
+    "w": 224,
+    "h": 192
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 32,
+    "w": 224,
+    "h": 192
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "spore-hex_travel": {
+   "frame": {
+    "x": 1,
+    "y": 1532,
+    "w": 224,
+    "h": 100
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 78,
+    "w": 224,
+    "h": 100
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "star-flame_impact": {
+   "frame": {
+    "x": 1,
+    "y": 226,
+    "w": 213,
+    "h": 224
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 21,
+    "y": 16,
+    "w": 213,
+    "h": 224
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "star-flame_prepare": {
+   "frame": {
+    "x": 1,
+    "y": 1685,
+    "w": 166,
+    "h": 145
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 45,
+    "y": 55,
+    "w": 166,
+    "h": 145
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "star-flame_settle": {
+   "frame": {
+    "x": 1,
+    "y": 1242,
+    "w": 224,
+    "h": 162
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 47,
+    "w": 224,
+    "h": 162
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "star-flame_travel": {
+   "frame": {
+    "x": 453,
+    "y": 1535,
+    "w": 224,
+    "h": 93
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 81,
+    "w": 224,
+    "h": 93
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "veil-quake_impact": {
+   "frame": {
+    "x": 227,
+    "y": 1260,
+    "w": 224,
+    "h": 157
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 67,
+    "w": 224,
+    "h": 157
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "veil-quake_prepare": {
+   "frame": {
+    "x": 625,
+    "y": 1099,
+    "w": 224,
+    "h": 162
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 62,
+    "w": 224,
+    "h": 162
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "veil-quake_settle": {
+   "frame": {
+    "x": 1,
+    "y": 1406,
+    "w": 224,
+    "h": 124
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 100,
+    "w": 224,
+    "h": 124
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "veil-quake_travel": {
+   "frame": {
+    "x": 453,
+    "y": 1630,
+    "w": 224,
+    "h": 78
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 16,
+    "y": 146,
+    "w": 224,
+    "h": 78
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
   }
+ },
+ "meta": {
+  "image": "foe_signature_fx.webp",
+  "format": "RGBA8888",
+  "size": {
+   "w": 906,
+   "h": 1858
+  },
+  "scale": "1"
+ }
 }

@@ -50,5 +50,7 @@ shell.setBattleVisibilityListener(visible => {
   if (visible) queueMicrotask(() => { if (battleVisible && scene.isReady) { game.loop.wake(); scene.refreshLayout(); } });
   else game.loop.sleep();
 });
+// W8 on-device measurement panel (docs/validation/w8-field-audit/MOBILE_PERF_TH.md): only with ?perf=1, loaded on demand.
+if (new URLSearchParams(location.search).has('perf')) void import('./platform/perf-probe').then(m => m.startPerfProbe({ game, textures: () => scene.sys?.textures }));
 // Startup finished: index.html's boot guard stands down.
 (window as unknown as { __fateweaveReady?: boolean }).__fateweaveReady = true;

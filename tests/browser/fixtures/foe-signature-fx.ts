@@ -38,7 +38,7 @@ function painted(atlas = FOE_SIGNATURE_ATLAS) {
   const items: { frame: string; x: number; y: number; width: number; height: number; alpha: number; visible: boolean; tint: number; rotation: number; scaleX: number; tag: string; target: string }[] = [];
   const visit = (list: Phaser.GameObjects.GameObject[]) => { for (const item of list) {
     if (item instanceof Phaser.GameObjects.Container) visit(item.list);
-    if (item instanceof Phaser.GameObjects.Image && item.texture.key === atlas) items.push({ frame: item.frame.name, x: item.x, y: item.y, width: item.displayWidth, height: item.displayHeight, alpha: item.alpha, visible: item.visible, tint: item.tintTopLeft, rotation: item.rotation, scaleX: item.scaleX, tag: String(item.getData('foeSigTag')), target: String(item.getData('foeSigTarget')) });
+    if (item instanceof Phaser.GameObjects.Image && item.texture.key === atlas && !item.getData('foeSigHalo')) items.push({ frame: item.frame.name, x: item.x, y: item.y, width: item.displayWidth, height: item.displayHeight, alpha: item.alpha, visible: item.visible, tint: item.tintTopLeft, rotation: item.rotation, scaleX: item.scaleX, tag: String(item.getData('foeSigTag')), target: String(item.getData('foeSigTarget')) });
   } }; visit(scene.children.getChildren()); return items;
 }
 const qa = { atlasReady: () => scene.textures.exists(FOE_SIGNATURE_ATLAS),

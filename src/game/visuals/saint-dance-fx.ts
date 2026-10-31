@@ -82,6 +82,12 @@ const thick:Record<string,number>={saintstrike_settle:60,communion_settle:56,due
 // would vanish entirely behind an opaque sprite, so they stay in front, anchored below the face (waist/soles).
 const BACK=new Set(['rounddance_settle','deepbeat_peak','deepbeat_settle']);
 const RIM=new Set(['rounddance_settle','deepbeat_peak','deepbeat_settle']),RIM_ALPHA=.55;
+// W8: Rounddance/Deepbeat read faint over the floor. Their foreground rim glows (additive, stronger) instead of a plain fainter copy.
+const RIM_GLOW:Record<string,number>={rounddance_settle:.9,deepbeat_peak:.85,deepbeat_settle:.85};
+const ADD=1; // Phaser.BlendModes.ADD
+// W8: Duet's looped ribbon smeared when one painting spanned a long link (a top-slot dancer to a bottom-slot ally). A link longer
+// than MAX_STRETCH of the painting's natural length is drawn as consecutive copies, each stretched at most that much; short links are unchanged.
+const SEGMENTED=new Set(['duet_peak','duet_settle']),MAX_STRETCH=1.8,MAX_SEGMENTS=4;
 // Rings behind the legs are drawn wider than the art suggestion so they stay readable around the soles.
 const FLOOR_SCALE:Record<string,number>={rounddance_settle:1,deepbeat_peak:1.5,deepbeat_settle:1.5,closingstep_peak:1.15,closingstep_settle:1.15};
 // Lastlight's burst is brief (art note: roughly the first tenth of the existing window); everything else holds through peak.
@@ -102,6 +108,14 @@ function paint(ctxs:SdContexts,piece:SdPiece,phase:Phase,lookup:SdLookup):Phaser
   img.setData('sdFrame',frame).setData('sdPhase',phase).setData('songT',1).setData('sdScale',1);
   if(phase==='prepare')img.setData('songPrepare',true);
   let rim:Phaser.GameObjects.Image|undefined;
+  const extra:Phaser.GameObjects.Image[]=[];
+  const segment=(i:number)=>{
+    while(extra.length<i){
+      const seg=ctx.scene.add.image(first.x,first.y,SAINT_DANCE_ATLAS,frame).setOrigin(pivot[0],pivot[1]);
+      seg.setData('sdSegment',true);ctx.add(seg);extra.push(seg);
+    }
+    return extra[i-1]!;
+  };
   const follow=()=>{
     if(!img.active)return;
     const quiet=ctx.quiet?.9:1,local=(img.getData('songLocal') as (()=>{x:number;y:number})|undefined)?.(),pop=img.getData('sdScale') as number;
@@ -110,22 +124,35 @@ function paint(ctxs:SdContexts,piece:SdPiece,phase:Phase,lookup:SdLookup):Phaser
     if(piece.mode==='link'){
       const begin=centroid((piece.from??[]).map(at));if(!begin)return;
       const t=(img.getData('songT') as number)*(piece.reach??1),dx=end.x-begin.x,dy=end.y-begin.y,dist=Math.hypot(dx,dy),len=Math.max(14,dist*t),left=dx<0;
-      const s=end.size/111,sx=len/(img.width*REACH),sy=Math.min(Math.max(sx*.5,50/256*s),(thick[frame]??60)/256*s*1.9);
-      x=begin.x+dx*t/2;y=begin.y+dy*t/2;
+      const s=end.size/111,natural=img.width*REACH*(thick[frame]??60)/256*s;
+      const count=SEGMENTED.has(frame)?Math.min(MAX_SEGMENTS,Math.max(1,Math.ceil(len/(natural*MAX_STRETCH)))):1,part=len/count;
+      const sx=part/(img.width*REACH),sy=Math.min(Math.max(sx*.5,50/256*s),(thick[frame]??60)/256*s*1.9);
+      const ux=dist?dx/dist:1,uy=dist?dy/dist:0;
+      x=begin.x+ux*part/2;y=begin.y+uy*part/2;
       // Art points right; mirror for leftward travel and follow the real direction.
-      img.setScale(left?-sx:sx,sy*quiet).setRotation(left?Math.atan2(-dy,-dx):Math.atan2(dy,dx));
+      const rotation=left?Math.atan2(-dy,-dx):Math.atan2(dy,dx);
+      img.setScale(left?-sx:sx,sy*quiet).setRotation(rotation);
+      for(let i=1;i<=Math.max(count-1,extra.length);i++){
+        const seg=segment(i);seg.setVisible(i<count);
+        seg.setPosition(begin.x+ux*part*(i+.5),begin.y+uy*part*(i+.5)).setScale(img.scaleX,img.scaleY).setRotation(rotation);
+      }
     }else{
       const w=(widths[frame]??60)*(FLOOR_SCALE[frame]??1)*end.size/111/img.width*quiet;
       img.setScale(w*pop);
     }
     // Back layers live inside their unit's body: positions are then relative to the body origin.
     img.setPosition(x-(local?.x??0),y-(local?.y??0));
-    if(rim?.active)rim.setPosition(x,y).setScale(img.scaleX,img.scaleY).setRotation(img.rotation).setAlpha(img.alpha*RIM_ALPHA);
+    if(rim?.active)rim.setPosition(x,y).setScale(img.scaleX,img.scaleY).setRotation(img.rotation).setAlpha(img.alpha*(RIM_GLOW[frame]??RIM_ALPHA));
   };
+  if(SEGMENTED.has(frame)){
+    // Copies share the painting's fade and tint; they never outlive it.
+    const sync=()=>{if(!img.active){ctx.scene.events.off('postupdate',sync);return;}for(const seg of extra)if(seg.active){seg.alpha=img.alpha;seg.tintTopLeft=img.tintTopLeft;}};
+    ctx.scene.events.on('postupdate',sync);img.once('destroy',()=>{ctx.scene.events.off('postupdate',sync);for(const seg of extra)seg.destroy();});
+  }
   // Rings sit behind the sprite, so a fainter copy in front keeps a thin rim across the legs (art note: rear paint + narrow foreground rim).
   if(RIM.has(frame)&&!ctx.reduced&&ctxs.front!==ctx){
     rim=ctxs.front.scene.add.image(first.x,first.y,SAINT_DANCE_ATLAS,frame).setOrigin(pivot[0],pivot[1]);
-    rim.setData('songRim',true);ctxs.front.add(rim);img.once('destroy',()=>rim?.destroy());
+    rim.setData('songRim',true);if(RIM_GLOW[frame])rim.setBlendMode(ADD);ctxs.front.add(rim);img.once('destroy',()=>rim?.destroy());
   }
   if(!ctx.reduced)img.setData('songFollow',follow);follow();ctx.add(img);
   if(piece.outcome==='blocked'&&phase!=='prepare')img.setTint(0x8addf5);

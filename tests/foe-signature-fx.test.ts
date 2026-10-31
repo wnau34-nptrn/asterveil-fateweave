@@ -9,11 +9,12 @@ import sources from '../incoming/ART-VFX-FOE-SIGNATURE-001/production-sources.js
 import layers from '../incoming/ART-VFX-FOE-SIGNATURE-001/layers.json';
 
 const moves=Object.keys(foeSignatureMoves) as FoeSignatureMove[];
-const bossSignature=['Thorn Tempest','Thorn Bloom','Thorn Rage','Gather Thorns','Thorn Storm','Rift Gathering','Rift Cataclysm','Rift Wave','Rift Beam','War Cry','Horn Charge','Stampede','Call the Hunt','Call the Rift','Rift Awakening'];
+const bossSignature=['Thorn Tempest','Thorn Bloom','Thorn Rage','Gather Thorns','Thorn Storm','Rift Gathering','Rift Cataclysm','Rift Wave','War Cry','Horn Charge','Stampede','Call the Hunt','Call the Rift','Rift Awakening'];
 
 describe('foe signature VFX routing follows authoritative enemy turns',()=>{
- it('ships 40 layers (10 moves x prepare/travel/impact/settle) with art-sheet hashes and pivots',()=>{
+ it('ships 40 layers (10 painted moves; Rift Beam shares Rift Bolt; x prepare/travel/impact/settle) with art-sheet hashes and pivots',()=>{
   expect(Object.keys(atlas.frames).sort()).toEqual(Object.keys(art).sort());expect(Object.keys(art)).toHaveLength(40);
+  expect(foeSignatureMoves['Rift Beam']).toBe(foeSignatureMoves['Rift Bolt']);
   for(const slug of Object.values(foeSignatureMoves))for(const beat of ['prepare','travel','impact','settle'])expect(art).toHaveProperty(`${slug}_${beat}`);
   const a=art as unknown as Record<string,{pivot:number[]}>;
   expect(a['veil-quake_travel']!.pivot).toEqual([.5,.875]);expect(a['seed-spark_travel']!.pivot).toEqual([.5,.5]);

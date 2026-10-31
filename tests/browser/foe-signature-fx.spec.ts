@@ -5,7 +5,7 @@ test.skip(process.env.PLAYWRIGHT_PAGES==='true','source-only foe signature VFX g
 test.use({reducedMotion:'no-preference'});
 // Mirrors the module table (importing it would need a JSON import attribute under the Playwright node loader).
 const foeSignatureMoves={'Seed Spark':'seed-spark','Ember Spark':'ember-spark','Spore Hex':'spore-hex','Spore Dust':'spore-dust','Star Flame':'star-flame',
- 'Rune Lash':'rune-lash','Rift Needle':'rift-needle','Shard Burst':'shard-burst','Rift Bolt':'rift-bolt-foe','Veil Quake':'veil-quake'} as const;
+ 'Rune Lash':'rune-lash','Rift Needle':'rift-needle','Shard Burst':'shard-burst','Rift Bolt':'rift-bolt-foe','Veil Quake':'veil-quake','Rift Beam':'rift-bolt-foe'} as const;
 type FoeSignatureMove=keyof typeof foeSignatureMoves;
 const moves=Object.keys(foeSignatureMoves) as FoeSignatureMove[];
 const slug=(m:FoeSignatureMove)=>foeSignatureMoves[m];

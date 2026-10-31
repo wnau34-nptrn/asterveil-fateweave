@@ -12,6 +12,10 @@ Owner: finish character animation and skill VFX before other development; Codex 
 
 R2 artwork (PR #89) integrated through PR92 merge `4883362` (mark/sigil/storm/dispel from actual events; rules/save/balance/timing unchanged); owner approved motion and merge with “ทั้งสองอย่าง” on 2026-10-28 after the 21 real 390px clips in `docs/combat-presentation/arcane-seal-slice/`. PR quality+browser passed (browser re-run once after an unrelated `presentation.spec.ts` timeout); Pages run 40730511483 build/4 browser shards/deploy success (16:54–17:21 UTC). A3 (PR #90, R2 chosen) is in a separate session; A4 (PR #91) not started.
 
+## W8 animation/VFX close — 2026-10-31 (PR open, awaiting owner approval)
+
+Branch `claude/w8-animation-vfx-close`: coverage table generated from code (`npm run coverage:presentation`; `tests/presentation-coverage.test.ts`/`tests/encounter-budget.test.ts` fail when stale — rerun after any registry/content/atlas change), A11 full-field check, encounter-only VFX atlases released between encounters, render-identical atlas repack (`scripts/repack-atlas-lossless.py`, verify with `scripts/verify-atlas-repack.py`), dark-foe halo/Duet ribbon segments/ring rims, `?perf=1` on-device panel. Evidence `docs/validation/w8-field-audit/README_TH.md`. Merge/Pages only after the owner approves the clips; no real-device/iOS results yet.
+
 ## Song/Shadow R3 — 2026-10-30 (owner-approved)
 
 Codex ART-VFX-SONG-SHADOW-002 R3 (PR #111) replaces song R2 / shadow R1 in `song_shadow_fx` (27-frame lossless atlas, 4.66 MiB decoded; note = song R2 and decoy = shadow R1 are not in R3 and stay). Finale of mending/dread paint only really healed/shielded allies; solo stands behind its recipient. Owner approved the motion with “อนุมัติ” on 2026-10-30 after the 22 real 390px clips (direct approval). PR #119; evidence `docs/combat-presentation/song-shadow-r3-slice/README_TH.md`. Rules/save/content/balance/timing unchanged.

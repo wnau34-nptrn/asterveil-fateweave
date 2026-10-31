@@ -19,6 +19,7 @@ export const foeSetup:Record<FoeSignatureMove,Pick<EnemyDefinition,'id'|'row'|'n
  'Rift Needle':{id:'b1',row:'back',name:'Rift Weaver',displayName:'ผู้ถักรอยแยก',art:'foe_riftweaver',color:0x8a6cc7,kind:'energy'},
  'Shard Burst':{id:'f1',row:'front',large:true,name:'Crystal Juggernaut',displayName:'ด้วงเกราะผลึก',art:'foe_juggernaut',color:0x9454d6,kind:'energy'},
  'Rift Bolt':{id:'f1',row:'front',large:true,name:'Rift Channeler',displayName:'อสูรส่งพลัง',art:'foe_rift_channeler',color:0x9785f2,kind:'energy'},
+ 'Rift Beam':{id:'f1',row:'front',large:true,name:'Rift Channeler',displayName:'อสูรส่งพลัง',art:'foe_rift_channeler',color:0x8a5cd6,kind:'energy'},
  'Veil Quake':{id:'f1',row:'front',large:true,name:'Veil Golem',displayName:'ยักษ์หินรอยแยก',art:'foe_golem',color:0x7d8a96,kind:'physical'},
 };
 export type FoeScenario='hit'|'guard'|'blocked'|'dodge'|'all';

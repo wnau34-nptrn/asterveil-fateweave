@@ -15,6 +15,8 @@ export const foeSignatureAtlasUrls=():[string,string]=>[`${import.meta.env.BASE_
 export const foeSignatureMoves={
   'Seed Spark':'seed-spark','Ember Spark':'ember-spark','Spore Hex':'spore-hex','Spore Dust':'spore-dust','Star Flame':'star-flame',
   'Rune Lash':'rune-lash','Rift Needle':'rift-needle','Shard Burst':'shard-burst','Rift Bolt':'rift-bolt-foe','Veil Quake':'veil-quake',
+  // W8: the Channeler's species move Rift Beam (not drawn in the package) shares its own Rift Bolt painting: same gesture, same caster.
+  'Rift Beam':'rift-bolt-foe',
 } as const;
 export type FoeSignatureMove=keyof typeof foeSignatureMoves;
 export const isFoeSignatureMove=(name:string|undefined):name is FoeSignatureMove=>!!name&&Object.prototype.hasOwnProperty.call(foeSignatureMoves,name);
@@ -46,10 +48,30 @@ const clamp01=(v:number)=>Math.max(0,Math.min(1,v));
 
 const spread=(cue:FoeSignatureCue)=>cue.total>1?.78:1;
 const px=(ctx:FxContext,beat:keyof typeof WIDTHS,size:number,cue:FoeSignatureCue,extra=1)=>WIDTHS[beat]*size/111/FRAME*(ctx.quiet?.9:1)*spread(cue)*extra;
+// W8: Rift Bolt (black core) and Veil Quake (dark fissure) vanish over the dark Channeler/Golem bodies. A soft additive halo
+// copy sits BEHIND the painting, slightly larger, so a light rim reads around the shape while its dark contours stay on top.
+export const haloMoves:Readonly<Partial<Record<FoeSignatureMove,{tint:number;alpha:number;scale:number}>>>={
+  'Rift Bolt':{tint:0xc4a2ff,alpha:.8,scale:1.18},'Rift Beam':{tint:0xc4a2ff,alpha:.8,scale:1.18},'Veil Quake':{tint:0xf0dcb0,alpha:.6,scale:1.1},
+};
+// Literals keep this module importable by node unit tests: Phaser.BlendModes.ADD and Phaser.TintModes.FILL. The halo is the
+// painting's silhouette filled with one light colour, so it glows even where the painting itself is near black.
+const ADD=1,FILL=1;
+function halo(ctx:FxContext,img:Phaser.GameObjects.Image,name:Name,tag:string,move:FoeSignatureMove):void{
+  const spec=haloMoves[move];if(!spec||tag==='settle')return;
+  const glow=ctx.scene.add.image(0,0,FOE_SIGNATURE_ATLAS,name).setOrigin(img.originX,img.originY).setBlendMode(ADD).setTint(spec.tint).setTintMode(FILL);
+  glow.setData('foeSigHalo',true);glow.setData('foeSigTag',tag);ctx.add(glow);
+  const parent=img.parentContainer;if(parent&&glow.parentContainer===parent)parent.moveBelow(glow,img);
+  const sync=()=>{
+    if(!img.active||!glow.active){ctx.scene.events.off('postupdate',sync);if(glow.active)glow.destroy();return;}
+    glow.setPosition(img.x,img.y).setScale(img.scaleX*spec.scale,img.scaleY*spec.scale).setRotation(img.rotation).setVisible(img.visible);
+    glow.alpha=img.alpha*spec.alpha*(ctx.quiet?.7:1);
+  };
+  sync();ctx.scene.events.on('postupdate',sync);img.once('destroy',()=>{ctx.scene.events.off('postupdate',sync);if(glow.active)glow.destroy();});
+}
 function make(ctx:FxContext,name:Name,tag:string,cue:FoeSignatureCue):Phaser.GameObjects.Image{
   const img=ctx.scene.add.image(0,0,FOE_SIGNATURE_ATLAS,name),p=info(name).pivot;
   img.setOrigin(p[0],p[1]);img.setData('foeSigName',name);img.setData('foeSigTag',tag);img.setData('foeSigEvent',cue.event);img.setData('foeSigTarget',cue.targetId);
-  ctx.add(img);return img;
+  ctx.add(img);halo(ctx,img,name,tag,cue.move);return img;
 }
 const dirOf=(from:FoePoint,to:FoePoint)=>(from.x>=to.x?1:-1) as 1|-1; // +1: the source stands to the right of the recipient (the normal case)
 const spotOf=(cue:FoeSignatureCue,end:'source'|'target'):FoeSpot=>isGroundMove(cue.move)?'feet':end==='source'?'hand':'chest';

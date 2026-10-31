@@ -1,0 +1,628 @@
+[
+ {
+  "id": "first-clash",
+  "pass": 1,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 35.42,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "scout-patrol",
+  "pass": 1,
+  "bodies": 6,
+  "standing": 6,
+  "sheets": 6,
+  "unitMiB": 28.62,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "rift-whelp",
+  "pass": 1,
+  "bodies": 6,
+  "standing": 6,
+  "sheets": 6,
+  "unitMiB": 31.51,
+  "fxMiB": 74.56,
+  "optional": [
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "thicket-ambush",
+  "pass": 1,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 8,
+  "unitMiB": 34.9,
+  "fxMiB": 88.91,
+  "optional": [
+   "boss-signature-fx",
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "shadow-stalker",
+  "pass": 1,
+  "bodies": 6,
+  "standing": 6,
+  "sheets": 6,
+  "unitMiB": 29.87,
+  "fxMiB": 74.56,
+  "optional": [
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "veil-siege",
+  "pass": 1,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 35.33,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "rear-ambush",
+  "pass": 1,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 33.16,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "crystal-stampede",
+  "pass": 1,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 34.84,
+  "fxMiB": 88.91,
+  "optional": [
+   "boss-signature-fx",
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "rift-warden",
+  "pass": 1,
+  "bodies": 6,
+  "standing": 6,
+  "sheets": 8,
+  "unitMiB": 33.68,
+  "fxMiB": 88.91,
+  "optional": [
+   "boss-signature-fx",
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "elite-tusk-chief",
+  "pass": 1,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 8,
+  "unitMiB": 34.28,
+  "fxMiB": 88.91,
+  "optional": [
+   "boss-signature-fx",
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "elite-briar-lord",
+  "pass": 1,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 8,
+  "unitMiB": 34.82,
+  "fxMiB": 88.91,
+  "optional": [
+   "boss-signature-fx",
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "mini-veil-golem",
+  "pass": 1,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 34.43,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "vanguard-captain",
+  "pass": 1,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 8,
+  "unitMiB": 40,
+  "fxMiB": 82.49,
+  "optional": [
+   "boss-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "slime-pair",
+  "pass": 1,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 29.89,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "bat-swarm",
+  "pass": 1,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 7,
+  "unitMiB": 30.66,
+  "fxMiB": 74.56,
+  "optional": [
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "slime-nest",
+  "pass": 1,
+  "bodies": 9,
+  "standing": 9,
+  "sheets": 8,
+  "unitMiB": 31.77,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "tusker-bats",
+  "pass": 1,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 33.39,
+  "fxMiB": 74.56,
+  "optional": [
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "beetle-spore",
+  "pass": 1,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 30.79,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "beetle-wall",
+  "pass": 1,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 7,
+  "unitMiB": 30.79,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "stalker-spore",
+  "pass": 1,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 31.45,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "forest-swarm",
+  "pass": 1,
+  "bodies": 9,
+  "standing": 9,
+  "sheets": 7,
+  "unitMiB": 30.79,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "channeler-wisps",
+  "pass": 1,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 7,
+  "unitMiB": 30.77,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "crawler-pack",
+  "pass": 1,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 7,
+  "unitMiB": 30.03,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "rift-host",
+  "pass": 1,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 8,
+  "unitMiB": 32.06,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "first-clash",
+  "pass": 2,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 35.42,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "scout-patrol",
+  "pass": 2,
+  "bodies": 6,
+  "standing": 6,
+  "sheets": 6,
+  "unitMiB": 28.62,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "rift-whelp",
+  "pass": 2,
+  "bodies": 6,
+  "standing": 6,
+  "sheets": 6,
+  "unitMiB": 31.51,
+  "fxMiB": 74.56,
+  "optional": [
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "thicket-ambush",
+  "pass": 2,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 8,
+  "unitMiB": 34.9,
+  "fxMiB": 88.91,
+  "optional": [
+   "boss-signature-fx",
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "shadow-stalker",
+  "pass": 2,
+  "bodies": 6,
+  "standing": 6,
+  "sheets": 6,
+  "unitMiB": 29.87,
+  "fxMiB": 74.56,
+  "optional": [
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "veil-siege",
+  "pass": 2,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 35.33,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "rear-ambush",
+  "pass": 2,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 33.16,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "crystal-stampede",
+  "pass": 2,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 34.84,
+  "fxMiB": 88.91,
+  "optional": [
+   "boss-signature-fx",
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "rift-warden",
+  "pass": 2,
+  "bodies": 6,
+  "standing": 6,
+  "sheets": 8,
+  "unitMiB": 33.68,
+  "fxMiB": 88.91,
+  "optional": [
+   "boss-signature-fx",
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "elite-tusk-chief",
+  "pass": 2,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 8,
+  "unitMiB": 34.28,
+  "fxMiB": 88.91,
+  "optional": [
+   "boss-signature-fx",
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "elite-briar-lord",
+  "pass": 2,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 8,
+  "unitMiB": 34.82,
+  "fxMiB": 88.91,
+  "optional": [
+   "boss-signature-fx",
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "mini-veil-golem",
+  "pass": 2,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 34.43,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "vanguard-captain",
+  "pass": 2,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 8,
+  "unitMiB": 40,
+  "fxMiB": 82.49,
+  "optional": [
+   "boss-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "slime-pair",
+  "pass": 2,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 29.89,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "bat-swarm",
+  "pass": 2,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 7,
+  "unitMiB": 30.66,
+  "fxMiB": 74.56,
+  "optional": [
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "slime-nest",
+  "pass": 2,
+  "bodies": 9,
+  "standing": 9,
+  "sheets": 8,
+  "unitMiB": 31.77,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "tusker-bats",
+  "pass": 2,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 33.39,
+  "fxMiB": 74.56,
+  "optional": [
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "beetle-spore",
+  "pass": 2,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 30.79,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "beetle-wall",
+  "pass": 2,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 7,
+  "unitMiB": 30.79,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "stalker-spore",
+  "pass": 2,
+  "bodies": 7,
+  "standing": 7,
+  "sheets": 7,
+  "unitMiB": 31.45,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "forest-swarm",
+  "pass": 2,
+  "bodies": 9,
+  "standing": 9,
+  "sheets": 7,
+  "unitMiB": 30.79,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "channeler-wisps",
+  "pass": 2,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 7,
+  "unitMiB": 30.77,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "crawler-pack",
+  "pass": 2,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 7,
+  "unitMiB": 30.03,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ },
+ {
+  "id": "rift-host",
+  "pass": 2,
+  "bodies": 8,
+  "standing": 8,
+  "sheets": 8,
+  "unitMiB": 32.06,
+  "fxMiB": 80.98,
+  "optional": [
+   "foe-signature-fx",
+   "saint-dance-fx"
+  ]
+ }
+]
