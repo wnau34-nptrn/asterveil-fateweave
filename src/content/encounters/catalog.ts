@@ -27,12 +27,16 @@ export const rearAmbush: EncounterDefinition = {
   ],
 };
 
-// Boss phases (owner 2026-10-22): at 70% the warden calls two rift wisps from the back row (hard mode: also a shard
-// crawler beside it); at 35% it charges, then strikes with a cataclysm and rift waves that hit the whole party.
-const wardenWisps = foes(10, [['b1', SPECIES.riftWisp, { reserve: true }], ['b2', SPECIES.riftWisp, { reserve: true }], ['f2', SPECIES.shardCrawler, { reserve: true }]]);
+// P02: the reference party of five-foe fields (the four plus Corin, the Saint, in front).
+const fiveHeroes = [...veilSiege.heroes, BATCH_ONE.find(h => h.id === 'metta')!];
+// Boss phases (owner 2026-10-22): at 70% the warden calls two rift wisps from the back row (hard mode: also a second
+// shard crawler, if there is room); at 35% it charges, then strikes with a cataclysm and rift waves that hit the whole
+// party. P02 (owner 2026-10-31): the warden no longer stands alone at the start: a shard crawler (f2) and a rift wisp
+// (b3) guard it from round 1, so the full field reaches five when it calls the rift (draft).
+const wardenWisps = foes(10, [['b1', SPECIES.riftWisp, { reserve: true }], ['b2', SPECIES.riftWisp, { reserve: true }], ['f2', SPECIES.shardCrawler], ['b3', SPECIES.riftWisp], ['f3', SPECIES.shardCrawler, { reserve: true }]]);
 export const riftWarden: EncounterDefinition = {
-  ...veilSiege, id: 'rift-warden', version: 19, level: 10, name: 'ศึกผู้คุมรอยแยก',
-  phases: [{ sourceId: 'f1', below: 70, summon: ['b1', 'b2'], hardSummon: ['f2'], name: 'Call the Rift' }, { sourceId: 'f1', below: 35, name: 'Rift Awakening' }],
+  ...veilSiege, heroes: fiveHeroes, id: 'rift-warden', version: 20, level: 10, name: 'ศึกผู้คุมรอยแยก',
+  phases: [{ sourceId: 'f1', below: 70, summon: ['b1', 'b2'], hardSummon: ['f3'], name: 'Call the Rift' }, { sourceId: 'f1', below: 35, name: 'Rift Awakening' }],
   // The Veilbound Sentinel, an ancient gate guardian cracked by the rift (mini boss art: gold and violet).
   enemies: [...wardenWisps.enemies, { id: 'f1', row: 'front', large: true, boss: true, speed: 70, name: 'Rift Warden', displayName: 'ผู้คุมรอยแยก', maxHp: 350, color: 0xd9bf86, art: 'foe_sentinel' }],
   intents: [...wardenWisps.intents,
@@ -255,7 +259,6 @@ const fifth = (set: Pick<EncounterDefinition, 'enemies' | 'intents'>): Pick<Enco
   const last = set.enemies.at(-1)!.id; const first = set.intents.findIndex(i => i.sourceId === last);
   return { ...set, intents: set.intents.map((i, n) => n === first ? { ...i, targetSlot: 4 } : i) };
 };
-const fiveHeroes = [...veilSiege.heroes, BATCH_ONE.find(h => h.id === 'metta')!];
 // Map 2 at Lv5: a thorn host, three front.
 export const thornHost: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes, id: 'thorn-host', version: 1, level: 5, name: 'ทัพหนามป่าลึก',
   ...fifth(foes(5, [['f1', S.thornBeetle], ['f2', S.stalker], ['f3', S.thornBeetle], ['b1', S.sporePuff], ['b2', S.sporePuff]])) };

@@ -40,6 +40,17 @@ for (const id of ['rift-legion', 'thorn-host']) test(`5v5 field ${id} at 390px: 
   await page.keyboard.press('1'); await expect(page.locator('#action-attack')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('.field-target.valid-target').first().click();
   await expect.poll(() => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.battle.commands.length, key)).toBe(1);
+  // Owner 2026-10-31: fatigue is a coloured dot on each card (green fresh, yellow −10%, red −20%); the words live in ⓘ.
+  await expect(page.locator('#party #hero-guardian .fatigue-dot.tired')).toBeVisible();
+  await expect(page.locator('#party #hero-tracer .fatigue-dot.worn')).toBeVisible();
+  await expect(page.locator('#party #hero-metta .fatigue-dot.fresh')).toBeVisible();
+  await expect(page.locator('#party .fatigue-info')).toHaveCount(0);
+  if (id === 'rift-legion') {
+    await page.locator('#battle-info').click(); await page.locator('#status-unit-tracer').click();
+    await expect(page.locator('#status-details .status-group.fatigue')).toContainText('ลด 20%');
+    if (dir) await page.screenshot({ path: `${dir}/team-five-fatigue-info-390.png` });
+    await page.keyboard.press('Escape'); await expect(page.locator('#game-info')).not.toBeVisible();
+  }
   // Owner 2026-10-31: the mage's ward (a move for our side) is cast by tapping Seren's card in the HUD, once.
   await expect(page.locator('#action-ward')).toBeEnabled({ timeout: 20000 }); await page.locator('#action-ward').click();
   await expect(page.locator('#party #hero-healer.hud-target.valid-target')).toBeEnabled();
@@ -74,5 +85,19 @@ test('camp team page: five deployed, reserve slots by chapter at 390px', async (
   await expect(page.locator('.team-grid').nth(1).locator('.team-card')).toHaveCount(5);
   await expect(page.locator('.team-grid').first().locator('.team-card:not(.empty)')).toHaveCount(5);
   if (dir) await page.screenshot({ path: `${dir}/team-five-camp-390.png` });
+  expect(errors).toEqual([]); await context.close();
+});
+
+test('the rift warden stands with two guards from round 1 (owner 2026-10-31) at 390px', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce', deviceScaleFactor: 2 });
+  const page = await context.newPage(); const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  const run = newExpedition(map, encounterById, 1234, { roster: { deployed: [...ids], reserve: [...reserve] }, members, reserveSlots: 3 }, true);
+  run.battle = { kind: 'boss', encounterId: 'rift-warden', entry: Object.fromEntries(ids.map(id => [id, run.hp[id]!])), commands: [] };
+  await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw: JSON.stringify({ version: 45, profile: profile(), run }) });
+  await page.goto('./'); await page.locator('#continue').click();
+  const start = page.locator('[data-ui=start]'); if (await start.isVisible({ timeout: 3000 }).catch(() => false)) await start.click();
+  await expect(page.locator('#action-attack')).toBeEnabled({ timeout: 20000 }); await page.waitForTimeout(500);
+  for (const foe of ['f1', 'f2', 'b3']) await expect(page.locator(`[data-field-unit=${foe}]`)).toBeVisible();
+  if (dir) await page.screenshot({ path: `${dir}/team-five-warden-390.png` });
   expect(errors).toEqual([]); await context.close();
 });

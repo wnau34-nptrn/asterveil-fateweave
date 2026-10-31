@@ -1,12 +1,12 @@
 {
   "base": "P02 team of five (save v45), after P01 c9f760f",
-  "policy": "Same simulation; the lobby fills the fifth field slot from the reserve; fatigue (steps 7/11, -10% each), A6c reserve recovery, automatic rotation at muster points (only to an equal-or-stronger rested reserve of the same lane; strongest lineup before the boss); map 1/2 bosses 115%/145%, forest gate elite 135%. Paired against P01: 7 cells equal, 12 up, 1 down (rush/advisor first veil-frontier 100->83, two companies of 12). 24 independent seeds (2001+i*41): 234->257, rush/advisor first veil-frontier 23->23 (docs/validation/p02/README_TH.md).",
+  "policy": "Same simulation; the lobby fills the fifth field slot from the reserve; fatigue (steps 7/11, -10% each), A6c reserve recovery, automatic rotation at muster points (only to an equal-or-stronger rested reserve of the same lane; strongest lineup before the boss); map 1/2 bosses 115%/145%, forest gate elite 135%; the rift warden starts with two guards (v20) at 125% (was 160%). Paired against P01: 7 cells equal, 12 up, 1 down (rush/advisor first veil-frontier 100->83, two companies of 12). 24 independent seeds (2001+i*41): 234->270, rush/advisor first veil-frontier 23->22 (docs/validation/p02/README_TH.md).",
   "cells": {
     "Rush (objectives only), advisor battles · 12 companies / ซากชายแดน #1": 100,
     "Rush (objectives only), advisor battles · 12 companies / เส้นทางป่าทึบ #1": 100,
     "Rush (objectives only), advisor battles · 12 companies / แนวรอยแยก #1": 83,
-    "Rush (objectives only), advisor battles · 12 companies / แนวรอยแยก (ยาก) #1": 92,
-    "Rush (objectives only), advisor battles · 12 companies / แนวรอยแยก (ยาก) #2": 92,
+    "Rush (objectives only), advisor battles · 12 companies / แนวรอยแยก (ยาก) #1": 100,
+    "Rush (objectives only), advisor battles · 12 companies / แนวรอยแยก (ยาก) #2": 100,
     "Explorer (everything on the map), advisor battles · 12 companies / ซากชายแดน #1": 100,
     "Explorer (everything on the map), advisor battles · 12 companies / เส้นทางป่าทึบ #1": 100,
     "Explorer (everything on the map), advisor battles · 12 companies / แนวรอยแยก #1": 100,
@@ -14,13 +14,13 @@
     "Explorer (everything on the map), advisor battles · 12 companies / แนวรอยแยก (ยาก) #2": 100,
     "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / ซากชายแดน #1": 100,
     "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / เส้นทางป่าทึบ #1": 92,
-    "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก #1": 75,
-    "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก (ยาก) #1": 58,
-    "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก (ยาก) #2": 75,
+    "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก #1": 58,
+    "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก (ยาก) #1": 92,
+    "Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก (ยาก) #2": 100,
     "Explorer (everything on the map), casual battles (advice on ~70% of turns) · 12 companies / ซากชายแดน #1": 100,
     "Explorer (everything on the map), casual battles (advice on ~70% of turns) · 12 companies / เส้นทางป่าทึบ #1": 67,
     "Explorer (everything on the map), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก #1": 100,
-    "Explorer (everything on the map), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก (ยาก) #1": 92,
-    "Explorer (everything on the map), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก (ยาก) #2": 92
+    "Explorer (everything on the map), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก (ยาก) #1": 100,
+    "Explorer (everything on the map), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก (ยาก) #2": 100
   }
 }

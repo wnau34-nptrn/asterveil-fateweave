@@ -50,7 +50,12 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #battle-view .hero-hp { font-size: 11px; color: #e1f4ec; }
 #battle-view .hero-card .hp-track { margin: 2px 0 0; }
 #battle-view .hero-card .barrier-info { position: static; font-size: 9px; }
-#battle-view .hero-card .fatigue-info { position: absolute; top: 2px; right: 6px; color: #ff9f8a; font-size: 8px; line-height: 1; white-space: nowrap; }
+/* P02 (owner 2026-10-31): fatigue as a dot in the card's corner; details in the ⓘ status panel. */
+.fatigue-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; vertical-align: middle; box-shadow: 0 0 0 1px #07101fcc; }
+.fatigue-dot.fresh { background: #5fd38d; } .fatigue-dot.tired { background: #f2c94c; } .fatigue-dot.worn { background: #ff6b5e; }
+#battle-view .hero-card .fatigue-dot { position: absolute; top: 5px; right: 6px; }
+.status-unit strong .fatigue-dot { margin-left: 4px; }
+.status-group.fatigue p { margin: 2px 0; font-size: 12px; } .status-group.fatigue .fatigue-legend { color: var(--text-muted, #a9b8cc); }
 /* Owner 2026-10-31: a move for our side can be cast on a hero's card in the HUD. */
 #battle-view .hero-card.hud-target.valid-target { border-color: #e4c783; box-shadow: inset 0 0 0 1px #e4c78399, 0 0 10px #e4c78344; cursor: pointer; }
 #battle-view .hero-card.hud-target:disabled { opacity: .55; }

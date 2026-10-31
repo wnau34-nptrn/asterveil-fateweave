@@ -17,7 +17,7 @@
 | `veil-siege` | 2 (0) | raider, brute | 31.0 MiB / 9.98 MB | 35.3 MiB / 11.43 MB | — |
 | `rear-ambush` | 2 (0) | riftweaver, channeler | 28.9 MiB / 9.09 MB | 33.2 MiB / 10.54 MB | — |
 | `crystal-stampede` | 2 (0) | golem, juggernaut | 30.5 MiB / 9.90 MB | 34.8 MiB / 11.34 MB | โหลด |
-| `rift-warden` | 4 (3) | wisp, crawler, sentinel | 29.4 MiB / 9.53 MB | 33.7 MiB / 10.97 MB | โหลด |
+| `rift-warden` | 6 (3) | wisp, crawler, sentinel | 29.4 MiB / 9.53 MB | 33.7 MiB / 10.97 MB | โหลด |
 | `elite-tusk-chief` | 3 (0) | sprite, tusker, sporepuff | 30.0 MiB / 9.41 MB | 34.3 MiB / 10.86 MB | โหลด |
 | `elite-briar-lord` | 4 (1) | stalker, sporepuff, matriarch | 30.5 MiB / 9.97 MB | 34.8 MiB / 11.41 MB | โหลด |
 | `mini-veil-golem` | 2 (0) | riftweaver, golem | 30.1 MiB / 9.62 MB | 34.4 MiB / 11.07 MB | — |

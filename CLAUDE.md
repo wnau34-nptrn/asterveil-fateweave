@@ -22,7 +22,7 @@ PR #126 merged `c9f760f` (quality + four browser shards passed on `9d6e6a6`); Pa
 
 ## P02 team of five — 2026-10-31
 
-Branch `claude/p02-team-five` (save v45): 1–5 a side, foe slots `f3`/`b3` appended (first four unchanged), five-foe encounters `thorn-host`/`rift-legion`, reserve by chapter 3→4→5 (carry ≤10), fatigue (deployed +1/reserve −1 per battle, steps 7/11 cut hits/direct heals 10% each, rest −5, calming draught −4), A6c reserve +25% after a win, map 1/2 bosses 115%/145% (draft). v44 profiles fill the fifth slot from the reserve; v44 runs keep four reserve slots. Field: foe trios in slots 10/11, twin letters top-down. Sim/regression notes and 390px shots: `docs/validation/p02/README_TH.md`. Open: P02-03 human/real-device trial; the forest boss still falls to plain attacks with five.
+Branch `claude/p02-team-five` (save v45): 1–5 a side, foe slots `f3`/`b3` appended (first four unchanged), five-foe encounters `thorn-host`/`rift-legion`, reserve by chapter 3→4→5 (carry ≤10), fatigue (deployed +1/reserve −1 per battle, steps 7/11 cut hits/direct heals 10% each, rest −5, calming draught −4), A6c reserve +25% after a win, map 1/2 bosses 115%/145%, rift warden starts with two guards at 125% (draft); fatigue shows as a green/yellow/red dot, details in ⓘ. v44 profiles fill the fifth slot from the reserve; v44 runs keep four reserve slots. Field: foe trios in slots 10/11, twin letters top-down. Sim/regression notes and 390px shots: `docs/validation/p02/README_TH.md`. Open: P02-03 human/real-device trial; the forest boss still falls to plain attacks with five.
 
 ## Song/Shadow R3 — 2026-10-30 (owner-approved)
 

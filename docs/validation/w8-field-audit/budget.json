@@ -170,7 +170,7 @@
   },
   {
    "id": "rift-warden",
-   "foes": 4,
+   "foes": 6,
    "reserves": 3,
    "foeSheets": [
     "wisp",

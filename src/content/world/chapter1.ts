@@ -58,7 +58,8 @@ export const chapterOne: MapDefinition = {
   bossEncounterId: 'rift-warden', bossLevel: 11,
   // A10 (2026-10-22): the warden died in about six rounds having landed two blows (campaign simulation,
   // docs/validation/balance-sim/CAMPAIGN.md), so its foes fight with 160% HP and move damage here.
-  bossPercent: 160,
+  // P02 (owner 2026-10-31): the warden now starts with two guards; 160 → 125 keeps the first clear near P01 (draft).
+  bossPercent: 125,
   revealRadius: 3,
   // Draft phase 2A numbers: chests sit in side pockets away from the main route.
   chests: [

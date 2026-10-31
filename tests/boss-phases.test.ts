@@ -58,7 +58,9 @@ describe('boss phase two', () => {
     foe(s, 'f1').hp = Math.floor(max * .7);
     while (foe(s, 'f1').phase !== 1) s = step(s, d).state;
     expect(['b1', 'b2'].map(id => foe(s, id).hp)).toEqual(d.enemies.filter(e => e.id === 'b1' || e.id === 'b2').map(e => e.maxHp));
-    expect(foe(s, 'f2').absent).toBe(true); // hard mode only
+    expect(foe(s, 'f3').absent).toBe(true); // hard mode only
+    // P02 (owner 2026-10-31): the warden's guards stand from round 1.
+    expect(['f2', 'b3'].every(id => !foe(createBattle(d), id).absent)).toBe(true);
     foe(s, 'f1').hp = Math.floor(max * .35);
     const seen: string[] = []; let aoe;
     while (s.outcome === 'active' && seen.length < 5) {
@@ -66,13 +68,15 @@ describe('boss phase two', () => {
       for (const t of r.turns.filter(x => x.actorId === 'f1')) { seen.push(t.intent!.special ?? t.intent!.name); if (t.intent!.all) aoe = t; }
     }
     expect(seen).toEqual(['phase', 'Rift Gathering', 'Rift Cataclysm', 'Rift Wave', 'Crushing Blow']);
-    const standing = aoe!.before ?? aoe!.state;
-    expect(aoe!.events.filter(e => e.type === 'damage' || e.type === 'dodge').map(e => e.targetId).sort()).toEqual(standing.heroes.filter(h => h.hp > 0).map(h => h.id).sort());
+    // Everyone standing when the wave began: those still up after it and those it downed.
+    const downed = aoe!.events.filter(e => e.type === 'down').map(e => e.targetId);
+    const standing = (aoe!.before ?? aoe!.state).heroes.filter(h => h.hp > 0 || downed.includes(h.id)).map(h => h.id);
+    expect([...new Set(aoe!.events.filter(e => e.type === 'damage' || e.type === 'dodge').map(e => e.targetId))].sort()).toEqual(standing.sort());
   });
   it('hard mode starts each phase 10% earlier and calls its hard-mode reserves', () => {
     const hard = hardEncounter(d, 'boss', map);
     expect(hard.phases!.map(p => p.below)).toEqual([80, 45]);
-    expect(hard.phases![0]!.summon).toEqual(['b1', 'b2', 'f2']);
+    expect(hard.phases![0]!.summon).toEqual(['b1', 'b2', 'f3']);
     expect(hardEncounter(lookup('elite-briar-lord')!, 'boss', map).phases![0]).toMatchObject({ below: 60, summon: ['b2'] });
   });
   it('previews and replays phase turns exactly; the foe sheet shows the next threshold', () => {

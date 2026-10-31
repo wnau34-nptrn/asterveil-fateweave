@@ -80,12 +80,14 @@ describe('five a side in the resolver', () => {
     expect(enemyIntent(s, d, 'b3', 1)!.targetId).toBe('mira');
   });
   it('a boss phase summons only into room: five standing or a full row leaves the reserve waiting', () => {
-    const roomy = withParty(riftWarden, five);
+    // The warden with its front guard only (its P02 back guard b3 and hard-mode f3 left out).
+    const alone = { ...riftWarden, enemies: riftWarden.enemies.filter(e => !['b3', 'f3'].includes(e.id)), intents: riftWarden.intents.filter(i => !['b3', 'f3'].includes(i.sourceId)), phases: riftWarden.phases!.map(p => ({ ...p, hardSummon: undefined })) };
+    const roomy = withParty(alone, five);
     const crowd: EncounterDefinition = { ...roomy, enemies: [...roomy.enemies, ...foes(10, [['f3', SPECIES.shardCrawler], ['b3', SPECIES.riftWisp]]).enemies],
       intents: [...roomy.intents, ...foes(10, [['f3', SPECIES.shardCrawler], ['b3', SPECIES.riftWisp]]).intents],
       phases: [{ sourceId: 'f1', below: 70, summon: ['b1', 'b2'], name: 'Call the Rift' }] };
     // f1 (the boss, below its threshold and fastest) f2 f3 b3 stand: the phase calls b1 and b2 but only one fits.
-    const crowdData = { ...crowd, enemies: crowd.enemies.map(e => e.id === 'f2' ? { ...e, reserve: false } : e.id === 'f1' ? { ...e, speed: 999 } : e) };
+    const crowdData = { ...crowd, enemies: crowd.enemies.map(e => e.id === 'f1' ? { ...e, speed: 999 } : e) };
     expect(encounterProblems(crowdData)).toEqual([]);
     const entryFoe = (data: EncounterDefinition) => ({ ...data, enemies: data.enemies.map(e => e.id === 'f1' ? { ...e, maxHp: 1000 } : e) });
     const low = entryFoe(crowdData); const s = createBattle({ ...low, phases: [{ sourceId: 'f1', below: 100, summon: ['b1', 'b2'], name: 'Call the Rift' }] });
@@ -93,7 +95,7 @@ describe('five a side in the resolver', () => {
     expect(s.enemies.find(e => e.id === 'b1')!.absent).toBeUndefined(); expect(s.enemies.find(e => e.id === 'b2')!.absent).toBe(true);
     // With room (no f3/b3) both arrive.
     const open = createBattle({ ...entryFoe({ ...roomy, enemies: roomy.enemies.map(e => e.id === 'f1' ? { ...e, speed: 999 } : e) }), phases: [{ sourceId: 'f1', below: 100, summon: ['b1', 'b2'], name: 'Call the Rift' }] });
-    expect(open.enemies.filter(e => !e.absent && e.hp > 0).map(e => e.id).sort()).toEqual(['b1', 'b2', 'f1']);
+    expect(open.enemies.filter(e => !e.absent && e.hp > 0).map(e => e.id).sort()).toEqual(['b1', 'b2', 'f1', 'f2']);
   });
   it('a tired hero hits and heals for less; SPD and the turn order stay the same', () => {
     const d = withParty(thornHost, five); const tired = withParty(thornHost, five.map(h => h.id === 'tracer' || h.id === 'healer' ? { ...h, fatigue: 20 } : h));

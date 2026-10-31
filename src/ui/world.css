@@ -228,8 +228,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .team-card b { font: 600 13px/1.5 var(--font-heading); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .team-card small { font-size: 11px; line-height: 1.35; color: var(--text-muted); font-variant-numeric: tabular-nums; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .team-card .lane { font-size: 10px; }
-.team-card .fatigue { font-size: 10px; color: #f3d38b; }
-.team-card .fatigue.cut { color: #ff9f8a; font-weight: 600; }
+.team-card .team-fatigue { position: absolute; top: 6px; right: 6px; line-height: 0; }
 .team-card .slot-no { position: absolute; left: 5px; top: 4px; font: 600 12px/1 var(--font-heading); font-style: normal; color: var(--gold-light); }
 .team-card[aria-pressed=true] { border-color: var(--gold-light); box-shadow: var(--glow-gold); }
 .team-card.fallen .portrait { filter: grayscale(1); opacity: .6; } .team-card.fallen small { color: var(--danger-coral); }
