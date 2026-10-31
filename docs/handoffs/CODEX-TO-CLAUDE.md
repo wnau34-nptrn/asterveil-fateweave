@@ -1,6 +1,6 @@
 # Codex → Claude handoff
 
-## 2026-10-31 — W8 ปิดแผน animation/VFX (Claude, `claude/w8-animation-vfx-close`, PR รอเจ้าของอนุมัติก่อน merge/Pages)
+## 2026-10-31 — W8 ปิดแผน animation/VFX (Claude, PR #125 merged `9a36736`, เจ้าของอนุมัติ “อนุมัติ” 2026-10-31)
 
 - coverage จากโค้ด (`src/game/visuals/presentation-coverage.ts`, `npm run coverage:presentation` เขียน `docs/combat-presentation/COVERAGE_TH.md`/`coverage.json` + `docs/validation/w8-field-audit/BUDGET_TH.md`; เทสต์ล้มเมื่อค้าง) — แก้ registry/content/atlas แล้วต้องรันคำสั่งนี้
 - A11 `tests/browser/field-a11.spec.ts`; ปล่อย atlas VFX เฉพาะ encounter (`BattleScene.encounterFx`); repack `scripts/repack-atlas-lossless.py` + ตรวจ `scripts/verify-atlas-repack.py` (11 VFX + ไลรา/เซรีส/ลิโอ)

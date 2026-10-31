@@ -1,3 +1,5 @@
+**เจ้าของอนุมัติ “อนุมัติ” 2026-10-31 → PR #125 merge `9a36736` (quality + browser 4 shards ผ่านบน `393090d`), Pages ตามมาจาก push นี้**
+
 # W8 — ปิดแผน animation/VFX: ตาราง coverage, A11 ตรวจสนามรวม, งบภาพ, แก้ VFX อ่านยาก, แผงวัดมือถือ (2026-10-31)
 
 สาขา `claude/w8-animation-vfx-close` จากสาขาเกม `7dcace8` · ไม่แก้ rules/save/content/balance/timing (resolver, เซฟ, ตัวเลข, contact/end ไม่แตะ)
