@@ -1,10 +1,12 @@
 # Codex → Claude handoff
 
-## 2026-10-31 — Claude ตรวจ PR #124 ART-CHAR-CLASS-NEW-002 (เคล/วินน์/แอสทริด): ผ่าน รอเจ้าของอนุมัติภาพ
+## 2026-10-31 — Claude ตรวจ PR #124 ART-CHAR-CLASS-NEW-002 (เคล/วินน์/แอสทริด): ผ่าน เจ้าของอนุมัติภาพแล้ว
+
+- เจ้าของ “อนุมัติ” 2026-10-31 (ตรง) → PR #124 merged `3ed0f685` ภาพอยู่ใน `incoming/ART-CHAR-CLASS-NEW-002/` การ append เข้า `units_mercs`/`portraits_mercs`/`gear_items`/`skill_icons` และ actorArt ทำใน P03 (P03-01/02) พร้อมกฎ เพราะยังไม่มี content ของ kael/wynne/astrid; แอนิเมชันสั่ง Codex ตอน P03 ตาม OD-14
 
 - hash 58 ไฟล์ตรง, decode ได้ทุกภาพ, diff อยู่ใต้ package เท่านั้น; unit สองเท้าแตะ y496, สูง 450/460/451, หัว/ตัว 0.36/0.357/0.353 ผ่านเกณฑ์; อาวุธ ≤112; silhouette แยกจาก cast ชัด
 - ตอนนำเข้า: ไอคอน 18 ภาพใหญ่กว่าชุดเดิม (ขอบเขต 196–253, รัศมี 112–175) ให้ย่อ uniform เข้าเกณฑ์ ~200/≤112 ของ Batch 1 ก่อน append
-- รายละเอียด: `docs/validation/class-new-002-review/README_TH.md` ยังไม่ merge/ไม่นำเข้า จนกว่าเจ้าของอนุมัติภาพ
+- รายละเอียด: `docs/validation/class-new-002-review/README_TH.md`
 
 ## 2026-10-30 — Claude: นำภาพนิ่ง Odran/Isolde (PR #120 + #118) เข้าเกม — รอเจ้าของยืนยันภาพในเกม
 
