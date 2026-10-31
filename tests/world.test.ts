@@ -211,7 +211,9 @@ describe('expedition rules', () => {
     expect(move(g.state, map, 'down').event).toEqual({ type: 'blocked', reason: 'busy' });
   });
   it('a full expedition from start to goal is winnable with the advisor and camp rests', () => {
-    let s = seasoned(fresh(2026), 6, 2); const [campA, campB] = [findTiles(map, 'camp')[1]!, findTiles(map, 'camp')[0]!]; const [goal] = findTiles(map, 'goal');
+    // P02: the team of five (the starting four and Corin).
+    const four = fresh(2026);
+    let s = seasoned({ ...four, roster: { ...four.roster, deployed: [...four.roster.deployed, 'metta'] }, members: { ...four.members, metta: { stars: 1, dupes: 0 } } }, 6, 2); const [campA, campB] = [findTiles(map, 'camp')[1]!, findTiles(map, 'camp')[0]!]; const [goal] = findTiles(map, 'goal');
     const walk = (to: Point, throughBoss = false) => {
       for (let guard = 0; guard < 400 && (s.position.x !== to.x || s.position.y !== to.y) && !s.completed; guard++) {
         const dir = route(s.position, to, throughBoss || s.bossDefeated)[0]!; s = move(s, map, dir).state;

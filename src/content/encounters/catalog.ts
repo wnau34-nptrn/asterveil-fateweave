@@ -1,11 +1,12 @@
 import type { EncounterDefinition } from '../../core/battle/types';
 import { veilSiege } from './veil-siege';
 import { SPECIES, foes } from '../enemies/species';
+import { rosterBatch1 as BATCH_ONE } from '../heroes/roster-batch1';
 
 // Every encounter reuses the four-hero party, skills and numeric rules.
 // Bosses (`boss`) are steadfast: a cancelled turn shields their next round from Bash/Sigil; their signature move
 // (`unstoppable`) can never be cancelled (owner 2026-10-22).
-// Enemy ids are the four field slots `f1`/`f2` (front row) and `b1`/`b2` (back row); front-row foes screen the back
+// Enemy ids are the field slots `f1`/`f2`/`f3` (front row) and `b1`/`b2`/`b3` (back row); front-row foes screen the back
 // row. New sets are built from `SPECIES` with `foes`; older ones keep their hand-written numbers.
 // `art` picks the illustrated Veil Frontier foe (ART-CHAR-MERC-ENEMY-001); without it the
 // original Raider/Brute frames are shown. Physical foes use physical moves, energy foes energy moves.
@@ -247,6 +248,21 @@ export const crawlerPack: EncounterDefinition = { ...veilSiege, id: 'crawler-pac
 export const riftHost: EncounterDefinition = { ...veilSiege, id: 'rift-host', version: 4, level: 8, name: 'ทัพรอยแยก',
   ...foes(8, [['f1', S.riftChanneler], ['f2', S.shardCrawler], ['b1', S.riftWisp]]) };
 
+// P02 (OD-05, draft): five-foe sets that use the appended slots `f3`/`b3` (3 front/2 back and 2 front/3 back). The last
+// foe opens on the fifth party slot so the fifth hero is aimed at too; older sets keep their slot 0–3 moves. Their
+// reference party is five (the four plus Corin, the Saint, in front).
+const fifth = (set: Pick<EncounterDefinition, 'enemies' | 'intents'>): Pick<EncounterDefinition, 'enemies' | 'intents'> => {
+  const last = set.enemies.at(-1)!.id; const first = set.intents.findIndex(i => i.sourceId === last);
+  return { ...set, intents: set.intents.map((i, n) => n === first ? { ...i, targetSlot: 4 } : i) };
+};
+const fiveHeroes = [...veilSiege.heroes, BATCH_ONE.find(h => h.id === 'metta')!];
+// Map 2 at Lv5: a thorn host, three front.
+export const thornHost: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes, id: 'thorn-host', version: 1, level: 5, name: 'ทัพหนามป่าลึก',
+  ...fifth(foes(5, [['f1', S.thornBeetle], ['f2', S.stalker], ['f3', S.thornBeetle], ['b1', S.sporePuff], ['b2', S.sporePuff]])) };
+// Map 3 at Lv8: a rift legion, three back.
+export const riftLegion: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes, id: 'rift-legion', version: 1, level: 8, name: 'กองทัพวิญญาณรอยแยก',
+  ...fifth(foes(8, [['f1', S.shardCrawler], ['f2', S.shardCrawler], ['b1', S.riftWisp], ['b2', S.riftWisp], ['b3', S.riftWisp]])) };
+
 export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, crystalStampede, riftWarden, eliteTuskChief, eliteBriarLord, miniVeilGolem, vanguardCaptain,
-  slimePair, batSwarm, slimeNest, tuskerBats, beetleSpore, beetleWall, stalkerSpore, forestSwarm, channelerWisps, crawlerPack, riftHost];
+  slimePair, batSwarm, slimeNest, tuskerBats, beetleSpore, beetleWall, stalkerSpore, forestSwarm, channelerWisps, crawlerPack, riftHost, thornHost, riftLegion];
 export const encounterById = (id: string): EncounterDefinition | undefined => encounters.find(e => e.id === id);

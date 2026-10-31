@@ -461,6 +461,43 @@
     "download": 10112440
    },
    "bossFx": false
+  },
+  {
+   "id": "thorn-host",
+   "foes": 5,
+   "reserves": 0,
+   "foeSheets": [
+    "stalker",
+    "beetle",
+    "sporepuff"
+   ],
+   "four": {
+    "decoded": 30335952,
+    "download": 9023498
+   },
+   "five": {
+    "decoded": 34840200,
+    "download": 10469415
+   },
+   "bossFx": false
+  },
+  {
+   "id": "rift-legion",
+   "foes": 5,
+   "reserves": 0,
+   "foeSheets": [
+    "wisp",
+    "crawler"
+   ],
+   "four": {
+    "decoded": 26985424,
+    "download": 8118651
+   },
+   "five": {
+    "decoded": 31489672,
+    "download": 9564568
+   },
+   "bossFx": false
   }
  ]
 }

@@ -4351,6 +4351,7 @@
     "channeler-wisps",
     "crawler-pack",
     "rift-host",
+    "rift-legion",
     "rift-warden"
    ]
   },
@@ -4799,6 +4800,7 @@
    "encounters": [
     "crawler-pack",
     "rift-host",
+    "rift-legion",
     "rift-warden"
    ]
   },
@@ -4839,7 +4841,8 @@
     "elite-briar-lord",
     "elite-tusk-chief",
     "forest-swarm",
-    "stalker-spore"
+    "stalker-spore",
+    "thorn-host"
    ]
   },
   {
@@ -4913,7 +4916,8 @@
    "encounters": [
     "elite-briar-lord",
     "shadow-stalker",
-    "stalker-spore"
+    "stalker-spore",
+    "thorn-host"
    ]
   },
   {
@@ -4952,7 +4956,8 @@
     "beetle-spore",
     "beetle-wall",
     "forest-swarm",
-    "thicket-ambush"
+    "thicket-ambush",
+    "thorn-host"
    ]
   },
   {
