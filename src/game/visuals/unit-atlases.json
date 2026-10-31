@@ -1,12 +1,12 @@
 {
   "lyra": {
-    "image": "lyra_pilot.dd738abb2d5e.webp",
-    "atlas": "lyra_pilot.636ce98c0df5.json",
-    "width": 631,
-    "height": 3254,
+    "image": "lyra_pilot.9334b0792c36.webp",
+    "atlas": "lyra_pilot.5e5d1ef4dade.json",
+    "width": 1479,
+    "height": 1444,
     "frames": 38,
-    "decodedBytes": 8213096,
-    "downloadBytes": 2267683
+    "decodedBytes": 8542704,
+    "downloadBytes": 2272430
   },
   "hunter": {
     "image": "hunter_pilot.a2500d3fa495.webp",
@@ -261,13 +261,13 @@
     "downloadBytes": 1372287
   },
   "lalin": {
-    "image": "lalin_a7.bf7c364d96f2.webp",
-    "atlas": "lalin_a7.ddd1dcd27468.json",
-    "width": 392,
-    "height": 3892,
+    "image": "lalin_a7.a261bd9f365c.webp",
+    "atlas": "lalin_a7.b67d26650aa5.json",
+    "width": 824,
+    "height": 1881,
     "frames": 41,
-    "decodedBytes": 6102656,
-    "downloadBytes": 2167393
+    "decodedBytes": 6199776,
+    "downloadBytes": 2165625
   },
   "matriarch": {
     "image": "matriarch_a9.9aec248e0338.webp",

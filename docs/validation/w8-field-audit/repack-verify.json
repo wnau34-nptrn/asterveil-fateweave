@@ -1,0 +1,72 @@
+[
+ {
+  "atlas": "public/assets/fx/bolt_fx.json",
+  "frames": 26,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/fx/execute_fx.json",
+  "frames": 21,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/fx/ward_fx.json",
+  "frames": 29,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/fx/blade_fx.json",
+  "frames": 38,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/fx/projectile_fx.json",
+  "frames": 21,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/fx/defense_fx.json",
+  "frames": 35,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/fx/alchemy_fx.json",
+  "frames": 18,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/fx/earth_fx.json",
+  "frames": 12,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/fx/saint_dance_fx.json",
+  "frames": 30,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/fx/boss_signature_fx.json",
+  "frames": 42,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/fx/foe_signature_fx.json",
+  "frames": 40,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/units/lyra_pilot.5e5d1ef4dade.json",
+  "frames": 38,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/units/lalin_a7.b67d26650aa5.json",
+  "frames": 41,
+  "renderIdentical": true
+ },
+ {
+  "atlas": "public/assets/units/lio_a6.86cf4bee30c2.json",
+  "frames": 40,
+  "renderIdentical": true
+ }
+]

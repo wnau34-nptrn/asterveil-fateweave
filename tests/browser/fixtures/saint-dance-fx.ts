@@ -37,7 +37,7 @@ function painted(atlas = SAINT_DANCE_ATLAS) {
   const items: { frame: string; x: number; y: number; width: number; height: number; alpha: number; rim: boolean }[] = [];
   const visit = (list: Phaser.GameObjects.GameObject[]) => { for (const item of list) {
     if (item instanceof Phaser.GameObjects.Container) visit(item.list);
-    if (item instanceof Phaser.GameObjects.Image && item.texture.key === atlas && !item.getData('songRim')) items.push({ frame: item.frame.name, x: item.x, y: item.y, width: item.displayWidth, height: item.displayHeight, alpha: item.alpha, rim: !!item.getData('healingRim') });
+    if (item instanceof Phaser.GameObjects.Image && item.texture.key === atlas && !item.getData('songRim') && !item.getData('sdSegment')) items.push({ frame: item.frame.name, x: item.x, y: item.y, width: item.displayWidth, height: item.displayHeight, alpha: item.alpha, rim: !!item.getData('healingRim') });
   } }; visit(scene.children.getChildren()); return items;
 }
 const qa={ atlasReady: () => scene.textures.exists(SAINT_DANCE_ATLAS),impacts,painted,rings:()=>{

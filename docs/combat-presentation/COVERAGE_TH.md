@@ -16,7 +16,7 @@
 | identity | ชื่อ | ฝั่ง | atlas (เฟรม · decoded · download) | hit | block | down | counter |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `guardian` | Aegis | เรา | 32 · 3.41 MiB · 1.17 MB | sprite 17,18 | sprite 30,31 | sprite 19,20,21 · ค้าง 21 | sprite 30,5,7 |
-| `tracer` | Lyra | เรา | 38 · 7.83 MiB · 2.27 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | sprite 12,13,14 |
+| `tracer` | Lyra | เรา | 38 · 8.15 MiB · 2.27 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | sprite 12,13,14 |
 | `weaver` | Eira | เรา | 22 · 3.88 MiB · 1.38 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `healer` | Seren | เรา | 40 · 4.68 MiB · 1.46 MB | sprite 17,18 | sprite 38,39 | sprite 19,20,21 · ค้าง 21 | — |
 | `mira` | Mira | เรา | 32 · 3.97 MiB · 1.10 MB | sprite 17,18 | sprite 30,31 | sprite 19,20,21 · ค้าง 21 | — |
@@ -27,7 +27,7 @@
 | `garran` | Garran | เรา | 32 · 3.85 MiB · 1.02 MB | sprite 17,18 | sprite 30,31 | sprite 19,20,21 · ค้าง 21 | sprite 30,5,6 |
 | `metta` | Corin | เรา | 35 · 4.18 MiB · 1.37 MB | sprite 25,26,27 | sprite 28,29,30 | sprite 31,32,33,34 · ค้าง 34 | — |
 | `thiran` | Odran | เรา | OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | procedural | procedural | procedural (ภาพนิ่งจาง) | — |
-| `lalin` | Cerise | เรา | 41 · 5.82 MiB · 2.17 MB | sprite 31,32,33 | sprite 34,35,36 | sprite 37,38,39,40 · ค้าง 40 | — |
+| `lalin` | Cerise | เรา | 41 · 5.91 MiB · 2.17 MB | sprite 31,32,33 | sprite 34,35,36 | sprite 37,38,39,40 · ค้าง 40 | — |
 | `wila` | Isolde | เรา | OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | procedural | procedural | procedural (ภาพนิ่งจาง) | — |
 | `brute` | อสูรรอยแยก | ศัตรู | 24 · 4.18 MiB · 1.44 MB | sprite 17,18 | sprite 22,23 | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_captain` | หัวหน้ากองหน้า | ศัตรู | 18 · 4.58 MiB · 1.34 MB | sprite 13,14 | procedural (tint/lift) | sprite 15,16,17 · ค้าง 17 | — |

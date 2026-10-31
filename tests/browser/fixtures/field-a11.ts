@@ -34,8 +34,8 @@ localStorage.setItem('asterveil.fateweave.presentation.v1', JSON.stringify({ spe
 localStorage.setItem('asterveil.fateweave.tutorial.v1', 'off');
 fitViewport();
 let current = field(params.get('encounter') ?? 'vanguard-captain');
-const ui = new BattleUI(document.querySelector('#battle-view')!, current);
-const scene = new BattleScene(current, id => ui.choose(id, 'canvas'), () => ui.sceneReady(), () => ui.fieldLayoutChanged());
+const ui = new BattleUI(document.querySelector('#battle-view')!, encounterById(current.id)!);
+const scene = new BattleScene(encounterById(current.id)!, id => ui.choose(id, 'canvas'), () => ui.sceneReady(), () => ui.fieldLayoutChanged());
 ui.attach(scene);
 scene.setBattleVisible(true);
 new Phaser.Game({ type: Phaser.AUTO, parent: 'game', transparent: true, scale: { mode: Phaser.Scale.NONE, width: 320, height: 240 }, scene: [scene], fps: { target: 60 }, audio: { noAudio: true } });

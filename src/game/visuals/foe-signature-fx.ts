@@ -51,12 +51,14 @@ const px=(ctx:FxContext,beat:keyof typeof WIDTHS,size:number,cue:FoeSignatureCue
 // W8: Rift Bolt (black core) and Veil Quake (dark fissure) vanish over the dark Channeler/Golem bodies. A soft additive halo
 // copy sits BEHIND the painting, slightly larger, so a light rim reads around the shape while its dark contours stay on top.
 export const haloMoves:Readonly<Partial<Record<FoeSignatureMove,{tint:number;alpha:number;scale:number}>>>={
-  'Rift Bolt':{tint:0xc9b2ff,alpha:.55,scale:1.16},'Rift Beam':{tint:0xc9b2ff,alpha:.55,scale:1.16},'Veil Quake':{tint:0xd8cdb8,alpha:.5,scale:1.1},
+  'Rift Bolt':{tint:0xc4a2ff,alpha:.8,scale:1.18},'Rift Beam':{tint:0xc4a2ff,alpha:.8,scale:1.18},'Veil Quake':{tint:0xf0dcb0,alpha:.6,scale:1.1},
 };
-const ADD=1; // Phaser.BlendModes.ADD (literal: this module stays importable by node unit tests)
+// Literals keep this module importable by node unit tests: Phaser.BlendModes.ADD and Phaser.TintModes.FILL. The halo is the
+// painting's silhouette filled with one light colour, so it glows even where the painting itself is near black.
+const ADD=1,FILL=1;
 function halo(ctx:FxContext,img:Phaser.GameObjects.Image,name:Name,tag:string,move:FoeSignatureMove):void{
   const spec=haloMoves[move];if(!spec||tag==='settle')return;
-  const glow=ctx.scene.add.image(0,0,FOE_SIGNATURE_ATLAS,name).setOrigin(img.originX,img.originY).setBlendMode(ADD).setTint(spec.tint);
+  const glow=ctx.scene.add.image(0,0,FOE_SIGNATURE_ATLAS,name).setOrigin(img.originX,img.originY).setBlendMode(ADD).setTint(spec.tint).setTintMode(FILL);
   glow.setData('foeSigHalo',true);glow.setData('foeSigTag',tag);ctx.add(glow);
   const parent=img.parentContainer;if(parent&&glow.parentContainer===parent)parent.moveBelow(glow,img);
   const sync=()=>{

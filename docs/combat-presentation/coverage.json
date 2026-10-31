@@ -42,11 +42,11 @@
    "name": "Lyra",
    "sheet": "lyra",
    "atlas": {
-    "image": "lyra_pilot.dd738abb2d5e.webp",
-    "atlas": "lyra_pilot.636ce98c0df5.json",
+    "image": "lyra_pilot.9334b0792c36.webp",
+    "atlas": "lyra_pilot.5e5d1ef4dade.json",
     "frames": 38,
-    "decodedBytes": 8213096,
-    "downloadBytes": 2267683
+    "decodedBytes": 8542704,
+    "downloadBytes": 2272430
    },
    "reactions": {
     "hit": "sprite 17,18",
@@ -246,11 +246,11 @@
    "name": "Cerise",
    "sheet": "lalin",
    "atlas": {
-    "image": "lalin_a7.bf7c364d96f2.webp",
-    "atlas": "lalin_a7.ddd1dcd27468.json",
+    "image": "lalin_a7.a261bd9f365c.webp",
+    "atlas": "lalin_a7.b67d26650aa5.json",
     "frames": 41,
-    "decodedBytes": 6102656,
-    "downloadBytes": 2167393
+    "decodedBytes": 6199776,
+    "downloadBytes": 2165625
    },
    "reactions": {
     "hit": "sprite 31,32,33",

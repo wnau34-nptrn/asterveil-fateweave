@@ -1,5 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-10-31 — W8 ปิดแผน animation/VFX: PR เปิดแล้ว รอเจ้าของอนุมัติ
+
+- สาขา `claude/w8-animation-vfx-close` — ผลรวม `docs/validation/w8-field-audit/README_TH.md`; ค้าง: เจ้าของดูคลิป/อนุมัติ → merge + Pages; ผลมือถือจริงจาก `?perf=1`; งบ download ไลรา/เซรีส (ต้องเลือกวิธีที่เปลี่ยนภาพ); โอดราน/อิโซลด์ OD-14
+- หลัง merge: ลำดับ OD-13 → P01
+
 ## 2026-10-31 — เซรีส A7-002 merged (PR #121 `52001f5`) → เปิดแชต W8
 
 - PR #121 (ท่าเซรีส `lalin` A7-002, เจ้าของอนุมัติ motion “อนุมัติ” 2026-10-30) merge เข้ากับฐานที่ถอด thiran/wila A7 แล้ว (#123): registry มีเฉพาะ metta/lalin, lalin 41 เฟรม down 40; quality + browser 4 shards ผ่านบน `276584a0`; ปิด Codex PR #117

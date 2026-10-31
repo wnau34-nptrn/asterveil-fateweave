@@ -13,6 +13,7 @@ import numpy as np
 from PIL import Image
 
 PAD = 2  # transparent gap kept around every packed rectangle (no filter bleed between frames)
+MAX_SIDE = 2048
 
 
 def frames_of(data):
@@ -37,9 +38,12 @@ def same_render(a, b):
     return bool((x[visible] == y[visible]).all() and (x[~visible][..., 3] == 0).all())
 
 
-def maxrects(sizes, width):
+ORDERS = [lambda w, h: (-max(w, h), -min(w, h)), lambda w, h: (-h, -w), lambda w, h: (-w, -h), lambda w, h: (-w * h,)]
+
+
+def maxrects(sizes, width, order=ORDERS[0]):
     free, placed, height = [(0, 0, width, 1 << 15)], {}, 0
-    for key, (w, h) in sorted(sizes.items(), key=lambda kv: (-max(kv[1]), -min(kv[1]), kv[0])):
+    for key, (w, h) in sorted(sizes.items(), key=lambda kv: (*order(*kv[1]), kv[0])):
         w2, h2 = w + PAD, h + PAD
         best = None
         for fx, fy, fw, fh in free:
@@ -74,9 +78,11 @@ def repack(image_path, data):
     sizes = {k: t.size for k, t in unique.items()}
     widest = max(w for w, _ in sizes.values()) + PAD
     best = None
-    for width in range(widest, 2049, 8):
-        plan = maxrects(sizes, width)
-        if plan and plan[1] <= 4096 and (best is None or width * plan[1] < best[0]): best = (width * plan[1], width, plan)
+    for width in range(widest, MAX_SIDE + 1, 8):
+        for order in ORDERS:
+            plan = maxrects(sizes, width, order)
+            # Both sides stay within 2048 (the size every shipped atlas already respected), safe on low-end GPUs.
+            if plan and plan[1] <= MAX_SIDE and (best is None or width * plan[1] < best[0]): best = (width * plan[1], width, plan)
     _, width, (positions, height) = best
     atlas = Image.new('RGBA', (width, height))
     for key, tile in unique.items(): atlas.paste(tile, (positions[key][0] + 1, positions[key][1] + 1))

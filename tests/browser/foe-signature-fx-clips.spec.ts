@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { mkdirSync, writeFileSync } from 'node:fs';
 
 test.skip(process.env.FOE_SIGNATURE_CLIPS !== '1', 'separate actual-runtime capture only');
-const moves = ['Seed Spark','Ember Spark','Spore Hex','Spore Dust','Star Flame','Rune Lash','Rift Needle','Shard Burst','Rift Bolt','Veil Quake'];
+const moves = ['Seed Spark','Ember Spark','Spore Hex','Spore Dust','Star Flame','Rune Lash','Rift Needle','Shard Burst','Rift Bolt','Veil Quake','Rift Beam'];
 const slug = (m: string) => m.toLowerCase().replace(/ /g, '-');
 const cases = [
  ...moves.map(move => ({ move, scenario: 'hit', mode: 'normal' })),

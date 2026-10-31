@@ -7,18 +7,18 @@
   "lio"
  ],
  "always": {
-  "decoded": 70960264,
-  "download": 10097859,
+  "decoded": 71130480,
+  "download": 10100069,
   "atlases": 12
  },
  "optional": {
   "boss": {
-   "decoded": 8233104,
-   "download": 1565035
+   "decoded": 8319096,
+   "download": 1566040
   },
   "foe": {
-   "decoded": 6620856,
-   "download": 1835842
+   "decoded": 6733392,
+   "download": 1836177
   },
   "saintDance": {
    "decoded": 7050888,
@@ -35,12 +35,12 @@
     "vargoth"
    ],
    "four": {
-    "decoded": 32214248,
-    "download": 9709893
+    "decoded": 32640976,
+    "download": 9712872
    },
    "five": {
-    "decoded": 36718496,
-    "download": 11155810
+    "decoded": 37145224,
+    "download": 11158789
    },
    "bossFx": false
   },
@@ -52,12 +52,12 @@
     "sprite"
    ],
    "four": {
-    "decoded": 25082088,
-    "download": 7750712
+    "decoded": 25508816,
+    "download": 7753691
    },
    "five": {
-    "decoded": 29586336,
-    "download": 9196629
+    "decoded": 30013064,
+    "download": 9199608
    },
    "bossFx": false
   },
@@ -69,12 +69,12 @@
     "tusker"
    ],
    "four": {
-    "decoded": 28105960,
-    "download": 8597651
+    "decoded": 28532688,
+    "download": 8600630
    },
    "five": {
-    "decoded": 32610208,
-    "download": 10043568
+    "decoded": 33036936,
+    "download": 10046547
    },
    "bossFx": false
   },
@@ -88,12 +88,12 @@
     "matriarch"
    ],
    "four": {
-    "decoded": 31662312,
-    "download": 10115239
+    "decoded": 32089040,
+    "download": 10118218
    },
    "five": {
-    "decoded": 36166560,
-    "download": 11561156
+    "decoded": 36593288,
+    "download": 11564135
    },
    "bossFx": true
   },
@@ -105,12 +105,12 @@
     "stalker"
    ],
    "four": {
-    "decoded": 26386664,
-    "download": 8088650
+    "decoded": 26813392,
+    "download": 8091629
    },
    "five": {
-    "decoded": 30890912,
-    "download": 9534567
+    "decoded": 31317640,
+    "download": 9537546
    },
    "bossFx": false
   },
@@ -123,12 +123,12 @@
     "brute"
    ],
    "four": {
-    "decoded": 32112872,
-    "download": 9977024
+    "decoded": 32539600,
+    "download": 9980003
    },
    "five": {
-    "decoded": 36617120,
-    "download": 11422941
+    "decoded": 37043848,
+    "download": 11425920
    },
    "bossFx": false
   },
@@ -141,12 +141,12 @@
     "channeler"
    ],
    "four": {
-    "decoded": 29840616,
-    "download": 9089024
+    "decoded": 30267344,
+    "download": 9092003
    },
    "five": {
-    "decoded": 34344864,
-    "download": 10534941
+    "decoded": 34771592,
+    "download": 10537920
    },
    "bossFx": false
   },
@@ -159,12 +159,12 @@
     "juggernaut"
    ],
    "four": {
-    "decoded": 31599848,
-    "download": 9895818
+    "decoded": 32026576,
+    "download": 9898797
    },
    "five": {
-    "decoded": 36104096,
-    "download": 11341735
+    "decoded": 36530824,
+    "download": 11344714
    },
    "bossFx": true
   },
@@ -178,12 +178,12 @@
     "sentinel"
    ],
    "four": {
-    "decoded": 30384360,
-    "download": 9525026
+    "decoded": 30811088,
+    "download": 9528005
    },
    "five": {
-    "decoded": 34888608,
-    "download": 10970943
+    "decoded": 35315336,
+    "download": 10973922
    },
    "bossFx": true
   },
@@ -197,12 +197,12 @@
     "sporepuff"
    ],
    "four": {
-    "decoded": 31016168,
-    "download": 9411760
+    "decoded": 31442896,
+    "download": 9414739
    },
    "five": {
-    "decoded": 35520416,
-    "download": 10857677
+    "decoded": 35947144,
+    "download": 10860656
    },
    "bossFx": true
   },
@@ -216,12 +216,12 @@
     "matriarch"
    ],
    "four": {
-    "decoded": 31578344,
-    "download": 9965070
+    "decoded": 32005072,
+    "download": 9968049
    },
    "five": {
-    "decoded": 36082592,
-    "download": 11410987
+    "decoded": 36509320,
+    "download": 11413966
    },
    "bossFx": true
   },
@@ -234,12 +234,12 @@
     "golem"
    ],
    "four": {
-    "decoded": 31166696,
-    "download": 9618459
+    "decoded": 31593424,
+    "download": 9621438
    },
    "five": {
-    "decoded": 35670944,
-    "download": 11064376
+    "decoded": 36097672,
+    "download": 11067355
    },
    "bossFx": false
   },
@@ -253,12 +253,12 @@
     "captain"
    ],
    "four": {
-    "decoded": 37012712,
-    "download": 11045970
+    "decoded": 37439440,
+    "download": 11048949
    },
    "five": {
-    "decoded": 41516960,
-    "download": 12491887
+    "decoded": 41943688,
+    "download": 12494866
    },
    "bossFx": true
   },
@@ -271,12 +271,12 @@
     "ember"
    ],
    "four": {
-    "decoded": 26411240,
-    "download": 8070922
+    "decoded": 26837968,
+    "download": 8073901
    },
    "five": {
-    "decoded": 30915488,
-    "download": 9516839
+    "decoded": 31342216,
+    "download": 9519818
    },
    "bossFx": false
   },
@@ -289,12 +289,12 @@
     "bat"
    ],
    "four": {
-    "decoded": 27219176,
-    "download": 8180406
+    "decoded": 27645904,
+    "download": 8183385
    },
    "five": {
-    "decoded": 31723424,
-    "download": 9626323
+    "decoded": 32150152,
+    "download": 9629302
    },
    "bossFx": false
   },
@@ -308,12 +308,12 @@
     "bat"
    ],
    "four": {
-    "decoded": 28383464,
-    "download": 8501133
+    "decoded": 28810192,
+    "download": 8504112
    },
    "five": {
-    "decoded": 32887712,
-    "download": 9947050
+    "decoded": 33314440,
+    "download": 9950029
    },
    "bossFx": false
   },
@@ -326,12 +326,12 @@
     "bat"
    ],
    "four": {
-    "decoded": 30078184,
-    "download": 9027862
+    "decoded": 30504912,
+    "download": 9030841
    },
    "five": {
-    "decoded": 34582432,
-    "download": 10473779
+    "decoded": 35009160,
+    "download": 10476758
    },
    "bossFx": false
   },
@@ -344,12 +344,12 @@
     "sporepuff"
    ],
    "four": {
-    "decoded": 27353320,
-    "download": 8324597
+    "decoded": 27780048,
+    "download": 8327576
    },
    "five": {
-    "decoded": 31857568,
-    "download": 9770514
+    "decoded": 32284296,
+    "download": 9773493
    },
    "bossFx": false
   },
@@ -362,12 +362,12 @@
     "sporepuff"
    ],
    "four": {
-    "decoded": 27353320,
-    "download": 8324597
+    "decoded": 27780048,
+    "download": 8327576
    },
    "five": {
-    "decoded": 31857568,
-    "download": 9770514
+    "decoded": 32284296,
+    "download": 9773493
    },
    "bossFx": false
   },
@@ -380,12 +380,12 @@
     "sporepuff"
    ],
    "four": {
-    "decoded": 28045544,
-    "download": 8544775
+    "decoded": 28472272,
+    "download": 8547754
    },
    "five": {
-    "decoded": 32549792,
-    "download": 9990692
+    "decoded": 32976520,
+    "download": 9993671
    },
    "bossFx": false
   },
@@ -398,12 +398,12 @@
     "sporepuff"
    ],
    "four": {
-    "decoded": 27353320,
-    "download": 8324597
+    "decoded": 27780048,
+    "download": 8327576
    },
    "five": {
-    "decoded": 31857568,
-    "download": 9770514
+    "decoded": 32284296,
+    "download": 9773493
    },
    "bossFx": false
   },
@@ -416,12 +416,12 @@
     "wisp"
    ],
    "four": {
-    "decoded": 27328744,
-    "download": 8276775
+    "decoded": 27755472,
+    "download": 8279754
    },
    "five": {
-    "decoded": 31832992,
-    "download": 9722692
+    "decoded": 32259720,
+    "download": 9725671
    },
    "bossFx": false
   },
@@ -434,12 +434,12 @@
     "crawler"
    ],
    "four": {
-    "decoded": 26558696,
-    "download": 8115672
+    "decoded": 26985424,
+    "download": 8118651
    },
    "five": {
-    "decoded": 31062944,
-    "download": 9561589
+    "decoded": 31489672,
+    "download": 9564568
    },
    "bossFx": false
   },
@@ -453,12 +453,12 @@
     "crawler"
    ],
    "four": {
-    "decoded": 28688616,
-    "download": 8663544
+    "decoded": 29115344,
+    "download": 8666523
    },
    "five": {
-    "decoded": 33192864,
-    "download": 10109461
+    "decoded": 33619592,
+    "download": 10112440
    },
    "bossFx": false
   }

@@ -1,5 +1,13 @@
 # Codex → Claude handoff
 
+## 2026-10-31 — W8 ปิดแผน animation/VFX (Claude, `claude/w8-animation-vfx-close`, PR รอเจ้าของอนุมัติก่อน merge/Pages)
+
+- coverage จากโค้ด (`src/game/visuals/presentation-coverage.ts`, `npm run coverage:presentation` เขียน `docs/combat-presentation/COVERAGE_TH.md`/`coverage.json` + `docs/validation/w8-field-audit/BUDGET_TH.md`; เทสต์ล้มเมื่อค้าง) — แก้ registry/content/atlas แล้วต้องรันคำสั่งนี้
+- A11 `tests/browser/field-a11.spec.ts`; ปล่อย atlas VFX เฉพาะ encounter (`BattleScene.encounterFx`); repack `scripts/repack-atlas-lossless.py` + ตรวจ `scripts/verify-atlas-repack.py` (11 VFX + ไลรา/เซรีส/ลิโอ)
+- VFX: halo หลัง Rift Bolt/Rift Beam/Veil Quake, Duet ribbon แบ่งช่วง, ขอบ Rounddance/Deepbeat additive; Rift Beam ใช้ภาพ Rift Bolt
+- แผง `?perf=1` (`src/platform/perf-probe.ts`, วิธีใช้ `docs/validation/w8-field-audit/MOBILE_PERF_TH.md`) — ยังไม่มีผลมือถือจริง
+- ผลรวม/ตัวเลข: `docs/validation/w8-field-audit/README_TH.md`
+
 ## 2026-10-31 — PR #121 เซรีส A7-002 merged `52001f5`
 
 - แก้ conflict กับ #123: คงการถอด thiran/wila A7 และเพิ่มชุดท่าเซรีสครบ (attack/circle/echo + hit/block/down, 41 เฟรม); typecheck/lint/vitest 1341 ผ่าน, Playwright unit-a7 + unit-loading 30/30 ในเครื่อง, CI quality + 4 shards ผ่าน
