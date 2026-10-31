@@ -161,7 +161,7 @@ export function unitClip(art: string, action: string | undefined, intent: string
 }
 // 0 idle; 1..8 slash; 9..16 skill; 17..18 hurt; 19..21 down. Identities with one gesture alias the other clip to idle (A3 Mycon, A4 Ember/Dew/Bat, A5 Stalker/Beetle, A6 Spore Puff, A8 Channeler/Wisp/Crawler).
 // Frame 5/13 is the contact pose. UI contact remains authoritative, never sprite FPS.
-function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip, art?: string): readonly number[] | undefined {
+export function sequence(pose: UnitPose | Reaction, phase: FramePhase, clip?: UnitClip, art?: string): readonly number[] | undefined {
   const definition = art ? unitDefinition(art) : undefined;
   if (phase === 'reaction') {
     const own = definition?.reactions?.[pose as Reaction];

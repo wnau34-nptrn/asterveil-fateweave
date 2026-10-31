@@ -15,6 +15,8 @@ export const foeSignatureAtlasUrls=():[string,string]=>[`${import.meta.env.BASE_
 export const foeSignatureMoves={
   'Seed Spark':'seed-spark','Ember Spark':'ember-spark','Spore Hex':'spore-hex','Spore Dust':'spore-dust','Star Flame':'star-flame',
   'Rune Lash':'rune-lash','Rift Needle':'rift-needle','Shard Burst':'shard-burst','Rift Bolt':'rift-bolt-foe','Veil Quake':'veil-quake',
+  // W8: the Channeler's species move Rift Beam (not drawn in the package) shares its own Rift Bolt painting: same gesture, same caster.
+  'Rift Beam':'rift-bolt-foe',
 } as const;
 export type FoeSignatureMove=keyof typeof foeSignatureMoves;
 export const isFoeSignatureMove=(name:string|undefined):name is FoeSignatureMove=>!!name&&Object.prototype.hasOwnProperty.call(foeSignatureMoves,name);

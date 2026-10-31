@@ -1,1700 +1,5247 @@
 {
-  "metadata": {
-    "createdUtc": "2026-10-21T07:42:52.384Z",
-    "head": "c6efee7623d58064ad813cd23cd40223bcca9d24",
-    "branch": "feature/fateweave-initial-prototype",
-    "counts": {
-      "heroes": 10,
-      "actions": 31,
-      "intents": 20,
-      "events": 23
-    },
-    "sourceSha256": {
-      "src/core/battle/types.ts": "554419602365e567d221b1612a14588cec3840e356f2fc12add7ad771e4f4aaa",
-      "src/core/battle/engine.ts": "54fac7f8cd6e390601cbe39bfd9be632b92295bd0ced829bff924cbc71224c79",
-      "src/ui/battle-ui.ts": "a6ba8cf9fb6384d8339d2b341d9acd325a19b8b992baf804d455548cf56a09ab",
-      "src/game/scenes/BattleScene.ts": "20654ad6e4e9f90867f6f67e95730f40a89628526ddca0d399737d56875bf77e",
-      "src/ui/game-shell.ts": "745b4661dae879901ab2492fa1f8ccae200b410f3d1da3c09195f3de994d82be",
-      "src/platform/sfx.ts": "b5c3a7552ebc11421deb82c3a0263f71cd67acb604e7a96f27c455f958661cae"
-    },
-    "limitations": [
-      "synthetic QA saves only",
-      "clock-controlled screenshots are not frame-time measurements",
-      "video captures visual output, not audible SFX",
-      "no physical mobile/Safari verification"
-    ]
+ "counts": {
+  "identities": 36,
+  "heroes": 14,
+  "enemies": 22,
+  "atlases": 34,
+  "parked": 2,
+  "actionIds": 73,
+  "heroRows": 98,
+  "intents": 40,
+  "foeRows": 49,
+  "spriteRows": 133,
+  "proceduralRows": 14,
+  "paintedRows": 112,
+  "sharedRows": 31,
+  "codeRows": 4
+ },
+ "identities": [
+  {
+   "identity": "guardian",
+   "side": "hero",
+   "name": "Aegis",
+   "sheet": "aegis",
+   "atlas": {
+    "image": "aegis_a2.2b9070aaeacc.webp",
+    "atlas": "aegis_a2.9136d3bfc15c.json",
+    "frames": 32,
+    "decodedBytes": 3578880,
+    "downloadBytes": 1172543
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "sprite 30,31",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21",
+    "counter": "sprite 30,5,7"
+   }
   },
-  "actions": [
-    {
-      "id": "attack",
-      "name": "โจมตี",
-      "owners": [
-        {
-          "id": "guardian",
-          "role": "Knight",
-          "name": "เอกิส",
-          "unlock": "base"
-        },
-        {
-          "id": "tracer",
-          "role": "Duelist",
-          "name": "ไลรา",
-          "unlock": "base"
-        },
-        {
-          "id": "weaver",
-          "role": "Mage",
-          "name": "ไอรา",
-          "unlock": "base"
-        },
-        {
-          "id": "healer",
-          "role": "Priest",
-          "name": "เซเรน",
-          "unlock": "base"
-        },
-        {
-          "id": "mira",
-          "role": "Archer",
-          "name": "มิร่า",
-          "unlock": "base"
-        },
-        {
-          "id": "toma",
-          "role": "Alchemist",
-          "name": "โทมะ",
-          "unlock": "base"
-        },
-        {
-          "id": "sefa",
-          "role": "Scout",
-          "name": "เซฟา",
-          "unlock": "base"
-        },
-        {
-          "id": "brann",
-          "role": "Warden",
-          "name": "แบรนน์",
-          "unlock": "base"
-        },
-        {
-          "id": "lio",
-          "role": "Bard",
-          "name": "ลิโอ",
-          "unlock": "base"
-        },
-        {
-          "id": "garran",
-          "role": "Spear",
-          "name": "การ์แรน",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "physical-by-actor",
-        "family": "weapon-contact",
-        "durationMs": 600,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "โจมตีศัตรู 10 กำจัดผู้โจมตีได้ก็หยุดการโจมตีของมัน"
-    },
-    {
-      "id": "guard",
-      "name": "ตั้งรับแทน",
-      "owners": [
-        {
-          "id": "guardian",
-          "role": "Knight",
-          "name": "เอกิส",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "ally",
-      "proposed": {
-        "visualKind": "support",
-        "family": "guard-link",
-        "durationMs": 500,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "เอกิสรับการโจมตีแทนคนที่ศัตรูเล็ง ลดความเสียหาย 65% ปัดความเสียหายที่เหลือขึ้น แล้วใช้โล่ก่อนเลือด ป้องกันการโจมตีศัตรูถัดไปที่แสดงไว้ หมดเมื่อรับการโจมตีหรือถึงเทิร์นเอกิสอีกครั้ง"
-    },
-    {
-      "id": "bash",
-      "name": "กระแทกโล่",
-      "owners": [
-        {
-          "id": "guardian",
-          "role": "Knight",
-          "name": "เอกิส",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "physical",
-        "family": "shield-bash",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "โจมตี 18 และหยุดเทิร์นถัดไปของเป้าหมายหากการโจมตีนั้นเป็นกายภาพ พลังงานยังโจมตีต่อได้ ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "mark",
-      "name": "ติดตรา",
-      "owners": [
-        {
-          "id": "tracer",
-          "role": "Duelist",
-          "name": "ไลรา",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "support",
-        "family": "mark-seal",
-        "durationMs": 500,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ยังไม่ทำความเสียหาย ติดตรา 2 รอบรวมรอบนี้ เพื่อให้ไลราโจมตีหรือฟันเจาะจุดแรงขึ้น 22 (ใช้ตราหมดเมื่อโจมตี)"
-    },
-    {
-      "id": "execute",
-      "name": "ฟันเจาะจุด",
-      "owners": [
-        {
-          "id": "tracer",
-          "role": "Duelist",
-          "name": "ไลรา",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "physical",
-        "family": "precision-slash",
-        "durationMs": 850,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ฟันเจาะจุด 28 หรือ 50 เมื่อเป้าหมายติดตรา ใช้ตราหมด ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "bolt",
-      "name": "ศรเวท",
-      "owners": [
-        {
-          "id": "weaver",
-          "role": "Mage",
-          "name": "ไอรา",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "energy",
-        "family": "arcane-projectile",
-        "durationMs": 850,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ยิงศรเวทสร้างความเสียหาย 26 ให้ศัตรูหนึ่งตัว ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "ward",
-      "name": "โล่เวท",
-      "owners": [
-        {
-          "id": "weaver",
-          "role": "Mage",
-          "name": "ไอรา",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "ally",
-      "proposed": {
-        "visualKind": "support",
-        "family": "hex-barrier",
-        "durationMs": 650,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ให้โล่ 14 แก่เพื่อนที่ยังยืนอยู่ 1 คน โล่รับความเสียหายก่อนเลือด ไม่ซ้อนกัน อยู่จนถูกใช้หมด ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "heal",
-      "name": "รักษา",
-      "owners": [
-        {
-          "id": "healer",
-          "role": "Priest",
-          "name": "เซเรน",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "ally",
-      "proposed": {
-        "visualKind": "support",
-        "family": "mint-heal",
-        "durationMs": 650,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ฟื้นเลือด 20 ให้เพื่อนที่ยังยืนอยู่ 1 คน ไม่เกินเลือดสูงสุด ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "prayer",
-      "name": "พรฟื้นฟู",
-      "owners": [
-        {
-          "id": "healer",
-          "role": "Priest",
-          "name": "เซเรน",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "party",
-      "proposed": {
-        "visualKind": "support",
-        "family": "party-heal",
-        "durationMs": 700,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ฟื้นเลือดคนละ 10 ให้ทุกคนที่ยังยืนอยู่ ไม่เกินเลือดสูงสุด ไม่ชุบชีวิต ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
-    },
-    {
-      "id": "brace",
-      "name": "ตั้งทวน",
-      "owners": [
-        {
-          "id": "garran",
-          "role": "Spear",
-          "name": "การ์แรน",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "self",
-      "proposed": {
-        "visualKind": "support",
-        "family": "spear-stance",
-        "durationMs": 500,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ตั้งทวนรอ เมื่อศัตรูโจมตีกายภาพใส่เพื่อนแนวหน้าคนใดก็ได้ (รวมตัวเอง) ครั้งแรก จะแทงสวนกลับ 14 หลังโดนตี อยู่จนสวนแล้วหรือถึงเทิร์นของตัวเองอีกครั้ง พลังงานไม่ทำให้สวน ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "pierce",
-      "name": "แทงทะลวง",
-      "owners": [
-        {
-          "id": "garran",
-          "role": "Spear",
-          "name": "การ์แรน",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "physical",
-        "family": "spear-thrust",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "แทงทะลวงสร้างความเสียหาย 22 ให้ศัตรูหนึ่งตัว ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "hinder",
-      "name": "ยิงสกัด",
-      "owners": [
-        {
-          "id": "mira",
-          "role": "Archer",
-          "name": "มิร่า",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "physical",
-        "family": "arrow-delay",
-        "durationMs": 750,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ยิงสกัด 12 และเป้าหมายจะไปลงมือท้ายสุดในรอบถัดไป (ลำดับรอบนี้ไม่เปลี่ยน) ใช้ขวางศัตรูที่เร็วก่อนที่มันจะได้ตีก่อนทีม ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "volley",
-      "name": "ห่าธนู",
-      "owners": [
-        {
-          "id": "mira",
-          "role": "Archer",
-          "name": "มิร่า",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "enemies",
-      "proposed": {
-        "visualKind": "physical",
-        "family": "arrow-volley",
-        "durationMs": 900,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ยิงห่าธนูใส่ศัตรูทุกตัว ตัวละ 10 ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
-    },
-    {
-      "id": "acid",
-      "name": "ขวดกรด",
-      "owners": [
-        {
-          "id": "toma",
-          "role": "Alchemist",
-          "name": "โทมะ",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "energy",
-        "family": "acid-flask",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ปาขวดกรด 8 แล้วเป้าหมายถูกกัดกร่อน 2 รอบรวมรอบนี้ ทุกการโจมตีของทีมใส่ตัวนี้แรงขึ้น +6 ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "haste",
-      "name": "ยาเร่ง",
-      "owners": [
-        {
-          "id": "toma",
-          "role": "Alchemist",
-          "name": "โทมะ",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "ally",
-      "proposed": {
-        "visualKind": "support",
-        "family": "haste-tonic",
-        "durationMs": 550,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ให้ยาเร่งเพื่อนที่ยังยืนอยู่ 1 คน (รวมตัวเอง) รอบถัดไปคนนั้นได้ลงมือก่อนทุกคน รอบนี้ลำดับไม่เปลี่ยน ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
-    },
-    {
-      "id": "ambush",
-      "name": "จู่โจมก่อน",
-      "owners": [
-        {
-          "id": "sefa",
-          "role": "Scout",
-          "name": "เซฟา",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "physical",
-        "family": "shadow-strike",
-        "durationMs": 750,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "จู่โจม 12 หรือ 24 ถ้าเป้าหมายยังไม่ได้ลงมือในรอบนี้ (ดูคิว SPD) ใช้ได้ดีกับศัตรูที่ช้ากว่า ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "evade",
-      "name": "ก้าวเงา",
-      "owners": [
-        {
-          "id": "sefa",
-          "role": "Scout",
-          "name": "เซฟา",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "self",
-      "proposed": {
-        "visualKind": "support",
-        "family": "shadow-step",
-        "durationMs": 500,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ก้าวเงาเตรียมหลบ การโจมตีของศัตรูครั้งแรกที่โดนเซฟา (กายภาพหรือพลังงาน) จะพลาดทั้งหมด อยู่จนหลบแล้วหรือถึงเทิร์นของตัวเองอีกครั้ง ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
-    },
-    {
-      "id": "taunt",
-      "name": "ยั่วยุ",
-      "owners": [
-        {
-          "id": "brann",
-          "role": "Warden",
-          "name": "แบรนน์",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "self",
-      "proposed": {
-        "visualKind": "support",
-        "family": "challenge-rune",
-        "durationMs": 550,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ยั่วยุศัตรูทุกตัว ตั้งแต่ตอนนี้จนถึงเทิร์นถัดไปของแบรนน์ การโจมตีของศัตรูทุกครั้ง (กายภาพหรือพลังงาน) จะเล็งมาที่แบรนน์ และเขารับเบาลง 35% แผนโจมตีศัตรูจะแสดงเป้าใหม่ทันที ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
-    },
-    {
-      "id": "slam",
-      "name": "ทุบค้อนรูน",
-      "owners": [
-        {
-          "id": "brann",
-          "role": "Warden",
-          "name": "แบรนน์",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "physical",
-        "family": "hammer-slam",
-        "durationMs": 850,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ทุบค้อนรูนสร้างความเสียหาย 18 ให้ศัตรูหนึ่งตัว ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "valor",
-      "name": "เพลงกล้า",
-      "owners": [
-        {
-          "id": "lio",
-          "role": "Bard",
-          "name": "ลิโอ",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "self",
-      "proposed": {
-        "visualKind": "support",
-        "family": "valor-notes",
-        "durationMs": 600,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "บรรเลงเพลงกล้าค้างไว้ ทุกการโจมตีของทีมแรงขึ้น +4 (รวมสกิลและการสวน) จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "mend",
-      "name": "เพลงฟื้น",
-      "owners": [
-        {
-          "id": "lio",
-          "role": "Bard",
-          "name": "ลิโอ",
-          "unlock": "base"
-        }
-      ],
-      "targetKind": "self",
-      "proposed": {
-        "visualKind": "support",
-        "family": "mending-notes",
-        "durationMs": 600,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "บรรเลงเพลงฟื้นค้างไว้ ทุกคนที่ยังยืนอยู่ฟื้นเลือด 5 เมื่อเริ่มแต่ละรอบใหม่ จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "rally",
-      "name": "ตั้งรับหมู่",
-      "owners": [
-        {
-          "id": "guardian",
-          "role": "Knight",
-          "name": "เอกิส",
-          "unlock": "star3"
-        }
-      ],
-      "targetKind": "self",
-      "proposed": {
-        "visualKind": "support",
-        "family": "party-guard",
-        "durationMs": 700,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ตั้งรับหมู่ เพื่อนทุกคนที่ยังยืนอยู่ (รวมเอกิส) ลดความเสียหาย 35% จากการโจมตีครั้งแรกที่โดน จนถึงเทิร์นถัดไปของเอกิส ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
-    },
-    {
-      "id": "finisher",
-      "name": "ปลิดชีพ",
-      "owners": [
-        {
-          "id": "tracer",
-          "role": "Duelist",
-          "name": "ไลรา",
-          "unlock": "star3"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "physical",
-        "family": "finishing-lunge",
-        "durationMs": 950,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ปลิดชีพ 16 หรือ 32 ถ้าเลือดศัตรูต่ำกว่า 40% ไม่ใช้ตรา ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "sigil",
-      "name": "ตรึงเวท",
-      "owners": [
-        {
-          "id": "weaver",
-          "role": "Mage",
-          "name": "ไอรา",
-          "unlock": "star3"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "energy",
-        "family": "sigil-bind",
-        "durationMs": 850,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ตรึงเวท 8 และยกเลิกท่าพลังงานครั้งถัดไปของเป้าหมาย ท่ากายภาพยังโจมตีตามปกติ (กระแทกโล่ใช้หยุดกายภาพ) ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
-    },
-    {
-      "id": "sanctuary",
-      "name": "พรคุ้มภัย",
-      "owners": [
-        {
-          "id": "healer",
-          "role": "Priest",
-          "name": "เซเรน",
-          "unlock": "star3"
-        }
-      ],
-      "targetKind": "ally",
-      "proposed": {
-        "visualKind": "support",
-        "family": "sanctuary-seal",
-        "durationMs": 750,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "อวยพรเพื่อนที่ยังยืนอยู่ 1 คน (รวมตัวเอง) เลือดจะไม่ลดต่ำกว่า 1 จนถึงเทิร์นถัดไปของเซเรน ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
-    },
-    {
-      "id": "spearwall",
-      "name": "กำแพงทวน",
-      "owners": [
-        {
-          "id": "garran",
-          "role": "Spear",
-          "name": "การ์แรน",
-          "unlock": "star3"
-        }
-      ],
-      "targetKind": "self",
-      "proposed": {
-        "visualKind": "support",
-        "family": "spear-wall",
-        "durationMs": 700,
-        "assetState": "not-produced",
-        "fallback": "recipient-icon-and-authoritative-event-text",
-        "soundCue": "apply",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ตั้งกำแพงทวน ทุกครั้งที่ศัตรูโจมตีกายภาพใส่เพื่อนแนวหน้า (รวมตัวเอง) จะโดนแทงสวน 8 จนถึงเทิร์นถัดไปของการ์แรน ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
-    },
-    {
-      "id": "weakshot",
-      "name": "ศรจุดอ่อน",
-      "owners": [
-        {
-          "id": "mira",
-          "role": "Archer",
-          "name": "มิร่า",
-          "unlock": "star3"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "energy",
-        "family": "weakpoint-arrow",
-        "durationMs": 850,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ยิงศรจุดอ่อน 16 หรือ 28 ถ้าเป้าหมายถูกยิงสกัดเลื่อนเทิร์นอยู่ ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "bomb",
-      "name": "ขวดระเบิด",
-      "owners": [
-        {
-          "id": "toma",
-          "role": "Alchemist",
-          "name": "โทมะ",
-          "unlock": "star3"
-        }
-      ],
-      "targetKind": "enemies",
-      "proposed": {
-        "visualKind": "energy",
-        "family": "blast-flask",
-        "durationMs": 900,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ปาขวดระเบิดใส่ศัตรูทุกตัว ตัวละ 10 ตัวที่ถูกกัดกร่อนอยู่โดนแรงขึ้นตามโบนัสกรด ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
-    },
-    {
-      "id": "backstab",
-      "name": "ลอบแทง",
-      "owners": [
-        {
-          "id": "sefa",
-          "role": "Scout",
-          "name": "เซฟา",
-          "unlock": "star3"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "physical",
-        "family": "backstab-shadow",
-        "durationMs": 900,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ลอบแทง 20 ใส่ศัตรูที่ไม่ได้เล็งเซฟาในท่าถัดไป (ดูเป้าที่ศัตรูประกาศ) ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "quake",
-      "name": "ทุบปฐพี",
-      "owners": [
-        {
-          "id": "brann",
-          "role": "Warden",
-          "name": "แบรนน์",
-          "unlock": "star3"
-        }
-      ],
-      "targetKind": "enemy",
-      "proposed": {
-        "visualKind": "energy",
-        "family": "earthshaker",
-        "durationMs": 1000,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "ทุบปฐพี 14 หรือ 24 ถ้าท่าถัดไปของเป้าหมายเล็งแบรนน์อยู่ (เข้าคู่กับยั่วยุ) ใช้แล้วพร้อมอีกครั้งใน 2 รอบ"
-    },
-    {
-      "id": "finale",
-      "name": "บทสุดท้าย",
-      "owners": [
-        {
-          "id": "lio",
-          "role": "Bard",
-          "name": "ลิโอ",
-          "unlock": "star3"
-        }
-      ],
-      "targetKind": "self",
-      "proposed": {
-        "visualKind": "physical",
-        "family": "finale-wave",
-        "durationMs": 950,
-        "assetState": "not-produced",
-        "fallback": "source-to-actual-target-line-and-contact",
-        "soundCue": "prepare/travel/contact",
-        "secondaryPolicy": "only-actual-ordered-events; no invented hits, crits or bonus values"
-      },
-      "currentDescription": "จบเพลงที่บรรเลงอยู่แล้วปล่อยพลังทันที: เพลงกล้า = โจมตีศัตรูทุกตัว 16 · เพลงฟื้น = ฟื้นเลือดทุกคน 12 ต้องมีเพลงของลิโอเล่นอยู่ ใช้แล้วพร้อมอีกครั้งใน 3 รอบ"
-    }
-  ],
-  "intents": [
-    {
-      "id": "physical:Raking Slash",
-      "name": "Raking Slash",
-      "kind": "physical",
-      "occurrences": [
-        {
-          "encounterId": "first-clash",
-          "sourceId": "raider",
-          "targetSlot": 1,
-          "damage": 10
-        },
-        {
-          "encounterId": "first-clash",
-          "sourceId": "raider",
-          "targetSlot": 0,
-          "damage": 10
-        },
-        {
-          "encounterId": "veil-siege",
-          "sourceId": "raider",
-          "targetSlot": 1,
-          "damage": 12
-        },
-        {
-          "encounterId": "veil-siege",
-          "sourceId": "raider",
-          "targetSlot": 0,
-          "damage": 12
-        },
-        {
-          "encounterId": "rift-warden",
-          "sourceId": "brute",
-          "targetSlot": 1,
-          "damage": 21
-        }
-      ],
-      "proposed": {
-        "family": "enemy-weapon-contact",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": [
-          {
-            "encounterId": "rift-warden",
-            "durationMs": 1200,
-            "family": "warden-raking-slash"
-          }
-        ]
-      }
-    },
-    {
-      "id": "energy:Rift Bolt",
-      "name": "Rift Bolt",
-      "kind": "energy",
-      "occurrences": [
-        {
-          "encounterId": "first-clash",
-          "sourceId": "brute",
-          "targetSlot": 2,
-          "damage": 16
-        },
-        {
-          "encounterId": "first-clash",
-          "sourceId": "brute",
-          "targetSlot": 2,
-          "damage": 16
-        },
-        {
-          "encounterId": "veil-siege",
-          "sourceId": "brute",
-          "targetSlot": 2,
-          "damage": 28
-        },
-        {
-          "encounterId": "veil-siege",
-          "sourceId": "brute",
-          "targetSlot": 2,
-          "damage": 28
-        },
-        {
-          "encounterId": "rear-ambush",
-          "sourceId": "brute",
-          "targetSlot": 2,
-          "damage": 23
-        },
-        {
-          "encounterId": "rear-ambush",
-          "sourceId": "brute",
-          "targetSlot": 3,
-          "damage": 23
-        },
-        {
-          "encounterId": "rear-ambush",
-          "sourceId": "brute",
-          "targetSlot": 2,
-          "damage": 27
-        },
-        {
-          "encounterId": "rift-warden",
-          "sourceId": "brute",
-          "targetSlot": 2,
-          "damage": 25
-        },
-        {
-          "encounterId": "rift-warden",
-          "sourceId": "brute",
-          "targetSlot": 3,
-          "damage": 23
-        },
-        {
-          "encounterId": "rift-warden",
-          "sourceId": "brute",
-          "targetSlot": 2,
-          "damage": 29
-        }
-      ],
-      "proposed": {
-        "family": "enemy-energy-projectile",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": [
-          {
-            "encounterId": "rift-warden",
-            "durationMs": 1200,
-            "family": "warden-rift-bolt"
-          }
-        ]
-      }
-    },
-    {
-      "id": "physical:Crushing Blow",
-      "name": "Crushing Blow",
-      "kind": "physical",
-      "occurrences": [
-        {
-          "encounterId": "first-clash",
-          "sourceId": "brute",
-          "targetSlot": 1,
-          "damage": 14
-        },
-        {
-          "encounterId": "veil-siege",
-          "sourceId": "brute",
-          "targetSlot": 1,
-          "damage": 26
-        },
-        {
-          "encounterId": "rift-warden",
-          "sourceId": "brute",
-          "targetSlot": 1,
-          "damage": 29
-        },
-        {
-          "encounterId": "rift-warden",
-          "sourceId": "brute",
-          "targetSlot": 0,
-          "damage": 33
-        }
-      ],
-      "proposed": {
-        "family": "enemy-heavy-contact",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": [
-          {
-            "encounterId": "rift-warden",
-            "durationMs": 1200,
-            "family": "warden-heavy-slam"
-          }
-        ]
-      }
-    },
-    {
-      "id": "energy:Shadow Knife",
-      "name": "Shadow Knife",
-      "kind": "energy",
-      "occurrences": [
-        {
-          "encounterId": "first-clash",
-          "sourceId": "raider",
-          "targetSlot": 3,
-          "damage": 12
-        },
-        {
-          "encounterId": "veil-siege",
-          "sourceId": "raider",
-          "targetSlot": 3,
-          "damage": 14
-        }
-      ],
-      "proposed": {
-        "family": "enemy-energy-projectile",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "energy:Seed Spark",
-      "name": "Seed Spark",
-      "kind": "energy",
-      "occurrences": [
-        {
-          "encounterId": "scout-patrol",
-          "sourceId": "raider",
-          "targetSlot": 1,
-          "damage": 11
-        },
-        {
-          "encounterId": "scout-patrol",
-          "sourceId": "raider",
-          "targetSlot": 3,
-          "damage": 12
-        },
-        {
-          "encounterId": "scout-patrol",
-          "sourceId": "raider",
-          "targetSlot": 0,
-          "damage": 11
-        },
-        {
-          "encounterId": "elite-tusk-chief",
-          "sourceId": "raider",
-          "targetSlot": 2,
-          "damage": 13
-        },
-        {
-          "encounterId": "elite-tusk-chief",
-          "sourceId": "raider",
-          "targetSlot": 3,
-          "damage": 14
-        },
-        {
-          "encounterId": "elite-tusk-chief",
-          "sourceId": "raider",
-          "targetSlot": 2,
-          "damage": 13
-        }
-      ],
-      "proposed": {
-        "family": "enemy-energy-projectile",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "physical:Tusk Charge",
-      "name": "Tusk Charge",
-      "kind": "physical",
-      "occurrences": [
-        {
-          "encounterId": "rift-whelp",
-          "sourceId": "brute",
-          "targetSlot": 1,
-          "damage": 18
-        },
-        {
-          "encounterId": "rift-whelp",
-          "sourceId": "brute",
-          "targetSlot": 0,
-          "damage": 16
-        },
-        {
-          "encounterId": "rift-whelp",
-          "sourceId": "brute",
-          "targetSlot": 1,
-          "damage": 18
-        },
-        {
-          "encounterId": "elite-tusk-chief",
-          "sourceId": "brute",
-          "targetSlot": 1,
-          "damage": 20
-        },
-        {
-          "encounterId": "elite-tusk-chief",
-          "sourceId": "brute",
-          "targetSlot": 1,
-          "damage": 20
-        }
-      ],
-      "proposed": {
-        "family": "enemy-weapon-contact",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "energy:Spore Hex",
-      "name": "Spore Hex",
-      "kind": "energy",
-      "occurrences": [
-        {
-          "encounterId": "thicket-ambush",
-          "sourceId": "raider",
-          "targetSlot": 1,
-          "damage": 12
-        },
-        {
-          "encounterId": "thicket-ambush",
-          "sourceId": "raider",
-          "targetSlot": 2,
-          "damage": 14
-        },
-        {
-          "encounterId": "thicket-ambush",
-          "sourceId": "raider",
-          "targetSlot": 0,
-          "damage": 12
-        }
-      ],
-      "proposed": {
-        "family": "enemy-energy-projectile",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "energy:Thorn Bloom",
-      "name": "Thorn Bloom",
-      "kind": "energy",
-      "occurrences": [
-        {
-          "encounterId": "thicket-ambush",
-          "sourceId": "brute",
-          "targetSlot": 3,
-          "damage": 20
-        },
-        {
-          "encounterId": "thicket-ambush",
-          "sourceId": "brute",
-          "targetSlot": 2,
-          "damage": 22
-        },
-        {
-          "encounterId": "elite-briar-lord",
-          "sourceId": "brute",
-          "targetSlot": 3,
-          "damage": 22
-        }
-      ],
-      "proposed": {
-        "family": "enemy-energy-projectile",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "physical:Briar Lash",
-      "name": "Briar Lash",
-      "kind": "physical",
-      "occurrences": [
-        {
-          "encounterId": "thicket-ambush",
-          "sourceId": "brute",
-          "targetSlot": 1,
-          "damage": 20
-        },
-        {
-          "encounterId": "elite-briar-lord",
-          "sourceId": "brute",
-          "targetSlot": 1,
-          "damage": 22
-        }
-      ],
-      "proposed": {
-        "family": "enemy-weapon-contact",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "physical:Thorn Pounce",
-      "name": "Thorn Pounce",
-      "kind": "physical",
-      "occurrences": [
-        {
-          "encounterId": "shadow-stalker",
-          "sourceId": "raider",
-          "targetSlot": 1,
-          "damage": 18
-        },
-        {
-          "encounterId": "shadow-stalker",
-          "sourceId": "raider",
-          "targetSlot": 0,
-          "damage": 16
-        },
-        {
-          "encounterId": "shadow-stalker",
-          "sourceId": "raider",
-          "targetSlot": 1,
-          "damage": 18
-        },
-        {
-          "encounterId": "elite-briar-lord",
-          "sourceId": "raider",
-          "targetSlot": 1,
-          "damage": 19
-        },
-        {
-          "encounterId": "elite-briar-lord",
-          "sourceId": "raider",
-          "targetSlot": 0,
-          "damage": 18
-        },
-        {
-          "encounterId": "elite-briar-lord",
-          "sourceId": "raider",
-          "targetSlot": 1,
-          "damage": 19
-        }
-      ],
-      "proposed": {
-        "family": "enemy-weapon-contact",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "energy:Rune Lash",
-      "name": "Rune Lash",
-      "kind": "energy",
-      "occurrences": [
-        {
-          "encounterId": "rear-ambush",
-          "sourceId": "raider",
-          "targetSlot": 3,
-          "damage": 24
-        },
-        {
-          "encounterId": "rear-ambush",
-          "sourceId": "raider",
-          "targetSlot": 2,
-          "damage": 23
-        }
-      ],
-      "proposed": {
-        "family": "enemy-energy-projectile",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "physical:Ribbon Snare",
-      "name": "Ribbon Snare",
-      "kind": "physical",
-      "occurrences": [
-        {
-          "encounterId": "rear-ambush",
-          "sourceId": "raider",
-          "targetSlot": 1,
-          "damage": 23
-        }
-      ],
-      "proposed": {
-        "family": "enemy-weapon-contact",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "physical:Crystal Fist",
-      "name": "Crystal Fist",
-      "kind": "physical",
-      "occurrences": [
-        {
-          "encounterId": "crystal-stampede",
-          "sourceId": "raider",
-          "targetSlot": 0,
-          "damage": 16
-        },
-        {
-          "encounterId": "crystal-stampede",
-          "sourceId": "raider",
-          "targetSlot": 1,
-          "damage": 18
-        },
-        {
-          "encounterId": "crystal-stampede",
-          "sourceId": "raider",
-          "targetSlot": 0,
-          "damage": 16
-        }
-      ],
-      "proposed": {
-        "family": "enemy-weapon-contact",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "physical:Horn Charge",
-      "name": "Horn Charge",
-      "kind": "physical",
-      "occurrences": [
-        {
-          "encounterId": "crystal-stampede",
-          "sourceId": "brute",
-          "targetSlot": 1,
-          "damage": 24
-        },
-        {
-          "encounterId": "crystal-stampede",
-          "sourceId": "brute",
-          "targetSlot": 0,
-          "damage": 26
-        }
-      ],
-      "proposed": {
-        "family": "enemy-weapon-contact",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "energy:Shard Burst",
-      "name": "Shard Burst",
-      "kind": "energy",
-      "occurrences": [
-        {
-          "encounterId": "crystal-stampede",
-          "sourceId": "brute",
-          "targetSlot": 2,
-          "damage": 22
-        }
-      ],
-      "proposed": {
-        "family": "enemy-energy-projectile",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "physical:Stampede",
-      "name": "Stampede",
-      "kind": "physical",
-      "occurrences": [
-        {
-          "encounterId": "elite-tusk-chief",
-          "sourceId": "brute",
-          "targetSlot": 0,
-          "damage": 26
-        }
-      ],
-      "proposed": {
-        "family": "enemy-weapon-contact",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "energy:Thorn Storm",
-      "name": "Thorn Storm",
-      "kind": "energy",
-      "occurrences": [
-        {
-          "encounterId": "elite-briar-lord",
-          "sourceId": "brute",
-          "targetSlot": 2,
-          "damage": 27
-        }
-      ],
-      "proposed": {
-        "family": "enemy-energy-projectile",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "energy:Rift Needle",
-      "name": "Rift Needle",
-      "kind": "energy",
-      "occurrences": [
-        {
-          "encounterId": "mini-veil-golem",
-          "sourceId": "raider",
-          "targetSlot": 2,
-          "damage": 18
-        },
-        {
-          "encounterId": "mini-veil-golem",
-          "sourceId": "raider",
-          "targetSlot": 3,
-          "damage": 18
-        },
-        {
-          "encounterId": "mini-veil-golem",
-          "sourceId": "raider",
-          "targetSlot": 2,
-          "damage": 19
-        }
-      ],
-      "proposed": {
-        "family": "enemy-energy-projectile",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "physical:Stone Fist",
-      "name": "Stone Fist",
-      "kind": "physical",
-      "occurrences": [
-        {
-          "encounterId": "mini-veil-golem",
-          "sourceId": "brute",
-          "targetSlot": 0,
-          "damage": 22
-        },
-        {
-          "encounterId": "mini-veil-golem",
-          "sourceId": "brute",
-          "targetSlot": 0,
-          "damage": 22
-        }
-      ],
-      "proposed": {
-        "family": "enemy-weapon-contact",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    },
-    {
-      "id": "physical:Veil Quake",
-      "name": "Veil Quake",
-      "kind": "physical",
-      "occurrences": [
-        {
-          "encounterId": "mini-veil-golem",
-          "sourceId": "brute",
-          "targetSlot": 1,
-          "damage": 30
-        }
-      ],
-      "proposed": {
-        "family": "enemy-weapon-contact",
-        "durationMs": 800,
-        "assetState": "not-produced",
-        "soundCue": "prepare/travel/contact",
-        "fallback": "source-to-resolved-target; respect-guard-dodge-barrier-cancel",
-        "secondaryPolicy": "no-AoE-without-actual-target-events",
-        "overrides": []
-      }
-    }
-  ],
-  "events": [
-    {
-      "id": "damage",
-      "proposedFamily": "contact-number-hp",
-      "cue": "contact",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "guard",
-      "proposedFamily": "guard-link",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "mark",
-      "proposedFamily": "mark-seal",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "barrier",
-      "proposedFamily": "barrier-gain",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "heal",
-      "proposedFamily": "hp-restoration",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "interrupt",
-      "proposedFamily": "intent-break",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "cancel",
-      "proposedFamily": "canceled-action",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "down",
-      "proposedFamily": "fall-or-dissolve",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "outcome",
-      "proposedFamily": "result-transition",
-      "cue": "after-final-reaction",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "brace",
-      "proposedFamily": "spear-stance",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "counter",
-      "proposedFamily": "return-strike",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "delay",
-      "proposedFamily": "queue-delay",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "corrode",
-      "proposedFamily": "acid-status",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "haste",
-      "proposedFamily": "haste-status",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "evade",
-      "proposedFamily": "evasion-ready",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "dodge",
-      "proposedFamily": "miss-afterimage",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "taunt",
-      "proposedFamily": "challenge-link",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "song",
-      "proposedFamily": "song-state",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "rally",
-      "proposedFamily": "party-guard",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "sigil",
-      "proposedFamily": "sigil-status",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "sanctuary",
-      "proposedFamily": "survival-seal",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "stand",
-      "proposedFamily": "last-stand",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    },
-    {
-      "id": "finale",
-      "proposedFamily": "song-finale",
-      "cue": "at-authoritative-event-order",
-      "fallback": "actual-target-icon-and-event-text; exact-values-only",
-      "assetState": "not-produced",
-      "provenance": "event type alone does not prove gear/passive origin"
-    }
-  ]
+  {
+   "identity": "tracer",
+   "side": "hero",
+   "name": "Lyra",
+   "sheet": "lyra",
+   "atlas": {
+    "image": "lyra_pilot.b2e071012643.webp",
+    "atlas": "lyra_pilot.a6e63bff9845.json",
+    "frames": 38,
+    "decodedBytes": 8924160,
+    "downloadBytes": 2314819
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21",
+    "counter": "sprite 12,13,14"
+   }
+  },
+  {
+   "identity": "weaver",
+   "side": "hero",
+   "name": "Eira",
+   "sheet": "eira",
+   "atlas": {
+    "image": "eira_a1.573c1cfd9b43.webp",
+    "atlas": "eira_a1.bd1097cc0ed3.json",
+    "frames": 22,
+    "decodedBytes": 4067328,
+    "downloadBytes": 1382688
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "healer",
+   "side": "hero",
+   "name": "Seren",
+   "sheet": "seren",
+   "atlas": {
+    "image": "seren_a3.8ee02ab5e681.webp",
+    "atlas": "seren_a3.3d911a21c2db.json",
+    "frames": 40,
+    "decodedBytes": 4902912,
+    "downloadBytes": 1463594
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "sprite 38,39",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "mira",
+   "side": "hero",
+   "name": "Mira",
+   "sheet": "mira",
+   "atlas": {
+    "image": "mira_a4.a66eff2f412e.webp",
+    "atlas": "mira_a4.fa41f1f841cc.json",
+    "frames": 32,
+    "decodedBytes": 4161536,
+    "downloadBytes": 1103668
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "sprite 30,31",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "toma",
+   "side": "hero",
+   "name": "Toma",
+   "sheet": "toma",
+   "atlas": {
+    "image": "toma_a4.a22b073a2df5.webp",
+    "atlas": "toma_a4.685bfa478782.json",
+    "frames": 24,
+    "decodedBytes": 2288640,
+    "downloadBytes": 646978
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "sprite 22,23",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "sefa",
+   "side": "hero",
+   "name": "Sefa",
+   "sheet": "sefa",
+   "atlas": {
+    "image": "sefa_a6.84128b973a5e.webp",
+    "atlas": "sefa_a6.dd4844ad09fd.json",
+    "frames": 40,
+    "decodedBytes": 4239360,
+    "downloadBytes": 1066697
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "sprite 38,39",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "brann",
+   "side": "hero",
+   "name": "Brann",
+   "sheet": "brann",
+   "atlas": {
+    "image": "brann_a5.75caea432f6f.webp",
+    "atlas": "brann_a5.13024341c94e.json",
+    "frames": 40,
+    "decodedBytes": 4612096,
+    "downloadBytes": 1494058
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "sprite 38,39",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "lio",
+   "side": "hero",
+   "name": "Lio",
+   "sheet": "lio",
+   "atlas": {
+    "image": "lio_a6.86a716dad3e8.webp",
+    "atlas": "lio_a6.09193c4bc99f.json",
+    "frames": 40,
+    "decodedBytes": 5200896,
+    "downloadBytes": 1455863
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "sprite 38,39",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "garran",
+   "side": "hero",
+   "name": "Garran",
+   "sheet": "garran",
+   "atlas": {
+    "image": "garran_a5.247ac3883b94.webp",
+    "atlas": "garran_a5.c699363d2062.json",
+    "frames": 32,
+    "decodedBytes": 4036608,
+    "downloadBytes": 1017823
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "sprite 30,31",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21",
+    "counter": "sprite 30,5,6"
+   }
+  },
+  {
+   "identity": "metta",
+   "side": "hero",
+   "name": "Corin",
+   "sheet": "metta",
+   "atlas": {
+    "image": "metta_a7.1961fbe088c4.webp",
+    "atlas": "metta_a7.b3f4b95c298f.json",
+    "frames": 35,
+    "decodedBytes": 4382720,
+    "downloadBytes": 1372287
+   },
+   "reactions": {
+    "hit": "sprite 25,26,27",
+    "block": "sprite 28,29,30",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 31,32,33,34 · ค้าง 34"
+   }
+  },
+  {
+   "identity": "thiran",
+   "side": "hero",
+   "name": "Odran",
+   "parked": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)",
+   "reactions": {
+    "hit": "procedural",
+    "block": "procedural",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "procedural (ภาพนิ่งจาง)"
+   }
+  },
+  {
+   "identity": "lalin",
+   "side": "hero",
+   "name": "Cerise",
+   "sheet": "lalin",
+   "atlas": {
+    "image": "lalin_a7.3154c54936f2.webp",
+    "atlas": "lalin_a7.e8d3473f11c9.json",
+    "frames": 41,
+    "decodedBytes": 6528000,
+    "downloadBytes": 2176220
+   },
+   "reactions": {
+    "hit": "sprite 31,32,33",
+    "block": "sprite 34,35,36",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 37,38,39,40 · ค้าง 40"
+   }
+  },
+  {
+   "identity": "wila",
+   "side": "hero",
+   "name": "Isolde",
+   "parked": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)",
+   "reactions": {
+    "hit": "procedural",
+    "block": "procedural",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "procedural (ภาพนิ่งจาง)"
+   }
+  },
+  {
+   "identity": "brute",
+   "side": "enemy",
+   "name": "อสูรรอยแยก",
+   "sheet": "brute",
+   "atlas": {
+    "image": "brute_a10.40cde2c95f56.webp",
+    "atlas": "brute_a10.e93415ea55b0.json",
+    "frames": 24,
+    "decodedBytes": 4380672,
+    "downloadBytes": 1442837
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "sprite 22,23",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_captain",
+   "side": "enemy",
+   "name": "หัวหน้ากองหน้า",
+   "sheet": "captain",
+   "atlas": {
+    "image": "captain_a9.93e9e7fb305a.webp",
+    "atlas": "captain_a9.84200ceb12ef.json",
+    "frames": 18,
+    "decodedBytes": 4798464,
+    "downloadBytes": 1336077
+   },
+   "reactions": {
+    "hit": "sprite 13,14",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 15,16,17 · ค้าง 17"
+   }
+  },
+  {
+   "identity": "foe_dew_slime",
+   "side": "enemy",
+   "name": "สไลม์น้ำค้าง",
+   "sheet": "dew",
+   "atlas": {
+    "image": "dew_a4.a57bd1fe4fb4.webp",
+    "atlas": "dew_a4.c105e9716176.json",
+    "frames": 22,
+    "decodedBytes": 1416192,
+    "downloadBytes": 357467
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_ember_slime",
+   "side": "enemy",
+   "name": "สไลม์ถ่านไฟ",
+   "sheet": "ember",
+   "atlas": {
+    "image": "ember_a4.21283c607c4a.webp",
+    "atlas": "ember_a4.70f335f30553.json",
+    "frames": 22,
+    "decodedBytes": 1164288,
+    "downloadBytes": 320727
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_golem",
+   "side": "enemy",
+   "name": "โกเลมเศษผลึก",
+   "sheet": "golem",
+   "atlas": {
+    "image": "golem_a8.347332eb22cb.webp",
+    "atlas": "golem_a8.5b47da42b1d4.json",
+    "frames": 22,
+    "decodedBytes": 3456000,
+    "downloadBytes": 1077307
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_hunter",
+   "side": "enemy",
+   "name": "นักล่าเผ่าอสูร",
+   "sheet": "hunter",
+   "atlas": {
+    "image": "hunter_pilot.a2500d3fa495.webp",
+    "atlas": "hunter_pilot.0ca0445de5c5.json",
+    "frames": 22,
+    "decodedBytes": 4079616,
+    "downloadBytes": 931414
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_juggernaut",
+   "side": "enemy",
+   "name": "ด้วงเกราะผลึก",
+   "sheet": "juggernaut",
+   "atlas": {
+    "image": "juggernaut_a9.c874096fe87b.webp",
+    "atlas": "juggernaut_a9.8855bfee5bd8.json",
+    "frames": 14,
+    "decodedBytes": 4313088,
+    "downloadBytes": 1425783
+   },
+   "reactions": {
+    "hit": "sprite 9,10",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 11,12,13 · ค้าง 13"
+   }
+  },
+  {
+   "identity": "foe_matriarch",
+   "side": "enemy",
+   "name": "ราชินีหนาม",
+   "sheet": "matriarch",
+   "atlas": {
+    "image": "matriarch_a9.9aec248e0338.webp",
+    "atlas": "matriarch_a9.869441fd964f.json",
+    "frames": 26,
+    "decodedBytes": 3532800,
+    "downloadBytes": 1420295
+   },
+   "reactions": {
+    "hit": "sprite 21,22",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 23,24,25 · ค้าง 25"
+   }
+  },
+  {
+   "identity": "foe_mycon",
+   "side": "enemy",
+   "name": "เห็ดหมอผีกลวง",
+   "sheet": "mycon",
+   "atlas": {
+    "image": "mycon_a3.e2b8c7771746.webp",
+    "atlas": "mycon_a3.84b234561959.json",
+    "frames": 22,
+    "decodedBytes": 2435072,
+    "downloadBytes": 826472
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_rift_channeler",
+   "side": "enemy",
+   "name": "อสูรส่งพลัง",
+   "sheet": "channeler",
+   "atlas": {
+    "image": "channeler_a8.e78036e65eec.webp",
+    "atlas": "channeler_a8.030af2894ed6.json",
+    "frames": 22,
+    "decodedBytes": 2129920,
+    "downloadBytes": 547872
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_rift_wisp",
+   "side": "enemy",
+   "name": "วิญญาณรอยแยก",
+   "sheet": "wisp",
+   "atlas": {
+    "image": "wisp_a8.f9b9ef229c93.webp",
+    "atlas": "wisp_a8.a22ecd578279.json",
+    "frames": 25,
+    "decodedBytes": 1368064,
+    "downloadBytes": 336175
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_riftweaver",
+   "side": "enemy",
+   "name": "ผู้ทอรอยแยก",
+   "sheet": "riftweaver",
+   "atlas": {
+    "image": "riftweaver_a6.8f88afac40de.webp",
+    "atlas": "riftweaver_a6.43505473120d.json",
+    "frames": 30,
+    "decodedBytes": 3879936,
+    "downloadBytes": 1148424
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_ruin_bat",
+   "side": "enemy",
+   "name": "ค้างคาวซาก",
+   "sheet": "bat",
+   "atlas": {
+    "image": "bat_a4.3feccaa66009.webp",
+    "atlas": "bat_a4.c9e4e10a932f.json",
+    "frames": 26,
+    "decodedBytes": 1972224,
+    "downloadBytes": 430211
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_sentinel",
+   "side": "enemy",
+   "name": "ผู้คุมรอยแยก",
+   "sheet": "sentinel",
+   "atlas": {
+    "image": "sentinel_a9.616021ce3ce4.webp",
+    "atlas": "sentinel_a9.0c30c1349c42.json",
+    "frames": 34,
+    "decodedBytes": 3825664,
+    "downloadBytes": 1409354
+   },
+   "reactions": {
+    "hit": "sprite 29,30",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 31,32,33 · ค้าง 33"
+   }
+  },
+  {
+   "identity": "foe_shard_crawler",
+   "side": "enemy",
+   "name": "แมงมุมเศษผลึก",
+   "sheet": "crawler",
+   "atlas": {
+    "image": "crawler_a8.4c402f135a49.webp",
+    "atlas": "crawler_a8.61d4d6d4d1b5.json",
+    "frames": 22,
+    "decodedBytes": 1359872,
+    "downloadBytes": 386769
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_spore_puff",
+   "side": "enemy",
+   "name": "ภูตสปอร์",
+   "sheet": "sporepuff",
+   "atlas": {
+    "image": "sporepuff_a6.1bfc88ce673f.webp",
+    "atlas": "sporepuff_a6.d542e6d2f65d.json",
+    "frames": 22,
+    "decodedBytes": 1658880,
+    "downloadBytes": 456125
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_sprite",
+   "side": "enemy",
+   "name": "ภูตแดนดิไลออน",
+   "sheet": "sprite",
+   "atlas": {
+    "image": "sprite_a1.12710bff0f5a.webp",
+    "atlas": "sprite_a1.7dfbdd0f7092.json",
+    "frames": 22,
+    "decodedBytes": 1251328,
+    "downloadBytes": 357984
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_stalker",
+   "side": "enemy",
+   "name": "ลิงซ์หนามพราง",
+   "sheet": "stalker",
+   "atlas": {
+    "image": "stalker_a5.32fe2106b8c7.webp",
+    "atlas": "stalker_a5.59e649e3e46f.json",
+    "frames": 22,
+    "decodedBytes": 2555904,
+    "downloadBytes": 695922
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_thorn_beetle",
+   "side": "enemy",
+   "name": "ด้วงหนาม",
+   "sheet": "beetle",
+   "atlas": {
+    "image": "beetle_a5.7e5d96178375.webp",
+    "atlas": "beetle_a5.a0583e05f41d.json",
+    "frames": 22,
+    "decodedBytes": 1863680,
+    "downloadBytes": 475744
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_tusker",
+   "side": "enemy",
+   "name": "หมูป่าหลังตะไคร่",
+   "sheet": "tusker",
+   "atlas": {
+    "image": "tusker_a5.79780d27e234.webp",
+    "atlas": "tusker_a5.a21dae4c5b62.json",
+    "frames": 22,
+    "decodedBytes": 4275200,
+    "downloadBytes": 1204923
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_vargoth_guard",
+   "side": "enemy",
+   "name": "องครักษ์อสูร",
+   "sheet": "vargoth",
+   "atlas": {
+    "image": "vargoth_a2.e00f4aba9301.webp",
+    "atlas": "vargoth_a2.cf090b150455.json",
+    "frames": 32,
+    "decodedBytes": 4303872,
+    "downloadBytes": 1385751
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "sprite 22,23",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "raider",
+   "side": "enemy",
+   "name": "นักจู่โจม",
+   "sheet": "raider",
+   "atlas": {
+    "image": "raider_a10.e753795001b9.webp",
+    "atlas": "raider_a10.6e58dfd81796.json",
+    "frames": 24,
+    "decodedBytes": 3901440,
+    "downloadBytes": 1141459
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "sprite 22,23",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  }
+ ],
+ "rows": [
+  {
+   "identity": "guardian",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "role basic"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "guardian",
+   "side": "hero",
+   "move": "guard",
+   "name": "ตั้งรับแทน",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "defense-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "ผู้ร่าย — ตัว"
+  },
+  {
+   "identity": "guardian",
+   "side": "hero",
+   "move": "bash",
+   "name": "กระแทกโล่",
+   "body": {
+    "kind": "sprite",
+    "clip": "bash",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "smash"
+   },
+   "vfx": {
+    "module": "earth-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "พื้นใต้ศัตรูที่โดนจริง (+ heal จริงแยก)"
+  },
+  {
+   "identity": "guardian",
+   "side": "hero",
+   "move": "bulwark",
+   "name": "กำแพงโล่",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "defense-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ผู้รับจริง — ตัว"
+  },
+  {
+   "identity": "guardian",
+   "side": "hero",
+   "move": "challenge",
+   "name": "ท้าดวล",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "command-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "โล่ผู้ร่าย → ศัตรูที่ถูกท้าจริง 1 ตัว"
+  },
+  {
+   "identity": "guardian",
+   "side": "hero",
+   "move": "rally",
+   "name": "ตั้งรับหมู่",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "defense-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ผู้รับจริง — ขา/พื้น"
+  },
+  {
+   "identity": "guardian",
+   "side": "hero",
+   "move": "rouse",
+   "name": "ยืนเคียงข้าง",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "healing-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ฐานเท้าผู้รับ heal/barrier จริง (รวม upkeep)"
+  },
+  {
+   "identity": "tracer",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3
+     ],
+     "recover": [
+      5,
+      4,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "role basic"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "tracer",
+   "side": "hero",
+   "move": "mark",
+   "name": "ติดตรา",
+   "body": {
+    "kind": "sprite",
+    "clip": "mark",
+    "frames": {
+     "prepare": [
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "กลางตัวเป้าจริง"
+  },
+  {
+   "identity": "tracer",
+   "side": "hero",
+   "move": "execute",
+   "name": "ฟันเจาะจุด",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "thrust"
+   },
+   "vfx": {
+    "module": "exec-ward-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง (+ ตราเมื่อติด Mark จริง)"
+  },
+  {
+   "identity": "tracer",
+   "side": "hero",
+   "move": "lunge",
+   "name": "พุ่งตัด",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "thrust"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "tracer",
+   "side": "hero",
+   "move": "finisher",
+   "name": "ปลิดชีพ",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3
+     ],
+     "recover": [
+      5,
+      4,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "thrust"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "tracer",
+   "side": "hero",
+   "move": "parry",
+   "name": "ปัดดาบ",
+   "body": {
+    "kind": "sprite",
+    "clip": "parry",
+    "frames": {
+     "prepare": [
+      31,
+      32,
+      33
+     ],
+     "recover": [
+      34,
+      35,
+      36,
+      37
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ผู้ร่าย (stance) + ผู้รับ counter จริง"
+  },
+  {
+   "identity": "tracer",
+   "side": "hero",
+   "move": "sweep",
+   "name": "ฟันกวาด",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3
+     ],
+     "recover": [
+      5,
+      4,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "slash"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรูทุกตัวที่ยืนอยู่",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "weaver",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "role basic"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "weaver",
+   "side": "hero",
+   "move": "bolt",
+   "name": "ศรเวท",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "bolt-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ไม้เท้า → ตัวผู้รับจริง"
+  },
+  {
+   "identity": "weaver",
+   "side": "hero",
+   "move": "ward",
+   "name": "โล่เวท",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "exec-ward-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "ผู้รับ barrier จริง"
+  },
+  {
+   "identity": "weaver",
+   "side": "hero",
+   "move": "storm",
+   "name": "พายุเวท",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรูทุกตัวที่ยืนอยู่",
+   "point": "กลางตัว → เท้าศัตรูที่โดนจริงทุกตัว"
+  },
+  {
+   "identity": "weaver",
+   "side": "hero",
+   "move": "aegis",
+   "name": "เกราะผลึก",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "defense-fx",
+    "kind": "painted"
+   },
+   "target": "ทั้งทีม",
+   "point": "ผู้รับจริง — ขา/พื้น"
+  },
+  {
+   "identity": "weaver",
+   "side": "hero",
+   "move": "sigil",
+   "name": "ตรึงเวท",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "เท้าศัตรูจริง"
+  },
+  {
+   "identity": "weaver",
+   "side": "hero",
+   "move": "dispel",
+   "name": "สลายเวท",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "กลางตัวเป้าจริง"
+  },
+  {
+   "identity": "healer",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "role basic"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "healer",
+   "side": "hero",
+   "move": "heal",
+   "name": "รักษา",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "healing-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "ฐานเท้าผู้รับ heal/barrier จริง (รวม upkeep)"
+  },
+  {
+   "identity": "healer",
+   "side": "hero",
+   "move": "prayer",
+   "name": "พรฟื้นฟู",
+   "body": {
+    "kind": "sprite",
+    "clip": "prayer",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "healing-fx",
+    "kind": "painted"
+   },
+   "target": "ทั้งทีม",
+   "point": "ฐานเท้าผู้รับ heal/barrier จริง (รวม upkeep)"
+  },
+  {
+   "identity": "healer",
+   "side": "hero",
+   "move": "revive",
+   "name": "ฟื้นคืน",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "healing-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "ฐานเท้าผู้รับ heal/barrier จริง (รวม upkeep)"
+  },
+  {
+   "identity": "healer",
+   "side": "hero",
+   "move": "sanctuary",
+   "name": "พรคุ้มภัย",
+   "body": {
+    "kind": "sprite",
+    "clip": "sanctuary",
+    "frames": {
+     "prepare": [
+      30,
+      31,
+      32,
+      33
+     ],
+     "recover": [
+      34,
+      35,
+      36,
+      37
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "defense-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "ผู้รับจริง — ตัว"
+  },
+  {
+   "identity": "healer",
+   "side": "hero",
+   "move": "halo",
+   "name": "วงแสงคุ้มกัน",
+   "body": {
+    "kind": "sprite",
+    "clip": "prayer",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "defense-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ผู้รับจริง — ตัว"
+  },
+  {
+   "identity": "healer",
+   "side": "hero",
+   "move": "bless",
+   "name": "พรต่อเนื่อง",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "healing-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "ฐานเท้าผู้รับ heal/barrier จริง (รวม upkeep)"
+  },
+  {
+   "identity": "mira",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "role basic"
+   },
+   "vfx": {
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "ลูกธนู/ขวดวาดด้วยโค้ด (AV03 ตั้งใจ ไม่ใช้ภาพสกิล)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ออกจากจุดปล่อย → ขอบหน้าผู้รับ damage จริง"
+  },
+  {
+   "identity": "mira",
+   "side": "hero",
+   "move": "hinder",
+   "name": "ยิงสกัด",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "shoot"
+   },
+   "vfx": {
+    "module": "projectile-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว)"
+  },
+  {
+   "identity": "mira",
+   "side": "hero",
+   "move": "volley",
+   "name": "ห่าธนู",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "shoot"
+   },
+   "vfx": {
+    "module": "projectile-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรูทุกตัวที่ยืนอยู่",
+   "point": "ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว)"
+  },
+  {
+   "identity": "mira",
+   "side": "hero",
+   "move": "weakshot",
+   "name": "ศรจุดอ่อน",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "shoot"
+   },
+   "vfx": {
+    "module": "projectile-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว)"
+  },
+  {
+   "identity": "mira",
+   "side": "hero",
+   "move": "pin",
+   "name": "ศรตรึงแถว",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "shoot"
+   },
+   "vfx": {
+    "module": "projectile-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรูทุกตัวที่ยืนอยู่",
+   "point": "ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว)"
+  },
+  {
+   "identity": "mira",
+   "side": "hero",
+   "move": "disengage",
+   "name": "ยิงถอยคิว",
+   "body": {
+    "kind": "sprite",
+    "clip": "disengage",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "shoot"
+   },
+   "vfx": {
+    "module": "projectile-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว)"
+  },
+  {
+   "identity": "mira",
+   "side": "hero",
+   "move": "track",
+   "name": "ศรตามรอย",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "shoot"
+   },
+   "vfx": {
+    "module": "projectile-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว)"
+  },
+  {
+   "identity": "toma",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "role basic"
+   },
+   "vfx": {
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "ลูกธนู/ขวดวาดด้วยโค้ด (AV03 ตั้งใจ ไม่ใช้ภาพสกิล)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ออกจากจุดปล่อย → ขอบหน้าผู้รับ damage จริง"
+  },
+  {
+   "identity": "toma",
+   "side": "hero",
+   "move": "acid",
+   "name": "ขวดกรด",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "throw"
+   },
+   "vfx": {
+    "module": "alchemy-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ผู้รับ event จริง (ศัตรู: ตัว, พันธมิตร: ตัว) รวม chain ของ catalyst"
+  },
+  {
+   "identity": "toma",
+   "side": "hero",
+   "move": "haste",
+   "name": "ยาเร่ง",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "alchemy-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "ผู้รับ event จริง (ศัตรู: ตัว, พันธมิตร: ตัว) รวม chain ของ catalyst"
+  },
+  {
+   "identity": "toma",
+   "side": "hero",
+   "move": "bomb",
+   "name": "ขวดระเบิด",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "throw"
+   },
+   "vfx": {
+    "module": "alchemy-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรูทุกตัวที่ยืนอยู่",
+   "point": "ผู้รับ event จริง (ศัตรู: ตัว, พันธมิตร: ตัว) รวม chain ของ catalyst"
+  },
+  {
+   "identity": "toma",
+   "side": "hero",
+   "move": "fury",
+   "name": "ยาคลั่ง",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "alchemy-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "ผู้รับ event จริง (ศัตรู: ตัว, พันธมิตร: ตัว) รวม chain ของ catalyst"
+  },
+  {
+   "identity": "toma",
+   "side": "hero",
+   "move": "smoke",
+   "name": "ขวดควัน",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "throw"
+   },
+   "vfx": {
+    "module": "alchemy-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ผู้รับ event จริง (ศัตรู: ตัว, พันธมิตร: ตัว) รวม chain ของ catalyst"
+  },
+  {
+   "identity": "toma",
+   "side": "hero",
+   "move": "catalyst",
+   "name": "ตัวเร่งปฏิกิริยา",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "throw"
+   },
+   "vfx": {
+    "module": "alchemy-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ผู้รับ event จริง (ศัตรู: ตัว, พันธมิตร: ตัว) รวม chain ของ catalyst"
+  },
+  {
+   "identity": "sefa",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "role basic"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "sefa",
+   "side": "hero",
+   "move": "ambush",
+   "name": "จู่โจมก่อน",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "slash"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "sefa",
+   "side": "hero",
+   "move": "evade",
+   "name": "ก้าวเงา",
+   "body": {
+    "kind": "sprite",
+    "clip": "evade",
+    "frames": {
+     "prepare": [
+      30,
+      31,
+      32,
+      33
+     ],
+     "recover": [
+      34,
+      35,
+      36,
+      37
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "song-shadow-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "เท้าผู้ร่าย"
+  },
+  {
+   "identity": "sefa",
+   "side": "hero",
+   "move": "backstab",
+   "name": "ลอบแทง",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "thrust"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "sefa",
+   "side": "hero",
+   "move": "decoy",
+   "name": "เงาคุ้มกัน",
+   "body": {
+    "kind": "sprite",
+    "clip": "evade",
+    "frames": {
+     "prepare": [
+      30,
+      31,
+      32,
+      33
+     ],
+     "recover": [
+      34,
+      35,
+      36,
+      37
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "song-shadow-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "ข้างพันธมิตรที่ถูกคุ้มจริง"
+  },
+  {
+   "identity": "sefa",
+   "side": "hero",
+   "move": "knives",
+   "name": "มีดบิน",
+   "body": {
+    "kind": "sprite",
+    "clip": "knives",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "throw"
+   },
+   "vfx": {
+    "module": "projectile-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรูทุกตัวที่ยืนอยู่",
+   "point": "ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว)"
+  },
+  {
+   "identity": "sefa",
+   "side": "hero",
+   "move": "disarm",
+   "name": "ปาดตัดหน้า",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "slash"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "brann",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "role basic"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "brann",
+   "side": "hero",
+   "move": "taunt",
+   "name": "ยั่วยุ",
+   "body": {
+    "kind": "sprite",
+    "clip": "taunt",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "command-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "อก/ค้อนผู้ร่าย (stance ตัวเอง)"
+  },
+  {
+   "identity": "brann",
+   "side": "hero",
+   "move": "slam",
+   "name": "ทุบค้อนรูน",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "smash"
+   },
+   "vfx": {
+    "module": "earth-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "พื้นใต้ศัตรูที่โดนจริง (+ heal จริงแยก)"
+  },
+  {
+   "identity": "brann",
+   "side": "hero",
+   "move": "stonearmor",
+   "name": "เกราะหิน",
+   "body": {
+    "kind": "sprite",
+    "clip": "brace",
+    "frames": {
+     "prepare": [
+      30,
+      31,
+      32,
+      33
+     ],
+     "recover": [
+      34,
+      35,
+      36,
+      37
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "defense-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ผู้ร่าย — ขา/พื้น"
+  },
+  {
+   "identity": "brann",
+   "side": "hero",
+   "move": "quake",
+   "name": "ทุบปฐพี",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "smash"
+   },
+   "vfx": {
+    "module": "earth-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรูทุกตัวที่ยืนอยู่",
+   "point": "พื้นใต้ศัตรูที่โดนจริง (+ heal จริงแยก)"
+  },
+  {
+   "identity": "brann",
+   "side": "hero",
+   "move": "guardstone",
+   "name": "ศิลาดึง",
+   "body": {
+    "kind": "sprite",
+    "clip": "brace",
+    "frames": {
+     "prepare": [
+      30,
+      31,
+      32,
+      33
+     ],
+     "recover": [
+      34,
+      35,
+      36,
+      37
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "defense-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "ผู้รับจริง — ตัว"
+  },
+  {
+   "identity": "brann",
+   "side": "hero",
+   "move": "tremor",
+   "name": "ปฐพีสั่น",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "smash"
+   },
+   "vfx": {
+    "module": "earth-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรูทุกตัวที่ยืนอยู่",
+   "point": "พื้นใต้ศัตรูที่โดนจริง (+ heal จริงแยก)"
+  },
+  {
+   "identity": "lio",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "role basic"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "lio",
+   "side": "hero",
+   "move": "valor",
+   "name": "เพลงกล้า",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "song"
+   },
+   "vfx": {
+    "module": "song-shadow-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ผู้ร่าย → พันธมิตรที่ยืนอยู่"
+  },
+  {
+   "identity": "lio",
+   "side": "hero",
+   "move": "mend",
+   "name": "เพลงฟื้น",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "song"
+   },
+   "vfx": {
+    "module": "healing-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ฐานเท้าผู้รับ heal/barrier จริง (รวม upkeep)"
+  },
+  {
+   "identity": "lio",
+   "side": "hero",
+   "move": "dread",
+   "name": "เพลงสะท้าน",
+   "body": {
+    "kind": "sprite",
+    "clip": "dread",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "song"
+   },
+   "vfx": {
+    "module": "song-shadow-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ฝั่งศัตรูที่ยืนอยู่ (ไม่ใช่ฮิต)"
+  },
+  {
+   "identity": "lio",
+   "side": "hero",
+   "move": "finale",
+   "name": "บทสุดท้าย",
+   "body": {
+    "kind": "sprite",
+    "clip": "finale",
+    "frames": {
+     "prepare": [
+      30,
+      31,
+      32,
+      33
+     ],
+     "recover": [
+      34,
+      35,
+      36,
+      37
+     ]
+    },
+    "pose": "song"
+   },
+   "vfx": {
+    "module": "song-shadow-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ศัตรูที่โดนจริง / พันธมิตรที่ได้ heal-โล่จริง"
+  },
+  {
+   "identity": "lio",
+   "side": "hero",
+   "move": "note",
+   "name": "โน้ตคม",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "song"
+   },
+   "vfx": {
+    "module": "song-shadow-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ผู้รับ damage จริง"
+  },
+  {
+   "identity": "lio",
+   "side": "hero",
+   "move": "solo",
+   "name": "เพลงเดี่ยว",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "song"
+   },
+   "vfx": {
+    "module": "song-shadow-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "หลังพันธมิตรที่ได้ Solo จริง"
+  },
+  {
+   "identity": "garran",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "role basic"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "garran",
+   "side": "hero",
+   "move": "brace",
+   "name": "ตั้งทวน",
+   "body": {
+    "kind": "sprite",
+    "clip": "stance",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "defense-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ผู้ร่าย — ตัว"
+  },
+  {
+   "identity": "garran",
+   "side": "hero",
+   "move": "pierce",
+   "name": "แทงทะลวง",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "thrust"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "garran",
+   "side": "hero",
+   "move": "spearwall",
+   "name": "กำแพงทวน",
+   "body": {
+    "kind": "sprite",
+    "clip": "stance",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "defense-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ผู้ร่าย — ตัว"
+  },
+  {
+   "identity": "garran",
+   "side": "hero",
+   "move": "halt",
+   "name": "แทงสวนจังหวะ",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "thrust"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "garran",
+   "side": "hero",
+   "move": "hold",
+   "name": "ทวนคุ้มหลัง",
+   "body": {
+    "kind": "sprite",
+    "clip": "stance",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "defense-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "ผู้ร่าย — ตัว"
+  },
+  {
+   "identity": "garran",
+   "side": "hero",
+   "move": "warcry",
+   "name": "เสียงศึก",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "guard"
+   },
+   "vfx": {
+    "module": "command-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง",
+   "point": "อกผู้ร่าย (buff) + เป้าที่ถูกสวนจริงต่อ event"
+  },
+  {
+   "identity": "metta",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    "pose": "role basic"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "metta",
+   "side": "hero",
+   "move": "saintstrike",
+   "name": "หมัดเมตตา",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    "pose": "punch"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง"
+  },
+  {
+   "identity": "metta",
+   "side": "hero",
+   "move": "communion",
+   "name": "แบ่งแรงใจ",
+   "body": {
+    "kind": "sprite",
+    "clip": "communion",
+    "frames": {
+     "prepare": [
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      17,
+      18
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง"
+  },
+  {
+   "identity": "metta",
+   "side": "hero",
+   "move": "saintarc",
+   "name": "กวาดคุ้มชีพ",
+   "body": {
+    "kind": "sprite",
+    "clip": "arc",
+    "frames": {
+     "prepare": [
+      7,
+      8
+     ],
+     "recover": [
+      9,
+      10,
+      11,
+      12
+     ]
+    },
+    "pose": "punch"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรูทุกตัวที่ยืนอยู่",
+   "point": "ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง"
+  },
+  {
+   "identity": "metta",
+   "side": "hero",
+   "move": "vowstrike",
+   "name": "หมัดสัตย์",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    "pose": "punch"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง"
+  },
+  {
+   "identity": "metta",
+   "side": "hero",
+   "move": "sharewound",
+   "name": "แบ่งบาดแผล",
+   "body": {
+    "kind": "sprite",
+    "clip": "communion",
+    "frames": {
+     "prepare": [
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      17,
+      18
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง"
+  },
+  {
+   "identity": "metta",
+   "side": "hero",
+   "move": "lastlight",
+   "name": "แสงสุดท้าย",
+   "body": {
+    "kind": "sprite",
+    "clip": "lastlight",
+    "frames": {
+     "prepare": [
+      19,
+      20,
+      21
+     ],
+     "recover": [
+      22,
+      23,
+      24
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง"
+  },
+  {
+   "identity": "thiran",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "procedural",
+    "pose": "role basic",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "thiran",
+   "side": "hero",
+   "move": "saintstrike",
+   "name": "หมัดเมตตา",
+   "body": {
+    "kind": "procedural",
+    "pose": "punch",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง"
+  },
+  {
+   "identity": "thiran",
+   "side": "hero",
+   "move": "communion",
+   "name": "แบ่งแรงใจ",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง"
+  },
+  {
+   "identity": "thiran",
+   "side": "hero",
+   "move": "saintarc",
+   "name": "กวาดคุ้มชีพ",
+   "body": {
+    "kind": "procedural",
+    "pose": "punch",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรูทุกตัวที่ยืนอยู่",
+   "point": "ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง"
+  },
+  {
+   "identity": "thiran",
+   "side": "hero",
+   "move": "vowstrike",
+   "name": "หมัดสัตย์",
+   "body": {
+    "kind": "procedural",
+    "pose": "punch",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง"
+  },
+  {
+   "identity": "thiran",
+   "side": "hero",
+   "move": "sharewound",
+   "name": "แบ่งบาดแผล",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง"
+  },
+  {
+   "identity": "thiran",
+   "side": "hero",
+   "move": "lastlight",
+   "name": "แสงสุดท้าย",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง"
+  },
+  {
+   "identity": "lalin",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      17,
+      18
+     ]
+    },
+    "pose": "role basic"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "lalin",
+   "side": "hero",
+   "move": "cadence",
+   "name": "คืนจังหวะ",
+   "body": {
+    "kind": "sprite",
+    "clip": "partner",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3
+     ],
+     "recover": [
+      4,
+      5,
+      6
+     ]
+    },
+    "pose": "dance"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
+  },
+  {
+   "identity": "lalin",
+   "side": "hero",
+   "move": "duet",
+   "name": "รำประสาน",
+   "body": {
+    "kind": "sprite",
+    "clip": "partner",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3
+     ],
+     "recover": [
+      4,
+      5,
+      6
+     ]
+    },
+    "pose": "dance"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
+  },
+  {
+   "identity": "lalin",
+   "side": "hero",
+   "move": "rounddance",
+   "name": "รำวง",
+   "body": {
+    "kind": "sprite",
+    "clip": "circle",
+    "frames": {
+     "prepare": [
+      19,
+      20
+     ],
+     "recover": [
+      21,
+      22,
+      23,
+      24
+     ]
+    },
+    "pose": "dance"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ทั้งทีม",
+   "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
+  },
+  {
+   "identity": "lalin",
+   "side": "hero",
+   "move": "deepbeat",
+   "name": "ย้ำจังหวะ",
+   "body": {
+    "kind": "sprite",
+    "clip": "partner",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3
+     ],
+     "recover": [
+      4,
+      5,
+      6
+     ]
+    },
+    "pose": "dance"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
+  },
+  {
+   "identity": "lalin",
+   "side": "hero",
+   "move": "echofoot",
+   "name": "ก้าวสะท้อน",
+   "body": {
+    "kind": "sprite",
+    "clip": "echo",
+    "frames": {
+     "prepare": [
+      25,
+      26,
+      27
+     ],
+     "recover": [
+      28,
+      29,
+      30
+     ]
+    },
+    "pose": "dance"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริง (เส้นเดียว)"
+  },
+  {
+   "identity": "lalin",
+   "side": "hero",
+   "move": "closingstep",
+   "name": "ก้าวปิดท้าย",
+   "body": {
+    "kind": "sprite",
+    "clip": "closing",
+    "frames": {
+     "prepare": [
+      7,
+      8,
+      9
+     ],
+     "recover": [
+      10,
+      11,
+      12
+     ]
+    },
+    "pose": "dance"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
+  },
+  {
+   "identity": "wila",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "procedural",
+    "pose": "role basic",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "wila",
+   "side": "hero",
+   "move": "cadence",
+   "name": "คืนจังหวะ",
+   "body": {
+    "kind": "procedural",
+    "pose": "dance",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
+  },
+  {
+   "identity": "wila",
+   "side": "hero",
+   "move": "duet",
+   "name": "รำประสาน",
+   "body": {
+    "kind": "procedural",
+    "pose": "dance",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
+  },
+  {
+   "identity": "wila",
+   "side": "hero",
+   "move": "rounddance",
+   "name": "รำวง",
+   "body": {
+    "kind": "procedural",
+    "pose": "dance",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ทั้งทีม",
+   "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
+  },
+  {
+   "identity": "wila",
+   "side": "hero",
+   "move": "deepbeat",
+   "name": "ย้ำจังหวะ",
+   "body": {
+    "kind": "procedural",
+    "pose": "dance",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
+  },
+  {
+   "identity": "wila",
+   "side": "hero",
+   "move": "echofoot",
+   "name": "ก้าวสะท้อน",
+   "body": {
+    "kind": "procedural",
+    "pose": "dance",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริง (เส้นเดียว)"
+  },
+  {
+   "identity": "wila",
+   "side": "hero",
+   "move": "closingstep",
+   "name": "ก้าวปิดท้าย",
+   "body": {
+    "kind": "procedural",
+    "pose": "dance",
+    "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "painted"
+   },
+   "target": "พันธมิตร 1 คน",
+   "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
+  },
+  {
+   "identity": "brute",
+   "side": "enemy",
+   "move": "Rift Bolt",
+   "name": "Rift Bolt",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "veil-siege"
+   ]
+  },
+  {
+   "identity": "brute",
+   "side": "enemy",
+   "move": "Crushing Blow",
+   "name": "Crushing Blow",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "veil-siege"
+   ]
+  },
+  {
+   "identity": "foe_captain",
+   "side": "enemy",
+   "move": "Crushing Blow",
+   "name": "Crushing Blow",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move2",
+    "frames": {
+     "prepare": [
+      0,
+      5,
+      6
+     ],
+     "recover": [
+      7,
+      8,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "vanguard-captain"
+   ]
+  },
+  {
+   "identity": "foe_captain",
+   "side": "enemy",
+   "move": "War Cry",
+   "name": "War Cry",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move1",
+    "frames": {
+     "prepare": [
+      0,
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ผู้รับ damage จริง",
+   "encounters": [
+    "vanguard-captain"
+   ]
+  },
+  {
+   "identity": "foe_captain",
+   "side": "enemy",
+   "move": "phase:Call the Hunt",
+   "name": "Call the Hunt",
+   "kind": "phase",
+   "body": {
+    "kind": "sprite",
+    "clip": "move3",
+    "frames": {
+     "prepare": [
+      0,
+      9,
+      10
+     ],
+     "recover": [
+      11,
+      12,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง + กำลังเสริมที่ปรากฏจริง",
+   "point": "ตำแหน่งตัวที่ถูกเรียกจริง",
+   "encounters": [
+    "vanguard-captain"
+   ]
+  },
+  {
+   "identity": "foe_dew_slime",
+   "side": "enemy",
+   "move": "Jelly Bounce",
+   "name": "Jelly Bounce",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "bat-swarm",
+    "slime-nest",
+    "slime-pair"
+   ]
+  },
+  {
+   "identity": "foe_ember_slime",
+   "side": "enemy",
+   "move": "Ember Spark",
+   "name": "Ember Spark",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "slime-nest",
+    "slime-pair"
+   ]
+  },
+  {
+   "identity": "foe_golem",
+   "side": "enemy",
+   "move": "Crystal Fist",
+   "name": "Crystal Fist",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "crystal-stampede"
+   ]
+  },
+  {
+   "identity": "foe_golem",
+   "side": "enemy",
+   "move": "Stone Fist",
+   "name": "Stone Fist",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "mini-veil-golem"
+   ]
+  },
+  {
+   "identity": "foe_golem",
+   "side": "enemy",
+   "move": "Veil Quake",
+   "name": "Veil Quake",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "เท้าศัตรู → พื้นใต้ผู้รับจริง",
+   "encounters": [
+    "mini-veil-golem"
+   ]
+  },
+  {
+   "identity": "foe_hunter",
+   "side": "enemy",
+   "move": "Raking Slash",
+   "name": "Raking Slash",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "first-clash",
+    "vanguard-captain"
+   ]
+  },
+  {
+   "identity": "foe_hunter",
+   "side": "enemy",
+   "move": "Shadow Knife",
+   "name": "Shadow Knife",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "throw"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "first-clash",
+    "vanguard-captain"
+   ]
+  },
+  {
+   "identity": "foe_juggernaut",
+   "side": "enemy",
+   "move": "Horn Charge",
+   "name": "Horn Charge",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move1",
+    "frames": {
+     "prepare": [
+      0,
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ผู้รับ damage จริง",
+   "encounters": [
+    "crystal-stampede"
+   ]
+  },
+  {
+   "identity": "foe_juggernaut",
+   "side": "enemy",
+   "move": "Shard Burst",
+   "name": "Shard Burst",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move2",
+    "frames": {
+     "prepare": [
+      0,
+      5,
+      6
+     ],
+     "recover": [
+      7,
+      8,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "crystal-stampede"
+   ]
+  },
+  {
+   "identity": "foe_matriarch",
+   "side": "enemy",
+   "move": "Thorn Bloom",
+   "name": "Thorn Bloom",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move4",
+    "frames": {
+     "prepare": [
+      0,
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ผู้รับ damage จริง",
+   "encounters": [
+    "elite-briar-lord",
+    "thicket-ambush"
+   ]
+  },
+  {
+   "identity": "foe_matriarch",
+   "side": "enemy",
+   "move": "Briar Lash",
+   "name": "Briar Lash",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move2",
+    "frames": {
+     "prepare": [
+      0,
+      5,
+      6
+     ],
+     "recover": [
+      7,
+      8,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "elite-briar-lord",
+    "thicket-ambush"
+   ]
+  },
+  {
+   "identity": "foe_matriarch",
+   "side": "enemy",
+   "move": "Thorn Storm",
+   "name": "Thorn Storm",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move4",
+    "frames": {
+     "prepare": [
+      0,
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ผู้รับ damage จริง",
+   "encounters": [
+    "elite-briar-lord"
+   ]
+  },
+  {
+   "identity": "foe_matriarch",
+   "side": "enemy",
+   "move": "Gather Thorns",
+   "name": "Gather Thorns",
+   "kind": "energy/charge",
+   "body": {
+    "kind": "sprite",
+    "clip": "move3",
+    "frames": {
+     "prepare": [
+      0,
+      9,
+      10
+     ],
+     "recover": [
+      11,
+      12,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง (รวมพลัง ไม่มี damage)",
+   "point": "ตัวบอส + ค้างจนปล่อยท่า",
+   "encounters": [
+    "elite-briar-lord"
+   ]
+  },
+  {
+   "identity": "foe_matriarch",
+   "side": "enemy",
+   "move": "Thorn Tempest",
+   "name": "Thorn Tempest",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move1",
+    "frames": {
+     "prepare": [
+      0,
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
+   "point": "ฮีโร่ที่โดนจริงทุกคน",
+   "encounters": [
+    "elite-briar-lord"
+   ]
+  },
+  {
+   "identity": "foe_matriarch",
+   "side": "enemy",
+   "move": "phase:Thorn Rage",
+   "name": "Thorn Rage",
+   "kind": "phase",
+   "body": {
+    "kind": "sprite",
+    "clip": "move5",
+    "frames": {
+     "prepare": [
+      0,
+      17,
+      18
+     ],
+     "recover": [
+      19,
+      20,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง + กำลังเสริมที่ปรากฏจริง",
+   "point": "ตัวบอส",
+   "encounters": [
+    "elite-briar-lord"
+   ]
+  },
+  {
+   "identity": "foe_mycon",
+   "side": "enemy",
+   "move": "Spore Hex",
+   "name": "Spore Hex",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "thicket-ambush"
+   ]
+  },
+  {
+   "identity": "foe_rift_channeler",
+   "side": "enemy",
+   "move": "Rift Bolt",
+   "name": "Rift Bolt",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "rear-ambush"
+   ]
+  },
+  {
+   "identity": "foe_rift_channeler",
+   "side": "enemy",
+   "move": "Rift Beam",
+   "name": "Rift Beam",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "channeler-wisps",
+    "rift-host"
+   ]
+  },
+  {
+   "identity": "foe_rift_wisp",
+   "side": "enemy",
+   "move": "Star Flame",
+   "name": "Star Flame",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "channeler-wisps",
+    "crawler-pack",
+    "rift-host",
+    "rift-warden"
+   ]
+  },
+  {
+   "identity": "foe_riftweaver",
+   "side": "enemy",
+   "move": "Rune Lash",
+   "name": "Rune Lash",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "rear-ambush"
+   ]
+  },
+  {
+   "identity": "foe_riftweaver",
+   "side": "enemy",
+   "move": "Ribbon Snare",
+   "name": "Ribbon Snare",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "snare",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "rear-ambush"
+   ]
+  },
+  {
+   "identity": "foe_riftweaver",
+   "side": "enemy",
+   "move": "Rift Needle",
+   "name": "Rift Needle",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "mini-veil-golem"
+   ]
+  },
+  {
+   "identity": "foe_ruin_bat",
+   "side": "enemy",
+   "move": "Nip",
+   "name": "Nip",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "bat-swarm",
+    "slime-nest",
+    "tusker-bats"
+   ]
+  },
+  {
+   "identity": "foe_sentinel",
+   "side": "enemy",
+   "move": "Crushing Blow",
+   "name": "Crushing Blow",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move3",
+    "frames": {
+     "prepare": [
+      0,
+      9,
+      10
+     ],
+     "recover": [
+      11,
+      12,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "rift-warden"
+   ]
+  },
+  {
+   "identity": "foe_sentinel",
+   "side": "enemy",
+   "move": "Rift Bolt",
+   "name": "Rift Bolt",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move4",
+    "frames": {
+     "prepare": [
+      0,
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "rift-warden"
+   ]
+  },
+  {
+   "identity": "foe_sentinel",
+   "side": "enemy",
+   "move": "Raking Slash",
+   "name": "Raking Slash",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move2",
+    "frames": {
+     "prepare": [
+      0,
+      5,
+      6
+     ],
+     "recover": [
+      7,
+      8,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "rift-warden"
+   ]
+  },
+  {
+   "identity": "foe_sentinel",
+   "side": "enemy",
+   "move": "Rift Gathering",
+   "name": "Rift Gathering",
+   "kind": "energy/charge",
+   "body": {
+    "kind": "sprite",
+    "clip": "move5",
+    "frames": {
+     "prepare": [
+      0,
+      17,
+      18
+     ],
+     "recover": [
+      19,
+      20,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง (รวมพลัง ไม่มี damage)",
+   "point": "ตัวบอส + ค้างจนปล่อยท่า",
+   "encounters": [
+    "rift-warden"
+   ]
+  },
+  {
+   "identity": "foe_sentinel",
+   "side": "enemy",
+   "move": "Rift Cataclysm",
+   "name": "Rift Cataclysm",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move1",
+    "frames": {
+     "prepare": [
+      0,
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ผู้รับ damage จริง",
+   "encounters": [
+    "rift-warden"
+   ]
+  },
+  {
+   "identity": "foe_sentinel",
+   "side": "enemy",
+   "move": "Rift Wave",
+   "name": "Rift Wave",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move4",
+    "frames": {
+     "prepare": [
+      0,
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
+   "point": "ฮีโร่ที่โดนจริงทุกคน",
+   "encounters": [
+    "rift-warden"
+   ]
+  },
+  {
+   "identity": "foe_sentinel",
+   "side": "enemy",
+   "move": "phase:Call the Rift",
+   "name": "Call the Rift",
+   "kind": "phase",
+   "body": {
+    "kind": "sprite",
+    "clip": "move7",
+    "frames": {
+     "prepare": [
+      0,
+      25,
+      26
+     ],
+     "recover": [
+      27,
+      28,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง + กำลังเสริมที่ปรากฏจริง",
+   "point": "ตำแหน่งตัวที่ถูกเรียกจริง",
+   "encounters": [
+    "rift-warden"
+   ]
+  },
+  {
+   "identity": "foe_sentinel",
+   "side": "enemy",
+   "move": "phase:Rift Awakening",
+   "name": "Rift Awakening",
+   "kind": "phase",
+   "body": {
+    "kind": "sprite",
+    "clip": "move6",
+    "frames": {
+     "prepare": [
+      0,
+      21,
+      22
+     ],
+     "recover": [
+      23,
+      24,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง (เปลี่ยนช่วง)",
+   "point": "ตัวบอส",
+   "encounters": [
+    "rift-warden"
+   ]
+  },
+  {
+   "identity": "foe_shard_crawler",
+   "side": "enemy",
+   "move": "Crystal Stab",
+   "name": "Crystal Stab",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "crawler-pack",
+    "rift-host",
+    "rift-warden"
+   ]
+  },
+  {
+   "identity": "foe_spore_puff",
+   "side": "enemy",
+   "move": "Spore Dust",
+   "name": "Spore Dust",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "beetle-spore",
+    "beetle-wall",
+    "elite-briar-lord",
+    "elite-tusk-chief",
+    "forest-swarm",
+    "stalker-spore"
+   ]
+  },
+  {
+   "identity": "foe_sprite",
+   "side": "enemy",
+   "move": "Seed Spark",
+   "name": "Seed Spark",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "elite-tusk-chief",
+    "scout-patrol"
+   ]
+  },
+  {
+   "identity": "foe_stalker",
+   "side": "enemy",
+   "move": "Thorn Pounce",
+   "name": "Thorn Pounce",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "elite-briar-lord",
+    "shadow-stalker",
+    "stalker-spore"
+   ]
+  },
+  {
+   "identity": "foe_thorn_beetle",
+   "side": "enemy",
+   "move": "Thorn Bite",
+   "name": "Thorn Bite",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "beetle-spore",
+    "beetle-wall",
+    "forest-swarm",
+    "thicket-ambush"
+   ]
+  },
+  {
+   "identity": "foe_tusker",
+   "side": "enemy",
+   "move": "Tusk Charge",
+   "name": "Tusk Charge",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "elite-tusk-chief",
+    "rift-whelp",
+    "tusker-bats"
+   ]
+  },
+  {
+   "identity": "foe_tusker",
+   "side": "enemy",
+   "move": "Stampede",
+   "name": "Stampede",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ผู้รับ damage จริง",
+   "encounters": [
+    "elite-tusk-chief"
+   ]
+  },
+  {
+   "identity": "foe_vargoth_guard",
+   "side": "enemy",
+   "move": "Rift Bolt",
+   "name": "Rift Bolt",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "first-clash"
+   ]
+  },
+  {
+   "identity": "foe_vargoth_guard",
+   "side": "enemy",
+   "move": "Crushing Blow",
+   "name": "Crushing Blow",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "first-clash"
+   ]
+  },
+  {
+   "identity": "foe_vargoth_guard",
+   "side": "enemy",
+   "move": "Shield Smash",
+   "name": "Shield Smash",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "bash",
+    "frames": {
+     "prepare": [
+      24,
+      25,
+      26,
+      27
+     ],
+     "recover": [
+      28,
+      29,
+      30,
+      31
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "vanguard-captain"
+   ]
+  },
+  {
+   "identity": "foe_vargoth_guard",
+   "side": "enemy",
+   "move": "Mace Swing",
+   "name": "Mace Swing",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "vanguard-captain"
+   ]
+  },
+  {
+   "identity": "raider",
+   "side": "enemy",
+   "move": "Raking Slash",
+   "name": "Raking Slash",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "veil-siege"
+   ]
+  },
+  {
+   "identity": "raider",
+   "side": "enemy",
+   "move": "Shadow Knife",
+   "name": "Shadow Knife",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "throw"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "veil-siege"
+   ]
+  }
+ ]
 }

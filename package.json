@@ -16,7 +16,8 @@
     "build:pages": "npm run typecheck && vite build --base=/asterveil-fateweave/",
     "preview": "vite preview --host 0.0.0.0",
     "lint": "eslint .",
-    "sim": "SIM_REPORT=1 vitest run tests/campaign-sim.test.ts tests/starter-sim.test.ts tests/balance-sim.test.ts tests/class-sim.test.ts tests/formation-sim.test.ts tests/tree-sim.test.ts tests/character-sim.test.ts"
+    "sim": "SIM_REPORT=1 vitest run tests/campaign-sim.test.ts tests/starter-sim.test.ts tests/balance-sim.test.ts tests/class-sim.test.ts tests/formation-sim.test.ts tests/tree-sim.test.ts tests/character-sim.test.ts",
+    "coverage:presentation": "PRESENTATION_COVERAGE_WRITE=1 vitest run tests/presentation-coverage.test.ts"
   },
   "dependencies": {
     "phaser": "4.2.1"
