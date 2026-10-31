@@ -20,7 +20,7 @@ export const gameRules: GameRules = {
     { id: 'herbalist-glow', npc: 'herbalist', kind: 'herbs', target: 6, reward: { potions: { salve: 2, tonic: 2 } } },
     { id: 'scout-puzzles', npc: 'scout', kind: 'puzzles', target: 6, reward: { ore: 40, seal: 1 } },
   ],
-  camp: { restHealPercent: 50, reviveHpPercent: 30 },
+  camp: { restHealPercent: 50, reviveHpPercent: 30, reserveHealPercent: 25, relightWins: 3, fatigue: { cap: 12, steps: [7, 11], stepPercent: 10, rest: 5 } },
   startingRoster: ['guardian', 'tracer', 'weaver', 'healer'],
   // A new ค่ายทหารรับจ้าง starts with the Knight alone (owner 2026-10-21); the other three join on map 1.
   firstCompany: ['guardian'],
@@ -50,6 +50,8 @@ export const gameRules: GameRules = {
     parked: ['thiran', 'wila'],
     // (4A) see `shop` for the market and paid board refreshes.
     sealSharePercent: 50,
+    // P02 (OD-11, draft): reserve 3 → 4 → 5 as chapters 1 and 2 are cleared; with the field of five, at most 10 carried.
+    reserveSlots: [3, 4, 5],
     starCosts: [{ dupes: 1, ore: 20 }, { dupes: 2, ore: 40 }, { dupes: 3, ore: 70 }, { dupes: 4, ore: 110 }],
   },
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
@@ -62,16 +64,16 @@ export const gameRules: GameRules = {
   talents: talentTrees,
   eventRules: {
     banditLevelBonus: 1, prayHeal: 25, prayWound: 5, maxWound: 20, offerOre: 10, offerSeal: 1,
-    merchant: { salve: 8, tonic: 14, repel: 10 }, traveller: { ore: 10, seal: 1 },
+    merchant: { salve: 8, tonic: 14, repel: 10, calm: 10 }, traveller: { ore: 10, seal: 1 },
     riftEncounterId: 'scout-patrol', riftDust: 12,
     eliteExp: 2, eliteRarityWeights: [0, 0, 60, 30, 10],
     optionalElite: { exp: 3, rarityWeights: [0, 0, 20, 50, 30], gold: 12, seal: 1 },
     miniBoss: { exp: 3, rarityWeights: [0, 0, 0, 60, 40], loot: { ore: [18, 24], gold: [9, 12], ember: [1, 0], seal: [1, 0] } },
   },
   potions: {
-    carry: 3, salvePercent: 40, tonicPercent: 20, repelSteps: 10,
-    brew: { salve: { ore: 6, dust: 2 }, tonic: { ore: 10, dust: 4 }, repel: { ore: 8, dust: 3 } },
-    chest: { common: { chance: 35, weights: { salve: 3, tonic: 1, repel: 1 } }, rare: { chance: 70, weights: { salve: 1, tonic: 2, repel: 2 } } },
+    carry: 3, salvePercent: 40, tonicPercent: 20, repelSteps: 10, calmRecover: 4,
+    brew: { salve: { ore: 6, dust: 2 }, tonic: { ore: 10, dust: 4 }, repel: { ore: 8, dust: 3 }, calm: { ore: 8, dust: 2 } },
+    chest: { common: { chance: 35, weights: { salve: 3, tonic: 1, repel: 1, calm: 0 } }, rare: { chance: 70, weights: { salve: 1, tonic: 2, repel: 2, calm: 0 } } },
   },
   // Equipment (2D-2, draft numbers; docs/EXPEDITION_DESIGN.md "Equipment").
   equipment: {

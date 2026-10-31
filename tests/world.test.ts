@@ -15,6 +15,8 @@ const lookup = encounterById;
 const extras = ['guardian', 'tracer', 'weaver', 'healer'].map(id => ({ ...encounterById(map.tutorialEncounterId)!.heroes.find(h => h.id === id)!, id: `${id}-b` }));
 const rosterLookup = (id: string) => id === map.tutorialEncounterId ? { ...encounterById(id)!, heroes: [...encounterById(id)!.heroes, ...extras] } : encounterById(id);
 const fresh = (seed = 7) => newExpedition(map, lookup, seed);
+// P02: the team of five (the starting four and Corin), as the warden's guards (owner 2026-10-31) expect.
+const freshFive = (seed = 7): ExpeditionState => { const four = fresh(seed); return { ...four, roster: { ...four.roster, deployed: [...four.roster.deployed, 'metta'] }, members: { ...four.members, metta: { stars: 1, dupes: 0 } } }; };
 // A10: veil-frontier is a Lv6–10 map with a tougher warden, so its later fights are played by a party of the map's
 // level (★3, full HP) rather than the Lv1 starters.
 function seasoned(state: ExpeditionState, level = 10, stars = 3): ExpeditionState {
@@ -127,15 +129,21 @@ describe('expedition rules', () => {
     expect(revive(r.state, map, lookup, 'weaver').event.type).toBe('blocked');
     expect(canRest(fresh(), map)).toBe(false);
   });
-  it('a camp becomes the return point on arrival, and a victory relights the campfire', () => {
+  it('a camp becomes the return point on arrival, and three victories relight the campfire (P02)', () => {
     const camp = findTiles(map, 'camp')[1]!;
     let s: ExpeditionState = { ...fresh(5), position: { x: camp.x - 1, y: camp.y } };
     s = move(s, map, 'right').state;
     expect(s.camp).toEqual(camp); expect(s.battle).toBeNull();
     s = rest(s, map, lookup).state; expect(s.restReady).toBe(false);
-    s = { ...s, position: { x: 10, y: 22 } };
-    while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
-    s = fight(s); expect(s.restReady).toBe(true);
+    s = { ...seasoned(s, 6, 2), position: { x: 10, y: 22 } };
+    for (let win = 1; win <= map.camp.relightWins; win++) {
+      while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
+      s = fight(s); expect(s.restReady, `win ${win}`).toBe(win === map.camp.relightWins); expect(s.restWins).toBe(win < map.camp.relightWins ? win : undefined);
+    }
+    // The count saves and reloads; a forged count is rejected.
+    const back = { ...s, restReady: false, restWins: 2 };
+    expect(parseGame(JSON.stringify({ version: 45, profile: newProfile(map, 4), run: back }), map, lookup).run!.restWins).toBe(2);
+    expect(() => parseGame(JSON.stringify({ version: 45, profile: newProfile(map, 4), run: { ...back, restWins: 3 } }), map, lookup)).toThrow();
   });
   it('defeat leaves the deployed members down at the last camp; losing every brought member wipes the run; a lost tutorial restarts', () => {
     const loseWith = (state: ExpeditionState, l = lookup) => {
@@ -180,12 +188,13 @@ describe('expedition rules', () => {
     expect(swapMembers(s, 'tracer', 'weaver').event.type).toBe('blocked');
     s = swapMembers(s, 'tracer-b', 'tracer').state;
     expect(s.roster).toEqual({ deployed: ['guardian', 'tracer-b', 'weaver', 'healer'], reserve: ['tracer', 'weaver-b'] });
-    expect(moveMember(s, 'weaver-b').event.type).toBe('blocked'); // party is full
-    s = moveMember(s, 'healer').state; s = moveMember(s, 'weaver-b').state;
-    expect(s.roster).toEqual({ deployed: ['guardian', 'tracer-b', 'weaver', 'weaver-b'], reserve: ['tracer', 'healer'] });
-    for (const id of ['tracer-b', 'weaver']) s = moveMember(s, id).state;
+    s = moveMember(s, 'weaver-b').state; // P02: the fifth field slot
+    expect(s.roster).toEqual({ deployed: ['guardian', 'tracer-b', 'weaver', 'healer', 'weaver-b'], reserve: ['tracer'] });
+    expect(moveMember(s, 'tracer').event.type).toBe('blocked'); // party is full (five)
+    for (const id of ['healer', 'tracer-b', 'weaver']) s = moveMember(s, id).state;
     expect(s.roster).toEqual({ deployed: ['guardian', 'weaver-b'], reserve: ['tracer', 'healer', 'tracer-b', 'weaver'] });
-    expect(moveMember(s, 'weaver-b').event.type).toBe('blocked'); // reserve is full
+    expect(moveMember(s, 'weaver-b').event.type).toBe('blocked'); // reserve is full (a run from before v45 keeps four)
+    expect(moveMember({ ...s, reserveSlots: 5 }, 'weaver-b').event.type).toBe('roster');
     let solo: ExpeditionState = { ...fresh(4), position: camp };
     for (const id of ['tracer', 'weaver', 'healer']) solo = moveMember(solo, id).state;
     expect(solo.roster.deployed).toEqual(['guardian']); expect(moveMember(solo, 'guardian').event.type).toBe('blocked');
@@ -199,7 +208,7 @@ describe('expedition rules', () => {
   it('the boss blocks its tile, and only its defeat opens the goal', () => {
     const [boss] = findTiles(map, 'boss'); const below = { x: boss!.x, y: boss!.y + 1 };
     // The rift seal (3B) holds until two objectives are done.
-    let s = { ...seasoned(fresh(2)), tutorialDone: true, position: below };
+    let s = { ...seasoned(freshFive(2)), tutorialDone: true, position: below };
     expect(move(s, map, 'up').event).toEqual({ type: 'blocked', reason: 'sealed' });
     s = { ...s, ...sealBroken };
     const r = move(s, map, 'up'); expect(r.event).toMatchObject({ type: 'encounter', kind: 'boss' }); expect(r.state.position).toEqual(below);
@@ -210,7 +219,8 @@ describe('expedition rules', () => {
     expect(move(g.state, map, 'down').event).toEqual({ type: 'blocked', reason: 'busy' });
   });
   it('a full expedition from start to goal is winnable with the advisor and camp rests', () => {
-    let s = seasoned(fresh(2026), 6, 2); const [campA, campB] = [findTiles(map, 'camp')[1]!, findTiles(map, 'camp')[0]!]; const [goal] = findTiles(map, 'goal');
+    // P02: the team of five (the starting four and Corin).
+    let s = seasoned(freshFive(2026), 6, 2); const [campA, campB] = [findTiles(map, 'camp')[1]!, findTiles(map, 'camp')[0]!]; const [goal] = findTiles(map, 'goal');
     const walk = (to: Point, throughBoss = false) => {
       for (let guard = 0; guard < 400 && (s.position.x !== to.x || s.position.y !== to.y) && !s.completed; guard++) {
         const dir = route(s.position, to, throughBoss || s.bossDefeated)[0]!; s = move(s, map, dir).state;
@@ -283,7 +293,8 @@ describe('lobby profile', () => {
       const id = boardOffers(q, map, rosterLookup)[i]!; q = hire(q, map, rosterLookup, i).profile;
       expect(q.company.at(-1)).toBe(id); expect(q.members[id]).toEqual({ stars: 1, dupes: 0 });
     }
-    expect(q.party.reserve).toHaveLength(4); expect(q.company).toHaveLength(8);
+    // P02: hires join the reserve up to the chapter's slots (three before map 1 is cleared).
+    expect(q.party.reserve).toHaveLength(3); expect(q.company).toHaveLength(8);
   });
   it('upgrades with duplicates and ore, lets one seal replace one duplicate, and caps at ★5', () => {
     let p = rich({ bank: { ore: 500, gold: 0, seal: 1, dust: 0 } });
@@ -306,13 +317,13 @@ describe('lobby profile', () => {
     let p: Profile = { ...rich(), company: ['guardian', 'tracer', 'weaver', 'healer', 'guardian-b', 'tracer-b'],
       members: { ...rich().members, 'guardian-b': { stars: 1, dupes: 0 }, 'tracer-b': { stars: 1, dupes: 0 } } };
     expect(groupOf(p, 'guardian-b')).toBe('bench');
-    p = placeMember(p, 'guardian-b', 'deployed', 'guardian').profile;
+    p = placeMember(p, map, 'guardian-b', 'deployed', 'guardian').profile;
     expect(p.party.deployed).toEqual(['guardian-b', 'tracer', 'weaver', 'healer']); expect(groupOf(p, 'guardian')).toBe('bench');
-    p = placeMember(p, 'guardian', 'reserve').profile; p = placeMember(p, 'healer', 'bench').profile;
+    p = placeMember(p, map, 'guardian', 'reserve').profile; p = placeMember(p, map, 'healer', 'bench').profile;
     expect(p.party).toEqual({ deployed: ['guardian-b', 'tracer', 'weaver'], reserve: ['guardian'] });
-    expect(placeMember(p, 'tracer-b', 'deployed').profile.party.deployed).toEqual(['guardian-b', 'tracer', 'weaver', 'tracer-b']);
-    let solo = rich(); for (const id of ['tracer', 'weaver', 'healer']) solo = placeMember(solo, id, 'bench').profile;
-    expect(placeMember(solo, 'guardian', 'bench').event).toEqual({ type: 'blocked', reason: 'last' });
+    expect(placeMember(p, map, 'tracer-b', 'deployed').profile.party.deployed).toEqual(['guardian-b', 'tracer', 'weaver', 'tracer-b']);
+    let solo = rich(); for (const id of ['tracer', 'weaver', 'healer']) solo = placeMember(solo, map, id, 'bench').profile;
+    expect(placeMember(solo, map, 'guardian', 'bench').event).toEqual({ type: 'blocked', reason: 'last' });
     const run = departure(p, map, rosterLookup, 3);
     expect(run.roster).toEqual(p.party); expect(Object.keys(run.hp)).toEqual(['guardian-b', 'tracer', 'weaver', 'guardian']);
   });
@@ -362,7 +373,7 @@ describe('resources and chests', () => {
     expect(s.resources.ore - before).toBeGreaterThanOrEqual(zone.ore[0]); expect(s.resources.ore - before).toBeLessThanOrEqual(zone.ore[1]);
     expect(s.resources.gold - goldBefore).toBeGreaterThanOrEqual(zone.gold[0]); expect(s.resources.gold - goldBefore).toBeLessThanOrEqual(zone.gold[1]);
     const [boss] = findTiles(map, 'boss');
-    let t: ExpeditionState = { ...seasoned(fresh(2)), tutorialDone: true, position: { x: boss!.x, y: boss!.y + 1 }, ...sealBroken };
+    let t: ExpeditionState = { ...seasoned(freshFive(2)), tutorialDone: true, position: { x: boss!.x, y: boss!.y + 1 }, ...sealBroken };
     t = fight(move(t, map, 'up').state);
     expect(t.resources).toEqual({ ore: map.loot.boss.ore[0], gold: map.loot.boss.gold[0], ember: 1, seal: 2 });
   });
@@ -372,7 +383,7 @@ describe('game save', () => {
   const game = (run: ExpeditionState | null = fresh(), profile = newProfile(map, 4)) => ({ profile, run });
   const v6 = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 6, profile, run });
   // Saves before v35 forgive battle commands that no longer replay (four-slot migration), so command checks use v35.
-  const current = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 44, profile, run });
+  const current = (run: unknown, profile: unknown = newProfile(map, 4)) => JSON.stringify({ version: 45, profile, run });
   it('round-trips the profile and an in-progress battle by replay', () => {
     const storage = memory(); let s = fresh(3);
     while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;

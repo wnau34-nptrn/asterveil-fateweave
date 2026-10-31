@@ -24,13 +24,22 @@ export const heroText: Record<string, { name: string; role: string; help: string
   healer: { name: 'เซเรน', role: 'นักบวช', help: 'รักษาคนเดียวหรือฟื้นฟูทั้งทีม', icon: '✚' },
 };
 const names: Record<string, string> = { lio: 'ลิโอ', brann: 'แบรนน์', sefa: 'เซฟา', toma: 'โทมะ', mira: 'มิร่า', garran: 'การ์แรน', guardian: 'เอกิส', tracer: 'ไลรา', weaver: 'ไอรา', healer: 'เซเรน', party: 'ทั้งทีม' };
+const foeLabel = (e: EncounterDefinition['enemies'][number]) => e.displayName ?? e.name;
+// Two or more foes of the same kind are told apart as ก/ข/ค… from the top of the field down (P02: a column of three
+// stands f1, f3, f2), then front before back; '' for a foe without a twin.
+const FIELD_RANK: Readonly<Record<string, number>> = { f1: 0, b1: 0, f3: 1, b3: 1, f2: 2, b2: 2 };
+export function twinLetter(id: string, data: EncounterDefinition): string {
+  const foe = data.enemies.find(e => e.id === id); if (!foe) return '';
+  const twins = data.enemies.map((e, i) => ({ e, i })).filter(({ e }) => foeLabel(e) === foeLabel(foe))
+    .sort((a, b) => (FIELD_RANK[a.e.id] ?? 0) - (FIELD_RANK[b.e.id] ?? 0) || a.i - b.i);
+  return twins.length > 1 ? 'กขคงจฉ'[twins.findIndex(t => t.e === foe)]! : '';
+}
 export function actorName(id: string | undefined, data: EncounterDefinition): string {
   // Enemies carry the battle's monster level (2D-1).
   // Two foes of the same kind are told apart as ก/ข in slot order.
   const foe = id ? data.enemies.find(e => e.id === id) : undefined;
   if (foe) {
-    const label = (e: typeof foe) => e.displayName ?? e.name; const twins = data.enemies.filter(e => label(e) === label(foe));
-    const name = twins.length > 1 ? `${label(foe)} ${'กขคง'[twins.indexOf(foe)]}` : label(foe);
+    const twin = twinLetter(foe.id, data); const name = twin ? `${foeLabel(foe)} ${twin}` : foeLabel(foe);
     return data.level ? `Lv${data.level} ${name}` : name;
   }
   return id ? heroText[id]?.name ?? names[id] ?? data.heroes.find(h => h.id === id)?.name ?? 'เป้าหมาย' : 'ทีม';
@@ -441,11 +450,12 @@ export function wornSets(rules: EquipmentRules, gear: Gear | undefined): { id: S
 }
 export const itemOwner = (item: Item): string => item.hero ? `เฉพาะ${heroText[item.hero]?.name ?? ''}` : 'ใส่ได้ทุกคน';
 // ---- Map potions (2D-5) ----
-export const potionIcon = { salve: 'potionSalve', tonic: 'potionTonic', repel: 'potionRepel' } as const;
+export const potionIcon = { salve: 'potionSalve', tonic: 'potionTonic', repel: 'potionRepel', calm: 'potionCalm' } as const;
 export const potionText: Record<PotionId, { name: string; help: (r: PotionRules) => string }> = {
   salve: { name: 'ยาฟื้นแผล', help: r => `ฟื้นเลือด ${r.salvePercent}% ให้สมาชิกที่ยังยืนอยู่ 1 คน` },
   tonic: { name: 'ยาฟื้นหมู่', help: r => `ฟื้นเลือด ${r.tonicPercent}% ให้ทุกคนที่ยังยืนอยู่` },
   repel: { name: 'ยาไล่อสูร', help: r => `${r.repelSteps} ก้าวถัดไปไม่เจอศัตรูสุ่ม (บอสยังขวางทาง)` },
+  calm: { name: 'ยาฟื้นความเหนื่อย', help: r => `ลดความเหนื่อยล้า ${r.calmRecover} แต้มให้สมาชิก 1 คน` },
 };
 // ---- Camp NPCs (ART-CHAR-NPC-001): names, roles and a few lines each (live Thai text, never baked into art). ----
 export const npcText: Record<'smith' | 'broker' | 'trainer' | 'keeper' | 'herbalist' | 'scout', { name: string; role: string; lines: readonly string[] }> = {

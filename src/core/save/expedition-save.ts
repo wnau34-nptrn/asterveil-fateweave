@@ -2,11 +2,11 @@ import {bossPlanValid,startBossPlan} from '../world/boss-equipment';
 import {storageCap} from '../world/storage';
 import { entryReason, MAGIC_DAMAGE_SKILLS, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
-import { PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type CampMigration, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
+import { LEGACY_RESERVE, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type CampMigration, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
 import { campLevel, draftOffers, skillChoices, battleState, expToNext, findTiles, levelXp, maxCampXp, type Party, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
-import { boardOfferCount, commanderReason, defaultCamp, newProfile, settle, talentsValid } from '../world/profile';
+import { boardOfferCount, commanderReason, defaultCamp, newProfile, reserveSlots, settle, talentsValid } from '../world/profile';
 import { grantsValid, isBigTree } from '../world/talents';
 import { classSkills } from '../world/tomes';
 import { TOME_LINES, TOME_SIZES, type TomeBag } from '../world/types';
@@ -92,7 +92,12 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // owned member (never the sum); an expedition in progress carries on and a battle in progress restarts from its entry HP;
 // the original save is kept under `legacyBackupKey` and `Game.migrated` says what happened.
 // The profile may carry `archived` bench members.
-const SAVE_VERSION = 44;
+// v45 (P02 team of five, OD-05/OD-11): five may be deployed and the reserve opens by chapter (3 → 4 → 5). A profile
+// from v44 moves its reserve into the free fifth field slot (and any reserve above its chapter's slots), never dropping a
+// member; a run in progress keeps the legacy four reserve slots. Runs gain `reserveSlots` and `fatigue`; potions gain
+// the calming draught (`calm`, none carried). The campfire relights after `camp.relightWins` wins (`restWins` counts them;
+// a v44 run's unlit fire starts counting from 0).
+const SAVE_VERSION = 45;
 const BATCH_ONE_IDS = ['metta', 'thiran', 'lalin', 'wila'];
 // The classes whose big tree arrived in v37 (release A) and in v39 (the recruits).
 const RELEASE_A_TREES = ['tracer', 'weaver', 'healer', 'garran', 'mira'];
@@ -309,6 +314,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (version < 16) s.herbs = [];
   if (version < 20) s.spare = [];
   if (version < 19) Object.assign(s, { visited: s.camp && typeof s.camp === 'object' ? [`${(s.camp as Point).x},${(s.camp as Point).y}`] : [], respawns: {} });
+  if (version < 45 && s.potions && typeof s.potions === 'object') (s.potions as Record<string, unknown>).calm ??= 0;
   if (s.mapId !== map.id) throw new Error('Map changed');
   if (s.mapVersion !== map.version) throw new StaleRun(staleRun(s, map, lookup));
   const cells = map.rows.length * map.rows[0]!.length;
@@ -317,6 +323,15 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (!isInt(s.seed, 0, 0xffffffff) || !isInt(s.rolls) || !isInt(s.steps) || !isInt(s.pressure, 0, 100) || !isInt(s.wins) || !isInt(s.defeats)) throw new Error('Invalid counters');
   const roster = rosterOf(s.roster, lookup, map);
   const ids = [...roster.deployed, ...roster.reserve];
+  // P02: the run's reserve slots (missing = the legacy four) and fatigue points of brought members only.
+  const reserveSlots = s.reserveSlots === undefined ? undefined : isInt(s.reserveSlots, Math.min(...map.company.reserveSlots), RESERVE_SLOTS) ? s.reserveSlots : badRun();
+  if (roster.reserve.length > (reserveSlots ?? LEGACY_RESERVE)) badRun();
+  let fatigue: Record<string, number> | undefined;
+  if (s.fatigue !== undefined) {
+    const f = obj(s.fatigue);
+    if (!Object.keys(f).length || Object.entries(f).some(([id, n]) => !ids.includes(id) || !isInt(n, 1, map.camp.fatigue.cap))) badRun();
+    fatigue = { ...f } as Record<string, number>;
+  }
   const campXp = campXpOf(s.campXp, map);
   const members = membersOf(s.members, map, ids, lookup, campLevel(map, campXp), true); const party = { members, campXp };
   const hp = hpRecord(s.hp, lookup, map, ids, party);
@@ -381,11 +396,13 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     ...(guests ? { guests } : {}), ...(recruited ? { recruited } : {}), ...(arrivals ? { arrivals } : {}), ...(s.hard === true ? { hard: true as const } : {}),
     ...(runTomes ? { tomes: runTomes } : {}), ...(s.riftCore !== undefined ? { riftCore: s.riftCore as number } : {}), ...(s.tomeWins !== undefined ? { tomeWins: s.tomeWins as number } : {}),
     ...(s.bossLoot===undefined?{}:{bossLoot:bossPlanOf(s.bossLoot,map)}),
+    ...(reserveSlots !== undefined ? { reserveSlots } : {}), ...(fatigue ? { fatigue } : {}),
     ...(s.hunt===undefined?{}:{hunt:huntPlan(s.hunt,map,lookup)}),
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map, true),
     steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, hp, campXp,
     camp: s.camp === null ? null : point(s.camp, map),
     resources: { ore: r.ore as number, gold: r.gold as number, ember: r.ember as number, seal: r.seal as number }, openedChests: [...s.openedChests as string[]], restReady: s.restReady as boolean,
+    ...(s.restWins !== undefined ? { restWins: !s.restReady && isInt(s.restWins, 1, map.camp.relightWins - 1) ? s.restWins : badRun() } : {}),
     tutorialDone: s.tutorialDone as boolean, bossDefeated: s.bossDefeated as boolean,
     completed: s.completed as boolean, wins: s.wins as number, defeats: s.defeats as number, battle,
     found: foundOf(s.found, map, lookup), spare: spareOf(s.spare, map, lookup), dry: isInt(s.dry, 0, map.equipment.pity) ? s.dry : badRun(),
@@ -444,6 +461,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (version < 9) Object.assign(p, { items: [], nextItem: 1 });
   if (version < 11) p.forge = 0;
   if (version < 12) p.potions = { salve: 0, tonic: 0, repel: 0 };
+  if (version < 45 && p.potions && typeof p.potions === 'object') (p.potions as Record<string, unknown>).calm ??= 0;
   if (version < 16) p.quests = {};
   if (version < 17) Object.assign(p, { shop: {}, refreshes: 0 });
   if (version < 18) p.smelted = 0;
@@ -487,6 +505,11 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const tomes = p.tomes === undefined ? undefined : tomesOf(p.tomes); const riftCore = p.riftCore === undefined ? undefined : isInt(p.riftCore, 0, 9999) ? p.riftCore : badProfile();
   const clearedHard = p.clearedHard === undefined ? undefined : clearedList(p.clearedHard, maps);
   if (clearedHard?.some(id => !cleared.includes(id))) throw new Error('Invalid profile');
+  // v44 → v45 (P02): the fifth field slot is filled from the reserve, and a reserve above the chapter's slots steps into
+  // the field first (there is always room: four deployed at most before v45). Nobody leaves the team.
+  const slots = reserveSlots({ cleared, ...(veteran ? { veteran: true as const } : {}) }, map);
+  if (version < 45) while (party.reserve.length && party.deployed.length < PARTY_SLOTS) party.deployed.push(party.reserve.shift()!);
+  if (party.reserve.length > slots) throw new Error('Invalid party');
   return {...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
@@ -647,7 +670,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

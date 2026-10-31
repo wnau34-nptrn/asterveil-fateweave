@@ -14,10 +14,10 @@ import { enhance, enhanceCost, enhanceReason, smelt, smeltReason } from '../../s
 import { boulderAt, openPit, passableWall, runePuzzleAt } from '../../src/core/world/puzzles';
 import type { ActionId, BattleState } from '../../src/core/battle/types';
 import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Lane, Point, Profile, MemberProgress, RunOutcome } from '../../src/core/world/types';
-import { GEAR_SLOTS } from '../../src/core/world/types';
+import { GEAR_SLOTS, PARTY_SLOTS } from '../../src/core/world/types';
 import {
   atCamp, atMuster, levelOf, levelXp, monsterLevelAt, battleData, battleState, canOpenChest, canRest, canRevive, eliteAt, eventAt, finishBattle, findTiles, memberDef, move, openChest,
-  newExpedition, draftPick, heroDef, loadoutActions, pendingEvent, questComplete, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, chooseEvent, eventChoiceReason, potionReason,
+  newExpedition, draftPick, heroDef, loadoutActions, pendingEvent, questComplete, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, fatigueOf, fatigueStep, fatigueCut, chooseEvent, eventChoiceReason, potionReason,
 } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 
@@ -154,10 +154,34 @@ function campCare(s: ExpeditionState): ExpeditionState {
     const r = s.roster.reserve.find(id => s.hp[id]! > 0); if (r) s = swapMembers(s, d, r).state;
   }
   if (canRest(s, map) && hpPercent(s, rosterIds(s)) < 90) s = rest(s, map, lookup).state;
+  return rotate(s);
+}
+// P02 (OD-11) automatic rotation at a muster point: the most tired deployed member who has reached a fatigue step trades
+// places with a rested standing reserve member (above half HP, at a lower step) of the same lane who is at least as
+// strong as the tired one after its cut (max HP × Attack, both at their own fatigue); the only healer stays.
+// `SIM_NO_ROTATE=1` keeps the team as it is (to measure what rotation is worth).
+const HEALERS = ['healer', 'toma', 'lio', 'metta', 'lalin'];
+function rotate(s: ExpeditionState): ExpeditionState {
+  if (process.env.SIM_NO_ROTATE || !atMuster(s, map)) return s;
+  const step = (id: string) => fatigueStep(map, fatigueOf(s, id));
+  const power = (id: string) => { const d = memberDef(lookup, map, s, id)!; return d.maxHp * d.attack * (100 - fatigueCut(map, fatigueOf(s, id))) / 100; };
+  const lane = (id: string) => s.roster.lanes?.[id] ?? heroDef(lookup, map, id)!.lane;
+  // Heading for the boss: field the strongest of each lane whatever the steps (rested or not).
+  const boss = questComplete(s, map) && !s.bossDefeated;
+  for (const d of [...s.roster.deployed].sort((a, b) => fatigueOf(s, b) - fatigueOf(s, a))) {
+    if (!s.hp[d] || (!boss && step(d) < Number(process.env.SIM_ROTATE_STEP ?? 1))) continue;
+    if (HEALERS.includes(d) && s.roster.deployed.filter(id => HEALERS.includes(id) && s.hp[id]).length < 2 && !s.roster.reserve.some(id => HEALERS.includes(id))) continue;
+    const r = s.roster.reserve.filter(id => s.hp[id]! * 2 > memberDef(lookup, map, s, id)!.maxHp && (boss || step(id) < step(d)) && lane(id) === lane(d) && (boss ? power(id) > power(d) : power(id) >= power(d))
+      && (!HEALERS.includes(d) || HEALERS.includes(id) || s.roster.deployed.some(x => x !== d && HEALERS.includes(x) && s.hp[x])))
+      .sort((a, b) => power(b) - power(a))[0];
+    if (r) s = swapMembers(s, d, r).state;
+  }
   return s;
 }
 // After a fight: a salve for anyone under a third, a tonic when the whole party is low.
 function patchUp(s: ExpeditionState): ExpeditionState {
+  // A calming draught for a deployed member two fatigue steps down.
+  for (const id of s.roster.deployed) if (fatigueStep(map, fatigueOf(s, id)) >= 2 && !potionReason(s, map, lookup, 'calm', id)) s = usePotion(s, map, lookup, 'calm', id).state;
   if (hpPercent(s) < 50 && !potionReason(s, map, lookup, 'tonic')) s = usePotion(s, map, lookup, 'tonic').state;
   for (const id of s.roster.deployed) {
     const max = memberDef(lookup, map, s, id)!.maxHp;
@@ -232,6 +256,8 @@ function lobby(p: Profile): { profile: Profile; claimed: string[] } {
     const out = p.party.deployed.find(id => id !== 'guardian' && id !== 'tracer' && id !== 'lio');
     if (out) p = { ...p, party: { ...p.party, deployed: p.party.deployed.map(id => id === out ? 'healer' : id), reserve: [...p.party.reserve.filter(id => id !== 'healer'), out] } };
   }
+  // P02 (OD-05): a free field slot takes the first reserve member, as the team page offers.
+  while (p.party.deployed.length < PARTY_SLOTS && p.party.reserve.length) p = { ...p, party: { ...p.party, deployed: [...p.party.deployed, p.party.reserve[0]!], reserve: p.party.reserve.slice(1) } };
   for (const q of map.sideQuests) if (!claimReason(p, map, q.id)) { p = claimQuest(p, map, q.id).profile; claimed.push(q.id); }
   // Talents: a class with an example build (tests/sim/tree-sim.ts, its first one) follows it and equips its skills;
   // spare points (and classes without a build) go to the first open node.
@@ -299,6 +325,8 @@ function lobby(p: Profile): { profile: Profile; claimed: string[] } {
     if (p.overflow?.length) p = collectOverflow(p, map, p.overflow.map(i => i.uid)).profile;
   }
   while (p.potions.salve < map.potions.carry && !brewReason(p, map, 'salve') && p.bank.ore > 60) p = brew(p, map, 'salve').profile;
+  // P02: one calming draught once there is a reserve to rotate with too.
+  if (p.potions.calm < 1 && p.party.reserve.length && !brewReason(p, map, 'calm') && p.bank.ore > 60) p = brew(p, map, 'calm').profile;
   return { profile: p, claimed };
 }
 

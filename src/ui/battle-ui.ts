@@ -1,5 +1,5 @@
 import { cooldownTargets, hasCap, skillCooldown, actionReason, beginBattle, createBattle, currentHeroId, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
-import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TurnStage } from '../core/battle/types';
+import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TargetOption, TurnStage } from '../core/battle/types';
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
 import { sfx } from '../platform/sfx';
 import { BattlePlayback, stageTiming } from './battle-playback';
@@ -7,7 +7,8 @@ import { combatPrefsKey, readCombatPrefs, contactSounds, effectFamily } from '..
 import type { BattleKind } from '../core/world/types';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleScene } from '../game/scenes/BattleScene';
-import { actorName, eventThai, heroText, intentName, intentRuleThai, intentTargetThai, reasonThai, skillDescription } from './th';
+import { fatigueDot, fatigueSection } from './fatigue';
+import { actorName, twinLetter, eventThai, heroText, intentName, intentRuleThai, intentTargetThai, reasonThai, skillDescription } from './th';
 import { portrait } from './portraits';
 import { artOf } from '../game/visuals/assets';
 import { riftBackdropFrame } from '../game/visuals/rift-backdrop';
@@ -507,10 +508,17 @@ export class BattleUI {
 
   private renderParty(disabled: boolean): void {
     const s = this.displayState; const d = this.data;
+    // Owner 2026-10-31: a move for our side (an ally, oneself or the whole team) can also be cast by tapping the hero's
+    // card in the HUD; it commits exactly like tapping that hero on the field.
+    const allySide = this.targeting && !disabled && this.started && !this.busy && s.outcome === 'active' && ['ally', 'self', 'party'].includes(targetKind(this.action));
+    const hudTargets = new Map(allySide ? this.currentTargets().map(t => [t.id, t] as const) : []);
     this.set('party', this.data.heroes.map((h, i) => {
       const hero = s.heroes[i]!; const text = heroText[h.id]!; const selected = h.id === this.heroId; const waiting = s.outcome === 'active' && !selected;
+      // As a target the card keeps its content; only its role (and the disabled rule) changes.
+      const hud = hudTargets.get(h.id);
+      const hudLabel = hud ? ` aria-label="${escapeHtml(`ใช้${d.skills[this.action].name}กับ${targetKind(this.action) === 'party' ? 'ทั้งทีม โดยแตะ' : ''}${text.name} · เลือด ${hero.hp}/${h.maxHp}${!hud.valid ? ` · ${reasonThai(hud.reason)}` : ''}`)}"` : '';
       const skills = h.actions.filter(a => a !== 'attack');
-      return `<button id="hero-${h.id}" data-ui="hero" data-value="${h.id}" data-lane="${h.lane}" class="hero-card ${h.id} ${hero.hp <= 0 ? 'fallen' : ''} ${selected ? 'selected' : 'waiting-turn'} ${this.actingActor === h.id ? 'active-actor' : ''}" aria-pressed="${selected}" ${disabled || hero.hp <= 0 || waiting ? 'disabled' : ''}><span class="hero-emblem">${this.portrait(h.id)}</span><span class="hero-copy"><span class="hero-class"><b>${h.lane === 'front' ? 'FRONT' : 'BACK'}</b> ${text.role}</span><strong>${text.name}</strong><span class="hero-hp"><span class="hp-amount"><span class="hp-label">HP</span> ${hero.hp} / ${h.maxHp}</span>${hero.barrier ? `<small class="barrier-info">โล่ ${hero.barrier}</small>` : ''}${hero.evading ? '<small class="barrier-info">ก้าวเงา</small>' : ''}${s.taunt?.heroId === h.id ? '<small class="barrier-info">ยั่วยุ</small>' : ''}${s.song?.heroId === h.id ? `<small class="barrier-info">${d.skills[s.song.action].name}</small>` : ''}${s.rally?.ids.includes(h.id) ? '<small class="barrier-info">ตั้งรับหมู่</small>' : ''}${s.sanctuary?.targetId === h.id ? '<small class="barrier-info">คุ้มภัย</small>' : ''}${s.counter?.heroId === h.id && s.counter.wall ? '<small class="barrier-info">กำแพงทวน</small>' : ''}${hero.hp <= 0 ? ' · ล้มแล้ว' : ''}</span><span class="hp-track"><span style="width:${hero.hp / h.maxHp * 100}%"></span></span></span><span class="hero-skills">${skills.map(action => {
+      return `<button id="hero-${h.id}" data-ui="${hud ? 'target' : 'hero'}" data-value="${h.id}" data-lane="${h.lane}" class="hero-card ${h.id} ${hud ? `hud-target${hud.valid ? ' valid-target' : ''}` : ''} ${hero.hp <= 0 ? 'fallen' : ''} ${selected ? 'selected' : 'waiting-turn'} ${this.actingActor === h.id ? 'active-actor' : ''}" aria-pressed="${selected}"${hudLabel} ${hud ? (hud.valid ? '' : 'disabled') : disabled || hero.hp <= 0 || waiting ? 'disabled' : ''}><span class="hero-emblem">${this.portrait(h.id)}</span><span class="hero-copy"><span class="hero-class"><b>${h.lane === 'front' ? 'FRONT' : 'BACK'}</b> ${text.role}</span><strong>${text.name}</strong><span class="hero-hp"><span class="hp-amount"><span class="hp-label">HP</span> ${hero.hp} / ${h.maxHp}</span>${hero.barrier ? `<small class="barrier-info">โล่ ${hero.barrier}</small>` : ''}${hero.evading ? '<small class="barrier-info">ก้าวเงา</small>' : ''}${s.taunt?.heroId === h.id ? '<small class="barrier-info">ยั่วยุ</small>' : ''}${s.song?.heroId === h.id ? `<small class="barrier-info">${d.skills[s.song.action].name}</small>` : ''}${s.rally?.ids.includes(h.id) ? '<small class="barrier-info">ตั้งรับหมู่</small>' : ''}${s.sanctuary?.targetId === h.id ? '<small class="barrier-info">คุ้มภัย</small>' : ''}${s.counter?.heroId === h.id && s.counter.wall ? '<small class="barrier-info">กำแพงทวน</small>' : ''}${fatigueDot(h.fatigue)}${hero.hp <= 0 ? ' · ล้มแล้ว' : ''}</span><span class="hp-track"><span style="width:${hero.hp / h.maxHp * 100}%"></span></span></span><span class="hero-skills">${skills.map(action => {
         const remaining = Math.max(0, (hero.cooldowns[action] ?? 0) - s.round);
         const available = targetOptions(s, d, h.id, action).some(t => t.valid);
         const status = hero.hp <= 0 ? 'ล้มแล้ว' : s.outcome !== 'active' ? 'จบแล้ว' : waiting ? 'รอเทิร์น' : remaining ? `รอ ${remaining} รอบ` : available ? 'พร้อมใช้' : action === 'heal' || action === 'prayer' ? 'เลือดเต็ม' : action === 'ward' ? 'โล่เต็ม' : action === 'finale' ? 'ยังไม่มีเพลง' : 'ยังใช้ไม่ได้';
@@ -533,13 +541,18 @@ export class BattleUI {
     }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><p class="target-hint">${!this.targeting ? 'เลือกสกิลเพื่อเล็งเป้าหมาย' : noTarget || `${d.skills[this.action].name} — ` + (targetKind(this.action) === 'party' ? 'แตะเพื่อนในสนามเพื่อใช้สกิลกับทั้งทีม' : targetKind(this.action) === 'enemies' ? 'แตะศัตรูตัวใดก็ได้เพื่อโจมตีทุกตัว' : this.action === 'brace' ? 'แตะตัวเองในสนามเพื่อตั้งทวน' : this.action === 'evade' ? 'แตะตัวเองในสนามเพื่อก้าวเงา' : this.action === 'taunt' ? 'แตะตัวเองในสนามเพื่อยั่วยุ' : this.action === 'valor' || this.action === 'mend' ? 'แตะตัวเองในสนามเพื่อบรรเลงเพลง' : targetKind(this.action) === 'self' ? `แตะตัวเองในสนามเพื่อใช้${d.skills[this.action].name}` : targetKind(this.action) === 'ally' ? 'แตะเพื่อนในสนามที่มีเครื่องหมาย' : 'แตะศัตรูในสนามที่มีเครื่องหมาย')}</p>`);
   }
 
+  // The targets of the selected action as the field shows them (a party/area move lists everyone it covers).
+  private currentTargets(): TargetOption[] {
+    const s = this.displayState; const d = this.data;
+    const options = targetOptions(s, d, this.heroId, this.action);
+    return targetKind(this.action) === 'party' ? d.heroes.map(h => ({ ...options[0]!, id:h.id, valid:options[0]!.valid && s.heroes.some(v => v.id===h.id && v.hp>0) }))
+      : targetKind(this.action) === 'enemies' ? d.enemies.map(e => ({ ...options[0]!, id:e.id, valid:options[0]!.valid && s.enemies.some(v => v.id===e.id && v.hp>0) })) : options;
+  }
   private renderFieldTargets(): void {
     if (!this.scene) return;
     const s = this.displayState; const d = this.data;
     const disabled = !this.targeting || !this.scene.isReady || !this.started || this.busy || s.outcome !== 'active';
-    const options = targetOptions(s, d, this.heroId, this.action);
-    const targets = targetKind(this.action) === 'party' ? d.heroes.map(h => ({ ...options[0]!, id:h.id, valid:options[0]!.valid && s.heroes.some(v => v.id===h.id && v.hp>0) }))
-      : targetKind(this.action) === 'enemies' ? d.enemies.map(e => ({ ...options[0]!, id:e.id, valid:options[0]!.valid && s.enemies.some(v => v.id===e.id && v.hp>0) })) : options;
+    const targets = this.currentTargets();
     this.set('field-targets', targets.map(t => {
       const position = this.scene!.actorTargets.get(t.id); if (!position) return '';
       const hero = s.heroes.find(h => h.id===t.id); const enemy = s.enemies.find(e => e.id===t.id);
@@ -568,7 +581,9 @@ export class BattleUI {
       const enemy = d.enemies.some(e => e.id === a.id);
       const label = `${actorName(a.id, d)} · ${rows.map(r => `${r.kind === 'buff' ? 'บัฟ' : 'ดีบัฟ'} ${r.name}: ${r.duration}`).join(' · ')} · รายละเอียดที่ปุ่มข้อมูล แท็บสถานะ`;
       // Standard grid: a foe's name stands above its head, every HP/status panel under the feet (owner 2026-10-22).
-      const name = `<span class="field-unit-name">${escapeHtml(actorName(a.id, d))}</span>`, above = slot.label && enemy ? slot.label : undefined;
+      // A twin's letter stays visible when a long name is cut (P02: three of a kind can stand in a column).
+      const twin = enemy ? twinLetter(a.id, d) : ''; const full = actorName(a.id, d);
+      const name = twin ? `<span class="field-unit-name twin-name" title="${escapeHtml(full)}"><span class="twin-main">${escapeHtml(full.slice(0, -twin.length - 1))}</span><b class="twin-letter">${twin}</b></span>` : `<span class="field-unit-name">${escapeHtml(full)}</span>`, above = slot.label && enemy ? slot.label : undefined;
       const tag = above ? `<div class="field-unit-label" data-field-label="${a.id}" style="left:${above.x}px;top:${above.y}px;width:${above.width}px;height:${above.height}px;opacity:${actor.hp > 0 ? 1 : .4}">${name}</div>` : '';
       return `${tag}<div class="field-unit-info ${slot.compact ? 'compact' : ''} ${slot.tiny ? 'tiny' : ''} ${slot.side ? 'side' : ''} ${slot.label ? 'grid' : ''} ${enemy ? 'enemy' : 'ally'}" data-field-unit="${a.id}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px;--field-icon:${slot.iconSize}px;opacity:${actor.hp > 0 ? 1 : .4}">${slot.label ? '' : name}<span class="field-health" aria-label="${escapeHtml(actorName(a.id, d))} HP ${actor.hp}/${a.maxHp}"><span class="field-hp-value">${actor.hp}/${a.maxHp}</span><span class="field-hp-track"><span style="width:${actor.hp / a.maxHp * 100}%;background:#${a.color.toString(16).padStart(6, '0')}"></span></span></span>${rows.length ? `<span class="field-statuses" data-status-actor="${a.id}" role="img" aria-label="${escapeHtml(label)}">${rows.slice(0, slot.maxIcons).map(r => `<span class="field-status ${r.kind}" data-status="${r.id}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > slot.maxIcons ? `<span class="field-status-more" aria-hidden="true">+${rows.length - slot.maxIcons}</span>` : ''}</span>` : ''}</div>`;
     }).join(''));
@@ -583,11 +598,11 @@ export class BattleUI {
     this.set('status-units', actors.map(a => {
       const actor = states.find(v => v.id === a.id)!;
       const rows = unitStatuses(s, d, a.id), ally = d.heroes.some(h => h.id === a.id);
-      return `<button id="status-unit-${a.id}" data-ui="status-unit" data-value="${a.id}" class="status-unit ${ally ? 'ally' : 'enemy'}" aria-pressed="${a.id === this.inspectedActorId}">${this.portrait(a.id)}<span><strong>${escapeHtml(actorName(a.id, d))}</strong><small>${ally ? 'ฝ่ายเรา' : 'ศัตรู'} · ${actor.hp <= 0 ? 'ล้มแล้ว' : 'HP ' + actor.hp + '/' + a.maxHp}</small><span class="status-mini" role="img" aria-label="${rows.length ? escapeHtml(rows.map(r => (r.kind === 'buff' ? 'บัฟ ' : 'ดีบัฟ ') + r.name).join(' · ')) : 'ไม่มีสถานะชั่วคราว'}">${rows.slice(0, 3).map(r => `<span class="${r.kind}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > 3 ? '<small>+' + (rows.length - 3) + '</small>' : ''}</span></span></button>`;
+      return `<button id="status-unit-${a.id}" data-ui="status-unit" data-value="${a.id}" class="status-unit ${ally ? 'ally' : 'enemy'}" aria-pressed="${a.id === this.inspectedActorId}">${this.portrait(a.id)}<span><strong>${escapeHtml(actorName(a.id, d))}${ally ? fatigueDot((a as { fatigue?: number }).fatigue) : ''}</strong><small>${ally ? 'ฝ่ายเรา' : 'ศัตรู'} · ${actor.hp <= 0 ? 'ล้มแล้ว' : 'HP ' + actor.hp + '/' + a.maxHp}</small><span class="status-mini" role="img" aria-label="${rows.length ? escapeHtml(rows.map(r => (r.kind === 'buff' ? 'บัฟ ' : 'ดีบัฟ ') + r.name).join(' · ')) : 'ไม่มีสถานะชั่วคราว'}">${rows.slice(0, 3).map(r => `<span class="${r.kind}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > 3 ? '<small>+' + (rows.length - 3) + '</small>' : ''}</span></span></button>`;
     }).join(''));
     const id = this.inspectedActorId, def = actors.find(a => a.id === id)!, actor = states.find(a => a.id === id)!;
     const rows = unitStatuses(s, d, id);
-    this.set('status-details', `<div class="status-selected">${this.portrait(id)}<div><h3>${escapeHtml(actorName(id, d))}</h3><p>HP ${actor.hp} / ${def.maxHp}${actor.hp <= 0 ? ' · ล้มแล้ว' : ''}</p></div></div>${this.foeSheet(id)}${rows.length ? (['buff', 'debuff'] as const).map(kind => {
+    this.set('status-details', `<div class="status-selected">${this.portrait(id)}<div><h3>${escapeHtml(actorName(id, d))}</h3><p>HP ${actor.hp} / ${def.maxHp}${actor.hp <= 0 ? ' · ล้มแล้ว' : ''}</p></div></div>${this.foeSheet(id)}${def && 'role' in def ? fatigueSection((def as { fatigue?: number }).fatigue) : ''}${rows.length ? (['buff', 'debuff'] as const).map(kind => {
       const group = rows.filter(r => r.kind === kind);
       return group.length ? `<section class="status-group ${kind}"><h4>${kind === 'buff' ? 'บัฟ · ผลเสริม' : 'ดีบัฟ · ผลลดทอน'}</h4><ul>${group.map(r => `<li data-status="${r.id}"><div class="status-name">${icon(r.icon)}<strong>${escapeHtml(r.name)}</strong></div><p>${escapeHtml(r.detail)}</p><p class="status-duration">${escapeHtml(r.duration)}</p></li>`).join('')}</ul></section>` : '';
     }).join('') : `<p class="status-empty">${actor.hp <= 0 ? 'ยูนิตล้มแล้ว ไม่มีสถานะชั่วคราวที่มีผล' : s.outcome !== 'active' ? 'การต่อสู้จบแล้ว ไม่มีสถานะชั่วคราวที่มีผล' : 'ไม่มีบัฟหรือดีบัฟชั่วคราว'}</p>` }`);

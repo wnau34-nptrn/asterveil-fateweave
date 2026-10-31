@@ -8,7 +8,7 @@ import { affixPool, gearTotals } from './equipment';
 import { effectiveTalents, isBigTree, memberTalentReason } from './talents';
 import { battleTomes, chestTomes } from './tomes';
 import type { TalentNode } from './types';
-import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS, type Lane, type Roster } from './types';
+import { LEGACY_RESERVE, PARTY_SLOTS, POTION_IDS, SET_IDS, type Lane, type Roster } from './types';
 import { formation, laneReason, placed, withLane } from './formation';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
@@ -64,6 +64,24 @@ export function heroDef(lookup: EncounterLookup, map: MapDefinition, id: string)
   return heroCatalog(lookup, map).find(h => h.id === id);
 }
 export const rosterIds = (state: ExpeditionState): string[] => [...state.roster.deployed, ...state.roster.reserve];
+// ---- P02 (OD-11): reserve slots and fatigue ----
+// The reserve this run may fill (fixed at departure; runs from before v45 keep the legacy four).
+export const reserveCap = (state: Pick<ExpeditionState, 'reserveSlots'>): number => state.reserveSlots ?? LEGACY_RESERVE;
+export const fatigueOf = (state: Pick<ExpeditionState, 'fatigue'>, id: string): number => state.fatigue?.[id] ?? 0;
+// The percent a member's fatigue cuts from its hits and direct heals: one `stepPercent` per step reached.
+export const fatigueCut = (map: Pick<MapDefinition, 'camp'>, points: number): number =>
+  map.camp.fatigue.steps.filter(step => points >= step).length * map.camp.fatigue.stepPercent;
+// How many steps a member has reached (0 = fresh).
+export const fatigueStep = (map: Pick<MapDefinition, 'camp'>, points: number): number => map.camp.fatigue.steps.filter(step => points >= step).length;
+function setFatigue(state: ExpeditionState, id: string, points: number): void {
+  if (points > 0) (state.fatigue ??= {})[id] = points;
+  else if (state.fatigue) { delete state.fatigue[id]; if (!Object.keys(state.fatigue).length) delete state.fatigue; }
+}
+// After each battle (not the prologue): every deployed member gains a point, every reserve member sheds one.
+function tire(state: ExpeditionState, map: MapDefinition): void {
+  for (const id of state.roster.deployed) setFatigue(state, id, Math.min(map.camp.fatigue.cap, fatigueOf(state, id) + 1));
+  for (const id of state.roster.reserve) setFatigue(state, id, fatigueOf(state, id) - 1);
+}
 // Story recruits (owner 2026-10-23): each joins at its own story point. A guest who fought the prologue joins for good at
 // the win; the other guests then part ways (`arrivals`) and leave the roster until their point (a camp is reached, the
 // boss fight starts). There a waiting recruit steps back in (a free party slot, else the reserve) at full HP. Both are
@@ -230,7 +248,8 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
     hp: fullParty(lookup, map, [...roster.deployed, ...roster.reserve], { members, campXp: company?.campXp ?? 0 }), camp: null, campXp: company?.campXp ?? 0,
     resources: { ore: 0, gold: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
     tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null, found: [], dry: 0,
-    potions: company?.potions ? { ...company.potions } : { salve: 0, tonic: 0, repel: 0 }, repel: 0,
+    potions: company?.potions ? { ...company.potions } : { salve: 0, tonic: 0, repel: 0, calm: 0 }, repel: 0,
+    ...(company?.reserveSlots ? { reserveSlots: company.reserveSlots } : {}),
     elitesDefeated: [], eventsDone: [], dust: 0, herbs: [], visited: [], respawns: {}, spare: [],
     runes: {}, solved: [], levers: [], boulders: {}, secrets: [],
   };
@@ -382,7 +401,9 @@ export function rest(initial: ExpeditionState, map: MapDefinition, lookup: Encou
   if (!canRest(initial, map)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial); const full = fullParty(lookup, map, rosterIds(state), state);
   for (const [id, max] of Object.entries(full)) if (state.hp[id]! > 0) state.hp[id] = Math.min(max, state.hp[id]! + percentOf(max, map.camp.restHealPercent));
-  state.pressure = 0; state.camp = { ...state.position }; state.restReady = false;
+  // P02: a rest also eases everyone's fatigue.
+  for (const id of rosterIds(state)) setFatigue(state, id, fatigueOf(state, id) - map.camp.fatigue.rest);
+  state.pressure = 0; state.camp = { ...state.position }; state.restReady = false; delete state.restWins;
   // 4C: beaten optional elites (not gate guards, not the mini-boss) return after a rest, one level higher.
   const respawned = map.elites.filter(e => !e.forced && !e.mini && state.elitesDefeated.includes(e.id)).map(e => e.id);
   for (const id of respawned) { state.elitesDefeated = state.elitesDefeated.filter(e => e !== id); state.respawns[id] = (state.respawns[id] ?? 0) + 1; }
@@ -440,7 +461,7 @@ export function setLane(initial: ExpeditionState, map: MapDefinition, lookup: En
 export function moveMember(initial: ExpeditionState, id: string): WorldResult {
   const { deployed, reserve } = initial.roster;
   const toReserve = deployed.includes(id);
-  const ok = canManage(initial) && (toReserve ? deployed.length > 1 && reserve.length < RESERVE_SLOTS : reserve.includes(id) && deployed.length < PARTY_SLOTS);
+  const ok = canManage(initial) && (toReserve ? deployed.length > 1 && reserve.length < reserveCap(initial) : reserve.includes(id) && deployed.length < PARTY_SLOTS);
   if (!ok) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial);
   const from = toReserve ? state.roster.deployed : state.roster.reserve; const to = toReserve ? state.roster.reserve : state.roster.deployed;
@@ -517,12 +538,14 @@ export function potionReason(state: ExpeditionState, map: MapDefinition, lookup:
   const hurt = (id: string) => state.hp[id]! > 0 && state.hp[id]! < memberDef(lookup, map, state, id)!.maxHp;
   if (potion === 'salve') return !targetId || !rosterIds(state).includes(targetId) ? 'target' : state.hp[targetId] === 0 ? 'down' : hurt(targetId) ? '' : 'full';
   if (potion === 'tonic') return rosterIds(state).some(hurt) ? '' : 'full';
+  if (potion === 'calm') return !targetId || !rosterIds(state).includes(targetId) ? 'target' : fatigueOf(state, targetId) > 0 ? '' : 'rested';
   return state.repel > 0 ? 'active' : '';
 }
 export function usePotion(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, potion: PotionId, targetId?: string): WorldResult {
   const reason = potionReason(initial, map, lookup, potion, targetId); if (reason) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial); state.potions[potion]--;
   if (potion === 'repel') { state.repel = map.potions.repelSteps; return { state, event: { type: 'potion', potion } }; }
+  if (potion === 'calm') { setFatigue(state, targetId!, fatigueOf(state, targetId!) - map.potions.calmRecover); return { state, event: { type: 'potion', potion } }; }
   const heal: Record<string, number> = {};
   for (const id of potion === 'salve' ? [targetId!] : rosterIds(state)) {
     const max = memberDef(lookup, map, state, id)!.maxHp; if (!state.hp[id]) continue;
@@ -666,7 +689,9 @@ export function battleData(state: ExpeditionState, map: MapDefinition, lookup: E
   const strong = leveled && state.battle!.percent ? withStrength(leveled, state.battle!.percent) : leveled;
   const staged = strong && bossRole(strong, state.battle!.kind, map, state.battle!.source);
   const data = staged && hard ? hardEncounter(staged, state.battle!.kind, map) : staged;
-  const party = state.roster.deployed.map(id => memberDef(lookup, map, state, id));
+  // Fatigue (P02) only changes between battles, so the battle replays with the cut it started with.
+  const party = state.roster.deployed.map(id => { const def = memberDef(lookup, map, state, id); const cut = fatigueCut(map, fatigueOf(state, id));
+    return def && cut ? { ...def, fatigue: cut } : def; });
   return data && party.every(Boolean) ? withParty(data, placed(party as HeroDefinition[], battleLanes(state, map, lookup))) : undefined;
 }
 // The battle's committed commands are replayed from the recorded entry; the world
@@ -712,7 +737,9 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
   const state = structuredClone(initial); const { kind, encounterId } = initial.battle;
   if (result.outcome === 'victory') {
     for (const h of result.heroes) state.hp[h.id] = h.hp;
-    state.battle = null; state.wins++; state.restReady = true;
+    state.battle = null; state.wins++;
+    // The campfire relights after `relightWins` won battles since the last rest (P02, owner 2026-10-31).
+    if (!state.restReady) { const wins = (state.restWins ?? 0) + 1; if (wins >= map.camp.relightWins) { state.restReady = true; delete state.restWins; } else state.restWins = wins; }
     // The guests part ways after the prologue win; the pair left behind patches up first (owner 2026-10-23: two
     // hurt heroes before the first camp wiped too often, docs/validation/balance-sim/CAMPAIGN.md).
     if (kind === 'tutorial') {
@@ -744,6 +771,11 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
     const items = dropItems(state, map, kind, data.level ?? 1, source);
     // Skill tomes on maps that drop them (no rolls, so loot and items are unchanged).
     const tomes = battleTomes(state, map, kind, state.roster.deployed);
+    // P02 (OD-11, A6c): standing reserve members patch themselves up after a win; then fatigue moves on.
+    if (kind !== 'tutorial') {
+      for (const id of state.roster.reserve) { const max = memberDef(lookup, map, state, id)!.maxHp; if (state.hp[id]! > 0) state.hp[id] = Math.min(max, state.hp[id]! + percentOf(max, map.camp.reserveHealPercent)); }
+      tire(state, map);
+    }
     return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(items[0] ? { item: items[0] } : {}), ...(items.length > 1 ? { items } : {}), ...(dust ? { dust } : {}), ...tomes } };
   }
   state.defeats++;
@@ -755,7 +787,7 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
   // When every brought member is down the expedition has failed (`wiped`) and the shell
   // settles it back to the lobby in the same write.
   for (const h of result.heroes) state.hp[h.id] = 0;
-  state.battle = null; state.pressure = 0;
+  state.battle = null; state.pressure = 0; tire(state, map);
   state.position = state.camp ? { ...state.camp } : startOf(map); reveal(state, map);
   const wiped = rosterIds(state).every(id => state.hp[id] === 0);
   return { state, event: { type: 'defeat', kind, encounterId, ...(wiped ? { wiped } : {}) } };

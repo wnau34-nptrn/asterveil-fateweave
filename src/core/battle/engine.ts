@@ -91,17 +91,27 @@ export function targetKind(action: ActionId): TargetKind {
 // move reaches only the front row unless it is a reach skill; back-lane heroes reach every foe and area moves hit all.
 // A mage's piercing bolt (tree modifier) also reaches, and an archer's pinning volley stops the screen for a while.
 export const REACH_SKILLS: readonly ActionId[] = ['pierce', 'mark', 'backstab', 'challenge', 'lunge'];
-export const ENEMY_SLOTS = ['f1', 'f2', 'b1', 'b2'] as const;
+// P02: `f3`/`b3` are appended; the first four keep their order. A side fields at most MAX_SIDE actors at once and
+// at most ROW_SLOTS foes stand in a row (reserves count only once summoned).
+export const ENEMY_SLOTS = ['f1', 'f2', 'b1', 'b2', 'f3', 'b3'] as const;
+export const MAX_SIDE = 5; export const ROW_SLOTS = 3;
+// Fatigue (P02, OD-11): a tired hero's hits and direct heals are cut by its percent.
+export const tired = (data: EncounterDefinition, heroId: string | undefined, amount: number): number => {
+  const cut = heroId ? data.heroes.find(h => h.id === heroId)?.fatigue ?? 0 : 0;
+  return cut ? Math.max(amount > 0 ? 1 : 0, Math.round(amount * (100 - cut) / 100)) : amount;
+};
 export function screened(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId, enemyId: string): boolean {
   const hero = data.heroes.find(h => h.id === heroId);
   if (!hero || hero.lane === 'back' || REACH_SKILLS.includes(action) || data.enemies.find(e => e.id === enemyId)?.row !== 'back') return false;
   if ((action === 'bolt' && hasCap(data, heroId, 'piercebolt')) || (state.pinned ?? 0) >= state.round) return false;
   return state.enemies.some(e => e.hp > 0 && data.enemies.find(d => d.id === e.id)?.row === 'front');
 }
-// Content check: 1–4 foes in distinct slots, at most two per row, each row matching its slot, every foe with a move.
+// Content check: foes in distinct slots, 1–5 on the field at the start and at most three per row, each row matching its
+// slot, every foe with a move.
 export function encounterProblems(data: EncounterDefinition): string[] {
   const problems: string[] = []; const ids = data.enemies.map(e => e.id);
-  if (!ids.length || ids.length > 4) problems.push(`${data.id}: ${ids.length} foes`);
+  const fielded = data.enemies.filter(e => !e.reserve);
+  if (!ids.length || fielded.length > MAX_SIDE) problems.push(`${data.id}: ${fielded.length} foes`);
   if (new Set(ids).size !== ids.length) problems.push(`${data.id}: repeated slot`);
   for (const e of data.enemies) {
     if (!ENEMY_SLOTS.includes(e.id) || e.row !== (e.id.startsWith('f') ? 'front' : 'back')) problems.push(`${data.id}: ${e.id} row ${e.row}`);
@@ -224,7 +234,8 @@ function bossBarrier(state:BattleState,data:EncounterDefinition,ownerId:string,t
 // Healing cast by this hero, raised by its equipment's heal bonus.
 // Deploys a party (in slot order) into an encounter; enemy slots then resolve to these heroes.
 export function withParty(data: EncounterDefinition, party: readonly HeroDefinition[]): EncounterDefinition {
-  if (!party.length || party.length > 4 || new Set(party.map(h => h.id)).size !== party.length) throw new Error('Invalid party.');
+  // The world keeps each column to LANE_SLOTS (formation); battles saved before formation (v35) fight in class lanes.
+  if (!party.length || party.length > MAX_SIDE || new Set(party.map(h => h.id)).size !== party.length) throw new Error('Invalid party.');
   return { ...data, heroes: party };
 }
 // Monster level (2D-1): enemy max HP and move damage change by `percent` per level away from the
@@ -430,7 +441,7 @@ export function enraged(state: BattleState, data: EncounterDefinition, enemyId: 
   return !!t && !!e && !!def && hasTrait(data, enemyId, 'enrage') && e.hp > 0 && e.hp * 100 <= def.maxHp * t.enrageBelow;
 }
 function strikeBack(state: BattleState, data: EncounterDefinition, heroId: string, enemy: EnemyState, power: number, events: BattleEvent[], text: string): void {
-  const dealt = Math.min(enemy.hp, veiled(state, data, enemy, power + hitBonus(state, data, enemy.id))); enemy.hp -= dealt;
+  const dealt = Math.min(enemy.hp, tired(data, heroId, veiled(state, data, enemy, power + hitBonus(state, data, enemy.id)))); enemy.hp -= dealt;
   events.push({ type: 'counter', sourceId: heroId, targetId: enemy.id, amount: dealt, text });
   if (!enemy.hp) { events.push({ type: 'down', targetId: enemy.id, text: 'Enemy falls.' }); chainReaction(state, data, enemy, events); }
   leech(state, data, heroId, dealt, events);
@@ -512,6 +523,9 @@ function beginPhase(state: BattleState, data: EncounterDefinition, enemy: EnemyS
   events.push({ type: 'phase', sourceId: enemy.id, targetId: enemy.id, text: phase.name });
   for (const slot of phase.summon ?? []) {
     const minion = state.enemies.find(e => e.id === slot); const def = data.enemies.find(e => e.id === slot);
+    // P02: a full field (five standing, or three in that row) leaves the reserve waiting; it never replaces anyone.
+    const standing = state.enemies.filter(e => e.hp > 0);
+    if (standing.length >= MAX_SIDE || standing.filter(e => data.enemies.find(d => d.id === e.id)?.row === def?.row).length >= ROW_SLOTS) continue;
     if (minion?.absent && def) { delete minion.absent; minion.hp = def.maxHp; events.push({ type: 'summon', sourceId: enemy.id, targetId: slot, text: 'Reinforcements.' }); }
   }
 }
@@ -774,7 +788,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     const raised = banner ? Math.round(power * (100 + banner) / 100) : power;
     // A bard's solo gives this hero the song of valor twice more.
     const solo = (actor.solo?.round ?? 0) >= state.round && state.song?.action === 'valor' && living(state, state.song.heroId) ? songPower(data, state.song.heroId, 'valor') * (SOLO_TIMES - 1) : 0;
-    const amount = Math.min(foe.hp, veiled(state, data, foe, raised + boss + solo + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe))); foe.hp -= amount; directDamage += amount;
+    const amount = Math.min(foe.hp, tired(data, hero.id, veiled(state, data, foe, raised + boss + solo + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)))); foe.hp -= amount; directDamage += amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text });
     if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
     leech(state, data, hero.id, amount, events);
@@ -789,8 +803,9 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     if (added) { h.barrier += added; events.push({ type: 'barrier', sourceId: hero.id, targetId: h.id, amount: added, text: 'Added barrier.' }); }
   };
   const livingBefore = state.enemies.filter(e => e.hp > 0).map(e => e.id);
-  const heal = (id: string, power: number) => {
+  const heal = (id: string, full: number) => {
     const target = state.heroes.find(h => h.id === id)!; if (!target.hp) return;
+    const power = tired(data, hero.id, full);
     const amount = Math.min(power, data.heroes.find(h => h.id === id)!.maxHp - target.hp);
     if (amount) { target.hp += amount; events.push({ type: 'heal', sourceId: hero.id, targetId: id, amount, text: 'Restored HP.' }); }
     // Afterglow (★5): healing beyond full HP becomes a barrier (capped, not stacking).

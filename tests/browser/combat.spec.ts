@@ -146,7 +146,9 @@ for(const first of ['b1','f1']){
   await expect(page.locator('#lobby-view')).toBeVisible();await expect(page.locator('.lobby-result')).toContainText('การเดินทางล้มเหลว');expect(issues).toEqual([]);
  });
 }
-const routes=[...partyRoutes.map(r=>({...r,data:veilSiege})),...encounterRoutes];
+// Only routes whose data is the catalog encounter can be replayed in the game (P02: the scripted warden routes keep the
+// v19 warden that stood alone; tests/encounters.test.ts replays them in the resolver).
+const routes=[...partyRoutes.map(r=>({...r,data:veilSiege})),...encounterRoutes.filter(r=>r.data===encounterById(r.data.id))];
 for(const [index,route]of routes.entries()){
  test(`${route.name}: all-four victory, exact HP, reload and return to the map with carried HP`,async({browser},info)=>{
   test.setTimeout(75000);const viewport=index%3===0?{width:320,height:568}:index%3===1?{width:390,height:844}:{width:1366,height:768};

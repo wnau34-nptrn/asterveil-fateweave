@@ -111,7 +111,7 @@ export class GameShell {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), refresh: () => this.profileChange(refreshBoard(this.game!.profile, map)),
       buy: (item, hero) => this.profileChange(buy(this.game!.profile, map, item, hero)), smelt: dust => this.profileChange(smelt(this.game!.profile, map, dust)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
       archive: (id, archived) => this.profileChange(setArchived(this.game!.profile, id, archived)),
-      dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, id, group, other)),
+      dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, map, id, group, other)),
       lane: (id, lane, other) => this.profileChange(setPartyLane(this.game!.profile, map, lookup, id, lane, other)),
       skillLevel: (id, action) => this.profileChange(raiseSkill(this.game!.profile, this.maps, map, lookup, id, action)),
       tomeTrade: (line, size, to) => this.profileChange(tradeTomes(this.game!.profile, this.maps, map, line, size, to)),

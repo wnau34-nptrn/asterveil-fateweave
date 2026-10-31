@@ -25,7 +25,8 @@ describe('painted equipment mapping', () => {
   });
   it('keeps each set emblem and each potion/material frame distinct', () => {
     expect(new Set(SET_IDS.map(s => emblemCell(s).col)).size).toBe(SET_IDS.length);
-    expect(new Set([...POTION_IDS, 'dust', 'gold'].map(id => potionCell(id as 'dust').col)).size).toBe(POTION_IDS.length + 2);
+    const painted = POTION_IDS.filter(id => id !== 'calm');
+    expect(new Set([...painted, 'dust', 'gold'].map(id => potionCell(id as 'dust').col)).size).toBe(painted.length + 2);
   });
   it('matches the actual five zero-based rarities', () => expect(RARITIES).toBe(tiers.length));
   for (const slot of slots) for (let rarity = 0; rarity < RARITIES; rarity++) {

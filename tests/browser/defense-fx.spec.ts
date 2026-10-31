@@ -36,7 +36,8 @@ for(const skill of skills)test(`defense ${skill} uses truthful contact and owned
       expect(prepare.filter(f=>f==='rally_prepare')).toHaveLength(1);
       const lead=(await page.evaluate(()=>window.defenseQA.painted())).find(p=>p.frame==='rally_prepare')!;
       const caster=await page.evaluate(id=>window.defenseQA.point(id),turn.actorId);
-      expect(lead.x).toBeCloseTo(caster.x);expect(lead.y).toBeCloseTo(caster.footY+27);
+      // The ring sits a scaled step below the feet: 27px at the original unit size, ×UNIT_SCALE (.95, P02 owner 2026-10-31).
+      expect(lead.x).toBeCloseTo(caster.x);expect(lead.y-caster.footY).toBeCloseTo(27*.95,0);
       expect(prepare.some(f=>f.startsWith('rally_command_'))).toBe(false);
     }
     await page.clock.runFor(61);
@@ -47,7 +48,7 @@ for(const skill of skills)test(`defense ${skill} uses truthful contact and owned
       expect((await page.evaluate(()=>window.defenseQA.frames())).some(f=>f.startsWith('rally_command_'))).toBe(false);
       for(const [i,cue]of cues.entries()){
         const foot=(await page.evaluate(id=>window.defenseQA.point(id),cue.targetId)).footY;
-        expect(peaks[i]!.y).toBeCloseTo(foot+27);
+        expect(peaks[i]!.y-foot).toBeCloseTo(27*.95,0);
       }
     }
     if(['stonearmor','aegis'].includes(skill)){

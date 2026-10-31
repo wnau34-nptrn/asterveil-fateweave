@@ -1,11 +1,12 @@
 import type { EncounterDefinition } from '../../core/battle/types';
 import { veilSiege } from './veil-siege';
 import { SPECIES, foes } from '../enemies/species';
+import { rosterBatch1 as BATCH_ONE } from '../heroes/roster-batch1';
 
 // Every encounter reuses the four-hero party, skills and numeric rules.
 // Bosses (`boss`) are steadfast: a cancelled turn shields their next round from Bash/Sigil; their signature move
 // (`unstoppable`) can never be cancelled (owner 2026-10-22).
-// Enemy ids are the four field slots `f1`/`f2` (front row) and `b1`/`b2` (back row); front-row foes screen the back
+// Enemy ids are the field slots `f1`/`f2`/`f3` (front row) and `b1`/`b2`/`b3` (back row); front-row foes screen the back
 // row. New sets are built from `SPECIES` with `foes`; older ones keep their hand-written numbers.
 // `art` picks the illustrated Veil Frontier foe (ART-CHAR-MERC-ENEMY-001); without it the
 // original Raider/Brute frames are shown. Physical foes use physical moves, energy foes energy moves.
@@ -26,12 +27,16 @@ export const rearAmbush: EncounterDefinition = {
   ],
 };
 
-// Boss phases (owner 2026-10-22): at 70% the warden calls two rift wisps from the back row (hard mode: also a shard
-// crawler beside it); at 35% it charges, then strikes with a cataclysm and rift waves that hit the whole party.
-const wardenWisps = foes(10, [['b1', SPECIES.riftWisp, { reserve: true }], ['b2', SPECIES.riftWisp, { reserve: true }], ['f2', SPECIES.shardCrawler, { reserve: true }]]);
+// P02: the reference party of five-foe fields (the four plus Corin, the Saint, in front).
+const fiveHeroes = [...veilSiege.heroes, BATCH_ONE.find(h => h.id === 'metta')!];
+// Boss phases (owner 2026-10-22): at 70% the warden calls two rift wisps from the back row (hard mode: also a second
+// shard crawler, if there is room); at 35% it charges, then strikes with a cataclysm and rift waves that hit the whole
+// party. P02 (owner 2026-10-31): the warden no longer stands alone at the start: a shard crawler (f2) and a rift wisp
+// (b3) guard it from round 1, so the full field reaches five when it calls the rift (draft).
+const wardenWisps = foes(10, [['b1', SPECIES.riftWisp, { reserve: true }], ['b2', SPECIES.riftWisp, { reserve: true }], ['f2', SPECIES.shardCrawler], ['b3', SPECIES.riftWisp], ['f3', SPECIES.shardCrawler, { reserve: true }]]);
 export const riftWarden: EncounterDefinition = {
-  ...veilSiege, id: 'rift-warden', version: 19, level: 10, name: 'ศึกผู้คุมรอยแยก',
-  phases: [{ sourceId: 'f1', below: 70, summon: ['b1', 'b2'], hardSummon: ['f2'], name: 'Call the Rift' }, { sourceId: 'f1', below: 35, name: 'Rift Awakening' }],
+  ...veilSiege, heroes: fiveHeroes, id: 'rift-warden', version: 20, level: 10, name: 'ศึกผู้คุมรอยแยก',
+  phases: [{ sourceId: 'f1', below: 70, summon: ['b1', 'b2'], hardSummon: ['f3'], name: 'Call the Rift' }, { sourceId: 'f1', below: 35, name: 'Rift Awakening' }],
   // The Veilbound Sentinel, an ancient gate guardian cracked by the rift (mini boss art: gold and violet).
   enemies: [...wardenWisps.enemies, { id: 'f1', row: 'front', large: true, boss: true, speed: 70, name: 'Rift Warden', displayName: 'ผู้คุมรอยแยก', maxHp: 350, color: 0xd9bf86, art: 'foe_sentinel' }],
   intents: [...wardenWisps.intents,
@@ -247,6 +252,20 @@ export const crawlerPack: EncounterDefinition = { ...veilSiege, id: 'crawler-pac
 export const riftHost: EncounterDefinition = { ...veilSiege, id: 'rift-host', version: 4, level: 8, name: 'ทัพรอยแยก',
   ...foes(8, [['f1', S.riftChanneler], ['f2', S.shardCrawler], ['b1', S.riftWisp]]) };
 
+// P02 (OD-05, draft): five-foe sets that use the appended slots `f3`/`b3` (3 front/2 back and 2 front/3 back). The last
+// foe opens on the fifth party slot so the fifth hero is aimed at too; older sets keep their slot 0–3 moves. Their
+// reference party is five (the four plus Corin, the Saint, in front).
+const fifth = (set: Pick<EncounterDefinition, 'enemies' | 'intents'>): Pick<EncounterDefinition, 'enemies' | 'intents'> => {
+  const last = set.enemies.at(-1)!.id; const first = set.intents.findIndex(i => i.sourceId === last);
+  return { ...set, intents: set.intents.map((i, n) => n === first ? { ...i, targetSlot: 4 } : i) };
+};
+// Map 2 at Lv5: a thorn host, three front.
+export const thornHost: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes, id: 'thorn-host', version: 1, level: 5, name: 'ทัพหนามป่าลึก',
+  ...fifth(foes(5, [['f1', S.thornBeetle], ['f2', S.stalker], ['f3', S.thornBeetle], ['b1', S.sporePuff], ['b2', S.sporePuff]])) };
+// Map 3 at Lv8: a rift legion, three back.
+export const riftLegion: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes, id: 'rift-legion', version: 1, level: 8, name: 'กองทัพวิญญาณรอยแยก',
+  ...fifth(foes(8, [['f1', S.shardCrawler], ['f2', S.shardCrawler], ['b1', S.riftWisp], ['b2', S.riftWisp], ['b3', S.riftWisp]])) };
+
 export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, crystalStampede, riftWarden, eliteTuskChief, eliteBriarLord, miniVeilGolem, vanguardCaptain,
-  slimePair, batSwarm, slimeNest, tuskerBats, beetleSpore, beetleWall, stalkerSpore, forestSwarm, channelerWisps, crawlerPack, riftHost];
+  slimePair, batSwarm, slimeNest, tuskerBats, beetleSpore, beetleWall, stalkerSpore, forestSwarm, channelerWisps, crawlerPack, riftHost, thornHost, riftLegion];
 export const encounterById = (id: string): EncounterDefinition | undefined => encounters.find(e => e.id === id);

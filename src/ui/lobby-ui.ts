@@ -9,10 +9,10 @@ import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gea
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BossPower, ActionId, HeroDefinition } from '../core/battle/types';
 import { withParty } from '../core/battle/engine';
-import { hardReason, activeGuides, guideDone, featureMap, featureOpen, NAME_MAX, mapUnlocked, boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
+import { hardReason, reserveSlots, activeGuides, guideDone, featureMap, featureOpen, NAME_MAX, mapUnlocked, boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
 import { isBigTree } from '../core/world/talents';
 import { salvageValue } from '../core/world/equipment';
-import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SHOP_ITEMS, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
+import { PARTY_SLOTS, POTION_IDS, SHOP_ITEMS, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
 import { campProgress, levelOf, recommendedLane, starred, type EncounterLookup } from '../core/world/world';
 import { emptyTomes, levelableSkills, skillLevelReason, tradeReason } from '../core/world/tomes';
 import type { TomeLine, TomeSize } from '../core/world/types';
@@ -340,7 +340,7 @@ export class LobbyUI {
     if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-lobby="pick" data-group="${group}" aria-label="${groupName[group]} ช่อง ${slot + 1} ว่าง"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
     const h = this.hero(id); const text = heroText[id]!; const lane = laneName(this.lanes(p)[id] ?? h.lane);
     return `<button id="lobby-member-${id}" class="team-card" data-lobby="pick" data-hero="${id}" data-group="${group}" aria-pressed="${this.picked === id}"
-      aria-label="${groupName[group]}${group === 'deployed' ? ` ช่อง ${slot + 1}` : ''} · ${text.name} ${p.members[id]!.stars} ดาว ${text.role} ${lane} เลือด ${h.maxHp}">${group === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.stars(p.members[id]!.stars)}<small>Lv${levelOf(this.map, p)} · เลือด ${h.maxHp}</small><small class="lane">${text.role} · ${lane}</small></button>`;
+      aria-label="${groupName[group]}${group === 'deployed' ? ` ช่อง ${slot + 1}` : ''} · ${text.name} ${p.members[id]!.stars} ดาว ${text.role} ${lane} เลือด ${h.maxHp}">${group === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.stars(p.members[id]!.stars)}<small>Lv${levelOf(this.map, p)} · HP ${h.maxHp}</small><small class="lane">${text.role} · ${lane}</small></button>`;
   }
   // Every character the company can hold (P01): the catalog without parked characters it does not own (OD-14).
   private catalogSize(p: Profile): number { return this.heroes.filter(h => !this.map.company.parked?.includes(h.id) || p.company.includes(h.id)).length; }
@@ -370,9 +370,9 @@ export class LobbyUI {
     const empty = this.benchFilter === 'archived' ? 'ยังไม่มีใครอยู่ในคลังสมาชิก' : all.length ? 'ไม่พบสมาชิกตามตัวกรอง' : 'ทุกคนอยู่ในทีมที่จะพาไปแล้ว';
     return `${this.campLine(p)}<h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3><div class="team-grid">${row(p.party.deployed, 'deployed', PARTY_SLOTS)}</div>
       ${formationGrid({ prefix: 'lobby', attr: 'lobby', deployed: p.party.deployed, lanes: this.lanes(p), recommended: recommendedLane(this.lookup, this.map), picked: this.lanePick })}
-      <h3>${icon('camp')} สำรอง <span class="camp-embers">พาเข้าด่าน สลับได้ในกระเป๋านอกการต่อสู้</span></h3><div class="team-grid">${row(p.party.reserve, 'reserve', RESERVE_SLOTS)}</div>
+      <h3>${icon('camp')} สำรอง <span class="camp-embers">${p.party.reserve.length}/${reserveSlots(p, this.map)} · ปลดเพิ่มตามบท · พาเข้าด่าน สลับได้ในกระเป๋านอกการต่อสู้</span></h3><div class="team-grid">${row(p.party.reserve, 'reserve', reserveSlots(p, this.map))}</div>
       <h3>${icon('rest')} ในค่าย <span class="camp-embers">ไม่ได้เข้าด่านรอบนี้</span></h3>
-      ${p.company.length > PARTY_SLOTS + RESERVE_SLOTS || archivedCount ? `<div class="bench-tools"><label class="bench-search"><span class="sr-only">ค้นหาสมาชิกในค่าย</span><input id="bench-search" type="search" data-lobby-search="bench" placeholder="ค้นหาชื่อหรืออาชีพ" value="${this.escape(this.benchQuery)}" autocomplete="off"></label><div class="bench-filters" role="group" aria-label="กรองสมาชิกในค่าย">${filters}</div></div>` : ''}
+      ${p.company.length > PARTY_SLOTS + reserveSlots(p, this.map) || archivedCount ? `<div class="bench-tools"><label class="bench-search"><span class="sr-only">ค้นหาสมาชิกในค่าย</span><input id="bench-search" type="search" data-lobby-search="bench" placeholder="ค้นหาชื่อหรืออาชีพ" value="${this.escape(this.benchQuery)}" autocomplete="off"></label><div class="bench-filters" role="group" aria-label="กรองสมาชิกในค่าย">${filters}</div></div>` : ''}
       <div class="team-grid bench">${bench.map((id, i) => this.card(p, id, 'bench', i)).join('')}${this.picked && groupOf(p, this.picked) !== 'bench' && this.benchFilter !== 'archived' ? this.card(p, undefined, 'bench', bench.length) : ''}${!bench.length && !this.picked ? `<p class="camp-note" id="bench-empty">${empty}</p>` : ''}</div>
       ${this.picked ? this.memberPanel(p, this.picked) : ''}
       ${this.picked ? `<p class="camp-note picked-hint" id="lobby-hint">เลือก${heroText[this.picked]!.name}แล้ว · แตะคนหรือช่องว่างในกลุ่มอื่นเพื่อสลับ แตะซ้ำเพื่อยกเลิก</p>`

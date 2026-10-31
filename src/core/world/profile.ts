@@ -5,8 +5,8 @@ import { memberTalentReason, talentsSpent } from './talents';
 import type { Lane, GuideDefinition, GuideKind, LobbyFeature, Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
 import { addTomes, dismissTomes, emptyTomes, firstClearTomes, tomeCount } from './tomes';
-import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, SET_IDS } from './types';
-import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, recommendedLane, rollPercent, rosterIds, type EncounterLookup } from './world';
+import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, SET_IDS } from './types';
+import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, recommendedLane, rollPercent, reserveCap, rosterIds, type EncounterLookup } from './world';
 import { laneReason, withLane } from './formation';
 import type { ActionId } from '../battle/types';
 
@@ -19,7 +19,7 @@ export function newProfile(map: MapDefinition, seed: number, first: readonly str
     bossLoot:{}, hunt:{pity:{}}, seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...first], members: Object.fromEntries(first.map(id => [id, { stars: 1, dupes: 0 }])), campXp: 0,
     party: { deployed: [...first], reserve: [] },
-    forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], overflow:[],storageTier:0, nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, cleared: [], last: null,
+    forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], overflow:[],storageTier:0, nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0, calm: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, cleared: [], last: null,
   };
 }
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
@@ -82,6 +82,12 @@ export function hireReason(profile: Profile, map: MapDefinition, lookup: Encount
   if (profile.bank.gold < map.company.hireCost) return 'gold';
   return profile.members[id] && profile.members[id]!.stars >= map.company.maxStars ? 'maxed' : '';
 }
+// P02 (OD-11): the reserve unlocked by chapter: one entry of `company.reserveSlots` per map cleared (the last from then
+// on). A company that predates the chapter unlocks (`veteran`) has the largest reserve.
+export function reserveSlots(profile: Pick<Profile, 'cleared' | 'veteran'>, map: Pick<MapDefinition, 'company'>): number {
+  const slots = map.company.reserveSlots;
+  return profile.veteran ? slots[slots.length - 1]! : slots[Math.min(profile.cleared.length, slots.length - 1)]!;
+}
 // P01: the company holds every unique catalog ID (no cap, no paid slot) and every member fights at the camp level.
 // Hiring someone already in the company stores a duplicate for star upgrades instead (never a second ID).
 // A new mercenary joins the company and, if there is room, the reserve for the next trip.
@@ -93,7 +99,7 @@ export function hire(initial: Profile, map: MapDefinition, lookup: EncounterLook
   if (duplicate) profile.members[id]!.dupes++;
   else {
     profile.members[id] = { stars: 1, dupes: 0 }; profile.company.push(id);
-    if (profile.party.reserve.length < RESERVE_SLOTS) profile.party.reserve.push(id);
+    if (profile.party.reserve.length < reserveSlots(profile, map)) profile.party.reserve.push(id);
   }
   return { profile, event: { type: 'hired', heroId: id, duplicate } };
 }
@@ -216,7 +222,7 @@ export function groupOf(profile: Profile, id: string): Group | undefined {
   if (profile.party.reserve.includes(id)) return 'reserve';
   return profile.company.includes(id) ? 'bench' : undefined;
 }
-export function placeMember(initial: Profile, id: string, target: Group, other?: string): ProfileResult {
+export function placeMember(initial: Profile, map: Pick<MapDefinition, 'company'>, id: string, target: Group, other?: string): ProfileResult {
   const from = groupOf(initial, id);
   if (!from || from === target || (other && groupOf(initial, other) !== target)) return blocked(initial, 'busy');
   const profile = structuredClone(initial); const { party } = profile;
@@ -226,7 +232,7 @@ export function placeMember(initial: Profile, id: string, target: Group, other?:
     if (src) src[src.indexOf(id)] = other;
     if (dst) dst[dst.indexOf(other)] = id;
   } else {
-    if (dst && dst.length >= (target === 'deployed' ? PARTY_SLOTS : RESERVE_SLOTS)) return blocked(initial, 'full');
+    if (dst && dst.length >= (target === 'deployed' ? PARTY_SLOTS : reserveSlots(initial, map))) return blocked(initial, 'full');
     if (src) src.splice(src.indexOf(id), 1);
     dst?.push(id);
   }
@@ -277,18 +283,18 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   const profile = structuredClone(initial); const ids = [...profile.party.deployed, ...profile.party.reserve];
   const potions = Object.fromEntries(POTION_IDS.map(id => [id, Math.min(map.potions.carry, profile.potions[id])])) as Potions;
   for (const id of POTION_IDS) profile.potions[id] -= potions[id];
-  const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions, campXp: profile.campXp }, profile.tutorialDone);
+  const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions, campXp: profile.campXp, reserveSlots: reserveSlots(profile, map) }, profile.tutorialDone);
   run.hunt=startHunt(profile);if(map.bossCharm)run.bossLoot=startBossPlan(profile,map);
   if (hard) run.hard = true;
   // Story recruits not yet in the company (owner 2026-10-23). Before the prologue they come along as guests in free
   // party slots and fight it with the team, with any prologue-only guests (world.ts `recruit` parts them after the win).
   // Past the prologue each waits for its own point (`arrivals`), a roster slot kept for it; the prologue's own recruit
   // joins at once. Everyone joins at the camp level (P01).
-  let free = PARTY_SLOTS + RESERVE_SLOTS - rosterIds(run).length;
+  const carry = PARTY_SLOTS + reserveCap(run); let free = carry - rosterIds(run).length;
   const temporary = run.tutorialDone ? [] : (map.prologueGuests ?? []);
   for (const { hero: id, at } of [...map.recruits ?? [], ...temporary.map(hero => ({ hero, at: 'prologue' as const }))]) {
     if (profile.company.includes(id) || rosterIds(run).includes(id)) continue;
-    if (temporary.includes(id) ? rosterIds(run).length >= PARTY_SLOTS + RESERVE_SLOTS : free <= 0) continue;
+    if (temporary.includes(id) ? rosterIds(run).length >= carry : free <= 0) continue;
     if (!temporary.includes(id)) free--;
     if (run.tutorialDone && at !== 'prologue') { (run.arrivals ??= []).push(id); continue; }
     const group = run.roster.deployed.length < PARTY_SLOTS ? 'deployed' : 'reserve';
@@ -320,7 +326,7 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   for (const id of run.recruited ?? []) {
     if (profile.members[id]) continue;
     profile.members[id] = { stars: 1, dupes: 0 }; profile.company.push(id);
-    const group = profile.party.deployed.length < PARTY_SLOTS ? 'deployed' : profile.party.reserve.length < RESERVE_SLOTS ? 'reserve' : undefined;
+    const group = profile.party.deployed.length < PARTY_SLOTS ? 'deployed' : profile.party.reserve.length < reserveSlots(profile, map) ? 'reserve' : undefined;
     if (group) profile.party[group].push(id);
   }
   for (const id of run.guests ?? []) {

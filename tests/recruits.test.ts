@@ -87,7 +87,7 @@ describe('story recruits and the starter recruitment', () => {
     const boss = findTiles(map, 'boss')[0]!; walk(stepBack(s.position, route(s.position, boss, true)), true);
     if (canRest(s, map)) s = rest(s, map, lookup).state;
     s = move(s, map, route(s.position, boss, true)[0]!, lookup).state; expect(s.battle?.kind).toBe('boss');
-    expect(s.recruited).toEqual(['tracer', ...picked, 'weaver']); expect(s.arrivals).toBeUndefined(); expect(s.roster.reserve).toEqual(['weaver']);
+    expect(s.recruited).toEqual(['tracer', ...picked, 'weaver']); expect(s.arrivals).toBeUndefined(); expect(s.roster.deployed).toContain('weaver'); expect(s.roster.reserve).toEqual([]);
     s = fight(s); walk(findTiles(map, 'goal')[0]!, true); expect(s.completed).toBe(true);
     const home = settle({ ...fresh(), tutorialDone: true }, s, 'complete', map);
     expect(home.company).toEqual(['guardian', 'tracer', ...picked, 'weaver']); expect(home.members.healer).toBeUndefined();
@@ -103,7 +103,7 @@ describe('story recruits and the starter recruitment', () => {
   it('saves v38 runs with arrivals and a pending recruitment; rejects forged offers; an older map 1 run settles home', () => {
     const s = won(); const profile = fresh(); let raw = '';
     saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, { profile, run: s });
-    expect(JSON.parse(raw).version).toBe(44); expect(parseGame(raw, chapterOne, lookup, MAPS).run).toEqual(s);
+    expect(JSON.parse(raw).version).toBe(45); expect(parseGame(raw, chapterOne, lookup, MAPS).run).toEqual(s);
     for (const forge of [(r: Record<string, unknown>) => { r.arrivals = { tracer: 1 }; }, (r: Record<string, unknown>) => { r.arrivals = { healer: 1 }; },
       (r: Record<string, unknown>) => { (r.draft as { offers: string[] }).offers = ['brann', 'sefa', 'garran']; }, (r: Record<string, unknown>) => { (r.draft as { left: number }).left = 3; }]) {
       const bad = JSON.parse(raw); forge(bad.run); expect(() => parseGame(JSON.stringify(bad), chapterOne, lookup, MAPS)).toThrow();

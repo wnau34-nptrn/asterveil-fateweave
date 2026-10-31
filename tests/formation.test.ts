@@ -90,7 +90,7 @@ describe('formation in the world and save v36', () => {
     expect(battleData(run, map, lookup)!.heroes.find(h => h.id === 'weaver')!.lane).toBe('front');
     expect(setLane(run, map, lookup, 'weaver', 'back').event.type).toBe('blocked');
     let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, { profile: p, run });
-    expect(JSON.parse(raw).version).toBe(44); expect(parseGame(raw, map, lookup)).toEqual({ profile: p, run });
+    expect(JSON.parse(raw).version).toBe(45); expect(parseGame(raw, map, lookup)).toEqual({ profile: p, run });
     const bad = JSON.parse(raw); bad.run.roster.lanes.weaver = 'middle'; expect(() => parseGame(JSON.stringify(bad), map, lookup)).toThrow();
     const stray = JSON.parse(raw); stray.run.battle.lanes = { mira: 'front' }; expect(() => parseGame(JSON.stringify(stray), map, lookup)).toThrow();
   });
@@ -100,7 +100,7 @@ describe('formation in the world and save v36', () => {
     expect(moved.event.type).toBe('roster');
     expect(battleLanes(moved.state, map, lookup)).toEqual({ guardian: 'back', tracer: 'front', weaver: 'front', healer: 'back' });
     let p = setPartyLane(newProfile(map, 5), map, lookup, 'weaver', 'front').profile;
-    p = placeMember(p, 'weaver', 'reserve').profile; p = placeMember(p, 'weaver', 'deployed').profile;
+    p = placeMember(p, map, 'weaver', 'reserve').profile; p = placeMember(p, map, 'weaver', 'deployed').profile;
     expect(formation(p.party, rec).weaver).toBe('front');
   });
   it('a v35 battle keeps every class lane, uncapped', () => {

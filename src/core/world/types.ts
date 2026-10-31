@@ -65,7 +65,12 @@ export interface MapDefinition {
   // Chests sit on floor tiles; loot tables are drafts until playtested.
   chests: readonly ChestDefinition[];
   loot: { tutorial: LootTable; boss: LootTable; chest: Readonly<Record<ChestTier, LootTable>> };
-  camp: { restHealPercent: number; reviveHpPercent: number };
+  // P02 (OD-11, draft numbers): after a won battle every standing reserve member heals `reserveHealPercent` of max HP
+  // (A6c). Fatigue: each battle a deployed member gains one point and a reserve member loses one (0..`cap`); from each
+  // entry of `steps` reached its hits and direct heals are cut by another `stepPercent` (never SPD or turns). A camp rest
+  // takes `rest` points from everyone brought.
+  camp: { restHealPercent: number; reviveHpPercent: number; reserveHealPercent: number; relightWins: number;
+    fatigue: { cap: number; steps: readonly number[]; stepPercent: number; rest: number } };
   // Hero ids that join free at ★1, deployed in this slot order.
   startingRoster: readonly string[];
   // Hireable mercenaries beyond the teaching party (the hero catalog is both together).
@@ -202,11 +207,12 @@ export interface EventRules {
 // ---- Map potions (2D-5, draft numbers) ----
 // salve heals one standing member, tonic every standing member (percent of max HP); repel stops random
 // encounters for `repelSteps` steps. Potions are used on the map only, never in battle.
-export type PotionId = 'salve' | 'tonic' | 'repel';
-export const POTION_IDS: readonly PotionId[] = ['salve', 'tonic', 'repel'];
+// P02 (OD-11): the calming draught takes `calmRecover` fatigue points from one member (save v45).
+export type PotionId = 'salve' | 'tonic' | 'repel' | 'calm';
+export const POTION_IDS: readonly PotionId[] = ['salve', 'tonic', 'repel', 'calm'];
 export type Potions = Record<PotionId, number>;
 export interface PotionRules {
-  carry: number; salvePercent: number; tonicPercent: number; repelSteps: number;
+  carry: number; salvePercent: number; tonicPercent: number; repelSteps: number; calmRecover: number;
   // Brewing cost in the lobby, per potion.
   brew: Readonly<Record<PotionId, { ore: number; dust: number }>>;
   // A chest adds one potion at `chance` percent (if the party can carry it), picked by weight.
@@ -310,6 +316,8 @@ export interface CompanyRules {
   starCosts: readonly { dupes: number; ore: number }[];
   // Seals may stand in for this share (percent, rounded up) of a star's duplicates.
   sealSharePercent: number;
+  // P02 (OD-11): reserve slots by chapters cleared (index = maps cleared, the last entry from then on).
+  reserveSlots: readonly number[];
 }
 // Levels belong to the whole camp (P01, save v44: `Profile.campXp`/`ExpeditionState.campXp`); members carry none.
 // `talents` (2D-1b): ranks spent per node; missing means none. `gear` (2D-2): equipped items by slot.
@@ -322,7 +330,8 @@ export interface MemberProgress { stars: number; dupes: number; talents?: Talent
 // The team brought into one expedition and their star progress (fixed during the run).
 // `potions`: what the expedition packs (2D-5; missing = none).
 // `campXp`: the camp's EXP the expedition sets out with (P01; missing = 0).
-export interface Company { roster: Roster; members: Record<string, MemberProgress>; potions?: Potions; campXp?: number }
+// `reserveSlots`: the reserve the camp has unlocked (P02; missing = the legacy four).
+export interface Company { roster: Roster; members: Record<string, MemberProgress>; potions?: Potions; campXp?: number; reserveSlots?: number }
 
 // ---- Lobby profile (persistent between expeditions) ----
 export type RunOutcome = 'complete' | 'withdrawn' | 'wiped';
@@ -409,9 +418,12 @@ export type ProfileEvent =
   | { type: 'bought'; item: ShopItemId; heroId?: string; uid?: number }
   | { type: 'refreshed' };
 export interface ProfileResult { profile: Profile; event: ProfileEvent }
-// Up to 4 deployed (slot order = enemy target slots) and 4 in reserve, swapped at camps.
-export const PARTY_SLOTS = 4;
-export const RESERVE_SLOTS = 4;
+// P02 (OD-05/OD-11): up to 5 deployed (slot order = enemy target slots) and a reserve unlocked by chapter (3 → 4 → 5,
+// `company.reserveSlots`), at most 10 carried. RESERVE_SLOTS is the largest reserve; LEGACY_RESERVE what a run started
+// before v45 keeps.
+export const PARTY_SLOTS = 5;
+export const RESERVE_SLOTS = 5;
+export const LEGACY_RESERVE = 4;
 // Formation (save v36, owner 2026-10-22): `lanes` holds the column a member was set to stand in; a member without
 // one stands in its class's recommended lane. Each column takes at most LANE_SLOTS deployed members.
 export type Lane = 'front' | 'back';
@@ -443,6 +455,9 @@ export interface ExpeditionState {
   // The camp's EXP during this run (P01, save v44): set from the profile on departure, raised once per victory and
   // handed back to the profile when the run settles. Every roster member fights at its level.
   campXp: number;
+  // P02 (save v45): the reserve slots this run may fill (fixed at departure; missing = LEGACY_RESERVE) and each brought
+  // member's fatigue points (OD-11; missing or absent = 0). Fatigue belongs to the run and ends with it.
+  reserveSlots?: number; fatigue?: Record<string, number>;
   // Hard mode (A9, save v33): set on departure, never changed during the run.
   hard?: true;
   bossLoot?:BossPlan;
@@ -453,8 +468,9 @@ export interface ExpeditionState {
   // `hp` covers every roster member; the battle entry covers the deployed ones.
   revealed: string; roster: Roster; members: Record<string, MemberProgress>;
   hp: Record<string, number>; camp: Point | null;
-  // `restReady` is the campfire: one rest, then it needs a won battle to relight.
-  resources: Resources; openedChests: string[]; restReady: boolean;
+  // `restReady` is the campfire: one rest, then it relights after `camp.relightWins` won battles (P02, owner 2026-10-31:
+  // 3, so potions matter between rests). `restWins` counts the wins since the last rest (missing = 0).
+  resources: Resources; openedChests: string[]; restReady: boolean; restWins?: number;
   tutorialDone: boolean; bossDefeated: boolean; completed: boolean;
   wins: number; defeats: number; battle: ActiveBattle | null;
   // Items found on this expedition (kept on complete/withdraw; a wipe keeps only the best `wipeKeep`) and dry random wins for the pity.

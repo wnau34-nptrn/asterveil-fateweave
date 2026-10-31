@@ -30,14 +30,15 @@ export const forestMap: MapDefinition = {
   specialZones: { S: 'thicket', C: 'camp', B: 'sanctum', G: 'sanctum' },
   zones: [
     { id: 'thicket', name: 'เส้นทางป่าทึบ', safe: false, base: 7, step: 4, cap: 40, levels: [3, 6], sets: ['shadow', 'thorn'],
-      pool: [{ encounterId: 'beetle-spore', weight: 3 }, { encounterId: 'beetle-wall', weight: 2 }, { encounterId: 'stalker-spore', weight: 2 }, { encounterId: 'forest-swarm', weight: 1 }, { encounterId: 'shadow-stalker', weight: 1 }, { encounterId: 'rift-whelp', weight: 1 }],
+      pool: [{ encounterId: 'beetle-spore', weight: 3 }, { encounterId: 'beetle-wall', weight: 2 }, { encounterId: 'stalker-spore', weight: 2 }, { encounterId: 'forest-swarm', weight: 1 }, { encounterId: 'thorn-host', weight: 1 }, { encounterId: 'shadow-stalker', weight: 1 }, { encounterId: 'rift-whelp', weight: 1 }],
       loot: { ore: [5, 7], gold: [2, 5], ember: [0, 12], seal: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ทางออกป่า', safe: true, base: 0, step: 0, cap: 0, pool: [] },
   ],
   bossEncounterId: 'elite-briar-lord', bossLevel: 6,
   // A10 (2026-10-22): plain attacks beat the thorn lord every time; its foes fight with 130% HP and move damage.
-  bossPercent: 130,
+  // P02 (draft): 130 → 145 and the gate elite 120 → 135 for the team of five (docs/validation/p02/README_TH.md).
+  bossPercent: 145,
   bossDrop: { weights: [0, 30, 45, 20, 5], zoneSets: true },
   // Seren, who parted after the map 1 prologue, comes back as the thorn lord's fight starts (owner 2026-10-23).
   recruits: [{ hero: 'garran', at: 'camp' }, { hero: 'healer', at: 'boss' }],
@@ -55,7 +56,7 @@ export const forestMap: MapDefinition = {
   },
   elites: [
     // Forced: the only way north to the boss.
-    { id: 'forest-gate', x: 8, y: 7, encounterId: 'elite-tusk-chief', forced: true, level: 5, percent: 120 },
+    { id: 'forest-gate', x: 8, y: 7, encounterId: 'elite-tusk-chief', forced: true, level: 5, percent: 135 },
     // Optional: a dead-end pocket in the north-west.
     { id: 'forest-matriarch', x: 1, y: 6, encounterId: 'thicket-ambush', forced: false, level: 6 },
   ],

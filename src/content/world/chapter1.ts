@@ -47,10 +47,10 @@ export const chapterOne: MapDefinition = {
       pool: [{ encounterId: 'slime-pair', weight: 3 }, { encounterId: 'bat-swarm', weight: 2 }, { encounterId: 'slime-nest', weight: 1 }, { encounterId: 'scout-patrol', weight: 2 }, { encounterId: 'tusker-bats', weight: 1 }],
       loot: { ore: [4, 6], gold: [2, 4], ember: [0, 8], seal: [0, 0] } },
     { id: 'thicket', name: 'พงหนามชายแดน', safe: false, base: 6, step: 4, cap: 45, levels: [7, 9], sets: ['shadow', 'thorn'],
-      pool: [{ encounterId: 'beetle-spore', weight: 3 }, { encounterId: 'beetle-wall', weight: 2 }, { encounterId: 'stalker-spore', weight: 2 }, { encounterId: 'forest-swarm', weight: 1 }, { encounterId: 'shadow-stalker', weight: 1 }, { encounterId: 'rift-whelp', weight: 1 }],
+      pool: [{ encounterId: 'beetle-spore', weight: 3 }, { encounterId: 'beetle-wall', weight: 2 }, { encounterId: 'stalker-spore', weight: 2 }, { encounterId: 'forest-swarm', weight: 1 }, { encounterId: 'thorn-host', weight: 1 }, { encounterId: 'shadow-stalker', weight: 1 }, { encounterId: 'rift-whelp', weight: 1 }],
       loot: { ore: [5, 8], gold: [2, 5], ember: [0, 12], seal: [0, 0] } },
     { id: 'scar', name: 'แผลรอยแยก', safe: false, base: 8, step: 5, cap: 50, levels: [9, 10], sets: ['starveil', 'mender'],
-      pool: [{ encounterId: 'channeler-wisps', weight: 2 }, { encounterId: 'crawler-pack', weight: 2 }, { encounterId: 'rift-host', weight: 1 }, { encounterId: 'veil-siege', weight: 1 }, { encounterId: 'rear-ambush', weight: 1 }, { encounterId: 'crystal-stampede', weight: 1 }],
+      pool: [{ encounterId: 'channeler-wisps', weight: 2 }, { encounterId: 'crawler-pack', weight: 2 }, { encounterId: 'rift-host', weight: 1 }, { encounterId: 'rift-legion', weight: 1 }, { encounterId: 'veil-siege', weight: 1 }, { encounterId: 'rear-ambush', weight: 1 }, { encounterId: 'crystal-stampede', weight: 1 }],
       loot: { ore: [7, 11], gold: [4, 6], ember: [0, 15], seal: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ประตูรอยแยก', safe: true, base: 0, step: 0, cap: 0, pool: [] },
@@ -58,7 +58,8 @@ export const chapterOne: MapDefinition = {
   bossEncounterId: 'rift-warden', bossLevel: 11,
   // A10 (2026-10-22): the warden died in about six rounds having landed two blows (campaign simulation,
   // docs/validation/balance-sim/CAMPAIGN.md), so its foes fight with 160% HP and move damage here.
-  bossPercent: 160,
+  // P02 (owner 2026-10-31): the warden now starts with two guards; 160 → 125 keeps the first clear near P01 (draft).
+  bossPercent: 125,
   revealRadius: 3,
   // Draft phase 2A numbers: chests sit in side pockets away from the main route.
   chests: [

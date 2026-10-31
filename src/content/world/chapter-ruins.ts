@@ -53,6 +53,8 @@ export const ruinsMap: MapDefinition = {
     boss: { ore: [30, 30], gold: [12, 12], ember: [1, 0], seal: [1, 0] },
     chest: { common: { ore: [8, 12], gold: [4, 6], ember: [0, 30], seal: [0, 0] }, rare: { ore: [14, 18], gold: [7, 9], ember: [1, 0], seal: [0, 0] } },
   },
+  // P02 (draft): a team of five beat this boss with plain attacks 58% of the time at 100%; 115% keeps a choice needed.
+  bossPercent: 115,
   elites: [],
   // No rift seal on the teaching map: the captain can be challenged at once.
   quest: { need: 0, objectives: [] },

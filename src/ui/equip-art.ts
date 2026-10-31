@@ -18,7 +18,10 @@ export function gearArt(item: Item): string {
   const art = c ? `<i class="equip-sprite" style="--atlas:url(${equipArtUrl('gear_items')});--cols:${cols};--rows:${rows};${at(c.col, c.row, cols, rows)}"></i>` : icon(slotIcon[item.slot]);
   return `<span class="gear-art" data-rarity="${item.rarity}" aria-hidden="true">${art}${item.set ? setEmblem(item.set) : ''}${item.boss?'<i class="boss-gear-marker">◆</i>':''}</span>`;
 }
+// The calming draught (P02) has no painted frame yet: its line icon stands in until Codex paints one.
+export const PAINTED_POTIONS = ['salve', 'tonic', 'repel'] as const;
 export function potionArt(id: PotionId | 'dust' | 'gold'): string {
+  if (id === 'calm') return `<span class="potion-art potion-art-icon" aria-hidden="true">${icon('potionCalm')}</span>`;
   const c = potionCell(id);
   const { cols, rows } = equipAtlasSize.potion_items;
   return `<span class="potion-art" aria-hidden="true"><i class="equip-sprite" style="--atlas:url(${equipArtUrl('potion_items')});--cols:${cols};--rows:${rows};${at(c.col, c.row, cols, rows)}"></i></span>`;

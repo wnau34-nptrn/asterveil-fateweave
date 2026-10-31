@@ -142,7 +142,7 @@ describe('map events', () => {
   it('traveller: giving a salve pays ore and a seal', () => {
     const ev = event('traveller');
     expect(eventChoiceReason(at(ev), map, 'help')).toBe('salve');
-    const r = chooseEvent(at(ev, { potions: { salve: 1, tonic: 0, repel: 0 } }), map, lookup, 'help').state;
+    const r = chooseEvent(at(ev, { potions: { salve: 1, tonic: 0, repel: 0, calm: 0 } }), map, lookup, 'help').state;
     expect(r.potions.salve).toBe(0); expect(r.resources).toMatchObject({ ore: R.traveller.ore, seal: R.traveller.seal }); expect(r.eventsDone).toEqual([ev.id]);
   });
   it('bandits: sneaking past maxes the zone pressure; fighting is a harder battle that always drops an item', () => {

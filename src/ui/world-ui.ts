@@ -11,8 +11,8 @@ import { shortcutBlocked } from '../platform/keyboard';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 
 import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId } from '../core/world/types';
-import { canManage, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, levelOf, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
-import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, type Lane } from '../core/world/types';
+import { canManage, fatigueCut, fatigueOf, reserveCap, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, levelOf, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
+import { PARTY_SLOTS, POTION_IDS, type Lane } from '../core/world/types';
 import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
 import { heroArt, portrait, starRow } from './portraits';
@@ -21,6 +21,7 @@ import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroTe
 import { tomeCount } from '../core/world/tomes';
 import { icon, lineIcon, type IconName } from './icons';
 import { gearArt, potionArt } from './equip-art';
+import { fatigueDot } from './fatigue';
 import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
 
 export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; lane(id: string, lane: Lane, other?: string): void; withdraw(): void; openChest(): void;
@@ -160,8 +161,8 @@ export class WorldUI {
           case 'withdraw': if (this.view?.locked) break;
             if (!this.confirmWithdraw) { this.confirmWithdraw = true; this.renderCamp(); this.root.querySelector<HTMLElement>('#withdraw')?.focus(); break; }
             this.confirmWithdraw = false; dialog('#camp-dialog').close(); this.host.withdraw(); break;
-          case 'pack': this.bagTab = 'items'; this.picked = undefined; this.lanePick = undefined; this.salvePick = false; this.renderPack(); dialog('#pack-dialog').showModal(); break;
-          case 'bag-tab': this.bagTab = button.dataset.tab as WorldUI['bagTab']; this.picked = undefined; this.lanePick = undefined; this.salvePick = false; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-tab-${this.bagTab}`)?.focus(); break;
+          case 'pack': this.bagTab = 'items'; this.picked = undefined; this.lanePick = undefined; this.potionPick = undefined; this.renderPack(); dialog('#pack-dialog').showModal(); break;
+          case 'bag-tab': this.bagTab = button.dataset.tab as WorldUI['bagTab']; this.picked = undefined; this.lanePick = undefined; this.potionPick = undefined; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-tab-${this.bagTab}`)?.focus(); break;
           case 'inventory-pick': this.inventoryPick=button.dataset.key;this.renderPack();this.root.querySelector<HTMLElement>('#inventory-hero-'+rosterIds(this.view!.state).find(id=>{const i=runEquipment(this.view!.state).find(e=>e.key===this.inventoryPick)?.item;return i&&(i.slot!=='weapon'||i.hero===id);}))?.focus();break;
           case 'inventory-character': this.openCharacter(button.dataset.hero!,'gear',button,button.dataset.key);break;
           case 'bag-member': this.openCharacter(button.dataset.hero!, 'gear', button); break;
@@ -170,8 +171,8 @@ export class WorldUI {
           case 'potion': if (!this.view?.locked) {
             const potion = button.dataset.potion as PotionId;
             // A salve first asks who drinks it.
-            if (potion === 'salve' && !button.dataset.hero) { this.salvePick = !this.salvePick; this.renderPack(); this.root.querySelector<HTMLElement>('#potion-salve')?.focus(); break; }
-            this.salvePick = false; this.host.usePotion(potion, button.dataset.hero); this.renderPack(); this.root.querySelector<HTMLElement>(`#potion-${potion}`)?.focus();
+            if ((potion === 'salve' || potion === 'calm') && !button.dataset.hero) { this.potionPick = this.potionPick === potion ? undefined : potion; this.renderPack(); this.root.querySelector<HTMLElement>(`#potion-${potion}`)?.focus(); break; }
+            this.potionPick = undefined; this.host.usePotion(potion, button.dataset.hero); this.renderPack(); this.root.querySelector<HTMLElement>(`#potion-${potion}`)?.focus();
           } break;
           case 'event-close': dialog('#event-dialog').close(); break;
           case 'draft-pick': if (!this.view?.locked) this.host.draft(Number(button.dataset.index)); break;
@@ -405,7 +406,7 @@ export class WorldUI {
     action.dataset.context = camp ? 'camp' : entrance ? 'entrance' : chest ? 'chest' : ev ? 'event' : 'none';
     const label = camp ? 'พัก' : entrance ? 'ทางออก' : chest ? 'เปิด' : ev ? 'ดู' : 'โต้ตอบ';
     action.innerHTML = `${icon(camp ? 'rest' : entrance ? 'flag' : chest ? 'chest' : 'talk')}<span>${label}</span>${available ? '<i class="context-dot"></i>' : ''}`;
-    const caption = camp ? (canRest(s, this.map) ? 'พักฟื้นหรือชุบคนที่ล้ม' : fallen ? 'ชุบคนที่ล้มด้วยถ่าน' : 'ไฟแคมป์รอศึกถัดไป') : entrance ? 'จัดทีมหรือถอนตัวกลับค่าย' : chest ? 'เปิดกล่องสมบัติ' : ev ? eventText[ev.kind].name : 'ยืนบนแคมป์หรือกล่องสมบัติ';
+    const caption = camp ? (canRest(s, this.map) ? 'พักฟื้นหรือชุบคนที่ล้ม' : fallen ? 'ชุบคนที่ล้มด้วยถ่าน' : `ไฟแคมป์ติดอีก ${this.map.camp.relightWins - (s.restWins ?? 0)} ศึก`) : entrance ? 'จัดทีมหรือถอนตัวกลับค่าย' : chest ? 'เปิดกล่องสมบัติ' : ev ? eventText[ev.kind].name : 'ยืนบนแคมป์หรือกล่องสมบัติ';
     action.setAttribute('aria-label', camp ? `แคมป์ · เปิดหน้าต่างพักและชุบ · ${caption}` : entrance ? `ทางเข้าด่าน · ${caption}` : chest ? 'เปิดกล่องสมบัติ' : ev ? `${eventText[ev.kind].name} · เปิดหน้าต่างตัวเลือก` : 'โต้ตอบ · ยังไม่มีจุดให้โต้ตอบ ยืนบนแคมป์หรือกล่องสมบัติ');
     this.root.querySelector('#action-caption')!.textContent = caption;
   }
@@ -420,7 +421,8 @@ export class WorldUI {
     if (gained && !this.reduced.matches) { pack.classList.remove('gain'); void pack.offsetWidth; pack.classList.add('gain'); }
   }
 
-  private salvePick = false;
+  // A salve or calming draught first asks who drinks it (P02 adds the draught).
+  private potionPick: 'salve' | 'calm' | undefined;
   // Map potions (2D-5): use buttons with live reasons; a salve lists who can drink it.
   private potionSection(s: ExpeditionState): string {
     const reasons: Record<string, string> = { none: 'ไม่มีแล้ว', full: 'เลือดเต็มทุกคน', active: 'ยังออกฤทธิ์อยู่', busy: 'ใช้ตอนนี้ไม่ได้' };
@@ -428,16 +430,20 @@ export class WorldUI {
       if (s.battle || s.completed) return reasons.busy!;
       if (s.potions[potion] <= 0) return reasons.none!;
       const hurt = rosterIds(s).some(id => s.hp[id]! > 0 && s.hp[id]! < this.hero(id, s).maxHp);
+      if (potion === 'calm') return rosterIds(s).some(id => fatigueOf(s, id) > 0) ? '' : 'ไม่มีใครเหนื่อย';
       if (potion !== 'repel' && !hurt) return reasons.full!;
       return potion === 'repel' && s.repel > 0 ? reasons.active! : '';
     };
     const rows = POTION_IDS.map(id => { const reason = why(id);
       return `<li data-potion="${id}">${potionArt(id)}<div><b>${potionText[id].name}</b><small>${potionText[id].help(this.map.potions)}</small></div><strong>${s.potions[id]}</strong>
-        <button id="potion-${id}" data-world="potion" data-potion="${id}" class="secondary"${reason ? ' disabled' : ''} aria-expanded="${id === 'salve' ? this.salvePick : false}">${reason || (id === 'salve' && this.salvePick ? 'เลือกคน' : 'ใช้')}</button></li>`; }).join('');
-    const targets = this.salvePick ? rosterIds(s).filter(id => s.hp[id]! > 0 && s.hp[id]! < this.hero(id, s).maxHp)
-      .map(id => `<button id="salve-${id}" data-world="potion" data-potion="salve" data-hero="${id}" class="secondary salve-target">${portrait(id)}<span>${heroText[id]!.name}<small>${s.hp[id]}/${this.hero(id, s).maxHp}</small></span></button>`).join('') : '';
+        <button id="potion-${id}" data-world="potion" data-potion="${id}" class="secondary"${reason ? ' disabled' : ''} aria-expanded="${id === 'salve' || id === 'calm' ? this.potionPick === id : false}">${reason || (this.potionPick === id ? 'เลือกคน' : 'ใช้')}</button></li>`; }).join('');
+    const pick = this.potionPick;
+    const targets = pick === 'salve' ? rosterIds(s).filter(id => s.hp[id]! > 0 && s.hp[id]! < this.hero(id, s).maxHp)
+      .map(id => `<button id="salve-${id}" data-world="potion" data-potion="salve" data-hero="${id}" class="secondary salve-target">${portrait(id)}<span>${heroText[id]!.name}<small>${s.hp[id]}/${this.hero(id, s).maxHp}</small></span></button>`).join('')
+      : pick === 'calm' ? rosterIds(s).filter(id => fatigueOf(s, id) > 0)
+      .map(id => `<button id="calm-${id}" data-world="potion" data-potion="calm" data-hero="${id}" class="secondary salve-target">${portrait(id)}<span>${heroText[id]!.name}<small>ล้า ${fatigueOf(s, id)}</small></span></button>`).join('') : '';
     return `<h3 class="pack-gear-title">${icon('potionSalve')} ยา <small>พกได้อย่างละ ${this.map.potions.carry} · ใช้บนแผนที่เท่านั้น</small></h3><ul class="pack-potions">${rows}</ul>
-      ${targets ? `<div class="salve-targets" role="group" aria-label="เลือกคนดื่มยาฟื้นแผล">${targets}</div>` : ''}${s.repel > 0 ? `<p class="world-stats">ยาไล่อสูรเหลือ ${s.repel} ก้าว</p>` : ''}`;
+      ${targets ? `<div class="salve-targets" role="group" aria-label="เลือกคนดื่ม${pick ? potionText[pick].name : ''}">${targets}</div>` : ''}${s.repel > 0 ? `<p class="world-stats">ยาไล่อสูรเหลือ ${s.repel} ก้าว</p>` : ''}`;
   }
   // Map bag (2026-10-17): items (potions and resources), gear (wear finds and own items) and team (party and details).
   private renderPack(): void {
@@ -493,8 +499,8 @@ export class WorldUI {
     const reviveHp = (max: number) => Math.max(1, Math.ceil(max * this.map.camp.reviveHpPercent / 100));
     return `
       <section class="camp-section" role="tabpanel"><h3>${icon('rest')} พักฟื้น</h3>
-        <p>ทุกคนในทีมและตัวสำรองที่ยังยืนอยู่ฟื้นเลือด ${this.map.camp.restHealPercent}% ของเลือดสูงสุด ไฟแคมป์ใช้ได้ 1 ครั้ง แล้วต้องชนะศึกอีกครั้งจึงจุดใหม่ได้</p>
-        <button id="camp-rest" data-world="camp-rest" class="primary"${ready ? '' : ' disabled'}>${ready ? `พักฟื้น +${this.map.camp.restHealPercent}%` : 'ไฟแคมป์มอด · ชนะศึกก่อน'}</button></section>
+        <p>ทุกคนในทีมและตัวสำรองที่ยังยืนอยู่ฟื้นเลือด ${this.map.camp.restHealPercent}% ของเลือดสูงสุด และลดความเหนื่อย ${this.map.camp.fatigue.rest} แต้ม ไฟแคมป์ใช้ได้ 1 ครั้ง แล้วต้องชนะศึก ${this.map.camp.relightWins} ครั้งจึงจุดใหม่ได้ (ใช้ร่วมทุกแคมป์) · ระหว่างนั้นใช้ยาและสลับตัวสำรอง</p>
+        <button id="camp-rest" data-world="camp-rest" class="primary"${ready ? '' : ' disabled'}>${ready ? `พักฟื้น +${this.map.camp.restHealPercent}%` : `ไฟแคมป์มอด · ชนะอีก ${this.map.camp.relightWins - (s.restWins ?? 0)} ศึก`}</button></section>
       <section class="camp-section"><h3>${icon('ember')} ชุบชีวิต <span class="camp-embers">ถ่านคืนชีพ ${embers}</span></h3>
         ${fallen.length ? `<ul class="revive-list">${fallen.map(h => { const ok = canRevive(s, this.map, h.id); return `<li>${portrait(h.id)}<span><b>${heroText[h.id]!.name}</b><small>ฟื้นด้วยเลือด ${reviveHp(h.maxHp)}/${h.maxHp}</small></span><button id="camp-revive-${h.id}" data-world="camp-revive" data-hero="${h.id}" class="secondary"${ok ? '' : ' disabled'} aria-label="ชุบ${heroText[h.id]!.name} ใช้ถ่านคืนชีพ 1">${ok ? 'ชุบ · ใช้ 1' : 'ไม่มีถ่าน'}</button></li>`; }).join('')}</ul>`
           : '<p>ไม่มีใครล้ม</p>'}
@@ -505,7 +511,10 @@ export class WorldUI {
       if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-world="team-pick" data-side="${side}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} ว่าง` : 'ช่องสำรองว่าง'}"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
       const h = this.hero(id); const hp = s.hp[id] ?? 0; const text = heroText[id]!;
       const lane = laneName(this.lanes(s)[id] ?? h.lane);
-      return `<button id="${prefix}-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${levelOf(this.map, s)} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small></button>`;
+      // P02 (OD-11, owner 2026-10-31): a fatigue dot in the corner (green fresh, yellow −10%, red −20%).
+      const tired = fatigueOf(s, id), cut = fatigueCut(this.map, tired);
+      const fatigue = `<span class="team-fatigue" data-fatigue="${tired}">${fatigueDot(cut)}</span>`;
+      return `<button id="${prefix}-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}${tired ? ` ความเหนื่อย ${tired}${cut ? ` โจมตีและรักษาลด ${cut}%` : ''}` : ''}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${levelOf(this.map, s)} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small>${fatigue}</button>`;
     };
     const row = (ids: string[], side: 'deployed' | 'reserve', size: number) => Array.from({ length: size }, (_, i) => card(ids[i], side, i)).join('');
     const deployedUp = s.roster.deployed.some(id => s.hp[id]! > 0);
@@ -513,8 +522,9 @@ export class WorldUI {
         <h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3>
         <div class="team-grid">${row(s.roster.deployed, 'deployed', PARTY_SLOTS)}</div>
         ${formationGrid({ prefix, attr: 'world', deployed: s.roster.deployed, lanes: this.lanes(s), recommended: this.recommended, picked: this.lanePick, disabled: !!this.view?.locked || !canManage(s), hp: id => s.hp[id] ?? 0 })}
-        <h3>${icon('camp')} สำรอง</h3>
-        <div class="team-grid">${row(s.roster.reserve, 'reserve', RESERVE_SLOTS)}</div>
+        <h3>${icon('camp')} สำรอง <span class="camp-embers">${s.roster.reserve.length}/${reserveCap(s)} · ชนะแล้วฟื้นเลือด ${this.map.camp.reserveHealPercent}% · หายเหนื่อย 1</span></h3>
+        <div class="team-grid">${row(s.roster.reserve, 'reserve', reserveCap(s))}</div>
+        <p class="camp-note fatigue-legend">ความเหนื่อยล้า: ${fatigueDot(0)} ไม่ล้า · ${fatigueDot(10)} พลังโจมตี/รักษา −10% · ${fatigueDot(20)} −20% · ลงสนามศึกละ +1 สำรอง −1</p>
         <p class="camp-note" id="${prefix}-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนในทีมหรือในแผนการยืน หรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ไม่ได้พาตัวสำรองมา · เลือกตัวสำรองได้ที่ค่ายก่อนออกเดินทาง'}</p>${this.picked&&rosterIds(s).includes(this.picked)?this.heroDetail(s,this.picked,prefix==='bag-team'?'bag':'camp'):''}</section>`;
   }
 

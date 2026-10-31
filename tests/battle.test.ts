@@ -307,7 +307,8 @@ describe('party slots', () => {
   it('rejects empty, oversized or duplicated parties and plays a smaller party', () => {
     const [guardian, tracer] = data.heroes;
     expect(() => withParty(data, [])).toThrow(); expect(() => withParty(data, [guardian!, guardian!])).toThrow();
-    expect(() => withParty(data, [...data.heroes, { ...guardian!, id: 'extra' }])).toThrow();
+    expect(() => withParty(data, [...data.heroes, { ...guardian!, id: 'extra' }, { ...guardian!, id: 'extra2' }])).toThrow();
+    expect(withParty(data, [...data.heroes, { ...guardian!, id: 'extra' }]).heroes).toHaveLength(5);
     const pair = withParty(data, [guardian!, tracer!]);
     const s = createBattle(pair);
     expect(s.heroes.map(h => h.id)).toEqual(['guardian', 'tracer']);
