@@ -50,7 +50,10 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #battle-view .hero-hp { font-size: 11px; color: #e1f4ec; }
 #battle-view .hero-card .hp-track { margin: 2px 0 0; }
 #battle-view .hero-card .barrier-info { position: static; font-size: 9px; }
-#battle-view .hero-card .fatigue-info { position: absolute; top: 1px; right: 3px; color: #ff9f8a; font-size: 9px; line-height: 1; }
+#battle-view .hero-card .fatigue-info { position: absolute; top: 2px; right: 6px; color: #ff9f8a; font-size: 8px; line-height: 1; white-space: nowrap; }
+/* Owner 2026-10-31: a move for our side can be cast on a hero's card in the HUD. */
+#battle-view .hero-card.hud-target.valid-target { border-color: #e4c783; box-shadow: inset 0 0 0 1px #e4c78399, 0 0 10px #e4c78344; cursor: pointer; }
+#battle-view .hero-card.hud-target:disabled { opacity: .55; }
 #battle-view .command-dock { padding: 0 6px 6px; margin: 0; background: transparent; }
 #battle-view #selected-hero { display: flex; align-items: center; height: 44px; margin: 0; gap: 4px; }
 #battle-view #selected-hero .selected-info { flex: 1; min-width: 0; }

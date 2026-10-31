@@ -1,5 +1,5 @@
 import { cooldownTargets, hasCap, skillCooldown, actionReason, beginBattle, createBattle, currentHeroId, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
-import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TurnStage } from '../core/battle/types';
+import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TargetOption, TurnStage } from '../core/battle/types';
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
 import { sfx } from '../platform/sfx';
 import { BattlePlayback, stageTiming } from './battle-playback';
@@ -507,8 +507,17 @@ export class BattleUI {
 
   private renderParty(disabled: boolean): void {
     const s = this.displayState; const d = this.data;
+    // Owner 2026-10-31: a move for our side (an ally, oneself or the whole team) can also be cast by tapping the hero's
+    // card in the HUD; it commits exactly like tapping that hero on the field.
+    const allySide = this.targeting && !disabled && this.started && !this.busy && s.outcome === 'active' && ['ally', 'self', 'party'].includes(targetKind(this.action));
+    const hudTargets = new Map(allySide ? this.currentTargets().map(t => [t.id, t] as const) : []);
     this.set('party', this.data.heroes.map((h, i) => {
       const hero = s.heroes[i]!; const text = heroText[h.id]!; const selected = h.id === this.heroId; const waiting = s.outcome === 'active' && !selected;
+      const hud = hudTargets.get(h.id);
+      if (hud) {
+        const label = `ใช้${d.skills[this.action].name}กับ${targetKind(this.action) === 'party' ? 'ทั้งทีม โดยแตะ' : ''}${text.name} · เลือด ${hero.hp}/${h.maxHp}${!hud.valid ? ` · ${reasonThai(hud.reason)}` : ''}`;
+        return `<button id="hero-${h.id}" data-ui="target" data-value="${h.id}" data-lane="${h.lane}" class="hero-card ${h.id} hud-target ${hud.valid ? 'valid-target' : ''} ${hero.hp <= 0 ? 'fallen' : ''} ${selected ? 'selected' : ''}" aria-label="${escapeHtml(label)}" ${hud.valid ? '' : 'disabled'}><span class="hero-copy"><strong>${text.name}</strong><span class="hero-hp"><span class="hp-amount">${hero.hp} / ${h.maxHp}</span>${h.fatigue ? `<small class="barrier-info fatigue-info">ล้า −${h.fatigue}%</small>` : ''}</span><span class="hp-track"><span style="width:${hero.hp / h.maxHp * 100}%"></span></span></span></button>`;
+      }
       const skills = h.actions.filter(a => a !== 'attack');
       return `<button id="hero-${h.id}" data-ui="hero" data-value="${h.id}" data-lane="${h.lane}" class="hero-card ${h.id} ${hero.hp <= 0 ? 'fallen' : ''} ${selected ? 'selected' : 'waiting-turn'} ${this.actingActor === h.id ? 'active-actor' : ''}" aria-pressed="${selected}" ${disabled || hero.hp <= 0 || waiting ? 'disabled' : ''}><span class="hero-emblem">${this.portrait(h.id)}</span><span class="hero-copy"><span class="hero-class"><b>${h.lane === 'front' ? 'FRONT' : 'BACK'}</b> ${text.role}</span><strong>${text.name}</strong><span class="hero-hp"><span class="hp-amount"><span class="hp-label">HP</span> ${hero.hp} / ${h.maxHp}</span>${hero.barrier ? `<small class="barrier-info">โล่ ${hero.barrier}</small>` : ''}${hero.evading ? '<small class="barrier-info">ก้าวเงา</small>' : ''}${s.taunt?.heroId === h.id ? '<small class="barrier-info">ยั่วยุ</small>' : ''}${s.song?.heroId === h.id ? `<small class="barrier-info">${d.skills[s.song.action].name}</small>` : ''}${s.rally?.ids.includes(h.id) ? '<small class="barrier-info">ตั้งรับหมู่</small>' : ''}${s.sanctuary?.targetId === h.id ? '<small class="barrier-info">คุ้มภัย</small>' : ''}${s.counter?.heroId === h.id && s.counter.wall ? '<small class="barrier-info">กำแพงทวน</small>' : ''}${h.fatigue ? `<small class="barrier-info fatigue-info" aria-label="เหนื่อยล้า โจมตีและรักษาลด ${h.fatigue}%">ล้า −${h.fatigue}%</small>` : ''}${hero.hp <= 0 ? ' · ล้มแล้ว' : ''}</span><span class="hp-track"><span style="width:${hero.hp / h.maxHp * 100}%"></span></span></span><span class="hero-skills">${skills.map(action => {
         const remaining = Math.max(0, (hero.cooldowns[action] ?? 0) - s.round);
@@ -533,13 +542,18 @@ export class BattleUI {
     }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><p class="target-hint">${!this.targeting ? 'เลือกสกิลเพื่อเล็งเป้าหมาย' : noTarget || `${d.skills[this.action].name} — ` + (targetKind(this.action) === 'party' ? 'แตะเพื่อนในสนามเพื่อใช้สกิลกับทั้งทีม' : targetKind(this.action) === 'enemies' ? 'แตะศัตรูตัวใดก็ได้เพื่อโจมตีทุกตัว' : this.action === 'brace' ? 'แตะตัวเองในสนามเพื่อตั้งทวน' : this.action === 'evade' ? 'แตะตัวเองในสนามเพื่อก้าวเงา' : this.action === 'taunt' ? 'แตะตัวเองในสนามเพื่อยั่วยุ' : this.action === 'valor' || this.action === 'mend' ? 'แตะตัวเองในสนามเพื่อบรรเลงเพลง' : targetKind(this.action) === 'self' ? `แตะตัวเองในสนามเพื่อใช้${d.skills[this.action].name}` : targetKind(this.action) === 'ally' ? 'แตะเพื่อนในสนามที่มีเครื่องหมาย' : 'แตะศัตรูในสนามที่มีเครื่องหมาย')}</p>`);
   }
 
+  // The targets of the selected action as the field shows them (a party/area move lists everyone it covers).
+  private currentTargets(): TargetOption[] {
+    const s = this.displayState; const d = this.data;
+    const options = targetOptions(s, d, this.heroId, this.action);
+    return targetKind(this.action) === 'party' ? d.heroes.map(h => ({ ...options[0]!, id:h.id, valid:options[0]!.valid && s.heroes.some(v => v.id===h.id && v.hp>0) }))
+      : targetKind(this.action) === 'enemies' ? d.enemies.map(e => ({ ...options[0]!, id:e.id, valid:options[0]!.valid && s.enemies.some(v => v.id===e.id && v.hp>0) })) : options;
+  }
   private renderFieldTargets(): void {
     if (!this.scene) return;
     const s = this.displayState; const d = this.data;
     const disabled = !this.targeting || !this.scene.isReady || !this.started || this.busy || s.outcome !== 'active';
-    const options = targetOptions(s, d, this.heroId, this.action);
-    const targets = targetKind(this.action) === 'party' ? d.heroes.map(h => ({ ...options[0]!, id:h.id, valid:options[0]!.valid && s.heroes.some(v => v.id===h.id && v.hp>0) }))
-      : targetKind(this.action) === 'enemies' ? d.enemies.map(e => ({ ...options[0]!, id:e.id, valid:options[0]!.valid && s.enemies.some(v => v.id===e.id && v.hp>0) })) : options;
+    const targets = this.currentTargets();
     this.set('field-targets', targets.map(t => {
       const position = this.scene!.actorTargets.get(t.id); if (!position) return '';
       const hero = s.heroes.find(h => h.id===t.id); const enemy = s.enemies.find(e => e.id===t.id);

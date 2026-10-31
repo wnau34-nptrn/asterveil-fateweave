@@ -40,7 +40,14 @@ for (const id of ['rift-legion', 'thorn-host']) test(`5v5 field ${id} at 390px: 
   await page.keyboard.press('1'); await expect(page.locator('#action-attack')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('.field-target.valid-target').first().click();
   await expect.poll(() => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.battle.commands.length, key)).toBe(1);
-  if (dir) { await expect(page.locator('#action-attack')).toBeEnabled({ timeout: 20000 }); await page.waitForTimeout(400); await page.screenshot({ path: `${dir}/team-five-${id}-turn2-390.png` }); }
+  // Owner 2026-10-31: the mage's ward (a move for our side) is cast by tapping Seren's card in the HUD, once.
+  await expect(page.locator('#action-ward')).toBeEnabled({ timeout: 20000 }); await page.locator('#action-ward').click();
+  await expect(page.locator('#party #hero-healer.hud-target.valid-target')).toBeEnabled();
+  if (dir) { await page.waitForTimeout(400); await page.screenshot({ path: `${dir}/team-five-${id}-turn2-390.png` }); }
+  const box = await page.locator('#party #hero-healer').boundingBox(); expect(Math.min(box!.width, box!.height)).toBeGreaterThanOrEqual(44);
+  await page.locator('#party #hero-healer').click();
+  await expect.poll(() => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.battle.commands.at(-1), key)).toMatchObject({ heroId: 'weaver', action: 'ward', targetId: 'healer' });
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.battle.commands.length, key)).toBe(2);
   expect(errors).toEqual([]); await context.close();
 });
 test('map bag team tab: five on the field, the reserve and fatigue at 390px', async ({ browser }) => {

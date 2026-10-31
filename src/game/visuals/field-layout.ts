@@ -32,6 +32,7 @@ const SLOT_IDS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const;
 // (owner 2026-10-22).
 const COLUMNS = [.115, .37, .63, .885] as const;
 const UNIT_WIDTH = .295;
+export const UNIT_SCALE = .95;
 const FULL_COLUMNS = [.12, .37, .62, .865] as const;
 const columnOf = (slot: number): number => slot === 8 ? 0 : slot === 9 ? 1 : slot === 10 ? 2 : slot === 11 ? 3 : slot >> 1;
 export const partner = (slot: number): number => slot % 2 ? slot - 1 : slot + 1;
@@ -78,7 +79,8 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
   };
   let size = widthCap;
   while (size > fitted && geometry(size).available < size * TRIO_STEP + panel + below(size)) size--;
-  const { bottom, step } = geometry(size);
+  // Owner 2026-10-31 (P02, ten on the field): every unit is drawn UNIT_SCALE of the fitted size; rows keep their spacing.
+  const step = geometry(size).step; size = Math.floor(size * UNIT_SCALE); const bottom = geometry(size).bottom;
   const rows = [bottom - 2 * step, bottom - step, bottom];
   const cellWidth = width * .22, iconSize = 12, compact = false;
   const maxIcons = Math.min(3, Math.floor((cellWidth - 18) / (iconSize + 2)));
