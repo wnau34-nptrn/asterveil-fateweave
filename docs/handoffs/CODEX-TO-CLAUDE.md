@@ -1,6 +1,6 @@
 # Codex → Claude handoff
 
-## 2026-10-31 — P01 เลเวลค่ายร่วม/ถือครอง/เซฟ v44 (Claude, สาขา `claude/p01-camp-level`)
+## 2026-10-31 — P01 เลเวลค่ายร่วม/ถือครอง/เซฟ v44 (Claude, PR #126 merged `c9f760f`, Pages 41180379308 สำเร็จ)
 
 - กฎ: `Profile.campXp`/`ExpeditionState.campXp` เป็น EXP ค่ายเดียว (สมาชิกไม่มี level/exp), `levelXp`/`campLevel`/`levelOf`/`campProgress` ใน `core/world/world.ts`, `memberDef(lookup, map, party, id)` รับ profile/run, `talentPoints`/`memberTalentReason` รับ Lv ค่าย; ชนะ = EXP ค่ายครั้งเดียว ไม่คูณจำนวนคน, ไม่มี joinBehind/reserve/catch-up; `settle` คืนค่า (max) ไม่บวกซ้ำ
 - ถือครอง: ไม่มี COMPANY_CAP, `company.parked` (thiran/wila) ไม่ขึ้นบอร์ด/featured, `hireable()`, คลังสมาชิก `Profile.archived` + `setArchived`; UI จัดทีม: แถบเลเวลค่าย, ถือครอง n/N, ค้นหา/ตัวกรอง/คลัง

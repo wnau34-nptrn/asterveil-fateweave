@@ -18,7 +18,7 @@ Branch `claude/w8-animation-vfx-close`: coverage table generated from code (`npm
 
 ## P01 camp level and ownership — 2026-10-31
 
-Branch `claude/p01-camp-level` (save v44): one camp Lv/EXP (`campXp` on profile and run, EXP once per victory, content cap), every owned ID at the camp level, no company cap, OD-14 parked thiran/wila never offered anew, bench search/filter/archive, v43 → v44 from the best owned member (never summed; runs carry on, a battle whose deployed levels change restarts from entry; raw backup kept). Deviation from P00 S09 (no forced withdraw) and the sim gate re-baseline are explained in `docs/validation/p01/README_TH.md`. Field team stays 4 (P02); star points stay until P04.
+PR #126 merged `c9f760f` (quality + four browser shards passed on `9d6e6a6`); Pages run 41180379308 published it (build + four browser shards + deploy). Branch `claude/p01-camp-level` (save v44): one camp Lv/EXP (`campXp` on profile and run, EXP once per victory, content cap), every owned ID at the camp level, no company cap, OD-14 parked thiran/wila never offered anew, bench search/filter/archive, v43 → v44 from the best owned member (never summed; runs carry on, a battle whose deployed levels change restarts from entry; raw backup kept). Deviation from P00 S09 (no forced withdraw) and the sim gate re-baseline are explained in `docs/validation/p01/README_TH.md`. Field team stays 4 (P02); star points stay until P04.
 
 ## Song/Shadow R3 — 2026-10-30 (owner-approved)
 
