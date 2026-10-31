@@ -42,11 +42,11 @@
    "name": "Lyra",
    "sheet": "lyra",
    "atlas": {
-    "image": "lyra_pilot.b2e071012643.webp",
-    "atlas": "lyra_pilot.a6e63bff9845.json",
+    "image": "lyra_pilot.dd738abb2d5e.webp",
+    "atlas": "lyra_pilot.636ce98c0df5.json",
     "frames": 38,
-    "decodedBytes": 8924160,
-    "downloadBytes": 2314819
+    "decodedBytes": 8213096,
+    "downloadBytes": 2267683
    },
    "reactions": {
     "hit": "sprite 17,18",
@@ -176,11 +176,11 @@
    "name": "Lio",
    "sheet": "lio",
    "atlas": {
-    "image": "lio_a6.86a716dad3e8.webp",
-    "atlas": "lio_a6.09193c4bc99f.json",
+    "image": "lio_a6.0e320b5472e5.webp",
+    "atlas": "lio_a6.86cf4bee30c2.json",
     "frames": 40,
-    "decodedBytes": 5200896,
-    "downloadBytes": 1455863
+    "decodedBytes": 4504248,
+    "downloadBytes": 1445917
    },
    "reactions": {
     "hit": "sprite 17,18",
@@ -246,11 +246,11 @@
    "name": "Cerise",
    "sheet": "lalin",
    "atlas": {
-    "image": "lalin_a7.3154c54936f2.webp",
-    "atlas": "lalin_a7.e8d3473f11c9.json",
+    "image": "lalin_a7.bf7c364d96f2.webp",
+    "atlas": "lalin_a7.ddd1dcd27468.json",
     "frames": 41,
-    "decodedBytes": 6528000,
-    "downloadBytes": 2176220
+    "decodedBytes": 6102656,
+    "downloadBytes": 2167393
    },
    "reactions": {
     "hit": "sprite 31,32,33",

@@ -1,0 +1,466 @@
+{
+ "heaviestHeroes": [
+  "lyra",
+  "lalin",
+  "seren",
+  "brann",
+  "lio"
+ ],
+ "always": {
+  "decoded": 70960264,
+  "download": 10097859,
+  "atlases": 12
+ },
+ "optional": {
+  "boss": {
+   "decoded": 8233104,
+   "download": 1565035
+  },
+  "foe": {
+   "decoded": 6620856,
+   "download": 1835842
+  },
+  "saintDance": {
+   "decoded": 7050888,
+   "download": 1688188
+  }
+ },
+ "rows": [
+  {
+   "id": "first-clash",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "hunter",
+    "vargoth"
+   ],
+   "four": {
+    "decoded": 32214248,
+    "download": 9709893
+   },
+   "five": {
+    "decoded": 36718496,
+    "download": 11155810
+   },
+   "bossFx": false
+  },
+  {
+   "id": "scout-patrol",
+   "foes": 1,
+   "reserves": 0,
+   "foeSheets": [
+    "sprite"
+   ],
+   "four": {
+    "decoded": 25082088,
+    "download": 7750712
+   },
+   "five": {
+    "decoded": 29586336,
+    "download": 9196629
+   },
+   "bossFx": false
+  },
+  {
+   "id": "rift-whelp",
+   "foes": 1,
+   "reserves": 0,
+   "foeSheets": [
+    "tusker"
+   ],
+   "four": {
+    "decoded": 28105960,
+    "download": 8597651
+   },
+   "five": {
+    "decoded": 32610208,
+    "download": 10043568
+   },
+   "bossFx": false
+  },
+  {
+   "id": "thicket-ambush",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "mycon",
+    "beetle",
+    "matriarch"
+   ],
+   "four": {
+    "decoded": 31662312,
+    "download": 10115239
+   },
+   "five": {
+    "decoded": 36166560,
+    "download": 11561156
+   },
+   "bossFx": true
+  },
+  {
+   "id": "shadow-stalker",
+   "foes": 1,
+   "reserves": 0,
+   "foeSheets": [
+    "stalker"
+   ],
+   "four": {
+    "decoded": 26386664,
+    "download": 8088650
+   },
+   "five": {
+    "decoded": 30890912,
+    "download": 9534567
+   },
+   "bossFx": false
+  },
+  {
+   "id": "veil-siege",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "raider",
+    "brute"
+   ],
+   "four": {
+    "decoded": 32112872,
+    "download": 9977024
+   },
+   "five": {
+    "decoded": 36617120,
+    "download": 11422941
+   },
+   "bossFx": false
+  },
+  {
+   "id": "rear-ambush",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "riftweaver",
+    "channeler"
+   ],
+   "four": {
+    "decoded": 29840616,
+    "download": 9089024
+   },
+   "five": {
+    "decoded": 34344864,
+    "download": 10534941
+   },
+   "bossFx": false
+  },
+  {
+   "id": "crystal-stampede",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "golem",
+    "juggernaut"
+   ],
+   "four": {
+    "decoded": 31599848,
+    "download": 9895818
+   },
+   "five": {
+    "decoded": 36104096,
+    "download": 11341735
+   },
+   "bossFx": true
+  },
+  {
+   "id": "rift-warden",
+   "foes": 4,
+   "reserves": 3,
+   "foeSheets": [
+    "wisp",
+    "crawler",
+    "sentinel"
+   ],
+   "four": {
+    "decoded": 30384360,
+    "download": 9525026
+   },
+   "five": {
+    "decoded": 34888608,
+    "download": 10970943
+   },
+   "bossFx": true
+  },
+  {
+   "id": "elite-tusk-chief",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "sprite",
+    "tusker",
+    "sporepuff"
+   ],
+   "four": {
+    "decoded": 31016168,
+    "download": 9411760
+   },
+   "five": {
+    "decoded": 35520416,
+    "download": 10857677
+   },
+   "bossFx": true
+  },
+  {
+   "id": "elite-briar-lord",
+   "foes": 4,
+   "reserves": 1,
+   "foeSheets": [
+    "stalker",
+    "sporepuff",
+    "matriarch"
+   ],
+   "four": {
+    "decoded": 31578344,
+    "download": 9965070
+   },
+   "five": {
+    "decoded": 36082592,
+    "download": 11410987
+   },
+   "bossFx": true
+  },
+  {
+   "id": "mini-veil-golem",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "riftweaver",
+    "golem"
+   ],
+   "four": {
+    "decoded": 31166696,
+    "download": 9618459
+   },
+   "five": {
+    "decoded": 35670944,
+    "download": 11064376
+   },
+   "bossFx": false
+  },
+  {
+   "id": "vanguard-captain",
+   "foes": 4,
+   "reserves": 1,
+   "foeSheets": [
+    "hunter",
+    "vargoth",
+    "captain"
+   ],
+   "four": {
+    "decoded": 37012712,
+    "download": 11045970
+   },
+   "five": {
+    "decoded": 41516960,
+    "download": 12491887
+   },
+   "bossFx": true
+  },
+  {
+   "id": "slime-pair",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "dew",
+    "ember"
+   ],
+   "four": {
+    "decoded": 26411240,
+    "download": 8070922
+   },
+   "five": {
+    "decoded": 30915488,
+    "download": 9516839
+   },
+   "bossFx": false
+  },
+  {
+   "id": "bat-swarm",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "dew",
+    "bat"
+   ],
+   "four": {
+    "decoded": 27219176,
+    "download": 8180406
+   },
+   "five": {
+    "decoded": 31723424,
+    "download": 9626323
+   },
+   "bossFx": false
+  },
+  {
+   "id": "slime-nest",
+   "foes": 4,
+   "reserves": 0,
+   "foeSheets": [
+    "dew",
+    "ember",
+    "bat"
+   ],
+   "four": {
+    "decoded": 28383464,
+    "download": 8501133
+   },
+   "five": {
+    "decoded": 32887712,
+    "download": 9947050
+   },
+   "bossFx": false
+  },
+  {
+   "id": "tusker-bats",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "tusker",
+    "bat"
+   ],
+   "four": {
+    "decoded": 30078184,
+    "download": 9027862
+   },
+   "five": {
+    "decoded": 34582432,
+    "download": 10473779
+   },
+   "bossFx": false
+  },
+  {
+   "id": "beetle-spore",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "beetle",
+    "sporepuff"
+   ],
+   "four": {
+    "decoded": 27353320,
+    "download": 8324597
+   },
+   "five": {
+    "decoded": 31857568,
+    "download": 9770514
+   },
+   "bossFx": false
+  },
+  {
+   "id": "beetle-wall",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "beetle",
+    "sporepuff"
+   ],
+   "four": {
+    "decoded": 27353320,
+    "download": 8324597
+   },
+   "five": {
+    "decoded": 31857568,
+    "download": 9770514
+   },
+   "bossFx": false
+  },
+  {
+   "id": "stalker-spore",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "stalker",
+    "sporepuff"
+   ],
+   "four": {
+    "decoded": 28045544,
+    "download": 8544775
+   },
+   "five": {
+    "decoded": 32549792,
+    "download": 9990692
+   },
+   "bossFx": false
+  },
+  {
+   "id": "forest-swarm",
+   "foes": 4,
+   "reserves": 0,
+   "foeSheets": [
+    "beetle",
+    "sporepuff"
+   ],
+   "four": {
+    "decoded": 27353320,
+    "download": 8324597
+   },
+   "five": {
+    "decoded": 31857568,
+    "download": 9770514
+   },
+   "bossFx": false
+  },
+  {
+   "id": "channeler-wisps",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "channeler",
+    "wisp"
+   ],
+   "four": {
+    "decoded": 27328744,
+    "download": 8276775
+   },
+   "five": {
+    "decoded": 31832992,
+    "download": 9722692
+   },
+   "bossFx": false
+  },
+  {
+   "id": "crawler-pack",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "wisp",
+    "crawler"
+   ],
+   "four": {
+    "decoded": 26558696,
+    "download": 8115672
+   },
+   "five": {
+    "decoded": 31062944,
+    "download": 9561589
+   },
+   "bossFx": false
+  },
+  {
+   "id": "rift-host",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "channeler",
+    "wisp",
+    "crawler"
+   ],
+   "four": {
+    "decoded": 28688616,
+    "download": 8663544
+   },
+   "five": {
+    "decoded": 33192864,
+    "download": 10109461
+   },
+   "bossFx": false
+  }
+ ]
+}

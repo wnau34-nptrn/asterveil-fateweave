@@ -1,12 +1,12 @@
 {
   "lyra": {
-    "image": "lyra_pilot.b2e071012643.webp",
-    "atlas": "lyra_pilot.a6e63bff9845.json",
-    "width": 1280,
-    "height": 1743,
+    "image": "lyra_pilot.dd738abb2d5e.webp",
+    "atlas": "lyra_pilot.636ce98c0df5.json",
+    "width": 631,
+    "height": 3254,
     "frames": 38,
-    "decodedBytes": 8924160,
-    "downloadBytes": 2314819
+    "decodedBytes": 8213096,
+    "downloadBytes": 2267683
   },
   "hunter": {
     "image": "hunter_pilot.a2500d3fa495.webp",
@@ -171,13 +171,13 @@
     "downloadBytes": 1066697
   },
   "lio": {
-    "image": "lio_a6.86a716dad3e8.webp",
-    "atlas": "lio_a6.09193c4bc99f.json",
-    "width": 768,
-    "height": 1693,
+    "image": "lio_a6.0e320b5472e5.webp",
+    "atlas": "lio_a6.86cf4bee30c2.json",
+    "width": 662,
+    "height": 1701,
     "frames": 40,
-    "decodedBytes": 5200896,
-    "downloadBytes": 1455863
+    "decodedBytes": 4504248,
+    "downloadBytes": 1445917
   },
   "riftweaver": {
     "image": "riftweaver_a6.8f88afac40de.webp",
@@ -261,13 +261,13 @@
     "downloadBytes": 1372287
   },
   "lalin": {
-    "image": "lalin_a7.3154c54936f2.webp",
-    "atlas": "lalin_a7.e8d3473f11c9.json",
-    "width": 800,
-    "height": 2040,
+    "image": "lalin_a7.bf7c364d96f2.webp",
+    "atlas": "lalin_a7.ddd1dcd27468.json",
+    "width": 392,
+    "height": 3892,
     "frames": 41,
-    "decodedBytes": 6528000,
-    "downloadBytes": 2176220
+    "decodedBytes": 6102656,
+    "downloadBytes": 2167393
   },
   "matriarch": {
     "image": "matriarch_a9.9aec248e0338.webp",

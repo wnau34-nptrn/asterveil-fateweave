@@ -1,253 +1,253 @@
 {
-  "frames": {
-    "bash_prepare": {
-      "frame": {
-        "x": 8,
-        "y": 8,
-        "w": 512,
-        "h": 260
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 260
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 260
-      }
-    },
-    "bash_peak": {
-      "frame": {
-        "x": 536,
-        "y": 8,
-        "w": 512,
-        "h": 260
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 260
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 260
-      }
-    },
-    "bash_tail": {
-      "frame": {
-        "x": 1064,
-        "y": 8,
-        "w": 512,
-        "h": 260
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 260
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 260
-      }
-    },
-    "slam_prepare": {
-      "frame": {
-        "x": 8,
-        "y": 296,
-        "w": 512,
-        "h": 265
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 265
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 265
-      }
-    },
-    "slam_peak": {
-      "frame": {
-        "x": 536,
-        "y": 296,
-        "w": 512,
-        "h": 265
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 265
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 265
-      }
-    },
-    "slam_tail": {
-      "frame": {
-        "x": 1064,
-        "y": 296,
-        "w": 512,
-        "h": 265
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 265
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 265
-      }
-    },
-    "quake_prepare": {
-      "frame": {
-        "x": 8,
-        "y": 584,
-        "w": 512,
-        "h": 245
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 245
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 245
-      }
-    },
-    "quake_peak": {
-      "frame": {
-        "x": 536,
-        "y": 584,
-        "w": 512,
-        "h": 245
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 245
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 245
-      }
-    },
-    "quake_tail": {
-      "frame": {
-        "x": 1064,
-        "y": 584,
-        "w": 512,
-        "h": 245
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 245
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 245
-      }
-    },
-    "tremor_prepare": {
-      "frame": {
-        "x": 8,
-        "y": 872,
-        "w": 512,
-        "h": 254
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 254
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 254
-      }
-    },
-    "tremor_peak": {
-      "frame": {
-        "x": 536,
-        "y": 872,
-        "w": 512,
-        "h": 254
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 254
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 254
-      }
-    },
-    "tremor_tail": {
-      "frame": {
-        "x": 1064,
-        "y": 872,
-        "w": 512,
-        "h": 254
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 254
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 254
-      }
-    }
+ "frames": {
+  "bash_prepare": {
+   "frame": {
+    "x": 1,
+    "y": 1064,
+    "w": 512,
+    "h": 260
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 260
+   },
+   "sourceSize": {
+    "w": 512,
+    "h": 260
+   }
   },
-  "meta": {
-    "image": "earth_fx.webp",
-    "format": "RGBA8888",
-    "size": {
-      "w": 1584,
-      "h": 1152
-    },
-    "scale": "1"
+  "bash_peak": {
+   "frame": {
+    "x": 1,
+    "y": 802,
+    "w": 512,
+    "h": 260
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 260
+   },
+   "sourceSize": {
+    "w": 512,
+    "h": 260
+   }
+  },
+  "bash_tail": {
+   "frame": {
+    "x": 1,
+    "y": 1326,
+    "w": 512,
+    "h": 260
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 260
+   },
+   "sourceSize": {
+    "w": 512,
+    "h": 260
+   }
+  },
+  "slam_prepare": {
+   "frame": {
+    "x": 1,
+    "y": 535,
+    "w": 512,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 512,
+    "h": 265
+   }
+  },
+  "slam_peak": {
+   "frame": {
+    "x": 1,
+    "y": 268,
+    "w": 512,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 512,
+    "h": 265
+   }
+  },
+  "slam_tail": {
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 512,
+    "h": 265
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 265
+   },
+   "sourceSize": {
+    "w": 512,
+    "h": 265
+   }
+  },
+  "quake_prepare": {
+   "frame": {
+    "x": 1,
+    "y": 2603,
+    "w": 512,
+    "h": 245
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 245
+   },
+   "sourceSize": {
+    "w": 512,
+    "h": 245
+   }
+  },
+  "quake_peak": {
+   "frame": {
+    "x": 1,
+    "y": 2850,
+    "w": 512,
+    "h": 245
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 245
+   },
+   "sourceSize": {
+    "w": 512,
+    "h": 245
+   }
+  },
+  "quake_tail": {
+   "frame": {
+    "x": 1,
+    "y": 2356,
+    "w": 512,
+    "h": 245
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 245
+   },
+   "sourceSize": {
+    "w": 512,
+    "h": 245
+   }
+  },
+  "tremor_prepare": {
+   "frame": {
+    "x": 1,
+    "y": 2100,
+    "w": 512,
+    "h": 254
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 254
+   },
+   "sourceSize": {
+    "w": 512,
+    "h": 254
+   }
+  },
+  "tremor_peak": {
+   "frame": {
+    "x": 1,
+    "y": 1588,
+    "w": 512,
+    "h": 254
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 254
+   },
+   "sourceSize": {
+    "w": 512,
+    "h": 254
+   }
+  },
+  "tremor_tail": {
+   "frame": {
+    "x": 1,
+    "y": 1844,
+    "w": 512,
+    "h": 254
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 512,
+    "h": 254
+   },
+   "sourceSize": {
+    "w": 512,
+    "h": 254
+   }
   }
+ },
+ "meta": {
+  "image": "earth_fx.webp",
+  "format": "RGBA8888",
+  "size": {
+   "w": 514,
+   "h": 3096
+  },
+  "scale": "1"
+ }
 }

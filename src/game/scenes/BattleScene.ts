@@ -153,14 +153,18 @@ export class BattleScene extends Phaser.Scene {
     // telegraph and the older generic cues stand in.
     // Foe-signature and Saint/Dance layers are fetched the same way: only for encounters whose foes or heroes use them,
     // which also keeps the startup preload under the loader's parallel-download limit.
-    const data = this.encounter, fx: [string, [string, string], boolean][] = [
+    let fetching = false;
+    for (const [key, urls, used] of this.encounterFx()) if (used && !this.textures.exists(key)) { this.load.atlas(key, ...urls); fetching = true; }
+    if ((names.length || fetching) && !this.load.isLoading()) this.load.start();
+  }
+  // Encounter-only VFX atlases and whether the current encounter uses them (W8: released like unit sheets when unused).
+  private encounterFx(): [string, [string, string], boolean][] {
+    const data = this.encounter;
+    return [
       [BOSS_ATLAS, bossAtlasUrls(), usesBossSignature(data)],
       [FOE_SIGNATURE_ATLAS, foeSignatureAtlasUrls(), data.intents.some(i => isFoeSignatureMove(i.name))],
       [SAINT_DANCE_ATLAS, saintDanceAtlasUrls(), data.heroes.some(h => h.actions.some(a => isSdSkill(a)))],
     ];
-    let fetching = false;
-    for (const [key, urls, used] of fx) if (used && !this.textures.exists(key)) { this.load.atlas(key, ...urls); fetching = true; }
-    if ((names.length || fetching) && !this.load.isLoading()) this.load.start();
   }
   private optionalUnitsLoaded(): void {
     if (!this.bossArt && this.textures.exists(BOSS_ATLAS)) { this.bossArt = true; this.optionalDirty = true; }
@@ -270,6 +274,11 @@ export class BattleScene extends Phaser.Scene {
     this.layer?.destroy();
     // Old bodies are gone; release only optional textures absent from the new encounter.
     for (const name of this.optionalUnits.unused(this.hasOptionalUnit)) this.textures.remove(`unit-pilot-${name}`);
+    // W8 (A11): the same for encounter-only VFX atlases, so a run of different encounters never accumulates them.
+    // Holds live inside the destroyed bodies; effects were stopped by setEncounter.
+    if (!this.load.isLoading()) for (const [key, , used] of this.encounterFx()) if (!used && this.textures.exists(key)) {
+      this.textures.remove(key); if (key === BOSS_ATLAS) this.bossArt = false;
+    }
     this.layer = this.add.container(0, 0); this.root.addAt(this.layer, 0);
     this.positions.clear(); this.actorTargets.clear(); this.actorPanels.clear();
     const w = this.viewW, h = this.viewH;
