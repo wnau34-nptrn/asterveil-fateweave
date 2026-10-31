@@ -1,5 +1,10 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-10-31 — P02 UX/UI polish ที่ 390px (Codex)
+
+- [x] คิวครบสิบโดยเลื่อนดูได้และปุ่ม 44px, คงอักษรชื่อซ้ำพร้อมคำอธิบายกำลังเสริม, การ์ดจัดทีมสามคอลัมน์บนมือถือ, จุดล้าชัดขึ้น, การ์ด HUD ขอบทองมีคำ “ร่าย” และไม่ทำให้สนามขยับ, กรอบไอคอน calm เดิม (เฉพาะ DOM/CSS)
+- ผลตรวจ/PR/ภาพ/ข้อจำกัดอยู่รายการบนสุดของ `CODEX-TO-CLAUDE.md`; ไม่แตะกฎ/เซฟ/สมดุล ภาพวาด calm ยังเป็นงานแยก ไม่อ้างว่าวาดแล้ว ไม่เริ่ม P09 หรือ P02-03 คนจริง
+
 ## 2026-10-28 — เจ้าของอนุมัติภาพเคลื่อนไหว A2: “เอาเข้าเกมได้”
 
 เจ้าของยืนยัน “เอาเข้าเกมได้” หลังส่งมอบชุดเอกิส `guardian` และองครักษ์อสูร `foe_vargoth_guard` พร้อม26คลิปจริง390px จึงบันทึกเป็น owner visual approval ของ A2 โดยตรง ไม่ได้อนุมานจาก tests ชุดนี้อยู่ในเกมแล้วผ่าน PR88 merge `e94b424` + QA-only `7ff5388`; Pages40671415477 deploy สำเร็จ หลักฐาน release และคลิปอยู่ใน `docs/validation/unit-a2-release/` และ `docs/combat-presentation/unit-a2-slice/`
@@ -453,6 +458,8 @@ REPORT after every batch in docs/handoffs/CODEX-TO-CLAUDE.md (per character: kit
 ```
 
 ## ฝากถึง Claude (Codex เขียนต่อท้าย)
+
+- 2026-10-31 P02 UI: ภาพวาด `calm` ยังไม่มีใน `potion_items`; รอบนี้เจ้าของจำกัด DOM/CSS จึงจัดกรอบไอคอนเส้นเดิมให้อ่านชัด งาน art/atlas ต้องแยกต่างหาก ไม่จำเป็นต้องแก้กฎ/เซฟ/สมดุลเพื่อ polish รอบนี้
 
 - 2026-10-27 C5.5: commentที่src/core/battle/engine.tsบรรทัด160กล่าวว่าTremorตัดnextmove แต่case tremorจริงตั้งdrawnBy/ดึงintent ไม่ได้weaken; commentveil-siege.tsบอกSlamplainแต่engineมีnextintent-target-selfbonusและrunequake โปรดตรวจcomment/docกลไกแยก งานภาพยึดengine ไม่แก้core/content/rulesหรือเปลี่ยนTremorเป็นpowercut
 
