@@ -5,13 +5,13 @@
 
  RUN  v5.0.4 /home/user/asterveil-fateweave
 
- ❯ tests/campaign-sim.test.ts (5 tests | 1 failed) 20ms
-   × C12 campaign gate: no first-normal or hard clear-rate regression in twenty paired cells 8ms
+ ❯ tests/campaign-sim.test.ts (5 tests | 1 failed) 88ms
+   × C12 campaign gate: no first-normal or hard clear-rate regression in twenty paired cells 30ms
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  tests/campaign-sim.test.ts > C12 campaign gate: no first-normal or hard clear-rate regression in twenty paired cells
-AssertionError: Rush (objectives only), casual battles (advice on ~70% of turns) · 12 companies / แนวรอยแยก #1: expected 58 to be greater than or equal to 75
+AssertionError: Explorer (everything on the map), advisor battles · 12 companies / เส้นทางป่าทึบ #1: expected 83 to be greater than or equal to 100
  ❯ tests/campaign-sim.test.ts:53:87
      51|   }
      52|   expect(Object.keys(actual)).toHaveLength(20);
@@ -25,12 +25,8 @@ AssertionError: Rush (objectives only), casual battles (advice on ~70% of turns)
 
  Test Files  1 failed | 6 passed (7)
       Tests  1 failed | 27 passed (28)
-   Start at  13:20:29
-   Duration  131.30s (import 99%, tests 1%)
-
-     Import  43 modules were evaluated 136 times · 388.18s total, 99% of tracked time
-             ~29.49s faster with isolate: false — shared modules are evaluated once per worker instead of once per file
-             learn more: https://vitest.dev/guide/improving-performance#test-isolation
+   Start at  14:54:11
+   Duration  193.38s (import 99%, tests 1%)
 
 EXIT 1
 

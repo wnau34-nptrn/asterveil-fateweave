@@ -69,7 +69,7 @@ export interface MapDefinition {
   // (A6c). Fatigue: each battle a deployed member gains one point and a reserve member loses one (0..`cap`); from each
   // entry of `steps` reached its hits and direct heals are cut by another `stepPercent` (never SPD or turns). A camp rest
   // takes `rest` points from everyone brought.
-  camp: { restHealPercent: number; reviveHpPercent: number; reserveHealPercent: number;
+  camp: { restHealPercent: number; reviveHpPercent: number; reserveHealPercent: number; relightWins: number;
     fatigue: { cap: number; steps: readonly number[]; stepPercent: number; rest: number } };
   // Hero ids that join free at ★1, deployed in this slot order.
   startingRoster: readonly string[];
@@ -468,8 +468,9 @@ export interface ExpeditionState {
   // `hp` covers every roster member; the battle entry covers the deployed ones.
   revealed: string; roster: Roster; members: Record<string, MemberProgress>;
   hp: Record<string, number>; camp: Point | null;
-  // `restReady` is the campfire: one rest, then it needs a won battle to relight.
-  resources: Resources; openedChests: string[]; restReady: boolean;
+  // `restReady` is the campfire: one rest, then it relights after `camp.relightWins` won battles (P02, owner 2026-10-31:
+  // 3, so potions matter between rests). `restWins` counts the wins since the last rest (missing = 0).
+  resources: Resources; openedChests: string[]; restReady: boolean; restWins?: number;
   tutorialDone: boolean; bossDefeated: boolean; completed: boolean;
   wins: number; defeats: number; battle: ActiveBattle | null;
   // Items found on this expedition (kept on complete/withdraw; a wipe keeps only the best `wipeKeep`) and dry random wins for the pity.

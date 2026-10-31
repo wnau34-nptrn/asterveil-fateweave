@@ -403,7 +403,7 @@ export function rest(initial: ExpeditionState, map: MapDefinition, lookup: Encou
   for (const [id, max] of Object.entries(full)) if (state.hp[id]! > 0) state.hp[id] = Math.min(max, state.hp[id]! + percentOf(max, map.camp.restHealPercent));
   // P02: a rest also eases everyone's fatigue.
   for (const id of rosterIds(state)) setFatigue(state, id, fatigueOf(state, id) - map.camp.fatigue.rest);
-  state.pressure = 0; state.camp = { ...state.position }; state.restReady = false;
+  state.pressure = 0; state.camp = { ...state.position }; state.restReady = false; delete state.restWins;
   // 4C: beaten optional elites (not gate guards, not the mini-boss) return after a rest, one level higher.
   const respawned = map.elites.filter(e => !e.forced && !e.mini && state.elitesDefeated.includes(e.id)).map(e => e.id);
   for (const id of respawned) { state.elitesDefeated = state.elitesDefeated.filter(e => e !== id); state.respawns[id] = (state.respawns[id] ?? 0) + 1; }
@@ -737,7 +737,9 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
   const state = structuredClone(initial); const { kind, encounterId } = initial.battle;
   if (result.outcome === 'victory') {
     for (const h of result.heroes) state.hp[h.id] = h.hp;
-    state.battle = null; state.wins++; state.restReady = true;
+    state.battle = null; state.wins++;
+    // The campfire relights after `relightWins` won battles since the last rest (P02, owner 2026-10-31).
+    if (!state.restReady) { const wins = (state.restWins ?? 0) + 1; if (wins >= map.camp.relightWins) { state.restReady = true; delete state.restWins; } else state.restWins = wins; }
     // The guests part ways after the prologue win; the pair left behind patches up first (owner 2026-10-23: two
     // hurt heroes before the first camp wiped too often, docs/validation/balance-sim/CAMPAIGN.md).
     if (kind === 'tutorial') {

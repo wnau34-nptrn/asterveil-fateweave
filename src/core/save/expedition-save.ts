@@ -95,7 +95,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v45 (P02 team of five, OD-05/OD-11): five may be deployed and the reserve opens by chapter (3 → 4 → 5). A profile
 // from v44 moves its reserve into the free fifth field slot (and any reserve above its chapter's slots), never dropping a
 // member; a run in progress keeps the legacy four reserve slots. Runs gain `reserveSlots` and `fatigue`; potions gain
-// the calming draught (`calm`, none carried).
+// the calming draught (`calm`, none carried). The campfire relights after `camp.relightWins` wins (`restWins` counts them;
+// a v44 run's unlit fire starts counting from 0).
 const SAVE_VERSION = 45;
 const BATCH_ONE_IDS = ['metta', 'thiran', 'lalin', 'wila'];
 // The classes whose big tree arrived in v37 (release A) and in v39 (the recruits).
@@ -401,6 +402,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, hp, campXp,
     camp: s.camp === null ? null : point(s.camp, map),
     resources: { ore: r.ore as number, gold: r.gold as number, ember: r.ember as number, seal: r.seal as number }, openedChests: [...s.openedChests as string[]], restReady: s.restReady as boolean,
+    ...(s.restWins !== undefined ? { restWins: !s.restReady && isInt(s.restWins, 1, map.camp.relightWins - 1) ? s.restWins : badRun() } : {}),
     tutorialDone: s.tutorialDone as boolean, bossDefeated: s.bossDefeated as boolean,
     completed: s.completed as boolean, wins: s.wins as number, defeats: s.defeats as number, battle,
     found: foundOf(s.found, map, lookup), spare: spareOf(s.spare, map, lookup), dry: isInt(s.dry, 0, map.equipment.pity) ? s.dry : badRun(),

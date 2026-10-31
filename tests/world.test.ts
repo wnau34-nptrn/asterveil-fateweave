@@ -129,15 +129,21 @@ describe('expedition rules', () => {
     expect(revive(r.state, map, lookup, 'weaver').event.type).toBe('blocked');
     expect(canRest(fresh(), map)).toBe(false);
   });
-  it('a camp becomes the return point on arrival, and a victory relights the campfire', () => {
+  it('a camp becomes the return point on arrival, and three victories relight the campfire (P02)', () => {
     const camp = findTiles(map, 'camp')[1]!;
     let s: ExpeditionState = { ...fresh(5), position: { x: camp.x - 1, y: camp.y } };
     s = move(s, map, 'right').state;
     expect(s.camp).toEqual(camp); expect(s.battle).toBeNull();
     s = rest(s, map, lookup).state; expect(s.restReady).toBe(false);
-    s = { ...s, position: { x: 10, y: 22 } };
-    while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
-    s = fight(s); expect(s.restReady).toBe(true);
+    s = { ...seasoned(s, 6, 2), position: { x: 10, y: 22 } };
+    for (let win = 1; win <= map.camp.relightWins; win++) {
+      while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
+      s = fight(s); expect(s.restReady, `win ${win}`).toBe(win === map.camp.relightWins); expect(s.restWins).toBe(win < map.camp.relightWins ? win : undefined);
+    }
+    // The count saves and reloads; a forged count is rejected.
+    const back = { ...s, restReady: false, restWins: 2 };
+    expect(parseGame(JSON.stringify({ version: 45, profile: newProfile(map, 4), run: back }), map, lookup).run!.restWins).toBe(2);
+    expect(() => parseGame(JSON.stringify({ version: 45, profile: newProfile(map, 4), run: { ...back, restWins: 3 } }), map, lookup)).toThrow();
   });
   it('defeat leaves the deployed members down at the last camp; losing every brought member wipes the run; a lost tutorial restarts', () => {
     const loseWith = (state: ExpeditionState, l = lookup) => {
