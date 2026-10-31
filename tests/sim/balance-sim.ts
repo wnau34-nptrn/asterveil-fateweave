@@ -17,7 +17,7 @@ import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Lane, Poin
 import { GEAR_SLOTS, PARTY_SLOTS } from '../../src/core/world/types';
 import {
   atCamp, atMuster, levelOf, levelXp, monsterLevelAt, battleData, battleState, canOpenChest, canRest, canRevive, eliteAt, eventAt, finishBattle, findTiles, memberDef, move, openChest,
-  newExpedition, draftPick, heroDef, loadoutActions, pendingEvent, questComplete, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, fatigueOf, fatigueStep, chooseEvent, eventChoiceReason, potionReason,
+  newExpedition, draftPick, heroDef, loadoutActions, pendingEvent, questComplete, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, fatigueOf, fatigueStep, fatigueCut, chooseEvent, eventChoiceReason, potionReason,
 } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 
@@ -157,14 +157,23 @@ function campCare(s: ExpeditionState): ExpeditionState {
   return rotate(s);
 }
 // P02 (OD-11) automatic rotation at a muster point: the most tired deployed member who has reached a fatigue step trades
-// places with the freshest standing reserve member (above half HP) that is at a lower step. `SIM_NO_ROTATE=1` keeps
-// the team as it is (to measure what rotation is worth).
+// places with a rested standing reserve member (above half HP, at a lower step) of the same lane who is at least as
+// strong as the tired one after its cut (max HP × Attack, both at their own fatigue); the only healer stays.
+// `SIM_NO_ROTATE=1` keeps the team as it is (to measure what rotation is worth).
+const HEALERS = ['healer', 'toma', 'lio', 'metta', 'lalin'];
 function rotate(s: ExpeditionState): ExpeditionState {
   if (process.env.SIM_NO_ROTATE || !atMuster(s, map)) return s;
   const step = (id: string) => fatigueStep(map, fatigueOf(s, id));
+  const power = (id: string) => { const d = memberDef(lookup, map, s, id)!; return d.maxHp * d.attack * (100 - fatigueCut(map, fatigueOf(s, id))) / 100; };
+  const lane = (id: string) => s.roster.lanes?.[id] ?? heroDef(lookup, map, id)!.lane;
+  // Heading for the boss: field the strongest of each lane whatever the steps (rested or not).
+  const boss = questComplete(s, map) && !s.bossDefeated;
   for (const d of [...s.roster.deployed].sort((a, b) => fatigueOf(s, b) - fatigueOf(s, a))) {
-    if (!s.hp[d] || step(d) < 1) continue;
-    const r = s.roster.reserve.filter(id => s.hp[id]! * 2 > memberDef(lookup, map, s, id)!.maxHp && step(id) < step(d)).sort((a, b) => fatigueOf(s, a) - fatigueOf(s, b))[0];
+    if (!s.hp[d] || (!boss && step(d) < Number(process.env.SIM_ROTATE_STEP ?? 1))) continue;
+    if (HEALERS.includes(d) && s.roster.deployed.filter(id => HEALERS.includes(id) && s.hp[id]).length < 2 && !s.roster.reserve.some(id => HEALERS.includes(id))) continue;
+    const r = s.roster.reserve.filter(id => s.hp[id]! * 2 > memberDef(lookup, map, s, id)!.maxHp && (boss || step(id) < step(d)) && lane(id) === lane(d) && (boss ? power(id) > power(d) : power(id) >= power(d))
+      && (!HEALERS.includes(d) || HEALERS.includes(id) || s.roster.deployed.some(x => x !== d && HEALERS.includes(x) && s.hp[x])))
+      .sort((a, b) => power(b) - power(a))[0];
     if (r) s = swapMembers(s, d, r).state;
   }
   return s;

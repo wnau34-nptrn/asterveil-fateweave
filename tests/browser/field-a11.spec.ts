@@ -6,7 +6,7 @@ test.skip(process.env.PLAYWRIGHT_PAGES === 'true', 'source-only A11 field gate r
 // Mirrors src/content/encounters/catalog.ts `encounters` (importing it here would pull JSON imports into the Playwright loader).
 const ENCOUNTERS = ['first-clash', 'scout-patrol', 'rift-whelp', 'thicket-ambush', 'shadow-stalker', 'veil-siege', 'rear-ambush', 'crystal-stampede',
   'rift-warden', 'elite-tusk-chief', 'elite-briar-lord', 'mini-veil-golem', 'vanguard-captain', 'slime-pair', 'bat-swarm', 'slime-nest', 'tusker-bats',
-  'beetle-spore', 'beetle-wall', 'stalker-spore', 'forest-swarm', 'channeler-wisps', 'crawler-pack', 'rift-host'];
+  'beetle-spore', 'beetle-wall', 'stalker-spore', 'forest-swarm', 'channeler-wisps', 'crawler-pack', 'rift-host', 'thorn-host', 'rift-legion'];
 const MiB = 1048576;
 const settle = async (page: Page) => {
   await expect.poll(() => page.evaluate(() => JSON.stringify(window.fieldA11QA.cached()) === JSON.stringify(window.fieldA11QA.expectedSheets())), { timeout: 20000 }).toBe(true);

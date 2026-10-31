@@ -132,16 +132,16 @@ describe('the team of five in the world (save v45)', () => {
     expect(run.reserveSlots).toBe(4); expect(run.roster.deployed).toHaveLength(5);
     expect(moveMember({ ...run, roster: { ...run.roster, reserve: [...run.roster.reserve, 'brann'] } }, 'guardian').event.type).toBe('blocked');
   });
-  it('after each battle the field tires by one and the reserve rests by one; steps cut 10% each from the step points', () => {
+  it('after each battle the field tires by one and the reserve rests by one; steps at 7 and 11 points cut 10% each', () => {
     let s = company(['guardian', 'tracer', 'weaver', 'healer', 'garran'], ['mira']);
     s.fatigue = { mira: 2 };
     const r = finish(battleAt(s, 'slime-pair')); expect(r.event.type).toBe('victory');
     expect(r.state.fatigue).toEqual({ guardian: 1, tracer: 1, weaver: 1, healer: 1, garran: 1, mira: 1 });
-    expect([0, 3, 4, 5, 6, 8].map(n => fatigueCut(map, n))).toEqual([0, 0, 10, 10, 20, 30]);
-    s = { ...r.state, fatigue: { ...r.state.fatigue, guardian: 8 } };
-    const tired = finish(battleAt(s, 'slime-pair')).state; expect(fatigueOf(tired, 'guardian')).toBe(8); expect(fatigueOf(tired, 'mira')).toBe(0);
+    expect([0, 6, 7, 10, 11, 12].map(n => fatigueCut(map, n))).toEqual([0, 0, 10, 10, 20, 20]);
+    s = { ...r.state, fatigue: { ...r.state.fatigue, guardian: 12 } };
+    const tired = finish(battleAt(s, 'slime-pair')).state; expect(fatigueOf(tired, 'guardian')).toBe(12); expect(fatigueOf(tired, 'mira')).toBe(0);
     // The battle reads the cut it started with and replays with it.
-    const b = battleAt({ ...s, fatigue: { guardian: 6 } }, 'slime-pair');
+    const b = battleAt({ ...s, fatigue: { guardian: 11 } }, 'slime-pair');
     expect(battleData(b, map, lookup)!.heroes.find(h => h.id === 'guardian')!.fatigue).toBe(20);
     expect(battleData(b, map, lookup)!.heroes.find(h => h.id === 'tracer')!.fatigue).toBeUndefined();
   });
@@ -157,9 +157,9 @@ describe('the team of five in the world (save v45)', () => {
   });
   it('a camp rest and the calming draught ease fatigue; neither changes SPD', () => {
     const camp = findTiles(map, 'camp')[0]!;
-    let s: ExpeditionState = { ...company(['guardian', 'tracer'], ['mira']), position: camp, fatigue: { guardian: 5, tracer: 2 }, potions: { salve: 0, tonic: 0, repel: 0, calm: 1 } };
+    let s: ExpeditionState = { ...company(['guardian', 'tracer'], ['mira']), position: camp, fatigue: { guardian: 9, tracer: 2 }, potions: { salve: 0, tonic: 0, repel: 0, calm: 1 } };
     expect(potionReason(s, map, lookup, 'calm', 'mira')).toBe('rested'); expect(potionReason(s, map, lookup, 'calm')).toBe('target');
-    s = usePotion(s, map, lookup, 'calm', 'guardian').state; expect(s.fatigue).toEqual({ guardian: 1, tracer: 2 }); expect(s.potions.calm).toBe(0);
+    s = usePotion(s, map, lookup, 'calm', 'guardian').state; expect(s.fatigue).toEqual({ guardian: 5, tracer: 2 }); expect(s.potions.calm).toBe(0);
     s = rest(s, map, lookup).state; expect(s.fatigue).toBeUndefined();
   });
   it('saves v45 with fatigue and reserve slots; rejects forged values', () => {
@@ -169,7 +169,7 @@ describe('the team of five in the world (save v45)', () => {
     const raw = write(game); expect(JSON.parse(raw).version).toBe(45);
     expect(parseGame(raw, map, lookup)).toEqual(game);
     const forge = (patch: Record<string, unknown>) => { const j = JSON.parse(raw); Object.assign(j.run, patch); return JSON.stringify(j); };
-    for (const bad of [{ fatigue: { guardian: 9 } }, { fatigue: { brann: 1 } }, { fatigue: {} }, { reserveSlots: 6 }, { reserveSlots: 2 }])
+    for (const bad of [{ fatigue: { guardian: 13 } }, { fatigue: { brann: 1 } }, { fatigue: {} }, { reserveSlots: 6 }, { reserveSlots: 2 }])
       expect(() => parseGame(forge(bad), map, lookup), JSON.stringify(bad)).toThrow();
   });
   it('v44 → v45: the profile fills the fifth field slot from the reserve and keeps everyone; a run in progress keeps four reserve slots', () => {

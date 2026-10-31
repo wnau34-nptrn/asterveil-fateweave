@@ -160,8 +160,8 @@ export class WorldUI {
           case 'withdraw': if (this.view?.locked) break;
             if (!this.confirmWithdraw) { this.confirmWithdraw = true; this.renderCamp(); this.root.querySelector<HTMLElement>('#withdraw')?.focus(); break; }
             this.confirmWithdraw = false; dialog('#camp-dialog').close(); this.host.withdraw(); break;
-          case 'pack': this.bagTab = 'items'; this.picked = undefined; this.lanePick = undefined; this.salvePick = false; this.renderPack(); dialog('#pack-dialog').showModal(); break;
-          case 'bag-tab': this.bagTab = button.dataset.tab as WorldUI['bagTab']; this.picked = undefined; this.lanePick = undefined; this.salvePick = false; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-tab-${this.bagTab}`)?.focus(); break;
+          case 'pack': this.bagTab = 'items'; this.picked = undefined; this.lanePick = undefined; this.potionPick = undefined; this.renderPack(); dialog('#pack-dialog').showModal(); break;
+          case 'bag-tab': this.bagTab = button.dataset.tab as WorldUI['bagTab']; this.picked = undefined; this.lanePick = undefined; this.potionPick = undefined; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-tab-${this.bagTab}`)?.focus(); break;
           case 'inventory-pick': this.inventoryPick=button.dataset.key;this.renderPack();this.root.querySelector<HTMLElement>('#inventory-hero-'+rosterIds(this.view!.state).find(id=>{const i=runEquipment(this.view!.state).find(e=>e.key===this.inventoryPick)?.item;return i&&(i.slot!=='weapon'||i.hero===id);}))?.focus();break;
           case 'inventory-character': this.openCharacter(button.dataset.hero!,'gear',button,button.dataset.key);break;
           case 'bag-member': this.openCharacter(button.dataset.hero!, 'gear', button); break;
@@ -170,8 +170,8 @@ export class WorldUI {
           case 'potion': if (!this.view?.locked) {
             const potion = button.dataset.potion as PotionId;
             // A salve first asks who drinks it.
-            if (potion === 'salve' && !button.dataset.hero) { this.salvePick = !this.salvePick; this.renderPack(); this.root.querySelector<HTMLElement>('#potion-salve')?.focus(); break; }
-            this.salvePick = false; this.host.usePotion(potion, button.dataset.hero); this.renderPack(); this.root.querySelector<HTMLElement>(`#potion-${potion}`)?.focus();
+            if ((potion === 'salve' || potion === 'calm') && !button.dataset.hero) { this.potionPick = this.potionPick === potion ? undefined : potion; this.renderPack(); this.root.querySelector<HTMLElement>(`#potion-${potion}`)?.focus(); break; }
+            this.potionPick = undefined; this.host.usePotion(potion, button.dataset.hero); this.renderPack(); this.root.querySelector<HTMLElement>(`#potion-${potion}`)?.focus();
           } break;
           case 'event-close': dialog('#event-dialog').close(); break;
           case 'draft-pick': if (!this.view?.locked) this.host.draft(Number(button.dataset.index)); break;
@@ -420,7 +420,8 @@ export class WorldUI {
     if (gained && !this.reduced.matches) { pack.classList.remove('gain'); void pack.offsetWidth; pack.classList.add('gain'); }
   }
 
-  private salvePick = false;
+  // A salve or calming draught first asks who drinks it (P02 adds the draught).
+  private potionPick: 'salve' | 'calm' | undefined;
   // Map potions (2D-5): use buttons with live reasons; a salve lists who can drink it.
   private potionSection(s: ExpeditionState): string {
     const reasons: Record<string, string> = { none: 'ไม่มีแล้ว', full: 'เลือดเต็มทุกคน', active: 'ยังออกฤทธิ์อยู่', busy: 'ใช้ตอนนี้ไม่ได้' };
@@ -428,16 +429,20 @@ export class WorldUI {
       if (s.battle || s.completed) return reasons.busy!;
       if (s.potions[potion] <= 0) return reasons.none!;
       const hurt = rosterIds(s).some(id => s.hp[id]! > 0 && s.hp[id]! < this.hero(id, s).maxHp);
+      if (potion === 'calm') return rosterIds(s).some(id => fatigueOf(s, id) > 0) ? '' : 'ไม่มีใครเหนื่อย';
       if (potion !== 'repel' && !hurt) return reasons.full!;
       return potion === 'repel' && s.repel > 0 ? reasons.active! : '';
     };
     const rows = POTION_IDS.map(id => { const reason = why(id);
       return `<li data-potion="${id}">${potionArt(id)}<div><b>${potionText[id].name}</b><small>${potionText[id].help(this.map.potions)}</small></div><strong>${s.potions[id]}</strong>
-        <button id="potion-${id}" data-world="potion" data-potion="${id}" class="secondary"${reason ? ' disabled' : ''} aria-expanded="${id === 'salve' ? this.salvePick : false}">${reason || (id === 'salve' && this.salvePick ? 'เลือกคน' : 'ใช้')}</button></li>`; }).join('');
-    const targets = this.salvePick ? rosterIds(s).filter(id => s.hp[id]! > 0 && s.hp[id]! < this.hero(id, s).maxHp)
-      .map(id => `<button id="salve-${id}" data-world="potion" data-potion="salve" data-hero="${id}" class="secondary salve-target">${portrait(id)}<span>${heroText[id]!.name}<small>${s.hp[id]}/${this.hero(id, s).maxHp}</small></span></button>`).join('') : '';
+        <button id="potion-${id}" data-world="potion" data-potion="${id}" class="secondary"${reason ? ' disabled' : ''} aria-expanded="${id === 'salve' || id === 'calm' ? this.potionPick === id : false}">${reason || (this.potionPick === id ? 'เลือกคน' : 'ใช้')}</button></li>`; }).join('');
+    const pick = this.potionPick;
+    const targets = pick === 'salve' ? rosterIds(s).filter(id => s.hp[id]! > 0 && s.hp[id]! < this.hero(id, s).maxHp)
+      .map(id => `<button id="salve-${id}" data-world="potion" data-potion="salve" data-hero="${id}" class="secondary salve-target">${portrait(id)}<span>${heroText[id]!.name}<small>${s.hp[id]}/${this.hero(id, s).maxHp}</small></span></button>`).join('')
+      : pick === 'calm' ? rosterIds(s).filter(id => fatigueOf(s, id) > 0)
+      .map(id => `<button id="calm-${id}" data-world="potion" data-potion="calm" data-hero="${id}" class="secondary salve-target">${portrait(id)}<span>${heroText[id]!.name}<small>ล้า ${fatigueOf(s, id)}</small></span></button>`).join('') : '';
     return `<h3 class="pack-gear-title">${icon('potionSalve')} ยา <small>พกได้อย่างละ ${this.map.potions.carry} · ใช้บนแผนที่เท่านั้น</small></h3><ul class="pack-potions">${rows}</ul>
-      ${targets ? `<div class="salve-targets" role="group" aria-label="เลือกคนดื่มยาฟื้นแผล">${targets}</div>` : ''}${s.repel > 0 ? `<p class="world-stats">ยาไล่อสูรเหลือ ${s.repel} ก้าว</p>` : ''}`;
+      ${targets ? `<div class="salve-targets" role="group" aria-label="เลือกคนดื่ม${pick ? potionText[pick].name : ''}">${targets}</div>` : ''}${s.repel > 0 ? `<p class="world-stats">ยาไล่อสูรเหลือ ${s.repel} ก้าว</p>` : ''}`;
   }
   // Map bag (2026-10-17): items (potions and resources), gear (wear finds and own items) and team (party and details).
   private renderPack(): void {
@@ -507,7 +512,7 @@ export class WorldUI {
       const lane = laneName(this.lanes(s)[id] ?? h.lane);
       // P02 (OD-11): fatigue points and the cut its step brings (none shown while fresh).
       const tired = fatigueOf(s, id), cut = fatigueCut(this.map, tired);
-      const fatigue = tired ? `<small class="fatigue${cut ? ' cut' : ''}" data-fatigue="${tired}">เหนื่อย ${cut ? `−${cut}%` : tired}</small>` : '';
+      const fatigue = tired ? `<small class="fatigue${cut ? ' cut' : ''}" data-fatigue="${tired}">ล้า ${cut ? `−${cut}%` : tired}</small>` : '';
       return `<button id="${prefix}-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}${tired ? ` ความเหนื่อย ${tired}${cut ? ` โจมตีและรักษาลด ${cut}%` : ''}` : ''}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${levelOf(this.map, s)} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small>${fatigue}</button>`;
     };
     const row = (ids: string[], side: 'deployed' | 'reserve', size: number) => Array.from({ length: size }, (_, i) => card(ids[i], side, i)).join('');

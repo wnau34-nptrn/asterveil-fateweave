@@ -164,7 +164,7 @@ test('Aira comes back as the map 1 boss fight starts: her scene plays before the
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator(`#move-${dir}`).click();
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'weaver'); await expect(page.locator('.story-text')).toContainText('ไอรา');
-  expect((await saved(page)).battle).toMatchObject({ kind: 'boss' }); expect((await saved(page)).roster.reserve).toEqual(['weaver']);
+  expect((await saved(page)).battle).toMatchObject({ kind: 'boss' }); expect((await saved(page)).roster.deployed).toContain('weaver'); // P02: the fifth field slot
   await page.locator('#story-next').click(); await expect(page.locator('.story-text')).toContainText('เข้าร่วมค่ายอารี'); await page.locator('#story-next').click();
   await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);
   expect(issues).toEqual([]);
@@ -259,7 +259,7 @@ test('the camp team tab benches and redeploys members; the party row follows the
   await expect.poll(async () => (await saved(page)).roster).toEqual({ deployed: ['guardian', 'tracer', 'weaver'], reserve: ['healer'] });
   await expect(page.locator('#world-party .world-hero')).toHaveCount(3);
   await reachable(page, '#team-healer'); await page.screenshot({ path: info.outputPath('team.png') });
-  await page.locator('#team-healer').click(); await page.locator('.team-card.empty[data-side=deployed]').click();
+  await page.locator('#team-healer').click(); await page.locator('.team-card.empty[data-side=deployed]').first().click();
   await expect.poll(async () => (await saved(page)).roster).toEqual({ deployed: ['guardian', 'tracer', 'weaver', 'healer'], reserve: [] });
   await page.keyboard.press('Escape'); await expect(page.locator('#world-party .world-hero')).toHaveCount(4);
   expect(issues).toEqual([]);
@@ -1040,7 +1040,7 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   await expect(page.locator('#character-content .hire-skills li').first()).toBeVisible();
   await page.keyboard.press('Escape'); await expect(page.locator('#pack-dialog')).toBeVisible();
   await page.screenshot({ path: info.outputPath('bag-team.png') });
-  await page.locator('#pack-content .team-card.empty.target').first().click();
+  await page.locator('#pack-content .team-card.empty.target[data-side=reserve]').first().click();
   await expect.poll(async () => (await saved(page)).roster).toEqual({ deployed: ['guardian', 'tracer', 'weaver'], reserve: ['healer'] });
   expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(45);
   expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
@@ -1168,7 +1168,7 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   expect(saved.version).toBe(45); expect(saved.profile.members.guardian.talents).toEqual({ c1s: 1, a1: 2 }); expect(saved.profile.members.guardian.loadout).toEqual(['guard', 'rally']);
   // Back to the team sheet: the card shows the new max HP.
   await page.locator('#camp-character-dialog [data-world=character-close]').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
-  await expect(page.locator('#lobby-member-guardian')).toContainText(`เลือด ${Math.round(76 * (100 + 9 + 10) / 100)}`);
+  await expect(page.locator('#lobby-member-guardian')).toContainText(`HP ${Math.round(76 * (100 + 9 + 10) / 100)}`);
   await page.locator('#lobby-tree-open').click(); await page.locator('#camp-character-reset').click();
   await expect(page.locator('.talent-points')).toContainText('แต้มเหลือ 3/3');
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!).profile.members.guardian.talents)).toBeUndefined();

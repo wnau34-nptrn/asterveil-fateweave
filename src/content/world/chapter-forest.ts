@@ -37,7 +37,8 @@ export const forestMap: MapDefinition = {
   ],
   bossEncounterId: 'elite-briar-lord', bossLevel: 6,
   // A10 (2026-10-22): plain attacks beat the thorn lord every time; its foes fight with 130% HP and move damage.
-  bossPercent: 130,
+  // P02 (draft): 130 → 145 and the gate elite 120 → 135 for the team of five (docs/validation/p02/README_TH.md).
+  bossPercent: 145,
   bossDrop: { weights: [0, 30, 45, 20, 5], zoneSets: true },
   // Seren, who parted after the map 1 prologue, comes back as the thorn lord's fight starts (owner 2026-10-23).
   recruits: [{ hero: 'garran', at: 'camp' }, { hero: 'healer', at: 'boss' }],
@@ -55,7 +56,7 @@ export const forestMap: MapDefinition = {
   },
   elites: [
     // Forced: the only way north to the boss.
-    { id: 'forest-gate', x: 8, y: 7, encounterId: 'elite-tusk-chief', forced: true, level: 5, percent: 120 },
+    { id: 'forest-gate', x: 8, y: 7, encounterId: 'elite-tusk-chief', forced: true, level: 5, percent: 135 },
     // Optional: a dead-end pocket in the north-west.
     { id: 'forest-matriarch', x: 1, y: 6, encounterId: 'thicket-ambush', forced: false, level: 6 },
   ],

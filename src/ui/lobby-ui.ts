@@ -340,7 +340,7 @@ export class LobbyUI {
     if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-lobby="pick" data-group="${group}" aria-label="${groupName[group]} ช่อง ${slot + 1} ว่าง"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
     const h = this.hero(id); const text = heroText[id]!; const lane = laneName(this.lanes(p)[id] ?? h.lane);
     return `<button id="lobby-member-${id}" class="team-card" data-lobby="pick" data-hero="${id}" data-group="${group}" aria-pressed="${this.picked === id}"
-      aria-label="${groupName[group]}${group === 'deployed' ? ` ช่อง ${slot + 1}` : ''} · ${text.name} ${p.members[id]!.stars} ดาว ${text.role} ${lane} เลือด ${h.maxHp}">${group === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.stars(p.members[id]!.stars)}<small>Lv${levelOf(this.map, p)} · เลือด ${h.maxHp}</small><small class="lane">${text.role} · ${lane}</small></button>`;
+      aria-label="${groupName[group]}${group === 'deployed' ? ` ช่อง ${slot + 1}` : ''} · ${text.name} ${p.members[id]!.stars} ดาว ${text.role} ${lane} เลือด ${h.maxHp}">${group === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.stars(p.members[id]!.stars)}<small>Lv${levelOf(this.map, p)} · HP ${h.maxHp}</small><small class="lane">${text.role} · ${lane}</small></button>`;
   }
   // Every character the company can hold (P01): the catalog without parked characters it does not own (OD-14).
   private catalogSize(p: Profile): number { return this.heroes.filter(h => !this.map.company.parked?.includes(h.id) || p.company.includes(h.id)).length; }

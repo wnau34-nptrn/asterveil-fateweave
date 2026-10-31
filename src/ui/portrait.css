@@ -50,7 +50,7 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #battle-view .hero-hp { font-size: 11px; color: #e1f4ec; }
 #battle-view .hero-card .hp-track { margin: 2px 0 0; }
 #battle-view .hero-card .barrier-info { position: static; font-size: 9px; }
-#battle-view .hero-card .fatigue-info { color: #ff9f8a; }
+#battle-view .hero-card .fatigue-info { position: absolute; top: 1px; right: 3px; color: #ff9f8a; font-size: 9px; line-height: 1; }
 #battle-view .command-dock { padding: 0 6px 6px; margin: 0; background: transparent; }
 #battle-view #selected-hero { display: flex; align-items: center; height: 44px; margin: 0; gap: 4px; }
 #battle-view #selected-hero .selected-info { flex: 1; min-width: 0; }

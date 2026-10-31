@@ -1,0 +1,33 @@
+
+> asterveil-fateweave@0.1.0 sim
+> SIM_REPORT=1 vitest run tests/campaign-sim.test.ts tests/starter-sim.test.ts tests/balance-sim.test.ts tests/class-sim.test.ts tests/formation-sim.test.ts tests/tree-sim.test.ts tests/character-sim.test.ts
+
+
+ RUN  v5.0.4 /home/user/asterveil-fateweave
+
+ ❯ tests/campaign-sim.test.ts (5 tests | 1 failed) 23ms
+   × C12 campaign gate: no first-normal or hard clear-rate regression in twenty paired cells 7ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/campaign-sim.test.ts > C12 campaign gate: no first-normal or hard clear-rate regression in twenty paired cells
+AssertionError: Rush (objectives only), advisor battles · 12 companies / แนวรอยแยก #1: expected 83 to be greater than or equal to 92
+ ❯ tests/campaign-sim.test.ts:53:87
+     51|   }
+     52|   expect(Object.keys(actual)).toHaveLength(20);
+     53|   for (const [cell, rate] of Object.entries(before.cells)) expect(actu…
+       |                                                                                       ^
+     54| });
+     55|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 27 passed (28)
+   Start at  11:31:44
+   Duration  160.80s (import 99%)
+
+EXIT 1
+
+# After moving tests/fixtures/c12-campaign-before.json to the P02 results: SIM_REPORT=1 vitest run tests/campaign-sim.test.ts -> 5/5 passed.
