@@ -1,9 +1,22 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
-## 2026-10-31 — P02 ทีมห้า/สำรองตามบท/ความเหนื่อยล้า/เซฟ v45: สาขา `claude/p02-team-five` (PR เข้าสาขาเกม รอเจ้าของดูภาพ 5v5)
+## 2026-10-31 — P02 ทีมห้า/สำรองตามบท/ความเหนื่อยล้า/เซฟ v45: เจ้าของ “อนุมัติ”, PR #127 merged `4d0d2a2`
 
-- ทำแล้ว: ฝ่ายละ 1–5 + `f3`/`b3`, encounter ห้าตัวสองชุด, สำรอง 3→4→5 ตามบท, ความเหนื่อยล้า + ยาฟื้น + A6c, บอสแผนที่ 1/2 แรงขึ้น, UI 390px สิบตัว — ผล/sim/ภาพ: `docs/validation/p02/README_TH.md`
-- ถัดไปตาม OD-13 หลัง merge: P09 ส่วน (1) บัญชี/เซฟคลาวด์/telemetry-feedback/admin (ต้องให้เจ้าของเพิ่มสิทธิ์ D1 Edit ให้ token ก่อนงานฐานข้อมูล); P02-03 (คนจริง/มือถือจริง) ทำขนานได้เมื่อเจ้าของมีเวลาทดสอบ
+- ทำแล้ว: ฝ่ายละ 1–5 + `f3`/`b3`, encounter ห้าตัวสองชุด, ผู้คุมรอยแยกมีลูกน้องตั้งแต่แรก, สำรอง 3→4→5 ตามบท, ความเหนื่อยล้า (จุดสี + ⓘ) + ยาฟื้น + A6c, กองไฟติดใหม่หลังชนะ 3 ศึก (OD-11a), ร่ายสกิลฝั่งเราบนการ์ด HUD, ตัวเล็กลง 5% — ผล/sim/ภาพ: `docs/validation/p02/README_TH.md`
+- ค้าง: P02-03 คนจริง/มือถือจริง; บอสป่าทึบยังแพ้การกดโจมตี (เสนอกลไก OD-09); ภาพวาดยาฟื้นความเหนื่อย (Codex)
+
+### ข้อความเปิดแชต P09 ส่วน (1) (model Opus)
+
+```text
+ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขาเกม feature/fateweave-initial-prototype (ไม่ใช่ main) เริ่มด้วย git fetch แล้วยืนยันว่า HEAD ตรงกับ origin (P02 ทีมห้า/เซฟ v45 merged แล้ว — ดู docs/validation/p02/README_TH.md)
+อ่าน AGENTS.md, CLAUDE.md, docs/DEVELOPMENT_PLAN_TH.md (P09 + ลำดับ OD-13), docs/design/OWNER_DECISIONS_TH.md (OD-13), docs/MASTER_PLAN_TH.md ส่วน backend/รุ่น D, หัวข้อบนสุดของ docs/handoffs/NEW-CHAT-HANDOFF-TH.md; ใช้ skill fateweave-rules-and-sim ก่อนแตะ core/save
+งาน P09 ส่วน (1) ตาม OD-13 (ยังไม่ทำรางวัลบน server/กาชา/แชต — เป็นส่วน 2–3):
+1) P09-01 ออกแบบ: บัญชี guest → ผูกบัญชี/กู้คืน/ย้ายเครื่อง, เซฟคลาวด์ที่ server ตรวจด้วย command replay (ใช้ core/save เดิม), trust boundary เซฟ offline เก่า vs online, นโยบายความเป็นส่วนตัว/ทางขอลบบัญชี; เขียนสเปกและตัดสินใจเรื่องที่ต้องถามเจ้าของ (เช่น ผู้ให้บริการ login) ก่อนลงมือ
+2) P09-02/03 Cloudflare Workers + D1: API เซฟ/โหลด/ประวัติเวอร์ชัน, telemetry การเล่น + ปุ่ม feedback + รายงาน error, เครื่องมือ admin (ล้าง/ย้ายเวอร์ชันเซฟ); local tests (miniflare/wrangler dev) ก่อน deploy
+ข้อจำกัด: repo secrets CLOUDFLARE_API_TOKEN/CLOUDFLARE_ACCOUNT_ID มีแล้ว (Workers Scripts Edit) — งานฐานข้อมูล D1 ต้องให้เจ้าของเพิ่มสิทธิ์ D1 Edit ก่อน (ถามเจ้าของเมื่อถึงขั้นนั้น); ห้ามใส่ secret ใน repo/แชต; เกม offline ต้องยังเล่นได้เหมือนเดิมเมื่อไม่ login
+เทสต์ unit + worker local + browser ที่เกี่ยว, CI เต็มบน PR เข้าสาขาเกม, merge/Pages ตาม standing authorization; อัปเดต handoff/แผน/issue #69 เมื่อจบ
+Chromium: export PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium; npm ci
+```
 
 ## 2026-10-31 — P01 เลเวลค่ายร่วม/ถือครอง/เซฟ v44: PR #126 merged `c9f760f`, Pages 41180379308 สำเร็จ
 
