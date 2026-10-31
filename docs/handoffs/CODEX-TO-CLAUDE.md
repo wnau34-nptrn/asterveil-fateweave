@@ -1,10 +1,18 @@
 # Codex → Claude handoff
 
-## 2026-10-31 — เจ้าของอนุมัติ push / merge / deploy เข้าเกมจริง
+## 2026-10-31 — P02 UI polish / ศัตรูชื่อซ้ำ: เจ้าของอนุมัติ push / merge / deploy
 
-- เจ้าของสั่งโดยตรง “อนุมัติให้ push และ merge deploy เข้าเกมขริง” หลังตรวจรอบลบ ก/ข/ค; ข้อจำกัด remote ของรายการก่อนหน้าได้รับคำอนุญาตปลายทางแล้ว
-- Push `codex/p02-mobile-ui-polish` ไป `wnau34-nptrn/asterveil-fateweave` แล้ว; เปิด PR เข้า `feature/fateweave-initial-prototype` และรอ CI ก่อน merge/Pages ไม่มีการส่งเข้า `main`
-- Runtime ล่าสุด `b728890` (ต่อจาก `82c8d9a`); local typecheck/lint/unit 1392/build ผ่าน, browser รอบ polish 140 ข้อและรอบชื่อซ้ำ 10 ข้อผ่านตามรายการด้านล่าง; การเผยแพร่รอบนี้ยังรอผล CI/merge/deploy
+- ข้อตัดสินเจ้าของ: “อนุมัติให้ push และ merge deploy เข้าเกมขริง” หลังรอบลบ ก/ข/ค; คำอนุญาตปลายทางที่ auto-review ขอได้รับแล้ว ข้อความ blocked/pending ในรายการก่อนหน้าเป็นประวัติ
+- สาขางาน `codex/p02-mobile-ui-polish` → [PR #128](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/128) → merge `f45421d5dff886607689ec7055b16bff71cf98cd` เข้าสาขาเกม `feature/fateweave-initial-prototype` แล้ว; validated head `a32d64412842310e3be421312fbea7a2ea900141` (runtime ล่าสุด `b728890`) ไม่มีการส่งเข้า `main`
+- งานที่ส่ง: คิวครบสิบแบบเลื่อนพร้อมปุ่ม 44px, การ์ดจัดทีมสามคอลัมน์บน 390px, จุดล้ามีขอบ/พื้นที่ข้างชื่อ, การ์ดขอบทองมีคำ “ร่าย” โดยสนามไม่ขยับ, กรอบไอคอน calm เดิม, ศัตรูชื่อซ้ำใช้ชื่อเดียวกันทุกจุด (ไม่มี ก/ข/ค และไม่มีคำอธิบายอักษรแล้ว)
+- ไฟล์: UI `battle-ui.ts`, `th.ts`, `portrait.css`, `styles.css`, `battle-skin.css`, `world.css`; เทสต์ `four-slots.test.ts`, `browser/team-five.spec.ts`, `browser/combat.spec.ts`; handoff สามไฟล์นี้/`CLAUDE-TO-CODEX-DEV-TH.md`/`NEW-CHAT-HANDOFF-TH.md` ไม่มี diff ใน core/content/assets หรือ playback timing; หลัง merge ตรวจ source/public/tests ตรง validated head แล้ว เซฟ v45 เดิม
+- ผลตรวจ local: typecheck/lint/unit **1392/1392 (99 files)**/build ผ่าน; polish browser **140/140**, หลังลบอักษร browser team-five+status **10/10** ตามรายละเอียดด้านล่าง
+- PR CI exact head: [quality 41223767619](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41223767619) และ [browser 41223767665](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41223767665) **success** ครบสี่ shards + aggregate (รวม source presentation fixtures และ full production gameplay); ไม่ใช้ local pass แทน CI
+- Pages: [41227868747](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41227868747) บน merge `f45421d` **completed/success ครบ build + browser สี่ shards + deploy**; deploy job `124627559091` success และส่ง URL [เกมจริง](https://wnau34-nptrn.github.io/asterveil-fateweave/) กลับมา; post-merge quality [41227868798](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41227868798) success
+- หลักฐานแพ็กเกจ: artifact `github-pages` ID `13051749800`, 96,105,849 bytes, SHA256 `a9b3b243ee3ace8657b37c2d1b0b95a0f9986b9b5a9318421e49f181b356879b`, workflow head SHA ตรง merge `f45421d5dff886607689ec7055b16bff71cf98cd`; ไม่อ้างว่าตรวจ CDN/live browser แล้ว เพราะคลาวด์เรียกโดเมน github.io ถูก proxy ปฏิเสธ (Tunnel connection failed: 403 Forbidden) ใช้ผล deploy/platform และ production browser CI เป็นหลักฐาน
+- ปิดเอกสารหลัง deploy เป็น docs-only follow-up `[skip ci]`: ตรวจ `git diff --check` และ `src/public/tests` เทียบ merge ไม่ต่าง; ไม่รันทดสอบเกมซ้ำเพราะไม่มี runtime เปลี่ยน
+- ภาพ 390px ที่เจ้าของเห็น: ชุด polish `/tmp/fateweave-final/` ตามรายการก่อนหน้า และชุดชื่อสุดท้าย `/tmp/fateweave-no-suffix/team-five-rift-legion-390.png`, `team-five-warden-390.png`; ไม่มีภาพ/animation ใหม่ในรอบเผยแพร่
+- งานค้าง: ไม่มีงาน push/merge/deploy ค้าง; ภาพวาด calm เป็นงาน art/atlas แยก, P02-03 คนจริง/มือถือจริง/iOS ยังไม่ทดสอบ; ไม่มีคำขอแก้กฎ/เซฟ/สมดุลจาก UI งานนี้
 
 ## 2026-10-31 — เจ้าของยกเลิกอักษร ก/ข/ค ต่อท้ายศัตรูชื่อซ้ำ (Codex)
 
