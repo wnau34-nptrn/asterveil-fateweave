@@ -15,26 +15,30 @@ export interface FieldSlot {
  *   - a large foe sharing its column stands on the bottom row and is drawn LARGE_SCALE taller from the same feet.
  * Coordinates are arena CSS pixels; each slot reserves its body, its HP/status panel (under the feet) and a foe's
  * name label (above its painted head).
- * Slot ids: heroes 0/1 (back), 2/3 (front), 8 (back middle), 9 (front middle); foes f1 4, f2 5, b1 6, b2 7.
+ * Slot ids: heroes 0/1 (back), 2/3 (front), 8 (back middle), 9 (front middle); foes f1 4, f2 5, b1 6, b2 7,
+ * f3 10 (front middle), b3 11 (back middle) (P02: five a side, at most three in a column).
  * Fields shorter than three rows of 44px units keep the older two-row short grid (`shortSlots`).
  */
-export const FOE_SLOT_INDEX: Readonly<Record<string, number>> = { f1: 4, f2: 5, b1: 6, b2: 7 };
+export const FOE_SLOT_INDEX: Readonly<Record<string, number>> = { f1: 4, f2: 5, b1: 6, b2: 7, f3: 10, b3: 11 };
 export const LARGE_SCALE = 1.5;
 export type HeroColumn = 'back' | 'front';
+export type FoeColumn = 'foeFront' | 'foeBack';
 export type Row = 0 | 1 | 2;
-export const TRIO_SLOTS: Readonly<Record<HeroColumn, readonly [number, number, number]>> = { back: [0, 8, 1], front: [2, 9, 3] };
+// Top, middle and bottom cells of each column.
+export const TRIO_SLOTS: Readonly<Record<HeroColumn | FoeColumn, readonly [number, number, number]>> = { back: [0, 8, 1], front: [2, 9, 3], foeFront: [4, 10, 5], foeBack: [6, 11, 7] };
+const SLOT_IDS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const;
 // Columns of a side stand .25 of the width apart and the two sides .28 apart; a unit is at most UNIT_WIDTH of the width,
 // so neighbouring bodies never overlap and the painted figures (about four fifths of the box) keep a clear gap
 // (owner 2026-10-22).
 const COLUMNS = [.115, .37, .63, .885] as const;
 const UNIT_WIDTH = .295;
 const FULL_COLUMNS = [.12, .37, .62, .865] as const;
-const columnOf = (slot: number): number => slot === 8 ? 0 : slot === 9 ? 1 : slot >> 1;
+const columnOf = (slot: number): number => slot === 8 ? 0 : slot === 9 ? 1 : slot === 10 ? 2 : slot === 11 ? 3 : slot >> 1;
 export const partner = (slot: number): number => slot % 2 ? slot - 1 : slot + 1;
 
 // `rise`: how far each slot's painted figure rises above its feet, as a fraction of its size (`figureRise`); a foe's
 // name label sits just above that. Missing = 1 (a figure filling its frame), the case the row spacing is built for.
-export interface SlotLayout { large: ReadonlySet<number>; rows: ReadonlyMap<number, Row>; trio: ReadonlySet<HeroColumn>; rise?: ReadonlyMap<number, number> }
+export interface SlotLayout { large: ReadonlySet<number>; rows: ReadonlyMap<number, Row>; trio: ReadonlySet<HeroColumn | FoeColumn>; rise?: ReadonlyMap<number, number> }
 const none: SlotLayout = { large: new Set(), rows: new Map(), trio: new Set() };
 
 // A body box overshoots its feet by 4% of its size (contact shadow); rows keep that clear of the next panel.
@@ -78,7 +82,7 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
   const rows = [bottom - 2 * step, bottom - step, bottom];
   const cellWidth = width * .22, iconSize = 12, compact = false;
   const maxIcons = Math.min(3, Math.floor((cellWidth - 18) / (iconSize + 2)));
-  return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(slot => {
+  return SLOT_IDS.map(slot => {
     const row = layout.rows.get(slot) ?? (slot >= 8 ? 1 : slot % 2 ? 2 : 0), y = rows[row]!;
     const x = width * COLUMNS[columnOf(slot)]!;
     // A large foe grows up from the same feet as far as LARGE_SCALE allows while its name stays inside the field and
@@ -103,8 +107,8 @@ function shortSlots(width: number, height: number, layout: SlotLayout): FieldSlo
   const tiny = height < 180, side = height < 150, compact = true;
   const iconSize = side ? 12 : tiny ? 14 : 18, panelHeight = side ? 26 : tiny ? 18 : 32;
   const top = 4, gap = 4, rowHeight = (height - top - gap - 4) / 2;
-  const slots = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(id => {
-    const slot = id >= 8 ? (id === 8 ? 0 : 2) : id;
+  const slots = SLOT_IDS.map(id => {
+    const slot = id >= 8 ? ({ 8: 0, 9: 2, 10: 4, 11: 6 } as Record<number, number>)[id]! : id;
     const enemy = slot >= 4, front = slot >= 2 && slot <= 5, row = slot % 2;
     const cellWidth = width * .24;
     const x = width * FULL_COLUMNS[enemy ? (front ? 2 : 3) : front ? 1 : 0] - (side ? 14 : 0);
@@ -120,7 +124,9 @@ function shortSlots(width: number, height: number, layout: SlotLayout): FieldSlo
   for (const column of layout.trio) {
     const ids = TRIO_SLOTS[column], base = slots[ids[0]]!, size = 44, step = (height - 8) / 3;
     // The side badge must end before the next column's panels (the shortest fields already badge all).
-    const x = base.side ? base.x : column === 'back' ? Math.max(23, Math.min(base.x, width * .25 - 51)) : Math.max(width * .24 + 23, Math.min(base.x, width * .5 - 51));
+    // Foe columns mirror the hero columns on the right half.
+    const x = base.side ? base.x : column === 'back' ? Math.max(23, Math.min(base.x, width * .25 - 51)) : column === 'front' ? Math.max(width * .24 + 23, Math.min(base.x, width * .5 - 51))
+      : column === 'foeFront' ? Math.max(width * .5 + 23, Math.min(base.x, width * .75 - 51)) : Math.max(width * .76 + 23, Math.min(base.x, width - 51));
     const first = Math.max(4 + step - 3, 1.03 * size + 3);
     ids.forEach((slot, k) => {
       const y = first + k * (height - 3 - first) / 2;
@@ -138,7 +144,7 @@ export interface SlotPlan extends SlotLayout { heroSlots: Map<string, number>; u
 export function slotPlan(heroes: readonly { id: string; lane: HeroColumn }[], foes: readonly { id: string; reserve?: boolean; large?: boolean; boss?: boolean }[], called: ReadonlySet<string>): SlotPlan {
   const count = { back: 0, front: 0 }; const lane = new Map<string, HeroColumn>();
   for (const hero of heroes) { const l = count[hero.lane] < 3 ? hero.lane : hero.lane === 'front' ? 'back' : 'front'; lane.set(hero.id, l); count[l]++; }
-  const trio = new Set((['back', 'front'] as const).filter(c => count[c] === 3));
+  const trio = new Set<HeroColumn | FoeColumn>((['back', 'front'] as const).filter(c => count[c] === 3));
   const free = { back: trio.has('back') ? [...TRIO_SLOTS.back] : [0, 1], front: trio.has('front') ? [...TRIO_SLOTS.front] : [2, 3] };
   const heroSlots = new Map(heroes.map(h => [h.id, free[lane.get(h.id)!].shift()!] as const));
   const standing = foes.filter(e => !e.reserve || called.has(e.id));
@@ -149,9 +155,17 @@ export function slotPlan(heroes: readonly { id: string; lane: HeroColumn }[], fo
     const ids = TRIO_SLOTS[column].filter(i => used.includes(i));
     ids.forEach((slot, k) => rows.set(slot, ids.length === 1 ? 1 : ids.length === 2 ? (k ? 2 : 0) : k as Row));
   }
-  for (const column of [[4, 5], [6, 7]]) {
+  for (const [name, column] of [['foeFront', TRIO_SLOTS.foeFront], ['foeBack', TRIO_SLOTS.foeBack]] as const) {
     const here = column.flatMap(i => standing.filter(e => FOE_SLOT_INDEX[e.id] === i));
     const boss = here.find(e => e.boss), big = here.filter(e => e.large);
+    // P02: a column of three stands on all three rows (a boss in the middle); large foes keep the normal size there.
+    if (here.length === 3) {
+      trio.add(name);
+      const middle = boss ?? here.find(e => FOE_SLOT_INDEX[e.id] === column[1]) ?? here[1]!;
+      const rest = here.filter(e => e !== middle);
+      rows.set(FOE_SLOT_INDEX[rest[0]!.id]!, 0); rows.set(FOE_SLOT_INDEX[middle.id]!, 1); rows.set(FOE_SLOT_INDEX[rest[1]!.id]!, 2);
+      continue;
+    }
     if (here.length === 1) { rows.set(FOE_SLOT_INDEX[here[0]!.id]!, 1); if (here[0]!.large) large.add(FOE_SLOT_INDEX[here[0]!.id]!); continue; }
     if (here.length !== 2) continue;
     // A boss takes the middle, its partner the bottom; otherwise a lone large foe takes the bottom.

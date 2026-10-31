@@ -11,8 +11,8 @@ import { shortcutBlocked } from '../platform/keyboard';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 
 import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId } from '../core/world/types';
-import { canManage, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, levelOf, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
-import { PARTY_SLOTS, POTION_IDS, RESERVE_SLOTS, type Lane } from '../core/world/types';
+import { canManage, fatigueCut, fatigueOf, reserveCap, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, levelOf, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
+import { PARTY_SLOTS, POTION_IDS, type Lane } from '../core/world/types';
 import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
 import { heroArt, portrait, starRow } from './portraits';
@@ -505,7 +505,10 @@ export class WorldUI {
       if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-world="team-pick" data-side="${side}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} ว่าง` : 'ช่องสำรองว่าง'}"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
       const h = this.hero(id); const hp = s.hp[id] ?? 0; const text = heroText[id]!;
       const lane = laneName(this.lanes(s)[id] ?? h.lane);
-      return `<button id="${prefix}-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${levelOf(this.map, s)} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small></button>`;
+      // P02 (OD-11): fatigue points and the cut its step brings (none shown while fresh).
+      const tired = fatigueOf(s, id), cut = fatigueCut(this.map, tired);
+      const fatigue = tired ? `<small class="fatigue${cut ? ' cut' : ''}" data-fatigue="${tired}">เหนื่อย ${cut ? `−${cut}%` : tired}</small>` : '';
+      return `<button id="${prefix}-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}${tired ? ` ความเหนื่อย ${tired}${cut ? ` โจมตีและรักษาลด ${cut}%` : ''}` : ''}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${levelOf(this.map, s)} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small>${fatigue}</button>`;
     };
     const row = (ids: string[], side: 'deployed' | 'reserve', size: number) => Array.from({ length: size }, (_, i) => card(ids[i], side, i)).join('');
     const deployedUp = s.roster.deployed.some(id => s.hp[id]! > 0);
@@ -513,8 +516,8 @@ export class WorldUI {
         <h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3>
         <div class="team-grid">${row(s.roster.deployed, 'deployed', PARTY_SLOTS)}</div>
         ${formationGrid({ prefix, attr: 'world', deployed: s.roster.deployed, lanes: this.lanes(s), recommended: this.recommended, picked: this.lanePick, disabled: !!this.view?.locked || !canManage(s), hp: id => s.hp[id] ?? 0 })}
-        <h3>${icon('camp')} สำรอง</h3>
-        <div class="team-grid">${row(s.roster.reserve, 'reserve', RESERVE_SLOTS)}</div>
+        <h3>${icon('camp')} สำรอง <span class="camp-embers">${s.roster.reserve.length}/${reserveCap(s)} · ชนะแล้วฟื้นเลือด ${this.map.camp.reserveHealPercent}% · หายเหนื่อย 1</span></h3>
+        <div class="team-grid">${row(s.roster.reserve, 'reserve', reserveCap(s))}</div>
         <p class="camp-note" id="${prefix}-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนในทีมหรือในแผนการยืน หรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ไม่ได้พาตัวสำรองมา · เลือกตัวสำรองได้ที่ค่ายก่อนออกเดินทาง'}</p>${this.picked&&rosterIds(s).includes(this.picked)?this.heroDetail(s,this.picked,prefix==='bag-team'?'bag':'camp'):''}</section>`;
   }
 

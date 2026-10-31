@@ -42,7 +42,7 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 /* The same centred command dock is used by touch and mouse. HP remains legible for waiting allies. */
 #battle-view .decision-panel { border: 0; margin: 0; border-radius: 16px 16px 0 0; background: linear-gradient(180deg, #0c1c30e8, #07111df5); }
 #battle-view .team-section { padding: 4px; }
-#battle-view .party { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+#battle-view .party { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 4px; }
 #battle-view .hero-card { grid-template-columns: 1fr; height: 48px; min-height: 48px; padding: 3px 4px; gap: 0; border-radius: 10px; text-align: center; }
 #battle-view .hero-card.waiting-turn { opacity: 1; }
 #battle-view .hero-emblem, #battle-view .hero-class, #battle-view .hero-skills, #battle-view .selected-tag, #battle-view .hero-hp .hp-label { display: none; }
@@ -50,6 +50,7 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #battle-view .hero-hp { font-size: 11px; color: #e1f4ec; }
 #battle-view .hero-card .hp-track { margin: 2px 0 0; }
 #battle-view .hero-card .barrier-info { position: static; font-size: 9px; }
+#battle-view .hero-card .fatigue-info { color: #ff9f8a; }
 #battle-view .command-dock { padding: 0 6px 6px; margin: 0; background: transparent; }
 #battle-view #selected-hero { display: flex; align-items: center; height: 44px; margin: 0; gap: 4px; }
 #battle-view #selected-hero .selected-info { flex: 1; min-width: 0; }
@@ -326,7 +327,7 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #battle-view .command-dock { grid-template-areas: "actions"; grid-template-columns: minmax(0, 1fr); }
 #battle-view .command-dock #selected-hero { display: none; }
 #battle-view .command-dock .target-hint { position: absolute !important; width: 1px; height: 1px; min-height: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-#battle-view .action-option .skill-info { position: absolute; z-index: 2; top: -10px; left: -10px; width: 34px; height: 34px; padding: 0; border: 0; background: transparent; color: var(--gold-light, #f2d596); font: 700 13px/1 var(--font-heading); display: grid; place-items: center; }
+#battle-view .action-option .skill-info { position: absolute; z-index: 2; top: -15px; left: -15px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: var(--gold-light, #f2d596); font: 700 13px/1 var(--font-heading); display: grid; place-items: center; }
 #battle-view .action-option .skill-info::before { content: 'ⓘ'; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #0b1626e6; border: 1px solid #f2d59680; }
 #battle-view .action-option .skill-info { font-size: 0; }
 #battle-view .action-option .skill-info::before { font-size: 14px; }

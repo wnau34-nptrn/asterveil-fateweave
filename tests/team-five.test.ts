@@ -67,7 +67,7 @@ describe('five a side in the resolver', () => {
   it('f3 screens the back row like f1/f2; b3 is reachable once the front row falls', () => {
     const d = withParty(thornHost, five); const s = createBattle(d);
     expect(screened(s, d, 'guardian', 'attack', 'b2')).toBe(true);
-    const onlyF3 = { ...s, enemies: s.enemies.map(e => e.id === 'f3' || e.row === 'back' ? e : { ...e, hp: 0 }) } as BattleState;
+    const onlyF3 = { ...s, enemies: s.enemies.map(e => e.id === 'f3' || e.id.startsWith('b') ? e : { ...e, hp: 0 }) } as BattleState;
     expect(screened(onlyF3, d, 'guardian', 'attack', 'b1')).toBe(true);
     const open = { ...s, enemies: s.enemies.map(e => e.id.startsWith('f') ? { ...e, hp: 0 } : e) } as BattleState;
     expect(screened(open, d, 'guardian', 'attack', 'b1')).toBe(false);
