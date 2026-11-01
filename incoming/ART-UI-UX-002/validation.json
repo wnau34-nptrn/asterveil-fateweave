@@ -34,14 +34,46 @@
       "decoded": true
     },
     {
+      "file": "04_equipment_level_fusion_reroll.png",
+      "bytes": 1969806,
+      "sha256": "a4ba02a9431703d1272d4cea467f7802fb557a2246e7f1cfb74fbfbf24b7df67",
+      "width": 1476,
+      "height": 1065,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "05_equipment_affix_transfer.png",
+      "bytes": 2047576,
+      "sha256": "8ee9419e686ce12cc2c81fefa00ea5c02d56c78dbb70f225d9154a51abd411e2",
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "06_crafting_recycle_smelt.png",
+      "bytes": 1937546,
+      "sha256": "e0386275b896f58d2ed7be8f63fba1752583720429aad20d3860bbf83304b646",
+      "width": 1476,
+      "height": 1065,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "EQUIPMENT_DEVELOPMENT_TH.md",
+      "bytes": 22436,
+      "sha256": "a2fa48fc527499d499348bca4b97a2cdca661c252a1601fae19843cf63282fe9"
+    },
+    {
       "file": "HANDOFF_TH.md",
-      "bytes": 6062,
-      "sha256": "e9f4c594d6eaff391904fc31abae1776305eca3f0973e639183ba14dc726e0fb"
+      "bytes": 6795,
+      "sha256": "10e1f57120ce564e42fd9fea3f5f1a4ada3966c929daac2342b7e73abb8e4b73"
     },
     {
       "file": "README.md",
-      "bytes": 2086,
-      "sha256": "fe6ef4f84ba51a99d9588c15d13237b6d0c22028c684e5fad533806516f66c46"
+      "bytes": 2837,
+      "sha256": "ed282dec2b34b0f1b29bb4f0da89c634cf22125e7995e7aaccfacadbcec05e4a"
     },
     {
       "file": "REVIEW_TH.md",
@@ -65,6 +97,7 @@
     "Boards are not runtime screenshots or production assets.",
     "Use existing hero art, real localized copy and authoritative state in implementation.",
     "All displayed costs, statistics and donor quantities are illustrative.",
-    "Star upgrade board uses current duplicate-first and capped seal substitution rules; P04 future star shards remain out of runtime scope."
+    "Star upgrade board uses current duplicate-first and capped seal substitution rules; P04 future star shards remain out of runtime scope.",
+    "Equipment boards04-06 cover deterministic previews, unknown random results, destructive donors, upfront fees/refunds, crafting, salvage and smelt quotas; all are concepts, not runtime."
   ]
 }

@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-11-01 — ART-UI-UX-002 เพิ่มหน้าพัฒนาอุปกรณ์ครบคำสั่ง
+
+- เจ้าของขอ “หน้าพัฒนาอุปกรณ์อื่นๆ ด้วยนะ” ต่อ PR #133 บน `art/art-ui-ux-002`; งานยังเป็นข้อเสนอภาพ ไม่ใช่นำเข้า runtime
+- อ่าน forge-workbench/core forge/rules ล่าสุดซ้ำ blobตรงฐาน c8665fa ครบเพิ่ม Lv/เลื่อนสี/สุ่ม/ถ่ายโอน/สร้าง/รีไซเคิล/หลอมแร่
+- เพิ่ม concept04 (Lv/fuse/reroll),05 (transferเลือก/ตรวจ),06 (craft/recycle/smelt) รวม8หน้าจอ และ `EQUIPMENT_DEVELOPMENT_TH.md` พร้อมข้อจำกัด/ตัวอย่างราคา/เกณฑ์QA
+- เน้นผลแน่นอนกับผลสุ่มแยกชัด, ผูกช่องถ่ายโอนถาวร, donorหายทั้งชิ้น, ค่าจ่ายล่วงหน้าแยกrefund, เพดานLv/คลัง/โควตา; ไม่เพิ่ม batch upgrade, reverse exchange, undo roll หรือกฎใหม่
+- ภาพยังเป็น concept ใช้ state/preview/assetจริงตอนนำเข้า; ตรวจภาพ/decode/hash/diff whitespace ไม่รัน gameplay/browser เพราะไม่แตะ runtime ไม่มี human usability/real-device results
+
+
 ## 2026-11-01 — ART-UI-UX-002 เพิ่มหน้าอัปดาวตามคำขอเจ้าของ
 
 - ต่อจาก PR #133 บน `art/art-ui-ux-002` เจ้าของขอ “หน้าอัพดาวตัวละครด้วยนะ ดูให้ที”

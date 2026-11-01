@@ -5,6 +5,10 @@
 - `01_development_concepts.png`: หน้าตีบวก, รวมงานสกิล, ทางเข้าพัฒนาตัวละคร
 - `02_forge_task_and_review.png`: หน้าเลือกงานโรงตีเหล็ก และการตรวจรายการหลอมสี
 - `03_character_star_upgrade.png`: หน้าอัปดาว ผล/ต้นทุน ตรวจรายการ และตัวซ้ำไม่พอ
+- `04_equipment_level_fusion_reroll.png`: เพิ่ม Lv เลือกวัตถุดิบเลื่อนสี และสุ่มคุณสมบัติ
+- `05_equipment_affix_transfer.png`: เลือกช่อง/ต้นทางถ่ายโอน และตรวจรายการก่อนใช้ต้นทางหมด
+- `06_crafting_recycle_smelt.png`: สร้างอาวุธ รีไซเคิล และหลอมแร่เป็นฝุ่น
+- [EQUIPMENT_DEVELOPMENT_TH.md](EQUIPMENT_DEVELOPMENT_TH.md): สเปกหน้าพัฒนาอุปกรณ์ครบคำสั่ง พร้อมหลักฐานข้อจำกัดและเกณฑ์ QA
 - [STAR_UPGRADE_TH.md](STAR_UPGRADE_TH.md): หลักฐานและข้อเสนอหน้าอัปดาว แยกระบบปัจจุบันจากทิศทาง P04
 - [REVIEW_TH.md](REVIEW_TH.md): หลักฐานสาขา/โค้ด, ปัญหา UX, โครงสร้างใหม่, interaction, states และเกณฑ์ตรวจรับ
 - [HANDOFF_TH.md](HANDOFF_TH.md): ข้อกำหนดส่งต่อก่อนนำเข้าเกม
