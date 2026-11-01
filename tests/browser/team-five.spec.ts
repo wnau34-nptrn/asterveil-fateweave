@@ -180,17 +180,21 @@ test('desktop turn queue: native horizontal rail leaves all ten 44px portraits r
   await open(page, 'rift-legion'); await expect(page.locator('#action-attack')).toBeEnabled();
   const before = await page.evaluate(k => localStorage.getItem(k), key);
   const buttons = page.locator('#turn-order .turn-icon'); await expect(buttons).toHaveCount(10);
-  await buttons.first().focus();
-  for (let index = 0; index < 10; index++) {
-    const button = buttons.nth(index);
-    if (index) await page.keyboard.press('Tab');
-    await expect(button).toBeFocused();
-    await expect(button).toBeInViewport({ ratio: 1 });
+  await expect(buttons.first()).toBeInViewport({ ratio: 1 });
+  for (const button of await buttons.all()) {
     expect(await button.evaluate(el => {
       const r = el.getBoundingClientRect(), phase = el.closest('#turn-phase')!.getBoundingClientRect();
-      return r.width >= 44 && r.height >= 44 && r.top >= phase.top && r.bottom <= phase.bottom + 1 && el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
+      return r.width >= 44 && r.height >= 44 && r.top >= phase.top && r.bottom <= phase.bottom + 1;
     })).toBe(true);
   }
+  const strip = page.locator('#turn-order ol');
+  await strip.focus(); await page.keyboard.press('ArrowRight');
+  await expect.poll(() => strip.evaluate(el => el.scrollLeft)).toBeGreaterThan(0);
+  await expect(buttons.last()).toBeInViewport({ ratio: 1 });
+  expect(await buttons.last().evaluate(el => { const r = el.getBoundingClientRect(); return el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2)); })).toBe(true);
+  await strip.hover(); await page.mouse.wheel(-400, 0);
+  await expect.poll(() => strip.evaluate(el => el.scrollLeft)).toBe(0);
+  await expect(buttons.first()).toBeInViewport({ ratio: 1 });
   expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
   await context.close();
 });
