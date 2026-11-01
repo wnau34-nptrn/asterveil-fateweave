@@ -3,7 +3,7 @@
 ## 2026-11-01 — HUD แผนที่: safe area / ชื่อยาว (Codex)
 
 - [x] แก้ตามภาพเจ้าของ: fallback ด้านบนเฉพาะ viewport เต็มจอ, จำกัดแถวชื่อไม่ซ้อนแถบอันตรายและแยก Lv, เรียงแถว HUD ตามความสูงจริง; ไม่แตะกฎ/เซฟ/สมดุล
-- สาขา `codex/world-hud-safe-area` จากเกม `12a95e6`; ผลทดสอบ ภาพ 390px และสถานะ PR/CI/Pages ดูรายการบนสุดใน `CODEX-TO-CLAUDE.md`; Safari/มือถือจริงยังไม่มีผล
+- PR #130 merged `787d826` เข้าสาขาเกมแล้ว หลัง quality/browser สี่ shards + aggregate ผ่านบน `6ba497c`; Pages `41270528649` success ครบ build/browser สี่ชุด/deploy เข้าเกมจริงแล้ว ผลทดสอบและภาพ 390px ดูรายการบนสุดใน `CODEX-TO-CLAUDE.md`; Safari/มือถือจริงยังไม่มีผล
 
 ## 2026-11-01 — หน้ารางวัลเน้นเลเวลค่าย (Codex)
 

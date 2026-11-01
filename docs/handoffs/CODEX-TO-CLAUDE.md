@@ -3,14 +3,18 @@
 ## 2026-11-01 — HUD แผนที่: ลดระยะบนซ้ำและกันชื่อยาวซ้อน (Codex)
 
 - เจ้าของส่งภาพ iPhone ที่มีช่องว่างเหนือ HUD มากและชื่อ “พงหนามชายแดน Lv12 · อันตราย” ซ้อนแถบอันตราย ขอแก้การแสดงผล; standing authorization รวม push/merge/Pages ต่อเนื่อง
-- สาขา `codex/world-hud-safe-area` จาก origin สาขาเกม `12a95e6` (`feature/fateweave-initial-prototype`, ไม่ใช่ main); PR/CI/merge/Pages จะบันทึกหลังสำเร็จ
+- สาขา `codex/world-hud-safe-area` จาก origin สาขาเกม `12a95e6` → [PR #130](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/130) → merge `787d826d2c462fc1ba3891cb358118e51c9ccae0` เข้า `feature/fateweave-initial-prototype` แล้ว (ไม่ใช่ main); validated head `6ba497c04ddc8f97da5f0c29b7f71493dba4fa00`; หลัง merge ตรวจ src/public/tests ตรง head ที่ผ่านทดสอบ
+- PR CI exact head: [quality 41267966320](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41267966320) และ [browser 41267966268](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41267966268) completed/success ครบสี่ shards + aggregate รวม source fixtures และ full production gameplay
+- Pages [41270528649](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41270528649) บน merge `787d826` **completed/success ครบ build + browser สี่ shards + deploy**; deploy job `124749711419` success และส่ง URL [เกมจริง](https://wnau34-nptrn.github.io/asterveil-fateweave/) กลับมา; post-merge [quality 41270528603](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41270528603) success
+- Artifact `github-pages` ID `13068803962`, 96,105,598 bytes, SHA256 `5f137feb00c46667476bcb56926fd9d717f83c231ad32c0fcb83a5e272ab1294` ผูก workflow head SHA ตรง merge `787d826d2c462fc1ba3891cb358118e51c9ccae0`; ยืนยันการเผยแพร่จากผล platform deploy และ production browser CI ไม่อ้างตรวจ CDN/live browser จากคลาวด์ ซึ่งเข้าถึง github.io ไม่ได้จากข้อจำกัด proxy 403 ที่ตรวจไว้ในงานก่อนหน้า
+- ปิดเอกสารหลัง deploy เป็น docs-only follow-up `[skip ci]`: ตรวจ `git diff --check` ผ่าน และ `src/public/tests` เทียบ validated head/merge ไม่ต่าง; ไม่รันทดสอบเกมซ้ำเมื่อไม่มี runtime เปลี่ยน
 - `src/platform/viewport.ts`: จำกัด fallback 50px เมื่อ iOS รายงาน env(top)=0 เฉพาะ viewport ที่สูงเต็ม screen จริง (คลาดไม่เกิน 1px) แทน tolerance 120px ที่ครอบคลุม viewport ซึ่ง Safari อาจกันแถบสถานะให้แล้ว; คง env safe-area จริง และ fallback กรณี edge-to-edge ไว้ ไม่มีการบวก inset ซ้ำ
 - `src/ui/world-ui.ts`/`portrait.css`: รวมชื่อและปุ่มด้านขวาในแถว flex ที่จำกัดความกว้าง, min-width:0 + ellipsis สำหรับชื่อยาว (DOM/หัวเรื่อง title ยังครบ), ย้าย Lv/อันตรายลงบรรทัดแยก; แถวชื่อ/ทีม/เป้าหมายและกระเป๋าเรียงตามเนื้อหาด้วย grid/flex แทน top offset ตายตัว จึงไม่เว้นช่องว่างเพิ่มเมื่ออยู่ค่าย; ปุ่มข้อมูล/เป้าหมาย/กระเป๋ายัง ≥44px
 - `tests/browser/world.spec.ts`: เพิ่ม 4 กรณี iPhone UA/หน้าจอ 390×785 (browser กันแถบสถานะแล้ว), 390×844 (edge-to-edge fallback), 390×844 (synthetic safe inset 59px), 320×568; ใช้เซฟ v45/โหมดยาก/ชื่อโซนจากภาพจริง ตรวจขอบกล่องไม่ซ้อน ระยะบนครั้งเดียว Thai DOM ครบ ปุ่มกดถึง ไม่มี scroll/overlay/console error, I/Escape เปิดปิดข้อมูลและ raw save ไม่เปลี่ยน
 - ข้อจำกัดการจำลอง: Chromium เครื่องนี้ไม่มี CDP Emulation.setSafeAreaInsets จึงป้อนค่าจำลองเข้าทั้ง measurement probe และ CSS สำหรับกรณี env(top)=59; ไม่อ้างว่าเป็น Safari/iOS/เครื่องจริง ใช้ Playwright เพราะค้น Browser runtime tool แล้วไม่มีให้เรียกในเซสชันนี้
 - ผล local: typecheck/lint ผ่าน, unit **1392/1392 (99 files)**, build ผ่าน; regression world 11 viewport + portrait frame/rotation/input รวม **24/24 ผ่าน**; ชุด HUD เซฟ v45/โหมดยากสุดท้าย **4/4 ผ่าน**; ไม่มี diff ใน core/content/public/assets หรือรูปแบบเซฟ v45/กฎ/ตัวเลขสมดุล/จังหวะการเล่น
 - ภาพให้เจ้าของดู 390px: `/tmp/world-hud-final/hud-browser-390.png` (390×785), `/tmp/world-hud-final/hud-island-390.png` (390×844, จำลอง inset); ไม่มีภาพวาดใหม่
-- งานค้าง: รอ PR CI และ Pages; ยังต้องให้เจ้าของดูบน Safari/มือถือจริงเพื่อยืนยันค่าที่เบราว์เซอร์รายงาน; ไม่มีคำถามแก้กฎ/เซฟ/สมดุลจากงานนี้
+- งานค้าง: ไม่มีงาน push/merge/deploy ค้าง; ยังไม่มีผล Safari/มือถือจริงเพื่อยืนยันค่าที่เบราว์เซอร์รายงาน; ไม่มีคำถามแก้กฎ/เซฟ/สมดุลจากงานนี้
 
 ## 2026-11-01 — หน้ารางวัลเน้นเลเวลค่าย ไม่มีรูปสมาชิก (Codex)
 
