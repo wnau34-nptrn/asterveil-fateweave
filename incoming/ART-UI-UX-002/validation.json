@@ -25,19 +25,33 @@
       "decoded": true
     },
     {
+      "file": "03_character_star_upgrade.png",
+      "bytes": 2009176,
+      "sha256": "f65be9ae445337c38ed401ede958bcc9347993b8ea0e720e6f58cf3ee550539b",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
       "file": "HANDOFF_TH.md",
-      "bytes": 5498,
-      "sha256": "1587fce8babcaac8ae733fd932491e93bc657e16770729d714c0950af6503cfb"
+      "bytes": 6062,
+      "sha256": "e9f4c594d6eaff391904fc31abae1776305eca3f0973e639183ba14dc726e0fb"
     },
     {
       "file": "README.md",
-      "bytes": 1717,
-      "sha256": "2af29914dd8f2d009d18a848eac19fb627a7206e41a2ae56f69dde93ea1fca8a"
+      "bytes": 2086,
+      "sha256": "fe6ef4f84ba51a99d9588c15d13237b6d0c22028c684e5fad533806516f66c46"
     },
     {
       "file": "REVIEW_TH.md",
       "bytes": 20616,
       "sha256": "3d8d8181605f6bcb1de00c8565cebe447b8cf8ff5e78fb0e756d7921ad8e5223"
+    },
+    {
+      "file": "STAR_UPGRADE_TH.md",
+      "bytes": 11568,
+      "sha256": "4f2a525581a6e0849e5e956a6116e310fd480b6869454d12609d4d1c2a0b27e0"
     }
   ],
   "checks": {
@@ -50,6 +64,7 @@
   "notes": [
     "Boards are not runtime screenshots or production assets.",
     "Use existing hero art, real localized copy and authoritative state in implementation.",
-    "All displayed costs, statistics and donor quantities are illustrative."
+    "All displayed costs, statistics and donor quantities are illustrative.",
+    "Star upgrade board uses current duplicate-first and capped seal substitution rules; P04 future star shards remain out of runtime scope."
   ]
 }

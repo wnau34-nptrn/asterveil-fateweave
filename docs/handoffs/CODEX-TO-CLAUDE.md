@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-11-01 — ART-UI-UX-002 เพิ่มหน้าอัปดาวตามคำขอเจ้าของ
+
+- ต่อจาก PR #133 บน `art/art-ui-ux-002` เจ้าของขอ “หน้าอัพดาวตัวละครด้วยนะ ดูให้ที”
+- ตรวจ `lobby-ui.ts` memberPanel/upgrade handler, `core/world/profile.ts` upgradeCost/sealLimit/upgradeReason, rules.ts และ OWNER_DECISIONS OD-01/02/04: ปัจจุบันอัปจากหน้าทีมทันที ใช้ตัวซ้ำก่อน+ตราแทนจำกัด+แร่; P04 เศษกลาง/แต้มจากค่ายยังต้องแยกจาก runtime
+- เพิ่ม artwork 03 สามสถานะ: ผล/ต้นทุน → review → ตัวซ้ำขั้นต่ำขาด และ `STAR_UPGRADE_TH.md` พร้อมตัวอย่าง ★3→4 ใช้ตัวซ้ำ1/ตรา2/แร่70 และเงื่อนไข QA
+- เสนอทางเข้า ตัวละคร→พัฒนา→อัปดาว, preview จากกฎเดิม, แยกเหตุผลตัวซ้ำ/ตรา/แร่, ย้ายเลิกจ้างออกจาก CTA อัปดาว, stale review และ max stars; ไม่เปลี่ยน src/rules/save/balance
+- ตรวจภาพจริง, PNG decode/hash และ diff whitespace; ไม่รัน runtime/browser เพราะเป็นข้อเสนอภาพ/สเปกเท่านั้น ไม่อ้าง human usability หรือภาพถูกอนุมัติแล้ว
+
+
 ## 2026-11-01 — ART-UI-UX-002: ข้อเสนอ UX โรงตีเหล็ก/พัฒนาตัวละคร
 
 - เจ้าของขอตรวจสาขา วิเคราะห์ส่วนใช้งานยาก และเสนอ Artwork สำหรับนำไปปรับเกมภายหลัง ขอบเขตนี้เป็นงานออกแบบ ไม่ใช่นำเข้า runtime
