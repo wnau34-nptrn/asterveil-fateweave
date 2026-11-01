@@ -26,7 +26,7 @@ const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile,
 
 // Commander: a name (1–20 code points after trimming, Thai marks included, no control characters) plus one crest
 // and one banner colour from fixed lists. The commander leads the company but never fights.
-export const COMMANDER_CRESTS = ['star', 'guard', 'flag', 'bolt', 'heal', 'mark'] as const;
+export const COMMANDER_CRESTS = ['star', 'guard', 'flag', 'bolt', 'heal', 'mark', 'moon', 'sun', 'mountain', 'diamond'] as const;
 export const COMMANDER_COLORS = ['gold', 'cyan', 'violet', 'coral', 'mint', 'rose'] as const;
 export const NAME_MAX = 20;
 export const normalizeName = (name: string): string => name.normalize('NFC').replace(/\s+/g, ' ').trim();

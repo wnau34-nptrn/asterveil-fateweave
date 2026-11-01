@@ -28,7 +28,7 @@ export function runSummary(before: Profile, run: ExpeditionState, after: Profile
   const quests = map.sideQuests.map(q => ({ id: q.id, npc: q.npc, from: before.quests[q.id]?.progress ?? 0, to: after.quests[q.id]?.progress ?? 0, target: q.target, ready: !after.quests[q.id]?.claimed && (after.quests[q.id]?.progress ?? 0) >= q.target }))
     .filter(q => q.to > q.from);
   return {
-    outcome, firstClear: outcome === 'complete' && !before.cleared.includes(run.mapId), mapId: run.mapId, mapName: map.name, camp: after.commander?.camp ?? '',
+    outcome, firstClear: outcome === 'complete' && !before.cleared.includes(run.mapId), mapId: run.mapId, mapName: map.name, camp: after.commander?.name ?? '',
     steps: run.steps, wins: run.wins, defeats: run.defeats, elites: run.elitesDefeated.length + Object.values(run.respawns).reduce((a, b) => a + b, 0), chests: run.openedChests.length,
     puzzles: run.solved.length, secrets: run.secrets.length, herbs: outcome === 'wiped' ? 0 : run.herbs.length,
     kept, items, overflow:after.overflow?.length??0, salvaged: after.last?.salvaged ?? 0, ...(to > from ? { campLevel: { from, to } } : {}), quests,

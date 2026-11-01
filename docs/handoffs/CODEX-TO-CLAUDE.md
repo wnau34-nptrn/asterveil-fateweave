@@ -1,5 +1,21 @@
 # Codex → Claude handoff
 
+
+## 2026-11-01 — ใช้ชื่อผู้บัญชาการ / สร้างตัวตนหน้าเดียว / ตราเส้น 10 แบบ (Codex)
+
+- เจ้าของสั่งเอาการตั้งชื่อค่ายและส่วนอ้างอิงออก ใช้ชื่อผู้บัญชาการแทน; หน้าสร้างไม่เลื่อน; ตรา minimal ตามดาว ไม่มีภาพสกิล ประมาณ 10 แบบ
+- เริ่มจาก origin เกมล่าสุด `c6127cd` working tree เดิมสะอาด; fetch ผ่าน network escalation เพราะ sandbox ติดต่อ proxy ไม่ได้; ไม่ทำบน main
+- DOM: ลบช่องชื่อค่าย/หน้าต่างเปลี่ยนชื่อ/host handler; ค่ายแสดงชื่อผู้บัญชาการ, สรุปเดินทางและบทรับสมาชิกใช้ชื่อผู้บัญชาการ รวมเซฟเก่า; เก็บ legacy camp field ไม่ migrate/ไม่ rewrite เซฟเก่า สร้างใหม่เติมชื่อผู้บัญชาการใน field เพื่อผ่าน validator เดิม
+- ตรา SVG เส้นเฉพาะ 10 แบบ (6 ID เดิม + moon/sun/mountain/diamond) ไม่ผ่าน skill icon renderer; เพิ่มเฉพาะรายการ cosmetic IDs ใน core/world/profile.ts ไม่เปลี่ยนกฎต่อสู้/เซฟ/สมดุล ไม่แตะ core/battle หรือ core/save
+- CSS grid ตรา 5×2 สี 6 แบบ ปุ่ม ≥44px ธงเล็กลงตาม container height ไม่ใช้ overflow hidden ตัดเนื้อหา; reduced-motion และ native keyboard เดิม
+- ไฟล์: src/ui/{commander-ui.ts,game-feel.css,lobby-ui.ts,game-shell.ts,story-ui.ts,summary-ui.ts}, src/core/world/profile.ts (cosmetic list เท่านั้น), tests/browser/world.spec.ts; เอกสารส่งต่อ
+- ผล local: typecheck/lint/unit 1392/1392 (99 files)/build ผ่าน; focused world/summary 59/59 ผ่าน หลังเก็บจุดอ้างอิงบทพูด; browser focused final 14/14 ผ่าน (11 viewport ตั้งแต่ 320×568 ถึง 1920×1080 + legacy identity + create/reload + prologue; รอบแรกพบ overflow 5px ที่ desktop 768px แก้ breakpoint แล้ว)
+- ภาพ 390px: /tmp/commander-final/commander-390.png และ commander-name-390.png; ตรวจชื่อยาว 20 ตัว ที่ 390×568/844 ไม่มี overflow; keyboard เลือก moon ด้วย Enter + เปลี่ยนสี mint ทำงาน; SVG ไม่มี img สกิล
+- ใช้ Playwright/Chromium ตามคำสั่งเจ้าของ: ค้น Browser js runtime แล้วไม่มีให้เรียก; ไม่อ้าง Safari/มือถือจริง
+- PR/merge/Pages: ยังไม่ส่ง ระหว่างตรวจ local; จะอัปเดตผลหลัง CI/เผยแพร่ ไม่เริ่ม P09
+- งานค้างเชิงกฎ/เซฟ: ไม่มี ไม่จำเป็นต้องลบ legacy schema เพื่อเปลี่ยน identity UI
+
+
 ## 2026-11-01 — HUD หน้า MAP แสดงค่าความล้ารายคน (Codex)
 
 - ข้อตัดสินเจ้าของ: ขอเห็นค่าความล้าของแต่ละตัวที่ลงสนามใน HUD ด้านบนขณะเดินบน MAP; แสดงตัวเลขเสมอ รวม 0 พร้อมสีเดิม ไม่เพิ่มกลไกใหม่
