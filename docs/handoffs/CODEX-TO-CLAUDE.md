@@ -3,13 +3,17 @@
 ## 2026-11-01 — HUD หน้า MAP แสดงค่าความล้ารายคน (Codex)
 
 - ข้อตัดสินเจ้าของ: ขอเห็นค่าความล้าของแต่ละตัวที่ลงสนามใน HUD ด้านบนขณะเดินบน MAP; แสดงตัวเลขเสมอ รวม 0 พร้อมสีเดิม ไม่เพิ่มกลไกใหม่
-- สาขา `codex/map-party-fatigue` จาก origin สาขาเกม `3235d14d6b19442719bb0147f899f069f08cf871` (`feature/fateweave-initial-prototype`, ไม่ใช่ main); PR/CI/merge/Pages จะบันทึกเมื่อเสร็จ
+- สาขา `codex/map-party-fatigue` จาก origin สาขาเกม `3235d14` → [PR #131](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/131) → merge `ad5e93ae19e0e6fd3bbc6e7a29fd4f52ed8cd216` เข้า `feature/fateweave-initial-prototype` แล้ว (ไม่ใช่ main); validated head `bef99d2d7abd763cb75193345261670ee5c7f8b2`; หลัง merge ตรวจ src/public/tests ตรง head ที่ผ่านทดสอบ
+- PR CI exact head: [quality 41275798623](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41275798623) และ [browser 41275798624](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41275798624) completed/success ครบสี่ shards + aggregate รวม source fixtures และ full production gameplay
+- Pages [41278835140](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41278835140) บน merge `ad5e93a` **completed/success ครบ build + browser สี่ shards + deploy**; deploy job `124772923846` success และส่ง URL [เกมจริง](https://wnau34-nptrn.github.io/asterveil-fateweave/) กลับมา; post-merge [quality 41278835315](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41278835315) success
+- Artifact `github-pages` ID `13071909457`, 96,109,007 bytes, SHA256 `3c1baf3554d5e77a18f70bcd8b61b0384025ecf6d1e0d1029e07b82022c79e8c` ผูก workflow head SHA ตรง merge `ad5e93ae19e0e6fd3bbc6e7a29fd4f52ed8cd216`; ยืนยันจากผล platform deploy และ production browser CI ไม่อ้างเปิด CDN/live browser จากคลาวด์ ซึ่งเข้าถึง github.io ไม่ได้จากข้อจำกัด proxy 403 ที่ตรวจไว้ในงานก่อนหน้า
+- ปิดเอกสารหลัง deploy เป็น docs-only follow-up `[skip ci]`: `git diff --check` ผ่าน และ `src/public/tests` เทียบ validated head/merge ไม่ต่าง; ไม่รันทดสอบเกมซ้ำเมื่อไม่มี runtime เปลี่ยน
 - `src/ui/world-ui.ts`: อ่าน `fatigueOf`/`fatigueCut` เดิมให้สมาชิกที่ลงสนามทุกคน เพิ่มบรรทัด “ล้า N” พร้อม `fatigueDot` เขียว/เหลือง/แดงใต้ HP; ข้อมูล accessible name มีแต้มและผลลดโจมตี/รักษา; group ระบุเลือดและความล้าของทีม; ค่ารีเฟรชจาก state ที่ render ทุกครั้ง ไม่เขียนเซฟหรือคำนวณเกณฑ์ใหม่
 - `src/ui/portrait.css`: ป้ายตัวเลข 11px มีพื้นหลังตัดกับแผนที่และตัวเลข tabular, จุดสีมีขอบ แถวเต็มความกว้างการ์ดแยกจากชื่อ/HP/+แต้ม; HUD grid จาก PR #130 จัดแถวเป้าหมาย/กระเป๋าลงตามเนื้อหาเอง ปุ่มยัง ≥44px
 - `tests/browser/team-five.spec.ts`: เพิ่มสองกรณี 390×844 / 320×568 ทีม 5+3 อ่านครบ 0/7/11 และสี ตรวจไม่มีข้อความล้น/ชน HP/ออกนอกการ์ด ปุ่ม ≥44px; เดินจริงหนึ่งก้าวโดยเลือกทิศที่กฎเดิมไม่สุ่มศึก, HUD ยังอยู่; ใช้ calm 7→3 แล้วตัวเลข/สีเปลี่ยนทันที อีกคนยัง 11; Enter เปิด character sheet / Escape ปิดและ raw save ไม่เปลี่ยนเมื่ออ่าน; console/overlay/page identity/ไม่มี page scroll ผ่าน; จำกัด selector ตรวจ fatigue ใน bag ให้ตรง team card เพราะ HUD มี data-fatigue ด้วยแล้ว
 - Local: typecheck/lint, unit **1392/1392 (99 files)**, build ผ่าน; focused team-five **3/3** (สอง viewport + bag), world **15/15** (11 viewport + 4 safe-area/ชื่อยาว regression) ผ่าน; Browser runtime tool ไม่มีให้เรียก จึงใช้ Playwright/Chromium ตามสิทธิ์เดิม `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium`; ไม่มี diff ใน core/content/public/assets/กฎ/เซฟ v45/สมดุล/จังหวะการเล่น
 - ภาพ 390px ให้เจ้าของดู: `/tmp/map-fatigue-final/map-fatigue-390.png` (Chromium touch emulation ไม่ใช่ Safari/มือถือจริง); ไม่มีภาพวาดหรือ animation ใหม่
-- งานค้าง: รอ PR CI/merge/Pages ตาม standing authorization; ยังไม่มีผลอุปกรณ์จริง; ไม่มีคำถามแก้กฎ/เซฟ/สมดุลในงานนี้
+- งานค้าง: ไม่มีงาน push/merge/deploy ค้าง; ยังไม่มีผลอุปกรณ์จริง; ไม่มีคำถามแก้กฎ/เซฟ/สมดุลในงานนี้
 
 ## 2026-11-01 — HUD แผนที่: ลดระยะบนซ้ำและกันชื่อยาวซ้อน (Codex)
 
