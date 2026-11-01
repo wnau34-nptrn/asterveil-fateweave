@@ -360,3 +360,7 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 .hud-tools { display: flex; gap: 8px; min-width: 0; }
 .hud-summary .hud-objective { position: static; flex: 1; width: 0; min-width: 0; max-width: none; }
 .hud-summary .hud-pack { position: static; flex: none; }
+
+/* Map: show every deployed member's fatigue without crowding their name or HP. */
+.world-fatigue { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 4px; min-width: 0; padding: 1px 3px; border-radius: 8px; background: #071320dc; color: #eef4ff; font-size: 11px; line-height: 1.5; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.world-fatigue .fatigue-dot { width: 8px; height: 8px; box-shadow: none; }

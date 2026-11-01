@@ -2,8 +2,8 @@ import { expect, test, type Page } from '@playwright/test';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { encounterById } from '../../src/content/encounters/catalog';
 import { newProfile } from '../../src/core/world/profile';
-import { newExpedition } from '../../src/core/world/world';
-import type { Profile } from '../../src/core/world/types';
+import { move, newExpedition } from '../../src/core/world/world';
+import type { Direction, Profile } from '../../src/core/world/types';
 
 // P02 (OD-05): the five-hero field against five foes on a 390px phone (Chromium emulation, not iOS). Owner review shots:
 // TEAM_FIVE_SHOTS=<dir> npx playwright test tests/browser/team-five.spec.ts
@@ -21,6 +21,7 @@ async function open(page: Page, encounterId: string | null) {
   await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw: JSON.stringify({ version: 45, profile: profile(), run }) });
   await page.goto('./'); await page.locator('#continue').click();
   const start = page.locator('[data-ui=start]'); if (encounterId && await start.isVisible({ timeout: 3000 }).catch(() => false)) await start.click();
+  return run;
 }
 for (const id of ['rift-legion', 'thorn-host']) test(`5v5 field ${id} at 390px: ten actors, readable intents, 44px controls, keyboard`, async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce', deviceScaleFactor: 2 });
@@ -87,7 +88,7 @@ test('map bag team tab: five on the field, the reserve and fatigue at 390px', as
   await page.locator('#potion-calm').click(); await page.locator('#calm-guardian').click();
   await expect.poll(() => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.fatigue.guardian, key)).toBe(3);
   await page.locator('#bag-tab-team, [role=tab]:has-text("ทีม")').first().click();
-  await expect(page.locator('[data-fatigue]').first()).toBeVisible();
+  await expect(page.locator('.team-fatigue[data-fatigue]').first()).toBeVisible();
   expect(await page.locator('.team-grid').first().evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(3);
   expect(await page.locator('.team-card b, .team-card small').evaluateAll(els => els.filter(e => e.scrollWidth > e.clientWidth + 1).map(e => e.textContent))).toEqual([]);
   if (dir) await page.screenshot({ path: `${dir}/team-five-bag-390.png`, fullPage: false });
@@ -122,5 +123,49 @@ test('the rift warden stands with two guards from round 1 (owner 2026-10-31) at 
   await page.locator('#status-unit-b3').click();
   await expect(page.locator('#status-details h3')).toHaveText('Lv10 วิญญาณรอยแยก');
   if (dir) await page.screenshot({ path: `${dir}/team-five-warden-390.png` });
+  expect(errors).toEqual([]); await context.close();
+});
+
+
+for (const width of [390, 320]) test(`map fatigue HUD at ${width}px: five values stay readable while walking and refresh after recovery`, async ({ browser }, info) => {
+  const context = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 568 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce' });
+  const page = await context.newPage(), errors: string[] = [];
+  page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+  const run = await open(page, null);
+  await expect(page).toHaveTitle('Asterveil · Fateweave'); await expect(page.locator('#world-view')).toBeVisible();
+  await expect(page.locator('vite-error-overlay')).toHaveCount(0);
+  const raw = () => page.evaluate(k => localStorage.getItem(k), key);
+  const before = await raw();
+  await expect(page.locator('#world-party .world-fatigue')).toHaveCount(5);
+  for (const [id, value, tone] of [['guardian', 7, 'tired'], ['tracer', 11, 'worn'], ['metta', 0, 'fresh'], ['weaver', 0, 'fresh'], ['healer', 0, 'fresh']] as const) {
+    const card = page.locator(`#world-hero-${id}`), badge = card.locator('.world-fatigue');
+    await expect(badge).toHaveText(`ล้า ${value}`); await expect(badge.locator(`.fatigue-dot.${tone}`)).toBeVisible();
+    await expect(card).toHaveAccessibleName(new RegExp(`ความล้า ${value} แต้ม`));
+    expect(await card.evaluate(el => { const r = el.getBoundingClientRect(), label = el.querySelector('.world-fatigue')!, b = label.getBoundingClientRect();
+      return r.width >= 44 && r.height >= 44 && b.left >= r.left && b.right <= r.right && b.top >= el.querySelector('.hero-copy')!.getBoundingClientRect().bottom && label.scrollWidth <= label.clientWidth && b.bottom <= r.bottom;
+    })).toBe(true);
+  }
+  expect(await raw()).toBe(before);
+  if (width === 390) await page.screenshot({ path: process.env.MAP_FATIGUE_SHOTS ? `${process.env.MAP_FATIGUE_SHOTS}/map-fatigue-390.png` : info.outputPath('map-fatigue.png') });
+  // Read existing movement rules to choose one legal step that does not start a battle.
+  const direction = (['up', 'right', 'down', 'left'] as Direction[]).find(d => {
+    const next = move(run, map, d, encounterById).state;
+    return !next.battle && (next.position.x !== run.position.x || next.position.y !== run.position.y);
+  })!;
+  expect(direction).toBeTruthy();
+  const position = move(run, map, direction, encounterById).state.position;
+  await page.locator(`#move-${direction}`).click();
+  await expect.poll(() => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.position, key)).toEqual(position);
+  await expect(page.locator('#world-view')).toBeVisible(); await expect(page.locator('#world-hero-guardian .world-fatigue')).toHaveText('ล้า 7');
+  await page.keyboard.press('b'); await page.locator('#potion-calm').click(); await page.locator('#calm-guardian').click(); await page.keyboard.press('Escape');
+  await expect(page.locator('#world-hero-guardian .world-fatigue')).toHaveText('ล้า 3');
+  await expect(page.locator('#world-hero-guardian .fatigue-dot.fresh')).toBeVisible();
+  await expect(page.locator('#world-hero-tracer .world-fatigue')).toHaveText('ล้า 11');
+  const after = await raw();
+  // Each card still opens the character sheet using the keyboard; reading it never changes the save.
+  await page.locator('#world-hero-guardian').focus(); await page.keyboard.press('Enter');
+  await expect(page.locator('#character-dialog')).toBeVisible(); await page.keyboard.press('Escape');
+  expect(await raw()).toBe(after);
+  expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth)).toBe(false);
   expect(errors).toEqual([]); await context.close();
 });

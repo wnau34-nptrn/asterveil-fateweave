@@ -99,7 +99,7 @@ export class WorldUI {
           <button id="world-info-button" data-world="info" class="hud-info round-glass" aria-haspopup="dialog" aria-controls="world-info" aria-label="ข้อมูลการเดินทางและวิธีเล่น">${icon('info')}</button>
         </div>
         </div>
-        <div class="hud-party" id="world-party" aria-label="เลือดทีม"></div>
+        <div class="hud-party" id="world-party" aria-label="เลือดและความล้าของทีม"></div>
         <div class="hud-tools">
         <button id="objective-button" data-world="goals" class="hud-objective glass-capsule" aria-haspopup="dialog" aria-controls="world-goals"></button>
         <button id="world-pack" data-world="pack" class="hud-pack glass-capsule" aria-haspopup="dialog" aria-controls="pack-dialog"></button>
@@ -549,7 +549,8 @@ export class WorldUI {
     this.root.querySelector('#world-party')!.innerHTML = s.roster.deployed.map(id => this.hero(id, s)).map(h => {
       const hp = s.hp[h.id] ?? 0; const ratio = hp / h.maxHp; const text = heroText[h.id]!;
       const state = hp <= 0 ? 'fallen' : ratio < .25 ? 'critical' : ratio < .6 ? 'hurt' : 'healthy';
-      return `<button data-world="character-open" data-hero="${h.id}" aria-haspopup="dialog" aria-controls="character-dialog" class="world-hero ${state}${s.guests?.includes(h.id) ? ' guest' : ''}" id="world-hero-${h.id}" aria-label="${text.name}${s.guests?.includes(h.id) ? ' ผู้ร่วมทางชั่วคราว' : ''} ${this.stars(s, h.id)} ดาว เลเวล ${levelOf(this.map, s)} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}${this.stars(s, h.id) > 1 ? `<i class="hero-stars">★${this.stars(s, h.id)}</i>` : ''}<i class="hero-level">Lv${levelOf(this.map, s)}</i></b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span>${talentPoints(this.map, s.members[h.id], h.id, levelOf(this.map, s)) - talentsSpent(s.members[h.id]?.talents) > 0 ? '<span class="world-talent-badge">+แต้ม</span>' : ''}</span></button>`;
+      const tired = fatigueOf(s, h.id), cut = fatigueCut(this.map, tired);
+      return `<button data-world="character-open" data-hero="${h.id}" aria-haspopup="dialog" aria-controls="character-dialog" class="world-hero ${state}${s.guests?.includes(h.id) ? ' guest' : ''}" id="world-hero-${h.id}" aria-label="${text.name}${s.guests?.includes(h.id) ? ' ผู้ร่วมทางชั่วคราว' : ''} ${this.stars(s, h.id)} ดาว เลเวล ${levelOf(this.map, s)} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`} ความล้า ${tired} แต้ม${cut ? ` โจมตีและรักษาลด ${cut}%` : ''}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}${this.stars(s, h.id) > 1 ? `<i class="hero-stars">★${this.stars(s, h.id)}</i>` : ''}<i class="hero-level">Lv${levelOf(this.map, s)}</i></b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span>${talentPoints(this.map, s.members[h.id], h.id, levelOf(this.map, s)) - talentsSpent(s.members[h.id]?.talents) > 0 ? '<span class="world-talent-badge">+แต้ม</span>' : ''}</span><span class="world-fatigue" data-fatigue="${tired}">${fatigueDot(cut)}<span>ล้า ${tired}</span></span></button>`;
     }).join('');
   }
 
