@@ -901,3 +901,34 @@ html, body { background: #0a1422; }
 .region-card { position: sticky; bottom: 0; margin-top: 8px; padding: 8px 6px 4px; border-radius: 14px; background: linear-gradient(180deg, #0b1626f2, #0b1626); border: 1px solid #f2d59633; box-shadow: 0 -10px 24px #0009; }
 .region-card .map-list { margin: 0; }
 .region-card .camp-note { margin: 6px 4px 0; }
+
+/* Identity setup fits the game frame; keep all choices visible without scrolling. */
+.commander-shell { justify-content: space-between; gap: 8px; }
+.commander-panel { flex: 1 1 0; overflow: visible; justify-content: space-evenly; gap: 8px; }
+.commander-form { gap: 10px; }
+.commander-choice .choice-row { display: grid; grid-template-columns: repeat(5, 44px); gap: 8px; justify-content: center; padding: 4px; }
+.commander-choice:last-child .choice-row { grid-template-columns: repeat(6, 44px); gap: 6px; }
+.commander-choice .choice-row button { width: 44px; height: 44px; min-height: 44px; transform: none; }
+.commander-choice .crest-art { width: 26px; height: 26px; }
+.commander-identity b { max-width: 100%; }
+@container game (max-height: 800px) {
+  .commander-panel { gap: 6px; }
+  .commander-stage .commander-banner { width: 88px; height: 110px; }
+  .commander-pole { width: 108px; }
+  .commander-stage .commander-banner .commander-crest { width: 58px; height: 58px; }
+  .commander-identity b { font-size: 22px !important; }
+  .commander-identity small:last-child { display: none; }
+  .commander-form { gap: 6px; }
+  .commander-field input { min-height: 44px; }
+  .commander-choice .choice-row { gap: 5px; }
+}
+@container game (max-height: 620px) {
+  .commander-stage .commander-banner { width: 54px; height: 66px; }
+  .commander-pole { width: 72px; height: 6px; }
+  .commander-stage .commander-banner .commander-crest { width: 38px; height: 38px; }
+  .commander-preview { gap: 3px; }
+  .commander-identity .eyebrow, .commander-identity small { display: none; }
+  .commander-identity b { font-size: 20px !important; }
+  .commander-top .eyebrow { display: none; }
+  .commander-footer #commander-create { min-height: 44px; }
+}

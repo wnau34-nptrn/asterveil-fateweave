@@ -133,7 +133,7 @@ test('a new ค่ายทหารรับจ้าง: the Knight fights the
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'healer'); await page.locator('#story-next').click();
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'narrator'); await expect(page.locator('.story-text')).toContainText('แยกย้าย'); await page.locator('#story-next').click();
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'tracer'); await expect(page.locator('.story-text')).toContainText('ไลรา');
-  await page.locator('#story-next').click(); await expect(page.locator('.story-text')).toContainText('เข้าร่วมค่ายอารี');
+  await page.locator('#story-next').click(); await expect(page.locator('.story-text')).toContainText('เข้าร่วมทีมของผู้บัญชาการ อารี แล้ว');
   await page.locator('#story-next').click();
   // The starter recruitment: three offers, Escape cannot skip it, each pick has its scene.
   const draft = page.locator('#draft-dialog'); await expect(draft).toBeVisible(); await expect(draft.locator('.draft-board li')).toHaveCount(3);
@@ -165,7 +165,7 @@ test('Aira comes back as the map 1 boss fight starts: her scene plays before the
   await page.locator(`#move-${dir}`).click();
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'weaver'); await expect(page.locator('.story-text')).toContainText('ไอรา');
   expect((await saved(page)).battle).toMatchObject({ kind: 'boss' }); expect((await saved(page)).roster.deployed).toContain('weaver'); // P02: the fifth field slot
-  await page.locator('#story-next').click(); await expect(page.locator('.story-text')).toContainText('เข้าร่วมค่ายอารี'); await page.locator('#story-next').click();
+  await page.locator('#story-next').click(); await expect(page.locator('.story-text')).toContainText('เข้าร่วมทีมของผู้บัญชาการ อารี แล้ว'); await page.locator('#story-next').click();
   await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);
   expect(issues).toEqual([]);
 });
@@ -510,18 +510,14 @@ test('the smith smelts ore into veil dust, capped per return; saved v18', async 
   expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(45);
 });
 
-test('the camp name shows in the lobby and the crest button renames it (owner 2026-10-21)', async ({ page }) => {
-  await seed(page, null); const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+test('commander identity replaces the legacy camp name without rewriting saves', async ({ page }) => {
+  await seed(page, null);
   await page.goto('./'); await page.locator('#continue').click();
-  await expect(page.locator('.lobby-who .eyebrow')).toContainText('ค่ายอารี');
-  await reachable(page, '#lobby-camp'); await page.locator('#lobby-camp').click();
-  await expect(page.locator('#lobby-sheet-title')).toContainText('ชื่อค่าย'); await expect(page.locator('#camp-name')).toBeFocused();
-  await page.locator('#camp-name').fill(''); await page.locator('#camp-save').click();
-  await expect(page.locator('.lobby-result')).toContainText('ชื่อค่ายต้องยาว');
-  await page.locator('#camp-name').fill('ค่ายเหยี่ยวเงิน'); await page.locator('#camp-save').click();
-  await expect.poll(async () => (await savedProfile(page)).commander!.camp).toBe('ค่ายเหยี่ยวเงิน');
-  await expect(page.locator('.lobby-who .eyebrow')).toContainText('ค่ายเหยี่ยวเงิน');
-  expect(issues).toEqual([]);
+  await expect(page.locator('#lobby-commander')).toHaveText(commander.name);
+  await expect(page.locator('#lobby-camp')).toHaveCount(0);
+  await expect(page.locator('#camp-name')).toHaveCount(0);
+  await expect(page.locator('.lobby-who')).not.toContainText(commander.camp);
+  expect((await savedProfile(page)).commander).toEqual(commander);
 });
 
 test('lobby systems open by chapter: a new company sees which map opens each locked system (master plan A3)', async ({ page }) => {
@@ -968,12 +964,12 @@ test('home → create commander → prologue: the name is required, crest and co
   await page.locator('#commander-create').click();
   await expect(page.locator('#commander-name')).toHaveAttribute('aria-invalid', 'true'); await expect(page.locator('#commander-view')).toBeVisible();
   expect(await page.evaluate(k => localStorage.getItem(k), key)).toBeNull();
-  await page.locator('#commander-name').fill('ผู้กอง อารี'); await page.locator('#crest-guard').click(); await page.locator('#color-violet').click();
-  await expect(page.locator('#commander-camp')).toHaveValue('ค่ายผู้กอง อารี');
+  await page.locator('#commander-name').fill('ผู้กอง อารี'); await page.locator('#crest-diamond').click(); await page.locator('#color-violet').click();
+  await expect(page.locator('#commander-camp')).toHaveCount(0);
   await expect(page.locator('#commander-preview-name')).toHaveText('ผู้กอง อารี'); await page.screenshot({ path: info.outputPath('commander.png') });
   await page.locator('#commander-name').press('Enter');
   await expect(page.locator('#story-view')).toBeVisible(); await expect(page.locator('.story-text')).toContainText('ผู้กอง อารี');
-  expect((await savedProfile(page)).commander).toEqual({ name: 'ผู้กอง อารี', crest: 'guard', color: 'violet', camp: 'ค่ายผู้กอง อารี' });
+  expect((await savedProfile(page)).commander).toEqual({ name: 'ผู้กอง อารี', crest: 'diamond', color: 'violet', camp: 'ผู้กอง อารี' });
   // A reload during the prologue resumes straight into the saved first battle.
   await page.reload(); await page.locator('#continue').click(); await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/); await expect(page.locator('#encounter-kind')).toContainText('ศึกแรก');
   expect(issues).toEqual([]);
@@ -984,7 +980,8 @@ for (const viewport of viewports) {
     const context = await browser.newContext({ viewport, hasTouch: viewport.width < 900, reducedMotion: 'reduce' }); const page = await context.newPage();
     await page.goto('./'); await page.locator('#new-game').click(); await expect(page.locator('#commander-view')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth)).toBe(false);
-    for (const sel of ['#commander-name', '#crest-star', '#crest-mark', '#color-gold', '#color-rose', '#commander-create']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
+    for (const sel of ['#commander-name', ...['star','guard','flag','bolt','heal','mark','moon','sun','mountain','diamond'].map(id => '#crest-' + id), '#color-gold', '#color-rose', '#commander-create']) { await reachable(page, sel); }
+    expect(await page.locator('.commander-panel').evaluate(el => el.scrollHeight > el.clientHeight)).toBe(false);
     await page.screenshot({ path: info.outputPath('commander.png') }); await context.close();
   });
   test(`lobby ${viewport.width}x${viewport.height}: team, hire and depart fit without page scroll`, async ({ browser }, info) => {
