@@ -92,14 +92,19 @@ export class WorldUI {
         <div class="world-fx" id="world-fx" aria-hidden="true"></div>
       </section>
       <div class="world-hud">
-        <div class="hud-location glass-capsule"><span class="location-mark">${icon('map')}</span><div><p class="eyebrow" id="map-name">${map.name}</p><h1 id="zone-name"></h1></div></div>
+        <div class="hud-summary">
+        <div class="hud-heading"><div class="hud-location glass-capsule"><span class="location-mark">${icon('map')}</span><div><p class="eyebrow" id="map-name">${map.name}</p><h1 id="zone-name"></h1></div></div>
         <div class="hud-top-right">
           <div id="danger-chip" class="hud-danger glass-capsule" role="status" aria-live="polite"></div>
           <button id="world-info-button" data-world="info" class="hud-info round-glass" aria-haspopup="dialog" aria-controls="world-info" aria-label="ข้อมูลการเดินทางและวิธีเล่น">${icon('info')}</button>
         </div>
+        </div>
         <div class="hud-party" id="world-party" aria-label="เลือดทีม"></div>
+        <div class="hud-tools">
         <button id="objective-button" data-world="goals" class="hud-objective glass-capsule" aria-haspopup="dialog" aria-controls="world-goals"></button>
         <button id="world-pack" data-world="pack" class="hud-pack glass-capsule" aria-haspopup="dialog" aria-controls="pack-dialog"></button>
+        </div>
+        </div>
         <p id="world-message" class="hud-event glass-capsule" role="status" aria-live="polite"></p>
         <div class="hud-movement">
           <div class="ghost-dpad" role="group" aria-label="เดินทีละช่อง">
@@ -365,7 +370,8 @@ export class WorldUI {
     this.root.querySelector('#map-name')!.textContent = `${this.map.name}${s.hard ? ' · ยาก' : ''}`;
     const team = levelOf(this.map, s);
     const danger = level !== undefined && team <= level - 2;
-    this.root.querySelector('#zone-name')!.innerHTML = `${tile.kind === 'camp' ? 'แคมป์พักแรม' : zone?.name ?? ''}${level !== undefined ? ` <span class="zone-level${danger ? ' danger' : ''}">Lv${level}${danger ? ' · อันตราย' : ''}</span>` : ''}`;
+    this.root.querySelector('#zone-name')!.innerHTML = `<span class="zone-title">${tile.kind === 'camp' ? 'แคมป์พักแรม' : zone?.name ?? ''}</span>${level !== undefined ? ` <span class="zone-level${danger ? ' danger' : ''}">Lv${level}${danger ? ' · อันตราย' : ''}</span>` : ''}`;
+    this.root.querySelector<HTMLElement>('#zone-name')!.title = this.root.querySelector('#zone-name')!.textContent ?? '';
     this.root.dataset.zone = tile.kind === 'camp' ? 'camp' : tile.zoneId;
     this.renderDanger(encounterChance(s, this.map), prev?.chance);
     this.renderParty(s);
