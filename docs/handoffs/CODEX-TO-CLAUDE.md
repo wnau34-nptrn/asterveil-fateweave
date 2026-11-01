@@ -3,14 +3,18 @@
 ## 2026-11-01 — หน้ารางวัลเน้นเลเวลค่าย ไม่มีรูปสมาชิก (Codex)
 
 - เจ้าของส่งภาพหน้ารางวัลที่มีรูปสมาชิกเรียงยาว ขอไม่แสดงตัวละครเพราะใช้เลเวลค่ายร่วมกันแล้ว และอนุมัติแนว “ตราค่ายเด่น + หลอด EXP แนวนอน” ด้วย “ดำเนินการได้”
-- สาขา `codex/camp-rewards-focus` จากสาขาเกมล่าสุด `dcd1d2c` (PR #128 เผยแพร่แล้ว); PR/merge/Pages จะเติมเมื่อ CI/เผยแพร่เสร็จ
+- สาขา `codex/camp-rewards-focus` จากสาขาเกม `dcd1d2c` → [PR #129](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/129) → merge `9d552b523090ab342d8c7e3765e9ded559d36a2e` เข้า `feature/fateweave-initial-prototype` แล้ว; validated head `4818f563558732ede9510865b4d52674a8fd6189`; หลัง merge ตรวจ src/public/tests ตรง validated head ไม่มีการส่งเข้า main
+- PR CI exact head: [quality 41255951828](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41255951828) และ [browser 41255951859](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41255951859) success ครบสี่ shards + aggregate รวม presentation source fixtures และ full production gameplay
+- Pages [41258854769](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41258854769) บน merge `9d552b5` **completed/success ครบ build + browser สี่ shards + deploy**; deploy job `124717760753` success พร้อม URL [เกมจริง](https://wnau34-nptrn.github.io/asterveil-fateweave/); post-merge [quality 41258854639](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41258854639) success
+- Artifact `github-pages` ID `13064495732`, 96,105,789 bytes, SHA256 `2642af8f023240ef9723463703bb3ca9d845475df41bdce1f1da69e87226ca6a` ผูก workflow head SHA ตรง merge `9d552b523090ab342d8c7e3765e9ded559d36a2e`; ใช้ผล platform deploy และ production browser CI ยืนยันการเผยแพร่ ไม่อ้างตรวจ CDN/live browser จากคลาวด์ เพราะ proxy ปฏิเสธโดเมน github.io (403 Forbidden)
+- ปิดเอกสารหลัง deploy เป็น docs-only follow-up `[skip ci]`: `git diff --check` ผ่าน และ `src/public/tests` เทียบ merge ไม่ต่าง; ไม่รันทดสอบเกมซ้ำเมื่อไม่มี runtime เปลี่ยน
 - DOM/CSS: เอารูปสมาชิกออกทั้งหมด ใช้ตรา/สีค่ายที่ผู้เล่นเลือก (legacy ไม่มีผู้บัญชาการใช้ธง), เลเวลตัวใหญ่, +EXP ค่าย/ส่วนเพิ่มสีทอง, EXP ปัจจุบันและจำนวนถึงเลเวลถัดไป, ข้อความสมาชิกทุกคนใช้เลเวลร่วมกัน; เมื่อเลเวลเพิ่มแสดงเดิม→ใหม่พร้อมแสงสั้น ๆ (reduced-motion ไม่มี animation); เมื่อเต็มแสดงเพดาน/หลอดทองแทน +0 EXP และไม่แสดงเลเวลถัดไป
 - หน้าต่างกว้างพอดีกรอบเกม สูงตามเนื้อหาและเลื่อนได้เมื่อหน้าจอสั้น ลดพื้นที่ว่างยาวของหน้าสรุปเดิม; ปุ่มไปต่อ ≥48px; Enter บนรายละเอียดไอเทมเปิดอ่านได้ตาม native summary (เดิม handler ปิดทั้งหน้าต่าง), Enter บนปุ่มไปต่อ/Escape ปิดหน้าสรุป ไม่เพิ่มรางวัลหรือแก้เซฟ
 - แสดงค่าจาก resolved `event.exp` และ `campProgress` เดิมเท่านั้น; `commander` ส่งใน pending reward UI ชั่วคราว ไม่เพิ่มข้อมูลเซฟ; ไม่มี diff ใน core/battle, core/save, core/world, content หรือ assets/จังหวะต่อสู้
 - ไฟล์ runtime: `src/ui/battle-rewards.ts`, `components.css`, `game-shell.ts`, `world.css`; เทสต์: `tests/browser/battle-rewards.spec.ts`; เอกสาร: handoff นี้/`CLAUDE-TO-CODEX-DEV-TH.md`/`NEW-CHAT-HANDOFF-TH.md`
 - ผลตรวจ: typecheck/lint/`npm test` **1392/1392 (99 files)**/build ผ่าน; browser rewards **3/3 ผ่าน** บนโค้ดสุดท้าย; fixture เพิ่มกรณีเต็มโดยตั้ง campXp ก่อนจำลองศึกจริง ไม่แตะ parser เพื่อรับ fixture ที่ไม่ตรงระดับ; browser ตรวจ 390px/resize 320×568, gain/level-up/cap, ตราค่าย/ไม่มี portrait, keyboard เปิดไอเทมและไปต่อ, normal/reduced motion, reload ไม่ซ้ำรางวัล, raw save ก่อน/หลังเปิดอ่าน/ปิดเหมือนเดิม; ใช้ Playwright ตามแนวเดิมเพราะ Browser runtime tool ไม่มีให้เรียก
 - ภาพให้เจ้าของดู (390×844, Chromium จำลอง ไม่ใช่มือถือจริง): `/tmp/camp-rewards-final/rewards-level-up-390.png`, `/tmp/camp-rewards-final/rewards-cap-390.png`; ไม่เพิ่มภาพวาดหรือเปลี่ยนเกมส่วนอื่น
-- งานค้าง: รอผล CI/merge/Pages; ยังไม่มีผล iOS/มือถือจริง; ไม่มีคำถามแก้กฎ/เซฟ/สมดุลจากงานนี้
+- งานค้าง: ไม่มีงาน push/merge/deploy ค้าง; ยังไม่มีผล iOS/มือถือจริง; ไม่มีคำถามแก้กฎ/เซฟ/สมดุลจากงานนี้
 
 ## 2026-10-31 — P02 UI polish / ศัตรูชื่อซ้ำ: เจ้าของอนุมัติ push / merge / deploy
 
