@@ -2,6 +2,8 @@
 
 ข้อเสนอ UX/UI สำหรับ Asterveil: Fateweave จากการตรวจสาขาเกมและ artwork เดิม ไม่ใช่ runtime implementation
 
+เริ่มพัฒนาจาก [IMPLEMENTATION_PLAN_TH.md](IMPLEMENTATION_PLAN_TH.md): ลำดับ UXD-00–08, งานที่ยังขาด, จุดแก้โค้ด, dependency P04/P09, เกณฑ์ทดสอบและการส่งมอบ งาน runtime ยังไม่เริ่ม
+
 - `01_development_concepts.png`: หน้าตีบวก, รวมงานสกิล, ทางเข้าพัฒนาตัวละคร
 - `02_forge_task_and_review.png`: หน้าเลือกงานโรงตีเหล็ก และการตรวจรายการหลอมสี
 - `03_character_star_upgrade.png`: หน้าอัปดาว ผล/ต้นทุน ตรวจรายการ และตัวซ้ำไม่พอ

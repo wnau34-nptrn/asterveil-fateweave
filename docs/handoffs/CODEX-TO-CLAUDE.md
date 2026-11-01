@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-11-01 — แผนนำ ART-UI-UX-002 ไปพัฒนาในเกม
+
+- เจ้าของขอจัดทำแผนปรับปรุงและระบุสิ่งที่ต้องทำเพิ่ม ต่อ PR #133 บน `art/art-ui-ux-002`; รอบนี้เป็นเอกสารแผน ไม่ใช่เริ่มimplementation
+- เพิ่ม `incoming/ART-UI-UX-002/IMPLEMENTATION_PLAN_TH.md`: UXD-00–08, dependency/ขนาดงาน/เกณฑ์ผ่าน, checklist, ไฟล์จริงที่เกี่ยวข้อง, regressiontestsเดิม, baseline/คนจริง/อุปกรณ์จริง, rollout/rollback
+- แนะนำเริ่ม00+01เก็บbaselineและตีบวกนำร่องให้จบflowก่อนขยาย; งานเพิ่มคือsuccess/blocked/stale/empty/max/คลัง/โควตา/copy/assetจริง/returncontext ไม่ใช่แค่เปลี่ยนCSSตามภาพ
+- ตรวจแผนรวมล่าสุด OD-13/P09ก่อนP04; UXปัจจุบันไม่ต้องรอเศษกลาง แต่ไม่เปิดกฎP04หรือเพิ่มbackendจากงานนี้ ไม่อ้างคนนอกทดสอบก่อนเงื่อนไขOD-13พร้อม
+- ตรวจlocal links, hashเอกสาร และgit diff --check; ไม่รันgameplay/browserเพราะไม่มีruntimechange ไม่อ้างว่างานUXDใดนำเข้าแล้ว
+
+
 ## 2026-11-01 — ART-UI-UX-002 เพิ่มหน้าพัฒนาอุปกรณ์ครบคำสั่ง
 
 - เจ้าของขอ “หน้าพัฒนาอุปกรณ์อื่นๆ ด้วยนะ” ต่อ PR #133 บน `art/art-ui-ux-002`; งานยังเป็นข้อเสนอภาพ ไม่ใช่นำเข้า runtime

@@ -67,13 +67,18 @@
     },
     {
       "file": "HANDOFF_TH.md",
-      "bytes": 6795,
-      "sha256": "10e1f57120ce564e42fd9fea3f5f1a4ada3966c929daac2342b7e73abb8e4b73"
+      "bytes": 7330,
+      "sha256": "92a59a2014e767bc7f68cc64abfef3f75c04beb653ed103b605f2593f27612d9"
+    },
+    {
+      "file": "IMPLEMENTATION_PLAN_TH.md",
+      "bytes": 28068,
+      "sha256": "c14e88b95f302fa2ad5c297633286dd1523e5d6ced11c319795361738a077f8a"
     },
     {
       "file": "README.md",
-      "bytes": 2837,
-      "sha256": "ed282dec2b34b0f1b29bb4f0da89c634cf22125e7995e7aaccfacadbcec05e4a"
+      "bytes": 3172,
+      "sha256": "8f2722b1f0e1e3e1fcdb3165b1c2cd4b0948a1a1a46d3de20a1f53f2254bee99"
     },
     {
       "file": "REVIEW_TH.md",
