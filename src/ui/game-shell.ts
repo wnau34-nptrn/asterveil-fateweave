@@ -535,7 +535,7 @@ export class GameShell {
       const result = finishBattle(next, this.map, this.lookup); next = result.state;
       if (result.event.type === 'victory') {
         if (kind === 'tutorial') this.prologueWon = true;
-        else this.pendingRewards = { event: result.event, before, after: next,
+        else this.pendingRewards = { event: result.event, before, after: next, commander: this.game?.profile.commander,
           title: kind === 'boss' ? `${this.map.bossName}ล้มแล้ว` : kind === 'elite' ? this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.mini ? 'มินิบอสล้มแล้ว' : 'ท้าสู้อีลิทสำเร็จ' : 'ชนะศึก' };
         this.effect = 'loot'; this.message = 'ชนะศึก';
       } else if (result.event.type === 'defeat') {

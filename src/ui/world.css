@@ -390,8 +390,6 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .bench-search input { box-sizing: border-box; width: 100%; min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #e8f5ff33; background: #0a1626; color: var(--text); font: 15px var(--font-body, inherit); }
 .bench-filters { display: flex; flex-wrap: wrap; gap: 6px; }
 .team-grid.bench .team-card[hidden] { display: none; }
-.reward-camp-team { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
-.reward-camp-team .portrait { width: 28px; height: 28px; }
 .lobby-footer { display: flex; align-items: center; gap: 12px; }
 .lobby-save { flex: 1; font-size: 12px; color: var(--text-muted); }
 #lobby-depart { min-height: 52px; padding: 0 22px; display: inline-flex; align-items: center; gap: 8px; font-size: 17px; }

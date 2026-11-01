@@ -361,6 +361,37 @@
 .reward-items > li:only-child { grid-column:1 / -1; }
 .reward-member > div { min-width:0; flex-basis:70px; }
 
+/* Shared camp progression is the reward; individual member portraits no longer belong here. */
+#app .battle-rewards[open] { width:min(440px,calc(var(--game-w) - 24px)); max-width:calc(var(--game-w) - 24px); height:fit-content; max-height:calc(var(--app-h) - 32px); border-radius:24px; padding:16px; gap:12px; }
+.battle-rewards .rewards-scroll { flex:0 1 auto; overscroll-behavior:contain; }
+.battle-rewards > button { margin-top:4px; }
+.reward-camp { position:relative; overflow:hidden; padding:22px 18px 16px; border:1px solid #d8b96a66; border-radius:20px; background:radial-gradient(ellipse at 15% 0%,#546e7938,transparent 65%),linear-gradient(145deg,#20384d,#101e31); box-shadow:inset 0 1px #ffedbd22,0 10px 24px #0002; }
+.reward-camp.leveled { border-color:#f0d28baa; background:radial-gradient(ellipse at 15% 0%,#c5a04d35,transparent 70%),linear-gradient(145deg,#26384a,#131f31); }
+.reward-camp-hero { display:flex; gap:18px; align-items:center; margin-bottom:18px; }
+.reward-camp-crest { flex:none; padding:6px; border:1px solid #ddc58466; border-radius:50%; background:#e6c9780b; }
+.reward-camp .commander-crest { width:66px; height:66px; box-shadow:0 0 24px color-mix(in srgb,var(--crest-color) 18%,transparent); }
+.battle-rewards .reward-camp h3 { margin:0 0 2px; color:#e7d2a1; font-size:14px; }
+.reward-camp-level { display:flex; align-items:baseline; flex-wrap:wrap; gap:7px; margin:0; color:#fff1ce; }
+.reward-camp-level > span:first-child { font-size:16px; color:#c5d4e4; }
+.reward-camp-level > strong { font:600 46px/1.2 var(--font-heading); font-variant-numeric:tabular-nums; }
+.reward-camp .reward-level { flex-basis:100%; font-size:13px; color:#ffe09b; }
+.reward-gain { margin:0 0 10px; color:#ecd6a6; font-size:13px; }
+.reward-gain strong { font:600 25px/1.3 var(--font-heading); color:#ffe2a2; }
+.reward-camp .reward-exp { position:relative; height:10px; margin:0 0 10px; border:1px solid #96d9e02b; border-radius:99px; }
+.reward-camp .reward-exp i { border-radius:99px; background:linear-gradient(90deg,#4fa7bd,#9aebf0); animation:camp-exp-fill 1100ms ease-out both; }
+.reward-exp-gain { position:absolute; top:0; bottom:0; background:linear-gradient(90deg,#f1ca70,#fff0bf); border-radius:0 99px 99px 0; animation:camp-gain-show 1100ms ease-out both; }
+.reward-exp-meta { display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 12px; font-size:12px; color:#b8cddd; font-variant-numeric:tabular-nums; }
+.reward-camp .reward-shared { margin:14px 0 0; padding-top:12px; border-top:1px solid #c3d8df1c; font-size:12px; color:#a9bdcf; }
+.reward-progress-note,.reward-no-gain { margin:4px 0 10px; font-size:12px; color:#c4d3e0; line-height:1.6; }
+.reward-camp .reward-cap { color:#f2d695; }
+.reward-camp.capped .reward-exp i { background:linear-gradient(90deg,#a37b35,#f1d38e); animation:none; }
+@keyframes camp-exp-fill { from { width:var(--from); } }
+@keyframes camp-gain-show { from { opacity:0; } }
+@media (prefers-reduced-motion:no-preference) { .reward-camp.leveled .reward-camp-crest { animation:camp-level-glow 900ms ease-out; } }
+@keyframes camp-level-glow { 40% { transform:scale(1.06); box-shadow:0 0 30px #efd08255; } }
+@media (prefers-reduced-motion:reduce) { .reward-camp .reward-exp i,.reward-exp-gain { animation:none; } }
+@container game (max-width:360px) { .reward-camp { padding:16px 12px 12px; } .reward-camp-hero { gap:12px; } }
+
 /* Personal branches share the talent budget; a separate row keeps 44px nodes readable on phones. */
 .personal-tree { padding: 10px 0; margin: 8px 0; border-block: 1px solid #74d4ef33; }
 .personal-tree h4 { margin: 0; color: var(--gold-light, #f2d596); }
