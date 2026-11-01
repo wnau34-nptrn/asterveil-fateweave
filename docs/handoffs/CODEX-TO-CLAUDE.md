@@ -12,7 +12,12 @@
 - ผล local: typecheck/lint/unit 1392/1392 (99 files)/build ผ่าน; focused world/summary 59/59 ผ่าน หลังเก็บจุดอ้างอิงบทพูด; browser focused final 14/14 ผ่าน (11 viewport ตั้งแต่ 320×568 ถึง 1920×1080 + legacy identity + create/reload + prologue; รอบแรกพบ overflow 5px ที่ desktop 768px แก้ breakpoint แล้ว)
 - ภาพ 390px: /tmp/commander-final/commander-390.png และ commander-name-390.png; ตรวจชื่อยาว 20 ตัว ที่ 390×568/844 ไม่มี overflow; keyboard เลือก moon ด้วย Enter + เปลี่ยนสี mint ทำงาน; SVG ไม่มี img สกิล
 - ใช้ Playwright/Chromium ตามคำสั่งเจ้าของ: ค้น Browser js runtime แล้วไม่มีให้เรียก; ไม่อ้าง Safari/มือถือจริง
-- PR #132 บน codex/commander-identity เข้า feature/fateweave-initial-prototype; quality CI ผ่านบน 836bd8b; browser shard 3 พบ expected ข้อความรับสมาชิกยังเป็นชื่อค่ายเก่า 2 จุด ปรับเทสต์เป็นชื่อผู้บัญชาการแล้ว local 2/2 ผ่าน ไม่เปลี่ยน runtime; รอ CI head ใหม่ก่อน merge/Pages ไม่เริ่ม P09
+- สาขา `codex/commander-identity` → [PR #132](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/132) → merge `c8665fa67613887af460b5062eb3bdc0600f68cd` เข้า `feature/fateweave-initial-prototype` แล้ว (ไม่ใช่ main); validated head `0efedc8ab0ba6b33d38d40fbf59613304c704e96`; หลัง merge ตรวจ src/public/tests ตรง validated head
+- PR exact-head CI: [quality 41316509080](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41316509080) และ [browser 41316509079](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41316509079) completed/success ครบสี่ shards + aggregate รวม source fixtures/full production gameplay
+- รอบ CI แรกบน 836bd8b พบ expected บทรับสมาชิกยังเป็นชื่อค่ายเก่า 2 จุด ปรับเทสต์เป็นชื่อผู้บัญชาการแล้ว local 2/2 ผ่าน; runtime ไม่เปลี่ยน รอบสุดท้ายผ่านทั้งหมด
+- Pages [41319399419](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41319399419) บน merge `c8665fa` **completed/success ครบ build + browser สี่ชุด + deploy**; deploy job `124898359037` success คืน URL [เกมจริง](https://wnau34-nptrn.github.io/asterveil-fateweave/) (2026-11-01 15:53 UTC / 22:53 Bangkok); post-merge quality 41319399409 success
+- ยืนยันการเผยแพร่จาก exact workflow SHA/platform deploy + production browser CI ไม่อ้างเปิดตรวจ CDN หรือ Safari/มือถือจริงจากคลาวด์
+- ปิดเอกสาร docs-only [skip ci]: git diff --check ผ่าน และ src/public/tests เทียบ validated head ไม่ต่าง; ไม่รันทดสอบเกมซ้ำ ไม่มีงาน push/merge/deploy ค้าง ไม่เริ่ม P09
 - งานค้างเชิงกฎ/เซฟ: ไม่มี ไม่จำเป็นต้องลบ legacy schema เพื่อเปลี่ยน identity UI
 
 
