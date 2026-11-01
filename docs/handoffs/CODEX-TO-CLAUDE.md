@@ -1,5 +1,16 @@
 # Codex → Claude handoff
 
+## 2026-11-01 — ART-UI-UX-002: ข้อเสนอ UX โรงตีเหล็ก/พัฒนาตัวละคร
+
+- เจ้าของขอตรวจสาขา วิเคราะห์ส่วนใช้งานยาก และเสนอ Artwork สำหรับนำไปปรับเกมภายหลัง ขอบเขตนี้เป็นงานออกแบบ ไม่ใช่นำเข้า runtime
+- branch `art/art-ui-ux-002` จากสาขาเกม `c8665fa`; สำรวจชื่อ 135 สาขา ตรวจ tree/commit ที่เกี่ยวข้อง 9 สาขา อ่าน forge-workbench/character-panel/character-view/core forge/tokens และ artwork Luminous Veil เดิม ไม่ได้เล่นทดสอบทุกสาขา
+- ส่งมอบ `incoming/ART-UI-UX-002/`: concept 2 boards (ตีบวก/สกิล/พัฒนาตัวละคร และ launcher/หลอมสี review), `REVIEW_TH.md`, `HANDOFF_TH.md`, README และ validation hashes
+- ข้อเสนอ: launcher แยกคำสั่งโรงตีเหล็กแล้วใช้หน้าคำสั่งเดียว; สกิลรวมติดตั้ง/เพิ่ม Lv/ผังสกิล; แสดงเลเวลค่ายร่วมกับดาวรายตัวชัด; กลับจาก forge คืนบริบท; แยกชิ้นหลักกับชิ้นที่ใช้หมด ไม่เพิ่มกฎระบบ
+- ผลตรวจ: เปิดภาพอ้างอิงและ concept จริง ตรวจ PNG decode/ขนาด/hash และ diff whitespace; ไม่รัน gameplay/browser test เพราะไม่มี runtime change; ยังไม่มี human usability/iOS/real-device results
+- Artwork เป็นภาพเสนอ hierarchy มีตัวเลข/portrait/copy ตัวอย่าง ให้ใช้ game art และ state/preview จริงเมื่อ implement โดยเฉพาะข้อความผลดาวในภาพไม่ใช่การอนุมัติเพิ่มกฎดาว
+- งานนี้ไม่เปลี่ยน src/tests/public/rules/save/balance และไม่ merge/publish เกม; เจ้าของยังไม่ได้เลือก artwork หรือสั่งนำเข้า UI ชุดนี้ PR งานภาพส่งให้ตรวจต่อ
+
+
 
 ## 2026-11-01 — ใช้ชื่อผู้บัญชาการ / สร้างตัวตนหน้าเดียว / ตราเส้น 10 แบบ (Codex)
 

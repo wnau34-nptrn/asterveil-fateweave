@@ -1,0 +1,55 @@
+{
+  "id": "ART-UI-UX-002",
+  "base_commit": "c8665fa67613887af460b5062eb3bdc0600f68cd",
+  "status": "concept-only",
+  "reference": "incoming/ART-UI-MODERN-001/05_forge.png",
+  "reference_git_blob": "471572e5cf1857132a62c7c2cd43247ce2b29759",
+  "image_tool": "image_gen",
+  "files": [
+    {
+      "file": "01_development_concepts.png",
+      "bytes": 2098775,
+      "sha256": "d1edc86496be35e14396d0d831a62029124845b804410fb3abee6c733816feb1",
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "02_forge_task_and_review.png",
+      "bytes": 2054350,
+      "sha256": "76912fd669a7d677a3f8fa1780604cb8fdbaca367bfd1a070105385bb0ff1472",
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "HANDOFF_TH.md",
+      "bytes": 5498,
+      "sha256": "1587fce8babcaac8ae733fd932491e93bc657e16770729d714c0950af6503cfb"
+    },
+    {
+      "file": "README.md",
+      "bytes": 1717,
+      "sha256": "2af29914dd8f2d009d18a848eac19fb627a7206e41a2ae56f69dde93ea1fca8a"
+    },
+    {
+      "file": "REVIEW_TH.md",
+      "bytes": 20616,
+      "sha256": "3d8d8181605f6bcb1de00c8565cebe447b8cf8ff5e78fb0e756d7921ad8e5223"
+    }
+  ],
+  "checks": {
+    "png_decode": true,
+    "visual_review": true,
+    "runtime_changed": false,
+    "gameplay_tested": false,
+    "real_device_tested": false
+  },
+  "notes": [
+    "Boards are not runtime screenshots or production assets.",
+    "Use existing hero art, real localized copy and authoritative state in implementation.",
+    "All displayed costs, statistics and donor quantities are illustrative."
+  ]
+}
