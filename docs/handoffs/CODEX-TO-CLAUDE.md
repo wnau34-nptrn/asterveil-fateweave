@@ -1,5 +1,16 @@
 # Codex → Claude handoff
 
+## 2026-11-01 — HUD หน้า MAP แสดงค่าความล้ารายคน (Codex)
+
+- ข้อตัดสินเจ้าของ: ขอเห็นค่าความล้าของแต่ละตัวที่ลงสนามใน HUD ด้านบนขณะเดินบน MAP; แสดงตัวเลขเสมอ รวม 0 พร้อมสีเดิม ไม่เพิ่มกลไกใหม่
+- สาขา `codex/map-party-fatigue` จาก origin สาขาเกม `3235d14d6b19442719bb0147f899f069f08cf871` (`feature/fateweave-initial-prototype`, ไม่ใช่ main); PR/CI/merge/Pages จะบันทึกเมื่อเสร็จ
+- `src/ui/world-ui.ts`: อ่าน `fatigueOf`/`fatigueCut` เดิมให้สมาชิกที่ลงสนามทุกคน เพิ่มบรรทัด “ล้า N” พร้อม `fatigueDot` เขียว/เหลือง/แดงใต้ HP; ข้อมูล accessible name มีแต้มและผลลดโจมตี/รักษา; group ระบุเลือดและความล้าของทีม; ค่ารีเฟรชจาก state ที่ render ทุกครั้ง ไม่เขียนเซฟหรือคำนวณเกณฑ์ใหม่
+- `src/ui/portrait.css`: ป้ายตัวเลข 11px มีพื้นหลังตัดกับแผนที่และตัวเลข tabular, จุดสีมีขอบ แถวเต็มความกว้างการ์ดแยกจากชื่อ/HP/+แต้ม; HUD grid จาก PR #130 จัดแถวเป้าหมาย/กระเป๋าลงตามเนื้อหาเอง ปุ่มยัง ≥44px
+- `tests/browser/team-five.spec.ts`: เพิ่มสองกรณี 390×844 / 320×568 ทีม 5+3 อ่านครบ 0/7/11 และสี ตรวจไม่มีข้อความล้น/ชน HP/ออกนอกการ์ด ปุ่ม ≥44px; เดินจริงหนึ่งก้าวโดยเลือกทิศที่กฎเดิมไม่สุ่มศึก, HUD ยังอยู่; ใช้ calm 7→3 แล้วตัวเลข/สีเปลี่ยนทันที อีกคนยัง 11; Enter เปิด character sheet / Escape ปิดและ raw save ไม่เปลี่ยนเมื่ออ่าน; console/overlay/page identity/ไม่มี page scroll ผ่าน; จำกัด selector ตรวจ fatigue ใน bag ให้ตรง team card เพราะ HUD มี data-fatigue ด้วยแล้ว
+- Local: typecheck/lint, unit **1392/1392 (99 files)**, build ผ่าน; focused team-five **3/3** (สอง viewport + bag), world **15/15** (11 viewport + 4 safe-area/ชื่อยาว regression) ผ่าน; Browser runtime tool ไม่มีให้เรียก จึงใช้ Playwright/Chromium ตามสิทธิ์เดิม `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/usr/bin/chromium`; ไม่มี diff ใน core/content/public/assets/กฎ/เซฟ v45/สมดุล/จังหวะการเล่น
+- ภาพ 390px ให้เจ้าของดู: `/tmp/map-fatigue-final/map-fatigue-390.png` (Chromium touch emulation ไม่ใช่ Safari/มือถือจริง); ไม่มีภาพวาดหรือ animation ใหม่
+- งานค้าง: รอ PR CI/merge/Pages ตาม standing authorization; ยังไม่มีผลอุปกรณ์จริง; ไม่มีคำถามแก้กฎ/เซฟ/สมดุลในงานนี้
+
 ## 2026-11-01 — HUD แผนที่: ลดระยะบนซ้ำและกันชื่อยาวซ้อน (Codex)
 
 - เจ้าของส่งภาพ iPhone ที่มีช่องว่างเหนือ HUD มากและชื่อ “พงหนามชายแดน Lv12 · อันตราย” ซ้อนแถบอันตราย ขอแก้การแสดงผล; standing authorization รวม push/merge/Pages ต่อเนื่อง
