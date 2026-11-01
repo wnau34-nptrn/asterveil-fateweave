@@ -404,3 +404,28 @@
 .cooldown-choices small { font-size: 12px; color: var(--text-muted, #bbcadb); }
 #cooldown-choice { max-width: min(360px, calc(100vw - 24px)); max-height: calc(100dvh - 32px); overflow: auto; }
 #cooldown-choice h2 { margin-top: 0; }
+
+/* Keep scrolling native. Touch hides the chrome; mouse/trackpad uses a quiet game-coloured rail. */
+#app, #app * { scrollbar-width: none; scrollbar-color: auto; }
+#app::-webkit-scrollbar, #app *::-webkit-scrollbar { display: none; width: 0; height: 0; }
+@media (hover: hover) and (pointer: fine) {
+  #app, #app * { scrollbar-width: thin; scrollbar-color: #63899f #081522; }
+  #app::-webkit-scrollbar, #app *::-webkit-scrollbar { display: block; width: 8px; height: 8px; }
+  #app::-webkit-scrollbar-track, #app *::-webkit-scrollbar-track { background: #081522; border-radius: 8px; }
+  #app::-webkit-scrollbar-thumb, #app *::-webkit-scrollbar-thumb { background: #63899f; border: 2px solid #081522; border-radius: 8px; }
+  #app::-webkit-scrollbar-thumb:hover, #app *::-webkit-scrollbar-thumb:hover { background: #99c3d3; }
+  #app::-webkit-scrollbar-button, #app *::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+  /* The turn strip already reserves six pixels for its rail; keep every portrait 44px tall. */
+  #app #battle-view #turn-phase #turn-order ol { padding-bottom: 0; }
+  #app #battle-view #turn-phase #turn-order ol::-webkit-scrollbar { height: 6px; }
+  /* Chromium/WebKit use the native rounded custom rail; Firefox keeps the standard thin rail. */
+  @supports selector(::-webkit-scrollbar) {
+    #app, #app * { scrollbar-width: auto; scrollbar-color: auto; }
+  }
+  @media (forced-colors: active) {
+    #app, #app * { scrollbar-width: auto; scrollbar-color: auto; }
+    #app::-webkit-scrollbar, #app *::-webkit-scrollbar { width: auto; height: auto; }
+    #app::-webkit-scrollbar-track, #app *::-webkit-scrollbar-track { background: Canvas; }
+    #app::-webkit-scrollbar-thumb, #app *::-webkit-scrollbar-thumb { background: ButtonText; border-color: Canvas; }
+  }
+}

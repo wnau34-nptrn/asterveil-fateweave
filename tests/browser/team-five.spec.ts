@@ -5,6 +5,10 @@ import { newProfile } from '../../src/core/world/profile';
 import { move, newExpedition } from '../../src/core/world/world';
 import type { Direction, Profile } from '../../src/core/world/types';
 
+// Native desktop rails must be visible in the test browser, just as in a normal desktop window.
+test.use({ launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE,
+  args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'], ignoreDefaultArgs: ['--hide-scrollbars'] } });
+
 // P02 (OD-05): the five-hero field against five foes on a 390px phone (Chromium emulation, not iOS). Owner review shots:
 // TEAM_FIVE_SHOTS=<dir> npx playwright test tests/browser/team-five.spec.ts
 const dir = process.env.TEAM_FIVE_SHOTS;
@@ -168,4 +172,25 @@ for (const width of [390, 320]) test(`map fatigue HUD at ${width}px: five values
   expect(await raw()).toBe(after);
   expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth)).toBe(false);
   expect(errors).toEqual([]); await context.close();
+});
+
+
+test('desktop turn queue: native horizontal rail leaves all ten 44px portraits reachable', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 1440, height: 768 }, reducedMotion: 'reduce' }), page = await context.newPage();
+  await open(page, 'rift-legion'); await expect(page.locator('#action-attack')).toBeEnabled();
+  const before = await page.evaluate(k => localStorage.getItem(k), key);
+  const buttons = page.locator('#turn-order .turn-icon'); await expect(buttons).toHaveCount(10);
+  await buttons.first().focus();
+  for (let index = 0; index < 10; index++) {
+    const button = buttons.nth(index);
+    if (index) await page.keyboard.press('Tab');
+    await expect(button).toBeFocused();
+    await expect(button).toBeInViewport({ ratio: 1 });
+    expect(await button.evaluate(el => {
+      const r = el.getBoundingClientRect(), phase = el.closest('#turn-phase')!.getBoundingClientRect();
+      return r.width >= 44 && r.height >= 44 && r.top >= phase.top && r.bottom <= phase.bottom + 1 && el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
+    })).toBe(true);
+  }
+  expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
+  await context.close();
 });
