@@ -12,7 +12,7 @@
 - ผล local: typecheck/lint/unit 1392/1392 (99 files)/build ผ่าน; focused world/summary 59/59 ผ่าน หลังเก็บจุดอ้างอิงบทพูด; browser focused final 14/14 ผ่าน (11 viewport ตั้งแต่ 320×568 ถึง 1920×1080 + legacy identity + create/reload + prologue; รอบแรกพบ overflow 5px ที่ desktop 768px แก้ breakpoint แล้ว)
 - ภาพ 390px: /tmp/commander-final/commander-390.png และ commander-name-390.png; ตรวจชื่อยาว 20 ตัว ที่ 390×568/844 ไม่มี overflow; keyboard เลือก moon ด้วย Enter + เปลี่ยนสี mint ทำงาน; SVG ไม่มี img สกิล
 - ใช้ Playwright/Chromium ตามคำสั่งเจ้าของ: ค้น Browser js runtime แล้วไม่มีให้เรียก; ไม่อ้าง Safari/มือถือจริง
-- PR/merge/Pages: ยังไม่ส่ง ระหว่างตรวจ local; จะอัปเดตผลหลัง CI/เผยแพร่ ไม่เริ่ม P09
+- PR #132 บน codex/commander-identity เข้า feature/fateweave-initial-prototype; quality CI ผ่านบน 836bd8b; browser shard 3 พบ expected ข้อความรับสมาชิกยังเป็นชื่อค่ายเก่า 2 จุด ปรับเทสต์เป็นชื่อผู้บัญชาการแล้ว local 2/2 ผ่าน ไม่เปลี่ยน runtime; รอ CI head ใหม่ก่อน merge/Pages ไม่เริ่ม P09
 - งานค้างเชิงกฎ/เซฟ: ไม่มี ไม่จำเป็นต้องลบ legacy schema เพื่อเปลี่ยน identity UI
 
 

@@ -133,7 +133,7 @@ test('a new ค่ายทหารรับจ้าง: the Knight fights the
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'healer'); await page.locator('#story-next').click();
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'narrator'); await expect(page.locator('.story-text')).toContainText('แยกย้าย'); await page.locator('#story-next').click();
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'tracer'); await expect(page.locator('.story-text')).toContainText('ไลรา');
-  await page.locator('#story-next').click(); await expect(page.locator('.story-text')).toContainText('เข้าร่วมค่ายอารี');
+  await page.locator('#story-next').click(); await expect(page.locator('.story-text')).toContainText('เข้าร่วมทีมของผู้บัญชาการ อารี แล้ว');
   await page.locator('#story-next').click();
   // The starter recruitment: three offers, Escape cannot skip it, each pick has its scene.
   const draft = page.locator('#draft-dialog'); await expect(draft).toBeVisible(); await expect(draft.locator('.draft-board li')).toHaveCount(3);
@@ -165,7 +165,7 @@ test('Aira comes back as the map 1 boss fight starts: her scene plays before the
   await page.locator(`#move-${dir}`).click();
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', 'weaver'); await expect(page.locator('.story-text')).toContainText('ไอรา');
   expect((await saved(page)).battle).toMatchObject({ kind: 'boss' }); expect((await saved(page)).roster.deployed).toContain('weaver'); // P02: the fifth field slot
-  await page.locator('#story-next').click(); await expect(page.locator('.story-text')).toContainText('เข้าร่วมค่ายอารี'); await page.locator('#story-next').click();
+  await page.locator('#story-next').click(); await expect(page.locator('.story-text')).toContainText('เข้าร่วมทีมของผู้บัญชาการ อารี แล้ว'); await page.locator('#story-next').click();
   await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);
   expect(issues).toEqual([]);
 });
