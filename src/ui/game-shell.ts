@@ -8,7 +8,7 @@ import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipm
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { setArchived, setPartyLane, chooseLoadout, hardReason, claimGuide, renameCamp, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
+import { setArchived, setPartyLane, chooseLoadout, hardReason, claimGuide, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
 import { draftPick, travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, setLane, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
@@ -116,7 +116,7 @@ export class GameShell {
       skillLevel: (id, action) => this.profileChange(raiseSkill(this.game!.profile, this.maps, map, lookup, id, action)),
       tomeTrade: (line, size, to) => this.profileChange(tradeTomes(this.game!.profile, this.maps, map, line, size, to)),
       talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), loadout: (id, actions) => this.profileChange(chooseLoadout(this.game!.profile, map, lookup, id, actions)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
-      renameCamp: name => this.renameCamp(name), guide: (id, skip) => this.guide(id, skip),
+      guide: (id, skip) => this.guide(id, skip),
       equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
       autoEquip: plan => this.profileChange(applyCampEquipment(this.game!.profile,plan)),
       transfer:(uid,index,donor,sourceIndex)=>this.profileChange(transferAffix(this.game!.profile,map,uid,index,donor,sourceIndex)),
@@ -256,13 +256,6 @@ export class GameShell {
     this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
     this.lobbyMessage = skip ? 'ข้ามงานแนะนำแล้ว' : 'รับรางวัลงานแนะนำแล้ว'; this.showLobby();
   }
-  private renameCamp(name: string): void {
-    if (!this.game || this.game.run) return;
-    const result = renameCamp(this.game.profile, name);
-    if (result.event.type === 'blocked') { if (result.event.reason === 'camp') { this.lobbyMessage = 'ชื่อค่ายต้องยาว 1–20 ตัวอักษร และไม่ใช้ < >'; this.showLobby(); } return; }
-    this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
-    this.lobbyMessage = `เปลี่ยนชื่อค่ายเป็น ${result.profile.commander!.camp} แล้ว`; this.showLobby();
-  }
   private profileChange(result: ProfileResult): void {
     if (!this.game || this.game.run) return;
     const e = result.event; const name = (id: string) => heroText[id]?.name ?? '';
@@ -374,7 +367,7 @@ export class GameShell {
     const fresh = (this.state?.recruited ?? []).filter(id => !this.recruitSeen.has(`${this.state!.mapId}:${id}`));
     if (!fresh.length) { then(); return; }
     this.markRecruits();
-    this.story.play(recruitStory(fresh, this.game?.profile.commander?.camp || 'ค่ายทหารรับจ้าง'), 'ไปต่อ', then);
+    this.story.play(recruitStory(fresh, this.game?.profile.commander?.name || 'ผู้บัญชาการ'), 'ไปต่อ', then);
   }
   private move(dir: Direction): void {
     if (!this.state || this.locked) return;
