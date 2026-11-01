@@ -29,7 +29,7 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #battle-view .phase-copy h2 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #battle-view .queue-hint { flex: none; color: #f2d596; font-size: 10px; }
 #battle-view #skip-turn { min-height: 44px; height: 44px; position: absolute; right: 52px; top: -44px; font-size: 11px; background: #0b192c; }
-#battle-view #turn-phase #turn-order ol { justify-content: flex-start; gap: 4px; overflow-x: auto; overflow-y: hidden; padding-bottom: 6px; scrollbar-width: thin; scrollbar-color: #8ca9bf #081525; overscroll-behavior-x: contain; }
+#battle-view #turn-phase #turn-order ol { justify-content: flex-start; gap: 4px; overflow-x: auto; overflow-y: hidden; padding-bottom: 6px; overscroll-behavior-x: contain; }
 #battle-view #turn-order ol:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
 #battle-view .turn-slot { display: block; flex: 0 0 44px; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; box-shadow: none; position: relative; }
 #battle-view .turn-slot:nth-child(n) { display: block; }

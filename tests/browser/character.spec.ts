@@ -6,6 +6,10 @@ import { affixPool } from '../../src/core/world/equipment';
 import { parseGame } from '../../src/core/save/expedition-save';
 import { xpAt } from '../fixtures/camp-level';
 
+// Inspect native scrollbar chrome rather than Chromium's default headless hiding policy.
+test.use({ launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE,
+  args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'], ignoreDefaultArgs: ['--hide-scrollbars'] } });
+
 const key = 'asterveil.fateweave.expedition.v1';
 async function open(page: Page) {
   const profile = newProfile(map, 123); profile.tutorialDone = true; profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
@@ -86,4 +90,60 @@ test('touch: portrait resize and rotation preserve character tabs and block pass
   await page.setViewportSize({width:390,height:844}); await expect(page.locator('#character-dialog')).toBeVisible();
   await expect(page.locator('#character-tab-talents')).toHaveAttribute('aria-selected','true');
   await expect(page.locator('#character-talent-c1s i')).toHaveText('0/1'); await context.close();
+});
+
+
+for (const touch of [false, true]) test(`native game scrollbars ${touch ? 'touch' : 'desktop'}: styled chrome preserves scrolling and saves`, async ({ browser }, info) => {
+  const context = await browser.newContext({ viewport: touch ? { width: 390, height: 844 } : { width: 1440, height: 768 }, hasTouch: touch, isMobile: touch, reducedMotion: 'reduce' });
+  const page = await context.newPage(), errors: string[] = [];
+  page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+  await open(page); await page.locator('#world-hero-guardian').click(); await page.locator('#character-tab-talents').click();
+  await expect(page).toHaveTitle('Asterveil · Fateweave'); await expect(page.locator('vite-error-overlay')).toHaveCount(0);
+  const pane = page.locator('#character-content'), before = await saved(page);
+  expect(await page.evaluate(() => matchMedia('(hover: hover) and (pointer: fine)').matches)).toBe(!touch);
+  const webkit = await page.evaluate(() => CSS.supports('selector(::-webkit-scrollbar)'));
+  const width = touch ? 'none' : webkit ? 'auto' : 'thin';
+  await expect.poll(() => pane.evaluate(el => getComputedStyle(el).getPropertyValue('scrollbar-width'))).toBe(width);
+  if (!touch && webkit) {
+    expect(await pane.evaluate(el => getComputedStyle(el, '::-webkit-scrollbar').width)).toBe('8px');
+    expect(await pane.evaluate(el => getComputedStyle(el, '::-webkit-scrollbar-thumb').backgroundColor)).toBe('rgb(99, 137, 159)');
+    expect(await pane.evaluate(el => getComputedStyle(el, '::-webkit-scrollbar-button').display)).toBe('none');
+  }
+  expect(await pane.evaluate(el => el.scrollHeight > el.clientHeight)).toBe(true);
+  // The shared policy covers both vertical panes and horizontal member/turn strips.
+  for (const selector of ['#character-members', '#turn-order ol']) {
+    const element = page.locator(selector);
+    if (await element.count()) expect(await element.evaluate(el => getComputedStyle(el).getPropertyValue('scrollbar-width'))).toBe(width);
+  }
+  if (process.env.SCROLLBAR_SHOTS) await page.screenshot({ path: `${process.env.SCROLLBAR_SHOTS}/scrollbar-${touch ? 'mobile-390' : 'desktop'}.png` });
+  else await page.screenshot({ path: info.outputPath('scrollbar.png') });
+  if (touch) {
+    const box = (await pane.boundingBox())!, cdp = await context.newCDPSession(page);
+    const x = box.x + box.width / 2, y = box.y + box.height * .8;
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+    for (let step = 1; step <= 10; step++) {
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: y - step * 25 }] });
+      await page.waitForTimeout(16); // Space native touch samples; this is input pacing, not an app-ready wait.
+    }
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  } else {
+    await pane.hover(); await page.mouse.wheel(0, 400);
+  }
+  await expect.poll(() => pane.evaluate(el => el.scrollTop)).toBeGreaterThan(0);
+  await pane.evaluate(el => { el.scrollTop = 0; });
+  await page.locator('#character-talent-c1s').focus();
+  const top = await pane.evaluate(el => el.scrollTop); await page.keyboard.press('PageDown');
+  await expect.poll(() => pane.evaluate(el => el.scrollTop)).toBeGreaterThan(top);
+  // High-contrast users retain system colours and their native scrollbar width.
+  if (!touch) {
+    await page.emulateMedia({ forcedColors: 'active' });
+    expect(await pane.evaluate(el => getComputedStyle(el).getPropertyValue('scrollbar-color'))).toBe('auto');
+    expect(await pane.evaluate(el => getComputedStyle(el).getPropertyValue('scrollbar-width'))).toBe('auto');
+    await page.emulateMedia({ forcedColors: 'none' });
+  }
+  for (const selector of ['#character-tab-overview', '#character-tab-talents', '#character-dialog [data-world=character-close]']) expect(await page.locator(selector).evaluate(el => { const r = el.getBoundingClientRect(); return r.width >= 44 && r.height >= 44; })).toBe(true);
+  expect(await saved(page)).toBe(before);
+  await page.keyboard.press('Escape'); await expect(page.locator('#character-dialog')).not.toBeVisible(); expect(await saved(page)).toBe(before);
+  expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  expect(errors).toEqual([]); await context.close();
 });
