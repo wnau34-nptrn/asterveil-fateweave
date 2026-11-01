@@ -346,3 +346,17 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #battle-view .action-option .skill-info::before { content: 'ⓘ'; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #0b1626e6; border: 1px solid #f2d59680; }
 #battle-view .action-option .skill-info { font-size: 0; }
 #battle-view .action-option .skill-info::before { font-size: 14px; }
+
+/* One bounded heading row: long Thai names cannot grow under the danger controls. */
+.hud-summary { position: absolute; top: var(--hud-top); left: var(--hud-left); right: var(--hud-right); display: grid; gap: 8px; }
+.hud-heading { display: flex; align-items: flex-start; gap: 8px; }
+.hud-heading .hud-location { position: static; flex: 1; min-width: 0; max-width: none; }
+.hud-location > div { min-width: 0; width: 100%; }
+.hud-heading .hud-top-right { position: static; flex: none; }
+.hud-location #map-name, .hud-location .zone-title { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hud-location #zone-name { overflow: visible; white-space: normal; }
+.hud-location #zone-name .zone-level { display: block; font-size: 12px; line-height: 1.5; }
+.hud-summary .hud-party { position: static; width: 100%; transform: none; }
+.hud-tools { display: flex; gap: 8px; min-width: 0; }
+.hud-summary .hud-objective { position: static; flex: 1; width: 0; min-width: 0; max-width: none; }
+.hud-summary .hud-pack { position: static; flex: none; }

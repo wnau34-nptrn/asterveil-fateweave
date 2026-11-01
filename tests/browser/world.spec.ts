@@ -1389,3 +1389,59 @@ test('levels: the map shows the monster level here and members’ levels; battle
   await expect(page.locator('#enemy-roster')).toContainText(`Lv${s.battle!.level}`);
   expect(issues).toEqual([]);
 });
+
+
+// Safari may already exclude its status bar while still reporting env(top)=0.
+// Keep that case separate from a genuinely edge-to-edge viewport.
+for (const [mode, width, height, envTop, fallback] of [
+  ['browser', 390, 785, 0, 0], ['edge', 390, 844, 0, 50],
+  ['island', 390, 844, 59, 0], ['narrow', 320, 568, 0, 0],
+] as const) {
+  test(`world HUD ${mode}: one safe inset and bounded long Thai heading`, async ({ browser }, info) => {
+    const context = await browser.newContext({ viewport: { width, height }, screen: { width, height: width === 390 ? 844 : 568 }, hasTouch: true,
+      userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 Version/26.0 Mobile/15E148 Safari/604.1', reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    // This Chromium lacks CDP safe-area emulation. Inject the reported env value
+    // into both the measurement probe and CSS; this is a synthetic layout check.
+    if (envTop) await page.addInitScript(top => {
+      document.addEventListener('DOMContentLoaded', () => {
+        const style = document.createElement('style');
+        style.textContent = `:root { --safe-top: max(${top}px, var(--safe-top-fallback, 0px)); } [style*="safe-area-inset-top"] { height: ${top}px !important; }`;
+        document.head.append(style); window.dispatchEvent(new Event('resize'));
+      }, { once: true });
+    }, envTop);
+    const position = findTiles(map, 'floor').find(p => tileAt(map, p)?.zoneId === 'thicket')!;
+    // Current save, hard mode and the exact long zone from the owner's screenshot.
+    const state = base({ position, hard: true });
+    const profile = { ...newProfile(map, 5), tutorialDone: true, commander, veteran: true, cleared: [ruinsMap.id, 'deep-forest', map.id] };
+    await page.addInitScript(({ raw, key }) => localStorage.setItem(key, raw), { raw: JSON.stringify({ version: 45, profile, run: state }), key });
+    const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+    page.on('console', m => { if (m.type() === 'error') issues.push(m.text()); });
+    await page.goto('./'); await page.locator('#continue').click();
+    await expect(page.locator('#map-name')).toHaveText('แนวรอยแยก · ยาก');
+    await expect(page).toHaveTitle('Asterveil · Fateweave');
+    await expect(page.locator('#zone-name')).toContainText('พงหนามชายแดน');
+    await expect(page.locator('#zone-name .danger')).toContainText('อันตราย');
+    await expect(page.locator('vite-error-overlay')).toHaveCount(0);
+    const before = await page.evaluate(k => localStorage.getItem(k), key);
+    await expect.poll(() => page.evaluate(() => document.documentElement.style.getPropertyValue('--safe-top-fallback'))).toBe(`${fallback}px`);
+    const geometry = await page.evaluate(() => {
+      const rect = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+      const a = rect('.hud-location'), b = rect('.hud-top-right'), party = rect('.hud-party');
+      return { top: a.top - rect('#app').top, gap: b.left - a.right, partyGap: party.top - a.bottom,
+        bounded: [...document.querySelectorAll('.hud-location #map-name, .hud-location .zone-title, .zone-level')].every(el => {
+          const r = el.getBoundingClientRect(); return r.left >= a.left && r.right <= a.right && r.bottom <= a.bottom;
+        }), scroll: document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth };
+    });
+    expect(geometry.top).toBe(Math.max(width <= 360 ? 8 : 12, envTop, fallback));
+    expect(geometry.gap).toBeGreaterThanOrEqual(8); expect(geometry.partyGap).toBeGreaterThanOrEqual(0);
+    expect(geometry.bounded).toBe(true); expect(geometry.scroll).toBe(false);
+    for (const selector of ['#world-info-button', '#objective-button', '#world-pack']) await reachable(page, selector);
+    await page.keyboard.press('i'); await expect(page.locator('#world-info')).toBeVisible();
+    await page.keyboard.press('Escape'); await expect(page.locator('#world-info')).not.toBeVisible();
+    expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
+    await page.locator('#world-info-button').evaluate(el => (el as HTMLElement).blur());
+    await page.screenshot({ path: info.outputPath(`hud-${mode}.png`) });
+    expect(issues).toEqual([]); await context.close();
+  });
+}
