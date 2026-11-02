@@ -1,5 +1,22 @@
 # Codex → Claude handoff
 
+## 2026-11-02 — นำภาพหน้าตีบวก ART-UI-UX-002 เข้า runtime
+
+- เจ้าของสั่ง “ดำเนินการต่อได้” หลังปิดhandoff1–7 จึงเริ่มimplementationจริงบน `codex/enhancement-visual-integration` จากremoteเกม07f95a7 ไม่mergeART PR133ทั้งชุด แบบอ้างอิงa77d17b
+- นำidentity96/stepทอง/ผลจริง+neutral/detailsรวม/costcards+dock/CTAglass-gold/4SVG1594bytesเข้าหน้าตีบวก; scopedCSSใหม่ forge-enhancement.css และlayoutobservermodule ใช้container/viewportเดิม มีrootfont200 reflowและcaptionguard
+- Receiptเก็บProfileก่อน/หลังเฉพาะUIจากforged/enhanceจริง ส่งcanonicalpersistedprofileจากGameShell แสดงผลที่ทำแล้วจนexplicitnext; reviewguard/cost/target/host/saveเดิม; no simulation/fixtures/modelbank/labเข้าruntime
+- Returncontext character/inventoryเดิม; Escapeในenhance review/pickerถอยชั้นและfocusหัวข้อpickerไม่แย่งnativeinput; otherforge reviewยังปิดแบบเดิม; doubleclickไม่ไหลfocusไปnext
+- ไฟล์: src/main.ts, ui/{forge-workbench,game-shell,lobby-ui,forge-enhancement-layout}.ts, forge-enhancement.css; public/assets/ui/forge-enhancement/*.svg; tests/enhancement-review.test.ts/browser enhancement-pilot+visual,forge-refund,world; docs/validation/enhancement-visualและhandoff
+- Localtypecheck/lint/unit1398ใน100files/buildPagesผ่าน; sourceguard6testsรวมในunit ชุดbrowser52กรณีไม่ซ้ำผ่านข้ามruns: batch45pass, visual6Pages(passซ้ำkeyboard1), Lv390rerun1, legacyworld1; visual390settled rerunเป็นภาพไม่เพิ่มcase
+- บันทึกfailuresจริง: receiptผูกresult.profileคนละobjectกับpersistedprofileแก้adapter, dblclickfocusแก้คืนreceipt/cancel, pickerfocusเดิมเป็นselectทำให้Escapeถูกguardแก้focusheading; จำกัดEscapeเฉพาะenhanceเพื่อคงtransferreview, updatelegacycost/details assertions
+- Localunitแรกขาด6reportfilesจากsparse คืนbytesตรงHEADแล้วfull1398ผ่าน; devrunnerเก่าปิดserverระหว่างชุดใหม่ แยกserverคงที่แล้วrerun; batchเก่ายังมีvisual5failก่อนpickerfixและLv390coldtimeout หลังแก้Pages6+retryผ่าน ไม่อ้างbatchแรกผ่าน
+- ภาพ390จริงก่อน/ready2/review/successsettled/text200ในdocs/validation/enhancement-visual เปิดดูแล้ว; currencyยังlineicon/ornamentreduced/gear128resample ไม่อ้างpixelperfectหรือผู้ใช้อนุมัติภาพแทนผลเทสต์
+- ไม่มีcore/battle/core/save/core/world/contentbalance/schema/workflow/animationtimingเปลี่ยน; SVGbytesตรงART ไม่มีrawmotif/mockoriginในbundle
+- Chromiumtouch/desktopและrootfont16→32เท่านั้น ยังไม่มีผลSafari/iOS/เครื่องจริง/OSfont/nativezoom/screenreader/ผู้เล่นจริง
+- ตอนบันทึกนี้รอPRquality/browser4shards+aggregateและPagesหลังmerge จะบันทึกPR/merge/deploymentจริงในentryปิดงาน ไม่ถือlocalผลนี้เป็นpublished
+- งานถัดไปหลังนำร่องผ่าน: UXD-02เลือกงาน/เพิ่มLv แล้วดาว/สกิล/อุปกรณ์อื่นตามแผน ไม่เปิดพร้อมกันในรอบนี้
+
+
 ## 2026-11-02 — UXD-00/01 นำร่องตีบวกจริงตามแผน ART-UI-UX-002
 
 - เจ้าของสั่ง “ดำเนินการขั้นแรก” จากแผน PR #133; branch `codex/uxd-01-enhancement-pilot` จากเกมล่าสุด `db1788e` เก็บงาน desktop scrollbars เดิมครบ

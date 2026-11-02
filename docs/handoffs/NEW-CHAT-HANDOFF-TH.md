@@ -1,5 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-11-02 — Visual integration หน้าตีบวก
+
+เจ้าของอนุญาตimplementationต่อจากสเปก1–7 ทำบนcodex/enhancement-visual-integrationจาก07f95a7 นำSVG/material/layoutเข้าหน้าจริงพร้อมreceipt/explicitnext/neutral/details/costreflowและfocusเดิม ไม่มีrules/save/balanceเปลี่ยน Localtypecheck/lint/unit1398/buildPagesผ่าน browser52distinctผ่านข้ามrunsตามCODEX-TO-CLAUDE.md ภาพ/proofในdocs/validation/enhancement-visual กำลังส่งPR/CI/Pages ให้ตามผลcommitจริง ไม่อ้างpublishก่อนworkflowเสร็จ ไม่ขยายหน้าดาว/สกิล/อุปกรณ์อื่นพร้อมกัน
+
+
 ## 2026-11-02 — UXD-00/01 หน้าตีบวกนำร่อง
 
 เจ้าของสั่งขั้นแรกของแผนART-UI-UX-002 (PR #133) ทำบน `codex/uxd-01-enhancement-pilot` จากเกม `db1788e`; PR #135 merged `4686ca5` หลังquality+browser4shardsผ่าน Pages41369875841 build/browser4/deployผ่าน เผยแพร่แล้ว หน้าตีบวกผลต่อผู้สวม/review dock/กลับชิ้นและตัวกรองเดิม/ยืนยันครั้งเดียว localunit1396และfocusedbrowserผ่าน รายละเอียดอยู่CODEX-TO-CLAUDE.md และ UXD-01-IMPLEMENTATION-TH.md
