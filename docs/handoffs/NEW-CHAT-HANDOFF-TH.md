@@ -1,5 +1,17 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-11-02 — แก้เกราะแสดงเป็นรูปอาวุธ (atlas pixels)
+
+- เจ้าของแจ้งเกราะเป็นอาวุธหลังภาพรอบiPhone; ยืนยัน gearCell/JSON เลือกช่องถูก แต่runtime atlasมี2ช่องไม่ตรงภาพต้นฉบับ ART-UI-EQUIP-002: gear_body_set_dawnเป็นอาวุธ และgear_body_fineเป็นถุงมือ
+- เทียบ78cellต้นฉบับพบผิดเฉพาะ2ช่องนี้ คืนRGBA128×128จากincoming/cellsเดิมแบบlossless ไม่วาดใหม่ ไม่เปลี่ยนJSON/ชื่อ/ชนิด/สเตตัส/เซฟ/กฎ/สมดุล/กรอบsafearea ทุกdecodedRGBAนอก2ช่องเหมือนก่อนแก้ตรงbyte รวม4อาวุธC12เดิม
+- runtime WebP1280×1152 987378bytes SHA2563935edefb869f5e97cfedbe84b1e4fcb42cb3a35aca090b4fb727f6b53fbc2b1; equipArtUrlเพิ่ม?v=3935edefเฉพาะgear_itemsป้องกันแคชเดิม คงURLภาพยา/ตราเซ็ต
+- เพิ่มbrowser decoded-pixel regression เทียบ78ภาพต้นฉบับบนพื้นดำและขาว ไม่ส่งincomingเข้าruntime; ยอมroundingCanvas8bit≤1channelเท่านั้น ก่อนแก้ล้ม2ช่องต่าง255 หลังแก้ผ่านทั้งหมด ตรวจURLversionจากSHAของไฟล์จริงด้วย
+- ระหว่างสร้างtest เทียบunpremultipliedRGBAตรงๆล้ม78เพราะprecisionขอบโปร่งใส (Pillowยืนยันมีผิด2); แก้เป็นopaque black+whiteและcolorSpaceConversion:none ก่อนแก้assetเพื่อยืนยันเหลือผิด2 ไม่กลบรูปร่างผิดด้วยtoleranceสูง
+- Local lint/typecheck/buildPagesผ่าน, unit equip-art118ผ่าน, dev browser5กรณี(78cells+equipment UI+safearea3)ผ่าน; Pages equipment2กรณีเดิมผ่าน ไม่บวกเป็น7distinct
+- ภาพหลังแก้390px /tmp/armour-atlas-fix/forge-390.png แสดงเกราะรุ่งอรุณจริง ภาพruntimeatlasรวม /tmp/gear-atlas-overview.png เป็นก่อนแก้ ไม่commitภาพชั่วคราว
+- Browser runtimeไม่มีjs toolในsessionจึงใช้repoPlaywright/Chromiumจำลอง ไม่อ้างSafari/iPhoneจริง; ยังไม่ทำliveHTTPเพราะPageshostนอกexecutorallowlistตามรอบก่อน
+- กำลังส่งPR/CI/merge/Pages จะบันทึกผลจริงหลังครบ ไม่อ้างผลlocalเป็นเผยแพร่
+
 ## 2026-11-02 — กรอบหน้าตีบวก iPhone เผยแพร่แล้ว (PR #137)
 
 - เจ้าของแจ้งกรอบหลุดขอบพร้อมภาพจริง; แก้ sheet inset0 ให้ทั้งกรอบอยู่ใน safe area สี่ด้านและมีระยะขั้นต่ำ8px ตัด safe padding ที่ซ้ำใน header/dock ไม่มี viewport/rules/save/balance/animation เปลี่ยน

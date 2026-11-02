@@ -1,5 +1,11 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-11-02 — Armour atlas fix
+
+- [x] คืนภาพเกราะ2ช่องจากต้นฉบับ เพิ่มgearURLrevisionและdecoded78cell/cache regression
+- [x] Local lint/typecheck/buildPages/unit118/dev5ผ่าน ดูCODEX-TO-CLAUDE.md
+- [ ] PR CI/merge/Pages และบันทึกผลเผยแพร่จริงของarmour fix
+
 ## 2026-11-02 — iPhone enhancement frame
 
 - [x] ย้ายกรอบทั้งsheetเข้าsafearea+ขั้นต่ำ8px ตัดheader/dock paddingซ้ำ
