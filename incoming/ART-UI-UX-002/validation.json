@@ -67,8 +67,8 @@
     },
     {
       "file": "HANDOFF_TH.md",
-      "bytes": 7405,
-      "sha256": "6a731c9d3ce5d1cda3de3397ad014248455f233aaad8ea8946031907853d7df7"
+      "bytes": 8761,
+      "sha256": "c4741a0b53db4fd221f23df024640b1ed405b1aa5fb2ae8ab2e8414242b97cbc"
     },
     {
       "file": "IMPLEMENTATION_PLAN_TH.md",
@@ -77,8 +77,8 @@
     },
     {
       "file": "README.md",
-      "bytes": 3390,
-      "sha256": "d1fa9e752a8b086048d02253521376341439861d290f45b007ca52b6c219628d"
+      "bytes": 3867,
+      "sha256": "50baf3cd69fc56f541635f2fbd82b074bc5aef7c223b42c1ebb240e1d275d0bd"
     },
     {
       "file": "REVIEW_TH.md",
@@ -89,6 +89,43 @@
       "file": "STAR_UPGRADE_TH.md",
       "bytes": 11568,
       "sha256": "4f2a525581a6e0849e5e956a6116e310fd480b6869454d12609d4d1c2a0b27e0"
+    },
+    {
+      "file": "VISUAL_AUDIT_01_TH.md",
+      "bytes": 21153,
+      "sha256": "22db8e13bb2c59e7f30839c225e976ff150832d612acba88f140f3655d6b372a"
+    },
+    {
+      "file": "visual-audit-01/enhance-ready-390x650.png",
+      "bytes": 48988,
+      "sha256": "28b9b04c83461f877bbc9ac59966b169bb42d78b459759068dfa283e6a3678ec",
+      "width": 390,
+      "height": 650,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "visual-audit-01/enhance-ready-390x844.png",
+      "bytes": 54164,
+      "sha256": "2086f1c422b397e3cdf82d36208958d3e78921549032e553be9240519e9e0966",
+      "width": 390,
+      "height": 844,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "visual-audit-01/enhance-review-390x844.png",
+      "bytes": 51376,
+      "sha256": "0691a26ae146bfd51259c90fa19ccb6702810be9752a06a1bab395b4ce83fca6",
+      "width": 390,
+      "height": 844,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "visual-audit-01/evidence.json",
+      "bytes": 2688,
+      "sha256": "7cc4b20e92d38fe15baf0fcf08368966974a4dcf0f99198cb035e7fdde638e89"
     }
   ],
   "checks": {
@@ -104,5 +141,14 @@
     "All displayed costs, statistics and donor quantities are illustrative.",
     "Star upgrade board uses current duplicate-first and capped seal substitution rules; P04 future star shards remain out of runtime scope.",
     "Equipment boards04-06 cover deterministic previews, unknown random results, destructive donors, upfront fees/refunds, crafting, salvage and smelt quotas; all are concepts, not runtime."
-  ]
+  ],
+  "visual_audit": {
+    "date": "2026-11-02",
+    "source_commit": "07f95a7f164b8b232c1c26edb0b4f31360df323f",
+    "capture": "local Chromium / Playwright, fixture only, DPR1, reduced motion",
+    "runtime_changed": false,
+    "capture_tests_passed": 1,
+    "page_errors": 0,
+    "real_device_tested": false
+  }
 }

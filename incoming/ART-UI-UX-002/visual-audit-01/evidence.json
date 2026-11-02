@@ -1,0 +1,109 @@
+{
+  "source": "07f95a7f164b8b232c1c26edb0b4f31360df323f",
+  "fixture": "seed17 guardian weapon rarity3 Lv6 +4 camp6 stars3",
+  "screens": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyWidth": 390,
+      "panels": [
+        {
+          "selector": "forge-item-head",
+          "text": "ดาบอัศวินล้ำค่า +4อาวุธ · Lv6 · ล้ำค่า · +4สวมอยู่: เอกิส",
+          "rect": {
+            "x": 15,
+            "y": 70,
+            "width": 360,
+            "height": 84.78125,
+            "top": 70,
+            "right": 375,
+            "bottom": 154.78125,
+            "left": 15
+          }
+        },
+        {
+          "selector": "gear-art",
+          "text": "",
+          "rect": {
+            "x": 28,
+            "y": 84.390625,
+            "width": 56,
+            "height": 56,
+            "top": 84.390625,
+            "right": 84,
+            "bottom": 140.390625,
+            "left": 28
+          }
+        },
+        {
+          "selector": "primary",
+          "text": "ตรวจรายการตีบวก +5",
+          "rect": {
+            "x": 15,
+            "y": 781,
+            "width": 360,
+            "height": 48,
+            "top": 781,
+            "right": 375,
+            "bottom": 829,
+            "left": 15
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 650
+      },
+      "bodyWidth": 390,
+      "panels": [
+        {
+          "selector": "forge-item-head",
+          "text": "ดาบอัศวินล้ำค่า +4อาวุธ · Lv6 · ล้ำค่า · +4สวมอยู่: เอกิส",
+          "rect": {
+            "x": 15,
+            "y": 70,
+            "width": 360,
+            "height": 84.78125,
+            "top": 70,
+            "right": 375,
+            "bottom": 154.78125,
+            "left": 15
+          }
+        },
+        {
+          "selector": "gear-art",
+          "text": "",
+          "rect": {
+            "x": 28,
+            "y": 84.390625,
+            "width": 56,
+            "height": 56,
+            "top": 84.390625,
+            "right": 84,
+            "bottom": 140.390625,
+            "left": 28
+          }
+        },
+        {
+          "selector": "primary",
+          "text": "ตรวจรายการตีบวก +5",
+          "rect": {
+            "x": 15,
+            "y": 587,
+            "width": 360,
+            "height": 48,
+            "top": 587,
+            "right": 375,
+            "bottom": 635,
+            "left": 15
+          }
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

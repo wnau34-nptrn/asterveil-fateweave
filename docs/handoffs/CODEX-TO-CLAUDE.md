@@ -1,5 +1,19 @@
 # Codex → Claude handoff
 
+## 2026-11-02 — ตรวจ visual fidelity ขั้นที่ 1 ตามคำขอเจ้าของ (ไม่แก้เกม)
+
+- เจ้าของถามวิธีให้สวยตาม Artwork โดยระบุยังไม่แก้เกม แล้วสั่ง “ดำเนินการขั้นตอนแรกได้”; งานนี้เป็นขั้นแรกของแผนภาพ ไม่ใช่เริ่ม implementation UXD-01 ซ้ำ
+- branch `art/art-ui-ux-002`, [Draft PR #133](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/133); ไม่มี merge commit/deployment ในงานนี้
+- เพิ่ม [VISUAL_AUDIT_01_TH.md](../../incoming/ART-UI-UX-002/VISUAL_AUDIT_01_TH.md): เทียบ Artwork01 กับเกม source `07f95a7` หลัง PR135, ความต่าง VF01–12 / P0–P2 และ brief ขั้น layout
+- ภาพอ้างอิงใหม่ ready390×844, ready390×650, review390×844 ใน incoming/ART-UI-UX-002/visual-audit-01 พร้อม evidence.json; ใช้ fixture ปัจจุบันเฉพาะ local ไม่กดยืนยัน/ไม่ใช้เซฟผู้เล่น
+- พบภาพอุปกรณ์56px, ขั้น+4→+5ชิดซ้าย/ขนาด22px, neutral stats มีหัวตารางเปล่า, ค่าใช้จ่ายยังเป็นบรรทัดเดียว; ไม่คัดค่าพลังตัวอย่างจาก Artwork ให้เป็นเกมจริง
+- เปลี่ยนเฉพาะเอกสาร/หลักฐาน incoming + handoff; README/HANDOFF/validation อัปเดต ไม่มี src/public/core/save/balance เปลี่ยน
+- ตรวจ capture ด้วย Playwright/Chromium: 1/1 ผ่าน, pageerror0, body width390 สองความสูง, CTA360×48 มองเห็น; เปิดดูภาพทั้งสามแล้ว ตรวจ diff/ลิงก์/PNG/SHA-256 ตาม validation.json ไม่มี gameplay suite ใหม่เพราะไม่มี runtime diff
+- ไม่ใช่ Safari/เครื่องจริง/ผู้เล่นจริง และยังไม่ตรวจทุก state/scroll path; ไม่อ้าง pixel-perfect หรือคะแนนความเหมือน
+- คงงานไว้ใน ART PR133 ตามขอบเขตยังไม่แก้เกม ไม่ merge ไปสาขาเกม; ฝากนำบันทึกนี้ตามไปเมื่อมีการนำงานภาพเข้าเกมภายหลัง
+- งานถัดไปตามแผน: dimensioned layout390×844/390×650, แล้วค่อย material/asset/prototype; หน้าดาว/สกิล/อุปกรณ์คำสั่งอื่นยังต้องตรวจรายหน้า ไม่เริ่ม implementation เอง
+
+
 ## 2026-11-01 — แผนนำ ART-UI-UX-002 ไปพัฒนาในเกม
 
 - เจ้าของขอจัดทำแผนปรับปรุงและระบุสิ่งที่ต้องทำเพิ่ม ต่อ PR #133 บน `art/art-ui-ux-002`; รอบนี้เป็นเอกสารแผน ไม่ใช่เริ่มimplementation
