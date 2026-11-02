@@ -1,5 +1,11 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-11-02 — iPhone enhancement frame
+
+- [x] ย้ายกรอบทั้งsheetเข้าsafearea+ขั้นต่ำ8px ตัดheader/dock paddingซ้ำ
+- [x] Local lint/typecheck/buildPages/dev browser9และPages focused3ผ่าน; ภาพและข้อจำกัดในCODEX-TO-CLAUDE.md
+- [ ] PR CI/merge/Pages และบันทึกผลเผยแพร่จริง
+
 ## 2026-11-02 — ภาพหน้าตีบวกตามแบบ1–7
 
 - [x] นำLayout/Material/SVGเข้าหน้าจริงโดยใช้ข้อมูล/guard/hostเดิม ไม่มีrules/save/balanceเปลี่ยน
