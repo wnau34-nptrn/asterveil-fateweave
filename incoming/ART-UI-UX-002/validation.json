@@ -67,8 +67,8 @@
     },
     {
       "file": "HANDOFF_TH.md",
-      "bytes": 9955,
-      "sha256": "b067327f6cc899f3f5869b93442ee45d9a5d9677fceb30b4c96491d6a65d479e"
+      "bytes": 11051,
+      "sha256": "dc92b9ba606ff84f6ee36470d169bf4d629370205a261f4e4118c76c4ea3f1c5"
     },
     {
       "file": "IMPLEMENTATION_PLAN_TH.md",
@@ -77,13 +77,18 @@
     },
     {
       "file": "LAYOUT_02_TH.md",
-      "bytes": 20760,
-      "sha256": "a54afd1a37882325e810f3413cf6b01f442621d9a35812cc992e69484418af09"
+      "bytes": 20979,
+      "sha256": "63bc6325a0d7ac89f80d54e09ffe40b89d1742a28d47011fabbfb164f58ea8f9"
+    },
+    {
+      "file": "MATERIAL_03_TH.md",
+      "bytes": 15757,
+      "sha256": "ce757b2a4be91887f025093d2392814a879552f760ed11accdf18135f09a59f3"
     },
     {
       "file": "README.md",
-      "bytes": 4374,
-      "sha256": "54571f02dcd779e35caf64f4c4830ccd56be2ed6be2a8fe5fbc9a5a59d3932b6"
+      "bytes": 4814,
+      "sha256": "0a031d285e38c308fdbc4447a68fcbcf8b44a22de7244d610ba484526c5fa5a7"
     },
     {
       "file": "REVIEW_TH.md",
@@ -162,6 +167,63 @@
       "file": "layout-02/validation-measurements.json",
       "bytes": 26780,
       "sha256": "8b5509f2ba89291929615712a224ee374141b291bac253db1673df86ebf44805"
+    },
+    {
+      "file": "material-03/asset-provenance.json",
+      "bytes": 1054,
+      "sha256": "b2e90077e84fa2ab4b080d3fb63899d95fb8d77e09467d396af81530d78b6a5a"
+    },
+    {
+      "file": "material-03/component-states-390.png",
+      "bytes": 197178,
+      "sha256": "6245cbf7069bbe97ea483ee1a677468b631393a585b33c5c3605b3d1d9e76597",
+      "width": 390,
+      "height": 1425,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "material-03/contrast-pairs.json",
+      "bytes": 2123,
+      "sha256": "c9631d8a465d90894224972652ca62f8dcee8bf494867336f9c154f04fbe65d5"
+    },
+    {
+      "file": "material-03/index.html",
+      "bytes": 19395,
+      "sha256": "ca50d42e3afca44c5d5f2ad92d86d8dfa590a39a20b1e2bd653d65f74b3c7f97"
+    },
+    {
+      "file": "material-03/material.css",
+      "bytes": 7220,
+      "sha256": "7723a09ece1693e67e66ff6b820e9cf737836027a7bc2f01fb308f5871bed031"
+    },
+    {
+      "file": "material-03/ready-390x650.png",
+      "bytes": 173244,
+      "sha256": "2d6d7e45b2e49edba340a77d559c17ef400108f840c14c986d4522b760c6f958",
+      "width": 390,
+      "height": 650,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "material-03/ready-390x844.png",
+      "bytes": 200408,
+      "sha256": "8426a3a40d9c428a4cc68ba9e2c3ad919f5593a60368dcb9dfdfcf22d2ce4302",
+      "width": 390,
+      "height": 844,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "material-03/tokens.json",
+      "bytes": 1248,
+      "sha256": "a28812337debf74af93b5f6c124a030afa9c26e150911be962ff209c2a173604"
+    },
+    {
+      "file": "material-03/validation-measurements.json",
+      "bytes": 29810,
+      "sha256": "f18c5938e72c7effa306c1474d0e0863977c9992597dc25ec0502ed20edfe69d"
     },
     {
       "file": "visual-audit-01/enhance-ready-390x650.png",
@@ -249,6 +311,23 @@
     "art_tile_px": 96,
     "page_errors": 0,
     "console_errors": 0,
+    "runtime_changed": false,
+    "transaction_tested": false,
+    "real_device_tested": false
+  },
+  "material_03": {
+    "date": "2026-11-02",
+    "type": "scoped CSS material proposal; no game integration",
+    "layout_baseline_commit": "92ac232",
+    "frames_geometry_matched": 14,
+    "button_states": [
+      "normal",
+      "pressed",
+      "focus",
+      "disabled"
+    ],
+    "contrast_pairs_checked": 11,
+    "contrast_scope": "selected conservative solid stops only; not whole-page certification",
     "runtime_changed": false,
     "transaction_tested": false,
     "real_device_tested": false

@@ -1,0 +1,93 @@
+{
+  "method": "WCAG relative luminance / sRGB; conservative opaque stops, not whole rendered-page certification",
+  "pairs": [
+    {
+      "pair": "body/panel conservative",
+      "foreground": "#f4f7fc",
+      "background": "#244e6c",
+      "ratio": 8.21,
+      "target": 4.5,
+      "passes_pair": true
+    },
+    {
+      "pair": "muted/panel conservative",
+      "foreground": "#bbcadb",
+      "background": "#244e6c",
+      "ratio": 5.28,
+      "target": 4.5,
+      "passes_pair": true
+    },
+    {
+      "pair": "mint/panel conservative",
+      "foreground": "#68e5b6",
+      "background": "#244e6c",
+      "ratio": 5.66,
+      "target": 4.5,
+      "passes_pair": true
+    },
+    {
+      "pair": "gold text/step conservative",
+      "foreground": "#f2d596",
+      "background": "#244667",
+      "ratio": 6.86,
+      "target": 4.5,
+      "passes_pair": true
+    },
+    {
+      "pair": "CTA normal darkest stop",
+      "foreground": "#172135",
+      "background": "#c69b52",
+      "ratio": 6.29,
+      "target": 4.5,
+      "passes_pair": true
+    },
+    {
+      "pair": "CTA pressed darkest stop",
+      "foreground": "#172135",
+      "background": "#c69b52",
+      "ratio": 6.29,
+      "target": 4.5,
+      "passes_pair": true
+    },
+    {
+      "pair": "disabled text",
+      "foreground": "#bbcadb",
+      "background": "#26374b",
+      "ratio": 7.27,
+      "target": 4.5,
+      "passes_pair": true
+    },
+    {
+      "pair": "insufficient text",
+      "foreground": "#ffc8b4",
+      "background": "#452933",
+      "ratio": 8.76,
+      "target": 4.5,
+      "passes_pair": true
+    },
+    {
+      "pair": "success text",
+      "foreground": "#bfffe9",
+      "background": "#164235",
+      "ratio": 10.03,
+      "target": 4.5,
+      "passes_pair": true
+    },
+    {
+      "pair": "focus/base",
+      "foreground": "#a3edff",
+      "background": "#08121f",
+      "ratio": 14.43,
+      "target": 3,
+      "passes_pair": true
+    },
+    {
+      "pair": "control border/control fill",
+      "foreground": "#6a92ac",
+      "background": "#24435e",
+      "ratio": 3.1,
+      "target": 3,
+      "passes_pair": true
+    }
+  ]
+}

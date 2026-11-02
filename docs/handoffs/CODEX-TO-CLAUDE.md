@@ -1,5 +1,19 @@
 # Codex → Claude handoff
 
+## 2026-11-02 — ขั้นที่ 3 Material/token sheet ตีบวก (ยังไม่แก้เกม)
+
+- เจ้าของสั่ง “ดำเนินการต่อได้” หลัง Layoutขั้น2 ทำmaterial sheetตามแผน โดยยังไม่แก้เกม
+- branch `art/art-ui-ux-002`, Draft PR #133; ไม่มีmerge/deploymentในงานนี้
+- เพิ่ม [MATERIAL_03_TH.md](../../incoming/ART-UI-UX-002/MATERIAL_03_TH.md), material-03/{index.html,material.css,tokens.json,contrast-pairs.json,asset-provenance.json,validation-measurements.json}, ready390×844/390×650 และcomponent-states390; README/HANDOFF/Layout/validationอัปเดต
+- วัสดุLuminous Veil: navy glass, ขอบblue-steel, stepทอง, impactcyan, CTAทองมีhighlight/bevel, pressed/focus/disabled; delta/neutral/insufficient/successชัดทั้งข้อความและสี ใช้layoutเดิมและasset/fontร่วม ไม่สร้างproductionartใหม่
+- ตรวจPlaywright/Chromium14กรอบ: geometry7ส่วนตรงฐาน92ac232ภายใน0.1px, art96,target≥44,no content horizontal overflow; จอ650ทั้ง7variantเลื่อนถึงงานอื่นได้/disclosureเปิดได้; primaryfocusจริงoutline3px; pageerror/consoleerror0
+- คำนวณคู่สี11คู่ผ่านค่าที่กำหนด (text≥4.5,border/focus≥3ตามsolidstopขอบเขต); ไม่รับรองWCAGทั้งหน้า เปิดดูภาพreadyสองความสูงและcomponent sheetแล้ว; ตรวจlinks/PNG/hashes/scoped diff
+- BrowserJSไม่พร้อม ใช้projectPlaywrightกับlocalhost; ไม่ทดสอบSafari/เครื่องจริง/200%/screen reader/transaction/gameplay/stale/double-submit; ปุ่มflowยังstatic ไม่มีstorage/API
+- ไม่แตะsrc/public/core/save/กฎ/ราคา; geometryของไอคอนenhance/ore/dust/act-lockเดิมจาก07f95a7 คงpath/viewBox เพิ่มเฉพาะclass/aria-hidden; ไม่ใช้image generationหรือแก้ภาพดาบเดิม
+- เก็บใน ART PR133 ตามคำขอยังไม่แก้เกม ฝากนำhandoffตามไปเมื่อมีintegrationจริง ไม่mergeสาขาArtworkเข้าเกมเอง
+- ขั้นถัดไปdecorative assetsเฉพาะที่CSSยังขาด (มุม/เส้นแบ่งและsafe bounds) แล้วค่อยprototype/fidelity/integrationตามแผน; ยังไม่ขยายlayoutทุกหน้าดาว/สกิล/อุปกรณ์อื่น
+
+
 ## 2026-11-02 — ขั้นที่ 2 Layout ตีบวกสองความสูง (ยังไม่แก้เกม)
 
 - เจ้าของสั่ง “ดำเนินการต่อได้” หลัง visual audit ขั้น1 จึงทำขั้น2 dimensioned layout เท่านั้น ขอบเขตยังไม่แก้เกม

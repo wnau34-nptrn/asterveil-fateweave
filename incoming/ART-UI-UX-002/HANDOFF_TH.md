@@ -1,5 +1,12 @@
 # ส่งต่อ ART-UI-UX-002
 
+## 2026-11-02 — ขั้นที่ 3 Material sheet เสร็จ (ไม่แก้เกม)
+
+อ่าน [MATERIAL_03_TH.md](MATERIAL_03_TH.md) และ [บอร์ดวัสดุ](material-03/index.html): CSS/tokenJSON, navy glass/ขอบทอง-cyan/CTAทองมีมิติ, button states4แบบ และข้อมูลdelta/neutral/insufficient/success พร้อมภาพreadyสองความสูงและcomponent sheet ตรวจgeometryตรงฐาน14กรอบ, target/scrollผ่าน และคู่สี11คู่ผ่านขอบเขตที่ระบุ ไม่ใช่WCAG/เครื่องจริง/transactionรับรอง
+
+ใช้asset/fontเดิมจากlayout-02ร่วมกันและinlinegeometryไอคอนเกมเดิม มีprovenance ไม่แตะsrc/public/core/save ขั้นถัดไปdecorative assetsเฉพาะที่จำเป็น แล้วจึงprototypeตามแผน; ยังไม่merge/deployเกม
+
+
 ## 2026-11-02 — ขั้นที่ 2 Layout สองความสูงเสร็จ (ไม่แก้เกม)
 
 อ่าน [LAYOUT_02_TH.md](LAYOUT_02_TH.md) และ [บอร์ด HTML](layout-02/index.html): ภาพ96, identityขั้นต่ำ158, step88/ตัวเลข32, neutral110, header60, dock168, CTA48; พร้อมห้าสถานะ × สองความสูงและสองvariant × สองความสูง รวม14กรอบ ผ่านตรวจ geometry/target/overflow/scroll ถึงงานรองบน Chromium รูป ready สองขนาดเป็นภาพแบบใหม่ ไม่ใช่ภาพเกมหลังแก้ รายละเอียดและข้อจำกัดดูเอกสาร

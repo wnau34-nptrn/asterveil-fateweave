@@ -1,0 +1,28 @@
+{
+  "base_layout_commit": "92ac232",
+  "base_layout": "../layout-02/index.html",
+  "game_asset_commit": "07f95a7f164b8b232c1c26edb0b4f31360df323f",
+  "shared_assets": "../layout-02/assets",
+  "icons": [
+    {
+      "source": "src/ui/svg/enhance.svg",
+      "sha256": "e63416732e28eebc288ced03fa35622d07e2d709afa557f2581f130cc8f4ec16",
+      "usage": "inline SVG geometry unchanged; add class and aria-hidden"
+    },
+    {
+      "source": "src/ui/svg/ore.svg",
+      "sha256": "3de48aeb1f75f65a013ad2aab48a5be69378b2fc713f4a794b4de59e2ac1e39d",
+      "usage": "inline SVG geometry unchanged; add class and aria-hidden"
+    },
+    {
+      "source": "src/ui/svg/dust.svg",
+      "sha256": "af136a4835c1e2b3e5c71510d84b1f7354e4a39660f43e8fda3a6cf86efc1023",
+      "usage": "inline SVG geometry unchanged; add class and aria-hidden"
+    },
+    {
+      "source": "src/ui/svg/act-lock.svg",
+      "sha256": "8b1216a916a2895546d3009ca1cd0147953b904a8e1b078d13af96c357c8aea5",
+      "usage": "inline SVG geometry unchanged; add class and aria-hidden"
+    }
+  ]
+}

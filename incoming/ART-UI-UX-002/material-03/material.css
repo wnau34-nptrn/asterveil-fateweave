@@ -1,0 +1,152 @@
+/* Design proposal only. Keep scoped; do not import into the game without integration review. */
+.material {
+  --mv-base: #08121f;
+  --mv-surface-low: #0d1c2e;
+  --mv-surface-high: #1e3b57;
+  --mv-text: #f4f7fc;
+  --mv-muted: #bbcadb;
+  --mv-gold: #f2d596;
+  --mv-gold-edge: #d9bf86;
+  --mv-cyan: #74d4ef;
+  --mv-mint: #68e5b6;
+  --mv-coral: #ed927f;
+  --mv-violet: #b59aff;
+  --mv-focus: #a3edff;
+  --mv-edge: #6a92ac;
+  --mv-gold-top: #ffe4a4;
+  --mv-gold-bottom: #c69b52;
+  --mv-on-gold: #172135;
+  --mv-disabled-bg: #26374b;
+  --mv-disabled-text: #bbcadb;
+  --mv-panel-fill: radial-gradient(ellipse at 15% 0%, #244e6c66, transparent 65%), linear-gradient(160deg, #18344f, #0d1c2e);
+  --mv-control-fill: linear-gradient(180deg, #24435e, #10253b);
+  --mv-gold-fill: linear-gradient(115deg, #ffe4a4, #e2bd75 60%, #c69b52);
+  --mv-panel-shadow: inset 0 1px 0 #d5efff26, inset 0 -1px 0 #020b1866, 0 5px 12px #00081640;
+  --mv-control-shadow: inset 0 1px 0 #e0f6ff33, inset 0 -2px 0 #03101b66, 0 2px 5px #00081655;
+  --mv-gold-shadow: inset 0 1px 0 #fff5d5cc, inset 0 -3px 0 #76511d66, 0 3px 8px #00081666;
+  color: var(--mv-text);
+}
+.phone.material {
+  background: radial-gradient(ellipse at 10% 22%, #153453aa, transparent 65%), var(--mv-base);
+  outline: 1px solid var(--mv-gold-edge);
+  outline-offset: 0;
+  box-shadow: 0 0 0 3px #08121f, 0 0 0 4px #8d785577, 0 12px 32px #00081688;
+}
+.phone.material::before {
+  content: ''; position: absolute; inset: 4px;
+  border: 1px solid #d9bf8640; border-radius: 14px;
+  pointer-events: none; z-index: 3;
+}
+.material .bar {
+  background: linear-gradient(110deg, #1a3751, #0b1c30 75%);
+  border-bottom-color: var(--mv-edge);
+  box-shadow: inset 0 1px 0 #e0f6ff26, 0 3px 12px #00081666;
+}
+.material .bar h3 { color: var(--mv-text); text-shadow: 0 2px 3px #000816cc; }
+.material .card {
+  background: var(--mv-panel-fill);
+  border-color: var(--mv-edge);
+  box-shadow: var(--mv-panel-shadow);
+}
+.material .identity { border-color: #6a92ac; }
+.material .identity h3 { color: var(--mv-text); text-shadow: 0 1px 3px #000816; }
+.material .meta, .material .owner, .material .impact small,
+.material .remaining, .material .resource span { color: var(--mv-muted); }
+.material .art {
+  background: radial-gradient(ellipse at 50% 40%, #284c70, #0a172b 80%);
+  border-color: var(--mv-violet);
+  box-shadow: inset 0 0 0 1px #ddd2ff33, 0 0 12px #b59aff33;
+}
+.material .art span {
+  background: #08121fe6; border-radius: 0 0 0 5px;
+  padding: 0 3px; color: var(--mv-gold); font-variant-numeric: tabular-nums;
+}
+.material .step {
+  position: relative;
+  background: radial-gradient(ellipse at 50% 0%, #244667, transparent 75%), linear-gradient(180deg, #142d47, #091a2c);
+  border-color: var(--mv-gold-edge);
+  box-shadow: inset 0 1px 0 #ffe4a455, inset 0 -1px 0 #030c18, 0 0 12px #d9bf8610;
+}
+.material .step strong { color: var(--mv-gold); text-shadow: 0 2px 1px #030c18, 0 0 12px #f2d59633; font-variant-numeric: tabular-nums; }
+.material .step p { color: var(--mv-mint); }
+.material .impact { border-color: var(--mv-cyan); box-shadow: var(--mv-panel-shadow), 0 0 10px #74d4ef12; }
+.material .impact h3 { color: var(--mv-text); }
+.material .impact p { color: var(--mv-text); }
+.material .disclosure {
+  background: linear-gradient(110deg, #142d44, #0b1b2e);
+  border-color: var(--mv-edge); box-shadow: inset 0 1px 0 #d5efff1a;
+}
+.material .disclosure summary { color: var(--mv-muted); }
+.material .disclosure[open] { border-color: var(--mv-cyan); }
+.material .disclosure p { color: var(--mv-muted); }
+.material button {
+  color: var(--mv-text); background: var(--mv-control-fill);
+  border-color: var(--mv-edge); box-shadow: var(--mv-control-shadow);
+  border-radius: 10px;
+}
+.material button:active:not(:disabled), .material button.is-pressed {
+  background: linear-gradient(180deg, #0b1d30, #1e3b57);
+  box-shadow: inset 0 2px 5px #020b18aa;
+}
+.material .actions .primary, .material button.primary {
+  color: var(--mv-on-gold); background: var(--mv-gold-fill);
+  border-color: #ffe4a4; box-shadow: var(--mv-gold-shadow);
+}
+.material .actions .primary:active:not(:disabled), .material button.primary.is-pressed {
+  background: linear-gradient(115deg, #d7b16c, #c69b52);
+  box-shadow: inset 0 2px 4px #76511d66, inset 0 -1px 0 #fff5d555;
+}
+.material .actions .primary:disabled, .material button:disabled {
+  background: var(--mv-disabled-bg); color: var(--mv-disabled-text);
+  border-color: #7f94aa; box-shadow: inset 0 1px 0 #d5efff1a;
+  opacity: 1;
+}
+.material button:focus-visible, .material summary:focus-visible,
+.material button.is-focus {
+  outline: 3px solid var(--mv-focus); outline-offset: 2px;
+}
+.material .dock {
+  background: linear-gradient(180deg, #19344d, #0a192b 85%);
+  border-top-color: var(--mv-gold-edge);
+  box-shadow: 0 -5px 16px #00081666, inset 0 1px 0 #d9bf8633;
+}
+.material .resource {
+  background: linear-gradient(140deg, #19344d, #0c1e32);
+  border-color: var(--mv-edge); box-shadow: inset 0 1px 0 #d5efff26;
+  font-variant-numeric: tabular-nums;
+}
+.material .resource b { color: var(--mv-text); }
+.material .resource.bad {
+  background: linear-gradient(140deg, #452933, #2d1e2b);
+  border-color: var(--mv-coral); box-shadow: inset 0 1px 0 #ed927f33;
+}
+.material .resource.bad span, .material .warning { color: #ffc8b4 !important; }
+.material .notice {
+  background: linear-gradient(120deg, #164235, #0c2c2b);
+  border-color: var(--mv-mint); color: #bfffe9;
+  box-shadow: inset 0 1px 0 #68e5b633;
+}
+.material .placeholder em { color: var(--mv-mint); }
+.material .placeholder { border-color: #6a92ac88; }
+.material .inline-icon { display: inline-block; width: 18px; height: 18px; vertical-align: -4px; flex: none; }
+.material .primary .inline-icon { margin-right: 6px; }
+.material .resource .inline-icon { color: var(--mv-cyan); margin-right: 4px; }
+.material .resource:nth-child(2) .inline-icon { color: var(--mv-gold); }
+.material .tools .inline-icon { width: 20px; height: 20px; margin: 0; vertical-align: -5px; }
+/* No idle shimmer, blur filter or animated glow in this design stage. */
+@media (prefers-reduced-motion: reduce) {
+  .material *, .material *::before, .material *::after { animation: none !important; transition: none !important; }
+}
+/* Component sheet, outside all game-frame geometry. */
+.component-samples { width: 390px; padding: 16px; background: var(--mv-base); margin-top: 36px; border: 1px solid #6a92ac; }
+.component-samples h2 { margin-bottom: 12px; }
+.component-samples h3 { margin: 12px 0 8px; }
+.component-samples .caption { color: var(--mv-muted); font-size: 12px; margin: 6px 0 14px; }
+.component-samples button { width: 100%; min-height: 48px; padding: 8px 12px; margin: 6px 0; border-width: 1px; border-style: solid; font: 700 14px/20px Noto; }
+.component-samples .sample-row { margin-bottom: 12px; }
+.component-samples .card { padding: 12px; margin: 12px 0; }
+.component-samples .card h3 { margin: 0 0 8px; }
+.component-samples .swatches { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.component-samples .swatch { min-height: 64px; border: 1px solid #6a92ac; padding: 8px; border-radius: 8px; font-size: 12px; }
+.component-samples .swatch b { display: block; }
+.component-samples .delta { color: var(--mv-mint); }
