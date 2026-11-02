@@ -14,6 +14,7 @@ import './ui/battle-skin.css';
 import './ui/game-feel.css';
 import './ui/portrait.css';
 import './ui/components.css';
+import './ui/forge-enhancement.css';
 
 fitViewport();
 const app = document.querySelector<HTMLElement>('#app')!;

@@ -2,6 +2,7 @@ import {HuntPanel} from './loot-guide';
 import {StorageManager} from './storage-manager';
 import {storageCap,departureBlocked,type StorageSource} from '../core/world/storage';
 import { ForgeWorkbench } from './forge-workbench';
+import { ForgeEnhancementLayout } from './forge-enhancement-layout';
 import { CharacterPanel, type CharacterModel } from './character-panel';
 import type { CharacterTab } from './character-view';
 import { applyCampEquipment, campEquipment, type AutoEquipmentPlan } from '../core/world/auto-equipment';
@@ -66,6 +67,7 @@ export class LobbyUI {
   private mapPicked: string | undefined;
   private readonly storageUI:StorageManager;
   private readonly forgeUI:ForgeWorkbench;
+  private readonly enhancementLayout=new ForgeEnhancementLayout();
   private forgeReturn:string|undefined;
   private forgeOrigin:{sheet:Sheet|null;picked:string|undefined;scroll:number;focus:string}|undefined;
   private readonly inventoryFilters = newGearFilters();
@@ -102,13 +104,13 @@ export class LobbyUI {
     });
     root.addEventListener('toggle', e => { const d = e.target as HTMLElement; if (d.id === 'npc-fold') this.npcOpen = (d as HTMLDetailsElement).open; }, true);
     root.addEventListener('change',event=>{const c=event.target as HTMLInputElement|HTMLSelectElement;if(c.id==='boss-target'&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.huntUI.changeBoss(c.value);this.draw();this.focus('#boss-target');return;}if(c.id==='hunt-target'&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.huntUI.change(c.value);this.draw();this.focus('#hunt-target');return;}if(c.closest('.forge-workbench')&&!root.hidden&&!root.closest('[inert]')&&!this.characters.open){this.forgeUI.remember(c.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.change(c);this.draw();this.focus('#'+focus);return;}if(c.dataset.gearFilter)this.storageUI.reset();if(c.closest('.character-dialog')||!c.dataset.gearFilter||root.hidden||root.closest('[inert]')||this.characters.open)return;changeGearFilter(this.inventoryFilters,c);this.draw();this.focus('#'+c.id);});
-    root.addEventListener('keydown',e=>{if(root.hidden||root.closest('[inert]'))return;const tab=(e.target as HTMLElement).closest<HTMLButtonElement>('.forge-tabs [role=tab]');if(tab&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const buttons=[...root.querySelectorAll<HTMLButtonElement>('.forge-tabs [role=tab]')],i=buttons.indexOf(tab),n=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;buttons[n]!.click();this.focus('#'+buttons[n]!.id);return;}if(e.repeat&&(e.target as HTMLElement).closest('[data-forge=review],[data-forge=confirm],[data-lobby=salvage],[data-storage=confirm],[data-storage=collect],[data-storage=recycle],[data-storage=expand],[data-storage=common]'))e.preventDefault();});
+    root.addEventListener('keydown',e=>{if(root.hidden||root.closest('[inert]'))return;const tab=(e.target as HTMLElement).closest<HTMLButtonElement>('.forge-tabs [role=tab]');if(tab&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const buttons=[...root.querySelectorAll<HTMLButtonElement>('.forge-tabs [role=tab]')],i=buttons.indexOf(tab),n=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:-1)+buttons.length)%buttons.length;buttons[n]!.click();this.focus('#'+buttons[n]!.id);return;}if(e.repeat&&(e.target as HTMLElement).closest('[data-forge=review],[data-forge=confirm],[data-forge=next-preview],[data-lobby=salvage],[data-storage=confirm],[data-storage=collect],[data-storage=recycle],[data-storage=expand],[data-storage=common]'))e.preventDefault();});
     this.startWork();
     // Escape closes the sheet even after a redraw moved focus out of it (only while the lobby shows).
-    root.ownerDocument.addEventListener('keydown', e => { if (!shortcutBlocked(e) && e.key === 'Escape' && this.sheet && !root.hidden && !this.characters.open) { e.preventDefault();if(this.sheet==='forge'&&this.forgeUI.enhancementView&&this.forgeUI.cancelReview()){this.draw();this.focus('#forge-enhance');}else this.closeSheet(); } });
+    root.ownerDocument.addEventListener('keydown', e => { if (!shortcutBlocked(e) && e.key === 'Escape' && this.sheet && !root.hidden && !this.characters.open) { e.preventDefault();const focus=this.sheet==='forge'?this.forgeUI.backFromEnhancement():undefined;if(focus){this.draw();this.focus('#'+focus);}else this.closeSheet(); } });
     root.addEventListener('click', e => {
       if(root.hidden||root.closest('[inert]')||this.characters.open)return;
-      const el=e.target as HTMLElement;const storageButton=el.closest<HTMLButtonElement>('button[data-storage]');if(storageButton){const focus=this.storageUI.click(storageButton,this.view!.profile);this.draw();this.focus('#'+focus);return;}const forgeButton=el.closest<HTMLButtonElement>('button');if(forgeButton?.closest('.forge-workbench')&&(forgeButton.dataset.forge||forgeButton.hasAttribute('data-gear-reset'))){if(forgeButton.hasAttribute('data-gear-reset'))forgeButton.dataset.forge='reset';this.forgeUI.remember(forgeButton.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.click(forgeButton,this.view!.profile);if(focus){this.draw();this.focus('#'+focus);}return;}if(el.closest('[data-gear-reset]')){this.storageUI.reset();Object.assign(this.inventoryFilters,newGearFilters());this.draw();this.focus('#camp-inventory-gear-filter-set');return;}
+      const el=e.target as HTMLElement;const storageButton=el.closest<HTMLButtonElement>('button[data-storage]');if(storageButton){const focus=this.storageUI.click(storageButton,this.view!.profile);this.draw();this.focus('#'+focus);return;}const forgeButton=el.closest<HTMLButtonElement>('button');if(forgeButton?.closest('.forge-workbench')&&(forgeButton.dataset.forge||forgeButton.hasAttribute('data-gear-reset'))){if(e.detail>1){this.root.querySelector<HTMLElement>('#forge-success, #forge-cancel')?.focus({preventScroll:true});return;}if(forgeButton.hasAttribute('data-gear-reset'))forgeButton.dataset.forge='reset';this.forgeUI.remember(forgeButton.closest<HTMLElement>('.forge-workbench')!);const focus=this.forgeUI.click(forgeButton,this.view!.profile);if(focus){this.draw();this.focus('#'+focus);}return;}if(el.closest('[data-gear-reset]')){this.storageUI.reset();Object.assign(this.inventoryFilters,newGearFilters());this.draw();this.focus('#camp-inventory-gear-filter-set');return;}
       const b = el.closest<HTMLButtonElement>('button[data-lobby]');
       if (!b || b.disabled) return;
       const id = b.dataset.hero;
@@ -287,6 +289,7 @@ export class LobbyUI {
   }
   private toastShown = '';
   private draw(): void {
+    this.enhancementLayout.disconnect();
     const huntScroll=this.sheet==='hunt'&&this.root.querySelector('#boss-target')||this.sheet==='maps'&&this.root.querySelector('.region-map')?this.root.querySelector('.lobby-content')?.scrollTop:undefined;
     const p = this.view!.profile; const last = p.last;
     const ready = p.party.deployed.length > 0&&!departureBlocked(p);
@@ -312,7 +315,7 @@ export class LobbyUI {
       ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.gold ? ` เหรียญทอง ${last.gold}` : ''}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
-        <div class="lobby-sheet-head">${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
+        <div class="lobby-sheet-head">${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="กลับไปจัดทีม">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title" tabindex="-1">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
         <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcLine(this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
@@ -321,6 +324,7 @@ export class LobbyUI {
           <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง</span></button></section>
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'tab-team', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'tab-hire', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'tab-bag', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('hunt', 'goal', 'ฟาร์ม', '')}${menu('forge', 'tab-forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
       </footer>`;
+    this.enhancementLayout.mount(this.root,this.forgeUI.scroll);
     if(huntScroll!==undefined&&(this.sheet==='hunt'||this.sheet==='maps'))this.root.querySelector('.lobby-content')!.scrollTop=huntScroll;
   }
 

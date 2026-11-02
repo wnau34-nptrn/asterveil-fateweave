@@ -1,0 +1,87 @@
+{
+  "id": "enhancement-visual-integration",
+  "runtime_base": "07f95a7f164b8b232c1c26edb0b4f31360df323f",
+  "design_commit": "a77d17bc11f25b218a6b2025b8b27926688ebda4",
+  "local_checks": {
+    "typecheck": true,
+    "lint": true,
+    "unit_tests": 1398,
+    "unit_files": 100,
+    "build_pages": true,
+    "browser_distinct_cases_passed_across_runs": 52,
+    "pages_visual_cases": 6,
+    "batch_was_not_clean": true,
+    "text200_detail_and_trial_select_px": 28
+  },
+  "ci_status": "pending",
+  "deployment_status": "pending",
+  "rules_changed": false,
+  "save_changed": false,
+  "balance_changed": false,
+  "motion_changed": false,
+  "real_device_tested": false,
+  "files": [
+    {
+      "path": "docs/validation/enhancement-visual/before-ready-390.png",
+      "bytes": 54164,
+      "sha256": "2086f1c422b397e3cdf82d36208958d3e78921549032e553be9240519e9e0966",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "docs/validation/enhancement-visual/ready-390x650.png",
+      "bytes": 155049,
+      "sha256": "4fd22c3df4efed9a8b959cd09e3ed790c2a7e9d18258141ba082d8a6a9bd665e",
+      "width": 390,
+      "height": 650
+    },
+    {
+      "path": "docs/validation/enhancement-visual/ready-390x844.png",
+      "bytes": 186104,
+      "sha256": "4ea30ce803558779ab179974ffc13b2e43bf5db9fb21ef30ee3ac8350c6c8028",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "docs/validation/enhancement-visual/review-390.png",
+      "bytes": 190386,
+      "sha256": "e6684e8eab805c66a73214447eacb74e8682e8daecfec5c38f3cfe67db317a43",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "docs/validation/enhancement-visual/success-390.png",
+      "bytes": 191920,
+      "sha256": "8a047318eca93d578f02f2e405ff56b0d53aa967bf60222cf7c351c7dada923a",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "path": "docs/validation/enhancement-visual/text200-390.png",
+      "bytes": 157823,
+      "sha256": "d4e1243dc83afe12c7a1b0c9c3308a58b387800fd1257fb8ab4a1e02be808908",
+      "width": 390,
+      "height": 650
+    },
+    {
+      "path": "public/assets/ui/forge-enhancement/divider-wing.svg",
+      "bytes": 533,
+      "sha256": "a9661e094cc69f58d085adc51c585b0363bb373ee89f6127dadcc2409fd3d8ad"
+    },
+    {
+      "path": "public/assets/ui/forge-enhancement/frame-corner.svg",
+      "bytes": 667,
+      "sha256": "5f3adadf1ce4458dfb90edd550fc06d1b582f3b7e8717e14f49a7d5d6942bf7a"
+    },
+    {
+      "path": "public/assets/ui/forge-enhancement/frame-edge-horizontal.svg",
+      "bytes": 197,
+      "sha256": "b428e14a9882762a7d9972a923e018da6a0ad5ef7bbeab4714d63c9c3265ed25"
+    },
+    {
+      "path": "public/assets/ui/forge-enhancement/frame-edge-vertical.svg",
+      "bytes": 197,
+      "sha256": "6cb6ece87ccf52bc91c079fa23cfeeeb2b4cbf4f9339639c6580bc1234f2c7c9"
+    }
+  ]
+}

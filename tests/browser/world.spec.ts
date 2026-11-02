@@ -1240,7 +1240,7 @@ test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async
   await page.locator('#lobby-tab-forge').click();
   await expect(page.locator('#lobby-sheet-title')).toContainText('ช่างตีเหล็ก'); await expect(page.locator('.forge-pick')).toHaveCount(3);
   await page.locator('#forge-item-1').click();
-  await expect(page.locator('#forge-cost')).toContainText('แร่ 4');
+  await expect(page.locator('#forge-cost')).toContainText('แร่ · ใช้ 4');
   await page.locator('#forge-enhance').click();await page.locator('#forge-confirm').click();
   await expect(page.locator('.forge-item-head')).toContainText('+1');
   await openForgeTools(page);await page.locator('#forge-mode-reroll').click();await page.locator('#forge-reroll-0').click();await page.locator('#forge-confirm').click();
