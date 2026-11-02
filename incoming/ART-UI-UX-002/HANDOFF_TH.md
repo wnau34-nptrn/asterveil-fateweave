@@ -1,5 +1,12 @@
 # ส่งต่อ ART-UI-UX-002
 
+## 2026-11-02 — ขั้นที่ 2 Layout สองความสูงเสร็จ (ไม่แก้เกม)
+
+อ่าน [LAYOUT_02_TH.md](LAYOUT_02_TH.md) และ [บอร์ด HTML](layout-02/index.html): ภาพ96, identityขั้นต่ำ158, step88/ตัวเลข32, neutral110, header60, dock168, CTA48; พร้อมห้าสถานะ × สองความสูงและสองvariant × สองความสูง รวม14กรอบ ผ่านตรวจ geometry/target/overflow/scroll ถึงงานรองบน Chromium รูป ready สองขนาดเป็นภาพแบบใหม่ ไม่ใช่ภาพเกมหลังแก้ รายละเอียดและข้อจำกัดดูเอกสาร
+
+ขั้นถัดไปเป็น material/token sheet ตาม Artwork01 ไม่เริ่มแก้ source/public หรือ merge/deploy เกม และยังไม่ข้ามไปทำ transaction prototype; ใช้ atlas/ฟอนต์เกมเดิม byte-identical มี provenance และ OFL ใน layout-02/assets
+
+
 ## 2026-11-02 — ขั้นแรกของแผนปรับภาพ (ยังไม่แก้เกม)
 
 อ่าน [VISUAL_AUDIT_01_TH.md](VISUAL_AUDIT_01_TH.md) ก่อนทำ dimensioned layout: ตรวจเกมหลัง PR #135 ที่ `07f95a7` เทียบ Artwork01 ฝั่งซ้าย พร้อมภาพจริงสองความสูงและ review แยกสถานะ พบ item tile 56px, ขั้นตีบวกยังไม่เด่น, neutral stats มีหัวตารางเปล่า และต้นทุนเป็นข้อความบรรทัดเดียว; จัด VF01–12 พร้อมลำดับ P0/P1/P2 แล้ว ข้อเสนอทั้งหมดยังไม่ได้ปรับเข้า runtime

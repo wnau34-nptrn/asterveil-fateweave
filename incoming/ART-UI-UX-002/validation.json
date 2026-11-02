@@ -67,8 +67,8 @@
     },
     {
       "file": "HANDOFF_TH.md",
-      "bytes": 8761,
-      "sha256": "c4741a0b53db4fd221f23df024640b1ed405b1aa5fb2ae8ab2e8414242b97cbc"
+      "bytes": 9955,
+      "sha256": "b067327f6cc899f3f5869b93442ee45d9a5d9677fceb30b4c96491d6a65d479e"
     },
     {
       "file": "IMPLEMENTATION_PLAN_TH.md",
@@ -76,9 +76,14 @@
       "sha256": "f15c2847901311a21d80425df63a6cf326e50c22b899b10bb7ad9ab2276853b1"
     },
     {
+      "file": "LAYOUT_02_TH.md",
+      "bytes": 20760,
+      "sha256": "a54afd1a37882325e810f3413cf6b01f442621d9a35812cc992e69484418af09"
+    },
+    {
       "file": "README.md",
-      "bytes": 3867,
-      "sha256": "50baf3cd69fc56f541635f2fbd82b074bc5aef7c223b42c1ebb240e1d275d0bd"
+      "bytes": 4374,
+      "sha256": "54571f02dcd779e35caf64f4c4830ccd56be2ed6be2a8fe5fbc9a5a59d3932b6"
     },
     {
       "file": "REVIEW_TH.md",
@@ -92,8 +97,71 @@
     },
     {
       "file": "VISUAL_AUDIT_01_TH.md",
-      "bytes": 21153,
-      "sha256": "22db8e13bb2c59e7f30839c225e976ff150832d612acba88f140f3655d6b372a"
+      "bytes": 21373,
+      "sha256": "c8f9ceeba56aaa96583168673e69a1e07c11ce3d70afcfb67b2ec10261bc779d"
+    },
+    {
+      "file": "layout-02/asset-provenance.json",
+      "bytes": 1367,
+      "sha256": "188bafaa81b6ed4f5694b35ee5c2e7e32e451c0f35227e08459efb8298f4c994"
+    },
+    {
+      "file": "layout-02/assets/Kanit-OFL.txt",
+      "bytes": 4384,
+      "sha256": "16dc702ee4cfe5a7b402ab917b2b9fbc1d1778c62fbe161c3f45529b07e076c1"
+    },
+    {
+      "file": "layout-02/assets/NotoSansThai-OFL.txt",
+      "bytes": 4381,
+      "sha256": "6db87e563a421ba02fc1b7dabbf0d269234fb0b7908006b3efda318814fc2d88"
+    },
+    {
+      "file": "layout-02/assets/gear_items.webp",
+      "bytes": 980378,
+      "sha256": "5f48cc54658c25115e3e858c378c3d5de05e254be5d223856b9478c4239de333"
+    },
+    {
+      "file": "layout-02/assets/kanit-600.woff2",
+      "bytes": 23428,
+      "sha256": "7fe638f5dc27b58a9d8f48e618cf0dddeb1dc6dc68eb431ab9b82d093dfbab96"
+    },
+    {
+      "file": "layout-02/assets/noto-sans-thai-400.woff2",
+      "bytes": 14092,
+      "sha256": "af64e9e3281b1382d20d3625e58efc06e5167ce01ed7471a6b346fd4abf2f56c"
+    },
+    {
+      "file": "layout-02/assets/noto-sans-thai-700.woff2",
+      "bytes": 14196,
+      "sha256": "235da84df524460d005db634ab4e9f2585f4dbc97bbfc4b828205164e9242d55"
+    },
+    {
+      "file": "layout-02/index.html",
+      "bytes": 13466,
+      "sha256": "d52e96fa44c28e19a930a910533fc093f61c21c1cfc60839160884e413a7e225"
+    },
+    {
+      "file": "layout-02/ready-390x650.png",
+      "bytes": 39267,
+      "sha256": "cba63fc63bebd2582edf32fade84c7979a8a98898d2246ce46c560c250b97058",
+      "width": 390,
+      "height": 650,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "layout-02/ready-390x844.png",
+      "bytes": 44656,
+      "sha256": "947954a8e9c23c30167f62aad730639be4b7c36d827c5bbcd21987d76fbe93c1",
+      "width": 390,
+      "height": 844,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "layout-02/validation-measurements.json",
+      "bytes": 26780,
+      "sha256": "8b5509f2ba89291929615712a224ee374141b291bac253db1673df86ebf44805"
     },
     {
       "file": "visual-audit-01/enhance-ready-390x650.png",
@@ -149,6 +217,40 @@
     "runtime_changed": false,
     "capture_tests_passed": 1,
     "page_errors": 0,
+    "real_device_tested": false
+  },
+  "layout_02": {
+    "date": "2026-11-02",
+    "source_asset_commit": "07f95a7f164b8b232c1c26edb0b4f31360df323f",
+    "type": "dimensioned static design board; no game integration",
+    "frames_checked": 14,
+    "states": [
+      "ready",
+      "review",
+      "success",
+      "insufficient",
+      "capped"
+    ],
+    "variants": [
+      "long-name-unowned",
+      "positive-placeholder-safe-area"
+    ],
+    "viewports": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ]
+    ],
+    "target_min_px": 44,
+    "art_tile_px": 96,
+    "page_errors": 0,
+    "console_errors": 0,
+    "runtime_changed": false,
+    "transaction_tested": false,
     "real_device_tested": false
   }
 }

@@ -1,0 +1,1337 @@
+{
+  "browser": "Chromium",
+  "runtimeGameChanged": false,
+  "errors": [],
+  "metrics": [
+    {
+      "state": "ready",
+      "height": 844,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 60
+      },
+      "body": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 616
+      },
+      "dock": {
+        "x": 0,
+        "y": 676,
+        "width": 390,
+        "height": 168
+      },
+      "identity": {
+        "x": 16,
+        "y": 72,
+        "width": 358,
+        "height": 158
+      },
+      "art": {
+        "x": 29,
+        "y": 103,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 242,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 342,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 7.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "เปลี่ยนอุปกรณ์",
+          "x": 137,
+          "y": 173,
+          "width": 172,
+          "height": 44
+        },
+        {
+          "label": "ล็อก",
+          "x": 317,
+          "y": 173,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 465,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 522,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "ตรวจรายการตีบวก +5",
+          "x": 16,
+          "y": 785,
+          "width": 358,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": false
+    },
+    {
+      "state": "ready",
+      "height": 650,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 650
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 60
+      },
+      "body": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 422
+      },
+      "dock": {
+        "x": 0,
+        "y": 482,
+        "width": 390,
+        "height": 168
+      },
+      "identity": {
+        "x": 16,
+        "y": 72,
+        "width": 358,
+        "height": 158
+      },
+      "art": {
+        "x": 29,
+        "y": 103,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 242,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 342,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 7.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "เปลี่ยนอุปกรณ์",
+          "x": 137,
+          "y": 173,
+          "width": 172,
+          "height": 44
+        },
+        {
+          "label": "ล็อก",
+          "x": 317,
+          "y": 173,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 465,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 522,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "ตรวจรายการตีบวก +5",
+          "x": 16,
+          "y": 591,
+          "width": 358,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": true
+    },
+    {
+      "state": "review",
+      "height": 844,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 60
+      },
+      "body": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 616
+      },
+      "dock": {
+        "x": 0,
+        "y": 676,
+        "width": 390,
+        "height": 168
+      },
+      "identity": {
+        "x": 16,
+        "y": 72,
+        "width": 358,
+        "height": 158
+      },
+      "art": {
+        "x": 29,
+        "y": 103,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 242,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 342,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 7.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 465,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 522,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "กลับไปแก้ไข",
+          "x": 16,
+          "y": 785,
+          "width": 120,
+          "height": 48
+        },
+        {
+          "label": "ยืนยันตีบวก +5",
+          "x": 144,
+          "y": 785,
+          "width": 230,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": false
+    },
+    {
+      "state": "review",
+      "height": 650,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 650
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 60
+      },
+      "body": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 422
+      },
+      "dock": {
+        "x": 0,
+        "y": 482,
+        "width": 390,
+        "height": 168
+      },
+      "identity": {
+        "x": 16,
+        "y": 72,
+        "width": 358,
+        "height": 158
+      },
+      "art": {
+        "x": 29,
+        "y": 103,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 242,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 342,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 7.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 465,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 522,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "กลับไปแก้ไข",
+          "x": 16,
+          "y": 591,
+          "width": 120,
+          "height": 48
+        },
+        {
+          "label": "ยืนยันตีบวก +5",
+          "x": 144,
+          "y": 591,
+          "width": 230,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": true
+    },
+    {
+      "state": "success",
+      "height": 844,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 60
+      },
+      "body": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 616
+      },
+      "dock": {
+        "x": 0,
+        "y": 676,
+        "width": 390,
+        "height": 168
+      },
+      "identity": {
+        "x": 16,
+        "y": 136,
+        "width": 358,
+        "height": 158
+      },
+      "art": {
+        "x": 29,
+        "y": 167,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 306,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 406,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 7.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 529,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 586,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "ดูขั้นถัดไป",
+          "x": 16,
+          "y": 785,
+          "width": 358,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": false
+    },
+    {
+      "state": "success",
+      "height": 650,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 650
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 60
+      },
+      "body": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 422
+      },
+      "dock": {
+        "x": 0,
+        "y": 482,
+        "width": 390,
+        "height": 168
+      },
+      "identity": {
+        "x": 16,
+        "y": 136,
+        "width": 358,
+        "height": 158
+      },
+      "art": {
+        "x": 29,
+        "y": 167,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 306,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 406,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 7.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 529,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 586,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "ดูขั้นถัดไป",
+          "x": 16,
+          "y": 591,
+          "width": 358,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": true
+    },
+    {
+      "state": "insufficient",
+      "height": 844,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 60
+      },
+      "body": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 616
+      },
+      "dock": {
+        "x": 0,
+        "y": 676,
+        "width": 390,
+        "height": 168
+      },
+      "identity": {
+        "x": 16,
+        "y": 72,
+        "width": 358,
+        "height": 158
+      },
+      "art": {
+        "x": 29,
+        "y": 103,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 242,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 342,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 7.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "เปลี่ยนอุปกรณ์",
+          "x": 137,
+          "y": 173,
+          "width": 172,
+          "height": 44
+        },
+        {
+          "label": "ล็อก",
+          "x": 317,
+          "y": 173,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 465,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 522,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "ตรวจรายการตีบวก +5",
+          "x": 16,
+          "y": 785,
+          "width": 358,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": false
+    },
+    {
+      "state": "insufficient",
+      "height": 650,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 650
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 60
+      },
+      "body": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 422
+      },
+      "dock": {
+        "x": 0,
+        "y": 482,
+        "width": 390,
+        "height": 168
+      },
+      "identity": {
+        "x": 16,
+        "y": 72,
+        "width": 358,
+        "height": 158
+      },
+      "art": {
+        "x": 29,
+        "y": 103,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 242,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 342,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 7.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "เปลี่ยนอุปกรณ์",
+          "x": 137,
+          "y": 173,
+          "width": 172,
+          "height": 44
+        },
+        {
+          "label": "ล็อก",
+          "x": 317,
+          "y": 173,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 465,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 522,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "ตรวจรายการตีบวก +5",
+          "x": 16,
+          "y": 591,
+          "width": 358,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": true
+    },
+    {
+      "state": "capped",
+      "height": 844,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 60
+      },
+      "body": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 616
+      },
+      "dock": {
+        "x": 0,
+        "y": 676,
+        "width": 390,
+        "height": 168
+      },
+      "identity": {
+        "x": 16,
+        "y": 72,
+        "width": 358,
+        "height": 158
+      },
+      "art": {
+        "x": 29,
+        "y": 103,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 242,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 342,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 7.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "เปลี่ยนอุปกรณ์",
+          "x": 137,
+          "y": 173,
+          "width": 172,
+          "height": 44
+        },
+        {
+          "label": "ล็อก",
+          "x": 317,
+          "y": 173,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 465,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 522,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "เลือกอุปกรณ์อื่น",
+          "x": 16,
+          "y": 785,
+          "width": 358,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": false
+    },
+    {
+      "state": "capped",
+      "height": 650,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 650
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 60
+      },
+      "body": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 422
+      },
+      "dock": {
+        "x": 0,
+        "y": 482,
+        "width": 390,
+        "height": 168
+      },
+      "identity": {
+        "x": 16,
+        "y": 72,
+        "width": 358,
+        "height": 158
+      },
+      "art": {
+        "x": 29,
+        "y": 103,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 242,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 342,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 7.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "เปลี่ยนอุปกรณ์",
+          "x": 137,
+          "y": 173,
+          "width": 172,
+          "height": 44
+        },
+        {
+          "label": "ล็อก",
+          "x": 317,
+          "y": 173,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 465,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 522,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "เลือกอุปกรณ์อื่น",
+          "x": 16,
+          "y": 591,
+          "width": 358,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": true
+    },
+    {
+      "state": "long",
+      "height": 844,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 60
+      },
+      "body": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 616
+      },
+      "dock": {
+        "x": 0,
+        "y": 676,
+        "width": 390,
+        "height": 168
+      },
+      "identity": {
+        "x": 16,
+        "y": 72,
+        "width": 358,
+        "height": 182
+      },
+      "art": {
+        "x": 29,
+        "y": 115,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 266,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 366,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 7.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "เปลี่ยนอุปกรณ์",
+          "x": 137,
+          "y": 197,
+          "width": 172,
+          "height": 44
+        },
+        {
+          "label": "ล็อก",
+          "x": 317,
+          "y": 197,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 489,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 546,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "ตรวจรายการตีบวก +5",
+          "x": 16,
+          "y": 785,
+          "width": 358,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": false
+    },
+    {
+      "state": "long",
+      "height": 650,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 650
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 60
+      },
+      "body": {
+        "x": 0,
+        "y": 60,
+        "width": 390,
+        "height": 422
+      },
+      "dock": {
+        "x": 0,
+        "y": 482,
+        "width": 390,
+        "height": 168
+      },
+      "identity": {
+        "x": 16,
+        "y": 72,
+        "width": 358,
+        "height": 182
+      },
+      "art": {
+        "x": 29,
+        "y": 115,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 266,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 366,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 7.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "เปลี่ยนอุปกรณ์",
+          "x": 137,
+          "y": 197,
+          "width": 172,
+          "height": 44
+        },
+        {
+          "label": "ล็อก",
+          "x": 317,
+          "y": 197,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 489,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 546,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "ตรวจรายการตีบวก +5",
+          "x": 16,
+          "y": 591,
+          "width": 358,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": true
+    },
+    {
+      "state": "positive",
+      "height": 844,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 844
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 84
+      },
+      "body": {
+        "x": 0,
+        "y": 84,
+        "width": 390,
+        "height": 558
+      },
+      "dock": {
+        "x": 0,
+        "y": 642,
+        "width": 390,
+        "height": 202
+      },
+      "identity": {
+        "x": 16,
+        "y": 96,
+        "width": 358,
+        "height": 158
+      },
+      "art": {
+        "x": 29,
+        "y": 127,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 266,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 366,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 31.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "เปลี่ยนอุปกรณ์",
+          "x": 137,
+          "y": 197,
+          "width": 172,
+          "height": 44
+        },
+        {
+          "label": "ล็อก",
+          "x": 317,
+          "y": 197,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 489,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 546,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "ตรวจรายการตีบวก +5",
+          "x": 16,
+          "y": 751,
+          "width": 358,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": false
+    },
+    {
+      "state": "positive",
+      "height": 650,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 650
+      },
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 84
+      },
+      "body": {
+        "x": 0,
+        "y": 84,
+        "width": 390,
+        "height": 364
+      },
+      "dock": {
+        "x": 0,
+        "y": 448,
+        "width": 390,
+        "height": 202
+      },
+      "identity": {
+        "x": 16,
+        "y": 96,
+        "width": 358,
+        "height": 158
+      },
+      "art": {
+        "x": 29,
+        "y": 127,
+        "width": 96,
+        "height": 96
+      },
+      "step": {
+        "x": 16,
+        "y": 266,
+        "width": 358,
+        "height": 88
+      },
+      "impact": {
+        "x": 16,
+        "y": 366,
+        "width": 358,
+        "height": 110
+      },
+      "actions": [
+        {
+          "label": "×",
+          "x": 330,
+          "y": 31.5,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "เปลี่ยนอุปกรณ์",
+          "x": 137,
+          "y": 197,
+          "width": 172,
+          "height": 44
+        },
+        {
+          "label": "ล็อก",
+          "x": 317,
+          "y": 197,
+          "width": 44,
+          "height": 44
+        },
+        {
+          "label": "รายละเอียดและการคืนทุน",
+          "x": 17,
+          "y": 489,
+          "width": 356,
+          "height": 44
+        },
+        {
+          "label": "งานอื่นของช่าง　›",
+          "x": 16,
+          "y": 546,
+          "width": 358,
+          "height": 44
+        },
+        {
+          "label": "ตรวจรายการตีบวก +5",
+          "x": 16,
+          "y": 557,
+          "width": 358,
+          "height": 48
+        }
+      ],
+      "horizontalOverflow": false,
+      "verticalScroll": true
+    }
+  ]
+}

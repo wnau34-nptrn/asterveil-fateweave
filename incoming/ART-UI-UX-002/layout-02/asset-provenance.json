@@ -1,0 +1,44 @@
+[
+  {
+    "source": "public/assets/ui/equip/gear_items.webp",
+    "file": "assets/gear_items.webp",
+    "sha256": "5f48cc54658c25115e3e858c378c3d5de05e254be5d223856b9478c4239de333"
+  },
+  {
+    "source": "public/assets/fonts/kanit-600.woff2",
+    "file": "assets/kanit-600.woff2",
+    "sha256": "7fe638f5dc27b58a9d8f48e618cf0dddeb1dc6dc68eb431ab9b82d093dfbab96"
+  },
+  {
+    "source": "public/assets/fonts/noto-sans-thai-400.woff2",
+    "file": "assets/noto-sans-thai-400.woff2",
+    "sha256": "af64e9e3281b1382d20d3625e58efc06e5167ce01ed7471a6b346fd4abf2f56c"
+  },
+  {
+    "source": "public/assets/fonts/noto-sans-thai-700.woff2",
+    "file": "assets/noto-sans-thai-700.woff2",
+    "sha256": "235da84df524460d005db634ab4e9f2585f4dbc97bbfc4b828205164e9242d55"
+  },
+  {
+    "source": "public/assets/fonts/Kanit-OFL.txt",
+    "file": "assets/Kanit-OFL.txt",
+    "sha256": "16dc702ee4cfe5a7b402ab917b2b9fbc1d1778c62fbe161c3f45529b07e076c1"
+  },
+  {
+    "source": "public/assets/fonts/NotoSansThai-OFL.txt",
+    "file": "assets/NotoSansThai-OFL.txt",
+    "sha256": "6db87e563a421ba02fc1b7dabbf0d269234fb0b7908006b3efda318814fc2d88"
+  },
+  {
+    "frame": "weapon_guardian_3",
+    "source": "src/game/visuals/equip/gear_items.json",
+    "rect": {
+      "x": 896,
+      "y": 512,
+      "w": 128,
+      "h": 128
+    },
+    "atlas_width": 1280,
+    "atlas_height": 1152
+  }
+]

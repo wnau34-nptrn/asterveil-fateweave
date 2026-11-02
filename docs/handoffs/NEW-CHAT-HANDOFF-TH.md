@@ -1,5 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-11-02 — Layout ขั้นที่ 2 เสร็จ (ยังไม่แก้เกม)
+
+เจ้าของสั่งต่อหลังauditขั้น1 ทำ [LAYOUT_02_TH.md](../../incoming/ART-UI-UX-002/LAYOUT_02_TH.md) และบอร์ดHTML14กรอบ/ภาพreadyสองความสูงใน ART PR133 ภาพ96/ขั้น32/header60/dock168/CTA48 พร้อมห้าสถานะ+variants; ตรวจChromium geometry/target/scroll/overflowผ่าน ยังไม่มีtransactionprototypeหรือruntimechange ขั้นถัดไปmaterial/token sheetตามArtwork01 ไม่ข้ามไปแก้เกมหรือเปิดทุกหน้าพัฒนาพร้อมกัน
+
+
 ## 2026-11-02 — ขั้นแรกแผน visual fidelity เสร็จ (ยังไม่แก้เกม)
 
 เจ้าของให้เริ่มตรวจภาพก่อน: รายงาน [VISUAL_AUDIT_01_TH.md](../../incoming/ART-UI-UX-002/VISUAL_AUDIT_01_TH.md) ใน ART PR #133 มี ready390×844/390×650 และ review390×844 จากเกม `07f95a7` หลัง PR135 พร้อม VF01–12 และ brief layout ขั้นถัดไป ห้ามสับสนกับขั้น implementation UXD-00/01 ที่เผยแพร่แล้ว รอบนี้ไม่แก้ source/public หรือ merge/deploy เกม ยังไม่มี dimensioned layout/asset/prototype ใหม่ และยังไม่เริ่มหน้าพัฒนาอื่น

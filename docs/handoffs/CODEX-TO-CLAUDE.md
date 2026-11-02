@@ -1,5 +1,19 @@
 # Codex → Claude handoff
 
+## 2026-11-02 — ขั้นที่ 2 Layout ตีบวกสองความสูง (ยังไม่แก้เกม)
+
+- เจ้าของสั่ง “ดำเนินการต่อได้” หลัง visual audit ขั้น1 จึงทำขั้น2 dimensioned layout เท่านั้น ขอบเขตยังไม่แก้เกม
+- branch `art/art-ui-ux-002`, Draft PR #133; ไม่มี merge/deployment หรือ runtime change ในงานนี้
+- เพิ่ม [LAYOUT_02_TH.md](../../incoming/ART-UI-UX-002/LAYOUT_02_TH.md), layout-02/index.html, PNG ready390×844/390×650, validation-measurements.json, asset-provenance.json และภาพ/ฟอนต์เดิมพร้อม OFL ใน assets; README/HANDOFF/audit/validation เชื่อมงานต่อ
+- Layout: ภาพ96×96, identityขั้นต่ำ158, step88/ตัวเลข32, neutral110, header60, dock168, CTA48; ห้าสถานะ ready/review/success/insufficient/capped และสองvariantชื่อยาว/ไม่มีผู้สวม/ค่าเปลี่ยน/safe24/34 รวม14กรอบ
+- ตรวจแบบด้วย Playwright/Chromium: 14กรอบผ่าน height budget/art96/target≥44/no horizontal overflow; 7variantจอ650เลื่อนถึงงานรองได้, disclosureเปิดได้; ไม่มี pageerror/consoleerrorรอบสุดท้าย; เปิดดูภาพ ready สองความสูง ตรวจPNG/links/hashes/diff เฉพาะไฟล์ที่เขียนเอง; OFLคงwhitespaceต้นฉบับแบบbyte-identical
+- Browser JS toolไม่พร้อม ใช้ project Playwright; file URLถูกbrowser policyบล็อก จึงใช้localhostแทน ไม่เปลี่ยนpolicy; ระหว่างร่างแก้summaryจาก42เป็น44ก่อนผลสุดท้าย
+- ไม่ได้ทดสอบtransaction/gameplay/Safari/เครื่องจริง/200%/screen reader/motion/stale/focus restoration; ปุ่มหลักเป็นstatic ไม่มีhandler/storage/API จึงไม่อ้างflowเหล่านี้ผ่าน
+- คัดลอกภาพและฟอนต์เดิม byte-identicalจากเกม07f95a7 มีprovenance ไม่เปลี่ยนart registry/core/save/กฎ/ราคา; success/insufficientเป็นตัวอย่างจัดหน้า ไม่ใช่การใช้ของจริง
+- คงเอกสารใน ART PR133 ตามคำขอยังไม่แก้เกม ฝากนำhandoffนี้ไปสาขาเกมพร้อมงานเมื่อเริ่มintegrationภายหลัง ไม่mergeเอกสารภาพทั้งหมดเอง
+- ขั้นต่อไปคือmaterial/token sheet, จากนั้นdecorative assets/prototypeตามลำดับ; ยังไม่ทำlayoutทุกหน้าดาว/สกิล/อุปกรณ์อื่นแทนตีบวก
+
+
 ## 2026-11-02 — ตรวจ visual fidelity ขั้นที่ 1 ตามคำขอเจ้าของ (ไม่แก้เกม)
 
 - เจ้าของถามวิธีให้สวยตาม Artwork โดยระบุยังไม่แก้เกม แล้วสั่ง “ดำเนินการขั้นตอนแรกได้”; งานนี้เป็นขั้นแรกของแผนภาพ ไม่ใช่เริ่ม implementation UXD-01 ซ้ำ
