@@ -1,5 +1,43 @@
 # Codex → Claude handoff
 
+## 2026-11-01 — แผนนำ ART-UI-UX-002 ไปพัฒนาในเกม
+
+- เจ้าของขอจัดทำแผนปรับปรุงและระบุสิ่งที่ต้องทำเพิ่ม ต่อ PR #133 บน `art/art-ui-ux-002`; รอบนี้เป็นเอกสารแผน ไม่ใช่เริ่มimplementation
+- เพิ่ม `incoming/ART-UI-UX-002/IMPLEMENTATION_PLAN_TH.md`: UXD-00–08, dependency/ขนาดงาน/เกณฑ์ผ่าน, checklist, ไฟล์จริงที่เกี่ยวข้อง, regressiontestsเดิม, baseline/คนจริง/อุปกรณ์จริง, rollout/rollback
+- แนะนำเริ่ม00+01เก็บbaselineและตีบวกนำร่องให้จบflowก่อนขยาย; งานเพิ่มคือsuccess/blocked/stale/empty/max/คลัง/โควตา/copy/assetจริง/returncontext ไม่ใช่แค่เปลี่ยนCSSตามภาพ
+- ตรวจแผนรวมล่าสุด OD-13/P09ก่อนP04; UXปัจจุบันไม่ต้องรอเศษกลาง แต่ไม่เปิดกฎP04หรือเพิ่มbackendจากงานนี้ ไม่อ้างคนนอกทดสอบก่อนเงื่อนไขOD-13พร้อม
+- ตรวจlocal links, hashเอกสาร และgit diff --check; ไม่รันgameplay/browserเพราะไม่มีruntimechange ไม่อ้างว่างานUXDใดนำเข้าแล้ว
+
+
+## 2026-11-01 — ART-UI-UX-002 เพิ่มหน้าพัฒนาอุปกรณ์ครบคำสั่ง
+
+- เจ้าของขอ “หน้าพัฒนาอุปกรณ์อื่นๆ ด้วยนะ” ต่อ PR #133 บน `art/art-ui-ux-002`; งานยังเป็นข้อเสนอภาพ ไม่ใช่นำเข้า runtime
+- อ่าน forge-workbench/core forge/rules ล่าสุดซ้ำ blobตรงฐาน c8665fa ครบเพิ่ม Lv/เลื่อนสี/สุ่ม/ถ่ายโอน/สร้าง/รีไซเคิล/หลอมแร่
+- เพิ่ม concept04 (Lv/fuse/reroll),05 (transferเลือก/ตรวจ),06 (craft/recycle/smelt) รวม8หน้าจอ และ `EQUIPMENT_DEVELOPMENT_TH.md` พร้อมข้อจำกัด/ตัวอย่างราคา/เกณฑ์QA
+- เน้นผลแน่นอนกับผลสุ่มแยกชัด, ผูกช่องถ่ายโอนถาวร, donorหายทั้งชิ้น, ค่าจ่ายล่วงหน้าแยกrefund, เพดานLv/คลัง/โควตา; ไม่เพิ่ม batch upgrade, reverse exchange, undo roll หรือกฎใหม่
+- ภาพยังเป็น concept ใช้ state/preview/assetจริงตอนนำเข้า; ตรวจภาพ/decode/hash/diff whitespace ไม่รัน gameplay/browser เพราะไม่แตะ runtime ไม่มี human usability/real-device results
+
+
+## 2026-11-01 — ART-UI-UX-002 เพิ่มหน้าอัปดาวตามคำขอเจ้าของ
+
+- ต่อจาก PR #133 บน `art/art-ui-ux-002` เจ้าของขอ “หน้าอัพดาวตัวละครด้วยนะ ดูให้ที”
+- ตรวจ `lobby-ui.ts` memberPanel/upgrade handler, `core/world/profile.ts` upgradeCost/sealLimit/upgradeReason, rules.ts และ OWNER_DECISIONS OD-01/02/04: ปัจจุบันอัปจากหน้าทีมทันที ใช้ตัวซ้ำก่อน+ตราแทนจำกัด+แร่; P04 เศษกลาง/แต้มจากค่ายยังต้องแยกจาก runtime
+- เพิ่ม artwork 03 สามสถานะ: ผล/ต้นทุน → review → ตัวซ้ำขั้นต่ำขาด และ `STAR_UPGRADE_TH.md` พร้อมตัวอย่าง ★3→4 ใช้ตัวซ้ำ1/ตรา2/แร่70 และเงื่อนไข QA
+- เสนอทางเข้า ตัวละคร→พัฒนา→อัปดาว, preview จากกฎเดิม, แยกเหตุผลตัวซ้ำ/ตรา/แร่, ย้ายเลิกจ้างออกจาก CTA อัปดาว, stale review และ max stars; ไม่เปลี่ยน src/rules/save/balance
+- ตรวจภาพจริง, PNG decode/hash และ diff whitespace; ไม่รัน runtime/browser เพราะเป็นข้อเสนอภาพ/สเปกเท่านั้น ไม่อ้าง human usability หรือภาพถูกอนุมัติแล้ว
+
+
+## 2026-11-01 — ART-UI-UX-002: ข้อเสนอ UX โรงตีเหล็ก/พัฒนาตัวละคร
+
+- เจ้าของขอตรวจสาขา วิเคราะห์ส่วนใช้งานยาก และเสนอ Artwork สำหรับนำไปปรับเกมภายหลัง ขอบเขตนี้เป็นงานออกแบบ ไม่ใช่นำเข้า runtime
+- branch `art/art-ui-ux-002` จากสาขาเกม `c8665fa`; สำรวจชื่อ 135 สาขา ตรวจ tree/commit ที่เกี่ยวข้อง 9 สาขา อ่าน forge-workbench/character-panel/character-view/core forge/tokens และ artwork Luminous Veil เดิม ไม่ได้เล่นทดสอบทุกสาขา
+- ส่งมอบ `incoming/ART-UI-UX-002/`: concept 2 boards (ตีบวก/สกิล/พัฒนาตัวละคร และ launcher/หลอมสี review), `REVIEW_TH.md`, `HANDOFF_TH.md`, README และ validation hashes
+- ข้อเสนอ: launcher แยกคำสั่งโรงตีเหล็กแล้วใช้หน้าคำสั่งเดียว; สกิลรวมติดตั้ง/เพิ่ม Lv/ผังสกิล; แสดงเลเวลค่ายร่วมกับดาวรายตัวชัด; กลับจาก forge คืนบริบท; แยกชิ้นหลักกับชิ้นที่ใช้หมด ไม่เพิ่มกฎระบบ
+- ผลตรวจ: เปิดภาพอ้างอิงและ concept จริง ตรวจ PNG decode/ขนาด/hash และ diff whitespace; ไม่รัน gameplay/browser test เพราะไม่มี runtime change; ยังไม่มี human usability/iOS/real-device results
+- Artwork เป็นภาพเสนอ hierarchy มีตัวเลข/portrait/copy ตัวอย่าง ให้ใช้ game art และ state/preview จริงเมื่อ implement โดยเฉพาะข้อความผลดาวในภาพไม่ใช่การอนุมัติเพิ่มกฎดาว
+- งานนี้ไม่เปลี่ยน src/tests/public/rules/save/balance และไม่ merge/publish เกม; เจ้าของยังไม่ได้เลือก artwork หรือสั่งนำเข้า UI ชุดนี้ PR งานภาพส่งให้ตรวจต่อ
+
+
 
 ## 2026-11-01 — ใช้ชื่อผู้บัญชาการ / สร้างตัวตนหน้าเดียว / ตราเส้น 10 แบบ (Codex)
 
