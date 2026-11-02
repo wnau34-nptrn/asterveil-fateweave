@@ -1,0 +1,33 @@
+body { padding: 24px; }
+.workbench { display: grid; grid-template-columns: 390px minmax(280px,380px); gap: 32px; justify-content: center; align-items: start; }
+#phone { --height: 844px; }
+#phone button, #phone summary { cursor: pointer; }
+#phone button:disabled { cursor: default; }
+.lab { max-width: 390px; }
+.lab h1 { font-size: 26px; }
+.lab p { margin: 12px 0; color: #bbcadb; }
+.lab label { display: block; margin: 12px 0; }
+.lab select, .lab button, .lab output { display: block; width: 100%; min-height: 44px; margin-top: 8px; padding: 10px; border: 1px solid #6a92ac; border-radius: 8px; background: #14243a; color: #f4f7fc; font: 14px/22px Noto; }
+.lab .check { display: flex; gap: 8px; align-items: center; min-height: 44px; }
+.lab input { width: 24px; height: 24px; }
+a { color: #a3edff; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#phone .dock { height: auto; min-height: calc(168px + var(--safe-bottom)); }
+#phone .resources { height: auto; min-height: 64px; }
+#phone .resource { min-height: 64px; }
+#phone .remaining { height: auto; min-height: 20px; }
+#phone .actions button { height: auto; min-height: 48px; }
+#phone .step { height: auto; min-height: 88px; }
+#phone .notice.error { background: #452933; border-color: #ed927f; color: #ffc8b4; }
+#phone .picker-option { width: 100%; text-align: left; min-height: 76px; padding: 12px; }
+#phone .picker-option small { display: block; color: #bbcadb; font-weight: 400; margin-top: 4px; }
+#phone .stat-row { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; padding: 6px 0; font-size: 14px; border-top: 1px solid #6a92ac66; }
+#phone .gain { color: #68e5b6; }
+#phone .detail-group { padding: 0 12px 12px; }
+#phone .detail-group h4 { font-size: 14px; margin: 8px 0; }
+#phone .origin-search { width: 100%; min-height: 44px; font: 14px Noto; background: #0d1c2e; color: #f4f7fc; border: 1px solid #6a92ac; border-radius: 8px; padding: 8px; }
+#phone .origin-tab { width: 100%; }
+#phone h3[tabindex], #phone .notice[tabindex] { outline-offset: 3px; }
+#phone .empty-dock { display: flex; align-items: flex-end; }
+#phone .empty-dock .actions { width: 100%; }
+@media(max-width:740px) { body { padding: 0; } .workbench { grid-template-columns: minmax(0,390px); gap: 20px; } .lab { padding: 16px; } #phone { width: 100%; } }

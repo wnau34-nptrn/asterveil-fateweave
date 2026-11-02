@@ -12,6 +12,8 @@
 
 ขั้นที่ 4 เสร็จแล้ว: [DECOR_04_TH.md](DECOR_04_TH.md) และ [บอร์ดตกแต่ง](decor-04/index.html) — มุม/รางกรอบ/ปลายเส้น SVG4ไฟล์ พร้อมsafe boundsและguardข้อความยาว ใช้ต้นแบบimage_genโปร่งใสและvectorที่เขียนแยก ยังไม่แก้เกม
 
+ขั้นที่ 5 เสร็จแล้ว: [PROTOTYPE_05_TH.md](PROTOTYPE_05_TH.md) และ [ต้นแบบกดใช้งาน](prototype-05/index.html) — ready/review/success/insufficient/capped, เลือกชิ้น/ล็อก/รายละเอียด/กลับต้นทาง พร้อมfixtureจากเกมและ26กลุ่มตรวจChromium; simulationในหน่วยความจำ ไม่เชื่อมเซฟเกม มีสคริปต์ทำZIPพกพา
+
 - `01_development_concepts.png`: หน้าตีบวก, รวมงานสกิล, ทางเข้าพัฒนาตัวละคร
 - `02_forge_task_and_review.png`: หน้าเลือกงานโรงตีเหล็ก และการตรวจรายการหลอมสี
 - `03_character_star_upgrade.png`: หน้าอัปดาว ผล/ต้นทุน ตรวจรายการ และตัวซ้ำไม่พอ

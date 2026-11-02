@@ -62,8 +62,8 @@
     },
     {
       "file": "DECOR_04_TH.md",
-      "bytes": 12279,
-      "sha256": "5dec36164dd0b2420732e5241eb081d8b4a4e7c3519862839235210a7f17cfd5"
+      "bytes": 12499,
+      "sha256": "106b0f89589e875f28348e39fa87dc01090699074b7d46b06bb2fe26ed6a2172"
     },
     {
       "file": "EQUIPMENT_DEVELOPMENT_TH.md",
@@ -72,8 +72,8 @@
     },
     {
       "file": "HANDOFF_TH.md",
-      "bytes": 12141,
-      "sha256": "a668ffd9e871a16a0d07fe6b30cf43cdc453c0ce1fbc485980ca56a0a85de25e"
+      "bytes": 13278,
+      "sha256": "b9b1bb748d3716422cdbd9efa553d89d91b62644a84ba64f486d0c840abee7c6"
     },
     {
       "file": "IMPLEMENTATION_PLAN_TH.md",
@@ -91,9 +91,14 @@
       "sha256": "0c9dc90a8e05f55092dc65a13a8ac4becfb6036dccf254763da67dc9b19baa42"
     },
     {
+      "file": "PROTOTYPE_05_TH.md",
+      "bytes": 15813,
+      "sha256": "791ce9bd34f0a2a4fe1fb16d93a91731e4e6be10b4f3c3f03b3a76166bd3c6f0"
+    },
+    {
       "file": "README.md",
-      "bytes": 5260,
-      "sha256": "4638f05f81b3b17abb7960d1bdee624ae3c7230f32bc86855c723cb07196624f"
+      "bytes": 5817,
+      "sha256": "5e6b76abe19ad831537eca64a85afbfd0ded0912bb07c850767ac816c2151339"
     },
     {
       "file": "REVIEW_TH.md",
@@ -312,6 +317,97 @@
       "sha256": "f18c5938e72c7effa306c1474d0e0863977c9992597dc25ec0502ed20edfe69d"
     },
     {
+      "file": "prototype-05/PORTABLE_README_TH.md",
+      "bytes": 2758,
+      "sha256": "f77c197a4ab267e8bf22c177b728599e9457b69316f623d8064f425e3ed17b0e"
+    },
+    {
+      "file": "prototype-05/app.js",
+      "bytes": 17268,
+      "sha256": "95b1b265f5354a52736a9d94bc7c0092438044697d6e3f27213c299ba4f825c8"
+    },
+    {
+      "file": "prototype-05/base-layout.css",
+      "bytes": 5061,
+      "sha256": "43b0589dcc8dbe32bc0733e0fe68f619d7802b49b640ac4543a11a054a8bdc47"
+    },
+    {
+      "file": "prototype-05/check.cjs",
+      "bytes": 8128,
+      "sha256": "9029e12e6221a9a911f607f4286ef6d290fc1aa50d6d2e9574f566cbcb6b72e5"
+    },
+    {
+      "file": "prototype-05/fixtures.js",
+      "bytes": 38293,
+      "sha256": "6f56e7d9430bdabfee6e996772506bbd86052ed38e3ed5e15666af048dbe6ba8"
+    },
+    {
+      "file": "prototype-05/fixtures.json",
+      "bytes": 38274,
+      "sha256": "9a108a98b34cf88d96ab354f2985fe7f255475e402be859ba0ff873d56117463"
+    },
+    {
+      "file": "prototype-05/icons.js",
+      "bytes": 1576,
+      "sha256": "ace5499550c4cfc1fc72d3c99e2e7d174677fdfd018c2c86d82f210f42c2614a"
+    },
+    {
+      "file": "prototype-05/index.html",
+      "bytes": 2782,
+      "sha256": "c779ccfdba730bfbf2d66a4580e3c4fa8da4f3effcb71fa9b0cab68b6c2ef8b4"
+    },
+    {
+      "file": "prototype-05/make-portable.py",
+      "bytes": 1457,
+      "sha256": "907e4ae8273ae73555c09f648a71209b2bf4d39b45a9601b2f40d0eb04b80a91"
+    },
+    {
+      "file": "prototype-05/prototype.css",
+      "bytes": 2396,
+      "sha256": "92e20137577953e9446c9d44d21cdf60a4d01edd9de71af59ee744a2c31a3ee6"
+    },
+    {
+      "file": "prototype-05/ready-390x650.png",
+      "bytes": 175585,
+      "sha256": "6a970541250c8c07fa231b2767c4f4cbf77d4c9324603e9714f23da325870879",
+      "width": 390,
+      "height": 650,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "prototype-05/ready-390x844.png",
+      "bytes": 202931,
+      "sha256": "6bc05b9fb68208a01aa65751a21170d9c40debacd9d741d912f571da2e3b6042",
+      "width": 390,
+      "height": 844,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "prototype-05/review-390x844.png",
+      "bytes": 222393,
+      "sha256": "d5a7f231102b18e0a3358ab0d4b8300d3bfbd539e268171fd276afd71d9ad85a",
+      "width": 390,
+      "height": 844,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "prototype-05/success-390x844.png",
+      "bytes": 218434,
+      "sha256": "efef5a2ed02508f126a6508f219c2eaabee274a6f72adf57307fc8fefe4764b2",
+      "width": 390,
+      "height": 844,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "prototype-05/validation-results.json",
+      "bytes": 3338,
+      "sha256": "f5282f47dc2b84be7ddadaf3561661f2d034cf84d0df3433d8b149e643777724"
+    },
+    {
       "file": "visual-audit-01/enhance-ready-390x650.png",
       "bytes": 48988,
       "sha256": "28b9b04c83461f877bbc9ac59966b169bb42d78b459759068dfa283e6a3678ec",
@@ -433,6 +529,35 @@
     "gear_check_dpr": 2,
     "runtime_changed": false,
     "transaction_tested": false,
+    "real_device_tested": false
+  },
+  "prototype_05": {
+    "date": "2026-11-02",
+    "status": "isolated in-memory interactive prototype; no game integration",
+    "fixture_source_commit": "07f95a7f164b8b232c1c26edb0b4f31360df323f",
+    "fixture_snapshot_plus_range": [
+      4,
+      20
+    ],
+    "fixture_export_checks_passed": 1,
+    "interaction_checks_passed": 26,
+    "viewports": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ]
+    ],
+    "page_errors": 0,
+    "console_errors": 0,
+    "external_requests": 0,
+    "storage_writes": 0,
+    "portable_zip_files": 20,
+    "runtime_changed": false,
+    "production_transaction_tested": false,
     "real_device_tested": false
   }
 }

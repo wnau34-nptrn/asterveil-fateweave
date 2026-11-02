@@ -1,0 +1,139 @@
+{
+  "browser": "Chromium touch emulation",
+  "results": [
+    {
+      "height": 844,
+      "name": "initial geometry and touch targets",
+      "passed": true
+    },
+    {
+      "height": 844,
+      "name": "review and cancel preserve currency, disclosure and focus",
+      "passed": true
+    },
+    {
+      "height": 844,
+      "name": "confirm commits once, double click and next do not spend twice",
+      "passed": true
+    },
+    {
+      "height": 844,
+      "name": "insufficient materials block review and show missing amount",
+      "passed": true
+    },
+    {
+      "height": 844,
+      "name": "capped offers picker and spends nothing",
+      "passed": true
+    },
+    {
+      "height": 844,
+      "name": "stale review is rejected without spending",
+      "passed": true
+    },
+    {
+      "height": 844,
+      "name": "lock toggles without spending and does not block enhance",
+      "passed": true
+    },
+    {
+      "height": 844,
+      "name": "picker cancel and item switch preserve currency",
+      "passed": true
+    },
+    {
+      "height": 844,
+      "name": "other commands return to selected item and focus",
+      "passed": true
+    },
+    {
+      "height": 844,
+      "name": "origin search, tab and focus survive open/close",
+      "passed": true
+    },
+    {
+      "height": 844,
+      "name": "Escape cancels review and held Enter does not confirm",
+      "passed": true
+    },
+    {
+      "height": 844,
+      "name": "long name and simulated safe area retain reachable controls",
+      "passed": true
+    },
+    {
+      "height": 844,
+      "name": "reload resets in-memory simulation",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "initial geometry and touch targets",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "review and cancel preserve currency, disclosure and focus",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "confirm commits once, double click and next do not spend twice",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "insufficient materials block review and show missing amount",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "capped offers picker and spends nothing",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "stale review is rejected without spending",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "lock toggles without spending and does not block enhance",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "picker cancel and item switch preserve currency",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "other commands return to selected item and focus",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "origin search, tab and focus survive open/close",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "Escape cancels review and held Enter does not confirm",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "long name and simulated safe area retain reachable controls",
+      "passed": true
+    },
+    {
+      "height": 650,
+      "name": "reload resets in-memory simulation",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "externalRequests": [],
+  "storageWritesAllowed": false,
+  "runtimeGameTested": false
+}

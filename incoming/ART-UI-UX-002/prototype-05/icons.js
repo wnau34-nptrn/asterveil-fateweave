@@ -1,0 +1,7 @@
+const ICONS = {
+  "enhance": "<svg class=\"inline-icon\" aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m12 3 8 8-4 4-8-8zM11 12l-8 8 2 2 8-8\"/><path d=\"M5 3v5M2.5 5.5h5\"/></svg>",
+  "ore": "<svg class=\"inline-icon\" aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m9 7 3-4 4 5-3 12-5-4ZM8 9 5 7 2 12l6 6M16 10l3-3 3 5-7 6M9 7l4 3 3-2M13 10v10\"/></svg>",
+  "dust": "<svg class=\"inline-icon\" aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m3 20 4-5 3 1 3-4 5 4 3 4zM11 4h4m-2-2v4M5 9l1 1m13-1-1 1\"/></svg>",
+  "act-lock": "<svg class=\"inline-icon\" aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 10V7a5 5 0 0 1 10 0v3M5 10h14v11H5ZM12 14v3\"/></svg>",
+  "act-unlock": "<svg class=\"inline-icon\" aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 10V7a5 5 0 0 1 9-3M5 10h14v11H5ZM12 14v3\"/></svg>"
+};

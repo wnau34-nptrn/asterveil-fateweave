@@ -1,5 +1,20 @@
 # Codex → Claude handoff
 
+## 2026-11-02 — ขั้นที่5 ต้นแบบตีบวกกดใช้งานแยกจากเกม
+
+- เจ้าของสั่ง “ดำเนินการต่อได้” หลังDecor4 ทำprototypeขั้น5เท่านั้น ขอบเขตยังไม่แก้เกม
+- branch `art/art-ui-ux-002`, Draft PR #133; ไม่มีmerge/deploymentในงานนี้
+- เพิ่ม [PROTOTYPE_05_TH.md](../../incoming/ART-UI-UX-002/PROTOTYPE_05_TH.md), prototype-05/index.html/app.js/CSS/fixturesJSON+JS/icons/check.cjs/validation-results/PNG4ภาพ/portableREADME+builder; README/HANDOFF/Decor/validationอัปเดต
+- Flow: ready→review→success, cancelคืนdetails/scroll/focus, nextอ่านcostใหม่, picker/lock/other/ต้นทางmockค้นหา+หมวด+focus; insufficient/cap; stalefingerprintและreviewล้างก่อนcommit; doubleclick/heldEnterguard
+- Snapshotส่งออกอ่านอย่างเดียวจากเกม07f95a7ด้วยenhanceCost/itemStats/starred/characterStats, Lv6/★3/rarity3/+4ถึงcap20; +4→5cost8/3, bank120/48→112/45; itemattack26→27แต่heroรวมเท่าเดิม; ไม่มีengine/save/APIเกมในbrowser
+- ตรวจexport1ผ่าน, node--checkผ่าน; Chromium touch26กลุ่ม (13×2ที่390×844/390×650)ผ่าน รวมcancelคืนscrollจริง/confirmครั้งเดียว/stale/keyboardinput/กลับcontext/reloadreset; pageerror/consoleerror/externalrequest0 ใช้Storage.setItemthrowguardตรวจไม่มีwrite
+- ระหว่างร่างแก้IDpickซ้ำในcapเป็นpick-primaryแล้วตรวจครบ26ใหม่; สคริปต์check.cjsที่ส่งต่อรันได้ด้วยNODE_PATHของcheckoutเกมในartworktree ไม่เพิ่มdependency
+- เปิดดูreadyจอเตี้ยและsuccess; ภาพready2/review1/success1เป็นprototype ไม่ใช่เกมหลังแก้ ไม่มีผลSafari/เครื่องจริง/200%/screenreader/320/480/productiontransactionหรือผู้เล่นจริง
+- ZIPพกพา20ไฟล์ /workspace/artifacts/fateweave-enhancement-prototype-05.zip ตรวจCRCและHTML/CSSrelativepathsครบ มีbuilderทำซ้ำ; ลิงก์helpในZIPชี้READMEแทนบอร์ดที่ไม่bundle
+- ไม่แตะsrc/tests/public/core/save/กฎ/ราคา/assetเดิม; เก็บในART PR133ไม่mergegame ฝากนำhandoffไปพร้อมintegrationภายหลัง
+- ขั้น6ถัดไปfidelity/responsive/ข้อความยาว200%/keyboard/จออื่น ก่อนขั้น7handoffintegration ยังไม่ขยายทุกหน้าดาว/สกิล/อุปกรณ์อื่น
+
+
 ## 2026-11-02 — ขั้นที่4 Decorative assets ตีบวก (ยังไม่แก้เกม)
 
 - เจ้าของสั่ง “ดำเนินการต่อได้” หลัง Material3 ทำdecorative assetsตามแผนเท่านั้น ยังไม่แก้เกม

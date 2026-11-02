@@ -1,5 +1,12 @@
 # ส่งต่อ ART-UI-UX-002
 
+## 2026-11-02 — ขั้นที่5 ต้นแบบกดใช้งานเสร็จ (ไม่แก้เกม)
+
+อ่าน [PROTOTYPE_05_TH.md](PROTOTYPE_05_TH.md) และprototype-05/index.html: ใช้Layout2+Material3+Decor4, fixture snapshotsจาก07f95a7 (+4ถึง20), guardreview/stale/doubleclick/Enterค้าง, picker/lock/details/returncontext; หักทุนเฉพาะin-memorysimulation มีlabreset/ขนาดจอ/scenarioและZIPbuilder ไม่โหลดruleengine/save/APIเกมในbrowser
+
+Chromium26กลุ่มผ่านสองความสูง, cancelคืนscroll/details/focus, successcommitครั้งเดียว, staleปฏิเสธ; ไม่มีpageerror/consoleerror/externalrequest/storagewrite ภาพready2/review1/success1เป็นต้นแบบ ไม่ใช่เกมจริง ขั้นต่อไปfidelity/responsive/keyboard/ข้อความ200%และจออื่นตามขั้น6 ยังไม่merge/deployหรือขยายทุกหน้าพัฒนา
+
+
 ## 2026-11-02 — ขั้นที่4 Decorative assets เสร็จ (ไม่แก้เกม)
 
 อ่าน [DECOR_04_TH.md](DECOR_04_TH.md), [บอร์ด](decor-04/index.html) และdecor-04/assets.json: SVG4ไฟล์รวม1594bytes ประกอบกรอบ8ชิ้น/ปลายเส้นข้างcaption พร้อมsourceRGBAจากimage_genและpromptแยกชัดเจน เป็นvectorตีความใหม่ไม่ใช่auto-trace/แก้pixels ตรวจgeometry14กรอบตรงฐาน, target/scroll/pointer/captionguardผ่าน, cornerprotectedinset11ไม่มีinkบนcanvas2x และดูgear96CSSที่DPR2แล้ว
