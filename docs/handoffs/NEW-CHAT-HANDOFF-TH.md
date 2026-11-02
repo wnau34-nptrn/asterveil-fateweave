@@ -1,5 +1,16 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-11-02 — แก้กรอบหน้าตีบวกชิดขอบ iPhone
+
+- เจ้าของส่งภาพ iPhone และแจ้งกรอบหลุดขอบ: กรอบ SVG เดิมอยู่บน sheet inset0 แต่ safe area ถูกกันเฉพาะเนื้อหา header/dock จึงไม่กันขอบกรอบที่จอจริง
+- แก้เฉพาะ forge-enhancement.css ให้ทั้ง sheet อยู่ใน safe area สี่ด้านและมีระยะขั้นต่ำ8px ย้ายการกันพื้นที่จาก header/dock มาไว้รอบ sheet ครั้งเดียว ไม่เปลี่ยน viewport หรือหน้าพัฒนาอื่น
+- tests/browser/enhancement-safe-area.spec.ts ตรวจ sheet/trim corners/ปุ่มปิด/ยืนยันด้วย bounds และ hit testing, รูปแบบ390×844 top59/bottom34,390×650ไม่มีinsets,320×568มีinsetsข้าง; ready/review/cancel/ข้อความ200%/rotationกลับแนวตั้ง และตรวจไม่ใช้วัสดุ
+- ก่อนแก้ valid fixture ทำให้ safe-area bounds fail ตามคาด; ระหว่างตั้งfixtureมี3runsที่ไม่เข้าcontinueเพราะข้อมูลไม่ผ่านsave validation (stat key/จำนวนaffix/special/plus0/campLv24เกินcap10) แก้fixtureให้ตรงกฎโดยไม่แก้เซฟหรือrules ไม่อ้างว่าrunsเหล่านี้เป็นผลยืนยันกรอบ
+- Local lint/typecheck/buildPagesผ่าน; focused browser dev9กรณีผ่าน (safearea3+enhancement-pilot6) และ Pages safearea3ผ่าน เป็นกรณีเดียวกับdev3ไม่บวกซ้ำ
+- ภาพก่อน/หลังใน /tmp/iphone-forge-frame/{before,after}.png ไม่commitภาพ; screenshotเป็นChromiumจำลองsafearea ไม่ใช่ภาพSafariหรือiPhoneจริง ยังต้องตรวจบนเครื่องเจ้าของหลังเผยแพร่
+- Browser skillอ่านแล้ว แต่ไม่มีBrowser js tool/runtimeในsessionจึงใช้repo Playwright /usr/bin/chromium; ไม่อ้างconnectedlocalbrowser ไม่มีwebkit/physicaliPhoneที่ใช้ตรวจได้
+- กำลังส่งPR/CIและPages จะบันทึกเลขPR/merge/runจริงหลังผ่านครบ ไม่มีrules/save/balance/animationเปลี่ยน
+
 ## 2026-11-02 — หน้าตีบวกตาม Artwork เผยแพร่แล้ว (PR #136)
 
 - PR [#136](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/136) merged `5746e10282c3f16e2c511d87888289b5b0a6e466` หลัง quality [41433419422](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41433419422) และ browser [41433419478](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41433419478) ผ่านครบสี่ shards + aggregate บน final head `ecddd6457814f8dbada95f5539367b8896d963ac`
