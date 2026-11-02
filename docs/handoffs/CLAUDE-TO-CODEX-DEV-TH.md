@@ -4,7 +4,7 @@
 
 - [x] เก็บbaselineตีบวกและทางเข้าดาว/สกิล พร้อมfixtureและข้อแตกต่างจากconcept
 - [x] หน้าตีบวกนำร่องพร้อมreview/ผลจริง/returncontext; localtypecheck/lint/unit1396/buildและfocusedbrowserผ่าน ดู UXD-01-IMPLEMENTATION-TH.md และCODEX-TO-CLAUDE.md
-- [ ] ตรวจrequiredCI รวมPRและตรวจPagesของชุดนำร่อง (บันทึกผลหลังเสร็จ)
+- [x] PR #135 merged `4686ca5` หลังquality+browser4shardsผ่านบน `1634854`; Pages41369875841 build/browser4/deployผ่าน เผยแพร่แล้ว2026-11-02 08:36 Asia/Bangkok
 - งานถัดไปเมื่อได้รับมอบหมาย: UXD-02 launcherโรงตีเหล็ก+เพิ่มLv ไม่เริ่มP04/P09หรือกฎใหม่จากงานUXนี้
 
 

@@ -2,7 +2,7 @@
 
 ## 2026-11-02 — UXD-00/01 หน้าตีบวกนำร่อง
 
-เจ้าของสั่งขั้นแรกของแผนART-UI-UX-002 (PR #133) ทำบน `codex/uxd-01-enhancement-pilot` จากเกม `db1788e`; หน้าตีบวกผลต่อผู้สวม/review dock/กลับชิ้นและตัวกรองเดิม/ยืนยันครั้งเดียว localunit1396และfocusedbrowserผ่าน รายละเอียด/สถานะCI-PR-merge-Pagesอยู่CODEX-TO-CLAUDE.md และ UXD-01-IMPLEMENTATION-TH.md
+เจ้าของสั่งขั้นแรกของแผนART-UI-UX-002 (PR #133) ทำบน `codex/uxd-01-enhancement-pilot` จากเกม `db1788e`; PR #135 merged `4686ca5` หลังquality+browser4shardsผ่าน Pages41369875841 build/browser4/deployผ่าน เผยแพร่แล้ว หน้าตีบวกผลต่อผู้สวม/review dock/กลับชิ้นและตัวกรองเดิม/ยืนยันครั้งเดียว localunit1396และfocusedbrowserผ่าน รายละเอียดอยู่CODEX-TO-CLAUDE.md และ UXD-01-IMPLEMENTATION-TH.md
 
 งานถัดไปเมื่อเจ้าของขอ: UXD-02 หน้าเลือกงานโรงตีเหล็กและเพิ่มLvตามpatternที่ผ่าน ไม่เปิดหน้าดาว/สกิลใหม่หรือเปลี่ยนP04/P09ไปพร้อมกัน ไม่สร้างแชตใหม่เอง
 

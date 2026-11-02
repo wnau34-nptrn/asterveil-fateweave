@@ -7,7 +7,11 @@
 - ยืนยันผ่านreviewของprofileปัจจุบัน ตรวจขั้นถัดไป/ทุนซ้ำ ล้างreviewทันทีหลังส่ง; feedbackสำเร็จจากeventที่commitจริง ย้ายfocusไปผล; Escapeจากreviewกลับแก้ไขโดยไม่เสียของ
 - กลับจากforgeคืนcharacter tab/filter/item/scroll/focusและหน้าต้นทาง เก็บcontextในUI ไม่เพิ่มsavefield; ปรับregressionให้ตรวจflowใหม่แทนการคาดว่ากลับหน้าแรกค่าย
 - ไฟล์: src/ui/{forge-workbench,character-panel,lobby-ui,game-shell}.ts, components.css; browser helper/specs และtests/enhancement-review.test.ts; สเปก UXD-01-IMPLEMENTATION-TH.md
-- ผลlocal: typecheck/lint/unit1396/1396ใน100files/buildผ่าน; focusedbrowser21/21 (pilot6/affix3/shared6/character6) และชุดLv-fusion3/refund3/crafting3ผ่าน; requiredCI/merge/Pagesรอตอนสร้างPR
+- ผลlocal: typecheck/lint/unit1396/1396ใน100files/buildผ่าน; focusedbrowser21/21 (pilot6/affix3/shared6/character6) และชุดLv-fusion3/refund3/crafting3ผ่าน
+- [PR #135](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/135) merged `4686ca59ea779a69f67ebf86be4e40e038df0989` หลังquality+browser4shards+aggregateผ่านบนhead `1634854`; Browser run41366243399 source565/prechecks3/production272ผ่าน (1145skipไม่นับเป็นpass); quality41366243528ผ่าน
+- [Pages run41369875841](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41369875841) เผยแพร่สำเร็จบนmergeนี้: build+browser4ชุด+deployผ่านทั้งหมด (source565; production shard1 67pass219skip; qualityหลังmergeผ่านด้วย) Deployรายงานsuccessที่2026-11-02 08:36:56 Asia/Bangkok
+- [เกม](https://wnau34-nptrn.github.io/asterveil-fateweave/) เป็นURLที่deploymentยืนยัน; ไม่มีการอ้างตรวจCDNด้วยbrowserจริง/มือถือจริงจากผลworkflowนี้ บันทึกติดตามนี้เป็นdocs-onlyหลังเผยแพร่ ไม่เปลี่ยนruntimeที่ทดสอบแล้ว
+- แผนArtwork PR #133 อัปเดตprogressในcommit `5028bb3` ให้ติดตามruntimeจากPR #135; ไม่mergeภาพ/แผนทั้งชุดเข้าเกมอัตโนมัติ
 - Baseline: runtimeforgeเดิม390px + ทางเข้าดาว/สกิลที่ยังไม่เปลี่ยน; ของสวมถึงreviewยัง2tapsเท่าเดิม ไม่อ้างลดtaps ภาพ390px /tmp/uxd-01/after/{review,success}-390.png เปิดดูแล้ว
 - อ่านBrowser skillและค้นruntimeแล้วไม่มีjs toolให้เรียก ใช้Playwrightโปรเจกต์กับ/usr/bin/chromium; จอ320×568,390×650,390×844,1366×768(กรอบportrait); ไม่มีผลSafari/iOS/เครื่องจริง/ผู้เล่นจริง
 - ไม่แตะcore/battle/core/save/ราคา/กฎ/RNG ปัญหาlocalช่วงแรกจากfixtureยังไม่ปลดทีม/รายงานขาดเพราะsparsecheckoutแก้ที่การเตรียมทดสอบ ไม่แก้กฎให้เทสต์ผ่าน
