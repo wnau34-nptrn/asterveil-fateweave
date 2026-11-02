@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile, readdir } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { encounterById } from '../../src/content/encounters/catalog';
 import { newProfile } from '../../src/core/world/profile';
@@ -10,7 +11,44 @@ import atlas from '../../src/game/visuals/equip/gear_items.json' with { type: 'j
 import { xpAt } from '../fixtures/camp-level';
 import { legacyEnvelope } from '../fixtures/legacy-save';
 
-test('equipment art: mixed loot and a matching full set at 390px', async ({ browser }, info) => {
+const gearRevision = async () => createHash('sha256').update(await readFile(new URL('../../public/assets/ui/equip/gear_items.webp', import.meta.url))).digest('hex').slice(0, 8);
+
+test('decoded equipment atlas matches all 78 approved source cells', async ({ page, baseURL }) => {
+  const source = new URL('../../incoming/ART-UI-EQUIP-002/cells/', import.meta.url);
+  const names = (await readdir(source)).filter(name => name.endsWith('.png')).sort();
+  expect(names).toHaveLength(78);
+  const references = await Promise.all(names.map(async name => ({
+    name: name.slice(0, -4), png: (await readFile(new URL(name, source))).toString('base64'),
+  })));
+  await page.goto('./');
+  const mismatches = await page.evaluate(async ({ url, frames, references }) => {
+    const decode = async (src: string) => createImageBitmap(await (await fetch(src)).blob(), { colorSpaceConversion: 'none' });
+    const actual = await decode(url), canvas = document.createElement('canvas');
+    canvas.width = 128; canvas.height = 128;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })!, mismatches: string[] = [];
+    for (const reference of references) {
+      const f = frames[reference.name as keyof typeof frames], expected = await decode(`data:image/png;base64,${reference.png}`);
+      let maxDifference = 0;
+      // Compare on both opaque backgrounds to cover alpha while avoiding the
+      // precision loss from unpremultiplying faint PNG/WebP edge pixels.
+      for (const background of ['#000', '#fff']) {
+        ctx.fillStyle = background; ctx.fillRect(0, 0, 128, 128); ctx.drawImage(actual, f.x, f.y, f.w, f.h, 0, 0, 128, 128);
+        const a = ctx.getImageData(0, 0, 128, 128).data;
+        ctx.fillStyle = background; ctx.fillRect(0, 0, 128, 128); ctx.drawImage(expected, 0, 0);
+        const b = ctx.getImageData(0, 0, 128, 128).data;
+        for (let i = 0; i < a.length; i++) maxDifference = Math.max(maxDifference, Math.abs(a[i]! - b[i]!));
+      }
+      // Equal PNG/WebP pixels can round by one in 8-bit canvas compositing.
+      if (maxDifference > 1) mismatches.push(`${reference.name}: ${maxDifference}`);
+      expected.close();
+    }
+    actual.close();
+    return mismatches;
+  }, { url: new URL(`assets/ui/equip/gear_items.webp?v=${await gearRevision()}`, baseURL!).href, frames: atlas, references });
+  expect(mismatches).toEqual([]);
+});
+
+test('equipment art: mixed loot and a matching full set at 390px', async ({ browser, baseURL }, info) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion: 'reduce', deviceScaleFactor: 1 });
   const page = await context.newPage(), errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
@@ -54,9 +92,9 @@ test('equipment art: mixed loot and a matching full set at 390px', async ({ brow
   const dimensions = await sprite.evaluate(async el => {
     const css = getComputedStyle(el), image = new Image();
     image.src = css.backgroundImage.slice(5, -2); await image.decode();
-    return { width: image.naturalWidth, height: image.naturalHeight, size: css.backgroundSize };
+    return { width: image.naturalWidth, height: image.naturalHeight, size: css.backgroundSize, url: image.src };
   });
-  expect(dimensions).toEqual({ width: cols * 128, height: rows * 128, size: `${cols * 100}% ${rows * 100}%` });
+  expect(dimensions).toEqual({ width: cols * 128, height: rows * 128, size: `${cols * 100}% ${rows * 100}%`, url: new URL(`assets/ui/equip/gear_items.webp?v=${await gearRevision()}`, baseURL!).href });
   await expect(panel.locator('.doll-slot .set-emblem')).toHaveCount(6);
   const output = process.env.EQUIP_ART_SHOTS;
   if (output) await mkdir(output, { recursive: true });

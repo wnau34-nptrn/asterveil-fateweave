@@ -14,7 +14,9 @@ const dimensions = (frames: Record<string, Frame>) => ({
 export const equipAtlasSize = {
   gear_items: dimensions(gearFrames), potion_items: dimensions(potionFrames), set_emblems: dimensions(emblemFrames),
 };
-export const equipArtUrl = (name: 'gear_items' | 'potion_items' | 'set_emblems'): string => `${import.meta.env.BASE_URL}assets/ui/equip/${name}.webp`;
+// Public assets keep their filename. Bump the gear revision (SHA256 prefix) when
+// its pixels change so existing browsers fetch the corrected artwork.
+export const equipArtUrl = (name: 'gear_items' | 'potion_items' | 'set_emblems'): string => `${import.meta.env.BASE_URL}assets/ui/equip/${name}.webp${name === 'gear_items' ? '?v=3935edef' : ''}`;
 const cell = (f: Frame | undefined) => f && { col: f.x / CELL, row: f.y / CELL };
 // Saved rarity is zero-based (0 common … 4 legendary): 0–1 worn, 2 fine, 3–4 masterwork.
 export function gearCell(item: Pick<Item, 'slot' | 'hero' | 'rarity' | 'set' | 'boss'>): { col: number; row: number } | undefined {
