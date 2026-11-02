@@ -1,5 +1,16 @@
 # Codex → Claude handoff
 
+## 2026-11-03 — เกราะแสดงภาพถูกต้องแล้ว (PR #138 เผยแพร่)
+
+- เจ้าของแจ้งเกราะเป็นอาวุธ: gearCell/JSON ถูก แต่runtime pixels2ช่องผิด คืน gear_body_set_dawn และ gear_body_fine จาก ART-UI-EQUIP-002/cells เดิมแบบlossless; decodedRGBAทุกพิกเซลนอก2ช่องตรงก่อนแก้ ไม่เปลี่ยนอีก4อาวุธC12หรือincomingต้นฉบับ
+- เพิ่ม gear_items.webp?v=3935edef ป้องกันแคชเก่า SHA2563935edefb869f5e97cfedbe84b1e4fcb42cb3a35aca090b4fb727f6b53fbc2b1 ขนาด987378bytes/1280×1152; ไม่มีJSON/ชนิด/สเตตัส/เซฟ/กฎ/สมดุล/CSSหรือกรอบsafeareaเปลี่ยน
+- PR [#138](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/138) merged `3db0800589c0b65afc54174ec29e36242583dd0c` หลัง quality [41473871955](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41473871955) และ browser [41473871649](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41473871649) ครบ4shards+aggregateผ่านบน `27384746d9c43dd3470e77e91fe0566b7e59694c`
+- Pages [41480497171](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41480497171) บนmerge commit ผ่านbuild/browser4/deploy เผยแพร่ 2026-11-03 00:10:33 Asia/Bangkok (2026-11-02T17:10:33Z); https://wnau34-nptrn.github.io/asterveil-fateweave/
+- CI unit1398/100filesผ่าน; Local lint/typecheck/buildPages/unit mapping118ผ่าน; dev browser5 (78sourcecells+character/bagUI+safearea3) และ Pages equipment2กรณีเดิมผ่าน ไม่บวกซ้ำ; browserregressionเทียบpixelsบนพื้นดำ/ขาวต่างได้≤1จากCanvas8bitrounding และcomputedURLrevisionต้องตรงhashไฟล์
+- ภาพหลังแก้390pxให้เจ้าของ /tmp/armour-atlas-fix/forge-390.png (เกราะรุ่งอรุณจริงบนหน้าตีบวก) เป็นworkspaceชั่วคราว ไม่commitภาพ
+- Browser js runtime/Safari/iPhoneจริงไม่มีในsession ใช้repoChromiumPlaywright; ยังไม่อ้างเครื่องจริงหรือliveHTTP/asset hashที่เว็บเสิร์ฟ (Pageshostนอกexecutorallowlist) ยืนยันเผยแพร่จากworkflowsuccess
+- ไฟล์: public/assets/ui/equip/gear_items.webp, src/game/visuals/equip-art.ts, tests/browser/equipment-art.spec.ts และhandoff3ไฟล์; pending entryด้านล่างเป็นประวัติ ผลปิดงานให้ยึดentryนี้ follow-upเป็นเอกสารเท่านั้น runtimeตรงmerge commit
+
 ## 2026-11-02 — แก้เกราะแสดงเป็นรูปอาวุธ (atlas pixels)
 
 - เจ้าของแจ้งเกราะเป็นอาวุธหลังภาพรอบiPhone; ยืนยัน gearCell/JSON เลือกช่องถูก แต่runtime atlasมี2ช่องไม่ตรงภาพต้นฉบับ ART-UI-EQUIP-002: gear_body_set_dawnเป็นอาวุธ และgear_body_fineเป็นถุงมือ

@@ -4,7 +4,7 @@
 
 - [x] คืนภาพเกราะ2ช่องจากต้นฉบับ เพิ่มgearURLrevisionและdecoded78cell/cache regression
 - [x] Local lint/typecheck/buildPages/unit118/dev5ผ่าน ดูCODEX-TO-CLAUDE.md
-- [ ] PR CI/merge/Pages และบันทึกผลเผยแพร่จริงของarmour fix
+- [x] PR #138 merged `3db0800589c0b65afc54174ec29e36242583dd0c` หลังquality41473871955/browser41473871649ครบ4shards+aggregateผ่านบน2738474; Pages41480497171 build/browser4/deployผ่าน เผยแพร่ 2026-11-03 00:10:33 Asia/Bangkok ดูCODEX-TO-CLAUDE.md
 
 ## 2026-11-02 — iPhone enhancement frame
 
