@@ -1,0 +1,7 @@
+{
+  "tool": "image_gen",
+  "transparent_background": true,
+  "reference": "../01_development_concepts.png",
+  "generated_source": "motif-source.png",
+  "prompt": "Create a restrained decorative UI ornament reference kit for Asterveil Fateweave, Luminous Veil. Use the provided game concept board ONLY for its delicate gold metal linework and navy/cyan fantasy design language. Output on REAL TRANSPARENT background. No navy filled panels, no text, no letters, no buttons, no characters, no weapons, no phone mockups. Three isolated decorative motifs laid out separately with generous transparent space: upper left a delicate top-left frame corner made from two narrow nested rounded L-shaped gold lines, restrained leaf-like gold curl at the elbow and one tiny four-point star; upper right a simple small four-point gold diamond divider endcap; lower half a long thin horizontal gold divider with a small central four-point star and tapering light at both ends. Refined blue-gold fantasy UI trim, clean sharp strokes, legible at small size, not heavy baroque sculpture. Flat orthographic front view, no perspective, no cast shadow on background, minimal controlled cyan edge accent, no backdrop or checkerboard. This is a motif source sheet for later separately authored scalable technical SVG implementation, not a full screen or a nine-slice frame."
+}

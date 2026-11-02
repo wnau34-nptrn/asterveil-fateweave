@@ -61,14 +61,19 @@
       "decoded": true
     },
     {
+      "file": "DECOR_04_TH.md",
+      "bytes": 12279,
+      "sha256": "5dec36164dd0b2420732e5241eb081d8b4a4e7c3519862839235210a7f17cfd5"
+    },
+    {
       "file": "EQUIPMENT_DEVELOPMENT_TH.md",
       "bytes": 22436,
       "sha256": "a2fa48fc527499d499348bca4b97a2cdca661c252a1601fae19843cf63282fe9"
     },
     {
       "file": "HANDOFF_TH.md",
-      "bytes": 11051,
-      "sha256": "dc92b9ba606ff84f6ee36470d169bf4d629370205a261f4e4118c76c4ea3f1c5"
+      "bytes": 12141,
+      "sha256": "a668ffd9e871a16a0d07fe6b30cf43cdc453c0ce1fbc485980ca56a0a85de25e"
     },
     {
       "file": "IMPLEMENTATION_PLAN_TH.md",
@@ -82,13 +87,13 @@
     },
     {
       "file": "MATERIAL_03_TH.md",
-      "bytes": 15757,
-      "sha256": "ce757b2a4be91887f025093d2392814a879552f760ed11accdf18135f09a59f3"
+      "bytes": 15955,
+      "sha256": "0c9dc90a8e05f55092dc65a13a8ac4becfb6036dccf254763da67dc9b19baa42"
     },
     {
       "file": "README.md",
-      "bytes": 4814,
-      "sha256": "0a031d285e38c308fdbc4447a68fcbcf8b44a22de7244d610ba484526c5fa5a7"
+      "bytes": 5260,
+      "sha256": "4638f05f81b3b17abb7960d1bdee624ae3c7230f32bc86855c723cb07196624f"
     },
     {
       "file": "REVIEW_TH.md",
@@ -104,6 +109,87 @@
       "file": "VISUAL_AUDIT_01_TH.md",
       "bytes": 21373,
       "sha256": "c8f9ceeba56aaa96583168673e69a1e07c11ce3d70afcfb67b2ec10261bc779d"
+    },
+    {
+      "file": "decor-04/asset-preview-390.png",
+      "bytes": 19506,
+      "sha256": "f465054ffadbec2a9b86f9726252d71413dd4e265018e0bf2f45bb8451d62450",
+      "width": 390,
+      "height": 305,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "decor-04/assets/divider-wing.svg",
+      "bytes": 533,
+      "sha256": "a9661e094cc69f58d085adc51c585b0363bb373ee89f6127dadcc2409fd3d8ad"
+    },
+    {
+      "file": "decor-04/assets/frame-corner.svg",
+      "bytes": 667,
+      "sha256": "5f3adadf1ce4458dfb90edd550fc06d1b582f3b7e8717e14f49a7d5d6942bf7a"
+    },
+    {
+      "file": "decor-04/assets/frame-edge-horizontal.svg",
+      "bytes": 197,
+      "sha256": "b428e14a9882762a7d9972a923e018da6a0ad5ef7bbeab4714d63c9c3265ed25"
+    },
+    {
+      "file": "decor-04/assets/frame-edge-vertical.svg",
+      "bytes": 197,
+      "sha256": "6cb6ece87ccf52bc91c079fa23cfeeeb2b4cbf4f9339639c6580bc1234f2c7c9"
+    },
+    {
+      "file": "decor-04/assets.json",
+      "bytes": 2595,
+      "sha256": "c83a0df5dbfe930d50d7779fbf79df9f9164be7cf0100cd9e29d76444debb041"
+    },
+    {
+      "file": "decor-04/decor.css",
+      "bytes": 2290,
+      "sha256": "0a911f120fefd930c7d9d8df21659c177df2226f098567559fb76d3662e1649e"
+    },
+    {
+      "file": "decor-04/index.html",
+      "bytes": 21273,
+      "sha256": "99a77bd8f8cf70bc40a76429f6fcbe30f62377ccd80b8f57a449dc0b5f235870"
+    },
+    {
+      "file": "decor-04/motif-source.png",
+      "bytes": 278050,
+      "sha256": "3a5477ac5287386f6172c4493dac63db29ea49257969e9cc1f8b1cf7a0545242",
+      "width": 1774,
+      "height": 887,
+      "mode": "RGBA",
+      "decoded": true
+    },
+    {
+      "file": "decor-04/prompts.json",
+      "bytes": 1354,
+      "sha256": "659f3c7b9326e2eba3df0f7621e4a99b5a2fa759e8fc04f3b6fb52c391a78120"
+    },
+    {
+      "file": "decor-04/ready-390x650.png",
+      "bytes": 176609,
+      "sha256": "6661a93e98e67c96f5c511cafc2a478f12a8379d0d08694acd357c21fbfa1812",
+      "width": 390,
+      "height": 650,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "decor-04/ready-390x844.png",
+      "bytes": 203348,
+      "sha256": "56e57e5f2d8e6a0bf00b53865f5c7a43497daa2380cf2865667e812192c34117",
+      "width": 390,
+      "height": 844,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "decor-04/validation-measurements.json",
+      "bytes": 29308,
+      "sha256": "36dba0d26357606b0957394e76ec8ad8dce7903ed208b59f567a42966fda2666"
     },
     {
       "file": "layout-02/asset-provenance.json",
@@ -328,6 +414,23 @@
     ],
     "contrast_pairs_checked": 11,
     "contrast_scope": "selected conservative solid stops only; not whole-page certification",
+    "runtime_changed": false,
+    "transaction_tested": false,
+    "real_device_tested": false
+  },
+  "decor_04": {
+    "date": "2026-11-02",
+    "status": "design assets; no game integration",
+    "generated_source": "decor-04/motif-source.png",
+    "generated_source_mode": "RGBA",
+    "svg_count": 4,
+    "svg_total_bytes": 1594,
+    "svg_method": "separately authored vector interpretation, not auto trace",
+    "frames_geometry_matched": 14,
+    "caption_guard_checked": true,
+    "corner_protected_inset_css_px": 11,
+    "gear_checked_css_px": 96,
+    "gear_check_dpr": 2,
     "runtime_changed": false,
     "transaction_tested": false,
     "real_device_tested": false

@@ -1,5 +1,12 @@
 # ส่งต่อ ART-UI-UX-002
 
+## 2026-11-02 — ขั้นที่4 Decorative assets เสร็จ (ไม่แก้เกม)
+
+อ่าน [DECOR_04_TH.md](DECOR_04_TH.md), [บอร์ด](decor-04/index.html) และdecor-04/assets.json: SVG4ไฟล์รวม1594bytes ประกอบกรอบ8ชิ้น/ปลายเส้นข้างcaption พร้อมsourceRGBAจากimage_genและpromptแยกชัดเจน เป็นvectorตีความใหม่ไม่ใช่auto-trace/แก้pixels ตรวจgeometry14กรอบตรงฐาน, target/scroll/pointer/captionguardผ่าน, cornerprotectedinset11ไม่มีinkบนcanvas2x และดูgear96CSSที่DPR2แล้ว
+
+ขั้นถัดไปprototypeแยกจากเกมตามLayout2+Material3+Decor4 มีflowจำลองและfixtureชัดเจน ยังไม่แตะsrc/public/core/saveหรือmerge/deployเกม ไม่ถือว่าการตรวจภาพนี้อนุมัติvisualintegrationแล้ว
+
+
 ## 2026-11-02 — ขั้นที่ 3 Material sheet เสร็จ (ไม่แก้เกม)
 
 อ่าน [MATERIAL_03_TH.md](MATERIAL_03_TH.md) และ [บอร์ดวัสดุ](material-03/index.html): CSS/tokenJSON, navy glass/ขอบทอง-cyan/CTAทองมีมิติ, button states4แบบ และข้อมูลdelta/neutral/insufficient/success พร้อมภาพreadyสองความสูงและcomponent sheet ตรวจgeometryตรงฐาน14กรอบ, target/scrollผ่าน และคู่สี11คู่ผ่านขอบเขตที่ระบุ ไม่ใช่WCAG/เครื่องจริง/transactionรับรอง

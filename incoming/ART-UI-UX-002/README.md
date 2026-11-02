@@ -10,6 +10,8 @@
 
 ขั้นที่ 3 เสร็จแล้ว: [MATERIAL_03_TH.md](MATERIAL_03_TH.md) และ [บอร์ดวัสดุ](material-03/index.html) — navy glass/กรอบ/แสง/ปุ่มทอง พร้อม normal/pressed/focus/disabled และข้อมูล delta/neutral/insufficient; geometryตรงฐาน14กรอบ ยังไม่แก้เกมหรือทำ transaction prototype
 
+ขั้นที่ 4 เสร็จแล้ว: [DECOR_04_TH.md](DECOR_04_TH.md) และ [บอร์ดตกแต่ง](decor-04/index.html) — มุม/รางกรอบ/ปลายเส้น SVG4ไฟล์ พร้อมsafe boundsและguardข้อความยาว ใช้ต้นแบบimage_genโปร่งใสและvectorที่เขียนแยก ยังไม่แก้เกม
+
 - `01_development_concepts.png`: หน้าตีบวก, รวมงานสกิล, ทางเข้าพัฒนาตัวละคร
 - `02_forge_task_and_review.png`: หน้าเลือกงานโรงตีเหล็ก และการตรวจรายการหลอมสี
 - `03_character_star_upgrade.png`: หน้าอัปดาว ผล/ต้นทุน ตรวจรายการ และตัวซ้ำไม่พอ

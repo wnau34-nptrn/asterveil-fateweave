@@ -1,0 +1,83 @@
+{
+  "id": "ART-UI-UX-002-DECOR-04",
+  "status": "design assets, not integrated into game",
+  "reference": "../01_development_concepts.png",
+  "material_base_commit": "0457c7e",
+  "source": {
+    "file": "motif-source.png",
+    "width": 1774,
+    "height": 887,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "fully_transparent_pixels": 1462065,
+    "fully_opaque_pixels": 38,
+    "sha256": "3a5477ac5287386f6172c4493dac63db29ea49257969e9cc1f8b1cf7a0545242",
+    "usage": "generated motif reference only, not imported into preview or sliced for runtime"
+  },
+  "svg_creation": "separately authored vector interpretation of generated motif; no pixel editing or auto trace",
+  "svg_files": [
+    {
+      "file": "assets/divider-wing.svg",
+      "viewBox": "0 0 32 12",
+      "bytes": 533,
+      "sha256": "a9661e094cc69f58d085adc51c585b0363bb373ee89f6127dadcc2409fd3d8ad",
+      "external_resources": false,
+      "role": "step ornament, mirror right, hide if caption collides"
+    },
+    {
+      "file": "assets/frame-corner.svg",
+      "viewBox": "0 0 32 32",
+      "bytes": 667,
+      "sha256": "5f3adadf1ce4458dfb90edd550fc06d1b582f3b7e8717e14f49a7d5d6942bf7a",
+      "external_resources": false,
+      "role": "corner, mirror on other corners"
+    },
+    {
+      "file": "assets/frame-edge-horizontal.svg",
+      "viewBox": "0 0 8 8",
+      "bytes": 197,
+      "sha256": "b428e14a9882762a7d9972a923e018da6a0ad5ef7bbeab4714d63c9c3265ed25",
+      "external_resources": false,
+      "role": "repeat at native 8px pitch, never stretch corner"
+    },
+    {
+      "file": "assets/frame-edge-vertical.svg",
+      "viewBox": "0 0 8 8",
+      "bytes": 197,
+      "sha256": "6cb6ece87ccf52bc91c079fa23cfeeeb2b4cbf4f9339639c6580bc1234f2c7c9",
+      "external_resources": false,
+      "role": "repeat at native 8px pitch, never stretch corner"
+    }
+  ],
+  "frame": {
+    "composition": "8 parts, empty center",
+    "corner_css_size": [
+      32,
+      32
+    ],
+    "rail_css_thickness": 8,
+    "connection_offset_css_px": 30,
+    "frame_protected_content_inset_css_px": 11,
+    "z_index": 3,
+    "pointer_events": "none",
+    "aria_hidden": true,
+    "focus_above_frame_z_index": 4
+  },
+  "divider": {
+    "wing_css_size": [
+      32,
+      12
+    ],
+    "offset_left_right_css_px": 12,
+    "offset_top_css_px": 57,
+    "caption_horizontal_clearance_css_px": 52,
+    "caption_max_single_line_height_css_px": 24,
+    "overflow_behavior": "hide both wings; preserve caption and font size"
+  },
+  "images_unchanged": true,
+  "runtime_changed": false,
+  "gameplay_tested": false
+}

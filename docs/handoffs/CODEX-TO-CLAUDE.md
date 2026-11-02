@@ -1,5 +1,19 @@
 # Codex → Claude handoff
 
+## 2026-11-02 — ขั้นที่4 Decorative assets ตีบวก (ยังไม่แก้เกม)
+
+- เจ้าของสั่ง “ดำเนินการต่อได้” หลัง Material3 ทำdecorative assetsตามแผนเท่านั้น ยังไม่แก้เกม
+- branch `art/art-ui-ux-002`, Draft PR #133; ไม่มีmerge/deploymentในงานนี้
+- เพิ่ม [DECOR_04_TH.md](../../incoming/ART-UI-UX-002/DECOR_04_TH.md), decor-04/{assets4SVG,assets.json,decor.css,index.html,motif-source.png,prompts.json,validation-measurements.json,ready390×844/390×650,asset-preview390}; README/HANDOFF/Material/validationอัปเดต
+- ใช้image_genแนบArtwork01ทำmotifRGBA1774×887 alpha0–255 เก็บbyte-identical แล้วเขียนSVGtechnicalinterpretationแยก ไม่auto-trace/แก้pixels; 4SVGรวม1594bytesเป็นcorner32/rail8/wing32×12, frame8partsว่างกลางและpointer-none
+- ใช้แนวทางgame-ui-frontendและproject fateweave-codex-art-brief; animationstrip/seed/VFXส่วนที่ไม่เกี่ยวไม่ขยายไปทำwaveใหม่
+- ตรวจChromium14กรอบ geometry7ส่วนตรงLayoutฐานภายใน0.1px, art96,target≥44,no content horizontal overflow; จอ650ทั้ง7variantเลื่อนถึงงานรอง/disclosureผ่าน; trimaria-hidden/pointer-noneครบ; wingssafe-caption/longcaptionguardผ่าน
+- Canvas2xอ่านalphaในcornerprotectedinset11ไม่มีink; primaryfocusจริงoutline3และCSSz4เหนือtrimz3; pageerror/consoleerror0; เปิดดูreadyสองความสูงและgear96CSS/DPR2แล้ว ภาพgearยังเป็น128source resampleเป็น192 ไม่อ้างnative2xหรือมือถือจริง
+- ตรวจSVGXML/PNGdecode/links/hash/diff; ไม่ทดสอบtransaction/gameplay/Safari/200%/เครื่องจริง/keyboardทั้งหน้า/performance; previewไม่มีstorage/API
+- ไม่แตะsrc/public/core/save/กฎ/ราคา/assetเดิม และไม่mergeARTเข้าเกมเอง ฝากนำhandoffไปสาขาเกมพร้อมintegrationในภายหลัง
+- ขั้นถัดไปprototypeแยกจำลองready→review→success/insufficient/cappedและกลับ/ล็อก/รายละเอียด ตามLayout2+Material3+Decor4; แล้วfidelity/ส่งต่อintegrationตามลำดับ ยังไม่ขยายทุกหน้าดาว/สกิล/อุปกรณ์อื่น
+
+
 ## 2026-11-02 — ขั้นที่ 3 Material/token sheet ตีบวก (ยังไม่แก้เกม)
 
 - เจ้าของสั่ง “ดำเนินการต่อได้” หลัง Layoutขั้น2 ทำmaterial sheetตามแผน โดยยังไม่แก้เกม

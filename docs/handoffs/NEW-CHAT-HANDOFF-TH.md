@@ -1,5 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-11-02 — Decorative assets ขั้นที่4 เสร็จ (ยังไม่แก้เกม)
+
+เจ้าของสั่งต่อหลังMaterial ทำ [DECOR_04_TH.md](../../incoming/ART-UI-UX-002/DECOR_04_TH.md) ใน ART PR133: SVG4ไฟล์/กรอบ8ชิ้น/ปลายเส้นพร้อมsafe bounds, sourceimage_genRGBAและpromptเก็บแยก; preview14กรอบตรงLayout/target/scroll/pointer/captionguardผ่าน เปิดดูready2ความสูง/gearDPR2แล้ว ยังไม่มีtransactionprototypeหรือruntimechange ขั้นต่อไปprototypeแยกพร้อมfixturesimulationตามLayout2+Material3+Decor4 ไม่merge/deployเกมหรือเปิดทุกหน้าพัฒนาพร้อมกัน
+
+
 ## 2026-11-02 — Material ขั้นที่ 3 เสร็จ (ยังไม่แก้เกม)
 
 ตามคำสั่งต่อหลังLayout ทำ [MATERIAL_03_TH.md](../../incoming/ART-UI-UX-002/MATERIAL_03_TH.md) และบอร์ดmaterial-03ใน ART PR133 มีCSS/token/คู่สี/ภาพready2ความสูง/component states ใช้navyglass/ทอง/cyanและassetเดิม Geometry14กรอบตรงLayout2; ตรวจChromiumtarget/scroll/focus/consoleผ่าน ยังไม่มีtransactionprototypeหรือruntimechange ขั้นต่อไปdecorativeassetsเฉพาะที่จำเป็น แล้วprototypeตามลำดับ ไม่ข้ามไปmerge/deployเกม

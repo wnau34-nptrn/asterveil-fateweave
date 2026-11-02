@@ -1,0 +1,28 @@
+/* Technical vector interpretation of motif-source.png. No layout or interaction changes. */
+.phone.decorated::before { content: none; }
+.frame-trim { position: absolute; inset: 0; z-index: 3; pointer-events: none; user-select: none; }
+.frame-trim i { position: absolute; display: block; pointer-events: none; }
+.frame-trim .corner { width: 32px; height: 32px; background: url(assets/frame-corner.svg) no-repeat center / 32px 32px; }
+.frame-trim .tl { top: 0; left: 0; }
+.frame-trim .tr { top: 0; right: 0; transform: scaleX(-1); }
+.frame-trim .bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.frame-trim .br { bottom: 0; right: 0; transform: scale(-1); }
+.frame-trim .edge-h { left: 30px; right: 30px; height: 8px; background: url(assets/frame-edge-horizontal.svg) repeat-x left top / 8px 8px; }
+.frame-trim .edge-v { top: 30px; bottom: 30px; width: 8px; background: url(assets/frame-edge-vertical.svg) repeat-y left top / 8px 8px; }
+.frame-trim .top { top: 0; }
+.frame-trim .bottom { bottom: 0; transform: scaleY(-1); }
+.frame-trim .left { left: 0; }
+.frame-trim .right { right: 0; transform: scaleX(-1); }
+.decorated .step .step-caption { position: relative; }
+.decorated .step::before, .decorated .step::after { content: ''; position: absolute; top: 57px; width: 32px; height: 12px; background: url(assets/divider-wing.svg) center / 32px 12px no-repeat; pointer-events: none; }
+.decorated .step::before { left: 12px; }
+.decorated .step::after { right: 12px; transform: scaleX(-1); }
+.decorated .step.hide-wings::before, .decorated .step.hide-wings::after { display: none; }
+.decor-sheet { width: 390px; padding: 16px; background: #08121f; border: 1px solid #6a92ac; margin: 24px 0; }
+.decor-sheet h2 { margin-bottom: 8px; }
+.decor-sheet p { color: #bbcadb; margin: 8px 0; }
+.decor-sheet .tile { display: inline-flex; vertical-align: top; align-items: center; justify-content: center; width: 108px; height: 108px; margin: 3px; background: #14243a; border: 1px solid #6a92ac; }
+.decor-sheet img { max-width: 100%; }
+.decor-sheet .wing-sample { display: block; width: 32px; height: 12px; margin: 12px auto; }
+/* Focus remains above edge ornament, including the header close button. */
+.decorated button:focus-visible, .decorated summary:focus-visible { position: relative; z-index: 4; }
