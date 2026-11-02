@@ -1,5 +1,13 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-11-02 — UXD-00/01 ตามคำสั่งเจ้าของ
+
+- [x] เก็บbaselineตีบวกและทางเข้าดาว/สกิล พร้อมfixtureและข้อแตกต่างจากconcept
+- [x] หน้าตีบวกนำร่องพร้อมreview/ผลจริง/returncontext; localtypecheck/lint/unit1396/buildและfocusedbrowserผ่าน ดู UXD-01-IMPLEMENTATION-TH.md และCODEX-TO-CLAUDE.md
+- [ ] ตรวจrequiredCI รวมPRและตรวจPagesของชุดนำร่อง (บันทึกผลหลังเสร็จ)
+- งานถัดไปเมื่อได้รับมอบหมาย: UXD-02 launcherโรงตีเหล็ก+เพิ่มLv ไม่เริ่มP04/P09หรือกฎใหม่จากงานUXนี้
+
+
 
 ## 2026-11-01 — ชื่อผู้บัญชาการแทนชื่อค่าย / ตรา 10 แบบ / หน้าสร้างไม่เลื่อน (Codex)
 

@@ -1,5 +1,18 @@
 # Codex → Claude handoff
 
+## 2026-11-02 — UXD-00/01 นำร่องตีบวกจริงตามแผน ART-UI-UX-002
+
+- เจ้าของสั่ง “ดำเนินการขั้นแรก” จากแผน PR #133; branch `codex/uxd-01-enhancement-pilot` จากเกมล่าสุด `db1788e` เก็บงาน desktop scrollbars เดิมครบ
+- UI: หน้าตีบวกเฉพาะงาน ผลต่อผู้สวมเปิดอ่านทันที รายละเอียดพับได้ ค่าใช้/มี/เหลือและreview dockแยกจากพื้นที่เลื่อน; คำสั่งอื่นยังเข้าได้ผ่าน “งานอื่นของช่าง” ยังไม่ทำlauncher/หน้าพัฒนาอื่น/ดาว/สกิลรอบถัดไป
+- ยืนยันผ่านreviewของprofileปัจจุบัน ตรวจขั้นถัดไป/ทุนซ้ำ ล้างreviewทันทีหลังส่ง; feedbackสำเร็จจากeventที่commitจริง ย้ายfocusไปผล; Escapeจากreviewกลับแก้ไขโดยไม่เสียของ
+- กลับจากforgeคืนcharacter tab/filter/item/scroll/focusและหน้าต้นทาง เก็บcontextในUI ไม่เพิ่มsavefield; ปรับregressionให้ตรวจflowใหม่แทนการคาดว่ากลับหน้าแรกค่าย
+- ไฟล์: src/ui/{forge-workbench,character-panel,lobby-ui,game-shell}.ts, components.css; browser helper/specs และtests/enhancement-review.test.ts; สเปก UXD-01-IMPLEMENTATION-TH.md
+- ผลlocal: typecheck/lint/unit1396/1396ใน100files/buildผ่าน; focusedbrowser21/21 (pilot6/affix3/shared6/character6) และชุดLv-fusion3/refund3/crafting3ผ่าน; requiredCI/merge/Pagesรอตอนสร้างPR
+- Baseline: runtimeforgeเดิม390px + ทางเข้าดาว/สกิลที่ยังไม่เปลี่ยน; ของสวมถึงreviewยัง2tapsเท่าเดิม ไม่อ้างลดtaps ภาพ390px /tmp/uxd-01/after/{review,success}-390.png เปิดดูแล้ว
+- อ่านBrowser skillและค้นruntimeแล้วไม่มีjs toolให้เรียก ใช้Playwrightโปรเจกต์กับ/usr/bin/chromium; จอ320×568,390×650,390×844,1366×768(กรอบportrait); ไม่มีผลSafari/iOS/เครื่องจริง/ผู้เล่นจริง
+- ไม่แตะcore/battle/core/save/ราคา/กฎ/RNG ปัญหาlocalช่วงแรกจากfixtureยังไม่ปลดทีม/รายงานขาดเพราะsparsecheckoutแก้ที่การเตรียมทดสอบ ไม่แก้กฎให้เทสต์ผ่าน
+
+
 
 ## 2026-11-01 — ใช้ชื่อผู้บัญชาการ / สร้างตัวตนหน้าเดียว / ตราเส้น 10 แบบ (Codex)
 

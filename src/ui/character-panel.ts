@@ -37,6 +37,7 @@ export class CharacterPanel {
   private goal:AutoGoal='recommended'; private preferred:SetId|undefined;
   private autoExpanded=false; private filtersExpanded=false; private picked=''; private node='';
   private back:{dialog?:string;focus:string;scroll:number;lobby:boolean}={focus:'',scroll:0,lobby:false};
+  private forgeReturn:{focus:string;scroll:number}|undefined;
   constructor(private readonly root:HTMLElement,private readonly map:MapDefinition,private readonly heroes:readonly HeroDefinition[],private readonly template:EncounterDefinition,private readonly host:CharacterHost,private readonly prefix='',readonly filters:GearFilters=newGearFilters()) {
     this.dialog=document.createElement('dialog');this.dialog.id=this.id('character-dialog');this.dialog.className='world-dialog character-dialog';this.dialog.setAttribute('aria-labelledby',this.id('character-title'));
     this.dialog.innerHTML=this.ids(`<div class="info-header"><h2 id="character-title">ตัวละคร</h2><button data-world="character-close" class="quiet" aria-label="ปิดข้อมูลตัวละคร">${icon('close')}</button></div><div id="character-members" class="tree-members character-member-list"></div><div id="character-tabs" class="character-tabs" role="tablist" aria-label="ข้อมูลตัวละคร"></div><div id="character-content" class="info-content character-content" role="tabpanel"></div>`);root.append(this.dialog);
@@ -57,7 +58,9 @@ export class CharacterPanel {
     });
     this.dialog.addEventListener('cancel',e=>{if(this.usable()&&(this.single||this.plan)){e.preventDefault();this.cancelTrial();}});
     this.dialog.addEventListener('close',()=>{
+      if(this.dialog.open)return;
       this.discard();this.content().innerHTML='';if(this.root.hidden||this.root.closest('[inert]'))return;
+      if(this.forgeReturn)return;
       if(this.back.dialog){this.host.restore?.(this.back.dialog);const from=this.root.querySelector<HTMLDialogElement>(`#${this.back.dialog}`);if(from&&!from.open)from.showModal();from?.querySelector('.info-content')?.scrollTo(0,this.back.scroll);}
       else if(this.back.lobby)this.root.querySelector('.lobby-content')?.scrollTo(0,this.back.scroll);
       (this.root.querySelector<HTMLElement>(`#${this.back.focus}`)??this.root.querySelector<HTMLElement>('#lobby-sub-back'))?.focus({preventScroll:true});
@@ -73,16 +76,25 @@ export class CharacterPanel {
   private discard():void{this.single=undefined;this.plan=undefined;}
   openFor(id:string,tab:CharacterTab,trigger:HTMLButtonElement,key?:string):void{
     const model=this.host.model();if(!model?.available||!model.ids.includes(id)||this.root.hidden||this.root.closest('[inert]'))return;
+    this.forgeReturn=undefined;
     const from=trigger.closest<HTMLDialogElement>('dialog'),lobby=trigger.closest('.lobby-content');this.back={dialog:from?.id,focus:trigger.id,scroll:from?.querySelector('.info-content')?.scrollTop??lobby?.scrollTop??0,lobby:!!lobby};
     this.heroId=id;this.tab=Object.hasOwn(characterTabs,tab)?tab:'overview';this.source=model.source;this.discard();
     const entry=model.entries.find(e=>e.key===key);this.picked=entry?.key??'';if(entry&&(entry.item.slot!=='weapon'||entry.item.hero===id))this.single={key:entry.key,item:entry.item};
     from?.close();this.render();this.content().scrollTop=0;this.dialog.showModal();this.focus(this.id(`character-tab-${this.tab}`));
   }
   refresh():void{if(this.open)this.render();}
+  resumeFromForge():boolean {
+    const model=this.host.model(),back=this.forgeReturn;this.forgeReturn=undefined;
+    if(!back||!model?.available||!model.ids.includes(this.heroId))return false;
+    this.source=model.source;this.discard();this.render();this.dialog.showModal();
+    this.content().scrollTop=back.scroll;
+    (this.dialog.querySelector<HTMLElement>(`#${back.focus}`)??this.dialog.querySelector<HTMLElement>(`#${this.id(`character-tab-${this.tab}`)}`))?.focus({preventScroll:true});
+    return true;
+  }
   private click(b:HTMLButtonElement):void{
     const model=this.host.model();if(!model)return;const action=b.dataset.world;
     if(b.hasAttribute('data-gear-reset')){Object.assign(this.filters,newGearFilters());this.render();this.focus(this.id('gear-filter-set'));return;}
-    if(action==='character-forge'&&model.camp&&this.host.forge){this.back={focus:'lobby-tab-forge',scroll:0,lobby:false};this.dialog.close();this.host.forge(this.heroId,Number(b.dataset.uid));return;}
+    if(action==='character-forge'&&model.camp&&this.host.forge){this.forgeReturn={focus:b.id||this.id('character-tab-gear'),scroll:this.content().scrollTop};this.dialog.close();this.host.forge(this.heroId,Number(b.dataset.uid));return;}
     if(action==='character-close'){this.dialog.close();return;}
     if(action==='character-tab'){this.tab=b.dataset.tab as CharacterTab;this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));return;}
     if(action==='character-member'){this.heroId=b.dataset.hero!;this.filters.slot='all';this.picked='';this.node='';this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-member-${this.heroId}`));return;}

@@ -1,3 +1,4 @@
+import { openForgeTools } from './forge-navigation';
 import { expect, test } from '@playwright/test';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { newProfile } from '../../src/core/world/profile';
@@ -37,8 +38,8 @@ for (const [width, height] of [[390, 844], [320, 568]] as const) {
       }
     }
     else await page.locator('#forge-cancel').click();
-    await page.locator('#forge-mode-level').click(); await shot('forge-level');
-    await page.locator('#forge-tab-recycle').click(); await shot('forge-recycle');
+    await openForgeTools(page);await page.locator('#forge-mode-level').click(); await shot('forge-level');
+    await openForgeTools(page);await page.locator('#forge-tab-recycle').click(); await shot('forge-recycle');
     await context.close();
   });
 }

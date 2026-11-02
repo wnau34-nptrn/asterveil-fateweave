@@ -244,6 +244,35 @@
 .forge-workbench .forge-result { margin: 8px 0; padding: 10px 14px; }
 .forge-workbench .forge-result .comparison-table td, .forge-workbench .forge-result .comparison-table th { padding: 6px 2px; }
 
+/* UXD-01: enhancement has one scroll surface and a separate, always reachable review dock. */
+.lobby-sheet:has(.forge-enhancement) { background: var(--navy-950); }
+.forge-enhancement #forge-body { display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+.forge-enhancement-content { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 8px 4px 12px; scrollbar-gutter: stable; }
+.forge-enhancement .forge-item-head { padding: 12px; background: var(--panel-soft); border-color: var(--hud-edge); }
+.forge-enhancement .forge-item-head .gear-art { --art: 56px; flex-basis: 56px; }
+.forge-enhancement .forge-item-head b { font-size: 16px; line-height: 1.5; }
+.forge-enhancement .forge-step { margin: 10px 0; padding: 10px; text-align: center; border: 1px solid var(--hud-edge); border-radius: var(--radius-md); background: var(--panel-soft); }
+.forge-enhancement #forge-body .forge-step h3 { margin: 0 0 3px; text-align: center; color: var(--gold-light); font: 600 22px var(--font-heading); }
+.forge-enhancement .forge-step p { margin: 0; font-size: 13px; color: var(--hp-mint); }
+.forge-enhancement .forge-hero-preview { padding: 10px 12px; border: 1px solid var(--hud-edge); border-radius: var(--radius-md); background: var(--panel-soft); }
+.forge-enhancement .forge-hero-preview h4 { margin: 0 0 6px; font-size: 16px; }
+.forge-enhancement .forge-hero-preview small { display: block; margin-top: 6px; font-size: 12px; color: var(--text-muted); }
+.forge-enhancement .comparison-table { width: 100%; font-size: 13px; }
+.forge-enhancement .comparison-table :is(th,td) { padding: 6px 2px; overflow-wrap: anywhere; }
+.forge-enhancement .comparison-table thead { font-size: 12px; color: var(--text-muted); }
+.forge-enhancement .comparison-table .gain { color: var(--hp-mint); }
+.forge-enhancement .comparison-table .loss { color: var(--danger-coral); }
+.forge-enhancement :is(.forge-impact,.forge-investment,.forge-item-stats,.forge-other) { margin-top: 8px; border: 1px solid var(--hud-edge); border-radius: var(--radius-sm); padding: 0 10px; background: var(--panel-bg); }
+.forge-enhancement details > summary { display: list-item; min-height: 44px; padding: 12px 0; font-size: 13px; cursor: pointer; }
+.forge-enhancement details p { color: var(--text-muted); font-size: 13px; overflow-wrap: anywhere; }
+.forge-enhancement .forge-enhancement-dock { position: static; flex: none; margin: 0; padding: 10px 4px max(4px,env(safe-area-inset-bottom)); border-top: 1px solid var(--hud-edge); background: var(--navy-950); }
+.forge-enhancement .forge-footer > p#forge-cost { font-size: 14px; }
+.forge-enhancement .forge-footer .forge-reason { color: var(--danger-coral); text-align: center; font-size: 13px; }
+.forge-enhancement .forge-footer .forge-review { text-align: center; font-size: 12px; color: var(--veil-cyan); }
+.forge-enhancement .forge-footer button { min-height: 48px; white-space: normal; }
+.forge-enhancement .forge-success { padding: 10px; margin: 0 0 8px; border: 1px solid var(--hp-mint); border-radius: var(--radius-sm); background: #143832; color: var(--text); font-size: 15px; }
+.forge-enhancement .forge-success small { display: block; margin-top: 4px; font-size: 12px; }
+
 /* Expedition summary (board 09): stat chips, one haul card of pills, three-column item tiles, level cards. */
 .summary-card { background: linear-gradient(180deg, #14243af0, #0b1626f5); }
 .summary-card header .eyebrow { font: 600 12px var(--font-display, Kanit), sans-serif; letter-spacing: .08em; color: var(--veil-cyan, #74d4ef); }

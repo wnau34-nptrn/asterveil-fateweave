@@ -1,3 +1,4 @@
+import { openForgeTools } from './forge-navigation';
 import { expect, test } from '@playwright/test';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { encounterById as lookup } from '../../src/content/encounters/catalog';
@@ -30,14 +31,14 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     const before=await writes();await page.locator('#forge-confirm').click();expect(await writes()).toBe(before+1);
     let game=parseGame(await saved(),map,lookup);expect(game.profile.bank).toMatchObject({ore:94,dust:48});expect(game.profile.members.guardian!.gear!.body).toMatchObject({plus:3,investment:{ore:15,dust:4}});expect(game.profile.forge).toBe(profile.forge);expect(JSON.parse(await saved()).version).toBe(45);
     await page.locator('#forge-lock').click();await expect(page.locator('#forge-lock')).toHaveAttribute('aria-pressed','true');
-    await page.keyboard.press('Escape');await expect(page.locator('#camp-character-dialog')).toBeVisible();await page.locator('#camp-character-dialog [data-world=character-close]').click();await expect(page.locator('#camp-character-dialog')).not.toBeVisible();
-    await page.locator('#lobby-tab-gear').click();await page.locator('#forge-open-2').click();await page.locator('#forge-tab-recycle').click();await expect(page.locator('.forge-item-head')).toContainText('+3');
+    await page.keyboard.press('Escape');await expect(page.locator('#camp-character-dialog')).toBeVisible();await page.locator('#camp-character-dialog [data-world=character-close]').click();await expect(page.locator('#camp-character-dialog')).not.toBeVisible();await page.locator('#lobby-sheet [data-lobby=close]').click();
+    await page.locator('#lobby-tab-gear').click();await page.locator('#forge-open-2').click();await openForgeTools(page);await page.locator('#forge-tab-recycle').click();await expect(page.locator('.forge-item-head')).toContainText('+3');
     await expect(page.locator('.forge-refund')).toContainText('แร่ 15');await expect(page.locator('.forge-refund')).toContainText('แร่ 17');
     await page.locator('#forge-lock').click();await expect(page.locator('#forge-recycle')).toBeDisabled();await page.locator('#forge-lock').click();
     const recycleBefore=await saved();await page.locator('#forge-recycle').click();expect(await saved()).toBe(recycleBefore);await page.locator('#forge-cancel').click();expect(await saved()).toBe(recycleBefore);
     await page.locator('#forge-recycle').click();await page.screenshot({path:info.outputPath('forge-refund.png')});await page.locator('#forge-confirm').click();
-    game=parseGame(await saved(),map,lookup);expect(game.profile.items.map(i=>i.uid)).toEqual([3]);expect(game.profile.bank).toMatchObject({ore:111,dust:53});await page.locator('#forge-tab-recycle').focus();await page.keyboard.press('ArrowRight');await expect(page.locator('#forge-tab-smelt')).toHaveAttribute('aria-selected','true');await page.keyboard.press('Home');await expect(page.locator('#forge-tab-develop')).toHaveAttribute('aria-selected','true');
-    await page.locator('[data-lobby=close]').click();await page.locator('#lobby-tab-gear').click();await page.locator('#lobby-sheet .gear-extra-filters summary').click();await page.locator('#camp-inventory-gear-filter-reset').click();await expect(page.locator('#salvage-3')).toBeDisabled();
+    game=parseGame(await saved(),map,lookup);expect(game.profile.items.map(i=>i.uid)).toEqual([3]);expect(game.profile.bank).toMatchObject({ore:111,dust:53});await openForgeTools(page);await page.locator('#forge-tab-recycle').focus();await page.keyboard.press('ArrowRight');await expect(page.locator('#forge-tab-smelt')).toHaveAttribute('aria-selected','true');await page.keyboard.press('Home');await expect(page.locator('#forge-tab-develop')).toHaveAttribute('aria-selected','true');
+    await page.locator('[data-lobby=close]').click();await expect(page.locator('#lobby-sheet-title')).toContainText('อุปกรณ์');await page.locator('#lobby-sheet .gear-extra-filters summary').click();await page.locator('#camp-inventory-gear-filter-reset').click();await expect(page.locator('#salvage-3')).toBeDisabled();
     await page.reload();await page.locator('#continue').click();game=parseGame(await saved(),map,lookup);expect(game.profile.members.guardian!.gear!.body).toMatchObject({plus:3,locked:true,investment:{ore:15,dust:4}});expect(game.profile.items[0]!.locked).toBe(true);
     expect(errors).toEqual([]);await context.close();
   });
