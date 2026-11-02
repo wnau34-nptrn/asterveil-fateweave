@@ -1,5 +1,14 @@
 # ส่งต่อ ART-UI-UX-002
 
+## 2026-11-02 — ขั้นที่7 สเปกส่งต่อครบ (ไม่แก้เกม)
+
+เริ่มที่ [INTEGRATION_07_TH.md](INTEGRATION_07_TH.md), [briefลงมือ](integration-07/IMPLEMENTER_BRIEF_TH.md), [mapping26paths/8anchors](integration-07/runtime-map.json) และ [AC01–15](integration-07/ACCEPTANCE_TH.md) ตรวจremoteเกมล่าสุด07f95a7ผ่านGitHubแล้ว ต่อยอดflowPR135ที่เผยแพร่ ไม่เริ่มUXD-01เดิมซ้ำ ไม่mergeทั้งARTbranchและไม่คัดsimulation/fixtures/labเข้าเกม
+
+สเปกระบุreceiptจริง/next-preview/cap/unowned/refund/returncontext, token/SVG4ไฟล์ที่นำเข้าได้, nativeframe/textreflow, regression/Pages/rollback และvisualgapcurrencyart/ornament/DPR2 ทุกACยังรอตรวจบนruntimeimplementation; prototype140/9/26ไม่ใช่ผลเกม รอบนี้มีเฉพาะเอกสารและmetadata ไม่รันทดสอบเกมหรือdeployใหม่
+
+ปิดชุดออกแบบเชิงลึกหน้าตีบวก1–7แล้ว งานถัดไปคือimplementationภาพหน้าตีบวกบนสาขาเกมใหม่ตามbrief ขอบเขตหน้าดาว/สกิล/อุปกรณ์อื่นยังตามแผนUXD-02–08 ไม่เปิดพร้อมกันจากhandoffนี้
+
+
 ## 2026-11-02 — ขั้นที่6 Fidelity/responsive/keyboard เสร็จ (ไม่แก้เกม)
 
 อ่าน [QA_06_TH.md](QA_06_TH.md): แก้เฉพาะprototypeให้กว้างถึง480, autoheightdesktopหักmargin, text-only200%/intrinsicheader/verticalidentity/reviewactions, ย้ายcostเข้าbodyเมื่อ200%และกรอบสูง<720; จอเล็ก/มือถือแนวนอนซ่อนframeพร้อมinertโดยไม่เปลี่ยนreview/bank

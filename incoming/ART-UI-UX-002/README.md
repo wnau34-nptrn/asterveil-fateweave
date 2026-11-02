@@ -2,6 +2,8 @@
 
 ข้อเสนอ UX/UI สำหรับ Asterveil: Fateweave จากการตรวจสาขาเกมและ artwork เดิม ไม่ใช่ runtime implementation
 
+เริ่มส่งต่องานนำเข้าภาพที่ [INTEGRATION_07_TH.md](INTEGRATION_07_TH.md): [brief](integration-07/IMPLEMENTER_BRIEF_TH.md), [runtime map](integration-07/runtime-map.json), [AC01–15](integration-07/ACCEPTANCE_TH.md) — ชุดออกแบบหน้าตีบวกขั้น1–7ครบแล้ว งานนำภาพเข้าruntimeยังไม่เริ่มในPRนี้ และไม่ใช่การปิดUXD-00–08ทุกหน้า
+
 แผนพัฒนาเดิมอยู่ [IMPLEMENTATION_PLAN_TH.md](IMPLEMENTATION_PLAN_TH.md): ลำดับ UXD-00–08, งานที่ยังขาด, จุดแก้โค้ด, dependency P04/P09, เกณฑ์ทดสอบและการส่งมอบ โค้ดนำร่อง UXD-00/01 อยู่แยกใน [PR #135](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/135); นำเข้าและเผยแพร่แล้ว ส่วนขั้นถัดไปยังเป็นแผน
 
 ขั้นแรกของแผนปรับภาพให้ใกล้ Artwork เสร็จแล้ว: [VISUAL_AUDIT_01_TH.md](VISUAL_AUDIT_01_TH.md) — หลักฐานหน้าตีบวกจริง 390×844/390×650, ความต่าง 12 ข้อเรียงลำดับ และ brief สำหรับทำ layout ต่อ ไม่มีการแก้เกมในรอบตรวจภาพนี้

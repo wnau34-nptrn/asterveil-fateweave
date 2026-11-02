@@ -1,0 +1,263 @@
+{
+  "id": "ART-UI-UX-002-INTEGRATION-07",
+  "date": "2026-11-02",
+  "status": "handoff only; no runtime integration performed",
+  "game_branch": "feature/fateweave-initial-prototype",
+  "game_head_verified_via_github": "07f95a7f164b8b232c1c26edb0b4f31360df323f",
+  "design_baseline_commit": "73a7e57",
+  "design_pr": "https://github.com/wnau34-nptrn/asterveil-fateweave/pull/133",
+  "existing_runtime_pilot_pr": "https://github.com/wnau34-nptrn/asterveil-fateweave/pull/135",
+  "source_files": [
+    {
+      "path": "src/ui/forge-workbench.ts",
+      "git_blob": "e195813f51e3a640c6ed94a314c6830ef498e2d4"
+    },
+    {
+      "path": "src/ui/lobby-ui.ts",
+      "git_blob": "87866f10eff0e8ca636ac1f7a14025104d875b1f"
+    },
+    {
+      "path": "src/ui/character-panel.ts",
+      "git_blob": "ccd9398ed9a583d3121d612f3668ccb7bb23362b"
+    },
+    {
+      "path": "src/ui/game-shell.ts",
+      "git_blob": "4b3d3131fcfffffda4542c323818a9aae75cfaec"
+    },
+    {
+      "path": "src/ui/components.css",
+      "git_blob": "a7a07b359474787e81d7572d015e4d136b7b8ebf"
+    },
+    {
+      "path": "src/ui/portrait.css",
+      "git_blob": "7a6a96110791f402a3057df3319cafec2f6fbb6b"
+    },
+    {
+      "path": "src/ui/tokens.css",
+      "git_blob": "d6ae88bf93fde2e1e3efd767a438fc6d7993da66"
+    },
+    {
+      "path": "src/ui/equip-art.ts",
+      "git_blob": "415fdcdb10e95e2ab6b0570b1f21ab8def951a65"
+    },
+    {
+      "path": "src/game/visuals/equip-art.ts",
+      "git_blob": "c42ca489394d652e3a694d7f254b4b5d8f6ba4ce"
+    },
+    {
+      "path": "src/ui/character-metrics.ts",
+      "git_blob": "a11cab9011fbe3d937032a893ea4566165ce6d15"
+    },
+    {
+      "path": "src/platform/viewport.ts",
+      "git_blob": "47a0129a5669880dc096a02b761ed3b6d2d58509"
+    },
+    {
+      "path": "src/core/world/forge.ts",
+      "git_blob": "6ba99e0b6ef935af510c74b09a5949ce015475db"
+    },
+    {
+      "path": "src/core/world/equipment.ts",
+      "git_blob": "37343163ff30b43e0f437bc4d47fc996456723e1"
+    },
+    {
+      "path": "src/main.ts",
+      "git_blob": "7049e504cf4230f3bf11cf9209263ff784987c29"
+    },
+    {
+      "path": "tests/enhancement-review.test.ts",
+      "git_blob": "5eed461e68dd1c0598181cae59abd57ff0578ba7"
+    },
+    {
+      "path": "tests/browser/enhancement-pilot.spec.ts",
+      "git_blob": "04b7d3b9f3a4845ea061dacc6ce80f5dc13b3b12"
+    },
+    {
+      "path": "tests/browser/character.spec.ts",
+      "git_blob": "60820b8b0e715836033477a0b77083258123b952"
+    },
+    {
+      "path": "tests/browser/forge-phase2.spec.ts",
+      "git_blob": "d69c4ddd6f6d7d9d672036dd008dd2ab4423adc6"
+    },
+    {
+      "path": "tests/browser/forge-refund.spec.ts",
+      "git_blob": "0f541770a158783b10a40eedb24132176d354d3e"
+    },
+    {
+      "path": "tests/browser/affix-transfer.spec.ts",
+      "git_blob": "1ffa76bc1f2ebb9b02b1f699aaf7243a905ee959"
+    },
+    {
+      "path": "tests/browser/weapon-crafting.spec.ts",
+      "git_blob": "d14cf6f06d2ba532db10461c5f71c634838baa43"
+    },
+    {
+      "path": "tests/browser/shared-equipment.spec.ts",
+      "git_blob": "d1745017e0e79d298b6898c43c6bdd583aaa39bc"
+    },
+    {
+      "path": "tests/browser/portrait-keyboard.spec.ts",
+      "git_blob": "524c96b77ad2337fdc784c083b6f30757c9385a3"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "git_blob": "67c20d77e4b9819024f17c4828c8afe2dad0ab09"
+    },
+    {
+      "path": ".github/workflows/browser.yml",
+      "git_blob": "608ccb357b2949368f394a4880bf9605991d9126"
+    },
+    {
+      "path": ".github/workflows/pages.yml",
+      "git_blob": "0fc63da683c21f197827ed53b34450f858dd7344"
+    }
+  ],
+  "components": [
+    {
+      "component": "identity",
+      "runtime_file": "src/ui/forge-workbench.ts",
+      "runtime_anchor": "private enhancementPage(",
+      "runtime_selectors": [
+        ".forge-item-head",
+        "#forge-change-item",
+        "#forge-lock"
+      ],
+      "data_source": [
+        "findItem",
+        "gearArt",
+        "itemName"
+      ],
+      "integration_requirement": "96px tile; merge existing tools into identity while preserving IDs and lock semantics"
+    },
+    {
+      "component": "step and result",
+      "runtime_file": "src/ui/forge-workbench.ts",
+      "runtime_anchor": "private statPreview(",
+      "runtime_selectors": [
+        ".forge-step",
+        ".forge-hero-preview"
+      ],
+      "data_source": [
+        "characterStats",
+        "itemStats",
+        "heroImpact"
+      ],
+      "integration_requirement": "Real preview; neutral without empty table; explicitly labelled trial for unowned item"
+    },
+    {
+      "component": "review and commit",
+      "runtime_file": "src/ui/forge-workbench.ts",
+      "runtime_anchor": "if(action==='confirm'&&this.review&&this.source===p)",
+      "runtime_selectors": [
+        "#forge-enhance",
+        "#forge-confirm",
+        "#forge-cancel"
+      ],
+      "data_source": [
+        "Profile reference identity",
+        "enhancementCostTo",
+        "ForgeHost.enhance"
+      ],
+      "integration_requirement": "Retain guard/command; never import prototype bank mutations or fixture rules"
+    },
+    {
+      "component": "success receipt",
+      "runtime_file": "src/ui/forge-workbench.ts",
+      "runtime_anchor": "enhanced(p:Profile,uid:number)",
+      "runtime_selectors": [
+        "#forge-success"
+      ],
+      "data_source": [
+        "GameShell committed forged/enhance event"
+      ],
+      "integration_requirement": "Transient real before/after receipt; explicit next-preview action without spend"
+    },
+    {
+      "component": "header and return",
+      "runtime_file": "src/ui/lobby-ui.ts",
+      "runtime_anchor": "private openForge(",
+      "runtime_selectors": [
+        "#lobby-sheet-title",
+        ".lobby-sheet-head"
+      ],
+      "data_source": [
+        "forgeOrigin",
+        "CharacterPanel.resumeFromForge"
+      ],
+      "integration_requirement": "Retain actual hero/tab/filter/item/scroll/focus; do not copy mock origin"
+    },
+    {
+      "component": "material styles",
+      "runtime_file": "src/ui/components.css",
+      "runtime_anchor": "/* UXD-01:",
+      "runtime_selectors": [
+        ".forge-enhancement",
+        ".forge-enhancement-content",
+        ".forge-enhancement-dock"
+      ],
+      "data_source": [
+        "src/ui/tokens.css"
+      ],
+      "integration_requirement": "Port scoped material/relative typography/intrinsic reflow, not entire prototype CSS"
+    },
+    {
+      "component": "decorative SVG",
+      "runtime_file": "src/ui/components.css",
+      "runtime_anchor": ".forge-enhancement #forge-body",
+      "runtime_selectors": [
+        ".forge-enhancement"
+      ],
+      "data_source": [
+        "decor-04/assets.json"
+      ],
+      "integration_requirement": "Four verified SVGs to proposed public/assets/ui/forge-enhancement; BASE_URL aware; pointer-none"
+    },
+    {
+      "component": "frame constraints",
+      "runtime_file": "src/platform/viewport.ts",
+      "runtime_anchor": "export function fitViewport(",
+      "runtime_selectors": [
+        "#app"
+      ],
+      "data_source": [
+        "existing gameBounds/viewport",
+        "@container game"
+      ],
+      "integration_requirement": "Read-only: use existing sizing/gate; do not copy lab height minus48 or prototype controls"
+    }
+  ],
+  "proposed_new_runtime_asset_directory": "public/assets/ui/forge-enhancement/",
+  "runtime_files_changed_this_task": [],
+  "do_not_ship": [
+    "prototype-05/app.js",
+    "prototype-05/fixtures.js",
+    "prototype-05/fixtures.json",
+    "prototype-05/check.cjs",
+    "prototype-05/base-layout.css",
+    "whole prototype CSS or lab controls",
+    "mock origin",
+    "decor-04/motif-source.png",
+    "concept boards and docs"
+  ],
+  "protected_runtime_paths": [
+    "src/core/battle/",
+    "src/core/save/",
+    "src/core/world/",
+    "src/content/",
+    ".github/",
+    "src/platform/viewport.ts"
+  ],
+  "remaining_visual_work": [
+    "painted ore/dust art",
+    "optional detailed ornament variant",
+    "real-device decision for gear128 source at DPR2"
+  ],
+  "prior_prototype_checks": {
+    "responsive_cases": 140,
+    "keyboard_groups": 9,
+    "interaction_groups": 26,
+    "runtime_game_tests": false
+  },
+  "checks_this_task": "source paths/anchors/blob IDs, document links, asset hashes and package integrity; no gameplay rerun"
+}

@@ -1,5 +1,20 @@
 # Codex → Claude handoff
 
+## 2026-11-02 — ขั้นที่7 ส่งต่อสเปกนำภาพตีบวกเข้าเกม (ยังไม่แก้เกม)
+
+- เจ้าของสั่ง “ดำเนินการต่อได้” หลังQA6 ทำhandoffขั้น7ตามลำดับเท่านั้น branch `art/art-ui-ux-002` / Draft PR #133; ไม่มีmerge/deploymentหรือruntimechangeรอบนี้
+- เพิ่ม [INTEGRATION_07_TH.md](../../incoming/ART-UI-UX-002/INTEGRATION_07_TH.md), integration-07/{runtime-map.json,ACCEPTANCE_TH.md,IMPLEMENTER_BRIEF_TH.md}; README/HANDOFF/QA/IMPLEMENTATION_PLAN/validationเชื่อมชุดปิด1–7
+- GitHubAPIยืนยันremoteเกมยัง07f95a7 ตรงcheckout source; ตรวจ26pathsพร้อมgitblobและ8function/selectoranchors ไม่ใช้ชื่อfunctionสมมติ; designฐาน73a7e57 RuntimeflowPR135เผยแพร่แล้ว ไม่เริ่มUXD-01ซ้ำ
+- Handoff: ต่อForgeWorkbench/LobbyUI/CharacterPanel/GameShellเดิม, source===p/rechecktargetcostbank, successจากforged/enhanceจริง, receipt+explicitnextpreview, capCTAIDไม่ซ้ำ/unownedtrial/refundจริง/returncontext, scopedCSS/token/4SVG/BASE_URL
+- ห้ามคัดprototypeapp/fixtures/modelbank/paid/revision/lab/mockorigin/rawmotifไปruntime; ไม่แก้rules/save/balance/viewport/workflowsหรือเพิ่มsavefontsetting; เกมใช้gameBounds/containerเดิมไม่คัดlabmargin24/desktop720
+- AC01–15ทุกข้อรอผลruntimeใหม่ ระบุcommands/specsที่มีจริงและrequiredCI/Pages/rollback; prototype140/9/26เป็นหลักฐานเดิม ไม่รันซ้ำหรืออ้างเป็นผลเกมรอบนี้
+- บันทึกvisualgappaintedcurrency/ornamentvariant/gearDPR2และplatformที่ยังไม่ตรวจ; ไม่อ้างpixelperfect/การเลือกartหรือapprovalแทนเจ้าของ
+- ตรวจdocslinks/JSON/sourcepaths+anchors+blob/assethashes/PNGdecode/diffและarchiveintegrity; ไม่มีgameplay/browser/deployใหม่เพราะdocs-only
+- ชุดส่งต่อดาวน์โหลด/workspace/artifacts/fateweave-ui-handoff-07.zipรวมpackage+manifest+readmeเปิดprototypeได้ ต้องมีrepoเกมเพื่อintegration ไม่รวมproductioncodeเปลี่ยนใหม่
+- ปิดชุดออกแบบหน้าตีบวก1–7 ไม่ใช่ปิดUXDทุกหน้า งานถัดไปvisualimplementationนำร่องบนbranchใหม่จากgameล่าสุดตามbrief ไม่mergeARTทั้งสาขา; หน้าดาว/สกิล/อุปกรณ์อื่นต่อหลังpatternผ่านจริง
+- เก็บnotesในARTตามขอบเขตไม่แก้เกม ฝากนำhandoffนี้ไปสาขาเกมพร้อมintegrationภายหลัง
+
+
 ## 2026-11-02 — ขั้นที่6 Fidelity/responsive/keyboard ของต้นแบบ (ไม่แก้เกม)
 
 - เจ้าของสั่ง “ดำเนินการ” หลังPrototype5 ทำQAขั้น6และแก้เฉพาะต้นแบบ; branch `art/art-ui-ux-002`, Draft PR #133 ไม่มีmerge/deployเกม

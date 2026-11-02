@@ -72,13 +72,18 @@
     },
     {
       "file": "HANDOFF_TH.md",
-      "bytes": 14345,
-      "sha256": "c5902d4e5a8e52c1d216d25ab5d8af00283b48487a6e984542217ccf428453cb"
+      "bytes": 15956,
+      "sha256": "74d59903cf77e11e7650aeb6c54bd9b03f9746021defa54b176aa9ba15c69637"
     },
     {
       "file": "IMPLEMENTATION_PLAN_TH.md",
-      "bytes": 28574,
-      "sha256": "f15c2847901311a21d80425df63a6cf326e50c22b899b10bb7ad9ab2276853b1"
+      "bytes": 29056,
+      "sha256": "1fc373d6369a2333b41e969791f66b449d8f286438cd1e64775bc3150a747b88"
+    },
+    {
+      "file": "INTEGRATION_07_TH.md",
+      "bytes": 23373,
+      "sha256": "7c7089e2e8bda007817a91ee98c2ddb515d84f74cccd5d7dd5d4c7b28ef48285"
     },
     {
       "file": "LAYOUT_02_TH.md",
@@ -97,13 +102,13 @@
     },
     {
       "file": "QA_06_TH.md",
-      "bytes": 17108,
-      "sha256": "2aad679068bf5353dcc508b9a6900db58ef123f2d4fef08c25c9dbb288a2e000"
+      "bytes": 17329,
+      "sha256": "aa0668c5a0a5a581ce950a7162d49b50d2b57255284a3e8515023490af555093"
     },
     {
       "file": "README.md",
-      "bytes": 6319,
-      "sha256": "ee60aac71e69a5abec0a64f429284eaab98d5658234217e847af63f6cfeeba60"
+      "bytes": 6856,
+      "sha256": "ddff9e061ac014dafbc1e4ebdb914bbd4e9edc50f6d2cb5c90d51c4ceaa53253"
     },
     {
       "file": "REVIEW_TH.md",
@@ -200,6 +205,21 @@
       "file": "decor-04/validation-measurements.json",
       "bytes": 29308,
       "sha256": "36dba0d26357606b0957394e76ec8ad8dce7903ed208b59f567a42966fda2666"
+    },
+    {
+      "file": "integration-07/ACCEPTANCE_TH.md",
+      "bytes": 8697,
+      "sha256": "9ac3463175186f19b7bd193cf2e627c6668be572fcb93a091cdb1e7483aaa9f6"
+    },
+    {
+      "file": "integration-07/IMPLEMENTER_BRIEF_TH.md",
+      "bytes": 5203,
+      "sha256": "20ee2ddee81fc55e209d1473c70dd0cd4957a1b1f556ed02b0405d2940e195e4"
+    },
+    {
+      "file": "integration-07/runtime-map.json",
+      "bytes": 8303,
+      "sha256": "dfc698386aab167049bee57a0b3ada51fd42a67fd20d418963bd430b672f1afa"
     },
     {
       "file": "layout-02/asset-provenance.json",
@@ -641,5 +661,19 @@
     "production_transaction_tested": false,
     "real_device_tested": false,
     "fidelity_percent": null
+  },
+  "integration_07": {
+    "date": "2026-11-02",
+    "status": "handoff complete; runtime integration not performed",
+    "game_head_verified_via_github": "07f95a7f164b8b232c1c26edb0b4f31360df323f",
+    "design_baseline_commit": "73a7e57",
+    "source_paths_verified": 26,
+    "component_anchors_verified": 8,
+    "runtime_acceptance_items": 15,
+    "runtime_acceptance_status": "all pending implementation checks",
+    "runtime_changed": false,
+    "new_gameplay_tests_run": false,
+    "new_browser_tests_run": false,
+    "deployment_performed": false
   }
 }
