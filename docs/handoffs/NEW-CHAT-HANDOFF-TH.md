@@ -1,5 +1,10 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-11-02 — QA ขั้นที่6 เสร็จ (ยังไม่แก้เกม)
+
+เจ้าของสั่งต่อหลังPrototype ทำ [QA_06_TH.md](../../incoming/ART-UI-UX-002/QA_06_TH.md) ใน ART PR133 ปรับprototype320–480/desktopfit/text-only200/costreflow/guidanceจอเล็ก-แนวนอน ผ่านmatrix140+keyboard9+flowเดิม26 มีภาพ390normal/200และZIP06 ยังไม่มีgameintegration ช่องว่างภาพcurrencypaintedart/ornament/DPR2แยกไว้ชัด ขั้น7จัดhandoffruntime/asset/token/acceptanceก่อนเริ่มแก้เกม ไม่merge/deployหรือเปิดทุกหน้าพัฒนาพร้อมกัน
+
+
 ## 2026-11-02 — Prototype ขั้นที่5 เสร็จ (ยังไม่แก้เกม)
 
 เจ้าของสั่งต่อหลังDecor ทำ [PROTOTYPE_05_TH.md](../../incoming/ART-UI-UX-002/PROTOTYPE_05_TH.md) และprototype-05ใน ART PR133 กดready/review/success/insufficient/capped/picker/lock/details/returnmockได้ ใช้snapshot07f95a7และin-memorysimulation ไม่เชื่อมเซฟ/APIเกม Chromium26กลุ่มสองความสูงผ่าน มีPNG4ภาพและZIPbuilder ขั้นต่อไป6fidelity/responsive/200%/keyboard/จออื่น แล้ว7handoff ไม่merge/deployหรือเปิดทุกหน้าพัฒนาพร้อมกัน

@@ -14,6 +14,8 @@
 
 ขั้นที่ 5 เสร็จแล้ว: [PROTOTYPE_05_TH.md](PROTOTYPE_05_TH.md) และ [ต้นแบบกดใช้งาน](prototype-05/index.html) — ready/review/success/insufficient/capped, เลือกชิ้น/ล็อก/รายละเอียด/กลับต้นทาง พร้อมfixtureจากเกมและ26กลุ่มตรวจChromium; simulationในหน่วยความจำ ไม่เชื่อมเซฟเกม มีสคริปต์ทำZIPพกพา
 
+ขั้นที่ 6 เสร็จแล้ว: [QA_06_TH.md](QA_06_TH.md) — ปรับต้นแบบให้รองรับกว้าง320–480/desktop, text-only200%, short-frame cost reflow และคำแนะนำจอเล็ก/แนวนอน; responsive140กรณี + keyboard9กลุ่ม + flowเดิม26ผ่าน พร้อมรายการช่องว่างภาพที่ยังต่างArtwork ไม่แก้เกม
+
 - `01_development_concepts.png`: หน้าตีบวก, รวมงานสกิล, ทางเข้าพัฒนาตัวละคร
 - `02_forge_task_and_review.png`: หน้าเลือกงานโรงตีเหล็ก และการตรวจรายการหลอมสี
 - `03_character_star_upgrade.png`: หน้าอัปดาว ผล/ต้นทุน ตรวจรายการ และตัวซ้ำไม่พอ

@@ -72,8 +72,8 @@
     },
     {
       "file": "HANDOFF_TH.md",
-      "bytes": 13278,
-      "sha256": "b9b1bb748d3716422cdbd9efa553d89d91b62644a84ba64f486d0c840abee7c6"
+      "bytes": 14345,
+      "sha256": "c5902d4e5a8e52c1d216d25ab5d8af00283b48487a6e984542217ccf428453cb"
     },
     {
       "file": "IMPLEMENTATION_PLAN_TH.md",
@@ -92,13 +92,18 @@
     },
     {
       "file": "PROTOTYPE_05_TH.md",
-      "bytes": 15813,
-      "sha256": "791ce9bd34f0a2a4fe1fb16d93a91731e4e6be10b4f3c3f03b3a76166bd3c6f0"
+      "bytes": 16181,
+      "sha256": "e8f2325bca419f95c563b6534b1285fe19cea04028b388c84d88e9d27653fbd9"
+    },
+    {
+      "file": "QA_06_TH.md",
+      "bytes": 17108,
+      "sha256": "2aad679068bf5353dcc508b9a6900db58ef123f2d4fef08c25c9dbb288a2e000"
     },
     {
       "file": "README.md",
-      "bytes": 5817,
-      "sha256": "5e6b76abe19ad831537eca64a85afbfd0ded0912bb07c850767ac816c2151339"
+      "bytes": 6319,
+      "sha256": "ee60aac71e69a5abec0a64f429284eaab98d5658234217e847af63f6cfeeba60"
     },
     {
       "file": "REVIEW_TH.md",
@@ -318,13 +323,13 @@
     },
     {
       "file": "prototype-05/PORTABLE_README_TH.md",
-      "bytes": 2758,
-      "sha256": "f77c197a4ab267e8bf22c177b728599e9457b69316f623d8064f425e3ed17b0e"
+      "bytes": 2949,
+      "sha256": "beffbfce0e635fe2e0005160f566315c221cd155c9eb2f552e7d7fa81038defa"
     },
     {
       "file": "prototype-05/app.js",
-      "bytes": 17268,
-      "sha256": "95b1b265f5354a52736a9d94bc7c0092438044697d6e3f27213c299ba4f825c8"
+      "bytes": 19345,
+      "sha256": "16f882f7932c89fdce709cbe6f58eabdba75309d40294bf9d7a692ce56856290"
     },
     {
       "file": "prototype-05/base-layout.css",
@@ -353,8 +358,8 @@
     },
     {
       "file": "prototype-05/index.html",
-      "bytes": 2782,
-      "sha256": "c779ccfdba730bfbf2d66a4580e3c4fa8da4f3effcb71fa9b0cab68b6c2ef8b4"
+      "bytes": 3156,
+      "sha256": "1dd520aca95b2b129daa2a81eb2c59c0e6781b4ffc6c74b3033ee938d0f45964"
     },
     {
       "file": "prototype-05/make-portable.py",
@@ -363,8 +368,8 @@
     },
     {
       "file": "prototype-05/prototype.css",
-      "bytes": 2396,
-      "sha256": "92e20137577953e9446c9d44d21cdf60a4d01edd9de71af59ee744a2c31a3ee6"
+      "bytes": 5953,
+      "sha256": "ed22d61669300ac88670d93a13409564145941211c7821c18d7bbdd15238f079"
     },
     {
       "file": "prototype-05/ready-390x650.png",
@@ -386,8 +391,8 @@
     },
     {
       "file": "prototype-05/review-390x844.png",
-      "bytes": 222393,
-      "sha256": "d5a7f231102b18e0a3358ab0d4b8300d3bfbd539e268171fd276afd71d9ad85a",
+      "bytes": 222422,
+      "sha256": "f8c4a15f7bffdbdfc822412cfca5dcd6ed9f1663ff1f1c4c5d67343f38d8f413",
       "width": 390,
       "height": 844,
       "mode": "RGB",
@@ -395,8 +400,8 @@
     },
     {
       "file": "prototype-05/success-390x844.png",
-      "bytes": 218434,
-      "sha256": "efef5a2ed02508f126a6508f219c2eaabee274a6f72adf57307fc8fefe4764b2",
+      "bytes": 218417,
+      "sha256": "4f3ec7a43bd86c2fb11c09a7b087cef1efedb030c57ca938f399a98be21e7572",
       "width": 390,
       "height": 844,
       "mode": "RGB",
@@ -406,6 +411,44 @@
       "file": "prototype-05/validation-results.json",
       "bytes": 3338,
       "sha256": "f5282f47dc2b84be7ddadaf3561661f2d034cf84d0df3433d8b149e643777724"
+    },
+    {
+      "file": "qa-06/check-keyboard.cjs",
+      "bytes": 6420,
+      "sha256": "4f9dbf2900f4911f3814821f8225deb6640c5cbddd2ebd43011969ebde674597"
+    },
+    {
+      "file": "qa-06/check-responsive.cjs",
+      "bytes": 3327,
+      "sha256": "f6e637d575f583624cc7af3fd5d2c64dc3bf45833fe8a2f387981c4c8e570155"
+    },
+    {
+      "file": "qa-06/keyboard-results.json",
+      "bytes": 1027,
+      "sha256": "95b3ce5e2e2bc172db5bee4687ffee59daf94360cd4e0a687c41165dba973fbd"
+    },
+    {
+      "file": "qa-06/ready-390x650.png",
+      "bytes": 175875,
+      "sha256": "6eaf82781b4e6fa12cf57492584651d49a3c2e8664ba3f735cc22004ab99dba4",
+      "width": 390,
+      "height": 650,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "file": "qa-06/responsive-results.json",
+      "bytes": 128935,
+      "sha256": "940c3d2d70230b6669f7347ae40163040f2e9f4d7768457d09c112c598824a59"
+    },
+    {
+      "file": "qa-06/text200-390x650.png",
+      "bytes": 179729,
+      "sha256": "281db6c87973c37254fc27a65f77e79faa7b9d951c133b1cf1c4bff2ff001966",
+      "width": 390,
+      "height": 650,
+      "mode": "RGB",
+      "decoded": true
     },
     {
       "file": "visual-audit-01/enhance-ready-390x650.png",
@@ -559,5 +602,44 @@
     "runtime_changed": false,
     "production_transaction_tested": false,
     "real_device_tested": false
+  },
+  "qa_06": {
+    "date": "2026-11-02",
+    "status": "prototype QA and fixes; no game integration",
+    "baseline_commit": "d220b45",
+    "responsive_cases_passed": 140,
+    "keyboard_reflow_guidance_groups_passed": 9,
+    "regression_interaction_groups_passed": 26,
+    "viewports": [
+      [
+        320,
+        568
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        480,
+        844
+      ],
+      [
+        1366,
+        768
+      ]
+    ],
+    "text_scales": [
+      1,
+      2
+    ],
+    "text_scale_method": "CSS text-only; not native browser/OS scaling",
+    "runtime_changed": false,
+    "production_transaction_tested": false,
+    "real_device_tested": false,
+    "fidelity_percent": null
   }
 }

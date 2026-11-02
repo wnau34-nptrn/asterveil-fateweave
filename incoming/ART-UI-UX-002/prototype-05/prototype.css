@@ -31,3 +31,45 @@ a { color: #a3edff; }
 #phone .empty-dock { display: flex; align-items: flex-end; }
 #phone .empty-dock .actions { width: 100%; }
 @media(max-width:740px) { body { padding: 0; } .workbench { grid-template-columns: minmax(0,390px); gap: 20px; } .lab { padding: 16px; } #phone { width: 100%; } }
+/* QA06: available portrait width and text-only resize; image/hitbox sizes stay native. */
+.workbench { grid-template-columns: minmax(320px,480px) minmax(280px,380px); }
+#phone { width: 100%; --text-scale: 1; container-type: inline-size; container-name: prototype; font-size: calc(14px * var(--text-scale)); }
+#phone[hidden], #space-guidance[hidden] { display: none; }
+#phone .bar { height: auto; min-height: calc(60px + var(--safe-top)); padding-bottom: 7px; gap: 12px; }
+#phone .bar h3 { min-width: 0; overflow-wrap: anywhere; font-size: calc(20px * var(--text-scale)); line-height: calc(30px * var(--text-scale)); }
+#phone .bar button { flex: 0 0 44px; font-size: 24px; line-height: 26px; }
+#phone button { font-size: calc(14px * var(--text-scale)); line-height: calc(20px * var(--text-scale)); overflow-wrap: anywhere; }
+#phone .identity h3 { font-size: calc(18px * var(--text-scale)); line-height: calc(24px * var(--text-scale)); }
+#phone .meta, #phone .owner { font-size: calc(14px * var(--text-scale)); line-height: calc(20px * var(--text-scale)); overflow-wrap: anywhere; }
+#phone .tools button { min-width: 0; }
+#phone .art span { font-size: calc(14px * var(--text-scale)); }
+#phone .step strong { font-size: calc(32px * var(--text-scale)); line-height: calc(42px * var(--text-scale)); overflow-wrap: anywhere; }
+#phone .step p { font-size: calc(14px * var(--text-scale)); line-height: calc(22px * var(--text-scale)); }
+#phone .impact h3 { font-size: calc(16px * var(--text-scale)); line-height: calc(24px * var(--text-scale)); }
+#phone .impact p, #phone .disclosure p { font-size: calc(14px * var(--text-scale)); line-height: calc(22px * var(--text-scale)); }
+#phone .impact small { font-size: calc(12px * var(--text-scale)); line-height: calc(20px * var(--text-scale)); }
+#phone .disclosure summary { font-size: calc(14px * var(--text-scale)); line-height: calc(22px * var(--text-scale)); }
+#phone .detail-group h4 { font-size: calc(14px * var(--text-scale)); }
+#phone .stat-row { font-size: calc(14px * var(--text-scale)); overflow-wrap: anywhere; }
+#phone .resource { font-size: calc(14px * var(--text-scale)); line-height: calc(24px * var(--text-scale)); }
+#phone .remaining { font-size: calc(12px * var(--text-scale)); line-height: calc(20px * var(--text-scale)); }
+#phone .notice { font-size: calc(14px * var(--text-scale)); line-height: calc(24px * var(--text-scale)); }
+#phone .picker-option small { font-size: calc(12px * var(--text-scale)); }
+#phone .origin-search { font-size: calc(14px * var(--text-scale)); line-height: calc(22px * var(--text-scale)); }
+#phone.large-text .identity .art { grid-column: 1 / -1; justify-self: center; }
+#phone.large-text .identity > div:last-child { grid-column: 1 / -1; }
+#phone.large-text .identity h3 { min-height: 0; }
+#phone.large-text .stat-row { grid-template-columns: 1fr; gap: 2px; }
+#phone.large-text .stat-row > span:last-child { justify-self: end; }
+#phone.large-text.review .actions { flex-direction: column; }
+#phone.large-text.review .actions button { flex: none; width: 100%; }
+@media(max-width:740px) { .workbench { grid-template-columns: minmax(0,480px); } }
+@container prototype (max-width:360px) {
+ #phone.review .actions { flex-direction: column; }
+ #phone.review .actions button { flex: none; width: 100%; }
+}
+/* On a short frame at 200%, move cost text into the body instead of starving it. */
+#phone.compact-cost .dock { min-height: 0; }
+#phone.compact-cost .actions { margin-top: 0; }
+#phone .cost-summary { padding: 12px; }
+#phone .cost-summary .remaining { margin-top: 8px; }

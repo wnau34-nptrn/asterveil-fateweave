@@ -1,5 +1,12 @@
 # ส่งต่อ ART-UI-UX-002
 
+## 2026-11-02 — ขั้นที่6 Fidelity/responsive/keyboard เสร็จ (ไม่แก้เกม)
+
+อ่าน [QA_06_TH.md](QA_06_TH.md): แก้เฉพาะprototypeให้กว้างถึง480, autoheightdesktopหักmargin, text-only200%/intrinsicheader/verticalidentity/reviewactions, ย้ายcostเข้าbodyเมื่อ200%และกรอบสูง<720; จอเล็ก/มือถือแนวนอนซ่อนframeพร้อมinertโดยไม่เปลี่ยนreview/bank
+
+responsive140กรณีผ่าน(5viewport×2scale×2safe×7state/scenario), keyboard/reflow/guidance9ผ่าน, interactionเดิม26ผ่าน ไม่มีruntime/gameintegration ช่องว่างภาพที่เหลือcurrencypaintedart/รายละเอียดornament/DPR2assetต้องเก็บในhandoff ไม่อ้างpixelperfect ขั้นต่อไป7จัดสเปกนำเข้าเกมก่อนimplementationจริง
+
+
 ## 2026-11-02 — ขั้นที่5 ต้นแบบกดใช้งานเสร็จ (ไม่แก้เกม)
 
 อ่าน [PROTOTYPE_05_TH.md](PROTOTYPE_05_TH.md) และprototype-05/index.html: ใช้Layout2+Material3+Decor4, fixture snapshotsจาก07f95a7 (+4ถึง20), guardreview/stale/doubleclick/Enterค้าง, picker/lock/details/returncontext; หักทุนเฉพาะin-memorysimulation มีlabreset/ขนาดจอ/scenarioและZIPbuilder ไม่โหลดruleengine/save/APIเกมในbrowser

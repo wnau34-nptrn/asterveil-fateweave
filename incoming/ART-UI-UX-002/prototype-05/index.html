@@ -7,10 +7,12 @@
 <script defer src="fixtures.js"></script><script defer src="icons.js"></script><script defer src="app.js"></script>
 </head>
 <body><main class="workbench">
+<section id="space-guidance" class="lab" hidden aria-live="polite"><h1>ต้องการพื้นที่เพิ่ม</h1><p id="space-message"></p></section>
 <section id="phone" class="phone material decorated" aria-label="ต้นแบบหน้าต่างตีบวก" style="--height:844px"></section>
 <aside class="lab"><p class="tag">ASTER VEIL · FATEWEAVE / PROTOTYPE 05</p><h1>ทดลองหน้าตีบวก</h1><p>ข้อมูลจำลองในหน่วยความจำ ไม่เชื่อมเซฟหรือบัญชีเกม รีโหลดแล้วเริ่มใหม่</p>
 <label>ตัวอย่างเริ่มต้น<select id="scenario"><option value="ready">พร้อมตีบวก</option><option value="insufficient">ฝุ่นไม่พอ</option><option value="capped">ถึงเพดาน</option><option value="unowned">ไม่มีผู้สวม</option><option value="long">ชื่อยาว</option></select></label>
-<label>ความสูงหน้าจอ<select id="size"><option value="auto">ตามพื้นที่หน้าต่าง (สูงสุด844)</option><option value="844">390 × 844</option><option value="650">390 × 650</option></select></label>
+<label>ความสูงหน้าจอ<select id="size"><option value="auto">ตามพื้นที่หน้าต่าง (สูงสุด844)</option><option value="844">สูง 844px</option><option value="650">สูง 650px</option></select></label>
+<label>ขนาดข้อความ<select id="text-size"><option value="1">100%</option><option value="2">200% (ขยายเฉพาะข้อความ)</option></select></label>
 <label class="check"><input type="checkbox" id="safe"> จำลอง safe-area บน24 / ล่าง34</label>
 <button id="reset" type="button">เริ่มตัวอย่างใหม่</button><button id="change-bank" type="button">จำลองทุนเปลี่ยนระหว่างตรวจรายการ</button>
 <output id="lab-ledger" aria-live="polite"></output><p>ลอง: ตรวจรายการ → กลับไปแก้ไข → ยืนยัน → ดูขั้นถัดไป; เลือกชิ้น/ล็อก/เปิดรายละเอียด/ปิดกลับต้นทางได้ ใช้ Escape เพื่อย้อนกลับทีละชั้น</p><p><a href="../PROTOTYPE_05_TH.md">สเปกและข้อจำกัด</a> · <a href="../decor-04/index.html">แบบภาพขั้นที่4</a></p>

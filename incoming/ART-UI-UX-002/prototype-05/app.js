@@ -51,7 +51,7 @@ function enhanceDock(item) {
 function options() {return model.items.map(item=>`<button type="button" class="picker-option" data-uid="${item.uid}" aria-pressed="${model.uid===item.uid}">${escapeHTML(item.name)} +${item.plus}<small>#${item.uid} · ${item.owner?`สวมอยู่: ${item.owner}`:'ในคลัง'}${item.locked?' · ล็อกแล้ว':''}</small></button>`).join('');}
 function originList() {return model.items.filter(i=>`${i.name} ${i.uid}`.includes(model.origin.query)).map(i=>`<button type="button" class="picker-option" id="origin-item-${i.uid}" data-open="${i.uid}">${escapeHTML(i.name)} +${i.plus}<small>#${i.uid} · ${i.owner?`สวมอยู่: ${i.owner}`:'ในคลัง'} · เปิดพัฒนาอุปกรณ์</small></button>`).join('')||'<p>ไม่พบอุปกรณ์</p>';}
 function render(focusId,restoreScroll=false) {
- cancelAnimationFrame(pendingFocus);const item=current();frame.className=`phone material decorated ${model.view==='enhance'?model.phase:''} ${document.querySelector('#safe').checked?'safe':''}`;frame.dataset.view=model.view;frame.dataset.phase=model.phase;
+ cancelAnimationFrame(pendingFocus);const item=current();frame.className=`phone material decorated ${model.view==='enhance'?model.phase:''} ${document.querySelector('#safe').checked?'safe':''} ${document.querySelector('#text-size').value==='2'?'large-text':''}`;frame.dataset.view=model.view;frame.dataset.phase=model.phase;
  let body,dock;
  if(model.view==='enhance'){body=enhanceBody(item);dock=enhanceDock(item);}
  else if(model.view==='picker'){body=options();dock=`<div class="actions">${button('return','กลับไปชิ้นเดิม',true)}</div>`;}
@@ -61,9 +61,21 @@ function render(focusId,restoreScroll=false) {
  frame.querySelector('#close').setAttribute('aria-label',model.view==='origin'?'กลับหน้าตีบวก':'ปิดกลับต้นทาง');
  lab.textContent=`วัสดุจำลอง: แร่ ${model.bank.ore} · ฝุ่น ${model.bank.dust} | ยืนยันสำเร็จ ${model.commits} ครั้ง | ชิ้น #${model.uid} +${item.plus}`;
  const scroll=model.view==='origin'?model.origin.scroll:restoreScroll?model.scroll:0;frame.querySelector('.content').scrollTop=scroll;
- pendingFocus=requestAnimationFrame(()=>{fitWings();if(focusId){const target=frame.querySelector('#'+focusId);if(target)target.focus({preventScroll:true});}});
+ pendingFocus=requestAnimationFrame(()=>{layoutCosts();frame.querySelector('.content').scrollTop=scroll;fitWings();if(focusId){const target=frame.querySelector('#'+focusId);if(target)target.focus({preventScroll:true});}});
 }
-function fitWings() {const step=frame.querySelector('.step');if(!step)return;const caption=step.querySelector('.step-caption'),a=step.getBoundingClientRect(),b=caption.getBoundingClientRect();step.classList.toggle('hide-wings',b.left<a.left+52||b.right>a.right-52||b.height>24);}
+function layoutCosts() {
+ if(frame.hidden)return;
+ const footer=frame.querySelector('.dock'),body=frame.querySelector('.content');
+ const compact=frame.classList.contains('large-text')&&frame.clientHeight<720&&model.view==='enhance';
+ const old=frame.querySelector('.cost-summary');
+ if(compact&&!old){
+  const resources=footer.querySelector('.resources'),remaining=footer.querySelector('.remaining');if(!resources)return;
+  const section=document.createElement('section');section.className='card cost-summary';section.setAttribute('aria-label','ค่าใช้จ่ายและวัสดุ');section.append(resources,remaining);
+  if(model.phase==='review')body.prepend(section);else body.insertBefore(section,body.querySelector('#details'));
+ }else if(!compact&&old){const actions=footer.querySelector('.actions');footer.insertBefore(old.querySelector('.resources'),actions);footer.insertBefore(old.querySelector('.remaining'),actions);old.remove();}
+ frame.classList.toggle('compact-cost',compact);
+}
+function fitWings() {if(frame.hidden)return;const step=frame.querySelector('.step');if(!step)return;const caption=step.querySelector('.step-caption'),a=step.getBoundingClientRect(),b=caption.getBoundingClientRect();step.classList.toggle('hide-wings',b.left<a.left+52||b.right>a.right-52||b.height>24);}
 function openSelected(uid) {if(model.view==='origin')model.origin.focus=document.activeElement.id;model.origin.scroll=frame.querySelector('.content').scrollTop;model.uid=uid;model.view='enhance';model.phase='ready';model.result=null;model.message='';model.review=null;render('heading');}
 function back() {
  if(model.view==='picker'||model.view==='other'){model.view='enhance';render(model.returnFocus||'pick',true);}
@@ -95,9 +107,19 @@ frame.addEventListener('change',event=>{if(event.target.id==='origin-tab')model.
 document.querySelector('#scenario').addEventListener('change',reset);
 document.querySelector('#reset').addEventListener('click',reset);
 document.querySelector('#change-bank').addEventListener('click',()=>{model.bank.dust=Math.max(0,model.bank.dust-1);model.revision++;if(model.phase==='review'){lab.textContent=`ทุนเปลี่ยนแล้ว: ฝุ่น ${model.bank.dust} · ลองยืนยันเพื่อตรวจรายการใหม่`;}else render();});
-function resize() {const choice=document.querySelector('#size').value;frame.style.setProperty('--height',(choice==='auto'?Math.min(844,window.innerHeight):+choice)+'px');fitWings();}
+function resize() {
+ const coarse=window.matchMedia('(pointer:coarse)').matches;
+ const landscape=coarse&&window.innerWidth>window.innerHeight;
+ const tooSmall=window.innerWidth<320||window.innerHeight<560;
+ const blocked=landscape||tooSmall;const guidance=document.querySelector('#space-guidance');
+ frame.hidden=blocked;frame.inert=blocked;guidance.hidden=!blocked;
+ document.querySelector('#space-message').textContent=landscape?'หมุนหน้าจอเป็นแนวตั้งเพื่อทดลองต่อ':'ใช้พื้นที่อย่างน้อย 320 × 560px เพื่อทดลองต่อ';
+ const choice=document.querySelector('#size').value;const margin=window.innerWidth>740?48:0;
+ frame.style.setProperty('--height',(choice==='auto'?Math.min(844,window.innerHeight-margin):+choice)+'px');layoutCosts();fitWings();
+}
 document.querySelector('#size').addEventListener('change',resize);
+document.querySelector('#text-size').addEventListener('change',()=>{remember();frame.style.setProperty('--text-scale',document.querySelector('#text-size').value);render(undefined,true);});
 document.querySelector('#safe').addEventListener('change',()=>{remember();render(undefined,true);});
-window.addEventListener('resize',resize);new ResizeObserver(fitWings).observe(frame);document.fonts.ready.then(fitWings);
+window.addEventListener('resize',resize);new ResizeObserver(()=>{layoutCosts();fitWings();}).observe(frame);document.fonts.ready.then(fitWings);
 Object.defineProperty(window,'prototypeSnapshot',{get:()=>structuredClone(model)});
 reset();resize();

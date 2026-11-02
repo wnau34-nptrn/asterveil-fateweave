@@ -1,5 +1,21 @@
 # Codex → Claude handoff
 
+## 2026-11-02 — ขั้นที่6 Fidelity/responsive/keyboard ของต้นแบบ (ไม่แก้เกม)
+
+- เจ้าของสั่ง “ดำเนินการ” หลังPrototype5 ทำQAขั้น6และแก้เฉพาะต้นแบบ; branch `art/art-ui-ux-002`, Draft PR #133 ไม่มีmerge/deployเกม
+- เพิ่ม [QA_06_TH.md](../../incoming/ART-UI-UX-002/QA_06_TH.md), qa-06/check-responsive/check-keyboard/reportJSON2/PNG390normal+200; อัปเดตprototype-05/{index,app,prototypeCSS,portableREADME,ผลflow/ภาพ}, README/HANDOFF/Prototype/validation
+- พบ480ใช้390, desktopกรอบเกินviewport24px, probe200headerติดขอบ และreview320×568/200%เบียดbodyเหลือ33/ล้นเมื่อsafe; แก้maxwidth480/autodesktop720/intrinsicheader/textscale/reflowcost
+- 200%เพิ่มเฉพาะข้อความผ่านCSSvar รูปยัง96; identityแนวตั้ง/reviewactionsเรียง, กรอบสูง<720ย้ายcostเข้าbodyและreviewวางcostต้นbody actionsคงdock; captionguard/ResizeObserverใช้ต่อ
+- เพิ่มguidanceเมื่อwindow<320×560หรือcoarse landscape: hidden+inert frameโดยไม่เปลี่ยนmodelreview/bank; ไม่คัดlab/mediaqueryไปgameจริง
+- Chromiumresponsive140กรณีผ่าน (320568/390650/390844/480844/1366768 ×scale1/2 ×safe0/24-34 ×7state/scenario), keyboard/reflow/guidance9ผ่าน; touchinteractionเดิม26ผ่านหลังแก้ พร้อมsyntaxcheck
+- Matrixเป็นviewport/finepointer; touch26และcoarselandscapeแยกชัด ไม่มีผลOSfont/browsernativezoom/Safari/เครื่องจริง/screenreader/ผู้เล่นจริงหรือproductiontransaction; ไม่อ้างWCAG/คะแนนpixel-fidelity
+- ดูArtwork01และภาพready390normal/200แล้ว ผลหลักลำดับ/materialเข้าทิศทาง แต่currencyยังlineicon/ornamenttechnicalลดรายละเอียด/gear128sourceยังresampleDPR2; ห้ามปลอมheroค่าdeltaหรือประกาศผลิตpaintedcurrencyแล้ว
+- ชุดพกพาปรับใหม่ /workspace/artifacts/fateweave-enhancement-prototype-06.zip ผ่านbuilderเดิม มีREADMEการทดสอบเพิ่ม; เก็บartifact05เดิมไว้ ไม่publishเกม
+- สคริปต์รอfonts/layout2framesและscrollหน้าlabกลับก่อนวัด ป้องกันนับframeyติดลบจากlabเป็นoverflow; แก้ต้นแบบตามข้อพบจริงแล้วrerunผ่าน ไม่เอาharnessraceเป็นproductfinding
+- ไม่แตะsrc/tests/public/core/save/กฎ/ราคา/fixturesตัวเลขเดิม เก็บในART PR133 ฝากนำhandoffตามไปเมื่อintegrationจริง
+- ขั้น7ถัดไปจัดmappingtoken/asset/runtimeไฟล์และเกณฑ์acceptance/rollout ยังไม่เริ่มimplementationเกมหรือขยายทุกหน้าดาว/สกิล/อุปกรณ์อื่น
+
+
 ## 2026-11-02 — ขั้นที่5 ต้นแบบตีบวกกดใช้งานแยกจากเกม
 
 - เจ้าของสั่ง “ดำเนินการต่อได้” หลังDecor4 ทำprototypeขั้น5เท่านั้น ขอบเขตยังไม่แก้เกม

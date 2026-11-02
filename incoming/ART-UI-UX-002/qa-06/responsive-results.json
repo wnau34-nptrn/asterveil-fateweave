@@ -1,0 +1,6645 @@
+{
+  "cases": [
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 320,
+          "height": 339,
+          "right": 320,
+          "bottom": 399
+        },
+        "dock": {
+          "x": 0,
+          "y": 399,
+          "width": 320,
+          "height": 169,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 320,
+          "height": 283,
+          "right": 320,
+          "bottom": 343
+        },
+        "dock": {
+          "x": 0,
+          "y": 343,
+          "width": 320,
+          "height": 225,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          48,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 320,
+          "height": 339,
+          "right": 320,
+          "bottom": 399
+        },
+        "dock": {
+          "x": 0,
+          "y": 399,
+          "width": 320,
+          "height": 169,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": false,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 320,
+          "height": 339,
+          "right": 320,
+          "bottom": 399
+        },
+        "dock": {
+          "x": 0,
+          "y": 399,
+          "width": 320,
+          "height": 169,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": false,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 320,
+          "height": 339,
+          "right": 320,
+          "bottom": 399
+        },
+        "dock": {
+          "x": 0,
+          "y": 399,
+          "width": 320,
+          "height": 169,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": false,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 320,
+          "height": 339,
+          "right": 320,
+          "bottom": 399
+        },
+        "dock": {
+          "x": 0,
+          "y": 399,
+          "width": 320,
+          "height": 169,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": false,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 320,
+          "height": 339,
+          "right": 320,
+          "bottom": 399
+        },
+        "dock": {
+          "x": 0,
+          "y": 399,
+          "width": 320,
+          "height": 169,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 320,
+          "height": 281,
+          "right": 320,
+          "bottom": 365
+        },
+        "dock": {
+          "x": 0,
+          "y": 365,
+          "width": 320,
+          "height": 203,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 320,
+          "height": 225,
+          "right": 320,
+          "bottom": 309
+        },
+        "dock": {
+          "x": 0,
+          "y": 309,
+          "width": 320,
+          "height": 259,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          48,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 320,
+          "height": 281,
+          "right": 320,
+          "bottom": 365
+        },
+        "dock": {
+          "x": 0,
+          "y": 365,
+          "width": 320,
+          "height": 203,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": true,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 320,
+          "height": 281,
+          "right": 320,
+          "bottom": 365
+        },
+        "dock": {
+          "x": 0,
+          "y": 365,
+          "width": 320,
+          "height": 203,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": true,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 320,
+          "height": 281,
+          "right": 320,
+          "bottom": 365
+        },
+        "dock": {
+          "x": 0,
+          "y": 365,
+          "width": 320,
+          "height": 203,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": true,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 320,
+          "height": 281,
+          "right": 320,
+          "bottom": 365
+        },
+        "dock": {
+          "x": 0,
+          "y": 365,
+          "width": 320,
+          "height": 203,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "safe": true,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 320,
+          "height": 281,
+          "right": 320,
+          "bottom": 365
+        },
+        "dock": {
+          "x": 0,
+          "y": 365,
+          "width": 320,
+          "height": 203,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 320,
+          "height": 369,
+          "right": 320,
+          "bottom": 445
+        },
+        "dock": {
+          "x": 0,
+          "y": 445,
+          "width": 320,
+          "height": 123,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          108,
+          58,
+          98
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 136,
+          "width": 320,
+          "height": 283,
+          "right": 320,
+          "bottom": 419
+        },
+        "dock": {
+          "x": 0,
+          "y": 419,
+          "width": 320,
+          "height": 149,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          108,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 320,
+          "height": 409,
+          "right": 320,
+          "bottom": 485
+        },
+        "dock": {
+          "x": 0,
+          "y": 485,
+          "width": 320,
+          "height": 83,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          108,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": false,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 320,
+          "height": 369,
+          "right": 320,
+          "bottom": 445
+        },
+        "dock": {
+          "x": 0,
+          "y": 445,
+          "width": 320,
+          "height": 123,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          108,
+          58,
+          98
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": false,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 320,
+          "height": 409,
+          "right": 320,
+          "bottom": 485
+        },
+        "dock": {
+          "x": 0,
+          "y": 485,
+          "width": 320,
+          "height": 83,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          108,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": false,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 320,
+          "height": 369,
+          "right": 320,
+          "bottom": 445
+        },
+        "dock": {
+          "x": 0,
+          "y": 445,
+          "width": 320,
+          "height": 123,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          108,
+          58,
+          98
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": false,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 320,
+          "height": 369,
+          "right": 320,
+          "bottom": 445
+        },
+        "dock": {
+          "x": 0,
+          "y": 445,
+          "width": 320,
+          "height": 123,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          108,
+          58,
+          98
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 320,
+          "height": 311,
+          "right": 320,
+          "bottom": 411
+        },
+        "dock": {
+          "x": 0,
+          "y": 411,
+          "width": 320,
+          "height": 157,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          108,
+          58,
+          98
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 160,
+          "width": 320,
+          "height": 225,
+          "right": 320,
+          "bottom": 385
+        },
+        "dock": {
+          "x": 0,
+          "y": 385,
+          "width": 320,
+          "height": 183,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          108,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 320,
+          "height": 351,
+          "right": 320,
+          "bottom": 451
+        },
+        "dock": {
+          "x": 0,
+          "y": 451,
+          "width": 320,
+          "height": 117,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          108,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": true,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 320,
+          "height": 311,
+          "right": 320,
+          "bottom": 411
+        },
+        "dock": {
+          "x": 0,
+          "y": 411,
+          "width": 320,
+          "height": 157,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          108,
+          58,
+          98
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": true,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 320,
+          "height": 351,
+          "right": 320,
+          "bottom": 451
+        },
+        "dock": {
+          "x": 0,
+          "y": 451,
+          "width": 320,
+          "height": 117,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          108,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": true,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 320,
+          "height": 311,
+          "right": 320,
+          "bottom": 411
+        },
+        "dock": {
+          "x": 0,
+          "y": 411,
+          "width": 320,
+          "height": 157,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          108,
+          58,
+          98
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "scale": 2,
+      "safe": true,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 320,
+          "height": 568,
+          "right": 320,
+          "bottom": 568
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 320,
+          "height": 311,
+          "right": 320,
+          "bottom": 411
+        },
+        "dock": {
+          "x": 0,
+          "y": 411,
+          "width": 320,
+          "height": 157,
+          "right": 320,
+          "bottom": 568
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          108,
+          58,
+          98
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 421,
+          "right": 390,
+          "bottom": 481
+        },
+        "dock": {
+          "x": 0,
+          "y": 481,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 421,
+          "right": 390,
+          "bottom": 481
+        },
+        "dock": {
+          "x": 0,
+          "y": 481,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          48,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 421,
+          "right": 390,
+          "bottom": 481
+        },
+        "dock": {
+          "x": 0,
+          "y": 481,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": false,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 421,
+          "right": 390,
+          "bottom": 481
+        },
+        "dock": {
+          "x": 0,
+          "y": 481,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": false,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 421,
+          "right": 390,
+          "bottom": 481
+        },
+        "dock": {
+          "x": 0,
+          "y": 481,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": false,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 421,
+          "right": 390,
+          "bottom": 481
+        },
+        "dock": {
+          "x": 0,
+          "y": 481,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": false,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 421,
+          "right": 390,
+          "bottom": 481
+        },
+        "dock": {
+          "x": 0,
+          "y": 481,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 363,
+          "right": 390,
+          "bottom": 447
+        },
+        "dock": {
+          "x": 0,
+          "y": 447,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 363,
+          "right": 390,
+          "bottom": 447
+        },
+        "dock": {
+          "x": 0,
+          "y": 447,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          48,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 363,
+          "right": 390,
+          "bottom": 447
+        },
+        "dock": {
+          "x": 0,
+          "y": 447,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": true,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 363,
+          "right": 390,
+          "bottom": 447
+        },
+        "dock": {
+          "x": 0,
+          "y": 447,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": true,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 363,
+          "right": 390,
+          "bottom": 447
+        },
+        "dock": {
+          "x": 0,
+          "y": 447,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": true,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 363,
+          "right": 390,
+          "bottom": 447
+        },
+        "dock": {
+          "x": 0,
+          "y": 447,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 1,
+      "safe": true,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 363,
+          "right": 390,
+          "bottom": 447
+        },
+        "dock": {
+          "x": 0,
+          "y": 447,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 390,
+          "height": 491,
+          "right": 390,
+          "bottom": 567
+        },
+        "dock": {
+          "x": 0,
+          "y": 567,
+          "width": 390,
+          "height": 83,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 136,
+          "width": 390,
+          "height": 365,
+          "right": 390,
+          "bottom": 501
+        },
+        "dock": {
+          "x": 0,
+          "y": 501,
+          "width": 390,
+          "height": 149,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 390,
+          "height": 491,
+          "right": 390,
+          "bottom": 567
+        },
+        "dock": {
+          "x": 0,
+          "y": 567,
+          "width": 390,
+          "height": 83,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": false,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 390,
+          "height": 491,
+          "right": 390,
+          "bottom": 567
+        },
+        "dock": {
+          "x": 0,
+          "y": 567,
+          "width": 390,
+          "height": 83,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": false,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 390,
+          "height": 491,
+          "right": 390,
+          "bottom": 567
+        },
+        "dock": {
+          "x": 0,
+          "y": 567,
+          "width": 390,
+          "height": 83,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": false,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 390,
+          "height": 491,
+          "right": 390,
+          "bottom": 567
+        },
+        "dock": {
+          "x": 0,
+          "y": 567,
+          "width": 390,
+          "height": 83,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": false,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 390,
+          "height": 491,
+          "right": 390,
+          "bottom": 567
+        },
+        "dock": {
+          "x": 0,
+          "y": 567,
+          "width": 390,
+          "height": 83,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 390,
+          "height": 433,
+          "right": 390,
+          "bottom": 533
+        },
+        "dock": {
+          "x": 0,
+          "y": 533,
+          "width": 390,
+          "height": 117,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 160,
+          "width": 390,
+          "height": 307,
+          "right": 390,
+          "bottom": 467
+        },
+        "dock": {
+          "x": 0,
+          "y": 467,
+          "width": 390,
+          "height": 183,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 390,
+          "height": 433,
+          "right": 390,
+          "bottom": 533
+        },
+        "dock": {
+          "x": 0,
+          "y": 533,
+          "width": 390,
+          "height": 117,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": true,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 390,
+          "height": 433,
+          "right": 390,
+          "bottom": 533
+        },
+        "dock": {
+          "x": 0,
+          "y": 533,
+          "width": 390,
+          "height": 117,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": true,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 390,
+          "height": 433,
+          "right": 390,
+          "bottom": 533
+        },
+        "dock": {
+          "x": 0,
+          "y": 533,
+          "width": 390,
+          "height": 117,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": true,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 390,
+          "height": 433,
+          "right": 390,
+          "bottom": 533
+        },
+        "dock": {
+          "x": 0,
+          "y": 533,
+          "width": 390,
+          "height": 117,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 650,
+      "scale": 2,
+      "safe": true,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 650,
+          "right": 390,
+          "bottom": 650
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 390,
+          "height": 433,
+          "right": 390,
+          "bottom": 533
+        },
+        "dock": {
+          "x": 0,
+          "y": 533,
+          "width": 390,
+          "height": 117,
+          "right": 390,
+          "bottom": 650
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 615,
+          "right": 390,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 615,
+          "right": 390,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          48,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 615,
+          "right": 390,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 615,
+          "right": 390,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 615,
+          "right": 390,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 615,
+          "right": 390,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 390,
+          "height": 615,
+          "right": 390,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 390,
+          "height": 169,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 557,
+          "right": 390,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 557,
+          "right": 390,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          48,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 557,
+          "right": 390,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 557,
+          "right": 390,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 557,
+          "right": 390,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 557,
+          "right": 390,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 390,
+          "height": 557,
+          "right": 390,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 390,
+          "height": 203,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 390,
+          "height": 523,
+          "right": 390,
+          "bottom": 599
+        },
+        "dock": {
+          "x": 0,
+          "y": 599,
+          "width": 390,
+          "height": 245,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 136,
+          "width": 390,
+          "height": 357,
+          "right": 390,
+          "bottom": 493
+        },
+        "dock": {
+          "x": 0,
+          "y": 493,
+          "width": 390,
+          "height": 351,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 390,
+          "height": 523,
+          "right": 390,
+          "bottom": 599
+        },
+        "dock": {
+          "x": 0,
+          "y": 599,
+          "width": 390,
+          "height": 245,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 390,
+          "height": 523,
+          "right": 390,
+          "bottom": 599
+        },
+        "dock": {
+          "x": 0,
+          "y": 599,
+          "width": 390,
+          "height": 245,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 390,
+          "height": 523,
+          "right": 390,
+          "bottom": 599
+        },
+        "dock": {
+          "x": 0,
+          "y": 599,
+          "width": 390,
+          "height": 245,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 390,
+          "height": 523,
+          "right": 390,
+          "bottom": 599
+        },
+        "dock": {
+          "x": 0,
+          "y": 599,
+          "width": 390,
+          "height": 245,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 390,
+          "height": 523,
+          "right": 390,
+          "bottom": 599
+        },
+        "dock": {
+          "x": 0,
+          "y": 599,
+          "width": 390,
+          "height": 245,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 390,
+          "height": 465,
+          "right": 390,
+          "bottom": 565
+        },
+        "dock": {
+          "x": 0,
+          "y": 565,
+          "width": 390,
+          "height": 279,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 160,
+          "width": 390,
+          "height": 299,
+          "right": 390,
+          "bottom": 459
+        },
+        "dock": {
+          "x": 0,
+          "y": 459,
+          "width": 390,
+          "height": 385,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 390,
+          "height": 465,
+          "right": 390,
+          "bottom": 565
+        },
+        "dock": {
+          "x": 0,
+          "y": 565,
+          "width": 390,
+          "height": 279,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 390,
+          "height": 465,
+          "right": 390,
+          "bottom": 565
+        },
+        "dock": {
+          "x": 0,
+          "y": 565,
+          "width": 390,
+          "height": 279,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 390,
+          "height": 465,
+          "right": 390,
+          "bottom": 565
+        },
+        "dock": {
+          "x": 0,
+          "y": 565,
+          "width": 390,
+          "height": 279,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 390,
+          "height": 465,
+          "right": 390,
+          "bottom": 565
+        },
+        "dock": {
+          "x": 0,
+          "y": 565,
+          "width": 390,
+          "height": 279,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844,
+          "right": 390,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 390,
+          "height": 465,
+          "right": 390,
+          "bottom": 565
+        },
+        "dock": {
+          "x": 0,
+          "y": 565,
+          "width": 390,
+          "height": 279,
+          "right": 390,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 480,
+          "height": 615,
+          "right": 480,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 480,
+          "height": 169,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 480,
+          "height": 615,
+          "right": 480,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 480,
+          "height": 169,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          48,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 480,
+          "height": 615,
+          "right": 480,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 480,
+          "height": 169,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 480,
+          "height": 615,
+          "right": 480,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 480,
+          "height": 169,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 480,
+          "height": 615,
+          "right": 480,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 480,
+          "height": 169,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 480,
+          "height": 615,
+          "right": 480,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 480,
+          "height": 169,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": false,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 60,
+          "width": 480,
+          "height": 615,
+          "right": 480,
+          "bottom": 675
+        },
+        "dock": {
+          "x": 0,
+          "y": 675,
+          "width": 480,
+          "height": 169,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 480,
+          "height": 557,
+          "right": 480,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 480,
+          "height": 203,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 480,
+          "height": 557,
+          "right": 480,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 480,
+          "height": 203,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          48,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 480,
+          "height": 557,
+          "right": 480,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 480,
+          "height": 203,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 480,
+          "height": 557,
+          "right": 480,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 480,
+          "height": 203,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 480,
+          "height": 557,
+          "right": 480,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 480,
+          "height": 203,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 480,
+          "height": 557,
+          "right": 480,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 480,
+          "height": 203,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 1,
+      "safe": true,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 84,
+          "width": 480,
+          "height": 557,
+          "right": 480,
+          "bottom": 641
+        },
+        "dock": {
+          "x": 0,
+          "y": 641,
+          "width": 480,
+          "height": 203,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 480,
+          "height": 523,
+          "right": 480,
+          "bottom": 599
+        },
+        "dock": {
+          "x": 0,
+          "y": 599,
+          "width": 480,
+          "height": 245,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 480,
+          "height": 457,
+          "right": 480,
+          "bottom": 533
+        },
+        "dock": {
+          "x": 0,
+          "y": 533,
+          "width": 480,
+          "height": 311,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 480,
+          "height": 523,
+          "right": 480,
+          "bottom": 599
+        },
+        "dock": {
+          "x": 0,
+          "y": 599,
+          "width": 480,
+          "height": 245,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 480,
+          "height": 523,
+          "right": 480,
+          "bottom": 599
+        },
+        "dock": {
+          "x": 0,
+          "y": 599,
+          "width": 480,
+          "height": 245,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 480,
+          "height": 523,
+          "right": 480,
+          "bottom": 599
+        },
+        "dock": {
+          "x": 0,
+          "y": 599,
+          "width": 480,
+          "height": 245,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 480,
+          "height": 523,
+          "right": 480,
+          "bottom": 599
+        },
+        "dock": {
+          "x": 0,
+          "y": 599,
+          "width": 480,
+          "height": 245,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": false,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 76,
+          "width": 480,
+          "height": 523,
+          "right": 480,
+          "bottom": 599
+        },
+        "dock": {
+          "x": 0,
+          "y": 599,
+          "width": 480,
+          "height": 245,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 480,
+          "height": 465,
+          "right": 480,
+          "bottom": 565
+        },
+        "dock": {
+          "x": 0,
+          "y": 565,
+          "width": 480,
+          "height": 279,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 480,
+          "height": 399,
+          "right": 480,
+          "bottom": 499
+        },
+        "dock": {
+          "x": 0,
+          "y": 499,
+          "width": 480,
+          "height": 345,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 480,
+          "height": 465,
+          "right": 480,
+          "bottom": 565
+        },
+        "dock": {
+          "x": 0,
+          "y": 565,
+          "width": 480,
+          "height": 279,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 480,
+          "height": 465,
+          "right": 480,
+          "bottom": 565
+        },
+        "dock": {
+          "x": 0,
+          "y": 565,
+          "width": 480,
+          "height": 279,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 480,
+          "height": 465,
+          "right": 480,
+          "bottom": 565
+        },
+        "dock": {
+          "x": 0,
+          "y": 565,
+          "width": 480,
+          "height": 279,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 480,
+          "height": 465,
+          "right": 480,
+          "bottom": 565
+        },
+        "dock": {
+          "x": 0,
+          "y": 565,
+          "width": 480,
+          "height": 279,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 480,
+      "height": 844,
+      "scale": 2,
+      "safe": true,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 480,
+          "height": 844,
+          "right": 480,
+          "bottom": 844
+        },
+        "body": {
+          "x": 0,
+          "y": 100,
+          "width": 480,
+          "height": 465,
+          "right": 480,
+          "bottom": 565
+        },
+        "dock": {
+          "x": 0,
+          "y": 565,
+          "width": 480,
+          "height": 279,
+          "right": 480,
+          "bottom": 844
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 84,
+          "width": 480,
+          "height": 491,
+          "right": 717,
+          "bottom": 575
+        },
+        "dock": {
+          "x": 237,
+          "y": 575,
+          "width": 480,
+          "height": 169,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 84,
+          "width": 480,
+          "height": 491,
+          "right": 717,
+          "bottom": 575
+        },
+        "dock": {
+          "x": 237,
+          "y": 575,
+          "width": 480,
+          "height": 169,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          48,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 84,
+          "width": 480,
+          "height": 491,
+          "right": 717,
+          "bottom": 575
+        },
+        "dock": {
+          "x": 237,
+          "y": 575,
+          "width": 480,
+          "height": 169,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": false,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 84,
+          "width": 480,
+          "height": 491,
+          "right": 717,
+          "bottom": 575
+        },
+        "dock": {
+          "x": 237,
+          "y": 575,
+          "width": 480,
+          "height": 169,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": false,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 84,
+          "width": 480,
+          "height": 491,
+          "right": 717,
+          "bottom": 575
+        },
+        "dock": {
+          "x": 237,
+          "y": 575,
+          "width": 480,
+          "height": 169,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": false,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 84,
+          "width": 480,
+          "height": 491,
+          "right": 717,
+          "bottom": 575
+        },
+        "dock": {
+          "x": 237,
+          "y": 575,
+          "width": 480,
+          "height": 169,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": false,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 84,
+          "width": 480,
+          "height": 491,
+          "right": 717,
+          "bottom": 575
+        },
+        "dock": {
+          "x": 237,
+          "y": 575,
+          "width": 480,
+          "height": 169,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 108,
+          "width": 480,
+          "height": 433,
+          "right": 717,
+          "bottom": 541
+        },
+        "dock": {
+          "x": 237,
+          "y": 541,
+          "width": 480,
+          "height": 203,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 108,
+          "width": 480,
+          "height": 433,
+          "right": 717,
+          "bottom": 541
+        },
+        "dock": {
+          "x": 237,
+          "y": 541,
+          "width": 480,
+          "height": 203,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          48,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 108,
+          "width": 480,
+          "height": 433,
+          "right": 717,
+          "bottom": 541
+        },
+        "dock": {
+          "x": 237,
+          "y": 541,
+          "width": 480,
+          "height": 203,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": true,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 108,
+          "width": 480,
+          "height": 433,
+          "right": 717,
+          "bottom": 541
+        },
+        "dock": {
+          "x": 237,
+          "y": 541,
+          "width": 480,
+          "height": 203,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": true,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 108,
+          "width": 480,
+          "height": 433,
+          "right": 717,
+          "bottom": 541
+        },
+        "dock": {
+          "x": 237,
+          "y": 541,
+          "width": 480,
+          "height": 203,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": true,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 108,
+          "width": 480,
+          "height": 433,
+          "right": 717,
+          "bottom": 541
+        },
+        "dock": {
+          "x": 237,
+          "y": 541,
+          "width": 480,
+          "height": 203,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 1,
+      "safe": true,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 108,
+          "width": 480,
+          "height": 433,
+          "right": 717,
+          "bottom": 541
+        },
+        "dock": {
+          "x": 237,
+          "y": 541,
+          "width": 480,
+          "height": 203,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          44,
+          44,
+          44,
+          44,
+          48
+        ],
+        "font": "14px",
+        "wingsHidden": false
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 100,
+          "width": 480,
+          "height": 399,
+          "right": 717,
+          "bottom": 499
+        },
+        "dock": {
+          "x": 237,
+          "y": 499,
+          "width": 480,
+          "height": 245,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 100,
+          "width": 480,
+          "height": 333,
+          "right": 717,
+          "bottom": 433
+        },
+        "dock": {
+          "x": 237,
+          "y": 433,
+          "width": 480,
+          "height": 311,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": false,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 100,
+          "width": 480,
+          "height": 399,
+          "right": 717,
+          "bottom": 499
+        },
+        "dock": {
+          "x": 237,
+          "y": 499,
+          "width": 480,
+          "height": 245,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": false,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 100,
+          "width": 480,
+          "height": 399,
+          "right": 717,
+          "bottom": 499
+        },
+        "dock": {
+          "x": 237,
+          "y": 499,
+          "width": 480,
+          "height": 245,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": false,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 100,
+          "width": 480,
+          "height": 399,
+          "right": 717,
+          "bottom": 499
+        },
+        "dock": {
+          "x": 237,
+          "y": 499,
+          "width": 480,
+          "height": 245,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": false,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 100,
+          "width": 480,
+          "height": 399,
+          "right": 717,
+          "bottom": 499
+        },
+        "dock": {
+          "x": 237,
+          "y": 499,
+          "width": 480,
+          "height": 245,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": false,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 100,
+          "width": 480,
+          "height": 399,
+          "right": 717,
+          "bottom": 499
+        },
+        "dock": {
+          "x": 237,
+          "y": 499,
+          "width": 480,
+          "height": 245,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 124,
+          "width": 480,
+          "height": 341,
+          "right": 717,
+          "bottom": 465
+        },
+        "dock": {
+          "x": 237,
+          "y": 465,
+          "width": 480,
+          "height": 279,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "review",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 124,
+          "width": 480,
+          "height": 275,
+          "right": 717,
+          "bottom": 399
+        },
+        "dock": {
+          "x": 237,
+          "y": 399,
+          "width": 480,
+          "height": 345,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": true,
+      "scenario": "ready",
+      "phase": "success",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 124,
+          "width": 480,
+          "height": 341,
+          "right": 717,
+          "bottom": 465
+        },
+        "dock": {
+          "x": 237,
+          "y": 465,
+          "width": 480,
+          "height": 279,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": true,
+      "scenario": "insufficient",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 124,
+          "width": 480,
+          "height": 341,
+          "right": 717,
+          "bottom": 465
+        },
+        "dock": {
+          "x": 237,
+          "y": 465,
+          "width": 480,
+          "height": 279,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": true,
+      "scenario": "capped",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 124,
+          "width": 480,
+          "height": 341,
+          "right": 717,
+          "bottom": 465
+        },
+        "dock": {
+          "x": 237,
+          "y": 465,
+          "width": 480,
+          "height": 279,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": true,
+      "scenario": "unowned",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 124,
+          "width": 480,
+          "height": 341,
+          "right": 717,
+          "bottom": 465
+        },
+        "dock": {
+          "x": 237,
+          "y": 465,
+          "width": 480,
+          "height": 279,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "scale": 2,
+      "safe": true,
+      "scenario": "long",
+      "phase": "ready",
+      "passed": true,
+      "failures": [],
+      "metrics": {
+        "frame": {
+          "x": 237,
+          "y": 24,
+          "width": 480,
+          "height": 720,
+          "right": 717,
+          "bottom": 744
+        },
+        "body": {
+          "x": 237,
+          "y": 124,
+          "width": 480,
+          "height": 341,
+          "right": 717,
+          "bottom": 465
+        },
+        "dock": {
+          "x": 237,
+          "y": 465,
+          "width": 480,
+          "height": 279,
+          "right": 717,
+          "bottom": 744
+        },
+        "titleInside": true,
+        "overflow": [],
+        "targets": [
+          44,
+          58,
+          58,
+          64,
+          58,
+          58
+        ],
+        "font": "28px",
+        "wingsHidden": true
+      }
+    }
+  ],
+  "errors": []
+}

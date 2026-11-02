@@ -1,0 +1,41 @@
+{
+  "results": [
+    {
+      "name": "keyboard traversal, reverse tab, Space disclosure and focus visibility",
+      "passed": true
+    },
+    {
+      "name": "keyboard opens picker and Escape restores invoking focus",
+      "passed": true
+    },
+    {
+      "name": "keyboard confirm needs explicit selection and commits once",
+      "passed": true
+    },
+    {
+      "name": "text-only200 preserves image96, material and single body scroll",
+      "passed": true
+    },
+    {
+      "name": "200 text on short frame reveals all costs and actions by scroll",
+      "passed": true
+    },
+    {
+      "name": "390 reference screenshots: normal and text200",
+      "passed": true
+    },
+    {
+      "name": "small desktop size gates frame without changing review",
+      "passed": true
+    },
+    {
+      "name": "large desktop portrait is480 and fits available height",
+      "passed": true
+    },
+    {
+      "name": "coarse landscape gates frame and preserves review on rotate",
+      "passed": true
+    }
+  ],
+  "errors": []
+}
