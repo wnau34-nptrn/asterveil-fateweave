@@ -37,10 +37,12 @@ CSSจำกัดenhancement; window/container/orientationใช้ของเ
 
 Localbatchที่รันระหว่างปรับfocusยังมีvisual5failก่อนแก้pickerfocusและLv390cold-loadtimeout1; visual6บนbuildPagesและLv390/legacy2ที่rerunหลังแก้ผ่านแล้ว ส่วนCIจะตรวจใหม่ทั้งชุดบนheadเดียว ไม่ซ่อนผลล้มเหลวหรืออ้างbatchแรกผ่านทั้งหมด
 
-ผลCI/Pagesของimplementationจะบันทึกตามcommitจริงในhandoffหลังworkflowเสร็จ ไม่ใช้ผลprototype140/9/26เป็นผลเกม
+PR [#136](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/136) merged `5746e10282c3f16e2c511d87888289b5b0a6e466` หลังquality41433419422และbrowser41433419478ครบ4shards+aggregateผ่านบนfinal head `ecddd6457814f8dbada95f5539367b8896d963ac`; CI unit1398/100filesผ่าน Pages [41440009608](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41440009608) build/browser4/deployผ่านบนmerge commit เผยแพร่ 2026-11-02T12:30:24Z ที่ https://wnau34-nptrn.github.io/asterveil-fateweave/ ไม่ใช้ผลprototype140/9/26เป็นผลเกม; follow-up release note แก้เอกสารเท่านั้น runtimeตรงmerge commit
 
 ## ข้อแตกต่างภาพและสิ่งที่ยังไม่ยืนยัน
 
 currencyยังlineiconเดิม ส่วนcrystalpaintedของArtworkยังไม่ผลิต; SVGเป็นฉบับอ่านชัดขนาดเล็ก รายละเอียดไม่เหมือนเส้นวาดทุกจุด; gear128sourceแสดง96CSSpx ไม่ใช่assetnative2x
 
 Chromium touch/desktop emulationและrootfont200%ไม่ยืนยันSafari/iOS/เครื่องจริง/browsernativezoom/OSfont/screenreader/ผู้เล่นจริง ไม่อ้างpixelperfectหรือการอนุมัติภาพแทนเจ้าของ ชุดนี้นำเข้าหน้าตีบวกนำร่องเท่านั้น หน้าดาว/สกิล/เพิ่มLv/อุปกรณ์อื่นยังไม่ทำvisualredesignรอบนี้
+
+การตรวจ live HTTP จาก cloud executor หลังdeployถูกproxy CONNECT403 เพราะwnau34-nptrn.github.ioอยู่นอกallowlist จึงไม่อ้างว่าเปิดเว็บจริงหรือเทียบhashไฟล์ที่เสิร์ฟแล้ว ผลเผยแพร่ยืนยันจากPagesrun/deploylogที่successและชุดbrowserใต้Pagesbaseที่ผ่านครบ

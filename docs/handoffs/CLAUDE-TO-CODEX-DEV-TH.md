@@ -5,7 +5,7 @@
 - [x] นำLayout/Material/SVGเข้าหน้าจริงโดยใช้ข้อมูล/guard/hostเดิม ไม่มีrules/save/balanceเปลี่ยน
 - [x] Receiptจากeventจริง + explicitnextที่ไม่ใช้ของ, neutral/details/costreflow/focus/returncontext
 - [x] Localtypecheck/lint/unit1398/buildPagesและ52browserdistinctผ่านตามผลที่แยกrunsในhandoff
-- [ ] ติดตามPRquality/browser4shards/aggregateและPagesหลังmerge แล้วบันทึกURL/commit/ผลเผยแพร่จริง
+- [x] PR #136 merged `5746e10282c3f16e2c511d87888289b5b0a6e466`; final head `ecddd6457814f8dbada95f5539367b8896d963ac` quality41433419422/browser41433419478ครบ4shards+aggregateผ่าน; Pages41440009608 build/browser4/deployผ่าน เผยแพร่ 2026-11-02T12:30:24Z ดู CODEX-TO-CLAUDE.md
 - รายละเอียด/ข้อจำกัด: CODEX-TO-CLAUDE.md และdocs/validation/enhancement-visual/README_TH.md; currencypaintedart/realdeviceยังไม่มี ไม่อ้างปิดUXDทุกหน้า
 
 

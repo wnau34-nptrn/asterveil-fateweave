@@ -1,5 +1,17 @@
 # Codex → Claude handoff
 
+## 2026-11-02 — หน้าตีบวกตาม Artwork เผยแพร่แล้ว (PR #136)
+
+- PR [#136](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/136) merged `5746e10282c3f16e2c511d87888289b5b0a6e466` หลัง quality [41433419422](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41433419422) และ browser [41433419478](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41433419478) ผ่านครบสี่ shards + aggregate บน final head `ecddd6457814f8dbada95f5539367b8896d963ac`
+- Pages [41440009608](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41440009608) บน merge commit ผ่าน build/browser สี่ชุด/deploy เผยแพร่เวลา 2026-11-02T12:30:24Z; เกม https://wnau34-nptrn.github.io/asterveil-fateweave/ ไม่ใช้ผล local แทนผลเผยแพร่
+- หน้าตีบวกใหม่: ภาพอุปกรณ์96px/ขั้นก่อน→หลัง/รายละเอียดพับ/ค่าใช้-มี-เหลือ/กรอบทอง navy glass; ผลสำเร็จจาก event ที่บันทึกจริง และปุ่มดูขั้นถัดไปที่ไม่ใช้วัสดุ; รักษา review guard, focus/return context และ responsive/rootfont200%
+- ไฟล์ runtime/test/local evidence และข้อจำกัดอยู่ entry implementation ด้านล่างและ `docs/validation/enhancement-visual/README_TH.md`; CI final head ยืนยัน unit1398/100files; local browser52กรณีไม่ซ้ำข้ามruns และ visualPages6ผ่าน (ไม่บวกซ้ำเป็น58)
+- ภาพจริงก่อน/ready390×844+390×650/review/success/text200 พร้อม SHA256 ใน `docs/validation/enhancement-visual/validation.json`
+- ไม่เปลี่ยน rules/save/balance/animation timing; ART PR133 ยังแยกเป็น draft ไม่ merge ทั้งสาขา; ไม่มีการอนุมานเจ้าของอนุมัติภาพจากผลเทสต์
+- คงข้อจำกัด currency line icons/gear source128/SVG simplified และยังไม่มี Safari/iOS/เครื่องจริง/screenreader/ผู้เล่นจริง; หน้าดาว/สกิล/อุปกรณ์อื่นยังไม่ redesign รอบนี้ งานถัดไป UXD-02 เลือกงานโรงตีเหล็ก/เพิ่มLv ตามแผน
+- Live HTTP หลังdeployถูกenvironmentproxy CONNECT403 (Pages hostนอกallowlist) จึงไม่มีผลตรวจliveHTML/CSS/SVGhash; deploymentยืนยันจากrun/deploylogsuccess ไม่อ้างlivebrowserหรืออุปกรณ์จริง
+- entry pending ที่เก็บด้านล่างเป็นประวัติระหว่างทำงาน ผลปิดงานให้ยึด entry นี้; follow-up นี้แก้เอกสารเท่านั้น ไม่เปลี่ยน runtime ที่เผยแพร่
+
 ## 2026-11-02 — เก็บตัวอักษรรายละเอียด200%ก่อนปิดPR136
 
 - Reviewสุดท้ายพบforge-skills/forge-labelยังสืบทอด13pxเดิม ปรับเฉพาะscopeenhancementเป็น.875remและเพิ่มassertจริงที่root32ว่าskills/hero-select28px

@@ -13,8 +13,8 @@
     "batch_was_not_clean": true,
     "text200_detail_and_trial_select_px": 28
   },
-  "ci_status": "pending",
-  "deployment_status": "pending",
+  "ci_status": "success",
+  "deployment_status": "success",
   "rules_changed": false,
   "save_changed": false,
   "balance_changed": false,
@@ -83,5 +83,60 @@
       "bytes": 197,
       "sha256": "6cb6ece87ccf52bc91c079fa23cfeeeb2b4cbf4f9339639c6580bc1234f2c7c9"
     }
-  ]
+  ],
+  "release": {
+    "merge_sha": "5746e10282c3f16e2c511d87888289b5b0a6e466",
+    "pages_run": 41440009608,
+    "published_at": "2026-11-02T12:30:24Z",
+    "game_url": "https://wnau34-nptrn.github.io/asterveil-fateweave/",
+    "pages_jobs": [
+      {
+        "id": 125259202406,
+        "name": "browser (4)",
+        "conclusion": "success",
+        "completed_at": "2026-11-02T12:00:46Z"
+      },
+      {
+        "id": 125259202818,
+        "name": "build",
+        "conclusion": "success",
+        "completed_at": "2026-11-02T11:53:46Z"
+      },
+      {
+        "id": 125259202896,
+        "name": "browser (3)",
+        "conclusion": "success",
+        "completed_at": "2026-11-02T12:00:32Z"
+      },
+      {
+        "id": 125259202929,
+        "name": "browser (1)",
+        "conclusion": "success",
+        "completed_at": "2026-11-02T12:29:20Z"
+      },
+      {
+        "id": 125259202940,
+        "name": "browser (2)",
+        "conclusion": "success",
+        "completed_at": "2026-11-02T12:01:48Z"
+      },
+      {
+        "id": 125276128634,
+        "name": "deploy",
+        "conclusion": "success",
+        "completed_at": "2026-11-02T12:30:24Z"
+      }
+    ],
+    "live_http_check": {
+      "status": "blocked_by_environment_network_policy",
+      "error": "HTTPS proxy CONNECT 403 for wnau34-nptrn.github.io; no live HTML/CSS/SVG hash verification claimed",
+      "deployment_evidence": "Pages run41440009608 completed success, deploy job125276128634 reported success",
+      "real_device_tested": false
+    },
+    "merge_quality_run": 41440009626
+  },
+  "validated_head": "ecddd6457814f8dbada95f5539367b8896d963ac",
+  "pull_request": "https://github.com/wnau34-nptrn/asterveil-fateweave/pull/136",
+  "quality_run": 41433419422,
+  "browser_run": 41433419478
 }
