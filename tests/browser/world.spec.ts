@@ -1,3 +1,4 @@
+import { openForgeTools } from './forge-navigation';
 import { expect, test, type Page } from '@playwright/test';
 import { encounterById } from '../../src/content/encounters/catalog';
 import { chapterOne as map } from '../../src/content/world/chapter1';
@@ -504,7 +505,7 @@ test('the smith smelts ore into veil dust, capped per return; saved v18', async 
   const f = map.equipment.forge;
   await seed(page, null, { ...newProfile(map, 5), tutorialDone: true, commander, bank: { ore: 500, gold: 0, seal: 0, dust: 0 } } as Profile);
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#lobby-tab-forge').click();
-  await page.locator('#forge-tab-smelt').click();await page.locator('#forge-target').selectOption('5');await reachable(page,'#forge-smelt');await page.locator('#forge-smelt').click();await page.locator('#forge-confirm').click();
+  await openForgeTools(page);await page.locator('#forge-tab-smelt').click();await page.locator('#forge-target').selectOption('5');await reachable(page,'#forge-smelt');await page.locator('#forge-smelt').click();await page.locator('#forge-confirm').click();
   await expect(page.locator('.lobby-result')).toContainText('หลอมแร่ดาวเป็นฝุ่นดาว 5');
   const p = await savedProfile(page); expect(p.bank.dust).toBe(5); expect(p.bank.ore).toBe(500 - 5 * f.smeltOre); expect(p.smelted).toBe(5);
   expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(45);
@@ -1242,9 +1243,9 @@ test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async
   await expect(page.locator('#forge-cost')).toContainText('แร่ 4');
   await page.locator('#forge-enhance').click();await page.locator('#forge-confirm').click();
   await expect(page.locator('.forge-item-head')).toContainText('+1');
-  await page.locator('#forge-mode-reroll').click();await page.locator('#forge-reroll-0').click();await page.locator('#forge-confirm').click();
+  await openForgeTools(page);await page.locator('#forge-mode-reroll').click();await page.locator('#forge-reroll-0').click();await page.locator('#forge-confirm').click();
   await expect(page.locator('#forge-reroll-0')).toBeDisabled();await expect(page.locator('.forge-reason')).toContainText('ตราสัญญาไม่พอ');
-  await page.locator('#forge-mode-fuse').click();await expect(page.locator('.forge-mats')).toContainText('จะทำลาย');
+  await openForgeTools(page);await page.locator('#forge-mode-fuse').click();await expect(page.locator('.forge-mats')).toContainText('จะทำลาย');
   await page.locator('#forge-fuse').click();await page.locator('#forge-confirm').click();
   await expect(page.locator('.forge-item-head')).toContainText('หายาก');
   await page.locator('#forge-change-item').click();await expect(page.locator('.forge-pick')).toHaveCount(1);
