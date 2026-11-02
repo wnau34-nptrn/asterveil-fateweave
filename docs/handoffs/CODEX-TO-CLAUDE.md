@@ -1,5 +1,16 @@
 # Codex → Claude handoff
 
+## 2026-11-02 — กรอบหน้าตีบวก iPhone เผยแพร่แล้ว (PR #137)
+
+- เจ้าของแจ้งกรอบหลุดขอบพร้อมภาพจริง; แก้ sheet inset0 ให้ทั้งกรอบอยู่ใน safe area สี่ด้านและมีระยะขั้นต่ำ8px ตัด safe padding ที่ซ้ำใน header/dock ไม่มี viewport/rules/save/balance/animation เปลี่ยน
+- PR [#137](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/137) merged `661a9b45b881075c75e21d8ee57a40e9a9450f60` หลัง quality [41455949507](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41455949507) และ browser [41455949420](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41455949420) ครบ4shards+aggregateผ่านบน `94711fcc20438c1bbcd1b8312dcdce36f46a3577`
+- Pages [41463645400](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41463645400) บนmerge commit ผ่านbuild/browser4/deploy เผยแพร่ 2026-11-02T15:26:27Z; https://wnau34-nptrn.github.io/asterveil-fateweave/
+- Local lint/typecheck/buildPagesผ่าน; dev9กรณี (safearea3+pilot6) และ Pages safearea3กรณีเดิมผ่าน ไม่บวกซ้ำ; regressionตรวจขอบsheet/trim/ปุ่มและhit test, review/cancel,200%text,rotationกลับ และไม่มีการใช้วัสดุจากการเปิดดู
+- ภาพก่อน/หลังที่ให้เจ้าของ: /tmp/iphone-forge-frame/before.png และ after.png (390×844 จำลองinsets59/34) เป็นไฟล์workspaceชั่วคราว ไม่commitภาพ
+- ไม่มีBrowser js tool/runtimeหรือiPhone/Safariจริง จึงใช้repo Chromium PlaywrightและCSS safe-area inputsจำลอง ยังต้องตรวจเครื่องเจ้าของ; ไม่อ้างnativeenv/OSfont/physical-rounded-corner trialจากemulation
+- Pages hostอยู่นอกexecutor allowlistตามการตรวจรอบPR136 ไม่ทำliveHTTP/asset hash claim; ยืนยันการเผยแพร่จากworkflow/deploylogsuccess
+- ไฟล์งาน: src/ui/forge-enhancement.css, tests/browser/enhancement-safe-area.spec.ts และhandoff3ไฟล์; pending entryด้านล่างเป็นประวัติ ให้ยึดผลปิดงานนี้; follow-upนี้เป็นเอกสารเท่านั้น runtimeที่เผยแพร่ตรงmerge commit
+
 ## 2026-11-02 — แก้กรอบหน้าตีบวกชิดขอบ iPhone
 
 - เจ้าของส่งภาพ iPhone และแจ้งกรอบหลุดขอบ: กรอบ SVG เดิมอยู่บน sheet inset0 แต่ safe area ถูกกันเฉพาะเนื้อหา header/dock จึงไม่กันขอบกรอบที่จอจริง

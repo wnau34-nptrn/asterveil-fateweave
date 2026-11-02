@@ -4,7 +4,7 @@
 
 - [x] ย้ายกรอบทั้งsheetเข้าsafearea+ขั้นต่ำ8px ตัดheader/dock paddingซ้ำ
 - [x] Local lint/typecheck/buildPages/dev browser9และPages focused3ผ่าน; ภาพและข้อจำกัดในCODEX-TO-CLAUDE.md
-- [ ] PR CI/merge/Pages และบันทึกผลเผยแพร่จริง
+- [x] PR #137 merged `661a9b45b881075c75e21d8ee57a40e9a9450f60` หลังquality41455949507/browser41455949420ครบ4shards+aggregateผ่านบน94711fc; Pages41463645400 build/browser4/deployผ่าน เผยแพร่ 2026-11-02T15:26:27Z ดูCODEX-TO-CLAUDE.md
 
 ## 2026-11-02 — ภาพหน้าตีบวกตามแบบ1–7
 
