@@ -1,5 +1,12 @@
 # Codex → Claude handoff
 
+## 2026-11-02 — เก็บตัวอักษรรายละเอียด200%ก่อนปิดPR136
+
+- Reviewสุดท้ายพบforge-skills/forge-labelยังสืบทอด13pxเดิม ปรับเฉพาะscopeenhancementเป็น.875remและเพิ่มassertจริงที่root32ว่าskills/hero-select28px
+- typecheck/lint/buildPagesและvisualPages6กลุ่มผ่านอีกครั้ง ไม่เปลี่ยนrule/save/inputbehavior; ส่งheadใหม่ให้quality/browserครบชุด ไม่ใช้ผล4ca853dแทนheadใหม่
+- PR136รอCIและPagesตามขั้นตอนเดิม เจ้าของย้ำ “ดำเนินงานต่อ” ระหว่างรอ ยังคงงานให้เสร็จไม่เปิดหน้าพัฒนาอื่น
+
+
 ## 2026-11-02 — นำภาพหน้าตีบวก ART-UI-UX-002 เข้า runtime
 
 - เจ้าของสั่ง “ดำเนินการต่อได้” หลังปิดhandoff1–7 จึงเริ่มimplementationจริงบน `codex/enhancement-visual-integration` จากremoteเกม07f95a7 ไม่mergeART PR133ทั้งชุด แบบอ้างอิงa77d17b

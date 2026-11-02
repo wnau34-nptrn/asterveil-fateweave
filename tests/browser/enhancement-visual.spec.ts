@@ -30,7 +30,7 @@ for(const [width,height,touch] of [[320,568,true],[390,650,true],[390,844,true],
     if(width===390&&height===844)await page.screenshot({path:'docs/validation/enhancement-visual/review-390.png'});
     await page.locator('#forge-cancel').click();await expect(page.locator('#forge-enhance')).toBeFocused();
     await page.evaluate(()=>document.documentElement.style.fontSize='32px');
-    await expect(page.locator('.forge-enhancement')).toHaveClass(/forge-text-large/);await bounds(page);
+    await expect(page.locator('.forge-enhancement')).toHaveClass(/forge-text-large/);await bounds(page);await page.locator('.forge-secondary-details > summary').click();expect(await page.locator('.forge-skills').evaluate(e=>getComputedStyle(e).fontSize)).toBe('28px');await page.locator('.forge-secondary-details > summary').click();
     if(width===390&&height===650)await page.screenshot({path:'docs/validation/enhancement-visual/text200-390.png'});
     await page.locator('#forge-enhance').click();await bounds(page);await page.keyboard.press('Escape');expect(await saved()).toBe(initial);
     await page.evaluate(()=>document.documentElement.style.fontSize='16px');await expect(page.locator('.forge-enhancement')).not.toHaveClass(/forge-text-large/);
@@ -51,5 +51,6 @@ test('enhancement keyboard, bag item identity and decorative URLs use the actual
   }
   expect(await page.locator('.forge-frame-trim').evaluate(e=>getComputedStyle(e).pointerEvents)).toBe('none');
   await page.locator('#forge-change-item').click();await page.locator('#forge-item-3').click();await expect(page.locator('.forge-hero-preview h4')).toHaveText('ผลต่ออุปกรณ์');await expect(page.locator('.forge-item-head')).toContainText('ไม่มีผู้สวม');
+  await page.evaluate(()=>document.documentElement.style.fontSize='32px');await page.locator('.forge-secondary-details > summary').click();expect(await page.locator('#forge-preview-hero').evaluate(e=>getComputedStyle(e).fontSize)).toBe('28px');
   const ids=await page.locator('.forge-workbench [id]').evaluateAll(nodes=>nodes.map(e=>e.id));expect(new Set(ids).size).toBe(ids.length);expect(await page.evaluate(k=>localStorage.getItem(k),key)).toBe(initial);
 });

@@ -10,7 +10,7 @@ receiptเกิดจากforged/enhanceที่บันทึกแล้�
 
 GameShellส่งProfileฉบับที่persistแล้วให้receipt เพื่อให้ตรงกับobjectที่Lobbyวาด ไม่เปลี่ยนการบันทึกหรือกฎเกม Nativepickerเริ่มfocusที่หัวข้อเพื่อให้Escapeกลับชิ้นเดิมได้ โดยไม่ดักEscapeของselect/inputที่ผู้ใช้กำลังแก้ไข ยืนยันด้วยdoubleclickไม่ย้ายfocusไหลไปขั้นต่อไป
 
-CSSจำกัดenhancement; window/container/orientationใช้ของเดิม อักษรremและintrinsiclayoutรองรับrootfont200%, costย้ายเข้าbodyเมื่อframeเตี้ยและข้อความใหญ่ actionsคงdock ส่วนกรอบและcaptionมีpointer-none/safe bounds/guard/observerที่ถอดเมื่อวาดหรือปิดsurface
+CSSจำกัดenhancement; window/container/orientationใช้ของเดิม อักษรremรวมรายละเอียดสกิล/ป้ายtrialheroและintrinsiclayoutรองรับrootfont200%, costย้ายเข้าbodyเมื่อframeเตี้ยและข้อความใหญ่ actionsคงdock ส่วนกรอบและcaptionมีpointer-none/safe bounds/guard/observerที่ถอดเมื่อวาดหรือปิดsurface
 
 ## ขอบเขตที่คงเดิม
 

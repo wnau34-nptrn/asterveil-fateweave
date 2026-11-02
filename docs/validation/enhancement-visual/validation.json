@@ -10,7 +10,8 @@
     "build_pages": true,
     "browser_distinct_cases_passed_across_runs": 52,
     "pages_visual_cases": 6,
-    "batch_was_not_clean": true
+    "batch_was_not_clean": true,
+    "text200_detail_and_trial_select_px": 28
   },
   "ci_status": "pending",
   "deployment_status": "pending",
@@ -57,8 +58,8 @@
     },
     {
       "path": "docs/validation/enhancement-visual/text200-390.png",
-      "bytes": 158136,
-      "sha256": "e54ee8d96b2af5ca20ad39931597bdb348814b35738eb99a24cb71f2cccbd073",
+      "bytes": 157823,
+      "sha256": "d4e1243dc83afe12c7a1b0c9c3308a58b387800fd1257fb8ab4a1e02be808908",
       "width": 390,
       "height": 650
     },

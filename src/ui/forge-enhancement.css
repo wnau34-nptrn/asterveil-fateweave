@@ -93,3 +93,4 @@
 .forge-enhancement .forge-step::before { left: 12px; }.forge-enhancement .forge-step::after { right: 12px; transform: scaleX(-1); }
 .forge-enhancement .forge-step.forge-hide-wings::before,.forge-enhancement .forge-step.forge-hide-wings::after { display: none; }
 @container game (max-width:360px) { .forge-enhancement[data-review=true] .forge-footer-buttons { flex-direction: column; } }
+.forge-enhancement :is(.forge-skills,.forge-label) { font-size: .875rem; }
