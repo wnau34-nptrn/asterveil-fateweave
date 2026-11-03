@@ -1,5 +1,14 @@
 # Codex → Claude handoff
 
+## 2026-11-03 — UXD-04 ถ่ายโอนคุณสมบัติ — PR #141
+
+- เจ้าของให้ดำเนินUXD-04 และให้หาวิธีเข้าenvironmentหลังoffline; เมื่อruntimeconnectedแล้วตรวจworkspaceเดิมสะอาดและremote/ancestryตรง5f08b7b (UXD-03 merge3408f41+เอกสารrelease) สร้างcodex/uxd-04-affix-transfer ไม่เปลี่ยนauth/resetงานเดิม/รวมcheckpointเก่าหรือART PR133
+- หน้า3ขั้นพร้อมชิ้นรับ/ต้นทางภาพUID/Lv/+/lock/ทุนจริง, เตือนผูกช่องและพลัง/เซ็ตต้นทางที่เสีย, ledgerจ่ายล่วงหน้า/คืนทุน/หลังทำจากกฎเดิม, revalidatetransferReason/Profileก่อนhost, review/focus/Escape/context และreceiptจากforged/transferที่persistจริง ดูขั้นถัดไปไม่สั่งงาน
+- Runtime5ไฟล์: forge-workbench.ts,forge-enhancement.css,forge-enhancement-layout.ts,lobby-ui.ts,game-shell.ts; unitใหม่affix-transfer-review20กรณี/browserใหม่3กรณี + ขยายaffix-transfer.spec.tsเป็น4ขนาดและ2commitsจริงในช่องผูกเดิม ไม่มีcore/content/public/ราคา/RNG/สมดุล/saveเปลี่ยน
+- Localtypecheck/lint/buildPages/fullunit1441/103files/focused49ผ่าน productionbrowser44distinctผ่าน (40regression+3ใหม่+world1 ไม่บวกdev/baseline/retries) ภาพ390pxตรวจจริง /tmp/uxd-04/transfer-review-650.png, transfer-review-844.png, transfer-result-844.png และtext200+insets59/34ในโฟลเดอร์เดียวกัน; รายละเอียด UXD-04-IMPLEMENTATION-TH.md
+- ไม่มีCURRENT_STATE.md/ไม่มีSafariหรือiPhoneจริง ไม่เริ่มUXD-05/06/P04/P09/ดาว/เศรษฐกิจใหม่ เปิด [PR #141](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/141) กลับfeature/fateweave-initial-prototypeแล้ว runtime commit a310eb3617fe2c768e6c4c1d8861d11ec7b02ea8 ตามด้วยเอกสารสถานะPR รอผลCIก่อนmergeและPages
+
+
 ## 2026-11-03 — UXD-03 เผยแพร่แล้ว (PR #140)
 
 - เจ้าของสั่งให้ดำเนินขั้นต่อไปหลังส่ง PR จึงตรวจ CI, merge และตรวจ Pages ตาม standing authorization งานใหม่ยังอยู่เฉพาะ UXD-03

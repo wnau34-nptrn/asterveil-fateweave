@@ -154,3 +154,33 @@
 .forge-ledger thead { color: var(--text-muted); }
 .forge-ledger td:last-child { color: var(--hp-mint); font-weight: 600; }
 .forge-random-development :is(.forge-actual-result,.forge-affix-choice) ul { margin: 8px 0; padding-left: 18px; font-size: .875rem; }
+
+/* Transfer keeps the receiving piece and the consumed source visually distinct. */
+.forge-transfer-page :is(.forge-transfer-stage,.forge-transfer-result,.forge-binding) { padding: 10px; border: 1px solid var(--enhance-edge); border-radius: 12px; background: var(--enhance-panel); box-shadow: var(--enhance-shadow); overflow-wrap: anywhere; }
+.forge-transfer-page h4 { margin: 0 0 8px; font-size: 1rem; }
+.forge-transfer-page p { overflow-wrap: anywhere; }
+.forge-transfer-page .forge-item-head { min-height: 132px; }
+.forge-transfer-page .forge-item-head .forge-main-label { color: var(--veil-cyan); font-weight: 600; }
+.forge-transfer-page .forge-binding { margin: 0; border-color: var(--gold-edge); color: var(--gold-light); }
+.forge-transfer-page .forge-binding > .icon { width: 20px; height: 20px; vertical-align: middle; margin-right: 6px; }
+.forge-transfer-page :is(.forge-binding,.forge-transfer-fee) small { display: block; font-size: .75rem; color: var(--text-muted); }
+.forge-transfer-page .forge-transfer-donor-card { border-color: var(--danger-coral); }
+.forge-transfer-page .forge-transfer-material { color: var(--danger-coral); font-weight: 600; }
+.forge-transfer-page .forge-source-loss { font-size: .75rem; }
+.forge-transfer-page .forge-transfer-result { border-color: var(--veil-cyan); }
+.forge-transfer-page .forge-transfer-result small { font-size: .75rem; color: var(--text-muted); }
+.forge-transfer-page .forge-label { display: block; }
+.forge-transfer-page select { width: 100%; min-height: 44px; font-size: .875rem; }
+.forge-transfer-page .forge-ledger { width: 100%; border-collapse: collapse; font-size: .75rem; text-align: right; }
+.forge-transfer-page .forge-transfer-fee { margin: 4px 0; font-size: .75rem; color: var(--gold-light); }
+.forge-transfer-page .forge-cost-summary { min-width: 0; }
+.forge-transfer-page.forge-text-large .forge-ledger thead { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; }
+.forge-transfer-page.forge-text-large .forge-ledger :is(tbody,tr) { display: grid; gap: 8px; }
+.forge-transfer-page.forge-text-large .forge-ledger tr { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 8px; border: 1px solid var(--enhance-edge); border-radius: 8px; }
+.forge-transfer-page.forge-text-large .forge-ledger th { grid-column: 1/-1; text-align: left; color: var(--gold-light); }
+.forge-transfer-page.forge-text-large .forge-ledger td { min-width: 0; text-align: left; }
+.forge-transfer-page.forge-text-large .forge-ledger td::before { display: block; font-size: .625rem; color: var(--text-muted); }
+.forge-transfer-page.forge-text-large .forge-ledger td:nth-child(2)::before { content: 'มี'; }
+.forge-transfer-page.forge-text-large .forge-ledger td:nth-child(3)::before { content: 'จ่ายล่วงหน้า'; }
+.forge-transfer-page.forge-text-large .forge-ledger td:nth-child(4)::before { content: 'คืนทุน'; }
+.forge-transfer-page.forge-text-large .forge-ledger td:nth-child(5)::before { content: 'หลังทำ'; }
