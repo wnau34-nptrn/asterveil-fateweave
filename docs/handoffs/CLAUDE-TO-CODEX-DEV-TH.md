@@ -1,5 +1,13 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-11-03 — UXD-02 forge launcher + equipment Lv
+
+- [x] Launcher8งานพร้อมgateเดิม/คงUIDและfocus; เพิ่มLvใช้sharedsafearea frame+ค่าจริง/review/receipt/explicitnext
+- [x] Local lint/typecheck/buildPages/fullunit1407 และproductionbrowser30ผ่าน ดูCODEX-TO-CLAUDE.md และUXD-02-IMPLEMENTATION-TH.md
+- [ ] PR exact-head quality/browser4+aggregate, merge, Pages build/browser4/deploy และบันทึกผลจริง (กำลังดำเนินการ)
+- ไม่มีrules/save/balance/ราคาเปลี่ยน ไม่เริ่มหน้าดาว/สกิล/P04/P09; iPhone/Safariจริงยังไม่มีผล
+
+
 ## 2026-11-02 — Armour atlas fix
 
 - [x] คืนภาพเกราะ2ช่องจากต้นฉบับ เพิ่มgearURLrevisionและdecoded78cell/cache regression

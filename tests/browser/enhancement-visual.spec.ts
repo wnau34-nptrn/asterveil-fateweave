@@ -1,3 +1,4 @@
+import { chooseForgeTask } from './forge-navigation';
 import { expect, test, type Page } from '@playwright/test';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { newProfile } from '../../src/core/world/profile';
@@ -10,7 +11,7 @@ async function open(page:Page) {
   const weapon={uid:1,slot:'weapon' as const,hero:'guardian',rarity:3,level:6,affixes:affixPool(map.equipment,'weapon','guardian').slice(0,3),plus:4,set:'dawn' as const};
   p.members.guardian={stars:3,dupes:0,gear:{weapon}};p.items=[{...weapon,uid:2,plus:20},{...weapon,uid:3}];p.nextItem=4;
   await page.addInitScript(({key,raw})=>localStorage.setItem(key,raw),{key,raw:currentSave({profile:p,run:null})});
-  await page.goto('./');await page.locator('#continue').click();await page.locator('#lobby-tab-forge').click();await page.locator('#forge-item-1').click();await page.evaluate(()=>document.fonts.ready);
+  await page.goto('./');await page.locator('#continue').click();await page.locator('#lobby-tab-forge').click();await chooseForgeTask(page,'enhance');await page.locator('#forge-item-1').click();await page.evaluate(()=>document.fonts.ready);
 }
 async function bounds(page:Page) {
   await expect.poll(()=>page.locator('.forge-enhancement').evaluate(e=>{

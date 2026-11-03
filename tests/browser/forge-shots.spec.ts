@@ -1,3 +1,4 @@
+import { chooseForgeTask } from './forge-navigation';
 import { openForgeTools } from './forge-navigation';
 import { expect, test } from '@playwright/test';
 import { chapterOne as map } from '../../src/content/world/chapter1';
@@ -26,7 +27,7 @@ for (const [width, height] of [[390, 844], [320, 568]] as const) {
     await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('forge-seeded')) { localStorage.setItem(key, raw); sessionStorage.setItem('forge-seeded', '1'); } }, { key, raw });
     await page.goto('./'); await page.locator('#continue').click();
     const shot = async (name: string) => { await page.waitForTimeout(150); await page.screenshot({ path: `${dir}/${name}-${width}.png` }); };
-    await page.locator('#lobby-tab-forge').click(); await expect(page.locator('.forge-workbench')).toBeVisible(); await shot('forge-pick');
+    await page.locator('#lobby-tab-forge').click(); await expect(page.locator('.forge-workbench')).toBeVisible(); await shot('forge-tasks'); await chooseForgeTask(page,'enhance'); await shot('forge-pick');
     await page.locator('#forge-item-1').click(); await shot('forge-enhance');
     await page.locator('#forge-enhance').click(); await shot('forge-review');
     if (strike) {

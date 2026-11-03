@@ -1,4 +1,4 @@
-import { openForgeTools } from './forge-navigation';
+import { openForgeTools, chooseForgeTask } from './forge-navigation';
 import { expect, test, type Page } from '@playwright/test';
 import { encounterById } from '../../src/content/encounters/catalog';
 import { chapterOne as map } from '../../src/content/world/chapter1';
@@ -1238,7 +1238,7 @@ test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async
   await seed(page, null, profile);
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator('#lobby-tab-forge').click();
-  await expect(page.locator('#lobby-sheet-title')).toContainText('ช่างตีเหล็ก'); await expect(page.locator('.forge-pick')).toHaveCount(3);
+  await expect(page.locator('#lobby-sheet-title')).toContainText('เลือกงานโรงตีเหล็ก'); await chooseForgeTask(page,'enhance'); await expect(page.locator('.forge-pick')).toHaveCount(3);
   await page.locator('#forge-item-1').click();
   await expect(page.locator('#forge-cost')).toContainText('แร่ · ใช้ 4');
   await page.locator('#forge-enhance').click();await page.locator('#forge-confirm').click();
