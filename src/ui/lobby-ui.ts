@@ -247,6 +247,8 @@ export class LobbyUI {
   }
   forgeEnhanced(p:Profile,uid:number):void{this.forgeUI.enhanced(p,uid);}
   forgeLeveled(p:Profile,uid:number):void{this.forgeUI.leveled(p,uid);}
+  forgeFused(p:Profile,uid:number):void{this.forgeUI.fused(p,uid);}
+  forgeRerolled(p:Profile,uid:number):void{this.forgeUI.rerolled(p,uid);}
   private closeSheet(): void {
     this.preview=undefined;const was=this.sheet,origin=was==='forge'?this.forgeOrigin:undefined;
     this.huntUI.cancel();this.forgeUI.cancelReview();this.storageUI.reset();this.sheet=origin?.sheet??null;this.picked=origin?.picked;this.confirmDismiss=false;

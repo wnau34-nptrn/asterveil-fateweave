@@ -1,5 +1,15 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-11-03 — UXD-03 เลื่อนความหายาก / สุ่มคุณสมบัติ — PR #140
+
+- เจ้าของมอบหมาย UXD-03 บนฐานเกม186f430 (รวมUXD-02 merge32cf6ce); remote/ancestryตรวจแล้ว ไม่มีCURRENT_STATE.md/checkpointscc51cd4,bcd6133ในenvironment ไม่ได้นำเข้าcheckpointหรือmergeART PR133
+- สาขา `codex/uxd-03-fusion-reroll`: shared frame/dock/review/receipt สำหรับ fuse/reroll, ภาพ/UID/Lv/+/lock/ทุนdonorรายชิ้น, ledgerจากกฎจริง, pool/ช่วงสุ่มไม่เรียกRNG, revalidateก่อนcommit, focus/Escape/selectedUID/returncontext และดูขั้นถัดไปไม่สั่งงาน
+- Runtime: src/ui/forge-workbench.ts, forge-enhancement.css, lobby-ui.ts, game-shell.ts; testsใหม่forge-fusion-reroll-review.test.ts/forge-fusion-reroll.spec.ts และขยายforge-phase2.spec.ts + world.spec.ts เพิ่มจอสั้น/ยอดจริง/receipt/repeatconfirm ไม่มีcore/content/public/rules/save/ราคา/RNG/สมดุลเปลี่ยน
+- Local typecheck/lint/buildPages/focusedunit31/fullunit1421ใน102filesผ่าน; productionbrowser45distinctผ่าน (39รวม+world6ใหม่ ไม่บวกfocusedซ้ำ5) รวมfocused11หลังย่อheadingและinsetsจำลอง59/34กับ200%text รายละเอียด UXD-03-IMPLEMENTATION-TH.md
+- ภาพ390pxที่ตรวจจริง: /tmp/uxd-03/fusion-review-844.png, fusion-result-650.png, reroll-review-844.png, reroll-result-650.png และคู่จอสั้น/ยาวในโฟลเดอร์เดียวกัน; baselineก่อนแก้และtext200+insets59/34อยู่ที่นั่นด้วย ไม่มีSafari/iPhoneจริง/ผู้เล่นจริง ไม่อ้างemulationเป็นเครื่องจริง
+- [x] Implementation/localQAครบตามขอบเขต; [PR #140](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/140) เปิดแล้วกลับfeature/fateweave-initial-prototype, runtime commit `e178f0db5041c77eadc8a8a55759ef5b05108a29` ตามด้วยเอกสารสถานะPR; CIquality/browserเริ่มแล้ว ยังรอผล ไม่merge/deploy UXD-03 ไม่เริ่มUXD-04–06/P04/P09/ดาวหรือเศรษฐกิจใหม่
+
+
 ## 2026-11-03 — UXD-02 forge launcher + equipment Lv
 
 - [x] Launcher8งานพร้อมgateเดิม/คงUIDและfocus; เพิ่มLvใช้sharedsafearea frame+ค่าจริง/review/receipt/explicitnext
