@@ -41,3 +41,5 @@ Escape จาก review กลับไปแก้ไขและคืน focu
 Lint/typecheck/buildPagesผ่าน, fullunit1407/101filesผ่านหลังแก้itemPicker, focusedunit15ผ่าน, productionChromiumbrowser30ผ่าน (4.8นาที) บนruntimeคงที่ รวมหน้าใหม่6กรณี/ทางเข้าโลก3/งานช่างเดิม21 ไม่บวกซ้ำผลdev ภาพ390pxใน /tmp/uxd-02/launcher-390.png และ level-390.png ตรวจด้วยตาแล้ว
 
 จับและแก้บั๊กย้อนกลับcraft/smeltที่ไม่มีUIDถูกมองเป็นpicker และreceiptหายเมื่อเปลี่ยนผู้ทดลองreadonly มีregressionทั้งunit/browser ส่วนselectorsเก่าปรับให้ใช้launcherใหม่โดยรักษาchecksเงิน/คืนทุน/เซฟเดิม ผลPR/Pagesยังรอดำเนินการ ดูhandoffบนสุด
+
+PR #139 รอบ119a188: qualityผ่านunit1407; browser shard4พบNPCspecคาดชื่อหัวหน้าต่างเดิม2จุด ปรับexpectationใหม่โดยคงการทดสอบNPCทั้งหมด productionNPCผ่าน1กรณีเพิ่ม (local31distinct); runtimeไม่เปลี่ยน รอCIheadใหม่ครบ

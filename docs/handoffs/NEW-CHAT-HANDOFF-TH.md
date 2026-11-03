@@ -10,6 +10,7 @@
 - รอบก่อนหน้ามีbrowserล้มจากHMRระหว่างแก้runtime1กรณี, selectorsเก่าของlauncherและpostcraft, และEscapeบั๊กข้างต้น ไม่อ้างรอบเหล่านั้นผ่าน ผลสุดท้าย30ผ่านเป็นproductionรอบใหม่หลังแก้ทั้งหมด
 - ไฟล์runtime: forge-workbench.ts,forge-enhancement.css,lobby-ui.ts,game-shell.ts; unitใหม่ item-level-review.test.ts9กรณี; browserใหม่ forge-tasks-level.spec.ts6กรณี + helper/forge regressionเดิม รายละเอียด docs/handoffs/UXD-02-IMPLEMENTATION-TH.md
 - ภาพ390pxตรวจแล้ว /tmp/uxd-02/launcher-390.png และ level-390.png (ไฟล์workspaceชั่วคราว) ไม่มีSafari/iPhoneจริง/ผู้เล่นจริง; ใช้repoPlaywrightเพราะBrowser js runtimeไม่มีในsession Pageshostนอกexecutorallowlistจึงไม่อ้างliveHTTP
+- PR #139 head119a188 quality41561027076ผ่าน (unit1407); browser41561027135 shard4พบNPCspecยังคาดชื่อหัวหน้าต่างเก่า2จุด ปรับเป็นเลือกงานโรงตีเหล็กแล้ว productionNPCเต็มเส้นทางผ่านเพิ่ม1กรณี (รวมlocal31distinct) runtimeไม่เปลี่ยน จะตรวจCIบนheadใหม่ครบ
 - สาขา codex/uxd-02-forge-launcher-level ฐานcce1bf0; กำลังส่งPR รอexact-head quality/browser4+aggregate ก่อนmerge และรอPages build/browser4/deploy จะบันทึกเลขจริงภายหลังตามstanding authorization
 
 
