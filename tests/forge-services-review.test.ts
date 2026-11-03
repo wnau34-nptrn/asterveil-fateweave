@@ -4,6 +4,7 @@ import { chapterOne as map } from '../src/content/world/chapter1';
 import { encounterById } from '../src/content/encounters/catalog';
 import { newProfile, salvage } from '../src/core/world/profile';
 import { craftWeapon, smelt, weaponBlueprint } from '../src/core/world/forge';
+import { parseGame, saveGame } from '../src/core/save/expedition-save';
 import { heroCatalog } from '../src/core/world/world';
 const button=(action:string,extra:Record<string,string>={})=>({dataset:{forge:action,...extra},disabled:false}) as unknown as HTMLButtonElement;
 const select=(id:string,value:string)=>({id,value,dataset:{}}) as HTMLSelectElement;
@@ -63,6 +64,13 @@ describe('craft, recycle and smelt reviews',()=>{
  });
  it.each(['craft','recycle','smelt'] as const)('%s changing tasks discards review without dispatching an old order',tab=>{
   const {p,ui,host}=fixture(tab);ui.click(button('review'),p);ui.click(button('tasks'),p);ui.click(button('task',{task:'level'}),p);ui.render(p);ui.click(button('confirm'),p);expect(host.craft).not.toHaveBeenCalled();expect(host.salvage).not.toHaveBeenCalled();expect(host.smelt).not.toHaveBeenCalled();expect(host.level).not.toHaveBeenCalled();
+ });
+
+ it.each([1,5])('blocks smelting %i above the existing persisted bank ceiling',amount=>{
+  const {p,ui,host}=fixture('smelt');p.bank.dust=9999999;ui.change(select('forge-target',String(amount)));const html=ui.render(p);expect(html).toContain('ฝุ่นดาวหลังหลอมเกินเพดานคลัง');expect(html).toMatch(/id="forge-smelt"[^>]*disabled/);ui.click(button('review'),p);ui.click(button('confirm'),p);expect(host.smelt).not.toHaveBeenCalled();
+ });
+ it('allows exactly the remaining dust capacity and round-trips the resulting Profile',()=>{
+  const {p,ui,host}=fixture('smelt');p.bank.dust=9999998;const html=ui.render(p);expect(html).not.toMatch(/id="forge-smelt"[^>]*disabled/);expect(html).toMatch(/option value="5"[^>]*disabled/);ui.click(button('review'),p);ui.click(button('confirm'),p);expect(host.smelt).toHaveBeenCalledExactlyOnceWith(1);const result=smelt(p,map,1);let raw='';expect(saveGame({getItem:()=>raw,setItem:(_k:string,v:string)=>{raw=v;}},{profile:result.profile,run:null})).toBe(true);expect(parseGame(raw,map,encounterById).profile.bank.dust).toBe(9999999);
  });
 
 });

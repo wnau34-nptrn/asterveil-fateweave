@@ -63,3 +63,9 @@ test('a failed storage write never claims a persisted success or offers a repeat
 test('changing a reviewed task discards the old confirmation and keeps the chosen recipe',async({page})=>{
  await page.setViewportSize({width:390,height:650});await seed(page);await chooseForgeTask(page,'craft');await page.locator('#forge-craft-level').selectOption('3');const raw=await saved(page);await page.locator('#forge-craft').click();await chooseForgeTask(page,'smelt');await expect(page.locator('#forge-confirm')).toHaveCount(0);await chooseForgeTask(page,'craft');await expect(page.locator('#forge-craft-level')).toHaveValue('3');await expect(page.locator('#forge-confirm')).toHaveCount(0);expect(await saved(page)).toBe(raw);
 });
+
+for(const dust of [9999998,9999999])test(`smelt respects the persisted dust ceiling from ${dust}`,async({page})=>{
+ await page.setViewportSize({width:390,height:650});const p=fixture();p.bank.dust=dust;await seed(page,p);await chooseForgeTask(page,'smelt');await expect(page.locator('#forge-target option[value="5"]')).toHaveJSProperty('disabled',true);const original=await saved(page);
+ if(dust===9999999){await expect(page.locator('#forge-smelt')).toBeDisabled();await expect(page.locator('.forge-reason')).toContainText('ฝุ่นดาวหลังหลอมเกินเพดานคลัง');await page.locator('#forge-smelt').dispatchEvent('click');expect(await saved(page)).toBe(original);}
+ else {await expect(page.locator('#forge-smelt')).toBeEnabled();await page.locator('#forge-smelt').click();expect(await saved(page)).toBe(original);await page.locator('#forge-confirm').dblclick();await expect(page.locator('.forge-service-page')).toHaveAttribute('data-persisted','true');expect((await profile(page)).bank.dust).toBe(9999999);await page.locator('#forge-next-preview').click();await expect(page.locator('#forge-smelt')).toBeDisabled();await page.reload();await page.locator('#continue').click();expect((await profile(page)).bank.dust).toBe(9999999);}
+});
