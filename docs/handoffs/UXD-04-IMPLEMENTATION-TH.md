@@ -1,5 +1,7 @@
 # UXD-04 — ถ่ายโอนคุณสมบัติอุปกรณ์
 
+[PR #141](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/141) merged `caeed2693a0699051a450fc32d88d0f14d19ae8d` หลัง quality 41639856307 และ browser 41639856298 ครบ 4 shards + aggregate ผ่านบน head `f9e12ff`; [Pages 41647477279](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41647477279) บน merge นี้ผ่าน build/browser 4 shards/deploy และเผยแพร่แล้ว เวลา 2026-11-03 21:37:02 Bangkok
+
 วันที่ 2026-11-03 (Asia/Bangkok) · สาขา `codex/uxd-04-affix-transfer` · ฐาน `5f08b7b6c9ba3769581eb84c03e95726898be588`
 
 ## ฐานและ baseline
@@ -37,4 +39,10 @@ Baselineก่อนแก้: affix-transfer.spec.ts390×844ผ่าน1กร
 
 ## สถานะส่งมอบ
 
-ImplementationและlocalQAผ่าน เปิด [PR #141](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/141) กลับfeature/fateweave-initial-prototypeแล้ว runtime commit a310eb3617fe2c768e6c4c1d8861d11ec7b02ea8 ตามด้วยเอกสารสถานะPR รอCIก่อนmergeและPages ผลเผยแพร่จะบันทึกตามหลักฐานจริง ไม่เริ่มงานถัดไปอัตโนมัติ
+Implementation/local QA/PR CI/merge/Pages สำเร็จ Runtime commit `a310eb3617fe2c768e6c4c1d8861d11ec7b02ea8` ตามด้วยเอกสารสถานะ PR ที่ `f9e12ff1095bc2ec2d97ab2579e035178bcc9404` และ merge `caeed2693a0699051a450fc32d88d0f14d19ae8d` กลับ `feature/fateweave-initial-prototype` (head กับ merge มี tree ตรงกัน)
+
+- PR quality 41639856307: unit 1441/103 files, typecheck/lint/build ผ่าน; browser 41639856298: source fixtures 565 + focus 3 + production 73/75/71/79 ครบ 4 shards และ aggregate ผ่าน ไม่รวม skips เป็นกรณีผ่าน
+- Post-merge quality 41647477214: unit 1441/103 files, typecheck/lint/build ผ่าน
+- Pages 41647477279: build, browser 4 shards (source fixtures 565 + production 73/75/71/79 = production 298) และ deploy ผ่านบน merge SHA ข้างต้น Deploy job `125984222768` รายงาน `Reported success!` ที่ `2026-11-03T14:37:02.4340449Z` = 21:37:02 Bangkok และ environment URL เป็น [เกม](https://wnau34-nptrn.github.io/asterveil-fateweave/)
+- ยืนยัน publication จาก workflow/head/deploy log ไม่อ้างว่าได้เปิด URL สดใน environment ซึ่ง host อยู่นอก allowlist ไม่มีผล Safari/iPhone จริง
+- Follow-up release เปลี่ยนเอกสาร 4 ไฟล์เท่านั้น ตรวจ content review และ `git diff --check` ไม่เปลี่ยน runtime หรือรันทดสอบเกมซ้ำ ส่งผ่าน GitHub connector เนื่องจาก git CLI ไม่มี credential โดยไม่เปลี่ยน authentication ไม่เริ่มงานถัดไปอัตโนมัติ

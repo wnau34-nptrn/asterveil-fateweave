@@ -1,5 +1,20 @@
 # Codex → Claude handoff
 
+## 2026-11-03 — UXD-04 เผยแพร่แล้ว (PR #141)
+
+- Environment กลับมา connected และ shell ใช้งานได้ คงฐานเกม `5f08b7b` ไม่ reset งานเดิม ไม่รวม checkpoints `cc51cd4`/`bcd6133` หรือ merge ART PR #133 และไม่เปลี่ยน authentication
+- หน้าถ่ายโอน 3 ขั้น: เลือกช่องชิ้นรับ → ต้นทาง → คุณสมบัติ แสดงภาพ, UID, Lv, +, lock, ทุน และเซ็ต/พลังต้นทางที่เสีย ใช้ `transferCandidate`/`transferReason`/`fusionRefund` เดิม Preview ไม่เรียก RNG และคำนวณค่าตาม Lv ชิ้นรับ
+- แยกค่าจ่ายล่วงหน้า/ทุนคืน/ยอดหลังทำ ต้องมีค่าบริการครบก่อน refund ตรวจ Profile และ eligibility ซ้ำก่อน confirm ล้าง review ก่อนเรียก host ป้องกันยืนยันซ้ำ/ข้อมูลเก่า เปลี่ยนชิ้นรับล้างต้นทางเดิม Escape/cancel คืน focus และ return context
+- Receipt มาจาก `forged/transfer` หลัง persist ใช้ Profile และยอดเงินจริง ดูขั้นถัดไปไม่สั่งงานเพิ่ม Runtime เปลี่ยน 5 ไฟล์พร้อม focused tests ตาม [implementation](UXD-04-IMPLEMENTATION-TH.md) ไม่มี core/content/public/ราคา/RNG/สมดุล/schema เปลี่ยน ไม่เริ่ม UXD-05/06/P04/P09/ดาว/เศรษฐกิจใหม่
+- [PR #141](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/141) merged `caeed2693a0699051a450fc32d88d0f14d19ae8d` หลัง head `f9e12ff` ผ่าน [quality 41639856307](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41639856307) (unit 1441/103 files, typecheck/lint/build) และ [browser 41639856298](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41639856298) ครบ 4 shards + aggregate (source fixtures 565 + focus 3 + production 73/75/71/79 ผ่าน; ไม่รวม skips)
+- [Pages 41647477279](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41647477279) บน merge `caeed2693a0699051a450fc32d88d0f14d19ae8d` ผ่าน build, browser ครบ 4 shards และ deploy: source fixtures 565 + production 73/75/71/79 (รวม production 298) ผ่าน; deploy job `125984222768` รายงาน `Reported success!` เวลา `2026-11-03T14:37:02.4340449Z` = 21:37:02 Bangkok เผยแพร่ [เกม](https://wnau34-nptrn.github.io/asterveil-fateweave/) แล้ว ยืนยันจาก workflow/head/deploy log ไม่ใช่การเปิด URL สดจาก environment ซึ่ง host ไม่อยู่ใน allowlist; [quality หลัง merge 41647477214](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41647477214) ผ่าน (unit 1441/103 files, typecheck/lint/build)
+- Local: full unit 1441/103 files, focused 49, production browser 44 distinct ผ่าน (40 regression + 3 ใหม่ + world 1 ไม่บวก dev/baseline/retries) รวมถ่ายโอนจริง 2 รอบในช่องผูกเดิมที่ 320×568, 390×650, 390×844 และ desktop พร้อม text 200%/insets จำลอง 59/34
+- ภาพ 390px ที่ตรวจ: `/tmp/uxd-04/transfer-review-650.png`, `transfer-review-844.png`, `transfer-result-650.png`, `transfer-result-844.png`, `transfer-review-text200-insets.png` Fixture ใหม่เคยใช้ speed กับ body นอก pool แก้เป็น barrier และเพิ่ม parseGame ก่อน seed ไม่ผ่อน validator ใช้ Chromium emulation ไม่มีผล Safari/iPhone/อุปกรณ์จริง/ผู้เล่นจริง
+- Follow-up release เปลี่ยนเฉพาะเอกสาร 4 ไฟล์นี้ ส่งผ่าน GitHub connector เนื่องจาก git CLI อ่าน remote ไม่ได้ (ไม่มี credential) ไม่เปลี่ยน auth; runtime คงเดิมจาก merge ที่เผยแพร่ head `f9e12ff` กับ merge `caeed26` มี tree ตรงกัน (`d9ab60d2`) ตรวจเอกสารด้วย content review และ `git diff --check` ตามกฎ docs-only ไม่รันทดสอบเกมซ้ำ
+- [x] implementation/local QA/PR CI/merge/Pages deploy สำเร็จ
+- รายการด้านล่างเป็นประวัติระหว่างพัฒนา ให้ยึดสถานะ release บนสุด
+
+
 ## 2026-11-03 — UXD-04 ถ่ายโอนคุณสมบัติ — PR #141
 
 - เจ้าของให้ดำเนินUXD-04 และให้หาวิธีเข้าenvironmentหลังoffline; เมื่อruntimeconnectedแล้วตรวจworkspaceเดิมสะอาดและremote/ancestryตรง5f08b7b (UXD-03 merge3408f41+เอกสารrelease) สร้างcodex/uxd-04-affix-transfer ไม่เปลี่ยนauth/resetงานเดิม/รวมcheckpointเก่าหรือART PR133
