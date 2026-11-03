@@ -28,7 +28,8 @@ export class ForgeEnhancementLayout {
     if(compact&&cost.parentElement===dock){if(surface.dataset.review==='true')body.prepend(cost);else body.insertBefore(cost,body.querySelector('.forge-secondary-details'));}
     else if(!compact&&cost.parentElement!==dock)dock.prepend(cost);
     surface.classList.toggle('forge-compact-cost',compact);
-    const step=surface.querySelector<HTMLElement>('.forge-step')!,caption=step.querySelector<HTMLElement>('.forge-step-caption')!;
+    const step=surface.querySelector<HTMLElement>('.forge-step');if(!step)return;
+    const caption=step.querySelector<HTMLElement>('.forge-step-caption')!;
     const a=step.getBoundingClientRect(),b=caption.getBoundingClientRect();
     step.classList.toggle('forge-hide-wings',b.left<a.left+52||b.right>a.right-52||b.height>24);
   }
