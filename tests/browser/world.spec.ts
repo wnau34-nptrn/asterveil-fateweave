@@ -1244,10 +1244,10 @@ test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async
   await page.locator('#forge-enhance').click();await page.locator('#forge-confirm').click();
   await expect(page.locator('.forge-item-head')).toContainText('+1');
   await openForgeTools(page);await page.locator('#forge-mode-reroll').click();await page.locator('#forge-reroll-0').click();await page.locator('#forge-confirm').click();
-  await expect(page.locator('#forge-reroll-0')).toBeDisabled();await expect(page.locator('.forge-reason')).toContainText('ตราสัญญาไม่พอ');
+  await expect(page.locator('#forge-success')).toContainText('สุ่มคุณสมบัติสำเร็จ');await page.locator('#forge-next-preview').click();await expect(page.locator('#forge-reroll-0')).toBeDisabled();await expect(page.locator('.forge-reason')).toContainText('ตราสัญญาไม่พอ');
   await openForgeTools(page);await page.locator('#forge-mode-fuse').click();await expect(page.locator('.forge-mats')).toContainText('จะทำลาย');
   await page.locator('#forge-fuse').click();await page.locator('#forge-confirm').click();
-  await expect(page.locator('.forge-item-head')).toContainText('หายาก');
+  await expect(page.locator('.forge-item-head')).toContainText('หายาก');await expect(page.locator('#forge-success')).toContainText('เลื่อนความหายากสำเร็จ');await page.locator('#forge-next-preview').click();
   await page.locator('#forge-change-item').click();await expect(page.locator('.forge-pick')).toHaveCount(1);
   for (const b of await page.locator('.forge-pick').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('lobby-forge.png') });

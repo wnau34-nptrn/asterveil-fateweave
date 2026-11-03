@@ -131,3 +131,26 @@
 .forge-picker :is(small,.camp-note) { font-size: .75rem; }
 
 .forge-task-grid #forge-mode-transfer { grid-column: auto; }
+
+/* Fusion / reroll share the established frame, scroll region and review dock. */
+.forge-random-development :is(.forge-materials,.forge-affix-choice,.forge-random-info) { margin: 10px 0; padding: 10px; border: 1px solid var(--hud-edge); border-radius: var(--radius-md); background: var(--panel-soft); }
+.forge-random-development h4 { margin: 0 0 6px; font-size: 1rem; }
+.forge-random-development p { overflow-wrap: anywhere; }
+.forge-random-development .forge-item-head .forge-main-label { color: var(--veil-cyan); font-weight: 600; }
+.forge-random-development .forge-random-info { border-color: var(--gold-light); }
+.forge-random-development .forge-mats { color: var(--danger-coral); }
+.forge-donor-cards { display: grid; gap: 8px; list-style: none; margin: 8px 0 0; padding: 0; }
+.forge-donor-cards > li, .forge-donor-cards button { min-width: 0; }
+.forge-donor-cards > li:not(:has(button)), .forge-donor-cards button { display: flex; gap: 10px; align-items: center; width: 100%; padding: 10px; text-align: left; color: var(--text); border: 1px solid var(--hud-edge); border-radius: var(--radius-sm); background: var(--panel-bg); }
+.forge-donor-cards button[aria-pressed="true"] { border-color: var(--veil-cyan); background: #123645; }
+.forge-donor-cards .gear-art { --art: 48px; flex: 0 0 48px; }
+.forge-donor-cards span:not(.gear-art) { min-width: 0; overflow-wrap: anywhere; }
+.forge-donor-cards small { display: block; color: var(--text-muted); font-size: .75rem; }
+.forge-donor-cards b { font-size: .875rem; }
+.forge-random-development .forge-ledger { width: 100%; border-collapse: collapse; font-size: .75rem; text-align: right; }
+.forge-ledger caption { text-align: left; color: var(--gold-light); }
+.forge-ledger :is(th,td) { padding: 4px 2px; overflow-wrap: anywhere; }
+.forge-ledger th:first-child { text-align: left; }
+.forge-ledger thead { color: var(--text-muted); }
+.forge-ledger td:last-child { color: var(--hp-mint); font-weight: 600; }
+.forge-random-development :is(.forge-actual-result,.forge-affix-choice) ul { margin: 8px 0; padding-left: 18px; font-size: .875rem; }

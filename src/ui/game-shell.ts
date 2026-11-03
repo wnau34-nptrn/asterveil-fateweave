@@ -275,6 +275,8 @@ export class GameShell {
       : ({ hired: 'broker', talent: 'trainer', equipped: 'keeper', salvaged: 'keeper', forged: 'smith', smelted: 'smith', brewed: 'herbalist' } as Partial<Record<string, NpcId>>)[e.type];
     if(e.type==='forged'&&e.action==='enhance')this.lobby.forgeEnhanced(this.game.profile,e.uid);
     if(e.type==='forged'&&e.action==='level')this.lobby.forgeLeveled(this.game.profile,e.uid);
+    if(e.type==='forged'&&e.action==='fuse')this.lobby.forgeFused(this.game.profile,e.uid);
+    if(e.type==='forged'&&e.action==='reroll')this.lobby.forgeRerolled(this.game.profile,e.uid);
     this.showLobby();
     if (e.type === 'forged' && (e.action === 'enhance' || e.action === 'level')) { const item = findItem(result.profile, e.uid)?.item; if (item) forgeStrike(this.root, item, e.action, this.reducedMotion.matches); }
   }
