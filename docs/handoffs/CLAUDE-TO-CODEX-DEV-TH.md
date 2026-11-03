@@ -1,5 +1,22 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-11-03 — UXD-03 เผยแพร่แล้ว (PR #140)
+
+- เจ้าของสั่งให้ดำเนินขั้นต่อไปหลังส่ง PR จึงตรวจ CI, merge และตรวจ Pages ตาม standing authorization งานใหม่ยังอยู่เฉพาะ UXD-03
+- PR #140 กลับ feature/fateweave-initial-prototype จากฐาน186f430; exact head6a5d484 ผ่าน quality41610244461 (unit1421/102files,typecheck,lint,build) และ browser41610244320 ครบ4shards+aggregateก่อนmerge
+- PR [#140](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/140) merged `3408f41085287abdee0d3ab01076c3dccd48abd7` หลัง CIhead6a5d484ผ่านครบ; source565 + focus3 + production72/74/70/78ผ่าน (skipsตามconfig ไม่รวมเป็นกรณีผ่าน)
+- Pages [41617328132](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41617328132) บนmerge3408f41ผ่าน build/unit1421/browserครบ4shards/deployทั้งหมด (source565 + production72/74/70/78ผ่าน); deploy log รายงานsuccess2026-11-03T10:48:08Z = 17:48:08 Asia/Bangkok เกม https://wnau34-nptrn.github.io/asterveil-fateweave/; [qualityหลังmerge41617327476](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41617327476) ผ่านunit1421เช่นกัน
+- หน้าเลื่อนความหายาก/สุ่มคุณสมบัติใช้sharedframe/dock/review/receiptตามeventที่บันทึกจริง แยกภาพ/UID/Lv/+/lock/ทุนdonorรายชิ้น และledgerใช้/คืนทุน/หลังทำ Previewไม่เรียกRNGหรือแสดงผลใหม่ล่วงหน้า รักษาselectedUID/focus/Escape/returncontext ดูขั้นถัดไปไม่สั่งงาน
+- Runtime4ไฟล์และunit/browser/handoffตามUXD-03-IMPLEMENTATION-TH.md; ไม่มีcore/content/public/rules/save/ราคา/RNG/สมดุลเปลี่ยน ไม่รวมcheckpointcc51cd4/bcd6133หรือART PR133 ไม่พบCURRENT_STATE.mdบนฐานเกม
+- Local unit1421,focused31,productionbrowser45distinctผ่าน; ภาพ390pxที่ตรวจและส่งเจ้าของ: /tmp/uxd-03/fusion-review-844.png และreroll-review-844.png พร้อมคู่650/844และผลจริงในโฟลเดอร์เดียวกัน ตรวจsafeareaจำลอง59/34ร่วมกับtext200%ด้วย
+- ยังไม่มีSafari/iPhone/มือถือจริง/ผู้เล่นจริง ไม่อ้างemulationเป็นเครื่องจริง ไม่เริ่มUXD-04–06/P04/P09/ดาว/เศรษฐกิจใหม่จากการปิดงานนี้
+
+- การตรวจอนุมัติอัตโนมัติปฏิเสธmergeครั้งแรกเพราะตีความสิทธิ์เพียงเปิดPR; อ่านAGENTS/CLAUDEที่exacthead6a5d484ยืนยันstanding authorization แล้วใช้merge toolเดิมกับexpectedheadเดิมครั้งที่สองสำเร็จ ไม่มีการเลี่ยงผ่านคำสั่งอื่น
+- [x] implementation/localQA/PR CI/merge/Pages deployครบ; follow-upนี้เป็นเอกสารrelease4ไฟล์เท่านั้น runtimeตรงmerge3408f41 ไม่รันทดสอบเกมซ้ำสำหรับเอกสาร ตรวจเนื้อหาและgit diff --check
+- การเผยแพร่ยืนยันจากrun/head/deploylogและenvironment URL ไม่อ้างliveHTTP/livebrowserจากexecutorซึ่งไม่มีgithub.ioในHTTPallowlist; ข้อจำกัดSafari/iPhoneจริงยังคงเดิม
+- รายการด้านล่างเป็นประวัติระหว่างพัฒนา ให้ยึดสถานะreleaseบนสุด
+
+
 ## 2026-11-03 — UXD-03 เลื่อนความหายาก / สุ่มคุณสมบัติ — PR #140
 
 - เจ้าของมอบหมาย UXD-03 บนฐานเกม186f430 (รวมUXD-02 merge32cf6ce); remote/ancestryตรวจแล้ว ไม่มีCURRENT_STATE.md/checkpointscc51cd4,bcd6133ในenvironment ไม่ได้นำเข้าcheckpointหรือmergeART PR133

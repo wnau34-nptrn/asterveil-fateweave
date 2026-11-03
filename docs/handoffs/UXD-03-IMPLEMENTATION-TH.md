@@ -1,5 +1,7 @@
 # UXD-03 — เลื่อนความหายากและสุ่มคุณสมบัติ
 
+เผยแพร่แล้วผ่าน [PR #140](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/140) merge `3408f41085287abdee0d3ab01076c3dccd48abd7`: quality41610244461/browser41610244320ครบ4+aggregateผ่านบนexacthead6a5d484; [Pages41617328132](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41617328132) build/browser4/deployผ่านทั้งหมด deploylogsuccess2026-11-03T10:48:08Z = 17:48:08 Asia/Bangkok เกม https://wnau34-nptrn.github.io/asterveil-fateweave/
+
 วันที่ 2026-11-03 (Asia/Bangkok) · สาขา `codex/uxd-03-fusion-reroll` · ฐาน `186f430f54ceefccdd9935d65d18d73a4b5823cc`
 
 ## ฐานและ baseline
@@ -32,8 +34,8 @@ environment เริ่มที่ `work/e51998c` มีเพียง README
 - Browser ใช้ Chromium `/usr/bin/chromium`; ตรวจ production build ผ่าน Playwright config เดิม ไม่อ้างว่าเป็น Safari/iPhone จริง
 - ภาพ baseline `/tmp/uxd-03/baseline-fusion-390.png`; ภาพหลังทำจริง390pxใน `/tmp/uxd-03/fusion-review-650.png`, `fusion-review-844.png`, `fusion-result-650.png`, `fusion-result-844.png`, `reroll-review-650.png`, `reroll-review-844.png`, `reroll-result-650.png`, `reroll-result-844.png`; ตรวจด้วยตาแล้ว (ภาพเฉพาะworkspace ไม่commitเข้าrepo)
 
-ยังไม่มีผล Safari/iPhone/มือถือจริงหรือผู้เล่นจริง จึงไม่อ้างปิด UXD-08 ไม่มีผล authenticated gh; สถานะ PR/CI ต้องดูจาก PR จริง ไม่ถือผล local เป็นผล GitHub Actions หรือ Pages
+ยังไม่มีผล Safari/iPhone/มือถือจริงหรือผู้เล่นจริง จึงไม่อ้างปิด UXD-08 ไม่มีผล authenticated gh; ผล GitHub Actions/Pages ยืนยันแยกจากlocalตามหลักฐานreleaseด้านบน ไม่อ้างผลlocalเป็นผลเครื่องจริง
 
 ## สถานะส่งมอบ
 
-ทำ implementation และ local QA แล้ว เปิด [PR #140](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/140) กลับ feature/fateweave-initial-prototype; runtime commit e178f0db5041c77eadc8a8a55759ef5b05108a29 ตามด้วยเอกสารสถานะ PR มี quality/browser workflows เริ่มแล้วแต่ยังรอผล ยังไม่ merge/deploy UXD-03; ไม่เริ่มงานถัดไปอัตโนมัติ
+ทำ implementation และ local QA แล้ว เปิด [PR #140](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/140) กลับ feature/fateweave-initial-prototype; runtime commit e178f0db5041c77eadc8a8a55759ef5b05108a29 ตามด้วยเอกสารสถานะ PR PR quality/browserผ่านครบและmerge3408f41แล้ว; Pages41617328132 build/unit1421/browserครบ4shards/deployผ่าน เผยแพร่สำเร็จ17:48:08 Asia/Bangkok ยืนยันจากworkflow/deploylog ไม่อ้างliveHTTP/livebrowserจากexecutor; เอกสารreleaseตามหลัง4ไฟล์ไม่เปลี่ยนruntime และไม่เริ่มงานถัดไปอัตโนมัติ
