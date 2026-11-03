@@ -37,4 +37,4 @@ Baselineก่อนแก้: affix-transfer.spec.ts390×844ผ่าน1กร
 
 ## สถานะส่งมอบ
 
-ImplementationและlocalQAผ่าน พร้อมส่งPRกลับfeature/fateweave-initial-prototype ผลCI/merge/Pagesจะบันทึกตามหลักฐานจริง ไม่เริ่มงานถัดไปอัตโนมัติ
+ImplementationและlocalQAผ่าน เปิด [PR #141](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/141) กลับfeature/fateweave-initial-prototypeแล้ว runtime commit a310eb3617fe2c768e6c4c1d8861d11ec7b02ea8 ตามด้วยเอกสารสถานะPR รอCIก่อนmergeและPages ผลเผยแพร่จะบันทึกตามหลักฐานจริง ไม่เริ่มงานถัดไปอัตโนมัติ
