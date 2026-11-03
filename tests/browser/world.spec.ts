@@ -1,4 +1,4 @@
-import { openForgeTools } from './forge-navigation';
+import { openForgeTools, chooseForgeTask } from './forge-navigation';
 import { expect, test, type Page } from '@playwright/test';
 import { encounterById } from '../../src/content/encounters/catalog';
 import { chapterOne as map } from '../../src/content/world/chapter1';
@@ -1238,7 +1238,7 @@ test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async
   await seed(page, null, profile);
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator('#lobby-tab-forge').click();
-  await expect(page.locator('#lobby-sheet-title')).toContainText('ช่างตีเหล็ก'); await expect(page.locator('.forge-pick')).toHaveCount(3);
+  await expect(page.locator('#lobby-sheet-title')).toContainText('เลือกงานโรงตีเหล็ก'); await chooseForgeTask(page,'enhance'); await expect(page.locator('.forge-pick')).toHaveCount(3);
   await page.locator('#forge-item-1').click();
   await expect(page.locator('#forge-cost')).toContainText('แร่ · ใช้ 4');
   await page.locator('#forge-enhance').click();await page.locator('#forge-confirm').click();
@@ -1303,7 +1303,7 @@ test('camp NPCs stand at their stations, open their service when tapped and gree
   for (const b of await page.locator('.npc-hit').all()) { const box = (await b.boundingBox())!; expect(box.width).toBeGreaterThanOrEqual(44); expect(box.height).toBeGreaterThanOrEqual(44); }
   await page.waitForTimeout(600);
   await page.screenshot({ path: info.outputPath('camp-npcs.png') });
-  for (const [npc, title, line] of [['smith', 'ช่างตีเหล็ก', 'ลุงบอร์ก'], ['broker', 'ป้ายจ้าง', 'พีโน่'], ['herbalist', 'นักปรุงยา', 'เฟิร์น'], ['keeper', 'อุปกรณ์', 'มิมี่'], ['trainer', 'ต้นไม้ความถนัด', 'ครูฮัลดา'], ['scout', 'จัดทีม', 'คาเอล']] as const) {
+  for (const [npc, title, line] of [['smith', 'เลือกงานโรงตีเหล็ก', 'ลุงบอร์ก'], ['broker', 'ป้ายจ้าง', 'พีโน่'], ['herbalist', 'นักปรุงยา', 'เฟิร์น'], ['keeper', 'อุปกรณ์', 'มิมี่'], ['trainer', 'ต้นไม้ความถนัด', 'ครูฮัลดา'], ['scout', 'จัดทีม', 'คาเอล']] as const) {
     await page.locator(`#npc-${npc}`).click();
     if(npc==='keeper')await page.locator('.storage-keeper summary').click();
     if(npc==='trainer'){await expect(page.locator('#camp-character-dialog')).toBeVisible();await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');await expect(page.locator('#npc-art-trainer')).toHaveAttribute('data-act','greet');await page.locator('#camp-character-dialog [data-world=character-close]').click();continue;}
@@ -1336,7 +1336,7 @@ test('camp NPCs stand at their stations, open their service when tapped and gree
   await expect.poll(() => pan.evaluate(el => el.scrollLeft)).toBeLessThan(5);
   await expect(page.locator('#npc-smith')).toBeInViewport(); await expect(page.locator('#npc-art-trainer')).toBeInViewport();
   await page.screenshot({ path: info.outputPath('camp-npcs-phone-left.png') });
-  await page.locator('#npc-smith').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('ช่างตีเหล็ก');
+  await page.locator('#npc-smith').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('เลือกงานโรงตีเหล็ก');
   // Redraws keep the pan where the player left it.
   await page.locator('[data-lobby="close"]').click(); expect(await pan.evaluate(el => el.scrollLeft)).toBeLessThan(5);
   await pan.evaluate(el => { el.scrollLeft = el.scrollWidth; }); await expect(page.locator('#npc-scout')).toBeInViewport();

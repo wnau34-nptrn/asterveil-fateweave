@@ -1,5 +1,19 @@
 # Codex → Claude handoff
 
+## 2026-11-03 — UXD-02 เลือกงานช่างและเพิ่มเลเวล (local QA ผ่าน รอ CI/เผยแพร่)
+
+- เจ้าของ “ดำเนินการได้” อนุญาตทำ UXD-02 ตามแผน: launcher8งานจากNPC/เมนูค่าย, คงUIDเมื่อเปลี่ยนงาน, หน้าเพิ่มLvใช้โครงเดียวกับตีบวกและข้อมูลจริง ไม่เริ่มดาว/สกิล/P04/P09หรือmerge ART PR133
+- หน้าเพิ่มLvมีภาพชิ้น/ผู้สวม, ก่อน→หลัง, capจริง, ผลต่อผู้สวม/ชิ้น, รายละเอียดและledgerพับ, ใช้/มี/เหลือ/ขาด, review, receiptจากforged/levelที่บันทึกจริง และดูขั้นถัดไปโดยไม่ใช้ของ รักษาสี/เซ็ต/+ และบริบทกลับตัวละคร/คลัง
+- ปุ่มเลือกงานย้ายอยู่headerเพื่อไม่ถูกdockบัง; ทั้งlauncher/picker/levelใช้กรอบsafeareaที่แก้PR137แล้ว เกราะและrevision3935edefจากPR138คงเดิม ไม่มีcore/content/public/rules/save/balance/viewport/motionเปลี่ยน
+- Local lint/typecheck/buildPagesผ่าน; fullunit1407/101filesผ่านหลังแก้runtimeสุดท้าย; focused15ผ่าน; production Chromium browser30/30ผ่านบนruntimeคงที่ (320×568,390×650,390×844,1366×768,ข้อความ200%,จำลองinsets59/34,rotation,keyboard,stale/doubleconfirm,receipt/cap/shortage,craft/refund/transfer/world locks)
+- ระหว่างQAพบและแก้จริง: non-item craft/smelt ถูกเข้าใจเป็นpickerทำให้Escape reviewไม่ปิด; จำกัดitemPickerเฉพาะdevelop/recycle พร้อมunit; เปลี่ยนผู้ทดลองแบบreadonlyต้องคงreceipt พร้อมunit/browser และvalidatefixtureก่อนinject ปรับkeyboard/postcraft assertionsตามหน้าใหม่โดยคงbank/refund/save checksเดิม
+- รอบก่อนหน้ามีbrowserล้มจากHMRระหว่างแก้runtime1กรณี, selectorsเก่าของlauncherและpostcraft, และEscapeบั๊กข้างต้น ไม่อ้างรอบเหล่านั้นผ่าน ผลสุดท้าย30ผ่านเป็นproductionรอบใหม่หลังแก้ทั้งหมด
+- ไฟล์runtime: forge-workbench.ts,forge-enhancement.css,lobby-ui.ts,game-shell.ts; unitใหม่ item-level-review.test.ts9กรณี; browserใหม่ forge-tasks-level.spec.ts6กรณี + helper/forge regressionเดิม รายละเอียด docs/handoffs/UXD-02-IMPLEMENTATION-TH.md
+- ภาพ390pxตรวจแล้ว /tmp/uxd-02/launcher-390.png และ level-390.png (ไฟล์workspaceชั่วคราว) ไม่มีSafari/iPhoneจริง/ผู้เล่นจริง; ใช้repoPlaywrightเพราะBrowser js runtimeไม่มีในsession Pageshostนอกexecutorallowlistจึงไม่อ้างliveHTTP
+- PR #139 head119a188 quality41561027076ผ่าน (unit1407); browser41561027135 shard4พบNPCspecยังคาดชื่อหัวหน้าต่างเก่า2จุด ปรับเป็นเลือกงานโรงตีเหล็กแล้ว productionNPCเต็มเส้นทางผ่านเพิ่ม1กรณี (รวมlocal31distinct) runtimeไม่เปลี่ยน จะตรวจCIบนheadใหม่ครบ
+- สาขา codex/uxd-02-forge-launcher-level ฐานcce1bf0; กำลังส่งPR รอexact-head quality/browser4+aggregate ก่อนmerge และรอPages build/browser4/deploy จะบันทึกเลขจริงภายหลังตามstanding authorization
+
+
 ## 2026-11-03 — เกราะแสดงภาพถูกต้องแล้ว (PR #138 เผยแพร่)
 
 - เจ้าของแจ้งเกราะเป็นอาวุธ: gearCell/JSON ถูก แต่runtime pixels2ช่องผิด คืน gear_body_set_dawn และ gear_body_fine จาก ART-UI-EQUIP-002/cells เดิมแบบlossless; decodedRGBAทุกพิกเซลนอก2ช่องตรงก่อนแก้ ไม่เปลี่ยนอีก4อาวุธC12หรือincomingต้นฉบับ

@@ -25,7 +25,7 @@ for(const [width,height,touch] of [[320,568,true],[390,650,true],[390,844,true],
     const saved=()=>page.evaluate(k=>localStorage.getItem(k),key),initial=await saved();
     await trigger.click();await expect(page.locator('#lobby-sheet-title')).toContainText('ตีบวกอุปกรณ์');
     await expect(page.locator('.forge-hero-preview')).toBeVisible();await expect(page.locator('#forge-cost')).toContainText('แร่ · ใช้ 6');await expect(page.locator('#forge-cost')).toContainText('มี 100');
-    await expect(page.locator('.forge-other')).not.toHaveAttribute('open','');
+    await expect(page.locator('#forge-open-tasks')).toBeVisible();
     await page.locator('#forge-enhance').click();await expect(page.locator('#lobby-sheet-title')).toContainText('ตรวจรายการ');expect(await saved()).toBe(initial);
     await page.keyboard.press('Escape');await expect(page.locator('#forge-enhance')).toBeFocused();expect(await saved()).toBe(initial);
     await page.locator('#forge-enhance').click();
