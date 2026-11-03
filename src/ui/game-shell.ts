@@ -278,6 +278,9 @@ export class GameShell {
     if(e.type==='forged'&&e.action==='fuse')this.lobby.forgeFused(this.game.profile,e.uid);
     if(e.type==='forged'&&e.action==='reroll')this.lobby.forgeRerolled(this.game.profile,e.uid);
     if(e.type==='forged'&&e.action==='transfer')this.lobby.forgeTransferred(this.game.profile,e.uid);
+    if(e.type==='forged'&&e.action==='craft')this.lobby.forgeServiced(this.game.profile,'craft',e.uid,this.saved);
+    if(e.type==='salvaged')this.lobby.forgeServiced(this.game.profile,'recycle',e.count,this.saved);
+    if(e.type==='smelted')this.lobby.forgeServiced(this.game.profile,'smelt',e.dust,this.saved);
     this.showLobby();
     if (e.type === 'forged' && (e.action === 'enhance' || e.action === 'level')) { const item = findItem(result.profile, e.uid)?.item; if (item) forgeStrike(this.root, item, e.action, this.reducedMotion.matches); }
   }

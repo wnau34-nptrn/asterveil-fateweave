@@ -1,3 +1,4 @@
+import { storageCap } from '../core/world/storage';
 import { icon } from './icons';
 import { preloadForgeStrike } from './forge-strike';
 import { equipmentEffects } from './character-view';
@@ -19,8 +20,9 @@ interface ForgeHost {
 type Tab='develop'|'craft'|'recycle'|'smelt';
 type Mode='enhance'|'level'|'fuse'|'reroll'|'transfer';
 type DevelopmentMode=Mode;
+type Service='craft'|'recycle'|'smelt';
+interface ServiceOrder { tab:Service; before:Profile; fingerprint:string; uid:number; hero:string; level:number; amount:number; }
 const tabs:Record<Tab,string>={develop:'พัฒนา',craft:'สร้างอาวุธ',recycle:'รีไซเคิล',smelt:'หลอมแร่'};
-const tabIcons:Record<Tab,Parameters<typeof icon>[0]>={develop:'tab-forge',craft:'attack',recycle:'act-reset',smelt:'dust'};
 const modes:Record<Mode,string>={enhance:'ตีบวก',level:'เพิ่ม Lv',fuse:'หลอมสี',reroll:'ปรับค่า',transfer:'ถ่ายโอน'};
 const forgeTasks:readonly {id:Mode|'craft'|'recycle'|'smelt';tab:Tab;mode?:Mode;label:string;description:string;glyph:Parameters<typeof icon>[0];feature?:LobbyFeature}[]=[
   {id:'enhance',tab:'develop',mode:'enhance',label:'ตีบวกอุปกรณ์',description:'เพิ่มขั้น + เพื่อเสริมพลังของชิ้นเดิม',glyph:'enhance'},
@@ -43,27 +45,31 @@ export class ForgeWorkbench {
   private staleReview=false; private detailsOpen=false; private readyScroll=0;
   private choosingTask=true;private taskReturn:{tab:Tab;mode:Mode;picker:boolean}|undefined;
   private success:{mode:DevelopmentMode;uid:number;from:number;to:number;ore:number;dust:number;before:Profile;after:Profile;index:number;sourceIndex:number;donors:number[]}|undefined;
+  private serviceReview:ServiceOrder|undefined;
+  private servicePending:ServiceOrder|undefined;
+  private serviceSuccess:(ServiceOrder&{after:Profile;resultUid?:number;persisted:boolean})|undefined;
   constructor(private readonly map:MapDefinition,private readonly heroes:readonly HeroDefinition[],private readonly data:EncounterDefinition,private readonly host:ForgeHost){}
   remember(root:HTMLElement):void {const impact=root.querySelector<HTMLDetailsElement>('details.forge-impact'),filters=root.querySelector<HTMLDetailsElement>('.gear-extra-filters');if(impact)this.impactOpen=impact.open;if(filters)this.filtersOpen=filters.open;const details=root.querySelector<HTMLDetailsElement>('.forge-secondary-details');if(details)this.detailsOpen=details.open;const body=root.querySelector('.forge-enhancement-content');if(body&&!this.review)this.readyScroll=body.scrollTop;}
-  open(uid?:number):void {this.donors=undefined;this.donorUid=0;this.uid=uid;this.picker=uid===undefined;this.tab='develop';this.mode='enhance';this.target=0;this.review=false;this.success=undefined;this.staleReview=false;this.detailsOpen=false;this.readyScroll=0;this.choosingTask=uid===undefined;this.taskReturn=undefined;}
-  openTasks():void{this.choosingTask=true;this.taskReturn=undefined;this.review=false;this.success=undefined;}
-  cancelReview():boolean{const was=this.review;this.review=false;return was;}
+  open(uid?:number):void {this.donors=undefined;this.donorUid=0;this.uid=uid;this.picker=uid===undefined;this.tab='develop';this.mode='enhance';this.target=0;this.review=false;this.success=undefined;this.serviceSuccess=undefined;this.serviceReview=undefined;this.servicePending=undefined;this.staleReview=false;this.detailsOpen=false;this.readyScroll=0;this.choosingTask=uid===undefined;this.taskReturn=undefined;}
+  openTasks():void{this.serviceSuccess=undefined;this.serviceReview=undefined;this.servicePending=undefined;this.choosingTask=true;this.taskReturn=undefined;this.review=false;this.success=undefined;}
+  cancelReview():boolean{const was=this.review;this.review=false;this.serviceReview=undefined;return was;}
   get enhancementView():boolean{return this.developmentView&&this.mode==='enhance';}
   private get itemPicker():boolean{return (this.tab==='develop'||this.tab==='recycle')&&(this.picker||!this.uid);}
   private get developmentView():boolean{return !this.choosingTask&&this.tab==='develop'&&!this.itemPicker&&this.uid!==undefined;}
-  private get reviewFocus():string{return this.mode==='reroll'?'forge-reroll-'+this.index:'forge-'+this.mode;}
+  private get reviewFocus():string{if(this.tab!=='develop')return 'forge-'+this.tab;return this.mode==='reroll'?'forge-reroll-'+this.index:'forge-'+this.mode;}
   get taskNavigation():boolean{return !this.choosingTask;}
   get scroll():number{return this.review?0:this.readyScroll;}
   backFromEnhancement():string|undefined{
     if(this.choosingTask&&this.taskReturn){const previous=this.taskReturn;this.tab=previous.tab;this.mode=previous.mode;this.picker=previous.picker;this.choosingTask=false;this.taskReturn=undefined;return 'forge-open-tasks';}
-    if(this.developmentView&&this.cancelReview())return this.reviewFocus;
+    if(!this.choosingTask&&this.cancelReview())return this.reviewFocus;
     if(!this.choosingTask&&this.itemPicker){if(this.uid){this.picker=false;return 'forge-change-item';}this.choosingTask=true;return this.tab==='develop'?'forge-mode-'+this.mode:'forge-tab-'+this.tab;}
     return;
   }
   get heading():string{
     if(this.choosingTask)return 'เลือกงานโรงตีเหล็ก';
+    if(this.serviceSuccess)return 'ผล'+(this.serviceSuccess.tab==='craft'?'การสร้างอาวุธ':this.serviceSuccess.tab==='recycle'?'การรีไซเคิล':'การหลอมแร่');
     if(this.itemPicker)return this.tab==='recycle'?'เลือกอุปกรณ์รีไซเคิล':'เลือกอุปกรณ์ · '+(this.mode==='level'?'เพิ่มเลเวล':modes[this.mode]);
-    if(!this.developmentView)return 'ช่างตีเหล็ก';
+    if(this.tab!=='develop')return (this.review?'ตรวจรายการ':'')+(this.tab==='craft'?'สร้างอาวุธ':this.tab==='recycle'?'รีไซเคิลอุปกรณ์':'หลอมแร่เป็นฝุ่น');
     if(this.mode==='fuse')return this.success?'ผลเลื่อนความหายาก':this.review?'ตรวจรายการเลื่อนสี':'เลื่อนความหายาก';
     if(this.mode==='reroll')return (this.success?'ผลการ':this.review?'ตรวจรายการ':'')+'สุ่มคุณสมบัติ';
     if(this.mode==='transfer')return this.success?'ผลการถ่ายโอน':this.review?'ตรวจรายการถ่ายโอน':'ถ่ายโอนคุณสมบัติ';
@@ -82,12 +88,25 @@ export class ForgeWorkbench {
     if(!this.developmentView||this.mode!==mode||this.uid!==uid||!before||!after||!this.source)return;
     this.success={mode,uid,from:mode==='level'?before.level:before.plus??0,to:mode==='level'?after.level:after.plus??0,ore:this.source.bank.ore-p.bank.ore,dust:this.source.bank.dust-p.bank.dust,before:this.source,after:p,index:this.index,sourceIndex:this.sourceIndex,donors:mode==='transfer'?[this.donorUid]:[...this.donors??[]]};this.readyScroll=0;this.staleReview=false;
   }
+  // Called by the shell only after the matching event and persistence, using its canonical Profile.
+  serviced(p:Profile,tab:Service,eventValue:number,persisted=true):void {
+    const order=this.servicePending;if(!order||order.tab!==tab||this.tab!==tab)return;
+    const resultUid=tab==='craft'?eventValue:undefined;
+    if(tab==='craft'&&(!resultUid||!p.items.some(i=>i.uid===resultUid)))return;
+    if(tab==='smelt'&&(eventValue!==order.amount||p.smelted-order.before.smelted!==eventValue))return;
+    if(tab==='recycle'&&eventValue!==1)return;
+    if(tab==='recycle'&&findItem(p,order.uid))return;
+    this.serviceSuccess={...order,after:p,resultUid,persisted};this.servicePending=undefined;this.readyScroll=0;this.staleReview=false;
+  }
+  private serviceOrder(p:Profile):ServiceOrder {
+    return {tab:this.tab as Service,before:p,fingerprint:JSON.stringify(p),uid:this.uid??0,hero:this.craftHero,level:this.craftLevel,amount:this.target===5?5:1};
+  }
   get selected():number|undefined{return this.uid;}
   click(b:HTMLButtonElement,p:Profile):string|undefined {
     const action=b.dataset.forge;if(!action||b.disabled)return;
-    if(action==='confirm'&&!this.review&&this.success)return;
-    if(action==='next-preview'){this.success=undefined;this.review=false;this.readyScroll=0;return 'lobby-sheet-title';}
-    if(action!=='confirm'){this.review=false;this.staleReview=false;this.success=undefined;}
+    if(action==='confirm'&&!this.review&&(this.success||this.serviceSuccess))return;
+    if(action==='next-preview'){if(this.serviceSuccess?.tab==='recycle'){this.uid=undefined;this.picker=true;}this.serviceSuccess=undefined;this.success=undefined;this.review=false;this.readyScroll=0;return 'lobby-sheet-title';}
+    if(action!=='confirm'){this.servicePending=undefined;this.serviceReview=undefined;this.serviceSuccess=undefined;this.review=false;this.staleReview=false;this.success=undefined;}
     if(action==='tasks'){this.taskReturn={tab:this.tab,mode:this.mode,picker:this.picker};this.choosingTask=true;return 'lobby-sheet-title';}
     if(action==='task'){
       const task=forgeTasks.find(t=>t.id===b.dataset.task);if(!task)return;
@@ -103,16 +122,24 @@ export class ForgeWorkbench {
     if(action==='recommend'){this.donors=fuseMaterials(p,this.map,this.uid!).map(i=>i.uid);return 'forge-recommend';}
     if(action==='lock'&&this.uid){this.host.lock(this.uid);return 'forge-lock';}
     if(action==='reset'){this.filters=newGearFilters();this.owner='all';return 'forge-gear-filter-set';}
-    if(action==='cancel'){if(this.developmentView)return this.reviewFocus;return this.tab==='craft'?'forge-craft-hero':'forge-change-item';}
-    if(action==='review'){this.review=true;return 'forge-confirm';}
+    if(action==='cancel')return this.reviewFocus;
+    if(action==='review'){this.review=true;if(this.tab!=='develop')this.serviceReview=this.serviceOrder(p);return 'forge-confirm';}
     if(action==='confirm'&&(!this.review||this.source!==p)){this.review=false;this.staleReview=true;return this.reviewFocus;}
     if(action==='confirm'&&this.review&&this.source===p){
       this.review=false;
-      if(this.tab==='craft'){if(weaponCraftReason(p,this.map,this.craftHero,this.craftLevel))return 'forge-craft-hero';const uid=p.nextItem;this.host.craft(this.craftHero,this.craftLevel);this.uid=uid;this.tab='develop';this.mode='enhance';this.picker=false;this.target=0;}
-      else if(this.tab==='smelt')this.host.smelt(this.target===5?5:1);
-      else if(this.uid&&findItem(p,this.uid)){
-        if(this.tab==='recycle')this.host.salvage([this.uid]);
-        else if(this.mode==='enhance'){
+      if(this.tab!=='develop'){
+        const order=this.serviceReview;this.serviceReview=undefined;
+        if(!order||order.fingerprint!==JSON.stringify(p)||order.tab!==this.tab||order.uid!==(this.uid??0)||order.hero!==this.craftHero||order.level!==this.craftLevel||order.amount!==(this.target===5?5:1)){this.staleReview=true;return this.reviewFocus;}
+        const reason=order.tab==='craft'?weaponCraftReason(p,this.map,order.hero,order.level):order.tab==='recycle'?salvageReason(p,this.map,[order.uid]):smeltReason(p,this.map,order.amount);
+        if(reason){this.staleReview=true;return this.reviewFocus;}
+        this.servicePending=order;
+        if(order.tab==='craft')this.host.craft(order.hero,order.level);
+        else if(order.tab==='recycle')this.host.salvage([order.uid]);
+        else this.host.smelt(order.amount);
+        return 'forge-success';
+      }
+      if(this.uid&&findItem(p,this.uid)){
+        if(this.mode==='enhance'){
           const item=findItem(p,this.uid)!.item,cost=enhancementCostTo(this.map,item,this.target);
           if(!cost||this.target!==(item.plus??0)+1||p.bank.ore<cost.ore||p.bank.dust<cost.dust)return 'forge-enhance';
           this.host.enhance(this.uid,this.target);return 'forge-success';
@@ -135,14 +162,14 @@ export class ForgeWorkbench {
           this.host.reroll(this.uid,this.index);return 'forge-success';
         }
       }
-      return this.tab==='recycle'?'forge-owner-filter':'forge-change-item';
+      return 'forge-change-item';
     }
     return 'forge-change-item';
   }
   change(c:HTMLSelectElement|HTMLInputElement):string {
-    this.review=false;this.staleReview=false;
+    this.review=false;this.serviceReview=undefined;this.staleReview=false;
     if(c.id==='forge-preview-hero'){this.hero=c.value;return c.id;}
-    this.success=undefined;
+    this.success=undefined;this.serviceSuccess=undefined;
     if(c.dataset.gearFilter)changeGearFilter(this.filters,c);
     else if(c.id==='forge-owner-filter')this.owner=c.value;
     else if(c.id==='forge-target')this.target=Number(c.value);
@@ -157,12 +184,13 @@ export class ForgeWorkbench {
   render(p:Profile,open:(f:LobbyFeature)=>boolean=()=>true):string {
     preloadForgeStrike();
     if(this.success&&this.success.after!==p)this.success=undefined;
+    if(this.serviceSuccess&&this.serviceSuccess.after!==p)this.serviceSuccess=undefined;
     const modeFeature:Partial<Record<Mode,LobbyFeature>>={level:'level',fuse:'fuse',reroll:'fuse',transfer:'transfer'};
     const modeOpen=(m:Mode)=>{const f=modeFeature[m];return !f||open(f);};
     if(!modeOpen(this.mode))this.mode='enhance';if(this.tab==='craft'&&!open('craft'))this.tab='develop';
-    if(this.source!==p){if(this.review)this.staleReview=true;this.review=false;this.donors=undefined;this.donorUid=0;this.source=p;}
+    if(this.source!==p){if(this.review)this.staleReview=true;this.review=false;this.serviceReview=undefined;this.donors=undefined;this.donorUid=0;this.source=p;}
+    if(this.serviceSuccess)return this.servicePage(p);
     if(this.uid&&!findItem(p,this.uid)){this.uid=undefined;this.picker=true;}
-    const header=`<div class="forge-tabs" role="tablist" aria-label="โรงตีเหล็ก">${Object.entries(tabs).map(([id,text])=>`<button id="forge-tab-${id}" data-forge="tab" data-tab="${id}" role="tab"${id==='craft'&&!open('craft')?' disabled':''} aria-selected="${id===this.tab}" aria-controls="forge-body" tabindex="${id===this.tab?0:-1}">${icon(tabIcons[id as Tab])}<span>${text}</span></button>`).join('')}</div>`;
     const bank=`<div class="forge-bank" aria-label="ทรัพยากร แร่ดาว ${p.bank.ore} ฝุ่นดาว ${p.bank.dust} ตราสัญญา ${p.bank.seal}"><span class="ui-pill">${icon('ore')}แร่ ${p.bank.ore}</span><span class="ui-pill">${icon('dust')}ฝุ่น ${p.bank.dust}</span><span class="ui-pill">${icon('seal')}ตรา ${p.bank.seal}</span></div>`;
     if(this.choosingTask)return this.launcher(p,open,bank);
     if(this.itemPicker)return `<section class="forge-workbench forge-launcher forge-picker" data-tab="${this.tab}" data-mode="${this.mode}"><div id="forge-body" role="region" aria-label="เลือกอุปกรณ์">${bank}${this.items(p)}</div>${this.frameTrim()}</section>`;
@@ -170,16 +198,7 @@ export class ForgeWorkbench {
       const {item,owner}=findItem(p,this.uid!)!;
       return this.mode==='transfer'?this.transfer(p,item,owner):this.mode==='fuse'||this.mode==='reroll'?this.randomDevelopmentPage(p,item,owner):this.enhancementPage(p,item,owner);
     }
-    let body:string;
-    if(this.tab==='craft')body=this.crafting(p);
-    else if(this.tab==='smelt')body=this.smelt(p);
-    else if(this.picker||!this.uid)body=this.items(p);
-    else {
-      const {item,owner}=findItem(p,this.uid)!;
-      body=`<div class="forge-item-head forge-showcase" data-rarity="${item.rarity}">${gearArt(item)}<div><b>${itemName(item)}</b><small>${slotText[item.slot]} · Lv${item.level} · ${rarityText[item.rarity]} · +${item.plus??0}</small><small>${owner?`สวมอยู่: ${heroText[owner]!.name}`:'ในคลัง'}${item.locked?' · ล็อกแล้ว':''}</small></div></div><div class="forge-item-tools"><button id="forge-change-item" data-forge="picker" class="secondary">เปลี่ยนอุปกรณ์</button><button id="forge-lock" data-forge="lock" class="secondary" aria-pressed="${!!item.locked}">${icon(item.locked?'act-unlock':'act-lock')}${item.locked?'ปลดล็อก':'ล็อกอุปกรณ์'}</button></div>`;
-      body+=this.recycle(p,item,owner);
-    }
-    return `<section class="forge-workbench" data-review="${this.review}" data-tab="${this.tab}" data-mode="${this.mode}">${bank}${header}<div id="forge-body" role="tabpanel" aria-labelledby="forge-tab-${this.tab}">${body}</div></section>`;
+    return this.servicePage(p);
   }
   private frameTrim():string{return `<div class="forge-frame-trim" aria-hidden="true">${['tl','tr','bl','br'].map(c=>`<i class="corner ${c}"></i>`).join('')}<i class="edge-h top"></i><i class="edge-h bottom"></i><i class="edge-v left"></i><i class="edge-v right"></i></div>`;}
   private launcher(p:Profile,open:(f:LobbyFeature)=>boolean,bank:string):string {
@@ -190,20 +209,10 @@ export class ForgeWorkbench {
       return `<button id="${id}" data-forge="task" data-task="${task.id}" class="forge-task-card" data-primary="${task.id==='enhance'||task.id==='level'}"${enabled?'':' disabled'}>${icon(task.glyph)}<span><b>${task.label}</b><small>${task.description}</small>${enabled?'':'<small>ยังไม่ปลดล็อก</small>'}</span></button>`;
     }).join('')}</div>${this.host.quest?`<details class="forge-quests"><summary>งานของช่างตีเหล็ก</summary>${this.host.quest()}</details>`:''}</div>${this.frameTrim()}</section>`;
   }
-  private crafting(p:Profile):string {
-    if(!p.company.includes(this.craftHero))this.craftHero=p.company[0]!;
-    const cap=itemLevelCap(p,this.map);if(this.craftLevel>cap||this.craftLevel<1)this.craftLevel=1;
-    const item=weaponBlueprint(this.map,this.craftHero,this.craftLevel),cost=weaponCraftCost(this.map,this.craftLevel)!,reason=weaponCraftReason(p,this.map,this.craftHero,this.craftLevel);
-    const reasons:Record<string,string>={unknown:'ไม่พบอาชีพนี้',level:'Lv เกินเพดานที่ปลดล็อก',pending:'จัดการของรอรับในกระเป๋าก่อน',bag:'คลังเต็ม · จัดของหรือขยายคลังก่อน',ore:'แร่ดาวไม่พอ',dust:'ฝุ่นดาวไม่พอ',full:'ไม่สามารถเพิ่มอุปกรณ์ได้'};
-    return `<div class="forge-craft"><h3>สร้างอาวุธพร้อมใช้</h3><p class="camp-note">สีดี · คุณภาพ 100% · ไม่มีเซ็ต · ไม่สุ่ม · เลือกอาชีพที่มีอยู่ รวมสมาชิกที่ไม่ได้พามา · ใช้เพดาน Lv เดียวกับช่าง</p><div class="forge-craft-selectors"><label class="forge-label">อาชีพ<select id="forge-craft-hero">${p.company.map(id=>`<option value="${id}"${id===this.craftHero?' selected':''}>${heroText[id]!.role} · ${heroText[id]!.name}</option>`).join('')}</select></label><label class="forge-label">Lv อาวุธ · ปลดล็อกถึง ${cap}<select id="forge-craft-level">${Array.from({length:cap},(_,n)=>n+1).map(n=>`<option value="${n}"${n===this.craftLevel?' selected':''}>Lv${n}</option>`).join('')}</select></label></div><div class="forge-item-head" data-rarity="1">${gearArt(item)}<div><b>${itemName(item)} · Lv${item.level}</b><small>${itemLines(this.map.equipment,item).join(' · ')}</small><small>ได้รับ 1 ชิ้นเข้าคลัง · ไม่สวมให้อัตโนมัติ</small></div></div>${this.heroImpact(p,this.craftHero,p.members[this.craftHero]!.gear??{},{...p.members[this.craftHero]!.gear,weapon:item},'เทียบกับอาวุธที่สวมอยู่ตอนนี้')}<p class="camp-note">ค่าผลิตไม่ใช่ทุนพัฒนา: รีไซเคิลคืนเฉพาะมูลค่าพื้นฐาน แร่ ${this.map.equipment.salvage[1]!.ore} · ฝุ่น ${this.map.equipment.salvage[1]!.dust} · ตีบวก/เพิ่ม Lv ภายหลังยังคืนทุน 100% · การสร้างไม่นับความคืบหน้ารับประกันฟาร์ม</p>${this.footer('forge-craft','สร้างอาวุธ 1 ชิ้น',reasons[reason]??'',`แร่ ${cost.ore} · ฝุ่น ${cost.dust}`,`คงเหลือ แร่ ${p.bank.ore-cost.ore} · ฝุ่น ${p.bank.dust-cost.dust}`)}</div>`;
-  }
   private items(p:Profile):string {
     const all=[...p.items.map(item=>({key:'owned:'+item.uid,item,label:'ในคลัง',owner:''})),...Object.entries(p.members).flatMap(([owner,m])=>Object.values(m.gear??{}).map(item=>({key:'owned:'+item!.uid,item:item!,label:'สวมอยู่: '+heroText[owner]!.name,owner})))];
     const entries=filteredEquipment(all,this.filters).filter(e=>{const owner=all.find(v=>v.key===e.key)!.owner;return (this.owner==='all'||(this.owner==='bag'?!owner:owner===this.owner))&&(this.tab!=='recycle'||!owner);});
     return `${this.uid&&findItem(p,this.uid)?'<button id="forge-resume" data-forge="resume" class="secondary">← กลับชิ้นที่เลือก</button>':''}${this.tab==='develop'&&this.host.quest?`<details class="forge-quests"><summary>งานของช่างตีเหล็ก</summary>${this.host.quest()}</details>`:''}<h3>${this.tab==='recycle'?'เลือกชิ้นที่จะรีไซเคิล':this.mode==='level'?'เลือกอุปกรณ์เพื่อเพิ่มเลเวล':'เลือกอุปกรณ์ที่จะพัฒนา'}</h3><p class="camp-note">${this.tab==='recycle'?'ชิ้นที่เลือกจะหายไป รวมพลังบอสถ้ามี · ตรวจยอดคืนก่อนยืนยัน · ของสวมอยู่ต้องถอดก่อน':'แตะชิ้นที่ต้องการสำหรับงานนี้ · ยังไม่ใช้ทรัพยากร · เปลี่ยนงานได้โดยคงชิ้นที่เลือก'}</p><label class="forge-label">ตำแหน่งอุปกรณ์<select id="forge-owner-filter"><option value="all"${this.owner==='all'?' selected':''}>ทั้งหมด</option><option value="bag"${this.owner==='bag'?' selected':''}>ในคลัง</option>${p.company.map(id=>`<option value="${id}"${this.owner===id?' selected':''}>สวมอยู่: ${heroText[id]!.name}</option>`).join('')}</select></label>${gearFilters(this.filters,'forge-').replace('<details class="gear-extra-filters">',`<details class="gear-extra-filters"${this.filtersOpen?' open':''}>`)}<p class="camp-note">${entries.length}/${all.length} ชิ้น · รูปกุญแจระบุของที่ล็อก</p><ul class="forge-list">${entries.map(e=>`<li data-rarity="${e.item.rarity}"><button id="forge-item-${e.item.uid}" data-forge="pick" data-uid="${e.item.uid}" class="forge-pick" aria-pressed="${this.uid===e.item.uid}">${gearArt(e.item)}<b>${itemName(e.item)} Lv${e.item.level} +${e.item.plus??0}${e.item.locked?' · 🔒':''}</b><small>${e.label} · ${itemLines(this.map.equipment,e.item).join(' · ')}</small></button></li>`).join('')}</ul>${entries.length?'':'<p class="camp-note">ไม่พบของตามตัวกรอง</p>'}`;
-  }
-  private footer(id:string,label:string,reason:string,cost:string,after:string,extra=''):string {
-    return `<div class="forge-footer"><p id="forge-cost">${cost}</p>${after?`<small>${after}</small>`:''}${reason?`<p class="forge-reason" role="status">${reason}</p>`:''}${this.review?`<p class="forge-review" role="status">ตรวจรายการแล้วกดยืนยัน</p><div class="forge-footer-buttons"><button id="forge-confirm" data-forge="confirm" ${extra} class="primary"${reason?' disabled':''}>ยืนยัน${label}</button><button id="forge-cancel" data-forge="cancel" class="secondary">ยกเลิก</button></div>`:`<button id="${id}" data-forge="review" ${extra} class="primary"${reason?' disabled':''}>${icon('tab-forge')}${label}</button>`}</div>`;
   }
   private enhancementPage(p:Profile,item:Item,owner:string|undefined):string {
     const leveling=this.mode==='level',operation=leveling?'เพิ่มเลเวล':'ตีบวก';
@@ -344,13 +353,45 @@ export class ForgeWorkbench {
   private ledger(rows:readonly (readonly [string,number,number,number,number])[],receipt:boolean):string {
     return `<table id="forge-cost" class="forge-ledger"><caption>${receipt?'ยอดที่บันทึกแล้ว':'ทรัพยากรก่อนยืนยัน'}</caption><thead><tr><th>หน่วย</th><th>มี</th><th>ใช้</th><th>คืนทุน</th><th>หลังทำ</th></tr></thead><tbody>${rows.map(([label,bank,cost,back,actual])=>`<tr><th>${label}</th><td>${bank}</td><td>${cost}</td><td>${back}</td><td>${receipt?actual:bank-cost+back}</td></tr>`).join('')}</tbody></table>`;
   }
-  private recycle(p:Profile,item:Item,owner?:string):string {
-    const base=this.map.equipment.salvage[item.rarity]!,paid=enhancementInvestment(this.map,item),total=salvageValue(this.map,item),reason=salvageReason(p,this.map,[item.uid]);
-    return `<h3>รีไซเคิลคืนค่าพัฒนา</h3><p class="forge-reason">${itemName(item)} Lv${item.level} +${item.plus??0} จะถูกทำลาย</p><dl class="forge-refund"><dt>วัตถุดิบจากตัวอุปกรณ์</dt><dd>แร่ ${base.ore} · ฝุ่น ${base.dust}</dd><dt>คืนทุนตีบวก 100%</dt><dd>แร่ ${paid.ore} · ฝุ่น ${paid.dust}</dd><dt>คืนทุนเพิ่ม Lv 100%</dt><dd>แร่ ${item.levelInvestment?.ore??0} · ฝุ่น ${item.levelInvestment?.dust??0}</dd><dt>รวมที่จะได้รับ</dt><dd>แร่ ${total.ore} · ฝุ่น ${total.dust}</dd></dl><p class="camp-note">${!item.investment&&(item.plus??0)>0?'ของเดิม: เครดิตจากระดับ + ที่ยังอยู่ · ':''}ไม่คืนอุปกรณ์ที่เคยใช้หลอมและค่าใช้จ่ายสุ่มคุณสมบัติ</p>${this.footer('forge-recycle','รีไซเคิล',item.locked?'ปลดล็อกอุปกรณ์ก่อนรีไซเคิล':owner?'ถอดอุปกรณ์ในหน้าตัวละครก่อนรีไซเคิล':reason==='full'?'ใช้ทรัพยากรในคลังก่อน ยอดคืนเกินเพดานที่เก็บได้':reason?'ไม่พบอุปกรณ์':'',`ได้รับ แร่ ${total.ore} · ฝุ่น ${total.dust}`,`หลังรับ แร่ ${p.bank.ore+total.ore} · ฝุ่น ${p.bank.dust+total.dust}`)}`;
+  private servicePage(p:Profile):string {
+    const receipt=this.serviceSuccess,tab=receipt?.tab??this.tab as Service,source=receipt?.before??p;
+    const operation=tab==='craft'?'สร้างอาวุธ':tab==='recycle'?'รีไซเคิล':'หลอมแร่';
+    let content:string,used={ore:0,dust:0},received={ore:0,dust:0};
+    const blockers:string[]=[];
+    if(tab==='craft'){
+      if(!p.company.includes(this.craftHero))this.craftHero=p.company[0]!;
+      const cap=itemLevelCap(p,this.map);if(this.craftLevel>cap||this.craftLevel<1)this.craftLevel=1;
+      const hero=receipt?.hero??this.craftHero,level=receipt?.level??this.craftLevel;
+      const item=receipt?p.items.find(i=>i.uid===receipt.resultUid)!:weaponBlueprint(this.map,hero,level);
+      used=weaponCraftCost(this.map,level)!;
+      const reason=weaponCraftReason(p,this.map,hero,level),reasons:Record<string,string>={unknown:'ไม่พบอาชีพนี้',level:'Lv เกินเพดานที่ปลดล็อก',pending:'จัดการของรอรับในกระเป๋าก่อน',bag:'คลังเต็ม · จัดของหรือขยายคลังก่อน',full:'ไม่สามารถเพิ่มอุปกรณ์ได้'};
+      if(!receipt){if(reasons[reason])blockers.push(reasons[reason]!);blockers.push(...this.shortages(p,used));}
+      const selectors=this.review||receipt?`<p class="forge-order">สูตรที่เลือก · ${heroText[hero]!.role} · ${heroText[hero]!.name} · Lv${level} · 1 ชิ้น</p>`:`<div class="forge-craft-selectors"><label class="forge-label">อาชีพที่มีในค่าย<select id="forge-craft-hero">${p.company.map(id=>`<option value="${id}"${id===hero?' selected':''}>${heroText[id]!.role} · ${heroText[id]!.name}</option>`).join('')}</select></label><label class="forge-label">Lv อาวุธ · เพดาน ${cap}<select id="forge-craft-level">${Array.from({length:cap},(_,n)=>n+1).map(n=>`<option value="${n}"${n===level?' selected':''}>Lv${n}</option>`).join('')}</select></label></div>`;
+      const member=source.members[hero]!;
+      content=`${selectors}<div class="forge-item-head" data-rarity="${item.rarity}"><div class="forge-art-tile">${gearArt(item)}</div><div><small>${receipt?(receipt.persisted?'อาวุธที่บันทึกจริง':'อาวุธในรอบนี้ · ยังไม่บันทึก'):'ผลที่รับประกัน · ไม่สุ่ม'}</small><b>${receipt?'#'+item.uid+' ':''}${itemName(item)}</b><small>Lv${item.level} · ${rarityText[item.rarity]} · คุณภาพ ${item.q?.main??100}%</small><small>ไม่มีเซ็ต · ได้รับ 1 ชิ้นเข้าคลัง · ไม่สวมให้อัตโนมัติ</small></div></div><p class="forge-order">คลัง ${p.items.length}/${storageCap(p,this.map)} ชิ้น · ของรอรับ ${p.overflow?.length??0} ชิ้น</p>${!receipt&&(reason==='pending'||reason==='bag')?'<button id="forge-manage-storage" data-lobby="forge-storage" class="secondary">จัดการคลัง / ของรอรับ</button>':''}<details class="forge-secondary-details"${this.detailsOpen?' open':''}><summary>ค่าสถานะ ผลต่อผู้สวม และการคืนทุน</summary><ul>${itemLines(this.map.equipment,item).map(line=>`<li>${line}</li>`).join('')}</ul>${this.heroImpact(source,hero,member.gear??{},{...member.gear,weapon:item},'เทียบกับอาวุธที่สวมอยู่ตอนนี้ · ยังไม่ได้สวม')}<p>ค่าผลิตไม่ใช่ทุนพัฒนา: รีไซเคิลคืนเฉพาะมูลค่าพื้นฐาน แร่ ${this.map.equipment.salvage[item.rarity]!.ore} · ฝุ่น ${this.map.equipment.salvage[item.rarity]!.dust} และทุนตีบวก/เพิ่ม Lv ที่จ่ายภายหลังจริง</p><p>การสร้างไม่นับความคืบหน้ารับประกันฟาร์ม</p></details>`;
+    }else if(tab==='recycle'){
+      const found=findItem(source,receipt?.uid??this.uid!)!,item=found.item;
+      const base=this.map.equipment.salvage[item.rarity]!,paid=enhancementInvestment(this.map,item),level=item.levelInvestment??{ore:0,dust:0};
+      received=receipt?{ore:p.bank.ore-source.bank.ore,dust:p.bank.dust-source.bank.dust}:salvageValue(this.map,item);
+      const reason=salvageReason(p,this.map,[item.uid]);
+      if(!receipt&&reason)blockers.push(item.locked?'ปลดล็อกอุปกรณ์ก่อนรีไซเคิล':found.owner?'ถอดอุปกรณ์ในหน้าตัวละครก่อนรีไซเคิล':reason==='full'?'ใช้ทรัพยากรในคลังก่อน ยอดคืนเกินเพดานที่เก็บได้':'ไม่พบอุปกรณ์ที่รีไซเคิลได้');
+      const tools=this.review||receipt?'':`<div class="forge-item-tools"><button id="forge-change-item" data-forge="picker" class="secondary">เปลี่ยนอุปกรณ์</button><button id="forge-lock" data-forge="lock" class="secondary" aria-label="${item.locked?'ปลดล็อก':'ล็อก'}อุปกรณ์" aria-pressed="${!!item.locked}">${icon(item.locked?'act-unlock':'act-lock')}</button></div>`;
+      content=`<div class="forge-item-head forge-destroy-item" data-rarity="${item.rarity}"><div class="forge-art-tile">${gearArt(item)}</div><div><small class="forge-loss">${receipt?'ทำลายแล้ว · หายจากคลังทั้งชิ้น':'ชิ้นนี้จะถูกทำลายทั้งชิ้น'}</small><b>#${item.uid} ${itemName(item)}</b><small>${slotText[item.slot]} · Lv${item.level} · +${item.plus??0} · ${rarityText[item.rarity]}</small><small>${found.owner?'สวมอยู่: '+heroText[found.owner]!.name:'ในคลัง'} · ${item.locked?'ล็อกแล้ว':'ไม่ล็อก'}</small>${tools}</div></div><section class="forge-service-panel"><h4>วัสดุที่ได้รับ · ผลแน่นอน</h4><dl class="forge-refund"><dt>มูลค่าพื้นฐาน</dt><dd>แร่ ${base.ore} · ฝุ่น ${base.dust}</dd><dt>คืนทุนตีบวก 100%</dt><dd>แร่ ${paid.ore} · ฝุ่น ${paid.dust}</dd><dt>คืนทุนเพิ่ม Lv 100%</dt><dd>แร่ ${level.ore} · ฝุ่น ${level.dust}</dd><dt>รวมที่จะได้รับ</dt><dd>แร่ ${received.ore} · ฝุ่น ${received.dust}</dd></dl></section><p class="forge-loss">${item.boss?'อุปกรณ์บอสและพลังบอสจะหายไป · ':''}${item.set?'เซ็ต '+setText[item.set]+' จะหายไป · ':''}${item.special?'พลัง '+specialText[item.special]+' จะหายไป · ':''}คุณสมบัติและช่องถ่ายโอนของชิ้นนี้หายทั้งหมด</p><details class="forge-secondary-details"${this.detailsOpen?' open':''}><summary>คุณสมบัติที่เสียและข้อจำกัดคืนทุน</summary><ul>${itemLines(this.map.equipment,item).map(line=>`<li>${line}</li>`).join('')}</ul><p>${!item.investment&&(item.plus??0)>0?'ของเดิม: เครดิตจากระดับ + ที่ยังอยู่ · ':''}ไม่คืนของที่เคยใช้หลอม ค่าผลิต ค่าสุ่มคุณสมบัติ และค่าบริการถ่ายโอน · ไม่ปลดล็อกหรือถอดของให้อัตโนมัติ</p></details>`;
+    }else{
+      const amount=receipt?.amount??(this.target===5?5:1),rate=this.map.equipment.forge.smeltOre,left=smeltLeft(source,this.map);
+      used.ore=amount*rate;received.dust=amount;
+      if(!receipt){blockers.push(...this.shortages(p,used));if(smeltReason(p,this.map,amount)==='limit')blockers.push(`โควตารอบนี้เหลือ ${left} · จำนวนที่เลือก ${amount}`);}
+      content=`<section class="forge-service-panel forge-exchange"><div>${icon('ore')}<b>แร่ ${rate}</b><span aria-hidden="true">→</span>${icon('dust')}<b>ฝุ่น 1</b></div><p>ผลแน่นอน · แร่เป็นฝุ่นเท่านั้น</p></section>${this.review||receipt?`<p class="forge-order">จำนวนที่${receipt?'หลอมแล้ว':'ยืนยัน'} · ฝุ่น ${amount} หน่วย · ใช้แร่ ${used.ore}</p>`:`<label class="forge-label">จำนวนฝุ่นที่จะได้รับ<select id="forge-target"><option value="1"${amount===1?' selected':''}${left<1?' disabled':''}>1 หน่วย${left<1?' · โควตาหมด':''}</option><option value="5"${amount===5?' selected':''}${left<5?' disabled':''}>5 หน่วย${left<5?' · โควตาไม่ถึง 5':''}</option></select></label>`}<section class="forge-service-panel"><h4>โควตารอบนี้</h4><p>หลอมแล้ว ${source.smelted}/${this.map.equipment.forge.smeltCap} · ${receipt?'หลังทำ':'หากยืนยัน'}ใช้ไป ${receipt?p.smelted:source.smelted+amount}</p><p>เหลือ ${receipt?smeltLeft(p,this.map):left} หน่วย${receipt?'':` · หลังทำเหลือ ${Math.max(0,left-amount)}`}</p><small>เริ่มโควตาใหม่เมื่อกลับค่ายจากการเดินทาง · ไม่มีแลกย้อนกลับ</small></section>`;
+    }
+    if(receipt){used={ore:Math.max(0,source.bank.ore-p.bank.ore),dust:Math.max(0,source.bank.dust-p.bank.dust)};received={ore:Math.max(0,p.bank.ore-source.bank.ore),dust:Math.max(0,p.bank.dust-source.bank.dust)};}
+    const rows=(['ore','dust'] as const).map((key,i)=>`<tr><th>${i?'ฝุ่น':'แร่'}</th><td data-label="มี">${source.bank[key]}</td><td data-label="ใช้">${used[key]}</td><td data-label="ได้รับ">${received[key]}</td><td data-label="หลังทำ">${receipt?p.bank[key]:p.bank[key]-used[key]+received[key]}</td></tr>`).join('');
+    const cost=`<div class="forge-cost-summary"><table id="forge-cost" class="forge-service-ledger"><caption>${receipt?(receipt.persisted?'ยอดที่บันทึกจริง':'ยอดในรอบนี้ · ยังไม่บันทึก'):'ทรัพยากร · มี / ใช้ / ได้รับ / หลังทำ'}</caption><thead><tr><th>หน่วย</th><th>มี</th><th>ใช้</th><th>ได้รับ</th><th>หลังทำ</th></tr></thead><tbody>${rows}</tbody></table><p class="forge-cost-status${blockers.length?' forge-reason':''}" role="status">${receipt?`${receipt.persisted?'ยอดบันทึกจริง':'ยังบันทึกไม่ได้ · ยอดในรอบนี้'} · แร่ ${p.bank.ore} · ฝุ่น ${p.bank.dust}`:blockers.join(' · ')||(this.review?'ยังไม่ใช้วัสดุ · ตรวจรายการก่อนยืนยัน':tab==='recycle'?'ทำลายเฉพาะชิ้นที่เลือก · ไม่มีสุ่มผล':tab==='craft'?'ได้รับ 1 ชิ้นเข้าคลัง · ไม่สวมให้อัตโนมัติ':'เลือกจำนวนก่อนตรวจรายการ')}</p></div>`;
+    const label=tab==='craft'?'สร้างอาวุธ 1 ชิ้น':tab==='recycle'?'ทำลายอุปกรณ์ #'+this.uid:'หลอมฝุ่น '+(this.target===5?5:1)+' หน่วย';
+    const actions=receipt?`<button id="forge-next-preview" data-forge="next-preview" class="primary">${tab==='recycle'?'เลือกชิ้นถัดไป':'ดูขั้นถัดไป'}</button>`:this.review?`<button id="forge-cancel" data-forge="cancel" class="secondary">กลับไปแก้ไข</button><button id="forge-confirm" data-forge="confirm" class="primary"${blockers.length?' disabled':''}>ยืนยัน${label}</button>`:`<button id="forge-${tab}" data-forge="review" class="primary"${blockers.length?' disabled':''}>${icon(tab==='craft'?'attack':tab==='recycle'?'act-reset':'dust')}ตรวจรายการ${operation}</button>`;
+    const result=receipt?`<p id="forge-success" class="forge-success" role="status" tabindex="-1">${icon(receipt.persisted?'check':'danger')}${receipt.persisted?operation+'สำเร็จ':'ทำรายการแล้ว แต่บันทึกบนเครื่องไม่สำเร็จ'}<small>${receipt.persisted?'บันทึกผลแล้ว':'ผลอยู่ในรอบนี้เท่านั้น · ไม่ต้องยืนยันซ้ำ'} · ${tab==='craft'?'อาวุธ #'+receipt.resultUid+' อยู่ในคลัง':tab==='recycle'?'ทำลาย #'+receipt.uid+' แล้ว':'ได้รับฝุ่น '+receipt.amount+' หน่วย'}</small></p>`:'';
+    return `<section class="forge-workbench forge-enhancement forge-service-page forge-${tab}" data-tab="${tab}" data-review="${this.review}" data-receipt="${!!receipt}" data-persisted="${receipt?.persisted??false}"><div id="forge-body" role="region" aria-label="${operation}"><div class="forge-enhancement-content">${result}${this.staleReview?'<p class="forge-reason forge-stale" role="status">ข้อมูลเปลี่ยนแล้ว · ตรวจรายการใหม่ก่อนยืนยัน</p>':''}${content}</div><div class="forge-footer forge-enhancement-dock">${cost}<div class="forge-footer-buttons">${actions}</div></div></div>${this.frameTrim()}</section>`;
   }
-  private smelt(p:Profile):string {
-    // One fixed quantity per review, chosen by the button; the displayed total is the committed amount.
-    const amount=this.target===5?5:1,reason=smeltReason(p,this.map,amount),cost=amount*this.map.equipment.forge.smeltOre;
-    return `<h3>แปรรูปแร่เป็นฝุ่นดาว</h3><p class="camp-note">แร่ ${this.map.equipment.forge.smeltOre} ต่อฝุ่น 1 · รอบนี้ทำได้อีก ${smeltLeft(p,this.map)}</p><label class="forge-label">จำนวนฝุ่น<select id="forge-target"><option value="1"${amount===1?' selected':''}>1</option><option value="5"${amount===5?' selected':''}>5</option></select></label>${this.footer('forge-smelt','หลอมแร่',reason==='ore'?'แร่ดาวไม่พอ':reason?'เกินจำนวนที่หลอมได้ในรอบนี้':'',`แร่ ${cost} → ฝุ่น ${amount}`,`คงเหลือแร่ ${p.bank.ore-cost} · ฝุ่น ${p.bank.dust+amount}`,`data-amount="${amount}"`)}`;
+  private shortages(p:Profile,cost:{ore:number;dust:number}):string[]{
+    return [p.bank.ore<cost.ore?`แร่ดาวขาด ${cost.ore-p.bank.ore}`:'',p.bank.dust<cost.dust?`ฝุ่นดาวขาด ${cost.dust-p.bank.dust}`:''].filter(Boolean);
   }
 }
