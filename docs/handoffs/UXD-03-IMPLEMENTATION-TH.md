@@ -36,4 +36,4 @@ environment เริ่มที่ `work/e51998c` มีเพียง README
 
 ## สถานะส่งมอบ
 
-ทำ implementation และ local QA แล้ว ส่ง PR กลับ feature/fateweave-initial-prototype ตามคำขอ ยังไม่ merge/deploy UXD-03; ไม่เริ่มงานถัดไปอัตโนมัติ
+ทำ implementation และ local QA แล้ว เปิด [PR #140](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/140) กลับ feature/fateweave-initial-prototype; runtime commit e178f0db5041c77eadc8a8a55759ef5b05108a29 ตามด้วยเอกสารสถานะ PR มี quality/browser workflows เริ่มแล้วแต่ยังรอผล ยังไม่ merge/deploy UXD-03; ไม่เริ่มงานถัดไปอัตโนมัติ
