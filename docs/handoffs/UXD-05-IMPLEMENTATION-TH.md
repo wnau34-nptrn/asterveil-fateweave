@@ -1,6 +1,8 @@
 # UXD-05 — สร้างอาวุธ / รีไซเคิล / หลอมแร่
 
-วันที่ 2026-11-03 (Asia/Bangkok) · สาขา `codex/uxd-05-craft-recycle-smelt` · ฐาน `fda92e36943944d15ce97b9e8c35cfce704ccdd8`
+เผยแพร่ครบ PR #142 + #143 · 2026-11-04 01:23:05 Asia/Bangkok · final runtime merge `75f0c7c151f3b7190a10555b185faf7fc8600479`
+
+เริ่มงาน 2026-11-03 (Asia/Bangkok) · สาขา `codex/uxd-05-craft-recycle-smelt` · ฐาน `fda92e36943944d15ce97b9e8c35cfce704ccdd8`
 
 ## ฐานและ baseline
 
@@ -22,13 +24,23 @@ Baseline ก่อนแก้: ตรวจ flow และภาพจริง
 
 Runtime เปลี่ยนเฉพาะ `src/ui/forge-workbench.ts`, `forge-enhancement.css`, `lobby-ui.ts`, `game-shell.ts` ไม่มี core/content/public, ราคา, RNG, สมดุล, schema/save หรือ battle rules เปลี่ยน ไม่เริ่ม UXD-06/P04/P09/ดาว/เศรษฐกิจใหม่
 
-## การตรวจและสถานะ
+## Follow-up เพดานฝุ่นเดิม — PR143
 
-กำลังตรวจ local QA; ยังไม่ถือว่า CI/merge/Pages สำเร็จ
+หลัง PR142 merged พบ mismatch เดิม: smeltReason ไม่เช็กเพดาน bank.dust9,999,999 ของ validator v45 เมื่อเต็มแล้วยังหลอม1ได้เป็น10,000,000, saveGameคืนtrueแต่ parseGameปฏิเสธ Invalid bank Repro ผ่านจริงก่อนเพิ่ม guard (ไม่เก็บ regression ที่บังคับให้ core defect คงอยู่)
 
-- Focused unit รอบแรก 56 ผ่าน (service 24 + transfer/fusion/reroll regression 32); typecheck/lint/build Pages ผ่านหลังแก้ fixture BossPower และ lint
-- Browser รอบ development แรกถูกรบกวนโดย Vite reload ระหว่างแก้ จึงหยุดและเปลี่ยนตรวจ production build ใต้ Pages subpath รอบ production แรกมี timeout ขณะ full unit รันพร้อมกัน และ case ใหม่รวมสามงานยาวเกิน timeout เดิม จึงแยก case ต่อตัวงาน/ขนาด โดยคง assertions เงิน/ของ/การบันทึก/reload ไม่ลด assertion หรือเพิ่ม timeout
-- Full unit รอบแรกมี timing failures ใน battle-playback และ balance-sim ระหว่างรันพร้อม browser; หยุดและกำลังรันเต็มใหม่ด้วย maxWorkers=1 แยกจาก browser ไม่เปลี่ยน rule/test timeout
-- ภาพจริงที่ต้องตรวจครบ: review/result ของ craft/recycle/smelt ที่ 390×650 และ 390×844, text200%/safe insets จำลอง 59/34 พร้อม regression 320×568 และ desktop
+PR143 เพิ่มเฉพาะ UI guard ใน workbench: ปิดตัวเลือก1/5ที่เกินเพดานคลังเดิม แจ้งเหตุผลและตรวจซ้ำก่อน host หลอมถึงเพดานพอดีได้พร้อม serialize/parse/reload regression ไม่แก้ core/world/core/save/schema/ราคา/อัตราหลอม/โควตา/RNG/สมดุล ฝาก mismatch ไว้ในหัวข้อฝากถึง Claude แล้ว
 
-ใช้ Chromium `/usr/bin/chromium` และ emulation เท่านั้น ยังไม่มี Safari/iPhone/มือถือจริงหรือผู้เล่นจริง
+## การตรวจและ release
+
+- PR142 head26913b6: quality41663593300 และ browser41663593365 ผ่าน (unit1467/104, source565 + focus3 + production78/80/76/84 =318 ครบ4+aggregate); merged159058e และ Pages41672891117 เผยแพร่ชุดหลัก 2026-11-04 00:09:28 Bangkok
+- [PR143](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/143) head6de4086: quality41674505325 ผ่าน typecheck/lint/unit1470/104/build และ browser41674505111 ผ่าน source565 + focus3 + production79/81/76/84 =320 ครบ4shards+aggregate ไม่รวม skips เป็นผลผ่าน
+- Final merge `75f0c7c151f3b7190a10555b185faf7fc8600479` ใช้ expected-head guard และมี treeตรงPR head `d8570954c98d8e5ddd40ad7e400d6c1356b8d9b0` ไม่มี base drift จาก159058e
+- [Post-merge quality41683593840](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41683593840) และ [Pages41683594383](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41683594383) บน final merge ผ่าน build/browser4/deploy; deploy job 126116992951 รายงาน Reported success! 2026-11-03 18:23:05 UTC = 2026-11-04 01:23:05 Asia/Bangkok [เกม](https://wnau34-nptrn.github.io/asterveil-fateweave/) ยืนยันจาก workflow/head/deploy log ไม่อ้าง live URL/browser จาก executor
+- Local ก่อน I/O ค้าง: focused unit101/9, full1467/104, typecheck/lint/build Pages และ production browser26 distinct ผ่าน (25 รอบหลัก + quota1 หลังแก้ native option property; ไม่บวก baseline/dev/retries) ใช้ CLI allowance unit60s/browser120s เพราะ environment ช้า Repo/CI timeout เดิม
+- หลัง guard: local typecheck/lint/build Pages/service unit29 ผ่าน Browser8 ค้างที่case3และ full1470ไม่จบ ไม่อ้าง local ผ่านส่วนนี้ Current CI ที่ timeoutมาตรฐานผ่าน1470/104 และ production320 รวมสอง browser cases ใหม่ที่เพดานเต็ม/ถึงเพดานพอดี+reload
+- QA เคยพบ BossPower fixtureผิด type (แก้เป็น aegis), lint2จุด, dev browserถูกรบกวนด้วยVite reloadจึงย้ายเป็นproduction, full unit timing timeout5sในbalance-sim (39.4s), และ toBeDisabled ไม่ตรวจ native option จึงใช้ disabled property ตรง ๆ ไม่ลด assertion ยอด/ของ/การบันทึกหรือเปลี่ยน timeoutในrepo
+- Focused coverage: fixed blueprint/ราคา/เพดาน/คลัง/ของรอรับ, ไม่auto-equip/ไม่เพิ่มpity/RNG, UIDและทุนที่หาย/legacyเครดิต/lock/worn/boss/full, quota0/1/4/5, ยอดมี/ใช้/ได้รับ/หลังทำจริง, readonlypreview/cancel, staleProfile/recipe/task/quantity, heldEnter/doubleconfirm, next preview, reload, context/focus/Escape และ storage failure
+- ภาพ review/result จริงครบ craft/recycle/smelt390×650/844 ตรวจแล้ว พร้อม regression320×568/desktop1366×768 และ text200%+insetsจำลอง59/34 ทั้งสามงาน Bodyเลื่อนได้และ dockเข้าถึงได้ ภาพหลักมาจากruntime PR142; guardไม่เปลี่ยน layout ปกติ ภาพอยู่ในchatและ /tmp/uxd-05/ พร้อมสำเนา local docs/validation/uxd-05/ อย่างละ2ภาพต่องาน (review844/result650) ตัวอย่างแยกfixtureเริ่มแร่120ฝุ่น48: craftLv3ใช้30/6→90/42, recycle#1รับ32/6→152/54, smelt5ใช้แร่40→80/53
+- Environment รายงาน running/connected แต่ local บางคำสั่งและ Playwright ติดรอ I/O โดยยังไม่ทราบต้นเหตุ ไม่ reset workspace หรือแก้ auth เอกสาร release 4 ไฟล์ส่งผ่าน GitHub connector แบบ expected-head guarded fast-forward ไม่ force ตรวจเนื้อหาและ whitespace ของข้อความเพิ่มผ่าน API; ไม่อ้างว่า final git diff --check รันสำเร็จ เก็บ draft และภาพ local ไว้ (PNG ยังไม่ได้ commit) ห้ามนำ draft เก่าทับ release; งานครั้งถัดไปตรวจ remote head ใหม่ก่อนจัด workspace
+
+ใช้ Chromium /usr/bin/chromium และ emulation เท่านั้น ไม่มี Safari/iPhone/มือถือจริง/ผู้เล่นจริง ไม่สรุป human usability หรือเปอร์เซ็นต์ปรับปรุงจาก emulation ไม่พบ CURRENT_STATE.md ไม่เริ่ม UXD-06/P04/P09/ดาวหรืองานถัดไปอัตโนมัติ
