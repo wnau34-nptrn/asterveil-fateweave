@@ -1,5 +1,14 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-11-04 — UXD-06 พัฒนาตัวละคร / อัปดาว (กำลัง QA)
+
+- เจ้าของเริ่ม UXD-06 ด้วย “ดำเนินการได้” หลัง UXD-05 release9bf63bd7 ตรวจ remote head/ancestry ก่อนสร้าง codex/uxd-06-character-star ไม่ reset checkoutเดิมที่HEADอ่านไม่ได้ ใช้ sparse checkoutแยก /workspace/asterveil-uxd-06-work ไม่มี CURRENT_STATE.md/Artwork workspace ไม่ merge ART branch/checkpoints
+- เพิ่มแท็บพัฒนา/shortcutภาพรวมและทางเข้าทีมที่ไม่จ่ายทันที Preview/review/receiptจากระบบจริง ใช้ตัวซ้ำก่อนตรา แยกของขาด เพดานตรา/ดาวเดิม เก็บProfile identity/fingerprint/eligibilityก่อนdispatch ป้องกันheldEnter/double-click/confirmซ้ำ ผลจริงจากupgraded eventหลังpersist แยกstorage failure ดูขั้นถัดไปไม่จ่ายเอง
+- คงเลเวลค่าย/คน/ของ/บาดแผล/ทีมและfocus/context แยกdismiss/archiveใต้จัดการสมาชิกตามconfirmเดิม ไม่เพิ่มอัปLvรายตัว/เลื่อนอาชีพ/สกุลเงินหรือP04/P09/UXD-07 คงแท็บความถนัดเดิมไว้จึงมี5แท็บระหว่างรอUXD-07
+- Runtime6ไฟล์UIเท่านั้น ไม่มีcore/content/public/save/schema/ราคา/RNG/สมดุล/battleเปลี่ยน มีfocused unit/browserและปรับregressionทางเข้าดาวเดิม รายละเอียด UXD-06-IMPLEMENTATION-TH.md
+- Full local unit1492/105filesและfocused43/3filesผ่าน ใช้timeoutเดิม Typecheck/lint/Pages buildผ่าน และproduction browser12กรณีผ่านครบ320×568/390×650/390×844/desktop รวมยอดจริง/reload/no-spend/ของขาด/★5/context/storage/rotation/200%text+insetsจำลอง59/34 กำลังตรวจlegacy/member-management/material sourcesและregression/full unitก่อนPR ไม่อ้างSafari/iPhone/อุปกรณ์จริง
+- ยังไม่merge/เผยแพร่จนchecksครบ หลักฐานภาพใน docs/validation/uxd-06/
+
 ## 2026-11-04 — UXD-05 เผยแพร่แล้ว (PR #142 + #143)
 
 - เจ้าของให้ทำ UXD-05 จนจบ checks/PR/merge/Pages ตาม standing authorization ฐานเริ่ม `fda92e36943944d15ce97b9e8c35cfce704ccdd8` บน feature/fateweave-initial-prototype ตรวจ remote/ancestry ก่อนสร้างสาขา ไม่ reset/import checkpoints cc51cd4/bcd6133 หรือสาขา release UXD-02 และไม่ merge ART PR #133

@@ -261,7 +261,7 @@ export class GameShell {
     const e = result.event; const name = (id: string) => heroText[id]?.name ?? '';
     if (e.type === 'blocked') return;
     this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
-    this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวในแท็บทีม` : `จ้าง${name(e.heroId)}แล้ว`)
+    this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวที่ตัวละคร → พัฒนา` : `จ้าง${name(e.heroId)}แล้ว`)
       : e.type==='bossTarget'?'บันทึกเป้าหมายบอสแล้ว':e.type==='huntTarget'?'บันทึกเป้าหมายฟาร์มแล้ว':e.type==='storageCollected'?`เก็บเข้าคลัง ${e.count} ชิ้นแล้ว`:e.type==='storageExpanded'?'ขยายคลังแล้ว': e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'archived' ? (e.archived ? `เก็บ${name(e.heroId)}เข้าคลังสมาชิกแล้ว · ดาว ของ และความถนัดอยู่ครบ` : `นำ${name(e.heroId)}ออกจากคลังสมาชิกแล้ว`) : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้เหรียญทองคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'skillLevel' ? `${name(e.heroId)} · ${this.lookup(this.map.tutorialEncounterId)!.skills[e.action].name} ขึ้นเป็น Lv${e.level}` : e.type === 'tomeTrade' ? `แลกได้ตำรา${tomeLineText[e.line]}${tomeSizeText[e.size]} 1 เล่ม` : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ฝุ่นดาว ${e.dust}`
       : e.type === 'equipmentLocked' ? `${e.locked?'ล็อก':'ปลดล็อก'}${itemName(findItem(result.profile,e.uid)!.item)}แล้ว` : e.type === 'forged' ? this.forgedText(result.profile, e.uid, e.action) : e.type === 'brewed' ? `ปรุง${potionText[e.potion].name}แล้ว · มีอยู่ ${result.profile.potions[e.potion]} ขวด`
       : e.type === 'smelted' ? `ลุงบอร์กหลอมแร่ดาวเป็นฝุ่นดาว ${e.dust} · มีฝุ่นดาว ${result.profile.bank.dust}`
@@ -281,6 +281,7 @@ export class GameShell {
     if(e.type==='forged'&&e.action==='craft')this.lobby.forgeServiced(this.game.profile,'craft',e.uid,this.saved);
     if(e.type==='salvaged')this.lobby.forgeServiced(this.game.profile,'recycle',e.count,this.saved);
     if(e.type==='smelted')this.lobby.forgeServiced(this.game.profile,'smelt',e.dust,this.saved);
+    if(e.type==='upgraded')this.lobby.starUpgraded(this.game.profile,e,this.saved&&!!this.storage);
     this.showLobby();
     if (e.type === 'forged' && (e.action === 'enhance' || e.action === 'level')) { const item = findItem(result.profile, e.uid)?.item; if (item) forgeStrike(this.root, item, e.action, this.reducedMotion.matches); }
   }

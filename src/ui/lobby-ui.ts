@@ -10,10 +10,10 @@ import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gea
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BossPower, ActionId, HeroDefinition } from '../core/battle/types';
 import { withParty } from '../core/battle/engine';
-import { hardReason, reserveSlots, activeGuides, guideDone, featureMap, featureOpen, mapUnlocked, boardOffers, brewReason, buyReason, claimReason, sealLimit, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, upgradeCost, upgradeReason, type Group } from '../core/world/profile';
+import { hardReason, reserveSlots, activeGuides, guideDone, featureMap, featureOpen, mapUnlocked, boardOffers, brewReason, buyReason, claimReason, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, type Group } from '../core/world/profile';
 import { isBigTree } from '../core/world/talents';
 import { salvageValue } from '../core/world/equipment';
-import { PARTY_SLOTS, POTION_IDS, SHOP_ITEMS, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type TalentNode } from '../core/world/types';
+import { PARTY_SLOTS, POTION_IDS, SHOP_ITEMS, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type ProfileEvent, type TalentNode } from '../core/world/types';
 import { campProgress, levelOf, recommendedLane, starred, type EncounterLookup } from '../core/world/world';
 import { emptyTomes, levelableSkills, skillLevelReason, tradeReason } from '../core/world/tomes';
 import type { TomeLine, TomeSize } from '../core/world/types';
@@ -91,7 +91,7 @@ export class LobbyUI {
     this.build();this.storageUI=new StorageManager(map,host);
     this.forgeUI=new ForgeWorkbench(map,heroes,lookup(map.tutorialEncounterId)!,{...host,quest:()=>this.questCard('smith')});
     this.characters=new CharacterPanel(root,map,heroes,lookup(map.tutorialEncounterId)!,{
-      model:()=>this.characterModel(),
+      model:()=>this.characterModel(),upgrade:id=>{if(this.open('team'))this.host.upgrade(id);},
       preview:(id,key)=>{const p=this.view?.profile,entry=p&&campEquipment(p).find(e=>e.key===key);if(!p||!entry)return;const out=equip(p,id,entry.item.uid);return out.event.type==='equipped'?this.characterModel(out.profile):undefined;},
       previewPlan:plan=>{if(!this.view)return;const out=applyCampEquipment(this.view.profile,plan);return out.event.type==='equipped'?this.characterModel(out.profile):undefined;},
       wear:(id,key)=>{const entry=this.view&&campEquipment(this.view.profile).find(e=>e.key===key);if(entry)this.host.equip(id,entry.item.uid);},
@@ -140,7 +140,7 @@ export class LobbyUI {
         case 'refresh': this.host.refresh(); this.focus('#hire-refresh'); break;
         case 'buy': { const item = b.dataset.item as ShopItemId; const hero = item === 'contract' ? this.root.querySelector<HTMLSelectElement>('#contract-hero')?.value : undefined;
           this.host.buy(item, hero || undefined); this.focus(`#buy-${item}`); break; }
-        case 'upgrade': if (this.picked) this.host.upgrade(this.picked); break;
+        case 'upgrade': if (this.picked&&this.open('team')) this.characters.openStarFor(this.picked,b); break;
         case 'archive': if (this.picked) { const target = this.picked; this.picked = undefined; this.host.archive(target, b.dataset.archived === 'true'); this.focus(`#lobby-member-${target}`); } break;
         case 'bench-filter': this.benchFilter = b.dataset.filter as 'all' | 'front' | 'back' | 'archived'; this.picked = undefined; this.draw(); this.focus(`#bench-filter-${this.benchFilter}`); break;
         case 'dismiss':
@@ -270,11 +270,12 @@ export class LobbyUI {
     this.draw(); this.characters.refresh();
     if (cheer) this.act(cheer, 'cheer', 1600);
   }
+  starUpgraded(p:Profile,event:ProfileEvent,saved:boolean):void {this.characters.upgraded(p,event,saved);}
   private characterModel(p=this.view?.profile):CharacterModel|undefined {
     if(!p)return;const hp=Object.fromEntries(p.company.map(id=>{const m=p.members[id]!,base=this.heroes.find(h=>h.id===id)!;return [id,starred(base,m.stars,this.map,levelOf(this.map,p),m.talents,m.gear,m).maxHp];}));
     // Skill tomes (save v37): levels are raised here at the camp, never on the map.
     const tomes={open:this.open('tomes'),bag:p.tomes??emptyTomes(),gold:p.bank.gold,core:p.riftCore??0,reason:(id:string,a:ActionId)=>skillLevelReason(p,this.maps,this.map,this.lookup,id,a),trade:(l:TomeLine,z:TomeSize,t?:TomeLine)=>tradeReason(p,this.maps,this.map,l,z,t),levelable:(id:string)=>levelableSkills(this.lookup,this.map,id,p.members[id])};
-    return {source:p,state:{members:p.members,roster:p.party,hp,campXp:p.campXp},ids:p.company,entries:campEquipment(p),available:true,camp:true,capacity:storageCap(p,this.map),tomes};
+    return {starSources:{hire:this.open('hire'),contracts:shopLeft(p,this.map,'contract'),seals:shopLeft(p,this.map,'seal')},starProfile:this.open('team')?p:undefined,source:p,state:{members:p.members,roster:p.party,hp,campXp:p.campXp},ids:p.company,entries:campEquipment(p),available:true,camp:true,capacity:storageCap(p,this.map),tomes};
   }
   private escape(text: string): string { return text.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]!); }
   private focus(sel: string): void { this.root.querySelector<HTMLElement>(sel)?.focus({ preventScroll: true }); }
@@ -403,16 +404,12 @@ export class LobbyUI {
         : `<details class="lobby-help" id="lobby-hint"><summary>${icon('info')} วิธีจัดทีม</summary><p>แตะสมาชิกเพื่อดูการอัปดาว หรือแตะต่อที่กลุ่มอื่นเพื่อสลับและจัดทีม</p></details>`}`;
   }
   private memberPanel(p: Profile, id: string): string {
-    const m = p.members[id]!; const cost = upgradeCost(p, this.map, id); const reason = upgradeReason(p, this.map, id);
-    const need = cost ? cost.dupes + cost.seals : 0;
-    const why: Record<string, string> = { maxed: 'ดาวเต็มแล้ว', dupes: 'ตัวซ้ำไม่พอ', ore: 'แร่ดาวไม่พอ' };
-    const label = !cost ? 'ดาวเต็มแล้ว' : reason ? `${why[reason]} · ★${m.stars + 1} ใช้ตัวซ้ำ ${need}${cost.seals ? ` (ตราแทนได้ ${sealLimit(this.map, m.stars)})` : ''} แร่ ${cost.ore}`
-      : `อัปเป็น ★${m.stars + 1} · ตัวซ้ำ ${cost.dupes}${cost.seals ? ` + ตรา ${cost.seals}` : ''} · แร่ ${cost.ore}`;
+    const m = p.members[id]!;
     const last = dismissReason(p, id) === 'last'; const archived = !!p.archived?.includes(id); const bench = groupOf(p, id) === 'bench';
     return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${levelOf(this.map, p)} (เลเวลค่าย) · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p><div class="member-subs character-links"><button id="lobby-character-open" data-lobby="character" data-tab="overview" class="secondary">ดูตัวละคร</button><button id="lobby-skills-open" data-lobby="character" data-tab="skills" class="secondary">สกิล</button>${this.treeButton(p, id)}${this.gearButton(p, id)}</div>
-      <div class="member-actions"><button id="lobby-upgrade" data-lobby="upgrade" class="primary"${reason ? ' disabled' : ''}>${label}</button>
+      <div class="member-actions"><button id="lobby-upgrade" data-lobby="upgrade" class="primary">อัปดาว · ★${m.stars} / ${this.map.company.maxStars}</button></div><details class="member-management"${this.confirmDismiss?' open':''}><summary>จัดการสมาชิก</summary><div class="member-actions">
       ${bench ? `<button id="lobby-archive" data-lobby="archive" data-archived="${!archived}" class="secondary">${archived ? 'นำออกจากคลังสมาชิก' : 'เก็บเข้าคลังสมาชิก · ของและดาวอยู่ครบ'}</button>` : ''}
-      <button id="lobby-dismiss" data-lobby="dismiss" class="danger-button"${last ? ' disabled' : ''}>${last ? 'ต้องมีคนลงสนาม 1 คน' : this.confirmDismiss ? `ยืนยันเลิกจ้าง · ดาวหาย +${this.map.company.dismissRefund} เหรียญทอง` : 'เลิกจ้าง'}</button></div></div>`;
+      <button id="lobby-dismiss" data-lobby="dismiss" class="danger-button"${last ? ' disabled' : ''}>${last ? 'ต้องมีคนลงสนาม 1 คน' : this.confirmDismiss ? `ยืนยันเลิกจ้าง · ดาวหาย +${this.map.company.dismissRefund} เหรียญทอง` : 'เลิกจ้าง'}</button></div></details></div>`;
   }
   // What ★3 (a third skill) and ★5 (a passive) unlock for this class, and whether they are open yet.
   private unlocks(id: string, stars: number): string {

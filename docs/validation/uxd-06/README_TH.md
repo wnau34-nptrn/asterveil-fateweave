@@ -1,0 +1,13 @@
+# UXD-06 — ภาพเกมจริงและการตรวจ
+
+ภาพจาก production Pages build บน Chromium /usr/bin/chromium ใช้ touch/mobile emulation ไม่ใช่ Safari/iPhone/เครื่องจริง ไม่มีผลคนจริงหรือค่าประสิทธิภาพมือถือจริง
+
+- [Preview 390×844](preview-844.png)
+- [Review 390×844](review-844.png)
+- [ผลจริง 390×650](result-650.png)
+- [ตัวซ้ำขั้นต่ำขาด แม้มีตรา 390×650](shortage-0-3.png)
+- [Review 200% text + insets จำลอง59/34 ที่390×650](review-text200-insets.png)
+
+Fixtureตัวอย่าง ★3→★4: ตัวซ้ำ1/ตรา3/แร่120 ใช้1/2/70 เหลือ0/1/50 คนเดิม ทีมเดิม เลเวลค่ายเดิม ไม่มีRNG/auto-repeat
+
+รายละเอียดกฎ/ขอบเขต/ผลtests/PR/merge/Pagesใน [implementation](../../handoffs/UXD-06-IMPLEMENTATION-TH.md) ภาพไม่ใช่ผลจากผู้เล่นจริง
