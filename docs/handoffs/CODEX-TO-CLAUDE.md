@@ -1,5 +1,19 @@
 # Codex → Claude handoff
 
+## 2026-11-03 — UXD-02 เผยแพร่แล้ว (PR #139)
+
+- เจ้าของ “ดำเนินการได้” หลังแผน UXD-02: เมนูช่าง8งานพร้อมคำอธิบาย/gateเดิม คงชิ้นเมื่อเปลี่ยนงาน; เพิ่มเลเวลอุปกรณ์ใช้layoutร่วมกับตีบวก มีcap/ก่อน–หลัง/ผลจริง/ใช้–มี–เหลือ–ขาด/รายละเอียดledger/review/receiptจากeventที่บันทึกจริง/ดูขั้นถัดไปโดยไม่ใช้ของ
+- headerเลือกงานเข้าถึงได้เหนือdock, focus/กลับตัวละครและคลังเดิม, receiptคงอยู่เมื่อดูผู้ทดลองreadonly, craft/smeltEscapeคงพฤติกรรมเดิม มีregression ไม่มีrules/save/content/ราคา/สมดุล/viewport/timingเปลี่ยน เกราะrevision3935edefและกรอบsafeareaPR137–138คงเดิม
+- PR [#139](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/139) merged `32cf6ce3b2d6617d99b71ffec0495d09cb9a5c2b` หลังquality [41562079992](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41562079992) และbrowser [41562079906](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41562079906) ครบ4shards+aggregateผ่านบนhead `639793f28767a3923804cdd7bb810001d76a436a`
+- Pages [41567220931](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41567220931) บนmerge commit ผ่านbuild/browser4/deployทั้งหมด logรายงานsuccess2026-11-03T03:17:48Z = 2026-11-03 10:17:48 Asia/Bangkok; https://wnau34-nptrn.github.io/asterveil-fateweave/ qualityหลังmerge41567220967ผ่านเช่นกัน
+- Local lint/typecheck/buildPages/fullunit1407/101files/focused15ผ่าน; productionbrowser31distinctผ่าน (30ชุดงานช่าง+1NPC) ไม่บวกdevหรือretriesซ้ำ; CIheadสุดท้าย unit1407, sourcefixtures565 + focus3 + productionshards71/73/68/76ผ่าน Pages/sourceมีconditional skipsตามconfig ไม่รวมเป็นกรณีผ่าน
+- CIรอบแรกhead119a188 browser4ล้มจากNPCspecคาดชื่อหัวหน้าต่างเก่า2จุด ปรับtestและlocalNPCเต็มเส้นทางผ่าน ไม่มีruntimeเพิ่ม รอบสุดท้ายผ่านครบก่อนmerge ประวัติQAและบั๊กEscape/receiptที่แก้อยู่entryimplementationด้านล่าง
+- ภาพหลังทำจริง390pxให้เจ้าของ: /tmp/uxd-02/launcher-390.png และ /tmp/uxd-02/level-390.png ตรวจด้วยตาแล้ว (Chromiumจำลองinsets59/34; workspaceชั่วคราว ไม่commitภาพ)
+- ไฟล์runtime4: src/ui/forge-workbench.ts, forge-enhancement.css, lobby-ui.ts, game-shell.ts; unitใหม่item-level-review9/browserใหม่forge-tasks-level6 + helperและforge/world regressionsเดิม; รายละเอียด [UXD-02-IMPLEMENTATION-TH.md](UXD-02-IMPLEMENTATION-TH.md) และhandoff3ไฟล์
+- ไม่มีBrowser js runtime/Safari/iPhoneจริง/ผู้เล่นจริง จึงไม่อ้างปิดUXD-08; Pageshostนอกexecutorallowlist ไม่อ้างliveHTTP/livebrowser/hashจากเว็บ ยืนยันเผยแพร่จากworkflowและdeploylogsuccess เครื่องมือattachPRถูกเรียก2ครั้งแต่ไม่ตอบกลับ จึงให้PRURLตรงในงาน
+- UXD-02ปิดงานแล้ว ไม่เริ่มหน้าดาว/สกิล/P04/P09 ไม่mergeART PR133 สาขาภาพยังแยก; ขั้นออกแบบหน้าพัฒนาอื่นตามแผนและการตรวจiPhoneจริงยังเป็นงานถัดไป follow-upนี้เอกสารเท่านั้น runtimeตรงmerge commit
+
+
 ## 2026-11-03 — UXD-02 เลือกงานช่างและเพิ่มเลเวล (local QA ผ่าน รอ CI/เผยแพร่)
 
 - เจ้าของ “ดำเนินการได้” อนุญาตทำ UXD-02 ตามแผน: launcher8งานจากNPC/เมนูค่าย, คงUIDเมื่อเปลี่ยนงาน, หน้าเพิ่มLvใช้โครงเดียวกับตีบวกและข้อมูลจริง ไม่เริ่มดาว/สกิล/P04/P09หรือmerge ART PR133

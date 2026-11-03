@@ -1,5 +1,9 @@
 # UXD-02 — หน้าเลือกงานโรงตีเหล็กและเพิ่มเลเวลอุปกรณ์
 
+เผยแพร่แล้วผ่าน [PR #139](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/139) merge32cf6ce3b2d6617d99b71ffec0495d09cb9a5c2b: exacthead639793f quality41562079992/browser41562079906ครบ4+aggregateผ่าน; [Pages41567220931](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41567220931) build/browser4/deployผ่านทั้งหมด logsuccess2026-11-03T03:17:48Z (10:17:48 Asia/Bangkok) เกม https://wnau34-nptrn.github.io/asterveil-fateweave/
+
+ผลlocalสุดท้าย31browserdistinct (30รอบงานช่าง+NPC1), unit1407/101files, lint/typecheck/buildPagesผ่าน รายละเอียดและประวัติด้านล่างเป็นบันทึกระหว่างทำ ให้ยึดผลปิดงานนี้เมื่อมีคำว่าpending ไม่มีการทดสอบSafari/iPhoneจริง/liveHTTPจากexecutorนี้
+
 ฐานเกม `cce1bf0` (รวมแก้ safe area ของกรอบ iPhone และภาพเกราะ PR #137–138) · สาขา `codex/uxd-02-forge-launcher-level` · อ้างอิง ART-UI-UX-002/IMPLEMENTATION_PLAN_TH.md และภาพ04 โดยใช้ชื่อ ค่าใช้จ่าย เพดาน และภาพจริงจากเกม
 
 ## ขอบเขตและทางเข้า

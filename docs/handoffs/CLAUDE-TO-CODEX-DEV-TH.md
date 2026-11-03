@@ -3,8 +3,8 @@
 ## 2026-11-03 — UXD-02 forge launcher + equipment Lv
 
 - [x] Launcher8งานพร้อมgateเดิม/คงUIDและfocus; เพิ่มLvใช้sharedsafearea frame+ค่าจริง/review/receipt/explicitnext
-- [x] Local lint/typecheck/buildPages/fullunit1407 และproductionbrowser30ผ่าน ดูCODEX-TO-CLAUDE.md และUXD-02-IMPLEMENTATION-TH.md
-- [ ] PR exact-head quality/browser4+aggregate, merge, Pages build/browser4/deploy และบันทึกผลจริง (กำลังดำเนินการ)
+- [x] Local lint/typecheck/buildPages/fullunit1407 และproductionbrowser31distinctผ่าน ดูCODEX-TO-CLAUDE.md และUXD-02-IMPLEMENTATION-TH.md
+- [x] PR #139 merged32cf6ce หลังhead639793f quality41562079992/browser41562079906ครบ4+aggregateผ่าน; Pages41567220931 build/browser4/deployผ่าน เผยแพร่2026-11-03 10:17:48 Asia/Bangkok ดูCODEX-TO-CLAUDE.md
 - ไม่มีrules/save/balance/ราคาเปลี่ยน ไม่เริ่มหน้าดาว/สกิล/P04/P09; iPhone/Safariจริงยังไม่มีผล
 
 
