@@ -26,8 +26,8 @@ describe('task launcher and item level review',()=>{
   });
   it('opens non-item tasks without asking for equipment when no item is selected',()=>{
     const {p,ui}=fixture();ui.open();ui.render(p);
-    ui.click(button('task',{task:'craft'}),p);expect(ui.render(p)).toContain('forge-craft-hero');expect(ui.heading).toBe('ช่างตีเหล็ก');ui.click(button('review'),p);expect(ui.backFromEnhancement()).toBeUndefined();
-    ui.openTasks();ui.click(button('task',{task:'smelt'}),p);expect(ui.render(p)).toContain('forge-smelt');expect(ui.heading).toBe('ช่างตีเหล็ก');ui.click(button('review'),p);expect(ui.backFromEnhancement()).toBeUndefined();
+    ui.click(button('task',{task:'craft'}),p);expect(ui.render(p)).toContain('forge-craft-hero');expect(ui.heading).toBe('สร้างอาวุธ');ui.click(button('review'),p);expect(ui.backFromEnhancement()).toBe('forge-craft');
+    ui.openTasks();ui.click(button('task',{task:'smelt'}),p);expect(ui.render(p)).toContain('forge-smelt');expect(ui.heading).toBe('หลอมแร่เป็นฝุ่น');ui.click(button('review'),p);expect(ui.backFromEnhancement()).toBe('forge-smelt');
   });
   it('requires the same profile and a fresh review before committing',()=>{
     const {p,ui,host,level}=fixture();level();ui.click(button('review'),p);ui.click(button('confirm'),structuredClone(p));expect(host.level).not.toHaveBeenCalled();

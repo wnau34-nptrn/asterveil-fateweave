@@ -1,5 +1,15 @@
 # ส่งต่องานพัฒนาให้ Codex ระหว่างรอ Usage ของ Claude (2026-10-23)
 
+## 2026-11-03 — UXD-05 สร้างอาวุธ / รีไซเคิล / หลอมแร่ (กำลัง QA)
+
+- ฐาน remote/ancestry ยืนยัน `fda92e3` ต่อจาก UXD-04 `caeed26` ด้วยเอกสาร release เท่านั้น สาขา `codex/uxd-05-craft-recycle-smelt` ไม่ reset/import checkpoints หรือ merge ART PR #133 ไม่มี CURRENT_STATE.md / Artwork workspace รอบนี้ อ่านแผนและภาพ 06 จาก art ref `a77d17b` แยก
+- UI ทั้งสามงานใช้ shared frame/review/dock/receipt แสดง blueprint/UID/ทุน/โควตาและ ledger จากระบบเดิม ตรวจ Profile/fingerprint/eligibility ก่อน host ล้าง review ก่อนส่ง ไม่เรียก RNG จาก preview ไม่ auto-equip หรือส่งคำสั่งจากดูขั้นถัดไป
+- Receipt รับ actual event หลัง persist ใช้ canonical Profile; แยกการเขียนเซฟล้มเหลวอย่างตรงไปตรงมา ไม่อ้างว่าบันทึกแล้วหรือเสนอ repeat confirm ทางไปจัดคลังกลับสูตร/focusเดิม และมี focus fallback เมื่อชิ้นรีไซเคิลหาย
+- Runtime 4 ไฟล์: forge-workbench.ts / forge-enhancement.css / lobby-ui.ts / game-shell.ts ไม่มี core/content/public/rules/save/ราคา/RNG/สมดุลเปลี่ยน เพิ่ม focused unit/browser และปรับ regression ตามหน้าใหม่ รายละเอียด UXD-05-IMPLEMENTATION-TH.md
+- Baseline browser 2 cases/ภาพจริงทั้งสามงาน 390×844/650 ตรวจแล้ว; focused unit รอบแรก 56 ผ่าน; typecheck/lint/build Pages ผ่านในระหว่าง QA Full unit maxWorkers=1 รอบแรกครบ 104 files: 1462 ผ่าน/1 timeout ที่ balance-sim deterministic (5000ms; ใช้จริง 39424ms) ไม่ใช่ assertion ยอด/กฎล้มเหลว กำลังตรวจ final snapshot และ production browser ไม่ถือว่า CI/merge/Pages ผ่านจนมีหลักฐาน
+- ภาพจริง /tmp/uxd-05/ มี baseline และ review/result ระหว่าง QA; ตรวจครบก่อนส่ง ไม่มี Safari/iPhone/อุปกรณ์จริง/ผู้เล่นจริง ไม่เริ่ม UXD-06/P04/P09/ดาวหรืองานถัดไป
+
+
 ## 2026-11-03 — UXD-04 เผยแพร่แล้ว (PR #141)
 
 - Environment กลับมา connected และ shell ใช้งานได้ คงฐานเกม `5f08b7b` ไม่ reset งานเดิม ไม่รวม checkpoints `cc51cd4`/`bcd6133` หรือ merge ART PR #133 และไม่เปลี่ยน authentication

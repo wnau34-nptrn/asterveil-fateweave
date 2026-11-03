@@ -184,3 +184,33 @@
 .forge-transfer-page.forge-text-large .forge-ledger td:nth-child(3)::before { content: 'จ่ายล่วงหน้า'; }
 .forge-transfer-page.forge-text-large .forge-ledger td:nth-child(4)::before { content: 'คืนทุน'; }
 .forge-transfer-page.forge-text-large .forge-ledger td:nth-child(5)::before { content: 'หลังทำ'; }
+
+/* UXD-05 services use the same frame, scroll body, review and persisted receipt. */
+.forge-service-page :is(.forge-label,.forge-service-panel,.forge-order) { display: block; min-width: 0; overflow-wrap: anywhere; }
+.forge-service-page select { width: 100%; min-height: 44px; font-size: .875rem; }
+.forge-service-page .forge-craft-selectors { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 10px; }
+.forge-service-page .forge-item-head { min-height: 132px; }
+.forge-service-page :is(.forge-service-panel,.forge-order) { padding: 10px; border: 1px solid var(--enhance-edge); border-radius: 10px; background: var(--enhance-panel); box-shadow: var(--enhance-shadow); }
+.forge-service-page h4 { margin: 0 0 8px; font-size: 1rem; }
+.forge-service-page .forge-service-panel p { margin: 4px 0; }
+.forge-service-page .forge-service-panel small { display: block; color: var(--text-muted); font-size: .75rem; }
+.forge-service-page .forge-loss { color: #ffc8b4; font-size: .875rem; }
+.forge-service-page .forge-destroy-item { border-color: var(--danger-coral); }
+.forge-service-page .forge-refund { margin: 0; font-size: .875rem; }
+.forge-service-page .forge-refund dd { overflow-wrap: anywhere; }
+.forge-service-page .forge-exchange { text-align: center; border-color: var(--gold-edge); }
+.forge-service-page .forge-exchange > div { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; }
+.forge-service-page .forge-exchange .icon { width: 36px; height: 36px; color: var(--veil-cyan); }
+.forge-service-ledger { width: 100%; border-collapse: collapse; font-size: .75rem; text-align: right; font-variant-numeric: tabular-nums; }
+.forge-service-ledger caption { color: var(--gold-light); text-align: left; }
+.forge-service-ledger :is(th,td) { padding: 4px 2px; overflow-wrap: anywhere; }
+.forge-service-ledger th:first-child { text-align: left; }
+.forge-service-ledger thead { color: var(--text-muted); }
+.forge-service-page.forge-text-large .forge-craft-selectors { grid-template-columns: 1fr; }
+.forge-service-page.forge-text-large .forge-service-ledger thead { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; }
+.forge-service-page.forge-text-large .forge-service-ledger :is(tbody,tr) { display: grid; gap: 8px; }
+.forge-service-page.forge-text-large .forge-service-ledger tr { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 8px; border: 1px solid var(--enhance-edge); border-radius: 8px; }
+.forge-service-page.forge-text-large .forge-service-ledger th { grid-column: 1/-1; text-align: left; color: var(--gold-light); }
+.forge-service-page.forge-text-large .forge-service-ledger td { min-width: 0; text-align: left; }
+.forge-service-page.forge-text-large .forge-service-ledger td::before { content: attr(data-label); display: block; font-size: .75rem; color: var(--text-muted); }
+.forge-service-page[data-receipt=true][data-persisted=false] .forge-success { border-color: var(--danger-coral); background: #452933; }

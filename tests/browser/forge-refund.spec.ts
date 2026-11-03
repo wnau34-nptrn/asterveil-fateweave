@@ -7,7 +7,7 @@ import { parseGame } from '../../src/core/save/expedition-save';
 import { xpAt } from '../fixtures/camp-level';
 import { legacyEnvelope } from '../fixtures/legacy-save';
 const key='asterveil.fateweave.expedition.v1';
-for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false]] as const){
+for(const [width,height,touch] of [[320,568,true],[390,650,true],[390,844,true],[1366,768,false]] as const){
   test(`forge review, exact refund and locks at ${width}x${height}`,async({browser},info)=>{
     const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'}),page=await context.newPage(),errors:string[]=[];
     page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
@@ -37,7 +37,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     await page.locator('#forge-lock').click();await expect(page.locator('#forge-recycle')).toBeDisabled();await page.locator('#forge-lock').click();
     const recycleBefore=await saved();await page.locator('#forge-recycle').click();expect(await saved()).toBe(recycleBefore);await page.locator('#forge-cancel').click();expect(await saved()).toBe(recycleBefore);
     await page.locator('#forge-recycle').click();await page.screenshot({path:info.outputPath('forge-refund.png')});await page.locator('#forge-confirm').click();
-    game=parseGame(await saved(),map,lookup);expect(game.profile.items.map(i=>i.uid)).toEqual([3]);expect(game.profile.bank).toMatchObject({ore:111,dust:53});await openForgeTools(page);await page.locator('#forge-tab-smelt').focus();await page.keyboard.press('Enter');await expect(page.locator('#forge-target')).toBeFocused();await expect(page.locator('#forge-tab-smelt')).toHaveAttribute('aria-selected','true');await page.locator('#forge-tab-smelt').focus();await page.keyboard.press('Home');await expect(page.locator('#lobby-sheet-title')).toBeFocused();await expect(page.locator('#forge-owner-filter')).toBeVisible();
+    game=parseGame(await saved(),map,lookup);expect(game.profile.items.map(i=>i.uid)).toEqual([3]);expect(game.profile.bank).toMatchObject({ore:111,dust:53});await openForgeTools(page);await page.locator('#forge-tab-smelt').focus();await page.keyboard.press('Enter');await expect(page.locator('#forge-target')).toBeFocused();await expect(page.locator('.forge-service-page')).toHaveAttribute('data-tab','smelt');await openForgeTools(page);await page.keyboard.press('Escape');await expect(page.locator('#forge-open-tasks')).toBeFocused();
     await page.locator('[data-lobby=close]').click();await expect(page.locator('#lobby-sheet-title')).toContainText('อุปกรณ์');await page.locator('#lobby-sheet .gear-extra-filters summary').click();await page.locator('#camp-inventory-gear-filter-reset').click();await expect(page.locator('#salvage-3')).toBeDisabled();
     await page.reload();await page.locator('#continue').click();game=parseGame(await saved(),map,lookup);expect(game.profile.members.guardian!.gear!.body).toMatchObject({plus:3,locked:true,investment:{ore:15,dust:4}});expect(game.profile.items[0]!.locked).toBe(true);
     expect(errors).toEqual([]);await context.close();
