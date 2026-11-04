@@ -2,12 +2,12 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
-## 2026-11-04 — HUD ทีม → หน้าตัวละคร (กำลังตรวจ PR)
+## 2026-11-04 — HUD ทีม → หน้าตัวละคร (PR #146 กำลังตรวจ)
 
 - เจ้าของให้ทำตามข้อเสนอ HUD “ทีม” → เลือกตัวละคร → สกิล พร้อมจัดหน้า; สาขา `codex/team-hud-character-navigation` จาก `a2596e3` ส่งกลับ feature ไม่เริ่ม UXD-08/P04/P09
 - แยกแถวภาพ “ตัวละคร” จากการเลือกย้ายทีม เปิดรายละเอียดเหนือ HUD จริง จำบริบทต่อคน/ดูล่าสุด และคง scroll/filter/focus ทางกลับ; inert ด้านหลัง ยกเลิก review เมื่อสลับ HUD โดยไม่จ่าย
 - UI เท่านั้น ไม่แก้ core/content/save/ราคา/RNG/สมดุล ไม่ reset งานเดิม/รวม Artwork/checkpoints; modal บนแผนที่คงเดิม
-- Typecheck/lint/build และ focused unit30/3 ผ่าน; production browserทางเข้า7และregressionค่าย/อัปดาว17ผ่าน กำลังตรวจสกิล/แผนที่19และCI; [ผลตรวจ/ภาพ/ข้อจำกัด](../validation/team-hud-navigation/README_TH.md)
+- Typecheck/lint/build และ focused unit30/3 ผ่าน; production browser focused48distinctผ่าน (ทางเข้า7+regression36+portrait5); กำลังตรวจCI หลังปรับtestกรอบทีมให้เว้นHUD; [ผลตรวจ/ภาพ/ข้อจำกัด](../validation/team-hud-navigation/README_TH.md)
 - ไม่มี Safari/iPhone/Android หรือ human usability จริง จบที่ merge หลัง PR gates ตามกฎ pre-release; Pages ทำต่ออัตโนมัติ ไม่ทำ release evidence
 
 ## 2026-11-04 — UXD-07 รวมหน้าสกิล เสร็จที่ merge (PR #145)
