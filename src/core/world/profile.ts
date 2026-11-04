@@ -8,7 +8,7 @@ import { addTomes, dismissTomes, emptyTomes, firstClearTomes, tomeCount } from '
 import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, SET_IDS } from './types';
 import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, recommendedLane, rollPercent, reserveCap, rosterIds, type EncounterLookup } from './world';
 import { laneReason, withLane } from './formation';
-import { bankFits, clampBank, clampPotions, clampTomes, potionsFit, RIFT_CORE_CAP } from './caps';
+import { bankFits, clampBank, clampPotions, clampTomes, potionsFit, RIFT_CORE_CAP, TOME_CAP } from './caps';
 import type { ActionId } from '../battle/types';
 
 // Pure lobby rules: the persistent mercenary company, the bank, the hiring board, the
@@ -389,7 +389,7 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   // A return home cannot be refused: what passes a storage ceiling is lost (caps.ts), so the profile always saves.
   clampBank(profile.bank); clampPotions(profile.potions);
   profile.returns++; delete profile.boardPool; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
-  profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged, ...(tomeCount(tomes) ? { tomes: tomeCount(tomes) } : {}) };
+  profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged, ...(tomeCount(tomes) ? { tomes: Math.min(TOME_CAP, tomeCount(tomes)) } : {}) };
   return profile;
 }
 // Every item found this run, in the bag or worn on the map (uid 0), in that order.

@@ -9,7 +9,7 @@ import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { boardOfferCount, commanderReason, defaultCamp, newProfile, reserveSlots, settle, talentsValid } from '../world/profile';
 import { grantsValid, isBigTree } from '../world/talents';
 import { classSkills } from '../world/tomes';
-import { BANK_CAP, POTION_CAP, RIFT_CORE_CAP, TOME_CAP } from '../world/caps';
+import { BANK_CAP, POTION_CAP, RIFT_CORE_CAP, RUN_CAP, TOME_CAP } from '../world/caps';
 import { TOME_LINES, TOME_SIZES, type TomeBag } from '../world/types';
 import type { GearSlot, GearStat, Item, MemberProgress, Potions, Talents } from '../world/types';
 import { GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/types';
@@ -337,7 +337,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   const members = membersOf(s.members, map, ids, lookup, campLevel(map, campXp), true); const party = { members, campXp };
   const hp = hpRecord(s.hp, lookup, map, ids, party);
   const r = obj(s.resources);
-  if (Object.keys(r).length !== 4 || !isInt(r.ore, 0, 999999) || !isInt(r.gold, 0, 999999) || !isInt(r.ember, 0, 9999) || !isInt(r.seal, 0, 9999)) throw new Error('Invalid resources');
+  if (Object.keys(r).length !== 4 || !isInt(r.ore, 0, RUN_CAP.ore) || !isInt(r.gold, 0, RUN_CAP.gold) || !isInt(r.ember, 0, RUN_CAP.ember) || !isInt(r.seal, 0, RUN_CAP.seal)) throw new Error('Invalid resources');
   const chestIds = map.chests.map(c => c.id);
   if (!Array.isArray(s.openedChests) || s.openedChests.some(id => !chestIds.includes(id)) || new Set(s.openedChests).size !== s.openedChests.length) throw new Error('Invalid chests');
   let battle: ActiveBattle | null = null;
@@ -387,7 +387,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (s.hard !== undefined && s.hard !== true) throw new Error('Invalid run');
   // Skill tomes (v37): only a map that drops them carries them.
   if ((s.tomes !== undefined || s.riftCore !== undefined || s.tomeWins !== undefined) && !map.tomes) throw new Error('Invalid run');
-  if ((s.riftCore !== undefined && !isInt(s.riftCore, 1, 999)) || (s.tomeWins !== undefined && !isInt(s.tomeWins, 1, 9999))) throw new Error('Invalid run');
+  if ((s.riftCore !== undefined && !isInt(s.riftCore, 1, RUN_CAP.riftCore)) || (s.tomeWins !== undefined && !isInt(s.tomeWins, 1, RUN_CAP.tomeWins))) throw new Error('Invalid run');
   const runTomes = s.tomes === undefined ? undefined : tomesOf(s.tomes);
   if (guests && recruited && guests.some(id => recruited.includes(id))) throw new Error('Invalid run');
   // v38: a starter recruitment in progress; its offers must be the ones this state deals.
@@ -409,7 +409,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     found: foundOf(s.found, map, lookup), spare: spareOf(s.spare, map, lookup), dry: isInt(s.dry, 0, map.equipment.pity) ? s.dry : badRun(),
     potions: potionsOf(s.potions, map.potions.carry), repel: isInt(s.repel, 0, map.potions.repelSteps) ? s.repel : badRun(),
     elitesDefeated: idList(s.elitesDefeated, map.elites.map(e => e.id)), eventsDone: idList(s.eventsDone, map.events.map(e => e.id)),
-    dust: isInt(s.dust, 0, 999999) ? s.dust : badRun(),
+    dust: isInt(s.dust, 0, RUN_CAP.dust) ? s.dust : badRun(),
     ...puzzleState(s, map), herbs: idList(s.herbs, map.herbs.map(h => h.id)),
     visited: idList(s.visited, findTiles(map, 'camp').map(c => `${c.x},${c.y}`)), respawns: respawnsOf(s.respawns, map),
   };
@@ -518,7 +518,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
 function respawnsOf(v: unknown, map: MapDefinition): Record<string, number> {
   const out: Record<string, number> = {};
   for (const [id, n] of Object.entries(obj(v))) {
-    if (!map.elites.some(e => e.id === id && !e.forced && !e.mini) || !isInt(n, 1, 99)) throw new Error('Invalid run');
+    if (!map.elites.some(e => e.id === id && !e.forced && !e.mini) || !isInt(n, 1, RUN_CAP.respawns)) throw new Error('Invalid run');
     out[id] = n;
   }
   return out;
