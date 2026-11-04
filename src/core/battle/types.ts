@@ -10,7 +10,9 @@ export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt'
   // warden stonearmor/guardstone/tremor, bard dread/note/solo.
   | 'smoke' | 'fury' | 'catalyst' | 'knives' | 'decoy' | 'disarm' | 'stonearmor' | 'guardstone' | 'tremor' | 'dread' | 'note' | 'solo'
   | 'saintstrike' | 'communion' | 'saintarc' | 'vowstrike' | 'sharewound' | 'lastlight'
-  | 'cadence' | 'duet' | 'rounddance' | 'deepbeat' | 'echofoot' | 'closingstep';
+  | 'cadence' | 'duet' | 'rounddance' | 'deepbeat' | 'echofoot' | 'closingstep'
+  // P03 Martial (Kael): gather chi, then spend it to finish.
+  | 'gatherfist' | 'releasefist' | 'flowfist' | 'circlefist' | 'storedfist' | 'perfectfist';
 // ★5 passives (one per class, always on at five stars).
 export type PassiveId = 'stand' | 'keeneye' | 'echo' | 'afterglow' | 'heavycounter' | 'tailwind' | 'potent' | 'shadowcounter' | 'stoneskin' | 'resound';
 // Talent-tree capstones (2D-1b): one small rule change per branch, read by the resolver from `HeroDefinition.talents`.
@@ -33,7 +35,10 @@ export type TalentCap = 'retribution' | 'guardcounter' | 'deepmark' | 'relentles
   | 'communionRatio' | 'saintRatio' | 'vowThreshold' | 'saintFinish' | 'sharePriority' | 'shareThree' | 'lastlightRatio'
   | 'dancerCadenceQuick' | 'dancerCadenceShort' | 'dancerRoundPair' | 'dancerDuetFocus' | 'dancerDuetQuick' | 'dancerDeep' | 'dancerEchoChoose' | 'dancerClosingQuick'
   | 'metta1' | 'metta2' | 'metta3' | 'metta4' | 'thiran2' | 'thiran3' | 'thiran4'
-  | 'lalin1' | 'lalin2' | 'lalin3' | 'lalin4' | 'wila1' | 'wila3' | 'wila4';
+  | 'lalin1' | 'lalin2' | 'lalin3' | 'lalin4' | 'wila1' | 'wila3' | 'wila4'
+  // P03 Martial tree and Kael's personal branch.
+  | 'martialGatherChi' | 'martialFlowZero' | 'martialReleasePer' | 'martialReleaseQuick' | 'martialCircleCrowd'
+  | 'martialStoredFull' | 'martialStoredBuild' | 'martialPerfectHeavy' | 'kael1' | 'kael2' | 'kael3' | 'kael4';
 // Talent numbers that add to a rule for this hero only (summed over ranks).
 export type TalentRule = 'guardReduction' | 'tauntReduction' | 'corrodeBonus' | 'ambushBonus' | 'executeHeal' | 'healBarrier' | 'hasteHeal' | 'dodgeHeal';
 // What a member's spent talent points do in battle (world `starred` builds it; stat nodes are already in maxHp/attack/skillBonus).
@@ -130,6 +135,9 @@ export interface HeroState { id: string; hp: number; barrier: number; cooldowns:
   exposed?: { percent: number; round: number }; solo?: { heroId: string; round: number };
   // Skill audit (save v42): a priest's lasting blessing heals `amount` as each round up to `until` begins.
   evadeBy?: string;
+  // P03 Martial chi (0–3, battle only): built by own hits that remove HP, spent by finishing skills. `chiLocked`
+  // (Kael's perfect fist): his next command builds no chi.
+  chi?: number; chiLocked?: boolean;
   renew?: { heroId: string; amount: number; until: number } }
 // `delayedRound`: an archer's hindering shot sends this enemy to the end of that round's queue (`delayedAlso`: a heavy
 // hinder's second round). `drawnBy`: a warden's tremor turns its move in `round` onto him.
@@ -204,7 +212,7 @@ export interface BattleState {
 export type SongId = 'valor' | 'mend' | 'dread';
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge'
-    | 'parry' | 'revive' | 'buff' | 'hold' | 'pin' | 'dispel' | 'weaken' | 'cooldown';
+    | 'parry' | 'revive' | 'buff' | 'hold' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi';
   text: string; sourceId?: string; targetId?: string; action?: ActionId; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

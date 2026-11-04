@@ -54,3 +54,6 @@ Dealt, Healed and Taken are that class's own totals.
 | wila | none | 9/10 | 55% | 561 | 0 | 162 | 6.9 |
 | wila | main | 10/10 | 79% | 914 | 8 | 57 | 5.4 |
 | wila | off | 10/10 | 77% | 914 | 24 | 45 | 5.4 |
+| kael | none | 10/10 | 70% | 1129 | 0 | 220 | 5.0 |
+| kael | main | 10/10 | 85% | 1517 | 38 | 94 | 4.5 |
+| kael | off | 10/10 | 80% | 1464 | 109 | 133 | 4.8 |

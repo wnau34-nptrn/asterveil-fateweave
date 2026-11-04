@@ -52,6 +52,7 @@ export function skillCooldown(data: EncounterDefinition, heroId: string | undefi
   if (action === 'duet') cooldown -= capAmount(data, heroId, 'dancerDuetQuick');
   if (action === 'deepbeat' && hasCap(data, heroId, 'dancerDeep')) cooldown++;
   if (action === 'lastlight' && hasCap(data, heroId, 'lastlightRatio')) cooldown++;
+  if (action === 'perfectfist' && hasCap(data, heroId, 'martialPerfectHeavy')) cooldown++;
   return Math.max(0, cooldown);
 }
 function levelPoints(data: EncounterDefinition, heroId: string | undefined, action: ActionId): number {
@@ -84,7 +85,7 @@ export function songPower(data: EncounterDefinition, heroId: string, action: Son
 export type TargetKind = 'self' | 'ally' | 'party' | 'enemies' | 'enemy';
 export function targetKind(action: ActionId): TargetKind {
   if (action === 'prayer' || action === 'aegis' || action === 'rounddance') return 'party';
-  if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor', 'quake', 'saintarc'].includes(action)) return 'enemies';
+  if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor', 'quake', 'saintarc', 'circlefist'].includes(action)) return 'enemies';
   if (['brace', 'evade', 'taunt', 'valor', 'mend', 'rally', 'spearwall', 'finale', 'bulwark', 'parry', 'halo', 'hold', 'warcry', 'dread', 'stonearmor', 'rouse'].includes(action)) return 'self';
   if (['guard', 'ward', 'heal', 'haste', 'sanctuary', 'bless', 'revive', 'fury', 'decoy', 'guardstone', 'solo', 'cadence', 'duet', 'deepbeat', 'closingstep'].includes(action)) return 'ally';
   return 'enemy';
@@ -223,6 +224,23 @@ export function saintRatioOf(data: EncounterDefinition, heroId: string, action: 
   if (action === 'lastlight' && hasCap(data, heroId, 'metta4')) return capAmount(data, heroId, 'metta4');
   if (action === 'lastlight' && hasCap(data, heroId, 'lastlightRatio')) return capAmount(data, heroId, 'lastlightRatio');
   return 30 + capAmount(data, heroId, 'saintRatio');
+}
+// ---- P03 Martial (docs/design/ROSTER_30_TH.md §3, draft numbers) ----
+// Chi 0–3 starts every battle at 0. A command that removes HP from at least one foe adds 1 once afterwards (however many
+// hits); finishing skills spend chi and build none back. Chi never touches SPD or turns.
+export const CHI_MAX = 3;
+export const RELEASE_PER_CHI = 8;
+export const chiOf = (state: BattleState, heroId: string): number => state.heroes.find(h => h.id === heroId)?.chi ?? 0;
+// What a skill spends: `all` = every point (at least one), otherwise a fixed amount.
+export const chiCost = (action: ActionId): number | 'all' => action === 'releasefist' ? 'all' : action === 'circlefist' ? 2 : action === 'perfectfist' ? 3 : 0;
+export const CHI_SPENDERS: readonly ActionId[] = ['releasefist', 'circlefist', 'perfectfist'];
+// Power of a release paying `paid` chi: base plus the per-point power, both grown by Attack and the skill level.
+export function releasePower(data: EncounterDefinition, heroId: string, paid: number): number {
+  const hero = data.heroes.find(h => h.id === heroId);
+  const percent = 100 + (hero?.damageBonus ?? 0) + skillLevelSteps(data, heroId, 'releasefist').steps * data.rules.skillLevel.powerPercent;
+  const raw = data.skills.releasefist.power + paid * RELEASE_PER_CHI;
+  return Math.round(raw * percent / 100) + (hero?.talents?.power?.releasefist ?? 0) + paid * capAmount(data, heroId, 'martialReleasePer')
+    + (paid === CHI_MAX ? capAmount(data, heroId, 'kael3') : 0);
 }
 
 // ---- Equipment (2D-2) ----
@@ -692,7 +710,9 @@ export function actionReason(state: BattleState, data: EncounterDefinition, hero
   if (!data.heroes.find(h => h.id === heroId)?.actions.includes(action)) return 'This hero does not have this action.';
   if (currentHeroId(state, data) !== heroId) return 'It is not this hero’s turn.';
   const remaining = (actor.cooldowns[action] ?? 0) - state.round;
-  return remaining > 0 ? `Cooldown: ${remaining}` : '';
+  if (remaining > 0) return `Cooldown: ${remaining}`;
+  const cost = chiCost(action);
+  return cost && (actor.chi ?? 0) < (cost === 'all' ? 1 : cost) ? 'Not enough chi.' : '';
 }
 export function targetOptions(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId): TargetOption[] {
   const unavailable = actionReason(state, data, heroId, action);
@@ -790,6 +810,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const skill = { ...base, power: skillPower(data, hero.id, command.action), cooldown: skillCooldown(data, hero.id, command.action) };
   let directDamage = 0;
   let cooldownAdjustment = 0;
+  const chiBefore = actor.chi ?? 0;
   // Every hero hit adds corrosion, valor and its own capstone bonuses.
   const strike = (foe: EnemyState, power: number, text: string) => {
     const boss=foe===enemy&&targetKind(command.action)==='enemy'&&power>0&&foe.markedUntil>state.round?bossPowerReady(state,data,hero.id,'focus'):0;
@@ -892,6 +913,18 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
           cooldownAdjustment -= capAmount(data, hero.id, 'lalin4'); break;
         }
       }
+      break;
+    }
+    case 'gatherfist': damage(skill.power + (chiBefore === 0 ? capAmount(data, hero.id, 'kael1') : 0)); break;
+    case 'flowfist': damage(skill.power + (chiBefore === 0 ? capAmount(data, hero.id, 'martialFlowZero') : 0)); break;
+    case 'storedfist':
+      damage(skill.power + (chiBefore === CHI_MAX ? capAmount(data, hero.id, 'martialStoredFull') : 0) - capAmount(data, hero.id, 'martialStoredBuild')); break;
+    case 'releasefist': damage(releasePower(data, hero.id, chiBefore)); break;
+    case 'perfectfist': damage(skill.power + capAmount(data, hero.id, 'martialPerfectHeavy') + capAmount(data, hero.id, 'kael4')); break;
+    case 'circlefist': {
+      const foes = state.enemies.filter(e => e.hp > 0); const front = foes.filter(e => row(e.id) === 'front');
+      const power = skill.power + (front.length >= 2 ? capAmount(data, hero.id, 'martialCircleCrowd') : 0);
+      for (const foe of front.length ? front : foes) strike(foe, power, 'Circle fist.');
       break;
     }
     case 'attack': case 'execute': case 'lunge': {
@@ -1220,6 +1253,22 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       const amount = Math.min(part, data.heroes.find(d => d.id === h.id)!.maxHp - h.hp);
       if (amount > 0) { h.hp += amount; events.push({ type: 'heal', sourceId: hero.id, targetId: h.id, amount, text: 'Damage becomes an ally’s life.' }); }
     });
+  }
+  // Martial chi: spenders pay first, then a command that removed HP builds chi (never a spender; a stored fist only with
+  // its build node). Kael's perfect fist locks his next command's gain.
+  if (hero.role === 'Martial') {
+    const cost = chiCost(command.action); const paid = cost === 'all' ? chiBefore : cost;
+    const locked = !!actor.chiLocked; delete actor.chiLocked;
+    let chi = chiBefore - paid;
+    if (directDamage > 0 && !paid && !locked && (command.action !== 'storedfist' || hasCap(data, hero.id, 'martialStoredBuild'))) {
+      chi += 1 + (command.action === 'flowfist' ? 1 : 0) + (command.action === 'gatherfist' && chiBefore === 0 && hasCap(data, hero.id, 'martialGatherChi') ? 1 : 0);
+    }
+    chi = Math.min(CHI_MAX, Math.max(0, chi));
+    if (command.action === 'perfectfist' && hasCap(data, hero.id, 'kael4')) actor.chiLocked = true;
+    if (command.action === 'releasefist' && paid === CHI_MAX) cooldownAdjustment -= capAmount(data, hero.id, 'martialReleaseQuick');
+    if (command.action === 'flowfist' && chiBefore === 0) cooldownAdjustment -= capAmount(data, hero.id, 'kael2');
+    if (chi) actor.chi = chi; else delete actor.chi;
+    if (chi !== chiBefore) events.push({ type: 'chi', sourceId: hero.id, targetId: hero.id, action: command.action, amount: chi - chiBefore, text: chi > chiBefore ? 'Chi gathered.' : 'Chi released.' });
   }
   // A levelled skill without numbers shields its user (tomes).
   const shield = levelBarrier(data, hero.id, command.action); if (shield && actor.hp > 0) barrier(actor, shield);

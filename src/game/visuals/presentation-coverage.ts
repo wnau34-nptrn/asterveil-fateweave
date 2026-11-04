@@ -11,7 +11,7 @@ import atlasManifest from './unit-atlases.json';
 import { isProjectileSkill } from './projectile-fx';
 import { isCommandSkill } from './command-fx';
 import { isSongSkill } from './song-fx';
-import { isSdSkill, saintSkills } from './saint-dance-fx';
+import { isSdFx, martialSkills, saintSkills } from './saint-dance-fx';
 import { isSealSkill } from './arcane-seal-fx';
 import { isAlchemySkill } from './alchemy-fx';
 import { isEarthSkill } from './earth-fx';
@@ -28,6 +28,10 @@ import defenseArt from './defense-art.json';
 // committed table no longer matches this code. Presentation only.
 
 // Parked identities (OD-14, owner 2026-10-30): redesigned still + procedural motion, no atlas until A7-003.
+// P03 characters fight on their approved still with procedural motion until their CODEX-A12 battle animation lands.
+export const STILL_ONLY: Readonly<Record<string, string>> = {
+  kael: 'P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12',
+};
 export const PARKED: Readonly<Record<string, string>> = {
   thiran: 'OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)',
   wila: 'OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)',
@@ -55,7 +59,7 @@ export function heroVfx(action: ActionId, role: string): VfxModule {
   if (action === 'attack' && (role === 'Archer' || role === 'Alchemist')) return 'basic-attack-fx';
   if (isCommandSkill(action)) return 'command-fx';
   if (isSongSkill(action)) return 'song-shadow-fx';
-  if (isSdSkill(action)) return 'saint-dance-fx';
+  if (isSdFx(action)) return 'saint-dance-fx';
   if (isSealSkill(action)) return 'arcane-seal-fx';
   if (isAlchemySkill(action)) return 'alchemy-fx';
   if (isEarthSkill(action)) return 'earth-fx';
@@ -85,7 +89,7 @@ function heroPoint(module: VfxModule, action: ActionId): string {
     case 'command-fx': return action === 'challenge' ? 'โล่ผู้ร่าย → ศัตรูที่ถูกท้าจริง 1 ตัว' : action === 'warcry' ? 'อกผู้ร่าย (buff) + เป้าที่ถูกสวนจริงต่อ event' : 'อก/ค้อนผู้ร่าย (stance ตัวเอง)';
     case 'song-shadow-fx': return action === 'evade' ? 'เท้าผู้ร่าย' : action === 'decoy' ? 'ข้างพันธมิตรที่ถูกคุ้มจริง' : action === 'solo' ? 'หลังพันธมิตรที่ได้ Solo จริง'
       : action === 'note' ? 'ผู้รับ damage จริง' : action === 'dread' ? 'ฝั่งศัตรูที่ยืนอยู่ (ไม่ใช่ฮิต)' : action === 'finale' ? 'ศัตรูที่โดนจริง / พันธมิตรที่ได้ heal-โล่จริง' : 'ผู้ร่าย → พันธมิตรที่ยืนอยู่';
-    case 'saint-dance-fx': return (saintSkills as readonly string[]).includes(action) ? 'ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง'
+    case 'saint-dance-fx': return (martialSkills as readonly string[]).includes(action) ? 'ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น)' : (saintSkills as readonly string[]).includes(action) ? 'ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง'
       : action === 'echofoot' ? 'ศัตรูที่โดนจริง (เส้นเดียว)' : 'พันธมิตรที่ได้ cooldown จริงเท่านั้น';
     case 'arcane-seal-fx': return action === 'sigil' ? 'เท้าศัตรูจริง' : action === 'storm' ? 'กลางตัว → เท้าศัตรูที่โดนจริงทุกตัว' : 'กลางตัวเป้าจริง';
     case 'alchemy-fx': return 'ผู้รับ event จริง (ศัตรู: ตัว, พันธมิตร: ตัว) รวม chain ของ catalyst';
@@ -114,7 +118,7 @@ function foePoint(module: VfxModule, name: string, route?: string): string {
 
 export interface BodyCoverage { kind: 'sprite' | 'procedural'; clip?: UnitClip; frames?: { prepare: readonly number[]; recover: readonly number[] }; pose: string; reason?: string }
 function body(art: string, pose: string, action?: string, intent?: string): BodyCoverage {
-  if (PARKED[art]) return { kind: 'procedural', pose, reason: PARKED[art] };
+  const still = PARKED[art] ?? STILL_ONLY[art]; if (still) return { kind: 'procedural', pose, reason: still };
   if (!unitDefinition(art)) return { kind: 'procedural', pose, reason: 'ไม่มี atlas ใน registry' };
   const clip = unitClip(art, action, intent);
   if (!clip) return { kind: 'procedural', pose, reason: 'ไม่มี clip สำหรับท่านี้ใน registry' };
@@ -126,7 +130,7 @@ function body(art: string, pose: string, action?: string, intent?: string): Body
 export interface ReactionCoverage { hit: string; block: string; dodge: string; down: string; counter?: string }
 function reactions(art: string): ReactionCoverage {
   const dodge = 'procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)';
-  if (PARKED[art] || !unitDefinition(art)) return { hit: 'procedural', block: 'procedural', dodge, down: 'procedural (ภาพนิ่งจาง)' };
+  if (PARKED[art] || STILL_ONLY[art] || !unitDefinition(art)) return { hit: 'procedural', block: 'procedural', dodge, down: 'procedural (ภาพนิ่งจาง)' };
   const show = (pose: 'hit' | 'block' | 'down' | 'counter', fallback: string) => { const f = sequence(pose, 'reaction', undefined, art); return f ? `sprite ${f.join(',')}` : fallback; };
   const counter = sequence('counter', 'reaction', undefined, art);
   return { hit: show('hit', 'procedural'), block: show('block', 'procedural (tint/lift)'), dodge, down: `${show('down', 'procedural')} · ค้าง ${unitDownFrame(art)}`,
@@ -137,7 +141,7 @@ export interface CoverageRow {
   body: BodyCoverage; vfx: { module: VfxModule; kind: 'painted' | 'shared' | 'code'; note?: string }; target: string; point: string; encounters?: string[];
 }
 export interface AtlasInfo { image: string; atlas: string; frames: number; decodedBytes: number; downloadBytes: number }
-export interface IdentityCoverage { identity: string; side: 'hero' | 'enemy'; name: string; sheet?: string; atlas?: AtlasInfo; parked?: string; reactions: ReactionCoverage }
+export interface IdentityCoverage { identity: string; side: 'hero' | 'enemy'; name: string; sheet?: string; atlas?: AtlasInfo; parked?: string; still?: string; reactions: ReactionCoverage }
 
 // Enemy moves an identity really performs: announced intents plus generated phase turns, from every catalog encounter.
 interface FoeMove { name: string; kind: IntentDefinition['kind']; charge?: boolean; all?: boolean; targetSlot: number; phase?: boolean; summon?: boolean; encounters: Set<string> }
@@ -171,16 +175,16 @@ export function presentationCoverage(list: readonly EncounterDefinition[] = enco
     const entry = sheet ? (atlasManifest as Record<string, AtlasInfo>)[sheet] : undefined;
     return { identity, side, name, ...(sheet ? { sheet } : {}),
       ...(entry ? { atlas: { image: entry.image, atlas: entry.atlas, frames: entry.frames, decodedBytes: entry.decodedBytes, downloadBytes: entry.downloadBytes } } : {}),
-      ...(PARKED[identity] ? { parked: PARKED[identity] } : {}), reactions: reactions(identity) };
+      ...(PARKED[identity] ? { parked: PARKED[identity] } : {}), ...(STILL_ONLY[identity] ? { still: STILL_ONLY[identity] } : {}), reactions: reactions(identity) };
   };
   for (const hero of heroRoster) {
     identities.push(ident(hero.id, 'hero', hero.name));
     for (const action of heroActions(hero.id)) {
       const module = heroVfx(action, roles[hero.id]!);
-      const shared = module === 'blade-fx' && action === 'attack';
+      const shared = module === 'blade-fx' && action === 'attack' || (martialSkills as readonly string[]).includes(action);
       rows.push({ identity: hero.id, side: 'hero', move: action, name: skills[action]?.name ?? action,
         body: body(hero.id, action === 'attack' ? 'role basic' : actionPoses[action], action),
-        vfx: { module, kind: vfxKind(module, shared), ...(shared ? { note: 'ฟันร่วมตามสีอาชีพ (ตั้งใจ)' } : module === 'basic-attack-fx' ? { note: 'ลูกธนู/ขวดวาดด้วยโค้ด (AV03 ตั้งใจ ไม่ใช้ภาพสกิล)' } : {}) },
+        vfx: { module, kind: vfxKind(module, shared), ...(shared ? { note: module === 'saint-dance-fx' ? 'ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)' : 'ฟันร่วมตามสีอาชีพ (ตั้งใจ)' } : module === 'basic-attack-fx' ? { note: 'ลูกธนู/ขวดวาดด้วยโค้ด (AV03 ตั้งใจ ไม่ใช้ภาพสกิล)' } : {}) },
         target: heroTargets[targetKind(action)]!, point: heroPoint(module, action) });
     }
   }

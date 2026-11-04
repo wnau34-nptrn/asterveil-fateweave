@@ -1,5 +1,5 @@
 import {bossNames,bossDescription} from './boss-equipment';
-import { capAmount, corrodeBonus, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, skillPower, rallyReductionOf, songPower, tauntReductionOf } from '../core/battle/engine';
+import { CHI_MAX, capAmount, corrodeBonus, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, skillPower, rallyReductionOf, songPower, tauntReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName, intentName, phaseThai } from './th';
 
@@ -21,6 +21,8 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
   if (hero) {
     const boss=d.heroes.find(h=>h.id===id)?.gear?.boss;
     if(boss)add('boss',boss.power==='focus'?'mark':boss.power==='aegis'?'ward':'heal',bossNames[boss.power],bossDescription(boss.power,boss.amount),hero.bossUsedRound===s.round?'ใช้สิทธิ์รอบนี้แล้ว · พร้อมใหม่รอบถัดไป':'สิทธิ์รอบนี้พร้อม · ต้องตรงเงื่อนไข');
+    if ((hero.chi ?? 0) > 0) add('chi', 'gatherfist', 'ปราณ', `สะสมไว้ ${hero.chi}/${CHI_MAX} แต้ม ใช้จ่ายท่าปิด${hero.chiLocked ? ' · คำสั่งถัดไปไม่สะสมปราณ' : ''}`, 'จนกว่าจะจ่ายหรือจบศึก');
+    else if (hero.chiLocked) add('chi', 'perfectfist', 'สงบหลังหมัด', 'คำสั่งถัดไปไม่สะสมปราณ', 'ถึงคำสั่งถัดไปของตน');
     if (hero.barrier > 0) add('barrier', 'ward', 'โล่เวท', `ดูดซับความเสียหายได้อีก ${hero.barrier} ก่อนหัก HP`, 'อยู่จนโล่ถูกใช้หมด');
     if (hero.barrier > 0 && hero.reflect && alive(hero.reflect.heroId)) add('reflect', 'ward', 'โล่สะท้อน', `สวนกลับ ${hero.reflect.amount} เมื่อโล่ดูดซับการโจมตี · จาก${name(hero.reflect.heroId)}`, 'ใช้ได้ 1 ครั้ง หรือจนโล่หมด');
     if (hero.evading) add('evade', 'evade', 'ก้าวเงา', `หลบการโจมตีศัตรูได้อีก ${1 + (hero.evadeExtra ?? 0)} ครั้ง`, `ใช้ครบจำนวนครั้ง หรือถึงเทิร์นถัดไปของ${name(hero.evadeBy ?? id)}`);

@@ -29,8 +29,8 @@ test('team sheet: one camp level, catalog count, search, filters and a non-destr
   await seed(page, currentSave({ profile: company(), run: null }));
   await page.locator('#lobby-tab-team').click();
   await expect(page.locator('#lobby-camp-level')).toContainText('เลเวลค่าย Lv5'); await expect(page.locator('#lobby-camp-level')).toContainText('EXP 12/245');
-  // Fourteen in the catalog, Odran and Isolde parked (OD-14): this company can hold twelve.
-  await expect(page.locator('#lobby-sheet-title')).toContainText('ถือครอง 11/12');
+  // Fifteen in the catalog (P03 Kael), Odran and Isolde parked (OD-14): this company can hold thirteen.
+  await expect(page.locator('#lobby-sheet-title')).toContainText('ถือครอง 11/13');
   for (const id of ids) await expect(page.locator(`#lobby-member-${id}`)).toContainText('Lv5');
   const bench = page.locator('.team-grid.bench .team-card[data-hero]');
   await expect(bench).toHaveCount(3);
@@ -61,7 +61,7 @@ test('an old save moves to the camp level once, says so, and keeps a backup', as
   const raw = JSON.stringify(legacy); await seed(page, raw);
   await expect(page.locator('#lobby-view [role=status]').first()).toContainText('ย้ายเซฟเป็นเลเวลค่ายแล้ว · ค่าย Lv7 ตามเซฟาที่ก้าวหน้าที่สุด');
   await page.screenshot({ path: info.outputPath('camp-migration-390.png') });
-  const now = JSON.parse(await saved(page)); expect(now.version).toBe(46); expect(now.profile.campXp).toBe(xpAt(7) + 30);
+  const now = JSON.parse(await saved(page)); expect(now.version).toBe(47); expect(now.profile.campXp).toBe(xpAt(7) + 30);
   expect(await page.evaluate(k => localStorage.getItem(k), legacyBackupKey(43))).toBe(raw);
   await page.reload(); await page.locator('#continue').click();
   await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('#lobby-view')).not.toContainText('ย้ายเซฟ');

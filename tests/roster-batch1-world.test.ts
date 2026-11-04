@@ -14,7 +14,9 @@ import { xpAt } from './fixtures/camp-level';
 import { legacyEnvelope } from './fixtures/legacy-save';
 
 const added = ['metta', 'thiran', 'lalin', 'wila'];
-const legacyMap: MapDefinition = { ...map, mercenaries: map.mercenaries.filter(h => !added.includes(h.id)) };
+// P03 characters joined later (save v47); the v42 catalog had neither group.
+const later = ['kael'];
+const legacyMap: MapDefinition = { ...map, mercenaries: map.mercenaries.filter(h => !added.includes(h.id) && !later.includes(h.id)), company: { ...map.company, featured: map.company.featured?.filter(id => !later.includes(id)) } };
 const write = (game: Game): string => { let raw = ''; saveGame({ getItem: () => null, setItem: (_key, value) => { raw = value; } }, game); return raw; };
 const oldEnvelope = (game: Game) => { const value = legacyEnvelope(JSON.parse(write(game))); value.version = 42; return value; };
 function offerOf(profile: Profile, id: string): Profile {
@@ -28,17 +30,17 @@ function offerOf(profile: Profile, id: string): Profile {
 describe('C12 Batch 1 catalog and hiring', () => {
   it('appends four members without changing the ten existing identities or the free starter pool', () => {
     const catalog = heroCatalog(lookup, map);
-    expect(catalog).toHaveLength(14);
+    expect(catalog).toHaveLength(14 + later.length);
     expect(catalog.slice(0, 10)).toEqual(heroCatalog(lookup, legacyMap));
-    expect(catalog.slice(10).map(h => h.id)).toEqual(added);
+    expect(catalog.slice(10, 14).map(h => h.id)).toEqual(added);
     expect(ruinsMap.draft!.pool).toEqual(['lio', 'brann', 'sefa', 'toma']);
     for (const id of added) expect(ruinsMap.recruits?.some(r => r.hero === id)).toBeFalsy();
     // New roster releases must not dilute the original three offers or their duplicate odds.
     for (let seed = 0; seed < 100; seed++) {
       const p = newProfile(map, seed), before = boardOffers(p, legacyMap, lookup), after = boardOffers(p, map, lookup);
-      expect(after.slice(0, 3)).toEqual(before);
+      expect(after.slice(0, 3)).toEqual(before.slice(0, 3));
       expect(after).toHaveLength(4);
-      expect(added).toContain(after[3]);
+      expect([...added, ...later]).toContain(after[3]);
     }
     // OD-14 (owner 2026-10-30): Odran and Isolde are parked, so only Corin and Cerise are offered anew.
     const seen = new Set<string>();
@@ -126,7 +128,7 @@ describe('C12 v42 → v43 migration', () => {
     expect(boardOffers(migrated.profile, map, lookup)).toEqual(boardOffers(p, legacyMap, lookup));
     expect(migrated.profile.taken).toEqual([1]);
     expect(migrated.profile.company.some(id => added.includes(id))).toBe(false);
-    expect(JSON.parse(write(migrated)).version).toBe(46);
+    expect(JSON.parse(write(migrated)).version).toBe(47);
     expect(parseGame(write(migrated), map, lookup)).toEqual({ profile: migrated.profile, run: null });
     const refreshed = refreshBoard(migrated.profile, map).profile;
     expect(refreshed.boardPool).toBeUndefined();

@@ -1,7 +1,7 @@
 {
   "cell": 256,
   "cols": 6,
-  "rows": 13,
+  "rows": 16,
   "order": [
     "guard",
     "bash",
@@ -75,6 +75,24 @@
     "rounddance",
     "deepbeat",
     "echofoot",
-    "closingstep"
+    "closingstep",
+    "gatherfist",
+    "releasefist",
+    "flowfist",
+    "circlefist",
+    "storedfist",
+    "perfectfist",
+    "threadhex",
+    "lifetoll",
+    "wovenhex",
+    "longthread",
+    "tollring",
+    "knothex",
+    "deflectfate",
+    "turncycle",
+    "starneedle",
+    "crossing",
+    "readorbit",
+    "doubledial"
   ]
 }
