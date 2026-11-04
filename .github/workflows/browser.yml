@@ -36,7 +36,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run build:pages
+      # Type checking runs once in ci.yml (npm run build); shards only need the bundle.
+      - run: npx vite build --base=/asterveil-fateweave/
       - run: npx playwright install --with-deps chromium
       - name: Verify painted blade, defense, healing, projectile, earth, alchemy and arcane seal source fixtures
         if: matrix.shard == 1
@@ -72,8 +73,13 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          for p in Path('test-results').glob('*/error-context.md'):
-              print(f'\n{p}\n{p.read_text()}')
+          # Keep the console short; the full files are in the playwright-results artifact below.
+          files = sorted(Path('test-results').glob('*/error-context.md'))
+          for p in files[:6]:
+              text = p.read_text()
+              print(f'\n{p}\n{text[:3000]}' + ('\n… (truncated; see artifact)' if len(text) > 3000 else ''))
+          if len(files) > 6:
+              print(f'\n… {len(files) - 6} more error-context.md files in the playwright-results artifact')
           PY
       - name: Keep failure evidence
         if: failure()

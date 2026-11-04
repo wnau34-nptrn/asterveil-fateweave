@@ -1,0 +1,3 @@
+# Search tools (ripgrep, Claude Code Grep/Glob, Codex) skip these by default to keep results short.
+# Search them explicitly when history matters: rg --no-ignore <pattern> docs/handoffs/archive
+docs/**/archive/

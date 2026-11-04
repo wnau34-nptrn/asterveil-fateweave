@@ -43,7 +43,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run build:pages
+      # The build job above already type-checks this commit and deploy needs both jobs; shards only need the bundle.
+      - run: npx vite build --base=/asterveil-fateweave/
       - run: npx playwright install --with-deps chromium
       - name: Verify painted blade, defense, healing, projectile, earth, alchemy and arcane seal source fixtures
         if: matrix.shard == 1
