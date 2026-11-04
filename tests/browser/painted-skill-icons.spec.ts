@@ -48,7 +48,7 @@ test('C1 painted skills appear in all six camp sheets and their trees at 390px',
       await page.locator('#camp-skill-selection').selectOption(skill);
       const art = page.locator(`.character-skills [data-skill=${skill}] > .skill-art`);
       await expect(art).toHaveCount(1);
-      await expect(art).toHaveCSS('background-size', '600% 1300%');
+      await expect(art).toHaveCSS('background-size', `600% ${atlas.rows * 100}%`);
       const index = atlas.order.indexOf(skill); expect(index).toBeGreaterThanOrEqual(34);
       await expect(art).toHaveCSS('--sx', `${index % atlas.cols / (atlas.cols - 1) * 100}%`);
       await expect(art).toHaveCSS('--sy', `${Math.floor(index / atlas.cols) / (atlas.rows - 1) * 100}%`);
@@ -79,7 +79,7 @@ test('C1 equipped tree skill uses painted art in the live battle dock', async ({
   await page.locator('#start').click();
   await expect(page.locator('#action-lunge')).toBeEnabled();
   await expect(page.locator('#action-lunge .skill-art')).toHaveCount(1);
-  await expect(page.locator('#action-lunge .skill-art')).toHaveCSS('background-size', '600% 1300%');
+  await expect(page.locator('#action-lunge .skill-art')).toHaveCSS('background-size', `600% ${atlas.rows * 100}%`);
   await page.locator('#action-lunge').click();
   await expect(page.locator('#action-lunge')).toHaveAttribute('aria-pressed', 'true');
   expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.battle.commands.length, key)).toBe(0);
