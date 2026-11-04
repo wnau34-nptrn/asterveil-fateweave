@@ -1,18 +1,18 @@
 {
  "counts": {
-  "identities": 38,
-  "heroes": 16,
+  "identities": 39,
+  "heroes": 17,
   "enemies": 22,
   "atlases": 34,
   "parked": 2,
-  "actionIds": 85,
-  "heroRows": 112,
+  "actionIds": 91,
+  "heroRows": 119,
   "intents": 40,
   "foeRows": 49,
   "spriteRows": 133,
-  "proceduralRows": 28,
+  "proceduralRows": 35,
   "paintedRows": 112,
-  "sharedRows": 45,
+  "sharedRows": 52,
   "codeRows": 4
  },
  "identities": [
@@ -287,6 +287,18 @@
    "identity": "wynne",
    "side": "hero",
    "name": "Wynne",
+   "still": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12",
+   "reactions": {
+    "hit": "procedural",
+    "block": "procedural",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "procedural (ภาพนิ่งจาง)"
+   }
+  },
+  {
+   "identity": "astrid",
+   "side": "hero",
+   "name": "Astrid",
    "still": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12",
    "reactions": {
     "hit": "procedural",
@@ -3792,6 +3804,132 @@
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
    "point": "กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย)"
+  },
+  {
+   "identity": "astrid",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "procedural",
+    "pose": "role basic",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "astrid",
+   "side": "hero",
+   "move": "deflectfate",
+   "name": "เบนชะตา",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "shared",
+    "note": "ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial)"
+  },
+  {
+   "identity": "astrid",
+   "side": "hero",
+   "move": "turncycle",
+   "name": "หมุนวงดาว",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "shared",
+    "note": "ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial)"
+  },
+  {
+   "identity": "astrid",
+   "side": "hero",
+   "move": "crossing",
+   "name": "ทางแยกชะตา",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "shared",
+    "note": "ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "กลางตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "astrid",
+   "side": "hero",
+   "move": "doubledial",
+   "name": "หมุนสองวง",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "shared",
+    "note": "ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial)"
+  },
+  {
+   "identity": "astrid",
+   "side": "hero",
+   "move": "starneedle",
+   "name": "เข็มดารา",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "shared",
+    "note": "ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "กลางตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "astrid",
+   "side": "hero",
+   "move": "readorbit",
+   "name": "อ่านวงโคจร",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "shared",
+    "note": "ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "กลางตัวผู้รับ damage จริง"
   },
   {
    "identity": "brute",

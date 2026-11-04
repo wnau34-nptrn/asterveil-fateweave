@@ -107,7 +107,7 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 const SAVE_VERSION = 47;
 const BATCH_ONE_IDS = ['metta', 'thiran', 'lalin', 'wila'];
 // Characters added after the v43 legacy board snapshot (P03); never part of a legacy pool or the v46 featured lineup.
-const P03_IDS = ['kael', 'wynne'];
+const P03_IDS = ['kael', 'wynne', 'astrid'];
 // The classes whose big tree arrived in v37 (release A) and in v39 (the recruits).
 const RELEASE_A_TREES = ['tracer', 'weaver', 'healer', 'garran', 'mira'];
 const RECRUIT_TREES = ['toma', 'sefa', 'brann', 'lio'];
@@ -120,7 +120,8 @@ const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execut
   'saintstrike', 'communion', 'saintarc', 'vowstrike', 'sharewound', 'lastlight',
   'cadence', 'duet', 'rounddance', 'deepbeat', 'echofoot', 'closingstep',
   'gatherfist', 'releasefist', 'flowfist', 'circlefist', 'storedfist', 'perfectfist',
-  'threadhex', 'lifetoll', 'wovenhex', 'longthread', 'tollring', 'knothex'];
+  'threadhex', 'lifetoll', 'wovenhex', 'longthread', 'tollring', 'knothex',
+  'deflectfate', 'turncycle', 'starneedle', 'crossing', 'readorbit', 'doubledial'];
 
 // One key for profile and run, so settling an expedition is a single atomic write.
 export function saveGame(storage: StoragePort | undefined, game: Game): boolean {
@@ -230,11 +231,13 @@ function command(v: unknown): Command {
   if (!isInt(c.beat, 1) || typeof c.heroId !== 'string' || typeof c.targetId !== 'string' || !actions.includes(c.action as ActionId)) throw new Error('Invalid command');
   if (c.cooldownAction !== undefined && !actions.includes(c.cooldownAction as ActionId)) throw new Error('Invalid command');
   if (c.cooldownTargetId !== undefined && typeof c.cooldownTargetId !== 'string') throw new Error('Invalid command');
+  if ((c.recipientId !== undefined && typeof c.recipientId !== 'string') || (c.steps !== undefined && !isInt(c.steps, 1, 2))) throw new Error('Invalid command');
   // These selections affect the deterministic result. Keep them through save/replay;
   // the resolver validates their action, paid personal cap and current legal recipient.
   return { beat: c.beat, heroId: c.heroId, targetId: c.targetId, action: c.action as ActionId,
     ...(c.cooldownAction !== undefined ? { cooldownAction: c.cooldownAction as ActionId } : {}),
-    ...(c.cooldownTargetId !== undefined ? { cooldownTargetId: c.cooldownTargetId as string } : {}) };
+    ...(c.cooldownTargetId !== undefined ? { cooldownTargetId: c.cooldownTargetId as string } : {}),
+    ...(c.recipientId !== undefined ? { recipientId: c.recipientId as string } : {}), ...(c.steps !== undefined ? { steps: c.steps as number } : {}) };
 
 }
 

@@ -15,7 +15,7 @@ import { legacyEnvelope } from './fixtures/legacy-save';
 
 const added = ['metta', 'thiran', 'lalin', 'wila'];
 // P03 characters joined later (save v47); the v42 catalog had neither group.
-const later = ['kael', 'wynne'];
+const later = ['kael', 'wynne', 'astrid'];
 const legacyMap: MapDefinition = { ...map, mercenaries: map.mercenaries.filter(h => !added.includes(h.id) && !later.includes(h.id)), company: { ...map.company, featured: map.company.featured?.filter(id => !later.includes(id)) } };
 const write = (game: Game): string => { let raw = ''; saveGame({ getItem: () => null, setItem: (_key, value) => { raw = value; } }, game); return raw; };
 const oldEnvelope = (game: Game) => { const value = legacyEnvelope(JSON.parse(write(game))); value.version = 42; return value; };

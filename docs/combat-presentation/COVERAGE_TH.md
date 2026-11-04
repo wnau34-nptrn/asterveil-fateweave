@@ -4,10 +4,10 @@
 
 ## สรุป
 
-- identities 38 (ฝ่ายเรา 16 · ศัตรู 22) · มี atlas 34 · พักตาม OD-14 2 (โอดราน `thiran` / อิโซลด์ `wila`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่ง P03 รออนิเมชัน 2
-- ActionId ฝ่ายเรา 85 รายการ (112 แถว ตัวละคร×ท่า รวมท่าจากต้นไม้) · ชื่อท่าศัตรู/phase 40 ชื่อ (49 แถว identity×ท่า)
-- ท่าร่างกาย: sprite 133 · procedural 28 (ตัวที่พักตาม OD-14 และภาพนิ่ง P03 ที่รออนิเมชัน CODEX-A12)
-- VFX: วาดเฉพาะ 112 · ชุดร่วมโดยตั้งใจ 45 · วาดด้วยโค้ดโดยตั้งใจ 4
+- identities 39 (ฝ่ายเรา 17 · ศัตรู 22) · มี atlas 34 · พักตาม OD-14 2 (โอดราน `thiran` / อิโซลด์ `wila`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่ง P03 รออนิเมชัน 3
+- ActionId ฝ่ายเรา 91 รายการ (119 แถว ตัวละคร×ท่า รวมท่าจากต้นไม้) · ชื่อท่าศัตรู/phase 40 ชื่อ (49 แถว identity×ท่า)
+- ท่าร่างกาย: sprite 133 · procedural 35 (ตัวที่พักตาม OD-14 และภาพนิ่ง P03 ที่รออนิเมชัน CODEX-A12)
+- VFX: วาดเฉพาะ 112 · ชุดร่วมโดยตั้งใจ 52 · วาดด้วยโค้ดโดยตั้งใจ 4
 
 ความหมาย: **sprite** = เฟรม atlas (prepare → recover; contact = เฟรม recover แรก, เวลา contact/end มาจาก UI ไม่ใช่ FPS ภาพ) · **procedural** = ภาพนิ่ง + การเคลื่อนไหวด้วยโค้ด · **วาด** = painted atlas ของท่านั้น · **ชุดร่วม** = painted atlas ร่วมตระกูลโดยตั้งใจ · **โค้ด** = วาดด้วย Graphics ตั้งใจ (ไม่มีภาพเฉพาะ) · จุดเกิดผลทุกแถวอ่านจาก event จริงของ resolver
 
@@ -31,6 +31,7 @@
 | `wila` | Isolde | เรา | OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | procedural | procedural | procedural (ภาพนิ่งจาง) | — |
 | `kael` | Kael | เรา | P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12 | procedural | procedural | procedural (ภาพนิ่งจาง) | — |
 | `wynne` | Wynne | เรา | P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | procedural | procedural | procedural (ภาพนิ่งจาง) | — |
+| `astrid` | Astrid | เรา | P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | procedural | procedural | procedural (ภาพนิ่งจาง) | — |
 | `brute` | อสูรรอยแยก | ศัตรู | 24 · 4.18 MiB · 1.44 MB | sprite 17,18 | sprite 22,23 | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_captain` | หัวหน้ากองหน้า | ศัตรู | 18 · 4.58 MiB · 1.34 MB | sprite 13,14 | procedural (tint/lift) | sprite 15,16,17 · ค้าง 17 | — |
 | `foe_dew_slime` | สไลม์น้ำค้าง | ศัตรู | 22 · 1.35 MiB · 0.36 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
@@ -172,6 +173,13 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `wynne` | `tollring` วงภาษี | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
 | `wynne` | `longthread` ด้ายยาว | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
 | `wynne` | `knothex` ปมสาป | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
+| `astrid` | `attack` โจมตี | procedural (role basic) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `astrid` | `deflectfate` เบนชะตา | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial) |
+| `astrid` | `turncycle` หมุนวงดาว | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial) |
+| `astrid` | `crossing` ทางแยกชะตา | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวผู้รับ damage จริง |
+| `astrid` | `doubledial` หมุนสองวง | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial) |
+| `astrid` | `starneedle` เข็มดารา | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวผู้รับ damage จริง |
+| `astrid` | `readorbit` อ่านวงโคจร | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวผู้รับ damage จริง |
 
 ## ศัตรู: identity × intent / phase
 
@@ -229,5 +237,5 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 
 ## งานค้างที่รู้อยู่แล้ว (สร้างจากตาราง)
 
-- ท่าร่างกาย procedural 28 แถว: `thiran`, `wila`, `kael`, `wynne` — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง); P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12; P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12
+- ท่าร่างกาย procedural 35 แถว: `thiran`, `wila`, `kael`, `wynne`, `astrid` — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง); P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12; P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12
 - VFX วาดด้วยโค้ดโดยตั้งใจ 4 แถว: `mira` โจมตี, `toma` โจมตี, `foe_hunter` Shadow Knife, `raider` Shadow Knife

@@ -54,6 +54,8 @@ export function skillCooldown(data: EncounterDefinition, heroId: string | undefi
   if (action === 'lastlight' && hasCap(data, heroId, 'lastlightRatio')) cooldown++;
   if (action === 'perfectfist' && hasCap(data, heroId, 'martialPerfectHeavy')) cooldown++;
   if (action === 'longthread') cooldown -= capAmount(data, heroId, 'wynne2');
+  if (action === 'deflectfate') cooldown -= capAmount(data, heroId, 'seerDeflectQuick');
+  if (action === 'turncycle') cooldown -= capAmount(data, heroId, 'seerTurnQuick');
   return Math.max(0, cooldown);
 }
 function levelPoints(data: EncounterDefinition, heroId: string | undefined, action: ActionId): number {
@@ -154,7 +156,7 @@ export const ambushBonus = (state: BattleState, data: EncounterDefinition, enemy
 // Magical damage and support use Magic Power (legacy field `skillBonus`); physical damage uses
 // Attack (`damageBonus`). Flat talent bonuses and skill levels keep their existing order.
 export const SUPPORT_SKILLS: readonly ActionId[] = ['ward', 'heal', 'prayer', 'valor', 'mend', 'bless', 'aegis'];
-export const MAGIC_DAMAGE_SKILLS: readonly ActionId[] = ['bolt', 'sigil', 'storm', 'dispel', 'acid', 'bomb', 'catalyst', 'finale', 'note', 'threadhex', 'lifetoll', 'tollring'];
+export const MAGIC_DAMAGE_SKILLS: readonly ActionId[] = ['bolt', 'sigil', 'storm', 'dispel', 'acid', 'bomb', 'catalyst', 'finale', 'note', 'threadhex', 'lifetoll', 'tollring', 'starneedle', 'crossing', 'readorbit'];
 export const usesMagicPower = (action: ActionId): boolean => SUPPORT_SKILLS.includes(action) || MAGIC_DAMAGE_SKILLS.includes(action);
 // Percent skills (bulwark, halo, blessing, war cry, revive): their power is a percent that only talents raise.
 export const PERCENT_SKILLS: readonly ActionId[] = ['bulwark', 'halo', 'revive', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread'];
@@ -265,7 +267,37 @@ function hexTicks(state: BattleState, data: EncounterDefinition, events: BattleE
     }
     if (foe.hexes) { foe.hexes = foe.hexes.filter(h => h.until > state.round && foe.hp > 0); if (!foe.hexes.length) delete foe.hexes; }
     if (foe.toll && (foe.toll.until <= state.round || foe.hp <= 0)) delete foe.toll;
+    if (foe.deflect && (foe.deflect.until <= state.round || foe.hp <= 0)) delete foe.deflect;
   }
+}
+// ---- P03 Seer (docs/design/ROSTER_30_TH.md §3, draft numbers) ----
+// Only an announced normal single-target move may be bent or turned: whole-party moves, charges, phase turns and
+// unstoppable signature moves are locked. A bent move keeps its power, kind and attacker and lands on another foe; it
+// never reaches an ally, never chains and never cancels the move. Turning moves the foe's cycle cursor; SPD and the queue
+// never change.
+export const lockedMove = (intent: Intent | IntentDefinition | null | undefined): boolean => !intent || !!intent.special || !!intent.all || !!intent.charge || !!intent.unstoppable;
+// Why this foe's move cannot be turned `steps` normal moves on (every move stepped over and reached must be normal).
+export function dialReason(state: BattleState, data: EncounterDefinition, enemyId: string, steps: number): string {
+  const foe = state.enemies.find(e => e.id === enemyId); const next = nextIntentOf(state, data, enemyId);
+  if (!foe || foe.hp <= 0 || !next) return 'This enemy is down.';
+  if (lockedMove(next)) return 'This move cannot be turned.';
+  const moves = phaseMoves(state, data, enemyId);
+  if (moves.length < steps + 1) return 'Too few moves in its cycle.';
+  for (let k = 1; k <= steps; k++) {
+    const shifted = { ...structuredClone(state) }; shifted.enemies.find(e => e.id === enemyId)!.cycleShift = (foe.cycleShift ?? 0) + k;
+    if (lockedMove(enemyIntent(shifted, data, enemyId, next.round))) return 'This move cannot be turned.';
+  }
+  return '';
+}
+// Why this foe's next move cannot be bent onto `recipientId` (empty when it can); `until` = the last round it may happen.
+export function deflectReason(state: BattleState, data: EncounterDefinition, heroId: string, enemyId: string, recipientId?: string): string {
+  const next = nextIntentOf(state, data, enemyId);
+  if (!next) return 'This enemy is down.';
+  if (lockedMove(next)) return 'This move cannot be bent.';
+  if (next.round > state.round + (hasCap(data, heroId, 'seerDeflectHold') ? 1 : 0)) return 'This enemy has already acted this round.';
+  const others = state.enemies.filter(e => e.hp > 0 && e.id !== enemyId);
+  if (!others.length) return 'No other enemy to bend it onto.';
+  return recipientId !== undefined && !others.some(e => e.id === recipientId) ? 'Choose another standing enemy.' : '';
 }
 // The toll a foe pays as its attacking move begins (the caller has excluded phase turns, charges and cancelled moves).
 function payToll(state: BattleState, data: EncounterDefinition, foe: EnemyState, events: BattleEvent[]): void {
@@ -359,7 +391,7 @@ export function enemyIntent(state: BattleState, data: EncounterDefinition, id: s
   if (phase) return alive[0] ? { sourceId: id, targetSlot: 0, name: phase.name, damage: 0, kind: 'energy', unstoppable: true, special: 'phase', targetId: alive[0].id, beat: state.beat, round } : null;
   // Each phase's moves cycle from the round after the phase began (the opening cycle from round 1).
   const moves = phaseMoves(state, data, id);
-  const template = moves[((round - (foe.phaseRound ?? 0) - 1) % moves.length + moves.length) % moves.length];
+  const template = moves[((round - (foe.phaseRound ?? 0) - 1 + (foe.cycleShift ?? 0)) % moves.length + moves.length) % moves.length];
   if (!template) return null;
   const front = alive.filter(h => data.heroes.find(d => d.id === h.id)!.lane === 'front');
   const allowed = template.kind === 'physical' && front.length ? front : alive;
@@ -580,7 +612,7 @@ function spearFury(state: BattleState, data: EncounterDefinition, heroId: string
 // next round) and its moves switch to the new phase's cycle.
 function beginPhase(state: BattleState, data: EncounterDefinition, enemy: EnemyState, events: BattleEvent[]): void {
   const phase = pendingPhase(state, data, enemy.id); if (!phase) return;
-  enemy.phase = (enemy.phase ?? 0) + 1; enemy.phaseRound = state.round;
+  enemy.phase = (enemy.phase ?? 0) + 1; enemy.phaseRound = state.round; delete enemy.cycleShift; delete enemy.deflect;
   events.push({ type: 'phase', sourceId: enemy.id, targetId: enemy.id, text: phase.name });
   for (const slot of phase.summon ?? []) {
     const minion = state.enemies.find(e => e.id === slot); const def = data.enemies.find(e => e.id === slot);
@@ -673,11 +705,21 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
       } else if (intent.charge) events.push({ type: 'charge', sourceId: actorId, targetId: intent.targetId, text: 'Gathering power.' });
       // A whole-party move strikes every standing hero; Guard cannot cover it.
       else if (intent.all) { for (const h of state.heroes.filter(x => x.hp > 0)) if (h.hp > 0) strike(h, null); }
+      else if (enemy.deflect && enemy.deflect.until >= state.round && !lockedMove(intent) && state.enemies.some(e => e.id === enemy.deflect!.recipientId && e.hp > 0)) {
+        // A Seer's deflection: the same move (its enrage/weaken included) lands on the chosen foe, never on a hero.
+        const bent = enemy.deflect; const recipient = state.enemies.find(e => e.id === bent.recipientId)!; delete enemy.deflect;
+        const strong = enraged(state, data, enemy.id) ? Math.ceil(intent.damage * (1 + data.rules.traits!.enragePercent / 100)) : intent.damage;
+        const amount = Math.min(recipient.hp, enemy.weaken ? Math.ceil(strong * (1 - enemy.weaken / 100)) : strong); recipient.hp -= amount;
+        events.push({ type: 'deflect', sourceId: bent.heroId, targetId: actorId, text: 'Fate bends the move.' });
+        events.push({ type: 'damage', sourceId: actorId, targetId: recipient.id, amount, absorbed: 0, text: 'Deflected.' });
+        if (!recipient.hp) { events.push({ type: 'down', targetId: recipient.id, text: 'Enemy falls.' }); chainReaction(state, data, recipient, events); }
+      }
       else strike(state.heroes.find(h => h.id === (guard?.heroId ?? intent.targetId))!, guard);
       // A two-guard knight covers a set number of hits; a plain guard ends when its announced attacker acts.
       if (guard?.uses && events.some(e => e.type === 'damage' && e.sourceId === actorId)) { guard.uses--; if (!guard.uses) state.guard = null; }
       else if (state.guard?.sourceId === actorId && !state.guard.uses && !state.guard.all) state.guard = null;
       if (state.challenge?.enemyId === actorId) state.challenge = null;
+      if (enemy.deflect && !lockedMove(intent)) delete enemy.deflect;
       if (intent.stoned && state.stone) {
         state.stone.ids = state.stone.ids.filter(id => id !== intent.stoneTargetId);
       }
@@ -819,7 +861,8 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
   return data.enemies.map(e => {
     const actor = state.enemies.find(s => s.id === e.id);
     const reason = unavailable || (!actor || actor.hp <= 0 ? 'This enemy is down.' :
-      screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : action === 'lifetoll' && !actor.hexes ? 'No curse on this enemy.' : '');
+      screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : action === 'lifetoll' && !actor.hexes ? 'No curse on this enemy.' : action === 'deflectfate' ? deflectReason(state, data, heroId, e.id)
+      : action === 'turncycle' ? dialReason(state, data, e.id, 1) : action === 'doubledial' ? dialReason(state, data, e.id, hasCap(data, heroId, 'seerDialChoose') ? 1 : 2) : '');
     return { id: e.id, name: e.name, valid: !reason, reason };
   });
 }
@@ -835,6 +878,12 @@ export function validateCommand(state: BattleState, data: EncounterDefinition, c
   const allies = danceAllies(state, data, command.heroId);
   if (selectsAlly && allies.length && !allies.some(h => h.id === command.cooldownTargetId)) return 'Choose an ally with an eligible cooling skill.';
   if (command.cooldownTargetId !== undefined && (!selectsAlly || !allies.some(h => h.id === command.cooldownTargetId))) return 'Invalid cooldown recipient.';
+  if (command.action === 'deflectfate') { const why = command.recipientId === undefined ? 'Choose the enemy to bend it onto.' : deflectReason(state, data, command.heroId, command.targetId, command.recipientId); if (why) return why; }
+  else if (command.recipientId !== undefined) return 'This action does not bend a move.';
+  if (command.steps !== undefined) {
+    if (command.action !== 'doubledial' || !hasCap(data, command.heroId, 'seerDialChoose') || (command.steps !== 1 && command.steps !== 2)) return 'Invalid number of steps.';
+    const why = dialReason(state, data, command.targetId, command.steps); if (why) return why;
+  } else if (command.action === 'doubledial') { const why = dialReason(state, data, command.targetId, 2); if (why) return why; }
   const target = targetOptions(state, data, command.heroId, command.action).find(t => t.id === command.targetId);
   return target?.valid ? '' : target?.reason || 'Invalid target.';
 }
@@ -963,6 +1012,43 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
           if (count === 1) cooldownAdjustment -= capAmount(data, hero.id, 'dancerClosingQuick');
           cooldownAdjustment -= capAmount(data, hero.id, 'lalin4'); break;
         }
+      }
+      break;
+    }
+    case 'deflectfate': {
+      const until = nextIntentOf(state, data, enemy!.id)!.round;
+      enemy!.deflect = { heroId: hero.id, recipientId: command.recipientId!, until };
+      events.push({ type: 'deflect', sourceId: hero.id, targetId: enemy!.id, text: 'Fate is bent.' });
+      if (hasCap(data, hero.id, 'astrid1') && !state.commands.some(c => c.heroId === hero.id && c.action === 'deflectfate')) cooldownAdjustment--;
+      if (hasCap(data, hero.id, 'astrid4') && row(command.recipientId!) !== row(enemy!.id)) cooldownAdjustment--;
+      break;
+    }
+    case 'turncycle': case 'doubledial': {
+      const steps = command.action === 'turncycle' ? 1 : command.steps ?? 2; const before = nextIntentOf(state, data, enemy!.id)!;
+      enemy!.cycleShift = (enemy!.cycleShift ?? 0) + steps;
+      events.push({ type: 'dial', sourceId: hero.id, targetId: enemy!.id, amount: steps, text: 'The cycle turns.' });
+      if (command.action === 'turncycle' && before.kind === 'physical') cooldownAdjustment -= capAmount(data, hero.id, 'seerTurnRefund');
+      break;
+    }
+    case 'starneedle': {
+      const lone = state.enemies.filter(e => e.hp > 0).length === 1;
+      damage(skill.power + (lone ? capAmount(data, hero.id, 'seerNeedleLone') : 0) + (deflectReason(state, data, hero.id, enemy!.id) ? capAmount(data, hero.id, 'seerNeedleBlocked') : 0));
+      break;
+    }
+    case 'readorbit': {
+      const next = nextIntentOf(state, data, enemy!.id);
+      damage(skill.power + (lockedMove(next) ? capAmount(data, hero.id, 'seerOrbitLocked') : 0) + (next?.all ? capAmount(data, hero.id, 'astrid3') : 0));
+      break;
+    }
+    case 'crossing': {
+      // The highest-HP other standing foe receives the target's next normal move (ties by encounter order).
+      const pick = () => state.enemies.filter(e => e.hp > 0 && e.id !== enemy!.id).sort((a, b) => b.hp - a.hp || data.enemies.findIndex(d => d.id === a.id) - data.enemies.findIndex(d => d.id === b.id))[0];
+      const bends = !lockedMove(nextIntentOf(state, data, enemy!.id)) && !!pick();
+      damage(skill.power + (bends ? capAmount(data, hero.id, 'seerCrossingHit') : 0));
+      const to = pick(); const next = nextIntentOf(state, data, enemy!.id);
+      if (bends && enemy!.hp > 0 && to && next && !lockedMove(next)) {
+        enemy!.deflect = { heroId: hero.id, recipientId: to.id, until: next.round };
+        events.push({ type: 'deflect', sourceId: hero.id, targetId: enemy!.id, text: 'Fate is bent.' });
       }
       break;
     }

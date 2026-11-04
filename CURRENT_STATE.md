@@ -5,7 +5,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages URL https://wnau34-nptrn.github.io/asterveil-fateweave/ through `pages.yml`; pre-release pushes deploy after lint/unit/build, with the full browser gate on PRs. Restore the Pages browser gate before OD-13 external tests.
-- **Save v46**; 1–5 units a side (P02), shared camp Lv/EXP (P01), reserve by chapter 3→4→5, fatigue, carry ≤10. W1–W8/P01/P02, UXD-01…07 and the HUD team → character entry (PR #146) are published.
+- **Save v47** (P03: board featured lineup); 1–5 units a side (P02), shared camp Lv/EXP (P01), reserve by chapter 3→4→5, fatigue, carry ≤10. W1–W8/P01/P02, UXD-01…07 and the HUD team → character entry (PR #146) are published.
 - 2026-11-04 Claude batch (all merged after quality + four browser shards):
   - PR #147/#149 storage ceilings: `core/world/caps.ts` holds the save limits (`BANK_CAP`, `TOME_CAP`, `RIFT_CORE_CAP`, `POTION_CAP`, `RUN_CAP`); player choices refuse `'full'`, settle/dismiss/run gains fill to the cap (`docs/validation/storage-caps/README_TH.md`).
   - PR #148 (save v46, owner decision on logic audit 4–5): Heal may target a full-HP ally when Afterglow/mender overflow still adds barrier; Revive levels add HP (`revivePoints` 5: 25→45%), no user barrier (`docs/design/LOGIC_AUDIT_2026-10-24_TH.md`).
@@ -14,19 +14,21 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
   - Art merged to `incoming/`: Kael proportion fix NEW-003 (PR #150), calm potion package (PR #151).
 - Owner 2026-11-04: “เรื่องภาพหรืออะไรให้คุณตัดสินใจได้เลย” — Claude may decide art picks; record each such pick as Claude's decision under that delegation, not as owner approval.
 
+- P03 (2026-11-04 late, PR #155/#156/#157): Kael (Martial chi), Wynne (Hexer curses/toll), Astrid (Seer deflect/cycle) — 15 classes × 1 character; featured board slot only; stills + procedural until CODEX-A12; evidence `docs/validation/roster-30/p03/README_TH.md`.
+
 ## Active task
 
-- None. Next: P03 (owner 2026-11-04 “แล้วต่อ P03”), in a new session.
+- None. Next: P09 (OD-13 order), in a new session.
 
 ## Next (owner order)
 
-- **P03**: add Kael (`kael`, Martial), Wynne (`wynne`, Hexer), Astrid (`astrid`, Seer) — 15 classes × 1 character (OD-14; no second characters). Mechanics, trees and 18 skills in `docs/design/ROSTER_30_TH.md`; plan `docs/DEVELOPMENT_PLAN_TH.md` P03. Stills approved 2026-10-31 (Kael replaced by `incoming/ART-CHAR-CLASS-NEW-003/`); battle animation brief sent to Codex: `docs/handoffs/CODEX-A12-NEW-CLASSES-TH.md` (use stills + procedural motion until it lands).
-- Then OD-13: P09 accounts/cloud save/telemetry+feedback/admin → P04 → server rewards → chat + World Boss → external test. UXD-08 combined UX check remains open.
+- **P09** (OD-13): accounts/cloud save/telemetry+feedback/admin (needs the owner's Cloudflare D1 Edit token before database work) → P04 → server rewards → chat + World Boss → external test. UXD-08 combined UX check remains open.
 
 ## Open items
 
 - Map 3 gate copy of the Briar Lord still falls to plain attacks 83–98%; stronger % broke the rush/casual first-clear gate — deferred to P05 (needs a gate-specific mechanic/encounter; Claude decision under delegation).
 - No real Safari/iPhone/Android or human usability results (P02-03 trial pending). The owner's iPhone report of Seren's art is fixed in PR #154 but not re-checked on the device.
+- P03 flags: the advisor rarely turns cycles (Astrid branch b ≈ no points in tree-sim) or uses tolls; tune after real play. Kael/Wynne/Astrid battle animation awaits Codex (`docs/handoffs/CODEX-A12-NEW-CLASSES-TH.md`).
 - Art: A7-003 parked (OD-14); Lyra atlas above guideline; open PRs #133 UX art/plan, #122 A7-003, #55 pets, #53 boss frames (do not merge the Artwork branch automatically).
 
 ## Workspace
@@ -38,6 +40,6 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ```text
 ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype
 อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง
-งาน: P03 เพิ่มเคล/วินน์/แอสทริด (อาชีพละ 1 ตัว OD-14) ตาม docs/design/ROSTER_30_TH.md และแผน P03 ใช้ skill fateweave-rules-and-sim
-แบ่ง PR ตามกลไก ทำ sim/migration/เทสต์ให้ครบ ตอบไทย เรื่องภาพตัดสินแทนเจ้าของได้ตามที่มอบหมาย 2026-11-04
+งาน: P09 ตาม OD-13 — บัญชีผู้เล่น/คลาวด์เซฟ/telemetry+feedback/admin บน Cloudflare (ดู docs/DEVELOPMENT_PLAN_TH.md P09)
+ตรวจ secret ที่มีจริงก่อน ถ้ายังไม่มีสิทธิ์ D1 Edit ให้ทำส่วนที่ไม่ต้องใช้ฐานข้อมูลก่อนและแจ้งเจ้าของ ตอบไทย
 ```
