@@ -1,5 +1,13 @@
 # ส่งต่องานให้แชตใหม่ (Claude) — อัปเดต 2026-10-22 หลัง A10 สมดุลรอบเล็ก (เซฟ v37)
 
+## 2026-11-04 — ตรวจ UX/UI ปัจจุบันและเสนอแนะเท่านั้น
+
+- เจ้าของขอ “ตรวจสอบเกมตอนนี้…เขียนข้อเสนอแนะ…ยังไม่ต้องแก้เกมจริง” ตรวจฐาน remote/local `b3ad98e950d278b0678cd3a334fad02862e1e891` บน feature/fateweave-initial-prototype แล้วสร้าง local branch `codex/ux-ui-audit-2026-11-04` ไม่มี runtime/core/content/save/rule changes ไม่เริ่ม UXD-07
+- รายงาน [UX/UI audit](../validation/ux-ui-audit-2026-11-04/REPORT_TH.md) พร้อม PNG 15 ภาพ, Profile interaction และ layout metrics แยกประเด็นที่พบจริงกับข้อเสนอออกแบบ จัดลำดับ 10 ข้อ โดย P1 คือเพิ่ม Lv สกิลดับเบิลคลิกจ่ายสองครั้ง, คำสั่งสมาชิกอยู่ไกลหลังเลือก, ข้อมูลแผนที่ถูกภาพค่ายทับ
+- เซฟทดสอบ: ดับเบิลคลิกเพิ่ม guard ของเอกิส Lv1→3, ทอง600→587, ตำราปราการเล็ก10→4 อ่าน Profile ที่ persist จริง ปุ่มอัปดาวหลังเลือกสมาชิกอยู่ y≈1827 บนจอ650; ค่ายลงสนาม5แต่ภาพแสดง4ตรง slice(0,4) บันทึกเพื่อเสนอแก้ ไม่แก้เกมในงานนี้
+- npm run build:pages ผ่าน; browser audit 6 เส้นทางหลักผ่านครบหลังแก้ navigation/wait ของ harness และ targeted interaction 1 ผ่าน รวม7 ไม่ใช่ full regression suite รอบแรก camp2ล้มจาก harness ไม่รายงานเป็น product defect ไม่รัน unit/typecheck/lint ใหม่เพราะไม่มี source changes ภาพจริง390×650/844 จาก production build บน Chromium emulation ไม่ใช่ Pages สด/Safari/iPhone/Androidจริง/ผู้ใช้จริง ไม่มี desktop/320/200% ใหม่ใน audit นี้
+- ภาพและรายงานส่งเจ้าของผ่านลิงก์ไฟล์ ไม่พบ CURRENT_STATE.md ใน workspace; รักษา checkout เดิม /workspace/asterveil-fateweave และใช้งานแยก /workspace/asterveil-uxd-06-work ตามเดิม เอกสารนี้อยู่ local docs commit ไม่มี PR/merge/Pages ใหม่ งานที่เสนอทั้งหมดรอคำสั่งเจ้าของแยก ไม่ถือว่าอนุมัติ implementation
+
 ## 2026-11-04 — UXD-06 เผยแพร่แล้ว (PR #144)
 
 - เจ้าของให้เริ่ม UXD-06 ด้วย “ดำเนินการได้” หลัง UXD-05 release9bf63bd7 ตรวจ connector/git remote/ancestry ก่อนสร้าง codex/uxd-06-character-star จาก `9bf63bd7c9dd966651ef536c971cb51b6876bb89` บน feature/fateweave-initial-prototype ไม่ reset/import checkpoints cc51cd4/bcd6133/สาขา release UXD-02 หรือ merge Artwork/ART PR #133
