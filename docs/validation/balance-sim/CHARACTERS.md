@@ -26,7 +26,7 @@ Every catalog character at ★1 and the map boss level; epic map-level main-stat
 | toma | Alchemist | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2d":1,"b1":2} / acid, haste |
 | sefa | Scout | deep-forest | 6 | 12/12 | 98.7% | 3.2 | {"a1":2,"a2b":1,"b1":2} / ambush, evade |
 | brann | Warden | deep-forest | 6 | 12/12 | 94.2% | 3.2 | {"b1":2,"b2":1,"c1s":1,"c1":1} / slam, quake, guardstone |
-| lio | Bard | deep-forest | 6 | 12/12 | 95.2% | 3.2 | {"b1":2,"b2o":1,"a1":2} / valor, mend |
+| lio | Bard | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"b1":2,"b2o":1,"a1":2} / valor, mend |
 | garran | Spear | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2f":1,"b1":2} / brace, pierce |
 | metta | Saint | deep-forest | 6 | 12/12 | 99.8% | 3.2 | {"b1":2,"b2y":1,"p1":1,"c1s":1} / saintstrike, communion, sharewound |
 | thiran | Saint | deep-forest | 6 | 12/12 | 99.7% | 3.2 | {"b1":2,"b2y":1,"p1":1,"c1s":1} / saintstrike, communion, sharewound |

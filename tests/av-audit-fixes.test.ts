@@ -146,7 +146,8 @@ describe('AV07 boss signature and charge holds', () => {
       s = r.state;
     }
     expect(held).toBeDefined();
-    expect(chargeHolds(held!, d)[0]).toMatchObject({ charge: 'Gather Thorns', release: 'Thorn Tempest', kind: 'unstoppable' });
+    // Thorn Tempest can be sealed since v10 (OD-09, 2026-11-04), so its hold uses the open `normal` telegraph.
+    expect(chargeHolds(held!, d)[0]).toMatchObject({ charge: 'Gather Thorns', release: 'Thorn Tempest', kind: 'normal', frame: 'gather-thorns_prepare' });
     // A seal/interrupt recorded on the charge round voids the hold (the resolver cancelled that gathering).
     const interrupted = structuredClone(held!); foe(interrupted, 'f1').interruptedRound = held!.round;
     expect(chargeHolds(interrupted, d)).toEqual([]);

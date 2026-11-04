@@ -12,16 +12,16 @@ Dealt, Healed and Taken are that class's own totals.
 
 | Class | Build | Won | Party HP left | Dealt | Healed | Taken | Rounds |
 |---|---|---|---|---|---|---|---|
-| guardian | none | 10/10 | 91% | 330 | 0 | 636 | 7.2 |
+| guardian | none | 10/10 | 89% | 330 | 0 | 652 | 7.2 |
 | guardian | main | 10/10 | 97% | 597 | 16 | 445 | 6.5 |
 | guardian | off | 10/10 | 97% | 597 | 46 | 404 | 6.5 |
-| tracer | none | 10/10 | 91% | 1672 | 0 | 259 | 7.2 |
+| tracer | none | 10/10 | 89% | 1672 | 0 | 275 | 7.2 |
 | tracer | main | 10/10 | 96% | 1813 | 45 | 181 | 6.3 |
 | tracer | off | 10/10 | 96% | 1810 | 0 | 149 | 6.3 |
-| weaver | none | 10/10 | 90% | 1051 | 0 | 94 | 7.2 |
+| weaver | none | 10/10 | 87% | 1051 | 0 | 110 | 7.2 |
 | weaver | main | 10/10 | 97% | 1353 | 0 | 49 | 6.4 |
 | weaver | off | 10/10 | 96% | 1307 | 20 | 52 | 6.7 |
-| healer | none | 10/10 | 90% | 140 | 1201 | 94 | 7.2 |
+| healer | none | 10/10 | 87% | 140 | 1201 | 110 | 7.2 |
 | healer | main | 10/10 | 97% | 193 | 1280 | 68 | 7.0 |
 | healer | off | 10/10 | 97% | 217 | 1275 | 86 | 6.9 |
 | mira | none | 10/10 | 67% | 1037 | 0 | 62 | 5.4 |
@@ -48,9 +48,9 @@ Dealt, Healed and Taken are that class's own totals.
 | thiran | none | 10/10 | 76% | 941 | 285 | 207 | 5.5 |
 | thiran | main | 10/10 | 93% | 1372 | 492 | 120 | 4.6 |
 | thiran | off | 10/10 | 91% | 1274 | 484 | 139 | 5.0 |
-| lalin | none | 10/10 | 56% | 525 | 0 | 123 | 6.8 |
+| lalin | none | 9/10 | 55% | 561 | 0 | 162 | 6.9 |
 | lalin | main | 10/10 | 79% | 914 | 8 | 57 | 5.4 |
 | lalin | off | 10/10 | 77% | 914 | 24 | 45 | 5.4 |
-| wila | none | 10/10 | 56% | 525 | 0 | 123 | 6.8 |
+| wila | none | 9/10 | 55% | 561 | 0 | 162 | 6.9 |
 | wila | main | 10/10 | 79% | 914 | 8 | 57 | 5.4 |
 | wila | off | 10/10 | 77% | 914 | 24 | 45 | 5.4 |
