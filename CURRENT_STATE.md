@@ -14,7 +14,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
   - Art merged to `incoming/`: Kael proportion fix NEW-003 (PR #150), calm potion package (PR #151).
 - Owner 2026-11-04: “เรื่องภาพหรืออะไรให้คุณตัดสินใจได้เลย” — Claude may decide art picks; record each such pick as Claude's decision under that delegation, not as owner approval.
 
-- P03 (2026-11-04 late, PR #155/#156/#157): Kael (Martial chi), Wynne (Hexer curses/toll), Astrid (Seer deflect/cycle) — 15 classes × 1 character; featured board slot only; stills + procedural until CODEX-A12; evidence `docs/validation/roster-30/p03/README_TH.md`.
+- P03 (2026-11-04 late, PR #155/#156/#158): Kael (Martial chi), Wynne (Hexer curses/toll), Astrid (Seer deflect/cycle) — 15 classes × 1 character; featured board slot only; stills + procedural until CODEX-A12; evidence `docs/validation/roster-30/p03/README_TH.md`.
 
 ## Active task
 

@@ -2,9 +2,9 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
-## 2026-11-04 (late) — Claude: P03 เคล/วินน์/แอสทริด (OD-14) — PR #155 → #156 → #157
+## 2026-11-04 (late) — Claude: P03 เคล/วินน์/แอสทริด (OD-14) — PR #155 → #156 → #158
 
-- แบ่ง PR ตามกลไก: #155 เคล นักมวย (ปราณ 0–3) + นำเข้าภาพนิ่ง/พอร์เทรต/ไอคอน 18/อาวุธ 3 ของทั้งสามตัว (lossless, เซลล์เดิมพิกเซลเท่าเดิม) + **save v47** (`Profile.boardFeatured` คงบอร์ดที่เปิดอยู่); #156 วินน์ นักสาป (สาปแยกผู้สาป ทำงานจบรอบ + ภาษีก่อนโจมตี); #157 แอสทริด โหราจารย์ (เบนท่าไปศัตรูอื่น `Command.recipientId`, หมุนวงท่า `cycleShift`/`steps`, หน้าต่างเลือกผู้รับก่อน commit)
+- แบ่ง PR ตามกลไก: #155 เคล นักมวย (ปราณ 0–3) + นำเข้าภาพนิ่ง/พอร์เทรต/ไอคอน 18/อาวุธ 3 ของทั้งสามตัว (lossless, เซลล์เดิมพิกเซลเท่าเดิม) + **save v47** (`Profile.boardFeatured` คงบอร์ดที่เปิดอยู่); #156 วินน์ นักสาป (สาปแยกผู้สาป ทำงานจบรอบ + ภาษีก่อนโจมตี); #158 แอสทริด โหราจารย์ (เบนท่าไปศัตรูอื่น `Command.recipientId`, หมุนวงท่า `cycleShift`/`steps`, หน้าต่างเลือกผู้รับก่อน commit)
 - ทั้งสามเข้าทางช่อง featured ของบอร์ดจ้างเท่านั้น; 15 อาชีพ × 1 ตัว (+โอดราน/อิโซลด์ที่พัก); ไม่ bump encounter version (กฎตัวเดิมไม่เปลี่ยน, replay เดิมผ่าน)
 - ตัวเลขร่างที่จูนจาก sim: ด้ายสาป 3→5 ต่อชั้น; การตีความสเปกที่ Claude ตัดสิน (kael p4, knothex c4, wynne p3/p4) อยู่ใน README
 - ภาพ/VFX ตัดสินแทนเจ้าของตามที่มอบหมาย 2026-11-04 (ไม่ใช่การอนุมัติของเจ้าของ): ภาพนิ่ง + procedural จน CODEX-A12; VFX ยืมภาพหมัดนักบุญรบ (เคล) และตรา/สลายเวทย้อมสี (วินน์แดง/แอสทริดฟ้า) บนผู้รับ event จริง
