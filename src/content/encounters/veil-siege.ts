@@ -1,6 +1,7 @@
 import type { EncounterDefinition } from '../../core/battle/types';
 import { heroes } from '../heroes/team';
 import { rosterBatch1Skills } from '../heroes/roster-batch1';
+import { rosterP03Skills } from '../heroes/roster-p03';
 import { enemies } from '../enemies/veilbound';
 export const veilSiege: EncounterDefinition = {
   id: 'veil-siege', version: 18, level: 8, name: 'ศึกปิดรอยแยก', heroes,
@@ -15,6 +16,7 @@ export const veilSiege: EncounterDefinition = {
   ],
   skills: {
     ...rosterBatch1Skills,
+    ...rosterP03Skills,
     attack: { name: 'โจมตี', english: 'Attack', icon: '⚔', power: 0, cooldown: 0 },
     guard: { name: 'ตั้งรับแทน', english: 'Guard', icon: '♜', power: 0, cooldown: 0 },
     bash: { name: 'กระแทกโล่', english: 'Shield Bash', icon: '✹', power: 18, cooldown: 2 },

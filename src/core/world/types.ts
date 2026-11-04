@@ -344,6 +344,8 @@ export interface Commander { name: string; crest: string; color: string; camp: s
 export interface Profile {
   // Legacy hiring pool frozen until the next board refresh/return (save v43).
   boardPool?: string[];
+  // The featured-slot lineup of the open board (save v47); refreshed with the board. Missing = the map's lineup.
+  boardFeatured?: string[];
   bossLoot?:Record<string,BossProgress>;
   hunt?:{target?:string;pity:Record<string,number>};
   seed: number; returns: number; tutorialDone: boolean;

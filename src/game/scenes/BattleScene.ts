@@ -19,7 +19,7 @@ import { PROJECTILE_ATLAS, projectileAtlasUrls, projectileCues, projectilePrepar
 import { SEAL_ATLAS, sealAtlasUrls, sealCues, sealEvents, sealPrepare, sealContact, isSealSkill, type SealSpot } from '../visuals/arcane-seal-fx';
 import { SONG_ATLAS, songAtlasUrls, isSongSkill, songPlan, songPrepare, songContact, type SongSpot } from '../visuals/song-fx';
 import { FOE_SIGNATURE_ATLAS, foeSignatureAtlasUrls, foeSignatureCues, foeSignaturePrepare, foeSignatureContact, isFoeSignatureMove, type FoeSpot } from '../visuals/foe-signature-fx';
-import { SAINT_DANCE_ATLAS, saintDanceAtlasUrls, isSdSkill, sdPlan, sdPrepare, sdContact } from '../visuals/saint-dance-fx';
+import { SAINT_DANCE_ATLAS, saintDanceAtlasUrls, isSdFx, sdPlan, sdPrepare, sdContact } from '../visuals/saint-dance-fx';
 import { COMMAND_ATLAS, commandAtlasUrls, commandCues, commandPrepare, commandContact, isCommandSkill, type CommandSpot } from '../visuals/command-fx';
 import { ALCHEMY_ATLAS, alchemyAtlasUrls, alchemyCues, alchemyEvents, alchemyPrepare, alchemyContact, alchemyHealingCues, isAlchemySkill, type AlchemySkill } from '../visuals/alchemy-fx';
 import { EARTH_ATLAS, earthAtlasUrls, earthCues, earthPrepare, earthContact, earthHealingCues, earthHealingEvents, isEarthSkill, type EarthSkill } from '../visuals/earth-fx';
@@ -163,7 +163,7 @@ export class BattleScene extends Phaser.Scene {
     return [
       [BOSS_ATLAS, bossAtlasUrls(), usesBossSignature(data)],
       [FOE_SIGNATURE_ATLAS, foeSignatureAtlasUrls(), data.intents.some(i => isFoeSignatureMove(i.name))],
-      [SAINT_DANCE_ATLAS, saintDanceAtlasUrls(), data.heroes.some(h => h.actions.some(a => isSdSkill(a)))],
+      [SAINT_DANCE_ATLAS, saintDanceAtlasUrls(), data.heroes.some(h => h.actions.some(a => isSdFx(a)))],
     ];
   }
   private optionalUnitsLoaded(): void {
@@ -648,7 +648,7 @@ export class BattleScene extends Phaser.Scene {
       commandPrepare({front:this.fx(turn.actorId)},turn,(id,spot)=>this.commandAnchor(id,spot),contactMs);return;
     }
     if(turn.side==='hero'&&isSongSkill(turn.action)&&this.textures.exists(SONG_ATLAS)&&songPrepare(this.songFx(turn.actorId),turn,(id,spot)=>this.songAnchor(id,spot),contactMs))return;
-    if(turn.side==='hero'&&isSdSkill(turn.action)&&this.textures.exists(SAINT_DANCE_ATLAS)&&sdPrepare(this.songFx(turn.actorId),turn,(id,spot)=>this.songAnchor(id,spot),contactMs))return;
+    if(turn.side==='hero'&&isSdFx(turn.action)&&this.textures.exists(SAINT_DANCE_ATLAS)&&sdPrepare(this.songFx(turn.actorId),turn,(id,spot)=>this.songAnchor(id,spot),contactMs))return;
     if(turn.side==='hero'&&isSealSkill(turn.action)&&this.textures.exists(SEAL_ATLAS)){
       sealPrepare(this.sealFx(turn.actorId),turn,(id,spot)=>this.sealAnchor(id,spot),contactMs);return;
     }

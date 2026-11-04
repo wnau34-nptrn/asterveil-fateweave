@@ -14,7 +14,7 @@ import { battleLesson } from '../../src/ui/tutorial';
 export interface TreeBuild { id: string; name: string; talents: Talents; loadout: ActionId[]; campaign?: boolean }
 // C12 examples use the same paid level/star budget and validator as the player. All four branch
 // priorities are sampled; the personal-branch comparison below removes only p ranks, keeping the same gear/team.
-const rosterIds = ['metta', 'thiran', 'lalin', 'wila'] as const;
+const rosterIds = ['metta', 'thiran', 'lalin', 'wila', 'kael'] as const;
 function rosterBuilds(): TreeBuild[] {
   return rosterIds.flatMap(id => (['a', 'b', 'c', 'p'] as const).map(branch => {
     const tree = map.talents[id] ?? [], talents: Talents = {}, member = { stars: 3, dupes: 0 };
@@ -25,7 +25,9 @@ function rosterBuilds(): TreeBuild[] {
     }
     const base = heroCatalog(lookup,map).find(h => h.id === id)!;
     const available: ActionId[] = skillChoices(base,map,talents).filter(a => a !== 'attack');
-    const wanted: ActionId[] = base.role === 'Saint'
+    const wanted: ActionId[] = base.role === 'Martial'
+      ? branch === 'a' ? ['flowfist','gatherfist','releasefist'] : branch === 'b' ? ['circlefist','releasefist','gatherfist'] : branch === 'c' ? ['perfectfist','storedfist','gatherfist'] : ['gatherfist','releasefist','flowfist']
+      : base.role === 'Saint'
       ? branch === 'a' ? ['saintarc','communion','saintstrike'] : branch === 'b' ? ['vowstrike','saintstrike','communion'] : branch === 'c' ? ['sharewound','lastlight','saintstrike'] : ['communion','saintarc','sharewound']
       : branch === 'a' ? ['rounddance','duet','cadence'] : branch === 'b' ? ['deepbeat','duet','cadence'] : branch === 'c' ? ['echofoot','closingstep','duet'] : ['duet','echofoot','cadence'];
     const loadout = [...new Set([...wanted.filter(a => available.includes(a)),...available])].slice(0,3);

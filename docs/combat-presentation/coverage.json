@@ -1,18 +1,18 @@
 {
  "counts": {
-  "identities": 36,
-  "heroes": 14,
+  "identities": 37,
+  "heroes": 15,
   "enemies": 22,
   "atlases": 34,
   "parked": 2,
-  "actionIds": 73,
-  "heroRows": 98,
+  "actionIds": 79,
+  "heroRows": 105,
   "intents": 40,
   "foeRows": 49,
   "spriteRows": 133,
-  "proceduralRows": 14,
+  "proceduralRows": 21,
   "paintedRows": 112,
-  "sharedRows": 31,
+  "sharedRows": 38,
   "codeRows": 4
  },
  "identities": [
@@ -264,6 +264,18 @@
    "side": "hero",
    "name": "Isolde",
    "parked": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)",
+   "reactions": {
+    "hit": "procedural",
+    "block": "procedural",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "procedural (ภาพนิ่งจาง)"
+   }
+  },
+  {
+   "identity": "kael",
+   "side": "hero",
+   "name": "Kael",
+   "still": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12",
    "reactions": {
     "hit": "procedural",
     "block": "procedural",
@@ -3516,6 +3528,132 @@
    },
    "target": "พันธมิตร 1 คน",
    "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
+  },
+  {
+   "identity": "kael",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "procedural",
+    "pose": "role basic",
+    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "kael",
+   "side": "hero",
+   "move": "gatherfist",
+   "name": "หมัดรวมปราณ",
+   "body": {
+    "kind": "procedural",
+    "pose": "punch",
+    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "shared",
+    "note": "ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น)"
+  },
+  {
+   "identity": "kael",
+   "side": "hero",
+   "move": "releasefist",
+   "name": "ปล่อยปราณ",
+   "body": {
+    "kind": "procedural",
+    "pose": "punch",
+    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "shared",
+    "note": "ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น)"
+  },
+  {
+   "identity": "kael",
+   "side": "hero",
+   "move": "flowfist",
+   "name": "หมัดสายน้ำ",
+   "body": {
+    "kind": "procedural",
+    "pose": "punch",
+    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "shared",
+    "note": "ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น)"
+  },
+  {
+   "identity": "kael",
+   "side": "hero",
+   "move": "circlefist",
+   "name": "หมัดวงกลม",
+   "body": {
+    "kind": "procedural",
+    "pose": "punch",
+    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "shared",
+    "note": "ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล)",
+   "point": "ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น)"
+  },
+  {
+   "identity": "kael",
+   "side": "hero",
+   "move": "storedfist",
+   "name": "หมัดเก็บแรง",
+   "body": {
+    "kind": "procedural",
+    "pose": "punch",
+    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "shared",
+    "note": "ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น)"
+  },
+  {
+   "identity": "kael",
+   "side": "hero",
+   "move": "perfectfist",
+   "name": "หมัดสมบูรณ์",
+   "body": {
+    "kind": "procedural",
+    "pose": "punch",
+    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "saint-dance-fx",
+    "kind": "shared",
+    "note": "ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น)"
   },
   {
    "identity": "brute",

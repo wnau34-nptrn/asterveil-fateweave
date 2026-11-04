@@ -19,10 +19,13 @@ export function newProfile(map: MapDefinition, seed: number, first: readonly str
   return {
     bossLoot:{}, hunt:{pity:{}}, seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
     company: [...first], members: Object.fromEntries(first.map(id => [id, { stars: 1, dupes: 0 }])), campXp: 0,
-    party: { deployed: [...first], reserve: [] },
+    party: { deployed: [...first], reserve: [] }, boardFeatured: featuredLineup(map),
     forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], overflow:[],storageTier:0, nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0, calm: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, cleared: [], last: null,
   };
 }
+// The featured-slot lineup is stored with each board (save v47), so a game update that adds a character changes the
+// open board only at its next return/refresh.
+export const featuredLineup = (map: MapDefinition): string[] => [...map.company.featured ?? []];
 const blocked = (profile: Profile, reason: string): ProfileResult => ({ profile, event: { type: 'blocked', reason } });
 
 // Commander: a name (1–20 code points after trimming, Thai marks included, no control characters) plus one crest
@@ -60,12 +63,12 @@ export function renameCamp(initial: Profile, camp: string): ProfileResult {
 // every time an expedition comes home. Company members can be offered (duplicates).
 // Every character a company can still take on anew: the catalog without the parked ones (OD-14).
 export const hireable = (map: MapDefinition, lookup: EncounterLookup): string[] => heroCatalog(lookup, map).map(h => h.id).filter(id => !map.company.parked?.includes(id));
-export function boardOfferCount(map: MapDefinition, lookup: EncounterLookup, frozen = false): number {
-  return map.company.offers + (!frozen && map.company.featured?.some(id => hireable(map, lookup).includes(id)) ? 1 : 0);
+export function boardOfferCount(map: MapDefinition, lookup: EncounterLookup, frozen = false, featured?: readonly string[]): number {
+  return map.company.offers + (!frozen && (featured ?? map.company.featured)?.some(id => hireable(map, lookup).includes(id)) ? 1 : 0);
 }
 export function boardOffers(profile: Profile, map: MapDefinition, lookup: EncounterLookup): string[] {
   const catalog = hireable(map, lookup);
-  const featured = profile.boardPool ? [] : (map.company.featured ?? []).filter(id => catalog.includes(id));
+  const featured = profile.boardPool ? [] : (profile.boardFeatured ?? map.company.featured ?? []).filter(id => catalog.includes(id));
   const pool = profile.boardPool ?? catalog.filter(id => !featured.includes(id)); const offers: string[] = [];
   // A paid refresh (4A) redraws the board; with no refresh it is the same board as before.
   const salt = (Math.imul(profile.returns + 1, 0x2c1b3c6d) ^ Math.imul(profile.refreshes, 0x165667b1)) >>> 0;
@@ -388,7 +391,7 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   }
   // A return home cannot be refused: what passes a storage ceiling is lost (caps.ts), so the profile always saves.
   clampBank(profile.bank); clampPotions(profile.potions);
-  profile.returns++; delete profile.boardPool; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
+  profile.returns++; delete profile.boardPool; profile.boardFeatured = featuredLineup(map); profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
   profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged, ...(tomeCount(tomes) ? { tomes: Math.min(TOME_CAP, tomeCount(tomes)) } : {}) };
   return profile;
 }
@@ -484,7 +487,7 @@ export function refreshReason(profile: Profile, map: MapDefinition): string {
 export function refreshBoard(initial: Profile, map: MapDefinition): ProfileResult {
   const reason = refreshReason(initial, map); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial);
-  profile.bank.gold -= map.shop.refreshCosts[profile.refreshes]!; profile.refreshes++; delete profile.boardPool; profile.taken = [];
+  profile.bank.gold -= map.shop.refreshCosts[profile.refreshes]!; profile.refreshes++; delete profile.boardPool; profile.boardFeatured = featuredLineup(map); profile.taken = [];
   return { profile, event: { type: 'refreshed' } };
 }
 export const shopLeft = (profile: Profile, map: MapDefinition, item: ShopItemId): number => map.shop.items[item].limit - (profile.shop[item] ?? 0);

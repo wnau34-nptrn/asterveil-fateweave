@@ -31,6 +31,22 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  const front=living.filter(e=>row(e.id)==='front'),back=living.filter(e=>row(e.id)==='back');
  // New roster kits are compared through the actual resolver. This is an advisor policy,
  // not a second implementation of healing or cooldown rules.
+ // Martial (P03): every legal command previewed; stored chi is worth a little, so the advisor builds to a finisher
+ // and spends when the payoff beats one more gathering strike.
+ if(role==='Martial'){
+  const me=data.heroes.find(h=>h.id===heroId)!,chi=state.heroes.find(h=>h.id===heroId)?.chi??0;let best:{command:Command;score:number;damage:number}|undefined;
+  for(const action of me.actions)for(const target of targetOptions(state,data,heroId,action).filter(t=>t.valid)){
+   const command:Command={heroId,beat:state.beat,action,targetId:target.id};
+   const turn=previewCommand(state,data,command).turns.find(t=>t.side==='hero');if(!turn)continue;
+   const damage=turn.events.filter(e=>e.type==='damage'&&e.sourceId===heroId&&state.enemies.some(x=>x.id===e.targetId)).reduce((n,e)=>n+(e.amount??0),0);
+   const kills=turn.events.filter(e=>e.type==='down'&&state.enemies.some(x=>x.id===e.targetId)).length;
+   const after=turn.state.heroes.find(h=>h.id===heroId)?.chi??0;
+   const score=damage+kills*8+(after-chi)*5;
+   if(!best||score>best.score)best={command,score,damage};
+  }
+  if(best){const {command,damage}=best;const after=command.action;return{...command,step:state.commands.length+1,title:['releasefist','circlefist','perfectfist'].includes(after)?'จ่ายปราณปิดท่า':'สะสมปราณ',copy:`${actorName(heroId,data)} → ${data.skills[command.action].name} → ${actorName(command.targetId,data)} · คาดการณ์ดาเมจ ${damage} · ปราณ ${chi}`};}
+  return attack();
+ }
  if(role==='Saint'||role==='Dancer'){
   const candidates:Array<{command:Command;score:number;damage:number;healed:number;recovered:number}>=[];
   const me=data.heroes.find(h=>h.id===heroId)!;

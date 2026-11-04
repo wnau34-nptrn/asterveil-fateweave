@@ -1,0 +1,147 @@
+{
+  "base": "522f6f60bc8563c2491cb971d83da82e0412cdc3",
+  "sources": {
+    "unit/kael": "incoming/ART-CHAR-CLASS-NEW-003/unit/kael.png",
+    "unit/wynne": "incoming/ART-CHAR-CLASS-NEW-002/unit/wynne.png",
+    "unit/astrid": "incoming/ART-CHAR-CLASS-NEW-002/unit/astrid.png",
+    "portrait/kael": "incoming/ART-CHAR-CLASS-NEW-003/portrait/kael.png",
+    "portrait/wynne": "incoming/ART-CHAR-CLASS-NEW-002/portrait/wynne.png",
+    "portrait/astrid": "incoming/ART-CHAR-CLASS-NEW-002/portrait/astrid.png"
+  },
+  "checkedOldPixels": {
+    "units_mercs": "first 10 cells identical; rows 7",
+    "portraits_mercs": "first 10 cells identical; rows 7",
+    "skill_icons": "first 73 cells identical; rows 16",
+    "gear_items": "all old cells identical; three weapons in free row-8 cells"
+  },
+  "frames": {
+    "kael": {
+      "opaqueBounds": [
+        47,
+        31,
+        466,
+        497
+      ],
+      "footY": 496
+    },
+    "wynne": {
+      "opaqueBounds": [
+        90,
+        37,
+        421,
+        497
+      ],
+      "footY": 496
+    },
+    "astrid": {
+      "opaqueBounds": [
+        84,
+        46,
+        427,
+        497
+      ],
+      "footY": 496
+    },
+    "gatherfist": {
+      "alphaRadius": 104.77,
+      "opaqueExtent": 199
+    },
+    "releasefist": {
+      "alphaRadius": 106.69,
+      "opaqueExtent": 194
+    },
+    "flowfist": {
+      "alphaRadius": 106.64,
+      "opaqueExtent": 195
+    },
+    "circlefist": {
+      "alphaRadius": 101.3,
+      "opaqueExtent": 197
+    },
+    "storedfist": {
+      "alphaRadius": 100.98,
+      "opaqueExtent": 197
+    },
+    "perfectfist": {
+      "alphaRadius": 100.22,
+      "opaqueExtent": 197
+    },
+    "threadhex": {
+      "alphaRadius": 107.12,
+      "opaqueExtent": 197
+    },
+    "lifetoll": {
+      "alphaRadius": 106.76,
+      "opaqueExtent": 196
+    },
+    "wovenhex": {
+      "alphaRadius": 105.7,
+      "opaqueExtent": 199
+    },
+    "longthread": {
+      "alphaRadius": 106.38,
+      "opaqueExtent": 194
+    },
+    "tollring": {
+      "alphaRadius": 104.46,
+      "opaqueExtent": 198
+    },
+    "knothex": {
+      "alphaRadius": 105.32,
+      "opaqueExtent": 198
+    },
+    "deflectfate": {
+      "alphaRadius": 107.28,
+      "opaqueExtent": 196
+    },
+    "turncycle": {
+      "alphaRadius": 107.05,
+      "opaqueExtent": 196
+    },
+    "starneedle": {
+      "alphaRadius": 107.28,
+      "opaqueExtent": 195
+    },
+    "crossing": {
+      "alphaRadius": 106.69,
+      "opaqueExtent": 195
+    },
+    "readorbit": {
+      "alphaRadius": 103.64,
+      "opaqueExtent": 198
+    },
+    "doubledial": {
+      "alphaRadius": 102.97,
+      "opaqueExtent": 198
+    }
+  },
+  "unitFrames": {
+    "kael": 10,
+    "wynne": 11,
+    "astrid": 12
+  },
+  "skillOrder": [
+    "gatherfist",
+    "releasefist",
+    "flowfist",
+    "circlefist",
+    "storedfist",
+    "perfectfist",
+    "threadhex",
+    "lifetoll",
+    "wovenhex",
+    "longthread",
+    "tollring",
+    "knothex",
+    "deflectfate",
+    "turncycle",
+    "starneedle",
+    "crossing",
+    "readorbit",
+    "doubledial"
+  ],
+  "runtime": {
+    "gear_items": "40e34673",
+    "skill_icons": "3b11491a"
+  }
+}

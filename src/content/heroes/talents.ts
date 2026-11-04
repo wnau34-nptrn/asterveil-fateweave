@@ -1,5 +1,6 @@
 import type { TalentNodeDef, TalentTree } from '../../core/world/types';
 import { rosterBatch1Trees } from './roster-batch1';
+import { rosterP03Trees } from './roster-p03';
 
 // Big skill trees (master plan A6, owner-approved 2026-10-21, draft numbers): three branches of four tiers. A node
 // can raise a stat, unlock an active skill, modify one (pick one of two per `choice`) or switch on a passive.
@@ -203,4 +204,5 @@ export const talentTrees: Readonly<Record<string, TalentTree>> = {
     node('c4', 'จังหวะชีวิต', { cap: 'liferhythm', amount: 5 }, { branch: 'c', tier: 4 }),
   ],
   ...rosterBatch1Trees,
+  ...rosterP03Trees,
 };

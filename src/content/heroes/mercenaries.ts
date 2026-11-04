@@ -1,5 +1,6 @@
 import type { HeroDefinition } from '../../core/battle/types';
 import { rosterBatch1 } from './roster-batch1';
+import { rosterP03 } from './roster-p03';
 
 // Hireable mercenaries beyond the starting four (2C-2). Each one is a unique character with
 // its own class mechanic; they join through the Lobby hiring board. Numbers are drafts.
@@ -17,4 +18,5 @@ export const mercenaries: readonly HeroDefinition[] = [
   { id: 'lio', speed: 85, name: 'Lio', role: 'Bard', lane: 'back', maxHp: 50, attack: 9, actions: ['attack', 'valor', 'mend'], unlocks: { skill: 'finale', passive: 'resound' }, color: 0xed927f },
   { id: 'garran', speed: 90, name: 'Garran', role: 'Spear', lane: 'front', maxHp: 70, attack: 12, actions: ['attack', 'brace', 'pierce'], unlocks: { skill: 'spearwall', passive: 'heavycounter' }, color: 0x4fc3b4 },
   ...rosterBatch1,
+  ...rosterP03,
 ];

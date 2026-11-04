@@ -206,7 +206,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก | mini | 48 | 100% | 90 | 94 |
 | แนวรอยแยก | mini:attack | 48 | 98% | – | – |
 | แนวรอยแยก | random | 1424 | 100% | 96 | 98 |
-| แนวรอยแยก (ยาก) | boss | 29 | 83% | 45 | 59 |
+| แนวรอยแยก (ยาก) | boss | 29 | 83% | 45 | 60 |
 | แนวรอยแยก (ยาก) | boss:attack | 29 | 7% | – | – |
 | แนวรอยแยก (ยาก) | boss:under2 | 29 | 93% | – | – |
 | แนวรอยแยก (ยาก) | elite-forced | 24 | 100% | 91 | 99 |

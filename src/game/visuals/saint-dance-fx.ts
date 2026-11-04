@@ -13,15 +13,23 @@ export const SAINT_DANCE_ATLAS='saint-dance-fx';
 export const saintDanceAtlasUrls=():[string,string]=>[`${import.meta.env.BASE_URL}assets/fx/saint_dance_fx.webp`,`${import.meta.env.BASE_URL}assets/fx/saint_dance_fx.json`];
 export const saintSkills=['saintstrike','communion','saintarc','vowstrike','sharewound','lastlight'] as const;
 export const danceSkills=['cadence','duet','rounddance','deepbeat','echofoot','closingstep'] as const;
+// P03 Martial (Kael): until a Martial VFX family is painted, his fists reuse the Saint strike paintings on the real struck
+// foes only (no heal, so no thread). Claude's art decision under the owner's 2026-11-04 delegation.
+export const martialSkills=['gatherfist','releasefist','flowfist','circlefist','storedfist','perfectfist'] as const;
+const MARTIAL_ALIAS:Record<typeof martialSkills[number],typeof saintSkills[number]>={gatherfist:'saintstrike',flowfist:'saintstrike',storedfist:'saintstrike',releasefist:'vowstrike',circlefist:'saintarc',perfectfist:'lastlight'};
+const strikeKind=(skill:string):typeof saintSkills[number]|undefined=>(saintSkills as readonly string[]).includes(skill)?skill as typeof saintSkills[number]:(MARTIAL_ALIAS as Record<string,typeof saintSkills[number]>)[skill];
 export const sdSkills=[...saintSkills,...danceSkills] as const;
 export type SdSkill=typeof sdSkills[number];
 export const isSdSkill=(action:string|undefined):action is SdSkill=>sdSkills.some(s=>s===action);
+export type SdFxSkill=SdSkill|typeof martialSkills[number];
+// Every skill this module paints (Saint/Dancer plus the borrowed Martial strikes).
+export const isSdFx=(action:string|undefined):action is SdFxSkill=>isSdSkill(action)||martialSkills.some(s=>s===action);
 export type SdSpot='hand'|'waist'|'feet';
 export interface SdTarget {id:string;spot:SdSpot}
 type Outcome='hit'|'blocked'|'dodged';
 // stand: one layer on one anchor; link: thread/ribbon from the centroid of `from` to `at`.
 export interface SdPiece {frame:string;mode:'stand'|'link';at:SdTarget;from?:SdTarget[];outcome:Outcome;/** raise the anchors by this fraction of a unit (low leg effects) */lift?:number;/** fraction of the span a link reaches */reach?:number;event?:BattleEvent}
-export interface SdPlan {skill:SdSkill;casterId:string;prepare:SdTarget;peaks:SdPiece[];settles:SdPiece[];/** resolver events fully covered by the painted layers (no generic ring/slash on them) */events:BattleEvent[]}
+export interface SdPlan {skill:SdFxSkill;casterId:string;prepare:SdTarget;peaks:SdPiece[];settles:SdPiece[];/** resolver events fully covered by the painted layers (no generic ring/slash on them) */events:BattleEvent[]}
 export interface SdPoint {x:number;y:number;size:number;side:1|-1}
 export type SdLookup=(id:string,spot:SdSpot)=>SdPoint|undefined;
 export interface SdContexts {front:FxContext;back:FxContext}
@@ -32,16 +40,17 @@ const CONTACT:Record<typeof saintSkills[number],string>={saintstrike:'saintstrik
 const LINK:Record<typeof saintSkills[number],string>={saintstrike:'saintstrike_settle',communion:'communion_settle',sharewound:'communion_settle',saintarc:'saintstrike_settle',vowstrike:'saintstrike_settle',lastlight:'saintstrike_settle'};
 
 export function sdPlan(turn:TurnStage):SdPlan|undefined{
-  if(turn.side!=='hero'||!isSdSkill(turn.action)||turn.events.some(e=>e.type==='cancel'))return;
+  if(turn.side!=='hero'||!isSdFx(turn.action)||turn.events.some(e=>e.type==='cancel'))return;
   const skill=turn.action,id=turn.actorId,own=turn.events.filter(e=>e.sourceId===id);
   const waist=(who:string):SdTarget=>({id:who,spot:'waist'}),feet=(who:string):SdTarget=>({id:who,spot:'feet'}),prepare:SdTarget={id,spot:'hand'};
   const hits=own.filter(e=>!!e.targetId&&(e.type==='damage'||e.type==='dodge'));
-  if((saintSkills as readonly string[]).includes(skill)){
+  const kind=strikeKind(skill);
+  if(kind){
     if(!hits.length)return;
-    const kind=skill as typeof saintSkills[number],struck=hits.filter(e=>e.type==='damage'),heals=own.filter(e=>e.type==='heal'&&e.text===SAINT_HEAL&&!!e.targetId);
+    const struck=hits.filter(e=>e.type==='damage'),heals=own.filter(e=>e.type==='heal'&&e.text===SAINT_HEAL&&!!e.targetId);
     const sources=struck.map(e=>waist(e.targetId!));
     const peaks:SdPiece[]=struck.map(e=>({frame:CONTACT[kind],mode:'stand',at:waist(e.targetId!),outcome:outcomeOf(e),event:e}));
-    const settles:SdPiece[]=struck.length&&skill==='vowstrike'?struck.map(e=>({frame:'vowstrike_settle',mode:'stand' as const,at:waist(e.targetId!),outcome:outcomeOf(e)})):[];
+    const settles:SdPiece[]=struck.length&&kind==='vowstrike'?struck.map(e=>({frame:'vowstrike_settle',mode:'stand' as const,at:waist(e.targetId!),outcome:outcomeOf(e)})):[];
     if(struck.length)for(const h of heals)settles.push({frame:LINK[kind],mode:'link',from:sources,at:waist(h.targetId!),outcome:'hit',event:h});
     return {skill,casterId:id,prepare,peaks,settles,events:[...struck,...(struck.length?heals:[])]};
   }
@@ -161,7 +170,7 @@ function paint(ctxs:SdContexts,piece:SdPiece,phase:Phase,lookup:SdLookup):Phaser
 export function sdPrepare(ctxs:SdContexts,turn:TurnStage,lookup:SdLookup,contactMs:number):boolean{
   const ctx=ctxs.front,plan=sdPlan(turn);if(!plan)return false;
   if(ctx.reduced)return true;
-  const img=paint(ctxs,{frame:`${plan.skill}_prepare`,mode:'stand',at:plan.prepare,outcome:'hit'},'prepare',lookup);if(!img)return true;
+  const img=paint(ctxs,{frame:`${strikeKind(plan.skill)??plan.skill}_prepare`,mode:'stand',at:plan.prepare,outcome:'hit'},'prepare',lookup);if(!img)return true;
   img.setAlpha(.2);
   ctx.scene.tweens.add({targets:img,alpha:ctx.quiet?.56:.86,duration:Math.max(1,contactMs),onComplete:()=>img.destroy()});
   return true;
