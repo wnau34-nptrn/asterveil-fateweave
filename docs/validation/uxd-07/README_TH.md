@@ -1,6 +1,6 @@
 # UXD-07 — รวมหน้าสกิลและหลักฐานการตรวจ
 
-สถานะ: implementation เสร็จ กำลังตรวจขั้นสุดท้ายก่อน merge/Pages · [PR #145](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/145)
+สถานะ: เสร็จและ merge แล้วที่ `26c5ab638ef3eac1929635e3a2c078372cb58fca` · [PR #145](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/145) · Pages deploy อัตโนมัติตามกฎ pre-release `aabc5dc` ไม่อ้างผล deploy ในรายงานนี้
 
 ฐาน remote `ab06dfd6cdd70b41bd6be721a85bf59e65289a7f` สืบจาก UXD-06 release `b3ad98e` บน `feature/fateweave-initial-prototype` สาขา `codex/uxd-07-unified-skills` ไม่รวมสาขา audit/Artwork หรือ checkpoints เก่า `cc51cd4`/`bcd6133`
 
@@ -27,7 +27,8 @@
 | Regression ระหว่างพัฒนา | ชุดอัปดาว+สกิลก่อนรายละเอียดสุดท้าย 26 ผ่าน; หน้าตัวละครบนแผนที่/อุปกรณ์/สมาชิก C12/painted icons และ scrollbar ตรวจแยก อีกชุด17/18ผ่านโดย C11 ล้มเฉพาะ selector จับภาพกว้างเกินไป แก้ให้ชี้ detail card แล้วผ่านในชุด13 ไม่ลด assertion ค่า34%/เซฟ |
 | Lobby tree regression จาก CI | ผ่าน1กรณีหลังเลือกสกิลก่อนถอดและยืนยัน reset สองขั้น คงการตรวจแต้มทีละLv/gates/HP/loadout/save/touch targets และเพิ่ม assertion ว่าคลิก reset ครั้งแรกไม่เปลี่ยนเซฟ รวม focusedล่าสุด15 distinct |
 | Full local unit | ผ่าน1518กรณี / 107files ในรอบรันเดี่ยว `--maxWorkers=1` (272.48s, timeoutเดิม) หลังดึงรายงานตรงHEADให้ครบ sparse checkout; รอบแรก1511/1516มี4รายงานขาดและboss-balanceชน180sระหว่างงานอื่น ไม่แก้กฎ/assertion/timeoutเพื่อให้ผ่าน |
-| Final PR CI / post-merge / Pages | รอผลของ final head ก่อน merge/เผยแพร่ จะบันทึก run/commit ที่ตรวจจริงหลังสำเร็จ |
+| Final PR CI | Head902bbf3 ผ่าน quality1518/107+lint/build และ browser86/88/83/91รวม348production, source565, focus3 และaggregate ไม่มีflaky/retry summaries; ดู checks ใน PR #145 |
+| Merge / post-merge | Merge26c5ab6 tree919535dตรง tested head; post-merge quality1518/107+lint/build ผ่าน |
 
 ไม่รวมผลรอบที่ขาดรายงาน การรันที่ยุติไปแล้ว skips หรือ retries เป็น pass เพิ่ม ชุด browser หลายรอบมีกรณีซ้ำ จึงไม่บวกยอดแต่ละแถวเป็นจำนวนกรณีใหม่
 
@@ -53,5 +54,5 @@
 
 - Chromium touch emulation และ desktop Chromium เท่านั้น ยังไม่มี Safari/iPhone/Android เครื่องจริง หรือผู้เล่นจริง ไม่ถือว่า automation เป็น human usability results
 - Safe area ใช้ตัวแปร CSS จำลองและตรวจกรอบ/ปุ่ม/การเลื่อนไปแถวสุดท้าย ไม่ใช่ผลจาก notch/แถบที่อยู่ของอุปกรณ์จริง
-- Build/ภาพตรวจผ่าน local production preview ไม่อ้างว่าเปิดตรวจ URL Pages สดจาก executor; หลักฐานเผยแพร่ใช้ workflow/head/deploy log
+- Build/ภาพตรวจผ่าน local production preview ไม่อ้างว่าเปิดตรวจ URL Pages สดจาก executor หรือยืนยัน deploy; owner update `aabc5dc` ให้จบงานที่ merge หลัง PR gates ผ่าน และ Pages ทำต่ออัตโนมัติ ไม่รอ/poll หรือทำ release-evidence commit
 - ข้อเสนอ audit เรื่องหน้าทีม ข้อมูลแผนที่ทับภาพ จำนวนคนรอบค่าย และกระเป๋ายังอยู่นอก UXD-07 ไม่มีการเริ่มแก้โดยอัตโนมัติ

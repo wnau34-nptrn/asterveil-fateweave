@@ -1,35 +1,39 @@
 # Current state — updated 2026-11-04
 
-Replace stale lines when a task ends; keep this file under ~5 KB. History goes to `docs/handoffs/CODEX-TO-CLAUDE.md` (newest first) and `docs/handoffs/archive/`.
+Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
 ## Game
 
-- Working branch `feature/fateweave-initial-prototype` (not `main`); live at https://wnau34-nptrn.github.io/asterveil-fateweave/ through `pages.yml`, which pre-release deploys after lint/unit/build only (browser gate runs on PRs; restore it in Pages before the external test).
-- Save v45. Battles 1–5 units a side (P02); one shared camp level (P01); reserve by chapter 3→4→5, fatigue, carry ≤ 10.
-- Animation/VFX waves W1–W8 are done and published (2026-10-31). P01 and P02 are done (2026-10-31).
-- UX rebuild UXD-01…06 (Codex, from ART-UI-UX-002) published: enhancement, forge launcher + item Lv, rarity/affix reroll, affix transfer, craft/recycle/smelt, character tab + star upgrade (UXD-06, PR #144, merge `b9031154`, 2026-11-04). Implementation notes: `docs/handoffs/UXD-0N-IMPLEMENTATION-TH.md`. The UX plan itself is on branch `art/art-ui-ux-002` (`incoming/ART-UI-UX-002/IMPLEMENTATION_PLAN_TH.md`, PR #133, not merged).
+- Working branch `feature/fateweave-initial-prototype` (not `main`); Pages URL https://wnau34-nptrn.github.io/asterveil-fateweave/ through `pages.yml`; pre-release pushes deploy after lint/unit/build, with the full browser gate on PRs (owner update `aabc5dc`). Restore the Pages browser gate before OD-13 external tests.
+- Save v45; 1–5 units a side (P02), shared camp Lv/EXP (P01), reserve by chapter3→4→5, fatigue, carry≤10. W1–W8/P01/P02 are published.
+- UXD-01…06 published. UXD-07 unified skills (equip/level/tree/tomes), reviewed skill spending and persisted receipts merged through PR #145 as `26c5ab638ef3eac1929635e3a2c078372cb58fca`, tested head `902bbf3` from `ab06dfd`. Merge tree equals tested head. No core/content/save/schema/price/RNG/battle changes.
+- PR quality1518/107 and browser348+source565+focus3 passed; post-merge quality passed. UXD-07 is complete at merge under the pre-release rule; Pages deploys automatically, with no deployment-success claim here. Validation: `docs/validation/uxd-07/README_TH.md`.
 
 ## Active task
 
-- Owner authorized UXD-07 with “ดำเนินการได้” on 2026-11-04: unified skill equip/level/tree plus tome review. Branch `codex/uxd-07-unified-skills`, based on `ab06dfd`. Implementation/QA in progress; no merge/publication yet. Evidence: `docs/validation/uxd-07/README_TH.md`.
+- UXD-07 complete. No next task started. Follow-up documentation preserves the owner’s pre-release workflow change `aabc5dc`; no Pages polling or release-evidence commit.
 
-## Next (the owner picks; nothing is auto-started)
+## Next (owner picks; nothing auto-started)
 
-- UXD-07 — equip, level and skill tree in one place (plan row on `art/art-ui-ux-002`); UXD-08 — combined check and release.
-- Owner order OD-13 after P02: P09 accounts/cloud save/telemetry+feedback/admin → P04 → server-authoritative rewards → chat + World Boss → external test.
+- UXD-08 combined UX check/release, including real-device/human trials; UXD-07 itself does not start it.
+- OD-13 after P02: P09 accounts/cloud save/telemetry+feedback/admin → P04 → server-authoritative rewards → chat + World Boss → external test. PvP async/Co-op excluded.
 
 ## Open items
 
-- Questions for Claude in "ฝากถึง Claude" at the end of `docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md`: smelt dust cap (`core/world/forge.ts::smeltReason` allows 9,999,999 → 10,000,000, which the v45 bank validator rejects; UI guard in PR #143, core fix pending); stale comments on Tremor/Slam/Rouse in `engine.ts`/`veil-siege.ts` and COVERAGE docs; missing `calm` potion art; logic audit `docs/design/LOGIC_AUDIT_2026-10-24_TH.md`.
-- P02-03 human/real-device trial; the forest boss still falls to plain attacks with five. No real-device/iOS results yet (`?perf=1`).
-- Art: A7-002 dancer redraw has no Codex PR; A7-003 (Odran/Isolde) is on hold (OD-14 parked); Kael/Wynne/Astrid pending owner confirmation; Lyra atlas is above the general-unit size guideline (owner informed).
-- Open PRs: #133 (UX art/plan), #122 (A7-003 candidates), #55 (pets), #53 (chapter-1 boss frames).
-- Codex's local token-saving checkpoints (`cc51cd4`, `bcd6133`, branch `codex/uxd-02-release-notes`) were never pushed; the owner chose to replace them with the 2026-11-04 context restructure (`docs/context/TOKEN_ECONOMY_TH.md`).
+- Claude questions in `docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md`: smelt dust cap; tome trade destination99,999→100,000 exceeds v45 validation (UXD-07 UI guard only; authoritative command/rewards fix pending); stale Tremor/Slam/Rouse comments and coverage docs; missing calm potion art; logic audit.
+- No real Safari/iPhone/Android or human usability results. P02-03 real-device trial pending; forest boss still falls to plain attacks with five.
+- UX audit branch `codex/ux-ui-audit-2026-11-04` is archived separately; team/camp map overlay/fifth campfire actor/inventory proposals remain outside UXD-07.
+- Art: A7-002 redraw has no Codex PR; A7-003 parked (OD-14); Kael/Wynne/Astrid pending owner confirmation; Lyra atlas above guideline. Open PRs #133 UX art/plan, #122 A7-003, #55 pets, #53 boss frames. Do not merge the Artwork branch into the game automatically.
 
-## Opening prompt for the next chat
+## Workspace
+
+- Healthy checkout `/workspace/asterveil-uxd-06-work`; original `/workspace/asterveil-fateweave` has unresolved HEAD/staged old work and is preserved untouched. Git CLI remote/push works with the configured network; no auth changes.
+- CURRENT_STATE.md now exists after context restructure `ab06dfd`. No Artwork workspace; read `art/art-ui-ux-002` separately. Never import checkpoints `cc51cd4`/`bcd6133` or `codex/uxd-02-release-notes` automatically.
+
+## Opening prompt for next chat
 
 ```text
-ทำงานต่อในรีโป wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype
-อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน แล้วอ่านเฉพาะไฟล์ที่งานต้องใช้
-งาน: <ระบุงานที่เจ้าของเลือก เช่น UXD-07 หรือ P09> ตอบเป็นภาษาไทย
+ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype
+อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง
+งาน: <เจ้าของเลือก> ตอบไทย ไม่เริ่ม UXD-08/P04/P09 อัตโนมัติ ไม่ reset งานเดิมหรือรวม Artwork/checkpoints เอง
 ```

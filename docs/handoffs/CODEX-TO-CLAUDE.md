@@ -2,6 +2,15 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-04 — UXD-07 รวมหน้าสกิล เสร็จที่ merge (PR #145)
+
+- สาขา `codex/uxd-07-unified-skills` จาก `ab06dfd` → [PR #145](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/145) merge `26c5ab638ef3eac1929635e3a2c078372cb58fca` เข้า feature; tree ตรง tested head902bbf3
+- รวมติดตั้ง/เพิ่ม Lv/ผัง/ตำรา คง selected skill และทางกลับ; review ตรวจ Profile/eligibility ซ้ำ ป้องกัน stale/repeat confirm และ receipt จาก event/Profile หลัง persist เพื่อให้เห็นต้นทุนและผลจริง
+- UI เท่านั้น ไม่เปลี่ยน core/content/save/ราคา/RNG/สมดุล; reset คงกฎเดิมและมีคำยืนยัน; UI กันตำราปลายทางเกิน99,999 ฝาก authoritative fix ในคิว Claude แล้ว
+- Local unit1518/107, focused98/6 และ browser15 distinct ผ่าน; PR quality/browser348+source565+focus3 และ post-merge quality ผ่าน; ไม่อ้างผล deploy ที่ยังไม่ได้ยืนยัน
+- เจ้าของอนุมัติ “ดำเนินการได้”; อัปเดตกฎก่อนเปิดผู้เล่น `aabc5dc` ให้จบที่ merge และ Pages ทำต่ออัตโนมัติ ไม่รอหรือเขียน release evidence; ไม่เริ่ม UXD-08/P04/P09 ไม่มี Safari/iPhone/Android หรือ human usability จริง
+- [หลักฐาน/ภาพ390px/ข้อจำกัด](../validation/uxd-07/README_TH.md); ใช้ checkout `/workspace/asterveil-uxd-06-work` เก็บ workspace เดิม ไม่ reset/รวม Artwork/checkpoints; งานถัดไปเจ้าของเลือก
+
 ## 2026-11-04 — Claude: context restructure for token economy (owner-approved)
 
 - Owner asked to cut token use and chose to replace the unpushed Codex checkpoints `cc51cd4`/`bcd6133`. CLAUDE.md now holds lasting rules only (36.7 → ~20 KB); state moved to `CURRENT_STATE.md`; UI/input rules to `docs/context/UI_INPUT_RULES.md`; old CLAUDE.md, AGENTS.md and the three handoff logs preserved verbatim in `docs/handoffs/archive/2026-11-04/`. Handoff entries are now written once (here), ≤ 12 lines. `.ignore` keeps archives out of searches; `tests/agent-context.test.ts` guards sizes and key rules. CI: no duplicate typecheck, capped failure output. Details and measurement plan: `docs/context/TOKEN_ECONOMY_TH.md`.

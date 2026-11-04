@@ -18,3 +18,7 @@
 ## ขอบเขตเพดานตำรา
 
 พบ tradeTomes เพิ่มปลายทางเป็น100000ได้ แต่ tomesOf ในเซฟv45รับสูงสุด99999 UIตรวจ read-only projection ก่อน review/confirm และแสดงปลายทางเต็มโดยไม่ dispatch ทั้ง upsize/cross-line ฝากแก้คำสั่งกลางใน CLAUDE-TO-CODEX-DEV-TH.md ไม่เปลี่ยนcore/save/ราคาในงานนี้
+
+## สถานะงาน
+
+PR #145 ผ่าน quality/browser และ merge เป็น `26c5ab638ef3eac1929635e3a2c078372cb58fca` แล้ว จบงานตามกฎ pre-release ที่อัปเดตใน `aabc5dc` ส่วน Pages deploy อัตโนมัติ ไม่อ้างผล deploy หรือเริ่มงานถัดไป รายละเอียดการตรวจอยู่ใน validation ที่ลิงก์ข้างต้น
