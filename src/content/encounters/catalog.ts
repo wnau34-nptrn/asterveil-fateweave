@@ -160,7 +160,7 @@ export const eliteTuskChief: EncounterDefinition = {
 // tempest (hard mode: a second spore puff joins).
 const lordSpore = foes(8, [['b1', SPECIES.sporePuff], ['b2', SPECIES.sporePuff, { reserve: true }]]);
 export const eliteBriarLord: EncounterDefinition = {
-  ...veilSiege, id: 'elite-briar-lord', version: 9, level: 8, name: 'เจ้าป่าหนาม',
+  ...veilSiege, id: 'elite-briar-lord', version: 10, level: 8, name: 'เจ้าป่าหนาม',
   phases: [{ sourceId: 'f1', below: 50, hardSummon: ['b2'], name: 'Thorn Rage' }],
   enemies: [...lordSpore.enemies,
     { id: 'f2', row: 'front', speed: 110, name: 'Briar Stalker', displayName: 'ลิงซ์หนามพราง', maxHp: 100, color: 0x397e77, art: 'foe_stalker' },
@@ -175,7 +175,9 @@ export const eliteBriarLord: EncounterDefinition = {
     { sourceId: 'f2', targetSlot: 1, name: 'Thorn Pounce', damage: 19, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 1, name: 'Briar Lash', damage: 22, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 0, name: 'Gather Thorns', damage: 0, kind: 'energy', charge: true, phase: 1 },
-    { sourceId: 'f1', targetSlot: 0, name: 'Thorn Tempest', damage: 13, kind: 'energy', all: true, unstoppable: true, phase: 1 },
+    // OD-09 (claude 2026-11-04): Gather Thorns telegraphs the Tempest; a Sigil Bind seals it, barriers/heals soften it, and
+    // a party that ignores it takes 28 each (was 13 and unsealable, so plain attacks won the forest boss 50–71% of the time).
+    { sourceId: 'f1', targetSlot: 0, name: 'Thorn Tempest', damage: 28, kind: 'energy', all: true, phase: 1 },
     { sourceId: 'f1', targetSlot: 1, name: 'Briar Lash', damage: 24, kind: 'physical', phase: 1 },
   ],
 };
