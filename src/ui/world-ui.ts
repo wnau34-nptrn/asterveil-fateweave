@@ -477,7 +477,7 @@ export class WorldUI {
     return this.campTeam(s, 'bag-team');
   }
   private heroDetail(_s: ExpeditionState, id: string, prefix = 'bag'): string {
-    return '<div class="bag-detail character-links"><h3>'+heroText[id]!.name+'</h3>'+Object.entries({overview:'ดูตัวละคร',gear:'อุปกรณ์',skills:'สกิล',talents:'ความถนัด'}).map(([tab,label])=>'<button id="'+(tab==='gear'?prefix+'-gear-of':prefix+'-character-'+tab)+'" data-world="character-open" data-hero="'+id+'" data-tab="'+tab+'" class="secondary">'+label+'</button>').join('')+'</div>';
+    return '<div class="bag-detail character-links"><h3>'+heroText[id]!.name+'</h3>'+Object.entries({overview:'ดูตัวละคร',gear:'อุปกรณ์',skills:'สกิล',talents:'ผังสกิล'}).map(([tab,label])=>'<button id="'+(tab==='gear'?prefix+'-gear-of':prefix+'-character-'+tab)+'" data-world="character-open" data-hero="'+id+'" data-tab="'+tab+'" class="secondary">'+label+'</button>').join('')+'</div>';
   }
   private stars(s: ExpeditionState, id: string): number { return s.members[id]?.stars ?? 1; }
   // Member stats as they fight: the catalog entry scaled by the member's stars.

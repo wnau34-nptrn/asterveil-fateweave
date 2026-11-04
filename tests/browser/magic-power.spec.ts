@@ -18,7 +18,7 @@ test('390px mage spells and shields display Magic Power and remain readonly on i
  const saved=()=>page.evaluate(k=>localStorage.getItem(k),key),before=await saved();
  await page.locator('#character-stat-support summary').click();await expect(page.locator('#character-stat-support')).toContainText('พลังเวท');await expect(page.locator('#character-stat-support')).toContainText('เพิ่มดาเมจเวท');
  await page.locator('#character-tab-skills').click();const h=memberDef(lookup, map, game.run, 'weaver')!,data=lookup(map.tutorialEncounterId)!;
- for(const action of ['bolt','ward'] as const){const card=page.locator(`.character-skills [data-skill=${action}]`);await expect(card).toContainText('อิงพลังเวท');await expect(card).toContainText(String(characterSkillMetric(action,h,data).value));}
+ for(const action of ['bolt','ward'] as const){await page.locator('#skill-selection').selectOption(action);const card=page.locator(`.character-skills [data-skill=${action}]`);await expect(card).toContainText('อิงพลังเวท');await expect(card).toContainText(String(characterSkillMetric(action,h,data).value));}
  await page.screenshot({path:info.outputPath('mage-magic-power-390.png')});
  expect(await saved()).toBe(before);await page.keyboard.press('Escape');await page.reload();await page.locator('#continue').click();expect(await saved()).toBe(before);expect(errors).toEqual([]);
 });

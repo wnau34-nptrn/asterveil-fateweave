@@ -1123,7 +1123,7 @@ test('lobby member panel shows the ★3 skill a migrated company keeps and the t
   await seed(page, null, profile);
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator('#lobby-tab-team').click(); await page.locator('#lobby-member-tracer').click();
-  await page.locator('#lobby-skills-open').click();
+  await page.locator('#lobby-skills-open').click();await page.locator('#camp-skills-details').click();await page.locator('#camp-skill-selection').selectOption('finisher');await page.locator('.skill-passives summary').click();
   await expect(page.locator('#camp-character-dialog .character-skills [data-skill=finisher]')).toContainText('ปลิดชีพ');
   await expect(page.locator('#camp-character-dialog .character-passive')).toContainText('ตาเหยี่ยว');
   await expect(page.locator('#camp-character-dialog .character-passive')).toContainText('ยังล็อก · ปลดที่โหนด สายตาคม ชั้น 4');
@@ -1140,7 +1140,7 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   await page.locator('#lobby-tree-open').click();
   // The tree replaces the team sheet: no team cards, a back button and a member picker.
   await expect(page.locator('#camp-character-dialog')).toBeVisible();
-  await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');
+  await expect(page.locator('#camp-character-tab-skills')).toHaveAttribute('aria-selected','true');
   await expect(page.locator('#camp-character-member-guardian')).toHaveAttribute('aria-pressed','true');
   // The Knight's big tree (A6): 3 branches × 4 tiers; tier 2 opens at Lv5.
   await expect(page.locator('.talent-node')).toHaveCount(17);
@@ -1153,9 +1153,9 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   await page.locator('#camp-character-talent-b1').click(); await learn.click({ force: true }); await expect(page.locator('#camp-character-talent-b1')).toContainText('0/2'); await expect(learn).toHaveAttribute('aria-disabled', 'true');
   await expect(page.locator('#camp-character-talent-b1')).toHaveAttribute('aria-label', /แต้มไม่พอ/);
   // The new rally is in the battle loadout; take Shield Bash out.
-  await expect(page.locator('#camp-character-loadout-rally')).toHaveAttribute('aria-pressed', 'true'); await page.locator('#camp-character-loadout-bash').click();
+  await expect(page.locator('#camp-character-loadout-rally')).toHaveAttribute('aria-pressed', 'true'); await page.locator('#camp-skill-selection').selectOption('bash'); await page.locator('#camp-character-loadout-bash').click();
   await expect(page.locator('#camp-character-loadout-bash')).toHaveAttribute('aria-pressed', 'false');
-  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn, #camp-character-dialog .loadout-skill, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn, #camp-character-dialog .skills-slots button, #camp-character-dialog .skills-selection-row>button, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('lobby-talents.png') });
   // Another member's tree from the picker.
   // P01: Lyra shares the camp level, so she has points of her own to spend.
@@ -1170,7 +1170,7 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   // Back to the team sheet: the card shows the new max HP.
   await page.locator('#camp-character-dialog [data-world=character-close]').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
   await expect(page.locator('#lobby-member-guardian')).toContainText(`HP ${Math.round(76 * (100 + 9 + 10) / 100)}`);
-  await page.locator('#lobby-tree-open').click(); await page.locator('#camp-character-reset').click();
+  await page.locator('#lobby-tree-open').click(); const beforeReset=await page.evaluate(()=>localStorage.getItem('asterveil.fateweave.expedition.v1')); await page.locator('#camp-character-reset').click(); expect(await page.evaluate(()=>localStorage.getItem('asterveil.fateweave.expedition.v1'))).toBe(beforeReset); await page.locator('#camp-character-reset').click();
   await expect(page.locator('.talent-points')).toContainText('แต้มเหลือ 3/3');
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!).profile.members.guardian.talents)).toBeUndefined();
   // Escape closes the tree sheet back to the camp.
@@ -1309,7 +1309,7 @@ test('camp NPCs stand at their stations, open their service when tapped and gree
   for (const [npc, title, line] of [['smith', 'เลือกงานโรงตีเหล็ก', 'ลุงบอร์ก'], ['broker', 'ป้ายจ้าง', 'พีโน่'], ['herbalist', 'นักปรุงยา', 'เฟิร์น'], ['keeper', 'อุปกรณ์', 'มิมี่'], ['trainer', 'ต้นไม้ความถนัด', 'ครูฮัลดา'], ['scout', 'จัดทีม', 'คาเอล']] as const) {
     await page.locator(`#npc-${npc}`).click();
     if(npc==='keeper')await page.locator('.storage-keeper summary').click();
-    if(npc==='trainer'){await expect(page.locator('#camp-character-dialog')).toBeVisible();await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');await expect(page.locator('#npc-art-trainer')).toHaveAttribute('data-act','greet');await page.locator('#camp-character-dialog [data-world=character-close]').click();continue;}
+    if(npc==='trainer'){await expect(page.locator('#camp-character-dialog')).toBeVisible();await expect(page.locator('#camp-character-tab-skills')).toHaveAttribute('aria-selected','true');await expect(page.locator('#npc-art-trainer')).toHaveAttribute('data-act','greet');await page.locator('#camp-character-dialog [data-world=character-close]').click();continue;}
     await expect(page.locator('#lobby-sheet-title')).toContainText(title); if(npc==='smith')await expect(page.locator('.forge-workbench')).toBeVisible();else await expect(page.locator('.npc-line')).toContainText(line);
     if (npc === 'smith') { await expect(page.locator(`#npc-art-${npc}`)).toHaveAttribute('data-act', 'greet'); await page.waitForTimeout(400); await page.screenshot({ path: info.outputPath('camp-npc-sheet.png') }); }
     await page.locator('[data-lobby="close"]').click();

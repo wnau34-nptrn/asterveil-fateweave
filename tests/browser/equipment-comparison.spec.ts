@@ -27,8 +27,8 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     await page.locator('#character-stat-support summary').click();await expect(page.locator('#character-stat-support p')).toContainText('ไม่เพิ่มดาเมจ');
     await page.locator('#character-stat-armour summary').click();await expect(page.locator('#character-stat-armour p')).toContainText('ไม่เกิน 30%');
     await page.screenshot({path:info.outputPath('stat-help.png')});
-    await page.locator('#character-tab-skills').click();await expect(page.locator('.character-skills [data-skill=bash]')).toContainText('อิงพลังโจมตี');
-    await expect(page.locator('.character-skills [data-skill=rally]')).toContainText('ผลพิเศษ');
+    await page.locator('#character-tab-skills').click();await page.locator('#skills-details').click();await page.locator('#skill-selection').selectOption('bash');await expect(page.locator('.character-skills [data-skill=bash]')).toContainText('อิงพลังโจมตี');
+    await page.locator('#skill-selection').selectOption('rally');await expect(page.locator('.character-skills [data-skill=rally]')).toContainText('ผลพิเศษ');
     await page.locator('#character-tab-gear').click();await page.locator('#pick-found-1').click();await expect(page.locator('#compare-found-1')).toBeDisabled();
     await page.locator('#pick-found-0').click();await page.locator('#compare-found-0').click();await expect(page.locator('#comparison-title')).toBeVisible();
     const expected=wear(game.run,map,lookup,'guardian','found',0).state,h=memberDef(lookup, map, expected, 'guardian')!;
@@ -51,7 +51,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     const equipped=parseGame(await saved(),map,lookup).run!;expect(equipped.hp.guardian).toBe(11);expect(equipped.members.guardian!.gear!.weapon!.level).toBe(8);
     expect(equipped.steps).toBe(game.run.steps);expect(equipped.rolls).toBe(game.run.rolls);
     await page.locator('#character-tab-overview').click();await expect(page.locator('#character-stat-attack strong')).toHaveText(String(h.attack));
-    await page.locator('#character-tab-skills').click();await expect(page.locator('.character-skills [data-skill=bash] .skill-metric strong')).toHaveText(String(afterPower));
+    await page.locator('#character-tab-skills').click();await page.locator('#skills-details').click();await page.locator('#skill-selection').selectOption('bash');await expect(page.locator('.character-skills [data-skill=bash] .skill-metric strong')).toHaveText(String(afterPower));
     // Support equipment changes both song healing and the healing branch of Finale.
     await page.locator('#character-member-lio').click();await page.locator('#character-tab-gear').click();
     const supportIndex=equipped.found.findIndex(i=>i.slot==='charm'),beforeSupport=await saved();

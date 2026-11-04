@@ -1,0 +1,61 @@
+/* One skill context across camp and expedition, within the existing portrait frame. */
+.skills-page {display:grid;gap:12px;min-width:0}
+.skills-equipped {padding:10px;border:1px solid var(--line,#384d60);border-radius:12px;background:#142537}
+.skills-equipped .loadout-head {margin:0 0 8px;align-items:center}
+.skills-equipped h3 {font-size:15px;margin:0}
+.skills-equipped .camp-note {margin:8px 0 0;font-size:12px}
+.skills-slots {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.skills-slots button {display:flex;flex-direction:column;min-height:60px;padding:6px;font-size:12px;line-height:1.4;white-space:normal;overflow-wrap:anywhere}
+.skills-slots svg {width:26px;height:26px}
+.skills-picker {display:grid;gap:5px;font-size:13px}
+.skills-picker select {width:100%;min-height:44px}
+.skills-sections {display:grid;grid-template-columns:1.5fr 1fr .8fr;gap:5px}
+.skills-sections button {padding:6px 4px;min-height:44px;font-size:13px;white-space:normal}
+.skills-page button[aria-pressed=true] {border-color:#7cdaed;background:#244556}
+.skill-install {display:grid;gap:8px;margin-bottom:12px}
+.skill-install p {margin:0}
+.skills-section .character-skills {margin:8px 0}
+.skills-section .character-skills>li {padding:10px;gap:8px}
+.skills-section .node-tree {margin-top:0}
+.skills-section .node-name {font-size:12px}
+.skills-section .tree-legend {font-size:12px;line-height:1.8}
+.skills-section #skill-from-node,.skills-section #character-reset {width:100%;margin-top:10px;white-space:normal}
+.skill-review-page {display:grid;gap:12px;padding:4px 0}
+.skill-review-page h3 {font-size:19px;margin:0}
+.skill-review-subject {font-size:16px;font-weight:600;color:#ffe2a3}
+.skill-review-page p {margin:0}
+.skill-review-page .star-ledger {font-size:13px;table-layout:fixed;width:100%}
+.skill-review-page .star-ledger th:first-child {width:35%;overflow-wrap:anywhere}
+.skill-review-page .star-ledger td {padding:12px 2px}
+.character-dialog[data-skill-review] .character-member-list,.character-dialog[data-skill-review] .character-tabs {display:none}
+@container game (max-height:700px) {
+ .character-dialog .skills-equipped {padding:8px}
+ .skills-equipped .camp-note {display:none}
+ .skills-page {gap:8px}
+ .skills-slots button {min-height:52px}
+}
+.skills-picker select {background:#142537;color:#f3f6fc;border:1px solid #71899d;border-radius:10px;font:inherit;padding:8px}
+.skills-slots .skill-art {display:block;width:28px;height:28px;flex:0 0 28px}
+.skills-equipped .loadout-head span {font-size:12px}
+.skills-page .skills-section h3 {font-size:16px}
+.skills-section .character-skills>li>div {min-width:0}
+.skills-section .character-skills p,.skills-section .character-skills small {font-size:13px;line-height:1.6}
+.skill-review-page .star-ledger th {white-space:normal;padding:12px 2px}
+@container game (max-height:700px) {
+ .skills-slots button {flex-direction:row;align-items:center;gap:5px;min-height:44px}
+ .skills-equipped {padding:6px}
+ .skills-equipped .loadout-head {margin-bottom:5px}
+ .skills-picker {gap:3px}
+}
+.skills-section .skill-description summary,.skills-section .skill-passives summary {min-height:44px;display:flex;align-items:center;font-size:13px;color:#a9deed;cursor:pointer}
+.skills-section .skill-passives {border-top:1px solid #384d60;margin:10px 0}
+.skill-review-page .star-ledger td {overflow-wrap:anywhere}
+.skills-selection-row {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end}
+.skills-selection-row>button {min-width:84px;min-height:44px;padding:8px;font-size:13px}
+.skills-install-note {margin:0;font-size:12px;line-height:1.5}
+.skills-section .skill-level-preview summary {min-height:44px;display:flex;align-items:center;font-size:13px;color:#ffe2a3;cursor:pointer}
+.skills-section #skill-to-node {width:100%;min-height:44px;white-space:normal}
+.skill-review-page h3 {font-size:1.125rem}
+.skill-review-subject {font-size:1rem}
+.skill-review-page .star-ledger {font-size:.8125rem;font-variant-numeric:tabular-nums}
+.character-dialog[data-skill-review] .star-cost-summary {font-size:.8125rem;line-height:1.5;overflow-wrap:anywhere}

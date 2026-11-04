@@ -1,12 +1,15 @@
+import './skills.css';
+import { SkillReview, type SkillCommand } from './skill-review';
+import { skillsView, skillCatalogue, type SkillSection } from './skills-view';
 import './star-upgrade.css';
 import { StarUpgrade, type StarSources } from './star-upgrade';
 import { formation } from '../core/world/formation';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { AUTO_GOALS, planEquipment, type AutoEquipmentPlan, type AutoGoal, type EquipmentEntry } from '../core/world/auto-equipment';
-import { SET_IDS, type GearSlot, type MapDefinition, type SetId, type TalentNode, type TomeLine, type TomeSize, type Profile, type ProfileEvent } from '../core/world/types';
+import { SET_IDS, type GearSlot, type MapDefinition, type SetId, type TalentNode, type TomeLine, type TomeSize, type Profile, type ProfileEvent, type ProfileResult } from '../core/world/types';
 import { talentPoints, talentsSpent } from '../core/world/talents';
 import { levelOf, starred, wounded } from '../core/world/world';
-import { characterEquipmentComparison, characterOverview, characterSkills, characterTabs, characterTalents, characterTabIcons, type CharacterTab, type SkillTomeView } from './character-view';
+import { characterEquipmentComparison, characterOverview, characterTabs, characterTabIcons, type CharacterTab, type SkillTomeView } from './character-view';
 import type { CharacterState } from './character-metrics';
 import { changeGearFilter, filteredEquipment, gearFilters, newGearFilters, type GearFilters } from './gear-inventory';
 import { gearArt } from './equip-art';
@@ -17,7 +20,7 @@ import { heroStatLine, heroText, itemLines, itemName, itemOwner, rarityText, set
 // Stats an item card compares, in display order: hero field, Thai name, unit.
 const statDeltas:readonly ['maxHp'|'attack'|'skillBonus'|'speed'|'armour'|'resist'|'leech',string,string][]=[['maxHp','เลือด',''],['attack','พลังโจมตี',''],['skillBonus','พลังเวท','%'],['speed','SPD',''],['armour','เกราะ','%'],['resist','ต้านพลังงาน','%'],['leech','ดูดเลือด','%']];
 
-export interface CharacterModel { state: CharacterState; source: object; ids: readonly string[]; entries: EquipmentEntry[]; available: boolean; camp: boolean; capacity?:number; starProfile?:Profile; starSources?:StarSources; tomes?: SkillTomeView }
+export interface CharacterModel { state: CharacterState; source: object; ids: readonly string[]; entries: EquipmentEntry[]; available: boolean; camp: boolean; capacity?:number; starProfile?:Profile; skillProfile?:Profile; starSources?:StarSources; tomes?: SkillTomeView }
 export interface CharacterHost {
   model(): CharacterModel|undefined;
   preview(id:string,key:string): CharacterModel|undefined;
@@ -26,6 +29,7 @@ export interface CharacterHost {
   talent(id:string,node:TalentNode): void; reset?(id:string): void; loadout?(id:string,actions:ActionId[]): void;
   skillLevel?(id:string,action:ActionId): void; tomeTrade?(line:TomeLine,size:TomeSize,to?:TomeLine): void;
   applyPlan(plan:AutoEquipmentPlan): void;
+  skillPreview?(p:Profile,command:SkillCommand):ProfileResult;
   upgrade?(id:string):void;
   restore?(dialogId:string): void; forge?(id:string,uid:number):void;
 }
@@ -36,6 +40,7 @@ export const autoGoalText: Record<AutoGoal,string> = {recommended:'แนะน�
 export class CharacterPanel {
   private readonly dialog: HTMLDialogElement;
   private readonly stars:StarUpgrade; private starOpen=false; private starReturn:{focus:string;scroll:number;tab:CharacterTab}={focus:'',scroll:0,tab:'develop'};
+  private readonly skillReview:SkillReview; private selectedSkill:ActionId='guard'; private skillSection:SkillSection='details'; private skillReturn={focus:'',scroll:0}; private skillNodeReturn:{skill:ActionId;scroll:number;focus:string}|undefined; private tomeExpanded=false; private skillScroll:Partial<Record<SkillSection,number>>={};
   private heroId=''; private tab:CharacterTab='overview'; private source:object|undefined;
   private single:{key:string;item:EquipmentEntry['item']}|undefined; private plan:AutoEquipmentPlan|undefined;
   private goal:AutoGoal='recommended'; private preferred:SetId|undefined;
@@ -43,26 +48,28 @@ export class CharacterPanel {
   private back:{dialog?:string;focus:string;scroll:number;lobby:boolean}={focus:'',scroll:0,lobby:false};
   private forgeReturn:{focus:string;scroll:number}|undefined;
   constructor(private readonly root:HTMLElement,private readonly map:MapDefinition,private readonly heroes:readonly HeroDefinition[],private readonly template:EncounterDefinition,private readonly host:CharacterHost,private readonly prefix='',readonly filters:GearFilters=newGearFilters()) {
+    this.skillReview=new SkillReview(map,template,(p,c)=>this.host.skillPreview?.(p,c));
     this.stars=new StarUpgrade(map,heroes,template);
     this.dialog=document.createElement('dialog');this.dialog.id=this.id('character-dialog');this.dialog.className='world-dialog character-dialog';this.dialog.setAttribute('aria-labelledby',this.id('character-title'));
     this.dialog.innerHTML=this.ids(`<div class="info-header"><h2 id="character-title">ตัวละคร</h2><button data-world="character-close" class="quiet" aria-label="ปิดข้อมูลตัวละคร">${icon('close')}</button></div><div id="character-members" class="tree-members character-member-list"></div><div id="character-tabs" class="character-tabs" role="tablist" aria-label="ข้อมูลตัวละคร"></div><div id="character-content" class="info-content character-content" role="tabpanel"></div><div id="character-dock" class="star-dock" hidden></div>`);root.append(this.dialog);
-    this.dialog.addEventListener('click',e=>{e.stopPropagation();const b=(e.target as HTMLElement).closest<HTMLButtonElement>('button');if(!b||b.disabled||!this.usable())return;if(e.detail>1&&b.dataset.world?.startsWith('star-')){e.preventDefault();this.focus(this.id('star-status'));return;}this.click(b);});
-    this.dialog.addEventListener('mousedown',e=>{if(e.detail>1&&(e.target as HTMLElement).closest<HTMLButtonElement>('button')?.dataset.world?.startsWith('star-'))e.preventDefault();});
+    this.dialog.addEventListener('click',e=>{e.stopPropagation();const b=(e.target as HTMLElement).closest<HTMLButtonElement>('button');if(!b||b.disabled||!this.usable())return;if(e.detail>1&&(b.dataset.world?.startsWith('star-')||b.dataset.world?.startsWith('skill-review-')||b.dataset.world==='character-loadout'||b.dataset.world==='character-reset'||b.dataset.world==='character-talent')){e.preventDefault();this.focus(this.id(b.dataset.world?.startsWith('star-')?'star-status':'skill-review-status'));return;}this.click(b);});
+    this.dialog.addEventListener('mousedown',e=>{if(e.detail>1&&(e.target as HTMLElement).closest<HTMLButtonElement>('button')?.matches('[data-world^=star-],[data-world=skill-level],[data-world=tome-trade],[data-world=skill-review-confirm],[data-world=character-loadout],[data-world=character-reset],[data-world=character-talent]'))e.preventDefault();});
     this.dialog.addEventListener('change',e=>{e.stopPropagation();if(!this.usable())return;const c=e.target as HTMLSelectElement|HTMLInputElement;
+      if(c.hasAttribute('data-skill-selection')){const model=this.host.model();if(model&&skillCatalogue(this.map,this.heroes.find(h=>h.id===this.heroId)!,this.hero(model)).includes(c.value as ActionId)){this.selectedSkill=c.value as ActionId;this.node='';this.skillReview.clear();this.render();this.focus(c.id);}return;}
       if(c.dataset.gearFilter){changeGearFilter(this.filters,c);this.render();this.focus(c.id);}
       else if(c.id===this.id('auto-goal')&&AUTO_GOALS.includes(c.value as AutoGoal)){this.goal=c.value as AutoGoal;}
       else if(c.id===this.id('auto-set'))this.preferred=SET_IDS.includes(c.value as SetId)?c.value as SetId:undefined;
     });
-    this.dialog.addEventListener('toggle',e=>{const details=e.target as HTMLDetailsElement;if(details.matches('.auto-settings'))this.autoExpanded=details.open;if(details.matches('.gear-extra-filters'))this.filtersExpanded=details.open;},true);
+    this.dialog.addEventListener('toggle',e=>{const details=e.target as HTMLDetailsElement;if(details.matches('.tome-trade'))this.tomeExpanded=details.open;if(details.matches('.auto-settings'))this.autoExpanded=details.open;if(details.matches('.gear-extra-filters'))this.filtersExpanded=details.open;},true);
     this.dialog.addEventListener('keydown',e=>{
       if(!this.usable())return;
-      if(e.repeat&&(e.target as HTMLElement).closest('[data-world=character-talent], [data-world=comparison-equip], [data-world=auto-preview], [data-world=star-review], [data-world=star-confirm], [data-world=star-next], [data-world=character-star-open]')){e.preventDefault();return;}
+      if(e.repeat&&(e.target as HTMLElement).closest('[data-world=skill-level], [data-world=tome-trade], [data-world=skill-review-confirm], [data-world=character-loadout], [data-world=character-reset], [data-world=character-talent], [data-world=comparison-equip], [data-world=auto-preview], [data-world=star-review], [data-world=star-confirm], [data-world=star-next], [data-world=character-star-open]')){e.preventDefault();return;}
       const tab=(e.target as HTMLElement).closest('.character-tabs [role=tab]');
       if(!tab||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
       e.preventDefault();e.stopPropagation();const keys=Object.keys(characterTabs) as CharacterTab[],i=keys.indexOf(this.tab);
       this.tab=keys[e.key==='Home'?0:e.key==='End'?keys.length-1:(i+(e.key==='ArrowRight'?1:-1)+keys.length)%keys.length]!;this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));
     });
-    this.dialog.addEventListener('cancel',e=>{if(this.usable()&&this.starOpen){e.preventDefault();this.backStar();return;}if(this.usable()&&(this.single||this.plan)){e.preventDefault();this.cancelTrial();}});
+    this.dialog.addEventListener('cancel',e=>{if(this.usable()&&this.skillReview.active){e.preventDefault();this.backSkillReview();return;}if(this.usable()&&this.starOpen){e.preventDefault();this.backStar();return;}if(this.usable()&&(this.single||this.plan)){e.preventDefault();this.cancelTrial();}});
     this.dialog.addEventListener('close',()=>{
       if(this.dialog.open)return;
       this.discard();this.content().innerHTML='';if(this.root.hidden||this.root.closest('[inert]'))return;
@@ -79,18 +86,20 @@ export class CharacterPanel {
   private focus(id:string):void{this.dialog.querySelector<HTMLElement>(`#${id}`)?.focus({preventScroll:false});}
   private usable():boolean{return this.dialog.open&&!this.root.hidden&&!this.root.closest('[inert]')&&!!this.host.model();}
   private hero(model:CharacterModel,id=this.heroId):HeroDefinition {const m=model.state.members[id]!,base=this.heroes.find(h=>h.id===id)!;return wounded(starred(base,m.stars,this.map,levelOf(this.map,model.state),m.talents,m.gear,m),m.wound);}
-  private discard():void{this.single=undefined;this.plan=undefined;this.starOpen=false;this.stars.open(this.heroId);}
+  private discard():void{this.skillReview.clear();this.single=undefined;this.plan=undefined;this.starOpen=false;this.stars.open(this.heroId);}
   openFor(id:string,tab:CharacterTab,trigger:HTMLButtonElement,key?:string):void{
     const model=this.host.model();if(!model?.available||!model.ids.includes(id)||this.root.hidden||this.root.closest('[inert]'))return;
     this.forgeReturn=undefined;
     const from=trigger.closest<HTMLDialogElement>('dialog'),lobby=trigger.closest('.lobby-content');this.back={dialog:from?.id,focus:trigger.id,scroll:from?.querySelector('.info-content')?.scrollTop??lobby?.scrollTop??0,lobby:!!lobby};
-    this.heroId=id;this.tab=Object.hasOwn(characterTabs,tab)?tab:'overview';this.source=model.source;this.discard();
+    this.heroId=id;this.skillNodeReturn=undefined;this.skillScroll={};this.skillSection=tab==='talents'?'tree':'details';this.tab=tab==='talents'?'skills':Object.hasOwn(characterTabs,tab)?tab:'overview';this.source=model.source;this.discard();
     const entry=model.entries.find(e=>e.key===key);this.picked=entry?.key??'';if(entry&&(entry.item.slot!=='weapon'||entry.item.hero===id))this.single={key:entry.key,item:entry.item};
     from?.close();this.render();this.content().scrollTop=0;this.dialog.showModal();this.focus(this.id(`character-tab-${this.tab}`));
   }
   refresh():void{if(this.open)this.render();}
   openStarFor(id:string,trigger:HTMLButtonElement):void {this.openFor(id,'develop',trigger);if(this.open){this.starReturn={focus:this.id('character-star-open'),scroll:0,tab:'develop'};this.starOpen=true;this.render();this.content().scrollTop=0;this.focus(this.id('star-status'));}}
   upgraded(p:Profile,event:ProfileEvent,saved:boolean):void {if(this.starOpen&&this.stars.upgraded(p,event,saved))this.focusAfterStar='star-status';}
+  skillCommitted(p:Profile,event:ProfileEvent,saved:boolean):void{this.skillReview.committed(p,event,saved);}
+  private backSkillReview():void{this.skillReview.clear();this.render();this.content().scrollTop=this.skillReturn.scroll;this.focus(this.dialog.querySelector('#'+this.skillReturn.focus)?this.skillReturn.focus:this.id('skills-'+this.skillSection));}
   private focusAfterStar='';
   private backStar():void {
     if(this.stars.reviewing){this.stars.cancel();this.render();this.content().scrollTop=0;this.focus(this.id('star-review'));return;}
@@ -106,6 +115,7 @@ export class CharacterPanel {
   }
   private click(b:HTMLButtonElement):void{
     const model=this.host.model();if(!model)return;const action=b.dataset.world;
+    if(this.skillReview.active&&!['skill-review-confirm','skill-review-back','character-close'].includes(action??''))return;
     if(b.hasAttribute('data-gear-reset')){Object.assign(this.filters,newGearFilters());this.render();this.focus(this.id('gear-filter-set'));return;}
     if(action==='character-forge'&&model.camp&&this.host.forge){this.forgeReturn={focus:b.id||this.id('character-tab-gear'),scroll:this.content().scrollTop};this.dialog.close();this.host.forge(this.heroId,Number(b.dataset.uid));return;}
     if(action==='character-star-open'){this.starReturn={focus:b.id,scroll:this.content().scrollTop,tab:this.tab};this.tab='develop';this.starOpen=true;this.stars.open(this.heroId);this.render();this.content().scrollTop=0;this.focus(this.id('star-status'));return;}
@@ -117,22 +127,25 @@ export class CharacterPanel {
       if(action==='star-review')this.stars.reviewFor(model.starProfile);else this.stars.confirm(model.starProfile,id=>this.host.upgrade!(id));
       this.render();this.content().scrollTop=0;this.focus(this.id('star-status'));return;
     }
-    if(action==='develop-link'){this.tab=b.dataset.tab as CharacterTab;this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));return;}
+    if(action==='skill-review-back'){this.backSkillReview();return;}
+    if(action==='skill-review-confirm'){if(model.available&&model.camp&&model.skillProfile)this.skillReview.confirm(model.skillProfile,c=>{if(c.kind==='level')this.host.skillLevel?.(c.id,c.action);else this.host.tomeTrade?.(c.line,c.size,c.to);});this.render();this.content().scrollTop=0;this.focus(this.id('skill-review-status'));return;}
+    if(action==='skill-select'||action==='skill-from-node'){this.selectedSkill=b.dataset.skill as ActionId;const back=action==='skill-from-node'&&this.skillNodeReturn?.skill===this.selectedSkill?this.skillNodeReturn:undefined;this.skillNodeReturn=undefined;this.skillSection='details';this.skillReview.clear();this.render();this.content().scrollTop=back?.scroll??0;this.focus(back?.focus??this.id('skill-selection'));return;}
+    if(action==='skill-section'||action==='skill-to-node'){if(action==='skill-to-node')this.skillNodeReturn={skill:this.selectedSkill,scroll:this.content().scrollTop,focus:b.id};this.skillScroll[this.skillSection]=this.content().scrollTop;this.skillSection=action==='skill-to-node'?'tree':b.dataset.section as SkillSection;if(action==='skill-to-node')this.node=b.dataset.node!;this.skillReview.clear();this.render();this.content().scrollTop=this.skillScroll[this.skillSection]??0;if(action==='skill-to-node')this.dialog.querySelector(`#${this.id('character-talent-'+this.node)}`)?.scrollIntoView({block:'center'});this.focus(this.id(action==='skill-to-node'?'character-talent-'+this.node:'skills-'+this.skillSection));return;}
+    if(action==='develop-link'){this.skillSection=b.dataset.tab==='talents'?'tree':'details';this.tab=b.dataset.tab==='talents'?'skills':b.dataset.tab as CharacterTab;this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));return;}
     if(action==='character-close'){this.dialog.close();return;}
     if(action==='character-tab'){this.tab=b.dataset.tab as CharacterTab;this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));return;}
-    if(action==='character-member'){this.heroId=b.dataset.hero!;this.filters.slot='all';this.picked='';this.node='';this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-member-${this.heroId}`));return;}
+    if(action==='character-member'){this.heroId=b.dataset.hero!;this.filters.slot='all';this.picked='';this.node='';this.skillNodeReturn=undefined;this.skillScroll={};this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-member-${this.heroId}`));return;}
     if(action==='comparison-back'){this.cancelTrial();return;}
     if(!model.available||this.source!==model.source)return;
-    if(action==='talent-pick'){this.node=b.dataset.node!;this.render();this.focus(b.id);}
+    if(action==='talent-pick'){this.node=b.dataset.node!;const def=this.map.talents[this.heroId]?.find(n=>n.id===this.node);if(def&&'unlock'in def.effect)this.selectedSkill=def.effect.unlock;else if(def?.choice&&skillCatalogue(this.map,this.heroes.find(h=>h.id===this.heroId)!,this.hero(model)).includes(def.choice as ActionId))this.selectedSkill=def.choice as ActionId;this.render();this.focus(b.id);}
     else if(action==='character-talent'&&b.getAttribute('aria-disabled')!=='true'){this.host.talent(this.heroId,b.dataset.node as TalentNode);this.focus(b.id);}
     else if(action==='character-loadout'&&b.getAttribute('aria-disabled')!=='true'){
       // Big skill trees (A6): toggle one unlocked skill in or out of the battle loadout (at least one stays).
       const skill=b.dataset.skill as ActionId,now:ActionId[]=this.hero(model).actions.filter(a=>a!=='attack');
       const next=now.includes(skill)?now.filter(a=>a!==skill):[...now,skill];
       if(next.length&&next.length<=this.map.progression.loadoutSize)this.host.loadout?.(this.heroId,next);this.focus(this.id(`character-loadout-${skill}`));}
-    else if(action==='skill-level'&&b.getAttribute('aria-disabled')!=='true'){this.host.skillLevel?.(this.heroId,b.dataset.level as ActionId);this.focus(b.id);}
-    else if(action==='tome-trade'&&b.getAttribute('aria-disabled')!=='true'){this.host.tomeTrade?.(b.dataset.line as TomeLine,b.dataset.size as TomeSize,(b.dataset.to||undefined) as TomeLine|undefined);this.focus(b.id);}
-    else if(action==='character-reset'){this.host.reset?.(this.heroId);this.focus(this.id('character-reset'));}
+    else if((action==='skill-level'||action==='tome-trade')&&b.getAttribute('aria-disabled')!=='true'&&model.skillProfile){this.skillReturn={focus:b.id,scroll:this.content().scrollTop};this.skillReview.start(model.skillProfile,action==='skill-level'?{kind:'level',id:this.heroId,action:b.dataset.level as ActionId}:{kind:'trade',line:b.dataset.line as TomeLine,size:b.dataset.size as TomeSize,...b.dataset.to?{to:b.dataset.to as TomeLine}:{}});this.render();this.content().scrollTop=0;this.focus(this.id('skill-review-status'));}
+    else if(action==='character-reset'){if(b.dataset.confirm!=='true'){b.dataset.confirm='true';b.textContent='ยืนยันคืนแต้มทั้งหมดและคืนชุดสกิลเริ่มต้น';return;}this.host.reset?.(this.heroId);this.focus(this.id('skills-tree'));}
     else if(action==='bag-slot'){const slot=b.dataset.slot as GearSlot;this.filters.slot=this.filters.slot===slot?'all':slot;this.render();this.focus(this.id(`bag-slot-${slot}`));}
     else if(action==='bag-pick'){this.picked=b.dataset.key!;this.render();this.focus(b.id);}
     else if(action==='gear-chip'){const chip=b.dataset.chip;if(chip==='all')Object.assign(this.filters,{...newGearFilters(),slot:this.filters.slot});else if(chip==='compatible')this.filters.compatible=!this.filters.compatible;else if(chip==='found')this.filters.source=this.filters.source==='found'?'all':'found';else if(chip==='boss')this.filters.kind=this.filters.kind==='boss'?'all':'boss';this.render();this.focus(b.id);}
@@ -164,9 +177,11 @@ export class CharacterPanel {
     const position=model.state.roster.deployed.includes(id)?`ตัวหลักช่อง ${model.state.roster.deployed.indexOf(id)+1}`:model.state.roster.reserve.includes(id)?'สำรอง':'ในค่าย';
     // A deployed member shows the lane it stands in (formation); others their class lane.
     const lane=formation(model.state.roster,c=>this.heroes.find(v=>v.id===c)?.lane??'front')[id]??h.lane;
-    let html=`<p class="character-summary">${heroText[id]!.role} · ${lane==='front'?'แนวหน้า':'แนวหลัง'} · ${position} · ${model.camp?'ค่ายหลัก · เลือดพร้อมออกเดินทาง':'HP'} ${model.state.hp[id]??0}/${h.maxHp}</p>`;
-    html+=this.tab==='overview'?characterOverview(model.state,this.map,h,this.template,!!model.starProfile):this.tab==='develop'?this.develop(model):this.tab==='skills'?characterSkills(h,base,m.stars,this.template,this.map,m,model.tomes):this.tab==='talents'?characterTalents(model.state,this.map,id,this.template,h,base,this.node)+(model.camp?`<button id="character-reset" data-world="character-reset" class="secondary"${talentsSpent(m.talents)?'':' disabled'}>${icon('act-reset')}รีเซ็ตแต้มฟรีที่ครูฝึก</button>`:''):this.gear(model,h);
-    let dock='';
+    if(!skillCatalogue(this.map,base,h).includes(this.selectedSkill))this.selectedSkill=h.actions.find(a=>a!=='attack')??'attack';
+    let html=this.tab==='skills'?'':`<p class="character-summary">${heroText[id]!.role} · ${lane==='front'?'แนวหน้า':'แนวหลัง'} · ${position} · ${model.camp?'ค่ายหลัก · เลือดพร้อมออกเดินทาง':'HP'} ${model.state.hp[id]??0}/${h.maxHp}</p>`;
+    html+=this.tab==='overview'?characterOverview(model.state,this.map,h,this.template,!!model.starProfile):this.tab==='develop'?this.develop(model):this.tab==='skills'?skillsView(model,this.map,this.template,h,base,this.selectedSkill,this.skillSection,this.node):this.gear(model,h);
+    let dock='';if(this.skillReview.active&&model.skillProfile){const page=this.skillReview.render(model.skillProfile);html=page.body;dock=page.dock;}
+    this.dialog.toggleAttribute('data-skill-review',this.skillReview.active);
     if(this.starOpen&&this.tab==='develop'){
       const page=model.starProfile?this.stars.render(model.starProfile,model.starSources):{body:'<p class="star-warning">อัปดาวได้ที่ค่ายเมื่อระบบจัดทีมเปิดแล้ว</p>',dock:'<button id="star-back" data-world="star-back" class="secondary">กลับหน้าพัฒนา</button>'};html=page.body;dock=page.dock;
     }
@@ -174,14 +189,16 @@ export class CharacterPanel {
     this.dialog.classList.toggle('has-star-page',this.starOpen&&this.tab==='develop');
     this.dialog.toggleAttribute('data-star-review',this.starOpen&&this.stars.reviewing);
     // Read folded panels before replacing them: a camp re-render can land before their async toggle event.
+    const tome=this.content().querySelector<HTMLDetailsElement>('.tome-trade');if(tome)this.tomeExpanded=tome.open;
     const was=this.content().querySelector<HTMLDetailsElement>('.gear-extra-filters'),wasAuto=this.content().querySelector<HTMLDetailsElement>('.auto-settings');if(was)this.filtersExpanded=was.open;if(wasAuto)this.autoExpanded=wasAuto.open;
     this.content().setAttribute('aria-labelledby',this.id(`character-tab-${this.tab}`));this.content().innerHTML=this.ids(html);
     const auto=this.content().querySelector<HTMLDetailsElement>('.auto-settings'),extra=this.content().querySelector<HTMLDetailsElement>('.gear-extra-filters');if(auto)auto.open=this.autoExpanded;if(extra)extra.open=this.filtersExpanded;
+    const trade=this.content().querySelector<HTMLDetailsElement>('.tome-trade');if(trade)trade.open=this.tomeExpanded;
     this.content().scrollTop=scroll;if(this.open&&focus)this.focus(focus);if(this.open&&this.focusAfterStar){this.focus(this.id(this.focusAfterStar));this.focusAfterStar='';}
   }
   private develop(model:CharacterModel):string {
     const m=model.state.members[this.heroId]!,level=levelOf(this.map,model.state),free=talentPoints(this.map,m,this.heroId,level)-talentsSpent(m.talents);
-    return `<section class="character-develop"><h3>พัฒนา${heroText[this.heroId]!.name}</h3><p>Lv${level} · ใช้เลเวลค่ายร่วม ทุกคนเติบโตพร้อมกัน</p><button id="character-star-open" data-world="character-star-open" class="primary">${icon('starBadge')}อัปดาว · ★${m.stars} / ${this.map.company.maxStars}</button>${!model.starProfile?'<p class="camp-note">อัปดาวได้ที่ค่ายเมื่อระบบจัดทีมเปิดแล้ว</p>':''}<p>ดาวของคนนี้ · ตัวซ้ำที่สะสม ${m.dupes}</p><div class="develop-links"><button id="develop-skills" data-world="develop-link" data-tab="skills" class="secondary">สกิล</button><button id="develop-gear" data-world="develop-link" data-tab="gear" class="secondary">อุปกรณ์</button><button id="develop-talents" data-world="develop-link" data-tab="talents" class="secondary">ผังความถนัด · แต้มว่าง ${free}</button></div></section>`;
+    return `<section class="character-develop"><h3>พัฒนา${heroText[this.heroId]!.name}</h3><p>Lv${level} · ใช้เลเวลค่ายร่วม ทุกคนเติบโตพร้อมกัน</p><button id="character-star-open" data-world="character-star-open" class="primary">${icon('starBadge')}อัปดาว · ★${m.stars} / ${this.map.company.maxStars}</button>${!model.starProfile?'<p class="camp-note">อัปดาวได้ที่ค่ายเมื่อระบบจัดทีมเปิดแล้ว</p>':''}<p>ดาวของคนนี้ · ตัวซ้ำที่สะสม ${m.dupes}</p><div class="develop-links"><button id="develop-skills" data-world="develop-link" data-tab="skills" class="secondary">สกิล</button><button id="develop-gear" data-world="develop-link" data-tab="gear" class="secondary">อุปกรณ์</button><button id="develop-talents" data-world="develop-link" data-tab="talents" class="secondary">ผังสกิล · แต้มว่าง ${free}</button></div></section>`;
   }
   private gear(model:CharacterModel,h:HeroDefinition):string{
     const trial=this.plan?.choices.length?this.host.previewPlan(this.plan):this.single?this.host.preview(this.heroId,this.single.key):undefined;
