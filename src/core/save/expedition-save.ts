@@ -98,7 +98,10 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // member; a run in progress keeps the legacy four reserve slots. Runs gain `reserveSlots` and `fatigue`; potions gain
 // the calming draught (`calm`, none carried). The campfire relights after `camp.relightWins` wins (`restWins` counts them;
 // a v44 run's unlit fire starts counting from 0).
-const SAVE_VERSION = 45;
+// v46 (owner 2026-11-04, logic audit 4–5): Revive levels raise its HP instead of shielding the priest, and Heal may aim at a
+// full-HP ally when Afterglow/the mender set would add a barrier. The profile is unchanged; a battle in progress that used
+// Revive restarts from its entry HP (old Heal commands replay the same: a full-HP target was illegal before).
+const SAVE_VERSION = 46;
 const BATCH_ONE_IDS = ['metta', 'thiran', 'lalin', 'wila'];
 // The classes whose big tree arrived in v37 (release A) and in v39 (the recruits).
 const RELEASE_A_TREES = ['tracer', 'weaver', 'healer', 'garran', 'mira'];
@@ -361,6 +364,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
         || MAGIC_DAMAGE_SKILLS.includes(cmd.action as ActionId) && (h?.skillBonus ?? 0) !== (h?.damageBonus ?? 0);
     })) b.commands = [];
     if (version < 42 && Array.isArray(b.commands) && (b.commands.some(c => AUDIT_ACTIONS.includes(obj(c).action as ActionId)) || s.hard === true && b.kind === 'boss')) b.commands = [];
+    if (version < 46 && Array.isArray(b.commands) && b.commands.some(c => obj(c).action === 'revive')) b.commands = [];
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, party);
     // Validate against the encounter as fought by this run's deployed party (stars and camp level included).
@@ -671,7 +675,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

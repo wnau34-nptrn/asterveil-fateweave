@@ -168,7 +168,7 @@ describe('the team of five in the world (save v45)', () => {
     const p: Profile = { ...newProfile(map, 2), tutorialDone: true, company: ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira'], members: Object.fromEntries(['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira'].map(id => [id, { stars: 1, dupes: 0 }])),
       party: { deployed: ['guardian', 'tracer', 'weaver', 'healer', 'garran'], reserve: ['mira'] } };
     const game = depart(p, map, lookup, 5); game.run.fatigue = { guardian: 3 };
-    const raw = write(game); expect(JSON.parse(raw).version).toBe(45);
+    const raw = write(game); expect(JSON.parse(raw).version).toBe(46);
     expect(parseGame(raw, map, lookup)).toEqual(game);
     const forge = (patch: Record<string, unknown>) => { const j = JSON.parse(raw); Object.assign(j.run, patch); return JSON.stringify(j); };
     for (const bad of [{ fatigue: { guardian: 13 } }, { fatigue: { brann: 1 } }, { fatigue: {} }, { reserveSlots: 6 }, { reserveSlots: 2 }])

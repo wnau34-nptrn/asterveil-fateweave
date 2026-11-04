@@ -114,7 +114,7 @@ export interface EncounterDefinition {
     defenseCap: number; leechCap: number;
     // Skill levels (tomes, save v37): each level above 1 adds `powerPercent` to a skill's power, `percentPoints` to a
     // percent skill, or a `barrier` on use to a skill without numbers (docs/design/SKILL_TOMES_TH.md).
-    skillLevel: { powerPercent: number; percentPoints: number; barrier: number } };
+    skillLevel: { powerPercent: number; percentPoints: number; barrier: number; revivePoints: number } };
 }
 // Expiry/cooldown values are absolute round numbers, never animation time.
 // `hastedRound`: an alchemist's haste makes this hero act before everyone in that round.
