@@ -1,5 +1,7 @@
 # UXD-06 — พัฒนาตัวละครและอัปดาว
 
+เผยแพร่ครบ [PR #144](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/144) · 2026-11-04 08:30:52 Asia/Bangkok · runtime merge `b9031154edb5655145edac296ba44491693ef100`
+
 เริ่ม 2026-11-04 (Asia/Bangkok) · สาขา `codex/uxd-06-character-star` · ฐาน `9bf63bd7c9dd966651ef536c971cb51b6876bb89` บน feature/fateweave-initial-prototype
 
 ## ฐานและ baseline
@@ -20,17 +22,23 @@
 - อัปดาวยังเป็นcapabilityของค่ายตามteam unlockเดิม บนexpeditionไม่เปิดคำสั่งใหม่ ★5ไม่มีปุ่มจ่ายหรือเลื่อนอาชีพ ย้ายarchive/dismissใต้จัดการสมาชิกและคงconfirm/last-member rulesเดิม
 - Bodyเลื่อนเดียว dockแยกfooter แสดงcost summaryเสมอ safeareaสงวนรอบdialog ปุ่ม≥44px ไม่ใช้assetsใหม่
 
+- ดูวิธีหาวัตถุดิบในบริการที่เปิดแล้ว: แสดงป้ายจ้างและโควตาใบสัญญาซ้ำ/ตราในตลาดจาก shopLeft จริง ไม่จ้าง ซื้อ เปลี่ยนป้าย หรือเรียก RNG ให้เอง
+
 Runtime: src/ui/star-upgrade.ts / star-upgrade.css / character-panel.ts / character-view.ts / lobby-ui.ts / game-shell.ts ไม่มีcore/content/public/save/schema/prices/RNG/battle/balance diff
 
 ## QA และ release
 
-กำลังตรวจ ห้ามอ้างว่า merge หรือเผยแพร่แล้วจนมีหลักฐานท้ายงาน
+- Runtime commit `c4dade5bb4b59b5757e3de2e4d686df81528f220`; test-only `f431e3d0f324de68a04b35365ebe672bfa7958fd` เปิดจัดการสมาชิกก่อน archive ทั้งสองขา ไม่แก้ assertion ข้อมูลสมาชิก
+- [PR144](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/144) บนฐาน9bf63bd7 ผ่าน [quality41743802268](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41743802268): typecheck/lint/unit1492/105files/build ด้วย timeout มาตรฐาน และ [browser41743802275](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41743802275): source565, focus3, production 83/84/80/88 รวม 335 ครบ4shards+aggregate ไม่รวมskips/retriesเป็นpassเพิ่ม
+- Merge `b9031154edb5655145edac296ba44491693ef100` ด้วย expected-head guard tree ตรง head f431e3d (`66b41dc611cf82eee26689b7c8f5b2fe5eb24879`) และฐาน9bf63bd7ไม่เคลื่อน ผ่าน [post-merge quality41748274440](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41748274440) unit1492/105files/typecheck/lint/build และ [Pages41748274489](https://github.com/wnau34-nptrn/asterveil-fateweave/actions/runs/41748274489) build/unit/source565/production 83/84/80/88 รวม 335 ครบ4/deploy
+- Deploy job126327413865 รายงาน Reported success! 2026-11-04T01:30:52.7619032Z = 2026-11-04 08:30:52 Asia/Bangkok [เกม](https://wnau34-nptrn.github.io/asterveil-fateweave/) ยืนยันจาก workflow/head/deploy log ไม่อ้างการเปิดlive URLจากexecutor
+- Local full unit1492/105filesผ่าน (142.85s,maxWorkers2,timeoutเดิม) Focused43/3filesรวมstar22ผ่าน และstar22ตรวจซ้ำหลังเพิ่มmaterial-helpแล้ว Typecheck/lint/production Pages buildผ่านก่อนPR
+- Fullunitรอบแรก1489ผ่าน/3ไม่ผ่าน: ขาดรายงาน2จากsparse checkout (ดึงไฟล์ตรงHEADโดยไม่แก้เนื้อหา) และboss-balanceชน180sขณะมีbrowser/buildร่วมกัน จึงรันfullunitแยกแล้วผ่านทั้งหมด ไม่มีการเปลี่ยนrepo/CI timeoutหรือกฎ
+- Local production browser38distinctผ่าน: star15 + regression23 ของcharacter/equipment/forge/team/archive/legacy skill รวมยอดเงินจริง/ของเดิม/reload/no-spend preview/cancel/next/heldEnter/double confirm/storage failure/★5/แยกของขาด/legacy grants/โควตาแหล่งวัตถุดิบ/focus/return context
+- ชุด33กรณีผ่าน32และdesktop characterเดิมชนtotal45sช่วงท้าย ตรวจกรณีเดิมซ้ำพร้อม5regressionsที่เหลือด้วย CLI120s ผ่าน6/6 (2.0m) จึงนับ38distinct ไม่บวกรอบซ้ำ baseline2/รอบขาดผลเป็นผลเพิ่ม repo/CI browser timeout45sเดิม
+- QAเคยพบfield orderของparseGameต่างจากobjectเดิม จึงเทียบkeyแบบcanonicalในreceipt ไม่ลดassertionจำนวน/ยอดจริง พบdouble-clickไปโดนnextที่แทนตำแหน่งเดิมและmousedownย้ายfocus จึงกันคลิกซ้ำและคืนfocusสถานะ
+- Environmentมีstarting/readyระหว่างQA ไฟล์อยู่ครบแต่browserprocessเดิมหาย ไม่มีผลสรุป จึงเริ่มชุดใหม่จนได้ผลครบ ไม่รวมรอบขาดผลเป็นpass
+- ตรวจภาพจริงpreview/review/resultครบ390×650/844 พร้อมregression320×568/desktop และ200%text/insetsจำลอง59/34 Bodyเลื่อนไปถึงแถวสุดท้ายได้และdockไม่บัง [ภาพที่commitแล้ว](../validation/uxd-06/README_TH.md) ตัวอย่าง★3→★4 ตัวซ้ำ1/ตรา3/แร่120 ใช้1/2/70 เหลือ0/1/50
+- ทำงานและ release docs บน checkout แยก /workspace/asterveil-uxd-06-work เก็บโฟลเดอร์เดิมพร้อม draft/ภาพ UXD-05 ไว้ ไม่ reset หรือแก้ auth เอกสาร release 5 ไฟล์เป็น docs-only ตรวจเนื้อหา/git diff --check และอัปเดต feature ด้วย expected-head guarded fast-forward ไม่ force งานถัดไปตรวจ remote head ใหม่ก่อนใช้ checkout/draft ใด
 
-- Focused unit43/3filesผ่าน (star reviewใหม่22) หลังแก้การเทียบobject field orderของparseGame ไม่ลดassertionยอดจริง
-- Typecheck/lint/production Pages buildผ่านบนโค้ดปัจจุบัน Focused star22ผ่านอีกครั้งหลังเพิ่มhelpแหล่งวัตถุดิบ
-- Full local unit1492/105filesผ่าน (142.85s, maxWorkers2, timeoutเดิม) รอบแรก1489ผ่าน/3ไม่ผ่าน: missingรายงาน2จากsparse checkout (ดึงไฟล์ตรงHEADโดยไม่แก้เนื้อหาแล้ว) และboss-balance timeout180sขณะรันbrowser/buildร่วมกัน จึงรันfullunitแยกแล้วผ่านทั้งหมด ไม่เปลี่ยนrepo/CI timeout
-- Production browser12ผ่าน (2.2m) ก่อนเพิ่มreadonly material-help; รอบสุดท้ายรวมlegacy/management/helpและregressionกำลังรัน ไม่อ้างเป็นผลผ่านจนจบ
-- Environmentมีstarting/readyระหว่างQA ไฟล์อยู่ครบ แต่process browserเดิมหยุดและไม่มีผลสรุป จึงเริ่มชุดใหม่ ไม่รวมรอบขาดผลเป็นpass
-- Browserพบdouble-clickไปโดนnextที่แทนตำแหน่งเดิมและfocusถูกmousedownย้าย แก้ป้องกันทั้งmousedown/clickซ้ำและคืนfocusที่สถานะ ไม่ใช่ปัญหาจ่ายซ้ำ
-- ภาพbaselineและภาพพัฒนาใน/tmp/uxd-06/; จะตรวจ/เก็บภาพfinal390×650/844และregressionที่เกี่ยวข้องก่อนปิดงาน
-- ใช้Chromium emulation ไม่มีSafari/iPhone/อุปกรณ์จริงหรือผู้เล่นจริง
+Chromium emulationเท่านั้น ไม่มีSafari/iPhone/อุปกรณ์จริง/ผู้เล่นจริง ไม่สรุปhuman usability ไม่พบCURRENT_STATE.md ไม่เริ่มUXD-07/P04/P09/เลื่อนอาชีพ/สกุลเงินใหม่หรืองานถัดไปอัตโนมัติ
