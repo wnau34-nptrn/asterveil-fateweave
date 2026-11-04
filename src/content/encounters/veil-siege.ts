@@ -36,7 +36,8 @@ export const veilSiege: EncounterDefinition = {
     // Scout (2C-2): ambush hits harder before the target acts this round; shadow step dodges the next hit.
     ambush: { name: 'จู่โจมก่อน', english: 'Ambush', icon: '⚔', power: 12, cooldown: 2 },
     evade: { name: 'ก้าวเงา', english: 'Shadow Step', icon: '↯', power: 0, cooldown: 3 },
-    // Hammer warden (2C-2): taunt pulls every enemy move onto him (reduced) until his next turn; slam is plain damage.
+    // Hammer warden (2C-2): taunt pulls every enemy move onto him (reduced) until his next turn; slam deals its power, plus
+    // `rules.quakeBonus` when the target's next move aims at the warden (Rune Quake capstone splashes the same column).
     taunt: { name: 'ยั่วยุ', english: 'Challenge', icon: '⛨', power: 0, cooldown: 3 },
     slam: { name: 'ทุบค้อนรูน', english: 'Rune Slam', icon: '⚒', power: 18, cooldown: 2 },
     // Bard (2C-2): one song plays until switched or the bard falls. Valor adds power to every hero hit;
@@ -55,7 +56,7 @@ export const veilSiege: EncounterDefinition = {
     quake: { name: 'ทุบปฐพี', english: 'Earthshaker', icon: '⚒', power: 14, cooldown: 2 },
     finale: { name: 'บทสุดท้าย', english: 'Finale', icon: '♪', power: 16, cooldown: 3 },
     // Knight big tree skills (A6, draft numbers): challenge pulls one enemy's next move, bulwark is a percent cut,
-    // rouse heals a percent of each ally's max HP.
+    // rouse guards the standing ally with the lowest HP ratio against every single-target move (guard `all`); no heal.
     challenge: { name: 'ท้าดวล', english: 'Challenge', icon: '⚔', power: 0, cooldown: 3 },
     bulwark: { name: 'กำแพงโล่', english: 'Bulwark', icon: '♜', power: 30, cooldown: 4 },
     rouse: { name: 'ยืนเคียงข้าง', english: 'Rouse', icon: '❋', power: 0, cooldown: 4 },

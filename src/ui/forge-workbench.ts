@@ -5,6 +5,7 @@ import { equipmentEffects } from './character-view';
 import { salvageReason } from '../core/world/profile';
 import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { enhancementInvestment, itemStats, salvageValue, affixPool, GEAR_SPECIALS, RARITIES } from '../core/world/equipment';
+import { bankFits } from '../core/world/caps';
 import { transferCandidate, transferReason, weaponBlueprint, weaponCraftCost, weaponCraftReason, enhancementCostTo, findItem, fuseMaterials, fuseReason, fusionRefund, itemLevelCap, itemLevelCost, raiseItemLevel, rerollReason, smeltLeft, smeltReason } from '../core/world/forge';
 import type { LobbyFeature, Gear, Item, MapDefinition, Profile } from '../core/world/types';
 import { levelOf, starred } from '../core/world/world';
@@ -392,9 +393,8 @@ export class ForgeWorkbench {
     return `<section class="forge-workbench forge-enhancement forge-service-page forge-${tab}" data-tab="${tab}" data-review="${this.review}" data-receipt="${!!receipt}" data-persisted="${receipt?.persisted??false}"><div id="forge-body" role="region" aria-label="${operation}"><div class="forge-enhancement-content">${result}${this.staleReview?'<p class="forge-reason forge-stale" role="status">ข้อมูลเปลี่ยนแล้ว · ตรวจรายการใหม่ก่อนยืนยัน</p>':''}${content}</div><div class="forge-footer forge-enhancement-dock">${cost}<div class="forge-footer-buttons">${actions}</div></div></div>${this.frameTrim()}</section>`;
   }
   private smeltCapacityReason(p:Profile,amount:number):string {
-    // Existing v45 bank validation (core/save/expedition-save.ts), not a new economy cap.
-    // smeltReason currently omits this persisted-profile constraint; keep the UI reload-safe.
-    return p.bank.dust+amount>9999999?'ฝุ่นดาวหลังหลอมเกินเพดานคลัง · ใช้ฝุ่นก่อน':'';
+    // The same ceiling smeltReason refuses as 'full' (core/world/caps.ts); shown even while the quota or ore also block.
+    return !bankFits(p.bank,{dust:amount})?'ฝุ่นดาวหลังหลอมเกินเพดานคลัง · ใช้ฝุ่นก่อน':'';
   }
   private shortages(p:Profile,cost:{ore:number;dust:number}):string[]{
     return [p.bank.ore<cost.ore?`แร่ดาวขาด ${cost.ore-p.bank.ore}`:'',p.bank.dust<cost.dust?`ฝุ่นดาวขาด ${cost.dust-p.bank.dust}`:''].filter(Boolean);

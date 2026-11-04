@@ -1,5 +1,6 @@
 import type {Item, MapDefinition, Profile, ProfileResult} from './types';
 import {salvageValue} from './equipment';
+import {bankFits} from './caps';
 export type StorageSource='bag'|'overflow';
 export const storageCap=(p:Pick<Profile,'storageTier'>,map:MapDefinition):number=>map.equipment.bagCap+(p.storageTier??0)*map.equipment.storage.step;
 export const storageItems=(p:Profile,source:StorageSource):readonly Item[]=>source==='bag'?p.items:p.overflow??[];
@@ -20,7 +21,7 @@ export function recycleSelection(p:Profile,map:MapDefinition,source:StorageSourc
   const list=selected(p,source,ids);if(!list)return blocked(p,'unknown');
   if(list.some(protectedItem))return blocked(p,'protected');
   const total=list.reduce((v,i)=>{const n=salvageValue(map,i);return {ore:v.ore+n.ore,dust:v.dust+n.dust};},{ore:0,dust:0});
-  if(p.bank.ore+total.ore>9999999||p.bank.dust+total.dust>9999999)return blocked(p,'full');
+  if(!bankFits(p.bank,total))return blocked(p,'full');
   const profile=structuredClone(p);if(source==='bag')profile.items=profile.items.filter(i=>!ids.includes(i.uid));else profile.overflow=(profile.overflow??[]).filter(i=>!ids.includes(i.uid));
   profile.bank.ore+=total.ore;profile.bank.dust+=total.dust;
   return {profile,event:{type:'salvaged',count:list.length,...total}};

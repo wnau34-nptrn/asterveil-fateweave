@@ -8,6 +8,7 @@ import { addTomes, dismissTomes, emptyTomes, firstClearTomes, tomeCount } from '
 import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, SET_IDS } from './types';
 import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, recommendedLane, rollPercent, reserveCap, rosterIds, type EncounterLookup } from './world';
 import { laneReason, withLane } from './formation';
+import { bankFits, clampBank, clampPotions, clampTomes, potionsFit, RIFT_CORE_CAP } from './caps';
 import type { ActionId } from '../battle/types';
 
 // Pure lobby rules: the persistent mercenary company, the bank, the hiring board, the
@@ -140,7 +141,8 @@ export function dismiss(initial: Profile, map: MapDefinition, id: string): Profi
   profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id); if (profile.party.lanes) delete profile.party.lanes[id];
   profile.bank.gold += map.company.dismissRefund;
   // Half the tomes spent on their skill levels come back (docs/design/SKILL_TOMES_TH.md).
-  const refund = dismissTomes(map, id, initial.members[id]); if (tomeCount(refund)) addTomes(profile.tomes ??= emptyTomes(), refund);
+  const refund = dismissTomes(map, id, initial.members[id]); if (tomeCount(refund)) { addTomes(profile.tomes ??= emptyTomes(), refund); clampTomes(profile.tomes); }
+  clampBank(profile.bank);
   return { profile, event: { type: 'dismissed', heroId: id } };
 }
 
@@ -204,7 +206,7 @@ export function salvageReason(initial:Profile,map:MapDefinition,uids:readonly nu
   if(picked.some(i=>i.locked))return 'locked';
   if(uids.length>1&&picked.some(i=>i.boss))return 'protected';
   const total=picked.reduce((v,item)=>{const n=salvageValue(map,item);return {ore:v.ore+n.ore,dust:v.dust+n.dust};},{ore:0,dust:0});
-  return !Number.isSafeInteger(total.ore)||!Number.isSafeInteger(total.dust)||initial.bank.ore+total.ore>9999999||initial.bank.dust+total.dust>9999999?'full':'';
+  return bankFits(initial.bank,total)?'':'full';
 }
 export function salvage(initial: Profile, map: MapDefinition, uids: readonly number[]): ProfileResult {
   const reason=salvageReason(initial,map,uids);if(reason)return blocked(initial,reason);
@@ -307,7 +309,7 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
 // ---- Potions (2D-5): brewed in the lobby for ore and veil dust; stock at home has no cap. ----
 export function brewReason(profile: Profile, map: MapDefinition, potion: PotionId): string {
   const cost = map.potions.brew[potion]; if (!cost) return 'unknown';
-  return profile.bank.ore < cost.ore ? 'ore' : profile.bank.dust < cost.dust ? 'dust' : '';
+  return profile.bank.ore < cost.ore ? 'ore' : profile.bank.dust < cost.dust ? 'dust' : potionsFit(profile.potions, { [potion]: 1 }) ? '' : 'full';
 }
 export function brew(initial: Profile, map: MapDefinition, potion: PotionId): ProfileResult {
   const reason = brewReason(initial, map, potion); if (reason) return blocked(initial, reason);
@@ -379,11 +381,13 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   // Skill tomes found on the map come home like ore (a wipe keeps its share); a tome map's first clear adds its own.
   const tomes = emptyTomes(); addTomes(tomes, run.tomes, pct); let core = Math.floor((run.riftCore ?? 0) * pct / 100);
   if (outcome === 'complete' && !profile.cleared.includes(run.mapId)) { const first = firstClearTomes(map, run.roster.deployed); if (first) { addTomes(tomes, first.tomes); core += first.core; } }
-  if (tomeCount(tomes) || core) { addTomes(profile.tomes ??= emptyTomes(), tomes); if (core) profile.riftCore = (profile.riftCore ?? 0) + core; }
+  if (tomeCount(tomes) || core) { addTomes(profile.tomes ??= emptyTomes(), tomes); clampTomes(profile.tomes); if (core) profile.riftCore = Math.min(RIFT_CORE_CAP, (profile.riftCore ?? 0) + core); }
   if (outcome === 'complete' && !profile.cleared.includes(run.mapId)) profile.cleared.push(run.mapId);
   if (outcome === 'complete' && run.hard && !profile.clearedHard?.includes(run.mapId)) {
     (profile.clearedHard ??= []).push(run.mapId); const r = map.progression.hardFirstClear; profile.bank.gold += r.gold; profile.bank.seal += r.seal;
   }
+  // A return home cannot be refused: what passes a storage ceiling is lost (caps.ts), so the profile always saves.
+  clampBank(profile.bank); clampPotions(profile.potions);
   profile.returns++; delete profile.boardPool; profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
   profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged, ...(tomeCount(tomes) ? { tomes: tomeCount(tomes) } : {}) };
   return profile;
@@ -431,7 +435,8 @@ export function claimReason(profile: Profile, map: MapDefinition, questId: strin
   const q = map.sideQuests.find(s => s.id === questId); if (!q) return 'quest';
   const now = profile.quests[q.id];
   if (now?.claimed) return 'claimed';
-  return (now?.progress ?? 0) >= q.target ? '' : 'progress';
+  if ((now?.progress ?? 0) < q.target) return 'progress';
+  return bankFits(profile.bank, q.reward) && potionsFit(profile.potions, q.reward.potions) ? '' : 'full';
 }
 export function claimQuest(initial: Profile, map: MapDefinition, questId: string): ProfileResult {
   const reason = claimReason(initial, map, questId); if (reason) return blocked(initial, reason);
@@ -463,6 +468,7 @@ export function activeGuides(p: Profile, maps: readonly MapDefinition[]): GuideD
 export function claimGuide(initial: Profile, maps: readonly MapDefinition[], id: string, skip = false): ProfileResult {
   const g = activeGuides(initial, maps).find(x => x.id === id); if (!g) return blocked(initial, 'unknown');
   if (!skip && !guideDone(initial, g.kind)) return blocked(initial, 'notDone');
+  if (!skip && (!bankFits(initial.bank, g.reward) || !potionsFit(initial.potions, g.reward.potions))) return blocked(initial, 'full');
   const profile = structuredClone(initial); (profile.guides ??= {})[id] = skip ? 'skipped' : 'claimed';
   if (!skip) { const r = g.reward; profile.bank.ore += r.ore ?? 0; profile.bank.gold += r.gold ?? 0; profile.bank.seal += r.seal ?? 0; profile.bank.dust += r.dust ?? 0;
     for (const p of POTION_IDS) profile.potions[p] += r.potions?.[p] ?? 0; }
@@ -491,7 +497,9 @@ export function buyReason(profile: Profile, map: MapDefinition, item: ShopItemId
     if (m.stars >= map.company.maxStars) return 'maxed';
   }
   if (item === 'gearbox' && profile.items.length >= storageCap(profile,map)) return 'bag';
-  return profile.bank.gold < def.price ? 'gold' : '';
+  if (profile.bank.gold < def.price) return 'gold';
+  if (item === 'seal' && !bankFits(profile.bank, { gold: -def.price, seal: 1 })) return 'full';
+  return item === 'repel' && !potionsFit(profile.potions, { repel: 1 }) ? 'full' : '';
 }
 // The gear box rolls from the profile's lobby roll counter (shared with the forge), so a reload cannot re-roll it.
 export function buy(initial: Profile, map: MapDefinition, item: ShopItemId, heroId?: string): ProfileResult {

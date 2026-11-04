@@ -2,6 +2,7 @@ import type { ActionId } from '../battle/types';
 import type { BattleKind, ChestTier, ExpeditionState, MapDefinition, MemberProgress, Profile, ProfileResult, TomeBag, TomeLine, TomeSize } from './types';
 import { TOME_LINES, TOME_SIZES } from './types';
 import { featureOpen } from './profile';
+import { TOME_CAP } from './caps';
 import { heroDef, skillChoices, type EncounterLookup } from './world';
 
 // Skill levels with tomes (A6 part 2, docs/design/SKILL_TOMES_TH.md). The tree decides which skills a member has;
@@ -52,8 +53,9 @@ export function raiseSkill(initial: Profile, maps: readonly MapDefinition[], map
 export function tradeReason(profile: Profile, maps: readonly MapDefinition[], map: MapDefinition, line: TomeLine, size: TomeSize, to?: TomeLine): string {
   if (!featureOpen(profile, maps, 'tomes')) return 'locked';
   const r = map.progression.skillLevels; const have = profile.tomes?.[line][size] ?? 0;
-  if (to === undefined) return size === 'large' ? 'size' : have < r.tradeUp ? 'tomes' : '';
-  return to === line || !TOME_LINES.includes(to) ? 'line' : have < r.swap ? 'tomes' : '';
+  // The tome received must still fit its stack (TOME_CAP, the saved limit).
+  if (to === undefined) { if (size === 'large') return 'size'; const next = TOME_SIZES[TOME_SIZES.indexOf(size) + 1]!; return have < r.tradeUp ? 'tomes' : (profile.tomes?.[line][next] ?? 0) >= TOME_CAP ? 'full' : ''; }
+  return to === line || !TOME_LINES.includes(to) ? 'line' : have < r.swap ? 'tomes' : (profile.tomes?.[to][size] ?? 0) >= TOME_CAP ? 'full' : '';
 }
 export function tradeTomes(initial: Profile, maps: readonly MapDefinition[], map: MapDefinition, line: TomeLine, size: TomeSize, to?: TomeLine): ProfileResult {
   const reason = tradeReason(initial, maps, map, line, size, to); if (reason) return { profile: initial, event: { type: 'blocked', reason } };
