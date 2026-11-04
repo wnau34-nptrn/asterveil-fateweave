@@ -10,7 +10,7 @@
   - เคล (หน้า): attack, gatherfist, releasefist, flowfist, circlefist, storedfist, perfectfist
   - วินน์ (หลัง): attack, threadhex, lifetoll, wovenhex, longthread, tollring, knothex
   - แอสทริด (หลัง): attack, deflectfate, turncycle, crossing, doubledial, starneedle, readorbit
-- **เคลต้องแก้สัดส่วนก่อน** (เจ้าของทักว่าสเกลต่าง ตรวจแล้วหัวจริงเล็กราว 105–115px เพราะวัดจากยอดมวยผม): ส่ง `docs/handoffs/CODEX-KAEL-SCALE-FIX-TH.md` (ART-CHAR-CLASS-NEW-003) ก่อน แล้วค่อยทำส่วนของเคลใน A12 โดยใช้ `incoming/ART-CHAR-CLASS-NEW-003/unit/kael.png` แทน seed เดิม และแทน sha256 ในกล่องด้วยค่าจาก NEW-003
+- เคลใช้ `incoming/ART-CHAR-CLASS-NEW-003/unit/kael.png` (sha256 `5d9f344d…`, merge PR #150 2026-11-04; Claude ตัดสินตามที่เจ้าของมอบหมาย) ภาพนิ่งวินน์/แอสทริดเจ้าของอนุมัติ 2026-10-31
 - ทั้งสามอาชีพยังไม่มีในโค้ดเกม (งาน P03) ภาพที่ได้จะเก็บใน `incoming/` ไว้ก่อน Claude จะนำเข้าเมื่อเพิ่มอาชีพเข้าเกม ส่วนการจับคู่ท่ากับ ActionId ด้านล่างเป็นข้อเสนอที่ใช้รูปแบบเดียวกับ registry `src/game/visuals/unit-frames.ts` (เช่น `lalin`)
 
 ## กล่อง prompt สำหรับ Codex (คัดลอกทั้งกล่อง)

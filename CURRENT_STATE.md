@@ -1,43 +1,43 @@
-# Current state — updated 2026-11-04
+# Current state — updated 2026-11-04 (late)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
 ## Game
 
-- Working branch `feature/fateweave-initial-prototype` (not `main`); Pages URL https://wnau34-nptrn.github.io/asterveil-fateweave/ through `pages.yml`; pre-release pushes deploy after lint/unit/build, with the full browser gate on PRs (owner update `aabc5dc`). Restore the Pages browser gate before OD-13 external tests.
-- Save v45; 1–5 units a side (P02), shared camp Lv/EXP (P01), reserve by chapter3→4→5, fatigue, carry≤10. W1–W8/P01/P02 are published.
-- UXD-01…06 published. UXD-07 unified skills (equip/level/tree/tomes), reviewed skill spending and persisted receipts merged through PR #145 as `26c5ab638ef3eac1929635e3a2c078372cb58fca`, tested head `902bbf3` from `ab06dfd`. Merge tree equals tested head. No core/content/save/schema/price/RNG/battle changes.
-- PR quality1518/107 and browser348+source565+focus3 passed; post-merge quality passed. UXD-07 is complete at merge under the pre-release rule; Pages deploys automatically, with no deployment-success claim here. Validation: `docs/validation/uxd-07/README_TH.md`.
-
-- HUD team → character navigation follow-up merged through PR #146 as `1b0616be8a31bc324a7eb447d2034e74998110cc` (tested head `fa55f22`, same tree). Direct character portraits, last-view context, persistent HUD, pre-review scroll and bag-origin restoration; PR quality1518/107 + production browser356 + source565 + focus3 passed. Validation: `docs/validation/team-hud-navigation/README_TH.md`.
-
-- Storage ceilings in core (owner pick ค, PR #147 `claude/storage-caps-core`): `core/world/caps.ts` is the one source of the v45 limits; trades/smelt/buy/brew/claims refuse `'full'`, settle/dismiss fill to the cap. No save version/price/RNG/balance/battle change. Validation: `docs/validation/storage-caps/README_TH.md`.
+- Working branch `feature/fateweave-initial-prototype` (not `main`); Pages URL https://wnau34-nptrn.github.io/asterveil-fateweave/ through `pages.yml`; pre-release pushes deploy after lint/unit/build, with the full browser gate on PRs. Restore the Pages browser gate before OD-13 external tests.
+- **Save v46**; 1–5 units a side (P02), shared camp Lv/EXP (P01), reserve by chapter 3→4→5, fatigue, carry ≤10. W1–W8/P01/P02, UXD-01…07 and the HUD team → character entry (PR #146) are published.
+- 2026-11-04 Claude batch (all merged after quality + four browser shards):
+  - PR #147/#149 storage ceilings: `core/world/caps.ts` holds the save limits (`BANK_CAP`, `TOME_CAP`, `RIFT_CORE_CAP`, `POTION_CAP`, `RUN_CAP`); player choices refuse `'full'`, settle/dismiss/run gains fill to the cap (`docs/validation/storage-caps/README_TH.md`).
+  - PR #148 (save v46, owner decision on logic audit 4–5): Heal may target a full-HP ally when Afterglow/mender overflow still adds barrier; Revive levels add HP (`revivePoints` 5: 25→45%), no user barrier (`docs/design/LOGIC_AUDIT_2026-10-24_TH.md`).
+  - PR #152 forest boss: `elite-briar-lord` v10, Thorn Tempest sealable 28 (was unstoppable 13); plain-attack wins 50–71% → 33–64% (`docs/validation/forest-boss-tempest/README_TH.md`).
+  - PR #153 painted calm potion (Codex PR #151 R1) + square potion art in the brew list; PR #154 cleared figure pieces crossing cells of `units.webp` (Eira's orb in Seren's art).
+  - Art merged to `incoming/`: Kael proportion fix NEW-003 (PR #150), calm potion package (PR #151).
+- Owner 2026-11-04: “เรื่องภาพหรืออะไรให้คุณตัดสินใจได้เลย” — Claude may decide art picks; record each such pick as Claude's decision under that delegation, not as owner approval.
 
 ## Active task
 
-- None after PR #147 merges. No next task started.
+- None. Next: P03 (owner 2026-11-04 “แล้วต่อ P03”), in a new session.
 
-## Next (owner picks; nothing auto-started)
+## Next (owner order)
 
-- UXD-08 combined UX check/release, including real-device/human trials; UXD-07 itself does not start it.
-- OD-13 after P02: P09 accounts/cloud save/telemetry+feedback/admin → P04 → server-authoritative rewards → chat + World Boss → external test. PvP async/Co-op excluded.
+- **P03**: add Kael (`kael`, Martial), Wynne (`wynne`, Hexer), Astrid (`astrid`, Seer) — 15 classes × 1 character (OD-14; no second characters). Mechanics, trees and 18 skills in `docs/design/ROSTER_30_TH.md`; plan `docs/DEVELOPMENT_PLAN_TH.md` P03. Stills approved 2026-10-31 (Kael replaced by `incoming/ART-CHAR-CLASS-NEW-003/`); battle animation brief sent to Codex: `docs/handoffs/CODEX-A12-NEW-CLASSES-TH.md` (use stills + procedural motion until it lands).
+- Then OD-13: P09 accounts/cloud save/telemetry+feedback/admin → P04 → server rewards → chat + World Boss → external test. UXD-08 combined UX check remains open.
 
 ## Open items
 
-- Claude questions: smelt/tome caps, stale Tremor/Slam/Rouse comments and coverage label closed by PR #147; logic audit 1–3 were already fixed (C11 v42). Owner rule choices pending: audit 4 (Heal a full-HP ally with Afterglow) and 5 (Revive levels give a barrier, not revive HP). Missing calm potion art (art task). Run-side caps (e.g. run ore 999,999) not audited.
-- No real Safari/iPhone/Android or human usability results. P02-03 real-device trial pending; forest boss still falls to plain attacks with five.
-- UX audit branch `codex/ux-ui-audit-2026-11-04` is archived separately; other team-layout/camp map overlay/fifth campfire actor/inventory proposals remain open; this follow-up completes HUD character navigation only.
-- Art: A7-002 redraw has no Codex PR; A7-003 parked (OD-14); Kael/Wynne/Astrid pending owner confirmation; Lyra atlas above guideline. Open PRs #133 UX art/plan, #122 A7-003, #55 pets, #53 boss frames. Do not merge the Artwork branch into the game automatically.
+- Map 3 gate copy of the Briar Lord still falls to plain attacks 83–98%; stronger % broke the rush/casual first-clear gate — deferred to P05 (needs a gate-specific mechanic/encounter; Claude decision under delegation).
+- No real Safari/iPhone/Android or human usability results (P02-03 trial pending). The owner's iPhone report of Seren's art is fixed in PR #154 but not re-checked on the device.
+- Art: A7-003 parked (OD-14); Lyra atlas above guideline; open PRs #133 UX art/plan, #122 A7-003, #55 pets, #53 boss frames (do not merge the Artwork branch automatically).
 
 ## Workspace
 
-- Healthy checkout `/workspace/asterveil-uxd-06-work`; original `/workspace/asterveil-fateweave` has unresolved HEAD/staged old work and is preserved untouched. Git CLI remote/push works with the configured network; no auth changes.
-- CURRENT_STATE.md now exists after context restructure `ab06dfd`. No Artwork workspace; read `art/art-ui-ux-002` separately. Never import checkpoints `cc51cd4`/`bcd6133` or `codex/uxd-02-release-notes` automatically.
+- Cloud checkouts are fresh per session; verify remote head/ancestry before work and never reset unpushed work. Never import checkpoints `cc51cd4`/`bcd6133` or `codex/uxd-02-release-notes` automatically.
 
 ## Opening prompt for next chat
 
 ```text
 ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype
 อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง
-งาน: <เจ้าของเลือก> ตอบไทย ไม่เริ่ม UXD-08/P04/P09 อัตโนมัติ ไม่ reset งานเดิมหรือรวม Artwork/checkpoints เอง
+งาน: P03 เพิ่มเคล/วินน์/แอสทริด (อาชีพละ 1 ตัว OD-14) ตาม docs/design/ROSTER_30_TH.md และแผน P03 ใช้ skill fateweave-rules-and-sim
+แบ่ง PR ตามกลไก ทำ sim/migration/เทสต์ให้ครบ ตอบไทย เรื่องภาพตัดสินแทนเจ้าของได้ตามที่มอบหมาย 2026-11-04
 ```

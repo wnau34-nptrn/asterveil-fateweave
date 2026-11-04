@@ -2,6 +2,14 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-04 — Claude: ชุดงานต่อจาก handoff (PR #148–#154)
+
+- เจ้าของเลือกข้อ 3/2 แล้ว P03 และมอบให้ Claude ตัดสินเรื่องภาพ (“เรื่องภาพหรืออะไรให้คุณตัดสินใจได้เลย”)
+- #148 (v46) Heal เป้าเลือดเต็มได้เมื่อ overflow ยังเพิ่มโล่, Revive อัปเลเวลเพิ่ม HP 25→45% (เจ้าของตัดสิน audit 4–5) · #149 `RUN_CAP`/`clampRun` เพดานระหว่างเดินทาง · #152 Thorn Tempest ผนึกได้ 28 (บอสป่ากดโจมตี 50–71→33–64%) · #153 ยา calm R1 + แก้ขวดยายืด · #154 ล้างชิ้นภาพข้ามช่องใน `units.webp` (ลูกแก้วไอราในภาพเซเรน รายงานจาก iPhone)
+- Art merge เข้า `incoming/`: เคล NEW-003 (#150, หัวจริง 148px), ยา calm (#151) — Claude เลือกตามที่มอบหมาย; brief Codex: `CODEX-A12-NEW-CLASSES-TH.md`, `CODEX-KAEL-SCALE-FIX-TH.md`, `CODEX-ART-POTION-CALM-TH.md`
+- ทุก PR ผ่าน quality + browser ครบ 4 shards ก่อน merge; unit บนผลรวมหลัง #148 1,538 ผ่าน; sim 28/28 (บอสป่าเปลี่ยนรายงาน, อื่นไม่เปลี่ยน)
+- ค้าง: อีลิทประตูแผนที่ 3 ยังแพ้กดโจมตี 83–98% เลื่อนไป P05; ยังไม่ตรวจบนเครื่องจริงหลังแก้ภาพเซเรน; งานถัดไป P03 (session ใหม่) — รายละเอียดใน validation README ของแต่ละ PR
+
 ## 2026-11-04 — Claude: เพดานคลัง/ตำราใน core (PR #147)
 
 - เจ้าของเลือกข้อ ค; `claude/storage-caps-core` จาก `81415f1` → [PR #147](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/147)
