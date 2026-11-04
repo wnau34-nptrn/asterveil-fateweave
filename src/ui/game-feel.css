@@ -626,6 +626,8 @@ html, body { background: #0a1422; }
 .gear-detail > .gear-art, .forge-detail > .gear-art { --art: 64px; justify-self: start; }
 .forge-detail h4 .icon { width: 16px; height: 16px; vertical-align: -3px; color: var(--gold-light, #f2d596); }
 .pack-potions li .potion-art, .brew-list li .potion-art { --art: 40px; }
+/* The potion art is a <span>: keep it square instead of taking `.hire-list li > span { flex: 1 }` (it stretched the bottles). */
+.hire-list li > .potion-art { flex: none; }
 .pack-list li .potion-art { --art: 40px; }
 .gear-art .equip-sprite { inset: 3px; }
 .gear-art > .icon { width: 60%; height: 60%; color: var(--rarity, #b9c8d8); }
