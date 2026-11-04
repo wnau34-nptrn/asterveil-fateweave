@@ -1,0 +1,177 @@
+{
+  "schema": 1,
+  "scope": "All package files except this self-referential manifest; text files have null dimensions/mode.",
+  "files": {
+    "NOTES.md": {
+      "sha256": "9b5ee4e932b63f2dc24a222333d59cb81f2c0212686a46bbbcd8ebd98ed2ad43",
+      "bytes": 7310,
+      "dimensions": null,
+      "mode": null
+    },
+    "build_assets.py": {
+      "sha256": "56bc0da266e0f73da8693530c2309576f56145cb711929cf54b736b3bab259c0",
+      "bytes": 4253,
+      "dimensions": null,
+      "mode": null
+    },
+    "calm-R1.png": {
+      "sha256": "e26291f30ad51e36188230f37e42ca8f4048440a1fa3d51e4d8cc7bfabee3d4d",
+      "bytes": 16221,
+      "dimensions": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "calm-R2.png": {
+      "sha256": "e9ee56b78e66f6426afb2fc1bec4313fdc4bc16a2070ca0a540abf1dc6246bb0",
+      "bytes": 15998,
+      "dimensions": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "calm-R3.png": {
+      "sha256": "b16a61535111689f04e2e5e13a38015835ae0e09569cc22369fe0529ef44504c",
+      "bytes": 19102,
+      "dimensions": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "calm.json": {
+      "sha256": "5766dbf062d50556244ec9412f2ddf785d1dcfb6a1557a2303245cb2ff241abb",
+      "bytes": 80,
+      "dimensions": null,
+      "mode": null
+    },
+    "calm.png": {
+      "sha256": "e26291f30ad51e36188230f37e42ca8f4048440a1fa3d51e4d8cc7bfabee3d4d",
+      "bytes": 16221,
+      "dimensions": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "normalization.json": {
+      "sha256": "937d5dcdc289f998b338acd94b42183378fb5fbeeea267dbf1b12da506357a08",
+      "bytes": 832,
+      "dimensions": null,
+      "mode": null
+    },
+    "potion_items_preview.png": {
+      "sha256": "d4d3adaa9eabe729103028cdbc9db51b3fabb8c8c2567e4c4e35fe5c8e735cad",
+      "bytes": 90289,
+      "dimensions": [
+        768,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "prompts.json": {
+      "sha256": "ed711c05a331d12bfa1bfa299b22ec04bfa9e820380759007ce2b45bc57a3d73",
+      "bytes": 4088,
+      "dimensions": null,
+      "mode": null
+    },
+    "raw/R1.png": {
+      "sha256": "b370ff90532b7a00dfd455c844122dd4a4e0af845515942d477f2672a86a1ef7",
+      "bytes": 293957,
+      "dimensions": [
+        724,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/R2.png": {
+      "sha256": "a4659b17425c089542c6f3d9860865525d7b68c26dc3ae02029b32135af68a36",
+      "bytes": 290776,
+      "dimensions": [
+        724,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/R3.png": {
+      "sha256": "a56218a6cc9f06e8eeec0770302331e4767f22f42c15428a90406ba394e4f555",
+      "bytes": 339069,
+      "dimensions": [
+        724,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/g1-R1.png": {
+      "sha256": "3c15eef477464893fe991696a2471e01a40f4d54d7042b38c04245320af74079",
+      "bytes": 313597,
+      "dimensions": [
+        724,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/g1-R2.png": {
+      "sha256": "b9a9f61fd0c43e5f34787bcef4bd9a94aa915c22a367e082ea92f49004c13dc6",
+      "bytes": 309323,
+      "dimensions": [
+        724,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/g1-R3.png": {
+      "sha256": "7675454860cd5207c4e8496044fa10577e92869214573ef64a33444439ce94d5",
+      "bytes": 295055,
+      "dimensions": [
+        724,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "references/calm-silhouette.png": {
+      "sha256": "0ac70e8aa582b7cf77a98a1f1cfdb0f57e8d61097a473b2976dc14df39623824",
+      "bytes": 1747,
+      "dimensions": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/potion-calm.svg": {
+      "sha256": "f346aa7eff5adf10000268d78436364edf7a4e5ae62ec9272ee17e78aacaf677",
+      "bytes": 253,
+      "dimensions": null,
+      "mode": null
+    },
+    "references/potions-reference.png": {
+      "sha256": "e2ee5e9fdb2b28ee3b55d96c0b6a062892dedea61e5b2eb988bdf6a28c7322ab",
+      "bytes": 43634,
+      "dimensions": [
+        384,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "review-390.png": {
+      "sha256": "53f13a38d292c6aa77247dad2f044cb682b2e8a0722923997a4410866f147aae",
+      "bytes": 83706,
+      "dimensions": [
+        390,
+        860
+      ],
+      "mode": "RGB"
+    },
+    "variants-390.png": {
+      "sha256": "1446689a1fbc4d3e645357ba06a82da791a0b739929dfabb0654ab0d27de7fd1",
+      "bytes": 48646,
+      "dimensions": [
+        390,
+        150
+      ],
+      "mode": "RGBA"
+    }
+  }
+}

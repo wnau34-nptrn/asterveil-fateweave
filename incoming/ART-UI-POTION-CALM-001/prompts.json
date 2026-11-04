@@ -1,0 +1,33 @@
+{
+  "tool": "image_gen.imagegen",
+  "generation_id": "exec-c181bee1-a129-466b-988b-c906bfc1ea2b",
+  "generation_id_kind": "tool output artifact identifier; backend generation ID not exposed",
+  "generations": [
+    {
+      "artifact_id": "exec-2510546a-2d59-4ed8-9421-caa16d043121",
+      "prompt": "Create a transparent sprite sheet containing exactly THREE separate original painted fantasy game inventory potions in ONE horizontal row, evenly spaced, same camera, same scale, each fully visible with generous transparent space. No text or labels anywhere. All are variants of ONLY the calming potion. Reference 1 is existing game potions for top-left light, sharp dark contour, cel shaded soft gradients and glass highlight treatment ONLY; do NOT copy their bottle silhouettes. Reference 2 is the required silhouette: short straight neck, broad sloping shoulders, straight sides, flat base (a compact rectangular apothecary flask), unlike round salve, long-neck diamond tonic and tall slim repel. Match this silhouette closely. Cork stopper, thin twine at neck holding one or two small herb leaves. Compact three-quarter view, restrained small readable details. Still liquid with ONE gentle smooth wave at its surface, faint silver white mist submerged in liquid. No bubbles, sparks, fire, particles, cast shadow or outside glow. Left R1: clear sea-glass aqua blue liquid and faint silver mist, recommended balanced design. Middle R2: pale blue with a very subtle lavender tint, never strong purple, same broad shoulder flat base form. Right R3: aqua, slightly shorter squatter broad-shouldered form but same scale and width family. Keep all three total object extents approximately equal (104–108 when reduced to a 128px cell). Crisp dark outlines and luminous glass highlights like supplied art, illustration not photorealistic or 3D render. Fully transparent background, genuine alpha, no checkerboard, no ground, no text, no numbers, no label, no price, no border, no frame, no rarity ring. Original new artwork only.",
+      "references_attached": [
+        "references/potions-reference.png",
+        "references/calm-silhouette.png"
+      ],
+      "transparent_background": true,
+      "outputs": "raw/g1-R1.png … raw/g1-R3.png: lossless 724×724 vertical tiles in left-to-right order; concatenate to recover the original 2172×724 master"
+    },
+    {
+      "artifact_id": "exec-c181bee1-a129-466b-988b-c906bfc1ea2b",
+      "prompt": "Edit this three-potion transparent strip with ONE change only: enlarge the RIGHTMOST squat aqua potion uniformly by about 16.7 percent, anchored at its center, so its overall tallest extent matches the left and middle bottles. Keep its short wide proportions. Keep all three separated in same row with generous transparent margins, no overlap or clipping. Left and middle bottles unchanged. Preserve real transparent background, no text, dark outlines, still aqua liquid, silver mist, leaves and cork. The resulting three object longest dimensions must be equal, allowing a single shared downsampling factor for all three icons.",
+      "references_attached": [
+        "Original generation exec-2510546a-2d59-4ed8-9421-caa16d043121.png (recover by concatenating raw/g1-R1.png, raw/g1-R2.png, raw/g1-R3.png horizontally)"
+      ],
+      "transparent_background": true,
+      "outputs": "raw/R1.png … raw/R3.png: lossless 724×724 tiles; all final options use this generation"
+    }
+  ],
+  "reference_notes": {
+    "references/potions-reference.png": "Unmodified pixel crop x=0,y=0,w=384,h=128 of public/assets/ui/equip/potion_items.webp at base d5fe9eaa668ef6c9a7384a95b0f365ba72dee10a; light/outline/scale only.",
+    "references/calm-silhouette.png": "Raster silhouette aid reconstructed from src/ui/svg/potion-calm.svg path vertices; curved wave approximated for visual guidance, not a pixel-exact SVG renderer. Attached to generation 1.",
+    "references/potion-calm.svg": "Reference copy with currentColor resolved to #86dfc2 for the raster aid; geometry unchanged."
+  },
+  "recommendation": "R1",
+  "owner_selection": "pending"
+}

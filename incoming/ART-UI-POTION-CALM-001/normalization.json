@@ -1,0 +1,58 @@
+{
+  "common_scale": 0.19217081850533807,
+  "alpha_cleanup_threshold": 8,
+  "anchor": "cell centre",
+  "variants": [
+    {
+      "variant": "R1",
+      "trimmed_source_size": [
+        392,
+        562
+      ],
+      "resized_size": [
+        75,
+        108
+      ],
+      "alpha_bbox": [
+        26,
+        10,
+        101,
+        118
+      ]
+    },
+    {
+      "variant": "R2",
+      "trimmed_source_size": [
+        397,
+        562
+      ],
+      "resized_size": [
+        76,
+        108
+      ],
+      "alpha_bbox": [
+        26,
+        10,
+        102,
+        118
+      ]
+    },
+    {
+      "variant": "R3",
+      "trimmed_source_size": [
+        492,
+        548
+      ],
+      "resized_size": [
+        95,
+        105
+      ],
+      "alpha_bbox": [
+        16,
+        11,
+        111,
+        116
+      ]
+    }
+  ]
+}
