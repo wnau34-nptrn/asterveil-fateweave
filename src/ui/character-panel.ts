@@ -99,7 +99,7 @@ export class CharacterPanel {
   openStarFor(id:string,trigger:HTMLButtonElement):void {this.openFor(id,'develop',trigger);if(this.open){this.starReturn={focus:this.id('character-star-open'),scroll:0,tab:'develop'};this.starOpen=true;this.render();this.content().scrollTop=0;this.focus(this.id('star-status'));}}
   upgraded(p:Profile,event:ProfileEvent,saved:boolean):void {if(this.starOpen&&this.stars.upgraded(p,event,saved))this.focusAfterStar='star-status';}
   skillCommitted(p:Profile,event:ProfileEvent,saved:boolean):void{this.skillReview.committed(p,event,saved);}
-  private backSkillReview():void{this.skillReview.clear();this.render();this.content().scrollTop=this.skillReturn.scroll;this.focus(this.skillReturn.focus);}
+  private backSkillReview():void{this.skillReview.clear();this.render();this.content().scrollTop=this.skillReturn.scroll;this.focus(this.dialog.querySelector('#'+this.skillReturn.focus)?this.skillReturn.focus:this.id('skills-'+this.skillSection));}
   private focusAfterStar='';
   private backStar():void {
     if(this.stars.reviewing){this.stars.cancel();this.render();this.content().scrollTop=0;this.focus(this.id('star-review'));return;}
@@ -145,7 +145,7 @@ export class CharacterPanel {
       const next=now.includes(skill)?now.filter(a=>a!==skill):[...now,skill];
       if(next.length&&next.length<=this.map.progression.loadoutSize)this.host.loadout?.(this.heroId,next);this.focus(this.id(`character-loadout-${skill}`));}
     else if((action==='skill-level'||action==='tome-trade')&&b.getAttribute('aria-disabled')!=='true'&&model.skillProfile){this.skillReturn={focus:b.id,scroll:this.content().scrollTop};this.skillReview.start(model.skillProfile,action==='skill-level'?{kind:'level',id:this.heroId,action:b.dataset.level as ActionId}:{kind:'trade',line:b.dataset.line as TomeLine,size:b.dataset.size as TomeSize,...b.dataset.to?{to:b.dataset.to as TomeLine}:{}});this.render();this.content().scrollTop=0;this.focus(this.id('skill-review-status'));}
-    else if(action==='character-reset'){if(b.dataset.confirm!=='true'){b.dataset.confirm='true';b.textContent='ยืนยันคืนแต้มทั้งหมดและคืนชุดสกิลเริ่มต้น';return;}this.host.reset?.(this.heroId);this.focus(this.id('character-reset'));}
+    else if(action==='character-reset'){if(b.dataset.confirm!=='true'){b.dataset.confirm='true';b.textContent='ยืนยันคืนแต้มทั้งหมดและคืนชุดสกิลเริ่มต้น';return;}this.host.reset?.(this.heroId);this.focus(this.id('skills-tree'));}
     else if(action==='bag-slot'){const slot=b.dataset.slot as GearSlot;this.filters.slot=this.filters.slot===slot?'all':slot;this.render();this.focus(this.id(`bag-slot-${slot}`));}
     else if(action==='bag-pick'){this.picked=b.dataset.key!;this.render();this.focus(b.id);}
     else if(action==='gear-chip'){const chip=b.dataset.chip;if(chip==='all')Object.assign(this.filters,{...newGearFilters(),slot:this.filters.slot});else if(chip==='compatible')this.filters.compatible=!this.filters.compatible;else if(chip==='found')this.filters.source=this.filters.source==='found'?'all':'found';else if(chip==='boss')this.filters.kind=this.filters.kind==='boss'?'all':'boss';this.render();this.focus(b.id);}
