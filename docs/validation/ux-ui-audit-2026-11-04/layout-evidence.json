@@ -1,0 +1,65 @@
+{
+  "05-team-650": {
+    "viewport": [
+      390,
+      650
+    ],
+    "overflow": false,
+    "scrolls": [
+      {
+        "id": "",
+        "class": "lobby-content",
+        "client": 577,
+        "scroll": 1516,
+        "top": 0
+      }
+    ]
+  },
+  "08-skills-650": {
+    "viewport": [
+      390,
+      650
+    ],
+    "overflow": false,
+    "scrolls": [
+      {
+        "id": "",
+        "class": "lobby-content",
+        "client": 577,
+        "scroll": 1917,
+        "top": 1340
+      },
+      {
+        "id": "camp-character-content",
+        "class": "info-content character-content",
+        "client": 422,
+        "scroll": 2030,
+        "top": 0
+      }
+    ]
+  },
+  "13-inventory-650": {
+    "viewport": [
+      390,
+      650
+    ],
+    "overflow": false,
+    "scrolls": [
+      {
+        "id": "",
+        "class": "lobby-content",
+        "client": 577,
+        "scroll": 4641,
+        "top": 0
+      }
+    ]
+  },
+  "23-battle-650": {
+    "viewport": [
+      390,
+      650
+    ],
+    "overflow": false,
+    "scrolls": []
+  }
+}

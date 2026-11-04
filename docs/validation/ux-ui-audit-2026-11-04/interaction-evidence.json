@@ -1,0 +1,50 @@
+{
+  "team": {
+    "top": 1827.296875,
+    "viewport": 650
+  },
+  "action": "guard",
+  "before": {
+    "gold": 600,
+    "tomes": {
+      "bulwark": {
+        "small": 10,
+        "medium": 10,
+        "large": 10
+      },
+      "blade": {
+        "small": 10,
+        "medium": 10,
+        "large": 10
+      },
+      "accord": {
+        "small": 10,
+        "medium": 10,
+        "large": 10
+      }
+    }
+  },
+  "after": {
+    "gold": 587,
+    "tomes": {
+      "bulwark": {
+        "small": 4,
+        "medium": 10,
+        "large": 10
+      },
+      "blade": {
+        "small": 10,
+        "medium": 10,
+        "large": 10
+      },
+      "accord": {
+        "small": 10,
+        "medium": 10,
+        "large": 10
+      }
+    },
+    "levels": {
+      "guard": 3
+    }
+  }
+}
