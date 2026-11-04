@@ -78,7 +78,7 @@ export class CharacterPanel {
     root.ownerDocument.addEventListener('keydown',e=>{if(this.host.navigationVisible&&e.key==='Escape'&&!e.defaultPrevented&&!e.repeat&&this.usable()&&!this.dialog.contains(e.target as Node)){e.preventDefault();if(this.dialog.dispatchEvent(new Event('cancel',{cancelable:true})))this.dialog.close();}});
     this.dialog.addEventListener('close',()=>{
       if(this.dialog.open)return;
-      this.rememberVisit();this.host.navigationVisible?.(false);this.discard();this.content().innerHTML='';if(this.navigationClose)return;if(this.root.hidden||this.root.closest('[inert]'))return;
+      if(!this.navigationClose)this.rememberVisit();this.host.navigationVisible?.(false);this.discard();this.content().innerHTML='';if(this.navigationClose)return;if(this.root.hidden||this.root.closest('[inert]'))return;
       if(this.forgeReturn)return;
       if(this.back.dialog){this.host.restore?.(this.back.dialog);const from=this.root.querySelector<HTMLDialogElement>(`#${this.back.dialog}`);if(from&&!from.open)from.showModal();from?.querySelector('.info-content')?.scrollTo(0,this.back.scroll);}
       else if(this.back.lobby)this.root.querySelector('.lobby-content')?.scrollTo(0,this.back.scroll);

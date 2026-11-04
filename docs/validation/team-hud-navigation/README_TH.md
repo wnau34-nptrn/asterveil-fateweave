@@ -14,10 +14,12 @@
 ## การตรวจ
 
 - Typecheck, lint และ production build ผ่าน; focused unit 30 กรณี / 3 files ผ่าน (skill review, character metrics, context)
-- Production browser ทางเข้าล่าสุด 7 กรณีผ่านด้วย timeout45s เดิม ที่390×650/844,320×568,desktop1366×768 และ200% text + safe areaจำลอง รวมคืน filter/scroll/focus และจำแท็บแยกคน; ชุดเบื้องต้น5ซ้ำอยู่ใน7 ไม่บวกเป็นกรณีใหม่
+- Production browser ทางเข้ารอบแรก7กรณีผ่านด้วย timeout45s เดิม ที่390×650/844,320×568,desktop1366×768 และ200% text + safe areaจำลอง รวมคืน filter/scroll/focus และจำแท็บแยกคน; ชุดเบื้องต้น5ซ้ำอยู่ใน7 ไม่บวกเป็นกรณีใหม่
 - Production regression เลเวลค่าย2และอัปดาว15 ผ่านหลังแก้ safe-area mapping (ก่อนเปลี่ยนพื้นแผงทึบ); สกิล13และตัวละครบนแผนที่6ผ่าน รวม43distinctกับทางเข้าใหม่7 ไม่นับรอบซ้ำ
 - Portrait/keyboard อีก5กรณีผ่านด้วย timeout45s เดิมที่1366×768,1920×1080,390×844,320×568,768×1024 รวม focused48distinct: ปรับเฉพาะ assertion หน้าทีมที่เดิมคาดเต็มจอ ให้ตรวจกรอบเกม/ไม่ทับHUD/ปุ่ม44px; คงการตรวจแผนที่ dialog keyboard และเซฟเดิม CI รอบแรกจึงล้ม5กรณีตามสัญญาหน้าเดิม CI ยังพบ world layout11ที่คาดเต็มจอเช่นกัน จึงปรับสัญญากรอบเดียวกัน คง no-page-scroll/หน้าจ้าง/ออกเดินทาง และเพิ่ม hit-test ปุ่ม HUD; local11ผ่านที่320×568ถึง1920×1080 รวม focused59distinct กำลังรัน PR gates ใหม่บน test-only follow-up
 - พบ safe-top8แทน59 จากแผงใหม่ในรอบแรก แก้ให้อ่าน --star-safe-top/bottom ร่วมกับขอบ HUD และตรวจกรณีเดิมผ่าน ไม่ลด assertions; local regression ใช้ CLI timeout120s เพราะรอบ45sชนเวลาเมื่อโหลดเซฟกลับ คง config/CI45sเดิม ข้อมูล fixture สำหรับ filter เพิ่มสมาชิกตามเงื่อนไขเปิดเดิม ไม่แก้กฎเกม
+- ตรวจทานและแก้ close event ที่บันทึก scroll ซ้ำหลัง HUD ทิ้ง review: เก็บตำแหน่งก่อน review ครั้งเดียว เพิ่ม assertion คืน scroll เดิมใน flowทั้ง4ขนาดจอ รันชุด7ซ้ำผ่าน (local CLI120s, CI45sเดิม) ไม่นับเป็นกรณีใหม่ รอบที่เครื่องช้าเกิด timeout ก่อนเข้าเกม/จับภาพ ไม่บวกรอบที่ไม่จบเป็น pass
+- ภาพ production5ภาพเก็บและตรวจแล้ว; การจับภาพซ้ำเปิดด้วย `TEAM_HUD_SHOTS=1` ส่วน assertions ทั้งหมดและ screenshot-on-failure ของ repo ยังทำงานตามเดิม
 - ตรวจยอดเซฟก่อน/หลัง preview/cancel/สลับ HUD, การกลับจาก review โดยไม่จ่ายซ้ำ, การคืน focus, การแยกคำสั่งย้ายทีม และการจำบริบทต่อคน
 
 ยังไม่มี Safari/iPhone/Android เครื่องจริง หรือผู้เล่นจริง การจำลอง Chromium และ safe area ไม่ใช่ผลทดสอบอุปกรณ์จริง งานจบที่ merge เมื่อ PR quality/browser ผ่านตามกฎ pre-release; Pages deploy ต่ออัตโนมัติ ไม่รอผล deploy หรือเพิ่ม release-evidence commit
