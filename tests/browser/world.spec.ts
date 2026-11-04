@@ -563,9 +563,12 @@ test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdr
   expect((await savedProfile(page)).members[offer]).toEqual({ stars: 1, dupes: 1 }); expect((await savedProfile(page)).bank).toMatchObject({ ore: 120, gold: 20 });
   await page.locator('[data-lobby=close]').click();
   await page.locator('#lobby-tab-team').click(); await page.locator(`#lobby-member-${offer}`).click();
-  await expect(page.locator('#lobby-upgrade')).toContainText('อัปเป็น ★2'); await page.locator('#lobby-upgrade').scrollIntoViewIfNeeded(); await reachable(page, '#lobby-upgrade');
+  await expect(page.locator('#lobby-upgrade')).toContainText('อัปดาว · ★1'); await page.locator('#lobby-upgrade').scrollIntoViewIfNeeded(); await reachable(page, '#lobby-upgrade');
   await page.screenshot({ path: info.outputPath('lobby-upgrade.png') });
   await page.locator('#lobby-upgrade').click();
+  await page.locator('#camp-star-review').click(); await page.locator('#camp-star-confirm').click();
+  await expect(page.locator('#camp-star-status')).toContainText('บันทึกผลอัปดาวแล้ว');
+  await page.locator('#camp-character-dialog [data-world=character-close]').click();
   await expect.poll(async () => (await savedProfile(page)).members[offer]).toEqual({ stars: 2, dupes: 0 }); expect((await savedProfile(page)).bank.ore).toBe(100);
   // Bench one member who is not the upgraded one: the expedition brings three.
   const benched = offer === 'healer' ? 'weaver' : 'healer';

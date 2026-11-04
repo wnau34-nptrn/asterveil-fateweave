@@ -13,20 +13,20 @@ import { statLines } from '../core/world/equipment';
 import { markedSkillExample, characterSkillMetric, characterStats, type CharacterState } from './character-metrics';
 import { gearArt, setEmblem } from './equip-art';
 
-export const characterTabs = { overview: 'ภาพรวม', gear: 'อุปกรณ์', skills: 'สกิล', talents: 'ความถนัด' } as const;
+export const characterTabs = { overview: 'ภาพรวม', gear: 'อุปกรณ์', skills: 'สกิล', develop: 'พัฒนา', talents: 'ความถนัด' } as const;
 export type CharacterTab = keyof typeof characterTabs;
 // ART-UI-ICONS-002 line icons for tabs and stats (decorative; the Thai label stays).
-export const characterTabIcons = { overview: 'tab-overview', gear: 'tab-gear', skills: 'tab-skills', talents: 'tab-tree' } as const;
+export const characterTabIcons = { overview: 'tab-overview', gear: 'tab-gear', skills: 'tab-skills', develop: 'starBadge', talents: 'tab-tree' } as const;
 const statIcons: Record<string, Parameters<typeof icon>[0]> = { hp: 'stat-hp', attack: 'stat-attack', speed: 'stat-speed', support: 'stat-support', armour: 'stat-armour', resist: 'stat-resist', leech: 'stat-leech', barrier: 'stat-barrier', regen: 'stat-regen', luck: 'stat-luck', 'party-luck': 'stat-luck' };
 
 // ART-UI-MODERN-001 overview: the hero in a lit ring with level and stars, an EXP bar, role chips, then stat chips
 // (each opens its explanation).
-export function characterOverview(s: CharacterState, map: MapDefinition, h: HeroDefinition, template?: EncounterDefinition): string {
+export function characterOverview(s: CharacterState, map: MapDefinition, h: HeroDefinition, template?: EncounterDefinition, starLink=false): string {
   const m = s.members[h.id]!, camp = campProgress(map, s.campXp), level = camp.level, max = !camp.need, need = max ? 1 : camp.need, exp = max ? 1 : camp.exp;
   return `<div class="overview-hero"><div class="hero-ring">${heroArt(h.id)}<span class="hero-badge">Lv${level} ${starRow(m.stars, map.company.maxStars)}</span></div>
     <div class="exp-row"><span>${max ? 'เลเวลค่ายสูงสุด' : `เลเวลค่าย · EXP ${exp}/${need}`}</span>${m.wound ? `<span class="down">บาดแผล −${m.wound}% เลือดสูงสุด</span>` : ''}</div><div class="ui-meter" role="presentation"><i style="width:${Math.round(exp / need * 100)}%"></i></div>
     <div class="role-chips"><span class="ui-pill">${icon(h.lane === 'front' ? 'stat-armour' : 'stat-luck')}${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</span><span class="ui-pill">${heroText[h.id]!.role}</span></div></div>
-    <p class="hero-help">${heroText[h.id]!.help}</p>${template ? `<div class="character-stat-list">${characterStats(s, map, h, template).map(v => `<details class="character-stat" id="character-stat-${v.id}"><summary><span>${statIcons[v.id] ? icon(statIcons[v.id]!) : ''}${v.name}</span><strong>${v.value}${v.unit}</strong></summary><p>${v.help}</p></details>`).join('')}</div><p class="camp-note">รวมเลเวล ดาว ความถนัด อุปกรณ์ และบาดแผล · แตะค่าเพื่ออ่านความหมาย</p>` : ''}`;
+    ${starLink?`<button id="character-star-shortcut" data-world="character-star-open" class="secondary">${icon('starBadge')}อัปดาว · ★${m.stars} / ${map.company.maxStars}</button>`:''}<p class="hero-help">${heroText[h.id]!.help}</p>${template ? `<div class="character-stat-list">${characterStats(s, map, h, template).map(v => `<details class="character-stat" id="character-stat-${v.id}"><summary><span>${statIcons[v.id] ? icon(statIcons[v.id]!) : ''}${v.name}</span><strong>${v.value}${v.unit}</strong></summary><p>${v.help}</p></details>`).join('')}</div><p class="camp-note">รวมเลเวล ดาว ความถนัด อุปกรณ์ และบาดแผล · แตะค่าเพื่ออ่านความหมาย</p>` : ''}`;
 }
 
 // Big skill trees (A6): every tree skill with its state (in the loadout, unlocked, or the node that unlocks it).

@@ -1,0 +1,74 @@
+/* UXD-06 keeps the current skill/tree surfaces reachable until UXD-07. */
+#app .character-dialog .character-tabs { grid-template-columns: repeat(5,minmax(0,1fr)); }
+#app .character-dialog {
+  --star-safe-top: var(--safe-top,0px);
+  --star-safe-bottom: env(safe-area-inset-bottom,0px);
+  inset: max(8px,var(--star-safe-top)) 0 max(8px,var(--star-safe-bottom));
+  width: calc(var(--game-w) - 16px);
+  height: calc(var(--app-h) - max(8px,var(--star-safe-top)) - max(8px,var(--star-safe-bottom)));
+  max-height: calc(var(--app-h) - max(8px,var(--star-safe-top)) - max(8px,var(--star-safe-bottom)));
+  padding: 8px; gap: 6px; border-color: var(--gold-edge); border-radius: 12px;
+}
+#app .character-dialog .info-header { padding: 0 0 6px 6px; }
+#app .character-dialog .info-header h2 { font-size: 1rem; }
+#app .character-dialog .character-tabs button { min-width: 0; font-size: .75rem; line-height: 1.25; }
+#app .character-dialog .character-content { scroll-padding-block: 8px; }
+.character-dialog .character-member-list { padding-block: 0 4px; }
+.star-page, .character-develop { font: 400 .875rem/1.5 var(--font-body); }
+.star-page { display: grid; gap: 12px; }
+.star-page > * { margin: 0; min-width: 0; }
+.star-step { color: var(--gold-light); font-size: .75rem; }
+.star-page h3 { font: 600 1.125rem/1.4 var(--font-heading); overflow-wrap: anywhere; }
+.star-hero, .star-box { border: 1px solid #668aa4; border-radius: 12px; background: radial-gradient(ellipse at 10% 0%,#21466388,transparent 70%),linear-gradient(145deg,#172d45,#0b1b2d); box-shadow: inset 0 1px #e8f5ff22; }
+.star-hero { display: flex; align-items: center; gap: 12px; padding: 10px 12px; }
+.star-hero .portrait { width: 64px; height: 64px; flex: none; }
+.star-hero > div { display: grid; min-width: 0; }
+.star-hero b { font: 600 1.125rem/1.5 var(--font-heading); }
+.star-hero span { color: var(--text-muted); }
+.star-transition { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; padding: 4px; color: var(--gold-light); }
+.star-transition .star-row .icon { width: 17px; height: 17px; }
+.star-transition b { width: 100%; text-align: center; }
+.star-box { padding: 10px; }
+.star-box h4 { margin: 0 0 8px; font-size: 1rem; }
+.star-box table { width: 100%; border-collapse: collapse; font-size: .8125rem; font-variant-numeric: tabular-nums; }
+.star-box :is(th,td) { border-bottom: 1px solid #6586a044; padding: 8px 3px; text-align: right; overflow-wrap: anywhere; }
+.star-box th { font-weight: 500; }
+.star-box th:first-child { text-align: left; }
+.star-box td:last-child { color: var(--hp-mint); font-weight: 600; }
+.star-ledger th:first-child { width: 46%; }
+.star-ledger th .icon { width: 22px; height: 22px; vertical-align: middle; margin-right: 5px; }
+.star-ledger .portrait { width: 24px; height: 24px; vertical-align: middle; margin-right: 5px; }
+.star-note { color: var(--text-muted); font-size: .75rem; margin: 8px 0 0; }
+.star-effect { color: var(--veil-cyan); margin: 8px 0; }
+.star-warning { padding: 10px; border: 1px solid var(--gold-edge); border-radius: 10px; background: #433220; color: #ffe5b4; overflow-wrap: anywhere; }
+.star-warning p { margin: 3px 0; }
+.star-dock { display: grid; flex: 0 0 auto; gap: 6px; padding: 8px 4px 0; border-top: 1px solid #6586a0; }
+.star-dock[hidden] { display: none; }
+.star-dock button, .character-develop button, #app [id$=character-star-shortcut] { min-height: 44px; font: 500 .875rem/1.4 var(--font-heading); white-space: normal; overflow-wrap: anywhere; }
+.star-dock button { width: 100%; padding: 10px; border-radius: 10px; }
+.star-dock button.primary { background: linear-gradient(110deg,#ffe4a4,#c69b52); color: var(--text-on-gold); border: 1px solid #ffe4a4; }
+.star-dock button:disabled { background: #26374b; color: #becbd6; border-color: #7f94aa; opacity: 1; }
+.star-page :focus-visible, .star-dock :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.character-develop { display: grid; gap: 12px; }
+.character-develop > * { margin: 0; }
+.develop-links { display: grid; gap: 8px; }
+.member-management { border-top: 1px solid var(--hud-edge); margin-top: 12px; padding-top: 6px; }
+.member-management summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; }
+@container game (max-width:360px) {
+  .star-transition .star-row .icon { width: 14px; height: 14px; }
+  .star-ledger th:first-child { width: 40%; }
+  .star-ledger th .portrait { display: none; }
+}
+/* Review dedicates its space to the chosen member and ledger. Back restores the picker/tabs. */
+#app .character-dialog[data-star-review] :is(.character-member-list,.character-tabs) { display: none; }
+.character-dialog[data-star-review] .star-page { gap: 8px; }
+.character-dialog[data-star-review] .star-hero { padding: 6px 10px; }
+.character-dialog[data-star-review] .star-hero .portrait { width: 44px; height: 44px; }
+.character-dialog[data-star-review] .star-hero > div { grid-template-columns: 1fr 1fr; column-gap: 8px; align-items: center; }
+.character-dialog[data-star-review] .star-hero > div span:last-child { display: none; }
+.character-dialog[data-star-review] .star-transition { padding: 0; }
+.character-dialog[data-star-review] .star-transition .star-row, .character-dialog[data-star-review] .star-transition > span:not(.star-row) { display: none; }
+.character-dialog[data-star-review] .star-note { margin-block: 4px 0; }
+.star-cost-summary { margin: 0; color: var(--gold-light); font-size: .8125rem; line-height: 1.4; text-align: center; overflow-wrap: anywhere; }
+.star-sources summary { display: flex; align-items: center; min-height: 44px; cursor: pointer; }
+.star-sources p { color: var(--text-muted); margin: 8px 0; }
