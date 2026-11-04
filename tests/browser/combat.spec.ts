@@ -56,7 +56,7 @@ async function savedState(page:Page,data=veilSiege){const s=await saved(page);re
 
 test('asset readiness gates Start and inputs; first SPD hero commits once',async({page})=>{
  await page.clock.install({time:new Date('2026-10-14T00:00:00Z')});let release!:()=>void;let requested=false;const gate=new Promise<void>(r=>{release=r;});
- await page.route('**/assets/art/units.webp',async route=>{requested=true;await gate;await route.continue();});
+ await page.route('**/assets/art/units.webp*',async route=>{requested=true;await gate;await route.continue();});
  const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));
  try{
   await seedRaw(page,expedition(veilSiege,[]));await page.goto('./',{waitUntil:'domcontentloaded'});await expect.poll(()=>requested).toBe(true);
