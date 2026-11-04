@@ -1,0 +1,23 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "audit-garran": [
+   {
+    "frame": 0,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 1659,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 466,
+    "scale": 0.984,
+    "inliers": 15,
+    "status": "ok"
+   }
+  ]
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "audit-corin": [
+   {
+    "frame": 0,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 1939,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 466,
+    "scale": 1.006,
+    "inliers": 4,
+    "status": "not-measured"
+   }
+  ]
+ }
+}

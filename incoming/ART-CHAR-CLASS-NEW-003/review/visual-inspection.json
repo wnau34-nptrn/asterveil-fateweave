@@ -1,0 +1,23 @@
+{
+  "performed": true,
+  "reviewer": "Codex, direct visual inspection with view_image",
+  "date_local": "2026-11-04 (Asia/Bangkok)",
+  "owner_visual_approval": "pending",
+  "reviewed_sha256": {
+    "unit/kael.png": "5d9f344d4d44cad32c169e74780c2ff10bed401fd9f9dd43ea27f4c2171dde1c",
+    "portrait/kael.png": "4e91b54f54f94a483fbd9b607d1dacde2d1b5b8038fdead1f2425d1a6ac3b99c",
+    "review/lineup.png": "76c6eaf15e591a4bafa61e8d77fc8e70327cd2662716a6c3bb67e8b62581787d",
+    "review/kael-before-after.png": "a89283212f7eb8670496c7720e36ebc936478d1fb796894ccee0c569b82baa73",
+    "review/anatomy.png": "de0a7f113dc5c56674caebd2154235375039db6d7d3efd23f0593c7950f24942",
+    "review/portraits-40.png": "54ebb30d1c833aa27d55dac9bf3311299473af1d9d33bf02b2642272717630d2"
+  },
+  "observations": [
+    "Inspected final unit at full cell size and 115px beside all 12 current allies plus unchanged Wynne and Astrid, on forest background and as black silhouettes.",
+    "Actual scalp crown below the topknot is cyan y62, chin gold y209. The face and eyes are visibly larger than NEW-002; wrapped open hands remain readable.",
+    "Broad stance retained:419px silhouette width versus410px NEW-002; gold sash/hips higher, knees still bent and soles level. Kael remains widest of the three new units; equipment/capes can extend other allies silhouettes.",
+    "Final portrait matches the new rounder chibi face, dark hair/topknot, amber eyes, calm mouth and umber/gold costume.",
+    "Garran chin re-inspected at y235, not y198 used in NEW-002 lineup (which crossed his face). Hair guide y66 retained.",
+    "Cross-character SIFT is supplementary: Garran scale0.984/15inliers is ok; Corin scale1.006/4inliers is not-measured. No numerical anatomy pass inferred for Corin.",
+    "No runtime integration or game playtest performed; all previews are offline composites. Owner selection and approval still required."
+  ]
+}
