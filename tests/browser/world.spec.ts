@@ -1153,9 +1153,9 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   await page.locator('#camp-character-talent-b1').click(); await learn.click({ force: true }); await expect(page.locator('#camp-character-talent-b1')).toContainText('0/2'); await expect(learn).toHaveAttribute('aria-disabled', 'true');
   await expect(page.locator('#camp-character-talent-b1')).toHaveAttribute('aria-label', /แต้มไม่พอ/);
   // The new rally is in the battle loadout; take Shield Bash out.
-  await expect(page.locator('#camp-character-loadout-rally')).toHaveAttribute('aria-pressed', 'true'); await page.locator('#camp-character-loadout-bash').click();
+  await expect(page.locator('#camp-character-loadout-rally')).toHaveAttribute('aria-pressed', 'true'); await page.locator('#camp-skill-selection').selectOption('bash'); await page.locator('#camp-character-loadout-bash').click();
   await expect(page.locator('#camp-character-loadout-bash')).toHaveAttribute('aria-pressed', 'false');
-  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn, #camp-character-dialog .loadout-skill, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn, #camp-character-dialog .skills-slots button, #camp-character-dialog .skills-selection-row>button, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('lobby-talents.png') });
   // Another member's tree from the picker.
   // P01: Lyra shares the camp level, so she has points of her own to spend.
@@ -1170,7 +1170,7 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   // Back to the team sheet: the card shows the new max HP.
   await page.locator('#camp-character-dialog [data-world=character-close]').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
   await expect(page.locator('#lobby-member-guardian')).toContainText(`HP ${Math.round(76 * (100 + 9 + 10) / 100)}`);
-  await page.locator('#lobby-tree-open').click(); await page.locator('#camp-character-reset').click();
+  await page.locator('#lobby-tree-open').click(); const beforeReset=await page.evaluate(()=>localStorage.getItem('asterveil.fateweave.expedition.v1')); await page.locator('#camp-character-reset').click(); expect(await page.evaluate(()=>localStorage.getItem('asterveil.fateweave.expedition.v1'))).toBe(beforeReset); await page.locator('#camp-character-reset').click();
   await expect(page.locator('.talent-points')).toContainText('แต้มเหลือ 3/3');
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!).profile.members.guardian.talents)).toBeUndefined();
   // Escape closes the tree sheet back to the camp.

@@ -23,9 +23,10 @@
 | Typecheck, lint, Pages production build | ผ่านหลังแก้ implementation ล่าสุด; มี Vite chunk-size warning เดิม ไม่เปลี่ยน bundling ในงานนี้ |
 | Focused unit | 98 กรณี / 6 files ผ่าน: skill review 18 รวม Lv5/core, capacity upsize/cross-line, stale replace/mutate/refresh, reentry, preview/cancel/no RNG, receipt/save reload/failure; รวม tomes/metrics/talents/star/context regression |
 | Browser สกิลและ C11 หลังแก้ markup | 13 กรณีผ่าน ครอบคลุม 390×650/844, 320×568, desktop1366×768; ยอดเงินและตำราจริง, cancel/preview ไม่เปลี่ยนเซฟ, double confirm, held Enter, rotation/inert, deep links, min/max loadout, legacy save/reset, storage failure และ cap |
-| Browser focus ขอบเขต | ผ่าน4กรณี (ซ้ำกับชุด13จำนวน3กรณี รวม coverageล่าสุด14 distinct): แลกจนต้นทางหมด, legacy reset, Lv5/core, 200% text+insets+เลื่อนไปอ่านแถวสุดท้าย |
+| Browser focus ขอบเขต | ผ่าน4กรณี (ซ้ำกับชุด13จำนวน3กรณี รวม coverageสกิล/C11จำนวน14 distinct): แลกจนต้นทางหมด, legacy reset, Lv5/core, 200% text+insets+เลื่อนไปอ่านแถวสุดท้าย |
 | Regression ระหว่างพัฒนา | ชุดอัปดาว+สกิลก่อนรายละเอียดสุดท้าย 26 ผ่าน; หน้าตัวละครบนแผนที่/อุปกรณ์/สมาชิก C12/painted icons และ scrollbar ตรวจแยก อีกชุด17/18ผ่านโดย C11 ล้มเฉพาะ selector จับภาพกว้างเกินไป แก้ให้ชี้ detail card แล้วผ่านในชุด13 ไม่ลด assertion ค่า34%/เซฟ |
-| Full local unit | รอบแรก1511/1516ผ่าน อีก4กรณีขาดรายงานใน sparse checkout และ boss-balance ชน180s ระหว่างงานอื่น; ดึงรายงานตรงHEADแล้ว focused37/5ผ่าน จะบันทึกผลรันเดี่ยวสุดท้ายแยกเมื่อจบ ไม่อ้างรอบแรกผ่านครบ |
+| Lobby tree regression จาก CI | ผ่าน1กรณีหลังเลือกสกิลก่อนถอดและยืนยัน reset สองขั้น คงการตรวจแต้มทีละLv/gates/HP/loadout/save/touch targets และเพิ่ม assertion ว่าคลิก reset ครั้งแรกไม่เปลี่ยนเซฟ รวม focusedล่าสุด15 distinct |
+| Full local unit | ผ่าน1518กรณี / 107files ในรอบรันเดี่ยว `--maxWorkers=1` (272.48s, timeoutเดิม) หลังดึงรายงานตรงHEADให้ครบ sparse checkout; รอบแรก1511/1516มี4รายงานขาดและboss-balanceชน180sระหว่างงานอื่น ไม่แก้กฎ/assertion/timeoutเพื่อให้ผ่าน |
 | Final PR CI / post-merge / Pages | รอผลของ final head ก่อน merge/เผยแพร่ จะบันทึก run/commit ที่ตรวจจริงหลังสำเร็จ |
 
 ไม่รวมผลรอบที่ขาดรายงาน การรันที่ยุติไปแล้ว skips หรือ retries เป็น pass เพิ่ม ชุด browser หลายรอบมีกรณีซ้ำ จึงไม่บวกยอดแต่ละแถวเป็นจำนวนกรณีใหม่
