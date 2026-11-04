@@ -15,7 +15,7 @@ import { isBigTree } from '../core/world/talents';
 import { salvageValue } from '../core/world/equipment';
 import { PARTY_SLOTS, POTION_IDS, SHOP_ITEMS, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type ProfileEvent, type TalentNode } from '../core/world/types';
 import { campProgress, levelOf, recommendedLane, starred, type EncounterLookup } from '../core/world/world';
-import { emptyTomes, levelableSkills, skillLevelReason, tradeReason } from '../core/world/tomes';
+import { emptyTomes, raiseSkill, tradeTomes, levelableSkills, skillLevelReason, tradeReason } from '../core/world/tomes';
 import type { TomeLine, TomeSize } from '../core/world/types';
 import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
@@ -95,6 +95,7 @@ export class LobbyUI {
       preview:(id,key)=>{const p=this.view?.profile,entry=p&&campEquipment(p).find(e=>e.key===key);if(!p||!entry)return;const out=equip(p,id,entry.item.uid);return out.event.type==='equipped'?this.characterModel(out.profile):undefined;},
       previewPlan:plan=>{if(!this.view)return;const out=applyCampEquipment(this.view.profile,plan);return out.event.type==='equipped'?this.characterModel(out.profile):undefined;},
       wear:(id,key)=>{const entry=this.view&&campEquipment(this.view.profile).find(e=>e.key===key);if(entry)this.host.equip(id,entry.item.uid);},
+      skillPreview:(p,c)=>c.kind==='level'?raiseSkill(p,this.maps,map,this.lookup,c.id,c.action):tradeTomes(p,this.maps,map,c.line,c.size,c.to),
       takeOff:(id,slot)=>this.host.unequip(id,slot),talent:(id,node)=>this.host.talent(id,node),loadout:(id,a)=>this.host.loadout(id,a),reset:id=>this.host.resetTalents(id),skillLevel:(id,a)=>this.host.skillLevel(id,a),tomeTrade:(l,z,t)=>this.host.tomeTrade(l,z,t),applyPlan:plan=>this.host.autoEquip(plan),forge:(id,uid)=>this.openForge(uid,id),
     },'camp-',this.inventoryFilters);
     // Typing in the bench search hides cards in place (no redraw), so the keyboard and the caret stay put.
@@ -270,12 +271,13 @@ export class LobbyUI {
     this.draw(); this.characters.refresh();
     if (cheer) this.act(cheer, 'cheer', 1600);
   }
+  skillCommitted(p:Profile,event:ProfileEvent,saved:boolean):void {this.characters.skillCommitted(p,event,saved);}
   starUpgraded(p:Profile,event:ProfileEvent,saved:boolean):void {this.characters.upgraded(p,event,saved);}
   private characterModel(p=this.view?.profile):CharacterModel|undefined {
     if(!p)return;const hp=Object.fromEntries(p.company.map(id=>{const m=p.members[id]!,base=this.heroes.find(h=>h.id===id)!;return [id,starred(base,m.stars,this.map,levelOf(this.map,p),m.talents,m.gear,m).maxHp];}));
     // Skill tomes (save v37): levels are raised here at the camp, never on the map.
     const tomes={open:this.open('tomes'),bag:p.tomes??emptyTomes(),gold:p.bank.gold,core:p.riftCore??0,reason:(id:string,a:ActionId)=>skillLevelReason(p,this.maps,this.map,this.lookup,id,a),trade:(l:TomeLine,z:TomeSize,t?:TomeLine)=>tradeReason(p,this.maps,this.map,l,z,t),levelable:(id:string)=>levelableSkills(this.lookup,this.map,id,p.members[id])};
-    return {starSources:{hire:this.open('hire'),contracts:shopLeft(p,this.map,'contract'),seals:shopLeft(p,this.map,'seal')},starProfile:this.open('team')?p:undefined,source:p,state:{members:p.members,roster:p.party,hp,campXp:p.campXp},ids:p.company,entries:campEquipment(p),available:true,camp:true,capacity:storageCap(p,this.map),tomes};
+    return {skillProfile:this.open('tomes')?p:undefined,starSources:{hire:this.open('hire'),contracts:shopLeft(p,this.map,'contract'),seals:shopLeft(p,this.map,'seal')},starProfile:this.open('team')?p:undefined,source:p,state:{members:p.members,roster:p.party,hp,campXp:p.campXp},ids:p.company,entries:campEquipment(p),available:true,camp:true,capacity:storageCap(p,this.map),tomes};
   }
   private escape(text: string): string { return text.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]!); }
   private focus(sel: string): void { this.root.querySelector<HTMLElement>(sel)?.focus({ preventScroll: true }); }

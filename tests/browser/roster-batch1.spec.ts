@@ -53,7 +53,7 @@ test('C12: personal branch inspection spends only on the explicit learn action a
   await page.locator('#lobby-tab-team').click();
   await page.locator('#lobby-member-metta').click();
   await page.locator('#lobby-character-open').click();
-  await page.locator('#camp-character-tab-talents').click();
+  await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-skills-tree').click();
   await expect(page.locator('.personal-tree')).toContainText('เส้นทางประจำตัว · คอริน');
   const before = await saved(page);
   await page.locator('.personal-tree [data-node=p1]').click();
@@ -64,7 +64,7 @@ test('C12: personal branch inspection spends only on the explicit learn action a
   await page.locator('.personal-tree').scrollIntoViewIfNeeded();
   await page.screenshot({ path: info.outputPath('c12-character-390.png') });
   await page.locator('#camp-character-tab-skills').click();
-  await expect(page.locator('[data-skill=communion]')).toContainText('เลือด');
+  await page.locator('#camp-skills-details').click();await page.locator('#camp-skill-selection').selectOption('communion');await expect(page.locator('.character-skills [data-skill=communion]')).toContainText('เลือด');
   expect(errors).toEqual([]);
 });
 

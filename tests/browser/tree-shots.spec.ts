@@ -27,7 +27,7 @@ test('tree and skill-level shots 390x844', async ({ browser }) => {
   const shot = async (name: string) => { await page.waitForTimeout(150); await page.screenshot({ path: `${dir}/${name}.png` }); };
   const to = (sel: string) => page.locator(sel).first().evaluate(el => { const c = document.querySelector('#camp-character-content')!; c.scrollTop += el.getBoundingClientRect().top - c.getBoundingClientRect().top - 8; });
   await page.locator('#camp-character-talent-c1s').click(); await shot('tree-duelist');
-  await page.locator('#camp-character-tab-skills').click(); await to('[data-skill=execute]'); await shot('skills-duelist');
-  await page.locator('#camp-skill-up-lunge').click(); await to('.tome-bag'); await page.locator('.tome-trade summary').click(); await shot('skills-tomes');
+  await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-skills-details').click(); await page.locator('#camp-skill-selection').selectOption('execute'); await to('[data-skill=execute]'); await shot('skills-duelist');
+  await page.locator('#camp-skills-tomes').click(); await to('.tome-bag'); await page.locator('.tome-trade summary').click(); await shot('skills-tomes');
   await context.close();
 });

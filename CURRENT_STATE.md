@@ -9,6 +9,10 @@ Replace stale lines when a task ends; keep this file under ~5 KB. History goes t
 - Animation/VFX waves W1–W8 are done and published (2026-10-31). P01 and P02 are done (2026-10-31).
 - UX rebuild UXD-01…06 (Codex, from ART-UI-UX-002) published: enhancement, forge launcher + item Lv, rarity/affix reroll, affix transfer, craft/recycle/smelt, character tab + star upgrade (UXD-06, PR #144, merge `b9031154`, 2026-11-04). Implementation notes: `docs/handoffs/UXD-0N-IMPLEMENTATION-TH.md`. The UX plan itself is on branch `art/art-ui-ux-002` (`incoming/ART-UI-UX-002/IMPLEMENTATION_PLAN_TH.md`, PR #133, not merged).
 
+## Active task
+
+- Owner authorized UXD-07 with “ดำเนินการได้” on 2026-11-04: unified skill equip/level/tree plus tome review. Branch `codex/uxd-07-unified-skills`, based on `ab06dfd`. Implementation/QA in progress; no merge/publication yet. Evidence: `docs/validation/uxd-07/README_TH.md`.
+
 ## Next (the owner picks; nothing is auto-started)
 
 - UXD-07 — equip, level and skill tree in one place (plan row on `art/art-ui-ux-002`); UXD-08 — combined check and release.

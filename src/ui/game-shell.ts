@@ -281,6 +281,7 @@ export class GameShell {
     if(e.type==='forged'&&e.action==='craft')this.lobby.forgeServiced(this.game.profile,'craft',e.uid,this.saved);
     if(e.type==='salvaged')this.lobby.forgeServiced(this.game.profile,'recycle',e.count,this.saved);
     if(e.type==='smelted')this.lobby.forgeServiced(this.game.profile,'smelt',e.dust,this.saved);
+    if(e.type==='skillLevel'||e.type==='tomeTrade')this.lobby.skillCommitted(this.game.profile,e,this.saved&&!!this.storage);
     if(e.type==='upgraded')this.lobby.starUpgraded(this.game.profile,e,this.saved&&!!this.storage);
     this.showLobby();
     if (e.type === 'forged' && (e.action === 'enhance' || e.action === 'level')) { const item = findItem(result.profile, e.uid)?.item; if (item) forgeStrike(this.root, item, e.action, this.reducedMotion.matches); }

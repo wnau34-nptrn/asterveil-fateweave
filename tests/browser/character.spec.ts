@@ -34,7 +34,7 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await page.locator('#world-hero-guardian').click(); await expect(page.locator('#character-dialog')).toBeVisible();
     await expect(page.locator('#character-tab-overview')).toHaveAttribute('aria-selected','true');
     await page.screenshot({path:info.outputPath('character-overview.png')});
-    await page.keyboard.press('End'); await expect(page.locator('#character-tab-talents')).toBeFocused();
+    await page.keyboard.press('End'); await expect(page.locator('#character-tab-develop')).toBeFocused(); await page.keyboard.press('ArrowLeft'); await expect(page.locator('#character-tab-skills')).toBeFocused(); await page.locator('#skills-tree').click();
     // The Knight's big tree (A6): tier 2 needs a rank in the branch's tier 1. A node tap only selects; its card spends.
     await expect(page.locator('#character-talent-a2i')).toHaveAttribute('data-state','locked');
     await page.locator('#character-talent-a2i').click(); await expect(page.locator('#character-talent-learn')).toHaveAttribute('aria-disabled','true');
@@ -43,9 +43,9 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await expect(page.locator('#character-talent-c1s')).toHaveAttribute('data-state','full'); await expect(page.locator('#character-talent-learn')).toHaveAttribute('aria-disabled','true');
     await page.locator('#character-talent-b1').click(); await page.locator('#character-talent-learn').focus(); await page.keyboard.down('Enter'); await page.keyboard.down('Enter'); await page.keyboard.up('Enter');
     expect(parseGame(await saved(page),map,encounterById).run!.members.guardian!.talents).toEqual({c1s:1,b1:1});
-    await expect(page.locator('#character-loadout-rally')).toHaveAttribute('aria-pressed','true');
+    await page.locator('#skills-details').click(); await page.locator('#skill-selection').selectOption('rally'); await expect(page.locator('#character-loadout-rally')).toHaveAttribute('aria-pressed','true'); await page.locator('#skill-selection').selectOption('bash');
     await page.locator('#character-loadout-bash').click();
-    expect(parseGame(await saved(page),map,encounterById).run!.members.guardian!.loadout).toEqual(['guard','rally']);
+    expect(parseGame(await saved(page),map,encounterById).run!.members.guardian!.loadout).toEqual(['guard','rally']); await page.locator('#skills-tree').click();
     await page.locator('#move-left').dispatchEvent('click'); await page.keyboard.press('w'); await page.keyboard.press('b'); await page.keyboard.press('i');
     const after = parseGame(await saved(page),map,encounterById).run!;
     expect(after.hp.guardian).toBe(11); expect(after.steps).toBe(before.steps); expect(after.rolls).toBe(before.rolls); expect(after.position).toEqual(before.position);
@@ -55,7 +55,7 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     // P01: Seren shares the camp level (Lv6), so she has points to spend like everyone else.
     await page.locator('#character-member-healer').click(); await page.locator('#character-talent-a1').click(); await expect(page.locator('#character-talent-learn')).toHaveAttribute('aria-disabled','false');
     await page.locator('#character-member-guardian').click(); await page.screenshot({path:info.outputPath('character-talents.png')});
-    await page.locator('#character-tab-skills').click(); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ท้าดวล'); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ยืนหยัด');
+    await page.locator('#character-tab-skills').click(); await page.locator('#skills-details').click(); await page.locator('#skill-selection').selectOption('challenge'); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ท้าดวล'); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ยืนหยัด');
     await page.screenshot({path:info.outputPath('character-skills.png')});
     await page.locator('#character-tab-gear').click(); await page.locator('#pick-found-1').click(); await expect(page.locator('#wear-found-1')).toBeDisabled();
     await page.locator('#pick-found-0').click(); await page.locator('#wear-found-0').click();
@@ -66,10 +66,10 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     expect(current.members.guardian!.gear!.body!.uid).toBe(1); expect(current.spare).toEqual([]);
     await page.screenshot({path:info.outputPath('character-gear.png')});
     expect(await page.locator('#character-dialog').evaluate(el => { const r=el.getBoundingClientRect(),a=document.querySelector('#app')!.getBoundingClientRect(); return r.left>=a.left-1&&r.right<=a.right+1&&r.top>=a.top-1&&r.bottom<=a.bottom+1&&el.scrollWidth<=el.clientWidth; })).toBe(true);
-    for(const selector of ['#character-tab-overview','#character-tab-gear','#character-tab-skills','#character-tab-talents','#character-member-mira']) expect(await page.locator(selector).evaluate(el=>{const r=el.getBoundingClientRect();return r.width>=44&&r.height>=44;})).toBe(true);
+    for(const selector of ['#character-tab-overview','#character-tab-gear','#character-tab-skills','#character-tab-develop','#character-member-mira']) expect(await page.locator(selector).evaluate(el=>{const r=el.getBoundingClientRect();return r.width>=44&&r.height>=44;})).toBe(true);
     await page.keyboard.press('Escape'); await expect(page.locator('#world-hero-guardian')).toBeFocused();
     await page.screenshot({path:info.outputPath('character-map-entry.png')});
-    await page.reload(); await page.locator('#continue').click(); await page.locator('#world-hero-guardian').click(); await page.locator('#character-tab-talents').click();
+    await page.reload(); await page.locator('#continue').click(); await page.locator('#world-hero-guardian').click(); await page.locator('#character-tab-skills').click(); await page.locator('#skills-tree').click();
     await expect(page.locator('#character-talent-b1 i')).toHaveText('1/2');
     await page.keyboard.press('Escape'); await page.locator('#world-pack').click(); await page.locator('#bag-tab-gear').click(); await page.locator('#bag-member-guardian').click();
     await expect(page.locator('#pack-dialog')).not.toBeVisible(); await page.keyboard.press('Escape');
@@ -81,14 +81,14 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
 
 test('touch: portrait resize and rotation preserve character tabs and block passive spending behind the rotation gate', async ({browser}) => {
   const context = await browser.newContext({viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'}), page = await context.newPage();
-  await open(page); await page.locator('#world-hero-guardian').tap(); await page.locator('#character-tab-talents').tap();
+  await open(page); await page.locator('#world-hero-guardian').tap(); await page.locator('#character-tab-skills').tap(); await page.locator('#skills-tree').tap();
   const before = await saved(page);
-  await page.setViewportSize({width:320,height:568}); await expect(page.locator('#character-tab-talents')).toHaveAttribute('aria-selected','true');
+  await page.setViewportSize({width:320,height:568}); await expect(page.locator('#character-tab-skills')).toHaveAttribute('aria-selected','true');
   await page.setViewportSize({width:844,height:390}); await expect(page.locator('#orientation-gate')).toBeVisible();
   await page.locator('#character-talent-c1s').dispatchEvent('click'); await page.locator('#character-talent-learn').dispatchEvent('click'); await page.locator('#character-dialog [data-world=character-close]').dispatchEvent('click'); await page.keyboard.press('Escape');
   expect(await saved(page)).toBe(before);
   await page.setViewportSize({width:390,height:844}); await expect(page.locator('#character-dialog')).toBeVisible();
-  await expect(page.locator('#character-tab-talents')).toHaveAttribute('aria-selected','true');
+  await expect(page.locator('#character-tab-skills')).toHaveAttribute('aria-selected','true');
   await expect(page.locator('#character-talent-c1s i')).toHaveText('0/1'); await context.close();
 });
 
@@ -97,9 +97,10 @@ for (const touch of [false, true]) test(`native game scrollbars ${touch ? 'touch
   const context = await browser.newContext({ viewport: touch ? { width: 390, height: 844 } : { width: 1440, height: 768 }, hasTouch: touch, isMobile: touch, reducedMotion: 'reduce' });
   const page = await context.newPage(), errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-  await open(page); await page.locator('#world-hero-guardian').click(); await page.locator('#character-tab-talents').click();
+  await open(page); await page.locator('#world-hero-guardian').click(); await page.locator('#character-tab-skills').click(); await page.locator('#skills-tree').click();
   await expect(page).toHaveTitle('Asterveil · Fateweave'); await expect(page.locator('vite-error-overlay')).toHaveCount(0);
   const pane = page.locator('#character-content'), before = await saved(page);
+  if(!touch)await page.locator('#character-title').hover(); // Measure the normal thumb, outside the pane hover state.
   expect(await page.evaluate(() => matchMedia('(hover: hover) and (pointer: fine)').matches)).toBe(!touch);
   const webkit = await page.evaluate(() => CSS.supports('selector(::-webkit-scrollbar)'));
   const width = touch ? 'none' : webkit ? 'auto' : 'thin';
@@ -141,7 +142,7 @@ for (const touch of [false, true]) test(`native game scrollbars ${touch ? 'touch
     expect(await pane.evaluate(el => getComputedStyle(el).getPropertyValue('scrollbar-width'))).toBe('auto');
     await page.emulateMedia({ forcedColors: 'none' });
   }
-  for (const selector of ['#character-tab-overview', '#character-tab-talents', '#character-dialog [data-world=character-close]']) expect(await page.locator(selector).evaluate(el => { const r = el.getBoundingClientRect(); return r.width >= 44 && r.height >= 44; })).toBe(true);
+  for (const selector of ['#character-tab-overview', '#skills-tree', '#character-dialog [data-world=character-close]']) expect(await page.locator(selector).evaluate(el => { const r = el.getBoundingClientRect(); return r.width >= 44 && r.height >= 44; })).toBe(true);
   expect(await saved(page)).toBe(before);
   await page.keyboard.press('Escape'); await expect(page.locator('#character-dialog')).not.toBeVisible(); expect(await saved(page)).toBe(before);
   expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth)).toBe(false);
