@@ -5,8 +5,8 @@
 ## ขอบเขต
 
 - เหลือ 4 แท็บหลัก ภาพรวม/อุปกรณ์/สกิล/พัฒนา ทางเข้าผังเดิมจาก NPC ทีม กระเป๋า และพัฒนาชี้เข้าส่วนผังใต้สกิล รองรับ alias talents ภายในสำหรับทางเข้าเดิม
-- ชุดติดตั้งอ่านจำนวนช่องและ actions จริง ตัวเลือกสกิลรวมท่าเริ่มต้น โหนดปลด และ grants เดิม เลือกท่าเพื่อดูรายละเอียดและผล Lv ถัดไป สลับรายละเอียด/ผัง/ตำราโดยไม่เปลี่ยนสกิลเอง
-- ไปโหนดของสกิลล็อกตรงตัว เลือก node ที่ปลด active แล้วกลับรายละเอียดท่านั้นได้ passive/choice nodes คง selected active เดิม ไม่ลงแต้มจากการดู
+- ชุดติดตั้งอ่านจำนวนช่องและ actions จริง ตัวเลือกสกิลรวมท่าเริ่มต้น โหนดปลด และ grants เดิม ปุ่มติดตั้ง/ถอดอยู่ข้างตัวเลือกท่า เลือกท่าเพื่อดูรายละเอียดและเทียบคำอธิบายผลปัจจุบัน/Lv ถัดไปจาก skillDescription/withParty เดิม สลับรายละเอียด/ผัง/ตำราโดยไม่เปลี่ยนสกิลเอง
+- ไปโหนดของสกิลล็อกตรงตัว และโหนด choice ที่อ้าง ActionId เดียวกันของท่าพื้นฐาน เลือก node ที่ปลด active แล้วกลับรายละเอียดท่านั้นได้ passive/choice nodes คง selected active เดิม ไม่ลงแต้มจากการดู
 - ลงแต้มและจัดชุดใช้ host commands เดิม รวม default loadout ที่เลือกจากสกิลปลดแล้วเมื่อยังไม่มีชุดเฉพาะ คงอย่างน้อย 1/เพดานเดิม รีเซ็ตฟรีในค่ายเตือนคืนแต้มและชุดเริ่มต้นก่อนยืนยัน
 - เพิ่ม Lv/แลกตำราผ่าน review แสดง มี/ใช้/ได้รับเมื่อเกี่ยวข้อง/หลังทำ จาก read-only projection ด้วย raiseSkill/tradeTomes เดิม ไม่ใช้ RNG ไม่ dispatch จาก preview/cancel/back
 - Review เก็บ Profile identity/fingerprint และ command เปรียบเทียบ projection อีกครั้งก่อนส่ง consume ก่อน host ป้องกัน reentry, held Enter และ double click รับ receipt จาก matching event กับ canonical Profile หลัง persist ตรวจผลทั้ง profile ยกเว้น last ที่ GameShell canonicalize และแยก storage failure ไม่อ้างว่าบันทึกถาวร
@@ -14,3 +14,7 @@
 - ไม่มี core/content/save schema/ราคา/สมดุล/กฎต่อสู้เปลี่ยน ไม่เริ่ม UXD-08/P04/P09 งานอื่นใน UX/UI audit ยังเป็นข้อเสนอ
 
 หลักฐานและผลตรวจล่าสุด: [validation](../validation/uxd-07/README_TH.md)
+
+## ขอบเขตเพดานตำรา
+
+พบ tradeTomes เพิ่มปลายทางเป็น100000ได้ แต่ tomesOf ในเซฟv45รับสูงสุด99999 UIตรวจ read-only projection ก่อน review/confirm และแสดงปลายทางเต็มโดยไม่ dispatch ทั้ง upsize/cross-line ฝากแก้คำสั่งกลางใน CLAUDE-TO-CODEX-DEV-TH.md ไม่เปลี่ยนcore/save/ราคาในงานนี้

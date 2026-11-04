@@ -1,4 +1,4 @@
-/* UXD-06 keeps the current skill/tree surfaces reachable until UXD-07. */
+/* Shared portrait frame for four character tabs and development reviews. */
 #app .character-dialog .character-tabs { grid-template-columns: repeat(4,minmax(0,1fr)); }
 #app .character-dialog {
   --star-safe-top: var(--safe-top,0px);

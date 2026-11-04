@@ -40,7 +40,7 @@ export const autoGoalText: Record<AutoGoal,string> = {recommended:'แนะน�
 export class CharacterPanel {
   private readonly dialog: HTMLDialogElement;
   private readonly stars:StarUpgrade; private starOpen=false; private starReturn:{focus:string;scroll:number;tab:CharacterTab}={focus:'',scroll:0,tab:'develop'};
-  private readonly skillReview:SkillReview; private selectedSkill:ActionId='guard'; private skillSection:SkillSection='details'; private skillReturn={focus:'',scroll:0}; private tomeExpanded=false; private skillScroll:Partial<Record<SkillSection,number>>={};
+  private readonly skillReview:SkillReview; private selectedSkill:ActionId='guard'; private skillSection:SkillSection='details'; private skillReturn={focus:'',scroll:0}; private skillNodeReturn:{skill:ActionId;scroll:number;focus:string}|undefined; private tomeExpanded=false; private skillScroll:Partial<Record<SkillSection,number>>={};
   private heroId=''; private tab:CharacterTab='overview'; private source:object|undefined;
   private single:{key:string;item:EquipmentEntry['item']}|undefined; private plan:AutoEquipmentPlan|undefined;
   private goal:AutoGoal='recommended'; private preferred:SetId|undefined;
@@ -91,7 +91,7 @@ export class CharacterPanel {
     const model=this.host.model();if(!model?.available||!model.ids.includes(id)||this.root.hidden||this.root.closest('[inert]'))return;
     this.forgeReturn=undefined;
     const from=trigger.closest<HTMLDialogElement>('dialog'),lobby=trigger.closest('.lobby-content');this.back={dialog:from?.id,focus:trigger.id,scroll:from?.querySelector('.info-content')?.scrollTop??lobby?.scrollTop??0,lobby:!!lobby};
-    this.heroId=id;this.skillScroll={};this.skillSection=tab==='talents'?'tree':'details';this.tab=tab==='talents'?'skills':Object.hasOwn(characterTabs,tab)?tab:'overview';this.source=model.source;this.discard();
+    this.heroId=id;this.skillNodeReturn=undefined;this.skillScroll={};this.skillSection=tab==='talents'?'tree':'details';this.tab=tab==='talents'?'skills':Object.hasOwn(characterTabs,tab)?tab:'overview';this.source=model.source;this.discard();
     const entry=model.entries.find(e=>e.key===key);this.picked=entry?.key??'';if(entry&&(entry.item.slot!=='weapon'||entry.item.hero===id))this.single={key:entry.key,item:entry.item};
     from?.close();this.render();this.content().scrollTop=0;this.dialog.showModal();this.focus(this.id(`character-tab-${this.tab}`));
   }
@@ -128,16 +128,16 @@ export class CharacterPanel {
       this.render();this.content().scrollTop=0;this.focus(this.id('star-status'));return;
     }
     if(action==='skill-review-back'){this.backSkillReview();return;}
-    if(action==='skill-review-confirm'){if(model.skillProfile)this.skillReview.confirm(model.skillProfile,c=>{if(c.kind==='level')this.host.skillLevel?.(c.id,c.action);else this.host.tomeTrade?.(c.line,c.size,c.to);});this.render();this.content().scrollTop=0;this.focus(this.id('skill-review-status'));return;}
-    if(action==='skill-select'||action==='skill-from-node'){this.selectedSkill=b.dataset.skill as ActionId;this.skillSection='details';this.skillReview.clear();this.render();this.content().scrollTop=0;this.focus(this.id('skill-selection'));return;}
-    if(action==='skill-section'||action==='skill-to-node'){this.skillScroll[this.skillSection]=this.content().scrollTop;this.skillSection=action==='skill-to-node'?'tree':b.dataset.section as SkillSection;if(action==='skill-to-node')this.node=b.dataset.node!;this.skillReview.clear();this.render();this.content().scrollTop=this.skillScroll[this.skillSection]??0;if(action==='skill-to-node')this.dialog.querySelector(`#${this.id('character-talent-'+this.node)}`)?.scrollIntoView({block:'center'});this.focus(this.id(action==='skill-to-node'?'character-talent-'+this.node:'skills-'+this.skillSection));return;}
+    if(action==='skill-review-confirm'){if(model.available&&model.camp&&model.skillProfile)this.skillReview.confirm(model.skillProfile,c=>{if(c.kind==='level')this.host.skillLevel?.(c.id,c.action);else this.host.tomeTrade?.(c.line,c.size,c.to);});this.render();this.content().scrollTop=0;this.focus(this.id('skill-review-status'));return;}
+    if(action==='skill-select'||action==='skill-from-node'){this.selectedSkill=b.dataset.skill as ActionId;const back=action==='skill-from-node'&&this.skillNodeReturn?.skill===this.selectedSkill?this.skillNodeReturn:undefined;this.skillNodeReturn=undefined;this.skillSection='details';this.skillReview.clear();this.render();this.content().scrollTop=back?.scroll??0;this.focus(back?.focus??this.id('skill-selection'));return;}
+    if(action==='skill-section'||action==='skill-to-node'){if(action==='skill-to-node')this.skillNodeReturn={skill:this.selectedSkill,scroll:this.content().scrollTop,focus:b.id};this.skillScroll[this.skillSection]=this.content().scrollTop;this.skillSection=action==='skill-to-node'?'tree':b.dataset.section as SkillSection;if(action==='skill-to-node')this.node=b.dataset.node!;this.skillReview.clear();this.render();this.content().scrollTop=this.skillScroll[this.skillSection]??0;if(action==='skill-to-node')this.dialog.querySelector(`#${this.id('character-talent-'+this.node)}`)?.scrollIntoView({block:'center'});this.focus(this.id(action==='skill-to-node'?'character-talent-'+this.node:'skills-'+this.skillSection));return;}
     if(action==='develop-link'){this.skillSection=b.dataset.tab==='talents'?'tree':'details';this.tab=b.dataset.tab==='talents'?'skills':b.dataset.tab as CharacterTab;this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));return;}
     if(action==='character-close'){this.dialog.close();return;}
     if(action==='character-tab'){this.tab=b.dataset.tab as CharacterTab;this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));return;}
-    if(action==='character-member'){this.heroId=b.dataset.hero!;this.filters.slot='all';this.picked='';this.node='';this.skillScroll={};this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-member-${this.heroId}`));return;}
+    if(action==='character-member'){this.heroId=b.dataset.hero!;this.filters.slot='all';this.picked='';this.node='';this.skillNodeReturn=undefined;this.skillScroll={};this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-member-${this.heroId}`));return;}
     if(action==='comparison-back'){this.cancelTrial();return;}
     if(!model.available||this.source!==model.source)return;
-    if(action==='talent-pick'){this.node=b.dataset.node!;const def=this.map.talents[this.heroId]?.find(n=>n.id===this.node);if(def&&'unlock'in def.effect)this.selectedSkill=def.effect.unlock;this.render();this.focus(b.id);}
+    if(action==='talent-pick'){this.node=b.dataset.node!;const def=this.map.talents[this.heroId]?.find(n=>n.id===this.node);if(def&&'unlock'in def.effect)this.selectedSkill=def.effect.unlock;else if(def?.choice&&skillCatalogue(this.map,this.heroes.find(h=>h.id===this.heroId)!,this.hero(model)).includes(def.choice as ActionId))this.selectedSkill=def.choice as ActionId;this.render();this.focus(b.id);}
     else if(action==='character-talent'&&b.getAttribute('aria-disabled')!=='true'){this.host.talent(this.heroId,b.dataset.node as TalentNode);this.focus(b.id);}
     else if(action==='character-loadout'&&b.getAttribute('aria-disabled')!=='true'){
       // Big skill trees (A6): toggle one unlocked skill in or out of the battle loadout (at least one stays).

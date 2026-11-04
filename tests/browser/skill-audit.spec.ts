@@ -33,7 +33,7 @@ test('C11: character sheet shows levelled row protection as a percent, inspectio
  p.members.guardian={stars:1,dupes:0,talents:{a1:1,a2i:1,a3s:1},loadout:['guard','bash','bulwark'],skillLevels:{bulwark:3}}; p.campXp = Math.max(p.campXp, xpAt(10));
  let raw='';saveGame({getItem:()=>null,setItem:(_k,v)=>{raw=v;}},{profile:p,run:null});
  await page.addInitScript(({key,raw})=>localStorage.setItem(key,raw),{key,raw});await page.goto('./');await page.locator('#continue').click();
- await page.locator('#lobby-tab-team').click();await page.locator('#lobby-member-guardian').click();await page.locator('#lobby-gear-open').click();await page.locator('#camp-character-tab-skills').click();
+ await page.locator('#lobby-tab-team').click();await page.locator('#lobby-member-guardian').click();await page.locator('#lobby-gear-open').click();await page.locator('#camp-character-tab-skills').click();await page.locator('#camp-skill-selection').selectOption('bulwark');
  await expect(page.locator('#camp-character-content')).toContainText('กำแพงโล่');await expect(page.locator('#camp-character-content')).toContainText('34');
  await page.locator('#camp-character-content [data-skill=bulwark]').scrollIntoViewIfNeeded();await page.screenshot({path:info.outputPath('c11-character-390.png')});expect(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)!).profile.members.guardian.skillLevels.bulwark,key)).toBe(3);
 });

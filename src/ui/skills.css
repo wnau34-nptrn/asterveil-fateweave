@@ -50,3 +50,11 @@
 .skills-section .skill-description summary,.skills-section .skill-passives summary {min-height:44px;display:flex;align-items:center;font-size:13px;color:#a9deed;cursor:pointer}
 .skills-section .skill-passives {border-top:1px solid #384d60;margin:10px 0}
 .skill-review-page .star-ledger td {overflow-wrap:anywhere}
+.skills-selection-row {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end}
+.skills-selection-row>button {min-width:84px;min-height:44px;padding:8px;font-size:13px}
+.skills-install-note {margin:0;font-size:12px;line-height:1.5}
+.skills-section .skill-level-preview summary {min-height:44px;display:flex;align-items:center;font-size:13px;color:#ffe2a3;cursor:pointer}
+.skills-section #skill-to-node {width:100%;min-height:44px;white-space:normal}
+.skill-review-page h3 {font-size:1.125rem}
+.skill-review-subject {font-size:1rem}
+.skill-review-page .star-ledger {font-size:.8125rem;font-variant-numeric:tabular-nums}

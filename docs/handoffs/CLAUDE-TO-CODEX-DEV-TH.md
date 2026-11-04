@@ -302,3 +302,5 @@ REPORT after every batch in docs/handoffs/CODEX-TO-CLAUDE.md (per character: kit
 เจ้าของให้ผ่าน Lyra/Vargoth Hunter ทั้งภาพและท่า และอนุญาตนำเข้าเกมจริง โดยขอช้าลงนิดเดียว ปรับคืนท่า sprite 240→260ms และ ease frame cadence เล็กน้อย คง contact/end เดิม นี่คือการอนุมัติคู่ pilot ของ PR #74 ไม่ใช่การอนุมัติ C5 blade VFX หรือขยายทุกยูนิต
 
 - 2026-10-27 C5.5เพิ่มเติม: COVERAGE_TH.md/coverage.jsonยังบอกSlamplain18และQuake14/24single-targetตามdescriptionเก่า แต่engineจริงSlam18+intentbonus10และQuakeแถวหน้า/หลังfallback โปรดตรวจdescription/docsในงานcontentแยก ไม่แก้ในPR85 งานภาพยึดactualeventsแล้ว Runequakeproseที่Codexเคยเขียนfullpowerแก้เป็นhalfpowerfloor(18→9)ในearthstoryboard/handoffแล้ว
+
+- UXD-07 พบ `tradeReason`/`tradeTomes` ไม่ตรวจเพดานตำราปลายทาง: 99,999 → 100,000 แต่ `core/save/expedition-save.ts::tomesOf` รับสูงสุด 99,999 ต่อสาย/ขนาด UI review กัน projected destination เกินเพดานไว้ก่อน ไม่แก้ core/save/rules/ราคา ฝาก Claude เพิ่ม guard ในคำสั่งกลางและทดสอบทั้ง upsize/cross-line/rewards ที่เกี่ยวข้อง แล้วพิจารณารวมแหล่ง cap เดียวกัน รายละเอียด/หลักฐานใน `docs/validation/uxd-07/README_TH.md`
