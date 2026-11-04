@@ -20,6 +20,7 @@
 - พบ safe-top8แทน59 จากแผงใหม่ในรอบแรก แก้ให้อ่าน --star-safe-top/bottom ร่วมกับขอบ HUD และตรวจกรณีเดิมผ่าน ไม่ลด assertions; local regression ใช้ CLI timeout120s เพราะรอบ45sชนเวลาเมื่อโหลดเซฟกลับ คง config/CI45sเดิม ข้อมูล fixture สำหรับ filter เพิ่มสมาชิกตามเงื่อนไขเปิดเดิม ไม่แก้กฎเกม
 - ตรวจทานและแก้ close event ที่บันทึก scroll ซ้ำหลัง HUD ทิ้ง review: เก็บตำแหน่งก่อน review ครั้งเดียว เพิ่ม assertion คืน scroll เดิมใน flowทั้ง4ขนาดจอ รันชุด7ซ้ำผ่าน (local CLI120s, CI45sเดิม) ไม่นับเป็นกรณีใหม่ รอบที่เครื่องช้าเกิด timeout ก่อนเข้าเกม/จับภาพ ไม่บวกรอบที่ไม่จบเป็น pass
 - ภาพ production5ภาพเก็บและตรวจแล้ว; การจับภาพซ้ำเปิดด้วย `TEAM_HUD_SHOTS=1` ส่วน assertions ทั้งหมดและ screenshot-on-failure ของ repo ยังทำงานตามเดิม
+- ตรวจทางเข้าจากกระเป๋าเพิ่มเติม: HUD active/aria-expanded เพียงทีมขณะดูตัวละคร ปิดกลับกระเป๋าแล้วคืน active/focus ต้นทาง ยอดเซฟไม่เปลี่ยน ล่าสุด2กรณีที่เกี่ยวข้องผ่าน (ซ้ำชุดเดิม1+กรณีใหม่1) รวม local focused60distinct; ชุดทางเข้ามี8กรณีรวมกรณีกระเป๋า
 - ตรวจยอดเซฟก่อน/หลัง preview/cancel/สลับ HUD, การกลับจาก review โดยไม่จ่ายซ้ำ, การคืน focus, การแยกคำสั่งย้ายทีม และการจำบริบทต่อคน
 
 ยังไม่มี Safari/iPhone/Android เครื่องจริง หรือผู้เล่นจริง การจำลอง Chromium และ safe area ไม่ใช่ผลทดสอบอุปกรณ์จริง งานจบที่ merge เมื่อ PR quality/browser ผ่านตามกฎ pre-release; Pages deploy ต่ออัตโนมัติ ไม่รอผล deploy หรือเพิ่ม release-evidence commit

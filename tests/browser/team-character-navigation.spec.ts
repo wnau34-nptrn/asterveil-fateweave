@@ -63,3 +63,15 @@ test('each character returns to its own last tab',async({page})=>{
   await page.locator('#team-character-tracer').click();await page.locator('#camp-character-tab-gear').click();await page.keyboard.press('Escape');
   await page.locator('#team-character-guardian').click();await expect(page.locator('#camp-character-tab-skills')).toHaveAttribute('aria-selected','true');await expect(page.locator('#camp-skills-tomes')).toHaveAttribute('aria-pressed','true');
 });
+
+test('bag entry highlights only Team while inspecting and restores the bag origin on close',async({page})=>{
+  await page.setViewportSize({width:390,height:650});await open(page);const before=await saved(page);
+  await page.locator('#lobby-tab-gear').click();await page.locator('.storage-characters summary').click();await page.locator('#gear-member-guardian').click();
+  await expect(page.locator('#camp-character-dialog')).toBeVisible();
+  expect(await page.locator('.lobby-menu-button.active').evaluateAll(els=>els.map(el=>el.id))).toEqual(['lobby-tab-team']);
+  await expect(page.locator('#lobby-tab-team')).toHaveAttribute('aria-expanded','true');await expect(page.locator('#lobby-tab-gear')).toHaveAttribute('aria-expanded','false');
+  await page.locator('#camp-character-dialog [data-world=character-close]').click();await expect(page.locator('#camp-character-dialog')).not.toBeVisible();
+  await expect(page.locator('#gear-member-guardian')).toBeFocused();
+  expect(await page.locator('.lobby-menu-button.active').evaluateAll(els=>els.map(el=>el.id))).toEqual(['lobby-tab-gear']);
+  await expect(page.locator('#lobby-tab-gear')).toHaveAttribute('aria-expanded','true');expect(await saved(page)).toBe(before);
+});

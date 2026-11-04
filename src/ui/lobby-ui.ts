@@ -310,7 +310,11 @@ export class LobbyUI {
   }
   private characterNavigation(open:boolean):void {
     this.root.toggleAttribute('data-character-open',open);
-    const team=this.root.querySelector('#lobby-tab-team');if(team){team.setAttribute('aria-controls',open?'camp-character-dialog':'lobby-sheet');team.setAttribute('aria-expanded',String(open||this.sheet==='team'||this.sheet==='tree'));team.classList.toggle('active',open||this.sheet==='team'||this.sheet==='tree');}
+    for(const button of this.root.querySelectorAll<HTMLButtonElement>('.lobby-menu [data-tab]')){
+      const team=button.dataset.tab==='team',active=open?team:button.dataset.tab===this.sheet||team&&this.sheet==='tree';
+      button.classList.toggle('active',active);button.setAttribute('aria-expanded',String(active));
+      button.setAttribute('aria-controls',open&&team?'camp-character-dialog':'lobby-sheet');
+    }
     for(const el of this.root.querySelectorAll<HTMLElement>('.lobby-pan,.lobby-hud > :not(.lobby-bottom),.lobby-bottom > :not(.lobby-menu)'))el.inert=open;
     if(!open&&this.view){const entry=this.root.querySelector('.team-character-entry');if(entry)entry.outerHTML=this.characterEntry(this.view.profile);}
     this.measureNavigation();

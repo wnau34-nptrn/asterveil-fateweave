@@ -11,7 +11,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- Owner authorized HUD team → character navigation follow-up after UXD-07. Branch `codex/team-hud-character-navigation` from `a2596e3`; PR #146; local focused59 distinct, unit30/3 and build/lint/typecheck passed. Final fix preserves pre-review scroll after HUD navigation; awaiting final PR gates. Validation: `docs/validation/team-hud-navigation/README_TH.md`. No UXD-08/P04/P09 started; preserve pre-release rule `aabc5dc`.
+- Owner authorized HUD team → character navigation follow-up after UXD-07. Branch `codex/team-hud-character-navigation` from `a2596e3`; PR #146; local focused60 distinct, unit30/3 and build/lint/typecheck passed. Final fixes preserve pre-review scroll and one active HUD entry with bag-origin restoration; awaiting final PR gates. Validation: `docs/validation/team-hud-navigation/README_TH.md`. No UXD-08/P04/P09 started; preserve pre-release rule `aabc5dc`.
 
 ## Next (owner picks; nothing auto-started)
 
