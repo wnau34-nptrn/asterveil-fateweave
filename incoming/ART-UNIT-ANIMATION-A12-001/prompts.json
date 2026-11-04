@@ -194,5 +194,137 @@
     "source_path": "/workspace/generated_images/exec-8276bf08-fa24-49da-8621-c765a7d058ed.png",
     "raw_file": "raw/astrid-deflect.png",
     "frame_count": 6
+  },
+  {
+    "identity": "kael",
+    "move": "attack",
+    "prompt": "Edit attached approved Kael into ONE horizontal SIX-frame body animation strip. Six full-body isolated sprites left-to-right, WIDE clear transparent gutters, generous outer margins. True transparent RGBA alpha ZERO outside figures. EXACT same original polished chibi rendering and large skull/head-to-body ratio as seed, including topknot, brown wavy hair, amber eyes, umber sleeveless tunic, gold sash, charcoal trousers, white hand/shin wraps, sandals. Same scale throughout, head NEVER shrinks when crouched. Face RIGHT toward enemies. Calm controlled low WIDE martial stance, power from legs/hips, open palms and forearms, NO weapon, no wild flailing. No VFX, energy, glow, motion lines, shadows, dust, background or text. Full fingers, head, sash tails and feet uncropped. 1 seed ready; 4 contact; 6 seed ready. ATTACK open palm: 1 seed ready; 2 small step RIGHT, rear palm chambered at hip; 3 hips drive quick open palm forward-RIGHT; 4 open striking arm fully EXTENDED forward-right, feet firmly planted, rear hand guards; 5 draw palm back; 6 seed ready. Clear open-palm technique, not a straight fist punch.",
+    "references": [
+      "seeds/kael.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-8dd6d344-2d9e-4d83-adba-69518124e884",
+    "source_path": "/workspace/generated_images/exec-8dd6d344-2d9e-4d83-adba-69518124e884.png",
+    "raw_file": "raw/kael-attack.png",
+    "frame_count": 6
+  },
+  {
+    "identity": "kael",
+    "move": "gather",
+    "prompt": "Edit attached approved Kael into ONE horizontal SIX-frame body animation strip. Six full-body isolated sprites left-to-right, WIDE clear transparent gutters, generous outer margins. True transparent RGBA alpha ZERO outside figures. EXACT same original polished chibi rendering and large skull/head-to-body ratio as seed, including topknot, brown wavy hair, amber eyes, umber sleeveless tunic, gold sash, charcoal trousers, white hand/shin wraps, sandals. Same scale throughout, head NEVER shrinks when crouched. Face RIGHT toward enemies. Calm controlled low WIDE martial stance, power from legs/hips, open palms and forearms, NO weapon, no wild flailing. No VFX, energy, glow, motion lines, shadows, dust, background or text. Full fingers, head, sash tails and feet uncropped. 1 seed ready; 4 contact; 6 seed ready. GATHER inner-energy strike, body only NO energy painted: 1 seed ready; 2 front open palm drives forward-RIGHT; 3 contact with front palm extended; 4 pull BOTH HANDS back together to HIP, closed breathing posture, elbows near ribs, explicitly drawing strength inward; 5 settle LOWER with both hands still at hip; 6 seed ready. Important gesture is the return of BOTH hands to hip after palm contact, not a second punch. Large head stays constant.",
+    "references": [
+      "seeds/kael.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-aaa17422-52ea-48dc-91bf-1d769ed7e37c",
+    "source_path": "/workspace/generated_images/exec-aaa17422-52ea-48dc-91bf-1d769ed7e37c.png",
+    "raw_file": "raw/kael-gather.png",
+    "frame_count": 6
+  },
+  {
+    "identity": "kael",
+    "move": "release",
+    "prompt": "Edit attached approved Kael into ONE horizontal SIX-frame body animation strip. Six full-body isolated sprites left-to-right, WIDE clear transparent gutters, generous outer margins. True transparent RGBA alpha ZERO outside figures. EXACT same original polished chibi rendering and large skull/head-to-body ratio as seed, including topknot, brown wavy hair, amber eyes, umber sleeveless tunic, gold sash, charcoal trousers, white hand/shin wraps, sandals. Same scale throughout, head NEVER shrinks when crouched. Face RIGHT toward enemies. Calm controlled low WIDE martial stance, power from legs/hips, open palms and forearms, NO weapon, no wild flailing. No VFX, energy, glow, motion lines, shadows, dust, background or text. Full fingers, head, sash tails and feet uncropped. 1 seed ready; 4 contact; 6 seed ready. RELEASE big double-palm finisher: 1 seed ready; 2 sink DEEP with BOTH open palms drawn BACK LOW at hips; 3 push powerfully off back foot preparing forward lunge; 4 EXPLOSIVE LUNGE forward-RIGHT with DOUBLE OPEN PALM THRUST, BOTH arms extended RIGHT, rear leg FULLY EXTENDED, front knee deeply bent, torso drives from hips; 5 hold extension then step back up; 6 seed ready. Distinct full-body double palm, no fist punch, no energy painted. Leave wide space around lunge and sash.",
+    "references": [
+      "seeds/kael.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-d1f46722-0f9c-4b20-8f58-52ec32497b46",
+    "source_path": "/workspace/generated_images/exec-d1f46722-0f9c-4b20-8f58-52ec32497b46.png",
+    "raw_file": "raw/kael-release.png",
+    "frame_count": 6
+  },
+  {
+    "identity": "kael",
+    "move": "circle",
+    "prompt": "Edit attached approved Kael into ONE horizontal SIX-frame body animation strip. Six full-body isolated sprites left-to-right, WIDE clear transparent gutters, generous outer margins. True transparent RGBA alpha ZERO outside figures. EXACT same original polished chibi rendering and large skull/head-to-body ratio as seed, including topknot, brown wavy hair, amber eyes, umber sleeveless tunic, gold sash, charcoal trousers, white hand/shin wraps, sandals. Same scale throughout, head NEVER shrinks when crouched. Face RIGHT toward enemies. Calm controlled low WIDE martial stance, power from legs/hips, open palms and forearms, NO weapon, no wild flailing. No VFX, energy, glow, motion lines, shadows, dust, background or text. Full fingers, head, sash tails and feet uncropped. 1 seed ready; 4 contact; 6 seed ready. CIRCLE wide forearm sweep across front row: 1 seed ready; 2 coil TORSO LEFT with forearm chambered across ribs, hips twist; 3 pivot on FRONT FOOT, torso begins unwinding and forearm opens; 4 sweep FOREARM in broad HORIZONTAL ARC across front toward RIGHT, elbow slightly bent, open palm, low turning step; 5 full follow-through PAST centre, shoulders turned and sash trails naturally, then unwind; 6 seed ready. Motion comes from torso/hip rotation, not a straight punch. No drawn arcs, no motion lines. Same head size in turning poses, face still readable right.",
+    "references": [
+      "seeds/kael.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-3e1a78d3-5ece-46f8-8fa4-de41cebb1c1a",
+    "source_path": "/workspace/generated_images/exec-3e1a78d3-5ece-46f8-8fa4-de41cebb1c1a.png",
+    "raw_file": "raw/kael-circle.png",
+    "frame_count": 6
+  },
+  {
+    "identity": "kael",
+    "move": "stored",
+    "prompt": "Edit attached approved Kael into ONE horizontal SIX-frame body animation strip. Six full-body isolated sprites left-to-right, WIDE clear transparent gutters, generous outer margins. True transparent RGBA alpha ZERO outside figures. EXACT same original polished chibi rendering and large skull/head-to-body ratio as seed, including topknot, brown wavy hair, amber eyes, umber sleeveless tunic, gold sash, charcoal trousers, white hand/shin wraps, sandals. Same scale throughout, head NEVER shrinks when crouched. Face RIGHT toward enemies. Calm controlled low WIDE martial stance, power from legs/hips, open palms and forearms, NO weapon, no wild flailing. No VFX, energy, glow, motion lines, shadows, dust, background or text. Full fingers, head, sash tails and feet uncropped. 1 seed ready; 4 contact; 6 seed ready. STORED compact heavy close-range ELBOW/FOREARM technique, retaining energy: 1 seed ready; 2 shift weight BACK onto rear leg, striking fist tight at ribs, elbow tucked; 3 make tiny hip compression, NO long windup; 4 SHORT COMPACT forward ELBOW/FOREARM blow toward RIGHT at close range, elbow stays BENT, fist remains close to ribs/upper chest, forearm is contact surface, do NOT extend palm or punch; 5 SOLID HOLD with breath held, then ease; 6 seed ready. Express stored pressure through planted feet and tight compressed body. No energy painted. Clear short elbow, not straight fist/palm.",
+    "references": [
+      "seeds/kael.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-746b41fc-8b48-4a11-8584-e5434dd13edd",
+    "source_path": "/workspace/generated_images/exec-746b41fc-8b48-4a11-8584-e5434dd13edd.png",
+    "raw_file": "raw/kael-stored.png",
+    "frame_count": 6
+  },
+  {
+    "identity": "kael",
+    "move": "hit",
+    "prompt": "Edit attached approved Kael into ONE horizontal FOUR-frame body animation strip. Four full-body isolated sprites left-to-right, WIDE clear transparent gutters, generous outer margins. True transparent RGBA alpha ZERO outside figures. EXACT same original polished chibi rendering and large skull/head-to-body ratio as seed, including topknot, brown wavy hair, amber eyes, umber sleeveless tunic, gold sash, charcoal trousers, white hand/shin wraps, sandals. Same scale throughout, head NEVER shrinks when crouched. Face RIGHT toward enemies. Calm controlled low WIDE martial stance, power from legs/hips, open palms and forearms, NO weapon, no wild flailing. No VFX, energy, glow, motion lines, shadows, dust, background or text. Full fingers, head, sash tails and feet uncropped. Exactly FOUR reaction poses, first and last seed ready. HIT reaction: 1 seed ready; 2 recoil backward LEFT from hit coming from RIGHT, torso tilts back but BOTH HANDS keep GUARD UP; 3 slide back HALF STEP with knees bent, recover controlled balance, guard remains; 4 seed ready. No flailing, no impact effects, same head size.",
+    "references": [
+      "seeds/kael.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-0ad81992-4f03-41e6-9d4c-258c5607400c",
+    "source_path": "/workspace/generated_images/exec-0ad81992-4f03-41e6-9d4c-258c5607400c.png",
+    "raw_file": "raw/rejected/kael-hit-background.png",
+    "frame_count": 4,
+    "status": "rejected"
+  },
+  {
+    "identity": "kael",
+    "move": "block",
+    "prompt": "Edit attached approved Kael into ONE horizontal FOUR-frame body animation strip. Four full-body isolated sprites left-to-right, WIDE clear transparent gutters, generous outer margins. True transparent RGBA alpha ZERO outside figures. EXACT same original polished chibi rendering and large skull/head-to-body ratio as seed, including topknot, brown wavy hair, amber eyes, umber sleeveless tunic, gold sash, charcoal trousers, white hand/shin wraps, sandals. Same scale throughout, head NEVER shrinks when crouched. Face RIGHT toward enemies. Calm controlled low WIDE martial stance, power from legs/hips, open palms and forearms, NO weapon, no wild flailing. No VFX, energy, glow, motion lines, shadows, dust, background or text. Full fingers, head, sash tails and feet uncropped. Exactly FOUR reaction poses, first and last seed ready. BLOCK: 1 seed ready; 2 cross BOTH FOREARMS firmly in front of chest/face as X guard facing attack from RIGHT, knees bend; 3 ABSORB LOW, lower hips with crossed forearms guarding, composed expression; 4 reset seed guard. Physical controlled block. CRITICAL perfectly CLEAN TRANSPARENT EMPTY gutters with ALPHA ZERO; no white/gray fill, no color haze, no halos, no shadows, no glow. Four isolated full figures.",
+    "references": [
+      "seeds/kael.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-408d4ad8-36ea-4c40-bfeb-9c5b3e4ccfc1",
+    "source_path": "/workspace/generated_images/exec-408d4ad8-36ea-4c40-bfeb-9c5b3e4ccfc1.png",
+    "raw_file": "raw/kael-block.png",
+    "frame_count": 4
+  },
+  {
+    "identity": "kael",
+    "move": "down",
+    "prompt": "Edit attached approved Kael into ONE horizontal FOUR-frame body animation strip. Four full-body isolated sprites left-to-right, WIDE clear transparent gutters, generous outer margins. True transparent RGBA alpha ZERO outside figures. EXACT same original polished chibi rendering and large skull/head-to-body ratio as seed, including topknot, brown wavy hair, amber eyes, umber sleeveless tunic, gold sash, charcoal trousers, white hand/shin wraps, sandals. Same scale throughout, head NEVER shrinks when crouched. Face RIGHT toward enemies. Calm controlled low WIDE martial stance, power from legs/hips, open palms and forearms, NO weapon, no wild flailing. No VFX, energy, glow, motion lines, shadows, dust, background or text. Full fingers, head, sash tails and feet uncropped. Exactly FOUR chronological falling poses; last stays unconscious, NEVER gets up. DOWN: 1 seed ready, knees start giving way; 2 drop onto ONE KNEE and ONE HAND on ground; 3 sink SIDEWAYS onto hip/elbow, guard slackens; 4 lie FULLY HORIZONTAL unconscious eyes CLOSED, head LEFT and sandal feet RIGHT, full extended body AS LONG as standing seed height, SAME HEAD SIZE as other frames, not a tiny curled-up body. Large clean empty margins, generous room for last horizontal figure and sash, no clipping. Perfectly TRANSPARENT alpha ZERO background, no haze/fill/halo/shadows/dust.",
+    "references": [
+      "seeds/kael.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-18f23061-faac-4fa4-a0f1-0c5022b58681",
+    "source_path": "/workspace/generated_images/exec-18f23061-faac-4fa4-a0f1-0c5022b58681.png",
+    "raw_file": "raw/kael-down.png",
+    "frame_count": 4
+  },
+  {
+    "identity": "kael",
+    "move": "hit",
+    "prompt": "Use attached approved Kael seed ONLY. Create ONE horizontal FOUR-frame HIT reaction strip on ABSOLUTELY CLEAN TRANSPARENT RGBA canvas. Alpha ZERO outside figures, NO white/gray fill, NO color haze, NO halo, NO aura, NO shadows, NO effects, NO text. Four full-body isolated sprites with wide clear transparent gutters and large outer margins. Same exact chibi style, SAME LARGE HEAD SIZE/body proportion, brown topknot hair amber eyes, umber sleeveless tunic gold sash charcoal pants white wraps sandals. Faces RIGHT. 1 exact seed ready in wide stance; 2 recoil slightly BACK toward LEFT from attack coming RIGHT, both open hands stay GUARD UP, torso leans back; 3 controlled half step backward and catch balance, guard still up; 4 exact seed ready. Calm controlled martial artist, no flailing. All hands, sash, sandals and hair uncropped. No background at all, empty transparent space only.",
+    "references": [
+      "seeds/kael.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-ebd06abd-eebb-4e02-be53-614953626c56",
+    "source_path": "/workspace/generated_images/exec-ebd06abd-eebb-4e02-be53-614953626c56.png",
+    "raw_file": "raw/rejected/kael-hit-background-02.png",
+    "frame_count": 4,
+    "status": "rejected"
+  },
+  {
+    "identity": "kael",
+    "move": "hit",
+    "prompt": "Transparent sprite asset edit of attached Kael. Output FOUR separate full-body figures in ONE horizontal row with broad EMPTY TRANSPARENT gutters. No backdrop of any color, no white paper, no ground, no shadows or aura. Exact reference identity and chibi proportions, especially SAME large head size and low wide stance; keep all clothing, wraps, gold sash, hair and sandals. Face screen RIGHT. Recoil action: figure 1 reference ready; figure 2 tilt torso slightly back toward screen LEFT, both open palms guarding in front; figure 3 half-step left and absorb in bent knees, guard remains raised; figure 4 reference ready. Controlled balanced martial artist hit reaction. No effects or motion strokes. Whole figures safely inside canvas. Production RGBA sprite strip with zero-alpha empty regions.",
+    "references": [
+      "seeds/kael.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-525e7b11-9563-4ca1-b753-b1b584ca5efc",
+    "source_path": "/workspace/generated_images/exec-525e7b11-9563-4ca1-b753-b1b584ca5efc.png",
+    "raw_file": "raw/kael-hit.png",
+    "frame_count": 4
   }
 ]

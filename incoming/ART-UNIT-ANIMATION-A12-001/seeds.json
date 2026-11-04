@@ -36,5 +36,24 @@
       0.970703125
     ],
     "byte_identical": true
+  },
+  {
+    "identity": "kael",
+    "file": "seeds/kael.png",
+    "copied_from": "incoming/ART-CHAR-CLASS-NEW-003/unit/kael.png",
+    "sha256": "5d9f344d4d44cad32c169e74780c2ff10bed401fd9f9dd43ea27f4c2171dde1c",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "facing": "right",
+    "sole_y": 496,
+    "ground_y": 497,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "byte_identical": true
   }
 ]

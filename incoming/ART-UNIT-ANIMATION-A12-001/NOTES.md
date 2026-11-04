@@ -4,19 +4,19 @@
 Base `feature/fateweave-initial-prototype` @ `d5fe9eaa668ef6c9a7384a95b0f365ba72dee10a`
 Art only · **รอเจ้าของเลือกภาพและอนุมัติ motion** · ห้าม merge โดย Codex
 
-## ส่งมอบ / pending
+## ส่งมอบ
 
-- Wynne 7 strips: attack, knot, toll, weave, hit, block, down; Astrid 7 strips: attack, deflect, dial, read, hit, block, down. รวม 72 generated action/reaction slots และ seed comparison แยกในทุกโฟลเดอร์เซลล์
-- **Kael ทั้ง 8 ท่า pending**: `incoming/ART-CHAR-CLASS-NEW-003/` ไม่มีบน base commit ที่ตรวจ ไม่ใช้ Kael NEW-002 ซึ่งสัดส่วนหัวเล็กเกินไป ไม่มีการสร้างภาพ Kael หรือใช้อีกคนแทน
+- Wynne 7 strips: attack, knot, toll, weave, hit, block, down; Astrid 7 strips: attack, deflect, dial, read, hit, block, down. Kael 8 strips: attack, gather, release, circle, stored, hit, block, down. รวม 114 generated action/reaction slots และ seed comparison แยกในทุกโฟลเดอร์เซลล์
+- Kael ใช้ seed NEW-003 เท่านั้น: ระหว่างทำงานสาขาเกมรวม PR #150 แล้ว ตรวจอีกครั้งที่ `743adc3f2e4967917f331a35f5f6f6a528628665` จึงคัดลอก `unit/kael.png` จาก git object byte-for-byte และตรวจ SHA `5d9f344d4d44cad32c169e74780c2ff10bed401fd9f9dd43ea27f4c2171dde1c` ตรง validation ของ NEW-003 ไม่ใช้ NEW-002 Kael; ไม่ merge/import ไฟล์อื่นจากสาขาเกมเข้ามา
 - คัดลอก Wynne/Astrid seed byte-for-byte จาก NEW-002, SHA-256 ตรง brief ทั้งคู่ ดู `seeds.json` ไม่มีภาพ cast อื่นเป็น input; artwork ต้นฉบับจาก Fateweave เท่านั้น ตัวละครแห่งค่ายทหารรับจ้าง
 
 ## วิธีสร้างและไฟล์
 
-สร้าง whole strip ต่อท่าในคำขอ edit เดียว แนบ seed ตัวตรงกันเป็น model เท่านั้น ทำ Wynne ให้ครบและ audit ก่อนเริ่ม Astrid `raw/` คือ PNG ต้นฉบับที่ไม่แก้พิกเซลจากเครื่องมือ; `raw/rejected/` เป็น deflect รอบที่เกิดอุปกรณ์ซ้ำ **ห้ามใช้** รอบแก้ไขแนะนำอยู่ใน `raw/astrid-deflect.png` ไม่มี R2 ตัวเลือกอื่น เพราะเป็นการแก้ข้อผิดพลาด ไม่ใช่เสนอความหมายท่าคนละแบบ
+สร้าง whole strip ต่อท่าในคำขอ edit เดียว แนบ seed ตัวตรงกันเป็น model เท่านั้น ทำ Wynne ให้ครบและ audit ก่อนเริ่ม Astrid และทำ Kael หลังตรวจว่า NEW-003 พร้อมบนสาขาเกม `raw/` คือ PNG ต้นฉบับที่ไม่แก้พิกเซลจากเครื่องมือ; `raw/rejected/` เป็น deflect รอบที่เกิดอุปกรณ์ซ้ำและ Kael hit รอบที่พื้นหลังผิด **ห้ามใช้** รอบแก้ไขแนะนำอยู่ใน `raw/astrid-deflect.png` ไม่มี R2 ตัวเลือกอื่น เพราะเป็นการแก้ข้อผิดพลาด ไม่ใช่เสนอความหมายท่าคนละแบบ; stored ของ Kael ใช้ศอกงอระยะสั้นเป็น candidate แนะนำ ท่าอ่านได้ชัดจึงไม่เพิ่ม variant
 
 `prompts.json` เก็บ prompt จริง อ้างอิง artifact UUID และ output path; generation job ID ไม่เปิดเผยจึงเป็น null ไม่แต่ง ID ไม่มี base64 ภาพใน JSON รอบ hit ของ Wynne และ read ของ Astrid ที่พื้นหลังผิดถูกสร้างใหม่ก่อนรับเข้าชุด final (ไฟล์รอบผิดยังอยู่ใน workspace generator outputs ไม่ใช่ asset ส่งมอบ)
 
-`spaced/` และ `cells/<character>-<move>/` ใช้ cell 640×512 เพื่อเพิ่มขอบโปร่งใสซ้ายขวาให้ท่านอนและแขนกาง logical source ยังคง 512×512 ที่ offset x64 จุดยึด cell `(320,497)`; pivot logical `(0.5,497/512)` เส้น sole alpha>40 อยู่ y496, ground y497. `000.png` เป็น seed เดิมเพิ่มขอบ; `001.png` ready ล็อกกลับ seed; ท่าสุดท้ายกลับ seed ยกเว้น down ที่ค้างนอนหมดสติ
+`spaced/` และ `cells/<character>-<move>/` ใช้ cell 640×512 สำหรับ Wynne/Astrid และ 768×512 สำหรับ Kael เพื่อเพิ่มขอบโปร่งใสซ้ายขวาให้ท่านอนและแขนกาง logical source ยังคง 512×512 ที่ offset x64 / x128 ตามลำดับ จุดยึด cell `(320,497)` / `(384,497)`; pivot logical `(0.5,497/512)` เส้น sole alpha>40 อยู่ y496, ground y497. `000.png` เป็น seed เดิมเพิ่มขอบ; `001.png` ready ล็อกกลับ seed; ท่าสุดท้ายกลับ seed ยกเว้น down ที่ค้างนอนหมดสติ
 
 ทุกท่าใช้ขนาดตัวปลายทางเทียบ seed ที่ scale 1.0 เหมือนกันทั้งตัวละคร ปัจจัย raw-to-seed ต่างกันตามความสูงภาพที่ generator ส่งออก: คำนวณจาก raw ready เทียบความสูง seed แล้วใช้ uniform scale เดียวทั้ง strip ไม่มีการ fit/ย่อหัว/บิด/ปรับขนาดเฉพาะเฟรม แยก component และเก็บขอบ anti-alias ใกล้ component 3px เพื่อตัด dust แยกตัวจากพื้นโปร่งใส raw ไม่ถูกแตะ ไม่มีการวาดเพิ่ม
 
@@ -24,9 +24,9 @@ Art only · **รอเจ้าของเลือกภาพและอน
 
 ## คุณภาพและข้อจำกัด
 
-รัน `scripts/unit-anatomy-audit.py --cells` เทียบ seed ของแต่ละ strip ทั้ง 14 ชุด เก็บ JSON + stdout ใน `audits/`; ทุก strip ผ่าน median ≤1.15 และทุกเฟรมที่วัดได้ ≤1.20 ดูค่าล่าสุดใน `validation.json`.
+รัน `scripts/unit-anatomy-audit.py --cells` เทียบ seed ของแต่ละ strip ทั้ง 22 ชุด เก็บ JSON + stdout ใน `audits/`; ทุก strip ผ่าน median ≤1.15 และทุกเฟรมที่วัดได้ ≤1.20 ดูค่าล่าสุดใน `validation.json`.
 
-**Astrid down frame 004 เป็น not-measured** (หน้าตะแคง/หลับ; inlier ต่ำ) ไม่ถือเป็นผลผ่านอัตโนมัติ ตรวจด้วยตาเทียบ seed และ preview แล้ว: ขนาดหัวไม่ถูกย่อ ตัวนอนเต็มความยาว ขาปลายเท้าไม่ถูกตัด หลับตาและถือแอสโทรเลบใกล้ตัว เฟรมอื่นไม่มี not-measured. ตรวจ offline preview ทั้งสองตัวละครแล้ว รวม costume, doll/short thread, มือ, ring, gutters และท่านอน; deflect รอบเก่ามี ring ซ้ำจึงปฏิเสธและสร้างใหม่ให้เหลือหนึ่งชิ้น
+**Astrid down frame 004 เป็น not-measured** (หน้าตะแคง/หลับ; inlier ต่ำ) ไม่ถือเป็นผลผ่านอัตโนมัติ ตรวจด้วยตาเทียบ seed และ preview แล้ว: ขนาดหัวไม่ถูกย่อ ตัวนอนเต็มความยาว ขาปลายเท้าไม่ถูกตัด หลับตาและถือแอสโทรเลบใกล้ตัว **Kael down frame 004 เป็น not-measured เช่นกัน**: ตรวจด้วยตาเทียบ seed/preview แล้ว หัวไม่ถูกย่อ ลำตัว/แขนขาเต็มความยาว หลับตาและรองเท้า/ปลายผ้าครบ ไม่มีเฟรมอื่นที่ not-measured ทั้ง 22 ชุด. ค่า audit สุดท้าย: Wynne median สูงสุด 1.005 / max 1.048; Astrid median สูงสุด 1.013 / max 1.033; Kael median สูงสุด 1.060 / max 1.086. ตรวจ offline preview ทั้งสามตัวละครแล้ว รวม costume, doll/short thread, มือ, ring, gutters และท่านอน; deflect รอบเก่ามี ring ซ้ำจึงปฏิเสธและสร้างใหม่ให้เหลือหนึ่งชิ้น
 
 ไม่มี VFX/เงาพื้น/เส้นเคลื่อนไหวใน body final. ลายดาวสีทองบนเสื้อคลุมเป็นลายผ้า ไม่ใช่ layer VFX. ไม่มี runtime integration, atlas packing, CI หรือการทดสอบในเกมในงาน art-only นี้ ผล audit และการตรวจ offline **ไม่ใช่ owner artwork/motion approval**. Claude นำเข้าตามงานแยกและจับคลิปจริง 390px เมื่อ classes พร้อม
 

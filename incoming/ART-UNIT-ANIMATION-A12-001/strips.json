@@ -1845,7 +1845,1079 @@
     },
     "visual_review": "reviewed offline at 390px; owner approval pending",
     "not_measured_visual_review": {
-      "4": "Examined against seed: same head size, full horizontal body length, eyes closed and instrument held close; automatic scale unavailable."
+      "4": "Examined against seed: same head size, full horizontal body length, eyes closed; character props retained; automatic scale unavailable."
+    },
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "kael",
+    "move": "attack",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      768,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 128,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 1.1477832512315271,
+    "ground_y": 497,
+    "raw_file": "raw/kael-attack.png",
+    "file": "spaced/kael-attack.png",
+    "cells": "cells/kael-attack",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          10,
+          141,
+          323,
+          553
+        ],
+        "uniform_raw_scale": 1.1477832512315271,
+        "offset": [
+          204,
+          27
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          356,
+          142,
+          681,
+          553
+        ],
+        "uniform_raw_scale": 1.1477832512315271,
+        "offset": [
+          198,
+          29
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          705,
+          142,
+          1037,
+          553
+        ],
+        "uniform_raw_scale": 1.1477832512315271,
+        "offset": [
+          194,
+          28
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1061,
+          142,
+          1411,
+          553
+        ],
+        "uniform_raw_scale": 1.1477832512315271,
+        "offset": [
+          183,
+          28
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1438,
+          142,
+          1783,
+          553
+        ],
+        "uniform_raw_scale": 1.1477832512315271,
+        "offset": [
+          186,
+          28
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1818,
+          142,
+          2144,
+          553
+        ],
+        "uniform_raw_scale": 1.1477832512315271,
+        "offset": [
+          197,
+          28
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 0.9924999999999999,
+    "maximum_measured": 0.996,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "step in; rear palm at hip",
+      "drive open palm right",
+      "extended palm; planted feet",
+      "draw back",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "attack": "attack"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "kael",
+    "move": "gather",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      768,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 128,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 1.0737327188940091,
+    "ground_y": 497,
+    "raw_file": "raw/kael-gather.png",
+    "file": "spaced/kael-gather.png",
+    "cells": "cells/kael-gather",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          20,
+          141,
+          362,
+          581
+        ],
+        "uniform_raw_scale": 1.0737327188940091,
+        "offset": [
+          200,
+          28
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          382,
+          139,
+          721,
+          581
+        ],
+        "uniform_raw_scale": 1.0737327188940091,
+        "offset": [
+          202,
+          25
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          740,
+          140,
+          1083,
+          581
+        ],
+        "uniform_raw_scale": 1.0737327188940091,
+        "offset": [
+          200,
+          26
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1104,
+          140,
+          1445,
+          581
+        ],
+        "uniform_raw_scale": 1.0737327188940091,
+        "offset": [
+          201,
+          26
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1466,
+          156,
+          1779,
+          581
+        ],
+        "uniform_raw_scale": 1.0737327188940091,
+        "offset": [
+          216,
+          44
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1787,
+          141,
+          2130,
+          581
+        ],
+        "uniform_raw_scale": 1.0737327188940091,
+        "offset": [
+          200,
+          28
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 1.0310000000000001,
+    "maximum_measured": 1.045,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "front palm forward",
+      "contact",
+      "both hands back to hip; breathe",
+      "settle lower",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "gatherfist": "gather",
+      "flowfist": "gather"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "kael",
+    "move": "release",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      768,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 128,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 1.1918158567774937,
+    "ground_y": 497,
+    "raw_file": "raw/kael-release.png",
+    "file": "spaced/kael-release.png",
+    "cells": "cells/kael-release",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          10,
+          152,
+          312,
+          549
+        ],
+        "uniform_raw_scale": 1.1918158567774937,
+        "offset": [
+          204,
+          27
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          334,
+          189,
+          627,
+          548
+        ],
+        "uniform_raw_scale": 1.1918158567774937,
+        "offset": [
+          210,
+          72
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          659,
+          149,
+          980,
+          548
+        ],
+        "uniform_raw_scale": 1.1918158567774937,
+        "offset": [
+          192,
+          24
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          971,
+          160,
+          1435,
+          550
+        ],
+        "uniform_raw_scale": 1.1918158567774937,
+        "offset": [
+          108,
+          35
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1411,
+          151,
+          1796,
+          550
+        ],
+        "uniform_raw_scale": 1.1918158567774937,
+        "offset": [
+          154,
+          25
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1826,
+          151,
+          2144,
+          549
+        ],
+        "uniform_raw_scale": 1.1918158567774937,
+        "offset": [
+          194,
+          26
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 1.0045,
+    "maximum_measured": 1.005,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "sink deep; both palms low",
+      "prepare hip drive",
+      "double palm lunge; rear leg extended",
+      "hold extension then step back",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "releasefist": "release",
+      "perfectfist": "release"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "kael",
+    "move": "circle",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      768,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 128,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 1.071264367816092,
+    "ground_y": 497,
+    "raw_file": "raw/kael-circle.png",
+    "file": "spaced/kael-circle.png",
+    "cells": "cells/kael-circle",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          16,
+          137,
+          358,
+          578
+        ],
+        "uniform_raw_scale": 1.071264367816092,
+        "offset": [
+          201,
+          28
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          364,
+          136,
+          684,
+          578
+        ],
+        "uniform_raw_scale": 1.071264367816092,
+        "offset": [
+          212,
+          27
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          698,
+          135,
+          1022,
+          578
+        ],
+        "uniform_raw_scale": 1.071264367816092,
+        "offset": [
+          210,
+          25
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1034,
+          136,
+          1392,
+          578
+        ],
+        "uniform_raw_scale": 1.071264367816092,
+        "offset": [
+          192,
+          27
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1394,
+          135,
+          1773,
+          578
+        ],
+        "uniform_raw_scale": 1.071264367816092,
+        "offset": [
+          181,
+          25
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1801,
+          137,
+          2149,
+          578
+        ],
+        "uniform_raw_scale": 1.071264367816092,
+        "offset": [
+          198,
+          28
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 0.9835,
+    "maximum_measured": 1.004,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "coil torso left",
+      "pivot front foot",
+      "sweep forearm horizontally across front",
+      "follow through past centre",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "circlefist": "circle"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "kael",
+    "move": "stored",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      768,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 128,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 1.059090909090909,
+    "ground_y": 497,
+    "raw_file": "raw/kael-stored.png",
+    "file": "spaced/kael-stored.png",
+    "cells": "cells/kael-stored",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          7,
+          140,
+          357,
+          586
+        ],
+        "uniform_raw_scale": 1.059090909090909,
+        "offset": [
+          198,
+          28
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          382,
+          141,
+          716,
+          586
+        ],
+        "uniform_raw_scale": 1.059090909090909,
+        "offset": [
+          207,
+          29
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          743,
+          153,
+          1076,
+          586
+        ],
+        "uniform_raw_scale": 1.059090909090909,
+        "offset": [
+          208,
+          41
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1102,
+          148,
+          1434,
+          586
+        ],
+        "uniform_raw_scale": 1.059090909090909,
+        "offset": [
+          208,
+          36
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1461,
+          149,
+          1795,
+          586
+        ],
+        "uniform_raw_scale": 1.059090909090909,
+        "offset": [
+          207,
+          37
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1818,
+          142,
+          2167,
+          586
+        ],
+        "uniform_raw_scale": 1.059090909090909,
+        "offset": [
+          199,
+          30
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 0.984,
+    "maximum_measured": 0.989,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "weight back; fist at ribs",
+      "compact hip compression",
+      "short bent-elbow forearm blow right",
+      "solid hold; ease",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "storedfist": "stored"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "kael",
+    "move": "hit",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      768,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 128,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 0.8472727272727273,
+    "ground_y": 497,
+    "raw_file": "raw/kael-hit.png",
+    "file": "spaced/kael-hit.png",
+    "cells": "cells/kael-hit",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          35,
+          66,
+          508,
+          622
+        ],
+        "uniform_raw_scale": 0.8472727272727273,
+        "offset": [
+          184,
+          28
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          597,
+          61,
+          1049,
+          622
+        ],
+        "uniform_raw_scale": 0.8472727272727273,
+        "offset": [
+          192,
+          24
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1121,
+          100,
+          1554,
+          624
+        ],
+        "uniform_raw_scale": 0.8472727272727273,
+        "offset": [
+          200,
+          56
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1654,
+          65,
+          2124,
+          622
+        ],
+        "uniform_raw_scale": 0.8472727272727273,
+        "offset": [
+          185,
+          27
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 1.004,
+    "maximum_measured": 1.01,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "recoil; guard up",
+      "slide half step back",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "hit": "hit"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "kael",
+    "move": "block",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      768,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 128,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 0.7315541601255887,
+    "ground_y": 497,
+    "raw_file": "raw/kael-block.png",
+    "file": "spaced/kael-block.png",
+    "cells": "cells/kael-block",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          18,
+          41,
+          516,
+          684
+        ],
+        "uniform_raw_scale": 0.7315541601255887,
+        "offset": [
+          202,
+          29
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          568,
+          55,
+          1052,
+          684
+        ],
+        "uniform_raw_scale": 0.7315541601255887,
+        "offset": [
+          207,
+          39
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1112,
+          93,
+          1583,
+          684
+        ],
+        "uniform_raw_scale": 0.7315541601255887,
+        "offset": [
+          212,
+          67
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1648,
+          41,
+          2145,
+          683
+        ],
+        "uniform_raw_scale": 0.7315541601255887,
+        "offset": [
+          202,
+          29
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 0.9335,
+    "maximum_measured": 0.943,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "cross forearms; bend knees",
+      "absorb low",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "block": "block"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "kael",
+    "move": "down",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      768,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 128,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 0.9529652351738241,
+    "ground_y": 497,
+    "raw_file": "raw/kael-down.png",
+    "file": "spaced/kael-down.png",
+    "cells": "cells/kael-down",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          31,
+          104,
+          445,
+          599
+        ],
+        "uniform_raw_scale": 0.9529652351738241,
+        "offset": [
+          186,
+          28
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          503,
+          167,
+          844,
+          605
+        ],
+        "uniform_raw_scale": 0.9529652351738241,
+        "offset": [
+          222,
+          83
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          933,
+          216,
+          1414,
+          598
+        ],
+        "uniform_raw_scale": 0.9529652351738241,
+        "offset": [
+          155,
+          135
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1467,
+          339,
+          2149,
+          595
+        ],
+        "uniform_raw_scale": 0.9529652351738241,
+        "offset": [
+          59,
+          255
+        ],
+        "ready_seed_lock": false
+      }
+    ],
+    "median": 1.06,
+    "maximum_measured": 1.086,
+    "not_measured": [
+      4
+    ],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "frame_descriptions": [
+      "ready; knees soften",
+      "one hand and knee on ground",
+      "sink sideways",
+      "lie unconscious; HOLD"
+    ],
+    "proposed_ActionId_mapping": {
+      "down": "down"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {
+      "4": "Examined against seed: same head size, full horizontal body length, eyes closed; character props retained; automatic scale unavailable."
     },
     "recommendation": "recommended corrected candidate; no alternate option"
   }
