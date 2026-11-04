@@ -1,0 +1,198 @@
+[
+  {
+    "identity": "wynne",
+    "move": "attack",
+    "prompt": "Edit the supplied approved Wynne sprite into ONE continuous horizontal animation strip, exactly SIX full-body figures left-to-right, separated by wide truly transparent gutters. Transparent RGBA background. Original production battle sprites, same delicate polished chibi illustration style as reference. Preserve EXACT same face, large head/body ratio, brown hair, purple eyes, red hood with hanging paper talismans, black/crimson/gold costume, boots, stitched doll and SHORT crimson thread loop. SAME character scale in every slot, face right. Allies left, enemies right. Keep whole figure and every hood tip, talisman, hand, doll, thread and boot uncropped. No text, scenery, shadows, glows, magic trails, particles, projectiles or motion lines. Wynne is a careful quiet doll maker, always cradles doll with one arm. ATTACK action: 1 exact reference ready pose; 2 lift doll slightly, free hand pinches short thread; 3 draw free hand slightly back preparing precise flick; 4 flick free hand forward-RIGHT toward foe at arm length, short physical thread loop snaps out, CONTACT; 5 draw hand back toward doll; 6 exact reference ready pose. Six chronological frames on one baseline, equal head size and rendering detail, generous empty margins.",
+    "references": [
+      "seeds/wynne.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-a10639aa-33ea-483c-b299-a37c681bff68",
+    "source_path": "/workspace/generated_images/exec-a10639aa-33ea-483c-b299-a37c681bff68.png",
+    "raw_file": "raw/wynne-attack.png",
+    "frame_count": 6
+  },
+  {
+    "identity": "wynne",
+    "move": "knot",
+    "prompt": "Use the attached approved Wynne sprite as the ONLY identity model. Make ONE horizontal continuous battle animation strip on transparent RGBA, SIX full-body figures left-to-right with WIDE EMPTY gutters, all on common ground, all same scale as attached seed and one another. Same polished chibi rendering, EXACT same large head/body proportions, face, brown hair, purple eyes, crimson hood, hanging talismans, black red gold dress, boots, stitched doll and SHORT physical red thread loop. Always cradle doll with one arm. Face RIGHT toward enemies (allies left). Whole body, arms, hood tips, hems and talismans must fit, no cropping. No glow, magic lines, long threads, particles, shadows, motion lines, text or scenery. Subtle careful precise doll-maker movement. Six chronological poses, fourth is release/contact, sixth returns to exact seed ready. KNOT curse-tying move: 1 seed ready; 2 raise cradled doll to chest; 3 free hand pulls SHORT physical thread loop taut sideways, preparing; 4 pinch and tie a knot with a SHARP TUG to screen RIGHT; 5 hold that pinching gesture out then begin to lower doll; 6 seed ready. Keep each figure no taller than reference, spacious clean transparent gutters.",
+    "references": [
+      "seeds/wynne.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-ed0147e7-57ca-4f5d-8526-ee8201776a18",
+    "source_path": "/workspace/generated_images/exec-ed0147e7-57ca-4f5d-8526-ee8201776a18.png",
+    "raw_file": "raw/wynne-knot.png",
+    "frame_count": 6
+  },
+  {
+    "identity": "wynne",
+    "move": "toll",
+    "prompt": "Use the attached approved Wynne sprite as the ONLY identity model. Make ONE horizontal continuous battle animation strip on transparent RGBA, SIX full-body figures left-to-right with WIDE EMPTY gutters, all on common ground, all same scale as attached seed and one another. Same polished chibi rendering, EXACT same large head/body proportions, face, brown hair, purple eyes, crimson hood, hanging talismans, black red gold dress, boots, stitched doll and SHORT physical red thread loop. Always cradle doll with one arm. Face RIGHT toward enemies (allies left). Whole body, arms, hood tips, hems and talismans must fit, no cropping. No glow, magic lines, long threads, particles, shadows, motion lines, text or scenery. Subtle careful precise doll-maker movement. Six chronological poses, fourth is release/contact, sixth returns to exact seed ready. TOLL tag offering move: 1 seed ready; 2 free hand takes ONE hanging paper talisman from her side while other arm cradles doll; 3 raise that paper tag held between TWO fingers; 4 press paper tag forward-RIGHT at arm's length toward enemy, clearly extended; 5 hold out tag then retract hand toward side; 6 seed ready. Short thread remains near doll. Six full figures and wide gutters.",
+    "references": [
+      "seeds/wynne.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-c968b836-7e2f-444c-9323-aa51e898b705",
+    "source_path": "/workspace/generated_images/exec-c968b836-7e2f-444c-9323-aa51e898b705.png",
+    "raw_file": "raw/wynne-toll.png",
+    "frame_count": 6
+  },
+  {
+    "identity": "wynne",
+    "move": "weave",
+    "prompt": "Use the attached approved Wynne sprite as the ONLY identity model. Make ONE horizontal continuous battle animation strip on transparent RGBA, SIX full-body figures left-to-right with WIDE EMPTY gutters, all on common ground, all same scale as attached seed and one another. Same polished chibi rendering, EXACT same large head/body proportions, face, brown hair, purple eyes, crimson hood, hanging talismans, black red gold dress, boots, stitched doll and SHORT physical red thread loop. Always cradle doll with one arm. Face RIGHT toward enemies (allies left). Whole body, arms, hood tips, hems and talismans must fit, no cropping. No glow, magic lines, long threads, particles, shadows, motion lines, text or scenery. Subtle careful precise doll-maker movement. Six chronological poses, fourth is release/contact, sixth returns to exact seed ready. WEAVE gesture: 1 exact seed ready; 2 small step backward screen left, doll pulled protectively in; 3 half-turn torso while opening free arm widely, preparing sweep; 4 sweep free hand broadly ACROSS THE RIGHT SIDE at chest height, elbow extended, reaching multiple foes right; 5 finish arc with palm lowered toward right, sleeve follows; 6 exact seed ready. NO drawn magical thread arc: express weaving by arm and torso ONLY. Doll always held. Six clear full figures and very wide gutters.",
+    "references": [
+      "seeds/wynne.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-bd9c9ad9-0689-4393-a7ea-919f491d10f2",
+    "source_path": "/workspace/generated_images/exec-bd9c9ad9-0689-4393-a7ea-919f491d10f2.png",
+    "raw_file": "raw/wynne-weave.png",
+    "frame_count": 6
+  },
+  {
+    "identity": "wynne",
+    "move": "hit",
+    "prompt": "Use the attached approved Wynne sprite as the ONLY identity model. Make ONE horizontal continuous battle animation strip on transparent RGBA, FOUR full-body figures left-to-right with WIDE EMPTY gutters, all on common ground, all same scale as attached seed and one another. Same polished chibi rendering, EXACT same large head/body proportions, face, brown hair, purple eyes, crimson hood, hanging talismans, black red gold dress, boots, stitched doll and SHORT physical red thread loop. Always cradle doll with one arm. Face RIGHT toward enemies (allies left). Whole body, arms, hood tips, hems and talismans must fit, no cropping. No glow, magic lines, long threads, particles, shadows, motion lines, text or scenery. Subtle careful precise doll-maker movement. Four chronological reactions, first and last seed ready. HIT reaction FOUR figures: 1 ready; 2 recoil LEFT from attack on RIGHT, curl shoulders around doll to protect it, worried face; 3 catch balance slightly crouched; 4 ready. CRITICAL export real clean transparency, absolutely zero alpha in all empty areas, NO white paper, NO ambient haze, NO halo, NO shadows. Four FULL isolated sprites. Keep the entire strip well INSIDE canvas with large empty transparent outer margins and wide clear gutters.",
+    "references": [
+      "seeds/wynne.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-4f843506-3760-4d2d-876f-4f9d9309cdec",
+    "source_path": "/workspace/generated_images/exec-4f843506-3760-4d2d-876f-4f9d9309cdec.png",
+    "raw_file": "raw/wynne-hit.png",
+    "frame_count": 4
+  },
+  {
+    "identity": "wynne",
+    "move": "block",
+    "prompt": "Use the attached approved Wynne sprite as the ONLY identity model. Make ONE horizontal continuous battle animation strip on transparent RGBA, FOUR full-body figures left-to-right with WIDE EMPTY gutters, all on common ground, all same scale as attached seed and one another. Same polished chibi rendering, EXACT same large head/body proportions, face, brown hair, purple eyes, crimson hood, hanging talismans, black red gold dress, boots, stitched doll and SHORT physical red thread loop. Always cradle doll with one arm. Face RIGHT toward enemies (allies left). Whole body, arms, hood tips, hems and talismans must fit, no cropping. No glow, magic lines, long threads, particles, shadows, motion lines, text or scenery. Subtle careful precise doll-maker movement. Four chronological reaction poses, first ready. BLOCK: exactly FOUR figures. 1 seed ready; 2 turn right shoulder inward toward attack from screen RIGHT, shield doll BEHIND shoulder on left, hunch knees; 3 brace in that shoulder guard, doll safely held behind; 4 reset to seed guard. TRANSPARENT EMPTY background alpha ZERO throughout all gutters, absolutely no white fill, no lighting halo, no ground shadow. Four isolated production sprites, NOT a sheet on paper.",
+    "references": [
+      "seeds/wynne.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-90b27871-60a2-46bf-9259-ec7a3de46bb1",
+    "source_path": "/workspace/generated_images/exec-90b27871-60a2-46bf-9259-ec7a3de46bb1.png",
+    "raw_file": "raw/wynne-block.png",
+    "frame_count": 4
+  },
+  {
+    "identity": "wynne",
+    "move": "down",
+    "prompt": "Use the attached approved Wynne sprite as the ONLY identity model. Make ONE horizontal continuous battle animation strip on transparent RGBA, FOUR full-body figures left-to-right with WIDE EMPTY gutters, all on common ground, all same scale as attached seed and one another. Same polished chibi rendering, EXACT same large head/body proportions, face, brown hair, purple eyes, crimson hood, hanging talismans, black red gold dress, boots, stitched doll and SHORT physical red thread loop. Always cradle doll with one arm. Face RIGHT toward enemies (allies left). Whole body, arms, hood tips, hems and talismans must fit, no cropping. No glow, magic lines, long threads, particles, shadows, motion lines, text or scenery. Subtle careful precise doll-maker movement. Four chronological falling poses, final stays unconscious and NEVER gets up. DOWN reaction: exactly FOUR frames: 1 seed ready, knees just beginning to soften; 2 knees give way, kneeling while firmly cradling doll; 3 sink sideways to LEFT onto hip and elbow, still hugging doll; 4 LIE FULLY HORIZONTAL unconscious on ground eyes CLOSED, head to left and boots to right, doll held against chest, body extended as long as standing seed height, DO NOT shrink body/head for prone pose. Wide extra space for horizontal body, no clipping. Four isolated sprites on ABSOLUTELY EMPTY transparent alpha ZERO background, no floor, no white fill, no shadow, no dust. SAME head size ALL frames.",
+    "references": [
+      "seeds/wynne.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-6af65b9b-0105-4dad-a39d-b2325ca31465",
+    "source_path": "/workspace/generated_images/exec-6af65b9b-0105-4dad-a39d-b2325ca31465.png",
+    "raw_file": "raw/wynne-down.png",
+    "frame_count": 4
+  },
+  {
+    "identity": "astrid",
+    "move": "attack",
+    "prompt": "Use attached approved Astrid sprite as the ONLY identity model. Create ONE continuous horizontal animation strip with exactly SIX full-body isolated sprites, chronological left to right, WIDE transparent gutters and generous outer margins. True transparent RGBA alpha zero in empty regions. Same polished illustrated chibi style, EXACT same large head/body proportion, silver lavender bob hair, purple eyes, gold star hairpin, navy ivory gold split mantle, dark trousers and boots. Astrolabe ring set stays IN or directly beside her RIGHT hand; NEVER floating around body. Same scale every figure, facing RIGHT toward enemies. Composed deliberate graceful movements. Keep full hands, mantle tails, hair, ring and boots uncropped. No ring glows, beams, star trails, magic lines, particles, shadows, text, scenery, white haze or ground. Frame 1 is seed ready; frame 4 contact/release; frame 6 returns seed ready. ATTACK starneedle gesture, body ONLY: 1 seed ready; 2 raise TWO fingers of free hand toward eye level; 3 two fingers at eye level preparing precise aim; 4 straighten free arm in precise point forward-RIGHT, extended and STILL, no bolt; 5 lower pointing arm; 6 seed ready. Astrolabe stays at other right hand, close. Six figures no taller than seed, each separated by clear empty space.",
+    "references": [
+      "seeds/astrid.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-7ad71c1d-767f-4d64-ab64-a54b98cdede3",
+    "source_path": "/workspace/generated_images/exec-7ad71c1d-767f-4d64-ab64-a54b98cdede3.png",
+    "raw_file": "raw/astrid-attack.png",
+    "frame_count": 6
+  },
+  {
+    "identity": "astrid",
+    "move": "deflect",
+    "prompt": "Use attached approved Astrid sprite as the ONLY identity model. Create ONE continuous horizontal animation strip with exactly SIX full-body isolated sprites, chronological left to right, WIDE transparent gutters and generous outer margins. True transparent RGBA alpha zero in empty regions. Same polished illustrated chibi style, EXACT same large head/body proportion, silver lavender bob hair, purple eyes, gold star hairpin, navy ivory gold split mantle, dark trousers and boots. Astrolabe ring set stays IN or directly beside her RIGHT hand; NEVER floating around body. Same scale every figure, facing RIGHT toward enemies. Composed deliberate graceful movements. Keep full hands, mantle tails, hair, ring and boots uncropped. No ring glows, beams, star trails, magic lines, particles, shadows, text, scenery, white haze or ground. Frame 1 is seed ready; frame 4 contact/release; frame 6 returns seed ready. DEFLECT gesture, redirect enemy move with free open palm: 1 seed ready; 2 raise free OPEN palm facing screen RIGHT; 3 push open palm outward toward RIGHT; 4 sweep that palm SIDEWAYS AND DOWN, turning wrist as if bending an invisible line aside, arm diagonally downward right; 5 HOLD turned palm down and outward, then recover; 6 seed ready. Clear distinction from straight pointing attack: OPEN PALM and descending sideways sweep. Astrolabe held close to right hand throughout. Six full isolated figures with wide gutters.",
+    "references": [
+      "seeds/astrid.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-7472a7a7-fe2e-4bf1-bfb1-479fdbd2a66e",
+    "source_path": "/workspace/generated_images/exec-7472a7a7-fe2e-4bf1-bfb1-479fdbd2a66e.png",
+    "raw_file": "raw/rejected/astrid-deflect-duplicate-prop.png",
+    "frame_count": 6,
+    "status": "rejected"
+  },
+  {
+    "identity": "astrid",
+    "move": "dial",
+    "prompt": "Use attached approved Astrid sprite as the ONLY identity model. Create ONE continuous horizontal animation strip with exactly SIX full-body isolated sprites, chronological left to right, WIDE transparent gutters and generous outer margins. True transparent RGBA alpha zero in empty regions. Same polished illustrated chibi style, EXACT same large head/body proportion, silver lavender bob hair, purple eyes, gold star hairpin, navy ivory gold split mantle, dark trousers and boots. Astrolabe ring set stays IN or directly beside her RIGHT hand; NEVER floating around body. Same scale every figure, facing RIGHT toward enemies. Composed deliberate graceful movements. Keep full hands, mantle tails, hair, ring and boots uncropped. No ring glows, beams, star trails, magic lines, particles, shadows, text, scenery, white haze or ground. Frame 1 is seed ready; frame 4 contact/release; frame 6 returns seed ready. DIAL ring turning move: 1 seed ready; 2 bring held astrolabe directly in front of CHEST; 3 OTHER free hand reaches across and grasps outer ring; 4 one CLEAR physical ROTATION gesture turns nested rings while right hand holds base, wrists move, gold star ring visibly tilted; 5 hold rings turned at chest, gaze stays toward foes RIGHT; 6 lower to seed ready. Ring set remains in contact with holding right hand, no duplication, no floating ring. Six spacious full figures.",
+    "references": [
+      "seeds/astrid.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-fcf186da-e1cb-41e8-acdf-fabbdd538df7",
+    "source_path": "/workspace/generated_images/exec-fcf186da-e1cb-41e8-acdf-fabbdd538df7.png",
+    "raw_file": "raw/astrid-dial.png",
+    "frame_count": 6
+  },
+  {
+    "identity": "astrid",
+    "move": "read",
+    "prompt": "Edit attached approved Astrid into ONE horizontal SIX-frame READ animation strip. Six full-body isolated sprites left-to-right with VERY WIDE CLEAN EMPTY gutters and large outer margins. TRANSPARENT alpha ZERO outside figures: absolutely NO white/gray fill, haze, halos, glows, shadows, effects, text or scenery. Exact same polished chibi style and head/body proportions as seed: silver lavender bob, purple eyes, gold star hairpin, navy ivory gold split mantle, trousers boots and astrolabe. Same scale every frame. Face RIGHT. Astrolabe remains physically held in RIGHT hand, never orbits body. 1 seed ready; 2 lift astrolabe; 3 instrument reaches EYE LEVEL, slight lean forward; 4 look THROUGH ring toward RIGHT, composed reading posture, eye seen through ring; 5 hold reading briefly then begin lowering; 6 seed ready. No projected stars or lines. Every part of hair, mantle, boots and ring uncropped. One continuous strip in a single row.",
+    "references": [
+      "seeds/astrid.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-27610545-94f0-4ee1-a839-b949bbc54586",
+    "source_path": "/workspace/generated_images/exec-27610545-94f0-4ee1-a839-b949bbc54586.png",
+    "raw_file": "raw/astrid-read.png",
+    "frame_count": 6
+  },
+  {
+    "identity": "astrid",
+    "move": "hit",
+    "prompt": "Edit attached approved Astrid into ONE horizontal FOUR-frame HIT reaction strip. Full-body isolated sprites left-to-right, wide transparent gutters, generous outer margins. True transparent RGBA alpha zero outside figures, no background, haze, shadows, VFX, glows, motion lines or text. Same polished chibi style, EXACT same head/body proportions and scale, silver lavender bob, purple eyes, gold star hairpin, navy ivory gold split mantle, trousers, boots and astrolabe. Face RIGHT toward foes. Astrolabe stays held in RIGHT hand or against chest, never orbits body. 1 exact seed ready; 2 recoil backward LEFT from hit arriving from RIGHT, shoulders curl and astrolabe pulled safely to chest; 3 catch balance lower stance, ring hugged at chest; 4 return exact seed ready. Same head size even crouched. All extremities uncropped.",
+    "references": [
+      "seeds/astrid.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-ab212238-2e09-4642-86d2-dc7a66d31cbc",
+    "source_path": "/workspace/generated_images/exec-ab212238-2e09-4642-86d2-dc7a66d31cbc.png",
+    "raw_file": "raw/astrid-hit.png",
+    "frame_count": 4
+  },
+  {
+    "identity": "astrid",
+    "move": "block",
+    "prompt": "Edit attached approved Astrid into ONE horizontal FOUR-frame BLOCK reaction strip. Full-body isolated sprites left-to-right, wide transparent gutters, generous outer margins. True transparent RGBA alpha zero outside figures, no background, haze, shadows, VFX, glows, motion lines or text. Same polished chibi style, EXACT same head/body proportions and scale, silver lavender bob, purple eyes, gold star hairpin, navy ivory gold split mantle, trousers, boots and astrolabe. Face RIGHT toward foes. Astrolabe stays held in RIGHT hand or against chest, never orbits body. 1 exact seed ready; 2 free arm raises mantle ACROSS BODY to shield from screen RIGHT, ring held safely close with right hand; 3 brace under raised mantle with knees bent, composed face; 4 lower mantle and reset exact seed ready. Same head size all poses, whole mantle and hands uncropped.",
+    "references": [
+      "seeds/astrid.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-587bf0f0-a221-43bc-9073-5841248aa44f",
+    "source_path": "/workspace/generated_images/exec-587bf0f0-a221-43bc-9073-5841248aa44f.png",
+    "raw_file": "raw/astrid-block.png",
+    "frame_count": 4
+  },
+  {
+    "identity": "astrid",
+    "move": "down",
+    "prompt": "Edit attached approved Astrid into ONE horizontal FOUR-frame DOWN strip, full-body isolated sprites, extra-wide transparent gutters and LARGE outer margins. True transparent RGBA alpha ZERO outside figures. Same polished chibi rendering and EXACT seed head/body proportions, silver lavender bob, purple eyes, gold star hairpin, navy ivory gold mantle, trousers boots and astrolabe. No VFX, glows, star trails, dust, shadows, floor, text or haze. Exactly four chronological poses: 1 seed ready, knees start weakening; 2 knees give way, kneel with astrolabe held tight at chest; 3 sink sideways LEFT onto hip and elbow, ring still held close; 4 lie fully HORIZONTAL unconscious eyes CLOSED, head LEFT feet RIGHT, holding astrolabe close, does NOT get up. Final lying body must be as LONG as the standing seed is TALL, with SAME head size as other poses. Give last pose ample width, all hair and boots well INSIDE canvas, no clipping.",
+    "references": [
+      "seeds/astrid.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-1440423e-0fc7-4cf3-93ed-7c3ce110dfa3",
+    "source_path": "/workspace/generated_images/exec-1440423e-0fc7-4cf3-93ed-7c3ce110dfa3.png",
+    "raw_file": "raw/astrid-down.png",
+    "frame_count": 4
+  },
+  {
+    "identity": "astrid",
+    "move": "deflect",
+    "prompt": "Edit attached approved Astrid into ONE horizontal SIX-frame DEFLECT strip. Exactly SIX full-body sprites, wide transparent gutters and margins. True transparent alpha ZERO outside figures; no haze, shadow, glow, VFX, stars, lines or text. EXACT same chibi proportions, face, silver lavender bob, purple eyes, gold star hairpin, navy ivory gold mantle, boots and costume. CRITICAL PROP CONTINUITY: there is ONLY ONE astrolabe instrument total PER FIGURE. Right hand holds that ONE instrument at the SAME SCREEN-RIGHT position beside waist/chest in ALL SIX frames. NEVER duplicate instrument, NEVER change holding hand, NEVER add another ring on left. Only EMPTY FREE hand moves; it starts on SCREEN LEFT and reaches ACROSS torso toward RIGHT, holding NOTHING. Poses: 1 seed ready; 2 free empty palm rises across chest facing RIGHT, instrument stays beside waist on screen right; 3 empty palm pushes outward RIGHT; 4 empty palm sweeps SIDEWAYS and DOWN diagonally RIGHT as if turning invisible line aside; 5 hold empty palm turned down; 6 seed ready. Same scale every frame, full mantle and hands fit. Instrument remains single and stationary near right holding hand.",
+    "references": [
+      "seeds/astrid.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-8276bf08-fa24-49da-8621-c765a7d058ed",
+    "source_path": "/workspace/generated_images/exec-8276bf08-fa24-49da-8621-c765a7d058ed.png",
+    "raw_file": "raw/astrid-deflect.png",
+    "frame_count": 6
+  }
+]

@@ -1,0 +1,1852 @@
+[
+  {
+    "identity": "wynne",
+    "move": "attack",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 0.9465020576131687,
+    "ground_y": 497,
+    "raw_file": "raw/wynne-attack.png",
+    "file": "spaced/wynne-attack.png",
+    "cells": "cells/wynne-attack",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          11,
+          102,
+          351,
+          594
+        ],
+        "uniform_raw_scale": 0.9465020576131687,
+        "offset": [
+          159,
+          33
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          375,
+          102,
+          716,
+          594
+        ],
+        "uniform_raw_scale": 0.9465020576131687,
+        "offset": [
+          158,
+          33
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          738,
+          102,
+          1081,
+          594
+        ],
+        "uniform_raw_scale": 0.9465020576131687,
+        "offset": [
+          158,
+          33
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1099,
+          103,
+          1481,
+          594
+        ],
+        "uniform_raw_scale": 0.9465020576131687,
+        "offset": [
+          139,
+          34
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1464,
+          102,
+          1796,
+          594
+        ],
+        "uniform_raw_scale": 0.9465020576131687,
+        "offset": [
+          163,
+          33
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1824,
+          102,
+          2160,
+          594
+        ],
+        "uniform_raw_scale": 0.9465020576131687,
+        "offset": [
+          161,
+          33
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 0.9995,
+    "maximum_measured": 1.002,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "lift doll; pinch short loop",
+      "prepare free-hand flick",
+      "flick forward-right; contact",
+      "retract to doll",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "attack": "attack"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "wynne",
+    "move": "knot",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 1.0407239819004526,
+    "ground_y": 497,
+    "raw_file": "raw/wynne-knot.png",
+    "file": "spaced/wynne-knot.png",
+    "cells": "cells/wynne-knot",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          27,
+          119,
+          337,
+          567
+        ],
+        "uniform_raw_scale": 1.0407239819004526,
+        "offset": [
+          158,
+          33
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          393,
+          119,
+          696,
+          567
+        ],
+        "uniform_raw_scale": 1.0407239819004526,
+        "offset": [
+          162,
+          33
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          751,
+          119,
+          1057,
+          567
+        ],
+        "uniform_raw_scale": 1.0407239819004526,
+        "offset": [
+          161,
+          33
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1110,
+          119,
+          1420,
+          567
+        ],
+        "uniform_raw_scale": 1.0407239819004526,
+        "offset": [
+          158,
+          33
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1481,
+          119,
+          1781,
+          567
+        ],
+        "uniform_raw_scale": 1.0407239819004526,
+        "offset": [
+          164,
+          33
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1842,
+          119,
+          2147,
+          567
+        ],
+        "uniform_raw_scale": 1.0407239819004526,
+        "offset": [
+          162,
+          34
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 0.9775,
+    "maximum_measured": 0.988,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "raise doll to chest",
+      "pull thread taut sideways",
+      "pinch knot; sharp tug right",
+      "hold pinch then lower",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "threadhex": "knot",
+      "knothex": "knot",
+      "longthread": "knot"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "wynne",
+    "move": "toll",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 1.1246943765281174,
+    "ground_y": 497,
+    "raw_file": "raw/wynne-toll.png",
+    "file": "spaced/wynne-toll.png",
+    "cells": "cells/wynne-toll",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          28,
+          150,
+          319,
+          565
+        ],
+        "uniform_raw_scale": 1.1246943765281174,
+        "offset": [
+          156,
+          33
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          392,
+          150,
+          681,
+          565
+        ],
+        "uniform_raw_scale": 1.1246943765281174,
+        "offset": [
+          158,
+          33
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          755,
+          150,
+          1043,
+          565
+        ],
+        "uniform_raw_scale": 1.1246943765281174,
+        "offset": [
+          158,
+          33
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1117,
+          150,
+          1440,
+          565
+        ],
+        "uniform_raw_scale": 1.1246943765281174,
+        "offset": [
+          138,
+          33
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1480,
+          150,
+          1767,
+          565
+        ],
+        "uniform_raw_scale": 1.1246943765281174,
+        "offset": [
+          158,
+          33
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1841,
+          150,
+          2129,
+          565
+        ],
+        "uniform_raw_scale": 1.1246943765281174,
+        "offset": [
+          158,
+          33
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 1.005,
+    "maximum_measured": 1.012,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "take hanging talisman",
+      "raise tag between fingers",
+      "press tag forward-right",
+      "hold then return",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "lifetoll": "toll"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "wynne",
+    "move": "weave",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 1.1855670103092784,
+    "ground_y": 497,
+    "raw_file": "raw/wynne-weave.png",
+    "file": "spaced/wynne-weave.png",
+    "cells": "cells/wynne-weave",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          23,
+          155,
+          293,
+          549
+        ],
+        "uniform_raw_scale": 1.1855670103092784,
+        "offset": [
+          160,
+          34
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          363,
+          160,
+          619,
+          548
+        ],
+        "uniform_raw_scale": 1.1855670103092784,
+        "offset": [
+          168,
+          40
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          721,
+          156,
+          1020,
+          549
+        ],
+        "uniform_raw_scale": 1.1855670103092784,
+        "offset": [
+          143,
+          34
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1107,
+          154,
+          1434,
+          549
+        ],
+        "uniform_raw_scale": 1.1855670103092784,
+        "offset": [
+          126,
+          32
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1502,
+          157,
+          1789,
+          549
+        ],
+        "uniform_raw_scale": 1.1855670103092784,
+        "offset": [
+          150,
+          36
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1881,
+          154,
+          2150,
+          549
+        ],
+        "uniform_raw_scale": 1.1855670103092784,
+        "offset": [
+          160,
+          33
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 0.983,
+    "maximum_measured": 0.996,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "step back; doll pulled in",
+      "open arm; half turn",
+      "sweep arm across right side",
+      "finish arc",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "wovenhex": "weave",
+      "tollring": "weave"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "wynne",
+    "move": "hit",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 0.8695652173913043,
+    "ground_y": 497,
+    "raw_file": "raw/wynne-hit.png",
+    "file": "spaced/wynne-hit.png",
+    "cells": "cells/wynne-hit",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          73,
+          87,
+          451,
+          622
+        ],
+        "uniform_raw_scale": 0.8695652173913043,
+        "offset": [
+          156,
+          34
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          556,
+          95,
+          985,
+          622
+        ],
+        "uniform_raw_scale": 0.8695652173913043,
+        "offset": [
+          134,
+          41
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1145,
+          125,
+          1544,
+          622
+        ],
+        "uniform_raw_scale": 0.8695652173913043,
+        "offset": [
+          146,
+          67
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1702,
+          87,
+          2080,
+          622
+        ],
+        "uniform_raw_scale": 0.8695652173913043,
+        "offset": [
+          156,
+          34
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 1.0019999999999998,
+    "maximum_measured": 1.003,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "flinch; protect doll",
+      "catch balance",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "hit": "hit"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "wynne",
+    "move": "block",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 0.7809847198641766,
+    "ground_y": 497,
+    "raw_file": "raw/wynne-block.png",
+    "file": "spaced/wynne-block.png",
+    "cells": "cells/wynne-block",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          37,
+          47,
+          461,
+          642
+        ],
+        "uniform_raw_scale": 0.7809847198641766,
+        "offset": [
+          154,
+          34
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          582,
+          81,
+          1019,
+          642
+        ],
+        "uniform_raw_scale": 0.7809847198641766,
+        "offset": [
+          150,
+          61
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1164,
+          113,
+          1570,
+          641
+        ],
+        "uniform_raw_scale": 0.7809847198641766,
+        "offset": [
+          162,
+          87
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1715,
+          47,
+          2136,
+          642
+        ],
+        "uniform_raw_scale": 0.7809847198641766,
+        "offset": [
+          156,
+          34
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 0.992,
+    "maximum_measured": 1.027,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "turn shoulder in; shield doll",
+      "brace",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "block": "block"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "wynne",
+    "move": "down",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 0.8630393996247655,
+    "ground_y": 497,
+    "raw_file": "raw/wynne-down.png",
+    "file": "spaced/wynne-down.png",
+    "cells": "cells/wynne-down",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          45,
+          79,
+          395,
+          618
+        ],
+        "uniform_raw_scale": 0.8630393996247655,
+        "offset": [
+          169,
+          34
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          505,
+          136,
+          877,
+          618
+        ],
+        "uniform_raw_scale": 0.8630393996247655,
+        "offset": [
+          160,
+          84
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          984,
+          194,
+          1451,
+          621
+        ],
+        "uniform_raw_scale": 0.8630393996247655,
+        "offset": [
+          118,
+          130
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1536,
+          315,
+          2144,
+          619
+        ],
+        "uniform_raw_scale": 0.8630393996247655,
+        "offset": [
+          58,
+          237
+        ],
+        "ready_seed_lock": false
+      }
+    ],
+    "median": 1.0,
+    "maximum_measured": 1.048,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "frame_descriptions": [
+      "ready; knees soften",
+      "knees give way; hold doll",
+      "sink sideways",
+      "lie unconscious holding doll; HOLD"
+    ],
+    "proposed_ActionId_mapping": {
+      "down": "down"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "astrid",
+    "move": "attack",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 1.1108374384236452,
+    "ground_y": 497,
+    "raw_file": "raw/astrid-attack.png",
+    "file": "spaced/astrid-attack.png",
+    "cells": "cells/astrid-attack",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          28,
+          139,
+          338,
+          551
+        ],
+        "uniform_raw_scale": 1.1108374384236452,
+        "offset": [
+          148,
+          41
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          392,
+          139,
+          700,
+          551
+        ],
+        "uniform_raw_scale": 1.1108374384236452,
+        "offset": [
+          149,
+          41
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          757,
+          139,
+          1062,
+          552
+        ],
+        "uniform_raw_scale": 1.1108374384236452,
+        "offset": [
+          150,
+          41
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1119,
+          139,
+          1433,
+          551
+        ],
+        "uniform_raw_scale": 1.1108374384236452,
+        "offset": [
+          146,
+          42
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1480,
+          139,
+          1786,
+          551
+        ],
+        "uniform_raw_scale": 1.1108374384236452,
+        "offset": [
+          150,
+          42
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1839,
+          139,
+          2148,
+          551
+        ],
+        "uniform_raw_scale": 1.1108374384236452,
+        "offset": [
+          148,
+          42
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 0.9735,
+    "maximum_measured": 0.977,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "raise two fingers",
+      "aim at eye level",
+      "precise straight point right",
+      "lower",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "attack": "attack",
+      "starneedle": "attack"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "astrid",
+    "move": "deflect",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 0.9318181818181818,
+    "ground_y": 497,
+    "raw_file": "raw/astrid-deflect.png",
+    "file": "spaced/astrid-deflect.png",
+    "cells": "cells/astrid-deflect",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          5,
+          119,
+          363,
+          609
+        ],
+        "uniform_raw_scale": 0.9318181818181818,
+        "offset": [
+          153,
+          43
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          368,
+          119,
+          725,
+          609
+        ],
+        "uniform_raw_scale": 0.9318181818181818,
+        "offset": [
+          154,
+          43
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          730,
+          119,
+          1087,
+          608
+        ],
+        "uniform_raw_scale": 0.9318181818181818,
+        "offset": [
+          154,
+          43
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1093,
+          119,
+          1450,
+          608
+        ],
+        "uniform_raw_scale": 0.9318181818181818,
+        "offset": [
+          154,
+          43
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1455,
+          119,
+          1812,
+          608
+        ],
+        "uniform_raw_scale": 0.9318181818181818,
+        "offset": [
+          154,
+          43
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1817,
+          119,
+          2172,
+          608
+        ],
+        "uniform_raw_scale": 0.9318181818181818,
+        "offset": [
+          154,
+          43
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 1.0065,
+    "maximum_measured": 1.011,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "raise open empty palm",
+      "push outward",
+      "sweep sideways and down",
+      "hold turned palm",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "deflectfate": "deflect",
+      "crossing": "deflect"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "astrid",
+    "move": "dial",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 0.9657387580299786,
+    "ground_y": 497,
+    "raw_file": "raw/astrid-dial.png",
+    "file": "spaced/astrid-dial.png",
+    "cells": "cells/astrid-dial",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          32,
+          117,
+          379,
+          590
+        ],
+        "uniform_raw_scale": 0.9657387580299786,
+        "offset": [
+          152,
+          42
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          430,
+          116,
+          683,
+          590
+        ],
+        "uniform_raw_scale": 0.9657387580299786,
+        "offset": [
+          198,
+          41
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          773,
+          116,
+          1036,
+          590
+        ],
+        "uniform_raw_scale": 0.9657387580299786,
+        "offset": [
+          193,
+          41
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1123,
+          115,
+          1411,
+          590
+        ],
+        "uniform_raw_scale": 0.9657387580299786,
+        "offset": [
+          181,
+          40
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1479,
+          116,
+          1744,
+          590
+        ],
+        "uniform_raw_scale": 0.9657387580299786,
+        "offset": [
+          192,
+          41
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1811,
+          116,
+          2150,
+          590
+        ],
+        "uniform_raw_scale": 0.9657387580299786,
+        "offset": [
+          156,
+          42
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 0.955,
+    "maximum_measured": 0.96,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "bring astrolabe to chest",
+      "other hand grips outer ring",
+      "rotate rings",
+      "hold rings turned",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "turncycle": "dial",
+      "doubledial": "dial"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "astrid",
+    "move": "read",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 1.1683937823834196,
+    "ground_y": 497,
+    "raw_file": "raw/astrid-read.png",
+    "file": "spaced/astrid-read.png",
+    "cells": "cells/astrid-read",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          31,
+          129,
+          322,
+          521
+        ],
+        "uniform_raw_scale": 1.1683937823834196,
+        "offset": [
+          150,
+          42
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          393,
+          129,
+          686,
+          522
+        ],
+        "uniform_raw_scale": 1.1683937823834196,
+        "offset": [
+          149,
+          42
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          747,
+          129,
+          1032,
+          522
+        ],
+        "uniform_raw_scale": 1.1683937823834196,
+        "offset": [
+          154,
+          42
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1107,
+          131,
+          1378,
+          522
+        ],
+        "uniform_raw_scale": 1.1683937823834196,
+        "offset": [
+          162,
+          44
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1474,
+          129,
+          1747,
+          521
+        ],
+        "uniform_raw_scale": 1.1683937823834196,
+        "offset": [
+          160,
+          42
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 6,
+        "source_box": [
+          1841,
+          129,
+          2132,
+          522
+        ],
+        "uniform_raw_scale": 1.1683937823834196,
+        "offset": [
+          150,
+          42
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 1.0005,
+    "maximum_measured": 1.013,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      1,
+      1.2,
+      0.75,
+      1,
+      0.8,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "lift astrolabe",
+      "raise to eye level",
+      "look through toward right",
+      "hold reading then lower",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "readorbit": "read"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "astrid",
+    "move": "hit",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 0.8010657193605684,
+    "ground_y": 497,
+    "raw_file": "raw/astrid-hit.png",
+    "file": "spaced/astrid-hit.png",
+    "cells": "cells/astrid-hit",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          60,
+          79,
+          488,
+          648
+        ],
+        "uniform_raw_scale": 0.8010657193605684,
+        "offset": [
+          148,
+          43
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          550,
+          101,
+          964,
+          649
+        ],
+        "uniform_raw_scale": 0.8010657193605684,
+        "offset": [
+          154,
+          60
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1150,
+          121,
+          1539,
+          648
+        ],
+        "uniform_raw_scale": 0.8010657193605684,
+        "offset": [
+          164,
+          77
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1689,
+          80,
+          2117,
+          648
+        ],
+        "uniform_raw_scale": 0.8010657193605684,
+        "offset": [
+          148,
+          44
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 1.013,
+    "maximum_measured": 1.033,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "recoil; ring to chest",
+      "catch balance",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "hit": "hit"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "astrid",
+    "move": "block",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 0.754180602006689,
+    "ground_y": 497,
+    "raw_file": "raw/astrid-block.png",
+    "file": "spaced/astrid-block.png",
+    "cells": "cells/astrid-block",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          66,
+          56,
+          486,
+          660
+        ],
+        "uniform_raw_scale": 0.754180602006689,
+        "offset": [
+          162,
+          43
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          626,
+          56,
+          983,
+          660
+        ],
+        "uniform_raw_scale": 0.754180602006689,
+        "offset": [
+          186,
+          43
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1098,
+          88,
+          1556,
+          659
+        ],
+        "uniform_raw_scale": 0.754180602006689,
+        "offset": [
+          148,
+          68
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1696,
+          57,
+          2115,
+          660
+        ],
+        "uniform_raw_scale": 0.754180602006689,
+        "offset": [
+          162,
+          44
+        ],
+        "ready_seed_lock": true
+      }
+    ],
+    "median": 0.9635,
+    "maximum_measured": 0.974,
+    "not_measured": [],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "frame_descriptions": [
+      "ready",
+      "raise mantle across body",
+      "brace",
+      "ready"
+    ],
+    "proposed_ActionId_mapping": {
+      "block": "block"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {},
+    "recommendation": "recommended corrected candidate; no alternate option"
+  },
+  {
+    "identity": "astrid",
+    "move": "down",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "shared_character_scale": 1.0,
+    "raw_to_seed_resolution_scale": 0.884313725490196,
+    "ground_y": 497,
+    "raw_file": "raw/astrid-down.png",
+    "file": "spaced/astrid-down.png",
+    "cells": "cells/astrid-down",
+    "transforms": [
+      {
+        "frame": 1,
+        "source_box": [
+          77,
+          105,
+          453,
+          621
+        ],
+        "uniform_raw_scale": 0.884313725490196,
+        "offset": [
+          154,
+          43
+        ],
+        "ready_seed_lock": true
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          515,
+          182,
+          871,
+          618
+        ],
+        "uniform_raw_scale": 0.884313725490196,
+        "offset": [
+          162,
+          113
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          945,
+          227,
+          1414,
+          613
+        ],
+        "uniform_raw_scale": 0.884313725490196,
+        "offset": [
+          112,
+          158
+        ],
+        "ready_seed_lock": false
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1475,
+          361,
+          2111,
+          609
+        ],
+        "uniform_raw_scale": 0.884313725490196,
+        "offset": [
+          39,
+          281
+        ],
+        "ready_seed_lock": false
+      }
+    ],
+    "median": 0.9875,
+    "maximum_measured": 0.991,
+    "not_measured": [
+      4
+    ],
+    "numeric_gate": "pass",
+    "status": "candidate",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "timing_weights": [
+      0.8,
+      1,
+      0.9,
+      1
+    ],
+    "frame_descriptions": [
+      "ready; knees soften",
+      "knees give way; ring close",
+      "sink sideways",
+      "lie unconscious holding ring; HOLD"
+    ],
+    "proposed_ActionId_mapping": {
+      "down": "down"
+    },
+    "visual_review": "reviewed offline at 390px; owner approval pending",
+    "not_measured_visual_review": {
+      "4": "Examined against seed: same head size, full horizontal body length, eyes closed and instrument held close; automatic scale unavailable."
+    },
+    "recommendation": "recommended corrected candidate; no alternate option"
+  }
+]

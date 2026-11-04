@@ -1,0 +1,40 @@
+[
+  {
+    "identity": "wynne",
+    "file": "seeds/wynne.png",
+    "copied_from": "incoming/ART-CHAR-CLASS-NEW-002/unit/wynne.png",
+    "sha256": "b2888ab61fcb39fc5e4fc508c0a6695efae1c74224c5460d32f724a24fa091e6",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "facing": "right",
+    "sole_y": 496,
+    "ground_y": 497,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "byte_identical": true
+  },
+  {
+    "identity": "astrid",
+    "file": "seeds/astrid.png",
+    "copied_from": "incoming/ART-CHAR-CLASS-NEW-002/unit/astrid.png",
+    "sha256": "a2d2ac7833818ff62cc877ecd0e90e87f24d8f56365f57e6c32d9321b36f1b29",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "facing": "right",
+    "sole_y": 496,
+    "ground_y": 497,
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "byte_identical": true
+  }
+]
