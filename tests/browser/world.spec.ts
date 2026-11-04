@@ -11,7 +11,7 @@ import { ruinsMap } from '../../src/content/world/chapter-ruins';
 import type { Commander, Profile } from '../../src/core/world/types';
 const commander: Commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
 // seed() writes a historical v21 envelope; its hiring board keeps the old catalog until refresh.
-const legacyOffers = (profile: Profile) => boardOffers({ ...profile, boardPool: heroCatalog(encounterById, map).filter(h => !['metta', 'thiran', 'lalin', 'wila', 'kael'].includes(h.id)).map(h => h.id) }, map, encounterById);
+const legacyOffers = (profile: Profile) => boardOffers({ ...profile, boardPool: heroCatalog(encounterById, map).filter(h => !['metta', 'thiran', 'lalin', 'wila', 'kael', 'wynne'].includes(h.id)).map(h => h.id) }, map, encounterById);
 import { battleLesson } from '../../src/ui/tutorial';
 import { watchPage } from './diagnostics';
 import { xpAt } from '../fixtures/camp-level';

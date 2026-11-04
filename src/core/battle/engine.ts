@@ -53,6 +53,7 @@ export function skillCooldown(data: EncounterDefinition, heroId: string | undefi
   if (action === 'deepbeat' && hasCap(data, heroId, 'dancerDeep')) cooldown++;
   if (action === 'lastlight' && hasCap(data, heroId, 'lastlightRatio')) cooldown++;
   if (action === 'perfectfist' && hasCap(data, heroId, 'martialPerfectHeavy')) cooldown++;
+  if (action === 'longthread') cooldown -= capAmount(data, heroId, 'wynne2');
   return Math.max(0, cooldown);
 }
 function levelPoints(data: EncounterDefinition, heroId: string | undefined, action: ActionId): number {
@@ -85,7 +86,7 @@ export function songPower(data: EncounterDefinition, heroId: string, action: Son
 export type TargetKind = 'self' | 'ally' | 'party' | 'enemies' | 'enemy';
 export function targetKind(action: ActionId): TargetKind {
   if (action === 'prayer' || action === 'aegis' || action === 'rounddance') return 'party';
-  if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor', 'quake', 'saintarc', 'circlefist'].includes(action)) return 'enemies';
+  if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor', 'quake', 'saintarc', 'circlefist', 'wovenhex', 'tollring'].includes(action)) return 'enemies';
   if (['brace', 'evade', 'taunt', 'valor', 'mend', 'rally', 'spearwall', 'finale', 'bulwark', 'parry', 'halo', 'hold', 'warcry', 'dread', 'stonearmor', 'rouse'].includes(action)) return 'self';
   if (['guard', 'ward', 'heal', 'haste', 'sanctuary', 'bless', 'revive', 'fury', 'decoy', 'guardstone', 'solo', 'cadence', 'duet', 'deepbeat', 'closingstep'].includes(action)) return 'ally';
   return 'enemy';
@@ -153,7 +154,7 @@ export const ambushBonus = (state: BattleState, data: EncounterDefinition, enemy
 // Magical damage and support use Magic Power (legacy field `skillBonus`); physical damage uses
 // Attack (`damageBonus`). Flat talent bonuses and skill levels keep their existing order.
 export const SUPPORT_SKILLS: readonly ActionId[] = ['ward', 'heal', 'prayer', 'valor', 'mend', 'bless', 'aegis'];
-export const MAGIC_DAMAGE_SKILLS: readonly ActionId[] = ['bolt', 'sigil', 'storm', 'dispel', 'acid', 'bomb', 'catalyst', 'finale', 'note'];
+export const MAGIC_DAMAGE_SKILLS: readonly ActionId[] = ['bolt', 'sigil', 'storm', 'dispel', 'acid', 'bomb', 'catalyst', 'finale', 'note', 'threadhex', 'lifetoll', 'tollring'];
 export const usesMagicPower = (action: ActionId): boolean => SUPPORT_SKILLS.includes(action) || MAGIC_DAMAGE_SKILLS.includes(action);
 // Percent skills (bulwark, halo, blessing, war cry, revive): their power is a percent that only talents raise.
 export const PERCENT_SKILLS: readonly ActionId[] = ['bulwark', 'halo', 'revive', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread'];
@@ -241,6 +242,37 @@ export function releasePower(data: EncounterDefinition, heroId: string, paid: nu
   const raw = data.skills.releasefist.power + paid * RELEASE_PER_CHI;
   return Math.round(raw * percent / 100) + (hero?.talents?.power?.releasefist ?? 0) + paid * capAmount(data, heroId, 'martialReleasePer')
     + (paid === CHI_MAX ? capAmount(data, heroId, 'kael3') : 0);
+}
+// ---- P03 Hexer (docs/design/ROSTER_30_TH.md §3, draft numbers) ----
+// Each hexer keeps its own stack (1–3) on a foe. A curse laid in round r ticks as rounds r and r+1 end (`until` = r+1);
+// laying it again refreshes (never shortens) its life. Ticks are energy damage through Magic Power, veilguard and
+// fatigue, never a hit bonus, mark or corrosion; they need the hexer standing. A toll makes a cursed foe pay before each
+// attacking move it really makes; paying never cancels the move unless the foe falls.
+export const HEX_MAX = 3; export const HEX_LIFE_CAP = 3;
+export const hexesOn = (enemy: EnemyState | undefined): number => enemy?.hexes?.reduce((n, h) => n + h.stacks, 0) ?? 0;
+export function hexTickPower(data: EncounterDefinition, heroId: string, stacks: number): number {
+  const per = skillPower(data, heroId, 'threadhex') + capAmount(data, heroId, 'hexThreadPer') + (stacks >= HEX_MAX ? capAmount(data, heroId, 'wynne3') : 0);
+  return stacks * per;
+}
+function hexTicks(state: BattleState, data: EncounterDefinition, events: BattleEvent[]): void {
+  for (const def of data.enemies) {
+    const foe = state.enemies.find(e => e.id === def.id)!;
+    for (const h of foe.hexes ?? []) {
+      if (foe.hp <= 0 || h.until < state.round || !living(state, h.heroId)) continue;
+      const dealt = Math.min(foe.hp, tired(data, h.heroId, veiled(state, data, foe, hexTickPower(data, h.heroId, h.stacks))));
+      foe.hp -= dealt; events.push({ type: 'damage', sourceId: h.heroId, targetId: foe.id, amount: dealt, text: 'Curse.' });
+      if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
+    }
+    if (foe.hexes) { foe.hexes = foe.hexes.filter(h => h.until > state.round && foe.hp > 0); if (!foe.hexes.length) delete foe.hexes; }
+    if (foe.toll && (foe.toll.until <= state.round || foe.hp <= 0)) delete foe.toll;
+  }
+}
+// The toll a foe pays as its attacking move begins (the caller has excluded phase turns, charges and cancelled moves).
+function payToll(state: BattleState, data: EncounterDefinition, foe: EnemyState, events: BattleEvent[]): void {
+  const toll = foe.toll; if (!toll || toll.until < state.round || !living(state, toll.heroId)) return;
+  const dealt = Math.min(foe.hp, tired(data, toll.heroId, veiled(state, data, foe, toll.power))); foe.hp -= dealt;
+  events.push({ type: 'toll', sourceId: toll.heroId, targetId: foe.id, amount: dealt, text: 'Toll paid.' });
+  if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
 }
 
 // ---- Equipment (2D-2) ----
@@ -381,6 +413,7 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
     state.turnIndex++;
     if (state.turnIndex >= state.order.length) {
       trackingShots(state, data, events); if (settled(state, data, events)) return;
+      hexTicks(state, data, events); if (settled(state, data, events)) return;
       state.round++; state.order = roundOrder(state, data); state.turnIndex = 0;
       // A priest's long prayer (or dawn) heals every standing ally again as its round begins.
       const echo = state.prayerEcho;
@@ -627,7 +660,10 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           if (parry && !parry.all) parried(state, data, enemy, recipient, events);
         }
       };
-      if (intent.special === 'phase') beginPhase(state, data, enemy, events);
+      // A tolled foe pays as its attacking move begins; falling to the toll ends its turn without the move.
+      if (!intent.special && !intent.charge && enemy.interruptedRound !== state.round) payToll(state, data, enemy, events);
+      if (enemy.hp <= 0) { /* fell paying the toll */ }
+      else if (intent.special === 'phase') beginPhase(state, data, enemy, events);
       else if (enemy.interruptedRound === state.round) {
         events.push({ type: 'cancel', sourceId: actorId, cause: intent.kind === 'energy' ? 'sealed' : 'interrupted', text: intent.kind === 'energy' ? 'Energy move sealed.' : 'Physical attack interrupted.' });
         if (data.enemies.find(e => e.id === actorId)?.boss) enemy.steadyRound = state.round + STEADFAST_ROUNDS;
@@ -651,7 +687,7 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
     const frame = structuredClone(state); const beat = state.beat; const round = state.round;
     finishOrAdvance(state, data, events);
     if (state.outcome !== 'active') { frame.outcome = state.outcome; frame.intent = null; }
-    turns.push({ actorId, side: 'enemy', beat, round, intent, targetId: events.find(e => e.type === 'damage' || e.type === 'dodge')?.targetId ?? intent?.targetId, state: frame, events, ...(presentation ? {before, after: structuredClone(state)} : {}) });
+    turns.push({ actorId, side: 'enemy', beat, round, intent, targetId: events.find(e => (e.type === 'damage' || e.type === 'dodge') && e.sourceId === actorId)?.targetId ?? intent?.targetId, state: frame, events, ...(presentation ? {before, after: structuredClone(state)} : {}) });
   }
 }
 export function entryReason(data: EncounterDefinition, entry?: BattleEntry): string {
@@ -738,7 +774,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
     return [{ id: 'party', name: 'Party', valid: !reason, reason }];
   }
   if (targetKind(action) === 'enemies') {
-    const reason = unavailable || (!state.enemies.some(e => e.hp > 0) ? 'This enemy is down.' : '');
+    const reason = unavailable || (!state.enemies.some(e => e.hp > 0) ? 'This enemy is down.' : action === 'tollring' && !state.enemies.some(e => e.hp > 0 && e.hexes) ? 'No curse on any enemy.' : '');
     return [{ id: 'enemies', name: 'Enemies', valid: !reason, reason }];
   }
   if (targetKind(action) === 'self') {
@@ -783,7 +819,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
   return data.enemies.map(e => {
     const actor = state.enemies.find(s => s.id === e.id);
     const reason = unavailable || (!actor || actor.hp <= 0 ? 'This enemy is down.' :
-      screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : '');
+      screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : action === 'lifetoll' && !actor.hexes ? 'No curse on this enemy.' : '');
     return { id: e.id, name: e.name, valid: !reason, reason };
   });
 }
@@ -855,6 +891,21 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     foe.corrodedUntil = state.round + data.rules.corrodeDuration + (hasPassive(data, hero.id, 'potent') ? 1 : 0); foe.corrodeBonus = corrodeBonusOf(data, hero.id);
     events.push({ type: 'corrode', sourceId: hero.id, targetId: foe.id, amount: foe.corrodeBonus, text: 'Enemy corroded.' });
   };
+  // Hexer: lay `add` stacks (cap 3) living `life` more round-ends after this one's; a full stack refreshed by Wynne's
+  // p4 keeps at least two more.
+  const hex = (foe: EnemyState, add: number, life: number) => {
+    if (foe.hp <= 0) return undefined;
+    const list = foe.hexes ??= []; let h = list.find(x => x.heroId === hero.id);
+    if (!h) { h = { heroId: hero.id, stacks: 0, until: 0 }; list.push(h); }
+    const full = h.stacks >= HEX_MAX; h.stacks = Math.min(HEX_MAX, h.stacks + add);
+    h.until = Math.max(h.until, state.round + life + (full && hasCap(data, hero.id, 'wynne4') ? 1 : 0));
+    events.push({ type: 'hex', sourceId: hero.id, targetId: foe.id, amount: h.stacks, text: 'Curse.' });
+    return h;
+  };
+  const toll = (foe: EnemyState, power: number, life: number) => {
+    foe.toll = { heroId: hero.id, power, until: state.round + life };
+    events.push({ type: 'toll', sourceId: hero.id, targetId: foe.id, amount: power, text: 'Toll bound.' });
+  };
   switch (command.action) {
     case 'saintstrike': case 'communion': case 'vowstrike': case 'sharewound': case 'lastlight': {
       let power = skill.power;
@@ -915,6 +966,34 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       }
       break;
     }
+    case 'threadhex': {
+      const fresh = !enemy!.hexes?.some(h => h.heroId === hero.id); const first = hasCap(data, hero.id, 'wynne1') && !enemy!.threaded?.includes(hero.id);
+      hex(enemy!, fresh && hasCap(data, hero.id, 'hexThreadFresh') ? 2 : 1, first ? 2 : 1);
+      if (first) enemy!.threaded = [...enemy!.threaded ?? [], hero.id];
+      break;
+    }
+    case 'wovenhex': {
+      const foes = state.enemies.filter(e => e.hp > 0); const front = foes.filter(e => row(e.id) === 'front');
+      if (front.length >= 2) cooldownAdjustment -= capAmount(data, hero.id, 'hexWovenQuick');
+      for (const foe of front.length ? front : foes) hex(foe, 1, 1);
+      break;
+    }
+    case 'longthread': {
+      const double = hasCap(data, hero.id, 'hexLongDouble');
+      hex(enemy!, double ? 2 : 1, double ? 1 : 2 + capAmount(data, hero.id, 'hexLongLife')); break;
+    }
+    case 'knothex': {
+      const had = !!enemy!.hexes?.some(h => h.heroId === hero.id);
+      const h = hex(enemy!, 2, 1);
+      // c4: tightening an existing curse also lengthens it one round-end (at most three ahead).
+      if (h && had && hasCap(data, hero.id, 'hexKnotLife')) h.until = Math.max(h.until, Math.min(state.round + HEX_LIFE_CAP, h.until + 1));
+      break;
+    }
+    case 'lifetoll': toll(enemy!, skill.power, 1 + capAmount(data, hero.id, 'hexTollLong')); break;
+    case 'tollring':
+      for (const foe of state.enemies.filter(e => e.hp > 0 && e.hexes))
+        toll(foe, skill.power + (foe.hexes!.some(h => h.stacks >= HEX_MAX) ? capAmount(data, hero.id, 'hexRingFull') : 0), 1);
+      break;
     case 'gatherfist': damage(skill.power + (chiBefore === 0 ? capAmount(data, hero.id, 'kael1') : 0)); break;
     case 'flowfist': damage(skill.power + (chiBefore === 0 ? capAmount(data, hero.id, 'martialFlowZero') : 0)); break;
     case 'storedfist':

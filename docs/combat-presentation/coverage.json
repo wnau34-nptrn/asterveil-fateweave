@@ -1,18 +1,18 @@
 {
  "counts": {
-  "identities": 37,
-  "heroes": 15,
+  "identities": 38,
+  "heroes": 16,
   "enemies": 22,
   "atlases": 34,
   "parked": 2,
-  "actionIds": 79,
-  "heroRows": 105,
+  "actionIds": 85,
+  "heroRows": 112,
   "intents": 40,
   "foeRows": 49,
   "spriteRows": 133,
-  "proceduralRows": 21,
+  "proceduralRows": 28,
   "paintedRows": 112,
-  "sharedRows": 38,
+  "sharedRows": 45,
   "codeRows": 4
  },
  "identities": [
@@ -276,6 +276,18 @@
    "side": "hero",
    "name": "Kael",
    "still": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12",
+   "reactions": {
+    "hit": "procedural",
+    "block": "procedural",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "procedural (ภาพนิ่งจาง)"
+   }
+  },
+  {
+   "identity": "wynne",
+   "side": "hero",
+   "name": "Wynne",
+   "still": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12",
    "reactions": {
     "hit": "procedural",
     "block": "procedural",
@@ -3654,6 +3666,132 @@
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
    "point": "ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น)"
+  },
+  {
+   "identity": "wynne",
+   "side": "hero",
+   "move": "attack",
+   "name": "โจมตี",
+   "body": {
+    "kind": "procedural",
+    "pose": "role basic",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
+  },
+  {
+   "identity": "wynne",
+   "side": "hero",
+   "move": "threadhex",
+   "name": "ด้ายสาป",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "shared",
+    "note": "ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย)"
+  },
+  {
+   "identity": "wynne",
+   "side": "hero",
+   "move": "lifetoll",
+   "name": "ภาษีชีวิต",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "shared",
+    "note": "ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย)"
+  },
+  {
+   "identity": "wynne",
+   "side": "hero",
+   "move": "wovenhex",
+   "name": "สาปถักทอ",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "shared",
+    "note": "ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล)",
+   "point": "กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย)"
+  },
+  {
+   "identity": "wynne",
+   "side": "hero",
+   "move": "tollring",
+   "name": "วงภาษี",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "shared",
+    "note": "ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล)",
+   "point": "กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย)"
+  },
+  {
+   "identity": "wynne",
+   "side": "hero",
+   "move": "longthread",
+   "name": "ด้ายยาว",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "shared",
+    "note": "ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย)"
+  },
+  {
+   "identity": "wynne",
+   "side": "hero",
+   "move": "knothex",
+   "name": "ปมสาป",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+   },
+   "vfx": {
+    "module": "arcane-seal-fx",
+    "kind": "shared",
+    "note": "ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04)"
+   },
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย)"
   },
   {
    "identity": "brute",

@@ -15,4 +15,5 @@ export const gearPreferences: Record<string, { main: GearStat[]; some: GearStat[
   lalin: { main: ['hp', 'armour', 'speed'], some: ['attack', 'resist'] },
   wila: { main: ['hp', 'armour', 'speed'], some: ['attack', 'resist'] },
   kael: { main: ['attack', 'hp', 'speed'], some: ['armour', 'leech'] },
+  wynne: { main: ['support', 'hp', 'speed'], some: ['resist', 'armour'] },
 };

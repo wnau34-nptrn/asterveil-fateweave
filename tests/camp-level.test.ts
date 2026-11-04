@@ -201,7 +201,7 @@ describe('save v43 → v44 migration', () => {
     expect(levelOf(map, g.run!)).toBe(5); expect(g.run!.members.healer).toEqual({ stars: 1, dupes: 0 });
   });
   it('preserves a frozen v42 hiring board and the taken offers', () => {
-    const p = { ...veteran(), taken: [1], boardPool: heroCatalog(lookup, map).map(h => h.id).filter(id => !['metta', 'thiran', 'lalin', 'wila', 'kael'].includes(id)) };
+    const p = { ...veteran(), taken: [1], boardPool: heroCatalog(lookup, map).map(h => h.id).filter(id => !['metta', 'thiran', 'lalin', 'wila', 'kael', 'wynne'].includes(id)) };
     const g = parseGame(JSON.stringify(v43({ profile: p, run: null }, {})), map, lookup).profile;
     expect(g.boardPool).toEqual(p.boardPool); expect(g.taken).toEqual([1]); expect(boardOffers(g, map, lookup)).toEqual(boardOffers(p, map, lookup));
   });

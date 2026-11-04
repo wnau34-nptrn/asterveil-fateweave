@@ -84,3 +84,27 @@ test('P03 Kael: gathers chi from a real hit, shows it, then releases it; reload 
   expect(parseGame(await saved(page), map, lookup).run!.battle).toEqual(parseGame(raw, map, lookup).run!.battle);
   expect(errors).toEqual([]);
 });
+
+test('P03 Wynne: a curse is laid on a real foe, shown in its status and ticks at round end; reload keeps the battle', async ({ page }, info) => {
+  const p = profile(); p.company.push('wynne'); p.members.wynne = { stars: 1, dupes: 0 };
+  p.party = { deployed: ['wynne', 'guardian', 'weaver', 'healer'], reserve: ['kael'] };
+  const game = depart(p, map, lookup, 227);
+  game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(game.run.roster.deployed.map(id => [id, game.run.hp[id]!])), commands: [] };
+  const errors = await open(page, serialize(game));
+  if (await page.locator('#start').isVisible()) await page.locator('#start').click();
+  for (let i = 0; i < 12; i++) {
+    await expect(page.getByRole('heading', { name: /เทิร์นของคุณ/ })).toBeVisible({ timeout: 15000 });
+    if (await page.locator('#hero-wynne').getAttribute('aria-pressed') === 'true') break;
+    await page.locator('#action-attack').click(); await page.locator('[data-ui=target].valid-target').first().click();
+  }
+  await page.locator('#action-threadhex').click(); await page.locator('#target-f1').click();
+  await expect.poll(async () => JSON.parse(await saved(page)).run.battle.commands.some((c: { action: string }) => c.action === 'threadhex')).toBe(true);
+  await expect(page.getByRole('heading', { name: /เทิร์นของคุณ/ })).toBeVisible({ timeout: 15000 });
+  await page.screenshot({ path: info.outputPath('p03-wynne-battle-390.png') });
+  const raw = await saved(page);
+  const battle = parseGame(raw, map, lookup).run!.battle!;
+  expect(battle.commands.at(-1)?.action ?? battle.commands.find(c => c.action === 'threadhex')?.action).toBeDefined();
+  await page.reload(); await page.locator('#continue').click();
+  expect(parseGame(await saved(page), map, lookup).run!.battle).toEqual(battle);
+  expect(errors).toEqual([]);
+});

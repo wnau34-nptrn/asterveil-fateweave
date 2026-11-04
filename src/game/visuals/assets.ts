@@ -14,7 +14,7 @@ export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number 
   sefa: { sheet: 'mercs', frame: 3 }, brann: { sheet: 'mercs', frame: 4 }, lio: { sheet: 'mercs', frame: 5 },
   metta: { sheet: 'mercs', frame: 6 }, thiran: { sheet: 'mercs', frame: 7 },
   lalin: { sheet: 'mercs', frame: 8 }, wila: { sheet: 'mercs', frame: 9 },
-  kael: { sheet: 'mercs', frame: 10 },
+  kael: { sheet: 'mercs', frame: 10 }, wynne: { sheet: 'mercs', frame: 11 },
   foe_tusker: { sheet: 'foes', frame: 0 }, foe_sprite: { sheet: 'foes', frame: 1 }, foe_stalker: { sheet: 'foes', frame: 2 },
   foe_mycon: { sheet: 'foes', frame: 3 }, foe_golem: { sheet: 'foes', frame: 4 }, foe_riftweaver: { sheet: 'foes', frame: 5 },
   foe_matriarch: { sheet: 'foes', frame: 6 }, foe_juggernaut: { sheet: 'foes', frame: 7 }, foe_sentinel: { sheet: 'foes', frame: 8 },

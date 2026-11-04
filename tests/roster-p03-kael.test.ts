@@ -177,7 +177,7 @@ describe('P03 Kael in the world', () => {
   const write = (game: Game): string => { let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game); return raw; };
   it('joins the catalog and the featured slot, never the starter draft or a story arrival', () => {
     const catalog = heroCatalog(lookup, map).map(h => h.id);
-    expect(catalog.at(-1)).toBe('kael');
+    expect(catalog).toContain('kael');
     expect(ruinsMap.draft!.pool).not.toContain('kael');
     expect(ruinsMap.recruits?.some(r => r.hero === 'kael')).toBeFalsy();
     expect(map.company.featured).toContain('kael');

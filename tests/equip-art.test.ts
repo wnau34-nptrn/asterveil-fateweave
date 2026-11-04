@@ -11,7 +11,7 @@ import { gearArt } from '../src/ui/equip-art';
 const slots = ['head', 'body', 'gloves', 'boots', 'charm'] as const;
 const heroes = ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'sefa', 'brann', 'lio'];
 // C12 Batch 1 classes keep their single ART-UI-EQUIP-001-style weapon until tiered art is delivered.
-const singleWeapon = ['metta', 'thiran', 'lalin', 'wila', 'kael'];
+const singleWeapon = ['metta', 'thiran', 'lalin', 'wila', 'kael', 'wynne'];
 const atlas: Record<string, { x: number; y: number; w: number; h: number }> = frames;
 const position = (name: string) => {
   expect(atlas[name], `missing frame ${name}`).toBeDefined();
@@ -59,14 +59,14 @@ describe('painted equipment mapping', () => {
       expect(gearCell({ slot: 'charm', rarity: 4, set: 'dawn', boss })).toEqual(position(`boss_${boss}`));
     });
   }
-  it('keeps all 83 designs in distinct cells', () => {
+  it('keeps all 84 designs in distinct cells', () => {
     const names = [
       ...singleWeapon.map(hero => `weapon_${hero}`),
       ...slots.flatMap(slot => ['worn', 'fine', 'master', ...SET_IDS.map(set => `set_${set}`)].map(suffix => `gear_${slot}_${suffix}`)),
       ...heroes.flatMap(hero => [1, 2, 3].map(tier => `weapon_${hero}_${tier}`)),
       ...['aegis', 'focus', 'lantern'].map(boss => `boss_${boss}`),
     ];
-    expect(new Set(names.map(name => JSON.stringify(position(name)))).size).toBe(83);
+    expect(new Set(names.map(name => JSON.stringify(position(name)))).size).toBe(84);
   });
   it('falls back to the legacy frame when new art is absent', () => {
     const cases = [

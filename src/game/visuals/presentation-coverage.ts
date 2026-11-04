@@ -12,7 +12,7 @@ import { isProjectileSkill } from './projectile-fx';
 import { isCommandSkill } from './command-fx';
 import { isSongSkill } from './song-fx';
 import { isSdFx, martialSkills, saintSkills } from './saint-dance-fx';
-import { isSealSkill } from './arcane-seal-fx';
+import { hexSkills, isSealFx } from './arcane-seal-fx';
 import { isAlchemySkill } from './alchemy-fx';
 import { isEarthSkill } from './earth-fx';
 import { isHealingSkill } from './healing-fx';
@@ -31,6 +31,7 @@ import defenseArt from './defense-art.json';
 // P03 characters fight on their approved still with procedural motion until their CODEX-A12 battle animation lands.
 export const STILL_ONLY: Readonly<Record<string, string>> = {
   kael: 'P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12',
+  wynne: 'P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12',
 };
 export const PARKED: Readonly<Record<string, string>> = {
   thiran: 'OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)',
@@ -60,7 +61,7 @@ export function heroVfx(action: ActionId, role: string): VfxModule {
   if (isCommandSkill(action)) return 'command-fx';
   if (isSongSkill(action)) return 'song-shadow-fx';
   if (isSdFx(action)) return 'saint-dance-fx';
-  if (isSealSkill(action)) return 'arcane-seal-fx';
+  if (isSealFx(action)) return 'arcane-seal-fx';
   if (isAlchemySkill(action)) return 'alchemy-fx';
   if (isEarthSkill(action)) return 'earth-fx';
   if (isHealingSkill(action)) return 'healing-fx';
@@ -91,7 +92,7 @@ function heroPoint(module: VfxModule, action: ActionId): string {
       : action === 'note' ? 'ผู้รับ damage จริง' : action === 'dread' ? 'ฝั่งศัตรูที่ยืนอยู่ (ไม่ใช่ฮิต)' : action === 'finale' ? 'ศัตรูที่โดนจริง / พันธมิตรที่ได้ heal-โล่จริง' : 'ผู้ร่าย → พันธมิตรที่ยืนอยู่';
     case 'saint-dance-fx': return (martialSkills as readonly string[]).includes(action) ? 'ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น)' : (saintSkills as readonly string[]).includes(action) ? 'ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง'
       : action === 'echofoot' ? 'ศัตรูที่โดนจริง (เส้นเดียว)' : 'พันธมิตรที่ได้ cooldown จริงเท่านั้น';
-    case 'arcane-seal-fx': return action === 'sigil' ? 'เท้าศัตรูจริง' : action === 'storm' ? 'กลางตัว → เท้าศัตรูที่โดนจริงทุกตัว' : 'กลางตัวเป้าจริง';
+    case 'arcane-seal-fx': return (hexSkills as readonly string[]).includes(action) ? 'กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย)' : action === 'sigil' ? 'เท้าศัตรูจริง' : action === 'storm' ? 'กลางตัว → เท้าศัตรูที่โดนจริงทุกตัว' : 'กลางตัวเป้าจริง';
     case 'alchemy-fx': return 'ผู้รับ event จริง (ศัตรู: ตัว, พันธมิตร: ตัว) รวม chain ของ catalyst';
     case 'earth-fx': return 'พื้นใต้ศัตรูที่โดนจริง (+ heal จริงแยก)';
     case 'healing-fx': return 'ฐานเท้าผู้รับ heal/barrier จริง (รวม upkeep)';
@@ -181,10 +182,10 @@ export function presentationCoverage(list: readonly EncounterDefinition[] = enco
     identities.push(ident(hero.id, 'hero', hero.name));
     for (const action of heroActions(hero.id)) {
       const module = heroVfx(action, roles[hero.id]!);
-      const shared = module === 'blade-fx' && action === 'attack' || (martialSkills as readonly string[]).includes(action);
+      const shared = module === 'blade-fx' && action === 'attack' || (martialSkills as readonly string[]).includes(action) || (hexSkills as readonly string[]).includes(action);
       rows.push({ identity: hero.id, side: 'hero', move: action, name: skills[action]?.name ?? action,
         body: body(hero.id, action === 'attack' ? 'role basic' : actionPoses[action], action),
-        vfx: { module, kind: vfxKind(module, shared), ...(shared ? { note: module === 'saint-dance-fx' ? 'ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)' : 'ฟันร่วมตามสีอาชีพ (ตั้งใจ)' } : module === 'basic-attack-fx' ? { note: 'ลูกธนู/ขวดวาดด้วยโค้ด (AV03 ตั้งใจ ไม่ใช้ภาพสกิล)' } : {}) },
+        vfx: { module, kind: vfxKind(module, shared), ...(shared ? { note: module === 'arcane-seal-fx' ? 'ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04)' : module === 'saint-dance-fx' ? 'ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)' : 'ฟันร่วมตามสีอาชีพ (ตั้งใจ)' } : module === 'basic-attack-fx' ? { note: 'ลูกธนู/ขวดวาดด้วยโค้ด (AV03 ตั้งใจ ไม่ใช้ภาพสกิล)' } : {}) },
         target: heroTargets[targetKind(action)]!, point: heroPoint(module, action) });
     }
   }

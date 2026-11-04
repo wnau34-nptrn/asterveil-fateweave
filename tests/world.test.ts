@@ -260,7 +260,7 @@ describe('commander', () => {
     const p5: Partial<Profile> = newProfile(map, 4); delete p5.commander;
     expect(parseGame(JSON.stringify({ version: 5, profile: p5, run: null }), map, lookup).profile.commander).toBeNull();
     const withCommander = createCommander(newProfile(map, 4), { name: 'Ari', crest: 'flag', color: 'rose', camp: 'ค่ายอารี' }).profile;
-    expect(parseGame(JSON.stringify({ version: 6, profile: withCommander, run: null }), map, lookup).profile).toEqual({ ...withCommander, boardPool: heroCatalog(lookup, map).filter(h => !['metta', 'thiran', 'lalin', 'wila', 'kael'].includes(h.id)).map(h => h.id) });
+    expect(parseGame(JSON.stringify({ version: 6, profile: withCommander, run: null }), map, lookup).profile).toEqual({ ...withCommander, boardPool: heroCatalog(lookup, map).filter(h => !['metta', 'thiran', 'lalin', 'wila', 'kael', 'wynne'].includes(h.id)).map(h => h.id) });
   });
 });
 

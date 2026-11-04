@@ -16,7 +16,7 @@ import { BLADE_ATLAS, bladeAtlasUrls, bladeCast, bladeImpact, bladeStance, blade
 import { DEFENSE_ATLAS, defenseAtlasUrls, defenseCast, defenseContact, defenseCues, isDefenseSkill } from '../visuals/defense-fx';
 import { HEALING_ATLAS, healingAtlasUrls, healingPrepare, healingContact, healingCues, isHealingSkill, type HealingContext } from '../visuals/healing-fx';
 import { PROJECTILE_ATLAS, projectileAtlasUrls, projectileCues, projectilePrepare, projectileContact, isProjectileSkill } from '../visuals/projectile-fx';
-import { SEAL_ATLAS, sealAtlasUrls, sealCues, sealEvents, sealPrepare, sealContact, isSealSkill, type SealSpot } from '../visuals/arcane-seal-fx';
+import { SEAL_ATLAS, sealAtlasUrls, sealCues, sealEvents, sealPrepare, sealContact, isSealFx, type SealSpot } from '../visuals/arcane-seal-fx';
 import { SONG_ATLAS, songAtlasUrls, isSongSkill, songPlan, songPrepare, songContact, type SongSpot } from '../visuals/song-fx';
 import { FOE_SIGNATURE_ATLAS, foeSignatureAtlasUrls, foeSignatureCues, foeSignaturePrepare, foeSignatureContact, isFoeSignatureMove, type FoeSpot } from '../visuals/foe-signature-fx';
 import { SAINT_DANCE_ATLAS, saintDanceAtlasUrls, isSdFx, sdPlan, sdPrepare, sdContact } from '../visuals/saint-dance-fx';
@@ -649,7 +649,7 @@ export class BattleScene extends Phaser.Scene {
     }
     if(turn.side==='hero'&&isSongSkill(turn.action)&&this.textures.exists(SONG_ATLAS)&&songPrepare(this.songFx(turn.actorId),turn,(id,spot)=>this.songAnchor(id,spot),contactMs))return;
     if(turn.side==='hero'&&isSdFx(turn.action)&&this.textures.exists(SAINT_DANCE_ATLAS)&&sdPrepare(this.songFx(turn.actorId),turn,(id,spot)=>this.songAnchor(id,spot),contactMs))return;
-    if(turn.side==='hero'&&isSealSkill(turn.action)&&this.textures.exists(SEAL_ATLAS)){
+    if(turn.side==='hero'&&isSealFx(turn.action)&&this.textures.exists(SEAL_ATLAS)){
       sealPrepare(this.sealFx(turn.actorId),turn,(id,spot)=>this.sealAnchor(id,spot),contactMs);return;
     }
     if(turn.side==='hero'&&isAlchemySkill(turn.action)&&this.textures.exists(ALCHEMY_ATLAS)){

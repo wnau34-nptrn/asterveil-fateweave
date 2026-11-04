@@ -14,10 +14,11 @@ export const actionPoses = {
   saintstrike: 'punch', communion: 'cast', saintarc: 'punch', vowstrike: 'punch', sharewound: 'cast', lastlight: 'cast',
   cadence: 'dance', duet: 'dance', rounddance: 'dance', deepbeat: 'dance', echofoot: 'dance', closingstep: 'dance',
   gatherfist: 'punch', releasefist: 'punch', flowfist: 'punch', circlefist: 'punch', storedfist: 'punch', perfectfist: 'punch',
+  threadhex: 'cast', lifetoll: 'cast', wovenhex: 'cast', longthread: 'cast', tollring: 'cast', knothex: 'cast',
 } as const satisfies Record<ActionId, UnitPose>;
 
 const basicPoses: Readonly<Record<string, UnitPose>> = {
-  Knight: 'slash', Duelist: 'thrust', Mage: 'cast', Priest: 'cast', Spear: 'thrust', Archer: 'shoot', Alchemist: 'throw', Scout: 'slash', Warden: 'smash', Bard: 'song', Saint: 'punch', Dancer: 'dance', Martial: 'punch',
+  Knight: 'slash', Duelist: 'thrust', Mage: 'cast', Priest: 'cast', Spear: 'thrust', Archer: 'shoot', Alchemist: 'throw', Scout: 'slash', Warden: 'smash', Bard: 'song', Saint: 'punch', Dancer: 'dance', Martial: 'punch', Hexer: 'cast',
 };
 const enemyPoses: Readonly<Record<string, UnitPose>> = {
   raider: 'slash', brute: 'smash', foe_tusker: 'charge', foe_sprite: 'cast', foe_stalker: 'pounce', foe_mycon: 'cast', foe_golem: 'smash', foe_riftweaver: 'cast',

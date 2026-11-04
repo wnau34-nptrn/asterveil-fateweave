@@ -12,7 +12,9 @@ export type ActionId = 'attack' | 'guard' | 'bash' | 'mark' | 'execute' | 'bolt'
   | 'saintstrike' | 'communion' | 'saintarc' | 'vowstrike' | 'sharewound' | 'lastlight'
   | 'cadence' | 'duet' | 'rounddance' | 'deepbeat' | 'echofoot' | 'closingstep'
   // P03 Martial (Kael): gather chi, then spend it to finish.
-  | 'gatherfist' | 'releasefist' | 'flowfist' | 'circlefist' | 'storedfist' | 'perfectfist';
+  | 'gatherfist' | 'releasefist' | 'flowfist' | 'circlefist' | 'storedfist' | 'perfectfist'
+  // P03 Hexer (Wynne): lasting curse stacks and a toll paid before attacking.
+  | 'threadhex' | 'lifetoll' | 'wovenhex' | 'longthread' | 'tollring' | 'knothex';
 // ★5 passives (one per class, always on at five stars).
 export type PassiveId = 'stand' | 'keeneye' | 'echo' | 'afterglow' | 'heavycounter' | 'tailwind' | 'potent' | 'shadowcounter' | 'stoneskin' | 'resound';
 // Talent-tree capstones (2D-1b): one small rule change per branch, read by the resolver from `HeroDefinition.talents`.
@@ -38,7 +40,10 @@ export type TalentCap = 'retribution' | 'guardcounter' | 'deepmark' | 'relentles
   | 'lalin1' | 'lalin2' | 'lalin3' | 'lalin4' | 'wila1' | 'wila3' | 'wila4'
   // P03 Martial tree and Kael's personal branch.
   | 'martialGatherChi' | 'martialFlowZero' | 'martialReleasePer' | 'martialReleaseQuick' | 'martialCircleCrowd'
-  | 'martialStoredFull' | 'martialStoredBuild' | 'martialPerfectHeavy' | 'kael1' | 'kael2' | 'kael3' | 'kael4';
+  | 'martialStoredFull' | 'martialStoredBuild' | 'martialPerfectHeavy' | 'kael1' | 'kael2' | 'kael3' | 'kael4'
+  // P03 Hexer tree and Wynne's personal branch.
+  | 'hexThreadPer' | 'hexThreadFresh' | 'hexWovenQuick' | 'hexTollLong' | 'hexRingFull' | 'hexLongLife' | 'hexLongDouble' | 'hexKnotLife'
+  | 'wynne1' | 'wynne2' | 'wynne3' | 'wynne4';
 // Talent numbers that add to a rule for this hero only (summed over ranks).
 export type TalentRule = 'guardReduction' | 'tauntReduction' | 'corrodeBonus' | 'ambushBonus' | 'executeHeal' | 'healBarrier' | 'hasteHeal' | 'dodgeHeal';
 // What a member's spent talent points do in battle (world `starred` builds it; stat nodes are already in maxHp/attack/skillBonus).
@@ -148,7 +153,11 @@ export interface HeroState { id: string; hp: number; barrier: number; cooldowns:
 // `interruptedBy`: the hero whose Bash/Sigil cancelled that turn. `weaken`: its next move is cut by this percent
 // (archer heavy hinder). `dispelledUntil`: a mage's dispel switches off its veilguard while the round is below this.
 export interface EnemyState { id: string; hp: number; markedUntil: number; absent?: boolean; phase?: number; phaseRound?: number; interruptedRound?: number; interruptedBy?: string; steadyRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number;
-  weaken?: number; dispelledUntil?: number; delayedAlso?: number; drawnBy?: { heroId: string; round: number } }
+  weaken?: number; dispelledUntil?: number; delayedAlso?: number; drawnBy?: { heroId: string; round: number };
+  // P03 Hexer curses: stacks (1–3) per hexer, ticking as each round up to `until` ends. `toll`: before each attacking
+  // move while the round is at most `until`, the foe pays `power` energy damage. `threaded`: hexers whose first-thread
+  // bonus (Wynne p1) this foe has already received.
+  hexes?: { heroId: string; stacks: number; until: number }[]; toll?: { heroId: string; power: number; until: number }; threaded?: string[] }
 // `stoned`: a warden's guardian stone turned this move from the covered ally to him.
 export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; stoned?: boolean; stoneTargetId?: string }
 // Party condition carried in from the expedition. Missing ids start at max HP.
@@ -212,7 +221,7 @@ export interface BattleState {
 export type SongId = 'valor' | 'mend' | 'dread';
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge'
-    | 'parry' | 'revive' | 'buff' | 'hold' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi';
+    | 'parry' | 'revive' | 'buff' | 'hold' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'toll';
   text: string; sourceId?: string; targetId?: string; action?: ActionId; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

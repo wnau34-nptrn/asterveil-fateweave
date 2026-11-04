@@ -1,10 +1,11 @@
 import type { ActionId, HeroDefinition, SkillDefinition } from '../../core/battle/types';
 import type { TalentNodeDef, TalentTree } from '../../core/world/types';
 
-// P03 (OD-14: one character per class): Kael the Martial, from docs/design/ROSTER_30_TH.md §3–5. New members join
+// P03 (OD-14: one character per class): Kael the Martial and Wynne the Hexer, from docs/design/ROSTER_30_TH.md §3–5. New members join
 // through the existing hiring board's featured slot, never the prologue draft or a story arrival. Numbers are drafts.
 export const rosterP03: readonly HeroDefinition[] = [
   { id: 'kael', name: 'Kael', role: 'Martial', lane: 'front', maxHp: 64, attack: 13, speed: 105, actions: ['attack', 'gatherfist', 'releasefist'], color: 0xc98a4b },
+  { id: 'wynne', name: 'Wynne', role: 'Hexer', lane: 'back', maxHp: 48, attack: 9, speed: 80, actions: ['attack', 'threadhex', 'lifetoll'], color: 0xb4475a },
 ];
 
 export const rosterP03Skills = {
@@ -14,6 +15,13 @@ export const rosterP03Skills = {
   circlefist: { name: 'หมัดวงกลม', english: 'Circle Fist', icon: '✊', power: 14, cooldown: 3 },
   storedfist: { name: 'หมัดเก็บแรง', english: 'Stored Fist', icon: '✊', power: 20, cooldown: 2 },
   perfectfist: { name: 'หมัดสมบูรณ์', english: 'Perfect Fist', icon: '✊', power: 38, cooldown: 4 },
+  // Hexer: thread hex's power is the curse's damage per stack as each round ends.
+  threadhex: { name: 'ด้ายสาป', english: 'Thread Hex', icon: '✂', power: 5, cooldown: 1 },
+  lifetoll: { name: 'ภาษีชีวิต', english: 'Life Toll', icon: '✂', power: 5, cooldown: 3 },
+  wovenhex: { name: 'สาปถักทอ', english: 'Woven Hex', icon: '✂', power: 0, cooldown: 4 },
+  longthread: { name: 'ด้ายยาว', english: 'Long Thread', icon: '✂', power: 0, cooldown: 3 },
+  tollring: { name: 'วงภาษี', english: 'Toll Ring', icon: '✂', power: 4, cooldown: 4 },
+  knothex: { name: 'ปมสาป', english: 'Knot Hex', icon: '✂', power: 0, cooldown: 3 },
 } satisfies Partial<Record<ActionId, SkillDefinition>>;
 
 type Place = Pick<TalentNodeDef, 'branch' | 'tier' | 'choice' | 'needs'>;
@@ -39,11 +47,36 @@ const martialTree: TalentTree = [
   node('c4', 'หมัดหนักแผ่นดิน', { cap: 'martialPerfectHeavy', amount: 8 }, { branch: 'c', tier: 4 }),
 ];
 
+const hexerTree: TalentTree = [
+  node('a1', 'มือช่างสาป', { stat: 'skill', percent: 4 }, { branch: 'a', tier: 1 }, 2),
+  node('a2x', 'ด้ายคม', { cap: 'hexThreadPer', amount: 1 }, { branch: 'a', tier: 2, choice: 'hexer-a2' }),
+  node('a2y', 'ปมแรก', { cap: 'hexThreadFresh', amount: 2 }, { branch: 'a', tier: 2, choice: 'hexer-a2' }),
+  node('a3', 'สาปถักทอ', { unlock: 'wovenhex' }, { branch: 'a', tier: 3 }),
+  node('a4', 'ทอแน่น', { cap: 'hexWovenQuick', amount: 1 }, { branch: 'a', tier: 4 }),
+  node('b1', 'ผ้าคลุมหนา', { stat: 'hp', percent: 5 }, { branch: 'b', tier: 1 }, 2),
+  node('b2x', 'ภาษีหนัก', { power: 'lifetoll', amount: 2 }, { branch: 'b', tier: 2, choice: 'hexer-b2' }),
+  node('b2y', 'ภาษียืด', { cap: 'hexTollLong', amount: 1 }, { branch: 'b', tier: 2, choice: 'hexer-b2' }),
+  node('b3', 'วงภาษี', { unlock: 'tollring' }, { branch: 'b', tier: 3 }),
+  node('b4', 'เก็บเต็มอัตรา', { cap: 'hexRingFull', amount: 2 }, { branch: 'b', tier: 4 }),
+  node('c1', 'ตุ๊กตาคุ้มตัว', { stat: 'armour', percent: 5 }, { branch: 'c', tier: 1 }, 2),
+  node('c1s', 'ด้ายยาว', { unlock: 'longthread' }, { branch: 'c', tier: 1 }),
+  node('c2x', 'ด้ายไม่ขาด', { cap: 'hexLongLife', amount: 1 }, { branch: 'c', tier: 2, choice: 'hexer-c2', needs: 'c1s' }),
+  node('c2y', 'ด้ายคู่', { cap: 'hexLongDouble', amount: 2 }, { branch: 'c', tier: 2, choice: 'hexer-c2', needs: 'c1s' }),
+  node('c3', 'ปมสาป', { unlock: 'knothex' }, { branch: 'c', tier: 3 }),
+  node('c4', 'ปมรัดนาน', { cap: 'hexKnotLife', amount: 1 }, { branch: 'c', tier: 4 }),
+];
+
 export const rosterP03Trees: Readonly<Record<string, TalentTree>> = {
   kael: [...martialTree,
     node('p1', 'ใจว่างก่อนหมัด', { cap: 'kael1', amount: 3 }, { branch: 'p', tier: 1 }),
     node('p2', 'ไหลจากความว่าง', { cap: 'kael2', amount: 1 }, { branch: 'p', tier: 2, needs: 'p1' }),
     node('p3', 'ปล่อยสุดลมหายใจ', { cap: 'kael3', amount: 4 }, { branch: 'p', tier: 3, needs: 'p2' }),
     node('p4', 'วินัยหยุดโทสะ', { cap: 'kael4', amount: 6 }, { branch: 'p', tier: 4, needs: 'p3' }),
+  ],
+  wynne: [...hexerTree,
+    node('p1', 'ด้ายเส้นแรก', { cap: 'wynne1', amount: 1 }, { branch: 'p', tier: 1 }),
+    node('p2', 'เย็บไว', { cap: 'wynne2', amount: 1 }, { branch: 'p', tier: 2, needs: 'p1' }),
+    node('p3', 'ปมแน่นเต็มตุ๊กตา', { cap: 'wynne3', amount: 1 }, { branch: 'p', tier: 3, needs: 'p2' }),
+    node('p4', 'ด้ายจากชายแดน', { cap: 'wynne4', amount: 1 }, { branch: 'p', tier: 4, needs: 'p3' }),
   ],
 };
