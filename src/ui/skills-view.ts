@@ -2,7 +2,7 @@ import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/batt
 import type { MapDefinition } from '../core/world/types';
 import { skillChoices } from '../core/world/world';
 import { skillLevelOf } from '../core/world/tomes';
-import { talentsSpent } from '../core/world/talents';
+import { isBigTree, talentsSpent } from '../core/world/talents';
 import { characterSkills, characterTalents, tomeSection } from './character-view';
 import type { CharacterModel } from './character-panel';
 import { icon } from './icons';
@@ -11,7 +11,7 @@ export function skillCatalogue(map:MapDefinition,base:HeroDefinition,h:HeroDefin
 export function skillsView(model:CharacterModel,map:MapDefinition,template:EncounterDefinition,h:HeroDefinition,base:HeroDefinition,selected:ActionId,section:SkillSection,node:string):string{
   const m=model.state.members[h.id]!,now:ActionId[]=h.actions.filter(a=>a!=='attack'),size=map.progression.loadoutSize;
   const choices=skillChoices(base,map,m.talents,m.grants),canUse=choices.includes(selected)||(base.unlocks?.skill===selected&&h.actions.includes(selected)),on=now.includes(selected);
-  const why=selected==='attack'?'โจมตีปกติใช้ได้เสมอ ไม่กินช่อง':!canUse?'ยังไม่ปลดสกิลนี้':on&&now.length<=1?'ต้องติดอย่างน้อย 1 สกิล':!on&&now.length>=size?`ติดครบ ${size} ช่องแล้ว ถอดสกิลอื่นก่อน`:'';
+  const why=!isBigTree(map.talents[h.id])?'อาชีพนี้ใช้ชุดสกิลตามดาว ไม่รองรับเปลี่ยนชุด':selected==='attack'?'โจมตีปกติใช้ได้เสมอ ไม่กินช่อง':!canUse?'ยังไม่ปลดสกิลนี้':on&&now.length<=1?'ต้องติดอย่างน้อย 1 สกิล':!on&&now.length>=size?`ติดครบ ${size} ช่องแล้ว ถอดสกิลอื่นก่อน`:'';
   const nodes=map.talents[h.id]??[],unlock=nodes.find(n=>'unlock'in n.effect&&n.effect.unlock===selected);
   const loadout=`<section class="skills-equipped" aria-label="ชุดสกิลต่อสู้"><div class="loadout-head"><h3>สกิลที่ติดตั้ง</h3><span>${now.length}/${size} ช่อง</span></div><div class="skills-slots">${now.map(a=>`<button id="skill-select-${a}" data-world="skill-select" data-skill="${a}" class="secondary" aria-pressed="${a===selected}">${icon(a)}<span>${template.skills[a].name}</span></button>`).join('')}</div><p class="camp-note">โจมตีปกติ + สกิลที่ติดตั้ง · เปลี่ยนได้เมื่ออยู่นอกการต่อสู้</p></section>`;
   const picker=`<label class="skills-picker">เลือกสกิล<select id="skill-selection" data-skill-selection>${skillCatalogue(map,base,h).map(a=>`<option value="${a}"${a===selected?' selected':''}>${template.skills[a].name}${a==='attack'?' · พื้นฐาน':` · Lv${skillLevelOf(m,a)}${now.includes(a)?' · ติดตั้ง':choices.includes(a)?' · พร้อมใช้':' · ยังล็อก'}`}</option>`).join('')}</select></label>`;
