@@ -43,7 +43,7 @@ test('C1 painted skills appear in all six camp sheets and their trees at 390px',
   const before = await page.evaluate(k => localStorage.getItem(k), key);
   for (const [id, skills] of Object.entries(members)) {
     await page.locator(`#camp-character-member-${id}`).click();
-    await page.locator('#camp-character-tab-skills').click();
+    await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-skills-details').click();
     for (const skill of skills) {
       await page.locator('#camp-skill-selection').selectOption(skill);
       const art = page.locator(`.character-skills [data-skill=${skill}] > .skill-art`);
@@ -54,7 +54,7 @@ test('C1 painted skills appear in all six camp sheets and their trees at 390px',
       await expect(art).toHaveCSS('--sy', `${Math.floor(index / atlas.cols) / (atlas.rows - 1) * 100}%`);
       await art.scrollIntoViewIfNeeded(); await expect(art).toBeVisible();
     }
-    await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-skills-tree').click();
+    await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-skills-details').click(); await page.locator('#camp-skills-tree').click();
     await expect(page.locator('.talent-node.skill .skill-art')).toHaveCount(4);
     // Modifier nodes deliberately retain the line-icon aliases.
     expect(await page.locator('.talent-node:not(.skill) svg').count()).toBeGreaterThan(0);
