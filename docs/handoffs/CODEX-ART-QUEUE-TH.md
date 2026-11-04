@@ -33,6 +33,7 @@
 | 27 | ART-UNIT-ANIMATION-A4-001 แอนิเมชันมิร่า + โทมะ, สไลม์ 2 ชนิด + ค้างคาวซาก (W2) | แผนแอนิเมชัน+VFX | หลัง Codex ส่ง W1 — prompt ใน `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md` §6 |
 | 28 | ART-UNIT-ANIMATION-A2-002 วาดท่าอัศวิน Aegis ใหม่ 25 ท่าให้สัดส่วนหัว/ตัวตรงกับ idle (แก้หัวโตกระโดด) | แก้คุณภาพ A2 | ส่ง Codex แล้ว (เจ้าของสั่ง 2026-10-29) **ก่อน W4–W8** — brief และ prompt ใน `docs/handoffs/CODEX-AEGIS-ANATOMY-REDRAW-TH.md`; ระหว่างรอ เกมพักเฟรม A2 ของ Aegis ไว้ |
 | 29 | ART-CHAR-REDESIGN-001 ออกแบบโอดราน (นักบุญรบ) และอิโซลด์ (นักเต้นรำ) ใหม่แบบเดียวต่อตัว ไม่ซ้ำคอริน/เซรีส → แล้ว ART-UNIT-ANIMATION-A7-003 ชุดท่าใหม่ | C12, A7 | ทันที (เจ้าของสั่ง 2026-10-30) |
+| 31 | ART-UI-POTION-CALM-001 ภาพวาดยาฟื้นความเหนื่อย `calm` (แทนไอคอนเส้น P02) | P02 UI | เขียน prompt แล้ว 2026-11-04 — `docs/handoffs/CODEX-ART-POTION-CALM-TH.md` (ตรวจคลังภาพ 2026-11-04: ภาพเดียวที่เกมขาดจริง) |
 | 33 | ART-CHAR-CLASS-NEW-003 แก้สัดส่วนเคล (หัวจริงเล็ก ~105–115px เพราะวัดจากยอดมวยผม) | ก่อน A12 ส่วนเคล | เขียน prompt แล้ว 2026-11-04 — `docs/handoffs/CODEX-KAEL-SCALE-FIX-TH.md` |
 | 32 | ART-UNIT-ANIMATION-A12-001 ชุดท่าต่อสู้ เคล/วินน์/แอสทริด (22 แถบ, seed = ART-CHAR-CLASS-NEW-002) | P03 อาชีพใหม่ | เขียน prompt แล้ว 2026-11-04 — `docs/handoffs/CODEX-A12-NEW-CLASSES-TH.md`; ภาพนิ่ง seed ยังรอเจ้าของยืนยัน |
 
