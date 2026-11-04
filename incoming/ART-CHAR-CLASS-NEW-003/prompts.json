@@ -1,0 +1,88 @@
+{
+  "tool": "image_gen.imagegen",
+  "original_art": true,
+  "base_commit": "d5fe9eaa668ef6c9a7384a95b0f365ba72dee10a",
+  "generation_id_note": "Output artifact UUID exposed in tool output_hint. No separate generator job id exposed; generator_job_id is null. Sources are byte-for-byte tool output copies, retaining metadata.",
+  "generations": [
+    {
+      "id": "kael-unit-01",
+      "prompt": "Redraw ONLY Kael as ONE original finished static battle unit for Asterveil Fateweave. References attached in order: (1) old Kael unit and (2) Kael portrait establish his identity costume palette and open-palm low guard; (3) Corin and (4) Garran establish ONLY chibi anatomy and rendering scale, never copy their costume or pose. Match their painterly fantasy chibi style, large readable face/amber eyes and hands. Same youthful warm tan male, dark brown scalp hair, single tied topknot, calm focused closed mouth, sleeveless burnt umber wrap vest with gold rope edging and charcoal V-neck, cream wrapped forearms/hands, gold tied waist sash, charcoal loose trousers, cream leg wraps and brown open-toe sandals. Bare broad shoulders; widest silhouette in cast. Correct old unit's small adult-proportioned skull and long limbs: actual SKULL CROWN (top of hair mass resting on scalp EXCLUDING topknot) to chin must be 35% of skull-crown-to-sole, visibly as large a head/face as Corin and Garran. Redraw a larger rounder actual skull and face, big eyes, shorter chunky limbs and large expressive wrapped open hands. Topknot is a small compact extra tuft only 30-40 pixels above skull crown at 512px. Keep right-facing three-quarter low open-palm martial guard with two separate wide feet and bent knees but raise hips: stance less deep than old Kael, fully cast-height. No armour, beads, weapons, staff, tabard or costume from references 3/4. TECHNICAL COMPOSITION at logical 512x512: scalp/skull crown y64, chin y216 (153px actual head), soles BOTH y496, crown-to-sole 433px; topknot tip y31-34. Treat these as drawing proportions, scale entire figure as a whole if fitting needed, never shrink head. Full body contained x20..491, true transparent RGBA background, no ground shadow, no energy/glow, no scenery, no words or labels. Just one beautiful original redraw with consistent identity and larger chibi skull.",
+      "references": [
+        "incoming/ART-CHAR-CLASS-NEW-002/unit/kael.png",
+        "incoming/ART-CHAR-CLASS-NEW-002/portrait/kael.png",
+        {
+          "path": "public/assets/art/units_mercs.webp",
+          "frame": 6,
+          "crop": [
+            0,
+            1536,
+            512,
+            2048
+          ],
+          "role": "Corin proportion only"
+        },
+        {
+          "path": "public/assets/art/units_mercs.webp",
+          "frame": 0,
+          "crop": [
+            0,
+            0,
+            512,
+            512
+          ],
+          "role": "Garran proportion only"
+        }
+      ],
+      "transparent_background": true,
+      "output": "sources/kael-unit-01.png",
+      "output_artifact_id": "exec-04201827-dc1c-4000-8c42-53765c1992e6",
+      "generation_id": "exec-04201827-dc1c-4000-8c42-53765c1992e6",
+      "generator_job_id": null,
+      "disposition": "superseded: stance too narrow"
+    },
+    {
+      "id": "kael-portrait-01",
+      "prompt": "Create ONE matching square 512x512 illustrated portrait for the newly redrawn Kael shown in reference 1. Reference 2 is his OLD portrait for identity palette and backdrop only. New Kael has a rounder larger chibi skull, broad face and large amber eyes as reference 1: match that exact new face, dark brown windswept scalp hair with one topknot tied gold, warm tan youthful skin, thick dark eyebrows, calm focused closed mouth. Three-quarter facing RIGHT, waist-up close crop with wrapped left hand raised in low open-palm guard, sleeveless burnt umber martial wrap vest, charcoal V-neck with gold trim, bare broad shoulders and cream cloth hand wraps. Same gold rope shoulder edging. Painterly polished original fantasy chibi artwork with warm rim highlights, clean dark contour. Softly painted warm golden mercenary training courtyard in background like old portrait, but no words, no text, no magic, no armour, no beads. No additional characters. Fill square portrait composition, face fully visible and identity consistent with NEW unit. This is a portrait only, not full body and not a contact sheet.",
+      "references": [
+        "sources/kael-unit-01.png",
+        "incoming/ART-CHAR-CLASS-NEW-002/portrait/kael.png"
+      ],
+      "transparent_background": false,
+      "output": "sources/kael-portrait-01.png",
+      "output_artifact_id": "exec-c331d698-7973-47ab-8ee4-c867d37a297a",
+      "generation_id": "exec-c331d698-7973-47ab-8ee4-c867d37a297a",
+      "generator_job_id": null,
+      "disposition": "Final portrait: new rounder face, amber eyes and costume visually compared with final unit; face identity retained through unit refinements."
+    },
+    {
+      "id": "kael-unit-02",
+      "references": [
+        {
+          "path": "unit/kael.png",
+          "note": "Intermediate normalization of sources/kael-unit-01.png with package.py; crown65 chin220 scale0.3860589812 raster484x484 translate8,21, rotation0. Final file may be superseded; intermediate reference recorded in review/reference-unit-01.png."
+        },
+        "incoming/ART-CHAR-CLASS-NEW-002/unit/kael.png"
+      ],
+      "transparent_background": true,
+      "output": "sources/kael-unit-02.png",
+      "generation_id": "exec-28e67078-609b-4abf-9427-0a2b31c113c0",
+      "status": "superseded",
+      "output_artifact_id": "exec-28e67078-609b-4abf-9427-0a2b31c113c0",
+      "generator_job_id": null,
+      "disposition": "Broad stance correct, but actual skull/body ratio too high (~0.377); compact topknot and taller stance requested."
+    },
+    {
+      "id": "kael-unit-03",
+      "references": [
+        "sources/kael-unit-02.png"
+      ],
+      "transparent_background": true,
+      "output": "sources/kael-unit-03.png",
+      "generation_id": "exec-98743e39-e498-4ce5-a72c-79375e3e48ea",
+      "status": "final",
+      "output_artifact_id": "exec-98743e39-e498-4ce5-a72c-79375e3e48ea",
+      "generator_job_id": null,
+      "disposition": "Final delivered unit, rigid/uniform registration only."
+    }
+  ]
+}
