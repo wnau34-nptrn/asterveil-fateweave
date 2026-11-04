@@ -10,6 +10,7 @@
   - เคล (หน้า): attack, gatherfist, releasefist, flowfist, circlefist, storedfist, perfectfist
   - วินน์ (หลัง): attack, threadhex, lifetoll, wovenhex, longthread, tollring, knothex
   - แอสทริด (หลัง): attack, deflectfate, turncycle, crossing, doubledial, starneedle, readorbit
+- **เคลต้องแก้สัดส่วนก่อน** (เจ้าของทักว่าสเกลต่าง ตรวจแล้วหัวจริงเล็กราว 105–115px เพราะวัดจากยอดมวยผม): ส่ง `docs/handoffs/CODEX-KAEL-SCALE-FIX-TH.md` (ART-CHAR-CLASS-NEW-003) ก่อน แล้วค่อยทำส่วนของเคลใน A12 โดยใช้ `incoming/ART-CHAR-CLASS-NEW-003/unit/kael.png` แทน seed เดิม และแทน sha256 ในกล่องด้วยค่าจาก NEW-003
 - ทั้งสามอาชีพยังไม่มีในโค้ดเกม (งาน P03) ภาพที่ได้จะเก็บใน `incoming/` ไว้ก่อน Claude จะนำเข้าเมื่อเพิ่มอาชีพเข้าเกม ส่วนการจับคู่ท่ากับ ActionId ด้านล่างเป็นข้อเสนอที่ใช้รูปแบบเดียวกับ registry `src/game/visuals/unit-frames.ts` (เช่น `lalin`)
 
 ## กล่อง prompt สำหรับ Codex (คัดลอกทั้งกล่อง)
@@ -21,7 +22,7 @@ Asterveil · Fateweave: battle body animation strips for the three new classes �
 Read AGENTS.md, CLAUDE.md, docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md, docs/design/ROSTER_30_TH.md (Martial/Hexer/Seer sections) and incoming/ART-CHAR-CLASS-NEW-002/NOTES.md first. Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (not main). Create branch art/art-unit-animation-a12-001. Add files only under incoming/ART-UNIT-ANIMATION-A12-001/. Do not change src/, tests/, public/, .github/, existing art or earlier incoming folders. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. The group is the ค่ายทหารรับจ้าง; never use the word ม่านเวล.
 
 SEEDS (on the game branch; verify the hashes and copy byte-for-byte into seeds/):
-- Kael:   incoming/ART-CHAR-CLASS-NEW-002/unit/kael.png   sha256 cff332c889f5c677a8e7aef7d6b1bd1a75d899a8e342facabb27f233f80ed0d2
+- Kael:   incoming/ART-CHAR-CLASS-NEW-003/unit/kael.png (owner-approved proportion fix; take its sha256 from that package's validation.json). Do NOT use the NEW-002 kael.png — its head is too small. If NEW-003 is not on the branch yet, skip Kael, do Wynne and Astrid, and list Kael as pending in NOTES.md.
 - Wynne:  incoming/ART-CHAR-CLASS-NEW-002/unit/wynne.png  sha256 b2888ab61fcb39fc5e4fc508c0a6695efae1c74224c5460d32f724a24fa091e6
 - Astrid: incoming/ART-CHAR-CLASS-NEW-002/unit/astrid.png sha256 a2d2ac7833818ff62cc877ecd0e90e87f24d8f56365f57e6c32d9321b36f1b29
 512×512 RGBA, facing right, sole on y496 (logical ground y497, pivot (0.5, 497/512)). Every frame keeps that exact face, hair, costume, props and the SAME head size relative to the body as the seed, including crouched, spinning and fallen frames (a lying body is as long as the standing seed). Use the matching portrait/ and weapon/ cells of the same package only as identity reference. Do NOT give the generator Corin (metta), Odran (thiran) or any other cast member as image input.
@@ -56,7 +57,7 @@ Astrid — composed star-chart maker; graceful, deliberate hand gestures. The as
 6. block: ready → mantle raised across the body with the free arm → brace → reset
 7. down: knees give way → astrolabe held close → sink → lie unconscious and hold
 
-GENERATION: one whole continuous strip per move in a single edit request (never frame by frame), the seed attached as the model, transparent background, wide clear gutters between figures. One shared scale per character across all strips, equal to the seed; feet on the same ground line except intended airborne frames. Body only: no VFX, glows, energy, particles, motion lines, shadows or text baked in. Leave room for full arms, sash tails, hood tips, talismans, doll and astrolabe; never crop them. Work in small batches in this order: Kael (8 strips) → Wynne (7) → Astrid (7); finish and audit one character before starting the next.
+GENERATION: one whole continuous strip per move in a single edit request (never frame by frame), the seed attached as the model, transparent background, wide clear gutters between figures. One shared scale per character across all strips, equal to the seed; feet on the same ground line except intended airborne frames. Body only: no VFX, glows, energy, particles, motion lines, shadows or text baked in. Leave room for full arms, sash tails, hood tips, talismans, doll and astrolabe; never crop them. Work in small batches in this order: Wynne (7 strips) → Astrid (7) → Kael (8, only once NEW-003 is available); finish and audit one character before starting the next.
 
 QUALITY GATE before delivery: run python3 scripts/unit-anatomy-audit.py --cells on every strip against its seed (median head scale <= 1.15, every measured frame <= 1.20; inspect not-measured frames by eye and say so in NOTES.md). Do not deliver a failing strip as final; regenerate it or list it as missing. Supply R2 only where a move is genuinely ambiguous (likely candidates: Kael stored, Wynne weave, Astrid deflect), and mark the recommended one.
 
