@@ -1,4 +1,5 @@
 import {bossReward} from './boss-equipment';
+import { clampRun, RUN_CAP } from './caps';
 import {huntedReward} from './targeted-loot';
 import { replay, withLevel, withParty, withStrength } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
@@ -405,7 +406,7 @@ export function rest(initial: ExpeditionState, map: MapDefinition, lookup: Encou
   for (const id of rosterIds(state)) setFatigue(state, id, fatigueOf(state, id) - map.camp.fatigue.rest);
   state.pressure = 0; state.camp = { ...state.position }; state.restReady = false; delete state.restWins;
   // 4C: beaten optional elites (not gate guards, not the mini-boss) return after a rest, one level higher.
-  const respawned = map.elites.filter(e => !e.forced && !e.mini && state.elitesDefeated.includes(e.id)).map(e => e.id);
+  const respawned = map.elites.filter(e => !e.forced && !e.mini && state.elitesDefeated.includes(e.id) && (state.respawns[e.id] ?? 0) < RUN_CAP.respawns).map(e => e.id);
   for (const id of respawned) { state.elitesDefeated = state.elitesDefeated.filter(e => e !== id); state.respawns[id] = (state.respawns[id] ?? 0) + 1; }
   return { state, event: { type: 'rested', ...(respawned.length ? { respawned } : {}) } };
 }
@@ -509,6 +510,7 @@ function rollLoot(state: ExpeditionState, table: LootTable): Resources {
   const ore = range(table.ore); const ember = extra(table.ember); const seal = extra(table.seal); const gold = range(table.gold);
   const loot = { ore, gold, ember, seal };
   state.resources = { ore: state.resources.ore + ore, gold: state.resources.gold + gold, ember: state.resources.ember + ember, seal: state.resources.seal + seal };
+  clampRun(state);
   return loot;
 }
 export const chestAt = (map: MapDefinition, p: Point): ChestDefinition | undefined => map.chests.find(c => c.x === p.x && c.y === p.y);
@@ -608,6 +610,7 @@ export function chooseEvent(initial: ExpeditionState, map: MapDefinition, lookup
   if (choice === 'help') { state.potions.salve--; state.resources.ore += r.traveller.ore; state.resources.seal += r.traveller.seal; }
   if (choice.startsWith('buy-')) { const potion = choice.slice(4) as PotionId; state.resources.ore -= r.merchant[potion]; state.potions[potion]++; }
   if (ev.kind !== 'merchant') state.eventsDone.push(ev.id);
+  clampRun(state);
   return { state, event: { type: 'eventDone', eventId: ev.id, choice, ...(Object.keys(heal).length ? { heal } : {}) } };
 }
 // Map stats from gear (stats design 2026-10-17): every `regenSteps` steps each standing brought member heals its
@@ -776,6 +779,7 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
       for (const id of state.roster.reserve) { const max = memberDef(lookup, map, state, id)!.maxHp; if (state.hp[id]! > 0) state.hp[id] = Math.min(max, state.hp[id]! + percentOf(max, map.camp.reserveHealPercent)); }
       tire(state, map);
     }
+    clampRun(state);
     return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(items[0] ? { item: items[0] } : {}), ...(items.length > 1 ? { items } : {}), ...(dust ? { dust } : {}), ...tomes } };
   }
   state.defeats++;
