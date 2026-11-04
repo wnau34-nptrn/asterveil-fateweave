@@ -996,11 +996,17 @@ for (const viewport of viewports) {
     const noScroll = () => page.evaluate(() => document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth);
     expect(await noScroll()).toBe(false);
     for (const sel of ['#lobby-depart', '#lobby-tab-team', '#lobby-tab-hire']) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
-    // Team and hire open as a sheet over the camp. Portrait phones show it full screen (close to switch);
-    // elsewhere the depart button stays reachable with it open.
+    // The team sheet leaves HUD navigation reachable; hire retains its full portrait sheet.
+    // The panel scrolls internally, while the page and the portrait game frame stay fixed.
     const frame = (await page.locator('#app').boundingBox())!; const full = frame.width <= 760 && frame.height > frame.width;
     await page.locator('#lobby-tab-team').click(); for (const sel of ['#lobby-member-guardian', ...(full ? ['[data-lobby=close]'] : ['#lobby-depart'])]) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
-    if (full) { const box = (await page.locator('#lobby-sheet').boundingBox())!; expect(box.width).toBe(frame.width); expect(box.height).toBe(frame.height); }
+    if (full) {
+      const box = (await page.locator('#lobby-sheet').boundingBox())!, nav = (await page.locator('.lobby-menu').boundingBox())!;
+      expect(box.width).toBe(frame.width); expect(box.x).toBe(frame.x); expect(box.y).toBeGreaterThanOrEqual(frame.y);
+      expect(box.y + box.height).toBeLessThanOrEqual(nav.y);
+      await expect(page.locator('.lobby-menu')).toBeVisible();
+      for (const button of await page.locator('.lobby-menu button').all()) await reachable(page, `#${await button.getAttribute('id')}`);
+    }
     await page.screenshot({ path: info.outputPath('lobby.png') });
     // The panel scrolls inside itself on short screens; the page never does.
     if (full) await page.locator('[data-lobby=close]').click();
