@@ -1,6 +1,6 @@
 import type { ActionId, EncounterDefinition } from '../core/battle/types';
 import type { MapDefinition, Profile, ProfileEvent, ProfileResult, TomeLine, TomeSize } from '../core/world/types';
-import { TOME_LINES, TOME_SIZES } from '../core/world/types';
+import { TOME_SIZES } from '../core/world/types';
 import { skillLevelOf, tomeLine } from '../core/world/tomes';
 import { heroText, tomeLineText, tomeSizeText } from './th';
 
@@ -22,16 +22,11 @@ export class SkillReview {
     if(this.review&&!this.valid(p,this.review)){this.review=undefined;this.message='ข้อมูลเปลี่ยนแล้ว · กลับไปตรวจรายการใหม่';}
     if(this.receipt&&(this.receipt.after!==p||this.receipt.fingerprint!==JSON.stringify(p))){this.receipt=undefined;this.message='ข้อมูลเปลี่ยนแล้ว · กลับไปดูสถานะปัจจุบัน';}
   }
-  private projection(p:Profile,c:SkillCommand):ProfileResult|undefined {
-    const result=this.project(p,c);
-    // v45 tomesOf accepts 0..99,999; tradeReason currently omits the destination cap.
-    // Guard the UI projection only until the authoritative rule is repaired (handoff).
-    if(result&&result.event.type!=='blocked'&&TOME_LINES.some(l=>TOME_SIZES.some(z=>(result.profile.tomes?.[l][z]??0)>99999)))return {profile:p,event:{type:'blocked',reason:'capacity'}};
-    return result;
-  }
+  // The destination tome cap (core/world/caps.ts TOME_CAP) is refused by tradeReason itself as 'full'.
+  private projection(p:Profile,c:SkillCommand):ProfileResult|undefined {return this.project(p,c);}
   start(p:Profile,command:SkillCommand):void{
     if(this.pending||this.receipt)return;
-    const expected=this.projection(p,command);if(!expected||expected.event.type==='blocked'){if(expected?.event.type==='blocked'&&expected.event.reason==='capacity'){this.clear();this.message='ตำราขนาดปลายทางเต็มแล้ว · ยังไม่ใช้ตำรา';}return;}
+    const expected=this.projection(p,command);if(!expected||expected.event.type==='blocked'){if(expected?.event.type==='blocked'&&expected.event.reason==='full'){this.clear();this.message='ตำราขนาดปลายทางเต็มแล้ว · ยังไม่ใช้ตำรา';}return;}
     this.clear();this.review={source:p,fingerprint:JSON.stringify(p),before:structuredClone(p),command:{...command},expected};
   }
   confirm(p:Profile,dispatch:(c:SkillCommand)=>void):void{

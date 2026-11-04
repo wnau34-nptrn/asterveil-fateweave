@@ -2,6 +2,14 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-04 — Claude: เพดานคลัง/ตำราใน core (PR #147)
+
+- เจ้าของเลือกข้อ ค; `claude/storage-caps-core` จาก `81415f1` → [PR #147](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/147)
+- `core/world/caps.ts` รวมเพดาน v45 เดิม (คลัง/ตรา/ตำรา/แก่น/ยา) ให้ save validator และคำสั่งใช้ร่วมกัน; แลกตำรา (ขึ้นขนาด/ข้ามสาย), หลอม, ซื้อตรา/ยากัน, ปรุงยา, รับเควสต์/ภารกิจ ปฏิเสธ `'full'` ก่อนจ่าย; กลับค่าย/คืนเงินปลดสมาชิกเติมถึงเพดาน (เดิมเซฟพัง)
+- UI ใช้เหตุผลจาก core แทน guard ของตัวเอง; ปุ่มแลกตำราที่ปลายทางเต็มปิดก่อน review (ปรับ spec); แก้ comment Tremor/Slam/Rouse และป้าย coverage `enemies`
+- ไม่เปลี่ยนเวอร์ชันเซฟ/ราคา/RNG/สมดุล/กฎต่อสู้; logic audit 1–3 แก้แล้วตั้งแต่ C11 v42, ข้อ 4–5 รอเจ้าของเลือกกติกา
+- Local typecheck/lint/build, unit1527/108 และ browser33 (unified-skills+forge-services) ผ่าน; [หลักฐาน](../validation/storage-caps/README_TH.md)
+
 ## 2026-11-04 — HUD ทีม → หน้าตัวละคร เสร็จแล้ว (PR #146)
 
 - เจ้าของอนุมัติทำตามข้อเสนอ HUD “ทีม” → เลือกตัวละคร → สกิล พร้อมจัดหน้า; `codex/team-hud-character-navigation` จาก `a2596e3` → [PR #146](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/146) merge `1b0616be8a31bc324a7eb447d2034e74998110cc` เข้า feature tree ตรง tested head `fa55f22`

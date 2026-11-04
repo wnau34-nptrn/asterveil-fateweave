@@ -176,7 +176,8 @@ export function talentHitBonus(state: BattleState, data: EncounterDefinition, he
     + (state.order.indexOf(enemy.id) > state.turnIndex ? capAmount(data, heroId, 'opportunist') : 0);
 }
 // ---- Recruit big trees (owner 2026-10-23, docs/design/SKILL_TREES_ALL_TH.md, draft numbers) ----
-// Catalyst: per corroded round left; disarm: a physical next move is cut; tremor: every front foe's next move is cut;
+// Catalyst: per corroded round left; disarm: a physical next move is cut; tremor: every front foe (or the back row when
+// the front is empty) takes its power and its next move is drawn onto the warden (`drawnBy`), not cut;
 // guardian stone heals the warden when it holds; a finale of dread shields allies; solo triples the song.
 export const CATALYST_PER_ROUND = 8; export const DISARM_MULTIPLIER = 1.6;
 export const NOTE_PER_ROUND = 3; export const NOTE_MAX_ROUNDS = 3;

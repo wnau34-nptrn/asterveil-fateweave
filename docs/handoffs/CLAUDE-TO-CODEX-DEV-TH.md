@@ -284,25 +284,25 @@ REPORT after every batch in docs/handoffs/CODEX-TO-CLAUDE.md (per character: kit
 
 ## ฝากถึง Claude (Codex เขียนต่อท้าย)
 
-- 2026-11-03 UXD-05: พบ mismatch เดิมระหว่าง `core/world/forge.ts::smeltReason` กับ bank validator v45: ฝุ่น9,999,999 ยังหลอม1ได้เป็น10,000,000; saveGameคืนtrue แต่ parseGameโยน Invalid bank (reproจริง /tmp/uxd-05/capacity-repro.log) งานนี้เพิ่ม UI guard ตามเพดานเดิมใน PR143 และ valid round-trip ถึง9,999,999 แล้ว ไม่แก้ pure core/save ตามขอบเขตเจ้าของ/AGENTS ฝากพิจารณาให้ smeltReason ตรวจ constraint เดียวกันในงาน core ที่ได้รับมอบหมาย โดยเฉพาะก่อนมี command entry ใหม่/P09 ไม่เพิ่มเพดานหรือเปลี่ยนเศรษฐกิจจากงานนี้
+- [ปิดแล้ว PR #147] 2026-11-03 UXD-05: พบ mismatch เดิมระหว่าง `core/world/forge.ts::smeltReason` กับ bank validator v45: ฝุ่น9,999,999 ยังหลอม1ได้เป็น10,000,000; saveGameคืนtrue แต่ parseGameโยน Invalid bank (reproจริง /tmp/uxd-05/capacity-repro.log) งานนี้เพิ่ม UI guard ตามเพดานเดิมใน PR143 และ valid round-trip ถึง9,999,999 แล้ว ไม่แก้ pure core/save ตามขอบเขตเจ้าของ/AGENTS ฝากพิจารณาให้ smeltReason ตรวจ constraint เดียวกันในงาน core ที่ได้รับมอบหมาย โดยเฉพาะก่อนมี command entry ใหม่/P09 ไม่เพิ่มเพดานหรือเปลี่ยนเศรษฐกิจจากงานนี้
 
 
 
 - 2026-10-31 P02 UI: ภาพวาด `calm` ยังไม่มีใน `potion_items`; รอบนี้เจ้าของจำกัด DOM/CSS จึงจัดกรอบไอคอนเส้นเดิมให้อ่านชัด งาน art/atlas ต้องแยกต่างหาก ไม่จำเป็นต้องแก้กฎ/เซฟ/สมดุลเพื่อ polish รอบนี้
 
-- 2026-10-27 C5.5: commentที่src/core/battle/engine.tsบรรทัด160กล่าวว่าTremorตัดnextmove แต่case tremorจริงตั้งdrawnBy/ดึงintent ไม่ได้weaken; commentveil-siege.tsบอกSlamplainแต่engineมีnextintent-target-selfbonusและrunequake โปรดตรวจcomment/docกลไกแยก งานภาพยึดengine ไม่แก้core/content/rulesหรือเปลี่ยนTremorเป็นpowercut
+- [ปิดแล้ว PR #147] 2026-10-27 C5.5: commentที่src/core/battle/engine.tsบรรทัด160กล่าวว่าTremorตัดnextmove แต่case tremorจริงตั้งdrawnBy/ดึงintent ไม่ได้weaken; commentveil-siege.tsบอกSlamplainแต่engineมีnextintent-target-selfbonusและrunequake โปรดตรวจcomment/docกลไกแยก งานภาพยึดengine ไม่แก้core/content/rulesหรือเปลี่ยนTremorเป็นpowercut
 
-- 2026-10-27 C5.3: `src/content/encounters/veil-siege.ts` มีcommentเก่าว่าRouseฮีล แต่engineปัจจุบันสร้างguard/all เลือกเพื่อนHP ratioต่ำสุด งานภาพยึดengine ไม่แก้rules/save/balance/content โปรดตรวจcommentแยกเมื่อแก้เอกสารกลไก ไม่ใช่คำขอเปลี่ยนRouseเป็นheal
+- [ปิดแล้ว PR #147] 2026-10-27 C5.3: `src/content/encounters/veil-siege.ts` มีcommentเก่าว่าRouseฮีล แต่engineปัจจุบันสร้างguard/all เลือกเพื่อนHP ratioต่ำสุด งานภาพยึดengine ไม่แก้rules/save/balance/content โปรดตรวจcommentแยกเมื่อแก้เอกสารกลไก ไม่ใช่คำขอเปลี่ยนRouseเป็นheal
 
 - 2026-10-25: P00–P02/P04/P06 in `docs/DEVELOPMENT_PLAN_TH.md` will affect battle/save/balance when implemented. This task only documents those impacts: shared Lv/EXP, actor capacity, talent entitlement and migrations need one coherent specification before code changes. No rule changes were made as part of publishing the plan.
 
 
-- 2026-10-24: เจ้าของถามหาจุดไม่สมเหตุผลอื่น (ยังไม่ได้สั่งแก้) ดู `docs/design/LOGIC_AUDIT_2026-10-24_TH.md`: ฝากพิจารณา Aegis ที่ใช้ได้แต่ไม่เพิ่มโล่, Heal ที่เลือกคนเลือดเต็มไม่ได้แม้มี Afterglow และ Revive อัปเลเวลแล้วเพิ่มโล่ผู้ใช้แทน HP ที่ชุบ ห้ามถือว่าข้อสังเกตเหล่านี้เป็นการอนุมัติเปลี่ยนกติกา; จุด UI แสดงหน่วย/scaling ผิดและ Bulwark ไม่รวมเลเวลเป็นข้อบกพร่องที่ยืนยันแล้ว
+- [ข้อ 1–3 ปิดใน C11 v42; ข้อ 4–5 รอเจ้าของเลือกกติกา] 2026-10-24: เจ้าของถามหาจุดไม่สมเหตุผลอื่น (ยังไม่ได้สั่งแก้) ดู `docs/design/LOGIC_AUDIT_2026-10-24_TH.md`: ฝากพิจารณา Aegis ที่ใช้ได้แต่ไม่เพิ่มโล่, Heal ที่เลือกคนเลือดเต็มไม่ได้แม้มี Afterglow และ Revive อัปเลเวลแล้วเพิ่มโล่ผู้ใช้แทน HP ที่ชุบ ห้ามถือว่าข้อสังเกตเหล่านี้เป็นการอนุมัติเปลี่ยนกติกา; จุด UI แสดงหน่วย/scaling ผิดและ Bulwark ไม่รวมเลเวลเป็นข้อบกพร่องที่ยืนยันแล้ว
 
 ## Unit animation pilot — owner visual approval 2026-10-26
 
 เจ้าของให้ผ่าน Lyra/Vargoth Hunter ทั้งภาพและท่า และอนุญาตนำเข้าเกมจริง โดยขอช้าลงนิดเดียว ปรับคืนท่า sprite 240→260ms และ ease frame cadence เล็กน้อย คง contact/end เดิม นี่คือการอนุมัติคู่ pilot ของ PR #74 ไม่ใช่การอนุมัติ C5 blade VFX หรือขยายทุกยูนิต
 
-- 2026-10-27 C5.5เพิ่มเติม: COVERAGE_TH.md/coverage.jsonยังบอกSlamplain18และQuake14/24single-targetตามdescriptionเก่า แต่engineจริงSlam18+intentbonus10และQuakeแถวหน้า/หลังfallback โปรดตรวจdescription/docsในงานcontentแยก ไม่แก้ในPR85 งานภาพยึดactualeventsแล้ว Runequakeproseที่Codexเคยเขียนfullpowerแก้เป็นhalfpowerfloor(18→9)ในearthstoryboard/handoffแล้ว
+- [ปิดแล้ว PR #147; description ใน th.ts ตรง engine แล้ว] 2026-10-27 C5.5เพิ่มเติม: COVERAGE_TH.md/coverage.jsonยังบอกSlamplain18และQuake14/24single-targetตามdescriptionเก่า แต่engineจริงSlam18+intentbonus10และQuakeแถวหน้า/หลังfallback โปรดตรวจdescription/docsในงานcontentแยก ไม่แก้ในPR85 งานภาพยึดactualeventsแล้ว Runequakeproseที่Codexเคยเขียนfullpowerแก้เป็นhalfpowerfloor(18→9)ในearthstoryboard/handoffแล้ว
 
-- UXD-07 พบ `tradeReason`/`tradeTomes` ไม่ตรวจเพดานตำราปลายทาง: 99,999 → 100,000 แต่ `core/save/expedition-save.ts::tomesOf` รับสูงสุด 99,999 ต่อสาย/ขนาด UI review กัน projected destination เกินเพดานไว้ก่อน ไม่แก้ core/save/rules/ราคา ฝาก Claude เพิ่ม guard ในคำสั่งกลางและทดสอบทั้ง upsize/cross-line/rewards ที่เกี่ยวข้อง แล้วพิจารณารวมแหล่ง cap เดียวกัน รายละเอียด/หลักฐานใน `docs/validation/uxd-07/README_TH.md`
+- [ปิดแล้ว PR #147] UXD-07 พบ `tradeReason`/`tradeTomes` ไม่ตรวจเพดานตำราปลายทาง: 99,999 → 100,000 แต่ `core/save/expedition-save.ts::tomesOf` รับสูงสุด 99,999 ต่อสาย/ขนาด UI review กัน projected destination เกินเพดานไว้ก่อน ไม่แก้ core/save/rules/ราคา ฝาก Claude เพิ่ม guard ในคำสั่งกลางและทดสอบทั้ง upsize/cross-line/rewards ที่เกี่ยวข้อง แล้วพิจารณารวมแหล่ง cap เดียวกัน รายละเอียด/หลักฐานใน `docs/validation/uxd-07/README_TH.md`

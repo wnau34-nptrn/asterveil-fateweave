@@ -1,6 +1,7 @@
 import type { Item, MapDefinition, Profile, ProfileResult } from './types';
 import { affixPool, enhancementInvestment, GEAR_SPECIALS, RARITIES, rollQuality } from './equipment';
 import { storageCap } from './storage';
+import { bankFits } from './caps';
 import { rollPercent } from './world';
 
 // Forge (2D-4): enhance, fuse and reroll in the lobby. Pure rules on the profile. Fuse and reroll draw from
@@ -62,7 +63,7 @@ export function fuseReason(profile: Profile, map: MapDefinition, uid: number, do
   const used=ids.map(id=>profile.items.find(i=>i.uid===id));
   if(used.some(i=>!i||i.uid===uid||i.boss||i.locked||i.slot!==main.slot||i.rarity!==main.rarity))return 'materials';
   const refund=fusionRefund(profile,map,ids);
-  return profile.bank.ore+refund.ore>9999999||profile.bank.dust+refund.dust>9999999?'full':'';
+  return bankFits(profile.bank,refund)?'':'full';
 }
 export function fuse(initial: Profile, map: MapDefinition, uid: number, donors?:readonly number[]): ProfileResult {
   const reason = fuseReason(initial, map, uid,donors); if (reason) return blocked(initial, reason);
@@ -101,7 +102,8 @@ export const smeltLeft = (profile: Profile, map: MapDefinition): number => Math.
 export function smeltReason(profile: Profile, map: MapDefinition, dust: number): string {
   if (!Number.isInteger(dust) || dust < 1) return 'unknown';
   if (dust > smeltLeft(profile, map)) return 'limit';
-  return profile.bank.ore < dust * map.equipment.forge.smeltOre ? 'ore' : '';
+  if (profile.bank.ore < dust * map.equipment.forge.smeltOre) return 'ore';
+  return bankFits(profile.bank, { dust }) ? '' : 'full';
 }
 export function smelt(initial: Profile, map: MapDefinition, dust: number): ProfileResult {
   const reason = smeltReason(initial, map, dust); if (reason) return blocked(initial, reason);
@@ -169,7 +171,7 @@ export function transferReason(p:Profile,map:MapDefinition,uid:number,index:numb
   const main=findItem(p,uid)?.item,donor=p.items.find(i=>i.uid===donorUid);
   if(!main||!donor||donor.locked||!transferCandidate(map,main,index,donor,sourceIndex))return 'materials';
   const c=map.equipment.forge.transfer;if(p.bank.ore<c.ore)return 'ore';if(p.bank.dust<c.dust)return 'dust';if(p.bank.seal<c.seal)return 'seal';
-  const refund=fusionRefund(p,map,[donorUid]);return p.bank.ore-c.ore+refund.ore>9999999||p.bank.dust-c.dust+refund.dust>9999999?'full':'';
+  const refund=fusionRefund(p,map,[donorUid]);return bankFits(p.bank,{ore:refund.ore-c.ore,dust:refund.dust-c.dust})?'':'full';
 }
 export function transferAffix(initial:Profile,map:MapDefinition,uid:number,index:number,donorUid:number,sourceIndex:number):ProfileResult {
   const reason=transferReason(initial,map,uid,index,donorUid,sourceIndex);if(reason)return blocked(initial,reason);

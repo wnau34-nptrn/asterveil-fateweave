@@ -42,7 +42,7 @@ function treeSkillState(map: MapDefinition, h: HeroDefinition, base: HeroDefinit
 // Skill tomes (save v37, docs/design/SKILL_TOMES_TH.md): what the camp can pay, and its reasons (the lobby builds it).
 export interface SkillTomeView { open: boolean; bag: TomeBag; gold: number; core: number; reason(id: string, action: ActionId): string; trade(line: TomeLine, size: TomeSize, to?: TomeLine): string; levelable(id: string): ActionId[] }
 const levelWhy: Record<string, string> = { locked: 'เปิดหลังจบแมพ 2 (เส้นทางป่าทึบ)', skill: 'ต้องปลดสกิลก่อน', max: 'เลเวลสูงสุดแล้ว', tomes: 'ตำราไม่พอ', gold: 'เหรียญทองไม่พอ', core: 'ต้องใช้แก่นรอยแยก', unknown: 'ไม่พบสมาชิก' };
-const tradeWhy: Record<string, string> = { locked: 'ยังไม่เปิด', size: 'เล่มใหญ่แลกขึ้นไม่ได้', tomes: 'ตำราไม่พอ', line: 'เลือกสายอื่น' };
+const tradeWhy: Record<string, string> = { locked: 'ยังไม่เปิด', size: 'เล่มใหญ่แลกขึ้นไม่ได้', tomes: 'ตำราไม่พอ', line: 'เลือกสายอื่น', full: 'ตำราขนาดปลายทางเต็มแล้ว' };
 // One skill's level: dots, and at the camp the next level's number (▲), its cost and the button.
 function skillLevelRow(h: HeroDefinition, a: ActionId, template: EncounterDefinition, map: MapDefinition, member: MemberProgress, tomes?: SkillTomeView): string {
   const level = skillLevelOf(member, a), max = map.progression.skillLevels.max;
