@@ -29,8 +29,11 @@ jobs:
         with:
           path: dist
 
-  # The browser gate runs in four shards on separate machines (owner approved 2026-10-23); deploy waits for every shard.
+  # Pre-release (owner 2026-11-04): the full browser gate already runs on every PR (browser.yml), so pushes deploy after
+  # lint/unit/build only. Run this workflow manually (workflow_dispatch) for a full browser check of the branch.
+  # Before the external test (OD-13), remove the `if:` below and put `browser` back into deploy's `needs`.
   browser:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -65,7 +68,7 @@ jobs:
           retention-days: 7
 
   deploy:
-    needs: [build, browser]
+    needs: [build]
     runs-on: ubuntu-latest
     permissions:
       pages: write

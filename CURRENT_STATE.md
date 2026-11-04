@@ -4,7 +4,7 @@ Replace stale lines when a task ends; keep this file under ~5 KB. History goes t
 
 ## Game
 
-- Working branch `feature/fateweave-initial-prototype` (not `main`); live at https://wnau34-nptrn.github.io/asterveil-fateweave/ through `pages.yml`.
+- Working branch `feature/fateweave-initial-prototype` (not `main`); live at https://wnau34-nptrn.github.io/asterveil-fateweave/ through `pages.yml`, which pre-release deploys after lint/unit/build only (browser gate runs on PRs; restore it in Pages before the external test).
 - Save v45. Battles 1–5 units a side (P02); one shared camp level (P01); reserve by chapter 3→4→5, fatigue, carry ≤ 10.
 - Animation/VFX waves W1–W8 are done and published (2026-10-31). P01 and P02 are done (2026-10-31).
 - UX rebuild UXD-01…06 (Codex, from ART-UI-UX-002) published: enhancement, forge launcher + item Lv, rarity/affix reroll, affix transfer, craft/recycle/smelt, character tab + star upgrade (UXD-06, PR #144, merge `b9031154`, 2026-11-04). Implementation notes: `docs/handoffs/UXD-0N-IMPLEMENTATION-TH.md`. The UX plan itself is on branch `art/art-ui-ux-002` (`incoming/ART-UI-UX-002/IMPLEMENTATION_PLAN_TH.md`, PR #133, not merged).
