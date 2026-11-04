@@ -42,12 +42,12 @@ test('team sheet: one camp level, catalog count, search, filters and a non-destr
   await page.locator('#bench-filter-all').click();
   // Archive Brann: he leaves the list, keeps everything, and comes back from the archive filter.
   const before = parseGame(await saved(page), map, lookup, MAPS).profile.members.brann;
-  await page.locator('#lobby-member-brann').click(); await page.locator('#lobby-archive').click();
+  await page.locator('#lobby-member-brann').click(); await page.locator('.member-management summary').click(); await page.locator('#lobby-archive').click();
   await expect(page.locator('#lobby-member-brann')).toHaveCount(0); await expect(page.locator('#bench-filter-archived')).toContainText('1');
   let p = parseGame(await saved(page), map, lookup, MAPS).profile; expect(p.archived).toEqual(['brann']); expect(p.members.brann).toEqual(before); expect(p.company).toContain('brann');
   await page.locator('#bench-filter-archived').click(); await expect(page.locator('#lobby-member-brann')).toBeVisible();
   await page.locator('.bench-tools').scrollIntoViewIfNeeded(); await page.screenshot({ path: info.outputPath('camp-team-archive-390.png') });
-  await page.locator('#lobby-member-brann').click(); await expect(page.locator('#lobby-archive')).toContainText('นำออกจากคลังสมาชิก'); await page.locator('#lobby-archive').click();
+  await page.locator('#lobby-member-brann').click(); await page.locator('.member-management summary').click(); await expect(page.locator('#lobby-archive')).toContainText('นำออกจากคลังสมาชิก'); await page.locator('#lobby-archive').click();
   p = parseGame(await saved(page), map, lookup, MAPS).profile; expect(p.archived).toBeUndefined();
   for (const box of await page.locator('.team-card, .ui-chip, #bench-search').all()) if (await box.isVisible()) expect((await box.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.locator('#bench-filter-all').click(); await page.locator('#lobby-sheet-title').scrollIntoViewIfNeeded();
