@@ -58,3 +58,4 @@
 .skill-review-page h3 {font-size:1.125rem}
 .skill-review-subject {font-size:1rem}
 .skill-review-page .star-ledger {font-size:.8125rem;font-variant-numeric:tabular-nums}
+.character-dialog[data-skill-review] .star-cost-summary {font-size:.8125rem;line-height:1.5;overflow-wrap:anywhere}
