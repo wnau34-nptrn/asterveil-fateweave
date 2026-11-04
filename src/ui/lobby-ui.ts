@@ -226,7 +226,7 @@ export class LobbyUI {
       <p class="side-quest-head">${icon('flag')}<b>${t.name}</b><small>${st.progress}/${q.target}</small></p>
       <p class="side-quest-ask">${t.ask(q.target)}</p><div class="side-quest-bar" aria-hidden="true"><i style="width:${Math.round(st.progress / q.target * 100)}%"></i></div>
       <p class="side-quest-reward">รางวัล: ${rewardText(q.reward)}</p>
-      ${st.claimed ? '<p class="side-quest-done">รับรางวัลแล้ว</p>' : `<button id="quest-claim-${q.id}" data-lobby="claim" data-quest="${q.id}" class="primary"${reason ? ' disabled' : ''}>${reason ? `สะสมจากการเดินทาง (${st.progress}/${q.target})` : 'รับรางวัล'}</button>`}</section>`;
+      ${st.claimed ? '<p class="side-quest-done">รับรางวัลแล้ว</p>' : `<button id="quest-claim-${q.id}" data-lobby="claim" data-quest="${q.id}" class="primary"${reason ? ' disabled' : ''}>${reason === 'full' ? 'รางวัลเกินเพดานคลัง · ใช้ทรัพยากรก่อน' : reason ? `สะสมจากการเดินทาง (${st.progress}/${q.target})` : 'รับรางวัล'}</button>`}</section>`;
   }
   // The scene and the NPC tap targets pan together (portrait phones); the HUD stays put above them.
   private build(): void {
@@ -471,7 +471,7 @@ export class LobbyUI {
   }
   // Map potions (2D-5): brew for ore and veil dust; each departure packs up to `carry` of each.
   private brewing(p: Profile): string {
-    const rules = this.map.potions; const why: Record<string, string> = { ore: 'แร่ดาวไม่พอ', dust: 'ฝุ่นดาวไม่พอ' };
+    const rules = this.map.potions; const why: Record<string, string> = { ore: 'แร่ดาวไม่พอ', dust: 'ฝุ่นดาวไม่พอ', full: 'ยาเต็มคลัง' };
     return `<p class="hire-cost">${icon('ore')} ${p.bank.ore} · ${icon('dust')} ${p.bank.dust} · ออกเดินทางแล้วพายาไปอย่างละไม่เกิน ${rules.carry} ขวด ที่เหลือเก็บไว้ที่ค่าย</p>
       <ul class="hire-list brew-list">${POTION_IDS.map(id => { const cost = rules.brew[id]; const reason = brewReason(p, this.map, id);
         return `<li>${potionArt(id)}<span><b>${potionText[id].name}</b><small>${potionText[id].help(rules)}</small><small class="hire-status">มีที่ค่าย ${p.potions[id]} ขวด · จะพาไป ${Math.min(rules.carry, p.potions[id])}</small></span>
@@ -565,7 +565,7 @@ export class LobbyUI {
   }
   // 4A market: gold-coin goods, each with a limit per return home.
   private marketList(p: Profile): string {
-    const why: Record<string, string> = { limit: 'หมดแล้วรอบนี้', gold: 'เหรียญทองไม่พอ', bag: 'คลังเต็ม', maxed: 'ดาวเต็มแล้ว', hero: 'เลือกคน' };
+    const why: Record<string, string> = { limit: 'หมดแล้วรอบนี้', gold: 'เหรียญทองไม่พอ', bag: 'คลังเต็ม', maxed: 'ดาวเต็มแล้ว', hero: 'เลือกคน', full: 'เกินเพดานคลัง' };
     const glyph: Record<ShopItemId, Parameters<typeof icon>[0]> = { seal: 'seal', contract: 'starBadge', gearbox: 'chest', repel: 'potionRepel' };
     const pickable = p.company.filter(id => (p.members[id]?.stars ?? 1) < this.map.company.maxStars);
     return `<p class="hire-cost"><span class="icon-gold">${icon('gold')}</span> มี ${p.bank.gold} เหรียญทอง · ของในตลาดเติมใหม่ทุกครั้งที่กลับจากการเดินทาง</p>

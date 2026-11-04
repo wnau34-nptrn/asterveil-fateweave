@@ -9,6 +9,7 @@ import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { boardOfferCount, commanderReason, defaultCamp, newProfile, reserveSlots, settle, talentsValid } from '../world/profile';
 import { grantsValid, isBigTree } from '../world/talents';
 import { classSkills } from '../world/tomes';
+import { BANK_CAP, POTION_CAP, RIFT_CORE_CAP, TOME_CAP } from '../world/caps';
 import { TOME_LINES, TOME_SIZES, type TomeBag } from '../world/types';
 import type { GearSlot, GearStat, Item, MemberProgress, Potions, Talents } from '../world/types';
 import { GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/types';
@@ -160,7 +161,7 @@ function itemOf(v: unknown, map: MapDefinition, lookup: EncounterLookup, found =
 // A tome bag: every line and size present, whole numbers.
 function tomesOf(v: unknown): TomeBag {
   const b = obj(v);
-  if (Object.keys(b).length !== TOME_LINES.length || TOME_LINES.some(l => { const x = obj(b[l]); return Object.keys(x).length !== TOME_SIZES.length || TOME_SIZES.some(z => !isInt(x[z], 0, 99999)); })) throw new Error('Invalid tomes');
+  if (Object.keys(b).length !== TOME_LINES.length || TOME_LINES.some(l => { const x = obj(b[l]); return Object.keys(x).length !== TOME_SIZES.length || TOME_SIZES.some(z => !isInt(x[z], 0, TOME_CAP)); })) throw new Error('Invalid tomes');
   return structuredClone(b) as unknown as TomeBag;
 }
 const badProfile = (): never => { throw new Error('Invalid profile'); };
@@ -457,7 +458,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const archived = p.archived === undefined ? undefined : idList(p.archived, (company as string[]).filter(id => ![...party.deployed, ...party.reserve].includes(id)));
   if (archived && !archived.length) throw new Error('Invalid archive');
   const bank = obj(p.bank); if (version < 9) bank.dust = 0; if (version < 14 && bank.gold === undefined) bank.gold = map.company.hireCost;
-  if (Object.keys(bank).length !== 4 || !isInt(bank.gold, 0, 9999999) || !isInt(bank.ore, 0, 9999999) || !isInt(bank.seal, 0, 99999) || !isInt(bank.dust, 0, 9999999)) throw new Error('Invalid bank');
+  if (Object.keys(bank).length !== 4 || !isInt(bank.gold, 0, BANK_CAP.gold) || !isInt(bank.ore, 0, BANK_CAP.ore) || !isInt(bank.seal, 0, BANK_CAP.seal) || !isInt(bank.dust, 0, BANK_CAP.dust)) throw new Error('Invalid bank');
   if (version < 9) Object.assign(p, { items: [], nextItem: 1 });
   if (version < 11) p.forge = 0;
   if (version < 12) p.potions = { salve: 0, tonic: 0, repel: 0 };
@@ -502,7 +503,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     guides = { ...g } as Profile['guides'];
   }
   const veteran = p.veteran === true || (version < 31 && p.tutorialDone === true);
-  const tomes = p.tomes === undefined ? undefined : tomesOf(p.tomes); const riftCore = p.riftCore === undefined ? undefined : isInt(p.riftCore, 0, 9999) ? p.riftCore : badProfile();
+  const tomes = p.tomes === undefined ? undefined : tomesOf(p.tomes); const riftCore = p.riftCore === undefined ? undefined : isInt(p.riftCore, 0, RIFT_CORE_CAP) ? p.riftCore : badProfile();
   const clearedHard = p.clearedHard === undefined ? undefined : clearedList(p.clearedHard, maps);
   if (clearedHard?.some(id => !cleared.includes(id))) throw new Error('Invalid profile');
   // v44 → v45 (P02): the fifth field slot is filled from the reserve, and a reserve above the chapter's slots steps into
@@ -511,7 +512,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (version < 45) while (party.reserve.length && party.deployed.length < PARTY_SLOTS) party.deployed.push(party.reserve.shift()!);
   if (party.reserve.length > slots) throw new Error('Invalid party');
   return {...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
-    bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, 9999), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
+    bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, POTION_CAP), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
 function respawnsOf(v: unknown, map: MapDefinition): Record<string, number> {

@@ -75,7 +75,7 @@ export function foeVfx(name: string, kind: IntentDefinition['kind']): VfxModule 
 }
 
 const heroTargets: Readonly<Record<string, string>> = {
-  enemy: 'ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)', enemies: 'ศัตรูทุกตัวที่ยืนอยู่', ally: 'พันธมิตร 1 คน', self: 'ตัวเอง', party: 'ทั้งทีม',
+  enemy: 'ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)', enemies: 'ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล)', ally: 'พันธมิตร 1 คน', self: 'ตัวเอง', party: 'ทั้งทีม',
 };
 // Where the effect lands (the event recipient that the module reads), per module.
 function heroPoint(module: VfxModule, action: ActionId): string {
