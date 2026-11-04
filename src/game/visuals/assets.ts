@@ -49,7 +49,10 @@ const figureTops: Readonly<Record<string, number>> = {
 // How far the painted figure rises above its feet, as a fraction of the drawn size.
 export const figureRise = (art: string): number => (actorFootOrigins[art] ?? 1) - (figureTops[art] ?? 0) / 512;
 type ArtName = 'units' | 'portraits' | 'ruins' | 'units_mercs' | 'portraits_mercs' | 'units_foes' | 'portraits_foes' | 'units_foes2' | 'portraits_foes2';
-export const artUrl = (name: ArtName): string => `${import.meta.env.BASE_URL}assets/art/${name}.webp`;
+// Bump a sheet's revision (SHA256 prefix) when its pixels change so browsers fetch the corrected art. `units` 2026-11-04:
+// pieces of Eira/Lyra/Seren that crossed into a neighbouring 512px cell were cleared (they showed in Seren's sheet).
+const ART_REV: Partial<Record<ArtName, string>> = { units: '6263840f' };
+export const artUrl = (name: ArtName): string => `${import.meta.env.BASE_URL}assets/art/${name}.webp${ART_REV[name] ? `?v=${ART_REV[name]}` : ''}`;
 export const unitsUrl = (sheet: ArtSheet): string => artUrl(sheet === 'units' ? 'units' : `units_${sheet}`);
 export const portraitsUrl = (sheet: ArtSheet): string => artUrl(sheet === 'units' ? 'portraits' : `portraits_${sheet}`);
 
