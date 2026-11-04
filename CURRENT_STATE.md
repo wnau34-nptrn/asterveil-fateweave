@@ -11,7 +11,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- UXD-07 complete. No next task started. Follow-up documentation preserves the owner’s pre-release workflow change `aabc5dc`; no Pages polling or release-evidence commit.
+- Owner authorized HUD team → character navigation follow-up after UXD-07. Branch `codex/team-hud-character-navigation` from `a2596e3`; implementation and focused QA in progress. Validation: `docs/validation/team-hud-navigation/README_TH.md`. No UXD-08/P04/P09 started; preserve pre-release rule `aabc5dc`.
 
 ## Next (owner picks; nothing auto-started)
 

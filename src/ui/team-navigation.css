@@ -1,0 +1,21 @@
+/* Camp character details share the persistent navigation; expedition details stay modal. */
+#app #lobby-view .character-dialog {
+  position: absolute; z-index: 30; margin: 0;
+  inset: max(8px,var(--star-safe-top,var(--safe-top,0px))) 8px max(var(--character-hud-bottom,88px),var(--star-safe-bottom,0px));
+  width: auto; height: auto; max-height: none; background: var(--navy-950);
+}
+#lobby-view[data-character-open] .lobby-hud > :not(.lobby-bottom),
+#lobby-view[data-character-open] .lobby-bottom > :not(.lobby-menu) { visibility: hidden; }
+#app #lobby-view[data-lobby-sheet="team"] .lobby-sheet {
+  top: max(8px,var(--safe-top,0px)); bottom: var(--character-hud-bottom,88px);
+}
+#lobby-view .team-character-entry { display: grid; gap: 8px; padding: 12px; margin-bottom: 16px; border: 1px solid var(--gold-edge); border-radius: 12px; background: var(--panel-bg); }
+#lobby-view .team-character-entry :is(h3,p) { margin: 0; }
+#lobby-view .team-character-entry p { color: var(--text-muted); font-size: .875rem; }
+#lobby-view .team-character-entry .tree-members { min-width: 0; padding-block: 4px; }
+#lobby-view .team-character-entry .tree-member { flex: 0 0 64px; min-height: 76px; }
+#lobby-view .team-character-entry > button { min-height: 44px; white-space: normal; }
+#lobby-view .team-arrange-heading { border-top: 1px solid var(--gold-edge); padding-top: 12px; }
+/* Existing camp sheets hide the bottom footer; these two surfaces retain its navigation. */
+#lobby-view[data-character-open] .lobby-menu,
+#lobby-view[data-lobby-sheet="team"] .lobby-menu { visibility: visible; }

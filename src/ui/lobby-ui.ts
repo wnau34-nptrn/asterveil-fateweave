@@ -4,7 +4,7 @@ import {storageCap,departureBlocked,type StorageSource} from '../core/world/stor
 import { ForgeWorkbench } from './forge-workbench';
 import { ForgeEnhancementLayout } from './forge-enhancement-layout';
 import { CharacterPanel, type CharacterModel } from './character-panel';
-import type { CharacterTab } from './character-view';
+import { characterTabs, type CharacterTab } from './character-view';
 import { applyCampEquipment, campEquipment, type AutoEquipmentPlan } from '../core/world/auto-equipment';
 import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gearFilterControls } from './gear-inventory';
 import { shortcutBlocked } from '../platform/keyboard';
@@ -74,6 +74,7 @@ export class LobbyUI {
   private readonly inventoryFilters = newGearFilters();
   private inventoryPick: string | undefined;
   private readonly characters: CharacterPanel;
+  private readonly navigationLayout=new ResizeObserver(()=>this.measureNavigation());
   private confirmSalvage: number | undefined;
   private sceneDrawn = '';
   private picked: string | undefined;
@@ -91,6 +92,7 @@ export class LobbyUI {
     this.build();this.storageUI=new StorageManager(map,host);
     this.forgeUI=new ForgeWorkbench(map,heroes,lookup(map.tutorialEncounterId)!,{...host,quest:()=>this.questCard('smith')});
     this.characters=new CharacterPanel(root,map,heroes,lookup(map.tutorialEncounterId)!,{
+      navigationVisible:open=>this.characterNavigation(open),
       model:()=>this.characterModel(),upgrade:id=>{if(this.open('team'))this.host.upgrade(id);},
       preview:(id,key)=>{const p=this.view?.profile,entry=p&&campEquipment(p).find(e=>e.key===key);if(!p||!entry)return;const out=equip(p,id,entry.item.uid);return out.event.type==='equipped'?this.characterModel(out.profile):undefined;},
       previewPlan:plan=>{if(!this.view)return;const out=applyCampEquipment(this.view.profile,plan);return out.event.type==='equipped'?this.characterModel(out.profile):undefined;},
@@ -111,8 +113,10 @@ export class LobbyUI {
     // Escape closes the sheet even after a redraw moved focus out of it (only while the lobby shows).
     root.ownerDocument.addEventListener('keydown', e => { if (!shortcutBlocked(e) && e.key === 'Escape' && this.sheet && !root.hidden && !this.characters.open) { e.preventDefault();const focus=this.sheet==='forge'?this.forgeUI.backFromEnhancement():undefined;if(focus){this.draw();this.focus('#'+focus);}else this.closeSheet(); } });
     root.addEventListener('click', e => {
-      if(root.hidden||root.closest('[inert]')||this.characters.open)return;
-      const el=e.target as HTMLElement;const storageButton=el.closest<HTMLButtonElement>('button[data-storage]');if(storageButton){const focus=this.storageUI.click(storageButton,this.view!.profile);this.draw();this.focus('#'+focus);return;}const forgeButton=el.closest<HTMLButtonElement>('button');if(forgeButton&&(forgeButton.closest('.forge-workbench')||this.sheet==='forge'&&forgeButton.id==='forge-open-tasks')&&(forgeButton.dataset.forge||forgeButton.hasAttribute('data-gear-reset'))){if(e.detail>1){this.root.querySelector<HTMLElement>('#forge-success, #forge-cancel')?.focus({preventScroll:true});return;}if(forgeButton.hasAttribute('data-gear-reset'))forgeButton.dataset.forge='reset';this.forgeUI.remember((forgeButton.closest<HTMLElement>('.forge-workbench')??this.root.querySelector<HTMLElement>('.forge-workbench'))!);const focus=this.forgeUI.click(forgeButton,this.view!.profile);if(focus){this.draw();this.focus(this.root.querySelector('#'+focus)?'#'+focus:'#lobby-sheet-title');}return;}if(el.closest('[data-gear-reset]')){this.storageUI.reset();Object.assign(this.inventoryFilters,newGearFilters());this.draw();this.focus('#camp-inventory-gear-filter-set');return;}
+      if(root.hidden||root.closest('[inert]'))return;
+      const el=e.target as HTMLElement;
+      if(this.characters.open){if(!el.closest('.lobby-menu button[data-lobby=tab]'))return;this.characters.closeForNavigation();}
+      const storageButton=el.closest<HTMLButtonElement>('button[data-storage]');if(storageButton){const focus=this.storageUI.click(storageButton,this.view!.profile);this.draw();this.focus('#'+focus);return;}const forgeButton=el.closest<HTMLButtonElement>('button');if(forgeButton&&(forgeButton.closest('.forge-workbench')||this.sheet==='forge'&&forgeButton.id==='forge-open-tasks')&&(forgeButton.dataset.forge||forgeButton.hasAttribute('data-gear-reset'))){if(e.detail>1){this.root.querySelector<HTMLElement>('#forge-success, #forge-cancel')?.focus({preventScroll:true});return;}if(forgeButton.hasAttribute('data-gear-reset'))forgeButton.dataset.forge='reset';this.forgeUI.remember((forgeButton.closest<HTMLElement>('.forge-workbench')??this.root.querySelector<HTMLElement>('.forge-workbench'))!);const focus=this.forgeUI.click(forgeButton,this.view!.profile);if(focus){this.draw();this.focus(this.root.querySelector('#'+focus)?'#'+focus:'#lobby-sheet-title');}return;}if(el.closest('[data-gear-reset]')){this.storageUI.reset();Object.assign(this.inventoryFilters,newGearFilters());this.draw();this.focus('#camp-inventory-gear-filter-set');return;}
       const b = el.closest<HTMLButtonElement>('button[data-lobby]');
       if (!b || b.disabled) return;
       const id = b.dataset.hero;
@@ -125,6 +129,7 @@ export class LobbyUI {
           else this.picked = undefined;
           this.sheet = sheet; if(sheet==='forge')this.forgeUI.openTasks(); this.preview = undefined; this.confirmDismiss = false; this.openedLine(sheet); this.draw(); this.act(npc, 'greet', 1400); this.focus(sheet==='forge'?'#lobby-sheet-title':`#npc-${npc}`); break; }
         case 'tab': this.forgeStorageReturn=false;this.huntUI.cancel();this.preview = undefined; this.lanePick = undefined; this.sheet = b.dataset.tab as 'team' | 'hire' | 'gear' | 'forge' | 'brew' | 'hunt'; if(this.sheet==='forge')this.forgeUI.openTasks(); this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = this.sheet==='gear'?(this.view!.profile.party.deployed[0]??this.view!.profile.company[0]):undefined; this.confirmDismiss = false; this.draw(); this.focus(this.sheet==='forge'?'#lobby-sheet-title':`#lobby-tab-${this.sheet}`); break;
+        case 'character-resume': if(id)this.characters.openRemembered(id,b);break;
         case 'close': this.closeSheet(); break;
         case 'pick': this.pick(id, b.dataset.group as Group); break;
         case 'lane-pick': case 'lane-cell': {
@@ -299,8 +304,20 @@ export class LobbyUI {
     return `<button id="lobby-music" data-music-toggle class="round-glass" aria-pressed="${!muted}" aria-label="${muted ? 'เปิดเพลง' : 'ปิดเพลง'}">${icon(muted ? 'musicOff' : 'music')}</button>`;
   }
   private toastShown = '';
+  private measureNavigation():void {
+    const nav=this.root.querySelector('.lobby-menu');if(!nav)return;
+    this.root.style.setProperty('--character-hud-bottom',`${Math.max(0,this.root.getBoundingClientRect().bottom-nav.getBoundingClientRect().top)+8}px`);
+  }
+  private characterNavigation(open:boolean):void {
+    this.root.toggleAttribute('data-character-open',open);
+    const team=this.root.querySelector('#lobby-tab-team');if(team){team.setAttribute('aria-controls',open?'camp-character-dialog':'lobby-sheet');team.setAttribute('aria-expanded',String(open||this.sheet==='team'||this.sheet==='tree'));team.classList.toggle('active',open||this.sheet==='team'||this.sheet==='tree');}
+    for(const el of this.root.querySelectorAll<HTMLElement>('.lobby-pan,.lobby-hud > :not(.lobby-bottom),.lobby-bottom > :not(.lobby-menu)'))el.inert=open;
+    if(!open&&this.view){const entry=this.root.querySelector('.team-character-entry');if(entry)entry.outerHTML=this.characterEntry(this.view.profile);}
+    this.measureNavigation();
+  }
   private draw(): void {
-    this.enhancementLayout.disconnect();
+    this.enhancementLayout.disconnect();this.navigationLayout.disconnect();
+    this.root.dataset.lobbySheet=this.sheet??'';
     const huntScroll=this.sheet==='hunt'&&this.root.querySelector('#boss-target')||this.sheet==='maps'&&this.root.querySelector('.region-map')?this.root.querySelector('.lobby-content')?.scrollTop:undefined;
     const p = this.view!.profile; const last = p.last;
     const ready = p.party.deployed.length > 0&&!departureBlocked(p);
@@ -336,6 +353,7 @@ export class LobbyUI {
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'tab-team', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'tab-hire', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'tab-bag', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('hunt', 'goal', 'ฟาร์ม', '')}${menu('forge', 'tab-forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
       </footer>`;
     this.enhancementLayout.mount(this.root,this.forgeUI.scroll);
+    this.navigationLayout.observe(this.root);const nav=this.root.querySelector('.lobby-menu');if(nav)this.navigationLayout.observe(nav);this.characterNavigation(this.characters.open);
     if(huntScroll!==undefined&&(this.sheet==='hunt'||this.sheet==='maps'))this.root.querySelector('.lobby-content')!.scrollTop=huntScroll;
   }
 
@@ -389,13 +407,17 @@ export class LobbyUI {
     const q = this.benchQuery.trim().toLowerCase(); if (!q) return true;
     const t = heroText[id]!; return [t.name, t.role, id].some(v => v.toLowerCase().includes(q));
   }
+  private characterEntry(p:Profile):string {
+    const last=this.characters.lastViewed,ids=p.company.filter(id=>!p.archived?.includes(id)||id===last?.id);
+    return `<section class="team-character-entry" aria-labelledby="team-character-heading"><h3 id="team-character-heading">ตัวละคร</h3><p>แตะภาพเพื่อดูอุปกรณ์ สกิล และพัฒนา</p><div class="tree-members">${ids.map(id=>`<button id="team-character-${id}" data-lobby="character-resume" data-hero="${id}" class="tree-member" aria-label="ดูตัวละคร ${heroText[id]!.name}" aria-pressed="${last?.id===id}">${portrait(id)}<small>${heroText[id]!.name}</small></button>`).join('')}</div>${last&&p.company.includes(last.id)?`<button id="team-character-resume" data-lobby="character-resume" data-hero="${last.id}" class="secondary">ดูล่าสุด · ${heroText[last.id]!.name} · ${characterTabs[last.tab]}</button>`:''}</section>`;
+  }
   private team(p: Profile): string {
     const row = (ids: string[], group: Group, size: number) => Array.from({ length: size }, (_, i) => this.card(p, ids[i], group, i)).join('');
     const all = p.company.filter(id => groupOf(p, id) === 'bench'); const bench = all.filter(id => this.benchShown(p, id));
     const archivedCount = p.archived?.length ?? 0;
     const filters = (['all', 'front', 'back', 'archived'] as const).map(f => `<button id="bench-filter-${f}" data-lobby="bench-filter" data-filter="${f}" class="ui-chip" aria-pressed="${this.benchFilter === f}">${{ all: 'ทั้งหมด', front: 'แนวหน้า', back: 'แนวหลัง', archived: `คลังสมาชิก ${archivedCount}` }[f]}</button>`).join('');
     const empty = this.benchFilter === 'archived' ? 'ยังไม่มีใครอยู่ในคลังสมาชิก' : all.length ? 'ไม่พบสมาชิกตามตัวกรอง' : 'ทุกคนอยู่ในทีมที่จะพาไปแล้ว';
-    return `${this.campLine(p)}<h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3><div class="team-grid">${row(p.party.deployed, 'deployed', PARTY_SLOTS)}</div>
+    return `${this.characterEntry(p)}<h3 class="team-arrange-heading">จัดทีมออกเดินทาง</h3><p class="camp-note">เลือกสมาชิกด้านล่าง แล้วเลือกคนหรือช่องว่างอีกกลุ่มเพื่อย้าย</p>${this.campLine(p)}<h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3><div class="team-grid">${row(p.party.deployed, 'deployed', PARTY_SLOTS)}</div>
       ${formationGrid({ prefix: 'lobby', attr: 'lobby', deployed: p.party.deployed, lanes: this.lanes(p), recommended: recommendedLane(this.lookup, this.map), picked: this.lanePick })}
       <h3>${icon('camp')} สำรอง <span class="camp-embers">${p.party.reserve.length}/${reserveSlots(p, this.map)} · ปลดเพิ่มตามบท · พาเข้าด่าน สลับได้ในกระเป๋านอกการต่อสู้</span></h3><div class="team-grid">${row(p.party.reserve, 'reserve', reserveSlots(p, this.map))}</div>
       <h3>${icon('rest')} ในค่าย <span class="camp-embers">ไม่ได้เข้าด่านรอบนี้</span></h3>
