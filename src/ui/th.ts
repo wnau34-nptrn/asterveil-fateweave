@@ -287,7 +287,7 @@ export const passiveText: Record<PassiveId, { name: string; actions: readonly Ac
   stand: { name: 'ยืนหยัด', actions: ['guard', 'rally'], help: () => 'ครั้งแรกในศึกที่การโจมตีซึ่งเอกิสป้องกัน (ตั้งรับแทนหรือตั้งรับหมู่) จะทำให้ล้ม จะเหลือเลือด 1 แทน' },
   keeneye: { name: 'ตาเหยี่ยว', actions: ['mark'], help: d => `ตราที่ไลราติดอยู่ได้ ${d.rules.markDuration + 1} รอบ` },
   echo: { name: 'โล่ตอบสนอง', actions: ['ward'], help: d => `โล่เวทหนาขึ้น ${d.rules.echoBonus * 100}% เมื่อใส่ให้คนที่ศัตรูประกาศว่าจะโจมตี` },
-  afterglow: { name: 'แสงอุ่น', actions: ['heal', 'prayer', 'finale'], help: d => `การรักษาที่เกินเลือดเต็มกลายเป็นโล่ สูงสุด ${d.rules.afterglowCap}` },
+  afterglow: { name: 'แสงอุ่น', actions: ['heal', 'prayer', 'finale'], help: d => `การรักษาที่เกินเลือดเต็มกลายเป็นโล่ สูงสุด ${d.rules.afterglowCap} · ฟื้นเลือดเลือกเพื่อนที่เลือดเต็มได้เมื่อโล่ยังเพิ่มได้` },
   heavycounter: { name: 'สวนหนัก', actions: ['brace'], help: d => `ตั้งทวนแทงสวนแรงขึ้น ${d.rules.heavyCounter * 100}%` },
   tailwind: { name: 'ลมใต้ปีก', actions: ['volley'], help: d => `ห่าธนูพร้อมใช้อีกครั้งใน ${d.skills.volley.cooldown - 1} รอบ` },
   potent: { name: 'สูตรเข้มข้น', actions: ['acid', 'bomb'], help: d => `กรดกัดกร่อนอยู่ได้ ${d.rules.corrodeDuration + 1} รอบ` },

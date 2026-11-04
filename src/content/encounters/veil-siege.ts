@@ -94,5 +94,5 @@ export const veilSiege: EncounterDefinition = {
   rules: { guardReduction: 0.65, markDuration: 2, markedBonus: 22, corrodeDuration: 2, corrodeBonus: 6, ambushBonus: 12, tauntReduction: 0.35,
     rallyReduction: 0.35, finisherThreshold: 0.4, echoBonus: 0.5, afterglowCap: 8, heavyCounter: 0.5,
     weakshotBonus: 12, quakeBonus: 10, shadowCounter: 8, stoneskinReduction: 0.5, resound: 0.5, finaleHeal: 12,
-    defenseCap: 30, leechCap: 20, skillLevel: { powerPercent: 8, percentPoints: 2, barrier: 3 } },
+    defenseCap: 30, leechCap: 20, skillLevel: { powerPercent: 8, percentPoints: 2, barrier: 3, revivePoints: 5 } },
 };

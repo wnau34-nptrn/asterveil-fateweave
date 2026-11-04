@@ -35,13 +35,15 @@ export const rallyReductionOf = (data: EncounterDefinition, heroId: string | und
 // A skill with power grows by a percent per level; a percent skill by points; a skill without numbers shields its user.
 export type SkillLevelKind = 'power' | 'percent' | 'utility';
 const PERCENT_LEVELS: readonly ActionId[] = ['guard', 'rally', 'bulwark', 'halo', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread'];
+// Revive (owner 2026-11-04, logic audit 5): its levels raise the HP it restores (`revivePoints` per level), not a barrier.
 export const skillLevelKind = (data: EncounterDefinition, action: ActionId): SkillLevelKind =>
-  PERCENT_LEVELS.includes(action) ? 'percent' : action === 'revive' || data.skills[action].power <= 0 ? 'utility' : 'power';
+  PERCENT_LEVELS.includes(action) || action === 'revive' ? 'percent' : data.skills[action].power <= 0 ? 'utility' : 'power';
 export const skillLevel = (data: EncounterDefinition, heroId: string | undefined, action: ActionId): number =>
   Math.min(5, Math.max(1, (heroId ? data.heroes.find(h => h.id === heroId)?.skillLevels?.[action] : undefined) ?? 1));
 // Steps above Lv1; a mastered (Lv5) skill with a cooldown of 3 or more spends its last step on one round less instead.
 export function skillLevelSteps(data: EncounterDefinition, heroId: string | undefined, action: ActionId): { steps: number; cooldown: number } {
-  const level = skillLevel(data, heroId, action); const master = level >= 5 && data.skills[action].cooldown >= 3;
+  // Revive is once per battle, so a shorter cooldown would be worthless: every level, Lv5 included, adds HP.
+  const level = skillLevel(data, heroId, action); const master = level >= 5 && data.skills[action].cooldown >= 3 && action !== 'revive';
   return { steps: master ? 3 : level - 1, cooldown: master ? 1 : 0 };
 }
 export function skillCooldown(data: EncounterDefinition, heroId: string | undefined, action: ActionId): number {
@@ -53,7 +55,7 @@ export function skillCooldown(data: EncounterDefinition, heroId: string | undefi
   return Math.max(0, cooldown);
 }
 function levelPoints(data: EncounterDefinition, heroId: string | undefined, action: ActionId): number {
-  return skillLevelKind(data, action) === 'percent' ? skillLevelSteps(data, heroId, action).steps * data.rules.skillLevel.percentPoints : 0;
+  return skillLevelKind(data, action) === 'percent' ? skillLevelSteps(data, heroId, action).steps * (action === 'revive' ? data.rules.skillLevel.revivePoints : data.rules.skillLevel.percentPoints) : 0;
 }
 export const levelBarrier = (data: EncounterDefinition, heroId: string | undefined, action: ActionId): number =>
   skillLevelKind(data, action) === 'utility' ? skillLevelSteps(data, heroId, action).steps * data.rules.skillLevel.barrier : 0;
@@ -99,6 +101,13 @@ export const MAX_SIDE = 5; export const ROW_SLOTS = 3;
 export const tired = (data: EncounterDefinition, heroId: string | undefined, amount: number): number => {
   const cut = heroId ? data.heroes.find(h => h.id === heroId)?.fatigue ?? 0 : 0;
   return cut ? Math.max(amount > 0 ? 1 : 0, Math.round(amount * (100 - cut) / 100)) : amount;
+};
+// Afterglow (★5) / the mender set: overflow healing becomes a barrier up to the larger cap. A full-HP ally may be healed
+// only when that barrier would grow (owner 2026-11-04, logic audit 4).
+export const overflowCap = (data: EncounterDefinition, heroId: string): number =>
+  Math.max(hasPassive(data, heroId, 'afterglow') ? data.rules.afterglowCap : 0, data.heroes.find(h => h.id === heroId)?.gear?.overflowCap ?? 0);
+export const overflowBarrier = (data: EncounterDefinition, heroId: string, target: { barrier: number }): number => {
+  const cap = overflowCap(data, heroId); return cap ? Math.min(cap, tired(data, heroId, skillPower(data, heroId, 'heal'))) - target.barrier : 0;
 };
 export function screened(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId, enemyId: string): boolean {
   const hero = data.heroes.find(h => h.id === heroId);
@@ -746,7 +755,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
     const actor = state.heroes.find(s => s.id === h.id)!;
     const reason = unavailable || (actor.hp <= 0 ? 'This hero is down.' :
       action === 'guard' && state.intent?.targetId !== h.id ? 'Guard must protect the announced target.' :
-      action === 'heal' && actor.hp >= h.maxHp ? 'This ally is at full health.' :
+      action === 'heal' && actor.hp >= h.maxHp && overflowBarrier(data, heroId, actor) <= 0 ? 'This ally is at full health.' :
       action === 'ward' && actor.barrier >= skillPower(data, heroId, 'ward') ? 'This ally already has this barrier.' : '');
     return { id: h.id, name: h.name, valid: !reason, reason };
   });
@@ -810,7 +819,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     if (amount) { target.hp += amount; events.push({ type: 'heal', sourceId: hero.id, targetId: id, amount, text: 'Restored HP.' }); }
     // Afterglow (★5): healing beyond full HP becomes a barrier (capped, not stacking).
     // The mender set (4 pieces) does the same with its own cap; the larger cap applies.
-    const cap = Math.max(hasPassive(data, hero.id, 'afterglow') ? data.rules.afterglowCap : 0, hero.gear?.overflowCap ?? 0);
+    const cap = overflowCap(data, hero.id);
     const glow = cap ? Math.min(cap, power - amount) - target.barrier : 0;
     if (glow > 0) { target.barrier += glow; events.push({ type: 'barrier', sourceId: hero.id, targetId: id, amount: glow, text: 'Overflowing light becomes a barrier.' }); }
   };
