@@ -30,6 +30,7 @@ export function effectCaption(event: BattleEvent): string {
     case 'cooldown': return `พร้อมเร็วขึ้น ${event.amount ?? 0} รอบ`;
     case 'deflect': return event.text === 'Fate is bent.' ? 'เบนชะตา' : 'ท่าถูกเบน!';
     case 'dial': return `วงท่า +${event.amount ?? 1}`;
+    case 'beat': return (event.amount ?? 0) > 0 ? `จังหวะ +${event.amount}` : `ใช้จังหวะ ${-(event.amount ?? 0)}`;
     case 'hex': return `สาป ${event.amount ?? 0}/3`;
     case 'toll': return event.text === 'Toll paid.' ? `ภาษี −${event.amount ?? 0}` : 'ผูกภาษี';
     case 'chi': return (event.amount ?? 0) > 0 ? `ปราณ +${event.amount}` : `ปล่อยปราณ ${-(event.amount ?? 0)}`;

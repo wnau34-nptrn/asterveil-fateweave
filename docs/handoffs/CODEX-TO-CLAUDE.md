@@ -2,12 +2,11 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
-## 2026-11-05 — Skill rework: direct effects for Cerise/Astrid (Claude, PR #181 feature/skill-direct-effects)
-- เจ้าของสั่ง: นักเต้นมีแต่สกิลลดคูลดาวน์ → ตรวจตัวใหม่ C12/P03: Cerise ทางอ้อมล้วน (และใช้ไม่ได้รอบแรก), Astrid turncycle ทางอ้อมล้วน; Corin/Kael/Wynne มีผลตรงแล้ว
-- ร่าง: cadence โล่ 8 (Support) + คูลดาวน์ −1, duet ดาเมจเพื่อน +20% ถึงจบรอบถัดไป + คูลดาวน์เดิม (ทั้งคู่ใช้ได้เสมอ), turncycle พลังงาน 8; เซฟ v48 ศึกค้างที่ใช้สามสกิลนี้เริ่มใหม่จากเลือดเข้า
-- Advisor นับโล่นักเต้นเฉพาะกันล้ม (ให้คะแนนโล่/บัฟเต็มทำ sim แพ้ศึกเฉียดฉิว); VFX วาดคงตามเหตุการณ์คูลดาวน์จริง
-- Tests: typecheck/lint/build, unit 1607, Playwright roster-batch1 2/2, sim 28 ผ่าน (Cerise class 9→10/10, tree ไม่ลงแต้ม HP 42→49%) — [README](../validation/skill-rework-2026-11-05/README_TH.md)
-- เปิด: สกิลต้นไม้นักเต้น rounddance/deepbeat/closingstep ยังเป็นคูลดาวน์ล้วน; เจ้าของยังไม่ได้ลองเล่น
+## 2026-11-05 — Skill rework step 1: Dancer kit + Astrid turn cycle (Claude, PR #181 feature/skill-direct-effects)
+- เจ้าของ: นักเต้นมีแต่ลดคูลดาวน์และ "OP" → วิเคราะห์ทุกตัว (artifact "ตรวจสกิล Fateweave" + "คลังกลไกสกิล") แล้วสั่งทำขั้นแรก
+- กฎ: cadence โล่ 8 + เร่งคูลดาวน์ใต้เพดาน; duet ตีตาม 40%; จังหวะจากสกิลเพื่อน → closingstep ตีทุกตัว 6+6/จังหวะ; rounddance โล่ 5; deepbeat ลดท่าถัดไป 40%; echofoot +จังหวะ; turncycle ตี 8; ไม่มีการเลือกสกิล/ผู้รับคูลดาวน์อีก; เซฟ v48
+- Tests: typecheck/lint/unit 1604, Playwright saint-dance-fx 20/20 + roster-batch1 + world/unit-a7 ที่เกี่ยว, sim 28/28 (Cerise ทุกกิ่งชนะครบ HP ขึ้น) — [README](../validation/skill-rework-2026-11-05/README_TH.md)
+- เปิด: advisor ไม่ใช้ rounddance/deepbeat; ขั้นถัดไปตามลำดับในหน้า artifact (Wynne → Garran → Astrid → Toma → ปรับเล็ก) รอเจ้าของสั่ง
 
 ## 2026-11-05 — Painted skill tomes in game (Claude, branch art/tome-icons)
 - ภาพตำรา 9 แบบจาก ART-UI-PROGRESS-001 (เจ้าของสั่งนำเข้า) → atlas 3×3 lossless 152 KB; ใช้ที่ชิปค่าใช้จ่ายเพิ่ม Lv สกิลและรายการตำราของค่าย; ไม่เปลี่ยนกฎ/เซฟ/ตัวเลข; ของอื่นในแพ็กเกจยังไม่ผูก

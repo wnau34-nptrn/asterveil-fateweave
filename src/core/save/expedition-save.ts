@@ -104,11 +104,12 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v47 (P03 Kael, OD-14): Kael joins the catalog and the hiring board's featured slot. Each profile now stores its open
 // board's featured lineup (`boardFeatured`); a v46 profile keeps the v46 lineup until its next return/refresh, so loading
 // never changes an open board or its paid indexes. No member, item or battle changes (old commands replay the same).
-// v48 (owner 2026-11-05, skill rework): Cerise's cadence adds a barrier and duet empowers, both usable on an ally with
-// nothing cooling; Astrid's turn cycle also hits. Profiles are unchanged; a battle in progress that used one of them
-// restarts from its entry HP.
+// v48 (owner 2026-11-05, skill rework): the dancer kit is reworked (cadence shields and quickens under a cap; duet echoes;
+// beats feed closing step; round dance shields; deep beat steadies; no dance picks a cooling skill or recipient) and
+// Astrid's turn cycle also hits. Profiles are unchanged; a battle in progress that used any of them restarts from its
+// entry HP.
 const SAVE_VERSION = 48;
-const REWORKED_V48: readonly ActionId[] = ['cadence', 'duet', 'turncycle'];
+const REWORKED_V48: readonly ActionId[] = ['cadence', 'duet', 'rounddance', 'deepbeat', 'echofoot', 'closingstep', 'turncycle'];
 const BATCH_ONE_IDS = ['metta', 'thiran', 'lalin', 'wila'];
 // Characters added after the v43 legacy board snapshot (P03); never part of a legacy pool or the v46 featured lineup.
 const P03_IDS = ['kael', 'wynne', 'astrid'];

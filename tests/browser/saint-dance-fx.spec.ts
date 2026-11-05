@@ -29,13 +29,14 @@ for(const skill of skills)test(`saint/dance ${skill}: prepare on the caster, pai
   await page.clock.runFor(61);
   const at=await frames(page);
   expect(at.some(f=>f.endsWith('_prepare'))).toBe(false);
-  // Rounddance: one ring per ally the resolver really restored.
-  const want=skill==='rounddance'?{rounddance_settle:new Set(turn.events.filter(e=>e.type==='cooldown').map(e=>e.targetId)).size}:expected[skill];
+  // Rounddance: one ring per ally the resolver really shielded; closing step a peak and settle per foe it really hit.
+  const foes=new Set(turn.events.filter(e=>e.type==='damage'&&e.sourceId===turn.actorId).map(e=>e.targetId)).size;
+  const want=skill==='rounddance'?{rounddance_settle:new Set(turn.events.filter(e=>e.type==='barrier'&&e.sourceId===turn.actorId).map(e=>e.targetId)).size}
+    :skill==='closingstep'?{closingstep_peak:foes,closingstep_settle:foes}:expected[skill];
   expect(tally(at)).toEqual(want);
   // The generic ring/slash must not be drawn on events the painted layers cover.
-  // (Echofoot's real ally cooldown event is not painted, so its one generic cue stays; duet's real buff event,
-  // skill rework 2026-11-05, keeps the generic buff cue too.)
-  expect(await page.evaluate(()=>window.sdQA.rings())).toBe(skill==='echofoot'||skill==='duet'?1:0);
+  // (Dancer rework, save v48: every dance's real events are painted, so no generic cue is left over.)
+  expect(await page.evaluate(()=>window.sdQA.rings())).toBe(0);
   await page.locator('#skip-turn').click();await page.clock.runFor(700);
   expect(await frames(page)).toEqual([]);
   expect(await page.evaluate(()=>localStorage.getItem('sd-committed'))).toBe(saved);expect(errors).toEqual([]);

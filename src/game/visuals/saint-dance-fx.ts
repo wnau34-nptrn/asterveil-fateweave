@@ -7,8 +7,8 @@ import art from './saint-dance-art.json';
 //  - Saint moves are strikes: `damage`/`dodge` on the real foes, then a thread from the struck foe(s) to each ally who really
 //    received a `Damage becomes an ally’s life.` heal. No heal event, no thread. A dodge gets no body contact (the generic dodge cue stays).
 //    The art notes picture Communion/Sharewound as ally-to-ally; the resolver makes both a foe strike with a conversion, so they are routed as that.
-//  - Dancer moves restore cooldowns: layers sit only on the real `cooldown` recipients (Rounddance's ring covers exactly those allies, Duet's
-//    ribbons join the caster and each real recipient). No heal, barrier or damage is implied. Echofoot is the one Dancer strike (one trail, one contact).
+//  - Dancer moves (save v48 rework) paint only where their real events land: cadence on the ally it shielded or quickened, duet and deep
+//    beat on the buffed ally, Rounddance a ring per shielded ally, closing step on each foe hit. Echofoot is the one trail strike.
 export const SAINT_DANCE_ATLAS='saint-dance-fx';
 export const saintDanceAtlasUrls=():[string,string]=>[`${import.meta.env.BASE_URL}assets/fx/saint_dance_fx.webp`,`${import.meta.env.BASE_URL}assets/fx/saint_dance_fx.json`];
 export const saintSkills=['saintstrike','communion','saintarc','vowstrike','sharewound','lastlight'] as const;
@@ -54,7 +54,10 @@ export function sdPlan(turn:TurnStage):SdPlan|undefined{
     if(struck.length)for(const h of heals)settles.push({frame:LINK[kind],mode:'link',from:sources,at:waist(h.targetId!),outcome:'hit',event:h});
     return {skill,casterId:id,prepare,peaks,settles,events:[...struck,...(struck.length?heals:[])]};
   }
-  const cool=own.filter(e=>e.type==='cooldown'&&!!e.targetId),who=[...new Set(cool.map(e=>e.targetId!))];
+  // Dancer rework (save v48): each dance paints where its own real events land: cadence on the ally it shielded or
+  // quickened, duet/deep beat on the ally given the buff, round dance on each shielded ally, closing step on each foe hit.
+  const kinds:Record<string,readonly string[]>={cadence:['cooldown','barrier'],duet:['buff'],rounddance:['barrier'],deepbeat:['buff'],closingstep:['damage']};
+  const cool=own.filter(e=>(kinds[skill]??[]).includes(e.type)&&!!e.targetId),who=[...new Set(cool.map(e=>e.targetId!))];
   if(skill==='echofoot'){
     if(!hits.length)return;
     const first=hits[0]!,dodged=first.type==='dodge';
@@ -64,7 +67,8 @@ export function sdPlan(turn:TurnStage):SdPlan|undefined{
     return {skill,casterId:id,prepare:{id,spot:'feet'},peaks,settles,events:hits.filter(e=>e.type==='damage')};
   }
   if(!who.length)return;
-  const events=cool;
+  // The dancer's own beat gain/spend is shown by the prepare on the caster, so its generic cue is covered too.
+  const events=[...cool,...own.filter(e=>e.type==='beat')];
   if(skill==='cadence')return {skill,casterId:id,prepare,peaks:who.map(w=>({frame:'cadence_peak',mode:'stand' as const,at:waist(w),outcome:'hit' as const})),settles:who.map(w=>({frame:'cadence_settle',mode:'stand' as const,at:waist(w),outcome:'hit' as const})),events};
   if(skill==='duet'){
     // A recipient other than the caster gets a ribbon from the caster; a caster-only recovery stays a still gather.

@@ -3,7 +3,7 @@
 These owner-scoped rules still apply. They were moved here verbatim so CLAUDE.md stays short. Before changing a system, read its section here.
 
 ## Direct-effect skill rework — owner 2026-11-05 (save v48)
-Cerise's cadence = Support-scaled barrier 8 + cooldown −1; duet = ally hits +20% to end of next round (`empowered`, max with fury, no exposure) + two cooldowns −1; both target any other standing ally (`DIRECT_DANCES`). Astrid's turn cycle lands energy 8 before turning. Painted dance VFX still follows cooldown events only; the barrier/buff use the generic presentation. Drafts and sim: `docs/validation/skill-rework-2026-11-05/README_TH.md`.
+Dancer kit (engine `BEAT_MAX`, `quickenable`): cadence = Support-scaled barrier 8 + one cooldown −1 under the quicken cap (once per use, never before the round after use, cooldown ≥4/revive once per battle); duet binds an ally whose next skill is echoed 40% (`HeroState.echo`); other allies' skills give beats (cap 3) that closing step spends on every foe (6 + 6/beat); round dance shields others 5; deep beat cuts the ally's next hit 40% (`steady`); echo foot hits 12. No dance picks a cooling skill/recipient. Astrid's turn cycle lands energy 8. Painted dance VFX follow the real events. Drafts and sim: `docs/validation/skill-rework-2026-11-05/README_TH.md`.
 
 ## Combat presentation phase 2 — owner scope 2026-10-21
 

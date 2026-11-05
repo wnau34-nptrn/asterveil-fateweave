@@ -1,4 +1,4 @@
-import { hexTickPower, validateCommand, cooldownTargets, hasCap, previewCommand, CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { actionReason, hexTickPower, validateCommand, cooldownTargets, hasCap, previewCommand, CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, Command } from '../core/battle/types';
 import { actorName } from './th';
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string; cooldownAction?:ActionId; cooldownTargetId?:string; recipientId?:string; steps?:number }
@@ -91,14 +91,6 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   for(const action of me.actions){
    for(const target of targetOptions(state,data,heroId,action).filter(t=>t.valid)){
     const command:Command={heroId,beat:state.beat,action,targetId:target.id};
-    if(action==='duet'&&hasCap(data,heroId,'lalin2'))command.cooldownAction=cooldownTargets(state,data,target.id)[0];
-    if(action==='echofoot'&&hasCap(data,heroId,'dancerEchoChoose')){
-     const allies=state.heroes.filter(h=>h.id!==heroId&&h.hp>0&&cooldownTargets(state,data,h.id).length).sort((a,b)=>{
-      const total=(id:string)=>cooldownTargets(state,data,id).reduce((n,a)=>n+Math.max(0,(state.heroes.find(h=>h.id===id)!.cooldowns[a]??0)-state.round),0);
-      return total(b.id)-total(a.id);
-     });
-     if(allies[0])command.cooldownTargetId=allies[0].id;
-    }
     const result=previewCommand(state,data,command),turn=result.turns.find(t=>t.side==='hero');
     if(!turn)continue;
     const damage=turn.events.filter(e=>e.type==='damage'&&e.sourceId===heroId&&state.enemies.some(x=>x.id===e.targetId)).reduce((n,e)=>n+(e.amount??0),0);
@@ -110,11 +102,17 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
      if(before>0&&after===0)readied++;
     }
     const kills=turn.events.filter(e=>e.type==='down'&&state.enemies.some(x=>x.id===e.targetId)).length;
-    // Skill rework 2026-11-05: the advisor values a dancer's barrier only when it keeps an ally standing against the damage
-    // announced at them this round; the duet buff is a bonus it does not chase (scoring it made the sim lose close races).
+    // Skill rework 2026-11-05: a dancer's barrier counts when it keeps an ally standing against the damage announced at them
+    // this round; a duet is worth its share of the bound ally's strongest ready skill, a deep beat its cut of the hits
+    // announced at the ally, and each beat gained a little of the closing step it feeds.
     const incoming=(id:string)=>plannedIntents(state,data,state.order.length).filter(i=>i.round===state.round&&(i.all||i.targetId===id)).reduce((n,i)=>n+i.damage,0);
     const saved=turn.events.filter(e=>e.type==='barrier'&&e.sourceId===heroId).filter(e=>{const a=state.heroes.find(h=>h.id===e.targetId)!,hit=incoming(a.id);return a.hp+a.barrier<=hit&&a.hp+a.barrier+(e.amount??0)>hit;}).length;
-    candidates.push({command,score:damage+healed*1.5+saved*12+recovered*5+readied*6+kills*8,damage,healed,recovered});
+    const ready=(id:string)=>Math.max(0,...data.heroes.find(h=>h.id===id)!.actions.filter(a=>a!=='attack'&&!actionReason(state,data,id,a).startsWith('Cooldown')).map(a=>skillPower(data,id,a)));
+    const echo=action==='duet'?ready(target.id)*skillPower(data,heroId,'duet')/100:0;
+    const cover=action==='rounddance'?turn.events.filter(e=>e.type==='barrier'&&e.sourceId===heroId).reduce((n,e)=>n+Math.min(e.amount??0,incoming(e.targetId!)),0)*.6:0;
+    const steady=action==='deepbeat'?Math.min(incoming(target.id),30)*skillPower(data,heroId,'deepbeat')/100:0;
+    const beats=turn.events.filter(e=>e.type==='beat'&&e.sourceId===heroId&&(e.amount??0)>0).reduce((n,e)=>n+(e.amount??0),0);
+    candidates.push({command,score:damage+healed*1.5+saved*12+echo+steady+cover+beats*3+recovered*5+readied*6+kills*8,damage,healed,recovered});
    }
   }
   const best=candidates.sort((a,b)=>b.score-a.score)[0];

@@ -156,9 +156,9 @@ describe('C12 v42 → v43 migration', () => {
     expect(home.boardPool).toBeUndefined();
   });
   for (const selection of [
-    { action: 'duet', cooldownAction: 'bash' },
-    { action: 'echofoot', cooldownTargetId: 'guardian' },
-  ] as const) it(`round-trips ${selection.action} selected cooldown metadata and reproduces its result`, () => {
+    { action: 'duet' },
+    { action: 'echofoot' },
+  ] as const) it(`round-trips ${selection.action} and rejects any cooldown choice metadata (save v48: no dance picks one)`, () => {
     const p = newProfile(map, 18, ['lalin', 'guardian', 'weaver']);
     p.members.lalin = { stars: 1, dupes: 0, talents: { p1: 1, p2: 1, c1s: 1, c2y: 1 }, loadout: ['duet', 'echofoot'] }; p.campXp = Math.max(p.campXp, xpAt(5));
     const game = depart(p, map, lookup, 81);
@@ -185,8 +185,8 @@ describe('C12 v42 → v43 migration', () => {
     for (const badValue of [null, 17, {}, 'unknown']) {
       const malformed = JSON.parse(write(game));
       const last = malformed.run.battle.commands.at(-1);
-      if (selection.action === 'duet') last.cooldownAction = badValue;
-      else last.cooldownTargetId = badValue;
+      if (selection.action === 'duet') last.cooldownAction = badValue ?? 'bash';
+      else last.cooldownTargetId = badValue ?? 'guardian';
       expect(() => parseGame(JSON.stringify(malformed), map, lookup)).toThrow();
     }
   });

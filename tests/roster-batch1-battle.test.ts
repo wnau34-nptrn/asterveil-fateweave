@@ -165,75 +165,12 @@ describe('C12 Dancer: cooldown relief never changes action order', () => {
     expect(() => resolveCommand(s, d, command(s, 'lalin', 'cadence', 'lalin'))).toThrow();
   });
 
-  it('rejects downed allies but allows duet with nothing cooling (it still empowers) and a useful subset', () => {
-    const d = fixture('lalin', 'duet');
-    const s = beginBattle(d).state;
-    const fresh = cast(d, s, 'lalin', 'duet', 'guardian');
-    expect(fresh.events.filter(e => e.type === 'cooldown')).toEqual([]);
-    expect(hero(fresh.state, 'guardian').empowered).toEqual({ percent: 20, round: s.round + 1 });
-    waiting(s, 'guardian', { bash: s.round + 2 });
-    expect(hero(cast(d, s, 'lalin', 'duet', 'guardian').state, 'guardian').cooldowns.bash).toBe(s.round + 1);
-    hero(s, 'guardian').hp = 0;
-    expect(() => resolveCommand(s, d, command(s, 'lalin', 'duet', 'guardian'))).toThrow();
-  });
-
-  it('handles both duet modifiers and stronger deepbeat without lowering cooldown below zero remaining', () => {
-    for (const caps of [{}, { dancerDuetFocus: 0 }] as Caps[]) {
-      const d = fixture('lalin', 'duet', caps), s = beginBattle(d).state;
-      waiting(s, 'guardian', { bash: s.round + 4, ward: s.round + 3 });
-      const frame = cast(d, s, 'lalin', 'duet', 'guardian');
-      expect(hero(frame.state, 'guardian').cooldowns.bash).toBe(s.round + (caps.dancerDuetFocus === undefined ? 3 : 2));
-      expect(hero(frame.state, 'guardian').cooldowns.ward).toBe(s.round + (caps.dancerDuetFocus === undefined ? 2 : 3));
-    }
-    const d = fixture('lalin', 'deepbeat', { dancerDeep: 0 }), s = beginBattle(d).state;
-    waiting(s, 'guardian', { bash: s.round + 2 });
-    expect(Math.max(0, (hero(cast(d, s, 'lalin', 'deepbeat', 'guardian').state, 'guardian').cooldowns.bash ?? 0) - s.round)).toBe(0);
-    expect(skillCooldown(d, 'lalin', 'deepbeat')).toBe(5);
-    expect(skillCooldown(fixture('lalin', 'cadence', { dancerCadenceQuick: 1 }), 'lalin', 'cadence')).toBe(2);
-    expect(skillCooldown(fixture('lalin', 'duet', { dancerDuetQuick: 1 }), 'lalin', 'duet')).toBe(3);
-  });
-
   it('uses the short-wait cadence alternative instead of the longest cooling skill', () => {
     const d = fixture('lalin', 'cadence', { dancerCadenceShort: 0 }), s = beginBattle(d).state;
     waiting(s, 'guardian', { bash: s.round + 4, ward: s.round + 2 });
     const frame = cast(d, s, 'lalin', 'cadence', 'guardian');
     expect(hero(frame.state, 'guardian').cooldowns.bash).toBe(s.round + 4);
     expect(hero(frame.state, 'guardian').cooldowns.ward).toBe(s.round + 1);
-  });
-
-  it('rounddance relieves every eligible ally, or only the two with the greatest remaining cooldown totals', () => {
-    for (const caps of [{}, { dancerRoundPair: 0 }] as Caps[]) {
-      const d = fixture('lalin', 'rounddance', caps), s = beginBattle(d).state;
-      waiting(s, 'guardian', { bash: s.round + 2 }); waiting(s, 'tracer', { bash: s.round + 4 }); waiting(s, 'weaver', { ward: s.round + 5 });
-      const frame = cast(d, s, 'lalin', 'rounddance', 'party');
-      expect(hero(frame.state, 'guardian').cooldowns.bash).toBe(s.round + (caps.dancerRoundPair === undefined ? 1 : 2));
-      expect(hero(frame.state, 'tracer').cooldowns.bash).toBe(s.round + (caps.dancerRoundPair === undefined ? 3 : 2));
-      expect(hero(frame.state, 'weaver').cooldowns.ward).toBe(s.round + (caps.dancerRoundPair === undefined ? 4 : 3));
-    }
-  });
-
-  it('echofoot damages once and selects an eligible ally by cooldown total, or an explicit chosen ally', () => {
-    const auto = fixture('lalin', 'echofoot'), s = beginBattle(auto).state;
-    waiting(s, 'guardian', { bash: s.round + 4 }); waiting(s, 'tracer', { bash: s.round + 3, ward: s.round + 2 });
-    const frame = cast(auto, s, 'lalin', 'echofoot');
-    expect(damage(frame)).toBe(12); expect(hero(frame.state, 'tracer').cooldowns.bash).toBe(s.round + 2);
-    expect(hero(frame.state, 'guardian').cooldowns.bash).toBe(s.round + 4);
-    const chosen = fixture('lalin', 'echofoot', { dancerEchoChoose: 0 });
-    const cs = beginBattle(chosen).state; waiting(cs, 'guardian', { bash: cs.round + 4 });
-    const chosenFrame = cast(chosen, cs, 'lalin', 'echofoot', 'f1', { cooldownTargetId: 'guardian' });
-    expect(hero(chosenFrame.state, 'guardian').cooldowns.bash).toBe(cs.round + 3);
-    expect(() => resolveCommand(cs, chosen, command(cs, 'lalin', 'echofoot'))).toThrow();
-  });
-
-  it('requires a legal selected duet skill only for Lalin personal choice, then applies two-skill relief once', () => {
-    const d = fixture('lalin', 'duet', { lalin2: 0 }), s = beginBattle(d).state;
-    waiting(s, 'guardian', { bash: s.round + 4, ward: s.round + 2, heal: s.round + 3 });
-    const frame = cast(d, s, 'lalin', 'duet', 'guardian', { cooldownAction: 'ward' });
-    expect(hero(frame.state, 'guardian').cooldowns.ward).toBe(s.round + 1);
-    expect(hero(frame.state, 'guardian').cooldowns.bash).toBe(s.round + 3);
-    expect(hero(frame.state, 'guardian').cooldowns.heal).toBe(s.round + 3);
-    expect(() => resolveCommand(s, d, command(s, 'lalin', 'duet', 'guardian'))).toThrow();
-    for (const action of ['attack', 'cadence'] as ActionId[]) expect(() => resolveCommand(s, d, command(s, 'lalin', 'duet', 'guardian', { cooldownAction: action }))).toThrow();
   });
 
   it('strictly rejects missing, inappropriate or extraneous cooldown choices', () => {
@@ -246,22 +183,6 @@ describe('C12 Dancer: cooldown relief never changes action order', () => {
     expect(() => resolveCommand(es, echo, command(es, 'lalin', 'echofoot', 'f1', { cooldownTargetId: 'lalin' }))).toThrow();
     expect(() => resolveCommand(es, echo, command(es, 'lalin', 'echofoot', 'f1', { cooldownTargetId: 'unknown' }))).toThrow();
     expect(() => resolveCommand(es, echo, command(es, 'lalin', 'attack', 'f1', { cooldownTargetId: 'guardian' }))).toThrow();
-  });
-
-  it('applies personal relief bonuses without inventing an extra caster turn', () => {
-    const d = fixture('lalin', 'deepbeat', { lalin3: 1 }), s = beginBattle(d, entry(d, { guardian: 20 })).state;
-    waiting(s, 'guardian', { bash: s.round + 5 });
-    const frame = cast(d, s, 'lalin', 'deepbeat', 'guardian');
-    expect(hero(frame.state, 'guardian').cooldowns.bash).toBe(s.round + 2);
-    const result = resolveCommand(s, d, command(s, 'lalin', 'deepbeat', 'guardian'));
-    expect(currentHeroId(result.state, d)).toBe('guardian');
-    expect(result.turns.filter(t => t.actorId === 'lalin')).toHaveLength(1);
-    const last = fixture('lalin', 'closingstep', { lalin4: 1, dancerClosingQuick: 1 }), ls = beginBattle(last).state;
-    waiting(ls, 'guardian', { bash: ls.round + 4, ward: ls.round + 3 });
-    const lf = cast(last, ls, 'lalin', 'closingstep', 'guardian');
-    expect(hero(lf.state, 'guardian').cooldowns.bash).toBe(ls.round + 2);
-    expect(hero(lf.state, 'guardian').cooldowns.ward).toBe(ls.round + 3);
-    expect(hero(lf.state, 'lalin').cooldowns.closingstep).toBe(ls.round + 5);
   });
 
   it('preserves Star-veil free cast when mastery and opening bonuses already make Cadence cooldown zero', () => {
@@ -302,18 +223,6 @@ describe('C12 Dancer: cooldown relief never changes action order', () => {
     }
   });
 
-  it('Wila duet shares one relief per ally and rounddance refunds its own cooldown only when three allies benefit', () => {
-    const d = fixture('wila', 'duet', { wila4: 0 }), s = beginBattle(d).state;
-    waiting(s, 'guardian', { bash: s.round + 5 }); waiting(s, 'tracer', { ward: s.round + 3 }); waiting(s, 'weaver', { heal: s.round + 2 });
-    const frame = cast(d, s, 'wila', 'duet', 'guardian');
-    expect(hero(frame.state, 'guardian').cooldowns.bash).toBe(s.round + 4);
-    expect(hero(frame.state, 'tracer').cooldowns.ward).toBe(s.round + 2);
-    expect(hero(frame.state, 'weaver').cooldowns.heal).toBe(s.round + 2);
-    const round = fixture('wila', 'rounddance', { wila3: 1 }), rs = beginBattle(round).state;
-    for (const id of ['guardian', 'tracer', 'weaver']) waiting(rs, id, { bash: rs.round + 3 });
-    const rf = cast(round, rs, 'wila', 'rounddance', 'party');
-    expect(hero(rf.state, 'wila').cooldowns.rounddance).toBe(rs.round + 4);
-  });
 });
 
 describe('Skill rework 2026-11-05: Cerise has direct effects', () => {
@@ -331,18 +240,105 @@ describe('Skill rework 2026-11-05: Cerise has direct effects', () => {
     expect(hero(second.state, 'guardian').cooldowns.bash).toBe(s.round + 1);
   });
 
-  it('duet raises the ally\'s real hit by its percent; preview equals the resolver and replay is deterministic', () => {
-    const d = fixture('lalin', 'duet');
-    const s = beginBattle(d).state;
-    const duet = command(s, 'lalin', 'duet', 'guardian');
-    expect(previewCommand(s, d, duet)).toEqual(resolveCommand(s, d, duet));
-    const buffed = resolveCommand(s, d, duet).state;
-    const plain = resolveCommand(s, d, command(s, 'lalin', 'attack', 'f1')).state;
-    expect(currentHeroId(buffed, d)).toBe('guardian');
-    const base = damage(cast(d, plain, 'guardian', 'attack', 'f1'));
-    expect(damage(cast(d, buffed, 'guardian', 'attack', 'f1'))).toBe(Math.round(base * 1.2));
-    const commands = [duet, command(buffed, 'guardian', 'attack', 'f1')];
-    expect(replay(d, commands)).toEqual(resolveCommand(buffed, d, commands[1]!).state);
+});
+
+describe('Dancer rework 2026-11-05 (save v48): quicken cap, echo, beats, steady', () => {
+  const dance = (actions: ActionId[], caps: Caps = {}, foes = 1, hit = 0): EncounterDefinition => {
+    const base = fixture('lalin', 'attack', caps, foes);
+    return { ...base, heroes: base.heroes.map(h => h.id === 'lalin' ? { ...h, actions: ['attack', ...actions] } : h.id === 'guardian' ? { ...h, actions: [...h.actions, 'revive'] as ActionId[] } : h),
+      intents: base.intents.map(i => i.sourceId === 'f1' ? { ...i, damage: hit } : i) };
+  };
+  const play = (d: EncounterDefinition, s: BattleState, id: string, action: ActionId, targetId = 'f1') => resolveCommand(s, d, command(s, id, action, targetId)).state;
+
+  it('cadence quickens one skill once per use, never to before the round after its use, and long skills once per battle', () => {
+    const d = dance(['cadence']); const s = beginBattle(d).state;
+    waiting(s, 'guardian', { bash: s.round + 2, revive: s.round + 5 });
+    const first = cast(d, s, 'lalin', 'cadence', 'guardian');
+    // Longest first: revive (once per battle), then bash would be next.
+    expect(hero(first.state, 'guardian').cooldowns.revive).toBe(s.round + 4);
+    expect(hero(first.state, 'guardian').quickenedBattle).toEqual(['revive']);
+    expect(cooldownTargets(first.state, d, 'guardian')).toEqual(['bash']);
+    // Bash used this round (ready in two rounds) can only come one round earlier, and only once until it is used again.
+    const t = structuredClone(s); delete hero(t, 'guardian').cooldowns.revive;
+    const q = cast(d, t, 'lalin', 'cadence', 'guardian');
+    expect(hero(q.state, 'guardian').cooldowns.bash).toBe(s.round + 1);
+    expect(cooldownTargets(q.state, d, 'guardian')).toEqual([]);
+    expect(targetOptions(q.state, d, 'lalin', 'cadence').find(o => o.id === 'guardian')).toBeDefined();
+  });
+
+  it('a skill quickened once can be quickened again only after its next use', () => {
+    const d = dance(['cadence']); const s = beginBattle(d).state;
+    const after = play(d, s, 'lalin', 'cadence', 'guardian');
+    hero(after, 'guardian').quickened = ['bash'];
+    expect(currentHeroId(after, d)).toBe('guardian');
+    expect(hero(play(d, after, 'guardian', 'bash'), 'guardian').quickened).toBeUndefined();
+    expect(hero(play(d, after, 'guardian', 'attack'), 'guardian').quickened).toEqual(['bash']);
+  });
+  it('duet echoes 40% of the bound ally\'s next skill damage once; a basic attack is not echoed without Cerise p2', () => {
+    const d = dance(['duet']); const s = beginBattle(d).state;
+    cast(d, s, 'lalin', 'duet', 'guardian');
+    const bound = resolveCommand(s, d, command(s, 'lalin', 'duet', 'guardian'));
+    expect(hero(bound.state, 'guardian').echo).toEqual([{ heroId: 'lalin', percent: 40, until: s.round + 1 }]);
+    const g = resolveCommand(bound.state, d, command(bound.state, 'guardian', 'bash'));
+    expect(previewCommand(bound.state, d, command(bound.state, 'guardian', 'bash'))).toEqual(g);
+    const own = damage(g.turns[0]!) - g.turns[0]!.events.filter(e => e.text === 'Echo.').reduce((n, e) => n + (e.amount ?? 0), 0);
+    expect(g.turns[0]!.events.filter(e => e.text === 'Echo.')).toMatchObject([{ type: 'damage', sourceId: 'lalin', targetId: 'f1', amount: Math.floor(own * 0.4) }]);
+    expect(hero(g.state, 'guardian').echo).toBeUndefined();
+    const plain = resolveCommand(bound.state, d, command(bound.state, 'guardian', 'attack'));
+    expect(plain.turns[0]!.events.some(e => e.text === 'Echo.')).toBe(false);
+    expect(hero(plain.state, 'guardian').echo).toHaveLength(1);
+    const p2 = dance(['duet'], { lalin2: 0 }); const ps = beginBattle(p2).state;
+    const pb = play(p2, ps, 'lalin', 'duet', 'guardian');
+    expect(resolveCommand(pb, p2, command(pb, 'guardian', 'attack')).turns[0]!.events.some(e => e.text === 'Echo.')).toBe(true);
+  });
+
+  it('another ally\'s skill gives the dancer one beat (cap 3); a basic attack gives none; closing step spends them on every foe', () => {
+    const d = dance(['closingstep'], {}, 2); let s = beginBattle(d).state;
+    s = play(d, s, 'lalin', 'attack');
+    const g = play(d, s, 'guardian', 'bash'); expect(hero(g, 'lalin').beats).toBe(1);
+    const t = play(d, g, 'tracer', 'attack'); expect(hero(t, 'lalin').beats).toBe(1);
+    const capped = structuredClone(t); hero(capped, 'lalin').beats = 3;
+    expect(hero(play(d, capped, 'tracer' === currentHeroId(capped, d) ? 'tracer' : 'weaver', 'ward', 'weaver'), 'lalin').beats).toBe(3);
+    const fresh = beginBattle(d).state; hero(fresh, 'lalin').beats = 2;
+    const step = cast(d, fresh, 'lalin', 'closingstep', 'enemies');
+    expect(damage(step, 'f1')).toBe(18); expect(damage(step, 'f2')).toBe(18);
+    expect(hero(step.state, 'lalin').beats).toBeUndefined();
+    const none = cast(d, beginBattle(d).state, 'lalin', 'closingstep', 'enemies');
+    expect(damage(none, 'f1')).toBe(6);
+  });
+
+  it('round dance shields every other standing ally (or the two lowest with the pair node) and adds a beat', () => {
+    const d = dance(['rounddance']); const s = beginBattle(d, entry(d, { guardian: 50, tracer: 90, weaver: 70 })).state;
+    const all = cast(d, s, 'lalin', 'rounddance', 'party');
+    expect(all.events.filter(e => e.type === 'barrier').map(e => [e.targetId, e.amount])).toEqual([['guardian', 5], ['tracer', 5], ['weaver', 5]]);
+    expect(hero(all.state, 'lalin').beats).toBe(1);
+    const pd = dance(['rounddance'], { dancerRoundPair: 0 }); const ps = beginBattle(pd, entry(pd, { guardian: 50, tracer: 90, weaver: 70 })).state;
+    expect(cast(pd, ps, 'lalin', 'rounddance', 'party').events.filter(e => e.type === 'barrier').map(e => [e.targetId, e.amount])).toEqual([['guardian', 9], ['weaver', 9]]);
+  });
+
+  it('deep beat cuts the ally\'s next hit taken by 40% once, and echo foot strikes and adds a beat', () => {
+    const d = dance(['deepbeat'], {}, 1, 20);
+    const taken = (first: ActionId) => {
+      let s = beginBattle(d).state; s = play(d, s, 'lalin', first, first === 'deepbeat' ? 'guardian' : 'f1');
+      for (const id of ['guardian', 'tracer', 'weaver']) s = play(d, s, id, 'attack');
+      return 100 - hero(s, 'guardian').hp;
+    };
+    const base = taken('attack'); expect(base).toBeGreaterThan(0);
+    expect(taken('deepbeat')).toBe(Math.ceil(base * 0.6));
+    const e = dance(['echofoot']); const es = beginBattle(e).state;
+    const foot = cast(e, es, 'lalin', 'echofoot');
+    expect(damage(foot)).toBe(12); expect(hero(foot.state, 'lalin').beats).toBe(1);
+  });
+
+  it('no dance accepts a cooling-skill or recipient choice any more, and replay reproduces the resolver', () => {
+    const d = dance(['duet', 'echofoot']); const s = beginBattle(d).state;
+    waiting(s, 'guardian', { bash: s.round + 2 });
+    expect(() => resolveCommand(s, d, command(s, 'lalin', 'duet', 'guardian', { cooldownAction: 'bash' }))).toThrow();
+    expect(() => resolveCommand(s, d, command(s, 'lalin', 'echofoot', 'f1', { cooldownTargetId: 'guardian' }))).toThrow();
+    const s0 = beginBattle(d).state;
+    const c1 = command(s0, 'lalin', 'duet', 'guardian'); const s1 = resolveCommand(s0, d, c1).state;
+    const c2 = command(s1, 'guardian', 'bash'); const s2 = resolveCommand(s1, d, c2).state;
+    expect(replay(d, [c1, c2])).toEqual(s2);
   });
 });
 
@@ -361,34 +357,4 @@ describe('C12 command history remains replayable', () => {
     }
   });
 
-  it('keeps explicit chosen skill/recipient fields in replayable command history', () => {
-    for (const [action, caps, extra] of [
-      ['duet', { lalin2: 0 }, { cooldownAction: 'ward' }],
-      ['echofoot', { dancerEchoChoose: 0 }, { cooldownTargetId: 'guardian' }],
-    ] as [ActionId, Caps, Partial<Command>][]) {
-      const d = fixture('lalin', action, caps);
-      d.heroes = d.heroes.map(h => h.id === 'guardian' ? { ...h, speed: 2000, actions: ['attack', 'ward'] as ActionId[] } : h);
-      const initial = entry(d), s = beginBattle(d, initial).state;
-      const ward = resolveCommand(s, d, command(s, 'guardian', 'ward', 'guardian')).state;
-      const cmd = command(ward, 'lalin', action, action === 'echofoot' ? 'f1' : 'guardian', extra);
-      const result = resolveCommand(ward, d, cmd);
-      expect(previewCommand(ward, d, cmd)).toEqual(result);
-      expect(result.state.commands.at(-1)).toMatchObject(extra);
-      expect(replay(d, result.state.commands, initial)).toEqual(result.state);
-    }
-  });
-
-  it('replays every cooldown-only action from a real prior cast rather than a manually seeded fixture', () => {
-    for (const action of ['cadence', 'duet', 'rounddance', 'deepbeat', 'closingstep'] as ActionId[]) {
-      const d = fixture('lalin', action);
-      d.heroes = d.heroes.map(h => h.id === 'guardian' ? { ...h, speed: 2000, actions: ['attack', 'ward'] as ActionId[] } : h);
-      const initial = entry(d), s = beginBattle(d, initial).state;
-      const ward = resolveCommand(s, d, command(s, 'guardian', 'ward', 'guardian')).state;
-      expect(currentHeroId(ward, d)).toBe('lalin');
-      const c = command(ward, 'lalin', action, action === 'rounddance' ? 'party' : 'guardian'), result = resolveCommand(ward, d, c);
-      expect(previewCommand(ward, d, c)).toEqual(result);
-      expect(Math.max(0, (hero(result.turns[0]!.state, 'guardian').cooldowns.ward ?? 0) - ward.round)).toBe(['deepbeat', 'closingstep'].includes(action) ? 0 : 1);
-      expect(replay(d, result.state.commands, initial)).toEqual(result.state);
-    }
-  });
 });
