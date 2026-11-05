@@ -1,6 +1,6 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
 import atlasManifest from './unit-atlases.json';
-export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare' | 'arc' | 'communion' | 'lastlight' | 'partner' | 'circle' | 'closing' | 'echo' | 'move1' | 'move2' | 'move3' | 'move4' | 'move5' | 'move6' | 'move7' | 'mark' | 'parry';
+export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare' | 'arc' | 'communion' | 'lastlight' | 'partner' | 'circle' | 'closing' | 'echo' | 'move1' | 'move2' | 'move3' | 'move4' | 'move5' | 'move6' | 'move7' | 'mark' | 'parry' | 'gather' | 'release' | 'stored' | 'knot' | 'toll' | 'weave' | 'deflect' | 'dial' | 'read';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
 export interface UnitFrames {
   show(pose: UnitPose | Reaction, phase: FramePhase, progress: number, clip?: UnitClip, durationMs?: number): boolean;
@@ -105,6 +105,20 @@ export const unitRegistry = {
     clips: { partner: { prepare: [1, 2, 3], recover: [4, 5, 6] }, closing: { prepare: [7, 8, 9], recover: [10, 11, 12] },
       attack: { prepare: [13, 14], recover: [15, 16, 17, 18] }, circle: { prepare: [19, 20], recover: [21, 22, 23, 24] }, echo: { prepare: [25, 26, 27], recover: [28, 29, 30] } },
     reactions: { hit: [31, 32, 33], block: [34, 35, 36], down: [37, 38, 39, 40] } },
+  // A12 (P03 classes, Claude intake 2026-11-05): cells resampled to the .42 factor, slot 0 = seed idle, each action strip [idle, 5 frames]; contact = first recover frame.
+  kael: { sheet: 'kael', displayRatio: 1 / .42, own: true, downFrame: 40,
+    actions: { attack: 'attack', gatherfist: 'gather', flowfist: 'gather', releasefist: 'release', perfectfist: 'release', circlefist: 'circle', storedfist: 'stored' },
+    clips: { attack: { prepare: [1, 2], recover: [3, 4, 5, 6] }, gather: { prepare: [7, 8], recover: [9, 10, 11, 12] }, release: { prepare: [13, 14], recover: [15, 16, 17, 18] },
+      circle: { prepare: [19, 20], recover: [21, 22, 23, 24] }, stored: { prepare: [25, 26], recover: [27, 28, 29, 30] } },
+    reactions: { hit: [31, 32, 33], block: [34, 35, 36], down: [37, 38, 39, 40] } },
+  wynne: { sheet: 'wynne', displayRatio: 1 / .42, own: true, downFrame: 34,
+    actions: { attack: 'attack', threadhex: 'knot', knothex: 'knot', longthread: 'knot', lifetoll: 'toll', wovenhex: 'weave', tollring: 'weave' },
+    clips: { attack: { prepare: [1, 2], recover: [3, 4, 5, 6] }, knot: { prepare: [7, 8], recover: [9, 10, 11, 12] }, toll: { prepare: [13, 14], recover: [15, 16, 17, 18] }, weave: { prepare: [19, 20], recover: [21, 22, 23, 24] } },
+    reactions: { hit: [25, 26, 27], block: [28, 29, 30], down: [31, 32, 33, 34] } },
+  astrid: { sheet: 'astrid', displayRatio: 1 / .42, own: true, downFrame: 34,
+    actions: { attack: 'attack', starneedle: 'attack', deflectfate: 'deflect', crossing: 'deflect', turncycle: 'dial', doubledial: 'dial', readorbit: 'read' },
+    clips: { attack: { prepare: [1, 2], recover: [3, 4, 5, 6] }, deflect: { prepare: [7, 8], recover: [9, 10, 11, 12] }, dial: { prepare: [13, 14], recover: [15, 16, 17, 18] }, read: { prepare: [19, 20], recover: [21, 22, 23, 24] } },
+    reactions: { hit: [25, 26, 27], block: [28, 29, 30], down: [31, 32, 33, 34] } },
   // Isolde (wila): same, redesigned still + procedural motion until A7-003.
   foe_riftweaver: { sheet: 'riftweaver', displayRatio: 2, intents: { 'Rune Lash': 'attack', 'Rift Needle': 'skill', 'Ribbon Snare': 'snare' } },
   foe_spore_puff: { sheet: 'sporepuff', displayRatio: 2, intents: { 'Spore Dust': 'attack' } },

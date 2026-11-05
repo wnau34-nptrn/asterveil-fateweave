@@ -2,6 +2,12 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-05 — A12 intake: Kael/Wynne/Astrid battle bodies (Claude, branch claude/a12-intake)
+- นำเข้า 22 strips จาก PR #157 (21 ที่รับ + astrid-deflect R2) เป็น atlas `kael_a12`/`wynne_a12`/`astrid_a12` (lossless ×.42, ในงบ); registry clips ใน `unit-frames.ts`; `STILL_ONLY` ว่าง; coverage regenerate. ไม่แตะ rules/save/balance.
+- Claude ตัดสินรับภาพตาม delegation 2026-11-04 (ไม่ใช่ owner approval); R2 deflect ผ่านตาภาพ review.
+- Tests: tsc, `tests/unit-a12.test.ts` (13), presentation-coverage/encounter-budget ผ่าน; 19 คลิป 390px (Chromium emulation) ดู `docs/combat-presentation/unit-a12-slice/README_TH.md`.
+- เปิด: circle/toll/dial ยังไม่มีคลิปในเกม; เจ้าของยังไม่ดู motion; PR #157 ไม่ merge (ปิดได้เมื่อแน่ใจ).
+
 ## 2026-11-04 (late) — Claude: P03 เคล/วินน์/แอสทริด (OD-14) — PR #155 → #156 → #158
 
 - แบ่ง PR ตามกลไก: #155 เคล นักมวย (ปราณ 0–3) + นำเข้าภาพนิ่ง/พอร์เทรต/ไอคอน 18/อาวุธ 3 ของทั้งสามตัว (lossless, เซลล์เดิมพิกเซลเท่าเดิม) + **save v47** (`Profile.boardFeatured` คงบอร์ดที่เปิดอยู่); #156 วินน์ นักสาป (สาปแยกผู้สาป ทำงานจบรอบ + ภาษีก่อนโจมตี); #158 แอสทริด โหราจารย์ (เบนท่าไปศัตรูอื่น `Command.recipientId`, หมุนวงท่า `cycleShift`/`steps`, หน้าต่างเลือกผู้รับก่อน commit)

@@ -3,14 +3,14 @@
   "identities": 39,
   "heroes": 17,
   "enemies": 22,
-  "atlases": 34,
+  "atlases": 37,
   "parked": 2,
   "actionIds": 91,
   "heroRows": 119,
   "intents": 40,
   "foeRows": 49,
-  "spriteRows": 133,
-  "proceduralRows": 35,
+  "spriteRows": 154,
+  "proceduralRows": 14,
   "paintedRows": 112,
   "sharedRows": 52,
   "codeRows": 4
@@ -275,36 +275,57 @@
    "identity": "kael",
    "side": "hero",
    "name": "Kael",
-   "still": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12",
+   "sheet": "kael",
+   "atlas": {
+    "image": "kael_a12.1d64ffdcff27.webp",
+    "atlas": "kael_a12.ec39738d1c49.json",
+    "frames": 41,
+    "decodedBytes": 4058496,
+    "downloadBytes": 1060461
+   },
    "reactions": {
-    "hit": "procedural",
-    "block": "procedural",
+    "hit": "sprite 31,32,33",
+    "block": "sprite 34,35,36",
     "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
-    "down": "procedural (ภาพนิ่งจาง)"
+    "down": "sprite 37,38,39,40 · ค้าง 40"
    }
   },
   {
    "identity": "wynne",
    "side": "hero",
    "name": "Wynne",
-   "still": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12",
+   "sheet": "wynne",
+   "atlas": {
+    "image": "wynne_a12.b84fd78f6f8c.webp",
+    "atlas": "wynne_a12.27df8cef5299.json",
+    "frames": 35,
+    "decodedBytes": 3006720,
+    "downloadBytes": 1083609
+   },
    "reactions": {
-    "hit": "procedural",
-    "block": "procedural",
+    "hit": "sprite 25,26,27",
+    "block": "sprite 28,29,30",
     "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
-    "down": "procedural (ภาพนิ่งจาง)"
+    "down": "sprite 31,32,33,34 · ค้าง 34"
    }
   },
   {
    "identity": "astrid",
    "side": "hero",
    "name": "Astrid",
-   "still": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12",
+   "sheet": "astrid",
+   "atlas": {
+    "image": "astrid_a12.cab699af4efb.webp",
+    "atlas": "astrid_a12.e1778abe9ed5.json",
+    "frames": 35,
+    "decodedBytes": 2809856,
+    "downloadBytes": 972387
+   },
    "reactions": {
-    "hit": "procedural",
-    "block": "procedural",
+    "hit": "sprite 25,26,27",
+    "block": "sprite 28,29,30",
     "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
-    "down": "procedural (ภาพนิ่งจาง)"
+    "down": "sprite 31,32,33,34 · ค้าง 34"
    }
   },
   {
@@ -3559,9 +3580,21 @@
    "move": "attack",
    "name": "โจมตี",
    "body": {
-    "kind": "procedural",
-    "pose": "role basic",
-    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    "pose": "role basic"
    },
    "vfx": {
     "module": "blade-fx",
@@ -3577,9 +3610,21 @@
    "move": "gatherfist",
    "name": "หมัดรวมปราณ",
    "body": {
-    "kind": "procedural",
-    "pose": "punch",
-    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "gather",
+    "frames": {
+     "prepare": [
+      7,
+      8
+     ],
+     "recover": [
+      9,
+      10,
+      11,
+      12
+     ]
+    },
+    "pose": "punch"
    },
    "vfx": {
     "module": "saint-dance-fx",
@@ -3595,9 +3640,21 @@
    "move": "releasefist",
    "name": "ปล่อยปราณ",
    "body": {
-    "kind": "procedural",
-    "pose": "punch",
-    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "release",
+    "frames": {
+     "prepare": [
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      17,
+      18
+     ]
+    },
+    "pose": "punch"
    },
    "vfx": {
     "module": "saint-dance-fx",
@@ -3613,9 +3670,21 @@
    "move": "flowfist",
    "name": "หมัดสายน้ำ",
    "body": {
-    "kind": "procedural",
-    "pose": "punch",
-    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "gather",
+    "frames": {
+     "prepare": [
+      7,
+      8
+     ],
+     "recover": [
+      9,
+      10,
+      11,
+      12
+     ]
+    },
+    "pose": "punch"
    },
    "vfx": {
     "module": "saint-dance-fx",
@@ -3631,9 +3700,21 @@
    "move": "circlefist",
    "name": "หมัดวงกลม",
    "body": {
-    "kind": "procedural",
-    "pose": "punch",
-    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "circle",
+    "frames": {
+     "prepare": [
+      19,
+      20
+     ],
+     "recover": [
+      21,
+      22,
+      23,
+      24
+     ]
+    },
+    "pose": "punch"
    },
    "vfx": {
     "module": "saint-dance-fx",
@@ -3649,9 +3730,21 @@
    "move": "storedfist",
    "name": "หมัดเก็บแรง",
    "body": {
-    "kind": "procedural",
-    "pose": "punch",
-    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "stored",
+    "frames": {
+     "prepare": [
+      25,
+      26
+     ],
+     "recover": [
+      27,
+      28,
+      29,
+      30
+     ]
+    },
+    "pose": "punch"
    },
    "vfx": {
     "module": "saint-dance-fx",
@@ -3667,9 +3760,21 @@
    "move": "perfectfist",
    "name": "หมัดสมบูรณ์",
    "body": {
-    "kind": "procedural",
-    "pose": "punch",
-    "reason": "P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "release",
+    "frames": {
+     "prepare": [
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      17,
+      18
+     ]
+    },
+    "pose": "punch"
    },
    "vfx": {
     "module": "saint-dance-fx",
@@ -3685,9 +3790,21 @@
    "move": "attack",
    "name": "โจมตี",
    "body": {
-    "kind": "procedural",
-    "pose": "role basic",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    "pose": "role basic"
    },
    "vfx": {
     "module": "blade-fx",
@@ -3703,9 +3820,21 @@
    "move": "threadhex",
    "name": "ด้ายสาป",
    "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "knot",
+    "frames": {
+     "prepare": [
+      7,
+      8
+     ],
+     "recover": [
+      9,
+      10,
+      11,
+      12
+     ]
+    },
+    "pose": "cast"
    },
    "vfx": {
     "module": "arcane-seal-fx",
@@ -3721,9 +3850,21 @@
    "move": "lifetoll",
    "name": "ภาษีชีวิต",
    "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "toll",
+    "frames": {
+     "prepare": [
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      17,
+      18
+     ]
+    },
+    "pose": "cast"
    },
    "vfx": {
     "module": "arcane-seal-fx",
@@ -3739,9 +3880,21 @@
    "move": "wovenhex",
    "name": "สาปถักทอ",
    "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "weave",
+    "frames": {
+     "prepare": [
+      19,
+      20
+     ],
+     "recover": [
+      21,
+      22,
+      23,
+      24
+     ]
+    },
+    "pose": "cast"
    },
    "vfx": {
     "module": "arcane-seal-fx",
@@ -3757,9 +3910,21 @@
    "move": "tollring",
    "name": "วงภาษี",
    "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "weave",
+    "frames": {
+     "prepare": [
+      19,
+      20
+     ],
+     "recover": [
+      21,
+      22,
+      23,
+      24
+     ]
+    },
+    "pose": "cast"
    },
    "vfx": {
     "module": "arcane-seal-fx",
@@ -3775,9 +3940,21 @@
    "move": "longthread",
    "name": "ด้ายยาว",
    "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "knot",
+    "frames": {
+     "prepare": [
+      7,
+      8
+     ],
+     "recover": [
+      9,
+      10,
+      11,
+      12
+     ]
+    },
+    "pose": "cast"
    },
    "vfx": {
     "module": "arcane-seal-fx",
@@ -3793,9 +3970,21 @@
    "move": "knothex",
    "name": "ปมสาป",
    "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "knot",
+    "frames": {
+     "prepare": [
+      7,
+      8
+     ],
+     "recover": [
+      9,
+      10,
+      11,
+      12
+     ]
+    },
+    "pose": "cast"
    },
    "vfx": {
     "module": "arcane-seal-fx",
@@ -3811,9 +4000,21 @@
    "move": "attack",
    "name": "โจมตี",
    "body": {
-    "kind": "procedural",
-    "pose": "role basic",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    "pose": "role basic"
    },
    "vfx": {
     "module": "blade-fx",
@@ -3829,9 +4030,21 @@
    "move": "deflectfate",
    "name": "เบนชะตา",
    "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "deflect",
+    "frames": {
+     "prepare": [
+      7,
+      8
+     ],
+     "recover": [
+      9,
+      10,
+      11,
+      12
+     ]
+    },
+    "pose": "cast"
    },
    "vfx": {
     "module": "arcane-seal-fx",
@@ -3847,9 +4060,21 @@
    "move": "turncycle",
    "name": "หมุนวงดาว",
    "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "dial",
+    "frames": {
+     "prepare": [
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      17,
+      18
+     ]
+    },
+    "pose": "cast"
    },
    "vfx": {
     "module": "arcane-seal-fx",
@@ -3865,9 +4090,21 @@
    "move": "crossing",
    "name": "ทางแยกชะตา",
    "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "deflect",
+    "frames": {
+     "prepare": [
+      7,
+      8
+     ],
+     "recover": [
+      9,
+      10,
+      11,
+      12
+     ]
+    },
+    "pose": "cast"
    },
    "vfx": {
     "module": "arcane-seal-fx",
@@ -3883,9 +4120,21 @@
    "move": "doubledial",
    "name": "หมุนสองวง",
    "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "dial",
+    "frames": {
+     "prepare": [
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      17,
+      18
+     ]
+    },
+    "pose": "cast"
    },
    "vfx": {
     "module": "arcane-seal-fx",
@@ -3901,9 +4150,21 @@
    "move": "starneedle",
    "name": "เข็มดารา",
    "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    "pose": "cast"
    },
    "vfx": {
     "module": "arcane-seal-fx",
@@ -3919,9 +4180,21 @@
    "move": "readorbit",
    "name": "อ่านวงโคจร",
    "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12"
+    "kind": "sprite",
+    "clip": "read",
+    "frames": {
+     "prepare": [
+      19,
+      20
+     ],
+     "recover": [
+      21,
+      22,
+      23,
+      24
+     ]
+    },
+    "pose": "cast"
    },
    "vfx": {
     "module": "arcane-seal-fx",

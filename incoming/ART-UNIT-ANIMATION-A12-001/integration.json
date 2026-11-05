@@ -1,0 +1,60 @@
+{
+  "kael": {
+    "image": "kael_a12.1d64ffdcff27.webp",
+    "atlas": "kael_a12.ec39738d1c49.json",
+    "width": 1248,
+    "height": 813,
+    "frames": 41,
+    "decodedBytes": 4058496,
+    "downloadBytes": 1060461,
+    "clipStarts": {
+      "attack": 1,
+      "gather": 7,
+      "release": 13,
+      "circle": 19,
+      "stored": 25,
+      "hit": 31,
+      "block": 34,
+      "down": 37
+    },
+    "uniqueFrames": 28
+  },
+  "wynne": {
+    "image": "wynne_a12.b84fd78f6f8c.webp",
+    "atlas": "wynne_a12.27df8cef5299.json",
+    "width": 1856,
+    "height": 405,
+    "frames": 35,
+    "decodedBytes": 3006720,
+    "downloadBytes": 1083609,
+    "clipStarts": {
+      "attack": 1,
+      "knot": 7,
+      "toll": 13,
+      "weave": 19,
+      "hit": 25,
+      "block": 28,
+      "down": 31
+    },
+    "uniqueFrames": 24
+  },
+  "astrid": {
+    "image": "astrid_a12.cab699af4efb.webp",
+    "atlas": "astrid_a12.e1778abe9ed5.json",
+    "width": 896,
+    "height": 784,
+    "frames": 35,
+    "decodedBytes": 2809856,
+    "downloadBytes": 972387,
+    "clipStarts": {
+      "attack": 1,
+      "deflect": 7,
+      "dial": 13,
+      "read": 19,
+      "hit": 25,
+      "block": 28,
+      "down": 31
+    },
+    "uniqueFrames": 24
+  }
+}

@@ -1,0 +1,5326 @@
+{
+  "task": "ART-UNIT-ANIMATION-A12-001",
+  "base_commit": "d5fe9eaa668ef6c9a7384a95b0f365ba72dee10a",
+  "all_technical_checks_pass": true,
+  "scope": "additions only under this package",
+  "delivered_strips": 22,
+  "generated_frames": 114,
+  "pending": {},
+  "kael_seed_source_commit": "743adc3f2e4967917f331a35f5f6f6a528628665",
+  "gate": {
+    "median_lte": 1.15,
+    "every_measured_lte": 1.2,
+    "not_measured_is_pass": false
+  },
+  "proposed_mapping": {
+    "wynne": {
+      "attack": "attack",
+      "threadhex": "knot",
+      "knothex": "knot",
+      "longthread": "knot",
+      "lifetoll": "toll",
+      "wovenhex": "weave",
+      "tollring": "weave"
+    },
+    "astrid": {
+      "attack": "attack",
+      "starneedle": "attack",
+      "deflectfate": "deflect",
+      "crossing": "deflect",
+      "turncycle": "dial",
+      "doubledial": "dial",
+      "readorbit": "read"
+    },
+    "kael": {
+      "attack": "attack",
+      "gatherfist": "gather",
+      "flowfist": "gather",
+      "releasefist": "release",
+      "perfectfist": "release",
+      "circlefist": "circle",
+      "storedfist": "stored"
+    }
+  },
+  "owner_artwork_selection": "pending",
+  "owner_motion_approval": "pending",
+  "runtime_integration": "not performed; Claude responsibility",
+  "strips": [
+    {
+      "identity": "wynne",
+      "move": "attack",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 0.9465020576131687,
+      "ground_y": 497,
+      "raw_file": "raw/wynne-attack.png",
+      "file": "spaced/wynne-attack.png",
+      "cells": "cells/wynne-attack",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            11,
+            102,
+            351,
+            594
+          ],
+          "uniform_raw_scale": 0.9465020576131687,
+          "offset": [
+            159,
+            33
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            375,
+            102,
+            716,
+            594
+          ],
+          "uniform_raw_scale": 0.9465020576131687,
+          "offset": [
+            158,
+            33
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            738,
+            102,
+            1081,
+            594
+          ],
+          "uniform_raw_scale": 0.9465020576131687,
+          "offset": [
+            158,
+            33
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1099,
+            103,
+            1481,
+            594
+          ],
+          "uniform_raw_scale": 0.9465020576131687,
+          "offset": [
+            139,
+            34
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1464,
+            102,
+            1796,
+            594
+          ],
+          "uniform_raw_scale": 0.9465020576131687,
+          "offset": [
+            163,
+            33
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1824,
+            102,
+            2160,
+            594
+          ],
+          "uniform_raw_scale": 0.9465020576131687,
+          "offset": [
+            161,
+            33
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 0.9995,
+      "maximum_measured": 1.002,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "lift doll; pinch short loop",
+        "prepare free-hand flick",
+        "flick forward-right; contact",
+        "retract to doll",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "attack": "attack"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "wynne",
+      "move": "knot",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 1.0407239819004526,
+      "ground_y": 497,
+      "raw_file": "raw/wynne-knot.png",
+      "file": "spaced/wynne-knot.png",
+      "cells": "cells/wynne-knot",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            27,
+            119,
+            337,
+            567
+          ],
+          "uniform_raw_scale": 1.0407239819004526,
+          "offset": [
+            158,
+            33
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            393,
+            119,
+            696,
+            567
+          ],
+          "uniform_raw_scale": 1.0407239819004526,
+          "offset": [
+            162,
+            33
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            751,
+            119,
+            1057,
+            567
+          ],
+          "uniform_raw_scale": 1.0407239819004526,
+          "offset": [
+            161,
+            33
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1110,
+            119,
+            1420,
+            567
+          ],
+          "uniform_raw_scale": 1.0407239819004526,
+          "offset": [
+            158,
+            33
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1481,
+            119,
+            1781,
+            567
+          ],
+          "uniform_raw_scale": 1.0407239819004526,
+          "offset": [
+            164,
+            33
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1842,
+            119,
+            2147,
+            567
+          ],
+          "uniform_raw_scale": 1.0407239819004526,
+          "offset": [
+            162,
+            34
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 0.9775,
+      "maximum_measured": 0.988,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "raise doll to chest",
+        "pull thread taut sideways",
+        "pinch knot; sharp tug right",
+        "hold pinch then lower",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "threadhex": "knot",
+        "knothex": "knot",
+        "longthread": "knot"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "wynne",
+      "move": "toll",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 1.1246943765281174,
+      "ground_y": 497,
+      "raw_file": "raw/wynne-toll.png",
+      "file": "spaced/wynne-toll.png",
+      "cells": "cells/wynne-toll",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            28,
+            150,
+            319,
+            565
+          ],
+          "uniform_raw_scale": 1.1246943765281174,
+          "offset": [
+            156,
+            33
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            392,
+            150,
+            681,
+            565
+          ],
+          "uniform_raw_scale": 1.1246943765281174,
+          "offset": [
+            158,
+            33
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            755,
+            150,
+            1043,
+            565
+          ],
+          "uniform_raw_scale": 1.1246943765281174,
+          "offset": [
+            158,
+            33
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1117,
+            150,
+            1440,
+            565
+          ],
+          "uniform_raw_scale": 1.1246943765281174,
+          "offset": [
+            138,
+            33
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1480,
+            150,
+            1767,
+            565
+          ],
+          "uniform_raw_scale": 1.1246943765281174,
+          "offset": [
+            158,
+            33
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1841,
+            150,
+            2129,
+            565
+          ],
+          "uniform_raw_scale": 1.1246943765281174,
+          "offset": [
+            158,
+            33
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 1.005,
+      "maximum_measured": 1.012,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "take hanging talisman",
+        "raise tag between fingers",
+        "press tag forward-right",
+        "hold then return",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "lifetoll": "toll"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "wynne",
+      "move": "weave",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 1.1855670103092784,
+      "ground_y": 497,
+      "raw_file": "raw/wynne-weave.png",
+      "file": "spaced/wynne-weave.png",
+      "cells": "cells/wynne-weave",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            23,
+            155,
+            293,
+            549
+          ],
+          "uniform_raw_scale": 1.1855670103092784,
+          "offset": [
+            160,
+            34
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            363,
+            160,
+            619,
+            548
+          ],
+          "uniform_raw_scale": 1.1855670103092784,
+          "offset": [
+            168,
+            40
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            721,
+            156,
+            1020,
+            549
+          ],
+          "uniform_raw_scale": 1.1855670103092784,
+          "offset": [
+            143,
+            34
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1107,
+            154,
+            1434,
+            549
+          ],
+          "uniform_raw_scale": 1.1855670103092784,
+          "offset": [
+            126,
+            32
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1502,
+            157,
+            1789,
+            549
+          ],
+          "uniform_raw_scale": 1.1855670103092784,
+          "offset": [
+            150,
+            36
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1881,
+            154,
+            2150,
+            549
+          ],
+          "uniform_raw_scale": 1.1855670103092784,
+          "offset": [
+            160,
+            33
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 0.983,
+      "maximum_measured": 0.996,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "step back; doll pulled in",
+        "open arm; half turn",
+        "sweep arm across right side",
+        "finish arc",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "wovenhex": "weave",
+        "tollring": "weave"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "wynne",
+      "move": "hit",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 0.8695652173913043,
+      "ground_y": 497,
+      "raw_file": "raw/wynne-hit.png",
+      "file": "spaced/wynne-hit.png",
+      "cells": "cells/wynne-hit",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            73,
+            87,
+            451,
+            622
+          ],
+          "uniform_raw_scale": 0.8695652173913043,
+          "offset": [
+            156,
+            34
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            556,
+            95,
+            985,
+            622
+          ],
+          "uniform_raw_scale": 0.8695652173913043,
+          "offset": [
+            134,
+            41
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            1145,
+            125,
+            1544,
+            622
+          ],
+          "uniform_raw_scale": 0.8695652173913043,
+          "offset": [
+            146,
+            67
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1702,
+            87,
+            2080,
+            622
+          ],
+          "uniform_raw_scale": 0.8695652173913043,
+          "offset": [
+            156,
+            34
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 1.0019999999999998,
+      "maximum_measured": 1.003,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "flinch; protect doll",
+        "catch balance",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "hit": "hit"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "wynne",
+      "move": "block",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 0.7809847198641766,
+      "ground_y": 497,
+      "raw_file": "raw/wynne-block.png",
+      "file": "spaced/wynne-block.png",
+      "cells": "cells/wynne-block",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            37,
+            47,
+            461,
+            642
+          ],
+          "uniform_raw_scale": 0.7809847198641766,
+          "offset": [
+            154,
+            34
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            582,
+            81,
+            1019,
+            642
+          ],
+          "uniform_raw_scale": 0.7809847198641766,
+          "offset": [
+            150,
+            61
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            1164,
+            113,
+            1570,
+            641
+          ],
+          "uniform_raw_scale": 0.7809847198641766,
+          "offset": [
+            162,
+            87
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1715,
+            47,
+            2136,
+            642
+          ],
+          "uniform_raw_scale": 0.7809847198641766,
+          "offset": [
+            156,
+            34
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 0.992,
+      "maximum_measured": 1.027,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "turn shoulder in; shield doll",
+        "brace",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "block": "block"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "wynne",
+      "move": "down",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 0.8630393996247655,
+      "ground_y": 497,
+      "raw_file": "raw/wynne-down.png",
+      "file": "spaced/wynne-down.png",
+      "cells": "cells/wynne-down",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            45,
+            79,
+            395,
+            618
+          ],
+          "uniform_raw_scale": 0.8630393996247655,
+          "offset": [
+            169,
+            34
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            505,
+            136,
+            877,
+            618
+          ],
+          "uniform_raw_scale": 0.8630393996247655,
+          "offset": [
+            160,
+            84
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            984,
+            194,
+            1451,
+            621
+          ],
+          "uniform_raw_scale": 0.8630393996247655,
+          "offset": [
+            118,
+            130
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1536,
+            315,
+            2144,
+            619
+          ],
+          "uniform_raw_scale": 0.8630393996247655,
+          "offset": [
+            58,
+            237
+          ],
+          "ready_seed_lock": false
+        }
+      ],
+      "median": 1.0,
+      "maximum_measured": 1.048,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frame_descriptions": [
+        "ready; knees soften",
+        "knees give way; hold doll",
+        "sink sideways",
+        "lie unconscious holding doll; HOLD"
+      ],
+      "proposed_ActionId_mapping": {
+        "down": "down"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "astrid",
+      "move": "attack",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 1.1108374384236452,
+      "ground_y": 497,
+      "raw_file": "raw/astrid-attack.png",
+      "file": "spaced/astrid-attack.png",
+      "cells": "cells/astrid-attack",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            28,
+            139,
+            338,
+            551
+          ],
+          "uniform_raw_scale": 1.1108374384236452,
+          "offset": [
+            148,
+            41
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            392,
+            139,
+            700,
+            551
+          ],
+          "uniform_raw_scale": 1.1108374384236452,
+          "offset": [
+            149,
+            41
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            757,
+            139,
+            1062,
+            552
+          ],
+          "uniform_raw_scale": 1.1108374384236452,
+          "offset": [
+            150,
+            41
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1119,
+            139,
+            1433,
+            551
+          ],
+          "uniform_raw_scale": 1.1108374384236452,
+          "offset": [
+            146,
+            42
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1480,
+            139,
+            1786,
+            551
+          ],
+          "uniform_raw_scale": 1.1108374384236452,
+          "offset": [
+            150,
+            42
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1839,
+            139,
+            2148,
+            551
+          ],
+          "uniform_raw_scale": 1.1108374384236452,
+          "offset": [
+            148,
+            42
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 0.9735,
+      "maximum_measured": 0.977,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "raise two fingers",
+        "aim at eye level",
+        "precise straight point right",
+        "lower",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "attack": "attack",
+        "starneedle": "attack"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "astrid",
+      "move": "deflect",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 0.9977876106194691,
+      "ground_y": 497,
+      "raw_file": "raw/astrid-deflect.png",
+      "file": "spaced/astrid-deflect.png",
+      "cells": "cells/astrid-deflect",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            26,
+            121,
+            338,
+            579
+          ],
+          "uniform_raw_scale": 0.9977876106194691,
+          "offset": [
+            164,
+            43
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            391,
+            121,
+            699,
+            579
+          ],
+          "uniform_raw_scale": 0.9977876106194691,
+          "offset": [
+            166,
+            43
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            746,
+            120,
+            1066,
+            578
+          ],
+          "uniform_raw_scale": 0.9977876106194691,
+          "offset": [
+            160,
+            42
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1113,
+            123,
+            1424,
+            579
+          ],
+          "uniform_raw_scale": 0.9977876106194691,
+          "offset": [
+            165,
+            45
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1475,
+            122,
+            1785,
+            579
+          ],
+          "uniform_raw_scale": 0.9977876106194691,
+          "offset": [
+            166,
+            44
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1844,
+            121,
+            2147,
+            579
+          ],
+          "uniform_raw_scale": 0.9977876106194691,
+          "offset": [
+            169,
+            43
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 0.9215,
+      "maximum_measured": 0.926,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "revision": "r2",
+      "recommendation": "R2 replaces R1 for small motion",
+      "r1_commit": "0404c7ff1c291d22b9b12d68be61671098006e22",
+      "frame_descriptions": [
+        "ready",
+        "left open palm to shoulder; elbow out; palm faces right",
+        "nearly straight arm pushes palm far right past body; lean forward",
+        "extended arm sweeps sideways/down to hip height; wrist turns",
+        "hold low turned palm far right; gaze follows",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "deflectfate": "deflect",
+        "crossing": "deflect"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {}
+    },
+    {
+      "identity": "astrid",
+      "move": "dial",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 0.9657387580299786,
+      "ground_y": 497,
+      "raw_file": "raw/astrid-dial.png",
+      "file": "spaced/astrid-dial.png",
+      "cells": "cells/astrid-dial",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            32,
+            117,
+            379,
+            590
+          ],
+          "uniform_raw_scale": 0.9657387580299786,
+          "offset": [
+            152,
+            42
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            430,
+            116,
+            683,
+            590
+          ],
+          "uniform_raw_scale": 0.9657387580299786,
+          "offset": [
+            198,
+            41
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            773,
+            116,
+            1036,
+            590
+          ],
+          "uniform_raw_scale": 0.9657387580299786,
+          "offset": [
+            193,
+            41
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1123,
+            115,
+            1411,
+            590
+          ],
+          "uniform_raw_scale": 0.9657387580299786,
+          "offset": [
+            181,
+            40
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1479,
+            116,
+            1744,
+            590
+          ],
+          "uniform_raw_scale": 0.9657387580299786,
+          "offset": [
+            192,
+            41
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1811,
+            116,
+            2150,
+            590
+          ],
+          "uniform_raw_scale": 0.9657387580299786,
+          "offset": [
+            156,
+            42
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 0.955,
+      "maximum_measured": 0.96,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "bring astrolabe to chest",
+        "other hand grips outer ring",
+        "rotate rings",
+        "hold rings turned",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "turncycle": "dial",
+        "doubledial": "dial"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "astrid",
+      "move": "read",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 1.1683937823834196,
+      "ground_y": 497,
+      "raw_file": "raw/astrid-read.png",
+      "file": "spaced/astrid-read.png",
+      "cells": "cells/astrid-read",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            31,
+            129,
+            322,
+            521
+          ],
+          "uniform_raw_scale": 1.1683937823834196,
+          "offset": [
+            150,
+            42
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            393,
+            129,
+            686,
+            522
+          ],
+          "uniform_raw_scale": 1.1683937823834196,
+          "offset": [
+            149,
+            42
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            747,
+            129,
+            1032,
+            522
+          ],
+          "uniform_raw_scale": 1.1683937823834196,
+          "offset": [
+            154,
+            42
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1107,
+            131,
+            1378,
+            522
+          ],
+          "uniform_raw_scale": 1.1683937823834196,
+          "offset": [
+            162,
+            44
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1474,
+            129,
+            1747,
+            521
+          ],
+          "uniform_raw_scale": 1.1683937823834196,
+          "offset": [
+            160,
+            42
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1841,
+            129,
+            2132,
+            522
+          ],
+          "uniform_raw_scale": 1.1683937823834196,
+          "offset": [
+            150,
+            42
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 1.0005,
+      "maximum_measured": 1.013,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "lift astrolabe",
+        "raise to eye level",
+        "look through toward right",
+        "hold reading then lower",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "readorbit": "read"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "astrid",
+      "move": "hit",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 0.8010657193605684,
+      "ground_y": 497,
+      "raw_file": "raw/astrid-hit.png",
+      "file": "spaced/astrid-hit.png",
+      "cells": "cells/astrid-hit",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            60,
+            79,
+            488,
+            648
+          ],
+          "uniform_raw_scale": 0.8010657193605684,
+          "offset": [
+            148,
+            43
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            550,
+            101,
+            964,
+            649
+          ],
+          "uniform_raw_scale": 0.8010657193605684,
+          "offset": [
+            154,
+            60
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            1150,
+            121,
+            1539,
+            648
+          ],
+          "uniform_raw_scale": 0.8010657193605684,
+          "offset": [
+            164,
+            77
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1689,
+            80,
+            2117,
+            648
+          ],
+          "uniform_raw_scale": 0.8010657193605684,
+          "offset": [
+            148,
+            44
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 1.013,
+      "maximum_measured": 1.033,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "recoil; ring to chest",
+        "catch balance",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "hit": "hit"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "astrid",
+      "move": "block",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 0.754180602006689,
+      "ground_y": 497,
+      "raw_file": "raw/astrid-block.png",
+      "file": "spaced/astrid-block.png",
+      "cells": "cells/astrid-block",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            66,
+            56,
+            486,
+            660
+          ],
+          "uniform_raw_scale": 0.754180602006689,
+          "offset": [
+            162,
+            43
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            626,
+            56,
+            983,
+            660
+          ],
+          "uniform_raw_scale": 0.754180602006689,
+          "offset": [
+            186,
+            43
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            1098,
+            88,
+            1556,
+            659
+          ],
+          "uniform_raw_scale": 0.754180602006689,
+          "offset": [
+            148,
+            68
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1696,
+            57,
+            2115,
+            660
+          ],
+          "uniform_raw_scale": 0.754180602006689,
+          "offset": [
+            162,
+            44
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 0.9635,
+      "maximum_measured": 0.974,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "raise mantle across body",
+        "brace",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "block": "block"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "astrid",
+      "move": "down",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        640,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 64,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 0.884313725490196,
+      "ground_y": 497,
+      "raw_file": "raw/astrid-down.png",
+      "file": "spaced/astrid-down.png",
+      "cells": "cells/astrid-down",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            77,
+            105,
+            453,
+            621
+          ],
+          "uniform_raw_scale": 0.884313725490196,
+          "offset": [
+            154,
+            43
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            515,
+            182,
+            871,
+            618
+          ],
+          "uniform_raw_scale": 0.884313725490196,
+          "offset": [
+            162,
+            113
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            945,
+            227,
+            1414,
+            613
+          ],
+          "uniform_raw_scale": 0.884313725490196,
+          "offset": [
+            112,
+            158
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1475,
+            361,
+            2111,
+            609
+          ],
+          "uniform_raw_scale": 0.884313725490196,
+          "offset": [
+            39,
+            281
+          ],
+          "ready_seed_lock": false
+        }
+      ],
+      "median": 0.9875,
+      "maximum_measured": 0.991,
+      "not_measured": [
+        4
+      ],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frame_descriptions": [
+        "ready; knees soften",
+        "knees give way; ring close",
+        "sink sideways",
+        "lie unconscious holding ring; HOLD"
+      ],
+      "proposed_ActionId_mapping": {
+        "down": "down"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {
+        "4": "Examined against seed: same head size, full horizontal body length, eyes closed; character props retained; automatic scale unavailable."
+      },
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "kael",
+      "move": "attack",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        768,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 128,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 1.1477832512315271,
+      "ground_y": 497,
+      "raw_file": "raw/kael-attack.png",
+      "file": "spaced/kael-attack.png",
+      "cells": "cells/kael-attack",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            10,
+            141,
+            323,
+            553
+          ],
+          "uniform_raw_scale": 1.1477832512315271,
+          "offset": [
+            204,
+            27
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            356,
+            142,
+            681,
+            553
+          ],
+          "uniform_raw_scale": 1.1477832512315271,
+          "offset": [
+            198,
+            29
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            705,
+            142,
+            1037,
+            553
+          ],
+          "uniform_raw_scale": 1.1477832512315271,
+          "offset": [
+            194,
+            28
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1061,
+            142,
+            1411,
+            553
+          ],
+          "uniform_raw_scale": 1.1477832512315271,
+          "offset": [
+            183,
+            28
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1438,
+            142,
+            1783,
+            553
+          ],
+          "uniform_raw_scale": 1.1477832512315271,
+          "offset": [
+            186,
+            28
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1818,
+            142,
+            2144,
+            553
+          ],
+          "uniform_raw_scale": 1.1477832512315271,
+          "offset": [
+            197,
+            28
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 0.9924999999999999,
+      "maximum_measured": 0.996,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "step in; rear palm at hip",
+        "drive open palm right",
+        "extended palm; planted feet",
+        "draw back",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "attack": "attack"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "kael",
+      "move": "gather",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        768,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 128,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 1.0737327188940091,
+      "ground_y": 497,
+      "raw_file": "raw/kael-gather.png",
+      "file": "spaced/kael-gather.png",
+      "cells": "cells/kael-gather",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            20,
+            141,
+            362,
+            581
+          ],
+          "uniform_raw_scale": 1.0737327188940091,
+          "offset": [
+            200,
+            28
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            382,
+            139,
+            721,
+            581
+          ],
+          "uniform_raw_scale": 1.0737327188940091,
+          "offset": [
+            202,
+            25
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            740,
+            140,
+            1083,
+            581
+          ],
+          "uniform_raw_scale": 1.0737327188940091,
+          "offset": [
+            200,
+            26
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1104,
+            140,
+            1445,
+            581
+          ],
+          "uniform_raw_scale": 1.0737327188940091,
+          "offset": [
+            201,
+            26
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1466,
+            156,
+            1779,
+            581
+          ],
+          "uniform_raw_scale": 1.0737327188940091,
+          "offset": [
+            216,
+            44
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1787,
+            141,
+            2130,
+            581
+          ],
+          "uniform_raw_scale": 1.0737327188940091,
+          "offset": [
+            200,
+            28
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 1.0310000000000001,
+      "maximum_measured": 1.045,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "front palm forward",
+        "contact",
+        "both hands back to hip; breathe",
+        "settle lower",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "gatherfist": "gather",
+        "flowfist": "gather"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "kael",
+      "move": "release",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        768,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 128,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 1.1918158567774937,
+      "ground_y": 497,
+      "raw_file": "raw/kael-release.png",
+      "file": "spaced/kael-release.png",
+      "cells": "cells/kael-release",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            10,
+            152,
+            312,
+            549
+          ],
+          "uniform_raw_scale": 1.1918158567774937,
+          "offset": [
+            204,
+            27
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            334,
+            189,
+            627,
+            548
+          ],
+          "uniform_raw_scale": 1.1918158567774937,
+          "offset": [
+            210,
+            72
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            659,
+            149,
+            980,
+            548
+          ],
+          "uniform_raw_scale": 1.1918158567774937,
+          "offset": [
+            192,
+            24
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            971,
+            160,
+            1435,
+            550
+          ],
+          "uniform_raw_scale": 1.1918158567774937,
+          "offset": [
+            108,
+            35
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1411,
+            151,
+            1796,
+            550
+          ],
+          "uniform_raw_scale": 1.1918158567774937,
+          "offset": [
+            154,
+            25
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1826,
+            151,
+            2144,
+            549
+          ],
+          "uniform_raw_scale": 1.1918158567774937,
+          "offset": [
+            194,
+            26
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 1.0045,
+      "maximum_measured": 1.005,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "sink deep; both palms low",
+        "prepare hip drive",
+        "double palm lunge; rear leg extended",
+        "hold extension then step back",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "releasefist": "release",
+        "perfectfist": "release"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "kael",
+      "move": "circle",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        768,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 128,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 1.071264367816092,
+      "ground_y": 497,
+      "raw_file": "raw/kael-circle.png",
+      "file": "spaced/kael-circle.png",
+      "cells": "cells/kael-circle",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            16,
+            137,
+            358,
+            578
+          ],
+          "uniform_raw_scale": 1.071264367816092,
+          "offset": [
+            201,
+            28
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            364,
+            136,
+            684,
+            578
+          ],
+          "uniform_raw_scale": 1.071264367816092,
+          "offset": [
+            212,
+            27
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            698,
+            135,
+            1022,
+            578
+          ],
+          "uniform_raw_scale": 1.071264367816092,
+          "offset": [
+            210,
+            25
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1034,
+            136,
+            1392,
+            578
+          ],
+          "uniform_raw_scale": 1.071264367816092,
+          "offset": [
+            192,
+            27
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1394,
+            135,
+            1773,
+            578
+          ],
+          "uniform_raw_scale": 1.071264367816092,
+          "offset": [
+            181,
+            25
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1801,
+            137,
+            2149,
+            578
+          ],
+          "uniform_raw_scale": 1.071264367816092,
+          "offset": [
+            198,
+            28
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 0.9835,
+      "maximum_measured": 1.004,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "coil torso left",
+        "pivot front foot",
+        "sweep forearm horizontally across front",
+        "follow through past centre",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "circlefist": "circle"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "kael",
+      "move": "stored",
+      "frame_count": 6,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        768,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 128,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 1.059090909090909,
+      "ground_y": 497,
+      "raw_file": "raw/kael-stored.png",
+      "file": "spaced/kael-stored.png",
+      "cells": "cells/kael-stored",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            7,
+            140,
+            357,
+            586
+          ],
+          "uniform_raw_scale": 1.059090909090909,
+          "offset": [
+            198,
+            28
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            382,
+            141,
+            716,
+            586
+          ],
+          "uniform_raw_scale": 1.059090909090909,
+          "offset": [
+            207,
+            29
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            743,
+            153,
+            1076,
+            586
+          ],
+          "uniform_raw_scale": 1.059090909090909,
+          "offset": [
+            208,
+            41
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1102,
+            148,
+            1434,
+            586
+          ],
+          "uniform_raw_scale": 1.059090909090909,
+          "offset": [
+            208,
+            36
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 5,
+          "source_box": [
+            1461,
+            149,
+            1795,
+            586
+          ],
+          "uniform_raw_scale": 1.059090909090909,
+          "offset": [
+            207,
+            37
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 6,
+          "source_box": [
+            1818,
+            142,
+            2167,
+            586
+          ],
+          "uniform_raw_scale": 1.059090909090909,
+          "offset": [
+            199,
+            30
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 0.984,
+      "maximum_measured": 0.989,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        1,
+        1.2,
+        0.75,
+        1,
+        0.8,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "weight back; fist at ribs",
+        "compact hip compression",
+        "short bent-elbow forearm blow right",
+        "solid hold; ease",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "storedfist": "stored"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "kael",
+      "move": "hit",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        768,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 128,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 0.8472727272727273,
+      "ground_y": 497,
+      "raw_file": "raw/kael-hit.png",
+      "file": "spaced/kael-hit.png",
+      "cells": "cells/kael-hit",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            35,
+            66,
+            508,
+            622
+          ],
+          "uniform_raw_scale": 0.8472727272727273,
+          "offset": [
+            184,
+            28
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            597,
+            61,
+            1049,
+            622
+          ],
+          "uniform_raw_scale": 0.8472727272727273,
+          "offset": [
+            192,
+            24
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            1121,
+            100,
+            1554,
+            624
+          ],
+          "uniform_raw_scale": 0.8472727272727273,
+          "offset": [
+            200,
+            56
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1654,
+            65,
+            2124,
+            622
+          ],
+          "uniform_raw_scale": 0.8472727272727273,
+          "offset": [
+            185,
+            27
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 1.004,
+      "maximum_measured": 1.01,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "recoil; guard up",
+        "slide half step back",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "hit": "hit"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "kael",
+      "move": "block",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        768,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 128,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 0.7315541601255887,
+      "ground_y": 497,
+      "raw_file": "raw/kael-block.png",
+      "file": "spaced/kael-block.png",
+      "cells": "cells/kael-block",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            18,
+            41,
+            516,
+            684
+          ],
+          "uniform_raw_scale": 0.7315541601255887,
+          "offset": [
+            202,
+            29
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            568,
+            55,
+            1052,
+            684
+          ],
+          "uniform_raw_scale": 0.7315541601255887,
+          "offset": [
+            207,
+            39
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            1112,
+            93,
+            1583,
+            684
+          ],
+          "uniform_raw_scale": 0.7315541601255887,
+          "offset": [
+            212,
+            67
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1648,
+            41,
+            2145,
+            683
+          ],
+          "uniform_raw_scale": 0.7315541601255887,
+          "offset": [
+            202,
+            29
+          ],
+          "ready_seed_lock": true
+        }
+      ],
+      "median": 0.9335,
+      "maximum_measured": 0.943,
+      "not_measured": [],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frame_descriptions": [
+        "ready",
+        "cross forearms; bend knees",
+        "absorb low",
+        "ready"
+      ],
+      "proposed_ActionId_mapping": {
+        "block": "block"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {},
+      "recommendation": "recommended corrected candidate; no alternate option"
+    },
+    {
+      "identity": "kael",
+      "move": "down",
+      "frame_count": 4,
+      "frame_order": "left-to-right",
+      "cell_size": [
+        768,
+        512
+      ],
+      "logical_source_size": [
+        512,
+        512
+      ],
+      "logical_x_offset": 128,
+      "pivot": [
+        0.5,
+        0.970703125
+      ],
+      "shared_character_scale": 1.0,
+      "raw_to_seed_resolution_scale": 0.9529652351738241,
+      "ground_y": 497,
+      "raw_file": "raw/kael-down.png",
+      "file": "spaced/kael-down.png",
+      "cells": "cells/kael-down",
+      "transforms": [
+        {
+          "frame": 1,
+          "source_box": [
+            31,
+            104,
+            445,
+            599
+          ],
+          "uniform_raw_scale": 0.9529652351738241,
+          "offset": [
+            186,
+            28
+          ],
+          "ready_seed_lock": true
+        },
+        {
+          "frame": 2,
+          "source_box": [
+            503,
+            167,
+            844,
+            605
+          ],
+          "uniform_raw_scale": 0.9529652351738241,
+          "offset": [
+            222,
+            83
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 3,
+          "source_box": [
+            933,
+            216,
+            1414,
+            598
+          ],
+          "uniform_raw_scale": 0.9529652351738241,
+          "offset": [
+            155,
+            135
+          ],
+          "ready_seed_lock": false
+        },
+        {
+          "frame": 4,
+          "source_box": [
+            1467,
+            339,
+            2149,
+            595
+          ],
+          "uniform_raw_scale": 0.9529652351738241,
+          "offset": [
+            59,
+            255
+          ],
+          "ready_seed_lock": false
+        }
+      ],
+      "median": 1.06,
+      "maximum_measured": 1.086,
+      "not_measured": [
+        4
+      ],
+      "numeric_gate": "pass",
+      "status": "candidate",
+      "owner_artwork_selection": "pending",
+      "owner_motion_approval": "pending",
+      "timing_weights": [
+        0.8,
+        1,
+        0.9,
+        1
+      ],
+      "frame_descriptions": [
+        "ready; knees soften",
+        "one hand and knee on ground",
+        "sink sideways",
+        "lie unconscious; HOLD"
+      ],
+      "proposed_ActionId_mapping": {
+        "down": "down"
+      },
+      "visual_review": "reviewed offline at 390px; owner approval pending",
+      "not_measured_visual_review": {
+        "4": "Examined against seed: same head size, full horizontal body length, eyes closed; character props retained; automatic scale unavailable."
+      },
+      "recommendation": "recommended corrected candidate; no alternate option"
+    }
+  ],
+  "files": {
+    "NOTES.md": {
+      "bytes": 13386,
+      "sha256": "b379e1eac0702a8260c69f025e52d162d8905701d4ec6d6ea19ea3d4a55a101a"
+    },
+    "astrid-preview-390.png": {
+      "bytes": 445927,
+      "sha256": "98e2353d22a16c9a69bed500e26d0c3f2b704601b059eb77e103b5896c4de8bf",
+      "size": [
+        390,
+        2586
+      ],
+      "mode": "RGB",
+      "decoded": true
+    },
+    "audits/astrid-attack.json": {
+      "bytes": 874,
+      "sha256": "94719fe8c6af4de4325e8fe40a4470e702bc2d9df33949013b147ac95f3852db"
+    },
+    "audits/astrid-attack.txt": {
+      "bytes": 66,
+      "sha256": "95420ba53cb8f749ca5273a0f800ac32204a75ac796350c93e41d2a8686ff3ea"
+    },
+    "audits/astrid-block.json": {
+      "bytes": 664,
+      "sha256": "5abab9a1857793808e891489357df4de0e42b7f1bcd583de8c0241cd9f803d0a"
+    },
+    "audits/astrid-block.txt": {
+      "bytes": 65,
+      "sha256": "c890226e21d9eab5b46615f1701a4967b7f33ed07c8dee480068a92c68ff1ae7"
+    },
+    "audits/astrid-deflect.json": {
+      "bytes": 873,
+      "sha256": "1bde12ab55762a94215adb691fc3474a93eeae4e2009b3561c3a91e1d81696d2"
+    },
+    "audits/astrid-deflect.txt": {
+      "bytes": 67,
+      "sha256": "629f98eea1cb937602b468b130eb4700c2939da462727ef42225c335f0e78338"
+    },
+    "audits/astrid-dial.json": {
+      "bytes": 871,
+      "sha256": "91186d2880c0ffaf84d3a40673fcb22673fd85855182d9cc12b1333ff2cd9877"
+    },
+    "audits/astrid-dial.txt": {
+      "bytes": 64,
+      "sha256": "bbcd28d886a9c0e2c8d06bb1bffba3e7cab9a02867d7f510bc85976cc2788d83"
+    },
+    "audits/astrid-down.json": {
+      "bytes": 650,
+      "sha256": "400010c97f8067468b0981802b74ea87dac5d4a6b91ccae4f87056f1bd8e576a"
+    },
+    "audits/astrid-down.txt": {
+      "bytes": 65,
+      "sha256": "febc9015f2eb9ff8137207e560a86c9866b1333a9893c972a44853ce8116c89e"
+    },
+    "audits/astrid-hit.json": {
+      "bytes": 662,
+      "sha256": "cf78e66eff77ba1532f1c1637462f3ed8cfe7c7317284ad8b782d20dbf835036"
+    },
+    "audits/astrid-hit.txt": {
+      "bytes": 63,
+      "sha256": "27f4227d98d47cc31eba3619ab413b18547945779d918729fa5bce265fe04d4e"
+    },
+    "audits/astrid-read.json": {
+      "bytes": 870,
+      "sha256": "ca4c6087e8f19fb8515a0af7ac19efc29a16988bb0523e50f108a85b9e29dcbe"
+    },
+    "audits/astrid-read.txt": {
+      "bytes": 64,
+      "sha256": "d6ca443872840a01c1358896ec9968756e756048f088780eda179a0ebec8a40b"
+    },
+    "audits/kael-attack.json": {
+      "bytes": 866,
+      "sha256": "863f13d56cfb635aefaeda33a3a384075f8b986e8e72a286b4dab4fbe4c9312a"
+    },
+    "audits/kael-attack.txt": {
+      "bytes": 64,
+      "sha256": "6eb3a3cbb891e9a50b224e08fc8503d88658c2089ec4fd955c7bac8bc6d0eee6"
+    },
+    "audits/kael-block.json": {
+      "bytes": 658,
+      "sha256": "d2af50c36318588e182c459cdcd49f7cfbf89239da391772ee7314331bc9fa2c"
+    },
+    "audits/kael-block.txt": {
+      "bytes": 63,
+      "sha256": "da2bb84a79f87678031e41271606472aedaf264bae3b74db7cb385bffdc4cb39"
+    },
+    "audits/kael-circle.json": {
+      "bytes": 866,
+      "sha256": "57f75f09616d06b1ec3ee25a58d8c1601141be767e216c15206b5f4c450546b3"
+    },
+    "audits/kael-circle.txt": {
+      "bytes": 64,
+      "sha256": "d5cfa58eae08252fc92a448645ea6ad84bff755e3d0d210eb02d42317d0739e9"
+    },
+    "audits/kael-down.json": {
+      "bytes": 646,
+      "sha256": "7f65cdcfb24269de55a335c6f1d01e73ed1cba4a3b106bdce03974b667a04226"
+    },
+    "audits/kael-down.txt": {
+      "bytes": 63,
+      "sha256": "6094743802103dc3c2f54466d403151180bd5ef219ecb8678703cac1e50b2ea0"
+    },
+    "audits/kael-gather.json": {
+      "bytes": 868,
+      "sha256": "3ca87803b45eb21eeada430656067a3950ab8ae0464a45f041bca6435bc4c413"
+    },
+    "audits/kael-gather.txt": {
+      "bytes": 64,
+      "sha256": "853735e0412814db475426e61a46813d4a772fc04e66ec8b7447831622151382"
+    },
+    "audits/kael-hit.json": {
+      "bytes": 656,
+      "sha256": "839c3441024e74598c8be279ba5d7883a75c6c3882b429452e43f486b4f95464"
+    },
+    "audits/kael-hit.txt": {
+      "bytes": 61,
+      "sha256": "ac441f1db9b5ce30d7b0748b78790df0796aee6bb383efcd0e94ad93a5c48ad7"
+    },
+    "audits/kael-release.json": {
+      "bytes": 867,
+      "sha256": "beee4e952e0df2a44500b4a868d1060301bcfed246ff24e32c8cfee9038aa972"
+    },
+    "audits/kael-release.txt": {
+      "bytes": 65,
+      "sha256": "e54edf3edaad976dae2152e8a7b88097f0f45772d3fba3d5e3b360f23caca5a0"
+    },
+    "audits/kael-stored.json": {
+      "bytes": 867,
+      "sha256": "9a7891bc431200fba89b022ed76f28e3c69dcc00e15be3a90da22a67c36d5f38"
+    },
+    "audits/kael-stored.txt": {
+      "bytes": 64,
+      "sha256": "d4fe995524faf844b5bd5fe22954de2c2cda33f3af46386268de23f347c4a566"
+    },
+    "audits/wynne-attack.json": {
+      "bytes": 874,
+      "sha256": "472cd6d5504f96a47a1801fdd004460ea6d48946602d26696fada4bbf0aa883a"
+    },
+    "audits/wynne-attack.txt": {
+      "bytes": 65,
+      "sha256": "8901152fad0203ddad490489c3dbba411adb389744b5b0cc0dcb80e9282901e0"
+    },
+    "audits/wynne-block.json": {
+      "bytes": 662,
+      "sha256": "da0626f766c53359b279c0e568737df01b58110b89e0fb017f0eeebdde88ebf9"
+    },
+    "audits/wynne-block.txt": {
+      "bytes": 64,
+      "sha256": "715f2d597bc8e62e3a570cac500d3444b19f449f654ec4ab5e2e3388f1238dbd"
+    },
+    "audits/wynne-down.json": {
+      "bytes": 640,
+      "sha256": "ea87a6c556c2cd803fc81ae2e2e4744b6b7e680eadf952d4c186ea7da08be993"
+    },
+    "audits/wynne-down.txt": {
+      "bytes": 63,
+      "sha256": "0900939432a51b665055a5f73548783505f409a96af279c9b2854c23aaaddb07"
+    },
+    "audits/wynne-hit.json": {
+      "bytes": 659,
+      "sha256": "ab8d49c7c3c34e7389b9d3ccd1d487973fd2ed1bde78778de007a30449ddc972"
+    },
+    "audits/wynne-hit.txt": {
+      "bytes": 62,
+      "sha256": "a760e967a13cac75d7af21576a2d3c7b5e5cd677d2540c5d2ae77051f34c1411"
+    },
+    "audits/wynne-knot.json": {
+      "bytes": 872,
+      "sha256": "c37eb8324f3762835395edca1fe174b8f535136e54839613e6aee61353741663"
+    },
+    "audits/wynne-knot.txt": {
+      "bytes": 63,
+      "sha256": "c4acd42c5a627814cfa1ac155b1b82d5ee4bb312c8fdd98c5265ddac497e66f2"
+    },
+    "audits/wynne-toll.json": {
+      "bytes": 870,
+      "sha256": "c45efa4edabb24cc5f667244bc7f4e3f293ddd304d42592fbd6536d3610d9aa2"
+    },
+    "audits/wynne-toll.txt": {
+      "bytes": 63,
+      "sha256": "de282276fda8a7ba2b8d0d37b66b8f2f9edd5a4bec3744f76e8b396ef3f3272a"
+    },
+    "audits/wynne-weave.json": {
+      "bytes": 872,
+      "sha256": "767032de55d43d96355046933b576bca72ae31dc5f0053548b5d3a261352deee"
+    },
+    "audits/wynne-weave.txt": {
+      "bytes": 64,
+      "sha256": "ed2ebcdeb7541f16a4763355aa78793e79d72077ead9c688c6e5a84c26cd9a9b"
+    },
+    "build_handoff.py": {
+      "bytes": 16043,
+      "sha256": "bab2ef8c741099df65a0f6e0ec5b98a9e63299eb0c0101abbfca106ce86b4093"
+    },
+    "cells/astrid-attack/000.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-attack/001.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-attack/002.png": {
+      "bytes": 280968,
+      "sha256": "08b4c21e7c666b22f77aa596dfcc397942925bfdef3131b940f9790234aa9624",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-attack/003.png": {
+      "bytes": 277829,
+      "sha256": "6f05fe179d1f0f3875a8cf1741736c5b6aa279f750000c39198f98940b07f50e",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-attack/004.png": {
+      "bytes": 278745,
+      "sha256": "510dd2c5c185b7ce1b66c130f94ae4714dbf4c41ae40407e9cef34885465c614",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-attack/005.png": {
+      "bytes": 277851,
+      "sha256": "3aeb7d511174a6b633d469a4bf873ab89d3346d6327b425f069db93696c02511",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-attack/006.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-block/000.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-block/001.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-block/002.png": {
+      "bytes": 250479,
+      "sha256": "6df2201fbbe16ce3320668968652c9320aa3ce8ad4d1a3486255bad4ba1d635f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-block/003.png": {
+      "bytes": 262734,
+      "sha256": "6d08784b2b5e11b0e42b1ea591a1152f728824c738d73c42cd482ee6f79e6573",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-block/004.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-deflect/000.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-deflect/001.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-deflect/002.png": {
+      "bytes": 256537,
+      "sha256": "e9dc6617ab94f0969af1a022fb25515533dff7ef5790f7bcc36e8570971ddfa6",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-deflect/003.png": {
+      "bytes": 251535,
+      "sha256": "8d819554bf574e408ad4b64ab40da12ebf83fe35063c095b1c38e02352e33241",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-deflect/004.png": {
+      "bytes": 247944,
+      "sha256": "3329b070b748e76ab6b94f97aaa9ebe5154be893d6b4f4c708e5b5633af0bc0c",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-deflect/005.png": {
+      "bytes": 253985,
+      "sha256": "318b65ea9d8b0adff121755503936b0810bd57078defe40901305dec8d4be6b7",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-deflect/006.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-dial/000.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-dial/001.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-dial/002.png": {
+      "bytes": 234738,
+      "sha256": "fc6421f976acfe2f420cf264ad81e938ec87eaa130ee9115e4520de3273857dd",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-dial/003.png": {
+      "bytes": 241255,
+      "sha256": "765d374fea4e02ccf630d8ec7c217766909530bdbf7b546aa991dba777558d94",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-dial/004.png": {
+      "bytes": 249769,
+      "sha256": "237779aa63996af5168d22c664c3377487f2932208f24299d7ae234cac08d325",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-dial/005.png": {
+      "bytes": 240975,
+      "sha256": "30e2819314787f73982f8b807f895194e10f9194736fb7f0337f27de1121f02a",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-dial/006.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-down/000.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-down/001.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-down/002.png": {
+      "bytes": 215203,
+      "sha256": "ff0462a5cb66e90728a58668caf7826d4914145bb23001eb2182c721fa87ee26",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-down/003.png": {
+      "bytes": 217288,
+      "sha256": "ee64564e4bdcaf0954acf2cf50bf6b5e43b2028e395c3d639aa3a555cf27db0f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-down/004.png": {
+      "bytes": 214483,
+      "sha256": "7d99538cb349a81ae615075c5e59eba7217a183569e96e5c7dc46e9319ec93f5",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-hit/000.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-hit/001.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-hit/002.png": {
+      "bytes": 252010,
+      "sha256": "84e8a66f0f376d27b5f7716eaa36cd45f1d640a0c718badcd81b460f56f4c3cc",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-hit/003.png": {
+      "bytes": 231152,
+      "sha256": "a751aac1bf25d4c72f38734ab4bb69b6fe9a67380a3332be531dcb9c5f1e273e",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-hit/004.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-read/000.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-read/001.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-read/002.png": {
+      "bytes": 275357,
+      "sha256": "c10dc29d4ddd80b64c3b763458840e96bcb948005c10bcdbce37f160da6686db",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-read/003.png": {
+      "bytes": 260950,
+      "sha256": "107e9c276e13d2cd013d6d601320aacfa06d24183545861607abbc096bff6802",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-read/004.png": {
+      "bytes": 250173,
+      "sha256": "d3301118c31a323e083090f93d324af99c622524716d7d134e162e73d4c56d70",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-read/005.png": {
+      "bytes": 255174,
+      "sha256": "ba5ac5fab52864748bac591bcea907a85e37312dc83115934bd71db3c2f6aae3",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/astrid-read/006.png": {
+      "bytes": 278945,
+      "sha256": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-attack/000.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-attack/001.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-attack/002.png": {
+      "bytes": 241305,
+      "sha256": "f491994c58735fe8f842fa40915353d62dc7229fdfb030a2637c330891db2aa6",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-attack/003.png": {
+      "bytes": 242473,
+      "sha256": "62a6c84479d3a22a06a82867dd9292ff5c07b123d6e5dbd9a3581cdc1b600b28",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-attack/004.png": {
+      "bytes": 241780,
+      "sha256": "b84cc77e918d2a432423dc90af8b925e5f56cc566681baa8e6a914a768b99747",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-attack/005.png": {
+      "bytes": 241553,
+      "sha256": "be20cad49920802843b2c75df3814a8d39b76f3d5871900231500888cf98c72a",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-attack/006.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-block/000.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-block/001.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-block/002.png": {
+      "bytes": 202142,
+      "sha256": "b7725c497c3461853fe02828793b17f0eb8edeec836970b6a6868352fbc0c8c9",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-block/003.png": {
+      "bytes": 203815,
+      "sha256": "bbc548b6cd5ccf1bfef90ae214e17ab91954c5c04ab77bcff80c42fee191ebdc",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-block/004.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-circle/000.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-circle/001.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-circle/002.png": {
+      "bytes": 217036,
+      "sha256": "4f866dd4b3bcfde720af55e7f9243a07cec9acd901b8dbb6d14e15d0aa63b00a",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-circle/003.png": {
+      "bytes": 235347,
+      "sha256": "f7e316772864ef06bd461fdac1db59cf90916ca185cf31ee1a34b8b96a32884f",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-circle/004.png": {
+      "bytes": 235610,
+      "sha256": "4f870c88c34725d814bbd6a56f8a0b49d67472804821e09de32b258b3bb38979",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-circle/005.png": {
+      "bytes": 229984,
+      "sha256": "6abbe4a3ca4725f4dbdba767d672a44208af3006a8be072e4ec366da9b44ed2b",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-circle/006.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-down/000.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-down/001.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-down/002.png": {
+      "bytes": 218356,
+      "sha256": "48d32c6001682c8050704764e60f694b171dca004f12ff55552b8fc2982e7b15",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-down/003.png": {
+      "bytes": 244762,
+      "sha256": "e677b67c6058be738689ad53e55ab87cce18a386e4c87429201dbf9ebf5ce8cc",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-down/004.png": {
+      "bytes": 228848,
+      "sha256": "56bf93929c8403adea3a75d73ae3e410be662431b243ab2d3707c9981bb6ac63",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-gather/000.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-gather/001.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-gather/002.png": {
+      "bytes": 240005,
+      "sha256": "1602521cc23419501b34c1547bf98032f8848a336b4401137e531c06ab7b7915",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-gather/003.png": {
+      "bytes": 241626,
+      "sha256": "e8127124c73f5afe4bf8343b48f4290f2190352c5351ed169bfecae8b48119c0",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-gather/004.png": {
+      "bytes": 224474,
+      "sha256": "0a323eb731ea3ed0028be137ee46b7dbad4162db04cbf7e33715dc0d72c3ccf7",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-gather/005.png": {
+      "bytes": 218847,
+      "sha256": "10bbee74ed5787010227caf4863a53218e854ceb575acb29754533e882adfefc",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-gather/006.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-hit/000.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-hit/001.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-hit/002.png": {
+      "bytes": 246277,
+      "sha256": "65f767251b9004c9c2a27554b495db843358b8edaf921f057b76aa67f453c296",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-hit/003.png": {
+      "bytes": 242638,
+      "sha256": "79b7ab03d2e94ae1b297de9b1d575ef946bf5f96a2de1ec52bcb95cc5aac2b40",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-hit/004.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-release/000.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-release/001.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-release/002.png": {
+      "bytes": 236073,
+      "sha256": "dcb97070f0e1931f4c0f1b89b43c785be7d2a04482ade0f35c4049734667ecbd",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-release/003.png": {
+      "bytes": 244482,
+      "sha256": "761f1a25d521e5aa1ad28f650e138a601e3cef9840f7015d78c23a379ea821bb",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-release/004.png": {
+      "bytes": 267395,
+      "sha256": "e26e543ee6530679838201b1cf06715f464c0a4ce4172de157113f88a5dda3e3",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-release/005.png": {
+      "bytes": 246773,
+      "sha256": "3c658ddbdbdf7af826994b68d47247e1184e90265557585c1fafe33d5a7943fa",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-release/006.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-stored/000.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-stored/001.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-stored/002.png": {
+      "bytes": 237174,
+      "sha256": "2f36db433eeba9c5740c8c02670a1c180678c219e9812211118c73da7eb31b76",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-stored/003.png": {
+      "bytes": 235768,
+      "sha256": "4314953da9f0666a60fc2caf219411ec4d0bf5be2cad2b20d060ec709f64ef54",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-stored/004.png": {
+      "bytes": 230490,
+      "sha256": "4ec17cd97b2330adf70db27015f7849eb23dc589e7d5f247259afe5c7ca89500",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-stored/005.png": {
+      "bytes": 228388,
+      "sha256": "43322f11001fc7be559f240423ef326ee6fa7407471bf1f4e05852b4625cbe62",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/kael-stored/006.png": {
+      "bytes": 239218,
+      "sha256": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "size": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-attack/000.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-attack/001.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-attack/002.png": {
+      "bytes": 295937,
+      "sha256": "61616cc8a84d2c51f44251fde0f7953e4e8cbf3473445da1a815cd9f2fa93f92",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-attack/003.png": {
+      "bytes": 293445,
+      "sha256": "acc274e41a2862678c644aa04a07c0ebb2c3d1144e7ed5b8d09a1dc6c12825da",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-attack/004.png": {
+      "bytes": 294992,
+      "sha256": "697d266f1e3fdebdebd16a13a03fea34a04d6a176bebe994e939b26ed73e2111",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-attack/005.png": {
+      "bytes": 286814,
+      "sha256": "44c503d7afdfcf4a395661074f8b2626292047b38e9b318166c53ea363cd2713",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-attack/006.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-block/000.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-block/001.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-block/002.png": {
+      "bytes": 270713,
+      "sha256": "e6e6b96b3ef6694ce797946cc759a97a0baed4a57f5889784c9e2ca2196898e4",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-block/003.png": {
+      "bytes": 253184,
+      "sha256": "284cef01d0c735369804e99f272649ceca50a13d5a112290e158fbc4aaef1648",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-block/004.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-down/000.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-down/001.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-down/002.png": {
+      "bytes": 280316,
+      "sha256": "6dc6be0342e01592cdefd3b781ece8502bbf4d0455dd979d51688dfa20e0f178",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-down/003.png": {
+      "bytes": 271972,
+      "sha256": "cda845f6bba2106a4afad408798a0b137fd633388e29f67f104885a640d4e944",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-down/004.png": {
+      "bytes": 254315,
+      "sha256": "75a231ef177578585d9b163348f3a5df73ad420bbe20002a5f0d58a3a1c5920e",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-hit/000.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-hit/001.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-hit/002.png": {
+      "bytes": 303629,
+      "sha256": "7a2c0e067f4f7b06cb72ee2e2c3ed955226a927258bf2fdbbef9dfaada5bae82",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-hit/003.png": {
+      "bytes": 290087,
+      "sha256": "3367fb6ab25b4d424031752b62f8a8402e680b976d455927e530ed5b80edcf08",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-hit/004.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-knot/000.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-knot/001.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-knot/002.png": {
+      "bytes": 284721,
+      "sha256": "3ceda34ad5d8e4da17871fb1625152d380bc5d9ff2186f9499097d8f72e4918c",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-knot/003.png": {
+      "bytes": 286547,
+      "sha256": "27aa7e14acc6b00ca4765ca1fd8b6f952e6016c2e313954adebe7374570c932b",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-knot/004.png": {
+      "bytes": 287972,
+      "sha256": "3977f9f4a4d1b7b3043c3e9f693a0de192a41a630126c7196943f7b92fb03898",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-knot/005.png": {
+      "bytes": 285013,
+      "sha256": "a9292f636f48b004166ba912d9569ac0a2543a65b30a6199d9bfab89aa8c87c6",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-knot/006.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-toll/000.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-toll/001.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-toll/002.png": {
+      "bytes": 290892,
+      "sha256": "03085282a4ac57e96ad52b2bc7974112f2bad564b51a62a969fb5a394a2400e9",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-toll/003.png": {
+      "bytes": 288796,
+      "sha256": "b427c12b4f989543126d957950dc439e93ca50a0a1fd0a926d97a4de62822dc8",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-toll/004.png": {
+      "bytes": 293750,
+      "sha256": "3cd19c51024bbaf37518f5c4d3371033aaa613492a4539937d4ac4cd78eb55f0",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-toll/005.png": {
+      "bytes": 285897,
+      "sha256": "22294eee2eef842efd3822ed0160a075c6a4b68fe677a617630d769f1e8a88c4",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-toll/006.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-weave/000.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-weave/001.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-weave/002.png": {
+      "bytes": 275898,
+      "sha256": "0aaa2e5d051699a92fbff1eebde29510e4ada661179581a58fb7f78296663f9b",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-weave/003.png": {
+      "bytes": 295850,
+      "sha256": "e92b79517ba5ee346d83d7d6f44aa1acb7622371a759b32bf85d8827a3eff276",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-weave/004.png": {
+      "bytes": 312351,
+      "sha256": "c59b3737c0b86355980de3a1afc1e34bc1d49d56b561cab21086975bc79ca7fb",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-weave/005.png": {
+      "bytes": 288862,
+      "sha256": "3c33bc316c087f9b991c256649c3b53e7e517e269c11a782e2cdf076a0aee73c",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "cells/wynne-weave/006.png": {
+      "bytes": 290362,
+      "sha256": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "size": [
+        640,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "kael-preview-390.png": {
+      "bytes": 381288,
+      "sha256": "5d0f07f4807ff59c007eb5c8ac78d1be3d1a532bf8926535ed4ab732a52a9d73",
+      "size": [
+        390,
+        3007
+      ],
+      "mode": "RGB",
+      "decoded": true
+    },
+    "prompts.json": {
+      "bytes": 41742,
+      "sha256": "a5b6529ce3c11f5c1fb32ce1d174ef60df772da714e959c3f01668750af62918"
+    },
+    "raw/astrid-attack.png": {
+      "bytes": 1535146,
+      "sha256": "104d8239932e41ba9d02c7c4bc81a87cabe5ffc42921a4f5a0c2696d96ca7a7f",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/astrid-block.png": {
+      "bytes": 1882904,
+      "sha256": "aaa33d2315f7c00e998d9a20b00f8626c314ab9b248af5ceedf473a4da458ea7",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/astrid-deflect.png": {
+      "bytes": 1673459,
+      "sha256": "65331b747981060d5f92bb7d31a9c30c68935c29bf579962ec6d021622da280a",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/astrid-dial.png": {
+      "bytes": 1773407,
+      "sha256": "e16b147df422e7eaf9168b8129ae0fccbe6567e9c613d934be77fe1da4094f92",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/astrid-down.png": {
+      "bytes": 1392314,
+      "sha256": "d3c3a7a2142cde92f7278354d584fd4791b9d323f45aa1fc657cb8bb6f8b18b5",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/astrid-hit.png": {
+      "bytes": 1699564,
+      "sha256": "f8a8dcce83352b8f46a7bee5a00e79fb4b821c574518aa83807d8bc940324021",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/astrid-read.png": {
+      "bytes": 1359412,
+      "sha256": "59a45d4b9861a7a5fba15ba4b3ee6f2b54610d84c8d3defe7a153780d1efc2d2",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/kael-attack.png": {
+      "bytes": 1210700,
+      "sha256": "a1216765261573c2c1a1097003f98baf42d34e239c0112f8d3925ae09ee55ff4",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/kael-block.png": {
+      "bytes": 1543023,
+      "sha256": "9a70ff18b97ba4e701259842cfbb00b6b95d93892a55af3f87b2a9584783869c",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/kael-circle.png": {
+      "bytes": 1349757,
+      "sha256": "f56613d9ac2f1ae45bd0a41357ab644f3e5d668b65a98e528dabae45f7ec4a84",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/kael-down.png": {
+      "bytes": 1093663,
+      "sha256": "3a86765c72363239534dab4920f119266c0d411063b36dbf2cfe96994904a09f",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/kael-gather.png": {
+      "bytes": 1360573,
+      "sha256": "5db1044dd4c5852675efeb72352f984ed52fa6f82d928b88487f13773755ebca",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/kael-hit.png": {
+      "bytes": 1426414,
+      "sha256": "7fc6796471b5093de4e233746d71dc1b622b5c202272f89119eba3216796cec5",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/kael-release.png": {
+      "bytes": 1276980,
+      "sha256": "95cea36c1f7ee2724b95247cd42f653355ed39e9a04b12496ffa7d4e500aafb8",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/kael-stored.png": {
+      "bytes": 1346269,
+      "sha256": "059d6b180b77b90166e88efaa303a3f75c9b156b9768ed13414d8726fdc2fa8f",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/rejected/astrid-deflect-duplicate-prop.png": {
+      "bytes": 1601017,
+      "sha256": "a564e4982b08d76f5d1b29863a89dab2790374e8b7694e74d8883accd58b1fbd",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/rejected/astrid-deflect-r1-small-motion.png": {
+      "bytes": 2045375,
+      "sha256": "3dfce35f226c0ab508c1d86b6c69df959ea74bfbf2fb0537ee8e69e108b854d3",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/rejected/kael-hit-background-02.png": {
+      "bytes": 2999347,
+      "sha256": "557f0184c996184d68af74eb9a02f20ce1c453d0eb8cbbf42bdaf8341a7f7af9",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/rejected/kael-hit-background.png": {
+      "bytes": 1889217,
+      "sha256": "ca9f7ade4d5b0a6febca47d4bc948fbc498d3c11b75b030cda12e2b334d6c11f",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/wynne-attack.png": {
+      "bytes": 2165489,
+      "sha256": "ee9413e620feaae1a283d7d83fe474eff6519d9d4e8d50e710e5f3da4f989369",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/wynne-block.png": {
+      "bytes": 1919312,
+      "sha256": "ba952bdaf2440253ad40d3fe426189f634230ee071f8a3aaaa666a592dcd9d4c",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/wynne-down.png": {
+      "bytes": 1580893,
+      "sha256": "caa99b12432b7db2abe460ee1db6adde9a0fbf319e96f74f00b007f030e9e35d",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/wynne-hit.png": {
+      "bytes": 1727308,
+      "sha256": "72eeee7665a7b38f24c480691d99e72c0e5bbeeab65d7a00bcd2c6c9c01b10a1",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/wynne-knot.png": {
+      "bytes": 1728213,
+      "sha256": "c958ade6a26238ae420e57c4c8a0ac3050686d649bf5f837dd3d652fcd14a7cb",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/wynne-toll.png": {
+      "bytes": 1518017,
+      "sha256": "f0bdeeeb646da3c8bae0e243379ddf61e85f60c9f2bd246bd68bcdb9f8d8b20d",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "raw/wynne-weave.png": {
+      "bytes": 1441563,
+      "sha256": "19d2fe19d8f3954a54081451c1988d5dbefc71d7043b2909bcc4c2d0dbc66e35",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "review/astrid-deflect-r1-vs-r2.png": {
+      "bytes": 2769047,
+      "sha256": "07d7d5932aa52314e2c1c40877a6afde457823df176eb0bd3b61e0c7971513de",
+      "size": [
+        7680,
+        785
+      ],
+      "mode": "RGB",
+      "decoded": true
+    },
+    "seeds/astrid.png": {
+      "bytes": 276250,
+      "sha256": "a2d2ac7833818ff62cc877ecd0e90e87f24d8f56365f57e6c32d9321b36f1b29",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "seeds/kael.png": {
+      "bytes": 234094,
+      "sha256": "5d9f344d4d44cad32c169e74780c2ff10bed401fd9f9dd43ea27f4c2171dde1c",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "seeds/wynne.png": {
+      "bytes": 287571,
+      "sha256": "b2888ab61fcb39fc5e4fc508c0a6695efae1c74224c5460d32f724a24fa091e6",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "seeds.json": {
+      "bytes": 1260,
+      "sha256": "44287a6c81ba96bd4e19c1a749a9ed98bbe9336bf8af5cca9331e93f9f2383ed"
+    },
+    "spaced/astrid-attack.png": {
+      "bytes": 1398541,
+      "sha256": "27fcdda6485fd8cc1acb3d884b0c66c6f70d0ba6b04780a358431d1577b0a403",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/astrid-block.png": {
+      "bytes": 802966,
+      "sha256": "824b606a78a95037ba0829cd0afac298a6fa6552aea1db51498000efa38bc45a",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/astrid-deflect.png": {
+      "bytes": 1294487,
+      "sha256": "6f9291138e6190c2ff355a815c54f16f2893452f05394af2fd27c337dc0398db",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/astrid-dial.png": {
+      "bytes": 1248999,
+      "sha256": "9c2a4a58855a37fd5cead444fb829637296eb55cade3409fe1cf7f6a9dc07918",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/astrid-down.png": {
+      "bytes": 931804,
+      "sha256": "1e5b5df876e16fbfbe5209f2a4383ce40f10e40b35738ab9b1163c3abd0501b0",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/astrid-hit.png": {
+      "bytes": 772472,
+      "sha256": "161e54781e7dbd4e0bcc7a8dae0ef97bfd01869e0c07354a8aaf8d27d2e45589",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/astrid-read.png": {
+      "bytes": 1326782,
+      "sha256": "5d8064701591dc0c5fc4cb0b2ba55f5a2b54f250226f6350af58e6cf873e8a4d",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/kael-attack.png": {
+      "bytes": 1208829,
+      "sha256": "e5afbe94df723d74ee20efb0d376e4cd81cd749ccc3115953e1a67f46821c9c1",
+      "size": [
+        4608,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/kael-block.png": {
+      "bytes": 655183,
+      "sha256": "242c59323c9364dcb7e935d660f70c04be944cdcdc0c53206a3a1bb696b61f1f",
+      "size": [
+        3072,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/kael-circle.png": {
+      "bytes": 1161065,
+      "sha256": "0574588d4d3ebccb927d6630f879dd8808933730ff06532e4e84f438b203c123",
+      "size": [
+        4608,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/kael-down.png": {
+      "bytes": 936145,
+      "sha256": "c8a24b7ab828714af7778d4dc482b5184fc7deee4417eb070b19395642ee855e",
+      "size": [
+        3072,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/kael-gather.png": {
+      "bytes": 1169538,
+      "sha256": "91a6981c3412d4a04976cd6d9490971876e20015671290c5887c8dd391aaedaa",
+      "size": [
+        4608,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/kael-hit.png": {
+      "bytes": 737921,
+      "sha256": "5d2193b1f8eb9c90042a73c0395f22b3a78b3113db17773b82dbb2324770a721",
+      "size": [
+        3072,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/kael-release.png": {
+      "bytes": 1242573,
+      "sha256": "d2f2045265d28876339e0f9962f8c297dafb877fde81e12590247fa15da3e865",
+      "size": [
+        4608,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/kael-stored.png": {
+      "bytes": 1176042,
+      "sha256": "1e8d38804bbd8b256266d7e90d9326fb3135b077ab3e1b30d2c4157624257e18",
+      "size": [
+        4608,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/wynne-attack.png": {
+      "bytes": 1465201,
+      "sha256": "382f545010a09f01a5bbc6a4b617ffe4167ac81a5169f0cc3d52a12756fee826",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/wynne-block.png": {
+      "bytes": 824807,
+      "sha256": "b754dbf90a3962de1f6e99ed67bcd5cffba0cae358a3fbe53869787f7f49836e",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/wynne-down.png": {
+      "bytes": 1100249,
+      "sha256": "d9dcdbe37e61045bb7c105cc05fbcacebe0688caa43b771dd512f166db1afa00",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/wynne-hit.png": {
+      "bytes": 894227,
+      "sha256": "3a54bba6274e8c9f8f0ced8a108fb371bc95afe23d1012b36fb639e45ae1b35f",
+      "size": [
+        2560,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/wynne-knot.png": {
+      "bytes": 1438417,
+      "sha256": "9d1a7b5a7f14a8a7a45607b1f2c353666e530b1f0dbef9944b984e45951f5f54",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/wynne-toll.png": {
+      "bytes": 1454300,
+      "sha256": "341cec9c38c70a5113451108cb945f40d92b1c96c5ffdb49e5601427a2fc3c3f",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "spaced/wynne-weave.png": {
+      "bytes": 1470009,
+      "sha256": "9724a4907967b4ac559bab091c1f5bad959cd9517bacb158750a11e616429af3",
+      "size": [
+        3840,
+        512
+      ],
+      "mode": "RGBA",
+      "decoded": true
+    },
+    "strips.json": {
+      "bytes": 59600,
+      "sha256": "733a912f3a832501e0e81036b3ca2d155201e6679d4910cae0aa8937b03ebdbf"
+    },
+    "verify_remote.py": {
+      "bytes": 2539,
+      "sha256": "63737be795905e792146e9ff1180ee9a67c7ebf28305e6fdac2a7a5bef87bc1e"
+    },
+    "wynne-preview-390.png": {
+      "bytes": 488476,
+      "sha256": "740271d52e9ec8d1c3409421f5d2e2e0c518cc04fd325fc95c68f82336bc9d65",
+      "size": [
+        390,
+        2586
+      ],
+      "mode": "RGB",
+      "decoded": true
+    }
+  },
+  "r2_review": {
+    "move": "astrid-deflect",
+    "baseline_commit": "0404c7ff1c291d22b9b12d68be61671098006e22",
+    "recommendation": "R2 replaces R1 for small motion",
+    "status": "candidate",
+    "review_image": "review/astrid-deflect-r1-vs-r2.png",
+    "small_review_unit_height": 111,
+    "small_review_scale": 0.24611973392461198,
+    "large_review_cell_height": 512,
+    "background": "public/assets/art/battle_forest.webp",
+    "background_sha256": "7538016aaca9f4cf0e216a7165f5cd56e2512445171850a59193f66f352aa4b0",
+    "r1_raw_sha256": "3dfce35f226c0ab508c1d86b6c69df959ea74bfbf2fb0537ee8e69e108b854d3",
+    "other_strip_records_unchanged": 21,
+    "protected_files_sha256": {
+      "audits/astrid-attack.json": "94719fe8c6af4de4325e8fe40a4470e702bc2d9df33949013b147ac95f3852db",
+      "audits/astrid-attack.txt": "95420ba53cb8f749ca5273a0f800ac32204a75ac796350c93e41d2a8686ff3ea",
+      "audits/astrid-block.json": "5abab9a1857793808e891489357df4de0e42b7f1bcd583de8c0241cd9f803d0a",
+      "audits/astrid-block.txt": "c890226e21d9eab5b46615f1701a4967b7f33ed07c8dee480068a92c68ff1ae7",
+      "audits/astrid-dial.json": "91186d2880c0ffaf84d3a40673fcb22673fd85855182d9cc12b1333ff2cd9877",
+      "audits/astrid-dial.txt": "bbcd28d886a9c0e2c8d06bb1bffba3e7cab9a02867d7f510bc85976cc2788d83",
+      "audits/astrid-down.json": "400010c97f8067468b0981802b74ea87dac5d4a6b91ccae4f87056f1bd8e576a",
+      "audits/astrid-down.txt": "febc9015f2eb9ff8137207e560a86c9866b1333a9893c972a44853ce8116c89e",
+      "audits/astrid-hit.json": "cf78e66eff77ba1532f1c1637462f3ed8cfe7c7317284ad8b782d20dbf835036",
+      "audits/astrid-hit.txt": "27f4227d98d47cc31eba3619ab413b18547945779d918729fa5bce265fe04d4e",
+      "audits/astrid-read.json": "ca4c6087e8f19fb8515a0af7ac19efc29a16988bb0523e50f108a85b9e29dcbe",
+      "audits/astrid-read.txt": "d6ca443872840a01c1358896ec9968756e756048f088780eda179a0ebec8a40b",
+      "audits/kael-attack.json": "863f13d56cfb635aefaeda33a3a384075f8b986e8e72a286b4dab4fbe4c9312a",
+      "audits/kael-attack.txt": "6eb3a3cbb891e9a50b224e08fc8503d88658c2089ec4fd955c7bac8bc6d0eee6",
+      "audits/kael-block.json": "d2af50c36318588e182c459cdcd49f7cfbf89239da391772ee7314331bc9fa2c",
+      "audits/kael-block.txt": "da2bb84a79f87678031e41271606472aedaf264bae3b74db7cb385bffdc4cb39",
+      "audits/kael-circle.json": "57f75f09616d06b1ec3ee25a58d8c1601141be767e216c15206b5f4c450546b3",
+      "audits/kael-circle.txt": "d5cfa58eae08252fc92a448645ea6ad84bff755e3d0d210eb02d42317d0739e9",
+      "audits/kael-down.json": "7f65cdcfb24269de55a335c6f1d01e73ed1cba4a3b106bdce03974b667a04226",
+      "audits/kael-down.txt": "6094743802103dc3c2f54466d403151180bd5ef219ecb8678703cac1e50b2ea0",
+      "audits/kael-gather.json": "3ca87803b45eb21eeada430656067a3950ab8ae0464a45f041bca6435bc4c413",
+      "audits/kael-gather.txt": "853735e0412814db475426e61a46813d4a772fc04e66ec8b7447831622151382",
+      "audits/kael-hit.json": "839c3441024e74598c8be279ba5d7883a75c6c3882b429452e43f486b4f95464",
+      "audits/kael-hit.txt": "ac441f1db9b5ce30d7b0748b78790df0796aee6bb383efcd0e94ad93a5c48ad7",
+      "audits/kael-release.json": "beee4e952e0df2a44500b4a868d1060301bcfed246ff24e32c8cfee9038aa972",
+      "audits/kael-release.txt": "e54edf3edaad976dae2152e8a7b88097f0f45772d3fba3d5e3b360f23caca5a0",
+      "audits/kael-stored.json": "9a7891bc431200fba89b022ed76f28e3c69dcc00e15be3a90da22a67c36d5f38",
+      "audits/kael-stored.txt": "d4fe995524faf844b5bd5fe22954de2c2cda33f3af46386268de23f347c4a566",
+      "audits/wynne-attack.json": "472cd6d5504f96a47a1801fdd004460ea6d48946602d26696fada4bbf0aa883a",
+      "audits/wynne-attack.txt": "8901152fad0203ddad490489c3dbba411adb389744b5b0cc0dcb80e9282901e0",
+      "audits/wynne-block.json": "da0626f766c53359b279c0e568737df01b58110b89e0fb017f0eeebdde88ebf9",
+      "audits/wynne-block.txt": "715f2d597bc8e62e3a570cac500d3444b19f449f654ec4ab5e2e3388f1238dbd",
+      "audits/wynne-down.json": "ea87a6c556c2cd803fc81ae2e2e4744b6b7e680eadf952d4c186ea7da08be993",
+      "audits/wynne-down.txt": "0900939432a51b665055a5f73548783505f409a96af279c9b2854c23aaaddb07",
+      "audits/wynne-hit.json": "ab8d49c7c3c34e7389b9d3ccd1d487973fd2ed1bde78778de007a30449ddc972",
+      "audits/wynne-hit.txt": "a760e967a13cac75d7af21576a2d3c7b5e5cd677d2540c5d2ae77051f34c1411",
+      "audits/wynne-knot.json": "c37eb8324f3762835395edca1fe174b8f535136e54839613e6aee61353741663",
+      "audits/wynne-knot.txt": "c4acd42c5a627814cfa1ac155b1b82d5ee4bb312c8fdd98c5265ddac497e66f2",
+      "audits/wynne-toll.json": "c45efa4edabb24cc5f667244bc7f4e3f293ddd304d42592fbd6536d3610d9aa2",
+      "audits/wynne-toll.txt": "de282276fda8a7ba2b8d0d37b66b8f2f9edd5a4bec3744f76e8b396ef3f3272a",
+      "audits/wynne-weave.json": "767032de55d43d96355046933b576bca72ae31dc5f0053548b5d3a261352deee",
+      "audits/wynne-weave.txt": "ed2ebcdeb7541f16a4763355aa78793e79d72077ead9c688c6e5a84c26cd9a9b",
+      "cells/astrid-attack/000.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-attack/001.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-attack/002.png": "08b4c21e7c666b22f77aa596dfcc397942925bfdef3131b940f9790234aa9624",
+      "cells/astrid-attack/003.png": "6f05fe179d1f0f3875a8cf1741736c5b6aa279f750000c39198f98940b07f50e",
+      "cells/astrid-attack/004.png": "510dd2c5c185b7ce1b66c130f94ae4714dbf4c41ae40407e9cef34885465c614",
+      "cells/astrid-attack/005.png": "3aeb7d511174a6b633d469a4bf873ab89d3346d6327b425f069db93696c02511",
+      "cells/astrid-attack/006.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-block/000.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-block/001.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-block/002.png": "6df2201fbbe16ce3320668968652c9320aa3ce8ad4d1a3486255bad4ba1d635f",
+      "cells/astrid-block/003.png": "6d08784b2b5e11b0e42b1ea591a1152f728824c738d73c42cd482ee6f79e6573",
+      "cells/astrid-block/004.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-dial/000.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-dial/001.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-dial/002.png": "fc6421f976acfe2f420cf264ad81e938ec87eaa130ee9115e4520de3273857dd",
+      "cells/astrid-dial/003.png": "765d374fea4e02ccf630d8ec7c217766909530bdbf7b546aa991dba777558d94",
+      "cells/astrid-dial/004.png": "237779aa63996af5168d22c664c3377487f2932208f24299d7ae234cac08d325",
+      "cells/astrid-dial/005.png": "30e2819314787f73982f8b807f895194e10f9194736fb7f0337f27de1121f02a",
+      "cells/astrid-dial/006.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-down/000.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-down/001.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-down/002.png": "ff0462a5cb66e90728a58668caf7826d4914145bb23001eb2182c721fa87ee26",
+      "cells/astrid-down/003.png": "ee64564e4bdcaf0954acf2cf50bf6b5e43b2028e395c3d639aa3a555cf27db0f",
+      "cells/astrid-down/004.png": "7d99538cb349a81ae615075c5e59eba7217a183569e96e5c7dc46e9319ec93f5",
+      "cells/astrid-hit/000.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-hit/001.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-hit/002.png": "84e8a66f0f376d27b5f7716eaa36cd45f1d640a0c718badcd81b460f56f4c3cc",
+      "cells/astrid-hit/003.png": "a751aac1bf25d4c72f38734ab4bb69b6fe9a67380a3332be531dcb9c5f1e273e",
+      "cells/astrid-hit/004.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-read/000.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-read/001.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/astrid-read/002.png": "c10dc29d4ddd80b64c3b763458840e96bcb948005c10bcdbce37f160da6686db",
+      "cells/astrid-read/003.png": "107e9c276e13d2cd013d6d601320aacfa06d24183545861607abbc096bff6802",
+      "cells/astrid-read/004.png": "d3301118c31a323e083090f93d324af99c622524716d7d134e162e73d4c56d70",
+      "cells/astrid-read/005.png": "ba5ac5fab52864748bac591bcea907a85e37312dc83115934bd71db3c2f6aae3",
+      "cells/astrid-read/006.png": "ef2d06c4b6ff87e5c1fe220549554d115abe96691f27af0d33888f6d40882935",
+      "cells/kael-attack/000.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-attack/001.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-attack/002.png": "f491994c58735fe8f842fa40915353d62dc7229fdfb030a2637c330891db2aa6",
+      "cells/kael-attack/003.png": "62a6c84479d3a22a06a82867dd9292ff5c07b123d6e5dbd9a3581cdc1b600b28",
+      "cells/kael-attack/004.png": "b84cc77e918d2a432423dc90af8b925e5f56cc566681baa8e6a914a768b99747",
+      "cells/kael-attack/005.png": "be20cad49920802843b2c75df3814a8d39b76f3d5871900231500888cf98c72a",
+      "cells/kael-attack/006.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-block/000.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-block/001.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-block/002.png": "b7725c497c3461853fe02828793b17f0eb8edeec836970b6a6868352fbc0c8c9",
+      "cells/kael-block/003.png": "bbc548b6cd5ccf1bfef90ae214e17ab91954c5c04ab77bcff80c42fee191ebdc",
+      "cells/kael-block/004.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-circle/000.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-circle/001.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-circle/002.png": "4f866dd4b3bcfde720af55e7f9243a07cec9acd901b8dbb6d14e15d0aa63b00a",
+      "cells/kael-circle/003.png": "f7e316772864ef06bd461fdac1db59cf90916ca185cf31ee1a34b8b96a32884f",
+      "cells/kael-circle/004.png": "4f870c88c34725d814bbd6a56f8a0b49d67472804821e09de32b258b3bb38979",
+      "cells/kael-circle/005.png": "6abbe4a3ca4725f4dbdba767d672a44208af3006a8be072e4ec366da9b44ed2b",
+      "cells/kael-circle/006.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-down/000.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-down/001.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-down/002.png": "48d32c6001682c8050704764e60f694b171dca004f12ff55552b8fc2982e7b15",
+      "cells/kael-down/003.png": "e677b67c6058be738689ad53e55ab87cce18a386e4c87429201dbf9ebf5ce8cc",
+      "cells/kael-down/004.png": "56bf93929c8403adea3a75d73ae3e410be662431b243ab2d3707c9981bb6ac63",
+      "cells/kael-gather/000.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-gather/001.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-gather/002.png": "1602521cc23419501b34c1547bf98032f8848a336b4401137e531c06ab7b7915",
+      "cells/kael-gather/003.png": "e8127124c73f5afe4bf8343b48f4290f2190352c5351ed169bfecae8b48119c0",
+      "cells/kael-gather/004.png": "0a323eb731ea3ed0028be137ee46b7dbad4162db04cbf7e33715dc0d72c3ccf7",
+      "cells/kael-gather/005.png": "10bbee74ed5787010227caf4863a53218e854ceb575acb29754533e882adfefc",
+      "cells/kael-gather/006.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-hit/000.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-hit/001.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-hit/002.png": "65f767251b9004c9c2a27554b495db843358b8edaf921f057b76aa67f453c296",
+      "cells/kael-hit/003.png": "79b7ab03d2e94ae1b297de9b1d575ef946bf5f96a2de1ec52bcb95cc5aac2b40",
+      "cells/kael-hit/004.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-release/000.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-release/001.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-release/002.png": "dcb97070f0e1931f4c0f1b89b43c785be7d2a04482ade0f35c4049734667ecbd",
+      "cells/kael-release/003.png": "761f1a25d521e5aa1ad28f650e138a601e3cef9840f7015d78c23a379ea821bb",
+      "cells/kael-release/004.png": "e26e543ee6530679838201b1cf06715f464c0a4ce4172de157113f88a5dda3e3",
+      "cells/kael-release/005.png": "3c658ddbdbdf7af826994b68d47247e1184e90265557585c1fafe33d5a7943fa",
+      "cells/kael-release/006.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-stored/000.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-stored/001.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/kael-stored/002.png": "2f36db433eeba9c5740c8c02670a1c180678c219e9812211118c73da7eb31b76",
+      "cells/kael-stored/003.png": "4314953da9f0666a60fc2caf219411ec4d0bf5be2cad2b20d060ec709f64ef54",
+      "cells/kael-stored/004.png": "4ec17cd97b2330adf70db27015f7849eb23dc589e7d5f247259afe5c7ca89500",
+      "cells/kael-stored/005.png": "43322f11001fc7be559f240423ef326ee6fa7407471bf1f4e05852b4625cbe62",
+      "cells/kael-stored/006.png": "a7ed034bd5ec79458fb1f96ac080b6dbe7d085eb7b8e6927f7e479896f6abb5d",
+      "cells/wynne-attack/000.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-attack/001.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-attack/002.png": "61616cc8a84d2c51f44251fde0f7953e4e8cbf3473445da1a815cd9f2fa93f92",
+      "cells/wynne-attack/003.png": "acc274e41a2862678c644aa04a07c0ebb2c3d1144e7ed5b8d09a1dc6c12825da",
+      "cells/wynne-attack/004.png": "697d266f1e3fdebdebd16a13a03fea34a04d6a176bebe994e939b26ed73e2111",
+      "cells/wynne-attack/005.png": "44c503d7afdfcf4a395661074f8b2626292047b38e9b318166c53ea363cd2713",
+      "cells/wynne-attack/006.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-block/000.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-block/001.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-block/002.png": "e6e6b96b3ef6694ce797946cc759a97a0baed4a57f5889784c9e2ca2196898e4",
+      "cells/wynne-block/003.png": "284cef01d0c735369804e99f272649ceca50a13d5a112290e158fbc4aaef1648",
+      "cells/wynne-block/004.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-down/000.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-down/001.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-down/002.png": "6dc6be0342e01592cdefd3b781ece8502bbf4d0455dd979d51688dfa20e0f178",
+      "cells/wynne-down/003.png": "cda845f6bba2106a4afad408798a0b137fd633388e29f67f104885a640d4e944",
+      "cells/wynne-down/004.png": "75a231ef177578585d9b163348f3a5df73ad420bbe20002a5f0d58a3a1c5920e",
+      "cells/wynne-hit/000.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-hit/001.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-hit/002.png": "7a2c0e067f4f7b06cb72ee2e2c3ed955226a927258bf2fdbbef9dfaada5bae82",
+      "cells/wynne-hit/003.png": "3367fb6ab25b4d424031752b62f8a8402e680b976d455927e530ed5b80edcf08",
+      "cells/wynne-hit/004.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-knot/000.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-knot/001.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-knot/002.png": "3ceda34ad5d8e4da17871fb1625152d380bc5d9ff2186f9499097d8f72e4918c",
+      "cells/wynne-knot/003.png": "27aa7e14acc6b00ca4765ca1fd8b6f952e6016c2e313954adebe7374570c932b",
+      "cells/wynne-knot/004.png": "3977f9f4a4d1b7b3043c3e9f693a0de192a41a630126c7196943f7b92fb03898",
+      "cells/wynne-knot/005.png": "a9292f636f48b004166ba912d9569ac0a2543a65b30a6199d9bfab89aa8c87c6",
+      "cells/wynne-knot/006.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-toll/000.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-toll/001.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-toll/002.png": "03085282a4ac57e96ad52b2bc7974112f2bad564b51a62a969fb5a394a2400e9",
+      "cells/wynne-toll/003.png": "b427c12b4f989543126d957950dc439e93ca50a0a1fd0a926d97a4de62822dc8",
+      "cells/wynne-toll/004.png": "3cd19c51024bbaf37518f5c4d3371033aaa613492a4539937d4ac4cd78eb55f0",
+      "cells/wynne-toll/005.png": "22294eee2eef842efd3822ed0160a075c6a4b68fe677a617630d769f1e8a88c4",
+      "cells/wynne-toll/006.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-weave/000.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-weave/001.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "cells/wynne-weave/002.png": "0aaa2e5d051699a92fbff1eebde29510e4ada661179581a58fb7f78296663f9b",
+      "cells/wynne-weave/003.png": "e92b79517ba5ee346d83d7d6f44aa1acb7622371a759b32bf85d8827a3eff276",
+      "cells/wynne-weave/004.png": "c59b3737c0b86355980de3a1afc1e34bc1d49d56b561cab21086975bc79ca7fb",
+      "cells/wynne-weave/005.png": "3c33bc316c087f9b991c256649c3b53e7e517e269c11a782e2cdf076a0aee73c",
+      "cells/wynne-weave/006.png": "b1e80facbb9f4922f67f811761d566c1607b7f5bf193ca81c595465a7622b72f",
+      "kael-preview-390.png": "5d0f07f4807ff59c007eb5c8ac78d1be3d1a532bf8926535ed4ab732a52a9d73",
+      "raw/astrid-attack.png": "104d8239932e41ba9d02c7c4bc81a87cabe5ffc42921a4f5a0c2696d96ca7a7f",
+      "raw/astrid-block.png": "aaa33d2315f7c00e998d9a20b00f8626c314ab9b248af5ceedf473a4da458ea7",
+      "raw/astrid-dial.png": "e16b147df422e7eaf9168b8129ae0fccbe6567e9c613d934be77fe1da4094f92",
+      "raw/astrid-down.png": "d3c3a7a2142cde92f7278354d584fd4791b9d323f45aa1fc657cb8bb6f8b18b5",
+      "raw/astrid-hit.png": "f8a8dcce83352b8f46a7bee5a00e79fb4b821c574518aa83807d8bc940324021",
+      "raw/astrid-read.png": "59a45d4b9861a7a5fba15ba4b3ee6f2b54610d84c8d3defe7a153780d1efc2d2",
+      "raw/kael-attack.png": "a1216765261573c2c1a1097003f98baf42d34e239c0112f8d3925ae09ee55ff4",
+      "raw/kael-block.png": "9a70ff18b97ba4e701259842cfbb00b6b95d93892a55af3f87b2a9584783869c",
+      "raw/kael-circle.png": "f56613d9ac2f1ae45bd0a41357ab644f3e5d668b65a98e528dabae45f7ec4a84",
+      "raw/kael-down.png": "3a86765c72363239534dab4920f119266c0d411063b36dbf2cfe96994904a09f",
+      "raw/kael-gather.png": "5db1044dd4c5852675efeb72352f984ed52fa6f82d928b88487f13773755ebca",
+      "raw/kael-hit.png": "7fc6796471b5093de4e233746d71dc1b622b5c202272f89119eba3216796cec5",
+      "raw/kael-release.png": "95cea36c1f7ee2724b95247cd42f653355ed39e9a04b12496ffa7d4e500aafb8",
+      "raw/kael-stored.png": "059d6b180b77b90166e88efaa303a3f75c9b156b9768ed13414d8726fdc2fa8f",
+      "raw/rejected/astrid-deflect-duplicate-prop.png": "a564e4982b08d76f5d1b29863a89dab2790374e8b7694e74d8883accd58b1fbd",
+      "raw/rejected/kael-hit-background-02.png": "557f0184c996184d68af74eb9a02f20ce1c453d0eb8cbbf42bdaf8341a7f7af9",
+      "raw/rejected/kael-hit-background.png": "ca9f7ade4d5b0a6febca47d4bc948fbc498d3c11b75b030cda12e2b334d6c11f",
+      "raw/wynne-attack.png": "ee9413e620feaae1a283d7d83fe474eff6519d9d4e8d50e710e5f3da4f989369",
+      "raw/wynne-block.png": "ba952bdaf2440253ad40d3fe426189f634230ee071f8a3aaaa666a592dcd9d4c",
+      "raw/wynne-down.png": "caa99b12432b7db2abe460ee1db6adde9a0fbf319e96f74f00b007f030e9e35d",
+      "raw/wynne-hit.png": "72eeee7665a7b38f24c480691d99e72c0e5bbeeab65d7a00bcd2c6c9c01b10a1",
+      "raw/wynne-knot.png": "c958ade6a26238ae420e57c4c8a0ac3050686d649bf5f837dd3d652fcd14a7cb",
+      "raw/wynne-toll.png": "f0bdeeeb646da3c8bae0e243379ddf61e85f60c9f2bd246bd68bcdb9f8d8b20d",
+      "raw/wynne-weave.png": "19d2fe19d8f3954a54081451c1988d5dbefc71d7043b2909bcc4c2d0dbc66e35",
+      "seeds/astrid.png": "a2d2ac7833818ff62cc877ecd0e90e87f24d8f56365f57e6c32d9321b36f1b29",
+      "seeds/kael.png": "5d9f344d4d44cad32c169e74780c2ff10bed401fd9f9dd43ea27f4c2171dde1c",
+      "seeds/wynne.png": "b2888ab61fcb39fc5e4fc508c0a6695efae1c74224c5460d32f724a24fa091e6",
+      "seeds.json": "44287a6c81ba96bd4e19c1a749a9ed98bbe9336bf8af5cca9331e93f9f2383ed",
+      "spaced/astrid-attack.png": "27fcdda6485fd8cc1acb3d884b0c66c6f70d0ba6b04780a358431d1577b0a403",
+      "spaced/astrid-block.png": "824b606a78a95037ba0829cd0afac298a6fa6552aea1db51498000efa38bc45a",
+      "spaced/astrid-dial.png": "9c2a4a58855a37fd5cead444fb829637296eb55cade3409fe1cf7f6a9dc07918",
+      "spaced/astrid-down.png": "1e5b5df876e16fbfbe5209f2a4383ce40f10e40b35738ab9b1163c3abd0501b0",
+      "spaced/astrid-hit.png": "161e54781e7dbd4e0bcc7a8dae0ef97bfd01869e0c07354a8aaf8d27d2e45589",
+      "spaced/astrid-read.png": "5d8064701591dc0c5fc4cb0b2ba55f5a2b54f250226f6350af58e6cf873e8a4d",
+      "spaced/kael-attack.png": "e5afbe94df723d74ee20efb0d376e4cd81cd749ccc3115953e1a67f46821c9c1",
+      "spaced/kael-block.png": "242c59323c9364dcb7e935d660f70c04be944cdcdc0c53206a3a1bb696b61f1f",
+      "spaced/kael-circle.png": "0574588d4d3ebccb927d6630f879dd8808933730ff06532e4e84f438b203c123",
+      "spaced/kael-down.png": "c8a24b7ab828714af7778d4dc482b5184fc7deee4417eb070b19395642ee855e",
+      "spaced/kael-gather.png": "91a6981c3412d4a04976cd6d9490971876e20015671290c5887c8dd391aaedaa",
+      "spaced/kael-hit.png": "5d2193b1f8eb9c90042a73c0395f22b3a78b3113db17773b82dbb2324770a721",
+      "spaced/kael-release.png": "d2f2045265d28876339e0f9962f8c297dafb877fde81e12590247fa15da3e865",
+      "spaced/kael-stored.png": "1e8d38804bbd8b256266d7e90d9326fb3135b077ab3e1b30d2c4157624257e18",
+      "spaced/wynne-attack.png": "382f545010a09f01a5bbc6a4b617ffe4167ac81a5169f0cc3d52a12756fee826",
+      "spaced/wynne-block.png": "b754dbf90a3962de1f6e99ed67bcd5cffba0cae358a3fbe53869787f7f49836e",
+      "spaced/wynne-down.png": "d9dcdbe37e61045bb7c105cc05fbcacebe0688caa43b771dd512f166db1afa00",
+      "spaced/wynne-hit.png": "3a54bba6274e8c9f8f0ced8a108fb371bc95afe23d1012b36fb639e45ae1b35f",
+      "spaced/wynne-knot.png": "9d1a7b5a7f14a8a7a45607b1f2c353666e530b1f0dbef9944b984e45951f5f54",
+      "spaced/wynne-toll.png": "341cec9c38c70a5113451108cb945f40d92b1c96c5ffdb49e5601427a2fc3c3f",
+      "spaced/wynne-weave.png": "9724a4907967b4ac559bab091c1f5bad959cd9517bacb158750a11e616429af3",
+      "verify_remote.py": "63737be795905e792146e9ff1180ee9a67c7ebf28305e6fdac2a7a5bef87bc1e",
+      "wynne-preview-390.png": "740271d52e9ec8d1c3409421f5d2e2e0c518cc04fd325fc95c68f82336bc9d65"
+    },
+    "motion_review": "รอเจ้าของ/Claude ตรวจ motion",
+    "claude_review_21_strips": "accepted under owner art delegation 2026-11-04; not owner approval"
+  }
+}
