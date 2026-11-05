@@ -29,8 +29,8 @@ test('team sheet: one camp level, catalog count, search, filters and a non-destr
   await seed(page, currentSave({ profile: company(), run: null }));
   await page.locator('#lobby-tab-team').click();
   await expect(page.locator('#lobby-camp-level')).toContainText('เลเวลค่าย Lv5'); await expect(page.locator('#lobby-camp-level')).toContainText('EXP 12/245');
-  // Fifteen in the catalog (P03 Kael), Odran and Isolde parked (OD-14): this company can hold thirteen.
-  await expect(page.locator('#lobby-sheet-title')).toContainText('ถือครอง 11/13');
+  // Sixteen in the catalog (P03 Kael, Wynne), Odran and Isolde parked (OD-14): this company can hold fourteen.
+  await expect(page.locator('#lobby-sheet-title')).toContainText('ถือครอง 11/14');
   for (const id of ids) await expect(page.locator(`#lobby-member-${id}`)).toContainText('Lv5');
   const bench = page.locator('.team-grid.bench .team-card[data-hero]');
   await expect(bench).toHaveCount(3);

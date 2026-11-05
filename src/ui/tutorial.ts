@@ -1,4 +1,4 @@
-import { cooldownTargets, hasCap, previewCommand, CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { hexTickPower, cooldownTargets, hasCap, previewCommand, CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, Command } from '../core/battle/types';
 import { actorName } from './th';
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string; cooldownAction?:ActionId; cooldownTargetId?:string }
@@ -45,6 +45,25 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    if(!best||score>best.score)best={command,score,damage};
   }
   if(best){const {command,damage}=best;const after=command.action;return{...command,step:state.commands.length+1,title:['releasefist','circlefist','perfectfist'].includes(after)?'จ่ายปราณปิดท่า':'สะสมปราณ',copy:`${actorName(heroId,data)} → ${data.skills[command.action].name} → ${actorName(command.targetId,data)} · คาดการณ์ดาเมจ ${damage} · ปราณ ${chi}`};}
+  return attack();
+ }
+ // Hexer (P03): a curse deals nothing now, so the advisor values the damage still to come: each stack's tick for every
+ // round-end left on it, and a toll for the rounds it binds. Every candidate goes through the resolver preview.
+ if(role==='Hexer'){
+  const potential=(s:BattleState)=>s.enemies.filter(e=>e.hp>0).reduce((n,e)=>n
+   +(e.hexes??[]).filter(h=>h.heroId===heroId).reduce((m,h)=>m+hexTickPower(data,heroId,h.stacks)*Math.max(0,h.until-s.round+1),0)
+   +(e.toll?.heroId===heroId?e.toll.power*Math.max(0,e.toll.until-s.round+1)*.8:0),0);
+  const me=data.heroes.find(h=>h.id===heroId)!,now=potential(state);let best:{command:Command;score:number}|undefined;
+  for(const action of me.actions)for(const target of targetOptions(state,data,heroId,action).filter(t=>t.valid)){
+   const command:Command={heroId,beat:state.beat,action,targetId:target.id};
+   const turn=previewCommand(state,data,command).turns.find(t=>t.side==='hero');if(!turn)continue;
+   const damage=turn.events.filter(e=>e.type==='damage'&&e.sourceId===heroId&&state.enemies.some(x=>x.id===e.targetId)).reduce((n,e)=>n+(e.amount??0),0);
+   const kills=turn.events.filter(e=>e.type==='down'&&state.enemies.some(x=>x.id===e.targetId)).length;
+   // Stacks keep paying when refreshed, so laid curse value is weighted a little above one-off damage.
+   const score=damage+kills*8+(potential(turn.state)-now)*1.3;
+   if(!best||score>best.score)best={command,score};
+  }
+  if(best){const {command}=best;return{...command,step:state.commands.length+1,title:command.action==='attack'?'โจมตีพื้นฐาน':'ผูกสาปให้กินเลือดทุกจบรอบ',copy:`${actorName(heroId,data)} → ${data.skills[command.action].name} → ${actorName(command.targetId,data)}`};}
   return attack();
  }
  if(role==='Saint'||role==='Dancer'){

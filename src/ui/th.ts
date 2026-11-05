@@ -4,7 +4,7 @@ import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } fr
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
-import { CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
+import { HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 import type { IconName } from './icons';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -20,6 +20,7 @@ export const heroText: Record<string, { name: string; role: string; help: string
   metta: { name: 'คอริน', role: 'นักบุญรบ', help: 'โจมตีแล้วแบ่งเลือดให้เพื่อนที่บาดเจ็บ', icon: '✚' },
   thiran: { name: 'โอดราน', role: 'นักบุญรบ', help: 'รุกแนวหน้าและเปลี่ยนดาเมจเป็นเลือดให้เพื่อน', icon: '✚' },
   kael: { name: 'เคล', role: 'นักมวย', help: 'สะสมปราณจากหมัดที่ทำเลือดลด แล้วจ่ายปิดท่า', icon: '✊' },
+  wynne: { name: 'วินน์', role: 'นักสาป', help: 'ผูกสาปซ้อนชั้นที่ทำดาเมจทุกจบรอบ และภาษีที่ศัตรูจ่ายก่อนโจมตี', icon: '✂' },
   lalin: { name: 'เซรีส', role: 'นักเต้นรำ', help: 'คืนคูลดาวน์ให้เพื่อน ไม่เพิ่มเทิร์นหรือเปลี่ยนคิว', icon: '♪' },
   wila: { name: 'อิโซลด์', role: 'นักเต้นรำ', help: 'กระจายจังหวะให้สกิลของทีมพร้อมเร็วขึ้น', icon: '♪' },
   healer: { name: 'เซเรน', role: 'นักบวช', help: 'รักษาคนเดียวหรือฟื้นฟูทั้งทีม', icon: '✚' },
@@ -140,19 +141,25 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     circlefist: `จ่ายปราณ 2 กายภาพ ${skill.power} ใส่ศัตรูแถวหน้าทุกตัว ถ้าหน้าว่างโดนหลังแทน`,
     storedfist: `กายภาพ ${skill.power} เป้าเดียว ไม่สะสมและไม่จ่ายปราณที่มี`,
     perfectfist: `จ่ายปราณ 3 กายภาพ ${skill.power} เป้าเดียว`,
+    threadhex: `ผูกสาปเพิ่ม 1 ชั้น (สูงสุด ${HEX_MAX}) ทุกจบรอบเสียเลือดพลังงาน ${hexTickPower(data, heroId, 1)} ต่อชั้น อยู่ถึงจบรอบถัดไป ลงซ้ำต่ออายุ`,
+    lifetoll: `ศัตรูที่ติดสาปถูกผูกภาษี 2 รอบ ก่อนโจมตีแต่ละครั้งเสียเลือดพลังงาน ${skill.power} (ถูกขัด/ชาร์จ/เปลี่ยนช่วงไม่จ่าย)`,
+    wovenhex: 'ศัตรูแถวหน้าทุกตัวติดสาปเพิ่ม 1 ชั้น ถ้าหน้าว่างโดนหลังแทน',
+    longthread: 'ผูกสาปเพิ่ม 1 ชั้น และอยู่ถึงจบรอบที่สามนับรอบนี้',
+    tollring: `ผูกภาษี ${skill.power} ให้ศัตรูที่ติดสาปทุกตัว 2 รอบ`,
+    knothex: `ผูกสาปเพิ่ม 2 ชั้นในเป้าเดียว (สูงสุด ${HEX_MAX})`,
   };
   const passive = hero.passive && passiveText[hero.passive].actions.includes(action) ? ` · ★5 ${passiveText[hero.passive].name}: ${passiveText[hero.passive].help(data)}` : '';
   // Skill level (tomes): the level, and the barrier a levelled skill without numbers gives its user.
   const level = skillLevel(data, heroId, action); const shield = levelBarrier(data, heroId, action);
   const lv = level > 1 ? ` · Lv${level}${shield ? ` ผู้ใช้ได้โล่ ${shield}` : ''}` : '';
-  const classNote = hero.role === 'Saint' && ['attack', 'saintstrike', 'saintarc', 'vowstrike', 'sharewound', 'lastlight'].includes(action) ? ` · แบ่งพื้นฐาน ${saintRatioOf(data, heroId, action)}% ของเลือดที่ศัตรูเสียจริงให้เพื่อนบาดเจ็บ ไม่นับดาเมจเกินเลือด ไม่รวมตัวเอง ไม่ชุบชีวิต` : hero.role === 'Martial' ? ` · ปราณสูงสุด ${CHI_MAX} (สะสมเมื่อคำสั่งที่ไม่จ่ายปราณทำเลือดศัตรูลด ครั้งละ 1 ไม่เพิ่ม SPD หรือเทิร์น)` : hero.role === 'Dancer' && ['cadence', 'duet', 'rounddance', 'deepbeat', 'echofoot', 'closingstep'].includes(action) ? ' · ไม่ลดสกิลคืนคูลดาวน์ของนักเต้นรำ ป้องกันการวนซ้ำ สกิลพร้อมอยู่แล้วไม่รับผล' : '';
+  const classNote = hero.role === 'Saint' && ['attack', 'saintstrike', 'saintarc', 'vowstrike', 'sharewound', 'lastlight'].includes(action) ? ` · แบ่งพื้นฐาน ${saintRatioOf(data, heroId, action)}% ของเลือดที่ศัตรูเสียจริงให้เพื่อนบาดเจ็บ ไม่นับดาเมจเกินเลือด ไม่รวมตัวเอง ไม่ชุบชีวิต` : hero.role === 'Hexer' && action !== 'attack' ? ' · สาปของแต่ละคนแยกชั้นกัน ไม่ระเบิด ไม่ติดตรา/กร่อน ต้องมีผู้สาปยืนอยู่จึงทำงาน' : hero.role === 'Martial' ? ` · ปราณสูงสุด ${CHI_MAX} (สะสมเมื่อคำสั่งที่ไม่จ่ายปราณทำเลือดศัตรูลด ครั้งละ 1 ไม่เพิ่ม SPD หรือเทิร์น)` : hero.role === 'Dancer' && ['cadence', 'duet', 'rounddance', 'deepbeat', 'echofoot', 'closingstep'].includes(action) ? ' · ไม่ลดสกิลคืนคูลดาวน์ของนักเต้นรำ ป้องกันการวนซ้ำ สกิลพร้อมอยู่แล้วไม่รับผล' : '';
   return text[action] + classNote + passive + talentNotes(action, heroId, data) + lv + cooldown;
 }
 // ---- Talent tree (2D-1b) ----
 // Branch names per class (A, B), matching docs/EXPEDITION_DESIGN.md "Talent tree".
 // Big skill trees (A6): three branch names per class, matching docs/design/SKILL_TREE_KNIGHT_TH.md.
 // Release A trees: docs/design/SKILL_TREES_ALL_TH.md.
-export const bigBranches: Record<string, readonly string[]> = { kael: ['รวมปราณ', 'ปล่อยปราณ', 'เก็บแรง', 'ประจำตัว'], metta: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], thiran: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], lalin: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], wila: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], guardian: ['ปราการ', 'ลงทัณฑ์', 'ธงนำ'],
+export const bigBranches: Record<string, readonly string[]> = { wynne: ['ด้ายสาป', 'ภาษี', 'ปมยาว', 'ประจำตัว'], kael: ['รวมปราณ', 'ปล่อยปราณ', 'เก็บแรง', 'ประจำตัว'], metta: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], thiran: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], lalin: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], wila: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], guardian: ['ปราการ', 'ลงทัณฑ์', 'ธงนำ'],
   tracer: ['ตราล่า', 'ปลิดชีพ', 'ระบำดาบ'], weaver: ['เวทโจมตี', 'เวทป้องกัน', 'ผนึกเวท'], healer: ['เยียวยา', 'คุ้มครอง', 'พรศรัทธา'],
   garran: ['ทวนรับ', 'ทวนรุก', 'ยึดแนว'], mira: ['แม่นธนู', 'ฝนธนู', 'พรานป่า'],
   toma: ['กรดกัดกร่อน', 'ยาเสริม', 'ควันและปฏิกิริยา'], sefa: ['ลอบสังหาร', 'เงา', 'ก่อกวน'], brann: ['ปราการศิลา', 'ค้อนรูน', 'ศิลาผู้พิทักษ์'], lio: ['เพลงรบ', 'เพลงปลอบ', 'ท่วงทำนอง'] };
@@ -209,6 +216,18 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   martialStoredFull: { actions: ['storedfist'], help: n => `หมัดเก็บแรงเพิ่ม ${n} เมื่อมีปราณเต็ม 3` },
   martialStoredBuild: { actions: ['storedfist'], help: n => `หมัดเก็บแรงที่ทำเลือดลดสะสมปราณ 1 แต่พลังลด ${n}` },
   martialPerfectHeavy: { actions: ['perfectfist'], help: n => `หมัดสมบูรณ์เพิ่ม ${n} แต่คูลดาวน์เพิ่ม 1 รอบ` },
+  hexThreadPer: { actions: ['threadhex'], help: n => `สาปเสียเลือดเพิ่ม ${n} ต่อชั้น` },
+  hexThreadFresh: { actions: ['threadhex'], help: n => `ด้ายสาปใส่เป้าที่ยังไม่มีสาปของเธอได้ ${n} ชั้น` },
+  hexWovenQuick: { actions: ['wovenhex'], help: n => `สาปถักทอคูลดาวน์ลด ${n} เมื่อแถวหน้ายืนอย่างน้อยสองตัว` },
+  hexTollLong: { actions: ['lifetoll'], help: n => `ภาษีชีวิตอยู่นานขึ้น ${n} รอบ` },
+  hexRingFull: { actions: ['tollring'], help: n => `วงภาษีแรงขึ้น ${n} กับเป้าที่สาปเต็ม` },
+  hexLongLife: { actions: ['longthread'], help: n => `ด้ายยาวอยู่นานขึ้น ${n} รอบ` },
+  hexLongDouble: { actions: ['longthread'], help: n => `ด้ายยาวผูก ${n} ชั้น แต่ไม่ยืดอายุ` },
+  hexKnotLife: { actions: ['knothex'], help: n => `ปมสาปต่ออายุสาปที่มีอยู่อีก ${n} รอบ (ไม่เกินสามจบรอบข้างหน้า)` },
+  wynne1: { actions: ['threadhex'], help: n => `ด้ายสาปครั้งแรกต่อเป้าอยู่นานขึ้น ${n} รอบ` },
+  wynne2: { actions: ['longthread'], help: n => `ด้ายยาวคูลดาวน์ลด ${n} รอบ` },
+  wynne3: { actions: ['threadhex', 'knothex'], help: n => `สาปที่เต็ม ${HEX_MAX} ชั้นเสียเลือดเพิ่ม ${n} ต่อชั้น` },
+  wynne4: { actions: ['threadhex', 'knothex', 'longthread', 'wovenhex'], help: () => 'ต่อสาปที่เต็มแล้ว อยู่ได้อีกอย่างน้อยสองจบรอบข้างหน้า' },
   kael1: { actions: ['gatherfist'], help: n => `หมัดรวมปราณเพิ่ม ${n} เมื่อเริ่มจากปราณ 0` },
   kael2: { actions: ['flowfist'], help: n => `หมัดสายน้ำที่เริ่มจากปราณ 0 คูลดาวน์ลด ${n} รอบ` },
   kael3: { actions: ['releasefist'], help: n => `ปล่อยปราณที่จ่ายครบสามแต้มเพิ่ม ${n}` },
@@ -343,6 +362,8 @@ export function reasonThai(reason: string): string {
     'Already evading.': 'มีก้าวเงาคุ้มกันอยู่แล้ว',
     'Already braced.': 'ตั้งทวนอยู่แล้ว',
     'Not enough chi.': 'ปราณไม่พอ',
+    'No curse on this enemy.': 'ศัตรูตัวนี้ยังไม่ติดสาป',
+    'No curse on any enemy.': 'ยังไม่มีศัตรูติดสาป',
     'Already playing this song.': 'กำลังบรรเลงเพลงนี้อยู่แล้ว',
     'Already hasted.': 'ได้ยาเร่งสำหรับรอบหน้าแล้ว',
     'No song is playing.': 'ต้องบรรเลงเพลงอยู่ก่อน',
@@ -355,6 +376,8 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
   const target = actorName(event.targetId, data); const source = actorName(event.sourceId, data);
   switch (event.type) {
     case 'cooldown': return `${target} · ${event.action ? data.skills[event.action].name : 'สกิล'} พร้อมเร็วขึ้น ${event.amount ?? 0} รอบ (ไม่เพิ่มเทิร์น)`;
+    case 'hex': return `${target} ติดสาป${source} ${event.amount}/${HEX_MAX} ชั้น`;
+    case 'toll': return event.text === 'Toll paid.' ? `${target} จ่ายภาษีชีวิตก่อนลงมือ เสียเลือด ${event.amount}` : `${target} ถูกผูกภาษีชีวิต ${event.amount} ทุกครั้งก่อนโจมตี`;
     case 'chi': { const now = after.heroes.find(h => h.id === event.targetId)?.chi ?? 0; return (event.amount ?? 0) > 0 ? `${target} สะสมปราณ +${event.amount} (มี ${now}/${CHI_MAX})` : `${target} ปล่อยปราณ ${-(event.amount ?? 0)} แต้ม (เหลือ ${now})`; }
     case 'damage': return `${target} เสียเลือด ${event.amount ?? 0}${event.absorbed ? ` (โล่รับไว้ ${event.absorbed})` : ''}`;
     case 'guard': return `${source}${event.sourceId === event.targetId ? 'ตั้งรับ' : `รับการโจมตีแทน${target}`} ลดความเสียหาย ${Math.round(guardReductionOf(data, event.sourceId) * 100)}%`;

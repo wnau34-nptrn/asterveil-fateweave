@@ -22,9 +22,9 @@ const snapshot = (body: Body) => [body.x, body.y, body.rotation, body.scaleX, bo
 describe('unit pose routing', () => {
   it('routes every current class basic attack through its weapon/gesture', () => {
     const data = { ...veilSiege, heroes: [...heroes, ...mercenaries] };
-    const expected = ['slash','thrust','cast','cast','shoot','throw','slash','smash','song','thrust','punch','punch','dance','dance','punch'];
+    const expected = ['slash','thrust','cast','cast','shoot','throw','slash','smash','song','thrust','punch','punch','dance','dance','punch','cast'];
     expect(data.heroes.map(h => unitPose({ ...turn, action: 'attack', actorId: h.id }, data))).toEqual(expected);
-    expect(Object.keys(actionPoses)).toHaveLength(79);
+    expect(Object.keys(actionPoses)).toHaveLength(85);
     expect(unitPose({ ...turn, action: 'ward' }, data)).toBe('cast');
     expect(unitPose(events({ type: 'cancel', text: '' }), data)).toBeUndefined();
   });

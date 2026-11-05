@@ -40,8 +40,8 @@ function markdown(c: PresentationCoverage): string {
 describe('W8 presentation coverage', () => {
   const c = presentationCoverage();
   it('counts every identity in the game and every ActionId', () => {
-    expect(c.counts.identities).toBe(37);
-    expect(c.counts.heroes).toBe(15);
+    expect(c.counts.identities).toBe(38);
+    expect(c.counts.heroes).toBe(16);
     expect(c.counts.actionIds).toBe(Object.keys(veilSiege.skills).length);
     expect(unusedRegistry(c)).toEqual([]);
     // Only the OD-14 parked identities and the P03 stills awaiting their battle animation lack an atlas.
@@ -63,8 +63,8 @@ describe('W8 presentation coverage', () => {
     // Code-drawn on purpose: the basic arrow/flask (AV03) and Shadow Knife's thrown energy blade.
     for (const r of c.rows.filter(r => r.vfx.kind === 'code')) expect(r.move === 'attack' || r.move === 'Shadow Knife', `${r.identity} ${r.move}`).toBe(true);
     // Shared on purpose: hero basic cuts by class palette and physical foe moves on the blade family.
-    // P03: Kael's fists share the Saint strike paintings until a Martial family exists.
-    for (const r of c.rows.filter(r => r.vfx.kind === 'shared')) expect(r.vfx.module, `${r.identity} ${r.move}`).toBe(STILL_ONLY[r.identity] && r.move !== 'attack' ? 'saint-dance-fx' : 'blade-fx');
+    // P03: Wynne's curses share the Mark painting; Kael's fists share the Saint strike paintings until a Martial family exists.
+    for (const r of c.rows.filter(r => r.vfx.kind === 'shared')) expect(r.vfx.module, `${r.identity} ${r.move}`).toBe(STILL_ONLY[r.identity] && r.move !== 'attack' ? (r.identity === 'wynne' ? 'arcane-seal-fx' : 'saint-dance-fx') : 'blade-fx');
   });
   it('the committed table matches the code', () => {
     const json = JSON.stringify(c, null, 1) + '\n', md = markdown(c);

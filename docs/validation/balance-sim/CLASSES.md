@@ -57,3 +57,6 @@ Dealt, Healed and Taken are that class's own totals.
 | kael | none | 10/10 | 70% | 1129 | 0 | 220 | 5.0 |
 | kael | main | 10/10 | 85% | 1517 | 38 | 94 | 4.5 |
 | kael | off | 10/10 | 80% | 1464 | 109 | 133 | 4.8 |
+| wynne | none | 10/10 | 58% | 526 | 0 | 96 | 5.9 |
+| wynne | main | 10/10 | 75% | 626 | 0 | 57 | 5.7 |
+| wynne | off | 10/10 | 69% | 592 | 0 | 57 | 5.8 |

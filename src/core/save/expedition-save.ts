@@ -107,7 +107,7 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 const SAVE_VERSION = 47;
 const BATCH_ONE_IDS = ['metta', 'thiran', 'lalin', 'wila'];
 // Characters added after the v43 legacy board snapshot (P03); never part of a legacy pool or the v46 featured lineup.
-const P03_IDS = ['kael'];
+const P03_IDS = ['kael', 'wynne'];
 // The classes whose big tree arrived in v37 (release A) and in v39 (the recruits).
 const RELEASE_A_TREES = ['tracer', 'weaver', 'healer', 'garran', 'mira'];
 const RECRUIT_TREES = ['toma', 'sefa', 'brann', 'lio'];
@@ -119,7 +119,8 @@ const actions: readonly ActionId[] = ['attack', 'guard', 'bash', 'mark', 'execut
   'smoke', 'fury', 'catalyst', 'knives', 'decoy', 'disarm', 'stonearmor', 'guardstone', 'tremor', 'dread', 'note', 'solo',
   'saintstrike', 'communion', 'saintarc', 'vowstrike', 'sharewound', 'lastlight',
   'cadence', 'duet', 'rounddance', 'deepbeat', 'echofoot', 'closingstep',
-  'gatherfist', 'releasefist', 'flowfist', 'circlefist', 'storedfist', 'perfectfist'];
+  'gatherfist', 'releasefist', 'flowfist', 'circlefist', 'storedfist', 'perfectfist',
+  'threadhex', 'lifetoll', 'wovenhex', 'longthread', 'tollring', 'knothex'];
 
 // One key for profile and run, so settling an expedition is a single atomic write.
 export function saveGame(storage: StoragePort | undefined, game: Game): boolean {

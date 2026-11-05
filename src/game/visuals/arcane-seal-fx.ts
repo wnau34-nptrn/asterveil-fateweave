@@ -9,21 +9,28 @@ export const sealAtlasUrls=():[string,string]=>[`${import.meta.env.BASE_URL}asse
 export const sealSkills=['mark','sigil','storm','dispel'] as const;
 export type SealSkill=typeof sealSkills[number];
 export const isSealSkill=(action:string|undefined):action is SealSkill=>sealSkills.some(s=>s===action);
+// P03 Hexer (Wynne): until a Hexer family is painted, her curses and tolls borrow the Mark painting, tinted crimson, on the
+// foes that really received a `hex`/`toll` event. Claude's art decision under the owner's 2026-11-04 delegation.
+export const hexSkills=['threadhex','lifetoll','wovenhex','longthread','tollring','knothex'] as const;
+export const HEX_TINT=0xff7a8a;
+const isHexSkill=(action:string|undefined)=>hexSkills.some(s=>s===action);
+export const isSealFx=(action:string|undefined):boolean=>isSealSkill(action)||isHexSkill(action);
 export type SealSpot='hand'|'centre'|'feet';
 export interface SealCue {skill:SealSkill;sourceId:string;targetId:string;event:BattleEvent;outcome:'hit'|'blocked'|'dodged';
   // Sigil/Dispel settle only when the bind or removal really happened.
-  applied:boolean;index:number}
+  applied:boolean;index:number;tint?:number}
 export interface SealPoint {x:number;y:number;size:number;side:1|-1}
 export type SealLookup=(id:string,spot:SealSpot)=>SealPoint|undefined;
 export interface SealContexts {front:FxContext;back:FxContext}
 
 export function sealEvents(turn:TurnStage):BattleEvent[]{
-  if(turn.side!=='hero'||!isSealSkill(turn.action)||turn.events.some(e=>e.type==='cancel'))return [];
+  if(turn.side!=='hero'||!isSealFx(turn.action)||turn.events.some(e=>e.type==='cancel'))return [];
+  if(isHexSkill(turn.action))return turn.events.filter(e=>!!e.targetId&&e.sourceId===turn.actorId&&(e.type==='hex'||e.type==='toll'&&e.text!=='Toll paid.'));
   return turn.events.filter(e=>!!e.targetId&&e.sourceId===turn.actorId&&(turn.action==='mark'?e.type==='mark':e.type==='damage'||e.type==='dodge'));
 }
 export function sealCues(turn:TurnStage):SealCue[]{
-  const skill=turn.action as SealSkill;
-  return sealEvents(turn).map((event,index)=>({skill,sourceId:event.sourceId!,targetId:event.targetId!,event,index,
+  const hex=isHexSkill(turn.action),skill=(hex?'mark':turn.action) as SealSkill;
+  return sealEvents(turn).map((event,index)=>({skill,...(hex?{tint:HEX_TINT}:{}),sourceId:event.sourceId!,targetId:event.targetId!,event,index,
     outcome:event.type==='dodge'?'dodged' as const:event.type==='damage'&&!event.amount?'blocked' as const:'hit' as const,
     applied:skill==='mark'||skill==='storm'||turn.events.some(e=>e.targetId===event.targetId&&e.sourceId===turn.actorId&&e.type===(skill==='sigil'?'sigil':'dispel'))}));
 }
@@ -51,10 +58,11 @@ function paint(ctxs:SealContexts,cue:SealCue,lookup:SealLookup,phase:Phase,o:{dx
     img.setPosition(p.x+dx,p.y+dy+(cue.outcome==='dodged'&&phase!=='prepare'?p.size*.2:0));}};
   if(!ctx.reduced)img.setData('sealFollow',follow);follow();ctx.add(img);
   if(cue.outcome==='blocked'&&phase!=='prepare')img.setTint(0x8addf5);
+  else if(cue.tint)img.setTint(cue.tint);
   return img;
 }
 export function sealPrepare(ctxs:SealContexts,turn:TurnStage,lookup:SealLookup,contactMs:number):void{
-  const ctx=ctxs.front;if(ctx.reduced||!isSealSkill(turn.action))return;
+  const ctx=ctxs.front;if(ctx.reduced||!isSealFx(turn.action))return;
   const cue=sealCues(turn)[0];if(!cue)return;
   const img=paint(ctxs,cue,lookup,'prepare');if(!img)return;img.setAlpha(.2);
   ctx.scene.tweens.add({targets:img,alpha:ctx.quiet?.56:.86,duration:Math.max(1,contactMs),onComplete:()=>img.destroy()});
