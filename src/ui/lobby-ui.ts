@@ -20,12 +20,12 @@ import type { TomeLine, TomeSize } from '../core/world/types';
 import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, npcBustsUrl, npcStationsUrl, unitsUrl, type LobbyPose, type NpcId } from '../game/visuals/assets';
-import { icon } from './icons';
+import { type IconName, icon } from './icons';
 import region from '../content/world/region_ch1.json';
 import { worldArtUrl } from '../game/visuals/world-art';
 import { commanderBadge } from './commander-ui';
 import { gearArt, potionArt } from './equip-art';
-import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText } from './th';
+import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
 
 import { heroArt, portrait, starRow } from './portraits';
 
@@ -65,6 +65,8 @@ export class LobbyUI {
   private readonly huntUI=new HuntPanel();
   // Map sheet: the node whose card shows (default: the furthest open map).
   private mapPicked: string | undefined;
+  // UX audit #9: the bank shows icons only; a tap names each resource and says what it is for.
+  private bankInfo = false;
   private readonly storageUI:StorageManager;
   private readonly forgeUI:ForgeWorkbench;
   private readonly enhancementLayout=new ForgeEnhancementLayout();
@@ -178,6 +180,7 @@ export class LobbyUI {
         // Chapters: with more than one open map, departing first asks where to go.
         // Chapters: departing goes to the furthest open map; with more than one open, the map button picks another.
         case 'depart': this.host.depart(this.openMaps().at(-1)?.id); break;
+        case 'bank': this.bankInfo = !this.bankInfo; this.draw(); this.focus('#lobby-bank'); break;
         case 'maps': this.sheet = 'maps'; this.mapPicked = undefined; this.draw(); this.regionScroll(); this.focus(`#map-node-${this.openMaps().at(-1)!.id}`); break;
         case 'pick-map': this.mapPicked = b.dataset.map; this.draw(); this.focus(`#map-node-${b.dataset.map}`); break;
         case 'go': this.sheet = null; this.host.depart(b.dataset.map, b.dataset.hard === 'true'); break;
@@ -213,10 +216,11 @@ export class LobbyUI {
     const text = npcText[id]; const i = NPC_IDS.indexOf(id); const index = this.line?.sheet === sheet ? this.line.index : 0;
     return `<div class="npc-line" style="--busts:url(${npcBustsUrl()});--sx:${(i % 3) * 50}%;--sy:${Math.floor(i / 3) * 100}%"><span class="npc-bust" aria-hidden="true"></span><p><b>${text.name} · ${text.role}</b>${text.lines[index % text.lines.length]}</p></div>${this.questCard(id)}`;
   }
-  // The broker's line and side quest fold away so the hire cards come first; a quest ready to claim keeps it open.
-  private npcFold(p: Profile): string {
-    const q = this.map.sideQuests.find(x => x.npc === 'broker'), ready = !!q && this.open('quests') && !p.quests[q.id]?.claimed && !claimReason(p, this.map, q.id);
-    return `<details id="npc-fold" class="npc-fold"${this.npcOpen || ready ? ' open' : ''}><summary>${icon('talk')}<span>พีโน่ · ข่าวและเควสต์${ready ? ' · มีรางวัลให้รับ' : ''}</span></summary>${this.npcLine('hire')}</details>`;
+  // The NPC's line and side quest fold away so the cards come first (hire cards, team list, brews...); a quest ready to claim keeps it open.
+  private npcFold(p: Profile, sheet: Sheet | null = 'hire'): string {
+    const id = npcOfSheet(sheet), line = this.npcLine(sheet); if (!id || !line) return '';
+    const q = this.map.sideQuests.find(x => x.npc === id), ready = !!q && this.open('quests') && !p.quests[q.id]?.claimed && !claimReason(p, this.map, q.id);
+    return `<details id="npc-fold" class="npc-fold"${this.npcOpen || ready ? ' open' : ''}><summary>${icon('talk')}<span>${npcText[id].name} · ข่าวและเควสต์${ready ? ' · มีรางวัลให้รับ' : ''}</span></summary>${line}</details>`;
   }
   // 3D: this NPC's side quest, with progress gathered from finished expeditions and a one-time claim.
   private questCard(npc: NpcId): string {
@@ -342,14 +346,14 @@ export class LobbyUI {
       <button class="lobby-pan-button" data-lobby="pan" data-dir="-1" aria-label="เลื่อนดูค่ายทางซ้าย" tabindex="-1">${icon('left')}</button><button class="lobby-pan-button" data-lobby="pan" data-dir="1" aria-label="เลื่อนดูค่ายทางขวา" tabindex="-1">${icon('right')}</button>
       <header class="lobby-top"><button data-lobby="home" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>${this.musicButton()}
         ${p.commander ? `<span class="lobby-camp-button" aria-hidden="true">${commanderBadge(p.commander)}</span>` : ''}<div class="lobby-who"><p class="eyebrow">${p.commander ? 'ผู้บัญชาการ' : 'ค่ายทหารรับจ้าง'} · ${this.view!.saved ? 'บันทึกอัตโนมัติ' : 'บันทึกบนเครื่องนี้ไม่ได้'}</p><h1 id="lobby-commander">${p.commander ? this.escape(p.commander.name) : 'เตรียมทีมก่อนออกเดินทาง'}</h1></div>
-        <div class="lobby-bank" aria-label="คลัง เหรียญทอง ${p.bank.gold} แร่ดาว ${p.bank.ore} ตราสัญญา ${p.bank.seal} ฝุ่นดาว ${p.bank.dust}"><span class="glass-capsule" data-bank="gold">${icon('gold')}<b>${p.bank.gold}</b></span><span class="glass-capsule" data-bank="ore">${icon('ore')}<b>${p.bank.ore}</b></span><span class="glass-capsule">${icon('seal')}<b>${p.bank.seal}</b></span><span class="glass-capsule">${icon('dust')}<b>${p.bank.dust}</b></span></div></header>
+        <button id="lobby-bank" class="lobby-bank" data-lobby="bank" aria-expanded="${this.bankInfo}" aria-controls="lobby-bank-legend" aria-label="คลัง เหรียญทอง ${p.bank.gold} แร่ดาว ${p.bank.ore} ตราสัญญา ${p.bank.seal} ฝุ่นดาว ${p.bank.dust} · แตะเพื่อดูชื่อและการใช้งาน"><span class="glass-capsule" data-bank="gold">${icon('gold')}<b>${p.bank.gold}</b></span><span class="glass-capsule" data-bank="ore">${icon('ore')}<b>${p.bank.ore}</b></span><span class="glass-capsule">${icon('seal')}<b>${p.bank.seal}</b></span><span class="glass-capsule">${icon('dust')}<b>${p.bank.dust}</b></span></button></header>${this.bankInfo ? this.bankLegend(p) : ''}
       ${p.overflow?.length?`<button id="lobby-overflow" data-lobby="overflow" class="secondary storage-notice">ของรอจัด ${p.overflow.length} ชิ้น · เปิดถาดก่อนออกเดินทาง</button>`:""}
       ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.gold ? ` เหรียญทอง ${last.gold}` : ''}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
         <div class="lobby-sheet-head">${this.sheet==='forge'&&forgeBody&&this.forgeUI.taskNavigation?`<button id="forge-open-tasks" data-forge="tasks" class="round-glass" aria-label="เลือกงานโรงตีเหล็ก">${icon('left')}</button>`:''}${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="${this.forgeStorageReturn?'กลับไปสร้างอาวุธ':'กลับไปจัดทีม'}">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title" tabindex="-1">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcLine(this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.board(p)}</div></section>` : ''}
+        <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p, 'hire'):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcFold(p, this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
         ${this.guideCard(p)}
         <section class="lobby-trip" aria-label="การเดินทาง"><div class="trip-head"><div><small>แผนที่ที่เลือก</small><b>${this.openMaps().at(-1)?.name ?? this.map.name}</b><span class="trip-team" data-ready="${ready}">${ready ? 'ทีมพร้อม' : 'ทีมยังไม่พร้อม'} · ลงสนาม ${p.party.deployed.length} · สำรอง ${p.party.reserve.length}</span></div>${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary" aria-label="เลือกแผนที่">${icon('map')}<span>เลือกแผนที่</span></button>` : ''}</div>
@@ -383,6 +387,15 @@ export class LobbyUI {
       return `<span class="lobby-station" style="--nx:${npcSpots[id].x}%;--npx:${npcSpots[id].px}%;--flip:${flip};--stations:url(${npcStationsUrl()});--sx:${(i % 3) * 50}%;--sy:${Math.floor(i / 3) * 100}%"><i></i></span>`
         + `<span id="npc-art-${id}" class="lobby-npc" data-npc="${id}" style="--nx:${npcSpots[id].x}%;--npx:${npcSpots[id].px}%;--flip:${flip};--atlas:url(${npcAtlasUrl(id)});--nd:${i * -0.37}s"><b><i></i></b></span>`; }).join('');
     return `<div class="lobby-scene" aria-hidden="true" style="--lobby-bg:url(${lobbyArt('lobby_bg')});--lobby-fg:url(${lobbyArt('lobby_fg')});--lobby-pit:url(${lobbyArt('lobby_firepit')})"><div class="lobby-fire"><b></b><span class="lobby-flame"><i></i></span></div>${staff}${units}<div class="lobby-fg"></div><div class="lobby-embers">${'<i></i>'.repeat(7)}</div></div>`;
+  }
+  private bankLegend(p: Profile): string {
+    const rows: readonly [IconName, string, number, string][] = [
+      ['gold', resourceText.gold.name, p.bank.gold, 'จ้างทหารรับจ้างและซื้อของที่ตลาด'],
+      ['ore', resourceText.ore.name, p.bank.ore, 'อัปดาว ปรุงยา และตีอุปกรณ์'],
+      ['seal', resourceText.seal.name, p.bank.seal, 'ใช้แทนตัวซ้ำได้ครึ่งหนึ่งเมื่ออัปดาว'],
+      ['dust', 'ฝุ่นดาว', p.bank.dust, 'ต้นทุนงานโรงตีเหล็ก ได้จากแปรรูปแร่'],
+    ];
+    return `<section id="lobby-bank-legend" class="bank-legend" aria-label="ทรัพยากรของค่าย"><ul>${rows.map(([ic, name, n, use]) => `<li>${icon(ic)}<span><b>${name} ${n}</b><small>${use}</small></span></li>`).join('')}</ul><button class="secondary bank-close" data-lobby="bank">ปิด</button></section>`;
   }
   private lanes(p: Profile): Record<string, Lane> { return formation(p.party, recommendedLane(this.lookup, this.map)); }
   private card(p: Profile, id: string | undefined, group: Group, slot: number): string {
@@ -467,7 +480,7 @@ export class LobbyUI {
     const pending=this.storageUI.source==='overflow';
     const rows=entries.map(e=>{const i=e.item,v=salvageValue(this.map,i),confirm=this.confirmSalvage===i.uid;return `<li data-rarity="${i.rarity}" data-item-key="${e.key}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}${i.locked?' · 🔒':''}</b><small>${itemLines(this.map.equipment,i).join(' · ')}</small><small>${itemOwner(i)}</small></div><span class="gear-actions">${this.storageUI.row(i)}${pending?`<small>เก็บเข้าคลังก่อนสวมใส่/พัฒนา</small>`:`<button id="equip-${i.uid}" data-lobby="inventory-pick" data-key="${e.key}" class="secondary">ดู/เปรียบเทียบ</button><button id="forge-open-${i.uid}" data-lobby="forge-open" data-uid="${i.uid}" class="secondary">พัฒนา</button><button id="lock-${i.uid}" data-lobby="lock" data-uid="${i.uid}" class="secondary" aria-pressed="${!!i.locked}">${i.locked?'ปลดล็อก':'ล็อก'}</button><button id="salvage-${i.uid}" data-lobby="salvage" data-uid="${i.uid}" class="${confirm?'danger-button':'secondary'}"${i.locked?' disabled':''} aria-label="แยกชิ้น ได้แร่ ${v.ore} ผง ${v.dust}">${confirm?'ยืนยันแยก':'แยก'}</button>`}${confirm?`<small>รวมคืน แร่ ${v.ore} · ฝุ่น ${v.dust} · ชิ้นนี้จะหายไป</small>`:''}</span></li>`;}).join('');
     const commons=entries.filter(e=>e.item.rarity===0&&!e.item.locked&&!e.item.plus&&!e.item.investment&&!e.item.levelInvestment).length;
-    return manage.head+'<details class="storage-characters"><summary>เปิดหน้าตัวละคร</summary>'+this.memberPicker(p,id,'gear',()=> '')+'</details>'+picker+'<h3>คลัง '+entries.length+'/'+(pending?(p.overflow?.length??0):p.items.length)+' ชิ้น</h3>'+gearFilterControls(this.inventoryFilters,'camp-inventory-')+(rows?'<ul class="gear-bag inventory-gear">'+rows+'</ul>':'<p class="camp-note">ไม่พบอุปกรณ์ตามตัวกรอง</p>')+(!pending&&commons?'<button id="salvage-common" data-storage="common" class="secondary">ตรวจแยกธรรมดาที่แสดง ('+commons+' ชิ้น)</button>':'');
+    return manage.head+manage.actions+'<details class="storage-characters"><summary>เปิดหน้าตัวละคร</summary>'+this.memberPicker(p,id,'gear',()=> '')+'</details>'+picker+'<h3>คลัง '+entries.length+'/'+(pending?(p.overflow?.length??0):p.items.length)+' ชิ้น</h3>'+gearFilterControls(this.inventoryFilters,'camp-inventory-')+(rows?'<ul class="gear-bag inventory-gear">'+rows+'</ul>':'<p class="camp-note">ไม่พบอุปกรณ์ตามตัวกรอง</p>')+(!pending&&commons?'<button id="salvage-common" data-storage="common" class="secondary">ตรวจแยกธรรมดาที่แสดง ('+commons+' ชิ้น)</button>':'');
   }
   // Map potions (2D-5): brew for ore and veil dust; each departure packs up to `carry` of each.
   private brewing(p: Profile): string {
