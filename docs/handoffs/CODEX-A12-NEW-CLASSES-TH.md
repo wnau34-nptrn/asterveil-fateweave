@@ -70,3 +70,53 @@ PROPOSED RUNTIME MAPPING (for strips.json; final mapping is Claude's when the cl
 
 Push with normal git, fetch back, verify every SHA-256 and decode every image with Pillow (PR #90 was once truncated near 768 KB). Owner artwork selection and later in-game motion approval are required; offline checks and CI are not approval. No merge, no runtime integration, no rules/content/save/balance changes (the three classes are not in the game code yet; Claude packs the atlases and captures real 390px clips when they are added).
 ```
+
+## ผลตรวจรอบแรก (PR #157) และ R2 ท่าเบนชะตาของแอสทริด — Claude 2026-11-05
+
+ตรวจที่ `0404c7ff` (Claude ตัดสินตามที่เจ้าของมอบหมาย 2026-11-04 ไม่ใช่การอนุมัติของเจ้าของ; เจ้าของสั่ง “ทำตามที่คุณแนะนำ” 2026-11-05):
+
+- SHA-256 ตรง 240/240, PNG decode 189/189, diff อยู่ใต้ `incoming/ART-UNIT-ANIMATION-A12-001/` เท่านั้น; seed ตรง (เคล NEW-003, วินน์/แอสทริด NEW-002)
+- **รับ 21 strips**: เคล 8 ท่า, วินน์ 7 ท่า, แอสทริด 6 ท่า (attack, dial, read, hit, block, down) — ตัวตน/สเกล/เส้นพื้นคงที่ ท่าอ่านออกที่ขนาดสนาม
+- **ไม่รับ `astrid-deflect`**: เฟรม 2–5 ฝ่ามือยกแค่หน้าอก ไม่เห็น “ผลักออกแล้วปัดลงด้านข้าง” ที่ 111px แทบเหมือนท่ายืน ใช้กับ deflectfate และ crossing จึงต้องอ่านออก → ขอ R2 ท่าเดียวในกล่องด้านล่าง
+- การนำเข้าเกมเป็นงานแยก: 21 strips เข้าได้ทันที ส่วนแอสทริด deflect/crossing ใช้ภาพนิ่ง + procedural จนกว่า R2 ผ่าน
+
+```text
+CODEX HANDOFF — ART-UNIT-ANIMATION-A12-001 R2: Astrid "deflect" strip only (art only)
+Asterveil · Fateweave · repository wnau34-nptrn/asterveil-fateweave
+
+Read AGENTS.md, CLAUDE.md, docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md, docs/handoffs/CODEX-A12-NEW-CLASSES-TH.md and incoming/ART-UNIT-ANIMATION-A12-001/NOTES.md first.
+Work on the SAME branch art/art-unit-animation-a12-001 (PR #157). Change files only under incoming/ART-UNIT-ANIMATION-A12-001/. Do not touch src/, tests/, public/, workflows or any other package. Do not merge.
+
+REVIEW RESULT (Claude 2026-11-05, deciding under the owner's art delegation of 2026-11-04 — not owner approval):
+21 of 22 strips are accepted as they are. Do not regenerate them.
+Only astrid-deflect fails. In frames 2–5 the open palm only rises in front of the chest and stays close to the body. The "push out, then sweep sideways and down" never reads. At the in-game size (unit about 111 px tall, palm about 10 px) the strip looks almost identical to the ready pose. This move is used for her two main skills (deflectfate, crossing), so it must read at a glance.
+
+SEED (unchanged): seeds/astrid.png (copy of incoming/ART-CHAR-CLASS-NEW-002/unit/astrid.png, sha256 a2d2ac7833818ff62cc877ecd0e90e87f24d8f56365f57e6c32d9321b36f1b29).
+512×512 RGBA, facing right, sole on y496, pivot (0.5, 497/512).
+Keep exactly the same face, hair, star hairpin, mantle, costume and astrolabe, and the same head-to-body size as the seed in every frame.
+Keep the same strip conventions as R1: one shared scale equal to the seed, cell 640×512 with logical 512×512 at x64, cell anchor (320,497), frame 1 and frame 6 locked to the seed.
+
+MOVE — deflect (6 frames, timing weights 1, 1.2, .75, 1, .8, 1). She bends a foe's incoming strike aside onto another foe. Calm and graceful, but a LARGE, clear arm path:
+1. ready (seed pose).
+2. Raise the free (left) open palm to shoulder height, elbow out. The palm faces the screen right (toward the foes), not the viewer.
+3. Push the palm straight forward-right with the arm almost fully extended and well clear of the body. The hand reaches about as far right as the astrolabe or farther. Slight forward lean, weight on the front foot.
+4. Contact: with the arm still extended, sweep the palm in a wide arc sideways and DOWN to about hip height in front-right, wrist turned as if guiding a line away. Torso turns a little with the sweep.
+5. Hold the turned palm low at the end of the arc, gaze following it to the side, then begin to relax.
+6. ready (seed pose).
+
+Readability target: shrink each frame to 111 px tall. Frames 3 and 4 must each show a clearly different arm silhouette from frame 1 and from each other (extended arm, then a low swept arm).
+
+Keep the astrolabe at or near her right hand the whole time, as ONE astrolabe (R1 was rejected once for a duplicated ring — exactly one astrolabe per frame).
+Feet stay on the ground line; no jump.
+Body only: no glow, trail, line, ring effect, particle, shadow or text. The bent strike is VFX that Claude draws.
+
+GENERATION: one whole continuous strip in a single edit request (never frame by frame), seed attached as the model, transparent background, wide clear gutters. If a result fails (wrong identity, second astrolabe, cropped hand, wrong background), regenerate the whole strip. Do not paint over it.
+
+FILES:
+- Move the R1 strip to raw/rejected/astrid-deflect-r1-small-motion.png (keep the bytes; record the reason in NOTES.md). Save the new raw output as raw/astrid-deflect.png, unedited.
+- Rebuild only the astrid-deflect outputs (spaced/astrid-deflect.png, cells/astrid-deflect/000–006.png) with build_handoff.py, using the same scale rule as R1.
+- Run scripts/unit-anatomy-audit.py --cells for astrid-deflect. Gate: median ≤ 1.15, every measured frame ≤ 1.20. Save the JSON and stdout under audits/.
+- Update strips.json (astrid deflect: status candidate, recommendation "R2 replaces R1 for small motion"), validation.json, prompts.json (real prompt, artifact UUID if exposed, generation id null if not exposed — never invent one), astrid-preview-390.png and SHA256SUMS. All other strips' files and hashes must stay byte-identical.
+- Add a review image review/astrid-deflect-r1-vs-r2.png: R1 and R2 frames side by side at 111 px unit height on the battle background, plus one row at 512 px.
+- Run verify_remote.py after pushing. Write NOTES.md in Thai: what changed, why, audit numbers, and "รอเจ้าของ/Claude ตรวจ motion".
+```
