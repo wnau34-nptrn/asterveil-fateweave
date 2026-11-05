@@ -18,10 +18,11 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- None. Next: P09 (OD-13 order), in a new session.
+- None. Next: A12 battle animation intake for Kael/Wynne/Astrid (PR #157: 21 strips accepted by Claude 2026-11-05, Astrid deflect R2 requested), then P09 (OD-13 order).
 
 ## Next (owner order)
 
+- **A12 intake** (owner 2026-11-05 “ทำตามที่คุณแนะนำ”): pack the 21 accepted strips from `incoming/ART-UNIT-ANIMATION-A12-001/` (PR #157, do not merge the art branch wholesale) into unit atlases, wire `unit-frames.ts`, drop them from `STILL_ONLY`; Astrid deflect/crossing stay still + procedural until R2 (brief at the end of `docs/handoffs/CODEX-A12-NEW-CLASSES-TH.md`). Capture 390px clips.
 - **P09** (OD-13): accounts/cloud save/telemetry+feedback/admin (needs the owner's Cloudflare D1 Edit token before database work) → P04 → server rewards → chat + World Boss → external test. UXD-08 combined UX check remains open.
 
 ## Open items
@@ -40,6 +41,6 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ```text
 ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype
 อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง
-งาน: P09 ตาม OD-13 — บัญชีผู้เล่น/คลาวด์เซฟ/telemetry+feedback/admin บน Cloudflare (ดู docs/DEVELOPMENT_PLAN_TH.md P09)
-ตรวจ secret ที่มีจริงก่อน ถ้ายังไม่มีสิทธิ์ D1 Edit ให้ทำส่วนที่ไม่ต้องใช้ฐานข้อมูลก่อนและแจ้งเจ้าของ ตอบไทย
+งาน: นำเข้าอนิเมชันศึก A12 ของเคล/วินน์/แอสทริด จาก PR #157 (incoming/ART-UNIT-ANIMATION-A12-001) 21 strips ที่ Claude รับแล้ว ใช้ skill fateweave-art-intake
+ท่า astrid-deflect รอ R2 (คงภาพนิ่ง+procedural) ห้าม merge สาขาอาร์ตทั้งก้อน เก็บคลิปจริง 390px ตอบไทย เรื่องภาพตัดสินแทนเจ้าของได้ตามที่มอบหมาย 2026-11-04 แล้วต่อ P09
 ```
