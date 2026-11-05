@@ -167,7 +167,7 @@ describe('P03 Hexer tree and Wynne branch', () => {
 
 describe('P03 Wynne in the world', () => {
   it('joins the catalog and featured slot only; twenty-node tree on the shared budget', () => {
-    expect(heroCatalog(lookup, map).map(h => h.id).slice(-2)).toEqual(['kael', 'wynne']);
+    expect(heroCatalog(lookup, map).map(h => h.id).slice(-3, -1)).toEqual(['kael', 'wynne']);
     expect(ruinsMap.draft!.pool).not.toContain('wynne');
     const seen = new Set<string>();
     for (let seed = 0; seed < 80; seed++) seen.add(boardOffers(newProfile(map, seed), map, lookup)[3]!);

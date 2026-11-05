@@ -1,11 +1,12 @@
 import type { ActionId, HeroDefinition, SkillDefinition } from '../../core/battle/types';
 import type { TalentNodeDef, TalentTree } from '../../core/world/types';
 
-// P03 (OD-14: one character per class): Kael the Martial and Wynne the Hexer, from docs/design/ROSTER_30_TH.md §3–5. New members join
+// P03 (OD-14: one character per class): Kael the Martial, Wynne the Hexer and Astrid the Seer, from docs/design/ROSTER_30_TH.md §3–5. New members join
 // through the existing hiring board's featured slot, never the prologue draft or a story arrival. Numbers are drafts.
 export const rosterP03: readonly HeroDefinition[] = [
   { id: 'kael', name: 'Kael', role: 'Martial', lane: 'front', maxHp: 64, attack: 13, speed: 105, actions: ['attack', 'gatherfist', 'releasefist'], color: 0xc98a4b },
   { id: 'wynne', name: 'Wynne', role: 'Hexer', lane: 'back', maxHp: 48, attack: 9, speed: 80, actions: ['attack', 'threadhex', 'lifetoll'], color: 0xb4475a },
+  { id: 'astrid', name: 'Astrid', role: 'Seer', lane: 'back', maxHp: 48, attack: 9, speed: 90, actions: ['attack', 'deflectfate', 'turncycle'], color: 0x6f86c9 },
 ];
 
 export const rosterP03Skills = {
@@ -22,6 +23,13 @@ export const rosterP03Skills = {
   longthread: { name: 'ด้ายยาว', english: 'Long Thread', icon: '✂', power: 0, cooldown: 3 },
   tollring: { name: 'วงภาษี', english: 'Toll Ring', icon: '✂', power: 4, cooldown: 4 },
   knothex: { name: 'ปมสาป', english: 'Knot Hex', icon: '✂', power: 0, cooldown: 3 },
+  // Seer: bend or turn announced moves; the needle and the orbit are its plain energy strikes.
+  deflectfate: { name: 'เบนชะตา', english: 'Deflect Fate', icon: '✦', power: 0, cooldown: 4 },
+  turncycle: { name: 'หมุนวงดาว', english: 'Turn Cycle', icon: '✦', power: 0, cooldown: 3 },
+  starneedle: { name: 'เข็มดารา', english: 'Star Needle', icon: '✦', power: 22, cooldown: 2 },
+  crossing: { name: 'ทางแยกชะตา', english: 'Crossing', icon: '✦', power: 12, cooldown: 4 },
+  readorbit: { name: 'อ่านวงโคจร', english: 'Read Orbit', icon: '✦', power: 18, cooldown: 2 },
+  doubledial: { name: 'หมุนสองวง', english: 'Double Dial', icon: '✦', power: 0, cooldown: 5 },
 } satisfies Partial<Record<ActionId, SkillDefinition>>;
 
 type Place = Pick<TalentNodeDef, 'branch' | 'tier' | 'choice' | 'needs'>;
@@ -66,12 +74,37 @@ const hexerTree: TalentTree = [
   node('c4', 'ปมรัดนาน', { cap: 'hexKnotLife', amount: 1 }, { branch: 'c', tier: 4 }),
 ];
 
+const seerTree: TalentTree = [
+  node('a1', 'ดวงตาดาว', { stat: 'skill', percent: 4 }, { branch: 'a', tier: 1 }, 2),
+  node('a2x', 'เบนไว', { cap: 'seerDeflectQuick', amount: 1 }, { branch: 'a', tier: 2, choice: 'seer-a2' }),
+  node('a2y', 'ชะตารอได้', { cap: 'seerDeflectHold', amount: 1 }, { branch: 'a', tier: 2, choice: 'seer-a2' }),
+  node('a3', 'ทางแยกชะตา', { unlock: 'crossing' }, { branch: 'a', tier: 3 }),
+  node('a4', 'แยกแล้วแทง', { cap: 'seerCrossingHit', amount: 4 }, { branch: 'a', tier: 4 }),
+  node('b1', 'เสื้อคลุมดาว', { stat: 'hp', percent: 5 }, { branch: 'b', tier: 1 }, 2),
+  node('b2x', 'หมุนไว', { cap: 'seerTurnQuick', amount: 1 }, { branch: 'b', tier: 2, choice: 'seer-b2' }),
+  node('b2y', 'หมุนคืนแรง', { cap: 'seerTurnRefund', amount: 1 }, { branch: 'b', tier: 2, choice: 'seer-b2' }),
+  node('b3', 'หมุนสองวง', { unlock: 'doubledial' }, { branch: 'b', tier: 3 }),
+  node('b4', 'กำหนดรอบหมุน', { cap: 'seerDialChoose', amount: 1 }, { branch: 'b', tier: 4 }),
+  node('c1', 'แผนที่ดาวกันตัว', { stat: 'armour', percent: 5 }, { branch: 'c', tier: 1 }, 2),
+  node('c1s', 'เข็มดารา', { unlock: 'starneedle' }, { branch: 'c', tier: 1 }),
+  node('c2x', 'ดาวเดี่ยว', { cap: 'seerNeedleLone', amount: 4 }, { branch: 'c', tier: 2, choice: 'seer-c2', needs: 'c1s' }),
+  node('c2y', 'เข็มแทนเบน', { cap: 'seerNeedleBlocked', amount: 3 }, { branch: 'c', tier: 2, choice: 'seer-c2', needs: 'c1s' }),
+  node('c3', 'อ่านวงโคจร', { unlock: 'readorbit' }, { branch: 'c', tier: 3 }),
+  node('c4', 'อ่านท่าไม้ตาย', { cap: 'seerOrbitLocked', amount: 6 }, { branch: 'c', tier: 4 }),
+];
+
 export const rosterP03Trees: Readonly<Record<string, TalentTree>> = {
   kael: [...martialTree,
     node('p1', 'ใจว่างก่อนหมัด', { cap: 'kael1', amount: 3 }, { branch: 'p', tier: 1 }),
     node('p2', 'ไหลจากความว่าง', { cap: 'kael2', amount: 1 }, { branch: 'p', tier: 2, needs: 'p1' }),
     node('p3', 'ปล่อยสุดลมหายใจ', { cap: 'kael3', amount: 4 }, { branch: 'p', tier: 3, needs: 'p2' }),
     node('p4', 'วินัยหยุดโทสะ', { cap: 'kael4', amount: 6 }, { branch: 'p', tier: 4, needs: 'p3' }),
+  ],
+  astrid: [...seerTree,
+    node('p1', 'แผนดาวฉบับแรก', { cap: 'astrid1', amount: 1 }, { branch: 'p', tier: 1 }),
+    node('p2', 'เส้นทางที่เลือกได้', { power: 'crossing', amount: 3 }, { branch: 'p', tier: 2, needs: 'p1' }),
+    node('p3', 'อ่านพายุล่วงหน้า', { cap: 'astrid3', amount: 3 }, { branch: 'p', tier: 3, needs: 'p2' }),
+    node('p4', 'ชะตาข้ามแนว', { cap: 'astrid4', amount: 1 }, { branch: 'p', tier: 4, needs: 'p3' }),
   ],
   wynne: [...hexerTree,
     node('p1', 'ด้ายเส้นแรก', { cap: 'wynne1', amount: 1 }, { branch: 'p', tier: 1 }),

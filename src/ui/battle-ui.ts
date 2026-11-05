@@ -1,4 +1,4 @@
-import { chiOf, releasePower, cooldownTargets, hasCap, skillCooldown, actionReason, beginBattle, createBattle, currentHeroId, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
+import { deflectReason, dialReason, chiOf, releasePower, cooldownTargets, hasCap, skillCooldown, actionReason, beginBattle, createBattle, currentHeroId, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TargetOption, TurnStage } from '../core/battle/types';
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
 import { sfx } from '../platform/sfx';
@@ -132,6 +132,8 @@ export class BattleUI {
         case 'cooldown-cancel': this.root.querySelector<HTMLDialogElement>('#cooldown-choice')!.close(); break;
         case 'cooldown-action': if (value) this.finishCooldownChoice({ cooldownAction: value as ActionId }); break;
         case 'cooldown-ally': if (value) this.finishCooldownChoice({ cooldownTargetId: value }); break;
+        case 'deflect-recipient': if (value) this.finishCooldownChoice({ recipientId: value }); break;
+        case 'dial-steps': if (value) this.finishCooldownChoice({ steps: Number(value) }); break;
         case 'target': if (value) this.choose(value); break;
         case 'skip-turn': this.finishPresentation(); break;
         case 'leave': if (!this.busy && this.state.outcome !== 'active') this.session?.leave(); break;
@@ -334,6 +336,24 @@ export class BattleUI {
   }
 
   private openCooldownChoice(targetId: string): boolean {
+    // P03 Seer: a deflection needs its recipient, and a double dial with its choice node needs 1 or 2 steps; both are
+    // chosen here before the single commit (closing the dialog changes nothing).
+    const chooseRecipient = this.action === 'deflectfate', chooseSteps = this.action === 'doubledial' && hasCap(this.data, this.heroId, 'seerDialChoose');
+    if (chooseRecipient || chooseSteps) {
+      const recipients = chooseRecipient ? this.state.enemies.filter(e => e.hp > 0 && e.id !== targetId && !deflectReason(this.state, this.data, this.heroId, targetId, e.id)) : [];
+      const steps = chooseSteps ? [1, 2].filter(n => !dialReason(this.state, this.data, targetId, n)) : [];
+      if (!recipients.length && !steps.length) return false;
+      this.pendingCooldown = { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId };
+      this.root.querySelector('#cooldown-choice-title')!.textContent = chooseRecipient ? 'เลือกศัตรูที่จะรับท่า' : 'เลือกจำนวนช่องที่จะหมุน';
+      this.root.querySelector('#cooldown-choice-copy')!.textContent = `${this.data.skills[this.action].name} → ${actorName(targetId, this.data)} · เลือกเพื่อยืนยันหนึ่งคำสั่ง`;
+      this.root.querySelector('#cooldown-choice-options')!.innerHTML = chooseRecipient
+        ? recipients.map(e => `<button data-ui="deflect-recipient" data-value="${e.id}"><span><b>${actorName(e.id, this.data)}</b><small>เลือด ${e.hp}</small></span></button>`).join('')
+        : steps.map(n => `<button data-ui="dial-steps" data-value="${n}"><span><b>${n} ช่อง</b><small>ข้ามท่าปกติ ${n} ท่า</small></span></button>`).join('');
+      this.closeSkill();
+      this.root.querySelector<HTMLDialogElement>('#cooldown-choice')!.showModal();
+      this.root.querySelector<HTMLButtonElement>('#cooldown-choice-options button')?.focus({ preventScroll: true });
+      return true;
+    }
     const chooseAction = this.action === 'duet' && hasCap(this.data, this.heroId, 'lalin2');
     const chooseAlly = this.action === 'echofoot' && hasCap(this.data, this.heroId, 'dancerEchoChoose');
     if (!chooseAction && !chooseAlly) return false;
@@ -352,7 +372,7 @@ export class BattleUI {
     return true;
   }
 
-  private finishCooldownChoice(extra: Pick<Command, 'cooldownAction' | 'cooldownTargetId'>): void {
+  private finishCooldownChoice(extra: Pick<Command, 'cooldownAction' | 'cooldownTargetId' | 'recipientId' | 'steps'>): void {
     const pending = this.pendingCooldown;
     this.pendingCooldown = undefined;
     this.root.querySelector<HTMLDialogElement>('#cooldown-choice')!.close();
@@ -360,7 +380,7 @@ export class BattleUI {
     this.execute(pending.targetId, extra);
   }
 
-  private execute(targetId: string, extra: Pick<Command, 'cooldownAction' | 'cooldownTargetId'> = {}): void {
+  private execute(targetId: string, extra: Pick<Command, 'cooldownAction' | 'cooldownTargetId' | 'recipientId' | 'steps'> = {}): void {
     if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
     const command: Command = { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId, ...extra };
     this.present(resolveCommand(this.state, this.data, command, true));

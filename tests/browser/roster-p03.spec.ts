@@ -108,3 +108,33 @@ test('P03 Wynne: a curse is laid on a real foe, shown in its status and ticks at
   expect(parseGame(await saved(page), map, lookup).run!.battle).toEqual(battle);
   expect(errors).toEqual([]);
 });
+
+test('P03 Astrid: deflect asks for the recipient before one commit; closing the dialog changes nothing; reload keeps it', async ({ page }, info) => {
+  const p = profile(); p.company.push('astrid'); p.members.astrid = { stars: 1, dupes: 0 };
+  p.party = { deployed: ['astrid', 'guardian', 'weaver', 'healer'], reserve: ['kael'] };
+  const game = depart(p, map, lookup, 229);
+  game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(game.run.roster.deployed.map(id => [id, game.run.hp[id]!])), commands: [] };
+  const errors = await open(page, serialize(game));
+  if (await page.locator('#start').isVisible()) await page.locator('#start').click();
+  for (let i = 0; i < 12; i++) {
+    await expect(page.getByRole('heading', { name: /เทิร์นของคุณ/ })).toBeVisible({ timeout: 15000 });
+    if (await page.locator('#hero-astrid').getAttribute('aria-pressed') === 'true' && await page.locator('#action-deflectfate').isEnabled()
+      && await page.locator('#action-deflectfate').getAttribute('data-unavailable') === 'false') break;
+    await page.locator('#action-attack').click(); await page.locator('[data-ui=target].valid-target').first().click();
+  }
+  await page.locator('#action-deflectfate').click();
+  const attacker = page.locator('[data-ui=target].valid-target').first(); await attacker.click();
+  await expect(page.locator('#cooldown-choice')).toBeVisible();
+  await expect(page.locator('#cooldown-choice-title')).toHaveText('เลือกศัตรูที่จะรับท่า');
+  await page.screenshot({ path: info.outputPath('p03-astrid-deflect-390.png') });
+  const before = await saved(page);
+  await page.keyboard.press('Escape'); await expect(page.locator('#cooldown-choice')).toBeHidden();
+  expect(await saved(page)).toBe(before);
+  await page.locator('#action-deflectfate').click(); await page.locator('[data-ui=target].valid-target').first().click();
+  await page.locator('[data-ui=deflect-recipient]').first().click();
+  await expect.poll(async () => JSON.parse(await saved(page)).run.battle.commands.filter((c: { action: string; recipientId?: string }) => c.action === 'deflectfate' && c.recipientId).length).toBe(1);
+  const raw = await saved(page);
+  await page.reload(); await page.locator('#continue').click();
+  expect(parseGame(await saved(page), map, lookup).run!.battle).toEqual(parseGame(raw, map, lookup).run!.battle);
+  expect(errors).toEqual([]);
+});

@@ -1,7 +1,7 @@
-import { hexTickPower, cooldownTargets, hasCap, previewCommand, CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { hexTickPower, validateCommand, cooldownTargets, hasCap, previewCommand, CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, Command } from '../core/battle/types';
 import { actorName } from './th';
-export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string; cooldownAction?:ActionId; cooldownTargetId?:string }
+export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string; cooldownAction?:ActionId; cooldownTargetId?:string; recipientId?:string; steps?:number }
 // Reactive advice for the teaching battle. It reads the committed state only and
 // never suggests commanding a hero outside the current SPD turn.
 export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|undefined {
@@ -49,6 +49,25 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  }
  // Hexer (P03): a curse deals nothing now, so the advisor values the damage still to come: each stack's tick for every
  // round-end left on it, and a toll for the rounds it binds. Every candidate goes through the resolver preview.
+ // Seer (P03): judged on the whole preview up to the party's next command, enemy turns included: HP removed from foes
+ // (a bent move counts) minus HP the party loses. Every legal attacker × recipient pair and dial is tried.
+ if(role==='Seer'){
+  const me=data.heroes.find(h=>h.id===heroId)!;let best:{command:Command;score:number}|undefined;
+  const foeLoss=(r:ReturnType<typeof previewCommand>)=>state.enemies.reduce((n,e)=>n+e.hp-(r.state.enemies.find(x=>x.id===e.id)?.hp??0),0);
+  const partyLoss=(r:ReturnType<typeof previewCommand>)=>state.heroes.reduce((n,h)=>n+Math.max(0,h.hp+h.barrier-(r.state.heroes.find(x=>x.id===h.id)?.hp??0)-(r.state.heroes.find(x=>x.id===h.id)?.barrier??0)),0);
+  for(const action of me.actions)for(const target of targetOptions(state,data,heroId,action).filter(t=>t.valid)){
+   const extras:Partial<Command>[]=action==='deflectfate'?state.enemies.filter(e=>e.hp>0&&e.id!==target.id).map(e=>({recipientId:e.id})):action==='doubledial'&&hasCap(data,heroId,'seerDialChoose')?[{steps:1},{steps:2}]:[{}];
+   for(const extra of extras){
+    const command:Command={heroId,beat:state.beat,action,targetId:target.id,...extra};
+    if(validateCommand(state,data,command))continue;
+    const r=previewCommand(state,data,command);
+    const score=foeLoss(r)-partyLoss(r)*1.2+(r.state.outcome==='victory'?50:0)-(r.state.outcome==='defeat'?100:0);
+    if(!best||score>best.score)best={command,score};
+   }
+  }
+  if(best){const {command}=best;return{...command,step:state.commands.length+1,title:command.action==='deflectfate'?'เบนท่าศัตรูไปลงพวกเดียวกัน':command.action==='attack'?'โจมตีพื้นฐาน':'อ่านชะตาแล้วลงมือ',copy:`${actorName(heroId,data)} → ${data.skills[command.action].name} → ${actorName(command.targetId,data)}${command.recipientId?` → ${actorName(command.recipientId,data)}`:''}`};}
+  return attack();
+ }
  if(role==='Hexer'){
   const potential=(s:BattleState)=>s.enemies.filter(e=>e.hp>0).reduce((n,e)=>n
    +(e.hexes??[]).filter(h=>h.heroId===heroId).reduce((m,h)=>m+hexTickPower(data,heroId,h.stacks)*Math.max(0,h.until-s.round+1),0)

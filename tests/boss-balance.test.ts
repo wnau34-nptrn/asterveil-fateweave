@@ -20,7 +20,7 @@ it('boss powers remain bounded across the current catalog, single/multi enemy fi
     const row={id:hero.id,plus,entry,set:set??'none',build,won:0,fought:0,hp:0,damage:0,rounds:0};
     for(const id of ['thicket-ambush','shadow-stalker','crystal-stampede','rear-ambush','elite-tusk-chief','elite-briar-lord',map.bossEncounterId]){
       const data=withParty(withLevel(lookup(id)!,11),party);let state=beginBattle(data,{hp:Object.fromEntries(party.map(h=>[h.id,Math.ceil(h.maxHp*entry)]))}).state,commands=0;
-      while(state.outcome==='active'&&commands++<300){const l=battleLesson(state,data)!;const out=resolveCommand(state,data,{beat:state.beat,heroId:l.heroId,action:l.action,targetId:l.targetId,cooldownAction:l.cooldownAction,cooldownTargetId:l.cooldownTargetId});state=out.state;
+      while(state.outcome==='active'&&commands++<300){const l=battleLesson(state,data)!;const out=resolveCommand(state,data,{beat:state.beat,heroId:l.heroId,action:l.action,targetId:l.targetId,cooldownAction:l.cooldownAction,cooldownTargetId:l.cooldownTargetId,recipientId:l.recipientId,steps:l.steps});state=out.state;
         row.damage+=out.events.filter(e=>e.sourceId===hero.id&&(e.type==='damage'||e.type==='counter')).reduce((n,e)=>n+(e.amount??0),0);
         expect(state.heroes.every(h=>h.hp>=0&&h.hp<=data.heroes.find(d=>d.id===h.id)!.maxHp&&h.barrier>=0)).toBe(true);
       }
