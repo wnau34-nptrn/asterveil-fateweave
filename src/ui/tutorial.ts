@@ -110,7 +110,8 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
     const ready=(id:string)=>Math.max(0,...data.heroes.find(h=>h.id===id)!.actions.filter(a=>a!=='attack'&&!actionReason(state,data,id,a).startsWith('Cooldown')).map(a=>skillPower(data,id,a)));
     const echo=action==='duet'?ready(target.id)*skillPower(data,heroId,'duet')/100:0;
     const cover=action==='rounddance'?turn.events.filter(e=>e.type==='barrier'&&e.sourceId===heroId).reduce((n,e)=>n+Math.min(e.amount??0,incoming(e.targetId!)),0)*.6:0;
-    const steady=action==='deepbeat'?Math.min(incoming(target.id),30)*skillPower(data,heroId,'deepbeat')/100:0;
+    // Deep beat covers every hit on the party this round: worth its cut of the damage announced this round, plus the counter step.
+    const steady=action==='deepbeat'?plannedIntents(state,data,state.order.length).filter(i=>i.round===state.round).reduce((n,i)=>n+i.damage*(i.all?2:1),0)*skillPower(data,heroId,'deepbeat')/100*.8:0;
     const beats=turn.events.filter(e=>e.type==='beat'&&e.sourceId===heroId&&(e.amount??0)>0).reduce((n,e)=>n+(e.amount??0),0);
     candidates.push({command,score:damage+healed*1.5+saved*12+echo+steady+cover+beats*3+recovered*5+readied*6+kills*8,damage,healed,recovered});
    }

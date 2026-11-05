@@ -19,7 +19,7 @@ export const rosterBatch1Skills = {
   lastlight: { name: 'แสงสุดท้าย', english: 'Last Light', icon: '✦', power: 24, cooldown: 4 },
   cadence: { name: 'คืนจังหวะ', english: 'Cadence', icon: '♬', power: 8, cooldown: 3 },
   duet: { name: 'รำประสาน', english: 'Duet', icon: '♬', power: 40, cooldown: 4 },
-  rounddance: { name: 'รำวง', english: 'Round Dance', icon: '♬', power: 5, cooldown: 4 },
+  rounddance: { name: 'รำวง', english: 'Round Dance', icon: '♬', power: 8, cooldown: 4 },
   deepbeat: { name: 'ย้ำจังหวะ', english: 'Deep Beat', icon: '♬', power: 40, cooldown: 3 },
   echofoot: { name: 'ก้าวสะท้อน', english: 'Echo Foot', icon: '♬', power: 12, cooldown: 4 },
   closingstep: { name: 'ก้าวปิดท้าย', english: 'Closing Step', icon: '♬', power: 6, cooldown: 4 },

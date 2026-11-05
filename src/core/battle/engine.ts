@@ -87,10 +87,10 @@ export function songPower(data: EncounterDefinition, heroId: string, action: Son
 // Who acts on which target: the UI and the resolver share these groups.
 export type TargetKind = 'self' | 'ally' | 'party' | 'enemies' | 'enemy';
 export function targetKind(action: ActionId): TargetKind {
-  if (action === 'prayer' || action === 'aegis' || action === 'rounddance') return 'party';
+  if (action === 'prayer' || action === 'aegis' || action === 'rounddance' || action === 'deepbeat') return 'party';
   if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor', 'quake', 'saintarc', 'circlefist', 'wovenhex', 'tollring', 'closingstep'].includes(action)) return 'enemies';
   if (['brace', 'evade', 'taunt', 'valor', 'mend', 'rally', 'spearwall', 'finale', 'bulwark', 'parry', 'halo', 'hold', 'warcry', 'dread', 'stonearmor', 'rouse'].includes(action)) return 'self';
-  if (['guard', 'ward', 'heal', 'haste', 'sanctuary', 'bless', 'revive', 'fury', 'decoy', 'guardstone', 'solo', 'cadence', 'duet', 'deepbeat'].includes(action)) return 'ally';
+  if (['guard', 'ward', 'heal', 'haste', 'sanctuary', 'bless', 'revive', 'fury', 'decoy', 'guardstone', 'solo', 'cadence', 'duet'].includes(action)) return 'ally';
   return 'enemy';
 }
 // Front-row foes screen the back row (owner 2026-10-22): while a front foe stands, a front-lane hero's single-target
@@ -214,7 +214,7 @@ export const DANCE_SKILLS: readonly ActionId[] = ['cadence', 'duet', 'rounddance
 // quicken cap below. Duet binds an ally for an echo (`HeroState.echo`); every other ally's skill gives each standing dancer one
 // beat (`HeroState.beats`, cap BEAT_MAX) that round dance, deep beat and echo foot also add to and closing step spends.
 export const BEAT_MAX = 3;
-export const DEEP_BEAT_LOW = 20;
+export const DEEP_BEAT_LOW = 10;
 export const ROUND_PAIR_BONUS = 4;
 // Quicken cap: a skill is quickened at most once per use, never to before the round after its use; revive and skills
 // with a base cooldown of 4 or more at most once per battle.
@@ -681,8 +681,14 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           if (brace && intent.kind === 'physical' && living(state, brace.heroId) && hasCap(data, brace.heroId, 'frontwall') && data.heroes.find(h => h.id === recipient.id)!.lane === 'front')
             incoming = Math.ceil(incoming * (1 - capAmount(data, brace.heroId, 'frontwall') / 100));
           if (state.solace?.targetId === recipient.id && living(state, state.solace.heroId)) incoming = Math.ceil(incoming * (1 - capAmount(data, state.solace.heroId, 'solace') / 100));
-          // A dancer's deep beat steadies this ally against the next hit it takes.
-          if (recipient.steady) { if (recipient.steady.until >= state.round) incoming = Math.ceil(incoming * (1 - recipient.steady.percent / 100)); delete recipient.steady; }
+          // A dancer's deep beat steadies this ally against the next hit it takes; the cut comes back at the attacker.
+          let counterStep: { heroId: string; amount: number } | undefined;
+          const steady = state.steady;
+          if (steady && (steady.until < state.round || !living(state, steady.heroId))) delete state.steady;
+          else if (steady && incoming > 0) {
+            const low = recipient.hp * 2 < data.heroes.find(h => h.id === recipient.id)!.maxHp ? steady.low : 0;
+            const cut = Math.ceil(incoming * (1 - Math.min(90, steady.percent + low) / 100)); counterStep = { heroId: steady.heroId, amount: incoming - cut }; incoming = cut;
+          }
           // Release A trees: a priest's halo (energy), a spear holding firm, then a duelist's parry.
           if (state.halo && intent.kind === 'energy' && living(state, state.halo.heroId)) incoming = Math.ceil(incoming * (1 - skillPower(data, state.halo.heroId, 'halo') / 100));
           if (state.hold && living(state, state.hold.heroId) && intent.kind === 'physical' && data.heroes.find(h => h.id === recipient.id)!.lane === 'back') incoming = Math.ceil(incoming * (1 - capAmount(data, state.hold.heroId, 'holdfirm') / 100));
@@ -700,6 +706,11 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           if (state.song?.action === 'valor' && living(state, state.song.heroId) && hasCap(data, state.song.heroId, 'chorus')) incoming = Math.max(0, incoming - capAmount(data, state.song.heroId, 'chorus'));
           hit(state, data, enemy, intent, recipient, incoming, events, protector);
           if (parry && !parry.all) parried(state, data, enemy, recipient, events);
+          if (counterStep && counterStep.amount > 0 && enemy.hp > 0 && living(state, counterStep.heroId)) {
+            const back = Math.min(enemy.hp, tired(data, counterStep.heroId, veiled(state, data, enemy, counterStep.amount))); enemy.hp -= back;
+            events.push({ type: 'damage', sourceId: counterStep.heroId, targetId: enemy.id, amount: back, text: 'Counter step.' });
+            if (!enemy.hp) { events.push({ type: 'down', targetId: enemy.id, text: 'Enemy falls.' }); chainReaction(state, data, enemy, events); }
+          }
         }
       };
       // A tolled foe pays as its attacking move begins; falling to the toll ends its turn without the move.
@@ -805,11 +816,15 @@ export function actionReason(state: BattleState, data: EncounterDefinition, hero
 export function targetOptions(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId): TargetOption[] {
   const unavailable = actionReason(state, data, heroId, action);
   // Dancer rework (owner 2026-11-05): each ally dance reaches another standing ally whether or not anything is cooling.
-  if (['cadence', 'duet', 'deepbeat'].includes(action)) return data.heroes.map(h => {
+  if (['cadence', 'duet'].includes(action)) return data.heroes.map(h => {
     const actor = state.heroes.find(a => a.id === h.id);
     const reason = unavailable || (!actor || actor.hp <= 0 ? 'This hero is down.' : h.id === heroId ? 'Choose another ally.' : '');
     return { id: h.id, name: h.name, valid: !reason, reason };
   });
+  if (action === 'deepbeat') {
+    const reason = unavailable || (state.steady?.heroId === heroId && state.steady.until >= state.round ? 'Already steadying the party.' : '');
+    return [{ id: 'party', name: 'Party', valid: !reason, reason }];
+  }
   if (action === 'rounddance') {
     const reason = unavailable || (!state.heroes.some(h => h.id !== heroId && h.hp > 0) ? 'Choose another ally.' : '');
     return [{ id: 'party', name: 'Party', valid: !reason, reason }];
@@ -1010,21 +1025,22 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
           break;
         }
         case 'rounddance': {
-          // Every other standing ally gains a small barrier (the front pair a larger one with the pair node); one beat.
+          // Every other standing ally gains a barrier (the two lowest a larger one with the pair node) and the dancer one
+          // beat per ally in the round (up to BEAT_MAX), so a round dance can ready a closing step at once.
           const pair = hasCap(data, hero.id, 'dancerRoundPair');
           const list = pair ? [...others].sort((a, b) => ratio(a) - ratio(b)).slice(0, 2) : others;
           for (const ally of list) barrier(ally, skill.power + (pair ? ROUND_PAIR_BONUS : 0));
-          beat(1);
+          beat(list.length);
           if (hasCap(data, hero.id, 'wila1') && !state.commands.some(c => c.heroId === hero.id && c.action === 'rounddance')) cooldownAdjustment--;
           if (hasCap(data, hero.id, 'wila3') && list.length >= 3) cooldownAdjustment--;
           break;
         }
         case 'deepbeat': {
-          // The ally's next hit taken before the end of next round is cut by the power in percent; one beat.
-          const low = chosen!.hp * 2 < data.heroes.find(h => h.id === chosen!.id)!.maxHp ? capAmount(data, hero.id, 'lalin3') * DEEP_BEAT_LOW : 0;
-          const percent = Math.min(90, skill.power + (hasCap(data, hero.id, 'dancerDeep') ? 20 : 0) + low);
-          chosen!.steady = { heroId: hero.id, percent, until: state.round + 1 };
-          events.push({ type: 'buff', sourceId: hero.id, targetId: chosen!.id, amount: percent, text: 'Steady.' });
+          // Every enemy hit on the party until the end of this round is cut by the power in percent (more on a hero below
+          // half HP with Cerise p3) and the attacker takes the cut back (the counter step); one beat.
+          const percent = Math.min(90, skill.power + (hasCap(data, hero.id, 'dancerDeep') ? 10 : 0));
+          state.steady = { heroId: hero.id, percent, low: capAmount(data, hero.id, 'lalin3') * DEEP_BEAT_LOW, until: state.round };
+          events.push({ type: 'buff', sourceId: hero.id, targetId: hero.id, amount: percent, text: 'Steady.' });
           beat(1);
           break;
         }

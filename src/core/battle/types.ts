@@ -141,9 +141,9 @@ export interface EncounterDefinition {
 export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; bossUsedRound?:number; hastedRound?: number; evading?: boolean; evadeExtra?: number; evadePhysical?: boolean; reflect?: { heroId: string; amount: number };
   fell?: boolean; revivedRound?: number; empowered?: { percent: number; round: number };
   // Dancer rework (save v48): `beats` a dancer's beats (0–BEAT_MAX); `echo` the dancer bound to this ally by duet (her
-  // echo follows its next skill up to `until`); `steady` cuts this ally's next incoming hit (deep beat) up to `until`;
+  // echo follows its next skill up to `until`);
   // `quickened` skills a dance already quickened since their last use, `quickenedBattle` the once-per-battle ones.
-  beats?: number; echo?: { heroId: string; percent: number; until: number }[]; steady?: { heroId: string; percent: number; until: number };
+  beats?: number; echo?: { heroId: string; percent: number; until: number }[];
   quickened?: ActionId[]; quickenedBattle?: ActionId[];
   // Recruit trees: `exposed` = hits taken are raised by a percent until the end of `round` (alchemist fury tonic);
   // `solo` = this hero gets the bard's playing song three times over until the end of `round`.
@@ -204,6 +204,9 @@ export interface BattleState {
   standUsed?: boolean;
   // Priest solace (talent): the healed ally takes less damage until the priest's next turn.
   solace?: { heroId: string; targetId: string } | null;
+  // Dancer deep beat (save v48): the next enemy hit on any hero up to `until` is cut by `percent` (+`low` on a hero below half
+  // HP) and the cut comes back at the attacker.
+  steady?: { heroId: string; percent: number; low: number; until: number };
   // Heroes whose last-stand equipment has already saved them this battle.
   lastStand?: string[];
   // Heroes who have used their star-veil free cast this battle.

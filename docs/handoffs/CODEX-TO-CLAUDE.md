@@ -6,7 +6,8 @@ Newest first. One entry per finished task, at most 12 lines; link a validation R
 - เจ้าของ: นักเต้นมีแต่ลดคูลดาวน์และ "OP" → วิเคราะห์ทุกตัว (artifact "ตรวจสกิล Fateweave" + "คลังกลไกสกิล") แล้วสั่งทำขั้นแรก
 - กฎ: cadence โล่ 8 + เร่งคูลดาวน์ใต้เพดาน; duet ตีตาม 40%; จังหวะจากสกิลเพื่อน → closingstep ตีทุกตัว 6+6/จังหวะ; rounddance โล่ 5; deepbeat ลดท่าถัดไป 40%; echofoot +จังหวะ; turncycle ตี 8; ไม่มีการเลือกสกิล/ผู้รับคูลดาวน์อีก; เซฟ v48
 - Tests: typecheck/lint/unit 1604, Playwright saint-dance-fx 20/20 + roster-batch1 + world/unit-a7 ที่เกี่ยว, sim 28/28 (Cerise ทุกกิ่งชนะครบ HP ขึ้น) — [README](../validation/skill-rework-2026-11-05/README_TH.md)
-- เปิด: advisor ไม่ใช้ rounddance/deepbeat; ขั้นถัดไปตามลำดับในหน้า artifact (Wynne → Garran → Astrid → Toma → ปรับเล็ก) รอเจ้าของสั่ง
+- ต่อมา (เจ้าของสั่ง): rounddance โล่ 8 + จังหวะต่อเพื่อน, deepbeat ทั้งทีมลด 40% รอบนี้ + ก้าวสวน (ไม่เสียเปล่า) — ใช้แบบเฉพาะสถานการณ์ใน sim
+- เปิด: ขั้นถัดไปตามลำดับในหน้า artifact (Wynne → Garran → Astrid → Toma → ปรับเล็ก) รอเจ้าของสั่ง
 
 ## 2026-11-05 — Painted skill tomes in game (Claude, branch art/tome-icons)
 - ภาพตำรา 9 แบบจาก ART-UI-PROGRESS-001 (เจ้าของสั่งนำเข้า) → atlas 3×3 lossless 152 KB; ใช้ที่ชิปค่าใช้จ่ายเพิ่ม Lv สกิลและรายการตำราของค่าย; ไม่เปลี่ยนกฎ/เซฟ/ตัวเลข; ของอื่นในแพ็กเกจยังไม่ผูก

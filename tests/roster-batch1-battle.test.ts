@@ -307,24 +307,34 @@ describe('Dancer rework 2026-11-05 (save v48): quicken cap, echo, beats, steady'
     expect(damage(none, 'f1')).toBe(6);
   });
 
-  it('round dance shields every other standing ally (or the two lowest with the pair node) and adds a beat', () => {
+  it('round dance shields every other standing ally (or the two lowest with the pair node) and adds a beat per ally', () => {
     const d = dance(['rounddance']); const s = beginBattle(d, entry(d, { guardian: 50, tracer: 90, weaver: 70 })).state;
     const all = cast(d, s, 'lalin', 'rounddance', 'party');
-    expect(all.events.filter(e => e.type === 'barrier').map(e => [e.targetId, e.amount])).toEqual([['guardian', 5], ['tracer', 5], ['weaver', 5]]);
-    expect(hero(all.state, 'lalin').beats).toBe(1);
+    expect(all.events.filter(e => e.type === 'barrier').map(e => [e.targetId, e.amount])).toEqual([['guardian', 8], ['tracer', 8], ['weaver', 8]]);
+    expect(hero(all.state, 'lalin').beats).toBe(3);
     const pd = dance(['rounddance'], { dancerRoundPair: 0 }); const ps = beginBattle(pd, entry(pd, { guardian: 50, tracer: 90, weaver: 70 })).state;
-    expect(cast(pd, ps, 'lalin', 'rounddance', 'party').events.filter(e => e.type === 'barrier').map(e => [e.targetId, e.amount])).toEqual([['guardian', 9], ['weaver', 9]]);
+    const pair = cast(pd, ps, 'lalin', 'rounddance', 'party');
+    expect(pair.events.filter(e => e.type === 'barrier').map(e => [e.targetId, e.amount])).toEqual([['guardian', 12], ['weaver', 12]]);
+    expect(hero(pair.state, 'lalin').beats).toBe(2);
   });
 
-  it('deep beat cuts the ally\'s next hit taken by 40% once, and echo foot strikes and adds a beat', () => {
+  it('deep beat cuts every hit on the party this round by 40% and sends the cut back at the attacker; echo foot strikes and adds a beat', () => {
     const d = dance(['deepbeat'], {}, 1, 20);
-    const taken = (first: ActionId) => {
-      let s = beginBattle(d).state; s = play(d, s, 'lalin', first, first === 'deepbeat' ? 'guardian' : 'f1');
+    const run = (first: ActionId) => {
+      let s = beginBattle(d).state; s = play(d, s, 'lalin', first, first === 'deepbeat' ? 'party' : 'f1');
+      const before = s.enemies[0]!.hp;
       for (const id of ['guardian', 'tracer', 'weaver']) s = play(d, s, id, 'attack');
-      return 100 - hero(s, 'guardian').hp;
+      return { taken: 100 - hero(s, 'guardian').hp, s, before };
     };
-    const base = taken('attack'); expect(base).toBeGreaterThan(0);
-    expect(taken('deepbeat')).toBe(Math.ceil(base * 0.6));
+    const base = run('attack').taken; expect(base).toBeGreaterThan(0);
+    const steady = run('deepbeat');
+    expect(steady.taken).toBe(Math.ceil(base * 0.6));
+    // The full foe turn includes the counter step from the dancer.
+    let s = beginBattle(d).state; s = play(d, s, 'lalin', 'deepbeat', 'party');
+    for (const id of ['guardian', 'tracer']) s = play(d, s, id, 'attack');
+    const last = resolveCommand(s, d, command(s, 'weaver', 'attack'));
+    expect(last.events.filter(e => e.text === 'Counter step.')).toMatchObject([{ sourceId: 'lalin', targetId: 'f1', amount: base - Math.ceil(base * 0.6) }]);
+    expect(previewCommand(s, d, command(s, 'weaver', 'attack'))).toEqual(last);
     const e = dance(['echofoot']); const es = beginBattle(e).state;
     const foot = cast(e, es, 'lalin', 'echofoot');
     expect(damage(foot)).toBe(12); expect(hero(foot.state, 'lalin').beats).toBe(1);
