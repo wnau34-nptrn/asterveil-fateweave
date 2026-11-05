@@ -3,8 +3,8 @@
   "revisionChecks": {
     "revision": "R2-review",
     "iconsAtLeast20": true,
-    "characterOverlapCheck": "reference-image pixel-difference bboxes; all native HUD painted rectangles",
-    "packageBytes": 78423585,
+    "characterOverlapCheck": "reference-image pixel-difference bboxes; all active native HUD painted rectangles, including paint behind transparent input targets",
+    "packageBytes": 78415247,
     "duplicateRasters": [],
     "failures": [],
     "pass": true,
@@ -34621,6 +34621,34 @@
             "h": 14.390625
           },
           {
+            "element": "art art-27",
+            "x": 303,
+            "y": 69,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "element": "queue-speed numeric",
+            "x": 314.0390625,
+            "y": 98.609375,
+            "w": 21.921875,
+            "h": 14.390625
+          },
+          {
+            "element": "art art-18",
+            "x": 351,
+            "y": 69,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "element": "queue-speed numeric",
+            "x": 361.53125,
+            "y": 98.609375,
+            "w": 22.9375,
+            "h": 14.390625
+          },
+          {
             "element": "hud-block field-health painted-surface native-h-battle-hud-320x568-3",
             "x": 160,
             "y": 349.5,
@@ -37248,6 +37276,34 @@
             "x": 266.046875,
             "y": 99.8125,
             "w": 21.90625,
+            "h": 13.1875
+          },
+          {
+            "element": "art art-27",
+            "x": 303,
+            "y": 69,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "element": "queue-speed numeric",
+            "x": 314.625,
+            "y": 99.8125,
+            "w": 20.75,
+            "h": 13.1875
+          },
+          {
+            "element": "art art-18",
+            "x": 351,
+            "y": 69,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "element": "queue-speed numeric",
+            "x": 362.15625,
+            "y": 99.8125,
+            "w": 21.6875,
             "h": 13.1875
           },
           {

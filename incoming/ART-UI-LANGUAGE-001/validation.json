@@ -4261,13 +4261,13 @@
     },
     {
       "path": "verification.json",
-      "bytes": 1128454,
-      "sha256": "3f73fb61a19a9f5d54345557fbe15028e65e7b49e1f96310cfb9acae053ca27c"
+      "bytes": 1129807,
+      "sha256": "1fce5b1387b80875f9dfa7c657499202083c0ad534beb150972e4877026ae190"
     },
     {
       "path": "verify.cjs",
-      "bytes": 20493,
-      "sha256": "34e881dc76e72c6d6964cb8925c63c4ed8074eaaacc969cf4198e44a944cacac"
+      "bytes": 20625,
+      "sha256": "5a79c10048316a6901ec5a5a165461b10c8e5ad550ec350eab73641625bed110"
     },
     {
       "path": "verify_image_pairs.py",
