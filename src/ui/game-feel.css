@@ -359,6 +359,9 @@ html, body { background: #0a1422; }
 /* The battle scene reaches every screen edge; only its HUD keeps clear of the insets.
    (Map, lobby, commander and title are fixed full-screen views with their own insets.) */
 #battle-view { padding: var(--safe-top) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); }
+/* Home-screen web app: the home indicator is a thin bar at the very edge, so the dock keeps 18px of the 34px inset free
+   instead of a wide empty band under the skill buttons. */
+:root[data-standalone="true"] #battle-view { padding-bottom: max(10px, calc(env(safe-area-inset-bottom, 0px) - 16px)); }
 /* The canvas buffer is devicePixelRatio × the arena; pin it so its size can never feed back into
    the arena's layout (WebKit sizes percentage heights in flex items from content). */
 #battle-view .arena { position: relative; }
