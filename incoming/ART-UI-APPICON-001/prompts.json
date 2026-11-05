@@ -1,0 +1,95 @@
+[
+  {
+    "variant": "r1",
+    "concept": "four-pointed star woven by one gold thread",
+    "prompt": "Create an ORIGINAL premium mobile fantasy-adventure mercenary GAME APP ICON, perfectly SQUARE 1:1, 1024x1024. FULLY OPAQUE FULL-BLEED navy background all the way to all four straight square corners. NO text, letters, numbers, logo lettering, border, frame around canvas, rounded corners, external drop shadow, watermark or UI. R1 SYMBOL design: ONE bold sculpted FOUR-POINTED GOLD STAR, long vertical points and shorter horizontal points, elegantly faceted broad polished gold planes. A SINGLE thick luminous GOLD THREAD weaves THROUGH the star's centre and curves once around its waist, visibly over-under like fate being woven, one confident asymmetric loop with TWO broad blunt ends near star, not a planet's orbit ring, not a circle border. Star main silhouette 58-64 percent of canvas height, centered. ALL important geometry including thread must fit INSIDE a centered circle DIAMETER 78 percent of canvas (radius390px at1024). Keep spacious dark navy negative space in corners and at outer 12 percent, background continuous. Palette ONLY three main color families: deep navy #0a1422 to #101c36, warm gold #ffcc72 / #f2d596, and restrained cyan #7cdaed central diffuse glow. Light comes ONLY from centre. Mysterious warm welcoming adventure, sophisticated gilded navy-glass game UI language. Bold high contrast and geometric readability at60px, thick thread no narrower than 26px at1024, no tiny filigree or thin scratches, just two or three broad gold sparkle shapes near star inside safe circle. Polished painterly icon finish with crisp large edges, simple unforgettable silhouette. No weapons, no character, no scenery. A complete square artwork, NOT an icon mockup on a page.",
+    "image_references": [],
+    "textual_references": [
+      "seeds/asterveil.svg",
+      "seeds/tokens.css",
+      "seeds/logo.svg",
+      "seeds/title_bg.webp"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-64b32836-78f1-4f5f-ba90-adef06bc7bad",
+    "source_file": "sources/rejected/icon-r1-oversize.png",
+    "workspace_output": "/workspace/generated_images/exec-64b32836-78f1-4f5f-ba90-adef06bc7bad.png",
+    "status": "rejected",
+    "reason": "Star tips extend outside central 80 percent circle"
+  },
+  {
+    "variant": "r2",
+    "concept": "Isolde portrait inside four-pointed star frame",
+    "character": "Isolde (wila), ART-CHAR-REDESIGN-001",
+    "prompt": "Create a NEW square fully opaque mobile fantasy-adventure game APP ICON using attached Isolde portrait ONLY as approved character identity. Keep EXACT same kind young adult woman's face, amber eyes, short swept dark-brown hair with wide silver-white streak over LEFT temple and one loose pale forelock, ochre-gold half-cape clasped by round gold brooch, navy/ivory neckline. No added crown, helmet, weapon or jewelry. Match original polished painterly anime/chibi portrait style, not a real person. R2 CHARACTER: centered close FACE AND SHOULDERS inside a bold FOUR-POINTED GOLD STAR-SHAPED FRAME, warm confident gentle smile looking slightly RIGHT. Absolutely no text, letters, numbers, watermark, canvas border or rounded corners. Background FULL-BLEED opaque deep navy #0a1422 to #101c36 out to all four SQUARE corners, soft CYAN #7cdaed glow from CENTRE, warm GOLD #ffcc72/#f2d596. Limit to navy/cyan/gold color families plus natural face tones, central warm face readable at60px. CRITICAL ANDROID MASK SAFE AREA: entire face, all hair tips, shoulders, cape and ALL FOUR frame points must be inside a centered circle of diameter78% of canvas. Make the gold star frame only60% of full canvas HEIGHT and60% WIDTH, with generous dark navy outer margin of20% on every side. No character/body or frame continuing to canvas edges. Face fills frame's interior, crop bust at chest INSIDE star, NOT at bottom canvas. Eyes large and readable, simplify costume to large plain masses; no fine patterns, no thin lines under2% width. Thick sculpted gold frame. Central single light source, mysterious welcoming adventure, gilded navy glass game UI. Flat full square artwork not a phone/mockup, no outside drop shadow.",
+    "image_references": [
+      "seeds/isolde-portrait.png"
+    ],
+    "textual_references": [
+      "seeds/asterveil.svg",
+      "seeds/tokens.css",
+      "seeds/logo.svg",
+      "seeds/title_bg.webp"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-105f7950-3f84-48e5-9feb-43d5c464dc0e",
+    "source_file": "sources/rejected/icon-r2-oversize.png",
+    "workspace_output": "/workspace/generated_images/exec-105f7950-3f84-48e5-9feb-43d5c464dc0e.png",
+    "status": "rejected",
+    "reason": "Frame points outside central 80 percent circle"
+  },
+  {
+    "variant": "r3",
+    "concept": "mercenary sword silhouette before star and fate thread",
+    "prompt": "ORIGINAL MOBILE GAME APP ICON, square 1:1 fully opaque full-bleed navy canvas. R3 HYBRID emblem about fateweave mercenaries: a bold simple DARK NAVY SWORD SILHOUETTE upright in foreground, broad straight blade and plain mercenary crossguard, its dark shape readable against a sculpted luminous FOUR-POINTED GOLD STAR behind. ONE thick gold luminous THREAD curves once behind and through star. Single central cyan glow. Navy #0a1422 to #101c36, warm gold #ffcc72/#f2d596, cyan #7cdaed only three main color families. No characters, faces, letters, numbers, text, game name, watermark, UI or outer frame. CRITICAL COMPOSITION: a SMALL CENTRAL emblem, the WHOLE sword/star/thread ensemble occupies only the CENTRAL 52% of canvas HEIGHT AND WIDTH. Leave a VERY WIDE empty navy margin of24% along ALL FOUR SIDES. The emblem is floating far from edges on a large calm navy square. Key silhouette stays entirely inside central circle diameter70%, so a circle mask cannot cut any blade tip, star point, crossguard or thread. Sword tip near y27% and pommel near y72%; star left tip near x28%, right tip near x72%. Background continuous opaque dark navy to square corners, no rounded corners or drop shadow. Strong broad planes and THICK shapes >=2.5% canvas width, high contrast at60px, premium painterly gilded navy glass UI finish, mysterious warm adventure, not grim or childish. No fine filigree, starfield dots, scratches or scenery. Complete standalone square painting, no mockup.",
+    "image_references": [],
+    "textual_references": [
+      "seeds/asterveil.svg",
+      "seeds/tokens.css",
+      "seeds/logo.svg",
+      "seeds/title_bg.webp"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-81c8ae63-8c3a-46b0-ad4c-79ab8c277b5a",
+    "source_file": "sources/icon-r3.png",
+    "workspace_output": "/workspace/generated_images/exec-81c8ae63-8c3a-46b0-ad4c-79ab8c277b5a.png"
+  },
+  {
+    "variant": "r1",
+    "concept": "four-pointed star woven by one gold thread, mask-safe layout",
+    "prompt": "Edit this ORIGINAL star-and-thread app-icon artwork ONLY to correct its Android mask safe area. KEEP the same faceted four-point gold star and ONE thick gold thread woven over/under through its centre, same navy/cyan/gold palette and painterly rendering, no letters or text. Make the ENTIRE star, both thread ends and two broad sparkles MUCH SMALLER TOGETHER, about TWO THIRDS their current size. Center that reduced emblem on a MUCH LARGER calm deep navy full-bleed square background. The whole emblem must occupy ONLY the central55% of final canvas height and width, leaving at least22% empty navy margin on every side. Top star tip around y23%, bottom tip around y77%; both inside a centered80% circle with ample room. Every important point and thread end must fit inside that circle, not touching it. Preserve a soft cyan central glow only, no other ornament. Fully opaque square image with continuous navy background to all four straight corners, no rounded corners, external shadow, frame, mockup or watermark. Crisp broad shapes, thick thread >=2% canvas width, highly readable at60px. This is layout reduction with background extension, NOT a zoomed-in emblem.",
+    "image_references": [
+      "sources/rejected/icon-r1-oversize.png"
+    ],
+    "textual_references": [
+      "seeds/asterveil.svg",
+      "seeds/tokens.css",
+      "seeds/logo.svg",
+      "seeds/title_bg.webp"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-d8bb5595-7924-44f3-8f01-fe20c6242193",
+    "source_file": "sources/icon-r1.png",
+    "workspace_output": "/workspace/generated_images/exec-d8bb5595-7924-44f3-8f01-fe20c6242193.png"
+  },
+  {
+    "variant": "r2",
+    "concept": "Isolde portrait inside mask-safe four-pointed star frame",
+    "character": "Isolde (wila), ART-CHAR-REDESIGN-001",
+    "prompt": "Edit attached original Isolde character app-icon artwork ONLY to reduce composition for Android mask safety. Preserve SAME exact Isolde face, amber eyes, short brown hair with broad SILVER-WHITE streak and loose pale forelock, gold ochre half-cape and round clasp, navy ivory neckline, same one four-point gold star frame. NO new character details or gear. Reduce the ENTIRE portrait AND gold frame together to TWO THIRDS their current size, centre it in a LARGE calm full-bleed dark navy square. Final whole emblem HEIGHT about56% and WIDTH about56% of canvas: top frame point y22%, bottom point y78%, left tip x22%, right tip x78%. Very wide22% outer navy margins on all four sides. Every face/hair/frame/cape point stays well INSIDE centered80% circle. Face fills star interior so amber eyes remain readable at60px. Simplify or remove fine golden floating ribbons and tiny flecks; prioritize face and four strong frame points. Keep deep navy #0a1422-#101c36, central soft cyan #7cdaed, warm gold #ffcc72/#f2d596 plus natural skin/hair tones. Single centre light, sophisticated painted game-icon finish. Fully OPAQUE square background continues to all four straight corners, no alpha, no text, letters, watermark, external shadow, rounded corners, outer border or phone mockup. A small centered portrait emblem on a much larger navy field, NOT a zoom-in.",
+    "image_references": [
+      "sources/rejected/icon-r2-oversize.png"
+    ],
+    "identity_reference": "seeds/isolde-portrait.png",
+    "textual_references": [
+      "seeds/asterveil.svg",
+      "seeds/tokens.css",
+      "seeds/logo.svg",
+      "seeds/title_bg.webp"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-9f86f247-f81b-4b61-82dc-1e8b11e848f2",
+    "source_file": "sources/icon-r2.png",
+    "workspace_output": "/workspace/generated_images/exec-9f86f247-f81b-4b61-82dc-1e8b11e848f2.png"
+  }
+]
