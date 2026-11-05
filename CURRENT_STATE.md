@@ -22,7 +22,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Skill rework PR #181 (Dancer kit: quicken cap, echo, beats; turn cycle 8): `docs/validation/skill-rework-2026-11-05/README_TH.md`; advisor never picks round dance/deep beat. Next owner-approved steps (artifact "ตรวจสกิล Fateweave"): Wynne, Garran, Astrid, Toma, then small ones.
+- Skill rework #181 (Dancer kit, turn cycle 8): `docs/validation/skill-rework-2026-11-05/README_TH.md`. Next steps (artifact "ตรวจสกิล Fateweave"): Wynne → Garran → Astrid → Toma.
 
 - Map 3 gate copy of the Briar Lord still falls to plain attacks 83–98%; stronger % broke the rush/casual first-clear gate — deferred to P05 (needs a gate-specific mechanic/encounter; Claude decision under delegation).
 - No real Safari/iPhone/Android or human usability results (P02-03 trial pending). The owner's iPhone report of Seren's art is fixed in PR #154 but not re-checked on the device.
