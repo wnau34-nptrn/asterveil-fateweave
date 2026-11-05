@@ -80,7 +80,7 @@ export class StarUpgrade {
       ${this.message?`<p class="star-warning" role="status">${this.message}</p>`:''}
       ${!receipt&&view.shortages.length?`<div class="star-warning" role="status">${view.shortages.map(s=>`<p>${s}</p>`).join('')}${m.dupes<view.minimum?'<p>ตราอย่างเดียวใช้แทนทั้งหมดไม่ได้</p>':''}</div>`:''}
       <div class="star-hero">${portrait(this.id)}<div><b>${name}</b><span>Lv${level} · เลเวลค่ายร่วม</span><span>${heroText[this.id]!.role}</span></div></div>
-      <div class="star-transition" aria-label="${m.stars} ดาว เป็น ${to} ดาว">${starRow(m.stars,this.map.company.maxStars)}${cost?`<span>→</span>${starRow(to,this.map.company.maxStars)}`:''}<b>${cost?`${m.stars} → ${to} ดาว`:'ดาวสูงสุดแล้ว'}</b></div>
+      <div class="star-transition" aria-label="${m.stars} ดาว เป็น ${to} ดาว">${starRow(m.stars,this.map.company.maxStars,true)}${cost?`<span>→</span>${starRow(to,this.map.company.maxStars,true)}`:''}<b>${cost?`${m.stars} → ${to} ดาว`:'ดาวสูงสุดแล้ว'}</b></div>
       ${!receipt?`<p class="star-note">${reviewing?'ยังไม่ใช้ทรัพยากร · ยืนยันเพิ่มครั้งละ 1 ดาว':'ดูผลและต้นทุนก่อนตรวจรายการ · ยังไม่ใช้ทรัพยากร'}</p>`:!receipt.saved?'<p class="star-warning">ผลในรอบนี้ยังไม่ถูกบันทึกถาวร · อย่ายืนยันรายการเดิมซ้ำ</p>':''}
       ${reviewing?materials+stats:stats+materials}
 

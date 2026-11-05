@@ -4,6 +4,7 @@ Newest first. One entry per finished task, at most 12 lines; link a validation R
 
 ## 2026-11-05 — Painted skill tomes in game (Claude, branch art/tome-icons)
 - ภาพตำรา 9 แบบจาก ART-UI-PROGRESS-001 (เจ้าของสั่งนำเข้า) → atlas 3×3 lossless 152 KB; ใช้ที่ชิปค่าใช้จ่ายเพิ่ม Lv สกิลและรายการตำราของค่าย; ไม่เปลี่ยนกฎ/เซฟ/ตัวเลข; ของอื่นในแพ็กเกจยังไม่ผูก
+- รอบ 2: แก่นรอยแยก (ชิปค่าใช้จ่าย + สรุปเดินทาง) และช่องดาวในหน้าอัปดาว; เศษดาว/เหรียญเกียรติยศ/ไข่-อาหารสัตว์/แถบช่องดาวยังไม่ผูก (ไม่มีฟีเจอร์รองรับ — เหตุผลใน README)
 - Tests: typecheck/lint/unit 1604 ผ่าน; Playwright unified-skills/character/skill-audit 22/22; หลักฐาน [`tome-art`](../validation/tome-art/README_TH.md)
 
 ## 2026-11-05 — UI frame group 2: team sheet + character window (Claude, branch feat/ui-frame-group2)

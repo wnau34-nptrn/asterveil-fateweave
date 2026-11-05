@@ -1,5 +1,5 @@
 import type { Item, PotionId, SetId, TomeLine, TomeSize } from '../core/world/types';
-import { TOME_ATLAS, tomeArtUrl, tomeCell } from '../game/visuals/tome-art';
+import { TOME_ATLAS, riftCoreUrl, tomeArtUrl, tomeCell } from '../game/visuals/tome-art';
 import { emblemCell, equipArtUrl, equipAtlasSize, gearCell, potionCell } from '../game/visuals/equip-art';
 import { icon } from './icons';
 import { slotIcon } from './th';
@@ -31,3 +31,5 @@ export function tomeArt(line: TomeLine, size: TomeSize): string {
   const c = tomeCell(line, size);
   return `<span class="tome-art" data-line="${line}" data-size="${size}" aria-hidden="true"><i class="equip-sprite" style="--atlas:url(${tomeArtUrl()});--cols:${TOME_ATLAS.cols};--rows:${TOME_ATLAS.rows};${at(c.col, c.row, TOME_ATLAS.cols, TOME_ATLAS.rows)}"></i></span>`;
 }
+// The rift core (แก่นรอยแยก), painted; the name and count stay DOM text beside it.
+export const riftCoreArt = (): string => `<span class="tome-art rift-core-art" aria-hidden="true"><i class="equip-sprite" style="--atlas:url(${riftCoreUrl()});--cols:1;--rows:1;--ax:0%;--ay:0%"></i></span>`;
