@@ -226,8 +226,8 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
   background: linear-gradient(160deg, #142a40f2, #0d1c2ef2); border: 1px solid #e8f5ff2e; color: var(--text); text-align: center; min-width: 0; }
 .team-card .portrait { width: 40px; border-radius: 10px; }
 .team-card b { font: 600 13px/1.5 var(--font-heading); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.team-card small { font-size: 11px; line-height: 1.35; color: var(--text-muted); font-variant-numeric: tabular-nums; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.team-card .lane { font-size: 10px; }
+.team-card small { font-size: 12px; line-height: 1.35; color: var(--text-muted); font-variant-numeric: tabular-nums; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.team-card .lane { font-size: 12px; }
 .team-card .team-fatigue { position: absolute; top: 6px; right: 6px; line-height: 0; }
 .team-card .slot-no { position: absolute; left: 5px; top: 4px; font: 600 12px/1 var(--font-heading); font-style: normal; color: var(--gold-light); }
 .team-card[aria-pressed=true] { border-color: var(--gold-light); box-shadow: var(--glow-gold); }
@@ -355,7 +355,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
   .team-grid:not(.bench) { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
   .team-card { padding: 8px 6px; }
   .team-card b, .team-card small { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
-  .team-card .lane { font-size: 11px; }
+  .team-card .lane { font-size: 12px; }
 }
 
 /* ---------- Lobby (ค่ายทหารรับจ้าง) — L1, glass UI over the title painting until lobby art exists ---------- */
