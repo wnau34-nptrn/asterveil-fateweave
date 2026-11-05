@@ -14,8 +14,8 @@ def dump(p,v):p.write_text(json.dumps(v,ensure_ascii=False,indent=2)+'\n')
 def save(im,p):
  assert im.mode=='RGB'
  im.save(p,icc_profile=ICC)
-def main():
- jobs=[j for j in json.loads((HERE/'prompts.json').read_text()) if j.get('status')!='rejected']
+def build_legacy():
+ jobs=[j for j in json.loads((HERE/'prompts.json').read_text()) if j.get('status')!='rejected' and j['variant'] in ('r1','r2','r3')]
  assert {j['variant'] for j in jobs}=={'r1','r2','r3'} and len(jobs)==3
  stats=[]
  for job in sorted(jobs,key=lambda j:j['variant']):
@@ -73,4 +73,75 @@ def main():
  paths=sorted(p for p in HERE.rglob('*') if p.is_file() and p.name!='SHA256SUMS' and '__pycache__' not in p.parts)
  (HERE/'SHA256SUMS').write_text(''.join(f'{sha(p)}  {p.relative_to(HERE)}\n' for p in paths))
  print('3 RGB/sRGB opaque square masters + 9 derivatives; mask safe-area proxy passed; all images decoded.')
+CAMP_BASELINE='47ff96c437aca1bba770b4e9edb847678b2fe8d9'
+CAMP_REFERENCE_COMMIT='fb1c7d7aa4e9bb56ad2a1b831e4c31c6915d021d'
+# Human-inspected outer extremities in generator source pixels (1254 square), including sparkles.
+# Background tents/sky extend to the edges by design; these points cover the principal emblem.
+CAMP_LANDMARKS={
+ 'r2a':[(627,198),(979,574),(628,957),(271,574),(718,331),(910,422),(326,710),(534,835),(373,342),(479,342),(794,705),(833,744)],
+ 'r2b':[(627,135),(1017,555),(628,1015),(238,555),(729,300),(939,425),(302,710),(529,834),(336,316),(469,316),(823,709),(869,754)]}
+def git_blob(commit,name):
+ import subprocess
+ return subprocess.check_output(['git','show',f'{commit}:{HERE.relative_to(REPO)}/{name}'],cwd=REPO)
+def build_camp():
+ baseline=json.loads(git_blob(CAMP_BASELINE,'validation.json'))
+ mutable={'NOTES.md','build_handoff.py','verify_remote.py','prompts.json','seeds.json','validation.json','SHA256SUMS'}
+ protected={n:m['sha256'] for n,m in baseline['files'].items() if n not in mutable}
+ for name,expected in protected.items():assert sha(HERE/name)==expected,('Legacy asset changed',name)
+ jobs=[j for j in json.loads((HERE/'prompts.json').read_text()) if j.get('round')=='camp-r2' and j.get('status')!='rejected']
+ assert {j['variant'] for j in jobs}=={'r2a','r2b'} and len(jobs)==2
+ stats=[]
+ for job in sorted(jobs,key=lambda j:j['variant']):
+  variant=job['variant']
+  with Image.open(HERE/job['source_file']) as source:
+   source.load();assert source.size==(1254,1254)
+   if 'A' in source.getbands():assert source.getchannel('A').getextrema()==(255,255)
+   master=source.convert('RGB').resize((1024,1024),Image.Resampling.LANCZOS)
+  for size in (1024,512,192,180):save(master if size==1024 else master.resize((size,size),Image.Resampling.LANCZOS),HERE/f'icon-{variant}-{size}.png')
+  points=[[x*1024/1254,y*1024/1254] for x,y in CAMP_LANDMARKS[variant]]
+  radii=[float(np.hypot(x-512,y-512)) for x,y in points]
+  assert max(radii)<=409.6,(variant,max(radii))
+  stats.append(dict(variant=variant,round='camp-r2',source=job['source_file'],source_sha256=sha(HERE/job['source_file']),master=f'icon-{variant}-1024.png',sizes=[1024,512,192,180],mode='RGB',embedded_color_profile='sRGB IEC61966-2.1',resize='Pillow LANCZOS, direct from 1024 master',emblem_extremities_master_xy=points,max_landmark_radius=max(radii),safe_circle_radius=409.6,measurement='manually inspected emblem/ribbon/sparkle extremities; +/-4 source px; backgrounds full bleed',visual_review='inspected at 180/120/60/40px; one coherent generated painting, owner selection pending'))
+ options=[('CLAUDE TEMP','seeds/final-r1-camp-1024.png'),('R2A','icon-r2a-1024.png'),('R2B - recommended','icon-r2b-1024.png')]
+ for theme,bg,fg in [('dark','#101823','#edf4fb'),('light','#e8edf1','#14243a')]:
+  out=Image.new('RGB',(540,805),bg);d=ImageDraw.Draw(out)
+  d.text((14,10),f'CAMP ICON / {theme.upper()} HOME / actual pixels',fill=fg)
+  d.text((14,28),'Temporary composite vs coherent paintings / 180 120 60 40',fill=fg)
+  for row,(name,file) in enumerate(options):
+   y=60+row*245;d.text((14,y),name,fill=fg);master=Image.open(HERE/file).convert('RGB')
+   for x,size in [(14,180),(212,120),(350,60),(428,40)]:
+    im=master.resize((size,size),Image.Resampling.LANCZOS);out.paste(im,(x,y+28+180-size));d.text((x,y+215),str(size),fill=fg)
+  save(out,HERE/f'preview-camp-{theme}.png')
+ out=Image.new('RGB',(390,390),'#172437');d=ImageDraw.Draw(out)
+ d.text((10,10),'CAMP ICON / safe 80% circle + OS mask review',fill='white')
+ for i,(name,file) in enumerate(options):
+  x=5+i*130;im=Image.open(HERE/file).convert('RGB').resize((120,120),Image.Resampling.LANCZOS)
+  d.text((x+4,40),('TEMP','R2A','R2B')[i],fill='white');out.paste(im,(x,65));d.ellipse((x+12,77,x+108,173),outline='white',width=1)
+  mask=Image.new('L',(120,120));ImageDraw.Draw(mask).ellipse((0,0,119,119),fill=255);out.paste(im,(x,220),mask)
+ d.text((10,360),'Review simulation; exports remain opaque squares.',fill='white')
+ save(out,HERE/'preview-camp-maskable-390.png')
+ seeds=json.loads(git_blob(CAMP_BASELINE,'seeds.json'))
+ import subprocess
+ for name,origin in [('lobby_bg.webp','public/assets/lobby/lobby_bg.webp'),('final-r1-camp-1024.png','incoming/ART-UI-APPICON-001/final-r1-camp-1024.png')]:
+  expected=hashlib.sha256(subprocess.check_output(['git','show',f'{CAMP_REFERENCE_COMMIT}:{origin}'],cwd=REPO)).hexdigest()
+  assert sha(HERE/'seeds'/name)==expected
+  seeds.append(dict(file='seeds/'+name,copied_from=origin,source_commit=CAMP_REFERENCE_COMMIT,sha256=expected,byte_identical=True))
+ dump(HERE/'seeds.json',seeds)
+ files={}
+ for p in sorted(HERE.rglob('*')):
+  if not p.is_file() or p.name in ('validation.json','SHA256SUMS') or '__pycache__' in p.parts:continue
+  meta=dict(bytes=p.stat().st_size,sha256=sha(p))
+  if p.suffix.lower() in ('.png','.webp'):
+   with Image.open(p) as im:im.load();meta.update(size=list(im.size),mode=im.mode,decoded=True)
+  files[str(p.relative_to(HERE))]=meta
+ manifest={**baseline,'recommended':'r2b','owner_selection':{'selected_direction':'R1 gold star and ribbon with game camp background, per user handoff','camp_r2_variant':'pending'},'variants':baseline['variants']+stats,'files':files,'camp_r2':{'baseline_commit':CAMP_BASELINE,'reference_commit':CAMP_REFERENCE_COMMIT,'protected_files_sha256':protected,'old_r1_r2_r3_exports_unchanged':True,'recommendation':'R2b: larger emblem and quieter camp at 60px','owner_approval':'pending'}}
+ dump(HERE/'validation.json',manifest)
+ paths=sorted(p for p in HERE.rglob('*') if p.is_file() and p.name!='SHA256SUMS' and '__pycache__' not in p.parts)
+ (HERE/'SHA256SUMS').write_text(''.join(f'{sha(p)}  {p.relative_to(HERE)}\n' for p in paths))
+ print('Camp R2a/R2b built; original assets protected:',len(protected))
+def main():
+ jobs=json.loads((HERE/'prompts.json').read_text())
+ if any(j.get('round')=='camp-r2' for j in jobs):build_camp()
+ else:build_legacy()
+
 if __name__=='__main__': main()

@@ -91,5 +91,31 @@
     "artifact_id": "exec-9f86f247-f81b-4b61-82dc-1e8b11e848f2",
     "source_file": "sources/icon-r2.png",
     "workspace_output": "/workspace/generated_images/exec-9f86f247-f81b-4b61-82dc-1e8b11e848f2.png"
+  },
+  {
+    "variant": "r2a",
+    "round": "camp-r2",
+    "prompt": "Premium mobile game app icon R2a. Repaint as ONE COHERENT ORIGINAL PAINTING using TWO attached references: image1 is the exact selected star/ribbon design; image2 is the game's twilight mercenary camp. SQUARE1:1, fully opaque full-bleed painting to all four straight corners. NO text, letters, numbers, watermark, border, rounded corners, outside drop shadows or UI. MAIN HERO at centre: match image1's glossy faceted GOLD FOUR-POINT CRYSTAL STAR exactly in silhouette and facet arrangement, longest vertical points, shorter horizontal points. ONE broad GOLD RIBBON weaves DIAGONALLY from lower left toward upper right across centre, wraps behind star once, two broad ends. No extra rings, points, swords or characters. Star/ribbon ensemble about52% of total WIDTH and65% HEIGHT, centered x50% y49%; ALL star points, ribbon ends and two small four-point sparkles INSIDE central80% circle (radius40% canvas). Paint star and scene TOGETHER, same brushwork and material resolution, no pasted sticker, no cutout outline or separate flat plate. BACKGROUND: simplified scene from image2, purple-pink-orange twilight sky, EXACTLY ONE compact floating castle behind upper star, two broad blue-cyan waterfalls falling from it. Only ONE island/castle, no side islands, no distant settlement clutter. Lower left and lower right occupied by TWO LARGE soft cream CANVAS TENT masses, deep TEAL/NAVY banners each with ONE bold GOLD FLEUR-DE-LIS, and one broad warm lantern per side. Tents/banners/lanterns reach bottom edge; NO EMPTY GROUND or road in lower half. Big silhouettes, no crates, barrels, tiny props, tables, ropes, bunting or crowds. LIGHTING INTEGRATION: star is sole dominant golden illumination; its warm light naturally rim-lights facing castle stone, tent cloth folds and banners, shared warm reflected values. Cyan waterfalls and warm lanterns are subordinate faint accents, not competing light sources; no visible sun. Depth: star sharp and broad, background gently softer and lower contrast but clearly a camp, NOT blurred smear. Corners subtly vignette to deep navy #0a1422/#101c36; no flat navy panel behind star. Rich twilight color balanced with warm gold, sophisticated painterly mobile game finish, readable at60px. Broad features at least2% image width; remove micro-detail. One integrated composition, NOT a collage or photographic mockup.",
+    "image_references": [
+      "icon-r1-1024.png",
+      "seeds/lobby_bg.webp"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-116014c6-2f2f-4ad9-9c09-7c17d2b096ee",
+    "source_file": "sources/icon-r2a.png",
+    "workspace_output": "/workspace/generated_images/exec-116014c6-2f2f-4ad9-9c09-7c17d2b096ee.png"
+  },
+  {
+    "variant": "r2b",
+    "round": "camp-r2",
+    "prompt": "Premium mobile game app icon R2b: create ONE coherent NEW painterly illustration from attached selected STAR/RIBBON design and TWILIGHT MERCENARY CAMP. Square1:1, fully opaque full-bleed, no text/letters/numbers/watermark/border/rounded corners/outside drop shadow. MATCH image1 EXACT main emblem: faceted four-point gold crystal star, long vertical points and shorter horizontal points, ONE thick luminous gold ribbon wrapping diagonally lower-left to upper-right through centre, one wrap and two broad ends, two small four-point sparkles. No added gear, crowns, swords, faces or extra star points. Star/ribbon ensemble about60% canvas WIDTH and70% HEIGHT, centered at50%/50%; every star point and ribbon end safely INSIDE centered80% CIRCLE. R2b must have a LARGER STAR and SIMPLER BACKGROUND than typical scene icon. Behind star a calm broad purple-pink-orange twilight sky. EXACTLY ONE small distant floating castle, its towers start around20% CANVAS HEIGHT (NOT at top edge), on one simple floating island directly behind upper star, two broad faint cyan waterfall strokes. Castle and island are LOW CONTRAST SOFT LARGE SHAPES, no visible stone detailing, no additional castles/islands or busy trees. All identifiable castle mass stays inside central80% circle; sky fills top margin. Bottom corners and edge: just TWO LARGE CREAM TENT ROOF/FABRIC silhouettes forming a shallow V, one left and one right, dark teal/navy banner on each side with one BOLD SIMPLE GOLD FLEUR-DE-LIS, one warm lantern shape on each side. Tents/cloth fill BOTTOM EDGE, NO empty ground, road, foreground plaza, crates, ropes, bunting, foliage clutter or little props. STAR IS THE DOMINANT LIGHT: warm gold rim and reflected glow on facing tent folds, gold banner edges and castle, painterly integration consistent brush/detail across star and surroundings, no sticker/cutout line or flat panel behind star. Lantern and cyan waterfalls very muted secondary luminous accents, no sun. Background softer and darker than star, strongly subordinate so main gold silhouette reads at60px and40px. Restrained dark navy #0a1422/#101c36 corners, twilight midtones, rich warmgold. Big clean shapes, no fine linework under2% canvas width. Refined welcoming fantasy-adventure mobile icon, whole picture painted together, NOT a collage, not a mockup.",
+    "image_references": [
+      "icon-r1-1024.png",
+      "seeds/lobby_bg.webp"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-af516d4e-e5e5-4df5-b2d7-2305aca4c6b9",
+    "source_file": "sources/icon-r2b.png",
+    "workspace_output": "/workspace/generated_images/exec-af516d4e-e5e5-4df5-b2d7-2305aca4c6b9.png"
   }
 ]

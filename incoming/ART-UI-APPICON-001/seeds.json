@@ -28,5 +28,19 @@
     "copied_from": "incoming/ART-CHAR-REDESIGN-001/portrait/isolde.png",
     "sha256": "e1f80e27532e7c570644b52ca396157f3ef380d222972c08353a63e35f0c5971",
     "byte_identical": true
+  },
+  {
+    "file": "seeds/lobby_bg.webp",
+    "copied_from": "public/assets/lobby/lobby_bg.webp",
+    "source_commit": "fb1c7d7aa4e9bb56ad2a1b831e4c31c6915d021d",
+    "sha256": "3fbd0e041c78904fa0dc83f86e019d46124238555a250f95dc1f60e487d83f1f",
+    "byte_identical": true
+  },
+  {
+    "file": "seeds/final-r1-camp-1024.png",
+    "copied_from": "incoming/ART-UI-APPICON-001/final-r1-camp-1024.png",
+    "source_commit": "fb1c7d7aa4e9bb56ad2a1b831e4c31c6915d021d",
+    "sha256": "54d854eec4214d1012dee6de188d5771a7c9c9913030858c4ef9e6b35a997f65",
+    "byte_identical": true
   }
 ]

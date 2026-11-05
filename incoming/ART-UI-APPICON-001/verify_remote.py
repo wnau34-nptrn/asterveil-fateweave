@@ -10,7 +10,7 @@ import io
 import json
 from pathlib import Path
 import subprocess
-from PIL import Image
+from PIL import Image, ImageCms
 
 ROOT=Path(__file__).resolve().parent
 REPO=ROOT.parents[1]
@@ -47,6 +47,17 @@ def main():
                 im.load()
                 assert list(im.size)==manifest['files'][name]['size'],name
         checked.append(name)
+    revision=manifest.get('camp_r2')
+    if revision:
+        for name,expected in revision['protected_files_sha256'].items():
+            assert hashlib.sha256(blob(name)).hexdigest()==expected,'Legacy asset changed: '+name
+        for variant in ('r2a','r2b'):
+            for size in (1024,512,192,180):
+                name=f'icon-{variant}-{size}.png'
+                with Image.open(io.BytesIO(blob(name))) as im:
+                    im.load(); assert im.mode=='RGB' and im.size==(size,size),name
+                    profile=ImageCms.ImageCmsProfile(io.BytesIO(im.info['icc_profile']))
+                    assert 'sRGB' in ImageCms.getProfileDescription(profile),name
     tracked=git('ls-tree','-r','--name-only',ref,'--',PREFIX).decode().splitlines()
     assert {PREFIX+n for n in checked}|{PREFIX+'SHA256SUMS'}==set(tracked),'unmanifested file'
     changed=git('diff','--name-status',BASE,ref).decode().splitlines()
