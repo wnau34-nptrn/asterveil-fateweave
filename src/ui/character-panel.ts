@@ -113,11 +113,11 @@ export class CharacterPanel {
     const b=(e.target as HTMLElement).closest<HTMLButtonElement>('.skills-slots button');
     if(!b||!e.isPrimary||e.button>0||!this.usable()||!this.host.model()?.available)return;
     const slots=[...this.dialog.querySelectorAll<HTMLButtonElement>('.skills-slots button')],from=slots.indexOf(b);if(slots.length<2)return;
-    const sx=e.clientX,sy=e.clientY,doc=this.dialog.ownerDocument;let active=false,over=from;
+    const rects=slots.map(x=>x.getBoundingClientRect()),sx=e.clientX,sy=e.clientY,doc=this.dialog.ownerDocument;let active=false,over=from;
     const move=(ev:PointerEvent):void=>{
       if(!active){if(Math.hypot(ev.clientX-sx,ev.clientY-sy)<8)return;active=true;b.dataset.dragging='';}
       ev.preventDefault();b.style.transform=`translate(${ev.clientX-sx}px,${ev.clientY-sy}px)`;
-      const t=slots.findIndex(x=>{const r=x.getBoundingClientRect();return ev.clientX>=r.left&&ev.clientX<=r.right;});if(t>=0)over=t;
+      const t=rects.findIndex(r=>ev.clientX>=r.left&&ev.clientX<=r.right);if(t>=0)over=t;
       slots.forEach((x,i)=>x.toggleAttribute('data-drop',i===over&&i!==from));
     };
     const end=(ev:PointerEvent):void=>{
@@ -174,7 +174,7 @@ export class CharacterPanel {
     }
     if(action==='skill-review-back'){this.backSkillReview();return;}
     if(action==='skill-review-confirm'){if(model.available&&model.camp&&model.skillProfile)this.skillReview.confirm(model.skillProfile,c=>{if(c.kind==='level')this.host.skillLevel?.(c.id,c.action);else this.host.tomeTrade?.(c.line,c.size,c.to);});this.render();this.content().scrollTop=0;this.focus(this.id('skill-review-status'));return;}
-    if(action==='skill-select'||action==='skill-from-node'){this.selectedSkill=b.dataset.skill as ActionId;const back=action==='skill-from-node'&&this.skillNodeReturn?.skill===this.selectedSkill?this.skillNodeReturn:undefined;this.skillNodeReturn=undefined;this.skillSection='details';this.skillReview.clear();this.render();this.content().scrollTop=back?.scroll??0;if(action==='skill-select'){this.dialog.querySelector('#'+this.id('skill-description'))?.scrollIntoView({block:'start'});this.focus(b.id);}else this.focus(back?.focus??this.id('skill-selection'));return;}
+    if(action==='skill-select'||action==='skill-from-node'){this.selectedSkill=b.dataset.skill as ActionId;const back=action==='skill-from-node'&&this.skillNodeReturn?.skill===this.selectedSkill?this.skillNodeReturn:undefined;this.skillNodeReturn=undefined;this.skillSection='details';this.skillReview.clear();const keep=this.content().scrollTop;this.render();this.content().scrollTop=action==='skill-select'?keep:back?.scroll??0;if(action==='skill-select'){this.dialog.querySelector<HTMLElement>('#'+b.id)?.focus({preventScroll:true});}else this.focus(back?.focus??this.id('skill-selection'));return;}
     if(action==='skill-section'||action==='skill-to-node'){if(action==='skill-to-node')this.skillNodeReturn={skill:this.selectedSkill,scroll:this.content().scrollTop,focus:b.id};this.skillScroll[this.skillSection]=this.content().scrollTop;this.skillSection=action==='skill-to-node'?'tree':b.dataset.section as SkillSection;if(action==='skill-to-node')this.node=b.dataset.node!;this.skillReview.clear();this.render();this.content().scrollTop=this.skillScroll[this.skillSection]??0;if(action==='skill-to-node')this.dialog.querySelector(`#${this.id('character-talent-'+this.node)}`)?.scrollIntoView({block:'center'});this.focus(this.id(action==='skill-to-node'?'character-talent-'+this.node:'skills-'+this.skillSection));return;}
     if(action==='develop-link'){this.skillSection=b.dataset.tab==='talents'?'tree':'details';this.tab=b.dataset.tab==='talents'?'skills':b.dataset.tab as CharacterTab;this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));return;}
     if(action==='character-close'){this.dialog.close();return;}
