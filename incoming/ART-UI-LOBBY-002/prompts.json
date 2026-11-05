@@ -1,0 +1,344 @@
+{
+  "tool": "image_gen.imagegen",
+  "note": "One whole illustration per call. Generation ID is the execution filename exposed by tool, not an invented provider job ID.",
+  "generations": [
+    {
+      "id": "kael_sit",
+      "args": {
+        "prompt": "Create ONE complete new full-body pose of the EXACT character in reference image 1 (Kael), not a collage or multiple panels. Preserve identity, face, brown swept hair and tiny topknot, golden eyes, red sleeveless gold-trim vest, yellow sash, dark loose trousers, white wrist/ankle wraps, brown sandals, and EXACT head-to-body proportions and anatomical scale. Reference 2 is ONLY an example of a camp seated pose and log, not character identity. Pose: relaxed sitting on a short rustic log, facing RIGHT in the same three-quarter camera, feet naturally touching the ground, friendly small smile, hands resting on thighs, no weapon. Draw the log fully in this single illustration. Maintain the seed's heroic chibi rendered anime line weight and warm cel shading. Whole character redrawn naturally into this pose. Transparent RGBA background, no floor, NO ground shadow, NO aura, light effects, text, letters, symbols added, border or UI. All hair, limbs and log inside canvas with clear transparent padding. Single square 512x512 intended frame, shoe soles and log bottom at y=496; keep head size identical to 512px reference (do not enlarge head when sitting). Readable at 90px and valid when mirrored. Return an image file accessible in the execution workspace if supported.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/kael.png",
+          "/tmp/lobby-seeds/old.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/kael_sit.png",
+      "generation_id": "exec-338bd75f-941b-42b7-8c5d-2123fedbca7e",
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/kael.png",
+        "seeds/style-log-garran.png"
+      ]
+    },
+    {
+      "id": "metta_sit",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Corin: young male with brown tousled swept hair, amber eyes, white and gold tabard over brown leather armor, ornate gold shoulder armor, plated knuckle gauntlets, brown boots, white prayer beads with gold pendant. POSE: Sit relaxed on a short rustic log, boots planted, serene friendly smile. Prayer beads rest beside his hip on the log, gauntleted hands rest naturally on thighs. Reference 2 is ONLY the old camp pose/log style and ground placement, never its character identity. Draw the whole log in the same illustration.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/metta.png",
+          "/tmp/lobby-seeds/old.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/metta_sit.png",
+      "generation_id": "exec-456bd8fc-9661-41f9-b18c-193510204e2f",
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/metta.png",
+        "seeds/style-log-garran.png"
+      ]
+    },
+    {
+      "id": "lalin_sit",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Cerise: cheerful female dancer with brown braided hair, gold floral hair ornament, amber eyes, teal and coral-red gold-trim dance costume, white sleeves, teal trousers, ankle jewelry, brown shoes, cream/teal/coral folding fans and long teal ribbons. POSE: Sit gracefully and relaxed on a short rustic log, feet touching ground, smiling toward camp companions on the right. Her two closed folding fans rest beside her on the log, ribbons lie naturally without magic. Reference 2 is ONLY the old camp pose/log style and ground placement, never its character identity. Draw the whole log in the same illustration.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/lalin.png",
+          "/tmp/lobby-seeds/old.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/lalin_sit.png",
+      "generation_id": "exec-f7da9c83-dc52-4d6e-8fbe-54b88fff3387",
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/lalin.png",
+        "seeds/style-log-garran.png"
+      ]
+    },
+    {
+      "id": "wynne_sit",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Wynne: short dark-brown wavy hair, violet eyes, burgundy hooded cloak with gold seams, layered burgundy and dark brown dress, gold ornaments, red cords and tassels, sturdy dark boots, tiny cream rag doll with red stitching and button eyes. Retain tassel/tag shapes but no legible glyphs or lettering; simple stitch patterns only. POSE: Sit relaxed on a short rustic log, boots touching ground, shy warm small smile, hands resting on lap. Her little rag doll sits next to her on the log, red cord lies physically beside it. Reference 2 is ONLY the old camp pose/log style and ground placement, never its character identity. Draw the whole log in the same illustration.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/wynne.png",
+          "/tmp/lobby-seeds/old.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/wynne_sit.png",
+      "generation_id": "exec-4812c403-b7df-43ab-8afd-cb691a7ee338",
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/wynne.png",
+        "seeds/style-log-garran.png"
+      ]
+    },
+    {
+      "id": "astrid_sit",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Astrid: short pale lavender/silver bob, violet eyes, gold star hairpin, dark navy and gold celestial cloak over cream tunic and muted violet trousers, gold-trim dark boots, ornate brass physical astrolabe. Stars are solid embroidered costume details, no glowing stars in air. POSE: Sit comfortably on a short rustic log, boots touching ground, calm smile, hands relaxed on lap. The physical brass astrolabe rests beside her, leaning safely against the log. Reference 2 is ONLY the old camp pose/log style and ground placement, never its character identity. Draw the whole log in the same illustration.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/astrid.png",
+          "/tmp/lobby-seeds/old.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/astrid_sit.png",
+      "generation_id": "exec-032c9cb2-f649-47f2-b1eb-cae0cfade39d",
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/astrid.png",
+        "seeds/style-log-garran.png"
+      ]
+    },
+    {
+      "id": "metta_cheer",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Corin: young male with brown tousled swept hair, amber eyes, white and gold tabard over brown leather armor, ornate gold shoulder armor, plated knuckle gauntlets, brown boots, white prayer beads with gold pendant. POSE: Stand relaxed, warmly smiling, raise one open gauntleted hand high in a friendly celebratory wave; other hand holds his prayer beads low at waist. Both boots grounded. Keep full standing anatomical size as seed. Leave space above raised hand. Match seed head-to-body proportion, do not compress torso/legs to fit the raised arm.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/metta.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/metta_cheer.png",
+      "generation_id": "exec-21f3864a-06d8-4374-9890-c7824f80ab20",
+      "selected": true,
+      "status": "rejected",
+      "packaged_references": [
+        "seeds/metta.png"
+      ],
+      "rejection_reason": "head scale 0.871; whole pose regenerated"
+    },
+    {
+      "id": "lalin_cheer",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Cerise: cheerful female dancer with brown braided hair, gold floral hair ornament, amber eyes, teal and coral-red gold-trim dance costume, white sleeves, teal trousers, ankle jewelry, brown shoes, cream/teal/coral folding fans and long teal ribbons. POSE: Stand in a joyful small dance step, smile, one arm high holding a folded fan in celebratory wave, other fan relaxed by her hip, ribbons physical draped curves without motion effects. One planted foot, other toe lightly resting on ground. Keep full standing anatomical size as seed. Leave space above raised hand. Match seed head-to-body proportion, do not compress torso/legs to fit the raised arm.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/lalin.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/lalin_cheer.png",
+      "generation_id": "exec-4a824926-624b-4eb2-be04-63ac71d9d19f",
+      "selected": true,
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/lalin.png"
+      ]
+    },
+    {
+      "id": "kael_cheer",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Kael: brown swept hair and tiny topknot, golden eyes, sleeveless red gold-trim vest, yellow sash, loose dark pants, white wrist/ankle wraps and brown sandals. Use ONLY corrected proportion seed, not larger-headed designs. POSE: Stand in a relaxed athletic stance, bright friendly smile, one hand raised in celebratory open-palmed wave above shoulder, other wrapped fist held casually at waist. Both sandals on ground, no combat energy. Keep full standing anatomical size as seed. Leave space above raised hand. Match seed head-to-body proportion, do not compress torso/legs to fit the raised arm.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/kael.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/kael_cheer.png",
+      "generation_id": "exec-97bc7e2a-5791-49c3-bd73-8ab3ea76e6ab",
+      "selected": true,
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/kael.png"
+      ]
+    },
+    {
+      "id": "wynne_cheer",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Wynne: short dark-brown wavy hair, violet eyes, burgundy hooded cloak with gold seams, layered burgundy and dark brown dress, gold ornaments, red cords and tassels, sturdy dark boots, tiny cream rag doll with red stitching and button eyes. Retain tassel/tag shapes but no legible glyphs or lettering; simple stitch patterns only. POSE: Stand with a shy delighted smile, raise one open hand high in a small celebratory wave, other arm cradles her familiar rag doll against hip. Both boots grounded. Keep full standing anatomical size as seed. Leave space above raised hand. Match seed head-to-body proportion, do not compress torso/legs to fit the raised arm.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/wynne.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/wynne_cheer.png",
+      "generation_id": "exec-eb505103-7aec-4a9c-a366-407f4f80ac94",
+      "selected": true,
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/wynne.png"
+      ]
+    },
+    {
+      "id": "astrid_cheer",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Astrid: short pale lavender/silver bob, violet eyes, gold star hairpin, dark navy and gold celestial cloak over cream tunic and muted violet trousers, gold-trim dark boots, ornate brass physical astrolabe. Stars are solid embroidered costume details, no glowing stars in air. POSE: Stand warmly smiling and raise one hand in a celebratory open-palmed wave above her head, other hand carries her brass astrolabe safely by hip. Both boots grounded, no magical effects. Keep full standing anatomical size as seed. Leave space above raised hand. Match seed head-to-body proportion, do not compress torso/legs to fit the raised arm.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/astrid.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/astrid_cheer.png",
+      "generation_id": "exec-ce4e8084-69de-48f8-bc9f-768d1b6a9bd1",
+      "selected": false,
+      "status": "rejected",
+      "packaged_references": [
+        "seeds/astrid.png"
+      ],
+      "rejection_reason": "painted white backdrop; entire pose regenerated"
+    },
+    {
+      "id": "metta_idle_alt",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Corin: young male with brown tousled swept hair, amber eyes, white and gold tabard over brown leather armor, ornate gold shoulder armor, plated knuckle gauntlets, brown boots, white prayer beads with gold pendant. POSE: Stand naturally at full seed height, BOTH gauntleted hands gently clasped at chest in quiet prayer, relaxed elbows, slight peaceful smile, eyes softly lowered but face still visible in three-quarter right. Prayer beads physically hang from clasped fingers. No light or aura.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/metta.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/metta_idle_alt.png",
+      "generation_id": "exec-4bb47d8f-2e17-4dc8-b04b-64b74b9d1ebe",
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/metta.png"
+      ]
+    },
+    {
+      "id": "lalin_idle_alt",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Cerise: cheerful female dancer with brown braided hair, gold floral hair ornament, amber eyes, teal and coral-red gold-trim dance costume, white sleeves, teal trousers, ankle jewelry, brown shoes, cream/teal/coral folding fans and long teal ribbons. POSE: A small elegant dance step, facing right, one foot planted and other toe touching ground behind, smile. Gently rotate one open folding fan outward with a visible delicate wrist turn, other fan held low near hip. Teal ribbons hang in natural curved drape; no motion streaks or magic. Keep full standing proportions.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/lalin.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/lalin_idle_alt.png",
+      "generation_id": "exec-523c54b2-235d-4fc4-bb49-677d11d7d573",
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/lalin.png"
+      ]
+    },
+    {
+      "id": "kael_idle_alt",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Kael: brown swept hair and tiny topknot, golden eyes, sleeveless red gold-trim vest, yellow sash, loose dark pants, white wrist/ankle wraps and brown sandals. Use ONLY corrected proportion seed, not larger-headed designs. POSE: A short warm-up stretch, stand upright with feet shoulder width, bring right wrapped arm horizontally across chest and use left hand at elbow to gently stretch it, attentive calm smile, face visible above arms. Keep the corrected seed anatomy and full leg length.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/kael.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/kael_idle_alt.png",
+      "generation_id": "exec-e1b02b8d-31d2-440a-9c2b-591d4c15f987",
+      "status": "rejected",
+      "packaged_references": [
+        "seeds/kael.png"
+      ],
+      "rejection_reason": "head scale 0.860; whole pose regenerated"
+    },
+    {
+      "id": "wynne_idle_alt",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Wynne: short dark-brown wavy hair, violet eyes, burgundy hooded cloak with gold seams, layered burgundy and dark brown dress, gold ornaments, red cords and tassels, sturdy dark boots, tiny cream rag doll with red stitching and button eyes. Retain tassel/tag shapes but no legible glyphs or lettering; simple stitch patterns only. POSE: Stand at full seed height, lift familiar little cream rag doll in one hand to inspect it near shoulder level, smile subtly with curiosity; other hand gently pulls ONE short physical red sewing thread from the doll, taut straight thread between fingers and doll. No magical thread effects, no circles, no spell glyphs.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/wynne.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/wynne_idle_alt.png",
+      "generation_id": "exec-ffc42249-f32c-4b2e-9b5a-7feec140914a",
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/wynne.png"
+      ]
+    },
+    {
+      "id": "astrid_idle_alt",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Astrid: short pale lavender/silver bob, violet eyes, gold star hairpin, dark navy and gold celestial cloak over cream tunic and muted violet trousers, gold-trim dark boots, ornate brass physical astrolabe. Stars are solid embroidered costume details, no glowing stars in air. POSE: Stand at full seed height, lift physical brass astrolabe near eye level in one hand to sight the sky toward the upper RIGHT; tilt chin only slightly up, three-quarter face still visible, other hand lightly steadies lower rim. The complete solid brass instrument is readable; no star trails, floating stars, glowing rings or magic.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/astrid.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/astrid_idle_alt.png",
+      "generation_id": "exec-f8922161-7f30-47fb-9d52-a5a0c282578e",
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/astrid.png"
+      ]
+    },
+    {
+      "id": "astrid_cheer_r2",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Astrid: short pale lavender/silver bob, violet eyes, gold star hairpin, dark navy and gold celestial cloak over cream tunic and muted violet trousers, gold-trim dark boots, ornate brass physical astrolabe. Stars are solid embroidered costume details, no glowing stars in air. POSE: Stand warmly smiling, raise one open hand in a celebratory wave at shoulder/head height, other hand holds brass astrolabe by hip. Both boots grounded. ABSOLUTELY NO LIGHT OR WHITE PATCH OR PAINTED BACKDROP: only solid character pixels surrounded by true transparent alpha. No haze, soft shadow, glow, aura, fog or any translucent paint behind figure.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/astrid.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/astrid_cheer_r2.png",
+      "generation_id": "exec-676d0556-7d52-48cc-adc3-d473a7f984b2",
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/astrid.png"
+      ]
+    },
+    {
+      "id": "lalin_idle_alt_r2",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Cerise: cheerful female dancer with brown braided hair, gold floral hair ornament, amber eyes, teal and coral-red gold-trim dance costume, white sleeves, teal trousers, ankle jewelry, brown shoes, cream/teal/coral folding fans and long teal ribbons. POSE: Stand in a tiny dance step, right-facing with a gentle smile. Both folding fans CLOSED, tucked together at her hip; she lightly twirls the loose end of ONE long physical teal ribbon in a soft small curved loop using one hand at waist/shoulder height. The other hand rests gracefully near her torso. Ribbon is solid fabric, no streaks or magic. One grounded shoe and one lightly resting toe.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/lalin.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/lalin_idle_alt_r2.png",
+      "generation_id": "exec-4b6334eb-9398-4550-84b7-ace2e2bc3b65",
+      "status": "alternative",
+      "packaged_references": [
+        "seeds/lalin.png"
+      ]
+    },
+    {
+      "id": "metta_cheer_r2",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Corin: young male with brown tousled swept hair, amber eyes, white and gold tabard over brown leather armor, ornate gold shoulder armor, plated knuckle gauntlets, brown boots, white prayer beads with gold pendant. POSE: Celebratory friendly wave in a relaxed low balanced stance with bent knees and boots spread as in seed, body NOT standing taller than seed. Smile; one gauntleted hand raised BESIDE the face near ear height, elbow at shoulder height, palm toward camera. Other hand holds prayer beads near waist. IMPORTANT: keep head the same large anatomical size as seed, not a smaller head on stretched standing body. Do not raise hand above the hair silhouette; give generous transparent top padding. Full body and feet visible.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/metta.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/metta_cheer_r2.png",
+      "generation_id": "exec-2fe29b2c-7693-4f1b-bd33-fd769b09f4d5",
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/metta.png"
+      ]
+    },
+    {
+      "id": "kael_idle_alt_r3",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Kael: brown swept hair and tiny topknot, golden eyes, sleeveless red gold-trim vest, yellow sash, loose dark pants, white wrist/ankle wraps and brown sandals. Use ONLY corrected proportion seed, not larger-headed designs. POSE: Warm-up arm stretch in a LOW, WIDE athletic stance with bent knees like reference: sandals spread, knees bent outward, torso lowered. Bring one wrapped arm horizontally across chest, other hand gently grips elbow. Calm focused half smile. Keep EXACT anatomical scale and head size as reference; no taller straight-legged body, no shrinking head. Hair top about y31 and soles y496 at target512. No motion effects.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/kael.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/kael_idle_alt_r3.png",
+      "generation_id": "exec-78945c83-1974-414c-8c1a-f24b3cc4c90b",
+      "status": "atlas",
+      "packaged_references": [
+        "seeds/kael.png"
+      ]
+    },
+    {
+      "id": "kael_idle_alt_r2",
+      "args": {
+        "prompt": "Draw ONE complete new full-body pose of the EXACT character in reference 1. Preserve the reference identity, face, hairstyle, clothing, accessories, palette, anatomical proportions, especially the EXACT head size relative to torso and limbs. Match the reference's heroic chibi anime painted line weight, detailed cel shading and warm edge highlights, no style redesign. Three-quarter camera, facing RIGHT, readable at 90px, stays correct mirrored. Compose on a transparent square intended as a 512x512 frame, complete hair/feet/props with padding, soles at y=496. Keep consistent anatomical scale with the 512px reference, even when sitting: head must not grow. NO floor, contact shadow, aura, VFX, glow, lettering, text, numbers, watermark, UI or frame. All visible light is only shading on the solid body, no painted light outside it. No separate panels, collage or extra figures. Redraw the WHOLE pose naturally in one image. Kael: brown swept hair and tiny topknot, golden eyes, sleeveless red gold-trim vest, yellow sash, loose dark pants, white wrist/ankle wraps and brown sandals. Use ONLY corrected proportion seed, not larger-headed designs. POSE: A quiet hand-wrapping warm-up. Keep the LOW WIDE athletic stance and bent knees of the seed, sandals spread and torso lowered. One hand gently pulls a short loose end of white bandage fabric while finishing wrapping the opposite wrist at chest height; look toward the hands with a small calm smile. Head the EXACT same anatomical size and scale as seed, not shrunk on a tall standing body. No floating bandage or visual effects.",
+        "referenced_image_paths": [
+          "/workspace/asterveil-fateweave/incoming/ART-UI-LOBBY-002/seeds/kael.png"
+        ],
+        "transparent_background": true
+      },
+      "raw": "raw/kael_idle_alt_r2.png",
+      "generation_id": "exec-b022e917-3a3a-4a2f-a682-c4d0ec34b429",
+      "status": "alternative",
+      "packaged_references": [
+        "seeds/kael.png"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "public/assets/art/units.webp": "6263840ff042fb5bd37ec0f92a7eb5c27f60d125e4598a2f93aa35b639eae4ab",
+  "public/assets/art/units_mercs.webp": "b2509c5e38906531c415611bfdc6eb81c7e746e35114aa61d9298e560f0559c5",
+  "public/assets/art/portraits.webp": "f604b5f93c6526130546e194674d37f4e3265083908bbbb3448affadf4b70496",
+  "public/assets/title/title_bg.webp": "f63ad252a1ccd4a5c67a896f70a6b9a0dbd847e011b5cb801e74bf958e94b556",
+  "public/assets/world/landmark_camp.webp": "d7cb524e2e81d2c760b129bf373ddeee42b7840f76e7ae25f4097ae49f6a1699",
+  "public/assets/lobby/lobby_bg.webp": "3fbd0e041c78904fa0dc83f86e019d46124238555a250f95dc1f60e487d83f1f",
+  "public/assets/lobby/lobby_poses_heroes.webp": "ed95adc4ad471a182077fd21ec2031b2babd197044ab3d6ebb991044046dc40f",
+  "public/assets/lobby/lobby_poses_mercs.webp": "0b8fb22c56a0b10c9cbc26161c3859e15eb3130e5b8aad7a7b4fc0fdf2122c49"
+}

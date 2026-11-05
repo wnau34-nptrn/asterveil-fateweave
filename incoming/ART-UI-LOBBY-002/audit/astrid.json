@@ -1,0 +1,45 @@
+{
+  "tolerance": 0.12,
+  "minInliers": 12,
+  "report": {
+    "astrid": [
+      {
+        "frame": 0,
+        "height": 451,
+        "scale": 1.0,
+        "inliers": 2527,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 1,
+        "height": 456,
+        "scale": 1.018,
+        "inliers": 179,
+        "status": "ok"
+      },
+      {
+        "frame": 2,
+        "height": 460,
+        "scale": 0.987,
+        "inliers": 303,
+        "status": "ok"
+      },
+      {
+        "frame": 3,
+        "height": 454,
+        "scale": 0.956,
+        "inliers": 86,
+        "status": "ok"
+      }
+    ]
+  },
+  "frames": [
+    "seed",
+    "astrid_sit",
+    "astrid_cheer",
+    "astrid_idle_alt"
+  ],
+  "command": "python3 scripts/unit-anatomy-audit.py --cells <seed+astrid-poses> --json audit/astrid.json",
+  "scriptExitCode": 0
+}

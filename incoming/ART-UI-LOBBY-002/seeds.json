@@ -1,0 +1,98 @@
+{
+  "metta": {
+    "source": "public/assets/art/units_mercs.webp",
+    "frame": 6,
+    "crop": [
+      0,
+      1536,
+      512,
+      512
+    ],
+    "sha256": "62126d7f84767d640e41a96515df67774fd153221fc43ad16c75e410f6b26fd2",
+    "size": [
+      512,
+      512
+    ],
+    "bbox": [
+      76,
+      37,
+      435,
+      497
+    ]
+  },
+  "lalin": {
+    "source": "public/assets/art/units_mercs.webp",
+    "frame": 8,
+    "crop": [
+      0,
+      2048,
+      512,
+      512
+    ],
+    "sha256": "3fc6f8259ca286dc11d2952c05a19518896d9cb56ea4a361d4c11c9fffccbeb6",
+    "size": [
+      512,
+      512
+    ],
+    "bbox": [
+      25,
+      37,
+      487,
+      497
+    ]
+  },
+  "kael": {
+    "source": "incoming/ART-CHAR-CLASS-NEW-003/unit/kael.png",
+    "sha256": "5d9f344d4d44cad32c169e74780c2ff10bed401fd9f9dd43ea27f4c2171dde1c",
+    "size": [
+      512,
+      512
+    ],
+    "bbox": [
+      47,
+      31,
+      466,
+      497
+    ]
+  },
+  "wynne": {
+    "source": "incoming/ART-CHAR-CLASS-NEW-002/unit/wynne.png",
+    "sha256": "b2888ab61fcb39fc5e4fc508c0a6695efae1c74224c5460d32f724a24fa091e6",
+    "size": [
+      512,
+      512
+    ],
+    "bbox": [
+      90,
+      37,
+      421,
+      497
+    ]
+  },
+  "astrid": {
+    "source": "incoming/ART-CHAR-CLASS-NEW-002/unit/astrid.png",
+    "sha256": "a2d2ac7833818ff62cc877ecd0e90e87f24d8f56365f57e6c32d9321b36f1b29",
+    "size": [
+      512,
+      512
+    ],
+    "bbox": [
+      84,
+      46,
+      427,
+      497
+    ]
+  },
+  "_style_reference": {
+    "source": "public/assets/lobby/lobby_poses_mercs.webp",
+    "crop": [
+      0,
+      0,
+      1536,
+      512
+    ],
+    "file": "seeds/style-log-garran.png",
+    "purpose": "log/seat style only; supplied as /tmp/lobby-seeds/old.png in actual calls",
+    "sha256": "b697e0181b2cca3b82886daf9c80882e7108248b70ee693f9ce93add190c89ac"
+  }
+}
