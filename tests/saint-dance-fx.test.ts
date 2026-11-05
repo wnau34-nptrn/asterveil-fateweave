@@ -62,7 +62,9 @@ describe('Saint / Dancer VFX follows authoritative events without changing state
  });
  for(const skill of danceSkills.filter(s=>s!=='echofoot'))it(`${skill}: layers sit only on the allies whose cooldown was really restored; no damage, heal or barrier is implied`,()=>{
   const f=sdFixture(skill),plan=sdPlan(f.turn)!,cool=f.turn.events.filter(e=>e.type==='cooldown'),copy=JSON.stringify(f.turn);
-  expect(cool.length).toBeGreaterThan(0);expect(f.turn.events.some(e=>['damage','heal','barrier'].includes(e.type))).toBe(false);
+  expect(cool.length).toBeGreaterThan(0);expect(f.turn.events.some(e=>['damage','heal'].includes(e.type))).toBe(false);
+  // Skill rework 2026-11-05: cadence's barrier and duet's buff are real events left to the generic barrier/buff presentation.
+  expect(f.turn.events.filter(e=>e.type==='barrier').length).toBe(skill==='cadence'?1:0);expect(plan.events.some(e=>e.type!=='cooldown')).toBe(false);
   expect(plan.events).toEqual(cool);
   const recipients=[...new Set(cool.map(e=>e.targetId))];
   if(skill==='rounddance'){expect(plan.peaks.map(p=>p.at.id)).toEqual(recipients);expect(plan.peaks.every(p=>p.at.spot==='feet')).toBe(true);}

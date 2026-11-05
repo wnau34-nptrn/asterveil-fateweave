@@ -165,10 +165,12 @@ describe('C12 Dancer: cooldown relief never changes action order', () => {
     expect(() => resolveCommand(s, d, command(s, 'lalin', 'cadence', 'lalin'))).toThrow();
   });
 
-  it('rejects no-op and downed allies but allows a useful subset of duet', () => {
+  it('rejects downed allies but allows duet with nothing cooling (it still empowers) and a useful subset', () => {
     const d = fixture('lalin', 'duet');
     const s = beginBattle(d).state;
-    expect(() => resolveCommand(s, d, command(s, 'lalin', 'duet', 'guardian'))).toThrow();
+    const fresh = cast(d, s, 'lalin', 'duet', 'guardian');
+    expect(fresh.events.filter(e => e.type === 'cooldown')).toEqual([]);
+    expect(hero(fresh.state, 'guardian').empowered).toEqual({ percent: 20, round: s.round + 1 });
     waiting(s, 'guardian', { bash: s.round + 2 });
     expect(hero(cast(d, s, 'lalin', 'duet', 'guardian').state, 'guardian').cooldowns.bash).toBe(s.round + 1);
     hero(s, 'guardian').hp = 0;
@@ -311,6 +313,36 @@ describe('C12 Dancer: cooldown relief never changes action order', () => {
     for (const id of ['guardian', 'tracer', 'weaver']) waiting(rs, id, { bash: rs.round + 3 });
     const rf = cast(round, rs, 'wila', 'rounddance', 'party');
     expect(hero(rf.state, 'wila').cooldowns.rounddance).toBe(rs.round + 4);
+  });
+});
+
+describe('Skill rework 2026-11-05: Cerise has direct effects', () => {
+  it('cadence shields another ally from round 1 (nothing cooling) without stacking, and still recovers a cooldown', () => {
+    const d = fixture('lalin', 'cadence');
+    const s = beginBattle(d).state;
+    expect(targetOptions(s, d, 'lalin', 'cadence').find(t => t.id === 'guardian')?.valid).toBe(true);
+    const first = cast(d, s, 'lalin', 'cadence', 'guardian');
+    expect(first.events.filter(e => e.type === 'barrier')).toMatchObject([{ sourceId: 'lalin', targetId: 'guardian', amount: 8 }]);
+    expect(hero(first.state, 'guardian').barrier).toBe(8);
+    // An ally already holding a larger barrier gains nothing extra (the larger value stands).
+    const shielded = structuredClone(s); hero(shielded, 'guardian').barrier = 12; waiting(shielded, 'guardian', { bash: s.round + 2 });
+    const second = cast(d, shielded, 'lalin', 'cadence', 'guardian');
+    expect(hero(second.state, 'guardian').barrier).toBe(12);
+    expect(hero(second.state, 'guardian').cooldowns.bash).toBe(s.round + 1);
+  });
+
+  it('duet raises the ally\'s real hit by its percent; preview equals the resolver and replay is deterministic', () => {
+    const d = fixture('lalin', 'duet');
+    const s = beginBattle(d).state;
+    const duet = command(s, 'lalin', 'duet', 'guardian');
+    expect(previewCommand(s, d, duet)).toEqual(resolveCommand(s, d, duet));
+    const buffed = resolveCommand(s, d, duet).state;
+    const plain = resolveCommand(s, d, command(s, 'lalin', 'attack', 'f1')).state;
+    expect(currentHeroId(buffed, d)).toBe('guardian');
+    const base = damage(cast(d, plain, 'guardian', 'attack', 'f1'));
+    expect(damage(cast(d, buffed, 'guardian', 'attack', 'f1'))).toBe(Math.round(base * 1.2));
+    const commands = [duet, command(buffed, 'guardian', 'attack', 'f1')];
+    expect(replay(d, commands)).toEqual(resolveCommand(buffed, d, commands[1]!).state);
   });
 });
 

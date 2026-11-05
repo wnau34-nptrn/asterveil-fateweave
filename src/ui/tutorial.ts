@@ -110,7 +110,11 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
      if(before>0&&after===0)readied++;
     }
     const kills=turn.events.filter(e=>e.type==='down'&&state.enemies.some(x=>x.id===e.targetId)).length;
-    candidates.push({command,score:damage+healed*1.5+recovered*5+readied*6+kills*8,damage,healed,recovered});
+    // Skill rework 2026-11-05: the advisor values a dancer's barrier only when it keeps an ally standing against the damage
+    // announced at them this round; the duet buff is a bonus it does not chase (scoring it made the sim lose close races).
+    const incoming=(id:string)=>plannedIntents(state,data,state.order.length).filter(i=>i.round===state.round&&(i.all||i.targetId===id)).reduce((n,i)=>n+i.damage,0);
+    const saved=turn.events.filter(e=>e.type==='barrier'&&e.sourceId===heroId).filter(e=>{const a=state.heroes.find(h=>h.id===e.targetId)!,hit=incoming(a.id);return a.hp+a.barrier<=hit&&a.hp+a.barrier+(e.amount??0)>hit;}).length;
+    candidates.push({command,score:damage+healed*1.5+saved*12+recovered*5+readied*6+kills*8,damage,healed,recovered});
    }
   }
   const best=candidates.sort((a,b)=>b.score-a.score)[0];

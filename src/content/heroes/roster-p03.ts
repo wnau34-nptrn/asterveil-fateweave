@@ -25,7 +25,7 @@ export const rosterP03Skills = {
   knothex: { name: 'ปมสาป', english: 'Knot Hex', icon: '✂', power: 0, cooldown: 3 },
   // Seer: bend or turn announced moves; the needle and the orbit are its plain energy strikes.
   deflectfate: { name: 'เบนชะตา', english: 'Deflect Fate', icon: '✦', power: 0, cooldown: 4 },
-  turncycle: { name: 'หมุนวงดาว', english: 'Turn Cycle', icon: '✦', power: 0, cooldown: 3 },
+  turncycle: { name: 'หมุนวงดาว', english: 'Turn Cycle', icon: '✦', power: 8, cooldown: 3 },
   starneedle: { name: 'เข็มดารา', english: 'Star Needle', icon: '✦', power: 22, cooldown: 2 },
   crossing: { name: 'ทางแยกชะตา', english: 'Crossing', icon: '✦', power: 12, cooldown: 4 },
   readorbit: { name: 'อ่านวงโคจร', english: 'Read Orbit', icon: '✦', power: 18, cooldown: 2 },

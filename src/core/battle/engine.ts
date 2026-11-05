@@ -34,7 +34,7 @@ export const rallyReductionOf = (data: EncounterDefinition, heroId: string | und
 // ---- Skill levels (tomes, save v37, docs/design/SKILL_TOMES_TH.md) ----
 // A skill with power grows by a percent per level; a percent skill by points; a skill without numbers shields its user.
 export type SkillLevelKind = 'power' | 'percent' | 'utility';
-const PERCENT_LEVELS: readonly ActionId[] = ['guard', 'rally', 'bulwark', 'halo', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread'];
+const PERCENT_LEVELS: readonly ActionId[] = ['guard', 'rally', 'bulwark', 'halo', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread', 'duet'];
 // Revive (owner 2026-11-04, logic audit 5): its levels raise the HP it restores (`revivePoints` per level), not a barrier.
 export const skillLevelKind = (data: EncounterDefinition, action: ActionId): SkillLevelKind =>
   PERCENT_LEVELS.includes(action) || action === 'revive' ? 'percent' : data.skills[action].power <= 0 ? 'utility' : 'power';
@@ -155,11 +155,11 @@ export const ambushBonus = (state: BattleState, data: EncounterDefinition, enemy
   state.order.indexOf(enemyId) > state.turnIndex ? ambushBonusOf(data, heroId) : 0;
 // Magical damage and support use Magic Power (legacy field `skillBonus`); physical damage uses
 // Attack (`damageBonus`). Flat talent bonuses and skill levels keep their existing order.
-export const SUPPORT_SKILLS: readonly ActionId[] = ['ward', 'heal', 'prayer', 'valor', 'mend', 'bless', 'aegis'];
-export const MAGIC_DAMAGE_SKILLS: readonly ActionId[] = ['bolt', 'sigil', 'storm', 'dispel', 'acid', 'bomb', 'catalyst', 'finale', 'note', 'threadhex', 'lifetoll', 'tollring', 'starneedle', 'crossing', 'readorbit'];
+export const SUPPORT_SKILLS: readonly ActionId[] = ['ward', 'heal', 'prayer', 'valor', 'mend', 'bless', 'aegis', 'cadence'];
+export const MAGIC_DAMAGE_SKILLS: readonly ActionId[] = ['bolt', 'sigil', 'storm', 'dispel', 'acid', 'bomb', 'catalyst', 'finale', 'note', 'threadhex', 'lifetoll', 'tollring', 'starneedle', 'crossing', 'readorbit', 'turncycle'];
 export const usesMagicPower = (action: ActionId): boolean => SUPPORT_SKILLS.includes(action) || MAGIC_DAMAGE_SKILLS.includes(action);
 // Percent skills (bulwark, halo, blessing, war cry, revive): their power is a percent that only talents raise.
-export const PERCENT_SKILLS: readonly ActionId[] = ['bulwark', 'halo', 'revive', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread'];
+export const PERCENT_SKILLS: readonly ActionId[] = ['bulwark', 'halo', 'revive', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread', 'duet'];
 export function skillPower(data: EncounterDefinition, heroId: string, action: ActionId): number {
   const hero = data.heroes.find(h => h.id === heroId);
   // Skill levels: a percent skill gains points, a skill with power a percent on top of its Attack/Support bonus.
@@ -210,6 +210,9 @@ function shorten(hero: HeroState | undefined, action: ActionId, round: number): 
 }
 // C12: cooldowns are absolute rounds. Only equipped, still-cooling non-dance skills qualify.
 export const DANCE_SKILLS: readonly ActionId[] = ['cadence', 'duet', 'rounddance', 'deepbeat', 'echofoot', 'closingstep'];
+// Dances with a direct effect of their own (owner 2026-11-05): cadence adds a small barrier (Support-scaled power),
+// duet raises the ally's hits by its power in percent until the end of next round (as the fury tonic, without exposure).
+export const DIRECT_DANCES: readonly ActionId[] = ['cadence', 'duet'];
 export function cooldownTargets(state: BattleState, data: EncounterDefinition, heroId: string): ActionId[] {
   const actor = state.heroes.find(h => h.id === heroId); const def = data.heroes.find(h => h.id === heroId);
   if (!actor || actor.hp <= 0 || !def) return [];
@@ -794,9 +797,11 @@ export function actionReason(state: BattleState, data: EncounterDefinition, hero
 }
 export function targetOptions(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId): TargetOption[] {
   const unavailable = actionReason(state, data, heroId, action);
+  // Skill rework (owner 2026-11-05): cadence shields and duet empowers, so both reach another standing ally even when
+  // nothing of theirs is cooling; deep beat and closing step only recover cooldowns and still need one.
   if (['cadence', 'duet', 'deepbeat', 'closingstep'].includes(action)) return data.heroes.map(h => {
     const actor = state.heroes.find(a => a.id === h.id);
-    const reason = unavailable || (!actor || actor.hp <= 0 ? 'This hero is down.' : h.id === heroId ? 'Choose another ally.' : !cooldownTargets(state, data, h.id).length ? 'No eligible skill is cooling down.' : '');
+    const reason = unavailable || (!actor || actor.hp <= 0 ? 'This hero is down.' : h.id === heroId ? 'Choose another ally.' : !DIRECT_DANCES.includes(action) && !cooldownTargets(state, data, h.id).length ? 'No eligible skill is cooling down.' : '');
     return { id: h.id, name: h.name, valid: !reason, reason };
   });
   if (action === 'rounddance') {
@@ -872,7 +877,9 @@ export function validateCommand(state: BattleState, data: EncounterDefinition, c
   const reason = actionReason(state, data, command.heroId, command.action);
   if (reason) return reason;
   const selectsSkill = command.action === 'duet' && hasCap(data, command.heroId, 'lalin2');
-  if (selectsSkill && (!command.cooldownAction || !cooldownTargets(state, data, command.targetId).includes(command.cooldownAction))) return 'Choose an eligible cooling skill.';
+  // Duet may now go to an ally with nothing cooling (Cerise p2 then has no skill to pick).
+  const cooling = selectsSkill ? cooldownTargets(state, data, command.targetId) : [];
+  if (selectsSkill && (command.cooldownAction ? !cooling.includes(command.cooldownAction) : cooling.length > 0)) return 'Choose an eligible cooling skill.';
   if (!selectsSkill && command.cooldownAction !== undefined) return 'This action does not select a cooling skill.';
   const selectsAlly = command.action === 'echofoot' && hasCap(data, command.heroId, 'dancerEchoChoose');
   const allies = danceAllies(state, data, command.heroId);
@@ -984,6 +991,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       };
       switch (command.action) {
         case 'cadence':
+          barrier(chosen!, skill.power);
           reduce(chosen!, 1, 1, undefined, hasCap(data, hero.id, 'dancerCadenceShort'));
           if (hasCap(data, hero.id, 'lalin1') && !state.commands.some(c => c.heroId === hero.id && c.action === 'cadence')) cooldownAdjustment--;
           break;
@@ -992,6 +1000,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
             reduce(chosen!, 1, 1, command.cooldownAction);
             const second = allies.find(h => h.id !== chosen!.id); if (second) reduce(second, 1, 1);
           } else reduce(chosen!, hasCap(data, hero.id, 'dancerDuetFocus') ? 2 : 1, hasCap(data, hero.id, 'dancerDuetFocus') ? 1 : 2, command.cooldownAction);
+          chosen!.empowered = { percent: Math.max(skill.power, (chosen!.empowered?.round ?? 0) >= state.round ? chosen!.empowered!.percent : 0), round: state.round + 1 };
+          events.push({ type: 'buff', sourceId: hero.id, targetId: chosen!.id, amount: skill.power, text: 'Duet.' });
           break;
         case 'rounddance': {
           const pair = hasCap(data, hero.id, 'dancerRoundPair');
@@ -1025,6 +1035,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     }
     case 'turncycle': case 'doubledial': {
       const steps = command.action === 'turncycle' ? 1 : command.steps ?? 2; const before = nextIntentOf(state, data, enemy!.id)!;
+      // Turn cycle also lands a small energy hit (owner 2026-11-05); the dial still turns if the foe falls.
+      if (skill.power > 0) damage(skill.power);
       enemy!.cycleShift = (enemy!.cycleShift ?? 0) + steps;
       events.push({ type: 'dial', sourceId: hero.id, targetId: enemy!.id, amount: steps, text: 'The cycle turns.' });
       if (command.action === 'turncycle' && before.kind === 'physical') cooldownAdjustment -= capAmount(data, hero.id, 'seerTurnRefund');

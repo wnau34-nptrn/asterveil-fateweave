@@ -80,7 +80,7 @@ test('C12: Duet selects a cooling skill once, cancellation preserves the save an
   await expect(page.locator('#hero-lalin')).toHaveAttribute('aria-pressed', 'true');
   const before = await saved(page);
   await page.locator('#action-duet').click();
-  await expect(page.locator('#action-duet .skill-value')).toHaveText('คืนคูลดาวน์');
+  await expect(page.locator('#action-duet .skill-value')).toHaveText(/^แรง \+\d+%$/);
   await page.locator('#target-weaver').click();
   await expect(page.locator('#cooldown-choice')).toBeVisible();
   expect(await saved(page)).toBe(before);

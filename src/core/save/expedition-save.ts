@@ -104,7 +104,11 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v47 (P03 Kael, OD-14): Kael joins the catalog and the hiring board's featured slot. Each profile now stores its open
 // board's featured lineup (`boardFeatured`); a v46 profile keeps the v46 lineup until its next return/refresh, so loading
 // never changes an open board or its paid indexes. No member, item or battle changes (old commands replay the same).
-const SAVE_VERSION = 47;
+// v48 (owner 2026-11-05, skill rework): Cerise's cadence adds a barrier and duet empowers, both usable on an ally with
+// nothing cooling; Astrid's turn cycle also hits. Profiles are unchanged; a battle in progress that used one of them
+// restarts from its entry HP.
+const SAVE_VERSION = 48;
+const REWORKED_V48: readonly ActionId[] = ['cadence', 'duet', 'turncycle'];
 const BATCH_ONE_IDS = ['metta', 'thiran', 'lalin', 'wila'];
 // Characters added after the v43 legacy board snapshot (P03); never part of a legacy pool or the v46 featured lineup.
 const P03_IDS = ['kael', 'wynne', 'astrid'];
@@ -375,6 +379,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     })) b.commands = [];
     if (version < 42 && Array.isArray(b.commands) && (b.commands.some(c => AUDIT_ACTIONS.includes(obj(c).action as ActionId)) || s.hard === true && b.kind === 'boss')) b.commands = [];
     if (version < 46 && Array.isArray(b.commands) && b.commands.some(c => obj(c).action === 'revive')) b.commands = [];
+    if (version < 48 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V48.includes(obj(c).action as ActionId))) b.commands = [];
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, party);
     // Validate against the encounter as fought by this run's deployed party (stars and camp level included).
@@ -689,7 +694,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

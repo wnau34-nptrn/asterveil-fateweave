@@ -92,6 +92,8 @@ describe('P03 Seer cycle', () => {
     expect(r.state.enemies[0]!.cycleShift).toBe(1);
     expect(upcomingTurns(r.state, d, 4).map(x => x.actorId)).toEqual(upcomingTurns(resolveCommand(s, d, { beat: s.beat, heroId: 'astrid', action: 'attack', targetId: 'f1' }).state, d, 4).map(x => x.actorId));
     expect(enemyIntent(r.state, d, 'f1', r.state.round)!.name).toBe('C');
+    // Skill rework 2026-11-05: the turn also lands a small energy hit on the turned foe.
+    expect(r.turns[0]!.events.filter(e => e.type === 'damage')).toMatchObject([{ sourceId: 'astrid', targetId: 'f1', amount: 8 }]);
   });
   it('cannot turn a locked move or onto one, nor a one-move cycle', () => {
     const locked = fixture(['turncycle'], {}, undefined, [move('f1', 'A', 20), move('f1', 'Storm', 30, { all: true }), move('f2', 'W', 1)]);

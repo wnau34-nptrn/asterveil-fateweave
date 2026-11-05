@@ -48,10 +48,10 @@ Dealt, Healed and Taken are that class's own totals.
 | thiran | none | 10/10 | 76% | 941 | 285 | 207 | 5.5 |
 | thiran | main | 10/10 | 93% | 1372 | 492 | 120 | 4.6 |
 | thiran | off | 10/10 | 91% | 1274 | 484 | 139 | 5.0 |
-| lalin | none | 9/10 | 55% | 561 | 0 | 162 | 6.9 |
+| lalin | none | 10/10 | 58% | 501 | 0 | 96 | 6.6 |
 | lalin | main | 10/10 | 79% | 914 | 8 | 57 | 5.4 |
 | lalin | off | 10/10 | 77% | 914 | 24 | 45 | 5.4 |
-| wila | none | 9/10 | 55% | 561 | 0 | 162 | 6.9 |
+| wila | none | 10/10 | 58% | 501 | 0 | 96 | 6.6 |
 | wila | main | 10/10 | 79% | 914 | 8 | 57 | 5.4 |
 | wila | off | 10/10 | 77% | 914 | 24 | 45 | 5.4 |
 | kael | none | 10/10 | 70% | 1129 | 0 | 220 | 5.0 |
@@ -60,6 +60,6 @@ Dealt, Healed and Taken are that class's own totals.
 | wynne | none | 10/10 | 58% | 526 | 0 | 96 | 5.9 |
 | wynne | main | 10/10 | 75% | 626 | 0 | 57 | 5.7 |
 | wynne | off | 10/10 | 69% | 592 | 0 | 57 | 5.8 |
-| astrid | none | 10/10 | 64% | 607 | 0 | 80 | 6.2 |
+| astrid | none | 10/10 | 64% | 605 | 0 | 80 | 6.2 |
 | astrid | main | 10/10 | 78% | 800 | 0 | 45 | 5.6 |
 | astrid | off | 10/10 | 75% | 862 | 26 | 45 | 5.5 |
