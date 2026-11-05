@@ -54,7 +54,11 @@ export function fitViewport(root: HTMLElement = document.documentElement): void 
     // A shorter viewport may already start below the status bar. Only reserve a
     // fallback when the layout actually reaches the full screen height; the old
     // 120px tolerance added another 50px to ordinary Safari viewports.
-    const underStatusBar = ios() && portrait && envTop === 0 && screen.height >= 812 && height >= screen.height - 1;
+    // Home-screen web app (manifest display: standalone): the page always fills the screen under a translucent
+    // status bar and env(safe-area-inset-*) is real, so the Safari-tab fallback must never add to it.
+    const standalone = matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
+    root.dataset.standalone = String(standalone);
+    const underStatusBar = !standalone && ios() && portrait && envTop === 0 && screen.height >= 812 && height >= screen.height - 1;
     root.style.setProperty('--safe-top-fallback', underStatusBar ? '50px' : '0px');
     if (window.scrollX || window.scrollY) window.scrollTo(0, 0);
     if (debug) {

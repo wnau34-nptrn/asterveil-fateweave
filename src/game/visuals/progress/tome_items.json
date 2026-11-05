@@ -1,0 +1,56 @@
+{
+  "tome_bulwark_small": {
+    "x": 0,
+    "y": 0,
+    "w": 128,
+    "h": 128
+  },
+  "tome_bulwark_medium": {
+    "x": 128,
+    "y": 0,
+    "w": 128,
+    "h": 128
+  },
+  "tome_bulwark_large": {
+    "x": 256,
+    "y": 0,
+    "w": 128,
+    "h": 128
+  },
+  "tome_blade_small": {
+    "x": 0,
+    "y": 128,
+    "w": 128,
+    "h": 128
+  },
+  "tome_blade_medium": {
+    "x": 128,
+    "y": 128,
+    "w": 128,
+    "h": 128
+  },
+  "tome_blade_large": {
+    "x": 256,
+    "y": 128,
+    "w": 128,
+    "h": 128
+  },
+  "tome_accord_small": {
+    "x": 0,
+    "y": 256,
+    "w": 128,
+    "h": 128
+  },
+  "tome_accord_medium": {
+    "x": 128,
+    "y": 256,
+    "w": 128,
+    "h": 128
+  },
+  "tome_accord_large": {
+    "x": 256,
+    "y": 256,
+    "w": 128,
+    "h": 128
+  }
+}

@@ -362,3 +362,13 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 /* Map: show every deployed member's fatigue without crowding their name or HP. */
 .world-fatigue { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 4px; min-width: 0; padding: 1px 3px; border-radius: 8px; background: #071320dc; color: #eef4ff; font-size: 11px; line-height: 1.5; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .world-fatigue .fatigue-dot { width: 8px; height: 8px; box-shadow: none; }
+/* Painted tomes (ART-UI-PROGRESS-001): a 24px book in the cost chip, a 36px book per size in the camp bag. */
+.tome-art { position: relative; flex: none; display: inline-grid; width: var(--art, 24px); height: var(--art, 24px); }
+.tome-chip .tome-art { --art: 24px; margin-block: -2px; }
+.tome-bag li { align-items: center; }
+.tome-bag li > b { flex: 0 0 auto; }
+.tome-counts { flex: 1 1 auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+.tome-count { display: grid; justify-items: center; gap: 0; text-align: center; line-height: 1.3; }
+.tome-count .tome-art { --art: 36px; }
+.tome-count small { font-size: 12px; color: var(--text-muted, #b9c8d8); }
+.tome-count strong { font-weight: 600; }

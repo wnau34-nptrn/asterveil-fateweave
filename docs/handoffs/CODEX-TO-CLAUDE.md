@@ -6,6 +6,10 @@ Newest first. One entry per finished task, at most 12 lines; link a validation R
 - เจ้าของขอสัญลักษณ์/ป้ายเตือนกายภาพ vs เวท: การ์ดเจตนา (ไอคอนสี+ขอบ+ป้ายคำ) และมุมรูปศัตรูในคิวเทิร์น; ป้ายที่การ์ดฮีโร่ที่ถูกเล็งเจ้าของสั่งตัด; "เวท" แทน "พลังงาน" ในคำแสดงผลของเจตนา; ไม่เปลี่ยนกฎ/เซฟ/ตัวเลข
 - Tests: typecheck/lint/unit ผ่าน; Playwright combat/team-five/battle-shots 54 ผ่าน; หลักฐาน [`damage-kind`](../validation/damage-kind/README_TH.md)
 
+## 2026-11-05 — Painted skill tomes in game (Claude, branch art/tome-icons)
+- ภาพตำรา 9 แบบจาก ART-UI-PROGRESS-001 (เจ้าของสั่งนำเข้า) → atlas 3×3 lossless 152 KB; ใช้ที่ชิปค่าใช้จ่ายเพิ่ม Lv สกิลและรายการตำราของค่าย; ไม่เปลี่ยนกฎ/เซฟ/ตัวเลข; ของอื่นในแพ็กเกจยังไม่ผูก
+- Tests: typecheck/lint/unit 1604 ผ่าน; Playwright unified-skills/character/skill-audit 22/22; หลักฐาน [`tome-art`](../validation/tome-art/README_TH.md)
+
 ## 2026-11-05 — UI frame group 2: team sheet + character window (Claude, branch feat/ui-frame-group2)
 - แผ่นทีมและหน้าต่างตัวละคร (5 แท็บ + review) เต็มจอบนจอแนวตั้ง แถบนำทางซ่อน (Q1 = R1 การตัดสินใจของ Claude ตามที่เจ้าของมอบ); หัวเดียวกับแผ่นบริการ (ปิด 333,11), ปุ่มหลัก/รอง token เดียวกัน, ข้อความ ≥12px ในหน้าต่าง (ยกเว้นแถบสลับตัวละคร/ตารางทีมที่ห้ามแตะ)
 - padding ใช้ `--star-safe-top/bottom` เดิม + box-shadow เติม navy; เทสต์ที่ยืนยัน "แถบนำทางเห็นได้" ปรับเป็น "แผ่นเต็มกรอบ แถบซ่อน" (portrait-keyboard, world, team-character-navigation)
