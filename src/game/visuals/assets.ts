@@ -63,6 +63,8 @@ const poseColumns: Readonly<Record<LobbyPose, number>> = { sit: 0, cheer: 1, idl
 const poseSheets = {
   heroes: ['guardian', 'tracer', 'weaver', 'healer'],
   mercs: ['garran', 'mira', 'toma', 'sefa', 'brann', 'lio'],
+  // ART-UI-LOBBY-002 (Claude intake 2026-11-05): Corin, Cerise, Kael, Wynne, Astrid; 1536×2560, lossy WebP q92 (the lossless master is 3.1 MB).
+  p03: ['metta', 'lalin', 'kael', 'wynne', 'astrid'],
 } as const;
 export function lobbyPose(id: string, pose: LobbyPose): { url: string; column: number; row: number; rows: number } | undefined {
   for (const [sheet, ids] of Object.entries(poseSheets) as [keyof typeof poseSheets, readonly string[]][]) {
