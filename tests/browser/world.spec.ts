@@ -307,7 +307,7 @@ test('lobby market (4A): the broker sheet redraws the board for gold twice per r
   await page.locator('#buy-gearbox').click(); await expect(page.locator('.lobby-result')).toContainText('หีบอุปกรณ์');
   p = await savedProfile(page);
   expect(p.members.tracer!.dupes).toBe(1); expect(p.shop).toEqual({ contract: 1, gearbox: 1 }); expect(p.items).toHaveLength(1); expect(p.items[0]!.rarity).toBeGreaterThanOrEqual(2);
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(47);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(48);
   expect(issues).toEqual([]);
 });
 
@@ -497,7 +497,7 @@ test('camp travel (4B) and optional elite returns (4C): rest brings the meadow e
   const start = findTiles(map, 'start')[0]!; await reachable(page, `#travel-${start.x}-${start.y}`); await page.locator(`#travel-${start.x}-${start.y}`).click();
   await expect(page.locator('#world-message')).toContainText('วาร์ปกลับทางเข้าด่าน');
   run = await saved(page); expect(run.position).toEqual(start);
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(47);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(48);
   expect(issues).toEqual([]);
 });
 
@@ -508,7 +508,7 @@ test('the smith smelts ore into veil dust, capped per return; saved v18', async 
   await openForgeTools(page);await page.locator('#forge-tab-smelt').click();await page.locator('#forge-target').selectOption('5');await reachable(page,'#forge-smelt');await page.locator('#forge-smelt').click();await page.locator('#forge-confirm').click();
   await expect(page.locator('.lobby-result')).toContainText('หลอมแร่ดาวเป็นฝุ่นดาว 5');
   const p = await savedProfile(page); expect(p.bank.dust).toBe(5); expect(p.bank.ore).toBe(500 - 5 * f.smeltOre); expect(p.smelted).toBe(5);
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(47);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(48);
 });
 
 test('commander identity replaces the legacy camp name without rewriting saves', async ({ page }) => {
@@ -1047,7 +1047,7 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   await page.screenshot({ path: info.outputPath('bag-team.png') });
   await page.locator('#pack-content .team-card.empty.target[data-side=reserve]').first().click();
   await expect.poll(async () => (await saved(page)).roster).toEqual({ deployed: ['guardian', 'tracer', 'weaver'], reserve: ['healer'] });
-  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(47);
+  expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(48);
   expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
   expect(issues).toEqual([]);
 });
