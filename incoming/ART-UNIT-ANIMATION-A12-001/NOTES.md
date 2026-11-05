@@ -4,6 +4,31 @@
 Base `feature/fateweave-initial-prototype` @ `d5fe9eaa668ef6c9a7384a95b0f365ba72dee10a`
 Art only · **รอเจ้าของเลือกภาพและอนุมัติ motion** · ห้าม merge โดย Codex
 
+## R2 — Astrid deflect เท่านั้น · 2026-11-05
+
+Claude ตรวจ 21 จาก 22 strips ผ่านตาม delegation งานภาพของเจ้าของวันที่ 2026-11-04 (ไม่ใช่ owner approval) จึงคง raw/spaced/cells/audits/preview ของท่าอื่นและข้อมูล strip ทั้ง 21 รายการเดิม byte-identical ไม่มีการ regenerate อีก 21 strips
+
+R1 ของ deflect มีมือชิดอกและการเคลื่อนเล็กเกินไป เมื่อย่อตัวประมาณ 111px มองไม่ออกว่า “ผลักออก แล้วกวาดด้านข้างลง” เก็บ raw R1 bytes เดิมที่ `raw/rejected/astrid-deflect-r1-small-motion.png` SHA-256 เดิมยืนยันใน validation; เปลี่ยน prompt record เดิมเป็น rejected พร้อมเหตุผล ไม่มีการแต้มแก้ภาพ
+
+R2 สร้างทั้งแถบ 6 เฟรมใน edit request เดียว แนบ seed Astrid เดิมเท่านั้น: เฟรม 2 ยกฝ่ามือซ้าย/กางศอก; เฟรม 3 เหยียดแขนออกขวาพ้นลำตัวระดับไหล่; เฟรม 4 แขนยังเหยียดแต่กวาดลงใกล้สะโพก; เฟรม 5 ค้างมือต่ำและมองตาม ทั้งแถบมีแอสโทรเลบหนึ่งชิ้นต่อเฟรมที่มือขวา ไม่มี VFX หรือเงาพื้น ตรวจภาพจริงแล้ว มือไม่ถูกตัด/ไม่มีอุปกรณ์ซ้ำ/พื้นโปร่งใส เฟรม 1 และ 6 ล็อกกลับ seed เดิม
+
+ใช้ uniform raw-to-seed scale จากความสูง ready เหมือน R1; cell 640×512, logical x64, anchor (320,497), sole alpha>40 บน y496, timing 1/1.2/.75/1/.8/1. Audit เดิมไม่แก้: **median 0.9215, max 0.926**, ทุกเฟรมวัดได้ ไม่มี not-measured ผ่านเกณฑ์ median ≤1.15 / ทุก measured ≤1.20
+
+`review/astrid-deflect-r1-vs-r2.png` เทียบ R1/R2 คู่กันทุกเฟรมบน `battle_forest.webp`: แถวบนใช้ scale คงที่จาก seed ให้ตัวสูง 111px (ไม่ fit รายเฟรม) แถวล่าง cell-height 512px. ตรวจที่ 111px แล้ว silhouette เฟรม 3 เป็นแขนยื่นสูง และเฟรม 4 เป็นแขนเฉียงต่ำต่างจาก ready และต่างกันชัด นี่เป็น offline review ไม่ใช่การทดสอบในเกม
+
+คำแนะนำใน strips.json: **R2 replaces R1 for small motion**, status candidate. **รอเจ้าของ/Claude ตรวจ motion**; ไม่มี owner approval หรือ runtime integration และไม่ merge PR #157
+
+ทำซ้ำเฉพาะท่านี้ (ไม่ rebuild ท่าอื่น):
+
+```sh
+PYTHONPATH=/tmp/a12-python python3 incoming/ART-UNIT-ANIMATION-A12-001/build_handoff.py --only astrid-deflect
+python3 incoming/ART-UNIT-ANIMATION-A12-001/verify_remote.py
+```
+
+Build ยืนยัน SHA ของ protected files จาก commit R1 `0404c7ff` และข้อมูล strip อีก 21 รายการก่อนเขียน manifest/checksums ใหม่ หลักฐาน `validation.json:r2_review` รวม hashes ที่ต้องคงเดิม
+
+ข้อความ R1 ด้านล่างเป็นประวัติ; สถานะ deflect ล่าสุดให้ยึด R2 ส่วนนี้
+
 ## ส่งมอบ
 
 - Wynne 7 strips: attack, knot, toll, weave, hit, block, down; Astrid 7 strips: attack, deflect, dial, read, hit, block, down. Kael 8 strips: attack, gather, release, circle, stored, hit, block, down. รวม 114 generated action/reaction slots และ seed comparison แยกในทุกโฟลเดอร์เซลล์

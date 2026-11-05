@@ -1088,7 +1088,7 @@
       0.970703125
     ],
     "shared_character_scale": 1.0,
-    "raw_to_seed_resolution_scale": 0.9318181818181818,
+    "raw_to_seed_resolution_scale": 0.9977876106194691,
     "ground_y": 497,
     "raw_file": "raw/astrid-deflect.png",
     "file": "spaced/astrid-deflect.png",
@@ -1097,14 +1097,14 @@
       {
         "frame": 1,
         "source_box": [
-          5,
-          119,
-          363,
-          609
+          26,
+          121,
+          338,
+          579
         ],
-        "uniform_raw_scale": 0.9318181818181818,
+        "uniform_raw_scale": 0.9977876106194691,
         "offset": [
-          153,
+          164,
           43
         ],
         "ready_seed_lock": true
@@ -1112,14 +1112,14 @@
       {
         "frame": 2,
         "source_box": [
-          368,
-          119,
-          725,
-          609
+          391,
+          121,
+          699,
+          579
         ],
-        "uniform_raw_scale": 0.9318181818181818,
+        "uniform_raw_scale": 0.9977876106194691,
         "offset": [
-          154,
+          166,
           43
         ],
         "ready_seed_lock": false
@@ -1127,66 +1127,66 @@
       {
         "frame": 3,
         "source_box": [
-          730,
-          119,
-          1087,
-          608
+          746,
+          120,
+          1066,
+          578
         ],
-        "uniform_raw_scale": 0.9318181818181818,
+        "uniform_raw_scale": 0.9977876106194691,
         "offset": [
-          154,
-          43
+          160,
+          42
         ],
         "ready_seed_lock": false
       },
       {
         "frame": 4,
         "source_box": [
-          1093,
-          119,
-          1450,
-          608
+          1113,
+          123,
+          1424,
+          579
         ],
-        "uniform_raw_scale": 0.9318181818181818,
+        "uniform_raw_scale": 0.9977876106194691,
         "offset": [
-          154,
-          43
+          165,
+          45
         ],
         "ready_seed_lock": false
       },
       {
         "frame": 5,
         "source_box": [
-          1455,
-          119,
-          1812,
-          608
+          1475,
+          122,
+          1785,
+          579
         ],
-        "uniform_raw_scale": 0.9318181818181818,
+        "uniform_raw_scale": 0.9977876106194691,
         "offset": [
-          154,
-          43
+          166,
+          44
         ],
         "ready_seed_lock": false
       },
       {
         "frame": 6,
         "source_box": [
-          1817,
-          119,
-          2172,
-          608
+          1844,
+          121,
+          2147,
+          579
         ],
-        "uniform_raw_scale": 0.9318181818181818,
+        "uniform_raw_scale": 0.9977876106194691,
         "offset": [
-          154,
+          169,
           43
         ],
         "ready_seed_lock": true
       }
     ],
-    "median": 1.0065,
-    "maximum_measured": 1.011,
+    "median": 0.9215,
+    "maximum_measured": 0.926,
     "not_measured": [],
     "numeric_gate": "pass",
     "status": "candidate",
@@ -1200,12 +1200,15 @@
       0.8,
       1
     ],
+    "revision": "r2",
+    "recommendation": "R2 replaces R1 for small motion",
+    "r1_commit": "0404c7ff1c291d22b9b12d68be61671098006e22",
     "frame_descriptions": [
       "ready",
-      "raise open empty palm",
-      "push outward",
-      "sweep sideways and down",
-      "hold turned palm",
+      "left open palm to shoulder; elbow out; palm faces right",
+      "nearly straight arm pushes palm far right past body; lean forward",
+      "extended arm sweeps sideways/down to hip height; wrist turns",
+      "hold low turned palm far right; gaze follows",
       "ready"
     ],
     "proposed_ActionId_mapping": {
@@ -1213,8 +1216,7 @@
       "crossing": "deflect"
     },
     "visual_review": "reviewed offline at 390px; owner approval pending",
-    "not_measured_visual_review": {},
-    "recommendation": "recommended corrected candidate; no alternate option"
+    "not_measured_visual_review": {}
   },
   {
     "identity": "astrid",

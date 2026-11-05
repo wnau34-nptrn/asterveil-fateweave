@@ -192,8 +192,11 @@
     "generation_id": null,
     "artifact_id": "exec-8276bf08-fa24-49da-8621-c765a7d058ed",
     "source_path": "/workspace/generated_images/exec-8276bf08-fa24-49da-8621-c765a7d058ed.png",
-    "raw_file": "raw/astrid-deflect.png",
-    "frame_count": 6
+    "raw_file": "raw/rejected/astrid-deflect-r1-small-motion.png",
+    "frame_count": 6,
+    "status": "rejected",
+    "rejection_reason": "R1 frames 2-5 arm too close to torso; forward push and downward sweep unreadable at 111px.",
+    "revision": "r1"
   },
   {
     "identity": "kael",
@@ -326,5 +329,19 @@
     "source_path": "/workspace/generated_images/exec-525e7b11-9563-4ca1-b753-b1b584ca5efc.png",
     "raw_file": "raw/kael-hit.png",
     "frame_count": 4
+  },
+  {
+    "identity": "astrid",
+    "move": "deflect",
+    "revision": "r2",
+    "prompt": "Edit attached approved Astrid sprite into ONE continuous horizontal SIX-frame DEFLECT animation strip, left to right, full-body figures with WIDE CLEAR transparent gutters and generous outer margins. True RGBA transparency, alpha ZERO outside figures. Same exact polished chibi illustration, large head-to-body proportions, face, silver-lavender bob, purple eyes, star hairpin, navy ivory gold split mantle, trousers and boots as reference. Face RIGHT, feet grounded on common baseline. Exactly ONE astrolabe per figure, physically held by her RIGHT hand throughout near screen-right chest/waist. NEVER duplicate or orbit the instrument. LEFT EMPTY HAND performs a LARGE CLEAR arm sweep, crossing IN FRONT of her body and extending past its right contour. NOT tiny gestures at chest. This must read when character is only 111 pixels tall. Six chronological poses: 1 EXACT seed ready. 2 raise LEFT EMPTY OPEN PALM to shoulder height with elbow out, palm faces screen RIGHT toward foes, not viewer; right hand keeps one instrument. 3 PUSH LEFT EMPTY PALM far FORWARD-RIGHT with arm ALMOST FULLY STRAIGHT, hand well clear of torso and at least as far right as astrolabe; slight forward lean, weight on front foot; silhouette must visibly project a long arm to the right at SHOULDER height. 4 CONTACT: with LEFT arm still EXTENDED well away from body, sweep palm sideways and DOWN in a WIDE arc until hand is at HIP HEIGHT in front-RIGHT; wrist turned down as guiding an invisible strike aside, torso slightly rotates. This low diagonal extended arm MUST have a clearly DIFFERENT silhouette from pose 3's high horizontal extended arm. 5 HOLD empty left palm LOW and FAR RIGHT at end of arc near hip height, gaze follows palm, then relax. 6 EXACT seed ready. DO NOT keep arm bent near chest in frames 3-5. Right hand and ONE astrolabe remain near chest while EMPTY left arm reaches past them. Full fingers, extended hand, mantle and boots must be safely INSIDE canvas. No VFX, glows, trails, energy, lines, particles, shadow, floor, text, halos, white haze or scenery. Body only, one whole strip in one row.",
+    "references": [
+      "seeds/astrid.png"
+    ],
+    "generation_id": null,
+    "artifact_id": "exec-d879c2be-8c1b-4e18-8c18-49ad318de417",
+    "source_path": "/workspace/generated_images/exec-d879c2be-8c1b-4e18-8c18-49ad318de417.png",
+    "raw_file": "raw/astrid-deflect.png",
+    "frame_count": 6
   }
 ]

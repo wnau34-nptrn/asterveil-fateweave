@@ -1,1 +1,1 @@
-astrid-deflect: median head scale 1.006; drift []; not measured []
+astrid-deflect: median head scale 0.921; drift []; not measured []
