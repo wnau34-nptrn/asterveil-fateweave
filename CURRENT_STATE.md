@@ -13,12 +13,12 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- None in Claude. **ART-UI-LANGUAGE-001** (owner 2026-11-05: one visual language for the whole UI) is with Codex: Claude audited 55 surfaces × 3 sizes (`docs/validation/ui-language-audit-2026-11-05/README_TH.md`; 9 header styles, 13 primary-button styles, 638 font sizes with 1 token) and wrote the brief `docs/handoffs/ART-UI-LANGUAGE-001.md` (owner questions Q1–Q4, R1 recommended by Claude). Codex must branch after PRs #166/#167/#168 merge (still open 2026-11-05).
+- **UI frame consistency** (owner 2026-11-05 “ดำเนินการได้”): Claude implements in the game itself, one page group per PR with 390px before/after shown before merge — shared window header (close/back size and position), primary/secondary button tokens, ≥12px text in service sheets and the character window, CSS onto tokens with unchanged looks. **Do not touch** battle/map HUD, painted skill icons, team formation grid, skills member strip, battle-rewards card, run-summary chips, forge item art/review. Scope and history: top of `docs/handoffs/ART-UI-LANGUAGE-001.md`; audit `docs/validation/ui-language-audit-2026-11-05/`. Codex PR #171 closed unmerged (prototypes flattened page content). Q1–Q3 open for the owner from in-game screenshots; Q4 dropped.
 
 ## Next (owner order)
 
-- When Codex opens the ART-UI-LANGUAGE-001 PR: verify SHA-256/decode, check `verification.json` against criteria 1–10, show the owner R1/R2 at 390px, record the owner's own Q1–Q4 picks, then import DOM/CSS one page group per PR (tokens + header/buttons → service sheets → forge → character → map/summary/battle dialogs), re-running `tests/browser/ui-language-audit.spec.ts` before/after. No rule/save/number changes.
-- Owner 2026-11-05: polish before P09; P09 (OD-13: accounts/cloud save/telemetry+feedback/admin, needs the D1 Edit token) waits for the owner's start. UXD-08 combined UX check remains open.
+- Group 1: header + buttons of the camp service sheets (`src/ui/game-feel.css` `.lobby-sheet-head`, `src/ui/forge-enhancement.css`, `world.css` `.round-glass`); then character window, forge, map/battle dialogs (not HUD), summary/rewards frame only. Re-run `tests/browser/ui-language-audit.spec.ts` before/after.
+- Owner 2026-11-05: polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check remains open.
 
 ## Open items
 
@@ -34,9 +34,9 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ## Opening prompt for next chat
 
 ```text
-ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype ตอบไทย
+ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype ตอบไทย ใช้เวลาไทย
 อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง
-งาน: ตรวจรับแพ็กเกจ Codex ART-UI-LANGUAGE-001 (PR จาก art/art-ui-language-001, ห้าม merge สาขาอาร์ตทั้งก้อน) ตาม docs/handoffs/ART-UI-LANGUAGE-001.md:
-ตรวจ SHA-256/decode, verification.json เทียบเกณฑ์ 1–10, ดูภาพก่อน/หลัง แล้วส่งภาพ R1/R2 390px ให้เจ้าของเลือก Q1–Q4 (บันทึกคำเจ้าของเอง)
-จากนั้นนำเข้า DOM/CSS ทีละกลุ่มหน้า PR ละกลุ่ม รัน tests/browser/ui-language-audit.spec.ts ก่อน/หลัง ไม่เปลี่ยนกฎ/เซฟ/ตัวเลข
+งาน: ทำกรอบ UI ให้สม่ำเสมอในเกมจริง ตามขอบเขตที่เจ้าของอนุมัติ (หัวข้อแรกของ docs/handoffs/ART-UI-LANGUAGE-001.md) เริ่มกลุ่ม 1 = หัวหน้าต่าง (ปุ่มปิด/ย้อนกลับ) + token ปุ่มหลัก/รอง ของแผ่นบริการค่าย
+ห้ามแตะ HUD ต่อสู้/แผนที่ ไอคอนสกิลวาด ตารางจัดทีม แถบสลับตัวละคร การ์ดรางวัล ชิปสรุป ภาพไอเทม/review ช่าง — จุดที่ดีอยู่แล้วห้ามแก้จนพัง
+รัน tests/browser/ui-language-audit.spec.ts ก่อน/หลัง ส่งภาพก่อน/หลัง 390px ให้เจ้าของดูก่อน merge แต่ละกลุ่ม ไม่เปลี่ยนกฎ/เซฟ/ตัวเลข
 ```
