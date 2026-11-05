@@ -4,10 +4,10 @@
   --star-safe-top: var(--safe-top,0px);
   --star-safe-bottom: env(safe-area-inset-bottom,0px);
   inset: max(8px,var(--star-safe-top)) 0 max(8px,var(--star-safe-bottom));
-  width: calc(var(--game-w) - 16px);
+  width: var(--game-w);
   height: calc(var(--app-h) - max(8px,var(--star-safe-top)) - max(8px,var(--star-safe-bottom)));
   max-height: calc(var(--app-h) - max(8px,var(--star-safe-top)) - max(8px,var(--star-safe-bottom)));
-  padding: 8px; gap: 6px; border-color: var(--gold-edge); border-radius: 12px;
+  padding: 8px 12px; gap: 6px; border-width: 1px 0; border-color: var(--gold-edge); border-radius: 0;
 }
 #app .character-dialog .info-header { padding: 0 0 6px 6px; }
 #app .character-dialog .info-header h2 { font-size: 1rem; }
