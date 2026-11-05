@@ -372,3 +372,9 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 .tome-count .tome-art { --art: 36px; }
 .tome-count small { font-size: 12px; color: var(--text-muted, #b9c8d8); }
 .tome-count strong { font-weight: 600; }
+/* Rift core and fate sockets (ART-UI-PROGRESS-001). */
+.tome-chip .rift-core-art { --art: 24px; margin-block: -2px; }
+.summary-haul .tome-art, .run-haul .tome-art { --art: 22px; }
+.star-sockets { gap: 2px; }
+.fate-socket { display: inline-block; width: 26px; height: 26px; flex: none; background: center / contain no-repeat; }
+.fate-socket[data-lit="false"] { opacity: .9; }

@@ -937,3 +937,9 @@ html, body { background: #0a1422; }
   .commander-top .eyebrow { display: none; }
   .commander-footer #commander-create { min-height: 44px; }
 }
+/* Sharper title on phones: a pre-upscaled portrait crop of the same art instead of stretching 499 source px of the landscape file,
+   and a gentler drift (less scale) so the animated layer is magnified less. Same picture, same framing. */
+@container game (max-width: 600px) {
+  .title-bg { inset: -3%; background-image: url('/assets/title/title_bg_portrait.webp'); animation-name: title-drift-soft; }
+}
+@keyframes title-drift-soft { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.04) translate(-1%, -.8%); } }
