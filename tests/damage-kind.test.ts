@@ -12,7 +12,7 @@ describe('incoming damage kind badge', () => {
   it('shows a kind only for an intent that deals damage of its own', () => {
     expect(damageKindOf({ ...base, kind: 'energy' })).toBe('energy');
     expect(damageKindOf({ ...base, kind: 'physical' })).toBe('physical');
-    expect(damageKindOf({ ...base, kind: 'physical', charge: 1 } as Intent)).toBeUndefined();
+    expect(damageKindOf({ ...base, kind: 'physical', charge: true } as Intent)).toBeUndefined();
     expect(damageKindOf({ ...base, kind: 'physical', special: 'phase' } as Intent)).toBeUndefined();
     expect(damageKindOf(null)).toBeUndefined();
   });
