@@ -15,6 +15,7 @@ import './ui/game-feel.css';
 import './ui/portrait.css';
 import './ui/components.css';
 import './ui/forge-enhancement.css';
+import './ui/sheet-frame.css';
 
 fitViewport();
 const app = document.querySelector<HTMLElement>('#app')!;

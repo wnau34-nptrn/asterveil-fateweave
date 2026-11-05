@@ -1,0 +1,43 @@
+/* UI frame group 1 (owner scope 2026-11-05, docs/handoffs/ART-UI-LANGUAGE-001.md): every camp service sheet
+   (team, hire/market, bag, farm plan, brew, forge, maps, quest board) shares one window header and one
+   primary/secondary button. Frame only: content, order and layout positions inside the sheets stay as they were.
+   Loaded last; #app keeps these above the per-sheet rules in game-feel/portrait/forge-enhancement/team-navigation. */
+
+/* Header: back (if any) left · title left-aligned · close right, the same 44px round buttons at the same spot. */
+#app .lobby-sheet .lobby-sheet-head { gap: var(--sheet-head-gap); }
+#app .lobby-sheet .lobby-sheet-head > button { flex: 0 0 var(--sheet-head-button); width: var(--sheet-head-button); height: var(--sheet-head-button); min-height: var(--sheet-head-button); padding: 0; border-radius: 50%; }
+#app .lobby-sheet .lobby-sheet-head > [data-lobby="close"] { margin-left: auto; }
+#app .lobby-sheet .lobby-sheet-head h2 { flex: 1 1 auto; min-width: 0; margin: 0; justify-content: flex-start; text-align: left;
+  font: var(--weight-heading) var(--sheet-title-size)/1.3 var(--font-heading); color: var(--sheet-title-color); overflow-wrap: anywhere; }
+
+@container game (max-width: 760px) and (orientation: portrait) {
+  /* Team keeps the bottom navigation but its header sits where every other sheet's does. */
+  #app #lobby-view[data-lobby-sheet="team"] .lobby-sheet { top: 0; }
+  /* The forge keeps its approved frame inset clear of rounded corners (ART-UI-UX-002, enhancement-safe-area tests);
+     its header padding absorbs that inset so close/back land on the same pixels as every other sheet
+     (other sheets: padding max(10px|12px, safe inset) + 1px border; forge: max(8px, inset) + 1px border + this). */
+  #app .lobby-sheet:has(.forge-enhancement, .forge-launcher) .lobby-sheet-head { min-height: 0;
+    padding: calc(max(10px, var(--enhance-safe-top)) - max(8px, var(--enhance-safe-top))) calc(max(12px, var(--enhance-safe-right)) - max(8px, var(--enhance-safe-right)))
+      6px calc(max(12px, var(--enhance-safe-left)) - max(8px, var(--enhance-safe-left))); }
+}
+
+/* Buttons: one primary (gold plate) and one secondary (navy plate) shape — height, radius, font, colours. */
+#app .lobby-sheet :is(button.primary, .hire-board li > button[id^="hire-"]:not(.hire-open), .hire-board li > button[id^="draft-"]) {
+  min-height: var(--button-primary-h); border-radius: var(--button-radius); font: var(--button-primary-font); }
+#app .lobby-sheet :is(button.primary, .hire-board li > button[id^="hire-"]:not(.hire-open), .hire-board li > button[id^="draft-"]):not(:disabled) {
+  color: var(--text-on-gold); background: var(--primary-plate); border: 1px solid var(--primary-plate-edge); box-shadow: var(--primary-plate-shadow); }
+#app .lobby-sheet :is(button.primary, .hire-board li > button[id^="hire-"]:not(.hire-open), .hire-board li > button[id^="draft-"]):hover:not(:disabled) { background: var(--primary-plate-hover); }
+#app .lobby-sheet :is(button.primary, .hire-board li > button[id^="hire-"]:not(.hire-open), .hire-board li > button[id^="draft-"]):disabled {
+  color: var(--primary-plate-disabled-text); background: var(--primary-plate-disabled); border: 1px solid var(--primary-plate-disabled-edge); box-shadow: inset 0 -2px 0 #3a372f; text-shadow: none; }
+#app .lobby-sheet button.secondary:not(.hire-board li > button) { min-height: var(--button-secondary-h); border-radius: var(--button-radius); font: var(--button-secondary-font); }
+
+/* Q3 = R1 (Claude's pick under the owner's delegation 2026-11-05 "เอาตามที่คุณแนะนำเลย"): no gold frame lines on
+   full-screen service sheets; gold stays for the primary button and the review/confirm ledger strip only. */
+@container game (max-width: 760px) and (orientation: portrait) {
+  #app .lobby-sheet { border-color: transparent; }
+  #app .lobby-sheet .forge-frame-trim { visibility: hidden; }
+  /* Fill the forge's safe-area gap so the camp scene does not show as stripes around it (layout unchanged). */
+  #app .lobby-sheet:has(.forge-enhancement, .forge-launcher) { box-shadow: 0 0 0 16px var(--navy-950); }
+}
+#app .lobby-sheet .lobby-sheet-head { border-bottom-color: var(--hud-edge); }
+#app .lobby-sheet .forge-enhancement:not([data-review="true"]) .forge-enhancement-dock { border-top-color: var(--enhance-edge); }

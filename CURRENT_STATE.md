@@ -13,11 +13,11 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **UI frame consistency** (owner 2026-11-05 “ดำเนินการได้”): Claude implements in the game itself, one page group per PR with 390px before/after shown before merge — shared window header (close/back size and position), primary/secondary button tokens, ≥12px text in service sheets and the character window, CSS onto tokens with unchanged looks. **Do not touch** battle/map HUD, painted skill icons, team formation grid, skills member strip, battle-rewards card, run-summary chips, forge item art/review. Scope and history: top of `docs/handoffs/ART-UI-LANGUAGE-001.md`; audit `docs/validation/ui-language-audit-2026-11-05/`. Codex PR #171 closed unmerged (prototypes flattened page content). Q1–Q3 open for the owner from in-game screenshots; Q4 dropped.
+- **UI frame consistency** (owner 2026-11-05 “ดำเนินการได้”): Claude implements in the game itself, one page group per PR with 390px before/after shown before merge — shared window header (close/back size and position), primary/secondary button tokens, ≥12px text in service sheets and the character window, CSS onto tokens with unchanged looks. **Do not touch** battle/map HUD, painted skill icons, team formation grid, skills member strip, battle-rewards card, run-summary chips, forge item art/review. Scope and history: top of `docs/handoffs/ART-UI-LANGUAGE-001.md`; audit `docs/validation/ui-language-audit-2026-11-05/`. Q1–Q3: owner delegated the pick (2026-11-05) → Claude chose R1 (full-screen sheets hiding the bottom nav, left titles, gold only on primary/review). Q4 dropped.
 
 ## Next (owner order)
 
-- Group 1: header + buttons of the camp service sheets (`src/ui/game-feel.css` `.lobby-sheet-head`, `src/ui/forge-enhancement.css`, `world.css` `.round-glass`); then character window, forge, map/battle dialogs (not HUD), summary/rewards frame only. Re-run `tests/browser/ui-language-audit.spec.ts` before/after.
+- Group 1 done (PR #173: service-sheet header + buttons + Q2/Q3, `src/ui/sheet-frame.css`, tokens `--primary-plate*`/`--secondary-plate*`/`--button-*`/`--sheet-*`; evidence `docs/validation/ui-frame-group1-2026-11-05/`). Next group 2: character window (`dialog.character`, `team-navigation.css`) — same header as sheets, Q1 R1 for team sheet + character window together (hide bottom nav, back/close in header), text ≥12px there; then map/battle dialogs (not HUD), summary/rewards frame only. Re-run `tests/browser/ui-language-audit.spec.ts` before/after.
 - Owner 2026-11-05: polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check remains open.
 
 ## Open items
@@ -36,7 +36,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ```text
 ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype ตอบไทย ใช้เวลาไทย
 อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง
-งาน: ทำกรอบ UI ให้สม่ำเสมอในเกมจริง ตามขอบเขตที่เจ้าของอนุมัติ (หัวข้อแรกของ docs/handoffs/ART-UI-LANGUAGE-001.md) เริ่มกลุ่ม 1 = หัวหน้าต่าง (ปุ่มปิด/ย้อนกลับ) + token ปุ่มหลัก/รอง ของแผ่นบริการค่าย
-ห้ามแตะ HUD ต่อสู้/แผนที่ ไอคอนสกิลวาด ตารางจัดทีม แถบสลับตัวละคร การ์ดรางวัล ชิปสรุป ภาพไอเทม/review ช่าง — จุดที่ดีอยู่แล้วห้ามแก้จนพัง
-รัน tests/browser/ui-language-audit.spec.ts ก่อน/หลัง ส่งภาพก่อน/หลัง 390px ให้เจ้าของดูก่อน merge แต่ละกลุ่ม ไม่เปลี่ยนกฎ/เซฟ/ตัวเลข
+งาน: กรอบ UI กลุ่ม 2 = หน้าต่างตัวละคร (ภาพรวม/อุปกรณ์/สกิล/พัฒนา/อัปดาว) + แผ่นทีม ตามขอบเขตหัวข้อแรกของ docs/handoffs/ART-UI-LANGUAGE-001.md
+ใช้หัวหน้าต่าง/ปุ่มเดียวกับกลุ่ม 1 (src/ui/sheet-frame.css, token ใน tokens.css) + Q1=R1 (Claude เลือกตามที่เจ้าของมอบ): เต็มจอซ่อนแถบนำทางล่าง ย้อนกลับ/ปิดในหัว + ตัวอักษร ≥12px ในหน้าต่างตัวละคร
+ห้ามแตะ HUD ต่อสู้/แผนที่ ไอคอนสกิลวาด ตารางจัดทีม แถบสลับตัวละคร การ์ดรางวัล ชิปสรุป ภาพไอเทม/review ช่าง — จุดที่ดีอยู่แล้วห้ามแก้จนพัง ไม่เปลี่ยนเนื้อหา/กฎ/เซฟ/ตัวเลข
+รัน tests/browser/ui-language-audit.spec.ts ก่อน/หลัง (UI_AUDIT=<dir>, UI_AUDIT_SIZES, PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium) ส่งภาพก่อน/หลัง 390px ให้เจ้าของดูก่อน merge
 ```
