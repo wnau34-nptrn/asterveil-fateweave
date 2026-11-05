@@ -149,7 +149,7 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `lalin` | `cadence` คืนจังหวะ | sprite `partner` 1,2,3 → 4,5,6 | วาด `saint-dance-fx` | พันธมิตร 1 คน | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `lalin` | `duet` รำประสาน | sprite `partner` 1,2,3 → 4,5,6 | วาด `saint-dance-fx` | พันธมิตร 1 คน | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `lalin` | `rounddance` รำวง | sprite `circle` 19,20 → 21,22,23,24 | วาด `saint-dance-fx` | ทั้งทีม | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
-| `lalin` | `deepbeat` ย้ำจังหวะ | sprite `partner` 1,2,3 → 4,5,6 | วาด `saint-dance-fx` | ทั้งทีม | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
+| `lalin` | `deepbeat` ย้ำจังหวะ | sprite `circle` 19,20 → 21,22,23,24 | วาด `saint-dance-fx` | ทั้งทีม | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `lalin` | `echofoot` ก้าวสะท้อน | sprite `echo` 25,26,27 → 28,29,30 | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง (เส้นเดียว) |
 | `lalin` | `closingstep` ก้าวปิดท้าย | sprite `closing` 7,8,9 → 10,11,12 | วาด `saint-dance-fx` | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `wila` | `attack` โจมตี | procedural (role basic) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
