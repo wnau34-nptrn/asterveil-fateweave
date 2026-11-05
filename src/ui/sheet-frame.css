@@ -41,3 +41,27 @@
 }
 #app .lobby-sheet .lobby-sheet-head { border-bottom-color: var(--hud-edge); }
 #app .lobby-sheet .forge-enhancement:not([data-review="true"]) .forge-enhancement-dock { border-top-color: var(--enhance-edge); }
+
+/* UI frame group 2 (owner scope 2026-11-05): the character window and the team sheet use the same full-screen
+   frame as every service sheet (Q1 = R1, Claude's pick under the owner's delegation): the bottom navigation waits
+   underneath, the header is title-left + the same 44px close at the same spot, text in the window is >= 12px.
+   The member strip, painted skill icons and formation grid are not touched. */
+@container game (max-width: 760px) and (orientation: portrait) {
+  #app #lobby-view[data-lobby-sheet="team"] .lobby-sheet { top: 0; bottom: 0; }
+  #app #lobby-view[data-character-open] .lobby-menu, #app #lobby-view[data-lobby-sheet="team"] .lobby-menu { visibility: hidden; }
+  #app #lobby-view .character-dialog { z-index: 40; inset: var(--star-safe-top) 0 var(--star-safe-bottom); width: auto; height: auto; max-height: none; border: 1px solid transparent; border-width: 1px;
+    padding: 10px max(12px, env(safe-area-inset-right)) 10px max(12px, env(safe-area-inset-left)); box-shadow: 0 0 0 80px var(--navy-950);
+    background: linear-gradient(180deg, #14243af5, #0b1626fa); }
+}
+#app .character-dialog .info-header { gap: var(--sheet-head-gap); padding: 0 0 6px; border-bottom: 1px solid var(--hud-edge); }
+#app .character-dialog .info-header h2 { flex: 1 1 auto; min-width: 0; margin: 0; text-align: left;
+  font: var(--weight-heading) var(--sheet-title-size)/1.3 var(--font-heading); color: var(--sheet-title-color); overflow-wrap: anywhere; }
+#app .character-dialog .info-header > button { flex: 0 0 var(--sheet-head-button); width: var(--sheet-head-button); height: var(--sheet-head-button); min-height: var(--sheet-head-button); padding: 0; border-radius: 50%; }
+#app .character-dialog :is(.doll-slot b, .tile-lv, .tile-plus, .tree-lv, .talent-node i, .swap-list small, .tree-legend) { font-size: 12px; }
+#app .character-dialog .character-content :is(i, small) { font-size: max(1em, 12px); }
+/* Character window buttons use the same primary/secondary plates as the sheets (shape only; positions unchanged). */
+#app .character-dialog button.primary { min-height: var(--button-primary-h); border-radius: var(--button-radius); font: var(--button-primary-font); }
+#app .character-dialog button.primary:not(:disabled) { color: var(--text-on-gold); background: var(--primary-plate); border: 1px solid var(--primary-plate-edge); box-shadow: var(--primary-plate-shadow); }
+#app .character-dialog button.primary:hover:not(:disabled) { background: var(--primary-plate-hover); }
+#app .character-dialog button.primary:disabled { color: var(--primary-plate-disabled-text); background: var(--primary-plate-disabled); border: 1px solid var(--primary-plate-disabled-edge); box-shadow: inset 0 -2px 0 #3a372f; text-shadow: none; }
+#app .character-dialog button.secondary { min-height: var(--button-secondary-h); border-radius: var(--button-radius); font: var(--button-secondary-font); }

@@ -52,12 +52,10 @@ for (const [width, height, touch] of [[1366, 768, false], [1920, 1080, false], [
     await page.locator('#continue').click(); await expect(page.locator('#lobby-view')).toBeVisible();
     await inFrame(page, '#lobby-depart'); await page.locator('#lobby-tab-team').click();
     await expect(page.locator('#lobby-sheet')).toBeVisible();
-    // The team sheet reserves the real HUD navigation (owner's character-entry flow).
-    await inFrame(page, '#lobby-sheet'); await expect(page.locator('.lobby-menu')).toBeVisible();
-    const teamSheet = (await page.locator('#lobby-sheet').boundingBox())!, nav = (await page.locator('.lobby-menu').boundingBox())!;
-    expect(teamSheet.x).toBe(frame.x); expect(teamSheet.width).toBe(frame.width);
-    expect(teamSheet.y + teamSheet.height).toBeLessThanOrEqual(nav.y);
-    for (const button of await page.locator('.lobby-menu button').all()) await inFrame(page, `#${await button.getAttribute('id')}`);
+    // UI frame group 2 (Q1 = R1): the team sheet is full screen like the other sheets; the HUD navigation waits underneath.
+    await inFrame(page, '#lobby-sheet'); await expect(page.locator('.lobby-menu')).toBeHidden();
+    const teamSheet = (await page.locator('#lobby-sheet').boundingBox())!;
+    expect(teamSheet.x).toBe(frame.x); expect(teamSheet.width).toBe(frame.width); expect(teamSheet.y).toBe(frame.y); expect(teamSheet.height).toBe(frame.height);
     await page.locator('[data-lobby=close]').click(); await page.locator('#lobby-depart').click();
     await expect(page.locator('#world-view')).toBeVisible();
     expect(await page.locator('#map-viewport').boundingBox()).toEqual(frame);

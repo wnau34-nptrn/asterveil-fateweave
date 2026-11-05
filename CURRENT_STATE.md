@@ -17,7 +17,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Next (owner order)
 
-- Group 1 done (PR #173: service-sheet header + buttons + Q2/Q3, `src/ui/sheet-frame.css`, tokens `--primary-plate*`/`--secondary-plate*`/`--button-*`/`--sheet-*`; evidence `docs/validation/ui-frame-group1-2026-11-05/`). Next group 2: character window (`dialog.character`, `team-navigation.css`) — same header as sheets, Q1 R1 for team sheet + character window together (hide bottom nav, back/close in header), text ≥12px there; then map/battle dialogs (not HUD), summary/rewards frame only. Re-run `tests/browser/ui-language-audit.spec.ts` before/after.
+- Groups 1–2 done (PR #173 service sheets; group 2 = team sheet + character window full-screen, header/buttons/≥12px, `docs/validation/ui-frame-group2-2026-11-05/`). Next group 3: map/battle dialogs (not HUD; the map character dialog already has the new header), then summary/rewards frame only. Re-run `tests/browser/ui-language-audit.spec.ts` before/after.
 - Owner 2026-11-05: polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check remains open.
 
 ## Open items
@@ -36,7 +36,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ```text
 ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype ตอบไทย ใช้เวลาไทย
 อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง
-งาน: กรอบ UI กลุ่ม 2 = หน้าต่างตัวละคร (ภาพรวม/อุปกรณ์/สกิล/พัฒนา/อัปดาว) + แผ่นทีม ตามขอบเขตหัวข้อแรกของ docs/handoffs/ART-UI-LANGUAGE-001.md
+งาน: กรอบ UI กลุ่ม 3 = ไดอะล็อกแผนที่/ต่อสู้ (ไม่ใช่ HUD) แล้วกรอบสรุป/รางวัลเท่านั้น ตามขอบเขตหัวข้อแรกของ docs/handoffs/ART-UI-LANGUAGE-001.md
 ใช้หัวหน้าต่าง/ปุ่มเดียวกับกลุ่ม 1 (src/ui/sheet-frame.css, token ใน tokens.css) + Q1=R1 (Claude เลือกตามที่เจ้าของมอบ): เต็มจอซ่อนแถบนำทางล่าง ย้อนกลับ/ปิดในหัว + ตัวอักษร ≥12px ในหน้าต่างตัวละคร
 ห้ามแตะ HUD ต่อสู้/แผนที่ ไอคอนสกิลวาด ตารางจัดทีม แถบสลับตัวละคร การ์ดรางวัล ชิปสรุป ภาพไอเทม/review ช่าง — จุดที่ดีอยู่แล้วห้ามแก้จนพัง ไม่เปลี่ยนเนื้อหา/กฎ/เซฟ/ตัวเลข
 รัน tests/browser/ui-language-audit.spec.ts ก่อน/หลัง (UI_AUDIT=<dir>, UI_AUDIT_SIZES, PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium) ส่งภาพก่อน/หลัง 390px ให้เจ้าของดูก่อน merge
