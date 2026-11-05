@@ -25,15 +25,16 @@ for(const [width,height] of [[390,650],[390,844],[320,568],[1366,768]] as const)
     expect(await dialog.evaluate(el=>el.matches(':modal'))).toBe(false);
     await expect(page.locator('.lobby-pan')).toHaveAttribute('inert','');
     await page.locator('#camp-character-tab-skills').click();await page.locator('#camp-skill-selection').selectOption('guard');
-    const nav=page.locator('.lobby-menu');await expect(nav).toBeVisible();const d=await dialog.boundingBox(),n=await nav.boundingBox();expect(d!.y+d!.height).toBeLessThanOrEqual(n!.y);
-    for(const b of await nav.locator('button').all()){const r=await b.boundingBox();expect(r!.height).toBeGreaterThanOrEqual(44);expect(r!.width).toBeGreaterThanOrEqual(44);}
+    // UI frame group 2 (Q1 = R1): the character window is full screen; the navigation waits underneath and the header close is 44px.
+    await expect(page.locator('.lobby-menu')).toBeHidden();const d=await dialog.boundingBox(),f=await page.locator('#app').boundingBox();expect(d!.y).toBe(f!.y);expect(d!.height).toBe(f!.height);
+    const cb=await dialog.locator('[data-world=character-close]').boundingBox();expect(cb!.width).toBeGreaterThanOrEqual(44);expect(cb!.height).toBeGreaterThanOrEqual(44);
     if(capture&&width===390)await page.screenshot({path:info.outputPath(`skills-hud-${height}.png`)});
     await page.locator('#camp-skills-tree').click();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(page.locator('#team-character-guardian')).toBeFocused();
     await page.locator('#team-character-resume').click();await expect(page.locator('#camp-character-tab-skills')).toHaveAttribute('aria-selected','true');await expect(page.locator('#camp-skills-tree')).toHaveAttribute('aria-pressed','true');
     await page.locator('#camp-skills-details').click();await expect(page.locator('#camp-skill-selection')).toHaveValue('guard');
     await page.locator('#camp-skill-up-guard').scrollIntoViewIfNeeded();const detailScroll=await page.locator('#camp-character-content').evaluate(el=>el.scrollTop);if(height===650)expect(detailScroll).toBeGreaterThan(0);
     await page.locator('#camp-skill-up-guard').click();await expect(page.locator('#camp-skill-review-confirm')).toBeVisible();
-    await page.locator('#lobby-tab-forge').click();await expect(dialog).not.toBeVisible();await expect(page.locator('.forge-launcher')).toBeVisible();expect(await saved(page)).toBe(before);
+    await dialog.locator('[data-world=character-close]').click();await expect(dialog).not.toBeVisible();await page.locator('#lobby-sheet [data-lobby=close]').click();await page.locator('#lobby-tab-forge').click();await expect(page.locator('.forge-launcher')).toBeVisible();expect(await saved(page)).toBe(before);
     await page.locator('#lobby-sheet [data-lobby=close]').click();await page.locator('#lobby-tab-team').click();await page.locator('#team-character-resume').click();await expect(page.locator('#camp-character-tab-skills')).toHaveAttribute('aria-selected','true');await expect(page.locator('#camp-skill-review-confirm')).toHaveCount(0);expect(await page.locator('#camp-character-content').evaluate(el=>el.scrollTop)).toBeCloseTo(detailScroll,0);
     await page.locator('#lobby-tab-team').focus();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();expect(await saved(page)).toBe(before);
     await expect(page.locator('.lobby-pan')).not.toHaveAttribute('inert','');
@@ -43,7 +44,7 @@ test('team scroll/filter and navigation remain usable with large text and safe-a
   await page.setViewportSize({width:390,height:650});await open(page);
   await page.evaluate(()=>{document.documentElement.style.fontSize='200%';document.querySelector<HTMLElement>('#app')!.style.setProperty('--safe-top','59px');document.querySelector<HTMLElement>('.lobby-bottom')!.style.bottom='34px';});
   await page.locator('#team-character-guardian').click();await page.locator('#camp-character-tab-skills').click();
-  const dialog=page.locator('#camp-character-dialog');await expect.poll(async()=>{const d=await dialog.boundingBox(),n=await page.locator('.lobby-menu').boundingBox();return d!.y+d!.height<=n!.y;}).toBe(true);
+  const dialog=page.locator('#camp-character-dialog');await expect.poll(async()=>{const d=await dialog.boundingBox(),f=await page.locator('#app').boundingBox();return d!.y+d!.height<=f!.y+f!.height+0.5;}).toBe(true);
   await page.locator('#camp-skill-up-guard').click();await expect(page.locator('#camp-skill-review-confirm')).toBeInViewport();
   if(capture)await page.screenshot({path:info.outputPath('review-hud-large-text.png')});
   await page.keyboard.press('Escape');await expect(page.locator('#camp-skill-up-guard')).toBeFocused();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();
@@ -66,7 +67,7 @@ test('each character returns to its own last tab',async({page})=>{
 
 test('bag entry highlights only Team while inspecting and restores the bag origin on close',async({page})=>{
   await page.setViewportSize({width:390,height:650});await open(page);const before=await saved(page);
-  await page.locator('#lobby-tab-gear').click();await page.locator('.storage-characters summary').click();await page.locator('#gear-member-guardian').click();
+  await page.locator('#lobby-sheet [data-lobby=close]').click();await page.locator('#lobby-tab-gear').click();await page.locator('.storage-characters summary').click();await page.locator('#gear-member-guardian').click();
   await expect(page.locator('#camp-character-dialog')).toBeVisible();
   expect(await page.locator('.lobby-menu-button.active').evaluateAll(els=>els.map(el=>el.id))).toEqual(['lobby-tab-team']);
   await expect(page.locator('#lobby-tab-team')).toHaveAttribute('aria-expanded','true');await expect(page.locator('#lobby-tab-gear')).toHaveAttribute('aria-expanded','false');
