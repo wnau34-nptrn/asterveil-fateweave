@@ -59,3 +59,7 @@
 .skill-review-subject {font-size:1rem}
 .skill-review-page .star-ledger {font-size:.8125rem;font-variant-numeric:tabular-nums}
 .character-dialog[data-skill-review] .star-cost-summary {font-size:.8125rem;line-height:1.5;overflow-wrap:anywhere}
+/* Equipped slots: drag to reorder (touch-action none keeps the pointer from scrolling the page). */
+.skills-slots button {touch-action:none;cursor:grab;position:relative}
+.skills-slots button[data-dragging] {z-index:5;opacity:.85;cursor:grabbing;box-shadow:0 6px 18px #000a;transition:none}
+.skills-slots button[data-drop] {outline:2px dashed #7cdaed;outline-offset:2px}

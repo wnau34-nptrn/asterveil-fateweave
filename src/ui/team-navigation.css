@@ -1,8 +1,8 @@
 /* Camp character details share the persistent navigation; expedition details stay modal. */
 #app #lobby-view .character-dialog {
   position: absolute; z-index: 30; margin: 0;
-  inset: max(8px,var(--star-safe-top,var(--safe-top,0px))) 8px max(var(--character-hud-bottom,88px),var(--star-safe-bottom,0px));
-  width: auto; height: auto; max-height: none; background: var(--navy-950);
+  inset: max(8px,var(--star-safe-top,var(--safe-top,0px))) 0 max(var(--character-hud-bottom,88px),var(--star-safe-bottom,0px));
+  width: auto; height: auto; max-height: none; background: var(--navy-950); border-radius: 0; border-inline-width: 0;
 }
 #lobby-view[data-character-open] .lobby-hud > :not(.lobby-bottom),
 #lobby-view[data-character-open] .lobby-bottom > :not(.lobby-menu) { visibility: hidden; }

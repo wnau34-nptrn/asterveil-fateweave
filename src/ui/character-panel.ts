@@ -57,6 +57,7 @@ export class CharacterPanel {
     this.dialog=document.createElement('dialog');this.dialog.id=this.id('character-dialog');this.dialog.className='world-dialog character-dialog';this.dialog.setAttribute('aria-labelledby',this.id('character-title'));
     this.dialog.innerHTML=this.ids(`<div class="info-header"><h2 id="character-title">ตัวละคร</h2><button data-world="character-close" class="quiet" aria-label="ปิดข้อมูลตัวละคร">${icon('close')}</button></div><div id="character-members" class="tree-members character-member-list"></div><div id="character-tabs" class="character-tabs" role="tablist" aria-label="ข้อมูลตัวละคร"></div><div id="character-content" class="info-content character-content" role="tabpanel"></div><div id="character-dock" class="star-dock" hidden></div>`);root.append(this.dialog);
     this.dialog.addEventListener('click',e=>{e.stopPropagation();const b=(e.target as HTMLElement).closest<HTMLButtonElement>('button');if(!b||b.disabled||!this.usable())return;if(e.detail>1&&(b.dataset.world?.startsWith('star-')||b.dataset.world?.startsWith('skill-review-')||b.dataset.world==='character-loadout'||b.dataset.world==='character-reset'||b.dataset.world==='character-talent')){e.preventDefault();this.focus(this.id(b.dataset.world?.startsWith('star-')?'star-status':'skill-review-status'));return;}this.click(b);});
+    this.dialog.addEventListener('pointerdown',e=>this.slotDragStart(e));
     this.dialog.addEventListener('mousedown',e=>{if(e.detail>1&&(e.target as HTMLElement).closest<HTMLButtonElement>('button')?.matches('[data-world^=star-],[data-world=skill-level],[data-world=tome-trade],[data-world=skill-review-confirm],[data-world=character-loadout],[data-world=character-reset],[data-world=character-talent]'))e.preventDefault();});
     this.dialog.addEventListener('change',e=>{e.stopPropagation();if(!this.usable())return;const c=e.target as HTMLSelectElement|HTMLInputElement;
       if(c.hasAttribute('data-skill-selection')){const model=this.host.model();if(model&&skillCatalogue(this.map,this.heroes.find(h=>h.id===this.heroId)!,this.hero(model)).includes(c.value as ActionId)){this.selectedSkill=c.value as ActionId;this.node='';this.skillReview.clear();this.render();this.focus(c.id);}return;}
@@ -69,6 +70,8 @@ export class CharacterPanel {
       if(!this.usable())return;
       if(this.host.navigationVisible&&e.key==='Escape'){e.preventDefault();e.stopPropagation();if(this.dialog.dispatchEvent(new Event('cancel',{cancelable:true})))this.dialog.close();return;}
       if(e.repeat&&(e.target as HTMLElement).closest('[data-world=skill-level], [data-world=tome-trade], [data-world=skill-review-confirm], [data-world=character-loadout], [data-world=character-reset], [data-world=character-talent], [data-world=comparison-equip], [data-world=auto-preview], [data-world=star-review], [data-world=star-confirm], [data-world=star-next], [data-world=character-star-open]')){e.preventDefault();return;}
+      const slot=(e.target as HTMLElement).closest<HTMLButtonElement>('.skills-slots button');
+      if(slot&&e.altKey&&(e.key==='ArrowLeft'||e.key==='ArrowRight')){e.preventDefault();e.stopPropagation();const all=[...this.dialog.querySelectorAll('.skills-slots button')],i=all.indexOf(slot);this.moveSlot(i,i+(e.key==='ArrowRight'?1:-1));return;}
       const tab=(e.target as HTMLElement).closest('.character-tabs [role=tab]');
       if(!tab||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
       e.preventDefault();e.stopPropagation();const keys=Object.keys(characterTabs) as CharacterTab[],i=keys.indexOf(this.tab);
@@ -100,6 +103,32 @@ export class CharacterPanel {
   private ids(html:string):string{return this.prefix?html.replace(/\bid="([^"]+)"/g,(_s,id:string)=>`id="${this.id(id)}"`).replace(/\b(aria-controls|aria-labelledby)="([^"]+)"/g,(_s,k:string,ids:string)=>`${k}="${ids.split(' ').map(id=>this.id(id)).join(' ')}"`):html;}
   private content():HTMLElement{return this.dialog.querySelector<HTMLElement>(`#${this.id('character-content')}`)!;}
   private focus(id:string):void{this.dialog.querySelector<HTMLElement>(`#${id}`)?.focus({preventScroll:false});}
+  // Equipped skills: drag a slot onto another to reorder (battle button order); Alt+Arrow does the same from the keyboard.
+  private moveSlot(from:number,to:number):void{
+    const model=this.host.model();if(!model?.available||from===to)return;
+    const now:ActionId[]=this.hero(model).actions.filter(a=>a!=='attack');if(from<0||to<0||from>=now.length||to>=now.length)return;
+    const [skill]=now.splice(from,1);now.splice(to,0,skill!);this.host.loadout?.(this.heroId,now);this.focus(this.id(`skill-select-${skill}`));
+  }
+  private slotDragStart(e:PointerEvent):void{
+    const b=(e.target as HTMLElement).closest<HTMLButtonElement>('.skills-slots button');
+    if(!b||!e.isPrimary||e.button>0||!this.usable()||!this.host.model()?.available)return;
+    const slots=[...this.dialog.querySelectorAll<HTMLButtonElement>('.skills-slots button')],from=slots.indexOf(b);if(slots.length<2)return;
+    const sx=e.clientX,sy=e.clientY,doc=this.dialog.ownerDocument;let active=false,over=from;
+    const move=(ev:PointerEvent):void=>{
+      if(!active){if(Math.hypot(ev.clientX-sx,ev.clientY-sy)<8)return;active=true;b.dataset.dragging='';}
+      ev.preventDefault();b.style.transform=`translate(${ev.clientX-sx}px,${ev.clientY-sy}px)`;
+      const t=slots.findIndex(x=>{const r=x.getBoundingClientRect();return ev.clientX>=r.left&&ev.clientX<=r.right;});if(t>=0)over=t;
+      slots.forEach((x,i)=>x.toggleAttribute('data-drop',i===over&&i!==from));
+    };
+    const end=(ev:PointerEvent):void=>{
+      doc.removeEventListener('pointermove',move);doc.removeEventListener('pointerup',end);doc.removeEventListener('pointercancel',end);
+      b.style.transform='';delete b.dataset.dragging;slots.forEach(x=>x.removeAttribute('data-drop'));
+      if(!active)return;
+      const stop=(c:Event):void=>{c.stopPropagation();c.preventDefault();};doc.addEventListener('click',stop,{capture:true,once:true});setTimeout(()=>doc.removeEventListener('click',stop,true),80);
+      if(ev.type==='pointerup')this.moveSlot(from,over);
+    };
+    doc.addEventListener('pointermove',move);doc.addEventListener('pointerup',end);doc.addEventListener('pointercancel',end);
+  }
   private usable():boolean{return this.dialog.open&&!this.root.hidden&&!this.root.closest('[inert]')&&!!this.host.model();}
   private hero(model:CharacterModel,id=this.heroId):HeroDefinition {const m=model.state.members[id]!,base=this.heroes.find(h=>h.id===id)!;return wounded(starred(base,m.stars,this.map,levelOf(this.map,model.state),m.talents,m.gear,m),m.wound);}
   private discard():void{this.skillReview.clear();this.single=undefined;this.plan=undefined;this.starOpen=false;this.stars.open(this.heroId);}
@@ -145,7 +174,7 @@ export class CharacterPanel {
     }
     if(action==='skill-review-back'){this.backSkillReview();return;}
     if(action==='skill-review-confirm'){if(model.available&&model.camp&&model.skillProfile)this.skillReview.confirm(model.skillProfile,c=>{if(c.kind==='level')this.host.skillLevel?.(c.id,c.action);else this.host.tomeTrade?.(c.line,c.size,c.to);});this.render();this.content().scrollTop=0;this.focus(this.id('skill-review-status'));return;}
-    if(action==='skill-select'||action==='skill-from-node'){this.selectedSkill=b.dataset.skill as ActionId;const back=action==='skill-from-node'&&this.skillNodeReturn?.skill===this.selectedSkill?this.skillNodeReturn:undefined;this.skillNodeReturn=undefined;this.skillSection='details';this.skillReview.clear();this.render();this.content().scrollTop=back?.scroll??0;this.focus(back?.focus??this.id('skill-selection'));return;}
+    if(action==='skill-select'||action==='skill-from-node'){this.selectedSkill=b.dataset.skill as ActionId;const back=action==='skill-from-node'&&this.skillNodeReturn?.skill===this.selectedSkill?this.skillNodeReturn:undefined;this.skillNodeReturn=undefined;this.skillSection='details';this.skillReview.clear();this.render();this.content().scrollTop=back?.scroll??0;if(action==='skill-select'){this.dialog.querySelector('#'+this.id('skill-description'))?.scrollIntoView({block:'start'});this.focus(b.id);}else this.focus(back?.focus??this.id('skill-selection'));return;}
     if(action==='skill-section'||action==='skill-to-node'){if(action==='skill-to-node')this.skillNodeReturn={skill:this.selectedSkill,scroll:this.content().scrollTop,focus:b.id};this.skillScroll[this.skillSection]=this.content().scrollTop;this.skillSection=action==='skill-to-node'?'tree':b.dataset.section as SkillSection;if(action==='skill-to-node')this.node=b.dataset.node!;this.skillReview.clear();this.render();this.content().scrollTop=this.skillScroll[this.skillSection]??0;if(action==='skill-to-node')this.dialog.querySelector(`#${this.id('character-talent-'+this.node)}`)?.scrollIntoView({block:'center'});this.focus(this.id(action==='skill-to-node'?'character-talent-'+this.node:'skills-'+this.skillSection));return;}
     if(action==='develop-link'){this.skillSection=b.dataset.tab==='talents'?'tree':'details';this.tab=b.dataset.tab==='talents'?'skills':b.dataset.tab as CharacterTab;this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));return;}
     if(action==='character-close'){this.dialog.close();return;}
