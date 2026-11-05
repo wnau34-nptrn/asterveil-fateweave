@@ -352,7 +352,7 @@ export class LobbyUI {
         <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcLine(this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
         ${this.guideCard(p)}
-        <section class="lobby-trip" aria-label="การเดินทาง"><div class="trip-head"><div><small>แผนที่ที่เลือก</small><b>${this.openMaps().at(-1)?.name ?? this.map.name}</b><span class="trip-team" data-ready="${ready}">ทีมพร้อม ${p.party.deployed.length}+${p.party.reserve.length}</span></div>${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary" aria-label="เลือกแผนที่">${icon('map')}<span>เลือกแผนที่</span></button>` : ''}</div>
+        <section class="lobby-trip" aria-label="การเดินทาง"><div class="trip-head"><div><small>แผนที่ที่เลือก</small><b>${this.openMaps().at(-1)?.name ?? this.map.name}</b><span class="trip-team" data-ready="${ready}">${ready ? 'ทีมพร้อม' : 'ทีมยังไม่พร้อม'} · ลงสนาม ${p.party.deployed.length} · สำรอง ${p.party.reserve.length}</span></div>${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary" aria-label="เลือกแผนที่">${icon('map')}<span>เลือกแผนที่</span></button>` : ''}</div>
           <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง</span></button></section>
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'tab-team', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'tab-hire', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'tab-bag', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('hunt', 'goal', 'ฟาร์ม', '')}${menu('forge', 'tab-forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
       </footer>`;
@@ -365,9 +365,9 @@ export class LobbyUI {
   // logs, the middle pair has a character moment, the back alternates; the member just hired or upgraded
   // cheers, and everyone cheers after a completed expedition. Right of the fire the frames are mirrored.
   private scene(p: Profile): string {
-    // Only the main team (at most four) sits around the fire; reserves stay off the scene so it never crowds.
-    const ids = p.party.deployed.slice(0, 4).filter(id => lobbyPose(id, 'sit') ?? actorArt[id]);
-    const spots = [[18, 0, 1], [33, 1, .92], [67, 1, .92], [82, 0, 1]] as const;
+    // The whole main team (up to five, OD-05) gathers around the fire; the fifth stands behind it. Reserves stay off the scene so it never crowds.
+    const ids = p.party.deployed.slice(0, 5).filter(id => lobbyPose(id, 'sit') ?? actorArt[id]);
+    const spots = [[18, 0, 1], [33, 1, .92], [67, 1, .92], [82, 0, 1], [50, 2, .8]] as const;
     const party = p.last?.outcome === 'complete';
     const units = ids.slice(0, spots.length).map((id, i) => {
       const [x, depth, scale] = spots[i]!;
