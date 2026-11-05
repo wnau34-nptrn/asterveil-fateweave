@@ -1,0 +1,18 @@
+/* Additions only. Canonical colours, fonts, radii, spacing and fills remain in src/ui/tokens.css.
+   Geometry fills gaps in the original vocabulary; numbers are CSS px unless unitless. */
+@font-face{font-family:'Kanit';font-weight:600;src:url('../../public/assets/fonts/kanit-600.woff2')}
+@font-face{font-family:'Noto Sans Thai';font-weight:400;src:url('../../public/assets/fonts/noto-sans-thai-400.woff2')}
+@font-face{font-family:'Noto Sans Thai';font-weight:700;src:url('../../public/assets/fonts/noto-sans-thai-700.woff2')}
+:root{
+ --ui-max:480px;--ui-height:100dvh;--ui-head:96px;--ui-title:20px;--ui-button:48px;
+ --ui-back-title:68px;--ui-title-end:68px;--ui-close-inset:12px;--ui-title-top:16px;
+ --ui-dock:80px;--ui-nav:72px;--ui-art:56px;--ui-hero:176px;--ui-line:2px;
+ --ui-focus-width:3px;--ui-focus-offset:3px;--ui-pressed:2px;--ui-hud-number-r2:11px;--ui-hud-power:19px;
+ --ui-zero:0;--ui-one:1;--ui-two:2;--ui-three:3;--ui-four:4;--ui-five:5;--ui-six:6;
+ --ui-full:100%;--ui-half:50%;--ui-auto:auto;--ui-flex:1;--ui-fr:1fr;--ui-last:-1;--ui-motion:none;--ui-clear:transparent;
+ --ui-ledger-col:18%;--ui-ledger-name:28%;--ui-hud-top:12px;--ui-hud-bottom:12px;
+ --ui-board-width:1200px;--ui-board-min:280px;--ui-card-action:88px;
+ --ui-sprite-size:200% 300%;--ui-portrait-x:0%;--ui-portrait-y:0%;
+ --ui-scene:url('../../public/assets/lobby/lobby_bg.webp');
+ --ui-arena:url('../../public/assets/art/ruins.webp');
+}

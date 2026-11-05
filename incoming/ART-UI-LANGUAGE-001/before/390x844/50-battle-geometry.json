@@ -1,0 +1,591 @@
+{
+  "texts": [
+    {
+      "text": "รอบ 1",
+      "x": 19,
+      "y": 14.46875,
+      "w": 22.34375,
+      "h": 14,
+      "parent": "beat-chip",
+      "px": 9
+    },
+    {
+      "text": "เทิร์นของคุณ · ไลรา",
+      "x": 60.34375,
+      "y": 12.1875,
+      "w": 103.03125,
+      "h": 19,
+      "parent": "turn-title",
+      "px": 13
+    },
+    {
+      "text": "เทิร์นของคุณ · ไลรา",
+      "x": 376,
+      "y": 60.5,
+      "w": 95.109375,
+      "h": 18,
+      "parent": "",
+      "px": 12
+    },
+    {
+      "text": "คิว 8 · เลื่อนดู →",
+      "x": 310.046875,
+      "y": 51.75,
+      "w": 66.953125,
+      "h": 16,
+      "parent": "queue-hint",
+      "px": 10
+    },
+    {
+      "text": "120",
+      "x": 28.125,
+      "y": 101,
+      "w": 13.75,
+      "h": 14,
+      "parent": "turn-speed",
+      "px": 9
+    },
+    {
+      "text": "ไลรา",
+      "x": 56,
+      "y": 65,
+      "w": 14.9375,
+      "h": 12,
+      "parent": "",
+      "px": 8
+    },
+    {
+      "text": "ตอนนี้ · 120",
+      "x": 56,
+      "y": 75.59375,
+      "w": 34.703125,
+      "h": 10,
+      "parent": "",
+      "px": 7
+    },
+    {
+      "text": "115",
+      "x": 77.5,
+      "y": 101,
+      "w": 10.984375,
+      "h": 14,
+      "parent": "turn-speed",
+      "px": 9
+    },
+    {
+      "text": "Lv10 วิญญาณรอยแยก",
+      "x": 104,
+      "y": 65,
+      "w": 77.53125,
+      "h": 12,
+      "parent": "",
+      "px": 8
+    },
+    {
+      "text": "ถัดไป · 115",
+      "x": 104,
+      "y": 75.59375,
+      "w": 31.953125,
+      "h": 10,
+      "parent": "",
+      "px": 7
+    },
+    {
+      "text": "105",
+      "x": 124.109375,
+      "y": 101,
+      "w": 13.78125,
+      "h": 14,
+      "parent": "turn-speed",
+      "px": 9
+    },
+    {
+      "text": "เคล",
+      "x": 152,
+      "y": 65,
+      "w": 12.453125,
+      "h": 12,
+      "parent": "",
+      "px": 8
+    },
+    {
+      "text": "รอ · 105",
+      "x": 152,
+      "y": 75.59375,
+      "w": 25.09375,
+      "h": 10,
+      "parent": "",
+      "px": 7
+    },
+    {
+      "text": "100",
+      "x": 171.4765625,
+      "y": 101,
+      "w": 15.046875,
+      "h": 14,
+      "parent": "turn-speed",
+      "px": 9
+    },
+    {
+      "text": "ไอรา",
+      "x": 200,
+      "y": 65,
+      "w": 14.859375,
+      "h": 12,
+      "parent": "",
+      "px": 8
+    },
+    {
+      "text": "รอ · 100",
+      "x": 200,
+      "y": 75.59375,
+      "w": 25.09375,
+      "h": 10,
+      "parent": "",
+      "px": 7
+    },
+    {
+      "text": "85",
+      "x": 221.9375,
+      "y": 101,
+      "w": 10.125,
+      "h": 14,
+      "parent": "turn-speed",
+      "px": 9
+    },
+    {
+      "text": "Lv10 แมงมุมเศษผลึก",
+      "x": 248,
+      "y": 65,
+      "w": 70.5,
+      "h": 12,
+      "parent": "",
+      "px": 8
+    },
+    {
+      "text": "รอ · 85",
+      "x": 248,
+      "y": 75.59375,
+      "w": 21.203125,
+      "h": 10,
+      "parent": "",
+      "px": 7
+    },
+    {
+      "text": "80",
+      "x": 269.296875,
+      "y": 101,
+      "w": 11.390625,
+      "h": 14,
+      "parent": "turn-speed",
+      "px": 9
+    },
+    {
+      "text": "เอกิส",
+      "x": 296,
+      "y": 65,
+      "w": 17.328125,
+      "h": 12,
+      "parent": "",
+      "px": 8
+    },
+    {
+      "text": "รอ · 80",
+      "x": 296,
+      "y": 75.59375,
+      "w": 21.203125,
+      "h": 10,
+      "parent": "",
+      "px": 7
+    },
+    {
+      "text": "70",
+      "x": 317.78125,
+      "y": 101,
+      "w": 10.4375,
+      "h": 14,
+      "parent": "turn-speed",
+      "px": 9
+    },
+    {
+      "text": "Lv10 ผู้คุมรอยแยก",
+      "x": 344,
+      "y": 65,
+      "w": 61.859375,
+      "h": 12,
+      "parent": "",
+      "px": 8
+    },
+    {
+      "text": "รอ · 70",
+      "x": 344,
+      "y": 75.59375,
+      "w": 21.203125,
+      "h": 10,
+      "parent": "",
+      "px": 7
+    },
+    {
+      "text": "60",
+      "x": 365.390625,
+      "y": 101,
+      "w": 11.203125,
+      "h": 14,
+      "parent": "turn-speed",
+      "px": 9
+    },
+    {
+      "text": "เซเรน",
+      "x": 392,
+      "y": 65,
+      "w": 18.984375,
+      "h": 12,
+      "parent": "",
+      "px": 8
+    },
+    {
+      "text": "รอ · 60",
+      "x": 392,
+      "y": 75.59375,
+      "w": 21.203125,
+      "h": 10,
+      "parent": "",
+      "px": 7
+    },
+    {
+      "text": "Lv10 แมงมุมเศษผลึก",
+      "x": 204.75,
+      "y": 526.234375,
+      "w": 78.734375,
+      "h": 14,
+      "parent": "field-unit-name",
+      "px": 9
+    },
+    {
+      "text": "98/98",
+      "x": 232.859375,
+      "y": 613,
+      "w": 22.53125,
+      "h": 14,
+      "parent": "field-hp-value",
+      "px": 9
+    },
+    {
+      "text": "Lv10 วิญญาณรอยแยก",
+      "x": 298.9375,
+      "y": 346.109375,
+      "w": 84.984375,
+      "h": 14,
+      "parent": "field-unit-name",
+      "px": 9
+    },
+    {
+      "text": "59/59",
+      "x": 329.25,
+      "y": 446,
+      "w": 22.53125,
+      "h": 14,
+      "parent": "field-hp-value",
+      "px": 9
+    },
+    {
+      "text": "Lv10 ผู้คุมรอยแยก",
+      "x": 209.5,
+      "y": 271.125,
+      "w": 69.234375,
+      "h": 14,
+      "parent": "field-unit-name",
+      "px": 9
+    },
+    {
+      "text": "350/350",
+      "x": 227.84375,
+      "y": 446,
+      "w": 32.546875,
+      "h": 14,
+      "parent": "field-hp-value",
+      "px": 9
+    },
+    {
+      "text": "Lv10 วิญญาณรอยแยก",
+      "x": 29,
+      "y": 655.5,
+      "w": 108.96875,
+      "h": 16,
+      "parent": "",
+      "px": 11
+    },
+    {
+      "text": "→",
+      "x": 141.96875,
+      "y": 655.5,
+      "w": 8.078125,
+      "h": 16,
+      "parent": "",
+      "px": 11
+    },
+    {
+      "text": "เอกิส",
+      "x": 154.046875,
+      "y": 655.5,
+      "w": 26.1875,
+      "h": 16,
+      "parent": "",
+      "px": 11
+    },
+    {
+      "text": "เปลวดาว · พลังงาน",
+      "x": 29,
+      "y": 669.25,
+      "w": 69.109375,
+      "h": 14,
+      "parent": "",
+      "px": 9
+    },
+    {
+      "text": "13",
+      "x": 348.125,
+      "y": 642.96875,
+      "w": 16.6875,
+      "h": 29,
+      "parent": "",
+      "px": 19
+    },
+    {
+      "text": "พลังโจมตี",
+      "x": 342.9375,
+      "y": 677.859375,
+      "w": 27.0625,
+      "h": 10,
+      "parent": "",
+      "px": 7
+    },
+    {
+      "text": "ใช้ได้ทุกเทิร์น",
+      "x": 17,
+      "y": 831,
+      "w": 49.515625,
+      "h": 16,
+      "parent": "",
+      "px": 10
+    },
+    {
+      "text": "ใช้ได้ทุกเทิร์น",
+      "x": 137,
+      "y": 831,
+      "w": 49.515625,
+      "h": 16,
+      "parent": "",
+      "px": 10
+    },
+    {
+      "text": "คูลดาวน์ 2 รอบ",
+      "x": 257,
+      "y": 831,
+      "w": 60.546875,
+      "h": 16,
+      "parent": "",
+      "px": 10
+    },
+    {
+      "text": "โจมตี — แตะศัตรูในสนามที่มีเครื่องหมาย",
+      "x": 17,
+      "y": 800.5,
+      "w": 174.78125,
+      "h": 17,
+      "parent": "target-hint",
+      "px": 11
+    }
+  ],
+  "buttons": [
+    {
+      "html": "ⓘ",
+      "text": "ⓘ",
+      "aria": "สถานะยูนิต ข้อมูลการต่อสู้และตั้งค่าเสียง",
+      "x": 340,
+      "y": 0,
+      "w": 44,
+      "h": 44
+    },
+    {
+      "html": "<span class=\"portrait\" data-actor=\"tracer\" style=\"--portrait-x:1;--portrait-y:0;--portrait-rows:3\" aria-hidden=\"true\"><img src=\"/assets/art/portraits.webp\" alt=\"\" width=\"1024\" height=\"1536\" draggable=\"false\"></span>",
+      "text": "",
+      "aria": "ไลรา · SPD 120",
+      "x": 13,
+      "y": 68,
+      "w": 44,
+      "h": 44
+    },
+    {
+      "html": "<span class=\"portrait\" data-actor=\"foe_rift_wisp\" style=\"--portrait-x:1;--portrait-y:3;--portrait-rows:5\" aria-hidden=\"true\"><img src=\"/assets/art/portraits_foes2.webp\" alt=\"\" width=\"1024\" height=\"2560\" draggable=\"false\"></span>",
+      "text": "",
+      "aria": "Lv10 วิญญาณรอยแยก · SPD 115",
+      "x": 61,
+      "y": 68,
+      "w": 44,
+      "h": 44
+    },
+    {
+      "html": "<span class=\"portrait\" data-actor=\"kael\" style=\"--portrait-x:0;--portrait-y:5;--portrait-rows:7\" aria-hidden=\"true\"><img src=\"/assets/art/portraits_mercs.webp\" alt=\"\" width=\"1024\" height=\"3584\" draggable=\"false\"></span>",
+      "text": "",
+      "aria": "เคล · SPD 105",
+      "x": 109,
+      "y": 68,
+      "w": 44,
+      "h": 44
+    },
+    {
+      "html": "<span class=\"portrait\" data-actor=\"weaver\" style=\"--portrait-x:0;--portrait-y:1;--portrait-rows:3\" aria-hidden=\"true\"><img src=\"/assets/art/portraits.webp\" alt=\"\" width=\"1024\" height=\"1536\" draggable=\"false\"></span>",
+      "text": "",
+      "aria": "ไอรา · SPD 100",
+      "x": 157,
+      "y": 68,
+      "w": 44,
+      "h": 44
+    },
+    {
+      "html": "<span class=\"portrait\" data-actor=\"foe_shard_crawler\" style=\"--portrait-x:0;--portrait-y:4;--portrait-rows:5\" aria-hidden=\"true\"><img src=\"/assets/art/portraits_foes2.webp\" alt=\"\" width=\"1024\" height=\"2560\" draggable=\"false\"></span>",
+      "text": "",
+      "aria": "Lv10 แมงมุมเศษผลึก · SPD 85",
+      "x": 205,
+      "y": 68,
+      "w": 44,
+      "h": 44
+    },
+    {
+      "html": "<span class=\"portrait\" data-actor=\"guardian\" style=\"--portrait-x:0;--portrait-y:0;--portrait-rows:3\" aria-hidden=\"true\"><img src=\"/assets/art/portraits.webp\" alt=\"\" width=\"1024\" height=\"1536\" draggable=\"false\"></span>",
+      "text": "",
+      "aria": "เอกิส · SPD 80",
+      "x": 253,
+      "y": 68,
+      "w": 44,
+      "h": 44
+    },
+    {
+      "html": "<span class=\"portrait\" data-actor=\"foe_sentinel\" style=\"--portrait-x:0;--portrait-y:4;--portrait-rows:6\" aria-hidden=\"true\"><img src=\"/assets/art/portraits_foes.webp\" alt=\"\" width=\"1024\" height=\"3072\" draggable=\"false\"></span>",
+      "text": "",
+      "aria": "Lv10 ผู้คุมรอยแยก · SPD 70",
+      "x": 301,
+      "y": 68,
+      "w": 44,
+      "h": 44
+    },
+    {
+      "html": "<span class=\"portrait\" data-actor=\"healer\" style=\"--portrait-x:1;--portrait-y:1;--portrait-rows:3\" aria-hidden=\"true\"><img src=\"/assets/art/portraits.webp\" alt=\"\" width=\"1024\" height=\"1536\" draggable=\"false\"></span>",
+      "text": "",
+      "aria": "เซเรน · SPD 60",
+      "x": 349,
+      "y": 68,
+      "w": 44,
+      "h": 44
+    },
+    {
+      "html": "",
+      "text": "",
+      "aria": "ใช้โจมตีกับLv10 แมงมุมเศษผลึก · เลือด 98/98",
+      "x": 208.125,
+      "y": 513.5,
+      "w": 72,
+      "h": 94.5
+    },
+    {
+      "html": "",
+      "text": "",
+      "aria": "ใช้โจมตีกับLv10 วิญญาณรอยแยก · เลือด 59/59 · ศัตรูแถวหน้าบังอยู่ ต้องล้มแถวหน้าก่อน หรือใช้สกิลตีทะลุ",
+      "x": 304.515625,
+      "y": 346.5,
+      "w": 72,
+      "h": 94.5
+    },
+    {
+      "html": "",
+      "text": "",
+      "aria": "ใช้โจมตีกับLv10 ผู้คุมรอยแยก · เลือด 350/350",
+      "x": 208.125,
+      "y": 299.6875,
+      "w": 72,
+      "h": 141.296875
+    },
+    {
+      "html": "<span class=\"hero-emblem\"><span class=\"portrait\" data-actor=\"guardian\" style=\"--portrait-x:0;--portrait-y:0;--portrait-rows:3\" aria-hidden=\"true\"><img src=\"/assets/art/portraits.webp\" alt=\"\" width=\"1024\" height=\"1536\" draggable=\"false\"></span></span><span class=\"hero-copy\"><span class=\"hero-class\"><b>FRONT</b> อัศวิน</span><strong>เอกิส</strong><span class=\"hero-hp\"><span class=\"hp-amount\"><span class=\"hp-label\">HP</span> 109 / 109</span><i class=\"fatigue-dot fresh\" role=\"img\" aria-label=\"ไม่ล้า · พลังโจมตีและการรักษาเต็ม\" title=\"ไม่ล้า · พลังโจมตีและการรักษาเต็ม\"></i></span><span class=\"hp-track\"><span style=\"width:100%\"></span></span></span><span class=\"hero-skills\"><span class=\"skill-status cooling\" data-skill=\"guard\"><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:0%;--sy:0%\"></span><span>ตั้งรับแทน<small>รอเทิร์น</small></span></span><span class=\"skill-status cooling\" data-skill=\"bash\"><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:20%;--sy:0%\"></span><span>กระแทกโล่<small>รอเทิร์น</small></span></span></span>",
+      "text": "FRONT อัศวินเอกิสHP 109 / 109ตั้งรับแทนรอเทิร์นกระแทกโล่รอเทิร์น",
+      "aria": null,
+      "x": 10,
+      "y": 697,
+      "w": 70.796875,
+      "h": 60
+    },
+    {
+      "html": "<span class=\"hero-emblem\"><span class=\"portrait\" data-actor=\"tracer\" style=\"--portrait-x:1;--portrait-y:0;--portrait-rows:3\" aria-hidden=\"true\"><img src=\"/assets/art/portraits.webp\" alt=\"\" width=\"1024\" height=\"1536\" draggable=\"false\"></span></span><span class=\"hero-copy\"><span class=\"hero-class\"><b>FRONT</b> นักดาบ</span><strong>ไลรา</strong><span class=\"hero-hp\"><span class=\"hp-amount\"><span class=\"hp-label\">HP</span> 71 / 71</span><i class=\"fatigue-dot fresh\" role=\"img\" aria-label=\"ไม่ล้า · พลังโจมตีและการรักษาเต็ม\" title=\"ไม่ล้า · พลังโจมตีและการรักษาเต็ม\"></i></span><span class=\"hp-track\"><span style=\"width:100%\"></span></span></span><span class=\"hero-skills\"><span class=\"skill-status ready\" data-skill=\"mark\"><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:0%;--sy:6.666666666666667%\"></span><span>ติดตรา<small>พร้อมใช้</small></span></span><span class=\"skill-status ready\" data-skill=\"execute\"><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:20%;--sy:6.666666666666667%\"></span><span>ฟันเจาะจุด<small>พร้อมใช้</small></span></span></span><span class=\"selected-tag\">ถึงเทิร์น</span>",
+      "text": "FRONT นักดาบไลราHP 71 / 71ติดตราพร้อมใช้ฟันเจาะจุดพร้อมใช้ถึงเทิร์น",
+      "aria": null,
+      "x": 84.796875,
+      "y": 697,
+      "w": 70.796875,
+      "h": 60
+    },
+    {
+      "html": "<span class=\"hero-emblem\"><span class=\"portrait\" data-actor=\"weaver\" style=\"--portrait-x:0;--portrait-y:1;--portrait-rows:3\" aria-hidden=\"true\"><img src=\"/assets/art/portraits.webp\" alt=\"\" width=\"1024\" height=\"1536\" draggable=\"false\"></span></span><span class=\"hero-copy\"><span class=\"hero-class\"><b>BACK</b> จอมเวท</span><strong>ไอรา</strong><span class=\"hero-hp\"><span class=\"hp-amount\"><span class=\"hp-label\">HP</span> 61 / 61</span><i class=\"fatigue-dot fresh\" role=\"img\" aria-label=\"ไม่ล้า · พลังโจมตีและการรักษาเต็ม\" title=\"ไม่ล้า · พลังโจมตีและการรักษาเต็ม\"></i></span><span class=\"hp-track\"><span style=\"width:100%\"></span></span></span><span class=\"hero-skills\"><span class=\"skill-status cooling\" data-skill=\"bolt\"><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:60%;--sy:6.666666666666667%\"></span><span>ศรเวท<small>รอเทิร์น</small></span></span><span class=\"skill-status cooling\" data-skill=\"ward\"><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:80%;--sy:6.666666666666667%\"></span><span>โล่เวท<small>รอเทิร์น</small></span></span></span>",
+      "text": "BACK จอมเวทไอราHP 61 / 61ศรเวทรอเทิร์นโล่เวทรอเทิร์น",
+      "aria": null,
+      "x": 159.59375,
+      "y": 697,
+      "w": 70.796875,
+      "h": 60
+    },
+    {
+      "html": "<span class=\"hero-emblem\"><span class=\"portrait\" data-actor=\"healer\" style=\"--portrait-x:1;--portrait-y:1;--portrait-rows:3\" aria-hidden=\"true\"><img src=\"/assets/art/portraits.webp\" alt=\"\" width=\"1024\" height=\"1536\" draggable=\"false\"></span></span><span class=\"hero-copy\"><span class=\"hero-class\"><b>BACK</b> นักบวช</span><strong>เซเรน</strong><span class=\"hero-hp\"><span class=\"hp-amount\"><span class=\"hp-label\">HP</span> 58 / 58</span><i class=\"fatigue-dot fresh\" role=\"img\" aria-label=\"ไม่ล้า · พลังโจมตีและการรักษาเต็ม\" title=\"ไม่ล้า · พลังโจมตีและการรักษาเต็ม\"></i></span><span class=\"hp-track\"><span style=\"width:100%\"></span></span></span><span class=\"hero-skills\"><span class=\"skill-status cooling\" data-skill=\"heal\"><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:0%;--sy:13.333333333333334%\"></span><span>รักษา<small>รอเทิร์น</small></span></span><span class=\"skill-status cooling\" data-skill=\"prayer\"><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:20%;--sy:13.333333333333334%\"></span><span>พรฟื้นฟู<small>รอเทิร์น</small></span></span></span>",
+      "text": "BACK นักบวชเซเรนHP 58 / 58รักษารอเทิร์นพรฟื้นฟูรอเทิร์น",
+      "aria": null,
+      "x": 234.390625,
+      "y": 697,
+      "w": 70.796875,
+      "h": 60
+    },
+    {
+      "html": "<span class=\"hero-emblem\"><span class=\"portrait\" data-actor=\"kael\" style=\"--portrait-x:0;--portrait-y:5;--portrait-rows:7\" aria-hidden=\"true\"><img src=\"/assets/art/portraits_mercs.webp\" alt=\"\" width=\"1024\" height=\"3584\" draggable=\"false\"></span></span><span class=\"hero-copy\"><span class=\"hero-class\"><b>FRONT</b> นักมวย</span><strong>เคล</strong><span class=\"hero-hp\"><span class=\"hp-amount\"><span class=\"hp-label\">HP</span> 81 / 81</span><i class=\"fatigue-dot fresh\" role=\"img\" aria-label=\"ไม่ล้า · พลังโจมตีและการรักษาเต็ม\" title=\"ไม่ล้า · พลังโจมตีและการรักษาเต็ม\"></i></span><span class=\"hp-track\"><span style=\"width:100%\"></span></span></span><span class=\"hero-skills\"><span class=\"skill-status cooling\" data-skill=\"gatherfist\"><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:20%;--sy:80%\"></span><span>หมัดรวมปราณ<small>รอเทิร์น</small></span></span><span class=\"skill-status cooling\" data-skill=\"releasefist\"><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:40%;--sy:80%\"></span><span>ปล่อยปราณ<small>รอเทิร์น</small></span></span></span>",
+      "text": "FRONT นักมวยเคลHP 81 / 81หมัดรวมปราณรอเทิร์นปล่อยปราณรอเทิร์น",
+      "aria": null,
+      "x": 309.1875,
+      "y": 697,
+      "w": 70.8125,
+      "h": 60
+    },
+    {
+      "html": "ⓘ",
+      "text": "ⓘ",
+      "aria": "ดูคำอธิบายสกิลโจมตี",
+      "x": 2,
+      "y": 754,
+      "w": 44,
+      "h": 44
+    },
+    {
+      "html": "<kbd class=\"key-hint\">1</kbd><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:60%;--sy:33.33333333333333%\"></span><strong>โจมตี</strong><small>Attack</small><span class=\"skill-value\">พลัง 20</span>",
+      "text": "1โจมตีAttackพลัง 20",
+      "aria": null,
+      "x": 17,
+      "y": 769,
+      "w": 116,
+      "h": 64
+    },
+    {
+      "html": "<kbd class=\"key-hint\">2</kbd><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:0%;--sy:6.666666666666667%\"></span><strong>ติดตรา</strong><small>Mark</small><span class=\"skill-value\">โบนัส +22</span>",
+      "text": "2ติดตราMarkโบนัส +22",
+      "aria": null,
+      "x": 137,
+      "y": 769,
+      "w": 116,
+      "h": 64
+    },
+    {
+      "html": "<kbd class=\"key-hint\">3</kbd><span class=\"icon skill-art\" aria-hidden=\"true\" style=\"background-image:url(/assets/ui/skill_icons.webp?v=3b11491a);background-size:600% 1600%;--sx:20%;--sy:6.666666666666667%\"></span><strong>ฟันเจาะจุด</strong><small>Precision Strike</small><span class=\"skill-value\">พลัง 36</span>",
+      "text": "3ฟันเจาะจุดPrecision Strikeพลัง 36",
+      "aria": null,
+      "x": 257,
+      "y": 769,
+      "w": 116,
+      "h": 64
+    }
+  ]
+}

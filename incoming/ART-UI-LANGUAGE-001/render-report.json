@@ -1,0 +1,1137 @@
+{
+  "engine": "Chromium",
+  "realDevices": false,
+  "dpr": 2,
+  "records": [
+    {
+      "page": "c-brew",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "c-brew",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "c-brew",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "c-hire",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/c-hire-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "c-hire",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/c-hire-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "c-hire",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/c-hire-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "c-market",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/c-market-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "c-market",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/c-market-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "c-market",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/c-market-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "c-bag",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/c-bag-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "c-bag",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/c-bag-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "c-bag",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/c-bag-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "c-team",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/c-team-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "c-team",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/c-team-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "c-team",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/c-team-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "c-quests",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/c-quests-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "c-quests",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/c-quests-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "c-quests",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/c-quests-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "c-farm",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/c-farm-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "c-farm",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/c-farm-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "c-farm",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/c-farm-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "d-overview",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/d-overview-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "d-overview",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/d-overview-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "d-overview",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/d-overview-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "d-skills",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/d-skills-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "d-skills",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/d-skills-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "d-skills",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/d-skills-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "d-tree",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/d-tree-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "d-tree",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/d-tree-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "d-tree",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/d-tree-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "d-tomes",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/d-tomes-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "d-tomes",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/d-tomes-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "d-tomes",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/d-tomes-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "d-star-review",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/d-star-review-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "d-star-review",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/d-star-review-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "d-star-review",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/d-star-review-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "e-tasks",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/e-tasks-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "e-tasks",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/e-tasks-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "e-tasks",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/e-tasks-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "f-pack",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/f-pack-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "f-pack",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/f-pack-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "f-pack",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/f-pack-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "f-pack-gear",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/f-pack-gear-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "f-pack-gear",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/f-pack-gear-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "f-pack-gear",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/f-pack-gear-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "f-entrance",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/f-entrance-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "f-entrance",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/f-entrance-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "f-entrance",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/f-entrance-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "f-withdraw",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/f-withdraw-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "f-withdraw",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/f-withdraw-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "f-withdraw",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/f-withdraw-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "f-event",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/f-event-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "f-event",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/f-event-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "f-event",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/f-event-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "f-draft",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/f-draft-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "f-draft",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/f-draft-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "f-draft",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/f-draft-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "g-summary",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/g-summary-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "g-summary",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/g-summary-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "g-summary",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/g-summary-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "g-rewards",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/g-rewards-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "g-rewards",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/g-rewards-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "g-rewards",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/g-rewards-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "g-defeat",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/g-defeat-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "g-defeat",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/g-defeat-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "g-defeat",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/g-defeat-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "h-info",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/h-info-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "h-info",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/h-info-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "h-info",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/h-info-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "h-skill",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/h-skill-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "h-skill",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/h-skill-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "h-skill",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/h-skill-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "f-map-hud",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/f-map-hud-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "f-map-hud",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/f-map-hud-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "f-map-hud",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/f-map-hud-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "f-map-hud-r2-q4",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/f-map-hud-r2-q4-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "f-map-hud-r2-q4",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/f-map-hud-r2-q4-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "f-map-hud-r2-q4",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/f-map-hud-r2-q4-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "h-battle-hud",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/h-battle-hud-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "h-battle-hud",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/h-battle-hud-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "h-battle-hud",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/h-battle-hud-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "h-battle-hud-r2-q4",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/h-battle-hud-r2-q4-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "h-battle-hud-r2-q4",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/h-battle-hud-r2-q4-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "h-battle-hud-r2-q4",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/h-battle-hud-r2-q4-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "b-camp",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/b-camp-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "b-camp",
+      "size": [
+        390,
+        650
+      ],
+      "dpr": 2,
+      "file": "export/b-camp-390x650.png",
+      "errors": []
+    },
+    {
+      "page": "b-camp",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/b-camp-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "c-brew-r2-all",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-r2-all-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "c-brew-r2-all",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-r2-all-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "c-brew-r2-q1",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-r2-q1-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "c-brew-r2-q1",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-r2-q1-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "c-brew-r2-q2",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-r2-q2-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "c-brew-r2-q2",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-r2-q2-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "c-brew-r2-q3",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-r2-q3-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "c-brew-r2-q3",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-r2-q3-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "c-brew-r2-q4",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-r2-q4-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "c-brew-r2-q4",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/c-brew-r2-q4-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review-r2-all",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-r2-all-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review-r2-all",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-r2-all-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review-r2-q1",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-r2-q1-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review-r2-q1",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-r2-q1-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review-r2-q2",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-r2-q2-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review-r2-q2",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-r2-q2-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review-r2-q3",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-r2-q3-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review-r2-q3",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-r2-q3-320x568.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review-r2-q4",
+      "size": [
+        390,
+        844
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-r2-q4-390x844.png",
+      "errors": []
+    },
+    {
+      "page": "e-craft-review-r2-q4",
+      "size": [
+        320,
+        568
+      ],
+      "dpr": 2,
+      "file": "export/e-craft-review-r2-q4-320x568.png",
+      "errors": []
+    }
+  ]
+}

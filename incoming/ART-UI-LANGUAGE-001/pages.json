@@ -1,0 +1,1036 @@
+[
+  {
+    "id": "c-brew",
+    "title": "นักปรุงยา",
+    "source": "26-brew",
+    "group": "C",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "c-hire",
+    "title": "ป้ายจ้างทหารรับจ้าง",
+    "source": "20-hire-board",
+    "group": "C",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "c-market",
+    "title": "ป้ายจ้างทหารรับจ้าง",
+    "source": "22-market",
+    "group": "C",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "c-bag",
+    "title": "อุปกรณ์",
+    "source": "23-bag",
+    "group": "C",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "c-team",
+    "title": "จัดทีม",
+    "source": "14-team-member-picked",
+    "group": "C",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "c-quests",
+    "title": "กระดานเควสต์",
+    "source": "32-quest-board",
+    "group": "C",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": false,
+    "preserves": [
+      "quest-card-claim"
+    ]
+  },
+  {
+    "id": "c-farm",
+    "title": "แผนฟาร์ม",
+    "source": "25-farm-plan",
+    "group": "C",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "d-overview",
+    "title": "เอกิส · Lv10 · ★3",
+    "source": "16-character-overview",
+    "group": "D",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "d-skills",
+    "title": "เอกิส · สกิล",
+    "source": "16-character-skills",
+    "group": "D",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "d-tree",
+    "title": "เอกิส · ผังสกิล",
+    "source": "17-character-skills-tree",
+    "group": "D",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "d-tomes",
+    "title": "เอกิส · ตำรา",
+    "source": "17b-character-tome-trade",
+    "group": "D",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "d-star-review",
+    "title": "ตรวจรายการอัปดาว",
+    "source": "18b-star-review",
+    "group": "D",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": true,
+    "preserves": [
+      "star-review",
+      "ledger"
+    ]
+  },
+  {
+    "id": "e-tasks",
+    "title": "เลือกงานโรงตีเหล็ก",
+    "source": "27-forge-tasks",
+    "group": "E",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "e-craft-review",
+    "title": "ตรวจรายการสร้างอาวุธ",
+    "source": "29-forge-craft-review",
+    "group": "E",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": true,
+    "preserves": [
+      "forge-review",
+      "guaranteed-v-random",
+      "ledger"
+    ]
+  },
+  {
+    "id": "e-craft",
+    "title": "สร้างอาวุธ",
+    "source": "28-forge-craft",
+    "group": "E",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": true,
+    "preserves": []
+  },
+  {
+    "id": "f-pack",
+    "title": "กระเป๋า",
+    "source": "42-map-pack",
+    "group": "F",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "dialog",
+    "back": true,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "f-pack-gear",
+    "title": "กระเป๋า · อุปกรณ์",
+    "source": "43-map-pack-tab2",
+    "group": "F",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "dialog",
+    "back": true,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "f-entrance",
+    "title": "ทางเข้าด่าน",
+    "source": "45-map-camp",
+    "group": "F",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "dialog",
+    "back": true,
+    "primary": true,
+    "preserves": [
+      "withdraw-existing-confirmation"
+    ]
+  },
+  {
+    "id": "f-withdraw",
+    "title": "ยืนยันถอนตัว",
+    "source": "46-map-withdraw-confirm",
+    "group": "F",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "dialog",
+    "back": true,
+    "primary": true,
+    "preserves": [
+      "withdraw-existing-confirmation"
+    ]
+  },
+  {
+    "id": "f-event",
+    "title": "ด่านโจร",
+    "source": null,
+    "group": "F",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "dialog",
+    "back": true,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "f-draft",
+    "title": "รับสมัครทหารรับจ้าง",
+    "source": null,
+    "group": "F",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "mandatory",
+    "back": false,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "g-summary",
+    "title": "ถอนตัวกลับค่าย",
+    "source": "47-run-summary",
+    "group": "G",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": true,
+    "preserves": [
+      "summary-bottom-return"
+    ]
+  },
+  {
+    "id": "g-rewards",
+    "title": "ชนะศึก",
+    "source": "55-battle-rewards",
+    "group": "G",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": true,
+    "preserves": []
+  },
+  {
+    "id": "g-defeat",
+    "title": "ทีมล้มทั้งหมด",
+    "source": null,
+    "group": "G",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": true,
+    "preserves": [
+      "summary-bottom-return"
+    ]
+  },
+  {
+    "id": "h-info",
+    "title": "ข้อมูลการต่อสู้",
+    "source": "53-battle-menu",
+    "group": "H",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "dialog",
+    "back": true,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "h-skill",
+    "title": "คำอธิบายสกิล",
+    "source": "51-battle-skill-help",
+    "group": "H",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "dialog",
+    "back": true,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "f-map-hud",
+    "title": "แผนที่เดินทาง",
+    "source": "40-map-hud",
+    "group": "F",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "hud",
+    "back": false,
+    "primary": false,
+    "preserves": [
+      "hud-anchors"
+    ]
+  },
+  {
+    "id": "f-map-hud-r2-q4",
+    "title": "แผนที่เดินทาง",
+    "source": "40-map-hud",
+    "group": "F",
+    "variant": "r2-q4",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "hud",
+    "back": false,
+    "primary": false,
+    "preserves": [
+      "hud-anchors"
+    ]
+  },
+  {
+    "id": "h-battle-hud",
+    "title": "HUD ต่อสู้",
+    "source": "50-battle",
+    "group": "H",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "hud",
+    "back": false,
+    "primary": false,
+    "preserves": [
+      "hud-anchors",
+      "battle-team-commands"
+    ]
+  },
+  {
+    "id": "h-battle-hud-r2-q4",
+    "title": "HUD ต่อสู้",
+    "source": "50-battle",
+    "group": "H",
+    "variant": "r2-q4",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "hud",
+    "back": false,
+    "primary": false,
+    "preserves": [
+      "hud-anchors",
+      "battle-team-commands"
+    ]
+  },
+  {
+    "id": "b-camp",
+    "title": "ค่ายทหารรับจ้าง",
+    "source": "11-camp",
+    "group": "B",
+    "variant": "r1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        390,
+        650
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "context",
+    "back": false,
+    "primary": false,
+    "preserves": [
+      "camp-scene-npcs-nav"
+    ]
+  },
+  {
+    "id": "c-brew-r2-all",
+    "title": "นักปรุงยา",
+    "source": "26-brew",
+    "group": "C",
+    "variant": "r2-all",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "c-brew-r2-q1",
+    "title": "นักปรุงยา",
+    "source": "26-brew",
+    "group": "C",
+    "variant": "r2-q1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "c-brew-r2-q2",
+    "title": "นักปรุงยา",
+    "source": "26-brew",
+    "group": "C",
+    "variant": "r2-q2",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "c-brew-r2-q3",
+    "title": "นักปรุงยา",
+    "source": "26-brew",
+    "group": "C",
+    "variant": "r2-q3",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "c-brew-r2-q4",
+    "title": "นักปรุงยา",
+    "source": "26-brew",
+    "group": "C",
+    "variant": "r2-q4",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": false,
+    "primary": false,
+    "preserves": []
+  },
+  {
+    "id": "e-craft-review-r2-all",
+    "title": "ตรวจรายการสร้างอาวุธ",
+    "source": "29-forge-craft-review",
+    "group": "E",
+    "variant": "r2-all",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": true,
+    "preserves": [
+      "forge-review",
+      "guaranteed-v-random",
+      "ledger"
+    ]
+  },
+  {
+    "id": "e-craft-review-r2-q1",
+    "title": "ตรวจรายการสร้างอาวุธ",
+    "source": "29-forge-craft-review",
+    "group": "E",
+    "variant": "r2-q1",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": true,
+    "preserves": [
+      "forge-review",
+      "guaranteed-v-random",
+      "ledger"
+    ]
+  },
+  {
+    "id": "e-craft-review-r2-q2",
+    "title": "ตรวจรายการสร้างอาวุธ",
+    "source": "29-forge-craft-review",
+    "group": "E",
+    "variant": "r2-q2",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": true,
+    "preserves": [
+      "forge-review",
+      "guaranteed-v-random",
+      "ledger"
+    ]
+  },
+  {
+    "id": "e-craft-review-r2-q3",
+    "title": "ตรวจรายการสร้างอาวุธ",
+    "source": "29-forge-craft-review",
+    "group": "E",
+    "variant": "r2-q3",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": true,
+    "preserves": [
+      "forge-review",
+      "guaranteed-v-random",
+      "ledger"
+    ]
+  },
+  {
+    "id": "e-craft-review-r2-q4",
+    "title": "ตรวจรายการสร้างอาวุธ",
+    "source": "29-forge-craft-review",
+    "group": "E",
+    "variant": "r2-q4",
+    "sizes": [
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        568
+      ]
+    ],
+    "kind": "sheet",
+    "back": true,
+    "primary": true,
+    "preserves": [
+      "forge-review",
+      "guaranteed-v-random",
+      "ledger"
+    ]
+  }
+]

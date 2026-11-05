@@ -1,0 +1,7 @@
+const fs=require('node:fs'),path=require('node:path'),http=require('node:http');
+const dir=__dirname,root=path.resolve(dir,'../..');
+function start(){return new Promise(resolve=>{const server=http.createServer((req,res)=>{let pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);if(pathname.startsWith('/assets/'))pathname='/public'+pathname;const file=path.resolve(root,'.'+pathname);if(!file.startsWith(root+path.sep)){res.writeHead(403);return res.end();}try{const data=fs.readFileSync(file);const ext=path.extname(file);res.setHeader('Content-Type',({'.html':'text/html; charset=utf-8','.css':'text/css','.js':'application/javascript','.json':'application/json','.png':'image/png','.webp':'image/webp','.woff2':'font/woff2'})[ext]||'application/octet-stream');res.end(data);}catch{res.writeHead(404);res.end();}});server.listen(0,'127.0.0.1',()=>resolve({server,url:'http://127.0.0.1:'+server.address().port}));});}
+async function browser(){const {chromium}=require('@playwright/test');return chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE||'/usr/bin/chromium',args:['--no-sandbox']});}
+const prefix='/incoming/ART-UI-LANGUAGE-001/';
+async function ready(page){await page.evaluate(()=>document.fonts.ready);await page.locator('img').evaluateAll(imgs=>Promise.all(imgs.map(i=>i.decode())));}
+module.exports={dir,root,start,browser,prefix,ready};

@@ -1,0 +1,94 @@
+// Measurements, not visual approval. Run after render.cjs.
+const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{spawnSync}=require('node:child_process');
+const {dir,start,browser,prefix,ready}=require('./runtime.cjs');
+const pages=JSON.parse(fs.readFileSync(path.join(dir,'pages.json')));
+const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'fateweave-ui-'));
+function literals(){const bad=[];const files=['components.css',...fs.readdirSync(path.join(dir,'prototypes')).filter(f=>f.endsWith('.html')).map(f=>'prototypes/'+f)];for(const file of files){let css=fs.readFileSync(path.join(dir,file),'utf8');if(file.endsWith('.html'))css=[...css.matchAll(/style="([^"]*)"/g)].map(x=>x[1]).join(';');css=css.replace(/\/\*[\s\S]*?\*\//g,'');for(const m of css.matchAll(/([\w-]+)\s*:\s*([^;{}]+)(?:;|(?=\}))/g)){if(m[1].startsWith('--'))continue;const value=m[2].replace(/var\([^)]*\)/g,'');const found=[...value.matchAll(/(?<![\w-])[-+]?(?:\d*\.)?\d+(?:px|rem|em|fr|ms|s|%|vh|dvh)?/g)].map(x=>x[0]).filter(x=>!['0','50%','100%'].includes(x));if(found.length)bad.push({file,property:m[1],value:m[2],literals:found});}}return bad;}
+(async()=>{const {server,url}=await start(),b=await browser(),records=[],contrastJobs=[];try{
+ for(const item of pages){for(const [w,h] of item.sizes){
+  const p=await b.newPage({viewport:{width:w,height:h},deviceScaleFactor:2,reducedMotion:'reduce'}),errors=[];
+  p.on('pageerror',e=>errors.push(e.message));p.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
+  await p.goto(url+prefix+'prototypes/'+item.id+'.html');await ready(p);await p.keyboard.press('Tab');
+  const measurement=await p.evaluate(()=>{
+   const app=document.querySelector('#app'),ar=app.getBoundingClientRect();
+   const top=el=>{const r=el.getBoundingClientRect();return [[r.x+r.width/2,r.y+r.height/2],[r.x+4,r.y+4],[r.right-4,r.bottom-4]].some(([x,y])=>{if(x<0||y<0||x>=innerWidth||y>=innerHeight)return false;const e=document.elementFromPoint(x,y);return e&&(e===el||el.contains(e));});};
+   const vis=e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width>2&&r.height>2&&r.bottom>0&&r.top<innerHeight&&s.display!=='none'&&s.visibility!=='hidden'&&+s.opacity>.05&&top(e);};
+   const box=e=>{const r=e.getBoundingClientRect();return {x:r.x-ar.x,y:r.y-ar.y,w:r.width,h:r.height};};
+   const sig=e=>{const s=getComputedStyle(e);return [s.height,s.borderRadius,s.fontFamily,s.fontSize,s.fontWeight,s.backgroundImage,s.backgroundColor,s.color];};
+   const one=sel=>{const e=document.querySelector(sel);return e&&vis(e)?{...box(e),radius:getComputedStyle(e).borderRadius}:null;};
+   const buttons=[...document.querySelectorAll('button,a.button,summary,select')].filter(vis);
+   const targets=buttons.map(e=>({text:e.getAttribute('aria-label')||e.textContent.trim(),...box(e),disabled:e.disabled||false,original:e.dataset.original?.split(',').map(Number)}));
+   const focusFailures=[];for(const e of buttons.filter(e=>!e.disabled)){e.focus({preventScroll:true});const s=getComputedStyle(e);if(s.outlineStyle==='none'||parseFloat(s.outlineWidth)<3)focusFailures.push(e.outerHTML.slice(0,140));}
+   document.activeElement?.blur();
+   const primary=[...document.querySelectorAll('.primary')].filter(e=>vis(e)&&!e.disabled);
+   const secondary=[...document.querySelectorAll('.secondary,.danger')].filter(e=>vis(e)&&!e.disabled&&!e.closest('.tabs,.navigation')&&!e.classList.contains('icon-button'));
+   const win=document.querySelector('.window'),ws=win&&getComputedStyle(win);
+   const h1=document.querySelector('h1');
+   const family=sel=>[...document.querySelectorAll(sel)].filter(vis).map(e=>{const s=getComputedStyle(e);return [s.backgroundColor,s.borderRadius,s.paddingTop,s.paddingBottom,s.fontSize,s.fontFamily];});
+   return {families:{header:family('.window-head'),card:family('.card'),ledger:family('.ledger')},close:one('.close'),back:one('.back'),title:h1?box(h1):null,primary:primary.map(e=>({text:e.textContent.trim(),...box(e),style:sig(e),inDock:!!e.closest('.dock')})),secondary:secondary.map(e=>({kind:e.classList.contains('danger')?'danger':'normal',style:sig(e)})),targets,focusFailures,sideBorders:win?[parseFloat(ws.borderLeftWidth),parseFloat(ws.borderRightWidth)]:null,hscroll:document.documentElement.scrollWidth>innerWidth+1||app.scrollWidth>app.clientWidth+1,bodyText:app.innerText,images:[...document.images].map(i=>({src:i.getAttribute('src'),loaded:i.complete&&i.naturalWidth>0})),reducedMotion:[...document.querySelectorAll('*')].every(e=>{const s=getComputedStyle(e);return s.animationName==='none'&&parseFloat(s.transitionDuration)===0;})};
+  });
+  const states=[];const scroll=p.locator('.scroll');const positions=await scroll.count()?[0,.5,1]:[0];
+  for(const expanded of (await p.locator('details').count()?[false,true]:[false])){if(expanded)await p.locator('details').evaluateAll(ds=>ds.forEach(d=>d.open=true));
+  for(const frac of positions){if(await scroll.count())await scroll.evaluate((e,f)=>e.scrollTop=(e.scrollHeight-e.clientHeight)*f,frac);
+   const state=await p.evaluate(()=>{
+    const top=el=>{const r=el.getBoundingClientRect();return [[r.x+r.width/2,r.y+r.height/2],[r.x+4,r.y+4],[r.right-4,r.bottom-4]].some(([x,y])=>{if(x<0||y<0||x>=innerWidth||y>=innerHeight)return false;const e=document.elementFromPoint(x,y);return e&&(e===el||el.contains(e));});};
+    const texts=[],small=[],overflow=[];const walker=document.createTreeWalker(document.querySelector('#app'),NodeFilter.SHOW_TEXT);
+    for(let n=walker.nextNode();n;n=walker.nextNode()){const text=n.textContent.trim(),e=n.parentElement;if(!text||!e||['OPTION','SCRIPT','STYLE'].includes(e.tagName))continue;const s=getComputedStyle(e),r=e.getBoundingClientRect();if(!r.width||!r.height||s.visibility==='hidden'||s.display==='none'||+s.opacity<=.05||r.bottom<0||r.top>=innerHeight||!top(e))continue;
+     const range=document.createRange();range.selectNode(n);const rects=[...range.getClientRects()].filter(r=>r.width&&r.height&&r.bottom>0&&r.top<innerHeight);
+     if(!rects.length)continue;const px=parseFloat(s.fontSize);if(px<12)small.push({text,px,numeric:e.classList.contains('numeric')});
+     const points=[];for(const rr of rects){for(const frac of [.15,.5,.85]){const x=rr.x+rr.width*frac,y=rr.y+rr.height/2;if(x<0||x>=innerWidth||y<0||y>=innerHeight)continue;const hit=document.elementFromPoint(x,y);if(hit&&(hit===e||e.contains(hit)))points.push([x,y]);}if(rr.right>r.right+1||rr.left<r.left-1)overflow.push({text,element:e.className,right:rr.right,parentRight:r.right});}
+     texts.push({text,px,weight:parseFloat(s.fontWeight),fg:s.color,points});
+    }
+    return {texts,small,overflow};
+   });
+   const style=await p.addStyleTag({content:'*,*::before,*::after{color:transparent!important;text-shadow:none!important;-webkit-text-fill-color:transparent!important}'});
+   const shot=path.join(tmp,`${item.id}-${w}x${h}-${expanded}-${frac}.png`);await p.screenshot({path:shot});await style.evaluate(e=>e.remove());
+   contrastJobs.push({key:`${item.id}/${w}x${h}/${expanded?'expanded':'initial'}/${frac}`,path:shot,texts:state.texts});states.push({expanded,scroll:frac,textCount:state.texts.length,small:state.small,overflow:state.overflow});
+  }
+  }
+  // Every disclosure is also measured open; text may scroll vertically, never truncate horizontally.
+  if(await p.locator('details').count()){
+   await p.locator('details').evaluateAll(ds=>ds.forEach(d=>d.open=true));
+   const full=await p.locator('#app').evaluate(e=>({hscroll:e.scrollWidth>e.clientWidth+1,text:e.textContent}));measurement.expandedHscroll=full.hscroll;
+  }
+  records.push({page:item.id,group:item.group,variant:item.variant,kind:item.kind,size:[w,h],errors,...measurement,states});await p.close();
+ }}
+ const ip=await b.newPage({viewport:{width:390,height:650},deviceScaleFactor:2,reducedMotion:'reduce'});await ip.goto(url+prefix+'prototypes/c-brew.html');await ip.locator('summary').click();const disclosure=await ip.locator('details').first().evaluate(e=>e.open);await ip.goto(url+prefix+'prototypes/c-hire.html');await ip.locator('.tabs a[href="c-market.html"]').click();const market=ip.url().endsWith('/c-market.html')&&(await ip.locator('#app').innerText()).includes('ตราสัญญา');await ip.close();const interactions={disclosure,marketTab:market};
+ const input=path.join(tmp,'contrast-input.json'),output=path.join(tmp,'contrast-output.json');fs.writeFileSync(input,JSON.stringify(contrastJobs));
+ const py=spawnSync('python',[path.join(dir,'measure_contrast.py'),input,output],{encoding:'utf8'});if(py.status!==0)throw Error(py.stderr);const contrasts=JSON.parse(fs.readFileSync(output));
+ const baseline=records.filter(r=>r.variant==='r1'&&!['hud','context','mandatory'].includes(r.kind)),r1=records.filter(r=>r.variant==='r1'&&r.kind!=='context');
+ const failures={};const fail=(n,v)=>{if(v)(failures[n]??=[]).push(v);};
+ for(const r of baseline){const [w,h]=r.size,key=`${r.page}/${w}x${h}`;
+  if(!r.close||Math.abs(r.close.x-(w-56))>2||Math.abs(r.close.y-12)>2||r.close.w!==44||r.close.h!==44||!['50%','22px'].includes(r.close.radius))fail(1,key);
+  if(r.back&&(Math.abs(r.back.x-12)>2||Math.abs(r.back.y-12)>2||r.back.w!==44||r.back.h!==44))fail(2,key);
+  if(r.title&&Math.abs(r.title.x-(r.back?68:16))>2)fail(2,key+' title');
+  if(r.primary.length>1)fail(3,key+' multiple primary');for(const e of r.primary)if(e.inDock&&(Math.abs(e.y-(h-64))>2||e.y+e.h>h))fail(3,{key,button:e});
+  if(r.sideBorders?.some(x=>x!==0))fail(6,key);
+ }
+ for(const r of r1){const key=`${r.page}/${r.size.join('x')}`;if(r.states.some(s=>s.small.length))fail(4,{key,small:r.states.flatMap(s=>s.small)});if(r.states.some(s=>s.overflow.length))fail(4,{key,overflow:r.states.flatMap(s=>s.overflow)});
+  if(r.hscroll||r.expandedHscroll||r.targets.some(e=>e.w<43.99||e.h<43.99)||r.focusFailures.length)fail(7,{key,hscroll:r.hscroll,expandedHscroll:r.expandedHscroll,smallTargets:r.targets.filter(e=>e.w<43.99||e.h<43.99),focus:r.focusFailures});
+  for(const c of contrasts.filter(c=>c.key.startsWith(key+'/')))if(c.failures.length)fail(8,c);
+  if(r.errors.length||r.images.some(i=>!i.loaded))fail(10,{key,errors:r.errors,images:r.images.filter(i=>!i.loaded)});
+ }
+ const literalValues=literals();if(literalValues.length)fail(5,literalValues);
+ const familyCounts=Object.fromEntries(['header','card','ledger'].map(k=>[k,new Set(baseline.flatMap(r=>r.families[k].map(e=>JSON.stringify(e)))).size]));
+ const primaryStyles=[...new Set(baseline.flatMap(r=>r.primary.map(e=>JSON.stringify(e.style))))];
+ const secondaryStyles=[...new Set(baseline.flatMap(r=>r.secondary.map(e=>JSON.stringify(e.style))))];
+ if(primaryStyles.length!==1||secondaryStyles.length>2||familyCounts.header>2||familyCounts.card>2||familyCounts.ledger>1)fail(9,{primary:primaryStyles.length,secondary:secondaryStyles.length});
+ const pairFailures=[];for(const item of pages)for(const [w,h] of item.sizes)if(!fs.existsSync(path.join(dir,'export/before-after',`${item.id}-${w}x${h}.png`)))pairFailures.push(item.id);if(pairFailures.length)fail(10,pairFailures);
+ const preservation={
+  'gallery-interactions':interactions.disclosure&&interactions.marketTab,
+  'forge-review-guarantee':records.some(r=>r.page==='e-craft-review'&&r.bodyText.includes('ผลที่รับประกัน · ไม่สุ่ม')&&r.bodyText.includes('ยังไม่ใช้วัสดุ')),
+  'ledger-five-columns':records.filter(r=>r.page==='e-craft-review'||r.page==='d-star-review').every(r=>['หน่วย','มี','ใช้','ได้รับ','หลังทำ'].every(t=>r.bodyText.includes(t))),
+  'star-stats-review':records.some(r=>r.page==='d-star-review'&&r.bodyText.includes('109')&&r.bodyText.includes('115')&&r.bodyText.includes('ใช้ตัวซ้ำที่สะสมของคนนี้')),
+  'withdraw-existing-two-states':pages.filter(p=>['f-entrance','f-withdraw'].includes(p.id)).length===2,
+  'summary-return-docked':records.filter(r=>r.page==='g-summary').every(r=>r.primary.some(b=>b.text==='กลับค่าย'&&b.inDock)),
+  'battle-five-heroes-commands-390x650':records.filter(r=>r.page==='h-battle-hud'&&r.size[1]===650).every(r=>['เอกิส','ไลรา','ไอรา','เซเรน','เคล','โจมตี','ติดตรา','ฟันเจาะจุด'].every(t=>r.bodyText.includes(t))),
+  'quest-claim-in-card':fs.readFileSync(path.join(dir,'prototypes/c-quests.html'),'utf8').includes('class="primary"'),
+  'camp-context-and-nav':pages.some(p=>p.id==='b-camp'),
+  'hud-source-anchors':records.filter(r=>r.kind==='hud').every(r=>r.targets.filter(t=>t.original).every(t=>[t.x,t.y,t.w,t.h].every((v,i)=>Math.abs(v-t.original[i])<=2))),
+  'reduced-motion':records.every(r=>r.reducedMotion)
+ };for(const [key,value] of Object.entries(preservation))if(!value)fail(10,key);
+ const report={schema:1,base:'dd99b38d',engine:'Chromium',dpr:2,realDevices:false,visualApproval:false,scope:'R1 acceptance; R2 measured separately with declared Q1/Q2/Q3/Q4 differences',criteria:Array.from({length:10},(_,i)=>({id:i+1,status:failures[i+1]?'fail':'pass',failures:failures[i+1]||[]})),literalCount:literalValues.length,styleCounts:{...familyCounts,primary:primaryStyles.length,secondary:secondaryStyles.length},styleSignatures:{primary:primaryStyles,secondary:secondaryStyles},preservation,interactions,contrast:contrasts,records};
+ report.pass=report.criteria.every(c=>c.status==='pass');fs.writeFileSync(path.join(dir,'verification.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({pass:report.pass,criteria:report.criteria.map(c=>[c.id,c.status,c.failures.length]),records:records.length,literals:literalValues.length,styles:report.styleCounts},null,2));
+ }finally{await b.close();server.close();fs.rmSync(tmp,{recursive:true,force:true});}})().catch(e=>{console.error(e);process.exitCode=1;});
