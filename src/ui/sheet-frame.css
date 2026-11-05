@@ -30,3 +30,14 @@
 #app .lobby-sheet :is(button.primary, .hire-board li > button[id^="hire-"]:not(.hire-open), .hire-board li > button[id^="draft-"]):disabled {
   color: var(--primary-plate-disabled-text); background: var(--primary-plate-disabled); border: 1px solid var(--primary-plate-disabled-edge); box-shadow: inset 0 -2px 0 #3a372f; text-shadow: none; }
 #app .lobby-sheet button.secondary:not(.hire-board li > button) { min-height: var(--button-secondary-h); border-radius: var(--button-radius); font: var(--button-secondary-font); }
+
+/* Q3 = R1 (Claude's pick under the owner's delegation 2026-11-05 "เอาตามที่คุณแนะนำเลย"): no gold frame lines on
+   full-screen service sheets; gold stays for the primary button and the review/confirm ledger strip only. */
+@container game (max-width: 760px) and (orientation: portrait) {
+  #app .lobby-sheet { border-color: transparent; }
+  #app .lobby-sheet .forge-frame-trim { visibility: hidden; }
+  /* Fill the forge's safe-area gap so the camp scene does not show as stripes around it (layout unchanged). */
+  #app .lobby-sheet:has(.forge-enhancement, .forge-launcher) { box-shadow: 0 0 0 16px var(--navy-950); }
+}
+#app .lobby-sheet .lobby-sheet-head { border-bottom-color: var(--hud-edge); }
+#app .lobby-sheet .forge-enhancement:not([data-review="true"]) .forge-enhancement-dock { border-top-color: var(--enhance-edge); }

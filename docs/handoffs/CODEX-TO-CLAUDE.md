@@ -2,6 +2,13 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-05 — UI frame group 1: service-sheet header + buttons (Claude, PR #173 claude/ui-frame-group1)
+- ทุกแผ่นบริการค่ายใช้หัวเดียวกัน (ปิด 333,11 ทุกแผ่น/ทุกขนาด, ย้อนกลับซ้าย, หัวเรื่องชิดซ้าย 19px) ปุ่มหลักทอง 1 แบบ ปุ่มรอง 1 แบบ ค่าเป็น token (`tokens.css`, `src/ui/sheet-frame.css` โหลดท้ายสุด)
+- Q1–Q3: เจ้าของมอบให้ Claude เลือก → R1 (บันทึกเป็นการตัดสินใจของ Claude); Q2+Q3 ทำในกลุ่มนี้, Q1 (เต็มจอซ่อนแถบนำทาง) ไปกลุ่มหน้าต่างตัวละคร+แผ่นทีม
+- กรอบช่างคงเยื้อง 8px (ART-UI-UX-002, เทสต์ safe-area); ลองชิดขอบแล้วเทสต์พัง 16 → ถอย ใช้ padding หัวชดเชย; หัวเรื่อง/ฟอนต์ปุ่มเป็น rem เพราะ `forge-text-large` อาศัยหัวขยายตามตัวอักษร
+- Tests: typecheck/lint/unit 1602/build ผ่าน; Playwright หน้าที่เกี่ยว 97/97 + รอบหลัง Q3 54/54; audit ก่อน/หลัง 3 ขนาด — หลักฐาน `docs/validation/ui-frame-group1-2026-11-05/README_TH.md`
+- เปิด: กลุ่มถัดไป = หน้าต่างตัวละคร (หัว + Q1 + ตัวอักษร ≥12px) แล้ว ไดอะล็อกแผนที่/สรุป; ปุ่ม "กลับไปป้ายจ้าง" ในเนื้อหายังเป็นปุ่มข้อความ
+
 ## 2026-11-05 — ART-UI-LANGUAGE-001 closed; new UI frame scope (Claude)
 - Codex PR #171 (2 รอบ): SHA/ขอบเขต/verify ผ่าน แต่ภาพก่อน/หลังพบว่าต้นแบบรื้อเนื้อหาหน้า (ไอคอนสกิลวาด→ไอคอนเส้น, ตารางจัดทีมหาย, การ์ดรางวัล/ชิปสรุปหาย, ชื่อศัตรูถูกตัด) → ปิดไม่ merge (เจ้าของ "ดำเนินการได้")
 - ขอบเขตใหม่ที่เจ้าของอนุมัติ: Claude ทำในเกมเองทีละกลุ่ม เฉพาะหัวหน้าต่าง/ปุ่ม/12px ในแผ่นบริการ+ตัวละคร/token ไม่แตะ HUD ต่อสู้-แผนที่; รายละเอียดหัว `docs/handoffs/ART-UI-LANGUAGE-001.md`
