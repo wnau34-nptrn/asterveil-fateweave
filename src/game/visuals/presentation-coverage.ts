@@ -28,12 +28,8 @@ import defenseArt from './defense-art.json';
 // committed table no longer matches this code. Presentation only.
 
 // Parked identities (OD-14, owner 2026-10-30): redesigned still + procedural motion, no atlas until A7-003.
-// P03 characters fight on their approved still with procedural motion until their CODEX-A12 battle animation lands.
-export const STILL_ONLY: Readonly<Record<string, string>> = {
-  kael: 'P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12',
-  wynne: 'P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12',
-  astrid: 'P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12',
-};
+// (empty since A12 intake 2026-11-05; the P03 classes have atlases.)
+export const STILL_ONLY: Readonly<Record<string, string>> = {};
 export const PARKED: Readonly<Record<string, string>> = {
   thiran: 'OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)',
   wila: 'OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)',

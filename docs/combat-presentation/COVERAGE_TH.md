@@ -4,9 +4,9 @@
 
 ## สรุป
 
-- identities 39 (ฝ่ายเรา 17 · ศัตรู 22) · มี atlas 34 · พักตาม OD-14 2 (โอดราน `thiran` / อิโซลด์ `wila`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่ง P03 รออนิเมชัน 3
+- identities 39 (ฝ่ายเรา 17 · ศัตรู 22) · มี atlas 37 · พักตาม OD-14 2 (โอดราน `thiran` / อิโซลด์ `wila`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่งรออนิเมชัน 0
 - ActionId ฝ่ายเรา 91 รายการ (119 แถว ตัวละคร×ท่า รวมท่าจากต้นไม้) · ชื่อท่าศัตรู/phase 40 ชื่อ (49 แถว identity×ท่า)
-- ท่าร่างกาย: sprite 133 · procedural 35 (ตัวที่พักตาม OD-14 และภาพนิ่ง P03 ที่รออนิเมชัน CODEX-A12)
+- ท่าร่างกาย: sprite 154 · procedural 14 (ตัวที่พักตาม OD-14 และภาพนิ่ง P03 ที่รออนิเมชัน CODEX-A12)
 - VFX: วาดเฉพาะ 112 · ชุดร่วมโดยตั้งใจ 52 · วาดด้วยโค้ดโดยตั้งใจ 4
 
 ความหมาย: **sprite** = เฟรม atlas (prepare → recover; contact = เฟรม recover แรก, เวลา contact/end มาจาก UI ไม่ใช่ FPS ภาพ) · **procedural** = ภาพนิ่ง + การเคลื่อนไหวด้วยโค้ด · **วาด** = painted atlas ของท่านั้น · **ชุดร่วม** = painted atlas ร่วมตระกูลโดยตั้งใจ · **โค้ด** = วาดด้วย Graphics ตั้งใจ (ไม่มีภาพเฉพาะ) · จุดเกิดผลทุกแถวอ่านจาก event จริงของ resolver
@@ -29,9 +29,9 @@
 | `thiran` | Odran | เรา | OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | procedural | procedural | procedural (ภาพนิ่งจาง) | — |
 | `lalin` | Cerise | เรา | 41 · 5.91 MiB · 2.17 MB | sprite 31,32,33 | sprite 34,35,36 | sprite 37,38,39,40 · ค้าง 40 | — |
 | `wila` | Isolde | เรา | OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | procedural | procedural | procedural (ภาพนิ่งจาง) | — |
-| `kael` | Kael | เรา | P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12 | procedural | procedural | procedural (ภาพนิ่งจาง) | — |
-| `wynne` | Wynne | เรา | P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | procedural | procedural | procedural (ภาพนิ่งจาง) | — |
-| `astrid` | Astrid | เรา | P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | procedural | procedural | procedural (ภาพนิ่งจาง) | — |
+| `kael` | Kael | เรา | 41 · 3.87 MiB · 1.06 MB | sprite 31,32,33 | sprite 34,35,36 | sprite 37,38,39,40 · ค้าง 40 | — |
+| `wynne` | Wynne | เรา | 35 · 2.87 MiB · 1.08 MB | sprite 25,26,27 | sprite 28,29,30 | sprite 31,32,33,34 · ค้าง 34 | — |
+| `astrid` | Astrid | เรา | 35 · 2.68 MiB · 0.97 MB | sprite 25,26,27 | sprite 28,29,30 | sprite 31,32,33,34 · ค้าง 34 | — |
 | `brute` | อสูรรอยแยก | ศัตรู | 24 · 4.18 MiB · 1.44 MB | sprite 17,18 | sprite 22,23 | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_captain` | หัวหน้ากองหน้า | ศัตรู | 18 · 4.58 MiB · 1.34 MB | sprite 13,14 | procedural (tint/lift) | sprite 15,16,17 · ค้าง 17 | — |
 | `foe_dew_slime` | สไลม์น้ำค้าง | ศัตรู | 22 · 1.35 MiB · 0.36 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
@@ -159,27 +159,27 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `wila` | `deepbeat` ย้ำจังหวะ | procedural (dance) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | พันธมิตร 1 คน | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `wila` | `echofoot` ก้าวสะท้อน | procedural (dance) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง (เส้นเดียว) |
 | `wila` | `closingstep` ก้าวปิดท้าย | procedural (dance) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | พันธมิตร 1 คน | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
-| `kael` | `attack` โจมตี | procedural (role basic) — P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
-| `kael` | `gatherfist` หมัดรวมปราณ | procedural (punch) — P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
-| `kael` | `releasefist` ปล่อยปราณ | procedural (punch) — P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
-| `kael` | `flowfist` หมัดสายน้ำ | procedural (punch) — P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
-| `kael` | `circlefist` หมัดวงกลม | procedural (punch) — P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
-| `kael` | `storedfist` หมัดเก็บแรง | procedural (punch) — P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
-| `kael` | `perfectfist` หมัดสมบูรณ์ | procedural (punch) — P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
-| `wynne` | `attack` โจมตี | procedural (role basic) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
-| `wynne` | `threadhex` ด้ายสาป | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
-| `wynne` | `lifetoll` ภาษีชีวิต | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
-| `wynne` | `wovenhex` สาปถักทอ | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
-| `wynne` | `tollring` วงภาษี | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
-| `wynne` | `longthread` ด้ายยาว | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
-| `wynne` | `knothex` ปมสาป | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
-| `astrid` | `attack` โจมตี | procedural (role basic) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
-| `astrid` | `deflectfate` เบนชะตา | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial) |
-| `astrid` | `turncycle` หมุนวงดาว | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial) |
-| `astrid` | `crossing` ทางแยกชะตา | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวผู้รับ damage จริง |
-| `astrid` | `doubledial` หมุนสองวง | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial) |
-| `astrid` | `starneedle` เข็มดารา | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวผู้รับ damage จริง |
-| `astrid` | `readorbit` อ่านวงโคจร | procedural (cast) — P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวผู้รับ damage จริง |
+| `kael` | `attack` โจมตี | sprite `attack` 1,2 → 3,4,5,6 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `kael` | `gatherfist` หมัดรวมปราณ | sprite `gather` 7,8 → 9,10,11,12 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
+| `kael` | `releasefist` ปล่อยปราณ | sprite `release` 13,14 → 15,16,17,18 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
+| `kael` | `flowfist` หมัดสายน้ำ | sprite `gather` 7,8 → 9,10,11,12 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
+| `kael` | `circlefist` หมัดวงกลม | sprite `circle` 19,20 → 21,22,23,24 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
+| `kael` | `storedfist` หมัดเก็บแรง | sprite `stored` 25,26 → 27,28,29,30 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
+| `kael` | `perfectfist` หมัดสมบูรณ์ | sprite `release` 13,14 → 15,16,17,18 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
+| `wynne` | `attack` โจมตี | sprite `attack` 1,2 → 3,4,5,6 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `wynne` | `threadhex` ด้ายสาป | sprite `knot` 7,8 → 9,10,11,12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
+| `wynne` | `lifetoll` ภาษีชีวิต | sprite `toll` 13,14 → 15,16,17,18 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
+| `wynne` | `wovenhex` สาปถักทอ | sprite `weave` 19,20 → 21,22,23,24 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
+| `wynne` | `tollring` วงภาษี | sprite `weave` 19,20 → 21,22,23,24 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
+| `wynne` | `longthread` ด้ายยาว | sprite `knot` 7,8 → 9,10,11,12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
+| `wynne` | `knothex` ปมสาป | sprite `knot` 7,8 → 9,10,11,12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex/toll จริง (สาปไม่มีดาเมจตอนร่าย) |
+| `astrid` | `attack` โจมตี | sprite `attack` 1,2 → 3,4,5,6 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `astrid` | `deflectfate` เบนชะตา | sprite `deflect` 7,8 → 9,10,11,12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial) |
+| `astrid` | `turncycle` หมุนวงดาว | sprite `dial` 13,14 → 15,16,17,18 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial) |
+| `astrid` | `crossing` ทางแยกชะตา | sprite `deflect` 7,8 → 9,10,11,12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวผู้รับ damage จริง |
+| `astrid` | `doubledial` หมุนสองวง | sprite `dial` 13,14 → 15,16,17,18 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial) |
+| `astrid` | `starneedle` เข็มดารา | sprite `attack` 1,2 → 3,4,5,6 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวผู้รับ damage จริง |
+| `astrid` | `readorbit` อ่านวงโคจร | sprite `read` 19,20 → 21,22,23,24 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวผู้รับ damage จริง |
 
 ## ศัตรู: identity × intent / phase
 
@@ -237,5 +237,5 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 
 ## งานค้างที่รู้อยู่แล้ว (สร้างจากตาราง)
 
-- ท่าร่างกาย procedural 35 แถว: `thiran`, `wila`, `kael`, `wynne`, `astrid` — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง); P03: ภาพนิ่ง NEW-003 + procedural; atlas รอ CODEX-A12; P03: ภาพนิ่ง NEW-002 + procedural; atlas รอ CODEX-A12
+- ท่าร่างกาย procedural 14 แถว: `thiran`, `wila` — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)
 - VFX วาดด้วยโค้ดโดยตั้งใจ 4 แถว: `mira` โจมตี, `toma` โจมตี, `foe_hunter` Shadow Knife, `raider` Shadow Knife

@@ -19,7 +19,7 @@ function markdown(c: PresentationCoverage): string {
   out.push('# ตารางครอบคลุมท่าร่างกายและ VFX (W8) — สร้างจากโค้ด', '',
     '> ไฟล์นี้และ `coverage.json` สร้างจาก `src/game/visuals/presentation-coverage.ts` (registry `unit-frames.ts`, content, ลำดับ routing ของ `BattleScene`) ด้วย `npm run coverage:presentation` ห้ามแก้ด้วยมือ; `tests/presentation-coverage.test.ts` ล้มเมื่อตารางไม่ตรงโค้ด',
     '', '## สรุป', '',
-    `- identities ${n.identities} (ฝ่ายเรา ${n.heroes} · ศัตรู ${n.enemies}) · มี atlas ${n.atlases} · พักตาม OD-14 ${n.parked} (โอดราน \`thiran\` / อิโซลด์ \`wila\`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่ง P03 รออนิเมชัน ${Object.keys(STILL_ONLY).length}`,
+    `- identities ${n.identities} (ฝ่ายเรา ${n.heroes} · ศัตรู ${n.enemies}) · มี atlas ${n.atlases} · พักตาม OD-14 ${n.parked} (โอดราน \`thiran\` / อิโซลด์ \`wila\`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่งรออนิเมชัน ${Object.keys(STILL_ONLY).length}`,
     `- ActionId ฝ่ายเรา ${n.actionIds} รายการ (${n.heroRows} แถว ตัวละคร×ท่า รวมท่าจากต้นไม้) · ชื่อท่าศัตรู/phase ${n.intents} ชื่อ (${n.foeRows} แถว identity×ท่า)`,
     `- ท่าร่างกาย: sprite ${n.spriteRows} · procedural ${n.proceduralRows} (ตัวที่พักตาม OD-14 และภาพนิ่ง P03 ที่รออนิเมชัน CODEX-A12)`,
     `- VFX: วาดเฉพาะ ${n.paintedRows} · ชุดร่วมโดยตั้งใจ ${n.sharedRows} · วาดด้วยโค้ดโดยตั้งใจ ${n.codeRows}`,
@@ -64,7 +64,7 @@ describe('W8 presentation coverage', () => {
     for (const r of c.rows.filter(r => r.vfx.kind === 'code')) expect(r.move === 'attack' || r.move === 'Shadow Knife', `${r.identity} ${r.move}`).toBe(true);
     // Shared on purpose: hero basic cuts by class palette and physical foe moves on the blade family.
     // P03: Wynne's curses share the Mark painting; Kael's fists share the Saint strike paintings until a Martial family exists.
-    for (const r of c.rows.filter(r => r.vfx.kind === 'shared')) expect(r.vfx.module, `${r.identity} ${r.move}`).toBe(STILL_ONLY[r.identity] && r.move !== 'attack' ? (r.identity === 'kael' ? 'saint-dance-fx' : 'arcane-seal-fx') : 'blade-fx');
+    for (const r of c.rows.filter(r => r.vfx.kind === 'shared')) expect(r.vfx.module, `${r.identity} ${r.move}`).toBe(['kael', 'wynne', 'astrid'].includes(r.identity) && r.move !== 'attack' ? (r.identity === 'kael' ? 'saint-dance-fx' : 'arcane-seal-fx') : 'blade-fx');
   });
   it('the committed table matches the code', () => {
     const json = JSON.stringify(c, null, 1) + '\n', md = markdown(c);
