@@ -21,6 +21,16 @@
   --hp-critical:linear-gradient(90deg,#ce6a62,#ed927f);
   --barrier:repeating-linear-gradient(125deg,#74d4ef 0 3px,#a3edff 3px 5px);
   --primary-fill:linear-gradient(135deg,#f2d596,#d9bf86);
+  /* UI frame group 1 (2026-11-05): one primary/secondary button and one window header for camp service sheets. */
+  --primary-plate:linear-gradient(180deg,#fbe7b8 0%,#f2d596 42%,#d9b673 100%); --primary-plate-edge:#fff0c8;
+  --primary-plate-shadow:inset 0 1px 0 #fffaf0,inset 0 -3px 0 #b48f4f,0 4px 14px rgba(0,5,15,.35),0 0 18px rgba(242,213,150,.18);
+  --primary-plate-hover:linear-gradient(180deg,#fff1cc 0%,#f7dea6 42%,#e2c080 100%);
+  --primary-plate-disabled:linear-gradient(180deg,#6d6656,#4d4a42); --primary-plate-disabled-edge:#8b826c; --primary-plate-disabled-text:#d6cfbd;
+  --secondary-plate:linear-gradient(180deg,#24425f 0%,#152a42 55%,#0f2034 100%); --secondary-plate-edge:#a9d6f04d;
+  --secondary-plate-shadow:inset 0 1px 0 #e8f5ff33,inset 0 -2px 0 #08121f,0 3px 10px rgba(0,5,15,.3);
+  --button-primary-h:48px; --button-secondary-h:44px; --button-radius:var(--radius-sm);
+  --button-primary-font:600 1rem/1.25 var(--font-heading); --button-secondary-font:600 .875rem/1.25 var(--font-heading);
+  --sheet-head-button:44px; --sheet-head-gap:8px; --sheet-title-size:1.1875rem; --sheet-title-color:var(--gold-light);
   --secondary-fill:linear-gradient(140deg,#1b344d,#101f32);
   --meter-track:#24384b; --hp-track:#24384b; --focus:#a3edff;
   --danger-panel:#452933; --scrim:rgba(3,9,18,.82);

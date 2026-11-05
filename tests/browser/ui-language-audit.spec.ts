@@ -1,5 +1,5 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { encounterById } from '../../src/content/encounters/catalog';
 import { newProfile, depart } from '../../src/core/world/profile';
@@ -17,7 +17,9 @@ import { xpAt } from '../fixtures/camp-level';
 // Output: <dir>/<w>x<h>/<surface>.png and <dir>/<w>x<h>/metrics.json (see docs/validation/ui-language-audit-2026-11-05).
 const dir = process.env.UI_AUDIT;
 const key = 'asterveil.fateweave.expedition.v1';
-const sizes = [[390, 844], [390, 650], [320, 568]] as const;
+// Optional: UI_AUDIT_SIZES=390x844,320x568 limits the sizes; UI_AUDIT_CSS=<file> injects extra CSS (owner option boards).
+const sizes = ([[390, 844], [390, 650], [320, 568]] as const).filter(([w, h]) => !process.env.UI_AUDIT_SIZES || process.env.UI_AUDIT_SIZES.split(',').includes(`${w}x${h}`));
+const extraCss = process.env.UI_AUDIT_CSS ? readFileSync(process.env.UI_AUDIT_CSS, 'utf8') : '';
 test.describe.configure({ timeout: 240_000 });
 
 function richProfile(): Profile {
@@ -71,6 +73,7 @@ async function open(browser: Browser, w: number, h: number, raw: string | null):
   const page = await context.newPage(), errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('ula')) { if (raw) localStorage.setItem(key, raw); else localStorage.removeItem(key); sessionStorage.setItem('ula', '1'); } }, { key, raw });
+  if (extraCss) await page.addInitScript(css => document.addEventListener('DOMContentLoaded', () => { const st = document.createElement('style'); st.textContent = css; document.head.append(st); }), extraCss);
   await page.goto('./');
   return { page, close: () => context.close(), errors };
 }
