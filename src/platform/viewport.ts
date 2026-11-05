@@ -26,7 +26,20 @@ export function fitViewport(root: HTMLElement = document.documentElement): void 
   probe.setAttribute('aria-hidden', 'true');
   probe.style.cssText = 'position:fixed;left:0;top:0;width:0;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none';
   document.body.append(probe);
-  const debug = new URLSearchParams(location.search).has('vp') ? document.body.appendChild(document.createElement('pre')) : undefined;
+  // Measurements overlay for real-device checks: `?vp` in the URL, or (home-screen web app, no URL bar) five quick taps
+  // in the top-left 140px corner of the page; five more hide it.
+  const bottomProbe = document.createElement('div');
+  bottomProbe.setAttribute('aria-hidden', 'true');
+  bottomProbe.style.cssText = 'position:fixed;left:0;top:0;width:0;height:env(safe-area-inset-bottom,0px);visibility:hidden;pointer-events:none';
+  document.body.append(bottomProbe);
+  const debug = document.body.appendChild(document.createElement('pre'));
+  debug.hidden = !new URLSearchParams(location.search).has('vp');
+  let taps: number[] = [];
+  document.addEventListener('pointerdown', e => {
+    if (e.clientX > 140 || e.clientY > 140) return;
+    const now = Date.now(); taps = [...taps.filter(t => now - t < 2500), now];
+    if (taps.length >= 5) { taps = []; debug.hidden = !debug.hidden; apply(); }
+  }, true);
   if (debug) debug.style.cssText = 'position:fixed;z-index:9999;left:50%;top:40%;transform:translateX(-50%);margin:0;padding:8px 10px;font:12px/1.35 monospace;color:#fff;background:#000c;border-radius:8px;pointer-events:none';
 
   const apply = (): void => {
@@ -61,13 +74,15 @@ export function fitViewport(root: HTMLElement = document.documentElement): void 
     const underStatusBar = !standalone && ios() && portrait && envTop === 0 && screen.height >= 812 && height >= screen.height - 1;
     root.style.setProperty('--safe-top-fallback', underStatusBar ? '50px' : '0px');
     if (window.scrollX || window.scrollY) window.scrollTo(0, 0);
-    if (debug) {
+    if (debug && !debug.hidden) {
       const vv = window.visualViewport;
       debug.textContent = [
         `inner ${window.innerWidth}×${window.innerHeight}`, `screen ${screen.width}×${screen.height}`,
         `client ${root.clientWidth}×${root.clientHeight}`, `visual ${vv ? `${Math.round(vv.width)}×${Math.round(vv.height)} @${Math.round(vv.offsetTop)}` : '-'}`,
         `env top ${envTop}`, `fallback ${underStatusBar ? 50 : 0}`, `dpr ${window.devicePixelRatio}`,
-        `standalone ${matchMedia('(display-mode: standalone)').matches}`,
+        `standalone ${matchMedia('(display-mode: standalone)').matches} nav ${(navigator as Navigator & { standalone?: boolean }).standalone ?? '-'}`,
+        `data-standalone ${root.dataset.standalone ?? '-'} env bottom ${bottomProbe.offsetHeight}`,
+        `app y ${Math.round(app.getBoundingClientRect().top)} h ${Math.round(app.getBoundingClientRect().height)}`,
       ].join('\n');
     }
   };
