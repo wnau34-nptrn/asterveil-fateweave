@@ -98,10 +98,10 @@ export const unitRegistry = {
     clips: { attack: { prepare: [1, 2], recover: [3, 4, 5, 6] }, arc: { prepare: [7, 8], recover: [9, 10, 11, 12] }, communion: { prepare: [13, 14], recover: [15, 16, 17, 18] }, lastlight: { prepare: [19, 20, 21], recover: [22, 23, 24] } },
     reactions: { hit: [25, 26, 27], block: [28, 29, 30], down: [31, 32, 33, 34] } },
   // Odran (thiran) has no A7 entry: the redesigned still (PR #120) is the seed with procedural motion until ART-UNIT-ANIMATION-A7-003.
-  // Lalin: partner turn R2 (cadence/duet/deepbeat) and closing step R2 from A7-001; A7-002 adds dance-strike (attack), circle-spin (rounddance),
+  // Lalin: partner turn R2 (cadence/duet; deep beat became party-wide in save v48 and uses the circle) and closing step R2 from A7-001; A7-002 adds dance-strike (attack), circle-spin (rounddance),
   // echo-closing-step (echofoot) and her own hit/block/down (frames 31..40, cells already at the .42 factor).
   lalin: { sheet: 'lalin', displayRatio: 1 / .42, own: true, downFrame: 40,
-    actions: { attack: 'attack', cadence: 'partner', duet: 'partner', deepbeat: 'partner', rounddance: 'circle', echofoot: 'echo', closingstep: 'closing' },
+    actions: { attack: 'attack', cadence: 'partner', duet: 'partner', deepbeat: 'circle', rounddance: 'circle', echofoot: 'echo', closingstep: 'closing' },
     clips: { partner: { prepare: [1, 2, 3], recover: [4, 5, 6] }, closing: { prepare: [7, 8, 9], recover: [10, 11, 12] },
       attack: { prepare: [13, 14], recover: [15, 16, 17, 18] }, circle: { prepare: [19, 20], recover: [21, 22, 23, 24] }, echo: { prepare: [25, 26, 27], recover: [28, 29, 30] } },
     reactions: { hit: [31, 32, 33], block: [34, 35, 36], down: [37, 38, 39, 40] } },

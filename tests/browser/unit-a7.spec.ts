@@ -6,7 +6,7 @@ const saved=(page:Page)=>page.evaluate(()=>localStorage.getItem('unit-a7-committ
 const saintClips={attack:'attack',saintstrike:'attack',vowstrike:'attack',saintarc:'arc',communion:'communion',sharewound:'communion',lastlight:'lastlight'} as Record<string,string>;
 // Anatomy-gated strips are absent (undefined): the body stays on the seed frame with the procedural motion.
 const clipOf:Record<A7Hero,Record<string,string|undefined>>={metta:saintClips,
- lalin:{attack:'attack',cadence:'partner',duet:'partner',deepbeat:'partner',rounddance:'circle',echofoot:'echo',closingstep:'closing'}};
+ lalin:{attack:'attack',cadence:'partner',duet:'partner',deepbeat:'circle',rounddance:'circle',echofoot:'echo',closingstep:'closing'}};
 const contactOf:Record<A7Hero,Record<string,number>>={metta:{attack:3,arc:9,communion:15,lastlight:22},lalin:{partner:4,closing:10,attack:15,circle:21,echo:28}};
 const downFrame:Record<A7Hero,string>={metta:'34',lalin:'40'};
 async function ready(page:Page,query:string,hero:A7Hero='metta'){
@@ -18,7 +18,8 @@ async function ready(page:Page,query:string,hero:A7Hero='metta'){
  if(await page.locator('#start').count())await page.locator('#start').click();
 }
 const cast=async(page:Page,action:string)=>{await page.locator(`#action-${action}`).click();await page.locator(`#target-${await page.evaluate(()=>window.unitA7QA.target())}`).click();};
-const frame=(page:Page,id:string)=>page.evaluate(i=>window.unitA7QA.frames()[i]![0]!.frame,id);
+// The body sprite, not the first image: a painted layer can sit on the caster (deep beat's party ward since save v48).
+const frame=(page:Page,id:string)=>page.evaluate(i=>window.unitA7QA.frames()[i]!.find(f=>f.texture.startsWith('unit-pilot'))!.frame,id);
 for(const hero of unitA7Heroes)for(const action of a7Actions(hero))test(`A7 ${hero} ${action}: windup, contact and exact committed result at 390px`,async({browser},info)=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'no-preference'});
  try{
@@ -27,7 +28,7 @@ for(const hero of unitA7Heroes)for(const action of a7Actions(hero))test(`A7 ${he
  await cast(page,action);
  const committed=await saved(page);expect(await page.evaluate(()=>window.unitA7QA.state())).toEqual(await page.evaluate(()=>window.unitA7QA.expected()));
  const clip=clipOf[hero][action],expected=clip?contactOf[hero][clip]!:0;
- await page.clock.runFor(80);const before=await page.evaluate(h=>window.unitA7QA.frames()[h]!,hero);
+ await page.clock.runFor(80);const before=await page.evaluate(h=>window.unitA7QA.frames()[h]!.filter(f=>f.texture.startsWith('unit-pilot')),hero);
  if(clip)expect(Number(before[0]!.frame)).toBeLessThan(expected);else expect(before[0]!.frame).toBe('0');
  expect(before[0]!.texture).toBe(`unit-pilot-${hero}`);
  await page.screenshot({path:info.outputPath(`${hero}-${action}-prepare-390.png`)});

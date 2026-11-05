@@ -2,6 +2,9 @@
 
 These owner-scoped rules still apply. They were moved here verbatim so CLAUDE.md stays short. Before changing a system, read its section here.
 
+## Direct-effect skill rework — owner 2026-11-05 (save v48)
+Dancer kit (engine `BEAT_MAX`, `quickenable`): cadence = Support-scaled barrier 8 + one cooldown −1 under the quicken cap (once per use, never before the round after use, cooldown ≥4/revive once per battle); duet binds an ally whose next skill is echoed 40% (`HeroState.echo`); other allies' skills give beats (cap 3) that closing step spends on every foe (6 + 6/beat); round dance shields others 8 and gives a beat per ally; deep beat (party) cuts every enemy hit this round 40% and counters the cut (`BattleState.steady`); echo foot hits 12. No dance picks a cooling skill/recipient. Astrid's turn cycle lands energy 8. Painted dance VFX follow the real events. Drafts and sim: `docs/validation/skill-rework-2026-11-05/README_TH.md`.
+
 ## Combat presentation phase 2 — owner scope 2026-10-21
 
 C20–C25 add code-native physical/magic/support effects for the starter Knight/Duelist/Mage/Priest, with event-based fallback for every other action. Use CSS-pixel body anchors and actual damage/dodge recipients; Guard can redirect the target. Never infer damage/healing/critical hits from effect or sound names. Body flash/recoil requires actual HP damage, while barrier absorption/depletion, interception, counters, full-HP support, Mark→Execute, interrupt/cancel/down remain truthful to events and authoritative boundaries. Input zones stay in the stationary information layer while bodies move. Timers, idle hold/resume, tints, offsets, effect objects and sounds must all settle on skip/load/hidden-tab/resize.

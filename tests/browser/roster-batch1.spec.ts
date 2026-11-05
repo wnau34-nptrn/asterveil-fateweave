@@ -68,7 +68,7 @@ test('C12: personal branch inspection spends only on the explicit learn action a
   expect(errors).toEqual([]);
 });
 
-test('C12: Duet selects a cooling skill once, cancellation preserves the save and Saint heals from damage', async ({ page }, info) => {
+test('C12: Duet commits in one tap with no cooling-skill choice (save v48) and Saint heals from damage', async ({ page }, info) => {
   const game = depart(profile(), map, lookup, 197);
   game.run.hp.thiran = Math.floor(game.run.hp.thiran! / 2);
   game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(game.run.roster.deployed.map(id => [id, game.run.hp[id]!])), commands: [] };
@@ -78,19 +78,14 @@ test('C12: Duet selects a cooling skill once, cancellation preserves the save an
   await page.locator('#action-bolt').click();
   await page.locator('#target-f1').click();
   await expect(page.locator('#hero-lalin')).toHaveAttribute('aria-pressed', 'true');
-  const before = await saved(page);
   await page.locator('#action-duet').click();
-  await expect(page.locator('#action-duet .skill-value')).toHaveText('คืนคูลดาวน์');
+  await expect(page.locator('#action-duet .skill-value')).toHaveText(/^ตามซ้ำ \d+%$/);
   await page.locator('#target-weaver').click();
-  await expect(page.locator('#cooldown-choice')).toBeVisible();
-  expect(await saved(page)).toBe(before);
-  await page.locator('[data-ui=cooldown-cancel]').click();
-  expect(await saved(page)).toBe(before);
-  await page.locator('#target-weaver').click();
-  await page.locator('[data-ui=cooldown-action][data-value=bolt]').click();
+  await expect(page.locator('#cooldown-choice')).toBeHidden();
   await expect.poll(async () => JSON.parse(await saved(page)).run.battle.commands.length).toBe(2);
   const command = JSON.parse(await saved(page)).run.battle.commands[1];
-  expect(command).toMatchObject({ heroId: 'lalin', action: 'duet', targetId: 'weaver', cooldownAction: 'bolt' });
+  expect(command).toMatchObject({ heroId: 'lalin', action: 'duet', targetId: 'weaver' });
+  expect(command.cooldownAction).toBeUndefined();
   await expect(page.locator('#hero-metta')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('#action-saintstrike').click();
   await page.locator('#skill-details').click();

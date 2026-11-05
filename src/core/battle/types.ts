@@ -140,6 +140,11 @@ export interface EncounterDefinition {
 // `empowered` = the alchemist fury tonic adds a percent to hits until the end of `round`.
 export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; bossUsedRound?:number; hastedRound?: number; evading?: boolean; evadeExtra?: number; evadePhysical?: boolean; reflect?: { heroId: string; amount: number };
   fell?: boolean; revivedRound?: number; empowered?: { percent: number; round: number };
+  // Dancer rework (save v48): `beats` a dancer's beats (0–BEAT_MAX); `echo` the dancer bound to this ally by duet (her
+  // echo follows its next skill up to `until`);
+  // `quickened` skills a dance already quickened since their last use, `quickenedBattle` the once-per-battle ones.
+  beats?: number; echo?: { heroId: string; percent: number; until: number }[];
+  quickened?: ActionId[]; quickenedBattle?: ActionId[];
   // Recruit trees: `exposed` = hits taken are raised by a percent until the end of `round` (alchemist fury tonic);
   // `solo` = this hero gets the bard's playing song three times over until the end of `round`.
   exposed?: { percent: number; round: number }; solo?: { heroId: string; round: number };
@@ -199,6 +204,9 @@ export interface BattleState {
   standUsed?: boolean;
   // Priest solace (talent): the healed ally takes less damage until the priest's next turn.
   solace?: { heroId: string; targetId: string } | null;
+  // Dancer deep beat (save v48): the next enemy hit on any hero up to `until` is cut by `percent` (+`low` on a hero below half
+  // HP) and the cut comes back at the attacker.
+  steady?: { heroId: string; percent: number; low: number; until: number };
   // Heroes whose last-stand equipment has already saved them this battle.
   lastStand?: string[];
   // Heroes who have used their star-veil free cast this battle.
@@ -230,7 +238,7 @@ export interface BattleState {
 export type SongId = 'valor' | 'mend' | 'dread';
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge'
-    | 'parry' | 'revive' | 'buff' | 'hold' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'toll' | 'deflect' | 'dial';
+    | 'parry' | 'revive' | 'buff' | 'hold' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'toll' | 'deflect' | 'dial' | 'beat';
   text: string; sourceId?: string; targetId?: string; action?: ActionId; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

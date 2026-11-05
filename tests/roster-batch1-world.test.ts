@@ -128,7 +128,7 @@ describe('C12 v42 → v43 migration', () => {
     expect(boardOffers(migrated.profile, map, lookup)).toEqual(boardOffers(p, legacyMap, lookup));
     expect(migrated.profile.taken).toEqual([1]);
     expect(migrated.profile.company.some(id => added.includes(id))).toBe(false);
-    expect(JSON.parse(write(migrated)).version).toBe(47);
+    expect(JSON.parse(write(migrated)).version).toBe(48);
     expect(parseGame(write(migrated), map, lookup)).toEqual({ profile: migrated.profile, run: null });
     const refreshed = refreshBoard(migrated.profile, map).profile;
     expect(refreshed.boardPool).toBeUndefined();
@@ -156,9 +156,9 @@ describe('C12 v42 → v43 migration', () => {
     expect(home.boardPool).toBeUndefined();
   });
   for (const selection of [
-    { action: 'duet', cooldownAction: 'bash' },
-    { action: 'echofoot', cooldownTargetId: 'guardian' },
-  ] as const) it(`round-trips ${selection.action} selected cooldown metadata and reproduces its result`, () => {
+    { action: 'duet' },
+    { action: 'echofoot' },
+  ] as const) it(`round-trips ${selection.action} and rejects any cooldown choice metadata (save v48: no dance picks one)`, () => {
     const p = newProfile(map, 18, ['lalin', 'guardian', 'weaver']);
     p.members.lalin = { stars: 1, dupes: 0, talents: { p1: 1, p2: 1, c1s: 1, c2y: 1 }, loadout: ['duet', 'echofoot'] }; p.campXp = Math.max(p.campXp, xpAt(5));
     const game = depart(p, map, lookup, 81);
@@ -185,8 +185,8 @@ describe('C12 v42 → v43 migration', () => {
     for (const badValue of [null, 17, {}, 'unknown']) {
       const malformed = JSON.parse(write(game));
       const last = malformed.run.battle.commands.at(-1);
-      if (selection.action === 'duet') last.cooldownAction = badValue;
-      else last.cooldownTargetId = badValue;
+      if (selection.action === 'duet') last.cooldownAction = badValue ?? 'bash';
+      else last.cooldownTargetId = badValue ?? 'guardian';
       expect(() => parseGame(JSON.stringify(malformed), map, lookup)).toThrow();
     }
   });

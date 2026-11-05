@@ -60,23 +60,26 @@ describe('Saint / Dancer VFX follows authoritative events without changing state
   const f=sdFixture('lastlight'),plan=sdPlan(f.turn)!;
   expect(plan.peaks).toHaveLength(1);expect(plan.peaks[0]!.frame).toBe('lastlight_peak');expect(plan.settles.map(s=>s.frame)).toEqual(['saintstrike_settle']);
  });
- for(const skill of danceSkills.filter(s=>s!=='echofoot'))it(`${skill}: layers sit only on the allies whose cooldown was really restored; no damage, heal or barrier is implied`,()=>{
-  const f=sdFixture(skill),plan=sdPlan(f.turn)!,cool=f.turn.events.filter(e=>e.type==='cooldown'),copy=JSON.stringify(f.turn);
-  expect(cool.length).toBeGreaterThan(0);expect(f.turn.events.some(e=>['damage','heal','barrier'].includes(e.type))).toBe(false);
-  expect(plan.events).toEqual(cool);
-  const recipients=[...new Set(cool.map(e=>e.targetId))];
-  if(skill==='rounddance'){expect(plan.peaks.map(p=>p.at.id)).toEqual(recipients);expect(plan.peaks.every(p=>p.at.spot==='feet')).toBe(true);}
-  else if(skill==='duet'){expect(plan.peaks.map(p=>p.at.id)).toEqual(recipients);expect(plan.peaks.every(p=>p.mode==='link'&&p.from![0]!.id===f.actor.id)).toBe(true);}
-  else expect(plan.peaks.map(p=>p.at.id)).toEqual(recipients);
+ // Dancer rework (save v48): each dance paints only where its own real events land.
+ const kinds:Record<string,readonly string[]>={cadence:['cooldown','barrier'],duet:['buff'],rounddance:['barrier'],deepbeat:['buff'],closingstep:['damage']};
+ for(const skill of danceSkills.filter(s=>s!=='echofoot'))it(`${skill}: layers sit only where its real events land; nothing else is painted`,()=>{
+  const f=sdFixture(skill),plan=sdPlan(f.turn)!,mine=f.turn.events.filter(e=>e.sourceId===f.actor.id&&kinds[skill]!.includes(e.type)&&!!e.targetId),copy=JSON.stringify(f.turn);
+  expect(mine.length).toBeGreaterThan(0);
+  if(skill!=='closingstep')expect(f.turn.events.some(e=>e.type==='damage'||e.type==='heal')).toBe(false);
+  expect(plan.events.filter(e=>e.type!=='beat')).toEqual(mine);expect(plan.events.filter(e=>e.type==='beat')).toEqual(f.turn.events.filter(e=>e.type==='beat'&&e.sourceId===f.actor.id));
+  const recipients=[...new Set(mine.map(e=>e.targetId))];
+  expect(plan.peaks.map(p=>p.at.id)).toEqual(recipients);
+  if(skill==='rounddance')expect(plan.peaks.every(p=>p.at.spot==='feet')).toBe(true);
+  if(skill==='duet')expect(plan.peaks.every(p=>p.mode==='link'&&p.from![0]!.id===f.actor.id)).toBe(true);
   expect(JSON.stringify(f.turn)).toBe(copy);
-  // nothing restored, nothing painted
-  expect(sdPlan(without(f.turn,e=>e.type==='cooldown'))).toBeUndefined();
+  // nothing landed, nothing painted
+  expect(sdPlan(without(f.turn,e=>kinds[skill]!.includes(e.type)))).toBeUndefined();
   expect(sdPlan({...f.turn,events:[...f.turn.events,{type:'cancel' as const,text:'cancelled'}]})).toBeUndefined();
  });
- it('rounddance rings only the allies with a real cooldown event (extra real recipients get a ring, nobody else)',()=>{
-  const f=sdFixture('rounddance'),extra:BattleEvent[]=['guardian','healer'].map(id=>({type:'cooldown',sourceId:f.actor.id,targetId:id,amount:1,text:'Cooldown recovered.'}));
+ it('rounddance rings only the allies with a real barrier event (extra real recipients get a ring, nobody else)',()=>{
+  const f=sdFixture('rounddance'),extra:BattleEvent[]=['guardian','healer'].map(id=>({type:'barrier',sourceId:f.actor.id,targetId:id,amount:1,text:'Added barrier.'}));
   const plan=sdPlan({...f.turn,events:[...f.turn.events,...extra]})!;
-  expect(plan.peaks.map(p=>p.at.id).sort()).toEqual([...new Set([...f.turn.events.filter(e=>e.type==='cooldown').map(e=>e.targetId!),'guardian','healer'])].sort());
+  expect(plan.peaks.map(p=>p.at.id).sort()).toEqual([...new Set([...f.turn.events.filter(e=>e.type==='barrier'&&e.sourceId===f.actor.id).map(e=>e.targetId!),'guardian','healer'])].sort());
   expect(plan.peaks.map(p=>p.at.id)).not.toContain(f.actor.id);
  });
  it('echofoot: one trail, one contact at the real foe; its ally cooldown is not painted; a dodge stops short with no spark',()=>{

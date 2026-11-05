@@ -71,10 +71,29 @@ describe('save v46', () => {
     const p = newProfile(map, 17); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
     const game = depart(p, map, lookup, 77);
     game.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...game.run.hp }, commands: [{ heroId: 'healer', beat: 0, action: 'revive', targetId: 'tracer' }] };
-    let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game); expect(JSON.parse(raw).version).toBe(47);
+    let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game); expect(JSON.parse(raw).version).toBe(48);
     const old = JSON.parse(raw) as { version: number }; old.version = 45;
     const migrated = parseGame(JSON.stringify(old), map, lookup);
     expect(migrated.run!.battle!.commands).toEqual([]); expect(migrated.run!.battle!.entry).toEqual(game.run.battle.entry);
     expect(migrated.profile.members).toEqual(game.profile.members); expect(migrated.profile.bank).toEqual(game.profile.bank);
+  });
+});
+
+describe('save v48 (skill rework 2026-11-05)', () => {
+  it('a v47 battle that used cadence, duet or turn cycle restarts from its entry HP; others keep their commands', async () => {
+    const { chapterOne: map } = await import('../src/content/world/chapter1');
+    const { encounterById: lookup } = await import('../src/content/encounters/catalog');
+    const { depart, newProfile } = await import('../src/core/world/profile');
+    const { parseGame, saveGame } = await import('../src/core/save/expedition-save');
+    const p = newProfile(map, 17); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
+    for (const action of ['cadence', 'duet', 'turncycle'] as const) {
+      const game = depart(p, map, lookup, 77);
+      game.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...game.run.hp }, commands: [{ heroId: 'lalin', beat: 0, action, targetId: 'guardian' }] };
+      let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game);
+      const old = JSON.parse(raw) as { version: number }; old.version = 47;
+      const migrated = parseGame(JSON.stringify(old), map, lookup);
+      expect(migrated.run!.battle!.commands).toEqual([]); expect(migrated.run!.battle!.entry).toEqual(game.run.battle.entry);
+      expect(migrated.profile.members).toEqual(game.profile.members);
+    }
   });
 });

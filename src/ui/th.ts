@@ -4,7 +4,7 @@ import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } fr
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
-import { HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
+import { BEAT_MAX, DEEP_BEAT_LOW, ROUND_PAIR_BONUS, HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 import type { IconName } from './icons';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -130,12 +130,12 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     vowstrike: `กายภาพ ${skill.power} เป้าเดียว ถ้ามีเพื่อนเลือดต่ำกว่า ${hasCap(data, heroId, 'vowThreshold') ? capAmount(data, heroId, 'vowThreshold') : 40}% แปลงดาเมจเป็นเลือด 45% แทน ${saintRatioOf(data, heroId, action)}%`,
     sharewound: `กายภาพ ${skill.power} เป้าเดียว แบ่งเลือดที่แปลงได้ให้เพื่อนบาดเจ็บสองคน ยอดรวมเท่าเดิม ไม่รวมตัวเอง`,
     lastlight: `กายภาพ ${skill.power} เป้าเดียว แบ่งเลือดให้เพื่อนที่บาดเจ็บ ไม่ชุบชีวิต`,
-    cadence: 'เลือกเพื่อนที่ยังยืนอยู่คนอื่น สกิลที่มีคูลดาวน์เหลือมากสุดพร้อมเร็วขึ้น 1 รอบ ไม่เพิ่มเทิร์น',
-    duet: 'เลือกเพื่อนที่ยังยืนอยู่คนอื่น สองสกิลที่กำลังรอพร้อมเร็วขึ้นสกิลละ 1 รอบ ถ้ามีเพียงสกิลเดียวก็ใช้ได้',
-    rounddance: 'เพื่อนที่ยังยืนอยู่ทุกคน ยกเว้นผู้ใช้ คนละหนึ่งสกิลพร้อมเร็วขึ้น 1 รอบ ไม่เปลี่ยนคิว SPD',
-    deepbeat: 'เพื่อนที่ยังยืนอยู่คนอื่น หนึ่งสกิลที่คูลดาวน์เหลือมากสุดพร้อมเร็วขึ้น 2 รอบ',
-    echofoot: `กายภาพ ${skill.power} เป้าเดียว แล้วเพื่อนที่มีผลรวมคูลดาวน์สูงสุด หนึ่งสกิลพร้อมเร็วขึ้น 1 รอบ`,
-    closingstep: 'เพื่อนที่ยังยืนอยู่คนอื่น สองสกิลที่กำลังรอพร้อมเร็วขึ้นสกิลละ 2 รอบ',
+    cadence: `เลือกเพื่อนที่ยังยืนอยู่คนอื่น ให้โล่ ${skill.power} (ไม่ซ้อน ใช้ค่าที่มากกว่า) และสกิลที่คูลดาวน์เหลือมากสุดพร้อมเร็วขึ้น 1 รอบ (สกิลหนึ่งถูกเร่งได้ครั้งเดียวต่อการใช้ ต้องรออย่างน้อย 1 รอบเสมอ สกิลคูลดาวน์ 4 ขึ้นไปและชุบชีวิตเร่งได้ครั้งเดียวต่อศึก)`,
+    duet: `ผูกเพื่อนที่ยังยืนอยู่คนอื่น 1 คน ถึงจบรอบถัดไป: ครั้งแรกที่เพื่อนใช้สกิล เซริสตามซ้ำ ${skill.power}% ของดาเมจที่เพื่อนทำ (ลงเป้าเดิม) และ ${skill.power}% ของเลือดและโล่ที่เพื่อนให้ (รักษาเพื่อนเลือดน้อยสุด) ไม่ลดคูลดาวน์`,
+    rounddance: `เพื่อนที่ยังยืนอยู่ทุกคน ยกเว้นผู้ใช้ ได้โล่ ${skill.power} (ไม่ซ้อน) และผู้ใช้ได้จังหวะ 1 ต่อเพื่อนที่ร่วมวง (สูงสุด ${BEAT_MAX})`,
+    deepbeat: `ทั้งทีม: ทุกการโจมตีของศัตรูที่โดนใครก็ได้ในทีมจนจบรอบนี้เบาลง ${skill.power}% และศัตรูที่ตีโดนดาเมจเท่าที่ถูกกันไว้กลับไป ผู้ใช้ได้จังหวะ 1`,
+    echofoot: `กายภาพ ${skill.power} เป้าเดียว และผู้ใช้ได้จังหวะ 1`,
+    closingstep: `ใช้จังหวะทั้งหมด ศัตรูทุกตัวโดน ${skill.power} + ${skill.power} ต่อจังหวะ จังหวะได้เมื่อเพื่อนใช้สกิล (สูงสุด ${BEAT_MAX})`,
     gatherfist: `กายภาพ ${skill.power} เป้าเดียว ทำเลือดศัตรูลดได้ สะสมปราณ 1`,
     releasefist: `จ่ายปราณทั้งหมด (ต้องมีอย่างน้อย 1) กายภาพ ${data.skills.releasefist.power} + ${RELEASE_PER_CHI} ต่อแต้ม · จ่าย 1/2/3 แต้ม = ${[1, 2, 3].map(n => releasePower(data, heroId, n)).join('/')}`,
     flowfist: `กายภาพ ${skill.power} เป้าเดียว ทำเลือดลดได้ สะสมปราณ 2 แทน 1`,
@@ -143,7 +143,7 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     storedfist: `กายภาพ ${skill.power} เป้าเดียว ไม่สะสมและไม่จ่ายปราณที่มี`,
     perfectfist: `จ่ายปราณ 3 กายภาพ ${skill.power} เป้าเดียว`,
     deflectfate: 'เลือกศัตรูผู้โจมตี แล้วเลือกศัตรูอีกตัวเป็นผู้รับ ท่าโจมตีเป้าเดี่ยวครั้งถัดไปของมันในรอบนี้ลงที่ผู้รับแทน คงพลังและชนิดเดิม (ท่าหมู่/ชาร์จ/เปลี่ยนช่วง/ท่าไม้ตายขัดไม่ได้เบนไม่ได้)',
-    turncycle: 'ขยับวงท่าของศัตรูไปท่าปกติถัดไป 1 ช่อง ประกาศใหม่ทันที ไม่เปลี่ยน SPD หรือคิว ไม่ข้ามท่าที่ล็อก',
+    turncycle: `พลังงาน ${skill.power} เป้าเดียว แล้วขยับวงท่าของศัตรูไปท่าปกติถัดไป 1 ช่อง ประกาศใหม่ทันที ไม่เปลี่ยน SPD หรือคิว ไม่ข้ามท่าที่ล็อก`,
     starneedle: `เข็มดาวพลังงาน ${skill.power} เป้าเดียว`,
     crossing: `พลังงาน ${skill.power} แล้วเบนท่าปกติถัดไปของเป้าไปลงศัตรูอื่นที่เลือดมากสุด`,
     readorbit: `พลังงาน ${skill.power} เป้าเดียว ดูวงท่าที่จะมาถึงได้ในแผงสถานะศัตรู`,
@@ -195,12 +195,12 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   lastlightRatio: { actions: ['lastlight'], help: n => `แสงสุดท้ายแปลงดาเมจเป็นเลือด ${n}% แต่คูลดาวน์เพิ่ม 1 รอบ` },
   dancerCadenceQuick: { actions: ['cadence'], help: n => `คืนจังหวะพร้อมเร็วขึ้น ${n} รอบ` },
   dancerCadenceShort: { actions: ['cadence'], help: () => 'คืนจังหวะเลือกสกิลที่คูลดาวน์เหลือน้อยสุดที่ยังไม่พร้อม' },
-  dancerRoundPair: { actions: ['rounddance'], help: () => 'ระบำวงเลือกเพื่อนสองคนที่รอมากสุด ลดคนละ 2 รอบแทนทั้งทีม' },
-  dancerDuetFocus: { actions: ['duet'], help: () => 'คู่จังหวะลดสกิลแรกเพิ่ม 1 รอบ แต่ไม่ลดสกิลที่สอง' },
+  dancerRoundPair: { actions: ['rounddance'], help: () => `รำวงให้โล่เฉพาะเพื่อนสองคนที่เลือดน้อยสุด แต่หนาขึ้น +${ROUND_PAIR_BONUS}` },
+  dancerDuetFocus: { actions: ['duet'], help: () => 'รำประสานตามซ้ำแรงขึ้น +15%' },
   dancerDuetQuick: { actions: ['duet'], help: n => `คู่จังหวะพร้อมเร็วขึ้น ${n} รอบ` },
-  dancerDeep: { actions: ['deepbeat'], help: () => 'จังหวะลึกลด 3 รอบแทน 2 แต่คูลดาวน์เพิ่ม 1 รอบ' },
-  dancerEchoChoose: { actions: ['echofoot'], help: () => 'ก้าวสะท้อนให้เลือกเพื่อนผู้รับการคืนคูลดาวน์เอง' },
-  dancerClosingQuick: { actions: ['closingstep'], help: n => `ก้าวส่งท้ายพร้อมเร็วขึ้น ${n} รอบ เมื่อเป้ามีสกิลเดียวกำลังรอ` },
+  dancerDeep: { actions: ['deepbeat'], help: () => 'ย้ำจังหวะลดดาเมจเพิ่ม 10% แต่คูลดาวน์เพิ่ม 1 รอบ' },
+  dancerEchoChoose: { actions: ['echofoot'], help: () => 'ก้าวสะท้อนได้จังหวะ 2 แทน 1' },
+  dancerClosingQuick: { actions: ['closingstep'], help: n => `ก้าวปิดท้ายที่ใช้จังหวะเต็ม ${BEAT_MAX} คูลดาวน์ลด ${n} รอบ` },
   metta1: { actions: ['communion'], help: n => `แบ่งแรงใจแปลงเพิ่ม ${n} จุดเปอร์เซ็นต์` },
   metta2: { actions: ['saintstrike'], help: n => `หมัดเมตตาเพิ่ม ${n} เมื่อเพื่อนมีเลือดต่ำกว่าครึ่ง` },
   metta3: { actions: ['sharewound'], help: n => `แบ่งยอดรักษาเป็น ${n}% ให้คนเลือดต่ำสุด ที่เหลือให้คนที่สอง` },
@@ -209,12 +209,12 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   thiran3: { actions: ['vowstrike'], help: n => `คำสัตย์เพิ่ม ${n} เมื่อแนวหน้าเจ็บสองคน` },
   thiran4: { actions: ['attack', 'saintstrike', 'communion', 'saintarc', 'vowstrike', 'sharewound', 'lastlight'], help: () => 'แบ่งเลือดพื้นฐานให้สองคนแทนหนึ่ง ยอดรวมเดิม' },
   lalin1: { actions: ['cadence'], help: n => `คืนจังหวะครั้งแรกต่อศึกคูลดาวน์ลด ${n} รอบ` },
-  lalin2: { actions: ['duet'], help: () => 'เลือกสกิลแรกที่จะคืนคูลดาวน์ก่อนยืนยันคู่จังหวะ' },
-  lalin3: { actions: ['deepbeat'], help: n => `จังหวะลึกลดเพิ่ม ${n} รอบ เมื่อเพื่อนเลือดต่ำกว่าครึ่ง` },
-  lalin4: { actions: ['closingstep'], help: n => `ก้าวส่งท้ายคูลดาวน์ลด ${n} รอบ แต่คืนให้สกิลเดียว` },
+  lalin2: { actions: ['duet'], help: () => 'รำประสานตามซ้ำการโจมตีปกติของเพื่อนด้วย' },
+  lalin3: { actions: ['deepbeat'], help: n => `ย้ำจังหวะลดดาเมจเพิ่ม ${n * DEEP_BEAT_LOW}% เมื่อคนที่โดนตีเลือดต่ำกว่าครึ่ง` },
+  lalin4: { actions: ['closingstep'], help: n => `ก้าวปิดท้ายคูลดาวน์ลด ${n} รอบ` },
   wila1: { actions: ['rounddance'], help: n => `ระบำวงครั้งแรกต่อศึกคูลดาวน์ลด ${n} รอบ` },
-  wila3: { actions: ['rounddance'], help: n => `ระบำวงที่คืนคูลดาวน์ได้สามคน พร้อมเร็วขึ้น ${n} รอบ` },
-  wila4: { actions: ['duet'], help: () => 'คู่จังหวะคืนให้เพื่อนสองคน คนละหนึ่งสกิล แทนคนเดียว' },
+  wila3: { actions: ['rounddance'], help: n => `รำวงที่ให้โล่ได้ตั้งแต่สามคน คูลดาวน์ลด ${n} รอบ` },
+  wila4: { actions: ['duet'], help: () => 'รำประสานผูกเพื่อนเลือดน้อยสุดอีกคนด้วย' },
   martialGatherChi: { actions: ['gatherfist'], help: n => `หมัดรวมปราณที่เริ่มจากปราณ 0 สะสมเพิ่มอีก ${n}` },
   martialFlowZero: { actions: ['flowfist'], help: n => `หมัดสายน้ำเพิ่ม ${n} เมื่อเริ่มจากปราณ 0` },
   martialReleasePer: { actions: ['releasefist'], help: n => `ปล่อยปราณแรงขึ้น ${n} ต่อแต้ม` },
@@ -378,7 +378,7 @@ export function reasonThai(reason: string): string {
     'Invalid cooldown action.': 'เลือกสกิลที่ยังรอคูลดาวน์ใหม่',
     'Invalid target.': 'เลือกเป้าหมายใหม่',
     'The party already has this barrier.': 'ทุกคนมีโล่เท่านี้หรือมากกว่าแล้ว',
-    'Already evading.': 'มีก้าวเงาคุ้มกันอยู่แล้ว',
+    'Already steadying the party.': 'ย้ำจังหวะยังคุ้มทีมอยู่', 'Already evading.': 'มีก้าวเงาคุ้มกันอยู่แล้ว',
     'Already braced.': 'ตั้งทวนอยู่แล้ว',
     'Not enough chi.': 'ปราณไม่พอ',
     'No curse on this enemy.': 'ศัตรูตัวนี้ยังไม่ติดสาป',
@@ -404,6 +404,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'cooldown': return `${target} · ${event.action ? data.skills[event.action].name : 'สกิล'} พร้อมเร็วขึ้น ${event.amount ?? 0} รอบ (ไม่เพิ่มเทิร์น)`;
     case 'deflect': return event.text === 'Fate is bent.' ? `${source}เบนท่าถัดไปของ${target}ไปลงศัตรูอีกตัว` : `ท่าของ${target}ถูกเบนออกจากฝ่ายเรา`;
     case 'dial': return `${source}หมุนวงท่าของ${target} ${event.amount} ช่อง (ไม่เปลี่ยนคิว SPD)`;
+    case 'beat': { const now = after.heroes.find(h => h.id === event.targetId)?.beats ?? 0; return (event.amount ?? 0) > 0 ? `${target} ได้จังหวะ +${event.amount} (มี ${now}/${BEAT_MAX})` : `${target} ใช้จังหวะ ${-(event.amount ?? 0)} แต้ม`; }
     case 'hex': return `${target} ติดสาป${source} ${event.amount}/${HEX_MAX} ชั้น`;
     case 'toll': return event.text === 'Toll paid.' ? `${target} จ่ายภาษีชีวิตก่อนลงมือ เสียเลือด ${event.amount}` : `${target} ถูกผูกภาษีชีวิต ${event.amount} ทุกครั้งก่อนโจมตี`;
     case 'chi': { const now = after.heroes.find(h => h.id === event.targetId)?.chi ?? 0; return (event.amount ?? 0) > 0 ? `${target} สะสมปราณ +${event.amount} (มี ${now}/${CHI_MAX})` : `${target} ปล่อยปราณ ${-(event.amount ?? 0)} แต้ม (เหลือ ${now})`; }

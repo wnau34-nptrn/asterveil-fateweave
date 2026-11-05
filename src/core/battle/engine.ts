@@ -34,7 +34,7 @@ export const rallyReductionOf = (data: EncounterDefinition, heroId: string | und
 // ---- Skill levels (tomes, save v37, docs/design/SKILL_TOMES_TH.md) ----
 // A skill with power grows by a percent per level; a percent skill by points; a skill without numbers shields its user.
 export type SkillLevelKind = 'power' | 'percent' | 'utility';
-const PERCENT_LEVELS: readonly ActionId[] = ['guard', 'rally', 'bulwark', 'halo', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread'];
+const PERCENT_LEVELS: readonly ActionId[] = ['guard', 'rally', 'bulwark', 'halo', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread', 'duet', 'deepbeat'];
 // Revive (owner 2026-11-04, logic audit 5): its levels raise the HP it restores (`revivePoints` per level), not a barrier.
 export const skillLevelKind = (data: EncounterDefinition, action: ActionId): SkillLevelKind =>
   PERCENT_LEVELS.includes(action) || action === 'revive' ? 'percent' : data.skills[action].power <= 0 ? 'utility' : 'power';
@@ -87,10 +87,10 @@ export function songPower(data: EncounterDefinition, heroId: string, action: Son
 // Who acts on which target: the UI and the resolver share these groups.
 export type TargetKind = 'self' | 'ally' | 'party' | 'enemies' | 'enemy';
 export function targetKind(action: ActionId): TargetKind {
-  if (action === 'prayer' || action === 'aegis' || action === 'rounddance') return 'party';
-  if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor', 'quake', 'saintarc', 'circlefist', 'wovenhex', 'tollring'].includes(action)) return 'enemies';
+  if (action === 'prayer' || action === 'aegis' || action === 'rounddance' || action === 'deepbeat') return 'party';
+  if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor', 'quake', 'saintarc', 'circlefist', 'wovenhex', 'tollring', 'closingstep'].includes(action)) return 'enemies';
   if (['brace', 'evade', 'taunt', 'valor', 'mend', 'rally', 'spearwall', 'finale', 'bulwark', 'parry', 'halo', 'hold', 'warcry', 'dread', 'stonearmor', 'rouse'].includes(action)) return 'self';
-  if (['guard', 'ward', 'heal', 'haste', 'sanctuary', 'bless', 'revive', 'fury', 'decoy', 'guardstone', 'solo', 'cadence', 'duet', 'deepbeat', 'closingstep'].includes(action)) return 'ally';
+  if (['guard', 'ward', 'heal', 'haste', 'sanctuary', 'bless', 'revive', 'fury', 'decoy', 'guardstone', 'solo', 'cadence', 'duet'].includes(action)) return 'ally';
   return 'enemy';
 }
 // Front-row foes screen the back row (owner 2026-10-22): while a front foe stands, a front-lane hero's single-target
@@ -155,11 +155,11 @@ export const ambushBonus = (state: BattleState, data: EncounterDefinition, enemy
   state.order.indexOf(enemyId) > state.turnIndex ? ambushBonusOf(data, heroId) : 0;
 // Magical damage and support use Magic Power (legacy field `skillBonus`); physical damage uses
 // Attack (`damageBonus`). Flat talent bonuses and skill levels keep their existing order.
-export const SUPPORT_SKILLS: readonly ActionId[] = ['ward', 'heal', 'prayer', 'valor', 'mend', 'bless', 'aegis'];
-export const MAGIC_DAMAGE_SKILLS: readonly ActionId[] = ['bolt', 'sigil', 'storm', 'dispel', 'acid', 'bomb', 'catalyst', 'finale', 'note', 'threadhex', 'lifetoll', 'tollring', 'starneedle', 'crossing', 'readorbit'];
+export const SUPPORT_SKILLS: readonly ActionId[] = ['ward', 'heal', 'prayer', 'valor', 'mend', 'bless', 'aegis', 'cadence'];
+export const MAGIC_DAMAGE_SKILLS: readonly ActionId[] = ['bolt', 'sigil', 'storm', 'dispel', 'acid', 'bomb', 'catalyst', 'finale', 'note', 'threadhex', 'lifetoll', 'tollring', 'starneedle', 'crossing', 'readorbit', 'turncycle'];
 export const usesMagicPower = (action: ActionId): boolean => SUPPORT_SKILLS.includes(action) || MAGIC_DAMAGE_SKILLS.includes(action);
 // Percent skills (bulwark, halo, blessing, war cry, revive): their power is a percent that only talents raise.
-export const PERCENT_SKILLS: readonly ActionId[] = ['bulwark', 'halo', 'revive', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread'];
+export const PERCENT_SKILLS: readonly ActionId[] = ['bulwark', 'halo', 'revive', 'smoke', 'fury', 'stonearmor', 'guardstone', 'dread', 'duet', 'deepbeat'];
 export function skillPower(data: EncounterDefinition, heroId: string, action: ActionId): number {
   const hero = data.heroes.find(h => h.id === heroId);
   // Skill levels: a percent skill gains points, a skill with power a percent on top of its Attack/Support bonus.
@@ -210,16 +210,24 @@ function shorten(hero: HeroState | undefined, action: ActionId, round: number): 
 }
 // C12: cooldowns are absolute rounds. Only equipped, still-cooling non-dance skills qualify.
 export const DANCE_SKILLS: readonly ActionId[] = ['cadence', 'duet', 'rounddance', 'deepbeat', 'echofoot', 'closingstep'];
+// Dancer rework (owner 2026-11-05, docs/validation/skill-rework-2026-11-05): only cadence still recovers a cooldown, under the
+// quicken cap below. Duet binds an ally for an echo (`HeroState.echo`); every other ally's skill gives each standing dancer one
+// beat (`HeroState.beats`, cap BEAT_MAX) that round dance, deep beat and echo foot also add to and closing step spends.
+export const BEAT_MAX = 3;
+export const DEEP_BEAT_LOW = 10;
+export const ROUND_PAIR_BONUS = 4;
+// Quicken cap: a skill is quickened at most once per use, never to before the round after its use; revive and skills
+// with a base cooldown of 4 or more at most once per battle.
+export function quickenable(data: EncounterDefinition, target: HeroState, action: ActionId): boolean {
+  const once = action === 'revive' || data.skills[action].cooldown >= 4;
+  return !(once ? target.quickenedBattle : target.quickened)?.includes(action);
+}
 export function cooldownTargets(state: BattleState, data: EncounterDefinition, heroId: string): ActionId[] {
   const actor = state.heroes.find(h => h.id === heroId); const def = data.heroes.find(h => h.id === heroId);
   if (!actor || actor.hp <= 0 || !def) return [];
-  return def.actions.filter(a => a !== 'attack' && !DANCE_SKILLS.includes(a) && (actor.cooldowns[a] ?? 0) > state.round)
+  return def.actions.filter(a => a !== 'attack' && !DANCE_SKILLS.includes(a) && (actor.cooldowns[a] ?? 0) > state.round && quickenable(data, actor, a)
+    && skillCooldown(data, heroId, a) >= 2)
     .sort((a, b) => actor.cooldowns[b]! - actor.cooldowns[a]! || def.actions.indexOf(a) - def.actions.indexOf(b));
-}
-function danceAllies(state: BattleState, data: EncounterDefinition, heroId: string): HeroState[] {
-  const total = (h: HeroState) => cooldownTargets(state, data, h.id).reduce((n, a) => n + h.cooldowns[a]! - state.round, 0);
-  return state.heroes.filter(h => h.id !== heroId && h.hp > 0 && cooldownTargets(state, data, h.id).length)
-    .sort((a, b) => total(b) - total(a));
 }
 // Explicit spell overrides do not gain the base-only conversion cap a second time.
 export function saintRatioOf(data: EncounterDefinition, heroId: string, action: ActionId = 'attack'): number {
@@ -673,6 +681,14 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           if (brace && intent.kind === 'physical' && living(state, brace.heroId) && hasCap(data, brace.heroId, 'frontwall') && data.heroes.find(h => h.id === recipient.id)!.lane === 'front')
             incoming = Math.ceil(incoming * (1 - capAmount(data, brace.heroId, 'frontwall') / 100));
           if (state.solace?.targetId === recipient.id && living(state, state.solace.heroId)) incoming = Math.ceil(incoming * (1 - capAmount(data, state.solace.heroId, 'solace') / 100));
+          // A dancer's deep beat steadies this ally against the next hit it takes; the cut comes back at the attacker.
+          let counterStep: { heroId: string; amount: number } | undefined;
+          const steady = state.steady;
+          if (steady && (steady.until < state.round || !living(state, steady.heroId))) delete state.steady;
+          else if (steady && incoming > 0) {
+            const low = recipient.hp * 2 < data.heroes.find(h => h.id === recipient.id)!.maxHp ? steady.low : 0;
+            const cut = Math.ceil(incoming * (1 - Math.min(90, steady.percent + low) / 100)); counterStep = { heroId: steady.heroId, amount: incoming - cut }; incoming = cut;
+          }
           // Release A trees: a priest's halo (energy), a spear holding firm, then a duelist's parry.
           if (state.halo && intent.kind === 'energy' && living(state, state.halo.heroId)) incoming = Math.ceil(incoming * (1 - skillPower(data, state.halo.heroId, 'halo') / 100));
           if (state.hold && living(state, state.hold.heroId) && intent.kind === 'physical' && data.heroes.find(h => h.id === recipient.id)!.lane === 'back') incoming = Math.ceil(incoming * (1 - capAmount(data, state.hold.heroId, 'holdfirm') / 100));
@@ -690,6 +706,11 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           if (state.song?.action === 'valor' && living(state, state.song.heroId) && hasCap(data, state.song.heroId, 'chorus')) incoming = Math.max(0, incoming - capAmount(data, state.song.heroId, 'chorus'));
           hit(state, data, enemy, intent, recipient, incoming, events, protector);
           if (parry && !parry.all) parried(state, data, enemy, recipient, events);
+          if (counterStep && counterStep.amount > 0 && enemy.hp > 0 && living(state, counterStep.heroId)) {
+            const back = Math.min(enemy.hp, tired(data, counterStep.heroId, veiled(state, data, enemy, counterStep.amount))); enemy.hp -= back;
+            events.push({ type: 'damage', sourceId: counterStep.heroId, targetId: enemy.id, amount: back, text: 'Counter step.' });
+            if (!enemy.hp) { events.push({ type: 'down', targetId: enemy.id, text: 'Enemy falls.' }); chainReaction(state, data, enemy, events); }
+          }
         }
       };
       // A tolled foe pays as its attacking move begins; falling to the toll ends its turn without the move.
@@ -794,13 +815,18 @@ export function actionReason(state: BattleState, data: EncounterDefinition, hero
 }
 export function targetOptions(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId): TargetOption[] {
   const unavailable = actionReason(state, data, heroId, action);
-  if (['cadence', 'duet', 'deepbeat', 'closingstep'].includes(action)) return data.heroes.map(h => {
+  // Dancer rework (owner 2026-11-05): each ally dance reaches another standing ally whether or not anything is cooling.
+  if (['cadence', 'duet'].includes(action)) return data.heroes.map(h => {
     const actor = state.heroes.find(a => a.id === h.id);
-    const reason = unavailable || (!actor || actor.hp <= 0 ? 'This hero is down.' : h.id === heroId ? 'Choose another ally.' : !cooldownTargets(state, data, h.id).length ? 'No eligible skill is cooling down.' : '');
+    const reason = unavailable || (!actor || actor.hp <= 0 ? 'This hero is down.' : h.id === heroId ? 'Choose another ally.' : '');
     return { id: h.id, name: h.name, valid: !reason, reason };
   });
+  if (action === 'deepbeat') {
+    const reason = unavailable || (state.steady?.heroId === heroId && state.steady.until >= state.round ? 'Already steadying the party.' : '');
+    return [{ id: 'party', name: 'Party', valid: !reason, reason }];
+  }
   if (action === 'rounddance') {
-    const reason = unavailable || (!danceAllies(state, data, heroId).length ? 'No eligible skill is cooling down.' : '');
+    const reason = unavailable || (!state.heroes.some(h => h.id !== heroId && h.hp > 0) ? 'Choose another ally.' : '');
     return [{ id: 'party', name: 'Party', valid: !reason, reason }];
   }
   if (action === 'aegis') {
@@ -871,13 +897,9 @@ export function validateCommand(state: BattleState, data: EncounterDefinition, c
   if (command.beat !== state.beat) return 'The preview is stale. Select an action again.';
   const reason = actionReason(state, data, command.heroId, command.action);
   if (reason) return reason;
-  const selectsSkill = command.action === 'duet' && hasCap(data, command.heroId, 'lalin2');
-  if (selectsSkill && (!command.cooldownAction || !cooldownTargets(state, data, command.targetId).includes(command.cooldownAction))) return 'Choose an eligible cooling skill.';
-  if (!selectsSkill && command.cooldownAction !== undefined) return 'This action does not select a cooling skill.';
-  const selectsAlly = command.action === 'echofoot' && hasCap(data, command.heroId, 'dancerEchoChoose');
-  const allies = danceAllies(state, data, command.heroId);
-  if (selectsAlly && allies.length && !allies.some(h => h.id === command.cooldownTargetId)) return 'Choose an ally with an eligible cooling skill.';
-  if (command.cooldownTargetId !== undefined && (!selectsAlly || !allies.some(h => h.id === command.cooldownTargetId))) return 'Invalid cooldown recipient.';
+  // Dancer rework (save v48): no dance picks a cooling skill or a cooldown recipient any more.
+  if (command.cooldownAction !== undefined) return 'This action does not select a cooling skill.';
+  if (command.cooldownTargetId !== undefined) return 'Invalid cooldown recipient.';
   if (command.action === 'deflectfate') { const why = command.recipientId === undefined ? 'Choose the enemy to bend it onto.' : deflectReason(state, data, command.heroId, command.targetId, command.recipientId); if (why) return why; }
   else if (command.recipientId !== undefined) return 'This action does not bend a move.';
   if (command.steps !== undefined) {
@@ -969,47 +991,67 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       break;
     }
     case 'cadence': case 'duet': case 'rounddance': case 'deepbeat': case 'echofoot': case 'closingstep': {
-      if (command.action === 'echofoot') damage(skill.power);
-      const allies = danceAllies(state, data, hero.id);
       const chosen = state.heroes.find(h => h.id === command.targetId);
-      const reduce = (target: HeroState, amount: number, count: number, explicit?: ActionId, shortest = false) => {
-        let actions = cooldownTargets(state, data, target.id);
-        if (shortest) actions = [...actions].sort((a, b) => target.cooldowns[a]! - target.cooldowns[b]!);
-        if (explicit) actions = [explicit, ...actions.filter(a => a !== explicit)];
-        for (const action of actions.slice(0, count)) {
-          const before = target.cooldowns[action]!; const after = Math.max(state.round, before - amount);
-          if (after <= state.round) delete target.cooldowns[action]; else target.cooldowns[action] = after;
-          if (before > after) events.push({ type: 'cooldown', sourceId: hero.id, targetId: target.id, action, amount: before - after, text: 'Cooldown recovered.' });
-        }
+      const others = state.heroes.filter(h => h.id !== hero.id && h.hp > 0);
+      const ratio = (h: HeroState) => h.hp / data.heroes.find(d => d.id === h.id)!.maxHp;
+      const beat = (n: number) => {
+        const before = actor.beats ?? 0; const after = Math.min(BEAT_MAX, before + n);
+        if (after !== before) { actor.beats = after; events.push({ type: 'beat', sourceId: hero.id, targetId: hero.id, amount: after - before, text: 'Beat.' }); }
       };
       switch (command.action) {
-        case 'cadence':
-          reduce(chosen!, 1, 1, undefined, hasCap(data, hero.id, 'dancerCadenceShort'));
+        case 'cadence': {
+          barrier(chosen!, skill.power);
+          // The only dance that still quickens: one skill, once per use, never to before the round after its use.
+          const action = (hasCap(data, hero.id, 'dancerCadenceShort') ? [...cooldownTargets(state, data, chosen!.id)].sort((a, b) => chosen!.cooldowns[a]! - chosen!.cooldowns[b]!) : cooldownTargets(state, data, chosen!.id))[0];
+          if (action) {
+            const before = chosen!.cooldowns[action]!; const floor = before - skillCooldown(data, chosen!.id, action) + 1;
+            const after = Math.max(state.round, floor, before - 1);
+            if (after <= state.round) delete chosen!.cooldowns[action]; else chosen!.cooldowns[action] = after;
+            const once = action === 'revive' || data.skills[action].cooldown >= 4;
+            if (once) chosen!.quickenedBattle = [...chosen!.quickenedBattle ?? [], action]; else chosen!.quickened = [...chosen!.quickened ?? [], action];
+            if (before > after) events.push({ type: 'cooldown', sourceId: hero.id, targetId: chosen!.id, action, amount: before - after, text: 'Cooldown recovered.' });
+          }
           if (hasCap(data, hero.id, 'lalin1') && !state.commands.some(c => c.heroId === hero.id && c.action === 'cadence')) cooldownAdjustment--;
           break;
-        case 'duet':
-          if (hasCap(data, hero.id, 'wila4')) {
-            reduce(chosen!, 1, 1, command.cooldownAction);
-            const second = allies.find(h => h.id !== chosen!.id); if (second) reduce(second, 1, 1);
-          } else reduce(chosen!, hasCap(data, hero.id, 'dancerDuetFocus') ? 2 : 1, hasCap(data, hero.id, 'dancerDuetFocus') ? 1 : 2, command.cooldownAction);
+        }
+        case 'duet': {
+          // The bound ally's next skill before the end of next round is echoed by this dancer (once).
+          const percent = skill.power + (hasCap(data, hero.id, 'dancerDuetFocus') ? 15 : 0);
+          const bound = [chosen!, ...hasCap(data, hero.id, 'wila4') ? others.filter(h => h.id !== chosen!.id).sort((a, b) => ratio(a) - ratio(b)).slice(0, 1) : []];
+          for (const ally of bound) {
+            ally.echo = [...(ally.echo ?? []).filter(e => e.heroId !== hero.id), { heroId: hero.id, percent, until: state.round + 1 }];
+            events.push({ type: 'buff', sourceId: hero.id, targetId: ally.id, amount: percent, text: 'Duet.' });
+          }
           break;
+        }
         case 'rounddance': {
+          // Every other standing ally gains a barrier (the two lowest a larger one with the pair node) and the dancer one
+          // beat per ally in the round (up to BEAT_MAX), so a round dance can ready a closing step at once.
           const pair = hasCap(data, hero.id, 'dancerRoundPair');
-          for (const ally of pair ? allies.slice(0, 2) : allies) reduce(ally, pair ? 2 : 1, 1);
+          const list = pair ? [...others].sort((a, b) => ratio(a) - ratio(b)).slice(0, 2) : others;
+          for (const ally of list) barrier(ally, skill.power + (pair ? ROUND_PAIR_BONUS : 0));
+          beat(list.length);
           if (hasCap(data, hero.id, 'wila1') && !state.commands.some(c => c.heroId === hero.id && c.action === 'rounddance')) cooldownAdjustment--;
-          if (hasCap(data, hero.id, 'wila3') && (pair ? Math.min(2, allies.length) : allies.length) >= 3) cooldownAdjustment--;
+          if (hasCap(data, hero.id, 'wila3') && list.length >= 3) cooldownAdjustment--;
           break;
         }
-        case 'deepbeat':
-          reduce(chosen!, (hasCap(data, hero.id, 'dancerDeep') ? 3 : 2) + (chosen!.hp * 2 < data.heroes.find(h => h.id === chosen!.id)!.maxHp ? capAmount(data, hero.id, 'lalin3') : 0), 1); break;
-        case 'echofoot': {
-          const recipient = hasCap(data, hero.id, 'dancerEchoChoose') ? allies.find(h => h.id === command.cooldownTargetId) : allies[0];
-          if (recipient) reduce(recipient, 1, 1); break;
+        case 'deepbeat': {
+          // Every enemy hit on the party until the end of this round is cut by the power in percent (more on a hero below
+          // half HP with Cerise p3) and the attacker takes the cut back (the counter step); one beat.
+          const percent = Math.min(90, skill.power + (hasCap(data, hero.id, 'dancerDeep') ? 10 : 0));
+          state.steady = { heroId: hero.id, percent, low: capAmount(data, hero.id, 'lalin3') * DEEP_BEAT_LOW, until: state.round };
+          events.push({ type: 'buff', sourceId: hero.id, targetId: hero.id, amount: percent, text: 'Steady.' });
+          beat(1);
+          break;
         }
+        case 'echofoot':
+          damage(skill.power); beat(hasCap(data, hero.id, 'dancerEchoChoose') ? 2 : 1); break;
         case 'closingstep': {
-          const count = cooldownTargets(state, data, chosen!.id).length;
-          reduce(chosen!, 2, hasCap(data, hero.id, 'lalin4') ? 1 : 2);
-          if (count === 1) cooldownAdjustment -= capAmount(data, hero.id, 'dancerClosingQuick');
+          // Spends every beat: each standing foe takes the power plus the power again per beat.
+          const spent = actor.beats ?? 0; delete actor.beats;
+          if (spent) events.push({ type: 'beat', sourceId: hero.id, targetId: hero.id, amount: -spent, text: 'Beats spent.' });
+          for (const foe of state.enemies.filter(e => e.hp > 0)) strike(foe, skill.power * (1 + spent), 'Closing step.');
+          if (spent >= BEAT_MAX) cooldownAdjustment -= capAmount(data, hero.id, 'dancerClosingQuick');
           cooldownAdjustment -= capAmount(data, hero.id, 'lalin4'); break;
         }
       }
@@ -1025,6 +1067,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     }
     case 'turncycle': case 'doubledial': {
       const steps = command.action === 'turncycle' ? 1 : command.steps ?? 2; const before = nextIntentOf(state, data, enemy!.id)!;
+      // Turn cycle also lands a small energy hit (owner 2026-11-05); the dial still turns if the foe falls.
+      if (skill.power > 0) damage(skill.power);
       enemy!.cycleShift = (enemy!.cycleShift ?? 0) + steps;
       events.push({ type: 'dial', sourceId: hero.id, targetId: enemy!.id, amount: steps, text: 'The cycle turns.' });
       if (command.action === 'turncycle' && before.kind === 'physical') cooldownAdjustment -= capAmount(data, hero.id, 'seerTurnRefund');
@@ -1435,6 +1479,33 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     if (chi) actor.chi = chi; else delete actor.chi;
     if (chi !== chiBefore) events.push({ type: 'chi', sourceId: hero.id, targetId: hero.id, action: command.action, amount: chi - chiBefore, text: chi > chiBefore ? 'Chi gathered.' : 'Chi released.' });
   }
+  // Dancer rework: another hero's skill gives each standing dancer a beat, and a duet-bound ally's skill is echoed by its
+  // dancer (40% of the damage it dealt onto its target, or the lowest-HP foe if that fell; 40% of the HP and barrier it
+  // gave as healing to the lowest-ratio ally). Cerise's p2 also echoes a basic attack.
+  if (command.action !== 'attack') for (const d of data.heroes.filter(h => h.role === 'Dancer' && h.id !== hero.id)) {
+    const dancer = state.heroes.find(h => h.id === d.id)!; if (dancer.hp <= 0) continue;
+    const before = dancer.beats ?? 0; const after = Math.min(BEAT_MAX, before + 1);
+    if (after !== before) { dancer.beats = after; events.push({ type: 'beat', sourceId: d.id, targetId: d.id, amount: 1, text: 'Beat.' }); }
+  }
+  for (const echo of [...actor.echo ?? []]) {
+    if (echo.until < state.round || (command.action === 'attack' && !hasCap(data, echo.heroId, 'lalin2'))) continue;
+    actor.echo = actor.echo!.filter(e => e !== echo); if (!actor.echo.length) delete actor.echo;
+    const dancer = state.heroes.find(h => h.id === echo.heroId); if (!dancer || dancer.hp <= 0) continue;
+    const dealt = events.filter(e => e.type === 'damage' && e.sourceId === hero.id && state.enemies.some(x => x.id === e.targetId)).reduce((n, e) => n + (e.amount ?? 0), 0);
+    const given = events.filter(e => (e.type === 'heal' || e.type === 'barrier') && e.sourceId === hero.id).reduce((n, e) => n + (e.amount ?? 0), 0);
+    const hitPower = Math.floor(dealt * echo.percent / 100); const mendPower = Math.floor(given * echo.percent / 100);
+    const foe = enemy && enemy.hp > 0 ? enemy : state.enemies.filter(e => e.hp > 0).sort((a, b) => a.hp - b.hp || data.enemies.findIndex(x => x.id === a.id) - data.enemies.findIndex(x => x.id === b.id))[0];
+    if (hitPower > 0 && foe) {
+      const amount = Math.min(foe.hp, tired(data, dancer.id, veiled(state, data, foe, hitPower))); foe.hp -= amount;
+      events.push({ type: 'damage', sourceId: dancer.id, targetId: foe.id, amount, text: 'Echo.' });
+      if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
+    }
+    const ally = state.heroes.filter(h => h.hp > 0).sort((a, b) => a.hp / data.heroes.find(d => d.id === a.id)!.maxHp - b.hp / data.heroes.find(d => d.id === b.id)!.maxHp)[0];
+    if (mendPower > 0 && ally) {
+      const amount = Math.min(tired(data, dancer.id, mendPower), data.heroes.find(d => d.id === ally.id)!.maxHp - ally.hp);
+      if (amount > 0) { ally.hp += amount; events.push({ type: 'heal', sourceId: dancer.id, targetId: ally.id, amount, text: 'Echo.' }); }
+    }
+  }
   // A levelled skill without numbers shields its user (tomes).
   const shield = levelBarrier(data, hero.id, command.action); if (shield && actor.hp > 0) barrier(actor, shield);
   const cooldown = command.action === 'volley' && hasPassive(data, hero.id, 'tailwind') || command.action === 'haste' && hasCap(data, hero.id, 'quickbrew')
@@ -1444,6 +1515,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const free = !!effectiveCooldown && !!hero.gear?.freeCast && !state.freeCast?.includes(hero.id);
   if (free) state.freeCast = [...state.freeCast ?? [], hero.id];
   else if (effectiveCooldown) actor.cooldowns[command.action] = state.round + effectiveCooldown;
+  if (actor.quickened?.includes(command.action)) { actor.quickened = actor.quickened.filter(a => a !== command.action); if (!actor.quickened.length) delete actor.quickened; }
   // Duelist relentless (talent): downing an enemy readies her precision strike again.
   const downed = livingBefore.some(id => state.enemies.find(e => e.id === id)!.hp <= 0);
   if (hasCap(data, hero.id, 'relentless') && downed) delete actor.cooldowns.execute;

@@ -10,7 +10,7 @@ import {readFileSync} from 'node:fs';
 // Expected clip per real ActionId. Missing = anatomy-gated, procedural body (Wila echo foot). Lalin is complete since A7-002.
 const saintClips={attack:'attack',saintstrike:'attack',vowstrike:'attack',saintarc:'arc',communion:'communion',sharewound:'communion',lastlight:'lastlight'} as const;
 const clipOf:Record<A7Hero,Record<string,string|undefined>>={metta:saintClips,
- lalin:{cadence:'partner',duet:'partner',deepbeat:'partner',closingstep:'closing',attack:'attack',rounddance:'circle',echofoot:'echo'}};
+ lalin:{cadence:'partner',duet:'partner',deepbeat:'circle',closingstep:'closing',attack:'attack',rounddance:'circle',echofoot:'echo'}};
 // Contact = first recover frame of each clip (six slots: slot 0 is the seed idle).
 const contactOf:Record<A7Hero,Record<string,number>>={metta:{attack:3,arc:9,communion:15,lastlight:22},
  lalin:{partner:4,closing:10,attack:15,circle:21,echo:28}};

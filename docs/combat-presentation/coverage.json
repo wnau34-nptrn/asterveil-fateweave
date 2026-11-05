@@ -3374,17 +3374,17 @@
    "name": "ย้ำจังหวะ",
    "body": {
     "kind": "sprite",
-    "clip": "partner",
+    "clip": "circle",
     "frames": {
      "prepare": [
-      1,
-      2,
-      3
+      19,
+      20
      ],
      "recover": [
-      4,
-      5,
-      6
+      21,
+      22,
+      23,
+      24
      ]
     },
     "pose": "dance"
@@ -3393,7 +3393,7 @@
     "module": "saint-dance-fx",
     "kind": "painted"
    },
-   "target": "พันธมิตร 1 คน",
+   "target": "ทั้งทีม",
    "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
   },
   {
@@ -3451,7 +3451,7 @@
     "module": "saint-dance-fx",
     "kind": "painted"
    },
-   "target": "พันธมิตร 1 คน",
+   "target": "ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล)",
    "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
   },
   {
@@ -3537,7 +3537,7 @@
     "module": "saint-dance-fx",
     "kind": "painted"
    },
-   "target": "พันธมิตร 1 คน",
+   "target": "ทั้งทีม",
    "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
   },
   {
@@ -3571,7 +3571,7 @@
     "module": "saint-dance-fx",
     "kind": "painted"
    },
-   "target": "พันธมิตร 1 คน",
+   "target": "ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล)",
    "point": "พันธมิตรที่ได้ cooldown จริงเท่านั้น"
   },
   {
