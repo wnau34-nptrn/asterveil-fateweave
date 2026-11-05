@@ -1,4 +1,5 @@
-import type { Item, PotionId, SetId } from '../core/world/types';
+import type { Item, PotionId, SetId, TomeLine, TomeSize } from '../core/world/types';
+import { TOME_ATLAS, tomeArtUrl, tomeCell } from '../game/visuals/tome-art';
 import { emblemCell, equipArtUrl, equipAtlasSize, gearCell, potionCell } from '../game/visuals/equip-art';
 import { icon } from './icons';
 import { slotIcon } from './th';
@@ -24,4 +25,9 @@ export function potionArt(id: PotionId | 'dust' | 'gold'): string {
   const c = potionCell(id);
   const { cols, rows } = equipAtlasSize.potion_items;
   return `<span class="potion-art" aria-hidden="true"><i class="equip-sprite" style="--atlas:url(${equipArtUrl('potion_items')});--cols:${cols};--rows:${rows};${at(c.col, c.row, cols, rows)}"></i></span>`;
+}
+// Painted skill tome of a line and size (ART-UI-PROGRESS-001); the Thai name and count stay beside it.
+export function tomeArt(line: TomeLine, size: TomeSize): string {
+  const c = tomeCell(line, size);
+  return `<span class="tome-art" data-line="${line}" data-size="${size}" aria-hidden="true"><i class="equip-sprite" style="--atlas:url(${tomeArtUrl()});--cols:${TOME_ATLAS.cols};--rows:${TOME_ATLAS.rows};${at(c.col, c.row, TOME_ATLAS.cols, TOME_ATLAS.rows)}"></i></span>`;
 }
