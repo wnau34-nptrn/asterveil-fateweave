@@ -1367,7 +1367,9 @@ test('side quests: a herb is picked on the map; at camp the herbalist shows "!",
   await page.evaluate(([k, id, target]) => { const s = JSON.parse(localStorage.getItem(k as string)!); s.run = null; s.profile.quests = { [id as string]: { progress: target, claimed: false } }; localStorage.setItem(k as string, JSON.stringify(s)); }, [key, q.id, q.target]);
   await page.reload(); await page.locator('#continue').click();
   await expect(page.locator('#npc-herbalist')).toHaveClass(/quest-ready/); await expect(page.locator('#npc-smith')).not.toHaveClass(/quest-ready/);
-  await page.locator('#npc-herbalist').click();
+  // Side quests live on the camp quest board; the herbalist's sheet only points to it.
+  await page.locator('#npc-herbalist').click(); await expect(page.locator('#quest-hint-herbalist')).toBeVisible(); await page.locator('[data-lobby="close"]').click();
+  await expect(page.locator('#lobby-board .trip-badge')).toHaveText('1'); await page.locator('#lobby-board').click();
   await expect(page.locator(`#quest-${q.id}`)).toHaveAttribute('data-state', 'ready');
   await reachable(page, `#quest-claim-${q.id}`);
   await page.screenshot({ path: info.outputPath('side-quest-ready.png') });
@@ -1378,7 +1380,6 @@ test('side quests: a herb is picked on the map; at camp the herbalist shows "!",
   const p = await savedProfile(page);
   expect(p.quests[q.id]).toEqual({ progress: q.target, claimed: true }); expect(p.potions.salve).toBe(q.reward.potions!.salve);
   // Another NPC's quest shows its progress and a disabled claim with the reason.
-  await page.locator('[data-lobby="close"]').click(); await page.locator('#npc-smith').click();
   await expect(page.locator('#quest-claim-smith-rare-ore')).toBeDisabled(); await expect(page.locator('#quest-claim-smith-rare-ore')).toContainText(`0/${map.sideQuests.find(s => s.npc === 'smith')!.target}`);
   expect(issues).toEqual([]);
 });
