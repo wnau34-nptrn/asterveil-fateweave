@@ -54,13 +54,13 @@
   "files": [
     {
       "path": "NOTES.md",
-      "bytes": 11021,
-      "sha256": "d038a6e8b5c7d12230cf18d98467765cecf9f880e017808f9f117a69b61646d0"
+      "bytes": 11127,
+      "sha256": "9a212be887e22af6d81526fd517ebb5698b058c58e2ff5d0e61137dd929c67fb"
     },
     {
       "path": "README.md",
-      "bytes": 2102,
-      "sha256": "c42dc03351a8d697d3cd30ec6bfb175f8cea125cdd0b4c707a2a209f34dff8c6"
+      "bytes": 2128,
+      "sha256": "ba8c8259fd4875fc45105c4ed75213484b595397f971d6c52b4e8f877305aa1e"
     },
     {
       "path": "SPEC_TH.md",
@@ -2488,8 +2488,8 @@
     },
     {
       "path": "build_handoff.py",
-      "bytes": 59743,
-      "sha256": "02c8298779c0d9f1eaee88cfc45b2725d22d2df6991ea825763f5d31ed93bbf9"
+      "bytes": 59925,
+      "sha256": "ad5258bc0e2af74e3605a7e26391b521ce6c30d1f9bef2178ce41e49b2fdfa2f"
     },
     {
       "path": "capture-before.spec.ts",
@@ -4569,9 +4569,243 @@
       "decoded": true
     },
     {
+      "path": "export/r1-r2/c-brew-r2-all-320x568.png",
+      "bytes": 170021,
+      "sha256": "9ad3d3daec5c4720f8df15bfb4b4820f76d3912820b363451e5bded05319cc24",
+      "width": 1376,
+      "height": 1264,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/c-brew-r2-all-390x844.png",
+      "bytes": 254937,
+      "sha256": "a8c3ac3778d53f8bddb283e6a38775d6e34e04ee6b5b722302a7746ef2a1185e",
+      "width": 1656,
+      "height": 1816,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/c-brew-r2-q1-320x568.png",
+      "bytes": 169320,
+      "sha256": "dc5aa91e676b68ec603c5ad894a1d63522a707a9465d806b932d719a6a459a8e",
+      "width": 1376,
+      "height": 1264,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/c-brew-r2-q1-390x844.png",
+      "bytes": 254355,
+      "sha256": "d3420ea39fee13b19169f7836ef52cd28122d2408603ff1a6624a763d79b1697",
+      "width": 1656,
+      "height": 1816,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/c-brew-r2-q2-320x568.png",
+      "bytes": 147195,
+      "sha256": "78fc4e1e4db448aabeb603becac547cbf24a476cfd9d5ec333e5f6c86234adec",
+      "width": 1376,
+      "height": 1264,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/c-brew-r2-q2-390x844.png",
+      "bytes": 230974,
+      "sha256": "755dab9df6ad4c9918d7df4ff4f59eebc726a1715552796bc0808f81fafb0cde",
+      "width": 1656,
+      "height": 1816,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/c-brew-r2-q3-320x568.png",
+      "bytes": 144587,
+      "sha256": "5ced633803ed1fef332ec1702aa4ef8223b8c9303cfbe876bf58a2d21a31fd18",
+      "width": 1376,
+      "height": 1264,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/c-brew-r2-q3-390x844.png",
+      "bytes": 227674,
+      "sha256": "80c423cf13a51cdfefb01b97e850987b23fcfeb7187a2593519a4ddde4ae48b4",
+      "width": 1656,
+      "height": 1816,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/c-brew-r2-q4-320x568.png",
+      "bytes": 144795,
+      "sha256": "10824c4738068d7fcb227b9a97cdb9fe2fc9aefa4774dc5f2249b973bad1460d",
+      "width": 1376,
+      "height": 1264,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/c-brew-r2-q4-390x844.png",
+      "bytes": 227661,
+      "sha256": "2a26d2ff48a7741c08d14856d80c8afabd08ea3964d73a7063d78dbff5ba1297",
+      "width": 1656,
+      "height": 1816,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/e-craft-review-r2-all-320x568.png",
+      "bytes": 212419,
+      "sha256": "927916c7c8dab3bb3b7873fbd9a6bf424484a493842eec8d7edf9b3f10739ac9",
+      "width": 1376,
+      "height": 1264,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/e-craft-review-r2-all-390x844.png",
+      "bytes": 234892,
+      "sha256": "e49738703686a53744fd065085171ae564cbb59fd027c530556dc8424bd71df1",
+      "width": 1656,
+      "height": 1816,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/e-craft-review-r2-q1-320x568.png",
+      "bytes": 200165,
+      "sha256": "53cde66f0eedb873983399f298ece23d6010e5bfa2e92a6ec3aab78fd18c0dbf",
+      "width": 1376,
+      "height": 1264,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/e-craft-review-r2-q1-390x844.png",
+      "bytes": 218582,
+      "sha256": "298c56611a0c2771c56729ccd6659e6552d9adf34d15c95d373eb62e5a700048",
+      "width": 1656,
+      "height": 1816,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/e-craft-review-r2-q2-320x568.png",
+      "bytes": 146993,
+      "sha256": "5c45165356f9594421c7d2239610648a4fefd8f014deb629c8055c504593bb3b",
+      "width": 1376,
+      "height": 1264,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/e-craft-review-r2-q2-390x844.png",
+      "bytes": 158547,
+      "sha256": "257a7584b66934a95c3ca461033bad3ad1dd258efdb224ad04458d0f0aa6b2a3",
+      "width": 1656,
+      "height": 1816,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/e-craft-review-r2-q3-320x568.png",
+      "bytes": 156234,
+      "sha256": "26eaa8d7050122101171cf069df8a9fe2638d1c48c9653ae812c41e2b283566e",
+      "width": 1376,
+      "height": 1264,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/e-craft-review-r2-q3-390x844.png",
+      "bytes": 167995,
+      "sha256": "07c6fb56e5dc20a171df537349df06215383e8e8616ea28a0ac672952be67568",
+      "width": 1656,
+      "height": 1816,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/e-craft-review-r2-q4-320x568.png",
+      "bytes": 143062,
+      "sha256": "6259fd3cd2905433bd93dfefdf152b0aecb93384e54e26092ea38dc8c578cbf0",
+      "width": 1376,
+      "height": 1264,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/e-craft-review-r2-q4-390x844.png",
+      "bytes": 152226,
+      "sha256": "4aada29a8fcccd4d2cd54f55f5f189d31770a65eae7918409cfc9dffa4d42969",
+      "width": 1656,
+      "height": 1816,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/f-map-hud-r2-q4-320x568.png",
+      "bytes": 820236,
+      "sha256": "18c2d6bb0fcb9b66e5dc1809c13750171622fd34aaec6dfdd9eb5e326775f2ea",
+      "width": 1376,
+      "height": 1264,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/f-map-hud-r2-q4-390x650.png",
+      "bytes": 1145819,
+      "sha256": "5d97df53ba59da2f91c48f05a8b973a62b4eda7d5921e6ae63357f3e2004d842",
+      "width": 1656,
+      "height": 1428,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/f-map-hud-r2-q4-390x844.png",
+      "bytes": 1407945,
+      "sha256": "0586e3c3533cd7955b536e842719ca98dcb483dfad5bf9b1ee476bb60618ca9a",
+      "width": 1656,
+      "height": 1816,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/h-battle-hud-r2-q4-320x568.png",
+      "bytes": 904193,
+      "sha256": "e1c8d10bb888235263fdb3a3c1afe00731e76563c027768a449e8d34f32e5e8f",
+      "width": 1376,
+      "height": 1264,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/h-battle-hud-r2-q4-390x650.png",
+      "bytes": 1244495,
+      "sha256": "3bfc8d59a23967406dd5cfada652cf12159bd314185988e2fa7bff45edfa0150",
+      "width": 1656,
+      "height": 1428,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
+      "path": "export/r1-r2/h-battle-hud-r2-q4-390x844.png",
+      "bytes": 1565056,
+      "sha256": "2e8328add0f0a1299bd3708af549c54b265f24192493bca0ec9c5c19ed5e6d49",
+      "width": 1656,
+      "height": 1816,
+      "mode": "RGB",
+      "decoded": true
+    },
+    {
       "path": "index.html",
-      "bytes": 6347,
-      "sha256": "e29474cf911524e1070bd36c5aa551d15b2e20ac3cc3d299d0e5865cb8f5dd25"
+      "bytes": 6529,
+      "sha256": "70c841cba20334f8d21081aba1dea28c783631e4a21658e25aa3f92bae858ff0"
     },
     {
       "path": "measure_contrast.py",
@@ -4800,13 +5034,18 @@
     },
     {
       "path": "render-report.json",
-      "bytes": 19621,
-      "sha256": "a84b9f4ddc84758601454f8795532d31fcf6321c9cd220fcd305549c1ccdbced"
+      "bytes": 24323,
+      "sha256": "ec338d6a611916ea3f96dabf9026925ecb2d73c6201a46ee0ffe9f829ae2ce41"
     },
     {
       "path": "render.cjs",
-      "bytes": 3042,
-      "sha256": "caec01059e9648f2090261f613ead3059e2602c8999b98dc3bb5180c34bd927a"
+      "bytes": 3117,
+      "sha256": "cae33e29cadacd6f7f88b39535aa522b8fae9a0d19203024aaebb9f4f0974d26"
+    },
+    {
+      "path": "render_decisions.cjs",
+      "bytes": 1950,
+      "sha256": "80b529e39868768447606ff99e373f2f52b0d8d974894b4bfb9526e6a6b4c8de"
     },
     {
       "path": "runtime.cjs",

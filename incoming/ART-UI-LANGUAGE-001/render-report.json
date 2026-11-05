@@ -1133,5 +1133,241 @@
       "file": "export/e-craft-review-r2-q4-320x568.png",
       "errors": []
     }
+  ],
+  "decisionComparisons": [
+    {
+      "r1": "f-map-hud",
+      "r2": "f-map-hud-r2-q4",
+      "size": [
+        390,
+        844
+      ],
+      "file": "export/r1-r2/f-map-hud-r2-q4-390x844.png"
+    },
+    {
+      "r1": "f-map-hud",
+      "r2": "f-map-hud-r2-q4",
+      "size": [
+        390,
+        650
+      ],
+      "file": "export/r1-r2/f-map-hud-r2-q4-390x650.png"
+    },
+    {
+      "r1": "f-map-hud",
+      "r2": "f-map-hud-r2-q4",
+      "size": [
+        320,
+        568
+      ],
+      "file": "export/r1-r2/f-map-hud-r2-q4-320x568.png"
+    },
+    {
+      "r1": "h-battle-hud",
+      "r2": "h-battle-hud-r2-q4",
+      "size": [
+        390,
+        844
+      ],
+      "file": "export/r1-r2/h-battle-hud-r2-q4-390x844.png"
+    },
+    {
+      "r1": "h-battle-hud",
+      "r2": "h-battle-hud-r2-q4",
+      "size": [
+        390,
+        650
+      ],
+      "file": "export/r1-r2/h-battle-hud-r2-q4-390x650.png"
+    },
+    {
+      "r1": "h-battle-hud",
+      "r2": "h-battle-hud-r2-q4",
+      "size": [
+        320,
+        568
+      ],
+      "file": "export/r1-r2/h-battle-hud-r2-q4-320x568.png"
+    },
+    {
+      "r1": "c-brew",
+      "r2": "c-brew-r2-all",
+      "size": [
+        390,
+        844
+      ],
+      "file": "export/r1-r2/c-brew-r2-all-390x844.png"
+    },
+    {
+      "r1": "c-brew",
+      "r2": "c-brew-r2-all",
+      "size": [
+        320,
+        568
+      ],
+      "file": "export/r1-r2/c-brew-r2-all-320x568.png"
+    },
+    {
+      "r1": "c-brew",
+      "r2": "c-brew-r2-q1",
+      "size": [
+        390,
+        844
+      ],
+      "file": "export/r1-r2/c-brew-r2-q1-390x844.png"
+    },
+    {
+      "r1": "c-brew",
+      "r2": "c-brew-r2-q1",
+      "size": [
+        320,
+        568
+      ],
+      "file": "export/r1-r2/c-brew-r2-q1-320x568.png"
+    },
+    {
+      "r1": "c-brew",
+      "r2": "c-brew-r2-q2",
+      "size": [
+        390,
+        844
+      ],
+      "file": "export/r1-r2/c-brew-r2-q2-390x844.png"
+    },
+    {
+      "r1": "c-brew",
+      "r2": "c-brew-r2-q2",
+      "size": [
+        320,
+        568
+      ],
+      "file": "export/r1-r2/c-brew-r2-q2-320x568.png"
+    },
+    {
+      "r1": "c-brew",
+      "r2": "c-brew-r2-q3",
+      "size": [
+        390,
+        844
+      ],
+      "file": "export/r1-r2/c-brew-r2-q3-390x844.png"
+    },
+    {
+      "r1": "c-brew",
+      "r2": "c-brew-r2-q3",
+      "size": [
+        320,
+        568
+      ],
+      "file": "export/r1-r2/c-brew-r2-q3-320x568.png"
+    },
+    {
+      "r1": "c-brew",
+      "r2": "c-brew-r2-q4",
+      "size": [
+        390,
+        844
+      ],
+      "file": "export/r1-r2/c-brew-r2-q4-390x844.png"
+    },
+    {
+      "r1": "c-brew",
+      "r2": "c-brew-r2-q4",
+      "size": [
+        320,
+        568
+      ],
+      "file": "export/r1-r2/c-brew-r2-q4-320x568.png"
+    },
+    {
+      "r1": "e-craft-review",
+      "r2": "e-craft-review-r2-all",
+      "size": [
+        390,
+        844
+      ],
+      "file": "export/r1-r2/e-craft-review-r2-all-390x844.png"
+    },
+    {
+      "r1": "e-craft-review",
+      "r2": "e-craft-review-r2-all",
+      "size": [
+        320,
+        568
+      ],
+      "file": "export/r1-r2/e-craft-review-r2-all-320x568.png"
+    },
+    {
+      "r1": "e-craft-review",
+      "r2": "e-craft-review-r2-q1",
+      "size": [
+        390,
+        844
+      ],
+      "file": "export/r1-r2/e-craft-review-r2-q1-390x844.png"
+    },
+    {
+      "r1": "e-craft-review",
+      "r2": "e-craft-review-r2-q1",
+      "size": [
+        320,
+        568
+      ],
+      "file": "export/r1-r2/e-craft-review-r2-q1-320x568.png"
+    },
+    {
+      "r1": "e-craft-review",
+      "r2": "e-craft-review-r2-q2",
+      "size": [
+        390,
+        844
+      ],
+      "file": "export/r1-r2/e-craft-review-r2-q2-390x844.png"
+    },
+    {
+      "r1": "e-craft-review",
+      "r2": "e-craft-review-r2-q2",
+      "size": [
+        320,
+        568
+      ],
+      "file": "export/r1-r2/e-craft-review-r2-q2-320x568.png"
+    },
+    {
+      "r1": "e-craft-review",
+      "r2": "e-craft-review-r2-q3",
+      "size": [
+        390,
+        844
+      ],
+      "file": "export/r1-r2/e-craft-review-r2-q3-390x844.png"
+    },
+    {
+      "r1": "e-craft-review",
+      "r2": "e-craft-review-r2-q3",
+      "size": [
+        320,
+        568
+      ],
+      "file": "export/r1-r2/e-craft-review-r2-q3-320x568.png"
+    },
+    {
+      "r1": "e-craft-review",
+      "r2": "e-craft-review-r2-q4",
+      "size": [
+        390,
+        844
+      ],
+      "file": "export/r1-r2/e-craft-review-r2-q4-390x844.png"
+    },
+    {
+      "r1": "e-craft-review",
+      "r2": "e-craft-review-r2-q4",
+      "size": [
+        320,
+        568
+      ],
+      "file": "export/r1-r2/e-craft-review-r2-q4-320x568.png"
+    }
   ]
 }

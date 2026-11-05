@@ -1,0 +1,9 @@
+// R1/R2 decision pairs: labels are outside the two unchanged CSS-size frames.
+const fs=require('node:fs'),path=require('node:path');
+const {dir,start,browser,prefix,ready}=require('./runtime.cjs');
+async function decisions(b,url){const pages=JSON.parse(fs.readFileSync(path.join(dir,'pages.json'))),out=path.join(dir,'export/r1-r2');fs.mkdirSync(out,{recursive:true});const records=[];
+ for(const item of pages.filter(p=>p.variant!=='r1'))for(const [w,h] of item.sizes){const base=item.id.replace(/-r2-.+$/,'');const name=`${item.id}-${w}x${h}.png`,p=await b.newPage({viewport:{width:w*2+48,height:h+64},deviceScaleFactor:2,reducedMotion:'reduce'});
+  await p.setContent(`<!doctype html><html lang="th"><link rel="stylesheet" href="${url+prefix}components.css"><style>:root{--pair-w:${w}px;--pair-h:${h}px}body{display:block;padding:var(--space-4)}main{display:flex;gap:var(--space-4)}figure,img{width:var(--pair-w)}img{height:var(--pair-h);display:block}figcaption{height:var(--space-8);font-size:var(--type-caption)}</style><body><main><figure><figcaption>R1 · ${w}×${h}</figcaption><img src="${url+prefix}export/${base}-${w}x${h}.png"></figure><figure><figcaption>R2 ${item.variant.slice(3).toUpperCase()} · ${w}×${h}</figcaption><img src="${url+prefix}export/${name}"></figure></main></body></html>`);await ready(p);await p.screenshot({path:path.join(out,name)});records.push({r1:base,r2:item.id,size:[w,h],file:'export/r1-r2/'+name});await p.close();}
+ const reportPath=path.join(dir,'render-report.json'),report=JSON.parse(fs.readFileSync(reportPath));report.decisionComparisons=records;fs.writeFileSync(reportPath,JSON.stringify(report,null,2)+'\n');return records.length;}
+module.exports=decisions;
+if(require.main===module)(async()=>{const {server,url}=await start(),b=await browser();try{console.log('R1/R2 pairs:',await decisions(b,url));}finally{await b.close();server.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

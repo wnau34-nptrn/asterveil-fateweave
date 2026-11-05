@@ -5,14 +5,14 @@
 ## สถานะงาน
 
 - **ออกแบบแล้ว:** SPEC_TH.md, token เพิ่มโดยไม่แก้ของเดิม, component ร่วม8ชิ้น/6สถานะ, ต้นแบบ41หน้า (R1 29หน้า + R2 12หน้า) และตารางแมปของเดิม→componentครบ55ผิวหน้า
-- **export ภาพแล้ว:** ภาพก่อน165ภาพจากฐานล่าสุดที่390×844 /390×650 /320×568 DPR2, ฉากไม่มีตัวอักษร6ภาพสำหรับ HUD, ภาพหลัง113ภาพ + before-after113ภาพ, component sheet2ตำแหน่ง รวมPNG399ไฟล์
+- **export ภาพแล้ว:** ภาพก่อน165ภาพจากฐานล่าสุดที่390×844 /390×650 /320×568 DPR2, ฉากไม่มีตัวอักษร6ภาพสำหรับ HUD, ภาพหลัง113ภาพ + before-after113ภาพ, component sheet2ตำแหน่ง และR1/R2เทียบคู่26ภาพ รวมPNG425ไฟล์
 - **verify ผ่าน:** เกณฑ์1–10ใน verification.json (113กรณี, literal0, contrastต่ำสุดที่sample5.574:1, เปิดแถบพับ/สลับแท็บผ่าน, asset error0); ผลนี้เป็นผลทางเทคนิคของ Chromium ไม่ใช่การเลือก/อนุมัติภาพของเจ้าของ
 - **ยังไม่ได้นำเข้าเกม:** ไม่แก้ src/tests/public/.github หรือ docs เดิม ไม่เปลี่ยนกฎ เซฟ ตัวเลข ราคา หรือเศรษฐกิจ
 - ส่งด้วย git ปกติ; สคริปต์ verify_remote.py ตรวจ fetched git blobs ทุกไฟล์เทียบ manifest/ขนาด/SHA-256 และ decode PNG ทุกภาพด้วย Pillow ผลหลัง push รายงานในข้อความส่งมอบ/PR
 
 ## ไฟล์และการเปิดดู
 
-เปิด index.html เป็นแกลเลอรี หรือ components.html ดูcomponent; `export/before-after/` ดูก่อน/หลังขนาดเดียวกัน ป้ายอยู่นอกกรอบเกม
+เปิด index.html เป็นแกลเลอรี หรือ components.html ดูcomponent; `export/before-after/` ดูก่อน/หลังขนาดเดียวกัน และ `export/r1-r2/` ดูR1/R2คู่กัน ป้ายอยู่นอกกรอบเกม
 README.md มีคำสั่งจับภาพ/build/export/verify/manifest ที่ทำซ้ำได้; runtime.cjs ใช้ local static server และอ้างฟอนต์/asset เดิมโดยตรง
 build_handoff.py สร้าง HTML จาก source DOM ที่เก็บใน before/ ไม่เขียนไฟล์นอกโฟลเดอร์นี้
 

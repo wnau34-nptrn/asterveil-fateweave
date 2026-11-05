@@ -18,5 +18,5 @@ const {dir,start,browser,prefix,ready}=require('./runtime.cjs');
   await ready(p);await p.screenshot({path:path.join(out,'before-after',name)});await p.close();
  }}
  const p=await b.newPage({viewport:{width:1200,height:1000},deviceScaleFactor:2,reducedMotion:'reduce'});await p.goto(url+prefix+'components.html');await ready(p);await p.screenshot({path:path.join(dir,'components_sheet.png'),fullPage:true});await p.screenshot({path:path.join(out,'components_sheet.png'),fullPage:true});await p.close();
- fs.writeFileSync(path.join(dir,'render-report.json'),JSON.stringify({engine:'Chromium',realDevices:false,dpr:2,records},null,2)+'\n');console.log('Exported',records.length,'pages and before/after pairs');
+ fs.writeFileSync(path.join(dir,'render-report.json'),JSON.stringify({engine:'Chromium',realDevices:false,dpr:2,records},null,2)+'\n');console.log('Exported',records.length,'pages and before/after pairs');console.log('R1/R2 pairs:',await require('./render_decisions.cjs')(b,url));
  }finally{await b.close();server.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

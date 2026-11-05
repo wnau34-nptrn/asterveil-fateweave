@@ -6,7 +6,7 @@ Design references only. Start with [index.html](index.html), [SPEC_TH.md](SPEC_T
 - R2: brew and weapon review, combined and isolated Q1–Q4, 390×844 / 320×568. Q4 HUD examples are also supplied.
 - [components.html](components.html): all eight primitives and six states.
 - `before/`: freshly captured base evidence and source DOM, not resized old screenshots.
-- `export/`: after PNGs and `before-after/` pairs with labels outside the game frame.
+- `export/`: after PNGs, `r1-r2/` decision pairs, and `before-after/` pairs with labels outside the game frame.
 - `verification.json`: measurements, **not owner approval**.
 
 From the repository root (Node 24, locked npm dependencies, Chromium, Pillow and beautifulsoup4):
