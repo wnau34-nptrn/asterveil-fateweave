@@ -33,8 +33,9 @@ for(const skill of skills)test(`saint/dance ${skill}: prepare on the caster, pai
   const want=skill==='rounddance'?{rounddance_settle:new Set(turn.events.filter(e=>e.type==='cooldown').map(e=>e.targetId)).size}:expected[skill];
   expect(tally(at)).toEqual(want);
   // The generic ring/slash must not be drawn on events the painted layers cover.
-  // (Echofoot's real ally cooldown event is not painted, so its one generic cue stays.)
-  expect(await page.evaluate(()=>window.sdQA.rings())).toBe(skill==='echofoot'?1:0);
+  // (Echofoot's real ally cooldown event is not painted, so its one generic cue stays; duet's real buff event,
+  // skill rework 2026-11-05, keeps the generic buff cue too.)
+  expect(await page.evaluate(()=>window.sdQA.rings())).toBe(skill==='echofoot'||skill==='duet'?1:0);
   await page.locator('#skip-turn').click();await page.clock.runFor(700);
   expect(await frames(page)).toEqual([]);
   expect(await page.evaluate(()=>localStorage.getItem('sd-committed'))).toBe(saved);expect(errors).toEqual([]);
