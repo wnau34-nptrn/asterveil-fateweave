@@ -2,6 +2,12 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-05 — UI frame group 2: team sheet + character window (Claude, branch feat/ui-frame-group2)
+- แผ่นทีมและหน้าต่างตัวละคร (5 แท็บ + review) เต็มจอบนจอแนวตั้ง แถบนำทางซ่อน (Q1 = R1 การตัดสินใจของ Claude ตามที่เจ้าของมอบ); หัวเดียวกับแผ่นบริการ (ปิด 333,11), ปุ่มหลัก/รอง token เดียวกัน, ข้อความ ≥12px ในหน้าต่าง (ยกเว้นแถบสลับตัวละคร/ตารางทีมที่ห้ามแตะ)
+- padding ใช้ `--star-safe-top/bottom` เดิม + box-shadow เติม navy; เทสต์ที่ยืนยัน "แถบนำทางเห็นได้" ปรับเป็น "แผ่นเต็มกรอบ แถบซ่อน" (portrait-keyboard, world, team-character-navigation)
+- Tests: typecheck/lint/unit 1602 ผ่าน; Playwright เฉพาะที่เกี่ยว 149 ผ่าน + 2 ที่พังแก้แล้วผ่าน; audit 390/320 — [`ui-frame-group2`](../validation/ui-frame-group2-2026-11-05/README_TH.md); ยังไม่ทดสอบเครื่องจริง
+- เปิด: กลุ่มถัดไป = ไดอะล็อกแผนที่ (หน้าต่างตัวละครบนแผนที่ใช้หัวใหม่แล้ว แต่ layout ยังเป็นของกลุ่มแผนที่) + กรอบสรุป/รางวัล
+
 ## 2026-11-05 — UI frame group 1: service-sheet header + buttons (Claude, PR #173 claude/ui-frame-group1)
 - ทุกแผ่นบริการค่ายใช้หัวเดียวกัน (ปิด 333,11 ทุกแผ่น/ทุกขนาด, ย้อนกลับซ้าย, หัวเรื่องชิดซ้าย 19px) ปุ่มหลักทอง 1 แบบ ปุ่มรอง 1 แบบ ค่าเป็น token (`tokens.css`, `src/ui/sheet-frame.css` โหลดท้ายสุด)
 - Q1–Q3: เจ้าของมอบให้ Claude เลือก → R1 (บันทึกเป็นการตัดสินใจของ Claude); Q2+Q3 ทำในกลุ่มนี้, Q1 (เต็มจอซ่อนแถบนำทาง) ไปกลุ่มหน้าต่างตัวละคร+แผ่นทีม
