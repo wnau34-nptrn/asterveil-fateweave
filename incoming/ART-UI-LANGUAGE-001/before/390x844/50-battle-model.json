@@ -1,0 +1,211 @@
+{
+  "regions": {
+    ".masthead": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 44
+    },
+    "#turn-phase": {
+      "x": 6,
+      "y": 48,
+      "w": 378,
+      "h": 70
+    },
+    "#turn-order": {
+      "x": 13,
+      "y": 68,
+      "w": 364,
+      "h": 50
+    },
+    "#intent": {
+      "x": 14,
+      "y": 651,
+      "w": 362,
+      "h": 38
+    },
+    "#party": {
+      "x": 10,
+      "y": 697,
+      "w": 370,
+      "h": 60
+    },
+    "#commands": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    ".arena": {
+      "x": 6,
+      "y": 122,
+      "w": 378,
+      "h": 525
+    },
+    ".hud-location": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "#danger-chip": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "#world-party": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    ".hud-tools": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    ".hud-movement": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    ".hud-action": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "#world-message": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  "characters": [
+    {
+      "id": "guardian",
+      "x": 95.0,
+      "y": 172.5,
+      "w": 103.5,
+      "h": 110.0,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/390x844/50-battle.png"
+    },
+    {
+      "id": "tracer",
+      "x": 93.5,
+      "y": 339.0,
+      "w": 102.5,
+      "h": 110.5,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/390x844/50-battle.png"
+    },
+    {
+      "id": "weaver",
+      "x": 6.0,
+      "y": 169.0,
+      "w": 96.0,
+      "h": 113.5,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/390x844/50-battle.png"
+    },
+    {
+      "id": "healer",
+      "x": 8.0,
+      "y": 503.0,
+      "w": 102.0,
+      "h": 113.5,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/390x844/50-battle.png"
+    },
+    {
+      "id": "kael",
+      "x": 103.0,
+      "y": 512.0,
+      "w": 86.5,
+      "h": 104.5,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/390x844/50-battle.png"
+    },
+    {
+      "id": "f2",
+      "x": 187.0,
+      "y": 545.5,
+      "w": 98.0,
+      "h": 71.0,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/390x844/50-battle.png"
+    },
+    {
+      "id": "b3",
+      "x": 303.0,
+      "y": 365.0,
+      "w": 78.5,
+      "h": 84.5,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/390x844/50-battle.png"
+    },
+    {
+      "id": "f1",
+      "x": 169.0,
+      "y": 290.0,
+      "w": 149.5,
+      "h": 164.5,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/390x844/50-battle.png"
+    }
+  ],
+  "enemyLabels": [
+    {
+      "name": "Lv10 แมงมุมเศษผลึก",
+      "x": 202.546875,
+      "y": 526.234375,
+      "w": 83.15625,
+      "h": 13
+    },
+    {
+      "name": "Lv10 วิญญาณรอยแยก",
+      "x": 298.9375,
+      "y": 346.109375,
+      "w": 83.15625,
+      "h": 13
+    },
+    {
+      "name": "Lv10 ผู้คุมรอยแยก",
+      "x": 202.546875,
+      "y": 271.125,
+      "w": 83.15625,
+      "h": 13
+    }
+  ],
+  "enemyHealth": [
+    {
+      "id": "f2",
+      "hp": "98/98",
+      "x": 202.546875,
+      "y": 615,
+      "w": 83.15625,
+      "h": 30
+    },
+    {
+      "id": "b3",
+      "hp": "59/59",
+      "x": 298.9375,
+      "y": 448,
+      "w": 83.15625,
+      "h": 30
+    },
+    {
+      "id": "f1",
+      "hp": "350/350",
+      "x": 202.546875,
+      "y": 448,
+      "w": 83.15625,
+      "h": 30
+    }
+  ]
+}

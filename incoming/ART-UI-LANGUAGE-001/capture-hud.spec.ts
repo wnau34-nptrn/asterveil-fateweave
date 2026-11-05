@@ -71,6 +71,7 @@ async function open(browser: Browser, w: number, h: number, raw: string | null):
   const page = await context.newPage(), errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('ula')) { if (raw) localStorage.setItem(key, raw); else localStorage.removeItem(key); sessionStorage.setItem('ula', '1'); } }, { key, raw });
+  await page.route('**/src/main.ts', async route => { const response=await route.fetch(); await route.fulfill({response,body:(await response.text())+'\nwindow.__artScene=scene;\n'}); });
   await page.goto('./');
   return { page, close: () => context.close(), errors };
 }
@@ -88,8 +89,29 @@ for (const [w,h] of sizes) test(`hud source ${w}x${h}`, async ({browser})=>{
    return {texts,buttons};
   });
   writeFileSync(`${out}/${name}-geometry.json`,JSON.stringify(geometry,null,2));
-  const style=await page.addStyleTag({content:'body *{color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:none!important}svg{visibility:hidden!important}'});
-  await page.screenshot({path:`${out}/${name}-scene.png`});await style.evaluate(e=>e.remove());
+  const model=await page.evaluate((name)=>{
+   const box=(el:Element|null)=>{if(!el)return null;const r=el.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height};};
+   const regions=Object.fromEntries(['.masthead','#turn-phase','#turn-order','#intent','#party','#commands','.arena','.hud-location','#danger-chip','#world-party','.hud-tools','.hud-movement','.hud-action','#world-message'].map(sel=>[sel,box(document.querySelector(sel))]));
+   const bounds:any[]=[];
+   if(name==='50-battle'){
+    const scene=(window as any).__artScene;if(!scene)throw Error('Missing read-only scene instrumentation');
+    const canvas=scene.game.canvas,cr=canvas.getBoundingClientRect();
+    for(const [id] of scene.bodies)bounds.push({id,method:'pending rendered-image difference; run measure_character_bounds.py'});
+   }else{const r=box(document.querySelector('#party-token'));if(r)bounds.push({id:'party-token',...r,method:'visible party-token bounding box in reference image'});}
+   return {regions,characters:bounds,enemyLabels:[...document.querySelectorAll('.field-unit-label')].filter(e=>{const r=e.getBoundingClientRect();return r.width&&r.height;}).map(e=>({name:e.querySelector('.field-unit-name')?.textContent,...box(e)})),enemyHealth:[...document.querySelectorAll('.field-unit-info:not(.ally)')].map(e=>({id:e.getAttribute('data-field-unit'),hp:e.querySelector('.field-hp-value')?.textContent,...box(e)}))};
+  },name);
+  writeFileSync(`${out}/${name}-model.json`,JSON.stringify(model,null,2));
+  await page.screenshot({path:`${out}/${name}.png`});
+  const hide=name==='40-map-hud'?'.world-hud,#world-banner':'.masthead,#turn-phase,#battle-coach,#enemy-roster,#intent,.decision-panel,#field-statuses,#field-targets,#field-banner,.formation-labels,#help-home,#battle-view footer';
+  const style=await page.addStyleTag({content:hide+'{visibility:hidden!important}'});
+  await page.screenshot({path:`${out}/${name}-scene.png`});
+  if(name==='50-battle'){
+   mkdirSync(`${dir}/capture-work/${w}x${h}`,{recursive:true});
+   const ids=await page.evaluate(()=>[...(window as any).__artScene.bodies.keys()] as string[]);
+   for(const id of ids){await page.evaluate(id=>(window as any).__artScene.bodies.get(id).setVisible(false),id);await page.waitForTimeout(50);await page.screenshot({path:`${dir}/capture-work/${w}x${h}/without-${id}.png`});await page.evaluate(id=>(window as any).__artScene.bodies.get(id).setVisible(true),id);await page.waitForTimeout(50);}
+  }
+  await style.evaluate(e=>e.remove());
+
  };
  const p=richProfile(),raw=currentSave({profile:p,run:null} as never);
  const m=await open(browser,w,h,raw);await m.page.locator('#continue').click();await m.page.locator('#lobby-depart').click();await expect(m.page.locator('#world-pack')).toBeVisible();await capture(m.page,'40-map-hud');await m.close();

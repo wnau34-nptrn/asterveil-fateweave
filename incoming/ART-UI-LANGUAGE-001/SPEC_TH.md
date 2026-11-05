@@ -41,7 +41,7 @@ CSS/DOM ของ lobby, forge-workbench, character/skills/star, world, summary,
 | 4 ราคา / ledger | `.price`, `.ledger`; หน่วย/มี/ใช้/ได้รับ/หลังทำ; `--type-caption`, tabular-nums; สีเดิมจาก token | แยกยอดก่อนจ่าย/receipt; star เติมคอลัมน์ได้รับ0เพราะไม่มีรับทรัพยากร ไม่ใช่เพิ่มรางวัล; ค่าอื่นตรง DOM |
 | 5 ป้าย | `.badge.count` pill + เลข; `.notice` มุม6 + ✓/ข้อความ; `.locked` มุม6 + เหตุผล | จำนวนไม่ใช้แทนแจ้งเตือน; สีมีข้อความ/รูปทรงคู่เสมอ; ขาด/เต็มไม่ซ่อนเหตุผล |
 | 6 แถบพับ | `details.fold > summary + .stack`; `--touch-min`, `--space-3`, `--radius-sm`, `--navy-900` | ข่าว NPC/จัดการคลัง/ตัวกรอง/คำอธิบายยาว; คีย์บอร์ดเปิดได้; ไม่มีขั้นจ่ายใหม่ |
-| 7 แผ่นข้อมูลทึบ | `.info-panel`, `.hud-label`, `.receipt`; `--navy-900/950`, `--hud-shadow`, `--text/text-muted` | แผ่นเล็กอยู่หลังข้อความบนภาพ; HUD เก็บ anchor เดิมจาก geometry.json; success มีข้อความบันทึกผล ไม่แต่งยอด |
+| 7 แผ่นข้อมูลทึบ | `.info-panel`, `.painted-surface`, `.receipt`; `--navy-900/950`, `--hud-shadow`, `--text/text-muted` | แผ่นเล็กอยู่หลังข้อความบนภาพ; HUD เก็บ anchor เดิมจาก geometry.json; success มีข้อความบันทึกผล ไม่แต่งยอด |
 | 8 ตัวอักษร | หัว20 Kanit600; ป้าย16; เนื้อหา14 Noto; รอง/ตาราง/HUD12; line-height1.45 (หัว1.2) | R1 ขั้นต่ำ12ทั้ง DOM; R2 Q4 เฉพาะป้ายตัวเลขล้วน11; ชื่อ/ข้อความกติกาไม่ลด |
 
 `components.html` แสดงทั้ง6สถานะ รวม disabled พร้อมเหตุผล, busy, receipt; ต้นแบบเป็น static gallery ไม่จำลองการจ่ายหรือเขียนเซฟ
@@ -69,14 +69,14 @@ Q4 ไม่มีป้าย HUD บนปรุงยา/review จึงห�
 - หน้าสร้างพร้อมทำจากภาพก่อนเป็นLv1 ส่วน review เป็นLv3ตาม audit แต่ละหน้าเป็นตัวอย่างอิสระ ไม่ใช่การจำลอง flow ที่เปลี่ยนยอดเอง
 - ถอนตัวมีสถานะก่อนยืนยัน/ยืนยันเดิมสองสถานะ ไม่เพิ่มขั้น; สรุปเดินทางและทีมล้มมีปุ่มกลับค่ายติดล่าง
 - เควสต์คงการ์ดและปุ่มรับในการ์ด; หน้าค่ายเป็นบริบทภาพเดิมและ nav เดิม6ตำแหน่ง ไม่ออกแบบฉาก/NPC ใหม่
-- HUD map/battle ใช้ภาพฉากจากเกมโดยเอาตัวอักษรออกก่อน แล้วซ้อนข้อความ DOM + hit target ที่ anchor เดิม; ไม่ใช้ PNG เหล่านี้เป็น UI runtime
+- HUD map/battle ซ่อน HUD เดิมทั้งชุดเพื่อจับเฉพาะฉาก/ตัวละคร แล้วสร้าง chip/queue/intent/name/HP/roster/commands ด้วย DOM/CSS จริง ไม่มีภาพ HUD ตกค้าง; ไม่ใช้ PNG เหล่านี้เป็น UI runtime
 - draft ไม่มีปิดตาม `world-ui.ts` (mandatory choice); แสดงโครง first pick จาก poolจริง lio/brann/sefa/toma ไม่แต่งราคา/HP/SPD
 - event/draft/ทีมล้มไม่มีภาพก่อนใน audit; ช่องbeforeระบุชัดว่าไม่มีภาพก่อน ใช้โครง/ข้อความจาก world-ui.ts/th.ts/summary-ui.ts
 - ภาพก่อนDPR2จับใหม่จากฐานที่ merge ครบ ไม่ใช่นำภาพDPR1มาขยาย
 
 ## การตรวจและขอบเขตผล
 
-`render.cjs` export ทุกหน้าและภาพbefore-after ป้ายชื่ออยู่นอกกรอบเกม; `verify.cjs` ตรวจเกณฑ์1–10จาก DOM/computed style แบบ topmost,
+`render.cjs` export PNG หนึ่งไฟล์ต่อหน้า/ขนาด; before-after และ R1/R2 เป็น HTML อ้างภาพชุดเดียว ป้ายชื่ออยู่นอกกรอบเกม; `verify.cjs` ตรวจเกณฑ์1–10จาก DOM/computed style แบบ topmost,
 พื้นที่แตะ/โฟกัสจริง, statesเลื่อนบน/กลาง/ล่างและแถบพับเปิด, literal CSS, style families, ภาพ/ฟอนต์โหลด และ preservation manifest
 contrast ใช้ภาพ Chromium ที่ซ่อนตัวอักษรแล้ว sample พื้นจริงใต้แต่ละบรรทัดผ่าน Pillow 3จุด/บรรทัด ไม่ใช่ประเมินด้วยตา
 ตรวจเฉพาะจุดตัวอย่างที่ระบุในverification.json; ผลไม่ครอบคลุมทุกpixelบนทุกฉากของเกมจริง
@@ -157,3 +157,15 @@ A/B/HUD ตั้งใจคงโครง ไม่บังคับเป�
 
 ไม่ merge สาขา art ทั้งก้อนเข้าเกม; ย้าย DOM/CSS ตามจริง ไม่ใช้ PNG เป็นแผง
 งานนี้ไม่แก้ src/tests/public/.github หรือ docs เดิม; บันทึกส่งต่ออยู่ใน NOTES.md แทนเพราะขอบเขตเฉพาะincomingจากคำสั่งผู้ใช้มีลำดับเหนือกว่ากฎบันทึกทั่วไป
+
+## รอบแก้ตาม review R2 ของ PR #171 (มีลำดับเหนือคำอธิบาย HUD รอบแรก)
+
+- ปิด/ย้อนกลับใช้SVGต้นฉบับ24px stroke `--icon-stroke`; ไอคอนในปุ่ม/summaryทุกจุด≥20px
+- HUDประกอบจาก `.native-hud` / `.painted-surface` จริง ฉากPNGไม่มีHUDติดมา; native queue/intent/field label/HP/roster/commands ใช้tokenร่วม ไม่ใช้กล่องปิดข้อความในภาพ
+- อ้าง `character-bounds.json` จากpixelของภาพก่อนและ `character-bounds.html` สำหรับตรวจ ไม่มีพื้นHUDชนกรอบตัวละครที่3ขนาดทั้งR1/R2
+- ป้ายชื่อศัตรู390pxใช้ellipsisบรรทัดเดียวตามพื้นที่ที่เหลือ ชื่อเต็มอยู่ในDOM/title; รายชื่อและความกว้างที่ถูกตัดอยู่ในNOTESและverification.json นี่เป็นข้อจำกัดของ12pxที่แสดงให้เลือกตามคำขอ ไม่อ้างว่าข้อความเต็มพอดี
+- ป้ายHPจัดพ้นเท้าตัวเอง/ตัวข้างเคียง; บางป้ายชื่อขยับภายในสนามเพื่อหลบรูป ไม่ย้ายตัวละครหรือกลุ่มHUDหลัก
+- `.npc-fold` คงภาพ/บทพูด/สถานะเปิดจากsourceเดิม แถบนำทางคงไอคอนและbadge5+3/4/6
+- `.brew-card` เป็นตัวแปรหนาแน่นของcardเดิม: ภาพ40, ปุ่มกับราคา72, ระยะ8; ยา4ใบพอดี390×844แม้เปิดNPC ทั้งR1/R2 ใบสุดท้ายจบที่y616.35 ก่อนnavR2ที่y772
+- `export/before-after/` และ `export/r1-r2/` เป็นHTMLใช้ภาพชุดเดียว ไม่มีPNGเปรียบเทียบซ้ำ; แพ็กเกจที่HEAD<100MB และDOMต้นฉบับ165ชุดยังอยู่ครบในgzipแบบlossless
+- verifyใหม่ตรวจขนาดไอคอน, การบังตัวละคร, no-wrap, font12/11จริงและpixel PNGต่างกันจริง, NPC/nav/ยา4ใบ และขนาดแพ็กเกจ; ไม่ใช้ผลpassเก่าหลังสคริปต์ล้ม

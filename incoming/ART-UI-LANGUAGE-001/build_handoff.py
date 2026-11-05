@@ -4,7 +4,7 @@ Run from any cwd. Does not import, write or execute game rules.
 """
 from pathlib import Path
 from bs4 import BeautifulSoup
-import json,re,html,hashlib
+import json,re,html,hashlib,gzip
 D=Path(__file__).resolve().parent
 R=D.parent.parent
 P=D/'prototypes'
@@ -12,7 +12,10 @@ P.mkdir(exist_ok=True)
 BASE='dd99b38d'
 art_rules=[]; arts={}; sources=[]; pages=[]
 def esc(v):return html.escape(str(v),quote=True)
-def soup(n):return BeautifulSoup(json.loads((D/'before/390x844'/f'{n}.json').read_text())['html'],'html.parser')
+def soup(n):
+ p=D/'before/390x844'/f'{n}.json'
+ data=p.read_text() if p.exists() else gzip.decompress(p.with_suffix('.json.gz').read_bytes()).decode()
+ return BeautifulSoup(json.loads(data)['html'],'html.parser')
 def txt(e):return e.get_text(' ',strip=True) if e else ''
 def pick(n,sel):
  e=soup(n).select_one(sel)
@@ -41,6 +44,24 @@ def art(e):
   name=f'art-{len(arts)+1}';arts[key]=name
   art_rules.append(f'.{name}'+'{'+f'--art-image:url("{url}");--art-size:{size};--art-pos:{pos}'+'}')
  return f'<span class="art {arts[key]}" aria-hidden="true"></span>'
+def line_icon(name):
+ svg=(R/'src/ui/svg'/f'{name}.svg').read_text().strip()
+ return re.sub(r'stroke-width="[^"]+"','stroke-width="var(--icon-stroke)"',svg).replace('<svg ','<svg aria-hidden="true" class="line-icon" ')
+def npc_fold(source):
+ if not source:return ''
+ root=soup(source);e=root.select_one('.lobby-content>.npc-fold,.lobby-content>.storage-keeper')
+ if not e or not e.select_one('.npc-line'):return ''
+ line=e.select_one('.npc-line');style=line.get('style','');name='npc-'+source
+ url=re.search(r'--busts:url\(([^)]+)',style)[1].replace('/assets/','../../public/assets/')
+ x=re.search(r'--sx:([\d.]+%)',style)[1];y=re.search(r'--sy:([\d.]+%)',style)[1]
+ art_rules.append('.'+name+'{'+f'--npc-art:url("{url}");--npc-position:{x} {y}'+'}')
+ bust=f'<span class="npc-bust {name}" aria-hidden="true"></span>'
+ title=txt(e.summary);copy=line.p
+ dialogue=''.join(str(t) for t in copy.find_all(string=True,recursive=False)).strip()
+ body=f'<div class="npc-body">{bust}<p><b>{esc(txt(copy.b))}</b><span>{esc(dialogue)}</span></p></div>'
+ hint=e.select_one('.quest-hint')
+ if hint:body+=button(txt(hint),'secondary','c-quests')
+ return f'<details class="fold npc-fold"'+(' open' if e.has_attr('open') else '')+f'><summary>{bust}<span>{esc(title)}</span>{line_icon("down")}</summary>{body}</details>'
 def button(label,kind='secondary',href=None,extra=''):
  if href:return f'<a class="button {kind}" href="{href}.html" {extra}>{esc(label)}</a>'
  return f'<button type="button" class="{kind}" {extra}>{esc(label)}</button>'
@@ -68,10 +89,18 @@ def copied_details(n,sel):
  return fold(label,body)
 def tabs(items,active):
  return '<nav class="tabs" aria-label="ส่วนของหน้าต่าง">'+''.join(button(label,'secondary',href,extra='aria-current="page"' if href==active else '') for label,href in items)+'</nav>'
-def nav():return '<nav class="navigation" aria-label="ค่าย">'+''.join(button(t,'secondary',h) for t,h in [('ทีม','c-team'),('จ้าง','c-hire'),('กระเป๋า','c-bag'),('ฟาร์ม','c-farm'),('ช่าง','e-tasks'),('ยา','c-brew')])+'</nav>'
+def nav():
+ links=[]
+ destinations=['c-team','c-hire','c-bag','c-farm','e-tasks','c-brew'];icons=['tab-team','tab-hire','tab-bag','gate','tab-forge','brew']
+ for el,href,icon_name in zip(soup('11-camp').select('.lobby-menu button'),destinations,icons):
+  label=txt(el.find('span',recursive=False));count=txt(el.small)
+  links.append(f'<a class="button secondary" href="{href}.html" aria-label="{esc(label+" "+count)}">{line_icon(icon_name)}<span>{esc(label)}</span>'+(f'<small class="nav-count">{esc(count)}</small>' if count else '')+'</a>')
+ return '<nav class="navigation" aria-label="ค่าย">'+''.join(links)+'</nav>'
+
 def page(id,title,body,source=None,group='C',sub='',back=None,primary=None,secondary=None,tab='',review=False,variant='r1',sizes=None,kind='sheet',preserves=None):
- cls='window'+(' review' if review else '')+(' dialog' if kind=='dialog' else '')
- header=f'<header class="window-head {"has-back" if back else ""}">'+(f'<a class="button icon-button back" href="{back}.html" aria-label="ย้อนกลับ">‹</a>' if back else '')+f'<div class="title-block"><h1>{esc(title)}</h1><small>{esc(sub)}</small></div><a class="button icon-button close" href="b-camp.html" aria-label="ปิด">×</a></header>'
+ if group=='C' and 'class="fold npc-fold"' not in body:body=npc_fold(source)+body
+ cls='window'+(' brew-window' if id.startswith('c-brew') else '')+(' review' if review else '')+(' dialog' if kind=='dialog' else '')
+ header=f'<header class="window-head {"has-back" if back else ""}">'+(f'<a class="button icon-button back" href="{back}.html" aria-label="ย้อนกลับ">{line_icon("left")}</a>' if back else '')+f'<div class="title-block"><h1>{esc(title)}</h1><small>{esc(sub)}</small></div><a class="button icon-button close" href="b-camp.html" aria-label="ปิด">{line_icon("close")}</a></header>'
  dock=''
  if primary:
   label,href=primary
@@ -86,8 +115,8 @@ def write_page(id,title,app):
 brew=''
 for e in pick('26-brew','.brew-list').find_all('li',recursive=False):
  lines=e.select('small');cost=txt(e.button).split(' · ',1)[1]
- brew+=card(txt(e.b),txt(lines[0]),e.select_one('.potion-art'),cost,'ปรุง',badge=f'<span class="badge count">{esc(txt(lines[1]))}</span>')
-brew=panel('แร่ดาว 640 · ฝุ่นดาว 120')+para('ออกเดินทางแล้วพายาไปอย่างละไม่เกิน 3 ขวด ที่เหลือเก็บไว้ที่ค่าย','caption')+brew+copied_details('26-brew','.lobby-help')
+ brew+=f'<article class="card dense brew-card">{art(e.select_one(".potion-art"))}<div class="copy"><b>{esc(txt(e.b))}</b><small>{esc(txt(lines[0]))}</small><small>{esc(txt(lines[1]))}</small></div><div class="brew-action">{button("ปรุง")}<small>{esc(cost)}</small></div></article>'
+brew='<div class="brew-intro"><small>แร่ดาว 640 · ฝุ่นดาว 120</small><small>ออกเดินทางแล้วพายาไปอย่างละไม่เกิน 3 ขวด ที่เหลือเก็บไว้ที่ค่าย</small></div>'+brew+copied_details('26-brew','.lobby-help')
 brew_spec=page('c-brew','นักปรุงยา',brew,'26-brew',sub='เฟิร์น · นักปรุงยา')
 for id,n,active in [('c-hire','20-hire-board','c-hire'),('c-market','22-market','c-market')]:
  body=panel(text(n,'.hire-cost'))
@@ -259,78 +288,9 @@ for id,n,title,sel in [('h-info','53-battle-menu','ข้อมูลการ�
    if not p.find_parent('details'):body+=para(txt(p))
   if not body:body=panel(txt(e))
  page(id,title,body,n,group='H',back='h-battle-hud',kind='dialog')
-# HUDs retain captured control anchors. Only the canvas is raster; every HUD label is live DOM.
-for id,n,group,title in [('f-map-hud','40-map-hud','F','แผนที่เดินทาง'),('h-battle-hud','50-battle','H','HUD ต่อสู้')]:
- for variant in ['r1','r2-q4']:
-  hud=''
-  for w,h in [[390,844],[390,650],[320,568]]:
-   size=f'{w}x{h}';data=json.loads((D/'before'/size/f'{n}-geometry.json').read_text());content=f'<img src="../before/{size}/{n}-scene.png" alt="ฉากจริงจากฐาน dd99b38d ไม่มี HUD"/>'
-   count=0
-   def place(x,y,ww,hh):
-    global count
-    count+=1;key=f'geo-{id}-{size}-{count}'
-    art_rules.append('.'+key+'{'+f'--hud-x:{x:g}px;--hud-y:{y:g}px;--hud-w:{ww:g}px;--hud-h:{hh:g}px'+'}')
-    return key
-   for e in data['texts']:
-    t=e['text'];cl=e['parent']
-    if n=='50-battle' and cl not in ['beat-chip','turn-title','queue-hint','turn-speed','field-unit-name','field-hp-value']:continue
-    if e['x']<0 or e['x']>=w or e['y']>=h:continue
-    font=max(e['px'],12);ww=min(w-e['x'],max(e['w']*font/e['px']+8,32));hh=max(e['h'],18)
-    if len(t)>20:ww=min(w-e['x'],max(ww,200))
-    if cl=='field-unit-name':ww=min(w-e['x'],max(ww,100));hh=36
-    cls=place(e['x'],e['y'],ww,hh)
-    numeric=' numeric' if re.fullmatch(r'[\d/% .]+',t) else ''
-    content+=f'<span class="hud-label{numeric} {cls}">{esc(t)}</span>'
-   if n=='50-battle':
-    # Intent panel anchor from the source, with local text reflow at 12px.
-    intent=[t for t in data['texts'] if t['parent']=='' and t['y']>h*.65 and t['y']<h*.78 and (t['text'] in ['→','เอกิส','เปลวดาว · พลังงาน','13'] or t['text'].startswith('Lv10 วิญญาณ'))]
-    if intent:
-     first=intent[0];content+=f'<span class="hud-label {place(first["x"],first["y"],w-first["x"]-64,36)}">'+esc(' '.join(t['text'] for t in intent if t['px']!=19))+'</span>'
-   for i,e in enumerate(data['buttons']):
-    if e['x']<0 or e['x']+e['w']>w+1 or e['y']+e['h']>h+1:continue
-    ar=e.get('aria') or '';t=e.get('text','').strip();href=None
-    if n=='40-map-hud':
-     if 'เลือด' in ar:
-      m=re.match(r'(.+?) (\d) ดาว เลเวล (\d+) เลือด (\d+) จาก (\d+) ความล้า (\d+)',ar)
-      if m:t=f'{m[1]}'+(f' ★{m[2]}' if int(m[2])>1 else '')+f'\n{m[4]}/{m[5]}\nล้า {m[6]}'
-      href='d-overview'
-     elif 'เดิน' in ar and not t:t={'เดินขึ้น':'↑','เดินซ้าย':'‹','เดินขวา':'›','เดินลง':'↓'}.get(ar,'ⓘ')
-     elif 'กระเป๋า' in ar:t='กระเป๋า\nแร่ดาว 0';href='f-pack'
-     elif 'เป้าหมาย' in ar:t='ไปถึงแคมป์ · 1/5'
-     elif 'ข้อมูล' in ar:t='ⓘ';href='h-info'
-     elif 'ทางเข้าด่าน' in ar:t='ทางออก';href='f-entrance'
-    else:
-     if 'SPD' in ar:t='';
-     elif 'ใช้โจมตี' in ar:t='';
-     elif 'HP' in t:
-      name=re.search(r'(?:FRONT|BACK)\s*.*?(เอกิส|ไลรา|ไอรา|เซเรน|เคล)HP\s*([\d /]+)',t)
-      if name:t=f'{name[1]}\n{name[2].strip()}'
-     elif t.startswith('1'):t='โจมตี\nพลัง 20'
-     elif t.startswith('2'):t='ติดตรา\nโบนัส +22'
-     elif t.startswith('3'):t='ฟันเจาะจุด\nพลัง 36'
-     if 'คำอธิบาย' in ar:href='h-skill'
-     elif 'ข้อมูล' in ar:href='h-info'
-    cls=place(e['x'],e['y'],e['w'],e['h']);label=esc(ar or t or 'ดูข้อมูล');text_html='<span class="hud-readout">'+''.join(('<span class="numeric">'+esc(line)+'</span>' if re.fullmatch(r'[\d/% .]+',line) else esc(line))+'<br>' for line in t.split('\n')).removesuffix('<br>')+'</span>' if t else ''
-    if n=='40-map-hud' and 'เลือด' in ar:
-     bs=BeautifulSoup(e['html'],'html.parser');text_html=art(bs.select_one('.portrait'))+text_html;cls+=' hud-party'
-    if n=='50-battle' and e['text'].strip().startswith(('1โจมตี','2ติดตรา','3ฟันเจาะจุด')):cls+=' hud-command'
-    # Queue portraits keep their original atlas art, read from captured button markup.
-    bs=BeautifulSoup(e['html'],'html.parser');portrait_el=bs.select_one('.portrait')
-    if not t and portrait_el:text_html=''  # Original portrait is in unchanged scene context; overlay is only a hit target.
-    tag='a' if href else 'button';attrs=f'href="{href}.html"' if href else 'type="button"'
-    content+=f'<{tag} {attrs} class="button hud-control {cls}" data-original="{e['x']},{e['y']},{e['w']},{e['h']}" aria-label="{label}">{text_html}</{tag}>'
-   if n=='40-map-hud':
-    original=json.loads((D/'before'/size/f'{n}.json').read_text())
-    for e in original['texts']:
-     if e['cls']=='world-talent-badge' and e['w']>0:content+=f'<span class="hud-label {place(e["x"],e["y"],min(36,w-e["x"]),18)}">+แต้ม</span>'
-   if n=='50-battle':
-    for e in data['texts']:
-     if e['text']=='13':content+=f'<span class="hud-label hud-power {place(e["x"],e["y"],32,30)}">13</span>'
-     if e['text']=='พลังโจมตี':content+=f'<span class="hud-label {place(w-56,e["y"],56,18)}">พลังโจมตี</span>'
-   hud+=f'<div class="hud-scene" data-size="{size}" hidden>{content}</div>'
-  pid=id if variant=='r1' else id+'-r2-q4'
-  write_page(pid,title,f'<main id="app" class="{variant}">{hud}</main><script src="../preview.js"></script>')
-  pages.append(dict(id=pid,title=title,source=n,group=group,variant=variant,sizes=[[390,844],[390,650],[320,568]],kind='hud',back=False,primary=False,preserves=['hud-anchors','battle-team-commands'] if group=='H' else ['hud-anchors']))
+# Native HUD reconstruction, no screenshot-backed UI.
+exec((D/'hud_builder.py').read_text(),globals())
+build_native_huds()
 # Camp context: original painted composition and NPC positions remain unchanged; DOM nav overlays original nav.
 camp='<div class="hud-scene">'
 for w,h in [[390,844],[390,650],[320,568]]:camp+=f'<img data-size="{w}x{h}" hidden src="../before/{w}x{h}/11-camp.png" alt="ฉากค่ายและ NPC เดิม"/>'
@@ -344,7 +304,7 @@ for id,spec in [('c-brew',brew_spec),('e-craft-review',review_spec)]:
   page(id+'-r2-'+v,**spec,variant='r2-'+v)
 # Shared component states; only literal numbers in token definitions.
 components=f'''<main class="gallery"><header><small>ASTER VEIL · FATEWEAVE / ART-UI-LANGUAGE-001</small><h1>ภาษาภาพร่วม · Luminous Veil</h1><p>R1 · ตัวอักษรขั้นต่ำ 12px · DOM/CSS อ้างอิงสำหรับเจ้าของเลือกแบบ</p></header><div class="gallery-grid">
-<section class="info-panel"><h2>01 / หัวหน้าต่างและแท็บ</h2><header class="window-head has-back"><button class="icon-button back" aria-label="ย้อนกลับ">‹</button><div class="title-block"><h1>ตรวจรายการสร้างอาวุธ</h1><small>อัศวิน · เอกิส · Lv3</small></div><button class="icon-button close" aria-label="ปิด">×</button></header>{dtabs('d-overview')}</section>
+<section class="info-panel"><h2>01 / หัวหน้าต่างและแท็บ</h2><header class="window-head has-back"><button class="icon-button back" aria-label="ย้อนกลับ">{line_icon("left")}</button><div class="title-block"><h1>ตรวจรายการสร้างอาวุธ</h1><small>อัศวิน · เอกิส · Lv3</small></div><button class="icon-button close" aria-label="ปิด">{line_icon("close")}</button></header>{dtabs('d-overview')}</section>
 <section class="info-panel"><h2>02 / การ์ดรายการ</h2>{card('ยาฟื้นแผล','ฟื้นเลือด 40% ให้สมาชิกที่ยังยืนอยู่ 1 คน',pick('26-brew','.potion-art'),'แร่ 6 · ผง 2','ปรุง')}{card('ดาบอัศวินดี','Lv3 · ดี · คุณภาพ 100%',pick('29-forge-craft-review','.gear-art'),action='ดู/เปรียบเทียบ')}</section>
 <section class="info-panel"><h2>03 / ปุ่มและสถานะ</h2><small>ปกติ</small>{button('ยืนยันสร้างอาวุธ 1 ชิ้น','primary')}<small>กด</small>{button('ปรุง','secondary demo-pressed')}<small>โฟกัส</small>{button('ปรุง','secondary demo-focus')}<small>ปิดใช้พร้อมเหตุผล</small>{button('ปรุง','secondary',extra='disabled aria-describedby="why"')}<small id="why">แร่ดาวไม่พอ</small><small>กำลังทำ</small>{button('กำลังทำ','secondary',extra='disabled aria-busy="true"')}{button('ถอนตัว','danger')}<p class="receipt" role="status">บันทึกผลอัปดาวแล้ว</p></section>
 <section class="info-panel review"><h2>04 / ราคาและ ledger</h2>{ledger(pick('29-forge-craft-review','#forge-cost'))}<small>ผลที่รับประกัน · ไม่สุ่ม</small></section>
@@ -427,7 +387,7 @@ CSS/DOM ของ lobby, forge-workbench, character/skills/star, world, summary,
 | 4 ราคา / ledger | `.price`, `.ledger`; หน่วย/มี/ใช้/ได้รับ/หลังทำ; `--type-caption`, tabular-nums; สีเดิมจาก token | แยกยอดก่อนจ่าย/receipt; star เติมคอลัมน์ได้รับ0เพราะไม่มีรับทรัพยากร ไม่ใช่เพิ่มรางวัล; ค่าอื่นตรง DOM |
 | 5 ป้าย | `.badge.count` pill + เลข; `.notice` มุม6 + ✓/ข้อความ; `.locked` มุม6 + เหตุผล | จำนวนไม่ใช้แทนแจ้งเตือน; สีมีข้อความ/รูปทรงคู่เสมอ; ขาด/เต็มไม่ซ่อนเหตุผล |
 | 6 แถบพับ | `details.fold > summary + .stack`; `--touch-min`, `--space-3`, `--radius-sm`, `--navy-900` | ข่าว NPC/จัดการคลัง/ตัวกรอง/คำอธิบายยาว; คีย์บอร์ดเปิดได้; ไม่มีขั้นจ่ายใหม่ |
-| 7 แผ่นข้อมูลทึบ | `.info-panel`, `.hud-label`, `.receipt`; `--navy-900/950`, `--hud-shadow`, `--text/text-muted` | แผ่นเล็กอยู่หลังข้อความบนภาพ; HUD เก็บ anchor เดิมจาก geometry.json; success มีข้อความบันทึกผล ไม่แต่งยอด |
+| 7 แผ่นข้อมูลทึบ | `.info-panel`, `.painted-surface`, `.receipt`; `--navy-900/950`, `--hud-shadow`, `--text/text-muted` | แผ่นเล็กอยู่หลังข้อความบนภาพ; HUD เก็บ anchor เดิมจาก geometry.json; success มีข้อความบันทึกผล ไม่แต่งยอด |
 | 8 ตัวอักษร | หัว20 Kanit600; ป้าย16; เนื้อหา14 Noto; รอง/ตาราง/HUD12; line-height1.45 (หัว1.2) | R1 ขั้นต่ำ12ทั้ง DOM; R2 Q4 เฉพาะป้ายตัวเลขล้วน11; ชื่อ/ข้อความกติกาไม่ลด |
 
 `components.html` แสดงทั้ง6สถานะ รวม disabled พร้อมเหตุผล, busy, receipt; ต้นแบบเป็น static gallery ไม่จำลองการจ่ายหรือเขียนเซฟ
@@ -455,14 +415,14 @@ Q4 ไม่มีป้าย HUD บนปรุงยา/review จึงห�
 - หน้าสร้างพร้อมทำจากภาพก่อนเป็นLv1 ส่วน review เป็นLv3ตาม audit แต่ละหน้าเป็นตัวอย่างอิสระ ไม่ใช่การจำลอง flow ที่เปลี่ยนยอดเอง
 - ถอนตัวมีสถานะก่อนยืนยัน/ยืนยันเดิมสองสถานะ ไม่เพิ่มขั้น; สรุปเดินทางและทีมล้มมีปุ่มกลับค่ายติดล่าง
 - เควสต์คงการ์ดและปุ่มรับในการ์ด; หน้าค่ายเป็นบริบทภาพเดิมและ nav เดิม6ตำแหน่ง ไม่ออกแบบฉาก/NPC ใหม่
-- HUD map/battle ใช้ภาพฉากจากเกมโดยเอาตัวอักษรออกก่อน แล้วซ้อนข้อความ DOM + hit target ที่ anchor เดิม; ไม่ใช้ PNG เหล่านี้เป็น UI runtime
+- HUD map/battle ซ่อน HUD เดิมทั้งชุดเพื่อจับเฉพาะฉาก/ตัวละคร แล้วสร้าง chip/queue/intent/name/HP/roster/commands ด้วย DOM/CSS จริง ไม่มีภาพ HUD ตกค้าง; ไม่ใช้ PNG เหล่านี้เป็น UI runtime
 - draft ไม่มีปิดตาม `world-ui.ts` (mandatory choice); แสดงโครง first pick จาก poolจริง lio/brann/sefa/toma ไม่แต่งราคา/HP/SPD
 - event/draft/ทีมล้มไม่มีภาพก่อนใน audit; ช่องbeforeระบุชัดว่าไม่มีภาพก่อน ใช้โครง/ข้อความจาก world-ui.ts/th.ts/summary-ui.ts
 - ภาพก่อนDPR2จับใหม่จากฐานที่ merge ครบ ไม่ใช่นำภาพDPR1มาขยาย
 
 ## การตรวจและขอบเขตผล
 
-`render.cjs` export ทุกหน้าและภาพbefore-after ป้ายชื่ออยู่นอกกรอบเกม; `verify.cjs` ตรวจเกณฑ์1–10จาก DOM/computed style แบบ topmost,
+`render.cjs` export PNG หนึ่งไฟล์ต่อหน้า/ขนาด; before-after และ R1/R2 เป็น HTML อ้างภาพชุดเดียว ป้ายชื่ออยู่นอกกรอบเกม; `verify.cjs` ตรวจเกณฑ์1–10จาก DOM/computed style แบบ topmost,
 พื้นที่แตะ/โฟกัสจริง, statesเลื่อนบน/กลาง/ล่างและแถบพับเปิด, literal CSS, style families, ภาพ/ฟอนต์โหลด และ preservation manifest
 contrast ใช้ภาพ Chromium ที่ซ่อนตัวอักษรแล้ว sample พื้นจริงใต้แต่ละบรรทัดผ่าน Pillow 3จุด/บรรทัด ไม่ใช่ประเมินด้วยตา
 ตรวจเฉพาะจุดตัวอย่างที่ระบุในverification.json; ผลไม่ครอบคลุมทุกpixelบนทุกฉากของเกมจริง
@@ -490,10 +450,10 @@ end='''
 ไม่ merge สาขา art ทั้งก้อนเข้าเกม; ย้าย DOM/CSS ตามจริง ไม่ใช้ PNG เป็นแผง
 งานนี้ไม่แก้ src/tests/public/.github หรือ docs เดิม; บันทึกส่งต่ออยู่ใน NOTES.md แทนเพราะขอบเขตเฉพาะincomingจากคำสั่งผู้ใช้มีลำดับเหนือกว่ากฎบันทึกทั่วไป
 '''
-(D/'SPEC_TH.md').write_text(intro+'\n'.join(rows)+'\n'+end)
+(D/'SPEC_TH.md').write_text(intro+'\n'.join(rows)+'\n'+end+'\n## รอบแก้ตาม review R2 ของ PR #171 (มีลำดับเหนือคำอธิบาย HUD รอบแรก)\n\n- ปิด/ย้อนกลับใช้SVGต้นฉบับ24px stroke `--icon-stroke`; ไอคอนในปุ่ม/summaryทุกจุด≥20px\n- HUDประกอบจาก `.native-hud` / `.painted-surface` จริง ฉากPNGไม่มีHUDติดมา; native queue/intent/field label/HP/roster/commands ใช้tokenร่วม ไม่ใช้กล่องปิดข้อความในภาพ\n- อ้าง `character-bounds.json` จากpixelของภาพก่อนและ `character-bounds.html` สำหรับตรวจ ไม่มีพื้นHUDชนกรอบตัวละครที่3ขนาดทั้งR1/R2\n- ป้ายชื่อศัตรู390pxใช้ellipsisบรรทัดเดียวตามพื้นที่ที่เหลือ ชื่อเต็มอยู่ในDOM/title; รายชื่อและความกว้างที่ถูกตัดอยู่ในNOTESและverification.json นี่เป็นข้อจำกัดของ12pxที่แสดงให้เลือกตามคำขอ ไม่อ้างว่าข้อความเต็มพอดี\n- ป้ายHPจัดพ้นเท้าตัวเอง/ตัวข้างเคียง; บางป้ายชื่อขยับภายในสนามเพื่อหลบรูป ไม่ย้ายตัวละครหรือกลุ่มHUDหลัก\n- `.npc-fold` คงภาพ/บทพูด/สถานะเปิดจากsourceเดิม แถบนำทางคงไอคอนและbadge5+3/4/6\n- `.brew-card` เป็นตัวแปรหนาแน่นของcardเดิม: ภาพ40, ปุ่มกับราคา72, ระยะ8; ยา4ใบพอดี390×844แม้เปิดNPC ทั้งR1/R2 ใบสุดท้ายจบที่y616.35 ก่อนnavR2ที่y772\n- `export/before-after/` และ `export/r1-r2/` เป็นHTMLใช้ภาพชุดเดียว ไม่มีPNGเปรียบเทียบซ้ำ; แพ็กเกจที่HEAD<100MB และDOMต้นฉบับ165ชุดยังอยู่ครบในgzipแบบlossless\n- verifyใหม่ตรวจขนาดไอคอน, การบังตัวละคร, no-wrap, font12/11จริงและpixel PNGต่างกันจริง, NPC/nav/ยา4ใบ และขนาดแพ็กเกจ; ไม่ใช้ผลpassเก่าหลังสคริปต์ล้ม\n')
 # Portable gallery, grouped by game surface and decision variant.
 groups=[]
 for group in ['B','C','D','E','F','G','H']:
  links=''.join(f'<li><a href="prototypes/{p["id"]}.html">{esc(p["title"])} · {p["variant"]}</a><small>{p["id"]}</small></li>' for p in pages if p['group']==group)
  groups.append(f'<section class="info-panel"><h2>กลุ่ม {group}</h2><ul class="stack">{links}</ul></section>')
-(D/'index.html').write_text('<!doctype html><html lang="th"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ART-UI-LANGUAGE-001 · Gallery</title><link rel="stylesheet" href="components.css"><body><main class="gallery"><header><h1>ภาษาภาพร่วม · Fateweave</h1><p>งานออกแบบอ้างอิง · R1/R2 สำหรับเจ้าของเลือก · ไม่มีการจ่ายหรือเปลี่ยนเซฟ</p><nav><a href="components.html">Component 8 ชิ้นและสถานะ</a><a href="export/r1-r2/c-brew-r2-all-390x844.png">เทียบ R1/R2 ปรุงยา</a><a href="export/r1-r2/e-craft-review-r2-all-390x844.png">เทียบ R1/R2 review</a><a href="SPEC_TH.md">สเปกภาษาไทย</a><a href="verification.json">ผลวัดเกณฑ์ 1–10</a></nav></header><div class="gallery-grid">'+''.join(groups)+'</div></main></body></html>')
+(D/'index.html').write_text('<!doctype html><html lang="th"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ART-UI-LANGUAGE-001 · Gallery</title><link rel="stylesheet" href="components.css"><body><main class="gallery"><header><h1>ภาษาภาพร่วม · Fateweave</h1><p>งานออกแบบอ้างอิง · R1/R2 สำหรับเจ้าของเลือก · ไม่มีการจ่ายหรือเปลี่ยนเซฟ</p><nav><a href="components.html">Component 8 ชิ้นและสถานะ</a><a href="export/r1-r2/c-brew-r2-all-390x844.html">เทียบ R1/R2 ปรุงยา</a><a href="export/r1-r2/e-craft-review-r2-all-390x844.html">เทียบ R1/R2 review</a><a href="SPEC_TH.md">สเปกภาษาไทย</a><a href="verification.json">ผลวัดเกณฑ์ 1–10</a></nav></header><div class="gallery-grid">'+''.join(groups)+'</div></main></body></html>')

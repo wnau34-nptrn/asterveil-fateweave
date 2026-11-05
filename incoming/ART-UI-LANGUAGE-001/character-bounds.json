@@ -1,0 +1,260 @@
+{
+  "390x844": {
+    "battle": [
+      {
+        "id": "guardian",
+        "x": 95.0,
+        "y": 172.5,
+        "w": 103.5,
+        "h": 110.0,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x844/50-battle.png"
+      },
+      {
+        "id": "tracer",
+        "x": 93.5,
+        "y": 339.0,
+        "w": 102.5,
+        "h": 110.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x844/50-battle.png"
+      },
+      {
+        "id": "weaver",
+        "x": 6.0,
+        "y": 169.0,
+        "w": 96.0,
+        "h": 113.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x844/50-battle.png"
+      },
+      {
+        "id": "healer",
+        "x": 8.0,
+        "y": 503.0,
+        "w": 102.0,
+        "h": 113.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x844/50-battle.png"
+      },
+      {
+        "id": "kael",
+        "x": 103.0,
+        "y": 512.0,
+        "w": 86.5,
+        "h": 104.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x844/50-battle.png"
+      },
+      {
+        "id": "f2",
+        "x": 187.0,
+        "y": 545.5,
+        "w": 98.0,
+        "h": 71.0,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x844/50-battle.png"
+      },
+      {
+        "id": "b3",
+        "x": 303.0,
+        "y": 365.0,
+        "w": 78.5,
+        "h": 84.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x844/50-battle.png"
+      },
+      {
+        "id": "f1",
+        "x": 169.0,
+        "y": 290.0,
+        "w": 149.5,
+        "h": 164.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x844/50-battle.png"
+      }
+    ],
+    "map": [
+      {
+        "id": "party-token",
+        "x": 156,
+        "y": 388.239990234375,
+        "w": 78,
+        "h": 78,
+        "method": "visible party-token bounding box in reference image"
+      }
+    ]
+  },
+  "390x650": {
+    "battle": [
+      {
+        "id": "guardian",
+        "x": 105.5,
+        "y": 153.5,
+        "w": 82.0,
+        "h": 86.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x650/50-battle.png"
+      },
+      {
+        "id": "tracer",
+        "x": 104.5,
+        "y": 244.0,
+        "w": 81.5,
+        "h": 87.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x650/50-battle.png"
+      },
+      {
+        "id": "weaver",
+        "x": 10.0,
+        "y": 151.0,
+        "w": 81.0,
+        "h": 89.0,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x650/50-battle.png"
+      },
+      {
+        "id": "healer",
+        "x": 17.0,
+        "y": 332.0,
+        "w": 80.5,
+        "h": 89.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x650/50-battle.png"
+      },
+      {
+        "id": "kael",
+        "x": 112.0,
+        "y": 339.0,
+        "w": 68.5,
+        "h": 82.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x650/50-battle.png"
+      },
+      {
+        "id": "f2",
+        "x": 199.0,
+        "y": 365.5,
+        "w": 77.5,
+        "h": 56.0,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x650/50-battle.png"
+      },
+      {
+        "id": "b3",
+        "x": 308.0,
+        "y": 264.5,
+        "w": 65.0,
+        "h": 66.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x650/50-battle.png"
+      },
+      {
+        "id": "f1",
+        "x": 185.0,
+        "y": 205.5,
+        "w": 117.5,
+        "h": 129.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/390x650/50-battle.png"
+      }
+    ],
+    "map": [
+      {
+        "id": "party-token",
+        "x": 156,
+        "y": 283.239990234375,
+        "w": 78,
+        "h": 78,
+        "method": "visible party-token bounding box in reference image"
+      }
+    ]
+  },
+  "320x568": {
+    "battle": [
+      {
+        "id": "guardian",
+        "x": 87.5,
+        "y": 164.0,
+        "w": 43.5,
+        "h": 45.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/320x568/50-battle.png"
+      },
+      {
+        "id": "tracer",
+        "x": 87.0,
+        "y": 249.5,
+        "w": 43.0,
+        "h": 47.0,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/320x568/50-battle.png"
+      },
+      {
+        "id": "weaver",
+        "x": 11.5,
+        "y": 146.5,
+        "w": 64.5,
+        "h": 70.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/320x568/50-battle.png"
+      },
+      {
+        "id": "healer",
+        "x": 17.0,
+        "y": 274.0,
+        "w": 64.0,
+        "h": 70.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/320x568/50-battle.png"
+      },
+      {
+        "id": "kael",
+        "x": 91.0,
+        "y": 338.0,
+        "w": 36.5,
+        "h": 42.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/320x568/50-battle.png"
+      },
+      {
+        "id": "f2",
+        "x": 161.0,
+        "y": 303.5,
+        "w": 61.5,
+        "h": 44.0,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/320x568/50-battle.png"
+      },
+      {
+        "id": "b3",
+        "x": 246.0,
+        "y": 260.5,
+        "w": 34.0,
+        "h": 34.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/320x568/50-battle.png"
+      },
+      {
+        "id": "f1",
+        "x": 165.5,
+        "y": 152.5,
+        "w": 62.5,
+        "h": 67.5,
+        "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+        "reference": "before/320x568/50-battle.png"
+      }
+    ],
+    "map": [
+      {
+        "id": "party-token",
+        "x": 128.65625,
+        "y": 250.407470703125,
+        "w": 63.6875,
+        "h": 63.6875,
+        "method": "visible party-token bounding box in reference image"
+      }
+    ]
+  }
+}

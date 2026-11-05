@@ -1,29 +1,36 @@
-# ART-UI-LANGUAGE-001
+# ART-UI-LANGUAGE-001 · review revision R2
 
-Design references only. Start with [index.html](index.html), [SPEC_TH.md](SPEC_TH.md), and [NOTES.md](NOTES.md).
+Design-only. Start with [index.html](index.html), [SPEC_TH.md](SPEC_TH.md), and [NOTES.md](NOTES.md). PR #171 stays open and unmerged.
 
-- R1: complete C–H references, all three CSS sizes, DPR 2.
-- R2: brew and weapon review, combined and isolated Q1–Q4, 390×844 / 320×568. Q4 HUD examples are also supplied.
-- [components.html](components.html): all eight primitives and six states.
-- `before/`: freshly captured base evidence and source DOM, not resized old screenshots.
-- `export/`: after PNGs, `r1-r2/` decision pairs, and `before-after/` pairs with labels outside the game frame.
-- `verification.json`: measurements, **not owner approval**.
+The revised map/battle HUD is live DOM/CSS over a **HUD-free scene plate**. Close/back use the original 24px line SVGs. Camp navigation retains icons/count badges. NPC portrait/dialogue disclosures are restored. All four potion cards fit at 390×844, including expanded NPC dialogue.
 
-From the repository root (Node 24, locked npm dependencies, Chromium, Pillow and beautifulsoup4):
+There is one PNG set: `export/` contains after images; `before/` contains the unique before references and six scene plates. Before/after and R1/R2 comparisons are **portable HTML** which reuses those PNGs. There are no duplicate raster comparison boards or duplicate component sheets. Full source DOM evidence is losslessly gzipped.
+
+From the repository root (Node 24, locked npm dependencies, Chromium, Pillow, beautifulsoup4):
 
 ```sh
+# Optional full before refresh; the copied audit fixes the original Tomes selector.
 UI_AUDIT=incoming/ART-UI-LANGUAGE-001/before npx playwright test --config incoming/ART-UI-LANGUAGE-001/audit.config.cjs --reporter=dot
+# Capture clean scenery and temporary per-actor hidden-body frames for real pixel bounds.
 CAPTURE_HUD=1 UI_AUDIT=incoming/ART-UI-LANGUAGE-001/before npx playwright test --config incoming/ART-UI-LANGUAGE-001/audit.config.cjs --reporter=dot
+python incoming/ART-UI-LANGUAGE-001/measure_character_bounds.py
 python incoming/ART-UI-LANGUAGE-001/build_handoff.py
 node incoming/ART-UI-LANGUAGE-001/render.cjs
+python incoming/ART-UI-LANGUAGE-001/compact_package.py
 node incoming/ART-UI-LANGUAGE-001/verify.cjs
 python incoming/ART-UI-LANGUAGE-001/package_manifest.py
 ```
 
-`PLAYWRIGHT_CHROMIUM_EXECUTABLE` overrides `/usr/bin/chromium`. Both capture and export use DPR 2. `runtime.cjs` serves local files and maps `/assets/` to the existing `public/assets/`; it does not modify the game.
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE` overrides `/usr/bin/chromium`. The capture uses temporary presentation instrumentation (visibility only, no game-state changes) inside the browser; no game source file changes. `character-bounds.html` shows the before images with the measured bounds.
 
-The copy of the audit fixes the Tomes selector to `data-section="tomes"`; `capture-tomes.spec.ts` is the focused recapture used to correct that surface. No original test file was changed.
+The verifier checks the original ten criteria plus icon size ≥20px, opaque HUD/body intersections, no HUD text wrapping, actual 12px/11px numeral fonts and nonzero PNG differences, NPC/nav preservation, four visible potion cards, no duplicate comparison PNGs, and package size <100 MB. Explicit single-line enemy-name ellipses are documented in NOTES and verification records. No device or visual approval is inferred.
 
-After normal git push, fetch the art ref explicitly and run `verify_remote.py` against that fetched ref. The manifest excludes its own hash and `SHA256SUMS` to avoid a circular hash claim; `SHA256SUMS` covers `validation.json`, and remote verification compares both files byte-for-byte as well as checking every payload hash and decoding every PNG.
+After normal git push, fetch the art ref and run:
 
-Do not merge this art branch or ship screenshots as UI panels. Owner Q1–Q4 choices precede separate DOM/CSS integration PRs.
+```sh
+python incoming/ART-UI-LANGUAGE-001/verify_remote.py origin/art/art-ui-language-001
+```
+
+The manifest does not claim a circular self-hash: `SHA256SUMS` covers the payload plus `validation.json`; remote verification compares both manifest files byte-for-byte, checks the exact file set and every hash, and fully decodes every PNG with Pillow.
+
+Do not merge this art branch or ship screenshot panels. Owner Q1–Q4 choices precede separate DOM/CSS integration PRs.

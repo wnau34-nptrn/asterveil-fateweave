@@ -1,0 +1,189 @@
+{
+  "regions": {
+    ".masthead": {
+      "x": 0,
+      "y": 0,
+      "w": 320,
+      "h": 44
+    },
+    "#turn-phase": {
+      "x": 6,
+      "y": 48,
+      "w": 308,
+      "h": 70
+    },
+    "#turn-order": {
+      "x": 13,
+      "y": 68,
+      "w": 294,
+      "h": 50
+    },
+    "#intent": {
+      "x": 14,
+      "y": 385,
+      "w": 292,
+      "h": 38
+    },
+    "#party": {
+      "x": 10,
+      "y": 431,
+      "w": 300,
+      "h": 60
+    },
+    "#commands": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    ".arena": {
+      "x": 6,
+      "y": 122,
+      "w": 308,
+      "h": 259
+    },
+    ".hud-location": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "#danger-chip": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "#world-party": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    ".hud-tools": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    ".hud-movement": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    ".hud-action": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "#world-message": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    }
+  },
+  "characters": [
+    {
+      "id": "guardian",
+      "x": 87.5,
+      "y": 164.0,
+      "w": 43.5,
+      "h": 45.5,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/320x568/50-battle.png"
+    },
+    {
+      "id": "tracer",
+      "x": 87.0,
+      "y": 249.5,
+      "w": 43.0,
+      "h": 47.0,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/320x568/50-battle.png"
+    },
+    {
+      "id": "weaver",
+      "x": 11.5,
+      "y": 146.5,
+      "w": 64.5,
+      "h": 70.5,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/320x568/50-battle.png"
+    },
+    {
+      "id": "healer",
+      "x": 17.0,
+      "y": 274.0,
+      "w": 64.0,
+      "h": 70.5,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/320x568/50-battle.png"
+    },
+    {
+      "id": "kael",
+      "x": 91.0,
+      "y": 338.0,
+      "w": 36.5,
+      "h": 42.5,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/320x568/50-battle.png"
+    },
+    {
+      "id": "f2",
+      "x": 161.0,
+      "y": 303.5,
+      "w": 61.5,
+      "h": 44.0,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/320x568/50-battle.png"
+    },
+    {
+      "id": "b3",
+      "x": 246.0,
+      "y": 260.5,
+      "w": 34.0,
+      "h": 34.5,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/320x568/50-battle.png"
+    },
+    {
+      "id": "f1",
+      "x": 165.5,
+      "y": 152.5,
+      "w": 62.5,
+      "h": 67.5,
+      "method": "reference-image pixel difference >12 RGB, DPR2; includes visible body/shadow",
+      "reference": "before/320x568/50-battle.png"
+    }
+  ],
+  "enemyLabels": [],
+  "enemyHealth": [
+    {
+      "id": "f2",
+      "hp": "98/98",
+      "x": 160,
+      "y": 348,
+      "w": 73.90625,
+      "h": 32
+    },
+    {
+      "id": "b3",
+      "hp": "59/59",
+      "x": 287.078125,
+      "y": 266.328125,
+      "w": 26,
+      "h": 26
+    },
+    {
+      "id": "f1",
+      "hp": "350/350",
+      "x": 160,
+      "y": 220.5,
+      "w": 73.90625,
+      "h": 32
+    }
+  ]
+}

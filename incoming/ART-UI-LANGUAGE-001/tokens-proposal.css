@@ -4,6 +4,9 @@
 @font-face{font-family:'Noto Sans Thai';font-weight:400;src:url('../../public/assets/fonts/noto-sans-thai-400.woff2')}
 @font-face{font-family:'Noto Sans Thai';font-weight:700;src:url('../../public/assets/fonts/noto-sans-thai-700.woff2')}
 :root{
+ --ui-nav-button:56px;--ui-npc-atlas:300% 300%;--ui-brew-art:40px;--ui-brew-action:72px;
+ --ui-queue-row:44px;--ui-negative-half:-50%;--ui-intent-power:48px;--ui-talent-top:-18px;
+ --ui-open-angle:180deg;
  --ui-max:480px;--ui-height:100dvh;--ui-head:96px;--ui-title:20px;--ui-button:48px;
  --ui-back-title:68px;--ui-title-end:68px;--ui-close-inset:12px;--ui-title-top:16px;
  --ui-dock:80px;--ui-nav:72px;--ui-art:56px;--ui-hero:176px;--ui-line:2px;

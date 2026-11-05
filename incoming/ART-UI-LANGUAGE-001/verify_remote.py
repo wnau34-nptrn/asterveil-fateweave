@@ -6,7 +6,7 @@ Reads git objects (not GitHub API); fully decodes each PNG with Pillow.
 from pathlib import Path
 from PIL import Image
 from io import BytesIO
-import subprocess,sys,json,hashlib
+import subprocess,sys,json,hashlib,gzip
 D=Path(__file__).resolve().parent;R=D.parent.parent
 ref=sys.argv[1] if len(sys.argv)>1 else 'origin/art/art-ui-language-001'
 prefix='incoming/ART-UI-LANGUAGE-001/'
@@ -17,6 +17,8 @@ assert blob('SHA256SUMS')==(D/'SHA256SUMS').read_bytes(),'Remote hash list diffe
 expected={e['path']:e for e in local['files']};png=0
 for p,e in expected.items():
  data=blob(p);assert len(data)==e['bytes'],f'{p}: byte length';assert hashlib.sha256(data).hexdigest()==e['sha256'],f'{p}: SHA-256'
+ if e.get('encoding')=='gzip':
+  decoded=gzip.decompress(data);assert len(decoded)==e['decodedBytes'] and hashlib.sha256(decoded).hexdigest()==e['decodedSha256'],f'{p}: decoded gzip integrity'
  if p.endswith('.png'):
   with Image.open(BytesIO(data)) as im:im.load();assert im.size==(e['width'],e['height']),f'{p}: size'
   png+=1
