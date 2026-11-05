@@ -2,6 +2,12 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-05 — ART-UI-LANGUAGE-001 closed; new UI frame scope (Claude)
+- Codex PR #171 (2 รอบ): SHA/ขอบเขต/verify ผ่าน แต่ภาพก่อน/หลังพบว่าต้นแบบรื้อเนื้อหาหน้า (ไอคอนสกิลวาด→ไอคอนเส้น, ตารางจัดทีมหาย, การ์ดรางวัล/ชิปสรุปหาย, ชื่อศัตรูถูกตัด) → ปิดไม่ merge (เจ้าของ "ดำเนินการได้")
+- ขอบเขตใหม่ที่เจ้าของอนุมัติ: Claude ทำในเกมเองทีละกลุ่ม เฉพาะหัวหน้าต่าง/ปุ่ม/12px ในแผ่นบริการ+ตัวละคร/token ไม่แตะ HUD ต่อสู้-แผนที่; รายละเอียดหัว `docs/handoffs/ART-UI-LANGUAGE-001.md`
+- บทเรียน: verify ผ่านไม่ใช่ภาพผ่าน; งาน UI DOM/CSS ให้ Claude ทำ, Codex ทำภาพวาด
+- Tests: เอกสารเท่านั้น (`git diff --check`, agent-context)
+
 ## 2026-11-05 — UI language audit + Codex brief ART-UI-LANGUAGE-001 (Claude, branch claude/ui-language-audit)
 - เจ้าของสั่งให้ภาษาภาพ UI ทั้งเกมเป็นแนวเดียว: Claude ตรวจ 55 ผิวหน้า × 3 ขนาด (390×844/650, 320×568) บนฐาน c5e57ce + PR #166/#167/#168 (merge ในเครื่องเท่านั้น) ไม่แก้ src/
 - พบ: หัวหน้าต่าง 9 แบบ ปุ่มปิด 5 ตำแหน่ง/2 รูปทรง ย้อนกลับ 3 แบบ ปุ่มหลัก 13 แบบ ปุ่มรอง 16 แบบ; CSS font-size 638 จุดใช้ token 1, radius 310/21; ข้อความ < 12px ในตัวละคร/HUD แผนที่/ต่อสู้ (7–11px); แผ่นบริการทับแถบนำทางไม่เท่ากัน; กรอบทองเฉพาะช่าง
