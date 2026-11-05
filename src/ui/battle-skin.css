@@ -67,3 +67,17 @@
 #battle-view .field-unit-info.grid.ally .field-health { margin-top: 2px; }
 #battle-view .field-unit-info.grid .field-statuses { gap: 1px; }
 .field-unit-label { position: absolute; display: flex; align-items: flex-end; justify-content: center; pointer-events: none; font-size: 9px; line-height: 11px; color: #f0f5ff; text-shadow: 0 1px 2px #07101f, 1px 0 2px #07101f; }
+/* Incoming damage kind (owner request 2026-11-05): physical = amber blade, energy/เวท = violet bolt. Shape + word, not colour alone. */
+.dmg-kind, .dmg-pill { --kind: #f0b060; --kind-bg: #3a2810; }
+.dmg-kind[data-kind="energy"], .dmg-pill[data-kind="energy"], .intent-icon[data-kind="energy"] { --kind: #c6a8ff; --kind-bg: #2a1d4a; }
+.intent-icon[data-kind="physical"] { --kind: #f0b060; --kind-bg: #3a2810; }
+.intent-icon[data-kind] { color: var(--kind); width: 40px; height: 40px; flex: 0 0 40px; display: grid; place-items: center; border-radius: 50%; border: 1.5px solid var(--kind); background: var(--kind-bg); }
+.intent-icon[data-kind] svg { width: 24px; height: 24px; }
+#intent[data-kind="energy"] { border-left-color: #c6a8ff; }
+#intent[data-kind="physical"] { border-left-color: #f0b060; }
+.dmg-pill { display: inline-flex; align-items: center; gap: 3px; padding: 1px 8px 1px 5px; border-radius: 99px; border: 1px solid var(--kind); background: var(--kind-bg); color: var(--kind); font-size: 12px; font-weight: 600; line-height: 1.5; vertical-align: middle; }
+.dmg-pill svg { width: 14px; height: 14px; }
+/* Queue: a corner glyph on each foe's portrait. */
+.turn-icon { position: relative; }
+.turn-icon .dmg-kind { position: absolute; right: -4px; bottom: -4px; width: 14px; height: 14px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--kind); background: var(--kind-bg); color: var(--kind); pointer-events: none; }
+.turn-icon .dmg-kind svg { width: 9px; height: 9px; }

@@ -2,6 +2,10 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-05 — Damage-kind badge on enemy intents (Claude, branch feat/damage-type-badge)
+- เจ้าของขอสัญลักษณ์/ป้ายเตือนกายภาพ vs เวท: การ์ดเจตนา (ไอคอนสี+ขอบ+ป้ายคำ) และมุมรูปศัตรูในคิวเทิร์น; ป้ายที่การ์ดฮีโร่ที่ถูกเล็งเจ้าของสั่งตัด; "เวท" แทน "พลังงาน" ในคำแสดงผลของเจตนา; ไม่เปลี่ยนกฎ/เซฟ/ตัวเลข
+- Tests: typecheck/lint/unit ผ่าน; Playwright combat/team-five/battle-shots 54 ผ่าน; หลักฐาน [`damage-kind`](../validation/damage-kind/README_TH.md)
+
 ## 2026-11-05 — Painted skill tomes in game (Claude, branch art/tome-icons)
 - ภาพตำรา 9 แบบจาก ART-UI-PROGRESS-001 (เจ้าของสั่งนำเข้า) → atlas 3×3 lossless 152 KB; ใช้ที่ชิปค่าใช้จ่ายเพิ่ม Lv สกิลและรายการตำราของค่าย; ไม่เปลี่ยนกฎ/เซฟ/ตัวเลข; ของอื่นในแพ็กเกจยังไม่ผูก
 - รอบ 2: แก่นรอยแยก (ชิปค่าใช้จ่าย + สรุปเดินทาง) และช่องดาวในหน้าอัปดาว; เศษดาว/เหรียญเกียรติยศ/ไข่-อาหารสัตว์/แถบช่องดาวยังไม่ผูก (ไม่มีฟีเจอร์รองรับ — เหตุผลใน README)
