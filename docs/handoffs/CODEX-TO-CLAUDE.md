@@ -2,6 +2,14 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-05 — UI language audit + Codex brief ART-UI-LANGUAGE-001 (Claude, branch claude/ui-language-audit)
+- เจ้าของสั่งให้ภาษาภาพ UI ทั้งเกมเป็นแนวเดียว: Claude ตรวจ 55 ผิวหน้า × 3 ขนาด (390×844/650, 320×568) บนฐาน c5e57ce + PR #166/#167/#168 (merge ในเครื่องเท่านั้น) ไม่แก้ src/
+- พบ: หัวหน้าต่าง 9 แบบ ปุ่มปิด 5 ตำแหน่ง/2 รูปทรง ย้อนกลับ 3 แบบ ปุ่มหลัก 13 แบบ ปุ่มรอง 16 แบบ; CSS font-size 638 จุดใช้ token 1, radius 310/21; ข้อความ < 12px ในตัวละคร/HUD แผนที่/ต่อสู้ (7–11px); แผ่นบริการทับแถบนำทางไม่เท่ากัน; กรอบทองเฉพาะช่าง
+- หลักฐาน `docs/validation/ui-language-audit-2026-11-05/README_TH.md` (43 ภาพ + sheets + surfaces.json); สคริปต์ `tests/browser/ui-language-audit.spec.ts` (ข้ามใน CI, ตั้ง UI_AUDIT) + `scripts/ui-language-audit.py`
+- Brief `docs/handoffs/ART-UI-LANGUAGE-001.md`: สเปก component 8 ชิ้น + ต้นแบบกลุ่ม C–H, เกณฑ์วัดได้ 10 ข้อ, คำถามเจ้าของ Q1–Q4 (Claude แนะนำ R1; เจ้าของยังไม่เลือก) ไม่ต้องมีภาพ/ไอคอนใหม่
+- Tests: typecheck, eslint ไฟล์ spec, รัน audit spec 3/3 (Chromium headless เท่านั้น ไม่ใช่เครื่องจริง); git diff --check
+- เปิด: Codex เริ่มหลัง #166–#168 merge; หน้า event/draft/แพ้ ยังไม่มีภาพก่อน
+
 ## 2026-11-05 — A12 intake: Kael/Wynne/Astrid battle bodies (Claude, branch claude/a12-intake)
 - นำเข้า 22 strips จาก PR #157 (21 ที่รับ + astrid-deflect R2) เป็น atlas `kael_a12`/`wynne_a12`/`astrid_a12` (lossless ×.42, ในงบ); registry clips ใน `unit-frames.ts`; `STILL_ONLY` ว่าง; coverage regenerate. ไม่แตะ rules/save/balance.
 - Claude ตัดสินรับภาพตาม delegation 2026-11-04 (ไม่ใช่ owner approval); R2 deflect ผ่านตาภาพ review.

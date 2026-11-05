@@ -1,4 +1,4 @@
-# Current state — updated 2026-11-04 (late)
+# Current state — updated 2026-11-05
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
@@ -6,24 +6,19 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages URL https://wnau34-nptrn.github.io/asterveil-fateweave/ through `pages.yml`; pre-release pushes deploy after lint/unit/build, with the full browser gate on PRs. Restore the Pages browser gate before OD-13 external tests.
 - **Save v47** (P03: board featured lineup); 1–5 units a side (P02), shared camp Lv/EXP (P01), reserve by chapter 3→4→5, fatigue, carry ≤10. W1–W8/P01/P02, UXD-01…07 and the HUD team → character entry (PR #146) are published.
-- 2026-11-04 Claude batch (all merged after quality + four browser shards):
-  - PR #147/#149 storage ceilings: `core/world/caps.ts` holds the save limits (`BANK_CAP`, `TOME_CAP`, `RIFT_CORE_CAP`, `POTION_CAP`, `RUN_CAP`); player choices refuse `'full'`, settle/dismiss/run gains fill to the cap (`docs/validation/storage-caps/README_TH.md`).
-  - PR #148 (save v46, owner decision on logic audit 4–5): Heal may target a full-HP ally when Afterglow/mender overflow still adds barrier; Revive levels add HP (`revivePoints` 5: 25→45%), no user barrier (`docs/design/LOGIC_AUDIT_2026-10-24_TH.md`).
-  - PR #152 forest boss: `elite-briar-lord` v10, Thorn Tempest sealable 28 (was unstoppable 13); plain-attack wins 50–71% → 33–64% (`docs/validation/forest-boss-tempest/README_TH.md`).
-  - PR #153 painted calm potion (Codex PR #151 R1) + square potion art in the brew list; PR #154 cleared figure pieces crossing cells of `units.webp` (Eira's orb in Seren's art).
-  - Art merged to `incoming/`: Kael proportion fix NEW-003 (PR #150), calm potion package (PR #151).
+- 2026-11-04 batch (merged): storage ceilings `core/world/caps.ts` (#147/#149), save v46 Heal/Revive (#148), forest boss Thorn Tempest sealable (#152), calm potion art (#153), `units.webp` bleed fix (#154); details in the handoff log.
 - Owner 2026-11-04: “เรื่องภาพหรืออะไรให้คุณตัดสินใจได้เลย” — Claude may decide art picks; record each such pick as Claude's decision under that delegation, not as owner approval.
 
 - P03 (2026-11-04 late, PR #155/#156/#158): Kael (Martial chi), Wynne (Hexer curses/toll), Astrid (Seer deflect/cycle) — 15 classes × 1 character; featured board slot only; battle bodies from A12 intake; evidence `docs/validation/roster-30/p03/README_TH.md`.
 
 ## Active task
 
-- None. Next: A12 battle animation intake for Kael/Wynne/Astrid (PR #157: 21 strips accepted by Claude 2026-11-05, Astrid deflect R2 requested), then P09 (OD-13 order).
+- None in Claude. **ART-UI-LANGUAGE-001** (owner 2026-11-05: one visual language for the whole UI) is with Codex: Claude audited 55 surfaces × 3 sizes (`docs/validation/ui-language-audit-2026-11-05/README_TH.md`; 9 header styles, 13 primary-button styles, 638 font sizes with 1 token) and wrote the brief `docs/handoffs/ART-UI-LANGUAGE-001.md` (owner questions Q1–Q4, R1 recommended by Claude). Codex must branch after PRs #166/#167/#168 merge (still open 2026-11-05).
 
 ## Next (owner order)
 
-- **A12 intake** (owner 2026-11-05 “ทำตามที่คุณแนะนำ”): pack the 21 accepted strips from `incoming/ART-UNIT-ANIMATION-A12-001/` (PR #157, do not merge the art branch wholesale) into unit atlases, wire `unit-frames.ts`, drop them from `STILL_ONLY`; Astrid deflect/crossing stay still + procedural until R2 (brief at the end of `docs/handoffs/CODEX-A12-NEW-CLASSES-TH.md`). Capture 390px clips.
-- **P09** (OD-13): accounts/cloud save/telemetry+feedback/admin (needs the owner's Cloudflare D1 Edit token before database work) → P04 → server rewards → chat + World Boss → external test. UXD-08 combined UX check remains open.
+- When Codex opens the ART-UI-LANGUAGE-001 PR: verify SHA-256/decode, check `verification.json` against criteria 1–10, show the owner R1/R2 at 390px, record the owner's own Q1–Q4 picks, then import DOM/CSS one page group per PR (tokens + header/buttons → service sheets → forge → character → map/summary/battle dialogs), re-running `tests/browser/ui-language-audit.spec.ts` before/after. No rule/save/number changes.
+- Owner 2026-11-05: polish before P09; P09 (OD-13: accounts/cloud save/telemetry+feedback/admin, needs the D1 Edit token) waits for the owner's start. UXD-08 combined UX check remains open.
 
 ## Open items
 
@@ -39,8 +34,9 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ## Opening prompt for next chat
 
 ```text
-ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype
+ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype ตอบไทย
 อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง
-งาน: นำเข้าอนิเมชันศึก A12 ของเคล/วินน์/แอสทริด จาก PR #157 (incoming/ART-UNIT-ANIMATION-A12-001) 21 strips ที่ Claude รับแล้ว ใช้ skill fateweave-art-intake
-ท่า astrid-deflect รอ R2 (คงภาพนิ่ง+procedural) ห้าม merge สาขาอาร์ตทั้งก้อน เก็บคลิปจริง 390px ตอบไทย เรื่องภาพตัดสินแทนเจ้าของได้ตามที่มอบหมาย 2026-11-04 แล้วต่อ P09
+งาน: ตรวจรับแพ็กเกจ Codex ART-UI-LANGUAGE-001 (PR จาก art/art-ui-language-001, ห้าม merge สาขาอาร์ตทั้งก้อน) ตาม docs/handoffs/ART-UI-LANGUAGE-001.md:
+ตรวจ SHA-256/decode, verification.json เทียบเกณฑ์ 1–10, ดูภาพก่อน/หลัง แล้วส่งภาพ R1/R2 390px ให้เจ้าของเลือก Q1–Q4 (บันทึกคำเจ้าของเอง)
+จากนั้นนำเข้า DOM/CSS ทีละกลุ่มหน้า PR ละกลุ่ม รัน tests/browser/ui-language-audit.spec.ts ก่อน/หลัง ไม่เปลี่ยนกฎ/เซฟ/ตัวเลข
 ```
