@@ -37,7 +37,10 @@ export function fitViewport(root: HTMLElement = document.documentElement): void 
     const el = document.createElement('div'); el.setAttribute('aria-hidden', 'true');
     el.style.cssText = `position:fixed;left:0;top:0;width:0;height:${u};visibility:hidden;pointer-events:none`; document.body.append(el); return [u, el] as const;
   });
+  const TOP_STEPS = [36, 0, 24, 48] as const;
+  let topStep = 0;
   const debug = document.body.appendChild(document.createElement('pre'));
+  debug.addEventListener('pointerdown', () => { topStep = (topStep + 1) % TOP_STEPS.length; apply(); });
   debug.hidden = !new URLSearchParams(location.search).has('vp');
   let taps: number[] = [];
   document.addEventListener('pointerdown', e => {
@@ -46,6 +49,7 @@ export function fitViewport(root: HTMLElement = document.documentElement): void 
     if (taps.length >= 5) { taps = []; debug.hidden = !debug.hidden; apply(); }
   }, true);
   if (debug) debug.style.cssText = 'position:fixed;z-index:9999;left:50%;top:40%;transform:translateX(-50%);margin:0;padding:8px 10px;font:12px/1.35 monospace;color:#fff;background:#000c;border-radius:8px;pointer-events:none';
+  debug.style.pointerEvents = 'auto';
 
   const apply = (): void => {
     const height = window.innerHeight;
@@ -77,7 +81,11 @@ export function fitViewport(root: HTMLElement = document.documentElement): void 
     const standalone = matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
     root.dataset.standalone = String(standalone);
     const underStatusBar = !standalone && ios() && portrait && envTop === 0 && screen.height >= 812 && height >= screen.height - 1;
-    root.style.setProperty('--safe-top-fallback', underStatusBar ? '50px' : '0px');
+    // Home-screen web app (iOS 26): the system draws a blur band over the top ~100pt of the screen (status bar + title-bar
+    // height), softening any HUD text inside it. The page starts below the 59pt status bar with env top 0, so the extra
+    // top space below it is reserved through the same fallback every screen already honours. Tap the overlay to try
+    // other values on the device (the choice is kept for the session only).
+    root.style.setProperty('--safe-top-fallback', standalone ? `${TOP_STEPS[topStep]}px` : underStatusBar ? '50px' : '0px');
     if (window.scrollX || window.scrollY) window.scrollTo(0, 0);
     if (debug && !debug.hidden) {
       const vv = window.visualViewport;
@@ -88,6 +96,7 @@ export function fitViewport(root: HTMLElement = document.documentElement): void 
         `standalone ${matchMedia('(display-mode: standalone)').matches} nav ${(navigator as Navigator & { standalone?: boolean }).standalone ?? '-'}`,
         `data-standalone ${root.dataset.standalone ?? '-'} env bottom ${bottomProbe.offsetHeight}`,
         `app y ${Math.round(app.getBoundingClientRect().top)} h ${Math.round(app.getBoundingClientRect().height)}`,
+        `top-extra ${TOP_STEPS[topStep]} (tap box to cycle ${TOP_STEPS.join('/')})`,
         `units ${unitProbes.map(([u, el]) => `${u.slice(3)} ${el.offsetHeight}`).join(' · ')}`,
       ].join('\n');
     }

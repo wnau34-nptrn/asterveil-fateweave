@@ -2,6 +2,11 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-06 — iPhone web app: HUD text in the top ~100pt is blurred by iOS (Claude, branch fix/battle-header-layer)
+- วัดภาพจริง: หัวแถวบน (≈70–95pt) นุ่ม แต่ตัวหนังสือที่ ≥108pt คม; ไม่มี filter/mask/overlay ใน DOM; สไตล์ที่แก้ใน #186 ไม่เปลี่ยนความคมเลย (วินิจฉัยรอบนั้นผิด); ตำแหน่งบนจอเท่ากันทั้งโหมดโปร่ง/ปกติ → สมมติฐาน: เอฟเฟกต์แถบบนของ iOS 26 ทับโซนบนสุดของเว็บแอป
+- แก้ (เฉพาะ standalone): `--safe-top-fallback` = 36px ทุกหน้าจอได้ที่ว่างบนเพิ่ม; แตะกล่องตัวเลข (เปิดด้วยแตะมุมซ้ายบน 5 ครั้ง) เพื่อวนค่า 36/0/24/48 บนเครื่อง
+- ยังไม่ยืนยันบนเครื่องจริง: ถ้าหัวแถวคมขึ้นที่ค่าไหน ให้ตั้งเป็นค่าเริ่มต้น และตรวจแผนที่/ค่าย/แผ่นบริการว่าหัวไม่ซ้อนโซนนี้
+
 ## 2026-11-06 — Skill rework step 3: Garran (Claude, PR #185 feature/skill-rework-garran)
 - เจ้าของ "ดำเนินการตามที่คุณแนะนำได้เลย" = การ์ด Garran ในหน้า artifact "ตรวจสกิล Fateweave" (ตามโน้ตเจ้าของ) + เจ้าของเลือก brace = แทงเป้าทันที 8 แล้วตั้งทวนสวน 14 เหมือนเดิม (แทนปะทะท่า)
 - กฎ: pierce ทะลุตัวหลังเป้า 50% (b2l เต็ม) · spearwall สวน 10 + ลดดาเมจแนวหน้า 5%/ครั้ง (สูงสุด 15%) · hold = ปักทวนตรึง 12 + ท่าถัดไปเบา 30% · halt = ผลักสลับแถวกับตัวหลังในคอลัมน์จนจบเทิร์นของตัวที่ถูกผลัก (ล็อก 2 รอบ, บอส/ตัวใหญ่ไม่ถูกผลัก, คูลดาวน์ 4) · warcry = พุ่งหอก 26 ตีถึงแถวหลัง รับเพิ่ม 20% · เซฟ v50 ศึกค้างที่ใช้ 6 ท่านี้เริ่มใหม่จากเลือดเข้า
