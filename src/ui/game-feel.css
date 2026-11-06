@@ -943,6 +943,3 @@ html, body { background: #0a1422; }
   .title-bg { inset: -3%; background-image: url('/assets/title/title_bg_portrait.webp'); animation-name: title-drift-soft; }
 }
 @keyframes title-drift-soft { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.04) translate(-1%, -.8%); } }
-
-/* Home-screen web app: keep the frame at the top when it is taller than the reported layout viewport (see viewport.ts). */
-:root[data-standalone="true"] body { place-items: start center; }
