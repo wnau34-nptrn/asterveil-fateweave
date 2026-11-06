@@ -18,7 +18,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Next (owner order)
 
-- UI frame consistency (owner 2026-11-05): groups 1–2 done (#173, `docs/validation/ui-frame-group2-2026-11-05/`); group 3 = map/battle dialogs (not HUD), then summary/rewards frame only; scope at the top of `docs/handoffs/ART-UI-LANGUAGE-001.md`, audit spec `tests/browser/ui-language-audit.spec.ts`. Q1–Q3 picked by Claude (R1) under the owner's delegation.
+- UI groups 1–2 done (#173, `docs/validation/ui-frame-group2-2026-11-05/`); after group 3, the summary/rewards frame only.
 - Polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check open.
 
 ## Open items
@@ -36,12 +36,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-```text
-ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype ตอบไทย ใช้เวลาไทย
-อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง แล้วอ่าน docs/context/UI_INPUT_RULES.md และหัวไฟล์ docs/handoffs/ART-UI-LANGUAGE-001.md (ขอบเขต R1)
-งาน: UI frame consistency กลุ่ม 3 = หน้าต่างบนแผนที่และในศึก ทำพร้อมกันทั้งชุด (เจ้าของสั่ง 2026-11-06)
-ขอบเขต: กระเป๋า 2 แท็บ, ข้อมูล, เป้าหมาย, ทางเข้าด่าน, ยืนยันถอนตัว, หน้าต่างตัวละครที่เปิดจากแผนที่ (dialog.world-dialog) และหน้าต่างข้อมูล/คำอธิบายสกิลในศึก (dialog#game-info) — หัวหน้าต่างเดียวกับกลุ่ม 1–2 (ย้อนกลับซ้าย หัวเรื่องชิดซ้าย ปิดขวา ขนาด/ตำแหน่งเดียวกัน) และ token ปุ่มหลัก/รอง (ตำแหน่งปุ่มคงเดิม)
-ห้าม: แตะ HUD แผนที่/ต่อสู้ (D-pad แถบคิว HP ปุ่มสกิล การเลือกเป้า), เนื้อหา/ข้อความ/ตัวเลข/ลำดับปุ่ม/ขั้นยืนยัน, กฎ/เซฟ · ตัวอักษร: ถ้าขนาดเดิมอ่านดีอยู่แล้วไม่ต้องปรับ · เจ้าของ: "ต้องไม่ไปทำให้สิ่งที่ดีอยู่แล้วพัง"
-วิธี: ถ่ายภาพก่อนด้วย tests/browser/ui-language-audit.spec.ts (390/320) → แก้ → วัดตำแหน่งปุ่ม/ขนาดตัวอักษร/เลื่อนแนวนอนเทียบก่อน → Playwright world/battle/ui-language-audit (PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium) → ส่งภาพก่อน/หลัง 390px ให้เจ้าของดูก่อน merge แบบ docs/validation/ui-frame-group2-2026-11-05/
-จบ: PR quality+browser ผ่าน + เจ้าของดูภาพ → merge; อัปเดต CURRENT_STATE, CODEX-TO-CLAUDE
-```
+UI group 3 is running in session `session_014iPEcM8uS9992tHJtW87Hf` (its full opening prompt is in that session and in the handoff log). For a fresh start: read CLAUDE.md, this file, `docs/context/UI_INPUT_RULES.md` and the top of `docs/handoffs/ART-UI-LANGUAGE-001.md`, then continue the Active task above.
