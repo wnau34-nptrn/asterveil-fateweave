@@ -181,9 +181,16 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    const free=!intent||intent.all||intent.targetId===heroId,spite=Math.min(CHALLENGE_GRUDGE_MAX,state.heroes.find(h=>h.id===heroId)?.grudge?.amount??0);
    if(free&&spite>=6){const g=state.enemies.find(e=>e.id===state.heroes.find(h=>h.id===heroId)!.grudge!.enemyId&&e.hp>0);const h=(intent?.kind==='physical'&&!intent.all&&make('bash',intent.sourceId,'กระแทกโล่ด้วยแค้นสะสม',`แรงขึ้น +${spite}`))||(g&&make('attack',g.id,'คืนแค้นสะสม',`แรงขึ้น +${spite}`));if(h)return h;}
    const coming=free?plannedIntents(state,data,state.order.length).find(i=>!i.all&&!i.charge&&!i.special&&i.targetId!==heroId&&i.sourceId!==intent?.sourceId&&state.heroes.some(h=>h.id===i.targetId&&h.hp>0)):undefined;
-   // A preview gate to the knight's next command never picked it (the grudge pays off after that window); measured
-   // ungated in the tree sim: 8 challenges, team HP 88.8 → 87.5%, the knight's damage +23%.
-   if(coming){const c=make('challenge',coming.sourceId,'ท้าดวลดึงท่าที่เล็งเพื่อน',`${actorName(coming.sourceId,data)} จะเล็งเอกิสแทน · แค้นสะสมสูงสุด +${CHALLENGE_GRUDGE_MAX}`);if(c)return c;}
+   // A challenge only when the preview (to the party's next command) beats the knight's plain fallback; the grudge it
+   // builds counts a little below face value. Ungated it was picked 10× in the tree sim and cost the party HP (88 → 80%,
+   // ΔHP −8.6): the pulled hit lands on the knight unreduced, where a later Guard would have cut it.
+   const c=coming&&make('challenge',coming.sourceId,'ท้าดวลดึงท่าที่เล็งเพื่อน',`${actorName(coming.sourceId,data)} จะเล็งเอกิสแทน · แค้นสะสมสูงสุด +${CHALLENGE_GRUDGE_MAX}`);
+   if(c){
+    const worth=(l:Lesson)=>{const r=previewCommand(state,data,{heroId,beat:state.beat,action:l.action,targetId:l.targetId});const me=r.state.heroes.find(h=>h.id===heroId)!;
+     return state.enemies.reduce((n,e)=>n+e.hp-(r.state.enemies.find(x=>x.id===e.id)?.hp??0),0)-state.heroes.reduce((n,h)=>{const a=r.state.heroes.find(x=>x.id===h.id)!;return n+Math.max(0,h.hp+h.barrier-a.hp-a.barrier);},0)*1.2+Math.min(CHALLENGE_GRUDGE_MAX,me.grudge?.amount??0)*.8;};
+    const plain=(intent?.kind==='physical'&&!intent.all&&!interruptBlock(state,data,intent.sourceId,intent)&&make('bash',intent.sourceId,'',''))||attack();
+    if(!plain||worth(c)>worth(plain))return c;
+   }
   }
   if(role==='Duelist'){
    if(intent?.kind==='physical'&&intent.targetId===heroId){const p=make('parry',heroId,'ปัดดาบรับท่ากายภาพ',`${actorName(intent.sourceId,data)} จะโดนฟันสวน`);if(p)return p;}

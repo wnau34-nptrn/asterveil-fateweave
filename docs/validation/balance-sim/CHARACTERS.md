@@ -9,7 +9,7 @@ Every catalog character at ★1 and the map boss level; epic map-level main-stat
 | weaver | Mage | ruined-border | 3 | 12/12 | 97.6% | 2.3 | {"b1":2} / bolt, ward |
 | healer | Priest | ruined-border | 3 | 12/12 | 97.6% | 2.3 | {"b1":2} / heal, prayer |
 | mira | Archer | ruined-border | 3 | 12/12 | 97.9% | 2.3 | {"c1":2} / hinder, volley |
-| toma | Alchemist | ruined-border | 3 | 12/12 | 90.8% | 2.3 | {"b1":2} / acid, haste |
+| toma | Alchemist | ruined-border | 3 | 12/12 | 92.7% | 2.3 | {"b1":2} / acid, haste |
 | sefa | Scout | ruined-border | 3 | 12/12 | 97.9% | 2.3 | {"c1s":1,"c1":1} / ambush, evade, knives |
 | brann | Warden | ruined-border | 3 | 12/12 | 94.8% | 2.3 | {"c1s":1,"c1":1} / taunt, slam, guardstone |
 | lio | Bard | ruined-border | 3 | 12/12 | 97.7% | 2.3 | {"b1":2} / valor, mend |
@@ -38,12 +38,12 @@ Every catalog character at ★1 and the map boss level; epic map-level main-stat
 | kael | Martial | deep-forest | 6 | 12/12 | 98.2% | 3.2 | {"a1":2,"a2x":1,"b1":2} / gatherfist, releasefist |
 | wynne | Hexer | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2x":1,"b1":2} / threadhex, lifetoll |
 | astrid | Seer | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"b1":2,"b2y":1,"p1":1,"c1s":1} / deflectfate, turncycle, starneedle |
-| guardian | Knight | veil-frontier | 10 | 12/12 | 99.2% | 12.6 | {"a1":2,"a2t":1,"a3s":1,"a3":1,"c1s":1,"c1":2,"b1":1} / guard, bulwark, rally |
+| guardian | Knight | veil-frontier | 10 | 12/12 | 97.4% | 12.6 | {"b1":2,"b2":1,"b3f":1,"a1":2,"c1":2,"c1s":1} / guard, challenge, rally |
 | tracer | Duelist | veil-frontier | 10 | 12/12 | 98.5% | 12.6 | {"c1":2,"c1s":1,"c2m":1,"c3":1,"a1":2,"b1":2} / mark, execute, sweep |
 | weaver | Mage | veil-frontier | 10 | 12/12 | 98.4% | 12.6 | {"a1":2,"a2p":1,"a3":1,"a3s":1,"b1":2,"c1":2} / bolt, ward, storm |
 | healer | Priest | veil-frontier | 10 | 12/12 | 94.4% | 12.6 | {"a1":2,"a2b":1,"a3":1,"b1":2,"b1s":1,"c1":2} / heal, prayer, revive |
 | mira | Archer | veil-frontier | 10 | 12/12 | 99.0% | 12.6 | {"c1":2,"c1s":1,"c2c":1,"c3":1,"a1":2,"b1":2} / hinder, volley, track |
-| toma | Alchemist | veil-frontier | 10 | 12/12 | 97.8% | 12.6 | {"a1":2,"a2d":1,"a3":1,"b1":2,"c1":2,"c1s":1} / acid, haste, bomb |
+| toma | Alchemist | veil-frontier | 10 | 12/12 | 97.5% | 12.6 | {"a1":2,"a2d":1,"a3":1,"b1":2,"c1":2,"c1s":1} / acid, haste, bomb |
 | sefa | Scout | veil-frontier | 10 | 12/12 | 96.1% | 12.6 | {"a1":2,"a2b":1,"a3":1,"b1":2,"c1":2,"c1s":1} / ambush, evade, backstab |
 | brann | Warden | veil-frontier | 10 | 12/12 | 98.3% | 12.6 | {"a1":2,"a2h":1,"a3":1,"b1":2,"c1":2,"c1s":1} / taunt, slam, guardstone |
 | lio | Bard | veil-frontier | 10 | 12/12 | 98.3% | 12.6 | {"b1":2,"b2o":1,"b3":1,"a1":2,"c1":2,"c1s":1} / valor, mend, note |
