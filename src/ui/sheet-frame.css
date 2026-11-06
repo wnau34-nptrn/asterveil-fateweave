@@ -65,3 +65,20 @@
 #app .character-dialog button.primary:hover:not(:disabled) { background: var(--primary-plate-hover); }
 #app .character-dialog button.primary:disabled { color: var(--primary-plate-disabled-text); background: var(--primary-plate-disabled); border: 1px solid var(--primary-plate-disabled-edge); box-shadow: inset 0 -2px 0 #3a372f; text-shadow: none; }
 #app .character-dialog button.secondary { min-height: var(--button-secondary-h); border-radius: var(--button-radius); font: var(--button-secondary-font); }
+
+/* UI frame group 3 (owner scope 2026-11-06): map dialogs (goals, bag, info, camp/entrance + withdraw confirm, events)
+   and the battle info dialog share the sheet header: title left (gold), the same 44px round close 13px from the right
+   and 11px from the top of the window. Frame only: tabs, content, button order and the confirm step stay as they were. */
+#app :is(.world-dialog:not(.character-dialog), #game-info) .info-header { gap: var(--sheet-head-gap); padding: 11px 13px 6px; border-bottom: 1px solid var(--hud-edge); }
+#app :is(#world-info, #game-info) .info-header { padding: 10px 12px 6px; } /* these two keep a 1px window border */
+#app :is(.world-dialog:not(.character-dialog), #game-info) .info-header h2 { flex: 1 1 auto; min-width: 0; margin: 0; text-align: left;
+  font: var(--weight-heading) var(--sheet-title-size)/1.3 var(--font-heading); color: var(--sheet-title-color); overflow-wrap: anywhere; }
+#app :is(.world-dialog:not(.character-dialog), #game-info) .info-header > button { flex: 0 0 var(--sheet-head-button); width: var(--sheet-head-button); height: var(--sheet-head-button); min-height: var(--sheet-head-button); padding: 0; border-radius: 50%; display: grid; place-items: center; }
+#app .world-dialog:not(.character-dialog) h2 .icon { color: var(--sheet-title-color); }
+/* Primary button = the gold plate used on the sheets (shape/colour only, size of text and position unchanged);
+   secondary = same radius, size and text unchanged. */
+#app :is(.world-dialog:not(.character-dialog), #game-info) button.primary { min-height: var(--button-primary-h); border-radius: var(--button-radius); }
+#app :is(.world-dialog:not(.character-dialog), #game-info) button.primary:not(:disabled) { color: var(--text-on-gold); background: var(--primary-plate); border: 1px solid var(--primary-plate-edge); box-shadow: var(--primary-plate-shadow); }
+#app :is(.world-dialog:not(.character-dialog), #game-info) button.primary:hover:not(:disabled) { background: var(--primary-plate-hover); }
+#app :is(.world-dialog:not(.character-dialog), #game-info) button.primary:disabled { color: var(--primary-plate-disabled-text); background: var(--primary-plate-disabled); border: 1px solid var(--primary-plate-disabled-edge); box-shadow: inset 0 -2px 0 #3a372f; text-shadow: none; }
+#app :is(.world-dialog:not(.character-dialog), #game-info) button.secondary { border-radius: var(--button-radius); }

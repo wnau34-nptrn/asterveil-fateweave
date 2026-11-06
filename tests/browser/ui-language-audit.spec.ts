@@ -169,6 +169,9 @@ for (const [w, h] of sizes) test(`ui language audit ${w}x${h}`, async ({ browser
       await shot(page, '51-battle-skill-help', () => page.locator('#commands button[aria-haspopup], .skill-info, [data-help], .action-help button').first().click({ timeout: 3000 }));
       await page.keyboard.press('Escape').catch(() => undefined);
       await shot(page, '52-battle-target', () => click(page, '#action-attack'));
+      await shot(page, '53a-battle-info-dialog', async () => { await page.keyboard.press('Escape').catch(() => undefined); await click(page, '#battle-info'); await expect(page.locator('#game-info')).toBeVisible({ timeout: 3000 }); });
+      await shot(page, '53b-battle-info-guide', () => click(page, '#battle-tab-guide'));
+      await page.keyboard.press('Escape').catch(() => undefined);
       await shot(page, '53-battle-menu', () => page.locator('#help-home, .masthead button').first().click({ timeout: 3000 }));
       if (s.errors.length) missed['page-errors-battle'] = s.errors.join(' | ').slice(0, 400);
       await s.close(); } }

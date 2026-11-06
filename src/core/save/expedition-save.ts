@@ -136,7 +136,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // Burst. Profiles are unchanged; a battle in progress that used any of them restarts from its entry HP.
 const SAVE_VERSION = 56;
 const REWORKED_V56: readonly ActionId[] = ['backstab', 'knives', 'disarm'];
-const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispel', 'bolt', 'slam'];
+// A bolt alone only adds arcane charges, which matter once Dispel is used (listed), so it restarts nothing.
+const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispel', 'slam'];
 const REWORKED_V54: readonly ActionId[] = ['storedfist', 'circlefist', 'solo', 'finale'];
 const REWORKED_V53: readonly ActionId[] = ['haste', 'challenge', 'rouse', 'sanctuary', 'bless'];
 const REWORKED_V52: readonly ActionId[] = ['haste', 'smoke', 'catalyst'];
