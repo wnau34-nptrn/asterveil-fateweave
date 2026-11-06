@@ -28,8 +28,13 @@ export function unitA6Fixture(hero:'sefa'|'lio',action:ActionId='attack',scenari
   play(hero,'valor',hero);
   while(state.outcome==='active'&&currentHeroId(state,data)!==hero){const id=currentHeroId(state,data)!;play(id,'attack','f1');}
  }
- // Save v56: the venom burst needs her poison on the foe first.
- if(action==='disarm'){state=structuredClone(state);state.enemies[0]!.venom={heroId:'sefa',stacks:2,until:state.round+1};}
+ // Save v56: the venom burst needs her poison on the foe first, laid by real commands (coat, then a coated hit) so the
+ // page replays it: the others defend meanwhile.
+ if(action==='disarm'){
+  const play=(heroId:string,act:ActionId,targetId:string)=>{const c:Command={beat:state.beat,heroId,action:act,targetId};prelude.push(c);state=resolveCommand(state,data,c,true).state;};
+  const others=()=>{while(state.outcome==='active'&&currentHeroId(state,data)!==hero){const id=currentHeroId(state,data)!;play(id,'attack','f1');}};
+  play(hero,'knives','enemies');others();play(hero,'attack','f1');others();
+ }
  const options=targetOptions(state,data,hero,action);
  const targetId=(options.find(t=>t.valid&&t.id==='f1')??options.find(t=>t.valid&&t.id==='enemies')??options.find(t=>t.valid&&t.id==='guardian')??options.find(t=>t.valid)!).id;
  const command:Command={beat:state.beat,heroId:hero,action,targetId};const result=resolveCommand(state,data,command,true);
