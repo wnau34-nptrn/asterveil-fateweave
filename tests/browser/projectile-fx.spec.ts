@@ -23,7 +23,7 @@ for(const skill of skills)test(`projectile ${skill} real flight/contact, rear la
     expect(arrows.every(a=>a.progress>0&&a.progress<1)).toBe(true);expect(await page.evaluate(()=>window.projectileQA.behindUnits())).toBe(true);
     await page.clock.runFor(timing.contact-Math.round(timing.contact*.82)+50);
     expect(await page.evaluate(()=>window.projectileQA.flight())).toEqual([]);
-    expect(await page.evaluate(()=>window.projectileQA.rings())).toBe(0);
+    expect(await page.evaluate(()=>window.projectileQA.rings())).toBe(skill==='disengage'?1:0); // save v55: Mira's real fall-back evade
     expect((await page.evaluate(()=>window.projectileQA.painted())).some(p=>p.frame.endsWith('_tail')&&p.alpha>.4)).toBe(true);
     await page.locator('#skip-turn').click();await page.clock.runFor(32);
     expect(await page.evaluate(()=>window.projectileQA.painted())).toEqual([]);
@@ -38,7 +38,7 @@ for(const skill of skills)test(`projectile ${skill} OS reduced motion is immedia
     await page.clock.pauseAt(new Date('2026-10-27T01:00:00Z'));
     await page.locator(`#action-${skill}`).click();await page.locator(`#target-${await page.evaluate(()=>window.projectileQA.target())}`).click();
     const still=await page.evaluate(()=>window.projectileQA.painted());expect(still.length).toBeGreaterThan(0);
-    expect(await page.evaluate(()=>window.projectileQA.rings())).toBe(0);
+    expect(await page.evaluate(()=>window.projectileQA.rings())).toBe(skill==='disengage'?1:0); // save v55: Mira's real fall-back evade
     await page.clock.runFor(90);expect(await page.evaluate(()=>window.projectileQA.painted())).toEqual(still);
   }finally{await ctx.close();}
 });
