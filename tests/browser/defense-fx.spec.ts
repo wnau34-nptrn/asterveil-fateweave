@@ -87,7 +87,9 @@ for(const [skill,scenario,kind]of [
     if(scenario==='partial'){const hit=turn.events.find(e=>e.type==='damage')!;expect(hit.amount).toBeGreaterThan(0);expect(hit.absorbed).toBe(8);}
     if(kind==='counter'){expect(frames).toContain('brace_peak');expect(cue!.event.amount).toBeGreaterThan(0);}
     if(kind==='save'){
-      expect(turn.after!.heroes.find(h=>h.id==='tracer')!.hp).toBe(1);expect(frames).toContain('sanctuary_peak');
+      // Save v53: the lasting sanctuary leaves 1 HP, then heals at once (its real heal event) and is spent.
+      const mend=turn.events.find(e=>e.type==='heal'&&e.text==='Sanctuary.')!;expect(mend.targetId).toBe('tracer');
+      expect(turn.after!.heroes.find(h=>h.id==='tracer')!.hp).toBe(1+mend.amount!);expect(turn.after!.heroes.find(h=>h.id==='tracer')!.sanctum).toBeUndefined();expect(frames).toContain('sanctuary_peak');
       expect(await page.evaluate(()=>window.defenseQA.bladeFrames())).not.toContain('deflect');
     }
   }

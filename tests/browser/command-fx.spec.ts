@@ -25,7 +25,8 @@ for(const skill of skills)test(`command ${skill}: prepare on the caster, peak la
   const paint=await page.evaluate(()=>window.commandQA.painted()).then(p=>p.map(i=>i.frame));
   for(const frame of peaks[skill])expect(paint.filter(f=>f===frame)).toHaveLength(1);
   expect(paint.some(f=>f.endsWith('_prepare'))).toBe(false);expect(paint).not.toContain('warcry_impact');
-  expect(await page.evaluate(()=>window.commandQA.rings())).toBe(0);
+  // Save v53: a challenge also hits, so its real damage event draws the ordinary hit ring; a taunt draws none.
+  expect(await page.evaluate(()=>window.commandQA.rings())).toBe(turn.events.filter(e=>e.type==='damage'&&e.sourceId===turn.actorId).length);
   await page.clock.runFor(200);
   expect((await page.evaluate(()=>window.commandQA.painted())).map(p=>p.frame)).toContain(settle[skill]);
   await page.locator('#skip-turn').click();await page.clock.runFor(600);
