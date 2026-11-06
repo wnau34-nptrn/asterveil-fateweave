@@ -5,7 +5,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages URL https://wnau34-nptrn.github.io/asterveil-fateweave/ through `pages.yml`; pre-release pushes deploy after lint/unit/build, with the full browser gate on PRs. Restore the Pages browser gate before OD-13 external tests.
-- **Save v51** (Astrid rework); v50 Garran; v49 Wynne; v48 Dancer; v47 P03 board featured lineup; 1–5 units a side (P02), shared camp Lv/EXP (P01), reserve by chapter 3→4→5, fatigue, carry ≤10. W1–W8/P01/P02, UXD-01…07 and the HUD team → character entry (PR #146) are published.
+- **Save v52** (Toma rework); v51 Astrid; v50 Garran; v49 Wynne; v48 Dancer; v47 P03 board featured lineup; 1–5 units a side (P02), shared camp Lv/EXP (P01), reserve by chapter 3→4→5, fatigue, carry ≤10. W1–W8/P01/P02, UXD-01…07 and the HUD team → character entry (PR #146) are published.
 - 2026-11-04 batch merged (#147–#154: storage caps, v46 Heal/Revive, sealable Thorn Tempest, calm potion, `units.webp` bleed); see the handoff log.
 - Owner 2026-11-04: “เรื่องภาพหรืออะไรให้คุณตัดสินใจได้เลย” — Claude may decide art picks; record each such pick as Claude's decision under that delegation, not as owner approval.
 
@@ -13,7 +13,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- Skill rework step 5 = Toma (owner 2026-11-06 "ดำเนินการขั้นต่อไปได้"); prompt below.
+- None. Skill rework step 5 (Toma) is in PR `feature/skill-rework-toma` (see the handoff log). Waiting on the owner: (1) haste baton 20% vs 50% (README §8 numbers), (2) the go for step 6 (small fixes; prompt below).
 
 ## Next (owner order)
 
@@ -22,7 +22,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Skill rework (`docs/validation/skill-rework-2026-11-05/README_TH.md`): Dancer #181, Wynne #184, Garran #185, Astrid #189 (§7, save v51, owner's "big move" definition) done. Next: Toma (owner "ดำเนินการขั้นต่อไปได้" 2026-11-06) → small fixes. Open: Pull Thread 2–5×; spear wall never picked; deflect still 2–4×; b4 `seerMeteorBig` is Claude's proposal.
+- Skill rework (`docs/validation/skill-rework-2026-11-05/README_TH.md`): Dancer #181, Wynne #184, Garran #185, Astrid #189 (§7, v51), Toma (§8, v52: baton, smoke spread, catalyst splash) done. Next: small fixes (card step 6) after the owner's go. Open: haste baton 20% does not beat Toma's own hit (50% measured +1.5/+3.4); smoke spread rare in sim; Pull Thread 2–5×; spear wall never picked; deflect still 2–4×; b4 `seerMeteorBig` is Claude's proposal.
 
 - Map 3 gate copy of the Briar Lord still falls to plain attacks 83–98%; stronger % broke the rush/casual first-clear gate — deferred to P05 (needs a gate-specific mechanic/encounter; Claude decision under delegation).
 - No real Safari/iPhone/Android or human usability results (P02-03 trial pending). The owner's iPhone report of Seren's art is fixed in PR #154 but not re-checked on the device.
@@ -38,12 +38,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ```text
 ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype ตอบไทย ใช้เวลาไทย
 อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง แล้วเปิด skill .claude/skills/fateweave-rules-and-sim
-งาน: ขั้นที่ 5 ของแผนตรวจสกิล = Toma (Alchemist) เจ้าของสั่ง "ดำเนินการขั้นต่อไปได้" (2026-11-06) ไม่ต้องรออนุมัติซ้ำ
-แบบ: การ์ด Toma ในหน้า artifact "ตรวจสกิล Fateweave" (https://claude.ai/artifact/RTv5isw1yhwL2DmH3duyBL, Artifact read; โน้ตเจ้าของใน db "notes") ห้ามคิดข้อเสนอใหม่แทน ถ้าวัดแล้วใช้ไม่ได้ บอกเจ้าของพร้อมตัวเลขก่อนเปลี่ยน
-- haste ยาเร่ง → ส่งไม้: เพื่อนลงมือทันทีและแรงขึ้น 20% ในการลงมือนั้น
-- smoke ขวดควัน: ลด 40% เหมือนเดิม + ถ้าเป้าติดกรด ควันลามไปศัตรูข้าง ๆ 20%
-- catalyst ตัวเร่ง: กรดทำงานทันทีหนึ่งรอบ (ไม่ล้างกรด) และกระเด็น 50% ไปศัตรูข้าง ๆ
-- acid/bomb/fury คงเดิม (ตรวจว่าโหนดที่อ้างยังมีความหมาย ถ้าไม่ เสนอสั้น ๆ)
-ทำแบบขั้น 4 (docs/validation/skill-rework-2026-11-05/README_TH.md §7, commit 6bdbbf6): probe วัดก่อน → engine/content/th/advisor/สถานะ/VFX → เซฟ v52 (REWORKED_V52, เทสต์ version 51 ทุกที่รวม tests/browser, เทสต์ย้ายเซฟ) → typecheck/lint/test/sim (แถว Toma เท่านั้นที่เปลี่ยน) + Playwright alchemy-fx/unit-a4
-จบ: PR → quality+browser ผ่าน → merge; อัปเดต CURRENT_STATE, CODEX-TO-CLAUDE, README §8 (ตัวเลขเดิม→ใหม่ + sim)
+งาน: ขั้นที่ 6 ของแผนตรวจสกิล = ปรับเล็ก (เริ่มตามลำดับในการ์ด: Aegis challenge/rouse/bash, Seren sanctuary/bless, Kael storedfist/circlefist, Lio solo/finale แล้ว Mira, Sefa, Eira, Brann) ใช้ได้เมื่อเจ้าของสั่งเริ่มแล้ว
+แบบ: การ์ดในหน้า artifact "ตรวจสกิล Fateweave" (https://claude.ai/artifact/RTv5isw1yhwL2DmH3duyBL, Artifact read; โน้ตเจ้าของใน db "notes") ห้ามคิดข้อเสนอใหม่แทน ถ้าวัดแล้วใช้ไม่ได้ บอกเจ้าของพร้อมตัวเลขก่อนเปลี่ยน · ถ้าเจ้าของตอบเรื่องส่งไม้ Toma (20% หรือ 50%) ให้ทำด้วย
+ทำแบบขั้น 5 (docs/validation/skill-rework-2026-11-05/README_TH.md §8): probe วัดก่อน → engine/content/th/advisor/สถานะ/VFX → เซฟ v53 (REWORKED_V53, เทสต์ version 52 ทุกที่รวม tests/browser, เทสต์ย้ายเซฟ) → typecheck/lint/test/sim (full SIM_REPORT=1 มี campaign gate) + Playwright ที่เกี่ยวข้อง (ตั้ง PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium)
+แบ่ง PR ตามตัวละครถ้างานใหญ่ จบแต่ละ PR: quality+browser ผ่าน → merge; อัปเดต CURRENT_STATE, CODEX-TO-CLAUDE, README §9
 ```

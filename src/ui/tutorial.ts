@@ -1,4 +1,4 @@
-import { bigMove, capAmount, enemyIntent, actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, previewCommand, CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { bigMove, capAmount, enemyIntent, actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, previewCommand, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, foeNeighbours, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, Command } from '../core/battle/types';
 import { actorName } from './th';
 // Seer advisor (tree-sim tuned 2026-11-06, drafts): a delayed big move still comes, so a delay is worth a small share of
@@ -220,8 +220,9 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   const strongest=[...data.heroes].filter(h=>h.id!==heroId&&state.heroes.some(x=>x.id===h.id&&x.hp>0)).sort((a,b)=>b.attack-a.attack)[0];
   if(role==='Alchemist'){
    if(heavy&&intent){const k=make('smoke',intent.sourceId,'ขวดควันลดท่าที่กำลังมา',`${actorName(intent.sourceId,data)} เบาลง ${skillPower(data,heroId,'smoke')}%`);if(k)return k;}
-   const ripe=living.find(e=>(e.corrodedUntil??0)-state.round>=2);
-   if(ripe){const c=make('catalyst',ripe.id,'ระเบิดกร่อนด้วยตัวเร่ง',`พลัง ${skillPower(data,heroId,'catalyst')+2*CATALYST_PER_ROUND}`);if(c)return c;}
+   // Save v52: the catalyst keeps the acid, so any corroded foe is ripe; one with neighbours first (the splash).
+   const soaked=living.filter(e=>(e.corrodedUntil??0)>state.round),ripe=soaked.find(e=>foeNeighbours(state,data,e.id).length)??soaked[0];
+   if(ripe){const c=make('catalyst',ripe.id,'จุดกรดด้วยตัวเร่ง',`พลัง ${skillPower(data,heroId,'catalyst')+CATALYST_PER_ROUND} กรดยังอยู่${foeNeighbours(state,data,ripe.id).length?` · กระเด็น ${CATALYST_SPLASH}% ไปตัวข้าง ๆ`:''}`);if(c)return c;}
    if(living.length>=3){const b=make('bomb','enemies','ขวดระเบิดโดนทุกตัว',`ตัวละ ${skillPower(data,heroId,'bomb')}`);if(b)return b;}
    if(strongest&&!(intent&&intent.targetId===strongest.id)){const f=make('fury',strongest.id,'ยาคลั่งให้ตัวตีหลัก',`${actorName(strongest.id,data)} แรงขึ้น ${skillPower(data,heroId,'fury')}%`);if(f)return f;}
   }
@@ -263,8 +264,11 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   const target=pick('acid');
   if(!(target.corrodedUntil&&target.corrodedUntil>state.round)){const a=make('acid',target.id,'กรดกัดกร่อนเป้าหลัก',`ทุกการโจมตีของทีม +${corrodeBonusOf(data,heroId)}`);if(a)return a;}
   // Haste the hardest-hitting standing ally so it strikes first next round.
+  // Save v52 baton: the hardest hitter, as before (a gate on the boost or on a duelist's mark lowered the campaign gate).
+  const soon=(id:string)=>state.order.indexOf(id)>state.turnIndex;
   const ally=[...data.heroes].filter(h=>h.id!==heroId&&state.heroes.some(s=>s.id===h.id&&s.hp>0)).sort((a,b)=>b.attack-a.attack)[0];
-  return (ally&&make('haste',ally.id,'ยาเร่งเพื่อนตัวแรง',`${actorName(ally.id,data)} ลงมือก่อนทุกคนรอบหน้า`))??attack();
+  const now=ally&&soon(ally.id);
+  return (ally&&make('haste',ally.id,'ยาเร่งส่งไม้ให้เพื่อนตัวแรง',`${actorName(ally.id,data)} ${now?'ลงมือต่อทันที':'ลงมือก่อนทุกคนรอบหน้า'} แรงขึ้น ${HASTE_BATON}%`))??attack();
  }
  if(role==='Archer'){
   const living2=state.enemies.filter(e=>e.hp>0);

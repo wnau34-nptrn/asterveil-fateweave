@@ -36,10 +36,12 @@ describe('alchemy follows authoritative events without changing state',()=>{
   expect(next.events.find(e=>e.type==='damage')?.amount).toBe(Math.ceil((scenario==='physical'||scenario==='energy'?10:1)*(scenario==='wide'?.8:.6)));
   expect(f.turn.events.filter(e=>e.type==='corrode')).toHaveLength(scenario==='poison'?1:0);
  });
- for(const [scenario,amount] of [['normal',6],['corroded',20],['expired',6],['kill',1]] as const)it(`Catalyst ${scenario} consumes real corrosion in one hit`,()=>{
-  const f=alchemyFixture('catalyst',scenario);expect(alchemyCues(f.turn).filter(c=>c.kind==='hit')).toHaveLength(1);
+ // Save v52: the catalyst works the acid once without spending it and splashes the neighbour (f2) with half the hit.
+ for(const [scenario,amount] of [['normal',6],['corroded',20],['expired',6],['kill',1]] as const)it(`Catalyst ${scenario} follows the real acid burst and splash`,()=>{
+  const f=alchemyFixture('catalyst',scenario),hits=alchemyCues(f.turn).filter(c=>c.kind==='hit');
+  expect(hits.map(c=>c.targetId)).toEqual(scenario==='corroded'?['f1','f2']:['f1']);
   expect(f.turn.events.find(e=>e.type==='damage')?.amount).toBe(amount);
-  if(scenario==='corroded')expect(f.turn.state.enemies.find(e=>e.id==='f1')?.corrodedUntil).toBeUndefined();
+  if(scenario==='corroded'){expect(f.turn.state.enemies.find(e=>e.id==='f1')?.corrodedUntil).toBeGreaterThan(f.turn.state.round);expect(f.turn.events.filter(e=>e.type==='damage')[1]?.amount).toBe(7);}
  });
  for(const scenario of ['chain','chainfallback','chainother'])it(`Chain reaction ${scenario} retains its actual source and never casts a new flask`,()=>{
   const f=alchemyFixture(scenario==='chainother'?'acid':'catalyst',scenario),cue=alchemyCues(f.turn).find(c=>c.kind==='reaction')!;

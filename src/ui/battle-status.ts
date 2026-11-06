@@ -27,6 +27,7 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     if (hero.barrier > 0 && hero.reflect && alive(hero.reflect.heroId)) add('reflect', 'ward', 'โล่สะท้อน', `สวนกลับ ${hero.reflect.amount} เมื่อโล่ดูดซับการโจมตี · จาก${name(hero.reflect.heroId)}`, 'ใช้ได้ 1 ครั้ง หรือจนโล่หมด');
     if (hero.evading) add('evade', 'evade', 'ก้าวเงา', `หลบการโจมตีศัตรูได้อีก ${1 + (hero.evadeExtra ?? 0)} ครั้ง`, `ใช้ครบจำนวนครั้ง หรือถึงเทิร์นถัดไปของ${name(hero.evadeBy ?? id)}`);
     if (hero.hastedRound !== undefined && hero.hastedRound >= s.round) add('haste', 'haste', 'เร่งจังหวะ', `ได้ลำดับลงมือก่อนกลุ่มปกติในรอบ ${hero.hastedRound} (ถ้ามีหลายคน เรียง SPD)`, `มีผลในรอบ ${hero.hastedRound} เท่านั้น`);
+    if (hero.baton && hero.hp > 0) add('baton', 'haste', 'ส่งไม้', `การลงมือครั้งถัดไปแรงขึ้น ${hero.baton}% (ดาเมจ รักษา และโล่)`, 'หมดเมื่อลงมือครั้งถัดไป');
     if (s.guard && alive(s.guard.heroId) && (s.guard.all || s.enemies.some(e => e.id === s.guard!.sourceId && e.hp > 0))) {
       const g = s.guard;
       if (g.targetId === id || g.heroId === id) add('guard', 'guard', g.targetId === id ? 'ได้รับการคุ้มกัน' : 'กำลังคุ้มกัน', `${g.all ? "ทุกท่าเป้าเดี่ยวที่โจมตี" : `หาก${name(g.sourceId)}โจมตี`}${name(g.targetId)} ${name(g.heroId)}จะรับแทน ลดความเสียหาย ${Math.round(guardReductionOf(d, g.heroId) * 100)}%`, `หมดเมื่อ${name(g.sourceId)}ลงมือ/ถูกกำจัด หรือถึงเทิร์นถัดไปของ${name(g.heroId)}`);
