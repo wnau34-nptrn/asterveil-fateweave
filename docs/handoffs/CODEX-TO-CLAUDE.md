@@ -2,6 +2,15 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md) and those of 2026-11-04 in [archive/2026-11-06/CODEX-TO-CLAUDE.md](archive/2026-11-06/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-06 — Skill rework step 6: small fixes (Claude, PRs #191 #192 merged; #193 + Sefa + Shadow Step in flight)
+- เจ้าของ "ตามที่คุณแนะนำ" + "ดำเนินการต่อได้" = การ์ดขั้น 6 ในหน้า artifact "ตรวจสกิล Fateweave" · เซฟ v53–v57 (หนึ่งเวอร์ชันต่อชุด, ศึกค้างที่ใช้สกิลที่เปลี่ยนเริ่มใหม่)
+- v53 #191: ส่งไม้ Toma 50%, Aegis challenge ตี 10 + แค้นสะสม, rouse −20%, Seren sanctuary พรค้างทั้งศึก, bless 6+6 · bash ผลักท้ายคิว: วัดแล้วทีมเสียเลือด เจ้าของเลือกคงเดิม
+- v54 #192: Kael storedfist ปะทะท่า, circlefist 1 ปราณ/เลือด 10% · Lio solo ×2 + โน้ต 6, finale +20%/รอบ
+- v55 #193: Mira ยิงถอยหลัง/ศรตามรอยเด้ง, Eira เกราะผลึกสะท้อน/ปลดพลังเวท (ประจุจาก bolt), Brann slam แค้นสะสม · v56: Sefa พายุคม/เคลือบพิษ/ระเบิดพิษ
+- หายเข้าเงา (การ์ด) ทำ campaign gate ตก → เจ้าของเลือก ก้าวเงา = ตี 8 + หลบ (v57) และ gate แบบดูทั้งแคมเปญ (ช่องเสียได้ ≤1 ค่ายเมื่อทั้งกลุ่มไม่แย่ลง)
+- Tests ทุกชุด: typecheck/lint/unit ~1635, sim 28/28 (campaign gate), Playwright ที่เกี่ยวข้อง (Chromium) · ตัวเลขทั้งหมด README §9 `docs/validation/skill-rework-2026-11-05/README_TH.md`
+- เปิด: challenge ยังไม่ถูกเลือกใน sim, rouse ΔHP −8.6, ความยากศัตรู (ถ้าเจ้าของต้องการ) เป็นงานแยก · เจ้าของยังไม่ได้ดูภาพในเกม
+
 ## 2026-11-06 — Skill rework step 5: Toma (Claude, PR #190 merged)
 - เจ้าของ "ดำเนินการขั้นต่อไปได้" = การ์ด Toma ในหน้า artifact "ตรวจสกิล Fateweave" (ไม่มีโน้ตเจ้าของ) · เซฟ v52 (ศึกค้างที่ใช้ haste/smoke/catalyst เริ่มใหม่จากเลือดเข้า)
 - กฎ: haste ส่งไม้ (`HeroState.baton` +20% การลงมือครั้งถัดไป: ดาเมจ/รักษา/โล่) · smoke บนเป้าติดกรด ลาม 20% ไปศัตรูข้าง ๆ · catalyst 6+8 ไม่ล้างกรด กระเด็น 50% ไปศัตรูข้าง ๆ · ศัตรูข้าง ๆ = ใกล้สุดซ้าย/ขวาในแถวเดียวกัน (`foeNeighbours`, Claude ตีความ)
