@@ -2,7 +2,7 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
-## 2026-11-06 — Skill rework step 2: Wynne pulls (Claude, PR #PRNUM feature/skill-rework-wynne)
+## 2026-11-06 — Skill rework step 2: Wynne pulls (Claude, PR #184 feature/skill-rework-wynne)
 - เจ้าของ "ดำเนินการขั้นถัดไป Wynne ได้": ภาษีชีวิต/วงภาษีแทบไม่ถูกใช้ → ดึงด้าย (สาปทำงานทันที คลาย 1 ชั้น ต่ออายุชั้นที่เหลือ, คูลดาวน์ 2) + วงด้ายดึง (ตัวที่มีสาปทำงานทันที ตัวที่ไม่มีติด 1 ชั้น ใช้ได้ทุกเทิร์น)
 - ถอดภาษี (`toll`/`payToll`/event `toll`) · โหนด b2x `hexPullHeavy`, b2y `hexPullKeep`, b4 `hexRingFull` ความหมายใหม่ · เซฟ v49 ศึกค้างที่ใช้ lifetoll/tollring เริ่มใหม่จากเลือดเข้า
 - การต่ออายุตอนดึงเป็นการตัดสินของ Claude: ถ้าไม่ต่อ สาปจะหมดในรอบที่ดึง (เป็นที่กฎ ไม่ใช่การให้คะแนน)
