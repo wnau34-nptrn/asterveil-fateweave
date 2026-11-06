@@ -2,6 +2,14 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-06 — Skill rework step 4: Astrid (Claude, branch feature/skill-rework-astrid)
+- เจ้าของอนุมัติรูปแบบ (การ์ด Astrid ใน artifact "ตรวจสกิล Fateweave") + นิยาม "ท่าใหญ่"/"เลื่อน 1 รอบ"/กันโกง ("เห็นด้วย") บันทึกใน README §7 และ SYSTEMS_REFERENCE
+- กฎ: deflectfate ตี 6 + คูลดาวน์ 4→3 · turncycle = เลื่อนท่าใหญ่ (ตี 8; ท่าใหญ่ถัดไปไปรอบหน้า ศัตรูใช้ท่าถัดไปในวงแทน; charge เลื่อนพร้อมท่าแรง; ครั้งเดียวต่อท่า; ถูกขัด/เบนแล้วเลื่อนไม่ได้) · doubledial = ดาวตก 18 ทุกตัวตอนจบรอบ หายถ้า Astrid ล้ม · `cycleShift`/`Command.steps` ถอดออก (`cycleLag`+`postpone`, `meteors`) · เซฟ v51
+- b2y คืนคูลดาวน์เมื่อเลื่อนได้จริง · b4 = `seerMeteorBig` +6 (ข้อเสนอ Claude รอเจ้าของดู) · ป้าย "<ท่า> เลื่อนไปรอบหน้า" บนการ์ดเจตนา (เห็นที่ 390px) · VFX Mark/Dispel/Storm ตามเหตุการณ์จริง + `tests/browser/seer-fx.spec.ts`
+- Advisor: เลื่อนมีค่า 10% ของท่าใหญ่ (80% ถ้าเป้าเหลือ ≤50) — 40% ทำให้กดบ่อยแต่ไม่ช่วย
+- Sim 28/28 เฉพาะแถว Astrid: กิ่ง b 9/10 43% → 10/10 60%, กิ่ง a 9→10/10, ประจำตัว 54→60%; ΔHP turncycle +0.6/+2.1/+5.3, doubledial +13.2 · probe `tests/probe/astrid-probe.test.ts`
+- เปิด: เบนชะตายังใช้ 2–4 ครั้ง · ขั้นถัดไป Toma (รอเจ้าของสั่ง) · เจ้าของยังไม่ได้ดูท่าทาง
+
 ## 2026-11-06 — iPhone web app: HUD text in the top ~100pt is blurred by iOS (Claude, branch fix/battle-header-layer)
 - วัดภาพจริง: หัวแถวบน (≈70–95pt) นุ่ม แต่ตัวหนังสือที่ ≥108pt คม; ไม่มี filter/mask/overlay ใน DOM; สไตล์ที่แก้ใน #186 ไม่เปลี่ยนความคมเลย (วินิจฉัยรอบนั้นผิด); ตำแหน่งบนจอเท่ากันทั้งโหมดโปร่ง/ปกติ → สมมติฐาน: เอฟเฟกต์แถบบนของ iOS 26 ทับโซนบนสุดของเว็บแอป
 - แก้ (เฉพาะ standalone): `--safe-top-fallback` = 36px ทุกหน้าจอได้ที่ว่างบนเพิ่ม; แตะกล่องตัวเลข (เปิดด้วยแตะมุมซ้ายบน 5 ครั้ง) เพื่อวนค่า 36/0/24/48 บนเครื่อง

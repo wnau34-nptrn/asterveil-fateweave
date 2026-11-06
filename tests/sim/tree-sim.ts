@@ -91,13 +91,13 @@ export function treeSim(fightLevel = 15): TreeRow[] {
       let s = beginBattle(data).state;
       for (let i = 0; i < 200 && s.outcome === 'active'; i++) {
         const l = battleLesson(s, data)!; if (l.heroId === b.id) row.actions[l.action] = (row.actions[l.action] ?? 0) + 1; if (l.heroId === b.id && b.loadout.includes(l.action) && !base.actions.includes(l.action)) row.used++;
-        s = resolveCommand(s, data, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}),...(l.steps?{steps:l.steps}:{}), ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }).state;
+        s = resolveCommand(s, data, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}), ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }).state;
       }
       for (const action of b.loadout) {
         const without = withParty(data, data.heroes.map(h => h.id === b.id ? { ...h, actions: h.actions.filter(a => a !== action) } : h));
         let off = beginBattle(without).state;
         for (let i = 0; i < 200 && off.outcome === 'active'; i++) {
-          const l = battleLesson(off, without)!; off = resolveCommand(off, without, { beat: off.beat, heroId: l.heroId, action: l.action, targetId: l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}),...(l.steps?{steps:l.steps}:{}), ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }).state;
+          const l = battleLesson(off, without)!; off = resolveCommand(off, without, { beat: off.beat, heroId: l.heroId, action: l.action, targetId: l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}), ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }).state;
         }
         const impact = row.disabled[action] ??= { won: 0, hp: 0 };
         if (off.outcome === 'victory') impact.won++;
@@ -109,7 +109,7 @@ export function treeSim(fightLevel = 15): TreeRow[] {
         const without = withParty(data, party.map(h => h.id === b.id ? starred(base, TREE_STARS, map, TREE_LEVEL, shared, undefined, b.loadout.length ? {loadout:b.loadout} : undefined) : h));
         let off = beginBattle(without).state;
         for (let i = 0; i < 200 && off.outcome === 'active'; i++) {
-          const l = battleLesson(off, without)!; off = resolveCommand(off, without, {beat:off.beat,heroId:l.heroId,action:l.action,targetId:l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}),...(l.steps?{steps:l.steps}:{}),cooldownAction:l.cooldownAction,cooldownTargetId:l.cooldownTargetId}).state;
+          const l = battleLesson(off, without)!; off = resolveCommand(off, without, {beat:off.beat,heroId:l.heroId,action:l.action,targetId:l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}),cooldownAction:l.cooldownAction,cooldownTargetId:l.cooldownTargetId}).state;
         }
         const impact = row.personal ??= {points:personal.reduce((n,[,rank]) => n+(rank??0),0),won:0,hp:0};
         if (off.outcome === 'victory') impact.won++;

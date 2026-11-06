@@ -60,6 +60,6 @@ Dealt, Healed and Taken are that class's own totals.
 | wynne | none | 10/10 | 58% | 540 | 0 | 96 | 5.9 |
 | wynne | main | 10/10 | 75% | 644 | 0 | 57 | 5.7 |
 | wynne | off | 10/10 | 70% | 608 | 0 | 57 | 5.7 |
-| astrid | none | 10/10 | 64% | 605 | 0 | 80 | 6.2 |
-| astrid | main | 10/10 | 78% | 800 | 0 | 45 | 5.6 |
-| astrid | off | 10/10 | 75% | 862 | 26 | 45 | 5.5 |
+| astrid | none | 10/10 | 66% | 589 | 0 | 62 | 6.0 |
+| astrid | main | 10/10 | 77% | 823 | 0 | 59 | 5.7 |
+| astrid | off | 10/10 | 71% | 909 | 31 | 58 | 5.7 |

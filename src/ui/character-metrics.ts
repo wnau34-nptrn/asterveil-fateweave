@@ -7,14 +7,17 @@ import { partyLuck } from '../core/world/world';
 export interface CharacterStat { id: string; name: string; value: number; unit: string; help: string }
 // A labelled hypothetical battle, projected by the real resolver. No saves, loot or profile mutation.
 export function markedSkillExample(action:ActionId,h:HeroDefinition,template:EncounterDefinition):number|undefined {
-  if(targetKind(action)!=='enemy'||(action!=='attack'&&template.skills[action].power<=0)||!h.actions.includes(action))return;
+  // A falling star (save v51) lands as the round ends on every foe, not on the marked target in the hero's turn.
+  if(targetKind(action)!=='enemy'||(action!=='attack'&&template.skills[action].power<=0)||!h.actions.includes(action)||action==='doubledial')return;
   // Backstab requires the enemy to aim at somebody else. Keep that legal context explicit,
   // rather than throwing while a Scout's shared sheet is rendering.
   const ally:HeroDefinition={id:'boss-preview-ally',name:'เพื่อนตัวอย่าง',role:'Preview',lane:'back',maxHp:100000,attack:1,speed:1,actions:['attack'],color:0};
   const data=withParty({...template,enemies:template.enemies.map(e=>({...e,maxHp:100000,speed:1})),intents:template.intents.map(i=>({...i,targetSlot:1}))},[{...h,speed:1000},ally]);
   const state=beginBattle(data).state,target=targetOptions(state,data,h.id,action).find(t=>t.valid);
   const enemy=state.enemies.find(e=>e.id===target?.id);if(!enemy)return;enemy.markedUntil=state.round+2;
-  const resolved=resolveCommand(state,data,{heroId:h.id,beat:state.beat,action,targetId:enemy.id});
+  // Deflect Fate (save v51) hits the bent foe and needs another foe to receive the move.
+  const recipientId=action==='deflectfate'?state.enemies.find(e=>e.hp>0&&e.id!==enemy.id)?.id:undefined;if(action==='deflectfate'&&!recipientId)return;
+  const resolved=resolveCommand(state,data,{heroId:h.id,beat:state.beat,action,targetId:enemy.id,...(recipientId?{recipientId}:{})});
   return resolved.turns.find(t=>t.side==='hero')?.events.filter(e=>e.type==='damage'&&e.sourceId===h.id&&e.targetId===enemy.id).reduce((n,e)=>n+(e.amount??0),0);
 }
 export type CharacterState = Pick<ExpeditionState,'members'|'hp'|'roster'|'campXp'>;
@@ -39,7 +42,7 @@ export function characterStats(s: CharacterState, map: MapDefinition, h: HeroDef
 
 export function characterSkillMetric(action: ActionId, h: HeroDefinition, template: EncounterDefinition): { label: string; value?: number; secondary?: { label: string; value: number }; scaling: string; target: string } {
   const data = withParty(template, [h]);
-  const effects: Partial<Record<ActionId,string>> = {bulwark:'เพื่อนแนวหน้าทุกคน',rouse:'เพื่อนเลือดต่ำสุด 1 คน',halo:'เพื่อนทุกคน',dread:'ทุกท่าของศัตรู',sweep:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',quake:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',tremor:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',pin:'ศัตรูแถวหน้า',saintarc:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)'};
+  const effects: Partial<Record<ActionId,string>> = {doubledial:'ศัตรูทุกตัว ตอนจบรอบ',bulwark:'เพื่อนแนวหน้าทุกคน',rouse:'เพื่อนเลือดต่ำสุด 1 คน',halo:'เพื่อนทุกคน',dread:'ทุกท่าของศัตรู',sweep:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',quake:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',tremor:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',pin:'ศัตรูแถวหน้า',saintarc:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)'};
   const target = effects[action] ?? ({ self: 'ตัวเอง', ally: 'เพื่อน 1 คน', party: 'เพื่อนทุกคน', enemy: 'ศัตรู 1 ตัว', enemies: 'ศัตรูทุกตัว' })[targetKind(action)];
   if (['cadence', 'duet', 'rounddance', 'deepbeat', 'closingstep'].includes(action)) return { label: 'คืนคูลดาวน์', scaling: 'ผลพิเศษ ไม่อิงพลังโจมตีหรือพลังเวท · ไม่เพิ่มเทิร์น', target: action === 'rounddance' ? 'เพื่อนทุกคนยกเว้นผู้ใช้' : 'เพื่อนที่ยังมีสกิลกำลังรอ' };
   if (['halo', 'fury', 'guardstone', 'dread'].includes(action)) return { label: action === 'fury' ? 'เพิ่มพลังโจมตี (%)' : 'ลดความเสียหาย (%)', value: skillPower(data, h.id, action), scaling: 'ค่าคงที่ เพิ่มด้วยเลเวลสกิล/โหนด', target };

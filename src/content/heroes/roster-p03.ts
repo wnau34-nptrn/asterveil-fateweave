@@ -25,12 +25,12 @@ export const rosterP03Skills = {
   tollring: { name: 'วงด้ายดึง', english: 'Pulling Ring', icon: '✂', power: 0, cooldown: 4 },
   knothex: { name: 'ปมสาป', english: 'Knot Hex', icon: '✂', power: 0, cooldown: 3 },
   // Seer: bend or turn announced moves; the needle and the orbit are its plain energy strikes.
-  deflectfate: { name: 'เบนชะตา', english: 'Deflect Fate', icon: '✦', power: 0, cooldown: 4 },
-  turncycle: { name: 'หมุนวงดาว', english: 'Turn Cycle', icon: '✦', power: 8, cooldown: 3 },
+  deflectfate: { name: 'เบนชะตา', english: 'Deflect Fate', icon: '✦', power: 6, cooldown: 3 },
+  turncycle: { name: 'เลื่อนท่าใหญ่', english: 'Delay Fate', icon: '✦', power: 8, cooldown: 3 },
   starneedle: { name: 'เข็มดารา', english: 'Star Needle', icon: '✦', power: 22, cooldown: 2 },
   crossing: { name: 'ทางแยกชะตา', english: 'Crossing', icon: '✦', power: 12, cooldown: 4 },
   readorbit: { name: 'อ่านวงโคจร', english: 'Read Orbit', icon: '✦', power: 18, cooldown: 2 },
-  doubledial: { name: 'หมุนสองวง', english: 'Double Dial', icon: '✦', power: 0, cooldown: 5 },
+  doubledial: { name: 'ดาวตก', english: 'Falling Star', icon: '✦', power: 18, cooldown: 5 },
 } satisfies Partial<Record<ActionId, SkillDefinition>>;
 
 type Place = Pick<TalentNodeDef, 'branch' | 'tier' | 'choice' | 'needs'>;
@@ -84,8 +84,8 @@ const seerTree: TalentTree = [
   node('b1', 'เสื้อคลุมดาว', { stat: 'hp', percent: 5 }, { branch: 'b', tier: 1 }, 2),
   node('b2x', 'หมุนไว', { cap: 'seerTurnQuick', amount: 1 }, { branch: 'b', tier: 2, choice: 'seer-b2' }),
   node('b2y', 'หมุนคืนแรง', { cap: 'seerTurnRefund', amount: 1 }, { branch: 'b', tier: 2, choice: 'seer-b2' }),
-  node('b3', 'หมุนสองวง', { unlock: 'doubledial' }, { branch: 'b', tier: 3 }),
-  node('b4', 'กำหนดรอบหมุน', { cap: 'seerDialChoose', amount: 1 }, { branch: 'b', tier: 4 }),
+  node('b3', 'ดาวตก', { unlock: 'doubledial' }, { branch: 'b', tier: 3 }),
+  node('b4', 'ดาวชี้ท่าใหญ่', { cap: 'seerMeteorBig', amount: 6 }, { branch: 'b', tier: 4 }),
   node('c1', 'แผนที่ดาวกันตัว', { stat: 'armour', percent: 5 }, { branch: 'c', tier: 1 }, 2),
   node('c1s', 'เข็มดารา', { unlock: 'starneedle' }, { branch: 'c', tier: 1 }),
   node('c2x', 'ดาวเดี่ยว', { cap: 'seerNeedleLone', amount: 4 }, { branch: 'c', tier: 2, choice: 'seer-c2', needs: 'c1s' }),

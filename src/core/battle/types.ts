@@ -47,7 +47,7 @@ export type TalentCap = 'retribution' | 'guardcounter' | 'deepmark' | 'relentles
   | 'hexThreadPer' | 'hexThreadFresh' | 'hexWovenQuick' | 'hexPullHeavy' | 'hexPullKeep' | 'hexRingFull' | 'hexLongLife' | 'hexLongDouble' | 'hexKnotLife'
   | 'wynne1' | 'wynne2' | 'wynne3' | 'wynne4'
   // P03 Seer tree and Astrid's personal branch.
-  | 'seerDeflectQuick' | 'seerDeflectHold' | 'seerCrossingHit' | 'seerTurnQuick' | 'seerTurnRefund' | 'seerDialChoose'
+  | 'seerDeflectQuick' | 'seerDeflectHold' | 'seerCrossingHit' | 'seerTurnQuick' | 'seerTurnRefund' | 'seerMeteorBig'
   | 'seerNeedleLone' | 'seerNeedleBlocked' | 'seerOrbitLocked' | 'astrid1' | 'astrid3' | 'astrid4';
 // Talent numbers that add to a rule for this hero only (summed over ranks).
 export type TalentRule = 'guardReduction' | 'tauntReduction' | 'corrodeBonus' | 'ambushBonus' | 'executeHeal' | 'healBarrier' | 'hasteHeal' | 'dodgeHeal';
@@ -167,18 +167,23 @@ export interface EnemyState { id: string; hp: number; markedUntil: number; absen
   // P03 Hexer curses: stacks (1–3) per hexer, ticking as each round up to `until` ends (a pull ticks one at once). `threaded`: hexers whose first-thread
   // bonus (Wynne p1) this foe has already received.
   hexes?: { heroId: string; stacks: number; until: number }[]; threaded?: string[];
-  // P03 Seer: `cycleShift` moves this foe's move cursor (its cycle index) forward; `deflect`: its next normal single-target
+  // Seer rework (save v51): `cycleLag` = rounds its move cycle runs late (each Turn Cycle delay adds one); `postpone` = the
+  // delay a Seer set: in `round` the foe uses the move `skip` places on in its cycle (the move after the delayed one, or
+  // after a charge and its strike), and the delayed move(s) land in the rounds after, up to `until`, and cannot be delayed
+  // again before then. `deflect`: its next normal single-target
   // move while the round is at most `until` lands on `recipientId` (another foe) instead of a hero.
-  cycleShift?: number; deflect?: { heroId: string; recipientId: string; until: number };
+  cycleLag?: number; postpone?: { heroId: string; round: number; skip: number; until: number }; deflect?: { heroId: string; recipientId: string; until: number };
   // Spear shove (`halt`, save v50): this front-row foe stands in the back row (and `partnerId`, the back-row foe of its
   // column, in the front row) until its own next turn ends; `shoveLock`: it cannot be shoved again before this round.
   shoved?: { heroId: string; partnerId?: string }; shoveLock?: number }
 // `stoned`: a warden's guardian stone turned this move from the covered ally to him.
-export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; stoned?: boolean; stoneTargetId?: string }
+// `delayedMove` (Seer delay, save v51): this move stands in for the named big move, which comes next round;
+// `delayedOnce`: this big move was delayed already and cannot be delayed again.
+export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; stoned?: boolean; stoneTargetId?: string; delayedMove?: string; delayedOnce?: boolean }
 // Party condition carried in from the expedition. Missing ids start at max HP.
 export interface BattleEntry { hp: Readonly<Record<string, number>> }
-// `recipientId` (Seer deflect): the foe the move is bent onto; `steps` (Seer double dial with its choice node): 1 or 2.
-export interface Command { beat: number; heroId: string; action: ActionId; targetId: string; cooldownAction?: ActionId; cooldownTargetId?: string; recipientId?: string; steps?: number }
+// `recipientId` (Seer deflect): the foe the move is bent onto.
+export interface Command { beat: number; heroId: string; action: ActionId; targetId: string; cooldownAction?: ActionId; cooldownTargetId?: string; recipientId?: string }
 export interface BattleState {
   encounterId: string; beat: number; round: number; order: string[]; turnIndex: number; outcome: Outcome;
   heroes: HeroState[]; enemies: EnemyState[]; intent: Intent | null; commands: Command[];
@@ -230,6 +235,9 @@ export interface BattleState {
   pinned?: number;
   // Archer tracking shots that fire again as `round` ends (if the target is still standing).
   tracking?: { heroId: string; enemyId: string; round: number; power: number }[];
+  // Seer falling star (`doubledial`, save v51): strikes every standing foe for `power` as `round` ends, unless its caster
+  // fell in the meantime.
+  meteors?: { heroId: string; round: number; power: number }[];
   // ---- Recruit big trees (owner 2026-10-23) ----
   // Warden guardian stone: from the cast until his next turn, the first move aimed at each listed ally turns to him and
   // is cut by `percent` (he heals when it holds).
@@ -240,7 +248,7 @@ export interface BattleState {
 export type SongId = 'valor' | 'mend' | 'dread';
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge'
-    | 'parry' | 'revive' | 'buff' | 'shove' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'deflect' | 'dial' | 'beat';
+    | 'parry' | 'revive' | 'buff' | 'shove' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'deflect' | 'dial' | 'meteor' | 'beat';
   text: string; sourceId?: string; targetId?: string; action?: ActionId; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

@@ -14,8 +14,10 @@ export const isSealSkill=(action:string|undefined):action is SealSkill=>sealSkil
 export const hexSkills=['threadhex','lifetoll','wovenhex','longthread','tollring','knothex'] as const;
 export const HEX_TINT=0xff7a8a;
 const isHexSkill=(action:string|undefined)=>hexSkills.some(s=>s===action);
-// P03 Seer (Astrid), same delegation: bending/turning borrows Mark on the foe whose move really changed (`deflect`/`dial`
-// events); her needle, orbit and crossing borrow Dispel's burst on the real damage events. Tinted star-blue.
+// P03 Seer (Astrid), same delegation: bending/delaying borrows Mark on the foe whose move really changed (`deflect`/`dial`
+// events); her needle, orbit and crossing, and the hits of Deflect Fate and Delay Fate (save v51), borrow Dispel's burst on
+// the real damage events. Falling Star (save v51) marks Astrid as she sets it (`meteor`) and paints Arcane Storm on each foe
+// a falling star really struck as the round ended (on whichever stage that round ended). Tinted star-blue.
 export const seerTurnSkills=['deflectfate','turncycle','doubledial'] as const;
 export const seerStrikeSkills=['starneedle','readorbit','crossing'] as const;
 export const SEER_TINT=0x9fc4ff;
@@ -29,19 +31,28 @@ export interface SealPoint {x:number;y:number;size:number;side:1|-1}
 export type SealLookup=(id:string,spot:SealSpot)=>SealPoint|undefined;
 export interface SealContexts {front:FxContext;back:FxContext}
 
+const fallingStar=(e:BattleEvent)=>e.type==='counter'&&e.text==='Falling star.'&&!!e.targetId&&!!e.sourceId;
 export function sealEvents(turn:TurnStage):BattleEvent[]{
+  const stars=turn.events.filter(fallingStar);
+  return [...ownSealEvents(turn),...stars];
+}
+function ownSealEvents(turn:TurnStage):BattleEvent[]{
   if(turn.side!=='hero'||!isSealFx(turn.action)||turn.events.some(e=>e.type==='cancel'))return [];
-  if(isSeerTurn(turn.action))return turn.events.filter(e=>!!e.targetId&&e.sourceId===turn.actorId&&(e.type==='deflect'||e.type==='dial'));
+  if(isSeerTurn(turn.action))return turn.events.filter(e=>!!e.targetId&&e.sourceId===turn.actorId&&(e.type==='deflect'||e.type==='dial'||e.type==='meteor'||e.type==='damage'||e.type==='dodge'));
   if(isSeerStrike(turn.action))return turn.events.filter(e=>!!e.targetId&&e.sourceId===turn.actorId&&(e.type==='damage'||e.type==='dodge'));
   if(isHexSkill(turn.action))return turn.events.filter(e=>!!e.targetId&&e.sourceId===turn.actorId&&(e.type==='hex'&&e.text!=='Curse loosened.'||e.type==='damage'&&e.text==='Thread pulled.'));
   return turn.events.filter(e=>!!e.targetId&&e.sourceId===turn.actorId&&(turn.action==='mark'?e.type==='mark':e.type==='damage'||e.type==='dodge'));
 }
 export function sealCues(turn:TurnStage):SealCue[]{
   const hex=isHexSkill(turn.action),seer=isSeerTurn(turn.action),strike=isSeerStrike(turn.action);
-  const skill=(hex||seer?'mark':strike?'dispel':turn.action) as SealSkill,tint=hex?HEX_TINT:seer||strike?SEER_TINT:undefined;
-  return sealEvents(turn).map((event,index)=>({skill,...(tint?{tint}:{}),sourceId:event.sourceId!,targetId:event.targetId!,event,index,
-    outcome:event.type==='dodge'?'dodged' as const:event.type==='damage'&&!event.amount?'blocked' as const:'hit' as const,
-    applied:skill==='mark'||skill==='storm'||strike||turn.events.some(e=>e.targetId===event.targetId&&e.sourceId===turn.actorId&&e.type===(skill==='sigil'?'sigil':'dispel'))}));
+  const base=(hex||seer?'mark':strike?'dispel':turn.action) as SealSkill,tint=hex?HEX_TINT:seer||strike?SEER_TINT:undefined;
+  return sealEvents(turn).map((event,index)=>{
+    const star=fallingStar(event),hit=seer&&(event.type==='damage'||event.type==='dodge');
+    const skill:SealSkill=star?'storm':hit?'dispel':base;
+    return {skill,...(star?{tint:SEER_TINT}:tint?{tint}:{}),sourceId:event.sourceId!,targetId:event.targetId!,event,index,
+      outcome:event.type==='dodge'?'dodged' as const:(event.type==='damage'||event.type==='counter')&&!event.amount?'blocked' as const:'hit' as const,
+      applied:skill==='mark'||skill==='storm'||strike||hit||turn.events.some(e=>e.targetId===event.targetId&&e.sourceId===turn.actorId&&e.type===(skill==='sigil'?'sigil':'dispel'))};
+  });
 }
 // Suggested canvas widths (px at a 390px game, 111px unit slot), from the art handoff.
 const widths:Record<SealSkill,Record<'prepare'|'peak'|'settle',number>>={
@@ -72,7 +83,7 @@ function paint(ctxs:SealContexts,cue:SealCue,lookup:SealLookup,phase:Phase,o:{dx
 }
 export function sealPrepare(ctxs:SealContexts,turn:TurnStage,lookup:SealLookup,contactMs:number):void{
   const ctx=ctxs.front;if(ctx.reduced||!isSealFx(turn.action))return;
-  const cue=sealCues(turn)[0];if(!cue)return;
+  const cue=sealCues(turn).find(c=>!fallingStar(c.event));if(!cue)return;
   const img=paint(ctxs,cue,lookup,'prepare');if(!img)return;img.setAlpha(.2);
   ctx.scene.tweens.add({targets:img,alpha:ctx.quiet?.56:.86,duration:Math.max(1,contactMs),onComplete:()=>img.destroy()});
 }

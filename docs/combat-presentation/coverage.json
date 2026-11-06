@@ -4052,13 +4052,13 @@
     "note": "ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04)"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial)"
+   "point": "กลางตัวศัตรูที่ท่าถูกเบน/เลื่อนจริง (event deflect/dial) + จุดระเบิดที่ damage จริง"
   },
   {
    "identity": "astrid",
    "side": "hero",
    "move": "turncycle",
-   "name": "หมุนวงดาว",
+   "name": "เลื่อนท่าใหญ่",
    "body": {
     "kind": "sprite",
     "clip": "dial",
@@ -4082,7 +4082,7 @@
     "note": "ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04)"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial)"
+   "point": "กลางตัวศัตรูที่ท่าถูกเบน/เลื่อนจริง (event deflect/dial) + จุดระเบิดที่ damage จริง"
   },
   {
    "identity": "astrid",
@@ -4118,7 +4118,7 @@
    "identity": "astrid",
    "side": "hero",
    "move": "doubledial",
-   "name": "หมุนสองวง",
+   "name": "ดาวตก",
    "body": {
     "kind": "sprite",
     "clip": "dial",
@@ -4142,7 +4142,7 @@
     "note": "ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04)"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "กลางตัวศัตรูที่ท่าถูกเบน/หมุนจริง (event deflect/dial)"
+   "point": "ตัว Astrid ตอนตั้งท่า (event meteor) → พายุเวทที่ศัตรูทุกตัวที่ดาวตกลงจริงตอนจบรอบ (counter Falling star.)"
   },
   {
    "identity": "astrid",

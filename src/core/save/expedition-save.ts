@@ -114,7 +114,11 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v50 (owner 2026-11-06, skill rework step 3): Garran's kit — brace strikes its target at once before bracing, a pierce
 // runs on to the foe behind, the spear wall's counters cut later front-lane hits, hold becomes the pinning spear, halt the
 // shove and warcry the charge. Profiles are unchanged; a battle in progress that used any of them restarts from its entry HP.
-const SAVE_VERSION = 50;
+// v51 (owner 2026-11-06, skill rework step 4): Astrid's Deflect Fate also hits the bent foe (cooldown 4 → 3), Turn Cycle
+// becomes Delay Fate (an announced big move comes one round later, once per move) and Double Dial becomes the Falling Star
+// (every foe struck as the round ends). Profiles are unchanged; a battle in progress that used any of them restarts from its entry HP.
+const SAVE_VERSION = 51;
+const REWORKED_V51: readonly ActionId[] = ['deflectfate', 'turncycle', 'doubledial'];
 const REWORKED_V50: readonly ActionId[] = ['brace', 'pierce', 'spearwall', 'hold', 'halt', 'warcry'];
 const REWORKED_V49: readonly ActionId[] = ['lifetoll', 'tollring'];
 const REWORKED_V48: readonly ActionId[] = ['cadence', 'duet', 'rounddance', 'deepbeat', 'echofoot', 'closingstep', 'turncycle'];
@@ -244,13 +248,14 @@ function command(v: unknown): Command {
   if (!isInt(c.beat, 1) || typeof c.heroId !== 'string' || typeof c.targetId !== 'string' || !actions.includes(c.action as ActionId)) throw new Error('Invalid command');
   if (c.cooldownAction !== undefined && !actions.includes(c.cooldownAction as ActionId)) throw new Error('Invalid command');
   if (c.cooldownTargetId !== undefined && typeof c.cooldownTargetId !== 'string') throw new Error('Invalid command');
-  if ((c.recipientId !== undefined && typeof c.recipientId !== 'string') || (c.steps !== undefined && !isInt(c.steps, 1, 2))) throw new Error('Invalid command');
+  // v51: Double Dial's step count is gone (a v50 battle that used it restarts before this check).
+  if ((c.recipientId !== undefined && typeof c.recipientId !== 'string') || c.steps !== undefined) throw new Error('Invalid command');
   // These selections affect the deterministic result. Keep them through save/replay;
   // the resolver validates their action, paid personal cap and current legal recipient.
   return { beat: c.beat, heroId: c.heroId, targetId: c.targetId, action: c.action as ActionId,
     ...(c.cooldownAction !== undefined ? { cooldownAction: c.cooldownAction as ActionId } : {}),
     ...(c.cooldownTargetId !== undefined ? { cooldownTargetId: c.cooldownTargetId as string } : {}),
-    ...(c.recipientId !== undefined ? { recipientId: c.recipientId as string } : {}), ...(c.steps !== undefined ? { steps: c.steps as number } : {}) };
+    ...(c.recipientId !== undefined ? { recipientId: c.recipientId as string } : {}) };
 
 }
 
@@ -391,6 +396,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     if (version < 48 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V48.includes(obj(c).action as ActionId))) b.commands = [];
     if (version < 49 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V49.includes(obj(c).action as ActionId))) b.commands = [];
     if (version < 50 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V50.includes(obj(c).action as ActionId))) b.commands = [];
+    if (version < 51 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V51.includes(obj(c).action as ActionId))) b.commands = [];
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, party);
     // Validate against the encounter as fought by this run's deployed party (stars and camp level included).
@@ -705,7 +711,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

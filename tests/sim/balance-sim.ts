@@ -115,7 +115,7 @@ export function playOut(s: ExpeditionState, style: Style): { bs: BattleState; lo
   for (let guard = 0; bs.outcome === 'active' && guard < 400; guard++) {
     const follow = style === 'advisor' || (style === 'casual' && rollPercent(s.seed ^ 0x9e3779b9, s.rolls * 997 + bs.commands.length) < 70);
     const l = follow ? battleLesson(bs, data) : undefined;
-    if (l) { bs = resolveCommand(bs, data, { beat: bs.beat, heroId: l.heroId, action: l.action, targetId: l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}),...(l.steps?{steps:l.steps}:{}), ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }).state; low = Math.min(low, now()); continue; }
+    if (l) { bs = resolveCommand(bs, data, { beat: bs.beat, heroId: l.heroId, action: l.action, targetId: l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}), ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }).state; low = Math.min(low, now()); continue; }
     const hero = currentHeroId(bs, data)!; const t = targetOptions(bs, data, hero, 'attack').find(o => o.valid)!;
     bs = resolveCommand(bs, data, { beat: bs.beat, heroId: hero, action: 'attack', targetId: t.id }).state; low = Math.min(low, now());
   }

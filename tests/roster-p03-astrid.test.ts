@@ -3,13 +3,14 @@ import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { veilSiege } from '../src/content/encounters/veil-siege';
 import { rosterP03 } from '../src/content/heroes/roster-p03';
 import { chapterOne as map } from '../src/content/world/chapter1';
-import { beginBattle, enemyIntent, nextIntentOf, previewCommand, replay, resolveCommand, skillCooldown, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
+import { beginBattle, bigMove, enemyIntent, postponeReason, nextIntentOf, previewCommand, replay, resolveCommand, skillCooldown, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
 import type { ActionId, BattleState, Command, EncounterDefinition, EnemyDefinition, IntentDefinition, TalentCap, TurnStage } from '../src/core/battle/types';
 import { parseGame, saveGame } from '../src/core/save/expedition-save';
 import { depart, newProfile } from '../src/core/world/profile';
 import { heroCatalog } from '../src/core/world/world';
 import { talentsValid } from '../src/core/world/talents';
 import { battleLesson } from '../src/ui/tutorial';
+import { sealCues } from '../src/game/visuals/arcane-seal-fx';
 
 type Caps = Partial<Record<TalentCap, number>>;
 const astrid = rosterP03.find(h => h.id === 'astrid')!;
@@ -39,6 +40,8 @@ describe('P03 Seer deflect', () => {
     expect(t.events.filter(e => e.type === 'damage')).toMatchObject([{ sourceId: 'f1', targetId: 'f2', amount: 20, text: 'Deflected.' }]);
     expect(hp(r.state, 'astrid')).toBe(500 - 1);
     expect(r.state.enemies[0]!.deflect).toBeUndefined();
+    // Seer rework (save v51): the bend also lands a 6 energy hit on the bent foe.
+    expect(r.turns[0]!.events.filter(e => e.type === 'damage')).toMatchObject([{ sourceId: 'astrid', targetId: 'f1', amount: 6 }]);
     // A non-deflect action may not carry a recipient.
     expect(validateCommand(s, d, { beat: s.beat, heroId: 'astrid', action: 'attack', targetId: 'f1', recipientId: 'f2' })).toBe('This action does not bend a move.');
   });
@@ -72,50 +75,129 @@ describe('P03 Seer deflect', () => {
   });
   it('astrid1 shortens the first deflection; astrid4 a cross-row one; a2x always', () => {
     const d = fixture(['deflectfate'], { astrid1: 1, astrid4: 1, seerDeflectQuick: 1 }, [foe('f1'), foe('f2', 1000, 5), foe('b1', 1000, 4)], [move('f1', 'A', 20), move('f2', 'W', 1), move('b1', 'W', 1)]);
-    expect(skillCooldown(d, 'astrid', 'deflectfate')).toBe(3);
+    // Seer rework (save v51): base cooldown 4 → 3.
+    expect(skillCooldown(d, 'astrid', 'deflectfate')).toBe(2);
     const s = beginBattle(d).state;
     const same = cast(d, s, 'deflectfate', 'f1', { recipientId: 'f2' });
-    expect(same.state.heroes[0]!.cooldowns.deflectfate).toBe(s.round + 2);
+    expect(same.turns[0]!.state.heroes[0]!.cooldowns.deflectfate).toBe(s.round + 1);
     const cross = cast(d, s, 'deflectfate', 'f1', { recipientId: 'b1' });
-    expect(cross.state.heroes[0]!.cooldowns.deflectfate).toBe(s.round + 1);
+    expect(cross.turns[0]!.state.heroes[0]!.cooldowns.deflectfate).toBeUndefined();
   });
 });
 
-describe('P03 Seer cycle', () => {
-  it('turn cycle moves the cursor one normal move and announces it at once; SPD and the queue never change', () => {
+describe('Seer rework (save v51): Delay Fate', () => {
+  // Cycle C40 → A20 → B30: C is the big move (top damage of a cycle with different damages).
+  const bigFirst = [move('f1', 'C', 40), move('f1', 'A', 20), move('f1', 'B', 30), move('f2', 'W', 1)];
+  it('a big move goes one round later: the next move stands in now, the card changes at once, the foe keeps its turn', () => {
+    const d = fixture(['turncycle'], {}, undefined, bigFirst);
+    const s = beginBattle(d).state;
+    expect(bigMove(s, d, 'f1', nextIntentOf(s, d, 'f1'))).toBe(true);
+    const preview = previewCommand(s, d, { beat: s.beat, heroId: 'astrid', action: 'turncycle', targetId: 'f1' });
+    const r = cast(d, s, 'turncycle');
+    expect(preview.turns[0]!.events.map(e => e.type)).toEqual(['dial', 'damage']);
+    expect(r.turns[0]!.events.filter(e => e.type === 'damage')).toMatchObject([{ sourceId: 'astrid', targetId: 'f1', amount: 8 }]);
+    // The announced card changes before the foe acts, and still names what was pushed.
+    expect(enemyIntent(r.turns[0]!.state, d, 'f1', 1)).toMatchObject({ name: 'A', delayedMove: 'C' });
+    const t = r.turns.find(x => x.actorId === 'f1')!;
+    expect(t.intent).toMatchObject({ name: 'A' });
+    expect(t.events.filter(e => e.type === 'damage')).toMatchObject([{ sourceId: 'f1', amount: 20 }]);
+    // The big move comes next round, then the cycle carries on one round late.
+    expect([2, 3, 4, 5].map(round => enemyIntent(r.state, d, 'f1', round)!.name)).toEqual(['C', 'A', 'B', 'C']);
+    expect(enemyIntent(r.state, d, 'f1', 2)!.delayedOnce).toBe(true);
+    // SPD and the queue never change.
+    const plain = resolveCommand(s, d, { beat: s.beat, heroId: 'astrid', action: 'attack', targetId: 'f1' }).state;
+    expect(upcomingTurns(r.state, d, 6).map(x => x.actorId)).toEqual(upcomingTurns(plain, d, 6).map(x => x.actorId));
+  });
+  it('any other move: still usable, the hit alone; the reason says why nothing moved', () => {
     const d = fixture(['turncycle']);
     const s = beginBattle(d).state;
-    expect(nextIntentOf(s, d, 'f1')!.name).toBe('A');
+    expect(postponeReason(s, d, 'f1')).toBe('Not a big move.');
+    expect(targetOptions(s, d, 'astrid', 'turncycle').find(o => o.id === 'f1')).toMatchObject({ valid: true });
     const r = cast(d, s, 'turncycle');
-    const t = r.turns.find(x => x.actorId === 'f1')!;
-    expect(t.intent!.name).toBe('B');
-    expect(r.state.enemies[0]!.cycleShift).toBe(1);
-    expect(upcomingTurns(r.state, d, 4).map(x => x.actorId)).toEqual(upcomingTurns(resolveCommand(s, d, { beat: s.beat, heroId: 'astrid', action: 'attack', targetId: 'f1' }).state, d, 4).map(x => x.actorId));
-    expect(enemyIntent(r.state, d, 'f1', r.state.round)!.name).toBe('C');
-    // Skill rework 2026-11-05: the turn also lands a small energy hit on the turned foe.
-    expect(r.turns[0]!.events.filter(e => e.type === 'damage')).toMatchObject([{ sourceId: 'astrid', targetId: 'f1', amount: 8 }]);
+    expect(r.turns[0]!.events.map(e => e.type)).toEqual(['damage']);
+    expect(r.state.enemies[0]!.postpone).toBeUndefined();
+    expect(r.turns.find(x => x.actorId === 'f1')!.intent!.name).toBe('A');
   });
-  it('cannot turn a locked move or onto one, nor a one-move cycle', () => {
-    const locked = fixture(['turncycle'], {}, undefined, [move('f1', 'A', 20), move('f1', 'Storm', 30, { all: true }), move('f2', 'W', 1)]);
-    expect(targetOptions(beginBattle(locked).state, locked, 'astrid', 'turncycle').find(o => o.id === 'f1')).toMatchObject({ valid: false, reason: 'This move cannot be turned.' });
-    expect(targetOptions(beginBattle(locked).state, locked, 'astrid', 'turncycle').find(o => o.id === 'f2')).toMatchObject({ valid: false, reason: 'Too few moves in its cycle.' });
+  it('once per move: a delayed move cannot be delayed again before it comes out', () => {
+    const d = fixture(['turncycle'], {}, undefined, bigFirst);
+    const r = cast(d, beginBattle(d).state, 'turncycle');
+    expect(r.state.round).toBe(2);
+    expect(postponeReason(r.state, d, 'f1')).toBe('This move was already delayed.');
+    // Even with the cooldown gone the second Delay Fate only hits.
+    const st = structuredClone(r.state); st.heroes[0]!.cooldowns = {};
+    const again = cast(d, st, 'turncycle');
+    expect(again.turns[0]!.events.map(e => e.type)).toEqual(['damage']);
+    expect(again.turns.find(x => x.actorId === 'f1')!.intent!.name).toBe('C');
   });
-  it('double dial needs three moves and skips two; b4 chooses one or two', () => {
-    const d = fixture(['doubledial']);
-    const r = cast(d, beginBattle(d).state, 'doubledial');
-    expect(r.turns.find(x => x.actorId === 'f1')!.intent!.name).toBe('C');
+  it('a move already interrupted or bent that round cannot be delayed', () => {
+    const d = fixture(['turncycle'], {}, undefined, bigFirst);
+    const cut = beginBattle(d).state; cut.enemies[0]!.interruptedRound = 1;
+    expect(postponeReason(cut, d, 'f1')).toBe('This move is already interrupted.');
+    const bent = beginBattle(d).state; bent.enemies[0]!.deflect = { heroId: 'astrid', recipientId: 'f2', until: 1 };
+    expect(postponeReason(bent, d, 'f1')).toBe('This move is already bent.');
+    expect(cast(d, bent, 'turncycle').turns[0]!.events.map(e => e.type)).toEqual(['damage']);
+  });
+  it('a charge is delayed together with the strike that follows it; a charge with nothing else in its cycle cannot be', () => {
+    const d = fixture(['turncycle'], {}, undefined, [move('f1', 'Gather', 0, { charge: true, kind: 'energy' }), move('f1', 'Tempest', 50, { all: true, kind: 'energy' }), move('f1', 'Lash', 20), move('f2', 'W', 1)]);
+    const r = cast(d, beginBattle(d).state, 'turncycle');
+    expect(r.turns.find(x => x.actorId === 'f1')!.intent!.name).toBe('Lash');
+    expect([2, 3, 4].map(round => enemyIntent(r.state, d, 'f1', round)!.name)).toEqual(['Gather', 'Tempest', 'Lash']);
+    expect(r.state.enemies[0]!.postpone).toMatchObject({ round: 1, until: 3 });
+    expect(postponeReason(r.state, d, 'f1')).toBe('This move was already delayed.');
+    const pair = fixture(['turncycle'], {}, undefined, [move('f1', 'Gather', 0, { charge: true }), move('f1', 'Tempest', 50, { all: true }), move('f2', 'W', 1)]);
+    expect(postponeReason(beginBattle(pair).state, pair, 'f1')).toBe('Too few moves in its cycle.');
+  });
+  it('big move = charge/all/unstoppable or the top damage of a cycle with two different damages; never a phase turn', () => {
+    const d = fixture(['turncycle'], {}, undefined, [move('f1', 'A', 20), move('f1', 'B', 20), move('f2', 'W', 1)]);
     const s = beginBattle(d).state;
-    expect(validateCommand(s, d, { beat: s.beat, heroId: 'astrid', action: 'doubledial', targetId: 'f1', steps: 1 })).toBe('Invalid number of steps.');
-    const choose = fixture(['doubledial'], { seerDialChoose: 1 });
-    expect(cast(choose, beginBattle(choose).state, 'doubledial', 'f1', { steps: 1 }).turns.find(x => x.actorId === 'f1')!.intent!.name).toBe('B');
-    const short = fixture(['doubledial'], {}, undefined, [move('f1', 'A', 20), move('f1', 'B', 30), move('f2', 'W', 1)]);
-    expect(targetOptions(beginBattle(short).state, short, 'astrid', 'doubledial')[0]).toMatchObject({ valid: false, reason: 'Too few moves in its cycle.' });
+    expect(bigMove(s, d, 'f1', nextIntentOf(s, d, 'f1'))).toBe(false);
+    expect(bigMove(s, d, 'f2', nextIntentOf(s, d, 'f2'))).toBe(false);
+    for (const extra of [{ all: true }, { charge: true }, { unstoppable: true }]) expect(bigMove(s, d, 'f1', move('f1', 'X', 1, extra))).toBe(true);
+    expect(bigMove(s, d, 'f1', { ...move('f1', 'Phase', 0), special: 'phase' })).toBe(false);
   });
-  it('b2x shortens; b2y refunds a round when the turned move was physical', () => {
-    const d = fixture(['turncycle'], { seerTurnQuick: 1, seerTurnRefund: 1 });
+  it('b2x shortens; b2y refunds a round only when a move was really delayed', () => {
+    const d = fixture(['turncycle'], { seerTurnQuick: 1, seerTurnRefund: 1 }, undefined, bigFirst);
     expect(skillCooldown(d, 'astrid', 'turncycle')).toBe(2);
     const s = beginBattle(d).state;
-    expect(cast(d, s, 'turncycle').state.heroes[0]!.cooldowns.turncycle).toBe(s.round + 1);
+    const plain = fixture(['turncycle'], { seerTurnQuick: 1, seerTurnRefund: 1 });
+    expect(cast(d, s, 'turncycle').state.heroes[0]!.cooldowns.turncycle! + 1).toBe(cast(plain, beginBattle(plain).state, 'turncycle').state.heroes[0]!.cooldowns.turncycle);
+  });
+});
+
+describe('Seer rework (save v51): Falling Star', () => {
+  it('is set this turn and strikes every standing foe as the round ends; b4 adds to a foe whose next move is big', () => {
+    const d = fixture(['doubledial'], { seerMeteorBig: 6 }, undefined, [move('f1', 'A', 20), move('f1', 'C', 40), move('f2', 'W', 1)]);
+    const s = beginBattle(d).state;
+    const r = cast(d, s, 'doubledial');
+    expect(r.turns[0]!.events.map(e => e.type)).toEqual(['meteor']);
+    const stars = r.turns.flatMap(t => t.events).filter(e => e.text === 'Falling star.');
+    // Round 2 brings f1's top move C (big): +6 on it; f2's one-move cycle is not big.
+    expect(stars).toMatchObject([{ sourceId: 'astrid', targetId: 'f1', amount: 24 }, { sourceId: 'astrid', targetId: 'f2', amount: 18 }]);
+    expect(r.state.meteors).toBeUndefined();
+    expect(replay(d, r.state.commands)).toEqual(r.state);
+  });
+  it('is lost if Astrid falls before the round ends', () => {
+    const d = fixture(['doubledial']);
+    const s = beginBattle(d).state; s.heroes[0]!.hp = 10;
+    const r = cast(d, s, 'doubledial');
+    expect(r.state.outcome).toBe('defeat');
+    expect(r.turns.flatMap(t => t.events).some(e => e.text === 'Falling star.')).toBe(false);
+  });
+});
+
+describe('Seer rework (save v51): presentation follows the real events', () => {
+  const cuesOf = (turns: TurnStage[]) => turns.flatMap(t => sealCues(t).map(c => [t.actorId, c.skill, c.targetId]));
+  it('Deflect Fate marks the bent foe and bursts on its hit; Delay Fate marks only a really delayed move', () => {
+    const d = fixture(['deflectfate', 'turncycle'], {}, undefined, [move('f1', 'C', 40), move('f1', 'A', 20), move('f1', 'B', 30), move('f2', 'W', 1)]);
+    const s = beginBattle(d).state;
+    expect(cuesOf(cast(d, s, 'deflectfate', 'f1', { recipientId: 'f2' }).turns)).toEqual([['astrid', 'mark', 'f1'], ['astrid', 'dispel', 'f1']]);
+    expect(cuesOf(cast(d, s, 'turncycle').turns)).toEqual([['astrid', 'mark', 'f1'], ['astrid', 'dispel', 'f1']]);
+    expect(cuesOf(cast(d, s, 'turncycle', 'f2').turns)).toEqual([['astrid', 'dispel', 'f2']]);
+  });
+  it('Falling Star marks Astrid as she sets it and paints a storm on each foe struck, on the stage where the round ended', () => {
+    const d = fixture(['doubledial']);
+    const r = cast(d, beginBattle(d).state, 'doubledial');
+    expect(cuesOf(r.turns)).toEqual([['astrid', 'mark', 'astrid'], ['f2', 'storm', 'f1'], ['f2', 'storm', 'f2']]);
   });
 });
 
@@ -134,14 +216,14 @@ describe('P03 Seer strikes and branch', () => {
     expect(dmg(cast(lone, l, 'starneedle'))).toBe(29);
     expect(dmg(cast(lone, l, 'readorbit'))).toBe(27);
   });
-  it('replays bent and turned moves to the same state; saves keep the recipient and steps', () => {
-    const d = fixture(['deflectfate', 'turncycle', 'doubledial'], { seerDialChoose: 1 });
+  it('replays bent, delayed and falling-star turns to the same state; saves keep the recipient', () => {
+    const d = fixture(['deflectfate', 'turncycle', 'doubledial'], {}, undefined, [move('f1', 'C', 40), move('f1', 'A', 20), move('f1', 'B', 30), move('f2', 'W', 1)]);
     let s = beginBattle(d).state;
+    s = cast(d, s, 'turncycle').state;
     s = cast(d, s, 'deflectfate', 'f1', { recipientId: 'f2' }).state;
-    s = cast(d, s, 'attack').state;
-    s = cast(d, s, 'doubledial', 'f1', { steps: 1 }).state;
+    s = cast(d, s, 'doubledial').state;
     expect(replay(d, s.commands)).toEqual(s);
-    expect(s.commands.map(c => [c.recipientId, c.steps])).toEqual([['f2', undefined], [undefined, undefined], [undefined, 1]]);
+    expect(s.commands.map(c => c.recipientId)).toEqual([undefined, 'f2', undefined]);
   });
   it('the advisor bends a heavy move onto a foe', () => {
     const d = fixture(['deflectfate', 'turncycle']);
@@ -163,7 +245,7 @@ describe('P03 Astrid in the world', () => {
     game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(game.run.roster.deployed.map(id => [id, game.run.hp[id]!])), commands: [{ beat: 1, heroId: 'astrid', action: 'attack', targetId: 'f1', recipientId: 'f2' }] };
     let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game);
     expect(() => parseGame(raw, map, lookup)).toThrow();
-    const bad = JSON.parse(raw); bad.run.battle.commands = [{ beat: 1, heroId: 'astrid', action: 'doubledial', targetId: 'f1', steps: 3 }];
+    const bad = JSON.parse(raw); bad.run.battle.commands = [{ beat: 1, heroId: 'astrid', action: 'doubledial', targetId: 'f1', recipientId: 'f2' }];
     expect(() => parseGame(JSON.stringify(bad), map, lookup)).toThrow();
   });
 });

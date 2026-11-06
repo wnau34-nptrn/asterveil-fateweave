@@ -20,7 +20,7 @@ export const heroText: Record<string, { name: string; role: string; help: string
   metta: { name: 'คอริน', role: 'นักบุญรบ', help: 'โจมตีแล้วแบ่งเลือดให้เพื่อนที่บาดเจ็บ', icon: '✚' },
   thiran: { name: 'โอดราน', role: 'นักบุญรบ', help: 'รุกแนวหน้าและเปลี่ยนดาเมจเป็นเลือดให้เพื่อน', icon: '✚' },
   kael: { name: 'เคล', role: 'นักมวย', help: 'สะสมปราณจากหมัดที่ทำเลือดลด แล้วจ่ายปิดท่า', icon: '✊' },
-  astrid: { name: 'แอสทริด', role: 'โหราจารย์', help: 'เบนท่าศัตรูไปลงศัตรูอีกตัว และหมุนวงท่าที่จะมาถึง', icon: '✦' },
+  astrid: { name: 'แอสทริด', role: 'โหราจารย์', help: 'เบนท่าศัตรูไปลงศัตรูอีกตัว เลื่อนท่าใหญ่ออกไปหนึ่งรอบ และเรียกดาวตกใส่ศัตรูทั้งหมด', icon: '✦' },
   wynne: { name: 'วินน์', role: 'นักสาป', help: 'ผูกสาปซ้อนชั้นที่ทำดาเมจทุกจบรอบ แล้วดึงด้ายให้สาปทำงานทันที', icon: '✂' },
   lalin: { name: 'เซรีส', role: 'นักเต้นรำ', help: 'คืนคูลดาวน์ให้เพื่อน ไม่เพิ่มเทิร์นหรือเปลี่ยนคิว', icon: '♪' },
   wila: { name: 'อิโซลด์', role: 'นักเต้นรำ', help: 'กระจายจังหวะให้สกิลของทีมพร้อมเร็วขึ้น', icon: '♪' },
@@ -42,12 +42,17 @@ export function actorName(id: string | undefined, data: EncounterDefinition): st
 export function intentTargetThai(intent: Intent, data: EncounterDefinition, recipient = intent.targetId): string {
   return intent.special === 'phase' ? 'เปลี่ยนช่วงการต่อสู้' : intent.charge ? 'รวบรวมพลัง' : intent.all ? 'ทั้งทีม' : actorName(recipient, data);
 }
+// Seer delay (save v51): the stand-in move names the big move pushed to next round; that move then reads as delayed once.
+export function intentDelayThai(intent: Intent): string {
+  return intent.delayedMove ? `${intentName({ ...intent, name: intent.delayedMove })} เลื่อนไปรอบหน้า` : intent.delayedOnce ? 'ถูกเลื่อนแล้ว · เลื่อนซ้ำไม่ได้' : '';
+}
 // The rule line under an announced enemy turn.
 export function intentRuleThai(intent: Intent): string {
   if (intent.special === 'phase') return 'ไม่โจมตีเทิร์นนี้ · เรียกพวก/เปลี่ยนท่า · ขัดจังหวะไม่ได้';
-  if (intent.charge) return 'ไม่ทำความเสียหาย · ท่าถัดไปแรงมาก เตรียมป้องกัน';
+  const label = intentDelayThai(intent), delay = label ? `${label} · ` : '';
+  if (intent.charge) return `${delay}ไม่ทำความเสียหาย · ท่าถัดไปแรงมาก เตรียมป้องกัน`;
   const reach = intent.all ? 'โดนทุกคน · ตั้งรับแทนไม่ได้' : intent.kind === 'physical' ? 'แนวหน้ารับก่อน' : 'ถึงแนวหลังได้';
-  return intent.unstoppable ? `${reach} · ขัดจังหวะไม่ได้` : reach;
+  return delay + (intent.unstoppable ? `${reach} · ขัดจังหวะไม่ได้` : reach);
 }
 // A boss phase's name, from the same move-name table.
 export const phaseThai = (name: string): string => intentName({ name } as Intent);
@@ -142,12 +147,12 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     circlefist: `จ่ายปราณ 2 กายภาพ ${skill.power} ใส่ศัตรูแถวหน้าทุกตัว ถ้าหน้าว่างโดนหลังแทน`,
     storedfist: `กายภาพ ${skill.power} เป้าเดียว ไม่สะสมและไม่จ่ายปราณที่มี`,
     perfectfist: `จ่ายปราณ 3 กายภาพ ${skill.power} เป้าเดียว`,
-    deflectfate: 'เลือกศัตรูผู้โจมตี แล้วเลือกศัตรูอีกตัวเป็นผู้รับ ท่าโจมตีเป้าเดี่ยวครั้งถัดไปของมันในรอบนี้ลงที่ผู้รับแทน คงพลังและชนิดเดิม (ท่าหมู่/ชาร์จ/เปลี่ยนช่วง/ท่าไม้ตายขัดไม่ได้เบนไม่ได้)',
-    turncycle: `พลังงาน ${skill.power} เป้าเดียว แล้วขยับวงท่าของศัตรูไปท่าปกติถัดไป 1 ช่อง ประกาศใหม่ทันที ไม่เปลี่ยน SPD หรือคิว ไม่ข้ามท่าที่ล็อก`,
+    deflectfate: `พลังงาน ${skill.power} ใส่ศัตรูผู้โจมตี แล้วเลือกศัตรูอีกตัวเป็นผู้รับ ท่าโจมตีเป้าเดี่ยวครั้งถัดไปของมันในรอบนี้ลงที่ผู้รับแทน คงพลังและชนิดเดิม (ท่าหมู่/ชาร์จ/เปลี่ยนช่วง/ท่าไม้ตายขัดไม่ได้เบนไม่ได้)`,
+    turncycle: `พลังงาน ${skill.power} เป้าเดียว ถ้าท่าถัดไปของเป้าเป็นท่าใหญ่ (ชาร์จ/หมู่/ไม้ตาย หรือแรงสุดในวงท่า) เลื่อนออกไป 1 รอบ: รอบนั้นใช้ท่าถัดไปในวงแทน ท่าใหญ่มารอบหน้า (ชาร์จเลื่อนพร้อมท่าแรงที่ตามมา) ศัตรูยังได้เทิร์นปกติ · ท่าเดิมเลื่อนซ้ำไม่ได้จนออกจริง · ท่าที่ถูกขัด/ถูกเบนรอบนั้นเลื่อนไม่ได้ · ท่าอื่นโดนพลังงานอย่างเดียว`,
     starneedle: `เข็มดาวพลังงาน ${skill.power} เป้าเดียว`,
     crossing: `พลังงาน ${skill.power} แล้วเบนท่าปกติถัดไปของเป้าไปลงศัตรูอื่นที่เลือดมากสุด`,
     readorbit: `พลังงาน ${skill.power} เป้าเดียว ดูวงท่าที่จะมาถึงได้ในแผงสถานะศัตรู`,
-    doubledial: 'ขยับวงท่าของศัตรู 2 ช่องในวงที่มีอย่างน้อย 3 ท่า ไม่ข้ามท่าที่ล็อก',
+    doubledial: `ตั้งท่าเทิร์นนี้ ดาวตกลงตอนจบรอบ พลังงาน ${skill.power} ใส่ศัตรูทุกตัว${capAmount(data, heroId, 'seerMeteorBig') ? ` (+${capAmount(data, heroId, 'seerMeteorBig')} ใส่ตัวที่ท่าถัดไปเป็นท่าใหญ่)` : ''} · ถ้าผู้ใช้ล้มก่อนจบรอบ ท่าหาย`,
     threadhex: `ผูกสาปเพิ่ม 1 ชั้น (สูงสุด ${HEX_MAX}) ทุกจบรอบเสียเลือดพลังงาน ${hexTickPower(data, heroId, 1)} ต่อชั้น อยู่ถึงจบรอบถัดไป ลงซ้ำต่ออายุ`,
     lifetoll: `เป้าที่ติดสาปของเธอ: สาปทำงานทันทีหนึ่งครั้ง เท่าจบรอบ แล้วคลายลง 1 ชั้นและต่ออายุถึงจบรอบถัดไป · สาป 1/2/3 ชั้น = พลังงาน ${[1, 2, 3].map(n => hexTickPower(data, heroId, n) + n * capAmount(data, heroId, 'hexPullHeavy')).join('/')}`,
     wovenhex: 'ศัตรูแถวหน้าทุกตัวติดสาปเพิ่ม 1 ชั้น ถ้าหน้าว่างโดนหลังแทน',
@@ -166,7 +171,7 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
 // Branch names per class (A, B), matching docs/EXPEDITION_DESIGN.md "Talent tree".
 // Big skill trees (A6): three branch names per class, matching docs/design/SKILL_TREE_KNIGHT_TH.md.
 // Release A trees: docs/design/SKILL_TREES_ALL_TH.md.
-export const bigBranches: Record<string, readonly string[]> = { astrid: ['เบนชะตา', 'หมุนวง', 'เข็มดาว', 'ประจำตัว'], wynne: ['ด้ายสาป', 'ดึงด้าย', 'ปมยาว', 'ประจำตัว'], kael: ['รวมปราณ', 'ปล่อยปราณ', 'เก็บแรง', 'ประจำตัว'], metta: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], thiran: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], lalin: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], wila: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], guardian: ['ปราการ', 'ลงทัณฑ์', 'ธงนำ'],
+export const bigBranches: Record<string, readonly string[]> = { astrid: ['เบนชะตา', 'เลื่อนท่า', 'เข็มดาว', 'ประจำตัว'], wynne: ['ด้ายสาป', 'ดึงด้าย', 'ปมยาว', 'ประจำตัว'], kael: ['รวมปราณ', 'ปล่อยปราณ', 'เก็บแรง', 'ประจำตัว'], metta: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], thiran: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], lalin: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], wila: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], guardian: ['ปราการ', 'ลงทัณฑ์', 'ธงนำ'],
   tracer: ['ตราล่า', 'ปลิดชีพ', 'ระบำดาบ'], weaver: ['เวทโจมตี', 'เวทป้องกัน', 'ผนึกเวท'], healer: ['เยียวยา', 'คุ้มครอง', 'พรศรัทธา'],
   garran: ['ทวนรับ', 'ทวนรุก', 'ยึดแนว'], mira: ['แม่นธนู', 'ฝนธนู', 'พรานป่า'],
   toma: ['กรดกัดกร่อน', 'ยาเสริม', 'ควันและปฏิกิริยา'], sefa: ['ลอบสังหาร', 'เงา', 'ก่อกวน'], brann: ['ปราการศิลา', 'ค้อนรูน', 'ศิลาผู้พิทักษ์'], lio: ['เพลงรบ', 'เพลงปลอบ', 'ท่วงทำนอง'] };
@@ -226,9 +231,9 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   seerDeflectQuick: { actions: ['deflectfate'], help: n => `เบนชะตาคูลดาวน์ลด ${n} รอบ` },
   seerDeflectHold: { actions: ['deflectfate'], help: () => 'เบนชะตาคงอยู่ถึงจบรอบถัดไปถ้าท่ายังไม่ออก' },
   seerCrossingHit: { actions: ['crossing'], help: n => `ทางแยกชะตาเพิ่ม ${n} เมื่อเบนได้จริง` },
-  seerTurnQuick: { actions: ['turncycle'], help: n => `หมุนวงดาวคูลดาวน์ลด ${n} รอบ` },
-  seerTurnRefund: { actions: ['turncycle'], help: n => `หมุนท่ากายภาพทิ้ง คูลดาวน์ลดอีก ${n} รอบ` },
-  seerDialChoose: { actions: ['doubledial'], help: () => 'หมุนสองวงเลือกได้ 1 หรือ 2 ช่องก่อนยืนยัน' },
+  seerTurnQuick: { actions: ['turncycle'], help: n => `เลื่อนท่าใหญ่คูลดาวน์ลด ${n} รอบ` },
+  seerTurnRefund: { actions: ['turncycle'], help: n => `เลื่อนท่าใหญ่ได้จริง คูลดาวน์ลดอีก ${n} รอบ` },
+  seerMeteorBig: { actions: ['doubledial'], help: n => `ดาวตกเพิ่ม ${n} ใส่ศัตรูที่ท่าถัดไปเป็นท่าใหญ่` },
   seerNeedleLone: { actions: ['starneedle'], help: n => `เข็มดาราเพิ่ม ${n} เมื่อเหลือศัตรูตัวเดียว` },
   seerNeedleBlocked: { actions: ['starneedle'], help: n => `เข็มดาราเพิ่ม ${n} เมื่อเบนท่าของเป้าไม่ได้` },
   seerOrbitLocked: { actions: ['readorbit'], help: n => `อ่านวงโคจรเพิ่ม ${n} เมื่อท่าถัดไปของเป้าล็อก` },
@@ -384,7 +389,10 @@ export function reasonThai(reason: string): string {
     'Not enough chi.': 'ปราณไม่พอ',
     'No curse on this enemy.': 'ศัตรูตัวนี้ยังไม่ติดสาป',
     'This move cannot be bent.': 'ท่าถัดไปเป็นท่าที่ล็อก (หมู่/ชาร์จ/เปลี่ยนช่วง/ไม้ตาย) เบนไม่ได้',
-    'This move cannot be turned.': 'ท่าถัดไปหรือท่าที่จะหมุนไปถึงล็อกอยู่ หมุนไม่ได้',
+    'Not a big move.': 'ท่าถัดไปไม่ใช่ท่าใหญ่ (ยังตีได้ แต่ไม่เลื่อน)',
+    'This move was already delayed.': 'ท่านี้ถูกเลื่อนไปแล้ว เลื่อนซ้ำไม่ได้จนกว่าจะออก',
+    'This move is already interrupted.': 'ท่านี้ถูกขัดจังหวะรอบนั้นแล้ว เลื่อนไม่ได้',
+    'This move is already bent.': 'ท่านี้ถูกเบนชะตาไว้แล้ว เลื่อนไม่ได้',
     'Too few moves in its cycle.': 'วงท่าของศัตรูตัวนี้สั้นเกินไป',
     'This enemy has already acted this round.': 'ศัตรูตัวนี้ลงมือรอบนี้ไปแล้ว',
     'No other enemy to bend it onto.': 'ไม่มีศัตรูตัวอื่นให้รับท่า',
@@ -404,7 +412,8 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
   switch (event.type) {
     case 'cooldown': return `${target} · ${event.action ? data.skills[event.action].name : 'สกิล'} พร้อมเร็วขึ้น ${event.amount ?? 0} รอบ (ไม่เพิ่มเทิร์น)`;
     case 'deflect': return event.text === 'Fate is bent.' ? `${source}เบนท่าถัดไปของ${target}ไปลงศัตรูอีกตัว` : `ท่าของ${target}ถูกเบนออกจากฝ่ายเรา`;
-    case 'dial': return `${source}หมุนวงท่าของ${target} ${event.amount} ช่อง (ไม่เปลี่ยนคิว SPD)`;
+    case 'dial': return `${source}เลื่อนท่าใหญ่ของ${target}ไปรอบหน้า (ศัตรูยังได้เทิร์น ใช้ท่าถัดไปในวงแทน)`;
+    case 'meteor': return event.text === 'The star falls.' ? `ดาวตกของ${source}ลงศัตรูทุกตัว` : `${source}ตั้งท่าดาวตก ลงตอนจบรอบ`;
     case 'beat': { const now = after.heroes.find(h => h.id === event.targetId)?.beats ?? 0; return (event.amount ?? 0) > 0 ? `${target} ได้จังหวะ +${event.amount} (มี ${now}/${BEAT_MAX})` : `${target} ใช้จังหวะ ${-(event.amount ?? 0)} แต้ม`; }
     case 'hex': return event.text === 'Curse loosened.' ? (event.amount ? `สาป${source}บน${target}คลายเหลือ ${event.amount}/${HEX_MAX} ชั้น` : `สาป${source}บน${target}หลุดหมด`) : `${target} ติดสาป${source} ${event.amount}/${HEX_MAX} ชั้น`;
     case 'chi': { const now = after.heroes.find(h => h.id === event.targetId)?.chi ?? 0; return (event.amount ?? 0) > 0 ? `${target} สะสมปราณ +${event.amount} (มี ${now}/${CHI_MAX})` : `${target} ปล่อยปราณ ${-(event.amount ?? 0)} แต้ม (เหลือ ${now})`; }

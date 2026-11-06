@@ -1,4 +1,4 @@
-import { BEAT_MAX, deflectReason, dialReason, chiOf, releasePower, hasCap, skillCooldown, actionReason, beginBattle, createBattle, currentHeroId, enemyIntent, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
+import { BEAT_MAX, deflectReason, chiOf, releasePower, skillCooldown, actionReason, beginBattle, createBattle, currentHeroId, enemyIntent, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TargetOption, TurnStage } from '../core/battle/types';
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
 import { sfx } from '../platform/sfx';
@@ -8,7 +8,7 @@ import type { BattleKind } from '../core/world/types';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleScene } from '../game/scenes/BattleScene';
 import { fatigueDot, fatigueSection } from './fatigue';
-import { actorName, eventThai, heroText, intentName, intentRuleThai, intentTargetThai, reasonThai, skillDescription } from './th';
+import { actorName, eventThai, heroText, intentDelayThai, intentName, intentRuleThai, intentTargetThai, reasonThai, skillDescription } from './th';
 import { portrait } from './portraits';
 import { artOf } from '../game/visuals/assets';
 import { riftBackdropFrame } from '../game/visuals/rift-backdrop';
@@ -134,7 +134,6 @@ export class BattleUI {
         case 'cooldown-action': if (value) this.finishCooldownChoice({ cooldownAction: value as ActionId }); break;
         case 'cooldown-ally': if (value) this.finishCooldownChoice({ cooldownTargetId: value }); break;
         case 'deflect-recipient': if (value) this.finishCooldownChoice({ recipientId: value }); break;
-        case 'dial-steps': if (value) this.finishCooldownChoice({ steps: Number(value) }); break;
         case 'target': if (value) this.choose(value); break;
         case 'skip-turn': this.finishPresentation(); break;
         case 'leave': if (!this.busy && this.state.outcome !== 'active') this.session?.leave(); break;
@@ -337,19 +336,14 @@ export class BattleUI {
   }
 
   private openCooldownChoice(targetId: string): boolean {
-    // P03 Seer: a deflection needs its recipient, and a double dial with its choice node needs 1 or 2 steps; both are
-    // chosen here before the single commit (closing the dialog changes nothing).
-    const chooseRecipient = this.action === 'deflectfate', chooseSteps = this.action === 'doubledial' && hasCap(this.data, this.heroId, 'seerDialChoose');
-    if (chooseRecipient || chooseSteps) {
-      const recipients = chooseRecipient ? this.state.enemies.filter(e => e.hp > 0 && e.id !== targetId && !deflectReason(this.state, this.data, this.heroId, targetId, e.id)) : [];
-      const steps = chooseSteps ? [1, 2].filter(n => !dialReason(this.state, this.data, targetId, n)) : [];
-      if (!recipients.length && !steps.length) return false;
+    // P03 Seer: a deflection needs its recipient, chosen here before the single commit (closing the dialog changes nothing).
+    if (this.action === 'deflectfate') {
+      const recipients = this.state.enemies.filter(e => e.hp > 0 && e.id !== targetId && !deflectReason(this.state, this.data, this.heroId, targetId, e.id));
+      if (!recipients.length) return false;
       this.pendingCooldown = { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId };
-      this.root.querySelector('#cooldown-choice-title')!.textContent = chooseRecipient ? 'เลือกศัตรูที่จะรับท่า' : 'เลือกจำนวนช่องที่จะหมุน';
+      this.root.querySelector('#cooldown-choice-title')!.textContent = 'เลือกศัตรูที่จะรับท่า';
       this.root.querySelector('#cooldown-choice-copy')!.textContent = `${this.data.skills[this.action].name} → ${actorName(targetId, this.data)} · เลือกเพื่อยืนยันหนึ่งคำสั่ง`;
-      this.root.querySelector('#cooldown-choice-options')!.innerHTML = chooseRecipient
-        ? recipients.map(e => `<button data-ui="deflect-recipient" data-value="${e.id}"><span><b>${actorName(e.id, this.data)}</b><small>เลือด ${e.hp}</small></span></button>`).join('')
-        : steps.map(n => `<button data-ui="dial-steps" data-value="${n}"><span><b>${n} ช่อง</b><small>ข้ามท่าปกติ ${n} ท่า</small></span></button>`).join('');
+      this.root.querySelector('#cooldown-choice-options')!.innerHTML = recipients.map(e => `<button data-ui="deflect-recipient" data-value="${e.id}"><span><b>${actorName(e.id, this.data)}</b><small>เลือด ${e.hp}</small></span></button>`).join('');
       this.closeSkill();
       this.root.querySelector<HTMLDialogElement>('#cooldown-choice')!.showModal();
       this.root.querySelector<HTMLButtonElement>('#cooldown-choice-options button')?.focus({ preventScroll: true });
@@ -359,7 +353,7 @@ export class BattleUI {
     return false;
   }
 
-  private finishCooldownChoice(extra: Pick<Command, 'cooldownAction' | 'cooldownTargetId' | 'recipientId' | 'steps'>): void {
+  private finishCooldownChoice(extra: Pick<Command, 'cooldownAction' | 'cooldownTargetId' | 'recipientId'>): void {
     const pending = this.pendingCooldown;
     this.pendingCooldown = undefined;
     this.root.querySelector<HTMLDialogElement>('#cooldown-choice')!.close();
@@ -367,7 +361,7 @@ export class BattleUI {
     this.execute(pending.targetId, extra);
   }
 
-  private execute(targetId: string, extra: Pick<Command, 'cooldownAction' | 'cooldownTargetId' | 'recipientId' | 'steps'> = {}): void {
+  private execute(targetId: string, extra: Pick<Command, 'cooldownAction' | 'cooldownTargetId' | 'recipientId'> = {}): void {
     if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
     const command: Command = { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId, ...extra };
     this.present(resolveCommand(this.state, this.data, command, true));
@@ -508,11 +502,11 @@ export class BattleUI {
       const target = s.heroes.find(h => h.id === recipient)!;
       const lethal = !this.presentation && !canceled && !target.evading && intent.damage >= target.hp + target.barrier;
       const heading = canceled ? 'การโจมตีนี้ถูกขัดจังหวะ' : dodge ? 'การโจมตีนี้พลาด' : response ? 'ศัตรูกำลังลงมือ' : `การโจมตีศัตรูถัดไป · รอบ ${intent.round}`;
-      this.set('intent', `<div class="intent-icon" data-kind="${intent.kind}">${lineIcon(intent.kind === 'energy' ? 'bolt' : 'attack')}</div><div class="intent-copy"><p class="eyebrow">${heading}</p><h2>${actorName(intent.sourceId, d)} <span>→</span> ${intentTargetThai(intent, d, recipient)}</h2><p>${intentName(intent)}${damageKindOf(intent) ? ` ${kindPill(intent.kind)}` : ''} <span class="intent-rule">${intentRuleThai(intent)}</span></p>${lethal ? `<p class="lethal-warning">⚠ ${actorName(intent.targetId, d)} จะล้มหากรับการโจมตีนี้โดยไม่มีการป้องกัน</p>` : ''}</div><div class="intent-damage"><strong>${canceled || (!hit && !dodge && (intent.special === 'phase' || intent.charge)) ? '—' : dodge ? 0 : hit ? hit.amount : intent.damage}</strong><small>${dodge ? 'หลบได้' : hit ? 'เสียเลือด' : intent.special === 'phase' ? 'ไม่โจมตี' : intent.charge ? 'สะสมพลัง' : 'พลังโจมตี'}</small></div>`);
+      this.set('intent', `<div class="intent-icon" data-kind="${intent.kind}">${lineIcon(intent.kind === 'energy' ? 'bolt' : 'attack')}</div><div class="intent-copy"><p class="eyebrow">${heading}</p><h2>${actorName(intent.sourceId, d)} <span>→</span> ${intentTargetThai(intent, d, recipient)}</h2><p>${intentName(intent)}${damageKindOf(intent) ? ` ${kindPill(intent.kind)}` : ''}${intentDelayThai(intent) ? ` <b class="intent-delay">${escapeHtml(intentDelayThai(intent))}</b>` : ''} <span class="intent-rule">${intentRuleThai(intent)}</span></p>${lethal ? `<p class="lethal-warning">⚠ ${actorName(intent.targetId, d)} จะล้มหากรับการโจมตีนี้โดยไม่มีการป้องกัน</p>` : ''}</div><div class="intent-damage"><strong>${canceled || (!hit && !dodge && (intent.special === 'phase' || intent.charge)) ? '—' : dodge ? 0 : hit ? hit.amount : intent.damage}</strong><small>${dodge ? 'หลบได้' : hit ? 'เสียเลือด' : intent.special === 'phase' ? 'ไม่โจมตี' : intent.charge ? 'สะสมพลัง' : 'พลังโจมตี'}</small></div>`);
       this.root.querySelector('#intent')?.setAttribute('data-kind', damageKindOf(intent) ?? 'none');
     } else this.set('intent', `<div class="intent-icon">✧</div><div class="intent-copy"><p class="eyebrow">การต่อสู้จบแล้ว</p><h2>${s.outcome === 'victory' ? 'ศัตรูถูกกำจัดแล้ว' : 'ทีมของคุณล้มทั้งหมด'}</h2><p>${s.outcome === 'victory' ? 'เลือดที่เหลือติดตัวไปศึกถัดไป' : 'ทีมจะถอยกลับไปฟื้นตัว'}</p></div>`);
     this.root.querySelector<HTMLElement>('#forecast-details')!.hidden = s.outcome !== 'active';
-    this.set('forecast', plannedIntents(s, d).map(next => `<div><b>รอบ ${next.round} · ${actorName(next.sourceId, d)} · ${intentName(next)}</b><small>${intentTargetThai(next, d)}${next.special || next.charge ? '' : ` · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'เวท' : 'กายภาพ'}`}${next.special || next.charge || next.all || next.unstoppable ? ` · ${intentRuleThai(next)}` : ''}</small></div>`).join('') + (s.outcome === 'active' ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม เป้าหมายจะถูกกำหนดจริงเมื่อถึงเทิร์นศัตรู</p>' : ''));
+    this.set('forecast', plannedIntents(s, d).map(next => `<div><b>รอบ ${next.round} · ${actorName(next.sourceId, d)} · ${intentName(next)}</b><small>${intentTargetThai(next, d)}${next.special || next.charge ? '' : ` · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'เวท' : 'กายภาพ'}`}${next.special || next.charge || next.all || next.unstoppable || intentDelayThai(next) ? ` · ${intentRuleThai(next)}` : ''}</small></div>`).join('') + (s.outcome === 'active' ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม เป้าหมายจะถูกกำหนดจริงเมื่อถึงเทิร์นศัตรู</p>' : ''));
     this.set('formation-info', '<div><strong>แนวหน้า 2 · แนวหลัง 2</strong><p>กายภาพโจมตีแนวหน้าก่อน · พลังงานถึงแนวหลังได้ · สกิลเฉพาะมีคูลดาวน์</p></div><div><strong>ศัตรูแถวหน้าบังแถวหลัง</strong><p>ฮีโร่แนวหน้าตีแถวหลังได้เมื่อแถวหน้าล้ม หรือใช้สกิลตีทะลุ (แทงทะลวง ติดตรา แทงข้างหลัง ท้าดวล) · ฮีโร่แนวหลังตีได้ทุกช่อง</p></div>');
     const k = this.session?.kind ?? 'random'; const fallen = s.heroes.filter(h => h.hp <= 0).length;
     this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">${kindLabel[k]}</p><h2>${escapeHtml(d.name)}</h2><p>${k === 'tutorial' ? 'ศึกแรกของการเดินทาง · คำแนะนำจะพาใช้สกิลของทุกอาชีพ' : k === 'boss' ? 'บอสสลับโจมตีกายภาพและพลังงาน · อ่านแผนแล้วป้องกันให้ทัน' : 'ศัตรูขวางทาง · เลือดที่เหลือติดตัวเข้าศึกนี้'}${fallen ? `<br>${fallen} คนล้มอยู่และไม่ได้ลงมือในศึกนี้` : ''}</p><button data-ui="start" id="start" class="primary" ${!this.scene?.isReady ? 'disabled' : ''}>${this.scene?.isReady ? 'เริ่มต่อสู้ →' : 'กำลังเตรียมสนาม…'}</button></div>` : !this.presentation && s.outcome !== 'active' ? `<div class="result-card" role="status"><p class="eyebrow">${s.outcome === 'victory' ? 'ชนะศึก' : k === 'tutorial' ? 'ลองอีกครั้งได้' : 'ถอยกลับไปตั้งหลัก'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</h2><p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่สมาชิกที่ล้มต้องรอพักที่แคมป์'}</strong>` : ''}<button data-ui="leave" id="leave-battle" class="primary">${escapeHtml(this.session?.leaveLabel(s.outcome) ?? 'ไปต่อ')}</button></div>` : '');
@@ -624,7 +618,7 @@ export class BattleUI {
     const p = foeProfile(this.displayState, this.data, id); if (!p) return '';
     return `<section class="foe-sheet" aria-label="ข้อมูลศัตรู"><dl class="foe-stats">${p.stats.map(r => `<div><dt>${r.label}</dt><dd>${escapeHtml(r.value)}</dd></div>`).join('')}</dl>`
       + `<p class="foe-position">${escapeHtml(p.position)}</p><h4>ท่าโจมตี · วนตามลำดับทีละรอบ</h4><ol class="foe-moves">${p.moves.map(m => `<li class="${m.next ? 'next' : ''}" data-kind="${m.kind}">`
-      + `<div class="status-name">${icon(m.kind === 'energy' ? 'bolt' : 'attack')}<strong>${escapeHtml(m.name)}</strong>${m.unstoppable ? '<span class="foe-ult">ท่าไม้ตาย · ขัดไม่ได้</span>' : ''}${m.next ? '<span class="foe-next">ถัดไป</span>' : ''}</div>`
+      + `<div class="status-name">${icon(m.kind === 'energy' ? 'bolt' : 'attack')}<strong>${escapeHtml(m.name)}</strong>${m.unstoppable ? '<span class="foe-ult">ท่าไม้ตาย · ขัดไม่ได้</span>' : ''}${m.big && !m.unstoppable ? '<span class="foe-ult">ท่าใหญ่</span>' : ''}${m.next ? '<span class="foe-next">ถัดไป</span>' : ''}</div>`
       + `<p>${m.kind === 'energy' ? 'พลังงาน' : 'กายภาพ'} · พลัง ${m.damage} · เล็ง ${escapeHtml(m.target)}</p></li>`).join('')}</ol></section>`;
   }
 
