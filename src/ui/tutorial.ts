@@ -325,7 +325,7 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  }
  if(role==='Scout'){
   // Step aside from the announced hit; otherwise ambush an enemy that still has to act this round.
-  if(intent?.targetId===heroId){const e=make('evade',heroId,'ก้าวเงาหลบการโจมตี',`${actorName(intent.sourceId,data)} จะตีพลาด`);if(e)return e;}
+  if(intent?.targetId===heroId){const e=make('evade',pick('evade').id,'ก้าวเงาตีแล้วหลบ',`${actorName(intent.sourceId,data)} จะตีพลาด`);if(e)return e;}
   const options=reach('ambush');
   const foe=options.find(e=>ambushBonus(state,data,e.id,heroId)>0)??focus(options);
   return (foe&&make('ambush',foe.id,'จู่โจมก่อนศัตรูขยับ',`พลัง ${skillPower(data,heroId,'ambush')+ambushBonus(state,data,foe.id,heroId)}`))??attack();
