@@ -1,6 +1,9 @@
-import { actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, hasCap, previewCommand, CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { bigMove, capAmount, enemyIntent, actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, previewCommand, CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, Command } from '../core/battle/types';
 import { actorName } from './th';
+// Seer advisor (tree-sim tuned 2026-11-06, drafts): a delayed big move still comes, so a delay is worth a small share of
+// its damage, and most of it when the foe is low enough (HP ≤ SEER_DOWN_HP after the hit) to be downed before it lands.
+const SEER_DELAY_SHARE=.1,SEER_DOWN_SHARE=.8,SEER_DOWN_HP=50;
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string; cooldownAction?:ActionId; cooldownTargetId?:string; recipientId?:string; steps?:number }
 // Reactive advice for the teaching battle. It reads the committed state only and
 // never suggests commanding a hero outside the current SPD turn.
@@ -84,13 +87,30 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   const me=data.heroes.find(h=>h.id===heroId)!;let best:{command:Command;score:number}|undefined;
   const foeLoss=(r:ReturnType<typeof previewCommand>)=>state.enemies.reduce((n,e)=>n+e.hp-(r.state.enemies.find(x=>x.id===e.id)?.hp??0),0);
   const partyLoss=(r:ReturnType<typeof previewCommand>)=>state.heroes.reduce((n,h)=>n+Math.max(0,h.hp+h.barrier-(r.state.heroes.find(x=>x.id===h.id)?.hp??0)-(r.state.heroes.find(x=>x.id===h.id)?.barrier??0)),0);
+  // Effects past the preview window (save v51). A delayed big move still comes a round later, so the delay is worth a share
+  // of its damage (a round to prepare for it, or to down the foe first), not all of it: when the stand-in move fell inside
+  // the window the preview's saving is taken back and replaced by that share. A falling star still waiting for its round
+  // to end counts its hits on the foes standing in the preview, a little discounted for the risk of the Seer falling.
+  const alive=state.heroes.filter(h=>h.hp>0).length,hurt=(i:{damage:number;all?:boolean}|null|undefined)=>i?i.damage*(i.all?alive:1):0;
+  const seerLater=(r:ReturnType<typeof previewCommand>,command:Command):number=>{
+   if(command.action==='turncycle'&&r.turns.some(t=>t.side==='hero'&&t.events.some(e=>e.type==='dial'))){
+    const after=r.turns[0]!.state,foe=after.enemies.find(e=>e.id===command.targetId),delay=foe?.postpone;if(!delay)return 0;
+    const filler=enemyIntent(after,data,command.targetId,delay.round),block=[1,2].filter(k=>delay.round+k<=delay.until).map(k=>enemyIntent(after,data,command.targetId,delay.round+k));
+    const big=Math.max(0,...block.map(hurt)),first=block[0]?.charge?0:hurt(block[0]);
+    const inWindow=r.turns.some(t=>t.side==='enemy'&&t.actorId===command.targetId);
+    const left=r.state.enemies.find(e=>e.id===command.targetId)?.hp??0,share=left<=SEER_DOWN_HP?SEER_DOWN_SHARE:SEER_DELAY_SHARE;
+    return big*share-(inWindow?Math.max(0,first-hurt(filler))*1.2:0);
+   }
+   if(command.action==='doubledial')return(r.state.meteors??[]).filter(m=>m.heroId===heroId).reduce((n,m)=>n+r.state.enemies.filter(e=>e.hp>0).reduce((k,e)=>k+Math.min(e.hp,m.power+(bigMove(r.state,data,e.id,enemyIntent(r.state,data,e.id,m.round+1))?capAmount(data,heroId,'seerMeteorBig'):0)),0)*.9,0);
+   return 0;
+  };
   for(const action of me.actions)for(const target of targetOptions(state,data,heroId,action).filter(t=>t.valid)){
-   const extras:Partial<Command>[]=action==='deflectfate'?state.enemies.filter(e=>e.hp>0&&e.id!==target.id).map(e=>({recipientId:e.id})):action==='doubledial'&&hasCap(data,heroId,'seerDialChoose')?[{steps:1},{steps:2}]:[{}];
+   const extras:Partial<Command>[]=action==='deflectfate'?state.enemies.filter(e=>e.hp>0&&e.id!==target.id).map(e=>({recipientId:e.id})):[{}];
    for(const extra of extras){
     const command:Command={heroId,beat:state.beat,action,targetId:target.id,...extra};
     if(validateCommand(state,data,command))continue;
     const r=previewCommand(state,data,command);
-    const score=foeLoss(r)-partyLoss(r)*1.2+(r.state.outcome==='victory'?50:0)-(r.state.outcome==='defeat'?100:0);
+    const score=foeLoss(r)-partyLoss(r)*1.2+seerLater(r,command)+(r.state.outcome==='victory'?50:0)-(r.state.outcome==='defeat'?100:0);
     if(!best||score>best.score)best={command,score};
    }
   }

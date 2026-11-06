@@ -26,10 +26,11 @@ export const hitLift = (energy: boolean, quiet: boolean): number => energy ? qui
 export function effectCaption(event: BattleEvent): string {
   switch (event.type) {
     case 'damage': return event.amount ? `−${event.amount}${event.absorbed ? ` · โล่รับ ${event.absorbed}` : ''}` : event.absorbed ? `โล่รับ ${event.absorbed}` : 'ป้องกันได้';
-    case 'counter': return `สวนกลับ −${event.amount ?? 0}`;
+    case 'counter': return event.text === 'Falling star.' ? `ดาวตก −${event.amount ?? 0}` : `สวนกลับ −${event.amount ?? 0}`;
     case 'cooldown': return `พร้อมเร็วขึ้น ${event.amount ?? 0} รอบ`;
     case 'deflect': return event.text === 'Fate is bent.' ? 'เบนชะตา' : 'ท่าถูกเบน!';
-    case 'dial': return `วงท่า +${event.amount ?? 1}`;
+    case 'dial': return 'เลื่อนท่าใหญ่';
+    case 'meteor': return event.text === 'The star falls.' ? 'ดาวตก!' : 'ตั้งท่าดาวตก';
     case 'beat': return (event.amount ?? 0) > 0 ? `จังหวะ +${event.amount}` : `ใช้จังหวะ ${-(event.amount ?? 0)}`;
     case 'hex': return `สาป ${event.amount ?? 0}/3`;
     case 'chi': return (event.amount ?? 0) > 0 ? `ปราณ +${event.amount}` : `ปล่อยปราณ ${-(event.amount ?? 0)}`;

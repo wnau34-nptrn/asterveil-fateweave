@@ -24,7 +24,7 @@ test.skipIf(!process.env.PROBE_OUT)('garran probe', () => {
       let s = beginBattle(data).state;
       for (let i = 0; i < 200 && s.outcome === 'active'; i++) {
         const l = battleLesson(s, data)!;
-        const r = resolveCommand(s, data, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId, ...(l.recipientId ? { recipientId: l.recipientId } : {}), ...(l.steps ? { steps: l.steps } : {}), ...('cooldownAction' in l ? { cooldownAction: l.cooldownAction } : {}), ...('cooldownTargetId' in l ? { cooldownTargetId: l.cooldownTargetId } : {}) });
+        const r = resolveCommand(s, data, { beat: s.beat, heroId: l.heroId, action: l.action, targetId: l.targetId, ...(l.recipientId ? { recipientId: l.recipientId } : {}), ...('cooldownAction' in l ? { cooldownAction: l.cooldownAction } : {}), ...('cooldownTargetId' in l ? { cooldownTargetId: l.cooldownTargetId } : {}) });
         if (l.heroId === 'garran' && pend) { const k = pend.trig ? 'trig' : pend.ev.has('down') ? 'srcDown' : pend.ev.has('interrupt') || pend.ev.has('cancel') ? 'interrupted' : 'other'; why[k] = (why[k] ?? 0) + 1; pend = null; }
         if (l.heroId === 'garran' && l.action === 'brace') pend = { src: s.intent?.sourceId ?? '', trig: false, ev: new Set() };
         if (l.heroId === 'garran') { cur = l.action; const p = per[cur] ??= { uses: 0, direct: 0, counter: 0, triggers: 0 }; p.uses++; }

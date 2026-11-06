@@ -1,5 +1,5 @@
 import {bossNames,bossDescription} from './boss-equipment';
-import { CHARGE_EXPOSED, CHI_MAX, HEX_MAX, foeRow, hexTickPower, capAmount, corrodeBonus, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, skillPower, rallyReductionOf, songPower, tauntReductionOf } from '../core/battle/engine';
+import { CHARGE_EXPOSED, CHI_MAX, HEX_MAX, foeRow, hexTickPower, capAmount, corrodeBonus, bigMove, cycleIndex, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, skillPower, rallyReductionOf, songPower, tauntReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName, intentName, phaseThai } from './th';
 
@@ -50,6 +50,7 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     if (s.stone?.ids.includes(id) && alive(s.stone.heroId)) add('stone', 'guardstone', d.skills.guardstone.name, `ท่าเป้าเดี่ยวแรกเปลี่ยนไปที่${name(s.stone.heroId)} และเบาลง ${s.stone.percent}%`, untilTurn(s.stone.heroId));
     if (hero.renew && alive(hero.renew.heroId)) add('renew', 'bless', d.skills.bless.name, `ฟื้น ${hero.renew.amount} ตอนเริ่มรอบ`, `ถึงเริ่มรอบ ${hero.renew.until} หรือผู้ใช้ล้ม`);
     if (s.bulwark && alive(s.bulwark.heroId) && d.heroes.find(h => h.id === id)?.lane === 'front') add('bulwark', 'bulwark', d.skills.bulwark.name, `รับความเสียหายลด ${skillPower(d, s.bulwark.heroId, 'bulwark')}%`, untilTurn(s.bulwark.heroId));
+    for (const m of s.meteors ?? []) if (m.heroId === id && alive(id)) add('meteor', 'doubledial', d.skills.doubledial.name, `ดาวตกลงศัตรูทุกตัว ${m.power} ตอนจบรอบ ${m.round} · ถ้าล้มก่อน ท่าหาย`, `จบรอบ ${m.round}`);
     if (s.charge?.heroId === id && alive(id)) add('charge', 'warcry', d.skills.warcry.name, `รับความเสียหายเพิ่ม ${CHARGE_EXPOSED}%`, untilTurn(id));
     if (s.solace?.targetId === id && alive(s.solace.heroId)) add('solace', 'heal', 'แสงปลอบประโลม', `ลดความเสียหาย ${capAmount(d, s.solace.heroId, 'solace')}% · จาก${name(s.solace.heroId)}`, untilTurn(s.solace.heroId));
   }
@@ -72,6 +73,7 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     }
     if (enemy.drawnBy && alive(enemy.drawnBy.heroId)) add('drawn', 'tremor', 'ถูกดึงเป้า', `ท่าถัดไปเล็ง${name(enemy.drawnBy.heroId)}`, `รอบ ${enemy.drawnBy.round}`, 'debuff');
     for (const h of enemy.hexes ?? []) if (alive(h.heroId)) add(`hex-${h.heroId}`, 'threadhex', 'สาป', `${h.stacks}/${HEX_MAX} ชั้น เสียเลือด ${hexTickPower(d, h.heroId, h.stacks)} ทุกจบรอบ · จาก${name(h.heroId)}`, `ถึงจบรอบ ${h.until}`, 'debuff');
+    if (enemy.postpone && enemy.postpone.until >= s.round && enemy.hp > 0) add('postpone', 'turncycle', 'ท่าใหญ่ถูกเลื่อน', `รอบ ${enemy.postpone.round} ใช้ท่าถัดไปในวงแทน ท่าใหญ่มารอบ ${enemy.postpone.round + 1}${enemy.postpone.until > enemy.postpone.round + 1 ? ` (ท่าแรงที่ตามมารอบ ${enemy.postpone.until})` : ''} · เลื่อนซ้ำไม่ได้จนท่านั้นออก · จาก${name(enemy.postpone.heroId)}`, `ถึงรอบ ${enemy.postpone.until}`, 'debuff');
     if (enemy.deflect && enemy.deflect.until >= s.round) add('deflect', 'deflectfate', 'ชะตาถูกเบน', `ท่าเป้าเดี่ยวถัดไปลงที่${name(enemy.deflect.recipientId)} · จาก${name(enemy.deflect.heroId)}`, `ถึงจบรอบ ${enemy.deflect.until}`, 'debuff');
     if (enemy.weaken) add('weaken', 'smoke', 'ท่าเบาลง', `ท่าถัดไปเบาลง ${enemy.weaken}%`, 'หมดเมื่อตัวนี้ลงมือ', 'debuff');
     // Spear shove (save v50): the swap lasts until the shoved foe's own next turn ends.
@@ -85,7 +87,7 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
 
 // A foe's sheet for the status panel (owner 2026-10-22): its stats, whether the front row shields it, and its moves in
 // the order it uses them (they cycle by round), the next one marked. Presentation only, read from the encounter data.
-export interface FoeMoveRow { name: string; kind: 'physical' | 'energy'; damage: number; target: string; next: boolean; unstoppable: boolean }
+export interface FoeMoveRow { name: string; kind: 'physical' | 'energy'; damage: number; target: string; next: boolean; unstoppable: boolean; big: boolean }
 export interface FoeProfile { stats: { label: string; value: string }[]; position: string; moves: FoeMoveRow[] }
 export function foeProfile(s: BattleState, d: EncounterDefinition, id: string): FoeProfile | undefined {
   const def = d.enemies.find(e => e.id === id), foe = s.enemies.find(e => e.id === id);
@@ -111,11 +113,11 @@ export function foeProfile(s: BattleState, d: EncounterDefinition, id: string): 
     : standing('back') ? 'บังศัตรูแถวหลังอยู่ · ล้มตัวนี้ก่อนฮีโร่แนวหน้าจึงตีแถวหลังได้' : 'ทุกคนตีถึง';
   const cycle = phaseMoves(s, d, id);
   const next = foe.hp > 0 && s.outcome === 'active' ? nextIntentOf(s, d, id) : null;
-  const nextIndex = next && !next.special ? ((next.round - (foe.phaseRound ?? 0) - 1) % cycle.length + cycle.length) % cycle.length : -1;
+  const nextIndex = next && !next.special ? cycleIndex(s, d, id, next.round) : -1;
   const moves = cycle.map((m, i) => {
     const hero = d.heroes[m.targetSlot];
     const target = `${hero ? actorName(hero.id, d) : `ช่อง ${m.targetSlot + 1}`}${m.kind === 'physical' ? ' (กายภาพ: แนวหน้าก่อนถ้ายังยืน)' : ''}`;
-    return { name: intentName({ ...m, targetId: hero?.id ?? '', beat: 0, round: 0 }), kind: m.kind, damage: m.damage, target: m.charge ? 'ไม่โจมตี · ท่าถัดไปแรงมาก' : m.all ? 'ทั้งทีม' : target, next: i === nextIndex, unstoppable: !!m.unstoppable };
+    return { name: intentName({ ...m, targetId: hero?.id ?? '', beat: 0, round: 0 }), kind: m.kind, damage: m.damage, target: m.charge ? 'ไม่โจมตี · ท่าถัดไปแรงมาก' : m.all ? 'ทั้งทีม' : target, next: i === nextIndex, unstoppable: !!m.unstoppable, big: bigMove(s, d, id, m) };
   });
   return { stats, position, moves };
 }

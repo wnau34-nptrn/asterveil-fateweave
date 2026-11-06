@@ -20,7 +20,7 @@ Every catalog character at ★1 and the map boss level; epic map-level main-stat
 | wila | Dancer | ruined-border | 3 | 12/12 | 91.7% | 2.3 | {"a1":2} / cadence, duet |
 | kael | Martial | ruined-border | 3 | 12/12 | 100.0% | 2.3 | {"b1":2} / gatherfist, releasefist |
 | wynne | Hexer | ruined-border | 3 | 12/12 | 91.6% | 2.3 | {"b1":2} / threadhex, lifetoll |
-| astrid | Seer | ruined-border | 3 | 12/12 | 91.5% | 2.3 | {"b1":2} / deflectfate, turncycle |
+| astrid | Seer | ruined-border | 3 | 12/12 | 92.4% | 2.3 | {"b1":2} / deflectfate, turncycle |
 | guardian | Knight | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"b1":2,"b2":1,"c1s":1,"c1":1} / bash, challenge, rally |
 | tracer | Duelist | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"b1":2,"b2":1,"a1":2} / mark, execute, finisher |
 | weaver | Mage | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2p":1,"b1":2} / bolt, ward |

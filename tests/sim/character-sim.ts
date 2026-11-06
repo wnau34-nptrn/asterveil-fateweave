@@ -51,7 +51,7 @@ export function characterSim(seeds: readonly number[]): CharacterRow[] {
       for (const build of builds) {
         const data = withParty(withLevel(lookup(m.bossEncounterId)!, m.bossLevel ?? 1, m.progression.monsterLevelPercent), team.map(h => starred(h, 1, m, level, h.id === subject.id ? build.talents : undefined, members[h.id]!.gear, h.id === subject.id ? build : undefined)));
         let s = beginBattle(data).state;
-        for (let i = 0; i < 200 && s.outcome === 'active'; i++) { const l = battleLesson(s,data)!; s = resolveCommand(s,data,{beat:s.beat,heroId:l.heroId,action:l.action,targetId:l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}),...(l.steps?{steps:l.steps}:{}),...("cooldownAction" in l ? {cooldownAction:l.cooldownAction}:{}),...("cooldownTargetId" in l ? {cooldownTargetId:l.cooldownTargetId}:{})}).state; }
+        for (let i = 0; i < 200 && s.outcome === 'active'; i++) { const l = battleLesson(s,data)!; s = resolveCommand(s,data,{beat:s.beat,heroId:l.heroId,action:l.action,targetId:l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}),...("cooldownAction" in l ? {cooldownAction:l.cooldownAction}:{}),...("cooldownTargetId" in l ? {cooldownTargetId:l.cooldownTargetId}:{})}).state; }
         const current = (s.outcome === 'victory' ? 10000 : 0) + s.heroes.reduce((n,h) => n+h.hp,0) / data.heroes.reduce((n,h) => n+h.maxHp,0)*100 - s.round*.01;
         if (current > score) { score = current; best = build; }
       }

@@ -297,23 +297,36 @@ function hexTicks(state: BattleState, data: EncounterDefinition, events: BattleE
   }
 }
 // ---- P03 Seer (docs/design/ROSTER_30_TH.md §3, draft numbers) ----
-// Only an announced normal single-target move may be bent or turned: whole-party moves, charges, phase turns and
-// unstoppable signature moves are locked. A bent move keeps its power, kind and attacker and lands on another foe; it
-// never reaches an ally, never chains and never cancels the move. Turning moves the foe's cycle cursor; SPD and the queue
-// never change.
+// Only an announced normal single-target move may be bent: whole-party moves, charges, phase turns and unstoppable
+// signature moves are locked. A bent move keeps its power, kind and attacker and lands on another foe; it never reaches an
+// ally, never chains and never cancels the move. SPD and the queue never change.
 export const lockedMove = (intent: Intent | IntentDefinition | null | undefined): boolean => !intent || !!intent.special || !!intent.all || !!intent.charge || !!intent.unstoppable;
-// Why this foe's move cannot be turned `steps` normal moves on (every move stepped over and reached must be normal).
-export function dialReason(state: BattleState, data: EncounterDefinition, enemyId: string, steps: number): string {
+// Seer rework (owner 2026-11-06 "เห็นด้วย", save v51): a foe's "big move" is a move marked charge, all or unstoppable, or the
+// top damage of its current cycle when that cycle has at least two different damages. A phase turn is never one.
+export function bigMove(state: BattleState, data: EncounterDefinition, enemyId: string, intent: Intent | IntentDefinition | null | undefined): boolean {
+  if (!intent || intent.special) return false;
+  if (intent.charge || intent.all || intent.unstoppable) return true;
+  const damages = phaseMoves(state, data, enemyId).map(m => m.damage);
+  return new Set(damages).size >= 2 && intent.damage === Math.max(...damages);
+}
+// Turn Cycle delays a big move one round: that round the foe uses the next move of its cycle (after a charge, the move after
+// the charge and its strike), and the big move (with the strike) follows. The foe still takes its turn. Once per move: it
+// cannot be delayed again before it has come out, and a move already interrupted or bent that round cannot be delayed.
+// The same rule serves either side (a rival Seer in offline PvP). Empty when it can be delayed.
+export function postponeReason(state: BattleState, data: EncounterDefinition, enemyId: string): string {
   const foe = state.enemies.find(e => e.id === enemyId); const next = nextIntentOf(state, data, enemyId);
   if (!foe || foe.hp <= 0 || !next) return 'This enemy is down.';
-  if (lockedMove(next)) return 'This move cannot be turned.';
-  const moves = phaseMoves(state, data, enemyId);
-  if (moves.length < steps + 1) return 'Too few moves in its cycle.';
-  for (let k = 1; k <= steps; k++) {
-    const shifted = { ...structuredClone(state) }; shifted.enemies.find(e => e.id === enemyId)!.cycleShift = (foe.cycleShift ?? 0) + k;
-    if (lockedMove(enemyIntent(shifted, data, enemyId, next.round))) return 'This move cannot be turned.';
-  }
+  if (!bigMove(state, data, enemyId, next)) return 'Not a big move.';
+  if (foe.postpone && next.round <= foe.postpone.until) return 'This move was already delayed.';
+  if (foe.interruptedRound === next.round) return 'This move is already interrupted.';
+  if (foe.deflect && foe.deflect.until >= next.round && !lockedMove(next)) return 'This move is already bent.';
+  if (phaseMoves(state, data, enemyId).length <= (next.charge ? 2 : 1)) return 'Too few moves in its cycle.';
   return '';
+}
+function postponeMove(state: BattleState, data: EncounterDefinition, foe: EnemyState, heroId: string): void {
+  const next = nextIntentOf(state, data, foe.id)!; const block = next.charge ? 2 : 1;
+  foe.cycleLag = (foe.cycleLag ?? 0) + 1;
+  foe.postpone = { heroId, round: next.round, skip: block + 1, until: next.round + block };
 }
 // Why this foe's next move cannot be bent onto `recipientId` (empty when it can); `until` = the last round it may happen.
 export function deflectReason(state: BattleState, data: EncounterDefinition, heroId: string, enemyId: string, recipientId?: string): string {
@@ -414,6 +427,14 @@ export function phaseMoves(state: BattleState, data: EncounterDefinition, id: st
   while (p > 0 && !data.intents.some(i => i.sourceId === id && (i.phase ?? 0) === p)) p--;
   return data.intents.filter(i => i.sourceId === id && (i.phase ?? 0) === p);
 }
+// Where in its current cycle a foe's move for `round` comes from: each phase's moves cycle from the round after the phase
+// began, late by `cycleLag`; in a Seer's delay round the foe uses the move `skip` places on.
+export function cycleIndex(state: BattleState, data: EncounterDefinition, id: string, round: number): number {
+  const foe = state.enemies.find(e => e.id === id); const n = phaseMoves(state, data, id).length;
+  if (!foe || !n) return -1;
+  const at = round - (foe.phaseRound ?? 0) - 1 - (foe.cycleLag ?? 0) + (foe.postpone?.round === round ? foe.postpone.skip : 0);
+  return (at % n + n) % n;
+}
 export function enemyIntent(state: BattleState, data: EncounterDefinition, id: string, round: number): Intent | null {
   const foe = state.enemies.find(e => e.id === id);
   if (!foe || !living(state, id)) return null;
@@ -424,8 +445,10 @@ export function enemyIntent(state: BattleState, data: EncounterDefinition, id: s
   if (phase) return alive[0] ? { sourceId: id, targetSlot: 0, name: phase.name, damage: 0, kind: 'energy', unstoppable: true, special: 'phase', targetId: alive[0].id, beat: state.beat, round } : null;
   // Each phase's moves cycle from the round after the phase began (the opening cycle from round 1).
   const moves = phaseMoves(state, data, id);
-  const template = moves[((round - (foe.phaseRound ?? 0) - 1 + (foe.cycleShift ?? 0)) % moves.length + moves.length) % moves.length];
+  const template = moves[cycleIndex(state, data, id, round)];
   if (!template) return null;
+  const delay = foe.postpone && round >= foe.postpone.round && round <= foe.postpone.until ? foe.postpone : undefined;
+  const marks = delay ? delay.round === round ? { delayedMove: moves[cycleIndex(state, data, id, round + 1)]!.name } : { delayedOnce: true } : {};
   const front = alive.filter(h => data.heroes.find(d => d.id === h.id)!.lane === 'front');
   const allowed = template.kind === 'physical' && front.length ? front : alive;
   const target = allowed.find(h => h.id === data.heroes[template.targetSlot]?.id) ?? allowed[0];
@@ -435,7 +458,7 @@ export function enemyIntent(state: BattleState, data: EncounterDefinition, id: s
   const drawn = !warden && !duel ? taunted(state, data, id, round, foe.drawnBy) : undefined;
   const stoned = !warden && !duel && !drawn && !template.all && !template.charge && state.stone?.ids.includes(target.id)
     ? taunted(state, data, id, round, state.stone) : undefined;
-  return { ...template, targetId: warden ?? duel ?? drawn ?? stoned ?? target.id, beat: state.beat, round, ...(stoned ? { stoned: true, stoneTargetId: target.id } : {}) };
+  return { ...template, targetId: warden ?? duel ?? drawn ?? stoned ?? target.id, beat: state.beat, round, ...(stoned ? { stoned: true, stoneTargetId: target.id } : {}), ...marks };
 }
 export function plannedIntents(state: BattleState, data: EncounterDefinition, count = 2): Intent[] {
   return upcomingTurns(state, data, (data.heroes.length + data.enemies.length) * (count + 1))
@@ -459,6 +482,7 @@ function settled(state: BattleState, data: EncounterDefinition, events: BattleEv
   state.intent = null; state.guard = null; state.counter = null; state.taunt = null; state.song = null; state.rally = null; state.sanctuary = null; state.solace = null;
   if (state.challenge) state.challenge = null; if (state.bulwark) state.bulwark = null; if (state.charge) state.charge = null;
   if (state.parry) state.parry = null; if (state.halo) state.halo = null; if (state.prayerEcho) state.prayerEcho = null; if (state.tracking) delete state.tracking;
+  if (state.meteors) delete state.meteors;
   if (state.stone) state.stone = null;
   events.push({ type: 'outcome', text: state.outcome }); return true;
 }
@@ -471,6 +495,21 @@ function trackingShots(state: BattleState, data: EncounterDefinition, events: Ba
     if (foe && foe.hp > 0 && living(state, t.heroId)) strikeBack(state, data, t.heroId, foe, t.power, events, 'Tracking shot.');
   }
 }
+// Seer falling stars land as their round ends on every standing foe, through Magic Power, veilguard and fatigue (a
+// chart-the-big-move node adds to a foe whose next move is big). A Seer downed since (revived or not) loses hers.
+function fallingStars(state: BattleState, data: EncounterDefinition, events: BattleEvent[]): void {
+  const due = state.meteors?.filter(t => t.round === state.round) ?? []; if (!state.meteors) return;
+  state.meteors = state.meteors.filter(t => t.round > state.round); if (!state.meteors.length) delete state.meteors;
+  for (const t of due) {
+    const seer = state.heroes.find(h => h.id === t.heroId);
+    if (!seer || seer.hp <= 0 || seer.revivedRound === state.round) continue;
+    events.push({ type: 'meteor', sourceId: t.heroId, text: 'The star falls.' });
+    for (const foe of state.enemies.filter(e => e.hp > 0)) {
+      const extra = bigMove(state, data, foe.id, enemyIntent(state, data, foe.id, state.round + 1)) ? capAmount(data, t.heroId, 'seerMeteorBig') : 0;
+      strikeBack(state, data, t.heroId, foe, t.power + extra, events, 'Falling star.');
+    }
+  }
+}
 function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: BattleEvent[]): void {
   if (settled(state, data, events)) return;
   state.beat++;
@@ -478,6 +517,7 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
     state.turnIndex++;
     if (state.turnIndex >= state.order.length) {
       trackingShots(state, data, events); if (settled(state, data, events)) return;
+      fallingStars(state, data, events); if (settled(state, data, events)) return;
       hexTicks(state, data, events); if (settled(state, data, events)) return;
       state.round++; state.order = roundOrder(state, data); state.turnIndex = 0;
       // A priest's long prayer (or dawn) heals every standing ally again as its round begins.
@@ -647,7 +687,7 @@ function spearFury(state: BattleState, data: EncounterDefinition, heroId: string
 // next round) and its moves switch to the new phase's cycle.
 function beginPhase(state: BattleState, data: EncounterDefinition, enemy: EnemyState, events: BattleEvent[]): void {
   const phase = pendingPhase(state, data, enemy.id); if (!phase) return;
-  enemy.phase = (enemy.phase ?? 0) + 1; enemy.phaseRound = state.round; delete enemy.cycleShift; delete enemy.deflect;
+  enemy.phase = (enemy.phase ?? 0) + 1; enemy.phaseRound = state.round; delete enemy.cycleLag; delete enemy.postpone; delete enemy.deflect;
   events.push({ type: 'phase', sourceId: enemy.id, targetId: enemy.id, text: phase.name });
   for (const slot of phase.summon ?? []) {
     const minion = state.enemies.find(e => e.id === slot); const def = data.enemies.find(e => e.id === slot);
@@ -918,7 +958,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
     const actor = state.enemies.find(s => s.id === e.id);
     const reason = unavailable || (!actor || actor.hp <= 0 ? 'This enemy is down.' :
       screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : action === 'lifetoll' && !actor.hexes?.some(h => h.heroId === heroId) ? 'No curse on this enemy.' : action === 'deflectfate' ? deflectReason(state, data, heroId, e.id)
-      : action === 'turncycle' ? dialReason(state, data, e.id, 1) : action === 'doubledial' ? dialReason(state, data, e.id, hasCap(data, heroId, 'seerDialChoose') ? 1 : 2) : '');
+      : '');
     return { id: e.id, name: e.name, valid: !reason, reason };
   });
 }
@@ -932,10 +972,6 @@ export function validateCommand(state: BattleState, data: EncounterDefinition, c
   if (command.cooldownTargetId !== undefined) return 'Invalid cooldown recipient.';
   if (command.action === 'deflectfate') { const why = command.recipientId === undefined ? 'Choose the enemy to bend it onto.' : deflectReason(state, data, command.heroId, command.targetId, command.recipientId); if (why) return why; }
   else if (command.recipientId !== undefined) return 'This action does not bend a move.';
-  if (command.steps !== undefined) {
-    if (command.action !== 'doubledial' || !hasCap(data, command.heroId, 'seerDialChoose') || (command.steps !== 1 && command.steps !== 2)) return 'Invalid number of steps.';
-    const why = dialReason(state, data, command.targetId, command.steps); if (why) return why;
-  } else if (command.action === 'doubledial') { const why = dialReason(state, data, command.targetId, 2); if (why) return why; }
   const target = targetOptions(state, data, command.heroId, command.action).find(t => t.id === command.targetId);
   return target?.valid ? '' : target?.reason || 'Invalid target.';
 }
@@ -1084,20 +1120,31 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       break;
     }
     case 'deflectfate': {
+      // Seer rework (save v51): the bend is set first, then a small hit lands on the bent foe.
       const until = nextIntentOf(state, data, enemy!.id)!.round;
       enemy!.deflect = { heroId: hero.id, recipientId: command.recipientId!, until };
       events.push({ type: 'deflect', sourceId: hero.id, targetId: enemy!.id, text: 'Fate is bent.' });
+      if (skill.power > 0) damage(skill.power);
       if (hasCap(data, hero.id, 'astrid1') && !state.commands.some(c => c.heroId === hero.id && c.action === 'deflectfate')) cooldownAdjustment--;
       if (hasCap(data, hero.id, 'astrid4') && row(command.recipientId!) !== row(enemy!.id)) cooldownAdjustment--;
       break;
     }
-    case 'turncycle': case 'doubledial': {
-      const steps = command.action === 'turncycle' ? 1 : command.steps ?? 2; const before = nextIntentOf(state, data, enemy!.id)!;
-      // Turn cycle also lands a small energy hit (owner 2026-11-05); the dial still turns if the foe falls.
+    case 'turncycle': {
+      // Seer rework (save v51): an energy hit; a big move next for the target is delayed one round first (any move
+      // otherwise: the hit alone). Turn back (`seerTurnRefund`) shortens the cooldown when a move was really delayed.
+      const delays = !postponeReason(state, data, enemy!.id);
+      if (delays) {
+        postponeMove(state, data, enemy!, hero.id);
+        events.push({ type: 'dial', sourceId: hero.id, targetId: enemy!.id, amount: 1, text: 'The big move is delayed.' });
+        cooldownAdjustment -= capAmount(data, hero.id, 'seerTurnRefund');
+      }
       if (skill.power > 0) damage(skill.power);
-      enemy!.cycleShift = (enemy!.cycleShift ?? 0) + steps;
-      events.push({ type: 'dial', sourceId: hero.id, targetId: enemy!.id, amount: steps, text: 'The cycle turns.' });
-      if (command.action === 'turncycle' && before.kind === 'physical') cooldownAdjustment -= capAmount(data, hero.id, 'seerTurnRefund');
+      break;
+    }
+    case 'doubledial': {
+      // Falling star (save v51): set now, it strikes every standing foe as this round ends, unless Astrid falls first.
+      state.meteors = [...state.meteors ?? [], { heroId: hero.id, round: state.round, power: skill.power }];
+      events.push({ type: 'meteor', sourceId: hero.id, targetId: hero.id, text: 'A star begins to fall.' });
       break;
     }
     case 'starneedle': {

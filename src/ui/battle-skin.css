@@ -77,6 +77,8 @@
 #intent[data-kind="physical"] { border-left-color: #f0b060; }
 .dmg-pill { display: inline-flex; align-items: center; gap: 3px; padding: 1px 8px 1px 5px; border-radius: 99px; border: 1px solid var(--kind); background: var(--kind-bg); color: var(--kind); font-size: 12px; font-weight: 600; line-height: 1.5; vertical-align: middle; }
 .dmg-pill svg { width: 14px; height: 14px; }
+/* Seer delay (save v51): always visible on the intent card, also where the rule line is hidden. */
+.intent-delay { display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 1px 8px; border-radius: var(--radius-pill); border: 1px solid var(--veil-cyan); background: var(--navy-800); color: var(--veil-cyan); font-size: var(--type-caption); font-weight: 600; line-height: 1.5; vertical-align: middle; }
 /* Queue: a corner glyph on each foe's portrait. */
 .turn-icon { position: relative; }
 .turn-icon .dmg-kind { position: absolute; right: -4px; bottom: -4px; width: 14px; height: 14px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--kind); background: var(--kind-bg); color: var(--kind); pointer-events: none; }
