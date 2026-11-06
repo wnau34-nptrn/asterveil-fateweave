@@ -32,6 +32,7 @@ export function effectCaption(event: BattleEvent): string {
     case 'dial': return 'เลื่อนท่าใหญ่';
     case 'meteor': return event.text === 'The star falls.' ? 'ดาวตก!' : 'ตั้งท่าดาวตก';
     case 'beat': return (event.amount ?? 0) > 0 ? `จังหวะ +${event.amount}` : `ใช้จังหวะ ${-(event.amount ?? 0)}`;
+    case 'clash': return `ปะทะ −${event.amount}`;
     case 'hex': return `สาป ${event.amount ?? 0}/3`;
     case 'chi': return (event.amount ?? 0) > 0 ? `ปราณ +${event.amount}` : `ปล่อยปราณ ${-(event.amount ?? 0)}`;
     case 'heal': return `+${event.amount ?? 0}`;

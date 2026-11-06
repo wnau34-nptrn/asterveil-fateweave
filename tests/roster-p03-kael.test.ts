@@ -4,7 +4,7 @@ import { veilSiege } from '../src/content/encounters/veil-siege';
 import { rosterP03 } from '../src/content/heroes/roster-p03';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { ruinsMap } from '../src/content/world/chapter-ruins';
-import { actionReason, beginBattle, previewCommand, releasePower, replay, resolveCommand, skillCooldown, targetOptions } from '../src/core/battle/engine';
+import { actionReason, beginBattle, CIRCLE_HP_PERCENT, circleHpCost, previewCommand, releasePower, replay, resolveCommand, skillCooldown, targetOptions } from '../src/core/battle/engine';
 import type { ActionId, BattleState, Command, EncounterDefinition, TalentCap, TurnStage } from '../src/core/battle/types';
 import { parseGame, saveGame, type Game } from '../src/core/save/expedition-save';
 import { boardOffers, featuredLineup, hire, learnTalent, newProfile, refreshBoard } from '../src/core/world/profile';
@@ -68,14 +68,40 @@ describe('P03 Martial chi', () => {
     expect(dealt(kill.turn)).toBe(10); expect(chi(kill.state)).toBe(1);
     expect(kill.turn.events.some(e => e.type === 'down' && e.targetId === 'f1')).toBe(true);
   });
-  it('a circle fist hitting two foes still builds no chi and pays two', () => {
+  it('a circle fist hitting two foes still builds no chi and pays one (save v54)', () => {
     const d = fixture(['circlefist'], {}, ['f1', 'f2', 'b1']);
-    const reason = actionReason(beginBattle(d).state, d, 'kael', 'circlefist');
-    expect(reason).toBe('Not enough chi.');
     const s = gathered(d, 3);
     const r = cast(d, s, 'circlefist', 'enemies');
     expect(r.turn.events.filter(e => e.type === 'damage').map(e => e.targetId)).toEqual(['f1', 'f2']);
-    expect(chi(r.state)).toBe(1);
+    expect(chi(r.state)).toBe(2);
+  });
+  it('save v54: a stored fist clashes with the move aimed at Kael, taking its real damage off that hit', () => {
+    for (const move of [12, 40]) {
+      const d = fixture(['storedfist']); d.intents = d.intents.map(i => ({ ...i, damage: move }));
+      const s = beginBattle(d).state; const kaelHp = s.heroes[0]!.hp;
+      const r = resolveCommand(s, d, { beat: s.beat, heroId: 'kael', action: 'storedfist', targetId: 'f1' });
+      const fist = dealt(r.turns[0]!); expect(fist).toBe(20);
+      expect(r.turns[0]!.events.find(e => e.type === 'clash')).toMatchObject({ sourceId: 'kael', targetId: 'f1', amount: Math.min(fist, move) });
+      const hit = r.events.find(e => e.type === 'damage' && e.sourceId === 'f1')!;
+      expect((hit.amount ?? 0) + (hit.absorbed ?? 0)).toBe(Math.max(0, move - fist));
+      expect(r.state.heroes[0]!.hp).toBe(kaelHp - Math.max(0, move - fist)); expect(r.state.enemies[0]!.clash).toBeUndefined();
+    }
+  });
+  it('save v54: no clash when the move does not aim at Kael (a whole-party move)', () => {
+    const d = fixture(['storedfist']); d.intents = d.intents.map(i => ({ ...i, damage: 12, all: true }));
+    const s = beginBattle(d).state; const r = cast(d, s, 'storedfist');
+    expect(r.turn.events.some(e => e.type === 'clash')).toBe(false); expect(r.turn.state.enemies[0]!.clash).toBeUndefined();
+  });
+  it('save v54: with no chi the circle fist costs CIRCLE_HP_PERCENT of max HP, never his last HP', () => {
+    const d = fixture(['circlefist'], {}, ['f1', 'f2', 'b1']); const s = beginBattle(d).state; s.turnIndex = s.order.indexOf('kael');
+    expect(actionReason(s, d, 'kael', 'circlefist')).toBe('');
+    const cost = circleHpCost(d, 'kael'); expect(cost).toBe(Math.ceil(d.heroes.find(h => h.id === 'kael')!.maxHp * CIRCLE_HP_PERCENT / 100));
+    const hp = s.heroes.find(h => h.id === 'kael')!.hp;
+    const r = cast(d, s, 'circlefist', 'enemies');
+    expect(r.turn.events.find(e => e.type === 'damage' && e.targetId === 'kael')).toMatchObject({ sourceId: 'kael', amount: cost });
+    expect(r.turn.state.heroes.find(h => h.id === 'kael')!.hp).toBe(hp - cost); expect(chi(r.turn.state)).toBe(0);
+    const low = structuredClone(s); low.heroes.find(h => h.id === 'kael')!.hp = cost;
+    expect(actionReason(low, d, 'kael', 'circlefist')).toBe('Not enough HP to pay for it.');
   });
   it('release pays every point (at least one) for 10 + 8 per point, grown by Attack', () => {
     const d = fixture(['releasefist']);
@@ -208,7 +234,7 @@ describe('P03 Kael in the world', () => {
     expect(loaded.boardFeatured).toEqual(['metta', 'lalin']);
     expect(boardOffers(loaded, map, lookup)).toEqual(v46Offers);
     expect(loaded.taken).toEqual([3]);
-    expect(JSON.parse(write({ profile: loaded, run: null })).version).toBe(53);
+    expect(JSON.parse(write({ profile: loaded, run: null })).version).toBe(54);
     const refreshed = refreshBoard({ ...loaded, bank: { ...loaded.bank, gold: 90 } }, map).profile;
     expect(refreshed.boardFeatured).toEqual(featuredLineup(map));
     expect(refreshed.boardFeatured).toContain('kael');

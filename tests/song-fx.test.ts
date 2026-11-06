@@ -53,9 +53,9 @@ describe('song / shadow VFX follows authoritative events without changing state'
   const f=songFixture('finale','mend'),plan=songPlan(f.turn)!;expect(f.turn.events.some(e=>e.type==='heal')).toBe(false);
   expect(plan.art).toBe('finale-mend');expect(plan.peak).toBeUndefined();expect(plan.settles).toHaveLength(0);expect(plan.events).toHaveLength(0);expect(plan.prepare).toBeDefined();
  });
- it('solo paints the one ally who really received the buff (no foe, no damage)',()=>{
+ it('solo paints the one ally who really received the buff; its note (save v54) is an ordinary hit on a foe',()=>{
   const f=songFixture('solo'),plan=songPlan(f.turn)!,buff=f.turn.events.find(e=>e.type==='buff')!;
-  expect(f.turn.events.some(e=>e.type==='damage')).toBe(false);expect(buff.targetId).not.toBe(f.actor.id);expect(plan.prepare).toEqual({id:buff.targetId,spot:'feet'});expect(plan.peak!.from).toEqual({id:buff.targetId,spot:'feet'});expect(plan.settles).toEqual([{at:{id:buff.targetId,spot:'feet'},outcome:'hit'}]);
+  expect(f.turn.events.filter(e=>e.type==='damage').map(e=>e.text)).toEqual(['The solo carries a sharp note.']);expect(buff.targetId).not.toBe(f.actor.id);expect(plan.prepare).toEqual({id:buff.targetId,spot:'feet'});expect(plan.peak!.from).toEqual({id:buff.targetId,spot:'feet'});expect(plan.settles).toEqual([{at:{id:buff.targetId,spot:'feet'},outcome:'hit'}]);
  });
  it('evade is Sefa\'s own feet; decoy is the covered ally (separate real events, one ghost)',()=>{
   const e=songFixture('evade'),pe=songPlan(e.turn)!;expect(pe.peak!.from).toEqual({id:'sefa',spot:'feet'});expect(pe.settles).toHaveLength(1);expect(e.turn.events.some(x=>x.type==='damage')).toBe(false);
