@@ -41,6 +41,13 @@ for (const [w, h] of sizes) test(`team page ${w}x${h}`, async ({ browser }) => {
   const shot = async (name: string) => { await page.waitForTimeout(300); await page.screenshot({ path: `${out}/${name}.png` }); };
   await page.locator('#lobby-tab-team').click(); await shot('camp-team-top');
   await page.locator('.team-grid.bench').scrollIntoViewIfNeeded(); await shot('camp-team-roster');
+  if (process.env.TEAM_SHOTS_PRESETS) {
+    await page.locator('#lobby-member-lio').click(); await page.locator('.quick-moves').scrollIntoViewIfNeeded(); await shot('camp-team-picked');
+    await page.locator('#lobby-member-lio').click();
+    await page.locator('#team-preset-1').click(); await page.locator('#lobby-sheet-title').scrollIntoViewIfNeeded(); await shot('camp-team-preset-applied');
+    await page.locator('#team-preset-manage summary').click(); await shot('camp-team-preset-manage');
+    await page.locator('#team-preset-0').click();
+  }
   await page.locator('[data-lobby=close]').click(); await page.locator('#lobby-depart').click(); await expect(page.locator('#world-view')).toBeVisible();
   await page.keyboard.press('b'); const tab = page.locator('[data-world=bag-tab][data-tab=team], #bag-tab-team').first();
   if (await tab.count()) { await tab.click(); await shot('map-bag-team'); }

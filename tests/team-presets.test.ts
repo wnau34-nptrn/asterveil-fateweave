@@ -24,12 +24,12 @@ describe('team presets at the camp', () => {
   it('saves the team with its columns, applies it in one step and marks the matching preset', () => {
     let p = setPartyLane(company(), map, lookup, 'weaver', 'front').profile;
     const saved = savePreset(p, map, lookup, 0, 'บุกบอส');
-    expect(saved.event).toEqual({ type: 'party', preset: 0 });
+    expect(saved.event).toEqual({ type: 'party', preset: 0, presetAction: 'save' });
     p = saved.profile; expect(p.presets).toEqual([{ name: 'บุกบอส', deployed: p.party.deployed, reserve: p.party.reserve, lanes: formation(p.party, rec) }]);
     // Rearrange by hand, then the preset puts everything back exactly (field order, reserve and columns).
     let q = placeMember(p, map, 'metta', 'deployed', 'guardian').profile; q = setPartyLane(q, map, lookup, 'weaver', 'back').profile;
     expect(matchesPreset(q.party, q.presets![0], formation(q.party, rec))).toBe(false);
-    const back = applyPreset(q, map, 0); expect(back.event).toEqual({ type: 'party', preset: 0 });
+    const back = applyPreset(q, map, 0); expect(back.event).toEqual({ type: 'party', preset: 0, presetAction: 'apply' });
     expect(back.profile.party.deployed).toEqual(p.party.deployed); expect(back.profile.party.reserve).toEqual(p.party.reserve);
     expect(formation(back.profile.party, rec)).toEqual(formation(p.party, rec));
     expect(matchesPreset(back.profile.party, back.profile.presets![0], formation(back.profile.party, rec))).toBe(true);
@@ -52,7 +52,7 @@ describe('team presets at the camp', () => {
     let p = savePreset(company(), map, lookup, 0).profile; p = { ...p, presets: [{ ...p.presets![0]!, reserve: ['mira', 'brann', 'lio', 'metta', 'lalin'] }] };
     p = { ...p, cleared: [] }; expect(reserveSlots(p, map)).toBe(3);
     expect(campPresetPlan(p, map, 0)!.left).toEqual(['metta', 'lalin']);
-    const out = applyPreset(p, map, 0); expect(out.event).toEqual({ type: 'party', preset: 0, left: ['metta', 'lalin'] });
+    const out = applyPreset(p, map, 0); expect(out.event).toEqual({ type: 'party', preset: 0, presetAction: 'apply', left: ['metta', 'lalin'] });
     expect(out.profile.party.reserve).toEqual(['mira', 'brann', 'lio']); expect(out.profile.company).toEqual(p.company);
   });
   it('takes applied members out of the archive; a dismissed member leaves every preset', () => {

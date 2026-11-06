@@ -35,18 +35,18 @@ export function savePreset(initial: Profile, map: MapDefinition, lookup: Encount
   const label = (name ?? presetOf(initial, slot)?.name ?? defaultPresetName(slot)).trim();
   const reason = presetNameReason(label); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial); put(profile, slot, snapshot(profile.party, recommendedLane(lookup, map), label));
-  return { profile, event: { type: 'party', preset: slot } };
+  return { profile, event: { type: 'party', preset: slot, presetAction: 'save' } };
 }
 export function renamePreset(initial: Profile, slot: number, name: string): ProfileResult {
   const preset = slotOk(slot) ? presetOf(initial, slot) : undefined; if (!preset) return blocked(initial, 'unknown');
   const reason = presetNameReason(name); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial); put(profile, slot, { ...structuredClone(preset), name: name.trim() });
-  return { profile, event: { type: 'party', preset: slot } };
+  return { profile, event: { type: 'party', preset: slot, presetAction: 'rename' } };
 }
 export function clearPreset(initial: Profile, slot: number): ProfileResult {
   if (!slotOk(slot) || !presetOf(initial, slot)) return blocked(initial, 'unknown');
   const profile = structuredClone(initial); put(profile, slot, null);
-  return { profile, event: { type: 'party', preset: slot } };
+  return { profile, event: { type: 'party', preset: slot, presetAction: 'clear' } };
 }
 // A dismissed member leaves every preset (a preset left with nobody empties; the first reserve steps up if the field
 // emptied). Called by `dismiss`.
@@ -76,7 +76,7 @@ export function applyPreset(initial: Profile, map: Pick<MapDefinition, 'company'
   // Bringing someone back into the team takes them out of the archive (as `placeMember` does).
   const team = [...plan.roster.deployed, ...plan.roster.reserve];
   if (profile.archived) { profile.archived = profile.archived.filter(id => !team.includes(id)); if (!profile.archived.length) delete profile.archived; }
-  return { profile, event: { type: 'party', preset: slot, ...(plan.left.length ? { left: plan.left } : {}) } };
+  return { profile, event: { type: 'party', preset: slot, presetAction: 'apply', ...(plan.left.length ? { left: plan.left } : {}) } };
 }
 
 // On the map (outside battle) a preset rearranges the members this run brought; nobody joins or leaves the run.
