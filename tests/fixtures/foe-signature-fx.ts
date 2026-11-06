@@ -29,8 +29,7 @@ const plans:Record<FoeScenario,{actor:string;action:ActionId;slot:number;with:st
  hit:{actor:'guardian',action:'attack',slot:1,with:['healer','weaver']},
  guard:{actor:'guardian',action:'guard',slot:1,with:['weaver','healer']},
  blocked:{actor:'weaver',action:'ward',slot:0,with:['guardian','healer']},
- // Save v56: Sefa's own fade hides instead of dodging, so the dodge comes from her decoy on the ally the move aims at.
- dodge:{actor:'sefa',action:'decoy',slot:1,with:['guardian','healer']},
+ dodge:{actor:'sefa',action:'evade',slot:0,with:['guardian','healer']},
  all:{actor:'guardian',action:'attack',slot:1,with:['healer','weaver']},
 };
 export function foeSignatureFixture(move:FoeSignatureMove,scenario:FoeScenario='hit'){
@@ -46,7 +45,7 @@ export function foeSignatureFixture(move:FoeSignatureMove,scenario:FoeScenario='
  const actor=data.heroes.find(h=>h.id===currentHeroId(state,data))!;
  if(actor.id!==caster.id)throw new Error('Wrong fixture actor '+actor.id);
  const options=targetOptions(state,data,actor.id,plan.action);
- const wanted=plan.action==='guard'||plan.action==='decoy'?party[1]!.id:plan.action==='attack'?foe.id:actor.id;
+ const wanted=plan.action==='guard'?party[1]!.id:plan.action==='attack'?foe.id:actor.id;
  const targetId=options.find(t=>t.valid&&t.id===wanted)?.id??options.find(t=>t.valid)!.id;
  const command:Command={beat:state.beat,heroId:actor.id,action:plan.action,targetId};
  const cast=resolveCommand(state,data,command,true),foeTurn=cast.turns.find(t=>t.side==='enemy'&&t.intent?.name===move)!;

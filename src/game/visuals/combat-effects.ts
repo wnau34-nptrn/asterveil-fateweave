@@ -33,7 +33,6 @@ export function effectCaption(event: BattleEvent): string {
     case 'meteor': return event.text === 'The star falls.' ? 'ดาวตก!' : 'ตั้งท่าดาวตก';
     case 'beat': return (event.amount ?? 0) > 0 ? `จังหวะ +${event.amount}` : `ใช้จังหวะ ${-(event.amount ?? 0)}`;
     case 'clash': return `ปะทะ −${event.amount}`;
-    case 'shade': return event.text === 'Into the shadow.' ? 'หายเข้าเงา' : event.text === 'Out of the shadow.' ? 'ออกจากเงา' : 'เงาจาง';
     case 'venom': return event.targetId === event.sourceId ? `เคลือบพิษ ${event.amount}` : `พิษ ${event.amount} ชั้น`;
     case 'arcane': return (event.amount ?? 0) > 0 ? `ประจุเวท +${event.amount}` : `ใช้ประจุ ${-(event.amount ?? 0)}`;
     case 'hex': return `สาป ${event.amount ?? 0}/3`;

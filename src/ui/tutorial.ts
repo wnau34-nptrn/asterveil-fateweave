@@ -325,9 +325,7 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  }
  if(role==='Scout'){
   // Step aside from the announced hit; otherwise ambush an enemy that still has to act this round.
-  // Save v56: fade into shadow (a hit too) when a single-target move coming for her would take 60%+ of her HP. Hiding
-  // moves the hit onto an ally, so used on every move aimed at her it cost the party (no-points HP 57.8 → 50.4%, a loss).
-  if(intent?.targetId===heroId&&!intent.all&&intent.damage*100>=(state.heroes.find(h=>h.id===heroId)?.hp??0)*60){const e=make('evade',pick('evade').id,'หายเข้าเงา',`${actorName(intent.sourceId,data)} เล็งเซฟาไม่ได้`);if(e)return e;}
+  if(intent?.targetId===heroId){const e=make('evade',heroId,'ก้าวเงาหลบการโจมตี',`${actorName(intent.sourceId,data)} จะตีพลาด`);if(e)return e;}
   const options=reach('ambush');
   const foe=options.find(e=>ambushBonus(state,data,e.id,heroId)>0)??focus(options);
   return (foe&&make('ambush',foe.id,'จู่โจมก่อนศัตรูขยับ',`พลัง ${skillPower(data,heroId,'ambush')+ambushBonus(state,data,foe.id,heroId)}`))??attack();

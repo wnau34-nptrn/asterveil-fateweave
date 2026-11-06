@@ -150,8 +150,8 @@ export interface HeroState { id: string; hp: number; barrier: number; cooldowns:
   shard?: { heroId: string; amount: number }; arcane?: number;
   // Warden (save v55): damage taken since his last command, for the rune slam.
   bruise?: number;
-  // Scout (save v56): `shade` = hidden from single-target moves for `turns` more of her turns; `coated` = hits left that poison.
-  shade?: { turns: number }; coated?: number;
+  // Scout (save v56): `coated` = hits left that poison.
+  coated?: number;
   // Dancer rework (save v48): `beats` a dancer's beats (0–BEAT_MAX); `echo` the dancer bound to this ally by duet (her
   // echo follows its next skill up to `until`);
   // `quickened` skills a dance already quickened since their last use, `quickenedBattle` the once-per-battle ones.
@@ -264,7 +264,7 @@ export interface BattleState {
 export type SongId = 'valor' | 'mend' | 'dread';
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge'
-    | 'parry' | 'revive' | 'buff' | 'shove' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'deflect' | 'dial' | 'meteor' | 'beat' | 'clash' | 'arcane' | 'shade' | 'venom';
+    | 'parry' | 'revive' | 'buff' | 'shove' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'deflect' | 'dial' | 'meteor' | 'beat' | 'clash' | 'arcane' | 'venom';
   text: string; sourceId?: string; targetId?: string; action?: ActionId; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

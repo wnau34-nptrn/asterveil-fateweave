@@ -47,7 +47,7 @@ describe('foe signature VFX routing follows authoritative enemy turns',()=>{
  it('a dodge is a miss: travel only, outcome dodged',()=>{
   for(const move of ['Seed Spark','Veil Quake'] as const){
    const f=foeSignatureFixture(move,'dodge'),cues=foeSignatureCues(f.turn);
-   expect(f.turn.events.map(e=>e.type)).toEqual(['dodge']);expect(cues).toHaveLength(1);expect(cues[0]).toMatchObject({outcome:'dodged',targetId:'guardian'});
+   expect(f.turn.events.map(e=>e.type)).toEqual(['dodge']);expect(cues).toHaveLength(1);expect(cues[0]).toMatchObject({outcome:'dodged',targetId:'sefa'});
   }
  });
  it('a fully absorbed hit reads blocked, not hit',()=>{

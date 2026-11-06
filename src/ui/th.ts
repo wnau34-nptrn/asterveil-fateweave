@@ -4,7 +4,7 @@ import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } fr
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
-import { BEAT_MAX, braceStrikePower, CHARGE_EXPOSED, PIERCE_BEHIND, PIN_PERCENT, SHOVE_LOCK, SPEARWALL_MAX, SPEARWALL_STEP, DEEP_BEAT_LOW, ROUND_PAIR_BONUS, HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, SLAM_GRUDGE, SLAM_GRUDGE_MAX, AEGIS_SHARD, ARCANE_MAX, DISPEL_PER_CHARGE, CIRCLE_HP_PERCENT, SOLO_NOTE, FINALE_PER_ROUND, NOTE_MAX_ROUNDS, CHALLENGE_GRUDGE_MAX, ROUSE_CUT, SANCTUARY_HEAL, SHADE_TURNS, SHADE_BONUS, BLADE_HITS, COAT_HITS, VENOM_MAX, VENOM_TICK, VENOM_ROUNDS, VENOM_BURST, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
+import { BEAT_MAX, braceStrikePower, CHARGE_EXPOSED, PIERCE_BEHIND, PIN_PERCENT, SHOVE_LOCK, SPEARWALL_MAX, SPEARWALL_STEP, DEEP_BEAT_LOW, ROUND_PAIR_BONUS, HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, SLAM_GRUDGE, SLAM_GRUDGE_MAX, AEGIS_SHARD, ARCANE_MAX, DISPEL_PER_CHARGE, CIRCLE_HP_PERCENT, SOLO_NOTE, FINALE_PER_ROUND, NOTE_MAX_ROUNDS, CHALLENGE_GRUDGE_MAX, ROUSE_CUT, SANCTUARY_HEAL, BLADE_HITS, COAT_HITS, VENOM_MAX, VENOM_TICK, VENOM_ROUNDS, VENOM_BURST, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 import type { IconName } from './icons';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -83,7 +83,7 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     volley: `ยิงห่าธนูใส่ศัตรูทุกตัว ตัวละ ${skill.power}`,
     acid: `ปาขวดกรด ${skill.power} แล้วเป้าหมายถูกกัดกร่อน ${data.rules.corrodeDuration} รอบรวมรอบนี้ ทุกการโจมตีของทีมใส่ตัวนี้แรงขึ้น +${corrodeBonusOf(data, heroId)}`,
     ambush: `จู่โจม ${skill.power} หรือ ${skill.power + ambushBonusOf(data, heroId)} ถ้าเป้าหมายยังไม่ได้ลงมือในรอบนี้ (ดูคิว SPD) ใช้ได้ดีกับศัตรูที่ช้ากว่า`,
-    evade: `หายเข้าเงา: โจมตี ${skill.power} แล้วซ่อนตัว ท่าเป้าเดี่ยวของศัตรูเล็งเซฟาไม่ได้ (ท่าหมู่ยังโดน) อยู่ได้ ${SHADE_TURNS} เทิร์นของเซฟาหรือจนกว่าจะโจมตี ท่าแรกที่ออกจากเงาแรงขึ้น ${SHADE_BONUS}%`,
+    evade: `ก้าวเงาเตรียมหลบ การโจมตีของศัตรูครั้งแรกที่โดนเซฟา (กายภาพหรือพลังงาน) จะพลาดทั้งหมด อยู่จนหลบแล้วหรือถึงเทิร์นของตัวเองอีกครั้ง`,
     taunt: `ยั่วยุศัตรูทุกตัว ตั้งแต่ตอนนี้จนถึงเทิร์นถัดไปของแบรนน์ การโจมตีของศัตรูทุกครั้ง (กายภาพหรือพลังงาน) จะเล็งมาที่แบรนน์ และเขารับเบาลง ${Math.round(tauntReductionOf(data, heroId) * 100)}% แผนโจมตีศัตรูจะแสดงเป้าใหม่ทันที`,
     slam: `ทุบค้อนรูน ${skill.power} หรือ ${skill.power + data.rules.quakeBonus} ถ้าท่าถัดไปของเป้าหมายเล็งผู้ใช้ · แค้นสะสม: +${SLAM_GRUDGE}% ของดาเมจที่แบรนน์รับตั้งแต่คำสั่งก่อน (สูงสุด +${SLAM_GRUDGE_MAX})`,
     valor: `บรรเลงเพลงกล้าค้างไว้ ทุกการโจมตีของทีมแรงขึ้น +${songPower(data, heroId, 'valor')} (รวมสกิลและการสวน) จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
@@ -188,7 +188,7 @@ const ruleText: Record<TalentRule, { actions: readonly ActionId[]; help: (n: num
   executeHeal: { actions: ['execute'], help: n => `ฟันเจาะจุดใส่ศัตรูที่ติดตรา ฟื้นเลือดตัวเอง ${n}` },
   healBarrier: { actions: ['heal'], help: n => `รักษาแล้วให้โล่ ${n} ด้วย (ไม่ซ้อนกัน)` },
   hasteHeal: { actions: ['haste'], help: n => `ยาเร่งฟื้นเลือดให้คนที่ได้ ${n}` },
-  dodgeHeal: { actions: ['evade'], help: n => `หายเข้าเงาแล้วฟื้นเลือดตัวเอง ${n}` },
+  dodgeHeal: { actions: ['evade'], help: n => `หลบได้แล้วฟื้นเลือดตัวเอง ${n}` },
 };
 const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: number) => string }> = {
   communionRatio: { actions: ['communion'], help: n => `แบ่งแรงใจแปลงดาเมจเพิ่ม ${n} จุดเปอร์เซ็นต์` },
@@ -272,7 +272,7 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   acidspread: { actions: ['acid'], help: () => 'ขวดกรดทำให้ศัตรูตัวอื่นถูกกัดกร่อนด้วย (ไม่มีดาเมจ)' },
   quickbrew: { actions: ['haste'], help: () => 'ยาเร่งพร้อมใช้อีกครั้งเร็วขึ้น 1 รอบ' },
   shadowlayer: { actions: ['ambush'], help: () => 'ใช้จู่โจมก่อนแล้วได้ก้าวเงาทันที' },
-  doubleshadow: { actions: ['evade'], help: () => 'อยู่ในเงานานขึ้น 1 เทิร์น' },
+  doubleshadow: { actions: ['evade'], help: () => 'ก้าวเงาหลบได้ 2 ครั้ง' },
   hammercounter: { actions: ['taunt'], help: n => `ระหว่างยั่วยุ ทุกครั้งที่โดนตีจะทุบสวน ${n}` },
   stoneregen: { actions: ['taunt'], help: n => `เริ่มเทิร์นตอนเลือดต่ำกว่าครึ่ง ฟื้นเลือด ${n}` },
   chorus: { actions: ['valor'], help: n => `ระหว่างเพลงกล้า การโจมตีของศัตรูทุกครั้งเบาลง ${n}` },
@@ -354,7 +354,7 @@ export const passiveText: Record<PassiveId, { name: string; actions: readonly Ac
   heavycounter: { name: 'สวนหนัก', actions: ['brace'], help: d => `ตั้งทวนแทงสวนแรงขึ้น ${d.rules.heavyCounter * 100}%` },
   tailwind: { name: 'ลมใต้ปีก', actions: ['volley'], help: d => `ห่าธนูพร้อมใช้อีกครั้งใน ${d.skills.volley.cooldown - 1} รอบ` },
   potent: { name: 'สูตรเข้มข้น', actions: ['acid', 'bomb'], help: d => `กรดกัดกร่อนอยู่ได้ ${d.rules.corrodeDuration + 1} รอบ` },
-  shadowcounter: { name: 'เงาสวน', actions: ['evade'], help: d => `อยู่ในเงาแล้วโดนท่าหมู่ แทงสวนผู้โจมตี ${d.rules.shadowCounter}` },
+  shadowcounter: { name: 'เงาสวน', actions: ['evade'], help: d => `หลบได้แล้วแทงสวนผู้โจมตี ${d.rules.shadowCounter}` },
   stoneskin: { name: 'ผิวหิน', actions: ['taunt'], help: d => `ยั่วยุลดความเสียหายที่รับ ${d.rules.stoneskinReduction * 100}%` },
   resound: { name: 'เพลงก้อง', actions: ['valor', 'mend'], help: d => `ผลของเพลงแรงขึ้น ${d.rules.resound * 100}%` },
 };
@@ -457,7 +457,6 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'pin': return `${source}ตรึงแถวหน้า · แถวหน้าเลิกบังแถวหลังถึงจบรอบถัดไป`;
     case 'dispel': return `${target}ถูกสลายเวท · เกราะพลังงานปิดถึงจบรอบถัดไป`;
     case 'weaken': return `ท่าถัดไปของ${target}เบาลง ${event.amount}%`;
-    case 'shade': return event.text === 'Into the shadow.' ? `${source}หายเข้าเงา · ท่าเป้าเดี่ยวของศัตรูเล็งไม่ได้` : event.text === 'Out of the shadow.' ? `${source}ออกจากเงา · ท่าแรกแรงขึ้น` : `เงาของ${source}จางหาย`;
     case 'venom': return event.targetId === event.sourceId ? `${source}เคลือบพิษอาวุธ · ${event.amount} การโดนถัดไปติดพิษ` : `${target}ติดพิษ ${event.amount} ชั้น`;
     case 'arcane': return (event.amount ?? 0) > 0 ? `${source}ได้ประจุเวท 1` : `${source}ปลดประจุเวท ${-(event.amount ?? 0)}`;
     case 'clash': return `หมัดเก็บแรงปะทะท่าถัดไปของ${target} · ท่าที่เล็ง${source}เบาลง ${event.amount}`;

@@ -4,7 +4,7 @@ import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { MAPS } from '../src/content/world/maps';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { heroCatalog } from '../src/core/world/world';
-import { actionReason, beginBattle, previewCommand, replay, resolveCommand, skillCooldown, skillPower, roundOrder, currentHeroId, targetKind, targetOptions , SHADE_TURNS} from '../src/core/battle/engine';
+import { actionReason, beginBattle, previewCommand, replay, resolveCommand, skillCooldown, skillPower, roundOrder, currentHeroId, targetKind, targetOptions } from '../src/core/battle/engine';
 import type { ActionId, EncounterDefinition } from '../src/core/battle/types';
 import { characterSkillMetric } from '../src/ui/character-metrics';
 import { newProfile, depart } from '../src/core/world/profile';
@@ -89,9 +89,9 @@ describe('C11 skill contract',()=>{
   s.song={heroId:'lio',action:'valor',since:-20};const r=resolveCommand(s,d,{heroId:'lio',action:'note',targetId:'f1',beat:s.beat}).turns[0]!;
   expect(r.events.find(e=>e.type==='damage')!.amount).toBe(Math.round((14+9)*1.2)+4);expect(r.events.some(e=>e.type==='weaken')).toBe(false);
  });
- it('her own fade (save v56) leaves a decoy dodge given by another hero as it was',()=>{
-  const d=fixture('sefa','evade'),s=beginBattle(d).state;s.heroes[0]!.evading=true;s.heroes[0]!.evadeBy='guardian';
-  const r=resolveCommand(s,d,{heroId:'sefa',action:'evade',targetId:'f1',beat:s.beat});expect(r.turns[0]!.state.heroes[0]).toMatchObject({evadeBy:'guardian',shade:{turns:SHADE_TURNS}});
+ it('own shadow step clears the giver expiry of a previously granted shadow',()=>{
+  const d=fixture('sefa','evade'),s=beginBattle(d).state;s.heroes[0]!.evadeBy='guardian';
+  const r=resolveCommand(s,d,{heroId:'sefa',action:'evade',targetId:'sefa',beat:s.beat});expect(r.turns[0]!.state.heroes[0]!.evadeBy).toBeUndefined();
  });
  it('Aegis rejects a no-op, but allows a useful level barrier to its caster',()=>{
   const d=fixture('weaver','aegis'),s=beginBattle(d).state;

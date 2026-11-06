@@ -131,11 +131,11 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // queue change), her Tracking Shot's repeat bounces to the weakest foe; Eira's Crystal Aegis strikes back when broken and
 // Dispel becomes the Arcane Release (bolt charges); Brann's Rune Slam adds part of the damage he took. Profiles are
 // unchanged; a battle in progress that used any of them restarts from its entry HP.
-// v56 (owner 2026-11-06, skill rework step 6, Sefa): Shadow Step becomes Fade (hit, hidden from single-target moves, a
-// stronger first strike out), Backstab the Blade Storm (four hits), Throwing Knives the Poison Coat and Disarm the Venom
+// v56 (owner 2026-11-06, skill rework step 6, Sefa; Shadow Step kept as it was by the owner's choice): Backstab becomes the
+// Blade Storm (four hits), Throwing Knives the Poison Coat and Disarm the Venom
 // Burst. Profiles are unchanged; a battle in progress that used any of them restarts from its entry HP.
 const SAVE_VERSION = 56;
-const REWORKED_V56: readonly ActionId[] = ['evade', 'backstab', 'knives', 'disarm'];
+const REWORKED_V56: readonly ActionId[] = ['backstab', 'knives', 'disarm'];
 const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispel', 'bolt', 'slam'];
 const REWORKED_V54: readonly ActionId[] = ['storedfist', 'circlefist', 'solo', 'finale'];
 const REWORKED_V53: readonly ActionId[] = ['haste', 'challenge', 'rouse', 'sanctuary', 'bless'];

@@ -73,8 +73,7 @@ export function songPlan(turn:TurnStage):SongPlan|undefined{
     // R3: the whole song stands behind the one ally who really received the buff, never on Lio.
     return {skill,art:skill,casterId:id,prepare:feet(event.targetId!),peak:{from:feet(event.targetId!),outcome:'hit'},events:[event],settles:[{at:feet(event.targetId!),outcome:'hit'}]};
   }
-  // Save v56: Sefa's fade raises a 'shade' event on herself (the decoy still an 'evade' on the covered ally).
-  const event=own.find(e=>skill==='evade'?e.type==='shade'&&e.text==='Into the shadow.'&&e.targetId===id:e.type==='evade'&&e.text==='Shadow cover.'&&!!e.targetId);if(!event)return;
+  const event=own.find(e=>e.type==='evade'&&(skill==='evade'?e.targetId===id:e.text==='Shadow cover.'&&!!e.targetId));if(!event)return;
   const at=feet(skill==='evade'?id:event.targetId!);
   return {skill,art:skill,casterId:id,prepare:feet(id),peak:{from:at,outcome:'hit'},events:[event],settles:[{at,outcome:'hit'}]};
 }

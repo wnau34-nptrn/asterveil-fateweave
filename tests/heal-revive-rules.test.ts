@@ -264,7 +264,7 @@ describe('save v55 (skill rework step 6, third batch, 2026-11-06)', () => {
 });
 
 describe('save v56 (skill rework step 6, Sefa, 2026-11-06)', () => {
-  it('a v55 battle that used Shadow Step, Backstab, Throwing Knives or Disarm restarts from its entry HP; others and the profile are kept', async () => {
+  it('a v55 battle that used Backstab, Throwing Knives or Disarm (Shadow Step is unchanged) restarts from its entry HP; others and the profile are kept', async () => {
     const { chapterOne: map } = await import('../src/content/world/chapter1');
     const { encounterById: lookup } = await import('../src/content/encounters/catalog');
     const { depart, newProfile } = await import('../src/core/world/profile');
@@ -274,7 +274,7 @@ describe('save v56 (skill rework step 6, Sefa, 2026-11-06)', () => {
       let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game);
       const old = JSON.parse(raw) as { version: number }; expect(old.version).toBe(56); old.version = 55; return parseGame(JSON.stringify(old), map, lookup);
     };
-    for (const [heroId, action, targetId] of [['sefa', 'evade', 'sefa'], ['sefa', 'backstab', 'f1'], ['sefa', 'knives', 'enemies'], ['sefa', 'disarm', 'f1']] as const) {
+    for (const [heroId, action, targetId] of [['sefa', 'backstab', 'f1'], ['sefa', 'knives', 'enemies'], ['sefa', 'disarm', 'f1']] as const) {
       const game = depart(p, map, lookup, 77);
       game.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...game.run.hp }, commands: [{ heroId, beat: 0, action, targetId }] };
       const migrated = v55(game);

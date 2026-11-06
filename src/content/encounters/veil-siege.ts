@@ -37,7 +37,7 @@ export const veilSiege: EncounterDefinition = {
     haste: { name: 'ยาเร่ง', english: 'Haste Tonic', icon: '⇡', power: 0, cooldown: 3 },
     // Scout (2C-2): ambush hits harder before the target acts this round; shadow step dodges the next hit.
     ambush: { name: 'จู่โจมก่อน', english: 'Ambush', icon: '⚔', power: 12, cooldown: 2 },
-    evade: { name: 'หายเข้าเงา', english: 'Fade', icon: '↯', power: 8, cooldown: 3 },
+    evade: { name: 'ก้าวเงา', english: 'Shadow Step', icon: '↯', power: 0, cooldown: 3 },
     // Hammer warden (2C-2): taunt pulls every enemy move onto him (reduced) until his next turn; slam deals its power, plus
     // `rules.quakeBonus` when the target's next move aims at the warden (Rune Quake capstone splashes the same column).
     taunt: { name: 'ยั่วยุ', english: 'Challenge', icon: '⛨', power: 0, cooldown: 3 },

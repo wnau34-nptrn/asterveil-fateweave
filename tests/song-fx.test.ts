@@ -58,7 +58,7 @@ describe('song / shadow VFX follows authoritative events without changing state'
   expect(f.turn.events.filter(e=>e.type==='damage').map(e=>e.text)).toEqual(['The solo carries a sharp note.']);expect(buff.targetId).not.toBe(f.actor.id);expect(plan.prepare).toEqual({id:buff.targetId,spot:'feet'});expect(plan.peak!.from).toEqual({id:buff.targetId,spot:'feet'});expect(plan.settles).toEqual([{at:{id:buff.targetId,spot:'feet'},outcome:'hit'}]);
  });
  it('evade is Sefa\'s own feet; decoy is the covered ally (separate real events, one ghost)',()=>{
-  const e=songFixture('evade'),pe=songPlan(e.turn)!;expect(pe.peak!.from).toEqual({id:'sefa',spot:'feet'});expect(pe.settles).toHaveLength(1);expect(e.turn.events.filter(x=>x.type==='damage').map(x=>x.sourceId)).toEqual(['sefa']);expect(pe.events.map(x=>x.type)).toEqual(['shade']); // save v56: the fade also hits
+  const e=songFixture('evade'),pe=songPlan(e.turn)!;expect(pe.peak!.from).toEqual({id:'sefa',spot:'feet'});expect(pe.settles).toHaveLength(1);expect(e.turn.events.some(x=>x.type==='damage')).toBe(false);
   const d=songFixture('decoy'),pd=songPlan(d.turn)!,cover=d.turn.events.find(x=>x.text==='Shadow cover.')!;
   expect(pd.peak!.from).toEqual({id:cover.targetId,spot:'feet'});expect(pd.settles).toHaveLength(1);expect(cover.targetId).not.toBe('sefa');
  });

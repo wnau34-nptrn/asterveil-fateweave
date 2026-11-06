@@ -199,13 +199,17 @@ describe('scout ★3 backstab / ★5 shadow counter (Sefa)', () => {
       if (aiming) expect(option.reason).toBe('This enemy is aiming at the scout.');
     }
   });
-  it('save v56: in shadow, a whole-party move that hits Sefa is struck back (shadow counter)', () => {
-    const d = party([['guardian', 1], ['sefa', 5], ['weaver', 1], ['healer', 1]]); d.intents = d.intents.map(i => ({ ...i, all: true }));
+  it('a successful shadow step strikes back', () => {
+    // Sefa in slot 1 (front) is the raider's first Raking Slash target, and she acts before it.
+    const d = party([['guardian', 1], ['sefa', 5], ['weaver', 1], ['healer', 1]]);
     const s = until(createBattle(d), d, 'sefa');
-    const r = act(s, d, 'evade', 'b1'); const after = r.turns[0]!.state;
-    expect(after.heroes.find(h => h.id === 'sefa')!.shade).toBeDefined();
-    const turn = r.turns.find(t => t.side === 'enemy' && t.events.some(e => e.type === 'damage' && e.targetId === 'sefa'))!;
-    expect(turn.events.find(e => e.type === 'counter')).toMatchObject({ sourceId: 'sefa', targetId: turn.actorId, amount: d.rules.shadowCounter });
+    expect(nextIntentOf(s, d, 'b1')?.targetId).toBe('sefa');
+    const raider = s.enemies.find(e => e.id === 'b1')!.hp;
+    const r = act(s, d, 'evade', 'sefa');
+    const turn = r.turns.find(t => t.actorId === 'b1')!;
+    expect(turn.events.map(e => e.type)).toEqual(['dodge', 'counter']);
+    expect(turn.events[1]).toMatchObject({ sourceId: 'sefa', targetId: 'b1', amount: d.rules.shadowCounter });
+    expect(hp(r.state, 'b1')).toBe(raider - d.rules.shadowCounter);
   });
 });
 

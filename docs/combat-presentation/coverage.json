@@ -2121,7 +2121,7 @@
    "identity": "sefa",
    "side": "hero",
    "move": "evade",
-   "name": "หายเข้าเงา",
+   "name": "ก้าวเงา",
    "body": {
     "kind": "sprite",
     "clip": "evade",
@@ -2145,7 +2145,7 @@
     "module": "song-shadow-fx",
     "kind": "painted"
    },
-   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "target": "ตัวเอง",
    "point": "เท้าผู้ร่าย"
   },
   {
