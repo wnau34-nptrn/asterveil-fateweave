@@ -13,7 +13,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- None. Skill rework step 5 (Toma) merged (PR #190). Waiting on the owner: (1) haste baton 20% vs 50% (README §8 numbers), (2) the go for step 6 (small fixes; prompt below).
+- Skill rework step 6 (small fixes) — owner 2026-11-06 "ตามที่คุณแนะนำ" (answer to: start step 6? haste baton 20% or 50%?) = start step 6 and raise Toma's haste baton 20% → 50% (Claude's reading of the recommendation; README §8 measured 50% = ΔHP +1.5/+3.4). Prompt below.
 
 ## Next (owner order)
 
@@ -38,8 +38,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ```text
 ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype ตอบไทย ใช้เวลาไทย
 อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง แล้วเปิด skill .claude/skills/fateweave-rules-and-sim
-งาน: ขั้นที่ 6 ของแผนตรวจสกิล = ปรับเล็ก (เริ่มตามลำดับในการ์ด: Aegis challenge/rouse/bash, Seren sanctuary/bless, Kael storedfist/circlefist, Lio solo/finale แล้ว Mira, Sefa, Eira, Brann) ใช้ได้เมื่อเจ้าของสั่งเริ่มแล้ว
-แบบ: การ์ดในหน้า artifact "ตรวจสกิล Fateweave" (https://claude.ai/artifact/RTv5isw1yhwL2DmH3duyBL, Artifact read; โน้ตเจ้าของใน db "notes") ห้ามคิดข้อเสนอใหม่แทน ถ้าวัดแล้วใช้ไม่ได้ บอกเจ้าของพร้อมตัวเลขก่อนเปลี่ยน · ถ้าเจ้าของตอบเรื่องส่งไม้ Toma (20% หรือ 50%) ให้ทำด้วย
+งาน: ขั้นที่ 6 ของแผนตรวจสกิล = ปรับเล็ก เจ้าของสั่ง "ตามที่คุณแนะนำ" (2026-11-06) ไม่ต้องรออนุมัติซ้ำ เริ่มตามลำดับในการ์ด: Aegis challenge/rouse/bash, Seren sanctuary/bless, Kael storedfist/circlefist, Lio solo/finale แล้ว Mira, Sefa, Eira, Brann
+แบบ: การ์ดในหน้า artifact "ตรวจสกิล Fateweave" (https://claude.ai/artifact/RTv5isw1yhwL2DmH3duyBL, Artifact read; โน้ตเจ้าของใน db "notes") ห้ามคิดข้อเสนอใหม่แทน ถ้าวัดแล้วใช้ไม่ได้ บอกเจ้าของพร้อมตัวเลขก่อนเปลี่ยน · รวมใน PR แรก: ส่งไม้ Toma `HASTE_BATON` 20 → 50 (เจ้าของตอบ "ตามที่คุณแนะนำ"; ตัวเลขใน README §8) แล้ววัด sim ใหม่
 ทำแบบขั้น 5 (docs/validation/skill-rework-2026-11-05/README_TH.md §8): probe วัดก่อน → engine/content/th/advisor/สถานะ/VFX → เซฟ v53 (REWORKED_V53, เทสต์ version 52 ทุกที่รวม tests/browser, เทสต์ย้ายเซฟ) → typecheck/lint/test/sim (full SIM_REPORT=1 มี campaign gate) + Playwright ที่เกี่ยวข้อง (ตั้ง PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium)
 แบ่ง PR ตามตัวละครถ้างานใหญ่ จบแต่ละ PR: quality+browser ผ่าน → merge; อัปเดต CURRENT_STATE, CODEX-TO-CLAUDE, README §9
 ```
