@@ -18,7 +18,7 @@ test.skipIf(!process.env.PROBE_OUT)('garran probe', () => {
     const me = starred(base, 3, map, 10, b.talents, undefined, b.loadout.length ? { loadout: b.loadout } : undefined);
     const party = [mates[0]!, me, ...mates.slice(1)];
     const per: Record<string, { uses: number; direct: number; counter: number; triggers: number }> = {};
-    let cur = ''; const why: Record<string, number> = {}; let pend: { src: string; trig: boolean; ev: Set<string> } | null = null;
+    let cur: string; const why: Record<string, number> = {}; let pend: { src: string; trig: boolean; ev: Set<string> } | null = null;
     for (const id of fights) {
       const data = withParty(withLevel(lookup(id)!, 15, map.progression.monsterLevelPercent), party);
       let s = beginBattle(data).state;
