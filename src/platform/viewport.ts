@@ -37,11 +37,7 @@ export function fitViewport(root: HTMLElement = document.documentElement): void 
     const el = document.createElement('div'); el.setAttribute('aria-hidden', 'true');
     el.style.cssText = `position:fixed;left:0;top:0;width:0;height:${u};visibility:hidden;pointer-events:none`; document.body.append(el); return [u, el] as const;
   });
-  // Experiment for the iOS home-screen app that reports a layout height one status bar short (innerHeight + env top = screen):
-  // tapping the overlay switches between the measured height and the full screen height so the owner can compare on the device.
-  let tall = false, metaReset = false;
   const debug = document.body.appendChild(document.createElement('pre'));
-  debug.addEventListener('pointerdown', () => { tall = !tall; apply(); });
   debug.hidden = !new URLSearchParams(location.search).has('vp');
   let taps: number[] = [];
   document.addEventListener('pointerdown', e => {
@@ -50,16 +46,13 @@ export function fitViewport(root: HTMLElement = document.documentElement): void 
     if (taps.length >= 5) { taps = []; debug.hidden = !debug.hidden; apply(); }
   }, true);
   if (debug) debug.style.cssText = 'position:fixed;z-index:9999;left:50%;top:40%;transform:translateX(-50%);margin:0;padding:8px 10px;font:12px/1.35 monospace;color:#fff;background:#000c;border-radius:8px;pointer-events:none';
-  debug.style.pointerEvents = 'auto';
 
   const apply = (): void => {
     const height = window.innerHeight;
     const width = window.innerWidth;
     // Phones use their full portrait viewport. Desktop keeps native-sized touch controls in
     // a centred portrait frame; the frame, not the monitor, owns component breakpoints.
-    const standaloneApp = matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
-    const shortByStatusBar = standaloneApp && ios() && height < width * 3 && height + probe.offsetHeight >= screen.height - 1 && height < screen.height - 1;
-    const frameHeight = touch.matches && width <= 600 ? (tall && standaloneApp ? Math.max(height, screen.height) : height) : Math.min(height, 960);
+    const frameHeight = touch.matches && width <= 600 ? height : Math.min(height, 960);
     const editing = document.activeElement?.matches('textarea, input[type="text"], input:not([type]), [contenteditable="true"]');
     const frameWidth = touch.matches && (height >= width || editing) ? Math.min(width, 480) : Math.min(480, width, Math.floor(frameHeight * .625));
     root.style.setProperty('--app-h', `${frameHeight}px`);
@@ -75,12 +68,6 @@ export function fitViewport(root: HTMLElement = document.documentElement): void 
       if (!gate.open) gate.showModal();
     } else if (gate.open) gate.close();
     const envTop = probe.offsetHeight;
-    // One automatic retry: re-applying the viewport meta makes iOS re-measure a stale layout viewport.
-    if (shortByStatusBar && !metaReset) {
-      metaReset = true;
-      const meta = document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
-      if (meta) { const content = meta.content; meta.content = `${content}, minimum-scale=1`; setTimeout(() => { meta.content = content; apply(); }, 120); }
-    }
     const portrait = window.innerHeight > window.innerWidth;
     // A shorter viewport may already start below the status bar. Only reserve a
     // fallback when the layout actually reaches the full screen height; the old
@@ -102,7 +89,6 @@ export function fitViewport(root: HTMLElement = document.documentElement): void 
         `data-standalone ${root.dataset.standalone ?? '-'} env bottom ${bottomProbe.offsetHeight}`,
         `app y ${Math.round(app.getBoundingClientRect().top)} h ${Math.round(app.getBoundingClientRect().height)}`,
         `units ${unitProbes.map(([u, el]) => `${u.slice(3)} ${el.offsetHeight}`).join(' · ')}`,
-        `short ${shortByStatusBar} meta-reset ${metaReset} tall ${tall} (tap box)`,
       ].join('\n');
     }
   };
