@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { fieldSlots, slotPlan, type FieldBox, type HeroColumn } from '../src/game/visuals/field-layout';
+import { fieldSlots, slotPlan, standSlotId, type FieldBox, type HeroColumn } from '../src/game/visuals/field-layout';
 
 const intersects = (a: FieldBox, b: FieldBox) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 type Foe = { id: string; reserve?: boolean; large?: boolean; boss?: boolean };
@@ -101,5 +101,16 @@ describe('standard battle grid (owner 2026-10-22: every battle stands on the sam
     // The guard's painted figure fills about 71% of its frame (its own headroom), so its name clears the boss's panel.
     const g = fieldSlots(378, 513, { ...plan, rise: new Map([[5, .71]]) });
     expect(g[5]!.size).toBeGreaterThan(g[2]!.size); // units now share one larger size, so the large partner has less room above its feet expect(g[5]!.label!.y).toBeGreaterThanOrEqual(g[4]!.panel.y + g[4]!.panel.height);
+  });
+});
+
+describe('spear shove stand slots (save v50)', () => {
+  it('swaps a shoved foe with its partner while both stand, uses the back slot without one, and returns after', () => {
+    const swapped = { enemies: [{ id: 'f1', hp: 9, shoved: { partnerId: 'b1' } }, { id: 'b1', hp: 9 }, { id: 'f2', hp: 9 }] };
+    expect(['f1', 'b1', 'f2'].map(id => standSlotId(swapped, id))).toEqual(['b1', 'f1', 'f2']);
+    expect(standSlotId({ enemies: [{ id: 'f2', hp: 9, shoved: {} }] }, 'f2')).toBe('b2');
+    // A fallen shoved foe no longer holds its partner forward.
+    expect(standSlotId({ enemies: [{ id: 'f1', hp: 0, shoved: { partnerId: 'b1' } }, { id: 'b1', hp: 9 }] }, 'b1')).toBe('b1');
+    expect(standSlotId({ enemies: [{ id: 'f1', hp: 9 }, { id: 'b1', hp: 9 }] }, 'f1')).toBe('f1');
   });
 });

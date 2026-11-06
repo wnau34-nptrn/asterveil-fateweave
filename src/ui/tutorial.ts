@@ -1,4 +1,4 @@
-import { actionReason, hexTickPower, validateCommand, cooldownTargets, hasCap, previewCommand, CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, hasCap, previewCommand, CATALYST_PER_ROUND, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, Command } from '../core/battle/types';
 import { actorName } from './th';
 export interface Lesson { step:number; title:string; copy:string; heroId:string; action:ActionId; targetId:string; cooldownAction?:ActionId; cooldownTargetId?:string; recipientId?:string; steps?:number }
@@ -45,6 +45,34 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    if(!best||score>best.score)best={command,score,damage};
   }
   if(best){const {command,damage}=best;const after=command.action;return{...command,step:state.commands.length+1,title:['releasefist','circlefist','perfectfist'].includes(after)?'จ่ายปราณปิดท่า':'สะสมปราณ',copy:`${actorName(heroId,data)} → ${data.skills[command.action].name} → ${actorName(command.targetId,data)} · คาดการณ์ดาเมจ ${damage} · ปราณ ${chi}`};}
+  return attack();
+ }
+ // Spear (save v50 rework): judged like the Seer, on the whole preview up to the party's next command (counters and a
+ // pinned move included); a shove is judged by which foe it pulls forward and which it hides, and the charge's exposure
+ // shows as party HP lost in the preview.
+ if(role==='Spear'){
+  const me=data.heroes.find(h=>h.id===heroId)!;let best:{command:Command;score:number}|undefined;
+  const foeLoss=(r:ReturnType<typeof previewCommand>)=>state.enemies.reduce((n,e)=>n+e.hp-(r.state.enemies.find(x=>x.id===e.id)?.hp??0),0);
+  const partyLoss=(r:ReturnType<typeof previewCommand>)=>state.heroes.reduce((n,h)=>n+Math.max(0,h.hp+h.barrier-(r.state.heroes.find(x=>x.id===h.id)?.hp??0)-(r.state.heroes.find(x=>x.id===h.id)?.barrier??0)),0);
+  for(const action of me.actions)for(const target of targetOptions(state,data,heroId,action).filter(t=>t.valid)){
+   const command:Command={heroId,beat:state.beat,action,targetId:target.id};
+   if(validateCommand(state,data,command))continue;
+   const r=previewCommand(state,data,command);
+   // A shove helps when it pulls forward a foe weaker than the one it hides (front-lane allies can finish it); hiding the
+   // foe the party is wearing down costs them a target.
+   const moved=r.state.enemies.find(e=>e.shoved&&!state.enemies.find(x=>x.id===e.id)?.shoved),partner=moved?.shoved?.partnerId?r.state.enemies.find(e=>e.id===moved.shoved!.partnerId):undefined;
+   const pulled=moved?(partner&&partner.hp<=moved.hp?8:-12):0;
+   // Effects that outlive the preview window: a stance still waiting on the announced physical hit on the front lane, a
+   // pinned foe that has not acted yet, and the charge's exposure to a move aimed at him.
+   const countered=r.turns.some(t=>t.events.some(e=>e.type==='counter'&&e.sourceId===heroId));
+   const frontHits=living.filter(e=>{const n=nextIntentOf(state,data,e.id);return n?.kind==='physical'&&!n.all&&lane(n.targetId)==='front';}).length;
+   const stance=countered?0:(action==='brace'&&intent?.kind==='physical'&&lane(intent.targetId)==='front'?skillPower(data,heroId,'brace')*.8:action==='spearwall'?(skillPower(data,heroId,'spearwall')*.8+(intent?.damage??0)*SPEARWALL_STEP/100)*frontHits:0);
+   const pinned=r.state.enemies.find(e=>e.id===target.id&&e.hp>0&&e.weaken&&action==='hold');const pin=pinned?(nextIntentOf(r.state,data,pinned.id)?.damage??0)*pinned.weaken!/100*.4:0;
+   const open=action==='warcry'&&intent?.targetId===heroId&&r.state.charge?.heroId===heroId?intent.damage*CHARGE_EXPOSED/100:0;
+   const score=foeLoss(r)-partyLoss(r)*1.2+pulled+stance+pin-open*1.2+(r.state.outcome==='victory'?50:0)-(r.state.outcome==='defeat'?100:0);
+   if(!best||score>best.score)best={command,score};
+  }
+  if(best){const {command}=best;return{...command,step:state.commands.length+1,title:command.action==='attack'?'โจมตีพื้นฐาน':`ใช้${data.skills[command.action].name}`,copy:`${actorName(heroId,data)} → ${data.skills[command.action].name} → ${actorName(command.targetId,data)}`};}
   return attack();
  }
  // Hexer (P03): a curse deals nothing now, so the advisor values the damage still to come: each stack's tick for every
@@ -158,17 +186,6 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    const strong=state.heroes.find(h=>h.hp>0&&!h.renew&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp);
    if(hurt&&strong){const b=make('bless',strong.id,'พรต่อเนื่องให้เพื่อนบาดเจ็บ',`ฟื้น ${skillPower(data,heroId,'bless')} ต่อรอบ 2 รอบ`);if(b)return b;}
   }
-  if(role==='Spear'){
-   // Hold the line for a back-liner the move would hurt badly, while Garran has HP to spare.
-   const aimed=intent&&!intent.all&&lane(intent.targetId)==='back'?state.heroes.find(h=>h.id===intent.targetId):undefined;
-   const me=state.heroes.find(h=>h.id===heroId)!,myMax=data.heroes.find(h=>h.id===heroId)!.maxHp;
-   if(aimed&&intent!.damage*100>=data.heroes.find(h=>h.id===aimed.id)!.maxHp*35&&me.hp*2>myMax){const h=make('hold',heroId,'ทวนโต้คุ้มแนวหลัง',`${actorName(intent!.sourceId,data)} จะโดนแทงสวน`);if(h)return h;}
-   if(intent?.kind==='physical'&&lane(intent.targetId)==='front'){const w=make('spearwall',heroId,'กำแพงทวนสวนทุกท่า',`สวน ${skillPower(data,heroId,'spearwall')} ทุกครั้ง`);if(w)return w;}
-   const ahead=reach('halt').find(e=>state.order.indexOf(e.id)>state.turnIndex&&nextIntentOf(state,data,e.id)?.kind==='physical'&&nextIntentOf(state,data,e.id)?.round===state.round);
-   if(ahead){const t=make('halt',ahead.id,'แทงสวนจังหวะก่อนมันตี',`${actorName(ahead.id,data)} โดนแรงขึ้น 50%`);if(t)return t;}
-   // War cry pays off while at least two other front-liners still act this round.
-   if(intent?.kind==='physical'&&lane(intent.targetId)==='front'){const c=make('warcry',heroId,'เสียงศึกปลุกแนวหน้า',`แนวหน้าสวนกายภาพ ${skillPower(data,heroId,'warcry')}`);if(c)return c;}
-  }
   if(role==='Archer'){
    if(front.length&&back.length&&state.heroes.some(h=>h.hp>0&&lane(h.id)==='front'&&h.id!==heroId)){const p=make('pin','enemies','ตรึงแถวหน้าเปิดแถวหลัง','ทั้งทีมตีแถวหลังได้');if(p)return p;}
    // Tail movement helps when it lets a living ally act before a pending foe, regardless of damage kind or target.
@@ -255,11 +272,6 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   const options=reach('ambush');
   const foe=options.find(e=>ambushBonus(state,data,e.id,heroId)>0)??focus(options);
   return (foe&&make('ambush',foe.id,'จู่โจมก่อนศัตรูขยับ',`พลัง ${skillPower(data,heroId,'ambush')+ambushBonus(state,data,foe.id,heroId)}`))??attack();
- }
- if(role==='Spear'){
-  const front=intent?.kind==='physical'&&data.heroes.find(h=>h.id===intent.targetId)?.lane==='front';
-  if(front)return make('brace',heroId,'ตั้งทวนรอสวน',`${actorName(intent!.sourceId,data)} จะโดนแทงสวน ${skillPower(data,heroId,'brace')}`)??make('pierce',pick('pierce').id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();
-  return make('pierce',pick('pierce').id,'แทงทะลวง',`พลัง ${skillPower(data,heroId,'pierce')}`)??attack();
  }
  if(role==='Duelist'){
   // Mark only a foe the duelist can strike next turn.

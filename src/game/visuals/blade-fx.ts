@@ -17,8 +17,14 @@ export const bladeSkills = {
   parry:    { width:88, height:74, axial:false, cross:1, family:'Duelist', life:280, turn:-.32, travel:[8,-3], core:13, count:1 },
   pierce:   { width:130, height:58, axial:true, cross:1.4, family:'Spear', life:285, turn:0, travel:[12,0], core:14, count:1 },
   halt:     { width:74, height:62, axial:true, cross:1, family:'Spear', life:300, turn:0, travel:[2,0], core:16, count:0 },
+  // Save v50: the pinning spear (hold) and the charge (warcry) are thrusts too.
+  hold:     { width:96, height:56, axial:true, cross:1.2, family:'Spear', life:290, turn:0, travel:[6,0], core:15, count:0 },
+  warcry:   { width:140, height:62, axial:true, cross:1.4, family:'Spear', life:300, turn:0, travel:[22,0], core:16, count:1 },
 } as const;
 export type BladeSkill = keyof typeof bladeSkills;
+// Skills drawn with another skill's painted layers (no new art): the pinning spear with Halting Thrust's, the charge
+// with Pierce's.
+export const BLADE_ART: Partial<Record<BladeSkill, BladeSkill>> = { hold: 'halt', warcry: 'pierce' };
 export const isBladeSkill = (action: string | undefined): action is BladeSkill => !!action && Object.hasOwn(bladeSkills, action);
 // The skill icons' class families: Knight blue/gold, Duelist rose, Scout steel blue, Spear teal.
 export const bladePalettes: Readonly<Record<string, number>> = {
@@ -52,7 +58,7 @@ const scale = (ctx: FxContext) => ctx.scale / 1.25 * (ctx.quiet ? .9 : 1);
 const artTint = (skill: BladeSkill, tint: number) => tint === bladePalettes[bladeSkills[skill].family] ? 0xffffff : tint;
 function paint(ctx: FxContext, at: Point, skill: BladeSkill, phase: string, size: number, tint: number): Phaser.GameObjects.Image {
   const spec = bladeSkills[skill];
-  return image(ctx, at, `${skill}_${phase}`, spec.width * size, spec.height * size, artTint(skill, tint), spec.cross);
+  return image(ctx, at, `${BLADE_ART[skill] ?? skill}_${phase}`, spec.width * size, spec.height * size, artTint(skill, tint), spec.cross);
 }
 // Every tween targets an owned image. stopEffects kills it and destroys its paired tail as well.
 function settle(ctx: FxContext, img: Phaser.GameObjects.Image, life: number): void {

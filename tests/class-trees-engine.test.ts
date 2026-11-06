@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { beginBattle, enemyIntent, previewCommand, replay, resolveCommand, skillPower, targetOptions, upcomingTurns } from '../src/core/battle/engine';
+import { beginBattle, CHARGE_EXPOSED, currentHeroId, foeRow, PIN_PERCENT, previewCommand, replay, resolveCommand, screened, SHOVE_LOCK, shoveReason, skillPower, targetOptions, upcomingTurns } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, HeroDefinition, HeroTalents, TalentCap } from '../src/core/battle/types';
 import { veilSiege } from '../src/content/encounters/veil-siege';
 import { mercenaries } from '../src/content/heroes/mercenaries';
@@ -180,31 +180,70 @@ describe('priest tree (Seren)', () => {
 describe('spear tree (Garran)', () => {
   // Party: Aegis, Garran (front), Eira, Seren. Round 1: raider, Eira, Garran, Aegis, brute (Rift Bolt at slot 2, Eira), Seren.
   const spear = (patch: Patch) => withMerc('garran', 1, { garran: patch });
-  it('hold counters physical hits on the back lane without redirecting energy hits', () => {
-    const base = spear({ actions: ['hold'], talents: { caps: { holdfirm: 20, holdcounter: 0 } } });
-    const d = { ...base, intents: base.intents.map(i => ({ ...i, kind: 'physical' as const })), heroes: base.heroes.map(h => ({ ...h, lane: 'back' as const })) };
-    const r = cast(d, turnOf(d, 'garran'), 'garran', 'hold', 'garran');
-    expect(enemyIntent(r.turns[0]!.state, d, 'f1', 1)!.targetId).toBe('weaver');
+  // Save v50 rework: hold = pinning spear, halt = shove, warcry = charge.
+  it('the pinning spear hits and cuts its target\'s next move; its nodes add power and cut', () => {
+    const d = spear({ actions: ['hold'], talents: caps({ holdfirm: 15, holdcounter: 6 }) });
+    const r = cast(d, turnOf(d, 'garran'), 'garran', 'hold', 'f1');
+    expect(r.turns[0]!.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'f1', amount: 12 + 6 });
+    expect(r.turns[0]!.events.find(e => e.type === 'weaken')).toMatchObject({ targetId: 'f1', amount: PIN_PERCENT + 15 });
     const t = fromEnemy(d, r, 'f1')!;
-    expect(t.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'weaver', amount: Math.ceil(28 * .8) });
-    expect(t.events.find(e => e.type === 'counter')).toMatchObject({ sourceId: 'garran', amount: Math.round(skillPower(d, 'garran', 'brace') * 1.5) });
+    expect(t.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'weaver', amount: Math.ceil(28 * (1 - (PIN_PERCENT + 15) / 100)) });
+    expect(t.state.enemies.find(e => e.id === 'f1')!.weaken).toBeUndefined();
+    const plain = spear({ actions: ['hold'] });
+    expect(cast(plain, turnOf(plain, 'garran'), 'garran', 'hold', 'f1').turns[0]!.events.find(e => e.type === 'weaken')!.amount).toBe(PIN_PERCENT);
   });
-  it('unyielding keeps him at 1 HP once during hold', () => {
-    const base = spear({ actions: ['hold'], talents: caps({ unyielding: 0 }) });
+  it('the charge reaches the screened back row and leaves him open until his next turn; unyielding keeps him at 1 HP once', () => {
+    const base = spear({ actions: ['warcry'] });
     const d = { ...base, intents: base.intents.map(i => ({ ...i, targetSlot: 1 })) };
-    const s = turnOf(d, 'garran'); hero(s, 'garran').hp = 5;
-    const t = fromEnemy(d, cast(d, s, 'garran', 'hold', 'garran'), 'f1')!;
-    expect(hero(t.state, 'garran').hp).toBe(1); expect(t.state.unyielding).toBe(true);
+    const s = turnOf(d, 'garran');
+    expect(targetOptions(s, d, 'garran', 'attack').find(t => t.id === 'b1')!.valid).toBe(false);
+    expect(targetOptions(s, d, 'garran', 'warcry').find(t => t.id === 'b1')!.valid).toBe(true);
+    const r = cast(d, s, 'garran', 'warcry', 'b1');
+    expect(r.turns[0]!.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'b1', amount: 26 });
+    expect(r.turns[0]!.state.charge).toEqual({ heroId: 'garran' });
+    const t = fromEnemy(d, r, 'f1')!;
+    expect(t.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'garran', amount: Math.ceil(28 * (1 + CHARGE_EXPOSED / 100)) });
+    let next = r.state; while (currentHeroId(next, d) !== 'garran' && next.outcome === 'active') next = cast(d, next, currentHeroId(next, d)!, 'attack', 'f1').state;
+    expect(next.charge).toBeNull();
+    const firm = spear({ actions: ['warcry'], talents: caps({ unyielding: 0 }) }); const fd = { ...firm, intents: firm.intents.map(i => ({ ...i, targetSlot: 1 })) };
+    const fs = turnOf(fd, 'garran'); hero(fs, 'garran').hp = 5;
+    const ft = fromEnemy(fd, cast(fd, fs, 'garran', 'warcry', 'b1'), 'f1')!;
+    expect(hero(ft.state, 'garran').hp).toBe(1); expect(ft.state.unyielding).toBe(true);
   });
-  it('halt gains 50% against a physical next move and preserves the queue', () => {
-    const d = spear({ actions: ['halt'] });
-    const phys = { ...d, intents: d.intents.map(i => ({ ...i, kind: 'physical' as const })) };
-    const s = turnOf(phys, 'garran'); const r = cast(phys, s, 'garran', 'halt', 'f1').turns[0]!;
-    expect(r.state.order).toEqual(s.order); expect(r.events.find(e => e.type === 'damage')!.amount).toBe(21);
+  // The Rift Brute is large; a normal-sized copy stands in for the movable foe.
+  const shoveable = () => { const base = spear({ actions: ['halt'] }); return { ...base, enemies: base.enemies.map(e => ({ ...e, large: false })) }; };
+  it('the shove swaps a front foe with the back foe of its column until its own next turn, keeps the queue and locks a re-shove', () => {
+    const d = shoveable();
+    const s = turnOf(d, 'garran'); const r = cast(d, s, 'garran', 'halt', 'f1'); const own = r.turns[0]!;
+    expect(own.state.order).toEqual(s.order);
+    expect(own.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'f1', amount: 16 });
+    expect(own.events.filter(e => e.type === 'shove').map(e => e.targetId)).toEqual(['f1', 'b1']);
+    const st = own.state;
+    expect(foeRow(st, d, 'f1')).toBe('back'); expect(foeRow(st, d, 'b1')).toBe('front');
+    // Aegis (front lane) now reaches the pulled raider and not the shoved brute.
+    expect(screened(st, d, 'guardian', 'attack', 'b1')).toBe(false); expect(screened(st, d, 'guardian', 'attack', 'f1')).toBe(true);
+    const t = fromEnemy(d, r, 'f1')!;
+    expect(t.state.enemies.find(e => e.id === 'f1')!.shoved).toBeUndefined(); expect(foeRow(t.state, d, 'f1')).toBe('front');
+    expect(t.events.filter(e => e.type === 'shove' && e.text === 'Back in its row.').map(e => e.targetId)).toEqual(['f1', 'b1']);
+    // Not again for SHOVE_LOCK rounds; never a boss or a large foe.
+    const locked = structuredClone(t.state); expect(shoveReason(locked, d, 'f1')).toBe(locked.round < 1 + SHOVE_LOCK ? 'Shoved recently.' : '');
+    const big = { ...d, enemies: d.enemies.map(e => e.id === 'f1' ? { ...e, large: true } : e) };
+    const b = cast(big, turnOf(big, 'garran'), 'garran', 'halt', 'f1').turns[0]!;
+    expect(b.events.some(e => e.type === 'shove')).toBe(false); expect(b.events.find(e => e.type === 'damage')).toMatchObject({ amount: 16 });
   });
-  it('war cry covers front allies once without empowering attacks', () => {
-    const d = spear({ actions: ['warcry'] }); const st = cast(d, turnOf(d, 'garran'), 'garran', 'warcry', 'garran').turns[0]!.state;
-    expect(st.warcry).toEqual({ heroId: 'garran', ids: ['guardian', 'garran'] }); expect(hero(st, 'guardian').empowered).toBeUndefined();
+  it('the shove previews and replays exactly', () => {
+    const d = shoveable(); const s = turnOf(d, 'garran');
+    const command = { beat: s.beat, heroId: 'garran', action: 'halt' as const, targetId: 'f1' };
+    const done = resolveCommand(s, d, command); expect(previewCommand(s, d, command)).toEqual(done);
+    expect(done.state.enemies.find(e => e.id === 'f1')!.shoveLock).toBe(s.round + SHOVE_LOCK);
+    // A natural battle: everyone attacks, Garran shoves whenever he can; the commands replay to the same state.
+    let b = beginBattle(d).state;
+    for (let i = 0; i < 30 && b.outcome === 'active'; i++) {
+      const id = currentHeroId(b, d)!; const halt = id === 'garran' && targetOptions(b, d, id, 'halt').find(t => t.id === 'f1')?.valid;
+      const target = targetOptions(b, d, id, 'attack').find(t => t.valid)!.id;
+      b = resolveCommand(b, d, { beat: b.beat, heroId: id, action: halt ? 'halt' : 'attack', targetId: halt ? 'f1' : target }).state;
+    }
+    expect(b.commands.some(c => c.action === 'halt')).toBe(true); expect(replay(d, b.commands)).toEqual(b);
   });
   it('deep pierce hits the back row harder; spear fury readies the thrust after each counter', () => {
     const d = spear({ talents: caps({ deeppierce: 30 }) });

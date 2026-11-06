@@ -169,7 +169,10 @@ export interface EnemyState { id: string; hp: number; markedUntil: number; absen
   hexes?: { heroId: string; stacks: number; until: number }[]; threaded?: string[];
   // P03 Seer: `cycleShift` moves this foe's move cursor (its cycle index) forward; `deflect`: its next normal single-target
   // move while the round is at most `until` lands on `recipientId` (another foe) instead of a hero.
-  cycleShift?: number; deflect?: { heroId: string; recipientId: string; until: number } }
+  cycleShift?: number; deflect?: { heroId: string; recipientId: string; until: number };
+  // Spear shove (`halt`, save v50): this front-row foe stands in the back row (and `partnerId`, the back-row foe of its
+  // column, in the front row) until its own next turn ends; `shoveLock`: it cannot be shoved again before this round.
+  shoved?: { heroId: string; partnerId?: string }; shoveLock?: number }
 // `stoned`: a warden's guardian stone turned this move from the covered ally to him.
 export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; stoned?: boolean; stoneTargetId?: string }
 // Party condition carried in from the expedition. Missing ids start at max HP.
@@ -183,8 +186,9 @@ export interface BattleState {
   // `all` (Knight stand beside): every hit on the target until the knight's next turn.
   guard: { heroId: string; targetId: string; sourceId: string; uses?: number; all?: boolean } | null;
   // Spear brace (2C-2): the next physical enemy hit on a front-lane ally is countered.
-  // Spear wall (★3): `wall` counters every physical hit on the front lane, not only the first.
-  counter: { heroId: string; wall?: boolean } | null;
+  // Spear wall (★3): `wall` counters every physical hit on the front lane, not only the first; `stacks` counters landed so far
+  // (each cuts later front-lane hits, save v50).
+  counter: { heroId: string; wall?: boolean; stacks?: number } | null;
   // Hammer warden taunt (2C-2): from the cast until the warden's next turn, every enemy move aims at him.
   taunt: { heroId: string; round: number } | null;
   // Knight shield wall (skill audit): front-lane allies take less until his next turn; nothing is pulled.
@@ -219,10 +223,9 @@ export interface BattleState {
   prayerEcho?: { heroId: string; round: number; amount: number } | null;
   // Priests who used their once-per-battle revive; `lastPrayer` = the last-prayer capstone has fired.
   revived?: string[]; lastPrayer?: boolean;
-  // Spear rear guard (hold): from the cast until his next turn, he counters every physical hit on a back-lane ally.
-  // Spear war cry: each listed front-lane ally counters the first physical hit it takes until his next turn.
-  warcry?: { heroId: string; ids: string[] } | null;
-  hold?: { heroId: string; round: number } | null; unyielding?: boolean;
+  // Spear charge (`warcry`, save v50): from the cast until his next turn he takes more from every hit; `unyielding` = the
+  // capstone that keeps him at 1 HP once during a charge has fired.
+  charge?: { heroId: string } | null; unyielding?: boolean;
   // Archer pinning volley: the front row screens nothing while the round is at most `round`.
   pinned?: number;
   // Archer tracking shots that fire again as `round` ends (if the target is still standing).
@@ -237,7 +240,7 @@ export interface BattleState {
 export type SongId = 'valor' | 'mend' | 'dread';
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge'
-    | 'parry' | 'revive' | 'buff' | 'hold' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'deflect' | 'dial' | 'beat';
+    | 'parry' | 'revive' | 'buff' | 'shove' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'deflect' | 'dial' | 'beat';
   text: string; sourceId?: string; targetId?: string; action?: ActionId; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

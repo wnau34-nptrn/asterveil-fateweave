@@ -89,14 +89,14 @@ export type TargetKind = 'self' | 'ally' | 'party' | 'enemies' | 'enemy';
 export function targetKind(action: ActionId): TargetKind {
   if (action === 'prayer' || action === 'aegis' || action === 'rounddance' || action === 'deepbeat') return 'party';
   if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor', 'quake', 'saintarc', 'circlefist', 'wovenhex', 'tollring', 'closingstep'].includes(action)) return 'enemies';
-  if (['brace', 'evade', 'taunt', 'valor', 'mend', 'rally', 'spearwall', 'finale', 'bulwark', 'parry', 'halo', 'hold', 'warcry', 'dread', 'stonearmor', 'rouse'].includes(action)) return 'self';
+  if (['evade', 'taunt', 'valor', 'mend', 'rally', 'spearwall', 'finale', 'bulwark', 'parry', 'halo', 'dread', 'stonearmor', 'rouse'].includes(action)) return 'self';
   if (['guard', 'ward', 'heal', 'haste', 'sanctuary', 'bless', 'revive', 'fury', 'decoy', 'guardstone', 'solo', 'cadence', 'duet'].includes(action)) return 'ally';
   return 'enemy';
 }
 // Front-row foes screen the back row (owner 2026-10-22): while a front foe stands, a front-lane hero's single-target
 // move reaches only the front row unless it is a reach skill; back-lane heroes reach every foe and area moves hit all.
 // A mage's piercing bolt (tree modifier) also reaches, and an archer's pinning volley stops the screen for a while.
-export const REACH_SKILLS: readonly ActionId[] = ['pierce', 'mark', 'backstab', 'challenge', 'lunge'];
+export const REACH_SKILLS: readonly ActionId[] = ['pierce', 'mark', 'backstab', 'challenge', 'lunge', 'warcry', 'brace'];
 // P02: `f3`/`b3` are appended; the first four keep their order. A side fields at most MAX_SIDE actors at once and
 // at most ROW_SLOTS foes stand in a row (reserves count only once summoned).
 export const ENEMY_SLOTS = ['f1', 'f2', 'b1', 'b2', 'f3', 'b3'] as const;
@@ -113,11 +113,18 @@ export const overflowCap = (data: EncounterDefinition, heroId: string): number =
 export const overflowBarrier = (data: EncounterDefinition, heroId: string, target: { barrier: number }): number => {
   const cap = overflowCap(data, heroId); return cap ? Math.min(cap, tired(data, heroId, skillPower(data, heroId, 'heal'))) - target.barrier : 0;
 };
+// The row a foe stands in now: its slot's row, swapped while a spear's shove (save v50) holds it or its column partner.
+export function foeRow(state: BattleState, data: EncounterDefinition, enemyId: string): 'front' | 'back' | undefined {
+  const foe = state.enemies.find(e => e.id === enemyId);
+  if (foe?.shoved) return 'back';
+  if (state.enemies.some(e => e.hp > 0 && e.shoved?.partnerId === enemyId)) return 'front';
+  return data.enemies.find(e => e.id === enemyId)?.row;
+}
 export function screened(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId, enemyId: string): boolean {
   const hero = data.heroes.find(h => h.id === heroId);
-  if (!hero || hero.lane === 'back' || REACH_SKILLS.includes(action) || data.enemies.find(e => e.id === enemyId)?.row !== 'back') return false;
+  if (!hero || hero.lane === 'back' || REACH_SKILLS.includes(action) || foeRow(state, data, enemyId) !== 'back') return false;
   if ((action === 'bolt' && hasCap(data, heroId, 'piercebolt')) || (state.pinned ?? 0) >= state.round) return false;
-  return state.enemies.some(e => e.hp > 0 && data.enemies.find(d => d.id === e.id)?.row === 'front');
+  return state.enemies.some(e => e.hp > 0 && foeRow(state, data, e.id) === 'front');
 }
 // Content check: foes in distinct slots, 1–5 on the field at the start and at most three per row, each row matching its
 // slot, every foe with a move.
@@ -168,6 +175,13 @@ export function skillPower(data: EncounterDefinition, heroId: string, action: Ac
   const level = skillLevelKind(data, action) === 'power' ? skillLevelSteps(data, heroId, action).steps * data.rules.skillLevel.powerPercent : 0;
   return Math.max(0, Math.round(data.skills[action].power * (100 + bonus + level) / 100) + (hero?.talents?.power?.[action] ?? 0) - (action === 'lastlight' && hasCap(data, heroId, 'metta4') ? 4 : 0));
 }
+// Spear brace (save v50): the strike at once scales like the brace's own power (Attack bonus and skill level), without
+// the counter-only node.
+export function braceStrikePower(data: EncounterDefinition, heroId: string): number {
+  const hero = data.heroes.find(h => h.id === heroId);
+  const level = skillLevelKind(data, 'brace') === 'power' ? skillLevelSteps(data, heroId, 'brace').steps * data.rules.skillLevel.powerPercent : 0;
+  return Math.round(BRACE_STRIKE * (100 + (hero?.damageBonus ?? 0) + level) / 100);
+}
 export const finaleHealPower = (data: EncounterDefinition, heroId: string): number =>
   Math.round(data.rules.finaleHeal * (100 + (data.heroes.find(h => h.id === heroId)?.skillBonus ?? 0) + skillLevelSteps(data, heroId, 'finale').steps * data.rules.skillLevel.powerPercent) / 100);
 // Extra damage a hero's own hits gain from its capstones (duelist deep mark, archer hunter) and mark-hunter gear.
@@ -192,7 +206,7 @@ export const GUARD_STONE_HEAL = 6; export const DREAD_FINALE = 10; export const 
 function chainReaction(state: BattleState, data: EncounterDefinition, foe: EnemyState, events: BattleEvent[]): void {
   if (foe.hp > 0 || (foe.corrodedUntil ?? 0) <= state.round) return;
   const alchemist = data.heroes.find(h => hasCap(data, h.id, 'chainreaction') && living(state, h.id)); if (!alchemist) return;
-  const others = state.enemies.filter(e => e.hp > 0 && e.id !== foe.id); const row = (id: string) => data.enemies.find(e => e.id === id)?.row;
+  const others = state.enemies.filter(e => e.hp > 0 && e.id !== foe.id); const row = (id: string) => foeRow(state, data, id);
   const next = others.find(e => row(e.id) === row(foe.id)) ?? others[0]; if (!next) return;
   next.corrodedUntil = Math.max(next.corrodedUntil ?? 0, foe.corrodedUntil!); next.corrodeBonus = Math.max(next.corrodeBonus ?? 0, foe.corrodeBonus ?? data.rules.corrodeBonus);
   delete foe.corrodedUntil; delete foe.corrodeBonus;
@@ -214,6 +228,11 @@ export const DANCE_SKILLS: readonly ActionId[] = ['cadence', 'duet', 'rounddance
 // quicken cap below. Duet binds an ally for an echo (`HeroState.echo`); every other ally's skill gives each standing dancer one
 // beat (`HeroState.beats`, cap BEAT_MAX) that round dance, deep beat and echo foot also add to and closing step spends.
 export const BEAT_MAX = 3;
+// Spear rework (save v50, draft numbers): brace strikes its target BRACE_STRIKE at once, then stands braced; each landed spear-wall counter cuts later front-lane hits SPEARWALL_STEP% (up to
+// SPEARWALL_MAX counters); the pinning spear (`hold`) cuts its target's next move PIN_PERCENT% (the back-to-the-wall node adds
+// its amount); the charge (`warcry`) leaves him taking CHARGE_EXPOSED% more until his next turn; a shove (`halt`) cannot
+// move the same foe again for SHOVE_LOCK rounds; a pierce carries PIERCE_BEHIND% on to the foe behind its target.
+export const BRACE_STRIKE = 8, SPEARWALL_STEP = 5, SPEARWALL_MAX = 3, PIN_PERCENT = 30, CHARGE_EXPOSED = 20, SHOVE_LOCK = 2, PIERCE_BEHIND = 50;
 export const DEEP_BEAT_LOW = 10;
 export const ROUND_PAIR_BONUS = 4;
 // Quicken cap: a skill is quickened at most once per use, never to before the round after its use; revive and skills
@@ -438,8 +457,8 @@ function settled(state: BattleState, data: EncounterDefinition, events: BattleEv
   else if (state.heroes.every(h => h.hp <= 0)) state.outcome = 'defeat';
   if (state.outcome === 'active') return false;
   state.intent = null; state.guard = null; state.counter = null; state.taunt = null; state.song = null; state.rally = null; state.sanctuary = null; state.solace = null;
-  if (state.challenge) state.challenge = null; if (state.bulwark) state.bulwark = null; if (state.warcry) state.warcry = null;
-  if (state.parry) state.parry = null; if (state.halo) state.halo = null; if (state.hold) state.hold = null; if (state.prayerEcho) state.prayerEcho = null; if (state.tracking) delete state.tracking;
+  if (state.challenge) state.challenge = null; if (state.bulwark) state.bulwark = null; if (state.charge) state.charge = null;
+  if (state.parry) state.parry = null; if (state.halo) state.halo = null; if (state.prayerEcho) state.prayerEcho = null; if (state.tracking) delete state.tracking;
   if (state.stone) state.stone = null;
   events.push({ type: 'outcome', text: state.outcome }); return true;
 }
@@ -500,9 +519,9 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
   if (state.solace && (!living(state, state.solace.heroId) || currentActorId(state) === state.solace.heroId)) state.solace = null;
   if (state.parry && (!living(state, state.parry.heroId) || currentActorId(state) === state.parry.heroId)) state.parry = null;
   if (state.halo && (!living(state, state.halo.heroId) || currentActorId(state) === state.halo.heroId)) state.halo = null;
-  if (state.hold && (!living(state, state.hold.heroId) || currentActorId(state) === state.hold.heroId)) state.hold = null;
+  for (const e of state.enemies) if (e.shoved && e.hp <= 0) delete e.shoved;
   if (state.bulwark && (!living(state, state.bulwark.heroId) || currentActorId(state) === state.bulwark.heroId)) state.bulwark = null;
-  if (state.warcry && (!living(state, state.warcry.heroId) || currentActorId(state) === state.warcry.heroId)) state.warcry = null;
+  if (state.charge && (!living(state, state.charge.heroId) || currentActorId(state) === state.charge.heroId)) state.charge = null;
   if (state.stone && (!living(state, state.stone.heroId) || currentActorId(state) === state.stone.heroId)) state.stone = null;
   if (state.challenge && (!living(state, state.challenge.heroId) || !living(state, state.challenge.enemyId) || state.round > state.challenge.round)) state.challenge = null;
   for (const h of state.heroes) if (h.evading && (h.hp <= 0 || currentActorId(state) === (h.evadeBy ?? h.id) || !!h.evadeBy && !living(state, h.evadeBy))) { delete h.evading; delete h.evadeBy; delete h.evadeExtra; delete h.evadePhysical; }
@@ -566,8 +585,8 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
       amount = recipient.hp - 1; events.push({ type: 'sanctuary', sourceId: sanctuary.heroId, targetId: recipient.id, text: 'Sanctuary keeps the ally standing.' });
     } else if (protector && !state.standUsed && hasPassive(data, protector, 'stand') && living(state, protector)) {
       amount = recipient.hp - 1; state.standUsed = true; events.push({ type: 'stand', sourceId: protector, targetId: recipient.id, text: 'The knight’s stand keeps the ally at 1 HP.' });
-    } else if (state.hold?.heroId === recipient.id && hasCap(data, recipient.id, 'unyielding') && !state.unyielding) {
-      // Spear unyielding (capstone): the first downing hit while he holds the line leaves him at 1 HP.
+    } else if (state.charge?.heroId === recipient.id && hasCap(data, recipient.id, 'unyielding') && !state.unyielding) {
+      // Spear unyielding (capstone): the first downing hit during his charge leaves him at 1 HP.
       amount = recipient.hp - 1; state.unyielding = true; events.push({ type: 'stand', sourceId: recipient.id, targetId: recipient.id, text: 'Unyielding.' });
     } else if (hasGear(data, recipient.id, 'laststand') && !state.lastStand?.includes(recipient.id)) {
       amount = recipient.hp - 1; state.lastStand = [...state.lastStand ?? [], recipient.id];
@@ -598,26 +617,28 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
     strikeBack(state, data, recipient.id, enemy, guardCounterPower(data, recipient.id), events, 'The knight counters.');
   if (enemy.hp > 0 && state.taunt?.heroId === recipient.id && hasCap(data, recipient.id, 'hammercounter') && recipient.hp > 0)
     strikeBack(state, data, recipient.id, enemy, capAmount(data, recipient.id, 'hammercounter'), events, 'The warden hammers back.');
-  const holder = state.hold;
-  if (holder && enemy.hp > 0 && intent.kind === 'physical' && living(state, holder.heroId) && data.heroes.find(h => h.id === recipient.id)!.lane === 'back') {
-    const power = Math.round(skillPower(data, holder.heroId, 'brace') * (hasCap(data, holder.heroId, 'holdcounter') ? 1.5 : 1));
-    strikeBack(state, data, holder.heroId, enemy, power, events, 'Held spear counters.'); spearFury(state, data, holder.heroId);
-  }
-  const cry = state.warcry;
-  if (cry && cry.ids.includes(recipient.id) && intent.kind === 'physical' && living(state, cry.heroId)) {
-    cry.ids.splice(cry.ids.indexOf(recipient.id), 1);
-    if (recipient.hp > 0 && enemy.hp > 0) strikeBack(state, data, recipient.id, enemy, skillPower(data, cry.heroId, 'warcry'), events, 'War cry counter.');
-  }
-  // A braced spear answers the first physical hit on any front-lane ally while it stands; a spear wall answers every one.
+  // A braced spear answers the first physical hit on any front-lane ally while it stands; a spear wall answers every one,
+  // each answer cutting the later ones (up to SPEARWALL_MAX).
   const brace = state.counter;
   if (brace && enemy.hp > 0 && intent.kind === 'physical' && living(state, brace.heroId) && data.heroes.find(h => h.id === recipient.id)!.lane === 'front') {
-    const power = brace.wall ? skillPower(data, brace.heroId, 'spearwall')
-      : Math.round(skillPower(data, brace.heroId, 'brace') * (hasPassive(data, brace.heroId, 'heavycounter') ? 1 + data.rules.heavyCounter : 1));
-    strikeBack(state, data, brace.heroId, enemy, power, events, brace.wall ? 'Spear wall counters.' : 'Braced spear counters.');
+    strikeBack(state, data, brace.heroId, enemy, brace.wall ? skillPower(data, brace.heroId, 'spearwall') : bracePower(data, brace.heroId), events, brace.wall ? 'Spear wall counters.' : 'Braced spear counters.');
     spearFury(state, data, brace.heroId);
-    if (!brace.wall) state.counter = null;
+    if (brace.wall) brace.stacks = Math.min(SPEARWALL_MAX, (brace.stacks ?? 0) + 1); else state.counter = null;
   }
 }
+// Spear shove (save v50): why this foe stays put. Bosses and large foes are never moved; only a front-row foe is, and not
+// again for SHOVE_LOCK rounds.
+export function shoveReason(state: BattleState, data: EncounterDefinition, enemyId: string): string {
+  const def = data.enemies.find(e => e.id === enemyId); const foe = state.enemies.find(e => e.id === enemyId);
+  if (!def || !foe) return 'No such enemy.';
+  if (def.boss || def.large) return 'Too large to shove.';
+  if (foeRow(state, data, enemyId) !== 'front') return 'Not in the front row.';
+  if ((foe.shoveLock ?? 0) > state.round) return 'Shoved recently.';
+  return '';
+}
+// Spear brace counter power, raised by the heavy-counter passive.
+export const bracePower = (data: EncounterDefinition, heroId: string): number =>
+  Math.round(skillPower(data, heroId, 'brace') * (hasPassive(data, heroId, 'heavycounter') ? 1 + data.rules.heavyCounter : 1));
 // Spear fury (capstone): each counter readies his piercing thrust one round sooner.
 function spearFury(state: BattleState, data: EncounterDefinition, heroId: string): void {
   if (hasCap(data, heroId, 'spearfury')) shorten(state.heroes.find(h => h.id === heroId), 'pierce', state.round);
@@ -673,7 +694,9 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           // Recruit trees: a song of dread cuts every move; a fury tonic leaves its drinker exposed.
           const dread = state.song?.action === 'dread' && living(state, state.song.heroId) ? songPower(data, state.song.heroId, 'dread') : 0;
           const quiet = dread ? Math.ceil(weakened * (1 - dread / 100)) : weakened;
-          const raw = (recipient.exposed?.round ?? 0) >= state.round ? Math.ceil(quiet * (1 + recipient.exposed!.percent / 100)) : quiet;
+          const tonic = (recipient.exposed?.round ?? 0) >= state.round ? Math.ceil(quiet * (1 + recipient.exposed!.percent / 100)) : quiet;
+          // A charging spear (save v50) is open to every hit until his next turn.
+          const raw = state.charge?.heroId === recipient.id ? Math.ceil(tonic * (1 + CHARGE_EXPOSED / 100)) : tonic;
           let incoming = guard ? Math.ceil(raw * (1 - guardReductionOf(data, guard.heroId))) : raw;
           let protector = guard?.heroId;
           if (state.taunt?.heroId === recipient.id) incoming = Math.ceil(incoming * (1 - tauntReductionOf(data, recipient.id)));
@@ -682,10 +705,13 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
             incoming = Math.ceil(incoming * (1 - rallyReductionOf(data, rally.heroId))); rally.ids.splice(rally.ids.indexOf(recipient.id), 1); protector ??= rally.heroId;
           }
           if (state.bulwark && living(state, state.bulwark.heroId) && data.heroes.find(h => h.id === recipient.id)!.lane === 'front') incoming = Math.ceil(incoming * (1 - skillPower(data, state.bulwark.heroId, 'bulwark') / 100));
-          // Talents: a braced spear's front wall, a priest's solace, then a bard's chorus (flat).
+          // Talents: a braced spear's front wall; a spear wall's landed counters cut later front-lane hits (save v50); then a
+          // priest's solace.
           const brace = state.counter;
-          if (brace && intent.kind === 'physical' && living(state, brace.heroId) && hasCap(data, brace.heroId, 'frontwall') && data.heroes.find(h => h.id === recipient.id)!.lane === 'front')
-            incoming = Math.ceil(incoming * (1 - capAmount(data, brace.heroId, 'frontwall') / 100));
+          if (brace && intent.kind === 'physical' && living(state, brace.heroId) && data.heroes.find(h => h.id === recipient.id)!.lane === 'front') {
+            if (hasCap(data, brace.heroId, 'frontwall')) incoming = Math.ceil(incoming * (1 - capAmount(data, brace.heroId, 'frontwall') / 100));
+            if (brace.wall && brace.stacks) incoming = Math.ceil(incoming * (1 - brace.stacks * SPEARWALL_STEP / 100));
+          }
           if (state.solace?.targetId === recipient.id && living(state, state.solace.heroId)) incoming = Math.ceil(incoming * (1 - capAmount(data, state.solace.heroId, 'solace') / 100));
           // A dancer's deep beat steadies this ally against the next hit it takes; the cut comes back at the attacker.
           let counterStep: { heroId: string; amount: number } | undefined;
@@ -695,9 +721,8 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
             const low = recipient.hp * 2 < data.heroes.find(h => h.id === recipient.id)!.maxHp ? steady.low : 0;
             const cut = Math.ceil(incoming * (1 - Math.min(90, steady.percent + low) / 100)); counterStep = { heroId: steady.heroId, amount: incoming - cut }; incoming = cut;
           }
-          // Release A trees: a priest's halo (energy), a spear holding firm, then a duelist's parry.
+          // Release A trees: a priest's halo (energy), then a duelist's parry.
           if (state.halo && intent.kind === 'energy' && living(state, state.halo.heroId)) incoming = Math.ceil(incoming * (1 - skillPower(data, state.halo.heroId, 'halo') / 100));
-          if (state.hold && living(state, state.hold.heroId) && intent.kind === 'physical' && data.heroes.find(h => h.id === recipient.id)!.lane === 'back') incoming = Math.ceil(incoming * (1 - capAmount(data, state.hold.heroId, 'holdfirm') / 100));
           const parry = state.parry?.heroId === recipient.id && (state.parry.all || intent.kind === 'physical') ? state.parry : null;
           if (parry) incoming = Math.ceil(incoming * (1 - (parry.all ? capAmount(data, recipient.id, 'parryall') / 100 : PARRY_REDUCTION)));
           // A warden's guardian stone takes the edge off this ally's first hit, and he recovers.
@@ -750,6 +775,8 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
       delete enemy.drawnBy;
     }
     delete enemy.interruptedRound; delete enemy.interruptedBy; delete enemy.weaken;
+    // A shoved foe (and its partner) return to their rows once its own next turn ends.
+    if (enemy.shoved) { const partner = enemy.shoved.partnerId; delete enemy.shoved; events.push({ type: 'shove', targetId: enemy.id, text: 'Back in its row.' }); if (partner) events.push({ type: 'shove', targetId: partner, text: 'Back in its row.' }); }
     const frame = structuredClone(state); const beat = state.beat; const round = state.round;
     finishOrAdvance(state, data, events);
     if (state.outcome !== 'active') { frame.outcome = state.outcome; frame.intent = null; }
@@ -938,7 +965,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const damage = (power: number) => strike(enemy!, power, 'Hero attacks.');
   // Split bolt (talent): the other living enemies take half the skill power; piercing line only the one in the same column.
   const splash = (power: number, column = false) => { for (const foe of state.enemies.filter(e => e.hp > 0 && e.id !== enemy!.id && (!column || e.id[1] === enemy!.id[1]))) strike(foe, Math.floor(power / 2), 'The hit carries on.'); };
-  const row = (id: string) => data.enemies.find(e => e.id === id)?.row;
+  const row = (id: string) => foeRow(state, data, id);
   const barrier = (h: HeroState, amount: number) => {
     const added = h.hp > 0 ? Math.max(h.barrier, amount) - h.barrier : 0;
     if (added) { h.barrier += added; events.push({ type: 'barrier', sourceId: hero.id, targetId: h.id, amount: added, text: 'Added barrier.' }); }
@@ -1175,7 +1202,11 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'pierce': {
       // Deep pierce (tree modifier) hits the back row harder.
       const power = row(enemy!.id) === 'back' && hasCap(data, hero.id, 'deeppierce') ? Math.round(skill.power * (100 + capAmount(data, hero.id, 'deeppierce')) / 100) : skill.power;
-      damage(power); if (hasCap(data, hero.id, 'pierceline')) splash(power, true); break;
+      // A pierce runs on to the foe behind a front-row target in its column (save v50): PIERCE_BEHIND%, all of it with the line node.
+      damage(power);
+      const behind = row(enemy!.id) === 'front' ? state.enemies.find(e => e.hp > 0 && e.id !== enemy!.id && e.id[1] === enemy!.id[1] && row(e.id) === 'back') : undefined;
+      if (behind) strike(behind, Math.floor(skill.power * (hasCap(data, hero.id, 'pierceline') ? 100 : PIERCE_BEHIND) / 100), 'The pierce runs through.');
+      break;
     }
     case 'parry':
       state.parry = { heroId: hero.id, ...(hasCap(data, hero.id, 'parryall') ? { all: true } : {}) };
@@ -1207,11 +1238,23 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       ally.renew = { heroId: hero.id, amount: skill.power, until: state.round + 2 };
       events.push({ type: 'buff', sourceId: hero.id, targetId: ally.id, amount: skill.power, text: 'Renew.' }); break;
     }
-    case 'hold': state.hold = { heroId: hero.id, round: state.round }; events.push({ type: 'hold', sourceId: hero.id, targetId: hero.id, text: 'Hold the line.' }); break;
-    case 'halt': damage(Math.round(skill.power * (nextIntent()?.kind === 'physical' ? 1.5 : 1))); break;
+    // Spear rework (save v50): the pinning spear hits and cuts the target's next move; the shove hits and, when the foe
+    // can be moved, swaps it with the back-row foe of its column until its own next turn ends; the charge reaches the back
+    // row and leaves him open until his next turn.
+    case 'hold': damage(skill.power + capAmount(data, hero.id, 'holdcounter')); if (enemy!.hp > 0) weaken(enemy!, PIN_PERCENT + capAmount(data, hero.id, 'holdfirm')); break;
+    case 'halt': {
+      damage(skill.power); const foe = enemy!;
+      if (foe.hp > 0 && !shoveReason(state, data, foe.id)) {
+        const partner = state.enemies.find(e => e.hp > 0 && e.id !== foe.id && e.id[1] === foe.id[1] && foeRow(state, data, e.id) === 'back');
+        foe.shoved = { heroId: hero.id, ...(partner ? { partnerId: partner.id } : {}) }; foe.shoveLock = state.round + SHOVE_LOCK;
+        events.push({ type: 'shove', sourceId: hero.id, targetId: foe.id, text: 'Shoved to the back row.' });
+        if (partner) events.push({ type: 'shove', sourceId: hero.id, targetId: partner.id, text: 'Pulled to the front row.' });
+      }
+      break;
+    }
     case 'warcry':
-      state.warcry = { heroId: hero.id, ids: state.heroes.filter(h => h.hp > 0 && data.heroes.find(d => d.id === h.id)!.lane === 'front').map(h => h.id) };
-      events.push({ type: 'buff', sourceId: hero.id, targetId: hero.id, amount: skill.power, text: 'War cry.' }); break;
+      damage(skill.power); state.charge = { heroId: hero.id };
+      events.push({ type: 'buff', sourceId: hero.id, targetId: hero.id, amount: CHARGE_EXPOSED, text: 'Charging and open.' }); break;
     case 'disengage': {
       const next = nextIntent(); damage(skill.power + (next && next.targetId !== hero.id && hasCap(data, hero.id, 'covershot') ? capAmount(data, hero.id, 'covershot') : 0));
       const at = state.order.indexOf(enemy!.id);
@@ -1411,7 +1454,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       if (fastest) { state.enemies.find(e => e.id === fastest.id)!.delayedRound = state.round + 1; events.push({ type: 'delay', sourceId: hero.id, targetId: fastest.id, text: 'Enemy acts last next round.' }); }
       break;
     }
-    case 'brace': state.counter = { heroId: hero.id }; events.push({ type: 'brace', sourceId: hero.id, targetId: hero.id, amount: skill.power, text: 'Spear braced until its next turn.' }); break;
+    // Save v50: brace strikes its target at once (pierce's reach), then stands braced as before.
+    case 'brace': damage(braceStrikePower(data, hero.id)); state.counter = { heroId: hero.id }; events.push({ type: 'brace', sourceId: hero.id, targetId: hero.id, amount: skill.power, text: 'Spear braced until its next turn.' }); break;
     case 'mark': enemy!.markedUntil = state.round + data.rules.markDuration + (hasPassive(data, hero.id, 'keeneye') ? 1 : 0); events.push({ type: 'mark', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy marked.' }); break;
     case 'guard': state.guard = { heroId: hero.id, targetId: command.targetId, sourceId: state.intent!.sourceId, ...(hasCap(data, hero.id, 'twoguard') ? { uses: 2 } : {}) }; events.push({ type: 'guard', sourceId: hero.id, targetId: command.targetId, text: 'Guard until announced attacker acts or Knight returns.' }); break;
     case 'ward': {

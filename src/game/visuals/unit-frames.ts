@@ -77,9 +77,10 @@ export const unitRegistry = {
     reactions: { block: [22, 23] }, release: { attack: { frame: 5, at: RELEASE_AT, point: [.39, -.52] } } },
   foe_dew_slime: { sheet: 'dew', displayRatio: 2, intents: { 'Jelly Bounce': 'attack' } },
   foe_ember_slime: { sheet: 'ember', displayRatio: 2, intents: { 'Ember Spark': 'skill' } },
-  // A5: Garran thrusts for attack/pierce/halt, holds a low spear guard for brace/spearwall/hold and shouts for warcry.
+  // A5: Garran thrusts for attack/pierce/halt (and, since save v50, the pinning spear and the charge) and holds a low spear
+  // guard for brace/spearwall; the shout clip stays in the sheet, unused.
   // Brann swings for attack, slams for slam/quake/tremor, plants the hammer to taunt and braces for the stone skills.
-  garran: { sheet: 'garran', displayRatio: 1 / .42, actions: { attack: 'attack', pierce: 'attack', halt: 'attack', brace: 'stance', spearwall: 'stance', hold: 'stance', warcry: 'skill' },
+  garran: { sheet: 'garran', displayRatio: 1 / .42, actions: { attack: 'attack', pierce: 'attack', halt: 'attack', brace: 'stance', spearwall: 'stance', hold: 'attack', warcry: 'attack' },
     // AV02: the riposte catches on the guard (30) and drives the spear (5, 6) in the same reaction window.
     reactions: { block: [30, 31], counter: [30, 5, 6] } },
   brann: { sheet: 'brann', displayRatio: 1 / .37, actions: { attack: 'attack', slam: 'skill', quake: 'skill', tremor: 'skill', taunt: 'taunt', stonearmor: 'brace', guardstone: 'brace' }, reactions: { block: [38, 39] } },

@@ -144,13 +144,14 @@ describe('spear ★3 spear wall / ★5 heavy counter (Garran)', () => {
     }
     expect(counters.length).toBeGreaterThanOrEqual(1);
     expect(counters.every(a => a === skillPower(d, 'garran', 'spearwall'))).toBe(true);
-    // Unlike brace, the wall is not used up by its first counter; it lapses at Garran's turn.
-    expect(afterFirst).toEqual({ heroId: 'garran', wall: true });
+    // Unlike brace, the wall is not used up by its first counter (each counter adds a stack that cuts later front-lane
+    // hits, save v50); it lapses at Garran's turn.
+    expect(afterFirst).toEqual({ heroId: 'garran', wall: true, stacks: 1 });
     expect(s.counter).toBeNull();
   });
   it('heavy counter strengthens brace by half', () => {
     const d = party([['garran', 5], ['tracer', 1], ['weaver', 1], ['healer', 1]]);
-    let s = act(until(createBattle(d), d, 'garran'), d, 'brace', 'garran').state; let counter;
+    let s = act(until(createBattle(d), d, 'garran'), d, 'brace', 'f1').state; let counter;
     for (let i = 0; i < 12 && !counter; i++) { const r = act(s, d, 'attack', 'f1'); counter = r.events.find(e => e.type === 'counter'); s = r.state; }
     expect(counter?.amount).toBe(Math.round(skillPower(d, 'garran', 'brace') * (1 + d.rules.heavyCounter)));
   });

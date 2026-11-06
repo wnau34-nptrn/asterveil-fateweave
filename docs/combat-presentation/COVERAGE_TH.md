@@ -125,12 +125,12 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `lio` | `note` โน้ตคม | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `song-shadow-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ผู้รับ damage จริง |
 | `lio` | `solo` เพลงเดี่ยว | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `song-shadow-fx` | พันธมิตร 1 คน | หลังพันธมิตรที่ได้ Solo จริง |
 | `garran` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
-| `garran` | `brace` ตั้งทวน | sprite `stance` 22,23,24,25 → 26,27,28,29 | วาด `defense-fx` | ตัวเอง | ผู้ร่าย — ตัว |
+| `garran` | `brace` ตั้งทวน | sprite `stance` 22,23,24,25 → 26,27,28,29 | วาด `defense-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ผู้ร่าย — ตัว |
 | `garran` | `pierce` แทงทะลวง | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `blade-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
 | `garran` | `spearwall` กำแพงทวน | sprite `stance` 22,23,24,25 → 26,27,28,29 | วาด `defense-fx` | ตัวเอง | ผู้ร่าย — ตัว |
-| `garran` | `halt` แทงสวนจังหวะ | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `blade-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
-| `garran` | `hold` ทวนคุ้มหลัง | sprite `stance` 22,23,24,25 → 26,27,28,29 | วาด `defense-fx` | ตัวเอง | ผู้ร่าย — ตัว |
-| `garran` | `warcry` เสียงศึก | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `command-fx` | ตัวเอง | อกผู้ร่าย (buff) + เป้าที่ถูกสวนจริงต่อ event |
+| `garran` | `halt` ผลักระยะทวน | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `blade-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `garran` | `hold` ปักทวนตรึง | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `blade-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `garran` | `warcry` พุ่งหอก | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `blade-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
 | `metta` | `attack` โจมตี | sprite `attack` 1,2 → 3,4,5,6 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
 | `metta` | `saintstrike` หมัดเมตตา | sprite `attack` 1,2 → 3,4,5,6 | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
 | `metta` | `communion` แบ่งแรงใจ | sprite `communion` 13,14 → 15,16,17,18 | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |

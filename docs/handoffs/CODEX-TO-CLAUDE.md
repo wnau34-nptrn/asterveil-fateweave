@@ -2,6 +2,13 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-06 — Skill rework step 3: Garran (Claude, PR #185 feature/skill-rework-garran)
+- เจ้าของ "ดำเนินการตามที่คุณแนะนำได้เลย" = การ์ด Garran ในหน้า artifact "ตรวจสกิล Fateweave" (ตามโน้ตเจ้าของ) + เจ้าของเลือก brace = แทงเป้าทันที 8 แล้วตั้งทวนสวน 14 เหมือนเดิม (แทนปะทะท่า)
+- กฎ: pierce ทะลุตัวหลังเป้า 50% (b2l เต็ม) · spearwall สวน 10 + ลดดาเมจแนวหน้า 5%/ครั้ง (สูงสุด 15%) · hold = ปักทวนตรึง 12 + ท่าถัดไปเบา 30% · halt = ผลักสลับแถวกับตัวหลังในคอลัมน์จนจบเทิร์นของตัวที่ถูกผลัก (ล็อก 2 รอบ, บอส/ตัวใหญ่ไม่ถูกผลัก, คูลดาวน์ 4) · warcry = พุ่งหอก 26 ตีถึงแถวหลัง รับเพิ่ม 20% · เซฟ v50 ศึกค้างที่ใช้ 6 ท่านี้เริ่มใหม่จากเลือดเข้า
+- advisor ทวนใช้ preview ของ resolver + ผลหลังหน้าต่าง preview; ผลักนับลบเมื่อซ่อนตัวที่ทีมกำลังตี (วัดได้ −2.8 ถ้าไม่เลือก) · ฉากวาดสองตัวสลับแถวตามสถานะจริง (`standSlotId`) ภาพ 390px ใน README
+- Tests: typecheck/lint/unit 1610 ผ่าน, Playwright command-fx + unit-a5 40 ผ่าน, sim 28/28: ผู้คุมแนว 9/10 49% → 10/10 57% (โจมตีปกติ 37→11), brace ΔHP −2.3→+0.9, warcry +2.4, ตัวอื่นไม่เปลี่ยน
+- รายละเอียด `docs/validation/skill-rework-2026-11-05/README_TH.md` §6 · เปิด: spearwall ไม่ถูกเลือก, hold −1.2 · ขั้นถัดไป Astrid (รอเจ้าของสั่ง) · เจ้าของยังไม่ได้ดูท่าทาง
+
 ## 2026-11-06 — Battle header text sharper; home-screen app back to normal status bar (Claude)
 - iPhone เว็บแอป: `black-translucent` (PR #175) ทำให้ iOS วาดหน้าที่ y=0 แต่ตัดที่ 793/852 → ล่าง 59pt วาดไม่ได้ (โหมดทดลอง #182 ยืนยัน) → เอาออก (#183) กลับเป็นแถบสถานะปกติ ที่ว่างล่างเหลือ ~26pt; ค่าที่วัด: inner 793, screen 852, env top 0, env bottom 34
 - หัวแถวบนของหน้าต่อสู้ดูเบลอ ไม่ใช่เกา/filter แต่เป็นสไตล์ (เงาฟุ้ง 6px, ชิป 9px/400) → ปรับให้คม ดู `docs/validation/battle-header-text/`

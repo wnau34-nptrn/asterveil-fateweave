@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { actionReason, ambushBonus, beginBattle, corrodeBonus, skillPower, withParty, createBattle, currentHeroId, enemyIntent, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
+import { actionReason, BRACE_STRIKE, braceStrikePower, ambushBonus, beginBattle, corrodeBonus, skillPower, withParty, createBattle, currentHeroId, enemyIntent, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
 import type { ActionId, BattleState } from '../src/core/battle/types';
 import { veilSiege } from '../src/content/encounters/veil-siege';
 import { openField } from './fixtures/open-field';
@@ -20,9 +20,13 @@ describe('spear brace (Garran)', () => {
     for (const [action, target] of moves) { const r = act(s, action as ActionId, target, d); events.push(...r.events.map(e => e.type)); s = r.state; }
     return { s, events };
   };
-  it('counters the first physical hit on a front-lane ally, then is consumed; energy never triggers it', () => {
+  it('strikes its target at once, then counters the first physical hit on a front-lane ally and is consumed; energy never triggers it', () => {
     // Order: Lyra, Raider, Eira, Garran, Brute, Seren. R1 Raider slashes Lyra before Garran braces.
-    const { s: braced, events } = run(party, [['attack', 'f1'], ['attack', 'f1'], ['brace', 'garran']]);
+    const before = run(party, [['attack', 'f1'], ['attack', 'f1']]).s;
+    const cast = act(before, 'brace', 'f1', party);
+    expect(cast.events.find(e => e.type === 'damage' && e.sourceId === 'garran')).toMatchObject({ targetId: 'f1', amount: braceStrikePower(party, 'garran') });
+    expect(braceStrikePower(party, 'garran')).toBe(BRACE_STRIKE);
+    const { s: braced, events } = run(party, [['attack', 'f1'], ['attack', 'f1'], ['brace', 'f1']]);
     expect(braced.counter).toEqual({ heroId: 'garran' }); expect(events).toContain('brace');
     expect(events).not.toContain('counter'); // Brute's Rift Bolt is energy
     const raiderBefore = braced.enemies.find(e => e.id === 'b1')!.hp;
@@ -37,7 +41,7 @@ describe('spear brace (Garran)', () => {
     const whelp = withParty(encounterById('rift-whelp')!, [garran, tracer!, weaver!, healer!]);
     let s = createBattle(whelp);
     while (currentHeroId(s, whelp) !== 'garran') s = act(s, 'attack', 'f1', whelp).state;
-    s = act(s, 'brace', 'garran', whelp).state;
+    s = act(s, 'brace', 'f1', whelp).state;
     expect(targetOptions(s, whelp, 'garran', 'brace')[0]!.valid).toBe(false);
     while (currentHeroId(s, whelp) !== 'garran') s = act(s, 'attack', 'f1', whelp).state;
     expect(s.counter).toBeNull();
@@ -45,7 +49,7 @@ describe('spear brace (Garran)', () => {
     expect(skillPower(starred, 'garran', 'brace')).toBe(16);
   });
   it('replays and previews identically', () => {
-    const moves: [string, string][] = [['attack', 'f1'], ['attack', 'f1'], ['brace', 'garran'], ['attack', 'b1'], ['pierce', 'b1']];
+    const moves: [string, string][] = [['attack', 'f1'], ['attack', 'f1'], ['brace', 'f1'], ['attack', 'b1'], ['pierce', 'b1']];
     let s = createBattle(party);
     for (const [action, target] of moves) {
       const command = { beat: s.beat, heroId: currentHeroId(s, party)!, action: action as ActionId, targetId: target };
@@ -179,7 +183,7 @@ describe('scout (Sefa)', () => {
     let s = createBattle(party); let checked = false;
     while (s.round < 5 && s.outcome === 'active') {
       const hero = currentHeroId(s, party)!;
-      const [action, target]: [ActionId, string] = hero === 'garran' && s.round === 3 ? ['brace', 'garran'] : hero === 'sefa' && s.round === 4 ? ['evade', 'sefa'] : ['attack', 'f1'];
+      const [action, target]: [ActionId, string] = hero === 'garran' && s.round === 3 ? ['brace', 'f1'] : hero === 'sefa' && s.round === 4 ? ['evade', 'sefa'] : ['attack', 'f1'];
       const r = act(s, action, target, party);
       if (action === 'evade') {
         const raider = r.turns.find(t => t.actorId === 'b1')!;
