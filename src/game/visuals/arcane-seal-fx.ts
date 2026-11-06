@@ -9,7 +9,7 @@ export const sealAtlasUrls=():[string,string]=>[`${import.meta.env.BASE_URL}asse
 export const sealSkills=['mark','sigil','storm','dispel'] as const;
 export type SealSkill=typeof sealSkills[number];
 export const isSealSkill=(action:string|undefined):action is SealSkill=>sealSkills.some(s=>s===action);
-// P03 Hexer (Wynne): until a Hexer family is painted, her curses and tolls borrow the Mark painting, tinted crimson, on the
+// P03 Hexer (Wynne): until a Hexer family is painted, her curses and pulls borrow the Mark painting, tinted crimson, on the
 // foes that really received a `hex`/`toll` event. Claude's art decision under the owner's 2026-11-04 delegation.
 export const hexSkills=['threadhex','lifetoll','wovenhex','longthread','tollring','knothex'] as const;
 export const HEX_TINT=0xff7a8a;
@@ -33,7 +33,7 @@ export function sealEvents(turn:TurnStage):BattleEvent[]{
   if(turn.side!=='hero'||!isSealFx(turn.action)||turn.events.some(e=>e.type==='cancel'))return [];
   if(isSeerTurn(turn.action))return turn.events.filter(e=>!!e.targetId&&e.sourceId===turn.actorId&&(e.type==='deflect'||e.type==='dial'));
   if(isSeerStrike(turn.action))return turn.events.filter(e=>!!e.targetId&&e.sourceId===turn.actorId&&(e.type==='damage'||e.type==='dodge'));
-  if(isHexSkill(turn.action))return turn.events.filter(e=>!!e.targetId&&e.sourceId===turn.actorId&&(e.type==='hex'||e.type==='toll'&&e.text!=='Toll paid.'));
+  if(isHexSkill(turn.action))return turn.events.filter(e=>!!e.targetId&&e.sourceId===turn.actorId&&(e.type==='hex'&&e.text!=='Curse loosened.'||e.type==='damage'&&e.text==='Thread pulled.'));
   return turn.events.filter(e=>!!e.targetId&&e.sourceId===turn.actorId&&(turn.action==='mark'?e.type==='mark':e.type==='damage'||e.type==='dodge'));
 }
 export function sealCues(turn:TurnStage):SealCue[]{

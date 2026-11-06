@@ -1,4 +1,4 @@
-import { saintRatioOf, beginBattle, resolveCommand, targetOptions, defenseOf, finaleHealPower, skillPower, songPower, usesMagicPower, targetKind, withParty } from '../core/battle/engine';
+import { hexTickPower, saintRatioOf, beginBattle, resolveCommand, targetOptions, defenseOf, finaleHealPower, skillPower, songPower, usesMagicPower, targetKind, withParty } from '../core/battle/engine';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { gearTotals } from '../core/world/equipment';
 import type { ExpeditionState, MapDefinition } from '../core/world/types';
@@ -51,6 +51,8 @@ export function characterSkillMetric(action: ActionId, h: HeroDefinition, templa
   if (action === 'attack') return { secondary: saintMetric, label: 'โจมตีพื้นฐาน', value: h.attack, scaling: 'อิงพลังโจมตี', target };
   if (action === 'finale') return { label: 'เพลงกล้า · ดาเมจต่อเป้าหมาย', value: skillPower(data,h.id,action), secondary: { label: 'เพลงฟื้น · ฟื้นเลือดต่อคน', value: finaleHealPower(data,h.id) }, scaling: 'ดาเมจและรักษาอิงพลังเวท', target: 'ศัตรู/เพื่อนทุกคน ตามเพลง' };
   if (action === 'valor' || action === 'mend') return { label: action === 'valor' ? 'โบนัสต่อการโจมตี' : 'ฟื้นเลือดต่อคน/รอบ', value: songPower(data, h.id, action), scaling: 'อิงพลังเวท', target: 'เพื่อนทุกคน' };
+  // Pulls (skill rework step 2) deal the curse's round-end power at once, scaled by Magic Power through thread hex.
+  if (action === 'lifetoll' || action === 'tollring') return { label: 'ดาเมจต่อชั้นสาปที่ดึง', value: hexTickPower(data, h.id, 1), scaling: 'อิงพลังเวท (เท่าสาปตอนจบรอบ)', target };
   if (!data.skills[action].power) return { label: 'ผลพิเศษ', scaling: 'อ่านเงื่อนไขของท่า', target };
   return { secondary: saintMetric, label: action === 'ward' || action === 'aegis' ? 'โล่พื้นฐาน' : action === 'heal' || action === 'prayer' || action === 'bless' ? 'ฟื้นเลือดพื้นฐานต่อคน' : action === 'brace' || action === 'spearwall' || action === 'warcry' ? 'พลังสวนพื้นฐาน' : 'ดาเมจพื้นฐานต่อเป้าหมาย', value: skillPower(data, h.id, action), scaling: usesMagicPower(action) ? 'อิงพลังเวท' : 'อิงพลังโจมตี', target };
 }

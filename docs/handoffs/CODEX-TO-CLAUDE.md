@@ -2,6 +2,13 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-06 — Skill rework step 2: Wynne pulls (Claude, PR #184 feature/skill-rework-wynne)
+- เจ้าของ "ดำเนินการขั้นถัดไป Wynne ได้": ภาษีชีวิต/วงภาษีแทบไม่ถูกใช้ → ดึงด้าย (สาปทำงานทันที คลาย 1 ชั้น ต่ออายุชั้นที่เหลือ, คูลดาวน์ 2) + วงด้ายดึง (ตัวที่มีสาปทำงานทันที ตัวที่ไม่มีติด 1 ชั้น ใช้ได้ทุกเทิร์น)
+- ถอดภาษี (`toll`/`payToll`/event `toll`) · โหนด b2x `hexPullHeavy`, b2y `hexPullKeep`, b4 `hexRingFull` ความหมายใหม่ · เซฟ v49 ศึกค้างที่ใช้ lifetoll/tollring เริ่มใหม่จากเลือดเข้า
+- การต่ออายุตอนดึงเป็นการตัดสินของ Claude: ถ้าไม่ต่อ สาปจะหมดในรอบที่ดึง (เป็นที่กฎ ไม่ใช่การให้คะแนน)
+- Tests: typecheck/lint/unit 1610 ผ่าน, Playwright roster-p03 + unit-a12-clips ผ่าน (คลิปถูกข้ามตาม env), sim ผ่าน: กิ่ง b 46→54% (tollring 0→11), ดึงด้าย 2–5 ครั้ง ตัวอื่นไม่เปลี่ยน
+- รายละเอียด `docs/validation/skill-rework-2026-11-05/README_TH.md` §5 · ขั้นถัดไป Garran (รอเจ้าของสั่ง) · เจ้าของยังไม่ได้ดูท่าทาง/VFX
+
 ## 2026-11-05 — Skill rework step 1: Dancer kit + Astrid turn cycle (Claude, PR #181 feature/skill-direct-effects)
 - เจ้าของ: นักเต้นมีแต่ลดคูลดาวน์และ "OP" → วิเคราะห์ทุกตัว (artifact "ตรวจสกิล Fateweave" + "คลังกลไกสกิล") แล้วสั่งทำขั้นแรก
 - กฎ: cadence โล่ 8 + เร่งคูลดาวน์ใต้เพดาน; duet ตีตาม 40%; จังหวะจากสกิลเพื่อน → closingstep ตีทุกตัว 6+6/จังหวะ; rounddance โล่ 5; deepbeat ลดท่าถัดไป 40%; echofoot +จังหวะ; turncycle ตี 8; ไม่มีการเลือกสกิล/ผู้รับคูลดาวน์อีก; เซฟ v48

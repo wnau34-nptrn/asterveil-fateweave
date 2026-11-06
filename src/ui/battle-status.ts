@@ -74,7 +74,6 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     if (enemy.drawnBy && alive(enemy.drawnBy.heroId)) add('drawn', 'tremor', 'ถูกดึงเป้า', `ท่าถัดไปเล็ง${name(enemy.drawnBy.heroId)}`, `รอบ ${enemy.drawnBy.round}`, 'debuff');
     for (const h of enemy.hexes ?? []) if (alive(h.heroId)) add(`hex-${h.heroId}`, 'threadhex', 'สาป', `${h.stacks}/${HEX_MAX} ชั้น เสียเลือด ${hexTickPower(d, h.heroId, h.stacks)} ทุกจบรอบ · จาก${name(h.heroId)}`, `ถึงจบรอบ ${h.until}`, 'debuff');
     if (enemy.deflect && enemy.deflect.until >= s.round) add('deflect', 'deflectfate', 'ชะตาถูกเบน', `ท่าเป้าเดี่ยวถัดไปลงที่${name(enemy.deflect.recipientId)} · จาก${name(enemy.deflect.heroId)}`, `ถึงจบรอบ ${enemy.deflect.until}`, 'debuff');
-    if (enemy.toll && alive(enemy.toll.heroId) && enemy.toll.until >= s.round) add('toll', 'lifetoll', 'ภาษีชีวิต', `ก่อนโจมตีเสียเลือด ${enemy.toll.power} · จาก${name(enemy.toll.heroId)}`, `ถึงจบรอบ ${enemy.toll.until}`, 'debuff');
     if (enemy.weaken) add('weaken', 'smoke', 'ท่าเบาลง', `ท่าถัดไปเบาลง ${enemy.weaken}%`, 'หมดเมื่อตัวนี้ลงมือ', 'debuff');
     if (s.taunt && alive(s.taunt.heroId)) add('taunted', 'taunt', 'ถูกยั่วยุ', `หากลงมือก่อนเทิร์นถัดไปของ${name(s.taunt.heroId)} จะเล็งไปที่ผู้นั้น`, untilTurn(s.taunt.heroId), 'debuff');
   }

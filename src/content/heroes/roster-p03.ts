@@ -16,12 +16,13 @@ export const rosterP03Skills = {
   circlefist: { name: 'หมัดวงกลม', english: 'Circle Fist', icon: '✊', power: 14, cooldown: 3 },
   storedfist: { name: 'หมัดเก็บแรง', english: 'Stored Fist', icon: '✊', power: 20, cooldown: 2 },
   perfectfist: { name: 'หมัดสมบูรณ์', english: 'Perfect Fist', icon: '✊', power: 38, cooldown: 4 },
-  // Hexer: thread hex's power is the curse's damage per stack as each round ends.
+  // Hexer: thread hex's power is the curse's damage per stack as each round ends; Pull Thread (`lifetoll`) and the Pulling
+  // Ring (`tollring`) tick a curse at once with that power (skill rework step 2, owner 2026-11-06), so their own power is 0.
   threadhex: { name: 'ด้ายสาป', english: 'Thread Hex', icon: '✂', power: 5, cooldown: 1 },
-  lifetoll: { name: 'ภาษีชีวิต', english: 'Life Toll', icon: '✂', power: 5, cooldown: 3 },
+  lifetoll: { name: 'ดึงด้าย', english: 'Pull Thread', icon: '✂', power: 0, cooldown: 2 },
   wovenhex: { name: 'สาปถักทอ', english: 'Woven Hex', icon: '✂', power: 0, cooldown: 4 },
   longthread: { name: 'ด้ายยาว', english: 'Long Thread', icon: '✂', power: 0, cooldown: 3 },
-  tollring: { name: 'วงภาษี', english: 'Toll Ring', icon: '✂', power: 4, cooldown: 4 },
+  tollring: { name: 'วงด้ายดึง', english: 'Pulling Ring', icon: '✂', power: 0, cooldown: 4 },
   knothex: { name: 'ปมสาป', english: 'Knot Hex', icon: '✂', power: 0, cooldown: 3 },
   // Seer: bend or turn announced moves; the needle and the orbit are its plain energy strikes.
   deflectfate: { name: 'เบนชะตา', english: 'Deflect Fate', icon: '✦', power: 0, cooldown: 4 },
@@ -62,10 +63,10 @@ const hexerTree: TalentTree = [
   node('a3', 'สาปถักทอ', { unlock: 'wovenhex' }, { branch: 'a', tier: 3 }),
   node('a4', 'ทอแน่น', { cap: 'hexWovenQuick', amount: 1 }, { branch: 'a', tier: 4 }),
   node('b1', 'ผ้าคลุมหนา', { stat: 'hp', percent: 5 }, { branch: 'b', tier: 1 }, 2),
-  node('b2x', 'ภาษีหนัก', { power: 'lifetoll', amount: 2 }, { branch: 'b', tier: 2, choice: 'hexer-b2' }),
-  node('b2y', 'ภาษียืด', { cap: 'hexTollLong', amount: 1 }, { branch: 'b', tier: 2, choice: 'hexer-b2' }),
-  node('b3', 'วงภาษี', { unlock: 'tollring' }, { branch: 'b', tier: 3 }),
-  node('b4', 'เก็บเต็มอัตรา', { cap: 'hexRingFull', amount: 2 }, { branch: 'b', tier: 4 }),
+  node('b2x', 'ดึงแรง', { cap: 'hexPullHeavy', amount: 2 }, { branch: 'b', tier: 2, choice: 'hexer-b2' }),
+  node('b2y', 'ดึงไม่คลาย', { cap: 'hexPullKeep', amount: 1 }, { branch: 'b', tier: 2, choice: 'hexer-b2' }),
+  node('b3', 'วงด้ายดึง', { unlock: 'tollring' }, { branch: 'b', tier: 3 }),
+  node('b4', 'ดึงเต็มวง', { cap: 'hexRingFull', amount: 2 }, { branch: 'b', tier: 4 }),
   node('c1', 'ตุ๊กตาคุ้มตัว', { stat: 'armour', percent: 5 }, { branch: 'c', tier: 1 }, 2),
   node('c1s', 'ด้ายยาว', { unlock: 'longthread' }, { branch: 'c', tier: 1 }),
   node('c2x', 'ด้ายไม่ขาด', { cap: 'hexLongLife', amount: 1 }, { branch: 'c', tier: 2, choice: 'hexer-c2', needs: 'c1s' }),

@@ -21,7 +21,7 @@ export const heroText: Record<string, { name: string; role: string; help: string
   thiran: { name: 'โอดราน', role: 'นักบุญรบ', help: 'รุกแนวหน้าและเปลี่ยนดาเมจเป็นเลือดให้เพื่อน', icon: '✚' },
   kael: { name: 'เคล', role: 'นักมวย', help: 'สะสมปราณจากหมัดที่ทำเลือดลด แล้วจ่ายปิดท่า', icon: '✊' },
   astrid: { name: 'แอสทริด', role: 'โหราจารย์', help: 'เบนท่าศัตรูไปลงศัตรูอีกตัว และหมุนวงท่าที่จะมาถึง', icon: '✦' },
-  wynne: { name: 'วินน์', role: 'นักสาป', help: 'ผูกสาปซ้อนชั้นที่ทำดาเมจทุกจบรอบ และภาษีที่ศัตรูจ่ายก่อนโจมตี', icon: '✂' },
+  wynne: { name: 'วินน์', role: 'นักสาป', help: 'ผูกสาปซ้อนชั้นที่ทำดาเมจทุกจบรอบ แล้วดึงด้ายให้สาปทำงานทันที', icon: '✂' },
   lalin: { name: 'เซรีส', role: 'นักเต้นรำ', help: 'คืนคูลดาวน์ให้เพื่อน ไม่เพิ่มเทิร์นหรือเปลี่ยนคิว', icon: '♪' },
   wila: { name: 'อิโซลด์', role: 'นักเต้นรำ', help: 'กระจายจังหวะให้สกิลของทีมพร้อมเร็วขึ้น', icon: '♪' },
   healer: { name: 'เซเรน', role: 'นักบวช', help: 'รักษาคนเดียวหรือฟื้นฟูทั้งทีม', icon: '✚' },
@@ -149,10 +149,10 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     readorbit: `พลังงาน ${skill.power} เป้าเดียว ดูวงท่าที่จะมาถึงได้ในแผงสถานะศัตรู`,
     doubledial: 'ขยับวงท่าของศัตรู 2 ช่องในวงที่มีอย่างน้อย 3 ท่า ไม่ข้ามท่าที่ล็อก',
     threadhex: `ผูกสาปเพิ่ม 1 ชั้น (สูงสุด ${HEX_MAX}) ทุกจบรอบเสียเลือดพลังงาน ${hexTickPower(data, heroId, 1)} ต่อชั้น อยู่ถึงจบรอบถัดไป ลงซ้ำต่ออายุ`,
-    lifetoll: `ศัตรูที่ติดสาปถูกผูกภาษี 2 รอบ ก่อนโจมตีแต่ละครั้งเสียเลือดพลังงาน ${skill.power} (ถูกขัด/ชาร์จ/เปลี่ยนช่วงไม่จ่าย)`,
+    lifetoll: `เป้าที่ติดสาปของเธอ: สาปทำงานทันทีหนึ่งครั้ง เท่าจบรอบ แล้วคลายลง 1 ชั้นและต่ออายุถึงจบรอบถัดไป · สาป 1/2/3 ชั้น = พลังงาน ${[1, 2, 3].map(n => hexTickPower(data, heroId, n) + n * capAmount(data, heroId, 'hexPullHeavy')).join('/')}`,
     wovenhex: 'ศัตรูแถวหน้าทุกตัวติดสาปเพิ่ม 1 ชั้น ถ้าหน้าว่างโดนหลังแทน',
     longthread: 'ผูกสาปเพิ่ม 1 ชั้น และอยู่ถึงจบรอบที่สามนับรอบนี้',
-    tollring: `ผูกภาษี ${skill.power} ให้ศัตรูที่ติดสาปทุกตัว 2 รอบ`,
+    tollring: `ศัตรูทุกตัว: ตัวที่ติดสาปของเธอ สาปทำงานทันทีหนึ่งครั้ง (ไม่คลายชั้น) · ตัวที่ยังไม่มีสาป ติดสาป 1 ชั้น`,
     knothex: `ผูกสาปเพิ่ม 2 ชั้นในเป้าเดียว (สูงสุด ${HEX_MAX})`,
   };
   const passive = hero.passive && passiveText[hero.passive].actions.includes(action) ? ` · ★5 ${passiveText[hero.passive].name}: ${passiveText[hero.passive].help(data)}` : '';
@@ -166,7 +166,7 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
 // Branch names per class (A, B), matching docs/EXPEDITION_DESIGN.md "Talent tree".
 // Big skill trees (A6): three branch names per class, matching docs/design/SKILL_TREE_KNIGHT_TH.md.
 // Release A trees: docs/design/SKILL_TREES_ALL_TH.md.
-export const bigBranches: Record<string, readonly string[]> = { astrid: ['เบนชะตา', 'หมุนวง', 'เข็มดาว', 'ประจำตัว'], wynne: ['ด้ายสาป', 'ภาษี', 'ปมยาว', 'ประจำตัว'], kael: ['รวมปราณ', 'ปล่อยปราณ', 'เก็บแรง', 'ประจำตัว'], metta: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], thiran: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], lalin: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], wila: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], guardian: ['ปราการ', 'ลงทัณฑ์', 'ธงนำ'],
+export const bigBranches: Record<string, readonly string[]> = { astrid: ['เบนชะตา', 'หมุนวง', 'เข็มดาว', 'ประจำตัว'], wynne: ['ด้ายสาป', 'ดึงด้าย', 'ปมยาว', 'ประจำตัว'], kael: ['รวมปราณ', 'ปล่อยปราณ', 'เก็บแรง', 'ประจำตัว'], metta: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], thiran: ['หมัดเมตตา', 'คำสัตย์', 'แบ่งบาดแผล', 'ประจำตัว'], lalin: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], wila: ['จังหวะเดี่ยว', 'ประสาน', 'ก้าวส่งท้าย', 'ประจำตัว'], guardian: ['ปราการ', 'ลงทัณฑ์', 'ธงนำ'],
   tracer: ['ตราล่า', 'ปลิดชีพ', 'ระบำดาบ'], weaver: ['เวทโจมตี', 'เวทป้องกัน', 'ผนึกเวท'], healer: ['เยียวยา', 'คุ้มครอง', 'พรศรัทธา'],
   garran: ['ทวนรับ', 'ทวนรุก', 'ยึดแนว'], mira: ['แม่นธนู', 'ฝนธนู', 'พรานป่า'],
   toma: ['กรดกัดกร่อน', 'ยาเสริม', 'ควันและปฏิกิริยา'], sefa: ['ลอบสังหาร', 'เงา', 'ก่อกวน'], brann: ['ปราการศิลา', 'ค้อนรูน', 'ศิลาผู้พิทักษ์'], lio: ['เพลงรบ', 'เพลงปลอบ', 'ท่วงทำนอง'] };
@@ -238,8 +238,9 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   hexThreadPer: { actions: ['threadhex'], help: n => `สาปเสียเลือดเพิ่ม ${n} ต่อชั้น` },
   hexThreadFresh: { actions: ['threadhex'], help: n => `ด้ายสาปใส่เป้าที่ยังไม่มีสาปของเธอได้ ${n} ชั้น` },
   hexWovenQuick: { actions: ['wovenhex'], help: n => `สาปถักทอคูลดาวน์ลด ${n} เมื่อแถวหน้ายืนอย่างน้อยสองตัว` },
-  hexTollLong: { actions: ['lifetoll'], help: n => `ภาษีชีวิตอยู่นานขึ้น ${n} รอบ` },
-  hexRingFull: { actions: ['tollring'], help: n => `วงภาษีแรงขึ้น ${n} กับเป้าที่สาปเต็ม` },
+  hexPullHeavy: { actions: ['lifetoll'], help: n => `ดึงด้ายเสียเลือดเพิ่ม ${n} ต่อชั้น` },
+  hexPullKeep: { actions: ['lifetoll'], help: () => `ดึงด้ายจากสาปเต็ม ${HEX_MAX} ชั้นไม่คลายชั้น` },
+  hexRingFull: { actions: ['tollring'], help: n => `วงด้ายดึงเสียเลือดเพิ่ม ${n} ต่อชั้นกับเป้าที่สาปเต็ม` },
   hexLongLife: { actions: ['longthread'], help: n => `ด้ายยาวอยู่นานขึ้น ${n} รอบ` },
   hexLongDouble: { actions: ['longthread'], help: n => `ด้ายยาวผูก ${n} ชั้น แต่ไม่ยืดอายุ` },
   hexKnotLife: { actions: ['knothex'], help: n => `ปมสาปต่ออายุสาปที่มีอยู่อีก ${n} รอบ (ไม่เกินสามจบรอบข้างหน้า)` },
@@ -405,8 +406,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'deflect': return event.text === 'Fate is bent.' ? `${source}เบนท่าถัดไปของ${target}ไปลงศัตรูอีกตัว` : `ท่าของ${target}ถูกเบนออกจากฝ่ายเรา`;
     case 'dial': return `${source}หมุนวงท่าของ${target} ${event.amount} ช่อง (ไม่เปลี่ยนคิว SPD)`;
     case 'beat': { const now = after.heroes.find(h => h.id === event.targetId)?.beats ?? 0; return (event.amount ?? 0) > 0 ? `${target} ได้จังหวะ +${event.amount} (มี ${now}/${BEAT_MAX})` : `${target} ใช้จังหวะ ${-(event.amount ?? 0)} แต้ม`; }
-    case 'hex': return `${target} ติดสาป${source} ${event.amount}/${HEX_MAX} ชั้น`;
-    case 'toll': return event.text === 'Toll paid.' ? `${target} จ่ายภาษีชีวิตก่อนลงมือ เสียเลือด ${event.amount}` : `${target} ถูกผูกภาษีชีวิต ${event.amount} ทุกครั้งก่อนโจมตี`;
+    case 'hex': return event.text === 'Curse loosened.' ? (event.amount ? `สาป${source}บน${target}คลายเหลือ ${event.amount}/${HEX_MAX} ชั้น` : `สาป${source}บน${target}หลุดหมด`) : `${target} ติดสาป${source} ${event.amount}/${HEX_MAX} ชั้น`;
     case 'chi': { const now = after.heroes.find(h => h.id === event.targetId)?.chi ?? 0; return (event.amount ?? 0) > 0 ? `${target} สะสมปราณ +${event.amount} (มี ${now}/${CHI_MAX})` : `${target} ปล่อยปราณ ${-(event.amount ?? 0)} แต้ม (เหลือ ${now})`; }
     case 'damage': return `${target} เสียเลือด ${event.amount ?? 0}${event.absorbed ? ` (โล่รับไว้ ${event.absorbed})` : ''}`;
     case 'guard': return `${source}${event.sourceId === event.targetId ? 'ตั้งรับ' : `รับการโจมตีแทน${target}`} ลดความเสียหาย ${Math.round(guardReductionOf(data, event.sourceId) * 100)}%`;
