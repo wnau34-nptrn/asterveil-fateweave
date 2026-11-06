@@ -13,7 +13,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- None. Skill rework step 5 (Toma) is in PR `feature/skill-rework-toma` (see the handoff log). Waiting on the owner: (1) haste baton 20% vs 50% (README §8 numbers), (2) the go for step 6 (small fixes; prompt below).
+- None. Skill rework step 5 (Toma) merged (PR #190). Waiting on the owner: (1) haste baton 20% vs 50% (README §8 numbers), (2) the go for step 6 (small fixes; prompt below).
 
 ## Next (owner order)
 

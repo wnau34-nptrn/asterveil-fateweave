@@ -2,7 +2,7 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md) and those of 2026-11-04 in [archive/2026-11-06/CODEX-TO-CLAUDE.md](archive/2026-11-06/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
-## 2026-11-06 — Skill rework step 5: Toma (Claude, branch feature/skill-rework-toma)
+## 2026-11-06 — Skill rework step 5: Toma (Claude, PR #190 merged)
 - เจ้าของ "ดำเนินการขั้นต่อไปได้" = การ์ด Toma ในหน้า artifact "ตรวจสกิล Fateweave" (ไม่มีโน้ตเจ้าของ) · เซฟ v52 (ศึกค้างที่ใช้ haste/smoke/catalyst เริ่มใหม่จากเลือดเข้า)
 - กฎ: haste ส่งไม้ (`HeroState.baton` +20% การลงมือครั้งถัดไป: ดาเมจ/รักษา/โล่) · smoke บนเป้าติดกรด ลาม 20% ไปศัตรูข้าง ๆ · catalyst 6+8 ไม่ล้างกรด กระเด็น 50% ไปศัตรูข้าง ๆ · ศัตรูข้าง ๆ = ใกล้สุดซ้าย/ขวาในแถวเดียวกัน (`foeNeighbours`, Claude ตีความ)
 - Sim 28/28 (TREES/CLASSES/CHARACTERS เปลี่ยนเฉพาะ Toma): catalyst 0→12 ครั้ง, haste ΔHP −7.8/−6.9 → −3.3/−6.0, นักปรุงยา 43→47% · Playwright alchemy-fx + unit-a4 91 ผ่าน (2 เคสจังหวะเวลาตกเมื่อรัน 3 workers ผ่านเมื่อ 1 worker)
