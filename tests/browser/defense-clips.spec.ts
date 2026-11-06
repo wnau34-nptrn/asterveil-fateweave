@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 test.skip(!process.env.DEFENSE_CLIPS, 'owner clip capture only');
 const cases = [
-  ...['guard','aegis','rally','bulwark','stonearmor','guardstone','halo','sanctuary','brace','spearwall','hold'].map(skill => ({skill,outcome:skill==='guardstone'?'stone':skill==='sanctuary'?'save':['brace','spearwall','hold'].includes(skill)?'counter':'normal',mode:'normal'})),
+  ...['guard','aegis','rally','bulwark','stonearmor','guardstone','halo','sanctuary','brace','spearwall'].map(skill => ({skill,outcome:skill==='guardstone'?'stone':skill==='sanctuary'?'save':['brace','spearwall','hold'].includes(skill)?'counter':'normal',mode:'normal'})),
   ...['blocked','partial'].map(outcome=>({skill:'aegis',outcome,mode:'normal'})),
   ...['dodged','cancelled'].map(outcome=>({skill:'guard',outcome,mode:'normal'})),
   ...['aegis','rally'].flatMap(skill=>['fast','reduced','osreduce'].map(mode=>({skill,outcome:'normal',mode}))),

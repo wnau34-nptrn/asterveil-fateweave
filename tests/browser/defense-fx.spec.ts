@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { stageTiming } from '../../src/ui/battle-playback';
 
-const skills=['guard','aegis','rally','bulwark','stonearmor','guardstone','halo','sanctuary','brace','spearwall','hold'];
+// Save v50: `hold` is the pinning spear (blade thrust), no longer a defense stance.
+const skills=['guard','aegis','rally','bulwark','stonearmor','guardstone','halo','sanctuary','brace','spearwall'];
 test.skip(process.env.PLAYWRIGHT_PAGES==='true','source-only defense fixture has a separate dev-server gate');
 test('defense missing atlas falls back without changing the command',async({page})=>{
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
@@ -64,7 +65,7 @@ for(const skill of skills)test(`defense ${skill} uses truthful contact and owned
 
 for(const [skill,scenario,kind]of [
   ['guard','normal','redirect'],['guardstone','stone','redirect'],['aegis','blocked','absorb'],['aegis','partial','absorb'],
-  ['sanctuary','save','save'],['brace','counter','counter'],['spearwall','counter','counter'],['hold','counter','counter'],
+  ['sanctuary','save','save'],['brace','counter','counter'],['spearwall','counter','counter'],
   ['guard','dodged','none'],['guard','cancelled','none'],
 ] as const)test(`defense ${skill}/${scenario} follows actual response events`,async({page})=>{
   await page.goto(`tests/browser/fixtures/defense.html?runtime=1&skill=${skill}&scenario=${scenario}`);await page.locator('#start').click();
