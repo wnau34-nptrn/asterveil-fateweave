@@ -234,7 +234,7 @@ describe('P03 Kael in the world', () => {
     expect(loaded.boardFeatured).toEqual(['metta', 'lalin']);
     expect(boardOffers(loaded, map, lookup)).toEqual(v46Offers);
     expect(loaded.taken).toEqual([3]);
-    expect(JSON.parse(write({ profile: loaded, run: null })).version).toBe(54);
+    expect(JSON.parse(write({ profile: loaded, run: null })).version).toBe(55);
     const refreshed = refreshBoard({ ...loaded, bank: { ...loaded.bank, gold: 90 } }, map).profile;
     expect(refreshed.boardFeatured).toEqual(featuredLineup(map));
     expect(refreshed.boardFeatured).toContain('kael');
