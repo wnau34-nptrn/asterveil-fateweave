@@ -2,6 +2,11 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-06 — Battle header text sharper; home-screen app back to normal status bar (Claude)
+- iPhone เว็บแอป: `black-translucent` (PR #175) ทำให้ iOS วาดหน้าที่ y=0 แต่ตัดที่ 793/852 → ล่าง 59pt วาดไม่ได้ (โหมดทดลอง #182 ยืนยัน) → เอาออก (#183) กลับเป็นแถบสถานะปกติ ที่ว่างล่างเหลือ ~26pt; ค่าที่วัด: inner 793, screen 852, env top 0, env bottom 34
+- หัวแถวบนของหน้าต่อสู้ดูเบลอ ไม่ใช่เกา/filter แต่เป็นสไตล์ (เงาฟุ้ง 6px, ชิป 9px/400) → ปรับให้คม ดู `docs/validation/battle-header-text/`
+- เปิด: ผู้ใช้ยังไม่ยืนยันผลบนเครื่องจริงหลังปรับ; ฉากพื้นหลังต่อสู้เป็นไฟล์แนวนอน 1536×1024 ขยาย ~1.6× (ถ้าต้องการคมกว่านี้ → ภาพแนวตั้งจาก Codex)
+
 ## 2026-11-06 — Skill rework step 2: Wynne pulls (Claude, PR #184 feature/skill-rework-wynne)
 - เจ้าของ "ดำเนินการขั้นถัดไป Wynne ได้": ภาษีชีวิต/วงภาษีแทบไม่ถูกใช้ → ดึงด้าย (สาปทำงานทันที คลาย 1 ชั้น ต่ออายุชั้นที่เหลือ, คูลดาวน์ 2) + วงด้ายดึง (ตัวที่มีสาปทำงานทันที ตัวที่ไม่มีติด 1 ชั้น ใช้ได้ทุกเทิร์น)
 - ถอดภาษี (`toll`/`payToll`/event `toll`) · โหนด b2x `hexPullHeavy`, b2y `hexPullKeep`, b4 `hexRingFull` ความหมายใหม่ · เซฟ v49 ศึกค้างที่ใช้ lifetoll/tollring เริ่มใหม่จากเลือดเข้า
