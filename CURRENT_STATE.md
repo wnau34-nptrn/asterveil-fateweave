@@ -13,12 +13,12 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **UI frame consistency** (owner 2026-11-05 “ดำเนินการได้”): Claude implements in the game itself, one page group per PR with 390px before/after shown before merge — shared window header (close/back size and position), primary/secondary button tokens, ≥12px text in service sheets and the character window, CSS onto tokens with unchanged looks. **Do not touch** battle/map HUD, painted skill icons, team formation grid, skills member strip, battle-rewards card, run-summary chips, forge item art/review. Scope and history: top of `docs/handoffs/ART-UI-LANGUAGE-001.md`; audit `docs/validation/ui-language-audit-2026-11-05/`. Q1–Q3: owner delegated the pick (2026-11-05) → Claude chose R1 (full-screen sheets hiding the bottom nav, left titles, gold only on primary/review). Q4 dropped.
+- Skill rework step 5 = Toma (owner 2026-11-06 "ดำเนินการขั้นต่อไปได้"); prompt below.
 
 ## Next (owner order)
 
-- Groups 1–2 done (PR #173 service sheets; group 2 = team sheet + character window full-screen, header/buttons/≥12px, `docs/validation/ui-frame-group2-2026-11-05/`). Next group 3: map/battle dialogs (not HUD; the map character dialog already has the new header), then summary/rewards frame only. Re-run `tests/browser/ui-language-audit.spec.ts` before/after.
-- Owner 2026-11-05: polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check remains open.
+- UI frame consistency (owner 2026-11-05): groups 1–2 done (#173, `docs/validation/ui-frame-group2-2026-11-05/`); group 3 = map/battle dialogs (not HUD), then summary/rewards frame only; scope at the top of `docs/handoffs/ART-UI-LANGUAGE-001.md`, audit spec `tests/browser/ui-language-audit.spec.ts`. Q1–Q3 picked by Claude (R1) under the owner's delegation.
+- Polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check open.
 
 ## Open items
 
@@ -43,7 +43,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - haste ยาเร่ง → ส่งไม้: เพื่อนลงมือทันทีและแรงขึ้น 20% ในการลงมือนั้น
 - smoke ขวดควัน: ลด 40% เหมือนเดิม + ถ้าเป้าติดกรด ควันลามไปศัตรูข้าง ๆ 20%
 - catalyst ตัวเร่ง: กรดทำงานทันทีหนึ่งรอบ (ไม่ล้างกรด) และกระเด็น 50% ไปศัตรูข้าง ๆ
-- acid, bomb, fury คงเดิม (ตรวจโหนด/กิ่งที่อ้างสามท่านี้ว่ายังมีความหมาย ถ้าไม่ เสนอความหมายใหม่สั้น ๆ)
-ขั้นตอนแบบขั้น 1–4 (README_TH.md §4–§7 ใน docs/validation/skill-rework-2026-11-05/): วัดก่อนแก้ด้วย probe (แบบ tests/probe/astrid-probe.test.ts) → engine+content → th.ts → advisor Alchemist → เมตริก/สถานะ → VFX ตามเหตุการณ์จริง (npm run coverage:presentation) → เซฟ v52 แบบ v51 (REWORKED_V52, รับ 51, อัปเดตเทสต์ version 51 ทุกรูปแบบรวม tests/browser, เทสต์ย้ายเซฟใน tests/heal-revive-rules.test.ts) → เทสต์ preview=resolver/replay/ขอบเขต + typecheck/lint/test/sim (เทียบแถว Toma ก่อน-หลัง ตัวอื่นไม่เปลี่ยน) + Playwright ที่เกี่ยว (alchemy-fx, unit-a4)
-จบ: PR เข้า feature/fateweave-initial-prototype รอ quality+browser ผ่านแล้ว merge, อัปเดต CURRENT_STATE.md, บนสุดของ CODEX-TO-CLAUDE.md, ต่อท้าย README §8 พร้อมตัวเลขเดิม→ใหม่และผล sim
+- acid/bomb/fury คงเดิม (ตรวจว่าโหนดที่อ้างยังมีความหมาย ถ้าไม่ เสนอสั้น ๆ)
+ทำแบบขั้น 4 (docs/validation/skill-rework-2026-11-05/README_TH.md §7, commit 6bdbbf6): probe วัดก่อน → engine/content/th/advisor/สถานะ/VFX → เซฟ v52 (REWORKED_V52, เทสต์ version 51 ทุกที่รวม tests/browser, เทสต์ย้ายเซฟ) → typecheck/lint/test/sim (แถว Toma เท่านั้นที่เปลี่ยน) + Playwright alchemy-fx/unit-a4
+จบ: PR → quality+browser ผ่าน → merge; อัปเดต CURRENT_STATE, CODEX-TO-CLAUDE, README §8 (ตัวเลขเดิม→ใหม่ + sim)
 ```
