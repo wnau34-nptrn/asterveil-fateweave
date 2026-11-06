@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { actionReason, BRACE_STRIKE, braceStrikePower, ambushBonus, beginBattle, corrodeBonus, skillPower, withParty, createBattle, currentHeroId, enemyIntent, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
+import { SHADE_BONUS, SHADE_TURNS, actionReason, BRACE_STRIKE, braceStrikePower, ambushBonus, beginBattle, corrodeBonus, skillPower, withParty, createBattle, currentHeroId, enemyIntent, plannedIntents, previewCommand, replay, resolveCommand, targetOptions, upcomingTurns, validateCommand } from '../src/core/battle/engine';
 import type { ActionId, BattleState } from '../src/core/battle/types';
 import { veilSiege } from '../src/content/encounters/veil-siege';
 import { openField } from './fixtures/open-field';
@@ -157,24 +157,35 @@ describe('scout (Sefa)', () => {
     expect(currentHeroId(t, slow)).toBe('sefa');
     expect(act(t, 'ambush', 'b1', slow).events.find(e => e.sourceId === 'sefa')).toMatchObject({ amount: 12 });
   });
-  it('shadow step makes the first enemy hit on Sefa miss', () => {
+  it('save v56 fade: Sefa hits, and the single-target move announced at her goes to someone else', () => {
     // Slot 1 is Sefa, so the Raider's opening physical slash aims at her.
     const party = withParty(data, [tracer!, sefa, weaver!, healer!]);
     let s = createBattle(party); s = act(s, 'attack', 'b1', party).state;
     expect(s.intent).toMatchObject({ sourceId: 'b1', targetId: 'sefa' });
-    const r = act(s, 'evade', 'sefa', party);
+    const r = act(s, 'evade', 'b1', party);
+    expect(r.turns[0]!.events.find(e => e.type === 'damage' && e.sourceId === 'sefa')).toMatchObject({ targetId: 'b1', amount: 8 });
+    expect(r.turns[0]!.state.heroes.find(h => h.id === 'sefa')!.shade).toEqual({ turns: SHADE_TURNS });
     const raider = r.turns.find(t => t.actorId === 'b1')!;
-    expect(raider.events.map(e => e.type)).toEqual(['dodge']); expect(raider.targetId).toBe('sefa');
-    expect(r.state.heroes.find(h => h.id === 'sefa')).toMatchObject({ hp: 54 }); expect(r.state.heroes.find(h => h.id === 'sefa')!.evading).toBeUndefined();
+    expect(raider.events.find(e => e.type === 'damage')!.targetId).not.toBe('sefa');
+    expect(r.state.heroes.find(h => h.id === 'sefa')!.hp).toBe(s.heroes.find(h => h.id === 'sefa')!.hp);
   });
-  it('an unused shadow step lapses when her own turn returns', () => {
+  it('save v56 fade: an attack brings her out SHADE_BONUS% stronger; without one the shadow lapses after SHADE_TURNS turns', () => {
     const party = withParty(data, [sefa, tracer!, weaver!, healer!]);
-    // The Raider's opening slash aims at slot 1 (Lyra), so the step is never tested this round.
     let s = createBattle(party); s = act(s, 'attack', 'f1', party).state;
-    s = act(s, 'evade', 'sefa', party).state;
-    expect(s.heroes.find(h => h.id === 'sefa')!.evading).toBe(true);
-    while (currentHeroId(s, party) !== 'sefa') s = act(s, 'attack', 'f1', party).state;
-    expect(s.round).toBe(2); expect(s.heroes.find(h => h.id === 'sefa')!.evading).toBeUndefined();
+    s = act(s, 'evade', 'f1', party).state;
+    const next = () => { while (currentHeroId(s, party) !== 'sefa') s = act(s, 'attack', 'f1', party).state; };
+    next(); const out = act(s, 'attack', 'f1', party);
+    expect(out.turns[0]!.events.find(e => e.type === 'damage' && e.sourceId === 'sefa')!.amount).toBe(Math.round(sefa.attack * (100 + SHADE_BONUS) / 100));
+    expect(out.turns[0]!.state.heroes.find(h => h.id === 'sefa')!.shade).toBeUndefined();
+    // Turns spent without attacking (a decoy for an ally) count the shadow down.
+    const decoyParty = withParty(data, [{ ...sefa, actions: ['attack', 'evade', 'decoy'] }, tracer!, weaver!, healer!]);
+    let t = createBattle(decoyParty); t = act(t, 'attack', 'f1', decoyParty).state; t = act(t, 'evade', 'f1', decoyParty).state;
+    for (let i = 0; i < SHADE_TURNS; i++) {
+      while (currentHeroId(t, decoyParty) !== 'sefa') t = act(t, 'attack', 'f1', decoyParty).state;
+      expect(t.heroes.find(h => h.id === 'sefa')!.shade).toEqual({ turns: SHADE_TURNS - i });
+      t.heroes.find(h => h.id === 'sefa')!.cooldowns = {}; t = act(t, 'decoy', 'weaver', decoyParty).state;
+    }
+    expect(t.heroes.find(h => h.id === 'sefa')!.shade).toBeUndefined();
   });
   it('a dodged hit is not a hit: a braced spear keeps its counter for the next one', () => {
     const garran = mercenaries.find(m => m.id === 'garran')!;
@@ -183,9 +194,11 @@ describe('scout (Sefa)', () => {
     let s = createBattle(party); let checked = false;
     while (s.round < 5 && s.outcome === 'active') {
       const hero = currentHeroId(s, party)!;
-      const [action, target]: [ActionId, string] = hero === 'garran' && s.round === 3 ? ['brace', 'f1'] : hero === 'sefa' && s.round === 4 ? ['evade', 'sefa'] : ['attack', 'f1'];
+      // Save v56: the scout's own fade no longer dodges, so the dodge is set directly (as a decoy or shadow layer gives it).
+      const [action, target]: [ActionId, string] = hero === 'garran' && s.round === 3 ? ['brace', 'f1'] : ['attack', 'f1'];
+      const dodge = hero === 'sefa' && s.round === 4; if (dodge) s.heroes.find(h => h.id === 'sefa')!.evading = true;
       const r = act(s, action, target, party);
-      if (action === 'evade') {
+      if (dodge) {
         const raider = r.turns.find(t => t.actorId === 'b1')!;
         expect(raider.events.map(e => e.type)).toEqual(['dodge']);
         // The frame after the Raider's turn still holds the brace (it lapses later, at Garran's own turn).

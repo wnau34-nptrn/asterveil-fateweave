@@ -131,7 +131,11 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // queue change), her Tracking Shot's repeat bounces to the weakest foe; Eira's Crystal Aegis strikes back when broken and
 // Dispel becomes the Arcane Release (bolt charges); Brann's Rune Slam adds part of the damage he took. Profiles are
 // unchanged; a battle in progress that used any of them restarts from its entry HP.
-const SAVE_VERSION = 55;
+// v56 (owner 2026-11-06, skill rework step 6, Sefa): Shadow Step becomes Fade (hit, hidden from single-target moves, a
+// stronger first strike out), Backstab the Blade Storm (four hits), Throwing Knives the Poison Coat and Disarm the Venom
+// Burst. Profiles are unchanged; a battle in progress that used any of them restarts from its entry HP.
+const SAVE_VERSION = 56;
+const REWORKED_V56: readonly ActionId[] = ['evade', 'backstab', 'knives', 'disarm'];
 const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispel', 'bolt', 'slam'];
 const REWORKED_V54: readonly ActionId[] = ['storedfist', 'circlefist', 'solo', 'finale'];
 const REWORKED_V53: readonly ActionId[] = ['haste', 'challenge', 'rouse', 'sanctuary', 'bless'];
@@ -419,6 +423,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     if (version < 53 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V53.includes(obj(c).action as ActionId))) b.commands = [];
     if (version < 54 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V54.includes(obj(c).action as ActionId))) b.commands = [];
     if (version < 55 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V55.includes(obj(c).action as ActionId))) b.commands = [];
+    if (version < 56 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V56.includes(obj(c).action as ActionId))) b.commands = [];
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, party);
     // Validate against the encounter as fought by this run's deployed party (stars and camp level included).
@@ -733,7 +738,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

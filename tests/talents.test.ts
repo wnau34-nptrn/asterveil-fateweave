@@ -272,13 +272,13 @@ describe('scout tree modifiers (Sefa)', () => {
     const l = party([['guardian'], ['sefa', { a2l: 1 }], ['weaver'], ['healer']]);
     expect(hero(act(until(createBattle(l), l, 'sefa'), l, 'ambush', 'f1').turns[0]!.state, 'sefa').evading).toBe(true);
   });
-  it('a doubled shadow step dodges twice; breathing in the shadow heals each dodge', () => {
+  it('save v56: a doubled shadow lasts a turn longer; breathing in the shadow heals her as she fades', () => {
     const d = party([['guardian'], ['sefa', { b2d: 1 }], ['weaver'], ['healer']]);
-    expect(hero(act(until(createBattle(d), d, 'sefa'), d, 'evade', 'sefa').turns[0]!.state, 'sefa').evadeExtra).toBe(1);
+    expect(hero(act(until(createBattle(d), d, 'sefa'), d, 'evade', 'f1').turns[0]!.state, 'sefa').shade).toEqual({ turns: 3 });
     const h = party([['guardian'], ['sefa', { b2h: 1 }], ['weaver'], ['healer']]);
     const s = set(until(createBattle(h), h, 'sefa'), 'sefa', { hp: 30 });
-    const turn = act(s, h, 'evade', 'sefa').turns.find(t => t.actorId === 'b1')!;
-    expect(turn.events.map(e => e.type)).toEqual(['dodge', 'heal']); expect(hero(turn.state, 'sefa').hp).toBe(36);
+    const turn = act(s, h, 'evade', 'f1').turns[0]!;
+    expect(turn.events.find(e => e.type === 'heal')).toMatchObject({ targetId: 'sefa', amount: 6 }); expect(hero(turn.state, 'sefa').hp).toBe(36);
   });
 });
 

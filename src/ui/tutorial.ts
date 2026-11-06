@@ -1,4 +1,4 @@
-import { bigMove, capAmount, enemyIntent, actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, previewCommand, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, DISPEL_PER_CHARGE, NOTE_MAX_ROUNDS, FINALE_PER_ROUND, CHALLENGE_GRUDGE_MAX, SANCTUARY_HEAL, foeNeighbours, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { bigMove, capAmount, enemyIntent, actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, previewCommand, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, VENOM_BURST, COAT_HITS, BLADE_HITS, DISPEL_PER_CHARGE, NOTE_MAX_ROUNDS, FINALE_PER_ROUND, CHALLENGE_GRUDGE_MAX, SANCTUARY_HEAL, foeNeighbours, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, Command } from '../core/battle/types';
 import { actorName } from './th';
 // Seer advisor (tree-sim tuned 2026-11-06, drafts): a delayed big move still comes, so a delay is worth a small share of
@@ -255,10 +255,14 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   if(role==='Scout'){
    const aimedBack=intent&&!intent.all&&intent.targetId!==heroId&&lane(intent.targetId)==='back'&&intent.damage*100>=data.heroes.find(h=>h.id===intent.targetId)!.maxHp*35;
    if(aimedBack){const d=make('decoy',intent!.targetId,'เงาคุ้มกันแนวหลัง',`${actorName(intent!.sourceId,data)} จะถูกหลบ`);if(d)return d;}
-   if(heavy&&intent&&intent.kind==='physical'&&!intent.all){const x=make('disarm',intent.sourceId,'ปาดตัดหน้าศัตรู',`${actorName(intent.sourceId,data)} โดนแรงขึ้นถ้ายังไม่ลงมือและเล็งเพื่อน`);if(x)return x;}
-   if(back.length&&(front.length||back.length>=2)){const k=make('knives','enemies','มีดบินใส่แถวหลัง',`ตัวละ ${skillPower(data,heroId,'knives')}`);if(k)return k;}
-   const low=reach('backstab').find(e=>e.hp<=skillPower(data,heroId,'backstab')+4);
-   if(low){const b=make('backstab',low.id,'ลอบแทงปิดฉาก',`พลัง ${skillPower(data,heroId,'backstab')}`);if(b)return b;}
+   // Save v56 assassin: burst any foe carrying her poison (waiting for 2–3 stacks was no better in the tree sim and the
+   // burst was then rarely used), coat the blades whenever they are bare, then the blade storm.
+   const venomed=living.filter(e=>e.venom?.heroId===heroId&&e.venom.stacks>=1).sort((a,b)=>b.venom!.stacks-a.venom!.stacks||a.hp-b.hp)[0];
+   if(venomed){const x=make('disarm',venomed.id,'ระเบิดพิษ',`พิษ ${venomed.venom!.stacks} ชั้นระเบิด ${venomed.venom!.stacks*VENOM_BURST}`);if(x)return x;}
+   const me=state.heroes.find(h=>h.id===heroId)!;
+   if(!me.coated){const k=make('knives','enemies','เคลือบพิษก่อนพายุคม',`${COAT_HITS} การโดนถัดไปติดพิษ`);if(k)return k;}
+   const storm=focus(reach('backstab'));
+   if(storm){const b=make('backstab',storm.id,'พายุคม',`${BLADE_HITS} ครั้ง ครั้งละ ${skillPower(data,heroId,'backstab')}`);if(b)return b;}
   }
   if(role==='Warden'){
    if(intent&&!intent.all&&intent.targetId===heroId&&intent.damage>=15){const a=make('stonearmor',heroId,'เกราะหินรับท่าหนัก',`โล่ ${skillPower(data,heroId,'stonearmor')}%`);if(a)return a;}
@@ -321,7 +325,9 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  }
  if(role==='Scout'){
   // Step aside from the announced hit; otherwise ambush an enemy that still has to act this round.
-  if(intent?.targetId===heroId){const e=make('evade',heroId,'ก้าวเงาหลบการโจมตี',`${actorName(intent.sourceId,data)} จะตีพลาด`);if(e)return e;}
+  // Save v56: fade into shadow (a hit too) when a single-target move coming for her would take 60%+ of her HP. Hiding
+  // moves the hit onto an ally, so used on every move aimed at her it cost the party (no-points HP 57.8 → 50.4%, a loss).
+  if(intent?.targetId===heroId&&!intent.all&&intent.damage*100>=(state.heroes.find(h=>h.id===heroId)?.hp??0)*60){const e=make('evade',pick('evade').id,'หายเข้าเงา',`${actorName(intent.sourceId,data)} เล็งเซฟาไม่ได้`);if(e)return e;}
   const options=reach('ambush');
   const foe=options.find(e=>ambushBonus(state,data,e.id,heroId)>0)??focus(options);
   return (foe&&make('ambush',foe.id,'จู่โจมก่อนศัตรูขยับ',`พลัง ${skillPower(data,heroId,'ambush')+ambushBonus(state,data,foe.id,heroId)}`))??attack();

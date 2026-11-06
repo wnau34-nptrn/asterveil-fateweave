@@ -4,7 +4,7 @@ import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { MAPS } from '../src/content/world/maps';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { heroCatalog } from '../src/core/world/world';
-import { actionReason, beginBattle, previewCommand, replay, resolveCommand, skillCooldown, skillPower, roundOrder, currentHeroId, targetKind, targetOptions } from '../src/core/battle/engine';
+import { actionReason, beginBattle, previewCommand, replay, resolveCommand, skillCooldown, skillPower, roundOrder, currentHeroId, targetKind, targetOptions , SHADE_TURNS} from '../src/core/battle/engine';
 import type { ActionId, EncounterDefinition } from '../src/core/battle/types';
 import { characterSkillMetric } from '../src/ui/character-metrics';
 import { newProfile, depart } from '../src/core/world/profile';
@@ -26,7 +26,11 @@ function fixture(id: string, action: ActionId): EncounterDefinition {
 describe('C11 skill contract',()=>{
  for(const [id,actions] of changed) for(const action of actions) it(`${id} ${action}: effect, cooldown, preview and replay`,()=>{
   const d=fixture(id,action),entry={hp:Object.fromEntries(d.heroes.map(h=>[h.id,Math.floor(h.maxHp/2)]))};
-  const s=beginBattle(d,entry).state;
+  let s=beginBattle(d,entry).state;
+  // Save v56: the venom burst needs her poison on a foe, laid by real commands (coat, then a coated hit) for the replay.
+  if(action==='disarm'){d.heroes[0]!.actions=['attack','knives','disarm'];const next=(a:ActionId,t:string)=>{s=resolveCommand(s,d,{beat:s.beat,heroId:currentHeroId(s,d)!,action:a,targetId:t}).state;};
+   next('knives','enemies');while(currentHeroId(s,d)!==id)next('attack',targetOptions(s,d,currentHeroId(s,d)!,'attack').find(t=>t.valid)!.id);
+   next('attack',targetOptions(s,d,id,'attack').find(t=>t.valid)!.id);while(currentHeroId(s,d)!==id)next('attack',targetOptions(s,d,currentHeroId(s,d)!,'attack').find(t=>t.valid)!.id);}
   const target=targetOptions(s,d,id,action).find(t=>t.valid)!;expect(target,action).toBeDefined();
   const cmd={beat:s.beat,heroId:id,action,targetId:target.id},r=resolveCommand(s,d,cmd);
   expect(previewCommand(s,d,cmd)).toEqual(r);expect(replay(d,r.state.commands,entry)).toEqual(r.state);
@@ -85,9 +89,9 @@ describe('C11 skill contract',()=>{
   s.song={heroId:'lio',action:'valor',since:-20};const r=resolveCommand(s,d,{heroId:'lio',action:'note',targetId:'f1',beat:s.beat}).turns[0]!;
   expect(r.events.find(e=>e.type==='damage')!.amount).toBe(Math.round((14+9)*1.2)+4);expect(r.events.some(e=>e.type==='weaken')).toBe(false);
  });
- it('own shadow step clears the giver expiry of a previously granted shadow',()=>{
-  const d=fixture('sefa','evade'),s=beginBattle(d).state;s.heroes[0]!.evadeBy='guardian';
-  const r=resolveCommand(s,d,{heroId:'sefa',action:'evade',targetId:'sefa',beat:s.beat});expect(r.turns[0]!.state.heroes[0]!.evadeBy).toBeUndefined();
+ it('her own fade (save v56) leaves a decoy dodge given by another hero as it was',()=>{
+  const d=fixture('sefa','evade'),s=beginBattle(d).state;s.heroes[0]!.evading=true;s.heroes[0]!.evadeBy='guardian';
+  const r=resolveCommand(s,d,{heroId:'sefa',action:'evade',targetId:'f1',beat:s.beat});expect(r.turns[0]!.state.heroes[0]).toMatchObject({evadeBy:'guardian',shade:{turns:SHADE_TURNS}});
  });
  it('Aegis rejects a no-op, but allows a useful level barrier to its caster',()=>{
   const d=fixture('weaver','aegis'),s=beginBattle(d).state;
@@ -112,7 +116,7 @@ describe('C11 save v41 → v42',()=>{
   const game=parseGame(JSON.stringify(old),map,lookup);
   expect(game.profile.members.guardian!.talents).toBeUndefined();expect(game.profile.members.guardian!.loadout).toBeUndefined();
   expect(game.profile.members.guardian!.skillLevels).toEqual({rally:2});expect(game.profile.members.toma!.talents).toEqual({a1:1});
-  expect(JSON.parse(write(game)).version).toBe(55);expect(parseGame(write(game),map,lookup)).toEqual({profile:game.profile,run:null});
+  expect(JSON.parse(write(game)).version).toBe(56);expect(parseGame(write(game),map,lookup)).toEqual({profile:game.profile,run:null});
  });
  it('restarts a changed active skill replay from recorded entry HP without duplicating rewards',()=>{
   const p=newProfile(map,2);const game=depart(p,map,lookup,3),run=game.run;

@@ -37,7 +37,7 @@ export const veilSiege: EncounterDefinition = {
     haste: { name: 'ยาเร่ง', english: 'Haste Tonic', icon: '⇡', power: 0, cooldown: 3 },
     // Scout (2C-2): ambush hits harder before the target acts this round; shadow step dodges the next hit.
     ambush: { name: 'จู่โจมก่อน', english: 'Ambush', icon: '⚔', power: 12, cooldown: 2 },
-    evade: { name: 'ก้าวเงา', english: 'Shadow Step', icon: '↯', power: 0, cooldown: 3 },
+    evade: { name: 'หายเข้าเงา', english: 'Fade', icon: '↯', power: 8, cooldown: 3 },
     // Hammer warden (2C-2): taunt pulls every enemy move onto him (reduced) until his next turn; slam deals its power, plus
     // `rules.quakeBonus` when the target's next move aims at the warden (Rune Quake capstone splashes the same column).
     taunt: { name: 'ยั่วยุ', english: 'Challenge', icon: '⛨', power: 0, cooldown: 3 },
@@ -54,7 +54,7 @@ export const veilSiege: EncounterDefinition = {
     spearwall: { name: 'กำแพงทวน', english: 'Spear Wall', icon: '⟋', power: 10, cooldown: 3 },
     weakshot: { name: 'ศรจุดอ่อน', english: 'Weak-point Shot', icon: '➶', power: 16, cooldown: 2 },
     bomb: { name: 'ขวดระเบิด', english: 'Blast Flask', icon: '⚗', power: 10, cooldown: 3 },
-    backstab: { name: 'ลอบแทง', english: 'Backstab', icon: '↯', power: 20, cooldown: 2 },
+    backstab: { name: 'พายุคม', english: 'Blade Storm', icon: '↯', power: 6, cooldown: 3 },
     quake: { name: 'ทุบปฐพี', english: 'Earthshaker', icon: '⚒', power: 14, cooldown: 2 },
     finale: { name: 'บทสุดท้าย', english: 'Finale', icon: '♪', power: 16, cooldown: 3 },
     // Knight big tree skills (A6, draft numbers): challenge pulls one enemy's next move, bulwark is a percent cut,
@@ -84,9 +84,9 @@ export const veilSiege: EncounterDefinition = {
     smoke: { name: 'ขวดควัน', english: 'Smoke Flask', icon: '⚗', power: 40, cooldown: 3 },
     fury: { name: 'ยาคลั่ง', english: 'Fury Tonic', icon: '⇡', power: 25, cooldown: 3 },
     catalyst: { name: 'ตัวเร่งปฏิกิริยา', english: 'Catalyst', icon: '⚗', power: 6, cooldown: 3 },
-    knives: { name: 'มีดบิน', english: 'Throwing Knives', icon: '↯', power: 8, cooldown: 3 },
+    knives: { name: 'เคลือบพิษ', english: 'Poison Coat', icon: '↯', power: 6, cooldown: 3 },
     decoy: { name: 'เงาคุ้มกัน', english: 'Decoy', icon: '↯', power: 0, cooldown: 3 },
-    disarm: { name: 'ปาดตัดหน้า', english: 'Disarm', icon: '⚔', power: 12, cooldown: 3 },
+    disarm: { name: 'ระเบิดพิษ', english: 'Venom Burst', icon: '⚔', power: 10, cooldown: 3 },
     stonearmor: { name: 'เกราะหิน', english: 'Stone Armour', icon: '⛨', power: 20, cooldown: 4 },
     guardstone: { name: 'ศิลาดึง', english: 'Guardian Stone', icon: '⛨', power: 40, cooldown: 3 },
     tremor: { name: 'ปฐพีสั่น', english: 'Tremor', icon: '⚒', power: 6, cooldown: 4 },

@@ -89,7 +89,7 @@ export type TargetKind = 'self' | 'ally' | 'party' | 'enemies' | 'enemy';
 export function targetKind(action: ActionId): TargetKind {
   if (action === 'prayer' || action === 'aegis' || action === 'rounddance' || action === 'deepbeat') return 'party';
   if (['volley', 'bomb', 'sweep', 'storm', 'pin', 'knives', 'tremor', 'quake', 'saintarc', 'circlefist', 'wovenhex', 'tollring', 'closingstep'].includes(action)) return 'enemies';
-  if (['evade', 'taunt', 'valor', 'mend', 'rally', 'spearwall', 'finale', 'bulwark', 'parry', 'halo', 'dread', 'stonearmor', 'rouse'].includes(action)) return 'self';
+  if (['taunt', 'valor', 'mend', 'rally', 'spearwall', 'finale', 'bulwark', 'parry', 'halo', 'dread', 'stonearmor', 'rouse'].includes(action)) return 'self';
   if (['guard', 'ward', 'heal', 'haste', 'sanctuary', 'bless', 'revive', 'fury', 'decoy', 'guardstone', 'solo', 'cadence', 'duet'].includes(action)) return 'ally';
   return 'enemy';
 }
@@ -213,6 +213,13 @@ export const isDelayed = (enemy: EnemyState, round: number): boolean => Math.max
 // Mage small fixes (save v55): a crystal aegis shard strikes back AEGIS_SHARD at the foe that breaks it; each bolt that
 // lands gives Eira an arcane charge (at most ARCANE_MAX) and the arcane release spends them all, DISPEL_PER_CHARGE each.
 // Warden (save v55): a rune slam adds SLAM_GRUDGE% of the damage Brann took since his last command (at most SLAM_GRUDGE_MAX).
+// Scout assassin rework (save v56): fade into shadow hits SHADE_POWER-free (its own power) and hides Sefa from single-target
+// moves for SHADE_TURNS of her turns or until she attacks, her first attack out of it SHADE_BONUS% stronger (the doubled
+// shadow node adds a turn); the blade storm is BLADE_HITS separate hits; the poison coat makes her next COAT_HITS hits
+// each add a poison stack (at most VENOM_MAX a foe, VENOM_TICK a stack as each round ends, for VENOM_ROUNDS rounds); the
+// venom burst pops every stack for VENOM_BURST each and splashes half onto the foe's row neighbours.
+export const SHADE_TURNS = 2; export const SHADE_BONUS = 50; export const BLADE_HITS = 4; export const COAT_HITS = 3;
+export const VENOM_MAX = 3; export const VENOM_TICK = 3; export const VENOM_ROUNDS = 2; export const VENOM_BURST = 6;
 export const SLAM_GRUDGE = 30; export const SLAM_GRUDGE_MAX = 15;
 export const slamGrudge = (taken: number): number => Math.min(SLAM_GRUDGE_MAX, Math.floor(taken * SLAM_GRUDGE / 100));
 export const AEGIS_SHARD = 4; export const ARCANE_MAX = 3; export const DISPEL_PER_CHARGE = 8;
@@ -310,6 +317,18 @@ export const hexesOn = (enemy: EnemyState | undefined): number => enemy?.hexes?.
 export function hexTickPower(data: EncounterDefinition, heroId: string, stacks: number): number {
   const per = skillPower(data, heroId, 'threadhex') + capAmount(data, heroId, 'hexThreadPer') + (stacks >= HEX_MAX ? capAmount(data, heroId, 'wynne3') : 0);
   return stacks * per;
+}
+// Scout poison (save v56): each stack bites VENOM_TICK as the round ends, until its last round.
+function venomTicks(state: BattleState, data: EncounterDefinition, events: BattleEvent[]): void {
+  for (const def of data.enemies) {
+    const foe = state.enemies.find(e => e.id === def.id)!; const v = foe.venom; if (!v) continue;
+    if (foe.hp > 0 && v.until >= state.round && living(state, v.heroId)) {
+      const dealt = Math.min(foe.hp, tired(data, v.heroId, veiled(state, data, foe, v.stacks * VENOM_TICK)));
+      foe.hp -= dealt; events.push({ type: 'damage', sourceId: v.heroId, targetId: foe.id, amount: dealt, text: 'Poison.' });
+      if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
+    }
+    if (v.until <= state.round || foe.hp <= 0 || !living(state, v.heroId)) delete foe.venom;
+  }
 }
 function hexTicks(state: BattleState, data: EncounterDefinition, events: BattleEvent[]): void {
   for (const def of data.enemies) {
@@ -477,8 +496,9 @@ export function enemyIntent(state: BattleState, data: EncounterDefinition, id: s
   if (!template) return null;
   const delay = foe.postpone && round >= foe.postpone.round && round <= foe.postpone.until ? foe.postpone : undefined;
   const marks = delay ? delay.round === round ? { delayedMove: moves[cycleIndex(state, data, id, round + 1)]!.name } : { delayedOnce: true } : {};
-  const front = alive.filter(h => data.heroes.find(d => d.id === h.id)!.lane === 'front');
-  const allowed = template.kind === 'physical' && front.length ? front : alive;
+  // A scout in shadow (save v56) cannot be picked by a single-target move while anyone else stands.
+  const seen = alive.filter(h => !h.shade); const pool = seen.length ? seen : alive; const near = pool.filter(h => data.heroes.find(d => d.id === h.id)!.lane === 'front');
+  const allowed = template.kind === 'physical' && near.length ? near : pool;
   const target = allowed.find(h => h.id === data.heroes[template.targetSlot]?.id) ?? allowed[0];
   const warden = taunted(state, data, id, round);
   const c = state.challenge; const duel = c && c.enemyId === id && c.round === round && living(state, c.heroId) ? c.heroId : undefined;
@@ -548,6 +568,7 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
       trackingShots(state, data, events); if (settled(state, data, events)) return;
       fallingStars(state, data, events); if (settled(state, data, events)) return;
       hexTicks(state, data, events); if (settled(state, data, events)) return;
+      venomTicks(state, data, events); if (settled(state, data, events)) return;
       state.round++; state.order = roundOrder(state, data); state.turnIndex = 0;
       // A priest's long prayer (or dawn) heals every standing ally again as its round begins.
       const echo = state.prayerEcho;
@@ -819,6 +840,8 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           const defense = defenseOf(data, recipient.id, intent.kind); if (defense) incoming = Math.ceil(incoming * (1 - defense / 100));
           if (state.song?.action === 'valor' && living(state, state.song.heroId) && hasCap(data, state.song.heroId, 'chorus')) incoming = Math.max(0, incoming - capAmount(data, state.song.heroId, 'chorus'));
           hit(state, data, enemy, intent, recipient, incoming, events, protector);
+          // Shadow counter (save v56): a whole-party move that finds the scout in shadow is answered at once.
+          if (recipient.shade && recipient.hp > 0 && enemy.hp > 0 && hasPassive(data, recipient.id, 'shadowcounter')) strikeBack(state, data, recipient.id, enemy, data.rules.shadowCounter, events, 'The scout strikes back from the shadows.');
           if (parry && !parry.all) parried(state, data, enemy, recipient, events);
           if (counterStep && counterStep.amount > 0 && enemy.hp > 0 && living(state, counterStep.heroId)) {
             const back = Math.min(enemy.hp, tired(data, counterStep.heroId, veiled(state, data, enemy, counterStep.amount))); enemy.hp -= back;
@@ -1001,7 +1024,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
   return data.enemies.map(e => {
     const actor = state.enemies.find(s => s.id === e.id);
     const reason = unavailable || (!actor || actor.hp <= 0 ? 'This enemy is down.' :
-      screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : action === 'lifetoll' && !actor.hexes?.some(h => h.heroId === heroId) ? 'No curse on this enemy.' : action === 'deflectfate' ? deflectReason(state, data, heroId, e.id)
+      screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : action === 'lifetoll' && !actor.hexes?.some(h => h.heroId === heroId) ? 'No curse on this enemy.' : action === 'disarm' && actor.venom?.heroId !== heroId ? 'No poison on this enemy.' : action === 'deflectfate' ? deflectReason(state, data, heroId, e.id)
       : '');
     return { id: e.id, name: e.name, valid: !reason, reason };
   });
@@ -1035,6 +1058,13 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   let grudge = Math.min(CHALLENGE_GRUDGE_MAX, actor.grudge?.amount ?? 0); delete actor.grudge;
   // What Brann took since his last command (save v55) feeds a rune slam now, then starts again.
   const bruise = actor.bruise ?? 0; delete actor.bruise;
+  // A scout in shadow (save v56): an attack brings her out (its first hit SHADE_BONUS% stronger); otherwise one of her
+  // turns in shadow passes.
+  let shadeBonus = 0;
+  if (actor.shade && command.action !== 'evade') {
+    if (targetKind(command.action) === 'enemy' || targetKind(command.action) === 'enemies') { shadeBonus = SHADE_BONUS; delete actor.shade; events.push({ type: 'shade', sourceId: hero.id, targetId: hero.id, amount: 0, text: 'Out of the shadow.' }); }
+    else if (--actor.shade.turns <= 0) { delete actor.shade; events.push({ type: 'shade', sourceId: hero.id, targetId: hero.id, amount: 0, text: 'The shadow fades.' }); }
+  }
   // Every hero hit adds corrosion, valor and its own capstone bonuses.
   const strike = (foe: EnemyState, power: number, text: string) => {
     const boss=foe===enemy&&targetKind(command.action)==='enemy'&&power>0&&foe.markedUntil>state.round?bossPowerReady(state,data,hero.id,'focus'):0;
@@ -1044,9 +1074,16 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     // A bard's solo gives this hero the song of valor twice more.
     const solo = (actor.solo?.round ?? 0) >= state.round && state.song?.action === 'valor' && living(state, state.song.heroId) ? songPower(data, state.song.heroId, 'valor') * (SOLO_TIMES - 1) : 0;
     const spite = power > 0 ? grudge : 0; if (spite) grudge = 0;
-    const amount = Math.min(foe.hp, tired(data, hero.id, veiled(state, data, foe, raised + boss + solo + spite + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)))); foe.hp -= amount; directDamage += amount;
+    const stepped = power > 0 && shadeBonus ? Math.round(power * shadeBonus / 100) : 0; if (stepped) shadeBonus = 0;
+    const amount = Math.min(foe.hp, tired(data, hero.id, veiled(state, data, foe, raised + boss + solo + spite + stepped + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)))); foe.hp -= amount; directDamage += amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text });
     if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
+    // A coated blade (save v56) poisons each foe it lands on, one stack a hit.
+    if (actor.coated && amount > 0 && foe.hp > 0) {
+      actor.coated--; if (!actor.coated) delete actor.coated;
+      const stacks = Math.min(VENOM_MAX, (foe.venom?.heroId === hero.id ? foe.venom.stacks : 0) + 1); foe.venom = { heroId: hero.id, stacks, until: state.round + VENOM_ROUNDS - 1 };
+      events.push({ type: 'venom', sourceId: hero.id, targetId: foe.id, amount: stacks, text: 'Poisoned.' });
+    }
     leech(state, data, hero.id, amount, events);
     thorned(state, data, foe, hero.id, amount, events);
   };
@@ -1387,7 +1424,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       damage(skill.power);
       if (isDelayed(enemy!, state.round)) state.tracking = [...state.tracking ?? [], { heroId: hero.id, enemyId: enemy!.id, round: state.round, power: skill.power }];
       break;
-    case 'backstab': damage(skill.power + ambushBonus(state, data, enemy!.id, hero.id)); break;
+    // Blade storm (save v56): BLADE_HITS separate hits on one foe, each with every per-hit bonus.
+    case 'backstab': for (let i = 0; i < BLADE_HITS && enemy!.hp > 0; i++) strike(enemy!, skill.power, 'Blade storm.'); break;
     // ---- Recruit big trees ----
     case 'smoke': {
       // Smoke: the target's next move is cut whatever its kind (a wide smoke cuts the target's whole row by less; a
@@ -1418,14 +1456,21 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       const live = state.enemies.filter(e => e.hp > 0); const back = live.filter(e => row(e.id) === 'back'); const front = live.filter(e => row(e.id) === 'front');
       for (const foe of back.length ? back : front) strike(foe, skill.power, 'Throwing knives.');
       if (back.length && hasCap(data, hero.id, 'twinknives')) for (const foe of front.filter(e => e.hp > 0)) strike(foe, Math.floor(skill.power / 2), 'Throwing knives.');
+      // Poison coat (save v56): her next COAT_HITS hits each poison their foe.
+      actor.coated = COAT_HITS; events.push({ type: 'venom', sourceId: hero.id, targetId: hero.id, amount: COAT_HITS, text: 'Blades coated.' });
       break;
     }
     case 'decoy': {
       const ally = state.heroes.find(h => h.id === command.targetId)!; ally.evading = true; ally.evadeBy = hero.id; delete ally.evadePhysical;
       events.push({ type: 'evade', sourceId: hero.id, targetId: ally.id, text: 'Shadow cover.' }); break;
     }
+    // Venom burst (save v56): a poisoned foe takes the hit, then every stack pops at once; half splashes onto its row neighbours.
     case 'disarm': {
-      const next = nextIntent(); damage(Math.round(skill.power * (ambushBonus(state, data, enemy!.id, hero.id) && next && next.targetId !== hero.id ? DISARM_MULTIPLIER : 1))); break;
+      const stacks = enemy!.venom?.heroId === hero.id ? enemy!.venom.stacks : 0; delete enemy!.venom;
+      damage(skill.power);
+      if (stacks && enemy!.hp > 0) strike(enemy!, stacks * VENOM_BURST, 'The venom bursts.');
+      if (stacks) for (const foe of foeNeighbours(state, data, enemy!.id)) strike(foe, Math.floor(stacks * VENOM_BURST / 2), 'The venom splashes.');
+      break;
     }
     case 'stonearmor': barrier(actor, Math.round(hero.maxHp * skill.power / 100)); break;
     case 'guardstone': {
@@ -1552,7 +1597,15 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'taunt':
       state.taunt = { heroId: hero.id, round: state.round };
       events.push({ type: 'taunt', sourceId: hero.id, targetId: hero.id, text: 'Every enemy attack aims at the warden until his next turn.' }); break;
-    case 'evade': actor.evading = true; delete actor.evadeBy; delete actor.evadePhysical; if (hasCap(data, hero.id, 'doubleshadow')) actor.evadeExtra = 1; events.push({ type: 'evade', sourceId: hero.id, targetId: hero.id, text: 'Scout evades the next hit until its next turn.' }); break;
+    // Fade into shadow (save v56): a hit, then hidden from single-target moves for SHADE_TURNS of her turns (one more with
+    // the doubled shadow) or until she attacks; breathing in shadow heals her as she fades.
+    case 'evade': {
+      damage(skill.power);
+      actor.shade = { turns: SHADE_TURNS + (hasCap(data, hero.id, 'doubleshadow') ? 1 : 0) };
+      events.push({ type: 'shade', sourceId: hero.id, targetId: hero.id, amount: actor.shade.turns, text: 'Into the shadow.' });
+      heal(hero.id, talentRule(data, hero.id, 'dodgeHeal'));
+      break;
+    }
     case 'hinder': {
       damage(skill.power);
       if (enemy!.hp > 0) { enemy!.delayedRound = state.round + 1; events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last next round.' }); }

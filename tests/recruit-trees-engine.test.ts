@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, DISARM_MULTIPLIER, DREAD_FINALE, GUARD_STONE_HEAL, SOLO_TIMES, beginBattle, enemyIntent, previewCommand, replay, resolveCommand, skillPower, songPower, targetOptions } from '../src/core/battle/engine';
+import { CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, DREAD_FINALE, GUARD_STONE_HEAL, SOLO_TIMES, beginBattle, enemyIntent, previewCommand, replay, resolveCommand, skillPower, songPower, targetOptions , VENOM_BURST, VENOM_MAX, VENOM_ROUNDS, COAT_HITS, BLADE_HITS} from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, HeroDefinition, HeroTalents, TalentCap } from '../src/core/battle/types';
 import { veilSiege } from '../src/content/encounters/veil-siege';
 import { mercenaries } from '../src/content/heroes/mercenaries';
@@ -119,11 +119,22 @@ describe('scout tree (Sefa)', () => {
     const t = fromEnemy(d, r, 'f1'); expect(t.events.some(e => e.type === 'dodge' && e.targetId === 'weaver')).toBe(true);
     expect(hero(t.state, 'weaver').evading).toBeUndefined();
   });
-  it('disarm gains damage before the target acts when it aims at an ally, with no weaken', () => {
-    const d = withMerc('sefa', 1, { sefa: { actions: ['disarm'], lane: 'back' } });
-    const r = cast(d, turnOf(d, 'sefa'), 'sefa', 'disarm', 'b1');
-    expect(r.turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(Math.round(skillPower(d, 'sefa', 'disarm') * DISARM_MULTIPLIER));
-    expect(foe(r.turns[0]!.state, 'b1').weaken).toBeUndefined();
+  it('save v56: the venom burst needs her poison, hits, pops every stack and splashes half onto row neighbours', () => {
+    const d = withMerc('sefa', 1, { sefa: { actions: ['disarm'], lane: 'back' } }); const s = turnOf(d, 'sefa');
+    expect(targetOptions(s, d, 'sefa', 'disarm').find(t => t.id === 'b1')!.reason).toBe('No poison on this enemy.');
+    foe(s, 'b1').venom = { heroId: 'sefa', stacks: 3, until: s.round + 1 };
+    const r = cast(d, s, 'sefa', 'disarm', 'b1').turns[0]!;
+    expect(r.events.filter(e => e.type === 'damage' && e.targetId === 'b1').map(e => e.text)).toEqual(['Hero attacks.', 'The venom bursts.']);
+    expect(r.events.find(e => e.text === 'The venom bursts.')!.amount).toBe(3 * VENOM_BURST);
+    expect(foe(r.state, 'b1').venom).toBeUndefined();
+  });
+  it('save v56: the poison coat poisons her next hits (one stack each, at most VENOM_MAX) and the blade storm strikes four times', () => {
+    const d = withMerc('sefa', 1, { sefa: { actions: ['knives', 'backstab'] } }); const s = turnOf(d, 'sefa');
+    const coat = cast(d, s, 'sefa', 'knives', 'enemies').turns[0]!; expect(hero(coat.state, 'sefa').coated).toBe(COAT_HITS);
+    const t = structuredClone(s); hero(t, 'sefa').coated = COAT_HITS;
+    const storm = cast(d, t, 'sefa', 'backstab', 'f1').turns[0]!;
+    expect(storm.events.filter(e => e.type === 'damage' && e.sourceId === 'sefa' && e.text === 'Blade storm.')).toHaveLength(BLADE_HITS);
+    expect(foe(storm.state, 'f1').venom).toEqual({ heroId: 'sefa', stacks: VENOM_MAX, until: t.round + VENOM_ROUNDS - 1 }); expect(hero(storm.state, 'sefa').coated).toBeUndefined();
   });
   it('a backstab that downs a foe readies the ambush (silent end); the opportunist hits foes yet to act harder', () => {
     const d = withMerc('sefa', 1, { sefa: { actions: ['backstab', 'ambush'], talents: caps({ silentend: 0 }) } }); const s = turnOf(d, 'sefa');

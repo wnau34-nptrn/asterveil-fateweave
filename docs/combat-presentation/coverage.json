@@ -2121,7 +2121,7 @@
    "identity": "sefa",
    "side": "hero",
    "move": "evade",
-   "name": "ก้าวเงา",
+   "name": "หายเข้าเงา",
    "body": {
     "kind": "sprite",
     "clip": "evade",
@@ -2145,14 +2145,14 @@
     "module": "song-shadow-fx",
     "kind": "painted"
    },
-   "target": "ตัวเอง",
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
    "point": "เท้าผู้ร่าย"
   },
   {
    "identity": "sefa",
    "side": "hero",
    "move": "backstab",
-   "name": "ลอบแทง",
+   "name": "พายุคม",
    "body": {
     "kind": "sprite",
     "clip": "skill",
@@ -2214,7 +2214,7 @@
    "identity": "sefa",
    "side": "hero",
    "move": "knives",
-   "name": "มีดบิน",
+   "name": "เคลือบพิษ",
    "body": {
     "kind": "sprite",
     "clip": "knives",
@@ -2245,7 +2245,7 @@
    "identity": "sefa",
    "side": "hero",
    "move": "disarm",
-   "name": "ปาดตัดหน้า",
+   "name": "ระเบิดพิษ",
    "body": {
     "kind": "sprite",
     "clip": "skill",
