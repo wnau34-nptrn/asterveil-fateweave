@@ -41,9 +41,9 @@ describe('C11 skill contract',()=>{
   const r=resolveCommand(s,d,{heroId:'tracer',action:'sweep',targetId:'enemies',beat:s.beat}).turns[0]!;
   expect(r.events.find(e=>e.type==='mark')!.targetId).toBe(s.enemies[0]!.id);expect(r.state.enemies[0]!.markedUntil).toBe(3);
  });
- it('dispel clears steadfast and sigilward shields the intended ally only when the seal lands',()=>{
+ it('the arcane release (save v55) no longer touches steadfast; sigilward shields the intended ally only when the seal lands',()=>{
   const d=fixture('weaver','dispel'),s=beginBattle(d).state;s.enemies[0]!.steadyRound=9;
-  expect(resolveCommand(s,d,{heroId:'weaver',action:'dispel',targetId:s.enemies[0]!.id,beat:s.beat}).turns[0]!.state.enemies[0]!.steadyRound).toBeUndefined();
+  expect(resolveCommand(s,d,{heroId:'weaver',action:'dispel',targetId:s.enemies[0]!.id,beat:s.beat}).turns[0]!.state.enemies[0]!.steadyRound).toBe(9);
   const seal=fixture('weaver','sigil');seal.heroes=seal.heroes.map((h,i)=>i? h:{...h,talents:{caps:{sigilward:10}}});const start=beginBattle(seal).state;
   const hit=resolveCommand(start,seal,{heroId:'weaver',action:'sigil',targetId:'f1',beat:start.beat}).turns[0]!.state;
   expect(hit.heroes.find(h=>h.id===seal.heroes[2]!.id)!.barrier).toBe(10);expect(hit.enemies.find(e=>e.id==='f1')!.delayedRound).toBeUndefined();
@@ -69,16 +69,16 @@ describe('C11 skill contract',()=>{
   const st=resolveCommand(s,d,{heroId:'mira',action:'hinder',targetId:'b1',beat:s.beat}).turns[0]!.state;
   expect(roundOrder(st,d,2).at(-1)).toBe('b1');expect(roundOrder(st,d,3).at(-1)).toBe('b1');expect(roundOrder(st,d,4).at(-1)).not.toBe('b1');
   const cover=fixture('mira','disengage');cover.heroes=cover.heroes.map((h,i)=>i?h:{...h,talents:{caps:{covershot:6}}});const cs=beginBattle(cover).state;
-  expect(resolveCommand(cs,cover,{heroId:'mira',action:'disengage',targetId:'f1',beat:cs.beat}).turns[0]!.events.find(e=>e.type==='damage')!.amount).toBe(16);
+  expect(resolveCommand(cs,cover,{heroId:'mira',action:'disengage',targetId:'f1',beat:cs.beat}).turns[0]!.events.find(e=>e.type==='damage')!.amount).toBe(20);
  });
- it('the archer advisor delays an energy foe aiming elsewhere only when an ally gains a turn before it',()=>{
-  const d=fixture('mira','disengage');d.enemies=d.enemies.map(e=>({...e,speed:500}));d.intents=d.intents.map(i=>({...i,kind:'energy',targetSlot:1}));
-  const s=beginBattle(d).state;expect(s.intent).toMatchObject({kind:'energy'});expect(s.intent!.targetId).not.toBe('mira');
+ it('the archer advisor (save v55) falls back from a physical move aimed at Mira, keeping the queue as it was',()=>{
+  const d=fixture('mira','disengage');d.heroes=d.heroes.map((h,i)=>i?h:{...h,lane:'front' as const,actions:['attack','disengage','hinder']});d.intents=d.intents.map(i=>({...i,kind:'physical',targetSlot:0}));
+  const s=beginBattle(d).state;expect(s.heroes[0]!.id).toBe('mira');
   const l=battleLesson(s,d)!;expect(l.action).toBe('disengage');
   const r=resolveCommand(s,d,{beat:s.beat,heroId:l.heroId,action:l.action,targetId:l.targetId});
-  expect(r.turns[0]!.state.order.at(-1)).toBe(s.intent!.sourceId);
-  const late={...d,enemies:d.enemies.map(e=>({...e,speed:1}))};
-  expect(battleLesson(beginBattle(late).state,late)!.action).not.toBe('disengage');
+  expect(r.turns[0]!.state.order).toEqual(s.order);expect(r.turns[0]!.state.heroes[0]).toMatchObject({evading:true,evadePhysical:true});
+  const energy={...d,intents:d.intents.map(i=>({...i,kind:'energy' as const}))};
+  expect(battleLesson(beginBattle(energy).state,energy)!.action).not.toBe('disengage');
  });
  it('note age caps at three full rounds and songnote modifies damage without weakening',()=>{
   const d=fixture('lio','note');d.heroes=d.heroes.map((h,i)=>i?h:{...h,talents:{caps:{songnote:20}}});const s=beginBattle(d).state;
@@ -112,7 +112,7 @@ describe('C11 save v41 → v42',()=>{
   const game=parseGame(JSON.stringify(old),map,lookup);
   expect(game.profile.members.guardian!.talents).toBeUndefined();expect(game.profile.members.guardian!.loadout).toBeUndefined();
   expect(game.profile.members.guardian!.skillLevels).toEqual({rally:2});expect(game.profile.members.toma!.talents).toEqual({a1:1});
-  expect(JSON.parse(write(game)).version).toBe(54);expect(parseGame(write(game),map,lookup)).toEqual({profile:game.profile,run:null});
+  expect(JSON.parse(write(game)).version).toBe(55);expect(parseGame(write(game),map,lookup)).toEqual({profile:game.profile,run:null});
  });
  it('restarts a changed active skill replay from recorded entry HP without duplicating rewards',()=>{
   const p=newProfile(map,2);const game=depart(p,map,lookup,3),run=game.run;

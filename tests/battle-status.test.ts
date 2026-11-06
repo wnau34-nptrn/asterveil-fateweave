@@ -86,7 +86,8 @@ describe('battle status inspection', () => {
     const spear = mercenaries.find(h => h.id === 'garran')!, hammer = mercenaries.find(h => h.id === 'brann')!;
     const d = withParty(data, [spear, hammer, data.heroes[2]!, data.heroes[3]!]);
     const s = createBattle(d); s.counter = { heroId: spear.id, wall: true }; s.taunt = { heroId: hammer.id, round: 1 };
-    expect(unitStatuses(s, d, hammer.id).map(r => r.id)).toEqual(['counter', 'taunt']);
+    // Save v55: a warden carrying the rune slam may also show the hits he took before his turn (`bruise`).
+    expect(unitStatuses(s, d, hammer.id).map(r => r.id).filter(id => id !== 'bruise')).toEqual(['counter', 'taunt']);
     expect(unitStatuses(s, d, 'weaver').map(r => r.id)).not.toContain('counter');
     expect(unitStatuses(s, d, 'f1').map(r => r.id)).toContain('taunted');
     s.heroes.find(h => h.id === hammer.id)!.hp = 0;

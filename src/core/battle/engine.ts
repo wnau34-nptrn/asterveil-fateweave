@@ -96,7 +96,7 @@ export function targetKind(action: ActionId): TargetKind {
 // Front-row foes screen the back row (owner 2026-10-22): while a front foe stands, a front-lane hero's single-target
 // move reaches only the front row unless it is a reach skill; back-lane heroes reach every foe and area moves hit all.
 // A mage's piercing bolt (tree modifier) also reaches, and an archer's pinning volley stops the screen for a while.
-export const REACH_SKILLS: readonly ActionId[] = ['pierce', 'mark', 'backstab', 'challenge', 'lunge', 'warcry', 'brace'];
+export const REACH_SKILLS: readonly ActionId[] = ['pierce', 'mark', 'backstab', 'challenge', 'lunge', 'warcry', 'brace', 'dispel'];
 // P02: `f3`/`b3` are appended; the first four keep their order. A side fields at most MAX_SIDE actors at once and
 // at most ROW_SLOTS foes stand in a row (reserves count only once summoned).
 export const ENEMY_SLOTS = ['f1', 'f2', 'b1', 'b2', 'f3', 'b3'] as const;
@@ -210,6 +210,12 @@ export const SANCTUARY_HEAL = 10;
 export const isDelayed = (enemy: EnemyState, round: number): boolean => Math.max(enemy.delayedRound ?? 0, enemy.delayedAlso ?? 0) >= round;
 // Save v54: a solo doubles the song (was ×3) and Lio plays a SOLO_NOTE-power sharp note at the lowest-HP foe he can reach;
 // a finale is FINALE_PER_ROUND% stronger per round its song has played (as the sharp note counts them, at most NOTE_MAX_ROUNDS).
+// Mage small fixes (save v55): a crystal aegis shard strikes back AEGIS_SHARD at the foe that breaks it; each bolt that
+// lands gives Eira an arcane charge (at most ARCANE_MAX) and the arcane release spends them all, DISPEL_PER_CHARGE each.
+// Warden (save v55): a rune slam adds SLAM_GRUDGE% of the damage Brann took since his last command (at most SLAM_GRUDGE_MAX).
+export const SLAM_GRUDGE = 30; export const SLAM_GRUDGE_MAX = 15;
+export const slamGrudge = (taken: number): number => Math.min(SLAM_GRUDGE_MAX, Math.floor(taken * SLAM_GRUDGE / 100));
+export const AEGIS_SHARD = 4; export const ARCANE_MAX = 3; export const DISPEL_PER_CHARGE = 8;
 export const SOLO_NOTE = 6; export const FINALE_PER_ROUND = 20;
 export const GUARD_STONE_HEAL = 6; export const DREAD_FINALE = 10; export const SOLO_TIMES = 2; export const FURY_EXPOSED = 10;
 // Alchemist chain reaction (capstone): a corroded foe that falls passes its corrosion to another standing foe of its row
@@ -512,9 +518,10 @@ function settled(state: BattleState, data: EncounterDefinition, events: BattleEv
 function trackingShots(state: BattleState, data: EncounterDefinition, events: BattleEvent[]): void {
   const due = state.tracking?.filter(t => t.round === state.round) ?? []; if (!state.tracking) return;
   state.tracking = state.tracking.filter(t => t.round > state.round); if (!state.tracking.length) delete state.tracking;
+  // Save v55: the repeat shot bounces to the standing foe with the least HP (not the first target, which often fell).
   for (const t of due) {
-    const foe = state.enemies.find(e => e.id === t.enemyId);
-    if (foe && foe.hp > 0 && living(state, t.heroId)) strikeBack(state, data, t.heroId, foe, t.power, events, 'Tracking shot.');
+    const foe = state.enemies.filter(e => e.hp > 0).sort((a, b) => a.hp - b.hp || a.id.localeCompare(b.id))[0];
+    if (foe && living(state, t.heroId)) strikeBack(state, data, t.heroId, foe, t.power, events, 'Tracking shot.');
   }
 }
 // Seer falling stars land as their round ends on every standing foe, through Magic Power, veilguard and fatigue (a
@@ -641,6 +648,8 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
   let saved: string | undefined;
   // A mage's reflecting ward (talent) strikes back once when it absorbs a hit.
   const reflect = absorbed ? recipient.reflect : undefined; if (absorbed || !recipient.barrier) delete recipient.reflect;
+  // A crystal aegis shard (save v55) strikes back at the foe whose hit breaks the barrier.
+  const shard = absorbed && !recipient.barrier ? recipient.shard : undefined; if (!recipient.barrier) delete recipient.shard;
   let amount = Math.min(recipient.hp, incoming - absorbed);
   if (amount && amount >= recipient.hp) {
     const sanctum = recipient.sanctum;
@@ -657,6 +666,8 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
     }
   }
   recipient.hp -= amount;
+  // A warden carrying the rune slam (save v55) remembers every hit he took since his last command.
+  if (data.heroes.find(h => h.id === recipient.id)?.actions.includes('slam')) recipient.bruise = (recipient.bruise ?? 0) + amount + absorbed;
   // A knight's challenge (save v53) remembers what its foe dealt him.
   if (recipient.grudge?.enemyId === actorId) recipient.grudge.amount += amount + absorbed;
   events.push({ type: 'damage', sourceId: actorId, targetId: recipient.id, amount, absorbed, text: 'Enemy attacks on its own turn.' });
@@ -676,6 +687,7 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
   }
   if(amount>0&&recipient.hp>0)bossBarrier(state,data,recipient.id,recipient.id,'aegis',events);
   if (reflect && living(state, reflect.heroId) && enemy.hp > 0) strikeBack(state, data, reflect.heroId, enemy, reflect.amount, events, 'The ward reflects the hit.');
+  if (shard && living(state, shard.heroId) && enemy.hp > 0) strikeBack(state, data, shard.heroId, enemy, shard.amount, events, 'The crystal shard strikes back.');
   // Thorn set (4 pieces): a physical hit taken is answered.
   const thorns = data.heroes.find(h => h.id === recipient.id)!.gear?.thorns;
   if (thorns && intent.kind === 'physical' && enemy.hp > 0 && recipient.hp > 0) strikeBack(state, data, recipient.id, enemy, thorns, events, 'Thorns strike back.');
@@ -1021,6 +1033,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const passed = (n: number) => baton ? Math.round(n * (100 + baton) / 100) : n;
   // A challenge's grudge (save v53) adds to this action's first hit, then it is spent.
   let grudge = Math.min(CHALLENGE_GRUDGE_MAX, actor.grudge?.amount ?? 0); delete actor.grudge;
+  // What Brann took since his last command (save v55) feeds a rune slam now, then starts again.
+  const bruise = actor.bruise ?? 0; delete actor.bruise;
   // Every hero hit adds corrosion, valor and its own capstone bonuses.
   const strike = (foe: EnemyState, power: number, text: string) => {
     const boss=foe===enemy&&targetKind(command.action)==='enemy'&&power>0&&foe.markedUntil>state.round?bossPowerReady(state,data,hero.id,'focus'):0;
@@ -1290,7 +1304,9 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       break;
     }
     case 'bolt': {
-      const power = skill.power + capAmount(data, hero.id, 'piercebolt'); damage(power); if (hasCap(data, hero.id, 'splitbolt')) splash(power);
+      const power = skill.power + capAmount(data, hero.id, 'piercebolt'); const landed = directDamage; damage(power); if (hasCap(data, hero.id, 'splitbolt')) splash(power);
+      // Save v55: a bolt that lands charges Eira's arcane release (only a mage who carries it).
+      if (directDamage > landed && hero.actions.includes('dispel') && (actor.arcane ?? 0) < ARCANE_MAX) { actor.arcane = (actor.arcane ?? 0) + 1; events.push({ type: 'arcane', sourceId: hero.id, targetId: hero.id, amount: 1, text: 'Arcane charge.' }); }
       // Arcane charge (capstone): each bolt readies the storm one round sooner.
       if (hasCap(data, hero.id, 'arcanecharge')) shorten(actor, 'storm', state.round);
       break;
@@ -1317,11 +1333,14 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       break;
     }
     case 'storm': for (const foe of state.enemies.filter(e => e.hp > 0)) strike(foe, skill.power, 'The storm strikes every enemy.'); break;
-    case 'aegis': for (const h of state.heroes) barrier(h, skill.power); break;
-    case 'dispel':
-      damage(skill.power);
-      if (enemy!.hp > 0) { enemy!.dispelledUntil = state.round + 2; delete enemy!.steadyRound; events.push({ type: 'dispel', sourceId: hero.id, targetId: enemy!.id, text: 'Veilguard dispelled.' }); }
+    case 'aegis': for (const h of state.heroes) { barrier(h, skill.power); if (h.hp > 0 && h.barrier > 0) h.shard = { heroId: hero.id, amount: AEGIS_SHARD }; } break;
+    // Save v55 arcane release: spends every arcane charge (an energy hit that reaches the back row past the front).
+    case 'dispel': {
+      const charges = actor.arcane ?? 0; delete actor.arcane;
+      damage(skill.power + charges * DISPEL_PER_CHARGE);
+      if (charges) events.push({ type: 'arcane', sourceId: hero.id, targetId: hero.id, amount: -charges, text: 'Arcane charges released.' });
       break;
+    }
     case 'revive': {
       const ally = state.heroes.find(h => h.id === command.targetId)!; const def = data.heroes.find(h => h.id === ally.id)!;
       ally.hp = Math.max(1, Math.round(def.maxHp * skill.power / 100)); ally.revivedRound = state.round; delete ally.fell;
@@ -1355,8 +1374,9 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       events.push({ type: 'buff', sourceId: hero.id, targetId: hero.id, amount: CHARGE_EXPOSED, text: 'Charging and open.' }); break;
     case 'disengage': {
       const next = nextIntent(); damage(skill.power + (next && next.targetId !== hero.id && hasCap(data, hero.id, 'covershot') ? capAmount(data, hero.id, 'covershot') : 0));
-      const at = state.order.indexOf(enemy!.id);
-      if (enemy!.hp > 0 && at > state.turnIndex) { state.order.splice(at, 1); state.order.push(enemy!.id); events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last this round.' }); }
+      // Save v55 (shoot and fall back): no queue change; Mira dodges the first physical hit on her until her next turn.
+      actor.evading = true; actor.evadePhysical = true; delete actor.evadeBy; delete actor.evadeExtra;
+      events.push({ type: 'evade', sourceId: hero.id, targetId: hero.id, text: 'The archer falls back from the next physical hit.' });
       if (enemy!.hp > 0 && hasCap(data, hero.id, 'quickstep')) { enemy!.delayedRound = state.round + 1; events.push({ type: 'delay', sourceId: hero.id, targetId: enemy!.id, text: 'Enemy acts last next round.' }); }
       break;
     }
@@ -1365,7 +1385,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       state.pinned = state.round + 1; events.push({ type: 'pin', sourceId: hero.id, targetId: hero.id, text: 'The front row stops screening.' }); break;
     case 'track':
       damage(skill.power);
-      if (enemy!.hp > 0 && isDelayed(enemy!, state.round)) state.tracking = [...state.tracking ?? [], { heroId: hero.id, enemyId: enemy!.id, round: state.round, power: skill.power }];
+      if (isDelayed(enemy!, state.round)) state.tracking = [...state.tracking ?? [], { heroId: hero.id, enemyId: enemy!.id, round: state.round, power: skill.power }];
       break;
     case 'backstab': damage(skill.power + ambushBonus(state, data, enemy!.id, hero.id)); break;
     // ---- Recruit big trees ----
@@ -1522,7 +1542,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       // Scout shadow layer (talent): an ambush leaves her in shadow step.
       if (hasCap(data, hero.id, 'shadowlayer') && !actor.evading) { actor.evading = true; events.push({ type: 'evade', sourceId: hero.id, targetId: hero.id, text: 'Scout evades the next hit until its next turn.' }); }
       break;
-    case 'slam': damage(skill.power + (nextIntent()?.targetId === hero.id ? data.rules.quakeBonus : 0)); if (hasCap(data, hero.id, 'runequake')) splash(skill.power, true); break;
+    case 'slam': damage(skill.power + (nextIntent()?.targetId === hero.id ? data.rules.quakeBonus : 0) + slamGrudge(bruise)); if (hasCap(data, hero.id, 'runequake')) splash(skill.power, true); break;
     case 'valor': case 'mend': case 'dread':
       state.song = { heroId: hero.id, action: command.action, since: state.round };
       events.push({ type: 'song', sourceId: hero.id, targetId: hero.id, amount: songPower(data, hero.id, command.action), text: command.action === 'valor' ? 'Song of valor: every hero hit is stronger.' : command.action === 'mend' ? 'Song of mending: the party heals each round.' : 'Song of dread: every enemy move is weaker.' });
