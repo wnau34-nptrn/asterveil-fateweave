@@ -9,7 +9,7 @@ export const actionPoses = {
   brace: 'guard', pierce: 'thrust', hinder: 'shoot', volley: 'shoot', acid: 'throw', haste: 'cast', ambush: 'slash', evade: 'guard', taunt: 'guard', slam: 'smash', valor: 'song', mend: 'song',
   rally: 'guard', finisher: 'thrust', sigil: 'cast', sanctuary: 'cast', spearwall: 'guard', weakshot: 'shoot', bomb: 'throw', backstab: 'thrust', quake: 'smash', finale: 'song',
   challenge: 'guard', bulwark: 'guard', rouse: 'guard', parry: 'guard', lunge: 'thrust', sweep: 'slash', storm: 'cast', aegis: 'cast', dispel: 'cast', revive: 'cast', halo: 'cast', bless: 'cast',
-  hold: 'guard', halt: 'thrust', warcry: 'guard', disengage: 'shoot', pin: 'shoot', track: 'shoot', smoke: 'throw', fury: 'cast', catalyst: 'throw', knives: 'throw', decoy: 'guard', disarm: 'slash',
+  hold: 'thrust', halt: 'thrust', warcry: 'thrust', disengage: 'shoot', pin: 'shoot', track: 'shoot', smoke: 'throw', fury: 'cast', catalyst: 'throw', knives: 'throw', decoy: 'guard', disarm: 'slash',
   stonearmor: 'guard', guardstone: 'guard', tremor: 'smash', dread: 'song', note: 'song', solo: 'song',
   saintstrike: 'punch', communion: 'cast', saintarc: 'punch', vowstrike: 'punch', sharewound: 'cast', lastlight: 'cast',
   cadence: 'dance', duet: 'dance', rounddance: 'dance', deepbeat: 'dance', echofoot: 'dance', closingstep: 'dance',

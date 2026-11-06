@@ -6,7 +6,7 @@ const saved=(page:Page)=>page.evaluate(()=>localStorage.getItem('unit-a5-committ
 const sheetOf={foe_tusker:'tusker',foe_stalker:'stalker',foe_thorn_beetle:'beetle'} as const;
 const contactOf=(clip:string)=>({attack:5,skill:13,stance:26,taunt:26,brace:34} as Record<string,number>)[clip]!;
 const foeContact=(intent:string)=>intent==='Stampede'?13:5;
-const clipOf={garran:{attack:'attack',pierce:'attack',halt:'attack',brace:'stance',spearwall:'stance',hold:'stance',warcry:'skill'},brann:{attack:'attack',slam:'skill',quake:'skill',tremor:'skill',taunt:'taunt',stonearmor:'brace',guardstone:'brace'}} as const;
+const clipOf={garran:{attack:'attack',pierce:'attack',halt:'attack',brace:'stance',spearwall:'stance',hold:'attack',warcry:'attack'},brann:{attack:'attack',slam:'skill',quake:'skill',tremor:'skill',taunt:'taunt',stonearmor:'brace',guardstone:'brace'}} as const;
 async function ready(page:Page,query:string,hero='garran',foe='foe_tusker'){
  await page.goto(`tests/browser/fixtures/unit-a5.html?hero=${hero}&foe=${foe}&${query}`);
  await expect(page.locator('canvas')).toBeVisible();

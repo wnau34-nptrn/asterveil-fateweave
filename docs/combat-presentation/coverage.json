@@ -2768,7 +2768,7 @@
     "module": "defense-fx",
     "kind": "painted"
    },
-   "target": "ตัวเอง",
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
    "point": "ผู้ร่าย — ตัว"
   },
   {
@@ -2837,7 +2837,7 @@
    "identity": "garran",
    "side": "hero",
    "move": "halt",
-   "name": "แทงสวนจังหวะ",
+   "name": "ผลักระยะทวน",
    "body": {
     "kind": "sprite",
     "clip": "attack",
@@ -2868,63 +2868,63 @@
    "identity": "garran",
    "side": "hero",
    "move": "hold",
-   "name": "ทวนคุ้มหลัง",
+   "name": "ปักทวนตรึง",
    "body": {
     "kind": "sprite",
-    "clip": "stance",
+    "clip": "attack",
     "frames": {
      "prepare": [
-      22,
-      23,
-      24,
-      25
+      1,
+      2,
+      3,
+      4
      ],
      "recover": [
-      26,
-      27,
-      28,
-      29
+      5,
+      6,
+      7,
+      8
      ]
     },
-    "pose": "guard"
+    "pose": "thrust"
    },
    "vfx": {
-    "module": "defense-fx",
+    "module": "blade-fx",
     "kind": "painted"
    },
-   "target": "ตัวเอง",
-   "point": "ผู้ร่าย — ตัว"
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
   },
   {
    "identity": "garran",
    "side": "hero",
    "move": "warcry",
-   "name": "เสียงศึก",
+   "name": "พุ่งหอก",
    "body": {
     "kind": "sprite",
-    "clip": "skill",
+    "clip": "attack",
     "frames": {
      "prepare": [
-      9,
-      10,
-      11,
-      12
+      1,
+      2,
+      3,
+      4
      ],
      "recover": [
-      13,
-      14,
-      15,
-      16
+      5,
+      6,
+      7,
+      8
      ]
     },
-    "pose": "guard"
+    "pose": "thrust"
    },
    "vfx": {
-    "module": "command-fx",
+    "module": "blade-fx",
     "kind": "painted"
    },
-   "target": "ตัวเอง",
-   "point": "อกผู้ร่าย (buff) + เป้าที่ถูกสวนจริงต่อ event"
+   "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
+   "point": "ตัวผู้รับ damage จริง"
   },
   {
    "identity": "metta",

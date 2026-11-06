@@ -179,3 +179,11 @@ export function slotPlan(heroes: readonly { id: string; lane: HeroColumn }[], fo
   }
   return { heroSlots, used, rows, large, trio };
 }
+
+/** The slot a foe stands in now: its own, or while a spear's shove (save v50) holds it, its column partner's (the back slot
+ * of its column without one); the pulled partner stands in the shoved foe's slot. Read from the committed state only. */
+export function standSlotId(state: { enemies: readonly { id: string; hp: number; shoved?: { partnerId?: string } }[] }, id: string): string {
+  const foe = state.enemies.find(e => e.id === id);
+  if (foe?.shoved && foe.hp > 0) return foe.shoved.partnerId ?? `b${id.slice(1)}`;
+  return state.enemies.find(e => e.hp > 0 && e.shoved?.partnerId === id)?.id ?? id;
+}

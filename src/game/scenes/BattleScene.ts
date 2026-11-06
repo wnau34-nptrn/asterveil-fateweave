@@ -23,7 +23,7 @@ import { SAINT_DANCE_ATLAS, saintDanceAtlasUrls, isSdFx, sdPlan, sdPrepare, sdCo
 import { COMMAND_ATLAS, commandAtlasUrls, commandCues, commandPrepare, commandContact, isCommandSkill, type CommandSpot } from '../visuals/command-fx';
 import { ALCHEMY_ATLAS, alchemyAtlasUrls, alchemyCues, alchemyEvents, alchemyPrepare, alchemyContact, alchemyHealingCues, isAlchemySkill, type AlchemySkill } from '../visuals/alchemy-fx';
 import { EARTH_ATLAS, earthAtlasUrls, earthCues, earthPrepare, earthContact, earthHealingCues, earthHealingEvents, isEarthSkill, type EarthSkill } from '../visuals/earth-fx';
-import { FOE_SLOT_INDEX, fieldSlots, slotPlan, type FieldSlot } from '../visuals/field-layout';
+import { FOE_SLOT_INDEX, fieldSlots, slotPlan, standSlotId, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artOf, artUrl, figureRise, mirroredArt, unitsUrl } from '../visuals/assets';
 
 // The unit's own sprite in its body container. Song/shadow floor layers and boss holds also live in the body (some
@@ -244,7 +244,9 @@ export class BattleScene extends Phaser.Scene {
     if (!this.ready) return;
     // A summon puts a new foe on the field mid-presentation: redraw so it appears in its empty slot.
     const present = view.state.enemies.filter(e => !e.absent).map(e => e.id);
-    if (repaint || present.some(id => !this.bodies.has(id))) this.paint();
+    // ...and a shove or its end moves two foes between rows.
+    const swaps = (s?: BattleState) => s?.enemies.map(e => e.shoved ? `${e.id}>${e.shoved.partnerId ?? ''}` : '').join(',');
+    if (repaint || present.some(id => !this.bodies.has(id)) || swaps(previous) !== swaps(view.state)) this.paint();
     else this.syncBodies(previous, view);
   }
   private syncBodies(previous: BattleState | undefined, view: SceneView): void {
@@ -283,10 +285,13 @@ export class BattleScene extends Phaser.Scene {
     this.positions.clear(); this.actorTargets.clear(); this.actorPanels.clear();
     const w = this.viewW, h = this.viewH;
     const bg = this.add.graphics(); this.layer.add(bg);
-    const plan = slotPlan(this.encounter.heroes, this.encounter.enemies, new Set(this.encounter.phases?.flatMap(p => p.summon ?? [])));
+    // A spear's shove (save v50) swaps a foe with its column partner until the shoved foe's turn ends: draw both where
+    // the rules say they stand.
+    const at = (id: string) => standSlotId(this.view!.state, id);
+    const plan = slotPlan(this.encounter.heroes, this.encounter.enemies.map(e => ({ ...e, id: at(e.id) })), new Set(this.encounter.phases?.flatMap(p => p.summon ?? []).map(at)));
     // Each HP panel sits just above its own painted figure (per-illustration headroom).
     const rise = new Map([...plan.heroSlots].map(([id, slot]) => [slot, figureRise(artOf(this.encounter, id))] as const)
-      .concat(this.encounter.enemies.map(e => [FOE_SLOT_INDEX[e.id]!, figureRise(artOf(this.encounter, e.id))] as const)));
+      .concat(this.encounter.enemies.map(e => [FOE_SLOT_INDEX[at(e.id)]!, figureRise(artOf(this.encounter, e.id))] as const)));
     const slots = fieldSlots(w, h, { ...plan, rise }), heroSlots = plan.heroSlots;
     for (const [i, hero] of this.encounter.heroes.entries()) {
       const slot = slots[heroSlots.get(hero.id)!]!;
@@ -296,7 +301,7 @@ export class BattleScene extends Phaser.Scene {
     for (const [i, enemy] of this.encounter.enemies.entries()) {
       // Reserves not yet summoned are off the field.
       if (this.view.state.enemies[i]!.absent) continue;
-      const slot = slots[FOE_SLOT_INDEX[enemy.id]!]!;
+      const slot = slots[FOE_SLOT_INDEX[at(enemy.id)]!]!;
       this.actorPanels.set(enemy.id, slot);
       this.actor(enemy.id, slot, this.view.state.enemies[i]!.hp, true);
     }

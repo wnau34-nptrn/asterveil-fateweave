@@ -7,7 +7,8 @@ export const garranActions=['attack','brace','pierce','halt','hold','spearwall',
 export const brannActions=['attack','taunt','slam','quake','tremor','stonearmor','guardstone'] as const satisfies readonly ActionId[];
 export const foeArts=['foe_tusker','foe_stalker','foe_thorn_beetle'] as const;
 export const foeIntents:Record<(typeof foeArts)[number],readonly string[]>={foe_tusker:['Tusk Charge','Stampede'],foe_stalker:['Thorn Pounce'],foe_thorn_beetle:['Thorn Bite']};
-// scenario: normal (hero acts, foe hits the Knight) | hurt/down (foe hits the hero) | enemy-down (foe has 1 HP)
+// scenario: normal (hero acts, foe hits the Knight) | hurt/down (foe hits the hero) | enemy-down (foe has 1 HP) |
+// shove (a second, back-row copy stands behind the foe in its column, for Garran's shove/pierce, save v50)
 export function unitA5Fixture(hero:'garran'|'brann',action:ActionId='attack',scenario='normal',art:(typeof foeArts)[number]='foe_tusker',intentName?:string){
  const name=intentName??foeIntents[art][0]!;
  const from=encounters.find(d=>d.enemies.some(e=>e.art===art&&d.intents.some(i=>i.sourceId===e.id&&i.name===name)))!;
@@ -17,8 +18,9 @@ export function unitA5Fixture(hero:'garran'|'brann',action:ActionId='attack',sce
  const actions=hero==='garran'?[...garranActions]:[...brannActions];
  const data:EncounterDefinition={...structuredClone(thicketAmbush),
   heroes:[{...merc,speed:200,actions,lane:'front'},{...base.find(h=>h.id==='guardian')!,speed:60,actions:['attack','guard']},{...base.find(h=>h.id==='weaver')!,speed:50,actions:['attack','ward']}],
-  enemies:[{...foe,id:'f1',row:'front',maxHp:scenario==='enemy-down'?1:foe.maxHp,speed:110}],
-  intents:[{...intent,sourceId:'f1',targetSlot:scenario==='hurt'||scenario==='down'?0:1}]};
+  enemies:[{...foe,id:'f1',row:'front',maxHp:scenario==='enemy-down'?1:foe.maxHp,speed:scenario==='shove'?40:110,...(scenario==='shove'?{large:false,boss:false}:{})},
+   ...(scenario==='shove'?[{...foe,id:'b1' as const,row:'back' as const,large:false,boss:false,speed:100}]:[])],
+  intents:[{...intent,sourceId:'f1',targetSlot:scenario==='hurt'||scenario==='down'?0:1},...(scenario==='shove'?[{...intent,sourceId:'b1',targetSlot:2}]:[])]};
  const entry={hp:Object.fromEntries(data.heroes.map(h=>[h.id,scenario==='down'&&h.id===hero?1:h.maxHp]))};
  const state=beginBattle(data,entry,true).state;
  const options=targetOptions(state,data,hero,action);

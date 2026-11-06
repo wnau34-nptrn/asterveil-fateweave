@@ -88,7 +88,7 @@ export const talentTrees: Readonly<Record<string, TalentTree>> = {
     node('c3', 'พรต่อเนื่อง', { unlock: 'bless' }, { branch: 'c', tier: 3 }),
     node('c4', 'รุ่งอรุณ', { cap: 'dawn' }, { branch: 'c', tier: 4 }),
   ],
-  // Spear: A bracing, B thrusting, C holding the line.
+  // Spear: A bracing, B thrusting, C pinning and charging (save v50).
   garran: [
     node('a1', 'ด้ามมั่น', { stat: 'hp', percent: 5 }, { branch: 'a', tier: 1 }, 2),
     node('a2k', 'ปลายทวนคม', { power: 'brace', amount: 6 }, { branch: 'a', tier: 2, choice: 'brace' }),
@@ -98,13 +98,13 @@ export const talentTrees: Readonly<Record<string, TalentTree>> = {
     node('b1', 'แรงแทง', { stat: 'attack', percent: 4 }, { branch: 'b', tier: 1 }, 2),
     node('b2l', 'ทะลุแนว', { cap: 'pierceline' }, { branch: 'b', tier: 2, choice: 'pierce' }),
     node('b2d', 'ทะลวงลึก', { cap: 'deeppierce', amount: 30 }, { branch: 'b', tier: 2, choice: 'pierce' }),
-    node('b3', 'แทงสวนจังหวะ', { unlock: 'halt' }, { branch: 'b', tier: 3 }),
+    node('b3', 'ผลักระยะทวน', { unlock: 'halt' }, { branch: 'b', tier: 3 }),
     node('b4', 'ทวนพิฆาต', { cap: 'spearfury' }, { branch: 'b', tier: 4 }),
     node('c1', 'ตั้งหลัก', { stat: 'armour', percent: 5 }, { branch: 'c', tier: 1 }, 2),
-    node('c1s', 'ทวนคุ้มหลัง', { unlock: 'hold' }, { branch: 'c', tier: 1 }),
-    node('c2b', 'หลังพิง', { cap: 'holdfirm', amount: 20 }, { branch: 'c', tier: 2, choice: 'hold', needs: 'c1s' }),
-    node('c2r', 'ทวนตอบแทน', { cap: 'holdcounter' }, { branch: 'c', tier: 2, choice: 'hold', needs: 'c1s' }),
-    node('c3', 'เสียงศึก', { unlock: 'warcry' }, { branch: 'c', tier: 3 }),
+    node('c1s', 'ปักทวนตรึง', { unlock: 'hold' }, { branch: 'c', tier: 1 }),
+    node('c2b', 'ปักลึก', { cap: 'holdfirm', amount: 15 }, { branch: 'c', tier: 2, choice: 'hold', needs: 'c1s' }),
+    node('c2r', 'ปักแรง', { cap: 'holdcounter', amount: 6 }, { branch: 'c', tier: 2, choice: 'hold', needs: 'c1s' }),
+    node('c3', 'พุ่งหอก', { unlock: 'warcry' }, { branch: 'c', tier: 3 }),
     node('c4', 'ไม่ถอยสักก้าว', { cap: 'unyielding' }, { branch: 'c', tier: 4 }),
   ],
   // Archer: A marksman, B arrow rain, C ranger.

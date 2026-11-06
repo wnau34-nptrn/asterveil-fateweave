@@ -6,7 +6,9 @@ import meta from './defense-art.json';
 export const DEFENSE_ATLAS = 'defense-fx';
 export const defenseAtlasUrls = (): [string,string] => [`${import.meta.env.BASE_URL}assets/fx/defense_fx.webp`,`${import.meta.env.BASE_URL}assets/fx/defense_fx.json`];
 export type DefenseSkill = keyof typeof meta.profiles;
-export const isDefenseSkill = (action: string | undefined): action is DefenseSkill => !!action && Object.hasOwn(meta.profiles,action);
+// `hold` keeps its painted profile in the atlas but is a spear thrust since save v50 (blade VFX).
+const RETIRED: readonly string[] = ['hold'];
+export const isDefenseSkill = (action: string | undefined): action is DefenseSkill => !!action && Object.hasOwn(meta.profiles,action) && !RETIRED.includes(action);
 export type DefenseCue = { sourceId:string; targetId:string; event:BattleEvent } &
   ({kind:'cast'|'counter'|'redirect'|'save';skill:DefenseSkill}|{kind:'absorb';skill?:never});
 export interface DefensePoint { x:number; y:number; footY:number }
@@ -24,7 +26,7 @@ export function defenseCues(turn:TurnStage,data:EncounterDefinition):DefenseCue[
     const primary=events[0];
     if(primary){
       let ids=events.flatMap(e=>e.targetId?[e.targetId]:[]);
-      if(skill==='guard'||skill==='brace'||skill==='spearwall'||skill==='hold')ids=[turn.actorId];
+      if(skill==='guard'||skill==='brace'||skill==='spearwall')ids=[turn.actorId];
       if(skill==='rally')ids=after?.rally?.heroId===turn.actorId?after.rally.ids:[];
       if(skill==='bulwark')ids=after?.bulwark?.heroId===turn.actorId?data.heroes.filter(h=>h.lane==='front'&&after.heroes.some(a=>a.id===h.id&&a.hp>0)).map(h=>h.id):[];
       if(skill==='halo')ids=after?.halo?.heroId===turn.actorId?after.heroes.filter(h=>h.hp>0).map(h=>h.id):[];
@@ -34,8 +36,8 @@ export function defenseCues(turn:TurnStage,data:EncounterDefinition):DefenseCue[
   for(const event of turn.events){
     const {sourceId,targetId}=event;if(!sourceId||!targetId)continue;
     if(event.type==='counter'&&(event.amount??0)>0){
-      const brace=before?.counter,hold=before?.hold;
-      const skill=brace?.heroId===sourceId?(brace.wall?'spearwall':'brace'):hold?.heroId===sourceId?'hold':undefined;
+      const brace=before?.counter;
+      const skill=brace?.heroId===sourceId?(brace.wall?'spearwall':'brace'):undefined;
       if(skill)cues.push({kind:'counter',skill,sourceId,targetId,event});
     }
     if(event.type==='damage'&&turn.side==='enemy'){

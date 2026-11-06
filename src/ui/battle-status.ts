@@ -1,5 +1,5 @@
 import {bossNames,bossDescription} from './boss-equipment';
-import { CHI_MAX, HEX_MAX, hexTickPower, capAmount, corrodeBonus, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, skillPower, rallyReductionOf, songPower, tauntReductionOf } from '../core/battle/engine';
+import { CHARGE_EXPOSED, CHI_MAX, HEX_MAX, foeRow, hexTickPower, capAmount, corrodeBonus, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, skillPower, rallyReductionOf, songPower, tauntReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName, intentName, phaseThai } from './th';
 
@@ -50,8 +50,7 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     if (s.stone?.ids.includes(id) && alive(s.stone.heroId)) add('stone', 'guardstone', d.skills.guardstone.name, `ท่าเป้าเดี่ยวแรกเปลี่ยนไปที่${name(s.stone.heroId)} และเบาลง ${s.stone.percent}%`, untilTurn(s.stone.heroId));
     if (hero.renew && alive(hero.renew.heroId)) add('renew', 'bless', d.skills.bless.name, `ฟื้น ${hero.renew.amount} ตอนเริ่มรอบ`, `ถึงเริ่มรอบ ${hero.renew.until} หรือผู้ใช้ล้ม`);
     if (s.bulwark && alive(s.bulwark.heroId) && d.heroes.find(h => h.id === id)?.lane === 'front') add('bulwark', 'bulwark', d.skills.bulwark.name, `รับความเสียหายลด ${skillPower(d, s.bulwark.heroId, 'bulwark')}%`, untilTurn(s.bulwark.heroId));
-    if (s.hold && alive(s.hold.heroId) && d.heroes.find(h => h.id === id)?.lane === 'back') add('hold', 'hold', d.skills.hold.name, `${name(s.hold.heroId)}สวนกายภาพทุกท่าที่โดนคนนี้`, untilTurn(s.hold.heroId));
-    if (s.warcry?.ids.includes(id) && alive(s.warcry.heroId)) add('warcry', 'warcry', d.skills.warcry.name, `สวนกายภาพครั้งแรก ${skillPower(d, s.warcry.heroId, 'warcry')}`, untilTurn(s.warcry.heroId));
+    if (s.charge?.heroId === id && alive(id)) add('charge', 'warcry', d.skills.warcry.name, `รับความเสียหายเพิ่ม ${CHARGE_EXPOSED}%`, untilTurn(id));
     if (s.solace?.targetId === id && alive(s.solace.heroId)) add('solace', 'heal', 'แสงปลอบประโลม', `ลดความเสียหาย ${capAmount(d, s.solace.heroId, 'solace')}% · จาก${name(s.solace.heroId)}`, untilTurn(s.solace.heroId));
   }
   if (enemy) {
@@ -75,6 +74,10 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     for (const h of enemy.hexes ?? []) if (alive(h.heroId)) add(`hex-${h.heroId}`, 'threadhex', 'สาป', `${h.stacks}/${HEX_MAX} ชั้น เสียเลือด ${hexTickPower(d, h.heroId, h.stacks)} ทุกจบรอบ · จาก${name(h.heroId)}`, `ถึงจบรอบ ${h.until}`, 'debuff');
     if (enemy.deflect && enemy.deflect.until >= s.round) add('deflect', 'deflectfate', 'ชะตาถูกเบน', `ท่าเป้าเดี่ยวถัดไปลงที่${name(enemy.deflect.recipientId)} · จาก${name(enemy.deflect.heroId)}`, `ถึงจบรอบ ${enemy.deflect.until}`, 'debuff');
     if (enemy.weaken) add('weaken', 'smoke', 'ท่าเบาลง', `ท่าถัดไปเบาลง ${enemy.weaken}%`, 'หมดเมื่อตัวนี้ลงมือ', 'debuff');
+    // Spear shove (save v50): the swap lasts until the shoved foe's own next turn ends.
+    if (enemy.shoved) add('shove', 'halt', 'ถูกผลัก', 'อยู่แถวหลังชั่วคราว', 'จบเทิร์นถัดไปของตัวนี้', 'debuff');
+    const shover = s.enemies.find(e => e.hp > 0 && e.shoved?.partnerId === id);
+    if (shover) add('shove', 'halt', 'ถูกดึงมาแถวหน้า', 'ฮีโร่แนวหน้าตีถึงได้', `จบเทิร์นถัดไปของ${name(shover.id)}`, 'debuff');
     if (s.taunt && alive(s.taunt.heroId)) add('taunted', 'taunt', 'ถูกยั่วยุ', `หากลงมือก่อนเทิร์นถัดไปของ${name(s.taunt.heroId)} จะเล็งไปที่ผู้นั้น`, untilTurn(s.taunt.heroId), 'debuff');
   }
   return rows;
@@ -87,12 +90,13 @@ export interface FoeProfile { stats: { label: string; value: string }[]; positio
 export function foeProfile(s: BattleState, d: EncounterDefinition, id: string): FoeProfile | undefined {
   const def = d.enemies.find(e => e.id === id), foe = s.enemies.find(e => e.id === id);
   if (!def || !foe || foe.absent) return undefined;
-  const standing = (row: 'front' | 'back') => s.enemies.some(e => e.id !== id && e.hp > 0 && d.enemies.find(x => x.id === e.id)?.row === row);
+  const standing = (row: 'front' | 'back') => s.enemies.some(e => e.id !== id && e.hp > 0 && foeRow(s, d, e.id) === row);
+  const row = foeRow(s, d, id), moved = row !== def.row;
   const stats = [
     ...(d.level ? [{ label: 'เลเวล', value: `Lv${d.level}` }] : []),
     { label: 'HP', value: `${Math.max(0, foe.hp)} / ${def.maxHp}` },
     { label: 'SPD', value: String(def.speed) },
-    { label: 'ตำแหน่ง', value: `${def.row === 'front' ? 'แถวหน้า' : 'แถวหลัง'}${def.boss ? ' · บอส' : def.large ? ' · ตัวใหญ่' : ''}` },
+    { label: 'ตำแหน่ง', value: `${row === 'front' ? 'แถวหน้า' : 'แถวหลัง'}${moved ? ' (ถูกผลักชั่วคราว)' : ''}${def.boss ? ' · บอส' : def.large ? ' · ตัวใหญ่' : ''}` },
     ...(def.boss ? [{ label: 'ทนการควบคุม', value: 'ถูกขัดแล้ว 2 รอบถัดไปขัดซ้ำไม่ได้' }] : []),
     // Boss phases: the next threshold and what it brings; after the last one, the current phase.
     ...(() => {
@@ -102,7 +106,7 @@ export function foeProfile(s: BattleState, d: EncounterDefinition, id: string): 
       return [{ label: 'ช่วงการต่อสู้', value: next ? `ช่วง ${done + 1}/${phases.length + 1} · เลือดต่ำกว่า ${next.below}% → ${phaseThai(next.name)} (${brings(next)})` : `ช่วงสุดท้าย ${done + 1}/${phases.length + 1}` }];
     })(),
   ];
-  const position = foe.hp <= 0 ? 'ล้มแล้ว' : def.row === 'back'
+  const position = foe.hp <= 0 ? 'ล้มแล้ว' : row === 'back'
     ? standing('front') ? 'ถูกแถวหน้าบัง · ฮีโร่แนวหน้าตีไม่ถึง ยกเว้นสกิลตีทะลุ (แทงทะลวง ติดตรา แทงข้างหลัง ท้าดวล) · ฮีโร่แนวหลังตีได้' : 'แถวหน้าล้มหมดแล้ว · ทุกคนตีถึง'
     : standing('back') ? 'บังศัตรูแถวหลังอยู่ · ล้มตัวนี้ก่อนฮีโร่แนวหน้าจึงตีแถวหลังได้' : 'ทุกคนตีถึง';
   const cycle = phaseMoves(s, d, id);

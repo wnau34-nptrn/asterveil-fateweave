@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { guardCounterPower, ambushBonus, corrodeBonus, createBattle, currentHeroId, guardReductionOf, nextIntentOf, resolveCommand, skillPower, tauntReductionOf, withParty } from '../src/core/battle/engine';
+import { guardCounterPower, PIERCE_BEHIND, ambushBonus, corrodeBonus, createBattle, currentHeroId, guardReductionOf, nextIntentOf, resolveCommand, skillPower, tauntReductionOf, withParty } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../src/core/battle/types';
 import { veilSiege as siegeBase } from '../src/content/encounters/veil-siege';
 import { openField } from './fixtures/open-field';
@@ -207,14 +207,20 @@ describe('priest tree modifiers (Seren)', () => {
 });
 
 describe('spear tree modifiers (Garran)', () => {
-  it('piercing line hits the foe behind the target for half', () => {
-    const d = party([['garran', { b1: 1, b2l: 1 }], ...rest]);
+  it('a pierce runs on to the foe behind a front-row target for half (save v50); the piercing line makes it full', () => {
+    // The real rows (openField would put every foe in front, with nobody behind); everyone else attacks the front brute.
+    const plain = party([['garran', { b1: 1 }], ...rest], siegeBase);
+    const until = (s: BattleState, d: EncounterDefinition, id: string) => { for (let i = 0; i < 40 && currentHeroId(s, d) !== id; i++) s = act(s, d, 'attack', 'f1').state; return s; };
+    expect(dealt(act(until(createBattle(plain), plain, 'garran'), plain, 'pierce', 'f1'), 'b1')).toBe(Math.floor(skillPower(plain, 'garran', 'pierce') * PIERCE_BEHIND / 100));
+    // A back-row target has nobody behind it.
+    expect(act(until(createBattle(plain), plain, 'garran'), plain, 'pierce', 'b1').turns[0]!.events.some(e => e.type === 'damage' && e.targetId === 'f1')).toBe(false);
+    const d = party([['garran', { b1: 1, b2l: 1 }], ...rest], siegeBase);
     const r = act(until(createBattle(d), d, 'garran'), d, 'pierce', 'f1');
-    expect(dealt(r, 'b1')).toBe(Math.floor(skillPower(d, 'garran', 'pierce') / 2));
+    expect(dealt(r, 'b1')).toBe(skillPower(d, 'garran', 'pierce'));
   });
   it('a braced front wall softens physical hits on the front lane', () => {
     const d = party([['garran', { a1: 1, a2f: 1 }], ...rest]);
-    let s = act(until(createBattle(d), d, 'garran'), d, 'brace', 'garran').state; let hit;
+    let s = act(until(createBattle(d), d, 'garran'), d, 'brace', 'f1').state; let hit;
     for (let i = 0; i < 12 && !hit; i++) {
       const r = act(s, d, 'attack', 'f1');
       for (const t of r.turns) { const e = t.events.find(x => x.type === 'damage' && t.side === 'enemy' && t.intent?.kind === 'physical'); if (e && !hit) hit = { e, damage: t.intent!.damage, counter: t.events.find(x => x.type === 'counter') }; }

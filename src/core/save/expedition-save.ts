@@ -111,7 +111,11 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // v49 (owner 2026-11-06, skill rework step 2): Wynne's Life Toll becomes Pull Thread (her curse ticks once now, loosens a
 // stack and lives to the next round-end) and the Toll Ring becomes the Pulling Ring (cursed foes tick once now, the others
 // take a first stack); tolls are gone. Profiles are unchanged; a battle in progress that used either restarts from its entry HP.
-const SAVE_VERSION = 49;
+// v50 (owner 2026-11-06, skill rework step 3): Garran's kit — brace strikes its target at once before bracing, a pierce
+// runs on to the foe behind, the spear wall's counters cut later front-lane hits, hold becomes the pinning spear, halt the
+// shove and warcry the charge. Profiles are unchanged; a battle in progress that used any of them restarts from its entry HP.
+const SAVE_VERSION = 50;
+const REWORKED_V50: readonly ActionId[] = ['brace', 'pierce', 'spearwall', 'hold', 'halt', 'warcry'];
 const REWORKED_V49: readonly ActionId[] = ['lifetoll', 'tollring'];
 const REWORKED_V48: readonly ActionId[] = ['cadence', 'duet', 'rounddance', 'deepbeat', 'echofoot', 'closingstep', 'turncycle'];
 const BATCH_ONE_IDS = ['metta', 'thiran', 'lalin', 'wila'];
@@ -386,6 +390,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     if (version < 46 && Array.isArray(b.commands) && b.commands.some(c => obj(c).action === 'revive')) b.commands = [];
     if (version < 48 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V48.includes(obj(c).action as ActionId))) b.commands = [];
     if (version < 49 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V49.includes(obj(c).action as ActionId))) b.commands = [];
+    if (version < 50 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V50.includes(obj(c).action as ActionId))) b.commands = [];
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, party);
     // Validate against the encounter as fought by this run's deployed party (stars and camp level included).
@@ -700,7 +705,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

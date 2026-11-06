@@ -71,7 +71,7 @@ describe('save v46', () => {
     const p = newProfile(map, 17); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
     const game = depart(p, map, lookup, 77);
     game.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...game.run.hp }, commands: [{ heroId: 'healer', beat: 0, action: 'revive', targetId: 'tracer' }] };
-    let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game); expect(JSON.parse(raw).version).toBe(49);
+    let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game); expect(JSON.parse(raw).version).toBe(50);
     const old = JSON.parse(raw) as { version: number }; old.version = 45;
     const migrated = parseGame(JSON.stringify(old), map, lookup);
     expect(migrated.run!.battle!.commands).toEqual([]); expect(migrated.run!.battle!.entry).toEqual(game.run.battle.entry);
@@ -114,5 +114,30 @@ describe('save v49 (skill rework step 2, 2026-11-06)', () => {
       expect(migrated.run!.battle!.commands).toEqual([]); expect(migrated.run!.battle!.entry).toEqual(game.run.battle.entry);
       expect(migrated.profile.members).toEqual(game.profile.members);
     }
+  });
+});
+
+describe('save v50 (skill rework step 3: Garran, 2026-11-06)', () => {
+  it('a v49 battle that used a reworked spear skill restarts from its entry HP; others and the profile are kept', async () => {
+    const { chapterOne: map } = await import('../src/content/world/chapter1');
+    const { encounterById: lookup } = await import('../src/content/encounters/catalog');
+    const { depart, newProfile } = await import('../src/core/world/profile');
+    const { parseGame, saveGame } = await import('../src/core/save/expedition-save');
+    const p = newProfile(map, 17); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
+    const v49 = (game: ReturnType<typeof depart>) => {
+      let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game);
+      const old = JSON.parse(raw) as { version: number }; old.version = 49; return parseGame(JSON.stringify(old), map, lookup);
+    };
+    for (const action of ['brace', 'pierce', 'spearwall', 'hold', 'halt', 'warcry'] as const) {
+      const game = depart(p, map, lookup, 77);
+      game.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...game.run.hp }, commands: [{ heroId: 'garran', beat: 0, action, targetId: 'f1' }] };
+      const migrated = v49(game);
+      expect(migrated.run!.battle!.commands).toEqual([]); expect(migrated.run!.battle!.entry).toEqual(game.run.battle.entry);
+      expect(migrated.profile.members).toEqual(game.profile.members);
+    }
+    // A v49 battle with no spear skill keeps its commands (replay-validated as before).
+    const plain = depart(p, map, lookup, 77);
+    plain.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...plain.run.hp }, commands: [] };
+    expect(v49(plain).run!.battle).toEqual(plain.run.battle);
   });
 });

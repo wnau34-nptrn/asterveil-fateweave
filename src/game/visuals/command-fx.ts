@@ -11,7 +11,9 @@ export const COMMAND_ATLAS='command-fx';
 export const commandAtlasUrls=():[string,string]=>[`${import.meta.env.BASE_URL}assets/fx/command_fx.webp`,`${import.meta.env.BASE_URL}assets/fx/command_fx.json`];
 export const commandSkills=['taunt','challenge','warcry'] as const;
 export type CommandSkill=typeof commandSkills[number];
-export const isCommandSkill=(action:string|undefined):action is CommandSkill=>commandSkills.some(s=>s===action);
+// Save v50: `warcry` is Garran's spear charge (blade VFX); its painted shout cone stays in the atlas, unused.
+const RETIRED:readonly string[]=['warcry'];
+export const isCommandSkill=(action:string|undefined):action is CommandSkill=>commandSkills.some(s=>s===action)&&!RETIRED.includes(action!);
 // chest/forward = caster upper body (never the floor), shield/crown = shield front / just above its rim, foe = resolved foe body.
 export type CommandSpot='chest'|'forward'|'shield'|'crown'|'foe';
 export interface CommandCue {kind:'cast'|'counter';skill:CommandSkill;sourceId:string;targetId:string;event:BattleEvent;blocked:boolean}

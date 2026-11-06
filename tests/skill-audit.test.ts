@@ -56,11 +56,13 @@ describe('C11 skill contract',()=>{
   while(s.round<4&&s.outcome==='active'){const id=currentHeroId(s,d)!,target=targetOptions(s,d,id,'attack').find(t=>t.valid)!;r=resolveCommand(s,d,{heroId:id,action:'attack',targetId:target.id,beat:s.beat});events.push(...r.events);s=r.state;}
   expect(events.filter(e=>e.type==='heal'&&e.text==='Renew.')).toHaveLength(2);expect(s.heroes[1]!.renew).toBeUndefined();expect(s.heroes[1]!.empowered).toBeUndefined();
  });
- it('warcry counters only the first physical hit per covered ally and expires at caster turn',()=>{
-  const d=fixture('garran','warcry');d.intents=d.intents.map(i=>({...i,kind:'physical',targetSlot:1}));let s=beginBattle(d).state;
-  let r=resolveCommand(s,d,{heroId:'garran',action:'warcry',targetId:'garran',beat:s.beat});const events=[...r.events];s=r.state;
-  while(s.round<2){const id=currentHeroId(s,d)!,target=targetOptions(s,d,id,'attack').find(t=>t.valid)!;r=resolveCommand(s,d,{heroId:id,action:'attack',targetId:target.id,beat:s.beat});events.push(...r.events);s=r.state;}
-  expect(events.filter(e=>e.type==='counter'&&e.text==='War cry counter.')).toHaveLength(1);expect(s.warcry).toBeNull();
+ it('warcry (spear charge, save v50) hits now, opens him to every hit and expires at his own next turn',()=>{
+  const d=fixture('garran','warcry');d.intents=d.intents.map(i=>({...i,kind:'physical',targetSlot:0}));let s=beginBattle(d).state;
+  const target=targetOptions(s,d,'garran','warcry').find(t=>t.valid)!.id;
+  let r=resolveCommand(s,d,{heroId:'garran',action:'warcry',targetId:target,beat:s.beat});const events=[...r.events];s=r.state;
+  expect(r.turns[0]!.events.find(e=>e.type==='damage')).toMatchObject({sourceId:'garran',targetId:target});expect(r.turns[0]!.state.charge).toEqual({heroId:'garran'});
+  while(currentHeroId(s,d)!=='garran'&&s.outcome==='active'){const id=currentHeroId(s,d)!,t=targetOptions(s,d,id,'attack').find(x=>x.valid)!;r=resolveCommand(s,d,{heroId:id,action:'attack',targetId:t.id,beat:s.beat});events.push(...r.events);s=r.state;}
+  expect(events.some(e=>e.type==='counter')).toBe(false);expect(s.charge).toBeNull();
  });
  it('heavyhinder affects exactly two future queues; covershot adds its real damage',()=>{
   const d=fixture('mira','hinder');d.heroes=d.heroes.map((h,i)=>i?h:{...h,talents:{caps:{heavyhinder:0}}});const s=beginBattle(d).state;
@@ -110,7 +112,7 @@ describe('C11 save v41 → v42',()=>{
   const game=parseGame(JSON.stringify(old),map,lookup);
   expect(game.profile.members.guardian!.talents).toBeUndefined();expect(game.profile.members.guardian!.loadout).toBeUndefined();
   expect(game.profile.members.guardian!.skillLevels).toEqual({rally:2});expect(game.profile.members.toma!.talents).toEqual({a1:1});
-  expect(JSON.parse(write(game)).version).toBe(49);expect(parseGame(write(game),map,lookup)).toEqual({profile:game.profile,run:null});
+  expect(JSON.parse(write(game)).version).toBe(50);expect(parseGame(write(game),map,lookup)).toEqual({profile:game.profile,run:null});
  });
  it('restarts a changed active skill replay from recorded entry HP without duplicating rewards',()=>{
   const p=newProfile(map,2);const game=depart(p,map,lookup,3),run=game.run;

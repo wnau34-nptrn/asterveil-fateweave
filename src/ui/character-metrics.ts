@@ -1,4 +1,4 @@
-import { hexTickPower, saintRatioOf, beginBattle, resolveCommand, targetOptions, defenseOf, finaleHealPower, skillPower, songPower, usesMagicPower, targetKind, withParty } from '../core/battle/engine';
+import { braceStrikePower, hexTickPower, saintRatioOf, beginBattle, resolveCommand, targetOptions, defenseOf, finaleHealPower, skillPower, songPower, usesMagicPower, targetKind, withParty } from '../core/battle/engine';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { gearTotals } from '../core/world/equipment';
 import type { ExpeditionState, MapDefinition } from '../core/world/types';
@@ -39,7 +39,7 @@ export function characterStats(s: CharacterState, map: MapDefinition, h: HeroDef
 
 export function characterSkillMetric(action: ActionId, h: HeroDefinition, template: EncounterDefinition): { label: string; value?: number; secondary?: { label: string; value: number }; scaling: string; target: string } {
   const data = withParty(template, [h]);
-  const effects: Partial<Record<ActionId,string>> = {bulwark:'เพื่อนแนวหน้าทุกคน',rouse:'เพื่อนเลือดต่ำสุด 1 คน',hold:'เพื่อนแนวหลังทุกคน',warcry:'เพื่อนแนวหน้าทุกคน',halo:'เพื่อนทุกคน',dread:'ทุกท่าของศัตรู',sweep:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',quake:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',tremor:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',pin:'ศัตรูแถวหน้า',saintarc:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)'};
+  const effects: Partial<Record<ActionId,string>> = {bulwark:'เพื่อนแนวหน้าทุกคน',rouse:'เพื่อนเลือดต่ำสุด 1 คน',halo:'เพื่อนทุกคน',dread:'ทุกท่าของศัตรู',sweep:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',quake:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',tremor:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)',pin:'ศัตรูแถวหน้า',saintarc:'ศัตรูแถวหน้า (แถวหลังเมื่อหน้าว่าง)'};
   const target = effects[action] ?? ({ self: 'ตัวเอง', ally: 'เพื่อน 1 คน', party: 'เพื่อนทุกคน', enemy: 'ศัตรู 1 ตัว', enemies: 'ศัตรูทุกตัว' })[targetKind(action)];
   if (['cadence', 'duet', 'rounddance', 'deepbeat', 'closingstep'].includes(action)) return { label: 'คืนคูลดาวน์', scaling: 'ผลพิเศษ ไม่อิงพลังโจมตีหรือพลังเวท · ไม่เพิ่มเทิร์น', target: action === 'rounddance' ? 'เพื่อนทุกคนยกเว้นผู้ใช้' : 'เพื่อนที่ยังมีสกิลกำลังรอ' };
   if (['halo', 'fury', 'guardstone', 'dread'].includes(action)) return { label: action === 'fury' ? 'เพิ่มพลังโจมตี (%)' : 'ลดความเสียหาย (%)', value: skillPower(data, h.id, action), scaling: 'ค่าคงที่ เพิ่มด้วยเลเวลสกิล/โหนด', target };
@@ -53,6 +53,8 @@ export function characterSkillMetric(action: ActionId, h: HeroDefinition, templa
   if (action === 'valor' || action === 'mend') return { label: action === 'valor' ? 'โบนัสต่อการโจมตี' : 'ฟื้นเลือดต่อคน/รอบ', value: songPower(data, h.id, action), scaling: 'อิงพลังเวท', target: 'เพื่อนทุกคน' };
   // Pulls (skill rework step 2) deal the curse's round-end power at once, scaled by Magic Power through thread hex.
   if (action === 'lifetoll' || action === 'tollring') return { label: 'ดาเมจต่อชั้นสาปที่ดึง', value: hexTickPower(data, h.id, 1), scaling: 'อิงพลังเวท (เท่าสาปตอนจบรอบ)', target };
+  // Spear brace (save v50): a strike at once, then its counter.
+  if (action === 'brace') return { label: 'พลังสวนพื้นฐาน', value: skillPower(data, h.id, action), secondary: { label: 'ดาเมจแทงทันที', value: braceStrikePower(data, h.id) }, scaling: 'อิงพลังโจมตี', target };
   if (!data.skills[action].power) return { label: 'ผลพิเศษ', scaling: 'อ่านเงื่อนไขของท่า', target };
-  return { secondary: saintMetric, label: action === 'ward' || action === 'aegis' ? 'โล่พื้นฐาน' : action === 'heal' || action === 'prayer' || action === 'bless' ? 'ฟื้นเลือดพื้นฐานต่อคน' : action === 'brace' || action === 'spearwall' || action === 'warcry' ? 'พลังสวนพื้นฐาน' : 'ดาเมจพื้นฐานต่อเป้าหมาย', value: skillPower(data, h.id, action), scaling: usesMagicPower(action) ? 'อิงพลังเวท' : 'อิงพลังโจมตี', target };
+  return { secondary: saintMetric, label: action === 'ward' || action === 'aegis' ? 'โล่พื้นฐาน' : action === 'heal' || action === 'prayer' || action === 'bless' ? 'ฟื้นเลือดพื้นฐานต่อคน' : action === 'spearwall' ? 'พลังสวนพื้นฐาน' : 'ดาเมจพื้นฐานต่อเป้าหมาย', value: skillPower(data, h.id, action), scaling: usesMagicPower(action) ? 'อิงพลังเวท' : 'อิงพลังโจมตี', target };
 }

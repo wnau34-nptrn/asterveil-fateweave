@@ -8,7 +8,7 @@ import {unitClip,unitSample,unitDisplayRatio,unitIdleFrame,unitRegistry} from '.
 import {unitPose,unitReactions} from '../src/game/visuals/unit-animation-map';
 import manifest from '../src/game/visuals/unit-atlases.json';
 import {readFileSync} from 'node:fs';
-const clipOf={garran:{attack:'attack',pierce:'attack',halt:'attack',brace:'stance',spearwall:'stance',hold:'stance',warcry:'skill'},
+const clipOf={garran:{attack:'attack',pierce:'attack',halt:'attack',brace:'stance',spearwall:'stance',hold:'attack',warcry:'attack'},
  brann:{attack:'attack',slam:'skill',quake:'skill',tremor:'skill',taunt:'taunt',stonearmor:'brace',guardstone:'brace'}} as const;
 // Contact is the first recover frame of each eight-frame clip block.
 const contactOf={attack:5,skill:13,stance:26,taunt:26,brace:34} as const;

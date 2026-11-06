@@ -3,9 +3,10 @@ import {stageTiming} from '../../src/ui/battle-playback';
 
 test.skip(process.env.PLAYWRIGHT_PAGES==='true','source-only command VFX gate runs explicitly in CI/Pages');
 test.use({reducedMotion:'no-preference'});
-const skills=['taunt','challenge','warcry'] as const;
-const peaks={taunt:['taunt_pulse','taunt_motes'],challenge:['challenge_crest','challenge_thread'],warcry:['warcry_cone']} as const;
-const settle={taunt:'taunt_settle',challenge:'challenge_settle',warcry:'warcry_wisps'} as const;
+// Save v50: war cry is Garran's spear charge (blade VFX); its painted shout layers stay in the atlas, unused.
+const skills=['taunt','challenge'] as const;
+const peaks={taunt:['taunt_pulse','taunt_motes'],challenge:['challenge_crest','challenge_thread']} as const;
+const settle={taunt:'taunt_settle',challenge:'challenge_settle'} as const;
 const open=async(page:import('@playwright/test').Page,query:string)=>{
  await page.goto(`tests/browser/fixtures/command-fx.html?${query}`);const start=page.locator('#start');if(await start.isVisible())await start.click();
 };
@@ -43,21 +44,13 @@ test('challenge draws one thread, to the actual selected foe only',async({page})
  expect(Math.abs(threads[0]!.x-start.x)).toBeLessThan(1.5);expect(Math.abs(threads[0]!.y-start.y)).toBeLessThan(1.5);
  expect(end.x).toBeGreaterThan(start.x);expect(threads[0]!.width).toBeGreaterThan(40);
 });
-test('war cry draws impacts only for real counters, on the struck-back foe',async({page})=>{
+test('the spear charge (war cry since save v50) paints no command layer',async({page})=>{
  await page.clock.install({time:new Date('2026-10-29T00:00:00Z')});await page.setViewportSize({width:390,height:844});
  await open(page,'skill=warcry');await page.clock.pauseAt(new Date('2026-10-29T01:00:00Z'));
- const turns=await page.evaluate(()=>window.commandQA.sequence()),counters=await page.evaluate(()=>window.commandQA.cues().filter(c=>c.kind==='counter'));
- expect(counters.length).toBeGreaterThan(0);
+ expect(await page.evaluate(()=>window.commandQA.cues())).toEqual([]);
+ const turn=(await page.evaluate(()=>window.commandQA.sequence()))[0]!,timing=stageTiming(turn,false);
  await cast(page,'warcry');
- let seen=0,elapsed=0,soFar=0;
- for(const t of turns){const timing=stageTiming(t,false);
-  const has=t.events.some(e=>e.type==='counter'&&e.text==='War cry counter.');
-  await page.clock.runFor(Math.max(1,timing.contact+70-elapsed));elapsed=0;
-  const impacts=(await page.evaluate(()=>window.commandQA.painted())).filter(p=>p.frame==='warcry_impact');
-  if(has){soFar++;expect(impacts.length).toBeGreaterThan(0);seen+=impacts.length;}else if(!soFar)expect(impacts).toHaveLength(0);
-  await page.clock.runFor(Math.max(0,timing.end-timing.contact-70));
- }
- expect(seen).toBeGreaterThanOrEqual(counters.length);
+ for(const at of [timing.contact-1,62,200,400]){await page.clock.runFor(at);expect(await page.evaluate(()=>window.commandQA.painted())).toEqual([]);}
 });
 for(const skill of skills)test(`command ${skill}: OS reduced motion is immediate and static`,async({browser})=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
