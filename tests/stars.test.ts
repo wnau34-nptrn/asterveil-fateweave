@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { corrodeBonusOf, createBattle, currentHeroId, nextIntentOf, resolveCommand, SANCTUARY_HEAL, skillPower, songPower, targetOptions, withParty } from '../src/core/battle/engine';
+import { corrodeBonusOf, createBattle, currentHeroId, nextIntentOf, resolveCommand, SANCTUARY_HEAL, FINALE_PER_ROUND, NOTE_MAX_ROUNDS, skillPower, songPower, targetOptions, withParty } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../src/core/battle/types';
 import { veilSiege as siegeBase } from '../src/content/encounters/veil-siege';
 import { openField } from './fixtures/open-field';
@@ -244,7 +244,10 @@ describe('bard ★3 finale / ★5 resound (Lio)', () => {
     s = act(s, d, 'valor', 'lio').state; s = until(s, d, 'lio');
     const valor = act(s, d, 'finale', 'lio');
     expect(valor.turns[0]!.state.song).toBeNull();
-    expect(valor.turns[0]!.events.filter(e => e.type === 'damage').map(e => e.amount)).toEqual(s.enemies.filter(e => e.hp > 0).map(e => Math.min(e.hp, skillPower(d, 'lio', 'finale'))));
+    // Save v54: FINALE_PER_ROUND% stronger per round the song has played (at most NOTE_MAX_ROUNDS).
+    const grown = Math.round(skillPower(d, 'lio', 'finale') * (100 + Math.min(NOTE_MAX_ROUNDS, s.round - s.song!.since!) * FINALE_PER_ROUND) / 100);
+    expect(s.round - s.song!.since!).toBeGreaterThan(0);
+    expect(valor.turns[0]!.events.filter(e => e.type === 'damage').map(e => e.amount)).toEqual(s.enemies.filter(e => e.hp > 0).map(e => Math.min(e.hp, grown)));
     let m = act(s, d, 'mend', 'lio').state; m = until(m, d, 'lio');
     m = { ...m, heroes: m.heroes.map(h => ({ ...h, hp: Math.max(1, h.hp - 20), cooldowns: {} })) };
     const healed = act(m, d, 'finale', 'lio').turns[0]!.events.filter(e => e.type === 'heal');

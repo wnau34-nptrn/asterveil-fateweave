@@ -1,4 +1,4 @@
-import { bigMove, capAmount, enemyIntent, actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, previewCommand, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, CHALLENGE_GRUDGE_MAX, SANCTUARY_HEAL, foeNeighbours, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { bigMove, capAmount, enemyIntent, actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, previewCommand, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, NOTE_MAX_ROUNDS, FINALE_PER_ROUND, CHALLENGE_GRUDGE_MAX, SANCTUARY_HEAL, foeNeighbours, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, Command } from '../core/battle/types';
 import { actorName } from './th';
 // Seer advisor (tree-sim tuned 2026-11-06, drafts): a delayed big move still comes, so a delay is worth a small share of
@@ -44,7 +44,10 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    const damage=turn.events.filter(e=>e.type==='damage'&&e.sourceId===heroId&&state.enemies.some(x=>x.id===e.targetId)).reduce((n,e)=>n+(e.amount??0),0);
    const kills=turn.events.filter(e=>e.type==='down'&&state.enemies.some(x=>x.id===e.targetId)).length;
    const after=turn.state.heroes.find(h=>h.id===heroId)?.chi??0;
-   const score=damage+kills*8+(after-chi)*5;
+   // Save v54: a clash is worth the damage it takes off the move aimed at Kael; HP paid for a circle fist costs him.
+   const clash=turn.events.filter(e=>e.type==='clash'&&e.sourceId===heroId).reduce((n,e)=>n+(e.amount??0),0);
+   const paid=turn.events.filter(e=>e.type==='damage'&&e.sourceId===heroId&&e.targetId===heroId).reduce((n,e)=>n+(e.amount??0),0);
+   const score=damage+kills*8+(after-chi)*5+clash-paid*1.2;
    if(!best||score>best.score)best={command,score,damage};
   }
   if(best){const {command,damage}=best;const after=command.action;return{...command,step:state.commands.length+1,title:['releasefist','circlefist','perfectfist'].includes(after)?'จ่ายปราณปิดท่า':'สะสมปราณ',copy:`${actorName(heroId,data)} → ${data.skills[command.action].name} → ${actorName(command.targetId,data)} · คาดการณ์ดาเมจ ${damage} · ปราณ ${chi}`};}
@@ -267,7 +270,10 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    if(song==='mend'&&hurt>=2){const f=make('finale',heroId,'บทสุดท้ายฟื้นทั้งทีม',`ทุกคนฟื้นทันที`);if(f)return f;}
    if(heavy&&(!song||song==='valor')){const d=make('dread',heroId,'เพลงสะท้านรับท่าหนัก',`ทุกท่าศัตรูเบาลง ${skillPower(data,heroId,'dread')}%`);if(d)return d;}
    if(song==='valor'&&strongest){const o=make('solo',strongest.id,'เพลงเดี่ยวให้ตัวตีหลัก',`${actorName(strongest.id,data)} ได้เพลงกล้า ×${SOLO_TIMES}`);if(o)return o;}
-   if(song==='valor'&&living.length>=2){const f=make('finale',heroId,'บทสุดท้ายปล่อยพลังเพลง',`ตัวละ ${skillPower(data,heroId,'finale')}`);if(f)return f;}
+   // Save v54: a finale grows with each round its song has played, so a valor finale waits until it has played 2 rounds (a dread
+   // finale after 2–3 rounds was tried: it cost a win in the tree sim, 10/10 → 9/10, so dread keeps playing).
+   const played=Math.min(NOTE_MAX_ROUNDS,state.round-(state.song?.since??state.round));
+   if(song==='valor'&&living.length>=2&&played>=2){const f=make('finale',heroId,'บทสุดท้ายปล่อยพลังเพลง',`ตัวละ ${Math.round(skillPower(data,heroId,'finale')*(100+played*FINALE_PER_ROUND)/100)}`);if(f)return f;}
    if(song){const n=make('note',pick('note').id,'โน้ตคมระหว่างเพลงเล่น',`พลัง ${skillPower(data,heroId,'note')}`);if(n)return n;}
   }
   return undefined;

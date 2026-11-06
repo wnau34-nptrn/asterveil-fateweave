@@ -25,7 +25,8 @@ for(const skill of skills)test(`song ${skill}: prepare on the caster, one peak l
   await page.clock.runFor(61);
   const at=await frames(page);
   expect(at.filter(f=>f===`${skill}_peak`)).toHaveLength(1);expect(at.some(f=>f.endsWith('_prepare'))).toBe(false);
-  expect(await page.evaluate(()=>window.songQA.rings())).toBe(0);
+  // Save v54: a solo also plays a note, so its real damage event draws the ordinary hit ring; songs, notes and finales paint their own hits.
+  expect(await page.evaluate(()=>window.songQA.rings())).toBe(skill==='solo'?turn.events.filter(e=>e.type==='damage'&&e.sourceId===turn.actorId).length:0);
   expect(at.filter(f=>f===`${skill}_settle`)).toHaveLength(settleCount[skill]);
   await page.locator('#skip-turn').click();await page.clock.runFor(700);
   expect(await frames(page)).toEqual([]);

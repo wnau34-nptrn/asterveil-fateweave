@@ -52,6 +52,6 @@ Every catalog character at ★1 and the map boss level; epic map-level main-stat
 | thiran | Saint | veil-frontier | 10 | 12/12 | 96.6% | 12.6 | {"a1":2,"a2y":1,"a3":1,"p1":1,"c1s":1,"c1":2,"b1":1} / communion, saintarc, sharewound |
 | lalin | Dancer | veil-frontier | 10 | 12/12 | 98.2% | 12.6 | {"b1":2,"b2x":1,"b3":1,"a1":2,"c1":2,"c1s":1} / cadence, duet, deepbeat |
 | wila | Dancer | veil-frontier | 10 | 12/12 | 98.2% | 12.6 | {"b1":2,"b2x":1,"b3":1,"a1":2,"c1":2,"c1s":1} / cadence, duet, deepbeat |
-| kael | Martial | veil-frontier | 10 | 12/12 | 94.1% | 12.6 | {"c1s":1,"c1":2,"c2y":1,"c3":1,"p1":1,"b1":2,"a1":1} / gatherfist, storedfist, perfectfist |
+| kael | Martial | veil-frontier | 10 | 12/12 | 93.9% | 12.6 | {"c1s":1,"c1":2,"c2y":1,"c3":1,"p1":1,"b1":2,"a1":1} / gatherfist, storedfist, perfectfist |
 | wynne | Hexer | veil-frontier | 10 | 12/12 | 99.7% | 12.6 | {"a1":2,"a2x":1,"a3":1,"b1":2,"c1":2,"c1s":1} / threadhex, lifetoll, wovenhex |
 | astrid | Seer | veil-frontier | 10 | 12/12 | 95.6% | 12.6 | {"a1":2,"a2x":1,"a3":1,"b1":2,"c1":2,"c1s":1} / deflectfate, crossing, starneedle |

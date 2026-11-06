@@ -4,7 +4,7 @@ import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } fr
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
-import { BEAT_MAX, braceStrikePower, CHARGE_EXPOSED, PIERCE_BEHIND, PIN_PERCENT, SHOVE_LOCK, SPEARWALL_MAX, SPEARWALL_STEP, DEEP_BEAT_LOW, ROUND_PAIR_BONUS, HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, CHALLENGE_GRUDGE_MAX, ROUSE_CUT, SANCTUARY_HEAL, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
+import { BEAT_MAX, braceStrikePower, CHARGE_EXPOSED, PIERCE_BEHIND, PIN_PERCENT, SHOVE_LOCK, SPEARWALL_MAX, SPEARWALL_STEP, DEEP_BEAT_LOW, ROUND_PAIR_BONUS, HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, CIRCLE_HP_PERCENT, SOLO_NOTE, FINALE_PER_ROUND, NOTE_MAX_ROUNDS, CHALLENGE_GRUDGE_MAX, ROUSE_CUT, SANCTUARY_HEAL, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 import type { IconName } from './icons';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -127,8 +127,8 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     tremor: `ปฐพีสั่น ศัตรูแถวหน้าทุกตัวโดน ${skill.power} แล้วท่าถัดไปเล็งผู้ใช้ ถ้าแถวหน้าว่างโดนแถวหลังแทน`,
     dread: `บรรเลงเพลงสะท้านค้างไว้ ทุกการโจมตีของศัตรูเบาลง ${songPower(data, heroId, 'dread')}% (เล่นได้ทีละเพลง เพลงอยู่จนเปลี่ยนเพลง ลิโอล้ม หรือจบศึก) บทสุดท้ายของเพลงนี้: เพื่อนทุกคนได้โล่ ${DREAD_FINALE}`,
     note: `โน้ตคม ${skill.power} พลังงาน เพิ่ม 3 ต่อรอบที่เพลงของผู้ใช้เล่นต่อเนื่อง สูงสุด 3 รอบ (+9)`,
-    solo: `เพลงเดี่ยว เลือกเพื่อน 1 คน ได้ผลเพลงที่ลิโอบรรเลงอยู่ ×${SOLO_TIMES} จนจบรอบถัดไป (เพลงกล้า = ตีแรงขึ้น · เพลงฟื้น = ฟื้นมากขึ้น) ต้องมีเพลงกล้าหรือเพลงฟื้นเล่นอยู่`,
-    finale: `จบเพลงที่บรรเลงอยู่แล้วปล่อยพลังทันที (เพลงสะท้าน = เพื่อนทุกคนได้โล่ ${DREAD_FINALE}): เพลงกล้า = โจมตีศัตรูทุกตัว ${skill.power} · เพลงฟื้น = ฟื้นเลือดทุกคน ${finaleHealPower(data, heroId)} ต้องมีเพลงของลิโอเล่นอยู่`,
+    solo: `เพลงเดี่ยว เลือกเพื่อน 1 คน ได้ผลเพลงที่ลิโอบรรเลงอยู่ ×${SOLO_TIMES} จนจบรอบถัดไป (เพลงกล้า = ตีแรงขึ้น · เพลงฟื้น = ฟื้นมากขึ้น) และลิโอดีดโน้ตใส่ศัตรูเลือดน้อยสุดที่ตีถึง ${SOLO_NOTE} ต้องมีเพลงกล้าหรือเพลงฟื้นเล่นอยู่`,
+    finale: `จบเพลงที่บรรเลงอยู่แล้วปล่อยพลังทันที (เพลงสะท้าน = เพื่อนทุกคนได้โล่ ${DREAD_FINALE}): เพลงกล้า = โจมตีศัตรูทุกตัว ${skill.power} · เพลงฟื้น = ฟื้นเลือดทุกคน ${finaleHealPower(data, heroId)} ต้องมีเพลงของลิโอเล่นอยู่ · แรงขึ้น ${FINALE_PER_ROUND}% ต่อรอบที่เพลงเล่นต่อเนื่อง สูงสุด ${NOTE_MAX_ROUNDS} รอบ (+${FINALE_PER_ROUND * NOTE_MAX_ROUNDS}%)`,
     saintstrike: `กายภาพ ${skill.power} เป้าเดียว แล้วแบ่งเลือดให้เพื่อนจากดาเมจที่ศัตรูเสียจริง`,
     communion: `กายภาพ ${skill.power} เป้าเดียว แปลงดาเมจที่ศัตรูเสียจริง ${saintRatioOf(data, heroId, action)}% เป็นเลือดให้เพื่อนที่มีสัดส่วนเลือดต่ำสุด`,
     saintarc: `กายภาพ ${skill.power} ใส่ศัตรูแถวหน้า ถ้าหน้าว่างโดนหลังแทน รวมดาเมจจริงก่อนแบ่งเลือดให้เพื่อน`,
@@ -144,8 +144,8 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     gatherfist: `กายภาพ ${skill.power} เป้าเดียว ทำเลือดศัตรูลดได้ สะสมปราณ 1`,
     releasefist: `จ่ายปราณทั้งหมด (ต้องมีอย่างน้อย 1) กายภาพ ${data.skills.releasefist.power} + ${RELEASE_PER_CHI} ต่อแต้ม · จ่าย 1/2/3 แต้ม = ${[1, 2, 3].map(n => releasePower(data, heroId, n)).join('/')}`,
     flowfist: `กายภาพ ${skill.power} เป้าเดียว ทำเลือดลดได้ สะสมปราณ 2 แทน 1`,
-    circlefist: `จ่ายปราณ 2 กายภาพ ${skill.power} ใส่ศัตรูแถวหน้าทุกตัว ถ้าหน้าว่างโดนหลังแทน`,
-    storedfist: `กายภาพ ${skill.power} เป้าเดียว ไม่สะสมและไม่จ่ายปราณที่มี`,
+    circlefist: `จ่ายปราณ 1 (ไม่มีปราณ: จ่ายเลือด ${CIRCLE_HP_PERCENT}% ของเลือดสูงสุดแทน) กายภาพ ${skill.power} ใส่ศัตรูแถวหน้าทุกตัว ถ้าหน้าว่างโดนหลังแทน`,
+    storedfist: `กายภาพ ${skill.power} เป้าเดียว ไม่สะสมและไม่จ่ายปราณที่มี · ปะทะท่า: ถ้าท่าถัดไปของเป้าเล็งเคล ท่านั้นเบาลงเท่าดาเมจที่หมัดทำได้จริง (เหลือแค่ส่วนต่าง)`,
     perfectfist: `จ่ายปราณ 3 กายภาพ ${skill.power} เป้าเดียว`,
     deflectfate: `พลังงาน ${skill.power} ใส่ศัตรูผู้โจมตี แล้วเลือกศัตรูอีกตัวเป็นผู้รับ ท่าโจมตีเป้าเดี่ยวครั้งถัดไปของมันในรอบนี้ลงที่ผู้รับแทน คงพลังและชนิดเดิม (ท่าหมู่/ชาร์จ/เปลี่ยนช่วง/ท่าไม้ตายขัดไม่ได้เบนไม่ได้)`,
     turncycle: `พลังงาน ${skill.power} เป้าเดียว ถ้าท่าถัดไปของเป้าเป็นท่าใหญ่ (ชาร์จ/หมู่/ไม้ตาย หรือแรงสุดในวงท่า) เลื่อนออกไป 1 รอบ: รอบนั้นใช้ท่าถัดไปในวงแทน ท่าใหญ่มารอบหน้า (ชาร์จเลื่อนพร้อมท่าแรงที่ตามมา) ศัตรูยังได้เทิร์นปกติ · ท่าเดิมเลื่อนซ้ำไม่ได้จนออกจริง · ท่าที่ถูกขัด/ถูกเบนรอบนั้นเลื่อนไม่ได้ · ท่าอื่นโดนพลังงานอย่างเดียว`,
@@ -457,6 +457,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'pin': return `${source}ตรึงแถวหน้า · แถวหน้าเลิกบังแถวหลังถึงจบรอบถัดไป`;
     case 'dispel': return `${target}ถูกสลายเวท · เกราะพลังงานปิดถึงจบรอบถัดไป`;
     case 'weaken': return `ท่าถัดไปของ${target}เบาลง ${event.amount}%`;
+    case 'clash': return `หมัดเก็บแรงปะทะท่าถัดไปของ${target} · ท่าที่เล็ง${source}เบาลง ${event.amount}`;
     case 'outcome': return after.outcome === 'victory' ? 'ชนะแล้ว! รอยแยกสงบลง' : 'แพ้แล้ว ลองจัดแผนใหม่';
   }
 }

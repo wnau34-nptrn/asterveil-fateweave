@@ -208,7 +208,10 @@ export const CHALLENGE_GRUDGE_MAX = 15; export const ROUSE_CUT = 20;
 // at 1 HP and heals SANCTUARY_HEAL at once. A blessing heals its power now and again as the next round begins.
 export const SANCTUARY_HEAL = 10;
 export const isDelayed = (enemy: EnemyState, round: number): boolean => Math.max(enemy.delayedRound ?? 0, enemy.delayedAlso ?? 0) >= round;
-export const GUARD_STONE_HEAL = 6; export const DREAD_FINALE = 10; export const SOLO_TIMES = 3; export const FURY_EXPOSED = 10;
+// Save v54: a solo doubles the song (was ×3) and Lio plays a SOLO_NOTE-power sharp note at the lowest-HP foe he can reach;
+// a finale is FINALE_PER_ROUND% stronger per round its song has played (as the sharp note counts them, at most NOTE_MAX_ROUNDS).
+export const SOLO_NOTE = 6; export const FINALE_PER_ROUND = 20;
+export const GUARD_STONE_HEAL = 6; export const DREAD_FINALE = 10; export const SOLO_TIMES = 2; export const FURY_EXPOSED = 10;
 // Alchemist chain reaction (capstone): a corroded foe that falls passes its corrosion to another standing foe of its row
 // (else any other standing foe).
 function chainReaction(state: BattleState, data: EncounterDefinition, foe: EnemyState, events: BattleEvent[]): void {
@@ -278,7 +281,10 @@ export const CHI_MAX = 3;
 export const RELEASE_PER_CHI = 8;
 export const chiOf = (state: BattleState, heroId: string): number => state.heroes.find(h => h.id === heroId)?.chi ?? 0;
 // What a skill spends: `all` = every point (at least one), otherwise a fixed amount.
-export const chiCost = (action: ActionId): number | 'all' => action === 'releasefist' ? 'all' : action === 'circlefist' ? 2 : action === 'perfectfist' ? 3 : 0;
+// Save v54: the circle fist costs 1 chi, or CIRCLE_HP_PERCENT of Kael's max HP when he has none (never below 1 HP).
+export const CIRCLE_HP_PERCENT = 10;
+export const chiCost = (action: ActionId): number | 'all' => action === 'releasefist' ? 'all' : action === 'circlefist' ? 1 : action === 'perfectfist' ? 3 : 0;
+export const circleHpCost = (data: EncounterDefinition, heroId: string): number => Math.ceil(data.heroes.find(h => h.id === heroId)!.maxHp * CIRCLE_HP_PERCENT / 100);
 export const CHI_SPENDERS: readonly ActionId[] = ['releasefist', 'circlefist', 'perfectfist'];
 // Power of a release paying `paid` chi: base plus the per-point power, both grown by Attack and the skill level.
 export function releasePower(data: EncounterDefinition, heroId: string, paid: number): number {
@@ -751,7 +757,9 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           // Reductions apply in order: Guard, a taunting warden (stoneskin ★5 is stronger), then a knight's rally.
           const strong = enraged(state, data, enemy.id) ? Math.ceil(intent.damage * (1 + data.rules.traits!.enragePercent / 100)) : intent.damage;
           // The alchemist's smoke weakens the foe's next move.
-          const weakened = enemy.weaken ? Math.ceil(strong * (1 - enemy.weaken / 100)) : strong;
+          const softened = enemy.weaken ? Math.ceil(strong * (1 - enemy.weaken / 100)) : strong;
+          // A martial clash (save v54) takes the stored fist's damage off the move aimed at Kael.
+          const weakened = enemy.clash?.heroId === recipient.id ? Math.max(0, softened - enemy.clash.amount) : softened;
           // Recruit trees: a song of dread cuts every move; a fury tonic leaves its drinker exposed.
           const dread = state.song?.action === 'dread' && living(state, state.song.heroId) ? songPower(data, state.song.heroId, 'dread') : 0;
           const quiet = dread ? Math.ceil(weakened * (1 - dread / 100)) : weakened;
@@ -837,7 +845,7 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
       }
       delete enemy.drawnBy;
     }
-    delete enemy.interruptedRound; delete enemy.interruptedBy; delete enemy.weaken;
+    delete enemy.interruptedRound; delete enemy.interruptedBy; delete enemy.weaken; delete enemy.clash;
     // A shoved foe (and its partner) return to their rows once its own next turn ends.
     if (enemy.shoved) { const partner = enemy.shoved.partnerId; delete enemy.shoved; events.push({ type: 'shove', targetId: enemy.id, text: 'Back in its row.' }); if (partner) events.push({ type: 'shove', targetId: partner, text: 'Back in its row.' }); }
     const frame = structuredClone(state); const beat = state.beat; const round = state.round;
@@ -904,6 +912,7 @@ export function actionReason(state: BattleState, data: EncounterDefinition, hero
   const remaining = (actor.cooldowns[action] ?? 0) - state.round;
   if (remaining > 0) return `Cooldown: ${remaining}`;
   const cost = chiCost(action);
+  if (action === 'circlefist' && !actor.chi) return actor.hp > circleHpCost(data, heroId) ? '' : 'Not enough HP to pay for it.';
   return cost && (actor.chi ?? 0) < (cost === 'all' ? 1 : cost) ? 'Not enough chi.' : '';
 }
 export function targetOptions(state: BattleState, data: EncounterDefinition, heroId: string, action: ActionId): TargetOption[] {
@@ -1237,11 +1246,22 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       break;
     case 'gatherfist': damage(skill.power + (chiBefore === 0 ? capAmount(data, hero.id, 'kael1') : 0)); break;
     case 'flowfist': damage(skill.power + (chiBefore === 0 ? capAmount(data, hero.id, 'martialFlowZero') : 0)); break;
-    case 'storedfist':
-      damage(skill.power + (chiBefore === CHI_MAX ? capAmount(data, hero.id, 'martialStoredFull') : 0) - capAmount(data, hero.id, 'martialStoredBuild')); break;
+    case 'storedfist': {
+      // Save v54 clash: when the target's next move aims at Kael, the fist's real damage comes off that move.
+      const next = nextIntent(); const before = directDamage;
+      damage(skill.power + (chiBefore === CHI_MAX ? capAmount(data, hero.id, 'martialStoredFull') : 0) - capAmount(data, hero.id, 'martialStoredBuild'));
+      const dealt = directDamage - before;
+      if (enemy!.hp > 0 && dealt > 0 && next && !next.all && next.targetId === hero.id) {
+        enemy!.clash = { heroId: hero.id, amount: dealt };
+        events.push({ type: 'clash', sourceId: hero.id, targetId: enemy!.id, amount: Math.min(dealt, next.damage), text: 'The fist meets the move.' });
+      }
+      break;
+    }
     case 'releasefist': damage(releasePower(data, hero.id, chiBefore)); break;
     case 'perfectfist': damage(skill.power + capAmount(data, hero.id, 'martialPerfectHeavy') + capAmount(data, hero.id, 'kael4')); break;
     case 'circlefist': {
+      // Save v54: with no chi, Kael pays in HP instead.
+      if (!chiBefore) { const cost = circleHpCost(data, hero.id); actor.hp -= cost; events.push({ type: 'damage', sourceId: hero.id, targetId: hero.id, amount: cost, text: 'Kael pays in blood.' }); }
       const foes = state.enemies.filter(e => e.hp > 0); const front = foes.filter(e => row(e.id) === 'front');
       const power = skill.power + (front.length >= 2 ? capAmount(data, hero.id, 'martialCircleCrowd') : 0);
       for (const foe of front.length ? front : foes) strike(foe, power, 'Circle fist.');
@@ -1413,7 +1433,10 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     }
     case 'solo': {
       const ally = state.heroes.find(h => h.id === command.targetId)!; ally.solo = { heroId: hero.id, round: state.round + 1 };
-      events.push({ type: 'buff', sourceId: hero.id, targetId: ally.id, amount: SOLO_TIMES, text: 'Solo.' }); break;
+      events.push({ type: 'buff', sourceId: hero.id, targetId: ally.id, amount: SOLO_TIMES, text: 'Solo.' });
+      const foe = targetOptions(state, data, hero.id, 'attack').filter(t => t.valid).map(t => state.enemies.find(e => e.id === t.id)!).sort((a, b) => a.hp - b.hp || a.id.localeCompare(b.id))[0];
+      if (foe) strike(foe, SOLO_NOTE, 'The solo carries a sharp note.');
+      break;
     }
     case 'finisher': {
       const maxHp = data.enemies.find(e => e.id === enemy!.id)!.maxHp;
@@ -1478,12 +1501,14 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'finale': {
       // The song ends and is released at once: valor strikes every enemy, mending heals every ally, dread cuts every
       // enemy's next move. An encore (capstone) plays the same song again at once, once per battle.
+      // Save v54: the longer the song has played, the stronger its finale.
+      const rounds = Math.min(NOTE_MAX_ROUNDS, state.round - (state.song!.since ?? state.round)); const grown = (n: number) => Math.round(n * (100 + rounds * FINALE_PER_ROUND) / 100);
       const song = state.song!.action; state.song = null;
       events.push({ type: 'finale', sourceId: hero.id, targetId: hero.id, text: song === 'valor' ? 'Finale of valor.' : song === 'mend' ? 'Finale of mending.' : 'Finale of dread.' });
-      if (song === 'valor') for (const foe of state.enemies.filter(e => e.hp > 0)) strike(foe, skill.power, 'The finale strikes every enemy.');
-      else if (song === 'dread') for (const ally of state.heroes) barrier(ally, DREAD_FINALE);
+      if (song === 'valor') for (const foe of state.enemies.filter(e => e.hp > 0)) strike(foe, grown(skill.power), 'The finale strikes every enemy.');
+      else if (song === 'dread') for (const ally of state.heroes) barrier(ally, grown(DREAD_FINALE));
       else {
-        const power = finaleHealPower(data, hero.id);
+        const power = grown(finaleHealPower(data, hero.id));
         for (const h of state.heroes) heal(h.id, power);
       }
       if (hasCap(data, hero.id, 'encore') && !state.encored?.includes(hero.id)) {
@@ -1607,7 +1632,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   if (hero.role === 'Martial') {
     const cost = chiCost(command.action); const paid = cost === 'all' ? chiBefore : cost;
     const locked = !!actor.chiLocked; delete actor.chiLocked;
-    let chi = chiBefore - paid;
+    let chi = chiBefore - Math.min(chiBefore, paid);
     if (directDamage > 0 && !paid && !locked && (command.action !== 'storedfist' || hasCap(data, hero.id, 'martialStoredBuild'))) {
       chi += 1 + (command.action === 'flowfist' ? 1 : 0) + (command.action === 'gatherfist' && chiBefore === 0 && hasCap(data, hero.id, 'martialGatherChi') ? 1 : 0);
     }

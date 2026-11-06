@@ -168,6 +168,8 @@ export interface HeroState { id: string; hp: number; barrier: number; cooldowns:
 // `interruptedBy`: the hero whose Bash/Sigil cancelled that turn. `weaken`: its next move is cut by this percent
 // (archer heavy hinder). `dispelledUntil`: a mage's dispel switches off its veilguard while the round is below this.
 export interface EnemyState { id: string; hp: number; markedUntil: number; absent?: boolean; phase?: number; phaseRound?: number; interruptedRound?: number; interruptedBy?: string; steadyRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number;
+  // `clash`: a martial stored fist (save v54) takes `amount` off this foe's next hit on that hero.
+  clash?: { heroId: string; amount: number };
   weaken?: number; dispelledUntil?: number; delayedAlso?: number; drawnBy?: { heroId: string; round: number };
   // P03 Hexer curses: stacks (1–3) per hexer, ticking as each round up to `until` ends (a pull ticks one at once). `threaded`: hexers whose first-thread
   // bonus (Wynne p1) this foe has already received.
@@ -253,7 +255,7 @@ export interface BattleState {
 export type SongId = 'valor' | 'mend' | 'dread';
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge'
-    | 'parry' | 'revive' | 'buff' | 'shove' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'deflect' | 'dial' | 'meteor' | 'beat';
+    | 'parry' | 'revive' | 'buff' | 'shove' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'deflect' | 'dial' | 'meteor' | 'beat' | 'clash';
   text: string; sourceId?: string; targetId?: string; action?: ActionId; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

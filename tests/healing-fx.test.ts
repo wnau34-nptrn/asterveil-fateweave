@@ -63,7 +63,9 @@ describe('painted healing follows actual resolver events', () => {
     const ticks = f.turns.flatMap(healingCues).filter(c => c.kind === 'tick');
     const solo = f.turns.find(t => t.action === 'solo')!;
     const boosted = ticks.filter(c => c.targetId === solo.targetId);
-    expect(boosted.some(c => c.event.amount! >= 15)).toBe(true);
+    // Save v54: the solo doubles the song for its ally, so its real tick is larger than any other ally's.
+    const plain = ticks.filter(c => c.targetId !== solo.targetId);
+    expect(Math.max(...boosted.map(c => c.event.amount!))).toBeGreaterThan(Math.max(...plain.map(c => c.event.amount!)));
   });
   for (const skill of ['bless', 'mend'] as const) it(`${skill} does not heal after its source falls`, () => {
     const f = healingFixture(skill, 'source-down');
