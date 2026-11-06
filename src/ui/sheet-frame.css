@@ -57,8 +57,8 @@
 #app .character-dialog .info-header h2 { flex: 1 1 auto; min-width: 0; margin: 0; text-align: left;
   font: var(--weight-heading) var(--sheet-title-size)/1.3 var(--font-heading); color: var(--sheet-title-color); overflow-wrap: anywhere; }
 #app .character-dialog .info-header > button { flex: 0 0 var(--sheet-head-button); width: var(--sheet-head-button); height: var(--sheet-head-button); min-height: var(--sheet-head-button); padding: 0; border-radius: 50%; }
-#app .character-dialog :is(.doll-slot b, .tile-lv, .tile-plus, .tree-lv, .talent-node i, .swap-list small, .tree-legend) { font-size: 12px; }
-#app .character-dialog .character-content :is(i, small) { font-size: max(1em, 12px); }
+/* Gear tab text floor only. (The skill tree keeps its original sizes: an earlier generic `max(1em, 12px)` rule here read 1em as the parent's size and enlarged every small label in the tree.) */
+#app .character-dialog :is(.doll-slot b, .tile-lv, .tile-plus, .swap-list small) { font-size: 12px; }
 /* Character window buttons use the same primary/secondary plates as the sheets (shape only; positions unchanged). */
 #app .character-dialog button.primary { min-height: var(--button-primary-h); border-radius: var(--button-radius); font: var(--button-primary-font); }
 #app .character-dialog button.primary:not(:disabled) { color: var(--text-on-gold); background: var(--primary-plate); border: 1px solid var(--primary-plate-edge); box-shadow: var(--primary-plate-shadow); }

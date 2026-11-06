@@ -5,8 +5,13 @@
 .skills-equipped h3 {font-size:15px;margin:0}
 .skills-equipped .camp-note {margin:8px 0 0;font-size:12px}
 .skills-slots {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.skills-slots button {display:flex;flex-direction:column;min-height:60px;padding:6px;font-size:12px;line-height:1.4;white-space:normal;overflow-wrap:anywhere}
-.skills-slots svg {width:26px;height:26px}
+/* Equipped skills: the painted icon is the hero of each slot (owner polish 2026-11-06). */
+.skills-slots button {display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;min-height:112px;padding:12px 6px 10px;text-align:center;font-size:13px;font-weight:600;line-height:1.35;white-space:normal;overflow-wrap:anywhere;border-radius:14px;background:radial-gradient(ellipse at 50% 30%,#2b4d68cc,#15293c 72%);border:1px solid #e8f5ff33}
+#app .skills-slots button > .icon.skill-art {display:block;flex:0 0 auto;width:56px;height:56px;margin:0;vertical-align:baseline;filter:drop-shadow(0 0 9px #74d4ef66) drop-shadow(0 2px 2px #000b)}
+.skills-slots button > svg {width:44px;height:44px}
+.skills-slots button[aria-pressed=true] {border-color:#f2d596;background:radial-gradient(ellipse at 50% 30%,#4a4a3acc,#1d2b3a 72%);box-shadow:0 0 14px #f2d59655,inset 0 0 0 1px #f2d59644;color:var(--gold-light,#f2d596)}
+#app .skills-slots button[aria-pressed=true] > .icon.skill-art {filter:drop-shadow(0 0 11px #f2d596aa) drop-shadow(0 2px 2px #000b)}
+.skills-slot-empty {display:grid;place-items:center;min-height:112px;border:1.5px dashed #e8f5ff33;border-radius:14px;color:#8597aa;font-size:12px}
 .skills-picker {display:grid;gap:5px;font-size:13px}
 .skills-picker select {width:100%;min-height:44px}
 .skills-sections {display:grid;grid-template-columns:1.5fr 1fr .8fr;gap:5px}
@@ -32,7 +37,7 @@
  .character-dialog .skills-equipped {padding:8px}
  .skills-equipped .camp-note {display:none}
  .skills-page {gap:8px}
- .skills-slots button {min-height:52px}
+ .skills-slots button {min-height:96px}#app .skills-slots button > .icon.skill-art {width:44px;height:44px}.skills-slot-empty {min-height:96px}
 }
 .skills-picker select {background:#142537;color:#f3f6fc;border:1px solid #71899d;border-radius:10px;font:inherit;padding:8px}
 .skills-slots .skill-art {display:block;width:28px;height:28px;flex:0 0 28px}
@@ -42,7 +47,7 @@
 .skills-section .character-skills p,.skills-section .character-skills small {font-size:13px;line-height:1.6}
 .skill-review-page .star-ledger th {white-space:normal;padding:12px 2px}
 @container game (max-height:700px) {
- .skills-slots button {flex-direction:row;align-items:center;gap:5px;min-height:44px}
+ .skills-slots button {flex-direction:column;align-items:center;gap:3px;min-height:82px;padding:8px 3px 6px;font-size:12px}#app .skills-slots button > .icon.skill-art {width:40px;height:40px}.skills-slot-empty {min-height:82px}
  .skills-equipped {padding:6px}
  .skills-equipped .loadout-head {margin-bottom:5px}
  .skills-picker {gap:3px}
