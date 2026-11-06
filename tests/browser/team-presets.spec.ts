@@ -9,7 +9,7 @@ import { xpAt } from '../fixtures/camp-level';
 import { currentSave } from '../fixtures/current-save';
 import { watchPage } from './diagnostics';
 
-// Team presets (owner 2026-11-06, save v55): save at the camp with one tap, switch the whole team with one tap, quick
+// Team presets (owner 2026-11-06, save v56): save at the camp with one tap, switch the whole team with one tap, quick
 // moves from the member panel, and switching on the map among the members brought (outside battle only).
 const key = 'asterveil.fateweave.expedition.v1';
 const ids = ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'sefa', 'brann', 'lio'];

@@ -368,7 +368,7 @@ export interface Profile {
   tomes?: TomeBag; riftCore?: number;
   // Unequipped items (≤ upgraded storage capacity), persistent pending rewards and the next uid.
   overflow?:Item[]; storageTier?:number;
-  // Team presets (owner 2026-11-06, save v55): up to PRESET_SLOTS saved line-ups, `null` an empty slot; missing = none.
+  // Team presets (owner 2026-11-06, save v56): up to PRESET_SLOTS saved line-ups, `null` an empty slot; missing = none.
   presets?: (TeamPreset | null)[];
   items: Item[]; nextItem: number;
   // Forge rolls used so far (fuse and reroll draw from (seed, forge)).

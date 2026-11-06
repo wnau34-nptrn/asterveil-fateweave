@@ -11,7 +11,7 @@ import { applyPreset, applyRunPreset, campPresetPlan, clearPreset, matchesPreset
 import { PRESET_SLOTS, type ExpeditionState, type Profile } from '../src/core/world/types';
 import { currentSave } from './fixtures/current-save';
 
-// Team presets (owner 2026-11-06, save v55; four slots and twelve-character names are drafts).
+// Team presets (owner 2026-11-06, save v56; four slots and twelve-character names are drafts).
 const rec = recommendedLane(lookup, map);
 const ids = ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'brann', 'lio', 'metta', 'lalin'];
 const company = (cleared: string[] = ['ruined-border', 'deep-forest', 'veil-frontier']): Profile => ({
@@ -114,12 +114,12 @@ describe('team presets on the map', () => {
   });
 });
 
-describe('save v55 team presets', () => {
+describe('save v56 team presets', () => {
   it('round-trips presets with a run; an older profile has none; forged presets are rejected', () => {
     const { p, s } = (() => { const x = savePreset(company(), map, lookup, 1, 'สายรับ').profile; return { p: x, s: depart(x, map, lookup, 9).run }; })();
-    const raw = write({ profile: p, run: s }); expect(JSON.parse(raw).version).toBe(55);
+    const raw = write({ profile: p, run: s }); expect(JSON.parse(raw).version).toBe(56);
     expect(parseGame(raw, map, lookup, MAPS)).toEqual({ profile: p, run: s });
-    const old = JSON.parse(raw); old.version = 54; delete old.profile.presets; expect(parseGame(JSON.stringify(old), map, lookup, MAPS).profile.presets).toBeUndefined();
+    const old = JSON.parse(raw); old.version = 55; delete old.profile.presets; expect(parseGame(JSON.stringify(old), map, lookup, MAPS).profile.presets).toBeUndefined();
     const forged = (f: (j: { profile: { presets: unknown[] } }) => void) => { const j = JSON.parse(raw); f(j); return () => parseGame(JSON.stringify(j), map, lookup, MAPS); };
     expect(forged(j => { (j.profile.presets[1] as { deployed: string[] }).deployed.push('kael'); })).toThrow();
     expect(forged(j => { (j.profile.presets[1] as { deployed: string[] }).deployed = []; })).toThrow();

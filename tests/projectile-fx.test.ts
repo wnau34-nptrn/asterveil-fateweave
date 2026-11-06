@@ -34,15 +34,21 @@ describe('projectile art follows resolved events without new strikes',()=>{
     expect(follow[0]!.event).toMatchObject({type:'counter',text:'Tracking shot.',sourceId:delayed.actor.id,targetId:'f1'});
     expect(delayed.turns.find(t=>t.events.includes(follow[0]!.event))!.actorId).not.toBe(delayed.actor.id);
   });
-  for(const scenario of ['targetdown','sourcedown'])it(`tracking has no followup after ${scenario}`,()=>{
-    const f=projectileFixture('track',scenario);expect(f.turns.some(t=>t.events.some(e=>e.type==='down'))).toBe(true);
+  it('tracking has no followup after its source is down',()=>{
+    const f=projectileFixture('track','sourcedown');expect(f.turns.some(t=>t.events.some(e=>e.type==='down'))).toBe(true);
     expect(f.turns.flatMap(projectileCues).filter(c=>c.kind==='followup')).toEqual([]);
+  });
+  it('save v55: after its first target is down, the tracking followup bounces to the real weakest foe',()=>{
+    const f=projectileFixture('track','targetdown');expect(f.turns.some(t=>t.events.some(e=>e.type==='down'&&e.targetId==='f1'))).toBe(true);
+    const follow=f.turns.flatMap(projectileCues).filter(c=>c.kind==='followup');
+    expect(follow).toHaveLength(1);expect(follow[0]!.event.text).toBe('Tracking shot.');expect(follow[0]!.targetId).not.toBe('f1');
   });
   it('weakshot bonus and disengage queue changes remain authoritative, without extra visual hits',()=>{
     const plain=projectileFixture('weakshot'),delayed=projectileFixture('weakshot','delayed');
     expect(projectileCues(delayed.turn)[0]!.event.amount).toBeGreaterThan(projectileCues(plain.turn)[0]!.event.amount!);
     const f=projectileFixture('disengage','quickstep');expect(projectileCues(f.turn)).toHaveLength(1);
-    expect(f.turn.events.filter(e=>e.type==='delay')).toHaveLength(2);expect(f.turn.events.some(e=>e.type==='dodge')).toBe(false);
+    // Save v55: no queue change of its own; quickstep still delays next round, and Mira falls back (an evade, no dodge yet).
+    expect(f.turn.events.filter(e=>e.type==='delay')).toHaveLength(1);expect(f.turn.events.filter(e=>e.type==='evade')).toHaveLength(1);expect(f.turn.events.some(e=>e.type==='dodge')).toBe(false);
   });
   it('contract: cancellation suppresses cast, unrelated thorns/counters do not become projectiles',()=>{
     const f=projectileFixture('hinder');

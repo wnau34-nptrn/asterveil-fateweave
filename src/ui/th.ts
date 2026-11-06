@@ -4,7 +4,7 @@ import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } fr
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
-import { BEAT_MAX, braceStrikePower, CHARGE_EXPOSED, PIERCE_BEHIND, PIN_PERCENT, SHOVE_LOCK, SPEARWALL_MAX, SPEARWALL_STEP, DEEP_BEAT_LOW, ROUND_PAIR_BONUS, HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, CIRCLE_HP_PERCENT, SOLO_NOTE, FINALE_PER_ROUND, NOTE_MAX_ROUNDS, CHALLENGE_GRUDGE_MAX, ROUSE_CUT, SANCTUARY_HEAL, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
+import { BEAT_MAX, braceStrikePower, CHARGE_EXPOSED, PIERCE_BEHIND, PIN_PERCENT, SHOVE_LOCK, SPEARWALL_MAX, SPEARWALL_STEP, DEEP_BEAT_LOW, ROUND_PAIR_BONUS, HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, SLAM_GRUDGE, SLAM_GRUDGE_MAX, AEGIS_SHARD, ARCANE_MAX, DISPEL_PER_CHARGE, CIRCLE_HP_PERCENT, SOLO_NOTE, FINALE_PER_ROUND, NOTE_MAX_ROUNDS, CHALLENGE_GRUDGE_MAX, ROUSE_CUT, SANCTUARY_HEAL, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 import type { IconName } from './icons';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -85,7 +85,7 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     ambush: `จู่โจม ${skill.power} หรือ ${skill.power + ambushBonusOf(data, heroId)} ถ้าเป้าหมายยังไม่ได้ลงมือในรอบนี้ (ดูคิว SPD) ใช้ได้ดีกับศัตรูที่ช้ากว่า`,
     evade: `ก้าวเงาเตรียมหลบ การโจมตีของศัตรูครั้งแรกที่โดนเซฟา (กายภาพหรือพลังงาน) จะพลาดทั้งหมด อยู่จนหลบแล้วหรือถึงเทิร์นของตัวเองอีกครั้ง`,
     taunt: `ยั่วยุศัตรูทุกตัว ตั้งแต่ตอนนี้จนถึงเทิร์นถัดไปของแบรนน์ การโจมตีของศัตรูทุกครั้ง (กายภาพหรือพลังงาน) จะเล็งมาที่แบรนน์ และเขารับเบาลง ${Math.round(tauntReductionOf(data, heroId) * 100)}% แผนโจมตีศัตรูจะแสดงเป้าใหม่ทันที`,
-    slam: `ทุบค้อนรูน ${skill.power} หรือ ${skill.power + data.rules.quakeBonus} ถ้าท่าถัดไปของเป้าหมายเล็งผู้ใช้`,
+    slam: `ทุบค้อนรูน ${skill.power} หรือ ${skill.power + data.rules.quakeBonus} ถ้าท่าถัดไปของเป้าหมายเล็งผู้ใช้ · แค้นสะสม: +${SLAM_GRUDGE}% ของดาเมจที่แบรนน์รับตั้งแต่คำสั่งก่อน (สูงสุด +${SLAM_GRUDGE_MAX})`,
     valor: `บรรเลงเพลงกล้าค้างไว้ ทุกการโจมตีของทีมแรงขึ้น +${songPower(data, heroId, 'valor')} (รวมสกิลและการสวน) จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
     mend: `บรรเลงเพลงฟื้นค้างไว้ ทุกคนที่ยังยืนอยู่ฟื้นเลือด ${songPower(data, heroId, 'mend')} เมื่อเริ่มแต่ละรอบใหม่ จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
     haste: `ให้ยาเร่งเพื่อนที่ยังยืนอยู่ 1 คน: ถ้ายังไม่ได้ลงมือในรอบนี้ ได้ลงมือต่อจากโทมะทันที ถ้าลงมือไปแล้ว (หรือให้ตัวเอง) ได้ลงมือก่อนทุกคนในรอบถัดไป · ส่งไม้: การลงมือครั้งนั้นแรงขึ้น ${HASTE_BATON}% (ดาเมจ รักษา และโล่) ไม่เพิ่มเทิร์น แค่เปลี่ยนลำดับ`,
@@ -105,17 +105,17 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     lunge: `พุ่งตัด ${skill.power} หรือ ${skill.power + data.rules.markedBonus} เมื่อเป้าหมายติดตรา (ใช้ตราหมด) ตีทะลุแถวหน้าถึงแถวหลังได้`,
     sweep: `ฟันกวาดศัตรูแถวหน้าทุกตัว ตัวละ ${skill.power} ถ้าแถวหน้าว่างโดนแถวหลังแทน แล้วติดตราเป้าที่เหลือเลือดน้อยสุดในแถวที่โดน`,
     storm: `พายุเวทโจมตีศัตรูทุกตัว ตัวละ ${skill.power} (พลังงาน)`,
-    aegis: `เกราะผลึก เพื่อนทุกคนที่ยังยืนอยู่ได้โล่ ${skill.power} ไม่ซ้อนกับโล่ที่หนากว่า`,
-    dispel: `สลายเวท ${skill.power} ลบไม่หวั่นไหวของบอส และปิดเกราะพลังงานถึงจบรอบถัดไป ท่าไม้ตายที่ขัดไม่ได้ยังขัดไม่ได้`,
+    aegis: `เกราะผลึก เพื่อนทุกคนที่ยังยืนอยู่ได้โล่ ${skill.power} ไม่ซ้อนกับโล่ที่หนากว่า · ใครโล่แตกหมด ศัตรูที่ตีแตกโดนสะท้อน ${AEGIS_SHARD}`,
+    dispel: `ปลดพลังเวท: ทุกครั้งที่ศรเวทโดนเป้า ไอราได้ประจุเวท 1 (สูงสุด ${ARCANE_MAX}) ท่านี้ใช้ประจุทั้งหมด ยิงพลังงาน ${skill.power} + ${DISPEL_PER_CHARGE} ต่อประจุ ตีถึงแถวหลังแม้แถวหน้าบัง`,
     revive: `ชุบเพื่อนที่ล้มในศึกนี้กลับมาด้วยเลือด ${skill.power}% ของเลือดสูงสุด ใช้ได้ 1 ครั้งต่อศึก คนที่ฟื้นได้เทิร์นตั้งแต่รอบถัดไป`,
     halo: `วงแสงคุ้มกัน จนถึงเทิร์นถัดไปของเซเรน ทุกคนรับความเสียหายพลังงานลดลง ${skill.power}%`,
     bless: `พรต่อเนื่อง เพื่อนที่ยังยืน 1 คน (รวมตัวเอง) ฟื้นเลือด ${skill.power} ทันที และอีก ${skill.power} ตอนเริ่มรอบถัดไป (ส่วนหลังหมดถ้าผู้ใช้ล้ม)`,
     hold: `ปักทวนตรึง ${skill.power + capAmount(data, heroId, 'holdcounter')} และท่าถัดไปของเป้าเบาลง ${PIN_PERCENT + capAmount(data, heroId, 'holdfirm')}%`,
     halt: `แทง ${skill.power} แล้วผลักศัตรูแถวหน้าไปแถวหลัง ตัวแถวหลังในคอลัมน์เดียวกันมาแทน จนจบเทิร์นถัดไปของตัวที่ถูกผลัก แล้วกลับที่เดิม · ผลักตัวเดิมซ้ำไม่ได้ ${SHOVE_LOCK} รอบ บอสและตัวใหญ่ไม่ถูกผลัก`,
     warcry: `พุ่งหอก ${skill.power} ตีถึงแถวหลังแม้แถวหน้าบัง แต่การ์แรนรับความเสียหายเพิ่ม ${CHARGE_EXPOSED}% จนถึงเทิร์นถัดไป`,
-    disengage: `ยิงถอยคิว ${skill.power} ถ้าเป้ายังไม่ได้ลงมือรอบนี้ ย้ายไปท้ายคิวรอบนี้ ไม่เพิ่มหรือลดเทิร์น`,
+    disengage: `ยิงถอยหลัง ${skill.power} แล้วมิราหลบท่ากายภาพครั้งแรกที่โดน จนถึงเทิร์นถัดไปของเธอ (ท่าพลังงานยังโดน)`,
     pin: `ศรตรึงแถว ศัตรูแถวหน้าทุกตัวโดนตัวละ ${skill.power} และแถวหน้าเลิกบังแถวหลังถึงจบรอบถัดไป ทั้งทีมตีแถวหลังได้`,
-    track: `ศรตามรอย ${skill.power} ถ้าเป้าหมายถูกยิงสกัดอยู่ จะยิงซ้ำอีก ${skill.power} ตอนจบรอบ`,
+    track: `ศรตามรอย ${skill.power} ถ้าเป้าหมายถูกยิงสกัดอยู่ จะยิงซ้ำอีก ${skill.power} ตอนจบรอบ ใส่ศัตรูที่เลือดน้อยสุดในตอนนั้น (แม้เป้าแรกล้มไปแล้ว)`,
     smoke: `ขวดควัน ท่าถัดไปของเป้าหมายเบาลง ${skill.power}% ไม่ว่ากายภาพหรือพลังงาน (ลดได้แต่ไม่ยกเลิก ใช้กับท่าไม้ตายบอสได้) · ถ้าเป้าหมายติดกรดอยู่แล้ว ควันลามไปศัตรูข้าง ๆ ในแถวเดียวกัน เบาลง ${Math.round(skill.power / 2)}%`,
     fury: `ยาคลั่ง เพื่อน 1 คน (รวมตัวเอง) โจมตีแรงขึ้น ${skill.power}% จนจบรอบถัดไป แต่รับความเสียหายเพิ่ม ${FURY_EXPOSED}% ในช่วงเดียวกัน`,
     catalyst: `ตัวเร่งปฏิกิริยา ${skill.power} ถ้าเป้าหมายถูกกัดกร่อนอยู่ กรดทำงานทันทีหนึ่งรอบ +${CATALYST_PER_ROUND} (กรดยังอยู่ ไม่ล้าง) และกระเด็น ${CATALYST_SPLASH}% ไปศัตรูข้าง ๆ ในแถวเดียวกัน`,
@@ -305,8 +305,8 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   unyielding: { actions: ['warcry'], help: () => 'ครั้งแรกในศึกที่จะล้มระหว่างพุ่งหอก เหลือเลือด 1' },
   heavyhinder: { actions: ['hinder'], help: () => `ยิงสกัดเลื่อนเป้าไปท้ายคิว 2 รอบถัดไป` },
   chase: { actions: ['hinder'], help: () => 'ล้มศัตรูได้แล้วยิงสกัดพร้อมใช้ทันที' },
-  quickstep: { actions: ['disengage'], help: () => 'ยิงถอยคิวแล้วเป้าหมายถูกสกัดด้วย (ลงมือท้ายสุดรอบถัดไป)' },
-  covershot: { actions: ['disengage'], help: n => `ยิงถอยคิวแรงขึ้น +${n} ถ้าท่าถัดไปของเป้าเล็งเพื่อนคนอื่น` },
+  quickstep: { actions: ['disengage'], help: () => 'ยิงถอยหลังแล้วเป้าหมายถูกสกัดด้วย (ลงมือท้ายสุดรอบถัดไป)' },
+  covershot: { actions: ['disengage'], help: n => `ยิงถอยหลังแรงขึ้น +${n} ถ้าท่าถัดไปของเป้าเล็งเพื่อนคนอื่น` },
   stalker: { actions: [], help: () => 'เริ่มศึก ศัตรูที่เร็วที่สุดถูกสกัดให้ลงมือท้ายสุดในรอบแรก' },
   smokepoison: { actions: ['smoke'], help: () => 'ขวดควันทำให้เป้าหมายถูกกัดกร่อนด้วย' },
   smokewide: { actions: ['smoke'], help: n => `ขวดควันโดนศัตรูทั้งแถวของเป้าหมาย แต่เบาลงแค่ ${n}%` },
@@ -457,6 +457,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'pin': return `${source}ตรึงแถวหน้า · แถวหน้าเลิกบังแถวหลังถึงจบรอบถัดไป`;
     case 'dispel': return `${target}ถูกสลายเวท · เกราะพลังงานปิดถึงจบรอบถัดไป`;
     case 'weaken': return `ท่าถัดไปของ${target}เบาลง ${event.amount}%`;
+    case 'arcane': return (event.amount ?? 0) > 0 ? `${source}ได้ประจุเวท 1` : `${source}ปลดประจุเวท ${-(event.amount ?? 0)}`;
     case 'clash': return `หมัดเก็บแรงปะทะท่าถัดไปของ${target} · ท่าที่เล็ง${source}เบาลง ${event.amount}`;
     case 'outcome': return after.outcome === 'victory' ? 'ชนะแล้ว! รอยแยกสงบลง' : 'แพ้แล้ว ลองจัดแผนใหม่';
   }

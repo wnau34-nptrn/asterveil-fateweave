@@ -3,7 +3,7 @@ import { reserveSlots } from './profile';
 import { canManage, recommendedLane, reserveCap, rosterIds, type EncounterLookup } from './world';
 import { PARTY_SLOTS, PRESET_NAME_MAX, PRESET_SLOTS, type ExpeditionState, type MapDefinition, type Profile, type ProfileResult, type Roster, type TeamPreset, type WorldResult } from './types';
 
-// Team presets (owner 2026-11-06, save v55; slot count and name length are drafts). A preset is a saved line-up:
+// Team presets (owner 2026-11-06, save v56; slot count and name length are drafts). A preset is a saved line-up:
 // field order, reserve and the column each fielded member stood in. Applying one is the same as doing the existing
 // one-at-a-time moves by hand: at the camp it rearranges `profile.party` within the reserve the camp has unlocked; on
 // the map (outside battle only) it rearranges the members this run brought. Nothing else changes: formation keeps

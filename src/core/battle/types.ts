@@ -145,6 +145,11 @@ export interface HeroState { id: string; hp: number; barrier: number; cooldowns:
   grudge?: { enemyId: string; amount: number };
   // Priest sanctuary (save v53): lasting for the battle; the first downing hit leaves 1 HP and heals, then it is spent.
   sanctum?: { heroId: string };
+  // Mage (save v55): `shard` = a crystal aegis barrier that strikes back `amount` at the foe that breaks it; `arcane` =
+  // Eira's arcane charges (0–ARCANE_MAX) from bolts that landed, spent by the arcane release.
+  shard?: { heroId: string; amount: number }; arcane?: number;
+  // Warden (save v55): damage taken since his last command, for the rune slam.
+  bruise?: number;
   // Dancer rework (save v48): `beats` a dancer's beats (0–BEAT_MAX); `echo` the dancer bound to this ally by duet (her
   // echo follows its next skill up to `until`);
   // `quickened` skills a dance already quickened since their last use, `quickenedBattle` the once-per-battle ones.
@@ -255,7 +260,7 @@ export interface BattleState {
 export type SongId = 'valor' | 'mend' | 'dread';
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge'
-    | 'parry' | 'revive' | 'buff' | 'shove' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'deflect' | 'dial' | 'meteor' | 'beat' | 'clash';
+    | 'parry' | 'revive' | 'buff' | 'shove' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'deflect' | 'dial' | 'meteor' | 'beat' | 'clash' | 'arcane';
   text: string; sourceId?: string; targetId?: string; action?: ActionId; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

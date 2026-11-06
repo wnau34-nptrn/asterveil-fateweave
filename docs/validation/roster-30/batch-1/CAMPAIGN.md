@@ -71,7 +71,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | ซากชายแดน | boss | 12 | 100% | 68 | 71 |
 | ซากชายแดน | boss:attack | 12 | 0% | – | – |
 | ซากชายแดน | boss:under2 | 12 | 100% | – | – |
-| ซากชายแดน | random | 69 | 100% | 84 | 84 |
+| ซากชายแดน | random | 69 | 100% | 84 | 85 |
 | ซากชายแดน | tutorial | 12 | 100% | 85 | 100 |
 | เส้นทางป่าทึบ | boss | 13 | 92% | 57 | 64 |
 | เส้นทางป่าทึบ | boss:attack | 13 | 62% | – | – |
@@ -129,7 +129,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 
 | Map | Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |
 |---|---|---|---|---|---|
-| ซากชายแดน | boss | 13 | 100% | 50 | 51 |
+| ซากชายแดน | boss | 13 | 100% | 50 | 52 |
 | ซากชายแดน | boss:attack | 13 | 8% | – | – |
 | ซากชายแดน | boss:under2 | 13 | 100% | – | – |
 | ซากชายแดน | random | 16 | 100% | 90 | 90 |
@@ -180,7 +180,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 
 | Map | Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |
 |---|---|---|---|---|---|
-| ซากชายแดน | boss | 12 | 100% | 52 | 53 |
+| ซากชายแดน | boss | 12 | 100% | 48 | 50 |
 | ซากชายแดน | boss:attack | 12 | 0% | – | – |
 | ซากชายแดน | boss:under2 | 12 | 100% | – | – |
 | ซากชายแดน | random | 71 | 100% | 81 | 81 |
