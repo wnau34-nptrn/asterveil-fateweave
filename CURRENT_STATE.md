@@ -13,12 +13,12 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **UI frame consistency group 3** (owner 2026-11-06): map and battle dialogs, all at once (not the HUD); text that already reads well keeps its size; nothing that works today may break. Opening prompt below.
+- **UI frame consistency group 3** built on branch `feature/ui-frame-group3` (map + battle dialog headers/buttons; evidence `docs/validation/ui-frame-group3-2026-11-06/`); waits for the owner to see the 390px before/after images, then merge.
 - Skill rework step 6 is being closed in session `session_014iPEcNspP15VvzkWFKs5CS` (README §9): #191 v53 and #192 v54 merged; #193 v55 (Mira/Eira/Brann) in CI; then Sefa v56 (blade storm, poison coat, venom burst) and the new Shadow Step v57 (hit 8 + dodge) with the whole-campaign gate (owner-approved). A UI branch that bumps nothing must not touch saves/rules.
 
 ## Next (owner order)
 
-- UI groups 1–2 done (#173, `docs/validation/ui-frame-group2-2026-11-05/`); after group 3, the summary/rewards frame only.
+- UI groups 1–2 done (#173, `docs/validation/ui-frame-group2-2026-11-05/`); group 3 pending owner view; then the summary/rewards frame only.
 - Polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check open.
 
 ## Open items

@@ -2,6 +2,12 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md) and those of 2026-11-04 in [archive/2026-11-06/CODEX-TO-CLAUDE.md](archive/2026-11-06/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-06 — UI frame group 3: map + battle dialogs (Claude, branch `feature/ui-frame-group3`, awaiting owner view)
+- เจ้าของสั่งทำทั้งชุดพร้อมกัน; แก้เฉพาะ CSS `src/ui/sheet-frame.css` (หัวหน้าต่างชิดซ้ายสีทอง 19px, ปิด 44px ที่ 333,11 = เท่าแผ่นบริการ; ปุ่ม primary แผ่นทองเดียวกัน, secondary เปลี่ยนแค่มุม) ครอบ goals/pack/info/camp+entrance+withdraw/event และ `#game-info`; ไม่แตะ HUD/เนื้อหา/กฎ/เซฟ
+- วัด 390/320: ขนาดตัวอักษรเท่าเดิม, ไม่มีเลื่อนแนวนอน, เนื้อหาในหน้าต่างเลื่อนลง 1px (หัวสูงขึ้น 1px) ยกเว้น `#game-info` ลง ~4px; ปุ่มอื่นอยู่ที่เดิม
+- Tests: world.spec + battle-shots (93 ผ่าน), ui-language-audit ก่อน/หลัง (เพิ่มภาพ 53a/53b ของ `#game-info`); ผลและภาพ `docs/validation/ui-frame-group3-2026-11-06/README_TH.md`
+- เปิด: เจ้าของยังไม่ได้ดูภาพก่อน/หลัง; PR gate quality+browser รอผล
+
 ## 2026-11-06 — Skill rework step 6: small fixes (Claude, PRs #191 #192 merged; #193 + Sefa + Shadow Step in flight)
 - เจ้าของ "ตามที่คุณแนะนำ" + "ดำเนินการต่อได้" = การ์ดขั้น 6 ในหน้า artifact "ตรวจสกิล Fateweave" · เซฟ v53–v57 (หนึ่งเวอร์ชันต่อชุด, ศึกค้างที่ใช้สกิลที่เปลี่ยนเริ่มใหม่)
 - v53 #191: ส่งไม้ Toma 50%, Aegis challenge ตี 10 + แค้นสะสม, rouse −20%, Seren sanctuary พรค้างทั้งศึก, bless 6+6 · bash ผลักท้ายคิว: วัดแล้วทีมเสียเลือด เจ้าของเลือกคงเดิม
