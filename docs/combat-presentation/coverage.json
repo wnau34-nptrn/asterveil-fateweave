@@ -1373,7 +1373,7 @@
    "identity": "weaver",
    "side": "hero",
    "move": "dispel",
-   "name": "สลายเวท",
+   "name": "ปลดพลังเวท",
    "body": {
     "kind": "sprite",
     "clip": "attack",
@@ -1778,7 +1778,7 @@
    "identity": "mira",
    "side": "hero",
    "move": "disengage",
-   "name": "ยิงถอยคิว",
+   "name": "ยิงถอยหลัง",
    "body": {
     "kind": "sprite",
     "clip": "disengage",

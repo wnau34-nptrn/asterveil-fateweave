@@ -1,5 +1,5 @@
 import {bossNames,bossDescription} from './boss-equipment';
-import { CHALLENGE_GRUDGE_MAX, ROUSE_CUT, SANCTUARY_HEAL, CHARGE_EXPOSED, CHI_MAX, HEX_MAX, foeRow, hexTickPower, capAmount, corrodeBonus, bigMove, cycleIndex, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, skillPower, rallyReductionOf, songPower, tauntReductionOf } from '../core/battle/engine';
+import { SLAM_GRUDGE, SLAM_GRUDGE_MAX, slamGrudge, ARCANE_MAX, DISPEL_PER_CHARGE, CHALLENGE_GRUDGE_MAX, ROUSE_CUT, SANCTUARY_HEAL, CHARGE_EXPOSED, CHI_MAX, HEX_MAX, foeRow, hexTickPower, capAmount, corrodeBonus, bigMove, cycleIndex, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, skillPower, rallyReductionOf, songPower, tauntReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName, intentName, phaseThai } from './th';
 
@@ -27,6 +27,9 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     if (hero.barrier > 0 && hero.reflect && alive(hero.reflect.heroId)) add('reflect', 'ward', 'โล่สะท้อน', `สวนกลับ ${hero.reflect.amount} เมื่อโล่ดูดซับการโจมตี · จาก${name(hero.reflect.heroId)}`, 'ใช้ได้ 1 ครั้ง หรือจนโล่หมด');
     if (hero.evading) add('evade', 'evade', 'ก้าวเงา', `หลบการโจมตีศัตรูได้อีก ${1 + (hero.evadeExtra ?? 0)} ครั้ง`, `ใช้ครบจำนวนครั้ง หรือถึงเทิร์นถัดไปของ${name(hero.evadeBy ?? id)}`);
     if (hero.hastedRound !== undefined && hero.hastedRound >= s.round) add('haste', 'haste', 'เร่งจังหวะ', `ได้ลำดับลงมือก่อนกลุ่มปกติในรอบ ${hero.hastedRound} (ถ้ามีหลายคน เรียง SPD)`, `มีผลในรอบ ${hero.hastedRound} เท่านั้น`);
+    if (hero.bruise && hero.hp > 0 && d.heroes.find(h => h.id === id)?.actions.includes('slam')) add('bruise', 'slam', 'แค้นสะสม', `ทุบค้อนรูนครั้งถัดไปแรงขึ้น +${slamGrudge(hero.bruise)} (${SLAM_GRUDGE}% ของดาเมจที่รับ สูงสุด +${SLAM_GRUDGE_MAX})`, 'หมดเมื่อลงมือครั้งถัดไป');
+    if (hero.arcane && hero.hp > 0) add('arcane', 'dispel', 'ประจุเวท', `ประจุ ${hero.arcane}/${ARCANE_MAX} · ปลดพลังเวทแรงขึ้น +${hero.arcane * DISPEL_PER_CHARGE}`, 'อยู่จนใช้ปลดพลังเวท');
+    if (hero.shard && hero.barrier > 0 && hero.hp > 0) add('shard', 'aegis', 'เกราะผลึก', `ถ้าโล่แตกหมด ศัตรูที่ตีแตกโดนสะท้อน ${hero.shard.amount} · จาก${name(hero.shard.heroId)}`, 'จนโล่แตก');
     if (hero.grudge && hero.hp > 0) add('grudge', 'challenge', 'แค้นสะสม', `การโจมตีครั้งแรกในเทิร์นถัดไปแรงขึ้น +${Math.min(CHALLENGE_GRUDGE_MAX, hero.grudge.amount)} (ดาเมจที่${name(hero.grudge.enemyId)}ทำกับตน สูงสุด +${CHALLENGE_GRUDGE_MAX})`, 'หมดเมื่อลงมือครั้งถัดไป');
     if (hero.baton && hero.hp > 0) add('baton', 'haste', 'ส่งไม้', `การลงมือครั้งถัดไปแรงขึ้น ${hero.baton}% (ดาเมจ รักษา และโล่)`, 'หมดเมื่อลงมือครั้งถัดไป');
     if (s.guard && alive(s.guard.heroId) && (s.guard.all || s.enemies.some(e => e.id === s.guard!.sourceId && e.hp > 0))) {

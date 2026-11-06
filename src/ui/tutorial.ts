@@ -1,4 +1,4 @@
-import { bigMove, capAmount, enemyIntent, actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, previewCommand, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, NOTE_MAX_ROUNDS, FINALE_PER_ROUND, CHALLENGE_GRUDGE_MAX, SANCTUARY_HEAL, foeNeighbours, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { bigMove, capAmount, enemyIntent, actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, previewCommand, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, DISPEL_PER_CHARGE, NOTE_MAX_ROUNDS, FINALE_PER_ROUND, CHALLENGE_GRUDGE_MAX, SANCTUARY_HEAL, foeNeighbours, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, Command } from '../core/battle/types';
 import { actorName } from './th';
 // Seer advisor (tree-sim tuned 2026-11-06, drafts): a delayed big move still comes, so a delay is worth a small share of
@@ -209,8 +209,10 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    const bare=state.heroes.filter(h=>h.hp>0&&!h.barrier).length;
    if(intent?.all||(intent&&bare>=3&&intent.damage>=15)){const a=make('aegis','party','เกราะผลึกให้ทั้งทีม',`ทุกคนได้โล่ ${skillPower(data,heroId,'aegis')}`);if(a)return a;}
    if(intent?.kind==='energy'&&!interruptBlock(state,data,intent.sourceId,intent)&&nextIntentOf(state,data,intent.sourceId)?.kind==='energy'){const g=make('sigil',intent.sourceId,'ตรึงเวทยกเลิกท่าพลังงาน',`${actorName(intent.sourceId,data)} จะเสียท่าพลังงานถัดไป`);if(g)return g;}
-   const veiled=living.find(e=>(e.steadyRound??0)>=state.round||data.enemies.find(d=>d.id===e.id)?.traits?.includes('veilguard')&&!(e.markedUntil>state.round)&&!((e.corrodedUntil??0)>state.round)&&!((e.dispelledUntil??0)>state.round));
-   if(veiled){const d=make('dispel',veiled.id,'สลายเกราะและไม่หวั่นไหว','ลบความต้านการขัดจังหวะและปิดเกราะพลังงานถึงจบรอบถัดไป');if(d)return d;}
+   // Save v55 arcane release: spend the charges as soon as there is one, on the lowest-HP foe (it ignores the screen);
+   // waiting for 2 or 3 charges was weaker in the tree sim (team HP 91.3% at 1, 89.9% at 2, 88.5% at 3).
+   const charges=state.heroes.find(h=>h.id===heroId)?.arcane??0;
+   if(charges>=1){const t=[...living].sort((a,b)=>a.hp-b.hp)[0];const d=t&&make('dispel',t.id,'ปลดพลังเวท',`ใช้ประจุ ${charges} · พลัง ${skillPower(data,heroId,'dispel')+charges*DISPEL_PER_CHARGE}`);if(d)return d;}
   }
   if(role==='Priest'){
    const fallen=state.heroes.find(h=>h.hp<=0&&h.fell);
@@ -230,9 +232,11 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   }
   if(role==='Archer'){
    if(front.length&&back.length&&state.heroes.some(h=>h.hp>0&&lane(h.id)==='front'&&h.id!==heroId)){const p=make('pin','enemies','ตรึงแถวหน้าเปิดแถวหลัง','ทั้งทีมตีแถวหลังได้');if(p)return p;}
-   // Tail movement helps when it lets a living ally act before a pending foe, regardless of damage kind or target.
-   const foeIndex=intent?state.order.indexOf(intent.sourceId):-1;
-   if(intent&&foeIndex>state.turnIndex&&state.order.slice(foeIndex+1).some(id=>state.heroes.some(h=>h.id===id&&h.hp>0))){const d=make('disengage',intent.sourceId,'ยิงถอยคิวเปิดจังหวะให้เพื่อน','ศัตรูไปท้ายคิวรอบนี้');if(d)return d;}
+   // Save v55: shoot and fall back is a hit plus a dodge, best when a physical move is coming for Mira herself.
+   const aimed=plannedIntents(state,data,state.order.length).find(i=>!i.all&&i.kind==='physical'&&i.targetId===heroId);
+   // Used every time it is ready it beat the old queue shot (team HP 62.0 → 63.3%) but lost to hinder/weak shot
+   // (66.5% without it), so otherwise only while both are cooling.
+   if(aimed||(actionReason(state,data,heroId,'hinder')&&actionReason(state,data,heroId,'weakshot'))){const d=make('disengage',pick('disengage').id,'ยิงแล้วถอยหลบ',`หลบท่ากายภาพครั้งแรกจนถึงเทิร์นถัดไป`);if(d)return d;}
    const slowed=living.find(e=>isDelayed(e,state.round));
    if(slowed){const t=make('track',slowed.id,'ศรตามรอยเป้าที่ถูกสกัด',`ยิงซ้ำตอนจบรอบ`)??make('weakshot',slowed.id,'ศรจุดอ่อนเป้าที่ถูกสกัด',`พลัง ${skillPower(data,heroId,'weakshot')+data.rules.weakshotBonus}`);if(t)return t;}
   }

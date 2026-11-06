@@ -66,7 +66,7 @@ export const talentTrees: Readonly<Record<string, TalentTree>> = {
     node('c1s', 'ตรึงเวท', { unlock: 'sigil' }, { branch: 'c', tier: 1, legacyStars: 3 }),
     node('c2r', 'ผนึกสะท้อน', { cap: 'sigilreflect', amount: 30 }, { branch: 'c', tier: 2, choice: 'sigil', needs: 'c1s' }),
     node('c2d', 'ผนึกคุ้มกัน', { cap: 'sigilward', amount: 10 }, { branch: 'c', tier: 2, choice: 'sigil', needs: 'c1s' }),
-    node('c3', 'สลายเวท', { unlock: 'dispel' }, { branch: 'c', tier: 3 }),
+    node('c3', 'ปลดพลังเวท', { unlock: 'dispel' }, { branch: 'c', tier: 3 }),
     node('c4', 'ผนึกชะตา', { cap: 'fateseal', amount: 10 }, { branch: 'c', tier: 4 }),
   ],
   // Priest: A healing, B protection, C blessings.
@@ -120,7 +120,7 @@ export const talentTrees: Readonly<Record<string, TalentTree>> = {
     node('b3', 'ศรตรึงแถว', { unlock: 'pin' }, { branch: 'b', tier: 3 }),
     node('b4', 'ลมส่ง', { passive: 'tailwind' }, { branch: 'b', tier: 4, legacyStars: 5 }),
     node('c1', 'ระยะปลอดภัย', { stat: 'hp', percent: 5 }, { branch: 'c', tier: 1 }, 2),
-    node('c1s', 'ยิงถอยคิว', { unlock: 'disengage' }, { branch: 'c', tier: 1 }),
+    node('c1s', 'ยิงถอยหลัง', { unlock: 'disengage' }, { branch: 'c', tier: 1 }),
     node('c2q', 'ถอยไว', { cap: 'quickstep' }, { branch: 'c', tier: 2, choice: 'disengage', needs: 'c1s' }),
     node('c2c', 'ยิงคุ้มกัน', { cap: 'covershot', amount: 6 }, { branch: 'c', tier: 2, choice: 'disengage', needs: 'c1s' }),
     node('c3', 'ศรตามรอย', { unlock: 'track' }, { branch: 'c', tier: 3 }),

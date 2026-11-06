@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { beginBattle, CHARGE_EXPOSED, currentHeroId, foeRow, PIN_PERCENT, previewCommand, replay, resolveCommand, screened, SHOVE_LOCK, shoveReason, skillPower, targetOptions, upcomingTurns } from '../src/core/battle/engine';
+import { SLAM_GRUDGE, SLAM_GRUDGE_MAX, AEGIS_SHARD, ARCANE_MAX, DISPEL_PER_CHARGE, beginBattle, CHARGE_EXPOSED, currentHeroId, foeRow, PIN_PERCENT, previewCommand, replay, resolveCommand, screened, SHOVE_LOCK, shoveReason, skillPower, targetOptions, upcomingTurns } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, HeroDefinition, HeroTalents, TalentCap } from '../src/core/battle/types';
 import { veilSiege } from '../src/content/encounters/veil-siege';
 import { mercenaries } from '../src/content/heroes/mercenaries';
@@ -92,15 +92,31 @@ describe('mage tree (Eira)', () => {
     const st = cast(d, s, 'weaver', 'aegis', 'party').turns[0]!.state;
     expect(st.heroes.map(h => h.barrier)).toEqual([20, 8, 8, 0]);
   });
-  it('dispel switches a veilguard off until the end of the next round', () => {
-    const guarded: EncounterDefinition = { ...veilSiege, rules: { ...veilSiege.rules, traits: { thornsPercent: 20, veilguardPercent: 25, enrageBelow: 50, enragePercent: 30 } },
-      enemies: veilSiege.enemies.map(e => e.id === 'f1' ? { ...e, traits: ['veilguard'] } : e) };
-    const d = team({ weaver: { actions: ['dispel', 'bolt'] } }, guarded); const s = turnOf(d, 'weaver');
-    const blunt = cast(d, s, 'weaver', 'bolt', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount!;
-    expect(blunt).toBe(Math.ceil(26 * 0.75));
-    const r = cast(d, s, 'weaver', 'dispel', 'f1'); expect(foe(r.turns[0]!.state, 'f1').dispelledUntil).toBe(3);
-    const after = structuredClone(r.turns[0]!.state); after.turnIndex = after.order.indexOf('weaver'); after.beat = r.turns[0]!.state.beat;
-    expect(cast(d, after, 'weaver', 'bolt', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(26);
+  it('save v55 arcane release: each landed bolt charges Eira (max ARCANE_MAX); the release spends them all and reaches the back row', () => {
+    const d = team({ weaver: { actions: ['dispel', 'bolt'] } }); const s = turnOf(d, 'weaver');
+    const bolt = cast(d, s, 'weaver', 'bolt', 'f1').turns[0]!;
+    expect(hero(bolt.state, 'weaver').arcane).toBe(1); expect(bolt.events.find(e => e.type === 'arcane')).toMatchObject({ amount: 1 });
+    expect(hero(cast(team({ weaver: { actions: ['bolt'] } }), s, 'weaver', 'bolt', 'f1').turns[0]!.state, 'weaver').arcane).toBeUndefined();
+    const full = turnOf(d, 'weaver'); hero(full, 'weaver').arcane = ARCANE_MAX;
+    expect(hero(cast(d, full, 'weaver', 'bolt', 'f1').turns[0]!.state, 'weaver').arcane).toBe(ARCANE_MAX);
+    expect(targetOptions(full, d, 'weaver', 'dispel').find(t => t.id === 'b1')!.valid).toBe(true);
+    const r = cast(d, full, 'weaver', 'dispel', 'b1').turns[0]!;
+    expect(r.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'b1', amount: skillPower(d, 'weaver', 'dispel') + ARCANE_MAX * DISPEL_PER_CHARGE });
+    expect(hero(r.state, 'weaver').arcane).toBeUndefined();
+    expect(cast(d, turnOf(d, 'weaver'), 'weaver', 'dispel', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(skillPower(d, 'weaver', 'dispel'));
+  });
+  it('save v55 rune slam adds SLAM_GRUDGE% of the damage Brann took since his last command, at most SLAM_GRUDGE_MAX', () => {
+    const d = withMerc('brann', 0, { brann: { actions: ['slam'] } }); const s = turnOf(d, 'brann');
+    const hit = (bruise: number) => { const t = structuredClone(s); if (bruise) hero(t, 'brann').bruise = bruise; else delete hero(t, 'brann').bruise; const r = cast(d, t, 'brann', 'slam', 'f1').turns[0]!; expect(hero(r.state, 'brann').bruise).toBeUndefined(); return r.events.find(e => e.type === 'damage')!.amount!; };
+    const plain = hit(0);
+    expect(hit(20)).toBe(plain + Math.floor(20 * SLAM_GRUDGE / 100)); expect(hit(200)).toBe(plain + SLAM_GRUDGE_MAX);
+  });
+  it('save v55 crystal aegis: a barrier broken by a foe strikes it back AEGIS_SHARD', () => {
+    const d = team({ weaver: { actions: ['aegis'] } }); const s = turnOf(d, 'weaver');
+    const r = playOn(d, cast(d, s, 'weaver', 'aegis', 'party'), x => x.events.some(e => e.text === 'The crystal shard strikes back.'));
+    const back = r.events.find(e => e.text === 'The crystal shard strikes back.')!;
+    expect(back).toMatchObject({ sourceId: 'weaver', amount: AEGIS_SHARD });
+    expect(r.events.some(e => e.type === 'damage' && e.sourceId === back.targetId && (e.absorbed ?? 0) > 0)).toBe(true);
   });
   it('piercing bolt reaches past the front row from the front lane and hits harder', () => {
     const d = team({ weaver: { lane: 'front', talents: caps({ piercebolt: 4 }) } }); const plain = team({ weaver: { lane: 'front' } });
@@ -261,10 +277,10 @@ describe('spear tree (Garran)', () => {
 describe('archer tree (Mira)', () => {
   // Party: Aegis, Lyra, Mira (back), Seren. Round 1: Lyra, raider, Mira, Aegis, brute, Seren.
   const archer = (patch: Patch, base?: EncounterDefinition) => withMerc('mira', 2, { mira: patch }, base);
-  it('disengage delays a pending foe in this round; quickstep also delays next round, no dodge', () => {
+  it('save v55 disengage: no queue change, Mira dodges the next physical hit; quickstep still delays next round', () => {
     const d = archer({ actions: ['disengage'], talents: caps({ covershot: 6, quickstep: 0 }) }); const s = turnOf(d, 'mira');
     const r = cast(d, s, 'mira', 'disengage', 'f1').turns[0]!;
-    expect(r.state.order.at(-1)).toBe('f1'); expect(hero(r.state, 'mira').evading).toBeUndefined();
+    expect(r.state.order).toEqual(s.order); expect(hero(r.state, 'mira')).toMatchObject({ evading: true, evadePhysical: true });
     expect(foe(r.state, 'f1').delayedRound).toBe(2);
   });
   it('pinning volley hits the front row and lifts its screen to the end of the next round', () => {
@@ -276,7 +292,10 @@ describe('archer tree (Mira)', () => {
   it('tracking shot fires again at the round’s end on a hindered target', () => {
     const d = archer({ actions: ['track'] }); const s = turnOf(d, 'mira'); foe(s, 'f1').delayedRound = 1;
     const r = playOn(d, cast(d, s, 'mira', 'track', 'f1'), x => x.state.round > 1); expect(r.turns[0]!.state.tracking).toHaveLength(1);
-    expect(r.events.find(e => e.text === 'Tracking shot.')).toMatchObject({ sourceId: 'mira', targetId: 'f1', amount: skillPower(d, 'mira', 'track') });
+    // Save v55: the repeat shot goes to the standing foe with the least HP at the round's end.
+    const shot = r.events.find(e => e.text === 'Tracking shot.')!; const end = r.turns.find(t => t.events.includes(shot))!;
+    const weakest = [...end.state.enemies, ...[]].map(e => ({ id: e.id, hp: e.hp + (e.id === shot.targetId ? shot.amount! : 0) })).filter(e => e.hp > 0).sort((a, b) => a.hp - b.hp || a.id.localeCompare(b.id))[0]!;
+    expect(shot).toMatchObject({ sourceId: 'mira', targetId: weakest.id, amount: skillPower(d, 'mira', 'track') });
     expect(r.state.tracking).toBeUndefined();
     const plain = turnOf(d, 'mira'); expect(cast(d, plain, 'mira', 'track', 'f1').turns[0]!.state.tracking).toBeUndefined();
   });
