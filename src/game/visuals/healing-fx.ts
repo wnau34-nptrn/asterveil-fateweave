@@ -24,7 +24,8 @@ export function healingCues(turn: TurnStage): HealingCue[] {
     if (!sourceId || !targetId) continue;
     let skill: HealingSkill | undefined, kind: HealingCue['kind'] = 'cast';
     if (event.type === 'heal' && (event.amount ?? 0) > 0) {
-      if (event.text === 'Renew.' && state.heroes.find(h => h.id === targetId)?.renew?.heroId === sourceId) { skill = 'bless'; kind = 'tick'; }
+      // A blessing's last tick (save v53: one round) clears its renew in the same upkeep, so the state before counts too.
+      if (event.text === 'Renew.' && (state.heroes.find(h => h.id === targetId)?.renew ?? turn.before?.heroes.find(h => h.id === targetId)?.renew)?.heroId === sourceId) { skill = 'bless'; kind = 'tick'; }
       else if (event.text === 'The song mends the party.' && state.song?.action === 'mend' && state.song.heroId === sourceId) { skill = 'mend'; kind = 'tick'; }
       else if (event.text === 'The prayer lingers.' && state.prayerEcho?.heroId === sourceId) { skill = 'prayer'; kind = 'tick'; }
       else if (!cancelled && sourceId === turn.actorId && (castSkill === 'heal' || castSkill === 'prayer') && event.text === 'Restored HP.') skill = castSkill;

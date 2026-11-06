@@ -14,9 +14,11 @@ describe('painted healing follows actual resolver events', () => {
     if (skill === 'rouse') { expect(cues[0]!.targetId).toBe(turn.state.guard!.targetId); expect(turn.events.some(e => e.type === 'heal')).toBe(false); }
     if (skill === 'revive') expect(turn.before!.heroes.find(h => h.id === cues[0]!.targetId)).toMatchObject({ hp: 0, fell: true });
   });
-  for (const skill of ['bless', 'mend'] as const) it(`${skill} has no cast heal and heals only at actual upkeep`, () => {
+  for (const skill of ['bless', 'mend'] as const) it(`${skill} heals at cast only when a blessing (save v53), then at actual upkeep`, () => {
     const f = healingFixture(skill);
-    expect(f.turns[0]!.events.some(e => e.type === 'heal')).toBe(false);
+    expect(f.turns[0]!.events.some(e => e.type === 'heal')).toBe(skill === 'bless');
+    // The cast heal is painted by the one bless cast cue (no second cue on the same ally).
+    if (skill === 'bless') expect(healingCues(f.turns[0]!).filter(c => c.kind === 'cast')).toHaveLength(1);
     const ticks = f.turns.flatMap(healingCues).filter(c => c.kind === 'tick');
     expect(ticks.length).toBe(skill === 'bless' ? 1 : 4);
     expect(ticks.every(c => c.skill === skill && c.event.type === 'heal' && c.event.amount! > 0)).toBe(true);

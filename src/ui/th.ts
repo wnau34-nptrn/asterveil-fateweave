@@ -4,7 +4,7 @@ import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } fr
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
-import { BEAT_MAX, braceStrikePower, CHARGE_EXPOSED, PIERCE_BEHIND, PIN_PERCENT, SHOVE_LOCK, SPEARWALL_MAX, SPEARWALL_STEP, DEEP_BEAT_LOW, ROUND_PAIR_BONUS, HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
+import { BEAT_MAX, braceStrikePower, CHARGE_EXPOSED, PIERCE_BEHIND, PIN_PERCENT, SHOVE_LOCK, SPEARWALL_MAX, SPEARWALL_STEP, DEEP_BEAT_LOW, ROUND_PAIR_BONUS, HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, CHALLENGE_GRUDGE_MAX, ROUSE_CUT, SANCTUARY_HEAL, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 import type { IconName } from './icons';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -92,15 +92,15 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     rally: `ตั้งรับหมู่ เพื่อนทุกคนที่ยังยืนอยู่ (รวมเอกิส) ลดความเสียหาย ${Math.round(rallyReductionOf(data, heroId) * 100)}% จากการโจมตีครั้งแรกที่โดน จนถึงเทิร์นถัดไปของเอกิส`,
     finisher: `ปลิดชีพ ${skill.power} หรือ ${skill.power * 2} ถ้าเลือดศัตรูต่ำกว่า ${data.rules.finisherThreshold * 100}% ไม่ใช้ตรา`,
     sigil: `ตรึงเวท ${skill.power} และยกเลิกท่าพลังงานครั้งถัดไปของเป้าหมาย ท่ากายภาพยังโจมตีตามปกติ (กระแทกโล่ใช้หยุดกายภาพ)`,
-    sanctuary: `อวยพรเพื่อนที่ยังยืนอยู่ 1 คน (รวมตัวเอง) เลือดจะไม่ลดต่ำกว่า 1 จนถึงเทิร์นถัดไปของเซเรน`,
+    sanctuary: `พรค้างให้เพื่อนที่ยังยืนอยู่ 1 คน (รวมตัวเอง) อยู่ได้ทั้งศึก: ครั้งแรกที่จะล้ม เหลือเลือด 1 แล้วรักษา ${SANCTUARY_HEAL} ทันที (ไม่ใช้เทิร์น) แล้วพรหมด · คนที่มีพรอยู่แล้วให้ซ้ำไม่ได้`,
     spearwall: `ตั้งกำแพงทวน ทุกครั้งที่ศัตรูโจมตีกายภาพใส่เพื่อนแนวหน้า (รวมตัวเอง) จะโดนแทงสวน ${skill.power} และแนวหน้ารับกายภาพลดลงอีก ${SPEARWALL_STEP}% ต่อครั้งที่สวน (สูงสุด ${SPEARWALL_STEP * SPEARWALL_MAX}%) จนถึงเทิร์นถัดไปของการ์แรน`,
     weakshot: `ยิงศรจุดอ่อน ${skill.power} หรือ ${skill.power + data.rules.weakshotBonus} ถ้าเป้าหมายถูกยิงสกัดเลื่อนเทิร์นอยู่`,
     bomb: `ปาขวดระเบิดใส่ศัตรูทุกตัว ตัวละ ${skill.power} ตัวที่ถูกกัดกร่อนอยู่โดนแรงขึ้นตามโบนัสกรด`,
     backstab: `ลอบแทง ${skill.power} เพิ่ม ${ambushBonusOf(data, heroId)} ถ้าเป้ายังไม่ได้ลงมือรอบนี้ ใช้ได้แม้เป้าเล็งผู้ใช้`,
     quake: `ทุบปฐพีใส่ศัตรูแถวหน้าทุกตัว ตัวละ ${skill.power} ถ้าแถวหน้าว่างโดนแถวหลังแทน`,
-    challenge: `ท้าดวลศัตรู 1 ตัว ท่าถัดไปของมันจะเล็งเอกิสแทน (แผนโจมตีแสดงเป้าใหม่ทันที) ไม่ทำความเสียหาย`,
+    challenge: `ท้าดวลศัตรู 1 ตัว: โจมตี ${skill.power} และท่าถัดไปของมันจะเล็งเอกิสแทน (แผนโจมตีแสดงเป้าใหม่ทันที) · แค้นสะสม: ดาเมจที่ตัวนั้นทำกับเอกิสจนถึงเทิร์นถัดไป บวกเข้าการโจมตีครั้งแรกในเทิร์นถัดไปของเอกิส (สูงสุด +${CHALLENGE_GRUDGE_MAX})`,
     bulwark: `กำแพงโล่ เพื่อนแนวหน้าทุกคนรับความเสียหายลดลง ${skill.power}% จนถึงเทิร์นถัดไปของผู้ใช้ ไม่เปลี่ยนเป้าศัตรู`,
-    rouse: `ยืนเคียงข้าง รับแทนเพื่อนที่ยังยืนและมีสัดส่วนเลือดต่ำสุด (ไม่นับตัวเอง) ทุกท่าเป้าเดี่ยวจนถึงเทิร์นถัดไปของผู้ใช้ ลดความเสียหาย ${Math.round(guardReductionOf(data, heroId) * 100)}%`,
+    rouse: `ยืนเคียงข้าง รับแทนเพื่อนที่ยังยืนและมีสัดส่วนเลือดต่ำสุด (ไม่นับตัวเอง) ทุกท่าเป้าเดี่ยวจนถึงเทิร์นถัดไปของผู้ใช้ ลดความเสียหาย ${Math.round(guardReductionOf(data, heroId) * 100)}% แล้วเบาลงอีก ${ROUSE_CUT}%`,
     parry: `ตั้งท่าปัดดาบ จนถึงเทิร์นถัดไปของไลรา การโจมตีกายภาพครั้งแรกที่โดนเธอเบาลง ${PARRY_REDUCTION * 100}% แล้วเธอฟันสวน ${skill.power}`,
     lunge: `พุ่งตัด ${skill.power} หรือ ${skill.power + data.rules.markedBonus} เมื่อเป้าหมายติดตรา (ใช้ตราหมด) ตีทะลุแถวหน้าถึงแถวหลังได้`,
     sweep: `ฟันกวาดศัตรูแถวหน้าทุกตัว ตัวละ ${skill.power} ถ้าแถวหน้าว่างโดนแถวหลังแทน แล้วติดตราเป้าที่เหลือเลือดน้อยสุดในแถวที่โดน`,
@@ -109,7 +109,7 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     dispel: `สลายเวท ${skill.power} ลบไม่หวั่นไหวของบอส และปิดเกราะพลังงานถึงจบรอบถัดไป ท่าไม้ตายที่ขัดไม่ได้ยังขัดไม่ได้`,
     revive: `ชุบเพื่อนที่ล้มในศึกนี้กลับมาด้วยเลือด ${skill.power}% ของเลือดสูงสุด ใช้ได้ 1 ครั้งต่อศึก คนที่ฟื้นได้เทิร์นตั้งแต่รอบถัดไป`,
     halo: `วงแสงคุ้มกัน จนถึงเทิร์นถัดไปของเซเรน ทุกคนรับความเสียหายพลังงานลดลง ${skill.power}%`,
-    bless: `พรต่อเนื่อง เพื่อนที่ยังยืน 1 คน (รวมตัวเอง) ฟื้นเลือด ${skill.power} ตอนเริ่มรอบถัดไป 2 รอบ หมดเมื่อผู้ใช้ล้ม`,
+    bless: `พรต่อเนื่อง เพื่อนที่ยังยืน 1 คน (รวมตัวเอง) ฟื้นเลือด ${skill.power} ทันที และอีก ${skill.power} ตอนเริ่มรอบถัดไป (ส่วนหลังหมดถ้าผู้ใช้ล้ม)`,
     hold: `ปักทวนตรึง ${skill.power + capAmount(data, heroId, 'holdcounter')} และท่าถัดไปของเป้าเบาลง ${PIN_PERCENT + capAmount(data, heroId, 'holdfirm')}%`,
     halt: `แทง ${skill.power} แล้วผลักศัตรูแถวหน้าไปแถวหลัง ตัวแถวหลังในคอลัมน์เดียวกันมาแทน จนจบเทิร์นถัดไปของตัวที่ถูกผลัก แล้วกลับที่เดิม · ผลักตัวเดิมซ้ำไม่ได้ ${SHOVE_LOCK} รอบ บอสและตัวใหญ่ไม่ถูกผลัก`,
     warcry: `พุ่งหอก ${skill.power} ตีถึงแถวหลังแม้แถวหน้าบัง แต่การ์แรนรับความเสียหายเพิ่ม ${CHARGE_EXPOSED}% จนถึงเทิร์นถัดไป`,
@@ -264,7 +264,7 @@ const capText: Record<TalentCap, { actions: readonly ActionId[]; help: (n: numbe
   splitbolt: { actions: ['bolt'], help: () => 'ศรเวทโดนศัตรูตัวอื่นด้วยครึ่งหนึ่ง' },
   wardreflect: { actions: ['ward'], help: n => `โล่เวทที่รับการโจมตีได้สะท้อนใส่ผู้โจมตี ${n} (ครั้งเดียว)` },
   twinheal: { actions: ['heal'], help: () => 'รักษาแล้วเพื่อนที่เลือดเหลือน้อยที่สุดอีกคนได้ครึ่งหนึ่ง' },
-  solace: { actions: ['sanctuary'], help: n => `คนที่ได้พรคุ้มภัยรับความเสียหายลดลง ${n}% จนถึงเทิร์นถัดไปของเซเรน` },
+  solace: { actions: ['sanctuary'], help: n => `ตอนให้พรคุ้มภัย คนนั้นรับความเสียหายลดลง ${n}% จนถึงเทิร์นถัดไปของเซเรน` },
   pierceline: { actions: ['pierce'], help: () => 'แทงทะลวงโดนศัตรูหลังเป้าเต็มแรงแทนครึ่งหนึ่ง' },
   frontwall: { actions: ['brace', 'spearwall'], help: n => `ระหว่างตั้งทวน แนวหน้ารับความเสียหายกายภาพลดลง ${n}%` },
   hunter: { actions: ['attack', 'hinder', 'volley', 'weakshot'], help: n => `ทุกการโจมตีของมิร่าใส่ศัตรูที่ถูกสกัด +${n}` },
@@ -429,7 +429,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'rally':
       return `${source}ตั้งรับหมู่ · การโจมตีครั้งแรกที่ทุกคนโดนเบาลง ${Math.round(rallyReductionOf(data, event.sourceId) * 100)}%`;
     case 'sigil': return `${target}ถูกตรึงเวท · ท่าพลังงานครั้งถัดไปจะถูกยกเลิก`;
-    case 'sanctuary': return event.text.startsWith('Sanctuary keeps') ? `พรคุ้มภัยทำให้${target}ยังยืนอยู่ด้วยเลือด 1` : `${target}ได้รับพรคุ้มภัย · เลือดไม่ต่ำกว่า 1 จนถึงเทิร์นถัดไปของ${source}`;
+    case 'sanctuary': return event.text.startsWith('Sanctuary keeps') ? `พรคุ้มภัยทำให้${target}ยังยืนอยู่ด้วยเลือด 1 แล้วรักษา ${SANCTUARY_HEAL}` : `${target}ได้รับพรคุ้มภัย · ครั้งแรกที่จะล้มในศึกนี้ เหลือเลือด 1 และรักษา ${SANCTUARY_HEAL}`;
     case 'stand': return event.text.startsWith('Last stand') ? `อุปกรณ์ยืนหยัดทำให้${target}รอดด้วยเลือด 1` : `${source}ยืนหยัด · ${target}รอดด้วยเลือด 1`;
     case 'finale': return `${source}บรรเลงบทสุดท้าย · ${event.text === 'Finale of valor.' ? 'โจมตีศัตรูทุกตัว' : 'ฟื้นเลือดทั้งทีม'}`;
     case 'counter': return event.text === 'The ward reflects the hit.' ? `โล่เวทของ${source}สะท้อนใส่${target} ${event.amount}` : event.text === 'The knight counters.' ? `${source}โต้กลับ${target} ${event.amount}` : event.text === 'The warden hammers back.' ? `${source}ทุบสวน${target} ${event.amount}` : event.text === 'Thorns strike back.' ? `หนามของ${source}สวน${target} ${event.amount}` : `${source}แทงสวน${target} ${event.amount}`;

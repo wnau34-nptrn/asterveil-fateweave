@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { beginBattle, enemyIntent, guardCounterPower, resolveCommand } from '../src/core/battle/engine';
+import { beginBattle, targetOptions, CHALLENGE_GRUDGE_MAX, enemyIntent, guardCounterPower, previewCommand, resolveCommand, ROUSE_CUT } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, HeroTalents } from '../src/core/battle/types';
 import { veilSiege } from '../src/content/encounters/veil-siege';
 
@@ -30,6 +30,43 @@ describe('knight big tree skills', () => {
     const r = cast(d, s, 'rouse', 'guardian');
     expect(r.turns[0]!.state.guard).toMatchObject({ heroId: 'guardian', targetId: 'weaver', all: true });
     expect(r.turns[0]!.events.some(e => e.type === 'heal')).toBe(false);
+  });
+  it('save v53: challenge hits for its power and remembers what its foe deals the knight until his next turn', () => {
+    const d = knight(['challenge']); const s = knightTurn(d);
+    const r = cast(d, s, 'challenge', 'f1');
+    expect(r.turns[0]!.events.find(e => e.type === 'damage' && e.sourceId === 'guardian')).toMatchObject({ targetId: 'f1', amount: 10 });
+    const taken = r.events.filter(e => e.type === 'damage' && e.sourceId === 'f1' && e.targetId === 'guardian').reduce((n, e) => n + (e.amount ?? 0) + (e.absorbed ?? 0), 0);
+    expect(taken).toBeGreaterThan(0);
+    expect(r.state.heroes.find(h => h.id === 'guardian')!.grudge).toEqual({ enemyId: 'f1', amount: taken });
+  });
+  it('save v53: the grudge adds to the knight’s next hit, at most CHALLENGE_GRUDGE_MAX, then it is spent', () => {
+    const d = knight(['challenge']); const s = knightTurn(d);
+    const plain = cast(d, s, 'attack', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount!;
+    for (const [amount, bonus] of [[6, 6], [40, CHALLENGE_GRUDGE_MAX]] as const) {
+      const t = structuredClone(s); t.heroes.find(h => h.id === 'guardian')!.grudge = { enemyId: 'f1', amount };
+      const r = cast(d, t, 'attack', 'f1');
+      expect(r.turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(plain + bonus);
+      expect(r.turns[0]!.state.heroes.find(h => h.id === 'guardian')!.grudge).toBeUndefined();
+      expect(previewCommand(t, d, { beat: t.beat, heroId: 'guardian', action: 'attack', targetId: 'f1' })).toEqual(r);
+    }
+  });
+  it('save v53: rouse takes each covered hit ROUSE_CUT% lighter than the same cover without it', () => {
+    const d = knight(['rouse']); const s = knightTurn(d); s.heroes.find(h => h.id === 'weaver')!.hp = 1;
+    const cover = cast(d, s, 'rouse', 'guardian').turns[0]!.state; expect(cover.guard).toMatchObject({ targetId: 'weaver', all: true, rouse: true });
+    const plain = structuredClone(cover); delete plain.guard!.rouse;
+    // Play both on with the same plain attacks until a foe's hit lands on the knight.
+    const firstHit = (start: BattleState) => {
+      let st = start;
+      for (let i = 0; i < 12; i++) {
+        const id = st.order[st.turnIndex]!; const foe = targetOptions(st, d, id, 'attack').find(t => t.valid)!;
+        const r = resolveCommand(st, d, { beat: st.beat, heroId: id, action: 'attack', targetId: foe.id });
+        const hit = r.events.find(e => e.type === 'damage' && e.targetId === 'guardian'); if (hit) return hit; st = r.state;
+      }
+      throw new Error('no hit');
+    };
+    const a = firstHit(cover), b = firstHit(plain);
+    expect(a.sourceId).toBe(b.sourceId);
+    expect(a.amount! + a.absorbed!).toBe(Math.ceil((b.amount! + b.absorbed!) * (1 - ROUSE_CUT / 100)));
   });
 });
 describe('knight big tree modifiers', () => {

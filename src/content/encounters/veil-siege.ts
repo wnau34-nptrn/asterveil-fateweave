@@ -59,7 +59,7 @@ export const veilSiege: EncounterDefinition = {
     finale: { name: 'บทสุดท้าย', english: 'Finale', icon: '♪', power: 16, cooldown: 3 },
     // Knight big tree skills (A6, draft numbers): challenge pulls one enemy's next move, bulwark is a percent cut,
     // rouse guards the standing ally with the lowest HP ratio against every single-target move (guard `all`); no heal.
-    challenge: { name: 'ท้าดวล', english: 'Challenge', icon: '⚔', power: 0, cooldown: 3 },
+    challenge: { name: 'ท้าดวล', english: 'Challenge', icon: '⚔', power: 10, cooldown: 3 },
     bulwark: { name: 'กำแพงโล่', english: 'Bulwark', icon: '♜', power: 30, cooldown: 4 },
     rouse: { name: 'ยืนเคียงข้าง', english: 'Rouse', icon: '❋', power: 0, cooldown: 4 },
     // Release A big trees (docs/design/SKILL_TREES_ALL_TH.md, draft numbers). Parry's power is its riposte; halo,
@@ -72,7 +72,7 @@ export const veilSiege: EncounterDefinition = {
     dispel: { name: 'สลายเวท', english: 'Dispel', icon: '✧', power: 12, cooldown: 3 },
     revive: { name: 'ฟื้นคืน', english: 'Revive', icon: '✚', power: 25, cooldown: 5 },
     halo: { name: 'วงแสงคุ้มกัน', english: 'Halo', icon: '❋', power: 30, cooldown: 4 },
-    bless: { name: 'พรต่อเนื่อง', english: 'Blessing', icon: '✚', power: 8, cooldown: 3 },
+    bless: { name: 'พรต่อเนื่อง', english: 'Blessing', icon: '✚', power: 6, cooldown: 3 },
     hold: { name: 'ปักทวนตรึง', english: 'Pinning Spear', icon: '➹', power: 12, cooldown: 3 },
     halt: { name: 'ผลักระยะทวน', english: 'Spear Shove', icon: '➹', power: 16, cooldown: 4 },
     warcry: { name: 'พุ่งหอก', english: 'Spear Charge', icon: '➹', power: 26, cooldown: 3 },

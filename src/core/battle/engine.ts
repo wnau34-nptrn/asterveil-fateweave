@@ -199,8 +199,14 @@ export function talentHitBonus(state: BattleState, data: EncounterDefinition, he
 // smoke on a corroded target spreads half its cut to the neighbours. Disarm: a physical next move is cut; tremor: every front foe (or the back row when
 // the front is empty) takes its power and its next move is drawn onto the warden (`drawnBy`), not cut;
 // guardian stone heals the warden when it holds; a finale of dread shields allies; solo triples the song.
-export const CATALYST_PER_ROUND = 8; export const CATALYST_SPLASH = 50; export const HASTE_BATON = 20; export const DISARM_MULTIPLIER = 1.6;
+export const CATALYST_PER_ROUND = 8; export const CATALYST_SPLASH = 50; export const HASTE_BATON = 50; export const DISARM_MULTIPLIER = 1.6;
 export const NOTE_PER_ROUND = 3; export const NOTE_MAX_ROUNDS = 3;
+// Knight small fixes (save v53): a challenge also hits and its foe's damage on the knight until his next turn adds to his next hit (at most CHALLENGE_GRUDGE_MAX);
+// a rouse cover takes ROUSE_CUT% less.
+export const CHALLENGE_GRUDGE_MAX = 15; export const ROUSE_CUT = 20;
+// Priest small fixes (save v53): a sanctuary stays on its ally for the battle; the first hit that would down it leaves it
+// at 1 HP and heals SANCTUARY_HEAL at once. A blessing heals its power now and again as the next round begins.
+export const SANCTUARY_HEAL = 10;
 export const isDelayed = (enemy: EnemyState, round: number): boolean => Math.max(enemy.delayedRound ?? 0, enemy.delayedAlso ?? 0) >= round;
 export const GUARD_STONE_HEAL = 6; export const DREAD_FINALE = 10; export const SOLO_TIMES = 3; export const FURY_EXPOSED = 10;
 // Alchemist chain reaction (capstone): a corroded foe that falls passes its corrosion to another standing foe of its row
@@ -626,13 +632,14 @@ function strikeBack(state: BattleState, data: EncounterDefinition, heroId: strin
 function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, intent: Intent, recipient: HeroState, incoming: number, events: BattleEvent[], protector?: string): void {
   const actorId = enemy.id;
   const absorbed = Math.min(recipient.barrier, incoming); recipient.barrier -= absorbed;
+  let saved: string | undefined;
   // A mage's reflecting ward (talent) strikes back once when it absorbs a hit.
   const reflect = absorbed ? recipient.reflect : undefined; if (absorbed || !recipient.barrier) delete recipient.reflect;
   let amount = Math.min(recipient.hp, incoming - absorbed);
   if (amount && amount >= recipient.hp) {
-    const sanctuary = state.sanctuary;
-    if (sanctuary?.targetId === recipient.id && living(state, sanctuary.heroId)) {
-      amount = recipient.hp - 1; events.push({ type: 'sanctuary', sourceId: sanctuary.heroId, targetId: recipient.id, text: 'Sanctuary keeps the ally standing.' });
+    const sanctum = recipient.sanctum;
+    if (sanctum) {
+      amount = recipient.hp - 1; saved = sanctum.heroId; delete recipient.sanctum; events.push({ type: 'sanctuary', sourceId: sanctum.heroId, targetId: recipient.id, text: 'Sanctuary keeps the ally standing.' });
     } else if (protector && !state.standUsed && hasPassive(data, protector, 'stand') && living(state, protector)) {
       amount = recipient.hp - 1; state.standUsed = true; events.push({ type: 'stand', sourceId: protector, targetId: recipient.id, text: 'The knight’s stand keeps the ally at 1 HP.' });
     } else if (state.charge?.heroId === recipient.id && hasCap(data, recipient.id, 'unyielding') && !state.unyielding) {
@@ -644,7 +651,11 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
     }
   }
   recipient.hp -= amount;
+  // A knight's challenge (save v53) remembers what its foe dealt him.
+  if (recipient.grudge?.enemyId === actorId) recipient.grudge.amount += amount + absorbed;
   events.push({ type: 'damage', sourceId: actorId, targetId: recipient.id, amount, absorbed, text: 'Enemy attacks on its own turn.' });
+  // A spent sanctuary heals at once (save v53).
+  if (saved) { const mend = Math.min(SANCTUARY_HEAL, data.heroes.find(h => h.id === recipient.id)!.maxHp - recipient.hp); recipient.hp += mend; events.push({ type: 'heal', sourceId: saved, targetId: recipient.id, amount: mend, text: 'Sanctuary.' }); }
   if (!recipient.hp) {
     recipient.fell = true; events.push({ type: 'down', targetId: recipient.id, text: 'Hero falls.' });
     // Priest last prayer (capstone): the first ally to fall in a battle heals every other standing ally.
@@ -748,6 +759,8 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           // A charging spear (save v50) is open to every hit until his next turn.
           const raw = state.charge?.heroId === recipient.id ? Math.ceil(tonic * (1 + CHARGE_EXPOSED / 100)) : tonic;
           let incoming = guard ? Math.ceil(raw * (1 - guardReductionOf(data, guard.heroId))) : raw;
+          // A knight standing beside an ally (rouse, save v53) takes the covered hit lighter still.
+          if (guard?.rouse) incoming = Math.ceil(incoming * (1 - ROUSE_CUT / 100));
           let protector = guard?.heroId;
           if (state.taunt?.heroId === recipient.id) incoming = Math.ceil(incoming * (1 - tauntReductionOf(data, recipient.id)));
           const rally = state.rally;
@@ -958,7 +971,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
   });
   if (['guard', 'ward', 'heal', 'sanctuary'].includes(action)) return data.heroes.map(h => {
     const actor = state.heroes.find(s => s.id === h.id)!;
-    const reason = unavailable || (actor.hp <= 0 ? 'This hero is down.' :
+    const reason = unavailable || (actor.hp <= 0 ? 'This hero is down.' : action === 'sanctuary' && actor.sanctum ? 'This ally already has a sanctuary.' :
       action === 'guard' && state.intent?.targetId !== h.id ? 'Guard must protect the announced target.' :
       action === 'heal' && actor.hp >= h.maxHp && overflowBarrier(data, heroId, actor) <= 0 ? 'This ally is at full health.' :
       action === 'ward' && actor.barrier >= skillPower(data, heroId, 'ward') ? 'This ally already has this barrier.' : '');
@@ -997,6 +1010,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   // Haste's baton (save v52) raises this one action, then it is spent.
   const baton = actor.baton ?? 0; delete actor.baton;
   const passed = (n: number) => baton ? Math.round(n * (100 + baton) / 100) : n;
+  // A challenge's grudge (save v53) adds to this action's first hit, then it is spent.
+  let grudge = Math.min(CHALLENGE_GRUDGE_MAX, actor.grudge?.amount ?? 0); delete actor.grudge;
   // Every hero hit adds corrosion, valor and its own capstone bonuses.
   const strike = (foe: EnemyState, power: number, text: string) => {
     const boss=foe===enemy&&targetKind(command.action)==='enemy'&&power>0&&foe.markedUntil>state.round?bossPowerReady(state,data,hero.id,'focus'):0;
@@ -1005,7 +1020,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     const raised = banner || baton ? Math.round(power * (100 + banner + baton) / 100) : power;
     // A bard's solo gives this hero the song of valor twice more.
     const solo = (actor.solo?.round ?? 0) >= state.round && state.song?.action === 'valor' && living(state, state.song.heroId) ? songPower(data, state.song.heroId, 'valor') * (SOLO_TIMES - 1) : 0;
-    const amount = Math.min(foe.hp, tired(data, hero.id, veiled(state, data, foe, raised + boss + solo + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)))); foe.hp -= amount; directDamage += amount;
+    const spite = power > 0 ? grudge : 0; if (spite) grudge = 0;
+    const amount = Math.min(foe.hp, tired(data, hero.id, veiled(state, data, foe, raised + boss + solo + spite + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)))); foe.hp -= amount; directDamage += amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text });
     if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
     leech(state, data, hero.id, amount, events);
@@ -1295,8 +1311,10 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'halo': state.halo = { heroId: hero.id }; events.push({ type: 'buff', sourceId: hero.id, targetId: hero.id, amount: skill.power, text: 'Halo.' }); break;
     case 'bless': {
       const ally = state.heroes.find(h => h.id === command.targetId)!;
-      ally.renew = { heroId: hero.id, amount: skill.power, until: state.round + 2 };
-      events.push({ type: 'buff', sourceId: hero.id, targetId: ally.id, amount: skill.power, text: 'Renew.' }); break;
+      // Save v53: heals now and once more as the next round begins.
+      ally.renew = { heroId: hero.id, amount: skill.power, until: state.round + 1 };
+      events.push({ type: 'buff', sourceId: hero.id, targetId: ally.id, amount: skill.power, text: 'Renew.' });
+      heal(ally.id, skill.power); break;
     }
     // Spear rework (save v50): the pinning spear hits and cuts the target's next move; the shove hits and, when the foe
     // can be moved, swaps it with the back-row foe of its column until its own next turn ends; the charge reaches the back
@@ -1433,7 +1451,10 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'challenge': {
       const slot = upcomingTurns(state, data, state.order.length * 2 + data.enemies.length).find(t => t.actorId === command.targetId);
       if (slot) state.challenge = { heroId: hero.id, enemyId: command.targetId, round: slot.round };
-      events.push({ type: 'taunt', sourceId: hero.id, targetId: command.targetId, text: 'Challenge.' }); break;
+      events.push({ type: 'taunt', sourceId: hero.id, targetId: command.targetId, text: 'Challenge.' });
+      // Save v53: the challenge hits too, and the foe's damage on the knight until his next turn feeds his next hit.
+      damage(skill.power); if (enemy!.hp > 0) actor.grudge = { enemyId: enemy!.id, amount: 0 };
+      break;
     }
     case 'bulwark':
       state.bulwark = { heroId: hero.id };
@@ -1442,12 +1463,13 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       const allies = state.heroes.filter(h => h.hp > 0 && h.id !== hero.id);
       const ratio = (h: HeroState) => h.hp / data.heroes.find(d => d.id === h.id)!.maxHp;
       const low = allies.reduce((a, h) => ratio(h) < ratio(a) ? h : a);
-      state.guard = { heroId: hero.id, targetId: low.id, sourceId: state.intent!.sourceId, all: true };
+      state.guard = { heroId: hero.id, targetId: low.id, sourceId: state.intent!.sourceId, all: true, rouse: true };
       events.push({ type: 'guard', sourceId: hero.id, targetId: low.id, text: 'Stand beside.' }); break;
     }
     case 'sanctuary':
-      state.sanctuary = { heroId: hero.id, targetId: command.targetId };
-      events.push({ type: 'sanctuary', sourceId: hero.id, targetId: command.targetId, text: 'The ally cannot fall until the priest’s next turn.' });
+      // Save v53: a lasting sanctuary, spent by the first hit that would down the ally.
+      state.heroes.find(h => h.id === command.targetId)!.sanctum = { heroId: hero.id };
+      events.push({ type: 'sanctuary', sourceId: hero.id, targetId: command.targetId, text: 'The ally will not fall to the next downing hit this battle.' });
       // Priest tree modifiers: solace cuts the damage the ally takes, a double sanctuary adds a barrier.
       if (hasCap(data, hero.id, 'solace')) state.solace = { heroId: hero.id, targetId: command.targetId };
       if (hasCap(data, hero.id, 'sanctuaryward')) barrier(state.heroes.find(h => h.id === command.targetId)!, capAmount(data, hero.id, 'sanctuaryward'));
