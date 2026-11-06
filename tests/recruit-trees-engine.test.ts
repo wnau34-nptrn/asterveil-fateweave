@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CATALYST_PER_ROUND, DISARM_MULTIPLIER, DREAD_FINALE, GUARD_STONE_HEAL, SOLO_TIMES, beginBattle, enemyIntent, previewCommand, replay, resolveCommand, skillPower, songPower, targetOptions } from '../src/core/battle/engine';
+import { CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, DISARM_MULTIPLIER, DREAD_FINALE, GUARD_STONE_HEAL, SOLO_TIMES, beginBattle, enemyIntent, previewCommand, replay, resolveCommand, skillPower, songPower, targetOptions } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, HeroDefinition, HeroTalents, TalentCap } from '../src/core/battle/types';
 import { veilSiege } from '../src/content/encounters/veil-siege';
 import { mercenaries } from '../src/content/heroes/mercenaries';
@@ -15,6 +15,8 @@ function withMerc(id: string, slot: number, patch: Record<string, Patch>, base: 
   const heroes = [...veilSiege.heroes]; heroes[slot] = merc(id);
   return { ...base, heroes: heroes.map(h => { const p = patch[h.id]; return p ? { ...h, ...(p.actions ? { actions: ['attack', ...p.actions] } : {}), ...(p.talents ? { talents: p.talents } : {}), ...(p.lane ? { lane: p.lane } : {}) } : h; }) };
 }
+// Two foes side by side in the front row: the raider moves from b1 to f2.
+const besides = (d: EncounterDefinition): EncounterDefinition => ({ ...d, enemies: d.enemies.map(e => e.id === 'b1' ? { ...e, id: 'f2', row: 'front' as const } : e), intents: d.intents.map(i => i.sourceId === 'b1' ? { ...i, sourceId: 'f2' } : i) });
 const caps = (c: Partial<Record<TalentCap, number>>): HeroTalents => ({ caps: c });
 function turnOf(d: EncounterDefinition, id: string, s: BattleState = beginBattle(d).state): BattleState { const t = structuredClone(s); t.turnIndex = t.order.indexOf(id); return t; }
 const cast = (d: EncounterDefinition, s: BattleState, heroId: string, action: ActionId, targetId: string) => {
@@ -54,13 +56,41 @@ describe('alchemist tree (Toma)', () => {
     expect(hero(r.state, 'weaver')).toMatchObject({ empowered: { percent: 25, round: 2 }, exposed: { percent: 10, round: 2 } });
     expect(taken(fromEnemy(d, r, 'f1'))).toEqual({ target: 'weaver', amount: Math.ceil(28 * 1.1) });
   });
-  it('catalyst bursts the corrosion left and spends it; a plain target takes the catalyst alone', () => {
-    const d = withMerc('toma', 3, { toma: { actions: ['catalyst'] } }); const s = turnOf(d, 'toma');
+  it('catalyst (save v52): the acid works once at once and stays; half the hit splashes the neighbour; a plain target takes the catalyst alone', () => {
+    const d = withMerc('toma', 3, { toma: { actions: ['catalyst'] } }, besides(veilSiege)); const s = turnOf(d, 'toma');
     Object.assign(foe(s, 'f1'), { corrodedUntil: 3, corrodeBonus: 6 });
-    const r = cast(d, s, 'toma', 'catalyst', 'f1');
-    expect(r.turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(skillPower(d, 'toma', 'catalyst') + 2 * CATALYST_PER_ROUND + 6);
-    expect(foe(r.state, 'f1').corrodedUntil).toBeUndefined();
-    expect(cast(d, turnOf(d, 'toma'), 'toma', 'catalyst', 'f1').turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(skillPower(d, 'toma', 'catalyst'));
+    const r = cast(d, s, 'toma', 'catalyst', 'f1'); const burst = skillPower(d, 'toma', 'catalyst') + CATALYST_PER_ROUND;
+    const hits = r.turns[0]!.events.filter(e => e.type === 'damage');
+    expect(hits.map(e => [e.targetId, e.amount])).toEqual([['f1', burst + 6], ['f2', Math.floor(burst * CATALYST_SPLASH / 100)]]);
+    expect(foe(r.state, 'f1')).toMatchObject({ corrodedUntil: 3, corrodeBonus: 6 });
+    // The neighbour must stand in the same row: a back-row foe of the same column is not beside it.
+    const apart = withMerc('toma', 3, { toma: { actions: ['catalyst'] } }); const a = turnOf(apart, 'toma'); Object.assign(foe(a, 'f1'), { corrodedUntil: 3, corrodeBonus: 6 });
+    expect(cast(apart, a, 'toma', 'catalyst', 'f1').turns[0]!.events.filter(e => e.type === 'damage').map(e => e.targetId)).toEqual(['f1']);
+    const plain = cast(d, turnOf(d, 'toma'), 'toma', 'catalyst', 'f1').turns[0]!.events.filter(e => e.type === 'damage');
+    expect(plain.map(e => [e.targetId, e.amount])).toEqual([['f1', skillPower(d, 'toma', 'catalyst')]]);
+  });
+  it('smoke (save v52): on a corroded target it spreads half its cut to the neighbour; not on a clean one', () => {
+    const d = withMerc('toma', 3, { toma: { actions: ['smoke'] } }, besides(veilSiege)); const s = turnOf(d, 'toma');
+    expect(foe(cast(d, s, 'toma', 'smoke', 'f1').state, 'f2').weaken).toBeUndefined();
+    Object.assign(foe(s, 'f1'), { corrodedUntil: 3, corrodeBonus: 6 });
+    const r = cast(d, s, 'toma', 'smoke', 'f1');
+    expect([foe(r.state, 'f1').weaken, foe(r.state, 'f2').weaken]).toEqual([40, 20]);
+    // Poison smoke corrodes the clean target after the check: no spread on that first throw.
+    const poison = withMerc('toma', 3, { toma: { actions: ['smoke'], talents: caps({ smokepoison: 0 }) } }, besides(veilSiege));
+    expect(foe(cast(poison, turnOf(poison, 'toma'), 'toma', 'smoke', 'f1').state, 'f2').weaken).toBeUndefined();
+  });
+  it('haste (save v52) passes the baton: the ally’s next action is 20% stronger, then it is spent', () => {
+    const d = withMerc('toma', 3, { toma: { actions: ['haste'] } }); const s = turnOf(d, 'toma');
+    const r = cast(d, s, 'toma', 'haste', 'weaver'); expect(hero(r.state, 'weaver').baton).toBe(HASTE_BATON);
+    const t = turnOf(d, 'weaver', r.state); const target = targetOptions(t, d, 'weaver', 'attack').find(o => o.valid)!.id;
+    const plain = turnOf(d, 'weaver', s); const base = cast(d, plain, 'weaver', 'attack', target).turns[0]!.events.find(e => e.type === 'damage')!.amount!;
+    const boosted = cast(d, t, 'weaver', 'attack', target);
+    // The raise applies to the hit's own power (Eira's attack), before the flat bonuses.
+    const power = d.heroes.find(h => h.id === 'weaver')!.attack;
+    expect(boosted.turns[0]!.events.find(e => e.type === 'damage')!.amount).toBe(base - power + Math.round(power * (100 + HASTE_BATON) / 100));
+    expect(hero(boosted.turns[0]!.state, 'weaver').baton).toBeUndefined();
+    const again = turnOf(d, 'toma', r.state); hero(again, 'toma').cooldowns = {};
+    expect(targetOptions(again, d, 'toma', 'haste').find(o => o.id === 'weaver')!.reason).toBe('Already hasted.');
   });
   it('chain reaction passes the corrosion of a fallen foe on; the mobile lab hastes the slowest ally in round 1', () => {
     const d = withMerc('toma', 3, { toma: { talents: caps({ chainreaction: 0 }) } }); const s = turnOf(d, 'tracer');

@@ -9,7 +9,7 @@ Every catalog character at ★1 and the map boss level; epic map-level main-stat
 | weaver | Mage | ruined-border | 3 | 12/12 | 97.6% | 2.3 | {"b1":2} / bolt, ward |
 | healer | Priest | ruined-border | 3 | 12/12 | 97.6% | 2.3 | {"b1":2} / heal, prayer |
 | mira | Archer | ruined-border | 3 | 12/12 | 97.9% | 2.3 | {"c1":2} / hinder, volley |
-| toma | Alchemist | ruined-border | 3 | 12/12 | 91.0% | 2.3 | {"b1":2} / acid, haste |
+| toma | Alchemist | ruined-border | 3 | 12/12 | 90.8% | 2.3 | {"b1":2} / acid, haste |
 | sefa | Scout | ruined-border | 3 | 12/12 | 97.9% | 2.3 | {"c1s":1,"c1":1} / ambush, evade, knives |
 | brann | Warden | ruined-border | 3 | 12/12 | 94.8% | 2.3 | {"c1s":1,"c1":1} / taunt, slam, guardstone |
 | lio | Bard | ruined-border | 3 | 12/12 | 97.7% | 2.3 | {"b1":2} / valor, mend |

@@ -71,7 +71,7 @@ describe('save v46', () => {
     const p = newProfile(map, 17); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
     const game = depart(p, map, lookup, 77);
     game.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...game.run.hp }, commands: [{ heroId: 'healer', beat: 0, action: 'revive', targetId: 'tracer' }] };
-    let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game); expect(JSON.parse(raw).version).toBe(51);
+    let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game); expect(JSON.parse(raw).version).toBe(52);
     const old = JSON.parse(raw) as { version: number }; old.version = 45;
     const migrated = parseGame(JSON.stringify(old), map, lookup);
     expect(migrated.run!.battle!.commands).toEqual([]); expect(migrated.run!.battle!.entry).toEqual(game.run.battle.entry);
@@ -164,5 +164,29 @@ describe('save v51 (skill rework step 4: Astrid, 2026-11-06)', () => {
     const plain = depart(p, map, lookup, 77);
     plain.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...plain.run.hp }, commands: [] };
     expect(v50(plain).run!.battle).toEqual(plain.run.battle);
+  });
+});
+
+describe('save v52 (skill rework step 5: Toma, 2026-11-06)', () => {
+  it('a v51 battle that used Haste, Smoke or Catalyst restarts from its entry HP; others and the profile are kept', async () => {
+    const { chapterOne: map } = await import('../src/content/world/chapter1');
+    const { encounterById: lookup } = await import('../src/content/encounters/catalog');
+    const { depart, newProfile } = await import('../src/core/world/profile');
+    const { parseGame, saveGame } = await import('../src/core/save/expedition-save');
+    const p = newProfile(map, 17); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
+    const v51 = (game: ReturnType<typeof depart>) => {
+      let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game);
+      const old = JSON.parse(raw) as { version: number }; old.version = 51; return parseGame(JSON.stringify(old), map, lookup);
+    };
+    for (const action of ['haste', 'smoke', 'catalyst'] as const) {
+      const game = depart(p, map, lookup, 77);
+      game.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...game.run.hp }, commands: [{ heroId: 'toma', beat: 0, action, targetId: action === 'haste' ? 'guardian' : 'f1' }] };
+      const migrated = v51(game);
+      expect(migrated.run!.battle!.commands).toEqual([]); expect(migrated.run!.battle!.entry).toEqual(game.run.battle.entry);
+      expect(migrated.profile.members).toEqual(game.profile.members);
+    }
+    const plain = depart(p, map, lookup, 77);
+    plain.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...plain.run.hp }, commands: [] };
+    expect(v51(plain).run!.battle).toEqual(plain.run.battle);
   });
 });

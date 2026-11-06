@@ -4,7 +4,7 @@ import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } fr
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
-import { BEAT_MAX, braceStrikePower, CHARGE_EXPOSED, PIERCE_BEHIND, PIN_PERCENT, SHOVE_LOCK, SPEARWALL_MAX, SPEARWALL_STEP, DEEP_BEAT_LOW, ROUND_PAIR_BONUS, HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
+import { BEAT_MAX, braceStrikePower, CHARGE_EXPOSED, PIERCE_BEHIND, PIN_PERCENT, SHOVE_LOCK, SPEARWALL_MAX, SPEARWALL_STEP, DEEP_BEAT_LOW, ROUND_PAIR_BONUS, HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, DISARM_MULTIPLIER, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
 import type { IconName } from './icons';
 export const thaiFont = '"Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif';
 export const heroText: Record<string, { name: string; role: string; help: string; icon: string }> = {
@@ -88,7 +88,7 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     slam: `ทุบค้อนรูน ${skill.power} หรือ ${skill.power + data.rules.quakeBonus} ถ้าท่าถัดไปของเป้าหมายเล็งผู้ใช้`,
     valor: `บรรเลงเพลงกล้าค้างไว้ ทุกการโจมตีของทีมแรงขึ้น +${songPower(data, heroId, 'valor')} (รวมสกิลและการสวน) จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
     mend: `บรรเลงเพลงฟื้นค้างไว้ ทุกคนที่ยังยืนอยู่ฟื้นเลือด ${songPower(data, heroId, 'mend')} เมื่อเริ่มแต่ละรอบใหม่ จนกว่าจะเปลี่ยนเพลงหรือลิโอล้ม เล่นได้ทีละเพลง`,
-    haste: `ให้ยาเร่งเพื่อนที่ยังยืนอยู่ 1 คน: ถ้ายังไม่ได้ลงมือในรอบนี้ ได้ลงมือต่อจากโทมะทันที ถ้าลงมือไปแล้ว (หรือให้ตัวเอง) ได้ลงมือก่อนทุกคนในรอบถัดไป ไม่เพิ่มเทิร์น แค่เปลี่ยนลำดับ`,
+    haste: `ให้ยาเร่งเพื่อนที่ยังยืนอยู่ 1 คน: ถ้ายังไม่ได้ลงมือในรอบนี้ ได้ลงมือต่อจากโทมะทันที ถ้าลงมือไปแล้ว (หรือให้ตัวเอง) ได้ลงมือก่อนทุกคนในรอบถัดไป · ส่งไม้: การลงมือครั้งนั้นแรงขึ้น ${HASTE_BATON}% (ดาเมจ รักษา และโล่) ไม่เพิ่มเทิร์น แค่เปลี่ยนลำดับ`,
     rally: `ตั้งรับหมู่ เพื่อนทุกคนที่ยังยืนอยู่ (รวมเอกิส) ลดความเสียหาย ${Math.round(rallyReductionOf(data, heroId) * 100)}% จากการโจมตีครั้งแรกที่โดน จนถึงเทิร์นถัดไปของเอกิส`,
     finisher: `ปลิดชีพ ${skill.power} หรือ ${skill.power * 2} ถ้าเลือดศัตรูต่ำกว่า ${data.rules.finisherThreshold * 100}% ไม่ใช้ตรา`,
     sigil: `ตรึงเวท ${skill.power} และยกเลิกท่าพลังงานครั้งถัดไปของเป้าหมาย ท่ากายภาพยังโจมตีตามปกติ (กระแทกโล่ใช้หยุดกายภาพ)`,
@@ -116,9 +116,9 @@ export function skillDescription(action: ActionId, heroId: string, data: Encount
     disengage: `ยิงถอยคิว ${skill.power} ถ้าเป้ายังไม่ได้ลงมือรอบนี้ ย้ายไปท้ายคิวรอบนี้ ไม่เพิ่มหรือลดเทิร์น`,
     pin: `ศรตรึงแถว ศัตรูแถวหน้าทุกตัวโดนตัวละ ${skill.power} และแถวหน้าเลิกบังแถวหลังถึงจบรอบถัดไป ทั้งทีมตีแถวหลังได้`,
     track: `ศรตามรอย ${skill.power} ถ้าเป้าหมายถูกยิงสกัดอยู่ จะยิงซ้ำอีก ${skill.power} ตอนจบรอบ`,
-    smoke: `ขวดควัน ท่าถัดไปของเป้าหมายเบาลง ${skill.power}% ไม่ว่ากายภาพหรือพลังงาน (ลดได้แต่ไม่ยกเลิก ใช้กับท่าไม้ตายบอสได้)`,
+    smoke: `ขวดควัน ท่าถัดไปของเป้าหมายเบาลง ${skill.power}% ไม่ว่ากายภาพหรือพลังงาน (ลดได้แต่ไม่ยกเลิก ใช้กับท่าไม้ตายบอสได้) · ถ้าเป้าหมายติดกรดอยู่แล้ว ควันลามไปศัตรูข้าง ๆ ในแถวเดียวกัน เบาลง ${Math.round(skill.power / 2)}%`,
     fury: `ยาคลั่ง เพื่อน 1 คน (รวมตัวเอง) โจมตีแรงขึ้น ${skill.power}% จนจบรอบถัดไป แต่รับความเสียหายเพิ่ม ${FURY_EXPOSED}% ในช่วงเดียวกัน`,
-    catalyst: `ตัวเร่งปฏิกิริยา ${skill.power} ถ้าเป้าหมายถูกกัดกร่อนอยู่ ระเบิดเพิ่ม ${CATALYST_PER_ROUND} ต่อรอบที่กร่อนเหลือ แล้วกร่อนหมด`,
+    catalyst: `ตัวเร่งปฏิกิริยา ${skill.power} ถ้าเป้าหมายถูกกัดกร่อนอยู่ กรดทำงานทันทีหนึ่งรอบ +${CATALYST_PER_ROUND} (กรดยังอยู่ ไม่ล้าง) และกระเด็น ${CATALYST_SPLASH}% ไปศัตรูข้าง ๆ ในแถวเดียวกัน`,
     knives: `มีดบินโดนศัตรูแถวหลังทุกตัว ตัวละ ${skill.power} แม้แถวหน้าบังอยู่ (แถวหลังว่างจะโดนแถวหน้าแทน)`,
     decoy: `เงาคุ้มกัน ให้ก้าวเงาแก่เพื่อนที่ยังยืน 1 คน (ไม่ใช่ตัวเอง) หลบกายภาพหรือพลังงานครั้งแรกจนถึงเทิร์นถัดไปของผู้ให้`,
     disarm: `ปาดตัดหน้า ${skill.power} หรือ ${Math.round(skill.power * DISARM_MULTIPLIER)} ถ้าเป้ายังไม่ได้ลงมือรอบนี้และท่าถัดไปเล็งเพื่อนคนอื่น`,
@@ -400,7 +400,7 @@ export function reasonThai(reason: string): string {
     'Choose the enemy to bend it onto.': 'เลือกศัตรูที่จะรับท่าก่อนยืนยัน',
     'No curse on any enemy.': 'ยังไม่มีศัตรูติดสาป',
     'Already playing this song.': 'กำลังบรรเลงเพลงนี้อยู่แล้ว',
-    'Already hasted.': 'ได้ยาเร่งสำหรับรอบหน้าแล้ว',
+    'Already hasted.': 'ได้ยาเร่งอยู่แล้ว (ยังไม่ได้ใช้)',
     'No song is playing.': 'ต้องบรรเลงเพลงอยู่ก่อน',
     'This enemy is aiming at the scout.': 'ศัตรูตัวนี้เล็งเซฟาอยู่',
     'A front-row enemy shields this target.': 'ศัตรูแถวหน้าบังอยู่ ต้องล้มแถวหน้าก่อน หรือใช้สกิลตีทะลุ',
@@ -434,7 +434,7 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'finale': return `${source}บรรเลงบทสุดท้าย · ${event.text === 'Finale of valor.' ? 'โจมตีศัตรูทุกตัว' : 'ฟื้นเลือดทั้งทีม'}`;
     case 'counter': return event.text === 'The ward reflects the hit.' ? `โล่เวทของ${source}สะท้อนใส่${target} ${event.amount}` : event.text === 'The knight counters.' ? `${source}โต้กลับ${target} ${event.amount}` : event.text === 'The warden hammers back.' ? `${source}ทุบสวน${target} ${event.amount}` : event.text === 'Thorns strike back.' ? `หนามของ${source}สวน${target} ${event.amount}` : `${source}แทงสวน${target} ${event.amount}`;
     case 'corrode': return `${target}ถูกกัดกร่อน · ทุกการโจมตีของทีม +${event.amount}`;
-    case 'haste': return `${target}จะลงมือก่อนทุกคนในรอบถัดไป`;
+    case 'haste': return `${event.text === 'Ally acts next.' ? `${target}ลงมือต่อทันที` : `${target}จะลงมือก่อนทุกคนในรอบถัดไป`} · การลงมือครั้งนั้นแรงขึ้น ${HASTE_BATON}%`;
     case 'song': return `${source}เริ่มบรรเลงเพลงใหม่ ค้างไว้จนเปลี่ยนเพลง`;
     case 'taunt': if (event.text === 'Challenge.') return `${source}ท้าดวล${target} · ท่าถัดไปของมันจะเล็ง${source}`;
       return `${source}ยั่วยุ · ศัตรูทุกตัวจะเล็ง${source}จนถึงเทิร์นถัดไป (รับเบาลง ${Math.round(tauntReductionOf(data, event.sourceId) * 100)}%)`;

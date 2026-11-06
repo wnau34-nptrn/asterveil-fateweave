@@ -194,10 +194,12 @@ export function talentHitBonus(state: BattleState, data: EncounterDefinition, he
     + (state.order.indexOf(enemy.id) > state.turnIndex ? capAmount(data, heroId, 'opportunist') : 0);
 }
 // ---- Recruit big trees (owner 2026-10-23, docs/design/SKILL_TREES_ALL_TH.md, draft numbers) ----
-// Catalyst: per corroded round left; disarm: a physical next move is cut; tremor: every front foe (or the back row when
+// Catalyst (save v52): a corroded target's acid works once at once (CATALYST_PER_ROUND) without being spent, and
+// CATALYST_SPLASH% of the hit lands on its neighbours; haste passes the baton (HASTE_BATON% on the ally's next action);
+// smoke on a corroded target spreads half its cut to the neighbours. Disarm: a physical next move is cut; tremor: every front foe (or the back row when
 // the front is empty) takes its power and its next move is drawn onto the warden (`drawnBy`), not cut;
 // guardian stone heals the warden when it holds; a finale of dread shields allies; solo triples the song.
-export const CATALYST_PER_ROUND = 8; export const DISARM_MULTIPLIER = 1.6;
+export const CATALYST_PER_ROUND = 8; export const CATALYST_SPLASH = 50; export const HASTE_BATON = 20; export const DISARM_MULTIPLIER = 1.6;
 export const NOTE_PER_ROUND = 3; export const NOTE_MAX_ROUNDS = 3;
 export const isDelayed = (enemy: EnemyState, round: number): boolean => Math.max(enemy.delayedRound ?? 0, enemy.delayedAlso ?? 0) >= round;
 export const GUARD_STONE_HEAL = 6; export const DREAD_FINALE = 10; export const SOLO_TIMES = 3; export const FURY_EXPOSED = 10;
@@ -211,6 +213,14 @@ function chainReaction(state: BattleState, data: EncounterDefinition, foe: Enemy
   next.corrodedUntil = Math.max(next.corrodedUntil ?? 0, foe.corrodedUntil!); next.corrodeBonus = Math.max(next.corrodeBonus ?? 0, foe.corrodeBonus ?? data.rules.corrodeBonus);
   delete foe.corrodedUntil; delete foe.corrodeBonus;
   events.push({ type: 'corrode', sourceId: alchemist.id, targetId: next.id, amount: next.corrodeBonus, text: 'Chain reaction.' });
+}
+// A foe's neighbours (save v52): the nearest standing foe on each side of it in its current row (slot numbers, empty slots skipped).
+export function foeNeighbours(state: BattleState, data: EncounterDefinition, enemyId: string): EnemyState[] {
+  const row = foeRow(state, data, enemyId); const at = Number(enemyId[1]);
+  const mates = state.enemies.filter(e => e.hp > 0 && e.id !== enemyId && foeRow(state, data, e.id) === row && Number.isFinite(Number(e.id[1])));
+  const left = mates.filter(e => Number(e.id[1]) < at).sort((a, b) => Number(b.id[1]) - Number(a.id[1]))[0];
+  const right = mates.filter(e => Number(e.id[1]) > at).sort((a, b) => Number(a.id[1]) - Number(b.id[1]))[0];
+  return [left, right].filter((e): e is EnemyState => !!e);
 }
 // Duelist shared mark (tree modifier): allies' hits on a marked foe gain her bonus.
 const sharedMark = (state: BattleState, data: EncounterDefinition, heroId: string): number =>
@@ -924,7 +934,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
   }
   if (action === 'haste') return data.heroes.map(h => {
     const ally = state.heroes.find(s => s.id === h.id)!;
-    const reason = unavailable || (ally.hp <= 0 ? 'This hero is down.' : ally.hastedRound === state.round + 1 ? 'Already hasted.' : '');
+    const reason = unavailable || (ally.hp <= 0 ? 'This hero is down.' : ally.hastedRound === state.round + 1 || ally.baton ? 'Already hasted.' : '');
     return { id: h.id, name: h.name, valid: !reason, reason };
   });
   // A priest's revive raises an ally who fell in this battle, once per battle; a blessing goes to another standing ally.
@@ -984,12 +994,15 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   let directDamage = 0;
   let cooldownAdjustment = 0;
   const chiBefore = actor.chi ?? 0;
+  // Haste's baton (save v52) raises this one action, then it is spent.
+  const baton = actor.baton ?? 0; delete actor.baton;
+  const passed = (n: number) => baton ? Math.round(n * (100 + baton) / 100) : n;
   // Every hero hit adds corrosion, valor and its own capstone bonuses.
   const strike = (foe: EnemyState, power: number, text: string) => {
     const boss=foe===enemy&&targetKind(command.action)==='enemy'&&power>0&&foe.markedUntil>state.round?bossPowerReady(state,data,hero.id,'focus'):0;
     if(boss)actor.bossUsedRound=state.round;
     const banner = (actor.empowered?.round ?? 0) >= state.round ? actor.empowered!.percent : 0;
-    const raised = banner ? Math.round(power * (100 + banner) / 100) : power;
+    const raised = banner || baton ? Math.round(power * (100 + banner + baton) / 100) : power;
     // A bard's solo gives this hero the song of valor twice more.
     const solo = (actor.solo?.round ?? 0) >= state.round && state.song?.action === 'valor' && living(state, state.song.heroId) ? songPower(data, state.song.heroId, 'valor') * (SOLO_TIMES - 1) : 0;
     const amount = Math.min(foe.hp, tired(data, hero.id, veiled(state, data, foe, raised + boss + solo + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)))); foe.hp -= amount; directDamage += amount;
@@ -1002,14 +1015,14 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   // Split bolt (talent): the other living enemies take half the skill power; piercing line only the one in the same column.
   const splash = (power: number, column = false) => { for (const foe of state.enemies.filter(e => e.hp > 0 && e.id !== enemy!.id && (!column || e.id[1] === enemy!.id[1]))) strike(foe, Math.floor(power / 2), 'The hit carries on.'); };
   const row = (id: string) => foeRow(state, data, id);
-  const barrier = (h: HeroState, amount: number) => {
-    const added = h.hp > 0 ? Math.max(h.barrier, amount) - h.barrier : 0;
+  const barrier = (h: HeroState, full: number) => {
+    const amount = passed(full); const added = h.hp > 0 ? Math.max(h.barrier, amount) - h.barrier : 0;
     if (added) { h.barrier += added; events.push({ type: 'barrier', sourceId: hero.id, targetId: h.id, amount: added, text: 'Added barrier.' }); }
   };
   const livingBefore = state.enemies.filter(e => e.hp > 0).map(e => e.id);
   const heal = (id: string, full: number) => {
     const target = state.heroes.find(h => h.id === id)!; if (!target.hp) return;
-    const power = tired(data, hero.id, full);
+    const power = passed(tired(data, hero.id, full));
     const amount = Math.min(power, data.heroes.find(h => h.id === id)!.maxHp - target.hp);
     if (amount) { target.hp += amount; events.push({ type: 'heal', sourceId: hero.id, targetId: id, amount, text: 'Restored HP.' }); }
     // Afterglow (★5): healing beyond full HP becomes a barrier (capped, not stacking).
@@ -1321,8 +1334,10 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'smoke': {
       // Smoke: the target's next move is cut whatever its kind (a wide smoke cuts the target's whole row by less; a
       // poison smoke corrodes the target too). Nothing is cancelled, so a boss's signature move is only cut.
-      const wide = hasCap(data, hero.id, 'smokewide');
+      // Save v52: smoke on a target already corroded spreads half its cut (20%) to the target's neighbours.
+      const wide = hasCap(data, hero.id, 'smokewide'); const soaked = (enemy!.corrodedUntil ?? 0) > state.round;
       for (const foe of state.enemies.filter(e => e.hp > 0 && (e.id === enemy!.id || (wide && row(e.id) === row(enemy!.id))))) weaken(foe, wide ? capAmount(data, hero.id, 'smokewide') : skill.power);
+      if (soaked) for (const foe of foeNeighbours(state, data, enemy!.id)) weaken(foe, Math.round(skill.power / 2));
       if (hasCap(data, hero.id, 'smokepoison')) corrode(enemy!);
       break;
     }
@@ -1333,10 +1348,11 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       events.push({ type: 'buff', sourceId: hero.id, targetId: ally.id, amount: skill.power, text: 'Fury tonic.' }); break;
     }
     case 'catalyst': {
-      // A corroded target bursts for every round of corrosion left, then the corrosion is spent.
-      const left = Math.max(0, (enemy!.corrodedUntil ?? 0) - state.round);
-      damage(skill.power + left * CATALYST_PER_ROUND);
-      if (left) { delete enemy!.corrodedUntil; delete enemy!.corrodeBonus; }
+      // Save v52: a corroded target's acid works once at once (the corrosion stays) and half the hit splashes on its neighbours.
+      const soaked = (enemy!.corrodedUntil ?? 0) > state.round; const beside = soaked ? foeNeighbours(state, data, enemy!.id) : [];
+      const burst = skill.power + (soaked ? CATALYST_PER_ROUND : 0);
+      damage(burst);
+      for (const foe of beside) strike(foe, Math.floor(burst * CATALYST_SPLASH / 100), 'The catalyst splashes.');
       break;
     }
     case 'knives': {
@@ -1485,7 +1501,9 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'haste': {
       // Haste (owner 2026-10-23): an ally still to act this round acts right after the alchemist; one who has acted
       // (or the alchemist herself) acts before everyone next round. Order only: nobody gains a turn.
+      // Save v52 (baton pass): that next action is HASTE_BATON% stronger.
       const ally = state.heroes.find(h => h.id === command.targetId)!; const at = state.order.indexOf(ally.id);
+      ally.baton = HASTE_BATON;
       if (at > state.turnIndex + 1) {
         state.order.splice(at, 1); state.order.splice(state.turnIndex + 1, 0, ally.id);
         events.push({ type: 'haste', sourceId: hero.id, targetId: ally.id, text: 'Ally acts next.' });
@@ -1507,7 +1525,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     case 'guard': state.guard = { heroId: hero.id, targetId: command.targetId, sourceId: state.intent!.sourceId, ...(hasCap(data, hero.id, 'twoguard') ? { uses: 2 } : {}) }; events.push({ type: 'guard', sourceId: hero.id, targetId: command.targetId, text: 'Guard until announced attacker acts or Knight returns.' }); break;
     case 'ward': {
       // Echo (★5): a ward on the hero the enemy has announced it will strike is stronger.
-      const power = hasPassive(data, hero.id, 'echo') && state.intent?.targetId === command.targetId ? Math.round(skill.power * (1 + data.rules.echoBonus)) : skill.power;
+      const power = passed(hasPassive(data, hero.id, 'echo') && state.intent?.targetId === command.targetId ? Math.round(skill.power * (1 + data.rules.echoBonus)) : skill.power);
       const target = state.heroes.find(h => h.id === command.targetId)!; const amount = Math.max(target.barrier, power) - target.barrier;
       target.barrier += amount; events.push({ type: 'barrier', sourceId: hero.id, targetId: target.id, amount, text: 'Added barrier.' });
       if (hasCap(data, hero.id, 'wardreflect')) target.reflect = { heroId: hero.id, amount: capAmount(data, hero.id, 'wardreflect') };

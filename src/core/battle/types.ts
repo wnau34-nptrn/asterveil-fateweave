@@ -137,9 +137,10 @@ export interface EncounterDefinition {
 // Talents: `evadeExtra` = further hits a doubled shadow step dodges; `reflect` = a ward that strikes back once when it absorbs a hit.
 // `evadePhysical` is kept for serializable compatibility; `fell` = downed during this
 // battle (only those can be revived); `revivedRound` = revived this round (acts from the next one);
-// `empowered` = the alchemist fury tonic adds a percent to hits until the end of `round`.
+// `empowered` = the alchemist fury tonic adds a percent to hits until the end of `round`;
+// `baton` = the alchemist's haste (save v52): this hero's next action deals/heals/shields this percent more, then it is spent.
 export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; bossUsedRound?:number; hastedRound?: number; evading?: boolean; evadeExtra?: number; evadePhysical?: boolean; reflect?: { heroId: string; amount: number };
-  fell?: boolean; revivedRound?: number; empowered?: { percent: number; round: number };
+  fell?: boolean; revivedRound?: number; empowered?: { percent: number; round: number }; baton?: number;
   // Dancer rework (save v48): `beats` a dancer's beats (0–BEAT_MAX); `echo` the dancer bound to this ally by duet (her
   // echo follows its next skill up to `until`);
   // `quickened` skills a dance already quickened since their last use, `quickenedBattle` the once-per-battle ones.
