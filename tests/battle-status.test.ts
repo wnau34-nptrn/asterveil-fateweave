@@ -59,13 +59,13 @@ describe('battle status inspection', () => {
   it('describes charges and caster-turn expiry instead of inventing round durations', () => {
     const s = createBattle(data), h = s.heroes[0]!;
     Object.assign(h, { barrier: 18, reflect: { heroId: 'weaver', amount: 4 }, evading: true, evadeExtra: 1, hastedRound: 2 });
-    s.sanctuary = { heroId: 'healer', targetId: h.id };
+    h.sanctum = { heroId: 'healer' };
     s.rally = { heroId: 'guardian', ids: [h.id] };
     s.solace = { heroId: 'healer', targetId: h.id };
     const rows = unitStatuses(s, data, h.id);
     expect(rows.find(r => r.id === 'evade')?.detail).toContain('2 ครั้ง');
     expect(rows.find(r => r.id === 'haste')?.duration).toBe('มีผลในรอบ 2 เท่านั้น');
-    expect(rows.find(r => r.id === 'sanctuary')?.duration).toContain('เทิร์นถัดไปของเซเรน');
+    expect(rows.find(r => r.id === 'sanctuary')?.duration).toContain('ทั้งศึก');
     expect(rows.find(r => r.id === 'reflect')?.detail).toContain('4');
     s.rally.ids = [];
     expect(unitStatuses(s, data, h.id).map(r => r.id)).not.toContain('rally');

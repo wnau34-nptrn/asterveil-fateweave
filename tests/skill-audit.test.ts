@@ -50,11 +50,11 @@ describe('C11 skill contract',()=>{
   const physical=resolveCommand(start,seal,{heroId:'weaver',action:'sigil',targetId:'b1',beat:start.beat}).turns[0]!.state;
   expect(physical.heroes.every(h=>!h.barrier)).toBe(true);
  });
- it('renew ticks exactly twice and expires, with no attack buff',()=>{
+ it('a blessing heals at cast, ticks once and expires (save v53), with no attack buff',()=>{
   const d=fixture('healer','bless'),entry={hp:Object.fromEntries(d.heroes.map(h=>[h.id,10]))};let s=beginBattle(d,entry).state;
   const events=[];let r=resolveCommand(s,d,{heroId:'healer',action:'bless',targetId:d.heroes[1]!.id,beat:s.beat});events.push(...r.events);s=r.state;
   while(s.round<4&&s.outcome==='active'){const id=currentHeroId(s,d)!,target=targetOptions(s,d,id,'attack').find(t=>t.valid)!;r=resolveCommand(s,d,{heroId:id,action:'attack',targetId:target.id,beat:s.beat});events.push(...r.events);s=r.state;}
-  expect(events.filter(e=>e.type==='heal'&&e.text==='Renew.')).toHaveLength(2);expect(s.heroes[1]!.renew).toBeUndefined();expect(s.heroes[1]!.empowered).toBeUndefined();
+  expect(events.filter(e=>e.type==='heal'&&e.text==='Restored HP.'&&e.sourceId==='healer')).toHaveLength(1);expect(events.filter(e=>e.type==='heal'&&e.text==='Renew.')).toHaveLength(1);expect(s.heroes[1]!.renew).toBeUndefined();expect(s.heroes[1]!.empowered).toBeUndefined();
  });
  it('warcry (spear charge, save v50) hits now, opens him to every hit and expires at his own next turn',()=>{
   const d=fixture('garran','warcry');d.intents=d.intents.map(i=>({...i,kind:'physical',targetSlot:0}));let s=beginBattle(d).state;
@@ -112,7 +112,7 @@ describe('C11 save v41 → v42',()=>{
   const game=parseGame(JSON.stringify(old),map,lookup);
   expect(game.profile.members.guardian!.talents).toBeUndefined();expect(game.profile.members.guardian!.loadout).toBeUndefined();
   expect(game.profile.members.guardian!.skillLevels).toEqual({rally:2});expect(game.profile.members.toma!.talents).toEqual({a1:1});
-  expect(JSON.parse(write(game)).version).toBe(52);expect(parseGame(write(game),map,lookup)).toEqual({profile:game.profile,run:null});
+  expect(JSON.parse(write(game)).version).toBe(53);expect(parseGame(write(game),map,lookup)).toEqual({profile:game.profile,run:null});
  });
  it('restarts a changed active skill replay from recorded entry HP without duplicating rewards',()=>{
   const p=newProfile(map,2);const game=depart(p,map,lookup,3),run=game.run;

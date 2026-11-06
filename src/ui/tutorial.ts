@@ -1,4 +1,4 @@
-import { bigMove, capAmount, enemyIntent, actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, previewCommand, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, foeNeighbours, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
+import { bigMove, capAmount, enemyIntent, actionReason, CHARGE_EXPOSED, SPEARWALL_STEP, hexTickPower, validateCommand, cooldownTargets, previewCommand, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, CHALLENGE_GRUDGE_MAX, SANCTUARY_HEAL, foeNeighbours, SOLO_TIMES, isDelayed, ambushBonus, corrodeBonusOf, guardReductionOf, interruptBlock, nextIntentOf, plannedIntents, tauntReductionOf, currentHeroId, skillPower, targetOptions } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition, Command } from '../core/battle/types';
 import { actorName } from './th';
 // Seer advisor (tree-sim tuned 2026-11-06, drafts): a delayed big move still comes, so a delay is worth a small share of
@@ -176,6 +176,21 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    if(intent?.all||new Set(pending.map(i=>i.targetId)).size>=2){const r=make('rally',heroId,'ตั้งรับหมู่รับหลายท่า','ลดท่าแรกของเพื่อนแต่ละคน');if(r)return r;}
    const low=state.heroes.find(h=>h.id!==heroId&&h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.6);
    if(low&&intent&&!intent.all){const r=make('rouse',heroId,'ยืนเคียงข้างเพื่อนบาดเจ็บ','รับแทนจนถึงเทิร์นถัดไป');if(r)return r;}
+   // Save v53: when Guard cannot cover the announced move (none, a whole-party move, or one at the knight himself), spend
+   // a built-up grudge on a hit, else challenge the foe whose single-target move is coming for another ally.
+   const free=!intent||intent.all||intent.targetId===heroId,spite=Math.min(CHALLENGE_GRUDGE_MAX,state.heroes.find(h=>h.id===heroId)?.grudge?.amount??0);
+   if(free&&spite>=6){const g=state.enemies.find(e=>e.id===state.heroes.find(h=>h.id===heroId)!.grudge!.enemyId&&e.hp>0);const h=(intent?.kind==='physical'&&!intent.all&&make('bash',intent.sourceId,'กระแทกโล่ด้วยแค้นสะสม',`แรงขึ้น +${spite}`))||(g&&make('attack',g.id,'คืนแค้นสะสม',`แรงขึ้น +${spite}`));if(h)return h;}
+   const coming=free?plannedIntents(state,data,state.order.length).find(i=>!i.all&&!i.charge&&!i.special&&i.targetId!==heroId&&i.sourceId!==intent?.sourceId&&state.heroes.some(h=>h.id===i.targetId&&h.hp>0)):undefined;
+   // A challenge only when the preview (to the party's next command) beats the knight's plain fallback; the grudge it
+   // builds counts a little below face value. Ungated it was picked 10× in the tree sim and cost the party HP (88 → 80%,
+   // ΔHP −8.6): the pulled hit lands on the knight unreduced, where a later Guard would have cut it.
+   const c=coming&&make('challenge',coming.sourceId,'ท้าดวลดึงท่าที่เล็งเพื่อน',`${actorName(coming.sourceId,data)} จะเล็งเอกิสแทน · แค้นสะสมสูงสุด +${CHALLENGE_GRUDGE_MAX}`);
+   if(c){
+    const worth=(l:Lesson)=>{const r=previewCommand(state,data,{heroId,beat:state.beat,action:l.action,targetId:l.targetId});const me=r.state.heroes.find(h=>h.id===heroId)!;
+     return state.enemies.reduce((n,e)=>n+e.hp-(r.state.enemies.find(x=>x.id===e.id)?.hp??0),0)-state.heroes.reduce((n,h)=>{const a=r.state.heroes.find(x=>x.id===h.id)!;return n+Math.max(0,h.hp+h.barrier-a.hp-a.barrier);},0)*1.2+Math.min(CHALLENGE_GRUDGE_MAX,me.grudge?.amount??0)*.8;};
+    const plain=(intent?.kind==='physical'&&!intent.all&&!interruptBlock(state,data,intent.sourceId,intent)&&make('bash',intent.sourceId,'',''))||attack();
+    if(!plain||worth(c)>worth(plain))return c;
+   }
   }
   if(role==='Duelist'){
    if(intent?.kind==='physical'&&intent.targetId===heroId){const p=make('parry',heroId,'ปัดดาบรับท่ากายภาพ',`${actorName(intent.sourceId,data)} จะโดนฟันสวน`);if(p)return p;}
@@ -201,10 +216,14 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    const low=state.heroes.some(h=>h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.5);
    if(intent?.kind==='energy'&&(intent.all||(intent.damage>=20&&!low))){const h=make('halo',heroId,'วงแสงรับท่าพลังงาน',`ลด ${skillPower(data,heroId,'halo')}%`);if(h)return h;}
    const aimed=intent&&!intent.all?state.heroes.find(h=>h.id===intent.targetId):undefined;
-   if(aimed&&aimed.hp+aimed.barrier<=intent!.damage){const c=make('sanctuary',aimed.id,'พรคุ้มภัยกันล้ม',`${actorName(aimed.id,data)} เลือดไม่ต่ำกว่า 1`);if(c)return c;}
+   // Save v53: the sanctuary lasts, but cast early it cost heals in the tree sim (10 casts, 1 save, team HP 71.9 → 68.8%), so
+   // it still goes to an ally the announced hit would down.
+   if(aimed&&!aimed.sanctum&&aimed.hp+aimed.barrier<=intent!.damage){const c=make('sanctuary',aimed.id,'พรคุ้มภัยกันล้ม',`${actorName(aimed.id,data)} ครั้งแรกที่จะล้ม เหลือเลือด 1 แล้วรักษา ${SANCTUARY_HEAL}`);if(c)return c;}
    const hurt=state.heroes.some(h=>h.hp>0&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp*.7);
    const strong=state.heroes.find(h=>h.hp>0&&!h.renew&&h.hp<data.heroes.find(d=>d.id===h.id)!.maxHp);
-   if(hurt&&strong){const b=make('bless',strong.id,'พรต่อเนื่องให้เพื่อนบาดเจ็บ',`ฟื้น ${skillPower(data,heroId,'bless')} ต่อรอบ 2 รอบ`);if(b)return b;}
+   const healReady=!actionReason(state,data,heroId,'heal');
+   // Save v53: a blessing (6 now + 6) only while Heal is cooling; before it replaced stronger heals.
+   if(hurt&&strong&&!healReady){const b=make('bless',strong.id,'พรต่อเนื่องให้เพื่อนบาดเจ็บ',`ฟื้น ${skillPower(data,heroId,'bless')} ทันทีและอีกครั้งรอบหน้า`);if(b)return b;}
   }
   if(role==='Archer'){
    if(front.length&&back.length&&state.heroes.some(h=>h.hp>0&&lane(h.id)==='front'&&h.id!==heroId)){const p=make('pin','enemies','ตรึงแถวหน้าเปิดแถวหลัง','ทั้งทีมตีแถวหลังได้');if(p)return p;}

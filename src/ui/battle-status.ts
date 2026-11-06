@@ -1,5 +1,5 @@
 import {bossNames,bossDescription} from './boss-equipment';
-import { CHARGE_EXPOSED, CHI_MAX, HEX_MAX, foeRow, hexTickPower, capAmount, corrodeBonus, bigMove, cycleIndex, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, skillPower, rallyReductionOf, songPower, tauntReductionOf } from '../core/battle/engine';
+import { CHALLENGE_GRUDGE_MAX, ROUSE_CUT, SANCTUARY_HEAL, CHARGE_EXPOSED, CHI_MAX, HEX_MAX, foeRow, hexTickPower, capAmount, corrodeBonus, bigMove, cycleIndex, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, skillPower, rallyReductionOf, songPower, tauntReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
 import { actorName, intentName, phaseThai } from './th';
 
@@ -27,10 +27,11 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     if (hero.barrier > 0 && hero.reflect && alive(hero.reflect.heroId)) add('reflect', 'ward', 'โล่สะท้อน', `สวนกลับ ${hero.reflect.amount} เมื่อโล่ดูดซับการโจมตี · จาก${name(hero.reflect.heroId)}`, 'ใช้ได้ 1 ครั้ง หรือจนโล่หมด');
     if (hero.evading) add('evade', 'evade', 'ก้าวเงา', `หลบการโจมตีศัตรูได้อีก ${1 + (hero.evadeExtra ?? 0)} ครั้ง`, `ใช้ครบจำนวนครั้ง หรือถึงเทิร์นถัดไปของ${name(hero.evadeBy ?? id)}`);
     if (hero.hastedRound !== undefined && hero.hastedRound >= s.round) add('haste', 'haste', 'เร่งจังหวะ', `ได้ลำดับลงมือก่อนกลุ่มปกติในรอบ ${hero.hastedRound} (ถ้ามีหลายคน เรียง SPD)`, `มีผลในรอบ ${hero.hastedRound} เท่านั้น`);
+    if (hero.grudge && hero.hp > 0) add('grudge', 'challenge', 'แค้นสะสม', `การโจมตีครั้งแรกในเทิร์นถัดไปแรงขึ้น +${Math.min(CHALLENGE_GRUDGE_MAX, hero.grudge.amount)} (ดาเมจที่${name(hero.grudge.enemyId)}ทำกับตน สูงสุด +${CHALLENGE_GRUDGE_MAX})`, 'หมดเมื่อลงมือครั้งถัดไป');
     if (hero.baton && hero.hp > 0) add('baton', 'haste', 'ส่งไม้', `การลงมือครั้งถัดไปแรงขึ้น ${hero.baton}% (ดาเมจ รักษา และโล่)`, 'หมดเมื่อลงมือครั้งถัดไป');
     if (s.guard && alive(s.guard.heroId) && (s.guard.all || s.enemies.some(e => e.id === s.guard!.sourceId && e.hp > 0))) {
       const g = s.guard;
-      if (g.targetId === id || g.heroId === id) add('guard', 'guard', g.targetId === id ? 'ได้รับการคุ้มกัน' : 'กำลังคุ้มกัน', `${g.all ? "ทุกท่าเป้าเดี่ยวที่โจมตี" : `หาก${name(g.sourceId)}โจมตี`}${name(g.targetId)} ${name(g.heroId)}จะรับแทน ลดความเสียหาย ${Math.round(guardReductionOf(d, g.heroId) * 100)}%`, `หมดเมื่อ${name(g.sourceId)}ลงมือ/ถูกกำจัด หรือถึงเทิร์นถัดไปของ${name(g.heroId)}`);
+      if (g.targetId === id || g.heroId === id) add('guard', 'guard', g.targetId === id ? 'ได้รับการคุ้มกัน' : 'กำลังคุ้มกัน', `${g.all ? "ทุกท่าเป้าเดี่ยวที่โจมตี" : `หาก${name(g.sourceId)}โจมตี`}${name(g.targetId)} ${name(g.heroId)}จะรับแทน ลดความเสียหาย ${Math.round(guardReductionOf(d, g.heroId) * 100)}%${g.rouse ? ` แล้วเบาลงอีก ${ROUSE_CUT}%` : ''}`, `หมดเมื่อ${name(g.sourceId)}ลงมือ/ถูกกำจัด หรือถึงเทิร์นถัดไปของ${name(g.heroId)}`);
     }
     const brace = s.counter;
     if (brace && alive(brace.heroId) && d.heroes.find(h => h.id === id)?.lane === 'front') {
@@ -44,7 +45,7 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
       add('song', song.action, d.skills[song.action].name, `${song.action === 'valor' ? `การโจมตีแต่ละครั้งแรงขึ้น ${power}${chorus}` : song.action === 'dread' ? `ทุกการโจมตีของศัตรูเบาลง ${power}%` : `ฟื้น HP ${power} เมื่อเริ่มรอบใหม่`} · จาก${name(song.heroId)} · มีผลกับเพื่อนที่ยังยืนอยู่ทุกคน`, 'จนกวีเปลี่ยนเพลง ใช้บทส่งท้าย ล้ม หรือจบศึก');
     }
     if (s.rally?.ids.includes(id) && alive(s.rally.heroId)) add('rally', 'rally', d.skills.rally.name, `ลดความเสียหายจากการโจมตีศัตรูครั้งแรก ${Math.round(rallyReductionOf(d, s.rally.heroId) * 100)}% · จาก${name(s.rally.heroId)}`, `รับการโจมตีอีก ${s.rally.ids.filter(x => x === id).length} ครั้ง หรือ${untilTurn(s.rally.heroId)}`);
-    if (s.sanctuary?.targetId === id && alive(s.sanctuary.heroId)) add('sanctuary', 'sanctuary', d.skills.sanctuary.name, `HP ไม่ลดต่ำกว่า 1 · จาก${name(s.sanctuary.heroId)}`, untilTurn(s.sanctuary.heroId));
+    if (hero.sanctum && hero.hp > 0) add('sanctuary', 'sanctuary', d.skills.sanctuary.name, `ครั้งแรกที่จะล้ม เหลือเลือด 1 แล้วรักษา ${SANCTUARY_HEAL} · จาก${name(hero.sanctum.heroId)}`, 'อยู่ทั้งศึก จนกว่าจะช่วยไว้ 1 ครั้ง');
     // Recruit trees: fury tonic, solo, guardian stone and decoy.
     if ((hero.exposed?.round ?? 0) >= s.round) add('fury', 'fury', d.skills.fury.name, `โจมตีแรงขึ้น ${hero.empowered?.percent ?? 0}% แต่รับความเสียหายเพิ่ม ${hero.exposed!.percent}%`, `ถึงจบรอบ ${hero.exposed!.round}`);
     if ((hero.solo?.round ?? 0) >= s.round && alive(hero.solo!.heroId)) add('solo', 'solo', d.skills.solo.name, `ได้ผลเพลงที่บรรเลงอยู่ ×3 · จาก${name(hero.solo!.heroId)}`, `ถึงจบรอบ ${hero.solo!.round}`);

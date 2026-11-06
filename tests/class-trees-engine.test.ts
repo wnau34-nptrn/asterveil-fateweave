@@ -151,13 +151,14 @@ describe('priest tree (Seren)', () => {
     const t = fromEnemy(d, cast(d, s, 'healer', 'halo', 'healer'), 'f1')!;
     expect(t.events.find(e => e.type === 'damage')).toMatchObject({ targetId: 'weaver', amount: Math.ceil(28 * 0.7) });
   });
-  it('renew heals at the next two round starts, capped by max HP', () => {
+  it('a blessing heals now and at the next round start (save v53), capped by max HP', () => {
     const d = team({ healer: { actions: ['bless'] } }); const s = turnOf(d, 'healer');
     hero(s, 'tracer').hp = 20;
     expect(targetOptions(s, d, 'healer', 'bless').find(t => t.id === 'healer')!.valid).toBe(true);
     const r = cast(d, s, 'healer', 'bless', 'tracer');
-    expect(hero(r.state, 'tracer').renew).toEqual({ heroId: 'healer', amount: 8, until: 3 });
-    expect(r.events.find(e => e.type === 'heal' && e.text === 'Renew.')).toMatchObject({ amount: 8 });
+    expect(r.turns[0]!.events.find(e => e.type === 'heal' && e.text === 'Restored HP.')).toMatchObject({ targetId: 'tracer', amount: 6 });
+    expect(hero(r.turns[0]!.state, 'tracer').renew).toEqual({ heroId: 'healer', amount: 6, until: 2 });
+    expect(r.events.filter(e => e.type === 'heal' && e.text === 'Renew.')).toEqual([expect.objectContaining({ amount: 6 })]);
     expect(hero(r.state, 'tracer').empowered).toBeUndefined();
   });
   it('sanctuary and prayer modifiers: a double sanctuary shields; long prayer heals again next round; quick prayer is ready sooner', () => {

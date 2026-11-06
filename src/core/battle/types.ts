@@ -141,6 +141,10 @@ export interface EncounterDefinition {
 // `baton` = the alchemist's haste (save v52): this hero's next action deals/heals/shields this percent more, then it is spent.
 export interface HeroState { id: string; hp: number; barrier: number; cooldowns: Partial<Record<ActionId, number>>; bossUsedRound?:number; hastedRound?: number; evading?: boolean; evadeExtra?: number; evadePhysical?: boolean; reflect?: { heroId: string; amount: number };
   fell?: boolean; revivedRound?: number; empowered?: { percent: number; round: number }; baton?: number;
+  // Knight challenge (save v53): damage `enemyId` dealt this knight since; added to his next hit (capped), then spent.
+  grudge?: { enemyId: string; amount: number };
+  // Priest sanctuary (save v53): lasting for the battle; the first downing hit leaves 1 HP and heals, then it is spent.
+  sanctum?: { heroId: string };
   // Dancer rework (save v48): `beats` a dancer's beats (0–BEAT_MAX); `echo` the dancer bound to this ally by duet (her
   // echo follows its next skill up to `until`);
   // `quickened` skills a dance already quickened since their last use, `quickenedBattle` the once-per-battle ones.
@@ -190,7 +194,7 @@ export interface BattleState {
   heroes: HeroState[]; enemies: EnemyState[]; intent: Intent | null; commands: Command[];
   // `uses` (Knight twoguard): the guard covers this many hits on the target from any enemy until the knight returns.
   // `all` (Knight stand beside): every hit on the target until the knight's next turn.
-  guard: { heroId: string; targetId: string; sourceId: string; uses?: number; all?: boolean } | null;
+  guard: { heroId: string; targetId: string; sourceId: string; uses?: number; all?: boolean; rouse?: boolean } | null;
   // Spear brace (2C-2): the next physical enemy hit on a front-lane ally is countered.
   // Spear wall (★3): `wall` counters every physical hit on the front lane, not only the first; `stacks` counters landed so far
   // (each cuts later front-lane hits, save v50).

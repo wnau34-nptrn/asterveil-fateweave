@@ -83,7 +83,7 @@ Bank after the last expedition (average): ore 709, gold 335, seal 53, dust 48; b
 
 | Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |
 |---|---|---|---|---|
-| boss | 75 | 99% | 72 | 81 |
+| boss | 75 | 99% | 71 | 81 |
 | elite-forced | 140 | 83% | 57 | 86 |
 | event-rift | 104 | 100% | 86 | 94 |
 | mini | 96 | 97% | 68 | 79 |
@@ -108,26 +108,26 @@ Bank after the last expedition (average): ore 226, gold 126, seal 7, dust 18; ba
 | Exp. | Complete | Withdrawn | Wiped | Steps | Wins | Defeats | Lowest HP% | Ore | Gold | Seal | Dust | Items (C/U/R/E/L) | Chests | Min level | Max ★ | Company |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | 0% | 0% | 100% | 94 | 14.5 | 1.0 | 0 | 83 | 51 | 1.7 | 1 | 0.0/0.0/0.2/0.6/0.2 | 5.3 | 6.5 | 1.0 | 4.0 |
-| 2 | 4% | 0% | 96% | 141 | 24.5 | 1.0 | 2 | 153 | 91 | 3.0 | 4 | 0.4/0.1/0.2/0.6/0.6 | 8.0 | 8.8 | 1.9 | 4.0 |
-| 3 | 58% | 0% | 42% | 175 | 31.8 | 0.4 | 28 | 346 | 196 | 7.3 | 9 | 4.4/2.1/2.1/2.2/1.7 | 10.1 | 9.8 | 2.6 | 4.0 |
-| 4 | 92% | 0% | 8% | 194 | 35.4 | 0.1 | 70 | 456 | 255 | 10.2 | 12 | 6.8/3.5/2.8/3.7/2.2 | 11.7 | 10.0 | 3.5 | 4.0 |
-| 5 | 100% | 0% | 0% | 197 | 37.2 | 0.0 | 88 | 491 | 274 | 11.0 | 12 | 9.3/5.5/3.3/3.3/2.2 | 12.0 | 10.0 | 4.1 | 4.0 |
+| 2 | 4% | 0% | 96% | 140 | 24.4 | 1.0 | 2 | 153 | 91 | 3.0 | 4 | 0.5/0.1/0.2/0.5/0.7 | 8.0 | 8.8 | 1.9 | 4.0 |
+| 3 | 54% | 0% | 46% | 173 | 31.0 | 0.5 | 28 | 328 | 187 | 7.0 | 9 | 4.1/1.7/2.0/2.0/1.7 | 10.0 | 9.8 | 2.6 | 4.0 |
+| 4 | 92% | 0% | 8% | 194 | 35.5 | 0.1 | 69 | 456 | 255 | 10.2 | 12 | 6.8/3.5/2.9/3.8/2.2 | 11.7 | 10.0 | 3.5 | 4.0 |
+| 5 | 100% | 0% | 0% | 197 | 37.2 | 0.0 | 88 | 491 | 274 | 11.0 | 12 | 9.3/5.5/3.3/3.3/2.2 | 12.0 | 10.0 | 4.0 | 4.0 |
 | 6 | 100% | 0% | 0% | 197 | 37.0 | 0.0 | 93 | 490 | 271 | 11.0 | 12 | 9.4/4.6/3.6/3.3/2.5 | 12.0 | 10.0 | 4.7 | 4.0 |
 
 | Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |
 |---|---|---|---|---|
-| boss | 87 | 98% | 78 | 88 |
+| boss | 86 | 98% | 78 | 89 |
 | elite-forced | 126 | 90% | 68 | 93 |
 | elite-optional | 144 | 99% | 77 | 91 |
 | event-bandits | 202 | 99% | 86 | 95 |
 | event-rift | 111 | 100% | 91 | 96 |
 | mini | 103 | 94% | 73 | 85 |
-| random | 3588 | 99% | 88 | 95 |
+| random | 3571 | 99% | 88 | 95 |
 | tutorial | 24 | 100% | 90 | 93 |
 
-First completed expedition: 5, 5, 3, 3, 4, 4, 3, 4, 4, 3, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 2, 4, 3, 4 (median 3).
+First completed expedition: 5, 5, 3, 3, 4, 4, 3, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 2, 4, 3, 4 (median 3).
 
-Bank after the last expedition (average): ore 699, gold 328, seal 37, dust 12; bag 54/60.
+Bank after the last expedition (average): ore 699, gold 326, seal 37, dust 12; bag 54/60.
 
 | Side quest | Need | Done by the end | Claimed before expedition (avg) |
 |---|---|---|---|
@@ -135,7 +135,7 @@ Bank after the last expedition (average): ore 699, gold 328, seal 37, dust 12; b
 | broker | wins 30 | 100% | 3.3 |
 | trainer | elites 6 | 100% | 4.5 |
 | keeper | secrets 6 | 100% | 4.4 |
-| herbalist | herbs 6 | 100% | 5.3 |
+| herbalist | herbs 6 | 100% | 5.4 |
 | scout | puzzles 6 | 100% | 4.2 |
 
 ### Explorer (every chest, herb, puzzle, secret and optional elite), blind basic attacks · 24 companies × 6 expeditions

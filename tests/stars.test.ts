@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { corrodeBonusOf, createBattle, currentHeroId, nextIntentOf, resolveCommand, skillPower, songPower, targetOptions, withParty } from '../src/core/battle/engine';
+import { corrodeBonusOf, createBattle, currentHeroId, nextIntentOf, resolveCommand, SANCTUARY_HEAL, skillPower, songPower, targetOptions, withParty } from '../src/core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../src/core/battle/types';
 import { veilSiege as siegeBase } from '../src/content/encounters/veil-siege';
 import { openField } from './fixtures/open-field';
@@ -112,15 +112,16 @@ describe('mage ★3 sigil / ★5 echo (Eira)', () => {
 });
 
 describe('priest ★3 sanctuary / ★5 afterglow (Seren)', () => {
-  it('sanctuary keeps the ally at 1 HP until the priest’s next turn', () => {
+  it('a lasting sanctuary (save v53) keeps the ally at 1 HP once, heals it and is spent', () => {
     const d = party([['guardian', 1], ['tracer', 1], ['weaver', 1], ['healer', 3]]);
     let s = until(createBattle(d), d, 'healer');
     const target = nextIntentOf(s, d, 'b1')!.targetId;
     s = { ...s, heroes: s.heroes.map(h => h.id === target ? { ...h, hp: 3 } : h) };
     s = act(s, d, 'sanctuary', target).state;
-    expect(s.sanctuary).toEqual({ heroId: 'healer', targetId: target });
+    expect(s.heroes.find(h => h.id === target)!.sanctum).toEqual({ heroId: 'healer' });
+    expect(targetOptions(s, d, 'healer', 'sanctuary').find(t => t.id === target)!.valid).toBe(false);
     s = until(s, d, 'healer');
-    expect(hp(s, target)).toBe(1); expect(s.sanctuary).toBeNull();
+    expect(hp(s, target)).toBe(1 + SANCTUARY_HEAL); expect(s.heroes.find(h => h.id === target)!.sanctum).toBeUndefined();
   });
   it('afterglow turns overflow healing into a capped barrier', () => {
     const d = party([['guardian', 1], ['tracer', 1], ['weaver', 1], ['healer', 5]]);
