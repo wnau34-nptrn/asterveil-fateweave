@@ -13,12 +13,13 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **UI frame consistency group 3** (owner 2026-11-06): map and battle dialogs, all at once (not the HUD); text that already reads well keeps its size; nothing that works today may break. Opening prompt below.
+- UI frame group 3 merged (#194, owner approved the 390px before/after; `docs/validation/ui-frame-group3-2026-11-06/`).
+- **Team presets + team page redesign** (owner 2026-11-06) runs in session `session_014iPEcP6oUwVRPxyN3wu8Go` (Opus): one-tap preset swap of fielded/reserve, team page = fielded + reserve on top, all characters below; research from other games first.
 - Skill rework step 6 is being closed in session `session_014iPEcNspP15VvzkWFKs5CS` (README §9): #191 v53 and #192 v54 merged; #193 v55 (Mira/Eira/Brann) in CI; then Sefa v56 (blade storm, poison coat, venom burst) and the new Shadow Step v57 (hit 8 + dodge) with the whole-campaign gate (owner-approved). A UI branch that bumps nothing must not touch saves/rules.
 
 ## Next (owner order)
 
-- UI groups 1–2 done (#173, `docs/validation/ui-frame-group2-2026-11-05/`); after group 3, the summary/rewards frame only.
+- UI groups 1–2 done (#173, `docs/validation/ui-frame-group2-2026-11-05/`); group 3 done (#194); next UI frame: summary/rewards only.
 - Polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check open.
 
 ## Open items
@@ -36,4 +37,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-UI group 3 is running in session `session_014iPEcM8uS9992tHJtW87Hf` (its full opening prompt is in that session and in the handoff log). For a fresh start: read CLAUDE.md, this file, `docs/context/UI_INPUT_RULES.md` and the top of `docs/handoffs/ART-UI-LANGUAGE-001.md`, then continue the Active task above.
+Team presets + team page redesign is running in session `session_014iPEcP6oUwVRPxyN3wu8Go`. For a fresh start: read CLAUDE.md, this file, `docs/context/UI_INPUT_RULES.md`, `docs/design/FORMATION_PLAN_TH.md`; the task prompt is in that session.
