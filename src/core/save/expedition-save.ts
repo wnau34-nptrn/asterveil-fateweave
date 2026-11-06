@@ -139,7 +139,8 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 const SAVE_VERSION = 57;
 const REWORKED_V57: readonly ActionId[] = ['evade'];
 const REWORKED_V56: readonly ActionId[] = ['backstab', 'knives', 'disarm'];
-const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispel', 'bolt', 'slam'];
+// A bolt alone only adds arcane charges, which matter once Dispel is used (listed), so it restarts nothing.
+const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispel', 'slam'];
 const REWORKED_V54: readonly ActionId[] = ['storedfist', 'circlefist', 'solo', 'finale'];
 const REWORKED_V53: readonly ActionId[] = ['haste', 'challenge', 'rouse', 'sanctuary', 'bless'];
 const REWORKED_V52: readonly ActionId[] = ['haste', 'smoke', 'catalyst'];
