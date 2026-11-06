@@ -162,7 +162,7 @@ describe('scout (Sefa)', () => {
     const party = withParty(data, [tracer!, sefa, weaver!, healer!]);
     let s = createBattle(party); s = act(s, 'attack', 'b1', party).state;
     expect(s.intent).toMatchObject({ sourceId: 'b1', targetId: 'sefa' });
-    const r = act(s, 'evade', 'sefa', party);
+    const r = act(s, 'evade', 'f1', party);
     const raider = r.turns.find(t => t.actorId === 'b1')!;
     expect(raider.events.map(e => e.type)).toEqual(['dodge']); expect(raider.targetId).toBe('sefa');
     expect(r.state.heroes.find(h => h.id === 'sefa')).toMatchObject({ hp: 54 }); expect(r.state.heroes.find(h => h.id === 'sefa')!.evading).toBeUndefined();
@@ -171,7 +171,7 @@ describe('scout (Sefa)', () => {
     const party = withParty(data, [sefa, tracer!, weaver!, healer!]);
     // The Raider's opening slash aims at slot 1 (Lyra), so the step is never tested this round.
     let s = createBattle(party); s = act(s, 'attack', 'f1', party).state;
-    s = act(s, 'evade', 'sefa', party).state;
+    s = act(s, 'evade', 'f1', party).state;
     expect(s.heroes.find(h => h.id === 'sefa')!.evading).toBe(true);
     while (currentHeroId(s, party) !== 'sefa') s = act(s, 'attack', 'f1', party).state;
     expect(s.round).toBe(2); expect(s.heroes.find(h => h.id === 'sefa')!.evading).toBeUndefined();
@@ -183,7 +183,7 @@ describe('scout (Sefa)', () => {
     let s = createBattle(party); let checked = false;
     while (s.round < 5 && s.outcome === 'active') {
       const hero = currentHeroId(s, party)!;
-      const [action, target]: [ActionId, string] = hero === 'garran' && s.round === 3 ? ['brace', 'f1'] : hero === 'sefa' && s.round === 4 ? ['evade', 'sefa'] : ['attack', 'f1'];
+      const [action, target]: [ActionId, string] = hero === 'garran' && s.round === 3 ? ['brace', 'f1'] : hero === 'sefa' && s.round === 4 ? ['evade', 'f1'] : ['attack', 'f1'];
       const r = act(s, action, target, party);
       if (action === 'evade') {
         const raider = r.turns.find(t => t.actorId === 'b1')!;
@@ -200,7 +200,7 @@ describe('scout (Sefa)', () => {
     let s = createBattle(party);
     for (let i = 0; i < 12 && s.outcome === 'active'; i++) {
       const hero = currentHeroId(s, party)!;
-      const options: [ActionId, string][] = hero === 'sefa' ? [['ambush', 'f1'], ['evade', 'sefa'], ['attack', 'f1']] : [['attack', 'f1']];
+      const options: [ActionId, string][] = hero === 'sefa' ? [['ambush', 'f1'], ['evade', 'f1'], ['attack', 'f1']] : [['attack', 'f1']];
       const use = options.map(([action, targetId]) => ({ beat: s.beat, heroId: hero, action, targetId })).find(c => !validateCommand(s, party, c))!;
       expect(previewCommand(s, party, use)).toEqual(resolveCommand(s, party, use)); s = resolveCommand(s, party, use).state;
     }

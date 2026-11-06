@@ -91,7 +91,7 @@ describe('C11 skill contract',()=>{
  });
  it('own shadow step clears the giver expiry of a previously granted shadow',()=>{
   const d=fixture('sefa','evade'),s=beginBattle(d).state;s.heroes[0]!.evadeBy='guardian';
-  const r=resolveCommand(s,d,{heroId:'sefa',action:'evade',targetId:'sefa',beat:s.beat});expect(r.turns[0]!.state.heroes[0]!.evadeBy).toBeUndefined();
+  const r=resolveCommand(s,d,{heroId:'sefa',action:'evade',targetId:'f1',beat:s.beat});expect(r.turns[0]!.state.heroes[0]!.evadeBy).toBeUndefined();
  });
  it('Aegis rejects a no-op, but allows a useful level barrier to its caster',()=>{
   const d=fixture('weaver','aegis'),s=beginBattle(d).state;
@@ -116,7 +116,7 @@ describe('C11 save v41 → v42',()=>{
   const game=parseGame(JSON.stringify(old),map,lookup);
   expect(game.profile.members.guardian!.talents).toBeUndefined();expect(game.profile.members.guardian!.loadout).toBeUndefined();
   expect(game.profile.members.guardian!.skillLevels).toEqual({rally:2});expect(game.profile.members.toma!.talents).toEqual({a1:1});
-  expect(JSON.parse(write(game)).version).toBe(56);expect(parseGame(write(game),map,lookup)).toEqual({profile:game.profile,run:null});
+  expect(JSON.parse(write(game)).version).toBe(57);expect(parseGame(write(game),map,lookup)).toEqual({profile:game.profile,run:null});
  });
  it('restarts a changed active skill replay from recorded entry HP without duplicating rewards',()=>{
   const p=newProfile(map,2);const game=depart(p,map,lookup,3),run=game.run;

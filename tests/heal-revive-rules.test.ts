@@ -71,7 +71,7 @@ describe('save v46', () => {
     const p = newProfile(map, 17); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
     const game = depart(p, map, lookup, 77);
     game.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...game.run.hp }, commands: [{ heroId: 'healer', beat: 0, action: 'revive', targetId: 'tracer' }] };
-    let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game); expect(JSON.parse(raw).version).toBe(56);
+    let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game); expect(JSON.parse(raw).version).toBe(57);
     const old = JSON.parse(raw) as { version: number }; old.version = 45;
     const migrated = parseGame(JSON.stringify(old), map, lookup);
     expect(migrated.run!.battle!.commands).toEqual([]); expect(migrated.run!.battle!.entry).toEqual(game.run.battle.entry);
@@ -200,7 +200,7 @@ describe('save v53 (skill rework step 6, first batch, 2026-11-06)', () => {
     const p = newProfile(map, 17); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
     const v52 = (game: ReturnType<typeof depart>) => {
       let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game);
-      const old = JSON.parse(raw) as { version: number }; expect(old.version).toBe(56); old.version = 52; return parseGame(JSON.stringify(old), map, lookup);
+      const old = JSON.parse(raw) as { version: number }; expect(old.version).toBe(57); old.version = 52; return parseGame(JSON.stringify(old), map, lookup);
     };
     for (const [heroId, action, targetId] of [['toma', 'haste', 'guardian'], ['guardian', 'challenge', 'f1'], ['guardian', 'rouse', 'guardian'], ['healer', 'sanctuary', 'tracer'], ['healer', 'bless', 'tracer']] as const) {
       const game = depart(p, map, lookup, 77);
@@ -224,7 +224,7 @@ describe('save v54 (skill rework step 6, second batch, 2026-11-06)', () => {
     const p = newProfile(map, 17); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
     const v53 = (game: ReturnType<typeof depart>) => {
       let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game);
-      const old = JSON.parse(raw) as { version: number }; expect(old.version).toBe(56); old.version = 53; return parseGame(JSON.stringify(old), map, lookup);
+      const old = JSON.parse(raw) as { version: number }; expect(old.version).toBe(57); old.version = 53; return parseGame(JSON.stringify(old), map, lookup);
     };
     for (const [heroId, action, targetId] of [['kael', 'storedfist', 'f1'], ['kael', 'circlefist', 'enemies'], ['lio', 'solo', 'guardian'], ['lio', 'finale', 'lio']] as const) {
       const game = depart(p, map, lookup, 77);
@@ -248,7 +248,7 @@ describe('save v55 (skill rework step 6, third batch, 2026-11-06)', () => {
     const p = newProfile(map, 17); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
     const v54 = (game: ReturnType<typeof depart>) => {
       let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game);
-      const old = JSON.parse(raw) as { version: number }; expect(old.version).toBe(56); old.version = 54; return parseGame(JSON.stringify(old), map, lookup);
+      const old = JSON.parse(raw) as { version: number }; expect(old.version).toBe(57); old.version = 54; return parseGame(JSON.stringify(old), map, lookup);
     };
     for (const [heroId, action, targetId] of [['mira', 'disengage', 'f1'], ['mira', 'track', 'f1'], ['weaver', 'aegis', 'party'], ['weaver', 'dispel', 'f1'], ['weaver', 'bolt', 'f1'], ['brann', 'slam', 'f1']] as const) {
       const game = depart(p, map, lookup, 77);
@@ -272,7 +272,7 @@ describe('save v56 (skill rework step 6, Sefa, 2026-11-06)', () => {
     const p = newProfile(map, 17); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
     const v55 = (game: ReturnType<typeof depart>) => {
       let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game);
-      const old = JSON.parse(raw) as { version: number }; expect(old.version).toBe(56); old.version = 55; return parseGame(JSON.stringify(old), map, lookup);
+      const old = JSON.parse(raw) as { version: number }; expect(old.version).toBe(57); old.version = 55; return parseGame(JSON.stringify(old), map, lookup);
     };
     for (const [heroId, action, targetId] of [['sefa', 'backstab', 'f1'], ['sefa', 'knives', 'enemies'], ['sefa', 'disarm', 'f1']] as const) {
       const game = depart(p, map, lookup, 77);
@@ -284,5 +284,29 @@ describe('save v56 (skill rework step 6, Sefa, 2026-11-06)', () => {
     const plain = depart(p, map, lookup, 77);
     plain.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...plain.run.hp }, commands: [] };
     expect(v55(plain).run!.battle).toEqual(plain.run.battle);
+  });
+});
+
+describe('save v57 (skill rework step 6, shadow step, 2026-11-06)', () => {
+  it('a v56 battle that used Shadow Step restarts from its entry HP; others and the profile are kept', async () => {
+    const { chapterOne: map } = await import('../src/content/world/chapter1');
+    const { encounterById: lookup } = await import('../src/content/encounters/catalog');
+    const { depart, newProfile } = await import('../src/core/world/profile');
+    const { parseGame, saveGame } = await import('../src/core/save/expedition-save');
+    const p = newProfile(map, 17); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
+    const v56 = (game: ReturnType<typeof depart>) => {
+      let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game);
+      const old = JSON.parse(raw) as { version: number }; expect(old.version).toBe(57); old.version = 56; return parseGame(JSON.stringify(old), map, lookup);
+    };
+    for (const [heroId, action, targetId] of [['sefa', 'evade', 'f1']] as const) {
+      const game = depart(p, map, lookup, 77);
+      game.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...game.run.hp }, commands: [{ heroId, beat: 0, action, targetId }] };
+      const migrated = v56(game);
+      expect(migrated.run!.battle!.commands).toEqual([]); expect(migrated.run!.battle!.entry).toEqual(game.run.battle.entry);
+      expect(migrated.profile.members).toEqual(game.profile.members);
+    }
+    const plain = depart(p, map, lookup, 77);
+    plain.run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: { ...plain.run.hp }, commands: [] };
+    expect(v56(plain).run!.battle).toEqual(plain.run.battle);
   });
 });

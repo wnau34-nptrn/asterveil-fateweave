@@ -274,10 +274,10 @@ describe('scout tree modifiers (Sefa)', () => {
   });
   it('a doubled shadow step dodges twice; breathing in the shadow heals each dodge', () => {
     const d = party([['guardian'], ['sefa', { b2d: 1 }], ['weaver'], ['healer']]);
-    expect(hero(act(until(createBattle(d), d, 'sefa'), d, 'evade', 'sefa').turns[0]!.state, 'sefa').evadeExtra).toBe(1);
+    expect(hero(act(until(createBattle(d), d, 'sefa'), d, 'evade', 'f1').turns[0]!.state, 'sefa').evadeExtra).toBe(1);
     const h = party([['guardian'], ['sefa', { b2h: 1 }], ['weaver'], ['healer']]);
     const s = set(until(createBattle(h), h, 'sefa'), 'sefa', { hp: 30 });
-    const turn = act(s, h, 'evade', 'sefa').turns.find(t => t.actorId === 'b1')!;
+    const turn = act(s, h, 'evade', 'f1').turns.find(t => t.actorId === 'b1')!;
     expect(turn.events.map(e => e.type)).toEqual(['dodge', 'heal']); expect(hero(turn.state, 'sefa').hp).toBe(36);
   });
 });
