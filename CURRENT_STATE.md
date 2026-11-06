@@ -22,7 +22,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Skill rework (`docs/validation/skill-rework-2026-11-05/README_TH.md`): Dancer #181, Wynne #184, Garran #185, Astrid (§7, save v51: delay big move, falling star; owner's "big move" definition recorded) done. Next (waits for the owner): Toma → small fixes. Open: Pull Thread 2–5×; spear wall never picked; deflect still 2–4×; b4 `seerMeteorBig` is Claude's proposal.
+- Skill rework (`docs/validation/skill-rework-2026-11-05/README_TH.md`): Dancer #181, Wynne #184, Garran #185, Astrid #189 (§7, save v51, owner's "big move" definition) done. Next: Toma (owner "ดำเนินการขั้นต่อไปได้" 2026-11-06) → small fixes. Open: Pull Thread 2–5×; spear wall never picked; deflect still 2–4×; b4 `seerMeteorBig` is Claude's proposal.
 
 - Map 3 gate copy of the Briar Lord still falls to plain attacks 83–98%; stronger % broke the rush/casual first-clear gate — deferred to P05 (needs a gate-specific mechanic/encounter; Claude decision under delegation).
 - No real Safari/iPhone/Android or human usability results (P02-03 trial pending). The owner's iPhone report of Seren's art is fixed in PR #154 but not re-checked on the device.
@@ -37,9 +37,13 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ```text
 ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype ตอบไทย ใช้เวลาไทย
-อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง
-งาน: กรอบ UI กลุ่ม 3 = ไดอะล็อกแผนที่/ต่อสู้ (ไม่ใช่ HUD) แล้วกรอบสรุป/รางวัลเท่านั้น ตามขอบเขตหัวข้อแรกของ docs/handoffs/ART-UI-LANGUAGE-001.md
-ใช้หัวหน้าต่าง/ปุ่มเดียวกับกลุ่ม 1 (src/ui/sheet-frame.css, token ใน tokens.css) + Q1=R1 (Claude เลือกตามที่เจ้าของมอบ): เต็มจอซ่อนแถบนำทางล่าง ย้อนกลับ/ปิดในหัว + ตัวอักษร ≥12px ในหน้าต่างตัวละคร
-ห้ามแตะ HUD ต่อสู้/แผนที่ ไอคอนสกิลวาด ตารางจัดทีม แถบสลับตัวละคร การ์ดรางวัล ชิปสรุป ภาพไอเทม/review ช่าง — จุดที่ดีอยู่แล้วห้ามแก้จนพัง ไม่เปลี่ยนเนื้อหา/กฎ/เซฟ/ตัวเลข
-รัน tests/browser/ui-language-audit.spec.ts ก่อน/หลัง (UI_AUDIT=<dir>, UI_AUDIT_SIZES, PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium) ส่งภาพก่อน/หลัง 390px ให้เจ้าของดูก่อน merge
+อ่าน CLAUDE.md และ CURRENT_STATE.md ก่อน ตรวจ remote head/ancestry และ worktree จริง แล้วเปิด skill .claude/skills/fateweave-rules-and-sim
+งาน: ขั้นที่ 5 ของแผนตรวจสกิล = Toma (Alchemist) เจ้าของสั่ง "ดำเนินการขั้นต่อไปได้" (2026-11-06) ไม่ต้องรออนุมัติซ้ำ
+แบบ: การ์ด Toma ในหน้า artifact "ตรวจสกิล Fateweave" (https://claude.ai/artifact/RTv5isw1yhwL2DmH3duyBL, Artifact read; โน้ตเจ้าของใน db "notes") ห้ามคิดข้อเสนอใหม่แทน ถ้าวัดแล้วใช้ไม่ได้ บอกเจ้าของพร้อมตัวเลขก่อนเปลี่ยน
+- haste ยาเร่ง → ส่งไม้: เพื่อนลงมือทันทีและแรงขึ้น 20% ในการลงมือนั้น
+- smoke ขวดควัน: ลด 40% เหมือนเดิม + ถ้าเป้าติดกรด ควันลามไปศัตรูข้าง ๆ 20%
+- catalyst ตัวเร่ง: กรดทำงานทันทีหนึ่งรอบ (ไม่ล้างกรด) และกระเด็น 50% ไปศัตรูข้าง ๆ
+- acid, bomb, fury คงเดิม (ตรวจโหนด/กิ่งที่อ้างสามท่านี้ว่ายังมีความหมาย ถ้าไม่ เสนอความหมายใหม่สั้น ๆ)
+ขั้นตอนแบบขั้น 1–4 (README_TH.md §4–§7 ใน docs/validation/skill-rework-2026-11-05/): วัดก่อนแก้ด้วย probe (แบบ tests/probe/astrid-probe.test.ts) → engine+content → th.ts → advisor Alchemist → เมตริก/สถานะ → VFX ตามเหตุการณ์จริง (npm run coverage:presentation) → เซฟ v52 แบบ v51 (REWORKED_V52, รับ 51, อัปเดตเทสต์ version 51 ทุกรูปแบบรวม tests/browser, เทสต์ย้ายเซฟใน tests/heal-revive-rules.test.ts) → เทสต์ preview=resolver/replay/ขอบเขต + typecheck/lint/test/sim (เทียบแถว Toma ก่อน-หลัง ตัวอื่นไม่เปลี่ยน) + Playwright ที่เกี่ยว (alchemy-fx, unit-a4)
+จบ: PR เข้า feature/fateweave-initial-prototype รอ quality+browser ผ่านแล้ว merge, อัปเดต CURRENT_STATE.md, บนสุดของ CODEX-TO-CLAUDE.md, ต่อท้าย README §8 พร้อมตัวเลขเดิม→ใหม่และผล sim
 ```
