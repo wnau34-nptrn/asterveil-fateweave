@@ -11,6 +11,7 @@ import { heroCatalog, skillChoices } from '../src/core/world/world';
 import { talentsValid } from '../src/core/world/talents';
 import { unitStatuses } from '../src/ui/battle-status';
 import { battleLesson } from '../src/ui/tutorial';
+import { sealEvents } from '../src/game/visuals/arcane-seal-fx';
 
 type Caps = Partial<Record<TalentCap, number>>;
 const wynne = rosterP03.find(h => h.id === 'wynne')!;
@@ -82,30 +83,68 @@ describe('P03 Hexer curses', () => {
   });
 });
 
-describe('P03 Hexer toll', () => {
-  it('binds only a cursed foe; the foe pays before each attacking move and still attacks', () => {
-    const d = fixture(['threadhex', 'lifetoll'], {}, [foe('f1')], [wait('f1', 2)]);
-    const s = beginBattle(d).state;
+describe('P03 Hexer pulls (skill rework step 2)', () => {
+  it('Pull Thread needs her own curse', () => {
+    const other: HeroDefinition = { ...wynne, id: 'hexb', name: 'B', speed: 79, actions: ['attack', 'threadhex'] };
+    const d = fixture(['threadhex', 'knothex', 'lifetoll'], {}, [foe('f1'), foe('f2')], undefined, {}, [other]);
+    let s = beginBattle(d).state;
     expect(targetOptions(s, d, 'wynne', 'lifetoll').find(t => t.id === 'f1')).toMatchObject({ valid: false, reason: 'No curse on this enemy.' });
-    const hexed = cast(d, s, 'threadhex').state;
-    const r = cast(d, hexed, 'lifetoll');
-    expect(r.state.enemies[0]!.toll).toEqual({ heroId: 'wynne', power: 5, until: 3 });
-    const foeTurn = r.turns.find(t => t.side === 'enemy')!;
-    expect(foeTurn.events.map(e => e.type)).toEqual(['toll', 'damage', 'damage']);
-    expect(foeTurn.events[0]).toMatchObject({ amount: 5, text: 'Toll paid.' });
-    expect(foeTurn.targetId).toBe('wynne');
+    s = resolveCommand(s, d, { beat: s.beat, heroId: 'wynne', action: 'attack', targetId: 'f2' }).state;
+    s = resolveCommand(s, d, { beat: s.beat, heroId: 'hexb', action: 'threadhex', targetId: 'f2' }).state;
+    // Another hexer's curse does not count.
+    expect(targetOptions(s, d, 'wynne', 'lifetoll').find(t => t.id === 'f2')).toMatchObject({ valid: false, reason: 'No curse on this enemy.' });
   });
-  it('a charge, a phase turn or a cancelled move pays nothing; falling to the toll ends the turn without the move', () => {
-    const charge = fixture(['threadhex', 'lifetoll'], {}, [foe('f1')], [wait('f1', 0, { charge: true })]);
-    let s = cast(charge, beginBattle(charge).state, 'threadhex').state;
-    let r = cast(charge, s, 'lifetoll');
-    expect(events(r.turns).some(e => e.text === 'Toll paid.')).toBe(false);
-    const lethal = fixture(['threadhex', 'lifetoll'], {}, [foe('f1', 9), foe('f2')], [wait('f1', 30), wait('f2')]);
-    s = cast(lethal, beginBattle(lethal).state, 'threadhex').state;
-    r = cast(lethal, s, 'lifetoll');
-    const turn = r.turns.find(t => t.side === 'enemy' && t.actorId === 'f1')!;
-    expect(turn.events.map(e => e.type)).toEqual(['toll', 'down']);
-    expect(r.state.heroes[0]!.hp).toBe(wynne.maxHp - 30);
+  it('Pull Thread ticks the curse once now with the round-end power, then loosens a stack', () => {
+    const d = fixture(['knothex', 'lifetoll']);
+    const s = cast(d, beginBattle(d).state, 'knothex').state;
+    expect(stacks(s)!.stacks).toBe(2);
+    const before = hp(s);
+    const r = cast(d, s, 'lifetoll');
+    const own = r.turns[0]!.events;
+    expect(own.filter(e => e.type === 'damage').map(e => [e.text, e.amount])).toEqual([['Thread pulled.', hexTickPower(d, 'wynne', 2)]]);
+    expect(own.find(e => e.type === 'hex')).toMatchObject({ amount: 1, text: 'Curse loosened.' });
+    // The loosened curse lives to the next round-end, like a fresh thread.
+    expect(stacks(r.state)).toEqual({ heroId: 'wynne', stacks: 1, until: s.round + 1 });
+    expect(hp(r.state)).toBe(before - 10 - 5);
+    expect(r.state.heroes[0]!.cooldowns.lifetoll).toBe(s.round + 2);
+  });
+  it('a pull at one stack removes the curse; a pull that downs the foe ends it and can win', () => {
+    const one = fixture(['threadhex', 'lifetoll'], {}, [foe('f1'), foe('f2')]);
+    const s1 = cast(one, beginBattle(one).state, 'threadhex').state;
+    const gone = cast(one, s1, 'lifetoll');
+    expect(gone.turns[0]!.events.find(e => e.type === 'hex')).toMatchObject({ amount: 0, text: 'Curse loosened.' });
+    expect(gone.state.enemies[0]!.hexes).toBeUndefined();
+    const lethal = fixture(['knothex', 'lifetoll'], {}, [foe('f1', 19)]);
+    const k = cast(lethal, beginBattle(lethal).state, 'knothex').state;
+    expect(hp(k)).toBe(9);
+    const win = cast(lethal, k, 'lifetoll');
+    expect(win.turns[0]!.events.map(e => e.type)).toEqual(['damage', 'down', 'outcome']);
+    expect(win.state.outcome).toBe('victory');
+  });
+  it('the Pulling Ring is usable with no curse: cursed foes tick once now (no loosening), uncursed ones take a first stack', () => {
+    const d = fixture(['knothex', 'tollring'], {}, [foe('f1'), foe('f2'), foe('b1')]);
+    let s = beginBattle(d).state;
+    expect(targetOptions(s, d, 'wynne', 'tollring')[0]).toMatchObject({ valid: true });
+    const bare = cast(d, s, 'tollring', 'enemies');
+    expect(bare.turns[0]!.events.filter(e => e.type === 'hex').map(e => [e.targetId, e.amount])).toEqual([['f1', 1], ['f2', 1], ['b1', 1]]);
+    expect(bare.turns[0]!.events.some(e => e.type === 'damage')).toBe(false);
+    s = cast(d, s, 'knothex').state;
+    const ring = cast(d, s, 'tollring', 'enemies');
+    const own = ring.turns[0]!.events;
+    expect(own.filter(e => e.type === 'damage').map(e => [e.targetId, e.amount])).toEqual([['f1', 10]]);
+    expect(own.filter(e => e.type === 'hex').map(e => [e.targetId, e.amount])).toEqual([['f2', 1], ['b1', 1]]);
+    expect(ring.turns[0]!.state.enemies[0]!.hexes![0]!.stacks).toBe(2);
+  });
+});
+
+describe('P03 Hexer pull presentation', () => {
+  it('the seal VFX lands once on each foe really pulled or newly cursed, never on a loosening', () => {
+    const d = fixture(['knothex', 'lifetoll', 'tollring'], {}, [foe('f1'), foe('f2')]);
+    const s = cast(d, beginBattle(d).state, 'knothex').state;
+    const pull = cast(d, s, 'lifetoll').turns[0]!;
+    expect(sealEvents(pull).map(e => [e.type, e.targetId])).toEqual([['damage', 'f1']]);
+    const ring = cast(d, s, 'tollring', 'enemies').turns[0]!;
+    expect(sealEvents(ring).map(e => [e.type, e.targetId])).toEqual([['damage', 'f1'], ['hex', 'f2']]);
   });
 });
 
@@ -130,14 +169,21 @@ describe('P03 Hexer tree and Wynne branch', () => {
     const plain = fixture(['longthread']);
     expect(stacks(cast(plain, beginBattle(plain).state, 'longthread').state)!.until).toBe(3);
   });
-  it('b2x/b2y strengthen or lengthen the toll; the ring binds every cursed foe, b4 more on a full curse', () => {
-    const d = fixture(['threadhex', 'knothex', 'lifetoll', 'tollring'], { hexTollLong: 1, hexRingFull: 2 }, [foe('f1'), foe('f2')]);
-    let s = beginBattle(d).state;
-    expect(targetOptions(s, d, 'wynne', 'tollring')[0]).toMatchObject({ valid: false, reason: 'No curse on any enemy.' });
-    s = cast(d, s, 'threadhex').state; s = cast(d, s, 'knothex').state;
-    const ring = cast(d, s, 'tollring', 'enemies').state;
-    expect(ring.enemies.map(e => e.toll?.power)).toEqual([6, undefined]);
-    expect(cast(d, s, 'lifetoll').state.enemies[0]!.toll!.until).toBe(s.round + 2);
+  it('b2x pulls harder per stack; b2y keeps a full curse; b4 adds per stack on a full curse in the ring', () => {
+    const heavy = fixture(['knothex', 'threadhex', 'lifetoll'], { hexPullHeavy: 2 });
+    let s = cast(heavy, beginBattle(heavy).state, 'knothex').state;
+    expect(cast(heavy, s, 'lifetoll').turns[0]!.events[0]).toMatchObject({ text: 'Thread pulled.', amount: 2 * (5 + 2) });
+    const keep = fixture(['knothex', 'threadhex', 'lifetoll'], { hexPullKeep: 1 });
+    s = cast(keep, beginBattle(keep).state, 'knothex').state; s = cast(keep, s, 'threadhex').state;
+    expect(stacks(s)!.stacks).toBe(3);
+    const kept = cast(keep, s, 'lifetoll');
+    expect(kept.turns[0]!.events.some(e => e.type === 'hex')).toBe(false);
+    expect(stacks(kept.turns[0]!.state)!.stacks).toBe(3);
+    const ring = fixture(['knothex', 'threadhex', 'tollring'], { hexRingFull: 2 }, [foe('f1'), foe('f2')]);
+    s = beginBattle(ring).state;
+    s.enemies[0]!.hexes = [{ heroId: 'wynne', stacks: 3, until: 2 }]; s.enemies[1]!.hexes = [{ heroId: 'wynne', stacks: 1, until: 1 }];
+    const pulled = cast(ring, s, 'tollring', 'enemies').turns[0]!.events.filter(e => e.type === 'damage').map(e => [e.targetId, e.amount]);
+    expect(pulled).toEqual([['f1', 3 * (5 + 2)], ['f2', 5]]);
   });
   it('knot hex lays two (cap three); c4 also extends the curse it tightens, at most three round-ends ahead', () => {
     const d = fixture(['threadhex', 'knothex'], { hexKnotLife: 1 });
@@ -159,8 +205,9 @@ describe('P03 Hexer tree and Wynne branch', () => {
   it('replays to the same state and the advisor curses', () => {
     const d = fixture(['threadhex', 'lifetoll'], {}, [foe('f1'), foe('f2')], [wait('f1', 1), wait('f2', 1)]);
     let s = beginBattle(d).state; const used: ActionId[] = [];
-    for (let i = 0; i < 5; i++) { const l = battleLesson(s, d)!; used.push(l.action); s = cast(d, s, l.action, l.targetId).state; }
+    for (let i = 0; i < 8; i++) { const l = battleLesson(s, d)!; used.push(l.action); s = cast(d, s, l.action, l.targetId).state; }
     expect(used).toContain('threadhex');
+    expect(used).toContain('lifetoll');
     expect(replay(d, s.commands)).toEqual(s);
   });
 });

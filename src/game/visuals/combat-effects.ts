@@ -32,7 +32,6 @@ export function effectCaption(event: BattleEvent): string {
     case 'dial': return `วงท่า +${event.amount ?? 1}`;
     case 'beat': return (event.amount ?? 0) > 0 ? `จังหวะ +${event.amount}` : `ใช้จังหวะ ${-(event.amount ?? 0)}`;
     case 'hex': return `สาป ${event.amount ?? 0}/3`;
-    case 'toll': return event.text === 'Toll paid.' ? `ภาษี −${event.amount ?? 0}` : 'ผูกภาษี';
     case 'chi': return (event.amount ?? 0) > 0 ? `ปราณ +${event.amount}` : `ปล่อยปราณ ${-(event.amount ?? 0)}`;
     case 'heal': return `+${event.amount ?? 0}`;
     case 'barrier': return `โล่ +${event.amount ?? 0}`;

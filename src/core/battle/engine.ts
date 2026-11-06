@@ -256,8 +256,8 @@ export function releasePower(data: EncounterDefinition, heroId: string, paid: nu
 // ---- P03 Hexer (docs/design/ROSTER_30_TH.md §3, draft numbers) ----
 // Each hexer keeps its own stack (1–3) on a foe. A curse laid in round r ticks as rounds r and r+1 end (`until` = r+1);
 // laying it again refreshes (never shortens) its life. Ticks are energy damage through Magic Power, veilguard and
-// fatigue, never a hit bonus, mark or corrosion; they need the hexer standing. A toll makes a cursed foe pay before each
-// attacking move it really makes; paying never cancels the move unless the foe falls.
+// fatigue, never a hit bonus, mark or corrosion; they need the hexer standing. Skill rework step 2 (owner 2026-11-06): Pull
+// Thread (`lifetoll`) and the Pulling Ring (`tollring`) make a curse tick once at once with the same round-end power.
 export const HEX_MAX = 3; export const HEX_LIFE_CAP = 3;
 export const hexesOn = (enemy: EnemyState | undefined): number => enemy?.hexes?.reduce((n, h) => n + h.stacks, 0) ?? 0;
 export function hexTickPower(data: EncounterDefinition, heroId: string, stacks: number): number {
@@ -274,7 +274,6 @@ function hexTicks(state: BattleState, data: EncounterDefinition, events: BattleE
       if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
     }
     if (foe.hexes) { foe.hexes = foe.hexes.filter(h => h.until > state.round && foe.hp > 0); if (!foe.hexes.length) delete foe.hexes; }
-    if (foe.toll && (foe.toll.until <= state.round || foe.hp <= 0)) delete foe.toll;
     if (foe.deflect && (foe.deflect.until <= state.round || foe.hp <= 0)) delete foe.deflect;
   }
 }
@@ -307,12 +306,19 @@ export function deflectReason(state: BattleState, data: EncounterDefinition, her
   if (!others.length) return 'No other enemy to bend it onto.';
   return recipientId !== undefined && !others.some(e => e.id === recipientId) ? 'Choose another standing enemy.' : '';
 }
-// The toll a foe pays as its attacking move begins (the caller has excluded phase turns, charges and cancelled moves).
-function payToll(state: BattleState, data: EncounterDefinition, foe: EnemyState, events: BattleEvent[]): void {
-  const toll = foe.toll; if (!toll || toll.until < state.round || !living(state, toll.heroId)) return;
-  const dealt = Math.min(foe.hp, tired(data, toll.heroId, veiled(state, data, foe, toll.power))); foe.hp -= dealt;
-  events.push({ type: 'toll', sourceId: toll.heroId, targetId: foe.id, amount: dealt, text: 'Toll paid.' });
-  if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
+// A pull: this hexer's curse on the foe ticks once now (round-end power + `bonusPer` a stack, through veilguard and fatigue);
+// `loosen` then lowers it one stack (a curse at one stack is removed) and keeps the rest to the next round-end. Returns the damage dealt.
+function pullHex(state: BattleState, data: EncounterDefinition, heroId: string, foe: EnemyState, bonusPer: number, loosen: boolean, events: BattleEvent[]): number {
+  const h = foe.hexes?.find(x => x.heroId === heroId); if (!h || foe.hp <= 0) return 0;
+  const dealt = Math.min(foe.hp, tired(data, heroId, veiled(state, data, foe, hexTickPower(data, heroId, h.stacks) + bonusPer * h.stacks)));
+  foe.hp -= dealt; events.push({ type: 'damage', sourceId: heroId, targetId: foe.id, amount: dealt, text: 'Thread pulled.' });
+  // Pull Thread keeps the thread taut: what it leaves lives at least to the next round-end, like a fresh thread.
+  if (loosen && foe.hp > 0) {
+    h.until = Math.max(h.until, state.round + 1); h.stacks -= 1; events.push({ type: 'hex', sourceId: heroId, targetId: foe.id, amount: h.stacks, text: 'Curse loosened.' });
+    if (!h.stacks) { foe.hexes = foe.hexes!.filter(x => x !== h); if (!foe.hexes.length) delete foe.hexes; }
+  }
+  if (!foe.hp) { delete foe.hexes; events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
+  return dealt;
 }
 
 // ---- Equipment (2D-2) ----
@@ -713,10 +719,7 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
           }
         }
       };
-      // A tolled foe pays as its attacking move begins; falling to the toll ends its turn without the move.
-      if (!intent.special && !intent.charge && enemy.interruptedRound !== state.round) payToll(state, data, enemy, events);
-      if (enemy.hp <= 0) { /* fell paying the toll */ }
-      else if (intent.special === 'phase') beginPhase(state, data, enemy, events);
+      if (intent.special === 'phase') beginPhase(state, data, enemy, events);
       else if (enemy.interruptedRound === state.round) {
         events.push({ type: 'cancel', sourceId: actorId, cause: intent.kind === 'energy' ? 'sealed' : 'interrupted', text: intent.kind === 'energy' ? 'Energy move sealed.' : 'Physical attack interrupted.' });
         if (data.enemies.find(e => e.id === actorId)?.boss) enemy.steadyRound = state.round + STEADFAST_ROUNDS;
@@ -842,7 +845,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
     return [{ id: 'party', name: 'Party', valid: !reason, reason }];
   }
   if (targetKind(action) === 'enemies') {
-    const reason = unavailable || (!state.enemies.some(e => e.hp > 0) ? 'This enemy is down.' : action === 'tollring' && !state.enemies.some(e => e.hp > 0 && e.hexes) ? 'No curse on any enemy.' : '');
+    const reason = unavailable || (!state.enemies.some(e => e.hp > 0) ? 'This enemy is down.' : '');
     return [{ id: 'enemies', name: 'Enemies', valid: !reason, reason }];
   }
   if (targetKind(action) === 'self') {
@@ -887,7 +890,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
   return data.enemies.map(e => {
     const actor = state.enemies.find(s => s.id === e.id);
     const reason = unavailable || (!actor || actor.hp <= 0 ? 'This enemy is down.' :
-      screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : action === 'lifetoll' && !actor.hexes ? 'No curse on this enemy.' : action === 'deflectfate' ? deflectReason(state, data, heroId, e.id)
+      screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : action === 'lifetoll' && !actor.hexes?.some(h => h.heroId === heroId) ? 'No curse on this enemy.' : action === 'deflectfate' ? deflectReason(state, data, heroId, e.id)
       : action === 'turncycle' ? dialReason(state, data, e.id, 1) : action === 'doubledial' ? dialReason(state, data, e.id, hasCap(data, heroId, 'seerDialChoose') ? 1 : 2) : '');
     return { id: e.id, name: e.name, valid: !reason, reason };
   });
@@ -972,10 +975,6 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     h.until = Math.max(h.until, state.round + life + (full && hasCap(data, hero.id, 'wynne4') ? 1 : 0));
     events.push({ type: 'hex', sourceId: hero.id, targetId: foe.id, amount: h.stacks, text: 'Curse.' });
     return h;
-  };
-  const toll = (foe: EnemyState, power: number, life: number) => {
-    foe.toll = { heroId: hero.id, power, until: state.round + life };
-    events.push({ type: 'toll', sourceId: hero.id, targetId: foe.id, amount: power, text: 'Toll bound.' });
   };
   switch (command.action) {
     case 'saintstrike': case 'communion': case 'vowstrike': case 'sharewound': case 'lastlight': {
@@ -1119,10 +1118,19 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       if (h && had && hasCap(data, hero.id, 'hexKnotLife')) h.until = Math.max(h.until, Math.min(state.round + HEX_LIFE_CAP, h.until + 1));
       break;
     }
-    case 'lifetoll': toll(enemy!, skill.power, 1 + capAmount(data, hero.id, 'hexTollLong')); break;
+    // Pull Thread: the target's curse ticks once now, then loosens a stack (b2y keeps a full curse at three).
+    case 'lifetoll': {
+      const h = enemy!.hexes?.find(x => x.heroId === hero.id);
+      pullHex(state, data, hero.id, enemy!, capAmount(data, hero.id, 'hexPullHeavy'), !(h && h.stacks >= HEX_MAX && hasCap(data, hero.id, 'hexPullKeep')), events);
+      break;
+    }
+    // Pulling Ring: every standing foe; a cursed one ticks once now (no stack lost), an uncursed one takes a first stack.
     case 'tollring':
-      for (const foe of state.enemies.filter(e => e.hp > 0 && e.hexes))
-        toll(foe, skill.power + (foe.hexes!.some(h => h.stacks >= HEX_MAX) ? capAmount(data, hero.id, 'hexRingFull') : 0), 1);
+      for (const foe of state.enemies.filter(e => e.hp > 0)) {
+        const h = foe.hexes?.find(x => x.heroId === hero.id);
+        if (h) pullHex(state, data, hero.id, foe, h.stacks >= HEX_MAX ? capAmount(data, hero.id, 'hexRingFull') : 0, false, events);
+        else hex(foe, 1, 1);
+      }
       break;
     case 'gatherfist': damage(skill.power + (chiBefore === 0 ? capAmount(data, hero.id, 'kael1') : 0)); break;
     case 'flowfist': damage(skill.power + (chiBefore === 0 ? capAmount(data, hero.id, 'martialFlowZero') : 0)); break;

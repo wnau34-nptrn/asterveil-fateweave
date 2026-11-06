@@ -6,14 +6,14 @@ import type {ActionId,Command,EncounterDefinition} from '../../src/core/battle/t
 // Identities whose A7 bodies ship. Odran (thiran) and Isolde (wila) were redesigned (PR #120) and use the seed + procedural motion until A7-003.
 export const unitA12Heroes=['kael','wynne','astrid'] as const;
 export type A12Hero=(typeof unitA12Heroes)[number];
-// Only actions the fixture can stage from a fresh battle (circlefist/perfectfist, lifetoll/tollring, deflectfate, turncycle/doubledial need mid-battle setup the fixture does not script).
+// Only actions the fixture can stage from a fresh battle (circlefist/perfectfist, deflectfate, turncycle/doubledial need mid-battle setup the fixture does not script).
 export const a12Actions=(hero:A12Hero):readonly ActionId[]=>({
  kael:['attack','gatherfist','flowfist','releasefist','storedfist'],
- wynne:['attack','threadhex','knothex','longthread','wovenhex'],
+ wynne:['attack','threadhex','knothex','longthread','wovenhex','lifetoll','tollring'],
  astrid:['attack','starneedle','crossing','readorbit'],
 } as const)[hero] as readonly ActionId[];
 // Setup actions tried (in order) when the skill has no valid target at the start of the battle (charges, curses, marks).
-const setups:readonly ActionId[]=['attack','gatherfist','threadhex','starneedle','readorbit'];
+const setups:readonly ActionId[]=['threadhex','attack','gatherfist','starneedle','readorbit'];
 export const foeArt='foe_spore_puff' as const,foeIntent='Spore Dust';
 // scenario: normal (hero acts, foe hits the Knight) | hurt/down (foe hits the hero) | block (foe's hit on the hero is fully absorbed: 0 damage) | enemy-down (foe has 1 HP)
 export function unitA12Fixture(hero:A12Hero,action:ActionId='attack',scenario='normal'){

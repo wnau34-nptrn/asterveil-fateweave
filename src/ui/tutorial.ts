@@ -48,7 +48,8 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
   return attack();
  }
  // Hexer (P03): a curse deals nothing now, so the advisor values the damage still to come: each stack's tick for every
- // round-end left on it, and a toll for the rounds it binds. Every candidate goes through the resolver preview.
+ // round-end left on it; a pull's instant tick counts as damage now and its loosened stack as curse value lost. Every
+ // candidate goes through the resolver preview.
  // Seer (P03): judged on the whole preview up to the party's next command, enemy turns included: HP removed from foes
  // (a bent move counts) minus HP the party loses. Every legal attacker × recipient pair and dial is tried.
  if(role==='Seer'){
@@ -70,8 +71,7 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  }
  if(role==='Hexer'){
   const potential=(s:BattleState)=>s.enemies.filter(e=>e.hp>0).reduce((n,e)=>n
-   +(e.hexes??[]).filter(h=>h.heroId===heroId).reduce((m,h)=>m+hexTickPower(data,heroId,h.stacks)*Math.max(0,h.until-s.round+1),0)
-   +(e.toll?.heroId===heroId?e.toll.power*Math.max(0,e.toll.until-s.round+1)*.8:0),0);
+   +(e.hexes??[]).filter(h=>h.heroId===heroId).reduce((m,h)=>m+hexTickPower(data,heroId,h.stacks)*Math.max(0,h.until-s.round+1),0),0);
   const me=data.heroes.find(h=>h.id===heroId)!,now=potential(state);let best:{command:Command;score:number}|undefined;
   for(const action of me.actions)for(const target of targetOptions(state,data,heroId,action).filter(t=>t.valid)){
    const command:Command={heroId,beat:state.beat,action,targetId:target.id};
@@ -82,7 +82,7 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
    const score=damage+kills*8+(potential(turn.state)-now)*1.3;
    if(!best||score>best.score)best={command,score};
   }
-  if(best){const {command}=best;return{...command,step:state.commands.length+1,title:command.action==='attack'?'โจมตีพื้นฐาน':'ผูกสาปให้กินเลือดทุกจบรอบ',copy:`${actorName(heroId,data)} → ${data.skills[command.action].name} → ${actorName(command.targetId,data)}`};}
+  if(best){const {command}=best;return{...command,step:state.commands.length+1,title:command.action==='attack'?'โจมตีพื้นฐาน':command.action==='lifetoll'||command.action==='tollring'?'ดึงด้ายให้สาปทำงานทันที':'ผูกสาปให้กินเลือดทุกจบรอบ',copy:`${actorName(heroId,data)} → ${data.skills[command.action].name} → ${actorName(command.targetId,data)}`};}
   return attack();
  }
  if(role==='Saint'||role==='Dancer'){
