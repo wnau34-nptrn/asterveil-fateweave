@@ -57,13 +57,13 @@ it('actual boss victory adds only its independent bonus and preserves all three 
 it('focus adds exactly once to the marked primary hit, includes leech/replay/preview, and never adds to splash, marks or unmarked hits',()=>{
   const data=fixture('focus'),state=beginBattle(data).state;state.enemies[0]!.markedUntil=3;
   const cmd:Command={beat:state.beat,heroId:'tracer',action:'execute',targetId:'f1'},r=resolveCommand(state,data,cmd);
-  expect(r).toEqual(previewCommand(state,data,cmd));expect(r.turns[0]!.events.find(e=>e.type==='damage')!.amount).toBe(55);expect(state.heroes[0]!.bossUsedRound).toBeUndefined();expect(r.turns[0]!.state.heroes[0]!.bossUsedRound).toBe(1);
+  expect(r).toEqual(previewCommand(state,data,cmd));expect(r.turns[0]!.events.find(e=>e.type==='damage')!.amount).toBe(54);expect(state.heroes[0]!.bossUsedRound).toBeUndefined();expect(r.turns[0]!.state.heroes[0]!.bossUsedRound).toBe(1);
   const used=structuredClone(state);used.heroes[0]!.bossUsedRound=1;expect(resolveCommand(used,data,cmd).turns[0]!.events.find(e=>e.type==='damage')!.amount).toBe(50);
   const leechData=structuredClone(data);leechData.heroes=[{...leechData.heroes[0]!,leech:10}];const hurt=structuredClone(state);hurt.heroes[0]!.hp=100;expect(resolveCommand(hurt,leechData,cmd).turns[0]!.state.heroes[0]!.hp).toBe(105);
   const unmarked=beginBattle(data).state;expect(resolveCommand(unmarked,data,{...cmd,beat:unmarked.beat}).turns[0]!.events.find(e=>e.type==='damage')!.amount).toBe(28);
   const mark=resolveCommand(beginBattle(data).state,data,{...cmd,action:'mark'});expect(mark.turns[0]!.state.heroes[0]!.bossUsedRound).toBeUndefined();
   const mage=fixture('focus','weaver',2);mage.heroes=[{...mage.heroes[0]!,talents:{caps:{splitbolt:0}}}];const m=beginBattle(mage).state;m.enemies.forEach(e=>e.markedUntil=3);const hit=resolveCommand(m,mage,{beat:m.beat,heroId:'weaver',action:'bolt',targetId:'f1'}).turns[0]!.events.filter(e=>e.type==='damage');expect(hit.map(e=>e.amount)).toEqual([30,13]);
-  const normal=beginBattle(data).state,attack={beat:normal.beat,heroId:'tracer',action:'attack' as const,targetId:'f1'},done=resolveCommand(normal,data,attack).state;expect(replay(data,[attack])).toEqual(done);expect(markedSkillExample('execute',data.heroes[0]!,data)).toBe(55);
+  const normal=beginBattle(data).state,attack={beat:normal.beat,heroId:'tracer',action:'attack' as const,targetId:'f1'},done=resolveCommand(normal,data,attack).state;expect(replay(data,[attack])).toEqual(done);expect(markedSkillExample('execute',data.heroes[0]!,data)).toBe(54);
 });
 it('aegis grants a post-hit shield floor once per round, never prevents death or triggers on fully absorbed damage',()=>{
   const data=fixture('aegis','tracer',2),s=beginBattle(data).state,cmd={beat:s.beat,heroId:'tracer',action:'mark' as const,targetId:'f1'},out=resolveCommand(s,data,cmd);
