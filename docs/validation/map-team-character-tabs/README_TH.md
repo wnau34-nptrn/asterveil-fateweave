@@ -32,11 +32,18 @@
 | ผังสกิลบนแมพ | [tree-map-390.png](tree-map-390.png) |
 | พัฒนาเฉพาะค่าย / 5 แท็บ | [develop-camp-390.png](develop-camp-390.png) |
 
-ผลในเครื่อง: focused unit 30/30 ผ่าน; regression browser ชุด 28 กรณีผ่าน 27 และพบ expectation เก่าคืนกระเป๋า 1 กรณี ปรับให้คืนหน้าทีมตามทางเข้าใหม่แล้วรันซ้ำผ่าน; รอบสุดท้าย browser ใหม่ 3 + shared-equipment กรณีแก้ 1 ผ่านครบ 4/4 บนโค้ดล่าสุด; typecheck/lint/build ผ่าน และตรวจภาพจริง 390px ทั้ง 4 ภาพแล้ว ผล full unit/quality/browser CI บันทึกเมื่อครบก่อน merge
+ผลในเครื่อง: focused unit 30/30 ผ่าน; regression browser ชุด 28 กรณีผ่าน 27 และพบ expectation เก่าคืนกระเป๋า 1 กรณี ปรับให้คืนหน้าทีมตามทางเข้าใหม่แล้วรันซ้ำผ่าน; รอบสุดท้าย browser ใหม่ 3 + shared-equipment กรณีแก้ 1 ผ่านครบ 4/4 บนโค้ดล่าสุด; typecheck/lint/build ผ่าน และตรวจภาพจริง 390px ทั้ง 4 ภาพแล้ว ผลตรวจสุดท้ายอยู่ด้านล่าง
 
 ## ผลตรวจเพิ่มเติมก่อน merge
 
 - Full unit ในเครื่อง: **1,657 ผ่าน / 6 skipped**, 121 files ผ่าน; CI quality ของ code head แรกผ่าน
 - CI browser รอบแรกพบ 5 expectations ของ flow เดิม: active tab ผังสกิลหลัง resize/เปิดจากครูฝึก, การกลับแท็บสกิลก่อนเปลี่ยน loadout, focus หลัง Lv5 และการ์ดที่ต้องเลื่อนถึงในจอ 320px
 - ปรับ tests ให้ตรวจ primary talents tab, สลับไปหน้าสกิลจริง, คืน focus ไปปุ่มรายละเอียดเดิม และ scroll-to-card ก่อนตรวจขนาด/การกด โดยไม่ลดเงื่อนไข touch target หรือเปลี่ยน runtime; รัน 5 กรณีดังกล่าวผ่านครบในเครื่อง
-- รอ quality + browser ทั้งชุดของ head ใหม่ก่อน merge; ไม่มีการข้าม test/gate หรือปรับกติกาเพื่อให้ผ่าน
+- quality + browser ทั้งชุดของ head ใหม่ผ่านก่อน merge; ไม่มีการข้าม test/gate หรือปรับกติกาเพื่อให้ผ่าน
+
+## ส่งมอบ
+
+- Merge [PR #203](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/203) เป็น `ae8889c4997ec69b28527235d899f73d94233b2c` เข้าสาขาเกม หลัง quality + browser ทั้ง 4 shards และ aggregate ผ่านบน head `f80f5da`
+- Full unit: 1,657 ผ่าน / 6 skipped; focused unit 30 ผ่าน; focused browser/new menu + source-return checks และ 5 CI regression cases ผ่าน; typecheck/lint/build ผ่าน
+- ตรวจภาพจริง Chromium 390px ทั้ง 4 หน้าจอ และ interaction ที่ 390×844/650; CI ครอบคลุม responsive/keyboard/rotation/legacy saves ตามชุดเดิม ไม่ได้ยืนยัน Safari หรืออุปกรณ์จริง
+- CURRENT_STATE และ CODEX-TO-CLAUDE อัปเดตผล/owner decision แล้ว; รักษาเซฟและกติกาเดิม งานถัดไปรอเจ้าของ ไม่เริ่ม P09

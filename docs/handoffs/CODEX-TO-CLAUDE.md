@@ -1,10 +1,10 @@
 ## 2026-11-07 — MAP-TEAM-CHARACTER-TABS-001
 - Owner approved separate map team, one-tap carried-only presets, primary tree tab and no development tab on MAP.
-- Branch `codex/map-team-character-tabs` → game branch; PR/merge recorded on completion.
+- Merged PR #203 (`codex/map-team-character-tabs` → game branch), merge `ae8889c4997ec69b28527235d899f73d94233b2c`, after quality + browser success.
 - HUD goals/team/bag share one row; T team / B bag; team dialog preserves camp-only preset saving, missing-member feedback and current-plan status.
 - MAP character = overview/gear/skills/talents; camp adds development. No duplicate development links; skill-level/tome services stay camp-only.
 - Reuses existing roster/preset/formation/talent commands; no battle/save/balance/capacity/art changes or P09.
-- Local full unit 1,657 passed/6 skipped; new browser 3/3 + focused regressions passed. CI found 5 old tab/focus/scroll expectations; corrected and reran 5/5 passed, full CI pending.
+- Local full unit 1,657 passed/6 skipped, focused unit 30 passed; new browser/regressions and 5 corrected tab/focus/scroll cases passed. CI quality + browser 4 shards/aggregate passed.
 - Evidence and 390px screenshots: `docs/validation/map-team-character-tabs/README_TH.md`; next task awaits owner.
 
 ## 2026-11-07 — SYSTEM-UNLOCK-PACING-002
