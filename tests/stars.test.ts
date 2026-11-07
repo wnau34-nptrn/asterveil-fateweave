@@ -205,7 +205,7 @@ describe('scout ★3 backstab / ★5 shadow counter (Sefa)', () => {
     const s = until(createBattle(d), d, 'sefa');
     expect(nextIntentOf(s, d, 'b1')?.targetId).toBe('sefa');
     const raider = s.enemies.find(e => e.id === 'b1')!.hp;
-    const r = act(s, d, 'evade', 'sefa');
+    const r = act(s, d, 'evade', 'f1');
     const turn = r.turns.find(t => t.actorId === 'b1')!;
     expect(turn.events.map(e => e.type)).toEqual(['dodge', 'counter']);
     expect(turn.events[1]).toMatchObject({ sourceId: 'sefa', targetId: 'b1', amount: d.rules.shadowCounter });

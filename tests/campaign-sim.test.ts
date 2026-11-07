@@ -41,7 +41,12 @@ describe('campaign simulation (A10)', () => {
   });
 });
 
-if (full) it('C12 campaign gate: no first-normal or hard clear-rate regression in twenty paired cells', () => {
+// Campaign gate (owner 2026-11-06, "ดูทั้งแคมเปญ"): the twenty paired cells are read as company counts (12 a group). A cell
+// may lose at most one company, and only when its group (one policy × style: the first tries at every map and the hard
+// tries) clears at least as many first tries in total as before. A company that clears the previous map sooner reaches the
+// next one at a lower level, which can cost that one first try without the campaign getting any slower
+// (docs/validation/skill-rework-2026-11-05/README_TH.md §9.5).
+if (full) it('C12 campaign gate: no campaign-wide regression in first-normal or hard clears over twenty paired cells', () => {
   let group = ''; const actual: Record<string, number> = {};
   for (const line of campaignReport(csForGate()).split('\n')) {
     if (line.startsWith('### ')) group = line.slice(4);
@@ -50,5 +55,8 @@ if (full) it('C12 campaign gate: no first-normal or hard clear-rate regression i
     if (cells[2]?.endsWith('%')) actual[`${group} / ${cells[0]}`] = Number(cells[2].slice(0, -1));
   }
   expect(Object.keys(actual)).toHaveLength(20);
-  for (const [cell, rate] of Object.entries(before.cells)) expect(actual[cell], cell).toBeGreaterThanOrEqual(rate);
+  const companies = (rate: number) => Math.round(rate * seeds.length / 100); const groupOf = (cell: string) => cell.split(' / ')[0]!;
+  const sum = (cells: Record<string, number>, group: string) => Object.entries(cells).filter(([c]) => groupOf(c) === group).reduce((n, [, r]) => n + companies(r), 0);
+  for (const [cell, rate] of Object.entries(before.cells)) expect(companies(actual[cell]!), cell).toBeGreaterThanOrEqual(companies(rate) - 1);
+  for (const group of new Set(Object.keys(before.cells).map(groupOf))) expect(sum(actual, group), group).toBeGreaterThanOrEqual(sum(before.cells, group));
 });
