@@ -46,13 +46,14 @@ export function heroActions(id: string): ActionId[] {
 
 export type VfxModule = 'projectile-fx' | 'basic-attack-fx' | 'command-fx' | 'song-shadow-fx' | 'saint-dance-fx' | 'arcane-seal-fx'
   | 'alchemy-fx' | 'earth-fx' | 'healing-fx' | 'defense-fx' | 'blade-fx' | 'exec-ward-fx' | 'bolt-fx'
-  | 'foe-signature-fx' | 'boss-signature-fx' | 'generic-code';
+  | 'foe-signature-fx' | 'boss-signature-fx' | 'rework-fx' | 'generic-code';
 // Painted (own atlas) vs intentionally shared/code-drawn.
 export const vfxKind = (module: VfxModule, shared: boolean): 'painted' | 'shared' | 'code' =>
   module === 'generic-code' || module === 'basic-attack-fx' ? 'code' : shared ? 'shared' : 'painted';
 
 // Same order as BattleScene.prepare for a hero turn.
 export function heroVfx(action: ActionId, role: string): VfxModule {
+  if (action === 'backstab') return 'rework-fx';
   if (isProjectileSkill(action)) return 'projectile-fx';
   if (action === 'attack' && (role === 'Archer' || role === 'Alchemist')) return 'basic-attack-fx';
   if (isCommandSkill(action)) return 'command-fx';
@@ -82,6 +83,7 @@ const heroTargets: Readonly<Record<string, string>> = {
 // Where the effect lands (the event recipient that the module reads), per module.
 function heroPoint(module: VfxModule, action: ActionId): string {
   switch (module) {
+    case 'rework-fx': return 'กลางตัวผู้รับ Blade storm. damage จริงทีละ hit; settle ที่เท้าผู้รับจริง (หยุดตามจำนวน event)';
     case 'projectile-fx': return 'ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว)';
     case 'basic-attack-fx': return 'ออกจากจุดปล่อย → ขอบหน้าผู้รับ damage จริง';
     case 'command-fx': return action === 'challenge' ? 'โล่ผู้ร่าย → ศัตรูที่ถูกท้าจริง 1 ตัว' : action === 'warcry' ? 'อกผู้ร่าย (buff) + เป้าที่ถูกสวนจริงต่อ event' : 'อก/ค้อนผู้ร่าย (stance ตัวเอง)';
@@ -184,6 +186,13 @@ export function presentationCoverage(list: readonly EncounterDefinition[] = enco
         body: body(hero.id, action === 'attack' ? 'role basic' : actionPoses[action], action),
         vfx: { module, kind: vfxKind(module, shared), ...(shared ? { note: module === 'arcane-seal-fx' ? ((hexSkills as readonly string[]).includes(action) ? 'ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04)' : 'ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04)') : module === 'saint-dance-fx' ? 'ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)' : 'ฟันร่วมตามสีอาชีพ (ตั้งใจ)' } : module === 'basic-attack-fx' ? { note: 'ลูกธนู/ขวดวาดด้วยโค้ด (AV03 ตั้งใจ ไม่ใช้ภาพสกิล)' } : {}) },
         target: heroTargets[targetKind(action)]!, point: heroPoint(module, action) });
+      const supplemental: Partial<Record<ActionId,string>> = {
+        knives:'เคลือบพิษที่มือจาก venom บนผู้ร่าย', disarm:'burst/splash เฉพาะ damage ของพิษจริง (ไม่แทน hit แรก)',
+        evade:'shadow cut เฉพาะ damage จริง + afterimage เท้า (คงภาพ readiness เดิม)',
+        bolt:'มวลพลังเวทที่มือเมื่อ arcane +1 จริง', dispel:'ปล่อยพลังที่มือเฉพาะ arcane −N จริง', storedfist:'clash เฉพาะ event ปะทะจริง',
+      };
+      const extra = supplemental[action];
+      if (extra) { const row = rows[rows.length - 1]!; row.vfx.note = [row.vfx.note, `เสริม rework-fx: ${extra}; คงภาพหลักเดิม`].filter(Boolean).join(' · '); }
     }
   }
   for (const [art, entry] of [...foeMoves(list)].sort(([a], [b]) => a.localeCompare(b))) {

@@ -1,0 +1,1297 @@
+{
+  "schema": "art-vfx-three-beat-v1",
+  "batch": "ART-VFX-REWORK-001",
+  "frame_size": [
+    256,
+    256
+  ],
+  "alpha": "straight",
+  "padding_min_px": 12,
+  "timing": "Existing stage timing unchanged; event-owned contacts only.",
+  "sources": [
+    {
+      "file": "source/venom_coat.png",
+      "sha256": "1a9a6902d51cd337d590af610b48d2aa1cf756015ad9dc9fc60045a2c565dfed",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/venom_stack.png",
+      "sha256": "357e536608e38d6497dbd717e041cf98febc82b21cae6fef1b1104546d6f6603",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/venom_tick.png",
+      "sha256": "ff166963aad12fe77341c36e24388ad533fec9ce7c86d2ebb62f3ee3fa7e4689",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/venom_burst.png",
+      "sha256": "106be2abc930a72c6891475a46a261b7e86368ed23677553294d50a91939c08a",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/venom_splash.png",
+      "sha256": "5c39a6ddbc02326febd97b056e40b02414e0b94e444c8d5006d8a2c7c4fdfbc2",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/shadow_cut.png",
+      "sha256": "897090dba6c3a6fb8aa2dfbdc4a521b43d9b4a7a6cf36ee0fa6a78034383e503",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/shadow_afterimage.png",
+      "sha256": "1f9da10dceffaae7bb74b6341bc8f4abc4f3a6d0442dd5ef1c217877e59b06e4",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/arcane_gain.png",
+      "sha256": "409bc0407849b404b24c03690d1fc61fb2caafafb28b92827ee198c0cda9534a",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/arcane_release.png",
+      "sha256": "700ab82e8271a591c1606f1b510a288867fb68351a90ec40e2366a406dd0188c",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/clash.png",
+      "sha256": "ddda6ad0bdc304175f9ed26896f0bb534ff8fa8626f2179bca2a1a85c931123a",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/blade_storm.png",
+      "sha256": "69dc148cf890f8096727c17f7be96e2c095dde6af1fd1c0e76b9c9e1efde9625",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "file": "source/venom_emblem.png",
+      "sha256": "cf70b444954767090b9ad597828c3136239900861165d9c34df184c86d25dbd0",
+      "size": [
+        1774,
+        887
+      ]
+    },
+    {
+      "file": "source/arcane_emblem.png",
+      "sha256": "68670db7a9799ade7569681216a402113bf5641140b391eb984987f2d03d97ce",
+      "size": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "layers": [
+    {
+      "move": "venom_coat",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/venom_coat_prepare.png",
+      "source": "source/venom_coat.png",
+      "source_rect": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        32,
+        34,
+        241,
+        217
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster hands",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 52,
+      "sha256": "ab7cb41e11555968c57c5c970d9ecfca4c221013af6c37bda84c3eae6bca067b"
+    },
+    {
+      "move": "venom_coat",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/venom_coat_peak.png",
+      "source": "source/venom_coat.png",
+      "source_rect": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        31,
+        29,
+        240,
+        234
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster hands",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 52,
+      "sha256": "1e4e8dd9febff3b5c43d9092e2c228b6c6a5828ed5891047ec074e7150734052"
+    },
+    {
+      "move": "venom_coat",
+      "beat": "end",
+      "variant": "R1",
+      "file": "R1/venom_coat_end.png",
+      "source": "source/venom_coat.png",
+      "source_rect": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        14,
+        42,
+        231,
+        232
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster hands",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 52,
+      "sha256": "13a92e8f472f3d7355ae108b1344c1290451bb42d3c566520010450277533976"
+    },
+    {
+      "move": "venom_stack",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/venom_stack_prepare.png",
+      "source": "source/venom_stack.png",
+      "source_rect": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        20,
+        243,
+        234
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target waist",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 52,
+      "sha256": "63b2c2dbcc2582a86b1db1a204c2509e621553a45b9c4994ead3882e31db4e6e"
+    },
+    {
+      "move": "venom_stack",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/venom_stack_peak.png",
+      "source": "source/venom_stack.png",
+      "source_rect": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        13,
+        13,
+        244,
+        232
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target waist",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 52,
+      "sha256": "124b657e9500009c0e0375de61b9f4be6b32c90237c9f02b9e40b4155493d41c"
+    },
+    {
+      "move": "venom_stack",
+      "beat": "end",
+      "variant": "R1",
+      "file": "R1/venom_stack_end.png",
+      "source": "source/venom_stack.png",
+      "source_rect": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        16,
+        235,
+        234
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target waist",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 52,
+      "sha256": "a0217ac6a6b1298f01d711e092eb383afac6ddbf7712f41a4d54c25c3b94fcfd"
+    },
+    {
+      "move": "venom_tick",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/venom_tick_prepare.png",
+      "source": "source/venom_tick.png",
+      "source_rect": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        13,
+        244,
+        242
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target waist",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 44,
+      "sha256": "5da1774f50dbdd78ea6403b8f03eadeaafe5dfeabe33f793baf1708619cf641b"
+    },
+    {
+      "move": "venom_tick",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/venom_tick_peak.png",
+      "source": "source/venom_tick.png",
+      "source_rect": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        29,
+        240,
+        239
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target waist",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 44,
+      "sha256": "4b132ec1ac091386f402adc617d6b7f20ba9fced421a1f3d076f99f652cce2f0"
+    },
+    {
+      "move": "venom_tick",
+      "beat": "end",
+      "variant": "R1",
+      "file": "R1/venom_tick_end.png",
+      "source": "source/venom_tick.png",
+      "source_rect": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        15,
+        42,
+        202,
+        211
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target waist",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 44,
+      "sha256": "a8c73de61968040d71656f585ac9860b8d5a57190ceed745c13bcfbecb23500f"
+    },
+    {
+      "move": "venom_burst",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/venom_burst_prepare.png",
+      "source": "source/venom_burst.png",
+      "source_rect": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        13,
+        244,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 90,
+      "sha256": "a7b5ee67394d1d04920b668f56ff7d14859a9835443fbff1e3a0d94edbfe0ac0"
+    },
+    {
+      "move": "venom_burst",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/venom_burst_peak.png",
+      "source": "source/venom_burst.png",
+      "source_rect": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        12,
+        244,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 90,
+      "sha256": "03382de391ea71df4b6c82356604d3f184c1725f0f2642af32883d1fadd70663"
+    },
+    {
+      "move": "venom_burst",
+      "beat": "end",
+      "variant": "R1",
+      "file": "R1/venom_burst_end.png",
+      "source": "source/venom_burst.png",
+      "source_rect": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        12,
+        244,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 90,
+      "sha256": "05ada62d1359e23fe0a71806fcc42e1a4877a71b829a5e7d1f4e05e7ad9084f6"
+    },
+    {
+      "move": "venom_splash",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/venom_splash_prepare.png",
+      "source": "source/venom_splash.png",
+      "source_rect": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        38,
+        73,
+        199,
+        220
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 50,
+      "sha256": "a7238015adca9ef1702b953eb700267fe8e450ac1d0b242a236f837aa42666a5"
+    },
+    {
+      "move": "venom_splash",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/venom_splash_peak.png",
+      "source": "source/venom_splash.png",
+      "source_rect": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        48,
+        242,
+        221
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 50,
+      "sha256": "81dff2e3527c317d151b889c538352af5574ba9aae4458c9c7c493a348be4b1f"
+    },
+    {
+      "move": "venom_splash",
+      "beat": "end",
+      "variant": "R1",
+      "file": "R1/venom_splash_end.png",
+      "source": "source/venom_splash.png",
+      "source_rect": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        22,
+        64,
+        244,
+        215
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 50,
+      "sha256": "bb7889035a5ba39a061686d5e6162b74314f04ceba70c38ebb40fcfe6e0107f9"
+    },
+    {
+      "move": "shadow_cut",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/shadow_cut_prepare.png",
+      "source": "source/shadow_cut.png",
+      "source_rect": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        58,
+        66,
+        213,
+        196
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 76,
+      "sha256": "52496dd859d8267ba5ff0015c60938275ce7b74a3bbfa2f8bc10953873db9c92"
+    },
+    {
+      "move": "shadow_cut",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/shadow_cut_peak.png",
+      "source": "source/shadow_cut.png",
+      "source_rect": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        22,
+        35,
+        233,
+        190
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 76,
+      "sha256": "ff14850da13c7d9d3de8ad967a05b1fa3f5c777041500f3e47da468e811796c1"
+    },
+    {
+      "move": "shadow_cut",
+      "beat": "end",
+      "variant": "R1",
+      "file": "R1/shadow_cut_end.png",
+      "source": "source/shadow_cut.png",
+      "source_rect": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        14,
+        19,
+        206,
+        207
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 76,
+      "sha256": "78bbcd8ce788d02576502e151ba705e38b24301a37c88ef565f741f6f1a3a6ef"
+    },
+    {
+      "move": "shadow_afterimage",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/shadow_afterimage_prepare.png",
+      "source": "source/shadow_afterimage.png",
+      "source_rect": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        20,
+        30,
+        244,
+        240
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster feet",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 95,
+      "sha256": "51e9a1324f174ce4c77c2bb3a8c39c168ed7027d0e0054efa344af7ffcaf6633"
+    },
+    {
+      "move": "shadow_afterimage",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/shadow_afterimage_peak.png",
+      "source": "source/shadow_afterimage.png",
+      "source_rect": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        20,
+        240,
+        232
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster feet",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 95,
+      "sha256": "b0040d21670167df6c91286a8397abe28cec60dba7f3bf8e4a53d6b570ff733e"
+    },
+    {
+      "move": "shadow_afterimage",
+      "beat": "end",
+      "variant": "R1",
+      "file": "R1/shadow_afterimage_end.png",
+      "source": "source/shadow_afterimage.png",
+      "source_rect": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        19,
+        42,
+        239,
+        240
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster feet",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 95,
+      "sha256": "30224cf6d4280798ce100c3ec2c38dcf5b8966a6260e8c09f4039cc132654171"
+    },
+    {
+      "move": "arcane_gain",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/arcane_gain_prepare.png",
+      "source": "source/arcane_gain.png",
+      "source_rect": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        15,
+        244,
+        241
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster hands",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 48,
+      "sha256": "199f3d54c6268118612db8bddc31351d5be1442f83ddf7c572c837a2bd71f552"
+    },
+    {
+      "move": "arcane_gain",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/arcane_gain_peak.png",
+      "source": "source/arcane_gain.png",
+      "source_rect": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        18,
+        244,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster hands",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 48,
+      "sha256": "da781c86417aef8c53934ffb8809f9af335fb1a3bc641cdca1a1fb84a9d67562"
+    },
+    {
+      "move": "arcane_gain",
+      "beat": "end",
+      "variant": "R1",
+      "file": "R1/arcane_gain_end.png",
+      "source": "source/arcane_gain.png",
+      "source_rect": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        12,
+        19,
+        244,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster hands",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 48,
+      "sha256": "c0a8b9981aa839e5ed2bfea6fba09ca874c022f4ddef61c3812eecfa82978d56"
+    },
+    {
+      "move": "arcane_release",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/arcane_release_prepare.png",
+      "source": "source/arcane_release.png",
+      "source_rect": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        22,
+        35,
+        238,
+        223
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster hands",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 94,
+      "sha256": "6d7b2189c84c76832e1e0f65060d1384acae2b88ed32193cb0ef0ee75351f765"
+    },
+    {
+      "move": "arcane_release",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/arcane_release_peak.png",
+      "source": "source/arcane_release.png",
+      "source_rect": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        24,
+        38,
+        242,
+        229
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster hands",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 94,
+      "sha256": "ad961a8f3b4f111561ef34d03eeb86431f84eef6669fbe40bd58b1f97d71d78d"
+    },
+    {
+      "move": "arcane_release",
+      "beat": "end",
+      "variant": "R1",
+      "file": "R1/arcane_release_end.png",
+      "source": "source/arcane_release.png",
+      "source_rect": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        39,
+        46,
+        222,
+        185
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster hands",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 94,
+      "sha256": "1c51cf85b787ff6ad7b03a82868d7977cbc0c8313069f12a65b8b68f6fe9bd21"
+    },
+    {
+      "move": "clash",
+      "beat": "prepare",
+      "variant": "R1",
+      "file": "R1/clash_prepare.png",
+      "source": "source/clash.png",
+      "source_rect": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        20,
+        26,
+        244,
+        227
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 90,
+      "sha256": "459e04638fb12d93ca44992060af40c367ce2da4813429868cc34fbc74667dc0"
+    },
+    {
+      "move": "clash",
+      "beat": "peak",
+      "variant": "R1",
+      "file": "R1/clash_peak.png",
+      "source": "source/clash.png",
+      "source_rect": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        26,
+        24,
+        235,
+        226
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 90,
+      "sha256": "6b2491824bd1adb8ad476db71b959a12be087b17a0de152b565890b351d35858"
+    },
+    {
+      "move": "clash",
+      "beat": "end",
+      "variant": "R1",
+      "file": "R1/clash_end.png",
+      "source": "source/clash.png",
+      "source_rect": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        31,
+        31,
+        236,
+        220
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 90,
+      "sha256": "82296c05b041ffbe0e9879cc11b2413e22edbacc59c10f575a432c46078b4081"
+    },
+    {
+      "move": "blade_storm",
+      "beat": "1",
+      "variant": "R1",
+      "file": "R1/blade_storm_1.png",
+      "source": "source/blade_storm.png",
+      "source_rect": [
+        0,
+        0,
+        434,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        57,
+        21,
+        198,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre; settle target feet",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 76,
+      "sha256": "7907686fd3a472edc72fd7d2cf2e4b9d2339f8415a3f06b0e4b1f4afe817a9a6"
+    },
+    {
+      "move": "blade_storm",
+      "beat": "2",
+      "variant": "R1",
+      "file": "R1/blade_storm_2.png",
+      "source": "source/blade_storm.png",
+      "source_rect": [
+        434,
+        0,
+        869,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        57,
+        24,
+        198,
+        230
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre; settle target feet",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 76,
+      "sha256": "fdf24a8dd5784137fbbf1f5053838c03d522be61fb621b41ab8b6803f4a636fc"
+    },
+    {
+      "move": "blade_storm",
+      "beat": "3",
+      "variant": "R1",
+      "file": "R1/blade_storm_3.png",
+      "source": "source/blade_storm.png",
+      "source_rect": [
+        869,
+        0,
+        1303,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        57,
+        23,
+        198,
+        213
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre; settle target feet",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 76,
+      "sha256": "2e762384f30ffc46f6993b7b11e0b7225c645177cc47f9668bf69a2b097abcaf"
+    },
+    {
+      "move": "blade_storm",
+      "beat": "4",
+      "variant": "R1",
+      "file": "R1/blade_storm_4.png",
+      "source": "source/blade_storm.png",
+      "source_rect": [
+        1303,
+        0,
+        1738,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        57,
+        26,
+        198,
+        233
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre; settle target feet",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 76,
+      "sha256": "61d7742e5968b879f372d95705435c4b6cfab3b47eeb4966a98d320f86245011"
+    },
+    {
+      "move": "blade_storm",
+      "beat": "settle",
+      "variant": "R1",
+      "file": "R1/blade_storm_settle.png",
+      "source": "source/blade_storm.png",
+      "source_rect": [
+        1738,
+        0,
+        2172,
+        724
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        57,
+        58,
+        198,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target centre; settle target feet",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 76,
+      "sha256": "92ef082e0468f032f78d9d30cdf48690acf385bcb2d75e9076e697dc9606ee73"
+    },
+    {
+      "move": "venom_emblem",
+      "beat": "emblem",
+      "variant": "R1",
+      "file": "R1/venom_emblem.png",
+      "source": "source/venom_emblem.png",
+      "source_rect": [
+        0,
+        0,
+        887,
+        887
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        47,
+        12,
+        193,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target waist",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 28,
+      "sha256": "70ab91af348096149fe488fc784fa7891fdaa5b61d9d70f30921bd6d3e3a5413"
+    },
+    {
+      "move": "venom_emblem",
+      "beat": "emblem",
+      "variant": "R2",
+      "file": "R2/venom_emblem.png",
+      "source": "source/venom_emblem.png",
+      "source_rect": [
+        887,
+        0,
+        1774,
+        887
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        47,
+        17,
+        208,
+        243
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "target waist",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 28,
+      "sha256": "e6235b1aaf6f56946ffc820714f423b37efd28fb7cb1b942dc37b146900fd709"
+    },
+    {
+      "move": "arcane_emblem",
+      "beat": "emblem",
+      "variant": "R1",
+      "file": "R1/arcane_emblem.png",
+      "source": "source/arcane_emblem.png",
+      "source_rect": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "size": [
+        256,
+        256
+      ],
+      "alpha_bounds": [
+        49,
+        12,
+        206,
+        244
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "anchor": "caster hands",
+      "blend": "normal",
+      "suggested_canvas_width_at_390": 28,
+      "sha256": "59138eca11f44008eaab085eb5d212bdf7cfbb8bafbceb974ba5fae385df8cce"
+    }
+  ]
+}

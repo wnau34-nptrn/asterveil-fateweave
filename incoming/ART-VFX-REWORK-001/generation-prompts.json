@@ -1,0 +1,120 @@
+[
+  {
+    "id": "venom_coat",
+    "path": "/workspace/generated_images/exec-214bbdaf-c832-448c-aa16-77704021ac94.png",
+    "prompt": "Remove ALL panel backgrounds, all squares, borders and checkerboards completely. Keep ONLY the isolated painted VFX shapes in exactly the same cells and positions and colours. Real transparent alpha throughout every empty pixel between, around and inside shapes. No dark navy panels, no grey panels, no checkerboard pixels. Preserve original separate effects and horizontal arrangement. This is a transparent game sprite strip, NOT a storyboard on panels.",
+    "original_generation": {
+      "id": "venom_coat",
+      "path": "/workspace/generated_images/exec-e2c80083-43d3-4625-8f0a-9fc3890320c3.png",
+      "prompt": "Create original hand-painted fantasy JRPG effect-only animation strip, transparent background, no text no numbers no characters no weapons no UI. EXACTLY THREE equal square cells in ONE horizontal row, wide transparent gutters, each visual centered at same pivot and common scale, clear 12% padding. Effect VENOM COAT: left preparation two very narrow sickly jade green #7ee08a sheen ribbons with deep muted violet shadows for two dagger blades; middle peak the same two elegant tapered liquid sheens brightening with ONE droplet hanging below; right end fading sheen and one falling drop. Shapes thin deliberate painted edges, tiny ivory cores, sparse particles, no full ring or flash, dark navy scene readability. Only isolated green-violet light ribbons and drop; no daggers. 3 beats prepare peak end.",
+      "source_file": "source/rejected/exec-e2c80083-43d3-4625-8f0a-9fc3890320c3.png",
+      "generation_id": "exec-e2c80083-43d3-4625-8f0a-9fc3890320c3",
+      "status": "rejected: painted panel background"
+    },
+    "reference": "source/rejected/exec-e2c80083-43d3-4625-8f0a-9fc3890320c3.png",
+    "generation_id": "exec-214bbdaf-c832-448c-aa16-77704021ac94",
+    "source_file": "source/venom_coat.png"
+  },
+  {
+    "id": "venom_stack",
+    "path": "/workspace/generated_images/exec-352049fc-7703-45f8-ab41-fe69df5ea713.png",
+    "prompt": "Original hand-painted fantasy JRPG VFX animation strip. EXACTLY THREE equally sized square cells in ONE horizontal row. Transparent real alpha background, no text no numbers no UI no characters. Wide transparent gutters and at least 12% clear padding each cell. Each effect centered in cell, same common scale all beats, left prepare, middle peak, right end. Deliberate tapered painterly shapes, coloured edges, tiny crisp light cores, sparse flecks, readable over navy background, never giant uniform circles. Small poison bloom around target waist: prepare tiny curled green bud, peak compact asymmetric sickly jade green petals with muted violet shadow and one droplet silhouette inside, end a few dissolving green droplets. Not a heal, no plus signs.",
+    "generation_id": "exec-352049fc-7703-45f8-ab41-fe69df5ea713",
+    "source_file": "source/venom_stack.png"
+  },
+  {
+    "id": "venom_tick",
+    "path": "/workspace/generated_images/exec-0fa3ac66-2f26-4bcd-adf2-710d09fe68e8.png",
+    "prompt": "Original hand-painted fantasy JRPG VFX animation strip. EXACTLY THREE equally sized square cells in ONE horizontal row. Transparent real alpha background, no text no numbers no UI no characters. Wide transparent gutters and at least 12% clear padding each cell. Each effect centered in cell, same common scale all beats, left prepare, middle peak, right end. Deliberate tapered painterly shapes, coloured edges, tiny crisp light cores, sparse flecks, readable over navy background, never giant uniform circles. Quiet inward poison bite pulse: prepare three tiny muted jade wisps outside centre, peak inward curled green-violet fangs converging at centre, end tiny fading drop. Smaller quieter than explosion.",
+    "generation_id": "exec-0fa3ac66-2f26-4bcd-adf2-710d09fe68e8",
+    "source_file": "source/venom_tick.png"
+  },
+  {
+    "id": "venom_burst",
+    "path": "/workspace/generated_images/exec-30c48356-c1d0-41b0-932f-db88ce608bbc.png",
+    "prompt": "Original hand-painted fantasy JRPG VFX animation strip. EXACTLY THREE equally sized square cells in ONE horizontal row. Transparent real alpha background, no text no numbers no UI no characters. Wide transparent gutters and at least 12% clear padding each cell. Each effect centered in cell, same common scale all beats, left prepare, middle peak, right end. Deliberate tapered painterly shapes, coloured edges, tiny crisp light cores, sparse flecks, readable over navy background, never giant uniform circles. Poison detonation: prepare inward green-violet liquid curls gathering at centre, peak ONE sharp compact toxic radial rupture with pointed liquid petals sickly jade and deep violet shadows, end low fading green mist. No skull no fire.",
+    "generation_id": "exec-30c48356-c1d0-41b0-932f-db88ce608bbc",
+    "source_file": "source/venom_burst.png"
+  },
+  {
+    "id": "venom_splash",
+    "path": "/workspace/generated_images/exec-66daf6ca-c353-46ac-8566-69a49fea1d9b.png",
+    "prompt": "Original hand-painted fantasy JRPG VFX animation strip. EXACTLY THREE equally sized square cells in ONE horizontal row. Transparent real alpha background, no text no numbers no UI no characters. Wide transparent gutters and at least 12% clear padding each cell. Each effect centered in cell, same common scale all beats, left prepare, middle peak, right end. Deliberate tapered painterly shapes, coloured edges, tiny crisp light cores, sparse flecks, readable over navy background, never giant uniform circles. Low sideways poison splash: prepare compact droplet, peak one small sideways jade green liquid splash to right with violet undersides, end fading droplets. Compact neighbour-local effect, no explosion.",
+    "generation_id": "exec-66daf6ca-c353-46ac-8566-69a49fea1d9b",
+    "source_file": "source/venom_splash.png"
+  },
+  {
+    "id": "shadow_cut",
+    "path": "/workspace/generated_images/exec-277ed8f5-a0fc-4e42-911f-f5bfd1afdfd8.png",
+    "prompt": "Original hand-painted fantasy JRPG VFX animation strip. EXACTLY THREE equally sized square cells in ONE horizontal row. Transparent real alpha background, no text no numbers no UI no characters. Wide transparent gutters and at least 12% clear padding each cell. Each effect centered in cell, same common scale all beats, left prepare, middle peak, right end. Deliberate tapered painterly shapes, coloured edges, tiny crisp light cores, sparse flecks, readable over navy background, never giant uniform circles. Quick shadow-cut at enemy centre: prepare short dark violet blur line, peak a SINGLE tapered dark-violet diagonal cutting ribbon ending in a small icy white cut flash, end fading violet line. No shield no parry.",
+    "generation_id": "exec-277ed8f5-a0fc-4e42-911f-f5bfd1afdfd8",
+    "source_file": "source/shadow_cut.png"
+  },
+  {
+    "id": "shadow_afterimage",
+    "path": "/workspace/generated_images/exec-35448ab0-2455-48c6-9307-02996e374ddf.png",
+    "prompt": "Original hand-painted fantasy JRPG VFX animation strip. EXACTLY THREE equally sized square cells in ONE horizontal row. Transparent real alpha background, no text no numbers no UI no characters. Wide transparent gutters and at least 12% clear padding each cell. Each effect centered in cell, same common scale all beats, left prepare, middle peak, right end. Deliberate tapered painterly shapes, coloured edges, tiny crisp light cores, sparse flecks, readable over navy background, never giant uniform circles. Steel-blue smoke dodge readiness at caster feet matching painted soft low steel-blue wisps: prepare low elliptical curl, peak a translucent offset foot-shaped wisp rising only slightly, end thin dissolving smoke. NO humanoid, no shield, no full body ghost.",
+    "generation_id": "exec-35448ab0-2455-48c6-9307-02996e374ddf",
+    "source_file": "source/shadow_afterimage.png"
+  },
+  {
+    "id": "arcane_gain",
+    "path": "/workspace/generated_images/exec-ffb4b52c-c711-4008-b6c9-7a71fb62a97d.png",
+    "prompt": "Original hand-painted fantasy JRPG VFX animation strip. EXACTLY THREE equally sized square cells in ONE horizontal row. Transparent real alpha background, no text no numbers no UI no characters. Wide transparent gutters and at least 12% clear padding each cell. Each effect centered in cell, same common scale all beats, left prepare, middle peak, right end. Deliberate tapered painterly shapes, coloured edges, tiny crisp light cores, sparse flecks, readable over navy background, never giant uniform circles. Violet-gold arcane charge gain at caster hand: prepare tiny gold fleck in violet curl, peak ONE small elegant violet mote with a warm gold diamond core and two tapering wisps, end same compact mote settled. Not multiple motes.",
+    "generation_id": "exec-ffb4b52c-c711-4008-b6c9-7a71fb62a97d",
+    "source_file": "source/arcane_gain.png"
+  },
+  {
+    "id": "arcane_release",
+    "path": "/workspace/generated_images/exec-e162e07e-ed49-4d43-8b7c-015993da0881.png",
+    "prompt": "Original hand-painted fantasy JRPG VFX animation strip. EXACTLY THREE equally sized square cells in ONE horizontal row. Transparent real alpha background, no text no numbers no UI no characters. Wide transparent gutters and at least 12% clear padding each cell. Each effect centered in cell, same common scale all beats, left prepare, middle peak, right end. Deliberate tapered painterly shapes, coloured edges, tiny crisp light cores, sparse flecks, readable over navy background, never giant uniform circles. Violet-gold arcane energy release at caster hand: prepare violet motes converging to centre, peak compact bright gold pointed flare pouring out to the right through violet ribbon, end fine violet-gold fading stream. No full screen bloom.",
+    "generation_id": "exec-e162e07e-ed49-4d43-8b7c-015993da0881",
+    "source_file": "source/arcane_release.png"
+  },
+  {
+    "id": "clash",
+    "path": "/workspace/generated_images/exec-32ebee7f-8cf3-4121-8f1c-bf4b2c00d64c.png",
+    "prompt": "Remove ALL panel backgrounds, all squares, borders and checkerboards completely. Keep ONLY the isolated painted VFX shapes in exactly the same cells and positions and colours. Real transparent alpha throughout every empty pixel between, around and inside shapes. No dark navy panels, no grey panels, no checkerboard pixels. Preserve original separate effects and horizontal arrangement. This is a transparent game sprite strip, NOT a storyboard on panels.",
+    "original_generation": {
+      "id": "clash",
+      "path": "/workspace/generated_images/exec-9ae30b8a-432e-450e-bd35-0e9e73bfaaad.png",
+      "prompt": "Original hand-painted fantasy JRPG VFX animation strip. EXACTLY THREE equally sized square cells in ONE horizontal row. Transparent real alpha background, no text no numbers no UI no characters. Wide transparent gutters and at least 12% clear padding each cell. Each effect centered in cell, same common scale all beats, left prepare, middle peak, right end. Deliberate tapered painterly shapes, coloured edges, tiny crisp light cores, sparse flecks, readable over navy background, never giant uniform circles. Two-sided martial collision at target centre: prepare warm orange gold energy wedge approaching from lower left and cold enemy violet wedge from upper right; peak both meet at ONE small bright ivory point with short broken shock ring; end warm and violet fragments recoil. No fists, no characters, no text.",
+      "source_file": "source/rejected/exec-9ae30b8a-432e-450e-bd35-0e9e73bfaaad.png",
+      "generation_id": "exec-9ae30b8a-432e-450e-bd35-0e9e73bfaaad",
+      "status": "rejected: painted panel background"
+    },
+    "reference": "source/rejected/exec-9ae30b8a-432e-450e-bd35-0e9e73bfaaad.png",
+    "generation_id": "exec-32ebee7f-8cf3-4121-8f1c-bf4b2c00d64c",
+    "source_file": "source/clash.png"
+  },
+  {
+    "id": "blade_storm",
+    "path": "/workspace/generated_images/exec-dc13704f-47f1-46d3-9931-5d91c8bb2b7e.png",
+    "prompt": "Remove ALL panel backgrounds, all squares, borders and checkerboards completely. Keep ONLY the isolated painted VFX shapes in exactly the same cells and positions and colours. Real transparent alpha throughout every empty pixel between, around and inside shapes. No dark navy panels, no grey panels, no checkerboard pixels. Preserve original separate effects and horizontal arrangement. This is a transparent game sprite strip, NOT a storyboard on panels.",
+    "original_generation": {
+      "id": "blade_storm",
+      "path": "/workspace/generated_images/exec-8fff4d30-b5e5-4be4-a7db-256a9dfea81e.png",
+      "prompt": "Original painted 2D fantasy JRPG VFX sprites on real transparent background. No text, numbers, UI or characters. Wide empty transparent gutters, each cell shape centered, 12% clear padding, same scale. EXACTLY FIVE equal square cells in one horizontal row, each one separate single steel blue cold white painted short slash: cell1 diagonal down right, cell2 diagonal up right, cell3 almost horizontal, cell4 steep descending left, cell5 low steel blue broken afterimage ring at feet. ONE slash each, never 4-in-1. Sharp tapered organic silver-blue ribbon edges and tiny cold white core. No weapon.",
+      "source_file": "source/rejected/exec-8fff4d30-b5e5-4be4-a7db-256a9dfea81e.png",
+      "generation_id": "exec-8fff4d30-b5e5-4be4-a7db-256a9dfea81e",
+      "status": "rejected: painted panel background"
+    },
+    "reference": "source/rejected/exec-8fff4d30-b5e5-4be4-a7db-256a9dfea81e.png",
+    "generation_id": "exec-dc13704f-47f1-46d3-9931-5d91c8bb2b7e",
+    "source_file": "source/blade_storm.png"
+  },
+  {
+    "id": "venom_emblem",
+    "path": "/workspace/generated_images/exec-2f2d58f7-6d2f-48d1-a491-0b2dd93d6d4c.png",
+    "prompt": "Original painted 2D fantasy JRPG VFX sprites on real transparent background. No text, numbers, UI or characters. Wide empty transparent gutters, each cell shape centered, 12% clear padding, same scale. EXACTLY TWO equal square cells in one horizontal row: cell1 ONE compact sickly green poison DROP emblem with violet shaded underside, elegant pointed droplet; cell2 alternative ONE curved poison FANG emblem in same palette. Simple clear silhouette readable at 30 pixels. No circles around icons.",
+    "generation_id": "exec-2f2d58f7-6d2f-48d1-a491-0b2dd93d6d4c",
+    "source_file": "source/venom_emblem.png"
+  },
+  {
+    "id": "arcane_emblem",
+    "path": "/workspace/generated_images/exec-73828f65-e287-4b53-a3c1-14476aa467a4.png",
+    "prompt": "Original painted 2D fantasy JRPG VFX sprites on real transparent background. No text, numbers, UI or characters. Wide empty transparent gutters, each cell shape centered, 12% clear padding, same scale. ONE isolated small violet-gold mote emblem centered in ONE square cell. Tiny gold diamond core nestled inside violet painted flame-shaped droplet, 2 delicate violet wisps. Compact readable at 30px, no orbit ring, no numbers.",
+    "generation_id": "exec-73828f65-e287-4b53-a3c1-14476aa467a4",
+    "source_file": "source/arcane_emblem.png"
+  }
+]

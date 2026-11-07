@@ -20,7 +20,7 @@ const fxFile = (name: string) => {
   return { decodedBytes: meta.size.w * meta.size.h * 4, downloadBytes: statSync(`public/assets/fx/${name}.webp`).size + statSync(`public/assets/fx/${name}.json`).size };
 };
 // Preloaded by BattleScene.preload for every battle, and the three fetched only for encounters that use them.
-const ALWAYS = ['bolt_fx', 'execute_fx', 'ward_fx', 'blade_fx', 'projectile_fx', 'earth_fx', 'alchemy_fx', 'arcane_seal_fx', 'command_fx', 'song_shadow_fx', 'defense_fx', 'healing_fx'];
+const ALWAYS = ['bolt_fx', 'execute_fx', 'ward_fx', 'blade_fx', 'projectile_fx', 'earth_fx', 'alchemy_fx', 'arcane_seal_fx', 'command_fx', 'song_shadow_fx', 'rework_fx', 'defense_fx', 'healing_fx'];
 const OPTIONAL = { boss: 'boss_signature_fx', foe: 'foe_signature_fx', saintDance: 'saint_dance_fx' } as const;
 const roster = [...heroes, ...mercenaries.filter(m => !heroes.some(h => h.id === m.id))];
 const heroSheets = roster.flatMap(h => encounterUnitSheets({ heroes: [h], enemies: [] } as unknown as EncounterDefinition)).sort((a, b) => manifest[b].decodedBytes - manifest[a].decodedBytes);

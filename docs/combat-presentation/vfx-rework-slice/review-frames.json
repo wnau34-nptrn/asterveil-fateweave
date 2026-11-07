@@ -1,0 +1,14 @@
+{
+  "burst-normal": {
+    "frame": "0017",
+    "rawCapture": "vfx-rework-clips-rework-clip-burst-normal",
+    "sourceSha256": "0129a44f903005a301fc2fa4c80208e87a6356d1280c8f9d8898b3c563b2702e",
+    "reason": "Visible green poison bloom and live poison emblems at the target."
+  },
+  "clash-normal": {
+    "frame": "0021",
+    "rawCapture": "vfx-rework-clips-rework-clip-clash-normal",
+    "sourceSha256": "da886573595427f9b68637fe0bc92344cff0a791b837f8190c2a062222c3621e",
+    "reason": "Visible warm-orange and cold-violet contact core at the target."
+  }
+}
