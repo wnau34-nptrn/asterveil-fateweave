@@ -8,6 +8,7 @@ import { addTomes, dismissTomes, emptyTomes, firstClearTomes, tomeCount } from '
 import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, SET_IDS } from './types';
 import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, recommendedLane, rollPercent, reserveCap, rosterIds, type EncounterLookup } from './world';
 import { laneReason, withLane } from './formation';
+import { dropFromPresets } from './presets';
 import { bankFits, clampBank, clampPotions, clampTomes, potionsFit, RIFT_CORE_CAP, TOME_CAP } from './caps';
 import type { ActionId } from '../battle/types';
 
@@ -142,6 +143,7 @@ export function dismiss(initial: Profile, map: MapDefinition, id: string): Profi
   if(profile.hunt?.target===id)delete profile.hunt.target;
   profile.company = profile.company.filter(m => m !== id); delete profile.members[id]; unarchive(profile, id);
   profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id); if (profile.party.lanes) delete profile.party.lanes[id];
+  dropFromPresets(profile, id);
   profile.bank.gold += map.company.dismissRefund;
   // Half the tomes spent on their skill levels come back (docs/design/SKILL_TOMES_TH.md).
   const refund = dismissTomes(map, id, initial.members[id]); if (tomeCount(refund)) { addTomes(profile.tomes ??= emptyTomes(), refund); clampTomes(profile.tomes); }
