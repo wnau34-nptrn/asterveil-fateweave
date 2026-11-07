@@ -1,3 +1,11 @@
+## 2026-11-07 — Handoff: SYSTEM-UNLOCK-AUDIT-001
+- Owner requested the next chat audit current system unlocks; camp team must work after clearing MAP 1.
+- Handoff: `docs/handoffs/SYSTEM-UNLOCK-AUDIT-TH.md`; updated CURRENT_STATE priority and opening prompt.
+- Verified `rules.ts` still sets team=3; traced featureMap/featureOpen and lobby locked panel; veteran bypass must be excluded from fresh-profile reproduction.
+- Scope next chat: audit actual systems, fix confirmed availability/UI/core guard/guide mismatches, preserve saves and battle/balance rules.
+- This task changes documentation only; no runtime gate fix. Checks: content review and `git diff --check`.
+- No chat/session creation tool is available here; supplied a ready-to-paste opening prompt instead of claiming a new chat exists.
+
 ## 2026-11-07 — Owner-authorized merge of PR #200
 - Merged `art/art-vfx-rework-001` into `feature/fateweave-initial-prototype`; merge commit `ff9274e73989b6bdf5af520ac7099793edb7a998`.
 - Owner instruction: "ทำการ Merge เข้าเกมได้ของ PR #200". This authorizes this PR's merge; no broader animation approvals inferred.
