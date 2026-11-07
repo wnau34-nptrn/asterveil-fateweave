@@ -671,7 +671,8 @@ test('Sefa (scout) steps aside: the announced slash at her misses and the intent
   await expect(page.locator('#hero-sefa .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
   await page.locator('#action-ambush').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('ยังไม่ได้ลงมือในรอบนี้');
   await page.locator('#action-evade').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('จะพลาดทั้งหมด');
-  await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-sefa').click();
+  // Save v58: the shadow step hits a foe first, then dodges.
+  await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-f1').click();
   await expect(page.locator('#intent')).toContainText('การโจมตีนี้พลาด');
   await page.screenshot({ path: info.outputPath('sefa-dodge.png') });
   await finishPlayback(page);
