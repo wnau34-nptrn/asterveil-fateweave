@@ -18,7 +18,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Next (owner order)
 
-- UI frame groups 1–3 done (#173, #194); next: the summary/rewards frame (opening prompt below).
+- UI frame groups 1–4 done (#173, #194, group 4 summary/rewards 2026-11-07); no frame work left.
 - Polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check open.
 
 ## Open items
@@ -36,4 +36,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype ตอบไทย ใช้เวลาไทย · อ่าน CLAUDE.md, CURRENT_STATE.md, docs/context/UI_INPUT_RULES.md และหัว docs/handoffs/ART-UI-LANGUAGE-001.md · ตรวจ remote head และ PR ที่เปิดอยู่ (skill rework step 6 อาจยังแก้ engine/save: ห้ามแตะเซฟ/กฎ) · งาน: UI frame กลุ่มสุดท้าย = หน้าสรุปผลศึก/รางวัล ให้ใช้กรอบเดียวกับกลุ่ม 1–3 (`src/ui/sheet-frame.css`); ตัวหนังสือที่อ่านดีอยู่แล้วคงขนาดเดิม ห้ามทำของที่ใช้ได้พัง · ถ่ายก่อน/หลัง 390×844, 390×650, 320×568 ด้วย tests/browser/ui-language-audit.spec.ts ส่งเจ้าของก่อน merge · PR quality+browser ผ่าน → merge · จบงานเขียน CURRENT_STATE.md (<6000 bytes) + 1 entry บนสุด docs/handoffs/CODEX-TO-CLAUDE.md
+ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype ตอบไทย ใช้เวลาไทย · อ่าน CLAUDE.md, CURRENT_STATE.md · ตรวจ remote head/PR ที่เปิดอยู่ · งาน: ให้เจ้าของเลือกจาก "Next" (UXD-08 combined UX check, polish ก่อน P09, หรือ skill rework step 6 ที่ค้าง) · จบงานเขียน CURRENT_STATE.md (<6000 bytes) + 1 entry บนสุด docs/handoffs/CODEX-TO-CLAUDE.md
