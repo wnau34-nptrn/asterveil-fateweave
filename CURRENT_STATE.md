@@ -13,6 +13,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
+- **CAMP-HUD-CHARACTER-QUEST-001:** approved camp layout implemented on `codex/camp-hud-character-quest-layout`, awaiting final checks/PR. Transparent top HUD + quest entry; direct bottom Team/Characters; opaque compact quest list with details on tap. Rules/save/unlocks unchanged. Evidence: `docs/validation/camp-hud-layout/README_TH.md`.
+
 - **MAP-TEAM-CHARACTER-TABS-001 complete (2026-11-07, PR #203, merge `ae8889c`):** separate map team HUD/dialog (T), bag items/gear (B), one-tap carried-only presets; direct tree tab, MAP 4 character tabs/camp 5, development stays camp-only. Quality + browser passed. Rules/save/balance unchanged. Evidence: `docs/validation/map-team-character-tabs/README_TH.md`.
 - Unlock pacing #202: quests/team MAP 1; hiring/market/hunt MAP 2; advanced services/hard explicitly MAP 3. Rights follow cleared history.
 

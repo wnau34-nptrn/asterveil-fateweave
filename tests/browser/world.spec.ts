@@ -1005,8 +1005,9 @@ for (const viewport of viewports) {
     await page.locator('#lobby-tab-team').click(); for (const sel of ['#lobby-member-guardian', ...(full ? ['[data-lobby=close]'] : ['#lobby-depart'])]) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
     if (full) {
       const box = (await page.locator('#lobby-sheet').boundingBox())!;
-      expect(box.width).toBe(frame.width); expect(box.x).toBe(frame.x); expect(box.y).toBe(frame.y); expect(box.height).toBe(frame.height);
-      await expect(page.locator('.lobby-menu')).toBeHidden();
+      expect(box.width).toBe(frame.width); expect(box.x).toBe(frame.x); expect(box.y).toBe(frame.y);
+      expect(box.y+box.height).toBeLessThanOrEqual((await page.locator('.lobby-menu').boundingBox())!.y);
+      await expect(page.locator('.lobby-menu')).toBeVisible();
     }
     await page.screenshot({ path: info.outputPath('lobby.png') });
     // The panel scrolls inside itself on short screens; the page never does.

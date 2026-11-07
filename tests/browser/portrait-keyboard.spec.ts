@@ -52,10 +52,10 @@ for (const [width, height, touch] of [[1366, 768, false], [1920, 1080, false], [
     await page.locator('#continue').click(); await expect(page.locator('#lobby-view')).toBeVisible();
     await inFrame(page, '#lobby-depart'); await page.locator('#lobby-tab-team').click();
     await expect(page.locator('#lobby-sheet')).toBeVisible();
-    // UI frame group 2 (Q1 = R1): the team sheet is full screen like the other sheets; the HUD navigation waits underneath.
-    await inFrame(page, '#lobby-sheet'); await expect(page.locator('.lobby-menu')).toBeHidden();
+    // Team management keeps the six direct camp navigation entries reachable.
+    await inFrame(page, '#lobby-sheet'); await expect(page.locator('.lobby-menu')).toBeVisible();
     const teamSheet = (await page.locator('#lobby-sheet').boundingBox())!;
-    expect(teamSheet.x).toBe(frame.x); expect(teamSheet.width).toBe(frame.width); expect(teamSheet.y).toBe(frame.y); expect(teamSheet.height).toBe(frame.height);
+    expect(teamSheet.x).toBe(frame.x); expect(teamSheet.width).toBe(frame.width); expect(teamSheet.y).toBe(frame.y); expect(teamSheet.y+teamSheet.height).toBeLessThanOrEqual((await page.locator('.lobby-menu').boundingBox())!.y);
     await page.locator('[data-lobby=close]').click(); await page.locator('#lobby-depart').click();
     await expect(page.locator('#world-view')).toBeVisible();
     expect(await page.locator('#map-viewport').boundingBox()).toEqual(frame);

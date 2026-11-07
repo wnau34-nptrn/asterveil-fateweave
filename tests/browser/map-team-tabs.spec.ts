@@ -72,7 +72,7 @@ for (const height of [844, 650]) test(`map team has a separate HUD and one-tap c
 });
 test('camp has a direct tree tab plus camp-only development, with no duplicate navigation tiles', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 }); await open(page, true);
-  await page.locator('#lobby-tab-team').click(); await page.locator('#team-character-guardian').click();
+  await page.locator('#lobby-tab-characters').click();
   const before = await saved(page);
   await expect(page.locator('#camp-character-tabs [role=tab]')).toHaveText(['ภาพรวม', 'อุปกรณ์', 'สกิล', 'ผังสกิล', 'พัฒนา']);
   await page.locator('#camp-character-tab-talents').click(); await expect(page.locator('.talent-tree')).toBeVisible();

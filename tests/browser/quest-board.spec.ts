@@ -16,6 +16,13 @@ for (const [w, h] of [[390, 844], [390, 650], [320, 568]] as const) test(`quest 
   await page.locator('#lobby-board').click();
   await expect(page.locator('.quest-board .side-quest')).toHaveCount(map.sideQuests.length);
   await expect(page.locator('.quest-board .side-quest').first()).toHaveAttribute('data-state', 'ready');   // claimable first
+  const first=page.locator('.quest-board .side-quest').first();
+  await expect(first.locator('.side-quest-ask')).toBeHidden();
+  const beforeRead=await page.evaluate(k=>localStorage.getItem(k),key);
+  await first.locator('summary').click();
+  await expect(first.locator('.side-quest-ask')).toBeVisible();
+  expect(await page.evaluate(k=>localStorage.getItem(k),key)).toBe(beforeRead);
+  await first.locator('summary').click();
   await page.screenshot({ path: info.outputPath('board.png') });
   await page.locator(`#quest-claim-${ready.id}`).click();
   await expect(page.locator(`#quest-${ready.id}`)).toHaveAttribute('data-state', 'claimed');

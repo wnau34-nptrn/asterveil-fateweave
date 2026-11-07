@@ -18,24 +18,25 @@ const saved=(page:Page)=>page.evaluate(k=>localStorage.getItem(k),key);
 for(const [width,height] of [[390,650],[390,844],[320,568],[1366,768]] as const){
   test(`team HUD opens character details, preserves context and cancels spending ${width}x${height}`,async({page},info)=>{
     await page.setViewportSize({width,height});await open(page);const before=await saved(page);
-    await expect(page.locator('.team-character-entry')).toContainText('แตะภาพ');
+    await expect(page.locator('.team-character-entry')).toHaveCount(0);
+    await expect(page.locator('.lobby-menu button')).toHaveCount(6);
     if(capture&&width===390)await page.screenshot({path:info.outputPath(`team-entry-${height}.png`)});
-    await page.locator('#team-character-guardian .portrait').click();
-    const dialog=page.locator('#camp-character-dialog');await expect(dialog).toBeVisible();await expect(page.locator('#lobby-tab-team')).toHaveAttribute('aria-controls','camp-character-dialog');
+    await page.locator('#lobby-tab-characters').click();
+    const dialog=page.locator('#camp-character-dialog');await expect(dialog).toBeVisible();await expect(page.locator('#lobby-tab-characters')).toHaveAttribute('aria-controls','camp-character-dialog');
     expect(await dialog.evaluate(el=>el.matches(':modal'))).toBe(false);
     await expect(page.locator('.lobby-pan')).toHaveAttribute('inert','');
     await page.locator('#camp-character-tab-skills').click();await page.locator('#camp-skill-selection').selectOption('guard');
-    // UI frame group 2 (Q1 = R1): the character window is full screen; the navigation waits underneath and the header close is 44px.
-    await expect(page.locator('.lobby-menu')).toBeHidden();const d=await dialog.boundingBox(),f=await page.locator('#app').boundingBox();expect(d!.y).toBe(f!.y);expect(d!.height).toBe(f!.height);
+    // Camp character details retain direct navigation and clear its touch targets.
+    await expect(page.locator('.lobby-menu')).toBeVisible();const d=await dialog.boundingBox(),n=await page.locator('.lobby-menu').boundingBox();expect(d!.y+d!.height).toBeLessThanOrEqual(n!.y);
     const cb=await dialog.locator('[data-world=character-close]').boundingBox();expect(cb!.width).toBeGreaterThanOrEqual(44);expect(cb!.height).toBeGreaterThanOrEqual(44);
     if(capture&&width===390)await page.screenshot({path:info.outputPath(`skills-hud-${height}.png`)});
-    await page.locator('#camp-character-tab-talents').click();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(page.locator('#team-character-guardian')).toBeFocused();
-    await page.locator('#team-character-resume').click();await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');
+    await page.locator('#camp-character-tab-talents').click();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(page.locator('#lobby-tab-characters')).toBeFocused();
+    await page.locator('#lobby-tab-characters').click();await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');
     await page.locator('#camp-character-tab-skills').click();await expect(page.locator('#camp-skill-selection')).toHaveValue('guard');
     await page.locator('#camp-skill-up-guard').scrollIntoViewIfNeeded();const detailScroll=await page.locator('#camp-character-content').evaluate(el=>el.scrollTop);if(height===650)expect(detailScroll).toBeGreaterThan(0);
     await page.locator('#camp-skill-up-guard').click();await expect(page.locator('#camp-skill-review-confirm')).toBeVisible();
-    await dialog.locator('[data-world=character-close]').click();await expect(dialog).not.toBeVisible();await page.locator('#lobby-sheet [data-lobby=close]').click();await page.locator('#lobby-tab-forge').click();await expect(page.locator('.forge-launcher')).toBeVisible();expect(await saved(page)).toBe(before);
-    await page.locator('#lobby-sheet [data-lobby=close]').click();await page.locator('#lobby-tab-team').click();await page.locator('#team-character-resume').click();await expect(page.locator('#camp-character-tab-skills')).toHaveAttribute('aria-selected','true');await expect(page.locator('#camp-skill-review-confirm')).toHaveCount(0);expect(await page.locator('#camp-character-content').evaluate(el=>el.scrollTop)).toBeCloseTo(detailScroll,0);
+    await dialog.locator('[data-world=character-close]').click();await expect(dialog).not.toBeVisible();await page.locator('#lobby-tab-forge').click();await expect(page.locator('.forge-launcher')).toBeVisible();expect(await saved(page)).toBe(before);
+    await page.locator('#lobby-sheet [data-lobby=close]').click();await page.locator('#lobby-tab-team').click();await page.locator('#lobby-tab-characters').click();await expect(page.locator('#camp-character-tab-skills')).toHaveAttribute('aria-selected','true');await expect(page.locator('#camp-skill-review-confirm')).toHaveCount(0);expect(await page.locator('#camp-character-content').evaluate(el=>el.scrollTop)).toBeCloseTo(detailScroll,0);
     await page.locator('#lobby-tab-team').focus();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();expect(await saved(page)).toBe(before);
     await expect(page.locator('.lobby-pan')).not.toHaveAttribute('inert','');
   });
@@ -43,7 +44,7 @@ for(const [width,height] of [[390,650],[390,844],[320,568],[1366,768]] as const)
 test('team scroll/filter and navigation remain usable with large text and safe-area insets',async({page},info)=>{
   await page.setViewportSize({width:390,height:650});await open(page);
   await page.evaluate(()=>{document.documentElement.style.fontSize='200%';document.querySelector<HTMLElement>('#app')!.style.setProperty('--safe-top','59px');document.querySelector<HTMLElement>('.lobby-bottom')!.style.bottom='34px';});
-  await page.locator('#team-character-guardian').click();await page.locator('#camp-character-tab-skills').click();
+  await page.locator('#lobby-tab-characters').click();await page.locator('#camp-character-tab-skills').click();
   const dialog=page.locator('#camp-character-dialog');await expect.poll(async()=>{const d=await dialog.boundingBox(),f=await page.locator('#app').boundingBox();return d!.y+d!.height<=f!.y+f!.height+0.5;}).toBe(true);
   await page.locator('#camp-skill-up-guard').click();await expect(page.locator('#camp-skill-review-confirm')).toBeInViewport();
   if(capture)await page.screenshot({path:info.outputPath('review-hud-large-text.png')});
@@ -58,19 +59,21 @@ test('return restores team filter, scroll and focus without moving a member',asy
   await expect(page.locator('#lobby-skills-open')).toBeFocused();await expect(page.locator('#bench-filter-front')).toHaveAttribute('aria-pressed','true');
   expect(await page.locator('.lobby-content').evaluate(el=>el.scrollTop)).toBeCloseTo(scroll,0);expect(await saved(page)).toBe(before);
 });
-test('each character returns to its own last tab',async({page})=>{
-  await page.setViewportSize({width:390,height:650});await open(page);
-  await page.locator('#team-character-guardian').click();await page.locator('#camp-character-tab-skills').click();await page.locator('#camp-skills-tomes').click();await page.keyboard.press('Escape');
-  await page.locator('#team-character-tracer').click();await page.locator('#camp-character-tab-gear').click();await page.keyboard.press('Escape');
-  await page.locator('#team-character-guardian').click();await expect(page.locator('#camp-character-tab-skills')).toHaveAttribute('aria-selected','true');await expect(page.locator('#camp-skills-tomes')).toHaveAttribute('aria-pressed','true');
+test('direct character entry remembers the last selected member and tab',async({page})=>{
+  await page.setViewportSize({width:390,height:650});await open(page);const before=await saved(page);
+  await page.locator('#lobby-tab-characters').click();await page.locator('#camp-character-tab-skills').click();
+  await page.locator('#camp-character-member-tracer').click();await page.locator('#camp-character-tab-gear').click();
+  await page.keyboard.press('Escape');await page.locator('#lobby-tab-characters').click();
+  await expect(page.locator('#camp-character-member-tracer')).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('#camp-character-tab-gear')).toHaveAttribute('aria-selected','true');expect(await saved(page)).toBe(before);
 });
 
-test('bag entry highlights only Team while inspecting and restores the bag origin on close',async({page})=>{
+test('bag entry highlights only Characters while inspecting and restores the bag origin on close',async({page})=>{
   await page.setViewportSize({width:390,height:650});await open(page);const before=await saved(page);
   await page.locator('#lobby-sheet [data-lobby=close]').click();await page.locator('#lobby-tab-gear').click();await page.locator('.storage-characters summary').click();await page.locator('#gear-member-guardian').click();
   await expect(page.locator('#camp-character-dialog')).toBeVisible();
-  expect(await page.locator('.lobby-menu-button.active').evaluateAll(els=>els.map(el=>el.id))).toEqual(['lobby-tab-team']);
-  await expect(page.locator('#lobby-tab-team')).toHaveAttribute('aria-expanded','true');await expect(page.locator('#lobby-tab-gear')).toHaveAttribute('aria-expanded','false');
+  expect(await page.locator('.lobby-menu-button.active').evaluateAll(els=>els.map(el=>el.id))).toEqual(['lobby-tab-characters']);
+  await expect(page.locator('#lobby-tab-characters')).toHaveAttribute('aria-expanded','true');await expect(page.locator('#lobby-tab-gear')).toHaveAttribute('aria-expanded','false');
   await page.locator('#camp-character-dialog [data-world=character-close]').click();await expect(page.locator('#camp-character-dialog')).not.toBeVisible();
   await expect(page.locator('#gear-member-guardian')).toBeFocused();
   expect(await page.locator('.lobby-menu-button.active').evaluateAll(els=>els.map(el=>el.id))).toEqual(['lobby-tab-gear']);

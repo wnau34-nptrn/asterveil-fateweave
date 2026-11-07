@@ -1,3 +1,13 @@
+## 2026-11-07 — CAMP-HUD-CHARACTER-QUEST-001
++- Branch `codex/camp-hud-character-quest-layout`; PR/merge: pending checks.
++- เจ้าของอนุมัติ mockup: HUD/ปุ่มกระดานโปร่ง; รายการเควสต์ทึบ กระชับ กดดูรายละเอียดเต็ม
++- ค่าย: ฟาร์มย้ายขึ้น HUD; แถบล่าง ทีม/ตัวละคร/จ้าง/กระเป๋า/ช่าง/ยา; ตัวละครเปิดคน/แท็บล่าสุดตรง ไม่ผ่านทีม
++- ทีมตัดส่วนพัฒนา/เลเวลค่ายซ้ำออก; เควสต์ใช้ native disclosure และปุ่มรับเดิม
++- Rules/save/balance/unlock pacing unchanged; no new daily quests or farming mechanics.
++- Validation: typecheck/lint/build; focused browser and unit results recorded on PR after completion.
++- Evidence: `docs/validation/camp-hud-layout/README_TH.md` (actual 390px game screenshots).
++- Open: real Safari/device feel remains unverified; P09 stays on hold.
+
 ## 2026-11-07 — MAP-TEAM-CHARACTER-TABS-001
 - Owner approved separate map team, one-tap carried-only presets, primary tree tab and no development tab on MAP.
 - Merged PR #203 (`codex/map-team-character-tabs` → game branch), merge `ae8889c4997ec69b28527235d899f73d94233b2c`, after quality + browser success.
