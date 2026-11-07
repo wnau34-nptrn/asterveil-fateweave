@@ -368,6 +368,8 @@ export interface Profile {
   tomes?: TomeBag; riftCore?: number;
   // Unequipped items (≤ upgraded storage capacity), persistent pending rewards and the next uid.
   overflow?:Item[]; storageTier?:number;
+  // Team presets (owner 2026-11-06, save v56): up to PRESET_SLOTS saved line-ups, `null` an empty slot; missing = none.
+  presets?: (TeamPreset | null)[];
   items: Item[]; nextItem: number;
   // Forge rolls used so far (fuse and reroll draw from (seed, forge)).
   forge: number;
@@ -400,7 +402,7 @@ export type ProfileEvent =
   | {type:'storageCollected';count:number}
   | {type:'storageExpanded'}
   | { type: 'blocked'; reason: string }
-  | { type: 'party'; heroId?: string; lane?: Lane }
+  | { type: 'party'; heroId?: string; lane?: Lane; preset?: number; presetAction?: 'apply' | 'save' | 'rename' | 'clear'; left?: string[] }
   | { type: 'archived'; heroId: string; archived: boolean }
   | { type: 'commander' }
   | { type: 'guide'; id: string; skipped: boolean }
@@ -431,6 +433,11 @@ export const LEGACY_RESERVE = 4;
 export type Lane = 'front' | 'back';
 export const LANE_SLOTS = 3;
 export interface Roster { deployed: string[]; reserve: string[]; lanes?: Record<string, Lane> }
+// Team presets (owner 2026-11-06, draft numbers): a named line-up — field order, reserve and the column each deployed
+// member stands in. Applying one only rearranges the team outside battle (formation and fatigue rules stay as they are).
+export const PRESET_SLOTS = 4;
+export const PRESET_NAME_MAX = 12;
+export interface TeamPreset { name: string; deployed: string[]; reserve: string[]; lanes: Record<string, Lane> }
 
 // `elite` and `event` (3A) name the elite or event in `ActiveBattle.source`.
 export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
@@ -497,7 +504,7 @@ export type WorldEvent =
   | { type: 'talent'; heroId: string }
   | { type: 'moved'; chance: number }
   | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' | 'sealed' | 'stone' | 'pit' }
-  | { type: 'roster'; heroId?: string; lane?: Lane }
+  | { type: 'roster'; heroId?: string; lane?: Lane; preset?: number; absent?: string[] }
   | { type: 'equipped'; heroId: string }
   | { type: 'encounter'; kind: BattleKind; encounterId: string; chance: number }
   | { type: 'goal' }

@@ -5,7 +5,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages URL https://wnau34-nptrn.github.io/asterveil-fateweave/ through `pages.yml`; pre-release pushes deploy after lint/unit/build, with the full browser gate on PRs. Restore the Pages browser gate before OD-13 external tests.
-- **Save v54** merged (step 6 batches 1–2; v55–v57 in flight, see Active task); v52 Toma; v51 Astrid; v50 Garran; v49 Wynne; v48 Dancer; v47 P03 board featured lineup; 1–5 units a side (P02), shared camp Lv/EXP (P01), reserve by chapter 3→4→5, fatigue, carry ≤10. W1–W8/P01/P02, UXD-01…07 and the HUD team → character entry (PR #146) are published.
+- **Save v56** team presets (#196) on top of v55 Mira/Eira/Brann (#193); Sefa (#195) and Shadow Step follow as v57+; v54 Kael/Lio; v53 step 6 batch 1; v52 Toma; v51 Astrid; v50 Garran; v49 Wynne; v48 Dancer; v47 P03 board featured lineup; 1–5 units a side (P02), shared camp Lv/EXP (P01), reserve by chapter 3→4→5, fatigue, carry ≤10. W1–W8/P01/P02, UXD-01…07 and the HUD team → character entry (PR #146) are published.
 - 2026-11-04 batch merged (#147–#154: storage caps, v46 Heal/Revive, sealable Thorn Tempest, calm potion, `units.webp` bleed); see the handoff log.
 - Owner 2026-11-04: “เรื่องภาพหรืออะไรให้คุณตัดสินใจได้เลย” — Claude may decide art picks; record each such pick as Claude's decision under that delegation, not as owner approval.
 
@@ -13,13 +13,12 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- UI frame group 3 merged (#194, owner approved the 390px before/after; `docs/validation/ui-frame-group3-2026-11-06/`).
-- **Team presets + team page redesign** (owner 2026-11-06) runs in session `session_014iPEcP6oUwVRPxyN3wu8Go` (Opus): one-tap preset swap of fielded/reserve, team page = fielded + reserve on top, all characters below; research from other games first.
-- Skill rework step 6 is being closed in session `session_014iPEcNspP15VvzkWFKs5CS` (README §9): #191 v53 and #192 v54 merged; #193 v55 (Mira/Eira/Brann) in CI; then Sefa v56 (blade storm, poison coat, venom burst) and the new Shadow Step v57 (hit 8 + dodge) with the whole-campaign gate (owner-approved). A UI branch that bumps nothing must not touch saves/rules.
+- **Team presets + team page** (owner 2026-11-06, PR #196, save v56): 4 named presets (draft) — one tap applies at the camp (reserve by chapter, overflow waits in the camp) or in the map bag outside battle (members brought only); camp page = presets → field → reserve → formation → characters in camp, one-tap field/reserve/camp moves. Evidence and research table `docs/validation/team-presets-2026-11-06/README_TH.md`. Owner has the 390px before/after images; owner review of the feel is open.
+- Skill rework step 6 closes in session `session_014iPEcNspP15VvzkWFKs5CS` (README §9): Sefa #195 then Shadow Step (hit 8 + dodge) with the whole-campaign gate. Whichever PR lands second takes the next save version.
 
 ## Next (owner order)
 
-- UI groups 1–2 done (#173, `docs/validation/ui-frame-group2-2026-11-05/`); group 3 done (#194); next UI frame: summary/rewards only.
+- UI frame groups 1–3 done (#173, #194); next: the summary/rewards frame (opening prompt below).
 - Polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check open.
 
 ## Open items
@@ -37,4 +36,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-Team presets + team page redesign is running in session `session_014iPEcP6oUwVRPxyN3wu8Go`. For a fresh start: read CLAUDE.md, this file, `docs/context/UI_INPUT_RULES.md`, `docs/design/FORMATION_PLAN_TH.md`; the task prompt is in that session.
+ทำงานต่อใน wnau34-nptrn/asterveil-fateweave สาขา feature/fateweave-initial-prototype ตอบไทย ใช้เวลาไทย · อ่าน CLAUDE.md, CURRENT_STATE.md, docs/context/UI_INPUT_RULES.md และหัว docs/handoffs/ART-UI-LANGUAGE-001.md · ตรวจ remote head และ PR ที่เปิดอยู่ (skill rework step 6 อาจยังแก้ engine/save: ห้ามแตะเซฟ/กฎ) · งาน: UI frame กลุ่มสุดท้าย = หน้าสรุปผลศึก/รางวัล ให้ใช้กรอบเดียวกับกลุ่ม 1–3 (`src/ui/sheet-frame.css`); ตัวหนังสือที่อ่านดีอยู่แล้วคงขนาดเดิม ห้ามทำของที่ใช้ได้พัง · ถ่ายก่อน/หลัง 390×844, 390×650, 320×568 ด้วย tests/browser/ui-language-audit.spec.ts ส่งเจ้าของก่อน merge · PR quality+browser ผ่าน → merge · จบงานเขียน CURRENT_STATE.md (<6000 bytes) + 1 entry บนสุด docs/handoffs/CODEX-TO-CLAUDE.md
