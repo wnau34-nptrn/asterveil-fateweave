@@ -899,6 +899,8 @@ ACCEPTANCE (Claude checks before owner review): head 145–165px, body 440–460
 
 ที่มา: Claude ตรวจคลิปทบทวน motion ของขั้น 5–6 (2026-11-07) แล้วพบว่า กลไกใหม่ยังไม่มีภาพของตัวเอง เห็นเพียงตัวเลขลอยกับวงแหวนเดิม เจ้าของตอบว่า "ตามที่คุณแนะนำเลย อะไรต้องแก้ไข ขอ prompt codex" งานนี้เป็นงานภาพอย่างเดียว ไม่แตะกติกา ตัวเลข หรือเซฟ
 
+เจ้าของสั่งเพิ่ม 2026-11-07: "เดี๋ยวจะให้ codex ทำภาพและเอาเข้าเกมเองเลย" — รอบนี้ Codex ทำทั้งภาพและนำเข้าเกม (ข้อ "NOT YOURS" ด้านล่างจึงไม่ใช้กับรอบนี้) ให้ทำตาม skill `.claude/skills/fateweave-art-intake/SKILL.md`: pack แบบ lossless, route จาก event จริงในโค้ดภาพ (`src/game/visuals/`) เท่านั้น ไม่เปลี่ยน rules/save/ตัวเลข/playback timing, รัน `npm run coverage:presentation`, typecheck/lint/test/build และ Playwright ที่เกี่ยวข้อง แล้วอัดคลิปจริง 390px ให้เจ้าของดู PR ต้องผ่าน quality + browser การอนุมัติ motion ยังเป็นของเจ้าของ
+
 ```text
 CODEX HANDOFF — ART-VFX-REWORK-001
 
