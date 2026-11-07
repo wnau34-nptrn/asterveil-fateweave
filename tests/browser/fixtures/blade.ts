@@ -7,8 +7,8 @@ import { BattleScene } from '../../../src/game/scenes/BattleScene';
 import { BattleUI } from '../../../src/ui/battle-ui';
 import { fitViewport } from '../../../src/platform/viewport';
 import { BLADE_ATLAS, bladeCues } from '../../../src/game/visuals/blade-fx';
-import { beginBattle, resolveCommand } from '../../../src/core/battle/engine';
-import type { ActionId, EncounterDefinition, TurnStage } from '../../../src/core/battle/types';
+import { beginBattle, currentHeroId, resolveCommand, targetOptions } from '../../../src/core/battle/engine';
+import type { ActionId, Command, EncounterDefinition, TurnStage } from '../../../src/core/battle/types';
 import '../../../src/ui/styles.css';
 import '../../../src/ui/tokens.css';
 import '../../../src/ui/effects.css';
@@ -21,7 +21,7 @@ import '../../../src/ui/components.css';
 const params = new URLSearchParams(location.search), skill = (params.get('skill') ?? 'attack') as ActionId;
 const role = ['pierce', 'halt'].includes(skill) ? 'Spear' : ['ambush', 'backstab', 'disarm'].includes(skill) ? 'Scout' : 'Duelist';
 const actor = [...heroes, ...mercenaries].find(h => h.role === role)!;
-const data: EncounterDefinition = { ...structuredClone(veilSiege), heroes: [{ ...actor, speed: 200, maxHp: 500, actions: [...new Set<ActionId>(['attack', skill, 'ward'])] }, ...heroes.filter(h => h.id !== actor.id).slice(0, 3).map(h => ({ ...h, speed: 50 }))],
+const data: EncounterDefinition = { ...structuredClone(veilSiege), heroes: [{ ...actor, speed: 200, maxHp: 500, actions: [...new Set<ActionId>(['attack', skill, 'ward', ...(skill === 'disarm' ? ['knives' as const] : [])])] }, ...heroes.filter(h => h.id !== actor.id).slice(0, 3).map(h => ({ ...h, speed: 50 }))],
   enemies: veilSiege.enemies.map(e => ({ ...e, speed: 100, maxHp: 500 })),
   intents: veilSiege.enemies.map(e => ({ sourceId: e.id, targetSlot: skill === 'backstab' ? 1 : 0, name: 'Raking Slash', damage: 12, kind: 'physical' as const })) };
 localStorage.setItem('asterveil.fateweave.presentation.v1', JSON.stringify({ speed: params.get('speed') ?? 'normal', intensity: params.get('intensity') ?? 'standard' }));
@@ -38,7 +38,15 @@ scene.play = (turn, remainingMs) => {
 };
 ui.attach(scene);
 new Phaser.Game({ type: Phaser.AUTO, parent: 'game', transparent: true, scale: { mode: Phaser.Scale.NONE, width: 320, height: 240 }, scene: [scene], fps: { target: 60 }, audio: { noAudio: true } });
-ui.open({ kind: 'random', data, entry: { hp: Object.fromEntries(data.heroes.map(h => [h.id, h.maxHp])) }, commands: [],
+// Save v56: the venom burst needs her poison on the foe first, laid by real commands (coat, then a coated hit) so the page
+// replays it; the others attack meanwhile.
+const prelude: Command[] = [];
+if (skill === 'disarm') {
+  let st = beginBattle(data).state; const play = (heroId: string, action: ActionId, targetId: string) => { const c: Command = { beat: st.beat, heroId, action, targetId }; prelude.push(c); st = resolveCommand(st, data, c).state; };
+  const others = () => { while (st.outcome === 'active' && currentHeroId(st, data) !== actor.id) { const id = currentHeroId(st, data)!; play(id, 'attack', targetOptions(st, data, id, 'attack').find(t => t.valid)!.id); } };
+  others(); play(actor.id, 'knives', 'enemies'); others(); play(actor.id, 'attack', 'f1'); others();
+}
+ui.open({ kind: 'random', data, entry: { hp: Object.fromEntries(data.heroes.map(h => [h.id, h.maxHp])) }, commands: prelude,
   commit: state => { localStorage.setItem('blade-committed', JSON.stringify(state)); return true; }, leaveLabel: () => '', leave: () => {} });
 new ResizeObserver(() => scene.refreshLayout()).observe(document.querySelector('#game')!);
 void document.fonts.ready.then(() => scene.refreshLayout());
@@ -52,6 +60,7 @@ function stage(outcome: string): TurnStage {
   if (outcome === 'dodged') h.evading = true;
   if (outcome === 'guarded') state.guard = { heroId: state.heroes[1]!.id, targetId: h.id, sourceId: 'f1' };
   if (outcome === 'cancelled') state.enemies.find(e => e.id === 'f1')!.interruptedRound = state.round;
+  if (skill === 'disarm') state.enemies.find(e => e.id === 'f1')!.venom = { heroId: actor.id, stacks: 2, until: state.round + 1 };
   const result = resolveCommand(state, data, { beat: state.beat, heroId: actor.id, action: skill, targetId: skill === 'parry' ? actor.id : skill === 'sweep' ? 'enemies' : 'f1' }, true);
   if (outcome === 'cancelled') {
     return result.turns.find(t => t.events.some(e => e.type === 'cancel'))!;
@@ -68,7 +77,10 @@ function painted() {
   };
   visit(scene.children.getChildren()); return images;
 }
+// f1's HP text before the venom burst, from the replayed prelude (save v56).
+const preludeHp = (() => { if (!prelude.length) return null; let st = beginBattle(data).state; for (const c of prelude) st = resolveCommand(st, data, c).state; return `${st.enemies.find(e => e.id === 'f1')!.hp}/500`; })();
 const qa = {
+  before: () => preludeHp,
   impacts,
   renderOutcome: (outcome: string) => {
     const turn = stage(outcome), cue = bladeCues(turn)[0];

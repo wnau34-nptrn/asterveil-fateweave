@@ -213,6 +213,11 @@ export const isDelayed = (enemy: EnemyState, round: number): boolean => Math.max
 // Mage small fixes (save v55): a crystal aegis shard strikes back AEGIS_SHARD at the foe that breaks it; each bolt that
 // lands gives Eira an arcane charge (at most ARCANE_MAX) and the arcane release spends them all, DISPEL_PER_CHARGE each.
 // Warden (save v55): a rune slam adds SLAM_GRUDGE% of the damage Brann took since his last command (at most SLAM_GRUDGE_MAX).
+// Scout assassin rework (save v56; the shadow step is kept, owner 2026-11-06): the blade storm is BLADE_HITS separate hits; the poison coat makes her next COAT_HITS hits
+// each add a poison stack (at most VENOM_MAX a foe, VENOM_TICK a stack as each round ends, for VENOM_ROUNDS rounds); the
+// venom burst pops every stack for VENOM_BURST each and splashes half onto the foe's row neighbours.
+export const BLADE_HITS = 4; export const COAT_HITS = 3;
+export const VENOM_MAX = 3; export const VENOM_TICK = 3; export const VENOM_ROUNDS = 2; export const VENOM_BURST = 6;
 export const SLAM_GRUDGE = 30; export const SLAM_GRUDGE_MAX = 15;
 export const slamGrudge = (taken: number): number => Math.min(SLAM_GRUDGE_MAX, Math.floor(taken * SLAM_GRUDGE / 100));
 export const AEGIS_SHARD = 4; export const ARCANE_MAX = 3; export const DISPEL_PER_CHARGE = 8;
@@ -310,6 +315,18 @@ export const hexesOn = (enemy: EnemyState | undefined): number => enemy?.hexes?.
 export function hexTickPower(data: EncounterDefinition, heroId: string, stacks: number): number {
   const per = skillPower(data, heroId, 'threadhex') + capAmount(data, heroId, 'hexThreadPer') + (stacks >= HEX_MAX ? capAmount(data, heroId, 'wynne3') : 0);
   return stacks * per;
+}
+// Scout poison (save v56): each stack bites VENOM_TICK as the round ends, until its last round.
+function venomTicks(state: BattleState, data: EncounterDefinition, events: BattleEvent[]): void {
+  for (const def of data.enemies) {
+    const foe = state.enemies.find(e => e.id === def.id)!; const v = foe.venom; if (!v) continue;
+    if (foe.hp > 0 && v.until >= state.round && living(state, v.heroId)) {
+      const dealt = Math.min(foe.hp, tired(data, v.heroId, veiled(state, data, foe, v.stacks * VENOM_TICK)));
+      foe.hp -= dealt; events.push({ type: 'damage', sourceId: v.heroId, targetId: foe.id, amount: dealt, text: 'Poison.' });
+      if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
+    }
+    if (v.until <= state.round || foe.hp <= 0 || !living(state, v.heroId)) delete foe.venom;
+  }
 }
 function hexTicks(state: BattleState, data: EncounterDefinition, events: BattleEvent[]): void {
   for (const def of data.enemies) {
@@ -548,6 +565,7 @@ function finishOrAdvance(state: BattleState, data: EncounterDefinition, events: 
       trackingShots(state, data, events); if (settled(state, data, events)) return;
       fallingStars(state, data, events); if (settled(state, data, events)) return;
       hexTicks(state, data, events); if (settled(state, data, events)) return;
+      venomTicks(state, data, events); if (settled(state, data, events)) return;
       state.round++; state.order = roundOrder(state, data); state.turnIndex = 0;
       // A priest's long prayer (or dawn) heals every standing ally again as its round begins.
       const echo = state.prayerEcho;
@@ -1001,7 +1019,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
   return data.enemies.map(e => {
     const actor = state.enemies.find(s => s.id === e.id);
     const reason = unavailable || (!actor || actor.hp <= 0 ? 'This enemy is down.' :
-      screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : action === 'lifetoll' && !actor.hexes?.some(h => h.heroId === heroId) ? 'No curse on this enemy.' : action === 'deflectfate' ? deflectReason(state, data, heroId, e.id)
+      screened(state, data, heroId, action, e.id) ? 'A front-row enemy shields this target.' : action === 'lifetoll' && !actor.hexes?.some(h => h.heroId === heroId) ? 'No curse on this enemy.' : action === 'disarm' && actor.venom?.heroId !== heroId ? 'No poison on this enemy.' : action === 'deflectfate' ? deflectReason(state, data, heroId, e.id)
       : '');
     return { id: e.id, name: e.name, valid: !reason, reason };
   });
@@ -1047,6 +1065,12 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     const amount = Math.min(foe.hp, tired(data, hero.id, veiled(state, data, foe, raised + boss + solo + spite + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)))); foe.hp -= amount; directDamage += amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text });
     if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
+    // A coated blade (save v56) poisons each foe it lands on, one stack a hit.
+    if (actor.coated && amount > 0 && foe.hp > 0) {
+      actor.coated--; if (!actor.coated) delete actor.coated;
+      const stacks = Math.min(VENOM_MAX, (foe.venom?.heroId === hero.id ? foe.venom.stacks : 0) + 1); foe.venom = { heroId: hero.id, stacks, until: state.round + VENOM_ROUNDS - 1 };
+      events.push({ type: 'venom', sourceId: hero.id, targetId: foe.id, amount: stacks, text: 'Poisoned.' });
+    }
     leech(state, data, hero.id, amount, events);
     thorned(state, data, foe, hero.id, amount, events);
   };
@@ -1387,7 +1411,8 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       damage(skill.power);
       if (isDelayed(enemy!, state.round)) state.tracking = [...state.tracking ?? [], { heroId: hero.id, enemyId: enemy!.id, round: state.round, power: skill.power }];
       break;
-    case 'backstab': damage(skill.power + ambushBonus(state, data, enemy!.id, hero.id)); break;
+    // Blade storm (save v56): BLADE_HITS separate hits on one foe, each with every per-hit bonus.
+    case 'backstab': for (let i = 0; i < BLADE_HITS && enemy!.hp > 0; i++) strike(enemy!, skill.power, 'Blade storm.'); break;
     // ---- Recruit big trees ----
     case 'smoke': {
       // Smoke: the target's next move is cut whatever its kind (a wide smoke cuts the target's whole row by less; a
@@ -1418,14 +1443,21 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       const live = state.enemies.filter(e => e.hp > 0); const back = live.filter(e => row(e.id) === 'back'); const front = live.filter(e => row(e.id) === 'front');
       for (const foe of back.length ? back : front) strike(foe, skill.power, 'Throwing knives.');
       if (back.length && hasCap(data, hero.id, 'twinknives')) for (const foe of front.filter(e => e.hp > 0)) strike(foe, Math.floor(skill.power / 2), 'Throwing knives.');
+      // Poison coat (save v56): her next COAT_HITS hits each poison their foe.
+      actor.coated = COAT_HITS; events.push({ type: 'venom', sourceId: hero.id, targetId: hero.id, amount: COAT_HITS, text: 'Blades coated.' });
       break;
     }
     case 'decoy': {
       const ally = state.heroes.find(h => h.id === command.targetId)!; ally.evading = true; ally.evadeBy = hero.id; delete ally.evadePhysical;
       events.push({ type: 'evade', sourceId: hero.id, targetId: ally.id, text: 'Shadow cover.' }); break;
     }
+    // Venom burst (save v56): a poisoned foe takes the hit, then every stack pops at once; half splashes onto its row neighbours.
     case 'disarm': {
-      const next = nextIntent(); damage(Math.round(skill.power * (ambushBonus(state, data, enemy!.id, hero.id) && next && next.targetId !== hero.id ? DISARM_MULTIPLIER : 1))); break;
+      const stacks = enemy!.venom?.heroId === hero.id ? enemy!.venom.stacks : 0; delete enemy!.venom;
+      damage(skill.power);
+      if (stacks && enemy!.hp > 0) strike(enemy!, stacks * VENOM_BURST, 'The venom bursts.');
+      if (stacks) for (const foe of foeNeighbours(state, data, enemy!.id)) strike(foe, Math.floor(stacks * VENOM_BURST / 2), 'The venom splashes.');
+      break;
     }
     case 'stonearmor': barrier(actor, Math.round(hero.maxHp * skill.power / 100)); break;
     case 'guardstone': {

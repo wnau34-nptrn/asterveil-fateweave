@@ -10,7 +10,7 @@ Every catalog character at ★1 and the map boss level; epic map-level main-stat
 | healer | Priest | ruined-border | 3 | 12/12 | 97.6% | 2.3 | {"b1":2} / heal, prayer |
 | mira | Archer | ruined-border | 3 | 12/12 | 97.9% | 2.3 | {"c1":2} / hinder, volley |
 | toma | Alchemist | ruined-border | 3 | 12/12 | 92.7% | 2.3 | {"b1":2} / acid, haste |
-| sefa | Scout | ruined-border | 3 | 12/12 | 97.9% | 2.3 | {"c1s":1,"c1":1} / ambush, evade, knives |
+| sefa | Scout | ruined-border | 3 | 12/12 | 98.3% | 2.3 | {"c1s":1,"c1":1} / ambush, evade, knives |
 | brann | Warden | ruined-border | 3 | 12/12 | 92.4% | 2.3 | {"c1s":1,"c1":1} / taunt, slam, guardstone |
 | lio | Bard | ruined-border | 3 | 12/12 | 97.7% | 2.3 | {"b1":2} / valor, mend |
 | garran | Spear | ruined-border | 3 | 12/12 | 91.7% | 2.3 | {"b1":2} / brace, pierce |
@@ -44,7 +44,7 @@ Every catalog character at ★1 and the map boss level; epic map-level main-stat
 | healer | Priest | veil-frontier | 10 | 12/12 | 94.4% | 12.6 | {"a1":2,"a2b":1,"a3":1,"b1":2,"b1s":1,"c1":2} / heal, prayer, revive |
 | mira | Archer | veil-frontier | 10 | 12/12 | 98.0% | 12.6 | {"a1":2,"a2h":1,"a3":1,"b1":2,"c1":2,"c1s":1} / hinder, volley, disengage |
 | toma | Alchemist | veil-frontier | 10 | 12/12 | 97.5% | 12.6 | {"a1":2,"a2d":1,"a3":1,"b1":2,"c1":2,"c1s":1} / acid, haste, bomb |
-| sefa | Scout | veil-frontier | 10 | 12/12 | 96.1% | 12.6 | {"a1":2,"a2b":1,"a3":1,"b1":2,"c1":2,"c1s":1} / ambush, evade, backstab |
+| sefa | Scout | veil-frontier | 10 | 12/12 | 94.6% | 12.6 | {"a1":2,"a2b":1,"a3":1,"b1":2,"c1":2,"c1s":1} / ambush, evade, backstab |
 | brann | Warden | veil-frontier | 10 | 12/12 | 99.1% | 12.6 | {"a1":2,"a2h":1,"a3":1,"b1":2,"c1":2,"c1s":1} / taunt, slam, guardstone |
 | lio | Bard | veil-frontier | 10 | 12/12 | 98.3% | 12.6 | {"b1":2,"b2o":1,"b3":1,"a1":2,"c1":2,"c1s":1} / valor, mend, note |
 | garran | Spear | veil-frontier | 10 | 12/12 | 97.0% | 12.6 | {"b1":2,"b2d":1,"b3":1,"a1":2,"c1":2,"c1s":1} / brace, pierce, halt |

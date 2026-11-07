@@ -38,13 +38,13 @@ C12 selective deployed-duplicate policy, paired against the same policy on base 
 | แนวรอยแยก | mini | 49 | 100% | 87 | 93 |
 | แนวรอยแยก | mini:attack | 49 | 84% | – | – |
 | แนวรอยแยก | random | 419 | 100% | 93 | 97 |
-| แนวรอยแยก (ยาก) | boss | 24 | 100% | 70 | 78 |
+| แนวรอยแยก (ยาก) | boss | 24 | 100% | 69 | 77 |
 | แนวรอยแยก (ยาก) | boss:attack | 24 | 0% | – | – |
 | แนวรอยแยก (ยาก) | boss:under2 | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | elite-forced | 24 | 100% | 94 | 100 |
 | แนวรอยแยก (ยาก) | elite-forced:attack | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | event-rift | 24 | 100% | 98 | 100 |
-| แนวรอยแยก (ยาก) | mini | 24 | 100% | 94 | 99 |
+| แนวรอยแยก (ยาก) | mini | 24 | 100% | 94 | 98 |
 | แนวรอยแยก (ยาก) | mini:attack | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | random | 206 | 100% | 97 | 99 |
 
@@ -86,7 +86,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก | boss:under2 | 48 | 100% | – | – |
 | แนวรอยแยก | elite-forced | 48 | 100% | 94 | 100 |
 | แนวรอยแยก | elite-forced:attack | 48 | 88% | – | – |
-| แนวรอยแยก | elite-optional | 48 | 100% | 96 | 100 |
+| แนวรอยแยก | elite-optional | 48 | 100% | 96 | 99 |
 | แนวรอยแยก | elite-optional:attack | 48 | 100% | – | – |
 | แนวรอยแยก | event-bandits | 96 | 100% | 96 | 99 |
 | แนวรอยแยก | event-rift | 48 | 100% | 98 | 100 |
@@ -140,7 +140,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | เส้นทางป่าทึบ | elite-forced | 13 | 100% | 55 | 55 |
 | เส้นทางป่าทึบ | elite-forced:attack | 13 | 15% | – | – |
 | เส้นทางป่าทึบ | random | 12 | 92% | 68 | 76 |
-| แนวรอยแยก | boss | 50 | 98% | 78 | 86 |
+| แนวรอยแยก | boss | 50 | 98% | 79 | 86 |
 | แนวรอยแยก | boss:attack | 50 | 62% | – | – |
 | แนวรอยแยก | boss:under2 | 50 | 96% | – | – |
 | แนวรอยแยก | elite-forced | 52 | 100% | 86 | 94 |
@@ -149,7 +149,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก | mini | 50 | 100% | 83 | 88 |
 | แนวรอยแยก | mini:attack | 50 | 86% | – | – |
 | แนวรอยแยก | random | 442 | 99% | 88 | 93 |
-| แนวรอยแยก (ยาก) | boss | 26 | 92% | 53 | 65 |
+| แนวรอยแยก (ยาก) | boss | 26 | 92% | 53 | 66 |
 | แนวรอยแยก (ยาก) | boss:attack | 26 | 8% | – | – |
 | แนวรอยแยก (ยาก) | boss:under2 | 26 | 100% | – | – |
 | แนวรอยแยก (ยาก) | elite-forced | 24 | 100% | 91 | 99 |
@@ -205,7 +205,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก | mini | 48 | 100% | 89 | 94 |
 | แนวรอยแยก | mini:attack | 48 | 96% | – | – |
 | แนวรอยแยก | random | 1443 | 100% | 95 | 98 |
-| แนวรอยแยก (ยาก) | boss | 24 | 100% | 55 | 62 |
+| แนวรอยแยก (ยาก) | boss | 24 | 100% | 55 | 63 |
 | แนวรอยแยก (ยาก) | boss:attack | 24 | 8% | – | – |
 | แนวรอยแยก (ยาก) | boss:under2 | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | elite-forced | 24 | 100% | 91 | 99 |

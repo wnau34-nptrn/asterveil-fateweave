@@ -2152,7 +2152,7 @@
    "identity": "sefa",
    "side": "hero",
    "move": "backstab",
-   "name": "ลอบแทง",
+   "name": "พายุคม",
    "body": {
     "kind": "sprite",
     "clip": "skill",
@@ -2214,7 +2214,7 @@
    "identity": "sefa",
    "side": "hero",
    "move": "knives",
-   "name": "มีดบิน",
+   "name": "เคลือบพิษ",
    "body": {
     "kind": "sprite",
     "clip": "knives",
@@ -2245,7 +2245,7 @@
    "identity": "sefa",
    "side": "hero",
    "move": "disarm",
-   "name": "ปาดตัดหน้า",
+   "name": "ระเบิดพิษ",
    "body": {
     "kind": "sprite",
     "clip": "skill",
