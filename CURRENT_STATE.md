@@ -13,14 +13,14 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **SYSTEM-UNLOCK-AUDIT-001 — next chat (owner 2026-11-07):** audit/fix feature availability against the current game; camp team must open after clearing MAP 1. Handoff: `docs/handoffs/SYSTEM-UNLOCK-AUDIT-TH.md`. Current `unlocks.team=3`; no runtime fix made in the handoff chat. Prioritize this before other polish.
+- **SYSTEM-UNLOCK-AUDIT-001 (2026-11-07):** team gate changed from MAP 3 to MAP 1; persistent cleared history keeps it open on replay/reload. No save/battle/balance change. Audit, remaining proposals and 390px evidence: `docs/validation/system-unlock-audit/README_TH.md`.
 
 - **Team presets + team page** (owner 2026-11-06, PR #196, save v56): 4 named presets (draft) — one tap applies at the camp (reserve by chapter, overflow waits in the camp) or in the map bag outside battle (members brought only); camp page = presets → field → reserve → formation → characters in camp, one-tap field/reserve/camp moves. Evidence and research table `docs/validation/team-presets-2026-11-06/README_TH.md`. Owner has the 390px before/after images; owner review of the feel is open.
 - Skill rework step 6 done (#191–#193, #195, #198; README §9 `docs/validation/skill-rework-2026-11-05/README_TH.md`); the campaign gate now reads the whole campaign (owner 2026-11-06).
 
 ## Next (owner order)
 
-- First: SYSTEM-UNLOCK-AUDIT-001; other milestones follow the current owner decisions, not a blanket MAP 1 unlock.
+- Await the owner’s next task; other milestones follow the current owner decisions, not a blanket MAP 1 unlock. P09 remains on hold.
 
 - UI frame groups 1–4 done (#173, #194, group 4 summary/rewards 2026-11-07); no frame work left.
 - Polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check open.
@@ -41,4 +41,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-ทำงาน SYSTEM-UNLOCK-AUDIT-001 ใน wnau34-nptrn/asterveil-fateweave จาก feature/fateweave-initial-prototype อ่าน AGENTS.md, CLAUDE.md, CURRENT_STATE.md และ docs/handoffs/SYSTEM-UNLOCK-AUDIT-TH.md แล้วตรวจและแก้เงื่อนไขเปิดระบบให้ตรงเกมปัจจุบัน เริ่มจากทีมใน camp ที่ต้องใช้ได้หลังจบ MAP 1 ทำตามขอบเขตและ regression cases ใน handoff เปิด PR ให้ผ่าน quality + browser พร้อมหลักฐาน 390px
+อ่าน AGENTS.md, CLAUDE.md และ CURRENT_STATE.md ใน wnau34-nptrn/asterveil-fateweave จาก feature/fateweave-initial-prototype แล้วรอเจ้าของเลือกงานถัดไป ไม่เริ่ม P09 หรืองานภาพเอง; ผล audit และข้อเสนอที่ยังไม่ใช่กฎใหม่อยู่ใน docs/validation/system-unlock-audit/README_TH.md

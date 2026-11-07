@@ -124,3 +124,7 @@ The current/next SPD queue stays in the portrait phase band as six circular slot
 - UI: `ui/formation-grid.ts` renders our side as 2 columns × 3 cells (rear left) in the lobby team sheet (`#lobby-lane-<id>`) and the camp/bag team tab (`#team-lane-<id>`, `#bag-team-lane-<id>`); tap a member then an empty cell or a member of the other column. Team cards show the standing lane.
 - Field: `slotPlan` returns `trio` columns; a column of three uses slots 0/8/1 (rear) or 2/9/3 (front), at full size (owner 2026-10-22): the top unit's panel sits above its head, the middle unit stands just above the bottom unit's head stepped toward the field centre, panels shrink to 32/26px when short (`fieldSlots(…, trio)`).
 - Simulation: `tests/formation-sim.test.ts` + `tests/sim/formation-sim.ts`, report `docs/validation/formation-sim/REPORT.md`.
+
+## System unlock audit (2026-11-07)
+
+Camp team opens after clearing MAP 1 (owner SYSTEM-UNLOCK-AUDIT-001), including formation and presets; rights follow persistent cleared history, never selected map. Other thresholds and the existing latest-built-map fallback stay unchanged. Audit and regression evidence: [README_TH](../validation/system-unlock-audit/README_TH.md).
