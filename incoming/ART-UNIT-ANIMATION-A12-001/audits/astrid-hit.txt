@@ -1,0 +1,1 @@
+astrid-hit: median head scale 1.013; drift []; not measured []

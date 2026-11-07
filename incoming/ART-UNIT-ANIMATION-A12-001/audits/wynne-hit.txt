@@ -1,0 +1,1 @@
+wynne-hit: median head scale 1.002; drift []; not measured []

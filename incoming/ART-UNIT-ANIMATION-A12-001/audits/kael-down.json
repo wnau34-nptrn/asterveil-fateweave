@@ -1,0 +1,45 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "kael-down": [
+   {
+    "frame": 0,
+    "height": 466,
+    "scale": 1.0,
+    "inliers": 815,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 466,
+    "scale": 1.0,
+    "inliers": 815,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 2,
+    "height": 417,
+    "scale": 1.034,
+    "inliers": 57,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 364,
+    "scale": 1.086,
+    "inliers": 55,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 244,
+    "scale": 1.685,
+    "inliers": 6,
+    "status": "not-measured"
+   }
+  ]
+ }
+}

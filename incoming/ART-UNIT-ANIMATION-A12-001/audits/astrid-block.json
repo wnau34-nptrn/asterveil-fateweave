@@ -1,0 +1,46 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "astrid-block": [
+   {
+    "frame": 0,
+    "height": 451,
+    "scale": 1.0,
+    "inliers": 2527,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 451,
+    "scale": 1.0,
+    "inliers": 2527,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 2,
+    "height": 456,
+    "scale": 0.953,
+    "inliers": 303,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 431,
+    "scale": 0.974,
+    "inliers": 198,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 451,
+    "scale": 1.0,
+    "inliers": 2527,
+    "idle": true,
+    "status": "idle"
+   }
+  ]
+ }
+}

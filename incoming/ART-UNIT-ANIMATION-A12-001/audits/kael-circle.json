@@ -1,0 +1,60 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "kael-circle": [
+   {
+    "frame": 0,
+    "height": 466,
+    "scale": 1.0,
+    "inliers": 815,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 466,
+    "scale": 1.0,
+    "inliers": 815,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 2,
+    "height": 473,
+    "scale": 0.979,
+    "inliers": 39,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 475,
+    "scale": 0.988,
+    "inliers": 78,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 473,
+    "scale": 1.004,
+    "inliers": 51,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 475,
+    "scale": 0.925,
+    "inliers": 27,
+    "status": "ok"
+   },
+   {
+    "frame": 6,
+    "height": 466,
+    "scale": 1.0,
+    "inliers": 815,
+    "idle": true,
+    "status": "idle"
+   }
+  ]
+ }
+}

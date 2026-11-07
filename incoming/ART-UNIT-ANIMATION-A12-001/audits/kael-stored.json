@@ -1,0 +1,60 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "kael-stored": [
+   {
+    "frame": 0,
+    "height": 466,
+    "scale": 1.0,
+    "inliers": 815,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 466,
+    "scale": 1.0,
+    "inliers": 815,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 2,
+    "height": 471,
+    "scale": 0.983,
+    "inliers": 135,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 459,
+    "scale": 0.989,
+    "inliers": 89,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 464,
+    "scale": 0.973,
+    "inliers": 93,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 463,
+    "scale": 0.985,
+    "inliers": 76,
+    "status": "ok"
+   },
+   {
+    "frame": 6,
+    "height": 466,
+    "scale": 1.0,
+    "inliers": 815,
+    "idle": true,
+    "status": "idle"
+   }
+  ]
+ }
+}

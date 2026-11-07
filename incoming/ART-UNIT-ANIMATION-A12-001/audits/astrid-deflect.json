@@ -1,0 +1,60 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "astrid-deflect": [
+   {
+    "frame": 0,
+    "height": 451,
+    "scale": 1.0,
+    "inliers": 2527,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 451,
+    "scale": 1.0,
+    "inliers": 2527,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 2,
+    "height": 457,
+    "scale": 0.921,
+    "inliers": 117,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 457,
+    "scale": 0.926,
+    "inliers": 71,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 455,
+    "scale": 0.922,
+    "inliers": 88,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 456,
+    "scale": 0.911,
+    "inliers": 77,
+    "status": "ok"
+   },
+   {
+    "frame": 6,
+    "height": 451,
+    "scale": 1.0,
+    "inliers": 2527,
+    "idle": true,
+    "status": "idle"
+   }
+  ]
+ }
+}

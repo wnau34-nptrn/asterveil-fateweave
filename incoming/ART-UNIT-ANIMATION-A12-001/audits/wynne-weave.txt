@@ -1,0 +1,1 @@
+wynne-weave: median head scale 0.983; drift []; not measured []

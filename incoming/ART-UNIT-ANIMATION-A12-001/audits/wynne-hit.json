@@ -1,0 +1,46 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "wynne-hit": [
+   {
+    "frame": 0,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2607,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2607,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 2,
+    "height": 458,
+    "scale": 1.001,
+    "inliers": 72,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 432,
+    "scale": 1.003,
+    "inliers": 70,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2607,
+    "idle": true,
+    "status": "idle"
+   }
+  ]
+ }
+}
