@@ -1,5 +1,7 @@
 # SYSTEM-UNLOCK-AUDIT-001 · 2026-11-07
 
+> ประวัติ audit ก่อนเจ้าของอนุมัติ pacing รอบถัดไป: เงื่อนไขล่าสุดอยู่ใน [SYSTEM-UNLOCK-PACING-002](../system-unlock-pacing/README_TH.md); ตารางเดิมด้านล่างไม่ใช่ gate ปัจจุบันของ quests/hiring/market/hunt
+
 ฐาน `3d99908` จาก `feature/fateweave-initial-prototype` (fetch ก่อนแก้) ไม่ใช้ main
 
 ## หลักฐานและการตัดสินใจ

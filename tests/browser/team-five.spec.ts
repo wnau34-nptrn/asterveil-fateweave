@@ -101,7 +101,7 @@ test('map bag team tab: five on the field, the reserve and fatigue at 390px', as
 test('camp team page: five deployed, reserve slots by chapter at 390px', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce', deviceScaleFactor: 2 });
   const page = await context.newPage(); const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
-  // The camp team page opens after map 3 (A3 unlocks); two chapters cleared open five reserve slots.
+  // The camp team page opens after map 1 (owner 2026-11-07); two chapters cleared open five reserve slots.
   const p = { ...profile(), cleared: ['ruined-border', 'deep-forest', 'veil-frontier'] };
   await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw: JSON.stringify({ version: 45, profile: p, run: null }) });
   await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#lobby-view')).toBeVisible();

@@ -13,7 +13,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **SYSTEM-UNLOCK-AUDIT-001 complete (2026-11-07, PR #201, merge `2d7f35d`):** team gate changed from MAP 3 to MAP 1; persistent cleared history keeps it open on replay/reload. Quality + browser passed. No save/battle/balance change. Audit, remaining proposals and 390px evidence: `docs/validation/system-unlock-audit/README_TH.md`.
+- **SYSTEM-UNLOCK-PACING-002 (owner 2026-11-07):** approved follow-up to audit #201: quests after MAP 1; hiring/market/hunt after MAP 2; advanced services explicitly MAP 3 so future maps cannot silently move existing rights. Team remains MAP 1. No save/battle/balance change. Evidence: `docs/validation/system-unlock-pacing/README_TH.md`.
 
 - **Team presets + team page** (owner 2026-11-06, PR #196, save v56): 4 named presets (draft) — one tap applies at the camp (reserve by chapter, overflow waits in the camp) or in the map bag outside battle (members brought only); camp page = presets → field → reserve → formation → characters in camp, one-tap field/reserve/camp moves. Evidence and research table `docs/validation/team-presets-2026-11-06/README_TH.md`. Owner has the 390px before/after images; owner review of the feel is open.
 - Skill rework step 6 done (#191–#193, #195, #198; README §9 `docs/validation/skill-rework-2026-11-05/README_TH.md`); the campaign gate now reads the whole campaign (owner 2026-11-06).
@@ -41,4 +41,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-อ่าน AGENTS.md, CLAUDE.md และ CURRENT_STATE.md ใน wnau34-nptrn/asterveil-fateweave จาก feature/fateweave-initial-prototype แล้วรอเจ้าของเลือกงานถัดไป ไม่เริ่ม P09 หรืองานภาพเอง; ผล audit และข้อเสนอที่ยังไม่ใช่กฎใหม่อยู่ใน docs/validation/system-unlock-audit/README_TH.md
+อ่าน AGENTS.md, CLAUDE.md และ CURRENT_STATE.md ใน wnau34-nptrn/asterveil-fateweave จาก feature/fateweave-initial-prototype แล้วรอเจ้าของเลือกงานถัดไป ไม่เริ่ม P09 หรืองานภาพเอง; pacing ล่าสุดที่เจ้าของอนุมัติและผลตรวจอยู่ใน docs/validation/system-unlock-pacing/README_TH.md

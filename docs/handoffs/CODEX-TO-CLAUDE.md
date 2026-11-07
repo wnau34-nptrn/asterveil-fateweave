@@ -1,3 +1,12 @@
+## 2026-11-07 — SYSTEM-UNLOCK-PACING-002
+- Owner approved the recommended pacing: quests after MAP 1; hiring/market/hunt after MAP 2; other current services stay at their existing MAP 1/2/3 milestones.
+- Branch `codex/system-unlock-pacing-002` → game branch; PR/merge recorded on completion.
+- Explicit MAP 3 thresholds preserve advanced-service availability when future maps are added; old A3 table remains historical, linked to the new decision.
+- Quest board retains progress/rewards/claim-once and adds preparation guidance; guides remain one at a time, hire guide follows MAP 2.
+- Local full unit 1,657 passed/6 skipped; focused non-veteran regressions + 4 browser tests passed; CI results in validation README. Updated old world.spec hiring assertion MAP 3→2.
+- No battle/save format/balance/reward/cost/slot changes, parked recruits still parked; no future systems or P09.
+- Evidence: `docs/validation/system-unlock-pacing/README_TH.md`; next task awaits owner.
+
 ## 2026-11-07 — SYSTEM-UNLOCK-AUDIT-001
 - Merged PR #201 (`codex/system-unlock-audit-001` → `feature/fateweave-initial-prototype`), merge `2d7f35d1dd5cddcde89f63e227c7a9fce9fb6257`, after quality + browser success.
 - Owner: camp team opens after MAP 1; changed shared threshold 3→1, so UI lock and reserve guide follow it automatically.

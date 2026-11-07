@@ -255,7 +255,7 @@ export class LobbyUI {
       ${st.claimed ? '<p class="side-quest-done">รับรางวัลแล้ว</p>' : `<button id="quest-claim-${q.id}" data-lobby="claim" data-quest="${q.id}" class="primary"${reason ? ' disabled' : ''}>${reason === 'full' ? 'รางวัลเกินเพดานคลัง · ใช้ทรัพยากรก่อน' : reason ? `สะสมจากการเดินทาง (${st.progress}/${q.target})` : 'รับรางวัล'}</button>`}</section>`;
     };
     const open = sorted.filter(r => state(r) < 2), done = sorted.filter(r => state(r) === 2);
-    return `<div class="quest-board"><p class="camp-note">เควสต์ของเหล่า NPC รวมอยู่ที่นี่ ความคืบหน้านับจากการเดินทางที่จบแล้ว รับรางวัลได้ครั้งเดียวต่อเควสต์</p>${open.map(card).join('')}${done.length ? `<details class="quest-done-list"><summary>รับรางวัลแล้ว ${done.length} งาน</summary>${done.map(card).join('')}</details>` : ''}</div>`;
+    return `<div class="quest-board"><p class="camp-note">เควสต์ของเหล่า NPC รวมอยู่ที่นี่ ความคืบหน้านับจากการเดินทางที่จบแล้ว รับรางวัลได้ครั้งเดียวต่อเควสต์ · ก่อนเดินทางรอบถัดไป จัดทีม สวมอุปกรณ์ และเตรียมยาได้ที่ค่าย</p>${open.map(card).join('')}${done.length ? `<details class="quest-done-list"><summary>รับรางวัลแล้ว ${done.length} งาน</summary>${done.map(card).join('')}</details>` : ''}</div>`;
   }
   // The scene and the NPC tap targets pan together (portrait phones); the HUD stays put above them.
   private build(): void {

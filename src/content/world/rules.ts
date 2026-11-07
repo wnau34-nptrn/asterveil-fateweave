@@ -36,8 +36,10 @@ export const gameRules: GameRules = {
     { id: 'guide-hire', npc: 'broker', feature: 'hire', kind: 'hire', reward: { gold: 10 } },
     { id: 'guide-reserve', npc: 'scout', feature: 'team', kind: 'reserve', reward: { potions: { repel: 1 } } },
   ],
-  // Owner 2026-11-07: camp team opens after MAP 1; replaying an earlier map never revokes it.
-  unlocks: { tree: 1, forge: 1, brew: 1, gear: 1, level: 2, quests: 2, hire: 3, team: 1, market: 3, fuse: 5, craft: 5, hunt: 5, transfer: 7, bossCharm: 9, hard: 3, tomes: 2 },
+  // Owner 2026-11-07, approved pacing: quests/team after MAP 1; hire/market/hunt after MAP 2.
+  // Advanced services stay at MAP 3 explicitly: adding maps must not silently move existing rights to 5/7/9.
+  // Revisit the historical A3 future-chapter table only with a new owner-approved progression task.
+  unlocks: { tree: 1, forge: 1, brew: 1, gear: 1, level: 2, quests: 1, hire: 2, team: 1, market: 2, fuse: 3, craft: 3, hunt: 2, transfer: 3, bossCharm: 3, hard: 3, tomes: 2 },
   // Phase 4A (draft): the camp market, paid in gold coins, and paid hiring-board refreshes (2 per return).
   shop: {
     items: { seal: { price: 60, limit: 2 }, contract: { price: 150, limit: 1 }, gearbox: { price: 120, limit: 1 }, repel: { price: 30, limit: 2 } },
