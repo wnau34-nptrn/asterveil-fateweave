@@ -12,7 +12,8 @@ for (const skill of skills) test(`blade ${skill} resolved contact and cleanup at
   try {
     await page.clock.install({ time: new Date('2026-10-24T00:00:00Z') });
     await page.goto(`tests/browser/fixtures/blade.html?skill=${skill}`);
-    await expect(page.locator('#start')).toBeEnabled(); await page.locator('#start').click();
+    // Save v56: the venom burst opens on a replayed prelude (her poison laid by real commands), so there is no start button.
+    if (skill !== 'disarm') { await expect(page.locator('#start')).toBeEnabled(); await page.locator('#start').click(); } else await expect(page.locator('#hero-sefa')).toHaveAttribute('aria-pressed', 'true');
     await page.clock.pauseAt(new Date('2026-10-24T01:00:00Z'));
     const cues = await page.evaluate(() => window.bladeQA.cues('hit'));
     const turn = await page.evaluate(() => window.bladeQA.stage('hit'));
@@ -23,9 +24,13 @@ for (const skill of skills) test(`blade ${skill} resolved contact and cleanup at
     if (skill !== 'parry') {
       const timing = stageTiming(turn, false);
       await page.clock.runFor(timing.contact - 1);
-      await expect(page.locator('[data-field-unit=f1] .field-hp-value')).toHaveText('500/500');
+      // Save v56: the venom burst starts from its replayed prelude, so its HP before/after come from the committed state.
+      const prior = skill === 'disarm' ? JSON.parse(committed!) as { commands: unknown[] } : undefined;
+      const before = prior ? (await page.evaluate(() => window.bladeQA.before?.() ?? null)) : null;
+      await expect(page.locator('[data-field-unit=f1] .field-hp-value')).toHaveText(before ?? '500/500');
       await page.clock.runFor(1);
-      await expect(page.locator('[data-field-unit=f1] .field-hp-value')).toHaveText(`${turn.after!.enemies.find(e => e.id === 'f1')!.hp}/500`);
+      const after = prior ? (JSON.parse(committed!) as { enemies: { id: string; hp: number }[] }).enemies.find(e => e.id === 'f1')!.hp : turn.after!.enemies.find(e => e.id === 'f1')!.hp;
+      await expect(page.locator('[data-field-unit=f1] .field-hp-value')).toHaveText(`${after}/500`);
       await page.clock.runFor(35);
       const early = (await page.evaluate(() => window.bladeQA.painted())).find(i => i.frame === `${skill}_peak`);
       expect(early, 'each skill uses its selected painted silhouette').toBeDefined();
@@ -86,7 +91,8 @@ for (const skill of skills) test(`blade ${skill} OS reduced keeps selected still
   const page = await ctx.newPage();
   try {
     await page.goto(`tests/browser/fixtures/blade.html?skill=${skill}`);
-    await page.locator('#start').click(); await page.locator(`#action-${skill}`).click();
+    if (skill !== 'disarm') await page.locator('#start').click(); else await expect(page.locator('#hero-sefa')).toHaveAttribute('aria-pressed', 'true');
+    await page.locator(`#action-${skill}`).click();
     await page.locator(`#target-${skill === 'parry' ? 'tracer' : skill === 'sweep' ? 'enemies-f1' : 'f1'}`).click();
     const before = await page.evaluate(() => window.bladeQA.painted());
     const still = before.find(i => i.frame === `${skill}_${skill === 'parry' ? 'prepare' : 'peak'}`);
