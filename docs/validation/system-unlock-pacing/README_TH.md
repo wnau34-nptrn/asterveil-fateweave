@@ -29,4 +29,6 @@
 - `system-unlock-audit.test.ts` จาก PR #201 ยังครอบคลุม field/reserve/formation/preset หลัง MAP 1
 - Browser `system-unlock-pacing.spec.ts`: 390×844, ก่อนเคลียร์ / หลัง MAP 1 / หลัง MAP 2 ไม่มี veteran; กระดานเควสต์รับ/โหลดกลับ, ข้อความล็อก MAP 2, จ้าง/ซื้อ/ตั้ง hunt จริง, boss target ยังไม่เปิดก่อน MAP 3, guide ทีละงาน
 - ภาพจริง 390px: `quests-map1-390.png`, `hiring-map2-390.png`, `hunt-map2-390.png`; Chromium emulation ไม่ใช่ Safari หรืออุปกรณ์จริง
-- Focused unit: 22 tests ผ่าน (20 existing/regression + 2 integration); browser ใหม่ 3/3 ผ่านและตรวจภาพ 390px ทั้ง 3 ภาพแล้ว; typecheck/lint/build และ coverage:presentation (6 tests) ผ่าน ผล full quality/browser สุดท้ายบันทึกหลังตรวจครบ
+- Focused unit: 22 tests ผ่าน (20 existing/regression + 2 integration); browser ใหม่ 3/3 ผ่านและตรวจภาพ 390px ทั้ง 3 ภาพแล้ว; typecheck/lint/build และ coverage:presentation (6 tests) ผ่าน full unit ในเครื่องผ่าน 1,657 tests / 6 skipped (121 files ผ่าน) ผล CI สุดท้ายบันทึกหลังตรวจครบ
+
+- CI browser รอบแรกพบ assertion เดิมใน `world.spec.ts` ยังรอ hiring MAP 3; ปรับให้ตรวจข้อความ MAP 2 ตาม owner decision และรันกรณีเดิมบน production Pages build ผ่าน 1/1 ไม่มีการแก้ runtime เพื่อหลบ test; รวม local browser ที่ตรวจ 4 tests ผ่าน

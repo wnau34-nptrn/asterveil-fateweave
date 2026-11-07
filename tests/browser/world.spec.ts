@@ -521,13 +521,13 @@ test('commander identity replaces the legacy camp name without rewriting saves',
   expect((await savedProfile(page)).commander).toEqual(commander);
 });
 
-test('lobby systems open by chapter: a new company sees which map opens each locked system (master plan A3)', async ({ page }) => {
+test('lobby systems open by chapter: a new company sees which map opens each locked system (owner pacing 2026-11-07)', async ({ page }) => {
   const profile = { ...newProfile(ruinsMap, 5, ['guardian', 'tracer']), commander, tutorialDone: true, cleared: [ruinsMap.id] };
   await page.addInitScript(({ raw, key }) => { if (sessionStorage.getItem('seeded')) return; localStorage.setItem(key, raw); sessionStorage.setItem('seeded', '1'); }, { raw: JSON.stringify(legacyEnvelope({ version: 31, profile, run: null })), key });
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click();
   await expect(page.locator('#lobby-tab-hire')).toContainText('🔒'); await expect(page.locator('#lobby-tab-forge')).not.toContainText('🔒');
-  await page.locator('#lobby-tab-hire').click(); await expect(page.locator('.lobby-locked')).toContainText('แนวรอยแยก');
+  await page.locator('#lobby-tab-hire').click(); await expect(page.locator('.lobby-locked')).toContainText('แผนที่ 2 · เส้นทางป่าทึบ');
   await page.locator('[data-lobby=close]').click(); await page.locator('#lobby-tab-forge').click();
   await expect(page.locator('.lobby-locked')).toHaveCount(0); await expect(page.locator('#forge-tab-craft')).toBeDisabled();
   // Guided tasks (A4): the keeper's task shows first; it cannot be claimed before it is done, and skipping moves on.

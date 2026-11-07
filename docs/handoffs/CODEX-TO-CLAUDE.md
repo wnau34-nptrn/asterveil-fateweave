@@ -3,7 +3,7 @@
 - Branch `codex/system-unlock-pacing-002` → game branch; PR/merge recorded on completion.
 - Explicit MAP 3 thresholds preserve advanced-service availability when future maps are added; old A3 table remains historical, linked to the new decision.
 - Quest board retains progress/rewards/claim-once and adds preparation guidance; guides remain one at a time, hire guide follows MAP 2.
-- Non-veteran core regressions passed: quest claim, hiring/market/hunt, guide once, reload/replay and advanced gates; browser/quality results in validation README.
+- Local full unit 1,657 passed/6 skipped; focused non-veteran regressions + 4 browser tests passed; CI results in validation README. Updated old world.spec hiring assertion MAP 3→2.
 - No battle/save format/balance/reward/cost/slot changes, parked recruits still parked; no future systems or P09.
 - Evidence: `docs/validation/system-unlock-pacing/README_TH.md`; next task awaits owner.
 
