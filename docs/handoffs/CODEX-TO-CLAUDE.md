@@ -1,3 +1,12 @@
+## 2026-11-07 — SYSTEM-UNLOCK-AUDIT-001
+- Branch `codex/system-unlock-audit-001` → `feature/fateweave-initial-prototype`; PR/merge tracked by this task.
+- Owner: camp team opens after MAP 1; changed shared threshold 3→1, so UI lock and reserve guide follow it automatically.
+- Pure team operations keep existing roster/lane/capacity checks; no battle/save format/balance/art/P09 changes.
+- Non-veteran regressions cover settlement outcomes, M2 entry/M1 replay, save load, field/reserve/formation/preset and one-time guide claims.
+- Focused unit tests passed; Chromium 390px before/after and reload passed; full quality/browser results recorded in validation README.
+- Audit distinguishes approved milestones, latest-built-map fallback and proposals for campaign guards in pure services; other gates unchanged.
+- Evidence and open proposals: `docs/validation/system-unlock-audit/README_TH.md`; next task awaits owner selection.
+
 ## 2026-11-07 — Handoff: SYSTEM-UNLOCK-AUDIT-001
 - Owner requested the next chat audit current system unlocks; camp team must work after clearing MAP 1.
 - Handoff: `docs/handoffs/SYSTEM-UNLOCK-AUDIT-TH.md`; updated CURRENT_STATE priority and opening prompt.
