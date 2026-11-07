@@ -21,12 +21,12 @@ Newest first. One entry per finished task, at most 12 lines; link a validation R
 - Tests: world.spec + battle-shots (93 ผ่าน), ui-language-audit ก่อน/หลัง (เพิ่มภาพ 53a/53b ของ `#game-info`); ผลและภาพ `docs/validation/ui-frame-group3-2026-11-06/README_TH.md`
 - เจ้าของอนุมัติภาพ; PR gate quality+browser ผ่านครบ → merge · ต่อไป: จัดทีม preset (session_014iPEcP6oUwVRPxyN3wu8Go) แล้วกรอบสรุป/รางวัล
 
-## 2026-11-06 — Skill rework step 6: small fixes (Claude, PRs #191 #192 merged; #193 + Sefa + Shadow Step in flight)
+## 2026-11-06/07 — Skill rework step 6: small fixes (Claude, PRs #191 #192 #193 #195 #198 merged; saves v53–v55, v57 Sefa, v58 Shadow Step)
 - เจ้าของ "ตามที่คุณแนะนำ" + "ดำเนินการต่อได้" = การ์ดขั้น 6 ในหน้า artifact "ตรวจสกิล Fateweave" · เซฟ v53–v57 (หนึ่งเวอร์ชันต่อชุด, ศึกค้างที่ใช้สกิลที่เปลี่ยนเริ่มใหม่)
 - v53 #191: ส่งไม้ Toma 50%, Aegis challenge ตี 10 + แค้นสะสม, rouse −20%, Seren sanctuary พรค้างทั้งศึก, bless 6+6 · bash ผลักท้ายคิว: วัดแล้วทีมเสียเลือด เจ้าของเลือกคงเดิม
 - v54 #192: Kael storedfist ปะทะท่า, circlefist 1 ปราณ/เลือด 10% · Lio solo ×2 + โน้ต 6, finale +20%/รอบ
 - v55 #193: Mira ยิงถอยหลัง/ศรตามรอยเด้ง, Eira เกราะผลึกสะท้อน/ปลดพลังเวท (ประจุจาก bolt), Brann slam แค้นสะสม · v56: Sefa พายุคม/เคลือบพิษ/ระเบิดพิษ
-- หายเข้าเงา (การ์ด) ทำ campaign gate ตก → เจ้าของเลือก ก้าวเงา = ตี 8 + หลบ (v57) และ gate แบบดูทั้งแคมเปญ (ช่องเสียได้ ≤1 ค่ายเมื่อทั้งกลุ่มไม่แย่ลง)
+- หายเข้าเงา (การ์ด) ทำ campaign gate ตก → เจ้าของเลือก ก้าวเงา = ตี 8 + หลบ (v58, #198) และ gate แบบดูทั้งแคมเปญ (ช่องเสียได้ ≤1 ค่ายเมื่อทั้งกลุ่มไม่แย่ลง) · v56 = ชุดทีม #196 (session อื่น) ประสานเลขเซฟผ่าน send_message
 - Tests ทุกชุด: typecheck/lint/unit ~1635, sim 28/28 (campaign gate), Playwright ที่เกี่ยวข้อง (Chromium) · ตัวเลขทั้งหมด README §9 `docs/validation/skill-rework-2026-11-05/README_TH.md`
 - เปิด: challenge ยังไม่ถูกเลือกใน sim, rouse ΔHP −8.6, ความยากศัตรู (ถ้าเจ้าของต้องการ) เป็นงานแยก · เจ้าของยังไม่ได้ดูภาพในเกม
 
