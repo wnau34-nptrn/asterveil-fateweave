@@ -1,5 +1,5 @@
-/* Shared portrait frame for four character tabs and development reviews. */
-#app .character-dialog .character-tabs { grid-template-columns: repeat(4,minmax(0,1fr)); }
+/* Shared portrait frame for context-specific character tabs and development reviews. */
+#app .character-dialog .character-tabs { grid-template-columns: repeat(var(--character-tab-count,4),minmax(0,1fr)); }
 #app .character-dialog {
   --star-safe-top: var(--safe-top,0px);
   --star-safe-bottom: env(safe-area-inset-bottom,0px);

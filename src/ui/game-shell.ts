@@ -157,16 +157,17 @@ export class GameShell {
       if (shortcutBlocked(e) || this.story.open || root.querySelector('.summary-view:not([hidden])')) return;
       const view = root.dataset.view;
       const bag = e.code === 'KeyB' || e.key.toLowerCase() === 'b';
+      const team = e.code === 'KeyT' || e.key.toLowerCase() === 't';
       const info = e.code === 'KeyI' || e.key.toLowerCase() === 'i';
-      const buttonId = bag && view === 'world' ? 'world-pack' : info && view === 'world' ? 'world-info-button' : info && view === 'battle' ? 'battle-info' : undefined;
-      const dialogId = bag && view === 'world' ? 'pack-dialog' : info && view === 'world' ? 'world-info' : info && view === 'battle' ? 'game-info' : undefined;
+      const buttonId = team && view === 'world' ? 'world-team' : bag && view === 'world' ? 'world-pack' : info && view === 'world' ? 'world-info-button' : info && view === 'battle' ? 'battle-info' : undefined;
+      const dialogId = team && view === 'world' ? 'team-dialog' : bag && view === 'world' ? 'pack-dialog' : info && view === 'world' ? 'world-info' : info && view === 'battle' ? 'game-info' : undefined;
       if (!buttonId || !dialogId) return;
       const modal = document.querySelector<HTMLDialogElement>('dialog[open]');
       if (modal && modal.id !== dialogId) return;
       e.preventDefault();
       if (modal) modal.close(); else root.querySelector<HTMLButtonElement>(`#${buttonId}`)?.click();
     });
-    for (const [id, key] of [['world-pack', 'B'], ['world-info-button', 'I'], ['battle-info', 'I']]) root.querySelector(`#${id}`)?.setAttribute('aria-keyshortcuts', key!);
+    for (const [id, key] of [['world-team', 'T'], ['world-pack', 'B'], ['world-info-button', 'I'], ['battle-info', 'I']]) root.querySelector(`#${id}`)?.setAttribute('aria-keyshortcuts', key!);
   }
   private refreshMusicControls(): void {
     const p = this.music.settings;

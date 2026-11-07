@@ -13,8 +13,8 @@ import { statLines } from '../core/world/equipment';
 import { markedSkillExample, characterSkillMetric, characterStats, type CharacterState } from './character-metrics';
 import { gearArt, riftCoreArt, setEmblem, tomeArt } from './equip-art';
 
-export const characterTabs = { overview: 'ภาพรวม', gear: 'อุปกรณ์', skills: 'สกิล', develop: 'พัฒนา' } as const;
-export type CharacterTab = keyof typeof characterTabs | 'talents';
+export const characterTabs = { overview: 'ภาพรวม', gear: 'อุปกรณ์', skills: 'สกิล', talents: 'ผังสกิล', develop: 'พัฒนา' } as const;
+export type CharacterTab = keyof typeof characterTabs;
 // ART-UI-ICONS-002 line icons for tabs and stats (decorative; the Thai label stays).
 export const characterTabIcons = { overview: 'tab-overview', gear: 'tab-gear', skills: 'tab-skills', develop: 'starBadge', talents: 'tab-tree' } as const;
 const statIcons: Record<string, Parameters<typeof icon>[0]> = { hp: 'stat-hp', attack: 'stat-attack', speed: 'stat-speed', support: 'stat-support', armour: 'stat-armour', resist: 'stat-resist', leech: 'stat-leech', barrier: 'stat-barrier', regen: 'stat-regen', luck: 'stat-luck', 'party-luck': 'stat-luck' };

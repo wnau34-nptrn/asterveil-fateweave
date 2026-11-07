@@ -128,3 +128,7 @@ The current/next SPD queue stays in the portrait phase band as six circular slot
 ## System unlock audit (2026-11-07)
 
 Camp team opens after clearing MAP 1 (owner SYSTEM-UNLOCK-AUDIT-001), including formation and presets; rights follow persistent cleared history, never selected map. The subsequent owner-approved pacing opens quests after MAP 1 and hiring/market/hunt after MAP 2; advanced services explicitly stay at MAP 3 (hard also needs target-map normal clear). See [current pacing](../validation/system-unlock-pacing/README_TH.md); historical audit and regression evidence: [README_TH](../validation/system-unlock-audit/README_TH.md).
+
+## Map team and character tabs (owner-approved 2026-11-07)
+
+Team has a separate map HUD entry/dialog (T), with four carried-only preset slots and field/reserve/formation; bag (B) owns items/gear. Map characters have overview/gear/skills/talents; camp adds development. Tree deep links/return focus still work; camp-only upgrade services do not appear on the map. Existing core commands, HP/fatigue, capacities, saves and battle restrictions are unchanged. Evidence: [README_TH](../validation/map-team-character-tabs/README_TH.md).

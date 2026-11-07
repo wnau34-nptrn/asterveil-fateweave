@@ -6,6 +6,7 @@ import { CharacterPanel, type CharacterModel } from './character-panel';
 import { applyRunEquipment, runEquipment, type AutoEquipmentPlan } from '../core/world/auto-equipment';
 import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gearFilterControls } from './gear-inventory';
 import { talentPoints, talentsSpent } from '../core/world/talents';
+import { PRESET_SLOTS } from '../core/world/types';
 import type { TalentNode } from '../core/world/types';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
@@ -20,7 +21,7 @@ import { heroArt, portrait, starRow } from './portraits';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
 import { tomeCount } from '../core/world/tomes';
-import { icon, lineIcon, type IconName } from './icons';
+import { icon, lineIcon } from './icons';
 import { gearArt, potionArt } from './equip-art';
 import { fatigueDot } from './fatigue';
 import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
@@ -64,8 +65,8 @@ export class WorldUI {
   private previous: { position: Point; chance: number; revealed: string; boss: boolean; done: boolean } | undefined;
   private lastKey = 0;
   private campTab: 'care' | 'team' | 'travel' = 'care';
-  // Map bag (2026-10-17): items, gear and team tabs; the member and slot shown on the gear tab.
-  private bagTab: 'items' | 'gear' | 'team' = 'items';
+  // Map bag owns items and gear. Team management has its own HUD entry and dialog.
+  private bagTab: 'items' | 'gear' = 'items';
   private inventoryPick: string | undefined;
   private inventorySource: ExpeditionState | undefined;
   private readonly inventoryFilters = newGearFilters();
@@ -103,6 +104,7 @@ export class WorldUI {
         <div class="hud-party" id="world-party" aria-label="เลือดและความล้าของทีม"></div>
         <div class="hud-tools">
         <button id="objective-button" data-world="goals" class="hud-objective glass-capsule" aria-haspopup="dialog" aria-controls="world-goals"></button>
+        <button id="world-team" data-world="team" class="hud-team glass-capsule" aria-haspopup="dialog" aria-controls="team-dialog">ทีม</button>
         <button id="world-pack" data-world="pack" class="hud-pack glass-capsule" aria-haspopup="dialog" aria-controls="pack-dialog"></button>
         </div>
         </div>
@@ -122,6 +124,7 @@ export class WorldUI {
       <div id="world-banner" class="world-banner" role="status" hidden></div>
       <dialog id="world-goals" class="world-dialog" aria-labelledby="world-goals-title"><div class="info-header"><h2 id="world-goals-title">เป้าหมายการเดินทาง</h2><button data-world="goals-close" class="quiet" aria-label="ปิดเป้าหมาย">${icon('close')}</button></div><div class="info-content" id="world-goals-content"></div></dialog>
       <dialog id="camp-dialog" class="world-dialog" aria-labelledby="camp-title"><div class="info-header"><h2 id="camp-title">${icon('camp')} แคมป์พักแรม</h2><button data-world="camp-close" class="quiet" aria-label="ปิดแคมป์">${icon('close')}</button></div><div class="info-content" id="camp-content"></div></dialog>
+      <dialog id="team-dialog" class="world-dialog" aria-labelledby="map-team-title"><div class="info-header"><h2 id="map-team-title">${icon('flag')} ทีม</h2><button data-world="team-close" class="quiet" aria-label="ปิดทีม">${icon('close')}</button></div><div class="info-content" id="map-team-content"></div></dialog>
       <dialog id="pack-dialog" class="world-dialog" aria-labelledby="pack-title"><div class="info-header"><h2 id="pack-title">${icon('pack')} กระเป๋า</h2><button data-world="pack-close" class="quiet" aria-label="ปิดกระเป๋า">${icon('close')}</button></div><div class="info-content" id="pack-content"></div></dialog>
       <dialog id="draft-dialog" class="world-dialog draft-dialog" aria-labelledby="draft-title"><div class="info-header"><h2 id="draft-title">${icon('gold')} รับสมัครทหารรับจ้าง</h2></div><div class="info-content" id="draft-content"></div></dialog>
       <dialog id="event-dialog" class="world-dialog" aria-labelledby="event-title"><div class="info-header"><h2 id="event-title"></h2><button data-world="event-close" class="quiet" aria-label="ปิดและเดินต่อ">${icon('close')}</button></div><div class="info-content" id="event-content"></div></dialog>
@@ -132,12 +135,12 @@ export class WorldUI {
       previewPlan:plan=>{if(!this.view)return;const out=applyRunEquipment(this.view.state,map,()=>({...skillData,heroes}),plan);return out.event.type==='equipped'?this.characterModel(out.state):undefined;},
       wear:(id,key)=>{const match=/^(found|spare):(\d+)$/.exec(key);if(match)this.host.wear(id,match[1] as BagList,Number(match[2]));},
       takeOff:(id,slot)=>this.host.takeOff(id,slot),talent:(id,node)=>this.host.talent(id,node),loadout:(id,a)=>this.host.loadout(id,a),applyPlan:plan=>this.host.autoEquip(plan),
-      restore:id=>{if(id==='pack-dialog')this.renderPack();else if(id==='camp-dialog')this.renderCamp();},
+      restore:id=>{if(id==='pack-dialog')this.renderPack();else if(id==='camp-dialog')this.renderCamp();else if(id==='team-dialog')this.renderTeam();},
     },'',this.inventoryFilters);
     root.addEventListener('change',event=>{const control=event.target as HTMLInputElement|HTMLSelectElement;if(control.closest('.character-dialog')||!control.dataset.gearFilter||root.hidden||root.closest('[inert]')||Array.from(root.querySelectorAll('dialog[open]')).some(d=>!d.contains(control)))return;changeGearFilter(this.inventoryFilters,control);this.renderPack();root.querySelector<HTMLElement>('#'+control.id)?.focus();});
     // The recruitment must be finished: Escape does not close it.
     root.querySelector('#draft-dialog')!.addEventListener('cancel', e => e.preventDefault());
-    for (const [id, trigger] of [['world-info', 'world-info-button'], ['world-goals', 'objective-button'], ['pack-dialog', 'world-pack'], ['camp-dialog', 'rest'], ['event-dialog', 'rest']]) {
+    for (const [id, trigger] of [['world-info', 'world-info-button'], ['world-goals', 'objective-button'], ['pack-dialog', 'world-pack'], ['team-dialog', 'world-team'], ['camp-dialog', 'rest'], ['event-dialog', 'rest']]) {
       root.querySelector(`#${id}`)!.addEventListener('close', () => {
         if (root.querySelector('dialog[open]')) return;
         if (!root.hidden && !root.closest('[inert]')) root.querySelector<HTMLElement>(`#${trigger}`)?.focus({ preventScroll: true });
@@ -162,12 +165,14 @@ export class WorldUI {
           case 'camp-close': dialog('#camp-dialog').close(); break;
           case 'travel': this.host.travel({ x: Number(button.dataset.x), y: Number(button.dataset.y) }); break;
           case 'camp-tab': this.campTab = button.dataset.tab as WorldUI['campTab']; this.picked = undefined; this.lanePick = undefined; this.confirmWithdraw = false; this.renderCamp(); this.root.querySelector<HTMLElement>(`#camp-tab-${this.campTab}`)?.focus(); break;
-          case 'preset': if (!this.view?.locked) { const slot = Number(button.dataset.slot); this.picked = undefined; this.lanePick = undefined; this.host.preset(slot); this.root.querySelector<HTMLElement>(`#${this.bagOpen() ? 'bag-team' : 'team'}-preset-${slot}`)?.focus(); } break;
+          case 'preset': if (!this.view?.locked) { const slot = Number(button.dataset.slot); this.picked = undefined; this.lanePick = undefined; this.host.preset(slot); this.root.querySelector<HTMLElement>(`#${this.teamPrefix()}-preset-${slot}`)?.focus(); } break;
           case 'team-pick': this.pickMember(button.dataset.hero, button.dataset.side as 'deployed' | 'reserve'); break;
           case 'lane-pick': case 'lane-cell': this.pickLane(button.dataset.hero, button.dataset.lane as Lane); break;
           case 'withdraw': if (this.view?.locked) break;
             if (!this.confirmWithdraw) { this.confirmWithdraw = true; this.renderCamp(); this.root.querySelector<HTMLElement>('#withdraw')?.focus(); break; }
             this.confirmWithdraw = false; dialog('#camp-dialog').close(); this.host.withdraw(); break;
+          case 'team': this.picked = undefined; this.lanePick = undefined; this.renderTeam(); dialog('#team-dialog').showModal(); break;
+          case 'team-close': dialog('#team-dialog').close(); break;
           case 'pack': this.bagTab = 'items'; this.picked = undefined; this.lanePick = undefined; this.potionPick = undefined; this.renderPack(); dialog('#pack-dialog').showModal(); break;
           case 'bag-tab': this.bagTab = button.dataset.tab as WorldUI['bagTab']; this.picked = undefined; this.lanePick = undefined; this.potionPick = undefined; this.renderPack(); this.root.querySelector<HTMLElement>(`#bag-tab-${this.bagTab}`)?.focus(); break;
           case 'inventory-pick': this.inventoryPick=button.dataset.key;this.renderPack();this.root.querySelector<HTMLElement>('#inventory-hero-'+rosterIds(this.view!.state).find(id=>{const i=runEquipment(this.view!.state).find(e=>e.key===this.inventoryPick)?.item;return i&&(i.slot!=='weapon'||i.hero===id);}))?.focus();break;
@@ -250,7 +255,7 @@ export class WorldUI {
   private pickMember(id: string | undefined, side: 'deployed' | 'reserve'): void {
     const s = this.view?.state; if (!s || this.view!.locked) return;
     const pickedSide = this.picked && (s.roster.deployed.includes(this.picked) ? 'deployed' : 'reserve');
-    if (!this.picked || pickedSide === side) { this.picked = id && id !== this.picked ? id : undefined; if (this.bagOpen()) this.renderPack(); else this.renderCamp(); this.focusTeam(this.picked ?? id); return; }
+    if (!this.picked || pickedSide === side) { this.picked = id && id !== this.picked ? id : undefined; this.renderTeamSurface(); this.focusTeam(this.picked ?? id); return; }
     const from = this.picked; this.picked = undefined;
     if (id) this.host.swap(from, id); else this.host.moveMember(from);
     this.focusTeam(from);
@@ -266,13 +271,16 @@ export class WorldUI {
       this.focusTeam(from); return;
     }
     const tap = formationTap(this.lanePick, this.lanes(s), id, lane); this.lanePick = tap.picked;
-    if (tap.move) this.host.lane(tap.move.id, tap.move.lane, tap.move.other); else if (this.bagOpen()) this.renderPack(); else this.renderCamp();
+    if (tap.move) this.host.lane(tap.move.id, tap.move.lane, tap.move.other); else this.renderTeamSurface();
     const focus = tap.move?.id ?? tap.picked ?? id;
-    if (focus) this.root.querySelector<HTMLElement>(`#${this.bagOpen() ? 'bag-team' : 'team'}-lane-${focus}`)?.focus();
+    if (focus) this.root.querySelector<HTMLElement>(`#${this.teamPrefix()}-lane-${focus}`)?.focus();
   }
   private recommended = (id: string): Lane => this.heroes.find(h => h.id === id)?.lane ?? 'front';
   private lanes(s: ExpeditionState): Record<string, Lane> { return formation(s.roster, this.recommended); }
-  private focusTeam(id: string | undefined): void { if (id) this.root.querySelector<HTMLElement>(`#${this.bagOpen() ? 'bag-team' : 'team'}-${id}`)?.focus(); }
+  private focusTeam(id: string | undefined): void { if (id) this.root.querySelector<HTMLElement>(`#${this.teamPrefix()}-${id}`)?.focus(); }
+  private teamPrefix(): string { return this.root.querySelector<HTMLDialogElement>('#team-dialog')!.open ? 'map-team' : 'team'; }
+  private renderTeamSurface(): void { if (this.teamPrefix() === 'map-team') this.renderTeam(); else this.renderCamp(); }
+  private renderTeam(): void { const s = this.view?.state; if (s) this.root.querySelector('#map-team-content')!.innerHTML = this.campTeam(s, 'map-team'); }
   private bagOpen(): boolean { return this.root.querySelector<HTMLDialogElement>('#pack-dialog')!.open; }
   private openCharacter(id: string, tab: CharacterTab, trigger: HTMLButtonElement, key?: string): void { this.characters?.openFor(id,tab,trigger,key); }
   private characterModel(state = this.view?.state): CharacterModel | undefined {
@@ -392,6 +400,7 @@ export class WorldUI {
     const eventDialog = this.root.querySelector<HTMLDialogElement>('#event-dialog')!;
     if (eventDialog.open) { if (pendingEvent(s, this.map) && !view.locked) this.renderEvent(); else eventDialog.close(); }
     if (this.bagOpen()) this.renderPack();
+    if (this.root.querySelector<HTMLDialogElement>('#team-dialog')!.open) this.renderTeam();
     this.characters?.refresh();
     if (this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.open) { if (atMuster(s, this.map) && !view.locked) this.renderCamp(); else this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.close(); }
     if (!prev || prev.revealed !== s.revealed) this.renderFog(s);
@@ -421,11 +430,8 @@ export class WorldUI {
 
   private renderPackButton(s: ExpeditionState, gained: boolean): void {
     const pack = this.root.querySelector<HTMLElement>('#world-pack')!;
-    const potions = POTION_IDS.reduce((n, id) => n + s.potions[id], 0);
-    pack.innerHTML = `<span class="pack-bag">${icon('pack')}</span>` + resourceOrder.map(id => `<span class="pack-item" data-resource="${id}">${icon(id as IconName)}<b>${s.resources[id]}</b></span>`).join('')
-      + (potions ? `<span class="pack-item" data-resource="potion">${icon('potionSalve')}<b>${potions}</b></span>` : '')
-      + (s.found.length ? `<span class="pack-item" data-resource="gear">${icon('gearBody')}<b>${s.found.length}</b></span>` : '');
-    pack.setAttribute('aria-label', `กระเป๋า · ${resourceOrder.map(id => `${resourceText[id].name} ${s.resources[id]}`).join(' · ')}${s.found.length ? ` · อุปกรณ์ ${s.found.length} ชิ้น` : ''} · เปิดดูของ อุปกรณ์ และทีม`);
+    pack.innerHTML = `<span class="pack-bag">${icon('pack')}</span><span>กระเป๋า</span>`;
+    pack.setAttribute('aria-label', `กระเป๋า · ${resourceOrder.map(id => `${resourceText[id].name} ${s.resources[id]}`).join(' · ')} · เปิดดูของและอุปกรณ์`);
     if (gained && !this.reduced.matches) { pack.classList.remove('gain'); void pack.offsetWidth; pack.classList.add('gain'); }
   }
 
@@ -457,10 +463,10 @@ export class WorldUI {
   private renderPack(): void {
     const s = this.view?.state; if (!s) return;
     if(this.inventorySource&&this.inventorySource!==s)this.inventoryPick=undefined;this.inventorySource=s;
-    const glyph = { items: 'tab-bag', gear: 'tab-gear', team: 'tab-team' } as const;
+    const glyph = { items: 'tab-bag', gear: 'tab-gear' } as const;
     const tab = (id: WorldUI['bagTab'], label: string) => `<button id="bag-tab-${id}" data-world="bag-tab" data-tab="${id}" role="tab" aria-selected="${this.bagTab === id}" class="${this.bagTab === id ? 'active' : ''}">${icon(glyph[id])}${label}</button>`;
-    const tabs = `<div class="camp-tabs three" role="tablist" aria-label="กระเป๋า">${tab('items', 'ของ')}${tab('gear', `อุปกรณ์${s.found.length ? ` <small>ใหม่ ${s.found.length}</small>` : ''}`)}${tab('team', `ทีม <small>${s.roster.deployed.length}+${s.roster.reserve.length}</small>`)}</div>`;
-    this.root.querySelector('#pack-content')!.innerHTML = tabs + (this.bagTab === 'gear' ? this.bagInventory(s) : this.bagTab === 'team' ? this.bagTeam(s) : this.bagItems(s));
+    const tabs = `<div class="camp-tabs two" role="tablist" aria-label="กระเป๋า">${tab('items', 'ของ')}${tab('gear', `อุปกรณ์${s.found.length ? ` <small>ใหม่ ${s.found.length}</small>` : ''}`)}</div>`;
+    this.root.querySelector('#pack-content')!.innerHTML = tabs + (this.bagTab === 'gear' ? this.bagInventory(s) : this.bagItems(s));
   }
   private bagItems(s: ExpeditionState): string {
     const opened = s.openedChests.length;
@@ -473,10 +479,6 @@ export class WorldUI {
     const picker=pick?'<section class="inventory-pick"><h3>เลือกผู้สวมใส่: '+itemName(pick.item)+'</h3><div class="tree-members">'+rosterIds(s).map(id=>'<button id="inventory-hero-'+id+'" data-world="inventory-character" data-hero="'+id+'" data-key="'+pick.key+'" class="tree-member"'+(pick.item.slot==='weapon'&&pick.item.hero!==id?' disabled':'')+'>'+portrait(id)+'<small>'+heroText[id]!.name+'</small></button>').join('')+'</div></section>':'';
     const rows=entries.map(e=>'<li data-rarity="'+e.item.rarity+'" data-item-key="'+e.key+'">'+gearArt(e.item)+'<div><b>'+itemName(e.item)+' Lv'+e.item.level+'</b><small>'+itemLines(this.map.equipment,e.item).join(' · ')+'</small><small>'+e.label+' · '+itemOwner(e.item)+'</small></div><button id="inventory-'+e.key.replace(':','-')+'" data-world="inventory-pick" data-key="'+e.key+'" class="secondary">ดู/เปรียบเทียบ</button></li>').join('');
     return '<div role="tabpanel"><h3>เปิดหน้าตัวละคร</h3><div class="tree-members">'+rosterIds(s).map(id=>'<button id="bag-member-'+id+'" data-world="character-open" data-hero="'+id+'" data-tab="gear" class="tree-member">'+portrait(id)+'<small>'+heroText[id]!.name+'</small></button>').join('')+'</div>'+picker+'<h3>อุปกรณ์ในกระเป๋า · '+entries.length+'/'+all.length+' ชิ้น</h3>'+gearFilterControls(this.inventoryFilters,'pack-')+(rows?'<ul class="pack-gear inventory-gear">'+rows+'</ul>':'<p class="camp-note">ไม่พบอุปกรณ์ตามตัวกรอง</p>')+'<p class="camp-note">เลือกชิ้นแล้วเลือกตัวละคร เพื่อเปรียบเทียบในหน้าตัวละครเดียวกัน</p></div>';
-  }
-  // Team tab: the same 4 + 4 swap grid as the camp; the picked member's details show underneath.
-  private bagTeam(s: ExpeditionState): string {
-    return this.campTeam(s, 'bag-team');
   }
   private heroDetail(_s: ExpeditionState, id: string, prefix = 'bag'): string {
     return '<div class="bag-detail character-links"><h3>'+heroText[id]!.name+'</h3>'+Object.entries({overview:'ดูตัวละคร',gear:'อุปกรณ์',skills:'สกิล',talents:'ผังสกิล'}).map(([tab,label])=>'<button id="'+(tab==='gear'?prefix+'-gear-of':prefix+'-character-'+tab)+'" data-world="character-open" data-hero="'+id+'" data-tab="'+tab+'" class="secondary">'+label+'</button>').join('')+'</div>';
@@ -516,33 +518,38 @@ export class WorldUI {
   }
   // Team presets on the map (owner 2026-11-06): saved at the camp, applied here outside battle among the members brought.
   private presetRow(s: ExpeditionState, prefix: string): string {
-    const presets = this.view?.presets ?? []; if (!presets.some(Boolean)) return `<p class="camp-note" id="${prefix}-preset-none">${icon('flag')} ตั้งชุดทีมได้ที่ค่าย (จัดทีม → ชุดทีม) แล้วสลับได้ที่นี่ในครั้งเดียว</p>`;
+    const presets = this.view?.presets ?? [];
     const busy = !!this.view?.locked || !canManage(s); const lanes = this.lanes(s); const carried = rosterIds(s);
-    const buttons = presets.map((preset, i) => {
-      if (!preset) return '';
-      const plan = runPresetPlan(s, preset); const on = matchesPreset(s.roster, preset, lanes);
+    const buttons = Array.from({ length: PRESET_SLOTS }, (_, i) => {
+      const preset = presets[i];
+      if (!preset) return `<button id="${prefix}-preset-${i}" class="preset-slot" disabled aria-label="ชุดทีมช่อง ${i + 1} ยังไม่บันทึก · บันทึกได้ที่ค่าย"><b>ชุด ${i + 1}</b><small>บันทึกที่ค่าย</small></button>`;
+      const plan = runPresetPlan(s, preset); const on = !!plan && matchesPreset(s.roster, { ...preset, ...plan.roster, lanes: plan.roster.lanes ?? {} }, lanes);
       const absent = plan?.absent ?? [...preset.deployed, ...preset.reserve].filter(id => !carried.includes(id));
       const down = plan ? plan.roster.deployed.filter(id => (s.hp[id] ?? 0) <= 0) : [];
       const tired = plan ? plan.roster.deployed.filter(id => fatigueCut(this.map, fatigueOf(s, id)) > 0) : [];
       const names = (ids: string[]) => ids.map(id => heroText[id]?.name ?? id).join(' ');
       const notes = [absent.length ? `ไม่ได้พามา ${names(absent)}` : '', down.length ? `ล้มอยู่ ${names(down)}` : '', tired.length ? `เหนื่อย ${names(tired)}` : ''].filter(Boolean);
-      return `<button id="${prefix}-preset-${i}" data-world="preset" data-slot="${i}" class="preset-slot${on ? ' current' : ''}" aria-pressed="${on}"${busy || !plan ? ' disabled' : ''} aria-label="ชุดทีม ${preset.name}${on ? ' · ใช้อยู่' : ' · แตะเพื่อใช้'}${plan ? '' : ' · ไม่มีคนในชุดนี้ที่พามาลงสนาม'}${notes.length ? ` · ${notes.join(' · ')}` : ''}"><b>${preset.name.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)}</b><small>${on ? `${icon('act-confirm')}ใช้อยู่` : notes.length ? `! ${absent.length ? `ขาด ${absent.length}` : down.length ? `ล้ม ${down.length}` : `เหนื่อย ${tired.length}`}` : 'แตะเพื่อใช้'}</small></button>`;
+      const label = preset.name.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+      return `<button id="${prefix}-preset-${i}" data-world="preset" data-slot="${i}" class="preset-slot${on ? ' current' : ''}" aria-pressed="${on}"${busy || !plan ? ' disabled' : ''} aria-label="ชุดทีม ${label}${on ? ' · ใช้อยู่' : ' · แตะเพื่อใช้'}${plan ? '' : ' · ไม่มีคนในชุดนี้ที่พามาลงสนาม'}${notes.length ? ` · ${notes.join(' · ')}` : ''}"><b>${label}</b><small>${on ? `${icon('act-confirm')}ใช้อยู่${absent.length ? ` · ขาด ${absent.length}` : ''}` : notes.length ? `! ${absent.length ? `ขาด ${absent.length}` : down.length ? `ล้ม ${down.length}` : `เหนื่อย ${tired.length}`}` : 'แตะเพื่อใช้'}</small></button>`;
     }).join('');
-    return `<h3>${icon('flag')} ชุดทีม <span class="camp-embers">สลับทั้งทีมนอกการต่อสู้ · ใช้เฉพาะคนที่พามา</span></h3><div class="preset-row" role="group" aria-label="ชุดทีม">${buttons}</div>`;
+    const missing = presets.flatMap(p => p ? [{ name: p.name, ids: [...p.deployed, ...p.reserve].filter(id => !carried.includes(id)) }] : []).filter(p => p.ids.length);
+    return `<h3>${icon('flag')} ชุดทีม <span class="camp-embers">สลับทั้งทีมนอกการต่อสู้ · ใช้เฉพาะคนที่พามา</span></h3><div class="preset-row" role="group" aria-label="ชุดทีม">${buttons}</div><p class="camp-note">บันทึกชุดทีมที่ค่าย · แตะชุดเพื่อสลับในครั้งเดียว ใช้เฉพาะสมาชิกที่พามา</p>${missing.map(p => `<p class="camp-note preset-missing">${p.name.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]!)} · ไม่ได้พามา: ${p.ids.map(id => heroText[id]?.name ?? id).join(' ')}</p>`).join('')}`;
   }
   private campTeam(s: ExpeditionState, prefix = 'team'): string {
+    const busy = !!this.view?.locked || !canManage(s);
     const card = (id: string | undefined, side: 'deployed' | 'reserve', slot: number) => {
-      if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-world="team-pick" data-side="${side}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} ว่าง` : 'ช่องสำรองว่าง'}"${this.picked ? '' : ' disabled'}><span>ว่าง</span></button>`;
+      if (!id) return `<button class="team-card empty${this.picked ? ' target' : ''}" data-world="team-pick" data-side="${side}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} ว่าง` : 'ช่องสำรองว่าง'}"${this.picked && !busy ? '' : ' disabled'}><span>ว่าง</span></button>`;
       const h = this.hero(id); const hp = s.hp[id] ?? 0; const text = heroText[id]!;
       const lane = laneName(this.lanes(s)[id] ?? h.lane);
       // P02 (OD-11, owner 2026-10-31): a fatigue dot in the corner (green fresh, yellow −10%, red −20%).
       const tired = fatigueOf(s, id), cut = fatigueCut(this.map, tired);
       const fatigue = `<span class="team-fatigue" data-fatigue="${tired}">${fatigueDot(cut)}</span>`;
-      return `<button id="${prefix}-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick" data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}${tired ? ` ความเหนื่อย ${tired}${cut ? ` โจมตีและรักษาลด ${cut}%` : ''}` : ''}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${levelOf(this.map, s)} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small>${fatigue}</button>`;
+      return `<button id="${prefix}-${id}" class="team-card${hp <= 0 ? ' fallen' : ''}" data-world="team-pick"${busy ? ' disabled' : ''} data-hero="${id}" data-side="${side}" aria-pressed="${this.picked === id}" aria-label="${side === 'deployed' ? `ช่อง ${slot + 1} · ` : 'สำรอง · '}${text.name} ${this.stars(s, id)} ดาว ${text.role} ${lane} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`}${tired ? ` ความเหนื่อย ${tired}${cut ? ` โจมตีและรักษาลด ${cut}%` : ''}` : ''}">${side === 'deployed' ? `<i class="slot-no">${slot + 1}</i>` : ''}${portrait(id)}<b>${text.name}</b>${this.starRow(this.stars(s, id))}<small>Lv${levelOf(this.map, s)} · ${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><small class="lane">${text.role} · ${lane}</small>${fatigue}</button>`;
     };
     const row = (ids: string[], side: 'deployed' | 'reserve', size: number) => Array.from({ length: size }, (_, i) => card(ids[i], side, i)).join('');
     const deployedUp = s.roster.deployed.some(id => s.hp[id]! > 0);
     return `<section class="camp-section team-section" role="tabpanel">
+        ${busy ? '<p class="camp-note" role="status">เปลี่ยนทีมและ Preset ไม่ได้ระหว่างการต่อสู้หรือเมื่อจบการเดินทาง</p>' : ''}
         ${this.presetRow(s, prefix)}
         <h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3>
         <div class="team-grid">${row(s.roster.deployed, 'deployed', PARTY_SLOTS)}</div>
@@ -550,7 +557,7 @@ export class WorldUI {
         <div class="team-grid">${row(s.roster.reserve, 'reserve', reserveCap(s))}</div>
         ${formationGrid({ prefix, attr: 'world', deployed: s.roster.deployed, lanes: this.lanes(s), recommended: this.recommended, picked: this.lanePick, disabled: !!this.view?.locked || !canManage(s), hp: id => s.hp[id] ?? 0 })}
         <p class="camp-note fatigue-legend">ความเหนื่อยล้า: ${fatigueDot(0)} ไม่ล้า · ${fatigueDot(10)} พลังโจมตี/รักษา −10% · ${fatigueDot(20)} −20% · ลงสนามศึกละ +1 สำรอง −1</p>
-        <p class="camp-note" id="${prefix}-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนในทีมหรือในแผนการยืน หรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ไม่ได้พาตัวสำรองมา · เลือกตัวสำรองได้ที่ค่ายก่อนออกเดินทาง'}</p>${this.picked&&rosterIds(s).includes(this.picked)?this.heroDetail(s,this.picked,prefix==='bag-team'?'bag':'camp'):''}</section>`;
+        <p class="camp-note" id="${prefix}-hint">${this.picked ? `เลือก${heroText[this.picked]!.name}แล้ว · แตะคนในทีมหรือในแผนการยืน หรือช่องว่างอีกฝั่งเพื่อสลับ แตะซ้ำเพื่อยกเลิก` : !deployedUp ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองที่ยังยืนอยู่หรือชุบก่อนออกเดินทาง' : s.roster.reserve.length ? 'แตะสมาชิก แล้วแตะคนหรือช่องว่างอีกฝั่งเพื่อสลับ' : 'ไม่ได้พาตัวสำรองมา · เลือกตัวสำรองได้ที่ค่ายก่อนออกเดินทาง'}</p>${this.picked&&rosterIds(s).includes(this.picked)?this.heroDetail(s,this.picked,prefix==='map-team'?'map-team':'camp'):''}</section>`;
   }
 
   private renderDanger(chance: number, before: number | undefined): void {
@@ -671,7 +678,7 @@ export class WorldUI {
       return r ? new DOMRect(r.x - bounds.x, r.y - bounds.y, r.width, r.height) : undefined;
     };
     let top = 0, bottom = h;
-    for (const sel of ['.hud-location', '.hud-top-right', '.hud-party', '.hud-objective', '.hud-pack']) { const r = rect(sel); if (r && band(r)) top = Math.max(top, r.bottom); }
+    for (const sel of ['.hud-location', '.hud-top-right', '.hud-party', '.hud-objective', '.hud-team', '.hud-pack']) { const r = rect(sel); if (r && band(r)) top = Math.max(top, r.bottom); }
     for (const sel of ['.hud-movement', '.hud-action', '#world-message']) { const r = rect(sel); if (r && band(r) && !(sel === '#world-message' && this.root.querySelector<HTMLElement>(sel)!.hidden)) bottom = Math.min(bottom, r.top); }
     const focusY = bottom - top >= 3 * t ? (top + bottom) / 2 : h / 2;
     const p = this.view.state.position;
@@ -699,7 +706,7 @@ export class WorldUI {
       <h3>เลือดติดตัว</h3><p>จบศึกแล้วเลือดไม่ฟื้นเอง สมาชิกที่ล้มยังล้มอยู่จนกว่าจะชุบที่แคมป์ ศึกถัดไปเริ่มด้วยเลือดที่เหลือ</p>
       <h3>${icon('camp')} แคมป์</h3><p>ยืนบนแคมป์แล้วกด “พัก” มุมขวาล่าง พักฟื้นได้ ${this.map.camp.restHealPercent}% ครั้งเดียวจนกว่าจะชนะศึกถัดไป คนที่ล้มต้องใช้ถ่านคืนชีพชุบทีละคน แคมป์ล่าสุดที่ไปถึงคือจุดกลับเมื่อแพ้</p>
       <h3>${icon('chest')} ของตกและกล่องสมบัติ</h3><p>ชนะศึกได้แร่ดาวและบางครั้งได้ถ่านคืนชีพ ยืนบนกล่องแล้วกด “เปิด” กล่องหายากมีตราสัญญา ดูของที่มีได้จากช่องสัมภาระ</p>
-      <h3>${icon('flag')} ทีมและตัวสำรอง</h3><p>พาเข้าด่านได้ 4 + 4 คนจากค่าย สลับตัวและเปลี่ยนอุปกรณ์ได้ในกระเป๋าทุกที่นอกการต่อสู้ ศัตรูเล็งตามหมายเลขช่อง ใครยืนช่องนั้นคือเป้า (กายภาพยังโดนแนวหน้าก่อน)</p>
+      <h3>${icon('flag')} ทีมและตัวสำรอง</h3><p>ลงสนามได้สูงสุด 5 คน สำรองตามความคืบหน้าสูงสุด 5 คน · เปิด “ทีม” (T) เพื่อสลับสมาชิก ใช้ Preset และจัดแผนการยืน · เปิด “กระเป๋า” (B) เพื่อดูของและอุปกรณ์ ทุกอย่างเปลี่ยนได้เฉพาะนอกการต่อสู้ ศัตรูเล็งตามหมายเลขช่อง ใครยืนช่องนั้นคือเป้า (กายภาพยังโดนแนวหน้าก่อน)</p>
       <h3>เมื่อแพ้</h3><p>ทีมถอยกลับแคมป์ล่าสุดที่ไปถึง (หรือทางเข้า) คนที่ล้มยังล้มอยู่ ต้องชุบหรือสลับตัวสำรอง ถ้าทุกคนที่พามาล้มหมด การเดินทางล้มเหลว กลับค่ายพร้อมแร่ดาวและตราครึ่งเดียว</p>
       <h3>${icon('camp')} กลับค่าย</h3><p>ถอนตัวได้ที่แคมป์หรือทางเข้าด่าน ของที่เก็บได้กลับค่ายครบ ไปถึง${this.map.goalName}คือสำเร็จการเดินทาง</p>
       ${this.map.elites.length ? `<h3>${icon('boss')} อีลิท</h3><p>อีลิทขอบแดงเฝ้าด่านทางเดียว ต้องชนะถึงจะผ่าน · อีลิทขอบทองที่มีหีบเหนือหัวเดินอ้อมได้ แต่ถ้าท้าสู้แล้วชนะจะได้ EXP ×${this.map.eventRules.optionalElite.exp} อุปกรณ์ชั้นดีกว่า เหรียญทอง +${this.map.eventRules.optionalElite.gold} และตราสัญญา +${this.map.eventRules.optionalElite.seal}</p>` : ''}

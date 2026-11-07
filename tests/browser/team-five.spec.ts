@@ -82,7 +82,7 @@ for (const id of ['rift-legion', 'thorn-host']) test(`5v5 field ${id} at 390px: 
   expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.battle.commands.length, key)).toBe(2);
   expect(errors).toEqual([]); await context.close();
 });
-test('map bag team tab: five on the field, the reserve and fatigue at 390px', async ({ browser }) => {
+test('map team dialog: five on the field, the reserve and fatigue at 390px', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce', deviceScaleFactor: 2 });
   const page = await context.newPage(); const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await open(page, null);
@@ -91,7 +91,7 @@ test('map bag team tab: five on the field, the reserve and fatigue at 390px', as
   if (dir) await page.screenshot({ path: `${dir}/team-five-bag-items-390.png` });
   await page.locator('#potion-calm').click(); await page.locator('#calm-guardian').click();
   await expect.poll(() => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.fatigue.guardian, key)).toBe(3);
-  await page.locator('#bag-tab-team, [role=tab]:has-text("ทีม")').first().click();
+  await page.locator('[data-world=pack-close]').click(); await page.locator('#world-team').click();
   await expect(page.locator('.team-fatigue[data-fatigue]').first()).toBeVisible();
   expect(await page.locator('.team-grid').first().evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(3);
   expect(await page.locator('.team-card b, .team-card small').evaluateAll(els => els.filter(e => e.scrollWidth > e.clientWidth + 1).map(e => e.textContent))).toEqual([]);

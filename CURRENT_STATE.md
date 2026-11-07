@@ -13,9 +13,10 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **SYSTEM-UNLOCK-PACING-002 complete (2026-11-07, PR #202, merge `f05754c`):** approved follow-up to audit #201: quests after MAP 1; hiring/market/hunt after MAP 2; advanced services explicitly MAP 3 so future maps cannot silently move existing rights. Team remains MAP 1. Quality + browser passed. No save/battle/balance change. Evidence: `docs/validation/system-unlock-pacing/README_TH.md`.
+- **MAP-TEAM-CHARACTER-TABS-001 (owner 2026-11-07):** separate map team HUD/dialog (T), bag items/gear (B), one-tap carried-only presets; direct tree tab, MAP 4 character tabs/camp 5, development stays camp-only. No rules/save/balance change. Evidence: `docs/validation/map-team-character-tabs/README_TH.md`.
+- Unlock pacing #202: quests/team MAP 1; hiring/market/hunt MAP 2; advanced services/hard explicitly MAP 3. Rights follow cleared history.
 
-- **Team presets + team page** (owner 2026-11-06, PR #196, save v56): 4 named presets (draft) — one tap applies at the camp (reserve by chapter, overflow waits in the camp) or in the map bag outside battle (members brought only); camp page = presets → field → reserve → formation → characters in camp, one-tap field/reserve/camp moves. Evidence and research table `docs/validation/team-presets-2026-11-06/README_TH.md`. Owner has the 390px before/after images; owner review of the feel is open.
+- **Team presets + team page** (owner 2026-11-06, PR #196, save v56): 4 named presets (draft) — one tap applies at the camp (reserve by chapter, overflow waits in the camp) or in the separate map team dialog outside battle (members brought only); camp page = presets → field → reserve → formation → characters in camp, one-tap field/reserve/camp moves. Evidence and research table `docs/validation/team-presets-2026-11-06/README_TH.md`. Owner has the 390px before/after images; owner review of the feel is open.
 - Skill rework step 6 done (#191–#193, #195, #198; README §9 `docs/validation/skill-rework-2026-11-05/README_TH.md`); the campaign gate now reads the whole campaign (owner 2026-11-06).
 
 ## Next (owner order)
@@ -41,4 +42,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-อ่าน AGENTS.md, CLAUDE.md และ CURRENT_STATE.md ใน wnau34-nptrn/asterveil-fateweave จาก feature/fateweave-initial-prototype แล้วรอเจ้าของเลือกงานถัดไป ไม่เริ่ม P09 หรืองานภาพเอง; pacing ล่าสุดที่เจ้าของอนุมัติและผลตรวจอยู่ใน docs/validation/system-unlock-pacing/README_TH.md
+อ่าน AGENTS.md, CLAUDE.md และ CURRENT_STATE.md ใน wnau34-nptrn/asterveil-fateweave จาก feature/fateweave-initial-prototype แล้วรอเจ้าของเลือกงานถัดไป ไม่เริ่ม P09 หรืองานภาพเอง; ผลแยกทีมบน MAP และแท็บตัวละครอยู่ใน docs/validation/map-team-character-tabs/README_TH.md; pacing ล่าสุดอยู่ใน docs/validation/system-unlock-pacing/README_TH.md

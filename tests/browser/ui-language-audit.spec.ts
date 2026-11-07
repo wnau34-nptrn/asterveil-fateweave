@@ -111,7 +111,7 @@ for (const [w, h] of sizes) test(`ui language audit ${w}x${h}`, async ({ browser
     const cclose = async () => { for (let i = 0; i < 3 && await page.locator('[data-world="character-close"]').first().isVisible().catch(() => false); i++) { await page.keyboard.press('Escape'); await page.waitForTimeout(150); const c = page.locator('[data-world="character-close"]').first(); if (await c.isVisible().catch(() => false)) await c.click({ timeout: 2000 }).catch(() => undefined); } };
     await shot(page, '16-character-overview', () => click(page, '#team-character-guardian'));
     for (const tab of ['gear', 'skills', 'develop'] as const) await shot(page, `16-character-${tab}`, () => ctab(tab));
-    await shot(page, '17-character-skills-tree', async () => { await ctab('skills'); await page.locator('[data-world="skill-section"]').nth(1).click({ timeout: 3000 }); });
+    await shot(page, '17-character-skills-tree', async () => { await ctab('talents'); });
     await shot(page, '17b-character-tome-trade', async () => { await page.locator('[data-world="skill-section"]').last().click({ timeout: 3000 }); });
     await shot(page, '18-star-page', async () => { await ctab('develop'); await page.locator('[data-world="character-star-open"]').first().click({ timeout: 3000 }); });
     await shot(page, '18b-star-review', () => page.locator('[data-world="star-review"]').first().click({ timeout: 3000 }));
