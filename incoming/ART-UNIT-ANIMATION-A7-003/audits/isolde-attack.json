@@ -1,0 +1,60 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "isolde-attack": [
+   {
+    "frame": 0,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 2,
+    "height": 459,
+    "scale": 1.03,
+    "inliers": 118,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 430,
+    "scale": 1.063,
+    "inliers": 125,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 417,
+    "scale": 1.048,
+    "inliers": 75,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 520,
+    "scale": 0.997,
+    "inliers": 152,
+    "status": "ok"
+   },
+   {
+    "frame": 6,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   }
+  ]
+ }
+}

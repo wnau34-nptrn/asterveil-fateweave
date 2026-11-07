@@ -1,0 +1,107 @@
+{
+  "odran-attack": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Inspected chronological contact sheets and same-scale seed comparison; implement complete, costume/face consistent, no painted effects. Ready/reset cells locked to seed except down."
+  },
+  "odran-arc": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Inspected chronological contact sheets and same-scale seed comparison; implement complete, costume/face consistent, no painted effects. Ready/reset cells locked to seed except down."
+  },
+  "odran-communion": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Frames 2/3 inspected enlarged: bowed head and left-facing offering; original head size and costume retained, neither is an automated pass.",
+    "notMeasuredFrames": [
+      2,
+      3
+    ]
+  },
+  "odran-lastlight": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Inspected chronological contact sheets and same-scale seed comparison; implement complete, costume/face consistent, no painted effects. Ready/reset cells locked to seed except down."
+  },
+  "odran-hit": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Inspected chronological contact sheets and same-scale seed comparison; implement complete, costume/face consistent, no painted effects. Ready/reset cells locked to seed except down."
+  },
+  "odran-block": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Inspected chronological contact sheets and same-scale seed comparison; implement complete, costume/face consistent, no painted effects. Ready/reset cells locked to seed except down."
+  },
+  "odran-down": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Frames 3/4 inspected enlarged against standing seed: sideways collapse and closed-eye unconscious hold; full body and gauntlets retained; head not enlarged. Not automatically measured.",
+    "notMeasuredFrames": [
+      3,
+      4
+    ]
+  },
+  "isolde-attack": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Inspected chronological contact sheets and same-scale seed comparison; implement complete, costume/face consistent, no painted effects. Ready/reset cells locked to seed except down."
+  },
+  "isolde-partner": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Inspected chronological contact sheets and same-scale seed comparison; implement complete, costume/face consistent, no painted effects. Ready/reset cells locked to seed except down."
+  },
+  "isolde-circle": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Frame 3 inspected enlarged: intended back three-quarter turn; hair/head contour and costume consistent, full staff including attached bell streamers retained. Not automatically measured.",
+    "notMeasuredFrames": [
+      3
+    ]
+  },
+  "isolde-closing": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Inspected chronological contact sheets and same-scale seed comparison; implement complete, costume/face consistent, no painted effects. Ready/reset cells locked to seed except down."
+  },
+  "isolde-echo": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Inspected chronological contact sheets and same-scale seed comparison; implement complete, costume/face consistent, no painted effects. Ready/reset cells locked to seed except down."
+  },
+  "isolde-hit": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Inspected chronological contact sheets and same-scale seed comparison; implement complete, costume/face consistent, no painted effects. Ready/reset cells locked to seed except down."
+  },
+  "isolde-block": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Inspected chronological contact sheets and same-scale seed comparison; implement complete, costume/face consistent, no painted effects. Ready/reset cells locked to seed except down."
+  },
+  "isolde-down": {
+    "reviewed": true,
+    "reviewer": "Codex",
+    "ownerApproval": false,
+    "notes": "Frames 3/4 inspected enlarged: collapse and fully prone unconscious hold, body full standing-seed length, staff alongside complete. Head retains seed proportions by eye; not automatically measured.",
+    "notMeasuredFrames": [
+      3,
+      4
+    ]
+  }
+}

@@ -1,0 +1,1366 @@
+{
+  "schema": 1,
+  "files": {
+    "NOTES.md": {
+      "sha256": "b36f978939e8c30a043b63016d119a45e759d1fe3190a4da75d037f55df3a217",
+      "bytes": 11208
+    },
+    "audits/isolde-attack.json": {
+      "sha256": "e101ce774a221a4658ecee4192541735ae5e33f9a62d78702f715947fe7467c3",
+      "bytes": 873
+    },
+    "audits/isolde-attack.stdout.txt": {
+      "sha256": "578674810e548f3cc948c2c6115faa3db6b35d41491d8570103d6d2b3468ba02",
+      "bytes": 66
+    },
+    "audits/isolde-block.json": {
+      "sha256": "31c08e37201302da164d812667720d4d1042ba9a5e02dc5b9a4e59abcc44382e",
+      "bytes": 663
+    },
+    "audits/isolde-block.stdout.txt": {
+      "sha256": "63cb4e40068f6da6ff4731bc40eb0c888908e4f6ae0682188203b483c1e72697",
+      "bytes": 65
+    },
+    "audits/isolde-circle.json": {
+      "sha256": "eca99737dc158520c6ff4f00c8827d288ff9f82ffa2c1d85ff6ce365713c6d21",
+      "bytes": 879
+    },
+    "audits/isolde-circle.stdout.txt": {
+      "sha256": "933795dd98c47cc84c70740fb41eccda2449c399ca5e19411c18f80ebf169747",
+      "bytes": 67
+    },
+    "audits/isolde-closing.json": {
+      "sha256": "1be1cd433e7555ee9dffbc5bb77fae7b1f0af0feacd63d7b595d25481bf37343",
+      "bytes": 872
+    },
+    "audits/isolde-closing.stdout.txt": {
+      "sha256": "55f38a7f1bf7748b22bcc9d214c981bba5f29cdea7a364c17930a151c0a066e6",
+      "bytes": 67
+    },
+    "audits/isolde-down.json": {
+      "sha256": "0dc71e829e2e01f1ed0fcae9abfebabceef357e6a0b539eb9315a6561cbb9efc",
+      "bytes": 636
+    },
+    "audits/isolde-down.stdout.txt": {
+      "sha256": "20aa464aceac30f44e7018c00dbf4fe48c51c5de9a278d91a3fbbfe462e99e5b",
+      "bytes": 68
+    },
+    "audits/isolde-echo.json": {
+      "sha256": "03563468f5bd332b1c95ff14f624d37e4d800681cbf464470ea40fc95339c049",
+      "bytes": 869
+    },
+    "audits/isolde-echo.stdout.txt": {
+      "sha256": "1d80f584abbb8c8e7d18feb46047c08f2fafabdc5e86386b7fc66123548b0195",
+      "bytes": 64
+    },
+    "audits/isolde-hit.json": {
+      "sha256": "554a3dd829b46685e8ca21f69594bc3f3c3b415ffe22e499c37bbbf557163514",
+      "bytes": 660
+    },
+    "audits/isolde-hit.stdout.txt": {
+      "sha256": "3b4f44f375c9e5709344929a77273ea55b6d16d3eb8b94c5701a3e320974dd02",
+      "bytes": 63
+    },
+    "audits/isolde-partner.json": {
+      "sha256": "b7aef86a999bf03b91d0171ecbe4f7523d948ddde94f582745cbcd827415ec2b",
+      "bytes": 873
+    },
+    "audits/isolde-partner.stdout.txt": {
+      "sha256": "b0004fdc09d1c43b6b538b3d05969198e7ab422bca619b68133a26236d199cb9",
+      "bytes": 67
+    },
+    "audits/odran-arc.json": {
+      "sha256": "377239deced6077f5c5bd856830376bf64ce60c0fb112e829eb31ac713568714",
+      "bytes": 867
+    },
+    "audits/odran-arc.stdout.txt": {
+      "sha256": "7ab5dfb62e58f77ea2a0fd73aa1b646607eefeae59af6fd43155c4b9ba545f5a",
+      "bytes": 62
+    },
+    "audits/odran-attack.json": {
+      "sha256": "741650be55ad7fabf99156d7cad475b5c8a5aeee5de8b4f9efc0094c7fbeaaa6",
+      "bytes": 870
+    },
+    "audits/odran-attack.stdout.txt": {
+      "sha256": "a00bc073f43abc5d335ad3bde7d46caa4fe9aa86da670772181c43d1844cab77",
+      "bytes": 65
+    },
+    "audits/odran-block.json": {
+      "sha256": "a1b0f00a92074d9b50f3532aee873b0e4a333902cf7e969dd8b2116294252ce4",
+      "bytes": 661
+    },
+    "audits/odran-block.stdout.txt": {
+      "sha256": "ea50ce16e9576432b13d33b963deedee28f8ab79f40c7d80eb118d62e592042e",
+      "bytes": 64
+    },
+    "audits/odran-communion.json": {
+      "sha256": "a7ee53afac779f6f676eabe71e0472668fc6652a3822ae1ae8ea58bd438403fe",
+      "bytes": 891
+    },
+    "audits/odran-communion.stdout.txt": {
+      "sha256": "d9021ea912c36556da3dabe0278c66bfdcad11f7d4e0dc8aa6ca2deae6baf477",
+      "bytes": 72
+    },
+    "audits/odran-down.json": {
+      "sha256": "9c30a878b1556e8adb893d69833ae91377323f426cb04e135aa7effcf8ecff8e",
+      "bytes": 636
+    },
+    "audits/odran-down.stdout.txt": {
+      "sha256": "93f09a81a8ff1133bb157e1c940920a741ec785dd301f91f7b29d8ffd51a5965",
+      "bytes": 67
+    },
+    "audits/odran-hit.json": {
+      "sha256": "3f62549bc3fe0e25588e15a5f22ac0b992379f8e1cfa02323f91432c7d2cc10d",
+      "bytes": 660
+    },
+    "audits/odran-hit.stdout.txt": {
+      "sha256": "d613beccd79a37a4682e1a527a7a2b560219aa9a2ea70f50a494268d3e9d6161",
+      "bytes": 62
+    },
+    "audits/odran-lastlight.json": {
+      "sha256": "b91204b5034206bf4c4438653fa22f71b120d7028f789245ee38e11ccfc326b8",
+      "bytes": 873
+    },
+    "audits/odran-lastlight.stdout.txt": {
+      "sha256": "a96d56a9e7b8545818c62e9b23aa063d8c9a438a21d762086e7be8e8fb6ceb95",
+      "bytes": 68
+    },
+    "audits/rejected-r1/odran-arc.json": {
+      "sha256": "ba312dda5e7994ec3766fa59125fdde10997c314b66fcbbe375b0f9668b1e9f8",
+      "bytes": 869
+    },
+    "audits/rejected-r1/odran-arc.stdout.txt": {
+      "sha256": "87a96925e5ee5e9e314feacf8b719f5f4e9203cf7f48297d52fc807e25e12fa8",
+      "bytes": 71
+    },
+    "audits/rejected-r1/odran-communion.json": {
+      "sha256": "8a1072b31149121584503b31c286c8215f60ead32b18199c7e2ed42a460acb86",
+      "bytes": 891
+    },
+    "audits/rejected-r1/odran-communion.stdout.txt": {
+      "sha256": "5fce30cc615bfea6206b1af525d0047e9b5bcaaeb3699ead08160b1f4cc56ade",
+      "bytes": 72
+    },
+    "audits/rejected-r1/odran-lastlight.json": {
+      "sha256": "386e82e2b14434e09100311bd126d7c111d0f6dfbf9df17e7635f89ae691919d",
+      "bytes": 879
+    },
+    "audits/rejected-r1/odran-lastlight.stdout.txt": {
+      "sha256": "a3056947bc0ef30f6eefd7b196217e25dce6703ddd29deb80d32ee02c48e5972",
+      "bytes": 90
+    },
+    "audits/summary.json": {
+      "sha256": "cce2314f2fa5bcee0d31ce1b2817cb76ada48becdb664b61a383f81f30fbcaac",
+      "bytes": 2488
+    },
+    "build_handoff.py": {
+      "sha256": "f5a5b52bc3c56bd2f832b2bf01f8cfcaee02694b49588de5da4da10ab9704df1",
+      "bytes": 10316
+    },
+    "cells/isolde-attack/000.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-attack/001.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-attack/002.png": {
+      "sha256": "7cce99d94d6e18b6d5056a0f88a400637a75196a5c9c44a42854ae2ad04b3c18",
+      "bytes": 282845,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-attack/003.png": {
+      "sha256": "74401c0cd474e59fc52357cd3abf085607c55ae97449894abb90b5700094b6aa",
+      "bytes": 283849,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-attack/004.png": {
+      "sha256": "bc15cb4efa094ede1c035efe060608202f2d82db3ebc6c82acca1af877117ce7",
+      "bytes": 288107,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-attack/005.png": {
+      "sha256": "3072a5242eda7276bd02a0736d55dae4e5f8e32dbe30746919f40fb2ef5bd6bd",
+      "bytes": 272549,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-attack/006.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-block/000.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-block/001.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-block/002.png": {
+      "sha256": "19bf071db913a97eef54455ffd9b2f1ea2beab063b2f004d24cbe082f03c9525",
+      "bytes": 296867,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-block/003.png": {
+      "sha256": "b0da3fd319f5567380e019a813cb5ff5b40d794ec63129f3b2b9f39bf79eb2cb",
+      "bytes": 252217,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-block/004.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-circle/000.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-circle/001.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-circle/002.png": {
+      "sha256": "bcfef076565a8edc3a04e9b2f6777894a024c4ab04551a3b95d2b89574fae063",
+      "bytes": 292685,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-circle/003.png": {
+      "sha256": "ad2339ff39c9309b4c71da563df6f297e9aa77430c0d4cc7cbd16ae3916c2ebf",
+      "bytes": 289021,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-circle/004.png": {
+      "sha256": "b1ea839d433783eca6c46f1892ebe94459901edbff7cb80f7fb99c1647394907",
+      "bytes": 297142,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-circle/005.png": {
+      "sha256": "ed2afaaf69ed286b1355c33b72b294764acd3af3efa31f304d9c7f801c59122e",
+      "bytes": 300850,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-circle/006.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-closing/000.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-closing/001.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-closing/002.png": {
+      "sha256": "91d47a4b988fa242e086fa04beefed2de67d200efc99a00421368b916b43565c",
+      "bytes": 295844,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-closing/003.png": {
+      "sha256": "1bd4a8f7ccacc5cb0e974ace6204e9d79b7e245239f745b9c74613454e85f80a",
+      "bytes": 305928,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-closing/004.png": {
+      "sha256": "73c00e7d1eae19c6c6f25499edf0b4d19d22182f99563d3c28a781b5e3ff8ff8",
+      "bytes": 269427,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-closing/005.png": {
+      "sha256": "4faea5cd99dd047f7096aa455a157e751767c74dd011da7bb487982aac1092bc",
+      "bytes": 245258,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-closing/006.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-down/000.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-down/001.png": {
+      "sha256": "0abab7dcf3dd4efe1f36887718fb5d806ea748510900ca1864b3bf442a8de94f",
+      "bytes": 332382,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-down/002.png": {
+      "sha256": "c8b0a9130549efee4d1aaaaa0296bb10a107d562030809733b7cefb27cc28a79",
+      "bytes": 287923,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-down/003.png": {
+      "sha256": "faa68c2930c43a73179a8639de4969fe445dfbe3dbd62b6d3d83e67e6d4ec83c",
+      "bytes": 267904,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-down/004.png": {
+      "sha256": "c01cd4d11278b7c129ba466cfb95610d47695efddc9907019943d7497d181dcb",
+      "bytes": 247035,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-echo/000.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-echo/001.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-echo/002.png": {
+      "sha256": "0bcb804a9fd01b2b23c1357003c4257e2c8ddc87189b8f8ee58561121a454b74",
+      "bytes": 275971,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-echo/003.png": {
+      "sha256": "f9f396e2ce845ac115933be5eab2707ec8a5c48808e61a614545e514f747d414",
+      "bytes": 301620,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-echo/004.png": {
+      "sha256": "5495d2a2f2d6e49da6c0b10e2c88db60ca0df26ee97b4fb4b8476e72b127fb3d",
+      "bytes": 261880,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-echo/005.png": {
+      "sha256": "16c35bc767557008c9a235a1ef02fb8e9ab8be58e2558ac17f1fa2c2222d205e",
+      "bytes": 306142,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-echo/006.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-hit/000.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-hit/001.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-hit/002.png": {
+      "sha256": "3555cc6664ed77049f08229e6a0f8c6cd3f8fe869a508cb594cb6e20a15d5c0a",
+      "bytes": 280292,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-hit/003.png": {
+      "sha256": "d7c730b350c7002ba1bd11bd3628abb4f2534ebe4491da864dcc525e7e04f8f9",
+      "bytes": 263071,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-hit/004.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-partner/000.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-partner/001.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-partner/002.png": {
+      "sha256": "5b652346497cc8ce17731afe5f12c4923f42446972f86415f59e3aa23b18115e",
+      "bytes": 261096,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-partner/003.png": {
+      "sha256": "33a31a0bb0432833207400744ce558922c0470eb641f1dc8b979b85d6a873792",
+      "bytes": 282080,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-partner/004.png": {
+      "sha256": "59b313e162f282534238aeb0720419173bbfc93f4170c244b5294119a3722375",
+      "bytes": 267450,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-partner/005.png": {
+      "sha256": "f7ea715b9a2d167bf1c5a83719e17fc65d27d0939e79eda89efc683e85672004",
+      "bytes": 252919,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/isolde-partner/006.png": {
+      "sha256": "536ae1a7f4203e9c88eda8f27d297503c2ffe9f3de59f0161e577fa1fcaafc00",
+      "bytes": 274590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-arc/000.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-arc/001.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-arc/002.png": {
+      "sha256": "66ee20b2d329bbd7c5ff565875fa5a538623748cf9ad7c02b1381c5f388e735e",
+      "bytes": 290148,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-arc/003.png": {
+      "sha256": "696294ad1b966c46771413c4f43493884011daf01b11cda66e0583ae54f74363",
+      "bytes": 333976,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-arc/004.png": {
+      "sha256": "5c28b1a091708c6c53a53cc7ad5f86cf46b6d6b6212b701cad0fe109fc9eef01",
+      "bytes": 317520,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-arc/005.png": {
+      "sha256": "fd2fb5ac3374d04b741cbedb72e5955d6f7c3329e4e6e7d44787a84237746a2e",
+      "bytes": 318834,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-arc/006.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-attack/000.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-attack/001.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-attack/002.png": {
+      "sha256": "03c09f4129e04f0d5dee8fe32cfb4ea7dccec168a9d0ff02eb5ef812e49b559b",
+      "bytes": 357131,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-attack/003.png": {
+      "sha256": "6c55d94838c04f8b87946de6b2df5b76091bca7c3748f761a7bbebad6bf39c0f",
+      "bytes": 369311,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-attack/004.png": {
+      "sha256": "55ce61e5f4f8e6658033af0ff926ff7c09b97c2c13700bc412ef01866db0255d",
+      "bytes": 375724,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-attack/005.png": {
+      "sha256": "64be55d10fee48b1f8cce093b9a261a5abadb7afc010f4ae8d240e8bfb9672c9",
+      "bytes": 319644,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-attack/006.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-block/000.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-block/001.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-block/002.png": {
+      "sha256": "e34abe52a8ac7186bca9825d2c2333138b183f1a3660a7ff6329c348fd76530d",
+      "bytes": 317169,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-block/003.png": {
+      "sha256": "8481b0bdffbbf5ba218a1db5b6bd0261091de1fd36d07a97a548ff0d115e5beb",
+      "bytes": 287748,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-block/004.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-communion/000.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-communion/001.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-communion/002.png": {
+      "sha256": "d7ff51712e62cd8c35624438c3cf4cb9c93f6fce84f5976939344a4f95776088",
+      "bytes": 316311,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-communion/003.png": {
+      "sha256": "333a018a54c7198a0712c91b17e7315bd6fc97cb903ea1e7f41544d54e3bab93",
+      "bytes": 353510,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-communion/004.png": {
+      "sha256": "e18b5cd028859d76d2dd7c03b0dad35719003d2007edfbe37aad1179f71487c0",
+      "bytes": 347869,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-communion/005.png": {
+      "sha256": "39008a5a81cfee1b6826a82ce6e4df49b6be8b034a74c5ead3a17e852c73167b",
+      "bytes": 306800,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-communion/006.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-down/000.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-down/001.png": {
+      "sha256": "c4227e0574b1e30cedbfd41db990fd94bf70da2c214963c027017551054c9cc2",
+      "bytes": 334074,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-down/002.png": {
+      "sha256": "e75d4415114b0289b56d4feaad8941fe1e15356306117f3d957a3d3bf7c90864",
+      "bytes": 299437,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-down/003.png": {
+      "sha256": "d51b779ed70b5cbe24224f5859a6e6b838956a51f50a4bf29a9f152813ef1601",
+      "bytes": 288214,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-down/004.png": {
+      "sha256": "788e96baa6d0ad710428d13a79eec3ac14376953908daa1508f9625c3d319090",
+      "bytes": 226960,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-hit/000.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-hit/001.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-hit/002.png": {
+      "sha256": "88f284cee417db803403a8f89afc8ad75dffac873cad133f98f0d200cbf548b5",
+      "bytes": 317045,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-hit/003.png": {
+      "sha256": "0cd5c5f2bf35716938097c41a2400688d4b744ea5380b2447d7d84ac5c7f73df",
+      "bytes": 356464,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-hit/004.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-lastlight/000.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-lastlight/001.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-lastlight/002.png": {
+      "sha256": "a8e8b8ba3c4732b2a1d3320aa863c929015ab05515acda493bf85080d2735b43",
+      "bytes": 285021,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-lastlight/003.png": {
+      "sha256": "5fb26075e6065093566bfe00c9efab1ab98b087ad1a95092061a6caef866c17f",
+      "bytes": 359454,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-lastlight/004.png": {
+      "sha256": "ba8d04855543d0580a027096bdc6bf8f324c1487938732d5709879b2baa30293",
+      "bytes": 432276,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-lastlight/005.png": {
+      "sha256": "a33cf5c1d73695872e91db25320aa3546e1a0559a04099e2b84ea3e4b2cc42f6",
+      "bytes": 314731,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "cells/odran-lastlight/006.png": {
+      "sha256": "ca3577c70c0a2787222b8080491555e1db462c412e116585d536803165273a57",
+      "bytes": 392049,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "isolde-preview-390.png": {
+      "sha256": "3c8cd9684028d82d9903b63a9be2dc138df1c8bc50d9458662ff98408bc1e948",
+      "bytes": 415222,
+      "size": [
+        390,
+        2922
+      ],
+      "mode": "RGB"
+    },
+    "odran-preview-390.png": {
+      "sha256": "5aa9aa0466dbdb74bad2fad35b1b8957f79880c45fbfa6e5f20b9b95fe1b45bf",
+      "bytes": 418161,
+      "size": [
+        390,
+        2508
+      ],
+      "mode": "RGB"
+    },
+    "prompts.json": {
+      "sha256": "0f5900ef1aa87cca4866a10aca3967f64d859e08a21d74908f43c3cbfa3a7f20",
+      "bytes": 39924
+    },
+    "raw/isolde-attack-r1.png": {
+      "sha256": "698373c2820a66134cbd436dcdbd169af5042f65c2feee067e965c67f98f20e8",
+      "bytes": 1572761,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/isolde-block-r1.png": {
+      "sha256": "bbe2f6d7699ea6fb54b8dd16b4e7b92cdf2b086580a75b6413b071a4253ebeb7",
+      "bytes": 1292258,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/isolde-circle-r1.png": {
+      "sha256": "e558f3abb6fd888d176843593a5905b8bd6c3471c041ad81bfb726a27b9dcb9f",
+      "bytes": 1694175,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/isolde-closing-r1.png": {
+      "sha256": "d487ac7b903193079c3662a01f9068a604a0b4a03024a467bd5b162d720a073c",
+      "bytes": 1771323,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/isolde-down-r1.png": {
+      "sha256": "1f049b321d1bbe605a0b33310f736313046fbbc0cd9605733be99c1653413dd9",
+      "bytes": 1054924,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/isolde-echo-r1.png": {
+      "sha256": "8a108a8648d9825491eacfd5c52ad40286166f4cfa62acdf0579369443209e63",
+      "bytes": 1830224,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/isolde-hit-r1.png": {
+      "sha256": "9cd84a7eef5dd91bc3bae5890be62bfd9e9808a27a8035376e2ba1a6506fd02b",
+      "bytes": 1239069,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/isolde-partner-r1.png": {
+      "sha256": "1b15b7dc347b91f2f4183cb8219dede7399e657d0f52e14d0a73214e9cc536aa",
+      "bytes": 1840769,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/odran-arc-r1-corrected.png": {
+      "sha256": "f60727bb09203b4b70888454d35c17fbd07d10449f5bf2ae0cd4d82a06deece9",
+      "bytes": 1585303,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/odran-arc-r1.png": {
+      "sha256": "d3086a2e3ad2bca144c44c835b9150104daa4ef6ebbd6d5ccca1f43d366c170d",
+      "bytes": 1572581,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/odran-attack-layout-rejected.png": {
+      "sha256": "659913b8ebefce268928e2f6a5f5f215a9413fa8a9802fe7ac0dc3b95488ad27",
+      "bytes": 1822718,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/odran-attack-r1.png": {
+      "sha256": "5a534ef696929424cf5d79ca573913569688d71477256166465c29d0758a6997",
+      "bytes": 1452666,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/odran-block-r1.png": {
+      "sha256": "2722c6ad4ea6aca5ac52c5c08a0cd33ece739dac4b8d69459d946bd25f44053f",
+      "bytes": 1254903,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/odran-communion-r1-corrected.png": {
+      "sha256": "211477e84174355be4cfba87e720f8c489ccda2e06fd347bfc113efb56b03727",
+      "bytes": 1535098,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/odran-communion-r1.png": {
+      "sha256": "c6b690f54313a725541e2a1f2a3ff15c7e0c84b145c159fbc2239a2e9ca32d33",
+      "bytes": 1668289,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/odran-down-r1.png": {
+      "sha256": "4c429bbacd8182eef371c69ff6cca1dc0544294e72c08f62249ae224838edc2f",
+      "bytes": 1058574,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/odran-hit-r1.png": {
+      "sha256": "7e3eb4d428660b1a3cf949d6fe1ee998029af4bd8a2328a615258314b003a3bb",
+      "bytes": 1286509,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/odran-lastlight-r1-corrected.png": {
+      "sha256": "4b8b0f4df4c02450084bd9f11737c22530bd71c8192acaf811ff4749bb616159",
+      "bytes": 1615248,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "raw/odran-lastlight-r1.png": {
+      "sha256": "3010d20b55ed1c06e6004968e71a5c7598001c6680e64132b82f64571c2436c0",
+      "bytes": 1560331,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/isolde.png": {
+      "sha256": "e6d80253147ac8b0cd52edae6c211417fb30779b89b2524963ee724f12b530ba",
+      "bytes": 265035,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/odran.png": {
+      "sha256": "ca7a30b361eb8e7fd8764cacfd7e56b7cd3f13d3a701586b0b7ee54a92a61ccf",
+      "bytes": 377751,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds.json": {
+      "sha256": "7d1a21088a3e40e9279574b2c472acd04e9fa121275ca2b2c0d4111142a69316",
+      "bytes": 581
+    },
+    "spaced/isolde-attack.png": {
+      "sha256": "042e91d52232979c8ecaa122c2c02e0f243091b1cda7f4445ccbe32cbb34d77c",
+      "bytes": 1413629,
+      "size": [
+        6624,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/isolde-block.png": {
+      "sha256": "ed7c61f3a728fa78fa91aa9f1615e6572b5d4840d19c1647b18a695fa403c0f9",
+      "bytes": 839778,
+      "size": [
+        4384,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/isolde-circle.png": {
+      "sha256": "6980202fb6ca6343781b6e74c7fc7ba3f6e97e71d91330fc9ccc405793aa68d2",
+      "bytes": 1474883,
+      "size": [
+        6624,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/isolde-closing.png": {
+      "sha256": "e476a3811bc5ccb3741b012ce36b968783bea59f41626d0eeaceb54261e38442",
+      "bytes": 1405084,
+      "size": [
+        6624,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/isolde-down.png": {
+      "sha256": "353f6a53ac61a9042ed38667b09d1af9166f737677a8a896f964f2ad82bdd2d2",
+      "bytes": 1135011,
+      "size": [
+        4384,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/isolde-echo.png": {
+      "sha256": "a581653af5f4767e10ec00ec5dcdce825283c98d9b9d3d72316a8a4c8ea693b4",
+      "bytes": 1432722,
+      "size": [
+        6624,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/isolde-hit.png": {
+      "sha256": "a98dce45906e5d9b21a7cb7653b33a813043dd536fb94a41ff60080c0a7808f4",
+      "bytes": 832224,
+      "size": [
+        4384,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/isolde-partner.png": {
+      "sha256": "1ef130643e265183083c9603d4b191a60ebdf4a1c6e33157755189a635d6e691",
+      "bytes": 1350873,
+      "size": [
+        6624,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/odran-arc.png": {
+      "sha256": "3f237f6a720fe119dcc48804139fef9b242057b58675eb8b63148f39158a631d",
+      "bytes": 1659412,
+      "size": [
+        6624,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/odran-attack.png": {
+      "sha256": "6d50940f93af34c4b1257fc72766c3e680aac727262b8c4774fc76b8f0a517e6",
+      "bytes": 1824279,
+      "size": [
+        6624,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/odran-block.png": {
+      "sha256": "1c2acf263c0a174ee0f2babaac2bbca0e87a4296bd432ff524fb184095951c6b",
+      "bytes": 1009770,
+      "size": [
+        4384,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/odran-communion.png": {
+      "sha256": "1101615831c86805944025dccb65743b87757d1a0e987a97b5e2d9d6e0187969",
+      "bytes": 1724258,
+      "size": [
+        6624,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/odran-down.png": {
+      "sha256": "bda135e9ad464e889b86412d042f9dab51ca392900cbde1bdb3e597bb7639fc9",
+      "bytes": 1147081,
+      "size": [
+        4384,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/odran-hit.png": {
+      "sha256": "7276535542bda590a7dd12ad979543c8367b4cbb8e21c6af0485db8f1a98042c",
+      "bytes": 1078459,
+      "size": [
+        4384,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "spaced/odran-lastlight.png": {
+      "sha256": "e2497f5f77082a4d476bde976b8a7e51cecff731ee65078fd43e4b622e0f6f8d",
+      "bytes": 1803471,
+      "size": [
+        6624,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "strips.json": {
+      "sha256": "881ac2559cfad9468b6ecd9b1d7bd0089fd36b11fef45c56b05dcf94760b81a5",
+      "bytes": 51314
+    },
+    "verify_remote.py": {
+      "sha256": "8c9a98a1c096c04d299f444314ad57e19a26749b45c566d178895541f51eb15c",
+      "bytes": 2370
+    },
+    "visual-review.json": {
+      "sha256": "e9d26bc7dbb40cd1102509dfdb170b82287a004105e5ab1de2b3977d9f487bcf",
+      "bytes": 4633
+    }
+  },
+  "seedHashesVerified": true,
+  "candidateStrips": 15,
+  "missingMoves": [],
+  "ownerArtworkSelection": "pending",
+  "ownerMotionApproval": "pending",
+  "runtimeIntegrated": false
+}
