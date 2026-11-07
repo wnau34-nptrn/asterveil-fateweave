@@ -33,3 +33,10 @@ Encoder เก็บ timestamp ของทุกเฟรม CDP แบบ vari
 Encounter นี้เป็น QA fixture ที่ปรับ HP/SPD เฉพาะใน tests เพื่อให้เห็นหลาย hit และจบรอบได้ครบ ไม่ได้เปลี่ยน content ของเกม
 
 ข้อจำกัดการบันทึก: Chromium/SwiftShader ในคลาวด์มีช่องว่างระหว่างเฟรมและ GPU latency บางช่วง จึงอาจไม่เห็นทุก beat ใน MP4; `heroEffectCapture` วัดหน้าต่าง contact ที่ CPU ขอ การตรวจครบ 4 มุมใช้ source browser assertions แยก คลิปนี้ไม่ใช่ผล FPS บนมือถือจริง
+
+
+CI รอบแรก: source fixtures ผ่าน 568/571; 3 assertions เดิมของ knives/evade ยังคาดหวัง generic ring จึงปรับให้ตรวจ painted venom coat และ shadow cut/afterimage โดยตรง และคง state/cleanup assertions ทั้งหมดไว้ รันเฉพาะทั้ง 3 กรณีซ้ำผ่านแล้ว
+
+Source fixtures ชุดเดิมถูกแบ่งตามไฟล์ให้ 4 runners ใช้ browser worker เดียวต่อ runner ตรวจรายชื่อรวมทุก shard เทียบชุดเต็มก่อน push เพื่อคง coverage เดิมครบ
+
+ผลแบ่งชุด: 171 + 126 + 145 + 129 = 571; รายชื่อแต่ละ shard ไม่ซ้ำ และ union ตรงกับ `--list` ชุดเต็มทุกกรณี
