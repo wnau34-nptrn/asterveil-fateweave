@@ -14,7 +14,7 @@
 .skills-slot-empty {display:grid;place-items:center;min-height:112px;border:1.5px dashed #e8f5ff33;border-radius:14px;color:#8597aa;font-size:12px}
 .skills-picker {display:grid;gap:5px;font-size:13px}
 .skills-picker select {width:100%;min-height:44px}
-.skills-sections {display:grid;grid-template-columns:1.5fr 1fr .8fr;gap:5px}
+.skills-sections {display:grid;grid-template-columns:1.5fr 1fr;gap:5px}
 .skills-sections button {padding:6px 4px;min-height:44px;font-size:13px;white-space:normal}
 .skills-page button[aria-pressed=true] {border-color:#7cdaed;background:#244556}
 .skill-install {display:grid;gap:8px;margin-bottom:12px}
@@ -68,3 +68,6 @@
 .skills-slots button {touch-action:none;cursor:grab;position:relative}
 .skills-slots button[data-dragging] {z-index:5;opacity:.85;cursor:grabbing;box-shadow:0 6px 18px #000a;transition:none}
 .skills-slots button[data-drop] {outline:2px dashed #7cdaed;outline-offset:2px}
+
+.talents-page { display: grid; gap: 10px; }
+.talents-page > button { width: 100%; min-height: 44px; white-space: normal; }

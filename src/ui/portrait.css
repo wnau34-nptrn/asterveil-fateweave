@@ -380,3 +380,12 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 .star-sockets { gap: 2px; }
 .fate-socket { display: inline-block; width: 26px; height: 26px; flex: none; background: center / contain no-repeat; }
 .fate-socket[data-lit="false"] { opacity: .9; }
+
+/* Map team is a sibling of the bag: one 44px tool row, with no extra map obstruction. */
+.hud-summary .hud-team { position: static; flex: 0 0 72px; width: 72px; height: 44px; padding: 0 8px; font-weight: 600; }
+.hud-summary .hud-pack { flex: 0 0 96px; width: 96px; min-width: 0; height: 44px; justify-content: center; padding: 0 8px; gap: 6px; }
+.hud-summary .hud-pack .pack-bag .icon { width: 20px; height: 20px; }
+@container game (max-width: 360px) {
+  .hud-summary .hud-team { flex-basis: 60px; width: 60px; }
+  .hud-summary .hud-pack { flex-basis: 88px; width: 88px; padding-inline: 4px; }
+}

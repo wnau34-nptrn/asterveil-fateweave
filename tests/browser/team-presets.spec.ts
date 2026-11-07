@@ -45,12 +45,12 @@ test('camp presets: one tap saves, one tap switches back; quick moves; the map s
   await expect(page.locator('#team-preset-error')).toContainText('ชื่อยาวเกิน'); expect((await game(page)).profile.presets![0]!.name).toBe('ชุด 1');
   // On the map: the bag shows both presets. "สายรับ" names Lio, who stayed at the camp; Guardian (brought) keeps a seat.
   await page.locator('[data-lobby=close]').click(); await page.locator('#lobby-depart').click(); await expect(page.locator('#world-view')).toBeVisible();
-  await page.keyboard.press('b'); await page.locator('#bag-tab-team').click();
-  await expect(page.locator('#bag-team-preset-0')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('#bag-team-preset-1')).toContainText('ขาด 1');
-  await page.locator('#bag-team-preset-1').click();
+  await page.keyboard.press('t');
+  await expect(page.locator('#map-team-preset-0')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#map-team-preset-1')).toContainText('ขาด 1');
+  await page.locator('#map-team-preset-1').click();
   const run = (await game(page)).run!; expect(run.roster.deployed).toEqual(['tracer', 'weaver', 'healer', 'garran']); expect(run.roster.reserve).toEqual(['mira', 'toma', 'guardian']);
-  await expect(page.locator('#bag-team-preset-1')).toHaveAttribute('aria-pressed', 'false');
-  await page.locator('#bag-team-preset-0').click();
+  await expect(page.locator('#map-team-preset-1')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#map-team-preset-0').click();
   expect((await game(page)).run!.roster.deployed).toEqual(ids.slice(0, 5));
 });

@@ -207,7 +207,9 @@ test('victory returns to the same tile with surviving HP and loot; a camp rest h
   await page.screenshot({ path: info.outputPath('after-victory.png') });
   await expect(page.locator('#world-message')).toContainText('ชนะศึก');
   expect(after.resources.ore).toBeGreaterThanOrEqual(6); expect(after.restReady).toBe(true);
-  await expect(page.locator('#world-pack [data-resource=ore] b')).toHaveText(String(after.resources.ore));
+  await page.locator('#world-pack').click();
+  await expect(page.locator('#pack-content [data-resource=ore] strong')).toHaveText(String(after.resources.ore));
+  await page.locator('[data-world=pack-close]').click();
   await page.locator('#move-up').click(); await expect(page.locator('#rest')).toBeEnabled();
   expect((await saved(page)).camp).toEqual(camp);
   await page.locator('#rest').click(); await expect(page.locator('#camp-dialog')).toBeVisible();
@@ -931,7 +933,7 @@ for (const viewport of viewports) {
     expect(await page.evaluate(() => ({ x: scrollX, y: scrollY, overflow: document.documentElement.scrollHeight > innerHeight || document.documentElement.scrollWidth > innerWidth }))).toEqual({ x: 0, y: 0, overflow: false });
     // The map fills the portrait game frame, including on a wider desktop viewport.
     expect(await page.locator('#map-viewport').boundingBox()).toEqual(await page.locator('#app').boundingBox());
-    for (const s of ['#move-up', '#move-down', '#move-left', '#move-right', '#rest', '#world-info-button', '#objective-button', '#world-pack']) await reachable(page, s);
+    for (const s of ['#move-up', '#move-down', '#move-left', '#move-right', '#rest', '#world-info-button', '#objective-button', '#world-team', '#world-pack']) await reachable(page, s);
     const overlap = await page.evaluate(() => { const a = document.querySelector('#objective-button')!.getBoundingClientRect(), b = document.querySelector('#world-pack')!.getBoundingClientRect(); return a.right > b.left && a.left < b.right && a.bottom > b.top && a.top < b.bottom; });
     expect(overlap).toBe(false);
     await expect(page.locator('#rest')).toContainText('พัก'); await expect(page.locator('#rest')).toBeEnabled();
@@ -954,7 +956,7 @@ for (const viewport of viewports) {
     expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight)).toBe(false);
     await page.screenshot({ path: info.outputPath('camp.png') });
     await page.locator('#camp-tab-team').click();
-    for (const id of ['guardian', 'tracer', 'weaver', 'healer']) await reachable(page, `#team-${id}`);
+    for (const id of ['guardian', 'tracer', 'weaver', 'healer']) { await page.locator(`#team-${id}`).scrollIntoViewIfNeeded(); await reachable(page, `#team-${id}`); }
     expect(await page.evaluate(() => document.documentElement.scrollHeight > innerHeight)).toBe(false);
     await page.locator('#withdraw').scrollIntoViewIfNeeded(); await reachable(page, '#withdraw');
     await page.screenshot({ path: info.outputPath('team.png') }); await page.keyboard.press('Escape');
@@ -1023,7 +1025,7 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   const issues = await open(page, base({ found: [epic, bow], position: { x: start.x - 1, y: start.y } }));
   await page.locator('#world-pack').click(); await expect(page.locator('#pack-dialog')).toBeVisible();
   await expect(page.locator('#bag-tab-items')).toHaveAttribute('aria-selected', 'true');
-  for (const sel of ['#bag-tab-items', '#bag-tab-gear', '#bag-tab-team', '[data-world=pack-close]']) await reachable(page, sel);
+  for (const sel of ['#bag-tab-items', '#bag-tab-gear', '[data-world=pack-close]']) await reachable(page, sel);
   await page.locator('#bag-tab-gear').click(); await page.locator('#bag-member-guardian').click();
   // The bag is a tile grid (A7): picking a tile shows its card with the wear action.
   await page.locator('#pick-found-1').click(); await expect(page.locator('#wear-found-1')).toBeDisabled(); await expect(page.locator('#wear-found-1')).toContainText('คนอื่นใช้');
@@ -1041,12 +1043,12 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   await expect.poll(async () => (await saved(page)).members.tracer?.gear?.weapon?.hero).toBe('tracer');
   // Team tab: tapping a member shows their details; tapping an empty reserve seat benches them, away from any camp.
   await page.keyboard.press('Escape'); await expect(page.locator('#pack-dialog')).toBeVisible();
-  await page.locator('#bag-tab-team').click(); await page.locator('#bag-team-healer').click();
-  await page.locator('#bag-gear-of').click(); await page.locator('#character-tab-skills').click();
+  await page.locator('[data-world=pack-close]').click(); await page.locator('#world-team').click(); await page.locator('#map-team-healer').click();
+  await page.locator('#map-team-gear-of').click(); await page.locator('#character-tab-skills').click();
   await expect(page.locator('#character-content .hire-skills li').first()).toBeVisible();
-  await page.keyboard.press('Escape'); await expect(page.locator('#pack-dialog')).toBeVisible();
-  await page.screenshot({ path: info.outputPath('bag-team.png') });
-  await page.locator('#pack-content .team-card.empty.target[data-side=reserve]').first().click();
+  await page.keyboard.press('Escape'); await expect(page.locator('#team-dialog')).toBeVisible();
+  await page.screenshot({ path: info.outputPath('map-team.png') });
+  await page.locator('#map-team-content .team-card.empty.target[data-side=reserve]').first().click();
   await expect.poll(async () => (await saved(page)).roster).toEqual({ deployed: ['guardian', 'tracer', 'weaver'], reserve: ['healer'] });
   expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(58);
   expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
@@ -1128,7 +1130,7 @@ test('lobby member panel shows the ★3 skill a migrated company keeps and the t
   await seed(page, null, profile);
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator('#lobby-tab-team').click(); await page.locator('#lobby-member-tracer').click();
-  await page.locator('#lobby-skills-open').click();await page.locator('#camp-skills-details').click();await page.locator('#camp-skill-selection').selectOption('finisher');await page.locator('.skill-passives summary').click();
+  await page.locator('#lobby-skills-open').click();await page.locator('#camp-character-tab-skills').click();await page.locator('#camp-skill-selection').selectOption('finisher');await page.locator('.skill-passives summary').click();
   await expect(page.locator('#camp-character-dialog .character-skills [data-skill=finisher]')).toContainText('ปลิดชีพ');
   await expect(page.locator('#camp-character-dialog .character-passive')).toContainText('ตาเหยี่ยว');
   await expect(page.locator('#camp-character-dialog .character-passive')).toContainText('ยังล็อก · ปลดที่โหนด สายตาคม ชั้น 4');
@@ -1145,7 +1147,7 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   await page.locator('#lobby-tree-open').click();
   // The tree replaces the team sheet: no team cards, a back button and a member picker.
   await expect(page.locator('#camp-character-dialog')).toBeVisible();
-  await expect(page.locator('#camp-character-tab-skills')).toHaveAttribute('aria-selected','true');
+  await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');
   await expect(page.locator('#camp-character-member-guardian')).toHaveAttribute('aria-pressed','true');
   // The Knight's big tree (A6): 3 branches × 4 tiers; tier 2 opens at Lv5.
   await expect(page.locator('.talent-node')).toHaveCount(17);
@@ -1157,9 +1159,12 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   // No points left: another node does nothing and says why.
   await page.locator('#camp-character-talent-b1').click(); await learn.click({ force: true }); await expect(page.locator('#camp-character-talent-b1')).toContainText('0/2'); await expect(learn).toHaveAttribute('aria-disabled', 'true');
   await expect(page.locator('#camp-character-talent-b1')).toHaveAttribute('aria-label', /แต้มไม่พอ/);
-  // The new rally is in the battle loadout; take Shield Bash out.
+  // The new rally is in the battle loadout; switch to its own skill tab before changing the loadout.
+  await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-skill-selection').selectOption('rally');
   await expect(page.locator('#camp-character-loadout-rally')).toHaveAttribute('aria-pressed', 'true'); await page.locator('#camp-skill-selection').selectOption('bash'); await page.locator('#camp-character-loadout-bash').click();
   await expect(page.locator('#camp-character-loadout-bash')).toHaveAttribute('aria-pressed', 'false');
+  for (const b of await page.locator('#camp-character-dialog .skills-slots button, #camp-character-dialog .skills-selection-row>button').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await page.locator('#camp-character-tab-talents').click();
   for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn, #camp-character-dialog .skills-slots button, #camp-character-dialog .skills-selection-row>button, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('lobby-talents.png') });
   // Another member's tree from the picker.
@@ -1314,7 +1319,7 @@ test('camp NPCs stand at their stations, open their service when tapped and gree
   for (const [npc, title, line] of [['smith', 'เลือกงานโรงตีเหล็ก', 'ลุงบอร์ก'], ['broker', 'ป้ายจ้าง', 'พีโน่'], ['herbalist', 'นักปรุงยา', 'เฟิร์น'], ['keeper', 'อุปกรณ์', 'มิมี่'], ['trainer', 'ต้นไม้ความถนัด', 'ครูฮัลดา'], ['scout', 'จัดทีม', 'คาเอล']] as const) {
     await page.locator(`#npc-${npc}`).click();
     if(npc==='keeper')await page.locator('.storage-keeper summary').click();
-    if(npc==='trainer'){await expect(page.locator('#camp-character-dialog')).toBeVisible();await expect(page.locator('#camp-character-tab-skills')).toHaveAttribute('aria-selected','true');await expect(page.locator('#npc-art-trainer')).toHaveAttribute('data-act','greet');await page.locator('#camp-character-dialog [data-world=character-close]').click();continue;}
+    if(npc==='trainer'){await expect(page.locator('#camp-character-dialog')).toBeVisible();await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');await expect(page.locator('#npc-art-trainer')).toHaveAttribute('data-act','greet');await page.locator('#camp-character-dialog [data-world=character-close]').click();continue;}
     await expect(page.locator('#lobby-sheet-title')).toContainText(title); if(npc==='smith')await expect(page.locator('.forge-workbench')).toBeVisible();else await expect(page.locator('.npc-line')).toContainText(line);
     if (npc === 'smith') { await expect(page.locator(`#npc-art-${npc}`)).toHaveAttribute('data-act', 'greet'); await page.waitForTimeout(400); await page.screenshot({ path: info.outputPath('camp-npc-sheet.png') }); }
     await page.locator('[data-lobby="close"]').click();
@@ -1443,7 +1448,7 @@ for (const [mode, width, height, envTop, fallback] of [
     expect(geometry.top).toBe(Math.max(width <= 360 ? 8 : 12, envTop, fallback));
     expect(geometry.gap).toBeGreaterThanOrEqual(8); expect(geometry.partyGap).toBeGreaterThanOrEqual(0);
     expect(geometry.bounded).toBe(true); expect(geometry.scroll).toBe(false);
-    for (const selector of ['#world-info-button', '#objective-button', '#world-pack']) await reachable(page, selector);
+    for (const selector of ['#world-info-button', '#objective-button', '#world-team', '#world-pack']) await reachable(page, selector);
     await page.keyboard.press('i'); await expect(page.locator('#world-info')).toBeVisible();
     await page.keyboard.press('Escape'); await expect(page.locator('#world-info')).not.toBeVisible();
     expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);

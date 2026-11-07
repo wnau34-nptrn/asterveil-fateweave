@@ -8,7 +8,7 @@ import type { Profile } from '../../src/core/world/types';
 import { currentSave } from '../fixtures/current-save';
 import { xpAt } from '../fixtures/camp-level';
 
-// Team page evidence (owner 2026-11-06, team presets): the camp team sheet and the map bag team tab at the owner's
+// Team page evidence (owner 2026-11-06, team presets): the camp team sheet and the separate map team dialog at the owner's
 // three sizes. Evidence only. Run with TEAM_SHOTS=<dir> npx playwright test tests/browser/team-presets-shots.spec.ts
 const dir = process.env.TEAM_SHOTS;
 const key = 'asterveil.fateweave.expedition.v1';
@@ -49,7 +49,7 @@ for (const [w, h] of sizes) test(`team page ${w}x${h}`, async ({ browser }) => {
     await page.locator('#team-preset-0').click();
   }
   await page.locator('[data-lobby=close]').click(); await page.locator('#lobby-depart').click(); await expect(page.locator('#world-view')).toBeVisible();
-  await page.keyboard.press('b'); const tab = page.locator('[data-world=bag-tab][data-tab=team], #bag-tab-team').first();
-  if (await tab.count()) { await tab.click(); await shot('map-bag-team'); }
+  await page.keyboard.press('t');
+  await shot('map-team');
   expect(errors).toEqual([]); await context.close();
 });

@@ -58,9 +58,9 @@ for (const [width,height] of [[390,844],[320,568]] as const) {
     await page.locator('#comparison-back').click();
     await page.locator('.auto-settings summary').click(); await page.locator('#auto-preview').click(); await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0)); await shot('auto');
     await page.locator('#comparison-back').click();
-    await page.locator('#character-tab-skills').click(); await page.locator('#skills-tree').click(); await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0)); await shot('tree', true);
+    await page.locator('#character-tab-skills').click(); await page.locator('#character-tab-talents').click(); await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0)); await shot('tree', true);
     await page.locator('#character-talent-a2i').click(); await page.locator('#character-talent-learn').click(); await page.locator('#character-talent-b2').click(); await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0)); await shot('tree-learned');
-    await page.locator('#character-tab-skills').click(); await page.locator('#skills-details').click(); await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0)); await shot('skills');
+    await page.locator('#character-tab-skills').click(); await page.locator('#character-tab-skills').click(); await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0)); await shot('skills');
     await context.close();
   });
 }

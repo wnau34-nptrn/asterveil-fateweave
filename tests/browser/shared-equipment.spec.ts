@@ -31,7 +31,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     await expect(panel).toBeVisible();await expect(id('comparison-title')).toBeVisible();expect(await saved()).toBe(original);
     await page.keyboard.press('Escape');await expect(panel).toBeVisible();await page.keyboard.press('Escape');await expect(panel).not.toBeVisible();
     if(camp){await page.keyboard.press('Escape');await page.locator('#lobby-tab-team').click();await page.locator('#lobby-member-guardian').click();await page.locator('#lobby-character-open').click();}
-    else{await page.locator('#bag-tab-team').click();await page.locator('#bag-team-guardian').click();await page.locator('#bag-character-overview').click();}
+    else{await page.locator('[data-world=pack-close]').click(); await page.locator('#world-team').click();await page.locator('#map-team-guardian').click();await page.locator('#map-team-character-overview').click();}
     await expect(id('character-tab-overview')).toHaveAttribute('aria-selected','true');
     if(camp){await id('character-member-mira').click();await expect(id('character-title')).toContainText('มิร่า');await expect(panel.locator('.character-summary')).toContainText('ในค่าย');await id('character-member-guardian').click();expect(await saved()).toBe(original);}
     await id('character-tab-gear').click();await panel.locator('.gear-extra-filters summary').click();await id('gear-filter-set').selectOption('none');await expect(panel.locator('.gear-bag li')).toHaveCount(2);
@@ -50,7 +50,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     const after=await saved();await id('auto-preview').click();await expect(panel.locator('.auto-empty')).toBeVisible();expect(await saved()).toBe(after);
     await page.screenshot({path:info.outputPath('auto-equipped.png')});
     await panel.locator('[data-world=character-close]').click();
-    if(!camp){await expect(panel).not.toBeVisible();await expect(page.locator('#pack-dialog')).toBeVisible();await page.keyboard.press('Escape');await expect(page.locator('#pack-dialog')).not.toBeVisible();await page.locator('#rest').click();await page.locator('#team-guardian').click();await page.locator('#camp-character-overview').click();await expect(panel).toBeVisible();await panel.locator('[data-world=character-close]').click();await expect(page.locator('#camp-dialog')).toBeVisible();}
+    if(!camp){await expect(panel).not.toBeVisible();await expect(page.locator('#team-dialog')).toBeVisible();await page.keyboard.press('Escape');await expect(page.locator('#team-dialog')).not.toBeVisible();await page.locator('#rest').click();await page.locator('#team-guardian').click();await page.locator('#camp-character-overview').click();await expect(panel).toBeVisible();await panel.locator('[data-world=character-close]').click();await expect(page.locator('#camp-dialog')).toBeVisible();}
     await page.reload();await page.locator('#continue').click();const resumed=parseGame(await saved(),map,lookup);expect((camp?resumed.profile.members:resumed.run!.members).guardian!.gear).toEqual(member.gear);
     expect(errors).toEqual([]);await context.close();
   });

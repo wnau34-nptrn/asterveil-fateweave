@@ -29,9 +29,9 @@ for(const [width,height] of [[390,650],[390,844],[320,568],[1366,768]] as const)
     await expect(page.locator('.lobby-menu')).toBeHidden();const d=await dialog.boundingBox(),f=await page.locator('#app').boundingBox();expect(d!.y).toBe(f!.y);expect(d!.height).toBe(f!.height);
     const cb=await dialog.locator('[data-world=character-close]').boundingBox();expect(cb!.width).toBeGreaterThanOrEqual(44);expect(cb!.height).toBeGreaterThanOrEqual(44);
     if(capture&&width===390)await page.screenshot({path:info.outputPath(`skills-hud-${height}.png`)});
-    await page.locator('#camp-skills-tree').click();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(page.locator('#team-character-guardian')).toBeFocused();
-    await page.locator('#team-character-resume').click();await expect(page.locator('#camp-character-tab-skills')).toHaveAttribute('aria-selected','true');await expect(page.locator('#camp-skills-tree')).toHaveAttribute('aria-pressed','true');
-    await page.locator('#camp-skills-details').click();await expect(page.locator('#camp-skill-selection')).toHaveValue('guard');
+    await page.locator('#camp-character-tab-talents').click();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(page.locator('#team-character-guardian')).toBeFocused();
+    await page.locator('#team-character-resume').click();await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');
+    await page.locator('#camp-character-tab-skills').click();await expect(page.locator('#camp-skill-selection')).toHaveValue('guard');
     await page.locator('#camp-skill-up-guard').scrollIntoViewIfNeeded();const detailScroll=await page.locator('#camp-character-content').evaluate(el=>el.scrollTop);if(height===650)expect(detailScroll).toBeGreaterThan(0);
     await page.locator('#camp-skill-up-guard').click();await expect(page.locator('#camp-skill-review-confirm')).toBeVisible();
     await dialog.locator('[data-world=character-close]').click();await expect(dialog).not.toBeVisible();await page.locator('#lobby-sheet [data-lobby=close]').click();await page.locator('#lobby-tab-forge').click();await expect(page.locator('.forge-launcher')).toBeVisible();expect(await saved(page)).toBe(before);
