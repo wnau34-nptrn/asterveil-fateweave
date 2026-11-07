@@ -1,0 +1,155 @@
+{
+  "metta_sit": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      -2
+    ],
+    "alphaDustThreshold": 8
+  },
+  "metta_cheer": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      0
+    ],
+    "alphaDustThreshold": 8
+  },
+  "metta_idle_alt": {
+    "uniformScale": 0.4003189792663477,
+    "scaledCanvas": 502,
+    "translation": [
+      5,
+      4
+    ],
+    "alphaDustThreshold": 8
+  },
+  "lalin_sit": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      13
+    ],
+    "alphaDustThreshold": 8
+  },
+  "lalin_cheer": {
+    "uniformScale": 0.4003189792663477,
+    "scaledCanvas": 502,
+    "translation": [
+      5,
+      5
+    ],
+    "alphaDustThreshold": 8
+  },
+  "lalin_idle_alt": {
+    "uniformScale": 0.4003189792663477,
+    "scaledCanvas": 502,
+    "translation": [
+      5,
+      -1
+    ],
+    "alphaDustThreshold": 8
+  },
+  "kael_sit": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      -8
+    ],
+    "alphaDustThreshold": 8
+  },
+  "kael_cheer": {
+    "uniformScale": 0.4003189792663477,
+    "scaledCanvas": 502,
+    "translation": [
+      5,
+      0
+    ],
+    "alphaDustThreshold": 8
+  },
+  "kael_idle_alt": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      -4
+    ],
+    "alphaDustThreshold": 8
+  },
+  "wynne_sit": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      9
+    ],
+    "alphaDustThreshold": 8
+  },
+  "wynne_cheer": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      3
+    ],
+    "alphaDustThreshold": 8
+  },
+  "wynne_idle_alt": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      3
+    ],
+    "alphaDustThreshold": 8
+  },
+  "astrid_sit": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      4
+    ],
+    "alphaDustThreshold": 8
+  },
+  "astrid_cheer": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      3
+    ],
+    "alphaDustThreshold": 8
+  },
+  "astrid_idle_alt": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      6
+    ],
+    "alphaDustThreshold": 8
+  },
+  "lalin_idle_alt_r2": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      -4
+    ],
+    "alphaDustThreshold": 8
+  },
+  "kael_idle_alt_r2": {
+    "uniformScale": 0.4082934609250399,
+    "scaledCanvas": 512,
+    "translation": [
+      0,
+      -2
+    ],
+    "alphaDustThreshold": 8
+  }
+}
