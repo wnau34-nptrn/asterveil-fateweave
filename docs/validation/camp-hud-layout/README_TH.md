@@ -26,4 +26,13 @@
 
 ## การตรวจ
 
-ผลตรวจสุดท้ายบันทึกใน handoff ของงานนี้และ PR; ภาพในเอกสารนี้เป็นผลรันเกมจริง ไม่ใช่ภาพสร้าง
+- `npm run typecheck`, `npm run lint`, `npm run build`: ผ่าน (มีคำเตือน bundle Phaser ขนาดใหญ่เดิม)
+- Unit suite: 120 files / 1,656 tests ผ่าน และ 6 tests skipped; boss-balance อีก 1 test ครั้งแรก timeout 180s ระหว่างรัน browser พร้อมกัน แล้วรันแยกผ่านใน 161s ไม่แก้กติกาหรือ timeout
+- Browser ชุดแรก: camp-level, camp-trip-panel, map-team-tabs และ quest-board ผ่าน; รอบสุดท้าย navigation/keyboard/quest/unlock หลัง source คงที่ผ่าน 29/29 กรณี และ compatibility หน้าค่ายเดิม 11 ขนาด + เควสต์เดิมผ่านอีก 12/12 กรณี
+- Context/document checks: 8/8 ผ่าน
+- ภาพถ่ายเมื่อโหลด atlas ครบ และลด motion เพื่อไม่เก็บภาพจังหวะ fade ระหว่างเปิดหน้าต่าง
+- ภาพในเอกสารนี้เป็นผลรันเกมจริง ไม่ใช่ภาพสร้าง
+
+## สถานะการส่งขึ้นเกม
+
+โค้ด commit ในเครื่องแล้ว แต่ **ยังไม่ push, เปิด PR, merge หรือ deploy** เพราะ automatic approval review ปฏิเสธการส่งโค้ดไป repository สาธารณะ ต้องได้คำยืนยันจากเจ้าของให้ push/PR/merge/deploy ก่อนดำเนินขั้นตอน remote ต่อ ไม่เปลี่ยนช่องทางเพื่อข้ามข้อจำกัดนี้

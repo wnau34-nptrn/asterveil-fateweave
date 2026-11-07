@@ -13,7 +13,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **CAMP-HUD-CHARACTER-QUEST-001:** approved camp layout implemented on `codex/camp-hud-character-quest-layout`, awaiting final checks/PR. Transparent top HUD + quest entry; direct bottom Team/Characters; opaque compact quest list with details on tap. Rules/save/unlocks unchanged. Evidence: `docs/validation/camp-hud-layout/README_TH.md`.
+- **CAMP-HUD-CHARACTER-QUEST-001:** approved camp layout implemented on `codex/camp-hud-character-quest-layout`, local implementation ready; remote publication blocked by automatic approval review pending explicit owner authorization. Transparent top HUD + quest entry; direct bottom Team/Characters; opaque compact quest list with details on tap. Rules/save/unlocks unchanged. Evidence: `docs/validation/camp-hud-layout/README_TH.md`.
 
 - **MAP-TEAM-CHARACTER-TABS-001 complete (2026-11-07, PR #203, merge `ae8889c`):** separate map team HUD/dialog (T), bag items/gear (B), one-tap carried-only presets; direct tree tab, MAP 4 character tabs/camp 5, development stays camp-only. Quality + browser passed. Rules/save/balance unchanged. Evidence: `docs/validation/map-team-character-tabs/README_TH.md`.
 - Unlock pacing #202: quests/team MAP 1; hiring/market/hunt MAP 2; advanced services/hard explicitly MAP 3. Rights follow cleared history.
@@ -44,4 +44,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-อ่าน AGENTS.md, CLAUDE.md และ CURRENT_STATE.md ใน wnau34-nptrn/asterveil-fateweave จาก feature/fateweave-initial-prototype แล้วรอเจ้าของเลือกงานถัดไป ไม่เริ่ม P09 หรืองานภาพเอง; ผลแยกทีมบน MAP และแท็บตัวละครอยู่ใน docs/validation/map-team-character-tabs/README_TH.md; pacing ล่าสุดอยู่ใน docs/validation/system-unlock-pacing/README_TH.md
+อ่าน AGENTS.md, CLAUDE.md และ CURRENT_STATE.md แล้วทำ CAMP-HUD-CHARACTER-QUEST-001 ต่อบน `codex/camp-hud-character-quest-layout`: โค้ด local พร้อม แต่ automatic approval review บล็อก push ไป public remote รอเจ้าของยืนยัน push/PR/merge/deploy ก่อนทำขั้นตอน remote; ผ่าน quality/browser ก่อน merge เข้า feature/fateweave-initial-prototype ไม่เริ่ม P09 เอง หลักฐาน: docs/validation/camp-hud-layout/README_TH.md
