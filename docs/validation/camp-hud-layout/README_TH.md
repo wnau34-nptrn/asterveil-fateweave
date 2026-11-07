@@ -35,4 +35,4 @@
 
 ## สถานะการส่งขึ้นเกม
 
-โค้ด commit ในเครื่องแล้ว แต่ **ยังไม่ push, เปิด PR, merge หรือ deploy** เพราะ automatic approval review ปฏิเสธการส่งโค้ดไป repository สาธารณะ ต้องได้คำยืนยันจากเจ้าของให้ push/PR/merge/deploy ก่อนดำเนินขั้นตอน remote ต่อ ไม่เปลี่ยนช่องทางเพื่อข้ามข้อจำกัดนี้
+เจ้าของยืนยันอนุมัติ push/PR/merge/deploy แล้ว หลังจาก automatic approval review เคยบล็อกการ push ครั้งแรก เปิด PR #204 เข้า `feature/fateweave-initial-prototype` และรอ quality/browser checks ผ่านก่อน merge ตามขั้นตอนโครงการ

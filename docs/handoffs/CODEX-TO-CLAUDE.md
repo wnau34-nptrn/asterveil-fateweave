@@ -1,5 +1,5 @@
 ## 2026-11-07 — CAMP-HUD-CHARACTER-QUEST-001
-+- Branch `codex/camp-hud-character-quest-layout`; PR/merge: none; automatic approval review blocked push to public remote, requires explicit owner authorization.
++- Branch `codex/camp-hud-character-quest-layout`; PR #204 open; merge pending quality/browser. Owner explicitly approved push/PR/merge/deploy after the initial automatic-review block.
 +- เจ้าของอนุมัติ mockup: HUD/ปุ่มกระดานโปร่ง; รายการเควสต์ทึบ กระชับ กดดูรายละเอียดเต็ม
 +- ค่าย: ฟาร์มย้ายขึ้น HUD; แถบล่าง ทีม/ตัวละคร/จ้าง/กระเป๋า/ช่าง/ยา; ตัวละครเปิดคน/แท็บล่าสุดตรง ไม่ผ่านทีม
 +- ทีมตัดส่วนพัฒนา/เลเวลค่ายซ้ำออก; เควสต์ใช้ native disclosure และปุ่มรับเดิม
