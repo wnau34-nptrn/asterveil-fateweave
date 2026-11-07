@@ -1,3 +1,10 @@
+## 2026-11-07 — Owner-authorized merge of PR #200
+- Merged `art/art-vfx-rework-001` into `feature/fateweave-initial-prototype`; merge commit `ff9274e73989b6bdf5af520ac7099793edb7a998`.
+- Owner instruction: "ทำการ Merge เข้าเกมได้ของ PR #200". This authorizes this PR's merge; no broader animation approvals inferred.
+- Verified latest head `01c97ab`: quality + browser both success; expected-head merge succeeded and PR is closed/merged.
+- Updated CURRENT_STATE and validation status; docs-only follow-up checked with `git diff --check`. No new gameplay/art changes.
+- Evidence: `docs/combat-presentation/vfx-rework-slice/README_TH.md`. Real-device/Safari validation remains unverified.
+
 ## 2026-11-07 — ART-VFX-REWORK-001 (Codex art + intake)
 - PR #200 · Branch `art/art-vfx-rework-001` → `feature/fateweave-initial-prototype`; no merge (owner motion review pending).
 - Generated poison/storm/shadow/arcane/clash layers, R1 drop + R2 fang; raw sources/prompts and lossless pipeline in `incoming/ART-VFX-REWORK-001/`.
