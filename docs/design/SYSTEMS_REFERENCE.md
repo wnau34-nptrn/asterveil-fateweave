@@ -127,4 +127,4 @@ The current/next SPD queue stays in the portrait phase band as six circular slot
 
 ## System unlock audit (2026-11-07)
 
-Camp team opens after clearing MAP 1 (owner SYSTEM-UNLOCK-AUDIT-001), including formation and presets; rights follow persistent cleared history, never selected map. Other thresholds and the existing latest-built-map fallback stay unchanged. Audit and regression evidence: [README_TH](../validation/system-unlock-audit/README_TH.md).
+Camp team opens after clearing MAP 1 (owner SYSTEM-UNLOCK-AUDIT-001), including formation and presets; rights follow persistent cleared history, never selected map. The subsequent owner-approved pacing opens quests after MAP 1 and hiring/market/hunt after MAP 2; advanced services explicitly stay at MAP 3 (hard also needs target-map normal clear). See [current pacing](../validation/system-unlock-pacing/README_TH.md); historical audit and regression evidence: [README_TH](../validation/system-unlock-audit/README_TH.md).
