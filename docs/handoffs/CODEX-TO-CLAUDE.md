@@ -4,7 +4,7 @@
 - HUD goals/team/bag share one row; T team / B bag; team dialog preserves camp-only preset saving, missing-member feedback and current-plan status.
 - MAP character = overview/gear/skills/talents; camp adds development. No duplicate development links; skill-level/tome services stay camp-only.
 - Reuses existing roster/preset/formation/talent commands; no battle/save/balance/capacity/art changes or P09.
-- Browser new 3/3 passed at 390×844/650; regression/quality results in validation README. Updated old selectors/routes to the actual new UI.
+- Local full unit 1,657 passed/6 skipped; new browser 3/3 + focused regressions passed. CI found 5 old tab/focus/scroll expectations; corrected and reran 5/5 passed, full CI pending.
 - Evidence and 390px screenshots: `docs/validation/map-team-character-tabs/README_TH.md`; next task awaits owner.
 
 ## 2026-11-07 — SYSTEM-UNLOCK-PACING-002

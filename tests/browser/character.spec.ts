@@ -83,12 +83,12 @@ test('touch: portrait resize and rotation preserve character tabs and block pass
   const context = await browser.newContext({viewport:{width:390,height:844},hasTouch:true,reducedMotion:'reduce'}), page = await context.newPage();
   await open(page); await page.locator('#world-hero-guardian').tap(); await page.locator('#character-tab-skills').tap(); await page.locator('#character-tab-talents').tap();
   const before = await saved(page);
-  await page.setViewportSize({width:320,height:568}); await expect(page.locator('#character-tab-skills')).toHaveAttribute('aria-selected','true');
+  await page.setViewportSize({width:320,height:568}); await expect(page.locator('#character-tab-talents')).toHaveAttribute('aria-selected','true');
   await page.setViewportSize({width:844,height:390}); await expect(page.locator('#orientation-gate')).toBeVisible();
   await page.locator('#character-talent-c1s').dispatchEvent('click'); await page.locator('#character-talent-learn').dispatchEvent('click'); await page.locator('#character-dialog [data-world=character-close]').dispatchEvent('click'); await page.keyboard.press('Escape');
   expect(await saved(page)).toBe(before);
   await page.setViewportSize({width:390,height:844}); await expect(page.locator('#character-dialog')).toBeVisible();
-  await expect(page.locator('#character-tab-skills')).toHaveAttribute('aria-selected','true');
+  await expect(page.locator('#character-tab-talents')).toHaveAttribute('aria-selected','true');
   await expect(page.locator('#character-talent-c1s i')).toHaveText('0/1'); await context.close();
 });
 
