@@ -10,6 +10,7 @@ import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
 import { setArchived, setPartyLane, chooseLoadout, hardReason, claimGuide, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
+import { applyPreset, applyRunPreset, clearPreset, renamePreset, savePreset } from '../core/world/presets';
 import { draftPick, travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, setLane, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
 import { firstClearStory, runSummary, SummaryUI, type RunSummary } from './summary-ui';
@@ -85,7 +86,7 @@ export class GameShell {
     }
     for (const id of this.game?.run?.recruited ?? []) this.recruitSeen.add(`${this.game!.run!.mapId}:${id}`);
     this.world = new WorldUI(views.world, this.map, heroCatalog(lookup, map), {
-      travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), lane: (id, lane, other) => this.roster(setLane(this.state!, map, lookup, id, lane, other)), moveMember: id => this.roster(moveMember(this.state!, id)),
+      travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), lane: (id, lane, other) => this.roster(setLane(this.state!, map, lookup, id, lane, other)), moveMember: id => this.roster(moveMember(this.state!, id)), preset: slot => this.roster(applyRunPreset(this.state!, this.game?.profile.presets?.[slot] ?? undefined, slot)),
       withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
       chooseEvent: choice => this.chooseEvent(choice), draft: index => this.draft(index),
       talent: (id, node) => {
@@ -113,6 +114,7 @@ export class GameShell {
       archive: (id, archived) => this.profileChange(setArchived(this.game!.profile, id, archived)),
       dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, map, id, group, other)),
       lane: (id, lane, other) => this.profileChange(setPartyLane(this.game!.profile, map, lookup, id, lane, other)),
+      preset: (action, slot, name) => { const p = this.game!.profile; this.profileChange(action === 'apply' ? applyPreset(p, map, slot) : action === 'save' ? savePreset(p, map, lookup, slot, name) : action === 'rename' ? renamePreset(p, slot, name ?? '') : clearPreset(p, slot)); },
       skillLevel: (id, action) => this.profileChange(raiseSkill(this.game!.profile, this.maps, map, lookup, id, action)),
       tomeTrade: (line, size, to) => this.profileChange(tradeTomes(this.game!.profile, this.maps, map, line, size, to)),
       talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), loadout: (id, actions) => this.profileChange(chooseLoadout(this.game!.profile, map, lookup, id, actions)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
@@ -256,6 +258,11 @@ export class GameShell {
     this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
     this.lobbyMessage = skip ? 'ข้ามงานแนะนำแล้ว' : 'รับรางวัลงานแนะนำแล้ว'; this.showLobby();
   }
+  private presetText(p: Profile, slot: number, action: 'apply' | 'save' | 'rename' | 'clear', left?: string[]): string {
+    const name = p.presets?.[slot]?.name ?? `ชุด ${slot + 1}`;
+    return action === 'apply' ? `ใช้ชุดทีม “${name}” แล้ว${left?.length ? ` · สำรองเต็ม ${left.map(id => heroText[id]?.name ?? id).join(' ')} รออยู่ในค่าย` : ''}`
+      : action === 'save' ? `บันทึกทีมตอนนี้ลงชุด “${name}” แล้ว` : action === 'rename' ? `เปลี่ยนชื่อชุดเป็น “${name}” แล้ว` : `ล้างชุดทีมช่อง ${slot + 1} แล้ว`;
+  }
   private profileChange(result: ProfileResult): void {
     if (!this.game || this.game.run) return;
     const e = result.event; const name = (id: string) => heroText[id]?.name ?? '';
@@ -267,7 +274,7 @@ export class GameShell {
       : e.type === 'smelted' ? `ลุงบอร์กหลอมแร่ดาวเป็นฝุ่นดาว ${e.dust} · มีฝุ่นดาว ${result.profile.bank.dust}`
       : e.type === 'refreshed' ? `พีโน่เปลี่ยนป้ายจ้างใหม่แล้ว · สุ่มได้อีก ${this.map.shop.refreshCosts.length - result.profile.refreshes} ครั้ง`
       : e.type === 'bought' ? this.boughtText(result.profile, e)
-      : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : e.type === 'party' && e.heroId && e.lane ? `จัดแผนแล้ว · ${name(e.heroId)}ยืน${laneName(e.lane)}` : 'จัดทีมแล้ว';
+      : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : e.type === 'party' && e.heroId && e.lane ? `จัดแผนแล้ว · ${name(e.heroId)}ยืน${laneName(e.lane)}` : e.type === 'party' && e.presetAction ? this.presetText(result.profile, e.preset!, e.presetAction, e.left) : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     // The camp NPC whose service just succeeded cheers once.
     sfx.play(({ hired: 'coin', upgraded: 'upgrade', dismissed: 'close', talent: 'buff', equipped: 'guard', salvaged: 'anvil', forged: 'anvil', smelted: 'anvil', brewed: 'potion', claimed: 'claim', bought: 'coin', refreshed: 'coin' } as Partial<Record<string, SfxName>>)[e.type] ?? 'click');
@@ -367,7 +374,7 @@ export class GameShell {
   private renderWorld(): void {
     this.world.setMap(this.map, this.eliteArtOf(this.map));
     this.show('world');
-    this.world.render({ state: this.state!, message: this.message, locked: this.locked, saved: this.saved && !!this.storage, banner: this.banner, effect: this.effect });
+    this.world.render({ presets: this.game?.profile.presets, state: this.state!, message: this.message, locked: this.locked, saved: this.saved && !!this.storage, banner: this.banner, effect: this.effect });
     this.effect = undefined;
   }
   // Story recruits: play each newly joined guest once per session (a reload shows the ones already joined as seen).
@@ -472,7 +479,8 @@ export class GameShell {
   private roster(result: { state: ExpeditionState; event: WorldEvent }): void {
     if (!this.state || this.locked || result.event.type !== 'roster') return;
     this.state = result.state; this.persist();
-    this.message = result.event.heroId && result.event.lane ? `จัดแผนแล้ว · ${heroText[result.event.heroId]?.name ?? ''}ยืน${laneName(result.event.lane)} ใช้ในศึกถัดไป` : 'จัดทีมแล้ว · ศัตรูเล็งตามหมายเลขช่อง';
+    const e = result.event, preset = e.preset !== undefined ? this.game?.profile.presets?.[e.preset] : undefined;
+    this.message = preset ? `ใช้ชุดทีม “${preset.name}” แล้ว${e.absent?.length ? ` · ไม่ได้พามา: ${e.absent.map(id => heroText[id]?.name ?? id).join(' ')}` : ''} · ใช้ในศึกถัดไป` : result.event.heroId && result.event.lane ? `จัดแผนแล้ว · ${heroText[result.event.heroId]?.name ?? ''}ยืน${laneName(result.event.lane)} ใช้ในศึกถัดไป` : 'จัดทีมแล้ว · ศัตรูเล็งตามหมายเลขช่อง';
     this.renderWorld();
   }
   // Map bag gear (2026-10-17): saved at once, like every other map action.

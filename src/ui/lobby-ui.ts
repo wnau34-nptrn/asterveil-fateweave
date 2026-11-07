@@ -13,7 +13,8 @@ import { withParty } from '../core/battle/engine';
 import { hardReason, reserveSlots, activeGuides, guideDone, featureMap, featureOpen, mapUnlocked, boardOffers, brewReason, buyReason, claimReason, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, type Group } from '../core/world/profile';
 import { isBigTree } from '../core/world/talents';
 import { salvageValue } from '../core/world/equipment';
-import { PARTY_SLOTS, POTION_IDS, SHOP_ITEMS, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type ProfileEvent, type TalentNode } from '../core/world/types';
+import { campPresetPlan, defaultPresetName, matchesPreset, presetNameReason, presetOf, presetSlots } from '../core/world/presets';
+import { PARTY_SLOTS, PRESET_NAME_MAX, POTION_IDS, SHOP_ITEMS, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type ProfileEvent, type TalentNode } from '../core/world/types';
 import { campProgress, levelOf, recommendedLane, starred, type EncounterLookup } from '../core/world/world';
 import { emptyTomes, raiseSkill, tradeTomes, levelableSkills, skillLevelReason, tradeReason } from '../core/world/tomes';
 import type { TomeLine, TomeSize } from '../core/world/types';
@@ -29,7 +30,7 @@ import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestTex
 
 import { heroArt, portrait, starRow } from './portraits';
 
-export interface LobbyHost { archive(id: string, archived: boolean): void; autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; place(id: string, group: Group, other?: string): void; lane(id: string, lane: Lane, other?: string): void; talent(id: string, node: TalentNode): void; loadout(id: string, actions: ActionId[]): void; resetTalents(id: string): void;
+export interface LobbyHost { archive(id: string, archived: boolean): void; autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; preset(action: 'apply' | 'save' | 'rename' | 'clear', slot: number, name?: string): void; place(id: string, group: Group, other?: string): void; lane(id: string, lane: Lane, other?: string): void; talent(id: string, node: TalentNode): void; loadout(id: string, actions: ActionId[]): void; resetTalents(id: string): void;
   skillLevel(id: string, action: ActionId): void; tomeTrade(line: TomeLine, size: TomeSize, to?: TomeLine): void;
   transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
@@ -134,6 +135,17 @@ export class LobbyUI {
         case 'character-resume': if(id)this.characters.openRemembered(id,b);break;
         case 'close': this.closeSheet(); break;
         case 'pick': this.pick(id, b.dataset.group as Group); break;
+        case 'quick-place': if (this.picked) { const target = this.picked; this.picked = undefined; this.confirmDismiss = false; this.host.place(target, b.dataset.group as Group); this.focus(`#lobby-member-${target}`); } break;
+        case 'preset': { const slot = Number(b.dataset.slot); const p = this.view!.profile; this.presetSlot = slot; this.confirmClear = false; this.presetError = ''; this.picked = undefined; this.lanePick = undefined;
+          const preset = presetOf(p, slot);
+          if (!preset) this.host.preset('save', slot); else if (!matchesPreset(p.party, preset, this.lanes(p))) this.host.preset('apply', slot); else this.draw();
+          this.focus(`#team-preset-${slot}`); break; }
+        case 'preset-save': case 'preset-rename': { const name = this.root.querySelector<HTMLInputElement>('#team-preset-name')?.value ?? ''; const reason = presetNameReason(name);
+          this.confirmClear = false; this.presetError = reason ? { empty: 'ใส่ชื่อชุดก่อน', long: `ชื่อยาวเกิน ${PRESET_NAME_MAX} ตัว`, invalid: 'ชื่อมีอักขระที่ใช้ไม่ได้' }[reason] ?? 'ชื่อใช้ไม่ได้' : '';
+          if (this.presetError) { this.draw(); this.focus('#team-preset-name'); break; }
+          this.host.preset(b.dataset.lobby === 'preset-save' ? 'save' : 'rename', this.presetSlot, name); this.focus(`#team-preset-${this.presetSlot}`); break; }
+        case 'preset-clear': if (!this.confirmClear) { this.confirmClear = true; this.draw(); this.focus('#team-preset-clear'); break; }
+          this.confirmClear = false; this.host.preset('clear', this.presetSlot); this.focus(`#team-preset-${this.presetSlot}`); break;
         case 'lane-pick': case 'lane-cell': {
           const lanes = this.lanes(this.view!.profile); const tap = formationTap(this.lanePick, lanes, id, b.dataset.lane as Lane);
           const moved = tap.move?.id; this.lanePick = tap.picked;
@@ -441,26 +453,60 @@ export class LobbyUI {
     const last=this.characters.lastViewed,ids=p.company.filter(id=>!p.archived?.includes(id)||id===last?.id);
     return `<section class="team-character-entry" aria-labelledby="team-character-heading"><h3 id="team-character-heading">ตัวละคร</h3><p>แตะภาพเพื่อดูอุปกรณ์ สกิล และพัฒนา</p><div class="tree-members">${ids.map(id=>`<button id="team-character-${id}" data-lobby="character-resume" data-hero="${id}" class="tree-member" aria-label="ดูตัวละคร ${heroText[id]!.name}" aria-pressed="${last?.id===id}">${portrait(id)}<small>${heroText[id]!.name}</small></button>`).join('')}</div>${last&&p.company.includes(last.id)?`<button id="team-character-resume" data-lobby="character-resume" data-hero="${last.id}" class="secondary">ดูล่าสุด · ${heroText[last.id]!.name} · ${characterTabs[last.tab]}</button>`:''}</section>`;
   }
+  // Team presets (owner 2026-11-06): one tap on a saved slot switches the whole team; one tap on an empty slot saves the
+  // team as it stands. Overwrite, rename and clear act on the slot last tapped (inside "จัดการชุดทีม").
+  private presetSlot = 0; private confirmClear = false; private presetError = '';
+  private presetBar(p: Profile): string {
+    const lanes = this.lanes(p); const slots = presetSlots();
+    const buttons = slots.map(i => {
+      const preset = presetOf(p, i); const on = matchesPreset(p.party, preset, lanes); const plan = preset && campPresetPlan(p, this.map, i);
+      if (!preset) return `<button id="team-preset-${i}" data-lobby="preset" data-slot="${i}" class="preset-slot empty" aria-label="ชุดทีมช่อง ${i + 1} ว่าง · แตะเพื่อบันทึกทีมตอนนี้"><b>+ บันทึก</b><small>ช่อง ${i + 1}</small></button>`;
+      const warn = plan && plan.left.length ? ` · สำรองเต็ม ${plan.left.map(id => heroText[id]!.name).join(' ')} จะรออยู่ในค่าย` : '';
+      return `<button id="team-preset-${i}" data-lobby="preset" data-slot="${i}" class="preset-slot${on ? ' current' : ''}" aria-pressed="${on}" aria-label="ชุดทีม ${this.escape(preset.name)} · ลงสนาม ${preset.deployed.map(id => heroText[id]!.name).join(' ')}${preset.reserve.length ? ` · สำรอง ${preset.reserve.map(id => heroText[id]!.name).join(' ')}` : ''}${on ? ' · ใช้อยู่' : ' · แตะเพื่อใช้'}${warn}"><b>${this.escape(preset.name)}</b><small>${on ? `${icon('act-confirm')}ใช้อยู่` : `${preset.deployed.length}+${preset.reserve.length}`}${warn ? ' !' : ''}</small></button>`;
+    }).join('');
+    const sel = presetOf(p, this.presetSlot); const label = sel?.name ?? defaultPresetName(this.presetSlot);
+    const manage = `<details class="preset-manage" id="team-preset-manage"${this.confirmClear || this.presetError ? ' open' : ''}><summary>จัดการชุด “${this.escape(label)}”</summary>
+      <label class="preset-name"><span>ชื่อชุด (ไม่เกิน ${PRESET_NAME_MAX} ตัว)</span><input id="team-preset-name" type="text" maxlength="${PRESET_NAME_MAX * 2}" value="${this.escape(label)}" autocomplete="off"></label>
+      ${this.presetError ? `<p class="camp-note lane-warn" id="team-preset-error" role="alert">${this.presetError}</p>` : ''}
+      <div class="member-actions"><button id="team-preset-save" data-lobby="preset-save" class="secondary">${sel ? 'บันทึกทีมตอนนี้ทับชุดนี้' : 'บันทึกทีมตอนนี้ลงช่องนี้'}</button>${sel ? `<button id="team-preset-rename" data-lobby="preset-rename" class="secondary">เปลี่ยนชื่อ</button><button id="team-preset-clear" data-lobby="preset-clear" class="danger-button">${this.confirmClear ? 'ยืนยันล้างชุด · ทีมไม่เปลี่ยน' : 'ล้างชุด'}</button>` : ''}</div></details>`;
+    return `<section class="team-presets" aria-labelledby="team-presets-title"><h3 id="team-presets-title">${icon('flag')} ชุดทีม <span class="camp-embers">แตะเพื่อสลับทั้งทีม · ช่องว่างแตะเพื่อบันทึก</span></h3>
+      <div class="preset-row" role="group" aria-label="ชุดทีม ${slots.length} ช่อง">${buttons}</div>${manage}</section>`;
+  }
+  // One-tap moves for the picked member (owner 2026-11-06): into the first free field or reserve slot, or back to the camp.
+  private quickMoves(p: Profile, id: string): string {
+    const g = groupOf(p, id), fieldFree = p.party.deployed.length < PARTY_SLOTS, reserveFree = p.party.reserve.length < reserveSlots(p, this.map);
+    const b = (target: Group, text: string, primary = false) => `<button id="lobby-quick-${target}" data-lobby="quick-place" data-group="${target}" class="${primary ? 'primary' : 'secondary'}">${text}</button>`;
+    const out: string[] = [];
+    if (g !== 'deployed' && fieldFree) out.push(b('deployed', `ใส่ลงสนาม · ช่อง ${p.party.deployed.length + 1}`, true));
+    if (g !== 'reserve' && reserveFree) out.push(b('reserve', 'ใส่สำรอง', g === 'bench' && !fieldFree));
+    if (g !== 'bench' && !(g === 'deployed' && p.party.deployed.length === 1)) out.push(b('bench', 'พักในค่าย'));
+    const full = g === 'bench' && !fieldFree && !reserveFree;
+    return `<div class="member-actions quick-moves">${out.join('')}</div>${full ? '<p class="camp-note">ทีมเต็มแล้ว · แตะคนในทีมด้านบนเพื่อสลับตัว</p>' : ''}`;
+  }
   private team(p: Profile): string {
     const row = (ids: string[], group: Group, size: number) => Array.from({ length: size }, (_, i) => this.card(p, ids[i], group, i)).join('');
     const all = p.company.filter(id => groupOf(p, id) === 'bench'); const bench = all.filter(id => this.benchShown(p, id));
     const archivedCount = p.archived?.length ?? 0;
     const filters = (['all', 'front', 'back', 'archived'] as const).map(f => `<button id="bench-filter-${f}" data-lobby="bench-filter" data-filter="${f}" class="ui-chip" aria-pressed="${this.benchFilter === f}">${{ all: 'ทั้งหมด', front: 'แนวหน้า', back: 'แนวหลัง', archived: `คลังสมาชิก ${archivedCount}` }[f]}</button>`).join('');
     const empty = this.benchFilter === 'archived' ? 'ยังไม่มีใครอยู่ในคลังสมาชิก' : all.length ? 'ไม่พบสมาชิกตามตัวกรอง' : 'ทุกคนอยู่ในทีมที่จะพาไปแล้ว';
-    return `${this.characterEntry(p)}<h3 class="team-arrange-heading">จัดทีมออกเดินทาง</h3><p class="camp-note">เลือกสมาชิกด้านล่าง แล้วเลือกคนหรือช่องว่างอีกกลุ่มเพื่อย้าย</p>${this.campLine(p)}<h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3><div class="team-grid">${row(p.party.deployed, 'deployed', PARTY_SLOTS)}</div>
-      ${formationGrid({ prefix: 'lobby', attr: 'lobby', deployed: p.party.deployed, lanes: this.lanes(p), recommended: recommendedLane(this.lookup, this.map), picked: this.lanePick })}
+    const pickedGroup = this.picked && groupOf(p, this.picked);
+    const panel = this.picked ? `${this.memberPanel(p, this.picked)}<p class="camp-note picked-hint" id="lobby-hint">เลือก${heroText[this.picked]!.name}แล้ว · ใช้ปุ่มด้านบน หรือแตะคน/ช่องว่างในกลุ่มอื่นเพื่อสลับ แตะซ้ำเพื่อยกเลิก</p>` : '';
+    return `<h3 class="team-arrange-heading">จัดทีมออกเดินทาง</h3>${this.presetBar(p)}
+      <h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3><div class="team-grid">${row(p.party.deployed, 'deployed', PARTY_SLOTS)}</div>
       <h3>${icon('camp')} สำรอง <span class="camp-embers">${p.party.reserve.length}/${reserveSlots(p, this.map)} · ปลดเพิ่มตามบท · พาเข้าด่าน สลับได้ในกระเป๋านอกการต่อสู้</span></h3><div class="team-grid">${row(p.party.reserve, 'reserve', reserveSlots(p, this.map))}</div>
-      <h3>${icon('rest')} ในค่าย <span class="camp-embers">ไม่ได้เข้าด่านรอบนี้</span></h3>
+      ${pickedGroup && pickedGroup !== 'bench' ? panel : ''}
+      ${formationGrid({ prefix: 'lobby', attr: 'lobby', deployed: p.party.deployed, lanes: this.lanes(p), recommended: recommendedLane(this.lookup, this.map), picked: this.lanePick })}
+      <h3>${icon('rest')} ตัวละครในค่าย <span class="camp-embers">${all.length} คน · แตะเพื่อเลือกแล้วใส่ทีม</span></h3>
       ${p.company.length > PARTY_SLOTS + reserveSlots(p, this.map) || archivedCount ? `<div class="bench-tools"><label class="bench-search"><span class="sr-only">ค้นหาสมาชิกในค่าย</span><input id="bench-search" type="search" data-lobby-search="bench" placeholder="ค้นหาชื่อหรืออาชีพ" value="${this.escape(this.benchQuery)}" autocomplete="off"></label><div class="bench-filters" role="group" aria-label="กรองสมาชิกในค่าย">${filters}</div></div>` : ''}
       <div class="team-grid bench">${bench.map((id, i) => this.card(p, id, 'bench', i)).join('')}${this.picked && groupOf(p, this.picked) !== 'bench' && this.benchFilter !== 'archived' ? this.card(p, undefined, 'bench', bench.length) : ''}${!bench.length && !this.picked ? `<p class="camp-note" id="bench-empty">${empty}</p>` : ''}</div>
-      ${this.picked ? this.memberPanel(p, this.picked) : ''}
-      ${this.picked ? `<p class="camp-note picked-hint" id="lobby-hint">เลือก${heroText[this.picked]!.name}แล้ว · แตะคนหรือช่องว่างในกลุ่มอื่นเพื่อสลับ แตะซ้ำเพื่อยกเลิก</p>`
-        : `<details class="lobby-help" id="lobby-hint"><summary>${icon('info')} วิธีจัดทีม</summary><p>แตะสมาชิกเพื่อดูการอัปดาว หรือแตะต่อที่กลุ่มอื่นเพื่อสลับและจัดทีม</p></details>`}`;
+      ${pickedGroup === 'bench' ? panel : ''}
+      ${this.picked ? '' : `<details class="lobby-help" id="lobby-hint"><summary>${icon('info')} วิธีจัดทีม</summary><p>แตะชุดทีมเพื่อสลับทั้งทีมในครั้งเดียว · แตะสมาชิกแล้วกด “ใส่ลงสนาม/ใส่สำรอง/พักในค่าย” หรือแตะคนในกลุ่มอื่นเพื่อสลับ · ดูอุปกรณ์และสกิลได้ที่แถบตัวละครด้านล่าง</p></details>`}
+      ${this.campLine(p)}${this.characterEntry(p)}`;
   }
   private memberPanel(p: Profile, id: string): string {
     const m = p.members[id]!;
     const last = dismissReason(p, id) === 'last'; const archived = !!p.archived?.includes(id); const bench = groupOf(p, id) === 'bench';
-    return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${levelOf(this.map, p)} (เลเวลค่าย) · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p><div class="member-subs character-links"><button id="lobby-character-open" data-lobby="character" data-tab="overview" class="secondary">ดูตัวละคร</button><button id="lobby-skills-open" data-lobby="character" data-tab="skills" class="secondary">สกิล</button>${this.treeButton(p, id)}${this.gearButton(p, id)}</div>
+    return `<div class="member-panel" aria-live="polite"><p><b>${heroText[id]!.name}</b> ${this.stars(m.stars)} <span>Lv${levelOf(this.map, p)} (เลเวลค่าย) · ตัวซ้ำที่เก็บไว้ ${m.dupes}</span></p>${this.quickMoves(p, id)}<div class="member-subs character-links"><button id="lobby-character-open" data-lobby="character" data-tab="overview" class="secondary">ดูตัวละคร</button><button id="lobby-skills-open" data-lobby="character" data-tab="skills" class="secondary">สกิล</button>${this.treeButton(p, id)}${this.gearButton(p, id)}</div>
       <div class="member-actions"><button id="lobby-upgrade" data-lobby="upgrade" class="primary">อัปดาว · ★${m.stars} / ${this.map.company.maxStars}</button></div><details class="member-management"${this.confirmDismiss?' open':''}><summary>จัดการสมาชิก</summary><div class="member-actions">
       ${bench ? `<button id="lobby-archive" data-lobby="archive" data-archived="${!archived}" class="secondary">${archived ? 'นำออกจากคลังสมาชิก' : 'เก็บเข้าคลังสมาชิก · ของและดาวอยู่ครบ'}</button>` : ''}
       <button id="lobby-dismiss" data-lobby="dismiss" class="danger-button"${last ? ' disabled' : ''}>${last ? 'ต้องมีคนลงสนาม 1 คน' : this.confirmDismiss ? `ยืนยันเลิกจ้าง · ดาวหาย +${this.map.company.dismissRefund} เหรียญทอง` : 'เลิกจ้าง'}</button></div></details></div>`;

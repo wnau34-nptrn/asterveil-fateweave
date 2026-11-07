@@ -2,7 +2,8 @@ import {bossPlanValid,startBossPlan} from '../world/boss-equipment';
 import {storageCap} from '../world/storage';
 import { entryReason, MAGIC_DAMAGE_SKILLS, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
-import { LEGACY_RESERVE, PARTY_SLOTS, RESERVE_SLOTS, type ActiveBattle, type CampMigration, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
+import { presetNameReason } from '../world/presets';
+import { LEGACY_RESERVE, PARTY_SLOTS, PRESET_SLOTS, RESERVE_SLOTS, type TeamPreset, type ActiveBattle, type CampMigration, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
 import { campLevel, draftOffers, skillChoices, battleState, expToNext, findTiles, levelXp, maxCampXp, type Party, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
@@ -131,16 +132,18 @@ export const legacyKeys = ['asterveil.fateweave.battle.v1', 'asterveil.fateweave
 // queue change), her Tracking Shot's repeat bounces to the weakest foe; Eira's Crystal Aegis strikes back when broken and
 // Dispel becomes the Arcane Release (bolt charges); Brann's Rune Slam adds part of the damage he took. Profiles are
 // unchanged; a battle in progress that used any of them restarts from its entry HP.
-// v56 (owner 2026-11-06, skill rework step 6, Sefa; Shadow Step kept as it was by the owner's choice): Backstab becomes the
-// Blade Storm (four hits), Throwing Knives the Poison Coat and Disarm the Venom
-// Burst. Profiles are unchanged; a battle in progress that used any of them restarts from its entry HP.
-// v57 (owner 2026-11-06, skill rework step 6): Sefa's Shadow Step hits (8) before the dodge. Profiles are unchanged; a
-// battle in progress that used it restarts from its entry HP.
-const SAVE_VERSION = 57;
-const REWORKED_V57: readonly ActionId[] = ['evade'];
-const REWORKED_V56: readonly ActionId[] = ['backstab', 'knives', 'disarm'];
 // A bolt alone only adds arcane charges, which matter once Dispel is used (listed), so it restarts nothing.
 const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispel', 'slam'];
+// v56 (owner 2026-11-06, team presets): the profile may carry `presets` (up to PRESET_SLOTS named line-ups of owned
+// members, `null` = an empty slot). Older profiles have none; nothing else changes (old commands replay the same).
+// v57 (owner 2026-11-06, skill rework step 6, Sefa; Shadow Step kept as it was by the owner's choice): Backstab becomes the
+// Blade Storm (four hits), Throwing Knives the Poison Coat and Disarm the Venom Burst. Profiles are unchanged; a battle in
+// progress that used any of them restarts from its entry HP.
+// v58 (owner 2026-11-06, skill rework step 6): Sefa's Shadow Step hits (8) before the dodge. Profiles are unchanged; a
+// battle in progress that used it restarts from its entry HP.
+const SAVE_VERSION = 58;
+const REWORKED_V58: readonly ActionId[] = ['evade'];
+const REWORKED_V57: readonly ActionId[] = ['backstab', 'knives', 'disarm'];
 const REWORKED_V54: readonly ActionId[] = ['storedfist', 'circlefist', 'solo', 'finale'];
 const REWORKED_V53: readonly ActionId[] = ['haste', 'challenge', 'rouse', 'sanctuary', 'bless'];
 const REWORKED_V52: readonly ActionId[] = ['haste', 'smoke', 'catalyst'];
@@ -200,6 +203,19 @@ function rosterOf(v: unknown, lookup: EncounterLookup, map: MapDefinition): Rost
   // Set lanes may name any hero (a benched member keeps its column); only the deployed ones stand on the field.
   const lanes = r.lanes === undefined ? undefined : lanesOf(r.lanes, id => !!heroDef(lookup, map, id));
   return { deployed: [...deployed] as string[], reserve: [...reserve] as string[], ...(lanes ? { lanes } : {}) };
+}
+// Team presets (save v56): 1..PRESET_SLOTS entries, each `null` or a named line-up of distinct owned members — a
+// non-empty field of at most PARTY_SLOTS, a reserve of at most RESERVE_SLOTS and columns for those members only.
+function presetsOf(v: unknown, company: readonly string[]): (TeamPreset | null)[] {
+  if (!Array.isArray(v) || !v.length || v.length > PRESET_SLOTS || v[v.length - 1] === null) throw new Error('Invalid presets');
+  return v.map(e => {
+    if (e === null) return null;
+    const p = obj(e); const { name, deployed, reserve } = p;
+    if (Object.keys(p).length !== 4 || typeof name !== 'string' || name !== name.trim() || presetNameReason(name) || !Array.isArray(deployed) || !Array.isArray(reserve)) throw new Error('Invalid presets');
+    const ids = [...deployed, ...reserve];
+    if (!deployed.length || deployed.length > PARTY_SLOTS || reserve.length > RESERVE_SLOTS || new Set(ids).size !== ids.length || ids.some(id => typeof id !== 'string' || !company.includes(id))) throw new Error('Invalid presets');
+    return { name, deployed: [...deployed] as string[], reserve: [...reserve] as string[], lanes: lanesOf(p.lanes, id => ids.includes(id)) };
+  });
 }
 function lanesOf(v: unknown, known: (id: string) => boolean): Record<string, Lane> {
   const l = obj(v);
@@ -427,8 +443,8 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     if (version < 53 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V53.includes(obj(c).action as ActionId))) b.commands = [];
     if (version < 54 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V54.includes(obj(c).action as ActionId))) b.commands = [];
     if (version < 55 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V55.includes(obj(c).action as ActionId))) b.commands = [];
-    if (version < 56 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V56.includes(obj(c).action as ActionId))) b.commands = [];
     if (version < 57 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V57.includes(obj(c).action as ActionId))) b.commands = [];
+    if (version < 58 && Array.isArray(b.commands) && b.commands.some(c => REWORKED_V58.includes(obj(c).action as ActionId))) b.commands = [];
     if (!Array.isArray(b.commands) || b.commands.length > 5000) throw new Error('Invalid battle');
     const entry = hpRecord(b.entry, lookup, map, roster.deployed, party);
     // Validate against the encounter as fought by this run's deployed party (stars and camp level included).
@@ -524,6 +540,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const party = rosterOf(p.party, lookup, map);
   if ([...party.deployed, ...party.reserve].some(id => !company.includes(id))) throw new Error('Invalid party');
   if(hunt.target&&!company.includes(hunt.target))throw new Error('Unowned hunt target');
+  const presets = p.presets === undefined ? undefined : presetsOf(p.presets, company as string[]);
   const campXp = campXpOf(p.campXp, map);
   const members = membersOf(p.members, map, company as string[], lookup, campLevel(map, campXp));
   // The archive (P01) holds bench members only.
@@ -583,7 +600,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const slots = reserveSlots({ cleared, ...(veteran ? { veteran: true as const } : {}) }, map);
   if (version < 45) while (party.reserve.length && party.deployed.length < PARTY_SLOTS) party.deployed.push(party.reserve.shift()!);
   if (party.reserve.length > slots) throw new Error('Invalid party');
-  return {...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(boardFeatured ? { boardFeatured: [...boardFeatured as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
+  return {...(presets ? { presets } : {}),...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(boardFeatured ? { boardFeatured: [...boardFeatured as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, POTION_CAP), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -743,7 +760,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

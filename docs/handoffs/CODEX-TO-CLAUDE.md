@@ -2,6 +2,14 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md) and those of 2026-11-04 in [archive/2026-11-06/CODEX-TO-CLAUDE.md](archive/2026-11-06/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-06 — Team presets + easier team page (Claude, PR #196, save v56)
+- เจ้าของสั่ง: preset สลับทั้งทีมแตะเดียว + หน้าจัดทีม "ทีมบน คลังล่าง" · research HSR/Genshin/FEH/Raid/SW/AFK/Pokémon → ตารางใน README
+- กฎบริสุทธิ์ `core/world/presets.ts`: 4 ชุด (ร่าง) ชื่อ ≤12 · ค่าย = ใช้ภายในสำรองที่ปลดตามบท (เกินรอในค่าย), เลิกจ้างแล้วหลุดจากทุกชุด · แผนที่ = นอกศึก เฉพาะคนที่พามา ไม่มีใครเข้า/ออก · formation/fatigue/ศึกไม่เปลี่ยน; replay หลังใช้ชุดเท่ากับจัดมือ (เทสต์)
+- เซฟ v56: `Profile.presets` (ทับ v55 ของ #193 ที่ merge ระหว่างทำ) · #195 Sefa อ้าง v56 เหมือนกัน → ตัวที่ merge หลังบวกเป็น v57 (แจ้ง session skill rework แล้ว)
+- UI: ค่าย ชุดทีม → ลงสนาม → สำรอง → แผนการยืน → ตัวละครในค่าย → แถบตัวละคร; ปุ่มแตะเดียว ใส่ลงสนาม/สำรอง/พักในค่าย; กระเป๋าแผนที่มีแถวชุดทีม (ขาด/ล้ม/เหนื่อย)
+- Tests: typecheck/lint/build, vitest 1641, Playwright ทีม/ค่าย/world 148 + team-presets.spec (Chromium) · ภาพ/README `docs/validation/team-presets-2026-11-06/README_TH.md` · ไม่ได้ลองอุปกรณ์จริง
+- เปิด: เจ้าของยังไม่ได้ลองเล่นจริง; จำนวนชุด 4 เป็นร่าง
+
 ## 2026-11-06 — UI frame group 3: map + battle dialogs (Claude, PR #194 merged, owner approved images)
 - เจ้าของสั่งทำทั้งชุดพร้อมกัน; แก้เฉพาะ CSS `src/ui/sheet-frame.css` (หัวหน้าต่างชิดซ้ายสีทอง 19px, ปิด 44px ที่ 333,11 = เท่าแผ่นบริการ; ปุ่ม primary แผ่นทองเดียวกัน, secondary เปลี่ยนแค่มุม) ครอบ goals/pack/info/camp+entrance+withdraw/event และ `#game-info`; ไม่แตะ HUD/เนื้อหา/กฎ/เซฟ
 - วัด 390/320: ขนาดตัวอักษรเท่าเดิม, ไม่มีเลื่อนแนวนอน, เนื้อหาในหน้าต่างเลื่อนลง 1px (หัวสูงขึ้น 1px) ยกเว้น `#game-info` ลง ~4px; ปุ่มอื่นอยู่ที่เดิม
