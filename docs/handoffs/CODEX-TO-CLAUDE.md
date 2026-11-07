@@ -1,9 +1,9 @@
 ## 2026-11-07 — SYSTEM-UNLOCK-AUDIT-001
-- Branch `codex/system-unlock-audit-001` → `feature/fateweave-initial-prototype`; PR/merge tracked by this task.
+- Merged PR #201 (`codex/system-unlock-audit-001` → `feature/fateweave-initial-prototype`), merge `2d7f35d1dd5cddcde89f63e227c7a9fce9fb6257`, after quality + browser success.
 - Owner: camp team opens after MAP 1; changed shared threshold 3→1, so UI lock and reserve guide follow it automatically.
 - Pure team operations keep existing roster/lane/capacity checks; no battle/save format/balance/art/P09 changes.
 - Non-veteran regressions cover settlement outcomes, M2 entry/M1 replay, save load, field/reserve/formation/preset and one-time guide claims.
-- Focused unit tests passed; Chromium 390px before/after and reload passed; full quality/browser results recorded in validation README.
+- Typecheck/lint/build and CI quality + browser passed; local related browser 19/19. Full local unit: 1,653 pass, boss simulation timeout; isolated unchanged retry passed in 149s.
 - Audit distinguishes approved milestones, latest-built-map fallback and proposals for campaign guards in pure services; other gates unchanged.
 - Evidence and open proposals: `docs/validation/system-unlock-audit/README_TH.md`; next task awaits owner selection.
 

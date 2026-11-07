@@ -49,3 +49,14 @@ Campaign gates ส่วนใหญ่เป็น availability ของเม
 - `unlocks.test.ts`, `guides.test.ts`, `team-presets.test.ts`: 15 tests ผ่านในการรัน focused
 - Browser Chromium 390×844: non-veteran ก่อน/หลัง M1, ข้อความล็อก, กด preset/ย้ายสำรอง/คืนทีมและ reload; รูป `team-locked-390.png`, `team-open-390.png`
 - ไม่แก้ battle/save format/รางวัล/จำนวนช่อง/ภาพ/animation; ไม่เริ่ม P09
+
+## ผลตรวจสุดท้ายและส่งมอบ
+
+- PR [#201](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/201) merge `2d7f35d1dd5cddcde89f63e227c7a9fce9fb6257` เข้าสาขาเกม หลัง quality และ browser (4 shards + aggregate) ผ่านครบ
+- `npm run typecheck`, `npm run lint`, `npm run build`: ผ่าน
+- Focused unit 15 tests ผ่าน; เพิ่มตาราง regression ทุก feature ภายหลังและรัน `unlocks.test.ts` ผ่าน 3 tests
+- Full unit ในเครื่อง: 119 files/1,653 tests ผ่าน, 6 skipped; boss-balance เพียงตัวเดียว timeout 180s ขณะรันพร้อม browser รันซ้ำแยก **ผ่านใน 149s** โดยไม่เปลี่ยนโค้ดหรือ timeout; CI quality ผ่านทั้งชุด
+- Browser ที่เกี่ยวข้องในเครื่อง: **19/19 ผ่าน** (`system-unlock-audit`, `team-presets`, `team-five`, `team-character-navigation`); ตรวจภาพจริง 390px ทั้งสองภาพแล้ว ไม่มีการทดสอบอุปกรณ์จริงหรือ Safari
+- การทดสอบ milestone เรียก core `settle` โดยตรงเพื่อแยก complete/withdrawn/wiped; browser โหลด fixture เซฟ non-veteran ก่อน/หลัง M1 และกด UI จริง ไม่ได้อ้างว่าเล่นแคมเปญใหม่ทั้งหมดด้วยมือ
+- ต้นไม้ยังใช้แต้มตาม implementation ปัจจุบัน (camp Lv + โบนัสดาวของ big tree จน P04 ตาม `talents.ts` และ validation P01); ไม่ย้าย OD-02 milestone points เข้ามาก่อน P04 จากงาน audit นี้
+- ไม่มีการแก้ save format, battle rules, ตัวเลขรางวัล/ต่อสู้, จำนวนช่อง หรือเงื่อนไขระหว่างศึก; ไม่เริ่ม P09 ไม่เพิ่มภาพ/animation
