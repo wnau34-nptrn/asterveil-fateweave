@@ -1,0 +1,43 @@
+{
+  "image": "pet_portraits.webp",
+  "width": 768,
+  "height": 512,
+  "frames": {
+    "meadow_fox": {
+      "x": 0,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    "thicket_piglet": {
+      "x": 256,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    "rift_crystal_moth": {
+      "x": 512,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    "fort_gargoyle_pup": {
+      "x": 0,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    },
+    "forest_lantern_owl": {
+      "x": 256,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    },
+    "gate_starveil_slime": {
+      "x": 512,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    }
+  }
+}
