@@ -1,0 +1,68 @@
+/* ART-UI-WORLD-001 R2 design tokens (Luminous Veil). Fonts are OFL subsets self-hosted under public/assets/fonts. */
+@font-face { font-family: 'Kanit'; font-weight: 600; font-style: normal; font-display: swap; src: url('/assets/fonts/kanit-600.woff2') format('woff2'); }
+@font-face { font-family: 'Noto Sans Thai'; font-weight: 400; font-style: normal; font-display: swap; src: url('/assets/fonts/noto-sans-thai-400.woff2') format('woff2'); }
+@font-face { font-family: 'Noto Sans Thai'; font-weight: 700; font-style: normal; font-display: swap; src: url('/assets/fonts/noto-sans-thai-700.woff2') format('woff2'); }
+:root {
+  --hud-glass:rgba(8,18,31,.80); --hud-edge:rgba(232,245,255,.28);
+  --control-glass:rgba(8,28,42,.24); --control-edge:rgba(232,245,255,.62);
+  --hud-shadow:0 4px 16px rgba(0,8,20,.18);
+  --control-shadow:inset 0 1px 6px rgba(232,245,255,.12),0 3px 12px rgba(0,8,20,.18); --control-blur:8px;
+  --navy-950:#08121f; --navy-900:#0d1c2e; --navy-800:#14243a;
+  --panel-bg:rgba(8,18,31,.94); --panel-soft:rgba(20,36,58,.88);
+  --gold-edge:#d9bf86; --gold-light:#f2d596; --gold-muted:#8d7855;
+  --veil-cyan:#74d4ef; --hp-mint:#68e5b6; --rift-violet:#b59aff;
+  --rift-deep:#9454d6; --danger-coral:#ed927f;
+  --text:#f4f7fc; --text-muted:#bbcadb; --text-on-gold:#172135;
+  --meadow:#7ec886; --thicket:#6ab7a6; --scar:#b59aff; --sanctum:#f2d596;
+  --danger-safe:var(--hp-mint); --danger-low:var(--veil-cyan);
+  --danger-mid:var(--gold-light); --danger-high:var(--danger-coral);
+  --hp-ally:linear-gradient(90deg,#369f84,#68e5b6);
+  --hp-enemy:linear-gradient(90deg,#9454d6,#dca8fa);
+  --hp-critical:linear-gradient(90deg,#ce6a62,#ed927f);
+  --barrier:repeating-linear-gradient(125deg,#74d4ef 0 3px,#a3edff 3px 5px);
+  --primary-fill:linear-gradient(135deg,#f2d596,#d9bf86);
+  --secondary-fill:linear-gradient(140deg,#1b344d,#101f32);
+  --meter-track:#24384b; --hp-track:#24384b; --focus:#a3edff;
+  --danger-panel:#452933; --scrim:rgba(3,9,18,.82);
+  --radius-xs:6px; --radius-sm:10px; --radius-md:16px; --radius-lg:24px; --radius-pill:999px;
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+  --space-5:20px; --space-6:24px; --space-8:32px;
+  --font-heading:'Kanit','Noto Sans Thai',sans-serif;
+  --font-body:'Noto Sans Thai',sans-serif; --font-logo:'Liberation Serif',serif;
+  --weight-body:400; --weight-strong:700; --weight-heading:600;
+  --type-caption:12px; --type-body:14px; --type-label:16px;
+  --type-heading:22px; --type-title:32px; --type-display:48px;
+  --leading-body:1.45; --leading-heading:1.2;
+  --panel-shadow:0 12px 36px rgba(0,5,15,.34),inset 0 1px 0 rgba(242,213,150,.08);
+  --button-shadow:0 4px 12px rgba(0,5,15,.25);
+  --glow-cyan:0 0 18px rgba(116,212,239,.24);
+  --glow-gold:0 0 18px rgba(242,213,150,.22);
+  --glow-violet:0 0 20px rgba(181,154,255,.3);
+  --glow-coral:0 0 16px rgba(237,146,127,.25);
+  --blur-panel:12px; --edge-width:1px; --icon-stroke:1.8;
+  --touch-min:44px; --dpad-phone:46px; --dpad-desktop:60px;
+  --tile-min:36px; --tile-max:64px; --slice-panel:24;
+  --hop-ms:160ms; --press-ms:90ms; --hint-ms:1800ms;
+  --danger-rise-ms:360ms; --critical-ms:1400ms; --veil-ms:720ms;
+  --camp-ms:900ms; --fire-ms:480ms; --flash-ms:280ms; --shard-delay-ms:120ms; --gate-ms:640ms; --boss-ms:540ms;
+  --grass-ms:3200ms; --water-ms:2400ms; --rift-ms:2200ms;
+  --motes-ms:4200ms; --sheet-ms:180ms; --reduced-fade-ms:100ms;
+  --ease-out:cubic-bezier(.2,.7,.2,1); --ease-soft:cubic-bezier(.4,0,.2,1);
+}
+@keyframes veil-hop {0%{transform:translateY(0) scale(1.04,.96)}50%{transform:translateY(-6px) scale(.98,1.02)}100%{transform:translateY(0) scale(1)}}
+@keyframes veil-hint {0%,100%{opacity:.55;transform:scale(.96)}50%{opacity:.9;transform:scale(1)}}
+@keyframes danger-rise {0%,100%{transform:scaleX(1);opacity:1}40%{transform:scaleX(1.04);opacity:.78}}
+@keyframes critical-hp {0%,100%{opacity:1}50%{opacity:.65}}
+@keyframes grass-sway {0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1deg)}}
+@keyframes water-shimmer {0%,100%{opacity:.65}50%{opacity:.9}}
+@keyframes rift-pulse {0%,100%{opacity:.4;transform:scale(.96)}50%{opacity:.75;transform:scale(1.03)}}
+@keyframes veil-mote {from{transform:translateY(3px);opacity:0}30%,70%{opacity:.6}to{transform:translateY(-9px);opacity:0}}
+@keyframes camp-sparkle {0%{transform:translateY(4px) scale(.6);opacity:0}25%{opacity:1}100%{transform:translateY(-18px) scale(1);opacity:0}}
+@keyframes gate-open {from{transform:scale(.9);opacity:.1}to{transform:scale(1);opacity:1}}
+@keyframes boss-reveal {from{transform:translateY(6px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes sheet-in {from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes veil-shard {0%{transform:translate(0,0) rotate(0);opacity:0}12%{opacity:.75}100%{transform:translate(var(--shard-x),var(--shard-y)) rotate(var(--shard-angle));opacity:0}}
+@keyframes encounter-flash {0%,100%{opacity:0}22%{opacity:.45}}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}

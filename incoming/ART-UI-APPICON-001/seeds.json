@@ -1,0 +1,46 @@
+[
+  {
+    "file": "seeds/asterveil.svg",
+    "copied_from": "public/assets/asterveil.svg",
+    "sha256": "7fce973ae24a215ccc8f36200b573f6db9c06a040508c2a0d429dac2ab0b2730",
+    "byte_identical": true
+  },
+  {
+    "file": "seeds/logo.svg",
+    "copied_from": "public/assets/title/logo.svg",
+    "sha256": "01352c5a3373672653d20842a187e8ec63f325527856823bccb2e6f70f220f15",
+    "byte_identical": true
+  },
+  {
+    "file": "seeds/title_bg.webp",
+    "copied_from": "public/assets/title/title_bg.webp",
+    "sha256": "f63ad252a1ccd4a5c67a896f70a6b9a0dbd847e011b5cb801e74bf958e94b556",
+    "byte_identical": true
+  },
+  {
+    "file": "seeds/tokens.css",
+    "copied_from": "src/ui/tokens.css",
+    "sha256": "c140925cefb92fb739ae030fd08c25dc550e4299fd436f66b3ec5003c280dd40",
+    "byte_identical": true
+  },
+  {
+    "file": "seeds/isolde-portrait.png",
+    "copied_from": "incoming/ART-CHAR-REDESIGN-001/portrait/isolde.png",
+    "sha256": "e1f80e27532e7c570644b52ca396157f3ef380d222972c08353a63e35f0c5971",
+    "byte_identical": true
+  },
+  {
+    "file": "seeds/lobby_bg.webp",
+    "copied_from": "public/assets/lobby/lobby_bg.webp",
+    "source_commit": "fb1c7d7aa4e9bb56ad2a1b831e4c31c6915d021d",
+    "sha256": "3fbd0e041c78904fa0dc83f86e019d46124238555a250f95dc1f60e487d83f1f",
+    "byte_identical": true
+  },
+  {
+    "file": "seeds/final-r1-camp-1024.png",
+    "copied_from": "incoming/ART-UI-APPICON-001/final-r1-camp-1024.png",
+    "source_commit": "fb1c7d7aa4e9bb56ad2a1b831e4c31c6915d021d",
+    "sha256": "54d854eec4214d1012dee6de188d5771a7c9c9913030858c4ef9e6b35a997f65",
+    "byte_identical": true
+  }
+]
