@@ -2,6 +2,11 @@
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md) and those of 2026-11-04 in [archive/2026-11-06/CODEX-TO-CLAUDE.md](archive/2026-11-06/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).
 
+## 2026-11-07 — UI frame group 4: run summary + battle rewards (Claude, branch feature/ui-frame-group4)
+- CSS only (`src/ui/sheet-frame.css`): header divider/left title on the summary, gold primary plate on "กลับค่าย"/"ไปต่อ", hud-edge borders; text sizes, content, order, button positions unchanged (summary return keeps 52px). No rules/save change. Closes the UI frame series (groups 1–4).
+- Evidence + before/after 390×844, 390×650, 320×568: `docs/validation/ui-frame-group4-2026-11-07/README_TH.md` (ui-language-audit: font-size sets and <12px counts identical, no hscroll; Chromium headless only).
+- Owner got the images before merge. Open: none new; next task is the owner's pick (CURRENT_STATE.md).
+
 ## 2026-11-06 — Team presets + easier team page (Claude, PR #196, save v56)
 - เจ้าของสั่ง: preset สลับทั้งทีมแตะเดียว + หน้าจัดทีม "ทีมบน คลังล่าง" · research HSR/Genshin/FEH/Raid/SW/AFK/Pokémon → ตารางใน README
 - กฎบริสุทธิ์ `core/world/presets.ts`: 4 ชุด (ร่าง) ชื่อ ≤12 · ค่าย = ใช้ภายในสำรองที่ปลดตามบท (เกินรอในค่าย), เลิกจ้างแล้วหลุดจากทุกชุด · แผนที่ = นอกศึก เฉพาะคนที่พามา ไม่มีใครเข้า/ออก · formation/fatigue/ศึกไม่เปลี่ยน; replay หลังใช้ชุดเท่ากับจัดมือ (เทสต์)

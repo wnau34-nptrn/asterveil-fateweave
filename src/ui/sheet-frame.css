@@ -82,3 +82,19 @@
 #app :is(.world-dialog:not(.character-dialog), #game-info) button.primary:hover:not(:disabled) { background: var(--primary-plate-hover); }
 #app :is(.world-dialog:not(.character-dialog), #game-info) button.primary:disabled { color: var(--primary-plate-disabled-text); background: var(--primary-plate-disabled); border: 1px solid var(--primary-plate-disabled-edge); box-shadow: inset 0 -2px 0 #3a372f; text-shadow: none; }
 #app :is(.world-dialog:not(.character-dialog), #game-info) button.secondary { border-radius: var(--button-radius); }
+
+/* UI frame group 4 (owner scope 2026-11-06): run summary and battle-rewards dialog use the sheet frame — header with the
+   hairline divider, title left, the gold primary plate (radius/colours from the tokens) and the hud edge colour.
+   Frame only: sizes of text, content, order, the confirm step and button positions stay as they were. */
+#app .summary-card header { text-align: left; padding: 0 0 8px; border-bottom: 1px solid var(--hud-edge); }
+#app .summary-card header .eyebrow, #app .battle-rewards header small { letter-spacing: .08em; }
+#app .summary-card { border-color: var(--hud-edge); }
+#app .summary-view[data-outcome=complete] .summary-card { border-color: var(--primary-plate-edge); }
+#app .summary-view[data-outcome=wiped] .summary-card { border-color: #ff8a7a88; }
+@container game (max-width: 760px) and (orientation: portrait) { #app .summary-card { border: 0; } }
+#app .battle-rewards[open] { border-color: var(--hud-edge); }
+#app .battle-rewards header { padding: 0 0 8px; border-bottom: 1px solid var(--hud-edge); }
+#app :is(.summary-view #summary-done, .battle-rewards > button.primary) { min-height: var(--button-primary-h); border-radius: var(--button-radius); font-family: var(--font-heading);
+  color: var(--text-on-gold); background: var(--primary-plate); border: 1px solid var(--primary-plate-edge); box-shadow: var(--primary-plate-shadow); }
+#app :is(.summary-view #summary-done, .battle-rewards > button.primary):hover:not(:disabled) { background: var(--primary-plate-hover); }
+#app .summary-view #summary-done { min-height: 52px; } /* the summary's return button keeps its 52px */
