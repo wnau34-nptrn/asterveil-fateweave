@@ -23,10 +23,12 @@ for(const skill of skills)test(`projectile ${skill} real flight/contact, rear la
     expect(arrows.every(a=>a.progress>0&&a.progress<1)).toBe(true);expect(await page.evaluate(()=>window.projectileQA.behindUnits())).toBe(true);
     await page.clock.runFor(timing.contact-Math.round(timing.contact*.82)+50);
     expect(await page.evaluate(()=>window.projectileQA.flight())).toEqual([]);
-    expect(await page.evaluate(()=>window.projectileQA.rings())).toBe(skill==='disengage'||skill==='knives'?1:0); // save v55/v56: Mira's real fall-back evade, Sefa's real blade coat
+    expect(await page.evaluate(()=>window.projectileQA.rings())).toBe(skill==='disengage'?1:0); // Blade coat now uses its painted rework layer, not a generic ring.
+    if(skill==='knives')expect((await page.evaluate(()=>window.projectileQA.painted('rework-fx'))).some(p=>p.frame.startsWith('venom_coat_'))).toBe(true);
     expect((await page.evaluate(()=>window.projectileQA.painted())).some(p=>p.frame.endsWith('_tail')&&p.alpha>.4)).toBe(true);
     await page.locator('#skip-turn').click();await page.clock.runFor(32);
     expect(await page.evaluate(()=>window.projectileQA.painted())).toEqual([]);
+    if(skill==='knives')expect(await page.evaluate(()=>window.projectileQA.painted('rework-fx'))).toEqual([]);
     expect(await page.evaluate(()=>localStorage.getItem('projectile-committed'))).toBe(saved);expect(errors).toEqual([]);
   }finally{await ctx.close();}
 });
@@ -38,8 +40,11 @@ for(const skill of skills)test(`projectile ${skill} OS reduced motion is immedia
     await page.clock.pauseAt(new Date('2026-10-27T01:00:00Z'));
     await page.locator(`#action-${skill}`).click();await page.locator(`#target-${await page.evaluate(()=>window.projectileQA.target())}`).click();
     const still=await page.evaluate(()=>window.projectileQA.painted());expect(still.length).toBeGreaterThan(0);
-    expect(await page.evaluate(()=>window.projectileQA.rings())).toBe(skill==='disengage'||skill==='knives'?1:0); // save v55/v56: Mira's real fall-back evade, Sefa's real blade coat
+    expect(await page.evaluate(()=>window.projectileQA.rings())).toBe(skill==='disengage'?1:0); // Blade coat now uses its painted rework layer, not a generic ring.
+    if(skill==='knives')expect((await page.evaluate(()=>window.projectileQA.painted('rework-fx'))).some(p=>p.frame.startsWith('venom_coat_'))).toBe(true);
+    const coat=skill==='knives'?await page.evaluate(()=>window.projectileQA.painted('rework-fx')):[];
     await page.clock.runFor(90);expect(await page.evaluate(()=>window.projectileQA.painted())).toEqual(still);
+    if(skill==='knives')expect(await page.evaluate(()=>window.projectileQA.painted('rework-fx'))).toEqual(coat);
   }finally{await ctx.close();}
 });
 for(const [skill,scenario,count] of [['pin','normal',2],['volley','volleyhinder',4],['knives','frontonly',2],['knives','twin',4],['track','delayed',1]] as const)

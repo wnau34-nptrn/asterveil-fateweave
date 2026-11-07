@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { REWORK_ATLAS, reworkAtlasUrls, reworkCues, reworkMarks, reworkContact } from '../visuals/rework-fx';
 import { unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals/basic-attack-fx';
 import { BOSS_ATLAS, bossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, usesBossSignature, type BossPoint } from '../visuals/boss-signature-fx';
@@ -109,6 +110,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(EXECUTE_ATLAS, ...executeAtlasUrls());
     this.load.atlas(WARD_ATLAS, ...wardAtlasUrls());
     this.load.atlas(BLADE_ATLAS, ...bladeAtlasUrls());
+    this.load.atlas(REWORK_ATLAS, ...reworkAtlasUrls());
     this.load.atlas(PROJECTILE_ATLAS, ...projectileAtlasUrls());
     this.load.atlas(EARTH_ATLAS, ...earthAtlasUrls());
     this.load.atlas(ALCHEMY_ATLAS, ...alchemyAtlasUrls());
@@ -182,6 +184,7 @@ export class BattleScene extends Phaser.Scene {
   private holds = new Map<string, Phaser.GameObjects.GameObject>();
   private paintHolds(): void {
     const view = this.view; if (!view) return;
+    this.paintReworkMarks(view.state);
     const wanted = new Map(chargeHolds(view.state, this.encounter, this.resolvedActor).map(h => [h.enemyId, h]));
     for (const [id, item] of this.holds) if (wanted.get(id)?.frame !== item.getData('holdFrame') || !item.active) { this.tweens.killTweensOf(item); item.destroy(); this.holds.delete(id); }
     for (const [id, hold] of wanted) {
@@ -207,6 +210,21 @@ export class BattleScene extends Phaser.Scene {
       body.add(item); this.holds.set(id, item);
       // Normal holds breathe gently; unstoppable brackets stay rigid. Reduced motion and quiet keep both still.
       if (hold.kind === 'normal' && !this.quiet && !this.reducedMotion) this.idle.push(this.tweens.add({ targets: item, alpha: { from: 1, to: .85 }, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+    }
+  }
+  private reworkEmblems = new Set<Phaser.GameObjects.Image>();
+  private paintReworkMarks(state: BattleState): void {
+    for (const image of this.reworkEmblems) image.destroy();
+    this.reworkEmblems.clear();
+    if (!this.textures.exists(REWORK_ATLAS)) return;
+    for (const mark of reworkMarks(state)) {
+      const body = this.bodies.get(mark.id), at = this.songAnchor(mark.id, mark.spot), slot = this.actorPanels.get(mark.id);
+      if (!body || !at || !slot) continue;
+      const size = 28;
+      for (let i = 0; i < mark.count; i++) {
+        const image = this.add.image(at.x - body.x + (i - (mark.count - 1) / 2) * (size + 2), at.y - body.y + slot.size * .15, REWORK_ATLAS, mark.frame).setDisplaySize(size,size);
+        image.setData('reworkEmblem', mark.frame); body.add(image); this.reworkEmblems.add(image);
+      }
     }
   }
   // Rendered landmarks for the boss-signature family: chest, feet and the facing side.
@@ -672,6 +690,7 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     if (turn.side === 'enemy' && this.textures.exists(BOSS_ATLAS) && bossPrepare(this.fx(turn.actorId), turn, id => this.bossAnchor(id), contactMs)) return;
+    if (turn.side === 'hero' && turn.action === 'backstab' && this.textures.exists(REWORK_ATLAS) && reworkCues(turn).some(c => c.kind === 'blade_storm')) return;
     if ((turn.side === 'hero' && isBladeSkill(turn.action)) || (turn.side === 'enemy' && turn.intent?.kind === 'physical')) {
       const start = this.anchor(turn.actorId);
       // No anticipation of a hit for a cancelled action or Parry's stance.
@@ -712,6 +731,7 @@ export class BattleScene extends Phaser.Scene {
     this.stageActive = true;
     if (!this.ready) return;
     this.resolvedActor = turn.actorId; this.paintHolds();
+    this.paintReworkMarks(turn.after ?? turn.state);
     const events = turn.events, life = Math.max(100, remainingMs - 20), family = effectFamily(turn);
     // Sanctuary at 1 HP can prevent HP loss without absorbing a barrier point.
     const savedWithoutDamage = (event:BattleEvent) => event.type==='damage'&&!event.amount&&!event.absorbed&&events.some(e=>e.type==='sanctuary'&&e.targetId===event.targetId);
@@ -721,7 +741,9 @@ export class BattleScene extends Phaser.Scene {
     const foeReady=this.textures.exists(FOE_SIGNATURE_ATLAS)&&turn.side==='enemy'&&isFoeSignatureMove(turn.intent?.name);
     const paintedFoe=foeReady?foeSignatureCues(turn):[];
     const foeEventSet=new Set(paintedFoe.map(c=>c.event));
-    const paintedBlades = bladeCues(turn).filter(c=>!savedWithoutDamage(c.event)&&!basicEvents.has(c.event)&&!bossEvents.has(c.event)&&!(foeReady&&!c.parried));
+    const paintedRework = this.textures.exists(REWORK_ATLAS) ? reworkCues(turn) : [];
+    const reworkEvents = new Set(paintedRework.map(c=>c.event));
+    const paintedBlades = bladeCues(turn).filter(c=>!reworkEvents.has(c.event)&&!savedWithoutDamage(c.event)&&!basicEvents.has(c.event)&&!bossEvents.has(c.event)&&!(foeReady&&!c.parried));
     const paintedDefense = this.textures.exists(DEFENSE_ATLAS)?defenseCues(turn,this.encounter).filter(c=>c.kind!=='absorb'||!(paintedBlades.some(b=>b.event===c.event)||foeEventSet.has(c.event))):[];
     const earthHeals=this.textures.exists(HEALING_ATLAS)?earthHealingEvents(turn):[];
     const paintedHealing = this.textures.exists(HEALING_ATLAS) ? [...healingCues(turn),...earthHealingCues(turn),...alchemyHealingCues(turn)] : [];
@@ -773,6 +795,10 @@ export class BattleScene extends Phaser.Scene {
     for(const image of [...(this.healingLayer?.list??[]),...(this.effects?.list??[])])if(image.getData('commandTag')==='prepare'){this.tweens.killTweensOf(image);image.destroy();}
     for(const image of [...(this.healingLayer?.list??[]),...(this.effects?.list??[])])if(image.getData('foeSigTag')==='prepare'){this.tweens.killTweensOf(image);image.destroy();}
     for(const image of [...(this.healingLayer?.list??[]),...(this.effects?.list??[]),...this.songFloor])if(image.getData('songPrepare')){this.tweens.killTweensOf(image);image.destroy();}
+    for (const cue of paintedRework) {
+      const at = cue.spot === 'centre' ? this.anchor(cue.id) : this.songAnchor(cue.id, cue.spot);
+      if (at) reworkContact(cue.kind === 'shadow_afterimage' ? this.songFx(cue.id).back : this.fx(cue.id), cue, at, life, this.songAnchor(cue.id, 'feet'), this.anchor(cue.event.sourceId));
+    }
     if(paintedSd)sdContact(this.songFx(paintedSd.casterId),paintedSd,(id,spot)=>this.songAnchor(id,spot),life);
     if(paintedSong)songContact(this.songFx(paintedSong.casterId),paintedSong,(id,spot)=>this.songAnchor(id,spot),life);
     for(const cue of paintedFoe)foeSignatureContact(this.fx(cue.targetId),cue,(id,spot)=>this.foeAnchor(id,spot),life);
@@ -803,7 +829,7 @@ export class BattleScene extends Phaser.Scene {
       const parry = event.type === 'parry';
       const bossPainted=paintedBoss.length>0&&(event.type==='charge'||event.type==='phase'||event.type==='summon');
       const projectile=projectileEvents.has(event)||basicEvents.has(event)||bossEvents.has(event)||bossPainted,earth=earthEvents.has(event),alchemy=alchemyEventSet.has(event)||sealEventSet.has(event)||commandEventSet.has(event)||songEventSet.has(event)||foeEventSet.has(event)||sdEventSet.has(event);
-      const defense = defenseEvents.has(event) || healingEvents.has(event);
+      const defense = defenseEvents.has(event) || healingEvents.has(event) || reworkEvents.has(event);
       if (parry && event.sourceId === event.targetId) bladeStance(this.fx(id), p, life, bladePalettes.Duelist!);
       if (blade) bladeImpact(this.fx(id), blade, p, this.anchor(event.sourceId), life,
         bladePalettes[this.encounter.heroes.find(h => h.id === event.sourceId)?.role ?? ''] ?? palette.gold);

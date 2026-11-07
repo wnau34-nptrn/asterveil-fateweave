@@ -1,3 +1,12 @@
+## 2026-11-07 — ART-VFX-REWORK-001 (Codex art + intake)
+- PR #200 · Branch `art/art-vfx-rework-001` → `feature/fateweave-initial-prototype`; no merge (owner motion review pending).
+- Generated poison/storm/shadow/arcane/clash layers, R1 drop + R2 fang; raw sources/prompts and lossless pipeline in `incoming/ART-VFX-REWORK-001/`.
+- Event-only routing in visuals/BattleScene; no rules/save/content/balance/stage timing changes; fallback/reduced/fast retained.
+- Validation, real 390px Chromium clips and test results: `docs/combat-presentation/vfx-rework-slice/README_TH.md`.
+- Owner explicitly authorized Codex to make art and integrate in §31; R1 recommendation is Codex's choice, not owner approval.
+- CI follow-up: legacy knives/evade ring assertions now verify the new painted layers; state/cleanup checks retained; same 571 source cases partitioned across 4 runners (disjoint union verified).
+- Open: owner reviews motion; do not merge/publish automatically. Real mobile/Safari unverified.
+
 # Codex → Claude handoff
 
 Newest first. One entry per finished task, at most 12 lines; link a validation README for evidence instead of pasting run ids or logs. Write each entry only here. Older entries (to 2026-11-03) are preserved verbatim in [archive/2026-11-04/CODEX-TO-CLAUDE.md](archive/2026-11-04/CODEX-TO-CLAUDE.md) and those of 2026-11-04 in [archive/2026-11-06/CODEX-TO-CLAUDE.md](archive/2026-11-06/CODEX-TO-CLAUDE.md); move entries there when this file passes ~40 KB. Current state: [CURRENT_STATE.md](../../CURRENT_STATE.md).

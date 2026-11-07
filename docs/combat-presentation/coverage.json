@@ -1240,7 +1240,8 @@
    },
    "vfx": {
     "module": "bolt-fx",
-    "kind": "painted"
+    "kind": "painted",
+    "note": "เสริม rework-fx: มวลพลังเวทที่มือเมื่อ arcane +1 จริง; คงภาพหลักเดิม"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
    "point": "ไม้เท้า → ตัวผู้รับจริง"
@@ -1395,7 +1396,8 @@
    },
    "vfx": {
     "module": "arcane-seal-fx",
-    "kind": "painted"
+    "kind": "painted",
+    "note": "เสริม rework-fx: ปล่อยพลังที่มือเฉพาะ arcane −N จริง; คงภาพหลักเดิม"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
    "point": "กลางตัวเป้าจริง"
@@ -2143,7 +2145,8 @@
    },
    "vfx": {
     "module": "song-shadow-fx",
-    "kind": "painted"
+    "kind": "painted",
+    "note": "เสริม rework-fx: shadow cut เฉพาะ damage จริง + afterimage เท้า (คงภาพ readiness เดิม); คงภาพหลักเดิม"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
    "point": "เท้าผู้ร่าย"
@@ -2173,11 +2176,11 @@
     "pose": "thrust"
    },
    "vfx": {
-    "module": "blade-fx",
+    "module": "rework-fx",
     "kind": "painted"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ตัวผู้รับ damage จริง"
+   "point": "กลางตัวผู้รับ Blade storm. damage จริงทีละ hit; settle ที่เท้าผู้รับจริง (หยุดตามจำนวน event)"
   },
   {
    "identity": "sefa",
@@ -2236,7 +2239,8 @@
    },
    "vfx": {
     "module": "projectile-fx",
-    "kind": "painted"
+    "kind": "painted",
+    "note": "เสริม rework-fx: เคลือบพิษที่มือจาก venom บนผู้ร่าย; คงภาพหลักเดิม"
    },
    "target": "ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล)",
    "point": "ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว)"
@@ -2267,7 +2271,8 @@
    },
    "vfx": {
     "module": "blade-fx",
-    "kind": "painted"
+    "kind": "painted",
+    "note": "เสริม rework-fx: burst/splash เฉพาะ damage ของพิษจริง (ไม่แทน hit แรก); คงภาพหลักเดิม"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
    "point": "ตัวผู้รับ damage จริง"
@@ -3749,7 +3754,7 @@
    "vfx": {
     "module": "saint-dance-fx",
     "kind": "shared",
-    "note": "ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)"
+    "note": "ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) · เสริม rework-fx: clash เฉพาะ event ปะทะจริง; คงภาพหลักเดิม"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
    "point": "ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น)"

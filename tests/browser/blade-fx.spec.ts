@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { stageTiming } from '../../src/ui/battle-playback';
 
-const skills = ['attack', 'finisher', 'lunge', 'sweep', 'backstab', 'ambush', 'disarm', 'parry', 'pierce', 'halt'];
+// Reworked backstab/disarm are covered by vfx-rework.spec.ts; retain legacy art assertions for these skills.
+const skills = ['attack', 'finisher', 'lunge', 'sweep', 'ambush', 'parry', 'pierce', 'halt'];
 // This isolated source fixture is not a shipped game/debug entry. CI runs it against Vite
 // before the separate production Pages suite, which covers the actual shipped application.
 test.skip(process.env.PLAYWRIGHT_PAGES === 'true', 'source fixture has its own dev-server CI gate');

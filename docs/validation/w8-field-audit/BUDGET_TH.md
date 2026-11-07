@@ -4,7 +4,7 @@
 
 - ฮีโร่ที่ atlas หนักสุด 5 คน (กรณีแย่สุด): `lyra`, `lalin`, `seren`, `brann`, `lio`
 - สนามแย่สุด (ทีม 5 ตาม OD-05): `vanguard-captain` 40.0 MiB decoded / 12.49 MB download (งบ ≤64 MiB / ~12 MB)
-- VFX ที่ preload ทุก battle (12 atlas): 67.8 MiB decoded / 10.10 MB — นอกงบ animation แต่วัดแยกตาม §7
+- VFX ที่ preload ทุก battle (13 atlas): 74.3 MiB decoded / 10.89 MB — นอกงบ animation แต่วัดแยกตาม §7
 - VFX โหลดเฉพาะ encounter ที่ใช้: boss 7.9 MiB · foe signature 6.4 MiB · saint/dance 6.7 MiB (ปล่อยเมื่อ encounter ถัดไปไม่ใช้)
 
 | encounter | ศัตรู (สำรอง) | atlas ศัตรู | ทีม 4: decoded / download | ทีม 5: decoded / download | boss VFX |

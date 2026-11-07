@@ -1,0 +1,753 @@
+{
+  "frames": {
+    "arcane_emblem": {
+      "frame": {
+        "x": 1,
+        "y": 1,
+        "w": 157,
+        "h": 232
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 49,
+        "y": 12,
+        "w": 157,
+        "h": 232
+      }
+    },
+    "venom_burst_end": {
+      "frame": {
+        "x": 160,
+        "y": 1,
+        "w": 232,
+        "h": 232
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 12,
+        "w": 232,
+        "h": 232
+      }
+    },
+    "venom_burst_peak": {
+      "frame": {
+        "x": 394,
+        "y": 1,
+        "w": 232,
+        "h": 232
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 12,
+        "w": 232,
+        "h": 232
+      }
+    },
+    "venom_emblem": {
+      "frame": {
+        "x": 628,
+        "y": 1,
+        "w": 146,
+        "h": 232
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 47,
+        "y": 12,
+        "w": 146,
+        "h": 232
+      }
+    },
+    "venom_burst_prepare": {
+      "frame": {
+        "x": 776,
+        "y": 1,
+        "w": 232,
+        "h": 231
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 13,
+        "w": 232,
+        "h": 231
+      }
+    },
+    "venom_tick_prepare": {
+      "frame": {
+        "x": 1,
+        "y": 235,
+        "w": 232,
+        "h": 229
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 13,
+        "w": 232,
+        "h": 229
+      }
+    },
+    "arcane_gain_peak": {
+      "frame": {
+        "x": 235,
+        "y": 235,
+        "w": 232,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 18,
+        "w": 232,
+        "h": 226
+      }
+    },
+    "arcane_gain_prepare": {
+      "frame": {
+        "x": 469,
+        "y": 235,
+        "w": 232,
+        "h": 226
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 15,
+        "w": 232,
+        "h": 226
+      }
+    },
+    "arcane_gain_end": {
+      "frame": {
+        "x": 703,
+        "y": 235,
+        "w": 232,
+        "h": 225
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 19,
+        "w": 232,
+        "h": 225
+      }
+    },
+    "blade_storm_1": {
+      "frame": {
+        "x": 1,
+        "y": 466,
+        "w": 141,
+        "h": 223
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 57,
+        "y": 21,
+        "w": 141,
+        "h": 223
+      }
+    },
+    "venom_stack_peak": {
+      "frame": {
+        "x": 144,
+        "y": 466,
+        "w": 231,
+        "h": 219
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 13,
+        "w": 231,
+        "h": 219
+      }
+    },
+    "venom_stack_end": {
+      "frame": {
+        "x": 377,
+        "y": 466,
+        "w": 223,
+        "h": 218
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 16,
+        "w": 223,
+        "h": 218
+      }
+    },
+    "venom_stack_prepare": {
+      "frame": {
+        "x": 602,
+        "y": 466,
+        "w": 231,
+        "h": 214
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 20,
+        "w": 231,
+        "h": 214
+      }
+    },
+    "shadow_afterimage_peak": {
+      "frame": {
+        "x": 1,
+        "y": 691,
+        "w": 228,
+        "h": 212
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 20,
+        "w": 228,
+        "h": 212
+      }
+    },
+    "shadow_afterimage_prepare": {
+      "frame": {
+        "x": 231,
+        "y": 691,
+        "w": 224,
+        "h": 210
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 20,
+        "y": 30,
+        "w": 224,
+        "h": 210
+      }
+    },
+    "venom_tick_peak": {
+      "frame": {
+        "x": 457,
+        "y": 691,
+        "w": 228,
+        "h": 210
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 29,
+        "w": 228,
+        "h": 210
+      }
+    },
+    "blade_storm_4": {
+      "frame": {
+        "x": 687,
+        "y": 691,
+        "w": 141,
+        "h": 207
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 57,
+        "y": 26,
+        "w": 141,
+        "h": 207
+      }
+    },
+    "blade_storm_2": {
+      "frame": {
+        "x": 830,
+        "y": 691,
+        "w": 141,
+        "h": 206
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 57,
+        "y": 24,
+        "w": 141,
+        "h": 206
+      }
+    },
+    "venom_coat_peak": {
+      "frame": {
+        "x": 1,
+        "y": 905,
+        "w": 209,
+        "h": 205
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 29,
+        "w": 209,
+        "h": 205
+      }
+    },
+    "clash_peak": {
+      "frame": {
+        "x": 212,
+        "y": 905,
+        "w": 209,
+        "h": 202
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 26,
+        "y": 24,
+        "w": 209,
+        "h": 202
+      }
+    },
+    "clash_prepare": {
+      "frame": {
+        "x": 423,
+        "y": 905,
+        "w": 224,
+        "h": 201
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 20,
+        "y": 26,
+        "w": 224,
+        "h": 201
+      }
+    },
+    "shadow_afterimage_end": {
+      "frame": {
+        "x": 649,
+        "y": 905,
+        "w": 220,
+        "h": 198
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 19,
+        "y": 42,
+        "w": 220,
+        "h": 198
+      }
+    },
+    "arcane_release_peak": {
+      "frame": {
+        "x": 1,
+        "y": 1112,
+        "w": 218,
+        "h": 191
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 24,
+        "y": 38,
+        "w": 218,
+        "h": 191
+      }
+    },
+    "blade_storm_3": {
+      "frame": {
+        "x": 221,
+        "y": 1112,
+        "w": 141,
+        "h": 190
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 57,
+        "y": 23,
+        "w": 141,
+        "h": 190
+      }
+    },
+    "venom_coat_end": {
+      "frame": {
+        "x": 364,
+        "y": 1112,
+        "w": 217,
+        "h": 190
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 14,
+        "y": 42,
+        "w": 217,
+        "h": 190
+      }
+    },
+    "clash_end": {
+      "frame": {
+        "x": 583,
+        "y": 1112,
+        "w": 205,
+        "h": 189
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 31,
+        "w": 205,
+        "h": 189
+      }
+    },
+    "arcane_release_prepare": {
+      "frame": {
+        "x": 790,
+        "y": 1112,
+        "w": 216,
+        "h": 188
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 22,
+        "y": 35,
+        "w": 216,
+        "h": 188
+      }
+    },
+    "shadow_cut_end": {
+      "frame": {
+        "x": 1,
+        "y": 1305,
+        "w": 192,
+        "h": 188
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 14,
+        "y": 19,
+        "w": 192,
+        "h": 188
+      }
+    },
+    "blade_storm_settle": {
+      "frame": {
+        "x": 195,
+        "y": 1305,
+        "w": 141,
+        "h": 186
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 57,
+        "y": 58,
+        "w": 141,
+        "h": 186
+      }
+    },
+    "venom_coat_prepare": {
+      "frame": {
+        "x": 338,
+        "y": 1305,
+        "w": 209,
+        "h": 183
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 32,
+        "y": 34,
+        "w": 209,
+        "h": 183
+      }
+    },
+    "venom_splash_peak": {
+      "frame": {
+        "x": 549,
+        "y": 1305,
+        "w": 230,
+        "h": 173
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 48,
+        "w": 230,
+        "h": 173
+      }
+    },
+    "venom_tick_end": {
+      "frame": {
+        "x": 781,
+        "y": 1305,
+        "w": 187,
+        "h": 169
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 15,
+        "y": 42,
+        "w": 187,
+        "h": 169
+      }
+    },
+    "shadow_cut_peak": {
+      "frame": {
+        "x": 1,
+        "y": 1495,
+        "w": 211,
+        "h": 155
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 22,
+        "y": 35,
+        "w": 211,
+        "h": 155
+      }
+    },
+    "venom_splash_end": {
+      "frame": {
+        "x": 214,
+        "y": 1495,
+        "w": 222,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 22,
+        "y": 64,
+        "w": 222,
+        "h": 151
+      }
+    },
+    "venom_splash_prepare": {
+      "frame": {
+        "x": 438,
+        "y": 1495,
+        "w": 161,
+        "h": 147
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 38,
+        "y": 73,
+        "w": 161,
+        "h": 147
+      }
+    },
+    "arcane_release_end": {
+      "frame": {
+        "x": 601,
+        "y": 1495,
+        "w": 183,
+        "h": 139
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 39,
+        "y": 46,
+        "w": 183,
+        "h": 139
+      }
+    },
+    "shadow_cut_prepare": {
+      "frame": {
+        "x": 786,
+        "y": 1495,
+        "w": 155,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": true,
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "spriteSourceSize": {
+        "x": 58,
+        "y": 66,
+        "w": 155,
+        "h": 130
+      }
+    }
+  },
+  "meta": {
+    "image": "rework_fx.webp",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1024,
+      "h": 1651
+    },
+    "scale": "1"
+  }
+}

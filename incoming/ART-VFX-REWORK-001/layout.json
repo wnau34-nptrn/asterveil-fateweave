@@ -1,0 +1,529 @@
+{
+  "venom_coat": {
+    "source": "source/venom_coat.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        724,
+        724
+      ],
+      [
+        724,
+        0,
+        1448,
+        724
+      ],
+      [
+        1448,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "common_scale": 0.3217753120665742,
+    "bounds_alpha_threshold": 0,
+    "common_union": [
+      3,
+      9,
+      724,
+      724
+    ],
+    "offset": [
+      12,
+      13
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "caster hands",
+    "width_at_390": 52
+  },
+  "venom_stack": {
+    "source": "source/venom_stack.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        724,
+        724
+      ],
+      [
+        724,
+        0,
+        1448,
+        724
+      ],
+      [
+        1448,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "common_scale": 0.32044198895027626,
+    "bounds_alpha_threshold": 0,
+    "common_union": [
+      0,
+      9,
+      724,
+      724
+    ],
+    "offset": [
+      12,
+      13
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "target waist",
+    "width_at_390": 52
+  },
+  "venom_tick": {
+    "source": "source/venom_tick.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        724,
+        724
+      ],
+      [
+        724,
+        0,
+        1448,
+        724
+      ],
+      [
+        1448,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "common_scale": 0.32044198895027626,
+    "bounds_alpha_threshold": 0,
+    "common_union": [
+      0,
+      9,
+      724,
+      724
+    ],
+    "offset": [
+      12,
+      13
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "target waist",
+    "width_at_390": 44
+  },
+  "venom_burst": {
+    "source": "source/venom_burst.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        724,
+        724
+      ],
+      [
+        724,
+        0,
+        1448,
+        724
+      ],
+      [
+        1448,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "common_scale": 0.32044198895027626,
+    "bounds_alpha_threshold": 0,
+    "common_union": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "offset": [
+      12,
+      12
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "target centre",
+    "width_at_390": 90
+  },
+  "venom_splash": {
+    "source": "source/venom_splash.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        724,
+        724
+      ],
+      [
+        724,
+        0,
+        1448,
+        724
+      ],
+      [
+        1448,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "common_scale": 0.32044198895027626,
+    "bounds_alpha_threshold": 0,
+    "common_union": [
+      0,
+      0,
+      724,
+      698
+    ],
+    "offset": [
+      12,
+      16
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "target centre",
+    "width_at_390": 50
+  },
+  "shadow_cut": {
+    "source": "source/shadow_cut.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        724,
+        724
+      ],
+      [
+        724,
+        0,
+        1448,
+        724
+      ],
+      [
+        1448,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "common_scale": 0.32088520055325037,
+    "bounds_alpha_threshold": 0,
+    "common_union": [
+      1,
+      19,
+      724,
+      704
+    ],
+    "offset": [
+      12,
+      18
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "target centre",
+    "width_at_390": 76
+  },
+  "shadow_afterimage": {
+    "source": "source/shadow_afterimage.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        724,
+        724
+      ],
+      [
+        724,
+        0,
+        1448,
+        724
+      ],
+      [
+        1448,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "common_scale": 0.32044198895027626,
+    "bounds_alpha_threshold": 0,
+    "common_union": [
+      0,
+      23,
+      724,
+      724
+    ],
+    "offset": [
+      12,
+      15
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "caster feet",
+    "width_at_390": 95
+  },
+  "arcane_gain": {
+    "source": "source/arcane_gain.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        724,
+        724
+      ],
+      [
+        724,
+        0,
+        1448,
+        724
+      ],
+      [
+        1448,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "common_scale": 0.32044198895027626,
+    "bounds_alpha_threshold": 0,
+    "common_union": [
+      0,
+      0,
+      724,
+      724
+    ],
+    "offset": [
+      12,
+      12
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "caster hands",
+    "width_at_390": 48
+  },
+  "arcane_release": {
+    "source": "source/arcane_release.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        724,
+        724
+      ],
+      [
+        724,
+        0,
+        1448,
+        724
+      ],
+      [
+        1448,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "common_scale": 0.32088520055325037,
+    "bounds_alpha_threshold": 0,
+    "common_union": [
+      1,
+      10,
+      724,
+      708
+    ],
+    "offset": [
+      12,
+      16
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "caster hands",
+    "width_at_390": 94
+  },
+  "clash": {
+    "source": "source/clash.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        724,
+        724
+      ],
+      [
+        724,
+        0,
+        1448,
+        724
+      ],
+      [
+        1448,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "common_scale": 0.3226703755215577,
+    "bounds_alpha_threshold": 0,
+    "common_union": [
+      1,
+      23,
+      720,
+      692
+    ],
+    "offset": [
+      12,
+      20
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "target centre",
+    "width_at_390": 90
+  },
+  "blade_storm": {
+    "source": "source/blade_storm.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        434,
+        724
+      ],
+      [
+        434,
+        0,
+        869,
+        724
+      ],
+      [
+        869,
+        0,
+        1303,
+        724
+      ],
+      [
+        1303,
+        0,
+        1738,
+        724
+      ],
+      [
+        1738,
+        0,
+        2172,
+        724
+      ]
+    ],
+    "common_scale": 0.3240223463687151,
+    "bounds_alpha_threshold": 0,
+    "common_union": [
+      0,
+      8,
+      435,
+      724
+    ],
+    "offset": [
+      57,
+      12
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "target centre; settle target feet",
+    "width_at_390": 76
+  },
+  "venom_emblem": {
+    "source": "source/venom_emblem.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        887,
+        887
+      ],
+      [
+        887,
+        0,
+        1774,
+        887
+      ]
+    ],
+    "common_scale": 0.3391812865497076,
+    "bounds_alpha_threshold": 16,
+    "common_union": [
+      249,
+      101,
+      723,
+      785
+    ],
+    "offset": [
+      47,
+      12
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "target waist",
+    "width_at_390": 28
+  },
+  "arcane_emblem": {
+    "source": "source/arcane_emblem.png",
+    "source_rects": [
+      [
+        0,
+        0,
+        1536,
+        1024
+      ]
+    ],
+    "common_scale": 0.58,
+    "bounds_alpha_threshold": 16,
+    "common_union": [
+      638,
+      290,
+      909,
+      690
+    ],
+    "offset": [
+      49,
+      12
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "anchor": "caster hands",
+    "width_at_390": 28
+  }
+}
