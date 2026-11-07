@@ -28,7 +28,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - Map 3 gate copy of the Briar Lord still falls to plain attacks 83–98%; stronger % broke the rush/casual first-clear gate — deferred to P05 (needs a gate-specific mechanic/encounter; Claude decision under delegation).
 - No real Safari/iPhone/Android or human usability results (P02-03 trial pending). The owner's iPhone report of Seren's art is fixed in PR #154 but not re-checked on the device.
 - P03: Kael/Wynne/Astrid battle animation integrated (A12 intake 2026-11-05, `docs/combat-presentation/unit-a12-slice/README_TH.md`); circle/toll/dial clips unseen in game; owner has not reviewed motion.
-- Motion review owed (owner asked 2026-11-07): 390px clips of the step 5–6 skills (reused art on new events: splash/smoke spread, blade storm ×4, clash/arcane/venom numbers, challenge/solo/shadow-step hit rings) with the Kael/Wynne/Astrid clips.
+- Motion review 2026-11-07: owner saw the 390px step 5–6 + Kael/Wynne/Astrid clips and said "ตามที่คุณแนะนำเลย อะไรต้องแก้ไข ขอ prompt codex" (no per-clip approval). Copy-ready brief `ART-VFX-REWORK-001` (venom coat/stack/burst, blade storm ×4, shadow step, arcane charge/release, clash) in `docs/handoffs/CODEX-ART-QUEUE-TH.md` §31; waiting for Codex, then intake + new clips.
 - Art: A7-003 parked (OD-14); Lyra atlas above guideline; open PRs #133 UX art/plan, #122 A7-003, #55 pets, #53 boss frames (do not merge the Artwork branch automatically).
 
 ## Workspace

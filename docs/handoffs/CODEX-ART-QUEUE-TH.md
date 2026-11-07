@@ -894,3 +894,46 @@ DELIVERABLES: unit/{kael,wynne,astrid}.png, portrait/{kael,wynne,astrid}.png, we
 
 ACCEPTANCE (Claude checks before owner review): head 145–165px, body 440–460px, ratio 0.32–0.36, both feet touching y≈496, every image decodes, silhouettes distinct from the current cast at 115px, icons readable at 44px, no repository file outside the package changed. Push with normal git, fetch back, verify every SHA-256 and decode every image with Pillow. Owner visual approval is required; these checks and CI are not approval. No merge, no runtime integration, no rules/content/save/balance changes.
 ```
+
+## 31. ART-VFX-REWORK-001 — เอฟเฟกต์ของสกิลที่ปรับใหม่ (พิษ, พายุคม, ก้าวเงา, พลังเวท/ปะทะ)
+
+ที่มา: Claude ตรวจคลิปทบทวน motion ของขั้น 5–6 (2026-11-07) แล้วพบว่า กลไกใหม่ยังไม่มีภาพของตัวเอง เห็นเพียงตัวเลขลอยกับวงแหวนเดิม เจ้าของตอบว่า "ตามที่คุณแนะนำเลย อะไรต้องแก้ไข ขอ prompt codex" งานนี้เป็นงานภาพอย่างเดียว ไม่แตะกติกา ตัวเลข หรือเซฟ
+
+```text
+CODEX HANDOFF — ART-VFX-REWORK-001
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (NOT main). Create branch art/art-vfx-rework-001. Add files only under incoming/ART-VFX-REWORK-001/. Do not change src/, tests/, public/, .github/ or existing art. Open a PR into the base branch; do not merge. Original artwork only; nothing from Asterveil: Rise Beyond. Never use the word ม่านเวล.
+
+GOAL: give five reworked mechanics their own readable effect layers. Today they reuse old art and only a floating number tells the player what happened. Effects only; the game routes them from real battle events and keeps all timing.
+
+READ FIRST: docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md; docs/combat-presentation/vfx-art-direction/README_TH.md (palette, blend rules, things not to do); incoming/ART-VFX-SONG-SHADOW-002/ (exact package format to repeat: art-vfx-three-beat-v1 layers.json, layout.json, generation-prompts.json, validation.json, SHA256SUMS, package.py, verify.py, storyboard-390.png, comparison board); public/assets/fx/blade_fx.* and incoming/ART-VFX-BLADE-001/ (current Sefa blade art to stay consistent with); public/assets/fx/arcane_seal_fx.* and public/assets/fx/bolt_fx.* (current Eira art); src/core/battle/engine.ts lines ~214–223, 319–330, 1068–1072, 1287–1295, 1333, 1362–1366, 1414–1460, 1588 (the real events each effect must match — read them, do not guess).
+
+CHARACTER SEEDS (placement reference only, not new character art): Sefa = public/assets/art/units_mercs.webp cell 3; Kael = units_mercs.webp cell 10; Eira = public/assets/art/units.webp cell 2 (id weaver); enemy placement = foes sheet as in src/game/visuals/assets.ts. 512px cells, ground line y≈497. Heroes stand on the lower half facing up-right toward foes; foes on the upper half.
+
+CONFIRMED SEMANTICS (from engine.ts; the art must claim nothing more):
+1. venom_coat (Sefa, skill knives "เคลือบพิษ"): she hits one foe, then her blades are coated for her next 3 hits. Event 'venom' on Sefa herself. Effect: a sickly green-violet sheen runs along her two daggers and drips once. Anchor: caster hands. No hit flash (the hit already has blade art).
+2. venom_stack (each coated hit that lands, and a small reusable status mark): event 'venom' on the foe with amount = stacks 1–3 (max 3). Effect: a small poison bloom at the foe's waist, plus ONE compact status emblem (a drop/fang shape, ~28–36 px on a 390 px screen) that the code repeats 1–3 times beside the foe. No numbers or text baked in. Also a quiet round-end tick (venom bites as each round ends): a short inward green pulse, 3 beats, smaller than the bloom.
+3. venom_burst (skill disarm "ระเบิดพิษ"): pops every stack on one foe (6 damage per stack) and splashes half onto that foe's row neighbours. Effect: gather on the foe (green-violet inward), one sharp toxic burst at foe centre, then a low sideways splash that can be placed separately on each neighbour. Supply the splash as its own small layer. Only plays when stacks exist.
+4. blade_storm (skill backstab "พายุคม"): exactly 4 separate hits of 6 on one foe; the hit loop stops early if the foe falls. Effect: ONE short crossing slash per hit, 4 visibly different angles (supply 4 slash variants, so the code can play them in order), plus one final settle (steel-blue afterimage ring at the foe's feet). Keep the language of the current blade_fx (steel-blue, cold white core). Not one big slash; not a 4-in-1 baked image.
+5. shadow_step_hit (skill evade "ก้าวเงา", power 8): Sefa hits one foe for 8 AND becomes evading until her next turn. Effect A (on foe): a quick shadow-cut — a dark-violet blur line that ends in a small cut flash. Effect B (on Sefa): she leaves a translucent afterimage wisp at her feet that reads "she is not quite there". Do not draw a shield or a parry; a dodge only happens later if an enemy attacks her, and the existing song_shadow evade layer still marks readiness — make B match it (steel-blue smoke) rather than replace it.
+6. arcane_charge / arcane_release (Eira): whenever her bolt lands she gains 1 arcane charge (max 3) — event 'arcane' amount +1 on Eira; skill dispel "ปลดพลังเวท" spends all charges (8 extra damage each) — event 'arcane' amount −N. Effect: (a) charge gain: one small violet-gold mote that settles beside Eira's hand; supply ONE mote emblem the code repeats 1–3 times; (b) release: the motes snap together at her hand and pour into the spell — a short brighter flare, sized so 1, 2 or 3 charges can be shown by scale (code scales it). Keep the current arcane_seal / bolt palette.
+7. clash (Kael, skill storedfist): when his stored fist meets an enemy's announced move, event 'clash'. Effect: a two-sided impact — warm orange from Kael's side, cold enemy-violet from the other — meeting at one bright point with a short shock ring. Anchor: target centre, oriented toward the hero side. No numbers.
+
+LAYERS: every effect = separate 256×256 straight-alpha PNGs, three beats (prepare / peak / end) unless stated (blade_storm: 4 slash variants + 1 settle; status emblems: 1 frame each). Real alpha; no painted checkerboard; ≥12 px clear padding. One common scale per effect across its beats. Record pivots as normalized canvas coordinates; anchors exactly: caster hands, target centre, target waist, target feet, caster feet.
+
+SIZE ON SCREEN (390 px wide): status emblems 28–36 px; venom bloom, venom tick, arcane mote 40–60 px; venom burst, clash, release peak 70–100 px; blade_storm slash ≈ the current blade_fx backstab slash width; shadow afterimage ≈ the current song_shadow evade width (do not apply the old 1.7× multiplier).
+
+TIMING (proposals only; Claude fits them inside the existing stage timing without changing total duration, event order, fast playback or reduced motion): coat 0–120–260–420 ms; stack 0–80–200–320; tick 0–100–260; burst 0–180–300–520 (+ splash 300–520); blade_storm one slash each ~110 ms, settle 440–640; shadow cut 0–90–220, afterimage 0–200–600; arcane gain 0–120–320, release 0–140–260–460; clash 0–100–180–380.
+
+PALETTE: poison = sickly green (#7ee08a-ish) with violet shadows, never neon full-screen; blades = existing steel-blue/cold white; arcane = existing violet-gold; Kael = warm orange/gold; enemy side = cold violet. Additive only for small cores; normal alpha for coloured edges. Must stay readable over the navy rift backdrop and must never cover faces, HP bars, names or status labels.
+
+VARIANTS: R1 for all. Also an R2 for venom_stack emblem only (drop shape vs fang shape); recommend one in NOTES.md.
+
+DELIVER: source/ (byte-identical generator output, one effect per call), R1/ (and R2/ for the emblem) layers, references/ (seed crops used), generation-prompts.json, layout.json, layers.json (art-vfx-three-beat-v1), storyboard-390.png (exact 390 px static placement with the seeds: one row per effect, showing 1/2/3 stacks and 1/2/3 charges with the repeated emblems), comparison-100px.png (old reused art vs new), NOTES.md (blend per layer, pivots, reduced-motion still per effect, any deviation), package.py, verify.py, validation.json, SHA256SUMS.
+
+DELIVERY CHECK: push with normal git (no API upload of images; PR #90 was once cut at ~768 KB), fetch the branch back, compare SHA-256 of every file with validation.json, and fully decode every PNG with Pillow. Report results in the PR.
+
+NOT YOURS: atlas packing, code routing, tests and in-game clips — Claude does these. Artwork selection and motion approval are the owner's decisions; technical checks and CI are not approval.
+
+RETURN: incoming/ART-VFX-REWORK-001/
+```
