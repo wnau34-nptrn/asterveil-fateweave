@@ -1,0 +1,55 @@
+{
+  "tool": "image_gen.imagegen",
+  "generation_ids": "not exposed; output filenames retained",
+  "composition": {
+    "prompt": "Create an original production fantasy continent map, extremely tall portrait aspect ratio 1080:3000, target 2160x6000 pixels at highest available detail. Painted three-quarter high aerial view, upper-left lighting, rich crisp hand-painted game terrain like reference region_ch1, calm emerald teal cyan champagne and slate palette. References: landscape world concept only for six biome identities, portrait concept for aerial materials, region_ch1 for exact style and the fourth layout image for REQUIRED southwest placement. The full region_ch1 painting must occupy exactly x=60,y=1900,w=432,h=936 on the 1080x3000 composition, fully retained rectangular inset seamlessly integrated into the continent; no frame around it. Do not redesign its ten landmarks or paths. Extend its cliffs, forest and mist OUTSIDE that rectangle. Its top violet rift flows diagonally northeast toward the central heartland. Whole single continent bounded by cool deep ocean, no horizon or sky. Geographical composition on 1080x3000: northern amber steppe y=180..650 with clearly BROKEN circular stone observatory at (570,410); northwest snowy highlands y=550..1150 with SPLIT mountain above SMALL settlement at (280,790); northeast burgundy autumn forest y=850..1500 with enormous ROOT cathedral at (800,1150); central champagne heartland y=1300..1980 with RING-WALLED city and SPINDLE tower at (570,1600); southeast jade TURQUOISE TIDAL DELTA y=1900..2780 with unmistakable STEPPED stone tidal temple at (800,2330); southwest exact chapter1 image at the stated rectangle. Leave ocean breathing space at outer perimeter. Large readable silhouettes at phone width 390, layered cliffs and restrained tiny details, magical violet ONLY in the narrow scar. No text, no letters, no numbers, no labels, no borders, no pins, no UI, no watermark. All six groups form one continuous continent, regional scale larger than individual chapter1 landmarks.",
+    "references": [
+      "seeds/world_concept.png",
+      "seeds/world_portrait.png",
+      "seeds/region_ch1.webp",
+      "seeds/layout.png"
+    ],
+    "output": "raw/composition.png",
+    "native_size": [
+      753,
+      2089
+    ]
+  },
+  "panels": [
+    {
+      "prompt": "Repaint this supplied fantasy map section 1 as a crisp high-detail production painting, target 2160x2400, preserve EXACT framing, camera, coastline geometry, landmark positions and all outer-edge terrain so overlapping sections can be mechanically blended. This is one section of a tall continent, do not zoom or crop or add another whole continent. Upper-left light, match region_ch1 illustration style, warm emerald woods, blue slate cliffs, cool cyan silver water, champagne paths, calm refined saturation, dark violet only for the rift. No writing, labels, numbers, pins, borders, UI, watermark. Keep the BROKEN circular observatory in the amber northern grassland, northwestern snowy SPLIT mountain with a small settlement beneath, and northeast autumn ROOT cathedral.",
+      "references": [
+        "seeds/panel_1_layout.png"
+      ],
+      "output": "raw/panel_1.png"
+    },
+    {
+      "prompt": "Repaint this supplied fantasy map section 2 as a crisp high-detail production painting, target 2160x2400, preserve EXACT framing, camera, coastline geometry, landmark positions and all outer-edge terrain so overlapping sections can be mechanically blended. This is one section of a tall continent, do not zoom or crop or add another whole continent. Upper-left light, match region_ch1 illustration style, warm emerald woods, blue slate cliffs, cool cyan silver water, champagne paths, calm refined saturation, dark violet only for the rift. No writing, labels, numbers, pins, borders, UI, watermark. Keep the central ring-walled city and its spindle-shaped spiral tower, the cathedral at upper right, and the narrow violet scar connecting southwest to city. At lower right replace the pointed spire church with a large unmistakable ancient STEPPED tidal temple: wide square terraced pyramid, broad staircase, low summit altar, no tall gothic spires.",
+      "references": [
+        "seeds/panel_2_layout.png"
+      ],
+      "output": "raw/panel_2_before_transition.png"
+    },
+    {
+      "prompt": "Repaint this supplied fantasy map section 3 as a crisp high-detail production painting, target 2160x2400, preserve EXACT framing, camera, coastline geometry, landmark positions and all outer-edge terrain so overlapping sections can be mechanically blended. This is one section of a tall continent, do not zoom or crop or add another whole continent. Upper-left light, match region_ch1 illustration style, warm emerald woods, blue slate cliffs, cool cyan silver water, champagne paths, calm refined saturation, dark violet only for the rift. No writing, labels, numbers, pins, borders, UI, watermark. Preserve the exact rectangle of chapter1 artwork at local x120,y200,w864,h1872 including all paths and ten landmarks; do not redesign it. Surround this rectangle seamlessly with matching cliffs and woodland. In the turquoise eastern tidal delta replace the spired gothic temple with a wide square ancient STEPPED temple: terraced pyramid, broad central stair, low altar, NO gothic spires. Keep the ocean and coastline at bottom.",
+      "references": [
+        "seeds/panel_3_layout.png"
+      ],
+      "output": "raw/panel_3_before_seam.png"
+    }
+  ],
+  "seam": {
+    "prompt": "Edit only terrain OUTSIDE the pasted chapter1 rectangle to make this map section ONE continuous painting. The rectangle occupies normalized x=.055 to .455, y=.0833 to .8633. Keep EVERY pixel INSIDE this rectangle unchanged, including its top edge violet throne and bottom edge emerald starting fort. Remove the duplicate thin chapter1 landscape strip above the rectangle: replace that OUTSIDE upper-left strip with continuous dark violet rocky rift platforms and mist extending naturally upward from the top edge of the pasted rectangle. Extend forest, rocks, waterfalls and wisps of pale mist OUTSIDE the left, right and lower edges to dissolve the obvious straight rectangular collage boundary. No rectangular frame or sharp pasted border must remain. Keep the big stepped tidal temple and turquoise channels on the right unchanged. Keep the ocean at bottom. Same aerial view, upper-left light, no text or UI. Do not move, resize, crop or repaint the pasted chapter1 rectangle.",
+    "references": [
+      "raw/panel_3_before_seam.png"
+    ],
+    "output": "raw/panel_3.png"
+  },
+  "transition": {
+    "prompt": "Correct this middle section of the tall continent map. Preserve the city, tower, forest cathedral, snow and all coastlines in the TOP TWO THIRDS exactly. In the lower-left quarter below the central city (normalized x 0..0.46, y .62..1), DELETE ALL miniature chapter1 landmarks, circular blue meteor craters, golden clearings and duplicated throne platforms. Replace that lower-left area with a SINGLE uninterrupted dark slate rocky canyon carrying one thin violet rift southwest from the city, surrounded by emerald woodland and mist, no buildings or gold paths. The scar must reach the lower edge near x=.30. This is the empty geological transition toward a chapter1 region that will be placed further south, so no chapter1 landmarks here. At bottom right preserve a wide stepped tidal temple. No text, no UI, no pins. Exact same crop and canvas aspect ratio as input.",
+    "references": [
+      "raw/panel_2_before_transition.png"
+    ],
+    "output": "raw/panel_2.png"
+  }
+}
