@@ -1,9 +1,9 @@
 ## 2026-11-07 — SYSTEM-UNLOCK-PACING-002
 - Owner approved the recommended pacing: quests after MAP 1; hiring/market/hunt after MAP 2; other current services stay at their existing MAP 1/2/3 milestones.
-- Branch `codex/system-unlock-pacing-002` → game branch; PR/merge recorded on completion.
+- Merged PR #202 (`codex/system-unlock-pacing-002` → game branch), merge `f05754cc3de006613d9019382c4472c063b470ce`, after quality + browser passed.
 - Explicit MAP 3 thresholds preserve advanced-service availability when future maps are added; old A3 table remains historical, linked to the new decision.
 - Quest board retains progress/rewards/claim-once and adds preparation guidance; guides remain one at a time, hire guide follows MAP 2.
-- Local full unit 1,657 passed/6 skipped; focused non-veteran regressions + 4 browser tests passed; CI results in validation README. Updated old world.spec hiring assertion MAP 3→2.
+- Local full unit 1,657 passed/6 skipped; focused regressions + 4 browser tests passed; CI quality + browser (4 shards/aggregate) passed. Old world.spec assertion MAP 3→2 fixed.
 - No battle/save format/balance/reward/cost/slot changes, parked recruits still parked; no future systems or P09.
 - Evidence: `docs/validation/system-unlock-pacing/README_TH.md`; next task awaits owner.
 
