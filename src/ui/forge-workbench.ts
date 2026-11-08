@@ -74,7 +74,7 @@ export class ForgeWorkbench {
     if(this.mode==='fuse')return this.success?'ผลเลื่อนความหายาก':this.review?'ตรวจรายการเลื่อนสี':'เลื่อนความหายาก';
     if(this.mode==='reroll')return (this.success?'ผลการ':this.review?'ตรวจรายการ':'')+'สุ่มคุณสมบัติ';
     if(this.mode==='transfer')return this.success?'ผลการถ่ายโอน':this.review?'ตรวจรายการถ่ายโอน':'ถ่ายโอนคุณสมบัติ';
-    return this.mode==='level'?(this.success?'ผลการเพิ่มเลเวล':this.review?'ตรวจรายการเพิ่มเลเวล':'เพิ่มเลเวลอุปกรณ์'):(this.success?'ผลการตีบวก':this.review?'ตรวจรายการตีบวก':'ตีบวกอุปกรณ์');
+    return this.mode==='level'?(this.success?'ผลการเพิ่มเลเวล':this.review?'ตรวจรายการเพิ่มเลเวล':'เพิ่มเลเวลอุปกรณ์'):'ตีบวกอุปกรณ์';
   }
   // Only committed forged events from the shell produce success feedback.
   enhanced(p:Profile,uid:number):void {
@@ -105,6 +105,14 @@ export class ForgeWorkbench {
   get selected():number|undefined{return this.uid;}
   click(b:HTMLButtonElement,p:Profile):string|undefined {
     const action=b.dataset.forge;if(!action||b.disabled)return;
+    if(action==='strike'){
+      // Bind the visible one-step cost to this exact profile/item/target. A detached or repeated
+      // button cannot spend again, even if the shell synchronously renders the next step.
+      if(!this.enhancementView||this.review||this.source!==p||Number(b.dataset.uid)!==this.uid)return;
+      const item=findItem(p,this.uid!)?.item,target=Number(b.dataset.target),cost=item&&enhancementCostTo(this.map,item,target);
+      if(!item||target!==(item.plus??0)+1||target!==this.target||!cost||p.bank.ore<cost.ore||p.bank.dust<cost.dust)return;
+      b.disabled=true;this.host.enhance(this.uid!,target);return 'forge-success';
+    }
     if(action==='confirm'&&!this.review&&(this.success||this.serviceSuccess))return;
     if(action==='next-preview'){if(this.serviceSuccess?.tab==='recycle'){this.uid=undefined;this.picker=true;}this.serviceSuccess=undefined;this.success=undefined;this.review=false;this.readyScroll=0;return 'lobby-sheet-title';}
     if(action!=='confirm'){this.servicePending=undefined;this.serviceReview=undefined;this.serviceSuccess=undefined;this.review=false;this.staleReview=false;this.success=undefined;}
@@ -220,18 +228,21 @@ export class ForgeWorkbench {
     const step=(value:number)=>leveling?`Lv${value}`:`+${value}`;
     const current=leveling?item.level:item.plus??0,cap=leveling?itemLevelCap(p,this.map):this.map.equipment.forge.plusCap[item.rarity]!;
     this.target=Math.min(cap,current+1);
-    const receipt=this.success?.uid===item.uid&&this.success.mode===this.mode?this.success:undefined;
+    const lastStrike=!leveling&&this.success?.uid===item.uid&&this.success.mode==='enhance'?this.success:undefined;
+    const receipt=leveling&&this.success?.uid===item.uid&&this.success.mode===this.mode?this.success:undefined;
     const before=receipt?findItem(receipt.before,item.uid)!.item:item;
     const cost=current>=cap?undefined:leveling?itemLevelCost(this.map,item,this.target):enhancementCostTo(this.map,item,this.target);
     const next=receipt?item:!cost?item:leveling?{...item,level:this.target}:{...item,plus:this.target};
     const previewProfile=receipt?.before??p,paid=enhancementInvestment(this.map,item),levelPaid=item.levelInvestment??{ore:0,dust:0};
     const reasons=cost?[p.bank.ore<cost.ore?`แร่ดาวขาด ${cost.ore-p.bank.ore}`:'',p.bank.dust<cost.dust?`ฝุ่นดาวขาด ${cost.dust-p.bank.dust}`:''].filter(Boolean):[];
     if(leveling&&cost&&!reasons.length&&raiseItemLevel(p,this.map,item.uid,this.target).event.type==='blocked')reasons.push('ไม่สามารถเพิ่มเลเวลได้ · ตรวจข้อมูลอุปกรณ์ใหม่');
-    const result=receipt?`<p id="forge-success" class="forge-success" role="status" tabindex="-1">${icon('check')}${operation}สำเร็จ ${step(receipt.from)} → ${step(receipt.to)}<small>ใช้แร่ ${receipt.ore} · ฝุ่น ${receipt.dust} · คงเหลือ แร่ ${p.bank.ore} · ฝุ่น ${p.bank.dust}</small></p>`:'';
+    const completed=lastStrike??receipt;
+    const result=completed?`<p id="forge-success" class="forge-success" role="status" tabindex="-1">${icon('check')}${operation}สำเร็จ ${step(completed.from)} → ${step(completed.to)}<small>ใช้แร่ ${completed.ore} · ฝุ่น ${completed.dust} · คงเหลือ แร่ ${p.bank.ore} · ฝุ่น ${p.bank.dust}</small></p>`:'';
     const resource=(label:string,glyph:'ore'|'dust',used:number,available:number,committed=false)=>`<div class="forge-resource${!committed&&available<used?' shortage':''}"><b>${icon(glyph)}${label} · ${committed?'ใช้แล้ว':'ใช้'} ${used}</b><span>${committed?'เหลือ':'มี'} ${available}${!committed&&available<used?` · ขาด ${used-available}`:''}</span></div>`;
     const resources=receipt?resource('แร่','ore',receipt.ore,p.bank.ore,true)+resource('ฝุ่น','dust',receipt.dust,p.bank.dust,true):cost?resource('แร่','ore',cost.ore,p.bank.ore)+resource('ฝุ่น','dust',cost.dust,p.bank.dust):'<div class="forge-resource"><b>ถึงเพดาน</b><span>ไม่มีขั้นถัดไป</span></div><div class="forge-resource"><b>ไม่ใช้วัสดุ</b><span>ในสถานะนี้</span></div>';
     const status=receipt?'ยอดคงเหลือหลังยืนยัน':!cost?'เลือกอุปกรณ์ชิ้นอื่นเพื่อพัฒนาต่อ':reasons.length?reasons.join(' · '):this.review?'ยังไม่ใช้ทรัพยากร · ตรวจรายการก่อนยืนยัน':`คงเหลือ แร่ ${p.bank.ore-cost.ore} · ฝุ่น ${p.bank.dust-cost.dust}`;
-    const actions=receipt?'<button id="forge-next-preview" data-forge="next-preview" class="primary">ดูขั้นถัดไป</button>':!cost?'<button id="forge-change-item-cap" data-forge="picker" class="primary">เลือกอุปกรณ์อื่น</button>':this.review?`<button id="forge-cancel" data-forge="cancel" class="secondary">กลับไปแก้ไข</button><button id="forge-confirm" data-forge="confirm" class="primary"${reasons.length?' disabled':''}>${icon(leveling?'up':'enhance')}ยืนยัน${operation} ${step(this.target)}</button>`:`<button id="${leveling?'forge-level':'forge-enhance'}" data-forge="review" class="primary"${reasons.length?' disabled':''}>${icon(leveling?'up':'enhance')}ตรวจรายการ${operation} ${step(this.target)}</button>`;
+    const strike=`<button id="forge-enhance" data-forge="strike" data-uid="${item.uid}" data-target="${this.target}" class="primary"${reasons.length?' disabled':''}>${icon('enhance')}ตีบวก ${step(this.target)}</button>`;
+    const actions=!leveling&&cost?strike:receipt?'<button id="forge-next-preview" data-forge="next-preview" class="primary">ดูขั้นถัดไป</button>':!cost?'<button id="forge-change-item-cap" data-forge="picker" class="primary">เลือกอุปกรณ์อื่น</button>':this.review?`<button id="forge-cancel" data-forge="cancel" class="secondary">กลับไปแก้ไข</button><button id="forge-confirm" data-forge="confirm" class="primary"${reasons.length?' disabled':''}>${icon(leveling?'up':'enhance')}ยืนยัน${operation} ${step(this.target)}</button>`:`<button id="${leveling?'forge-level':'forge-enhance'}" data-forge="review" class="primary"${reasons.length?' disabled':''}>${icon(leveling?'up':'enhance')}ตรวจรายการ${operation} ${step(this.target)}</button>`;
     const footer=`<div class="forge-footer forge-enhancement-dock"><div class="forge-cost-summary"><div id="forge-cost" class="forge-resources">${resources}</div><p class="forge-cost-status${reasons.length&&!receipt?' forge-reason':''}" role="status">${status}</p></div><div class="forge-footer-buttons">${actions}</div></div>`;
     const tools=this.review||receipt?`<small>${this.review?'ตรวจชิ้นที่เลือก':'ผลที่ยืนยันแล้ว'}</small>`:`<div class="forge-item-tools"><button id="forge-change-item" data-forge="picker" class="secondary">เปลี่ยนอุปกรณ์</button><button id="forge-lock" data-forge="lock" class="secondary" aria-label="${item.locked?'ปลดล็อก':'ล็อก'}อุปกรณ์" aria-pressed="${!!item.locked}">${icon(item.locked?'act-unlock':'act-lock')}</button></div>`;
     const itemDetails=this.itemComparison(before,next);

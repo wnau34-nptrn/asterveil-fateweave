@@ -1,3 +1,4 @@
+import {closeTalentDetails} from './talent-navigation';
 import { expect, test, type Page } from '@playwright/test';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { encounterById as lookup } from '../../src/content/encounters/catalog';
@@ -44,7 +45,7 @@ test('P03 Kael: personal branch is inspected without spending, then learnt once 
   await page.locator('#lobby-tab-team').click();
   await page.locator('#lobby-member-kael').click();
   await page.locator('#lobby-character-open').click();
-  await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-character-tab-talents').click();
+  await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click(); await closeTalentDetails(page);await page.locator('#camp-character-tab-talents').click();
   await expect(page.locator('.personal-tree')).toContainText('เส้นทางประจำตัว · เคล');
   const before = await saved(page);
   await page.locator('.personal-tree [data-node=p1]').click();

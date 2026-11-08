@@ -71,3 +71,13 @@
 
 .talents-page { display: grid; gap: 10px; }
 .talents-page > button { width: 100%; min-height: 44px; white-space: normal; }
+
+/* A native modal keeps the selected node's details and spending action in view. */
+#app dialog.talent-detail-dialog { width: calc(var(--game-w) - 24px); height: fit-content; max-height: calc(var(--app-h) - 32px); border-radius: 20px; }
+#app .talent-detail-dialog[open] { display: flex; flex-direction: column; overflow: hidden; }
+#app .talent-detail-dialog .info-content { flex: 0 1 auto; max-height: calc(var(--app-h) - 110px); overflow-y: auto; overscroll-behavior: contain; }
+.talent-detail-dialog .node-card { margin: 12px 0; }
+.talent-detail-dialog .talent-detail-points { display: flex; width: fit-content; }
+.talent-detail-dialog .node-card-foot { flex-wrap: wrap; gap: 10px; }
+.talent-detail-dialog .node-card-foot button { min-height: 44px; }
+.talent-detail-content > button { width: 100%; }

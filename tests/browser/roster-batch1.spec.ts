@@ -1,3 +1,4 @@
+import {closeTalentDetails} from './talent-navigation';
 import { expect, test, type Page } from '@playwright/test';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { encounterById as lookup } from '../../src/content/encounters/catalog';
@@ -53,7 +54,7 @@ test('C12: personal branch inspection spends only on the explicit learn action a
   await page.locator('#lobby-tab-team').click();
   await page.locator('#lobby-member-metta').click();
   await page.locator('#lobby-character-open').click();
-  await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-character-tab-talents').click();
+  await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click(); await closeTalentDetails(page);await page.locator('#camp-character-tab-talents').click();
   await expect(page.locator('.personal-tree')).toContainText('เส้นทางประจำตัว · คอริน');
   const before = await saved(page);
   await page.locator('.personal-tree [data-node=p1]').click();
@@ -63,8 +64,8 @@ test('C12: personal branch inspection spends only on the explicit learn action a
   await expect.poll(async () => JSON.parse(await saved(page)).profile.members.metta.talents.p1).toBe(1);
   await page.locator('.personal-tree').scrollIntoViewIfNeeded();
   await page.screenshot({ path: info.outputPath('c12-character-390.png') });
-  await page.locator('#camp-character-tab-skills').click();
-  await page.locator('#camp-character-tab-skills').click();await page.locator('#camp-skill-selection').selectOption('communion');await expect(page.locator('.character-skills [data-skill=communion]')).toContainText('เลือด');
+  await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click();
+  await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click();await page.locator('#camp-skill-selection').selectOption('communion');await expect(page.locator('.character-skills [data-skill=communion]')).toContainText('เลือด');
   expect(errors).toEqual([]);
 });
 
