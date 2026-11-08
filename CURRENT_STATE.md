@@ -13,6 +13,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
+- **ART-UI-AEGIS-APPICON-002:** owner approved Aegis protagonist icon and integration. Replaces web/favicon/iOS/PWA icons with versioned URLs; source in `incoming/ART-UI-AEGIS-APPICON-002/`. No gameplay changes.
+
 - **TEAM-FORMATION-EDITOR-002 complete:** PR #205 merged (`7c40161`) after quality and all browser shards/aggregate passed. Formation is the sole field list, reserves/camp place atomically, presets save explicitly. Rules/save unchanged. Evidence: `docs/validation/team-formation-editor/README_TH.md`.
 - Camp HUD/direct Characters/compact quests complete in PR #204 (`deb193f`), all checks passed; evidence `docs/validation/camp-hud-layout/README_TH.md`.
 
