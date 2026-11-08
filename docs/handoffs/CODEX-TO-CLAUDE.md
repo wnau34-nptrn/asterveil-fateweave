@@ -4,6 +4,7 @@
 - PWA purpose is `any`: source has baked rounded corners and is not an adaptive-maskable composition.
 - No gameplay/rules/save changes. Pages build/typecheck/lint passed; unit 1,662 passed + 6 skipped; built PNG decoding and manifest/base-path references passed.
 - iOS installed shortcuts may need removal/re-add; actual device not tested.
+- Deployment follow-up: final docs exceeded CURRENT_STATE 6000-byte gate by 65 bytes; shortened task line and reran agent-context before pushing.
 
 ## 2026-11-08 — TEAM-FORMATION-EDITOR-002
 - Branch `codex/team-formation-preset-layout`; Merged PR #205 into the game branch, merge `7c401617eb232497339de979ab027ae37a3f008a`, after quality + all browser shards/aggregate passed.
