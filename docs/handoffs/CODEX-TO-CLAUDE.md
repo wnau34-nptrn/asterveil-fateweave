@@ -1,3 +1,10 @@
+## 2026-11-08 — ART-UI-TITLE-PARTY-001
+- Branch `codex/adventurer-title-art`; owner approved the five-adventurer title concept: “เอาเข้าเกม”.
+- Clean background plate derived from approved artwork; real logo, start/continue controls and saved-game summary retained.
+- Fixed portrait framing avoids drift cropping edge characters; existing ambient rays/motes and reduced-motion preserved.
+- Source/concept retained in `incoming/ART-UI-TITLE-PARTY-001/`; no rules/save/balance changes.
+- Pages build/typecheck/lint passed; portrait frame/browser 5/5 passed. Unit/CI pending. Evidence: `docs/validation/title-party/README_TH.md`; real-device Safari unverified.
+
 ## 2026-11-08 — ART-UI-AEGIS-APPICON-002
 - Branch `codex/aegis-app-icon`; PR #206 merged `55d58b7` after quality + all browser shards/aggregate passed. Owner approved integration: “เอาเข้าเกมได้”.
 - Preserved approved original; resized 32/180/192/512px PNGs, replaced old SVG favicon precedence, versioned icon/manifest URLs.
