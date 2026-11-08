@@ -8,7 +8,7 @@ import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipm
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { setArchived, setPartyLane, chooseLoadout, hardReason, claimGuide, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, placeMember, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
+import { setArchived, setPartyLane, chooseLoadout, hardReason, claimGuide, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
 import { applyPreset, applyRunPreset, clearPreset, renamePreset, savePreset } from '../core/world/presets';
 import { draftPick, travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, setLane, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
@@ -24,6 +24,7 @@ import { laneName } from './formation-grid';
 import { transferAffix, craftWeapon, raiseItemLevel, enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
+import { placeCampMember } from './camp-team';
 import { forgeStrike } from './forge-strike';
 import { prologue, prologueEnd, recruitStory, StoryUI } from './story-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
@@ -112,7 +113,7 @@ export class GameShell {
       hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), refresh: () => this.profileChange(refreshBoard(this.game!.profile, map)),
       buy: (item, hero) => this.profileChange(buy(this.game!.profile, map, item, hero)), smelt: dust => this.profileChange(smelt(this.game!.profile, map, dust)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
       archive: (id, archived) => this.profileChange(setArchived(this.game!.profile, id, archived)),
-      dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other) => this.profileChange(placeMember(this.game!.profile, map, id, group, other)),
+      dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other, lane) => this.profileChange(placeCampMember(this.game!.profile, map, lookup, id, group, other, lane)),
       lane: (id, lane, other) => this.profileChange(setPartyLane(this.game!.profile, map, lookup, id, lane, other)),
       preset: (action, slot, name) => { const p = this.game!.profile; this.profileChange(action === 'apply' ? applyPreset(p, map, slot) : action === 'save' ? savePreset(p, map, lookup, slot, name) : action === 'rename' ? renamePreset(p, slot, name ?? '') : clearPreset(p, slot)); },
       skillLevel: (id, action) => this.profileChange(raiseSkill(this.game!.profile, this.maps, map, lookup, id, action)),

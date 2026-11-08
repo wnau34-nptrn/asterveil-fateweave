@@ -18,6 +18,7 @@ for (const cleared of [false, true]) test(`camp team after MAP 1: cleared=${clea
   } else {
     await expect(page.locator('.lobby-locked')).toHaveCount(0);
     await page.locator('#team-preset-0').click();
+    await page.locator('#team-preset-save').click();
     await page.locator('#lobby-member-tracer').click(); await page.locator('#lobby-quick-reserve').click();
     await expect(page.locator('#team-preset-0')).toHaveAttribute('aria-pressed', 'false');
     await page.locator('#team-preset-0').click();

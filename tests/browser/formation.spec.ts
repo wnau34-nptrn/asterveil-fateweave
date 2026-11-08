@@ -27,20 +27,20 @@ test('camp team page moves a member to the front by tap and keyboard, at most th
   await page.locator('#lobby-tab-team').click();
   const grid = page.locator('.formation');
   await expect(grid.locator('.formation-column[data-lane=back] .formation-cell[data-hero]')).toHaveCount(2);
-  await page.locator('#lobby-lane-weaver').click();
-  await expect(page.locator('#lobby-lane-weaver')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#lobby-member-weaver').click();
+  await expect(page.locator('#lobby-member-weaver')).toHaveAttribute('aria-pressed', 'true');
   await grid.locator('.formation-column[data-lane=front] .formation-cell.empty.target').first().click();
   await expect.poll(async () => (await saved(page)).profile.party.lanes?.weaver).toBe('front');
   expect((await saved(page)).version).toBe(58);
   await expect(grid.locator('.formation-column[data-lane=front] .formation-cell[data-hero]')).toHaveCount(3);
   await expect(grid.locator('.formation-column[data-lane=front] .formation-cell.empty')).toHaveCount(0);
-  await expect(page.locator('#lobby-lane-weaver .lane-warn')).toBeVisible();
+  await expect(page.locator('#lobby-member-weaver .lane-warn')).toBeVisible();
   // A fourth front member can only trade places: healer ↔ tracer, by keyboard.
-  await page.locator('#lobby-lane-healer').focus(); await page.keyboard.press('Enter');
-  await page.locator('#lobby-lane-tracer').focus(); await page.keyboard.press('Enter');
+  await page.locator('#lobby-member-healer').focus(); await page.keyboard.press('Enter');
+  await page.locator('#lobby-member-tracer').focus(); await page.keyboard.press('Enter');
   await expect.poll(async () => (await saved(page)).profile.party.lanes).toEqual({ guardian: 'front', tracer: 'back', weaver: 'front', healer: 'front' });
   for (const cell of await page.locator('.formation-cell').all()) expect((await cell.boundingBox())!.height).toBeGreaterThanOrEqual(44);
-  if (dir) { await page.locator('#lobby-lane-weaver').scrollIntoViewIfNeeded(); await page.waitForTimeout(200); await page.screenshot({ path: `${dir}/formation-camp-390.png` }); }
+  if (dir) { await page.locator('#lobby-member-weaver').scrollIntoViewIfNeeded(); await page.waitForTimeout(200); await page.screenshot({ path: `${dir}/formation-camp-390.png` }); }
   await context.close();
 });
 

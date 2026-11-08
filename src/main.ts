@@ -17,6 +17,7 @@ import './ui/components.css';
 import './ui/forge-enhancement.css';
 import './ui/sheet-frame.css';
 import './ui/camp-layout.css';
+import './ui/team-formation.css';
 
 fitViewport();
 const app = document.querySelector<HTMLElement>('#app')!;

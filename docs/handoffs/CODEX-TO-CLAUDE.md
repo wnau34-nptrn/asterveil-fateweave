@@ -1,3 +1,13 @@
+## 2026-11-08 — TEAM-FORMATION-EDITOR-002
+- Branch `codex/team-formation-preset-layout`; PR/merge pending validation.
+- Owner approved formation-first mockup: remove duplicate field strip, place reserves/camp members on the plan, save exact team as preset explicitly.
+- One selection for diagram/roster, atomic group+lane UI adapter, existing world validators and save/preset schema unchanged.
+- Native preset dialog: choose slot/name, explicit overwrite, rename/clear preserved, Escape/focus/rotation gates.
+- Keep scout NPC greeting below the top formation. Map/battle UI unchanged.
+- Placement unit 5/5 passed; final typecheck/lint/build/browser/unit suite in progress.
+- Evidence and actual 390px screenshots: `docs/validation/team-formation-editor/README_TH.md`.
+- No battle/save/balance changes; real-device Safari remains unverified. P09 stays on hold.
+
 ## 2026-11-08 — CAMP-HUD-CHARACTER-QUEST-001
 +- Branch `codex/camp-hud-character-quest-layout`; Merged PR #204 into the game branch, merge `deb193f3b967cedade82f063c1e9efd623ba1f76`, after quality + all four browser shards/aggregate passed. Owner explicitly approved push/PR/merge/deploy after the initial automatic-review block.
 +- เจ้าของอนุมัติ mockup: HUD/ปุ่มกระดานโปร่ง; รายการเควสต์ทึบ กระชับ กดดูรายละเอียดเต็ม
