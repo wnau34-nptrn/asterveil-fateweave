@@ -28,7 +28,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Next (owner order)
 
-- Await the owner’s next task; other milestones follow the current owner decisions, not a blanket MAP 1 unlock. P09 remains on hold.
+- Owner selected gacha G00/G01 next: follow `docs/handoffs/GACHA-G00-G01-NEXT-CHAT-TH.md` for decisions/economy analysis. Runtime/P09/payments remain outside this step.
 
 - UI frame groups 1–4 done (#173, #194, group 4 summary/rewards 2026-11-07); no frame work left.
 - Polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check open.
@@ -49,4 +49,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-Read AGENTS.md, CLAUDE.md and CURRENT_STATE.md. Review the saved gacha80 proposal/plan/economy evidence, then await owner selection. Numbers and SR convention are drafts, not authority to start P09, change saves/balance or sell packs. Suggested next scope if chosen: G00/G01 decisions and economy with ore/gold/legacy accounts.
+Start gacha G00/G01 per `docs/handoffs/GACHA-G00-G01-NEXT-CHAT-TH.md` after reading AGENTS/CLAUDE/CURRENT_STATE. Owner selected this first step: proceed with decisions, economy incl. ore/gold/legacy saves and reproducible evidence;80/96 remains draft. Analysis/docs only, no runtime/save/balance/P09/payments. Save findings to GitHub and present decisions for review.

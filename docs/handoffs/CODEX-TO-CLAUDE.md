@@ -1,3 +1,10 @@
+## 2026-11-08 — Next-chat handoff for gacha G00/G01
+- Owner selected the first step in a new chat; prepared `docs/handoffs/GACHA-G00-G01-NEXT-CHAT-TH.md` and updated CURRENT_STATE next scope/opening prompt.
+- Begin decisions/economy with actual ore/gold/free-acquisition/legacy-account inputs;80/96 and rates remain drafts, not approved production config.
+- No runtime/rules/save/balance/P09/payment changes authorized by this analysis handoff; no game files changed.
+- Starting reference: PR #209 merge0fb8d8c + notes1b2ea1a; branch `docs/gacha-g00-g01-next-chat`; validation: content/link/diff checks and agent-context.
+- Automatic new-chat creation unavailable in this session; provide copy-ready launch prompt rather than claiming a new session exists.
+
 ## 2026-11-08 — Gacha80 proposal and development plan (docs only)
 - PR #209 merged `0fb8d8c` after quality passed (browser gate not triggered: docs only); branch `docs/gacha-80-economy-development-plan`; owner requested revised recommendations, development plan and GitHub storage, not game implementation.
 - Recommended test baseline80 exchange/80–96 free tickets per28d;100 alternative; rates,SR convention,shards and paid packs remain draft.
