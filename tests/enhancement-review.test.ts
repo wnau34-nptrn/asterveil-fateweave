@@ -40,6 +40,13 @@ describe('enhancement review command boundary',()=>{
     ui.click(strike(4),result.profile);expect(host.enhance).toHaveBeenLastCalledWith(1,4);
     expect(result.profile.bank).toMatchObject({ore:94,dust:48});
   });
+  it('keeps the next cost visible but blocks continuation when the previous step exhausts resources',()=>{
+    const {p,ui,host}=fixture();p.bank={...p.bank,ore:6,dust:2};ui.render(p);
+    ui.click({dataset:{forge:'strike',uid:'1',target:'3'},disabled:false} as unknown as HTMLButtonElement,p);
+    const result=enhanceTo(p,map,1,3);ui.enhanced(result.profile,1);const html=ui.render(result.profile);
+    expect(html).toContain('<h3>+3 → +4</h3>');expect(html).toContain('แร่ดาวขาด 7');expect(html).toContain('ฝุ่นดาวขาด 2');expect(html).toContain('data-target="4" class="primary" disabled');
+    ui.click({dataset:{forge:'strike',uid:'1',target:'4'},disabled:false} as unknown as HTMLButtonElement,result.profile);expect(host.enhance).toHaveBeenCalledTimes(1);
+  });
   it('refuses stale, unaffordable, skipped and capped direct strikes',()=>{
     for(const change of ['stale','ore','dust','skip','cap'] as const){
       const {p,ui,host}=fixture();let source=p,target=3;

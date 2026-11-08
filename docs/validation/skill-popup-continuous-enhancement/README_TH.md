@@ -10,9 +10,16 @@
 
 ## การตรวจ
 
-- `tests/enhancement-review.test.ts`: 7 ผ่าน ครอบคลุมปุ่มใช้ครั้งเดียว, stale profile/target, ข้ามขั้น, ทรัพยากรไม่พอและเพดาน
+- `tests/enhancement-review.test.ts`: 8 ผ่าน ครอบคลุมปุ่มใช้ครั้งเดียว, stale profile/target, ข้ามขั้น, ทรัพยากรไม่พอหลังตีสำเร็จและเพดาน
 - `tests/browser/skill-popup-enhancement.spec.ts`: เปิด/ปิด popup, focus/scroll, ดูโดยไม่ใช้แต้ม, อัพและคงแผงเดิม, โหนดเต็ม/ล็อก, ตีต่อและเพดาน; 320×568, 390×650, 390×844 และ desktop 1366×768
 - ชุด regression เดิมปรับให้ปิด modal ก่อนเลือกโหนด/สมาชิก/แท็บอื่น และใช้ปุ่มตีบวกโดยตรง การตรวจ scrollbar ใช้จอมือถือสั้น เพราะย้ายรายละเอียดออกแล้วผังไม่จำเป็นต้องเลื่อนในจอสูง
 - ตรวจภาพจริง 390px ทั้ง popup และหลังตีบวกสำเร็จแล้ว ปุ่มอยู่ในกรอบและไม่มี error overlay; browser connector ไม่มีเครื่องมือให้เรียกในเซสชัน ใช้ Chromium `/usr/bin/chromium` ผ่าน Playwright ตาม skill ของ repository
-- ภาพทดสอบอยู่ภายนอก repository ที่ `/tmp/fateweave-popup-qa/`; ดูผล quality/browser ฉบับรวมใน PR ก่อน merge
+- ภาพทดสอบอยู่ภายนอก repository ที่ `/tmp/fateweave-popup-qa/`; ยังต้องผ่าน quality/browser ของ PR ก่อน merge หลังได้รับอนุญาตให้ push
 - Chromium touch emulation เท่านั้น ยังไม่ได้ทดสอบ Safari/iPhone จริง
+
+## ผล local รอบสุดท้าย
+
+- Build/typecheck/lint ผ่าน; unit รอบเต็ม 1,662 ผ่าน + 6 ข้าม และ boss-balance 1 รายการเกิน 180 วินาทีขณะรันร่วมกับ browser; รันรายการนั้นแยกแล้วผ่านใน 110.28 วินาที (ไม่มีการแก้ rules/balance หรือเพิ่ม timeout)
+- Focused boundary unit หลังเพิ่มกรณีทรัพยากรหมด 8/8 ผ่าน; agent-context 8/8 ผ่าน
+- Browser ที่เกี่ยวข้อง 50 กรณีผ่านรวมรันซ้ำ: ชุดหลัก 46/47 ผ่านครั้งแรก, scrollbar touch ที่ปรับให้รอ viewport resize ผ่านแยก, และ personal-branch/world-tree เพิ่มอีก 3 ผ่าน; ภาพ 390px สองหน้าตรวจแล้ว
+- ระบบ auto-review ปฏิเสธ `git push` เพราะถือเป็นการส่งโค้ดออก/เผยแพร่ที่ยังไม่มีคำอนุญาตชัดเจน จึงยังไม่มี PR, CI gate หรือ merge สำหรับการแก้ไขนี้; local implementation พร้อมให้ตรวจและขออนุญาตขั้นตอนส่งขึ้น GitHub

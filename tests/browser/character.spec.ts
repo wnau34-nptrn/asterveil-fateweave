@@ -112,7 +112,7 @@ for (const touch of [false, true]) test(`native game scrollbars ${touch ? 'touch
     expect(await pane.evaluate(el => getComputedStyle(el, '::-webkit-scrollbar-thumb').backgroundColor)).toBe('rgb(99, 137, 159)');
     expect(await pane.evaluate(el => getComputedStyle(el, '::-webkit-scrollbar-button').display)).toBe('none');
   }
-  expect(await pane.evaluate(el => el.scrollHeight > el.clientHeight)).toBe(true);
+  await expect.poll(() => pane.evaluate(el => el.scrollHeight > el.clientHeight)).toBe(true);
   // The shared policy covers both vertical panes and horizontal member/turn strips.
   for (const selector of ['#character-members', '#turn-order ol']) {
     const element = page.locator(selector);
