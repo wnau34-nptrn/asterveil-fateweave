@@ -13,6 +13,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
+- **Gacha proposal saved (docs only):** 80-point exchange + 80–96 free tickets/28d recommended for testing; 100-point alternative and rates remain draft. See `docs/design/GACHA_80_PROPOSAL_TH.md`, `GACHA_DEVELOPMENT_PLAN_TH.md`; reproducible 12-case economy evidence in `docs/validation/gacha-economy-80-2026-11-08/`. No runtime/P09/payment work authorized by this documentation task.
+
 - **Skill popup + continuous enhancement complete:** PR #208 merged (`117a0d4`) after quality + all browser shards/aggregate passed. Nodes open native upgrade details; enhancement prepares the next step automatically. Rules/save/balance unchanged. Evidence: `docs/validation/skill-popup-continuous-enhancement/README_TH.md`.
 
 - Earlier UI complete: party title #207 (`4ea37ca`), team formation #205 (`7c40161`), camp HUD #204 (`deb193f`); quality/browser passed. Evidence under `docs/validation/title-party/`, `team-formation-editor/`, `camp-hud-layout/`.
@@ -20,7 +22,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - **MAP-TEAM-CHARACTER-TABS-001 complete (2026-11-07, PR #203, merge `ae8889c`):** separate map team HUD/dialog (T), bag items/gear (B), one-tap carried-only presets; direct tree tab, MAP 4 character tabs/camp 5, development stays camp-only. Quality + browser passed. Rules/save/balance unchanged. Evidence: `docs/validation/map-team-character-tabs/README_TH.md`.
 - Unlock pacing #202: quests/team MAP 1; hiring/market/hunt MAP 2; advanced services/hard explicitly MAP 3. Rights follow cleared history.
 
-- **Team presets + team page** (owner 2026-11-06, PR #196, save v56): 4 named presets (draft) — one tap applies at the camp (reserve by chapter, overflow waits in the camp) or in the separate map team dialog outside battle (members brought only); camp page = presets → field → reserve → formation → characters in camp, one-tap field/reserve/camp moves. Evidence and research table `docs/validation/team-presets-2026-11-06/README_TH.md`. Owner has the 390px before/after images; owner review of the feel is open.
+- Team presets #196 (save v56): 4 named presets; camp and carried-only map application. Evidence: `docs/validation/team-presets-2026-11-06/README_TH.md`; owner usability review remains open.
+
 - Skill rework step 6 done (#191–#193, #195, #198; README §9 `docs/validation/skill-rework-2026-11-05/README_TH.md`); the campaign gate now reads the whole campaign (owner 2026-11-06).
 
 ## Next (owner order)
@@ -46,4 +49,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-Read AGENTS.md, CLAUDE.md and CURRENT_STATE.md on the game branch, then await the owner's next task. Skill popup + continuous enhancement completed in PR #208 (`117a0d4`), quality/browser passed. Do not start P09 without the owner.
+Read AGENTS.md, CLAUDE.md and CURRENT_STATE.md. Review the saved gacha80 proposal/plan/economy evidence, then await owner selection. Numbers and SR convention are drafts, not authority to start P09, change saves/balance or sell packs. Suggested next scope if chosen: G00/G01 decisions and economy with ore/gold/legacy accounts.

@@ -1,0 +1,972 @@
+{
+  "metadata": {
+    "seed": 20261108,
+    "players_per_case": 8000,
+    "days": 365,
+    "numpy": "2.3.5",
+    "python": "3.12.14",
+    "proposal_only": true
+  },
+  "results": [
+    {
+      "label": "old_30_48_reference",
+      "shard_min": 1,
+      "shard_max": 5,
+      "bootstrap_factor": 1,
+      "exchange_cost": 30,
+      "players": 8000,
+      "p_full": 0.1,
+      "free28": 48,
+      "paid30": 0,
+      "farm20_per_session": true,
+      "sessions_week": 4,
+      "first_favorite_max_sessions": {
+        "median": 10.0,
+        "p90": 10.0,
+        "completed_pct": 100.0
+      },
+      "collection_days": {
+        "median": 94.0,
+        "p90": 129.0,
+        "completed_pct": 100.0
+      },
+      "all_max_days": {
+        "median": 155.0,
+        "p90": 161.0,
+        "completed_pct": 100.0
+      },
+      "snapshots": {
+        "1": {
+          "pulls": 9,
+          "owned_median": 2.0,
+          "owned_p10": 1.0,
+          "max5_median": 0.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 0.0,
+          "marks_median": 9.0
+        },
+        "28": {
+          "pulls": 68,
+          "owned_median": 8.0,
+          "owned_p10": 6.0,
+          "max5_median": 1.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 2.0,
+          "marks_median": 8.0
+        },
+        "90": {
+          "pulls": 174,
+          "owned_median": 14.0,
+          "owned_p10": 12.0,
+          "max5_median": 6.0,
+          "all_owned_pct": 26.95,
+          "all_max_pct": 0.0,
+          "universal_median": 8.0,
+          "marks_median": 24.0
+        },
+        "180": {
+          "pulls": 328,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 212.0,
+          "marks_median": 58.0
+        },
+        "365": {
+          "pulls": 645,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 1704.0,
+          "marks_median": 375.0
+        }
+      }
+    },
+    {
+      "label": "new80_casual80",
+      "shard_min": 1,
+      "shard_max": 2,
+      "bootstrap_factor": 2,
+      "exchange_cost": 80,
+      "players": 8000,
+      "p_full": 0.075,
+      "free28": 80,
+      "paid30": 0,
+      "farm20_per_session": true,
+      "sessions_week": 3,
+      "first_favorite_max_sessions": {
+        "median": 10.0,
+        "p90": 10.0,
+        "completed_pct": 100.0
+      },
+      "collection_days": {
+        "median": 98.0,
+        "p90": 129.0,
+        "completed_pct": 100.0
+      },
+      "all_max_days": {
+        "median": 181.0,
+        "p90": 189.0,
+        "completed_pct": 100.0
+      },
+      "snapshots": {
+        "1": {
+          "pulls": 18,
+          "owned_median": 2.0,
+          "owned_p10": 1.0,
+          "max5_median": 0.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 0.0,
+          "marks_median": 18.0
+        },
+        "28": {
+          "pulls": 120,
+          "owned_median": 8.0,
+          "owned_p10": 6.0,
+          "max5_median": 1.0,
+          "all_owned_pct": 0.04,
+          "all_max_pct": 0.0,
+          "universal_median": 2.0,
+          "marks_median": 40.0
+        },
+        "90": {
+          "pulls": 297,
+          "owned_median": 14.0,
+          "owned_p10": 12.0,
+          "max5_median": 4.0,
+          "all_owned_pct": 22.24,
+          "all_max_pct": 0.0,
+          "universal_median": 6.0,
+          "marks_median": 57.0
+        },
+        "180": {
+          "pulls": 554,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 14.0,
+          "all_owned_pct": 99.31,
+          "all_max_pct": 48.15,
+          "universal_median": 24.0,
+          "marks_median": 74.0
+        },
+        "365": {
+          "pulls": 1082,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 1524.0,
+          "marks_median": 602.0
+        }
+      }
+    },
+    {
+      "label": "new80_regular96",
+      "shard_min": 1,
+      "shard_max": 2,
+      "bootstrap_factor": 2,
+      "exchange_cost": 80,
+      "players": 8000,
+      "p_full": 0.075,
+      "free28": 96,
+      "paid30": 0,
+      "farm20_per_session": true,
+      "sessions_week": 4,
+      "first_favorite_max_sessions": {
+        "median": 10.0,
+        "p90": 10.0,
+        "completed_pct": 100.0
+      },
+      "collection_days": {
+        "median": 82.0,
+        "p90": 107.0,
+        "completed_pct": 100.0
+      },
+      "all_max_days": {
+        "median": 143.0,
+        "p90": 150.0,
+        "completed_pct": 100.0
+      },
+      "snapshots": {
+        "1": {
+          "pulls": 19,
+          "owned_median": 2.0,
+          "owned_p10": 1.0,
+          "max5_median": 0.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 0.0,
+          "marks_median": 19.0
+        },
+        "28": {
+          "pulls": 136,
+          "owned_median": 9.0,
+          "owned_p10": 6.0,
+          "max5_median": 1.0,
+          "all_owned_pct": 0.04,
+          "all_max_pct": 0.0,
+          "universal_median": 2.0,
+          "marks_median": 56.0
+        },
+        "90": {
+          "pulls": 348,
+          "owned_median": 15.0,
+          "owned_p10": 13.0,
+          "max5_median": 6.0,
+          "all_owned_pct": 60.27,
+          "all_max_pct": 0.0,
+          "universal_median": 8.0,
+          "marks_median": 28.0
+        },
+        "180": {
+          "pulls": 657,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 373.0,
+          "marks_median": 177.0
+        },
+        "365": {
+          "pulls": 1291,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 2200.0,
+          "marks_median": 811.0
+        }
+      }
+    },
+    {
+      "label": "new80_free100",
+      "shard_min": 1,
+      "shard_max": 2,
+      "bootstrap_factor": 2,
+      "exchange_cost": 80,
+      "players": 8000,
+      "p_full": 0.075,
+      "free28": 100,
+      "paid30": 0,
+      "farm20_per_session": true,
+      "sessions_week": 4,
+      "first_favorite_max_sessions": {
+        "median": 10.0,
+        "p90": 10.0,
+        "completed_pct": 100.0
+      },
+      "collection_days": {
+        "median": 79.0,
+        "p90": 103.0,
+        "completed_pct": 100.0
+      },
+      "all_max_days": {
+        "median": 141.0,
+        "p90": 147.0,
+        "completed_pct": 100.0
+      },
+      "snapshots": {
+        "1": {
+          "pulls": 19,
+          "owned_median": 2.0,
+          "owned_p10": 1.0,
+          "max5_median": 0.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 0.0,
+          "marks_median": 19.0
+        },
+        "28": {
+          "pulls": 140,
+          "owned_median": 9.0,
+          "owned_p10": 7.0,
+          "max5_median": 1.0,
+          "all_owned_pct": 0.04,
+          "all_max_pct": 0.0,
+          "universal_median": 2.0,
+          "marks_median": 60.0
+        },
+        "90": {
+          "pulls": 361,
+          "owned_median": 15.0,
+          "owned_p10": 13.0,
+          "max5_median": 6.0,
+          "all_owned_pct": 61.99,
+          "all_max_pct": 0.0,
+          "universal_median": 8.0,
+          "marks_median": 41.0
+        },
+        "180": {
+          "pulls": 682,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 413.0,
+          "marks_median": 202.0
+        },
+        "365": {
+          "pulls": 1343,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 2320.0,
+          "marks_median": 863.0
+        }
+      }
+    },
+    {
+      "label": "alternative100_regular96",
+      "shard_min": 1,
+      "shard_max": 2,
+      "bootstrap_factor": 2,
+      "exchange_cost": 100,
+      "players": 8000,
+      "p_full": 0.075,
+      "free28": 96,
+      "paid30": 0,
+      "farm20_per_session": true,
+      "sessions_week": 4,
+      "first_favorite_max_sessions": {
+        "median": 10.0,
+        "p90": 10.0,
+        "completed_pct": 100.0
+      },
+      "collection_days": {
+        "median": 105.0,
+        "p90": 135.0,
+        "completed_pct": 100.0
+      },
+      "all_max_days": {
+        "median": 145.0,
+        "p90": 152.0,
+        "completed_pct": 100.0
+      },
+      "snapshots": {
+        "1": {
+          "pulls": 19,
+          "owned_median": 2.0,
+          "owned_p10": 1.0,
+          "max5_median": 0.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 0.0,
+          "marks_median": 19.0
+        },
+        "28": {
+          "pulls": 136,
+          "owned_median": 9.0,
+          "owned_p10": 6.0,
+          "max5_median": 1.0,
+          "all_owned_pct": 0.04,
+          "all_max_pct": 0.0,
+          "universal_median": 2.0,
+          "marks_median": 36.0
+        },
+        "90": {
+          "pulls": 348,
+          "owned_median": 14.0,
+          "owned_p10": 13.0,
+          "max5_median": 6.0,
+          "all_owned_pct": 41.25,
+          "all_max_pct": 0.0,
+          "universal_median": 8.0,
+          "marks_median": 48.0
+        },
+        "180": {
+          "pulls": 657,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 99.92,
+          "all_max_pct": 99.92,
+          "universal_median": 363.0,
+          "marks_median": 157.0
+        },
+        "365": {
+          "pulls": 1291,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 2190.0,
+          "marks_median": 791.0
+        }
+      }
+    },
+    {
+      "label": "alternative100_free100",
+      "shard_min": 1,
+      "shard_max": 2,
+      "bootstrap_factor": 2,
+      "exchange_cost": 100,
+      "players": 8000,
+      "p_full": 0.075,
+      "free28": 100,
+      "paid30": 0,
+      "farm20_per_session": true,
+      "sessions_week": 4,
+      "first_favorite_max_sessions": {
+        "median": 10.0,
+        "p90": 10.0,
+        "completed_pct": 100.0
+      },
+      "collection_days": {
+        "median": 101.0,
+        "p90": 129.0,
+        "completed_pct": 100.0
+      },
+      "all_max_days": {
+        "median": 141.0,
+        "p90": 148.0,
+        "completed_pct": 100.0
+      },
+      "snapshots": {
+        "1": {
+          "pulls": 19,
+          "owned_median": 2.0,
+          "owned_p10": 1.0,
+          "max5_median": 0.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 0.0,
+          "marks_median": 19.0
+        },
+        "28": {
+          "pulls": 140,
+          "owned_median": 9.0,
+          "owned_p10": 7.0,
+          "max5_median": 1.0,
+          "all_owned_pct": 0.04,
+          "all_max_pct": 0.0,
+          "universal_median": 2.0,
+          "marks_median": 40.0
+        },
+        "90": {
+          "pulls": 361,
+          "owned_median": 14.0,
+          "owned_p10": 13.0,
+          "max5_median": 6.0,
+          "all_owned_pct": 43.4,
+          "all_max_pct": 0.0,
+          "universal_median": 8.0,
+          "marks_median": 61.0
+        },
+        "180": {
+          "pulls": 682,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 99.92,
+          "all_max_pct": 99.92,
+          "universal_median": 403.0,
+          "marks_median": 182.0
+        },
+        "365": {
+          "pulls": 1343,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 2308.0,
+          "marks_median": 843.0
+        }
+      }
+    },
+    {
+      "label": "new80_fullrate5pct",
+      "shard_min": 1,
+      "shard_max": 2,
+      "bootstrap_factor": 2,
+      "exchange_cost": 80,
+      "players": 8000,
+      "p_full": 0.05,
+      "free28": 96,
+      "paid30": 0,
+      "farm20_per_session": true,
+      "sessions_week": 4,
+      "first_favorite_max_sessions": {
+        "median": 10.0,
+        "p90": 10.0,
+        "completed_pct": 100.0
+      },
+      "collection_days": {
+        "median": 105.0,
+        "p90": 152.0,
+        "completed_pct": 100.0
+      },
+      "all_max_days": {
+        "median": 155.0,
+        "p90": 161.0,
+        "completed_pct": 100.0
+      },
+      "snapshots": {
+        "1": {
+          "pulls": 19,
+          "owned_median": 2.0,
+          "owned_p10": 1.0,
+          "max5_median": 0.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 0.0,
+          "marks_median": 19.0
+        },
+        "28": {
+          "pulls": 136,
+          "owned_median": 7.0,
+          "owned_p10": 5.0,
+          "max5_median": 1.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 2.0,
+          "marks_median": 56.0
+        },
+        "90": {
+          "pulls": 348,
+          "owned_median": 13.0,
+          "owned_p10": 11.0,
+          "max5_median": 6.0,
+          "all_owned_pct": 18.85,
+          "all_max_pct": 0.0,
+          "universal_median": 8.0,
+          "marks_median": 28.0
+        },
+        "180": {
+          "pulls": 657,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 99.83,
+          "all_max_pct": 99.76,
+          "universal_median": 217.0,
+          "marks_median": 97.0
+        },
+        "365": {
+          "pulls": 1291,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 1751.0,
+          "marks_median": 731.0
+        }
+      }
+    },
+    {
+      "label": "new80_fullrate10pct",
+      "shard_min": 1,
+      "shard_max": 2,
+      "bootstrap_factor": 2,
+      "exchange_cost": 80,
+      "players": 8000,
+      "p_full": 0.1,
+      "free28": 96,
+      "paid30": 0,
+      "farm20_per_session": true,
+      "sessions_week": 4,
+      "first_favorite_max_sessions": {
+        "median": 10.0,
+        "p90": 10.0,
+        "completed_pct": 100.0
+      },
+      "collection_days": {
+        "median": 71.0,
+        "p90": 99.0,
+        "completed_pct": 100.0
+      },
+      "all_max_days": {
+        "median": 133.0,
+        "p90": 140.0,
+        "completed_pct": 100.0
+      },
+      "snapshots": {
+        "1": {
+          "pulls": 19,
+          "owned_median": 3.0,
+          "owned_p10": 1.0,
+          "max5_median": 0.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 0.0,
+          "marks_median": 19.0
+        },
+        "28": {
+          "pulls": 136,
+          "owned_median": 10.0,
+          "owned_p10": 8.0,
+          "max5_median": 1.0,
+          "all_owned_pct": 0.14,
+          "all_max_pct": 0.0,
+          "universal_median": 2.0,
+          "marks_median": 56.0
+        },
+        "90": {
+          "pulls": 348,
+          "owned_median": 15.0,
+          "owned_p10": 14.0,
+          "max5_median": 6.0,
+          "all_owned_pct": 88.06,
+          "all_max_pct": 0.0,
+          "universal_median": 8.0,
+          "marks_median": 28.0
+        },
+        "180": {
+          "pulls": 657,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 557.0,
+          "marks_median": 177.0
+        },
+        "365": {
+          "pulls": 1291,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 2678.0,
+          "marks_median": 811.0
+        }
+      }
+    },
+    {
+      "label": "new80_unchanged_old_reward_risk",
+      "shard_min": 1,
+      "shard_max": 5,
+      "bootstrap_factor": 2,
+      "exchange_cost": 80,
+      "players": 8000,
+      "p_full": 0.1,
+      "free28": 96,
+      "paid30": 0,
+      "farm20_per_session": true,
+      "sessions_week": 4,
+      "first_favorite_max_sessions": {
+        "median": 9.0,
+        "p90": 10.0,
+        "completed_pct": 100.0
+      },
+      "collection_days": {
+        "median": 71.0,
+        "p90": 97.0,
+        "completed_pct": 100.0
+      },
+      "all_max_days": {
+        "median": 110.0,
+        "p90": 115.0,
+        "completed_pct": 100.0
+      },
+      "snapshots": {
+        "1": {
+          "pulls": 19,
+          "owned_median": 3.0,
+          "owned_p10": 1.0,
+          "max5_median": 0.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 0.0,
+          "marks_median": 19.0
+        },
+        "28": {
+          "pulls": 136,
+          "owned_median": 10.0,
+          "owned_p10": 8.0,
+          "max5_median": 1.0,
+          "all_owned_pct": 0.14,
+          "all_max_pct": 0.0,
+          "universal_median": 2.0,
+          "marks_median": 56.0
+        },
+        "90": {
+          "pulls": 348,
+          "owned_median": 15.0,
+          "owned_p10": 14.0,
+          "max5_median": 9.0,
+          "all_owned_pct": 88.2,
+          "all_max_pct": 0.0,
+          "universal_median": 13.0,
+          "marks_median": 28.0
+        },
+        "180": {
+          "pulls": 657,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 1156.0,
+          "marks_median": 257.0
+        },
+        "365": {
+          "pulls": 1291,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 4135.0,
+          "marks_median": 891.0
+        }
+      }
+    },
+    {
+      "label": "new80_monthly40",
+      "shard_min": 1,
+      "shard_max": 2,
+      "bootstrap_factor": 2,
+      "exchange_cost": 80,
+      "players": 8000,
+      "p_full": 0.075,
+      "free28": 96,
+      "paid30": 40,
+      "farm20_per_session": true,
+      "sessions_week": 4,
+      "first_favorite_max_sessions": {
+        "median": 10.0,
+        "p90": 10.0,
+        "completed_pct": 100.0
+      },
+      "collection_days": {
+        "median": 59.0,
+        "p90": 77.0,
+        "completed_pct": 100.0
+      },
+      "all_max_days": {
+        "median": 121.0,
+        "p90": 126.0,
+        "completed_pct": 100.0
+      },
+      "snapshots": {
+        "1": {
+          "pulls": 20,
+          "owned_median": 2.0,
+          "owned_p10": 1.0,
+          "max5_median": 0.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 0.0,
+          "marks_median": 20.0
+        },
+        "28": {
+          "pulls": 173,
+          "owned_median": 11.0,
+          "owned_p10": 8.0,
+          "max5_median": 1.0,
+          "all_owned_pct": 1.1,
+          "all_max_pct": 0.0,
+          "universal_median": 1.0,
+          "marks_median": 13.0
+        },
+        "90": {
+          "pulls": 468,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 7.0,
+          "all_owned_pct": 92.33,
+          "all_max_pct": 0.0,
+          "universal_median": 10.0,
+          "marks_median": 68.0
+        },
+        "180": {
+          "pulls": 897,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 825.0,
+          "marks_median": 337.0
+        },
+        "365": {
+          "pulls": 1778,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 3367.0,
+          "marks_median": 1218.0
+        }
+      }
+    },
+    {
+      "label": "new80_card_and_packs100",
+      "shard_min": 1,
+      "shard_max": 2,
+      "bootstrap_factor": 2,
+      "exchange_cost": 80,
+      "players": 8000,
+      "p_full": 0.075,
+      "free28": 96,
+      "paid30": 100,
+      "farm20_per_session": true,
+      "sessions_week": 4,
+      "first_favorite_max_sessions": {
+        "median": 9.0,
+        "p90": 10.0,
+        "completed_pct": 100.0
+      },
+      "collection_days": {
+        "median": 42.0,
+        "p90": 55.0,
+        "completed_pct": 100.0
+      },
+      "all_max_days": {
+        "median": 98.0,
+        "p90": 103.0,
+        "completed_pct": 100.0
+      },
+      "snapshots": {
+        "1": {
+          "pulls": 22,
+          "owned_median": 2.0,
+          "owned_p10": 1.0,
+          "max5_median": 0.0,
+          "all_owned_pct": 0.0,
+          "all_max_pct": 0.0,
+          "universal_median": 0.0,
+          "marks_median": 22.0
+        },
+        "28": {
+          "pulls": 229,
+          "owned_median": 12.0,
+          "owned_p10": 10.0,
+          "max5_median": 1.0,
+          "all_owned_pct": 2.9,
+          "all_max_pct": 0.0,
+          "universal_median": 1.0,
+          "marks_median": 69.0
+        },
+        "90": {
+          "pulls": 648,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 11.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 3.28,
+          "universal_median": 18.0,
+          "marks_median": 8.0
+        },
+        "180": {
+          "pulls": 1257,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 1621.0,
+          "marks_median": 617.0
+        },
+        "365": {
+          "pulls": 2508,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 5238.0,
+          "marks_median": 1868.0
+        }
+      }
+    },
+    {
+      "label": "new80_veteran15_star3",
+      "shard_min": 1,
+      "shard_max": 2,
+      "bootstrap_factor": 2,
+      "exchange_cost": 80,
+      "players": 8000,
+      "p_full": 0.075,
+      "free28": 96,
+      "paid30": 0,
+      "farm20_per_session": true,
+      "sessions_week": 4,
+      "first_favorite_max_sessions": {
+        "median": 7.0,
+        "p90": 7.0,
+        "completed_pct": 100.0
+      },
+      "collection_days": {
+        "median": 1.0,
+        "p90": 1.0,
+        "completed_pct": 100.0
+      },
+      "all_max_days": {
+        "median": 96.0,
+        "p90": 101.0,
+        "completed_pct": 100.0
+      },
+      "snapshots": {
+        "1": {
+          "pulls": 3,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 0.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 0.0,
+          "universal_median": 0.0,
+          "marks_median": 3.0
+        },
+        "28": {
+          "pulls": 96,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 2.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 0.0,
+          "universal_median": 6.0,
+          "marks_median": 16.0
+        },
+        "90": {
+          "pulls": 308,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 13.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 6.56,
+          "universal_median": 19.0,
+          "marks_median": 68.0
+        },
+        "180": {
+          "pulls": 617,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 847.0,
+          "marks_median": 297.0
+        },
+        "365": {
+          "pulls": 1251,
+          "owned_median": 15.0,
+          "owned_p10": 15.0,
+          "max5_median": 15.0,
+          "all_owned_pct": 100.0,
+          "all_max_pct": 100.0,
+          "universal_median": 2673.0,
+          "marks_median": 931.0
+        }
+      }
+    }
+  ]
+}
