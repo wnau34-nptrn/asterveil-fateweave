@@ -67,3 +67,7 @@ scenarios.jsonเป็นรายการพารามิเตอร์ �
 ตัวแบบตรวจยอดเศษ/เศษกลางไม่ติดลบและดาว0–5ระหว่างรัน ชุดทบทวนเอกสารตรวจsumงบ96/80,40bootstrap,40/100paid,สูตรmassและโอกาสสิบครั้ง รวมถึงsnapshot monotonic/bounds,ครบครบ100%ก่อนตีความquantile และตรวจว่าไม่มีไฟล์runtimeเปลี่ยน
 
 เครื่องมือนี้ไม่ได้อ้างว่าใช้server RNGจริง ไม่ทดสอบtransaction/auth/payment/migrationของเกม ไม่ใช่การผ่านG03–G07ในแผนพัฒนา
+
+## 5. สถานะเอกสารบน GitHub
+
+PR [#209](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/209) merged `0fb8d8c9e37592d6d463893b6f9c40fb522b6cea` เข้า game branch หลัง CI quality (lint/unit/build) ผ่าน งานนี้แก้เฉพาะ CURRENT_STATE.md และ docs/** จึงไม่ trigger browser workflow ไม่มีการอ้างว่าทดสอบกาชาในเกมแล้ว ตรวจลิงก์/สูตรงบ/zero income/ขอบ79–80/snapshot boundsและcontext8/8ผ่าน ยังไม่อนุมัติ implementation/rates/payments จากการ merge เอกสาร

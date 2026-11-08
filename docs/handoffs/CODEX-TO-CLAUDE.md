@@ -1,9 +1,9 @@
 ## 2026-11-08 — Gacha80 proposal and development plan (docs only)
-- Branch `docs/gacha-80-economy-development-plan`; owner requested revised recommendations, development plan and GitHub storage, not game implementation.
+- PR #209 merged `0fb8d8c` after quality passed (browser gate not triggered: docs only); branch `docs/gacha-80-economy-development-plan`; owner requested revised recommendations, development plan and GitHub storage, not game implementation.
 - Recommended test baseline80 exchange/80–96 free tickets per28d;100 alternative; rates,SR convention,shards and paid packs remain draft.
 - Added proposal, G00–G08 dependency/acceptance plan and reproducible8,000×12-case/365-day Monte Carlo evidence; old30-point results are reference only.
 - Linked P10 without marking P04/P09/P10 complete; sent save/balance/trust-boundary questions under ฝากถึง Claude.
-- No runtime/rules/save/content/balance/hosting changes; no supplied artwork imported. Validation: doc links/arithmetic/model sanity, context limits and diff checks; CI status recorded by PR.
+- No runtime/rules/save/content/balance/hosting changes; no supplied artwork imported. Validation passed: doc links/arithmetic/model sanity, context limits8/8, diff checks, and CI lint/unit/build.
 - Next: await owner scope; suggested G00/G01 before live pulls or payments. Files: `docs/design/GACHA_80_PROPOSAL_TH.md`, `GACHA_DEVELOPMENT_PLAN_TH.md`; evidence `docs/validation/gacha-economy-80-2026-11-08/`.
 
 ## 2026-11-08 — Skill popup + continuous enhancement
