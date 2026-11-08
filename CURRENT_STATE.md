@@ -13,7 +13,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **Skill popup + continuous enhancement (owner 2026-11-08):** branch `codex/skill-popup-continuous-enhancement`; native node details with explicit 1-point upgrade; enhancement prepares the next step automatically. Rules/save/balance unchanged. Evidence: `docs/validation/skill-popup-continuous-enhancement/README_TH.md`; local ready; auto-review blocked push, explicit GitHub permission needed; CI gates before merge.
+- **Skill popup + continuous enhancement (owner 2026-11-08):** branch `codex/skill-popup-continuous-enhancement`; native node details with explicit 1-point upgrade; enhancement prepares the next step automatically. Rules/save/balance unchanged. Evidence: `docs/validation/skill-popup-continuous-enhancement/README_TH.md`; owner approved GitHub push/PR/merge on 2026-11-08; CI gates before merge.
 
 - Earlier UI complete: party title #207 (`4ea37ca`), team formation #205 (`7c40161`), camp HUD #204 (`deb193f`); quality/browser passed. Evidence under `docs/validation/title-party/`, `team-formation-editor/`, `camp-hud-layout/`.
 
@@ -46,4 +46,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-Continue `codex/skill-popup-continuous-enhancement`: local UX changes and tests ready. Auto-review rejected pushing source; obtain explicit GitHub push/PR/merge permission, then run required CI gates before merging. See `docs/validation/skill-popup-continuous-enhancement/README_TH.md`. Do not start P09.
+Continue `codex/skill-popup-continuous-enhancement`: local UX changes and tests ready. Owner explicitly approved pushing and integrating the changes on 2026-11-08. Complete required CI gates and merge. See `docs/validation/skill-popup-continuous-enhancement/README_TH.md`. Do not start P09.

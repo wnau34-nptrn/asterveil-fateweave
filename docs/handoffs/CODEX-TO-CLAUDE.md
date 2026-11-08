@@ -1,11 +1,11 @@
 ## 2026-11-08 — Skill popup + continuous enhancement
-- Branch `codex/skill-popup-continuous-enhancement`; local implementation ready, no PR/merge yet (push blocked by auto-review).
+- Branch `codex/skill-popup-continuous-enhancement`; owner approved integration on 2026-11-08: “อนุมัติ เอาเข้าเกมได้”; PR/merge follows required CI gates.
 - Owner: “ดำเนินการแก้ไขในเกมได้” for both discussed UX changes.
 - Native node detail modal keeps upgrade, points and lock reasons visible; X/Escape/backdrop restore tree focus/scroll.
 - Enhancement commits one displayed step and prepares the next immediately; fresh costs/resources, stale/duplicate/repeat guards preserved.
 - Rules/save/content/balance unchanged; other forge modes retain reviews.
 - Build/typecheck/lint passed; full unit 1662 + 6 skipped, timed-out boss test passed separately (110.28s), added boundary case passed; 50 focused browser cases passed (including corrected viewport-resize regression); 390px images inspected.
-- Required CI quality/browser still needed after explicit push permission; auto-review blocked push (external export/publication needs explicit user permission), so no PR/merge yet; required CI gates remain. Details: evidence/remaining real-device limits: `docs/validation/skill-popup-continuous-enhancement/README_TH.md`.
+- Required CI quality/browser still needed after explicit push permission; initial push block resolved by explicit owner permission; source pushed, required CI gates remain. Details: evidence/remaining real-device limits: `docs/validation/skill-popup-continuous-enhancement/README_TH.md`.
 
 ## 2026-11-08 — ART-UI-TITLE-PARTY-001
 - PR #207 merged `4ea37ca` after quality + all browser shards/aggregate passed; owner approved integration: “เอาเข้าเกม”.
