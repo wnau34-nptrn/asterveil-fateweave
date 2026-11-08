@@ -1,3 +1,4 @@
+import {closeTalentDetails} from './talent-navigation';
 import { expect, test } from '@playwright/test';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { encounterById } from '../../src/content/encounters/catalog';
@@ -26,8 +27,8 @@ test('tree and skill-level shots 390x844', async ({ browser }) => {
   await expect(page.locator('#camp-character-dialog')).toBeVisible();
   const shot = async (name: string) => { await page.waitForTimeout(150); await page.screenshot({ path: `${dir}/${name}.png` }); };
   const to = (sel: string) => page.locator(sel).first().evaluate(el => { const c = document.querySelector('#camp-character-content')!; c.scrollTop += el.getBoundingClientRect().top - c.getBoundingClientRect().top - 8; });
-  await page.locator('#camp-character-talent-c1s').click(); await shot('tree-duelist');
-  await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-skill-selection').selectOption('execute'); await to('[data-skill=execute]'); await shot('skills-duelist');
+  await closeTalentDetails(page);await page.locator('#camp-character-talent-c1s').click(); await shot('tree-duelist');
+  await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click(); await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-skill-selection').selectOption('execute'); await to('[data-skill=execute]'); await shot('skills-duelist');
   await page.locator('#camp-skills-tomes').click(); await to('.tome-bag'); await page.locator('.tome-trade summary').click(); await shot('skills-tomes');
   await context.close();
 });

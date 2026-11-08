@@ -26,19 +26,15 @@ for(const [width,height,touch] of [[320,568,true],[390,650,true],[390,844,true],
     await open(page);const saved=()=>page.evaluate(k=>localStorage.getItem(k),key),initial=await saved();
     await expect(page.locator('.forge-hero-preview')).toContainText('ค่าสถานะรวมเท่าเดิม');await expect(page.locator('.forge-hero-preview table')).toHaveCount(0);
     expect(await page.locator('.forge-item-head .gear-art').evaluate(e=>e.getBoundingClientRect().width)).toBe(96);await bounds(page);
-    if(width===390)await page.screenshot({path:`docs/validation/enhancement-visual/ready-390x${height}.png`});
-    await page.locator('#forge-enhance').click();await bounds(page);expect(await saved()).toBe(initial);
-    if(width===390&&height===844)await page.screenshot({path:'docs/validation/enhancement-visual/review-390.png'});
-    await page.locator('#forge-cancel').click();await expect(page.locator('#forge-enhance')).toBeFocused();
+    if(width===390)await page.screenshot({path:`/tmp/enhancement-visual/ready-390x${height}.png`});
     await page.evaluate(()=>document.documentElement.style.fontSize='32px');
     await expect(page.locator('.forge-enhancement')).toHaveClass(/forge-text-large/);await bounds(page);await page.locator('.forge-secondary-details > summary').click();expect(await page.locator('.forge-skills').evaluate(e=>getComputedStyle(e).fontSize)).toBe('28px');await page.locator('.forge-secondary-details > summary').click();
-    if(width===390&&height===650)await page.screenshot({path:'docs/validation/enhancement-visual/text200-390.png'});
-    await page.locator('#forge-enhance').click();await bounds(page);await page.keyboard.press('Escape');expect(await saved()).toBe(initial);
+    if(width===390&&height===650)await page.screenshot({path:'/tmp/enhancement-visual/text200-390.png'});
     await page.evaluate(()=>document.documentElement.style.fontSize='16px');await expect(page.locator('.forge-enhancement')).not.toHaveClass(/forge-text-large/);
-    await page.locator('#forge-enhance').click();await page.locator('#forge-confirm').dblclick();await expect(page.locator('#forge-success')).toBeFocused();
-    expect(JSON.parse((await saved())!).profile.bank).toMatchObject({ore:112,dust:45});await expect(page.locator('.forge-step h3')).toHaveText('+4 → +5');
-    if(width===390&&height===844){await expect(page.locator('.forge-strike')).toHaveCount(0);await page.screenshot({path:'docs/validation/enhancement-visual/success-390.png'});}
-    const committed=await saved();await page.locator('#forge-next-preview').click();await expect(page.locator('.forge-step h3')).toHaveText('+5 → +6');expect(await saved()).toBe(committed);
+    expect(await saved()).toBe(initial);await page.locator('#forge-enhance').dblclick();await expect(page.locator('#forge-success')).toBeFocused();
+    expect(JSON.parse((await saved())!).profile.bank).toMatchObject({ore:112,dust:45});await expect(page.locator('.forge-step h3')).toHaveText('+5 → +6');
+    if(width===390&&height===844){await expect(page.locator('.forge-strike')).toHaveCount(0);await page.screenshot({path:'/tmp/enhancement-visual/success-390.png'});}
+    const committed=await saved();await expect(page.locator('#forge-enhance')).toBeEnabled();await expect(page.locator('.forge-step h3')).toHaveText('+5 → +6');expect(await saved()).toBe(committed);
     await page.locator('#forge-change-item').click();await page.keyboard.press('Escape');await expect(page.locator('#forge-change-item')).toBeFocused();expect(await saved()).toBe(committed);
     expect(errors).toEqual([]);await context.close();
   });

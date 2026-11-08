@@ -39,8 +39,8 @@ for(const scenario of [
     const saved=()=>page.evaluate(k=>localStorage.getItem(k),key),initial=await saved();
     await bounds(page,s.top,s.bottom,s.left,s.right);
     if(s.height===844)await page.screenshot({path:testInfo.outputPath('iphone-safe-frame.png')});
-    await page.locator('#forge-enhance').click();await bounds(page,s.top,s.bottom,s.left,s.right);await page.locator('#forge-cancel').click();await expect(page.locator('#forge-enhance')).toBeFocused();
-    await page.evaluate(()=>document.documentElement.style.fontSize='32px');await bounds(page,s.top,s.bottom,s.left,s.right);await page.locator('#forge-enhance').click();await bounds(page,s.top,s.bottom,s.left,s.right);await page.keyboard.press('Escape');
+    await page.locator('#forge-enhance').focus();await bounds(page,s.top,s.bottom,s.left,s.right);await expect(page.locator('#forge-enhance')).toBeFocused();
+    await page.evaluate(()=>document.documentElement.style.fontSize='32px');await bounds(page,s.top,s.bottom,s.left,s.right);await bounds(page,s.top,s.bottom,s.left,s.right);
     await page.evaluate(()=>document.documentElement.style.fontSize='16px');
     if(s.height===844){await page.setViewportSize({width:844,height:390});await expect(page.locator('#orientation-gate')).toBeVisible();await page.setViewportSize({width:390,height:650});await expect(page.locator('#orientation-gate')).not.toBeVisible();await bounds(page,s.top,s.bottom);}
     expect(await saved()).toBe(initial);expect(errors).toEqual([]);await context.close();

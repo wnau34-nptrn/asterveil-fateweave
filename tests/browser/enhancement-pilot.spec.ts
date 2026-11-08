@@ -26,19 +26,15 @@ for(const [width,height,touch] of [[320,568,true],[390,650,true],[390,844,true],
     await trigger.click();await expect(page.locator('#lobby-sheet-title')).toContainText('ตีบวกอุปกรณ์');
     await expect(page.locator('.forge-hero-preview')).toBeVisible();await expect(page.locator('#forge-cost')).toContainText('แร่ · ใช้ 6');await expect(page.locator('#forge-cost')).toContainText('มี 100');
     await expect(page.locator('#forge-open-tasks')).toBeVisible();
-    await page.locator('#forge-enhance').click();await expect(page.locator('#lobby-sheet-title')).toContainText('ตรวจรายการ');expect(await saved()).toBe(initial);
-    await page.keyboard.press('Escape');await expect(page.locator('#forge-enhance')).toBeFocused();expect(await saved()).toBe(initial);
-    await page.locator('#forge-enhance').click();
-    expect(await page.locator('#forge-confirm').evaluate(el=>{const r=el.getBoundingClientRect();const app=document.querySelector('#app')!.getBoundingClientRect();return r.height>=44&&r.top>=app.top&&r.bottom<=app.bottom&&document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===el;})).toBe(true);
-    expect(await page.locator('.forge-enhancement-content').evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
-    if(width===390&&height===844)await page.screenshot({path:'/tmp/uxd-01/after/review-390.png'});
+    expect(await page.locator('#forge-enhance').evaluate(el=>{const r=el.getBoundingClientRect();const app=document.querySelector('#app')!.getBoundingClientRect();return r.height>=44&&r.top>=app.top&&r.bottom<=app.bottom&&document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===el;})).toBe(true);
+    expect(await saved()).toBe(initial);
     const writes=await page.evaluate(()=>(window as unknown as {pilotWrites:number}).pilotWrites);
-    await page.locator('#forge-confirm').evaluate(el=>{(el as HTMLButtonElement).click();(el as HTMLButtonElement).click();});
+    await page.locator('#forge-enhance').evaluate(el=>{(el as HTMLButtonElement).click();(el as HTMLButtonElement).click();});
     expect(await page.evaluate(()=>(window as unknown as {pilotWrites:number}).pilotWrites)).toBe(writes+1);
     const committed=JSON.parse((await saved())!);expect(committed.profile.bank).toMatchObject({ore:94,dust:48});expect(committed.profile.members.guardian.gear.body.plus).toBe(3);
-    await expect(page.locator('#forge-success')).toBeFocused();await expect(page.locator('#forge-success')).toContainText('+2 → +3');await expect(page.locator('.forge-step h3')).toHaveText('+2 → +3');await expect(page.locator('#forge-next-preview')).toBeVisible();
+    await expect(page.locator('#forge-success')).toBeFocused();await expect(page.locator('#forge-success')).toContainText('+2 → +3');await expect(page.locator('.forge-step h3')).toHaveText('+3 → +4');await expect(page.locator('#forge-enhance')).toBeEnabled();
     if(width===390&&height===844){await expect(page.locator('.forge-strike')).toHaveCount(0);await page.screenshot({path:'/tmp/uxd-01/after/success-390.png'});}
-    await page.locator('#forge-next-preview').click();await expect(page.locator('.forge-step h3')).toHaveText('+3 → +4');expect(JSON.parse((await saved())!)).toEqual(committed);
+    await expect(page.locator('.forge-step h3')).toHaveText('+3 → +4');expect(JSON.parse((await saved())!)).toEqual(committed);
     await page.keyboard.press('Escape');await expect(page.locator('#camp-character-dialog')).toBeVisible();
     await expect(page.locator('#camp-character-tab-gear')).toHaveAttribute('aria-selected','true');await expect(page.locator('#camp-bag-slot-body')).toHaveAttribute('aria-pressed','true');
     await expect(page.locator('#camp-gear-filter-set')).toHaveValue('dawn');await expect(trigger).toBeFocused();

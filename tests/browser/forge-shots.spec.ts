@@ -29,16 +29,16 @@ for (const [width, height] of [[390, 844], [320, 568]] as const) {
     const shot = async (name: string) => { await page.waitForTimeout(150); await page.screenshot({ path: `${dir}/${name}-${width}.png` }); };
     await page.locator('#lobby-tab-forge').click(); await expect(page.locator('.forge-workbench')).toBeVisible(); await shot('forge-tasks'); await chooseForgeTask(page,'enhance'); await shot('forge-pick');
     await page.locator('#forge-item-1').click(); await shot('forge-enhance');
-    await page.locator('#forge-enhance').click(); await shot('forge-review');
+    await shot('forge-ready');
     if (strike) {
       // Deterministic frames: fake timers drive the flipbooks, the Web Animations are paused and seeked to the same time.
-      await page.clock.install(); await page.clock.pauseAt(Date.now() + 5000); await page.locator('#forge-confirm').click(); let at = 0;
+      await page.clock.install(); await page.clock.pauseAt(Date.now() + 5000); await page.locator('#forge-enhance').click(); let at = 0;
       for (const [name, t] of [['a', 280], ['b', 345], ['c', 520], ['d', 705], ['e', 800], ['f', 1000]] as const) {
         await page.clock.runFor(t - at); at = t;
         await page.evaluate(ms => { for (const a of document.getAnimations()) { a.pause(); a.currentTime = ms; } }, t); await page.screenshot({ path: `${dir}/forge-strike-${name}-${width}.png` });
       }
     }
-    else await page.locator('#forge-cancel').click();
+    else await page.locator('#forge-enhance').click();
     await openForgeTools(page);await page.locator('#forge-mode-level').click(); await shot('forge-level');
     await openForgeTools(page);await page.locator('#forge-tab-recycle').click(); await shot('forge-recycle');
     await context.close();

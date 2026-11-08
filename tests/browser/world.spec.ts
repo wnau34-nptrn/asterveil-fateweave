@@ -1,3 +1,4 @@
+import {closeTalentDetails} from './talent-navigation';
 import { openForgeTools, chooseForgeTask } from './forge-navigation';
 import { expect, test, type Page } from '@playwright/test';
 import { encounterById } from '../../src/content/encounters/catalog';
@@ -570,7 +571,7 @@ test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdr
   await page.locator('#lobby-upgrade').click();
   await page.locator('#camp-star-review').click(); await page.locator('#camp-star-confirm').click();
   await expect(page.locator('#camp-star-status')).toContainText('บันทึกผลอัปดาวแล้ว');
-  await page.locator('#camp-character-dialog [data-world=character-close]').click();
+  await closeTalentDetails(page);await page.locator('#camp-character-dialog [data-world=character-close]').click();
   await expect.poll(async () => (await savedProfile(page)).members[offer]).toEqual({ stars: 2, dupes: 0 }); expect((await savedProfile(page)).bank.ore).toBe(100);
   // Bench one member who is not the upgraded one: the expedition brings three.
   const benched = offer === 'healer' ? 'weaver' : 'healer';
@@ -1038,14 +1039,14 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   // Taking it off puts the find back; the tracer can wear the bow.
   await page.locator('#bag-slot-body').click(); await page.locator('#bag-takeoff').click();
   await expect.poll(async () => (await saved(page)).found.length).toBe(2); expect((await saved(page)).members.guardian?.gear).toBeUndefined();
-  await page.locator('#character-member-tracer').click(); await page.locator('#bag-slot-weapon').click();
+  await closeTalentDetails(page);await page.locator('#character-member-tracer').click(); await page.locator('#bag-slot-weapon').click();
   await expect(page.locator('[data-world=bag-wear]')).toHaveCount(1);
   await page.locator('[data-world=bag-wear][data-key^="found:"]').first().click();
   await expect.poll(async () => (await saved(page)).members.tracer?.gear?.weapon?.hero).toBe('tracer');
   // Team tab: tapping a member shows their details; tapping an empty reserve seat benches them, away from any camp.
   await page.keyboard.press('Escape'); await expect(page.locator('#pack-dialog')).toBeVisible();
   await page.locator('[data-world=pack-close]').click(); await page.locator('#world-team').click(); await page.locator('#map-team-healer').click();
-  await page.locator('#map-team-gear-of').click(); await page.locator('#character-tab-skills').click();
+  await page.locator('#map-team-gear-of').click(); await closeTalentDetails(page);await page.locator('#character-tab-skills').click();
   await expect(page.locator('#character-content .hire-skills li').first()).toBeVisible();
   await page.keyboard.press('Escape'); await expect(page.locator('#team-dialog')).toBeVisible();
   await page.screenshot({ path: info.outputPath('map-team.png') });
@@ -1131,7 +1132,7 @@ test('lobby member panel shows the ★3 skill a migrated company keeps and the t
   await seed(page, null, profile);
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator('#lobby-tab-team').click(); await page.locator('#lobby-member-tracer').click();
-  await page.locator('#lobby-skills-open').click();await page.locator('#camp-character-tab-skills').click();await page.locator('#camp-skill-selection').selectOption('finisher');await page.locator('.skill-passives summary').click();
+  await page.locator('#lobby-skills-open').click();await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click();await page.locator('#camp-skill-selection').selectOption('finisher');await page.locator('.skill-passives summary').click();
   await expect(page.locator('#camp-character-dialog .character-skills [data-skill=finisher]')).toContainText('ปลิดชีพ');
   await expect(page.locator('#camp-character-dialog .character-passive')).toContainText('ตาเหยี่ยว');
   await expect(page.locator('#camp-character-dialog .character-passive')).toContainText('ยังล็อก · ปลดที่โหนด สายตาคม ชั้น 4');
@@ -1154,32 +1155,32 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   await expect(page.locator('.talent-node')).toHaveCount(17);
   await expect(page.locator('#camp-character-talent-a2i')).toHaveAttribute('data-state', 'locked'); await expect(page.locator('#camp-character-talent-a2i')).toHaveAttribute('aria-label', /เปิดที่ Lv5/);
   const learn = page.locator('#camp-character-talent-learn');
-  await page.locator('#camp-character-talent-c1s').click(); await learn.click(); await expect(page.locator('#camp-character-talent-c1s')).toHaveAttribute('data-state', 'full');
-  await page.locator('#camp-character-talent-a1').click(); await learn.click(); await learn.click();
+  await closeTalentDetails(page);await page.locator('#camp-character-talent-c1s').click(); await learn.click(); await expect(page.locator('#camp-character-talent-c1s')).toHaveAttribute('data-state', 'full');
+  await closeTalentDetails(page);await page.locator('#camp-character-talent-a1').click(); await learn.click(); await learn.click();
   await expect(page.locator('#camp-character-talent-a1')).toContainText('2/2'); await expect(page.locator('.talent-points')).toContainText('แต้มเหลือ 0/3');
   // No points left: another node does nothing and says why.
-  await page.locator('#camp-character-talent-b1').click(); await learn.click({ force: true }); await expect(page.locator('#camp-character-talent-b1')).toContainText('0/2'); await expect(learn).toHaveAttribute('aria-disabled', 'true');
+  await closeTalentDetails(page);await page.locator('#camp-character-talent-b1').click(); await learn.click({ force: true }); await expect(page.locator('#camp-character-talent-b1')).toContainText('0/2'); await expect(learn).toHaveAttribute('aria-disabled', 'true');
   await expect(page.locator('#camp-character-talent-b1')).toHaveAttribute('aria-label', /แต้มไม่พอ/);
   // The new rally is in the battle loadout; switch to its own skill tab before changing the loadout.
-  await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-skill-selection').selectOption('rally');
+  await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-skill-selection').selectOption('rally');
   await expect(page.locator('#camp-character-loadout-rally')).toHaveAttribute('aria-pressed', 'true'); await page.locator('#camp-skill-selection').selectOption('bash'); await page.locator('#camp-character-loadout-bash').click();
   await expect(page.locator('#camp-character-loadout-bash')).toHaveAttribute('aria-pressed', 'false');
   for (const b of await page.locator('#camp-character-dialog .skills-slots button, #camp-character-dialog .skills-selection-row>button').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
-  await page.locator('#camp-character-tab-talents').click();
-  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn, #camp-character-dialog .skills-slots button, #camp-character-dialog .skills-selection-row>button, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await closeTalentDetails(page);await page.locator('#camp-character-tab-talents').click();
+  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn:visible, #camp-character-dialog .skills-slots button, #camp-character-dialog .skills-selection-row>button, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('lobby-talents.png') });
   // Another member's tree from the picker.
   // P01: Lyra shares the camp level, so she has points of her own to spend.
-  await page.locator('#camp-character-member-tracer').click(); await expect(page.locator('#camp-character-dialog .talent-tree')).toHaveAttribute('aria-label', /ไลรา/);
+  await closeTalentDetails(page);await page.locator('#camp-character-member-tracer').click(); await expect(page.locator('#camp-character-dialog .talent-tree')).toHaveAttribute('aria-label', /ไลรา/);
   await expect(page.locator('#camp-character-talent-a1')).toHaveAttribute('aria-label', /ลงได้ 1 แต้ม/);
-  await page.locator('#camp-character-member-guardian').click();
+  await closeTalentDetails(page);await page.locator('#camp-character-member-guardian').click();
   await page.setViewportSize({ width: 390, height: 844 }); await page.locator('#camp-character-talent-c4').scrollIntoViewIfNeeded();
   expect(await page.evaluate(() => document.scrollingElement!.scrollHeight <= innerHeight)).toBe(true);
   await page.screenshot({ path: info.outputPath('lobby-talents-phone.png') });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('asterveil.fateweave.expedition.v1')!));
   expect(saved.version).toBe(58); expect(saved.profile.members.guardian.talents).toEqual({ c1s: 1, a1: 2 }); expect(saved.profile.members.guardian.loadout).toEqual(['guard', 'rally']);
   // Back to the team sheet: the card shows the new max HP.
-  await page.locator('#camp-character-dialog [data-world=character-close]').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
+  await closeTalentDetails(page);await page.locator('#camp-character-dialog [data-world=character-close]').click(); await expect(page.locator('#lobby-sheet-title')).toContainText('จัดทีม');
   await expect(page.locator('#lobby-member-guardian')).toContainText(`HP ${Math.round(76 * (100 + 9 + 10) / 100)}`);
   await page.locator('#lobby-tree-open').click(); const beforeReset=await page.evaluate(()=>localStorage.getItem('asterveil.fateweave.expedition.v1')); await page.locator('#camp-character-reset').click(); expect(await page.evaluate(()=>localStorage.getItem('asterveil.fateweave.expedition.v1'))).toBe(beforeReset); await page.locator('#camp-character-reset').click();
   await expect(page.locator('.talent-points')).toContainText('แต้มเหลือ 3/3');
@@ -1216,7 +1217,7 @@ test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salva
   await page.locator('#camp-bag-slot-body').click();
   await page.locator('#camp-pick-owned-4').click(); await page.locator('#camp-wear-owned-4').click(); await expect(page.locator('#camp-bag-slot-charm')).toContainText('เครื่องรางตำนาน');
   await page.screenshot({ path: info.outputPath('lobby-gear.png') });
-  await page.locator('#camp-character-dialog [data-world=character-close]').click(); await page.keyboard.press('Escape'); await page.locator('#lobby-tab-gear').click();
+  await closeTalentDetails(page);await page.locator('#camp-character-dialog [data-world=character-close]').click(); await page.keyboard.press('Escape'); await page.locator('#lobby-tab-gear').click();
   // Salvage stays in the camp inventory; a rare piece needs a second press.
   await page.locator('#salvage-1').click(); await expect(page.locator('#salvage-1')).toContainText('ยืนยันแยก');
   await page.locator('#salvage-1').click(); await expect(page.locator('#salvage-1')).toHaveCount(0);
@@ -1255,7 +1256,7 @@ test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async
   await expect(page.locator('#lobby-sheet-title')).toContainText('เลือกงานโรงตีเหล็ก'); await chooseForgeTask(page,'enhance'); await expect(page.locator('.forge-pick')).toHaveCount(3);
   await page.locator('#forge-item-1').click();
   await expect(page.locator('#forge-cost')).toContainText('แร่ · ใช้ 4');
-  await page.locator('#forge-enhance').click();await page.locator('#forge-confirm').click();
+  await page.locator('#forge-enhance').click();
   await expect(page.locator('.forge-item-head')).toContainText('+1');
   await openForgeTools(page);await page.locator('#forge-mode-reroll').click();await page.locator('#forge-reroll-0').click();await page.locator('#forge-confirm').click();
   await expect(page.locator('#forge-success')).toContainText('สุ่มคุณสมบัติสำเร็จ');await page.locator('#forge-next-preview').click();await expect(page.locator('#forge-reroll-0')).toBeDisabled();await expect(page.locator('.forge-reason')).toContainText('ตราสัญญาไม่พอ');
@@ -1320,7 +1321,7 @@ test('camp NPCs stand at their stations, open their service when tapped and gree
   for (const [npc, title, line] of [['smith', 'เลือกงานโรงตีเหล็ก', 'ลุงบอร์ก'], ['broker', 'ป้ายจ้าง', 'พีโน่'], ['herbalist', 'นักปรุงยา', 'เฟิร์น'], ['keeper', 'อุปกรณ์', 'มิมี่'], ['trainer', 'ต้นไม้ความถนัด', 'ครูฮัลดา'], ['scout', 'จัดทีม', 'คาเอล']] as const) {
     await page.locator(`#npc-${npc}`).click();
     if(npc==='keeper')await page.locator('.storage-keeper summary').click();
-    if(npc==='trainer'){await expect(page.locator('#camp-character-dialog')).toBeVisible();await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');await expect(page.locator('#npc-art-trainer')).toHaveAttribute('data-act','greet');await page.locator('#camp-character-dialog [data-world=character-close]').click();continue;}
+    if(npc==='trainer'){await expect(page.locator('#camp-character-dialog')).toBeVisible();await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');await expect(page.locator('#npc-art-trainer')).toHaveAttribute('data-act','greet');await closeTalentDetails(page);await page.locator('#camp-character-dialog [data-world=character-close]').click();continue;}
     await expect(page.locator('#lobby-sheet-title')).toContainText(title); if(npc==='smith')await expect(page.locator('.forge-workbench')).toBeVisible();else await expect(page.locator('.npc-line')).toContainText(line);
     if (npc === 'smith') { await expect(page.locator(`#npc-art-${npc}`)).toHaveAttribute('data-act', 'greet'); await page.waitForTimeout(400); await page.screenshot({ path: info.outputPath('camp-npc-sheet.png') }); }
     await page.locator('[data-lobby="close"]').click();

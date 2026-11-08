@@ -30,13 +30,25 @@ describe('enhancement review command boundary',()=>{
     const {p,ui,host}=fixture();ui.click(button('review'),p);ui.change({id:'forge-preview-hero',value:'healer',dataset:{}} as HTMLSelectElement);
     ui.click(button('confirm'),p);expect(host.enhance).not.toHaveBeenCalled();
   });
-  it('keeps the committed receipt until explicit next preview without another command',()=>{
-    const {p,ui,host}=fixture();ui.click(button('review'),p);ui.click(button('confirm'),p);
+  it('prepares the next step automatically, with fresh costs and a one-use button',()=>{
+    const {p,ui,host}=fixture();
+    const strike=(target:number)=>({dataset:{forge:'strike',uid:'1',target:String(target)},disabled:false}) as unknown as HTMLButtonElement;
+    const first=strike(3);ui.click(first,p);ui.click(first,p);expect(host.enhance).toHaveBeenCalledExactlyOnceWith(1,3);
     const result=enhanceTo(p,map,1,3);ui.enhanced(result.profile,1);
-    const receipt=ui.render(result.profile);expect(receipt).toContain('data-receipt="true"');expect(receipt).toContain('<h3>+2 → +3</h3>');
-    expect(receipt).toContain('forge-next-preview');expect(receipt).not.toContain('id="forge-enhance"');
-    ui.click(button('next-preview'),result.profile);expect(ui.render(result.profile)).toContain('<h3>+3 → +4</h3>');expect(host.enhance).toHaveBeenCalledTimes(1);
+    const html=ui.render(result.profile);expect(html).toContain('ตีบวกสำเร็จ +2 → +3');expect(html).toContain('<h3>+3 → +4</h3>');expect(html).toContain('data-target="4"');expect(html).not.toContain('forge-next-preview');
+    ui.click(strike(3),result.profile);expect(host.enhance).toHaveBeenCalledTimes(1);
+    ui.click(strike(4),result.profile);expect(host.enhance).toHaveBeenLastCalledWith(1,4);
     expect(result.profile.bank).toMatchObject({ore:94,dust:48});
+  });
+  it('refuses stale, unaffordable, skipped and capped direct strikes',()=>{
+    for(const change of ['stale','ore','dust','skip','cap'] as const){
+      const {p,ui,host}=fixture();let source=p,target=3;
+      if(change==='stale')source=structuredClone(p);
+      if(change==='ore')p.bank.ore=0;if(change==='dust')p.bank.dust=0;
+      if(change==='skip')target=4;if(change==='cap'){p.items[0]!.plus=5;target=6;}
+      ui.click({dataset:{forge:'strike',uid:'1',target:String(target)},disabled:false} as unknown as HTMLButtonElement,source);
+      expect(host.enhance).not.toHaveBeenCalled();
+    }
   });
   it('groups real preview details and never calls a bag item worn',()=>{
     const {p,ui}=fixture();const html=ui.render(p);expect(html).toContain('ผลต่ออุปกรณ์');expect(html).toContain('ในคลัง · ไม่มีผู้สวม');

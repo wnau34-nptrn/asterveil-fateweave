@@ -13,10 +13,9 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **Party title complete:** #207 (`4ea37ca`), quality/browser passed. Evidence: `docs/validation/title-party/`. Aegis icon #206 complete.
+- **Skill popup + continuous enhancement (owner 2026-11-08):** branch `codex/skill-popup-continuous-enhancement`; native node details with explicit 1-point upgrade; enhancement prepares the next step automatically. Rules/save/balance unchanged. Evidence: `docs/validation/skill-popup-continuous-enhancement/README_TH.md`; merge requires quality + browser.
 
-- **TEAM-FORMATION-EDITOR-002 complete:** PR #205 merged (`7c40161`) after quality and all browser shards/aggregate passed. Formation is the sole field list, reserves/camp place atomically, presets save explicitly. Rules/save unchanged. Evidence: `docs/validation/team-formation-editor/README_TH.md`.
-- Camp HUD/direct Characters/compact quests complete in PR #204 (`deb193f`), all checks passed; evidence `docs/validation/camp-hud-layout/README_TH.md`.
+- Earlier UI complete: party title #207 (`4ea37ca`), team formation #205 (`7c40161`), camp HUD #204 (`deb193f`); quality/browser passed. Evidence under `docs/validation/title-party/`, `team-formation-editor/`, `camp-hud-layout/`.
 
 - **MAP-TEAM-CHARACTER-TABS-001 complete (2026-11-07, PR #203, merge `ae8889c`):** separate map team HUD/dialog (T), bag items/gear (B), one-tap carried-only presets; direct tree tab, MAP 4 character tabs/camp 5, development stays camp-only. Quality + browser passed. Rules/save/balance unchanged. Evidence: `docs/validation/map-team-character-tabs/README_TH.md`.
 - Unlock pacing #202: quests/team MAP 1; hiring/market/hunt MAP 2; advanced services/hard explicitly MAP 3. Rights follow cleared history.

@@ -1,3 +1,12 @@
+## 2026-11-08 — Skill popup + continuous enhancement
+- Branch `codex/skill-popup-continuous-enhancement`; merge after required quality/browser checks (PR records the merge SHA).
+- Owner: “ดำเนินการแก้ไขในเกมได้” for both discussed UX changes.
+- Native node detail modal keeps upgrade, points and lock reasons visible; X/Escape/backdrop restore tree focus/scroll.
+- Enhancement commits one displayed step and prepares the next immediately; fresh costs/resources, stale/duplicate/repeat guards preserved.
+- Rules/save/content/balance unchanged; other forge modes retain reviews.
+- Typecheck/lint and 7 enhancement boundary unit tests passed; 390px popup/continuous enhancement browser 2/2 passed and images inspected.
+- Full quality + browser regression gates required before merge; evidence/remaining real-device limits: `docs/validation/skill-popup-continuous-enhancement/README_TH.md`.
+
 ## 2026-11-08 — ART-UI-TITLE-PARTY-001
 - PR #207 merged `4ea37ca` after quality + all browser shards/aggregate passed; owner approved integration: “เอาเข้าเกม”.
 - Clean background plate derived from approved artwork; real logo, start/continue controls and saved-game summary retained.
