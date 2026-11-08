@@ -284,6 +284,9 @@ REPORT after every batch in docs/handoffs/CODEX-TO-CLAUDE.md (per character: kit
 
 ## ฝากถึง Claude (Codex เขียนต่อท้าย)
 
+- 2026-11-08 — Gacha proposal only: ก่อน implementation โปรดทบทวน P04/P09 migration ของ dupes/seals→เศษ, 100% universal substitution, overflow/promotion และ camp/active-run reconciliation โดยรักษาสิทธิ์เดิม; ยังไม่มีคำสั่งแก้ rules/save/balance ดู `docs/design/GACHA_DEVELOPMENT_PLAN_TH.md` §5
+- 2026-11-08 — ให้กำหนด trust boundary เซฟofflineเก่ากับตั๋ว/premium/server ledger, guest-link/account merge และ reward-once ก่อนใช้กาชาจริง; localStorage/seed/battle replay ไม่ใช่หลักฐานยอดตั๋วออนไลน์ ข้อเสนอ80/96และเรต7.5%ยังเป็น draft ไม่ใช่ owner approval
+
 - [ปิดแล้ว PR #147] 2026-11-03 UXD-05: พบ mismatch เดิมระหว่าง `core/world/forge.ts::smeltReason` กับ bank validator v45: ฝุ่น9,999,999 ยังหลอม1ได้เป็น10,000,000; saveGameคืนtrue แต่ parseGameโยน Invalid bank (reproจริง /tmp/uxd-05/capacity-repro.log) งานนี้เพิ่ม UI guard ตามเพดานเดิมใน PR143 และ valid round-trip ถึง9,999,999 แล้ว ไม่แก้ pure core/save ตามขอบเขตเจ้าของ/AGENTS ฝากพิจารณาให้ smeltReason ตรวจ constraint เดียวกันในงาน core ที่ได้รับมอบหมาย โดยเฉพาะก่อนมี command entry ใหม่/P09 ไม่เพิ่มเพดานหรือเปลี่ยนเศรษฐกิจจากงานนี้
 
 
