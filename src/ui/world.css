@@ -12,9 +12,9 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 
 /* ---------- Title ---------- */
 .title-view { position: absolute; inset: 0; justify-content: flex-end; padding: max(16px, var(--safe-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
-  background: radial-gradient(ellipse 70% 32% at 50% 14%, #08121fd0, #08121f00 100%), linear-gradient(180deg, #08121f99 0%, #08121f00 34%, #08121f55 62%, #08121ff2 100%), url('/assets/title/title_bg.webp') 50% 50% / cover no-repeat, var(--navy-950); }
+  background: radial-gradient(ellipse 70% 32% at 50% 14%, #08121fd0, #08121f00 100%), linear-gradient(180deg, #08121f99 0%, #08121f00 34%, #08121f55 62%, #08121ff2 100%), url('/assets/title/title_party.webp') 50% 50% / cover no-repeat, var(--navy-950); }
 .title-card { width: min(440px, 100%); height: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
-.title-logo { margin-top: max(5cqh, 12px); width: min(92%, 520px); }
+.title-logo { margin-top: max(7cqh, 12px); width: min(100%, 520px); }
 .title-logo img { width: 100%; height: auto; filter: drop-shadow(0 4px 18px #08121fcc); }
 .title-copy { margin-top: 2px; color: #f4f7fc; font-size: 15px; text-shadow: 0 1px 3px #08121f, 0 0 12px #08121f; }
 .title-actions { margin-top: auto; width: 100%; display: flex; flex-direction: column; gap: 12px; }
