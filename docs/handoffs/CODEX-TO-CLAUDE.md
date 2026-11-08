@@ -1,11 +1,11 @@
 ## 2026-11-08 — Skill popup + continuous enhancement
-- Branch `codex/skill-popup-continuous-enhancement`; owner approved integration on 2026-11-08: “อนุมัติ เอาเข้าเกมได้”; PR/merge follows required CI gates.
-- Owner: “ดำเนินการแก้ไขในเกมได้” for both discussed UX changes.
-- Native node detail modal keeps upgrade, points and lock reasons visible; X/Escape/backdrop restore tree focus/scroll.
-- Enhancement commits one displayed step and prepares the next immediately; fresh costs/resources, stale/duplicate/repeat guards preserved.
-- Rules/save/content/balance unchanged; other forge modes retain reviews.
-- Build/typecheck/lint passed; full unit 1662 + 6 skipped, timed-out boss test passed separately (110.28s), added boundary case passed; 50 focused browser cases passed (including corrected viewport-resize regression); 390px images inspected.
-- Required CI quality/browser still needed after explicit push permission; initial push block resolved by explicit owner permission; source pushed, required CI gates remain. Details: evidence/remaining real-device limits: `docs/validation/skill-popup-continuous-enhancement/README_TH.md`.
+- PR #208 merged `117a0d4`; branch `codex/skill-popup-continuous-enhancement`; quality + all 4 browser shards/aggregate passed.
+- Owner approved both changes and integration: “อนุมัติ เอาเข้าเกมได้”.
+- Native node modal keeps details, points and explicit 1-point upgrade visible; X/Escape/backdrop restore tree focus/scroll.
+- Enhancement commits one displayed step per click and prepares the next immediately with fresh costs/resources and stale/duplicate/repeat guards.
+- Other forge services and rules/save/content/balance unchanged.
+- Local build/typecheck/lint, 50 focused browser cases and 8 boundary unit tests passed. Full unit's boss timeout passed separately in 110.28s; full CI quality passed.
+- Evidence: `docs/validation/skill-popup-continuous-enhancement/README_TH.md`; real-device Safari remains unverified. Await owner's next task.
 
 ## 2026-11-08 — ART-UI-TITLE-PARTY-001
 - PR #207 merged `4ea37ca` after quality + all browser shards/aggregate passed; owner approved integration: “เอาเข้าเกม”.

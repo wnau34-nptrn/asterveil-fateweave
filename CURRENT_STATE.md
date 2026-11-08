@@ -13,7 +13,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **Skill popup + continuous enhancement (owner 2026-11-08):** branch `codex/skill-popup-continuous-enhancement`; native node details with explicit 1-point upgrade; enhancement prepares the next step automatically. Rules/save/balance unchanged. Evidence: `docs/validation/skill-popup-continuous-enhancement/README_TH.md`; owner approved GitHub push/PR/merge on 2026-11-08; CI gates before merge.
+- **Skill popup + continuous enhancement complete:** PR #208 merged (`117a0d4`) after quality + all browser shards/aggregate passed. Nodes open native upgrade details; enhancement prepares the next step automatically. Rules/save/balance unchanged. Evidence: `docs/validation/skill-popup-continuous-enhancement/README_TH.md`.
 
 - Earlier UI complete: party title #207 (`4ea37ca`), team formation #205 (`7c40161`), camp HUD #204 (`deb193f`); quality/browser passed. Evidence under `docs/validation/title-party/`, `team-formation-editor/`, `camp-hud-layout/`.
 
@@ -46,4 +46,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-Continue `codex/skill-popup-continuous-enhancement`: local UX changes and tests ready. Owner explicitly approved pushing and integrating the changes on 2026-11-08. Complete required CI gates and merge. See `docs/validation/skill-popup-continuous-enhancement/README_TH.md`. Do not start P09.
+Read AGENTS.md, CLAUDE.md and CURRENT_STATE.md on the game branch, then await the owner's next task. Skill popup + continuous enhancement completed in PR #208 (`117a0d4`), quality/browser passed. Do not start P09 without the owner.
