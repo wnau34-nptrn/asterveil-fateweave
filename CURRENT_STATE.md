@@ -13,7 +13,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **TEAM-FORMATION-EDITOR-002 active:** owner approved formation-first mockup, no duplicate field list, unified reserve/camp placement and explicit preset save dialog. Branch `codex/team-formation-preset-layout`; local/full CI checks required before merge. Rules/save unchanged. Evidence: `docs/validation/team-formation-editor/README_TH.md`.
+- **TEAM-FORMATION-EDITOR-002 complete:** PR #205 merged (`7c40161`) after quality and all browser shards/aggregate passed. Formation is the sole field list, reserves/camp place atomically, presets save explicitly. Rules/save unchanged. Evidence: `docs/validation/team-formation-editor/README_TH.md`.
 - Camp HUD/direct Characters/compact quests complete in PR #204 (`deb193f`), all checks passed; evidence `docs/validation/camp-hud-layout/README_TH.md`.
 
 - **MAP-TEAM-CHARACTER-TABS-001 complete (2026-11-07, PR #203, merge `ae8889c`):** separate map team HUD/dialog (T), bag items/gear (B), one-tap carried-only presets; direct tree tab, MAP 4 character tabs/camp 5, development stays camp-only. Quality + browser passed. Rules/save/balance unchanged. Evidence: `docs/validation/map-team-character-tabs/README_TH.md`.
@@ -45,4 +45,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-Continue TEAM-FORMATION-EDITOR-002 on codex/team-formation-preset-layout. Read AGENTS.md/CLAUDE.md; owner approved mockup implementation and session push/PR/merge/deploy. Finish quality + browser checks before merging into feature/fateweave-initial-prototype. Evidence: docs/validation/team-formation-editor/README_TH.md. P09 stays on hold.
+อ่าน AGENTS.md, CLAUDE.md และ CURRENT_STATE.md ใน feature/fateweave-initial-prototype แล้วรอเจ้าของเลือกงานถัดไป ไม่เริ่ม P09 เอง หน้าจัดทีมแบบแผนการยืนจุดเดียวเสร็จใน PR #205 หลัง quality/browser ผ่านทั้งหมด หลักฐาน: docs/validation/team-formation-editor/README_TH.md

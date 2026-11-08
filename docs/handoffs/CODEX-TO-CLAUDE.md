@@ -1,10 +1,10 @@
 ## 2026-11-08 — TEAM-FORMATION-EDITOR-002
-- Branch `codex/team-formation-preset-layout`; PR/merge pending validation.
+- Branch `codex/team-formation-preset-layout`; Merged PR #205 into the game branch, merge `7c401617eb232497339de979ab027ae37a3f008a`, after quality + all browser shards/aggregate passed.
 - Owner approved formation-first mockup: remove duplicate field strip, place reserves/camp members on the plan, save exact team as preset explicitly.
 - One selection for diagram/roster, atomic group+lane UI adapter, existing world validators and save/preset schema unchanged.
 - Native preset dialog: choose slot/name, explicit overwrite, rename/clear preserved, Escape/focus/rotation gates.
 - Keep scout NPC greeting below the top formation. Map/battle UI unchanged.
-- Placement unit 5/5 passed; final typecheck/lint/build/browser/unit suite in progress.
+- Local typecheck/lint/build passed; unit 1,662 passed + 6 skipped, focused browser 23/23 + compatibility 8/8 passed. Full CI quality + browser passed.
 - Evidence and actual 390px screenshots: `docs/validation/team-formation-editor/README_TH.md`.
 - No battle/save/balance changes; real-device Safari remains unverified. P09 stays on hold.
 

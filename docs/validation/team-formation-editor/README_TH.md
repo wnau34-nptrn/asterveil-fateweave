@@ -25,4 +25,12 @@
 
 UI placement unit checks 5/5 ผ่าน รวม atomic placement, ความจุแนว, ลำดับ, การย้ายจากคลังสมาชิก และการปฏิเสธโดยไม่เปลี่ยนต้นฉบับ
 
-Typecheck/lint/build และ browser checks สำหรับสมาชิก/preset/formation/จอเล็กกำลังทวนฉบับสุดท้ายก่อน merge; ผล CI และสถานะงานบันทึกใน handoff และ PR
+- Typecheck, lint, production build ผ่าน
+- Full unit suite: 1,662 passed, 6 skipped (รวม placement ใหม่ 5 กรณี)
+- Browser เฉพาะทีม/formation/preset/คลังสมาชิก/จอเล็ก: 23/23 ผ่าน
+- Compatibility อัปดาว สกิล อุปกรณ์ ทีม 5 คน และ NPC: 8/8 ผ่าน
+- Quality และ browser เต็มทั้ง 4 shards/aggregate ของ PR #205 ผ่านครบ
+
+## สถานะงาน
+
+Merge PR #205 เข้า `feature/fateweave-initial-prototype` แล้วที่ `7c401617eb232497339de979ab027ae37a3f008a` หลังผ่านทุก gate บันทึกภาพจริงฉบับสุดท้ายและสถานะส่งต่องานใน commit เอกสารนี้ ไม่มีการเปลี่ยนกติกาหรือ source เพิ่ม และไม่รอ/บันทึกผล Pages แยกตามขั้นตอน pre-release ของโครงการ
