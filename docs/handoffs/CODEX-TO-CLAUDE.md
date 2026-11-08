@@ -1,8 +1,8 @@
 ## 2026-11-08 — ART-UI-AEGIS-APPICON-002
-- Branch `codex/aegis-app-icon`; owner explicitly approved the Aegis concept and requested integration: “เอาเข้าเกมได้”.
+- Branch `codex/aegis-app-icon`; PR #206 merged `55d58b7` after quality + all browser shards/aggregate passed. Owner approved integration: “เอาเข้าเกมได้”.
 - Preserved approved original; resized 32/180/192/512px PNGs, replaced old SVG favicon precedence, versioned icon/manifest URLs.
 - PWA purpose is `any`: source has baked rounded corners and is not an adaptive-maskable composition.
-- No gameplay/rules/save changes. Validation and PR status recorded after checks.
+- No gameplay/rules/save changes. Pages build/typecheck/lint passed; unit 1,662 passed + 6 skipped; built PNG decoding and manifest/base-path references passed.
 - iOS installed shortcuts may need removal/re-add; actual device not tested.
 
 ## 2026-11-08 — TEAM-FORMATION-EDITOR-002
