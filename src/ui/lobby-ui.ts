@@ -62,6 +62,7 @@ export class LobbyUI {
   // The equipment sheet (2D-2) works the same way.
   // The forge (2D-4) is a third menu sheet.
   private sheet: Sheet | null = null;
+  private teamNpc = false;
   private readonly huntUI=new HuntPanel();
   // Map sheet: the node whose card shows (default: the furthest open map).
   private mapPicked: string | undefined;
@@ -123,16 +124,16 @@ export class LobbyUI {
       if (!b || b.disabled) return;
       const id = b.dataset.hero;
       switch (b.dataset.lobby) {
-        case 'npc': { this.forgeStorageReturn=false;const npc = b.dataset.npc as NpcId; const sheet = npcSpots[npc].sheet;
+        case 'npc': { this.forgeStorageReturn=false;const npc = b.dataset.npc as NpcId; const sheet = npcSpots[npc].sheet;this.teamNpc=sheet==='team';
           if(sheet==='tree'&&!this.open('tree')){this.sheet='tree';this.draw();this.act(npc,'greet',1400);this.focus(`#npc-${npc}`);break;}
           if(sheet==='tree'){const id=this.view!.profile.party.deployed[0]??this.view!.profile.company[0];if(id){this.act(npc,'greet',1400);this.characters.openFor(id,'talents',b);}break;}
           // The trainer and keeper open for the first deployed member; the others open their own sheet.
           if (sheet === 'gear') this.picked = this.view!.profile.party.deployed[0];
           else this.picked = undefined;
           this.sheet = sheet; if(sheet==='forge')this.forgeUI.openTasks(); this.preview = undefined; this.confirmDismiss = false; this.openedLine(sheet); this.draw(); this.act(npc, 'greet', 1400); this.focus(sheet==='forge'?'#lobby-sheet-title':`#npc-${npc}`); break; }
-        case 'tab': this.forgeStorageReturn=false;this.huntUI.cancel();this.preview = undefined; this.lanePick = undefined; this.sheet = b.dataset.tab as 'team' | 'hire' | 'gear' | 'forge' | 'brew' | 'hunt'; if(this.sheet==='forge')this.forgeUI.openTasks(); this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = this.sheet==='gear'?(this.view!.profile.party.deployed[0]??this.view!.profile.company[0]):undefined; this.confirmDismiss = false; this.draw(); this.focus(this.sheet==='forge'?'#lobby-sheet-title':`#lobby-tab-${this.sheet}`); break;
+        case 'tab': this.teamNpc=false;this.forgeStorageReturn=false;this.huntUI.cancel();this.preview = undefined; this.lanePick = undefined; this.sheet = b.dataset.tab as 'team' | 'hire' | 'gear' | 'forge' | 'brew' | 'hunt'; if(this.sheet==='forge')this.forgeUI.openTasks(); this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = this.sheet==='gear'?(this.view!.profile.party.deployed[0]??this.view!.profile.company[0]):undefined; this.confirmDismiss = false; this.draw(); this.focus(this.sheet==='forge'?'#lobby-sheet-title':`#lobby-tab-${this.sheet}`); break;
         case 'character-home': {
-          this.forgeStorageReturn=false;this.huntUI.cancel();this.forgeUI.cancelReview();this.preview=undefined;this.confirmDismiss=false;
+          this.teamNpc=false;this.forgeStorageReturn=false;this.huntUI.cancel();this.forgeUI.cancelReview();this.preview=undefined;this.confirmDismiss=false;
           if(!this.open('team')){this.sheet='team';this.draw();this.focus('#lobby-sheet-title');break;}
           const p=this.view!.profile,last=this.characters.lastViewed?.id;
           const target=last&&p.company.includes(last)?last:p.party.deployed[0]??p.company[0];
@@ -299,6 +300,7 @@ export class LobbyUI {
   forgeTransferred(p:Profile,uid:number):void{this.forgeUI.transferred(p,uid);}
   forgeServiced(p:Profile,tab:'craft'|'recycle'|'smelt',eventValue:number,persisted:boolean):void{this.forgeUI.serviced(p,tab,eventValue,persisted);}
   private closeSheet(): void {
+    this.teamNpc=false;
     if(this.sheet==='gear'&&this.forgeStorageReturn){this.storageUI.reset();this.forgeStorageReturn=false;this.sheet='forge';this.draw();this.focus(this.root.querySelector('#forge-manage-storage')?'#forge-manage-storage':'#forge-craft');return;}
     this.preview=undefined;const was=this.sheet,origin=was==='forge'?this.forgeOrigin:undefined;
     this.huntUI.cancel();this.forgeUI.cancelReview();this.storageUI.reset();this.sheet=origin?.sheet??null;this.picked=origin?.picked;this.confirmDismiss=false;
@@ -388,7 +390,7 @@ export class LobbyUI {
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
         <div class="lobby-sheet-head">${this.sheet==='forge'&&forgeBody&&this.forgeUI.taskNavigation?`<button id="forge-open-tasks" data-forge="tasks" class="round-glass" aria-label="เลือกงานโรงตีเหล็ก">${icon('left')}</button>`:''}${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="${this.forgeStorageReturn?'กลับไปสร้างอาวุธ':'กลับไปจัดทีม'}">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title" tabindex="-1">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : this.sheet === 'board' ? `${icon('flag')} กระดานเควสต์ <small>รับได้ ${this.readyQuests(p).length}</small>` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.sheet==='forge'||this.sheet==='board'||this.sheet==='team'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p, 'hire'):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcFold(p, this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'board' ? this.questBoard(p) : this.board(p)}</div></section>` : ''}
+        <div class="lobby-content">${this.sheet==='forge'||this.sheet==='board'||this.sheet==='team'&&!this.teamNpc?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p, 'hire'):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcFold(p, this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'board' ? this.questBoard(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
         ${this.guideCard(p)}
         <section class="lobby-trip" aria-label="การเดินทาง"><div class="trip-head"><div><b>${this.openMaps().at(-1)?.name ?? this.map.name}</b><span class="trip-team" data-ready="${ready}">${ready ? 'ทีมพร้อม' : 'ทีมยังไม่พร้อม'} · ลงสนาม ${p.party.deployed.length} · สำรอง ${p.party.reserve.length}</span></div><div class="trip-actions">${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary" aria-label="เลือกแผนที่">${icon('map')}</button>` : ''}</div></div>

@@ -6,7 +6,8 @@
 +- Rules/save/balance/unlock pacing unchanged; no new daily quests or farming mechanics.
 +- Validation: typecheck/lint/build passed; 1,656 unit tests + isolated boss-balance retry passed (first attempt timed out). Browser 29/29 + existing camp/quest compatibility 12/12 passed; context 8/8 passed.
 +- Evidence: `docs/validation/camp-hud-layout/README_TH.md` (actual 390px game screenshots).
-+- Open: real Safari/device feel remains unverified; P09 stays on hold.
++- CI follow-up: preserve scout greeting when team opens via NPC; direct Team stays compact. Commander identity assertion includes camp level; focused regression 2/2 passed. Full CI rechecking.
+- Open: real Safari/device feel remains unverified; P09 stays on hold.
 
 ## 2026-11-07 — MAP-TEAM-CHARACTER-TABS-001
 - Owner approved separate map team, one-tap carried-only presets, primary tree tab and no development tab on MAP.
