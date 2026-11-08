@@ -36,4 +36,4 @@
 
 ## สถานะการส่งขึ้นเกม
 
-เจ้าของยืนยันอนุมัติ push/PR/merge/deploy แล้ว หลังจาก automatic approval review เคยบล็อกการ push ครั้งแรก เปิด PR #204 เข้า `feature/fateweave-initial-prototype` และรอ quality/browser checks ผ่านก่อน merge ตามขั้นตอนโครงการ
+เจ้าของยืนยันอนุมัติ push/PR/merge/deploy แล้ว PR #204 merge เข้า `feature/fateweave-initial-prototype` สำเร็จเมื่อ 2026-11-08 ที่ `deb193f3b967cedade82f063c1e9efd623ba1f76` หลัง quality และ browser ทั้ง 4 shards/aggregate ผ่านครบ ระบบเผยแพร่เดิมทำงานจาก game branch ตามปกติ ไม่รอหรือบันทึกผล Pages แยกตามคำสั่ง pre-release ของโครงการ

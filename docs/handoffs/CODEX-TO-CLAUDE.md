@@ -1,12 +1,12 @@
-## 2026-11-07 — CAMP-HUD-CHARACTER-QUEST-001
-+- Branch `codex/camp-hud-character-quest-layout`; PR #204 open; merge pending quality/browser. Owner explicitly approved push/PR/merge/deploy after the initial automatic-review block.
+## 2026-11-08 — CAMP-HUD-CHARACTER-QUEST-001
++- Branch `codex/camp-hud-character-quest-layout`; Merged PR #204 into the game branch, merge `deb193f3b967cedade82f063c1e9efd623ba1f76`, after quality + all four browser shards/aggregate passed. Owner explicitly approved push/PR/merge/deploy after the initial automatic-review block.
 +- เจ้าของอนุมัติ mockup: HUD/ปุ่มกระดานโปร่ง; รายการเควสต์ทึบ กระชับ กดดูรายละเอียดเต็ม
 +- ค่าย: ฟาร์มย้ายขึ้น HUD; แถบล่าง ทีม/ตัวละคร/จ้าง/กระเป๋า/ช่าง/ยา; ตัวละครเปิดคน/แท็บล่าสุดตรง ไม่ผ่านทีม
 +- ทีมตัดส่วนพัฒนา/เลเวลค่ายซ้ำออก; เควสต์ใช้ native disclosure และปุ่มรับเดิม
 +- Rules/save/balance/unlock pacing unchanged; no new daily quests or farming mechanics.
 +- Validation: typecheck/lint/build passed; 1,656 unit tests + isolated boss-balance retry passed (first attempt timed out). Browser 29/29 + existing camp/quest compatibility 12/12 passed; context 8/8 passed.
 +- Evidence: `docs/validation/camp-hud-layout/README_TH.md` (actual 390px game screenshots).
-+- CI follow-up: preserve scout greeting when team opens via NPC; direct Team stays compact. Commander identity assertion includes camp level; focused regression 2/2 passed. Full CI rechecking.
++- CI follow-up: preserve scout greeting when team opens via NPC; direct Team stays compact. Commander identity assertion includes camp level; focused regression 2/2 passed. Full CI quality + browser passed after the fix.
 - Open: real Safari/device feel remains unverified; P09 stays on hold.
 
 ## 2026-11-07 — MAP-TEAM-CHARACTER-TABS-001
