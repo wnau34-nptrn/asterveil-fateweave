@@ -105,7 +105,7 @@ for (const [w, h] of sizes) test(`ui language audit ${w}x${h}`, async ({ browser
     await shot(page, '12-camp-bank-legend', () => click(page, '#lobby-bank'));
     await click(page, '#lobby-bank').catch(() => undefined);
     await shot(page, '13-team', () => click(page, '#lobby-tab-team'));
-    await shot(page, '14-team-member-picked', () => click(page, '.lobby-sheet [data-lobby="pick"]'));
+    await shot(page, '14-team-member-picked', () => click(page, '.lobby-sheet [data-lobby="lane-pick"]'));
     await shot(page, '15-team-member-scrolled', () => page.locator('.member-panel').first().scrollIntoViewIfNeeded({ timeout: 3000 }));
     const ctab = (tab: string) => page.locator(`[data-world="character-tab"][data-tab="${tab}"]`).first().click({ timeout: 4000 });
     const cclose = async () => { for (let i = 0; i < 3 && await page.locator('[data-world="character-close"]').first().isVisible().catch(() => false); i++) { await page.keyboard.press('Escape'); await page.waitForTimeout(150); const c = page.locator('[data-world="character-close"]').first(); if (await c.isVisible().catch(() => false)) await c.click({ timeout: 2000 }).catch(() => undefined); } };

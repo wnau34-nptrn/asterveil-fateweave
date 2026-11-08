@@ -26,6 +26,7 @@ test('camp presets: one tap saves, one tap switches back; quick moves; the map s
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#lobby-tab-team').click();
   // An empty slot saves the team as it stands; it then shows as in use.
   await page.locator('#team-preset-0').click();
+  await page.locator('#team-preset-save').click();
   await expect(page.locator('#team-preset-0')).toHaveAttribute('aria-pressed', 'true');
   let p = (await game(page)).profile; expect(p.presets).toEqual([expect.objectContaining({ name: 'ชุด 1', deployed: ids.slice(0, 5), reserve: ids.slice(5, 7) })]);
   // Quick moves: Lio to the reserve, Guardian to the camp; the preset no longer matches.
@@ -34,15 +35,16 @@ test('camp presets: one tap saves, one tap switches back; quick moves; the map s
   p = (await game(page)).profile; expect(p.party.deployed).toEqual(ids.slice(1, 5)); expect(p.party.reserve).toEqual(['mira', 'toma', 'lio']);
   await expect(page.locator('#team-preset-0')).toHaveAttribute('aria-pressed', 'false');
   // Save this as a second, renamed preset; then one tap on the first restores everything.
-  await page.locator('#team-preset-1').click(); await page.locator('#team-preset-manage summary').click();
-  await page.locator('#team-preset-name').fill('สายรับ'); await page.locator('#team-preset-rename').click();
+  await page.locator('#team-preset-1').click();
+  await page.locator('#team-preset-name').fill('สายรับ'); await page.locator('#team-preset-save').click();
   await expect(page.locator('#team-preset-1')).toContainText('สายรับ');
   await page.locator('#team-preset-0').click();
   p = (await game(page)).profile; expect(p.party.deployed).toEqual(ids.slice(0, 5)); expect(p.party.reserve).toEqual(ids.slice(5, 7));
-  for (const b of await page.locator('.preset-slot').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  for (const b of await page.locator('.preset-slot:visible').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   // A too-long name is refused with a reason and nothing is saved.
-  await page.locator('#team-preset-manage summary').click(); await page.locator('#team-preset-name').fill('ชื่อยาวเกินกว่าสิบสองตัวแน่นอน'); await page.locator('#team-preset-rename').click();
+  await page.locator('#team-preset-open').click(); await page.locator('#preset-destination-0').click(); await page.locator('#team-preset-name').fill('ชื่อยาวเกินกว่าสิบสองตัวแน่นอน'); await page.locator('#team-preset-rename').click();
   await expect(page.locator('#team-preset-error')).toContainText('ชื่อยาวเกิน'); expect((await game(page)).profile.presets![0]!.name).toBe('ชุด 1');
+  await page.locator('#preset-dialog-close').click();
   // On the map: the bag shows both presets. "สายรับ" names Lio, who stayed at the camp; Guardian (brought) keeps a seat.
   await page.locator('[data-lobby=close]').click(); await page.locator('#lobby-depart').click(); await expect(page.locator('#world-view')).toBeVisible();
   await page.keyboard.press('t');

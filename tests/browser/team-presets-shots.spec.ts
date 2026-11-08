@@ -45,7 +45,7 @@ for (const [w, h] of sizes) test(`team page ${w}x${h}`, async ({ browser }) => {
     await page.locator('#lobby-member-lio').click(); await page.locator('.quick-moves').scrollIntoViewIfNeeded(); await shot('camp-team-picked');
     await page.locator('#lobby-member-lio').click();
     await page.locator('#team-preset-1').click(); await page.locator('#lobby-sheet-title').scrollIntoViewIfNeeded(); await shot('camp-team-preset-applied');
-    await page.locator('#team-preset-manage summary').click(); await shot('camp-team-preset-manage');
+    await page.locator('#team-preset-open').click(); await shot('camp-team-preset-manage'); await page.locator('#preset-dialog-close').click();
     await page.locator('#team-preset-0').click();
   }
   await page.locator('[data-lobby=close]').click(); await page.locator('#lobby-depart').click(); await expect(page.locator('#world-view')).toBeVisible();

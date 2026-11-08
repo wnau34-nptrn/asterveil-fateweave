@@ -107,8 +107,8 @@ test('camp team page: five deployed, reserve slots by chapter at 390px', async (
   await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#lobby-view')).toBeVisible();
   await page.locator('#lobby-tab-team').click();
   // Five reserve slots (three filled, two free).
-  await expect(page.locator('.team-grid').nth(1).locator('.team-card')).toHaveCount(5);
-  await expect(page.locator('.team-grid').first().locator('.team-card:not(.empty)')).toHaveCount(5);
+  await expect(page.locator('#lobby-sheet .team-grid:not(.bench)').first().locator('.team-card')).toHaveCount(5);
+  await expect(page.locator('#lobby-sheet .formation-cell[data-hero]')).toHaveCount(5);
   if (dir) await page.screenshot({ path: `${dir}/team-five-camp-390.png` });
   expect(errors).toEqual([]); await context.close();
 });

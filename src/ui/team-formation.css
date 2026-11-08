@@ -1,0 +1,43 @@
+/* Camp-only formation-first team editor. Map formation and battle stay unchanged. */
+#lobby-view[data-lobby-sheet=team] .lobby-content > .formation { margin-top:0; }
+#lobby-view .formation { border:1px solid var(--gold-edge); padding:10px; border-radius:14px; background:#0d1e30; }
+#lobby-view .formation h3 { display:flex; justify-content:space-between; align-items:center; gap:6px; margin:0 0 8px; }
+#lobby-view .formation h3 .camp-embers { margin-left:auto; font-size:12px; }
+#lobby-view .formation-column { padding:5px; }
+#lobby-view .formation-cell { padding-left:14px; grid-template-columns:34px minmax(0,1fr); grid-template-rows:auto auto auto; min-height:58px; }
+#lobby-view .formation-cell .portrait { grid-row:1/4; }
+#lobby-view .formation-cell .field-stat { font-size:10px; grid-column:2; }
+#lobby-view .formation-cell .slot-no { left:3px; top:7px; transform:none; font-size:10px; }
+#lobby-view .formation-cell b { font-size:12px; }
+#lobby-view .formation-cell small { font-size:10px; }
+#lobby-view .formation-cell.empty { font-size:11px; }
+#lobby-view .formation .formation-rule { font-size:11px; line-height:1.5; }
+#lobby-view .formation-help > summary { min-height:44px; display:flex; align-items:center; cursor:pointer; color:var(--text-muted); font-size:11px; }
+#lobby-view .formation > .camp-note { font-size:11px; margin:6px 0 0; }
+#lobby-view .team-presets { margin:10px 0; }
+#lobby-view .team-presets h3 { font-size:14px; margin-bottom:7px; }
+#lobby-view .team-presets .camp-embers { font-size:11px; }
+#lobby-view .team-save-bar { flex:none; padding:8px 0 0; border-top:1px solid var(--gold-edge); background:var(--navy-950); }
+#lobby-view .team-save-bar p { display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px; color:var(--text-muted); font-size:10px; margin:0 0 6px; }
+#lobby-view .team-save-bar > button { width:100%; min-height:44px; }
+#app #lobby-view .camp-preset-dialog { position:fixed; height:auto; min-height:0; max-width:none; top:auto; right:auto; margin:0; padding:16px 16px max(16px,env(safe-area-inset-bottom)); border:1px solid var(--gold-edge); border-radius:20px 20px 0 0; background:linear-gradient(#1a3047,#0b1b2e); color:var(--text); box-sizing:border-box; overflow:auto; box-shadow:0 -10px 35px #0007; }
+#app #lobby-view .camp-preset-dialog:not([open]) { display:none; }
+#lobby-view .camp-preset-dialog::backdrop { background:#030b16b3; }
+#lobby-view .preset-dialog-head { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+#lobby-view .preset-dialog-head h2 { color:var(--gold-light); font:600 22px/1.3 var(--font-heading); }
+#lobby-view .preset-dialog-head p { font-size:12px; color:var(--text-muted); margin-top:5px; }
+#lobby-view #preset-dialog-close { flex:none; width:44px; height:44px; padding:0; display:grid; place-items:center; border-radius:12px; }
+#lobby-view .preset-dialog-content h3 { font-size:13px; margin:16px 0 8px; color:var(--gold-light); }
+#lobby-view .camp-preset-dialog .preset-name { display:grid; gap:8px; font-size:13px; margin:16px 0; }
+#lobby-view .camp-preset-dialog input { width:100%; min-height:44px; padding:10px; background:#0a1728; border:1px solid #8195a666; border-radius:10px; color:inherit; }
+#lobby-view .preset-snapshot { padding:10px; background:#091a2d; border:1px solid #ffffff12; border-radius:10px; margin:12px 0; }
+#lobby-view .preset-snapshot small { display:block; color:var(--text-muted); margin-top:4px; font-size:12px; }
+#lobby-view .preset-maintenance { display:flex; gap:8px; margin:12px 0; }
+#lobby-view .preset-maintenance button { flex:1; min-height:44px; font-size:12px; }
+#lobby-view .camp-preset-dialog footer > button { width:100%; min-height:48px; margin-top:12px; font:600 16px/1.4 var(--font-heading); }
+#lobby-view #team-preset-error { color:var(--danger-coral); font-size:13px; }
+
+#app #lobby-view .camp-preset-dialog[open] { display:flex; flex-direction:column; overflow:hidden; }
+#lobby-view .preset-dialog-head { flex:none; }
+#lobby-view .preset-dialog-content { min-height:0; overflow:auto; }
+#lobby-view .camp-preset-dialog footer { display:block; flex:none; margin:0; }
