@@ -4,7 +4,7 @@ import {storageCap,departureBlocked,type StorageSource} from '../core/world/stor
 import { ForgeWorkbench } from './forge-workbench';
 import { ForgeEnhancementLayout } from './forge-enhancement-layout';
 import { CharacterPanel, type CharacterModel } from './character-panel';
-import { characterTabs, type CharacterTab } from './character-view';
+import { type CharacterTab } from './character-view';
 import { applyCampEquipment, campEquipment, type AutoEquipmentPlan } from '../core/world/auto-equipment';
 import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gearFilterControls } from './gear-inventory';
 import { shortcutBlocked } from '../platform/keyboard';
@@ -15,7 +15,7 @@ import { isBigTree } from '../core/world/talents';
 import { salvageValue } from '../core/world/equipment';
 import { campPresetPlan, defaultPresetName, matchesPreset, presetNameReason, presetOf, presetSlots } from '../core/world/presets';
 import { PARTY_SLOTS, PRESET_NAME_MAX, POTION_IDS, SHOP_ITEMS, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type ProfileEvent, type TalentNode } from '../core/world/types';
-import { campProgress, levelOf, recommendedLane, starred, type EncounterLookup } from '../core/world/world';
+import { levelOf, recommendedLane, starred, type EncounterLookup } from '../core/world/world';
 import { emptyTomes, raiseSkill, tradeTomes, levelableSkills, skillLevelReason, tradeReason } from '../core/world/tomes';
 import type { TomeLine, TomeSize } from '../core/world/types';
 import { formation } from '../core/world/formation';
@@ -24,7 +24,6 @@ import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, 
 import { type IconName, icon } from './icons';
 import region from '../content/world/region_ch1.json';
 import { worldArtUrl } from '../game/visuals/world-art';
-import { commanderBadge } from './commander-ui';
 import { gearArt, potionArt } from './equip-art';
 import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
 
@@ -63,6 +62,7 @@ export class LobbyUI {
   // The equipment sheet (2D-2) works the same way.
   // The forge (2D-4) is a third menu sheet.
   private sheet: Sheet | null = null;
+  private teamNpc = false;
   private readonly huntUI=new HuntPanel();
   // Map sheet: the node whose card shows (default: the furthest open map).
   private mapPicked: string | undefined;
@@ -118,21 +118,30 @@ export class LobbyUI {
     root.addEventListener('click', e => {
       if(root.hidden||root.closest('[inert]'))return;
       const el=e.target as HTMLElement;
-      if(this.characters.open){if(!el.closest('.lobby-menu button[data-lobby=tab]'))return;this.characters.closeForNavigation();}
+      if(this.characters.open){if(!el.closest('.lobby-menu button'))return;this.characters.closeForNavigation();}
       const storageButton=el.closest<HTMLButtonElement>('button[data-storage]');if(storageButton){const focus=this.storageUI.click(storageButton,this.view!.profile);this.draw();this.focus('#'+focus);return;}const forgeButton=el.closest<HTMLButtonElement>('button');if(forgeButton&&(forgeButton.closest('.forge-workbench')||this.sheet==='forge'&&forgeButton.id==='forge-open-tasks')&&(forgeButton.dataset.forge||forgeButton.hasAttribute('data-gear-reset'))){if(e.detail>1){this.root.querySelector<HTMLElement>('#forge-success, #forge-cancel')?.focus({preventScroll:true});return;}if(forgeButton.hasAttribute('data-gear-reset'))forgeButton.dataset.forge='reset';this.forgeUI.remember((forgeButton.closest<HTMLElement>('.forge-workbench')??this.root.querySelector<HTMLElement>('.forge-workbench'))!);const focus=this.forgeUI.click(forgeButton,this.view!.profile);if(focus){this.draw();this.focus(this.root.querySelector('#'+focus)?'#'+focus:'#lobby-sheet-title');}return;}if(el.closest('[data-gear-reset]')){this.storageUI.reset();Object.assign(this.inventoryFilters,newGearFilters());this.draw();this.focus('#camp-inventory-gear-filter-set');return;}
       const b = el.closest<HTMLButtonElement>('button[data-lobby]');
       if (!b || b.disabled) return;
       const id = b.dataset.hero;
       switch (b.dataset.lobby) {
-        case 'npc': { this.forgeStorageReturn=false;const npc = b.dataset.npc as NpcId; const sheet = npcSpots[npc].sheet;
+        case 'npc': { this.forgeStorageReturn=false;const npc = b.dataset.npc as NpcId; const sheet = npcSpots[npc].sheet;this.teamNpc=sheet==='team';
           if(sheet==='tree'&&!this.open('tree')){this.sheet='tree';this.draw();this.act(npc,'greet',1400);this.focus(`#npc-${npc}`);break;}
           if(sheet==='tree'){const id=this.view!.profile.party.deployed[0]??this.view!.profile.company[0];if(id){this.act(npc,'greet',1400);this.characters.openFor(id,'talents',b);}break;}
           // The trainer and keeper open for the first deployed member; the others open their own sheet.
           if (sheet === 'gear') this.picked = this.view!.profile.party.deployed[0];
           else this.picked = undefined;
           this.sheet = sheet; if(sheet==='forge')this.forgeUI.openTasks(); this.preview = undefined; this.confirmDismiss = false; this.openedLine(sheet); this.draw(); this.act(npc, 'greet', 1400); this.focus(sheet==='forge'?'#lobby-sheet-title':`#npc-${npc}`); break; }
-        case 'tab': this.forgeStorageReturn=false;this.huntUI.cancel();this.preview = undefined; this.lanePick = undefined; this.sheet = b.dataset.tab as 'team' | 'hire' | 'gear' | 'forge' | 'brew' | 'hunt'; if(this.sheet==='forge')this.forgeUI.openTasks(); this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = this.sheet==='gear'?(this.view!.profile.party.deployed[0]??this.view!.profile.company[0]):undefined; this.confirmDismiss = false; this.draw(); this.focus(this.sheet==='forge'?'#lobby-sheet-title':`#lobby-tab-${this.sheet}`); break;
-        case 'character-resume': if(id)this.characters.openRemembered(id,b);break;
+        case 'tab': this.teamNpc=false;this.forgeStorageReturn=false;this.huntUI.cancel();this.preview = undefined; this.lanePick = undefined; this.sheet = b.dataset.tab as 'team' | 'hire' | 'gear' | 'forge' | 'brew' | 'hunt'; if(this.sheet==='forge')this.forgeUI.openTasks(); this.openedLine(this.sheet); { const n = npcOfSheet(this.sheet); if (n) this.act(n, 'greet', 1400); } this.picked = this.sheet==='gear'?(this.view!.profile.party.deployed[0]??this.view!.profile.company[0]):undefined; this.confirmDismiss = false; this.draw(); this.focus(this.sheet==='forge'?'#lobby-sheet-title':`#lobby-tab-${this.sheet}`); break;
+        case 'character-home': {
+          this.teamNpc=false;this.forgeStorageReturn=false;this.huntUI.cancel();this.forgeUI.cancelReview();this.preview=undefined;this.confirmDismiss=false;
+          if(!this.open('team')){this.sheet='team';this.draw();this.focus('#lobby-sheet-title');break;}
+          const p=this.view!.profile,last=this.characters.lastViewed?.id;
+          const target=last&&p.company.includes(last)?last:p.party.deployed[0]??p.company[0];
+          this.sheet=null;this.picked=undefined;this.draw();
+          const trigger=this.root.querySelector<HTMLButtonElement>('#lobby-tab-characters');
+          if(target&&trigger)this.characters.openRemembered(target,trigger);
+          break;
+        }
         case 'close': this.closeSheet(); break;
         case 'pick': this.pick(id, b.dataset.group as Group); break;
         case 'quick-place': if (this.picked) { const target = this.picked; this.picked = undefined; this.confirmDismiss = false; this.host.place(target, b.dataset.group as Group); this.focus(`#lobby-member-${target}`); } break;
@@ -241,21 +250,23 @@ export class LobbyUI {
     const p = this.view!.profile, n = this.readyQuests(p).filter(q => q.npc === npc).length;
     return n ? `<button id="quest-hint-${npc}" data-lobby="board" class="secondary quest-hint">${icon('flag')}<span>มีรางวัลเควสต์ให้รับ · ไปกระดานเควสต์</span></button>` : '';
   }
+  private questEntry(p:Profile):string {
+    if(!this.open('quests'))return '';
+    const ready=this.readyQuests(p).length,active=this.map.sideQuests.filter(q=>!p.quests[q.id]?.claimed).length;
+    return `<button id="lobby-board" data-lobby="board" class="lobby-quest-entry" aria-controls="lobby-sheet" aria-expanded="${this.sheet==='board'}"><strong>${icon('flag')} กระดานเควสต์ ${ready?`<small class="trip-badge">${ready}</small>`:''}${icon('right')}</strong><span>${ready?`มีรางวัลให้รับ ${ready} งาน`:`กำลังดำเนินการ ${active} งาน · แตะเพื่อดู`}</span></button>`;
+  }
   private questBoard(p: Profile): string {
     const rows = this.map.sideQuests.map(q => ({ q, st: p.quests[q.id] ?? { progress: 0, claimed: false }, reason: claimReason(p, this.map, q.id) }));
     const state = (r: typeof rows[number]) => r.st.claimed ? 2 : r.reason ? 1 : 0;
     const sorted = [...rows].sort((a, b) => state(a) - state(b));
     const card = ({ q, st, reason }: typeof rows[number]) => {
       const t = sideQuestText[q.kind], who = npcText[q.npc as NpcId];
-      return `<section class="side-quest" id="quest-${q.id}" data-state="${st.claimed ? 'claimed' : reason ? 'open' : 'ready'}" aria-label="เควสต์ ${t.name}">
-      <p class="side-quest-head">${icon('flag')}<b>${t.name}</b><small>${st.progress}/${q.target}</small></p>
-      <p class="side-quest-from">จาก ${who.name} · ${who.role}</p>
-      <p class="side-quest-ask">${t.ask(q.target)}</p><div class="side-quest-bar" aria-hidden="true"><i style="width:${Math.round(Math.min(1, st.progress / q.target) * 100)}%"></i></div>
-      <p class="side-quest-reward">รางวัล: ${rewardText(q.reward)}</p>
-      ${st.claimed ? '<p class="side-quest-done">รับรางวัลแล้ว</p>' : `<button id="quest-claim-${q.id}" data-lobby="claim" data-quest="${q.id}" class="primary"${reason ? ' disabled' : ''}>${reason === 'full' ? 'รางวัลเกินเพดานคลัง · ใช้ทรัพยากรก่อน' : reason ? `สะสมจากการเดินทาง (${st.progress}/${q.target})` : 'รับรางวัล'}</button>`}</section>`;
+      const status=st.claimed?'รับรางวัลแล้ว':reason==='full'?'คลังเต็ม':reason?'กำลังดำเนินการ':'รับรางวัลได้';
+      const claim=st.claimed?'':`<button id="quest-claim-${q.id}" data-lobby="claim" data-quest="${q.id}" class="primary"${reason?' disabled':''}>${reason==='full'?'รางวัลเกินเพดานคลัง · ใช้ทรัพยากรก่อน':reason?`สะสมจากการเดินทาง (${st.progress}/${q.target})`:'รับรางวัล'}</button>`;
+      return `<section class="side-quest" id="quest-${q.id}" data-state="${st.claimed?'claimed':reason?'open':'ready'}" aria-label="เควสต์ ${t.name}"><details class="quest-detail"><summary><span class="side-quest-head">${icon('flag')}<b>${t.name}</b><small>${Math.min(st.progress,q.target)}/${q.target}</small></span><span class="quest-row-status">${status}<small>ดูรายละเอียด</small></span></summary><div class="quest-detail-body"><p class="side-quest-from">จาก ${who.name} · ${who.role}</p><p class="side-quest-ask">${t.ask(q.target)}</p><p class="side-quest-reward">รางวัล: ${rewardText(q.reward)}</p>${reason?claim:''}</div></details>${!reason?claim:''}</section>`;
     };
     const open = sorted.filter(r => state(r) < 2), done = sorted.filter(r => state(r) === 2);
-    return `<div class="quest-board"><p class="camp-note">เควสต์ของเหล่า NPC รวมอยู่ที่นี่ ความคืบหน้านับจากการเดินทางที่จบแล้ว รับรางวัลได้ครั้งเดียวต่อเควสต์ · ก่อนเดินทางรอบถัดไป จัดทีม สวมอุปกรณ์ และเตรียมยาได้ที่ค่าย</p>${open.map(card).join('')}${done.length ? `<details class="quest-done-list"><summary>รับรางวัลแล้ว ${done.length} งาน</summary>${done.map(card).join('')}</details>` : ''}</div>`;
+    return `<div class="quest-board"><p class="camp-note">ความคืบหน้าจากรอบเดินทางที่จบแล้ว · แตะเควสต์เพื่อดูรายละเอียด</p>${open.map(card).join('')}${done.length ? `<details class="quest-done-list"><summary>รับรางวัลแล้ว ${done.length} งาน</summary>${done.map(card).join('')}</details>` : ''}</div>`;
   }
   // The scene and the NPC tap targets pan together (portrait phones); the HUD stays put above them.
   private build(): void {
@@ -289,13 +300,14 @@ export class LobbyUI {
   forgeTransferred(p:Profile,uid:number):void{this.forgeUI.transferred(p,uid);}
   forgeServiced(p:Profile,tab:'craft'|'recycle'|'smelt',eventValue:number,persisted:boolean):void{this.forgeUI.serviced(p,tab,eventValue,persisted);}
   private closeSheet(): void {
+    this.teamNpc=false;
     if(this.sheet==='gear'&&this.forgeStorageReturn){this.storageUI.reset();this.forgeStorageReturn=false;this.sheet='forge';this.draw();this.focus(this.root.querySelector('#forge-manage-storage')?'#forge-manage-storage':'#forge-craft');return;}
     this.preview=undefined;const was=this.sheet,origin=was==='forge'?this.forgeOrigin:undefined;
     this.huntUI.cancel();this.forgeUI.cancelReview();this.storageUI.reset();this.sheet=origin?.sheet??null;this.picked=origin?.picked;this.confirmDismiss=false;
     this.forgeOrigin=undefined;const resume=was==='forge'&&this.forgeReturn;this.forgeReturn=undefined;this.draw();
     if(resume&&this.characters.resumeFromForge())return;
     if(origin){const content=this.root.querySelector('.lobby-content');if(content)content.scrollTop=origin.scroll;(this.root.querySelector<HTMLElement>(`#${origin.focus}`)??this.root.querySelector<HTMLElement>('#lobby-sheet-title'))?.focus({preventScroll:true});}
-    else if(was)this.focus(`#lobby-tab-${was}`);
+    else if(was)this.focus(was==='board'?'#lobby-board':was==='maps'?'#lobby-maps':`#lobby-tab-${was}`);
   }
   render(view: LobbyView): void {
     const cheer = view.npcCheer && view !== this.view ? view.npcCheer : undefined;
@@ -340,12 +352,11 @@ export class LobbyUI {
   private characterNavigation(open:boolean):void {
     this.root.toggleAttribute('data-character-open',open);
     for(const button of this.root.querySelectorAll<HTMLButtonElement>('.lobby-menu [data-tab]')){
-      const team=button.dataset.tab==='team',active=open?team:button.dataset.tab===this.sheet||team&&this.sheet==='tree';
+      const character=button.dataset.tab==='characters',active=open?character:button.dataset.tab===this.sheet||button.dataset.tab==='team'&&this.sheet==='tree';
       button.classList.toggle('active',active);button.setAttribute('aria-expanded',String(active));
-      button.setAttribute('aria-controls',open&&team?'camp-character-dialog':'lobby-sheet');
+      button.setAttribute('aria-controls',character?'camp-character-dialog':'lobby-sheet');
     }
     for(const el of this.root.querySelectorAll<HTMLElement>('.lobby-pan,.lobby-hud > :not(.lobby-bottom),.lobby-bottom > :not(.lobby-menu)'))el.inert=open;
-    if(!open&&this.view){const entry=this.root.querySelector('.team-character-entry');if(entry)entry.outerHTML=this.characterEntry(this.view.profile);}
     this.measureNavigation();
   }
   private draw(): void {
@@ -370,20 +381,21 @@ export class LobbyUI {
     this.root.querySelector('.lobby-hud')!.innerHTML = `
       <button class="lobby-pan-button" data-lobby="pan" data-dir="-1" aria-label="เลื่อนดูค่ายทางซ้าย" tabindex="-1">${icon('left')}</button><button class="lobby-pan-button" data-lobby="pan" data-dir="1" aria-label="เลื่อนดูค่ายทางขวา" tabindex="-1">${icon('right')}</button>
       <header class="lobby-top"><button data-lobby="home" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>${this.musicButton()}
-        ${p.commander ? `<span class="lobby-camp-button" aria-hidden="true">${commanderBadge(p.commander)}</span>` : ''}<div class="lobby-who"><p class="eyebrow">${p.commander ? 'ผู้บัญชาการ' : 'ค่ายทหารรับจ้าง'} · ${this.view!.saved ? 'บันทึกอัตโนมัติ' : 'บันทึกบนเครื่องนี้ไม่ได้'}</p><h1 id="lobby-commander">${p.commander ? this.escape(p.commander.name) : 'เตรียมทีมก่อนออกเดินทาง'}</h1></div>
+        <div class="lobby-who"><p class="eyebrow">${p.commander ? 'ผู้บัญชาการ' : 'ค่ายทหารรับจ้าง'} · ${this.view!.saved ? 'บันทึกอัตโนมัติ' : 'บันทึกบนเครื่องนี้ไม่ได้'}</p><h1 id="lobby-commander">${p.commander ? this.escape(p.commander.name) : 'ค่ายทหารรับจ้าง'} <small>· ค่าย Lv${levelOf(this.map,p)}</small></h1></div><button id="lobby-tab-hunt" data-lobby="tab" data-tab="hunt" class="lobby-farm round-glass" aria-controls="lobby-sheet" aria-expanded="${this.sheet==='hunt'}">${icon('goal')}<span>แผนฟาร์ม${this.locked('hunt')?' 🔒':''}</span></button>
         <button id="lobby-bank" class="lobby-bank" data-lobby="bank" aria-expanded="${this.bankInfo}" aria-controls="lobby-bank-legend" aria-label="คลัง เหรียญทอง ${p.bank.gold} แร่ดาว ${p.bank.ore} ตราสัญญา ${p.bank.seal} ฝุ่นดาว ${p.bank.dust} · แตะเพื่อดูชื่อและการใช้งาน"><span class="glass-capsule" data-bank="gold">${icon('gold')}<b>${p.bank.gold}</b></span><span class="glass-capsule" data-bank="ore">${icon('ore')}<b>${p.bank.ore}</b></span><span class="glass-capsule">${icon('seal')}<b>${p.bank.seal}</b></span><span class="glass-capsule">${icon('dust')}<b>${p.bank.dust}</b></span></button></header>${this.bankInfo ? this.bankLegend(p) : ''}
+      ${this.questEntry(p)}
       ${p.overflow?.length?`<button id="lobby-overflow" data-lobby="overflow" class="secondary storage-notice">ของรอจัด ${p.overflow.length} ชิ้น · เปิดถาดก่อนออกเดินทาง</button>`:""}
       ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.gold ? ` เหรียญทอง ${last.gold}` : ''}${last.seal ? ` ตราสัญญา ${last.seal}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
         <div class="lobby-sheet-head">${this.sheet==='forge'&&forgeBody&&this.forgeUI.taskNavigation?`<button id="forge-open-tasks" data-forge="tasks" class="round-glass" aria-label="เลือกงานโรงตีเหล็ก">${icon('left')}</button>`:''}${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="${this.forgeStorageReturn?'กลับไปสร้างอาวุธ':'กลับไปจัดทีม'}">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title" tabindex="-1">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ต้นไม้ความถนัด` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : this.sheet === 'board' ? `${icon('flag')} กระดานเควสต์ <small>รับได้ ${this.readyQuests(p).length}</small>` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.sheet==='forge'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p, 'hire'):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcFold(p, this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'board' ? this.questBoard(p) : this.board(p)}</div></section>` : ''}
+        <div class="lobby-content">${this.sheet==='forge'||this.sheet==='board'||this.sheet==='team'&&!this.teamNpc?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p, 'hire'):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcFold(p, this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'board' ? this.questBoard(p) : this.board(p)}</div></section>` : ''}
       <footer class="lobby-bottom">
         ${this.guideCard(p)}
-        <section class="lobby-trip" aria-label="การเดินทาง"><div class="trip-head"><div><b>${this.openMaps().at(-1)?.name ?? this.map.name}</b><span class="trip-team" data-ready="${ready}">${ready ? 'ทีมพร้อม' : 'ทีมยังไม่พร้อม'} · ลงสนาม ${p.party.deployed.length} · สำรอง ${p.party.reserve.length}</span></div><div class="trip-actions">${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary" aria-label="เลือกแผนที่">${icon('map')}</button>` : ''}${this.open('quests') ? `<button id="lobby-board" data-lobby="board" class="secondary" aria-label="กระดานเควสต์${this.readyQuests(p).length ? ` มีรางวัลให้รับ ${this.readyQuests(p).length}` : ''}">${icon('flag')}${this.readyQuests(p).length ? `<small class="trip-badge">${this.readyQuests(p).length}</small>` : ''}</button>` : ''}</div></div>
+        <section class="lobby-trip" aria-label="การเดินทาง"><div class="trip-head"><div><b>${this.openMaps().at(-1)?.name ?? this.map.name}</b><span class="trip-team" data-ready="${ready}">${ready ? 'ทีมพร้อม' : 'ทีมยังไม่พร้อม'} · ลงสนาม ${p.party.deployed.length} · สำรอง ${p.party.reserve.length}</span></div><div class="trip-actions">${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary" aria-label="เลือกแผนที่">${icon('map')}</button>` : ''}</div></div>
           <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง</span></button></section>
-        <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'tab-team', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}${menu('hire', 'tab-hire', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'tab-bag', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('hunt', 'goal', 'ฟาร์ม', '')}${menu('forge', 'tab-forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
+        <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'tab-team', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}<button id="lobby-tab-characters" data-lobby="character-home" data-tab="characters" class="lobby-menu-button" aria-controls="camp-character-dialog" aria-expanded="false">${icon('star')}<span>ตัวละคร</span></button>${menu('hire', 'tab-hire', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'tab-bag', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('forge', 'tab-forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
       </footer>`;
     this.enhancementLayout.mount(this.root,this.forgeUI.scroll);
     this.navigationLayout.observe(this.root);const nav=this.root.querySelector('.lobby-menu');if(nav)this.navigationLayout.observe(nav);this.characterNavigation(this.characters.open);
@@ -431,11 +443,6 @@ export class LobbyUI {
   }
   // Every character the company can hold (P01): the catalog without parked characters it does not own (OD-14).
   private catalogSize(p: Profile): number { return this.heroes.filter(h => !this.map.company.parked?.includes(h.id) || p.company.includes(h.id)).length; }
-  // The camp level every member shares (P01).
-  private campLine(p: Profile): string {
-    const c = campProgress(this.map, p.campXp);
-    return `<p class="camp-level" id="lobby-camp-level">${icon('starFilled')}<b>เลเวลค่าย Lv${c.level}</b><span>${c.need ? `EXP ${c.exp}/${c.need}` : 'เลเวลสูงสุดของเนื้อหาตอนนี้'}</span><small>ทุกคนในค่ายใช้เลเวลนี้ รวมคนใหม่ สำรอง และคนที่อยู่ในค่าย</small></p>`;
-  }
   // The bench list (P01): name search and lane/archive filters. Filtering only hides cards; nobody loses anything.
   private benchFilter: 'all' | 'front' | 'back' | 'archived' = 'all';
   private benchQuery = '';
@@ -448,10 +455,6 @@ export class LobbyUI {
   private benchMatches(id: string): boolean {
     const q = this.benchQuery.trim().toLowerCase(); if (!q) return true;
     const t = heroText[id]!; return [t.name, t.role, id].some(v => v.toLowerCase().includes(q));
-  }
-  private characterEntry(p:Profile):string {
-    const last=this.characters.lastViewed,ids=p.company.filter(id=>!p.archived?.includes(id)||id===last?.id);
-    return `<section class="team-character-entry" aria-labelledby="team-character-heading"><h3 id="team-character-heading">ตัวละคร</h3><p>แตะภาพเพื่อดูอุปกรณ์ สกิล และพัฒนา</p><div class="tree-members">${ids.map(id=>`<button id="team-character-${id}" data-lobby="character-resume" data-hero="${id}" class="tree-member" aria-label="ดูตัวละคร ${heroText[id]!.name}" aria-pressed="${last?.id===id}">${portrait(id)}<small>${heroText[id]!.name}</small></button>`).join('')}</div>${last&&p.company.includes(last.id)?`<button id="team-character-resume" data-lobby="character-resume" data-hero="${last.id}" class="secondary">ดูล่าสุด · ${heroText[last.id]!.name} · ${characterTabs[last.tab]}</button>`:''}</section>`;
   }
   // Team presets (owner 2026-11-06): one tap on a saved slot switches the whole team; one tap on an empty slot saves the
   // team as it stands. Overwrite, rename and clear act on the slot last tapped (inside "จัดการชุดทีม").
@@ -491,7 +494,7 @@ export class LobbyUI {
     const empty = this.benchFilter === 'archived' ? 'ยังไม่มีใครอยู่ในคลังสมาชิก' : all.length ? 'ไม่พบสมาชิกตามตัวกรอง' : 'ทุกคนอยู่ในทีมที่จะพาไปแล้ว';
     const pickedGroup = this.picked && groupOf(p, this.picked);
     const panel = this.picked ? `${this.memberPanel(p, this.picked)}<p class="camp-note picked-hint" id="lobby-hint">เลือก${heroText[this.picked]!.name}แล้ว · ใช้ปุ่มด้านบน หรือแตะคน/ช่องว่างในกลุ่มอื่นเพื่อสลับ แตะซ้ำเพื่อยกเลิก</p>` : '';
-    return `<h3 class="team-arrange-heading">จัดทีมออกเดินทาง</h3>${this.presetBar(p)}
+    return `${this.presetBar(p)}
       <h3>${icon('flag')} ลงสนาม <span class="camp-embers">ศัตรูเล็งตามหมายเลขช่อง</span></h3><div class="team-grid">${row(p.party.deployed, 'deployed', PARTY_SLOTS)}</div>
       <h3>${icon('camp')} สำรอง <span class="camp-embers">${p.party.reserve.length}/${reserveSlots(p, this.map)} · ปลดเพิ่มตามบท · พาเข้าด่าน สลับได้ในกระเป๋านอกการต่อสู้</span></h3><div class="team-grid">${row(p.party.reserve, 'reserve', reserveSlots(p, this.map))}</div>
       ${pickedGroup && pickedGroup !== 'bench' ? panel : ''}
@@ -501,7 +504,7 @@ export class LobbyUI {
       <div class="team-grid bench">${bench.map((id, i) => this.card(p, id, 'bench', i)).join('')}${this.picked && groupOf(p, this.picked) !== 'bench' && this.benchFilter !== 'archived' ? this.card(p, undefined, 'bench', bench.length) : ''}${!bench.length && !this.picked ? `<p class="camp-note" id="bench-empty">${empty}</p>` : ''}</div>
       ${pickedGroup === 'bench' ? panel : ''}
       ${this.picked ? '' : `<details class="lobby-help" id="lobby-hint"><summary>${icon('info')} วิธีจัดทีม</summary><p>แตะชุดทีมเพื่อสลับทั้งทีมในครั้งเดียว · แตะสมาชิกแล้วกด “ใส่ลงสนาม/ใส่สำรอง/พักในค่าย” หรือแตะคนในกลุ่มอื่นเพื่อสลับ · ดูอุปกรณ์และสกิลได้ที่แถบตัวละครด้านล่าง</p></details>`}
-      ${this.campLine(p)}${this.characterEntry(p)}`;
+      `;
   }
   private memberPanel(p: Profile, id: string): string {
     const m = p.members[id]!;

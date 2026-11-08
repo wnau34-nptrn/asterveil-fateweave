@@ -516,7 +516,7 @@ test('the smith smelts ore into veil dust, capped per return; saved v18', async 
 test('commander identity replaces the legacy camp name without rewriting saves', async ({ page }) => {
   await seed(page, null);
   await page.goto('./'); await page.locator('#continue').click();
-  await expect(page.locator('#lobby-commander')).toHaveText(commander.name);
+  await expect(page.locator('#lobby-commander')).toHaveText(`${commander.name} · ค่าย Lv1`);
   await expect(page.locator('#lobby-camp')).toHaveCount(0);
   await expect(page.locator('#camp-name')).toHaveCount(0);
   await expect(page.locator('.lobby-who')).not.toContainText(commander.camp);
@@ -1005,8 +1005,9 @@ for (const viewport of viewports) {
     await page.locator('#lobby-tab-team').click(); for (const sel of ['#lobby-member-guardian', ...(full ? ['[data-lobby=close]'] : ['#lobby-depart'])]) { await page.locator(sel).scrollIntoViewIfNeeded(); await reachable(page, sel); }
     if (full) {
       const box = (await page.locator('#lobby-sheet').boundingBox())!;
-      expect(box.width).toBe(frame.width); expect(box.x).toBe(frame.x); expect(box.y).toBe(frame.y); expect(box.height).toBe(frame.height);
-      await expect(page.locator('.lobby-menu')).toBeHidden();
+      expect(box.width).toBe(frame.width); expect(box.x).toBe(frame.x); expect(box.y).toBe(frame.y);
+      expect(box.y+box.height).toBeLessThanOrEqual((await page.locator('.lobby-menu').boundingBox())!.y);
+      await expect(page.locator('.lobby-menu')).toBeVisible();
     }
     await page.screenshot({ path: info.outputPath('lobby.png') });
     // The panel scrolls inside itself on short screens; the page never does.
@@ -1324,6 +1325,7 @@ test('camp NPCs stand at their stations, open their service when tapped and gree
     if (npc === 'smith') { await expect(page.locator(`#npc-art-${npc}`)).toHaveAttribute('data-act', 'greet'); await page.waitForTimeout(400); await page.screenshot({ path: info.outputPath('camp-npc-sheet.png') }); }
     await page.locator('[data-lobby="close"]').click();
   }
+  await page.locator('#lobby-tab-team').click();await expect(page.locator('.npc-line')).toHaveCount(0);await page.locator('[data-lobby="close"]').click();
   // Brewing makes the herbalist cheer.
   await page.locator('#npc-herbalist').click(); await page.locator('#brew-salve').click();
   await expect(page.locator('#npc-art-herbalist')).toHaveAttribute('data-act', 'cheer');

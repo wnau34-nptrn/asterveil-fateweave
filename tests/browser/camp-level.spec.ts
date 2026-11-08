@@ -28,7 +28,9 @@ test('team sheet: one camp level, catalog count, search, filters and a non-destr
   await page.setViewportSize({ width: 390, height: 844 }); watchPage(page);
   await seed(page, currentSave({ profile: company(), run: null }));
   await page.locator('#lobby-tab-team').click();
-  await expect(page.locator('#lobby-camp-level')).toContainText('เลเวลค่าย Lv5'); await expect(page.locator('#lobby-camp-level')).toContainText('EXP 12/245');
+  await expect(page.locator('#lobby-commander')).toContainText('ค่าย Lv5');
+  await page.locator('#lobby-tab-characters').click(); await expect(page.locator('#camp-character-content')).toContainText('EXP 12/245');
+  await page.locator('#lobby-tab-team').click();
   // Seventeen in the catalog (P03 Kael, Wynne, Astrid), Odran and Isolde parked (OD-14): this company can hold fifteen.
   await expect(page.locator('#lobby-sheet-title')).toContainText('ถือครอง 11/15');
   for (const id of ids) await expect(page.locator(`#lobby-member-${id}`)).toContainText('Lv5');
