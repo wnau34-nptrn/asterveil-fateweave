@@ -12,14 +12,16 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
+- **Gacha visual references saved:** PR #212, branch `art/art-ui-gacha-002`, package `incoming/ART-UI-GACHA-002/` on that branch. [Gallery](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/art/art-ui-gacha-002/incoming/ART-UI-GACHA-002/README_TH.md). Latest main artwork + draggable Saturn-ring concept; full characters use full-body cards, shards use broken crystals/quantity labels. 11 PNG originals remotely downloaded and SHA256/decode verified. Reference only; no runtime integration/motion approval.
+
 - **G00/G01 analysis delivered:** `docs/design/GACHA_G00_DECISIONS_TH.md`, `GACHA_G01_ECONOMY_TH.md`, `GACHA_G01_MIGRATION_TH.md`; reproducible 33-case/365-day research in `docs/validation/gacha-g00-g01-2026-11-09/README_TH.md`.
 - 80 points/free80–96 per28d and rates remain drafts. G00 is a decision sheet, not signed-off config; G01 does not certify production pacing. Current controls include story/draft/seeded gold board, ore/gold, favorite/collection, paid30d, veteran/returner and hoarding/growth sensitivities.
-- Main unresolved choices: timing of first favorite vs OD-07 7–10 visits; source budget without absent modes; universal substitution/overflow and legacy trust. MAP1 already yields 5 members; team/item/tome readiness and real20–30min visits remain unverified. No runtime/rules/save/balance/P09/payment changes in this task.
+- Owner later deferred numeric tuning (including 7–10 visits) and wants system/visual discussion first; final economy assumes all planned features exist, using80–96 as draft, not a temporary absent-mode workaround. Universal/overflow/legacy trust remain open. MAP1 yields5 members; actual item/tome/session readiness unverified. No runtime/rules/save/balance/P09/payment work yet.
 - Earlier proposal #209 (`0fb8d8c`) and 12-case model remain historical drafts; new findings extend them, not owner approval.
 
 ## Next (owner review)
 
-- Review G00 decision questions and G01 evidence; study early targeted acquisition and actual session workloads before locking rates. Do not automatically start G02/P09/G03/G04/G05 or payments. P09/P04/ledger/trust remain dependencies for real gacha; OD-13 order still applies.
+- Review the saved visual direction and core system choices; leave rates/costs/pacing adjustable for later tuning. Do not automatically start G02/P09/G03/G04/G05 or payments. Real gacha still needs P09/P04/ledger/trust; OD-13 order applies.
 - UXD-08 combined UX check open. Team-preset owner usability review remains open.
 
 ## Open items
@@ -34,4 +36,4 @@ Cloud checkouts are fresh; verify remote head/ancestry, never reset unpushed wor
 
 ## Opening prompt for next chat
 
-Read AGENTS/CLAUDE/CURRENT_STATE, then docs/design/GACHA_G00_DECISIONS_TH.md and docs/validation/gacha-g00-g01-2026-11-09/README_TH.md on feature/fateweave-initial-prototype. Review open G00/G01 decisions with owner; numbers remain draft. Next research should test early favorite acquisition and real ore/gold/item/tome/session workloads. Do not begin runtime/save/balance/P09/payments without that scoped request.
+Read AGENTS/CLAUDE/CURRENT_STATE, G00/G01 evidence and the ART-UI-GACHA-002 gallery on art/art-ui-gacha-002 (PR #212). Continue owner-led gacha system/visual discussion; numbers/pacing stay draft for later tuning and the final game assumes all planned modes. Use latest Saturn-ring character/shard distinction, not old result grids. Images are references only; do not implement runtime/save/balance/P09/payments without that scoped request.

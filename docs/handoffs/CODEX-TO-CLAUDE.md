@@ -1,3 +1,11 @@
+## 2026-11-09 — Selected gacha artwork archived for reference
+- Owner: “นำภาพที่อนุมัติเข้า Github ไว้อ้างอิง”; saved on `art/art-ui-gacha-002`, PR #212 (open reference PR, no art merge/runtime integration).
+- Package/gallery: `incoming/ART-UI-GACHA-002/README_TH.md` on the art branch; 11 original PNGs including latest main artwork, Saturn-ring full-character/shard distinction, art layers, static storyboard and earlier 18-screen functional references.
+- Latest ring supersedes old grid/uniform portrait medallions; full characters = full-body rectangular cards, shards = broken crystals + face + quantity. Earlier flow compositions explicitly secondary.
+- Owner steering: tune numbers later; discuss system first, final economy assumes all planned features. 7–10 visits/rates/costs remain drafts, not hard gates. CURRENT_STATE updated to reflect this.
+- Validation: fresh isolated GitHub checkout, SHA256 + PNG decode for all11, alpha0–255, relative links and diff checks passed; reports in package. Original pixels retained.
+- No src/public/rules/save/balance/P09/payment changes. Carousel and storyboard are static concepts, not working input or approved in-game motion; integration is a separately scoped task.
+
 ## 2026-11-09 — Gacha G00/G01 analysis
 - PR #211 merged `3174b5a` into `feature/fateweave-initial-prototype`; topic `docs/gacha-g00-g01-analysis`. Owner requested analysis/simulation/docs only; rates and all numeric proposals remain draft.
 - G00 decision sheet + G01 actual-source ore/gold/free acquisition audit + migration/trust/P09 readiness; CURRENT_STATE updated. Evidence: `docs/validation/gacha-g00-g01-2026-11-09/README_TH.md`.
