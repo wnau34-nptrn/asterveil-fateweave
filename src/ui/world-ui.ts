@@ -11,7 +11,7 @@ import type { TalentNode } from '../core/world/types';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 
-import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId } from '../core/world/types';
+import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId, Profile } from '../core/world/types';
 import { matchesPreset, runPresetPlan } from '../core/world/presets';
 import { canManage, fatigueCut, fatigueOf, reserveCap, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, levelOf, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, POTION_IDS, type Lane, type TeamPreset } from '../core/world/types';
@@ -19,7 +19,7 @@ import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
 import { heroArt, portrait, starRow } from './portraits';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { questLine, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
+import { questLine, sideQuestText, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
 import { tomeCount } from '../core/world/tomes';
 import { icon, lineIcon } from './icons';
 import { gearArt, potionArt } from './equip-art';
@@ -31,7 +31,7 @@ export interface WorldHost { travel(to: Point): void; move(dir: Direction): void
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void; draft(index: number): void;
   wear(heroId: string, from: BagList, index: number): void; takeOff(heroId: string, slot: GearSlot): void }
 export interface WorldBanner { kind: 'encounter' | 'boss' | 'elite' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
-export interface WorldView { presets?: (TeamPreset | null)[]; state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' | 'loot' }
+export interface WorldView { presets?: (TeamPreset | null)[]; questBoard?: { definitions: MapDefinition['sideQuests']; progress: Profile['quests']; unlocked: boolean }; state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' | 'loot' }
 
 const keyDirections: Record<string, Direction> = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', w: 'up', s: 'down', a: 'left', d: 'right', W: 'up', S: 'down', A: 'left', D: 'right' };
 const dirLabel: Record<Direction, string> = { up: 'เดินขึ้น', down: 'เดินลง', left: 'เดินซ้าย', right: 'เดินขวา' };
@@ -122,7 +122,7 @@ export class WorldUI {
         </div>
       </div>
       <div id="world-banner" class="world-banner" role="status" hidden></div>
-      <dialog id="world-goals" class="world-dialog" aria-labelledby="world-goals-title"><div class="info-header"><h2 id="world-goals-title">เป้าหมายการเดินทาง</h2><button data-world="goals-close" class="quiet" aria-label="ปิดเป้าหมาย">${icon('close')}</button></div><div class="info-content" id="world-goals-content"></div></dialog>
+      <dialog id="world-goals" class="world-dialog" aria-labelledby="world-goals-title"><div class="info-header"><h2 id="world-goals-title">เป้าหมายและเควสต์</h2><button data-world="goals-close" class="quiet" aria-label="ปิดเป้าหมาย">${icon('close')}</button></div><div class="info-tabs" role="tablist" aria-label="เป้าหมายและเควสต์"><button id="goals-tab-travel" type="button" role="tab" aria-controls="goals-panel-travel" aria-selected="true" tabindex="0">เป้าหมาย</button><button id="goals-tab-quests" type="button" role="tab" aria-controls="goals-panel-quests" aria-selected="false" tabindex="-1">เควสต์</button></div><div class="info-content"><section id="goals-panel-travel" role="tabpanel" aria-labelledby="goals-tab-travel" tabindex="0"><div id="world-goals-content"></div></section><section id="goals-panel-quests" role="tabpanel" aria-labelledby="goals-tab-quests" tabindex="0" hidden><div id="world-quests-content"></div></section></div></dialog>
       <dialog id="camp-dialog" class="world-dialog" aria-labelledby="camp-title"><div class="info-header"><h2 id="camp-title">${icon('camp')} แคมป์พักแรม</h2><button data-world="camp-close" class="quiet" aria-label="ปิดแคมป์">${icon('close')}</button></div><div class="info-content" id="camp-content"></div></dialog>
       <dialog id="team-dialog" class="world-dialog" aria-labelledby="map-team-title"><div class="info-header"><h2 id="map-team-title">${icon('flag')} ทีม</h2><button data-world="team-close" class="quiet" aria-label="ปิดทีม">${icon('close')}</button></div><div class="info-content" id="map-team-content"></div></dialog>
       <dialog id="pack-dialog" class="world-dialog" aria-labelledby="pack-title"><div class="info-header"><h2 id="pack-title">${icon('pack')} กระเป๋า</h2><button data-world="pack-close" class="quiet" aria-label="ปิดกระเป๋า">${icon('close')}</button></div><div class="info-content" id="pack-content"></div></dialog>
@@ -387,7 +387,8 @@ export class WorldUI {
     this.renderParty(s);
     const all = goals(s, this.map); const done = all.filter(g => g.done).length; const next = all.find(g => !g.done);
     this.root.querySelector('#objective-button')!.innerHTML = `<span class="objective-symbol">${icon('goal')}</span><span class="objective-text">${next ? next.label : 'สำเร็จการเดินทาง'}</span><span class="objective-count">${done}/${all.length}</span>${icon('right')}`;
-    this.root.querySelector('#objective-button')!.setAttribute('aria-label', `เป้าหมาย ${done} จาก ${all.length} · ${next ? `ถัดไป ${next.label}` : 'สำเร็จแล้ว'} · เปิดรายการ`);
+    this.root.querySelector('#objective-button')!.setAttribute('aria-label', `เป้าหมาย ${done} จาก ${all.length} · ${next ? `ถัดไป ${next.label}` : 'สำเร็จแล้ว'} · เปิดเป้าหมายและเควสต์`);
+    if (this.root.querySelector<HTMLDialogElement>('#world-goals')!.open) this.renderGoals();
     const message = this.root.querySelector<HTMLElement>('#world-message')!;
     // A new notice pops in as a toast and fades by itself; the text stays for assistive tech.
     if (message.textContent !== view.message) { message.textContent = view.message; message.classList.remove('toast-live'); void message.offsetWidth; message.classList.add('toast-live'); }
@@ -696,6 +697,26 @@ export class WorldUI {
     const sealed = questDone(s, this.map);
     const seal = !this.map.quest.need ? '' : `<h3 class="seal-title">${icon('boss')} ผนึกรอยแยก · ทำให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนท้าผู้คุม</h3><ul class="goal-list seal-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>`;
     this.root.querySelector('#world-goals-content')!.innerHTML = `<ul class="goal-list">${goals(s, this.map).map(g => `<li class="${g.done ? 'done' : ''}">${icon(g.done ? 'check' : 'circle')}<span>${g.label}</span></li>`).join('')}</ul>${seal}<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>`;
+    this.renderQuests();
+  }
+
+  private renderQuests(): void {
+    const board = this.view?.questBoard;
+    const content = this.root.querySelector('#world-quests-content')!;
+    if (!board?.unlocked) {
+      content.innerHTML = '<p class="map-quest-note">เควสต์จะปลดล็อกหลังผ่าน MAP1 · ดูเป้าหมายการเดินทางได้ที่แท็บเป้าหมาย</p>';
+      return;
+    }
+    const rows = board.definitions.map(q => ({ q, st: board.progress[q.id] ?? { progress: 0, claimed: false } }));
+    const order = ({ q, st }: typeof rows[number]) => st.claimed ? 2 : st.progress >= q.target ? 0 : 1;
+    rows.sort((a, b) => order(a) - order(b));
+    const card = ({ q, st }: typeof rows[number]) => {
+      const text = sideQuestText[q.kind], progress = Math.min(st.progress, q.target);
+      const status = st.claimed ? 'รับรางวัลแล้ว' : progress >= q.target ? 'ครบแล้ว · รับรางวัลที่ค่าย' : 'กำลังดำเนินการ';
+      const task = { rareChests: `เปิดกล่องสมบัติหายาก ${q.target} กล่อง`, wins: `ชนะการต่อสู้ ${q.target} ครั้ง`, elites: `ปราบศัตรูหัวหน้า ${q.target} ตัว`, secrets: `ค้นหาทางลับ ${q.target} แห่ง`, herbs: `เก็บสมุนไพรเรืองแสง ${q.target} ต้น`, puzzles: `ไขกลไกโบราณ ${q.target} อย่าง` }[q.kind];
+      return `<li class="map-quest" data-state="${st.claimed ? 'claimed' : progress >= q.target ? 'complete' : 'active'}"><div class="map-quest-heading"><h3>${text.name}</h3><span>${progress}/${q.target}</span></div><p>${task}</p><progress value="${progress}" max="${q.target}" aria-label="${text.name}">${progress}/${q.target}</progress><small>${status}</small></li>`;
+    };
+    content.innerHTML = `<p class="map-quest-note">ความคืบหน้าจากรอบเดินทางที่จบแล้ว</p><ul class="map-quest-list">${rows.map(card).join('')}</ul>${rows.length ? '' : '<p class="map-quest-note">ยังไม่มีเควสต์</p>'}<p class="map-quest-note">รับรางวัลที่กระดานเควสต์ในค่าย</p>`;
   }
 
   private renderInfo(): void {

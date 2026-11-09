@@ -8,7 +8,7 @@ import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipm
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { setArchived, setPartyLane, chooseLoadout, hardReason, claimGuide, createCommander, depart, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
+import { setArchived, setPartyLane, chooseLoadout, hardReason, claimGuide, createCommander, depart, featureOpen, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
 import { applyPreset, applyRunPreset, clearPreset, renamePreset, savePreset } from '../core/world/presets';
 import { draftPick, travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, setLane, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
@@ -376,7 +376,8 @@ export class GameShell {
   private renderWorld(): void {
     this.world.setMap(this.map, this.eliteArtOf(this.map));
     this.show('world');
-    this.world.render({ presets: this.game?.profile.presets, state: this.state!, message: this.message, locked: this.locked, saved: this.saved && !!this.storage, banner: this.banner, effect: this.effect });
+    const profile = this.game!.profile;
+    this.world.render({ presets: profile.presets, questBoard: { definitions: this.home.sideQuests, progress: profile.quests, unlocked: featureOpen(profile, this.maps, 'quests') }, state: this.state!, message: this.message, locked: this.locked, saved: this.saved && !!this.storage, banner: this.banner, effect: this.effect });
     this.effect = undefined;
   }
   // Story recruits: play each newly joined guest once per session (a reload shows the ones already joined as seen).
