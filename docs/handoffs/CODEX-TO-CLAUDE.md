@@ -1,3 +1,8 @@
+## 2026-11-09 — Skill popup proportions
+- Branch `fix/skill-popup-proportions`; owner requested smaller upgrade button and balanced popup typography.
+- Scoped popup CSS: compact header/body spacing, explicit inline-flex icon/text alignment, 14px upgrade label/18px icon, 44px touch targets; secondary link wraps at 13px.
+- No gameplay/save/balance changes. Build passed; focused popup browser checks and lint run before integration.
+
 ## 2026-11-08 — Next-chat handoff for gacha G00/G01
 - Owner selected the first step in a new chat; prepared `docs/handoffs/GACHA-G00-G01-NEXT-CHAT-TH.md` and updated CURRENT_STATE next scope/opening prompt.
 - Begin decisions/economy with actual ore/gold/free-acquisition/legacy-account inputs;80/96 and rates remain drafts, not approved production config.
