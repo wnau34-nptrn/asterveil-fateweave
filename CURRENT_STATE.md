@@ -1,54 +1,37 @@
-# Current state — updated 2026-11-08
+# Current state — updated 2026-11-09
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
 ## Game
 
-- Working branch `feature/fateweave-initial-prototype` (not `main`); Pages URL https://wnau34-nptrn.github.io/asterveil-fateweave/ through `pages.yml`; pre-release pushes deploy after lint/unit/build, with the full browser gate on PRs. Restore the Pages browser gate before OD-13 external tests.
-- **Save v58** Shadow Step (#198); v57 Sefa (#195); v56 team presets (#196); v55 Mira/Eira/Brann (#193); v54 Kael/Lio; v53 step 6 batch 1; v52 Toma; v51 Astrid; v50 Garran; v49 Wynne; v48 Dancer; v47 P03 board featured lineup; 1–5 units a side (P02), shared camp Lv/EXP (P01), reserve by chapter 3→4→5, fatigue, carry ≤10. W1–W8/P01/P02, UXD-01…07 and the HUD team → character entry (PR #146) are published.
-- 2026-11-04 batch merged (#147–#154: storage caps, v46 Heal/Revive, sealable Thorn Tempest, calm potion, `units.webp` bleed); see the handoff log.
-- Owner 2026-11-04: “เรื่องภาพหรืออะไรให้คุณตัดสินใจได้เลย” — Claude may decide art picks; record each such pick as Claude's decision under that delegation, not as owner approval.
-
-- P03 (2026-11-04 late, PR #155/#156/#158): Kael (Martial chi), Wynne (Hexer curses/toll), Astrid (Seer deflect/cycle) — 15 classes × 1 character; featured board slot only; battle bodies from A12 intake; evidence `docs/validation/roster-30/p03/README_TH.md`.
+- Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`. Pre-release pushes deploy after lint/unit/build; browser PR gate is path-filtered. Restore Pages browser gate before OD-13 external tests.
+- Save v58; Phaser/TypeScript/Vite, local saves, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked, existing rights preserved. No gacha wallet/accounts/reward ledger; Worker only `/health`.
+- Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3. Rights follow cleared history.
+- Skill popup proportions #210 complete (`b1d1d42`); earlier popup/UI #208/#207/#205/#204/#203 and VFX #200 merged. Evidence and tests in handoff log.
+- Owner art delegation 2026-11-04 remains: Claude may decide art picks; record as Claude decision, not owner approval.
 
 ## Active task
 
-- Skill popup proportions complete: PR #210 (`b1d1d42`); compact controls/type, aligned icon, 44px targets; all CI passed.
+- **G00/G01 analysis delivered:** `docs/design/GACHA_G00_DECISIONS_TH.md`, `GACHA_G01_ECONOMY_TH.md`, `GACHA_G01_MIGRATION_TH.md`; reproducible 33-case/365-day research in `docs/validation/gacha-g00-g01-2026-11-09/README_TH.md`.
+- 80 points/free80–96 per28d and rates remain drafts. G00 is a decision sheet, not signed-off config; G01 does not certify production pacing. Current controls include story/draft/seeded gold board, ore/gold, favorite/collection, paid30d, veteran/returner and hoarding/growth sensitivities.
+- Main unresolved choices: timing of first favorite vs OD-07 7–10 visits; source budget without absent modes; universal substitution/overflow and legacy trust. MAP1 already yields 5 members; team/item/tome readiness and real20–30min visits remain unverified. No runtime/rules/save/balance/P09/payment changes in this task.
+- Earlier proposal #209 (`0fb8d8c`) and 12-case model remain historical drafts; new findings extend them, not owner approval.
 
-- **Gacha proposal saved (docs only, PR #209 / `0fb8d8c`, quality passed):** 80-point exchange + 80–96 free tickets/28d recommended for testing; 100-point alternative and rates remain draft. See `docs/design/GACHA_80_PROPOSAL_TH.md`, `GACHA_DEVELOPMENT_PLAN_TH.md`; reproducible 12-case economy evidence in `docs/validation/gacha-economy-80-2026-11-08/`. No runtime/P09/payment work authorized by this documentation task.
+## Next (owner review)
 
-- Skill popup + continuous enhancement: PR #208 (`117a0d4`), all CI passed. Evidence: `docs/validation/skill-popup-continuous-enhancement/README_TH.md`.
-
-- Earlier UI complete: party title #207 (`4ea37ca`), team formation #205 (`7c40161`), camp HUD #204 (`deb193f`); quality/browser passed. Evidence under `docs/validation/title-party/`, `team-formation-editor/`, `camp-hud-layout/`.
-
-- **MAP-TEAM-CHARACTER-TABS-001 complete (2026-11-07, PR #203, merge `ae8889c`):** separate map team HUD/dialog (T), bag items/gear (B), one-tap carried-only presets; direct tree tab, MAP 4 character tabs/camp 5, development stays camp-only. Quality + browser passed. Rules/save/balance unchanged. Evidence: `docs/validation/map-team-character-tabs/README_TH.md`.
-- Unlock pacing #202: quests/team MAP 1; hiring/market/hunt MAP 2; advanced services/hard explicitly MAP 3. Rights follow cleared history.
-
-- Team presets #196 (save v56): 4 named presets; camp and carried-only map application. Evidence: `docs/validation/team-presets-2026-11-06/README_TH.md`; owner usability review remains open.
-
-- Skill rework step 6 done (#191–#193, #195, #198; README §9 `docs/validation/skill-rework-2026-11-05/README_TH.md`); the campaign gate now reads the whole campaign (owner 2026-11-06).
-
-## Next (owner order)
-
-- Owner selected gacha G00/G01 next: follow `docs/handoffs/GACHA-G00-G01-NEXT-CHAT-TH.md` for decisions/economy analysis. Runtime/P09/payments remain outside this step.
-
-- UI frame groups 1–4 done (#173, #194, group 4 summary/rewards 2026-11-07); no frame work left.
-- Polish before P09; P09 (OD-13) waits for the owner's start. UXD-08 combined UX check open.
+- Review G00 decision questions and G01 evidence; study early targeted acquisition and actual session workloads before locking rates. Do not automatically start G02/P09/G03/G04/G05 or payments. P09/P04/ledger/trust remain dependencies for real gacha; OD-13 order still applies.
+- UXD-08 combined UX check open. Team-preset owner usability review remains open.
 
 ## Open items
 
-- Skill rework step 6 open items (README §9): Shield Bash kept as is (owner); Challenge still unused by the advisor, Rouse still ΔHP −8.6; Fade (card) dropped for the campaign gate — Shadow Step = hit 8 + dodge; enemy difficulty, if wanted, is its own task.
-
-- Map 3 gate copy of the Briar Lord still falls to plain attacks 83–98%; stronger % broke the rush/casual first-clear gate — deferred to P05 (needs a gate-specific mechanic/encounter; Claude decision under delegation).
-- No real Safari/iPhone/Android or human usability results (P02-03 trial pending). The owner's iPhone report of Seren's art is fixed in PR #154 but not re-checked on the device.
-- P03: Kael/Wynne/Astrid battle animation integrated (A12 intake 2026-11-05, `docs/combat-presentation/unit-a12-slice/README_TH.md`); circle/toll/dial clips unseen in game; owner has not reviewed motion.
-- ART-VFX-REWORK-001 (PR #200) merged `ff9274e` into the game branch on 2026-11-07 after quality + browser passed. Owner explicitly authorized: "ทำการ Merge เข้าเกมได้ของ PR #200". Original art, event-only VFX routing and 13 actual 390px clips: `docs/combat-presentation/vfx-rework-slice/README_TH.md`. Rules/save/content/balance/playback timing unchanged.
-- Art: A7-003 parked (OD-14); Lyra atlas above guideline; open PRs #133 UX art/plan, #122 A7-003, #55 pets, #53 boss frames (do not merge the Artwork branch automatically).
+- Skill step6: Shield Bash kept (owner); Challenge unused by advisor, Rouse ΔHP−8.6; Fade dropped for campaign gate, Shadow Step=hit8+dodge. Enemy difficulty is separate.
+- MAP3 Briar Lord gate still falls to plain attacks83–98%; deferred P05; details in skill-rework validation. No real Safari/iPhone/Android or human usability validation.
+- P03 motion circle/toll/dial unseen in game; owner motion review pending. Art A7-003 parked (OD-14); Lyra atlas above guideline. Open art PRs #133/#122/#55/#53 remain separate; do not merge Artwork automatically.
 
 ## Workspace
 
-- Cloud checkouts are fresh per session; verify remote head/ancestry before work and never reset unpushed work. Never import checkpoints `cc51cd4`/`bcd6133` or `codex/uxd-02-release-notes` automatically.
+Cloud checkouts are fresh; verify remote head/ancestry, never reset unpushed work or automatically import checkpoints cc51cd4/bcd6133 or codex/uxd-02-release-notes. This analysis used source c4beb7b.
 
 ## Opening prompt for next chat
 
-Start gacha G00/G01 per `docs/handoffs/GACHA-G00-G01-NEXT-CHAT-TH.md` after reading AGENTS/CLAUDE/CURRENT_STATE. Owner selected this first step: proceed with decisions, economy incl. ore/gold/legacy saves and reproducible evidence;80/96 remains draft. Analysis/docs only, no runtime/save/balance/P09/payments. Save findings to GitHub and present decisions for review.
+Read AGENTS/CLAUDE/CURRENT_STATE, then docs/design/GACHA_G00_DECISIONS_TH.md and docs/validation/gacha-g00-g01-2026-11-09/README_TH.md on feature/fateweave-initial-prototype. Review open G00/G01 decisions with owner; numbers remain draft. Next research should test early favorite acquisition and real ore/gold/item/tome/session workloads. Do not begin runtime/save/balance/P09/payments without that scoped request.

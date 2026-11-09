@@ -4,6 +4,8 @@
 
 แผนลงมือและเงื่อนไขแต่ละระยะ: [GACHA_DEVELOPMENT_PLAN_TH.md](GACHA_DEVELOPMENT_PLAN_TH.md) ผลจำลองที่ทำซ้ำได้: [รายงานเศรษฐกิจ](../validation/gacha-economy-80-2026-11-08/README_TH.md)
 
+ต่อยอด G00/G01 วันที่9พ.ย.: [decision sheet](GACHA_G00_DECISIONS_TH.md), [เศรษฐกิจร่วมกับแร่/ทอง/ทางฟรี](GACHA_G01_ECONOMY_TH.md), [migration/trust](GACHA_G01_MIGRATION_TH.md), [หลักฐานใหม่](../validation/gacha-g00-g01-2026-11-09/README_TH.md). ข้อเสนอฉบับนี้ยังเป็นdraft; ป้ายSRและนโยบายoverflowต้องอ่านสถานะใหม่ในdecision sheet ไม่ถือว่าอนุมัติจากการเก็บเอกสาร.
+
 ## 1. บริบทและสิ่งที่เปลี่ยนจากข้อเสนอเดิม
 
 - เกมปัจจุบันมี 15 อาชีพ อาชีพละหนึ่งตัวที่เปิดรับใหม่; `thiran`/`wila` พักตาม OD-14 และต้องเก็บสิทธิ์ของเซฟเก่า
