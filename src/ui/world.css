@@ -158,6 +158,24 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .world-dialog .info-header h2 { font-size: 20px; }
 .world-dialog .info-header button { width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border-radius: 50%; }
 .world-dialog .info-content { padding: 14px 18px 18px; max-height: calc(100cqh - 100px); overflow-y: auto; }
+#app #world-goals { width: calc(var(--game-w) - 24px); height: auto; max-height: min(520px, calc(var(--app-h) - 24px)); border: 1px solid #e8f5ff40; border-radius: 24px; }
+#world-goals[open] { display: flex; flex-direction: column; overflow: hidden; }
+#world-goals .info-header { flex-shrink: 0; }
+#world-goals .info-header h2 { min-width: 0; font-size: 18px; }
+#app #world-goals .info-content { min-height: 0; max-height: none; }
+.map-quest-list { display: grid; gap: 10px; margin: 10px 0; padding: 0; list-style: none; }
+.map-quest { padding: 12px; border: 1px solid #e8f5ff40; border-radius: 14px; background: #102335c9; }
+.map-quest-heading { display: flex; align-items: baseline; gap: 12px; }
+.map-quest-heading h3 { min-width: 0; margin: 0; font-size: 15px; overflow-wrap: anywhere; }
+.map-quest-heading span { margin-left: auto; flex-shrink: 0; color: var(--gold-light); font-weight: 700; }
+.map-quest p, .map-quest-note { margin: 6px 0; font-size: 13px; color: var(--text-muted); }
+.map-quest progress { display: block; width: 100%; height: 8px; margin: 10px 0 6px; border: 0; border-radius: 8px; overflow: hidden; appearance: none; background: #e8f5ff26; color: var(--hp-mint); }
+.map-quest progress::-webkit-progress-bar { background: #e8f5ff26; border-radius: 8px; }
+.map-quest progress::-webkit-progress-value { background: var(--hp-mint); border-radius: 8px; }
+.map-quest progress::-moz-progress-bar { background: var(--hp-mint); border-radius: 8px; }
+.map-quest small { color: var(--text-muted); font-size: 12px; }
+.map-quest[data-state=complete] small { color: var(--hp-mint); }
+.map-quest[data-state=claimed] { opacity: .7; }
 .goal-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .goal-list li { display: flex; align-items: center; gap: 10px; min-height: 40px; font-size: 15px; border-bottom: 1px solid #e8f5ff14; }
 .goal-list li .icon { width: 20px; height: 20px; color: var(--text-muted); }
