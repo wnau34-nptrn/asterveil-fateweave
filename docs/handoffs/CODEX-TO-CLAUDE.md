@@ -1,3 +1,12 @@
+## 2026-11-09 — Gacha G00/G01 analysis
+- PR #211 merged `3174b5a` into `feature/fateweave-initial-prototype`; topic `docs/gacha-g00-g01-analysis`. Owner requested analysis/simulation/docs only; rates and all numeric proposals remain draft.
+- G00 decision sheet + G01 actual-source ore/gold/free acquisition audit + migration/trust/P09 readiness; CURRENT_STATE updated. Evidence: `docs/validation/gacha-g00-g01-2026-11-09/README_TH.md`.
+- 33 cases × 4,000 accounts × 365 days, seed20261109; source/input hashes, median/P90/P99, population censoring, favorite/collection, paid30d, veteran/returner, hoarding/growth sensitivities.
+- 80/96 favorite from account start: ★5 median11/P9016 visits; after acquisition8/9; starting favorite9/9. Thin income23/40; no farm30/38. These are basket simulations, not real playtest pacing.
+- Validation passed: model self-check/full-run assertions, original TypeScript board/roll comparison20 seed/return pairs, deterministic rerun, 28/30-day budgets, ore negative control, generated-table repeat, links/source hashes/context sizes/diff checks.
+- PR quality (lint/unit/build) passed before merge; browser workflow not triggered by docs-only path filter. No runtime/rules/save/balance/P09/payment changes; no human/device results claimed.
+- Open owner choices: 80 vs100 trial, OD-07 timing/early favorite access, absent-mode budget, universal/overflow/story compensation, legacy/account trust. Questions sent to “ฝากถึง Claude”; do not start G02/P09/G03/G04/G05 automatically.
+
 ## 2026-11-09 — Skill popup proportions
 - PR #210 merged (`b1d1d42`); owner requested smaller upgrade button and balanced popup typography.
 - Scoped popup CSS: compact header/body spacing, explicit inline-flex icon/text alignment, 14px upgrade label/18px icon, 44px touch targets; secondary link wraps at 13px.
