@@ -1,3 +1,11 @@
+## 2026-11-09 — Restore thin enemy HP tracks
+- Owner feedback on #214: HP bars became too thick; the desired result is the original thin line with the counter overlaid, not a text-height plate.
+- Branch `codex/enemy-hp-thin` removes the extra track-height override. Normal tracks retain 4px and tiny tracks 3px; the existing grid centres the number over that line.
+- Counter font/contrast, HP/state, combat timing, actor positions and side-panel disclosure remain unchanged.
+- Updated the reserved-panel regression to enforce 3–4px track height and matching text/track centre lines instead of requiring the glyph box to fit inside the bar.
+- Actual 390px battle preview replayed real attacks from 140/140 to 47/140; thin-line alignment assertion passed and screenshot inspected. No manual HP mutation or owner save used.
+- Local quality/status regression and required remote quality/browser gates are recorded in this branch's PR; merge only after required checks pass. Not physical iPhone/Safari validation.
+
 ## 2026-11-09 — Enemy HP values inside their bars
 - Owner requested enemy HP counters and bars to be one strip, using the supplied battle screenshot as the target surface.
 - Branch `codex/enemy-hp-inline` from `da1d508`; scoped CSS overlays the counter at the centre of the full HP track rather than stacking it above the fill.

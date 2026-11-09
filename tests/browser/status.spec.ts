@@ -61,11 +61,11 @@ test('all six reserved HP/status panels avoid every sprite and each other throug
           });
       });
     }, { arena, slots })).toBe(true);
-    // Enemy counters occupy the same track, rather than a separate row above it.
+    // Counters overlap the centre of the original thin track, without thickening it to fit the text.
     expect(await page.locator('.field-unit-info.enemy:not(.side) .field-health').evaluateAll(els => els.every(el => {
       const value = el.querySelector('.field-hp-value')!.getBoundingClientRect();
       const track = el.querySelector('.field-hp-track')!.getBoundingClientRect();
-      return value.width > 0 && value.left >= track.left - .5 && value.right <= track.right + .5 && value.top >= track.top - .5 && value.bottom <= track.bottom + .5 && Math.abs(value.y + value.height / 2 - track.y - track.height / 2) <= .5;
+      return value.width > 0 && value.left >= track.left - .5 && value.right <= track.right + .5 && track.height >= 3 && track.height <= 4 && Math.abs(value.y + value.height / 2 - track.y - track.height / 2) <= .5;
     }))).toBe(true);
     await expect(page.locator('#action-bash')).toHaveAttribute('aria-pressed', 'true');
     expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
