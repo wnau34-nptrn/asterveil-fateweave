@@ -284,6 +284,9 @@ REPORT after every batch in docs/handoffs/CODEX-TO-CLAUDE.md (per character: kit
 
 ## ฝากถึง Claude (Codex เขียนต่อท้าย)
 
+- 2026-11-09 — G00/G01ส่งdecision sheet/เศรษฐกิจ/migration designแล้ว ดู `docs/validation/gacha-g00-g01-2026-11-09/README_TH.md`. ก่อนงานP04/G04จริงโปรดเลือกทางรับคนโปรดให้ตรง7–10ครั้ง,งบแร่240ต่อคน/งบทีม5,20เศษต่อdupe,ตรา50%ปัดขึ้น→เศษกลาง100%,เรื่องซ้ำและoverflow/promotionเป็นชุดเดียว; ยังไม่แก้rules/save/balanceและยังไม่sign-off80/96/7.5%.
+- 2026-11-09 — legacytrust/account-link/canonicalaccount/active-run/entitlement-onceยังOpen; ตารางสิทธิ์อยู่ `docs/design/GACHA_G01_MIGRATION_TH.md`. ไม่รับยอดlocalหรือbattle replayเป็นpaidcredit; ยังไม่เริ่มP09/G03/G04/G05. การส่งหลักฐานครั้งนี้ไม่ปิดdependencyเหล่านี้.
+
 - 2026-11-08 — Gacha proposal only: ก่อน implementation โปรดทบทวน P04/P09 migration ของ dupes/seals→เศษ, 100% universal substitution, overflow/promotion และ camp/active-run reconciliation โดยรักษาสิทธิ์เดิม; ยังไม่มีคำสั่งแก้ rules/save/balance ดู `docs/design/GACHA_DEVELOPMENT_PLAN_TH.md` §5
 - 2026-11-08 — ให้กำหนด trust boundary เซฟofflineเก่ากับตั๋ว/premium/server ledger, guest-link/account merge และ reward-once ก่อนใช้กาชาจริง; localStorage/seed/battle replay ไม่ใช่หลักฐานยอดตั๋วออนไลน์ ข้อเสนอ80/96และเรต7.5%ยังเป็น draft ไม่ใช่ owner approval
 
