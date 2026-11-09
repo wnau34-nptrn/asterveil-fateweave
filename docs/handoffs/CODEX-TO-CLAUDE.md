@@ -1,3 +1,13 @@
+## 2026-11-09 — MAP objectives / quest progress tabs
+- Owner approved implementation after the revised mockup: combine quests inside the existing ไปถึงแคมป์/objective entry, with separate เป้าหมาย / เควสต์ tabs; no extra persistent HUD panel.
+- Branch `codex/map-quest-tabs`, PR #213 into `feature/fateweave-initial-prototype`; merge remains gated on quality + browser checks (GitHub PR holds final merge/status).
+- WorldUI uses existing accessible info-tab navigation; compact centred, scrollable dialog preserves HUD tools, travel/rift goals and focus return.
+- GameShell supplies the home camp-board definitions + settled profile progress + existing featureOpen result. No in-run tally projection, reward claiming, unlock/rule/save/balance changes.
+- Read-only quest rows show current/target, semantic progress bars and active/completed/claimed states; locked MAP1 state explains the existing requirement. Rewards remain at camp.
+- Local typecheck/lint/build passed; focused Chromium browser regression 9/9 passed at 320×568, 390×650, 390×844 and desktop, including tabs/Home/End/arrows, Escape/close focus, scroll, unchanged save, camp claims and rift goals.
+- Full unit suite and remote checks are recorded in PR #213; finish merge only after required gates pass. Existing Phaser bundle-size warning remains.
+- Browser extension control tool unavailable in this session; used repository-authorized Playwright + system Chromium. Screenshot inspected at 390px; no physical iPhone/Safari validation.
+
 ## 2026-11-09 — Selected gacha artwork archived for reference
 - Owner: “นำภาพที่อนุมัติเข้า Github ไว้อ้างอิง”; saved on `art/art-ui-gacha-002`, PR #212 (open reference PR, no art merge/runtime integration).
 - Package/gallery: `incoming/ART-UI-GACHA-002/README_TH.md` on the art branch; 11 original PNGs including latest main artwork, Saturn-ring full-character/shard distinction, art layers, static storyboard and earlier 18-screen functional references.
