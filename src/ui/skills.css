@@ -81,3 +81,18 @@
 .talent-detail-dialog .node-card-foot { flex-wrap: wrap; gap: 10px; }
 .talent-detail-dialog .node-card-foot button { min-height: 44px; }
 .talent-detail-content > button { width: 100%; }
+
+/* Keep the node popup compact instead of inheriting full character-sheet controls. */
+#app .talent-detail-dialog .info-header { flex: 0 0 auto; padding: 12px 14px; gap: 12px; }
+#app .talent-detail-dialog .info-header h2 { font-size: 18px; line-height: 1.4; }
+#app .talent-detail-dialog .info-content { padding: 14px 16px 16px; }
+#app .talent-detail-dialog .node-card { display: grid; gap: 12px; margin: 12px 0 14px; }
+#app .talent-detail-dialog .node-card-head { gap: 10px; }
+#app .talent-detail-dialog .node-card-head b { font-size: 17px; line-height: 1.4; }
+#app .talent-detail-dialog .node-card-head small { margin-top: 3px; font-size: 12px; line-height: 1.5; }
+#app .talent-detail-dialog .node-card p { font-size: 14px; line-height: 1.65; overflow-wrap: anywhere; }
+#app .talent-detail-dialog .node-card-foot { gap: 8px 12px; }
+#app .talent-detail-dialog .node-card-foot button.primary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; min-width: 0; padding: 8px 12px; font: 600 14px/1.4 var(--font-heading); }
+#app .talent-detail-dialog .node-card-foot button .icon { width: 18px; height: 18px; flex: 0 0 18px; }
+#app .talent-detail-dialog .node-note { font-size: 12px; line-height: 1.5; }
+#app .talent-detail-content > button.secondary { min-height: 44px; padding: 10px 12px; font: 500 13px/1.5 var(--font-heading); white-space: normal; }
