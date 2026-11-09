@@ -13,7 +13,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- Skill popup proportions: `fix/skill-popup-proportions`; compact controls/typography, 44px targets, CSS only.
+- Skill popup CSS: `fix/skill-popup-proportions`; compact type/controls, 44px targets.
 
 - **Gacha proposal saved (docs only, PR #209 / `0fb8d8c`, quality passed):** 80-point exchange + 80–96 free tickets/28d recommended for testing; 100-point alternative and rates remain draft. See `docs/design/GACHA_80_PROPOSAL_TH.md`, `GACHA_DEVELOPMENT_PLAN_TH.md`; reproducible 12-case economy evidence in `docs/validation/gacha-economy-80-2026-11-08/`. No runtime/P09/payment work authorized by this documentation task.
 
