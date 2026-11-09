@@ -557,6 +557,10 @@ main { width: 100%; max-width: 1600px; flex: 1; min-height: 0; display: flex; fl
 /* Four foe columns (A7 step 2) leave a side panel only the ally width: enemies drop the HP number there too
    (it stays in the roster, the status tab and each target's label). */
 .field-unit-info.side.enemy .field-unit-name, .field-unit-info.side.enemy .field-hp-value { display: none; }
+/* Keep enemy HP text centred over the full track, including when its fill is nearly empty. */
+.field-unit-info.enemy:not(.side) .field-health { display: grid; align-items: center; }
+.field-unit-info.enemy:not(.side) .field-hp-track { grid-area: 1 / 1; height: calc(1lh + 3px); background: #071424; }
+.field-unit-info.enemy:not(.side) .field-hp-value { grid-area: 1 / 1; z-index: 1; color: #fff; font-variant-numeric: tabular-nums; text-shadow: 0 1px 2px #07101f, 0 -1px 2px #07101f, 1px 0 2px #07101f, -1px 0 2px #07101f; }
 .field-statuses { display: flex; align-items: center; justify-content: center; gap: 2px; pointer-events: none; }
 .field-status, .field-status-more { display: grid; place-items: center; width: var(--field-icon, 18px); height: var(--field-icon, 18px); border: 1px solid; border-radius: 4px; box-shadow: 0 1px 3px #07101fe6; }
 .field-status.buff { color: #adffe4; border-color: #66d9b0; background: #10392ff5; }

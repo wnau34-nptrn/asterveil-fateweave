@@ -1,6 +1,14 @@
+## 2026-11-09 — Enemy HP values inside their bars
+- Owner requested enemy HP counters and bars to be one strip, using the supplied battle screenshot as the target surface.
+- Branch `codex/enemy-hp-inline` from `da1d508`; scoped CSS overlays the counter at the centre of the full HP track rather than stacking it above the fill.
+- Dark empty track + white tabular digits with dark text shadow preserve contrast; existing compact/tiny line-height and side-panel disclosure remain, keeping reserved HP/status bounds.
+- No battle/render timing, HP values, saves, commands, actor positions or ally HP changes.
+- Local lint/typecheck/build passed; status browser regression verifies text stays inside the bar across short field, 320px, 390px and desktop, plus status inspection, targeting and unchanged saves. Final focused/CI results and merge status belong to this branch's PR.
+- Inspected 390px stress screenshot (extra status icons are test-only decorations). Playwright/system Chromium used because Browser control tool is unavailable; not a physical iPhone/Safari result.
+
 ## 2026-11-09 — MAP objectives / quest progress tabs
 - Owner approved implementation after the revised mockup: combine quests inside the existing ไปถึงแคมป์/objective entry, with separate เป้าหมาย / เควสต์ tabs; no extra persistent HUD panel.
-- Branch `codex/map-quest-tabs`, PR #213 into `feature/fateweave-initial-prototype`; merge remains gated on quality + browser checks (GitHub PR holds final merge/status).
+- Branch `codex/map-quest-tabs`, PR #213 merged as `da1d508` after quality + browser passed and explicit owner merge/publication approval.
 - WorldUI uses existing accessible info-tab navigation; compact centred, scrollable dialog preserves HUD tools, travel/rift goals and focus return.
 - GameShell supplies the home camp-board definitions + settled profile progress + existing featureOpen result. No in-run tally projection, reward claiming, unlock/rule/save/balance changes.
 - Read-only quest rows show current/target, semantic progress bars and active/completed/claimed states; locked MAP1 state explains the existing requirement. Rewards remain at camp.

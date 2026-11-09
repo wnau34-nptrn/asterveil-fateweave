@@ -7,7 +7,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`. Pre-release pushes deploy after lint/unit/build; browser PR gate is path-filtered. Restore Pages browser gate before OD-13 external tests.
 - Save v58; Phaser/TypeScript/Vite, local saves, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked, existing rights preserved. No gacha wallet/accounts/reward ledger; Worker only `/health`.
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3. Rights follow cleared history.
-- MAP quest tabs #213: existing objective entry opens เป้าหมาย / เควสต์ in one compact scrollable dialog; settled camp-board progress, original MAP1 unlock and camp-only rewards. Implementation follows the owner-approved combined-tab mockup; PR quality/browser gates control merge.
+- Enemy field HP: `codex/enemy-hp-inline` combines enemy numbers and fill in one strip with readable dark-backed text; presentation CSS only, existing HP/status reservations retained.
+- MAP quest tabs #213 merged (`da1d508`): existing objective entry opens เป้าหมาย / เควสต์ in one compact scrollable dialog; settled camp-board progress, original MAP1 unlock and camp-only rewards. Implementation follows the owner-approved combined-tab mockup; Quality/browser passed before merge.
 - Skill popup proportions #210 complete (`b1d1d42`); earlier popup/UI #208/#207/#205/#204/#203 and VFX #200 merged. Evidence and tests in handoff log.
 - Owner art delegation 2026-11-04 remains: Claude may decide art picks; record as Claude decision, not owner approval.
 
@@ -33,7 +34,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Workspace
 
-Cloud checkouts are fresh; verify remote head/ancestry, never reset unpushed work or automatically import checkpoints cc51cd4/bcd6133 or codex/uxd-02-release-notes. MAP quest tabs use source d7105da; work is isolated on codex/map-quest-tabs (PR #213).
+Cloud checkouts are fresh; verify remote head/ancestry, never reset unpushed work or automatically import checkpoints cc51cd4/bcd6133 or codex/uxd-02-release-notes. Enemy HP overlay work is isolated on codex/enemy-hp-inline from da1d508; MAP quest tabs #213 are merged.
 
 ## Opening prompt for next chat
 
