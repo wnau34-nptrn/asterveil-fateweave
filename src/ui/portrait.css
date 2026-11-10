@@ -389,7 +389,7 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 }
 
 /* Read-only inspector takes real layout space below the queue; the battlefield keeps
-   only thin front HP arcs. Bottom allied name/HP cards retain their original layout. */
+   straight thin HP tracks with numeric counters. Bottom allied name/HP cards retain their original layout. */
 #battle-view .unit-inspector { display: flex; align-items: center; gap: 7px; flex: 0 0 44px; min-height: 44px; width: 100%; padding: 2px 10px; border: 0; border-block: 1px solid #728eaa38; border-radius: 0; background: #102333e8; text-align: left; color: #e8eff8; }
 .unit-inspector .portrait { width: 30px; height: 30px; flex: 0 0 30px; }
 .inspector-copy { display: flex; flex-direction: column; flex: 1; min-width: 0; line-height: 1.2; }
@@ -403,3 +403,10 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 .unit-inspector[data-hp-tone="red"] .inspector-hp b { color: #f16d79; }
 .inspector-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 #turn-order .turn-icon[aria-pressed="true"] { outline: 1px solid #b9e7ff; outline-offset: 2px; }
+.inspector-statuses { display: inline-flex; gap: 3px; flex: 0 0 auto; }
+.inspector-status { display: grid; place-items: center; width: 14px; height: 14px; border: 1px solid; border-radius: 4px; }
+.inspector-status .icon { width: 10px; height: 10px; }
+.inspector-status.buff { color: #adffe4; border-color: #66d9b0; background: #10392ff5; }
+.inspector-status.debuff { color: #ffccd7; border-color: #fa849e; background: #4a1d30f5; }
+.inspector-status.more { color: #f3e8c7; border-color: #bdaa7c; background: #17263af5; font-size: 8px; font-weight: 600; }
+.inspector-hp { flex-shrink: 0; white-space: nowrap; }

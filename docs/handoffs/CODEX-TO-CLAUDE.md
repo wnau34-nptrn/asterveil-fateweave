@@ -1,3 +1,12 @@
+## 2026-11-10 — Straight HP counters + inspector status badges
+- Branch `codex/straight-hp-status-inspector` from #217 handoff; owner authorized implementing the latest straight-bar/numeric-HP/buff-debuff mockup.
+- Both sides use straight 4px tracks, current/max HP centred over the full track with outlined white digits; no thicker plate or floating names. HP colours and original lower cards unchanged.
+- Inspector uses real displayed `unitStatuses`, showing buff/debuff categories together when present, at most 2 icons + overflow; badge taps open the existing selected-unit details without casting.
+- Existing field status icons remain; only HP-panel minimum width grows 64→72px with arena clamping. Actor positions/sizes, turn-follow/manual inspection and playback timing stay unchanged.
+- Local typecheck/lint/build and focused HP/layout/status unit 12 pass; HUD/status/keyboard/5v5 browser 16 pass. Full unit and required PR quality/browser results belong in this branch's PR and [validation](../validation/battle-front-hp/README_TH.md).
+- Real 390px screenshots reviewed; 320px stress covers a long boss name, 9999/9999 and mixed/overflow statuses. Fixture only, not shipped balance. Playwright/system Chromium fallback (Browser tool unavailable), no device claim.
+- No resolver/save/schema/balance/runtime encounter/assets changes. Open: required PR gates + merge.
+
 ## 2026-11-10 — Turn-following inspector + 4px HP arcs
 - PR [#217](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/217), `codex/battle-inspector-turn-follow`; merged `6bcfa5c` after quality/browser passed. Owner requested turn owner → tapped enemy → next owner, retaining manual inspection.
 - Inspector resets only on stage boundaries/next playable turn, not on contact/render/resize. Manual queue/status choices last for the current turn; full status dialog keeps its independent selected unit.

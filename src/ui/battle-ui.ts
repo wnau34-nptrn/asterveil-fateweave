@@ -17,7 +17,7 @@ import { damageKindOf, kindGlyph, kindPill } from './damage-kind';
 import { infoTabs, selectInfoTab } from './info-tabs';
 import { foeProfile, unitStatuses } from './battle-status';
 import { battleLesson } from './tutorial';
-import { bossCrown, frontHealthPath, healthColors, healthRatio, healthTone } from './battle-health';
+import { bossCrown, fieldHealthPath, healthColors, healthRatio, healthTone } from './battle-health';
 import { heroVoice } from './story-ui';
 
 const tutorialKey = 'asterveil.fateweave.tutorial.v1';
@@ -600,12 +600,17 @@ export class BattleUI {
     const enemy = d.enemies.some(e => e.id === id), boss = 'boss' in def && def.boss;
     const level = enemy ? d.level : undefined;
     const name = enemy && 'displayName' in def ? def.displayName ?? def.name : enemy ? def.name : actorName(id, d);
+    const statuses = unitStatuses(s, d, id), buff = statuses.find(r => r.kind === 'buff'), debuff = statuses.find(r => r.kind === 'debuff');
+    // Show both categories when present; overflow remains available in the status dialog.
+    const shown = buff && debuff ? [buff, debuff] : statuses.slice(0, 2);
+    const statusLabel = statuses.map(r => `${r.kind === 'buff' ? 'บัฟ' : 'ดีบัฟ'} ${r.name}: ${r.duration}`).join(' · ');
+    const badges = statuses.length ? `<span class="inspector-statuses" role="img" aria-label="${escapeHtml(statusLabel)}">${shown.map(r => `<span class="inspector-status ${r.kind}" data-inspector-status="${r.id}" title="${escapeHtml(`${r.name} · ${r.duration}`)}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${statuses.length > shown.length ? `<span class="inspector-status more" aria-hidden="true">+${statuses.length - shown.length}</span>` : ''}</span>` : '';
     const node = this.root.querySelector<HTMLElement>('#unit-inspector')!;
     node.dataset.actor = id; node.dataset.side = enemy ? 'enemy' : 'ally';
     node.dataset.hpTone = healthTone(actor.hp, def.maxHp);
-    node.setAttribute('aria-label', `${actorName(id, d)} HP ${actor.hp}/${def.maxHp} · เปิดรายละเอียดสถานะ`);
+    node.setAttribute('aria-label', `${actorName(id, d)} HP ${actor.hp}/${def.maxHp}${statusLabel ? ` · ${statusLabel}` : ''} · เปิดรายละเอียดสถานะ`);
     for (const button of this.root.querySelectorAll<HTMLButtonElement>('#turn-order .turn-icon')) button.setAttribute('aria-pressed', String(button.dataset.value === id));
-    this.set('unit-inspector', `${this.portrait(id)}<span class="inspector-copy"><small>กำลังดู · ${enemy ? 'ศัตรู' : 'ฝ่ายเรา'}${typeof level === 'number' ? ` · Lv${level}` : ''}</small><strong>${boss ? bossCrown : ''}<span class="inspector-name">${escapeHtml(name)}</span></strong></span><span class="inspector-hp"><b>${actor.hp} / ${def.maxHp}</b><small>HP${actor.hp <= 0 ? ' · ล้มแล้ว' : ''}</small></span><span aria-hidden="true">ⓘ</span>`);
+    this.set('unit-inspector', `${this.portrait(id)}<span class="inspector-copy"><small>กำลังดู · ${enemy ? 'ศัตรู' : 'ฝ่ายเรา'}${typeof level === 'number' ? ` · Lv${level}` : ''}</small><strong>${boss ? bossCrown : ''}<span class="inspector-name">${escapeHtml(name)}</span>${badges}</strong></span><span class="inspector-hp"><b>${actor.hp} / ${def.maxHp}</b><small>HP${actor.hp <= 0 ? ' · ล้มแล้ว' : ''}</small></span><span aria-hidden="true">ⓘ</span>`);
   }
 
   private renderFieldStatuses(): void {
@@ -616,9 +621,9 @@ export class BattleUI {
       const position = slot.panel, actor = [...s.heroes, ...s.enemies].find(h => h.id === a.id)!;
       const enemy = d.enemies.some(e => e.id === a.id), boss = 'boss' in a && a.boss;
       const label = `${actorName(a.id, d)} · ${rows.map(r => `${r.kind === 'buff' ? 'บัฟ' : 'ดีบัฟ'} ${r.name}: ${r.duration}`).join(' · ')} · รายละเอียดที่ปุ่มข้อมูล แท็บสถานะ`;
-      const tone = healthTone(actor.hp, a.maxHp), ratio = healthRatio(actor.hp, a.maxHp);
+      const tone = healthTone(actor.hp, a.maxHp), ratio = healthRatio(actor.hp, a.maxHp), hpText = `${actor.hp}/${a.maxHp}`;
       const crown = boss ? `<span class="field-boss-crown" data-boss-crown="${a.id}" style="left:${slot.x - 10}px;top:${slot.body.y - 12}px">${bossCrown}</span>` : '';
-      return `${crown}<div class="field-unit-info ${rows.length ? 'has-status' : ''} ${enemy ? 'enemy' : 'ally'}" data-field-unit="${a.id}" data-hp-tone="${tone}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px;--field-icon:${slot.iconSize}px;opacity:${actor.hp > 0 ? 1 : .4}"><span class="field-health" role="img" aria-label="${escapeHtml(actorName(a.id, d))} HP ${actor.hp}/${a.maxHp}"><span class="field-hp-value sr-only">${actor.hp}/${a.maxHp}</span><svg class="field-hp-arc" viewBox="0 0 72 14" preserveAspectRatio="none" aria-hidden="true"><path class="hp-arc-track" d="${frontHealthPath}"/><path class="hp-arc-fill" d="${frontHealthPath}" pathLength="100" stroke-dasharray="${ratio * 100} 100" style="stroke:${healthColors[tone]};opacity:${ratio > 0 ? 1 : 0}"/></svg></span>${rows.length ? `<span class="field-statuses" data-status-actor="${a.id}" role="img" aria-label="${escapeHtml(label)}">${rows.slice(0, slot.maxIcons).map(r => `<span class="field-status ${r.kind}" data-status="${r.id}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > slot.maxIcons ? `<span class="field-status-more" aria-hidden="true">+${rows.length - slot.maxIcons}</span>` : ''}</span>` : ''}</div>`;
+      return `${crown}<div class="field-unit-info ${rows.length ? 'has-status' : ''} ${enemy ? 'enemy' : 'ally'}" data-field-unit="${a.id}" data-hp-tone="${tone}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px;--field-icon:${slot.iconSize}px;opacity:${actor.hp > 0 ? 1 : .4}"><span class="field-health" role="img" aria-label="${escapeHtml(actorName(a.id, d))} HP ${actor.hp}/${a.maxHp}"><span class="field-hp-value" style="font-size:${hpText.length > 9 ? 7 : hpText.length > 7 ? 8 : 9}px">${hpText}</span><svg class="field-hp-bar" viewBox="0 0 72 14" preserveAspectRatio="none" aria-hidden="true"><path class="hp-bar-track" d="${fieldHealthPath}"/><path class="hp-bar-fill" d="${fieldHealthPath}" pathLength="100" stroke-dasharray="${ratio * 100} 100" style="stroke:${healthColors[tone]};opacity:${ratio > 0 ? 1 : 0}"/></svg></span>${rows.length ? `<span class="field-statuses" data-status-actor="${a.id}" role="img" aria-label="${escapeHtml(label)}">${rows.slice(0, slot.maxIcons).map(r => `<span class="field-status ${r.kind}" data-status="${r.id}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > slot.maxIcons ? `<span class="field-status-more" aria-hidden="true">+${rows.length - slot.maxIcons}</span>` : ''}</span>` : ''}</div>`;
     }).join(''));
   }
 

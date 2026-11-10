@@ -56,15 +56,19 @@ test('all six reserved HP/status panels avoid every sprite and each other throug
         const r = boxes[i]!;
         const local = { x:r.x-arena.x, y:r.y-arena.y, width:r.width, height:r.height };
         return !slots.some(s => overlap(local, s.body)) && !boxes.some((b,j) => i!==j && overlap(r,b)) &&
-          [...el.querySelectorAll('.field-status, .field-status-more, .field-health')].every(c => {
+          [...el.querySelectorAll('.field-status, .field-status-more, .field-health, .field-hp-value')].every(c => {
             const b = c.getBoundingClientRect(); return !b.width || b.left>=r.left-.5 && b.right<=r.right+.5 && b.top>=r.top-.5 && b.bottom<=r.bottom+.5 && (!c.classList.contains('field-hp-value') || c.scrollWidth<=c.clientWidth+1);
           });
       });
     }, { arena, slots })).toBe(true);
-    // Both sides use a thin OPEN front curve; all visible names and numbers live in the inspector/HUD.
-    expect(await page.locator('.field-hp-arc').evaluateAll(els => els.length === 6 && els.every(el => {
+    // Both sides use a thin straight track and an overlaid counter; names remain in the inspector.
+    expect(await page.locator('.field-hp-bar').evaluateAll(els => els.length === 6 && els.every(el => {
       const paths = [...el.querySelectorAll('path')];
-      return el.getBoundingClientRect().width >= 32 && paths.length === 2 && paths.every(p => p.getAttribute('d') === 'M 3 2 Q 36 14 69 2' && getComputedStyle(p).strokeWidth === '4px');
+      return el.getBoundingClientRect().width >= 32 && paths.length === 2 && paths.every(p => p.getAttribute('d') === 'M 3 7 H 69' && getComputedStyle(p).strokeWidth === '4px');
+    }))).toBe(true);
+    expect(await page.locator('.field-health').evaluateAll(els => els.every(el => {
+      const value = el.querySelector('.field-hp-value')!.getBoundingClientRect(), track = el.getBoundingClientRect();
+      return value.width > 0 && Math.abs(value.x + value.width / 2 - track.x - track.width / 2) < .5 && Math.abs(value.y + value.height / 2 - track.y - track.height / 2) < .5;
     }))).toBe(true);
     await expect(page.locator('.field-unit-label, .field-unit-name')).toHaveCount(0);
     await expect(page.locator('#action-bash')).toHaveAttribute('aria-pressed', 'true');
@@ -83,9 +87,12 @@ test('status inspection follows each displayed actor stage instead of leaking th
   await page.locator('#battle-info').click(); await page.locator('#status-unit-weaver').click();
   await expect(page.locator('#status-frame')).toContainText('จังหวะที่กำลังแสดง');
   await expect(page.locator('#status-details [data-status=barrier]')).toBeVisible();
+  await expect(page.locator('#unit-inspector [data-inspector-status=barrier]')).toBeVisible();
   await expect(page.locator('[data-status-actor=weaver] [data-status=barrier]')).toHaveCount(1);
   await page.clock.runFor(1000);
   await expect(page.locator('#status-details [data-status=barrier]')).toHaveCount(0);
+  await page.locator('#status-unit-weaver').click();
+  await expect(page.locator('#unit-inspector [data-inspector-status=barrier]')).toHaveCount(0);
   await expect(page.locator('[data-status-actor=weaver]')).toHaveCount(0);
   await expect(page.locator('#battle-tab-status')).toHaveAttribute('aria-selected', 'true');
   expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(committed);
@@ -147,6 +154,8 @@ for (const [width, height, touch] of [[320, 568, true], [390, 844, true], [1366,
     await expect.poll(() => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.battle.commands.length, key)).toBe(3);
     await page.locator('#battle-info').click(); await page.locator('#status-unit-weaver').click();
     await expect(page.locator('#status-details [data-status=barrier]')).toHaveCount(0);
+  await page.locator('#status-unit-weaver').click();
+  await expect(page.locator('#unit-inspector [data-inspector-status=barrier]')).toHaveCount(0);
     expect(issues).toEqual([]); await context.close();
   });
 }
