@@ -1,11 +1,11 @@
 ## 2026-11-10 — Turn-following inspector + 4px HP arcs
-- Branch `codex/battle-inspector-turn-follow` from `7c791f2`; owner requested auto-following turn owner, tapped enemy and next owner, retaining manual inspection.
+- PR [#217](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/217), `codex/battle-inspector-turn-follow`; merged `6bcfa5c` after quality/browser passed. Owner requested turn owner → tapped enemy → next owner, retaining manual inspection.
 - Inspector resets only on stage boundaries/next playable turn, not on contact/render/resize. Manual queue/status choices last for the current turn; full status dialog keeps its independent selected unit.
 - Enemy group actions inspect the concrete tapped unit while preserving the actual `enemies` command. Skip also restores the next owner.
 - Field track/fill stroke increases 2.5→4px on both sides, retaining open front-only curves, 40%/25% colours and original five lower HP cards.
-- Local typecheck/lint/build; full unit 123 files/1662 tests pass (6 skipped); HUD/status browser 9 pass, targeted normal/reduced/area interaction 3 pass again. [Validation](../validation/battle-front-hp/README_TH.md).
+- Local typecheck/lint/build; full unit 123 files/1662 tests pass (6 skipped); HUD/status/keyboard/5v5 browser 14 pass, targeted normal/reduced/area interaction 3 pass again. [Validation](../validation/battle-front-hp/README_TH.md).
 - Actual 390px target-inspection screenshot reviewed. Playwright/system Chromium fallback (Browser tool unavailable); no real-device claim.
-- No battle rules, saves, balance, assets, command validation or combat timing changes. Open: required PR gates + merge.
+- No battle rules, saves, balance, assets, command validation or combat timing changes. Required quality/browser gates passed; open: real-device/owner usability review.
 
 ## 2026-11-10 — Front HP arcs + unit inspector
 - PR [#216](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/216), `codex/battle-front-hp-inspector`; merged `8bb581c` after required quality/browser checks passed. Owner authorized implementation of the approved mockups.

@@ -8,7 +8,8 @@
 - ท่าหมู่คงเป้าหมายคำสั่ง `enemies` ตามเดิม แต่แถบบนแสดงยูนิตจริงที่แตะ; ไม่เปลี่ยนคำสั่งเป็นการโจมตีเดี่ยว
 - เพิ่ม stroke จาก 2.5px เป็น **4px** ทั้ง track/fill ของเส้นหน้าเท้าทั้งสองฝั่ง รูปร่างเปิดและสี 40%/25% เดิม การ์ด HP ล่างคงเดิม
 - ตรวจจริง: เจ้าของเทิร์น → ศัตรูที่ตี → ศัตรูที่ได้เทิร์น → ฮีโร่ถัดไป; เลือกดูเองระหว่างทุกช่วง, ไม่มีคำสั่งเพิ่ม, HP เปลี่ยนเฉพาะ contact, Skip และท่าหมู่ ทั้ง normal/reduced motion
-- Local: typecheck/lint/build; full unit 123 files/1662 tests ผ่าน (6 skipped); browser HUD/status 9 เคสผ่าน และเฉพาะ interaction ล่าสุด 3 เคสผ่านซ้ำ ภาพ 390px ตรวจในเซสชัน; Browser tool ไม่พร้อมจึงใช้ Playwright/system Chromium
+- Local: typecheck/lint/build; full unit 123 files/1662 tests ผ่าน (6 skipped); browser HUD/status/keyboard/5v5 14 เคสผ่าน และเฉพาะ interaction ล่าสุด 3 เคสผ่านซ้ำ ภาพ 390px ตรวจในเซสชัน; Browser tool ไม่พร้อมจึงใช้ Playwright/system Chromium
+- [PR #217](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/217) ผ่าน required quality + browser CI ก่อน merge `6bcfa5c`
 
 ## แบบฐานจาก PR #216
 

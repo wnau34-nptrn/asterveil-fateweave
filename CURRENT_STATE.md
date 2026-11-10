@@ -7,7 +7,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`. Pre-release pushes deploy after lint/unit/build; browser PR gate is path-filtered. Restore Pages browser gate before OD-13 external tests.
 - Save v58; Phaser/TypeScript/Vite, local saves, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked, existing rights preserved. No gacha wallet/accounts/reward ledger; Worker only `/health`.
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3. Rights follow cleared history.
-- Battle HUD: owner-approved front-only thin HP arcs on both sides, upper name/numeric-HP inspector, boss crowns/adaptive scale and original five lower HP cards. Green >40%, orange >25–40%, red ≤25%. Base #216 (`8bb581c`) merged. Owner follow-up: upper inspector follows turn owner → enemy tapped → next owner, manual inspection lasts within the turn, field arcs 4px. Implemented on `codex/battle-inspector-turn-follow`; PR gates pending. [Real screenshots/validation](docs/validation/battle-front-hp/README_TH.md).
+- Battle HUD: owner-approved front-only thin HP arcs on both sides, upper name/numeric-HP inspector, boss crowns/adaptive scale and original five lower HP cards. Green >40%, orange >25–40%, red ≤25%. Base #216 (`8bb581c`) merged. Owner follow-up: upper inspector follows turn owner → enemy tapped → next owner, manual inspection lasts within the turn, field arcs 4px. Merged #217 (`6bcfa5c`) after quality/browser passed. [Real screenshots/validation](docs/validation/battle-front-hp/README_TH.md).
 - MAP quest tabs #213 merged (`da1d508`): existing objective entry opens เป้าหมาย / เควสต์ in one compact scrollable dialog; settled camp-board progress, original MAP1 unlock and camp-only rewards. Implementation follows the owner-approved combined-tab mockup; Quality/browser passed before merge.
 - Skill popup proportions #210 complete (`b1d1d42`); earlier popup/UI #208/#207/#205/#204/#203 and VFX #200 merged. Evidence and tests in handoff log.
 - Owner art delegation 2026-11-04 remains: Claude may decide art picks; record as Claude decision, not owner approval.
@@ -34,7 +34,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Workspace
 
-Cloud checkouts are fresh; verify remote head/ancestry, never reset unpushed work or automatically import checkpoints cc51cd4/bcd6133 or codex/uxd-02-release-notes. MAP quest tabs #213 and thin HP correction #215 are merged. Battle front-arc HUD #216 is merged; checkout `/workspace/asterveil-battle-hud` has the implementation. Keep the separate gacha work unchanged.
+Cloud checkouts are fresh; verify remote head/ancestry, never reset unpushed work or automatically import checkpoints cc51cd4/bcd6133 or codex/uxd-02-release-notes. MAP quest tabs #213 and thin HP correction #215 are merged. Battle front-arc HUD #216 and turn-follow/4px update #217 are merged; checkout `/workspace/asterveil-battle-hud` has the implementation. Keep the separate gacha work unchanged.
 
 ## Opening prompt for next chat
 
