@@ -1,24 +1,12 @@
 export interface FieldBox { x: number; y: number; width: number; height: number }
 export interface FieldSlot {
-  // `label`: where a foe's name stands, just above its painted figure (standard grid only; the HP panel is below the feet).
   x: number; y: number; size: number; body: FieldBox; panel: FieldBox; label?: FieldBox;
   compact: boolean; tiny: boolean; side: boolean; iconSize: number; maxIcons: number;
 }
 
-/** The standard battle grid (owner 2026-10-22: every battle stands on the same spots, nothing shifts between fights).
- * Each side has two columns (heroes: back 0, front 1; foes: front 2, back 3) and three rows (top 0, middle 1,
- * bottom 2). Row heights, column centres and the unit size come from the arena size alone, never from who is in the
- * fight; the rows stand one step apart from the bottom up, so the top row stays on the floor. `slotPlan` decides only
- * which cell each actor takes:
- *   - a column holding one unit stands it in the middle; two take top and bottom; three take all three rows;
- *   - a boss always stands in the middle, a column partner below it;
- *   - a large foe sharing its column stands on the bottom row and is drawn LARGE_SCALE taller from the same feet.
- * Coordinates are arena CSS pixels; each slot reserves its body, its HP/status panel (under the feet) and a foe's
- * name label (above its painted head).
- * Slot ids: heroes 0/1 (back), 2/3 (front), 8 (back middle), 9 (front middle); foes f1 4, f2 5, b1 6, b2 7,
- * f3 10 (front middle), b3 11 (back middle) (P02: five a side, at most three in a column).
- * Fields shorter than three rows of 44px units keep the older two-row short grid (`shortSlots`).
- */
+/** Stable tactical cells: heroes back/front, foes front/back; top/middle/bottom.
+ * Adaptive presentation may spread rows and offset a large boss into an empty cell.
+ * Slot ids are unchanged, including spear shove and encounter phase reservations. */
 export const FOE_SLOT_INDEX: Readonly<Record<string, number>> = { f1: 4, f2: 5, b1: 6, b2: 7, f3: 10, b3: 11 };
 export const LARGE_SCALE = 1.5;
 export type HeroColumn = 'back' | 'front';
@@ -33,110 +21,53 @@ const SLOT_IDS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const;
 const COLUMNS = [.115, .37, .63, .885] as const;
 const UNIT_WIDTH = .295;
 export const UNIT_SCALE = .95;
-const FULL_COLUMNS = [.12, .37, .62, .865] as const;
 const columnOf = (slot: number): number => slot === 8 ? 0 : slot === 9 ? 1 : slot === 10 ? 2 : slot === 11 ? 3 : slot >> 1;
 export const partner = (slot: number): number => slot % 2 ? slot - 1 : slot + 1;
 
-// `rise`: how far each slot's painted figure rises above its feet, as a fraction of its size (`figureRise`); a foe's
-// name label sits just above that. Missing = 1 (a figure filling its frame), the case the row spacing is built for.
-export interface SlotLayout { large: ReadonlySet<number>; rows: ReadonlyMap<number, Row>; trio: ReadonlySet<HeroColumn | FoeColumn>; rise?: ReadonlyMap<number, number> }
+// Rise is measured from each illustration's painted top to its sole. Reserve all encounter
+// cells (including phase summons), so deaths/summons never move surviving units.
+export interface SlotLayout { large: ReadonlySet<number>; rows: ReadonlyMap<number, Row>; trio: ReadonlySet<HeroColumn | FoeColumn>; rise?: ReadonlyMap<number, number>; used?: readonly number[] }
 const none: SlotLayout = { large: new Set(), rows: new Map(), trio: new Set() };
 
-// A body box overshoots its feet by 4% of its size (contact shadow); rows keep that clear of the next panel.
-const below = (size: number) => Math.ceil(size * .04) + 2;
-// The largest unit size whose three rows (body + panel) fit the field height.
-// Every HP/status panel sits under the feet (owner 2026-10-22: the same height for every unit); only a foe's name
-// stands above its head. Rows are spaced for a figure that fills its frame (rise 1): its name label then still clears
-// the panel of the unit above.
-const FLOOR = .38, LABEL = 13, TRIO_STEP = .62;
-const reach = (size: number) => size + 4 + LABEL + 2;
-const stepOf = (size: number, panel: number) => reach(size) + panel + below(size);
-// The largest unit size whose three rows (name + body + panel) fit between the backdrop's floor line (the top row's
-// feet at FLOOR of the height) and the field's bottom edge.
-// `floor` false drops the floor-line rule (rows may start above the backdrop's floor) for shorter fields, which
-// would otherwise fall back to the tiny two-row grid on phones with a tall status bar.
-const fitSize = (width: number, height: number, panel: number, floor = true) => {
-  let size = Math.floor(Math.min(140, width * UNIT_WIDTH));
-  while (size > 0 && (3 * stepOf(size, panel) > height - 2 || floor && 2 * stepOf(size, panel) > height - 2 - panel - below(size) - Math.max(height * FLOOR, reach(size)))) size--;
-  return size;
-};
-
+/** Front-only HP arcs need their own clear band. Fit the largest base size first while
+ * retaining a 1.5× boss; on very short fields cap its scale before reducing normal units
+ * below 44px. Row heights follow the tallest painted figure, never overlapping an arc.
+ * This is presentation geometry only: tactical slot ids and targeting remain unchanged. */
 export function fieldSlots(width: number, height: number, layout: SlotLayout = none): FieldSlot[] {
-  // A 30px panel: the HP number over a centred bar, small status icons under it.
-  const panel = 30, fitted = Math.max(fitSize(width, height, panel), fitSize(width, height, panel, false));
-  if (fitted < 44) return shortSlots(width, height, layout);
-  // Every unit stands at one size whether a column holds two or three (owner 2026-10-23): the largest size up to the
-  // width cap whose top row keeps its head and name inside the field and whose rows leave a column of three
-  // `TRIO_STEP` of its size between feet (a trio's upper heads then overlap the HP panel above only a little).
-  // The grid is anchored to the bottom: the bottom row's feet just above the field's edge; rows spread up to where the
-  // backdrop's floor begins (the top row's feet at FLOOR of the height) when that leaves room.
-  const widthCap = Math.max(fitted, Math.min(140, Math.floor(width * UNIT_WIDTH)));
-  const geometry = (u: number) => {
-    const bottom = height - 2 - panel - below(u), available = (bottom - (u * 1.03 + 4 + LABEL + 2)) / 2;
-    const spread = (bottom - Math.max(height * FLOOR, reach(u))) / 2;
-    // At the three-row fit itself rows keep the full panel clearance, as before.
-    return { bottom, available, step: u <= fitted ? Math.max(stepOf(u, panel), spread) : Math.min(available, Math.max(u * TRIO_STEP + panel + below(u), spread)) };
+  const used = layout.used ?? SLOT_IDS;
+  const rowOf = (id: number): Row => layout.rows.get(id) ?? (id >= 8 ? 1 : id % 2 ? 2 : 0);
+  const panel = 14, gap = 8, edge = height < 240 ? 4 : 8;
+  const cap = Math.floor(Math.min(140, width * UNIT_WIDTH) * UNIT_SCALE);
+  const geometry = (base: number, scale: number) => {
+    const rises = [0, 1, 2].map(row => Math.max(base * 1.022, ...used.filter(id => rowOf(id) === row).map(id =>
+      base * (layout.large.has(id) ? scale : 1) * (layout.rise?.get(id) ?? 1) * 1.022 + (layout.large.has(id) ? 12 : 0))));
+    return { rises, required: edge * 2 + rises.reduce((a, b) => a + b, 0) + 3 * panel + 2 * gap };
   };
-  let size = widthCap;
-  while (size > fitted && geometry(size).available < size * TRIO_STEP + panel + below(size)) size--;
-  // Owner 2026-10-31 (P02, ten on the field): every unit is drawn UNIT_SCALE of the fitted size; rows keep their spacing.
-  const step = geometry(size).step; size = Math.floor(size * UNIT_SCALE); const bottom = geometry(size).bottom;
-  const rows = [bottom - 2 * step, bottom - step, bottom];
-  const cellWidth = width * .22, iconSize = 12, compact = false;
-  const maxIcons = Math.min(3, Math.floor((cellWidth - 18) / (iconSize + 2)));
-  return SLOT_IDS.map(slot => {
-    const row = layout.rows.get(slot) ?? (slot >= 8 ? 1 : slot % 2 ? 2 : 0), y = rows[row]!;
-    const x = width * COLUMNS[columnOf(slot)]!;
-    // A large foe grows up from the same feet as far as LARGE_SCALE allows while its name stays inside the field and
-    // below the panel of a unit standing higher in its column.
-    const above = [...layout.rows].filter(([other, r]) => other !== slot && columnOf(other) === columnOf(slot) && r < row).map(([, r]) => rows[r]!);
-    const ceiling = above.length ? Math.max(...above) + below(size) + panel : 0;
-    const rise = Math.min(1, layout.rise?.get(slot) ?? 1);
-    const drawn = layout.large.has(slot) ? Math.floor(Math.max(size, Math.min(size * LARGE_SCALE, (y - ceiling - 4 - LABEL - 2) / rise))) : size;
-    const top = y - drawn * 1.03 - 4;
+  let scale = LARGE_SCALE;
+  // The minimum is a visual size, not a control size (hit targets stay >=44px).
+  while (scale > 1 && geometry(Math.min(44, cap), scale).required > height) scale = Math.max(1, Math.round((scale - .05) * 100) / 100);
+  let base = cap;
+  while (base > 1 && geometry(base, scale).required > height) base--;
+  const { rises, required } = geometry(base, scale);
+  const extra = Math.max(0, height - required), stepExtra = extra / 3;
+  const rows: number[] = [];
+  let cursor = edge + stepExtra;
+  for (let row = 0; row < 3; row++) { cursor += rises[row]!; rows.push(cursor); cursor += panel + gap + stepExtra; }
+  return SLOT_IDS.map(id => {
+    const large = layout.large.has(id), size = base * (large ? scale : 1), row = rowOf(id), y = rows[row]!;
+    let x = width * COLUMNS[columnOf(id)]!;
+    // A large front-middle foe may borrow the empty back-middle cell, keeping clear
+    // of the opposing front hero. Never borrow a cell occupied by a reserve or shove.
+    const backMiddle = used.some(other => columnOf(other) === 3 && rowOf(other) === 1);
+    if (large && columnOf(id) === 2 && row === 1 && !backMiddle) x += Math.min(base * .33, width * .09);
+    const cellWidth = Math.min(width * .22, Math.max(64, base * .78));
+    const rise = layout.rise?.get(id) ?? 1;
     return {
-      x, y, size: drawn, compact, tiny: false, side: false, iconSize, maxIcons,
-      body: { x: x - drawn * .51, y: top, width: drawn * 1.02, height: drawn * 1.07 + 4 },
-      panel: { x: x - cellWidth / 2, y: y + below(size), width: cellWidth, height: panel },
-      label: { x: x - cellWidth / 2, y: y - rise * drawn - 4 - LABEL - 2, width: cellWidth, height: LABEL },
+      x, y, size, compact: base < 70, tiny: base < 44, side: false, iconSize: 12, maxIcons: 1,
+      body: { x: x - size * .5, y: y - size * rise * 1.022, width: size, height: size * rise * 1.022 },
+      panel: { x: x - cellWidth / 2, y: y + 2, width: cellWidth, height: panel - 2 },
     };
   });
-}
-
-// Short fields (keyboard-raised or landscape PC windows): two rows of small units with a side badge; a column of
-// three spreads over the height. Large foes draw at the normal size.
-function shortSlots(width: number, height: number, layout: SlotLayout): FieldSlot[] {
-  const tiny = height < 180, side = height < 150, compact = true;
-  const iconSize = side ? 12 : tiny ? 14 : 18, panelHeight = side ? 26 : tiny ? 18 : 32;
-  const top = 4, gap = 4, rowHeight = (height - top - gap - 4) / 2;
-  const slots = SLOT_IDS.map(id => {
-    const slot = id >= 8 ? ({ 8: 0, 9: 2, 10: 4, 11: 6 } as Record<number, number>)[id]! : id;
-    const enemy = slot >= 4, front = slot >= 2 && slot <= 5, row = slot % 2;
-    const cellWidth = width * .24;
-    const x = width * FULL_COLUMNS[enemy ? (front ? 2 : 3) : front ? 1 : 0] - (side ? 14 : 0);
-    const panelY = top + row * (rowHeight + gap) + rowHeight - panelHeight + (front ? 3 : 0);
-    const size = side ? 44 : Math.max(44, Math.min(100, cellWidth - 8, rowHeight - panelHeight - 8));
-    const y = side ? top + row * (rowHeight + gap) + rowHeight - 3 + (front ? 3 : 0) : panelY - 5;
-    return {
-      x, y, size, compact, tiny, side, iconSize, maxIcons: 1,
-      body: { x: x - size * .51, y: y - size * 1.03 - 4, width: size * 1.02, height: size * 1.07 + 4 },
-      panel: side ? { x: x + 24, y: y - 26, width: 26, height: 26 } : { x: x - cellWidth / 2, y: panelY, width: cellWidth, height: panelHeight },
-    };
-  });
-  for (const column of layout.trio) {
-    const ids = TRIO_SLOTS[column], base = slots[ids[0]]!, size = 44, step = (height - 8) / 3;
-    // The side badge must end before the next column's panels (the shortest fields already badge all).
-    // Foe columns mirror the hero columns on the right half.
-    const x = base.side ? base.x : column === 'back' ? Math.max(23, Math.min(base.x, width * .25 - 51)) : column === 'front' ? Math.max(width * .24 + 23, Math.min(base.x, width * .5 - 51))
-      : column === 'foeFront' ? Math.max(width * .5 + 23, Math.min(base.x, width * .75 - 51)) : Math.max(width * .76 + 23, Math.min(base.x, width - 51));
-    const first = Math.max(4 + step - 3, 1.03 * size + 3);
-    ids.forEach((slot, k) => {
-      const y = first + k * (height - 3 - first) / 2;
-      slots[slot] = { x, y, size, compact, tiny: base.tiny, side: true, iconSize: 12, maxIcons: 1,
-        body: { x: x - size * .51, y: y - size * 1.03 - 4, width: size * 1.02, height: size * 1.07 + 4 }, panel: { x: x + 24, y: y - 26, width: 26, height: 26 } };
-    });
-  }
-  return slots;
 }
 
 export interface SlotPlan extends SlotLayout { heroSlots: Map<string, number>; used: number[] }
@@ -160,22 +91,23 @@ export function slotPlan(heroes: readonly { id: string; lane: HeroColumn }[], fo
   for (const [name, column] of [['foeFront', TRIO_SLOTS.foeFront], ['foeBack', TRIO_SLOTS.foeBack]] as const) {
     const here = column.flatMap(i => standing.filter(e => FOE_SLOT_INDEX[e.id] === i));
     const boss = here.find(e => e.boss), big = here.filter(e => e.large);
-    // P02: a column of three stands on all three rows (a boss in the middle); large foes keep the normal size there.
+    // A boss stays in the middle; adaptive geometry reserves its larger painted rise.
     if (here.length === 3) {
       trio.add(name);
       const middle = boss ?? here.find(e => FOE_SLOT_INDEX[e.id] === column[1]) ?? here[1]!;
       const rest = here.filter(e => e !== middle);
       rows.set(FOE_SLOT_INDEX[rest[0]!.id]!, 0); rows.set(FOE_SLOT_INDEX[middle.id]!, 1); rows.set(FOE_SLOT_INDEX[rest[1]!.id]!, 2);
+      for (const foe of here) if (foe.large || foe.boss) large.add(FOE_SLOT_INDEX[foe.id]!);
       continue;
     }
-    if (here.length === 1) { rows.set(FOE_SLOT_INDEX[here[0]!.id]!, 1); if (here[0]!.large) large.add(FOE_SLOT_INDEX[here[0]!.id]!); continue; }
+    if (here.length === 1) { rows.set(FOE_SLOT_INDEX[here[0]!.id]!, 1); if (here[0]!.large || here[0]!.boss) large.add(FOE_SLOT_INDEX[here[0]!.id]!); continue; }
     if (here.length !== 2) continue;
     // A boss takes the middle, its partner the bottom; otherwise a lone large foe takes the bottom.
     const lower = boss ? here.find(e => e !== boss)! : big.length === 1 ? big[0]! : here[1]!;
     const upper = here.find(e => e !== lower)!;
     rows.set(FOE_SLOT_INDEX[upper.id]!, boss ? 1 : 0); rows.set(FOE_SLOT_INDEX[lower.id]!, 2);
-    if (upper.large) large.add(FOE_SLOT_INDEX[upper.id]!);
-    if (lower.large) large.add(FOE_SLOT_INDEX[lower.id]!);
+    if (upper.large || upper.boss) large.add(FOE_SLOT_INDEX[upper.id]!);
+    if (lower.large || lower.boss) large.add(FOE_SLOT_INDEX[lower.id]!);
   }
   return { heroSlots, used, rows, large, trio };
 }

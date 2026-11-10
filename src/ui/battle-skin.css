@@ -62,11 +62,7 @@
 #field-banner[data-kind="all"] { border-color: #ff6f7d; color: #ffd4c8; }
 /* Standard grid (owner 2026-10-22): the HP number over a centred bar under the feet, small status icons below it;
    a foe's name stands just above its painted head. */
-#battle-view .field-unit-info.grid { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 1px; }
-#battle-view .field-unit-info.grid .field-health { width: 52px; }
-#battle-view .field-unit-info.grid.ally .field-health { margin-top: 2px; }
-#battle-view .field-unit-info.grid .field-statuses { gap: 1px; }
-.field-unit-label { position: absolute; display: flex; align-items: flex-end; justify-content: center; pointer-events: none; font-size: 9px; line-height: 11px; color: #f0f5ff; text-shadow: 0 1px 2px #07101f, 1px 0 2px #07101f; }
+
 /* Incoming damage kind (owner request 2026-11-05): physical = amber blade, energy/เวท = violet bolt. Shape + word, not colour alone. */
 .dmg-kind, .dmg-pill { --kind: #f0b060; --kind-bg: #3a2810; }
 .dmg-kind[data-kind="energy"], .dmg-pill[data-kind="energy"], .intent-icon[data-kind="energy"] { --kind: #c6a8ff; --kind-bg: #2a1d4a; }

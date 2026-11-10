@@ -39,8 +39,6 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 #battle-view .turn-slot.current-turn .portrait { border-color: #f2d596; box-shadow: 0 0 10px #f2d59688; }
 #battle-view .turn-slot.current-turn::after { content: ''; position: absolute; top: 0; left: 18px; border: 4px solid transparent; border-top-color: #f2d596; pointer-events: none; }
 #battle-view .turn-slot.blocked-turn::before { content: '×'; position: absolute; right: 0; bottom: 0; color: #ffb9c5; background: #28121b; border-radius: 50%; width: 16px; text-align: center; pointer-events: none; z-index: 1; }
-#turn-detail { position: fixed; inset: auto; margin: 0; width: min(320px, calc(var(--game-w) - 16px)); padding: 10px 54px 10px 12px; color: #eef4ff; background: #10253af5; border: 1px solid #718ba7; border-radius: 12px; font-size: 13px; }
-#turn-detail button { position: absolute; right: 2px; top: 0; width: 44px; padding: 0; }
 
 /* The same centred command dock is used by touch and mouse. HP remains legible for waiting allies. */
 #battle-view .decision-panel { border: 0; margin: 0; border-radius: 16px 16px 0 0; background: linear-gradient(180deg, #0c1c30e8, #07111df5); }
@@ -389,3 +387,19 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
   .hud-summary .hud-team { flex-basis: 60px; width: 60px; }
   .hud-summary .hud-pack { flex-basis: 88px; width: 88px; padding-inline: 4px; }
 }
+
+/* Read-only inspector takes real layout space below the queue; the battlefield keeps
+   only thin front HP arcs. Bottom allied name/HP cards retain their original layout. */
+#battle-view .unit-inspector { display: flex; align-items: center; gap: 7px; flex: 0 0 44px; min-height: 44px; width: 100%; padding: 2px 10px; border: 0; border-block: 1px solid #728eaa38; border-radius: 0; background: #102333e8; text-align: left; color: #e8eff8; }
+.unit-inspector .portrait { width: 30px; height: 30px; flex: 0 0 30px; }
+.inspector-copy { display: flex; flex-direction: column; flex: 1; min-width: 0; line-height: 1.2; }
+.inspector-copy small { font-size: 9px; color: #acc0d1; }
+.inspector-copy strong { display: flex; align-items: center; gap: 4px; font-size: 12px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.inspector-hp { display: flex; flex-direction: column; text-align: right; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.inspector-hp b { font-size: 12px; }
+.inspector-hp small { font-size: 8px; color: #acc0d1; }
+.unit-inspector[data-hp-tone="green"] .inspector-hp b { color: #68d8ad; }
+.unit-inspector[data-hp-tone="orange"] .inspector-hp b { color: #ffad54; }
+.unit-inspector[data-hp-tone="red"] .inspector-hp b { color: #f16d79; }
+.inspector-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+#turn-order .turn-icon[aria-pressed="true"] { outline: 1px solid #b9e7ff; outline-offset: 2px; }

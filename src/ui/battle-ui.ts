@@ -17,6 +17,7 @@ import { damageKindOf, kindGlyph, kindPill } from './damage-kind';
 import { infoTabs, selectInfoTab } from './info-tabs';
 import { foeProfile, unitStatuses } from './battle-status';
 import { battleLesson } from './tutorial';
+import { bossCrown, frontHealthPath, healthColors, healthRatio, healthTone } from './battle-health';
 import { heroVoice } from './story-ui';
 
 const tutorialKey = 'asterveil.fateweave.tutorial.v1';
@@ -77,6 +78,7 @@ export class BattleUI {
       </header>
       <main>
         <section id="turn-phase" class="turn-phase" role="status" aria-live="polite" aria-label="เทิร์นการต่อสู้"></section>
+        <button id="unit-inspector" data-ui="inspect-details" class="unit-inspector" aria-label="รายละเอียดสถานะยูนิตที่กำลังดู" aria-haspopup="dialog" aria-controls="game-info"></button>
         <aside id="battle-coach" class="battle-coach" aria-label="คำแนะนำจากทีม" hidden><span id="coach-face" class="coach-face" aria-hidden="true"></span><div class="coach-content"><strong id="coach-title"></strong><p id="coach-copy" aria-live="polite"></p></div><button id="coach-dismiss" data-ui="coach-dismiss" class="quiet" aria-label="ปิดคำใบ้สอนเล่น">×</button></aside>
         <div class="battle-layout">
           <section class="battle-board" aria-label="สถานการณ์การต่อสู้">
@@ -103,7 +105,6 @@ export class BattleUI {
         <footer><span>เจ้าของเทิร์น → เลือกสกิล → แตะเป้าหมายในสนาม</span><span id="save-status"></span></footer>
       </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div>${infoTabs('battle', true, true)}<div class="info-content"><section id="battle-panel-status" role="tabpanel" aria-labelledby="battle-tab-status"><p class="status-help">เลือกยูนิตเพื่อดูบัฟและดีบัฟ · ตรวจดูได้โดยไม่ใช้เทิร์น</p><p id="status-frame" class="status-frame"></p><div id="status-units" class="status-units" role="group" aria-label="เลือกยูนิตที่ต้องการตรวจสถานะ"></div><section id="status-details" aria-live="polite" aria-atomic="true"></section></section><section id="battle-panel-settings" role="tabpanel" aria-labelledby="battle-tab-settings" hidden><section class="battle-sound" aria-labelledby="battle-sound-title"><h3 id="battle-sound-title">เพลงและเสียงเอฟเฟกต์</h3><div id="battle-sfx-controls"></div></section><section id="combat-settings" class="tutorial-settings" aria-label="ตั้งค่าภาพการต่อสู้"></section><section id="tutorial-settings" class="tutorial-settings" aria-label="ตั้งค่าคำใบ้สอนเล่น"></section></section><section id="battle-panel-guide" role="tabpanel" aria-labelledby="battle-tab-guide" hidden><section id="info-skill"></section><div id="info-host"></div></section><section id="battle-panel-history" role="tabpanel" aria-labelledby="battle-tab-history" hidden><h3>บันทึกการต่อสู้</h3><ol id="event-log" role="log" aria-live="polite"></ol></section></div></dialog>
 
-      <section id="turn-detail" popover="auto" role="dialog" aria-label="รายละเอียดลำดับเทิร์น"><p></p><button data-ui="turn-close" class="quiet" aria-label="ปิดรายละเอียดเทิร์น">×</button></section>
       <section id="skill-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="skill-title" aria-describedby="skill-copy skill-availability" tabindex="-1"><div class="skill-popover-heading"><h2 id="skill-title"></h2><button data-ui="skill-close" class="quiet" aria-label="ปิดคำอธิบายสกิล">✕</button></div><p id="skill-copy"></p><p id="skill-availability"></p><small>อ่านแล้วแตะเป้าหมายในสนามเพื่อใช้สกิล</small></section>
       <dialog id="cooldown-choice" aria-labelledby="cooldown-choice-title"><h2 id="cooldown-choice-title"></h2><p id="cooldown-choice-copy"></p><div id="cooldown-choice-options" class="cooldown-choices"></div><button data-ui="cooldown-cancel" class="quiet">ยกเลิก · ยังไม่ใช้เทิร์น</button></dialog>`;
     root.addEventListener('click', e => {
@@ -120,15 +121,18 @@ export class BattleUI {
           const tab = this.root.querySelector<HTMLButtonElement>('#battle-tab-status')!; selectInfoTab(tab);
           this.root.querySelector<HTMLDialogElement>('#game-info')!.showModal(); tab.focus({ preventScroll: true }); break;
         }
+        case 'inspect-details': {
+          this.renderStatuses(); selectInfoTab(this.root.querySelector<HTMLButtonElement>('#battle-tab-status')!);
+          this.root.querySelector<HTMLDialogElement>('#game-info')!.showModal(); break;
+        }
         case 'status-unit': if (value) { this.inspectedActorId = value; this.renderStatuses(); this.root.querySelector<HTMLElement>(`#status-unit-${value}`)?.focus({ preventScroll: true }); } break;
         case 'info-close': this.root.querySelector<HTMLDialogElement>('#game-info')!.close(); break;
         case 'start': if (this.session && !this.started) { this.started = true; this.present(beginBattle(this.data, this.session.entry, true)); } break;
         case 'hero': if (value) this.selectHero(value); break;
-        case 'action': if (value && !this.busy && this.started && this.state.outcome === 'active' && this.data.heroes.find(h => h.id === currentHeroId(this.state, this.data))?.actions.includes(value as ActionId)) { this.closeSkill(); this.root.querySelector<HTMLElement>('#turn-detail:popover-open')?.hidePopover(); this.action = value as ActionId; this.targeting = true; this.render(); } break;
+        case 'action': if (value && !this.busy && this.started && this.state.outcome === 'active' && this.data.heroes.find(h => h.id === currentHeroId(this.state, this.data))?.actions.includes(value as ActionId)) { this.closeSkill(); this.action = value as ActionId; this.targeting = true; this.render(); } break;
         case 'skill-info': this.showSkill(); break;
         case 'cancel-action': this.cancelAction(); break;
         case 'turn-info': this.showTurnInfo(button); break;
-        case 'turn-close': this.root.querySelector<HTMLElement>('#turn-detail')!.hidePopover(); break;
         case 'skill-close': this.closeSkill(true); break;
         case 'cooldown-cancel': this.root.querySelector<HTMLDialogElement>('#cooldown-choice')!.close(); break;
         case 'cooldown-action': if (value) this.finishCooldownChoice({ cooldownAction: value as ActionId }); break;
@@ -179,7 +183,7 @@ export class BattleUI {
       if (!action) return;
       e.preventDefault(); this.closeSkill(); this.root.querySelector<HTMLButtonElement>(`#action-${action}`)?.click();
     });
-    new ResizeObserver(() => { this.positionSkill(); this.placeBackdrop(); this.root.querySelector<HTMLElement>('#turn-detail:popover-open')?.hidePopover(); }).observe(root);
+    new ResizeObserver(() => { this.positionSkill(); this.placeBackdrop(); }).observe(root);
     document.addEventListener('visibilitychange', () => {
       if (document.hidden && this.busy) this.finishPresentation(false);
     });
@@ -203,6 +207,7 @@ export class BattleUI {
     this.state = replay(session.data, session.commands, session.entry);
     this.started = session.commands.length > 0;
     this.heroId = currentHeroId(this.state, this.data) ?? this.state.heroes.find(h => h.hp > 0)?.id ?? this.data.heroes[0]!.id;
+    this.inspectedActorId = this.heroId;
     this.messages = [this.started ? 'กลับมาต่อสู้จากจังหวะที่บันทึกไว้' : `${kindLabel[session.kind]} · ${session.data.name}`];
     this.saved = true;
     this.render(); this.scene?.refreshLayout();
@@ -318,11 +323,9 @@ export class BattleUI {
     const def = d.heroes.find(h => h.id === id) ?? d.enemies.find(e => e.id === id);
     const actor = this.displayState.heroes.find(h => h.id === id) ?? this.displayState.enemies.find(e => e.id === id);
     if (!def || !actor) return;
-    const popup = this.root.querySelector<HTMLElement>('#turn-detail')!;
-    popup.querySelector('p')!.textContent = `${actorName(id, d)} · SPD ${def.speed} · เลือด ${actor.hp}/${def.maxHp}`;
-    popup.showPopover(); const bounds = gameBounds(), anchor = button.getBoundingClientRect();
-    popup.style.left = `${Math.max(bounds.left + 8, Math.min(bounds.right - popup.offsetWidth - 8, anchor.left))}px`;
-    popup.style.top = `${Math.min(bounds.bottom - popup.offsetHeight - 8, anchor.bottom + 4)}px`;
+    this.inspectedActorId = id;
+    this.renderStatuses(); this.renderInspector();
+    // Queue inspection never changes the selected skill, turn owner, or command log.
   }
 
   private closeSkill(returnFocus = false): void {
@@ -479,7 +482,7 @@ export class BattleUI {
         index === 0 && this.stage?.events.some(e => e.type === 'cancel'));
       const slotKind = slot.side === 'enemy' && !blocked ? damageKindOf(enemyIntent(s, this.data, slot.actorId, slot.round)) : undefined;
       const label = blocked ? 'หยุด' : index === 0 ? 'ตอนนี้' : slot.round > s.round ? `รอบ ${slot.round}` : index === 1 ? 'ถัดไป' : 'รอ';
-      return `<li class="turn-slot ${slot.side} ${blocked ? 'blocked-turn' : ''} ${index === 0 ? 'current-turn' : ''} ${slot.round > s.round ? 'later-round' : ''}" data-actor="${slot.actorId}" data-round="${slot.round}" ${index === 0 ? 'aria-current="step"' : ''} aria-label="${index === 0 ? 'ตอนนี้' : `ลำดับ ${index + 1}`} ${actorName(slot.actorId, this.data)} ความเร็ว ${slot.speed} รอบ ${slot.round}${blocked ? ' ถูกขัดจังหวะ' : ''}"><button data-ui="turn-info" data-value="${slot.actorId}" class="turn-icon" title="${escapeHtml(actorName(slot.actorId, this.data))} · SPD ${slot.speed}" aria-label="${escapeHtml(actorName(slot.actorId, this.data))} · SPD ${slot.speed}${blocked ? ' · ถูกขัดจังหวะ' : ''}${slotKind ? ` · โจมตี${slotKind === 'energy' ? 'เวท' : 'กายภาพ'}` : ''}">${this.portrait(slot.actorId)}${slotKind ? kindGlyph(slotKind) : ''}</button><b class="turn-speed" aria-hidden="true">${slot.speed}</b><span class="sr-only"><b>${actorName(slot.actorId, this.data)}</b><small>${label} · ${slot.speed}</small></span></li>`;
+      return `<li class="turn-slot ${slot.side} ${blocked ? 'blocked-turn' : ''} ${index === 0 ? 'current-turn' : ''} ${slot.round > s.round ? 'later-round' : ''}" data-actor="${slot.actorId}" data-round="${slot.round}" ${index === 0 ? 'aria-current="step"' : ''} aria-label="${index === 0 ? 'ตอนนี้' : `ลำดับ ${index + 1}`} ${actorName(slot.actorId, this.data)} ความเร็ว ${slot.speed} รอบ ${slot.round}${blocked ? ' ถูกขัดจังหวะ' : ''}"><button data-ui="turn-info" data-value="${slot.actorId}" class="turn-icon" aria-pressed="${slot.actorId === this.inspectedActorId}" title="${escapeHtml(actorName(slot.actorId, this.data))} · SPD ${slot.speed}" aria-label="${escapeHtml(actorName(slot.actorId, this.data))} · SPD ${slot.speed}${blocked ? ' · ถูกขัดจังหวะ' : ''}${slotKind ? ` · โจมตี${slotKind === 'energy' ? 'เวท' : 'กายภาพ'}` : ''}">${this.portrait(slot.actorId)}${slotKind ? kindGlyph(slotKind) : ''}</button><b class="turn-speed" aria-hidden="true">${slot.speed}</b><span class="sr-only"><b>${actorName(slot.actorId, this.data)}</b><small>${label} · ${slot.speed}</small></span></li>`;
     }).join('')}</ol>` : '<p>จบการต่อสู้แล้ว</p>');
   }
 
@@ -524,7 +527,7 @@ export class BattleUI {
       const hud = hudTargets.get(h.id);
       const hudLabel = hud ? ` aria-label="${escapeHtml(`ใช้${d.skills[this.action].name}กับ${targetKind(this.action) === 'party' ? 'ทั้งทีม โดยแตะ' : ''}${text.name} · เลือด ${hero.hp}/${h.maxHp}${!hud.valid ? ` · ${reasonThai(hud.reason)}` : ''}`)}"` : '';
       const skills = h.actions.filter(a => a !== 'attack');
-      return `<button id="hero-${h.id}" data-ui="${hud ? 'target' : 'hero'}" data-value="${h.id}" data-lane="${h.lane}" class="hero-card ${h.id} ${hud ? `hud-target${hud.valid ? ' valid-target' : ''}` : ''} ${hero.hp <= 0 ? 'fallen' : ''} ${selected ? 'selected' : 'waiting-turn'} ${this.actingActor === h.id ? 'active-actor' : ''}" aria-pressed="${selected}"${hudLabel} ${hud ? (hud.valid ? '' : 'disabled') : disabled || hero.hp <= 0 || waiting ? 'disabled' : ''}><span class="hero-emblem">${this.portrait(h.id)}</span><span class="hero-copy"><span class="hero-class"><b>${h.lane === 'front' ? 'FRONT' : 'BACK'}</b> ${text.role}</span><strong>${text.name}</strong>${hud?.valid ? '<span class="hud-cast-cue" aria-hidden="true">ร่าย</span>' : ''}<span class="hero-hp"><span class="hp-amount"><span class="hp-label">HP</span> ${hero.hp} / ${h.maxHp}</span>${hero.barrier ? `<small class="barrier-info">โล่ ${hero.barrier}</small>` : ''}${hero.evading ? '<small class="barrier-info">ก้าวเงา</small>' : ''}${s.taunt?.heroId === h.id ? '<small class="barrier-info">ยั่วยุ</small>' : ''}${s.song?.heroId === h.id ? `<small class="barrier-info">${d.skills[s.song.action].name}</small>` : ''}${s.rally?.ids.includes(h.id) ? '<small class="barrier-info">ตั้งรับหมู่</small>' : ''}${s.sanctuary?.targetId === h.id ? '<small class="barrier-info">คุ้มภัย</small>' : ''}${s.counter?.heroId === h.id && s.counter.wall ? '<small class="barrier-info">กำแพงทวน</small>' : ''}${fatigueDot(h.fatigue)}${hero.hp <= 0 ? ' · ล้มแล้ว' : ''}</span><span class="hp-track"><span style="width:${hero.hp / h.maxHp * 100}%"></span></span></span><span class="hero-skills">${skills.map(action => {
+      return `<button id="hero-${h.id}" data-ui="${hud ? 'target' : 'hero'}" data-value="${h.id}" data-lane="${h.lane}" class="hero-card ${h.id} ${hud ? `hud-target${hud.valid ? ' valid-target' : ''}` : ''} ${hero.hp <= 0 ? 'fallen' : ''} ${selected ? 'selected' : 'waiting-turn'} ${this.actingActor === h.id ? 'active-actor' : ''}" aria-pressed="${selected}"${hudLabel} ${hud ? (hud.valid ? '' : 'disabled') : disabled || hero.hp <= 0 || waiting ? 'disabled' : ''}><span class="hero-emblem">${this.portrait(h.id)}</span><span class="hero-copy"><span class="hero-class"><b>${h.lane === 'front' ? 'FRONT' : 'BACK'}</b> ${text.role}</span><strong>${text.name}</strong>${hud?.valid ? '<span class="hud-cast-cue" aria-hidden="true">ร่าย</span>' : ''}<span class="hero-hp"><span class="hp-amount"><span class="hp-label">HP</span> ${hero.hp} / ${h.maxHp}</span>${hero.barrier ? `<small class="barrier-info">โล่ ${hero.barrier}</small>` : ''}${hero.evading ? '<small class="barrier-info">ก้าวเงา</small>' : ''}${s.taunt?.heroId === h.id ? '<small class="barrier-info">ยั่วยุ</small>' : ''}${s.song?.heroId === h.id ? `<small class="barrier-info">${d.skills[s.song.action].name}</small>` : ''}${s.rally?.ids.includes(h.id) ? '<small class="barrier-info">ตั้งรับหมู่</small>' : ''}${s.sanctuary?.targetId === h.id ? '<small class="barrier-info">คุ้มภัย</small>' : ''}${s.counter?.heroId === h.id && s.counter.wall ? '<small class="barrier-info">กำแพงทวน</small>' : ''}${fatigueDot(h.fatigue)}${hero.hp <= 0 ? ' · ล้มแล้ว' : ''}</span><span class="hp-track"><span style="width:${healthRatio(hero.hp, h.maxHp) * 100}%;background:${healthColors[healthTone(hero.hp, h.maxHp)]}"></span></span></span><span class="hero-skills">${skills.map(action => {
         const remaining = Math.max(0, (hero.cooldowns[action] ?? 0) - s.round);
         const available = targetOptions(s, d, h.id, action).some(t => t.valid);
         const status = hero.hp <= 0 ? 'ล้มแล้ว' : s.outcome !== 'active' ? 'จบแล้ว' : waiting ? 'รอเทิร์น' : remaining ? `รอ ${remaining} รอบ` : available ? 'พร้อมใช้' : action === 'heal' || action === 'prayer' ? 'เลือดเต็ม' : action === 'ward' ? 'โล่เต็ม' : action === 'finale' ? 'ยังไม่มีเพลง' : 'ยังใช้ไม่ได้';
@@ -578,19 +581,34 @@ export class BattleUI {
     if (banner.textContent !== copy) banner.textContent = copy;
   }
 
+  private renderInspector(): void {
+    const s = this.displayState, d = this.data;
+    const id = this.inspectedActorId;
+    const def = d.heroes.find(h => h.id === id) ?? d.enemies.find(e => e.id === id);
+    const actor = [...s.heroes, ...s.enemies].find(a => a.id === id);
+    if (!def || !actor) return;
+    const enemy = d.enemies.some(e => e.id === id), boss = 'boss' in def && def.boss;
+    const level = enemy ? d.level : undefined;
+    const name = enemy && 'displayName' in def ? def.displayName ?? def.name : enemy ? def.name : actorName(id, d);
+    const node = this.root.querySelector<HTMLElement>('#unit-inspector')!;
+    node.dataset.actor = id; node.dataset.side = enemy ? 'enemy' : 'ally';
+    node.dataset.hpTone = healthTone(actor.hp, def.maxHp);
+    node.setAttribute('aria-label', `${actorName(id, d)} HP ${actor.hp}/${def.maxHp} · เปิดรายละเอียดสถานะ`);
+    for (const button of this.root.querySelectorAll<HTMLButtonElement>('#turn-order .turn-icon')) button.setAttribute('aria-pressed', String(button.dataset.value === id));
+    this.set('unit-inspector', `${this.portrait(id)}<span class="inspector-copy"><small>กำลังดู · ${enemy ? 'ศัตรู' : 'ฝ่ายเรา'}${typeof level === 'number' ? ` · Lv${level}` : ''}</small><strong>${boss ? bossCrown : ''}<span class="inspector-name">${escapeHtml(name)}</span></strong></span><span class="inspector-hp"><b>${actor.hp} / ${def.maxHp}</b><small>HP${actor.hp <= 0 ? ' · ล้มแล้ว' : ''}</small></span><span aria-hidden="true">ⓘ</span>`);
+  }
+
   private renderFieldStatuses(): void {
     const s = this.displayState, d = this.data;
     this.set('field-statuses', !this.started || !this.scene ? '' : [...d.heroes, ...d.enemies].map(a => {
       const slot = this.scene!.actorPanels.get(a.id), rows = unitStatuses(s, d, a.id);
       if (!slot) return '';
       const position = slot.panel, actor = [...s.heroes, ...s.enemies].find(h => h.id === a.id)!;
-      const enemy = d.enemies.some(e => e.id === a.id);
+      const enemy = d.enemies.some(e => e.id === a.id), boss = 'boss' in a && a.boss;
       const label = `${actorName(a.id, d)} · ${rows.map(r => `${r.kind === 'buff' ? 'บัฟ' : 'ดีบัฟ'} ${r.name}: ${r.duration}`).join(' · ')} · รายละเอียดที่ปุ่มข้อมูล แท็บสถานะ`;
-      // Standard grid: a foe's name stands above its head, every HP/status panel under the feet (owner 2026-10-22).
-      const full = actorName(a.id, d);
-      const name = `<span class="field-unit-name" title="${escapeHtml(full)}">${escapeHtml(full)}</span>`, above = slot.label && enemy ? slot.label : undefined;
-      const tag = above ? `<div class="field-unit-label" data-field-label="${a.id}" style="left:${above.x}px;top:${above.y}px;width:${above.width}px;height:${above.height}px;opacity:${actor.hp > 0 ? 1 : .4}">${name}</div>` : '';
-      return `${tag}<div class="field-unit-info ${slot.compact ? 'compact' : ''} ${slot.tiny ? 'tiny' : ''} ${slot.side ? 'side' : ''} ${slot.label ? 'grid' : ''} ${enemy ? 'enemy' : 'ally'}" data-field-unit="${a.id}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px;--field-icon:${slot.iconSize}px;opacity:${actor.hp > 0 ? 1 : .4}">${slot.label ? '' : name}<span class="field-health" aria-label="${escapeHtml(actorName(a.id, d))} HP ${actor.hp}/${a.maxHp}"><span class="field-hp-value">${actor.hp}/${a.maxHp}</span><span class="field-hp-track"><span style="width:${actor.hp / a.maxHp * 100}%;background:#${a.color.toString(16).padStart(6, '0')}"></span></span></span>${rows.length ? `<span class="field-statuses" data-status-actor="${a.id}" role="img" aria-label="${escapeHtml(label)}">${rows.slice(0, slot.maxIcons).map(r => `<span class="field-status ${r.kind}" data-status="${r.id}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > slot.maxIcons ? `<span class="field-status-more" aria-hidden="true">+${rows.length - slot.maxIcons}</span>` : ''}</span>` : ''}</div>`;
+      const tone = healthTone(actor.hp, a.maxHp), ratio = healthRatio(actor.hp, a.maxHp);
+      const crown = boss ? `<span class="field-boss-crown" data-boss-crown="${a.id}" style="left:${slot.x - 10}px;top:${slot.body.y - 12}px">${bossCrown}</span>` : '';
+      return `${crown}<div class="field-unit-info ${rows.length ? 'has-status' : ''} ${enemy ? 'enemy' : 'ally'}" data-field-unit="${a.id}" data-hp-tone="${tone}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height}px;--field-icon:${slot.iconSize}px;opacity:${actor.hp > 0 ? 1 : .4}"><span class="field-health" role="img" aria-label="${escapeHtml(actorName(a.id, d))} HP ${actor.hp}/${a.maxHp}"><span class="field-hp-value sr-only">${actor.hp}/${a.maxHp}</span><svg class="field-hp-arc" viewBox="0 0 72 14" preserveAspectRatio="none" aria-hidden="true"><path class="hp-arc-track" d="${frontHealthPath}"/><path class="hp-arc-fill" d="${frontHealthPath}" pathLength="100" stroke-dasharray="${ratio * 100} 100" style="stroke:${healthColors[tone]};opacity:${ratio > 0 ? 1 : 0}"/></svg></span>${rows.length ? `<span class="field-statuses" data-status-actor="${a.id}" role="img" aria-label="${escapeHtml(label)}">${rows.slice(0, slot.maxIcons).map(r => `<span class="field-status ${r.kind}" data-status="${r.id}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > slot.maxIcons ? `<span class="field-status-more" aria-hidden="true">+${rows.length - slot.maxIcons}</span>` : ''}</span>` : ''}</div>`;
     }).join(''));
   }
 
@@ -606,6 +624,7 @@ export class BattleUI {
       return `<button id="status-unit-${a.id}" data-ui="status-unit" data-value="${a.id}" class="status-unit ${ally ? 'ally' : 'enemy'}" aria-pressed="${a.id === this.inspectedActorId}">${this.portrait(a.id)}<span><strong>${escapeHtml(actorName(a.id, d))}${ally ? fatigueDot((a as { fatigue?: number }).fatigue) : ''}</strong><small>${ally ? 'ฝ่ายเรา' : 'ศัตรู'} · ${actor.hp <= 0 ? 'ล้มแล้ว' : 'HP ' + actor.hp + '/' + a.maxHp}</small><span class="status-mini" role="img" aria-label="${rows.length ? escapeHtml(rows.map(r => (r.kind === 'buff' ? 'บัฟ ' : 'ดีบัฟ ') + r.name).join(' · ')) : 'ไม่มีสถานะชั่วคราว'}">${rows.slice(0, 3).map(r => `<span class="${r.kind}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > 3 ? '<small>+' + (rows.length - 3) + '</small>' : ''}</span></span></button>`;
     }).join(''));
     const id = this.inspectedActorId, def = actors.find(a => a.id === id)!, actor = states.find(a => a.id === id)!;
+    this.renderInspector();
     const rows = unitStatuses(s, d, id);
     this.set('status-details', `<div class="status-selected">${this.portrait(id)}<div><h3>${escapeHtml(actorName(id, d))}</h3><p>HP ${actor.hp} / ${def.maxHp}${actor.hp <= 0 ? ' · ล้มแล้ว' : ''}</p></div></div>${this.foeSheet(id)}${def && 'role' in def ? fatigueSection((def as { fatigue?: number }).fatigue) : ''}${rows.length ? (['buff', 'debuff'] as const).map(kind => {
       const group = rows.filter(r => r.kind === kind);
