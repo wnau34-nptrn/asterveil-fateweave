@@ -64,7 +64,7 @@ test('all six reserved HP/status panels avoid every sprite and each other throug
     // Both sides use a thin OPEN front curve; all visible names and numbers live in the inspector/HUD.
     expect(await page.locator('.field-hp-arc').evaluateAll(els => els.length === 6 && els.every(el => {
       const paths = [...el.querySelectorAll('path')];
-      return el.getBoundingClientRect().width >= 32 && paths.length === 2 && paths.every(p => p.getAttribute('d') === 'M 3 2 Q 36 14 69 2' && getComputedStyle(p).strokeWidth === '2.5px');
+      return el.getBoundingClientRect().width >= 32 && paths.length === 2 && paths.every(p => p.getAttribute('d') === 'M 3 2 Q 36 14 69 2' && getComputedStyle(p).strokeWidth === '4px');
     }))).toBe(true);
     await expect(page.locator('.field-unit-label, .field-unit-name')).toHaveCount(0);
     await expect(page.locator('#action-bash')).toHaveAttribute('aria-pressed', 'true');
