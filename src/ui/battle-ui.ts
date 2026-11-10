@@ -49,6 +49,7 @@ export class BattleUI {
   private pendingCooldown: { beat: number; heroId: string; action: ActionId; targetId: string } | undefined;
   private targeting = true;
   private inspectedActorId = '';
+  private fieldInspectedActorId = '';
   private started: boolean;
   private busy = false;
   private canvasInputAfterInfo = 0;
@@ -117,15 +118,15 @@ export class BattleUI {
       const value = button.dataset.value;
       switch (button.dataset.ui) {
         case 'info': {
-          this.inspectedActorId = this.heroId; this.renderStatuses();
+          this.inspectedActorId = this.fieldInspectedActorId; this.renderStatuses();
           const tab = this.root.querySelector<HTMLButtonElement>('#battle-tab-status')!; selectInfoTab(tab);
           this.root.querySelector<HTMLDialogElement>('#game-info')!.showModal(); tab.focus({ preventScroll: true }); break;
         }
         case 'inspect-details': {
-          this.renderStatuses(); selectInfoTab(this.root.querySelector<HTMLButtonElement>('#battle-tab-status')!);
+          this.inspectedActorId = this.fieldInspectedActorId; this.renderStatuses(); selectInfoTab(this.root.querySelector<HTMLButtonElement>('#battle-tab-status')!);
           this.root.querySelector<HTMLDialogElement>('#game-info')!.showModal(); break;
         }
-        case 'status-unit': if (value) { this.inspectedActorId = value; this.renderStatuses(); this.root.querySelector<HTMLElement>(`#status-unit-${value}`)?.focus({ preventScroll: true }); } break;
+        case 'status-unit': if (value) { this.inspectedActorId = value; this.fieldInspectedActorId = value; this.renderStatuses(); this.root.querySelector<HTMLElement>(`#status-unit-${value}`)?.focus({ preventScroll: true }); } break;
         case 'info-close': this.root.querySelector<HTMLDialogElement>('#game-info')!.close(); break;
         case 'start': if (this.session && !this.started) { this.started = true; this.present(beginBattle(this.data, this.session.entry, true)); } break;
         case 'hero': if (value) this.selectHero(value); break;
@@ -207,7 +208,7 @@ export class BattleUI {
     this.state = replay(session.data, session.commands, session.entry);
     this.started = session.commands.length > 0;
     this.heroId = currentHeroId(this.state, this.data) ?? this.state.heroes.find(h => h.hp > 0)?.id ?? this.data.heroes[0]!.id;
-    this.inspectedActorId = this.heroId;
+    this.inspectedActorId = this.heroId; this.fieldInspectedActorId = this.heroId;
     this.messages = [this.started ? 'กลับมาต่อสู้จากจังหวะที่บันทึกไว้' : `${kindLabel[session.kind]} · ${session.data.name}`];
     this.saved = true;
     this.render(); this.scene?.refreshLayout();
@@ -237,6 +238,8 @@ export class BattleUI {
       : targetKind(this.action) === 'enemies' && this.state.enemies.some(e => e.id === id && e.hp > 0) ? 'enemies' : id;
     const target = targetOptions(this.state, this.data, this.heroId, this.action).find(t => t.id === actualTarget);
     if (target?.valid) {
+      // Retain the concrete unit tapped even when the command targets all enemies.
+      if (this.data.enemies.some(e => e.id === id)) { this.fieldInspectedActorId = id; this.renderInspector(); }
       if (!this.openCooldownChoice(actualTarget)) this.execute(actualTarget);
     } else if (targetKind(this.action) === 'enemy' && this.data.heroes.some(h => h.id === id)) this.selectHero(id);
   }
@@ -323,7 +326,7 @@ export class BattleUI {
     const def = d.heroes.find(h => h.id === id) ?? d.enemies.find(e => e.id === id);
     const actor = this.displayState.heroes.find(h => h.id === id) ?? this.displayState.enemies.find(e => e.id === id);
     if (!def || !actor) return;
-    this.inspectedActorId = id;
+    this.inspectedActorId = id; this.fieldInspectedActorId = id;
     this.renderStatuses(); this.renderInspector();
     // Queue inspection never changes the selected skill, turn owner, or command log.
   }
@@ -381,7 +384,7 @@ export class BattleUI {
         ...turn.events.map(event => eventThai(event, turn.after!, this.data)));
       return this.messages.length;
     });
-    if (!result.turns.length) { this.busy = false; this.heroId = currentHeroId(this.state, this.data) ?? this.heroId; this.render(); return; }
+    if (!result.turns.length) { this.busy = false; this.heroId = currentHeroId(this.state, this.data) ?? this.heroId; this.fieldInspectedActorId = this.heroId; this.render(); return; }
     this.busy = true;
     const first = result.turns[0]!;
     this.presentation = { phase: first.side, index: 0, resolution: result, frame: first.before!, logEnds, revealed: false, logStart };
@@ -394,6 +397,11 @@ export class BattleUI {
     const turn = playback.resolution.turns[playback.index]!;
     playback.phase = turn.side; playback.frame = turn.before!; playback.revealed = false;
     if (turn.side === 'hero') this.heroId = turn.actorId;
+    // Reset the field inspector only at a turn boundary, never on contact/resize.
+    // A hero's enemy action shows that target through its displayed HP change;
+    // other stages default to their owner. Manual inspection lasts until the next stage.
+    const enemyTarget = this.data.enemies.find(e => e.id === (turn.targetId === 'enemies' ? this.fieldInspectedActorId : turn.targetId));
+    this.fieldInspectedActorId = turn.side === 'hero' && enemyTarget ? enemyTarget.id : turn.actorId;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const timing = stageTiming(turn, reduced, this.combatPrefs.speed === 'fast', this.session?.kind === 'boss');
     this.scene?.configureEffects(this.combatPrefs, reduced);
@@ -438,7 +446,9 @@ export class BattleUI {
     this.playback.cancel(); this.scene?.stopEffects();
     if (audible && !document.hidden && this.state.outcome !== 'active') this.playback.own(sfx.play(this.state.outcome === 'victory' ? 'victory' : 'defeat'));
     this.presentation = undefined; this.busy = false;
-    this.heroId = currentHeroId(this.state, this.data) ?? this.heroId;
+    const nextHero = currentHeroId(this.state, this.data);
+    this.heroId = nextHero ?? this.heroId;
+    this.fieldInspectedActorId = nextHero ?? this.fieldInspectedActorId;
     this.action = 'attack'; this.targeting = true; this.render();
     if (this.state.outcome === 'active' && !document.hidden && !this.root.closest('[inert]') && !this.root.querySelector('dialog[open]')) this.root.querySelector<HTMLElement>('#action-attack')?.focus({ preventScroll: true });
   }
@@ -482,7 +492,7 @@ export class BattleUI {
         index === 0 && this.stage?.events.some(e => e.type === 'cancel'));
       const slotKind = slot.side === 'enemy' && !blocked ? damageKindOf(enemyIntent(s, this.data, slot.actorId, slot.round)) : undefined;
       const label = blocked ? 'หยุด' : index === 0 ? 'ตอนนี้' : slot.round > s.round ? `รอบ ${slot.round}` : index === 1 ? 'ถัดไป' : 'รอ';
-      return `<li class="turn-slot ${slot.side} ${blocked ? 'blocked-turn' : ''} ${index === 0 ? 'current-turn' : ''} ${slot.round > s.round ? 'later-round' : ''}" data-actor="${slot.actorId}" data-round="${slot.round}" ${index === 0 ? 'aria-current="step"' : ''} aria-label="${index === 0 ? 'ตอนนี้' : `ลำดับ ${index + 1}`} ${actorName(slot.actorId, this.data)} ความเร็ว ${slot.speed} รอบ ${slot.round}${blocked ? ' ถูกขัดจังหวะ' : ''}"><button data-ui="turn-info" data-value="${slot.actorId}" class="turn-icon" aria-pressed="${slot.actorId === this.inspectedActorId}" title="${escapeHtml(actorName(slot.actorId, this.data))} · SPD ${slot.speed}" aria-label="${escapeHtml(actorName(slot.actorId, this.data))} · SPD ${slot.speed}${blocked ? ' · ถูกขัดจังหวะ' : ''}${slotKind ? ` · โจมตี${slotKind === 'energy' ? 'เวท' : 'กายภาพ'}` : ''}">${this.portrait(slot.actorId)}${slotKind ? kindGlyph(slotKind) : ''}</button><b class="turn-speed" aria-hidden="true">${slot.speed}</b><span class="sr-only"><b>${actorName(slot.actorId, this.data)}</b><small>${label} · ${slot.speed}</small></span></li>`;
+      return `<li class="turn-slot ${slot.side} ${blocked ? 'blocked-turn' : ''} ${index === 0 ? 'current-turn' : ''} ${slot.round > s.round ? 'later-round' : ''}" data-actor="${slot.actorId}" data-round="${slot.round}" ${index === 0 ? 'aria-current="step"' : ''} aria-label="${index === 0 ? 'ตอนนี้' : `ลำดับ ${index + 1}`} ${actorName(slot.actorId, this.data)} ความเร็ว ${slot.speed} รอบ ${slot.round}${blocked ? ' ถูกขัดจังหวะ' : ''}"><button data-ui="turn-info" data-value="${slot.actorId}" class="turn-icon" aria-pressed="${slot.actorId === this.fieldInspectedActorId}" title="${escapeHtml(actorName(slot.actorId, this.data))} · SPD ${slot.speed}" aria-label="${escapeHtml(actorName(slot.actorId, this.data))} · SPD ${slot.speed}${blocked ? ' · ถูกขัดจังหวะ' : ''}${slotKind ? ` · โจมตี${slotKind === 'energy' ? 'เวท' : 'กายภาพ'}` : ''}">${this.portrait(slot.actorId)}${slotKind ? kindGlyph(slotKind) : ''}</button><b class="turn-speed" aria-hidden="true">${slot.speed}</b><span class="sr-only"><b>${actorName(slot.actorId, this.data)}</b><small>${label} · ${slot.speed}</small></span></li>`;
     }).join('')}</ol>` : '<p>จบการต่อสู้แล้ว</p>');
   }
 
@@ -583,7 +593,7 @@ export class BattleUI {
 
   private renderInspector(): void {
     const s = this.displayState, d = this.data;
-    const id = this.inspectedActorId;
+    const id = this.fieldInspectedActorId;
     const def = d.heroes.find(h => h.id === id) ?? d.enemies.find(e => e.id === id);
     const actor = [...s.heroes, ...s.enemies].find(a => a.id === id);
     if (!def || !actor) return;

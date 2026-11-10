@@ -16,10 +16,11 @@ import '../../../src/ui/game-feel.css';
 import '../../../src/ui/portrait.css';
 import '../../../src/ui/components.css';
 
+const enemyAfterHero = new URLSearchParams(location.search).has('enemy-after-hero');
 const data: EncounterDefinition = { ...structuredClone(veilSiege), id: 'hud-qa', level: 4,
   heroes: [...heroes, mercenaries.find(h => h.id === 'garran')!].map((h, i) => ({ ...h, maxHp: 100, speed: i === 1 ? 200 : 110 - i })),
   enemies: [
-    { id: 'f1', row: 'front', boss: true, large: true, name: 'ราชาผู้เฝ้ารอยแยก', art: 'foe_golem', maxHp: 500, speed: 100, color: 0xff7777 },
+    { id: 'f1', row: 'front', boss: true, large: true, name: 'ราชาผู้เฝ้ารอยแยก', art: 'foe_golem', maxHp: 500, speed: enemyAfterHero ? 190 : 100, color: 0xff7777 },
     { id: 'f2', row: 'front', name: 'ด้วงหนาม', art: 'foe_thorn_beetle', maxHp: 100, speed: 90, color: 0x77ff77 },
     { id: 'f3', row: 'front', name: 'ด้วงหนาม', art: 'foe_thorn_beetle', maxHp: 100, speed: 85, color: 0x77ff77 },
     { id: 'b1', row: 'back', name: 'ภูตสปอร์', art: 'foe_spore_puff', maxHp: 100, speed: 80, color: 0x77ff77 },

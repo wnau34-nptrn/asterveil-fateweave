@@ -65,3 +65,78 @@ test('five allies and a large front-middle boss: front arcs, safe inspection, or
   expect(await page.evaluate(() => localStorage.getItem('hud-committed'))).toBe(committed);
   expect(errors).toEqual([]);
 });
+
+for (const reducedMotion of ['no-preference', 'reduce'] as const) test(`inspector follows turn owner, enemy target and next owner with manual overrides (${reducedMotion})`, async ({ browser }, info) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, reducedMotion });
+  const page = await context.newPage(), errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  try {
+    await page.clock.install({ time: new Date('2026-11-10T00:00:00Z') });
+    await page.goto('tests/browser/fixtures/battle-hud.html?enemy-after-hero');
+    await expect(page.locator('#start')).toBeEnabled(); await page.locator('#start').click();
+    await expect(page.locator('#action-attack')).toBeEnabled();
+    await page.clock.pauseAt(new Date('2026-11-10T00:01:00Z'));
+    const inspector = page.locator('#unit-inspector');
+    await expect(inspector).toHaveAttribute('data-actor', 'tracer');
+    const entry = await page.evaluate(() => localStorage.getItem('hud-committed'));
+    // Queue clicks are still read-only and remain selected within the same turn.
+    await page.locator('#turn-order [data-value=guardian]').first().click();
+    await expect(inspector).toHaveAttribute('data-actor', 'guardian');
+    await page.locator('#action-mark').click(); await page.locator('#action-attack').click();
+    await expect(inspector).toHaveAttribute('data-actor', 'guardian');
+    expect(await page.evaluate(() => localStorage.getItem('hud-committed'))).toBe(entry);
+    expect(await page.locator('.field-hp-arc path').evaluateAll(els => els.length === 20 && els.every(el => getComputedStyle(el).strokeWidth === '4px'))).toBe(true);
+    await page.locator('#target-f2').click();
+    await expect(inspector).toHaveAttribute('data-actor', 'f2');
+    const committed = await page.evaluate(() => localStorage.getItem('hud-committed'));
+    expect(JSON.parse(committed!).commands).toHaveLength(1);
+    if (reducedMotion === 'no-preference') {
+      await expect(inspector).toContainText('100 / 100');
+      await page.clock.runFor(209); await expect(inspector).toContainText('100 / 100');
+      await page.clock.runFor(1);
+    }
+    await expect(inspector).toContainText('84 / 100');
+    await page.screenshot({ path: info.outputPath(`inspected-target-${reducedMotion}-390.png`) });
+    await page.locator('#turn-order [data-value=weaver]').first().click();
+    await expect(inspector).toHaveAttribute('data-actor', 'weaver');
+    await page.clock.runFor(reducedMotion === 'reduce' ? 599 : 389);
+    await expect(inspector).toHaveAttribute('data-actor', 'weaver');
+    await page.clock.runFor(1);
+    // The enemy actually taking its turn differs from the enemy just attacked.
+    await expect(page.locator('#turn-phase')).toHaveAttribute('data-actor', 'f1');
+    await expect(inspector).toHaveAttribute('data-actor', 'f1');
+    await expect(inspector.locator('.boss-crown')).toHaveCount(1);
+    await page.locator('#turn-order [data-value=b1]').first().click();
+    await expect(inspector).toHaveAttribute('data-actor', 'b1');
+    await page.clock.runFor(1199); await expect(inspector).toHaveAttribute('data-actor', 'b1');
+    await page.clock.runFor(1);
+    await expect(page.locator('#action-attack')).toBeEnabled();
+    await expect(inspector).toHaveAttribute('data-actor', 'guardian');
+    expect(await page.evaluate(() => localStorage.getItem('hud-committed'))).toBe(committed);
+    // Skip uses the same boundary reset, including a manually inspected unit.
+    await page.locator('#target-f2').click(); await expect(inspector).toHaveAttribute('data-actor', 'f2');
+    await page.locator('#turn-order [data-value=b2]').first().click();
+    await expect(inspector).toHaveAttribute('data-actor', 'b2');
+    await page.locator('#skip-turn').click();
+    await expect(inspector).toHaveAttribute('data-actor', 'weaver');
+    expect(JSON.parse((await page.evaluate(() => localStorage.getItem('hud-committed')))!).commands).toHaveLength(2);
+    expect(errors).toEqual([]);
+  } finally { await context.close(); }
+});
+
+
+test('an area attack keeps the concrete enemy tapped in the inspector', async ({ page }) => {
+  await page.clock.install({ time: new Date('2026-11-10T00:00:00Z') });
+  await page.goto('tests/browser/fixtures/blade.html?skill=sweep');
+  await page.locator('#start').click(); await expect(page.locator('#action-sweep')).toBeEnabled();
+  await page.clock.pauseAt(new Date('2026-11-10T00:01:00Z'));
+  await page.locator('#action-sweep').click();
+  const target = page.locator('.field-target.valid-target').last();
+  const id = await target.getAttribute('data-actor');
+  await target.click();
+  await expect(page.locator('#unit-inspector')).toHaveAttribute('data-actor', id!);
+  const committed = await page.evaluate(() => localStorage.getItem('blade-committed'));
+  expect(JSON.parse(committed!).commands).toHaveLength(1);
+  expect(JSON.parse(committed!).commands[0].targetId).toBe('enemies');
+  await page.locator('#skip-turn').click();
+  await expect(page.locator('#unit-inspector')).toHaveAttribute('data-actor', (await page.locator('#turn-phase').getAttribute('data-actor'))!);
+});
