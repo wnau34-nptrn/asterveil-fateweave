@@ -307,7 +307,7 @@ export class BattleScene extends Phaser.Scene {
     // the rules say they stand.
     const at = (id: string) => standSlotId(this.view!.state, id);
     const plan = slotPlan(this.encounter.heroes, this.encounter.enemies.map(e => ({ ...e, id: at(e.id) })), new Set(this.encounter.phases?.flatMap(p => p.summon ?? []).map(at)));
-    // Each HP panel sits just above its own painted figure (per-illustration headroom).
+    // Fit painted figures and their front HP bands using per-illustration headroom.
     const rise = new Map([...plan.heroSlots].map(([id, slot]) => [slot, figureRise(artOf(this.encounter, id))] as const)
       .concat(this.encounter.enemies.map(e => [FOE_SLOT_INDEX[at(e.id)]!, figureRise(artOf(this.encounter, e.id))] as const)));
     const slots = fieldSlots(w, h, { ...plan, rise }), heroSlots = plan.heroSlots;
@@ -337,13 +337,8 @@ export class BattleScene extends Phaser.Scene {
     body.setAlpha(hp <= 0 ? this.corpseAlpha(id) : involved ? 1 : 0.55);
     info.setAlpha(hp <= 0 ? 0.4 : involved ? 1 : 0.75);
     const g = this.add.graphics(); body.add(g);
-    const selected = this.view!.heroId === id;
-    // A contact shadow and selection ring share the same foot anchor.
-    g.fillStyle(0x07131f, .65); g.fillEllipse(0, 0, size * .65, size * .12);
-    if (selected && hp > 0) { g.lineStyle(2, palette.gold); g.strokeEllipse(0, 0, size * .68, size * .14); }
-    if (id === this.view!.activeActorId && hp > 0) {
-      g.lineStyle(3, enemy ? 0xf19b9f : palette.cyan); g.strokeEllipse(0, 0, size * .72, size * .16);
-    }
+    // A neutral contact shadow is separate from the DOM front-only HP arc.
+    g.fillStyle(0x07131f, .5); g.fillEllipse(0, 0, size * .6, size * .1);
     const key = artOf(this.encounter, id); const art = actorArt[key]!;
     const ratio = unitDisplayRatio(key);
     // Packed animation atlases already face their side (A9 Matriarch, A10 Raider); only the static seed cell is mirrored.
@@ -371,18 +366,12 @@ export class BattleScene extends Phaser.Scene {
     // Input stays at the slot origin while the disposable body lunges/recoils.
     hit.on('pointerdown', () => this.choose(id)); info.add(hit);
   }
-  // Idle life: a soft aura under the feet (cyan for heroes, rift violet for foes, brighter for the acting unit),
-  // gentle breathing out of phase per unit, and rift motes rising around foes. Off under reduced motion.
+  // Idle life: gentle breathing and rift motes; no rear ring behind the front-only HP arc.
   private liven(id: string, body: Phaser.GameObjects.Container, sprite: Phaser.GameObjects.Image, size: number, enemy: boolean, active: boolean): void {
-    const tint = enemy ? 0xb072ff : active ? palette.cyan : 0x7fd6ff;
-    const aura = this.add.ellipse(0, -2, size * .78, size * .2, tint, active ? .42 : .22).setBlendMode(Phaser.BlendModes.ADD);
-    body.addAt(aura, 1);
     if (this.quiet || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const phase = [...id].reduce((a, c) => a + c.charCodeAt(0), 0) % 1000;
     const sx = sprite.scaleX, sy = sprite.scaleY;
     this.idle.push(this.tweens.add({ targets: sprite, scaleY: sy * 1.022, scaleX: sx * .992, duration: 1500 + phase % 600, delay: phase, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
-    this.idle.push(this.tweens.add({ targets: aura, alpha: active ? .62 : .36, scaleX: 1.08, duration: 1300 + phase % 500, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
-    if (active) this.idle.push(this.tweens.add({ targets: sprite, y: sprite.y - 4, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
     // Rift motes: a few sparks drifting up through each foe.
     const motes = enemy ? 4 : active ? 3 : 0;
     for (let i = 0; i < motes; i++) {

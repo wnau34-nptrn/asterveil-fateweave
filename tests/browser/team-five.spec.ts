@@ -40,8 +40,7 @@ for (const id of ['rift-legion', 'thorn-host']) test(`5v5 field ${id} at 390px: 
   expect(cards).toHaveLength(5); expect(new Set(cards.map(Math.round)).size).toBe(1);
   await expect(page.locator('#intent')).not.toBeEmpty();
   // Owner: identical foes keep the same name; no ก/ข/ค suffix on the field or queue.
-  const spiritNames = page.locator('[data-field-label^=b] .field-unit-name');
-  if (id === 'rift-legion') expect(await spiritNames.allTextContents()).toEqual(Array(3).fill('Lv8 วิญญาณรอยแยก'));
+  await expect(page.locator('[data-field-label]')).toHaveCount(0);
   expect(await page.locator('#turn-order .turn-icon').evaluateAll(els => els.map(e => e.getAttribute('aria-label')).filter(t => / [กขค] · SPD/.test(t ?? '')))).toEqual([]);
   // All ten turns remain available at native touch size. Keyboard focus scrolls the last one into view;
   // inspection must not issue a command or change the save.
@@ -50,7 +49,8 @@ for (const id of ['rift-legion', 'thorn-host']) test(`5v5 field ${id} at 390px: 
   const beforeInspect = await page.evaluate(k => localStorage.getItem(k), key);
   const lastTurn = page.locator('#turn-order .turn-icon').last();
   await lastTurn.focus(); await page.keyboard.press('Enter');
-  await expect(page.locator('#turn-detail')).toBeVisible();
+  await expect(page.locator('#unit-inspector')).toHaveAttribute('data-actor', (await lastTurn.getAttribute('data-value'))!);
+  await expect(page.locator('#unit-inspector')).toContainText('HP');
   expect(await lastTurn.evaluate(el => { const a = el.getBoundingClientRect(), b = el.closest('ol')!.getBoundingClientRect(); return a.left >= b.left && a.right <= b.right; })).toBe(true);
   await page.keyboard.press('Escape');
   expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(beforeInspect);

@@ -44,7 +44,7 @@ test('all six reserved HP/status panels avoid every sprite and each other throug
       const sample = document.querySelector('.field-status')!.outerHTML;
       for (const el of els) {
         el.querySelector('.field-statuses')?.remove();
-        const icons = el.classList.contains('compact') ? 1 : Math.min(3, Math.floor((el.clientWidth - 18) / 20));
+        const icons = 1; el.classList.add('has-status');
         const row = document.createElement('span'); row.className = 'field-statuses';
         row.innerHTML = sample.repeat(icons) + '<span class="field-status-more">+9</span>'; el.append(row);
       }
@@ -56,17 +56,17 @@ test('all six reserved HP/status panels avoid every sprite and each other throug
         const r = boxes[i]!;
         const local = { x:r.x-arena.x, y:r.y-arena.y, width:r.width, height:r.height };
         return !slots.some(s => overlap(local, s.body)) && !boxes.some((b,j) => i!==j && overlap(r,b)) &&
-          [...el.querySelectorAll('.field-status, .field-status-more, .field-health, .field-hp-value, .field-unit-name')].every(c => {
+          [...el.querySelectorAll('.field-status, .field-status-more, .field-health')].every(c => {
             const b = c.getBoundingClientRect(); return !b.width || b.left>=r.left-.5 && b.right<=r.right+.5 && b.top>=r.top-.5 && b.bottom<=r.bottom+.5 && (!c.classList.contains('field-hp-value') || c.scrollWidth<=c.clientWidth+1);
           });
       });
     }, { arena, slots })).toBe(true);
-    // Counters overlap the centre of the original thin track, without thickening it to fit the text.
-    expect(await page.locator('.field-unit-info.enemy:not(.side) .field-health').evaluateAll(els => els.every(el => {
-      const value = el.querySelector('.field-hp-value')!.getBoundingClientRect();
-      const track = el.querySelector('.field-hp-track')!.getBoundingClientRect();
-      return value.width > 0 && value.left >= track.left - .5 && value.right <= track.right + .5 && track.height >= 3 && track.height <= 4 && Math.abs(value.y + value.height / 2 - track.y - track.height / 2) <= .5;
+    // Both sides use a thin OPEN front curve; all visible names and numbers live in the inspector/HUD.
+    expect(await page.locator('.field-hp-arc').evaluateAll(els => els.length === 6 && els.every(el => {
+      const paths = [...el.querySelectorAll('path')];
+      return el.getBoundingClientRect().width >= 32 && paths.length === 2 && paths.every(p => p.getAttribute('d') === 'M 3 2 Q 36 14 69 2' && getComputedStyle(p).strokeWidth === '2.5px');
     }))).toBe(true);
+    await expect(page.locator('.field-unit-label, .field-unit-name')).toHaveCount(0);
     await expect(page.locator('#action-bash')).toHaveAttribute('aria-pressed', 'true');
     expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(before);
     await page.screenshot({ path: info.outputPath(`reserved-status-${width}-${forceShort ? 'short' : 'normal'}.png`) });
