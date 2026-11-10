@@ -9,9 +9,9 @@
 - ป้ายบนแสดงไอคอนสถานะจริงจาก `unitStatuses(displayState)` ของยูนิตที่กำลังดู: บัฟเขียว/ดีบัฟแดง แสดงอย่างละประเภทเมื่อมีทั้งคู่ สูงสุด 2 ไอคอนและ +จำนวนที่เหลือ ไม่ใช้ไอคอนตัวอย่างจาก mockup เป็นข้อมูลจริง
 - แตะป้าย/ไอคอนเพื่อเปิดรายละเอียดเดิม รายการครบและชื่อ/ระยะเวลามี accessible label/title; ป้ายยังสูง 44px และมีพื้นที่ให้ชื่อกับ HP ไม่ทับไอคอน
 - คงการติดตามเจ้าของเทิร์น → ศัตรูที่แตะ → เจ้าของเทิร์นถัดไป และการเลือกดูเองตาม #217; HP/ไอคอนอ่านจาก snapshot ที่แสดง ไม่เปิดเผยผลลัพธ์ล่วงหน้าก่อน contact
-- Local: typecheck/lint/build และ focused HP/layout/status unit 12 เคสผ่าน; HUD/status/keyboard/5v5 browser 16 เคสผ่าน รวม buff+debuff+overflow และตัวเลข 9999/9999 ที่ 320/390px, read-only inspection, staged expiration, normal/reduced motion และ 5v5/keyboard regression
+- Local: typecheck/lint/build, full unit 123 files/1662 tests ผ่าน (6 skipped), focused HP/layout/status unit 12 เคสผ่าน; HUD/status/keyboard/5v5 browser 16 เคสผ่าน รวม buff+debuff+overflow และตัวเลข 9999/9999 ที่ 320/390px, read-only inspection, staged expiration, normal/reduced motion และ 5v5/keyboard regression
 - ภาพจริง 390px ตรวจในเซสชัน (fixture แยกสำหรับค่าขนาดใหญ่/หลายสถานะ ไม่ใช่ปรับสมดุลเกม); Browser tool ไม่พร้อม จึงใช้ Playwright/system Chromium ไม่ใช่เครื่องจริง
-- ไม่เปลี่ยน resolver, save schema, runtime encounters, balance, assets หรือ playback timing; required quality/browser ต้องผ่านก่อน merge
+- ไม่เปลี่ยน resolver, save schema, runtime encounters, balance, assets หรือ playback timing; [PR #218](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/218) ผ่าน required quality/browser ก่อน merge `2ac1105`
 
 ## ประวัติ: ปรับตามเจ้าของเทิร์นและเพิ่มความหนา (2026-11-10)
 
