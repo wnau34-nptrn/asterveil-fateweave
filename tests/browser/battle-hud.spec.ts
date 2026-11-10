@@ -4,13 +4,13 @@ import { expect, test } from '@playwright/test';
 test.use({ reducedMotion: 'no-preference' });
 test.skip(process.env.PLAYWRIGHT_PAGES === 'true', 'source fixture');
 
-test('five allies and a large front-middle boss: front arcs, safe inspection, original HP cards and responsive fit', async ({ page }, info) => {
+test('five allies and a large front-middle boss: straight HP tracks, safe inspection, original HP cards and responsive fit', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('tests/browser/fixtures/battle-hud.html');
   await expect(page.locator('#start')).toBeEnabled(); await page.locator('#start').click();
   await expect(page.locator('#action-attack')).toBeEnabled();
-  await expect(page.locator('.field-hp-arc')).toHaveCount(10);
+  await expect(page.locator('.field-hp-bar')).toHaveCount(10);
   await expect(page.locator('[data-field-label], .field-unit-name')).toHaveCount(0);
   await expect(page.locator('[data-boss-crown=f1]')).toHaveCount(1);
   await expect(page.locator('[data-field-unit=tracer]')).toHaveAttribute('data-hp-tone', 'orange');
@@ -84,7 +84,7 @@ for (const reducedMotion of ['no-preference', 'reduce'] as const) test(`inspecto
     await page.locator('#action-mark').click(); await page.locator('#action-attack').click();
     await expect(inspector).toHaveAttribute('data-actor', 'guardian');
     expect(await page.evaluate(() => localStorage.getItem('hud-committed'))).toBe(entry);
-    expect(await page.locator('.field-hp-arc path').evaluateAll(els => els.length === 20 && els.every(el => getComputedStyle(el).strokeWidth === '4px'))).toBe(true);
+    expect(await page.locator('.field-hp-bar path').evaluateAll(els => els.length === 20 && els.every(el => getComputedStyle(el).strokeWidth === '4px'))).toBe(true);
     await page.locator('#target-f2').click();
     await expect(inspector).toHaveAttribute('data-actor', 'f2');
     const committed = await page.evaluate(() => localStorage.getItem('hud-committed'));
@@ -139,4 +139,41 @@ test('an area attack keeps the concrete enemy tapped in the inspector', async ({
   expect(JSON.parse(committed!).commands[0].targetId).toBe('enemies');
   await page.locator('#skip-turn').click();
   await expect(page.locator('#unit-inspector')).toHaveAttribute('data-actor', (await page.locator('#turn-phase').getAttribute('data-actor'))!);
+});
+
+
+for (const [width, height] of [[320, 568], [390, 844]] as const) test(`straight HP counters and real buff/debuff inspector fit at ${width}px`, async ({ page }, info) => {
+  await page.setViewportSize({ width, height });
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto('tests/browser/fixtures/battle-hud.html?statuses&large-hp');
+  await expect(page.locator('#action-attack')).toBeEnabled();
+  const before = await page.evaluate(() => localStorage.getItem('hud-committed'));
+  await page.locator('#turn-order [data-value=f1]').first().click();
+  const inspector = page.locator('#unit-inspector');
+  await expect(inspector.locator('[data-inspector-status=thorns].buff')).toBeVisible();
+  await expect(inspector.locator('[data-inspector-status=mark].debuff')).toBeVisible();
+  await expect(inspector.locator('.inspector-status.more')).toHaveText('+2');
+  await expect(inspector).toHaveAttribute('aria-label', /หนาม.*ติดตรา/);
+  await expect(page.locator('[data-field-unit=f1] .field-hp-value')).toHaveText('9999/9999');
+  expect(await page.locator('.field-health').evaluateAll(els => els.length === 10 && els.every(el => {
+    const box = el.getBoundingClientRect(), value = el.querySelector('.field-hp-value')!.getBoundingClientRect();
+    return value.height > 0 && value.width > 0 && value.left >= box.left - .5 && value.right <= box.right + .5 && Math.abs(value.x + value.width / 2 - box.x - box.width / 2) < .5 && Math.abs(value.y + value.height / 2 - box.y - box.height / 2) < .5;
+  }))).toBe(true);
+  expect(await inspector.evaluate(el => {
+    const parent = el.getBoundingClientRect();
+    const name = el.querySelector('.inspector-name')!.getBoundingClientRect(), badges = el.querySelector('.inspector-statuses')!.getBoundingClientRect(), hp = el.querySelector('.inspector-hp')!.getBoundingClientRect();
+    return parent.height === 44 && name.width > 10 && name.right <= badges.left && badges.right <= hp.left && hp.right <= parent.right && badges.top >= parent.top && badges.bottom <= parent.bottom;
+  })).toBe(true);
+  if (width === 390) await page.screenshot({ path: info.outputPath('straight-hp-statuses-390.png') });
+  // Badges open the existing details for the inspected unit, without casting.
+  await inspector.locator('[data-inspector-status=mark]').click();
+  await expect(page.locator('#status-unit-f1')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#status-details [data-status=mark]')).toBeVisible();
+  await expect(page.locator('#status-details [data-status=veilguard]')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await page.locator('#turn-order [data-value=weaver]').first().click();
+  await expect(inspector.locator('.inspector-statuses')).toHaveCount(0);
+  expect(await page.evaluate(() => localStorage.getItem('hud-committed'))).toBe(before);
+  await expect(page.locator('#action-attack')).toHaveAttribute('aria-pressed', 'true');
+  expect(errors).toEqual([]);
 });

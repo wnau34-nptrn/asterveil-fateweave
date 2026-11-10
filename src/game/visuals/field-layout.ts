@@ -29,9 +29,9 @@ export const partner = (slot: number): number => slot % 2 ? slot - 1 : slot + 1;
 export interface SlotLayout { large: ReadonlySet<number>; rows: ReadonlyMap<number, Row>; trio: ReadonlySet<HeroColumn | FoeColumn>; rise?: ReadonlyMap<number, number>; used?: readonly number[] }
 const none: SlotLayout = { large: new Set(), rows: new Map(), trio: new Set() };
 
-/** Front-only HP arcs need their own clear band. Fit the largest base size first while
+/** Straight HP tracks and counters need their own clear band. Fit the largest base size first while
  * retaining a 1.5× boss; on very short fields cap its scale before reducing normal units
- * below 44px. Row heights follow the tallest painted figure, never overlapping an arc.
+ * below 44px. Row heights follow the tallest painted figure, never overlapping a track.
  * This is presentation geometry only: tactical slot ids and targeting remain unchanged. */
 export function fieldSlots(width: number, height: number, layout: SlotLayout = none): FieldSlot[] {
   const used = layout.used ?? SLOT_IDS;
@@ -60,12 +60,12 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
     // of the opposing front hero. Never borrow a cell occupied by a reserve or shove.
     const backMiddle = used.some(other => columnOf(other) === 3 && rowOf(other) === 1);
     if (large && columnOf(id) === 2 && row === 1 && !backMiddle) x += Math.min(base * .33, width * .09);
-    const cellWidth = Math.min(width * .22, Math.max(64, base * .78));
+    const cellWidth = Math.min(width * .24, Math.max(72, base * .78));
     const rise = layout.rise?.get(id) ?? 1;
     return {
       x, y, size, compact: base < 70, tiny: base < 44, side: false, iconSize: 12, maxIcons: 1,
       body: { x: x - size * .5, y: y - size * rise * 1.022, width: size, height: size * rise * 1.022 },
-      panel: { x: x - cellWidth / 2, y: y + 2, width: cellWidth, height: panel - 2 },
+      panel: { x: Math.max(0, Math.min(width - cellWidth, x - cellWidth / 2)), y: y + 2, width: cellWidth, height: panel - 2 },
     };
   });
 }
