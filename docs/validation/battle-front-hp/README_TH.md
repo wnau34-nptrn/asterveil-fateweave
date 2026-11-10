@@ -15,8 +15,9 @@
 
 ## ตรวจสอบ
 
+- Local typecheck/lint/build ผ่าน; full unit 123 files / 1662 tests ผ่าน (6 skipped), focused geometry/HP/context 13 เคสผ่าน
 - Unit: ขอบเขตสี 40/25%, clamp 0/max; layout ครบ formation 1–5 ตัว, บอส/คู่หู/ตัวเรียก, หลายความสูง รวมการคง spear shove IDs
 - Browser ใหม่: 5v5 บอสกลางหน้า, resize 390×844/650/960 และ 320×568, HP bands ไม่ทับ bodies/กันเอง, มงกุฎ, การ์ด HP เดิม 60px, การเลือกดูทั้งสองฝั่งไม่เปลี่ยนคำสั่ง/สกิล/ผู้ถือเทิร์น และ HP เปลี่ยนตาม contact จริง
-- Regression: status/resize/เซฟ, ทีม 5 คน, combat และ portrait keyboard; full quality/browser checks ต้องผ่านก่อน merge
+- Regression: status/resize/เซฟ, ทีม 5 คน, combat และ portrait keyboard; local HUD/status/team 14 เคส + keyboard PC 3 เคสผ่าน; full quality/browser CI ของ [PR #216](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/216) ผ่านก่อน merge `8bb581c`
 - Browser control tool ไม่พร้อมในเซสชันนี้ จึงใช้ Playwright + system Chromium ตาม fallback ของโปรเจกต์ เป็น desktop/touch emulation ไม่ใช่การทดสอบ Safari หรือเครื่องจริง
 - ไม่เปลี่ยน resolver, save schema, encounter runtime content, balance, VFX contact/playback timing หรือ assets

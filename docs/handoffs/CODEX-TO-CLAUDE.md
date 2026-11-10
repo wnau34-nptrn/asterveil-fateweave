@@ -1,12 +1,12 @@
 ## 2026-11-10 — Front HP arcs + unit inspector
-- Branch `codex/battle-front-hp-inspector` from #215 (`bd3fbab`); requested implementation after owner-approved mockups.
+- PR [#216](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/216), `codex/battle-front-hp-inspector`; merged `8bb581c` after required quality/browser checks passed. Owner authorized implementation of the approved mockups.
 - Both sides use a thin open front-foot HP curve; names/numbers move to a read-only upper inspector selected through the queue/status UI. Boss crowns in field/inspector.
 - Green >40%, orange >25–40%, red ≤25%, shared with the original five lower name/HP/bar/fatigue cards; those cards remain 60px with full numeric HP.
 - Adaptive painted-rise row spacing supports a 1.5× front-middle boss with minions above/below; short fields cap scale/fit sprites. Reserve/shove IDs and command semantics stay intact.
 - No rules, save schema, balance, runtime encounter/assets or VFX contact/playback timing changes. Inspection/resize cannot commit.
-- Local full unit: 123 files/1662 tests pass, 6 skipped; quality and final browser results in [validation](../validation/battle-front-hp/README_TH.md) and this branch's PR.
+- Local: typecheck/lint/build pass; unit 123 files/1662 tests pass (6 skipped), focused unit 13 pass; browser HUD/status/team 14 + keyboard 3 pass. [Validation](../validation/battle-front-hp/README_TH.md).
 - Real 390×844/650 screenshots reviewed; 320×568/390×960 tested by isolated real UI/scene/resolver fixture. Browser tool unavailable: Playwright/system Chromium, no real Safari/device claim.
-- Open: required PR quality + browser checks and merge; preserve separate gacha owner-review work.
+- Required PR gates passed before merge; no Pages polling (pre-release rule). Open: real-device/owner usability review; preserve separate gacha owner-review work. Older log entries archived verbatim per size policy.
 
 ## 2026-11-09 — Restore thin enemy HP tracks
 - Owner feedback on #214: HP bars became too thick; the desired result is the original thin line with the counter overlaid, not a text-height plate.
