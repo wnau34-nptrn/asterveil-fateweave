@@ -1,3 +1,10 @@
+## 2026-11-11 — UXD-08 combined UX check
+- Second part of the owner's “แก้ไขงานที่ค้างก่อน”; branch `claude/uxd-08-combined-check` (stacked on the P03 clips branch).
+- Focused UXD regression 77/77 on the post-#218 build; 34 real 390px screens inspected by Claude. Details: `docs/validation/uxd-08/README_TH.md`.
+- One fix: the team page's talent-tree entry wrapped to three lines in a third-width cell; now a full-width row like the gear entry (one CSS rule in `src/ui/portrait.css`). Team-page specs 18/18 after the fix. No rule/save/balance change.
+- Owner “อนุมัติ” (2026-11-11) on Claude's proposals: one term ผังสกิล everywhere (text only); star-up becomes a secondary button so save-team-set is the page's only gold action. Affected specs 44/44.
+- No real Safari/iPhone/Android or human trial, so that part of UXD-08 stays open.
+
 ## 2026-11-11 — P03 clips for the seven staged skills
 - Owner asked to clear pending work first; Claude recommended UXD-08 and the P03 motion review. This entry is the P03 part; branch `claude/p03-missing-motion-clips`.
 - `tests/fixtures/unit-a12.ts` now stages circlefist, perfectfist, lifetoll, tollring, deflectfate, turncycle and doubledial (chi prelude, a laid curse, a second foe, a big next move). Fixture/spec only: no src, rules, content, save or balance change.
