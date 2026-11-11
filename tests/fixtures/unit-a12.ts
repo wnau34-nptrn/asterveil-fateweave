@@ -6,13 +6,15 @@ import type {ActionId,Command,EncounterDefinition} from '../../src/core/battle/t
 // Identities whose A7 bodies ship. Odran (thiran) and Isolde (wila) were redesigned (PR #120) and use the seed + procedural motion until A7-003.
 export const unitA12Heroes=['kael','wynne','astrid'] as const;
 export type A12Hero=(typeof unitA12Heroes)[number];
-// Only actions the fixture can stage from a fresh battle (circlefist/perfectfist, deflectfate, turncycle/doubledial need mid-battle setup the fixture does not script).
+// Every real action of the three classes. Staging: perfectfist gathers chi through the prelude against a foe with enough HP to outlast it; deflectfate gets a second foe to bend onto; turncycle gets a two-move cycle whose next move is the big one (so the delay is real).
 export const a12Actions=(hero:A12Hero):readonly ActionId[]=>({
- kael:['attack','gatherfist','flowfist','releasefist','storedfist'],
+ kael:['attack','gatherfist','flowfist','releasefist','storedfist','circlefist','perfectfist'],
  wynne:['attack','threadhex','knothex','longthread','wovenhex','lifetoll','tollring'],
- astrid:['attack','starneedle','crossing','readorbit'],
+ astrid:['attack','starneedle','crossing','readorbit','deflectfate','turncycle','doubledial'],
 } as const)[hero] as readonly ActionId[];
 // Setup actions tried (in order) when the skill has no valid target at the start of the battle (charges, curses, marks).
+// Clips added 2026-11-11 for the owner's motion review: these show a real three-skill dock (attack + the setup skill + the skill) instead of every action.
+export const a12Staged:Partial<Record<ActionId,ActionId>>={circlefist:'gatherfist',perfectfist:'gatherfist',lifetoll:'threadhex',tollring:'threadhex',deflectfate:'starneedle',turncycle:'starneedle',doubledial:'starneedle'};
 const setups:readonly ActionId[]=['threadhex','attack','gatherfist','starneedle','readorbit'];
 export const foeArt='foe_spore_puff' as const,foeIntent='Spore Dust';
 // scenario: normal (hero acts, foe hits the Knight) | hurt/down (foe hits the hero) | block (foe's hit on the hero is fully absorbed: 0 damage) | enemy-down (foe has 1 HP)
@@ -22,27 +24,30 @@ export function unitA12Fixture(hero:A12Hero,action:ActionId='attack',scenario='n
  const intent=from.intents.find(i=>i.sourceId===foe.id&&i.name===foeIntent)!;
  const base=thicketAmbush.heroes,merc=mercenaries.find(m=>m.id===hero)!;
  const data:EncounterDefinition={...structuredClone(thicketAmbush),
-  heroes:[{...merc,speed:200,actions:[...a12Actions(hero)],lane:'front'},{...base.find(h=>h.id==='guardian')!,speed:60,actions:['attack','guard']},{...base.find(h=>h.id==='weaver')!,speed:50,actions:['attack','ward']}],
-  enemies:[{...foe,id:'f1',row:'front',maxHp:scenario==='enemy-down'?1:foe.maxHp,speed:110}],
-  intents:[{...intent,sourceId:'f1',targetSlot:scenario==='hurt'||scenario==='down'||scenario==='block'?0:1,...(scenario==='block'?{damage:0}:{})}]};
+  heroes:[{...merc,speed:200,actions:a12Staged[action]?['attack',a12Staged[action],action]:[...a12Actions(hero)],lane:'front'},{...base.find(h=>h.id==='guardian')!,speed:60,actions:['attack','guard']},{...base.find(h=>h.id==='weaver')!,speed:50,actions:['attack','ward']}],
+  enemies:[{...foe,id:'f1',row:'front',maxHp:scenario==='enemy-down'?1:action==='perfectfist'?foe.maxHp*6:foe.maxHp,speed:110},...(action==='deflectfate'?[{...foe,id:'f2' as const,row:'front' as const,speed:100}]:[])],
+  intents:[...(action==='turncycle'?[{...intent,sourceId:'f1',targetSlot:1,damage:intent.damage+4}]:[]),{...intent,sourceId:'f1',targetSlot:scenario==='hurt'||scenario==='down'||scenario==='block'?0:1,...(scenario==='block'?{damage:0}:{})},...(action==='deflectfate'?[{...intent,sourceId:'f2',targetSlot:1}]:[])]};
  const entry={hp:Object.fromEntries(data.heroes.map(h=>[h.id,h.id===hero?(scenario==='down'?1:h.maxHp):Math.ceil(h.maxHp*.5)]))};
  const begin=beginBattle(data,entry,true).state;
  const prelude:Command[]=[];let state=begin;
- const play=(heroId:string,act:ActionId)=>{const options=targetOptions(state,data,heroId,act);const t=(options.find(o=>o.valid&&o.id==='f1')??options.find(o=>o.valid)!).id;const c:Command={beat:state.beat,heroId,action:act,targetId:t};prelude.push(c);state=resolveCommand(state,data,c,true).state;};
+ const play=(heroId:string,wanted:ActionId)=>{const act=targetOptions(state,data,heroId,wanted).some(o=>o.valid)?wanted:'attack';const options=targetOptions(state,data,heroId,act);const t=(options.find(o=>o.valid&&o.id==='f1')??options.find(o=>o.valid)!).id;const c:Command={beat:state.beat,heroId,action:act,targetId:t};prelude.push(c);state=resolveCommand(state,data,c,true).state;};
  const valid=()=>targetOptions(state,data,hero,action).some(o=>o.valid);
+ const others=()=>{while(state.outcome==='active'&&currentHeroId(state,data)!==hero){const id=currentHeroId(state,data)!;play(id,id==='guardian'?'guard':id==='weaver'?'ward':'attack');}};
+ // The Pulling Ring ticks curses at once: lay one first so the clip shows the pull, not an empty ring.
+ if(action==='tollring'){play(hero,'threadhex');others();}
  const base0={state,len:prelude.length};
- if(!valid())for(const setup of setups){
+ if(!valid())for(const setup of action==='perfectfist'?['gatherfist' as const]:setups){
   state=base0.state;prelude.length=base0.len;
   if(!targetOptions(state,data,hero,setup).some(o=>o.valid))continue;
   play(hero,setup);
   for(let i=0;i<14&&state.outcome==='active'&&!valid();i++){
-   while(state.outcome==='active'&&currentHeroId(state,data)!==hero){const id=currentHeroId(state,data)!;play(id,id==='guardian'?'guard':id==='weaver'?'ward':'attack');}
+   others();
    if(!valid()&&state.outcome==='active')play(hero,targetOptions(state,data,hero,setup).some(o=>o.valid)?setup:'attack');
   }
   if(valid())break;
  }
  const options=targetOptions(state,data,hero,action);
  const targetId=(options.find(t=>t.valid&&t.id==='f1')??options.find(t=>t.valid&&t.id==='enemies')??options.find(t=>t.valid&&t.id==='guardian')??options.find(t=>t.valid)!).id;
- const command:Command={beat:state.beat,heroId:hero,action,targetId};const result=resolveCommand(state,data,command,true);
+ const command:Command={beat:state.beat,heroId:hero,action,targetId,...(action==='deflectfate'?{recipientId:'f2'}:{})};const result=resolveCommand(state,data,command,true);
  return {data,entry,prelude,state,command,result};
 }

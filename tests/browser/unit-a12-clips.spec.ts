@@ -3,12 +3,16 @@ import {mkdirSync,writeFileSync} from 'node:fs';
 import {unitA12Heroes,type A12Hero} from '../fixtures/unit-a12';
 test.skip(process.env.UNIT_A12_CLIPS!=='1','separate real-clock capture only');
 interface Clip{hero:A12Hero;skill:string;scenario:string;mode:string}
-const cases:Clip[]=[
+const staged:Clip[]=([['kael','circlefist'],['kael','perfectfist'],['wynne','lifetoll'],['wynne','tollring'],['astrid','deflectfate'],['astrid','turncycle'],['astrid','doubledial']] as const).map(([hero,skill])=>({hero,skill,scenario:'normal',mode:'normal'}));
+const all:Clip[]=[
  ...unitA12Heroes.flatMap(hero=>[{hero,skill:'attack',scenario:'normal',mode:'normal'},{hero,skill:'attack',scenario:'hurt',mode:'normal'},{hero,skill:'attack',scenario:'down',mode:'normal'},{hero,skill:'attack',scenario:'block',mode:'normal'}]),
  {hero:'kael',skill:'gatherfist',scenario:'normal',mode:'normal'},{hero:'kael',skill:'releasefist',scenario:'normal',mode:'normal'},{hero:'kael',skill:'storedfist',scenario:'normal',mode:'normal'},
  {hero:'wynne',skill:'threadhex',scenario:'normal',mode:'normal'},{hero:'wynne',skill:'wovenhex',scenario:'normal',mode:'normal'},
  {hero:'astrid',skill:'crossing',scenario:'normal',mode:'normal'},{hero:'astrid',skill:'readorbit',scenario:'normal',mode:'normal'},
+ // Owner motion review 2026-11-11: the seven skills that need staging (chi, a curse, a second foe, a big move).
+ ...staged,
 ];
+const cases=process.env.UNIT_A12_ONLY==='staged'?staged:all;
 for(const {hero,skill,scenario,mode} of cases)test(`unit A12 clip ${hero}-${skill}-${scenario}-${mode}`,async({browser},info)=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:mode==='osreduce'?'reduce':'no-preference'});
  try{
@@ -22,7 +26,7 @@ for(const {hero,skill,scenario,mode} of cases)test(`unit A12 clip ${hero}-${skil
  const dir=info.outputPath('frames');mkdirSync(dir,{recursive:true});const cdp=await ctx.newCDPSession(page),stamps:string[]=[];
  cdp.on('Page.screencastFrame',f=>{const n=String(stamps.length).padStart(4,'0');writeFileSync(`${dir}/${n}.jpg`,Buffer.from(f.data,'base64'));stamps.push(`${n} ${f.metadata.timestamp}`);void cdp.send('Page.screencastFrameAck',{sessionId:f.sessionId});});
  await cdp.send('Page.startScreencast',{format:'jpeg',quality:90,everyNthFrame:1});await page.waitForTimeout(300);
- await page.locator(`#target-${await page.evaluate(()=>window.unitA12QA.target())}`).click();const committed=await page.evaluate(()=>localStorage.getItem('unit-a12-committed'));
+ await page.locator(`#target-${await page.evaluate(()=>window.unitA12QA.target())}`).click();if(skill==='deflectfate')await page.locator('[data-ui="deflect-recipient"][data-value="f2"]').click();const committed=await page.evaluate(()=>localStorage.getItem('unit-a12-committed'));
  const click=Number(await page.locator('html').getAttribute('data-unit-a12-click'));expect(click).toBeGreaterThan(1e9);
  await expect(page.locator('#skip-turn')).toBeHidden();await page.waitForTimeout(300);await cdp.send('Page.stopScreencast');
  const actual=await page.evaluate(()=>window.unitA12QA.state());expect(actual).toEqual(await page.evaluate(()=>window.unitA12QA.expected()));
