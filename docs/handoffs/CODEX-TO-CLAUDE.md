@@ -1,3 +1,11 @@
+## 2026-11-11 — P03 clips for the seven staged skills
+- Owner asked to clear pending work first; Claude recommended UXD-08 and the P03 motion review. This entry is the P03 part; branch `claude/p03-missing-motion-clips`.
+- `tests/fixtures/unit-a12.ts` now stages circlefist, perfectfist, lifetoll, tollring, deflectfate, turncycle and doubledial (chi prelude, a laid curse, a second foe, a big next move). Fixture/spec only: no src, rules, content, save or balance change.
+- 7 real 390px clips + impact stills added to `docs/combat-presentation/unit-a12-slice/` (manifest now 26); staging and limits in its README. The 19 older clips were not re-captured (pre-#216 HUD).
+- Falling Star clip shows the set-up only; the round-end strike is not in it. Perfect Fist foe has ×6 HP for staging.
+- Checks: typecheck, lint, `tests/unit-a12.test.ts`, coverage/context tests, 7/7 capture runs with resolver-state equality; encoder re-decoded every clip. Chromium emulation, not a real phone.
+- Owner approved the seven clips with “ผ่าน ไปต่อได้” on 2026-11-11 (direct approval; the 19 earlier A12 clips were not re-sent). Open: UXD-08 combined UX check.
+
 ## 2026-11-10 — Straight HP counters + inspector status badges
 - PR [#218](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/218), `codex/straight-hp-status-inspector`; merged `2ac1105` after quality/browser passed. Owner authorized the latest straight-bar/numeric-HP/status-icon mockup.
 - Both sides use straight 4px tracks, current/max HP centred over the full track with outlined white digits; no thicker plate or floating names. HP colours and original lower cards unchanged.

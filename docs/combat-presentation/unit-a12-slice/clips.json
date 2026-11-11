@@ -8711,5 +8711,4261 @@
         }
       }
     ]
+  },
+  {
+    "file": "astrid-deflectfate-normal-normal-390.mp4",
+    "duration": 3.600322,
+    "capturedFrames": 161,
+    "maxFrameGap": 0.256,
+    "maxTimestampErrorMs": 0.0061,
+    "clickOffset": 0.309,
+    "rawCapture": "unit-a12-clips-unit-A12-cl-10ad3-d-deflectfate-normal-normal",
+    "captureStartUTCSeconds": 1794403809.061804,
+    "impacts": [
+      {
+        "at": 0.682,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "astrid",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "deflectfate",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "astrid",
+              "f1",
+              "f2",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "deflectfate": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 38,
+                "markedUntil": 0,
+                "deflect": {
+                  "heroId": "astrid",
+                  "recipientId": "f2",
+                  "until": 1
+                }
+              },
+              {
+                "id": "f2",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "deflectfate",
+                "targetId": "f1",
+                "recipientId": "f2"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "deflect",
+              "sourceId": "astrid",
+              "targetId": "f1",
+              "text": "Fate is bent."
+            },
+            {
+              "type": "damage",
+              "sourceId": "astrid",
+              "targetId": "f1",
+              "amount": 6,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "astrid",
+              "f1",
+              "f2",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              },
+              {
+                "id": "f2",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "astrid",
+              "f1",
+              "f2",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "deflectfate": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 38,
+                "markedUntil": 0,
+                "deflect": {
+                  "heroId": "astrid",
+                  "recipientId": "f2",
+                  "until": 1
+                }
+              },
+              {
+                "id": "f2",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "deflectfate",
+                "targetId": "f1",
+                "recipientId": "f2"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.497,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "f2",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "astrid",
+              "f1",
+              "f2",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "deflectfate": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 38,
+                "markedUntil": 0
+              },
+              {
+                "id": "f2",
+                "hp": 34,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "deflectfate",
+                "targetId": "f1",
+                "recipientId": "f2"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "deflect",
+              "sourceId": "astrid",
+              "targetId": "f1",
+              "text": "Fate bends the move."
+            },
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "f2",
+              "amount": 10,
+              "absorbed": 0,
+              "text": "Deflected."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "astrid",
+              "f1",
+              "f2",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "deflectfate": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 38,
+                "markedUntil": 0,
+                "deflect": {
+                  "heroId": "astrid",
+                  "recipientId": "f2",
+                  "until": 1
+                }
+              },
+              {
+                "id": "f2",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "deflectfate",
+                "targetId": "f1",
+                "recipientId": "f2"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "astrid",
+              "f1",
+              "f2",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "deflectfate": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 38,
+                "markedUntil": 0
+              },
+              {
+                "id": "f2",
+                "hp": 34,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f2",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "deflectfate",
+                "targetId": "f1",
+                "recipientId": "f2"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 2.314,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f2",
+          "side": "enemy",
+          "beat": 3,
+          "round": 1,
+          "intent": {
+            "sourceId": "f2",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 3,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "astrid",
+              "f1",
+              "f2",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "deflectfate": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 38,
+                "markedUntil": 0
+              },
+              {
+                "id": "f2",
+                "hp": 34,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f2",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "deflectfate",
+                "targetId": "f1",
+                "recipientId": "f2"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f2",
+              "targetId": "guardian",
+              "amount": 10,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "astrid",
+              "f1",
+              "f2",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "deflectfate": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 38,
+                "markedUntil": 0
+              },
+              {
+                "id": "f2",
+                "hp": 34,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f2",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "deflectfate",
+                "targetId": "f1",
+                "recipientId": "f2"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 4,
+            "round": 1,
+            "turnIndex": 3,
+            "order": [
+              "astrid",
+              "f1",
+              "f2",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "deflectfate": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 38,
+                "markedUntil": 0
+              },
+              {
+                "id": "f2",
+                "hp": 34,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 4,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "deflectfate",
+                "targetId": "f1",
+                "recipientId": "f2"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "astrid-doubledial-normal-normal-390.mp4",
+    "duration": 2.525411,
+    "capturedFrames": 116,
+    "maxFrameGap": 0.238,
+    "maxTimestampErrorMs": 0.006,
+    "clickOffset": 0.306,
+    "rawCapture": "unit-a12-clips-unit-A12-clip-astrid-doubledial-normal-normal",
+    "captureStartUTCSeconds": 1794403822.335896,
+    "impacts": [
+      {
+        "at": 0.65,
+        "remainingMs": 480,
+        "turn": {
+          "actorId": "astrid",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "doubledial",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "astrid",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "doubledial": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "doubledial",
+                "targetId": "f1"
+              }
+            ],
+            "meteors": [
+              {
+                "heroId": "astrid",
+                "round": 1,
+                "power": 18
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "meteor",
+              "sourceId": "astrid",
+              "targetId": "astrid",
+              "text": "A star begins to fall."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "astrid",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "astrid",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "doubledial": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "doubledial",
+                "targetId": "f1"
+              }
+            ],
+            "meteors": [
+              {
+                "heroId": "astrid",
+                "round": 1,
+                "power": 18
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.419,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "astrid",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "doubledial": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "doubledial",
+                "targetId": "f1"
+              }
+            ],
+            "meteors": [
+              {
+                "heroId": "astrid",
+                "round": 1,
+                "power": 18
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 10,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "astrid",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "doubledial": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "doubledial",
+                "targetId": "f1"
+              }
+            ],
+            "meteors": [
+              {
+                "heroId": "astrid",
+                "round": 1,
+                "power": 18
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "astrid",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "doubledial": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "doubledial",
+                "targetId": "f1"
+              }
+            ],
+            "meteors": [
+              {
+                "heroId": "astrid",
+                "round": 1,
+                "power": 18
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "astrid-turncycle-normal-normal-390.mp4",
+    "duration": 2.503244,
+    "capturedFrames": 113,
+    "maxFrameGap": 0.259,
+    "maxTimestampErrorMs": 0.0059,
+    "clickOffset": 0.251,
+    "rawCapture": "unit-a12-clips-unit-A12-clip-astrid-turncycle-normal-normal",
+    "captureStartUTCSeconds": 1794403816.305642,
+    "impacts": [
+      {
+        "at": 0.526,
+        "remainingMs": 455,
+        "turn": {
+          "actorId": "astrid",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "turncycle",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 14,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "astrid",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "turncycle": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 36,
+                "markedUntil": 0,
+                "cycleLag": 1,
+                "postpone": {
+                  "heroId": "astrid",
+                  "round": 1,
+                  "skip": 2,
+                  "until": 2
+                }
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 14,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "turncycle",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "dial",
+              "sourceId": "astrid",
+              "targetId": "f1",
+              "amount": 1,
+              "text": "The big move is delayed."
+            },
+            {
+              "type": "damage",
+              "sourceId": "astrid",
+              "targetId": "f1",
+              "amount": 8,
+              "text": "Hero attacks."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "astrid",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 14,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "astrid",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "turncycle": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 36,
+                "markedUntil": 0,
+                "cycleLag": 1,
+                "postpone": {
+                  "heroId": "astrid",
+                  "round": 1,
+                  "skip": 2,
+                  "until": 2
+                }
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1,
+              "delayedMove": "Spore Dust"
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "turncycle",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.296,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1,
+            "delayedMove": "Spore Dust"
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "astrid",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "turncycle": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 36,
+                "markedUntil": 0,
+                "cycleLag": 1,
+                "postpone": {
+                  "heroId": "astrid",
+                  "round": 1,
+                  "skip": 2,
+                  "until": 2
+                }
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1,
+              "delayedMove": "Spore Dust"
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "turncycle",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 10,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "astrid",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "turncycle": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 36,
+                "markedUntil": 0,
+                "cycleLag": 1,
+                "postpone": {
+                  "heroId": "astrid",
+                  "round": 1,
+                  "skip": 2,
+                  "until": 2
+                }
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1,
+              "delayedMove": "Spore Dust"
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "turncycle",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "astrid",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "astrid",
+                "hp": 48,
+                "barrier": 0,
+                "cooldowns": {
+                  "turncycle": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 36,
+                "markedUntil": 0,
+                "cycleLag": 1,
+                "postpone": {
+                  "heroId": "astrid",
+                  "round": 1,
+                  "skip": 2,
+                  "until": 2
+                }
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 14,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2,
+              "delayedOnce": true
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "astrid",
+                "action": "turncycle",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "kael-circlefist-normal-normal-390.mp4",
+    "duration": 2.3996,
+    "capturedFrames": 96,
+    "maxFrameGap": 0.329,
+    "maxTimestampErrorMs": 0.006,
+    "clickOffset": 0.151,
+    "rawCapture": "unit-a12-clips-unit-A12-clip-kael-circlefist-normal-normal",
+    "captureStartUTCSeconds": 1794403784.895804,
+    "impacts": [
+      {
+        "at": 0.505,
+        "remainingMs": 585,
+        "turn": {
+          "actorId": "kael",
+          "side": "hero",
+          "beat": 1,
+          "round": 1,
+          "action": "circlefist",
+          "targetId": "enemies",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 1,
+            "round": 1
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "kael",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "kael",
+                "hp": 57,
+                "barrier": 0,
+                "cooldowns": {
+                  "circlefist": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 30,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "kael",
+                "action": "circlefist",
+                "targetId": "enemies"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "kael",
+              "targetId": "kael",
+              "amount": 7,
+              "text": "Kael pays in blood."
+            },
+            {
+              "type": "damage",
+              "sourceId": "kael",
+              "targetId": "f1",
+              "amount": 14,
+              "text": "Circle fist."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 1,
+            "round": 1,
+            "turnIndex": 0,
+            "order": [
+              "kael",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "kael",
+                "hp": 64,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 44,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 1,
+              "round": 1
+            },
+            "commands": []
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "kael",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "kael",
+                "hp": 57,
+                "barrier": 0,
+                "cooldowns": {
+                  "circlefist": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 30,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "kael",
+                "action": "circlefist",
+                "targetId": "enemies"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.38,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 2,
+          "round": 1,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 2,
+            "round": 1
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "kael",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "kael",
+                "hp": 57,
+                "barrier": 0,
+                "cooldowns": {
+                  "circlefist": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 30,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "kael",
+                "action": "circlefist",
+                "targetId": "enemies"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 10,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 2,
+            "round": 1,
+            "turnIndex": 1,
+            "order": [
+              "kael",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "kael",
+                "hp": 57,
+                "barrier": 0,
+                "cooldowns": {
+                  "circlefist": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 38,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 30,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 2,
+              "round": 1
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "kael",
+                "action": "circlefist",
+                "targetId": "enemies"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 3,
+            "round": 1,
+            "turnIndex": 2,
+            "order": [
+              "kael",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "kael",
+                "hp": 57,
+                "barrier": 0,
+                "cooldowns": {
+                  "circlefist": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 30,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 3,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "kael",
+                "action": "circlefist",
+                "targetId": "enemies"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "kael-perfectfist-normal-normal-390.mp4",
+    "duration": 2.429811,
+    "capturedFrames": 112,
+    "maxFrameGap": 0.258,
+    "maxTimestampErrorMs": 0.0052,
+    "clickOffset": 0.232,
+    "rawCapture": "unit-a12-clips-unit-A12-clip-kael-perfectfist-normal-normal",
+    "captureStartUTCSeconds": 1794403791.007553,
+    "impacts": [
+      {
+        "at": 0.62,
+        "remainingMs": 650,
+        "turn": {
+          "actorId": "kael",
+          "side": "hero",
+          "beat": 13,
+          "round": 4,
+          "action": "perfectfist",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 13,
+            "round": 4
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 13,
+            "round": 4,
+            "turnIndex": 0,
+            "order": [
+              "kael",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "kael",
+                "hp": 64,
+                "barrier": 14,
+                "cooldowns": {
+                  "gatherfist": 4,
+                  "perfectfist": 8
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 20,
+                "barrier": 14,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 5
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 167,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 13,
+              "round": 4
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "kael"
+              },
+              {
+                "beat": 5,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 7,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 8,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 9,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 11,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 12,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 13,
+                "heroId": "kael",
+                "action": "perfectfist",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "kael",
+              "targetId": "f1",
+              "amount": 38,
+              "text": "Hero attacks."
+            },
+            {
+              "type": "chi",
+              "sourceId": "kael",
+              "targetId": "kael",
+              "action": "perfectfist",
+              "amount": -3,
+              "text": "Chi released."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 13,
+            "round": 4,
+            "turnIndex": 0,
+            "order": [
+              "kael",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "kael",
+                "hp": 64,
+                "barrier": 14,
+                "cooldowns": {
+                  "gatherfist": 4
+                },
+                "chi": 3
+              },
+              {
+                "id": "guardian",
+                "hp": 20,
+                "barrier": 14,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 5
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 205,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 13,
+              "round": 4
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "kael"
+              },
+              {
+                "beat": 5,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 7,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 8,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 9,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 11,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 12,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "guardian"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 14,
+            "round": 4,
+            "turnIndex": 1,
+            "order": [
+              "kael",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "kael",
+                "hp": 64,
+                "barrier": 14,
+                "cooldowns": {
+                  "gatherfist": 4,
+                  "perfectfist": 8
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 20,
+                "barrier": 14,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 5
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 167,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 14,
+              "round": 4
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "kael"
+              },
+              {
+                "beat": 5,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 7,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 8,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 9,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 11,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 12,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 13,
+                "heroId": "kael",
+                "action": "perfectfist",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.561,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 14,
+          "round": 4,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 14,
+            "round": 4
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 14,
+            "round": 4,
+            "turnIndex": 1,
+            "order": [
+              "kael",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "kael",
+                "hp": 64,
+                "barrier": 14,
+                "cooldowns": {
+                  "gatherfist": 4,
+                  "perfectfist": 8
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 20,
+                "barrier": 10,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 5
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 167,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 14,
+              "round": 4
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "kael"
+              },
+              {
+                "beat": 5,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 7,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 8,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 9,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 11,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 12,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 13,
+                "heroId": "kael",
+                "action": "perfectfist",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 0,
+              "absorbed": 4,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 14,
+            "round": 4,
+            "turnIndex": 1,
+            "order": [
+              "kael",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "kael",
+                "hp": 64,
+                "barrier": 14,
+                "cooldowns": {
+                  "gatherfist": 4,
+                  "perfectfist": 8
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 20,
+                "barrier": 14,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 5
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 167,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 14,
+              "round": 4
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "kael"
+              },
+              {
+                "beat": 5,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 7,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 8,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 9,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 11,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 12,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 13,
+                "heroId": "kael",
+                "action": "perfectfist",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 15,
+            "round": 4,
+            "turnIndex": 2,
+            "order": [
+              "kael",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "kael",
+                "hp": 64,
+                "barrier": 14,
+                "cooldowns": {
+                  "gatherfist": 4,
+                  "perfectfist": 8
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 20,
+                "barrier": 10,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 5
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 167,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 15,
+              "round": 5
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "kael"
+              },
+              {
+                "beat": 5,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 7,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 8,
+                "heroId": "weaver",
+                "action": "attack",
+                "targetId": "f1"
+              },
+              {
+                "beat": 9,
+                "heroId": "kael",
+                "action": "gatherfist",
+                "targetId": "f1"
+              },
+              {
+                "beat": 11,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 12,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 13,
+                "heroId": "kael",
+                "action": "perfectfist",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "wynne-lifetoll-normal-normal-390.mp4",
+    "duration": 2.525478,
+    "capturedFrames": 113,
+    "maxFrameGap": 0.258,
+    "maxTimestampErrorMs": 0.006,
+    "clickOffset": 0.305,
+    "rawCapture": "unit-a12-clips-unit-A12-clip-wynne-lifetoll-normal-normal",
+    "captureStartUTCSeconds": 1794403796.966916,
+    "impacts": [
+      {
+        "at": 0.606,
+        "remainingMs": 487,
+        "turn": {
+          "actorId": "wynne",
+          "side": "hero",
+          "beat": 5,
+          "round": 2,
+          "action": "lifetoll",
+          "targetId": "f1",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 5,
+            "round": 2
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 5,
+            "round": 2,
+            "turnIndex": 0,
+            "order": [
+              "wynne",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "wynne",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "threadhex": 2,
+                  "lifetoll": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 34,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 5,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "wynne",
+                "action": "threadhex",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "wynne"
+              },
+              {
+                "beat": 5,
+                "heroId": "wynne",
+                "action": "lifetoll",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "wynne",
+              "targetId": "f1",
+              "amount": 5,
+              "text": "Thread pulled."
+            },
+            {
+              "type": "hex",
+              "sourceId": "wynne",
+              "targetId": "f1",
+              "amount": 0,
+              "text": "Curse loosened."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 5,
+            "round": 2,
+            "turnIndex": 0,
+            "order": [
+              "wynne",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "wynne",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "threadhex": 2
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 39,
+                "markedUntil": 0,
+                "hexes": [
+                  {
+                    "heroId": "wynne",
+                    "stacks": 1,
+                    "until": 2
+                  }
+                ]
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 5,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "wynne",
+                "action": "threadhex",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "wynne"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "wynne",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "wynne",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "threadhex": 2,
+                  "lifetoll": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 34,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "wynne",
+                "action": "threadhex",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "wynne"
+              },
+              {
+                "beat": 5,
+                "heroId": "wynne",
+                "action": "lifetoll",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.391,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 6,
+          "round": 2,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 6,
+            "round": 2
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "wynne",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "wynne",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "threadhex": 2,
+                  "lifetoll": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 34,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "wynne",
+                "action": "threadhex",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "wynne"
+              },
+              {
+                "beat": 5,
+                "heroId": "wynne",
+                "action": "lifetoll",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 4,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "wynne",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "wynne",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "threadhex": 2,
+                  "lifetoll": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 34,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "wynne",
+                "action": "threadhex",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "wynne"
+              },
+              {
+                "beat": 5,
+                "heroId": "wynne",
+                "action": "lifetoll",
+                "targetId": "f1"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 7,
+            "round": 2,
+            "turnIndex": 2,
+            "order": [
+              "wynne",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "wynne",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "threadhex": 2,
+                  "lifetoll": 4
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 34,
+                "markedUntil": 0
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 7,
+              "round": 3
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "wynne",
+                "action": "threadhex",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "wynne"
+              },
+              {
+                "beat": 5,
+                "heroId": "wynne",
+                "action": "lifetoll",
+                "targetId": "f1"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "file": "wynne-tollring-normal-normal-390.mp4",
+    "duration": 2.594756,
+    "capturedFrames": 114,
+    "maxFrameGap": 0.248,
+    "maxTimestampErrorMs": 0.006,
+    "clickOffset": 0.344,
+    "rawCapture": "unit-a12-clips-unit-A12-clip-wynne-tollring-normal-normal",
+    "captureStartUTCSeconds": 1794403802.88018,
+    "impacts": [
+      {
+        "at": 0.684,
+        "remainingMs": 552,
+        "turn": {
+          "actorId": "wynne",
+          "side": "hero",
+          "beat": 5,
+          "round": 2,
+          "action": "tollring",
+          "targetId": "enemies",
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 5,
+            "round": 2
+          },
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 5,
+            "round": 2,
+            "turnIndex": 0,
+            "order": [
+              "wynne",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "wynne",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "threadhex": 2,
+                  "tollring": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 34,
+                "markedUntil": 0,
+                "hexes": [
+                  {
+                    "heroId": "wynne",
+                    "stacks": 1,
+                    "until": 2
+                  }
+                ]
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 5,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "wynne",
+                "action": "threadhex",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "wynne"
+              },
+              {
+                "beat": 5,
+                "heroId": "wynne",
+                "action": "tollring",
+                "targetId": "enemies"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "wynne",
+              "targetId": "f1",
+              "amount": 5,
+              "text": "Thread pulled."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 5,
+            "round": 2,
+            "turnIndex": 0,
+            "order": [
+              "wynne",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "wynne",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "threadhex": 2
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 39,
+                "markedUntil": 0,
+                "hexes": [
+                  {
+                    "heroId": "wynne",
+                    "stacks": 1,
+                    "until": 2
+                  }
+                ]
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 5,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "wynne",
+                "action": "threadhex",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "wynne"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "wynne",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "wynne",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "threadhex": 2,
+                  "tollring": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 34,
+                "markedUntil": 0,
+                "hexes": [
+                  {
+                    "heroId": "wynne",
+                    "stacks": 1,
+                    "until": 2
+                  }
+                ]
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "wynne",
+                "action": "threadhex",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "wynne"
+              },
+              {
+                "beat": 5,
+                "heroId": "wynne",
+                "action": "tollring",
+                "targetId": "enemies"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "at": 1.532,
+        "remainingMs": 520,
+        "turn": {
+          "actorId": "f1",
+          "side": "enemy",
+          "beat": 6,
+          "round": 2,
+          "intent": {
+            "sourceId": "f1",
+            "targetSlot": 1,
+            "name": "Spore Dust",
+            "damage": 10,
+            "kind": "energy",
+            "targetId": "guardian",
+            "beat": 6,
+            "round": 2
+          },
+          "targetId": "guardian",
+          "state": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "wynne",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "wynne",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "threadhex": 2,
+                  "tollring": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 34,
+                "markedUntil": 0,
+                "hexes": [
+                  {
+                    "heroId": "wynne",
+                    "stacks": 1,
+                    "until": 2
+                  }
+                ]
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "wynne",
+                "action": "threadhex",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "wynne"
+              },
+              {
+                "beat": 5,
+                "heroId": "wynne",
+                "action": "tollring",
+                "targetId": "enemies"
+              }
+            ]
+          },
+          "events": [
+            {
+              "type": "damage",
+              "sourceId": "f1",
+              "targetId": "guardian",
+              "amount": 4,
+              "absorbed": 0,
+              "text": "Enemy attacks on its own turn."
+            }
+          ],
+          "before": {
+            "encounterId": "thicket-ambush",
+            "beat": 6,
+            "round": 2,
+            "turnIndex": 1,
+            "order": [
+              "wynne",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": {
+              "heroId": "guardian",
+              "targetId": "guardian",
+              "sourceId": "f1"
+            },
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "wynne",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "threadhex": 2,
+                  "tollring": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 28,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 34,
+                "markedUntil": 0,
+                "hexes": [
+                  {
+                    "heroId": "wynne",
+                    "stacks": 1,
+                    "until": 2
+                  }
+                ]
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 6,
+              "round": 2
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "wynne",
+                "action": "threadhex",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "wynne"
+              },
+              {
+                "beat": 5,
+                "heroId": "wynne",
+                "action": "tollring",
+                "targetId": "enemies"
+              }
+            ]
+          },
+          "after": {
+            "encounterId": "thicket-ambush",
+            "beat": 7,
+            "round": 2,
+            "turnIndex": 2,
+            "order": [
+              "wynne",
+              "f1",
+              "guardian",
+              "weaver"
+            ],
+            "outcome": "active",
+            "guard": null,
+            "counter": null,
+            "taunt": null,
+            "song": null,
+            "heroes": [
+              {
+                "id": "wynne",
+                "hp": 48,
+                "barrier": 14,
+                "cooldowns": {
+                  "threadhex": 2,
+                  "tollring": 6
+                }
+              },
+              {
+                "id": "guardian",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {}
+              },
+              {
+                "id": "weaver",
+                "hp": 24,
+                "barrier": 0,
+                "cooldowns": {
+                  "ward": 3
+                }
+              }
+            ],
+            "enemies": [
+              {
+                "id": "f1",
+                "hp": 34,
+                "markedUntil": 0,
+                "hexes": [
+                  {
+                    "heroId": "wynne",
+                    "stacks": 1,
+                    "until": 2
+                  }
+                ]
+              }
+            ],
+            "intent": {
+              "sourceId": "f1",
+              "targetSlot": 1,
+              "name": "Spore Dust",
+              "damage": 10,
+              "kind": "energy",
+              "targetId": "guardian",
+              "beat": 7,
+              "round": 3
+            },
+            "commands": [
+              {
+                "beat": 1,
+                "heroId": "wynne",
+                "action": "threadhex",
+                "targetId": "f1"
+              },
+              {
+                "beat": 3,
+                "heroId": "guardian",
+                "action": "guard",
+                "targetId": "guardian"
+              },
+              {
+                "beat": 4,
+                "heroId": "weaver",
+                "action": "ward",
+                "targetId": "wynne"
+              },
+              {
+                "beat": 5,
+                "heroId": "wynne",
+                "action": "tollring",
+                "targetId": "enemies"
+              }
+            ]
+          }
+        }
+      }
+    ]
   }
 ]
