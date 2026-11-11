@@ -1,6 +1,7 @@
-// P09-01 cloud save envelope — design-stage pure checks (docs/design/p09/CLOUD_SAVE_ENVELOPE_TH.md).
-// Not wired into the game, the Worker or any database yet. Nothing here changes the local save (v58) or its rules:
-// the payload is the exact local save string; the server replays it with `parseGame` from `core/save` separately.
+// P09-01 design-stage pure checks (docs/design/p09/). Not wired into the game, the Worker or any database yet, and nothing
+// here changes the local save (v58) or its rules. With the server deciding everything (owner D10 = ค), `checkUpload` and
+// `decideUpload` serve the one-time import of an existing local save (and admin restores); the payload is the exact local
+// save string, replayed with `parseGame` from `core/save` separately. `decideCommand` orders the commands of normal play.
 // No clocks, randomness, crypto or browser APIs: the caller computes the SHA-256 digest with its platform's crypto.
 
 export const CLOUD_FORMAT = 1;
@@ -86,65 +87,26 @@ export function decideUpload(head: CloudSaveHead | null, committed: readonly Com
   return { kind: 'conflict', revision: head.revision };
 }
 
-// Device-side sync status (docs/design/p09/ACCOUNT_FLOW_TH.md §3). The local save stays the playable copy in every state.
-export type SyncState =
-  | { kind: 'guestLocal' }                                                    // no account linked: local only
-  | { kind: 'synced'; revision: number; digest: string }
-  | { kind: 'dirty'; base: number; digest: string }                           // local differs from the synced revision
-  // `digest` is the payload of the request in flight; `pending` a newer local save that follows once it settles.
-  | { kind: 'uploading'; base: number; digest: string; requestId: string; attempts: number; pending?: string }
-  | { kind: 'waiting'; base: number; digest: string; requestId: string; attempts: number; pending?: string } // offline/timeout: retry same id
-  | { kind: 'conflict'; base: number; digest: string; server: number }       // player must choose (never auto-merged)
-  | { kind: 'blocked'; reason: 'versionTooNew' | 'rejected' | 'signedOut' };
+// Server-authoritative play (owner D10 = ค, 2026-11-11; docs/design/p09/SERVER_AUTHORITY_TH.md). The device sends commands,
+// never state. Each command carries the account's next sequence number and a requestId; the server applies commands one at a
+// time in sequence order with the same pure rules the game uses. This decides only ordering and retries, not the command's
+// legality (that is the rules' job).
+export interface CommandEnvelope { requestId: string; seq: number; kind: string; argsSha256: string }
+// What the server remembers: the last applied sequence number and recent results by requestId (kept for retries).
+export interface CommandLog { lastSeq: number; recent: readonly { requestId: string; seq: number; argsSha256: string }[] }
+export type CommandDecision =
+  | { kind: 'apply' }                  // seq = lastSeq + 1 and the requestId is new: run the rules, store, answer
+  | { kind: 'replayed'; seq: number }  // already applied with the same arguments: answer the stored result, change nothing
+  | { kind: 'requestReused' }          // same requestId, different command: reject
+  | { kind: 'stale'; lastSeq: number } // an older seq that is not a retry: the device is behind, it must reload state
+  | { kind: 'gap'; lastSeq: number }   // a seq beyond lastSeq + 1: an earlier command never arrived, resend from lastSeq + 1
+  | { kind: 'invalid' };               // malformed envelope
 
-export type SyncEvent =
-  | { type: 'linked'; revision: number; digest: string }
-  | { type: 'localSaved'; digest: string }
-  | { type: 'send'; requestId: string }
-  | { type: 'accepted'; revision: number; digest: string }
-  | { type: 'conflict'; server: number }
-  | { type: 'timeout' } | { type: 'offline' } | { type: 'online' }
-  | { type: 'rejected'; reason: 'versionTooNew' | 'rejected' }
-  | { type: 'keptCloud'; revision: number; digest: string }   // player chose the cloud copy (local backed up first)
-  | { type: 'keptLocal' }                                     // player chose the local copy: upload on top of server head
-  | { type: 'signedOut' };
-
-export const MAX_ATTEMPTS = 5;
-
-// Total, deterministic transitions; an event that does not apply leaves the state unchanged.
-export function syncStep(s: SyncState, e: SyncEvent): SyncState {
-  if (e.type === 'signedOut') return { kind: 'blocked', reason: 'signedOut' };
-  if (e.type === 'linked') return { kind: 'synced', revision: e.revision, digest: e.digest };
-  if (s.kind === 'guestLocal' || s.kind === 'blocked') return s;
-  switch (e.type) {
-    case 'localSaved': {
-      if (s.kind === 'synced') return s.digest === e.digest ? s : { kind: 'dirty', base: s.revision, digest: e.digest };
-      if (s.kind === 'dirty' || s.kind === 'conflict') return { ...s, digest: e.digest };
-      // A save during an upload/wait: the in-flight request keeps its own payload; the newer one follows after.
-      return { ...s, pending: e.digest };
-    }
-    case 'send':
-      if (s.kind === 'dirty') return { kind: 'uploading', base: s.base, digest: s.digest, requestId: e.requestId, attempts: 1 };
-      // A retry re-sends the same requestId so the server can answer a committed request without writing twice.
-      if (s.kind === 'waiting') return s.attempts >= MAX_ATTEMPTS ? s : { ...s, kind: 'uploading', attempts: s.attempts + 1 };
-      return s;
-    case 'accepted': {
-      if (s.kind !== 'uploading' && s.kind !== 'waiting') return s;
-      const pending = s.pending;
-      return pending && pending !== e.digest ? { kind: 'dirty', base: e.revision, digest: pending } : { kind: 'synced', revision: e.revision, digest: e.digest };
-    }
-    case 'conflict':
-      if (s.kind !== 'uploading' && s.kind !== 'waiting' && s.kind !== 'dirty') return s;
-      return { kind: 'conflict', base: s.base, digest: s.kind === 'dirty' ? s.digest : s.pending ?? s.digest, server: e.server };
-    case 'timeout': case 'offline':
-      return s.kind === 'uploading' ? { ...s, kind: 'waiting' } : s;
-    case 'online':
-      return s;
-    case 'rejected':
-      return s.kind === 'uploading' || s.kind === 'waiting' ? { kind: 'blocked', reason: e.reason } : s;
-    case 'keptCloud':
-      return s.kind === 'conflict' ? { kind: 'synced', revision: e.revision, digest: e.digest } : s;
-    case 'keptLocal':
-      return s.kind === 'conflict' ? { kind: 'dirty', base: s.server, digest: s.digest } : s;
-  }
+export function decideCommand(log: CommandLog, cmd: CommandEnvelope): CommandDecision {
+  if (!REQUEST_ID.test(cmd.requestId) || !Number.isSafeInteger(cmd.seq) || cmd.seq < 1 || !/^[a-z][A-Za-z0-9]{0,31}$/.test(cmd.kind) || !SHA256_HEX.test(cmd.argsSha256)) return { kind: 'invalid' };
+  const seen = log.recent.find(r => r.requestId === cmd.requestId);
+  if (seen) return seen.seq === cmd.seq && seen.argsSha256 === cmd.argsSha256 ? { kind: 'replayed', seq: seen.seq } : { kind: 'requestReused' };
+  if (cmd.seq <= log.lastSeq) return { kind: 'stale', lastSeq: log.lastSeq };
+  if (cmd.seq > log.lastSeq + 1) return { kind: 'gap', lastSeq: log.lastSeq };
+  return { kind: 'apply' };
 }

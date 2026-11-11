@@ -5,7 +5,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`. Pre-release pushes deploy after lint/unit/build; browser PR gate is path-filtered. Restore Pages browser gate before OD-13 external tests.
-- Save v58; Phaser/TypeScript/Vite, local saves, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked, existing rights preserved. No gacha wallet/accounts/reward ledger; Worker only `/health`. P09-01 design (docs only + unwired pure `src/core/cloud/cloud-save.ts`): [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md); owner decisions D1–D9 open.
+- Save v58; Phaser/TypeScript/Vite, local saves, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked, existing rights preserved. No gacha wallet/accounts/reward ledger; Worker only `/health`. P09-01 design (docs + unwired pure `src/core/cloud/cloud-save.ts`): [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md). Owner D10 = ค: server decides everything (online-only, server seeds).
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3. Rights follow cleared history.
 - Battle HUD: latest approved mockup uses straight 4px HP tracks with centred current/max counters on both sides, real buff/debuff badges on the upper inspector (2 + overflow), original five lower HP cards and green >40% / orange >25–40% / red ≤25%. Turn owner → tapped enemy → next owner and manual inspection from #217 stay intact. Merged #218 (`2ac1105`) after quality/browser passed. [Validation](docs/validation/battle-front-hp/README_TH.md).
 - MAP quest tabs #213 merged (`da1d508`): existing objective entry opens เป้าหมาย / เควสต์ in one compact scrollable dialog; settled camp-board progress, original MAP1 unlock and camp-only rewards. Implementation follows the owner-approved combined-tab mockup; Quality/browser passed before merge.
@@ -23,7 +23,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Next (owner review)
 
-- P09-01: owner picks D1–D9 in `docs/design/p09/README_TH.md` (recommended: Google+recovery code, choose-whole-copy on conflict, legacy option A, opt-in cloud, online actions on synced cloud copy). P09-02 (Worker+D1) needs the owner to add D1 Edit to the token first.
+- P09: owner picks D1/D11/D12 (rec. Google+recovery code; import old saves once before external test; one device at a time). Next P09-02a command layer + server seeds (local, Opus); Worker+DO+D1 needs D1 Edit/DO on the token.
 
 - Review the saved visual direction and core system choices; leave rates/costs/pacing adjustable for later tuning. Do not automatically start G02/P09/G03/G04/G05 or payments. Real gacha still needs P09/P04/ledger/trust; OD-13 order applies.
 - UXD-08 combined UX check open. Team-preset owner usability review remains open.

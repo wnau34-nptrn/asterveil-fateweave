@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
-import { checkUpload, CLOUD_FORMAT, decideUpload, MAX_ATTEMPTS, MAX_PAYLOAD_BYTES, syncStep, utf8Bytes, type CloudSaveUpload, type SyncState } from '../src/core/cloud/cloud-save';
+import { checkUpload, CLOUD_FORMAT, decideCommand, decideUpload, MAX_PAYLOAD_BYTES, utf8Bytes, type CloudSaveUpload, type CommandEnvelope, type CommandLog } from '../src/core/cloud/cloud-save';
 import { expeditionKey, parseGame, saveGame, type StoragePort } from '../src/core/save/expedition-save';
 import { newProfile } from '../src/core/world/profile';
 import { newExpedition } from '../src/core/world/world';
@@ -86,36 +86,22 @@ describe('server upload decision (compare-and-swap on revision)', () => {
   });
 });
 
-describe('device sync status', () => {
-  const run = (s: SyncState, ...events: Parameters<typeof syncStep>[1][]): SyncState => events.reduce(syncStep, s);
-  it('a guest without an account stays local whatever happens to the network', () => {
-    expect(run({ kind: 'guestLocal' }, { type: 'localSaved', digest: 'a' }, { type: 'send', requestId: 'r' }, { type: 'offline' })).toEqual({ kind: 'guestLocal' });
+describe('server command order (server decides everything, D10 = ค)', () => {
+  const h = (t: string): string => sha(t);
+  const cmd = (seq: number, requestId = `req_cmd_${String(seq).padStart(8, '0')}`, args = 'a'): CommandEnvelope => ({ requestId, seq, kind: 'battleCommand', argsSha256: h(args) });
+  const log: CommandLog = { lastSeq: 7, recent: [{ requestId: cmd(7).requestId, seq: 7, argsSha256: h('a') }] };
+  it('applies only the next command in sequence', () => {
+    expect(decideCommand(log, cmd(8))).toEqual({ kind: 'apply' });
+    expect(decideCommand(log, cmd(10))).toEqual({ kind: 'gap', lastSeq: 7 });
+    expect(decideCommand(log, cmd(5))).toEqual({ kind: 'stale', lastSeq: 7 });
   });
-  it('a timeout keeps the same request id for the retry, then settles once', () => {
-    const s = run({ kind: 'synced', revision: 3, digest: 'a' }, { type: 'localSaved', digest: 'b' }, { type: 'send', requestId: 'r1' }, { type: 'timeout' });
-    expect(s).toEqual({ kind: 'waiting', base: 3, digest: 'b', requestId: 'r1', attempts: 1 });
-    const retried = run(s, { type: 'online' }, { type: 'send', requestId: 'ignored' });
-    expect(retried).toMatchObject({ kind: 'uploading', requestId: 'r1', attempts: 2 });
-    expect(run(retried, { type: 'accepted', revision: 4, digest: 'b' })).toEqual({ kind: 'synced', revision: 4, digest: 'b' });
+  it('answers a retry after a lost response without applying it twice, and rejects a reused requestId', () => {
+    expect(decideCommand(log, cmd(7))).toEqual({ kind: 'replayed', seq: 7 });
+    expect(decideCommand(log, cmd(7, cmd(7).requestId, 'other'))).toEqual({ kind: 'requestReused' });
+    expect(decideCommand(log, cmd(8, cmd(7).requestId))).toEqual({ kind: 'requestReused' });
   });
-  it('stops retrying after the attempt limit and keeps the local copy waiting', () => {
-    let s: SyncState = run({ kind: 'dirty', base: 1, digest: 'b' }, { type: 'send', requestId: 'r' });
-    for (let i = 0; i < MAX_ATTEMPTS + 2; i++) s = run(s, { type: 'timeout' }, { type: 'send', requestId: 'x' });
-    expect(s).toMatchObject({ kind: 'waiting', requestId: 'r', attempts: MAX_ATTEMPTS });
-    expect(run(s, { type: 'localSaved', digest: 'c' })).toMatchObject({ kind: 'waiting', digest: 'b', pending: 'c' });
-  });
-  it('a save made during an upload follows after it instead of being lost', () => {
-    const s = run({ kind: 'dirty', base: 1, digest: 'b' }, { type: 'send', requestId: 'r' }, { type: 'localSaved', digest: 'c' }, { type: 'accepted', revision: 2, digest: 'b' });
-    expect(s).toEqual({ kind: 'dirty', base: 2, digest: 'c' });
-  });
-  it('a conflict waits for the player and is never merged automatically', () => {
-    const c = run({ kind: 'dirty', base: 1, digest: 'b' }, { type: 'send', requestId: 'r' }, { type: 'conflict', server: 5 });
-    expect(c).toEqual({ kind: 'conflict', base: 1, digest: 'b', server: 5 });
-    expect(run(c, { type: 'send', requestId: 'z' })).toEqual(c);
-    expect(run(c, { type: 'keptLocal' })).toEqual({ kind: 'dirty', base: 5, digest: 'b' });
-    expect(run(c, { type: 'keptCloud', revision: 5, digest: 'srv' })).toEqual({ kind: 'synced', revision: 5, digest: 'srv' });
-  });
-  it('a rejected upload or newer server format blocks syncing but not playing', () => {
-    expect(run({ kind: 'dirty', base: 1, digest: 'b' }, { type: 'send', requestId: 'r' }, { type: 'rejected', reason: 'versionTooNew' })).toEqual({ kind: 'blocked', reason: 'versionTooNew' });
+  it('rejects malformed envelopes before touching the rules', () => {
+    for (const bad of [cmd(0), { ...cmd(8), requestId: 'x' }, { ...cmd(8), kind: 'Drop table' }, { ...cmd(8), argsSha256: 'zz' }, { ...cmd(8), seq: 1.5 }])
+      expect(decideCommand(log, bad)).toEqual({ kind: 'invalid' });
   });
 });
