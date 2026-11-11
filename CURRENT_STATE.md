@@ -25,8 +25,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 - P09: owner picks D1/D11/D12 (rec. Google+recovery code; import old saves once before external test; one device at a time). Next P09-02a command layer + server seeds (local, Opus); Worker+DO+D1 needs D1 Edit/DO on the token.
 
-- Review the saved visual direction and core system choices; leave rates/costs/pacing adjustable for later tuning. Do not automatically start G02/P09/G03/G04/G05 or payments. Real gacha still needs P09/P04/ledger/trust; OD-13 order applies.
-- UXD-08 combined UX check open. Team-preset owner usability review remains open.
+- Gacha: review visual direction/core choices; rates/costs/pacing stay adjustable. Do not auto-start G02–G05 or payments; real gacha needs P09/P04/ledger (OD-13).
+- UXD-08: regression 77/77 + 34 screens inspected 2026-11-11, team-page fixes and the single term ผังสกิล (owner “อนุมัติ”; [validation](docs/validation/uxd-08/README_TH.md)); real-device/human trial still open. Team-preset owner usability review remains open.
 
 ## Open items
 
