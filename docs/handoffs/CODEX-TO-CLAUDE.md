@@ -1,3 +1,10 @@
+## 2026-11-11 — P09-01 guest account + cloud save design (no database)
+- Branch `claude/p09-01-account-cloud-save-design`; owner approved starting the database-free part (“อนุมัติ ทำตามที่แนะนำ”).
+- Thai design set `docs/design/p09/` (index README_TH with owner decisions D1–D9 + recommendations; account flow, cloud save envelope, trust boundary, D1/API draft). Facts from code are marked [โค้ด], proposals [เสนอ].
+- Pure, unwired `src/core/cloud/cloud-save.ts`: `checkUpload` (shape/size/UTF-8 bytes/SHA-256/version), `decideUpload` (revision CAS, idempotent retry, downgrade guard), `syncStep` (device sync states incl. offline/timeout/same-requestId retry/conflict). 14 tests `tests/cloud-save-envelope.test.ts`, including the fact that a bank edited to the cap still passes `parseGame`.
+- No change to save v58, rules, balance, UI, Worker or D1; no secret used, nothing deployed.
+- Open: owner D1–D9; P09-02 needs D1 Edit on the token; measure replay CPU of large saves before choosing the Cloudflare plan.
+
 ## 2026-11-11 — P03 clips for the seven staged skills
 - Owner asked to clear pending work first; Claude recommended UXD-08 and the P03 motion review. This entry is the P03 part; branch `claude/p03-missing-motion-clips`.
 - `tests/fixtures/unit-a12.ts` now stages circlefist, perfectfist, lifetoll, tollring, deflectfate, turncycle and doubledial (chi prelude, a laid curse, a second foe, a big next move). Fixture/spec only: no src, rules, content, save or balance change.
