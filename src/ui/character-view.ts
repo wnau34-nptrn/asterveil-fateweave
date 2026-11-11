@@ -37,7 +37,7 @@ function treeSkillState(map: MapDefinition, h: HeroDefinition, base: HeroDefinit
   const passive = tree.find(n => 'passive' in n.effect) as TalentNodeDef & { effect: { passive: NonNullable<HeroDefinition['passive']> } } | undefined;
   const note = (a: ActionId, cd: number) => h.actions.includes(a) ? `ติดอยู่ · ${cd ? `คูลดาวน์ ${cd} รอบ` : 'ใช้ได้ทุกเทิร์น'}` : choices.includes(a) ? 'ปลดแล้ว · ยังไม่ได้ติด (เลือกในแท็บความถนัด)' : `ยังล็อก · ปลดที่โหนด ${nodeOf(a)?.name ?? ''} ชั้น ${nodeOf(a)?.tier ?? ''}`;
   return { actions: [...h.actions, ...choices.filter(a => !h.actions.includes(a)), ...locked], note,
-    passive: passive ? `<h3>พาสซีฟจากต้นไม้</h3><div class="character-passive"><strong>${passiveText[passive.effect.passive].name}</strong><p>${h.passive === passive.effect.passive ? 'ปลดล็อกแล้ว' : `ยังล็อก · ปลดที่โหนด ${passive.name} ชั้น ${passive.tier}`}</p><p>${passiveText[passive.effect.passive].help(data)}</p></div>` : '' };
+    passive: passive ? `<h3>พาสซีฟจากผังสกิล</h3><div class="character-passive"><strong>${passiveText[passive.effect.passive].name}</strong><p>${h.passive === passive.effect.passive ? 'ปลดล็อกแล้ว' : `ยังล็อก · ปลดที่โหนด ${passive.name} ชั้น ${passive.tier}`}</p><p>${passiveText[passive.effect.passive].help(data)}</p></div>` : '' };
 }
 // Skill tomes (save v37, docs/design/SKILL_TOMES_TH.md): what the camp can pay, and its reasons (the lobby builds it).
 export interface SkillTomeView { open: boolean; bag: TomeBag; gold: number; core: number; reason(id: string, action: ActionId): string; trade(line: TomeLine, size: TomeSize, to?: TomeLine): string; levelable(id: string): ActionId[] }
@@ -135,7 +135,7 @@ function bigTalents(s: CharacterState, map: MapDefinition, id: string, data: Enc
   const choices = skillChoices(base, map, m.talents, m.grants), now: ActionId[] = h.actions.filter(a => a !== 'attack'), size = map.progression.loadoutSize;
   const loadout = choices.map(a => { const on = now.includes(a), why = !on && now.length >= size ? `ติดครบ ${size} ช่องแล้ว ถอดก่อน` : on && now.length <= 1 ? 'ต้องติดอย่างน้อย 1 สกิล' : '';
     return `<button id="character-loadout-${a}" data-world="character-loadout" data-skill="${a}" class="loadout-skill" aria-pressed="${on}" aria-disabled="${!!why}" aria-label="${hd.skills[a].name} · ${on ? 'ติดอยู่' : 'ยังไม่ติด'}${why ? ` · ${why}` : ''}">${icon(a)}<b>${hd.skills[a].name}</b><small>${on ? 'ติดอยู่' : why || 'แตะเพื่อติด'}</small></button>`; }).join('');
-  return `<section class="talent-tree big-tree node-tree" aria-label="ต้นไม้สกิลของ${heroText[id]!.name}"><div class="tree-head"><h3>เส้นทาง${heroText[id]!.role}</h3><span class="ui-pill talent-points" role="status">${icon('stat-level')}<span>แต้มเหลือ <strong>${free}</strong>/${points}</span></span></div>
+  return `<section class="talent-tree big-tree node-tree" aria-label="ผังสกิลของ${heroText[id]!.name}"><div class="tree-head"><h3>เส้นทาง${heroText[id]!.role}</h3><span class="ui-pill talent-points" role="status">${icon('stat-level')}<span>แต้มเหลือ <strong>${free}</strong>/${points}</span></span></div>
     ${grid}${personalGrid}${card}
     ${unified?'':`<div class="loadout-head"><h3>สกิลที่ติดตั้ง</h3><span>${now.length}/${size}</span></div><div class="loadout-list">${loadout}</div>`}
     <p class="tree-legend" aria-hidden="true"><span class="lg skill"></span>สกิล <span class="lg choice"></span>ปรับสกิล <span class="lg passive"></span>พาสซีฟ <span class="lg capstone"></span>ขั้นสูงสุด</p>
@@ -143,7 +143,7 @@ function bigTalents(s: CharacterState, map: MapDefinition, id: string, data: Enc
 }
 export function characterTalents(s: CharacterState, map: MapDefinition, id: string, data: EncounterDefinition, h?: HeroDefinition, base?: HeroDefinition, selected?: string, unified=false): string {
   const m = s.members[id]!, nodes = map.talents[id];
-  if (!nodes) return '<p>ตัวละครนี้ไม่มีต้นไม้ความถนัด</p>';
+  if (!nodes) return '<p>ตัวละครนี้ไม่มีผังสกิล</p>';
   if (isBigTree(nodes) && h && base) return bigTalents(s, map, id, data, h, base, selected, unified);
   const points = talentPoints(map, m, id, levelOf(map, s)), free = points - talentsSpent(m.talents), branches = talentBranches[id] ?? ['สาย A', 'สาย B'];
   const why: Record<string, string> = { max: 'เต็มแล้ว', locked: 'ต้องลงขั้นก่อนหน้า', points: 'แต้มไม่พอ', unknown: 'ไม่พบความถนัด' };
@@ -152,5 +152,5 @@ export function characterTalents(s: CharacterState, map: MapDefinition, id: stri
     const state = rank >= def.max ? 'full' : rank ? 'partial' : reason === 'locked' ? 'locked' : 'open';
     return `<button id="character-talent-${n}" data-world="character-talent" data-node="${n}" class="talent-node${n.endsWith('3') ? ' capstone' : ''}" data-state="${state}" aria-disabled="${!!reason}" aria-label="${def.name} ขั้น ${rank}/${def.max} · ${talentHelp(def,data)}${reason?` · ${why[reason]}`:''}"><b>${def.name}</b><i>${rank}/${def.max}</i><small>${talentHelp(def, data)}</small><small>${reason ? why[reason] : 'แตะเพื่อลง 1 แต้ม'}</small></button>`;
   };
-  return `<section class="talent-tree" aria-label="ต้นไม้ความถนัดของ${heroText[id]!.name}"><p class="talent-points" role="status">แต้มเหลือ <strong>${free}</strong>/${points} · ได้ 1 แต้มทุกเลเวลอัป</p><div class="talent-root">${node('root')}</div><div class="talent-branches">${(['a', 'b'] as const).map((b, i) => `<div class="talent-branch"><h4>${branches[i]}</h4>${node(`${b}1`)}${node(`${b}2`)}<p class="talent-gate">ยอดสาย: ลงสายนี้ครบ 4 แต้ม</p>${node(`${b}3`)}</div>`).join('')}</div><p class="camp-note">ลงแต้มได้ทันทีนอกการต่อสู้ · คืนแต้มและเปลี่ยนสายได้ฟรีที่ครูฝึกในค่าย</p></section>`;
+  return `<section class="talent-tree" aria-label="ผังสกิลของ${heroText[id]!.name}"><p class="talent-points" role="status">แต้มเหลือ <strong>${free}</strong>/${points} · ได้ 1 แต้มทุกเลเวลอัป</p><div class="talent-root">${node('root')}</div><div class="talent-branches">${(['a', 'b'] as const).map((b, i) => `<div class="talent-branch"><h4>${branches[i]}</h4>${node(`${b}1`)}${node(`${b}2`)}<p class="talent-gate">ยอดสาย: ลงสายนี้ครบ 4 แต้ม</p>${node(`${b}3`)}</div>`).join('')}</div><p class="camp-note">ลงแต้มได้ทันทีนอกการต่อสู้ · คืนแต้มและเปลี่ยนสายได้ฟรีที่ครูฝึกในค่าย</p></section>`;
 }

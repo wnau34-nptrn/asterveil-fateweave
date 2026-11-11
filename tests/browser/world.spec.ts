@@ -1318,7 +1318,7 @@ test('camp NPCs stand at their stations, open their service when tapped and gree
   for (const b of await page.locator('.npc-hit').all()) { const box = (await b.boundingBox())!; expect(box.width).toBeGreaterThanOrEqual(44); expect(box.height).toBeGreaterThanOrEqual(44); }
   await page.waitForTimeout(600);
   await page.screenshot({ path: info.outputPath('camp-npcs.png') });
-  for (const [npc, title, line] of [['smith', 'เลือกงานโรงตีเหล็ก', 'ลุงบอร์ก'], ['broker', 'ป้ายจ้าง', 'พีโน่'], ['herbalist', 'นักปรุงยา', 'เฟิร์น'], ['keeper', 'อุปกรณ์', 'มิมี่'], ['trainer', 'ต้นไม้ความถนัด', 'ครูฮัลดา'], ['scout', 'จัดทีม', 'คาเอล']] as const) {
+  for (const [npc, title, line] of [['smith', 'เลือกงานโรงตีเหล็ก', 'ลุงบอร์ก'], ['broker', 'ป้ายจ้าง', 'พีโน่'], ['herbalist', 'นักปรุงยา', 'เฟิร์น'], ['keeper', 'อุปกรณ์', 'มิมี่'], ['trainer', 'ผังสกิล', 'ครูฮัลดา'], ['scout', 'จัดทีม', 'คาเอล']] as const) {
     await page.locator(`#npc-${npc}`).click();
     if(npc==='keeper')await page.locator('.storage-keeper summary').click();
     if(npc==='trainer'){await expect(page.locator('#camp-character-dialog')).toBeVisible();await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');await expect(page.locator('#npc-art-trainer')).toHaveAttribute('data-act','greet');await closeTalentDetails(page);await page.locator('#camp-character-dialog [data-world=character-close]').click();continue;}
