@@ -24,7 +24,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ## Next (owner review)
 
 - Review the saved visual direction and core system choices; leave rates/costs/pacing adjustable for later tuning. Do not automatically start G02/P09/G03/G04/G05 or payments. Real gacha still needs P09/P04/ledger/trust; OD-13 order applies.
-- UXD-08 combined UX check open. Team-preset owner usability review remains open.
+- UXD-08: regression 77/77 + 34 screens inspected 2026-11-11, one team-page layout fix ([validation](docs/validation/uxd-08/README_TH.md)); real-device/human trial and the ผังสกิล/ต้นไม้ความถนัด wording still open. Team-preset owner usability review remains open.
 
 ## Open items
 

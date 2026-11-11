@@ -165,6 +165,7 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 .character-links { display: flex; flex-wrap: wrap; gap: 8px; }
 .character-links h3 { flex-basis: 100%; margin: 0; }
 .character-links button { flex: 1 1 100px; min-height: 44px; }
+.character-links .tree-toggle { flex-basis: 100%; margin: 0; } /* UXD-08: the tree entry wrapped to three lines in a third-width cell at 390px */
 .auto-summary, .auto-empty { padding: 10px; border: 1px solid var(--gold-light); border-radius: 10px; color: var(--gold-light); font-size: 13px; }
 .lobby-menu { display: grid; grid-template-columns: repeat(5,minmax(44px,1fr)); gap: 6px; width: 100%; justify-items: center; }
 .lobby-menu .lobby-menu-button { width: 100%; max-width: 68px; min-width: 44px; }
