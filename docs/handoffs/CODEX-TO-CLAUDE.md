@@ -4,7 +4,7 @@
 - 7 real 390px clips + impact stills added to `docs/combat-presentation/unit-a12-slice/` (manifest now 26); staging and limits in its README. The 19 older clips were not re-captured (pre-#216 HUD).
 - Falling Star clip shows the set-up only; the round-end strike is not in it. Perfect Fist foe has ×6 HP for staging.
 - Checks: typecheck, lint, `tests/unit-a12.test.ts`, coverage/context tests, 7/7 capture runs with resolver-state equality; encoder re-decoded every clip. Chromium emulation, not a real phone.
-- Open: owner motion approval for A12 (none recorded yet); UXD-08 combined UX check not started.
+- Owner approved the seven clips with “ผ่าน ไปต่อได้” on 2026-11-11 (direct approval; the 19 earlier A12 clips were not re-sent). Open: UXD-08 combined UX check.
 
 ## 2026-11-10 — Straight HP counters + inspector status badges
 - PR [#218](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/218), `codex/straight-hp-status-inspector`; merged `2ac1105` after quality/browser passed. Owner authorized the latest straight-bar/numeric-HP/status-icon mockup.
