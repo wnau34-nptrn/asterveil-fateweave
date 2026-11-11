@@ -38,7 +38,16 @@ jobs:
       - run: npm ci
       # Type checking runs once in ci.yml (npm run build); shards only need the bundle.
       - run: npx vite build --base=/asterveil-fateweave/
-      - run: npx playwright install --with-deps chromium
+      # The Ubuntu mirrors sometimes fail to resolve on a runner (2026-11-11: every shard died here before any test ran).
+      # Retry the same install; the environment is unchanged when it succeeds.
+      - name: Install Chromium and its system packages (up to 3 attempts)
+        run: |
+          for attempt in 1 2 3; do
+            if npx playwright install --with-deps chromium; then exit 0; fi
+            echo "Browser install failed (attempt $attempt of 3); retrying in 30s"
+            sleep 30
+          done
+          exit 1
       # Partition the same source fixture files across four runners; each keeps one browser worker.
       - name: Verify painted blade, defense, healing, projectile, earth, alchemy and arcane seal source fixtures
         env:
