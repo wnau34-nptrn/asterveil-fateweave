@@ -5,9 +5,6 @@ name: Cloudflare permission probe
 # Uses throwaway dev resources only and deletes them in every outcome.
 on:
   workflow_dispatch:
-  push:
-    branches: ['claude/p09-02b-**']
-    paths: ['cloudflare/probe/**', '.github/workflows/cloudflare-probe.yml']
 
 permissions:
   contents: read

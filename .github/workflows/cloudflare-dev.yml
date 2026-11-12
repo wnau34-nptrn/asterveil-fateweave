@@ -4,7 +4,7 @@ on:
   pull_request:
     paths: ['cloudflare/**', 'src/server/**', 'src/core/**', 'src/content/**', 'tests/server-api.test.ts', 'scripts/content-version.mjs', '.github/workflows/cloudflare-dev.yml']
   push:
-    branches: [feature/fateweave-initial-prototype, 'claude/p09-02b-**']
+    branches: [feature/fateweave-initial-prototype]
     paths: ['cloudflare/**', 'src/server/**', 'src/core/**', 'src/content/**', 'scripts/content-version.mjs', '.github/workflows/cloudflare-dev.yml']
   workflow_dispatch:
 
@@ -38,7 +38,7 @@ jobs:
   # Wrangler prints the account name, which contains the owner's e-mail: every Wrangler output is filtered.
   deploy:
     needs: validate
-    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/feature/fateweave-initial-prototype' || startsWith(github.ref, 'refs/heads/claude/p09-02b-'))
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/feature/fateweave-initial-prototype'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -106,6 +106,6 @@ jobs:
               for (const l of lines){ buf+=l; try{ out.push(JSON.parse(buf)); buf=''; }catch{} }
               for (const e of out){ const r=e.event?.request; console.log([r?new URL(r.url).pathname:'-', e.scriptName, e.outcome, 'cpuTime='+(e.cpuTime??'n/a'), 'wallTime='+(e.wallTime??'n/a')].join('\t')); }
               if(!out.length) console.log('no tail events captured');
-            " || echo "tail parse failed"
+            " | tee /dev/stderr || echo "tail parse failed"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"

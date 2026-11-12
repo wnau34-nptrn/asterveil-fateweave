@@ -60,7 +60,9 @@ workflow `Cloudflare permission probe` (`.github/workflows/cloudflare-probe.yml`
 | battle 6 เทิร์น | 3,093 | 4–5 |
 | GET state | 1,155–2,907 | 1–2 |
 
-Worker ที่ deploy: bundle 383 KiB (gzip 87 KiB). เวลา CPU ต่อคำขอบน Cloudflare อ่านจาก Workers Tail ใน summary ของ workflow `Cloudflare development API` (ดู §7)
+Worker ที่ deploy: bundle 383 KiB (gzip 87 KiB), content `e7f18d399c8f67ac`. Smoke test บน Cloudflare จริง (12 พ.ย., runner GitHub ในสหรัฐฯ, เวลาไป-กลับรวมเครือข่าย): createCommander 878 B / 139 ms, ส่งซ้ำ 878 B (ไบต์เดิม) / 117 ms, depart 2,172 B / 118 ms, state 2,009 B / 85 ms, verify 92 ms, guest 135 ms — ผ่านทั้งหมด
+
+เวลา CPU ต่อคำขอบน Workers: workflow พิมพ์ `cpuTime`/`wallTime` จาก Workers Tail ลง log และ summary ทุกครั้งที่ deploy บนสาขาเกม (ค่าแรกบันทึกใน handoff หลัง merge)
 
 ## 6. ข้อเสนอสำหรับ D8 (Free/Paid) [เสนอ]
 
