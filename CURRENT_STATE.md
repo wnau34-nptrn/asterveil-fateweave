@@ -19,7 +19,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Next (owner review)
 
-- P09: D1 Google+recovery, D11 one-time import, D12 one device (owner “อนุมัติ” 2026-11-12). Token proven (D1 Edit + Workers Scripts Edit incl. DO) by `cloudflare-probe.yml`. Next P09-02c: shell talks to the server (prompt below); Google sign-in needs an OAuth Web Client ID from the owner; D8 Free/Paid uses SERVER_P09_02B §5–6 numbers. Owner may delete old probe run logs (Wrangler printed the account name).
+- P09: D1 Google+recovery, D11 one-time import, D12 one device (owner “อนุมัติ” 2026-11-12). Token proven (D1 Edit + Workers Scripts Edit incl. DO) by `cloudflare-probe.yml`. Next P09-02c: shell talks to the server (prompt below); Google OAuth Web Client ID (Testing mode) is in SERVER_P09_02B §7; D8 Free/Paid uses SERVER_P09_02B §5–6 numbers. Owner may delete old probe run logs (Wrangler printed the account name).
 
 - Gacha: review visual direction/core choices; rates/costs/pacing stay adjustable. Do not auto-start G02–G05 or payments; real gacha needs P09/P04/ledger (OD-13).
 - UXD-08: regression 77/77 + 34 screens inspected 2026-11-11, team-page fixes and the single term ผังสกิล (owner “อนุมัติ”; [validation](docs/validation/uxd-08/README_TH.md)); real-device/human trial still open. Team-preset owner usability review remains open.
