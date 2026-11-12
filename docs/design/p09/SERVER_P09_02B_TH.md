@@ -63,7 +63,9 @@ workflow `Cloudflare permission probe` (`.github/workflows/cloudflare-probe.yml`
 
 Worker ที่ deploy: bundle 383 KiB (gzip 87 KiB), content `e7f18d399c8f67ac`. Smoke test บน Cloudflare จริง (12 พ.ย., runner GitHub ในสหรัฐฯ, เวลาไป-กลับรวมเครือข่าย): createCommander 878 B / 139 ms, ส่งซ้ำ 878 B (ไบต์เดิม) / 117 ms, depart 2,172 B / 118 ms, state 2,009 B / 85 ms, verify 92 ms, guest 135 ms — ผ่านทั้งหมด
 
-เวลา CPU ต่อคำขอบน Workers: workflow พิมพ์ `cpuTime`/`wallTime` จาก Workers Tail ลง log และ summary ทุกครั้งที่ deploy บนสาขาเกม (ค่าแรกบันทึกใน handoff หลัง merge)
+เวลา CPU บน Workers (Workers Tail, deploy แรกจากสาขาเกมหลัง #225, 12 พ.ย.): ฝั่ง Worker (`/v1/*`, auth D1 + ส่งต่อ) 0–2 ms; ฝั่ง DO `/command` 1–6 ms (6 ms = createCommander/depart ที่สร้างโปรไฟล์/ออกสำรวจ), `/state` 1–3 ms, `/verify` (log 2 รายการ) 2 ms. workflow พิมพ์ค่าเหล่านี้ลง log/summary ทุกครั้งที่ deploy
+
+ข้อสังเกต [เสนอ]: ทุกคำสั่งที่วัดได้ต่ำกว่าเพดาน CPU ของแผน Free (10 ms ต่อคำขอ ณ วันที่เขียน — ตรวจซ้ำกับเอกสาร Cloudflare ตอนตัดสิน D8); ยังไม่ได้วัด battle ยาว ๆ และ `/verify` ที่ log ยาวบน Workers — สองอย่างนี้เสี่ยงเกินก่อน
 
 ## 6. ข้อเสนอสำหรับ D8 (Free/Paid) [เสนอ]
 
@@ -75,7 +77,7 @@ Worker ที่ deploy: bundle 383 KiB (gzip 87 KiB), content `e7f18d399c8f67ac
 
 - **P09-02c** (ทำแล้ว → [CLIENT_SERVER_P09_02C_TH](CLIENT_SERVER_P09_02C_TH.md)): shell ส่งคำสั่งไป server และแสดง `view` แทนเกมในเครื่อง; ล็อกระหว่างรอ, reconnect/ส่งซ้ำด้วย requestId เดิม, ตอบ 409 `stale`/`gap` ด้วยการอ่าน state ใหม่; ใส่ `CONTENT_VERSION` ตอน build (Vite define จาก `scripts/content-version.mjs`); ชนิด UI เป็น `ClientProfile`/`ClientRun` (CLIENT_VIEW §5 ข้อ 1–2)
 - **D12 ทีละเครื่อง**: ทำแล้วใน P09-02c (`POST /v1/session`, 423 `other_device`)
-- **Google sign-in (D1)**: ต้องขอเจ้าของ: Google OAuth Client ID (ชนิด Web) พร้อม authorized JavaScript origin ของ Pages; server ตรวจ ID token กับ JWKS ของ Google; ตาราง `identities`/`recovery_codes` ตาม SCHEMA_API_DRAFT
+- **Google sign-in (D1)**: เจ้าของสร้าง OAuth Web Client แล้ว (12 พ.ย., Google Cloud project `asterveil-fateweave`, โหมด Testing, origins `https://wnau34-nptrn.github.io` + `http://localhost:5173`): Client ID `982054923877-79lqr98hgklktknar98k6jsnvs4dk4fb.apps.googleusercontent.com` (ไม่ใช่ความลับ; ไม่ใช้ client secret); server ตรวจ ID token กับ JWKS ของ Google; ตาราง `identities`/`recovery_codes` ตาม SCHEMA_API_DRAFT
 - **D11 นำเข้าเซฟ**: ยังไม่ทำ (`checkUpload`/`decideUpload` มีแล้ว); ต้อง replay เซฟ v58 ด้วย `parseGame` ใน DO และเก็บ fingerprint ใน D1
 - log ใน DO โตไม่หยุด → snapshot เป็นระยะ + ตัด log เก่าตาม D6; `/v1/verify` replay ทั้ง log (ช้าเมื่อยาว) → จำกัดให้ admin
 - rate limit อยู่ในหน่วยความจำของ isolate (best effort) → ใช้ Rate Limiting binding ของ Cloudflare หรือนับใน DO ก่อนเปิดคนนอก; `/v1/guest` ไม่ idempotent (retry ได้บัญชีใหม่)

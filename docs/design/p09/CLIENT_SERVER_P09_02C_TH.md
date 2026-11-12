@@ -36,6 +36,7 @@
 ## 5. ที่เหลือ [เสนอ]
 
 - ข้อความ "บันทึกบนเครื่องนี้อัตโนมัติ" ในศึก/แผนที่ยังขึ้นในโหมด server (ควรเป็น "บันทึกบนเซิร์ฟเวอร์")
+- Google sign-in: Client ID พร้อมแล้ว (#226, SERVER_P09_02B §7) → งานถัดไป P09-02d; วัด CPU ศึกยาวและ `/v1/verify` บน log ยาว
 - ชนิดข้อมูล UI ยังเป็น `Profile`/`ExpeditionState` เต็ม (ใช้ `server-game.ts` แปลง); เปลี่ยนเป็น `ClientProfile`/`ClientRun` รายไฟล์เมื่อแตะไฟล์นั้น (CLIENT_VIEW §5 ข้อ 1)
-- Google sign-in รอ OAuth Web Client ID จากเจ้าของ; D11 นำเข้าเซฟ; snapshot log; rate limit จริง; migrate เซฟเมื่อ deploy เนื้อหาใหม่ (SERVER_P09_02B §7)
+- D11 นำเข้าเซฟ; snapshot log; rate limit จริง; migrate เซฟเมื่อ deploy เนื้อหาใหม่ (SERVER_P09_02B §7)
 - ยังไม่ได้ทดสอบกับ Worker dev ที่ deploy จริงจากเบราว์เซอร์ (รอ workflow deploy หลัง merge แล้วเปิด `?server=`), Safari/iPhone/Android จริง

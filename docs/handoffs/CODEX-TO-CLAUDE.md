@@ -4,14 +4,14 @@
 - `game-shell.ts`: every command is `exec(cmd, then)` — local unchanged (sync), server mode locks all views (`inert`), shows a wait note/problem card (`src/ui/server-play.css`), adopts `view`/`events` via `src/ui/server-game.ts`, never touches the local save; battle turns queue, leaving waits for the last answer.
 - Server D12: `POST /v1/session` claims the account for a session (`X-Fateweave-Session`, DO table `session`); other sessions get 423 `other_device`; smoke script covers it.
 - Tests: `tests/server-client.test.ts` 7 (client vs real Worker+DO in process, fakes moved to `tests/fixtures/server-fakes.ts`), server-api +1, `tests/browser/server-play.spec.ts` (390px: 423 card, lost answer retry, inert lock, no local save, reload resume); typecheck/lint/unit 1766 pass/build; local world+combat+rewards specs re-run. Details: [CLIENT_SERVER_P09_02C_TH](../design/p09/CLIENT_SERVER_P09_02C_TH.md).
-- No rule/number/save v58 change. Open: server-mode save labels, UI types → ClientProfile/ClientRun, Google OAuth Client ID, D11 import (next prompt), live test against the deployed Worker.
+- No rule/number/save v58 change. Open: server-mode save labels, UI types → ClientProfile/ClientRun, Google sign-in (next prompt; client ID from #226), D11 import, long-battle/verify CPU, live test against the deployed Worker.
 
 ## 2026-11-12 — P09-02b Worker + per-account DO + D1 (dev, not wired to UI)
 - Owner “เริ่ม P09-02b”; branch `claude/p09-02b-worker-do-d1` → PR #225 into `feature/fateweave-initial-prototype`.
 - Step 1: `cloudflare-probe.yml` proved the existing secret creates/queries/deletes D1 and deploys/deletes a Worker with a SQLite DO (throwaway resources removed).
 - `src/server/`: Worker front door (`api.ts`: /health unchanged, /v1/guest, /v1/state, /v1/command, /v1/verify; size/media/content-version/auth/rate limits/CORS), DO `GameAccount` (`account-object.ts`) over pure `GameHost` (`game-host.ts`: `processCommand`, crypto seeds logged, state+book+log in one `transactionSync`, `replayLog`), D1 guests with token hashes (`accounts.ts`, `cloudflare/migrations/0001_accounts.sql`). Content version = `scripts/content-version.mjs`.
 - `cloudflare-dev.yml` now tests, finds/creates D1 `asterveil-dev`, migrates, deploys, runs `cloudflare/smoke.mjs` + Workers Tail CPU on game-branch pushes; old `index.mjs` probe removed.
-- Tests: `tests/server-api.test.ts` 8 (node:sqlite fakes); typecheck/lint/unit 1758/build pass; local `wrangler dev` and deployed dev Worker smoke OK. Numbers: SERVER_P09_02B_TH §5 (~3 KB/command).
+- Tests: `tests/server-api.test.ts` 8 (node:sqlite fakes); typecheck/lint/unit 1758/build pass; local `wrangler dev` and deployed dev Worker smoke OK. Numbers: SERVER_P09_02B_TH §5 (~3 KB/command; Workers CPU: Worker 0–2 ms, DO command 1–6 ms).
 - No rule/number/save v58/UI change. Open: P09-02c, Google OAuth client from owner, D11 import, D8 plan, log snapshots, real rate limiting; Wrangler printed the account name in early probe logs (filtered since).
 
 ## 2026-11-12 — P09-02a2 seed-free client view + command envelope (local)
