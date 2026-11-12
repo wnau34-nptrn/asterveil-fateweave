@@ -31,14 +31,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Token identity (no secret printed)
-        run: $WRANGLER whoami 2>&1 | grep -viE 'token|@' | tail -n 30 || true
       - name: D1 create, query, delete
         id: d1
         run: |
           set -o pipefail
           echo "## D1" >> "$GITHUB_STEP_SUMMARY"
-          $WRANGLER d1 create "$D1_NAME" 2>&1 | tail -n 15
+          $WRANGLER d1 create "$D1_NAME" 2>&1 | grep -iE 'success|error|creat' | grep -v '@'
           $WRANGLER d1 execute "$D1_NAME" --remote --yes --json --command "CREATE TABLE t (n INTEGER); INSERT INTO t VALUES (41); SELECT n + 1 AS answer FROM t;" > /tmp/d1.json
           node -e "const r=JSON.parse(require('fs').readFileSync('/tmp/d1.json','utf8')); const ok=r.some(x=>x.results?.some(row=>row.answer===42)); console.log('answer 42:', ok); if(!ok) process.exit(1)"
           echo "D1 create/query OK" >> "$GITHUB_STEP_SUMMARY"
@@ -47,7 +45,8 @@ jobs:
         working-directory: cloudflare/probe
         run: |
           set -o pipefail
-          $WRANGLER deploy 2>&1 | tail -n 20 | tee /tmp/deploy.txt
+          $WRANGLER deploy > /tmp/deploy.txt 2>&1 || { grep -v '@' /tmp/deploy.txt | tail -n 20; exit 1; }
+          grep -iE 'uploaded|deployed|workers.dev' /tmp/deploy.txt | grep -v '@'
           url=$(grep -oE 'https://[a-z0-9.-]+\.workers\.dev' /tmp/deploy.txt | head -n1)
           test -n "$url"
           echo "url=$url" >> "$GITHUB_OUTPUT"
@@ -76,7 +75,14 @@ jobs:
       - name: Delete probe Worker
         if: always()
         working-directory: cloudflare/probe
-        run: $WRANGLER delete --force 2>&1 | tail -n 10 || true
+        env:
+          WORKER_URL: ${{ steps.deploy.outputs.url }}
+        # Wrangler prints the account name (it contains the owner's e-mail): keep only the result lines.
+        run: |
+          printf 'y\n' | $WRANGLER delete --force 2>&1 | grep -iE 'success|delet|error|not exist' | grep -v '@' || true
+          code=$(curl -s -o /dev/null -w '%{http_code}' "${WORKER_URL}/health" || true)
+          echo "probe /health after delete: HTTP $code"
+          echo "Probe Worker after delete: HTTP $code" >> "$GITHUB_STEP_SUMMARY"
       - name: Delete probe D1
         if: always()
-        run: $WRANGLER d1 delete "$D1_NAME" --skip-confirmation 2>&1 | tail -n 10 || true
+        run: $WRANGLER d1 delete "$D1_NAME" --skip-confirmation 2>&1 | grep -iE 'delet|error' | grep -v '@' || true
