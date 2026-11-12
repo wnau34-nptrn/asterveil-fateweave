@@ -3,7 +3,7 @@
 - Step 1: `cloudflare-probe.yml` proved the existing secret creates/queries/deletes D1 and deploys/deletes a Worker with a SQLite DO (throwaway resources removed).
 - `src/server/`: Worker front door (`api.ts`: /health unchanged, /v1/guest, /v1/state, /v1/command, /v1/verify; size/media/content-version/auth/rate limits/CORS), DO `GameAccount` (`account-object.ts`) over pure `GameHost` (`game-host.ts`: `processCommand`, crypto seeds logged, state+book+log in one `transactionSync`, `replayLog`), D1 guests with token hashes (`accounts.ts`, `cloudflare/migrations/0001_accounts.sql`). Content version = `scripts/content-version.mjs`.
 - `cloudflare-dev.yml` now tests, finds/creates D1 `asterveil-dev`, migrates, deploys, runs `cloudflare/smoke.mjs` + Workers Tail CPU on game-branch pushes; old `index.mjs` probe removed.
-- Tests: `tests/server-api.test.ts` 8 (node:sqlite fakes); typecheck/lint/unit 1758/build pass; local `wrangler dev` and deployed dev Worker smoke OK. Numbers: SERVER_P09_02B_TH §5 (~3 KB/command).
+- Tests: `tests/server-api.test.ts` 8 (node:sqlite fakes); typecheck/lint/unit 1758/build pass; local `wrangler dev` and deployed dev Worker smoke OK. Numbers: SERVER_P09_02B_TH §5 (~3 KB/command; Workers CPU: Worker 0–2 ms, DO command 1–6 ms).
 - No rule/number/save v58/UI change. Open: P09-02c, Google OAuth client from owner, D11 import, D8 plan, log snapshots, real rate limiting; Wrangler printed the account name in early probe logs (filtered since).
 
 ## 2026-11-12 — P09-02a2 seed-free client view + command envelope (local)
