@@ -55,15 +55,23 @@
 | `/v1/verify` log 50 / 150 / 300 | 40–53 / 100–115 / 180–210 ms |
 | ศึกยาวสังเคราะห์ (HP ศัตรู ×12, ศึก 47 เทิร์นวนซ้ำ, log 260) | เทิร์นที่ 25 ≈ 6–13 ms, เทิร์นที่ 47 ≈ 18–20 ms (โตตามจำนวนเทิร์น ~0.35 ms/เทิร์นที่ replay); `/v1/verify` 0.9–1.2 วินาที |
 
-### 5.2 Workers (CPU จริง)
+### 5.2 Workers (CPU จริง, deploy หลัง #229, 12 พ.ย.)
 
-workflow `cloudflare-dev.yml` รันชุดเดียวกันกับ Worker dev ที่ deploy (log 300, verify ที่ 50/150/300) ขณะเปิด Workers Tail และสรุป CPU ต่อเส้นทาง (p50/p95/max) + CPU ของ `/verify` ทีละครั้งลง summary ของ run หลัง merge — ตัวเลขบันทึกใน handoff/CURRENT_STATE
+workflow `cloudflare-dev.yml` รันชุดเดียวกันกับ Worker dev (log 300, verify ที่ 50/150/300) ขณะเปิด Workers Tail (Tail เก็บได้บางส่วน: DO `/command` 105 จาก ~300 ครั้ง, DO `/verify` 1 จาก 3 ครั้ง)
+
+| เส้นทาง | CPU (ms) |
+|---|---|
+| Worker ทุกเส้นทาง (auth D1 + ส่งต่อ; `/v1/recover` `/v1/recovery-code` `/v1/guest`) | 0–4 |
+| DO `/command` (เล่นจริง MAP1, ศึกยาวสุด 19 เทิร์น) | p50 7 · p95 19 · max 24 |
+| DO `/verify` (log ยาว, ครั้งที่ Tail จับได้) | 215 |
+
+เวลาไป-กลับจาก runner ในสหรัฐฯ: คำสั่ง p50 198 ms; verify log 50/150/300 = 301/384/471 ms (รวมเครือข่าย). ไม่มีคำขอใดล้มเพราะ CPU ในรอบนี้
 
 ### 5.3 ข้อสรุป [เสนอ]
 
 - **`/v1/verify` replay ทั้ง log จึงโต O(n) ตามจำนวนคำสั่ง × ความยาวศึก** และเกิน 10 ms ของ Free plan ตั้งแต่ log สั้น ๆ: ใช้เป็น audit ของ admin/งานเบื้องหลังเท่านั้น และทำ snapshot เป็นระยะ (verify จาก snapshot ล่าสุด) ก่อนเปิดคนนอก (ตรง SERVER_P09_02B §7)
 - **คำสั่ง `battle` replay ทั้งศึกทุกเทิร์น** — ศึกจริง MAP1 ~20 เทิร์นยังเบา แต่ศึกบอส/ศึกยาว 50+ เทิร์นแตะ 10–20 ms (Node): ทางลด (ไม่เปลี่ยนกฎ): DO เก็บ `BattleState` ล่าสุดในหน่วยความจำแล้ว resolve เฉพาะเทิร์นใหม่ (ตรวจว่า prefix ตรงกับที่เก็บไว้) — เลือกหลังเห็น CPU จริงของ Workers
-- ตัดสิน D8: ถ้า Workers CPU ใกล้เคียง Node → Free plan พอสำหรับเล่นปกติแต่ไม่พอสำหรับ verify; Paid (เพดาน CPU สูงกว่า) หรือทำ snapshot+incremental ก่อน
+- ตัดสิน D8: CPU บน Workers สูงกว่า Node ราว 1.5–2 เท่า: คำสั่งศึก p95 19 ms เกิน 10 ms ของ Free แล้ว (ศึกยาวจะเกินมากขึ้น) และ verify 215 ms → แนะนำ Paid หรือทำ battle แบบ incremental + snapshot ก่อนเปิดคนนอก
 
 ## 6. ที่เหลือ [เสนอ]
 

@@ -19,7 +19,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Next (owner review)
 
-- P09: next P09-02e D11 one-time import (prompt below). Owner can try Google on Pages `?server=<dev Worker URL>` as a Testing-mode test user. `/v1/verify` replays the whole log (≈0.2–1 s Node at ~300 commands) → admin-only + snapshots before outsiders; long battles replay every turn (~20 ms Node at 47 turns). D8 Free/Paid: ACCOUNT_P09_02D §5 + SERVER_P09_02B §5–6.
+- P09: next P09-02e D11 one-time import (prompt below). Owner can try Google on Pages `?server=<dev Worker URL>` as a Testing-mode test user. Workers CPU (P09-02d deploy): DO command p50 7 / p95 19 / max 24 ms (over Free's 10 ms at p95), `/v1/verify` 215 ms at a ~300-command log → admin-only verify + snapshots + incremental battle, or Paid, before outsiders. D8 Free/Paid: ACCOUNT_P09_02D §5 + SERVER_P09_02B §5–6.
 
 - Gacha: review visual direction/core choices; rates/costs/pacing stay adjustable. Do not auto-start G02–G05 or payments; real gacha needs P09/P04/ledger (OD-13).
 - UXD-08: regression 77/77 + 34 screens inspected 2026-11-11, team-page fixes and the single term ผังสกิล (owner “อนุมัติ”; [validation](docs/validation/uxd-08/README_TH.md)); real-device/human trial still open. Team-preset owner usability review remains open.
