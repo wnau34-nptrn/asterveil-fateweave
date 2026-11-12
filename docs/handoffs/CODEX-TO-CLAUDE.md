@@ -1,3 +1,7 @@
+## 2026-11-12 — P09 owner decisions D1/D11/D12
+- Owner “อนุมัติ” on Claude's recommendations: D1 Google sign-in + recovery code, D11 import a local save once per account before the external test, D12 one device at a time. Recorded in `docs/design/OWNER_DECISIONS_TH.md` and `docs/design/p09/README_TH.md` (docs only).
+- Owner “อนุมัติตามที่คุณแนะนำ ดำเนินการได้”: P09-02a2 (seed-free client view + command envelope) opened as a separate Opus session.
+
 ## 2026-11-12 — P09-02a command layer + seeds behind a port (local)
 - Owner “ดำเนินการต่อได้” after P09-01 (#221); branch `claude/p09-02a-command-layer` → PR into `feature/fateweave-initial-prototype`.
 - `src/core/command/game-command.ts`: 55 JSON command kinds (camp + map + `battle`), `parseCommand` shape check, pure `applyCommand(game, cmd, ctx)` calling the existing `core/world` rules; `depart` includes the prologue start, `move` to the goal / a wiped battle / `withdraw` settle in the same command.
