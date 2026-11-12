@@ -18,6 +18,7 @@
 | [TRUST_BOUNDARY_TH.md](TRUST_BOUNDARY_TH.md) | อะไรเป็นของ server (ทั้งหมด) และการปฏิบัติต่อเซฟเก่า |
 | [SCHEMA_API_DRAFT_TH.md](SCHEMA_API_DRAFT_TH.md) | ร่างตาราง D1/DO และ endpoint |
 | [COMMAND_LAYER_TH.md](COMMAND_LAYER_TH.md) | **P09-02a**: รายการคำสั่งค่าย/แผนที่ `applyCommand`, จุดที่ seed ถูกใช้, สิ่งที่เหลือก่อนต่อ server |
+| [CLIENT_VIEW_TH.md](CLIENT_VIEW_TH.md) | **P09-02a2**: มุมมองเครื่องไม่มี seed (`clientView`, `hireBoard`) และซองคำสั่ง `{requestId, seq}` (`processCommand`) |
 
 ต้นแบบ pure (ยังไม่ต่อกับเกม/Worker): `src/core/cloud/cloud-save.ts` (`checkUpload`, `decideUpload`, `decideCommand`), เทสต์ `tests/cloud-save-envelope.test.ts`
 

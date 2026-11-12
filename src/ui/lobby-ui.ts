@@ -11,7 +11,7 @@ import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gea
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BossPower, ActionId, HeroDefinition } from '../core/battle/types';
 import { withParty } from '../core/battle/engine';
-import { hardReason, reserveSlots, activeGuides, guideDone, featureMap, featureOpen, mapUnlocked, boardOffers, brewReason, buyReason, claimReason, refreshReason, shopLeft, dismissReason, equip, groupOf, hireReason, talentPoints, talentsSpent, type Group } from '../core/world/profile';
+import { hardReason, reserveSlots, activeGuides, guideDone, featureMap, featureOpen, mapUnlocked, brewReason, buyReason, claimReason, refreshReason, shopLeft, dismissReason, equip, groupOf, talentPoints, talentsSpent, type Group } from '../core/world/profile';
 import { isBigTree } from '../core/world/talents';
 import { salvageValue } from '../core/world/equipment';
 import { campPresetPlan, matchesPreset, presetOf, presetSlots } from '../core/world/presets';
@@ -20,6 +20,7 @@ import { levelOf, recommendedLane, starred, type EncounterLookup } from '../core
 import { emptyTomes, raiseSkill, tradeTomes, levelableSkills, skillLevelReason, tradeReason } from '../core/world/tomes';
 import type { TomeLine, TomeSize } from '../core/world/types';
 import { formation } from '../core/world/formation';
+import type { HireSlot } from '../core/command/client-view';
 import { formationGrid, formationTap, laneName } from './formation-grid';
 import { actorArt, actorFootOrigins, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, npcBustsUrl, npcStationsUrl, unitsUrl, type LobbyPose, type NpcId } from '../game/visuals/assets';
 import { type IconName, icon } from './icons';
@@ -37,7 +38,8 @@ export interface LobbyHost { archive(id: string, archived: boolean): void; autoE
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; guide(id: string, skip: boolean): void;
   enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(mapId?: string, hard?: boolean): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
-export interface LobbyView { profile: Profile; message: string; saved: boolean; cheer?: string; npcCheer?: NpcId }
+// `board`: the hiring board from the seed-free client view (`core/command/client-view.ts`), never worked out here.
+export interface LobbyView { profile: Profile; board: readonly HireSlot[]; message: string; saved: boolean; cheer?: string; npcCheer?: NpcId }
 type Sheet = 'team' | 'hire' | 'tree' | 'gear' | 'forge' | 'brew' | 'hunt' | 'maps' | 'board';
 // Each camp NPC stands at a fixed spot along the back of the camp (x %, left half faces right) and runs one service.
 // `px`: the spot on portrait phones, where the camp is wider than the screen (3×) and pans sideways: the staff
@@ -58,6 +60,7 @@ const guideText: Record<GuideKind, string> = {
 };
 export class LobbyUI {
   private view: LobbyView | undefined;
+  private get offers(): readonly HireSlot[] { return this.view?.board ?? []; }
   // The team, hire or talent-tree sheet floats over the camp; the scene alone shows when it is closed.
   // The tree sheet is its own window, opened from a member in the team sheet (`picked`).
   // The equipment sheet (2D-2) works the same way.
@@ -379,7 +382,7 @@ export class LobbyUI {
     const menu = (id: Exclude<Sheet,'tree'>, glyph: Parameters<typeof icon>[0], label: string, shown: string, badge = this.locked(id) ? '🔒' : shown) =>
       `<button id="lobby-tab-${id}" data-lobby="tab" data-tab="${id}" class="lobby-menu-button${this.sheet === id || id === 'team' && this.sheet === 'tree' ? ' active' : ''}" aria-expanded="${this.sheet === id || id === 'team' && this.sheet === 'tree'}" aria-controls="lobby-sheet">${icon(glyph)}<span>${label}</span>${badge ? `<small>${badge}</small>` : ''}</button>`;
     const forgeBody=this.sheet==='forge'&&!this.locked('forge')?this.forge(p):'';
-    const openOffers = boardOffers(p, this.map, this.lookup).filter((_, i) => !hireReason(p, this.map, this.lookup, i)).length;
+    const openOffers = this.offers.filter(o => !o.reason).length;
     this.root.querySelector('.lobby-hud')!.innerHTML = `
       <button class="lobby-pan-button" data-lobby="pan" data-dir="-1" aria-label="เลื่อนดูค่ายทางซ้าย" tabindex="-1">${icon('left')}</button><button class="lobby-pan-button" data-lobby="pan" data-dir="1" aria-label="เลื่อนดูค่ายทางขวา" tabindex="-1">${icon('right')}</button>
       <header class="lobby-top"><button data-lobby="home" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>${this.musicButton()}
@@ -557,14 +560,14 @@ export class LobbyUI {
   private board(p: Profile): string {
     const tabs = `<div class="hire-tabs" role="tablist">${(['board', 'market'] as const).map(t => `<button id="hire-tab-${t}" role="tab" data-lobby="hire-tab" data-tab="${t}" aria-selected="${(t === 'market') === this.market}" class="${(t === 'market') === this.market ? 'active' : ''}">${icon(t === 'market' ? 'pack' : 'gold')}<span>${t === 'market' ? 'ตลาด' : 'ป้ายจ้าง'}</span></button>`).join('')}</div>`;
     if (this.market) return tabs + this.marketList(p);
-    if (this.preview !== undefined && boardOffers(p, this.map, this.lookup)[this.preview]) return this.hirePreview(p, this.preview);
+    if (this.preview !== undefined && this.offers[this.preview]) return this.hirePreview(p, this.preview);
     const why: Record<string, string> = { taken: 'จ้างแล้ว', gold: 'เหรียญทองไม่พอ', maxed: 'ดาวเต็มแล้ว' };
     const costs = this.map.shop.refreshCosts; const left = costs.length - p.refreshes; const rr = refreshReason(p, this.map);
     const refresh = `<button id="hire-refresh" data-lobby="refresh" class="secondary hire-refresh"${rr ? ' disabled' : ''}>${icon('reroll')}<span>${rr === 'limit' ? 'สุ่มป้ายครบแล้วรอบนี้' : `สุ่มป้ายใหม่ · ${costs[p.refreshes]} เหรียญทอง`}<small>เหลือ ${left}/${costs.length} ครั้ง${rr === 'gold' ? ' · เหรียญทองไม่พอ' : ''}</small></span></button>`;
     const lanes = (['all', 'front', 'back'] as const).map(l => `<button id="hire-lane-${l}" class="ui-chip" data-lobby="hire-lane" data-lane="${l}" aria-pressed="${this.lane === l}">${{ all: 'ทั้งหมด', front: 'แนวหน้า', back: 'แนวหลัง' }[l]}</button>`).join('');
     return `${tabs}<div class="hire-top"><p class="hire-cost">จ้างคนละ ${this.map.company.hireCost} เหรียญทอง · ป้ายเปลี่ยนใหม่เมื่อกลับจากการเดินทาง</p><span class="ui-pill" aria-label="มีเหรียญทอง ${p.bank.gold}">${icon('gold')}${p.bank.gold}</span></div><div class="hire-lanes" role="group" aria-label="กรองตามแนว">${lanes}</div>${refresh}
-      <ul class="hire-list hire-board">${boardOffers(p, this.map, this.lookup).map((id, i) => ({ id, i })).filter(({ id }) => this.lane === 'all' || this.hero(id).lane === this.lane).map(({ id, i }) => {
-        const reason = hireReason(p, this.map, this.lookup, i); const h = this.hero(id); const text = heroText[id]!; const m = p.members[id];
+      <ul class="hire-list hire-board">${this.offers.map(({ heroId: id, reason }, i) => ({ id, i, reason })).filter(({ id }) => this.lane === 'all' || this.hero(id).lane === this.lane).map(({ id, i, reason }) => {
+        const h = this.hero(id); const text = heroText[id]!; const m = p.members[id];
         const status = m ? `${this.stars(m.stars)} ตัวซ้ำ ${m.dupes} · มีในค่าย` : 'ใหม่ · ★1';
         return `<li class="${reason === 'taken' ? 'taken' : ''}"><button id="hire-open-${i}" data-lobby="hire-preview" data-index="${i}" class="hire-open" aria-label="ดูข้อมูล${text.name}ก่อนจ้าง">${heroArt(id)}<span>${this.stars(m?.stars ?? 1)}<b>${text.name}</b><small>${text.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${text.help}</small><small class="hire-status">${status} · แตะเพื่อดูสกิล</small></span></button>
           <button id="hire-${i}" data-lobby="hire" data-index="${i}" class="secondary"${reason ? ' disabled' : ''} aria-label="จ้าง${text.name} ใช้เหรียญทอง ${this.map.company.hireCost}">${reason ? why[reason] ?? 'จ้างไม่ได้' : `จ้าง · ${this.map.company.hireCost}`}</button></li>`;
@@ -573,8 +576,7 @@ export class LobbyUI {
   }
   // Preview of a hiring offer: the mercenary as they would join (or as owned), stats, every skill and the star unlocks.
   private hirePreview(p: Profile, index: number): string {
-    const id = boardOffers(p, this.map, this.lookup)[index]!; const text = heroText[id]!; const m = p.members[id]; const h = this.hero(id);
-    const reason = hireReason(p, this.map, this.lookup, index);
+    const { heroId: id, reason } = this.offers[index]!; const text = heroText[id]!; const m = p.members[id]; const h = this.hero(id);
     const why: Record<string, string> = { taken: 'จ้างแล้ว', gold: 'เหรียญทองไม่พอ', maxed: 'ดาวเต็มแล้ว' };
     const data = withParty(this.lookup(this.map.tutorialEncounterId)!, [h]);
     const skills = h.actions.map((a: ActionId) => `<li>${icon(a)}<div><b>${data.skills[a].name}</b><small>${data.skills[a].cooldown ? `คูลดาวน์ ${data.skills[a].cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น'}</small><p>${skillDescription(a, id, data)}</p></div></li>`).join('');

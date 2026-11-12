@@ -5,7 +5,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`. Pre-release pushes deploy after lint/unit/build; browser PR gate is path-filtered. Restore Pages browser gate before OD-13 external tests.
-- Save v58; Phaser/TypeScript/Vite, local saves, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked, existing rights preserved. No gacha wallet/accounts/reward ledger; Worker only `/health`. P09 design: [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md); owner D10 = ค (server decides, server seeds). P09-02a done: shell actions run as JSON commands through pure `applyCommand` (`src/core/command/`), seeds from an injected `SeedSource`; [COMMAND_LAYER_TH](docs/design/p09/COMMAND_LAYER_TH.md).
+- Save v58; Phaser/TypeScript/Vite, local saves, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked, existing rights preserved. No gacha wallet/accounts/reward ledger; Worker only `/health`. P09 design: [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md); owner D10 = ค (server decides, server seeds). P09-02a done: shell actions run as JSON commands through pure `applyCommand` (`src/core/command/`), seeds from an injected `SeedSource`; [COMMAND_LAYER_TH](docs/design/p09/COMMAND_LAYER_TH.md). P09-02a2 done: seed-free `clientView` (drops profile seed/forge, run seed/rolls, adds `hireBoard`; lobby reads the board from it) and pure `processCommand` envelope `{requestId, seq, command}` (not used by the local shell); [CLIENT_VIEW_TH](docs/design/p09/CLIENT_VIEW_TH.md).
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3. Rights follow cleared history.
 - Battle HUD #218 (`2ac1105`): straight HP tracks, status badges, 3-colour HP; [validation](docs/validation/battle-front-hp/README_TH.md).
 - MAP quest tabs #213 (`da1d508`): เป้าหมาย / เควสต์ in one dialog.
@@ -22,7 +22,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Next (owner review)
 
-- P09: owner picks D1/D11/D12 (rec. Google+recovery code; import old saves once before external test; one device at a time). Next local step P09-02a2 seed-free client view (prompt below, touches `lobby-ui.ts`: start after Codex's HUD work); P09-02b Worker+DO+D1 needs D1 Edit/DO on the token.
+- P09: owner picks D1/D11/D12 (rec. Google+recovery code; import old saves once before external test; one device at a time; docs PR #223 open). Next P09-02b Worker+DO+D1 (prompt below) needs D1 Edit/DO on the token; leftovers before it in CLIENT_VIEW_TH §5.
 
 - Gacha: review visual direction/core choices; rates/costs/pacing stay adjustable. Do not auto-start G02–G05 or payments; real gacha needs P09/P04/ledger (OD-13).
 - UXD-08: regression 77/77 + 34 screens inspected 2026-11-11, team-page fixes and the single term ผังสกิล (owner “อนุมัติ”; [validation](docs/validation/uxd-08/README_TH.md)); real-device/human trial still open. Team-preset owner usability review remains open.
@@ -39,4 +39,4 @@ Cloud checkouts are fresh; verify remote head/ancestry, never reset unpushed wor
 
 ## Opening prompt for next chat
 
-P09-02a2 (Opus, local, no Cloudflare): read CLAUDE/CURRENT_STATE and docs/design/p09/COMMAND_LAYER_TH.md §3–4. Add a pure seed-free client view of `Game` (drop seed/rolls/forge counter, add computed `boardOffers`) and make `lobby-ui` read the hiring board from it; wrap commands in `{requestId, seq}` with `decideCommand`. Keep rules, numbers, save v58 and UI behaviour unchanged; PR into `feature/fateweave-initial-prototype`.
+P09-02b (Opus): read CLAUDE/CURRENT_STATE and docs/design/p09/CLIENT_VIEW_TH.md §5 + SCHEMA_API_DRAFT_TH.md. First check the Cloudflare token has D1 Edit + Durable Objects; if not, stop and tell the owner. Build the Worker command endpoint on a per-account DO calling `processCommand` with a server `SeedSource`, storing game+book in one write; no gacha/payments/P04; keep save v58, rules and numbers unchanged; PR into `feature/fateweave-initial-prototype`.

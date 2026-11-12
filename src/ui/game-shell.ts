@@ -2,6 +2,7 @@ import { showBattleRewards, type BattleRewards } from './battle-rewards';
 import { bindInfoTabs } from './info-tabs';
 import { rosterIds } from '../core/world/world';
 import { applyCommand, isRejected, type CampCommand, type CommandEvent, type CommandResult, type GameCommand, type RunCommand } from '../core/command/game-command';
+import { clientView } from '../core/command/client-view';
 import { localSeedSource } from '../platform/seed-source';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
@@ -259,7 +260,7 @@ export class GameShell {
     this.migrationNote = '';
     const entering = this.root.dataset.view !== 'lobby';
     this.show('lobby');
-    this.lobby.render({ profile: this.game!.profile, message: this.lobbyMessage, cheer: this.lobbyCheer, saved: this.saved && !!this.storage, ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
+    this.lobby.render({ profile: this.game!.profile, board: clientView(this.game!, { home: this.home, lookup: this.lookup }).hireBoard, message: this.lobbyMessage, cheer: this.lobbyCheer, saved: this.saved && !!this.storage, ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
     this.npcCheer = undefined;
     // Arriving in the camp opens on the fire; later redraws keep where the player panned to.
     if (entering) this.lobby.centreScene();

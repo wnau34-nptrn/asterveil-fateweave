@@ -34,12 +34,12 @@ seed ที่อยู่ในสถานะและเซฟ (ยังส�
 | `profile.seed` + `profile.forge` | หลอมรวม/ปรับค่า (`fuse`, `reroll`) และหีบอุปกรณ์ในร้าน (`buy gearbox`) |
 | เซฟเก่ามาก | `parseGame` สร้าง profile จาก `run.seed ^ 0x5bd1e995` |
 
-ฟังก์ชันแสดงผลของ UI ที่ต้องรู้ seed (ต้องตัดออกจากมุมมองเครื่องภายหลัง): **`boardOffers`/`hireReason` ใน `lobby-ui.ts`** (รายชื่อบนกระดานจ้าง คำนวณจาก `profile.seed` บนเครื่อง) — เป็นจุดเดียวที่พบ. ที่ไม่ต้องใช้ seed: ข้อเสนอ draft (เก็บไว้ใน `run.draft.offers`), โอกาสเจอศัตรู (`encounterChance` ใช้ pressure), preview ศึก/replay (`core/battle` ไม่มีสุ่ม), preview ตำรา/ตีบวก/เพิ่มเลเวล/เหตุผลหลอม
+ฟังก์ชันแสดงผลของ UI ที่ต้องรู้ seed (P09-02a2 ย้ายไปคำนวณใน `clientView` แล้ว ดู [CLIENT_VIEW_TH.md](CLIENT_VIEW_TH.md)): **`boardOffers`/`hireReason` ใน `lobby-ui.ts`** (รายชื่อบนกระดานจ้าง คำนวณจาก `profile.seed` บนเครื่อง) — เป็นจุดเดียวที่พบ. ที่ไม่ต้องใช้ seed: ข้อเสนอ draft (เก็บไว้ใน `run.draft.offers`), โอกาสเจอศัตรู (`encounterChance` ใช้ pressure), preview ศึก/replay (`core/battle` ไม่มีสุ่ม), preview ตำรา/ตีบวก/เพิ่มเลเวล/เหตุผลหลอม
 
 ## 4. สิ่งที่เหลือก่อนต่อ server [เสนอ]
 
-1. **มุมมองเครื่อง**: ฟังก์ชัน `clientView(game)` ที่ตัด `seed`/`rolls`/`forge` และใส่ `boardOffers` ที่คำนวณแล้วแทน; ให้ `lobby-ui` อ่านรายชื่อจากมุมมองนี้ (แก้ UI เล็กน้อย ควรทำหลังงาน HUD ของ Codex)
-2. **ซองคำสั่ง**: ห่อ `{ requestId, seq, command }` แล้วใช้ `decideCommand` (`core/cloud/cloud-save.ts`) ก่อน `parseCommand` → `applyCommand`; เก็บผลไว้ตอบซ้ำ
+1. ✅ ทำแล้วใน P09-02a2 ([CLIENT_VIEW_TH.md](CLIENT_VIEW_TH.md)) — **มุมมองเครื่อง**: ฟังก์ชัน `clientView(game)` ที่ตัด `seed`/`rolls`/`forge` และใส่ `boardOffers` ที่คำนวณแล้วแทน; ให้ `lobby-ui` อ่านรายชื่อจากมุมมองนี้ (แก้ UI เล็กน้อย ควรทำหลังงาน HUD ของ Codex)
+2. ✅ ทำแล้วใน P09-02a2 (`processCommand`) — **ซองคำสั่ง**: ห่อ `{ requestId, seq, command }` แล้วใช้ `decideCommand` (`core/cloud/cloud-save.ts`) ก่อน `parseCommand` → `applyCommand`; เก็บผลไว้ตอบซ้ำ
 3. **seed บน server**: `SeedSource` ที่ใช้ crypto ของ DO และไม่ส่งออก; ทดสอบว่า log คำสั่ง + seed ที่ใช้ replay ได้ snapshot เดิม
 4. **เวอร์ชันเนื้อหา**: server และเครื่องต้องใช้ content/encounter version เดียวกัน หรือปฏิเสธคำสั่งเมื่อเวอร์ชันไม่ตรง
 5. **ผลที่ shell ใช้**: shell ยังอ่าน `game` ที่ได้กลับมาทั้งก้อน; เมื่อมี server ให้ใช้มุมมองจากข้อ 1 และเหตุการณ์แทน และย้ายข้อความ `rejected` (เช่น `storage`) เป็นข้อความผู้เล่น
