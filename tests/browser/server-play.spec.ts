@@ -3,7 +3,7 @@ import { contentVersion } from '../../scripts/content-version.mjs';
 import { SESSION_HEADER } from '../../src/server/account-object';
 import { CONTENT_HEADER, handle } from '../../src/server/api';
 import { withGoogle } from '../fixtures/google-fake';
-import { server, type Server } from '../fixtures/server-fakes';
+import { battleTurns, server, storedGame, type Server } from '../fixtures/server-fakes';
 
 // P09-02c server play in a real browser: the page talks to `https://api.test`, which Playwright routes to the real Worker
 // and Durable Object code running in this process (SQLite in memory). Local play stays the default (other specs).
@@ -82,6 +82,67 @@ test('server play: a guest account plays through the dev API with retries, input
   await expect(page.locator('#continue')).toBeVisible();
   await page.locator('#continue').click();
   await expect(page.locator('#encounter-title')).toContainText('กองหน้าของวาร์กอธ');
+  expect(issues).toEqual([]);
+});
+
+// A company already on the map: guest → commander → depart → prologue won → starter picks, all through the API.
+async function onTheMap(w: Wire): Promise<string> {
+  const version = contentVersion(); const session = 'e'.repeat(32);
+  const guest = await (await handle(new Request(`${API}/v1/guest`, { method: 'POST' }), w.s.deps)).json() as { accountId: string; token: string };
+  const headers = { Authorization: `Bearer ${guest.token}`, [CONTENT_HEADER]: version, [SESSION_HEADER]: session, 'Content-Type': 'application/json' };
+  let seq = 0;
+  const send = async (command: unknown) => {
+    w.s.clock.t += 1000;
+    const r = await handle(new Request(`${API}/v1/command`, { method: 'POST', headers, body: JSON.stringify({ requestId: `setup-request-${String(++seq).padStart(6, '0')}`, seq, command }) }), w.s.deps);
+    expect(r.status).toBe(200);
+  };
+  await send({ kind: 'createCommander', commander: { name: 'เดิน', crest: 'star', color: 'gold', camp: 'ค่ายเดิน' }, replace: false });
+  await send({ kind: 'depart', hard: false });
+  await send({ kind: 'battle', commands: battleTurns(storedGame(w.s, guest.accountId)!) });
+  for (let i = 0; i < 6 && storedGame(w.s, guest.accountId)!.run?.draft; i++) await send({ kind: 'draftPick', index: 0 });
+  expect(storedGame(w.s, guest.accountId)!.run?.battle).toBeFalsy();
+  return guest.token;
+}
+
+test('server play: a step moves the token before the answer, keeps the map live and buffers the next tap', async ({ page }) => {
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.setViewportSize({ width: 390, height: 844 });
+  const w = await serve(page);
+  const token = await onTheMap(w);
+  await page.addInitScript(([k, v]) => { localStorage.setItem(k!, v!); }, [`fateweave-server-token:${API}`, token]);
+  await page.goto(`./?server=${encodeURIComponent(API)}`);
+  await page.locator('#continue').click();
+  await expect(page.locator('#world-view')).toBeVisible();
+  const tokenAt = () => page.locator('#party-token').evaluate(el => `${(el as HTMLElement).style.getPropertyValue('--x')},${(el as HTMLElement).style.getPropertyValue('--y')}`);
+  const start = await tokenAt();
+  const before = w.commands.length;
+  w.holdNext = 1500;
+  const hint = page.locator('.step-hint').first(); const dir = await hint.getAttribute('data-dir');
+  await hint.click();
+  // The token is already on the new tile while the server still holds the answer, and the map stays live.
+  await expect.poll(tokenAt, { timeout: 1000 }).not.toBe(start);
+  await expect(page.locator('#app')).toHaveAttribute('data-server', 'sending');
+  expect(await page.locator('#world-view').evaluate(el => (el as HTMLElement).inert)).toBe(false);
+  // A second step tapped meanwhile waits and goes out after the first answer, with the next sequence number.
+  const back = ({ up: 'down', down: 'up', left: 'right', right: 'left' } as Record<string, string>)[dir!]!;
+  await page.locator(`.step-hint[data-dir="${back}"]`).click();
+  await expect(page.locator('#app')).not.toHaveAttribute('data-server', /./, { timeout: 5000 });
+  const sent = w.commands.slice(before).map(b => JSON.parse(b) as { seq: number; command: { kind: string; dir?: string } });
+  expect(sent[0]).toMatchObject({ command: { kind: 'move', dir } });
+  await expect.poll(() => w.commands.length - before).toBe(2);
+  const second = JSON.parse(w.commands[before + 1]!) as { seq: number; command: { dir: string } };
+  expect(second.command.dir).toBe(back); expect(second.seq).toBe(sent[0]!.seq + 1);
+  await expect(page.locator('#app')).not.toHaveAttribute('data-server', /./, { timeout: 5000 });
+  await expect.poll(tokenAt).toBe(start);
+  // A step into a wall is refused on the device with the usual message; nothing goes to the server.
+  const open = await page.locator('.step-hint').evaluateAll(els => els.map(el => (el as HTMLElement).dataset.dir));
+  const wall = (['up', 'down', 'left', 'right'] as const).find(d => !open.includes(d));
+  if (wall) {
+    const count = w.commands.length;
+    await page.keyboard.press({ up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight' }[wall]);
+    await expect(page.locator('#world-message')).toContainText('ไปต่อไม่ได้');
+    expect(w.commands.length).toBe(count);
+  }
   expect(issues).toEqual([]);
 });
 
