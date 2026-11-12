@@ -22,7 +22,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Next (owner review)
 
-- P09: owner picks D1/D11/D12 (rec. Google+recovery code; import old saves once before external test; one device at a time; docs PR #223 open). Next P09-02b Worker+DO+D1 (prompt below) needs D1 Edit/DO on the token; leftovers before it in CLIENT_VIEW_TH §5.
+- P09: owner approved D1 Google+recovery code, D11 one-time import before external test, D12 one device at a time (“อนุมัติ” 2026-11-12). Next P09-02b Worker+DO+D1 (prompt below) needs D1 Edit/DO on the token; leftovers before it in CLIENT_VIEW_TH §5.
 
 - Gacha: review visual direction/core choices; rates/costs/pacing stay adjustable. Do not auto-start G02–G05 or payments; real gacha needs P09/P04/ledger (OD-13).
 - UXD-08: regression 77/77 + 34 screens inspected 2026-11-11, team-page fixes and the single term ผังสกิล (owner “อนุมัติ”; [validation](docs/validation/uxd-08/README_TH.md)); real-device/human trial still open. Team-preset owner usability review remains open.
