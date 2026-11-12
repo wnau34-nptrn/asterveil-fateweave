@@ -2,18 +2,22 @@ name: Cloudflare development API
 
 on:
   pull_request:
-    paths: ['cloudflare/**', '.github/workflows/cloudflare-dev.yml']
+    paths: ['cloudflare/**', 'src/server/**', 'src/core/**', 'src/content/**', 'tests/server-api.test.ts', 'scripts/content-version.mjs', '.github/workflows/cloudflare-dev.yml']
   push:
-    branches: [feature/fateweave-initial-prototype]
-    paths: ['cloudflare/**', '.github/workflows/cloudflare-dev.yml']
+    branches: [feature/fateweave-initial-prototype, 'claude/p09-02b-**']
+    paths: ['cloudflare/**', 'src/server/**', 'src/core/**', 'src/content/**', 'scripts/content-version.mjs', '.github/workflows/cloudflare-dev.yml']
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: cloudflare-dev-${{ github.ref }}
+  group: cloudflare-dev
   cancel-in-progress: false
+
+env:
+  WRANGLER: npx --yes wrangler@4.153.0
+  WRANGLER_SEND_METRICS: 'false'
 
 jobs:
   validate:
@@ -24,66 +28,84 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - run: node cloudflare/health.node.mjs
+          cache: npm
+      - run: npm ci
+      - run: npx vitest run tests/server-api.test.ts
       - name: Bundle Worker without accessing Cloudflare
-        run: npx --yes wrangler@4.153.0 deploy --dry-run --config cloudflare/wrangler.json --outdir /tmp/asterveil-worker
-        env:
-          WRANGLER_SEND_METRICS: 'false'
+        run: $WRANGLER deploy --dry-run --config cloudflare/wrangler.json --outdir /tmp/asterveil-worker
 
+  # Deploys the dev API (Worker + per-account Durable Object + D1 `asterveil-dev`) and runs the smoke test against it.
+  # Wrangler prints the account name, which contains the owner's e-mail: every Wrangler output is filtered.
   deploy:
     needs: validate
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/feature/fateweave-initial-prototype'
+    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/feature/fateweave-initial-prototype' || startsWith(github.ref, 'refs/heads/claude/p09-02b-'))
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
       - name: Check deployment credentials without printing them
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           node --input-type=module <<'NODE'
           for (const name of ['CLOUDFLARE_API_TOKEN', 'CLOUDFLARE_ACCOUNT_ID']) {
             if (!process.env[name]?.trim()) throw new Error(`Missing repository secret: ${name}`);
           }
-          if (!/^[a-f0-9]{32}$/i.test(process.env.CLOUDFLARE_ACCOUNT_ID)) {
-            throw new Error('CLOUDFLARE_ACCOUNT_ID must be the 32-character account ID');
-          }
+          if (!/^[a-f0-9]{32}$/i.test(process.env.CLOUDFLARE_ACCOUNT_ID)) throw new Error('CLOUDFLARE_ACCOUNT_ID must be the 32-character account ID');
           NODE
-      - name: Deploy development probe
-        id: deploy
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          wranglerVersion: '4.153.0'
-          packageManager: npm
-          command: deploy --config cloudflare/wrangler.json
-      - name: Verify public development health endpoint
-        env:
-          WORKER_URL: ${{ steps.deploy.outputs.deployment-url }}
+      - name: Find or create the dev D1 database and write the deploy config
         run: |
+          set -o pipefail
+          $WRANGLER d1 list --json > /tmp/d1-list.json 2>/tmp/d1-list.err || { grep -v '@' /tmp/d1-list.err | tail -n 20; exit 1; }
+          if ! node -e "const l=JSON.parse(require('fs').readFileSync('/tmp/d1-list.json','utf8')); process.exit(l.some(d=>d.name==='asterveil-dev')?0:1)"; then
+            $WRANGLER d1 create asterveil-dev 2>&1 | grep -iE 'success|creat|error' | grep -v '@'
+            $WRANGLER d1 list --json > /tmp/d1-list.json 2>/dev/null
+          fi
           node --input-type=module <<'NODE'
-          import assert from 'node:assert/strict';
-          import { appendFileSync } from 'node:fs';
-          import { setTimeout } from 'node:timers/promises';
-          if (!process.env.WORKER_URL) throw new Error('Wrangler did not return a deployment URL');
-          const url = new URL('/health', process.env.WORKER_URL);
-          assert.equal(url.protocol, 'https:');
-          assert.ok(url.hostname.endsWith('.workers.dev'));
-          for (let attempt = 1; attempt <= 6; attempt++) {
-            try {
-              const response = await fetch(url, { signal: AbortSignal.timeout(10000), redirect: 'error' });
-              assert.equal(response.status, 200);
-              assert.deepEqual(await response.json(), { status: 'ok', service: 'asterveil-api', environment: 'dev' });
-              appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Development API verified: ${url}\n\nInfrastructure probe only; accounts, saves and rewards are not enabled.\n`);
-              break;
-            } catch (error) {
-              if (attempt === 6) throw error;
-              await setTimeout(5000);
-            }
-          }
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const db = JSON.parse(readFileSync('/tmp/d1-list.json', 'utf8')).find(d => d.name === 'asterveil-dev');
+          if (!db?.uuid) throw new Error('asterveil-dev D1 database not found');
+          const config = JSON.parse(readFileSync('cloudflare/wrangler.json', 'utf8'));
+          config.d1_databases[0].database_id = db.uuid;
+          writeFileSync('cloudflare/wrangler.deploy.json', JSON.stringify(config, null, 2));
           NODE
+          echo "CONTENT_VERSION=$(node scripts/content-version.mjs)" >> "$GITHUB_ENV"
+      - name: Apply D1 migrations
+        run: $WRANGLER d1 migrations apply DB --remote --config cloudflare/wrangler.deploy.json 2>&1 | grep -vE '@|Account' | tail -n 15
+      - name: Deploy
+        id: deploy
+        run: |
+          $WRANGLER deploy --config cloudflare/wrangler.deploy.json --var "CONTENT_VERSION:$CONTENT_VERSION" > /tmp/deploy.txt 2>&1 || { grep -v '@' /tmp/deploy.txt | tail -n 30; exit 1; }
+          grep -iE 'uploaded|deployed|workers.dev|Durable|D1' /tmp/deploy.txt | grep -v '@'
+          url=$(grep -oE 'https://[a-z0-9.-]+\.workers\.dev' /tmp/deploy.txt | head -n1)
+          test -n "$url"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+      - name: Smoke test with Workers Tail CPU times
+        env:
+          WORKER_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            [ "$(curl -s -o /dev/null -w '%{http_code}' "$WORKER_URL/health")" = 200 ] && break; sleep 5
+          done
+          (timeout 90 $WRANGLER tail --config cloudflare/wrangler.deploy.json --format json > /tmp/tail.json 2>/dev/null &) ; sleep 12
+          node cloudflare/smoke.mjs "$WORKER_URL" "$CONTENT_VERSION" | tee /tmp/smoke.txt
+          sleep 15
+          {
+            echo "## Development API (content $CONTENT_VERSION)"
+            echo "$WORKER_URL — smoke test passed (guest, createCommander, retry, gap, depart, state, replay audit; no seed in any response)."
+            echo '```'; cat /tmp/smoke.txt; echo '```'
+            echo "### Workers Tail (per invocation)"
+            echo '```'
+            node -e "
+              const lines=require('fs').readFileSync('/tmp/tail.json','utf8').split('\n').filter(Boolean);
+              const out=[]; let buf='';
+              for (const l of lines){ buf+=l; try{ out.push(JSON.parse(buf)); buf=''; }catch{} }
+              for (const e of out){ const r=e.event?.request; console.log([r?new URL(r.url).pathname:'-', e.scriptName, e.outcome, 'cpuTime='+(e.cpuTime??'n/a'), 'wallTime='+(e.wallTime??'n/a')].join('\t')); }
+              if(!out.length) console.log('no tail events captured');
+            " || echo "tail parse failed"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
