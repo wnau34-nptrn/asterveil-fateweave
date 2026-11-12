@@ -1,16 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { currentActorId, resolveCommand } from '../src/core/battle/engine';
-import type { Command } from '../src/core/battle/types';
 import { HIDDEN_PROFILE_KEYS, HIDDEN_RUN_KEYS } from '../src/core/command/client-view';
 import { COMMANDER_COLORS, COMMANDER_CRESTS } from '../src/core/world/profile';
-import type { Game } from '../src/core/save/expedition-save';
 import type { Profile } from '../src/core/world/types';
-import { battleData, battleState } from '../src/core/world/world';
 import { SESSION_HEADER, sqlStore } from '../src/server/account-object';
 import { CONTENT_HEADER, handle, LIMITS } from '../src/server/api';
 import { GameHost, memoryStore, replayLog } from '../src/server/game-host';
 import { GAME_CONTEXT } from '../src/server/worker';
-import { fakeDurableState, server, VERSION, type Server } from './fixtures/server-fakes';
+import { battleTurns, fakeDurableState, server, storedGame, VERSION, type Server } from './fixtures/server-fakes';
 
 // P09-02b: the Worker front door and the per-account Durable Object, run in Node with real SQLite (node:sqlite) standing
 // in for D1 and the Durable Object's SQL storage. See docs/design/p09/SERVER_P09_02B_TH.md.
@@ -38,20 +34,6 @@ function keysDeep(value: unknown, out = new Set<string>()): Set<string> {
   return out;
 }
 const leaks = (text: string) => [...keysDeep(JSON.parse(text))].filter(k => HIDDEN.has(k));
-const storedGame = (s: Server, accountId: string): Game | null => s.objects.get(accountId)!.host['store'].load()?.game ?? null;
-
-function battleTurns(g: Game): Command[] {
-  const data = battleData(g.run!, GAME_CONTEXT.home, GAME_CONTEXT.lookup)!; let st = battleState(g.run!, GAME_CONTEXT.home, GAME_CONTEXT.lookup)!;
-  for (let n = 0; n < 400 && st.outcome === 'active'; n++) {
-    const heroId = currentActorId(st)!; let done = false;
-    for (const e of st.enemies) {
-      try { st = resolveCommand(st, data, { beat: st.beat, heroId, action: 'attack', targetId: e.id }, true).state; done = true; break; } catch { /* next */ }
-    }
-    if (!done) throw new Error('no legal turn');
-  }
-  return st.commands;
-}
-
 describe('P09-02b Worker front door', () => {
   it('keeps /health exactly as the development probe answered it', async () => {
     const s = server();

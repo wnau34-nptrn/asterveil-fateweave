@@ -240,10 +240,12 @@ export class GameShell {
   private readonly seeds = localSeedSource();
   // P09-02c: `then` gets the result at once in local play; in server play after the server answered, with input
   // locked meanwhile (one command at a time). `queue` keeps the latest command sent while waiting (battle turns).
-  private exec(cmd: GameCommand, then: (result: CommandResult) => void, queue = false): void {
-    if (!this.server) { then(applyCommand(this.game ?? null, cmd, { home: this.home, maps: this.maps, lookup: this.lookup, seeds: this.seeds })); return; }
+  // `soft` (map steps, battle turns): the screen stays live while the server answers; other commands are refused
+  // until it has, and steps tapped meanwhile wait in `nextMove`.
+  private exec(cmd: GameCommand, then: (result: CommandResult) => void, queue = false, soft = false): void {
+    if (!this.server) { then(this.local(cmd)); return; }
     if (this.waiting) { if (queue) this.queued = { cmd, then }; return; }
-    this.lockForServer('กำลังส่งไปเซิร์ฟเวอร์…');
+    this.lockForServer('กำลังส่งไปเซิร์ฟเวอร์…', soft);
     void this.server.send(cmd).then(out => this.answer(out, then));
   }
   // A map action as the world result the shell's handlers already read (a refusal reads as `blocked`, changing nothing).
@@ -258,7 +260,12 @@ export class GameShell {
     if (!this.game || this.game.run) return;
     this.exec(cmd, r => { if (isRejected(r)) return; this.profileChange({ profile: r.game.profile, event: r.events[0] as ProfileEvent }); });
   }
+  private local(cmd: GameCommand): CommandResult { return applyCommand(this.game ?? null, cmd, { home: this.home, maps: this.maps, lookup: this.lookup, seeds: this.seeds }); }
   // ---- P09-02c server play (off unless switched on; see platform/server-client.ts) ----
+  // A step tapped while the previous one is still with the server (one is kept; the newest wins).
+  private nextMove: Direction | undefined;
+  // The token already moved for this step (`move`), so the answer does not hop or step again.
+  private stepShown = false;
   private waiting = false;
   private queued: { cmd: GameCommand; then: (result: CommandResult) => void } | undefined;
   private afterWait: (() => void) | undefined;
@@ -268,11 +275,12 @@ export class GameShell {
   private inertBefore = new Map<Element, boolean>();
   private waitTimer: ReturnType<typeof setTimeout> | undefined;
   // Locks every view (pointer and keyboard) while the server works; the note shows only if the answer is slow.
-  private lockForServer(note: string): void {
-    this.waiting = true; this.root.dataset.server = 'waiting'; this.root.setAttribute('aria-busy', 'true');
-    for (const el of Array.from(this.root.children)) if (el !== this.serverPanel && !this.inertBefore.has(el)) { this.inertBefore.set(el, (el as HTMLElement).inert); (el as HTMLElement).inert = true; }
+  // A soft wait leaves the views live and shows the note only when the answer is really slow.
+  private lockForServer(note: string, soft = false): void {
+    this.waiting = true; this.root.dataset.server = soft ? 'sending' : 'waiting'; this.root.setAttribute('aria-busy', 'true');
+    if (!soft) for (const el of Array.from(this.root.children)) if (el !== this.serverPanel && !this.inertBefore.has(el)) { this.inertBefore.set(el, (el as HTMLElement).inert); (el as HTMLElement).inert = true; }
     clearTimeout(this.waitTimer);
-    this.waitTimer = setTimeout(() => { if (this.waiting && !this.serverPanel.dataset.problem) { this.serverPanel.innerHTML = `<p class="server-note">${note}</p>`; this.serverPanel.hidden = false; } }, 300);
+    this.waitTimer = setTimeout(() => { if (this.waiting && !this.serverPanel.dataset.problem) { this.serverPanel.innerHTML = `<p class="server-note">${note}</p>`; this.serverPanel.hidden = false; } }, soft ? 900 : 400);
   }
   private unlockForServer(): void {
     this.waiting = false; delete this.root.dataset.server; this.root.removeAttribute('aria-busy'); clearTimeout(this.waitTimer);
@@ -290,13 +298,18 @@ export class GameShell {
   private drain(): void {
     if (this.waiting) return;
     const next = this.queued; this.queued = undefined;
-    if (next) { this.exec(next.cmd, next.then); return; }
+    if (next) { this.exec(next.cmd, next.then, false, true); return; }
+    const dir = this.nextMove; this.nextMove = undefined;
+    // A buffered step goes only where a fresh tap could (no fight, story, dialog or summary has opened since).
+    if (dir && this.root.dataset.view === 'world' && !document.querySelector('dialog[open], .story-view:not([hidden]), .summary-view:not([hidden])')) { this.move(dir); return; }
     const after = this.afterWait; this.afterWait = undefined; after?.();
   }
   // Takes the server's state as the game and shows it: on the title (entering) or where the player is (catching up).
   private adopt(state: ServerState, screen: 'title' | 'current', note = ''): void {
     this.game = state.view ? gameFromView(state.view) : undefined; this.board = state.view?.hireBoard ?? [];
-    this.queued = undefined; this.pendingRewards = undefined; this.banner = undefined; this.locked = false; this.saved = true;
+    this.queued = undefined; this.nextMove = undefined; this.stepShown = false; this.pendingRewards = undefined;
+    // As a local load does: recruits already on the roster have had their scene.
+    this.markRecruits(); this.banner = undefined; this.locked = false; this.saved = true;
     if (screen === 'title' || !this.game) { this.showTitle(); return; }
     if (this.game.run) { this.migrationNote = note; this.resume(); } else { this.lobbyMessage = note; this.showLobby(); }
   }
@@ -321,6 +334,8 @@ export class GameShell {
     const retrying = (problem === 'network' || problem === 'server') && this.server?.waitingRetry && then;
     const action = problem === 'other_device' ? 'เล่นบนเครื่องนี้ต่อ' : problem === 'content_version' ? 'โหลดหน้าใหม่' : retrying ? 'ส่งอีกครั้ง' : 'เชื่อมต่อใหม่';
     const [title, detail] = text[problem];
+    if (this.root.dataset.server === 'sending') { this.unlockForServer(); this.lockForServer('กำลังส่งไปเซิร์ฟเวอร์…'); }
+    this.nextMove = undefined; this.stepShown = false;
     this.serverPanel.dataset.problem = problem; this.serverPanel.hidden = false;
     this.serverPanel.innerHTML = `<div class="server-card" role="alertdialog" aria-labelledby="server-problem-title"><h2 id="server-problem-title">${title}</h2><p>${detail}</p>`
       + `<button type="button" class="primary" data-server="act">${action}</button><button type="button" class="secondary" data-server="local">เล่นในเครื่องแทน</button></div>`;
@@ -481,11 +496,12 @@ export class GameShell {
   private afterRecruits(): void {
     if (this.state?.draft) this.world.openDraft(); else this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true });
   }
-  private renderWorld(): void {
+  // `preview`: server play shows a step's new position before the server's answer (see `move`).
+  private renderWorld(preview?: ExpeditionState): void {
     this.world.setMap(this.map, this.eliteArtOf(this.map));
     this.show('world');
     const profile = this.game!.profile;
-    this.world.render({ presets: profile.presets, questBoard: { definitions: this.home.sideQuests, progress: profile.quests, unlocked: featureOpen(profile, this.maps, 'quests') }, state: this.state!, message: this.message, locked: this.locked, saved: this.saved && !!this.storage, banner: this.banner, effect: this.effect });
+    this.world.render({ presets: profile.presets, questBoard: { definitions: this.home.sideQuests, progress: profile.quests, unlocked: featureOpen(profile, this.maps, 'quests') }, state: preview ?? this.state!, message: this.message, locked: this.locked, saved: this.saved && !!this.storage, banner: this.banner, effect: this.effect });
     this.effect = undefined;
   }
   // Story recruits: play each newly joined guest once per session (a reload shows the ones already joined as seen).
@@ -499,9 +515,23 @@ export class GameShell {
   }
   private move(dir: Direction): void {
     if (!this.state || this.locked) return;
-    this.exec({ kind: 'move', dir }, out => this.moved(out));
+    if (this.server) {
+      if (this.waiting) { if (this.root.dataset.server === 'sending') this.nextMove = dir; return; }
+      // Server play: where a step lands follows from the public map alone (walls, doors, stones, pits, seals), so the
+      // device checks it with the same rules and moves the token at once. What the step finds (a fight, an event, loot)
+      // stays hidden until the server's answer. A refused step changes nothing, so it is not sent.
+      const guess = this.local({ kind: 'move', dir });
+      if (isRejected(guess)) { this.moved(guess); return; }
+      if (guess.game.run) {
+        const p = guess.game.run.position;
+        if (p.x !== this.state.position.x || p.y !== this.state.position.y) { this.stepShown = true; sfx.play('step'); this.renderWorld({ ...this.state, position: { ...p } }); }
+      }
+    }
+    this.exec({ kind: 'move', dir }, out => this.moved(out), false, true);
   }
   private moved(out: CommandResult): void {
+    // The token already stepped (server play): the answer neither hops nor plays a second step sound.
+    const shown = this.stepShown; this.stepShown = false;
     if (!this.state) return;
     // Reaching the goal settles the run home in the same command.
     if (!isRejected(out) && !out.game.run) { this.worldSound(out.events[0] as WorldEvent); this.endRun(out.game, out.events, 'complete'); return; }
@@ -513,7 +543,7 @@ export class GameShell {
         : result.event.reason === 'sealed' ? `${this.map.bossName}ยังถูกผนึก · ทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อน (ตอนนี้ ${questDone(this.state, this.map).length}/${this.map.quest.need}) ดูได้ที่ช่องเป้าหมาย` : this.message;
       sfx.play('bump'); this.renderWorld(); return;
     }
-    this.state = result.state; this.worldSound(result.event);
+    this.state = result.state; if (!(shown && result.event.type === 'moved')) this.worldSound(result.event);
     this.persist();
     this.message = this.describe(result.event);
     // A recruit who steps in as the boss fight starts gets their scene first (owner 2026-10-23).
@@ -667,7 +697,7 @@ export class GameShell {
     // the turns are already decided on the device (the resolver is deterministic); the answer arrives later and the
     // battle cannot be left before it has (`leaveBattle`).
     let saved = false;
-    this.exec({ kind: 'battle', commands: battle.commands }, out => { saved = this.battleCommitted(out, kind, before); }, true);
+    this.exec({ kind: 'battle', commands: battle.commands }, out => { saved = this.battleCommitted(out, kind, before); }, true, true);
     return this.server ? true : saved;
   }
   private battleCommitted(out: CommandResult, kind: NonNullable<ExpeditionState['battle']>['kind'], before: ExpeditionState): boolean {

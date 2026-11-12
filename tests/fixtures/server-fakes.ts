@@ -6,6 +6,10 @@ import { handleAccountRequest, sqlStore, type DurableStateLike } from '../../src
 import { RateLimiter, type ApiDeps } from '../../src/server/api';
 import { GameHost } from '../../src/server/game-host';
 import { GAME_CONTEXT } from '../../src/server/worker';
+import { currentActorId, resolveCommand } from '../../src/core/battle/engine';
+import type { Command } from '../../src/core/battle/types';
+import type { Game } from '../../src/core/save/expedition-save';
+import { battleData, battleState } from '../../src/core/world/world';
 
 // The P09-02b Worker and per-account Durable Object in Node: real SQLite (node:sqlite) stands in for D1 and the Durable
 // Object's SQL storage. Shared by tests/server-api.test.ts and tests/server-client.test.ts.
@@ -59,4 +63,19 @@ export function server(seeds: number[] = [11, 22, 33, 44, 55, 66, 77, 88, 99], c
     },
   };
   return { deps, d1, objects, clock };
+}
+
+export const storedGame = (s: Server, accountId: string): Game | null => s.objects.get(accountId)!.host['store'].load()?.game ?? null;
+
+// Plain attacks on the first legal foe until the battle ends (enough for the prologue).
+export function battleTurns(g: Game): Command[] {
+  const data = battleData(g.run!, GAME_CONTEXT.home, GAME_CONTEXT.lookup)!; let st = battleState(g.run!, GAME_CONTEXT.home, GAME_CONTEXT.lookup)!;
+  for (let n = 0; n < 400 && st.outcome === 'active'; n++) {
+    const heroId = currentActorId(st)!; let done = false;
+    for (const e of st.enemies) {
+      try { st = resolveCommand(st, data, { beat: st.beat, heroId, action: 'attack', targetId: e.id }, true).state; done = true; break; } catch { /* next */ }
+    }
+    if (!done) throw new Error('no legal turn');
+  }
+  return st.commands;
 }

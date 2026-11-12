@@ -1,3 +1,8 @@
+## 2026-11-12 — P09-02c follow-ups: smooth server-play walking, smoke rollout wait
+- Owner tried the dev Worker on a phone (“ใช้ได้ แต่จังหวะเดินเหมือนจะหน่วงๆ”) and asked for the walking fix before P09-02d (#229 held until this merges). Branch `claude/p09-02c-walk-lag`.
+- Server play: steps move the token at once (landing tile checked locally with the same rules; findings shown only from the server answer), refused steps are not sent, steps/battle turns don't lock the screen (note after 0.9 s), one tapped step is buffered; recruit scenes no longer replay after entering. #228: `cloudflare-dev.yml` waits for the new Worker version and fails on smoke failure (the #227 run had hidden one: rollout race); smoke now passes on the real Worker.
+- Tests: unit 1766 pass, lint/typecheck, `server-play.spec.ts` 2/2, world movement/prologue/draft specs pass. Details: [CLIENT_SERVER_P09_02C_TH §2b](../design/p09/CLIENT_SERVER_P09_02C_TH.md). Proposed next after P09-02d: loading screens + prefetch, measured with `?perf=1` on a phone first.
+
 ## 2026-11-12 — P09-02c game shell talks to the dev API (switch, off by default)
 - Owner “ดำเนินการต่อได้เลย”; branch `claude/p09-02c-client-server` → PR into `feature/fateweave-initial-prototype`.
 - `src/platform/server-client.ts` (`ServerClient`, `serverSwitch`): guest token per API URL, per-page session id, one `{requestId, seq, command}` at a time, retries on the same requestId/seq (lost answer, 5xx, 429), 409 stale/gap → reread state, 423 → other device, content version from `__CONTENT_VERSION__` (vite define from `scripts/content-version.mjs`, now importable).
