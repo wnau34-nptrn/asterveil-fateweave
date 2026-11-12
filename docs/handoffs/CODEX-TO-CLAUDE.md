@@ -1,3 +1,11 @@
+## 2026-11-11 — P09-01 guest account + cloud save design (no database)
+- Branch `claude/p09-01-account-cloud-save-design`; owner approved starting the database-free part (“อนุมัติ ทำตามที่แนะนำ”).
+- Thai design set `docs/design/p09/` (index README_TH with owner decisions D1–D9 + recommendations; account flow, cloud save envelope, trust boundary, D1/API draft). Facts from code are marked [โค้ด], proposals [เสนอ].
+- Owner then chose D10 = ค (“เลือก ค.”): server decides everything, online-only, seeds on the server (recorded in OWNER_DECISIONS_TH). Main doc `docs/design/p09/SERVER_AUTHORITY_TH.md`; seeds are made on the device today (`freshSeed` in game-shell) — must move.
+- Pure, unwired `src/core/cloud/cloud-save.ts`: `checkUpload`/`decideUpload` (one-time legacy import envelope), `decideCommand` (seq/idempotent retry). 11 tests `tests/cloud-save-envelope.test.ts`, incl. a bank edited to the cap still passing `parseGame`.
+- No change to save v58, rules, balance, UI, Worker or D1; no secret used, nothing deployed.
+- Open: owner D1/D11/D12; next P09-02a command layer for camp/map actions (local); Worker+DO+D1 needs D1 Edit/DO on the token; measure request volume/CPU before choosing the plan.
+
 ## 2026-11-11 — UXD-08 combined UX check
 - Second part of the owner's “แก้ไขงานที่ค้างก่อน”; branch `claude/uxd-08-combined-check` (stacked on the P03 clips branch).
 - Focused UXD regression 77/77 on the post-#218 build; 34 real 390px screens inspected by Claude. Details: `docs/validation/uxd-08/README_TH.md`.
