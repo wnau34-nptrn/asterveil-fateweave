@@ -4,7 +4,7 @@ import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { newProfile } from '../src/core/world/profile';
 import { formation } from '../src/core/world/formation';
 import { recommendedLane } from '../src/core/world/world';
-import { placeCampMember } from '../src/ui/camp-team';
+import { placeCampMember } from '../src/core/world/camp-team';
 
 function profile(){const p=newProfile(map,17);for(const id of ['lio','toma'])if(!p.company.includes(id)){p.company.push(id);p.members[id]={stars:1,dupes:0};}p.party={deployed:['guardian','tracer','weaver','healer'],reserve:['lio'],lanes:{guardian:'front',tracer:'front',weaver:'back',healer:'back'}};return p;}
 it('places a reserve into the chosen lane atomically without moving the existing field order or lanes',()=>{

@@ -1,7 +1,7 @@
-import { groupOf, placeMember, type Group } from '../core/world/profile';
-import { formation } from '../core/world/formation';
-import { recommendedLane, type EncounterLookup } from '../core/world/world';
-import type { Lane, MapDefinition, Profile, ProfileResult } from '../core/world/types';
+import { groupOf, placeMember, type Group } from './profile';
+import { formation } from './formation';
+import { recommendedLane, type EncounterLookup } from './world';
+import type { Lane, MapDefinition, Profile, ProfileResult } from './types';
 
 // One UI placement commits group + lane together. Existing world commands still own
 // membership, capacity, last-member and archive rules. Pin existing lanes before adding

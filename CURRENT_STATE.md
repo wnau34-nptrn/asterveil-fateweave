@@ -1,14 +1,14 @@
-# Current state — updated 2026-11-11
+# Current state — updated 2026-11-12
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`. Pre-release pushes deploy after lint/unit/build; browser PR gate is path-filtered. Restore Pages browser gate before OD-13 external tests.
-- Save v58; Phaser/TypeScript/Vite, local saves, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked, existing rights preserved. No gacha wallet/accounts/reward ledger; Worker only `/health`. P09-01 design (docs + unwired pure `src/core/cloud/cloud-save.ts`): [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md). Owner D10 = ค: server decides everything (online-only, server seeds).
+- Save v58; Phaser/TypeScript/Vite, local saves, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked, existing rights preserved. No gacha wallet/accounts/reward ledger; Worker only `/health`. P09 design: [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md); owner D10 = ค (server decides, server seeds). P09-02a done: shell actions run as JSON commands through pure `applyCommand` (`src/core/command/`), seeds from an injected `SeedSource`; [COMMAND_LAYER_TH](docs/design/p09/COMMAND_LAYER_TH.md).
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3. Rights follow cleared history.
-- Battle HUD: latest approved mockup uses straight 4px HP tracks with centred current/max counters on both sides, real buff/debuff badges on the upper inspector (2 + overflow), original five lower HP cards and green >40% / orange >25–40% / red ≤25%. Turn owner → tapped enemy → next owner and manual inspection from #217 stay intact. Merged #218 (`2ac1105`) after quality/browser passed. [Validation](docs/validation/battle-front-hp/README_TH.md).
-- MAP quest tabs #213 merged (`da1d508`): existing objective entry opens เป้าหมาย / เควสต์ in one compact scrollable dialog; settled camp-board progress, original MAP1 unlock and camp-only rewards. Implementation follows the owner-approved combined-tab mockup; Quality/browser passed before merge.
+- Battle HUD #218 (`2ac1105`): straight HP tracks, status badges, 3-colour HP; [validation](docs/validation/battle-front-hp/README_TH.md).
+- MAP quest tabs #213 (`da1d508`): เป้าหมาย / เควสต์ in one dialog.
 - Owner art delegation 2026-11-04 remains: Claude may decide art picks; record as Claude decision, not owner approval.
 
 ## Active task
@@ -22,7 +22,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Next (owner review)
 
-- P09: owner picks D1/D11/D12 (rec. Google+recovery code; import old saves once before external test; one device at a time). Next P09-02a command layer + server seeds (local, Opus); Worker+DO+D1 needs D1 Edit/DO on the token.
+- P09: owner picks D1/D11/D12 (rec. Google+recovery code; import old saves once before external test; one device at a time). Next local step P09-02a2 seed-free client view (prompt below, touches `lobby-ui.ts`: start after Codex's HUD work); P09-02b Worker+DO+D1 needs D1 Edit/DO on the token.
 
 - Gacha: review visual direction/core choices; rates/costs/pacing stay adjustable. Do not auto-start G02–G05 or payments; real gacha needs P09/P04/ledger (OD-13).
 - UXD-08: regression 77/77 + 34 screens inspected 2026-11-11, team-page fixes and the single term ผังสกิล (owner “อนุมัติ”; [validation](docs/validation/uxd-08/README_TH.md)); real-device/human trial still open. Team-preset owner usability review remains open.
@@ -39,4 +39,4 @@ Cloud checkouts are fresh; verify remote head/ancestry, never reset unpushed wor
 
 ## Opening prompt for next chat
 
-Read AGENTS/CLAUDE/CURRENT_STATE, G00/G01 evidence and the ART-UI-GACHA-002 gallery on art/art-ui-gacha-002 (PR #212). Continue owner-led gacha system/visual discussion; numbers/pacing stay draft for later tuning and the final game assumes all planned modes. Use latest Saturn-ring character/shard distinction, not old result grids. Images are references only; do not implement runtime/save/balance/P09/payments without that scoped request.
+P09-02a2 (Opus, local, no Cloudflare): read CLAUDE/CURRENT_STATE and docs/design/p09/COMMAND_LAYER_TH.md §3–4. Add a pure seed-free client view of `Game` (drop seed/rolls/forge counter, add computed `boardOffers`) and make `lobby-ui` read the hiring board from it; wrap commands in `{requestId, seq}` with `decideCommand`. Keep rules, numbers, save v58 and UI behaviour unchanged; PR into `feature/fateweave-initial-prototype`.
