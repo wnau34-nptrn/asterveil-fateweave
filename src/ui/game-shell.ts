@@ -4,6 +4,8 @@ import { rosterIds } from '../core/world/world';
 import { applyCommand, isRejected, type CampCommand, type CommandEvent, type CommandResult, type GameCommand, type RunCommand } from '../core/command/game-command';
 import { clientView, type HireSlot } from '../core/command/client-view';
 import type { ServerClient, ServerFailure, ServerOutcome, ServerState } from '../platform/server-client';
+import { AccountPanel } from './account-panel';
+import { setSavePlace } from './save-place';
 import { gameFromView, resultFromReply } from './server-game';
 import { localSeedSource } from '../platform/seed-source';
 import { shortcutBlocked } from '../platform/keyboard';
@@ -73,6 +75,7 @@ export class GameShell {
     const map = home;
     // P09-02c server play never reads or writes the local save: the account lives on the server.
     if (!server) clearLegacySaves(this.storage); sfx.init(this.storage);
+    setSavePlace(server ? 'server' : 'device');
     this.game = server ? undefined : loadGame(this.storage, map, lookup, maps);
     // P01: a save moved to camp levels says once what happened, then the new save replaces it (the old one is backed up).
     const moved = this.game?.migrated;
@@ -141,6 +144,7 @@ export class GameShell {
     views.title.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-title]');
       if (!button) return;
+      if (button.dataset.title === 'account') { void this.account?.open(); return; }
       if (button.dataset.title === 'continue' && this.game) { if (this.state) this.resume(); else if (!this.game.profile.commander) this.showCommander(false); else this.showLobby(); }
       if (button.dataset.title === 'new') {
         if (this.game && button.dataset.confirm !== 'yes') { button.dataset.confirm = 'yes'; button.textContent = 'ยืนยัน: ลบค่ายและทีมทั้งหมดแล้วเริ่มใหม่'; return; }
@@ -157,6 +161,8 @@ export class GameShell {
     this.root.querySelector('#world-sfx-controls')!.innerHTML = this.musicControls('world-');
     bindInfoTabs(root);
     this.serverPanel = document.createElement('div'); this.serverPanel.className = 'server-wait'; this.serverPanel.hidden = true;
+    if (server) this.account = new AccountPanel(root, { client: server, busy: note => this.lockForServer(note), idle: () => this.unlockForServer(),
+      switched: note => { this.titleNote = note; this.connect('title'); } });
     this.serverPanel.setAttribute('role', 'status'); this.serverPanel.setAttribute('aria-live', 'polite'); root.append(this.serverPanel);
     this.showTitle();
     if (server) this.connect();
@@ -229,7 +235,7 @@ export class GameShell {
       <div class="title-actions">${g ? `<p class="title-save">${s ? 'การเดินทางที่บันทึกไว้' : 'ค่ายของคุณ'}<span class="title-chips">${summary}</span></p><button id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ →' : 'เข้าค่าย →'}</button>` : ''}
       <button id="new-game" data-title="new" class="${g ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : 'เริ่มเกม'}</button>
 
-      ${this.server ? '<p class="title-server">เล่นผ่านเซิร์ฟเวอร์ทดลอง · ผลทุกอย่างตัดสินบนเซิร์ฟเวอร์</p>' : this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p></div>`;
+      ${this.server ? `<button id="account-open" data-title="account" class="secondary">บัญชี · Google · รหัสกู้คืน</button><p class="title-server">เล่นผ่านเซิร์ฟเวอร์ทดลอง · ความคืบหน้าบันทึกบนเซิร์ฟเวอร์</p>${this.titleNote ? `<p class="title-server-note" role="status">${this.titleNote}</p>` : ''}` : this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p></div>`;
     this.show('title');
     this.views.title.querySelector<HTMLElement>(g ? '#continue' : '#new-game')?.focus({ preventScroll: true });
   }
@@ -272,6 +278,9 @@ export class GameShell {
   // The hiring board as the server computed it (it needs the seed the device does not have).
   private board: HireSlot[] = [];
   private serverPanel!: HTMLElement;
+  // P09-02d: Google link/sign-in and recovery codes (server play only); a note after switching accounts.
+  private account: AccountPanel | undefined;
+  private titleNote = '';
   private inertBefore = new Map<Element, boolean>();
   private waitTimer: ReturnType<typeof setTimeout> | undefined;
   // Locks every view (pointer and keyboard) while the server works; the note shows only if the answer is slow.
@@ -413,8 +422,8 @@ export class GameShell {
     if(e.type==='forged'&&e.action==='craft')this.lobby.forgeServiced(this.game.profile,'craft',e.uid,this.saved);
     if(e.type==='salvaged')this.lobby.forgeServiced(this.game.profile,'recycle',e.count,this.saved);
     if(e.type==='smelted')this.lobby.forgeServiced(this.game.profile,'smelt',e.dust,this.saved);
-    if(e.type==='skillLevel'||e.type==='tomeTrade')this.lobby.skillCommitted(this.game.profile,e,this.saved&&!!this.storage);
-    if(e.type==='upgraded')this.lobby.starUpgraded(this.game.profile,e,this.saved&&!!this.storage);
+    if(e.type==='skillLevel'||e.type==='tomeTrade')this.lobby.skillCommitted(this.game.profile,e,this.saved&&(!!this.storage||!!this.server));
+    if(e.type==='upgraded')this.lobby.starUpgraded(this.game.profile,e,this.saved&&(!!this.storage||!!this.server));
     this.showLobby();
     if (e.type === 'forged' && (e.action === 'enhance' || e.action === 'level')) { const item = findItem(result.profile, e.uid)?.item; if (item) forgeStrike(this.root, item, e.action, this.reducedMotion.matches); }
   }
@@ -501,7 +510,7 @@ export class GameShell {
     this.world.setMap(this.map, this.eliteArtOf(this.map));
     this.show('world');
     const profile = this.game!.profile;
-    this.world.render({ presets: profile.presets, questBoard: { definitions: this.home.sideQuests, progress: profile.quests, unlocked: featureOpen(profile, this.maps, 'quests') }, state: preview ?? this.state!, message: this.message, locked: this.locked, saved: this.saved && !!this.storage, banner: this.banner, effect: this.effect });
+    this.world.render({ presets: profile.presets, questBoard: { definitions: this.home.sideQuests, progress: profile.quests, unlocked: featureOpen(profile, this.maps, 'quests') }, state: preview ?? this.state!, message: this.message, locked: this.locked, saved: this.saved && (!!this.storage || !!this.server), banner: this.banner, effect: this.effect });
     this.effect = undefined;
   }
   // Story recruits: play each newly joined guest once per session (a reload shows the ones already joined as seen).

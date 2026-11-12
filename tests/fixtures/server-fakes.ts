@@ -1,10 +1,10 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
 import { sequenceSeeds } from '../../src/core/command/seed-source';
 import type { D1Like, D1Stmt } from '../../src/server/accounts';
 import { handleAccountRequest, sqlStore, type DurableStateLike } from '../../src/server/account-object';
 import { RateLimiter, type ApiDeps } from '../../src/server/api';
-import { GameHost } from '../../src/server/game-host';
+import { GameHost, type GameContext } from '../../src/server/game-host';
 import { GAME_CONTEXT } from '../../src/server/worker';
 import { currentActorId, resolveCommand } from '../../src/core/battle/engine';
 import type { Command } from '../../src/core/battle/types';
@@ -18,7 +18,8 @@ export const VERSION = 'test-content-1';
 
 export function fakeD1(): D1Like & { db: DatabaseSync } {
   const db = new DatabaseSync(':memory:');
-  db.exec(readFileSync(new URL('../../cloudflare/migrations/0001_accounts.sql', import.meta.url), 'utf8'));
+  const dir = new URL('../../cloudflare/migrations/', import.meta.url);
+  for (const f of readdirSync(dir).filter(n => n.endsWith('.sql')).sort()) db.exec(readFileSync(new URL(f, dir), 'utf8'));
   const stmt = (sql: string, values: unknown[] = []): D1Stmt => ({
     bind: (...v) => stmt(sql, v),
     first: async <T>() => (db.prepare(sql).get(...values as never[]) ?? null) as T | null,
@@ -50,14 +51,14 @@ export function fakeDurableState(): DurableStateLike & { db: DatabaseSync } {
 }
 
 export interface Server { deps: ApiDeps; d1: ReturnType<typeof fakeD1>; objects: Map<string, { host: GameHost; state: ReturnType<typeof fakeDurableState> }>; clock: { t: number } }
-export function server(seeds: number[] = [11, 22, 33, 44, 55, 66, 77, 88, 99], contentVersion = VERSION): Server {
+export function server(seeds: number[] = [11, 22, 33, 44, 55, 66, 77, 88, 99], contentVersion = VERSION, context: GameContext = GAME_CONTEXT): Server {
   const d1 = fakeD1(); const objects: Server['objects'] = new Map(); const clock = { t: 1_000_000 };
   const draw = sequenceSeeds(seeds);
   const deps: ApiDeps = {
     db: d1, contentVersion, allowedOrigins: ['https://wnau34-nptrn.github.io'], now: () => clock.t, limiter: new RateLimiter(),
     game(accountId) {
       let o = objects.get(accountId);
-      if (!o) { const state = fakeDurableState(); o = { state, host: new GameHost(sqlStore(state), GAME_CONTEXT, () => draw.next(), contentVersion, () => clock.t) }; objects.set(accountId, o); }
+      if (!o) { const state = fakeDurableState(); o = { state, host: new GameHost(sqlStore(state), context, () => draw.next(), contentVersion, () => clock.t) }; objects.set(accountId, o); }
       const host = o.host;
       return { fetch: (r: Request) => handleAccountRequest(host, r) };
     },

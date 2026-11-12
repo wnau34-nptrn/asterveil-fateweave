@@ -5,7 +5,8 @@
   "workers_dev": true,
   "preview_urls": false,
   "vars": {
-    "ALLOWED_ORIGINS": "https://wnau34-nptrn.github.io,http://localhost:5173,http://127.0.0.1:5173"
+    "ALLOWED_ORIGINS": "https://wnau34-nptrn.github.io,http://localhost:5173,http://127.0.0.1:5173",
+    "GOOGLE_CLIENT_ID": "982054923877-79lqr98hgklktknar98k6jsnvs4dk4fb.apps.googleusercontent.com"
   },
   "d1_databases": [
     {
@@ -15,6 +16,20 @@
       "migrations_dir": "migrations"
     }
   ],
-  "durable_objects": { "bindings": [{ "name": "GAME", "class_name": "GameAccount" }] },
-  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["GameAccount"] }]
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "GAME",
+        "class_name": "GameAccount"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "GameAccount"
+      ]
+    }
+  ]
 }

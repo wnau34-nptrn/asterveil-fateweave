@@ -1,3 +1,4 @@
+import { savePlace } from './save-place';
 import {bossGuide} from './boss-equipment';
 import {lootGuide} from './loot-guide';
 import { infoTabs } from './info-tabs';
@@ -735,6 +736,6 @@ export class WorldUI {
       ${this.map.puzzles.runes.length + this.map.puzzles.secrets.length ? `<h3>${icon('star')} ปริศนาและทางลับ</h3><p>แต่ละโซนมีปริศนาเฝ้ากล่องหายาก: ทุ่งมีหินรูน 3 ก้อน เหยียบตามลำดับสัญลักษณ์บนประตูหิน · พงหนามมีก้อนหิน เดินชนเพื่อผลักลงหลุม · รอยแผลมีคันโยก 2 อันคนละฝั่ง ดึงให้ครบ · กำแพงที่มีรอยร้าวเรืองแสงจาง ๆ บางช่องเดินทะลุได้</p>` : ''}
       <h3>${icon('boss')} ${this.map.bossName}</h3><p>บอสเฝ้าทางเดียวไป${this.map.goalName} เดินชนบอสเพื่อเริ่มศึก ชนะแล้วเดินไปที่ประตูเพื่อจบการเดินทาง</p></section>
       ${s ? `<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>` : ''}
-      <p id="world-save" class="world-save">${this.view?.saved ? 'บันทึกอัตโนมัติบนเครื่องนี้ทุกก้าว' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้'}</p>`;
+      <p id="world-save" class="world-save">${savePlace() === 'server' ? 'บันทึกบนเซิร์ฟเวอร์ทุกก้าว' : this.view?.saved ? 'บันทึกอัตโนมัติบนเครื่องนี้ทุกก้าว' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้'}</p>`;
   }
 }

@@ -23,6 +23,11 @@ export type ServerOutcome =
   | { kind: 'otherDevice' }
   // No definitive answer; `retry()` sends the same request again.
   | { kind: 'failed'; reason: ServerFailure };
+// P09-02d account (owner D1): Google link/sign-in and one-time recovery codes.
+export interface AccountInfo { accountId: string; status: 'guest' | 'linked' | 'deleting' | 'suspended'; google: boolean; recoveryCodeAt: number | null }
+// `refused`: the server answered with a definite no (`identity_in_use`, `already_linked`, `not_linked`, `invalid_code`,
+// `google_token`, `google_unset`, `rate_limited`, …); `failed`: no definite answer.
+export type AccountOutcome<T> = { kind: 'ok'; value: T } | { kind: 'refused'; error: string } | { kind: 'failed'; reason: ServerFailure };
 export type EnterOutcome = { kind: 'state'; state: ServerState } | { kind: 'otherDevice' } | { kind: 'failed'; reason: ServerFailure };
 
 export interface ServerPort {
@@ -115,7 +120,7 @@ export class ServerClient {
 
   // Entering the game on this page: make a guest account the first time, then take the account over (D12) and read it.
   async enter(): Promise<EnterOutcome> {
-    let token = this.token() ?? this.memoryToken;
+    let token = this.memoryToken ?? this.token();
     for (let tries = 0; tries < 2; tries++) {
       if (!token) { const made = await this.newGuest(); if (made === 'network' || made === 'server') return { kind: 'failed', reason: made }; token = made; }
       const r = await this.request('/v1/session', { method: 'POST', headers: this.headers(token, false) });
@@ -132,7 +137,7 @@ export class ServerClient {
 
   // The server's current state for this session (after a 409, or to check on a lost answer).
   async state(): Promise<EnterOutcome> {
-    const token = this.token() ?? this.memoryToken;
+    const token = this.memoryToken ?? this.token();
     if (!token) return { kind: 'failed', reason: 'unauthorized' };
     const r = await this.request('/v1/state', { method: 'GET', headers: this.headers(token, false) });
     if (r?.status === 423) return { kind: 'otherDevice' };
@@ -140,6 +145,54 @@ export class ServerClient {
     const state = await r.json() as ServerState;
     this.lastSeq = state.lastSeq;
     return { kind: 'state', state };
+  }
+
+  // ---- P09-02d account ----
+  private async accountCall<T>(path: string, init: RequestInit, ok: number, read: (body: unknown) => T): Promise<AccountOutcome<T>> {
+    const r = await this.request(path, init);
+    if (!r) return { kind: 'failed', reason: 'network' };
+    const body: unknown = await r.json().catch(() => ({}));
+    if (r.status === ok) return { kind: 'ok', value: read(body) };
+    if (r.status === 401 && !(body as { error?: string }).error?.startsWith('google')) return { kind: 'failed', reason: 'unauthorized' };
+    if (r.status >= 500 && (body as { error?: string }).error !== 'google_unset') return { kind: 'failed', reason: 'server' };
+    return { kind: 'refused', error: (body as { error?: string }).error ?? `http_${r.status}` };
+  }
+  private bearer(json: boolean): Record<string, string> | null {
+    const token = this.memoryToken ?? this.token();
+    return token ? { Authorization: `Bearer ${token}`, ...(json ? { 'Content-Type': 'application/json' } : {}) } : null;
+  }
+  async account(): Promise<AccountOutcome<AccountInfo>> {
+    const headers = this.bearer(false);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    return this.accountCall('/v1/account', { method: 'GET', headers }, 200, b => b as AccountInfo);
+  }
+  // Links Google to the account this device plays. `identity_in_use`: that Google account already has another game
+  // account (never merged; `signIn` switches this device to it).
+  async link(idToken: string): Promise<AccountOutcome<AccountInfo>> {
+    const headers = this.bearer(true);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    return this.accountCall('/v1/link', { method: 'POST', headers, body: JSON.stringify({ idToken }) }, 200, b => b as AccountInfo);
+  }
+  // A new recovery code (replaces the old one); shown once.
+  async recoveryCode(): Promise<AccountOutcome<string>> {
+    const headers = this.bearer(false);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    return this.accountCall('/v1/recovery-code', { method: 'POST', headers }, 201, b => (b as { code: string }).code);
+  }
+  // Sign-in with Google or a recovery code: this device makes its new credential itself and sends it along, so a
+  // retried request whose answer was lost still works (the code is used once). On success the device plays that
+  // account from now on; `enter()` takes it over (D12) and reads it.
+  async signIn(idToken: string): Promise<AccountOutcome<string>> { return this.switchAccount('/v1/signin', { idToken }); }
+  async recover(code: string): Promise<AccountOutcome<string>> { return this.switchAccount('/v1/recover', { code }); }
+  private async switchAccount(path: string, body: Record<string, string>): Promise<AccountOutcome<string>> {
+    const token = `${this.port.randomHex(16)}.${this.port.randomHex(32)}`;
+    const out = await this.accountCall(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...body, token }) }, 200,
+      b => (b as { accountId: string }).accountId);
+    if (out.kind === 'ok') {
+      try { this.storage?.setItem(TOKEN_KEY + this.base, token); } catch { /* kept for this page only */ }
+      this.memoryToken = token; this.pending = undefined; this.lastSeq = 0;
+    }
+    return out;
   }
 
   async send(command: GameCommand): Promise<ServerOutcome> {
@@ -150,7 +203,7 @@ export class ServerClient {
 
   // Sends the unanswered request again: same requestId, same seq, same command.
   async retry(): Promise<ServerOutcome> {
-    const req = this.pending; const token = this.token() ?? this.memoryToken;
+    const req = this.pending; const token = this.memoryToken ?? this.token();
     if (!req) return { kind: 'failed', reason: 'server' };
     if (!token) { this.pending = undefined; return { kind: 'failed', reason: 'unauthorized' }; }
     const r = await this.request('/v1/command', { method: 'POST', headers: this.headers(token, true), body: JSON.stringify(req) });

@@ -1,8 +1,9 @@
-/* global fetch, URL, process, crypto, performance, TextEncoder, console, AbortSignal */
+/* global fetch, URL, process, crypto, performance, TextEncoder, console, AbortSignal, Buffer */
 // P09-02b smoke test against a running API (local `wrangler dev` or the deployed dev Worker):
 //   node cloudflare/smoke.mjs <base-url> <content-version>
 // Creates a throwaway guest, sends createCommander → depart, retries a request, reads the state, checks the one-session
-// lock (423 other_device), runs the replay audit,
+// lock (423 other_device), runs the replay audit, moves the account with a recovery code and checks Google sign-in is
+// configured (P09-02d),
 // checks no seed leaves the server and prints bytes and round-trip times. Prints no token.
 import assert from 'node:assert/strict';
 
@@ -52,6 +53,22 @@ assert.equal((await call('other device enters', '/v1/session', { method: 'POST',
 assert.equal((await call('replaced device', '/v1/state', { token })).status, 423);
 assert.equal((await call('enter again', '/v1/session', { method: 'POST', token })).status, 200);
 assert.deepEqual((await call('verify', '/v1/verify', { method: 'POST', token })).json, { ok: true, seq: 2 });
+// P09-02d account: a recovery code moves the account to a new device credential once; Google sign-in is configured
+// and the Worker reaches Google's key set (a well-formed token with an unknown key id is refused as `key`, not `jwks`).
+const account = await call('account', '/v1/account', { token });
+assert.equal(account.json.status, 'guest', account.text);
+const issued = await call('recovery-code', '/v1/recovery-code', { method: 'POST', token });
+assert.equal(issued.status, 201, issued.text);
+const hexOf = n => Array.from(crypto.getRandomValues(new Uint8Array(n)), b => b.toString(16).padStart(2, '0')).join('');
+const moved = `${hexOf(16)}.${hexOf(32)}`;
+const recovered = await call('recover', '/v1/recover', { method: 'POST', body: { code: issued.json.code, token: moved } });
+assert.deepEqual(recovered.json, { accountId: g.json.accountId }, recovered.text);
+assert.equal((await call('recover again', '/v1/recover', { method: 'POST', body: { code: issued.json.code, token: `${hexOf(16)}.${hexOf(32)}` } })).status, 404);
+assert.equal((await call('new device enters', '/v1/session', { method: 'POST', token: moved, session: OTHER })).status, 200);
+const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url');
+const fakeJwt = `${b64({ alg: 'RS256', kid: 'smoke-unknown', typ: 'JWT' })}.${b64({ sub: 'smoke' })}.${Buffer.from('x').toString('base64url')}`;
+const link = await call('link (unknown key)', '/v1/link', { method: 'POST', token: moved, body: { idToken: fakeJwt } });
+assert.deepEqual(link.json, { error: 'google_token', reason: 'key' }, link.text);
 console.log('label\tstatus\tbytes\tms');
 for (const r of rows) console.log(`${r.label}\t${r.status}\t${r.bytes}\t${r.ms}`);
 console.log('SMOKE OK');

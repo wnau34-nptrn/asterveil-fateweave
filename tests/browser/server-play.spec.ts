@@ -1,7 +1,8 @@
-import { expect, test, type Page, type Route } from '@playwright/test';
+import { expect, test, type Browser, type Page, type Route } from '@playwright/test';
 import { contentVersion } from '../../scripts/content-version.mjs';
 import { SESSION_HEADER } from '../../src/server/account-object';
 import { CONTENT_HEADER, handle } from '../../src/server/api';
+import { withGoogle } from '../fixtures/google-fake';
 import { battleTurns, server, storedGame, type Server } from '../fixtures/server-fakes';
 
 // P09-02c server play in a real browser: the page talks to `https://api.test`, which Playwright routes to the real Worker
@@ -10,8 +11,8 @@ const API = 'https://api.test';
 const SAVE_KEY = 'asterveil.fateweave.expedition.v1';
 
 interface Wire { s: Server; commands: string[]; holdNext: number; dropNext: number }
-async function serve(page: Page): Promise<Wire> {
-  const s = server(undefined, contentVersion());
+async function serve(page: Page, shared?: Server): Promise<Wire> {
+  const s = shared ?? server(undefined, contentVersion());
   s.deps.allowedOrigins = [new URL(test.info().project.use.baseURL ?? 'http://127.0.0.1:5173/').origin];
   const w: Wire = { s, commands: [], holdNext: 0, dropNext: 0 };
   await page.route(`${API}/**`, async (route: Route) => {
@@ -143,4 +144,74 @@ test('server play: a step moves the token before the answer, keeps the map live 
     expect(w.commands.length).toBe(count);
   }
   expect(issues).toEqual([]);
+});
+
+// P09-02d: Google Identity Services is replaced by a stub button that hands the page an ID token signed by the test
+// key (tests/fixtures/google-fake.ts); the Worker code checks it against the matching JWKS as it would Google's.
+const GIS_STUB = `window.google = { accounts: { id: {
+  initialize(c) { window.__gis = c; },
+  renderButton(el) { const b = document.createElement('button'); b.type = 'button'; b.id = 'fake-google'; b.textContent = 'Google (ทดสอบ)';
+    b.style.minHeight = '44px'; b.onclick = () => window.__gis.callback({ credential: window.__googleToken }); el.replaceChildren(b); } } } };`;
+async function device(browser: Browser, s: Server): Promise<{ page: Page; close(): Promise<void> }> {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, baseURL: test.info().project.use.baseURL ?? 'http://127.0.0.1:5173/', reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  await page.route('https://accounts.google.com/gsi/client', route => route.fulfill({ contentType: 'text/javascript', body: GIS_STUB }));
+  await serve(page, s);
+  await page.goto(`./?server=${encodeURIComponent(API)}`);
+  await expect(page.locator('#account-open')).toBeVisible();
+  return { page, close: () => context.close() };
+}
+
+test('server play account: link Google, sign in on a second device, recover on a third with a one-time code', async ({ browser }, info) => {
+  const s = server(undefined, contentVersion()); const google = await withGoogle(s);
+  const tokenFor = async (page: Page, sub: string) => { const t = await google.token({ sub }); await page.evaluate(v => { (window as unknown as { __googleToken: string }).__googleToken = v; }, t); };
+
+  // Phone: a guest makes a commander, then links Google and takes a recovery code.
+  const phone = await device(browser, s);
+  await phone.page.locator('#new-game').click(); await phone.page.locator('#commander-name').fill('ย้ายเครื่อง');
+  await phone.page.locator('#commander-create').click();
+  await phone.page.locator('[data-story=skip]').click();
+  await expect(phone.page.locator('#save-status')).toHaveText('บันทึกบนเซิร์ฟเวอร์ทุกเทิร์น');
+  await phone.page.reload();
+  await phone.page.locator('#account-open').click();
+  await expect(phone.page.locator('.account-status')).toHaveAttribute('data-status', 'guest');
+  await phone.page.locator('[data-account="code"]').click();
+  const code = (await phone.page.locator('#account-code').textContent())!.trim();
+  expect(code).toMatch(/^([0-9A-Z]{4}-){4}[0-9A-Z]{4}$/);
+  await tokenFor(phone.page, 'g-owner');
+  await phone.page.locator('#fake-google').click();
+  await expect(phone.page.locator('.account-status')).toHaveAttribute('data-status', 'linked');
+  await phone.page.screenshot({ path: info.outputPath('account-linked-390.png') });
+  expect(await phone.page.locator('#account-code').count()).toBe(1); // still shown until the panel closes
+  await phone.page.locator('[data-account="close"]').click();
+  await expect(phone.page.locator('#account-panel')).toBeHidden();
+
+  // Laptop: its own guest first; Google is already on the phone's account, so it offers to switch (never merges).
+  const laptop = await device(browser, s);
+  await expect(laptop.page.locator('#continue')).toHaveCount(0);
+  await laptop.page.locator('#account-open').click();
+  await tokenFor(laptop.page, 'g-owner');
+  await laptop.page.locator('#fake-google').click();
+  await expect(laptop.page.locator('.account-conflict')).toBeVisible();
+  await laptop.page.screenshot({ path: info.outputPath('account-switch-390.png') });
+  await laptop.page.locator('[data-account="switch"]').click();
+  await expect(laptop.page.locator('#continue')).toBeVisible();
+  await expect(laptop.page.locator('.title-server-note')).toContainText('Google');
+  await laptop.page.locator('#continue').click();
+  await expect(laptop.page.locator('#encounter-title')).toContainText('กองหน้าของวาร์กอธ');
+
+  // (The phone is now the other device: its next command gets 423, covered in tests/server-account.test.ts.)
+
+  // Tablet: the recovery code reaches the same account once; the same code on another device is refused.
+  const tablet = await device(browser, s);
+  await tablet.page.locator('#account-open').click();
+  await tablet.page.locator('#account-code-input').fill(code.toLowerCase());
+  await tablet.page.locator('[data-account="recover"]').click();
+  await expect(tablet.page.locator('#continue')).toBeVisible();
+  const again = await device(browser, s);
+  await again.page.locator('#account-open').click();
+  await again.page.locator('#account-code-input').fill(code);
+  await again.page.locator('[data-account="recover"]').click();
+  await expect(again.page.locator('.account-note')).toHaveText('รหัสกู้คืนไม่ถูกต้อง หรือถูกใช้ไปแล้ว');
+  for (const d of [phone, laptop, tablet, again]) await d.close();
 });

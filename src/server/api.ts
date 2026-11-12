@@ -1,4 +1,5 @@
-import { authenticate, createGuest, type D1Like } from './accounts';
+import { accountInfo, authenticate, createGuest, issueRecoveryCode, linkGoogle, recoverWithCode, signInGoogle, type D1Like } from './accounts';
+import type { GoogleVerifier } from './google';
 import { SESSION_HEADER } from './account-object';
 import { MAX_COMMAND_BYTES } from './game-host';
 
@@ -14,6 +15,8 @@ export interface ApiDeps {
   allowedOrigins: readonly string[];
   now(): number;
   limiter: RateLimiter;
+  // P09-02d: checks a Google ID token (iss/aud/exp/signature against Google's JWKS); absent when no client id is set.
+  google?: GoogleVerifier;
 }
 
 export const CONTENT_HEADER = 'X-Fateweave-Content';
@@ -34,7 +37,8 @@ export class RateLimiter {
     return ++w.count <= limit;
   }
 }
-export const LIMITS = { commandPerSecond: 10, guestPerMinute: 5, readPerSecond: 10 } as const;
+export const LIMITS = { commandPerSecond: 10, guestPerMinute: 5, readPerSecond: 10, signInPerMinute: 10, recoverPerMinute: 5, accountPerMinute: 20 } as const;
+const ACCOUNT_BODY_BYTES = 8 * 1024;
 
 function json(body: unknown, status = 200, extra: Record<string, string> = {}): Response {
   return Response.json(body, { status, headers: { 'Cache-Control': 'no-store', ...extra } });
@@ -77,7 +81,11 @@ export async function handle(request: Request, deps: ApiDeps): Promise<Response>
   return withHeaders(await route(request, path, deps), corsHeaders);
 }
 
-const ROUTES: Record<string, 'GET' | 'POST'> = { '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/command': 'POST', '/v1/verify': 'POST' };
+const ROUTES: Record<string, 'GET' | 'POST'> = {
+  '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/command': 'POST', '/v1/verify': 'POST',
+  '/v1/account': 'GET', '/v1/link': 'POST', '/v1/signin': 'POST', '/v1/recovery-code': 'POST', '/v1/recover': 'POST',
+};
+const ACCOUNT_ROUTES = new Set(['/v1/account', '/v1/link', '/v1/signin', '/v1/recovery-code', '/v1/recover']);
 // A session is one page load of the game on one device: 32 random hex digits made by the device (D12).
 const SESSION = /^[0-9a-f]{32}$/;
 
@@ -91,6 +99,7 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
     if (!deps.limiter.allow(`guest:${ip}`, LIMITS.guestPerMinute, 60_000, now)) return error('rate_limited', 429, { 'Retry-After': '60' });
     return json(await createGuest(deps.db, now), 201);
   }
+  if (ACCOUNT_ROUTES.has(path)) return accountRoute(request, path, deps, now);
   // Every game route: the device must run the same content as the server (a server deployed without one refuses all).
   if (!deps.contentVersion) return error('content_version_unset', 503);
   if (request.headers.get(CONTENT_HEADER) !== deps.contentVersion) return json({ error: 'content_version', server: deps.contentVersion }, 409);
@@ -111,4 +120,54 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
   const body = await readLimited(request, MAX_COMMAND_BYTES);
   if (body === null) return error('too_large', 413);
   return game.fetch(new Request('https://game/command', { method: 'POST', body, headers: { 'Content-Type': 'application/json', ...sessionHeaders } }));
+}
+
+// P09-02d account routes (owner D1): no game content is involved, so no content-version or session header.
+async function readJson(request: Request): Promise<Record<string, unknown> | Response> {
+  if (!/^application\/json\b/i.test(request.headers.get('Content-Type') ?? '')) return error('unsupported_media_type', 415);
+  const body = await readLimited(request, ACCOUNT_BODY_BYTES);
+  if (body === null) return error('too_large', 413);
+  try {
+    const v: unknown = JSON.parse(body);
+    return typeof v === 'object' && v !== null && !Array.isArray(v) ? v as Record<string, unknown> : error('invalid_request', 400);
+  } catch { return error('invalid_json', 400); }
+}
+const str = (v: unknown) => (typeof v === 'string' ? v : '');
+
+async function accountRoute(request: Request, path: string, deps: ApiDeps, now: number): Promise<Response> {
+  const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
+  // Without a bearer token: sign in with Google, or recover with a code. Both make a device credential.
+  if (path === '/v1/signin' || path === '/v1/recover') {
+    const [key, limit] = path === '/v1/signin' ? [`signin:${ip}`, LIMITS.signInPerMinute] : [`recover:${ip}`, LIMITS.recoverPerMinute];
+    if (!deps.limiter.allow(key, limit, 60_000, now)) return error('rate_limited', 429, { 'Retry-After': '60' });
+    const body = await readJson(request);
+    if (body instanceof Response) return body;
+    if (path === '/v1/recover') {
+      const out = await recoverWithCode(deps.db, str(body.code), str(body.token), now);
+      if (out === 'bad_token') return error('invalid_request', 400);
+      if (out === 'invalid_code') return error('invalid_code', 404);
+      return json({ accountId: out });
+    }
+    if (!deps.google) return error('google_unset', 503);
+    const check = await deps.google(str(body.idToken), now);
+    if (!check.ok) return json({ error: 'google_token', reason: check.reason }, check.reason === 'jwks' ? 503 : 401);
+    const out = await signInGoogle(deps.db, check.sub, str(body.token), now);
+    if (out === 'bad_token') return error('invalid_request', 400);
+    if (out === 'not_linked') return error('not_linked', 404);
+    return json({ accountId: out });
+  }
+  const accountId = await authenticate(deps.db, request.headers.get('Authorization'));
+  if (!accountId) return error('unauthorized', 401, { 'WWW-Authenticate': 'Bearer' });
+  if (!deps.limiter.allow(`account:${accountId}`, LIMITS.accountPerMinute, 60_000, now)) return error('rate_limited', 429, { 'Retry-After': '60' });
+  if (path === '/v1/account') return json(await accountInfo(deps.db, accountId));
+  if (path === '/v1/recovery-code') return json({ code: await issueRecoveryCode(deps.db, accountId, now) }, 201);
+  // /v1/link
+  if (!deps.google) return error('google_unset', 503);
+  const body = await readJson(request);
+  if (body instanceof Response) return body;
+  const check = await deps.google(str(body.idToken), now);
+  if (!check.ok) return json({ error: 'google_token', reason: check.reason }, check.reason === 'jwks' ? 503 : 401);
+  const out = await linkGoogle(deps.db, accountId, check.sub, now);
+  if (out !== 'linked') return error(out, 409);
+  return json(await accountInfo(deps.db, accountId));
 }

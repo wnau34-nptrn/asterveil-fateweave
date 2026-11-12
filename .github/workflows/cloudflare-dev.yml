@@ -2,7 +2,7 @@ name: Cloudflare development API
 
 on:
   pull_request:
-    paths: ['cloudflare/**', 'src/server/**', 'src/core/**', 'src/content/**', 'tests/server-api.test.ts', 'scripts/content-version.mjs', '.github/workflows/cloudflare-dev.yml']
+    paths: ['cloudflare/**', 'src/server/**', 'src/core/**', 'src/content/**', 'tests/server-api.test.ts', 'tests/server-account.test.ts', 'scripts/content-version.mjs', '.github/workflows/cloudflare-dev.yml']
   push:
     branches: [feature/fateweave-initial-prototype]
     paths: ['cloudflare/**', 'src/server/**', 'src/core/**', 'src/content/**', 'scripts/content-version.mjs', '.github/workflows/cloudflare-dev.yml']
@@ -30,7 +30,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx vitest run tests/server-api.test.ts
+      - run: npx vitest run tests/server-api.test.ts tests/server-account.test.ts
       - name: Bundle Worker without accessing Cloudflare
         run: $WRANGLER deploy --dry-run --config cloudflare/wrangler.json --outdir /tmp/asterveil-worker
 
@@ -49,6 +49,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+          cache: npm
+      - run: npm ci
       - name: Check deployment credentials without printing them
         run: |
           node --input-type=module <<'NODE'
@@ -99,21 +101,31 @@ jobs:
             if [ "$code" = 401 ]; then ok=$((ok + 1)); [ "$ok" -ge 5 ] && break; else ok=0; fi
             sleep 2
           done
-          (timeout 90 $WRANGLER tail --config cloudflare/wrangler.deploy.json --format json > /tmp/tail.json 2>/dev/null &) ; sleep 12
+          (timeout 420 $WRANGLER tail --config cloudflare/wrangler.deploy.json --format json > /tmp/tail.json 2>/dev/null &) ; sleep 12
           node cloudflare/smoke.mjs "$WORKER_URL" "$CONTENT_VERSION" | tee /tmp/smoke.txt
           smoke=${PIPESTATUS[0]}
+          # P09-02d: a fresh account played to a 300-command log (one battle command per turn) and audited at 50/150/300.
+          (MEASURE_URL="$WORKER_URL" MEASURE_CONTENT="$CONTENT_VERSION" npx vitest run tests/server-measure.test.ts 2>&1 || echo 'measurement run failed') | grep -vE 'ExperimentalWarning|trace-warnings' | tail -n 25 | tee /tmp/measure.txt
           sleep 15
           {
             echo "## Development API (content $CONTENT_VERSION)"
-            if [ "$smoke" = 0 ]; then echo "$WORKER_URL — smoke test passed (guest, session, createCommander, retry, gap, depart, state, one-device 423, replay audit; no seed in any response)."; else echo "$WORKER_URL — SMOKE TEST FAILED (exit $smoke)"; fi
+            if [ "$smoke" = 0 ]; then echo "$WORKER_URL — smoke test passed (guest, session, createCommander, retry, gap, depart, state, one-device 423, replay audit, recovery code, Google config; no seed in any response)."; else echo "$WORKER_URL — SMOKE TEST FAILED (exit $smoke)"; fi
             echo '```'; cat /tmp/smoke.txt; echo '```'
-            echo "### Workers Tail (per invocation)"
+            echo "### Long log measurement (round trips from the runner)"
+            echo '```'; cat /tmp/measure.txt; echo '```'
+            echo "### Workers Tail CPU (ms) by route"
             echo '```'
             node -e "
               const lines=require('fs').readFileSync('/tmp/tail.json','utf8').split('\n').filter(Boolean);
               const out=[]; let buf='';
               for (const l of lines){ buf+=l; try{ out.push(JSON.parse(buf)); buf=''; }catch{} }
-              for (const e of out){ const r=e.event?.request; console.log([r?new URL(r.url).pathname:'-', e.scriptName, e.outcome, 'cpuTime='+(e.cpuTime??'n/a'), 'wallTime='+(e.wallTime??'n/a')].join('\t')); }
+              const groups=new Map(); const verify=[];
+              for (const e of out){ const r=e.event?.request; const key=(r?new URL(r.url).host.startsWith('game')?'DO ':'Worker ':'-')+(r?new URL(r.url).pathname:'-');
+                const cpu=Number(e.cpuTime); if(!Number.isFinite(cpu)) continue;
+                if(!groups.has(key)) groups.set(key,[]); groups.get(key).push(cpu); if(key==='DO /verify') verify.push(cpu+'/'+(e.outcome??''));
+                if(e.outcome && e.outcome!=='ok') console.log('outcome', key, e.outcome, 'cpu', cpu); }
+              for (const [k,v] of groups){ v.sort((a,b)=>a-b); const q=p=>v[Math.min(v.length-1,Math.floor(p*v.length))]; console.log([k,'n='+v.length,'p50='+q(.5),'p95='+q(.95),'max='+v.at(-1)].join('\t')); }
+              console.log('DO /verify in order:', verify.join(' '));
               if(!out.length) console.log('no tail events captured');
             " | tee /dev/stderr || echo "tail parse failed"
             echo '```'

@@ -5,6 +5,7 @@ import type { D1Like } from './accounts';
 import { handleAccountRequest, serverSeed, sqlStore, type DurableStateLike } from './account-object';
 import { handle, RateLimiter } from './api';
 import { GameHost, type GameContext } from './game-host';
+import { GOOGLE_JWKS_URL, googleVerifier, type GoogleVerifier } from './google';
 
 // P09-02b Cloudflare entry (bundled by Wrangler from cloudflare/wrangler.json): the Worker and the per-account
 // Durable Object class `GameAccount` (SQLite storage). Bindings and vars are declared in wrangler.json.
@@ -13,12 +14,20 @@ interface DurableObjectNamespaceLike {
   idFromName(name: string): unknown;
   get(id: unknown): { fetch(request: Request): Promise<Response> };
 }
-export interface Env { DB: D1Like; GAME: DurableObjectNamespaceLike; CONTENT_VERSION?: string; ALLOWED_ORIGINS?: string }
+export interface Env { DB: D1Like; GAME: DurableObjectNamespaceLike; CONTENT_VERSION?: string; ALLOWED_ORIGINS?: string; GOOGLE_CLIENT_ID?: string }
 
 // The same content the game shell runs (`ui/game-shell.ts`).
 export const GAME_CONTEXT: GameContext = { home: chapterOne, maps: MAPS, lookup: encounterById };
 const contentVersion = (env: Env) => env.CONTENT_VERSION?.trim() ?? '';
 const limiter = new RateLimiter();
+// One verifier per isolate keeps Google's keys cached between requests.
+let google: { clientId: string; verify: GoogleVerifier } | undefined;
+function googleFor(env: Env): GoogleVerifier | undefined {
+  const clientId = env.GOOGLE_CLIENT_ID?.trim() ?? '';
+  if (!clientId) return undefined;
+  if (google?.clientId !== clientId) google = { clientId, verify: googleVerifier(clientId, () => fetch(GOOGLE_JWKS_URL)) };
+  return google.verify;
+}
 
 export class GameAccount {
   private readonly host: GameHost;
@@ -30,6 +39,7 @@ export class GameAccount {
 
 export default {
   fetch(request: Request, env: Env): Promise<Response> {
+    const verify = googleFor(env);
     return handle(request, {
       db: env.DB,
       game: accountId => env.GAME.get(env.GAME.idFromName(accountId)),
@@ -37,6 +47,7 @@ export default {
       allowedOrigins: (env.ALLOWED_ORIGINS ?? '').split(',').map(s => s.trim()).filter(Boolean),
       now: () => Date.now(),
       limiter,
+      ...(verify ? { google: verify } : {}),
     });
   },
 };
