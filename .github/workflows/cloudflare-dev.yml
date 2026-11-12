@@ -91,12 +91,21 @@ jobs:
           for attempt in 1 2 3 4 5 6; do
             [ "$(curl -s -o /dev/null -w '%{http_code}' "$WORKER_URL/health")" = 200 ] && break; sleep 5
           done
+          # A new version reaches every edge over some seconds; /health is the same in all versions, so wait until the
+          # newest route (/v1/session, 401 without a token; 404 on older versions) answers 5 times in a row.
+          ok=0
+          for attempt in $(seq 1 30); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H "X-Fateweave-Content: $CONTENT_VERSION" "$WORKER_URL/v1/session" || true)
+            if [ "$code" = 401 ]; then ok=$((ok + 1)); [ "$ok" -ge 5 ] && break; else ok=0; fi
+            sleep 2
+          done
           (timeout 90 $WRANGLER tail --config cloudflare/wrangler.deploy.json --format json > /tmp/tail.json 2>/dev/null &) ; sleep 12
           node cloudflare/smoke.mjs "$WORKER_URL" "$CONTENT_VERSION" | tee /tmp/smoke.txt
+          smoke=${PIPESTATUS[0]}
           sleep 15
           {
             echo "## Development API (content $CONTENT_VERSION)"
-            echo "$WORKER_URL — smoke test passed (guest, createCommander, retry, gap, depart, state, replay audit; no seed in any response)."
+            if [ "$smoke" = 0 ]; then echo "$WORKER_URL — smoke test passed (guest, session, createCommander, retry, gap, depart, state, one-device 423, replay audit; no seed in any response)."; else echo "$WORKER_URL — SMOKE TEST FAILED (exit $smoke)"; fi
             echo '```'; cat /tmp/smoke.txt; echo '```'
             echo "### Workers Tail (per invocation)"
             echo '```'
@@ -109,3 +118,5 @@ jobs:
             " | tee /dev/stderr || echo "tail parse failed"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+          # The smoke result decides the step (tee alone would hide a failure).
+          exit "$smoke"
