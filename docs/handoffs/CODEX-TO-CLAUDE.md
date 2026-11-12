@@ -1,3 +1,11 @@
+## 2026-11-12 — P09-02a2 seed-free client view + command envelope (local)
+- Owner “อนุมัติตามที่คุณแนะนำ ดำเนินการได้” after #222; branch `claude/p09-02a2-client-view` → PR into `feature/fateweave-initial-prototype`.
+- `src/core/command/client-view.ts`: `clientView(game, {home, lookup})` drops `profile.seed/forge`, `run.seed/rolls`, adds `hireBoard` (`boardOffers`+`hireReason` per slot); `clientEvents` strips the settled run.
+- `src/core/command/command-envelope.ts`: pure `processCommand(game, book, {requestId, seq, command}, sha, ctx)` = `decideCommand` → `parseCommand` → `applyCommand`, stores 64 replies for retries; refused commands use their seq. Local shell does not use it.
+- UI: `LobbyView.board` replaces `boardOffers`/`hireReason` calls in `lobby-ui.ts`; `game-shell.ts` passes it from `clientView`. Survey: no other UI reads seed/rolls/forge.
+- Tests: `tests/client-view.test.ts` 11; typecheck/lint/unit 1750 passed (6 skipped)/build pass; local Playwright lobby market/hire/fit (13) + hire-shots/unlock-pacing (3 passed, 1 skipped). No rules/numbers/save v58/Cloudflare change.
+- Open: leftovers + P09-02b in `docs/design/p09/CLIENT_VIEW_TH.md` §5.
+
 ## 2026-11-12 — P09 owner decisions D1/D11/D12
 - Owner “อนุมัติ” on Claude's recommendations: D1 Google sign-in + recovery code, D11 import a local save once per account before the external test, D12 one device at a time. Recorded in `docs/design/OWNER_DECISIONS_TH.md` and `docs/design/p09/README_TH.md` (docs only).
 - Owner “อนุมัติตามที่คุณแนะนำ ดำเนินการได้”: P09-02a2 (seed-free client view + command envelope) opened as a separate Opus session.
