@@ -1,3 +1,11 @@
+## 2026-11-12 — P09-02d Google sign-in + recovery codes + account moves (owner D1)
+- Owner “ดำเนินการต่อได้เลย”; branch `claude/p09-02d-google` → PR #229 into `feature/fateweave-initial-prototype`.
+- Worker: `src/server/google.ts` (RS256 ID token vs Google JWKS, iss/aud/azp/exp/iat), `accounts.ts` link/sign-in/recovery (D1 migration `0002_identities.sql`, sub only, code hash only, one-time, device-made credentials for idempotent retries), routes `/v1/account|link|signin|recovery-code|recover`; `GOOGLE_CLIENT_ID` var.
+- Client: `ServerClient` account methods, `platform/google-identity.ts` (GIS popup), `ui/account-panel.ts` (title button; never merges, switch with warning), `ui/save-place.ts` server save labels.
+- Measurement: `tests/server-measure.test.ts` (+ deploy workflow vs real Worker with Tail CPU by route). Node: verify 180–210 ms @300 cmds, ≈1 s with 47-turn battles; long-battle turn ≈20 ms.
+- Tests: typecheck/lint/unit 1774/build; server-account 8; Playwright server-play 2/2 (stub GIS, 390px); smoke vs local wrangler dev (real JWKS fetch). Real Google click and mobile browsers untested. Details: [ACCOUNT_P09_02D_TH](../design/p09/ACCOUNT_P09_02D_TH.md).
+- No rule/number/save v58 change. Open: D11 import (next), snapshots/admin-only verify, incremental battle, camp-side account button, sign-out/revoke, consent screen publish before OD-13.
+
 ## 2026-11-12 — P09-02c game shell talks to the dev API (switch, off by default)
 - Owner “ดำเนินการต่อได้เลย”; branch `claude/p09-02c-client-server` → PR into `feature/fateweave-initial-prototype`.
 - `src/platform/server-client.ts` (`ServerClient`, `serverSwitch`): guest token per API URL, per-page session id, one `{requestId, seq, command}` at a time, retries on the same requestId/seq (lost answer, 5xx, 429), 409 stale/gap → reread state, 423 → other device, content version from `__CONTENT_VERSION__` (vite define from `scripts/content-version.mjs`, now importable).
