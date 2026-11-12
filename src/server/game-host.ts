@@ -20,12 +20,17 @@ export interface HostStore {
   // Must store `state` and append `entry` atomically (one transaction).
   commit(state: HostState, entry: LogEntry): void;
   entries(): LogEntry[];
+  // D12: the one session (one tab on one device) allowed to play this account; the newest claim wins.
+  activeSession(): string | null;
+  setActiveSession(session: string, at: number): void;
 }
 
 export type HostAnswer =
   | { status: 200; body: CommandReply; replayed: boolean }
   | { status: 400; body: { error: 'invalid_request' } }
-  | { status: 409; body: { error: 'stale' | 'gap'; lastSeq: number } | { error: 'request_reused' } };
+  | { status: 409; body: { error: 'stale' | 'gap'; lastSeq: number } | { error: 'request_reused' } }
+  | { status: 423; body: { error: 'other_device' } };
+export const OTHER_DEVICE = { status: 423, body: { error: 'other_device' } } as const;
 
 export const MAX_COMMAND_BYTES = 128 * 1024;
 // Battle `commands` lists are the largest normal command (one entry per committed turn).
@@ -41,6 +46,15 @@ export class GameHost {
     private readonly contentVersion: string, private readonly now: () => number = () => Date.now()) {}
 
   private current(): HostState { return this.store.load() ?? { game: null, book: emptyBook() }; }
+
+  // D12 (owner 2026-11-12): one account plays on one session at a time and the session that enters last takes over.
+  // `claim` makes `session` the active one; `admits` lets the active session through (the first session ever claims).
+  claim(session: string): void { this.store.setActiveSession(session, this.now()); }
+  admits(session: string): boolean {
+    const active = this.store.activeSession();
+    if (active === null) { this.claim(session); return true; }
+    return active === session;
+  }
 
   // Synchronous between load and commit, so a Durable Object never interleaves two commands (hash the command first).
   command(request: CommandRequest, argsSha256: string): HostAnswer {
@@ -90,12 +104,15 @@ export function replayLog(entries: readonly LogEntry[], ctx: GameContext, expect
   return canonicalJson(game) === canonicalJson(expected) ? { ok: true, seq } : { ok: false, seq, reason: 'snapshot' };
 }
 
-export function memoryStore(): HostStore & { state: HostState | null; log: LogEntry[] } {
+export function memoryStore(): HostStore & { state: HostState | null; log: LogEntry[]; session: string | null } {
   const s = {
     state: null as HostState | null, log: [] as LogEntry[],
     load: () => s.state ? structuredClone(s.state) : null,
     commit: (state: HostState, entry: LogEntry) => { s.state = structuredClone(state); s.log.push(structuredClone(entry)); },
     entries: () => structuredClone(s.log),
+    session: null as string | null,
+    activeSession: () => s.session,
+    setActiveSession: (session: string) => { s.session = session; },
   };
   return s;
 }

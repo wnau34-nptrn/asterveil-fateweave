@@ -1,81 +1,30 @@
-import { readFileSync } from 'node:fs';
-import { DatabaseSync } from 'node:sqlite';
 import { describe, expect, it } from 'vitest';
 import { currentActorId, resolveCommand } from '../src/core/battle/engine';
 import type { Command } from '../src/core/battle/types';
 import { HIDDEN_PROFILE_KEYS, HIDDEN_RUN_KEYS } from '../src/core/command/client-view';
-import { sequenceSeeds } from '../src/core/command/seed-source';
 import { COMMANDER_COLORS, COMMANDER_CRESTS } from '../src/core/world/profile';
 import type { Game } from '../src/core/save/expedition-save';
 import type { Profile } from '../src/core/world/types';
 import { battleData, battleState } from '../src/core/world/world';
-import type { D1Like, D1Stmt } from '../src/server/accounts';
-import { handleAccountRequest, sqlStore, type DurableStateLike } from '../src/server/account-object';
-import { CONTENT_HEADER, handle, LIMITS, RateLimiter, type ApiDeps } from '../src/server/api';
+import { SESSION_HEADER, sqlStore } from '../src/server/account-object';
+import { CONTENT_HEADER, handle, LIMITS } from '../src/server/api';
 import { GameHost, memoryStore, replayLog } from '../src/server/game-host';
 import { GAME_CONTEXT } from '../src/server/worker';
+import { fakeDurableState, server, VERSION, type Server } from './fixtures/server-fakes';
 
 // P09-02b: the Worker front door and the per-account Durable Object, run in Node with real SQLite (node:sqlite) standing
 // in for D1 and the Durable Object's SQL storage. See docs/design/p09/SERVER_P09_02B_TH.md.
 
-const VERSION = 'test-content-1';
 const commander = { name: 'ทดสอบ', crest: COMMANDER_CRESTS[0], color: COMMANDER_COLORS[0], camp: 'ค่ายทดสอบ' };
 
-function fakeD1(): D1Like & { db: DatabaseSync } {
-  const db = new DatabaseSync(':memory:');
-  db.exec(readFileSync(new URL('../cloudflare/migrations/0001_accounts.sql', import.meta.url), 'utf8'));
-  const stmt = (sql: string, values: unknown[] = []): D1Stmt => ({
-    bind: (...v) => stmt(sql, v),
-    first: async <T>() => (db.prepare(sql).get(...values as never[]) ?? null) as T | null,
-    all: async <T>() => ({ results: db.prepare(sql).all(...values as never[]) as T[] }),
-    run: async () => db.prepare(sql).run(...values as never[]),
-  });
-  return {
-    db, prepare: sql => stmt(sql),
-    batch: async (list) => {
-      db.exec('BEGIN');
-      try { for (const s of list) await s.run(); db.exec('COMMIT'); } catch (e) { db.exec('ROLLBACK'); throw e; }
-      return [];
-    },
-  };
-}
-function fakeDurableState(): DurableStateLike & { db: DatabaseSync } {
-  const db = new DatabaseSync(':memory:');
-  return {
-    db,
-    storage: {
-      // Like the real API, exec runs the statement at once; the cursor only hands out the rows.
-      sql: { exec: <T>(q: string, ...b: unknown[]) => { const rows = db.prepare(q).all(...b as never[]) as T[]; return { toArray: () => rows }; } },
-      transactionSync: <T>(fn: () => T): T => {
-        db.exec('BEGIN');
-        try { const out = fn(); db.exec('COMMIT'); return out; } catch (e) { db.exec('ROLLBACK'); throw e; }
-      },
-    },
-  };
-}
-
-interface Server { deps: ApiDeps; d1: ReturnType<typeof fakeD1>; objects: Map<string, { host: GameHost; state: ReturnType<typeof fakeDurableState> }>; clock: { t: number } }
-function server(seeds: number[] = [11, 22, 33, 44, 55, 66, 77, 88, 99], contentVersion = VERSION): Server {
-  const d1 = fakeD1(); const objects: Server['objects'] = new Map(); const clock = { t: 1_000_000 };
-  const draw = sequenceSeeds(seeds);
-  const deps: ApiDeps = {
-    db: d1, contentVersion, allowedOrigins: ['https://wnau34-nptrn.github.io'], now: () => clock.t, limiter: new RateLimiter(),
-    game(accountId) {
-      let o = objects.get(accountId);
-      if (!o) { const state = fakeDurableState(); o = { state, host: new GameHost(sqlStore(state), GAME_CONTEXT, () => draw.next(), contentVersion, () => clock.t) }; objects.set(accountId, o); }
-      const host = o.host;
-      return { fetch: (r: Request) => handleAccountRequest(host, r) };
-    },
-  };
-  return { deps, d1, objects, clock };
-}
 const call = (s: Server, path: string, init: RequestInit = {}) => handle(new Request(`https://api.test${path}`, init), s.deps);
 async function guest(s: Server) {
   const r = await call(s, '/v1/guest', { method: 'POST', headers: { 'CF-Connecting-IP': '203.0.113.9' } });
   expect(r.status).toBe(201);
   return await r.json() as { accountId: string; token: string };
 }
-const gameHeaders = (token: string, version = VERSION) => ({ Authorization: `Bearer ${token}`, [CONTENT_HEADER]: version, 'Content-Type': 'application/json' });
+const SESSION_A = 'a'.repeat(32), SESSION_B = 'b'.repeat(32);
+const gameHeaders = (token: string, version = VERSION, session = SESSION_A) => ({ Authorization: `Bearer ${token}`, [CONTENT_HEADER]: version, [SESSION_HEADER]: session, 'Content-Type': 'application/json' });
 let rid = 0;
 const requestId = () => `request-${String(++rid).padStart(10, '0')}`;
 function send(s: Server, token: string, body: unknown) {
@@ -171,6 +120,32 @@ describe('P09-02b Worker front door', () => {
     }
     expect(codes.slice(0, -1).every(c => c === 409)).toBe(true); // gap: nothing ran
     expect(codes.at(-1)).toBe(429);
+  });
+});
+
+describe('P09-02c one session per account (D12)', () => {
+  it('lets the newest session play and answers 423 other_device to the one it replaced', async () => {
+    const s = server(); const { token } = await guest(s);
+    const cmd = (session: string, seq: number) => call(s, '/v1/command', { method: 'POST', headers: gameHeaders(token, VERSION, session),
+      body: JSON.stringify({ requestId: requestId(), seq, command: { kind: 'createCommander', commander, replace: false } }) });
+    // A missing or malformed session id is refused before the game sees the request.
+    const noSession: Record<string, string> = gameHeaders(token); delete noSession[SESSION_HEADER];
+    expect((await call(s, '/v1/state', { headers: noSession })).status).toBe(400);
+    expect((await call(s, '/v1/state', { headers: gameHeaders(token, VERSION, 'XYZ') })).status).toBe(400);
+    // The first session to arrive holds the account.
+    expect((await cmd(SESSION_A, 1)).status).toBe(200);
+    // Another device enters: it takes over and sees the same state.
+    const enter = await call(s, '/v1/session', { method: 'POST', headers: gameHeaders(token, VERSION, SESSION_B) });
+    expect(enter.status).toBe(200); expect((await enter.json() as { lastSeq: number }).lastSeq).toBe(1);
+    const old = await call(s, '/v1/state', { headers: gameHeaders(token, VERSION, SESSION_A) });
+    expect(old.status).toBe(423); expect(await old.json()).toEqual({ error: 'other_device' });
+    expect((await cmd(SESSION_A, 2)).status).toBe(423);
+    expect((await call(s, '/v1/state', { headers: gameHeaders(token, VERSION, SESSION_B) })).status).toBe(200);
+    // Entering again on the first device takes it back; nothing ran on the refused command.
+    expect((await call(s, '/v1/session', { method: 'POST', headers: gameHeaders(token, VERSION, SESSION_A) })).status).toBe(200);
+    expect((await cmd(SESSION_B, 2)).status).toBe(423);
+    const back = await call(s, '/v1/state', { headers: gameHeaders(token, VERSION, SESSION_A) });
+    expect((await back.json() as { lastSeq: number }).lastSeq).toBe(1);
   });
 });
 

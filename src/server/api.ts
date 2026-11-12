@@ -1,4 +1,5 @@
 import { authenticate, createGuest, type D1Like } from './accounts';
+import { SESSION_HEADER } from './account-object';
 import { MAX_COMMAND_BYTES } from './game-host';
 
 // P09-02b: the Worker's front door. Routing, request size/shape limits, content-version check, guest accounts, bearer
@@ -45,7 +46,7 @@ function cors(request: Request, deps: ApiDeps): Record<string, string> {
   if (!origin || !deps.allowedOrigins.includes(origin)) return {};
   return {
     'Access-Control-Allow-Origin': origin, Vary: 'Origin',
-    'Access-Control-Allow-Headers': `Authorization, Content-Type, ${CONTENT_HEADER}`,
+    'Access-Control-Allow-Headers': `Authorization, Content-Type, ${CONTENT_HEADER}, ${SESSION_HEADER}`,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Max-Age': '600',
   };
 }
@@ -76,7 +77,9 @@ export async function handle(request: Request, deps: ApiDeps): Promise<Response>
   return withHeaders(await route(request, path, deps), corsHeaders);
 }
 
-const ROUTES: Record<string, 'GET' | 'POST'> = { '/v1/guest': 'POST', '/v1/state': 'GET', '/v1/command': 'POST', '/v1/verify': 'POST' };
+const ROUTES: Record<string, 'GET' | 'POST'> = { '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/command': 'POST', '/v1/verify': 'POST' };
+// A session is one page load of the game on one device: 32 random hex digits made by the device (D12).
+const SESSION = /^[0-9a-f]{32}$/;
 
 async function route(request: Request, path: string, deps: ApiDeps): Promise<Response> {
   const method = ROUTES[path];
@@ -98,10 +101,14 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
     return error('rate_limited', 429, { 'Retry-After': '1' });
   }
   const game = deps.game(accountId);
-  if (path === '/v1/state') return game.fetch(new Request('https://game/state'));
   if (path === '/v1/verify') return game.fetch(new Request('https://game/verify', { method: 'POST' }));
+  const session = request.headers.get(SESSION_HEADER) ?? '';
+  if (!SESSION.test(session)) return error('session_required', 400);
+  const sessionHeaders = { [SESSION_HEADER]: session };
+  if (path === '/v1/session') return game.fetch(new Request('https://game/session', { method: 'POST', headers: sessionHeaders }));
+  if (path === '/v1/state') return game.fetch(new Request('https://game/state', { headers: sessionHeaders }));
   if (!/^application\/json\b/i.test(request.headers.get('Content-Type') ?? '')) return error('unsupported_media_type', 415);
   const body = await readLimited(request, MAX_COMMAND_BYTES);
   if (body === null) return error('too_large', 413);
-  return game.fetch(new Request('https://game/command', { method: 'POST', body, headers: { 'Content-Type': 'application/json' } }));
+  return game.fetch(new Request('https://game/command', { method: 'POST', body, headers: { 'Content-Type': 'application/json', ...sessionHeaders } }));
 }
