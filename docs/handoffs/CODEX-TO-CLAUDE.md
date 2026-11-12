@@ -1,3 +1,12 @@
+## 2026-11-12 — P09-02a command layer + seeds behind a port (local)
+- Owner “ดำเนินการต่อได้” after P09-01 (#221); branch `claude/p09-02a-command-layer` → PR into `feature/fateweave-initial-prototype`.
+- `src/core/command/game-command.ts`: 55 JSON command kinds (camp + map + `battle`), `parseCommand` shape check, pure `applyCommand(game, cmd, ctx)` calling the existing `core/world` rules; `depart` includes the prologue start, `move` to the goal / a wiped battle / `withdraw` settle in the same command.
+- Seeds: `SeedSource` port (`core/command/seed-source.ts`), local `platform/seed-source.ts` keeps the old clock+Math.random generator. `placeCampMember` moved from `src/ui/camp-team.ts` to `src/core/world/camp-team.ts`.
+- `src/ui/game-shell.ts` now sends every action through `applyCommand` (no other UI file changed); messages/effects unchanged.
+- Tests: `tests/game-command.test.ts` 66 (equality with direct calls for every kind, JSON round-trip, malformed/rejected, replay determinism, save reload); typecheck/lint/unit 1739/build pass; local Playwright gameplay specs: see PR.
+- No change to rules, numbers, save v58, Worker or D1. Seed survey and remaining server work: `docs/design/p09/COMMAND_LAYER_TH.md` (only `lobby-ui` `boardOffers` needs the seed on the device).
+- Open: owner D1/D11/D12; next P09-02a2 seed-free client view (after Codex HUD work).
+
 ## 2026-11-11 — P09-01 guest account + cloud save design (no database)
 - Branch `claude/p09-01-account-cloud-save-design`; owner approved starting the database-free part (“อนุมัติ ทำตามที่แนะนำ”).
 - Thai design set `docs/design/p09/` (index README_TH with owner decisions D1–D9 + recommendations; account flow, cloud save envelope, trust boundary, D1/API draft). Facts from code are marked [โค้ด], proposals [เสนอ].

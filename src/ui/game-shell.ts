@@ -1,17 +1,14 @@
 import { showBattleRewards, type BattleRewards } from './battle-rewards';
-import {chooseBossTarget} from '../core/world/boss-equipment';
-import {chooseHuntTarget} from '../core/world/targeted-loot';
-import {departureBlocked,collectOverflow,recycleSelection,expandStorage} from '../core/world/storage';
 import { bindInfoTabs } from './info-tabs';
-import { chooseRunLoadout, learnRunTalent, rosterIds } from '../core/world/world';
-import { applyCampEquipment, applyRunEquipment } from '../core/world/auto-equipment';
+import { rosterIds } from '../core/world/world';
+import { applyCommand, isRejected, type CampCommand, type CommandEvent, type CommandResult, type GameCommand, type RunCommand } from '../core/command/game-command';
+import { localSeedSource } from '../platform/seed-source';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
-import { setArchived, setPartyLane, chooseLoadout, hardReason, claimGuide, createCommander, depart, featureOpen, mapUnlocked, brew, buy, claimQuest, refreshBoard, dismiss, equip, hire, learnTalent, newProfile, resetTalents, salvage, settle, unequip, upgrade, canWithdraw } from '../core/world/profile';
-import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileResult, RunOutcome, ShopItemId, WorldEvent } from '../core/world/types';
-import { applyPreset, applyRunPreset, clearPreset, renamePreset, savePreset } from '../core/world/presets';
-import { draftPick, travel, tileAt, startPrologue, questDone, battleData, chooseEvent, finishBattle, heroCatalog, move, moveMember, openChest, recordBattle, usePotion, rest, revive, setLane, swapMembers, takeOff, wear, type EncounterLookup } from '../core/world/world';
+import { type createCommander, featureOpen } from '../core/world/profile';
+import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileEvent, ProfileResult, ShopItemId, WorldEvent, WorldResult } from '../core/world/types';
+import { tileAt, questDone, battleData, heroCatalog, type EncounterLookup } from '../core/world/world';
 import { Music, type Track } from '../platform/music';
 import { firstClearStory, runSummary, SummaryUI, type RunSummary } from './summary-ui';
 import { sfx, type SfxName } from '../platform/sfx';
@@ -19,12 +16,10 @@ import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import { leaderArt, type NpcId } from '../game/visuals/assets';
 import { choiceText, eventText, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText, tomeLineText, tomeSizeText, tomeThai } from './th';
-import { raiseSkill, tradeTomes } from '../core/world/tomes';
 import { laneName } from './formation-grid';
-import { transferAffix, craftWeapon, raiseItemLevel, enhanceTo, lockEquipment, findItem, fuse, reroll, smelt } from '../core/world/forge';
+import { findItem } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
 import { LobbyUI } from './lobby-ui';
-import { placeCampMember } from './camp-team';
 import { forgeStrike } from './forge-strike';
 import { prologue, prologueEnd, recruitStory, StoryUI } from './story-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
@@ -87,12 +82,12 @@ export class GameShell {
     }
     for (const id of this.game?.run?.recruited ?? []) this.recruitSeen.add(`${this.game!.run!.mapId}:${id}`);
     this.world = new WorldUI(views.world, this.map, heroCatalog(lookup, map), {
-      travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(swapMembers(this.state!, a, b)), lane: (id, lane, other) => this.roster(setLane(this.state!, map, lookup, id, lane, other)), moveMember: id => this.roster(moveMember(this.state!, id)), preset: slot => this.roster(applyRunPreset(this.state!, this.game?.profile.presets?.[slot] ?? undefined, slot)),
-      withdraw: () => this.endRun('withdrawn'), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
+      travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(this.step({ kind: 'swapMembers', a, b })), lane: (id, lane, other) => this.roster(this.step({ kind: 'setLane', heroId: id, lane, ...(other !== undefined ? { other } : {}) })), moveMember: id => this.roster(this.step({ kind: 'moveMember', heroId: id })), preset: slot => this.roster(this.step({ kind: 'runPreset', slot })),
+      withdraw: () => this.withdraw(), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
       chooseEvent: choice => this.chooseEvent(choice), draft: index => this.draft(index),
       talent: (id, node) => {
         if (!this.state || this.locked) return;
-        const result = learnRunTalent(this.state, map, lookup, id, node);
+        const result = this.step({ kind: 'learnRunTalent', heroId: id, node });
         if (result.event.type !== 'talent') return;
         this.state = result.state; this.persist(); sfx.play('buff');
         this.message = `ลงแต้มความถนัด${heroText[id]?.name ?? ''}แล้ว`;
@@ -100,36 +95,38 @@ export class GameShell {
       },
       loadout: (id, actions) => {
         if (!this.state || this.locked) return;
-        const result = chooseRunLoadout(this.state, map, lookup, id, actions);
+        const result = this.step({ kind: 'chooseRunLoadout', heroId: id, actions: [...actions] });
         if (result.event.type !== 'talent') return;
         this.state = result.state; this.persist(); sfx.play('buff');
         this.message = `เปลี่ยนสกิลติดตัว${heroText[id]?.name ?? ''}แล้ว`;
         this.renderWorld();
       },
-      wear: (id, from, index) => this.gear(wear(this.state!, map, lookup, id, from, index)), takeOff: (id, slot) => this.gear(takeOff(this.state!, map, lookup, id, slot)),
-      autoEquip: plan => { if(this.state&&!this.locked)this.gear(applyRunEquipment(this.state,map,lookup,plan)); },
+      wear: (id, from, index) => this.gear(this.step({ kind: 'wear', heroId: id, from, index })), takeOff: (id, slot) => this.gear(this.step({ kind: 'takeOff', heroId: id, slot })),
+      autoEquip: plan => { if(this.state&&!this.locked)this.gear(this.step({ kind: 'autoEquipRun', plan })); },
     }, this.eliteArtOf(this.map), lookup(map.tutorialEncounterId));
+    const has = <K extends string, V>(k: K, v: V | undefined) => (v !== undefined ? { [k]: v } : {}) as Partial<Record<K, V>>;
+    const camp = (cmd: CampCommand) => this.campCommand(cmd);
     this.lobby = new LobbyUI(views.lobby, map, lookup, heroCatalog(lookup, map), {
-      hire: i => this.profileChange(hire(this.game!.profile, map, lookup, i)), refresh: () => this.profileChange(refreshBoard(this.game!.profile, map)),
-      buy: (item, hero) => this.profileChange(buy(this.game!.profile, map, item, hero)), smelt: dust => this.profileChange(smelt(this.game!.profile, map, dust)), upgrade: id => this.profileChange(upgrade(this.game!.profile, map, id)),
-      archive: (id, archived) => this.profileChange(setArchived(this.game!.profile, id, archived)),
-      dismiss: id => this.profileChange(dismiss(this.game!.profile, map, id)), place: (id, group, other, lane) => this.profileChange(placeCampMember(this.game!.profile, map, lookup, id, group, other, lane)),
-      lane: (id, lane, other) => this.profileChange(setPartyLane(this.game!.profile, map, lookup, id, lane, other)),
-      preset: (action, slot, name) => { const p = this.game!.profile; this.profileChange(action === 'apply' ? applyPreset(p, map, slot) : action === 'save' ? savePreset(p, map, lookup, slot, name) : action === 'rename' ? renamePreset(p, slot, name ?? '') : clearPreset(p, slot)); },
-      skillLevel: (id, action) => this.profileChange(raiseSkill(this.game!.profile, this.maps, map, lookup, id, action)),
-      tomeTrade: (line, size, to) => this.profileChange(tradeTomes(this.game!.profile, this.maps, map, line, size, to)),
-      talent: (id, node) => this.profileChange(learnTalent(this.game!.profile, map, id, node)), loadout: (id, actions) => this.profileChange(chooseLoadout(this.game!.profile, map, lookup, id, actions)), resetTalents: id => this.profileChange(resetTalents(this.game!.profile, id)),
+      hire: i => camp({ kind: 'hire', index: i }), refresh: () => camp({ kind: 'refreshBoard' }),
+      buy: (item, hero) => camp({ kind: 'buy', item, ...has('heroId', hero) }), smelt: dust => camp({ kind: 'smelt', dust }), upgrade: id => camp({ kind: 'upgrade', heroId: id }),
+      archive: (id, archived) => camp({ kind: 'setArchived', heroId: id, archived }),
+      dismiss: id => camp({ kind: 'dismiss', heroId: id }), place: (id, group, other, lane) => camp({ kind: 'placeMember', heroId: id, group, ...has('other', other), ...has('lane', lane) }),
+      lane: (id, lane, other) => camp({ kind: 'setPartyLane', heroId: id, lane, ...has('other', other) }),
+      preset: (action, slot, name) => camp({ kind: 'preset', action, slot, ...has('name', name) }),
+      skillLevel: (id, action) => camp({ kind: 'raiseSkill', heroId: id, action }),
+      tomeTrade: (line, size, to) => camp({ kind: 'tradeTomes', line, size, ...has('to', to) }),
+      talent: (id, node) => camp({ kind: 'learnTalent', heroId: id, node }), loadout: (id, actions) => camp({ kind: 'chooseLoadout', heroId: id, actions: [...actions] }), resetTalents: id => camp({ kind: 'resetTalents', heroId: id }),
       guide: (id, skip) => this.guide(id, skip),
-      equip: (id, uid) => this.profileChange(equip(this.game!.profile, id, uid)), unequip: (id, slot) => this.profileChange(unequip(this.game!.profile, map, id, slot)),
-      autoEquip: plan => this.profileChange(applyCampEquipment(this.game!.profile,plan)),
-      transfer:(uid,index,donor,sourceIndex)=>this.profileChange(transferAffix(this.game!.profile,map,uid,index,donor,sourceIndex)),
-      craft:(hero,level)=>this.profileChange(craftWeapon(this.game!.profile,map,hero,level)),
-      bossTarget:target=>this.profileChange(chooseBossTarget(this.game!.profile,map,target)),
-      huntTarget:target=>this.profileChange(chooseHuntTarget(this.game!.profile,target)),
-      collect:ids=>this.profileChange(collectOverflow(this.game!.profile,map,ids)), recycleStored:(source,ids)=>this.profileChange(recycleSelection(this.game!.profile,map,source,ids)),expandStorage:()=>this.profileChange(expandStorage(this.game!.profile,map)),
-      salvage: uids => this.profileChange(salvage(this.game!.profile, map, uids)),
-      enhance: (uid,target) => this.profileChange(enhanceTo(this.game!.profile, map, uid,target)), lock: uid=>this.profileChange(lockEquipment(this.game!.profile,uid)), fuse: (uid,donors) => this.profileChange(fuse(this.game!.profile, map, uid,donors)), level:(uid,target)=>this.profileChange(raiseItemLevel(this.game!.profile,map,uid,target)),
-      reroll: (uid, i) => this.profileChange(reroll(this.game!.profile, map, uid, i)), brew: potion => this.profileChange(brew(this.game!.profile, map, potion)), claim: id => this.profileChange(claimQuest(this.game!.profile, map, id)),
+      equip: (id, uid) => camp({ kind: 'equip', heroId: id, uid }), unequip: (id, slot) => camp({ kind: 'unequip', heroId: id, slot }),
+      autoEquip: plan => camp({ kind: 'autoEquipCamp', plan }),
+      transfer:(uid,index,donor,sourceIndex)=>camp({ kind: 'transferAffix', uid, index, donor, sourceIndex }),
+      craft:(hero,level)=>camp({ kind: 'craftWeapon', heroId: hero, level }),
+      bossTarget:target=>camp({ kind: 'bossTarget', target }),
+      huntTarget:target=>camp({ kind: 'huntTarget', ...has('target', target) }),
+      collect:ids=>camp({ kind: 'collectOverflow', ids: [...ids] }), recycleStored:(source,ids)=>camp({ kind: 'recycleStored', source, ids: [...ids] }),expandStorage:()=>camp({ kind: 'expandStorage' }),
+      salvage: uids => camp({ kind: 'salvage', uids: [...uids] }),
+      enhance: (uid,target) => camp({ kind: 'enhance', uid, target }), lock: uid=>camp({ kind: 'lockEquipment', uid }), fuse: (uid,donors) => camp({ kind: 'fuse', uid, ...has('donors', donors ? [...donors] : undefined) }), level:(uid,target)=>camp({ kind: 'raiseItemLevel', uid, target }),
+      reroll: (uid, i) => camp({ kind: 'reroll', uid, index: i }), brew: potion => camp({ kind: 'brew', potion }), claim: id => camp({ kind: 'claimQuest', questId: id }),
       depart: (id, hard) => this.depart(id, hard), home: () => this.showTitle(),
     }, maps);
     const story = document.createElement('section'); root.append(story); this.story = new StoryUI(story);
@@ -228,21 +225,34 @@ export class GameShell {
     this.views.title.querySelector<HTMLElement>(g ? '#continue' : '#new-game')?.focus({ preventScroll: true });
   }
   private persist(): void { if (this.game) this.saved = saveGame(this.storage, this.game); }
-  // Seeds only choose future rolls; rules never read the clock.
-  private freshSeed(): number { return (Date.now() ^ Math.floor(Math.random() * 0xffffffff)) >>> 0; }
+  // P09-02a: every camp and map action is a serializable command run by the pure `applyCommand`; new seeds come from
+  // the injected source (locally the clock+Math.random generator the game always used). Seeds only choose future rolls.
+  private readonly seeds = localSeedSource();
+  private exec(cmd: GameCommand): CommandResult { return applyCommand(this.game ?? null, cmd, { home: this.home, maps: this.maps, lookup: this.lookup, seeds: this.seeds }); }
+  // A map action as the world result the shell's handlers already read (a refusal reads as `blocked`, changing nothing).
+  private step(cmd: RunCommand): WorldResult {
+    const r = this.exec(cmd);
+    return isRejected(r) ? { state: this.state!, event: { type: 'blocked', reason: r.rejected } as WorldEvent } : { state: r.game.run!, event: r.events[0] as WorldEvent };
+  }
+  // A camp service: refusals change nothing, as before; a result goes through the lobby's usual messages and effects.
+  private campCommand(cmd: CampCommand): void {
+    if (!this.game || this.game.run) return;
+    const r = this.exec(cmd); if (isRejected(r)) return;
+    this.profileChange({ profile: r.game.profile, event: r.events[0] as ProfileEvent });
+  }
+  private settledRun(events: readonly CommandEvent[]): ExpeditionState | undefined { const e = events.find(x => x.type === 'settled'); return e?.type === 'settled' ? e.run : undefined; }
   // Home → create commander → Lobby. A new game replaces the save only on confirmation.
   private showCommander(replacing: boolean): void { this.replacing = replacing; this.show('commander'); this.commander.open(); }
   private createCommander(c: Parameters<typeof createCommander>[1]): void {
     // Close the on-screen keyboard first: the prologue and the first battle follow at once, and a keyboard still
     // open on iOS leaves the page scrolled and laid out for a short, wide (landscape) viewport.
     (document.activeElement as HTMLElement | null)?.blur?.();
-    const base = this.replacing || !this.game ? newProfile(this.map, this.freshSeed(), this.map.firstCompany) : this.game.profile;
-    const result = createCommander(base, c); if (result.event.type !== 'commander') return;
-    this.game = { profile: result.profile, run: this.replacing ? null : this.game?.run ?? null }; this.replacing = false;
-    this.lobbyMessage = `ยินดีต้อนรับ ผู้บัญชาการ${result.profile.commander!.name} · เลือกทีมแล้วออกเดินทางได้เลย`;
+    const result = this.exec({ kind: 'createCommander', commander: c, replace: this.replacing }); if (isRejected(result)) return;
+    this.game = result.game; this.replacing = false;
+    this.lobbyMessage = `ยินดีต้อนรับ ผู้บัญชาการ${result.game.profile.commander!.name} · เลือกทีมแล้วออกเดินทางได้เลย`;
     this.persist();
     // A company that has never fought starts with the prologue: depart at once and meet Vargoth's vanguard.
-    if (!result.profile.tutorialDone && !this.game.run) { this.lobbyMessage = ''; this.depart(); return; }
+    if (!result.game.profile.tutorialDone && !this.game.run) { this.lobbyMessage = ''; this.depart(); return; }
     this.showLobby();
   }
   private showLobby(): void {
@@ -256,8 +266,8 @@ export class GameShell {
   }
   private guide(id: string, skip: boolean): void {
     if (!this.game || this.game.run) return;
-    const result = claimGuide(this.game.profile, this.maps, id, skip); if (result.event.type !== 'guide') return;
-    this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
+    const result = this.exec({ kind: 'claimGuide', id, skip }); if (isRejected(result)) return;
+    this.game = result.game; this.persist();
     this.lobbyMessage = skip ? 'ข้ามงานแนะนำแล้ว' : 'รับรางวัลงานแนะนำแล้ว'; this.showLobby();
   }
   private presetText(p: Profile, slot: number, action: 'apply' | 'save' | 'rename' | 'clear', left?: string[]): string {
@@ -317,31 +327,29 @@ export class GameShell {
   // The prologue always starts on the first map; otherwise the Lobby names an open map (default: the furthest open one).
   private depart(mapId?: string, hard = false): void {
     if (!this.game || this.game.run) return;
-    if(departureBlocked(this.game.profile)){this.lobbyMessage='จัดถาดรอเก็บในกระเป๋าก่อนออกเดินทาง';this.showLobby();return;}
-    const open = this.maps.filter(m => mapUnlocked(this.game!.profile, this.maps, m.id));
-    const chosen = !this.game.profile.tutorialDone ? this.maps[0]! : open.find(m => m.id === mapId) ?? open.at(-1)!;
-    if (mapId && chosen.id !== mapId) return;
-    this.chosenMap = chosen.id;
-    if (hard && hardReason(this.game.profile, this.maps, chosen.id)) return;
-    const out = depart(this.game.profile, chosen, this.lookup, this.freshSeed(), hard ? { maps: this.maps } : undefined);
-    this.game = { profile: { ...out.profile, last: null }, run: out.run };
+    const out = this.exec({ kind: 'depart', ...(mapId !== undefined ? { mapId } : {}), hard });
+    if (isRejected(out)) { if (out.rejected === 'storage') { this.lobbyMessage = 'จัดถาดรอเก็บในกระเป๋าก่อนออกเดินทาง'; this.showLobby(); } return; }
+    this.chosenMap = out.game.run!.mapId;
+    this.game = out.game;
     this.persist(); this.banner = undefined; this.locked = false; this.lobbyMessage = ''; this.lobbyCheer = '';
     this.message = 'แตะช่องที่ไฮไลต์หรือใช้ลูกศรเพื่อเดิน';
-    // First expedition (lore): the prologue plays, then Vargoth's vanguard attacks before the first step.
-    const prologueStart = startPrologue(this.state!, this.map);
-    if (prologueStart.event.type === 'encounter') {
-      this.state = prologueStart.state; this.persist(); this.locked = true; this.renderWorld();
+    // First expedition (lore): the prologue plays, then Vargoth's vanguard attacks before the first step (same command).
+    if (out.events.some(e => e.type === 'encounter')) {
+      this.locked = true; this.renderWorld();
       this.music.play('camp'); this.story.play(prologue(this.game.profile.commander?.name ?? 'ผู้บัญชาการ'), 'เข้าสู่การต่อสู้', () => { this.locked = false; this.openBattle(); });
       return;
     }
     this.renderWorld();
   }
   // Settles the run into the profile in the same write that clears it.
-  private endRun(outcome: RunOutcome): void {
-    const run = this.state; if (!this.game || !run) return;
-    if (outcome === 'withdrawn' && !canWithdraw(run, this.map)) return;
-    const before = this.game.profile; const after = settle(before, run, outcome, this.map);
-    this.game = { profile: after, run: null }; this.pendingSummary = runSummary(before, run, after, outcome, this.map);
+  private withdraw(): void {
+    if (!this.game || !this.state) return;
+    const r = this.exec({ kind: 'withdraw' }); if (isRejected(r)) return;
+    this.endRun(r.game, r.events, 'withdrawn');
+  }
+  private endRun(game: Game, events: readonly CommandEvent[], outcome: 'withdrawn' | 'complete'): void {
+    const map = this.map; const before = this.game!.profile; const run = this.settledRun(events)!;
+    this.game = game; this.pendingSummary = runSummary(before, run, game.profile, outcome, map);
     this.persist(); this.lobbyMessage = ''; this.lobbyCheer = ''; this.banner = undefined; this.locked = false;
     this.showSummary();
   }
@@ -364,7 +372,7 @@ export class GameShell {
   // Starter recruitment (owner 2026-10-23): each pick is saved at once, its recruit scene plays, then the next offers.
   private draft(index: number): void {
     if (!this.state || this.locked) return;
-    const result = draftPick(this.state, this.map, index, this.lookup);
+    const result = this.step({ kind: 'draftPick', index });
     if (result.event.type !== 'drafted') return;
     this.state = result.state; this.persist(); this.world.closeDraft();
     this.message = `${heroText[result.event.heroId]?.name ?? ''} เข้าร่วมทีมแล้ว`; this.renderWorld();
@@ -391,7 +399,10 @@ export class GameShell {
   }
   private move(dir: Direction): void {
     if (!this.state || this.locked) return;
-    const result = move(this.state, this.map, dir, this.lookup);
+    const out = this.exec({ kind: 'move', dir });
+    // Reaching the goal settles the run home in the same command.
+    if (!isRejected(out) && !out.game.run) { this.worldSound(out.events[0] as WorldEvent); this.endRun(out.game, out.events, 'complete'); return; }
+    const result: WorldResult = isRejected(out) ? { state: this.state, event: { type: 'blocked', reason: out.rejected } as WorldEvent } : { state: out.game.run!, event: out.events[0] as WorldEvent };
     if (result.event.type === 'blocked' && this.state.draft) { this.world.openDraft(); return; }
     if (result.event.type === 'blocked') {
       this.message = result.event.reason === 'wall' ? 'ทางนี้ไปต่อไม่ได้' : result.event.reason === 'party' ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองในกระเป๋า หรือชุบที่แคมป์ก่อนออกเดินทาง'
@@ -400,7 +411,6 @@ export class GameShell {
       sfx.play('bump'); this.renderWorld(); return;
     }
     this.state = result.state; this.worldSound(result.event);
-    if (result.event.type === 'goal') { this.endRun('complete'); return; }
     this.persist();
     this.message = this.describe(result.event);
     // A recruit who steps in as the boss fight starts gets their scene first (owner 2026-10-23).
@@ -437,7 +447,7 @@ export class GameShell {
   // Event choices (3A) are saved at once; a fight starts like any encounter.
   private chooseEvent(choice: EventChoice): void {
     if (!this.state || this.locked) return;
-    const result = chooseEvent(this.state, this.map, this.lookup, choice);
+    const result = this.step({ kind: 'chooseEvent', choice });
     if (result.event.type === 'blocked') return;
     this.state = result.state; this.persist();
     if (result.event.type === 'encounter') { this.message = 'เข้าสู่การต่อสู้!'; this.startEncounter(result.event.kind, result.event.encounterId); return; }
@@ -454,7 +464,7 @@ export class GameShell {
   }
   private rest(): void {
     if (!this.state) return;
-    const result = rest(this.state, this.map, this.lookup);
+    const result = this.step({ kind: 'rest' });
     if (result.event.type !== 'rested') return;
     this.state = result.state; this.persist(); sfx.play('rest');
     this.message = `พักที่แคมป์แล้ว · คนที่ยืนอยู่ฟื้นเลือด ${this.map.camp.restHealPercent}% ไฟแคมป์จะจุดใหม่เมื่อชนะศึก`;
@@ -465,14 +475,14 @@ export class GameShell {
   // 4B: free travel between reached camps and the entrance.
   private travelTo(to: Point): void {
     if (!this.state || this.locked) return;
-    const result = travel(this.state, this.map, to); if (result.event.type !== 'travelled') return;
+    const result = this.step({ kind: 'travel', to }); if (result.event.type !== 'travelled') return;
     this.state = result.state; this.persist(); sfx.play('door');
     this.message = tileAt(this.map, to)?.kind === 'start' ? 'วาร์ปกลับทางเข้าด่านแล้ว' : 'วาร์ปถึงแคมป์แล้ว';
     this.renderWorld();
   }
   private revive(heroId: string): void {
     if (!this.state || this.locked) return;
-    const result = revive(this.state, this.map, this.lookup, heroId);
+    const result = this.step({ kind: 'revive', heroId });
     if (result.event.type !== 'revived') return;
     this.state = result.state; this.persist(); sfx.play('heal');
     this.message = `ชุบ${heroText[heroId]?.name ?? ''}แล้ว · ใช้ถ่านคืนชีพ 1 เหลือ ${this.state.resources.ember}`;
@@ -496,7 +506,7 @@ export class GameShell {
   // Map potions (2D-5): saved at once, like every other map action.
   private drink(potion: PotionId, heroId?: string): void {
     if (!this.state || this.locked) return;
-    const result = usePotion(this.state, this.map, this.lookup, potion, heroId);
+    const result = this.step({ kind: 'usePotion', potion, ...(heroId !== undefined ? { heroId } : {}) });
     if (result.event.type !== 'potion') return;
     this.state = result.state; this.persist(); sfx.play('potion');
     const healed = Object.entries(result.event.heal ?? {}).map(([id, n]) => `${heroText[id]?.name ?? id} +${n}`).join(' · ');
@@ -505,7 +515,7 @@ export class GameShell {
   }
   private openChest(): void {
     if (!this.state || this.locked) return;
-    const result = openChest(this.state, this.map);
+    const result = this.step({ kind: 'openChest' });
     if (result.event.type !== 'chest') return;
     const before = this.state;
     this.state = result.state; this.persist(); sfx.play(this.map.chests.find(c => c.id === (result.event.type === 'chest' ? result.event.chestId : ''))?.tier === 'rare' ? 'chestRare' : 'chest');
@@ -542,27 +552,26 @@ export class GameShell {
   }
   private commitBattle(battle: BattleState): boolean {
     if (!this.state?.battle) return false;
-    const kind = this.state.battle.kind;
-    let next = recordBattle(this.state, this.map, this.lookup, battle.commands);
-    if (battle.outcome !== 'active') {
-      const before = next;
-      const result = finishBattle(next, this.map, this.lookup); next = result.state;
-      if (result.event.type === 'victory') {
-        if (kind === 'tutorial') this.prologueWon = true;
-        else this.pendingRewards = { event: result.event, before, after: next, commander: this.game?.profile.commander,
-          title: kind === 'boss' ? `${this.map.bossName}ล้มแล้ว` : kind === 'elite' ? this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.mini ? 'มินิบอสล้มแล้ว' : 'ท้าสู้อีลิทสำเร็จ' : 'ชนะศึก' };
-        this.effect = 'loot'; this.message = 'ชนะศึก';
-      } else if (result.event.type === 'defeat') {
-        if (result.event.wiped) {
-          // Every brought member is down: the expedition fails and settles home in this write.
-          const before = this.game!.profile; const after = settle(before, next, 'wiped', this.map);
-          this.game = { profile: after, run: null }; this.pendingSummary = runSummary(before, next, after, 'wiped', this.map); this.persist();
-          return this.saved;
-        }
-        this.message = kind === 'tutorial' ? 'ลองศึกแรกอีกครั้งด้วยเลือดเต็ม' : 'ทีมถอยกลับ · คนที่ล้มยังล้มอยู่ ชุบที่แคมป์ หรือสลับตัวสำรองในกระเป๋า';
+    const kind = this.state.battle.kind; const before = this.state;
+    // The command replays every turn with the resolver and finishes the battle when the replay has ended.
+    const out = this.exec({ kind: 'battle', commands: battle.commands }); if (isRejected(out)) return false;
+    const event = out.events[0];
+    if (event?.type === 'victory') {
+      const next = out.game.run!;
+      if (kind === 'tutorial') this.prologueWon = true;
+      else this.pendingRewards = { event, before, after: next, commander: this.game?.profile.commander,
+        title: kind === 'boss' ? `${this.map.bossName}ล้มแล้ว` : kind === 'elite' ? this.map.elites.find(e => e.id === next.elitesDefeated.at(-1))?.mini ? 'มินิบอสล้มแล้ว' : 'ท้าสู้อีลิทสำเร็จ' : 'ชนะศึก' };
+      this.effect = 'loot'; this.message = 'ชนะศึก';
+    } else if (event?.type === 'defeat') {
+      if (!out.game.run) {
+        // Every brought member is down: the expedition fails and settles home in this write.
+        const map = this.map; const prior = this.game!.profile;
+        this.game = out.game; this.pendingSummary = runSummary(prior, this.settledRun(out.events)!, out.game.profile, 'wiped', map); this.persist();
+        return this.saved;
       }
+        this.message = kind === 'tutorial' ? 'ลองศึกแรกอีกครั้งด้วยเลือดเต็ม' : 'ทีมถอยกลับ · คนที่ล้มยังล้มอยู่ ชุบที่แคมป์ หรือสลับตัวสำรองในกระเป๋า';
     }
-    this.state = next; this.persist();
+    this.game = out.game; this.persist();
     return this.saved;
   }
   private leaveBattle(): void {

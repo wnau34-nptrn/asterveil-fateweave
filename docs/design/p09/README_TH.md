@@ -17,8 +17,11 @@
 | [CLOUD_SAVE_ENVELOPE_TH.md](CLOUD_SAVE_ENVELOPE_TH.md) | envelope สำหรับนำเข้าเซฟเดิมและรูปแบบ snapshot การย้ายเวอร์ชัน |
 | [TRUST_BOUNDARY_TH.md](TRUST_BOUNDARY_TH.md) | อะไรเป็นของ server (ทั้งหมด) และการปฏิบัติต่อเซฟเก่า |
 | [SCHEMA_API_DRAFT_TH.md](SCHEMA_API_DRAFT_TH.md) | ร่างตาราง D1/DO และ endpoint |
+| [COMMAND_LAYER_TH.md](COMMAND_LAYER_TH.md) | **P09-02a**: รายการคำสั่งค่าย/แผนที่ `applyCommand`, จุดที่ seed ถูกใช้, สิ่งที่เหลือก่อนต่อ server |
 
 ต้นแบบ pure (ยังไม่ต่อกับเกม/Worker): `src/core/cloud/cloud-save.ts` (`checkUpload`, `decideUpload`, `decideCommand`), เทสต์ `tests/cloud-save-envelope.test.ts`
+
+P09-02a (2026-11-12, ใช้งานในเกมแล้ว): `src/core/command/game-command.ts` (`parseCommand`, `applyCommand`), seed จาก port `SeedSource` (`src/platform/seed-source.ts` ในเครื่อง), เทสต์ `tests/game-command.test.ts`
 
 ## ข้อตัดสินใจ
 
