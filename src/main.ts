@@ -6,6 +6,8 @@ import { BattleScene } from './game/scenes/BattleScene';
 import { BattleUI } from './ui/battle-ui';
 import { GameShell } from './ui/game-shell';
 import { fitViewport } from './platform/viewport';
+import { browserStorage } from './platform/browser-storage';
+import { ServerClient, serverSwitch } from './platform/server-client';
 import './ui/styles.css';
 import './ui/tokens.css';
 import './ui/effects.css';
@@ -18,6 +20,7 @@ import './ui/forge-enhancement.css';
 import './ui/sheet-frame.css';
 import './ui/camp-layout.css';
 import './ui/team-formation.css';
+import './ui/server-play.css';
 
 fitViewport();
 const app = document.querySelector<HTMLElement>('#app')!;
@@ -39,7 +42,9 @@ const game = new Phaser.Game({
   audio: { noAudio: true },
   render: { antialias: true, roundPixels: true },
 });
-const shell = new GameShell(app, chapterOne, encounterById, ui, views, MAPS);
+// P09-02c: server play only when switched on (`?server=<api url>`, remembered; `?server=off` returns to local play).
+const api = serverSwitch(location.search, browserStorage(), import.meta.env.VITE_FATEWEAVE_API ?? '');
+const shell = new GameShell(app, chapterOne, encounterById, ui, views, MAPS, api ? new ServerClient(api, __CONTENT_VERSION__, browserStorage()) : undefined);
 // Web fonts and DOM strips can resize the arena without a window resize; re-measure the canvas.
 new ResizeObserver(() => scene.refreshLayout()).observe(document.querySelector('#game')!);
 void document.fonts?.ready.then(() => scene.refreshLayout());

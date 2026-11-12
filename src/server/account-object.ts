@@ -1,7 +1,10 @@
 import { canonicalJson, type CommandBook, type CommandRequest } from '../core/command/command-envelope';
 import type { Game } from '../core/save/expedition-save';
 import { sha256Hex } from './accounts';
-import type { GameHost, HostState, HostStore, LogEntry } from './game-host';
+import { OTHER_DEVICE, type GameHost, type HostState, type HostStore, type LogEntry } from './game-host';
+
+// The Worker forwards the device's session id (checked there) in this header.
+export const SESSION_HEADER = 'X-Fateweave-Session';
 
 // P09-02b: the Durable Object for one account (SQLite storage backend). It adapts the DO's SQL storage to `HostStore`
 // and its HTTP requests from the Worker to `GameHost`. Only the Worker reaches it (no public route).
@@ -15,12 +18,14 @@ const SCHEMA = [
   'CREATE TABLE IF NOT EXISTS state (id INTEGER PRIMARY KEY CHECK (id = 1), game TEXT, book TEXT NOT NULL, updated_at INTEGER NOT NULL)',
   `CREATE TABLE IF NOT EXISTS log (seq INTEGER PRIMARY KEY, request_id TEXT NOT NULL, command TEXT NOT NULL, seeds TEXT NOT NULL,
      status TEXT NOT NULL, content_version TEXT NOT NULL, at INTEGER NOT NULL)`,
+  'CREATE TABLE IF NOT EXISTS session (id INTEGER PRIMARY KEY CHECK (id = 1), active TEXT NOT NULL, claimed_at INTEGER NOT NULL)',
 ];
 
 export function sqlStore(state: DurableStateLike): HostStore {
   const { sql } = state.storage;
   for (const s of SCHEMA) sql.exec(s);
   let cached: HostState | null | undefined;
+  let session: string | null | undefined;
   return {
     load() {
       if (cached === undefined) {
@@ -43,6 +48,14 @@ export function sqlStore(state: DurableStateLike): HostStore {
         'SELECT seq, request_id, command, seeds, status, content_version, at FROM log ORDER BY seq').toArray()
         .map(r => ({ seq: r.seq, requestId: r.request_id, command: JSON.parse(r.command), seeds: JSON.parse(r.seeds) as number[], status: r.status, contentVersion: r.content_version, at: r.at }));
     },
+    activeSession() {
+      if (session === undefined) session = sql.exec<{ active: string }>('SELECT active FROM session WHERE id = 1').toArray()[0]?.active ?? null;
+      return session;
+    },
+    setActiveSession(next, at) {
+      sql.exec('INSERT INTO session (id, active, claimed_at) VALUES (1, ?, ?) ON CONFLICT(id) DO UPDATE SET active = excluded.active, claimed_at = excluded.claimed_at', next, at);
+      session = next;
+    },
   };
 }
 
@@ -60,9 +73,14 @@ function asRequest(v: unknown): CommandRequest | null {
 // Request handling shared by the real Durable Object and tests.
 export async function handleAccountRequest(host: GameHost, request: Request): Promise<Response> {
   const path = new URL(request.url).pathname;
-  if (path === '/state' && request.method === 'GET') return reply(host.view());
   if (path === '/verify' && request.method === 'POST') return reply(host.verify());
-  if (path !== '/command' || request.method !== 'POST') return reply({ error: 'not_found' }, 404);
+  const session = request.headers.get(SESSION_HEADER) ?? '';
+  // D12: entering on this session takes the account over; any other session now gets 423 until it enters again.
+  if (path === '/session' && request.method === 'POST') { host.claim(session); return reply(host.view()); }
+  const known = (path === '/state' && request.method === 'GET') || (path === '/command' && request.method === 'POST');
+  if (!known) return reply({ error: 'not_found' }, 404);
+  if (!host.admits(session)) return reply(OTHER_DEVICE.body, OTHER_DEVICE.status);
+  if (path === '/state') return reply(host.view());
   let parsed: unknown;
   try { parsed = JSON.parse(await request.text()); } catch { return reply({ error: 'invalid_json' }, 400); }
   const req = asRequest(parsed);

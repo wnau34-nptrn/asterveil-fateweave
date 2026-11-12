@@ -1,3 +1,11 @@
+## 2026-11-12 — P09-02c game shell talks to the dev API (switch, off by default)
+- Owner “ดำเนินการต่อได้เลย”; branch `claude/p09-02c-client-server` → PR into `feature/fateweave-initial-prototype`.
+- `src/platform/server-client.ts` (`ServerClient`, `serverSwitch`): guest token per API URL, per-page session id, one `{requestId, seq, command}` at a time, retries on the same requestId/seq (lost answer, 5xx, 429), 409 stale/gap → reread state, 423 → other device, content version from `__CONTENT_VERSION__` (vite define from `scripts/content-version.mjs`, now importable).
+- `game-shell.ts`: every command is `exec(cmd, then)` — local unchanged (sync), server mode locks all views (`inert`), shows a wait note/problem card (`src/ui/server-play.css`), adopts `view`/`events` via `src/ui/server-game.ts`, never touches the local save; battle turns queue, leaving waits for the last answer.
+- Server D12: `POST /v1/session` claims the account for a session (`X-Fateweave-Session`, DO table `session`); other sessions get 423 `other_device`; smoke script covers it.
+- Tests: `tests/server-client.test.ts` 7 (client vs real Worker+DO in process, fakes moved to `tests/fixtures/server-fakes.ts`), server-api +1, `tests/browser/server-play.spec.ts` (390px: 423 card, lost answer retry, inert lock, no local save, reload resume); typecheck/lint/unit 1766 pass/build; local world+combat+rewards specs re-run. Details: [CLIENT_SERVER_P09_02C_TH](../design/p09/CLIENT_SERVER_P09_02C_TH.md).
+- No rule/number/save v58 change. Open: server-mode save labels, UI types → ClientProfile/ClientRun, Google sign-in (next prompt; client ID from #226), D11 import, long-battle/verify CPU, live test against the deployed Worker.
+
 ## 2026-11-12 — P09-02b Worker + per-account DO + D1 (dev, not wired to UI)
 - Owner “เริ่ม P09-02b”; branch `claude/p09-02b-worker-do-d1` → PR #225 into `feature/fateweave-initial-prototype`.
 - Step 1: `cloudflare-probe.yml` proved the existing secret creates/queries/deletes D1 and deploys/deletes a Worker with a SQLite DO (throwaway resources removed).

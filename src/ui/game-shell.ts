@@ -2,7 +2,9 @@ import { showBattleRewards, type BattleRewards } from './battle-rewards';
 import { bindInfoTabs } from './info-tabs';
 import { rosterIds } from '../core/world/world';
 import { applyCommand, isRejected, type CampCommand, type CommandEvent, type CommandResult, type GameCommand, type RunCommand } from '../core/command/game-command';
-import { clientView } from '../core/command/client-view';
+import { clientView, type HireSlot } from '../core/command/client-view';
+import type { ServerClient, ServerFailure, ServerOutcome, ServerState } from '../platform/server-client';
+import { gameFromView, resultFromReply } from './server-game';
 import { localSeedSource } from '../platform/seed-source';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
@@ -67,10 +69,11 @@ export class GameShell {
   }
   constructor(private readonly root: HTMLElement, private readonly home: MapDefinition, private readonly lookup: EncounterLookup, private readonly battle: BattleUI,
     private readonly views: { title: HTMLElement; commander: HTMLElement; lobby: HTMLElement; world: HTMLElement; battle: HTMLElement },
-    private readonly maps: readonly MapDefinition[] = [home]) {
+    private readonly maps: readonly MapDefinition[] = [home], private readonly server?: ServerClient) {
     const map = home;
-    clearLegacySaves(this.storage); sfx.init(this.storage);
-    this.game = loadGame(this.storage, map, lookup, maps);
+    // P09-02c server play never reads or writes the local save: the account lives on the server.
+    if (!server) clearLegacySaves(this.storage); sfx.init(this.storage);
+    this.game = server ? undefined : loadGame(this.storage, map, lookup, maps);
     // P01: a save moved to camp levels says once what happened, then the new save replaces it (the old one is backed up).
     const moved = this.game?.migrated;
     if (moved && this.game) {
@@ -83,27 +86,29 @@ export class GameShell {
     }
     for (const id of this.game?.run?.recruited ?? []) this.recruitSeen.add(`${this.game!.run!.mapId}:${id}`);
     this.world = new WorldUI(views.world, this.map, heroCatalog(lookup, map), {
-      travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.roster(this.step({ kind: 'swapMembers', a, b })), lane: (id, lane, other) => this.roster(this.step({ kind: 'setLane', heroId: id, lane, ...(other !== undefined ? { other } : {}) })), moveMember: id => this.roster(this.step({ kind: 'moveMember', heroId: id })), preset: slot => this.roster(this.step({ kind: 'runPreset', slot })),
+      travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.step({ kind: 'swapMembers', a, b }, r => this.roster(r)), lane: (id, lane, other) => this.step({ kind: 'setLane', heroId: id, lane, ...(other !== undefined ? { other } : {}) }, r => this.roster(r)), moveMember: id => this.step({ kind: 'moveMember', heroId: id }, r => this.roster(r)), preset: slot => this.step({ kind: 'runPreset', slot }, r => this.roster(r)),
       withdraw: () => this.withdraw(), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
       chooseEvent: choice => this.chooseEvent(choice), draft: index => this.draft(index),
       talent: (id, node) => {
         if (!this.state || this.locked) return;
-        const result = this.step({ kind: 'learnRunTalent', heroId: id, node });
-        if (result.event.type !== 'talent') return;
-        this.state = result.state; this.persist(); sfx.play('buff');
-        this.message = `ลงแต้มความถนัด${heroText[id]?.name ?? ''}แล้ว`;
-        this.renderWorld();
+        this.step({ kind: 'learnRunTalent', heroId: id, node }, result => {
+          if (result.event.type !== 'talent') return;
+          this.state = result.state; this.persist(); sfx.play('buff');
+          this.message = `ลงแต้มความถนัด${heroText[id]?.name ?? ''}แล้ว`;
+          this.renderWorld();
+        });
       },
       loadout: (id, actions) => {
         if (!this.state || this.locked) return;
-        const result = this.step({ kind: 'chooseRunLoadout', heroId: id, actions: [...actions] });
-        if (result.event.type !== 'talent') return;
-        this.state = result.state; this.persist(); sfx.play('buff');
-        this.message = `เปลี่ยนสกิลติดตัว${heroText[id]?.name ?? ''}แล้ว`;
-        this.renderWorld();
+        this.step({ kind: 'chooseRunLoadout', heroId: id, actions: [...actions] }, result => {
+          if (result.event.type !== 'talent') return;
+          this.state = result.state; this.persist(); sfx.play('buff');
+          this.message = `เปลี่ยนสกิลติดตัว${heroText[id]?.name ?? ''}แล้ว`;
+          this.renderWorld();
+        });
       },
-      wear: (id, from, index) => this.gear(this.step({ kind: 'wear', heroId: id, from, index })), takeOff: (id, slot) => this.gear(this.step({ kind: 'takeOff', heroId: id, slot })),
-      autoEquip: plan => { if(this.state&&!this.locked)this.gear(this.step({ kind: 'autoEquipRun', plan })); },
+      wear: (id, from, index) => this.step({ kind: 'wear', heroId: id, from, index }, r => this.gear(r)), takeOff: (id, slot) => this.step({ kind: 'takeOff', heroId: id, slot }, r => this.gear(r)),
+      autoEquip: plan => { if(this.state&&!this.locked)this.step({ kind: 'autoEquipRun', plan }, r => this.gear(r)); },
     }, this.eliteArtOf(this.map), lookup(map.tutorialEncounterId));
     const has = <K extends string, V>(k: K, v: V | undefined) => (v !== undefined ? { [k]: v } : {}) as Partial<Record<K, V>>;
     const camp = (cmd: CampCommand) => this.campCommand(cmd);
@@ -151,9 +156,12 @@ export class GameShell {
     this.root.querySelector('#battle-sfx-controls')!.innerHTML = this.musicControls('battle-');
     this.root.querySelector('#world-sfx-controls')!.innerHTML = this.musicControls('world-');
     bindInfoTabs(root);
+    this.serverPanel = document.createElement('div'); this.serverPanel.className = 'server-wait'; this.serverPanel.hidden = true;
+    this.serverPanel.setAttribute('role', 'status'); this.serverPanel.setAttribute('aria-live', 'polite'); root.append(this.serverPanel);
     this.showTitle();
+    if (server) this.connect();
     document.addEventListener('keydown', e => {
-      if (shortcutBlocked(e) || this.story.open || root.querySelector('.summary-view:not([hidden])')) return;
+      if (this.waiting || shortcutBlocked(e) || this.story.open || root.querySelector('.summary-view:not([hidden])')) return;
       const view = root.dataset.view;
       const bag = e.code === 'KeyB' || e.key.toLowerCase() === 'b';
       const team = e.code === 'KeyT' || e.key.toLowerCase() === 't';
@@ -221,25 +229,110 @@ export class GameShell {
       <div class="title-actions">${g ? `<p class="title-save">${s ? 'การเดินทางที่บันทึกไว้' : 'ค่ายของคุณ'}<span class="title-chips">${summary}</span></p><button id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ →' : 'เข้าค่าย →'}</button>` : ''}
       <button id="new-game" data-title="new" class="${g ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : 'เริ่มเกม'}</button>
 
-      ${this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p></div>`;
+      ${this.server ? '<p class="title-server">เล่นผ่านเซิร์ฟเวอร์ทดลอง · ผลทุกอย่างตัดสินบนเซิร์ฟเวอร์</p>' : this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p></div>`;
     this.show('title');
     this.views.title.querySelector<HTMLElement>(g ? '#continue' : '#new-game')?.focus({ preventScroll: true });
   }
-  private persist(): void { if (this.game) this.saved = saveGame(this.storage, this.game); }
+  // Server play keeps no local save: the server stored the state before it answered.
+  private persist(): void { if (this.server) { this.saved = true; return; } if (this.game) this.saved = saveGame(this.storage, this.game); }
   // P09-02a: every camp and map action is a serializable command run by the pure `applyCommand`; new seeds come from
   // the injected source (locally the clock+Math.random generator the game always used). Seeds only choose future rolls.
   private readonly seeds = localSeedSource();
-  private exec(cmd: GameCommand): CommandResult { return applyCommand(this.game ?? null, cmd, { home: this.home, maps: this.maps, lookup: this.lookup, seeds: this.seeds }); }
+  // P09-02c: `then` gets the result at once in local play; in server play after the server answered, with input
+  // locked meanwhile (one command at a time). `queue` keeps the latest command sent while waiting (battle turns).
+  private exec(cmd: GameCommand, then: (result: CommandResult) => void, queue = false): void {
+    if (!this.server) { then(applyCommand(this.game ?? null, cmd, { home: this.home, maps: this.maps, lookup: this.lookup, seeds: this.seeds })); return; }
+    if (this.waiting) { if (queue) this.queued = { cmd, then }; return; }
+    this.lockForServer('กำลังส่งไปเซิร์ฟเวอร์…');
+    void this.server.send(cmd).then(out => this.answer(out, then));
+  }
   // A map action as the world result the shell's handlers already read (a refusal reads as `blocked`, changing nothing).
-  private step(cmd: RunCommand): WorldResult {
-    const r = this.exec(cmd);
-    return isRejected(r) ? { state: this.state!, event: { type: 'blocked', reason: r.rejected } as WorldEvent } : { state: r.game.run!, event: r.events[0] as WorldEvent };
+  private step(cmd: RunCommand, then: (result: WorldResult) => void): void {
+    this.exec(cmd, r => {
+      if (!this.state) return;
+      then(isRejected(r) ? { state: this.state, event: { type: 'blocked', reason: r.rejected } as WorldEvent } : { state: r.game.run!, event: r.events[0] as WorldEvent });
+    });
   }
   // A camp service: refusals change nothing, as before; a result goes through the lobby's usual messages and effects.
   private campCommand(cmd: CampCommand): void {
     if (!this.game || this.game.run) return;
-    const r = this.exec(cmd); if (isRejected(r)) return;
-    this.profileChange({ profile: r.game.profile, event: r.events[0] as ProfileEvent });
+    this.exec(cmd, r => { if (isRejected(r)) return; this.profileChange({ profile: r.game.profile, event: r.events[0] as ProfileEvent }); });
+  }
+  // ---- P09-02c server play (off unless switched on; see platform/server-client.ts) ----
+  private waiting = false;
+  private queued: { cmd: GameCommand; then: (result: CommandResult) => void } | undefined;
+  private afterWait: (() => void) | undefined;
+  // The hiring board as the server computed it (it needs the seed the device does not have).
+  private board: HireSlot[] = [];
+  private serverPanel!: HTMLElement;
+  private inertBefore = new Map<Element, boolean>();
+  private waitTimer: ReturnType<typeof setTimeout> | undefined;
+  // Locks every view (pointer and keyboard) while the server works; the note shows only if the answer is slow.
+  private lockForServer(note: string): void {
+    this.waiting = true; this.root.dataset.server = 'waiting'; this.root.setAttribute('aria-busy', 'true');
+    for (const el of Array.from(this.root.children)) if (el !== this.serverPanel && !this.inertBefore.has(el)) { this.inertBefore.set(el, (el as HTMLElement).inert); (el as HTMLElement).inert = true; }
+    clearTimeout(this.waitTimer);
+    this.waitTimer = setTimeout(() => { if (this.waiting && !this.serverPanel.dataset.problem) { this.serverPanel.innerHTML = `<p class="server-note">${note}</p>`; this.serverPanel.hidden = false; } }, 300);
+  }
+  private unlockForServer(): void {
+    this.waiting = false; delete this.root.dataset.server; this.root.removeAttribute('aria-busy'); clearTimeout(this.waitTimer);
+    for (const [el, was] of this.inertBefore) (el as HTMLElement).inert = was;
+    this.inertBefore.clear();
+    this.serverPanel.hidden = true; this.serverPanel.innerHTML = ''; delete this.serverPanel.dataset.problem;
+  }
+  private answer(out: ServerOutcome, then: (result: CommandResult) => void): void {
+    if (out.kind === 'otherDevice' || out.kind === 'failed') { this.serverProblem(out.kind === 'otherDevice' ? 'other_device' : out.reason, then); return; }
+    this.unlockForServer();
+    if (out.kind === 'resynced') this.adopt(out.state, 'current', 'ข้อมูลบนเครื่องตามไม่ทัน · โหลดสถานะล่าสุดจากเซิร์ฟเวอร์แล้ว');
+    else { if (out.reply.status === 'applied') this.board = out.reply.view.hireBoard; then(resultFromReply(out.reply)); }
+    this.drain();
+  }
+  private drain(): void {
+    if (this.waiting) return;
+    const next = this.queued; this.queued = undefined;
+    if (next) { this.exec(next.cmd, next.then); return; }
+    const after = this.afterWait; this.afterWait = undefined; after?.();
+  }
+  // Takes the server's state as the game and shows it: on the title (entering) or where the player is (catching up).
+  private adopt(state: ServerState, screen: 'title' | 'current', note = ''): void {
+    this.game = state.view ? gameFromView(state.view) : undefined; this.board = state.view?.hireBoard ?? [];
+    this.queued = undefined; this.pendingRewards = undefined; this.banner = undefined; this.locked = false; this.saved = true;
+    if (screen === 'title' || !this.game) { this.showTitle(); return; }
+    if (this.game.run) { this.migrationNote = note; this.resume(); } else { this.lobbyMessage = note; this.showLobby(); }
+  }
+  // Entering the game on this page (also after another device took over): guest account, take over, read the state.
+  private connect(screen: 'title' | 'current' = 'title'): void {
+    if (!this.server) return;
+    this.lockForServer('กำลังเชื่อมต่อเซิร์ฟเวอร์…');
+    void this.server.enter().then(out => {
+      if (out.kind !== 'state') { this.serverProblem(out.kind === 'otherDevice' ? 'other_device' : out.reason); return; }
+      this.unlockForServer(); this.adopt(out.state, screen); this.drain();
+    });
+  }
+  // What went wrong, with the way out; input stays locked until the player picks one.
+  private serverProblem(problem: ServerFailure | 'other_device', then?: (result: CommandResult) => void): void {
+    const text: Record<ServerFailure | 'other_device', [string, string]> = {
+      other_device: ['กำลังเล่นบนอุปกรณ์อื่น', 'บัญชีนี้เปิดเล่นอยู่บนอุปกรณ์หรือแท็บอื่น · เล่นต่อที่นี่ได้ แต่ที่นั่นจะหยุดแทน'],
+      network: ['เชื่อมต่อเซิร์ฟเวอร์ไม่ได้', 'คำสั่งล่าสุดยังไม่ได้รับคำตอบ · ส่งซ้ำได้ เซิร์ฟเวอร์จะไม่ทำซ้ำสองครั้ง'],
+      server: ['เซิร์ฟเวอร์ยังไม่ตอบ', 'คำสั่งล่าสุดยังไม่ได้รับคำตอบ · ส่งซ้ำได้ เซิร์ฟเวอร์จะไม่ทำซ้ำสองครั้ง'],
+      content_version: ['เวอร์ชันเกมไม่ตรงกับเซิร์ฟเวอร์', 'โหลดหน้าใหม่เพื่อรับเกมเวอร์ชันล่าสุด'],
+      unauthorized: ['บัญชีทดลองใช้ไม่ได้แล้ว', 'เชื่อมต่อใหม่เพื่อเริ่มบัญชีทดลองใหม่'],
+    };
+    const retrying = (problem === 'network' || problem === 'server') && this.server?.waitingRetry && then;
+    const action = problem === 'other_device' ? 'เล่นบนเครื่องนี้ต่อ' : problem === 'content_version' ? 'โหลดหน้าใหม่' : retrying ? 'ส่งอีกครั้ง' : 'เชื่อมต่อใหม่';
+    const [title, detail] = text[problem];
+    this.serverPanel.dataset.problem = problem; this.serverPanel.hidden = false;
+    this.serverPanel.innerHTML = `<div class="server-card" role="alertdialog" aria-labelledby="server-problem-title"><h2 id="server-problem-title">${title}</h2><p>${detail}</p>`
+      + `<button type="button" class="primary" data-server="act">${action}</button><button type="button" class="secondary" data-server="local">เล่นในเครื่องแทน</button></div>`;
+    const button = this.serverPanel.querySelector<HTMLButtonElement>('[data-server="act"]')!;
+    button.addEventListener('click', () => {
+      delete this.serverPanel.dataset.problem; this.serverPanel.innerHTML = `<p class="server-note">กำลังเชื่อมต่อเซิร์ฟเวอร์…</p>`;
+      if (problem === 'content_version') { location.reload(); return; }
+      if (retrying && this.server) { void this.server.retry().then(out => this.answer(out, then)); return; }
+      this.unlockForServer(); this.connect('current');
+    }, { once: true });
+    this.serverPanel.querySelector('[data-server="local"]')!.addEventListener('click', () => { const u = new URL(location.href); u.searchParams.set('server', 'off'); location.assign(u); }, { once: true });
+    button.focus({ preventScroll: true });
   }
   private settledRun(events: readonly CommandEvent[]): ExpeditionState | undefined { const e = events.find(x => x.type === 'settled'); return e?.type === 'settled' ? e.run : undefined; }
   // Home → create commander → Lobby. A new game replaces the save only on confirmation.
@@ -248,28 +341,32 @@ export class GameShell {
     // Close the on-screen keyboard first: the prologue and the first battle follow at once, and a keyboard still
     // open on iOS leaves the page scrolled and laid out for a short, wide (landscape) viewport.
     (document.activeElement as HTMLElement | null)?.blur?.();
-    const result = this.exec({ kind: 'createCommander', commander: c, replace: this.replacing }); if (isRejected(result)) return;
-    this.game = result.game; this.replacing = false;
-    this.lobbyMessage = `ยินดีต้อนรับ ผู้บัญชาการ${result.game.profile.commander!.name} · เลือกทีมแล้วออกเดินทางได้เลย`;
-    this.persist();
-    // A company that has never fought starts with the prologue: depart at once and meet Vargoth's vanguard.
-    if (!result.game.profile.tutorialDone && !this.game.run) { this.lobbyMessage = ''; this.depart(); return; }
-    this.showLobby();
+    this.exec({ kind: 'createCommander', commander: c, replace: this.replacing }, result => {
+      if (isRejected(result)) return;
+      this.game = result.game; this.replacing = false;
+      this.lobbyMessage = `ยินดีต้อนรับ ผู้บัญชาการ${result.game.profile.commander!.name} · เลือกทีมแล้วออกเดินทางได้เลย`;
+      this.persist();
+      // A company that has never fought starts with the prologue: depart at once and meet Vargoth's vanguard.
+      if (!result.game.profile.tutorialDone && !this.game.run) { this.lobbyMessage = ''; this.depart(); return; }
+      this.showLobby();
+    });
   }
   private showLobby(): void {
     this.migrationNote = '';
     const entering = this.root.dataset.view !== 'lobby';
     this.show('lobby');
-    this.lobby.render({ profile: this.game!.profile, board: clientView(this.game!, { home: this.home, lookup: this.lookup }).hireBoard, message: this.lobbyMessage, cheer: this.lobbyCheer, saved: this.saved && !!this.storage, ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
+    this.lobby.render({ profile: this.game!.profile, board: this.server ? this.board : clientView(this.game!, { home: this.home, lookup: this.lookup }).hireBoard, message: this.lobbyMessage, cheer: this.lobbyCheer, saved: this.saved && (!!this.storage || !!this.server), ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
     this.npcCheer = undefined;
     // Arriving in the camp opens on the fire; later redraws keep where the player panned to.
     if (entering) this.lobby.centreScene();
   }
   private guide(id: string, skip: boolean): void {
     if (!this.game || this.game.run) return;
-    const result = this.exec({ kind: 'claimGuide', id, skip }); if (isRejected(result)) return;
-    this.game = result.game; this.persist();
-    this.lobbyMessage = skip ? 'ข้ามงานแนะนำแล้ว' : 'รับรางวัลงานแนะนำแล้ว'; this.showLobby();
+    this.exec({ kind: 'claimGuide', id, skip }, result => {
+      if (isRejected(result)) return;
+      this.game = result.game; this.persist();
+      this.lobbyMessage = skip ? 'ข้ามงานแนะนำแล้ว' : 'รับรางวัลงานแนะนำแล้ว'; this.showLobby();
+    });
   }
   private presetText(p: Profile, slot: number, action: 'apply' | 'save' | 'rename' | 'clear', left?: string[]): string {
     const name = p.presets?.[slot]?.name ?? `ชุด ${slot + 1}`;
@@ -328,7 +425,9 @@ export class GameShell {
   // The prologue always starts on the first map; otherwise the Lobby names an open map (default: the furthest open one).
   private depart(mapId?: string, hard = false): void {
     if (!this.game || this.game.run) return;
-    const out = this.exec({ kind: 'depart', ...(mapId !== undefined ? { mapId } : {}), hard });
+    this.exec({ kind: 'depart', ...(mapId !== undefined ? { mapId } : {}), hard }, out => this.departed(out));
+  }
+  private departed(out: CommandResult): void {
     if (isRejected(out)) { if (out.rejected === 'storage') { this.lobbyMessage = 'จัดถาดรอเก็บในกระเป๋าก่อนออกเดินทาง'; this.showLobby(); } return; }
     this.chosenMap = out.game.run!.mapId;
     this.game = out.game;
@@ -345,8 +444,7 @@ export class GameShell {
   // Settles the run into the profile in the same write that clears it.
   private withdraw(): void {
     if (!this.game || !this.state) return;
-    const r = this.exec({ kind: 'withdraw' }); if (isRejected(r)) return;
-    this.endRun(r.game, r.events, 'withdrawn');
+    this.exec({ kind: 'withdraw' }, r => { if (!isRejected(r)) this.endRun(r.game, r.events, 'withdrawn'); });
   }
   private endRun(game: Game, events: readonly CommandEvent[], outcome: 'withdrawn' | 'complete'): void {
     const map = this.map; const before = this.game!.profile; const run = this.settledRun(events)!;
@@ -373,11 +471,12 @@ export class GameShell {
   // Starter recruitment (owner 2026-10-23): each pick is saved at once, its recruit scene plays, then the next offers.
   private draft(index: number): void {
     if (!this.state || this.locked) return;
-    const result = this.step({ kind: 'draftPick', index });
-    if (result.event.type !== 'drafted') return;
-    this.state = result.state; this.persist(); this.world.closeDraft();
-    this.message = `${heroText[result.event.heroId]?.name ?? ''} เข้าร่วมทีมแล้ว`; this.renderWorld();
-    this.playRecruits(() => this.afterRecruits());
+    this.step({ kind: 'draftPick', index }, result => {
+      if (result.event.type !== 'drafted') return;
+      this.state = result.state; this.persist(); this.world.closeDraft();
+      this.message = `${heroText[result.event.heroId]?.name ?? ''} เข้าร่วมทีมแล้ว`; this.renderWorld();
+      this.playRecruits(() => this.afterRecruits());
+    });
   }
   private afterRecruits(): void {
     if (this.state?.draft) this.world.openDraft(); else this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true });
@@ -400,7 +499,10 @@ export class GameShell {
   }
   private move(dir: Direction): void {
     if (!this.state || this.locked) return;
-    const out = this.exec({ kind: 'move', dir });
+    this.exec({ kind: 'move', dir }, out => this.moved(out));
+  }
+  private moved(out: CommandResult): void {
+    if (!this.state) return;
     // Reaching the goal settles the run home in the same command.
     if (!isRejected(out) && !out.game.run) { this.worldSound(out.events[0] as WorldEvent); this.endRun(out.game, out.events, 'complete'); return; }
     const result: WorldResult = isRejected(out) ? { state: this.state, event: { type: 'blocked', reason: out.rejected } as WorldEvent } : { state: out.game.run!, event: out.events[0] as WorldEvent };
@@ -448,47 +550,52 @@ export class GameShell {
   // Event choices (3A) are saved at once; a fight starts like any encounter.
   private chooseEvent(choice: EventChoice): void {
     if (!this.state || this.locked) return;
-    const result = this.step({ kind: 'chooseEvent', choice });
-    if (result.event.type === 'blocked') return;
-    this.state = result.state; this.persist();
-    if (result.event.type === 'encounter') { this.message = 'เข้าสู่การต่อสู้!'; this.startEncounter(result.event.kind, result.event.encounterId); return; }
-    const done = result.event; if (done.type !== 'eventDone') return;
-    const ev = this.map.events.find(e => e.id === done.eventId)!;
-    const healed = Object.entries(done.heal ?? {}).map(([id, n]) => `${heroText[id]?.name ?? id} +${n}`).join(' · ');
-    const detail: Partial<Record<EventChoice, string>> = {
-      sneak: 'ลอบผ่านไปได้ · ศัตรูในโซนตื่นตัวเต็มที่', pray: `ศาลประทานพร${healed ? ` · ${healed}` : ''} · เลือดสูงสุดลด ${this.map.eventRules.prayWound}%`,
-      offer: `ถวายแร่ ${this.map.eventRules.offerOre} · ได้ตราสัญญา ${this.map.eventRules.offerSeal}`, help: `ช่วยนักเดินทาง · ได้แร่ดาว ${this.map.eventRules.traveller.ore} และตราสัญญา ${this.map.eventRules.traveller.seal}`,
-    };
-    this.message = `${eventText[ev.kind].name} · ${detail[choice] ?? `${choiceText(choice, this.map.eventRules).label} แล้ว`}`;
-    if (choice === 'pray') this.effect = 'rest'; else if (choice !== 'sneak') this.effect = 'loot';
-    this.renderWorld();
+    this.step({ kind: 'chooseEvent', choice }, result => {
+      if (result.event.type === 'blocked') return;
+      this.state = result.state; this.persist();
+      if (result.event.type === 'encounter') { this.message = 'เข้าสู่การต่อสู้!'; this.startEncounter(result.event.kind, result.event.encounterId); return; }
+      const done = result.event; if (done.type !== 'eventDone') return;
+      const ev = this.map.events.find(e => e.id === done.eventId)!;
+      const healed = Object.entries(done.heal ?? {}).map(([id, n]) => `${heroText[id]?.name ?? id} +${n}`).join(' · ');
+      const detail: Partial<Record<EventChoice, string>> = {
+        sneak: 'ลอบผ่านไปได้ · ศัตรูในโซนตื่นตัวเต็มที่', pray: `ศาลประทานพร${healed ? ` · ${healed}` : ''} · เลือดสูงสุดลด ${this.map.eventRules.prayWound}%`,
+        offer: `ถวายแร่ ${this.map.eventRules.offerOre} · ได้ตราสัญญา ${this.map.eventRules.offerSeal}`, help: `ช่วยนักเดินทาง · ได้แร่ดาว ${this.map.eventRules.traveller.ore} และตราสัญญา ${this.map.eventRules.traveller.seal}`,
+      };
+      this.message = `${eventText[ev.kind].name} · ${detail[choice] ?? `${choiceText(choice, this.map.eventRules).label} แล้ว`}`;
+      if (choice === 'pray') this.effect = 'rest'; else if (choice !== 'sneak') this.effect = 'loot';
+      this.renderWorld();
+    });
   }
   private rest(): void {
     if (!this.state) return;
-    const result = this.step({ kind: 'rest' });
-    if (result.event.type !== 'rested') return;
-    this.state = result.state; this.persist(); sfx.play('rest');
-    this.message = `พักที่แคมป์แล้ว · คนที่ยืนอยู่ฟื้นเลือด ${this.map.camp.restHealPercent}% ไฟแคมป์จะจุดใหม่เมื่อชนะศึก`;
-    if (result.event.respawned?.length) this.message += ` · อีลิทกลับมาแล้ว: ${result.event.respawned.map(id => this.lookup(this.map.elites.find(e => e.id === id)!.encounterId)?.name ?? id).join(', ')} (แรงขึ้น ไม่มีโบนัสเหรียญ/ตรา)`;
-    this.effect = 'rest';
-    this.renderWorld();
+    this.step({ kind: 'rest' }, result => {
+      if (result.event.type !== 'rested') return;
+      this.state = result.state; this.persist(); sfx.play('rest');
+      this.message = `พักที่แคมป์แล้ว · คนที่ยืนอยู่ฟื้นเลือด ${this.map.camp.restHealPercent}% ไฟแคมป์จะจุดใหม่เมื่อชนะศึก`;
+      if (result.event.respawned?.length) this.message += ` · อีลิทกลับมาแล้ว: ${result.event.respawned.map(id => this.lookup(this.map.elites.find(e => e.id === id)!.encounterId)?.name ?? id).join(', ')} (แรงขึ้น ไม่มีโบนัสเหรียญ/ตรา)`;
+      this.effect = 'rest';
+      this.renderWorld();
+    });
   }
   // 4B: free travel between reached camps and the entrance.
   private travelTo(to: Point): void {
     if (!this.state || this.locked) return;
-    const result = this.step({ kind: 'travel', to }); if (result.event.type !== 'travelled') return;
-    this.state = result.state; this.persist(); sfx.play('door');
-    this.message = tileAt(this.map, to)?.kind === 'start' ? 'วาร์ปกลับทางเข้าด่านแล้ว' : 'วาร์ปถึงแคมป์แล้ว';
-    this.renderWorld();
+    this.step({ kind: 'travel', to }, result => {
+      if (result.event.type !== 'travelled') return;
+      this.state = result.state; this.persist(); sfx.play('door');
+      this.message = tileAt(this.map, to)?.kind === 'start' ? 'วาร์ปกลับทางเข้าด่านแล้ว' : 'วาร์ปถึงแคมป์แล้ว';
+      this.renderWorld();
+    });
   }
   private revive(heroId: string): void {
     if (!this.state || this.locked) return;
-    const result = this.step({ kind: 'revive', heroId });
-    if (result.event.type !== 'revived') return;
-    this.state = result.state; this.persist(); sfx.play('heal');
-    this.message = `ชุบ${heroText[heroId]?.name ?? ''}แล้ว · ใช้ถ่านคืนชีพ 1 เหลือ ${this.state.resources.ember}`;
-    this.effect = 'rest';
-    this.renderWorld();
+    this.step({ kind: 'revive', heroId }, result => {
+      if (result.event.type !== 'revived') return;
+      this.state = result.state; this.persist(); sfx.play('heal');
+      this.message = `ชุบ${heroText[heroId]?.name ?? ''}แล้ว · ใช้ถ่านคืนชีพ 1 เหลือ ${this.state.resources.ember}`;
+      this.effect = 'rest';
+      this.renderWorld();
+    });
   }
   private roster(result: { state: ExpeditionState; event: WorldEvent }): void {
     if (!this.state || this.locked || result.event.type !== 'roster') return;
@@ -507,23 +614,25 @@ export class GameShell {
   // Map potions (2D-5): saved at once, like every other map action.
   private drink(potion: PotionId, heroId?: string): void {
     if (!this.state || this.locked) return;
-    const result = this.step({ kind: 'usePotion', potion, ...(heroId !== undefined ? { heroId } : {}) });
-    if (result.event.type !== 'potion') return;
-    this.state = result.state; this.persist(); sfx.play('potion');
-    const healed = Object.entries(result.event.heal ?? {}).map(([id, n]) => `${heroText[id]?.name ?? id} +${n}`).join(' · ');
-    this.message = `${potionText[potion].name} · ${potion === 'repel' ? `ไม่เจอศัตรูสุ่ม ${this.map.potions.repelSteps} ก้าว` : `ฟื้นเลือด ${healed}`}`;
-    this.renderWorld();
+    this.step({ kind: 'usePotion', potion, ...(heroId !== undefined ? { heroId } : {}) }, result => {
+      if (result.event.type !== 'potion') return;
+      this.state = result.state; this.persist(); sfx.play('potion');
+      const healed = Object.entries(result.event.heal ?? {}).map(([id, n]) => `${heroText[id]?.name ?? id} +${n}`).join(' · ');
+      this.message = `${potionText[potion].name} · ${potion === 'repel' ? `ไม่เจอศัตรูสุ่ม ${this.map.potions.repelSteps} ก้าว` : `ฟื้นเลือด ${healed}`}`;
+      this.renderWorld();
+    });
   }
   private openChest(): void {
     if (!this.state || this.locked) return;
-    const result = this.step({ kind: 'openChest' });
-    if (result.event.type !== 'chest') return;
-    const before = this.state;
-    this.state = result.state; this.persist(); sfx.play(this.map.chests.find(c => c.id === (result.event.type === 'chest' ? result.event.chestId : ''))?.tier === 'rare' ? 'chestRare' : 'chest');
-    this.message = `เปิดกล่องสมบัติ · ${lootThai(result.event.loot)}${result.event.potion ? ` · ${potionText[result.event.potion].name} +1` : ''}${result.event.tomes ? ` · ${tomeThai(result.event.tomes)}` : ''}`;
-    this.message += this.sealNote(before, result.state);
-    this.effect = 'loot';
-    this.renderWorld();
+    this.step({ kind: 'openChest' }, result => {
+      if (result.event.type !== 'chest') return;
+      const before = this.state!;
+      this.state = result.state; this.persist(); sfx.play(this.map.chests.find(c => c.id === (result.event.type === 'chest' ? result.event.chestId : ''))?.tier === 'rare' ? 'chestRare' : 'chest');
+      this.message = `เปิดกล่องสมบัติ · ${lootThai(result.event.loot)}${result.event.potion ? ` · ${potionText[result.event.potion].name} +1` : ''}${result.event.tomes ? ` · ${tomeThai(result.event.tomes)}` : ''}`;
+      this.message += this.sealNote(before, result.state);
+      this.effect = 'loot';
+      this.renderWorld();
+    });
   }
   private describe(event: WorldEvent): string {
     switch (event.type) {
@@ -554,8 +663,16 @@ export class GameShell {
   private commitBattle(battle: BattleState): boolean {
     if (!this.state?.battle) return false;
     const kind = this.state.battle.kind; const before = this.state;
-    // The command replays every turn with the resolver and finishes the battle when the replay has ended.
-    const out = this.exec({ kind: 'battle', commands: battle.commands }); if (isRejected(out)) return false;
+    // The command replays every turn with the resolver and finishes the battle when the replay has ended. In server play
+    // the turns are already decided on the device (the resolver is deterministic); the answer arrives later and the
+    // battle cannot be left before it has (`leaveBattle`).
+    let saved = false;
+    this.exec({ kind: 'battle', commands: battle.commands }, out => { saved = this.battleCommitted(out, kind, before); }, true);
+    return this.server ? true : saved;
+  }
+  private battleCommitted(out: CommandResult, kind: NonNullable<ExpeditionState['battle']>['kind'], before: ExpeditionState): boolean {
+    // The server refused what the device resolved: the two disagree, so take the server's state.
+    if (isRejected(out)) { if (this.server) this.connect('current'); return false; }
     const event = out.events[0];
     if (event?.type === 'victory') {
       const next = out.game.run!;
@@ -576,6 +693,8 @@ export class GameShell {
     return this.saved;
   }
   private leaveBattle(): void {
+    // Server play: the last turn's answer decides where the battle leads (loot, settlement); wait for it.
+    if (this.waiting) { this.afterWait = () => this.leaveBattle(); return; }
     if (!this.state) { this.lobbyMessage = ''; this.lobbyCheer = ''; this.locked = false; this.showSummary(); return; }
     if (this.state.battle) { this.openBattle(); return; }
     if (this.pendingRewards) {

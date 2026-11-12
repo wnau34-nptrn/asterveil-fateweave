@@ -20,6 +20,7 @@
 | [COMMAND_LAYER_TH.md](COMMAND_LAYER_TH.md) | **P09-02a**: รายการคำสั่งค่าย/แผนที่ `applyCommand`, จุดที่ seed ถูกใช้, สิ่งที่เหลือก่อนต่อ server |
 | [CLIENT_VIEW_TH.md](CLIENT_VIEW_TH.md) | **P09-02a2**: มุมมองเครื่องไม่มี seed (`clientView`, `hireBoard`) และซองคำสั่ง `{requestId, seq}` (`processCommand`) |
 | [SERVER_P09_02B_TH.md](SERVER_P09_02B_TH.md) | **P09-02b**: Worker + DO ต่อบัญชี (SQLite) + D1 guest ที่ทำจริง, endpoint, ตัวเลขวัดสำหรับ D8, งานที่เหลือ |
+| [CLIENT_SERVER_P09_02C_TH.md](CLIENT_SERVER_P09_02C_TH.md) | **P09-02c**: เกมคุยกับ dev API หลังสวิตช์ `?server=` (ล็อกระหว่างรอ, ส่งซ้ำ requestId เดิม, ตามทัน 409, D12 เล่นทีละเครื่อง 423) |
 
 ต้นแบบ pure (ยังไม่ต่อกับเกม/Worker): `src/core/cloud/cloud-save.ts` (`checkUpload`, `decideUpload`, `decideCommand`), เทสต์ `tests/cloud-save-envelope.test.ts`
 
