@@ -1,3 +1,4 @@
+import { savePlace } from './save-place';
 import { BEAT_MAX, deflectReason, chiOf, releasePower, skillCooldown, actionReason, beginBattle, createBattle, currentHeroId, enemyIntent, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TargetOption, TurnStage } from '../core/battle/types';
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
@@ -676,7 +677,7 @@ export class BattleUI {
     const p = this.presentation;
     const shownMessages = p ? this.messages.slice(0, p.revealed ? p.logEnds[p.index] : p.index ? p.logEnds[p.index - 1] : p.logStart) : this.messages;
     this.set('event-log', shownMessages.slice(-30).map(message => `<li>${escapeHtml(message)}</li>`).join(''));
-    this.set('save-status', this.saved && this.storage ? 'บันทึกบนเครื่องนี้อัตโนมัติ' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้');
+    this.set('save-status', savePlace() === 'server' ? 'บันทึกบนเซิร์ฟเวอร์ทุกเทิร์น' : this.saved && this.storage ? 'บันทึกบนเครื่องนี้อัตโนมัติ' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้');
     this.scene?.sync({ state: this.displayState, heroId: this.heroId, targetId: null, phase: this.presentation?.phase, activeActorId: this.actingActor, activeTargetId: this.actingTarget }, repaint);
     this.renderFieldTargets();
     this.renderFieldStatuses();

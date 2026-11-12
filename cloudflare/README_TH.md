@@ -1,8 +1,8 @@
 # Cloudflare development API — P09-02b
 
 Worker `asterveil-api-dev` + Durable Object `GameAccount` ต่อบัญชี (SQLite) + D1 `asterveil-dev` สำหรับรันคำสั่งเกมบน server
-ยังไม่ต่อกับหน้าเกม (P09-02c) และไม่ย้ายหน้าเกมออกจาก GitHub Pages; บัญชีเป็น guest แบบ dev เท่านั้น
-สถาปัตยกรรม endpoint และตัวเลขวัด: [docs/design/p09/SERVER_P09_02B_TH.md](../docs/design/p09/SERVER_P09_02B_TH.md)
+หน้าเกมใช้ได้หลังสวิตช์ `?server=` (P09-02c); ไม่ย้ายหน้าเกมออกจาก GitHub Pages; บัญชี guest + ผูก Google + รหัสกู้คืน (P09-02d, var `GOOGLE_CLIENT_ID` ใน `wrangler.json` ไม่ใช่ความลับ)
+สถาปัตยกรรม endpoint และตัวเลขวัด: [SERVER_P09_02B_TH.md](../docs/design/p09/SERVER_P09_02B_TH.md) · บัญชี: [ACCOUNT_P09_02D_TH.md](../docs/design/p09/ACCOUNT_P09_02D_TH.md)
 
 ## ไฟล์
 
@@ -19,7 +19,8 @@ Repository secrets `CLOUDFLARE_API_TOKEN` (D1 Edit + Workers Scripts Edit; Worke
 ## รันในเครื่อง
 
 ```
-npx vitest run tests/server-api.test.ts             # Node + node:sqlite
+npx vitest run tests/server-api.test.ts tests/server-account.test.ts   # Node + node:sqlite
+SERVER_MEASURE=1 npx vitest run tests/server-measure.test.ts           # ศึกยาว / verify บน log ยาว (เวลา Node)
 cd cloudflare && npx wrangler@4.153.0 d1 migrations apply DB --local
 npx wrangler@4.153.0 dev --port 8799 --var CONTENT_VERSION:local
 node cloudflare/smoke.mjs http://127.0.0.1:8799 local    # จากราก repo
