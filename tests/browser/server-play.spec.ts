@@ -4,7 +4,7 @@ import { SESSION_HEADER } from '../../src/server/account-object';
 import { CONTENT_HEADER, handle } from '../../src/server/api';
 import { currentSave } from '../fixtures/current-save';
 import { withGoogle } from '../fixtures/google-fake';
-import { battleTurns, server, storedGame, type Server } from '../fixtures/server-fakes';
+import { battleTurns, grantAdmin, server, storedGame, type Server } from '../fixtures/server-fakes';
 
 // P09-02c server play in a real browser: the page talks to `https://api.test`, which Playwright routes to the real Worker
 // and Durable Object code running in this process (SQLite in memory). Local play stays the default (other specs).
@@ -75,6 +75,7 @@ test('server play: a guest account plays through the dev API with retries, input
   await page.locator('[data-story=skip]').click();
   await expect(page.locator('#encounter-title')).toContainText('กองหน้าของวาร์กอธ');
   expect(await page.evaluate(k => localStorage.getItem(k), SAVE_KEY)).toBeNull();
+  grantAdmin(w.s, [...w.s.objects.keys()][0]!); // P09-02f: the audit is admin-only
   const state = await (await handle(new Request(`${API}/v1/verify`, { method: 'POST', headers: { Authorization: `Bearer ${await page.evaluate(k => localStorage.getItem(k), `fateweave-server-token:${API}`)}`, [CONTENT_HEADER]: contentVersion() } }), w.s.deps)).json();
   expect(state).toEqual({ ok: true, seq: 2, from: 0 });
 
@@ -214,6 +215,26 @@ test('server play account: link Google, sign in on a second device, recover on a
   await again.page.locator('#account-code-input').fill(code);
   await again.page.locator('[data-account="recover"]').click();
   await expect(again.page.locator('.account-note')).toHaveText('รหัสกู้คืนไม่ถูกต้อง หรือถูกใช้ไปแล้ว');
+
+  // P09-02f sign-out: the tablet signs the phone and laptop out, then itself (linked to Google: no warning) and starts
+  // over as a new guest; Google brings it back.
+  await tablet.page.locator('#account-open').click();
+  await tablet.page.locator('[data-account="signout-others"]').click();
+  await expect(tablet.page.locator('.account-note')).toHaveText('ออกจากระบบเครื่องอื่นแล้ว 2 เครื่อง');
+  await tablet.page.screenshot({ path: info.outputPath('account-signout-390.png') });
+  await tablet.page.locator('[data-account="signout"]').click();
+  await expect(tablet.page.locator('#account-panel')).toBeHidden();
+  await expect(tablet.page.locator('.title-server-note')).toContainText('ออกจากระบบแล้ว');
+  await expect(tablet.page.locator('#continue')).toHaveCount(0);
+  await tablet.page.locator('#account-open').click();
+  await expect(tablet.page.locator('.account-status')).toHaveAttribute('data-status', 'guest');
+  // The fresh guest has no Google or code: signing it out asks first.
+  await tablet.page.locator('[data-account="signout"]').click();
+  await expect(tablet.page.locator('[data-account="signout"]')).toHaveText('ยืนยัน: ออกจากระบบ (กลับมาไม่ได้)');
+  await tokenFor(tablet.page, 'g-owner');
+  await tablet.page.locator('#fake-google').click();
+  await tablet.page.locator('[data-account="switch"]').click();
+  await expect(tablet.page.locator('#continue')).toBeVisible();
   for (const d of [phone, laptop, tablet, again]) await d.close();
 });
 

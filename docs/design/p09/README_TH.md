@@ -23,6 +23,7 @@
 | [CLIENT_SERVER_P09_02C_TH.md](CLIENT_SERVER_P09_02C_TH.md) | **P09-02c**: เกมคุยกับ dev API หลังสวิตช์ `?server=` (ล็อกระหว่างรอ, ส่งซ้ำ requestId เดิม, ตามทัน 409, D12 เล่นทีละเครื่อง 423) |
 | [ACCOUNT_P09_02D_TH.md](ACCOUNT_P09_02D_TH.md) | **P09-02d**: D1 ผูก Google (ตรวจ ID token กับ JWKS) + รหัสกู้คืน (เก็บ hash) + ย้ายเครื่อง; วัดศึกยาวและ `/v1/verify` บน log ยาว; ป้าย "บันทึกบนเซิร์ฟเวอร์" |
 | [IMPORT_P09_02E_TH.md](IMPORT_P09_02E_TH.md) | **P09-02e**: นำเข้าเซฟในเครื่องครั้งเดียว (D11: `/v1/import`, fingerprint ใน D1, `parseGame` ใน DO) + snapshot ของ log ให้ `/v1/verify` replay จาก snapshot ล่าสุด |
+| [PERF_P09_02F_TH.md](PERF_P09_02F_TH.md) | **P09-02f**: ศึกแบบ incremental ใน DO (`battleMemo`, ผลเท่า replay เต็ม), `/v1/verify` เฉพาะ admin (D1 `admins` + `admin_audit`), ออกจากระบบ `/v1/sessions/revoke`, ตัวเลขวัด |
 
 ต้นแบบ pure (ยังไม่ต่อกับเกม/Worker): `src/core/cloud/cloud-save.ts` (`checkUpload`, `decideUpload`, `decideCommand`), เทสต์ `tests/cloud-save-envelope.test.ts`
 

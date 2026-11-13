@@ -66,6 +66,9 @@ export function server(seeds: number[] = [11, 22, 33, 44, 55, 66, 77, 88, 99], c
   return { deps, d1, objects, clock };
 }
 
+// P09-02f: the owner makes an account an admin with a D1 row (`wrangler d1 execute`); tests do the same.
+export const grantAdmin = (s: Server, accountId: string): void => { s.d1.db.prepare('INSERT INTO admins (account_id, granted_at) VALUES (?, ?)').run(accountId, s.clock.t); };
+
 export const storedGame = (s: Server, accountId: string): Game | null => s.objects.get(accountId)!.host['store'].load()?.game ?? null;
 
 // Plain attacks on the first legal foe until the battle ends (enough for the prologue).

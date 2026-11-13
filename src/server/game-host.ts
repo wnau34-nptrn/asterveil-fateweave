@@ -4,6 +4,8 @@ import { applyCommand, isRejected, parseCommand, type CommandContext } from '../
 import type { SeedSource } from '../core/command/seed-source';
 import { decideUpload, type CloudSaveUpload } from '../core/cloud/cloud-save';
 import { parseGame, type Game } from '../core/save/expedition-save';
+import type { BattleReplay } from '../core/world/world';
+import { battleMemo } from '../core/command/battle-memo';
 
 // P09-02b: the per-account game host the Durable Object wraps. It keeps the authoritative `Game` and the command book,
 // runs every device request through the same `processCommand` the game uses, draws seeds from a server source, and
@@ -11,7 +13,7 @@ import { parseGame, type Game } from '../core/save/expedition-save';
 // here touches Cloudflare: the store and the random source are injected, so tests run it in memory. The device only
 // ever receives seed-free views. See docs/design/p09/SERVER_P09_02B_TH.md.
 
-export type GameContext = Omit<CommandContext, 'seeds'>;
+export type GameContext = Omit<CommandContext, 'seeds' | 'battles'>;
 export interface HostState { game: Game | null; book: CommandBook }
 // One applied sequence number. `seeds` are the server draws the command consumed, in order; with them the log replays
 // to the same game. They never leave the server.
@@ -61,6 +63,9 @@ export function recordingSeeds(draw: () => number): SeedSource & { used: number[
 }
 
 export class GameHost {
+  // P09-02f: the current battle's resolved turns, kept while this object lives (a Durable Object stays in memory between
+  // requests; after eviction the first battle command resolves from the start again).
+  private readonly battles = battleMemo();
   constructor(private readonly store: HostStore, private readonly ctx: GameContext, private readonly draw: () => number,
     private readonly contentVersion: string, private readonly now: () => number = () => Date.now()) {}
 
@@ -79,7 +84,7 @@ export class GameHost {
   command(request: CommandRequest, argsSha256: string): HostAnswer {
     const { game, book } = this.current();
     const seeds = recordingSeeds(this.draw);
-    const out = processCommand(game, book, request, argsSha256, { ...this.ctx, seeds });
+    const out = processCommand(game, book, request, argsSha256, { ...this.ctx, seeds, battles: this.battles.replay });
     switch (out.kind) {
       case 'replayed': return { status: 200, body: out.reply, replayed: true };
       case 'invalid': return { status: 400, body: { error: 'invalid_request' } };
@@ -135,13 +140,14 @@ export class GameHost {
   verify(): ReplayResult & { from: number } {
     const { game } = this.current(); const start = this.store.latestSnapshot();
     const from = start ? { seq: start.seq, game: start.game } : { seq: 0, game: null };
-    return { ...replayLog(this.store.entries(from.seq), this.ctx, game, from), from: from.seq };
+    return { ...replayLog(this.store.entries(from.seq), this.ctx, game, from, battleMemo().replay), from: from.seq };
   }
 }
 
 export type ReplayResult = { ok: true; seq: number } | { ok: false; seq: number; reason: 'order' | 'seeds' | 'status' | 'snapshot' };
 
-export function replayLog(entries: readonly LogEntry[], ctx: GameContext, expected: Game | null, from: { seq: number; game: Game | null } = { seq: 0, game: null }): ReplayResult {
+// `play`: how battle commands replay (`verify` passes a fresh `battleMemo`, so each turn of a battle resolves once).
+export function replayLog(entries: readonly LogEntry[], ctx: GameContext, expected: Game | null, from: { seq: number; game: Game | null } = { seq: 0, game: null }, play?: BattleReplay): ReplayResult {
   let game: Game | null = from.game ? structuredClone(from.game) : null; let seq = from.seq;
   for (const e of entries) {
     if (e.seq !== seq + 1) return { ok: false, seq: e.seq, reason: 'order' };
@@ -150,7 +156,7 @@ export function replayLog(entries: readonly LogEntry[], ctx: GameContext, expect
     const seeds: SeedSource = { next: () => { if (i >= e.seeds.length) throw new Error('seeds'); return e.seeds[i++]! >>> 0; } };
     const cmd = parseCommand(e.command);
     let result;
-    try { result = cmd ? applyCommand(game, cmd, { ...ctx, seeds }) : { rejected: 'shape' }; } catch { return { ok: false, seq, reason: 'seeds' }; }
+    try { result = cmd ? applyCommand(game, cmd, { ...ctx, seeds, ...(play ? { battles: play } : {}) }) : { rejected: 'shape' }; } catch { return { ok: false, seq, reason: 'seeds' }; }
     if (i !== e.seeds.length) return { ok: false, seq, reason: 'seeds' };
     if ((isRejected(result) ? 'rejected' : 'applied') !== e.status) return { ok: false, seq, reason: 'status' };
     if (!isRejected(result)) game = result.game;

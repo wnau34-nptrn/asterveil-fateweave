@@ -9,7 +9,7 @@ import { GameHost, memoryStore, SNAPSHOT_EVERY } from '../src/server/game-host';
 import { GAME_CONTEXT } from '../src/server/worker';
 import { currentSave } from './fixtures/current-save';
 import { legacyEnvelope } from './fixtures/legacy-save';
-import { battleTurns, server, storedGame, VERSION, type Server } from './fixtures/server-fakes';
+import { battleTurns, grantAdmin, server, storedGame, VERSION, type Server } from './fixtures/server-fakes';
 
 // P09-02e (owner D11): one-time import of a local save into a server account, and Durable Object log snapshots that
 // `/verify` replays from. Worker + Durable Object in Node with real SQLite (tests/fixtures/server-fakes.ts).
@@ -78,6 +78,7 @@ describe('P09-02e one-time import of a local save (D11)', () => {
     const turns = battleTurns(storedGame(s, b.accountId)!);
     const r = await send(s, b.token, 1, { kind: 'battle', commands: turns });
     expect(((await r.json()) as { status: string }).status).toBe('applied');
+    grantAdmin(s, b.accountId);
     const verify = await call(s, '/v1/verify', { method: 'POST', headers: headers(b.token) });
     expect(await verify.json()).toEqual({ ok: true, seq: 1, from: 0 });
   });

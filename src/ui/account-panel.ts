@@ -26,6 +26,7 @@ const ERRORS: Record<string, string> = {
   server: 'เซิร์ฟเวอร์ยังไม่ตอบ · ลองอีกครั้ง',
   unauthorized: 'บัญชีบนเครื่องนี้ใช้ไม่ได้แล้ว · ปิดแล้วเชื่อมต่อใหม่',
   content_version: 'เวอร์ชันเกมไม่ตรงกับเซิร์ฟเวอร์ · โหลดหน้าใหม่',
+  unrecoverable: 'ออกจากระบบแล้วจะกลับเข้าบัญชีนี้ไม่ได้อีก · ผูก Google หรือออกรหัสกู้คืนก่อน',
 };
 const reasonOf = <T>(out: AccountOutcome<T>) => out.kind === 'refused' ? out.error : out.kind === 'failed' ? out.reason : '';
 const message = (code: string) => ERRORS[code] ?? `ทำรายการไม่สำเร็จ (${code})`;
@@ -38,6 +39,8 @@ export class AccountPanel {
   // A Google ID token whose identity is on another account, kept while the player decides whether to switch.
   private conflict: string | undefined;
   private confirmCode = false;
+  // P09-02f: the server said signing out would leave no way back; the next press confirms.
+  private confirmOut = false;
   private readonly el: HTMLElement;
   constructor(parent: HTMLElement, private readonly host: AccountHost) {
     this.el = document.createElement('section');
@@ -51,7 +54,7 @@ export class AccountPanel {
   get isOpen(): boolean { return !this.el.hidden; }
 
   async open(): Promise<void> {
-    this.note = ''; this.code = undefined; this.conflict = undefined; this.confirmCode = false;
+    this.note = ''; this.code = undefined; this.conflict = undefined; this.confirmCode = false; this.confirmOut = false;
     this.el.hidden = false; this.el.innerHTML = '<div class="account-card"><p class="server-note">กำลังโหลดบัญชี…</p></div>';
     const out = await this.call('กำลังโหลดบัญชี…', () => this.host.client.account());
     if (out.kind === 'ok') this.info = out.value; else { this.info = undefined; this.note = message(reasonOf(out)); }
@@ -89,6 +92,10 @@ export class AccountPanel {
       + '<label for="account-code-input">รหัส 20 ตัว</label>'
       + '<input id="account-code-input" name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="32" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX">'
       + '<button type="submit" class="secondary" data-account="recover">เข้าบัญชีด้วยรหัส</button></form>'
+      + (i ? '<section aria-labelledby="account-out"><h3 id="account-out">ออกจากระบบ</h3>'
+        + (this.confirmOut ? `<p class="account-warn" role="alert">${ERRORS.unrecoverable}</p>` : '<p>ออกจากระบบเครื่องนี้แล้ว เครื่องนี้จะเริ่มบัญชีทดลองใหม่ · กลับเข้าบัญชีนี้ได้ด้วย Google หรือรหัสกู้คืน</p>')
+        + `<button type="button" class="secondary" data-account="signout">${this.confirmOut ? 'ยืนยัน: ออกจากระบบ (กลับมาไม่ได้)' : 'ออกจากระบบเครื่องนี้'}</button>`
+        + '<button type="button" class="secondary" data-account="signout-others">ออกจากระบบเครื่องอื่นทั้งหมด</button></section>' : '')
       + '<button type="button" class="quiet" data-account="close">ปิด</button></div>';
     const slot = this.el.querySelector<HTMLElement>('#account-google-button');
     if (slot) void renderGoogleButton(slot, token => void this.google(token)).then(ok => { if (!ok && slot.isConnected) slot.innerHTML = '<p class="account-warn">โหลดปุ่ม Google ไม่ได้ · ตรวจการเชื่อมต่อแล้วเปิดหน้านี้ใหม่</p>'; });
@@ -103,6 +110,8 @@ export class AccountPanel {
     else if (act === 'cancel') { this.conflict = undefined; this.note = ''; this.render(); }
     else if (act === 'switch' && this.conflict) { const token = this.conflict; this.conflict = undefined; void this.signIn(token); }
     else if (act === 'code') void this.issueCode();
+    else if (act === 'signout') void this.signOut();
+    else if (act === 'signout-others') void this.signOutOthers();
     else if (act === 'copy' && this.code) { void navigator.clipboard?.writeText(this.code).then(() => { button.textContent = 'คัดลอกแล้ว'; }, () => { button.textContent = 'คัดลอกไม่ได้ · จดรหัสด้วยมือ'; }); }
   }
 
@@ -132,6 +141,18 @@ export class AccountPanel {
     else this.note = message(reasonOf(out));
     this.render();
     this.el.querySelector<HTMLElement>('#account-code')?.scrollIntoView({ block: 'nearest' });
+  }
+  private async signOut(): Promise<void> {
+    const confirm = this.confirmOut; this.confirmOut = false;
+    const out = await this.call('กำลังออกจากระบบ…', () => this.host.client.signOut('this', confirm));
+    if (out.kind === 'refused' && out.error === 'unrecoverable') { this.confirmOut = true; this.note = ''; this.render(); return; }
+    if (out.kind !== 'ok') { this.note = message(reasonOf(out)); this.render(); return; }
+    this.close(); this.host.switched('ออกจากระบบแล้ว · เครื่องนี้เริ่มบัญชีทดลองใหม่');
+  }
+  private async signOutOthers(): Promise<void> {
+    const out = await this.call('กำลังออกจากระบบเครื่องอื่น…', () => this.host.client.signOut('others'));
+    this.note = out.kind === 'ok' ? (out.value ? `ออกจากระบบเครื่องอื่นแล้ว ${out.value} เครื่อง` : 'ไม่มีเครื่องอื่นที่เข้าบัญชีนี้อยู่') : message(reasonOf(out));
+    this.render();
   }
   private async recover(): Promise<void> {
     const input = this.el.querySelector<HTMLInputElement>('#account-code-input');

@@ -3,7 +3,7 @@ import { clampRun, RUN_CAP } from './caps';
 import {huntedReward} from './targeted-loot';
 import { replay, withLevel, withParty, withStrength } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
-import type { EnemyTrait, BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents, ActionId, PassiveId } from '../battle/types';
+import type { EnemyTrait, BattleEntry, BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents, ActionId, PassiveId } from '../battle/types';
 import type { RecruitPoint, ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
 import { affixPool, gearTotals } from './equipment';
 import { effectiveTalents, isBigTree, memberTalentReason } from './talents';
@@ -699,14 +699,17 @@ export function battleData(state: ExpeditionState, map: MapDefinition, lookup: E
 }
 // The battle's committed commands are replayed from the recorded entry; the world
 // never trusts a supplied HP snapshot.
-export function battleState(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): BattleState | undefined {
+// How a battle's committed commands become its state. `replay` (the default) resolves every turn from the start; a
+// caller may pass an equivalent that reuses turns it already resolved (P09-02f `battleMemo`), never different rules.
+export type BattleReplay = (data: EncounterDefinition, commands: readonly Command[], entry: BattleEntry) => BattleState;
+export function battleState(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, play: BattleReplay = replay): BattleState | undefined {
   const data = battleData(state, map, lookup);
-  return state.battle && data ? replay(data, state.battle.commands, { hp: state.battle.entry }) : undefined;
+  return state.battle && data ? play(data, state.battle.commands, { hp: state.battle.entry }) : undefined;
 }
-export function recordBattle(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, commands: readonly Command[]): ExpeditionState {
+export function recordBattle(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, commands: readonly Command[], play: BattleReplay = replay): ExpeditionState {
   if (!initial.battle) throw new Error('No active battle.');
   const state = structuredClone(initial); state.battle!.commands = commands.map(c => ({ ...c }));
-  battleState(state, map, lookup);
+  battleState(state, map, lookup, play);
   return state;
 }
 // P01: a victory pays the camp once, whoever was brought (no share per member), tapered by the camp level against the
@@ -734,8 +737,8 @@ function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLo
 // Applies a finished battle. Victory keeps the surviving HP, rolls loot and relights
 // the campfire; defeat leaves the deployed members down at the last camp (or entrance).
 // A lost tutorial simply restarts at full HP.
-export function finishBattle(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): WorldResult {
-  const result = battleState(initial, map, lookup);
+export function finishBattle(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, play: BattleReplay = replay): WorldResult {
+  const result = battleState(initial, map, lookup, play);
   if (!initial.battle || !result || result.outcome === 'active') throw new Error('The battle has not finished.');
   const state = structuredClone(initial); const { kind, encounterId } = initial.battle;
   if (result.outcome === 'victory') {

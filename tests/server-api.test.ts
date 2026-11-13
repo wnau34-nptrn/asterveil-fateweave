@@ -6,7 +6,7 @@ import { SESSION_HEADER, sqlStore } from '../src/server/account-object';
 import { CONTENT_HEADER, handle, LIMITS } from '../src/server/api';
 import { GameHost, memoryStore, replayLog } from '../src/server/game-host';
 import { GAME_CONTEXT } from '../src/server/worker';
-import { battleTurns, fakeDurableState, server, storedGame, VERSION, type Server } from './fixtures/server-fakes';
+import { battleTurns, fakeDurableState, grantAdmin, server, storedGame, VERSION, type Server } from './fixtures/server-fakes';
 
 // P09-02b: the Worker front door and the per-account Durable Object, run in Node with real SQLite (node:sqlite) standing
 // in for D1 and the Durable Object's SQL storage. See docs/design/p09/SERVER_P09_02B_TH.md.
@@ -176,6 +176,7 @@ describe('P09-02b account Durable Object', () => {
     expect(leaks(battleText)).toEqual([]);
 
     // The stored log replays from nothing to the same snapshot (also through the audit route).
+    grantAdmin(s, accountId);
     expect(await (await call(s, '/v1/verify', { method: 'POST', headers: gameHeaders(token) })).json()).toEqual({ ok: true, seq: 4, from: 0 });
     // Accounts never share a Durable Object.
     const other = await guest(s);

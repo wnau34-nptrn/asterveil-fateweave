@@ -21,7 +21,7 @@ import {
 } from '../world/types';
 import {
   battleState, chooseEvent, chooseRunLoadout, draftPick, finishBattle, learnRunTalent, move, moveMember, openChest, recordBattle,
-  rest, revive, setLane, startPrologue, swapMembers, takeOff, travel, usePotion, wear, type BagList, type EncounterLookup,
+  rest, revive, setLane, startPrologue, swapMembers, takeOff, travel, usePotion, wear, type BagList, type BattleReplay, type EncounterLookup,
 } from '../world/world';
 import type { SeedSource } from './seed-source';
 
@@ -97,7 +97,9 @@ export type CommandEvent = ProfileEvent | WorldEvent
   | { type: 'departed'; mapId: string; hard: boolean }
   // The finished run as it was settled, for the shell's run summary (a server would send a seed-free view instead).
   | { type: 'settled'; outcome: RunOutcome; run: ExpeditionState };
-export interface CommandContext { home: MapDefinition; maps: readonly MapDefinition[]; lookup: EncounterLookup; seeds: SeedSource }
+// `battles` (P09-02f): how a `battle` command replays its turns; the server passes a `battleMemo` that resolves only the
+// new ones (same resolver, same result). Default: the full replay.
+export interface CommandContext { home: MapDefinition; maps: readonly MapDefinition[]; lookup: EncounterLookup; seeds: SeedSource; battles?: BattleReplay }
 export type CommandResult = { game: Game; events: CommandEvent[] } | { rejected: string };
 export const isRejected = (r: CommandResult): r is { rejected: string } => 'rejected' in r;
 
@@ -284,9 +286,10 @@ function applyRunCommand(game: Game | null, cmd: RunCommand, ctx: CommandContext
       if (cmd.commands.length < kept.length || kept.some((c, i) => !sameCommand(c, cmd.commands[i]!))) return reject('rewrite');
       let next: ExpeditionState, outcome: string;
       // The resolver replays every turn and refuses an illegal or stale one.
-      try { next = recordBattle(run, map, lookup, cmd.commands); outcome = battleState(next, map, lookup)!.outcome; } catch { return reject('illegal'); }
+      const play = ctx.battles;
+      try { next = recordBattle(run, map, lookup, cmd.commands, play); outcome = battleState(next, map, lookup, play)!.outcome; } catch { return reject('illegal'); }
       if (outcome === 'active') return { game: { profile: game.profile, run: next }, events: [] };
-      const result = finishBattle(next, map, lookup);
+      const result = finishBattle(next, map, lookup, play);
       // Every brought member down: the expedition fails and settles home in this write.
       if (result.event.type === 'defeat' && result.event.wiped) return settled(game.profile, result.state, 'wiped', map, [result.event]);
       return { game: { profile: game.profile, run: result.state }, events: [result.event] };

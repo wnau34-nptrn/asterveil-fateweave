@@ -163,3 +163,44 @@ export async function claimFingerprint(db: D1Like, accountId: string, fingerprin
 export async function releaseFingerprint(db: D1Like, accountId: string, fingerprint: string): Promise<void> {
   await db.prepare('UPDATE accounts SET legacy_fingerprint = NULL WHERE id = ? AND legacy_fingerprint = ?').bind(accountId, fingerprint).run();
 }
+
+// ---- P09-02f: sign-out and admin checks ----
+
+// The device id in a bearer token (the part before the dot), or null.
+export function deviceOf(authorization: string | null): string | null {
+  const m = /^Bearer (\S+)$/.exec(authorization ?? '');
+  return (m && TOKEN.exec(m[1]!)?.[1]) ?? null;
+}
+
+export type RevokeScope = 'this' | 'others';
+export type RevokeResult = { revoked: number } | 'unrecoverable';
+// Sign-out. `this`: the device's own credential stops working (the device forgets it and starts over); refused with
+// `unrecoverable` when nothing else could reach the account again (no Google identity, no recovery code, no other
+// signed-in device) unless `confirm`. `others`: every other device of the account is signed out (e.g. a lost phone).
+// Revoked credentials stay as rows with `revoked_at` (authenticate ignores them); a repeated request revokes nothing more.
+export async function revokeDevices(db: D1Like, accountId: string, deviceId: string, scope: RevokeScope, confirm: boolean, now: number): Promise<RevokeResult> {
+  if (scope === 'others') {
+    const others = await db.prepare('SELECT COUNT(*) AS n FROM devices WHERE account_id = ? AND id <> ? AND revoked_at IS NULL').bind(accountId, deviceId).first<{ n: number }>();
+    await db.prepare('UPDATE devices SET revoked_at = ? WHERE account_id = ? AND id <> ? AND revoked_at IS NULL').bind(now, accountId, deviceId).run();
+    return { revoked: others?.n ?? 0 };
+  }
+  if (!confirm) {
+    const row = await db.prepare(
+      `SELECT (SELECT COUNT(*) FROM identities i WHERE i.account_id = ?) AS ids, (SELECT COUNT(*) FROM recovery_codes r WHERE r.account_id = ?) AS codes,
+         (SELECT COUNT(*) FROM devices d WHERE d.account_id = ? AND d.id <> ? AND d.revoked_at IS NULL) AS others`,
+    ).bind(accountId, accountId, accountId, deviceId).first<{ ids: number; codes: number; others: number }>();
+    if (row && row.ids + row.codes + row.others === 0) return 'unrecoverable';
+  }
+  await db.prepare('UPDATE devices SET revoked_at = ? WHERE id = ? AND account_id = ? AND revoked_at IS NULL').bind(now, deviceId, accountId).run();
+  return { revoked: 1 };
+}
+
+export async function isAdmin(db: D1Like, accountId: string): Promise<boolean> {
+  return (await db.prepare('SELECT 1 AS yes FROM admins WHERE account_id = ?').bind(accountId).first<{ yes: number }>()) !== null;
+}
+export async function accountExists(db: D1Like, accountId: string): Promise<boolean> {
+  return (await db.prepare('SELECT 1 AS yes FROM accounts WHERE id = ?').bind(accountId).first<{ yes: number }>()) !== null;
+}
+export async function auditAdmin(db: D1Like, adminId: string, action: string, target: string, result: string, now: number): Promise<void> {
+  await db.prepare('INSERT INTO admin_audit (admin_id, action, target, result, at) VALUES (?, ?, ?, ?, ?)').bind(adminId, action, target, result, now).run();
+}

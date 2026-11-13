@@ -3,9 +3,20 @@
 //   node cloudflare/smoke.mjs <base-url> <content-version>
 // Creates a throwaway guest, sends createCommander → depart, retries a request, reads the state, checks the one-session
 // lock (423 other_device), runs the replay audit, moves the account with a recovery code and checks Google sign-in is
-// configured (P09-02d),
+// configured (P09-02d), checks that the audit is admin-only (P09-02f: with ADMIN_D1_CONFIG set, the throwaway account is
+// made an admin in D1 for the check and the row removed afterwards) and signs devices out (P09-02f),
 // checks no seed leaves the server and prints bytes and round-trip times. Prints no token.
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+
+// P09-02f: admin rows are only ever written with `wrangler d1 execute` (no API grants admin). Wrangler's output can
+// carry the account owner's e-mail, so nothing it prints is shown.
+const adminConfig = process.env.ADMIN_D1_CONFIG;
+function d1(sql) {
+  try { execFileSync('npx', ['--yes', 'wrangler@4.153.0', 'd1', 'execute', 'DB', '--remote', '--config', adminConfig, '--command', sql], { stdio: 'ignore', timeout: 120000 }); }
+  catch { throw new Error('wrangler d1 execute failed (output hidden)'); }
+}
+const ACCOUNT = /^[0-9a-f]{32}$/;
 
 const [base, version] = process.argv.slice(2);
 if (!base || !version) throw new Error('usage: node cloudflare/smoke.mjs <base-url> <content-version>');
@@ -52,7 +63,13 @@ assert.equal(s.json.lastSeq, 2);
 assert.equal((await call('other device enters', '/v1/session', { method: 'POST', token, session: OTHER })).status, 200);
 assert.equal((await call('replaced device', '/v1/state', { token })).status, 423);
 assert.equal((await call('enter again', '/v1/session', { method: 'POST', token })).status, 200);
-assert.deepEqual((await call('verify', '/v1/verify', { method: 'POST', token })).json, { ok: true, seq: 2 });
+assert.deepEqual((await call('verify (not admin)', '/v1/verify', { method: 'POST', token })).json, { error: 'forbidden' });
+if (adminConfig) {
+  assert.match(g.json.accountId, ACCOUNT);
+  d1(`INSERT OR IGNORE INTO admins (account_id, granted_at, note) VALUES ('${g.json.accountId}', ${Date.now()}, 'ci smoke')`);
+  try { assert.deepEqual((await call('verify (admin)', '/v1/verify', { method: 'POST', token })).json, { ok: true, seq: 2, from: 0 }); }
+  finally { d1(`DELETE FROM admins WHERE account_id = '${g.json.accountId}'`); }
+}
 // P09-02d account: a recovery code moves the account to a new device credential once; Google sign-in is configured
 // and the Worker reaches Google's key set (a well-formed token with an unknown key id is refused as `key`, not `jwks`).
 const account = await call('account', '/v1/account', { token });
@@ -69,6 +86,12 @@ const b64 = o => Buffer.from(JSON.stringify(o)).toString('base64url');
 const fakeJwt = `${b64({ alg: 'RS256', kid: 'smoke-unknown', typ: 'JWT' })}.${b64({ sub: 'smoke' })}.${Buffer.from('x').toString('base64url')}`;
 const link = await call('link (unknown key)', '/v1/link', { method: 'POST', token: moved, body: { idToken: fakeJwt } });
 assert.deepEqual(link.json, { error: 'google_token', reason: 'key' }, link.text);
+// P09-02f sign-out: the new device signs the old one out, then itself (warned first: no Google, the code was used).
+assert.deepEqual((await call('sign out others', '/v1/sessions/revoke', { method: 'POST', token: moved, body: { scope: 'others' } })).json, { revoked: 1 });
+assert.equal((await call('old device signed out', '/v1/account', { token })).status, 401);
+assert.deepEqual((await call('sign out (warned)', '/v1/sessions/revoke', { method: 'POST', token: moved, body: {} })).json, { error: 'unrecoverable' });
+assert.deepEqual((await call('sign out (confirmed)', '/v1/sessions/revoke', { method: 'POST', token: moved, body: { confirm: true } })).json, { revoked: 1 });
+assert.equal((await call('signed out', '/v1/account', { token: moved })).status, 401);
 console.log('label\tstatus\tbytes\tms');
 for (const r of rows) console.log(`${r.label}\t${r.status}\t${r.bytes}\t${r.ms}`);
 console.log('SMOKE OK');
