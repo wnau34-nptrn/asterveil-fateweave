@@ -35,30 +35,37 @@ export async function createGuest(db: D1Like, now: number): Promise<GuestAccount
   return { accountId, token: `${deviceId}.${secret}` };
 }
 
-// The account a bearer token belongs to, or null (unknown, revoked or a non-guest/linked account).
-export async function authenticate(db: D1Like, authorization: string | null): Promise<string | null> {
+// The account a bearer token belongs to and its status, or null (unknown or revoked; a suspended account is refused).
+// P09-02g: a `deleting` account still authenticates, so its device can read the account and cancel; routes decide.
+export async function authenticateAccount(db: D1Like, authorization: string | null): Promise<{ accountId: string; status: 'guest' | 'linked' | 'deleting' } | null> {
   const m = /^Bearer (\S+)$/.exec(authorization ?? '');
   const parts = m ? TOKEN.exec(m[1]!) : null;
   if (!parts) return null;
   const row = await db.prepare(
-    "SELECT d.account_id AS account, d.token_hash AS hash FROM devices d JOIN accounts a ON a.id = d.account_id WHERE d.id = ? AND d.revoked_at IS NULL AND a.status IN ('guest','linked')",
-  ).bind(parts[1]).first<{ account: string; hash: string }>();
+    "SELECT d.account_id AS account, d.token_hash AS hash, a.status AS status FROM devices d JOIN accounts a ON a.id = d.account_id WHERE d.id = ? AND d.revoked_at IS NULL AND a.status IN ('guest','linked','deleting')",
+  ).bind(parts[1]).first<{ account: string; hash: string; status: 'guest' | 'linked' | 'deleting' }>();
   if (!row) return null;
-  return equalHex(row.hash, await sha256Hex(parts[2]!)) ? row.account : null;
+  return equalHex(row.hash, await sha256Hex(parts[2]!)) ? { accountId: row.account, status: row.status } : null;
+}
+// The account of a bearer token that may play (guest or linked), or null.
+export async function authenticate(db: D1Like, authorization: string | null): Promise<string | null> {
+  const a = await authenticateAccount(db, authorization);
+  return a && a.status !== 'deleting' ? a.accountId : null;
 }
 
 // ---- P09-02d: Google identities and recovery codes ----
 
 export const GOOGLE = 'google';
 export type AccountStatus = 'guest' | 'linked' | 'deleting' | 'suspended';
-export interface AccountInfo { accountId: string; status: AccountStatus; google: boolean; recoveryCodeAt: number | null }
+// `deleteAfter` (P09-02g): when a `deleting` account is removed for good; null otherwise.
+export interface AccountInfo { accountId: string; status: AccountStatus; google: boolean; recoveryCodeAt: number | null; deleteAfter: number | null }
 
 export async function accountInfo(db: D1Like, accountId: string): Promise<AccountInfo | null> {
   const row = await db.prepare(
-    `SELECT a.status AS status, (SELECT COUNT(*) FROM identities i WHERE i.account_id = a.id AND i.provider = ?) AS google,
+    `SELECT a.status AS status, a.delete_after AS del, (SELECT COUNT(*) FROM identities i WHERE i.account_id = a.id AND i.provider = ?) AS google,
        (SELECT r.created_at FROM recovery_codes r WHERE r.account_id = a.id) AS code FROM accounts a WHERE a.id = ?`,
-  ).bind(GOOGLE, accountId).first<{ status: AccountStatus; google: number; code: number | null }>();
-  return row ? { accountId, status: row.status, google: row.google > 0, recoveryCodeAt: row.code ?? null } : null;
+  ).bind(GOOGLE, accountId).first<{ status: AccountStatus; del: number | null; google: number; code: number | null }>();
+  return row ? { accountId, status: row.status, google: row.google > 0, recoveryCodeAt: row.code ?? null, deleteAfter: row.status === 'deleting' ? row.del ?? null : null } : null;
 }
 
 export type LinkResult = 'linked' | 'identity_in_use' | 'already_linked';
@@ -97,10 +104,11 @@ async function adoptDevice(db: D1Like, accountId: string, token: string, now: nu
   } catch { return false; }
 }
 
-// Signing in on a device with a Google identity that is linked: the device gets a credential of that account.
+// Signing in on a device with a Google identity that is linked: the device gets a credential of that account (also while
+// it is `deleting`, so the player can cancel from a new device).
 export async function signInGoogle(db: D1Like, subject: string, token: string, now: number): Promise<string | 'not_linked' | 'bad_token'> {
   const row = await db.prepare(
-    "SELECT i.account_id AS account FROM identities i JOIN accounts a ON a.id = i.account_id WHERE i.provider = ? AND i.subject = ? AND a.status IN ('guest','linked')",
+    "SELECT i.account_id AS account FROM identities i JOIN accounts a ON a.id = i.account_id WHERE i.provider = ? AND i.subject = ? AND a.status IN ('guest','linked','deleting')",
   ).bind(GOOGLE, subject).first<{ account: string }>();
   if (!row) return 'not_linked';
   return await adoptDevice(db, row.account, token, now) ? row.account : 'bad_token';
@@ -133,7 +141,7 @@ export async function recoverWithCode(db: D1Like, code: string, token: string, n
   if (!before) {
     await db.batch([
       db.prepare(`INSERT INTO devices (id, account_id, token_hash, created_at, last_seen) SELECT ?, r.account_id, ?, ?, ? FROM recovery_codes r
-        JOIN accounts a ON a.id = r.account_id WHERE r.code_hash = ? AND a.status IN ('guest','linked')`).bind(parts[1], secretHash, now, now, codeHash),
+        JOIN accounts a ON a.id = r.account_id WHERE r.code_hash = ? AND a.status IN ('guest','linked','deleting')`).bind(parts[1], secretHash, now, now, codeHash),
       db.prepare('DELETE FROM recovery_codes WHERE code_hash = ? AND account_id IN (SELECT account_id FROM devices WHERE id = ?)').bind(codeHash, parts[1]),
     ]);
   }

@@ -27,7 +27,13 @@ const ERRORS: Record<string, string> = {
   unauthorized: 'บัญชีบนเครื่องนี้ใช้ไม่ได้แล้ว · ปิดแล้วเชื่อมต่อใหม่',
   content_version: 'เวอร์ชันเกมไม่ตรงกับเซิร์ฟเวอร์ · โหลดหน้าใหม่',
   unrecoverable: 'ออกจากระบบแล้วจะกลับเข้าบัญชีนี้ไม่ได้อีก · ผูก Google หรือออกรหัสกู้คืนก่อน',
+  account_deleting: 'บัญชีนี้รอการลบ · ยกเลิกการลบก่อนจึงจะทำรายการนี้ได้',
+  not_deleting: 'บัญชีนี้ไม่ได้รอการลบแล้ว',
+  too_late: 'เลยวันลบแล้ว · ยกเลิกไม่ได้',
 };
+// P09-02g: the phrase the player types before the deletion request is sent.
+export const DELETE_PHRASE = 'ลบบัญชี';
+const privacyLink = () => `<p class="account-privacy"><a href="${import.meta.env.BASE_URL}privacy.html" target="_blank" rel="noopener">นโยบายความเป็นส่วนตัว</a></p>`;
 const reasonOf = <T>(out: AccountOutcome<T>) => out.kind === 'refused' ? out.error : out.kind === 'failed' ? out.reason : '';
 const message = (code: string) => ERRORS[code] ?? `ทำรายการไม่สำเร็จ (${code})`;
 const dateText = (ms: number) => new Date(ms).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -41,6 +47,8 @@ export class AccountPanel {
   private confirmCode = false;
   // P09-02f: the server said signing out would leave no way back; the next press confirms.
   private confirmOut = false;
+  // P09-02g: the deletion confirm step is open.
+  private confirmDelete = false;
   private readonly el: HTMLElement;
   constructor(parent: HTMLElement, private readonly host: AccountHost) {
     this.el = document.createElement('section');
@@ -54,7 +62,7 @@ export class AccountPanel {
   get isOpen(): boolean { return !this.el.hidden; }
 
   async open(): Promise<void> {
-    this.note = ''; this.code = undefined; this.conflict = undefined; this.confirmCode = false; this.confirmOut = false;
+    this.note = ''; this.code = undefined; this.conflict = undefined; this.confirmCode = false; this.confirmOut = false; this.confirmDelete = false;
     this.el.hidden = false; this.el.innerHTML = '<div class="account-card"><p class="server-note">กำลังโหลดบัญชี…</p></div>';
     const out = await this.call('กำลังโหลดบัญชี…', () => this.host.client.account());
     if (out.kind === 'ok') this.info = out.value; else { this.info = undefined; this.note = message(reasonOf(out)); }
@@ -70,8 +78,21 @@ export class AccountPanel {
     try { return await run(); } finally { this.host.idle(); }
   }
 
+  // P09-02g: an account that waits for deletion only shows the date and the way back.
+  private renderDeleting(i: AccountInfo): void {
+    const when = i.deleteAfter ? dateText(i.deleteAfter) : '—';
+    this.el.innerHTML = `<div class="account-card"><h2 id="account-title" tabindex="-1">บัญชีบนเซิร์ฟเวอร์</h2>`
+      + `<p class="account-status" data-status="deleting"><b>บัญชีนี้รอการลบ</b> · จะลบถาวรวันที่ ${when}</p>`
+      + (this.note ? `<p class="account-note" role="status">${this.note}</p>` : '')
+      + '<p>ระหว่างนี้เล่นต่อไม่ได้ · ยกเลิกได้จนถึงวันลบ แล้วบัญชีและความคืบหน้าจะกลับมาเหมือนเดิม · เครื่องอื่นเข้าด้วย Google หรือรหัสกู้คืนเพื่อยกเลิกได้</p>'
+      + '<button type="button" class="primary" data-account="undelete">ยกเลิกการลบบัญชี</button>'
+      + privacyLink() + '<button type="button" class="quiet" data-account="close">ปิด</button></div>';
+    this.el.querySelector<HTMLElement>('[data-account="undelete"]')?.focus({ preventScroll: true });
+  }
+
   private render(): void {
     const i = this.info;
+    if (i?.status === 'deleting') { this.renderDeleting(i); return; }
     const status = !i ? '' : i.google
       ? '<p class="account-status" data-status="linked"><b>ผูก Google แล้ว</b> · เข้าเล่นบัญชีนี้บนเครื่องอื่นได้ด้วยปุ่ม Google เดียวกัน</p>'
       : '<p class="account-status" data-status="guest"><b>บัญชีทดลอง · ยังไม่ผูก</b> · ถ้าล้างข้อมูลเบราว์เซอร์หรือเปลี่ยนเครื่อง จะกลับมาบัญชีนี้ได้ด้วย Google หรือรหัสกู้คืนเท่านั้น</p>';
@@ -96,10 +117,27 @@ export class AccountPanel {
         + (this.confirmOut ? `<p class="account-warn" role="alert">${ERRORS.unrecoverable}</p>` : '<p>ออกจากระบบเครื่องนี้แล้ว เครื่องนี้จะเริ่มบัญชีทดลองใหม่ · กลับเข้าบัญชีนี้ได้ด้วย Google หรือรหัสกู้คืน</p>')
         + `<button type="button" class="secondary" data-account="signout">${this.confirmOut ? 'ยืนยัน: ออกจากระบบ (กลับมาไม่ได้)' : 'ออกจากระบบเครื่องนี้'}</button>`
         + '<button type="button" class="secondary" data-account="signout-others">ออกจากระบบเครื่องอื่นทั้งหมด</button></section>' : '')
-      + '<button type="button" class="quiet" data-account="close">ปิด</button></div>';
+      + (i ? this.deleteSection(i) : '')
+      + privacyLink() + '<button type="button" class="quiet" data-account="close">ปิด</button></div>';
     const slot = this.el.querySelector<HTMLElement>('#account-google-button');
     if (slot) void renderGoogleButton(slot, token => void this.google(token)).then(ok => { if (!ok && slot.isConnected) slot.innerHTML = '<p class="account-warn">โหลดปุ่ม Google ไม่ได้ · ตรวจการเชื่อมต่อแล้วเปิดหน้านี้ใหม่</p>'; });
     (this.el.querySelector<HTMLElement>('[data-account="switch"]') ?? this.el.querySelector<HTMLElement>('#account-title'))?.focus({ preventScroll: true });
+  }
+
+  private deleteSection(i: AccountInfo): string {
+    const head = '<section class="account-delete" aria-labelledby="account-del"><h3 id="account-del">ลบบัญชี</h3>';
+    if (!this.confirmDelete) {
+      return `${head}<p>ลบบัญชีนี้และความคืบหน้าบนเซิร์ฟเวอร์ทั้งหมด · มีเวลา 14 วันให้เปลี่ยนใจ</p><button type="button" class="secondary" data-account="delete">ลบบัญชีนี้…</button></section>`;
+    }
+    return `${head}<div class="account-warn" role="alert"><p><b>ยืนยันการลบบัญชี</b></p><ul>`
+      + '<li>บัญชีจะรอการลบ 14 วัน ระหว่างนี้เล่นไม่ได้ แต่ยกเลิกได้</li>'
+      + '<li>เครื่องอื่นทั้งหมดจะถูกออกจากระบบทันที</li>'
+      + '<li>พ้น 14 วันแล้ว ค่าย ทีม ไอเทม และประวัติคำสั่งบนเซิร์ฟเวอร์จะถูกลบถาวร กู้คืนไม่ได้</li>'
+      + (!i.google && i.recoveryCodeAt === null ? '<li>บัญชีนี้ยังไม่ผูก Google และไม่มีรหัสกู้คืน · ถ้าล้างข้อมูลเบราว์เซอร์ระหว่างนี้ จะกลับมายกเลิกไม่ได้</li>' : '')
+      + '<li>เซฟที่อยู่ในเครื่องนี้ (ถ้ามี) ไม่ถูกลบ</li></ul></div>'
+      + `<label for="account-delete-input">พิมพ์ “${DELETE_PHRASE}” เพื่อยืนยัน</label>`
+      + '<input id="account-delete-input" autocomplete="off" spellcheck="false" maxlength="20">'
+      + '<div class="account-row"><button type="button" class="danger-button" data-account="delete-confirm">ยืนยันลบบัญชี</button><button type="button" class="secondary" data-account="delete-cancel">ไม่ลบ</button></div></section>';
   }
 
   private click(e: Event): void {
@@ -112,6 +150,10 @@ export class AccountPanel {
     else if (act === 'code') void this.issueCode();
     else if (act === 'signout') void this.signOut();
     else if (act === 'signout-others') void this.signOutOthers();
+    else if (act === 'delete') { this.confirmDelete = true; this.note = ''; this.render(); this.el.querySelector<HTMLElement>('#account-delete-input')?.focus({ preventScroll: true }); }
+    else if (act === 'delete-cancel') { this.confirmDelete = false; this.render(); }
+    else if (act === 'delete-confirm') void this.deleteAccount();
+    else if (act === 'undelete') void this.undelete();
     else if (act === 'copy' && this.code) { void navigator.clipboard?.writeText(this.code).then(() => { button.textContent = 'คัดลอกแล้ว'; }, () => { button.textContent = 'คัดลอกไม่ได้ · จดรหัสด้วยมือ'; }); }
   }
 
@@ -153,6 +195,19 @@ export class AccountPanel {
     const out = await this.call('กำลังออกจากระบบเครื่องอื่น…', () => this.host.client.signOut('others'));
     this.note = out.kind === 'ok' ? (out.value ? `ออกจากระบบเครื่องอื่นแล้ว ${out.value} เครื่อง` : 'ไม่มีเครื่องอื่นที่เข้าบัญชีนี้อยู่') : message(reasonOf(out));
     this.render();
+  }
+  private async deleteAccount(): Promise<void> {
+    const input = this.el.querySelector<HTMLInputElement>('#account-delete-input');
+    if ((input?.value.trim() ?? '') !== DELETE_PHRASE) { this.note = `พิมพ์ “${DELETE_PHRASE}” ให้ตรงก่อนกดยืนยัน`; this.render(); this.el.querySelector<HTMLElement>('#account-delete-input')?.focus({ preventScroll: true }); return; }
+    this.confirmDelete = false;
+    const out = await this.call('กำลังส่งคำขอลบบัญชี…', () => this.host.client.deleteAccount());
+    if (out.kind !== 'ok') { this.note = message(reasonOf(out)); this.render(); return; }
+    this.info = out.value; this.note = 'ส่งคำขอลบบัญชีแล้ว'; this.render();
+  }
+  private async undelete(): Promise<void> {
+    const out = await this.call('กำลังยกเลิกการลบ…', () => this.host.client.cancelDeletion());
+    if (out.kind !== 'ok') { this.note = message(reasonOf(out)); this.render(); return; }
+    this.close(); this.host.switched('ยกเลิกการลบบัญชีแล้ว · เล่นต่อได้ตามเดิม');
   }
   private async recover(): Promise<void> {
     const input = this.el.querySelector<HTMLInputElement>('#account-code-input');

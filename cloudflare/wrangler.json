@@ -22,6 +22,10 @@
       {
         "name": "GAME",
         "class_name": "GameAccount"
+      },
+      {
+        "name": "LIMIT",
+        "class_name": "RateLimit"
       }
     ]
   },
@@ -31,6 +35,17 @@
       "new_sqlite_classes": [
         "GameAccount"
       ]
+    },
+    {
+      "tag": "v2",
+      "new_sqlite_classes": [
+        "RateLimit"
+      ]
     }
-  ]
+  ],
+  "triggers": {
+    "crons": [
+      "17 * * * *"
+    ]
+  }
 }

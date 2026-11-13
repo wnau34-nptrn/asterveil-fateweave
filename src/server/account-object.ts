@@ -2,6 +2,7 @@ import { canonicalJson, type CommandBook, type CommandRequest } from '../core/co
 import type { CloudSaveUpload } from '../core/cloud/cloud-save';
 import type { Game } from '../core/save/expedition-save';
 import { sha256Hex } from './accounts';
+import type { RateLimiter } from './rate-limit';
 import { OTHER_DEVICE, type GameHost, type HostState, type HostStore, type ImportRecord, type LogEntry, type Snapshot } from './game-host';
 
 // The Worker forwards the device's session id (checked there) in this header.
@@ -13,7 +14,7 @@ export const SESSION_HEADER = 'X-Fateweave-Session';
 // The subset of the Durable Object SQLite API used here.
 export interface SqlCursor<T> { toArray(): T[] }
 export interface SqlStorageLike { exec<T = Record<string, unknown>>(query: string, ...bindings: unknown[]): SqlCursor<T> }
-export interface DurableStateLike { storage: { sql: SqlStorageLike; transactionSync<T>(fn: () => T): T } }
+export interface DurableStateLike { storage: { sql: SqlStorageLike; transactionSync<T>(fn: () => T): T; deleteAll?(): Promise<void> } }
 
 const SCHEMA = [
   'CREATE TABLE IF NOT EXISTS state (id INTEGER PRIMARY KEY CHECK (id = 1), game TEXT, book TEXT NOT NULL, updated_at INTEGER NOT NULL)',
@@ -100,10 +101,31 @@ function asRequest(v: unknown): CommandRequest | null {
   return typeof r.requestId === 'string' && typeof r.seq === 'number' && 'command' in r ? { requestId: r.requestId, seq: r.seq, command: r.command } : null;
 }
 
+// P09-02g: the object's own count of an account's game requests (exact: one object serves one account), and the purge
+// of a deleted account (only the Worker's Cron sends it, after the grace period; see deletion.ts).
+export interface AccountObjectOptions {
+  limiter?: RateLimiter;
+  now?: () => number;
+  limits?: { commandPerSecond: number; readPerSecond: number };
+  purge?: () => Promise<void>;
+}
+
 // Request handling shared by the real Durable Object and tests.
-export async function handleAccountRequest(host: GameHost, request: Request): Promise<Response> {
+export async function handleAccountRequest(host: GameHost, request: Request, options: AccountObjectOptions = {}): Promise<Response> {
   const path = new URL(request.url).pathname;
+  if (path === '/purge' && request.method === 'POST') {
+    if (!options.purge) return reply({ error: 'not_found' }, 404);
+    await options.purge();
+    return reply({ purged: true });
+  }
   if (path === '/verify' && request.method === 'POST') return reply(host.verify());
+  if (options.limiter && options.limits && (path === '/command' || path === '/state' || path === '/session')) {
+    const writes = path === '/command';
+    const limit = writes ? options.limits.commandPerSecond : options.limits.readPerSecond;
+    if (!options.limiter.allow(writes ? 'cmd' : 'read', limit, 1000, (options.now ?? Date.now)())) {
+      return Response.json({ error: 'rate_limited' }, { status: 429, headers: { 'Cache-Control': 'no-store', 'Retry-After': '1' } });
+    }
+  }
   const session = request.headers.get(SESSION_HEADER) ?? '';
   // D12: entering on this session takes the account over; any other session now gets 423 until it enters again.
   if (path === '/session' && request.method === 'POST') { host.claim(session); return reply(host.view()); }

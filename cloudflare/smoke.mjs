@@ -4,7 +4,8 @@
 // Creates a throwaway guest, sends createCommander → depart, retries a request, reads the state, checks the one-session
 // lock (423 other_device), runs the replay audit, moves the account with a recovery code and checks Google sign-in is
 // configured (P09-02d), checks that the audit is admin-only (P09-02f: with ADMIN_D1_CONFIG set, the throwaway account is
-// made an admin in D1 for the check and the row removed afterwards) and signs devices out (P09-02f),
+// made an admin in D1 for the check and the row removed afterwards), signs devices out (P09-02f), asks for and cancels
+// an account deletion (P09-02g),
 // checks no seed leaves the server and prints bytes and round-trip times. Prints no token.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
@@ -92,6 +93,16 @@ assert.equal((await call('old device signed out', '/v1/account', { token })).sta
 assert.deepEqual((await call('sign out (warned)', '/v1/sessions/revoke', { method: 'POST', token: moved, body: {} })).json, { error: 'unrecoverable' });
 assert.deepEqual((await call('sign out (confirmed)', '/v1/sessions/revoke', { method: 'POST', token: moved, body: { confirm: true } })).json, { revoked: 1 });
 assert.equal((await call('signed out', '/v1/account', { token: moved })).status, 401);
+// P09-02g deletion: a second throwaway guest asks for deletion (the game then refuses), cancels, and asks again; it is
+// left waiting, so the hourly purge removes it after the grace period.
+const del = (await call('guest (deletion)', '/v1/guest', { method: 'POST' })).json.token;
+assert.equal((await call('delete (no confirm)', '/v1/account/delete', { method: 'POST', token: del, body: {} })).status, 400);
+const asked = await call('delete', '/v1/account/delete', { method: 'POST', token: del, body: { confirm: 'delete' } });
+assert.equal(asked.json.status, 'deleting', asked.text); assert.ok(asked.json.deleteAfter > Date.now() + 13 * 86400000, asked.text);
+assert.deepEqual((await call('session while deleting', '/v1/session', { method: 'POST', token: del })).json, { error: 'account_deleting' });
+assert.equal((await call('cancel deletion', '/v1/account/cancel', { method: 'POST', token: del })).json.status, 'guest');
+assert.equal((await call('session after cancel', '/v1/session', { method: 'POST', token: del })).status, 200);
+assert.equal((await call('delete again', '/v1/account/delete', { method: 'POST', token: del, body: { confirm: 'delete' } })).json.status, 'deleting');
 console.log('label\tstatus\tbytes\tms');
 for (const r of rows) console.log(`${r.label}\t${r.status}\t${r.bytes}\t${r.ms}`);
 console.log('SMOKE OK');

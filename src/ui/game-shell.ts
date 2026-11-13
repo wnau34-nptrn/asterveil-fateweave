@@ -241,7 +241,7 @@ export class GameShell {
       ${offer ? `<div class="title-import"><p class="title-save">พบเซฟเดิมในเครื่องนี้<span class="title-chips">${offerChips}</span></p><button id="import-save" data-title="import" class="primary">นำเข้าเซฟนี้ไปยังบัญชีเซิร์ฟเวอร์</button><p class="title-import-note">นำเข้าได้ครั้งเดียวต่อบัญชี · เซฟในเครื่องยังเก็บไว้เหมือนเดิม</p></div>` : ''}
       <button id="new-game" data-title="new" class="${g || offer ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : offer ? 'เริ่มเกมใหม่บนเซิร์ฟเวอร์' : 'เริ่มเกม'}</button>
 
-      ${this.server ? `<button id="account-open" data-title="account" class="secondary">บัญชี · Google · รหัสกู้คืน</button><p class="title-server">เล่นผ่านเซิร์ฟเวอร์ทดลอง · ความคืบหน้าบันทึกบนเซิร์ฟเวอร์</p>${this.titleNote ? `<p class="title-server-note" role="status">${this.titleNote}</p>` : ''}` : this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p></div>`;
+      ${this.server ? `<button id="account-open" data-title="account" class="secondary">บัญชี · Google · รหัสกู้คืน</button><p class="title-server">เล่นผ่านเซิร์ฟเวอร์ทดลอง · ความคืบหน้าบันทึกบนเซิร์ฟเวอร์</p>${this.titleNote ? `<p class="title-server-note" role="status">${this.titleNote}</p>` : ''}` : this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p><a class="title-privacy" href="${import.meta.env.BASE_URL}privacy.html" target="_blank" rel="noopener">นโยบายความเป็นส่วนตัว</a></div>`;
     this.show('title');
     this.views.title.querySelector<HTMLElement>(g ? '#continue' : offer ? '#import-save' : '#new-game')?.focus({ preventScroll: true });
   }
@@ -378,9 +378,10 @@ export class GameShell {
       server: ['เซิร์ฟเวอร์ยังไม่ตอบ', 'คำสั่งล่าสุดยังไม่ได้รับคำตอบ · ส่งซ้ำได้ เซิร์ฟเวอร์จะไม่ทำซ้ำสองครั้ง'],
       content_version: ['เวอร์ชันเกมไม่ตรงกับเซิร์ฟเวอร์', 'โหลดหน้าใหม่เพื่อรับเกมเวอร์ชันล่าสุด'],
       unauthorized: ['บัญชีทดลองใช้ไม่ได้แล้ว', 'เชื่อมต่อใหม่เพื่อเริ่มบัญชีทดลองใหม่'],
+      deleting: ['บัญชีนี้รอการลบ', 'ขอลบบัญชีนี้ไว้แล้ว จึงเล่นต่อไม่ได้ · ยกเลิกการลบได้ที่หน้าบัญชีก่อนถึงวันลบ'],
     };
     const retrying = (problem === 'network' || problem === 'server') && this.server?.waitingRetry && then;
-    const action = problem === 'other_device' ? 'เล่นบนเครื่องนี้ต่อ' : problem === 'content_version' ? 'โหลดหน้าใหม่' : retrying ? 'ส่งอีกครั้ง' : 'เชื่อมต่อใหม่';
+    const action = problem === 'other_device' ? 'เล่นบนเครื่องนี้ต่อ' : problem === 'content_version' ? 'โหลดหน้าใหม่' : problem === 'deleting' ? 'เปิดหน้าบัญชี' : retrying ? 'ส่งอีกครั้ง' : 'เชื่อมต่อใหม่';
     const [title, detail] = text[problem];
     if (this.root.dataset.server === 'sending') { this.unlockForServer(); this.lockForServer('กำลังส่งไปเซิร์ฟเวอร์…'); }
     this.nextMove = undefined; this.stepShown = false;
@@ -391,6 +392,8 @@ export class GameShell {
     button.addEventListener('click', () => {
       delete this.serverPanel.dataset.problem; this.serverPanel.innerHTML = `<p class="server-note">กำลังเชื่อมต่อเซิร์ฟเวอร์…</p>`;
       if (problem === 'content_version') { location.reload(); return; }
+      // P09-02g: the account panel shows the deletion date and the cancel button; cancelling enters the account again.
+      if (problem === 'deleting') { this.unlockForServer(); this.showTitle(); void this.account?.open(); return; }
       if (retrying && this.server) { void this.server.retry().then(out => this.answer(out, then)); return; }
       this.unlockForServer(); this.connect('current');
     }, { once: true });

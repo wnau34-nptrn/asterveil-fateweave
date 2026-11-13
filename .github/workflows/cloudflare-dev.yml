@@ -2,7 +2,7 @@ name: Cloudflare development API
 
 on:
   pull_request:
-    paths: ['cloudflare/**', 'src/server/**', 'src/core/**', 'src/content/**', 'tests/server-api.test.ts', 'tests/server-account.test.ts', 'tests/server-perf.test.ts', 'tests/server-measure.test.ts', 'tests/fixtures/server-*.ts', 'scripts/content-version.mjs', '.github/workflows/cloudflare-dev.yml']
+    paths: ['cloudflare/**', 'src/server/**', 'src/core/**', 'src/content/**', 'tests/server-api.test.ts', 'tests/server-account.test.ts', 'tests/server-safety.test.ts', 'tests/server-perf.test.ts', 'tests/server-measure.test.ts', 'tests/fixtures/server-*.ts', 'scripts/content-version.mjs', '.github/workflows/cloudflare-dev.yml']
   push:
     branches: [feature/fateweave-initial-prototype]
     paths: ['cloudflare/**', 'src/server/**', 'src/core/**', 'src/content/**', 'scripts/content-version.mjs', '.github/workflows/cloudflare-dev.yml']
@@ -30,7 +30,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx vitest run tests/server-api.test.ts tests/server-account.test.ts tests/server-perf.test.ts
+      - run: npx vitest run tests/server-api.test.ts tests/server-account.test.ts tests/server-perf.test.ts tests/server-safety.test.ts
       - name: Bundle Worker without accessing Cloudflare
         run: $WRANGLER deploy --dry-run --config cloudflare/wrangler.json --outdir /tmp/asterveil-worker
 
@@ -112,7 +112,7 @@ jobs:
           sleep 15
           {
             echo "## Development API (content $CONTENT_VERSION)"
-            if [ "$smoke" = 0 ]; then echo "$WORKER_URL — smoke test passed (guest, session, createCommander, retry, gap, depart, state, one-device 423, admin-only replay audit, recovery code, Google config, sign-out; no seed in any response)."; else echo "$WORKER_URL — SMOKE TEST FAILED (exit $smoke)"; fi
+            if [ "$smoke" = 0 ]; then echo "$WORKER_URL — smoke test passed (guest, session, createCommander, retry, gap, depart, state, one-device 423, admin-only replay audit, recovery code, Google config, sign-out, deletion request/cancel; no seed in any response)."; else echo "$WORKER_URL — SMOKE TEST FAILED (exit $smoke)"; fi
             echo '```'; cat /tmp/smoke.txt; echo '```'
             echo "### Long log measurement (round trips from the runner)"
             echo '```'; cat /tmp/measure.txt; echo '```'

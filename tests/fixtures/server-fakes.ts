@@ -3,7 +3,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { sequenceSeeds } from '../../src/core/command/seed-source';
 import type { D1Like, D1Stmt } from '../../src/server/accounts';
 import { handleAccountRequest, sqlStore, type DurableStateLike } from '../../src/server/account-object';
-import { RateLimiter, type ApiDeps } from '../../src/server/api';
+import { LIMITS, RateLimiter, type ApiDeps } from '../../src/server/api';
 import { GameHost, type GameContext } from '../../src/server/game-host';
 import { GAME_CONTEXT } from '../../src/server/worker';
 import { currentActorId, resolveCommand } from '../../src/core/battle/engine';
@@ -50,7 +50,7 @@ export function fakeDurableState(): DurableStateLike & { db: DatabaseSync } {
   };
 }
 
-export interface Server { deps: ApiDeps; d1: ReturnType<typeof fakeD1>; objects: Map<string, { host: GameHost; state: ReturnType<typeof fakeDurableState> }>; clock: { t: number } }
+export interface Server { deps: ApiDeps; d1: ReturnType<typeof fakeD1>; objects: Map<string, { host: GameHost; state: ReturnType<typeof fakeDurableState>; limiter: RateLimiter }>; clock: { t: number } }
 export function server(seeds: number[] = [11, 22, 33, 44, 55, 66, 77, 88, 99], contentVersion = VERSION, context: GameContext = GAME_CONTEXT): Server {
   const d1 = fakeD1(); const objects: Server['objects'] = new Map(); const clock = { t: 1_000_000 };
   const draw = sequenceSeeds(seeds);
@@ -58,9 +58,10 @@ export function server(seeds: number[] = [11, 22, 33, 44, 55, 66, 77, 88, 99], c
     db: d1, contentVersion, allowedOrigins: ['https://wnau34-nptrn.github.io'], now: () => clock.t, limiter: new RateLimiter(),
     game(accountId) {
       let o = objects.get(accountId);
-      if (!o) { const state = fakeDurableState(); o = { state, host: new GameHost(sqlStore(state), context, () => draw.next(), contentVersion, () => clock.t) }; objects.set(accountId, o); }
-      const host = o.host;
-      return { fetch: (r: Request) => handleAccountRequest(host, r) };
+      if (!o) { const state = fakeDurableState(); o = { state, limiter: new RateLimiter(), host: new GameHost(sqlStore(state), context, () => draw.next(), contentVersion, () => clock.t) }; objects.set(accountId, o); }
+      const { host, limiter } = o;
+      // P09-02g: the object's own rate count, and the purge (the fake forgets the object, like deleteAll).
+      return { fetch: (r: Request) => handleAccountRequest(host, r, { limiter, limits: LIMITS, now: () => clock.t, purge: async () => { objects.delete(accountId); } }) };
     },
   };
   return { deps, d1, objects, clock };
