@@ -19,7 +19,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Next (owner review)
 
-- P09: 02g (#236) and 03 done. Owner: real contact line in `public/privacy.html`, test date T (import closes T−14), own admin row (PERF §2; also unlocks the feedback/telemetry views), Google consent publish; D8 open. Still open: inactive-guest cleanup, old-token reuse detection. Owner picks the next task (OD-13 next: P04); proposed prompt below.
+- P09: 02g (#236), 03 (#237) done; Pages plays through the dev API by default (#238, owner “ข้อ 1”). Owner: real contact line in `public/privacy.html`, test date T (import closes T−14), own admin row (PERF §2; unlocks feedback/telemetry views), Google consent publish. Open: inactive-guest cleanup, old-token reuse detection.
+- P04-00 scope sheet: [docs/design/p04/SCOPE_P04_00_TH.md](docs/design/p04/SCOPE_P04_00_TH.md) — **waiting for owner answers S1–S8** (system choices, no numbers); then P04-01 simulation.
 
 - Gacha: review visual direction/core choices; rates/costs/pacing stay adjustable. Do not auto-start G02–G05 or payments; real gacha needs P09/P04/ledger (OD-13).
 - UXD-08: regression 77/77 + 34 screens inspected 2026-11-11, team-page fixes and the single term ผังสกิล (owner “อนุมัติ”; [validation](docs/validation/uxd-08/README_TH.md)); real-device/human trial still open. Team-preset owner usability review remains open.
@@ -36,4 +37,4 @@ Cloud checkouts are fresh; verify remote head/ancestry, never reset unpushed wor
 
 ## Opening prompt for next chat
 
-P04-00 (Opus, proposed — owner confirms): read CLAUDE/CURRENT_STATE, docs/DEVELOPMENT_PLAN_TH.md §P04, OWNER_DECISIONS_TH.md (OD-01–OD-04, OD-14) and the gacha G00/G01 notes. OD-13 next after P09: write a short P04 scope sheet (economy and stars: universal shards, camp-level tree points, new/old/returning/irregular-player models) that lists the system choices the owner must make and the simulations each needs, without locking numbers (owner deferred numeric tuning) and without runtime/save changes. Branch claude/p04-00-scope; PR into `feature/fateweave-initial-prototype`.
+P04-01 (Opus; start only after the owner answers S1–S8 in docs/design/p04/SCOPE_P04_00_TH.md §6): read CLAUDE/CURRENT_STATE, that sheet, GACHA_G00/G01 and docs/validation/gacha-g00-g01-2026-11-09. Extend the G01 research script into the §4 player models with the chosen systems; report ranges for shard costs, shard income per week and tree points that meet OD-07, for the owner to pick. No runtime/save/rule change. Branch claude/p04-01-sim; PR into `feature/fateweave-initial-prototype`.
