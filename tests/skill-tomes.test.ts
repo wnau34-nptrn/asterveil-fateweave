@@ -40,7 +40,7 @@ describe('skill levels in battle', () => {
     const five = levelled('tracer', { mark: 5 }); expect(cast(five, turnOf(five, 'tracer'), 'tracer', 'mark', 'f1').turns[0]!.state.heroes.find(h => h.id === 'tracer')!.barrier).toBe(12);
   });
   it('members carry their levels into battle through the world definition', () => {
-    const p = newProfile(map, 3); p.members.guardian = { stars: 1, dupes: 0, skillLevels: { bash: 3 } };
+    const p = newProfile(map, 3); p.members.guardian = { stars: 1, shards: 0, skillLevels: { bash: 3 } };
     expect(memberDef(lookup, map, p, 'guardian')!.skillLevels).toEqual({ bash: 3 });
   });
 });
@@ -74,7 +74,7 @@ describe('raising skill levels at the camp', () => {
     expect(tradeTomes(p, MAPS, map, 'bulwark', 'small', 'bulwark').event).toEqual({ type: 'blocked', reason: 'line' });
   });
   it('dismissing a member returns half the tomes spent on them', () => {
-    const p = open(); p.company.push('tracer'); p.members.tracer = { stars: 1, dupes: 0, skillLevels: { execute: 3, mark: 4 } };
+    const p = open(); p.company.push('tracer'); p.members.tracer = { stars: 1, shards: 0, skillLevels: { execute: 3, mark: 4 } };
     // execute Lv3 = small 6; mark Lv4 = small 6 + medium 2 → half: small 6, medium 1 (blade line).
     expect(dismiss(p, map, 'tracer').profile.tomes!.blade).toEqual({ small: 6, medium: 1, large: 0 });
   });
@@ -113,7 +113,7 @@ describe('save v37', () => {
   it('round-trips skill levels, tomes, rift cores and run finds', () => {
     const p = open(); p.members.guardian!.skillLevels = { bash: 3, guard: 2 }; const { profile, run } = depart(p, map, lookup, 4);
     battleTomes(run, map, 'elite', run.roster.deployed); run.tomeWins = 2;
-    const text = raw({ profile, run }); expect(JSON.parse(text).version).toBe(58);
+    const text = raw({ profile, run }); expect(JSON.parse(text).version).toBe(59);
     expect(parseGame(text, map, lookup, MAPS)).toEqual({ profile, run });
   });
   it('rejects levels out of range or for another class’s skill, and tomes on a map without them', () => {
@@ -125,7 +125,7 @@ describe('save v37', () => {
     expect(() => parseGame(raw(ruins), MAPS[0]!, lookup, MAPS)).toThrow();
   });
   it('v36 refunds the release A classes’ small-tree ranks, grants their star skills and sends a changed run home', () => {
-    const p = newProfile(map, 3); p.members.tracer = { stars: 5, dupes: 0}; p.campXp = Math.max(p.campXp, xpAt(4)); p.members.guardian = { stars: 1, dupes: 0, talents: { a1: 2 } }; p.campXp = Math.max(p.campXp, xpAt(4));
+    const p = newProfile(map, 3); p.members.tracer = { stars: 5, shards: 0}; p.campXp = Math.max(p.campXp, xpAt(4)); p.members.guardian = { stars: 1, shards: 0, talents: { a1: 2 } }; p.campXp = Math.max(p.campXp, xpAt(4));
     const { run } = depart(p, map, lookup, 5);
     const old = legacyEnvelope(JSON.parse(raw({ profile: p, run }))); old.version = 36;
     old.profile.members.tracer.talents = { root: 1, a1: 2 }; old.run.members.tracer.talents = { root: 1, a1: 2 };

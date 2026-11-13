@@ -31,7 +31,7 @@ export const forestMap: MapDefinition = {
   zones: [
     { id: 'thicket', name: 'เส้นทางป่าทึบ', safe: false, base: 7, step: 4, cap: 40, levels: [3, 6], sets: ['shadow', 'thorn'],
       pool: [{ encounterId: 'beetle-spore', weight: 3 }, { encounterId: 'beetle-wall', weight: 2 }, { encounterId: 'stalker-spore', weight: 2 }, { encounterId: 'forest-swarm', weight: 1 }, { encounterId: 'thorn-host', weight: 1 }, { encounterId: 'shadow-stalker', weight: 1 }, { encounterId: 'rift-whelp', weight: 1 }],
-      loot: { ore: [5, 7], gold: [2, 5], ember: [0, 12], seal: [0, 0] } },
+      loot: { ore: [5, 7], gold: [2, 5], ember: [0, 12], shard: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ทางออกป่า', safe: true, base: 0, step: 0, cap: 0, pool: [] },
   ],
@@ -50,9 +50,9 @@ export const forestMap: MapDefinition = {
   herbs: [{ id: 'forest-herb', x: 13, y: 3 }],
   puzzles: { runes: [], boulders: [], levers: [], secrets: [{ id: 'forest-secret', x: 13, y: 12 }] },
   loot: {
-    tutorial: { ore: [10, 10], gold: [5, 5], ember: [1, 0], seal: [0, 0] },
-    boss: { ore: [32, 32], gold: [14, 14], ember: [1, 0], seal: [1, 0] },
-    chest: { common: { ore: [9, 13], gold: [4, 6], ember: [0, 30], seal: [0, 0] }, rare: { ore: [16, 20], gold: [8, 10], ember: [1, 0], seal: [1, 0] } },
+    tutorial: { ore: [10, 10], gold: [5, 5], ember: [1, 0], shard: [0, 0] },
+    boss: { ore: [32, 32], gold: [14, 14], ember: [1, 0], shard: [3, 0] },
+    chest: { common: { ore: [9, 13], gold: [4, 6], ember: [0, 30], shard: [0, 0] }, rare: { ore: [16, 20], gold: [8, 10], ember: [1, 0], shard: [3, 0] } },
   },
   elites: [
     // Forced: the only way north to the boss.

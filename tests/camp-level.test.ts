@@ -47,12 +47,12 @@ describe('camp level thresholds and cap', () => {
     expect(campProgress(map, 70)).toEqual({ level: 2, exp: 5, need: 110 }); expect(campProgress(map, capXp(map) + 30)).toEqual({ level: 10, exp: 0, need: 0 });
   });
   it('every owned member, in the team, the reserve, the camp or just hired, fights at the camp level', () => {
-    let p = { ...veteran(), campXp: xpAt(6), bank: { ore: 0, gold: 999, seal: 0, dust: 0 } };
+    let p = { ...veteran(), campXp: xpAt(6), bank: { ore: 0, gold: 999, shard: 0, dust: 0 } };
     p = placeMember(p, map, 'healer', 'bench').profile; expect(p.party.deployed).not.toContain('healer');
     const offer = boardOffers(p, map, lookup).findIndex(id => !p.company.includes(id));
     p = hire(p, map, lookup, offer).profile; const hired = p.company.at(-1)!;
-    expect(p.members[hired]).toEqual({ stars: 1, dupes: 0 });
-    for (const id of p.company) expect(memberDef(lookup, map, p, id)!.maxHp).toBe(memberDef(lookup, map, { members: { [id]: { stars: p.members[id]!.stars, dupes: 0 } }, campXp: xpAt(6) }, id)!.maxHp);
+    expect(p.members[hired]).toEqual({ stars: 1, shards: 0 });
+    for (const id of p.company) expect(memberDef(lookup, map, p, id)!.maxHp).toBe(memberDef(lookup, map, { members: { [id]: { stars: p.members[id]!.stars, shards: 0 } }, campXp: xpAt(6) }, id)!.maxHp);
     // Talent points come from the camp level (stars still add theirs until P04).
     expect(talentPoints(map, p.members[hired], hired, levelOf(map, p))).toBe(5);
     const run = depart(p, map, lookup, 9).run; expect(run.campXp).toBe(p.campXp); expect(levelOf(map, run)).toBe(6);
@@ -77,7 +77,7 @@ describe('EXP once per victory', () => {
   });
   it('the same victory pays the same EXP for a team of one, four or eight', () => {
     const big = firstBattle({ ...veteran(), company: ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'lio'],
-      members: Object.fromEntries(['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'lio'].map(id => [id, { stars: 1, dupes: 0 }])),
+      members: Object.fromEntries(['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'lio'].map(id => [id, { stars: 1, shards: 0 }])),
       party: { deployed: ['guardian', 'tracer', 'weaver', 'healer'], reserve: ['garran', 'mira', 'toma', 'lio'] } });
     const small = { ...big.run!, roster: { deployed: big.run!.roster.deployed, reserve: [] } };
     for (const id of big.run!.roster.reserve) { delete small.hp[id]; delete small.members[id]; }
@@ -105,13 +105,13 @@ describe('EXP once per victory', () => {
 
 describe('holding the whole catalog (OD-14)', () => {
   it('has no company cap; a known ID hired again is a duplicate, never a second ID', () => {
-    let p: Profile = { ...veteran(), bank: { ore: 0, gold: 99999, seal: 0, dust: 0 } };
+    let p: Profile = { ...veteran(), bank: { ore: 0, gold: 99999, shard: 0, dust: 0 } };
     for (let returns = 0; returns < 60 && p.company.length < hireable(map, lookup).length; returns++) {
       p = { ...p, returns, taken: [] };
       for (let i = 0; i < boardOffers(p, map, lookup).length; i++) if (!hireReason(p, map, lookup, i)) p = hire(p, map, lookup, i).profile;
     }
     expect([...p.company].sort()).toEqual(hireable(map, lookup).sort()); expect(new Set(p.company).size).toBe(p.company.length);
-    const dupes = Object.values(p.members).reduce((n, m) => n + m.dupes, 0); expect(dupes).toBeGreaterThan(0);
+    const shards = Object.values(p.members).reduce((n, m) => n + m.shards, 0); expect(shards).toBeGreaterThan(0);
     expect(parseGame(write({ profile: p, run: null }), map, lookup).profile).toEqual(p);
   });
   it('parked Odran and Isolde are never offered anew, but an owner keeps them, their stars and their duplicates', () => {
@@ -119,22 +119,22 @@ describe('holding the whole catalog (OD-14)', () => {
     for (let seed = 0; seed < 200; seed++) for (const returns of [0, 1, 2]) expect(boardOffers({ ...newProfile(map, seed), returns }, map, lookup).some(id => ['thiran', 'wila'].includes(id))).toBe(false);
     for (const m of MAPS) for (const r of m.recruits ?? []) expect(['thiran', 'wila']).not.toContain(r.hero);
     for (const m of MAPS) expect(m.draft?.pool ?? []).not.toContain('thiran');
-    const p = { ...veteran(), company: ['guardian', 'thiran', 'wila'], members: { guardian: { stars: 1, dupes: 0 }, thiran: { stars: 2, dupes: 1, talents: { p1: 1 } }, wila: { stars: 1, dupes: 0 } },
-      party: { deployed: ['guardian', 'thiran'], reserve: [] }, campXp: xpAt(4), bank: { ore: 0, gold: 999, seal: 0, dust: 0 } };
+    const p = { ...veteran(), company: ['guardian', 'thiran', 'wila'], members: { guardian: { stars: 1, shards: 0 }, thiran: { stars: 2, shards: 1, talents: { p1: 1 } }, wila: { stars: 1, shards: 0 } },
+      party: { deployed: ['guardian', 'thiran'], reserve: [] }, campXp: xpAt(4), bank: { ore: 0, gold: 999, shard: 0, dust: 0 } };
     const back = parseGame(write({ profile: p, run: null }), map, lookup).profile; expect(back).toEqual(p);
-    expect(buy(back, map, 'contract', 'wila').profile.members.wila!.dupes).toBe(1);
+    expect(buy(back, map, 'contract', 'wila').profile.members.wila!.shards).toBe(10);
   });
   it('a story or starter recruit the company already owns brings no second ID and no duplicate', () => {
-    const p = { ...veteran(), company: ['guardian', 'tracer', 'weaver', 'healer', 'lio'], members: Object.fromEntries(['guardian', 'tracer', 'weaver', 'healer', 'lio'].map(id => [id, { stars: 1, dupes: 0 }])) };
+    const p = { ...veteran(), company: ['guardian', 'tracer', 'weaver', 'healer', 'lio'], members: Object.fromEntries(['guardian', 'tracer', 'weaver', 'healer', 'lio'].map(id => [id, { stars: 1, shards: 0 }])) };
     const run = newExpedition(map, lookup, 4, { roster: p.party, members: structuredClone(p.members), campXp: p.campXp }, true); run.recruited = ['lio'];
-    const home = settle(p, run, 'withdrawn', map); expect(home.company.filter(id => id === 'lio')).toHaveLength(1); expect(home.members.lio).toEqual({ stars: 1, dupes: 0 });
+    const home = settle(p, run, 'withdrawn', map); expect(home.company.filter(id => id === 'lio')).toHaveLength(1); expect(home.members.lio).toEqual({ stars: 1, shards: 0 });
   });
 });
 
 describe('camp archive', () => {
   it('puts bench members away without touching what they own; bringing them back or dismissing clears it', () => {
     let p: Profile = { ...veteran(), company: ['guardian', 'tracer', 'weaver', 'healer', 'mira'], party: { deployed: ['guardian', 'tracer', 'weaver', 'healer'], reserve: [] },
-      members: { ...veteran().members, mira: { stars: 3, dupes: 2, talents: { a1: 1 }, skillLevels: { volley: 2 } } }, campXp: xpAt(5) };
+      members: { ...veteran().members, mira: { stars: 3, shards: 2, talents: { a1: 1 }, skillLevels: { volley: 2 } } }, campXp: xpAt(5) };
     expect(setArchived(p, 'guardian', true).event).toEqual({ type: 'blocked', reason: 'busy' });
     expect(setArchived(p, 'mira', false).event).toEqual({ type: 'blocked', reason: 'unchanged' });
     const before = structuredClone(p.members.mira);
@@ -150,7 +150,7 @@ describe('camp archive', () => {
 
 describe('save v43 → v44 migration', () => {
   it('takes the most advanced owned member (bench included), never the sum; everyone projects to it', () => {
-    const p = { ...veteran(), company: ['guardian', 'tracer', 'weaver', 'healer', 'garran'], members: Object.fromEntries(['guardian', 'tracer', 'weaver', 'healer', 'garran'].map(id => [id, { stars: 1, dupes: 0 }])) };
+    const p = { ...veteran(), company: ['guardian', 'tracer', 'weaver', 'healer', 'garran'], members: Object.fromEntries(['guardian', 'tracer', 'weaver', 'healer', 'garran'].map(id => [id, { stars: 1, shards: 0 }])) };
     const raw = v43({ profile: p, run: null }, { guardian: [4, 10], tracer: [3, 0], weaver: [1, 0], healer: [2, 60], garran: [6, 7] });
     const g = parseGame(JSON.stringify(raw), map, lookup, MAPS);
     expect(g.profile.campXp).toBe(xpAt(6) + 7); expect(levelOf(map, g.profile)).toBe(6);
@@ -169,8 +169,8 @@ describe('save v43 → v44 migration', () => {
     expect(() => parseGame(JSON.stringify(odd), map, lookup)).toThrow();
   });
   it('keeps stars, duplicates, grants, talents, gear and skill levels; no member loses talent budget', () => {
-    const p = { ...veteran(), members: { ...veteran().members, guardian: { stars: 3, dupes: 2, grants: ['c1s'], talents: { a1: 2, b1: 1 }, loadout: ['guard'], skillLevels: { bash: 2 } },
-      tracer: { stars: 1, dupes: 0, talents: { a1: 1 } } } } as Profile;
+    const p = { ...veteran(), members: { ...veteran().members, guardian: { stars: 3, shards: 2, grants: ['c1s'], talents: { a1: 2, b1: 1 }, loadout: ['guard'], skillLevels: { bash: 2 } },
+      tracer: { stars: 1, shards: 0, talents: { a1: 1 } } } } as Profile;
     const raw = v43({ profile: p, run: null }, { guardian: [5, 0], tracer: [2, 0] });
     const g = parseGame(JSON.stringify(raw), map, lookup);
     expect(g.profile.members).toEqual(p.members); expect(levelOf(map, g.profile)).toBe(5);
@@ -190,15 +190,15 @@ describe('save v43 → v44 migration', () => {
     const won = finishBattle(fought(again.run!), map, lookup); expect(won.state.campXp).toBeGreaterThan(g.run!.campXp);
   });
   it('guests and recruits still on their way do not count; this run’s recruits do; arrivals become a list', () => {
-    const ruins = MAPS[0]!; const p = { ...veteran(), company: ['guardian'], members: { guardian: { stars: 1, dupes: 0 } }, party: { deployed: ['guardian'], reserve: [] } };
+    const ruins = MAPS[0]!; const p = { ...veteran(), company: ['guardian'], members: { guardian: { stars: 1, shards: 0 } }, party: { deployed: ['guardian'], reserve: [] } };
     const roster = { deployed: ['guardian', 'tracer', 'healer'], reserve: [] };
-    const run = newExpedition(ruins, lookup, 4, { roster, members: Object.fromEntries(roster.deployed.map(id => [id, { stars: 1, dupes: 0 }])) }, true);
+    const run = newExpedition(ruins, lookup, 4, { roster, members: Object.fromEntries(roster.deployed.map(id => [id, { stars: 1, shards: 0 }])) }, true);
     const env = v43({ profile: p, run }, { guardian: [2, 0] }, { guardian: [2, 0], tracer: [5, 0], healer: [7, 0] }) as { run: Record<string, unknown> };
     env.run.recruited = ['tracer']; env.run.guests = ['healer']; env.run.arrivals = { weaver: 9 };
     const g = parseGame(JSON.stringify(env), map, lookup, MAPS);
     // Seren (a guest, Lv7) and Aira's old arrival level do not count; Lyra (recruited on this run, Lv5) does.
     expect(g.profile.campXp).toBe(xpAt(5)); expect(g.run!.campXp).toBe(xpAt(5)); expect(g.run!.arrivals).toEqual(['weaver']);
-    expect(levelOf(map, g.run!)).toBe(5); expect(g.run!.members.healer).toEqual({ stars: 1, dupes: 0 });
+    expect(levelOf(map, g.run!)).toBe(5); expect(g.run!.members.healer).toEqual({ stars: 1, shards: 0 });
   });
   it('preserves a frozen v42 hiring board and the taken offers', () => {
     const p = { ...veteran(), taken: [1], boardPool: heroCatalog(lookup, map).map(h => h.id).filter(id => !['metta', 'thiran', 'lalin', 'wila', 'kael', 'wynne', 'astrid'].includes(id)) };

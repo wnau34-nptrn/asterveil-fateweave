@@ -300,10 +300,10 @@ test('★3/★5 members: four command buttons fit phones and the ★3 skill cast
  for(const [width,height] of [[390,844],[320,568]] as const){
   const context=await browser.newContext({viewport:{width,height},hasTouch:true,isMobile:true});const page=await context.newPage();watchPage(page);
   const state=newExpedition(chapterOne,encounterById,1234);state.tutorialDone=true;
-  for(const id of Object.keys(state.members))state.members[id]={stars:5,dupes:0};
+  for(const id of Object.keys(state.members))state.members[id]={stars:5,shards:0};
   const data=encounterById('veil-siege')!;
   state.battle={kind:'random',encounterId:data.id,entry:{...state.hp},commands:[]};
-  const profile={...newProfile(chapterOne,5),commander:{name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'}};for(const id of Object.keys(state.members))profile.members[id]={stars:5,dupes:0};
+  const profile={...newProfile(chapterOne,5),commander:{name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'}};for(const id of Object.keys(state.members))profile.members[id]={stars:5,shards:0};
   await page.addInitScript(({raw,key})=>{localStorage.setItem(key,raw);},{raw:JSON.stringify(legacyEnvelope({version:6,profile,run:state})),key});
   await page.goto('./');await resume(page);if(await page.locator('#start').count())await page.locator('#start').click();
   await owner(page,'tracer');

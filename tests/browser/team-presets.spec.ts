@@ -15,7 +15,7 @@ const key = 'asterveil.fateweave.expedition.v1';
 const ids = ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'sefa', 'brann', 'lio'];
 function company(): Profile {
   const p = { ...newProfile(map, 21), tutorialDone: true, veteran: true as const, cleared: MAPS.map(m => m.id), commander: { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' } };
-  return { ...p, company: [...ids], members: Object.fromEntries(ids.map(id => [id, { stars: 1, dupes: 0 }])), party: { deployed: ids.slice(0, 5), reserve: ids.slice(5, 7) }, campXp: xpAt(5) };
+  return { ...p, company: [...ids], members: Object.fromEntries(ids.map(id => [id, { stars: 1, shards: 0 }])), party: { deployed: ids.slice(0, 5), reserve: ids.slice(5, 7) }, campXp: xpAt(5) };
 }
 const game = async (page: Page) => parseGame(await page.evaluate(k => localStorage.getItem(k)!, key), map, lookup, MAPS);
 

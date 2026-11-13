@@ -8,7 +8,7 @@ import { legacyEnvelope } from '../fixtures/legacy-save';
 import { chooseForgeTask } from './forge-navigation';
 const key='asterveil.fateweave.expedition.v1';
 function fixture(){
- const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.forgeLevel=6;p.bank={ore:120,dust:48,gold:20,seal:3};p.items=[{uid:1,slot:'body',rarity:1,level:3,affixes:['hp'],plus:2,investment:{ore:9,dust:2},levelInvestment:{ore:20,dust:2},set:'dawn'}];p.nextItem=2;return p;
+ const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.forgeLevel=6;p.bank={ore:120,dust:48,gold:20,shard:3};p.items=[{uid:1,slot:'body',rarity:1,level:3,affixes:['hp'],plus:2,investment:{ore:9,dust:2},levelInvestment:{ore:20,dust:2},set:'dawn'}];p.nextItem=2;return p;
 }
 async function seed(page:Page,p=fixture()){
  const raw=JSON.stringify(legacyEnvelope({version:25,profile:p,run:null}));expect(parseGame(raw,map,encounterById).profile.commander?.name).toBe('อารี');

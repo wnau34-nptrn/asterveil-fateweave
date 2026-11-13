@@ -29,10 +29,10 @@ function richProfile(): Profile {
   p.cleared = ['ruined-border', 'deep-forest', 'veil-frontier'];
   p.campXp = xpAt(10); p.forgeLevel = 6; p.storageTier = 1;
   for (const id of ['guardian', 'tracer', 'weaver', 'healer', 'kael', 'wynne', 'astrid', 'metta', 'lalin']) if (!p.company.includes(id)) p.company.push(id);
-  for (const id of p.company) p.members[id] ??= { stars: 1, dupes: 0 };
-  p.members.guardian = { stars: 3, dupes: 4 };
+  for (const id of p.company) p.members[id] ??= { stars: 1, shards: 0 };
+  p.members.guardian = { stars: 3, shards: 4 };
   p.party = { deployed: ['guardian', 'tracer', 'weaver', 'healer', 'kael'], reserve: ['wynne', 'astrid', 'metta'] };
-  p.bank = { ore: 640, dust: 120, gold: 2480, seal: 3 };
+  p.bank = { ore: 640, dust: 120, gold: 2480, shard: 3 };
   p.tomes = { bulwark: { small: 6, medium: 2, large: 0 }, blade: { small: 4, medium: 1, large: 1 }, accord: { small: 3, medium: 0, large: 0 } };
   p.riftCore = 2;
   p.potions = { salve: 3, tonic: 2, repel: 1, calm: 1 };

@@ -6,16 +6,16 @@ import {heroCatalog} from '../src/core/world/world';
 import {craftWeapon,weaponBlueprint,weaponCraftCost,weaponCraftReason,enhanceTo,raiseItemLevel,fuse,fusionRefund} from '../src/core/world/forge';
 import {itemValid} from '../src/core/world/equipment';
 import {parseGame,saveGame} from '../src/core/save/expedition-save';
-const setup=()=>({...newProfile(map,17),tutorialDone:true,forgeLevel:10,bank:{ore:1000,dust:1000,gold:30,seal:2}});
+const setup=()=>({...newProfile(map,17),tutorialDone:true,forgeLevel:10,bank:{ore:1000,dust:1000,gold:30,shard:2}});
 it('crafts a valid fixed starter for every owned class, including bench/support classes, without touching loot or RNG',()=>{
-  const p=setup(),ids=heroCatalog(lookup,map).map(h=>h.id);p.company=ids;p.members=Object.fromEntries(ids.map(id=>[id,{stars:1,dupes:0}]));p.hunt={target:'guardian',pity:{guardian:11,healer:4}};const before=structuredClone(p);
+  const p=setup(),ids=heroCatalog(lookup,map).map(h=>h.id);p.company=ids;p.members=Object.fromEntries(ids.map(id=>[id,{stars:1,shards:0}]));p.hunt={target:'guardian',pity:{guardian:11,healer:4}};const before=structuredClone(p);
   for(const id of ids){const out=craftWeapon(p,map,id,10);expect(out.event).toEqual({type:'forged',uid:1,action:'craft'});expect(out.profile.items).toEqual([weaponBlueprint(map,id,10,1)]);expect(itemValid(map,out.profile.items[0]!,ids)).toBe(true);expect(out.profile.items[0]).toMatchObject({rarity:1,q:{main:100,affixes:[100]},affixes:[map.equipment.supportHeroes.includes(id)?'support':'attack']});expect(out.profile.items[0]!.set).toBeUndefined();expect(out.profile.forge).toBe(p.forge);expect(out.profile.seed).toBe(p.seed);expect(out.profile.hunt).toEqual(p.hunt);expect(out.profile.party).toEqual(p.party);}
   expect(p).toEqual(before);
 });
 it('pays the displayed cost atomically, allocates one UID, and roundtrips v25 including equipped active-run provenance',()=>{
   const p=setup();expect(weaponCraftCost(map,1)).toEqual({ore:18,dust:4});expect(weaponCraftCost(map,6)).toEqual({ore:48,dust:9});
   let out=craftWeapon(p,map,'guardian',6).profile;expect(out.bank).toEqual({...p.bank,ore:952,dust:991});expect(out.nextItem).toBe(2);expect(out.items[0]!.investment).toBeUndefined();expect(out.items[0]!.levelInvestment).toBeUndefined();expect(out).toEqual(craftWeapon(p,map,'guardian',6).profile);
-  out=equip(out,'guardian',1).profile;const game=depart(out,map,lookup,77);let raw='';saveGame({getItem:()=>null,setItem:(_k,v)=>{raw=v;}},game);expect(JSON.parse(raw).version).toBe(58);expect(parseGame(raw,map,lookup)).toEqual(game);
+  out=equip(out,'guardian',1).profile;const game=depart(out,map,lookup,77);let raw='';saveGame({getItem:()=>null,setItem:(_k,v)=>{raw=v;}},game);expect(JSON.parse(raw).version).toBe(59);expect(parseGame(raw,map,lookup)).toEqual(game);
 });
 it('blocks invalid choices, insufficient funds, full or pending storage and exhausted UIDs before any mutation',()=>{
   const p=setup();for(const level of [0,-1,1.5,11,NaN,Infinity])expect(craftWeapon(p,map,'guardian',level).profile).toBe(p);

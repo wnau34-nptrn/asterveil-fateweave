@@ -20,7 +20,7 @@ function profile(): Profile {
   p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
   p.cleared = ['ruined-border', 'deep-forest', 'veil-frontier']; p.campXp = xpAt(10);
   for (const id of ['guardian', 'tracer', 'weaver', 'healer', 'kael', 'wynne', 'astrid', 'metta', 'lalin', 'garran', 'lio']) if (!p.company.includes(id)) p.company.push(id);
-  for (const id of p.company) p.members[id] ??= { stars: 1, dupes: 0 };
+  for (const id of p.company) p.members[id] ??= { stars: 1, shards: 0 };
   p.party = { deployed: ['guardian', 'tracer', 'weaver', 'healer', 'kael'], reserve: ['wynne', 'astrid', 'metta'] };
   const withPresets = p as Profile & { presets?: unknown };
   if (process.env.TEAM_SHOTS_PRESETS) withPresets.presets = [

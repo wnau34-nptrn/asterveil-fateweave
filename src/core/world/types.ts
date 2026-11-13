@@ -17,13 +17,13 @@ export interface ZoneDefinition {
   sets?: readonly SetId[];
 }
 // Map-collected resources. Ore will pay for hiring, embers revive one fallen
-// member at a camp, and seals will substitute a duplicate in star upgrades.
+// member at a camp, and universal shards (P04-02, OD-15–18: they replaced contract seals) pay for any star.
 // `gold` (gold coins) pays only for hiring; ore stays for star upgrades, brewing and the forge.
-export type ResourceId = 'ore' | 'gold' | 'ember' | 'seal';
+export type ResourceId = 'ore' | 'gold' | 'ember' | 'shard';
 export type Resources = Record<ResourceId, number>;
-// A roll gives `min..max` ore; ember/seal give `[guaranteed, percent chance of one more]`.
-// `ore` and `gold` are [min, max]; `ember` and `seal` are [base, chance of one more %].
-export interface LootTable { ore: readonly [number, number]; gold: readonly [number, number]; ember: readonly [number, number]; seal: readonly [number, number] }
+// A roll gives `min..max` ore; ember/shard give `[guaranteed, percent chance of one more]`.
+// `ore` and `gold` are [min, max]; `ember` and `shard` are [base, chance of one more %].
+export interface LootTable { ore: readonly [number, number]; gold: readonly [number, number]; ember: readonly [number, number]; shard: readonly [number, number] }
 export type ChestTier = 'common' | 'rare';
 export interface ChestDefinition { id: string; x: number; y: number; tier: ChestTier }
 export interface MapDefinition {
@@ -174,7 +174,7 @@ export interface PuzzleDefinitions {
 export type SideQuestKind = 'wins' | 'elites' | 'secrets' | 'puzzles' | 'rareChests' | 'herbs';
 export interface SideQuestDefinition {
   id: string; npc: string; kind: SideQuestKind; target: number;
-  reward: { ore?: number; gold?: number; seal?: number; dust?: number; potions?: Partial<Record<PotionId, number>> };
+  reward: { ore?: number; gold?: number; shard?: number; dust?: number; potions?: Partial<Record<PotionId, number>> };
 }
 // Guided tasks (master plan A4): one per camp NPC and lobby system, shown once the system opens. Done is read from the
 // profile (`guideDone`); the small reward is claimed once, or the task is skipped.
@@ -191,16 +191,16 @@ export interface EventRules {
   // Bandits: a battle from the zone pool one level above the tile; the win always drops an item. Sneaking fills pressure.
   banditLevelBonus: number;
   // Shrine: prayer heals standing members `prayHeal`% and wounds every brought member `prayWound`% max HP for the run.
-  prayHeal: number; prayWound: number; maxWound: number; offerOre: number; offerSeal: number;
+  prayHeal: number; prayWound: number; maxWound: number; offerOre: number; offerShard: number;
   merchant: Readonly<Record<PotionId, number>>;
-  traveller: { ore: number; seal: number };
+  traveller: { ore: number; shard: number };
   // Rift: an energy battle at the tile's level; the win brings veil dust home.
   riftEncounterId: string; riftDust: number;
   // Elites: EXP multiplier and the drop's rarity weights.
   eliteExp: number; eliteRarityWeights: readonly number[];
   // An optional elite (not on a gate) pays more to make challenging it worth the risk: its own EXP multiplier and
   // rarity weights, plus bonus gold and seals added to the battle's loot.
-  optionalElite: { exp: number; rarityWeights: readonly number[]; gold: number; seal: number };
+  optionalElite: { exp: number; rarityWeights: readonly number[]; gold: number; shard: number };
   // A mini-boss (3B) replaces the zone loot with its own table and uses its own EXP multiplier and rarity weights.
   miniBoss: { exp: number; rarityWeights: readonly number[]; loot: LootTable };
 }
@@ -220,10 +220,10 @@ export interface PotionRules {
 }
 // Forge (2D-4, draft numbers). Enhancing always succeeds: +1 costs `ore + orePerPlus × n` ore and ceil(n × dustPerPlus) dust
 // for the n-th level, up to `plusCap[rarity]`; each level adds `plusPercent` to the slot's base stats (not affixes).
-// Fusing three pieces of one slot and rarity raises the chosen main piece one rarity; rerolling one affix costs a seal.
+// Fusing three pieces of one slot and rarity raises the chosen main piece one rarity; rerolling one affix costs universal shards.
 // Recycling returns base salvage plus paid enhancement and item-Lv investment.
 export interface ForgeRules {
-  transfer:{ore:number;dust:number;seal:number};
+  transfer:{ore:number;dust:number;shard:number};
   craft: {ore:number;dust:number;orePerLevel:number;dustPerLevel:number};
   itemLevel: {baseCap:number; orePerLevel:number; dustPerLevel:number; unlocks:readonly {elite:string;cap:number}[];
     // Completing a map (normal difficulty) raises the cap; other maps leave it alone (chapters, 2026-10-21).
@@ -231,7 +231,7 @@ export interface ForgeRules {
   plusCap: readonly number[]; plusPercent: number; ore: number; orePerPlus: number; dustPerPlus: number;
   // Smelting (owner-approved 2026-10-16): `smeltOre` ore per veil dust, at most `smeltCap` dust per return home.
   smeltOre: number; smeltCap: number;
-  fuseCount: number; rerollSeals: number; salvageDustPerPlus: number;
+  fuseCount: number; rerollShards: number; salvageDustPerPlus: number;
 }
 export type Gear = Partial<Record<GearSlot, Item>>;
 // ---- Talent tree (2D-1b, draft numbers) ----
@@ -265,7 +265,9 @@ export interface ProgressionRules {
   nextBase: number; nextPerLevel: number;
   // Hard mode (A9): every battle but the prologue fights `hardLevels` levels higher; the first hard clear of a map pays
   // `hardFirstClear` once.
-  hardLevels: number; hardFirstClear: { gold: number; seal: number };
+  hardLevels: number; hardFirstClear: { gold: number; shard: number };
+  // P04-02 (OD-17): universal shards for the first normal clear of each map (hard has its own above).
+  firstClearShards: number;
   // Hard-mode foes (A9 part 2): trait numbers for the resolver and the boss's extra move (percent of its heaviest).
   hardTraits: { thornsPercent: number; veilguardPercent: number; enrageBelow: number; enragePercent: number; bossMovePercent: number;
     // A10: a hard-mode boss fights this many levels above the other hard battles.
@@ -298,7 +300,7 @@ export interface MapTomes { boss: { medium: number; small: number }; first: { la
 // Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).
 // 4A camp market: each item has a gold price and a limit per return home. The gear box rolls a rare-or-better
 // piece at the company's highest level; the contract adds one duplicate to a chosen member.
-export const SHOP_ITEMS = ['seal', 'contract', 'gearbox', 'repel'] as const;
+export const SHOP_ITEMS = ['shard', 'contract', 'gearbox', 'repel'] as const;
 export type ShopItemId = typeof SHOP_ITEMS[number];
 export interface ShopRules {
   items: Record<ShopItemId, { price: number; limit: number }>;
@@ -313,9 +315,10 @@ export interface CompanyRules {
   // featured offer brings them in anew.
   parked?: readonly string[];
   hireCost: number; dismissRefund: number; offers: number; maxStars: number; starStatPercent: number;
-  starCosts: readonly { dupes: number; ore: number }[];
-  // Seals may stand in for this share (percent, rounded up) of a star's duplicates.
-  sealSharePercent: number;
+  // P04-02 (OD-15/16/23): each star costs character shards (a duplicate = `shardsPerDuplicate`) and ore; universal
+  // shards may pay any part of the shards.
+  starCosts: readonly { shards: number; ore: number }[];
+  shardsPerDuplicate: number;
   // P02 (OD-11): reserve slots by chapters cleared (index = maps cleared, the last entry from then on).
   reserveSlots: readonly number[];
 }
@@ -325,7 +328,7 @@ export interface CompanyRules {
 // `grants` (A6, save v34): big-tree nodes given free at full rank (skills a company had from stars before the tree).
 // `loadout` (A6): the active skills taken into battle (at most `progression.loadoutSize`; missing = the first unlocked).
 // `skillLevels` (save v37): active skills raised above Lv1 with tomes (missing = Lv1).
-export interface MemberProgress { stars: number; dupes: number; talents?: Talents; gear?: Gear; wound?: number; grants?: TalentNode[]; loadout?: ActionId[];
+export interface MemberProgress { stars: number; shards: number; talents?: Talents; gear?: Gear; wound?: number; grants?: TalentNode[]; loadout?: ActionId[];
   skillLevels?: Partial<Record<ActionId, number>> }
 // The team brought into one expedition and their star progress (fixed during the run).
 // `potions`: what the expedition packs (2D-5; missing = none).
@@ -337,7 +340,7 @@ export interface Company { roster: Roster; members: Record<string, MemberProgres
 export type RunOutcome = 'complete' | 'withdrawn' | 'wiped';
 // `dust` (veil dust, 2D-2) comes from salvage and pays for the forge (2D-4).
 // `gold` pays for hiring only.
-export interface Bank { ore: number; gold: number; seal: number; dust: number }
+export interface Bank { ore: number; gold: number; shard: number; dust: number }
 // The player's commander (non-combat leader of the company), created once (L2).
 // `camp`: the name of the player's ค่ายทหารรับจ้าง (owner 2026-10-21), shown in the lobby, summary and arena.
 export interface Commander { name: string; crest: string; color: string; camp: string }
@@ -389,9 +392,11 @@ export interface Profile {
   expeditions: number; completes: number;
   // Chapters (2026-10-17): ids of the maps this company has completed at least once (each opens the next map).
   cleared: string[];
+  // P04-02 (OD-22): story recruits already compensated (or met through the story), each at most once. Missing = none.
+  storyShards?: string[];
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
   // `tomes` (save v37): skill tomes brought home by that run (missing = none).
-  last: { outcome: RunOutcome; ore: number; gold: number; seal: number; steps: number; wins: number; items: number; salvaged: number; tomes?: number } | null;
+  last: { outcome: RunOutcome; ore: number; gold: number; shard: number; steps: number; wins: number; items: number; salvaged: number; tomes?: number } | null;
 }
 // What the v43 → v44 boundary did when an old save loaded (P01, never saved): the camp level taken from the best owned
 // member, and whether a battle in progress restarted from its entry HP.
@@ -494,7 +499,7 @@ export interface ExpeditionState {
   // 3D: glowing herbs picked up this run (they count for the herbalist's quest when the run settles, not on a wipe).
   herbs: string[];
   // 4B: camps reached this run ("x,y"), the destinations of free camp travel. 4C: how often each optional elite
-  // has come back after a rest (each return fights one level higher and pays no gold/seal bonus).
+  // has come back after a rest (each return fights one level higher and pays no gold/shard bonus).
   visited: string[]; respawns: Record<string, number>;
   // Map bag (2026-10-17): the company's own items (uid > 0) taken off on the map. They always come home, even
   // after a wipe. Found items taken off go back to `found`.

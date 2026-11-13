@@ -15,7 +15,7 @@ const dir = process.env.TEAM_FIVE_SHOTS;
 const key = 'asterveil.fateweave.expedition.v1';
 const ids = ['guardian', 'tracer', 'metta', 'weaver', 'healer'];
 const reserve = ['mira', 'toma', 'garran'];
-const members = Object.fromEntries([...ids, ...reserve].map(id => [id, { stars: 1, dupes: 0 }]));
+const members = Object.fromEntries([...ids, ...reserve].map(id => [id, { stars: 1, shards: 0 }]));
 const profile = (): Profile => ({ ...newProfile(map, 5), tutorialDone: true, commander: { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' },
   company: [...ids, ...reserve], members, party: { deployed: [...ids], reserve: [...reserve] } });
 async function open(page: Page, encounterId: string | null) {

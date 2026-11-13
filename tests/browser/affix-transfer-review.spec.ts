@@ -8,7 +8,7 @@ import { currentSave } from '../fixtures/current-save';
 import { xpAt } from '../fixtures/camp-level';
 const key='asterveil.fateweave.expedition.v1';
 async function open(page:Page,poor=false){
-  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.bank={ore:poor?11:100,dust:poor?2:100,seal:poor?0:5,gold:20};
+  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.bank={ore:poor?11:100,dust:poor?2:100,shard:poor?0:5,gold:20};
   p.items=[{uid:1,slot:'body',rarity:3,level:6,affixes:['hp','armour','regen'],q:{main:109,affixes:[80,95,105]},set:'dawn',plus:5,investment:{ore:30,dust:9},levelInvestment:{ore:20,dust:2},locked:true},
     {uid:2,slot:'body',rarity:4,level:3,affixes:['support','resist','barrier'],q:{main:90,affixes:[120,88,100]},special:'renewal',set:'wind',plus:2,investment:{ore:9,dust:2},levelInvestment:{ore:20,dust:2}}];p.nextItem=3;
   const raw=currentSave({profile:p,run:null});parseGame(raw,map,encounterById);

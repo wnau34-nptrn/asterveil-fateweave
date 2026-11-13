@@ -11,7 +11,7 @@ import { legacyEnvelope } from './fixtures/legacy-save';
 function setup(level = 4) {
   const profile = newProfile(map, 77); profile.tutorialDone = true;
   profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
-  profile.members.tracer = { stars: 1, dupes: 0 }; profile.campXp = xpAt(level);
+  profile.members.tracer = { stars: 1, shards: 0 }; profile.campXp = xpAt(level);
   return depart(profile, map, lookup, 1234);
 }
 

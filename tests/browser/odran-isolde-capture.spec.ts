@@ -40,7 +40,7 @@ for (const id of ['thiran', 'wila']) test(`odran-isolde character page ${id}`, a
   test.setTimeout(60000);
   const p = newProfile(map, 193); p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
   p.cleared = ['ruined-border', 'deep-forest', 'veil-frontier'];
-  for (const m of ['metta', 'thiran', 'lalin', 'wila']) { p.company.push(m); p.members[m] = { stars: 1, dupes: 0}; p.campXp = Math.max(p.campXp, xpAt(10)); }
+  for (const m of ['metta', 'thiran', 'lalin', 'wila']) { p.company.push(m); p.members[m] = { stars: 1, shards: 0}; p.campXp = Math.max(p.campXp, xpAt(10)); }
   p.party = { deployed: ['thiran', 'metta', 'wila', 'lalin'], reserve: [] };
   let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, { profile: p, run: null }); parseGame(raw, map, lookup);
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });

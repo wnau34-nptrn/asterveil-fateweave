@@ -15,7 +15,7 @@ const key = 'asterveil.fateweave.expedition.v1';
 async function open(page: Page) {
   const profile = newProfile(map, 123); profile.tutorialDone = true; profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
   const pool = (slot: 'weapon'|'body'|'head'|'gloves'|'boots'|'charm', hero = 'guardian') => affixPool(map.equipment, slot, slot === 'weapon' ? hero : undefined);
-  profile.members.guardian = { stars: 2, dupes: 0, talents: { a1: 1, b1: 1 }, gear: {
+  profile.members.guardian = { stars: 2, shards: 0, talents: { a1: 1, b1: 1 }, gear: {
     weapon: { uid: 1, slot: 'weapon', hero: 'guardian', rarity: 2, level: 5, plus: 2, affixes: pool('weapon').slice(0, 2), set: 'dawn' },
     body: { uid: 2, slot: 'body', rarity: 1, level: 4, affixes: pool('body').slice(0, 1) },
     head: { uid: 3, slot: 'head', rarity: 2, level: 5, affixes: pool('head').slice(0, 2), set: 'dawn' },

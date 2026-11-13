@@ -17,7 +17,7 @@ export function candidates(m: MapDefinition, hero: HeroDefinition, level: number
   const tree = m.talents[hero.id] ?? [], branches = [...new Set(tree.map(n => n.branch).filter(Boolean))];
   const out: MemberProgress[] = [];
   for (const branch of branches.length ? branches : [undefined]) for (const reverse of [false, true]) {
-    const member: MemberProgress = { stars: 1, dupes: 0 };
+    const member: MemberProgress = { stars: 1, shards: 0 };
     const talents: Talents = {};
     const ordered = [...tree].sort((a,b) => Number(b.branch === branch) - Number(a.branch === branch) || (a.tier ?? 0) - (b.tier ?? 0) || (reverse ? b.id.localeCompare(a.id) : a.id.localeCompare(b.id)));
     for (let i = 0; i < 50; i++) {
@@ -46,7 +46,7 @@ export function characterSim(seeds: readonly number[]): CharacterRow[] {
     const catalog = heroCatalog(lookup, m), level = Math.min(m.progression.levelCap, m.bossLevel ?? 1);
     for (const subject of catalog) {
       const team = squad(catalog, subject), builds = candidates(m, subject, level);
-      const members: Record<string, MemberProgress> = Object.fromEntries(team.map(h => [h.id, { stars: 1, dupes: 0, level, exp: 0, gear: gearFor(h.id, 'main', level) }]));
+      const members: Record<string, MemberProgress> = Object.fromEntries(team.map(h => [h.id, { stars: 1, shards: 0, level, exp: 0, gear: gearFor(h.id, 'main', level) }]));
       let best = builds[0]!, score = -Infinity;
       for (const build of builds) {
         const data = withParty(withLevel(lookup(m.bossEncounterId)!, m.bossLevel ?? 1, m.progression.monsterLevelPercent), team.map(h => starred(h, 1, m, level, h.id === subject.id ? build.talents : undefined, members[h.id]!.gear, h.id === subject.id ? build : undefined)));

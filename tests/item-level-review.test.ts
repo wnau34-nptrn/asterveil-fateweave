@@ -49,7 +49,7 @@ describe('task launcher and item level review',()=>{
     ui.click(button('review'),p);ui.click(button('confirm'),p);expect(host.level).not.toHaveBeenCalled();
   });
   it('keeps the committed receipt while inspecting another trial hero',()=>{
-    const {p,ui,host,level}=fixture();if(!p.company.includes('healer'))p.company.push('healer');p.members.healer={stars:1,dupes:0};level();ui.click(button('review'),p);ui.render(p);ui.click(button('confirm'),p);
+    const {p,ui,host,level}=fixture();if(!p.company.includes('healer'))p.company.push('healer');p.members.healer={stars:1,shards:0};level();ui.click(button('review'),p);ui.render(p);ui.click(button('confirm'),p);
     const result=raiseItemLevel(p,map,1,2);ui.leveled(result.profile,1);ui.render(result.profile);
     ui.change({id:'forge-preview-hero',value:'healer',dataset:{}} as HTMLSelectElement);
     const html=ui.render(result.profile);expect(html).toContain('data-receipt="true"');expect(html).toContain('<h3>Lv1 → Lv2</h3>');expect(host.level).toHaveBeenCalledTimes(1);

@@ -10,7 +10,7 @@ const key = 'asterveil.fateweave.expedition.v1';
 test('hire shots 390x844', async ({ browser }) => {
   test.skip(!dir, 'set HIRE_SHOTS to a folder');
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce', deviceScaleFactor: 2 }), page = await context.newPage();
-  const profile = newProfile(map, 17); profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; profile.tutorialDone = true; profile.completes = 9; profile.veteran = true; profile.bank = { ore: 50, dust: 5, gold: 2480, seal: 1 };
+  const profile = newProfile(map, 17); profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; profile.tutorialDone = true; profile.completes = 9; profile.veteran = true; profile.bank = { ore: 50, dust: 5, gold: 2480, shard: 1 };
   const raw = JSON.stringify(legacyEnvelope({ version: 23, profile, run: null }));
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('hire-seeded')) { localStorage.setItem(key, raw); sessionStorage.setItem('hire-seeded', '1'); } }, { key, raw });
   await page.goto('./'); await page.locator('#continue').click();

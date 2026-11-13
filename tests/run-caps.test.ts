@@ -18,17 +18,17 @@ const roundTrip = (state: ExpeditionState) => {
 
 describe('run ceilings', () => {
   it('clampRun fills every carried store to its limit', () => {
-    const s = run({ resources: { ore: RUN_CAP.ore + 5, gold: RUN_CAP.gold + 5, ember: RUN_CAP.ember + 1, seal: RUN_CAP.seal + 1 }, dust: RUN_CAP.dust + 9, riftCore: RUN_CAP.riftCore + 1, tomeWins: RUN_CAP.tomeWins + 1 });
+    const s = run({ resources: { ore: RUN_CAP.ore + 5, gold: RUN_CAP.gold + 5, ember: RUN_CAP.ember + 1, shard: RUN_CAP.shard + 1 }, dust: RUN_CAP.dust + 9, riftCore: RUN_CAP.riftCore + 1, tomeWins: RUN_CAP.tomeWins + 1 });
     s.tomes = emptyTomes(); s.tomes.blade.small = 100_000;
     clampRun(s);
-    expect(s.resources).toEqual({ ore: RUN_CAP.ore, gold: RUN_CAP.gold, ember: RUN_CAP.ember, seal: RUN_CAP.seal });
+    expect(s.resources).toEqual({ ore: RUN_CAP.ore, gold: RUN_CAP.gold, ember: RUN_CAP.ember, shard: RUN_CAP.shard });
     expect([s.dust, s.riftCore, s.tomeWins, s.tomes.blade.small]).toEqual([RUN_CAP.dust, RUN_CAP.riftCore, RUN_CAP.tomeWins, 99_999]);
   });
   it('a chest opened at the limits keeps a savable run', () => {
     const chest = map.chests[0]!;
-    const s = run({ position: { x: chest.x, y: chest.y }, resources: { ore: RUN_CAP.ore, gold: RUN_CAP.gold, ember: RUN_CAP.ember, seal: RUN_CAP.seal } });
+    const s = run({ position: { x: chest.x, y: chest.y }, resources: { ore: RUN_CAP.ore, gold: RUN_CAP.gold, ember: RUN_CAP.ember, shard: RUN_CAP.shard } });
     const r = openChest(s, map); expect(r.event.type).toBe('chest');
-    expect(r.state.resources).toEqual({ ore: RUN_CAP.ore, gold: RUN_CAP.gold, ember: RUN_CAP.ember, seal: RUN_CAP.seal });
+    expect(r.state.resources).toEqual({ ore: RUN_CAP.ore, gold: RUN_CAP.gold, ember: RUN_CAP.ember, shard: RUN_CAP.shard });
     expect(roundTrip(r.state).resources).toEqual(r.state.resources);
   });
   it('an optional elite stops returning after the respawn limit', () => {

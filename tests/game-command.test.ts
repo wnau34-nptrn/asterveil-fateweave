@@ -34,9 +34,9 @@ const key = (p: Point) => `${p.x},${p.y}`;
 // A rich camp: every map cleared, a full bank, a bench member, gear in the bag and a saved team preset.
 function campProfile(): Profile {
   let p: Profile = { ...newProfile(home, 4), tutorialDone: true, commander, cleared: maps.map(m => m.id), campXp: 400000,
-    bank: { ore: 9000, gold: 9000, seal: 60, dust: 9000 }, potions: { salve: 2, tonic: 1, repel: 1, calm: 0 } };
+    bank: { ore: 9000, gold: 9000, shard: 60, dust: 9000 }, potions: { salve: 2, tonic: 1, repel: 1, calm: 0 } };
   for (let i = 0; i < 3; i++) { const r = buy(p, home, 'gearbox'); if (r.event.type !== 'blocked') p = r.profile; }
-  p = { ...p, company: [...p.company, 'lio'], members: { ...p.members, lio: { stars: 1, dupes: 0 }, guardian: { ...p.members.guardian!, dupes: 9 } } };
+  p = { ...p, company: [...p.company, 'lio'], members: { ...p.members, lio: { stars: 1, shards: 0 }, guardian: { ...p.members.guardian!, shards: 9 } } };
   const saved = savePreset(p, home, lookup, 0, 'หลัก'); if (saved.event.type !== 'blocked') p = saved.profile;
   return p;
 }

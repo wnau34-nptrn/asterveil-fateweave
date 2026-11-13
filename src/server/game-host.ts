@@ -4,7 +4,7 @@ import { canonicalJson, emptyBook, processCommand, type CommandBook, type Comman
 import { applyCommand, isRejected, parseCommand, type CommandContext } from '../core/command/game-command';
 import type { SeedSource } from '../core/command/seed-source';
 import { decideUpload, type CloudSaveUpload } from '../core/cloud/cloud-save';
-import { parseGame, type Game } from '../core/save/expedition-save';
+import { parseGame, upgradeStoredGame, type Game } from '../core/save/expedition-save';
 import type { BattleReplay } from '../core/world/world';
 import { battleMemo } from '../core/command/battle-memo';
 
@@ -71,7 +71,11 @@ export class GameHost {
   constructor(private readonly store: HostStore, private readonly ctx: GameContext, private readonly draw: () => number,
     private readonly contentVersion: string, private readonly now: () => number = () => Date.now()) {}
 
-  private current(): HostState { return this.store.load() ?? { game: null, book: emptyBook() }; }
+  // P04-02 (save v59): a game stored before the shard change is converted when read; the next commit stores it so.
+  private current(): HostState {
+    const state = this.store.load() ?? { game: null, book: emptyBook() };
+    return { ...state, game: upgradeStoredGame(state.game, this.ctx.maps) };
+  }
 
   // D12 (owner 2026-11-12): one account plays on one session at a time and the session that enters last takes over.
   // `claim` makes `session` the active one; `admits` lets the active session through (the first session ever claims).
@@ -142,7 +146,7 @@ export class GameHost {
   // game. `from` is where the replay started.
   verify(): ReplayResult & { from: number } {
     const { game } = this.current(); const start = this.store.latestSnapshot();
-    const from = start ? { seq: start.seq, game: start.game } : { seq: 0, game: null };
+    const from = start ? { seq: start.seq, game: upgradeStoredGame(start.game, this.ctx.maps) } : { seq: 0, game: null };
     return { ...replayLog(this.store.entries(from.seq), this.ctx, game, from, battleMemo().replay), from: from.seq };
   }
 }

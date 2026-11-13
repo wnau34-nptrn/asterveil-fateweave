@@ -5,7 +5,7 @@ import {currentSave} from '../fixtures/current-save';
 const key='asterveil.fateweave.expedition.v1';
 async function open(page:Page){
   const p=newProfile(map,17);p.tutorialDone=true;p.veteran=true;p.cleared=['ruined-border','deep-forest','veil-frontier'];p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};
-  for(const id of ['lio','toma'])if(!p.company.includes(id)){p.company.push(id);p.members[id]={stars:1,dupes:0};}
+  for(const id of ['lio','toma'])if(!p.company.includes(id)){p.company.push(id);p.members[id]={stars:1,shards:0};}
   p.party={deployed:['guardian','tracer','weaver','healer'],reserve:['lio'],lanes:{guardian:'front',tracer:'front',weaver:'back',healer:'back'}};
   const raw=currentSave({profile:p,run:null});
   await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('formation-seed')){localStorage.setItem(key,raw);sessionStorage.setItem('formation-seed','1');}const original=Storage.prototype.setItem;const probe={writes:0};(window as unknown as {teamProbe:typeof probe}).teamProbe=probe;Storage.prototype.setItem=function(k,v){if(this===localStorage&&k===key)probe.writes++;original.call(this,k,v);};},{key,raw});

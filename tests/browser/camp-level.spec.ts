@@ -15,7 +15,7 @@ const key = 'asterveil.fateweave.expedition.v1';
 const ids = ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'sefa', 'brann', 'lio', 'metta'];
 function company(): Profile {
   const p = { ...newProfile(map, 21), tutorialDone: true, veteran: true as const, cleared: MAPS.map(m => m.id), commander: { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' } };
-  return { ...p, company: [...ids], members: Object.fromEntries(ids.map(id => [id, { stars: id === 'mira' ? 3 : 1, dupes: id === 'mira' ? 2 : 0 }])),
+  return { ...p, company: [...ids], members: Object.fromEntries(ids.map(id => [id, { stars: id === 'mira' ? 3 : 1, shards: id === 'mira' ? 2 : 0 }])),
     party: { deployed: ids.slice(0, 4), reserve: ids.slice(4, 8) }, campXp: xpAt(5) + 12 };
 }
 async function seed(page: Page, raw: string): Promise<void> {
@@ -63,7 +63,7 @@ test('an old save moves to the camp level once, says so, and keeps a backup', as
   const raw = JSON.stringify(legacy); await seed(page, raw);
   await expect(page.locator('#lobby-view [role=status]').first()).toContainText('ย้ายเซฟเป็นเลเวลค่ายแล้ว · ค่าย Lv7 ตามเซฟาที่ก้าวหน้าที่สุด');
   await page.screenshot({ path: info.outputPath('camp-migration-390.png') });
-  const now = JSON.parse(await saved(page)); expect(now.version).toBe(58); expect(now.profile.campXp).toBe(xpAt(7) + 30);
+  const now = JSON.parse(await saved(page)); expect(now.version).toBe(59); expect(now.profile.campXp).toBe(xpAt(7) + 30);
   expect(await page.evaluate(k => localStorage.getItem(k), legacyBackupKey(43))).toBe(raw);
   await page.reload(); await page.locator('#continue').click();
   await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('#lobby-view')).not.toContainText('ย้ายเซฟ');

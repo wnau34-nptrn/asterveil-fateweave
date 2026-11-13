@@ -115,7 +115,7 @@ describe('five a side in the resolver', () => {
 
 describe('the team of five in the world (save v45)', () => {
   const company = (deployed: string[], reserve: string[]): ExpeditionState =>
-    newExpedition(map, lookup, 9, { roster: { deployed, reserve }, members: Object.fromEntries([...deployed, ...reserve].map(id => [id, { stars: 1, dupes: 0 }])), campXp: xpAt(6), reserveSlots: 3 }, true);
+    newExpedition(map, lookup, 9, { roster: { deployed, reserve }, members: Object.fromEntries([...deployed, ...reserve].map(id => [id, { stars: 1, shards: 0 }])), campXp: xpAt(6), reserveSlots: 3 }, true);
   const battleAt = (s: ExpeditionState, encounterId: string): ExpeditionState => ({ ...s, battle: { kind: 'random', encounterId, entry: Object.fromEntries(s.roster.deployed.map(id => [id, s.hp[id]!])), commands: [] } });
   const finish = (s: ExpeditionState) => { const d = battleData(s, map, lookup)!; return finishBattle(recordBattle(s, map, lookup, play(d, battleState(s, map, lookup)!).commands), map, lookup); };
   it('five stand 3/2 at most; the reserve opens by chapter 3 → 4 → 5', () => {
@@ -126,7 +126,7 @@ describe('the team of five in the world (save v45)', () => {
     const p = newProfile(map, 1);
     expect(reserveSlots(p, map)).toBe(3); expect(reserveSlots({ ...p, cleared: ['ruined-border'] }, map)).toBe(4);
     expect(reserveSlots({ ...p, cleared: ['ruined-border', 'deep-forest'] }, map)).toBe(5); expect(reserveSlots({ ...p, veteran: true }, map)).toBe(5);
-    const full: Profile = { ...p, company: ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'sefa', 'brann'], members: Object.fromEntries(['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'sefa', 'brann'].map(id => [id, { stars: 1, dupes: 0 }])),
+    const full: Profile = { ...p, company: ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'sefa', 'brann'], members: Object.fromEntries(['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'sefa', 'brann'].map(id => [id, { stars: 1, shards: 0 }])),
       party: { deployed: ['guardian', 'tracer', 'weaver', 'healer', 'garran'], reserve: ['mira', 'toma', 'sefa'] } };
     expect(placeMember(full, map, 'brann', 'reserve').event).toEqual({ type: 'blocked', reason: 'full' });
     expect(placeMember({ ...full, cleared: ['ruined-border'] }, map, 'brann', 'reserve').profile.party.reserve).toHaveLength(4);
@@ -165,10 +165,10 @@ describe('the team of five in the world (save v45)', () => {
     s = rest(s, map, lookup).state; expect(s.fatigue).toBeUndefined();
   });
   it('saves v45 with fatigue and reserve slots; rejects forged values', () => {
-    const p: Profile = { ...newProfile(map, 2), tutorialDone: true, company: ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira'], members: Object.fromEntries(['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira'].map(id => [id, { stars: 1, dupes: 0 }])),
+    const p: Profile = { ...newProfile(map, 2), tutorialDone: true, company: ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira'], members: Object.fromEntries(['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira'].map(id => [id, { stars: 1, shards: 0 }])),
       party: { deployed: ['guardian', 'tracer', 'weaver', 'healer', 'garran'], reserve: ['mira'] } };
     const game = depart(p, map, lookup, 5); game.run.fatigue = { guardian: 3 };
-    const raw = write(game); expect(JSON.parse(raw).version).toBe(58);
+    const raw = write(game); expect(JSON.parse(raw).version).toBe(59);
     expect(parseGame(raw, map, lookup)).toEqual(game);
     const forge = (patch: Record<string, unknown>) => { const j = JSON.parse(raw); Object.assign(j.run, patch); return JSON.stringify(j); };
     for (const bad of [{ fatigue: { guardian: 13 } }, { fatigue: { brann: 1 } }, { fatigue: {} }, { reserveSlots: 6 }, { reserveSlots: 2 }])
@@ -176,7 +176,7 @@ describe('the team of five in the world (save v45)', () => {
   });
   it('v44 → v45: the profile fills the fifth field slot from the reserve and keeps everyone; a run in progress keeps four reserve slots', () => {
     const ids = ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'toma', 'sefa'];
-    const p: Profile = { ...newProfile(map, 2), tutorialDone: true, company: ids, members: Object.fromEntries(ids.map(id => [id, { stars: 1, dupes: 0 }])),
+    const p: Profile = { ...newProfile(map, 2), tutorialDone: true, company: ids, members: Object.fromEntries(ids.map(id => [id, { stars: 1, shards: 0 }])),
       party: { deployed: ids.slice(0, 4), reserve: ids.slice(4) } };
     const old = (run: unknown) => { const j = JSON.parse(write({ profile: p, run: null })); j.version = 44; delete j.profile.potions.calm; j.run = run; return JSON.stringify(j); };
     const migrated = parseGame(old(null), map, lookup);

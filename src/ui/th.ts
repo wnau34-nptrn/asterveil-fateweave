@@ -467,9 +467,9 @@ export const resourceText: Record<ResourceId, { name: string; use: string }> = {
   ore: { name: 'แร่ดาว', use: 'พากลับค่าย ใช้อัปดาว ปรุงยา และตีอุปกรณ์' },
   gold: { name: 'เหรียญทอง', use: 'พากลับค่าย ใช้จ้างทหารรับจ้างเท่านั้น' },
   ember: { name: 'ถ่านคืนชีพ', use: 'ชุบสมาชิกที่ล้ม 1 คนที่แคมป์' },
-  seal: { name: 'ตราสัญญา', use: 'พากลับค่าย ใช้แทนตัวซ้ำได้ครึ่งหนึ่งเมื่ออัปดาว' },
+  shard: { name: 'เศษกลาง', use: 'พากลับค่าย ใช้แทนเศษของใครก็ได้ตอนอัปดาว' },
 };
-export const resourceOrder: readonly ResourceId[] = ['ore', 'gold', 'ember', 'seal'];
+export const resourceOrder: readonly ResourceId[] = ['ore', 'gold', 'ember', 'shard'];
 // Skill tomes (save v37, docs/design/SKILL_TOMES_TH.md).
 export const tomeLineText: Record<TomeLine, string> = { bulwark: 'ปราการ', blade: 'ศัสตรา', accord: 'ประสาน' };
 export const tomeSizeText: Record<TomeSize, string> = { small: 'เล่มเล็ก', medium: 'เล่มกลาง', large: 'เล่มใหญ่' };
@@ -560,11 +560,11 @@ export function choiceText(choice: EventChoice, r: EventRules): { label: string;
     case 'fight': return { label: 'สู้', help: '' };
     case 'sneak': return { label: 'ลอบผ่าน', help: 'ไม่ต้องสู้ แต่ศัตรูในโซนจะตื่นตัวเต็มที่' };
     case 'pray': return { label: 'สวดขอพร', help: `คนที่ยืนอยู่ฟื้นเลือด ${r.prayHeal}% แต่เลือดสูงสุดทุกคนลด ${r.prayWound}% ตลอดรอบนี้` };
-    case 'offer': return { label: 'ถวายแร่', help: `จ่ายแร่ดาว ${r.offerOre} ได้ตราสัญญา ${r.offerSeal}` };
+    case 'offer': return { label: 'ถวายแร่', help: `จ่ายแร่ดาว ${r.offerOre} ได้เศษกลาง ${r.offerShard}` };
     case 'buy-salve': return { label: `ซื้อยาฟื้นแผล · ${r.merchant.salve} แร่`, help: '' };
     case 'buy-tonic': return { label: `ซื้อยาฟื้นหมู่ · ${r.merchant.tonic} แร่`, help: '' };
     case 'buy-repel': return { label: `ซื้อยาไล่อสูร · ${r.merchant.repel} แร่`, help: '' };
-    case 'help': return { label: 'ให้ยาฟื้นแผล', help: `ใช้ยาฟื้นแผล 1 ขวด ได้แร่ดาว ${r.traveller.ore} และตราสัญญา ${r.traveller.seal}` };
+    case 'help': return { label: 'ให้ยาฟื้นแผล', help: `ใช้ยาฟื้นแผล 1 ขวด ได้แร่ดาว ${r.traveller.ore} และเศษกลาง ${r.traveller.shard}` };
   }
 }
 export const eventChoices: Record<MapEventKind, readonly EventChoice[]> = {
@@ -583,14 +583,14 @@ export const sideQuestText: Record<SideQuestKind, { name: string; ask: (n: numbe
 export function rewardText(r: SideQuestDefinition['reward']): string {
   const parts: string[] = [];
   if (r.gold) parts.push(`เหรียญทอง ${r.gold}`); if (r.ore) parts.push(`แร่ดาว ${r.ore}`);
-  if (r.seal) parts.push(`ตราสัญญา ${r.seal}`); if (r.dust) parts.push(`ฝุ่นดาว ${r.dust}`);
+  if (r.shard) parts.push(`เศษกลาง ${r.shard}`); if (r.dust) parts.push(`ฝุ่นดาว ${r.dust}`);
   for (const [id, n] of Object.entries(r.potions ?? {}) as [PotionId, number][]) if (n) parts.push(`${potionText[id].name} ${n} ขวด`);
   return parts.join(' · ');
 }
 // ---- Camp market (4A): goods sold by the broker for gold coins. ----
 export const shopText: Record<ShopItemId, { name: string; help: string }> = {
-  seal: { name: 'ตราสัญญา', help: 'ใช้แทนตัวซ้ำได้ถึงครึ่งหนึ่งของที่ต้องใช้ตอนอัปดาว' },
-  contract: { name: 'ใบสัญญาซ้ำ', help: 'เพิ่มตัวซ้ำให้สมาชิกที่เลือกหนึ่งตัว ไว้อัปดาว' },
+  shard: { name: 'ห่อเศษกลาง', help: 'เศษกลาง 10 ชิ้น ใช้แทนเศษของใครก็ได้ตอนอัปดาว' },
+  contract: { name: 'ใบสัญญาซ้ำ', help: 'เพิ่มเศษ 10 ชิ้นให้สมาชิกที่เลือก ไว้อัปดาว' },
   gearbox: { name: 'หีบอุปกรณ์', help: 'อุปกรณ์ระดับหายากขึ้นไป เลเวลเท่าสมาชิกที่เลเวลสูงสุด' },
   repel: { name: 'ยาไล่อสูร', help: 'เก็บไว้ในคลังยา พกไปได้ตอนออกเดินทาง' },
 };

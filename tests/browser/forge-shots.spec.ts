@@ -18,9 +18,9 @@ for (const [width, height] of [[390, 844], [320, 568]] as const) {
     const strike = width === 390;
     test.skip(!dir, 'set FORGE_SHOTS to a folder');
     const context = await browser.newContext({ viewport: { width, height }, hasTouch: true, isMobile: true, reducedMotion: 'no-preference', deviceScaleFactor: 2 }), page = await context.newPage();
-    const profile = newProfile(map, 17); profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; profile.tutorialDone = true; profile.forgeLevel = 6; profile.completes = 9; profile.veteran = true; profile.bank = { ore: 500, dust: 50, gold: 20, seal: 3 };
+    const profile = newProfile(map, 17); profile.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; profile.tutorialDone = true; profile.forgeLevel = 6; profile.completes = 9; profile.veteran = true; profile.bank = { ore: 500, dust: 50, gold: 20, shard: 3 };
     const pool = affixPool(map.equipment, 'weapon', 'guardian');
-    profile.members.guardian = { stars: 3, dupes: 0, gear: { weapon: { uid: 1, slot: 'weapon', hero: 'guardian', rarity: 3, level: 6, affixes: pool.slice(0, 3), plus: 4, set: 'dawn' } } }; profile.campXp = Math.max(profile.campXp, xpAt(6));
+    profile.members.guardian = { stars: 3, shards: 0, gear: { weapon: { uid: 1, slot: 'weapon', hero: 'guardian', rarity: 3, level: 6, affixes: pool.slice(0, 3), plus: 4, set: 'dawn' } } }; profile.campXp = Math.max(profile.campXp, xpAt(6));
     profile.items = [{ uid: 2, slot: 'weapon', hero: 'guardian', rarity: 0, level: 3, affixes: [], plus: 2, investment: { ore: 9, dust: 2 }, levelInvestment: { ore: 20, dust: 2 } }, { uid: 3, slot: 'weapon', hero: 'guardian', rarity: 0, level: 1, affixes: [] }, { uid: 4, slot: 'body', rarity: 0, level: 4, affixes: [] }, { uid: 5, slot: 'weapon', hero: 'guardian', rarity: 0, level: 1, affixes: [] }]; profile.nextItem = 6;
     const raw = JSON.stringify(legacyEnvelope({ version: 35, profile, run: null }));
     parseGame(raw, map, encounterById);

@@ -21,7 +21,7 @@ test('summary shots 390x844', async ({ browser }) => {
   const [goal] = findTiles(map, 'goal'); run.position = { x: goal!.x, y: goal!.y + 1 };
   run.bossDefeated = true; run.elitesDefeated = ['scar-golem']; run.eventsDone = ['scar-rift'];
   run.steps = 48; run.wins = 8;
-  run.resources = { ore: 18, gold: 240, ember: 2, seal: 6 };
+  run.resources = { ore: 18, gold: 240, ember: 2, shard: 6 };
   const pool = (slot: 'weapon' | 'body' | 'charm') => affixPool(map.equipment, slot, slot === 'weapon' ? 'guardian' : undefined);
   run.found = [
     { uid: 0, slot: 'weapon', hero: 'guardian', rarity: 3, level: 6, plus: 2, affixes: pool('weapon').slice(0, 3) },

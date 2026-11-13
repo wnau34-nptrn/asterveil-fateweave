@@ -15,10 +15,10 @@ export const gameRules: GameRules = {
   sideQuests: [
     { id: 'smith-rare-ore', npc: 'smith', kind: 'rareChests', target: 6, reward: { ore: 30, dust: 25 } },
     { id: 'broker-proven', npc: 'broker', kind: 'wins', target: 30, reward: { gold: 40 } },
-    { id: 'trainer-elites', npc: 'trainer', kind: 'elites', target: 6, reward: { seal: 2 } },
+    { id: 'trainer-elites', npc: 'trainer', kind: 'elites', target: 6, reward: { shard: 20 } },
     { id: 'keeper-hidden', npc: 'keeper', kind: 'secrets', target: 6, reward: { gold: 20, dust: 15 } },
     { id: 'herbalist-glow', npc: 'herbalist', kind: 'herbs', target: 6, reward: { potions: { salve: 2, tonic: 2 } } },
-    { id: 'scout-puzzles', npc: 'scout', kind: 'puzzles', target: 6, reward: { ore: 40, seal: 1 } },
+    { id: 'scout-puzzles', npc: 'scout', kind: 'puzzles', target: 6, reward: { ore: 40, shard: 10 } },
   ],
   camp: { restHealPercent: 50, reviveHpPercent: 30, reserveHealPercent: 25, relightWins: 3, fatigue: { cap: 12, steps: [7, 11], stepPercent: 10, rest: 5 } },
   startingRoster: ['guardian', 'tracer', 'weaver', 'healer'],
@@ -42,7 +42,7 @@ export const gameRules: GameRules = {
   unlocks: { tree: 1, forge: 1, brew: 1, gear: 1, level: 2, quests: 1, hire: 2, team: 1, market: 2, fuse: 3, craft: 3, hunt: 2, transfer: 3, bossCharm: 3, hard: 3, tomes: 2 },
   // Phase 4A (draft): the camp market, paid in gold coins, and paid hiring-board refreshes (2 per return).
   shop: {
-    items: { seal: { price: 60, limit: 2 }, contract: { price: 150, limit: 1 }, gearbox: { price: 120, limit: 1 }, repel: { price: 30, limit: 2 } },
+    items: { shard: { price: 60, limit: 1 }, contract: { price: 150, limit: 1 }, gearbox: { price: 120, limit: 1 }, repel: { price: 30, limit: 2 } },
     gearboxWeights: [0, 0, 60, 30, 10], refreshCosts: [15, 30],
   },
   company: {
@@ -52,13 +52,14 @@ export const gameRules: GameRules = {
     // OD-14 (owner 2026-10-30): one character per class for now; Odran and Isolde rest until a class gets a second.
     parked: ['thiran', 'wila'],
     // (4A) see `shop` for the market and paid board refreshes.
-    sealSharePercent: 50,
     // P02 (OD-11, draft): reserve 3 → 4 → 5 as chapters 1 and 2 are cleared; with the field of five, at most 10 carried.
     reserveSlots: [3, 4, 5],
-    starCosts: [{ dupes: 1, ore: 20 }, { dupes: 2, ore: 40 }, { dupes: 3, ore: 70 }, { dupes: 4, ore: 110 }],
+    // P04-02 (OD-15/16/23, draft): character shards (a duplicate = 10) plus ore 15/30/45/70 (was 20/40/70/110);
+    // universal shards may pay any part of the shards. docs/validation/p04-01-2026-11-13.
+    starCosts: [{ shards: 10, ore: 15 }, { shards: 20, ore: 30 }, { shards: 30, ore: 45 }, { shards: 40, ore: 70 }], shardsPerDuplicate: 10,
   },
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
-  progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, expFoeHp: 95, summonExpPercent: 25, bossExpMultiplier: 3, nextBase: 20, nextPerLevel: 45, hardLevels: 5, hardFirstClear: { gold: 30, seal: 2 },
+  progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, expFoeHp: 95, summonExpPercent: 25, bossExpMultiplier: 3, nextBase: 20, nextPerLevel: 45, hardLevels: 5, hardFirstClear: { gold: 30, shard: 20 }, firstClearShards: 10,
     hardTraits: { thornsPercent: 20, veilguardPercent: 25, enrageBelow: 50, enragePercent: 30, bossMovePercent: 130, bossLevels: 8 }, treeTiers: [1, 5, 10, 15], loadoutSize: 3,
     // Skill tomes (docs/design/SKILL_TOMES_TH.md, owner-approved 2026-10-22, draft numbers).
     skillLevels: { max: 5, costs: [{ size: 'small', tomes: 2, gold: 5 }, { size: 'small', tomes: 4, gold: 8 }, { size: 'medium', tomes: 2, gold: 15 }, { size: 'large', tomes: 1, gold: 30, core: 1 }],
@@ -66,12 +67,12 @@ export const gameRules: GameRules = {
       battleEvery: 4, chest: { common: 0, rare: 1 }, elite: 2, hardPercent: 150, hardCore: 1, refundPercent: 50, tradeUp: 3, swap: 2 } },
   talents: talentTrees,
   eventRules: {
-    banditLevelBonus: 1, prayHeal: 25, prayWound: 5, maxWound: 20, offerOre: 10, offerSeal: 1,
-    merchant: { salve: 8, tonic: 14, repel: 10, calm: 10 }, traveller: { ore: 10, seal: 1 },
+    banditLevelBonus: 1, prayHeal: 25, prayWound: 5, maxWound: 20, offerOre: 10, offerShard: 3,
+    merchant: { salve: 8, tonic: 14, repel: 10, calm: 10 }, traveller: { ore: 10, shard: 3 },
     riftEncounterId: 'scout-patrol', riftDust: 12,
     eliteExp: 2, eliteRarityWeights: [0, 0, 60, 30, 10],
-    optionalElite: { exp: 3, rarityWeights: [0, 0, 20, 50, 30], gold: 12, seal: 1 },
-    miniBoss: { exp: 3, rarityWeights: [0, 0, 0, 60, 40], loot: { ore: [18, 24], gold: [9, 12], ember: [1, 0], seal: [1, 0] } },
+    optionalElite: { exp: 3, rarityWeights: [0, 0, 20, 50, 30], gold: 12, shard: 3 },
+    miniBoss: { exp: 3, rarityWeights: [0, 0, 0, 60, 40], loot: { ore: [18, 24], gold: [9, 12], ember: [1, 0], shard: [3, 0] } },
   },
   potions: {
     carry: 3, salvePercent: 40, tonicPercent: 20, repelSteps: 10, calmRecover: 4,
@@ -108,7 +109,7 @@ export const gameRules: GameRules = {
     // Forge (2D-4, draft numbers): caps +5/+10/+15/+20/+25, +6% base stats per level.
     hunt: {weaponBiasPercent:70,pityDrops:12},
     storage: {step:30,costs:[200,400,800]},
-    forge: { transfer:{ore:12,dust:3,seal:1}, craft:{ore:18,dust:4,orePerLevel:6,dustPerLevel:1}, itemLevel: {baseCap:3,orePerLevel:4,dustPerLevel:1,unlocks:[{elite:'gate-meadow',cap:6},{elite:'gate-thicket',cap:9},{elite:'scar-golem',cap:10}],clears:[{map:'veil-frontier',cap:10}]}, plusCap: [5, 10, 15, 20, 25], plusPercent: 6, ore: 3, orePerPlus: 1, dustPerPlus: 0.5, fuseCount: 3, rerollSeals: 1, salvageDustPerPlus: 1, smeltOre: 8, smeltCap: 30 },
+    forge: { transfer:{ore:12,dust:3,shard:10}, craft:{ore:18,dust:4,orePerLevel:6,dustPerLevel:1}, itemLevel: {baseCap:3,orePerLevel:4,dustPerLevel:1,unlocks:[{elite:'gate-meadow',cap:6},{elite:'gate-thicket',cap:9},{elite:'scar-golem',cap:10}],clears:[{map:'veil-frontier',cap:10}]}, plusCap: [5, 10, 15, 20, 25], plusPercent: 6, ore: 3, orePerPlus: 1, dustPerPlus: 0.5, fuseCount: 3, rerollShards: 10, salvageDustPerPlus: 1, smeltOre: 8, smeltCap: 30 },
     sets: {
       dawn: { two: [{ stat: 'hp', value: 10 }], four: { kind: 'barrier', amount: 12 } },
       wind: { two: [{ stat: 'speed', value: 3 }], four: { kind: 'firstStrike', amount: 0 } },

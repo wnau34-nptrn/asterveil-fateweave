@@ -1,5 +1,5 @@
 import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
-import { sealLimit, upgrade, upgradeCost, upgradeReason } from '../core/world/profile';
+import { upgrade, upgradeCost, upgradeReason } from '../core/world/profile';
 import { isBigTree, talentPoints } from '../core/world/talents';
 import type { MapDefinition, Profile, ProfileEvent } from '../core/world/types';
 import { levelOf, starred, wounded } from '../core/world/world';
@@ -9,18 +9,18 @@ import { heroText } from './th';
 
 // Presentation only: use the current cost/eligibility and stat helpers, including blocked previews.
 export function starUpgradeView(p: Profile, map: MapDefinition, id: string) {
-  const m=p.members[id],cost=upgradeCost(p,map,id),limit=m?sealLimit(map,m.stars):0;
-  const required=cost?cost.dupes+cost.seals:0,minimum=Math.max(0,required-limit);
+  // P04-02 (OD-15/16): the member's own shards first; universal shards may pay all of the rest.
+  const m=p.members[id],cost=upgradeCost(p,map,id);
+  const required=cost?cost.shards+cost.universal:0;
   const shortages:string[]=[];
   if(cost&&m){
-    if(m.dupes<minimum)shortages.push(`ตัวซ้ำขั้นต่ำขาด ${minimum-m.dupes}`);
-    if(p.bank.seal<cost.seals)shortages.push(`ตราสัญญาขาด ${cost.seals-p.bank.seal}`);
+    if(p.bank.shard<cost.universal)shortages.push(`เศษ${heroText[id]?.name??''}รวมเศษกลางขาด ${cost.universal-p.bank.shard}`);
     if(p.bank.ore<cost.ore)shortages.push(`แร่ดาวขาด ${cost.ore-p.bank.ore}`);
   }
-  return {cost,limit,required,minimum,shortages,reason:upgradeReason(p,map,id)};
+  return {cost,required,shortages,reason:upgradeReason(p,map,id)};
 }
 const equal=(a:unknown,b:unknown)=>JSON.stringify(a,(_key,v:unknown)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a.localeCompare(b))):v)===JSON.stringify(b,(_key,v:unknown)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a.localeCompare(b))):v);
-export interface StarSources { hire:boolean; contracts:number; seals:number }
+export interface StarSources { hire:boolean; contracts:number; shards:number }
 interface Snapshot { source:Profile; fingerprint:string; before:Profile; id:string }
 interface Receipt { before:Profile; after:Profile; fingerprint:string; saved:boolean }
 export class StarUpgrade {
@@ -66,29 +66,29 @@ export class StarUpgrade {
     const newActions=next.actions.filter(a=>!old.actions.includes(a));
     const effects=[...(points?[`แต้มผังความถนัด +${points} · ระบบปัจจุบัน`]:[]),...newActions.map(a=>`ปลด ${this.template.skills[a].name}`),...(next.passive&&next.passive!==old.passive?['ปลดพาสซีฟประจำอาชีพ']:[])];
     const ledger=cost?[
-      {label:`ตัวซ้ำ${name}`,have:m.dupes,use:cost.dupes,left:after?.members[this.id]?.dupes??m.dupes-cost.dupes,glyph:portrait(this.id)},
-      {label:'ตราสัญญา',have:before.bank.seal,use:cost.seals,left:after?.bank.seal??before.bank.seal-cost.seals,glyph:icon('seal')},
+      {label:`เศษ${name}`,have:m.shards,use:cost.shards,left:after?.members[this.id]?.shards??m.shards-cost.shards,glyph:portrait(this.id)},
+      {label:'เศษกลาง',have:before.bank.shard,use:cost.universal,left:after?.bank.shard??before.bank.shard-cost.universal,glyph:icon('seal')},
       {label:'แร่ดาว',have:before.bank.ore,use:cost.ore,left:after?.bank.ore??before.bank.ore-cost.ore,glyph:icon('ore')},
     ]:[];
     const stats=`<section class="star-box"><h4>ผล${receipt?'ที่ได้รับ':'หลังอัปดาว'}</h4><table class="star-stats"><thead><tr><th>ค่าสถานะ</th><th>เดิม</th><th>${receipt?'ผลจริง':'หลังอัป'}</th></tr></thead><tbody>${fields.map(([label,a,b,unit])=>`<tr><th>${label}</th><td>${a}${unit}</td><td>${b}${unit}</td></tr>`).join('')}</tbody></table>
       ${effects.map(e=>`<p class="star-effect">${e}</p>`).join('')}<p class="star-note">คงเลเวลค่าย อุปกรณ์ บาดแผล และการจัดทีมเดิม${isBigTree(this.map.talents[this.id])?' · สกิล/พาสซีฟปลดในผังความถนัด':''}</p></section>`;
     const materials=cost?`<section class="star-box"><h4>${receipt?'ทรัพยากรที่ใช้จริง':'วัตถุดิบที่ใช้'}</h4><table class="star-ledger"><thead><tr><th>รายการ</th><th>มี${receipt?'ก่อนทำ':''}</th><th>ใช้</th><th>${receipt?'ยอดจริง':'หลังทำ'}</th></tr></thead><tbody>${ledger.map(r=>`<tr><th>${r.glyph}<span>${r.label}</span></th><td>${r.have}</td><td>${r.use}</td><td>${r.left<0?`ขาด ${-r.left}`:r.left}</td></tr>`).join('')}</tbody></table>
-      <p class="star-note">ใช้ตัวซ้ำก่อน · ตราเติมส่วนขาดได้ไม่เกิน ${view.limit} จาก ${view.required} · ต้องมีตัวซ้ำอย่างน้อย ${view.minimum}</p><p class="star-note">ใช้ตัวซ้ำที่สะสมของคนนี้ ไม่ใช้สมาชิกคนอื่นเป็นวัตถุดิบ</p></section>`:'';
+      <p class="star-note">ใช้เศษ${name}ก่อน · เศษกลางเติมส่วนที่เหลือได้ทั้งหมด (ต้องใช้รวม ${view.required})</p><p class="star-note">ไม่ใช้สมาชิกคนอื่นเป็นวัตถุดิบ</p></section>`:'';
     const body=`<section class="star-page" data-review="${reviewing}" data-receipt="${!!receipt}"${receipt?` data-persisted="${receipt.saved}"`:''}>
       <p class="star-step">พัฒนา / ${reviewing?'ตรวจรายการ':receipt?'ผลอัปดาว':'อัปดาว'}</p>
       <h3 id="star-status" tabindex="-1" ${receipt?'role="status"':''}>${heading}</h3>
       ${this.message?`<p class="star-warning" role="status">${this.message}</p>`:''}
-      ${!receipt&&view.shortages.length?`<div class="star-warning" role="status">${view.shortages.map(s=>`<p>${s}</p>`).join('')}${m.dupes<view.minimum?'<p>ตราอย่างเดียวใช้แทนทั้งหมดไม่ได้</p>':''}</div>`:''}
+      ${!receipt&&view.shortages.length?`<div class="star-warning" role="status">${view.shortages.map(s=>`<p>${s}</p>`).join('')}</div>`:''}
       <div class="star-hero">${portrait(this.id)}<div><b>${name}</b><span>Lv${level} · เลเวลค่ายร่วม</span><span>${heroText[this.id]!.role}</span></div></div>
       <div class="star-transition" aria-label="${m.stars} ดาว เป็น ${to} ดาว">${starRow(m.stars,this.map.company.maxStars,true)}${cost?`<span>→</span>${starRow(to,this.map.company.maxStars,true)}`:''}<b>${cost?`${m.stars} → ${to} ดาว`:'ดาวสูงสุดแล้ว'}</b></div>
       ${!receipt?`<p class="star-note">${reviewing?'ยังไม่ใช้ทรัพยากร · ยืนยันเพิ่มครั้งละ 1 ดาว':'ดูผลและต้นทุนก่อนตรวจรายการ · ยังไม่ใช้ทรัพยากร'}</p>`:!receipt.saved?'<p class="star-warning">ผลในรอบนี้ยังไม่ถูกบันทึกถาวร · อย่ายืนยันรายการเดิมซ้ำ</p>':''}
       ${reviewing?materials+stats:stats+materials}
 
-      ${cost&&!receipt&&sources?.hire?`<details class="star-sources star-box"><summary>ดูวิธีหาวัตถุดิบที่เปิดแล้ว</summary><p>ป้ายจ้างในค่าย: จ้างคนที่ถือครองแล้วจะได้ตัวซ้ำของคนนั้น รายชื่อขึ้นกับป้ายปัจจุบัน ไม่รับประกันว่าจะมีคนนี้</p><p>ตลาดพีโน่: ใบสัญญาซ้ำเลือกผู้รับได้ เหลือ ${sources.contracts} ใบ · ตราสัญญาเหลือ ${sources.seals} ชิ้นในรอบนี้ ตรวจราคาและเงื่อนไขในตลาดก่อนซื้อ</p><p>การอ่านหน้านี้ไม่จ้าง ไม่ซื้อ และไม่เปลี่ยนป้ายให้เอง</p></details>`:''}
+      ${cost&&!receipt&&sources?.hire?`<details class="star-sources star-box"><summary>ดูวิธีหาวัตถุดิบที่เปิดแล้ว</summary><p>ป้ายจ้างในค่าย: จ้างคนที่ถือครองแล้วจะได้เศษของคนนั้น ${this.map.company.shardsPerDuplicate} ชิ้น รายชื่อขึ้นกับป้ายปัจจุบัน ไม่รับประกันว่าจะมีคนนี้</p><p>ตลาดพีโน่: ใบสัญญาซ้ำเลือกผู้รับได้ เหลือ ${sources.contracts} ใบ · ห่อเศษกลางเหลือ ${sources.shards} ห่อในรอบนี้ ตรวจราคาและเงื่อนไขในตลาดก่อนซื้อ</p><p>เศษกลางยังได้จากบอส หีบหายาก อีเวนต์ และการผ่านแผนที่ครั้งแรก</p><p>การอ่านหน้านี้ไม่จ้าง ไม่ซื้อ และไม่เปลี่ยนป้ายให้เอง</p></details>`:''}
       ${!cost?'<p class="star-note">ถึงเพดานดาวของระบบปัจจุบันแล้ว</p>':''}
       </section>`;
     const button=(id:string,action:string,label:string,primary=false,disabled=false)=>`<button id="${id}" data-world="${action}" class="${primary?'primary':'secondary'}"${disabled?' disabled':''}>${label}</button>`;
-    const summary=receipt?`ยอดจริง · ตัวซ้ำ ${after!.members[this.id]!.dupes} · ตรา ${after!.bank.seal} · แร่ ${after!.bank.ore}`:view.reason?(cost?'ยังทำไม่ได้ · ดูรายการที่ขาด':'ดาวสูงสุดแล้ว'):`ใช้ตัวซ้ำ ${cost!.dupes} · ตรา ${cost!.seals} · แร่ ${cost!.ore}`;
+    const summary=receipt?`ยอดจริง · เศษ${name} ${after!.members[this.id]!.shards} · เศษกลาง ${after!.bank.shard} · แร่ ${after!.bank.ore}`:view.reason?(cost?'ยังทำไม่ได้ · ดูรายการที่ขาด':'ดาวสูงสุดแล้ว'):`ใช้เศษ${name} ${cost!.shards} · เศษกลาง ${cost!.universal} · แร่ ${cost!.ore}`;
     const dock=`<p class="star-cost-summary">${summary}</p>`+(receipt?button('star-next','star-next','ดูขั้นถัดไป',true)+button('star-back','star-back','กลับหน้าตัวละคร'):reviewing?button('star-confirm','star-confirm',`ยืนยันอัปดาว ${name}`,true)+button('star-cancel','star-cancel','กลับไปแก้ไข'):button('star-review','star-review',cost?`ตรวจรายการอัปเป็น ${to} ดาว`:'ดาวสูงสุดแล้ว',true,!!view.reason||!!this.pending)+button('star-back','star-back','กลับหน้าตัวละคร'));
     return {body,dock};
   }

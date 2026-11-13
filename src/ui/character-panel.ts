@@ -260,7 +260,7 @@ export class CharacterPanel {
   }
   private develop(model:CharacterModel):string {
     const m=model.state.members[this.heroId]!,level=levelOf(this.map,model.state);
-    return `<section class="character-develop"><h3>พัฒนา${heroText[this.heroId]!.name}</h3><p>Lv${level} · ใช้เลเวลค่ายร่วม ทุกคนเติบโตพร้อมกัน</p><button id="character-star-open" data-world="character-star-open" class="primary">${icon('starBadge')}อัปดาว · ★${m.stars} / ${this.map.company.maxStars}</button><p>ดาวของคนนี้ · ตัวซ้ำที่สะสม ${m.dupes}</p></section>`;
+    return `<section class="character-develop"><h3>พัฒนา${heroText[this.heroId]!.name}</h3><p>Lv${level} · ใช้เลเวลค่ายร่วม ทุกคนเติบโตพร้อมกัน</p><button id="character-star-open" data-world="character-star-open" class="primary">${icon('starBadge')}อัปดาว · ★${m.stars} / ${this.map.company.maxStars}</button><p>ดาวของคนนี้ · เศษที่สะสม ${m.shards}</p></section>`;
   }
   private gear(model:CharacterModel,h:HeroDefinition):string{
     const trial=this.plan?.choices.length?this.host.previewPlan(this.plan):this.single?this.host.preview(this.heroId,this.single.key):undefined;

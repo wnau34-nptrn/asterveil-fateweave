@@ -25,7 +25,7 @@ const req = (n: number, command: unknown, seq = n): CommandRequest => ({ request
 
 function campProfile(): Profile {
   let p: Profile = { ...newProfile(home, 4), tutorialDone: true, commander, cleared: maps.map(m => m.id), campXp: 400000,
-    bank: { ore: 9000, gold: 9000, seal: 60, dust: 9000 } };
+    bank: { ore: 9000, gold: 9000, shard: 60, dust: 9000 } };
   for (let i = 0; i < 3; i++) { const r = buy(p, home, 'gearbox'); if (r.event.type !== 'blocked') p = r.profile; }
   return p;
 }

@@ -11,7 +11,7 @@ import { legacyEnvelope } from './fixtures/legacy-save';
 
 // Knight big tree (master plan A6, docs/design/SKILL_TREE_KNIGHT_TH.md): 3 branches × 4 tiers, pick-one modifiers,
 // three equipped skills, one point per level and per star.
-const knightAt = (level: number, stars = 1): Profile => { const p = newProfile(map, 3); p.members.guardian = { stars, dupes: 0 }; p.campXp = xpAt(level); return p; };
+const knightAt = (level: number, stars = 1): Profile => { const p = newProfile(map, 3); p.members.guardian = { stars, shards: 0 }; p.campXp = xpAt(level); return p; };
 const learn = (p: Profile, ...nodes: string[]) => nodes.reduce((q, n) => { const r = learnTalent(q, map, 'guardian', n); expect(r.event.type, n).toBe('talent'); return r.profile; }, p);
 const base = heroDef(lookup, map, 'guardian')!;
 describe('knight big tree: shape and gates', () => {
@@ -62,8 +62,8 @@ describe('knight big tree: skills, loadout and battle buttons', () => {
 describe('save v34', () => {
   const raw = (game: Parameters<typeof saveGame>[1]) => { let out = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { out = v; } }, game); return out; };
   it('round-trips tree ranks, grants and loadouts and rejects a locked loadout', () => {
-    const p = chooseLoadout(learn({ ...knightAt(6, 3), members: { ...knightAt(6, 3).members, guardian: { stars: 3, dupes: 0, grants: ['c1s'] } } }, 'b1', 'b2'), map, lookup, 'guardian', ['challenge', 'rally']).profile;
-    const text = raw({ profile: p, run: null }); expect(JSON.parse(text).version).toBe(58);
+    const p = chooseLoadout(learn({ ...knightAt(6, 3), members: { ...knightAt(6, 3).members, guardian: { stars: 3, shards: 0, grants: ['c1s'] } } }, 'b1', 'b2'), map, lookup, 'guardian', ['challenge', 'rally']).profile;
+    const text = raw({ profile: p, run: null }); expect(JSON.parse(text).version).toBe(59);
     expect(parseGame(text, map, lookup).profile.members.guardian).toEqual(p.members.guardian);
     const bad = JSON.parse(text); bad.profile.members.guardian.loadout = ['rouse']; expect(() => parseGame(JSON.stringify(bad), map, lookup)).toThrow();
   });

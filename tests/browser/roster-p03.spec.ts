@@ -16,7 +16,7 @@ function profile(): Profile {
   p.tutorialDone = true;
   p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
   p.cleared = ['ruined-border', 'deep-forest', 'veil-frontier'];
-  p.company.push('kael'); p.members.kael = { stars: 1, dupes: 0 }; p.campXp = xpAt(10);
+  p.company.push('kael'); p.members.kael = { stars: 1, shards: 0 }; p.campXp = xpAt(10);
   p.party = { deployed: ['kael', 'guardian', 'weaver', 'healer'], reserve: ['tracer'] };
   return p;
 }
@@ -87,7 +87,7 @@ test('P03 Kael: gathers chi from a real hit, shows it, then releases it; reload 
 });
 
 test('P03 Wynne: a curse is laid on a real foe, shown in its status and ticks at round end; reload keeps the battle', async ({ page }, info) => {
-  const p = profile(); p.company.push('wynne'); p.members.wynne = { stars: 1, dupes: 0 };
+  const p = profile(); p.company.push('wynne'); p.members.wynne = { stars: 1, shards: 0 };
   p.party = { deployed: ['wynne', 'guardian', 'weaver', 'healer'], reserve: ['kael'] };
   const game = depart(p, map, lookup, 227);
   game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(game.run.roster.deployed.map(id => [id, game.run.hp[id]!])), commands: [] };
@@ -111,7 +111,7 @@ test('P03 Wynne: a curse is laid on a real foe, shown in its status and ticks at
 });
 
 test('P03 Astrid: deflect asks for the recipient before one commit; closing the dialog changes nothing; reload keeps it', async ({ page }, info) => {
-  const p = profile(); p.company.push('astrid'); p.members.astrid = { stars: 1, dupes: 0 };
+  const p = profile(); p.company.push('astrid'); p.members.astrid = { stars: 1, shards: 0 };
   p.party = { deployed: ['astrid', 'guardian', 'weaver', 'healer'], reserve: ['kael'] };
   const game = depart(p, map, lookup, 229);
   game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(game.run.roster.deployed.map(id => [id, game.run.hp[id]!])), commands: [] };

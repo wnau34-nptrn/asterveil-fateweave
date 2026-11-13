@@ -30,7 +30,7 @@ export interface BattleStat { fought: number; won: number; hpAfter: number; low:
 export interface ExpeditionReport {
   index: number; outcome: RunOutcome; steps: number; wins: number; defeats: number; lowestHp: number;
   battles: Partial<Record<string, BattleStat>>;
-  gained: { ore: number; gold: number; seal: number; dust: number }; items: number[]; chests: number; elites: number; objectives: number;
+  gained: { ore: number; gold: number; shard: number; dust: number }; items: number[]; chests: number; elites: number; objectives: number;
   bossBeaten: boolean; level: number; stars: number; company: number; claimed: string[];
 }
 export interface CompanyReport { seed: number; policy: Policy; style: Style; expeditions: ExpeditionReport[]; profile: Profile }
@@ -288,8 +288,9 @@ function lobby(p: Profile): { profile: Profile; claimed: string[] } {
       if (t.event.type === 'tomeTrade') { p = t.profile; raised = true; break; }
     }
   }
-  // Market (4A): seals, a contract for the deployed member closest to the next star, and a gear box.
-  while (!buyReason(p, map, 'seal') && p.bank.gold > 120 && p.bank.seal < 3) p = buy(p, map, 'seal').profile;
+  // Market (4A): a universal shard pack when below one duplicate's worth (P04-02; seals were bought below 3), a contract for the deployed member closest
+  // to the next star, and a gear box.
+  while (!buyReason(p, map, 'shard') && p.bank.gold > 120 && p.bank.shard < map.company.shardsPerDuplicate) p = buy(p, map, 'shard').profile;
   const pick = [...p.party.deployed].sort((x, y) => p.members[y]!.stars - p.members[x]!.stars).find(id => !buyReason(p, map, 'contract', id));
   if (pick && p.bank.gold > 200) p = buy(p, map, 'contract', pick).profile;
   if (!buyReason(p, map, 'gearbox') && p.bank.gold > 150) p = buy(p, map, 'gearbox').profile;
@@ -342,7 +343,7 @@ export function simulateCompany(seed: number, policy: Policy, expeditions: numbe
     const shop = lobby(p); p = shop.profile;
     if (lanes) p = { ...p, party: { ...p.party, lanes: { ...lanes } } };
     const d = depart(p, map, lookup, (seed * 7919 + index * 104729) >>> 0); p = d.profile; let s = d.run;
-    const report: ExpeditionReport = { index, outcome: 'withdrawn', steps: 0, wins: 0, defeats: 0, lowestHp: 100, battles: {}, gained: { ore: 0, gold: 0, seal: 0, dust: 0 },
+    const report: ExpeditionReport = { index, outcome: 'withdrawn', steps: 0, wins: 0, defeats: 0, lowestHp: 100, battles: {}, gained: { ore: 0, gold: 0, shard: 0, dust: 0 },
       items: [0, 0, 0, 0, 0], chests: 0, elites: 0, objectives: 0, bossBeaten: false, level: 0, stars: 0, company: p.company.length, claimed: shop.claimed };
     if (!p.tutorialDone) { s = startPrologue(s, map).state; for (let tries = 0; s.battle && tries < 5; tries++) s = fight(s, report, style).state; }
     const r = runExpedition(s, policy, style, report); s = r.state;
@@ -351,7 +352,7 @@ export function simulateCompany(seed: number, policy: Policy, expeditions: numbe
     Object.assign(report, {
       outcome: r.outcome, steps: s.steps, wins: s.wins, defeats: s.defeats, chests: s.openedChests.length, elites: s.elitesDefeated.length,
       objectives: map.quest.objectives.filter(o => o.kind === 'chests' ? s.openedChests.length >= o.count : o.kind === 'elite' ? s.elitesDefeated.includes(o.target) : s.eventsDone.includes(o.target)).length,
-      bossBeaten: s.bossDefeated, gained: { ore: p.bank.ore - before.ore, gold: p.bank.gold - before.gold, seal: p.bank.seal - before.seal, dust: p.bank.dust - before.dust },
+      bossBeaten: s.bossDefeated, gained: { ore: p.bank.ore - before.ore, gold: p.bank.gold - before.gold, shard: p.bank.shard - before.shard, dust: p.bank.dust - before.dust },
       level: levelOf(map, p), stars: Math.max(...p.party.deployed.map(id => p.members[id]!.stars)),
     });
     for (const i of homeItems(s, r.outcome, map)) report.items[i.rarity]!++;
@@ -382,7 +383,7 @@ export function simulateCampaign(seed: number, policy: Policy, style: Style = 'a
     // Skill levels the party departs with (raised in this lobby).
     const lv = p.party.deployed.map(id => equipped(p, id).map(a => skillLevelOf(p.members[id], a)));
     const d = depart(p, map, lookup, (seed * 7919 + index * 104729) >>> 0, isHard ? { maps: MAPS } : undefined); p = d.profile; let s = d.run;
-    const report: CampaignExpedition = { index, outcome: 'withdrawn', steps: 0, wins: 0, defeats: 0, lowestHp: 100, battles: {}, gained: { ore: 0, gold: 0, seal: 0, dust: 0 },
+    const report: CampaignExpedition = { index, outcome: 'withdrawn', steps: 0, wins: 0, defeats: 0, lowestHp: 100, battles: {}, gained: { ore: 0, gold: 0, shard: 0, dust: 0 },
       items: [0, 0, 0, 0, 0], chests: 0, elites: 0, objectives: 0, bossBeaten: false, level: 0, stars: 0, company: p.company.length, claimed: shop.claimed,
       mapId: map.id, hard: isHard, attempt, skillGold, mainSkill: 0, skillAvg: 0, topSkill: 1, tomes: 0, levels: [] };
     if (!p.tutorialDone) { s = startPrologue(s, map).state; for (let tries = 0; s.battle && tries < 5; tries++) s = fight(s, report, style).state; }
@@ -397,7 +398,7 @@ export function simulateCampaign(seed: number, policy: Policy, style: Style = 'a
     const ids = p.party.deployed;
     Object.assign(report, {
       outcome: r.outcome, steps: s.steps, wins: s.wins, defeats: s.defeats, chests: s.openedChests.length, elites: s.elitesDefeated.length, bossBeaten: s.bossDefeated,
-      gained: { ore: p.bank.ore - before.ore, gold: p.bank.gold - before.gold, seal: p.bank.seal - before.seal, dust: p.bank.dust - before.dust },
+      gained: { ore: p.bank.ore - before.ore, gold: p.bank.gold - before.gold, shard: p.bank.shard - before.shard, dust: p.bank.dust - before.dust },
       levels: ids.map(() => levelOf(map, p)), level: levelOf(map, p), stars: Math.max(...ids.map(id => p.members[id]!.stars)), company: p.company.length,
       mainSkill: avg(lv.map(l => Math.max(1, ...l))), skillAvg: avg(lv.flat()), topSkill: Math.max(1, ...lv.flat()), tomes: tomeCount(p.tomes),
     });
@@ -422,7 +423,7 @@ export function report(companies: CompanyReport[]): string {
     for (let i = 0; i < n; i++) {
       const es = cs.map(c => c.expeditions[i]!); const k = (o: RunOutcome) => es.filter(e => e.outcome === o).length;
       const items = [0, 1, 2, 3, 4].map(r => f1(avg(es.map(e => e.items[r]!)))).join('/');
-      lines.push(`| ${i + 1} | ${pct(k('complete'), es.length)} | ${pct(k('withdrawn'), es.length)} | ${pct(k('wiped'), es.length)} | ${Math.round(avg(es.map(e => e.steps)))} | ${f1(avg(es.map(e => e.wins)))} | ${f1(avg(es.map(e => e.defeats)))} | ${Math.round(avg(es.map(e => e.lowestHp)))} | ${Math.round(avg(es.map(e => e.gained.ore)))} | ${Math.round(avg(es.map(e => e.gained.gold)))} | ${f1(avg(es.map(e => e.gained.seal)))} | ${Math.round(avg(es.map(e => e.gained.dust)))} | ${items} | ${f1(avg(es.map(e => e.chests)))} | ${f1(avg(es.map(e => e.level)))} | ${f1(avg(es.map(e => e.stars)))} | ${f1(avg(es.map(e => e.company)))} |`);
+      lines.push(`| ${i + 1} | ${pct(k('complete'), es.length)} | ${pct(k('withdrawn'), es.length)} | ${pct(k('wiped'), es.length)} | ${Math.round(avg(es.map(e => e.steps)))} | ${f1(avg(es.map(e => e.wins)))} | ${f1(avg(es.map(e => e.defeats)))} | ${Math.round(avg(es.map(e => e.lowestHp)))} | ${Math.round(avg(es.map(e => e.gained.ore)))} | ${Math.round(avg(es.map(e => e.gained.gold)))} | ${f1(avg(es.map(e => e.gained.shard)))} | ${Math.round(avg(es.map(e => e.gained.dust)))} | ${items} | ${f1(avg(es.map(e => e.chests)))} | ${f1(avg(es.map(e => e.level)))} | ${f1(avg(es.map(e => e.stars)))} | ${f1(avg(es.map(e => e.company)))} |`);
     }
     const all = cs.flatMap(c => c.expeditions); const kinds = [...new Set(all.flatMap(e => Object.keys(e.battles)))].sort();
     lines.push('', '| Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |', '|---|---|---|---|---|');
@@ -432,8 +433,8 @@ export function report(companies: CompanyReport[]): string {
     }
     const first = cs.map(c => c.expeditions.find(e => e.outcome === 'complete')?.index);
     lines.push('', `First completed expedition: ${first.map(x => x ?? '–').join(', ')} (median ${median(first)}).`);
-    const bank = (k: 'ore' | 'gold' | 'seal' | 'dust') => Math.round(avg(cs.map(c => c.profile.bank[k])));
-    lines.push('', `Bank after the last expedition (average): ore ${bank('ore')}, gold ${bank('gold')}, seal ${bank('seal')}, dust ${bank('dust')}; bag ${Math.round(avg(cs.map(c => c.profile.items.length)))}/${map.equipment.bagCap}.`);
+    const bank = (k: 'ore' | 'gold' | 'shard' | 'dust') => Math.round(avg(cs.map(c => c.profile.bank[k])));
+    lines.push('', `Bank after the last expedition (average): ore ${bank('ore')}, gold ${bank('gold')}, seal ${bank('shard')}, dust ${bank('dust')}; bag ${Math.round(avg(cs.map(c => c.profile.items.length)))}/${map.equipment.bagCap}.`);
     const claims = map.sideQuests.map(q => { const when = cs.map(c => c.expeditions.find(e => e.claimed.includes(q.id))?.index); const got = when.filter(x => x !== undefined).length;
       const done = cs.filter(c => (c.profile.quests[q.id]?.progress ?? 0) >= q.target).length;
       return `| ${q.npc} | ${q.kind} ${q.target} | ${pct(done, cs.length)} | ${got ? `${f1(avg(when.filter((x): x is number => x !== undefined)))}` : '–'} |`; });
@@ -490,7 +491,7 @@ export function campaignReport(campaigns: CampaignReport[]): string {
 // No hiring, equipment drops or lobby optimization is applied mid-run. Story arrivals can occupy reserves only.
 export function rosterMap(m: MapDefinition, seed: number, ids: readonly string[], members: Record<string, MemberProgress>): { complete: boolean; hp: number; wins: number } {
   map = m; checks = false;
-  const report: ExpeditionReport = { index: 1, outcome: 'withdrawn', steps: 0, wins: 0, defeats: 0, lowestHp: 100, battles: {}, gained: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [0,0,0,0,0], chests: 0, elites: 0, objectives: 0, bossBeaten: false, level: 0, stars: 1, company: 4, claimed: [] };
+  const report: ExpeditionReport = { index: 1, outcome: 'withdrawn', steps: 0, wins: 0, defeats: 0, lowestHp: 100, battles: {}, gained: { ore: 0, gold: 0, shard: 0, dust: 0 }, items: [0,0,0,0,0], chests: 0, elites: 0, objectives: 0, bossBeaten: false, level: 0, stars: 1, company: 4, claimed: [] };
   const s = newExpedition(m, lookup, seed, { roster: { deployed: [...ids], reserve: [] }, members }, true);
   const result = runExpedition(s, 'rush', 'advisor', report);
   const hp = hpPercent(result.state);

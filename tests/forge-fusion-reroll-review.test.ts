@@ -8,7 +8,7 @@ import { heroCatalog } from '../src/core/world/world';
 
 const button=(action:string,extra:Record<string,string>={})=>({dataset:{forge:action,...extra},disabled:false}) as unknown as HTMLButtonElement;
 function fixture(mode:'fuse'|'reroll'){
-  const p=newProfile(map,17);p.bank={ore:500,dust:50,gold:20,seal:5};
+  const p=newProfile(map,17);p.bank={ore:500,dust:50,gold:20,shard:50};
   p.items=[{uid:1,slot:'body',rarity:mode==='fuse'?0:1,level:3,affixes:mode==='fuse'?[]:['hp'],plus:2,q:{main:113,affixes:mode==='fuse'?[]:[97]},levelInvestment:{ore:20,dust:2}},
     {uid:2,slot:'body',rarity:0,level:2,affixes:[],plus:2,investment:{ore:9,dust:2},levelInvestment:{ore:20,dust:2}},
     {uid:3,slot:'body',rarity:0,level:1,affixes:[]},{uid:4,slot:'body',rarity:0,level:1,affixes:[],locked:true}];p.nextItem=5;
@@ -47,14 +47,14 @@ describe('fusion and reroll review',()=>{
     if(mode==='fuse')ui.fused(result.profile,1);else ui.rerolled(result.profile,1);
     const html=ui.render(result.profile);expect(html).toContain('data-receipt="true"');expect(html).toContain('ผลจริงก่อน → หลัง');expect(html).not.toContain('id="forge-confirm"');expect(html).not.toContain('ผลสุ่มแสดงหลังยืนยัน');
     if(mode==='fuse'){expect(result.profile.items.map(i=>i.uid)).toEqual([1,4]);expect(result.profile.bank).toMatchObject({ore:529,dust:54});}
-    else {expect(findItem(result.profile,1)!.item.affixes[0]).not.toBe('hp');expect(result.profile.bank.seal).toBe(5-map.equipment.forge.rerollSeals);}
+    else {expect(findItem(result.profile,1)!.item.affixes[0]).not.toBe('hp');expect(result.profile.bank.shard).toBe(50-map.equipment.forge.rerollShards);}
     const saved=structuredClone(result.profile);ui.click(button('next-preview'),result.profile);ui.render(result.profile);expect(host[mode]).toHaveBeenCalledTimes(1);expect(result.profile).toEqual(saved);
   });
   it('rechecks donor eligibility even if the profile object was mutated in place',()=>{
     const {p,ui,host}=fixture('fuse');ui.click(button('review'),p);p.items[1]!.locked=true;ui.click(button('confirm'),p);expect(host.fuse).not.toHaveBeenCalled();
   });
   it('rechecks reroll currency at confirmation and shows the shortage',()=>{
-    const {p,ui,host}=fixture('reroll');ui.click(button('review'),p);p.bank.seal=0;ui.click(button('confirm'),p);expect(host.reroll).not.toHaveBeenCalled();expect(ui.render(p)).toContain('ตราสัญญาไม่พอ');
+    const {p,ui,host}=fixture('reroll');ui.click(button('review'),p);p.bank.shard=0;ui.click(button('confirm'),p);expect(host.reroll).not.toHaveBeenCalled();expect(ui.render(p)).toContain('เศษกลางไม่พอ');
   });
   it('shows no-affix and maximum-rarity blockers without offering a command',()=>{
     const {p,ui,host}=fixture('fuse');p.items[0]!.rarity=4;
