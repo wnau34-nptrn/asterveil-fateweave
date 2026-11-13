@@ -244,11 +244,11 @@ test('camp revives one fallen member per ember; a chest opens once and fills the
   await page.locator('#rest').click();
   await expect(page.locator('#world-message')).toContainText('เปิดกล่องสมบัติ · แร่ดาว +');
   const opened = await saved(page);
-  expect(opened.openedChests).toEqual([chest.id]); expect(opened.resources.shard).toBe(1); expect(opened.resources.ember).toBe(1);
+  expect(opened.openedChests).toEqual([chest.id]); expect(opened.resources.shard).toBe(3); expect(opened.resources.ember).toBe(1);
   await expect(page.locator(`.chest[data-chest=${chest.id}]`)).toHaveAttribute('data-open', 'true');
   await expect(page.locator('#rest')).toBeDisabled();
   await page.locator('#world-pack').click(); await expect(page.locator('#pack-dialog')).toContainText('เศษกลาง');
-  await expect(page.locator('#pack-dialog li[data-resource=seal] strong')).toHaveText('1');
+  await expect(page.locator('#pack-dialog li[data-resource=shard] strong')).toHaveText('3');
   await page.screenshot({ path: info.outputPath('pack.png') });
   expect(issues).toEqual([]);
 });
@@ -572,7 +572,7 @@ test('lobby: hire a duplicate, upgrade a star, pick the team, depart, and withdr
   await page.locator('#camp-star-review').click(); await page.locator('#camp-star-confirm').click();
   await expect(page.locator('#camp-star-status')).toContainText('บันทึกผลอัปดาวแล้ว');
   await closeTalentDetails(page);await page.locator('#camp-character-dialog [data-world=character-close]').click();
-  await expect.poll(async () => (await savedProfile(page)).members[offer]).toEqual({ stars: 2, shards: 0 }); expect((await savedProfile(page)).bank.ore).toBe(100);
+  await expect.poll(async () => (await savedProfile(page)).members[offer]).toEqual({ stars: 2, shards: 0 }); expect((await savedProfile(page)).bank.ore).toBe(105);
   // Bench one member who is not the upgraded one: the expedition brings three.
   const benched = offer === 'healer' ? 'weaver' : 'healer';
   await page.locator(`#lobby-member-${offer}`).click(); await expect(page.locator(`#lobby-member-${offer}`)).toHaveAttribute('aria-pressed', 'false');
@@ -949,7 +949,7 @@ for (const viewport of viewports) {
     // Thai text in the capsules is not clipped vertically.
     for (const sel of ['#zone-name', '#world-hero-guardian b', '.objective-text']) expect(await page.locator(sel).evaluate(el => el.scrollHeight <= el.clientHeight + 1)).toBe(true);
     await page.screenshot({ path: info.outputPath('world.png') });
-    await page.locator('#objective-button').click(); await expect(page.locator('#world-goals')).toBeVisible(); await expect(page.locator('#world-goals .goal-list:not(.shard-list) li')).toHaveCount(5); await expect(page.locator('#world-goals .shard-list li')).toHaveCount(3);
+    await page.locator('#objective-button').click(); await expect(page.locator('#world-goals')).toBeVisible(); await expect(page.locator('#world-goals .goal-list:not(.seal-list) li')).toHaveCount(5); await expect(page.locator('#world-goals .seal-list li')).toHaveCount(3);
     await reachable(page, '[data-world=goals-close]'); await page.screenshot({ path: info.outputPath('goals.png') }); await page.keyboard.press('Escape');
     // The camp sheet fits without page scrolling and keeps >=44px controls.
     await page.locator('#rest').click(); await expect(page.locator('#camp-dialog')).toBeVisible();
