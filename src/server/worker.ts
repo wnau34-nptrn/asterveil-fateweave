@@ -14,7 +14,7 @@ interface DurableObjectNamespaceLike {
   idFromName(name: string): unknown;
   get(id: unknown): { fetch(request: Request): Promise<Response> };
 }
-export interface Env { DB: D1Like; GAME: DurableObjectNamespaceLike; CONTENT_VERSION?: string; ALLOWED_ORIGINS?: string; GOOGLE_CLIENT_ID?: string }
+export interface Env { DB: D1Like; GAME: DurableObjectNamespaceLike; CONTENT_VERSION?: string; ALLOWED_ORIGINS?: string; GOOGLE_CLIENT_ID?: string; LEGACY_IMPORT?: string }
 
 // The same content the game shell runs (`ui/game-shell.ts`).
 export const GAME_CONTEXT: GameContext = { home: chapterOne, maps: MAPS, lookup: encounterById };
@@ -47,6 +47,8 @@ export default {
       allowedOrigins: (env.ALLOWED_ORIGINS ?? '').split(',').map(s => s.trim()).filter(Boolean),
       now: () => Date.now(),
       limiter,
+      // D11: open until the owner closes it before the external test (`LEGACY_IMPORT` = closed).
+      legacyImport: env.LEGACY_IMPORT?.trim() !== 'closed',
       ...(verify ? { google: verify } : {}),
     });
   },

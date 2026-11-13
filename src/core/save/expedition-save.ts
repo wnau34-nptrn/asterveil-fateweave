@@ -141,7 +141,7 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // progress that used any of them restarts from its entry HP.
 // v58 (owner 2026-11-06, skill rework step 6): Sefa's Shadow Step hits (8) before the dodge. Profiles are unchanged; a
 // battle in progress that used it restarts from its entry HP.
-const SAVE_VERSION = 58;
+export const SAVE_VERSION = 58;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
 const REWORKED_V57: readonly ActionId[] = ['backstab', 'knives', 'disarm'];
 const REWORKED_V54: readonly ActionId[] = ['storedfist', 'circlefist', 'solo', 'finale'];

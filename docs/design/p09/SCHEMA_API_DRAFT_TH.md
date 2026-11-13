@@ -51,7 +51,7 @@ JSON, `Cache-Control: no-store`, CORS เฉพาะ origin ของ Pages, �
 | `POST /v1/session/refresh` | `{refreshToken}` | token คู่ใหม่ (หมุน) |
 | `POST /v1/link` | `{requestId, provider, idToken}` | `linked` / 409 `identity_in_use` |
 | `POST /v1/recovery-code` · `POST /v1/recover` | — · `{requestId, code, installId}` | รหัสแสดงครั้งเดียว · token ของบัญชีนั้น |
-| `POST /v1/import` | envelope นำเข้า (CLOUD_SAVE_ENVELOPE §2) | 201 / 409 `already_imported`·`fingerprint_used` / 413 / 422 `<issue>`·`replay_failed` / 403 `import_closed` |
+| `POST /v1/import` | envelope นำเข้า (CLOUD_SAVE_ENVELOPE §2) | 201 / 409 `already_imported`·`fingerprint_used`·`has_game` / 413 / 422 `<issue>`·`replay_failed` / 403 `import_closed` (ทำแล้ว P09-02e) |
 | `GET /v1/state` | — | มุมมองสถานะ (ตัด seed) + `seq` |
 | `POST /v1/command` (หรือ WebSocket ไปที่ DO) | `{requestId, seq, kind, args}` | ผลลัพธ์ + เหตุการณ์ (สำหรับ VFX) + มุมมองที่เปลี่ยน + `seq`; 409 `stale`/`gap`/`request_reused`; 422 `<เหตุผลตามกฎ>`; 423 `other_device` |
 | `POST /v1/account/delete` · `…/cancel` | `{requestId}` | `deleting` |

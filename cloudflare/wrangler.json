@@ -6,7 +6,8 @@
   "preview_urls": false,
   "vars": {
     "ALLOWED_ORIGINS": "https://wnau34-nptrn.github.io,http://localhost:5173,http://127.0.0.1:5173",
-    "GOOGLE_CLIENT_ID": "982054923877-79lqr98hgklktknar98k6jsnvs4dk4fb.apps.googleusercontent.com"
+    "GOOGLE_CLIENT_ID": "982054923877-79lqr98hgklktknar98k6jsnvs4dk4fb.apps.googleusercontent.com",
+    "LEGACY_IMPORT": "open"
   },
   "d1_databases": [
     {

@@ -10,7 +10,7 @@ import { gameFromView, resultFromReply } from './server-game';
 import { localSeedSource } from '../platform/seed-source';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BattleState, Outcome } from '../core/battle/types';
-import { clearLegacySaves, loadGame, saveGame, type Game } from '../core/save/expedition-save';
+import { clearLegacySaves, expeditionKey, loadGame, parseGame, saveGame, type Game } from '../core/save/expedition-save';
 import { type createCommander, featureOpen } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileEvent, ProfileResult, ShopItemId, WorldEvent, WorldResult } from '../core/world/types';
 import { tileAt, questDone, battleData, heroCatalog, type EncounterLookup } from '../core/world/world';
@@ -145,6 +145,7 @@ export class GameShell {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-title]');
       if (!button) return;
       if (button.dataset.title === 'account') { void this.account?.open(); return; }
+      if (button.dataset.title === 'import') { this.importLocal(); return; }
       if (button.dataset.title === 'continue' && this.game) { if (this.state) this.resume(); else if (!this.game.profile.commander) this.showCommander(false); else this.showLobby(); }
       if (button.dataset.title === 'new') {
         if (this.game && button.dataset.confirm !== 'yes') { button.dataset.confirm = 'yes'; button.textContent = 'ยืนยัน: ลบค่ายและทีมทั้งหมดแล้วเริ่มใหม่'; return; }
@@ -228,16 +229,54 @@ export class GameShell {
     const chips = !g ? [] : s ? [['footprints', `เดินแล้ว ${s.steps} ก้าว`], ['star', `ชนะ ${s.wins} ศึก`], ...(s.battle ? [['danger', 'ค้างอยู่ในศึก']] : [])]
       : [['camp', 'อยู่ที่ค่าย'], ['flag', `ทีม ${g.profile.company.length} คน`], ['ore', `แร่ดาว ${g.profile.bank.ore}`]];
     const summary = chips.map(([i, t]) => `<span>${icon(i as IconName)}${t}</span>`).join('');
+    // P09-02e (D11): server play with no game on the account yet, and an old local save on this device.
+    const offer = g ? undefined : this.importOffer();
+    const offerChips = offer ? [['flag', `ทีม ${offer.game.profile.company.length} คน`], ['ore', `แร่ดาว ${offer.game.profile.bank.ore}`], ...(offer.game.run ? [['footprints', 'มีการเดินทางค้างอยู่']] : [])]
+      .map(([i, t]) => `<span>${icon(i as IconName)}${t}</span>`).join('') : '';
     // Layered title: drifting painting, light rays and motes behind a logo that resolves into focus.
     this.views.title.innerHTML = `<div class="title-stage" aria-hidden="true"><div class="title-bg"></div><div class="title-rays"></div>
       <div class="title-motes">${'<i></i>'.repeat(14)}</div><div class="title-vignette"></div></div>
       <div class="title-card"><h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1><p class="title-copy">ข้ามรอยแยก · ถักทอโชคชะตา</p>
       <div class="title-actions">${g ? `<p class="title-save">${s ? 'การเดินทางที่บันทึกไว้' : 'ค่ายของคุณ'}<span class="title-chips">${summary}</span></p><button id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ →' : 'เข้าค่าย →'}</button>` : ''}
-      <button id="new-game" data-title="new" class="${g ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : 'เริ่มเกม'}</button>
+      ${offer ? `<div class="title-import"><p class="title-save">พบเซฟเดิมในเครื่องนี้<span class="title-chips">${offerChips}</span></p><button id="import-save" data-title="import" class="primary">นำเข้าเซฟนี้ไปยังบัญชีเซิร์ฟเวอร์</button><p class="title-import-note">นำเข้าได้ครั้งเดียวต่อบัญชี · เซฟในเครื่องยังเก็บไว้เหมือนเดิม</p></div>` : ''}
+      <button id="new-game" data-title="new" class="${g || offer ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : offer ? 'เริ่มเกมใหม่บนเซิร์ฟเวอร์' : 'เริ่มเกม'}</button>
 
       ${this.server ? `<button id="account-open" data-title="account" class="secondary">บัญชี · Google · รหัสกู้คืน</button><p class="title-server">เล่นผ่านเซิร์ฟเวอร์ทดลอง · ความคืบหน้าบันทึกบนเซิร์ฟเวอร์</p>${this.titleNote ? `<p class="title-server-note" role="status">${this.titleNote}</p>` : ''}` : this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p></div>`;
     this.show('title');
-    this.views.title.querySelector<HTMLElement>(g ? '#continue' : '#new-game')?.focus({ preventScroll: true });
+    this.views.title.querySelector<HTMLElement>(g ? '#continue' : offer ? '#import-save' : '#new-game')?.focus({ preventScroll: true });
+  }
+  // P09-02e (owner D11): server play leaves the local save untouched; while the account has no game it may become the
+  // account's game once. Offered only for a save this build can read (the server replays it the same way).
+  private importOffer(): { raw: string; game: Game } | undefined {
+    if (!this.server) return undefined;
+    try {
+      const raw = this.storage?.getItem(expeditionKey);
+      if (!raw) return undefined;
+      return { raw, game: parseGame(raw, this.home, this.lookup, this.maps) };
+    } catch { return undefined; }
+  }
+  private importLocal(): void {
+    const offer = this.importOffer();
+    if (!this.server || !offer || this.game) return;
+    this.lockForServer('กำลังนำเข้าเซฟ…');
+    void this.server.importSave(offer.raw).then(out => {
+      if (out.kind === 'otherDevice' || out.kind === 'failed') { this.serverProblem(out.kind === 'otherDevice' ? 'other_device' : out.reason); return; }
+      this.unlockForServer();
+      if (out.kind === 'imported') {
+        this.titleNote = `นำเข้าเซฟเดิม (v${out.from}) แล้ว · ความคืบหน้าต่อจากนี้บันทึกบนเซิร์ฟเวอร์${offer.game.run?.battle ? ' · ศึกที่ค้างอยู่เล่นต่อได้' : ''}`;
+        this.adopt(out.state, 'title'); return;
+      }
+      const refused: Record<string, string> = {
+        has_game: 'บัญชีนี้เริ่มเกมบนเซิร์ฟเวอร์แล้ว จึงนำเข้าเซฟเดิมไม่ได้',
+        already_imported: 'บัญชีนี้นำเข้าเซฟเดิมไปแล้ว (ได้ครั้งเดียว)',
+        fingerprint_used: 'เซฟนี้ถูกนำเข้าไปยังบัญชีอื่นแล้ว · ใช้ Google หรือรหัสกู้คืนเพื่อเข้าบัญชีนั้น',
+        replay_failed: 'ตรวจเซฟนี้ไม่ผ่าน จึงนำเข้าไม่ได้ · เซฟในเครื่องยังอยู่เหมือนเดิม',
+        import_closed: 'ปิดการนำเข้าเซฟเดิมแล้ว',
+        too_large: 'เซฟนี้ใหญ่เกินกว่าที่นำเข้าได้',
+      };
+      this.titleNote = refused[out.error] ?? `นำเข้าเซฟไม่ได้ (${out.error})`;
+      if (out.error === 'has_game' || out.error === 'already_imported') this.connect('title'); else this.showTitle();
+    });
   }
   // Server play keeps no local save: the server stored the state before it answered.
   private persist(): void { if (this.server) { this.saved = true; return; } if (this.game) this.saved = saveGame(this.storage, this.game); }

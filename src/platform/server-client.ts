@@ -28,6 +28,9 @@ export interface AccountInfo { accountId: string; status: 'guest' | 'linked' | '
 // `refused`: the server answered with a definite no (`identity_in_use`, `already_linked`, `not_linked`, `invalid_code`,
 // `google_token`, `google_unset`, `rate_limited`, …); `failed`: no definite answer.
 export type AccountOutcome<T> = { kind: 'ok'; value: T } | { kind: 'refused'; error: string } | { kind: 'failed'; reason: ServerFailure };
+// P09-02e (owner D11): importing this device's local save once. `refused` carries the server's reason (`has_game`,
+// `already_imported`, `fingerprint_used`, `replay_failed`, `import_closed`, `too_large`, an envelope issue, …).
+export type ImportOutcome = { kind: 'imported'; state: ServerState; from: number } | { kind: 'refused'; error: string } | { kind: 'otherDevice' } | { kind: 'failed'; reason: ServerFailure };
 export type EnterOutcome = { kind: 'state'; state: ServerState } | { kind: 'otherDevice' } | { kind: 'failed'; reason: ServerFailure };
 
 export interface ServerPort {
@@ -193,6 +196,33 @@ export class ServerClient {
       this.memoryToken = token; this.pending = undefined; this.lastSeq = 0;
     }
     return out;
+  }
+
+  // ---- P09-02e: one-time import of the local save (owner D11) ----
+  // Sends the exact local save string. The requestId comes from the save's SHA-256, so asking again after a lost
+  // answer is the same request and the server answers it as before. On success the server's game is this save.
+  async importSave(raw: string): Promise<ImportOutcome> {
+    const token = this.memoryToken ?? this.token();
+    if (!token) return { kind: 'failed', reason: 'unauthorized' };
+    let saveVersion: unknown;
+    try { saveVersion = (JSON.parse(raw) as { version?: unknown }).version; } catch { return { kind: 'refused', error: 'payloadJson' }; }
+    const bytes = new TextEncoder().encode(raw);
+    const sha = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)), b => b.toString(16).padStart(2, '0')).join('');
+    const upload = { format: 1, requestId: `imp_${sha.slice(0, 40)}`, baseRevision: 0, saveVersion, payload: raw, payloadBytes: bytes.byteLength, payloadSha256: sha };
+    const r = await this.request('/v1/import', { method: 'POST', headers: this.headers(token, true), body: JSON.stringify(upload) });
+    if (!r) return { kind: 'failed', reason: 'network' };
+    if (r.status === 423) return { kind: 'otherDevice' };
+    const body: unknown = await r.json().catch(() => ({}));
+    if (r.status === 201) {
+      const { lastSeq, view, from } = body as ServerState & { from: number };
+      this.lastSeq = lastSeq; this.pending = undefined;
+      return { kind: 'imported', state: { lastSeq, view }, from };
+    }
+    const code = (body as { error?: string }).error;
+    if (r.status === 401) return { kind: 'failed', reason: 'unauthorized' };
+    if (r.status === 409 && code === 'content_version') return { kind: 'failed', reason: 'content_version' };
+    if (r.status >= 500 || r.status === 429) return { kind: 'failed', reason: 'server' };
+    return { kind: 'refused', error: code ?? `http_${r.status}` };
   }
 
   async send(command: GameCommand): Promise<ServerOutcome> {

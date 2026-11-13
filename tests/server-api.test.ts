@@ -176,7 +176,7 @@ describe('P09-02b account Durable Object', () => {
     expect(leaks(battleText)).toEqual([]);
 
     // The stored log replays from nothing to the same snapshot (also through the audit route).
-    expect(await (await call(s, '/v1/verify', { method: 'POST', headers: gameHeaders(token) })).json()).toEqual({ ok: true, seq: 4 });
+    expect(await (await call(s, '/v1/verify', { method: 'POST', headers: gameHeaders(token) })).json()).toEqual({ ok: true, seq: 4, from: 0 });
     // Accounts never share a Durable Object.
     const other = await guest(s);
     expect(await (await call(s, '/v1/state', { headers: gameHeaders(other.token) })).json()).toEqual({ lastSeq: 0, view: null });
@@ -188,7 +188,7 @@ describe('P09-02b account Durable Object', () => {
     const h = new GameHost(store, GAME_CONTEXT, () => seeds.shift()!, VERSION, () => 0);
     expect(h.command({ requestId: requestId(), seq: 1, command: { kind: 'createCommander', commander, replace: false } }, 'a'.repeat(64)).status).toBe(200);
     expect(h.command({ requestId: requestId(), seq: 2, command: { kind: 'depart', hard: false } }, 'b'.repeat(64)).status).toBe(200);
-    expect(h.verify()).toEqual({ ok: true, seq: 2 });
+    expect(h.verify()).toEqual({ ok: true, seq: 2, from: 0 });
     seeds = [];
     const log = store.entries();
     expect(replayLog(log.map((e, i) => i === 1 ? { ...e, seeds: [7] } : e), GAME_CONTEXT, store.state!.game).ok).toBe(false);

@@ -2,6 +2,7 @@ import { expect, test, type Browser, type Page, type Route } from '@playwright/t
 import { contentVersion } from '../../scripts/content-version.mjs';
 import { SESSION_HEADER } from '../../src/server/account-object';
 import { CONTENT_HEADER, handle } from '../../src/server/api';
+import { currentSave } from '../fixtures/current-save';
 import { withGoogle } from '../fixtures/google-fake';
 import { battleTurns, server, storedGame, type Server } from '../fixtures/server-fakes';
 
@@ -75,7 +76,7 @@ test('server play: a guest account plays through the dev API with retries, input
   await expect(page.locator('#encounter-title')).toContainText('กองหน้าของวาร์กอธ');
   expect(await page.evaluate(k => localStorage.getItem(k), SAVE_KEY)).toBeNull();
   const state = await (await handle(new Request(`${API}/v1/verify`, { method: 'POST', headers: { Authorization: `Bearer ${await page.evaluate(k => localStorage.getItem(k), `fateweave-server-token:${API}`)}`, [CONTENT_HEADER]: contentVersion() } }), w.s.deps)).json();
-  expect(state).toEqual({ ok: true, seq: 2 });
+  expect(state).toEqual({ ok: true, seq: 2, from: 0 });
 
   // Reloading enters again and resumes where the server says the company is.
   await page.reload();
@@ -214,4 +215,32 @@ test('server play account: link Google, sign in on a second device, recover on a
   await again.page.locator('[data-account="recover"]').click();
   await expect(again.page.locator('.account-note')).toHaveText('รหัสกู้คืนไม่ถูกต้อง หรือถูกใช้ไปแล้ว');
   for (const d of [phone, laptop, tablet, again]) await d.close();
+});
+
+test('server play import (D11): the title offers the local save once and the server plays on from it', async ({ page }, info) => {
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.setViewportSize({ width: 390, height: 844 });
+  const w = await serve(page);
+  // A save this browser kept from local play: a company on the map after the prologue.
+  await onTheMap(w);
+  const raw = currentSave(storedGame(w.s, [...w.s.objects.keys()][0]!)!);
+  await page.addInitScript(([k, v]) => { if (!localStorage.getItem(k!)) localStorage.setItem(k!, v!); }, [SAVE_KEY, raw]);
+  await page.goto(`./?server=${encodeURIComponent(API)}`);
+  await expect(page.locator('#import-save')).toBeVisible();
+  await expect(page.locator('.title-import')).toContainText('พบเซฟเดิมในเครื่องนี้');
+  await expect(page.locator('#new-game')).toHaveText('เริ่มเกมใหม่บนเซิร์ฟเวอร์');
+  await page.screenshot({ path: info.outputPath('server-import-offer-390.png') });
+  await page.locator('#import-save').click();
+  await expect(page.locator('#continue')).toBeVisible();
+  await expect(page.locator('.title-server-note')).toContainText('นำเข้าเซฟเดิม (v58) แล้ว');
+  await expect(page.locator('#import-save')).toHaveCount(0);
+  await page.screenshot({ path: info.outputPath('server-import-done-390.png') });
+  // The local save stays as it was; the account now plays on the server.
+  expect(await page.evaluate(k => localStorage.getItem(k), SAVE_KEY)).toBe(raw);
+  await page.reload();
+  await expect(page.locator('#continue')).toBeVisible();
+  await expect(page.locator('#import-save')).toHaveCount(0);
+  await page.locator('#continue').click();
+  await expect(page.locator('#world-view')).toBeVisible();
+  expect(issues).toEqual([]);
 });

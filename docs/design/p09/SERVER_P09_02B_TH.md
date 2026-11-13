@@ -78,7 +78,7 @@ Worker ที่ deploy: bundle 383 KiB (gzip 87 KiB), content `e7f18d399c8f67ac
 - **P09-02c** (ทำแล้ว → [CLIENT_SERVER_P09_02C_TH](CLIENT_SERVER_P09_02C_TH.md)): shell ส่งคำสั่งไป server และแสดง `view` แทนเกมในเครื่อง; ล็อกระหว่างรอ, reconnect/ส่งซ้ำด้วย requestId เดิม, ตอบ 409 `stale`/`gap` ด้วยการอ่าน state ใหม่; ใส่ `CONTENT_VERSION` ตอน build (Vite define จาก `scripts/content-version.mjs`); ชนิด UI เป็น `ClientProfile`/`ClientRun` (CLIENT_VIEW §5 ข้อ 1–2)
 - **D12 ทีละเครื่อง**: ทำแล้วใน P09-02c (`POST /v1/session`, 423 `other_device`)
 - **Google sign-in (D1)**: ทำแล้วใน P09-02d → [ACCOUNT_P09_02D_TH](ACCOUNT_P09_02D_TH.md). เจ้าของสร้าง OAuth Web Client แล้ว (12 พ.ย., Google Cloud project `asterveil-fateweave`, โหมด Testing, origins `https://wnau34-nptrn.github.io` + `http://localhost:5173`): Client ID `982054923877-79lqr98hgklktknar98k6jsnvs4dk4fb.apps.googleusercontent.com` (ไม่ใช่ความลับ; ไม่ใช้ client secret); server ตรวจ ID token กับ JWKS ของ Google; ตาราง `identities`/`recovery_codes` ตาม SCHEMA_API_DRAFT
-- **D11 นำเข้าเซฟ**: ยังไม่ทำ (`checkUpload`/`decideUpload` มีแล้ว); ต้อง replay เซฟ v58 ด้วย `parseGame` ใน DO และเก็บ fingerprint ใน D1
+- **D11 นำเข้าเซฟ**: ทำแล้วใน P09-02e → [IMPORT_P09_02E_TH](IMPORT_P09_02E_TH.md) (รวม snapshot ของ log)
 - log ใน DO โตไม่หยุด → snapshot เป็นระยะ + ตัด log เก่าตาม D6; `/v1/verify` replay ทั้ง log (ช้าเมื่อยาว) → จำกัดให้ admin
 - rate limit อยู่ในหน่วยความจำของ isolate (best effort) → ใช้ Rate Limiting binding ของ Cloudflare หรือนับใน DO ก่อนเปิดคนนอก; `/v1/guest` ไม่ idempotent (retry ได้บัญชีใหม่)
 - เมื่อ deploy เนื้อหาใหม่ DO ยังถือ game ของเวอร์ชันเก่า: ต้องมีขั้น migrate เซฟ (ผ่าน `parseGame`) ก่อนรับคำสั่งเวอร์ชันใหม่

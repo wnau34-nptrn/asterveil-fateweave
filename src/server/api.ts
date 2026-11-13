@@ -1,4 +1,6 @@
-import { accountInfo, authenticate, createGuest, issueRecoveryCode, linkGoogle, recoverWithCode, signInGoogle, type D1Like } from './accounts';
+import { checkUpload, MAX_PAYLOAD_BYTES } from '../core/cloud/cloud-save';
+import { SAVE_VERSION } from '../core/save/expedition-save';
+import { accountInfo, authenticate, claimFingerprint, createGuest, issueRecoveryCode, linkGoogle, recoverWithCode, releaseFingerprint, sha256Hex, signInGoogle, type D1Like } from './accounts';
 import type { GoogleVerifier } from './google';
 import { SESSION_HEADER } from './account-object';
 import { MAX_COMMAND_BYTES } from './game-host';
@@ -17,6 +19,8 @@ export interface ApiDeps {
   limiter: RateLimiter;
   // P09-02d: checks a Google ID token (iss/aud/exp/signature against Google's JWKS); absent when no client id is set.
   google?: GoogleVerifier;
+  // P09-02e (owner D11): importing a local save is allowed only before the external test; `false` closes it (403).
+  legacyImport?: boolean;
 }
 
 export const CONTENT_HEADER = 'X-Fateweave-Content';
@@ -37,8 +41,10 @@ export class RateLimiter {
     return ++w.count <= limit;
   }
 }
-export const LIMITS = { commandPerSecond: 10, guestPerMinute: 5, readPerSecond: 10, signInPerMinute: 10, recoverPerMinute: 5, accountPerMinute: 20 } as const;
+export const LIMITS = { importPerMinute: 5, commandPerSecond: 10, guestPerMinute: 5, readPerSecond: 10, signInPerMinute: 10, recoverPerMinute: 5, accountPerMinute: 20 } as const;
 const ACCOUNT_BODY_BYTES = 8 * 1024;
+// The envelope carries the save as a JSON string, so escaping can make it up to about twice the save's size.
+export const IMPORT_BODY_BYTES = 2 * MAX_PAYLOAD_BYTES + 1024;
 
 function json(body: unknown, status = 200, extra: Record<string, string> = {}): Response {
   return Response.json(body, { status, headers: { 'Cache-Control': 'no-store', ...extra } });
@@ -82,7 +88,7 @@ export async function handle(request: Request, deps: ApiDeps): Promise<Response>
 }
 
 const ROUTES: Record<string, 'GET' | 'POST'> = {
-  '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/command': 'POST', '/v1/verify': 'POST',
+  '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/command': 'POST', '/v1/verify': 'POST', '/v1/import': 'POST',
   '/v1/account': 'GET', '/v1/link': 'POST', '/v1/signin': 'POST', '/v1/recovery-code': 'POST', '/v1/recover': 'POST',
 };
 const ACCOUNT_ROUTES = new Set(['/v1/account', '/v1/link', '/v1/signin', '/v1/recovery-code', '/v1/recover']);
@@ -105,6 +111,7 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
   if (request.headers.get(CONTENT_HEADER) !== deps.contentVersion) return json({ error: 'content_version', server: deps.contentVersion }, 409);
   const accountId = await authenticate(deps.db, request.headers.get('Authorization'));
   if (!accountId) return error('unauthorized', 401, { 'WWW-Authenticate': 'Bearer' });
+  if (path === '/v1/import') return importRoute(request, accountId, deps, now);
   const writes = path === '/v1/command';
   if (!deps.limiter.allow(`${writes ? 'cmd' : 'read'}:${accountId}`, writes ? LIMITS.commandPerSecond : LIMITS.readPerSecond, 1000, now)) {
     return error('rate_limited', 429, { 'Retry-After': '1' });
@@ -120,6 +127,39 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
   const body = await readLimited(request, MAX_COMMAND_BYTES);
   if (body === null) return error('too_large', 413);
   return game.fetch(new Request('https://game/command', { method: 'POST', body, headers: { 'Content-Type': 'application/json', ...sessionHeaders } }));
+}
+
+// P09-02e (owner D11): one-time import of the device's local save (v1–SAVE_VERSION) into this account. The Worker checks
+// the envelope (`checkUpload`: shape, size, the save's SHA-256 and version) and holds the fingerprint in D1; the account's
+// Durable Object replays the save with `parseGame` and makes it the account's game. Answers: 201 (also for a retry),
+// 403 import_closed, 409 already_imported / fingerprint_used / has_game, 413, 422 <issue> / replay_failed.
+async function importRoute(request: Request, accountId: string, deps: ApiDeps, now: number): Promise<Response> {
+  if (deps.legacyImport === false) return error('import_closed', 403);
+  if (!deps.limiter.allow(`import:${accountId}`, LIMITS.importPerMinute, 60_000, now)) return error('rate_limited', 429, { 'Retry-After': '60' });
+  const session = request.headers.get(SESSION_HEADER) ?? '';
+  if (!SESSION.test(session)) return error('session_required', 400);
+  if (!/^application\/json\b/i.test(request.headers.get('Content-Type') ?? '')) return error('unsupported_media_type', 415);
+  const body = await readLimited(request, IMPORT_BODY_BYTES);
+  if (body === null) return error('too_large', 413);
+  let parsed: unknown;
+  try { parsed = JSON.parse(body); } catch { return error('invalid_json', 400); }
+  const payload = typeof parsed === 'object' && parsed !== null ? (parsed as { payload?: unknown }).payload : undefined;
+  const digest = typeof payload === 'string' && payload.length <= MAX_PAYLOAD_BYTES ? await sha256Hex(payload) : '';
+  const checked = checkUpload(parsed, digest, v => v >= 1 && v <= SAVE_VERSION);
+  if (!checked.ok) return checked.issue === 'tooLarge' ? error('too_large', 413) : error(checked.issue, 422);
+  const fingerprint = checked.upload.payloadSha256;
+  const claim = await claimFingerprint(deps.db, accountId, fingerprint);
+  if (claim !== 'claimed') return error(claim, 409);
+  const answer = await deps.game(accountId).fetch(new Request('https://game/import', {
+    method: 'POST', body: JSON.stringify(checked.upload), headers: { 'Content-Type': 'application/json', [SESSION_HEADER]: session },
+  }));
+  if (answer.status === 422 || answer.status === 409) {
+    const code = (await answer.clone().json().catch(() => ({})) as { error?: string }).error;
+    // Nothing was imported: the save stays free for another account. (`already_imported` means the object holds this
+    // account's earlier import, which keeps its fingerprint.)
+    if (code !== 'already_imported') await releaseFingerprint(deps.db, accountId, fingerprint);
+  }
+  return answer;
 }
 
 // P09-02d account routes (owner D1): no game content is involved, so no content-version or session header.
