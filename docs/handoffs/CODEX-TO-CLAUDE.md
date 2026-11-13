@@ -1,3 +1,8 @@
+## 2026-11-13 — P04-00 economy/stars scope sheet + Pages server default
+- Owner “ข้อ 1” → PR #238 merged: Pages build presets `VITE_FATEWEAVE_API` (dev Worker), so the home-screen app and browsers start in server play; `?server=off` still opts out. P09-03 PR #237 merged after full CI.
+- Owner “ยืนยัน ทำ P04-00”; branch `claude/p04-00-scope` → PR. [SCOPE_P04_00_TH](../design/p04/SCOPE_P04_00_TH.md): settled decisions, what the code does now (stars +8%, dupes 1/2/3/4 + ore, seals ≤50%, tree points still `(Lv−1)+(★−1)`, camp cap 10, no milestones), system choices S1–S8 with recommendations, player models, P04-01…06 order (05/06 runtime waits for the ledger).
+- Docs only (`git diff --check`); no rule/number/save change. Open: owner answers S1–S8; privacy contact, test date T, admin row, consent publish.
+
 ## 2026-11-13 — P09-03 credential rotation + id-free telemetry + in-game feedback
 - Owner “ยืนยัน ทำ P09-03 ต่อได้เลย”; branch `claude/p09-03-telemetry` → PR into `feature/fateweave-initial-prototype` (P09-02g was #236, merged).
 - Rotation: `/v1/token/rotate` (device makes the next credential, stores it first; server keeps the old secret 10 min; client rotates every 24 h, recovers a lost answer without a new guest). D1 `0006` adds device `prev_hash/prev_until/rotated_at`, `telemetry_daily`, `feedback`.
