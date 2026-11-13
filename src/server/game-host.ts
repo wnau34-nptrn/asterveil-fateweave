@@ -1,4 +1,5 @@
 import { clientView, type ClientGame } from '../core/command/client-view';
+import { telemetryOf, type TelemetryItem } from './telemetry';
 import { canonicalJson, emptyBook, processCommand, type CommandBook, type CommandReply, type CommandRequest } from '../core/command/command-envelope';
 import { applyCommand, isRejected, parseCommand, type CommandContext } from '../core/command/game-command';
 import type { SeedSource } from '../core/command/seed-source';
@@ -40,7 +41,8 @@ export interface HostStore {
 }
 
 export type HostAnswer =
-  | { status: 200; body: CommandReply; replayed: boolean }
+  // `telemetry` (P09-03): what the committed command did, for the daily totals (empty for retries and refusals).
+  | { status: 200; body: CommandReply; replayed: boolean; telemetry?: TelemetryItem[] }
   | { status: 400; body: { error: 'invalid_request' } }
   | { status: 409; body: { error: 'stale' | 'gap'; lastSeq: number } | { error: 'request_reused' } }
   | { status: 423; body: { error: 'other_device' } };
@@ -98,7 +100,8 @@ export class GameHost {
           seq, requestId: request.requestId, command: request.command, seeds: seeds.used,
           status: out.reply.status, contentVersion: this.contentVersion, at,
         }, snapshot);
-        return { status: 200, body: out.reply, replayed: false };
+        const telemetry = out.reply.status === 'applied' ? telemetryOf(game, out.game, out.reply.events) : [];
+        return { status: 200, body: out.reply, replayed: false, telemetry };
       }
     }
   }

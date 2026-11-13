@@ -73,7 +73,7 @@ async function purgeGame(env: Env, accountId: string): Promise<boolean> {
 }
 
 export default {
-  fetch(request: Request, env: Env): Promise<Response> {
+  fetch(request: Request, env: Env, ctx?: ExecutionContextLike): Promise<Response> {
     const verify = googleFor(env);
     return handle(request, {
       db: env.DB,
@@ -84,6 +84,7 @@ export default {
       limiter,
       ...(env.LIMIT ? { gate: durableGate(env.LIMIT) } : {}),
       legacyImport: legacyImportOpen(env, Date.now()),
+      ...(ctx ? { defer: (work: Promise<unknown>) => ctx.waitUntil(work) } : {}),
       ...(verify ? { google: verify } : {}),
     });
   },

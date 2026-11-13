@@ -52,4 +52,4 @@
 
 ## 5. ที่เหลือก่อนคนนอก
 
-ช่องทางติดต่อในหน้า privacy · token rotation · publish Google consent screen · ลบบัญชี guest ที่ไม่ใช้นาน (ยังไม่มี, หน้า privacy บอกไว้) · Safari/iPhone/Android จริงยังไม่ทดสอบ
+ช่องทางติดต่อในหน้า privacy · token rotation (ทำแล้วใน [P09-03](TELEMETRY_P09_03_TH.md)) · publish Google consent screen · ลบบัญชี guest ที่ไม่ใช้นาน (ยังไม่มี, หน้า privacy บอกไว้) · Safari/iPhone/Android จริงยังไม่ทดสอบ

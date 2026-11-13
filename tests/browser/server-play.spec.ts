@@ -303,3 +303,46 @@ test('server play account: delete with a typed confirm, the waiting state, cance
   await page.screenshot({ path: info.outputPath('privacy-390.png') });
   await d.close();
 });
+
+// P09-03: the feedback form from the title and from the battle settings tab (a dialog above the info dialog); an admin
+// also sees the latest feedback and the telemetry totals.
+test('server play feedback: send from the title and from battle settings; admin views', async ({ browser }, info) => {
+  const s = server(undefined, contentVersion());
+  const d = await device(browser, s); const page = d.page;
+  await page.locator('#feedback-open').click();
+  await expect(page.locator('#feedback-dialog')).toBeVisible();
+  await page.locator('[data-feedback="send"]').click();
+  await expect(page.locator('#feedback-status')).toHaveText('เขียนรายละเอียดก่อนกดส่ง');
+  await page.locator('input[name="category"][value="idea"]').check();
+  await page.locator('#feedback-text').fill('อยากให้มีปุ่มเร่งความเร็วการต่อสู้');
+  await expect(page.locator('#feedback-count')).toHaveText('34 / 1000');
+  await page.screenshot({ path: info.outputPath('feedback-form-390.png') });
+  await page.locator('[data-feedback="send"]').click();
+  await expect(page.locator('#feedback-status')).toHaveText('ส่งแล้ว ขอบคุณที่ช่วยบอก');
+  await page.locator('[data-feedback="close"]').click();
+  // In battle: info → settings → feedback opens above the info dialog.
+  await page.locator('#new-game').click(); await page.locator('#commander-name').fill('ส่งความเห็น');
+  await page.locator('#commander-create').click();
+  await page.locator('[data-story=skip]').click();
+  await page.locator('#battle-info').click(); await page.locator('#battle-tab-settings').click();
+  await page.locator('#battle-panel-settings [data-feedback-open]').click();
+  await page.locator('input[name="category"][value="bug"]').check();
+  await page.locator('#feedback-text').fill('ทดสอบจากหน้าต่อสู้');
+  await page.locator('[data-feedback="send"]').click();
+  await expect(page.locator('#feedback-status')).toHaveText('ส่งแล้ว ขอบคุณที่ช่วยบอก');
+  expect(s.d1.db.prepare('SELECT category, place FROM feedback ORDER BY id').all()).toEqual([{ category: 'idea', place: 'title' }, { category: 'bug', place: 'battle' }]);
+  await page.locator('[data-feedback="close"]').click();
+  await expect(page.locator('#game-info')).toBeVisible();
+  // Admin: the same account made admin sees both views after a reload.
+  const accountId = (s.d1.db.prepare('SELECT id FROM accounts').get() as { id: string }).id;
+  grantAdmin(s, accountId);
+  await page.reload();
+  await page.locator('#feedback-open').click();
+  await page.locator('[data-feedback="admin-telemetry"]').click();
+  await expect(page.locator('.feedback-table')).toContainText('feedback · idea');
+  await page.locator('[data-feedback="admin-feedback"]').click();
+  await expect(page.locator('.feedback-list li')).toHaveCount(2);
+  await page.locator('.feedback-admin').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('feedback-admin-390.png') });
+  await d.close();
+});

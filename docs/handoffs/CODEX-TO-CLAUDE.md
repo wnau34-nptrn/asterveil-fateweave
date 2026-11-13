@@ -1,3 +1,11 @@
+## 2026-11-13 — P09-03 credential rotation + id-free telemetry + in-game feedback
+- Owner “ยืนยัน ทำ P09-03 ต่อได้เลย”; branch `claude/p09-03-telemetry` → PR into `feature/fateweave-initial-prototype` (P09-02g was #236, merged).
+- Rotation: `/v1/token/rotate` (device makes the next credential, stores it first; server keeps the old secret 10 min; client rotates every 24 h, recovers a lost answer without a new guest). D1 `0006` adds device `prev_hash/prev_until/rotated_at`, `telemetry_daily`, `feedback`.
+- Telemetry: server-derived daily totals (session, commander, run start/end, battle result) via an internal DO→Worker header written after the answer; device error codes from a fixed list (`/v1/telemetry`). No account id/device/IP stored.
+- Feedback: dialog from the title and world/battle settings (`/v1/feedback`, 3 per 10 min, purged with the account); admins see latest feedback and 14-day totals (`/v1/admin/*`, audited). Privacy page updated.
+- Tests: typecheck/lint/unit/build; new `server-telemetry` (6); Playwright `server-play` 6/6 (Chromium 390px; feedback form/admin screenshots checked); smoke adds rotate/report/feedback. Details: [TELEMETRY_P09_03_TH](../design/p09/TELEMETRY_P09_03_TH.md).
+- No rule/number/save v58 change. Open: privacy contact line, test date T, owner admin row, consent publish, inactive guests, old-token reuse detection.
+
 ## 2026-11-13 — P09-02g account deletion + privacy page + shared rate limits + dated import close
 - Owner “ยืนยัน ใช้ 14 วันตามที่เสนอ”; branch `claude/p09-02g-account-safety` → PR into `feature/fateweave-initial-prototype`.
 - Deletion: `/v1/account/delete` (`{confirm:'delete'}`, typed “ลบบัญชี” in the panel) → `deleting` + 14-day `delete_after`, other devices revoked; game routes 403 `account_deleting`; `/v1/account/cancel` until the deadline (also after Google/code sign-in on a new device); hourly Cron purges DO (`deleteAll`) then D1 rows; D1 `0005` `account_audit` (id/action/time only).

@@ -5,7 +5,7 @@ import { GOOGLE, type D1Like } from './accounts';
 // requesting device stays signed in so it can cancel; any device can also sign in again (Google / recovery code) to
 // cancel. While `deleting` the game routes refuse (403 account_deleting). Cancel: back to `linked`/`guest`. Purge (the
 // hourly Cron): once `delete_after` has passed by PURGE_MARGIN_MS, the account's Durable Object data is deleted, then its
-// D1 rows, in that order, so a failed run is simply retried. `account_audit` keeps only the random id, action and time.
+// D1 rows (P09-03: its feedback too), in that order, so a failed run is simply retried. `account_audit` keeps only the random id, action and time.
 
 export const DELETE_GRACE_MS = 14 * 24 * 60 * 60 * 1000;
 // Cancel is allowed until `delete_after`; the purge waits this much longer, so the two never overlap.
@@ -63,6 +63,7 @@ export async function purgeDue(db: D1Like, purgeGame: PurgeGame, now: number, li
       db.prepare(`DELETE FROM identities WHERE account_id = ? AND EXISTS ${guard}`).bind(id, id, now - PURGE_MARGIN_MS),
       db.prepare(`DELETE FROM recovery_codes WHERE account_id = ? AND EXISTS ${guard}`).bind(id, id, now - PURGE_MARGIN_MS),
       db.prepare(`DELETE FROM admins WHERE account_id = ? AND EXISTS ${guard}`).bind(id, id, now - PURGE_MARGIN_MS),
+      db.prepare(`DELETE FROM feedback WHERE account_id = ? AND EXISTS ${guard}`).bind(id, id, now - PURGE_MARGIN_MS),
       db.prepare(`INSERT INTO account_audit (account_id, action, detail, at) SELECT ?, 'purged', '', ? WHERE EXISTS ${guard}`).bind(id, now, id, now - PURGE_MARGIN_MS),
       db.prepare("DELETE FROM accounts WHERE id = ? AND status = 'deleting' AND delete_after <= ?").bind(id, now - PURGE_MARGIN_MS),
     ]);

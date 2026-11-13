@@ -38,3 +38,22 @@
 .account-status[data-status="deleting"] { padding: 8px 10px; border-radius: 10px; border: 1px solid #ed927f80; background: #ed927f14; }
 .account-privacy { text-align: center; }
 .account-privacy a, .title-privacy { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; color: var(--text-muted, #b9c8d8); text-decoration: underline; text-underline-offset: 3px; font-size: 13px; }
+/* P09-03: the feedback form (a modal dialog above the info dialogs) and its admin views. */
+.feedback-dialog { width: min(calc(100% - 32px), 420px); max-height: calc(100dvh - 32px); padding: 0; border: 0; background: transparent; color: var(--text, #e8f5ff); overflow-y: auto; }
+.feedback-dialog::backdrop { background: #050b14c7; }
+.feedback-form { display: grid; gap: 8px; }
+.feedback-form fieldset { margin: 0; padding: 0; border: 0; display: grid; gap: 6px; }
+.feedback-form legend, .feedback-form > label { margin-bottom: 4px; font-size: 13px; color: var(--text-muted, #b9c8d8); }
+.feedback-cats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.feedback-cats label { display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px; border-radius: 10px; border: 1px solid #e8f5ff33; font-size: 14px; }
+.feedback-cats label:has(input:checked) { border-color: var(--gold-light, #f2d596); background: #f2d59614; }
+.feedback-form textarea { width: 100%; min-height: 120px; padding: 10px 12px; border-radius: 10px; border: 1px solid #e8f5ff40; background: #050b14; color: var(--text, #e8f5ff); font: 16px/1.5 inherit; resize: vertical; }
+.feedback-count { text-align: right; font-size: 12px !important; }
+.feedback-note { font-size: 13px !important; }
+.feedback-entry { display: grid; gap: 8px; margin-top: 12px; }
+.feedback-entry button { min-height: 44px; }
+.feedback-list { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 8px; font-size: 14px; }
+.feedback-list p { white-space: pre-wrap; word-break: break-word; }
+.feedback-table { width: 100%; margin-top: 8px; border-collapse: collapse; font-size: 13px; }
+.feedback-table th, .feedback-table td { padding: 4px 6px; border-bottom: 1px solid #e8f5ff1f; text-align: left; word-break: break-all; }
+.feedback-table td:last-child, .feedback-table th:last-child { text-align: right; }
