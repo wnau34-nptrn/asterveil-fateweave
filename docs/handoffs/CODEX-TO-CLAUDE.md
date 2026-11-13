@@ -1,4 +1,10 @@
 ## 2026-11-13 — P09-02e one-time local-save import (owner D11) + DO log snapshots
+
+## 2026-11-13 — Title compact (Sonnet, branch claude/title-compact)
+- Rebuilt `showTitle()` + CSS per owner-approved mockup: single bottom glass dock (save line + primary), gear → bottom settings sheet (account/sound/server→local `?server=off`/red new game with confirm), "เซิร์ฟเวอร์ทดลอง" pill, auto-hiding `role=status` note, D11 import inside the dock. No rule/save/server change.
+- Tests: typecheck, lint, vitest, build, Playwright server-play + portrait-keyboard + ui-language-audit pass (specs updated: account opens via gear; #new-game in sheet when a save exists). 390px shots reviewed.
+- Open: owner visual review of the live title; real-device check.
+
 - Branch `claude/p09-02e-import` → PR into `feature/fateweave-initial-prototype`.
 - Worker `/v1/import`: `checkUpload` (size/SHA-256/version 1–58), D1 fingerprint claim first (migration `0003_legacy_import.sql`, unique), DO `importSave` (`decideUpload` + `parseGame` replay, raw save kept, import snapshot); 201 / 403 import_closed (`LEGACY_IMPORT` var) / 409 already_imported·fingerprint_used·has_game / 413 / 422; fingerprint released when DO refuses.
 - DO `snapshots` every 50 seq + run end; `/v1/verify` replays from the latest (`{ok, seq, from}`). Client `ServerClient.importSave` (requestId from the save hash), title offer in server play (390px checked).

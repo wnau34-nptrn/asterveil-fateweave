@@ -936,3 +936,39 @@ html, body { background: #0a1422; }
   .commander-top .eyebrow { display: none; }
   .commander-footer #commander-create { min-height: 44px; }
 }
+
+/* Compact title (owner-approved mockup 2026-11-13): artwork stays clear; one bottom glass dock, gear + sheet, server pill, note toast. */
+.title-view .title-top { position: absolute; z-index: 2; left: max(16px, env(safe-area-inset-left)); right: max(16px, env(safe-area-inset-right)); top: max(12px, var(--safe-top)); display: flex; justify-content: space-between; align-items: center; pointer-events: none; }
+.title-top > * { pointer-events: auto; }
+.title-server { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; background: #08121fc7; border: 1px solid #e8f5ff3d; font-size: 12px; color: var(--gold-light, #f2d596); }
+.title-server .icon { width: 16px; height: 16px; }
+.title-gear { width: 44px; height: 44px; min-height: 44px; padding: 0; display: grid; place-items: center; }
+.title-view .title-card { padding-top: 56px; }
+.title-view .title-logo { margin-top: 0; width: min(70%, 290px); }
+.title-view .title-server-note { margin: 12px auto 0; max-width: 100%; padding: 8px 14px; border-radius: 999px; background: #08121fe6; border: 1px solid #e8f5ff3d; font-size: 13px; color: var(--text, #e8f5ff); animation: title-note 8s ease both; }
+.title-view .title-server-note[hidden], .title-server-note-slot { display: none; }
+@keyframes title-note { 0%, 88% { opacity: 1; } 100% { opacity: 0; } }
+.title-view .title-actions { margin-top: auto; gap: 8px; padding: 10px 12px 8px; border-radius: 18px; background: #08121fc7; border: 1px solid #e8f5ff3d; backdrop-filter: blur(6px); margin-bottom: 2px; }
+.title-view .title-actions button { min-height: 50px; font-size: 18px; border-radius: 14px; }
+.title-view .title-actions .secondary { min-height: 44px; font-size: 15px; }
+.title-view .title-actions .title-save { padding: 0; flex-direction: row; justify-content: space-between; align-items: center; gap: 8px; width: 100%; font-size: 13px; text-align: left; }
+.title-view .title-actions .title-save b { font: 600 14px var(--font-heading); color: var(--gold-light, #f2d596); }
+.title-view .title-chips span { font-size: 12.5px; }
+.title-view .title-footer { margin: 0; font-size: 11px; color: var(--text-muted, #bbcadb); }
+.title-view .title-import { display: grid; gap: 8px; width: 100%; padding: 0; border: 0; background: none; }
+.title-view .title-import .title-save { flex-wrap: wrap; }
+.title-import-note { margin: 0; font-size: 12px; color: var(--text-muted, #bbcadb); text-align: center; }
+.title-settings { position: absolute; inset: 0; z-index: 5; display: flex; align-items: flex-end; }
+.title-settings[hidden] { display: none; }
+.title-scrim { position: absolute; inset: 0; background: #050b1499; }
+.title-sheet { position: relative; width: 100%; max-height: 90%; overflow-y: auto; display: grid; gap: 10px; padding: 14px 16px max(20px, env(safe-area-inset-bottom)); border-radius: 22px 22px 0 0; background: #0b1729f7; border-top: 1px solid #e8f5ff3d; text-align: left; }
+.title-sheet h2 { margin: 0; font: 600 18px var(--font-heading); display: flex; justify-content: space-between; align-items: center; }
+.title-sheet h3 { margin: 0 0 6px; font: 600 13px var(--font-heading); color: var(--gold-light, #f2d596); }
+.title-sec { display: grid; gap: 6px; padding-top: 10px; border-top: 1px solid #e8f5ff1f; }
+.title-x { width: 44px; height: 44px; min-height: 44px; padding: 0; border-radius: 50%; display: grid; place-items: center; background: #14243a; color: var(--text); border: 0; }
+.title-view .title-sheet .title-item { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; min-height: 48px; padding: 6px 12px; border-radius: 12px; background: #14243a; border: 0; color: var(--text); font: 400 14px var(--font-body); text-align: left; }
+.title-item small { display: block; color: var(--text-muted, #bbcadb); font-size: 12px; }
+.title-view .title-sheet .title-danger { color: #ffb4a8; border: 1px solid #ffb4a855; background: #2a1418; font-weight: 600; }
+@media (prefers-reduced-motion: reduce) { .title-view .title-server-note { animation: none !important; } }
+.title-view .title-actions .title-save b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.title-view .title-actions .title-chips { flex-wrap: nowrap; flex: none; }

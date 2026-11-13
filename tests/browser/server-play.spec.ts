@@ -159,7 +159,7 @@ async function device(browser: Browser, s: Server): Promise<{ page: Page; close(
   await page.route('https://accounts.google.com/gsi/client', route => route.fulfill({ contentType: 'text/javascript', body: GIS_STUB }));
   await serve(page, s);
   await page.goto(`./?server=${encodeURIComponent(API)}`);
-  await expect(page.locator('#account-open')).toBeVisible();
+  await expect(page.locator('#title-settings-open')).toBeVisible();
   return { page, close: () => context.close() };
 }
 
@@ -174,7 +174,7 @@ test('server play account: link Google, sign in on a second device, recover on a
   await phone.page.locator('[data-story=skip]').click();
   await expect(phone.page.locator('#save-status')).toHaveText('บันทึกบนเซิร์ฟเวอร์ทุกเทิร์น');
   await phone.page.reload();
-  await phone.page.locator('#account-open').click();
+  await phone.page.locator('#title-settings-open').click(); await phone.page.locator('#account-open').click();
   await expect(phone.page.locator('.account-status')).toHaveAttribute('data-status', 'guest');
   await phone.page.locator('[data-account="code"]').click();
   const code = (await phone.page.locator('#account-code').textContent())!.trim();
@@ -190,7 +190,7 @@ test('server play account: link Google, sign in on a second device, recover on a
   // Laptop: its own guest first; Google is already on the phone's account, so it offers to switch (never merges).
   const laptop = await device(browser, s);
   await expect(laptop.page.locator('#continue')).toHaveCount(0);
-  await laptop.page.locator('#account-open').click();
+  await laptop.page.locator('#title-settings-open').click(); await laptop.page.locator('#account-open').click();
   await tokenFor(laptop.page, 'g-owner');
   await laptop.page.locator('#fake-google').click();
   await expect(laptop.page.locator('.account-conflict')).toBeVisible();
@@ -205,12 +205,12 @@ test('server play account: link Google, sign in on a second device, recover on a
 
   // Tablet: the recovery code reaches the same account once; the same code on another device is refused.
   const tablet = await device(browser, s);
-  await tablet.page.locator('#account-open').click();
+  await tablet.page.locator('#title-settings-open').click(); await tablet.page.locator('#account-open').click();
   await tablet.page.locator('#account-code-input').fill(code.toLowerCase());
   await tablet.page.locator('[data-account="recover"]').click();
   await expect(tablet.page.locator('#continue')).toBeVisible();
   const again = await device(browser, s);
-  await again.page.locator('#account-open').click();
+  await again.page.locator('#title-settings-open').click(); await again.page.locator('#account-open').click();
   await again.page.locator('#account-code-input').fill(code);
   await again.page.locator('[data-account="recover"]').click();
   await expect(again.page.locator('.account-note')).toHaveText('รหัสกู้คืนไม่ถูกต้อง หรือถูกใช้ไปแล้ว');
@@ -228,7 +228,7 @@ test('server play import (D11): the title offers the local save once and the ser
   await page.goto(`./?server=${encodeURIComponent(API)}`);
   await expect(page.locator('#import-save')).toBeVisible();
   await expect(page.locator('.title-import')).toContainText('พบเซฟเดิมในเครื่องนี้');
-  await expect(page.locator('#new-game')).toHaveText('เริ่มเกมใหม่บนเซิร์ฟเวอร์');
+  await expect(page.locator('#new-game')).toHaveText('เริ่มใหม่บนเซิร์ฟเวอร์');
   await page.screenshot({ path: info.outputPath('server-import-offer-390.png') });
   await page.locator('#import-save').click();
   await expect(page.locator('#continue')).toBeVisible();

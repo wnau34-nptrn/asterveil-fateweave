@@ -47,7 +47,7 @@ for (const [width, height, touch] of [[1366, 768, false], [1920, 1080, false], [
     const frame = (await page.locator('#app').boundingBox())!;
     expect(frame.width).toBeLessThanOrEqual(480); expect(frame.width).toBeLessThan(frame.height);
     expect(Math.abs(frame.x + frame.width / 2 - width / 2)).toBeLessThanOrEqual(1);
-    for (const id of ['#continue', '#new-game']) await inFrame(page, id);
+    for (const id of ['#continue', '#title-settings-open']) await inFrame(page, id);
     await page.screenshot({ path: info.outputPath('portrait-title.png') });
     await page.locator('#continue').click(); await expect(page.locator('#lobby-view')).toBeVisible();
     await inFrame(page, '#lobby-depart'); await page.locator('#lobby-tab-team').click();
