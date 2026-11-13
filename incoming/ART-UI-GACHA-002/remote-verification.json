@@ -1,0 +1,64 @@
+{
+  "verified_remote_commit": "ce7972369e7042fe3349a41e506a054daee8c651",
+  "method": "fresh isolated shallow clone from GitHub; separate object store; checkout all referenced files",
+  "files": [
+    {
+      "path": "reference/main-screen.png",
+      "sha256_matches": true,
+      "png_decode": true
+    },
+    {
+      "path": "reference/saturn-ring-reward-types.png",
+      "sha256_matches": true,
+      "png_decode": true
+    },
+    {
+      "path": "art/key-art.png",
+      "sha256_matches": true,
+      "png_decode": true
+    },
+    {
+      "path": "art/fate-loom-transparent.png",
+      "sha256_matches": true,
+      "png_decode": true
+    },
+    {
+      "path": "reference/single-summon-storyboard.png",
+      "sha256_matches": true,
+      "png_decode": true
+    },
+    {
+      "path": "reference/flows/01-03-main-target-preview.png",
+      "sha256_matches": true,
+      "png_decode": true
+    },
+    {
+      "path": "reference/flows/04-06-rates-confirmation.png",
+      "sha256_matches": true,
+      "png_decode": true
+    },
+    {
+      "path": "reference/flows/07-09-summon-results.png",
+      "sha256_matches": true,
+      "png_decode": true
+    },
+    {
+      "path": "reference/flows/10-12-exchange.png",
+      "sha256_matches": true,
+      "png_decode": true
+    },
+    {
+      "path": "reference/flows/13-15-shards-history.png",
+      "sha256_matches": true,
+      "png_decode": true
+    },
+    {
+      "path": "reference/flows/16-18-receipt-recovery.png",
+      "sha256_matches": true,
+      "png_decode": true
+    }
+  ],
+  "all_checks_passed": true,
+  "relative_links": true,
+  "total_images": 11
+}

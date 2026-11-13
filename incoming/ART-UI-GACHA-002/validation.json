@@ -1,0 +1,154 @@
+{
+  "date": "2026-11-09",
+  "source_game_commit": "6357c10cf41c0a2f379878b0a77d28da15c9cbd5",
+  "purpose": "reference only; not runtime integration",
+  "files": [
+    {
+      "path": "reference/main-screen.png",
+      "bytes": 2128453,
+      "size": [
+        852,
+        1846
+      ],
+      "mode": "RGB",
+      "sha256": "96006a2c7006ccbf89d7b41b738f26c3487bfa6651d151f54f2a27a4e1433aa5",
+      "purpose": "latest main gacha artwork/mockup",
+      "source_file": "main-screen.png"
+    },
+    {
+      "path": "reference/saturn-ring-reward-types.png",
+      "bytes": 2333579,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "sha256": "9f4b187129c8a069941bf9872c12a243679624008452420076cb6f0b1bff26cb",
+      "purpose": "latest ring layout and full-character vs shard distinction",
+      "source_file": "exec-9ae5b7be-c75a-45ce-a78d-94aced7e4f9d.png"
+    },
+    {
+      "path": "art/key-art.png",
+      "bytes": 2241551,
+      "size": [
+        853,
+        1844
+      ],
+      "mode": "RGB",
+      "sha256": "9987c2456fac212908e58a47285268b044fcab506b97402259277e240a68c3c1",
+      "purpose": "new shrine background, no UI",
+      "source_file": "key-art.png"
+    },
+    {
+      "path": "art/fate-loom-transparent.png",
+      "bytes": 1052514,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "8c1b6c62e86931fd3ddf3d58feeb8734ae767af2d55b03904fbcc1842fe9158b",
+      "purpose": "isolated alpha art layer; not packed runtime asset",
+      "source_file": "fate-loom-transparent.png",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "path": "reference/single-summon-storyboard.png",
+      "bytes": 2533906,
+      "size": [
+        1023,
+        1538
+      ],
+      "mode": "RGB",
+      "sha256": "29e8570ce40c972651765352db9b723befb63308ee1fa6dc57d4f1a5f4a02a1a",
+      "purpose": "static single-summon animation direction",
+      "source_file": "summon-storyboard.png"
+    },
+    {
+      "path": "reference/flows/01-03-main-target-preview.png",
+      "bytes": 2025787,
+      "size": [
+        1448,
+        1086
+      ],
+      "mode": "RGB",
+      "sha256": "3091a7105f85083e2e7c6256f6b882e5fa3a2c04786e4e902b4ae890ce754c4f",
+      "purpose": "functional flow reference; old main/grid composition superseded",
+      "source_file": "01-03-main-target-preview.png"
+    },
+    {
+      "path": "reference/flows/04-06-rates-confirmation.png",
+      "bytes": 1778282,
+      "size": [
+        1341,
+        1173
+      ],
+      "mode": "RGB",
+      "sha256": "2367373fc29d6a620f068993c526db7a955602dde7779e5118f55ca2afcace0e",
+      "purpose": "functional flow reference; old main/grid composition superseded",
+      "source_file": "04-06-rates-confirmation.png"
+    },
+    {
+      "path": "reference/flows/07-09-summon-results.png",
+      "bytes": 1805109,
+      "size": [
+        1341,
+        1173
+      ],
+      "mode": "RGB",
+      "sha256": "952d9b7cafbd1c406ad2dbce8bcee7defd90854dac6bd7ae97cc6c160f84817a",
+      "purpose": "functional flow reference; old main/grid composition superseded",
+      "source_file": "07-09-summon-results.png"
+    },
+    {
+      "path": "reference/flows/10-12-exchange.png",
+      "bytes": 1877697,
+      "size": [
+        1448,
+        1086
+      ],
+      "mode": "RGB",
+      "sha256": "bf1fe4e9a1574aa0cd17551296ec38665acf93ec99b01e225921399469e167ac",
+      "purpose": "functional flow reference; old main/grid composition superseded",
+      "source_file": "10-12-exchange.png"
+    },
+    {
+      "path": "reference/flows/13-15-shards-history.png",
+      "bytes": 1853365,
+      "size": [
+        1448,
+        1086
+      ],
+      "mode": "RGB",
+      "sha256": "9e92e8d37ac6000cec0cfbc729137e05d6f40485d5369009779089f061674f92",
+      "purpose": "functional flow reference; old main/grid composition superseded",
+      "source_file": "13-15-shards-history.png"
+    },
+    {
+      "path": "reference/flows/16-18-receipt-recovery.png",
+      "bytes": 1758406,
+      "size": [
+        1448,
+        1086
+      ],
+      "mode": "RGB",
+      "sha256": "7eba648c21850ee6bbdfae25bcdb72afc51cd2a1d3897a6030fc4f3d892b18a3",
+      "purpose": "functional flow reference; old main/grid composition superseded",
+      "source_file": "16-18-receipt-recovery.png"
+    }
+  ],
+  "checks": {
+    "png_decode": true,
+    "original_bytes_preserved": true,
+    "alpha_layer": true,
+    "runtime_tests": "not applicable: images/docs only"
+  },
+  "limitations": [
+    "Static images only; no working carousel, video, sprite atlas or in-game approval",
+    "Numbers/rates/costs are illustrative, not approved balance",
+    "Flows use alternate example inventories, not one chronological account"
+  ]
+}
