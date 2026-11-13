@@ -1,11 +1,11 @@
-# Current state — updated 2026-11-12
+# Current state — updated 2026-11-13
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`. Pre-release pushes deploy after lint/unit/build; browser PR gate is path-filtered. Restore Pages browser gate before OD-13 external tests.
-- Save v58; Phaser/TypeScript/Vite, local saves, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked. No gacha wallet/reward ledger. P09 (owner D10 = ค, server decides/seeds; index [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md)): 02a/02a2 command layer + seed-free view; 02b Worker+DO+D1 guests (#225); 02c shell via `?server=<url>` (local default), retries, D12 one session, smooth walking (#227/#230); 02d Google link/sign-in + one-time recovery codes, account panel, server save labels, long battle/verify measured (#229, [ACCOUNT_P09_02D_TH](docs/design/p09/ACCOUNT_P09_02D_TH.md)).
+- Save v58; Phaser/TypeScript/Vite, local saves, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked. No gacha wallet/reward ledger. P09 (owner D10 = ค, server decides/seeds; index [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md)): 02a/02a2 command layer + seed-free view; 02b Worker+DO+D1 guests (#225); 02c shell via `?server=<url>` (local default), retries, D12 one session, smooth walking (#227/#230); 02d Google link/sign-in + one-time recovery codes, account panel, server save labels, long battle/verify measured (#229, [ACCOUNT_P09_02D_TH](docs/design/p09/ACCOUNT_P09_02D_TH.md)); 02e D11 one-time local-save import (`/v1/import`, D1 `legacy_fingerprint`, `parseGame` in DO, title offer) + DO log snapshots every 50 seq/run end, `/v1/verify` from the latest ([IMPORT_P09_02E_TH](docs/design/p09/IMPORT_P09_02E_TH.md)).
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3. Rights follow cleared history.
 - Owner art delegation 2026-11-04 remains: Claude may decide art picks; record as Claude decision, not owner approval.
 
@@ -19,7 +19,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Next (owner review)
 
-- P09: next P09-02e D11 one-time import (prompt below). Owner can try Google on Pages `?server=<dev Worker URL>` as a Testing-mode test user. Workers CPU (P09-02d deploy): DO command p50 7 / p95 19 / max 24 ms (over Free's 10 ms at p95), `/v1/verify` 215 ms at a ~300-command log → admin-only verify + snapshots + incremental battle, or Paid, before outsiders. D8 Free/Paid: ACCOUNT_P09_02D §5 + SERVER_P09_02B §5–6.
+- P09: 02e done (branch `claude/p09-02e-import`). Close `LEGACY_IMPORT` (wrangler var → `closed`) before OD-13 outsiders. Workers CPU (02d): DO command p50 7 / p95 19 ms, old full-log verify 215 ms; snapshot verify not yet measured on Workers. Still before outsiders: admin-only verify, incremental battle in DO (or Paid, D8), sign-out/revoke, account delete/privacy, consent-screen publish, real rate limits. Owner picks the next task; proposed prompt below.
 
 - Gacha: review visual direction/core choices; rates/costs/pacing stay adjustable. Do not auto-start G02–G05 or payments; real gacha needs P09/P04/ledger (OD-13).
 - UXD-08: regression 77/77 + 34 screens inspected 2026-11-11, team-page fixes and the single term ผังสกิล (owner “อนุมัติ”; [validation](docs/validation/uxd-08/README_TH.md)); real-device/human trial still open. Team-preset owner usability review remains open.
@@ -36,4 +36,4 @@ Cloud checkouts are fresh; verify remote head/ancestry, never reset unpushed wor
 
 ## Opening prompt for next chat
 
-P09-02e (Opus): read CLAUDE/CURRENT_STATE, docs/design/p09/ACCOUNT_P09_02D_TH.md §5–6, CLOUD_SAVE_ENVELOPE_TH.md §2 and SERVER_P09_02B_TH.md §7. D11 (owner-approved): one-time import of an existing local save (v1–v58) into a server account: the device offers it in server play when a local save exists; the Worker/DO parses and replays it with `parseGame` (checkUpload/decideUpload exist), stores its SHA-256 fingerprint in D1 (`accounts.legacy_fingerprint`, one account per save), only into an account with no game yet; 201/409 already_imported·fingerprint_used/413/422/403 per SCHEMA_API_DRAFT. Also add DO log snapshots so `/v1/verify` replays from the latest snapshot. No rule/number/save-format change, no gacha/payments/P04. Branch claude/p09-02e-import; PR into `feature/fateweave-initial-prototype`.
+P09-02f (Opus, proposed — owner confirms): read CLAUDE/CURRENT_STATE, docs/design/p09/IMPORT_P09_02E_TH.md §3–5 and ACCOUNT_P09_02D_TH.md §5.3. Make server play cheaper and safer before outsiders: (1) DO keeps the current battle's `BattleState` and resolves only new turns when the `battle` command's prefix matches (no rule change; fall back to full replay otherwise), with equality tests against full replay; (2) `/v1/verify` admin-only (secret-free check, e.g. a D1 admin flag) with `admin_audit`; (3) `/v1/sessions/revoke` sign-out. Measure DO command/verify/import CPU on the dev Worker with the existing deploy workflow. No rule/number/save-format change, no gacha/payments/P04. Branch claude/p09-02f-perf; PR into `feature/fateweave-initial-prototype`.

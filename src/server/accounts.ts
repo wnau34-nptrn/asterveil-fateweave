@@ -141,3 +141,25 @@ export async function recoverWithCode(db: D1Like, code: string, token: string, n
   if (!after) return 'invalid_code';
   return equalHex(after.hash, secretHash) ? after.account : 'bad_token';
 }
+
+// ---- P09-02e: one-time import of a local save (owner D11) ----
+
+export type FingerprintClaim = 'claimed' | 'already_imported' | 'fingerprint_used';
+// Holds `fingerprint` (the SHA-256 of the exact save string) for this account before its Durable Object imports the save,
+// so two accounts racing with one save cannot both get it (unique index). Claiming the account's own fingerprint again is
+// a retry. An account that holds a different fingerprint has imported already.
+export async function claimFingerprint(db: D1Like, accountId: string, fingerprint: string): Promise<FingerprintClaim> {
+  const read = async () => (await db.prepare('SELECT legacy_fingerprint AS fp FROM accounts WHERE id = ?').bind(accountId).first<{ fp: string | null }>())?.fp ?? null;
+  const held = await read();
+  if (held) return held === fingerprint ? 'claimed' : 'already_imported';
+  try {
+    await db.prepare('UPDATE accounts SET legacy_fingerprint = ? WHERE id = ? AND legacy_fingerprint IS NULL').bind(fingerprint, accountId).run();
+  } catch { return 'fingerprint_used'; }
+  const now = await read();
+  return now === fingerprint ? 'claimed' : 'already_imported';
+}
+// Lets the fingerprint go again when the Durable Object refused the save (it did not replay, or the account already
+// had a game), so the save stays importable into another account.
+export async function releaseFingerprint(db: D1Like, accountId: string, fingerprint: string): Promise<void> {
+  await db.prepare('UPDATE accounts SET legacy_fingerprint = NULL WHERE id = ? AND legacy_fingerprint = ?').bind(accountId, fingerprint).run();
+}

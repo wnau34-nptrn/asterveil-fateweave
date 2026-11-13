@@ -5,7 +5,8 @@ import { SESSION_HEADER } from '../src/server/account-object';
 import { CONTENT_HEADER, handle } from '../src/server/api';
 import { SEND_ATTEMPTS, ServerClient, serverSwitch, type ServerPort } from '../src/platform/server-client';
 import { gameFromView, resultFromReply } from '../src/ui/server-game';
-import { server, VERSION, type Server } from './fixtures/server-fakes';
+import { currentSave } from './fixtures/current-save';
+import { server, storedGame, VERSION, type Server } from './fixtures/server-fakes';
 
 // P09-02c: the game's API client driven against the real Worker + Durable Object code in process (tests/fixtures).
 // Covers the guest token, one-at-a-time `{requestId, seq, command}`, retry on the same requestId after a lost answer,
@@ -153,5 +154,28 @@ describe('P09-02c server switch', () => {
     expect(serverSwitch('?server=off', store, 'https://preset.example.dev')).toBeUndefined();
     expect(serverSwitch('', store, 'https://preset.example.dev')).toBeUndefined();
     expect(serverSwitch('', memory(), 'https://preset.example.dev')).toBe('https://preset.example.dev');
+  });
+
+  it('P09-02e: imports the local save once; a retry after a lost answer is the same request', async () => {
+    const s = server(); const w = wire(s);
+    // Another account plays a little; its game written as a local save is the save this device holds.
+    const other = new ServerClient(BASE, VERSION, memory(), w);
+    await other.enter(); await other.send({ kind: 'createCommander', commander, replace: false });
+    const raw = currentSave(storedGame(s, [...s.objects.keys()][0]!)!);
+    const c = new ServerClient(BASE, VERSION, memory(), w);
+    await c.enter();
+    const fetch = w.fetch; let lost = 1;
+    w.fetch = async (url, init) => { const r = await fetch(url, init); if (lost > 0 && new URL(url).pathname === '/v1/import') { lost--; throw new TypeError('connection reset'); } return r; };
+    s.clock.t += 60_000;
+    const out = await c.importSave(raw);
+    if (out.kind !== 'imported') throw new Error(JSON.stringify(out));
+    expect(out.from).toBe(58); expect(out.state.view?.profile.commander?.name).toBe('ทดสอบ');
+    const imports = w.seen.filter(x => x.path === '/v1/import').map(x => (JSON.parse(x.body) as { requestId: string }).requestId);
+    expect(imports).toHaveLength(2); expect(new Set(imports).size).toBe(1);
+    // The game goes on from the imported save; the same save cannot go into a second account.
+    expect(await c.send({ kind: 'hire', index: 99 })).toMatchObject({ kind: 'reply', reply: { seq: 1 } });
+    const third = new ServerClient(BASE, VERSION, memory(), w);
+    await third.enter(); s.clock.t += 60_000;
+    expect(await third.importSave(raw)).toEqual({ kind: 'refused', error: 'fingerprint_used' });
   });
 });

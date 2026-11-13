@@ -1,3 +1,10 @@
+## 2026-11-13 — P09-02e one-time local-save import (owner D11) + DO log snapshots
+- Branch `claude/p09-02e-import` → PR into `feature/fateweave-initial-prototype`.
+- Worker `/v1/import`: `checkUpload` (size/SHA-256/version 1–58), D1 fingerprint claim first (migration `0003_legacy_import.sql`, unique), DO `importSave` (`decideUpload` + `parseGame` replay, raw save kept, import snapshot); 201 / 403 import_closed (`LEGACY_IMPORT` var) / 409 already_imported·fingerprint_used·has_game / 413 / 422; fingerprint released when DO refuses.
+- DO `snapshots` every 50 seq + run end; `/v1/verify` replays from the latest (`{ok, seq, from}`). Client `ServerClient.importSave` (requestId from the save hash), title offer in server play (390px checked).
+- Tests: typecheck/lint/unit 1781 pass/build; new `server-import` (6), client import test, Playwright `server-play` 4/4 (Chromium 390px). Not measured on Workers; no real-device test. Details: [IMPORT_P09_02E_TH](../design/p09/IMPORT_P09_02E_TH.md).
+- No rule/number/save v58 change (only `SAVE_VERSION` exported). Open: close import before OD-13, admin-only verify, incremental battle, sign-out/revoke.
+
 ## 2026-11-12 — P09-02d Google sign-in + recovery codes + account moves (owner D1)
 - Owner “ดำเนินการต่อได้เลย”; branch `claude/p09-02d-google` → PR #229 into `feature/fateweave-initial-prototype`.
 - Worker: `src/server/google.ts` (RS256 ID token vs Google JWKS, iss/aud/azp/exp/iat), `accounts.ts` link/sign-in/recovery (D1 migration `0002_identities.sql`, sub only, code hash only, one-time, device-made credentials for idempotent retries), routes `/v1/account|link|signin|recovery-code|recover`; `GOOGLE_CLIENT_ID` var.
