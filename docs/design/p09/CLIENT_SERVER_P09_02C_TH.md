@@ -7,7 +7,7 @@
 ## 1. เปิดใช้อย่างไร [จริง]
 
 - ค่าเริ่มต้นยังเล่นในเครื่องเหมือนเดิม (เซฟ localStorage, seed ในเครื่อง)
-- เปิดเล่นผ่าน server: เปิดเกมด้วย `?server=<URL ของ Worker dev>` เช่น `https://asterveil-api-dev.<subdomain>.workers.dev` (ดู URL ได้ใน summary ของ workflow `cloudflare-dev.yml`) — เบราว์เซอร์จำไว้; `?server=off` กลับไปเล่นในเครื่อง (จำไว้เช่นกัน); build อาจตั้งค่าล่วงหน้าด้วย `VITE_FATEWEAVE_API` · รับเฉพาะ https (หรือ http บน localhost)
+- เปิดเล่นผ่าน server: เปิดเกมด้วย `?server=<URL ของ Worker dev>` เช่น `https://asterveil-api-dev.<subdomain>.workers.dev` (ดู URL ได้ใน summary ของ workflow `cloudflare-dev.yml`) — เบราว์เซอร์จำไว้; `?server=off` กลับไปเล่นในเครื่อง (จำไว้เช่นกัน); build อาจตั้งค่าล่วงหน้าด้วย `VITE_FATEWEAVE_API` (ตั้งแล้วใน `pages.yml` ตั้งแต่ 2026-11-13 ตามที่เจ้าของเลือก: เกมบน Pages เล่นผ่านเซิร์ฟเวอร์เป็นค่าเริ่มต้น) · รับเฉพาะ https (หรือ http บน localhost)
 - โหมด server ไม่อ่านและไม่เขียนเซฟในเครื่องเลย (เซฟเดิมในเครื่องอยู่ครบ); หน้าแรกขึ้นป้าย "เล่นผ่านเซิร์ฟเวอร์ทดลอง"
 
 ## 2. โครง [จริง]
