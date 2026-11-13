@@ -1,3 +1,8 @@
+## 2026-11-13 — P04 owner choices + P04-01 star pacing simulation
+- Owner “ตามที่แนะนำทั้งหมด” on P04-00 S1–S8 → OD-15–OD-22 in OWNER_DECISIONS. Branch `claude/p04-01-sim` → PR.
+- [P04-01 validation](../validation/p04-01-2026-11-13/README_TH.md): stdlib Python model in sessions (character shards, 100% universal fill, run/first-clear/weekly-shop sources, ore kept, no gacha), 30 sets × thin/standard × 5 schedules × 1,000 accounts. Thin ore income caps the first ★5 at ~12 sessions; sets A/B meet OD-07 with core five ≈37–39. Tree points: boss win = map clear today, so OD-20 gives 12 (15 with hard clears).
+- Docs/analysis only (`git diff --check`); no rule/number/save change. Open: owner picks star ore, shard set, OD-07 counting point, core-five target.
+
 ## 2026-11-13 — P04-00 economy/stars scope sheet + Pages server default
 - Owner “ข้อ 1” → PR #238 merged: Pages build presets `VITE_FATEWEAVE_API` (dev Worker), so the home-screen app and browsers start in server play; `?server=off` still opts out. P09-03 PR #237 merged after full CI.
 - Owner “ยืนยัน ทำ P04-00”; branch `claude/p04-00-scope` → PR. [SCOPE_P04_00_TH](../design/p04/SCOPE_P04_00_TH.md): settled decisions, what the code does now (stars +8%, dupes 1/2/3/4 + ore, seals ≤50%, tree points still `(Lv−1)+(★−1)`, camp cap 10, no milestones), system choices S1–S8 with recommendations, player models, P04-01…06 order (05/06 runtime waits for the ledger).

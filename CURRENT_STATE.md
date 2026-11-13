@@ -20,7 +20,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ## Next (owner review)
 
 - P09: 02g (#236), 03 (#237) done; Pages plays through the dev API by default (#238, owner “ข้อ 1”). Owner: real contact line in `public/privacy.html`, test date T (import closes T−14), own admin row (PERF §2; unlocks feedback/telemetry views), Google consent publish. Open: inactive-guest cleanup, old-token reuse detection.
-- P04-00 scope sheet: [docs/design/p04/SCOPE_P04_00_TH.md](docs/design/p04/SCOPE_P04_00_TH.md) — **waiting for owner answers S1–S8** (system choices, no numbers); then P04-01 simulation.
+- P04: owner chose all S1–S8 (OD-15–22). P04-01 simulation ([validation](docs/validation/p04-01-2026-11-13/README_TH.md)): thin ore income floors the first ★5 at ~12 sessions (ore 240); sets A (u6/F10/shop2) or B (u8/F0/shop2) meet OD-07 with core five ≈37–39. **Waiting for owner: star ore (OD-21 review), shard set, OD-07 counting point, core-five target.**
 
 - Gacha: review visual direction/core choices; rates/costs/pacing stay adjustable. Do not auto-start G02–G05 or payments; real gacha needs P09/P04/ledger (OD-13).
 - UXD-08: regression 77/77 + 34 screens inspected 2026-11-11, team-page fixes and the single term ผังสกิล (owner “อนุมัติ”; [validation](docs/validation/uxd-08/README_TH.md)); real-device/human trial still open. Team-preset owner usability review remains open.
@@ -37,4 +37,4 @@ Cloud checkouts are fresh; verify remote head/ancestry, never reset unpushed wor
 
 ## Opening prompt for next chat
 
-P04-01 (Opus; start only after the owner answers S1–S8 in docs/design/p04/SCOPE_P04_00_TH.md §6): read CLAUDE/CURRENT_STATE, that sheet, GACHA_G00/G01 and docs/validation/gacha-g00-g01-2026-11-09. Extend the G01 research script into the §4 player models with the chosen systems; report ranges for shard costs, shard income per week and tree points that meet OD-07, for the owner to pick. No runtime/save/rule change. Branch claude/p04-01-sim; PR into `feature/fateweave-initial-prototype`.
+P04-02 (Opus; start only after the owner answers the four questions in docs/validation/p04-01-2026-11-13/README_TH.md): read CLAUDE/CURRENT_STATE, docs/design/p04/SCOPE_P04_00_TH.md, OD-15–22 and that README; use the fateweave-rules-and-sim skill. Implement character shards + universal shards replacing seals (save bump with a no-loss conversion of seals/dupes, server converts on load/import), the chosen star/ore numbers, shard sources (first clears, run reward, weekly camp shop), story-duplicate compensation; tests + `npm run sim`. Branch claude/p04-02-shards; PR into `feature/fateweave-initial-prototype`.
