@@ -1,3 +1,11 @@
+## 2026-11-13 — P09-02f incremental battle in DO + admin-only verify + sign-out
+- Owner “ทำ P09-02f”; branch `claude/p09-02f-perf` → PR #233 merged into `feature/fateweave-initial-prototype`; dev deploy (cloudflare-dev run 33) smoke OK.
+- `core/command/battle-memo.ts`: DO keeps resolved turns, a `battle` command resolves only new ones via `resolveCommand` (optional `CommandContext.battles`/`BattleReplay`; full replay on any mismatch); `/verify` uses a fresh memo. `sqlStore` no longer clones the immutable command book per load/commit.
+- `/v1/verify` admin-only: D1 `0004_admin_audit.sql` (`admins` rows added by owner via `wrangler d1 execute`, no secret; `admin_audit` per check; `{accountId}` audits another account). `/v1/sessions/revoke` (`this` warns `unrecoverable`, `others`) + account-panel buttons.
+- Workers CPU: DO command p50 3 / p95 6 / max 12 ms (was 7/19/24), verify 1–2 ms (was 215), import 8 ms. Node: long-battle turn 47 ≈19→3.5 ms.
+- Tests: typecheck/lint/unit 1787/build; new `server-perf` (6); Playwright `server-play` 4/4 (Chromium 390px, sign-out screenshot checked); CI quality+browser green. Details: [PERF_P09_02F_TH](../design/p09/PERF_P09_02F_TH.md).
+- No rule/number/save v58 change. Open: owner admin row, D8, close import, account delete/privacy, token rotation, real rate limits.
+
 ## 2026-11-13 — P09-02e one-time local-save import (owner D11) + DO log snapshots
 - Branch `claude/p09-02e-import` → PR into `feature/fateweave-initial-prototype`.
 - Worker `/v1/import`: `checkUpload` (size/SHA-256/version 1–58), D1 fingerprint claim first (migration `0003_legacy_import.sql`, unique), DO `importSave` (`decideUpload` + `parseGame` replay, raw save kept, import snapshot); 201 / 403 import_closed (`LEGACY_IMPORT` var) / 409 already_imported·fingerprint_used·has_game / 413 / 422; fingerprint released when DO refuses.

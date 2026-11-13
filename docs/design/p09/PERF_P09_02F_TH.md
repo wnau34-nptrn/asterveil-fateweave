@@ -43,7 +43,18 @@
 
 ### 5.2 Workers
 
-วัดด้วย `cloudflare-dev.yml` หลัง merge (DO `/command`, `/verify`, `/import` จาก Workers Tail) — ตัวเลขบันทึกใน handoff/CURRENT_STATE หลัง deploy
+`cloudflare-dev.yml` หลัง merge #233 (13 พ.ย.): smoke ผ่าน (verify ไม่ใช่ admin 403 → admin 200, ออกจากระบบ others/warned/confirmed) และวัด log 300 + นำเข้าเซฟ ~2.4 KB ขณะเปิด Workers Tail (Tail จับ DO `/command` ได้ 89 จาก ~300 ครั้ง)
+
+| เส้นทาง | ก่อน (02d §5.2) | หลัง (CPU ms) |
+|---|---|---|
+| DO `/command` (เล่นจริง MAP1, ศึกยาวสุด 19 เทิร์น) | p50 7 · p95 19 · max 24 | p50 3 · p95 6 · max 12 |
+| DO `/verify` (log 50/150/300, จาก snapshot) | 215 | 1–2 |
+| DO `/import` (เซฟ ~2.4 KB) | — | 8 |
+| Worker ทุกเส้นทาง (auth D1 + admin check + ส่งต่อ) | 0–4 | 0–5 |
+
+เวลาไป-กลับจาก runner (รวมเครือข่าย): คำสั่ง p50 151 ms; verify 254–286 ms; import 398 ms. ไม่มีคำขอใดล้ม
+
+ข้อสรุป [เสนอ]: คำสั่งปกติและ verify/import อยู่ใต้ 10 ms ของ Free plan แล้ว; max 12 ms ยังมีอยู่ (ศึกแรกหลัง DO ถูกปลด หรือคำสั่งที่จบศึก/จบการเดินทาง) — Free plan ยอมให้เกินเป็นครั้งคราว แต่การตัดสิน D8 (Free/Paid) ยังเป็นของเจ้าของ; ศึกบอสยาวจริงยังไม่ได้วัดบน Workers
 
 ## 6. ที่เหลือ [เสนอ]
 
