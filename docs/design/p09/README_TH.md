@@ -25,6 +25,7 @@
 | [IMPORT_P09_02E_TH.md](IMPORT_P09_02E_TH.md) | **P09-02e**: นำเข้าเซฟในเครื่องครั้งเดียว (D11: `/v1/import`, fingerprint ใน D1, `parseGame` ใน DO) + snapshot ของ log ให้ `/v1/verify` replay จาก snapshot ล่าสุด |
 | [PERF_P09_02F_TH.md](PERF_P09_02F_TH.md) | **P09-02f**: ศึกแบบ incremental ใน DO (`battleMemo`, ผลเท่า replay เต็ม), `/v1/verify` เฉพาะ admin (D1 `admins` + `admin_audit`), ออกจากระบบ `/v1/sessions/revoke`, ตัวเลขวัด |
 | [SAFETY_P09_02G_TH.md](SAFETY_P09_02G_TH.md) | **P09-02g**: ลบบัญชี (รอ 14 วัน ยกเลิกได้, Cron ลบ DO+D1, `account_audit`), หน้า `privacy.html`, rate limit ข้าม isolate (DO ของบัญชี + DO `RateLimit`), แผนปิดนำเข้า `LEGACY_IMPORT_UNTIL` |
+| [TELEMETRY_P09_03_TH.md](TELEMETRY_P09_03_TH.md) | **P09-03**: หมุนกุญแจอุปกรณ์ทุก 24 ชม. (ผ่อนผัน 10 นาที ไม่ต้องเข้าใหม่), สถิติรวมรายวันไม่มี id (`telemetry_daily`), ฟอร์มส่งความเห็นในเกม + มุมมองผู้ดูแลที่ audit |
 
 ต้นแบบ pure (ยังไม่ต่อกับเกม/Worker): `src/core/cloud/cloud-save.ts` (`checkUpload`, `decideUpload`, `decideCommand`), เทสต์ `tests/cloud-save-envelope.test.ts`
 

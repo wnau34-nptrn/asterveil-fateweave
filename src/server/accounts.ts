@@ -37,20 +37,48 @@ export async function createGuest(db: D1Like, now: number): Promise<GuestAccount
 
 // The account a bearer token belongs to and its status, or null (unknown or revoked; a suspended account is refused).
 // P09-02g: a `deleting` account still authenticates, so its device can read the account and cancel; routes decide.
-export async function authenticateAccount(db: D1Like, authorization: string | null): Promise<{ accountId: string; status: 'guest' | 'linked' | 'deleting' } | null> {
+// P09-03: after a rotation the previous secret also works until `prev_until` (`previous: true`), then never again.
+export interface Authenticated { accountId: string; status: 'guest' | 'linked' | 'deleting'; deviceId: string; previous: boolean }
+export async function authenticateAccount(db: D1Like, authorization: string | null, now = Date.now()): Promise<Authenticated | null> {
   const m = /^Bearer (\S+)$/.exec(authorization ?? '');
   const parts = m ? TOKEN.exec(m[1]!) : null;
   if (!parts) return null;
   const row = await db.prepare(
-    "SELECT d.account_id AS account, d.token_hash AS hash, a.status AS status FROM devices d JOIN accounts a ON a.id = d.account_id WHERE d.id = ? AND d.revoked_at IS NULL AND a.status IN ('guest','linked','deleting')",
-  ).bind(parts[1]).first<{ account: string; hash: string; status: 'guest' | 'linked' | 'deleting' }>();
+    `SELECT d.account_id AS account, d.token_hash AS hash, d.prev_hash AS prev, d.prev_until AS until, a.status AS status FROM devices d
+       JOIN accounts a ON a.id = d.account_id WHERE d.id = ? AND d.revoked_at IS NULL AND a.status IN ('guest','linked','deleting')`,
+  ).bind(parts[1]).first<{ account: string; hash: string; prev: string | null; until: number | null; status: 'guest' | 'linked' | 'deleting' }>();
   if (!row) return null;
-  return equalHex(row.hash, await sha256Hex(parts[2]!)) ? { accountId: row.account, status: row.status } : null;
+  const secret = await sha256Hex(parts[2]!);
+  if (equalHex(row.hash, secret)) return { accountId: row.account, status: row.status, deviceId: parts[1]!, previous: false };
+  if (row.prev && row.until !== null && now < row.until && equalHex(row.prev, secret)) return { accountId: row.account, status: row.status, deviceId: parts[1]!, previous: true };
+  return null;
 }
 // The account of a bearer token that may play (guest or linked), or null.
-export async function authenticate(db: D1Like, authorization: string | null): Promise<string | null> {
-  const a = await authenticateAccount(db, authorization);
+export async function authenticate(db: D1Like, authorization: string | null, now = Date.now()): Promise<string | null> {
+  const a = await authenticateAccount(db, authorization, now);
   return a && a.status !== 'deleting' ? a.accountId : null;
+}
+
+// ---- P09-03: device-credential rotation ----
+
+// How long the replaced secret still works (a lost answer is retried within it).
+export const ROTATE_GRACE_MS = 10 * 60 * 1000;
+export type RotateResult = 'rotated' | 'bad_token' | 'conflict';
+// The device sends its next credential (same device id, a new secret it made itself). Presented with the current secret:
+// the next one becomes current and the old one keeps working for ROTATE_GRACE_MS. Presented with the previous secret
+// (an answer was lost) and the same next credential: a retry, success again. Anything else: `conflict`.
+export async function rotateDevice(db: D1Like, auth: Authenticated, next: string, now: number): Promise<RotateResult> {
+  const parts = TOKEN.exec(next);
+  if (!parts || parts[1] !== auth.deviceId) return 'bad_token';
+  const nextHash = await sha256Hex(parts[2]!);
+  const row = await db.prepare('SELECT token_hash AS hash FROM devices WHERE id = ?').bind(auth.deviceId).first<{ hash: string }>();
+  if (!row) return 'conflict';
+  if (auth.previous) return equalHex(row.hash, nextHash) ? 'rotated' : 'conflict';
+  if (equalHex(row.hash, nextHash)) return 'rotated';
+  await db.prepare('UPDATE devices SET prev_hash = token_hash, prev_until = ?, token_hash = ?, rotated_at = ?, last_seen = ? WHERE id = ? AND token_hash = ?')
+    .bind(now + ROTATE_GRACE_MS, nextHash, now, now, auth.deviceId, row.hash).run();
+  const after = await db.prepare('SELECT token_hash AS hash FROM devices WHERE id = ?').bind(auth.deviceId).first<{ hash: string }>();
+  return after && equalHex(after.hash, nextHash) ? 'rotated' : 'conflict';
 }
 
 // ---- P09-02d: Google identities and recovery codes ----

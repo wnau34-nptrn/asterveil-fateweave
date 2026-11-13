@@ -2,12 +2,15 @@ import { checkUpload, MAX_PAYLOAD_BYTES } from '../core/cloud/cloud-save';
 import { SAVE_VERSION } from '../core/save/expedition-save';
 import {
   accountExists, accountInfo, auditAdmin, authenticateAccount, claimFingerprint, createGuest, deviceOf, isAdmin, issueRecoveryCode, linkGoogle, recoverWithCode,
-  releaseFingerprint, revokeDevices, sha256Hex, signInGoogle, type D1Like,
+  releaseFingerprint, revokeDevices, rotateDevice, sha256Hex, signInGoogle, type D1Like,
 } from './accounts';
+import {
+  clientErrors, feedbackInput, readFeedback, readTelemetry, recordTelemetry, saveFeedback, type TelemetryItem,
+} from './telemetry';
 import type { GoogleVerifier } from './google';
 import { cancelDeletion, DELETE_CONFIRM, requestDeletion } from './deletion';
 import { ipKey, RateLimiter, type RateGate } from './rate-limit';
-import { SESSION_HEADER } from './account-object';
+import { SESSION_HEADER, TELEMETRY_HEADER } from './account-object';
 import { MAX_COMMAND_BYTES } from './game-host';
 
 // P09-02b: the Worker's front door. Routing, request size/shape limits, content-version check, guest accounts, bearer
@@ -28,6 +31,8 @@ export interface ApiDeps {
   google?: GoogleVerifier;
   // P09-02e (owner D11): importing a local save is allowed only before the external test; `false` closes it (403).
   legacyImport?: boolean;
+  // P09-03: runs work after the answer (the Worker's `ctx.waitUntil`); without it the work is awaited (tests).
+  defer?(work: Promise<unknown>): void;
 }
 
 export const CONTENT_HEADER = 'X-Fateweave-Content';
@@ -39,7 +44,17 @@ async function allowed(deps: ApiDeps, key: string, limit: number, windowMs: numb
   return deps.gate ? deps.gate.allow(key, limit, windowMs) : true;
 }
 const limited = (seconds: number) => error('rate_limited', 429, { 'Retry-After': String(seconds) });
-export const LIMITS = { verifyPerMinute: 10, importPerMinute: 5, commandPerSecond: 10, guestPerMinute: 5, readPerSecond: 10, signInPerMinute: 10, recoverPerMinute: 5, accountPerMinute: 20 } as const;
+export const LIMITS = {
+  verifyPerMinute: 10, importPerMinute: 5, commandPerSecond: 10, guestPerMinute: 5, readPerSecond: 10, signInPerMinute: 10, recoverPerMinute: 5, accountPerMinute: 20,
+  // P09-03 (drafts): device error reports, feedback (per 10 minutes), admin reads.
+  telemetryPerMinute: 6, feedbackPer10Minutes: 3, adminReadPerMinute: 20,
+} as const;
+// P09-03: adds telemetry items to the daily totals after answering; a failure never changes the answer.
+async function track(deps: ApiDeps, items: readonly TelemetryItem[], now: number): Promise<void> {
+  if (items.length === 0) return;
+  const work = recordTelemetry(deps.db, items, now).catch(() => undefined);
+  if (deps.defer) deps.defer(work); else await work;
+}
 const ACCOUNT_BODY_BYTES = 8 * 1024;
 // The envelope carries the save as a JSON string, so escaping can make it up to about twice the save's size.
 export const IMPORT_BODY_BYTES = 2 * MAX_PAYLOAD_BYTES + 1024;
@@ -89,10 +104,13 @@ const ROUTES: Record<string, 'GET' | 'POST'> = {
   '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/command': 'POST', '/v1/verify': 'POST', '/v1/import': 'POST',
   '/v1/account': 'GET', '/v1/link': 'POST', '/v1/signin': 'POST', '/v1/recovery-code': 'POST', '/v1/recover': 'POST', '/v1/sessions/revoke': 'POST',
   '/v1/account/delete': 'POST', '/v1/account/cancel': 'POST',
+  '/v1/token/rotate': 'POST', '/v1/telemetry': 'POST', '/v1/feedback': 'POST', '/v1/admin/telemetry': 'GET', '/v1/admin/feedback': 'GET',
 };
-const ACCOUNT_ROUTES = new Set(['/v1/account', '/v1/link', '/v1/signin', '/v1/recovery-code', '/v1/recover', '/v1/sessions/revoke', '/v1/account/delete', '/v1/account/cancel']);
-// P09-02g: what a `deleting` account may still do (read the account, cancel, sign devices out).
-const WHILE_DELETING = new Set(['/v1/account', '/v1/account/cancel', '/v1/sessions/revoke', '/v1/account/delete']);
+const ACCOUNT_ROUTES = new Set(['/v1/account', '/v1/link', '/v1/signin', '/v1/recovery-code', '/v1/recover', '/v1/sessions/revoke', '/v1/account/delete', '/v1/account/cancel',
+  '/v1/token/rotate', '/v1/telemetry', '/v1/feedback', '/v1/admin/telemetry', '/v1/admin/feedback']);
+// P09-02g: what a `deleting` account may still do (read the account, cancel, sign devices out; P09-03: keep its
+// credential fresh and report errors).
+const WHILE_DELETING = new Set(['/v1/account', '/v1/account/cancel', '/v1/sessions/revoke', '/v1/account/delete', '/v1/token/rotate', '/v1/telemetry']);
 const deletingError = () => error('account_deleting', 403);
 const ACCOUNT_ID = /^[0-9a-f]{32}$/;
 // A session is one page load of the game on one device: 32 random hex digits made by the device (D12).
@@ -111,7 +129,7 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
   // Every game route: the device must run the same content as the server (a server deployed without one refuses all).
   if (!deps.contentVersion) return error('content_version_unset', 503);
   if (request.headers.get(CONTENT_HEADER) !== deps.contentVersion) return json({ error: 'content_version', server: deps.contentVersion }, 409);
-  const auth = await authenticateAccount(deps.db, request.headers.get('Authorization'));
+  const auth = await authenticateAccount(deps.db, request.headers.get('Authorization'), now);
   if (!auth) return error('unauthorized', 401, { 'WWW-Authenticate': 'Bearer' });
   if (auth.status === 'deleting') return deletingError();
   const accountId = auth.accountId;
@@ -124,12 +142,24 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
   const session = request.headers.get(SESSION_HEADER) ?? '';
   if (!SESSION.test(session)) return error('session_required', 400);
   const sessionHeaders = { [SESSION_HEADER]: session };
-  if (path === '/v1/session') return game.fetch(new Request('https://game/session', { method: 'POST', headers: sessionHeaders }));
+  if (path === '/v1/session') {
+    const entered = await game.fetch(new Request('https://game/session', { method: 'POST', headers: sessionHeaders }));
+    if (entered.status === 200) await track(deps, [{ kind: 'session', key: 'enter' }], now);
+    return entered;
+  }
   if (path === '/v1/state') return game.fetch(new Request('https://game/state', { headers: sessionHeaders }));
   if (!/^application\/json\b/i.test(request.headers.get('Content-Type') ?? '')) return error('unsupported_media_type', 415);
   const body = await readLimited(request, MAX_COMMAND_BYTES);
   if (body === null) return error('too_large', 413);
-  return game.fetch(new Request('https://game/command', { method: 'POST', body, headers: { 'Content-Type': 'application/json', ...sessionHeaders } }));
+  const answer = await game.fetch(new Request('https://game/command', { method: 'POST', body, headers: { 'Content-Type': 'application/json', ...sessionHeaders } }));
+  const items = answer.headers.get(TELEMETRY_HEADER);
+  if (!items) return answer;
+  const out = new Response(answer.body, answer);
+  out.headers.delete(TELEMETRY_HEADER);
+  let parsed: TelemetryItem[] = [];
+  try { parsed = JSON.parse(items) as TelemetryItem[]; } catch { /* nothing counted */ }
+  await track(deps, parsed, now);
+  return out;
 }
 
 // P09-02f: the replay audit is for admins only (an account with a row in D1 `admins`, added by the owner; no secret).
@@ -223,12 +253,24 @@ async function accountRoute(request: Request, path: string, deps: ApiDeps, now: 
     if (out === 'not_linked') return error('not_linked', 404);
     return json({ accountId: out });
   }
-  const auth = await authenticateAccount(deps.db, request.headers.get('Authorization'));
+  const auth = await authenticateAccount(deps.db, request.headers.get('Authorization'), now);
   if (!auth) return error('unauthorized', 401, { 'WWW-Authenticate': 'Bearer' });
   const accountId = auth.accountId;
+  if (path === '/v1/telemetry' || path === '/v1/feedback' || path.startsWith('/v1/admin/')) return reportRoute(request, path, accountId, auth.status, deps, now);
   if (!await allowed(deps, `account:${accountId}`, LIMITS.accountPerMinute, 60_000, now)) return limited(60);
   if (auth.status === 'deleting' && !WHILE_DELETING.has(path)) return deletingError();
-  if (path === '/v1/account') return json(await accountInfo(deps.db, accountId));
+  // `admin: true` (P09-03) only for an admin, so the panel can offer the feedback and telemetry views.
+  if (path === '/v1/account') { const info = await accountInfo(deps.db, accountId); return json(info && await isAdmin(deps.db, accountId) ? { ...info, admin: true } : info); }
+  // P09-03 rotation: `{ token }` is the device's next credential (same device id). Answers `{ rotated: true }`;
+  // 400 invalid_request (another device id or malformed), 409 rotate_conflict.
+  if (path === '/v1/token/rotate') {
+    const body = await readJson(request);
+    if (body instanceof Response) return body;
+    const out = await rotateDevice(deps.db, auth, str(body.token), now);
+    if (out === 'bad_token') return error('invalid_request', 400);
+    if (out === 'conflict') return error('rotate_conflict', 409);
+    return json({ rotated: true });
+  }
   // P09-02g deletion: `{ confirm: 'delete' }` (the panel has the player type a phrase first). Answers the account with
   // `status: 'deleting'` and `deleteAfter`; a repeat keeps the first deadline. Cancel answers the account again, or
   // 409 not_deleting / too_late.
@@ -265,4 +307,44 @@ async function accountRoute(request: Request, path: string, deps: ApiDeps, now: 
   const out = await linkGoogle(deps.db, accountId, check.sub, now);
   if (out !== 'linked') return error(out, 409);
   return json(await accountInfo(deps.db, accountId));
+}
+
+// P09-03: device error reports (`{ events: [{ code, place }] }`, fixed vocabulary, daily totals without the account),
+// feedback (`{ category, text, place }`, stored with the account), and the admin reads of both (audited).
+async function reportRoute(request: Request, path: string, accountId: string, status: string, deps: ApiDeps, now: number): Promise<Response> {
+  if (path === '/v1/telemetry') {
+    if (!await allowed(deps, `telemetry:${accountId}`, LIMITS.telemetryPerMinute, 60_000, now)) return limited(60);
+    const body = await readJson(request);
+    if (body instanceof Response) return body;
+    const items = clientErrors(body);
+    if (!items) return error('invalid_request', 400);
+    await track(deps, items, now);
+    return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } });
+  }
+  if (path === '/v1/feedback') {
+    if (status === 'deleting') return deletingError();
+    // Checked before counting, so a refused text does not use up the player's sends.
+    const body = await readJson(request);
+    if (body instanceof Response) return body;
+    const input = feedbackInput(body);
+    if (!input) return error('invalid_request', 400);
+    if (!await allowed(deps, `feedback:${accountId}`, LIMITS.feedbackPer10Minutes, 600_000, now)) return limited(600);
+    const id = await saveFeedback(deps.db, accountId, input, deps.contentVersion, now);
+    await track(deps, [{ kind: 'feedback', key: input.category }], now);
+    return json({ id }, 201);
+  }
+  if (!await isAdmin(deps.db, accountId)) return error('forbidden', 403);
+  if (!await allowed(deps, `admin:${accountId}`, LIMITS.adminReadPerMinute, 60_000, now)) return limited(60);
+  const query = new URL(request.url).searchParams;
+  if (path === '/v1/admin/telemetry') {
+    const days = Math.min(90, Math.max(1, Number.parseInt(query.get('days') ?? '14', 10) || 14));
+    const rows = await readTelemetry(deps.db, now, days);
+    await auditAdmin(deps.db, accountId, 'telemetry_read', `days:${days}`, `rows:${rows.length}`, now);
+    return json({ days, rows });
+  }
+  const before = Number.parseInt(query.get('before') ?? '', 10);
+  const limit = Math.min(100, Math.max(1, Number.parseInt(query.get('limit') ?? '30', 10) || 30));
+  const rows = await readFeedback(deps.db, Number.isFinite(before) && before > 0 ? before : null, limit);
+  await auditAdmin(deps.db, accountId, 'feedback_read', Number.isFinite(before) ? `before:${before}` : 'latest', `rows:${rows.length}`, now);
+  return json({ rows });
 }

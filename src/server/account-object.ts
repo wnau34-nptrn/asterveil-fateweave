@@ -7,6 +7,8 @@ import { OTHER_DEVICE, type GameHost, type HostState, type HostStore, type Impor
 
 // The Worker forwards the device's session id (checked there) in this header.
 export const SESSION_HEADER = 'X-Fateweave-Session';
+// P09-03: from the Durable Object to the Worker only (telemetry items of a committed command).
+export const TELEMETRY_HEADER = 'X-Fateweave-Telemetry';
 
 // P09-02b: the Durable Object for one account (SQLite storage backend). It adapts the DO's SQL storage to `HostStore`
 // and its HTTP requests from the Worker to `GameHost`. Only the Worker reaches it (no public route).
@@ -147,5 +149,8 @@ export async function handleAccountRequest(host: GameHost, request: Request, opt
   // Hash before entering the synchronous load → process → commit section (no await inside it).
   const digest = await sha256Hex(canonicalJson(req.command));
   const answer = host.command(req, digest);
-  return reply(answer.body, answer.status);
+  const out = reply(answer.body, answer.status);
+  // P09-03: the Worker adds these to the daily totals and does not pass the header on.
+  if (answer.status === 200 && answer.telemetry?.length) out.headers.set(TELEMETRY_HEADER, JSON.stringify(answer.telemetry));
+  return out;
 }

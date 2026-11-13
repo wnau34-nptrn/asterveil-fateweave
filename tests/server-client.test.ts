@@ -45,7 +45,7 @@ describe('P09-02c server client', () => {
     const s = server(); const store = memory(); const w = wire(s);
     const c = new ServerClient(BASE, VERSION, store, w);
     expect(await c.enter()).toEqual({ kind: 'state', state: { lastSeq: 0, view: null } });
-    expect([...store.data.keys()]).toEqual([`fateweave-server-token:${BASE}`]);
+    expect([...store.data.keys()].sort()).toEqual([`fateweave-server-token-at:${BASE}`, `fateweave-server-token:${BASE}`]);
     const out = await c.send({ kind: 'createCommander', commander, replace: false });
     if (out.kind !== 'reply' || out.reply.status !== 'applied') throw new Error(JSON.stringify(out));
     expect('seed' in out.reply.view.profile).toBe(false);

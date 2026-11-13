@@ -5,7 +5,7 @@
 // lock (423 other_device), runs the replay audit, moves the account with a recovery code and checks Google sign-in is
 // configured (P09-02d), checks that the audit is admin-only (P09-02f: with ADMIN_D1_CONFIG set, the throwaway account is
 // made an admin in D1 for the check and the row removed afterwards), signs devices out (P09-02f), asks for and cancels
-// an account deletion (P09-02g),
+// an account deletion (P09-02g), rotates a credential and sends a report and feedback (P09-03),
 // checks no seed leaves the server and prints bytes and round-trip times. Prints no token.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
@@ -95,7 +95,16 @@ assert.deepEqual((await call('sign out (confirmed)', '/v1/sessions/revoke', { me
 assert.equal((await call('signed out', '/v1/account', { token: moved })).status, 401);
 // P09-02g deletion: a second throwaway guest asks for deletion (the game then refuses), cancels, and asks again; it is
 // left waiting, so the hourly purge removes it after the grace period.
-const del = (await call('guest (deletion)', '/v1/guest', { method: 'POST' })).json.token;
+let del = (await call('guest (deletion)', '/v1/guest', { method: 'POST' })).json.token;
+// P09-03: the credential rotates (old secret still works for the grace period), an error report and a feedback text
+// are accepted (the feedback goes with this account when the purge removes it).
+const rotated = `${del.split('.')[0]}.${hexOf(32)}`;
+assert.deepEqual((await call('rotate', '/v1/token/rotate', { method: 'POST', token: del, body: { token: rotated } })).json, { rotated: true });
+assert.equal((await call('old secret (grace)', '/v1/account', { token: del })).status, 200);
+del = rotated;
+assert.equal((await call('report', '/v1/telemetry', { method: 'POST', token: del, body: { events: [{ code: 'network', place: 'title' }] } })).status, 204);
+assert.equal((await call('feedback', '/v1/feedback', { method: 'POST', token: del, body: { category: 'other', text: 'smoke test', place: 'title' } })).status, 201);
+assert.equal((await call('admin feedback (not admin)', '/v1/admin/feedback', { token: del })).status, 403);
 assert.equal((await call('delete (no confirm)', '/v1/account/delete', { method: 'POST', token: del, body: {} })).status, 400);
 const asked = await call('delete', '/v1/account/delete', { method: 'POST', token: del, body: { confirm: 'delete' } });
 assert.equal(asked.json.status, 'deleting', asked.text); assert.ok(asked.json.deleteAfter > Date.now() + 13 * 86400000, asked.text);

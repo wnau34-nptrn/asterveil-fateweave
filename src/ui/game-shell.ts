@@ -3,8 +3,9 @@ import { bindInfoTabs } from './info-tabs';
 import { rosterIds } from '../core/world/world';
 import { applyCommand, isRejected, type CampCommand, type CommandEvent, type CommandResult, type GameCommand, type RunCommand } from '../core/command/game-command';
 import { clientView, type HireSlot } from '../core/command/client-view';
-import type { ServerClient, ServerFailure, ServerOutcome, ServerState } from '../platform/server-client';
+import type { ReportPlace, ServerClient, ServerFailure, ServerOutcome, ServerState } from '../platform/server-client';
 import { AccountPanel } from './account-panel';
+import { FeedbackPanel } from './feedback-panel';
 import { setSavePlace } from './save-place';
 import { gameFromView, resultFromReply } from './server-game';
 import { localSeedSource } from '../platform/seed-source';
@@ -145,6 +146,7 @@ export class GameShell {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-title]');
       if (!button) return;
       if (button.dataset.title === 'account') { void this.account?.open(); return; }
+      if (button.dataset.title === 'feedback') { this.feedback?.open('title'); return; }
       if (button.dataset.title === 'import') { this.importLocal(); return; }
       if (button.dataset.title === 'continue' && this.game) { if (this.state) this.resume(); else if (!this.game.profile.commander) this.showCommander(false); else this.showLobby(); }
       if (button.dataset.title === 'new') {
@@ -165,6 +167,15 @@ export class GameShell {
     if (server) this.account = new AccountPanel(root, { client: server, busy: note => this.lockForServer(note), idle: () => this.unlockForServer(),
       switched: note => { this.titleNote = note; this.connect('title'); } });
     this.serverPanel.setAttribute('role', 'status'); this.serverPanel.setAttribute('aria-live', 'polite'); root.append(this.serverPanel);
+    // P09-03: the feedback form (title button and the world/battle settings tabs) and device error reports.
+    if (server) {
+      this.feedback = new FeedbackPanel(root, server);
+      const entry = '<section class="feedback-entry"><h3>ส่งความเห็น</h3><p>เจอปัญหาหรืออยากบอกอะไรผู้พัฒนา ส่งได้จากตรงนี้</p><button type="button" class="secondary" data-feedback-open>ส่งความเห็น / แจ้งปัญหา</button></section>';
+      for (const id of ['#world-panel-settings', '#battle-panel-settings']) this.root.querySelector(id)?.insertAdjacentHTML('beforeend', entry);
+      root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-feedback-open]')) this.feedback?.open(this.place()); });
+      window.addEventListener('error', () => server.report('js_error', this.place()));
+      window.addEventListener('unhandledrejection', () => server.report('promise_error', this.place()));
+    }
     this.showTitle();
     if (server) this.connect();
     document.addEventListener('keydown', e => {
@@ -241,7 +252,7 @@ export class GameShell {
       ${offer ? `<div class="title-import"><p class="title-save">พบเซฟเดิมในเครื่องนี้<span class="title-chips">${offerChips}</span></p><button id="import-save" data-title="import" class="primary">นำเข้าเซฟนี้ไปยังบัญชีเซิร์ฟเวอร์</button><p class="title-import-note">นำเข้าได้ครั้งเดียวต่อบัญชี · เซฟในเครื่องยังเก็บไว้เหมือนเดิม</p></div>` : ''}
       <button id="new-game" data-title="new" class="${g || offer ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : offer ? 'เริ่มเกมใหม่บนเซิร์ฟเวอร์' : 'เริ่มเกม'}</button>
 
-      ${this.server ? `<button id="account-open" data-title="account" class="secondary">บัญชี · Google · รหัสกู้คืน</button><p class="title-server">เล่นผ่านเซิร์ฟเวอร์ทดลอง · ความคืบหน้าบันทึกบนเซิร์ฟเวอร์</p>${this.titleNote ? `<p class="title-server-note" role="status">${this.titleNote}</p>` : ''}` : this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p><a class="title-privacy" href="${import.meta.env.BASE_URL}privacy.html" target="_blank" rel="noopener">นโยบายความเป็นส่วนตัว</a></div>`;
+      ${this.server ? `<button id="account-open" data-title="account" class="secondary">บัญชี · Google · รหัสกู้คืน</button><button id="feedback-open" data-title="feedback" class="secondary">ส่งความเห็น / แจ้งปัญหา</button><p class="title-server">เล่นผ่านเซิร์ฟเวอร์ทดลอง · ความคืบหน้าบันทึกบนเซิร์ฟเวอร์</p>${this.titleNote ? `<p class="title-server-note" role="status">${this.titleNote}</p>` : ''}` : this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p><a class="title-privacy" href="${import.meta.env.BASE_URL}privacy.html" target="_blank" rel="noopener">นโยบายความเป็นส่วนตัว</a></div>`;
     this.show('title');
     this.views.title.querySelector<HTMLElement>(g ? '#continue' : offer ? '#import-save' : '#new-game')?.focus({ preventScroll: true });
   }
@@ -320,6 +331,12 @@ export class GameShell {
   // P09-02d: Google link/sign-in and recovery codes (server play only); a note after switching accounts.
   private account: AccountPanel | undefined;
   private titleNote = '';
+  private feedback: FeedbackPanel | undefined;
+  private place(): ReportPlace {
+    if (this.account?.isOpen) return 'account';
+    const view = this.root.dataset.view;
+    return view === 'title' || view === 'commander' || view === 'lobby' || view === 'world' || view === 'battle' ? view : 'unknown';
+  }
   private inertBefore = new Map<Element, boolean>();
   private waitTimer: ReturnType<typeof setTimeout> | undefined;
   // Locks every view (pointer and keyboard) while the server works; the note shows only if the answer is slow.
@@ -383,6 +400,7 @@ export class GameShell {
     const retrying = (problem === 'network' || problem === 'server') && this.server?.waitingRetry && then;
     const action = problem === 'other_device' ? 'เล่นบนเครื่องนี้ต่อ' : problem === 'content_version' ? 'โหลดหน้าใหม่' : problem === 'deleting' ? 'เปิดหน้าบัญชี' : retrying ? 'ส่งอีกครั้ง' : 'เชื่อมต่อใหม่';
     const [title, detail] = text[problem];
+    this.server?.report(problem, this.place());
     if (this.root.dataset.server === 'sending') { this.unlockForServer(); this.lockForServer('กำลังส่งไปเซิร์ฟเวอร์…'); }
     this.nextMove = undefined; this.stepShown = false;
     this.serverPanel.dataset.problem = problem; this.serverPanel.hidden = false;
