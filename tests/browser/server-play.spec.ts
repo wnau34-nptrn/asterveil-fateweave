@@ -265,3 +265,41 @@ test('server play import (D11): the title offers the local save once and the ser
   await expect(page.locator('#world-view')).toBeVisible();
   expect(issues).toEqual([]);
 });
+
+// P09-02g: deletion asks for a typed phrase, the account then waits (the game refuses and says how to cancel), and
+// cancelling brings the camp back. The privacy page is linked from the title.
+test('server play account: delete with a typed confirm, the waiting state, cancel, and the privacy page', async ({ browser }, info) => {
+  const s = server(undefined, contentVersion());
+  const d = await device(browser, s); const page = d.page;
+  await expect(page.locator('.title-privacy')).toHaveAttribute('href', /privacy\.html$/);
+  await page.locator('#new-game').click(); await page.locator('#commander-name').fill('ลบแล้วกลับ');
+  await page.locator('#commander-create').click();
+  await page.locator('[data-story=skip]').click();
+  await expect(page.locator('#save-status')).toHaveText('บันทึกบนเซิร์ฟเวอร์ทุกเทิร์น');
+  await page.reload();
+  await page.locator('#account-open').click();
+  await page.locator('[data-account="delete"]').click();
+  await expect(page.locator('.account-delete .account-warn')).toContainText('14 วัน');
+  await page.locator('#account-delete-input').fill('ลบ');
+  await page.locator('[data-account="delete-confirm"]').click();
+  await expect(page.locator('.account-note')).toContainText('พิมพ์ “ลบบัญชี”');
+  await page.locator('#account-delete-input').fill('ลบบัญชี');
+  await page.locator('.account-delete').scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('account-delete-confirm-390.png') });
+  await page.locator('[data-account="delete-confirm"]').click();
+  await expect(page.locator('.account-status')).toHaveAttribute('data-status', 'deleting');
+  await page.screenshot({ path: info.outputPath('account-deleting-390.png') });
+  // Entering again: the game refuses and points to the account page, where the deletion is cancelled.
+  await page.reload();
+  await expect(page.locator('#server-problem-title')).toHaveText('บัญชีนี้รอการลบ');
+  await page.locator('[data-server="act"]').click();
+  await page.locator('[data-account="undelete"]').click();
+  await expect(page.locator('.title-server-note')).toContainText('ยกเลิกการลบบัญชีแล้ว');
+  await expect(page.locator('#continue')).toBeVisible();
+  // The privacy page.
+  await page.goto('./privacy.html');
+  await expect(page.locator('h1')).toHaveText('นโยบายความเป็นส่วนตัว');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: info.outputPath('privacy-390.png') });
+  await d.close();
+});

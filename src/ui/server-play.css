@@ -30,3 +30,11 @@
 .title-import { display: grid; gap: 8px; padding: 10px 12px; border-radius: 14px; background: #08121fd9; border: 1px solid #e8f5ff2e; }
 .title-import .title-save { color: var(--gold-light, #f2d596); }
 .title-import-note { margin: 0; font-size: 12px; color: var(--text, #e8f5ff); text-align: center; }
+/* P09-02g: account deletion, the waiting state and the privacy link. */
+.account-delete label { font-size: 13px; color: var(--text-muted, #b9c8d8); }
+.account-delete input { min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #e8f5ff40; background: #050b14; color: var(--text, #e8f5ff); font-size: 16px; }
+.account-delete .account-warn { display: grid; gap: 4px; padding: 10px; border-radius: 12px; border: 1px solid #ed927f80; background: #ed927f14; font-size: 14px; }
+.account-delete ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.account-status[data-status="deleting"] { padding: 8px 10px; border-radius: 10px; border: 1px solid #ed927f80; background: #ed927f14; }
+.account-privacy { text-align: center; }
+.account-privacy a, .title-privacy { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; color: var(--text-muted, #b9c8d8); text-decoration: underline; text-underline-offset: 3px; font-size: 13px; }

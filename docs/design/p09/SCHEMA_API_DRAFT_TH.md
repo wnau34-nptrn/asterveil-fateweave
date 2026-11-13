@@ -54,7 +54,7 @@ JSON, `Cache-Control: no-store`, CORS เฉพาะ origin ของ Pages, �
 | `POST /v1/import` | envelope นำเข้า (CLOUD_SAVE_ENVELOPE §2) | 201 / 409 `already_imported`·`fingerprint_used`·`has_game` / 413 / 422 `<issue>`·`replay_failed` / 403 `import_closed` (ทำแล้ว P09-02e) |
 | `GET /v1/state` | — | มุมมองสถานะ (ตัด seed) + `seq` |
 | `POST /v1/command` (หรือ WebSocket ไปที่ DO) | `{requestId, seq, kind, args}` | ผลลัพธ์ + เหตุการณ์ (สำหรับ VFX) + มุมมองที่เปลี่ยน + `seq`; 409 `stale`/`gap`/`request_reused`; 422 `<เหตุผลตามกฎ>`; 423 `other_device` |
-| `POST /v1/account/delete` · `…/cancel` | `{requestId}` | `deleting` |
+| `POST /v1/account/delete` · `…/cancel` | delete: `{confirm:'delete'}` (P09-02g) | `deleting` + `deleteAfter` / กลับ `guest`·`linked` |
 | `POST /v1/sessions/revoke` | `{deviceId?}` | ออกจากระบบเครื่อง/ทุกเครื่อง |
 
 ช่องทาง: WebSocket ไป DO ลดความหน่วงของการเดิน/ศึก (คำสั่งถี่); HTTP ใช้ได้เมื่อ WebSocket ไม่ได้ Rate limit (ร่าง): คำสั่งไม่เกิน 10 ครั้ง/วินาที/บัญชี, สร้าง guest จำกัดต่อ IP

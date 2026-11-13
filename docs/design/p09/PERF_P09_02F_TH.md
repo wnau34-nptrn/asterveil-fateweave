@@ -58,6 +58,6 @@
 
 ## 6. ที่เหลือ [เสนอ]
 
-- ปิด `LEGACY_IMPORT` ก่อนคนนอก; access/refresh token หมุนเวียน; ลบบัญชี + นโยบายความเป็นส่วนตัว; publish consent screen; rate limit จริง (ข้าม isolate)
+- ปิด `LEGACY_IMPORT` ก่อนคนนอก; access/refresh token หมุนเวียน; ลบบัญชี + นโยบายความเป็นส่วนตัว; publish consent screen; rate limit จริง (ข้าม isolate) — ลบบัญชี/privacy/rate limit/แผนปิดนำเข้า ทำแล้วใน [P09-02g](SAFETY_P09_02G_TH.md)
 - เครื่องมือ admin อื่น (ดู audit, แก้เซฟที่นำเข้า) ใช้ `admins`/`admin_audit` เดียวกัน
 - Safari/iPhone/Android จริงยังไม่ได้ทดสอบ

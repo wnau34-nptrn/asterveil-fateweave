@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>นโยบายความเป็นส่วนตัว · Asterveil Fateweave</title>
+<!-- P09-02g: short privacy notice (docs/design/p09/SAFETY_P09_02G_TH.md §2). Keep it in step with the server: what is
+     stored is listed in cloudflare/migrations and src/server. The contact line must be filled in by the owner before
+     the external test (OD-13). -->
+<style>
+  @font-face { font-family: "Noto Sans Thai"; src: url("assets/fonts/noto-sans-thai-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "Noto Sans Thai"; src: url("assets/fonts/noto-sans-thai-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+  :root { color-scheme: dark; --bg: #07111f; --card: #0b1729; --line: #e8f5ff26; --text: #e8f5ff; --muted: #b9c8d8; --gold: #f2d596; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 "Noto Sans Thai", system-ui, sans-serif; }
+  main { width: min(100%, 480px); margin: 0 auto; padding: 24px 16px 40px; }
+  h1 { margin: 0 0 4px; font-size: 22px; line-height: 1.3; }
+  h2 { margin: 24px 0 6px; font-size: 17px; color: var(--gold); }
+  p, li { color: var(--muted); } p { margin: 0 0 8px; } b { color: var(--text); }
+  ul { margin: 0 0 8px; padding-left: 20px; } li { margin-bottom: 4px; }
+  .updated { font-size: 14px; }
+  .back { display: inline-flex; align-items: center; min-height: 44px; margin-top: 20px; color: var(--text); }
+  a { color: var(--gold); text-underline-offset: 3px; }
+</style>
+</head>
+<body>
+<main>
+<h1>นโยบายความเป็นส่วนตัว</h1>
+<p class="updated">Asterveil · Fateweave (รุ่นทดสอบ) · ปรับปรุงล่าสุด 13 พฤศจิกายน 2569</p>
+
+<h2>สรุปสั้น ๆ</h2>
+<p>เราเก็บเฉพาะสิ่งที่ต้องใช้ให้เล่นเกมและเก็บความคืบหน้าได้ ไม่เก็บอีเมล ชื่อจริง หรือรูปโปรไฟล์ ไม่ขายข้อมูล ไม่มีโฆษณา และไม่ติดตามคุณข้ามเว็บไซต์</p>
+
+<h2>ถ้าเล่นในเครื่องอย่างเดียว</h2>
+<p>เซฟและการตั้งค่าเสียงอยู่ในเบราว์เซอร์ของคุณเท่านั้น (local storage) ไม่ส่งไปที่ใด ล้างข้อมูลเบราว์เซอร์แล้วข้อมูลนี้จะหายไป</p>
+
+<h2>ถ้าเล่นผ่านเซิร์ฟเวอร์</h2>
+<ul>
+  <li><b>บัญชี</b> · รหัสบัญชีแบบสุ่ม สถานะบัญชี และเวลาที่สร้าง</li>
+  <li><b>อุปกรณ์</b> · ค่าแฮชของกุญแจอุปกรณ์ (ไม่เก็บกุญแจจริง) และเวลาที่ใช้ล่าสุด · กุญแจจริงอยู่ในเบราว์เซอร์ของคุณ</li>
+  <li><b>Google (ถ้าผูก)</b> · เฉพาะรหัสประจำตัวผู้ใช้ของ Google ที่ไม่บอกตัวตน ไม่เก็บอีเมล ชื่อ หรือรูป</li>
+  <li><b>รหัสกู้คืน (ถ้าออก)</b> · เก็บเฉพาะค่าแฮช ตัวรหัสแสดงให้คุณครั้งเดียว</li>
+  <li><b>ข้อมูลเกม</b> · ชื่อผู้บัญชาการและค่ายที่คุณตั้งเอง ทีม ไอเทม ความคืบหน้า ประวัติคำสั่งที่เล่น และภาพบันทึกสถานะสำหรับตรวจความถูกต้องของเกม</li>
+  <li><b>เซฟเดิมที่นำเข้า (ถ้านำเข้า)</b> · สำเนาเซฟนั้นและค่าแฮชของมัน เพื่อกันนำเซฟเดียวเข้าหลายบัญชี</li>
+  <li><b>หมายเลข IP</b> · ใช้ชั่วคราวเพื่อจำกัดการเรียกที่ถี่เกินไป (เช่น การสร้างบัญชีทดลองหรือการเข้าสู่ระบบ) นับในหน่วยความจำไม่เกินราวหนึ่งนาที ไม่บันทึกลงฐานข้อมูล</li>
+</ul>
+
+<h2>ใช้ข้อมูลเพื่ออะไร</h2>
+<ul>
+  <li>ให้คุณเล่นต่อและเก็บความคืบหน้า รวมถึงเข้าบัญชีบนเครื่องอื่นหรือกู้บัญชี</li>
+  <li>ตรวจว่าผลในเกมถูกต้องตามกติกา และกันการโกงหรือการใช้งานเกินกำลังของระบบ</li>
+</ul>
+
+<h2>ผู้ให้บริการที่เกี่ยวข้อง</h2>
+<ul>
+  <li><b>Cloudflare</b> · เซิร์ฟเวอร์และฐานข้อมูลของเกม</li>
+  <li><b>Google</b> · เฉพาะเมื่อคุณเปิดหน้าบัญชีและใช้ปุ่ม Google (ปุ่มโหลดจาก Google และเป็นไปตามนโยบายของ Google)</li>
+  <li><b>GitHub Pages</b> · ที่วางไฟล์ตัวเกม</li>
+</ul>
+<p>ผู้ให้บริการเหล่านี้อาจบันทึกข้อมูลการเชื่อมต่อทั่วไปตามนโยบายของตน</p>
+
+<h2>เก็บนานแค่ไหน และการลบบัญชี</h2>
+<ul>
+  <li>เก็บไว้จนกว่าคุณจะลบบัญชี · ตอนนี้ยังไม่มีการลบบัญชีที่ไม่ได้ใช้อัตโนมัติ (ถ้าจะเริ่มจะแจ้งล่วงหน้า)</li>
+  <li>ลบได้เองที่ <b>บัญชี · Google · รหัสกู้คืน → ลบบัญชี</b> แล้วพิมพ์ยืนยัน</li>
+  <li>หลังขอลบ บัญชีจะรอ <b>14 วัน</b> ระหว่างนี้เล่นไม่ได้แต่ยกเลิกได้ เครื่องอื่นจะถูกออกจากระบบทันที</li>
+  <li>พ้น 14 วัน ข้อมูลบัญชี อุปกรณ์ Google รหัสกู้คืน และข้อมูลเกมทั้งหมดบนเซิร์ฟเวอร์จะถูกลบภายในไม่กี่ชั่วโมง</li>
+  <li>เหลือไว้เพียงบันทึกตรวจสอบว่ารหัสบัญชีสุ่มนั้นขอลบ ยกเลิก หรือถูกลบเมื่อใด ซึ่งระบุตัวคุณไม่ได้</li>
+  <li>ระบบสำรองข้อมูลอัตโนมัติของ Cloudflare อาจยังมีสำเนาได้ไม่เกิน 30 วันหลังลบ แล้วหมดไปเอง</li>
+  <li>เซฟที่อยู่ในเครื่องของคุณไม่ถูกลบตามบัญชี ลบได้ด้วยการล้างข้อมูลเบราว์เซอร์</li>
+</ul>
+
+<h2>ติดต่อ</h2>
+<p>ขอดูหรือสอบถามเรื่องข้อมูลของคุณได้ผ่านช่องทางติดต่อที่แจ้งไว้ในคำเชิญทดสอบ</p>
+
+<a class="back" href="./">← กลับไปที่เกม</a>
+</main>
+</body>
+</html>

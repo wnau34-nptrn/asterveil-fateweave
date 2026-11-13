@@ -1,15 +1,17 @@
 import { checkUpload, MAX_PAYLOAD_BYTES } from '../core/cloud/cloud-save';
 import { SAVE_VERSION } from '../core/save/expedition-save';
 import {
-  accountExists, accountInfo, auditAdmin, authenticate, claimFingerprint, createGuest, deviceOf, isAdmin, issueRecoveryCode, linkGoogle, recoverWithCode,
+  accountExists, accountInfo, auditAdmin, authenticateAccount, claimFingerprint, createGuest, deviceOf, isAdmin, issueRecoveryCode, linkGoogle, recoverWithCode,
   releaseFingerprint, revokeDevices, sha256Hex, signInGoogle, type D1Like,
 } from './accounts';
 import type { GoogleVerifier } from './google';
+import { cancelDeletion, DELETE_CONFIRM, requestDeletion } from './deletion';
+import { ipKey, RateLimiter, type RateGate } from './rate-limit';
 import { SESSION_HEADER } from './account-object';
 import { MAX_COMMAND_BYTES } from './game-host';
 
 // P09-02b: the Worker's front door. Routing, request size/shape limits, content-version check, guest accounts, bearer
-// auth and best-effort rate limits; the game itself runs in the account's Durable Object (`account-object.ts`).
+// auth and rate limits (P09-02g: shared across isolates through `gate`, see rate-limit.ts); the game itself runs in the account's Durable Object (`account-object.ts`).
 // Platform-neutral (standard Request/Response), so tests call it with fakes. Endpoints: docs/design/p09/SERVER_P09_02B_TH.md.
 
 export interface AccountGame { fetch(request: Request): Promise<Response> }
@@ -19,7 +21,9 @@ export interface ApiDeps {
   contentVersion: string;
   allowedOrigins: readonly string[];
   now(): number;
+  // In-isolate first filter; `gate` (P09-02g) is the shared count behind it. Without a gate only the filter applies.
   limiter: RateLimiter;
+  gate?: RateGate;
   // P09-02d: checks a Google ID token (iss/aud/exp/signature against Google's JWKS); absent when no client id is set.
   google?: GoogleVerifier;
   // P09-02e (owner D11): importing a local save is allowed only before the external test; `false` closes it (403).
@@ -29,21 +33,12 @@ export interface ApiDeps {
 export const CONTENT_HEADER = 'X-Fateweave-Content';
 const HEALTH = { status: 'ok', service: 'asterveil-api', environment: 'dev' } as const;
 
-// Fixed one-second/one-minute windows kept in this isolate's memory. Best effort only: Cloudflare may run several
-// isolates, so this stops a runaway client, not a determined attacker (see the design note).
-export class RateLimiter {
-  private readonly windows = new Map<string, { start: number; count: number }>();
-  constructor(private readonly max = 50_000) {}
-  allow(key: string, limit: number, windowMs: number, now: number): boolean {
-    const w = this.windows.get(key);
-    if (!w || now - w.start >= windowMs) {
-      if (this.windows.size >= this.max) this.windows.clear();
-      this.windows.set(key, { start: now, count: 1 });
-      return true;
-    }
-    return ++w.count <= limit;
-  }
+export { RateLimiter } from './rate-limit';
+async function allowed(deps: ApiDeps, key: string, limit: number, windowMs: number, now: number): Promise<boolean> {
+  if (!deps.limiter.allow(key, limit, windowMs, now)) return false;
+  return deps.gate ? deps.gate.allow(key, limit, windowMs) : true;
 }
+const limited = (seconds: number) => error('rate_limited', 429, { 'Retry-After': String(seconds) });
 export const LIMITS = { verifyPerMinute: 10, importPerMinute: 5, commandPerSecond: 10, guestPerMinute: 5, readPerSecond: 10, signInPerMinute: 10, recoverPerMinute: 5, accountPerMinute: 20 } as const;
 const ACCOUNT_BODY_BYTES = 8 * 1024;
 // The envelope carries the save as a JSON string, so escaping can make it up to about twice the save's size.
@@ -93,8 +88,12 @@ export async function handle(request: Request, deps: ApiDeps): Promise<Response>
 const ROUTES: Record<string, 'GET' | 'POST'> = {
   '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/command': 'POST', '/v1/verify': 'POST', '/v1/import': 'POST',
   '/v1/account': 'GET', '/v1/link': 'POST', '/v1/signin': 'POST', '/v1/recovery-code': 'POST', '/v1/recover': 'POST', '/v1/sessions/revoke': 'POST',
+  '/v1/account/delete': 'POST', '/v1/account/cancel': 'POST',
 };
-const ACCOUNT_ROUTES = new Set(['/v1/account', '/v1/link', '/v1/signin', '/v1/recovery-code', '/v1/recover', '/v1/sessions/revoke']);
+const ACCOUNT_ROUTES = new Set(['/v1/account', '/v1/link', '/v1/signin', '/v1/recovery-code', '/v1/recover', '/v1/sessions/revoke', '/v1/account/delete', '/v1/account/cancel']);
+// P09-02g: what a `deleting` account may still do (read the account, cancel, sign devices out).
+const WHILE_DELETING = new Set(['/v1/account', '/v1/account/cancel', '/v1/sessions/revoke', '/v1/account/delete']);
+const deletingError = () => error('account_deleting', 403);
 const ACCOUNT_ID = /^[0-9a-f]{32}$/;
 // A session is one page load of the game on one device: 32 random hex digits made by the device (D12).
 const SESSION = /^[0-9a-f]{32}$/;
@@ -105,22 +104,22 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
   if (request.method !== method) return error('method_not_allowed', 405, { Allow: method });
   const now = deps.now();
   if (path === '/v1/guest') {
-    const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
-    if (!deps.limiter.allow(`guest:${ip}`, LIMITS.guestPerMinute, 60_000, now)) return error('rate_limited', 429, { 'Retry-After': '60' });
+    if (!await allowed(deps, `guest:${ipKey(request.headers.get('CF-Connecting-IP'))}`, LIMITS.guestPerMinute, 60_000, now)) return limited(60);
     return json(await createGuest(deps.db, now), 201);
   }
   if (ACCOUNT_ROUTES.has(path)) return accountRoute(request, path, deps, now);
   // Every game route: the device must run the same content as the server (a server deployed without one refuses all).
   if (!deps.contentVersion) return error('content_version_unset', 503);
   if (request.headers.get(CONTENT_HEADER) !== deps.contentVersion) return json({ error: 'content_version', server: deps.contentVersion }, 409);
-  const accountId = await authenticate(deps.db, request.headers.get('Authorization'));
-  if (!accountId) return error('unauthorized', 401, { 'WWW-Authenticate': 'Bearer' });
+  const auth = await authenticateAccount(deps.db, request.headers.get('Authorization'));
+  if (!auth) return error('unauthorized', 401, { 'WWW-Authenticate': 'Bearer' });
+  if (auth.status === 'deleting') return deletingError();
+  const accountId = auth.accountId;
   if (path === '/v1/import') return importRoute(request, accountId, deps, now);
   if (path === '/v1/verify') return verifyRoute(request, accountId, deps, now);
+  // The exact per-account count is kept by the account's Durable Object; this is the in-isolate first filter.
   const writes = path === '/v1/command';
-  if (!deps.limiter.allow(`${writes ? 'cmd' : 'read'}:${accountId}`, writes ? LIMITS.commandPerSecond : LIMITS.readPerSecond, 1000, now)) {
-    return error('rate_limited', 429, { 'Retry-After': '1' });
-  }
+  if (!deps.limiter.allow(`${writes ? 'cmd' : 'read'}:${accountId}`, writes ? LIMITS.commandPerSecond : LIMITS.readPerSecond, 1000, now)) return limited(1);
   const game = deps.game(accountId);
   const session = request.headers.get(SESSION_HEADER) ?? '';
   if (!SESSION.test(session)) return error('session_required', 400);
@@ -138,7 +137,7 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
 // Answers: the Durable Object's `{ ok, seq, from, reason? }`, 403 forbidden, 404 no_account, 400 invalid_request.
 async function verifyRoute(request: Request, adminId: string, deps: ApiDeps, now: number): Promise<Response> {
   if (!await isAdmin(deps.db, adminId)) return error('forbidden', 403);
-  if (!deps.limiter.allow(`verify:${adminId}`, LIMITS.verifyPerMinute, 60_000, now)) return error('rate_limited', 429, { 'Retry-After': '60' });
+  if (!await allowed(deps, `verify:${adminId}`, LIMITS.verifyPerMinute, 60_000, now)) return limited(60);
   let target = adminId;
   const text = await readLimited(request, ACCOUNT_BODY_BYTES);
   if (text === null) return error('too_large', 413);
@@ -163,7 +162,7 @@ async function verifyRoute(request: Request, adminId: string, deps: ApiDeps, now
 // 403 import_closed, 409 already_imported / fingerprint_used / has_game, 413, 422 <issue> / replay_failed.
 async function importRoute(request: Request, accountId: string, deps: ApiDeps, now: number): Promise<Response> {
   if (deps.legacyImport === false) return error('import_closed', 403);
-  if (!deps.limiter.allow(`import:${accountId}`, LIMITS.importPerMinute, 60_000, now)) return error('rate_limited', 429, { 'Retry-After': '60' });
+  if (!await allowed(deps, `import:${accountId}`, LIMITS.importPerMinute, 60_000, now)) return limited(60);
   const session = request.headers.get(SESSION_HEADER) ?? '';
   if (!SESSION.test(session)) return error('session_required', 400);
   if (!/^application\/json\b/i.test(request.headers.get('Content-Type') ?? '')) return error('unsupported_media_type', 415);
@@ -203,11 +202,11 @@ async function readJson(request: Request): Promise<Record<string, unknown> | Res
 const str = (v: unknown) => (typeof v === 'string' ? v : '');
 
 async function accountRoute(request: Request, path: string, deps: ApiDeps, now: number): Promise<Response> {
-  const ip = request.headers.get('CF-Connecting-IP') ?? 'unknown';
+  const ip = ipKey(request.headers.get('CF-Connecting-IP'));
   // Without a bearer token: sign in with Google, or recover with a code. Both make a device credential.
   if (path === '/v1/signin' || path === '/v1/recover') {
     const [key, limit] = path === '/v1/signin' ? [`signin:${ip}`, LIMITS.signInPerMinute] : [`recover:${ip}`, LIMITS.recoverPerMinute];
-    if (!deps.limiter.allow(key, limit, 60_000, now)) return error('rate_limited', 429, { 'Retry-After': '60' });
+    if (!await allowed(deps, key, limit, 60_000, now)) return limited(60);
     const body = await readJson(request);
     if (body instanceof Response) return body;
     if (path === '/v1/recover') {
@@ -224,10 +223,27 @@ async function accountRoute(request: Request, path: string, deps: ApiDeps, now: 
     if (out === 'not_linked') return error('not_linked', 404);
     return json({ accountId: out });
   }
-  const accountId = await authenticate(deps.db, request.headers.get('Authorization'));
-  if (!accountId) return error('unauthorized', 401, { 'WWW-Authenticate': 'Bearer' });
-  if (!deps.limiter.allow(`account:${accountId}`, LIMITS.accountPerMinute, 60_000, now)) return error('rate_limited', 429, { 'Retry-After': '60' });
+  const auth = await authenticateAccount(deps.db, request.headers.get('Authorization'));
+  if (!auth) return error('unauthorized', 401, { 'WWW-Authenticate': 'Bearer' });
+  const accountId = auth.accountId;
+  if (!await allowed(deps, `account:${accountId}`, LIMITS.accountPerMinute, 60_000, now)) return limited(60);
+  if (auth.status === 'deleting' && !WHILE_DELETING.has(path)) return deletingError();
   if (path === '/v1/account') return json(await accountInfo(deps.db, accountId));
+  // P09-02g deletion: `{ confirm: 'delete' }` (the panel has the player type a phrase first). Answers the account with
+  // `status: 'deleting'` and `deleteAfter`; a repeat keeps the first deadline. Cancel answers the account again, or
+  // 409 not_deleting / too_late.
+  if (path === '/v1/account/delete') {
+    const body = await readJson(request);
+    if (body instanceof Response) return body;
+    if (body.confirm !== DELETE_CONFIRM) return error('confirm_required', 400);
+    await requestDeletion(deps.db, accountId, deviceOf(request.headers.get('Authorization'))!, now);
+    return json(await accountInfo(deps.db, accountId));
+  }
+  if (path === '/v1/account/cancel') {
+    const out = await cancelDeletion(deps.db, accountId, now);
+    if (out !== 'cancelled') return error(out, 409);
+    return json(await accountInfo(deps.db, accountId));
+  }
   if (path === '/v1/recovery-code') return json({ code: await issueRecoveryCode(deps.db, accountId, now) }, 201);
   // P09-02f sign-out: `{ scope?: 'this' | 'others', confirm?: true }` (default this device). 409 unrecoverable: signing
   // this device out would leave no way back into the account (no Google, no recovery code, no other device).

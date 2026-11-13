@@ -13,7 +13,8 @@ import type { StoragePort } from '../core/save/expedition-save';
 export const CONTENT_HEADER = 'X-Fateweave-Content';
 export const SESSION_HEADER = 'X-Fateweave-Session';
 export interface ServerState { lastSeq: number; view: ClientGame | null }
-export type ServerFailure = 'content_version' | 'unauthorized' | 'network' | 'server';
+// `deleting` (P09-02g): the account waits for deletion; the game refuses until the player cancels in the account panel.
+export type ServerFailure = 'content_version' | 'unauthorized' | 'network' | 'server' | 'deleting';
 export type ServerOutcome =
   // The command used its sequence number: applied (new view + events) or refused by the rules (nothing changed).
   | { kind: 'reply'; reply: CommandReply }
@@ -24,7 +25,7 @@ export type ServerOutcome =
   // No definitive answer; `retry()` sends the same request again.
   | { kind: 'failed'; reason: ServerFailure };
 // P09-02d account (owner D1): Google link/sign-in and one-time recovery codes.
-export interface AccountInfo { accountId: string; status: 'guest' | 'linked' | 'deleting' | 'suspended'; google: boolean; recoveryCodeAt: number | null }
+export interface AccountInfo { accountId: string; status: 'guest' | 'linked' | 'deleting' | 'suspended'; google: boolean; recoveryCodeAt: number | null; deleteAfter?: number | null }
 // `refused`: the server answered with a definite no (`identity_in_use`, `already_linked`, `not_linked`, `invalid_code`,
 // `google_token`, `google_unset`, `rate_limited`, …); `failed`: no definite answer.
 export type AccountOutcome<T> = { kind: 'ok'; value: T } | { kind: 'refused'; error: string } | { kind: 'failed'; reason: ServerFailure };
@@ -118,6 +119,8 @@ export class ServerClient {
     if (!r) return 'network';
     if (r.status === 401) return 'unauthorized';
     if (r.status === 409) return 'content_version';
+    // Game routes answer 403 only for an account that waits for deletion (`account_deleting`).
+    if (r.status === 403) return 'deleting';
     return 'server';
   }
 
@@ -175,6 +178,18 @@ export class ServerClient {
     const headers = this.bearer(true);
     if (!headers) return { kind: 'failed', reason: 'unauthorized' };
     return this.accountCall('/v1/link', { method: 'POST', headers, body: JSON.stringify({ idToken }) }, 200, b => b as AccountInfo);
+  }
+  // P09-02g: asks the server to delete this account after the grace period (the panel asks the player to confirm first);
+  // answers the account with `status: 'deleting'` and `deleteAfter`. Cancel brings it back (`not_deleting`, `too_late`).
+  async deleteAccount(): Promise<AccountOutcome<AccountInfo>> {
+    const headers = this.bearer(true);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    return this.accountCall('/v1/account/delete', { method: 'POST', headers, body: JSON.stringify({ confirm: 'delete' }) }, 200, b => b as AccountInfo);
+  }
+  async cancelDeletion(): Promise<AccountOutcome<AccountInfo>> {
+    const headers = this.bearer(false);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    return this.accountCall('/v1/account/cancel', { method: 'POST', headers }, 200, b => b as AccountInfo);
   }
   // A new recovery code (replaces the old one); shown once.
   async recoveryCode(): Promise<AccountOutcome<string>> {

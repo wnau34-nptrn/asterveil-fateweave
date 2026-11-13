@@ -74,10 +74,10 @@ describe('P09-02d account routes', () => {
     const s = server(); const g = await withGoogle(s);
     const a = await guest(s), b = await guest(s);
     const info = await call(s, '/v1/account', { headers: { Authorization: `Bearer ${a.token}` } });
-    expect(await info.json()).toEqual({ accountId: a.accountId, status: 'guest', google: false, recoveryCodeAt: null });
+    expect(await info.json()).toEqual({ accountId: a.accountId, status: 'guest', google: false, recoveryCodeAt: null, deleteAfter: null });
     const linked = await post(s, '/v1/link', { idToken: await g.token({ sub: 'g-a' }) }, a.token);
     expect(linked.status).toBe(200);
-    expect(await linked.json()).toEqual({ accountId: a.accountId, status: 'linked', google: true, recoveryCodeAt: null });
+    expect(await linked.json()).toEqual({ accountId: a.accountId, status: 'linked', google: true, recoveryCodeAt: null, deleteAfter: null });
     expect(s.d1.db.prepare('SELECT * FROM identities').all()).toEqual([{ provider: 'google', subject: 'g-a', account_id: a.accountId, linked_at: expect.any(Number) }]);
     expect(JSON.stringify(s.d1.db.prepare('SELECT * FROM identities, accounts').all())).not.toContain('example.com');
     // Again (a retried request): still linked, one row.
