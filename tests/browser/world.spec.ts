@@ -911,11 +911,11 @@ test('map events: stepping on one opens its choices; the shrine heals with a wou
 test('starting a new game from the title requires confirmation and resets the company', async ({ page }) => {
   const issues = await open(page, base({ steps: 9 }));
   await page.reload(); await expect(page.locator('#continue')).toContainText('เดินทางต่อ');
-  await page.locator('#new-game').click(); await expect(page.locator('#new-game')).toContainText('ยืนยัน'); expect((await saved(page)).steps).toBe(9);
+  await page.locator('#title-settings-open').click(); await page.locator('#new-game').click(); await expect(page.locator('#new-game')).toContainText('ยืนยัน'); expect((await saved(page)).steps).toBe(9);
   await page.locator('#new-game').click(); await expect(page.locator('#commander-view')).toBeVisible();
   // Backing out keeps the old save; confirming a commander replaces it.
   await page.locator('[data-cmd=back]').click(); expect((await saved(page)).steps).toBe(9);
-  await page.locator('#new-game').click(); await page.locator('#new-game').click();
+  await page.locator('#title-settings-open').click(); await page.locator('#new-game').click(); await page.locator('#new-game').click();
   await page.locator('#commander-name').fill('ผู้กองใหม่'); await page.locator('#commander-create').click();
   // The new company starts with the prologue and its first battle.
   await expect(page.locator('#story-view')).toBeVisible(); await expect(page.locator('.story-text')).toContainText('ผู้กองใหม่');

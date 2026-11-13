@@ -144,7 +144,9 @@ export class GameShell {
     views.title.addEventListener('click', e => {
       const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-title]');
       if (!button) return;
+      if (button.dataset.title === 'settings-close') { this.toggleSettings(false); return; }
       if (button.dataset.title === 'account') { void this.account?.open(); return; }
+      if (button.dataset.title === 'local') { const u = new URL(location.href); u.searchParams.set('server', 'off'); location.assign(u); return; }
       if (button.dataset.title === 'import') { this.importLocal(); return; }
       if (button.dataset.title === 'continue' && this.game) { if (this.state) this.resume(); else if (!this.game.profile.commander) this.showCommander(false); else this.showLobby(); }
       if (button.dataset.title === 'new') {
@@ -152,6 +154,8 @@ export class GameShell {
         this.showCommander(true);
       }
     });
+    views.title.addEventListener('click', e => { if ((e.target as HTMLElement).closest('#title-settings-open')) this.toggleSettings(true); });
+    views.title.addEventListener('keydown', e => { if (e.key === 'Escape' && !this.views.title.querySelector<HTMLElement>('#title-settings')?.hidden && !this.account?.isOpen) { e.stopPropagation(); this.toggleSettings(false); } });
     // Shared audio preferences in the in-game settings tabs.
     root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-music-toggle]')) { this.music.setMuted(!this.music.settings.muted); this.refreshMusicControls(); } });
     // Every enabled button press clicks (the D-pad steps instead; game results add their own sound).
@@ -233,17 +237,41 @@ export class GameShell {
     const offer = g ? undefined : this.importOffer();
     const offerChips = offer ? [['flag', `ทีม ${offer.game.profile.company.length} คน`], ['ore', `แร่ดาว ${offer.game.profile.bank.ore}`], ...(offer.game.run ? [['footprints', 'มีการเดินทางค้างอยู่']] : [])]
       .map(([i, t]) => `<span>${icon(i as IconName)}${t}</span>`).join('') : '';
+    // Compact title (mockup title-compact, owner 2026-11-13): artwork stays clear; one bottom glass dock holds the save line
+    // and the single primary action; settings (account, sound, save mode, new game) live in a bottom sheet behind the gear.
+    const camp = g?.profile.commander?.camp;
+    const saveLine = g ? `<p class="title-save"><b>${camp || 'ค่ายของคุณ'}</b><span class="title-chips">${summary}</span></p>` : '';
+    const gear = `<button id="title-settings-open" class="title-gear round-glass" type="button" aria-label="ตั้งค่า" aria-haspopup="dialog" aria-expanded="false">${icon('tab-settings')}</button>`;
+    const settings = `<div id="title-settings" class="title-settings" hidden><div class="title-scrim" data-title="settings-close"></div>
+      <section class="title-sheet" role="dialog" aria-modal="true" aria-labelledby="title-settings-h"><h2 id="title-settings-h">ตั้งค่า<button type="button" id="title-settings-close" class="title-x" data-title="settings-close" aria-label="ปิดตั้งค่า">${icon('close')}</button></h2>
+      ${this.server ? '<div class="title-sec"><h3>บัญชี</h3><button id="account-open" data-title="account" class="title-item" type="button"><span>บัญชี · Google · รหัสกู้คืน</span><span aria-hidden="true">›</span></button></div>' : ''}
+      <div class="title-sec"><h3>เสียง</h3>${this.musicControls('title-')}</div>
+      ${this.server ? '<div class="title-sec"><h3>การบันทึก</h3><button id="local-play" data-title="local" class="title-item" type="button"><span>บันทึกบนเซิร์ฟเวอร์ทดลอง<small>เปลี่ยนไปเล่นในเครื่องแทน (เซฟบนเซิร์ฟเวอร์ยังอยู่)</small></span><span aria-hidden="true">›</span></button></div>' : ''}
+      ${g ? '<div class="title-sec"><button id="new-game" data-title="new" class="title-item title-danger" type="button">เริ่มเกมใหม่</button></div>' : ''}</section></div>`;
+    const dock = g ? `${saveLine}<button id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ →' : 'เข้าค่าย →'}</button>`
+      : offer ? `<div class="title-import"><p class="title-save"><b>พบเซฟเดิมในเครื่องนี้</b><span class="title-chips">${offerChips}</span></p><button id="import-save" data-title="import" class="primary">นำเข้าเซฟเดิม →</button><button id="new-game" data-title="new" class="secondary">เริ่มใหม่บนเซิร์ฟเวอร์</button><p class="title-import-note">นำเข้าได้ครั้งเดียวต่อบัญชี · เซฟในเครื่องยังอยู่</p></div>`
+      : '<button id="new-game" data-title="new" class="primary">เริ่มเกม →</button>';
+    const warning = !this.server && !this.storage ? '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>' : '';
     // Layered title: drifting painting, light rays and motes behind a logo that resolves into focus.
     this.views.title.innerHTML = `<div class="title-stage" aria-hidden="true"><div class="title-bg"></div><div class="title-rays"></div>
       <div class="title-motes">${'<i></i>'.repeat(14)}</div><div class="title-vignette"></div></div>
+      <div class="title-top">${this.server ? `<span class="title-server">${icon('safe')}เซิร์ฟเวอร์ทดลอง</span>` : '<span></span>'}${gear}</div>
       <div class="title-card"><h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1><p class="title-copy">ข้ามรอยแยก · ถักทอโชคชะตา</p>
-      <div class="title-actions">${g ? `<p class="title-save">${s ? 'การเดินทางที่บันทึกไว้' : 'ค่ายของคุณ'}<span class="title-chips">${summary}</span></p><button id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ →' : 'เข้าค่าย →'}</button>` : ''}
-      ${offer ? `<div class="title-import"><p class="title-save">พบเซฟเดิมในเครื่องนี้<span class="title-chips">${offerChips}</span></p><button id="import-save" data-title="import" class="primary">นำเข้าเซฟนี้ไปยังบัญชีเซิร์ฟเวอร์</button><p class="title-import-note">นำเข้าได้ครั้งเดียวต่อบัญชี · เซฟในเครื่องยังเก็บไว้เหมือนเดิม</p></div>` : ''}
-      <button id="new-game" data-title="new" class="${g || offer ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : offer ? 'เริ่มเกมใหม่บนเซิร์ฟเวอร์' : 'เริ่มเกม'}</button>
-
-      ${this.server ? `<button id="account-open" data-title="account" class="secondary">บัญชี · Google · รหัสกู้คืน</button><p class="title-server">เล่นผ่านเซิร์ฟเวอร์ทดลอง · ความคืบหน้าบันทึกบนเซิร์ฟเวอร์</p>${this.titleNote ? `<p class="title-server-note" role="status">${this.titleNote}</p>` : ''}` : this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p></div>`;
+      ${this.server && this.titleNote ? `<p class="title-server-note" role="status">${this.titleNote}</p>` : '<span class="title-server-note-slot" role="status"></span>'}
+      <div class="title-actions">${warning}${dock}<p class="title-footer">ชายแดนแอสเตอร์เวล</p></div></div>${settings}`;
+    const note = this.views.title.querySelector<HTMLElement>('.title-server-note');
+    if (note) setTimeout(() => { note.hidden = true; }, 8000);
     this.show('title');
     this.views.title.querySelector<HTMLElement>(g ? '#continue' : offer ? '#import-save' : '#new-game')?.focus({ preventScroll: true });
+  }
+  // The title's settings bottom sheet; closing cancels a half-made "new game" confirmation.
+  private toggleSettings(open: boolean): void {
+    const sheet = this.views.title.querySelector<HTMLElement>('#title-settings'); const gear = this.views.title.querySelector<HTMLElement>('#title-settings-open');
+    if (!sheet || !gear) return;
+    sheet.hidden = !open; gear.setAttribute('aria-expanded', String(open));
+    if (open) { this.views.title.querySelector<HTMLElement>('#title-settings-close')?.focus({ preventScroll: true }); return; }
+    const n = sheet.querySelector<HTMLButtonElement>('#new-game'); if (n) { delete n.dataset.confirm; n.textContent = 'เริ่มเกมใหม่'; }
+    gear.focus({ preventScroll: true });
   }
   // P09-02e (owner D11): server play leaves the local save untouched; while the account has no game it may become the
   // account's game once. Offered only for a save this build can read (the server replays it the same way).
