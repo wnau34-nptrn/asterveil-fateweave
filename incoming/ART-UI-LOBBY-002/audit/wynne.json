@@ -1,0 +1,45 @@
+{
+  "tolerance": 0.12,
+  "minInliers": 12,
+  "report": {
+    "wynne": [
+      {
+        "frame": 0,
+        "height": 460,
+        "scale": 1.0,
+        "inliers": 2607,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 1,
+        "height": 463,
+        "scale": 0.968,
+        "inliers": 127,
+        "status": "ok"
+      },
+      {
+        "frame": 2,
+        "height": 462,
+        "scale": 0.959,
+        "inliers": 127,
+        "status": "ok"
+      },
+      {
+        "frame": 3,
+        "height": 483,
+        "scale": 0.954,
+        "inliers": 86,
+        "status": "ok"
+      }
+    ]
+  },
+  "frames": [
+    "seed",
+    "wynne_sit",
+    "wynne_cheer",
+    "wynne_idle_alt"
+  ],
+  "command": "python3 scripts/unit-anatomy-audit.py --cells <seed+wynne-poses> --json audit/wynne.json",
+  "scriptExitCode": 0
+}
