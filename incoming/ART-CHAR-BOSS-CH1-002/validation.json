@@ -1,0 +1,98 @@
+{
+  "frames": [
+    {
+      "id": "lake_spirit",
+      "source": "04_lake_spirit.png",
+      "source_sha256": "a38cc3aba948d69bc79109efd1ab64cd88f030e0ed5c9cef6f6ddc54a92929d9",
+      "bounds": [
+        22,
+        28,
+        489,
+        500
+      ]
+    },
+    {
+      "id": "crystal_giant",
+      "source": "05_crystal_giant.png",
+      "source_sha256": "3afba7251f9374215e552d843c642a99312e8e31abf7490592a492e4ba550a15",
+      "bounds": [
+        16,
+        29,
+        496,
+        497
+      ]
+    },
+    {
+      "id": "swamp_witch",
+      "source": "06_swamp_witch.png",
+      "source_sha256": "a279c02287c395697a274b2f15f0e3e44333304d637da89e07c03e41e50ad631",
+      "bounds": [
+        20,
+        25,
+        491,
+        497
+      ]
+    },
+    {
+      "id": "flame_general",
+      "source": "07_flame_general.png",
+      "source_sha256": "b2e0bae1fdf11d0e12deeb601ac346b2b7c44d30ba5a483822fdc67984954176",
+      "bounds": [
+        16,
+        60,
+        496,
+        497
+      ]
+    },
+    {
+      "id": "ancient_guardian",
+      "source": "08_ancient_guardian.png",
+      "source_sha256": "511f05e808260303ae09b1f3adc4e15cfda29ee81332141f6d32c5813e6064e2",
+      "bounds": [
+        16,
+        27,
+        496,
+        497
+      ]
+    },
+    {
+      "id": "fate_shadow",
+      "source": "09_fate_shadow.png",
+      "source_sha256": "5d5f50d5ebe3657564569099b039f13577db5ceb1a2a7dc40fb749a843deeaf5",
+      "bounds": [
+        16,
+        59,
+        496,
+        497
+      ]
+    },
+    {
+      "id": "vargoth_armoured",
+      "source": "10_vargoth_armoured.png",
+      "source_sha256": "5979dcf80e36acd986d184bacfdd101b0343d146bfb3cd86a78fcb084f59ec5f",
+      "bounds": [
+        16,
+        65,
+        496,
+        497
+      ]
+    },
+    {
+      "id": "vargoth_unleashed",
+      "source": "10_vargoth_unleashed.png",
+      "source_sha256": "eab43abdb4e28616d272ea458f144bc09f69a4b4fc6a324d68b6aada4ec4d6d4",
+      "bounds": [
+        16,
+        31,
+        496,
+        497
+      ]
+    }
+  ],
+  "existing_art_sha256": {
+    "units.webp": "d205b57d8a4082290a3a2e5a415407245106f948033cf3c66eb7b8e537393629",
+    "portraits.webp": "f604b5f93c6526130546e194674d37f4e3265083908bbbb3448affadf4b70496",
+    "units_foes.webp": "dcf79e09f2b0b813aa03894bd65222ae3afb2df875e84870d1dba968c49a1895",
+    "ruins.webp": "a06f910462fb69b1a38d94c1a169274f8b28d559286ec6ae3fc7ac3db61e7868"
+  }
+}
