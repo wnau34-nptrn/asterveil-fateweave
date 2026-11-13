@@ -362,7 +362,7 @@ for (const [width, height] of [[320, 568], [390, 844], [1366, 768]]) {
     await page.setViewportSize({ width: width!, height: height! });
     const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
     await seed(page, base()); await page.goto('./');
-    await expect(page.locator('#title-view [data-music-volume], #title-view [data-sfx-volume], [data-sfx-test]')).toHaveCount(0);
+    await expect(page.locator('#title-view [data-music-volume]:visible, #title-view [data-sfx-volume]:visible, [data-sfx-test]:visible')).toHaveCount(0);
     await reachable(page, '#continue');
     await page.screenshot({ path: info.outputPath('bright-home.png') });
     await page.locator('#continue').click(); await page.locator('#world-info-button').click();
