@@ -32,7 +32,11 @@ const gameText = (game: Game | null) => game ? JSON.stringify(game) : null;
 export function sqlStore(state: DurableStateLike): HostStore {
   const { sql } = state.storage;
   for (const s of SCHEMA) sql.exec(s);
+  // P09-02f: the book (up to RECENT_REPLIES stored answers, each with a whole view) is only ever replaced, never changed
+  // in place (`processCommand` builds a new one), so it is shared instead of copied on every load and commit; the game
+  // is still copied.
   let cached: HostState | null | undefined;
+  const copy = (s: HostState): HostState => ({ game: structuredClone(s.game), book: s.book });
   let session: string | null | undefined;
   return {
     load() {
@@ -40,7 +44,7 @@ export function sqlStore(state: DurableStateLike): HostStore {
         const row = sql.exec<{ game: string | null; book: string }>('SELECT game, book FROM state WHERE id = 1').toArray()[0];
         cached = row ? { game: row.game ? JSON.parse(row.game) as Game : null, book: JSON.parse(row.book) as CommandBook } : null;
       }
-      return cached ? structuredClone(cached) : null;
+      return cached ? copy(cached) : null;
     },
     commit(next, e, snapshot) {
       state.storage.transactionSync(() => {
@@ -49,7 +53,7 @@ export function sqlStore(state: DurableStateLike): HostStore {
           e.seq, e.requestId, JSON.stringify(e.command), JSON.stringify(e.seeds), e.status, e.contentVersion, e.at);
         if (snapshot) sql.exec(SNAPSHOT_UPSERT, snapshot.seq, gameText(snapshot.game), snapshot.origin, snapshot.at);
       });
-      cached = structuredClone(next);
+      cached = copy(next);
     },
     entries(after = 0) {
       return sql.exec<{ seq: number; request_id: string; command: string; seeds: string; status: LogEntry['status']; content_version: string; at: number }>(
@@ -72,7 +76,7 @@ export function sqlStore(state: DurableStateLike): HostStore {
         sql.exec('INSERT INTO legacy_import (id, request_id, payload_sha256, save_version, seq, payload, at) VALUES (1, ?, ?, ?, ?, ?, ?)',
           record.requestId, record.payloadSha256, record.saveVersion, record.seq, payload, record.at);
       });
-      cached = structuredClone(next);
+      cached = copy(next);
     },
     activeSession() {
       if (session === undefined) session = sql.exec<{ active: string }>('SELECT active FROM session WHERE id = 1').toArray()[0]?.active ?? null;

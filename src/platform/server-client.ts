@@ -182,6 +182,20 @@ export class ServerClient {
     if (!headers) return { kind: 'failed', reason: 'unauthorized' };
     return this.accountCall('/v1/recovery-code', { method: 'POST', headers }, 201, b => (b as { code: string }).code);
   }
+  // P09-02f sign-out. `this`: the server revokes this device's credential and the device forgets it (the next `enter()`
+  // starts a new guest account); `unrecoverable` is refused unless `confirm` (nothing else could reach the account).
+  // `others`: every other device of the account is signed out; this one keeps playing.
+  async signOut(scope: 'this' | 'others', confirm = false): Promise<AccountOutcome<number>> {
+    const headers = this.bearer(true);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    const out = await this.accountCall('/v1/sessions/revoke', { method: 'POST', headers, body: JSON.stringify(confirm ? { scope, confirm } : { scope }) }, 200,
+      b => (b as { revoked: number }).revoked);
+    if (out.kind === 'ok' && scope === 'this') {
+      try { this.storage?.removeItem?.(TOKEN_KEY + this.base); } catch { /* ignore */ }
+      this.memoryToken = null; this.pending = undefined; this.lastSeq = 0;
+    }
+    return out;
+  }
   // Sign-in with Google or a recovery code: this device makes its new credential itself and sends it along, so a
   // retried request whose answer was lost still works (the code is used once). On success the device plays that
   // account from now on; `enter()` takes it over (D12) and reads it.

@@ -1,6 +1,9 @@
 import { checkUpload, MAX_PAYLOAD_BYTES } from '../core/cloud/cloud-save';
 import { SAVE_VERSION } from '../core/save/expedition-save';
-import { accountInfo, authenticate, claimFingerprint, createGuest, issueRecoveryCode, linkGoogle, recoverWithCode, releaseFingerprint, sha256Hex, signInGoogle, type D1Like } from './accounts';
+import {
+  accountExists, accountInfo, auditAdmin, authenticate, claimFingerprint, createGuest, deviceOf, isAdmin, issueRecoveryCode, linkGoogle, recoverWithCode,
+  releaseFingerprint, revokeDevices, sha256Hex, signInGoogle, type D1Like,
+} from './accounts';
 import type { GoogleVerifier } from './google';
 import { SESSION_HEADER } from './account-object';
 import { MAX_COMMAND_BYTES } from './game-host';
@@ -41,7 +44,7 @@ export class RateLimiter {
     return ++w.count <= limit;
   }
 }
-export const LIMITS = { importPerMinute: 5, commandPerSecond: 10, guestPerMinute: 5, readPerSecond: 10, signInPerMinute: 10, recoverPerMinute: 5, accountPerMinute: 20 } as const;
+export const LIMITS = { verifyPerMinute: 10, importPerMinute: 5, commandPerSecond: 10, guestPerMinute: 5, readPerSecond: 10, signInPerMinute: 10, recoverPerMinute: 5, accountPerMinute: 20 } as const;
 const ACCOUNT_BODY_BYTES = 8 * 1024;
 // The envelope carries the save as a JSON string, so escaping can make it up to about twice the save's size.
 export const IMPORT_BODY_BYTES = 2 * MAX_PAYLOAD_BYTES + 1024;
@@ -89,9 +92,10 @@ export async function handle(request: Request, deps: ApiDeps): Promise<Response>
 
 const ROUTES: Record<string, 'GET' | 'POST'> = {
   '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/command': 'POST', '/v1/verify': 'POST', '/v1/import': 'POST',
-  '/v1/account': 'GET', '/v1/link': 'POST', '/v1/signin': 'POST', '/v1/recovery-code': 'POST', '/v1/recover': 'POST',
+  '/v1/account': 'GET', '/v1/link': 'POST', '/v1/signin': 'POST', '/v1/recovery-code': 'POST', '/v1/recover': 'POST', '/v1/sessions/revoke': 'POST',
 };
-const ACCOUNT_ROUTES = new Set(['/v1/account', '/v1/link', '/v1/signin', '/v1/recovery-code', '/v1/recover']);
+const ACCOUNT_ROUTES = new Set(['/v1/account', '/v1/link', '/v1/signin', '/v1/recovery-code', '/v1/recover', '/v1/sessions/revoke']);
+const ACCOUNT_ID = /^[0-9a-f]{32}$/;
 // A session is one page load of the game on one device: 32 random hex digits made by the device (D12).
 const SESSION = /^[0-9a-f]{32}$/;
 
@@ -112,12 +116,12 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
   const accountId = await authenticate(deps.db, request.headers.get('Authorization'));
   if (!accountId) return error('unauthorized', 401, { 'WWW-Authenticate': 'Bearer' });
   if (path === '/v1/import') return importRoute(request, accountId, deps, now);
+  if (path === '/v1/verify') return verifyRoute(request, accountId, deps, now);
   const writes = path === '/v1/command';
   if (!deps.limiter.allow(`${writes ? 'cmd' : 'read'}:${accountId}`, writes ? LIMITS.commandPerSecond : LIMITS.readPerSecond, 1000, now)) {
     return error('rate_limited', 429, { 'Retry-After': '1' });
   }
   const game = deps.game(accountId);
-  if (path === '/v1/verify') return game.fetch(new Request('https://game/verify', { method: 'POST' }));
   const session = request.headers.get(SESSION_HEADER) ?? '';
   if (!SESSION.test(session)) return error('session_required', 400);
   const sessionHeaders = { [SESSION_HEADER]: session };
@@ -127,6 +131,30 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
   const body = await readLimited(request, MAX_COMMAND_BYTES);
   if (body === null) return error('too_large', 413);
   return game.fetch(new Request('https://game/command', { method: 'POST', body, headers: { 'Content-Type': 'application/json', ...sessionHeaders } }));
+}
+
+// P09-02f: the replay audit is for admins only (an account with a row in D1 `admins`, added by the owner; no secret).
+// Body (optional): `{ accountId }` to audit another account; default the admin's own. Every audit writes `admin_audit`.
+// Answers: the Durable Object's `{ ok, seq, from, reason? }`, 403 forbidden, 404 no_account, 400 invalid_request.
+async function verifyRoute(request: Request, adminId: string, deps: ApiDeps, now: number): Promise<Response> {
+  if (!await isAdmin(deps.db, adminId)) return error('forbidden', 403);
+  if (!deps.limiter.allow(`verify:${adminId}`, LIMITS.verifyPerMinute, 60_000, now)) return error('rate_limited', 429, { 'Retry-After': '60' });
+  let target = adminId;
+  const text = await readLimited(request, ACCOUNT_BODY_BYTES);
+  if (text === null) return error('too_large', 413);
+  if (text.trim()) {
+    let body: unknown;
+    try { body = JSON.parse(text); } catch { return error('invalid_json', 400); }
+    const id = typeof body === 'object' && body !== null ? (body as { accountId?: unknown }).accountId : undefined;
+    if (id !== undefined && (typeof id !== 'string' || !ACCOUNT_ID.test(id))) return error('invalid_request', 400);
+    if (typeof id === 'string') target = id;
+  }
+  if (target !== adminId && !await accountExists(deps.db, target)) return error('no_account', 404);
+  const answer = await deps.game(target).fetch(new Request('https://game/verify', { method: 'POST' }));
+  const out = await answer.clone().json().catch(() => ({})) as { ok?: boolean; seq?: number; reason?: string };
+  const result = answer.status !== 200 ? `error:${answer.status}` : out.ok ? `ok:${out.seq}` : `fail:${out.reason ?? '?'}:${out.seq}`;
+  await auditAdmin(deps.db, adminId, 'verify', target, result, now);
+  return answer;
 }
 
 // P09-02e (owner D11): one-time import of the device's local save (v1–SAVE_VERSION) into this account. The Worker checks
@@ -201,6 +229,17 @@ async function accountRoute(request: Request, path: string, deps: ApiDeps, now: 
   if (!deps.limiter.allow(`account:${accountId}`, LIMITS.accountPerMinute, 60_000, now)) return error('rate_limited', 429, { 'Retry-After': '60' });
   if (path === '/v1/account') return json(await accountInfo(deps.db, accountId));
   if (path === '/v1/recovery-code') return json({ code: await issueRecoveryCode(deps.db, accountId, now) }, 201);
+  // P09-02f sign-out: `{ scope?: 'this' | 'others', confirm?: true }` (default this device). 409 unrecoverable: signing
+  // this device out would leave no way back into the account (no Google, no recovery code, no other device).
+  if (path === '/v1/sessions/revoke') {
+    const body = await readJson(request);
+    if (body instanceof Response) return body;
+    const scope = body.scope ?? 'this';
+    if ((scope !== 'this' && scope !== 'others') || (body.confirm !== undefined && typeof body.confirm !== 'boolean')) return error('invalid_request', 400);
+    const out = await revokeDevices(deps.db, accountId, deviceOf(request.headers.get('Authorization'))!, scope, body.confirm === true, now);
+    if (out === 'unrecoverable') return error('unrecoverable', 409);
+    return json(out);
+  }
   // /v1/link
   if (!deps.google) return error('google_unset', 503);
   const body = await readJson(request);
