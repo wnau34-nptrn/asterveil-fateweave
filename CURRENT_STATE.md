@@ -11,7 +11,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
-- **Combat impact proposal archived (not implementation):** [issue #246](https://github.com/wnau34-nptrn/asterveil-fateweave/issues/246), reference branch `docs/combat-impact-proposal-2026-11-14`; [3 boards / 6 skill concepts](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/docs/combat-impact-proposal-2026-11-14/incoming/ART-COMBAT-IMPACT-001/README_TH.md). Future 3-skill slice; no runtime/motion approval or deployment.
+- **Combat impact proposal archived (not implementation):** [issue #246](https://github.com/wnau34-nptrn/asterveil-fateweave/issues/246), reference branch `docs/combat-impact-proposal-2026-11-14`; [3 boards / 6 skill concepts](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/docs/combat-impact-proposal-2026-11-14/incoming/ART-COMBAT-IMPACT-001/README_TH.md). [Claude slice handoff](docs/handoffs/COMBAT_IMPACT_SLICE_01_TO_CLAUDE_TH.md) and Codex art-request workflow recorded at owner's request. No runtime change, motion approval or deployment by this handoff task.
 
 - **Gacha visual references saved:** PR #212, branch `art/art-ui-gacha-002`, package `incoming/ART-UI-GACHA-002/` on that branch. [Gallery](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/art/art-ui-gacha-002/incoming/ART-UI-GACHA-002/README_TH.md). Reference only; no runtime integration/motion approval.
 
