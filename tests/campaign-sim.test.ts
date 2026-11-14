@@ -5,7 +5,7 @@ import before from './fixtures/c12-campaign-before.json';
 import { MAPS } from '../src/content/world/maps';
 
 // A10 (2026-10-22): a new company plays maps 1 → 2 → 3 with story recruits, example tree builds, formation and skill
-// tomes, then replays veil-frontier and plays it on hard. `npm run sim` writes docs/validation/balance-sim/CAMPAIGN.md;
+// tomes, then replays veil-frontier and plays it on hard. `npm run sim` writes docs/validation/roster-30/batch-1/CAMPAIGN.md (balance-sim/CAMPAIGN.md is the frozen 2026-11-08 copy);
 // the normal run keeps one seed per policy as a regression guard on the draft numbers.
 const full = process.env.SIM_REPORT === '1';
 // P04-04b (OD-32): the casual style plays 48 companies (12 companies swung by noise alone and forced a new baseline in P02, P04-02 and P04-03); the advisor keeps 12.

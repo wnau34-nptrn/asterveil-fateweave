@@ -3,7 +3,7 @@ import { clampRun, RUN_CAP } from './caps';
 import {huntedReward} from './targeted-loot';
 import { replay, withLevel, withParty, withStrength } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
-import type { EnemyTrait, BattleEntry, BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents, ActionId, PassiveId } from '../battle/types';
+import type { EnemyDefinition, EnemyTrait, BattleEntry, BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents, ActionId, PassiveId } from '../battle/types';
 import type { RecruitPoint, ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
 import { affixPool, gearTotals } from './equipment';
 import { effectiveTalents, isBigTree, memberTalentReason, treeClears } from './talents';
@@ -665,7 +665,9 @@ export function hardEncounter(data: EncounterDefinition, kind: BattleKind, map: 
   // The boss (`boss`, else the toughest foe) takes enrage + veilguard.
   const boss = kind === 'boss' ? (data.enemies.find(e => e.boss) ?? toughest(data)[0]!).id : undefined;
   const marked = toughest(data).filter(e => e.id !== boss).slice(0, boss ? 1 : 2).map(e => e.id);
-  const enemies = data.enemies.map((e, i) => ({ ...e, ...(e.id === boss ? { traits: ['enrage', 'veilguard'] as EnemyTrait[] } : marked.includes(e.id) ? { traits: [TRAITS[(salt + i) % TRAITS.length]!] } : {}) }));
+  // P05-04: a foe's own traits (a normal-mode bark) stay; hard mode adds its trait to them instead of replacing them.
+  const add = (e: EnemyDefinition, hard: readonly EnemyTrait[]) => ({ traits: [...hard, ...(e.traits ?? []).filter(t => !hard.includes(t))] });
+  const enemies = data.enemies.map((e, i) => ({ ...e, ...(e.id === boss ? add(e, ['enrage', 'veilguard']) : marked.includes(e.id) ? add(e, [TRAITS[(salt + i) % TRAITS.length]!]) : {}) }));
   let intents = data.intents;
   if (boss) {
     const source = boss;
