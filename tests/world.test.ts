@@ -107,7 +107,7 @@ describe('expedition rules', () => {
     expect(s.battle).toBeNull(); expect(s.position).toEqual(where); expect(s.tutorialDone).toBe(true); expect(s.wins).toBe(1);
     expect(Object.values(s.hp).some(hp => hp < 76)).toBe(true);
   });
-  it('carries fallen heroes into the next battle; a rest heals the standing by half and embers revive one at a time', () => {
+  it('carries fallen heroes into the next battle; a rest heals the standing by restHealPercent (70%) and embers revive one at a time', () => {
     let s = fresh(5); s.tutorialDone = true; s.hp = { guardian: 30, tracer: 0, weaver: 20, healer: 10 };
     while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
     expect(s.battle.kind).toBe('random');
@@ -117,7 +117,7 @@ describe('expedition rules', () => {
     let t: ExpeditionState = { ...fresh(5), position: camp, hp: { guardian: 1, tracer: 0, weaver: 0, healer: 40 }, pressure: 20 };
     expect(canRest(t, map)).toBe(true);
     t = rest(t, map, lookup).state;
-    expect(t.hp).toEqual({ guardian: 39, tracer: 0, weaver: 0, healer: 46 }); expect(t.pressure).toBe(0); expect(t.camp).toEqual(camp);
+    expect(t.hp).toEqual({ guardian: 55, tracer: 0, weaver: 0, healer: 46 }); expect(t.pressure).toBe(0); expect(t.camp).toEqual(camp);
     expect(t.restReady).toBe(false); expect(canRest(t, map)).toBe(false);
     expect(rest(t, map, lookup).event).toEqual({ type: 'blocked', reason: 'busy' });
     expect(canRevive(t, map, 'tracer')).toBe(false);
@@ -199,7 +199,7 @@ describe('expedition rules', () => {
     for (const id of ['tracer', 'weaver', 'healer']) solo = moveMember(solo, id).state;
     expect(solo.roster.deployed).toEqual(['guardian']); expect(moveMember(solo, 'guardian').event.type).toBe('blocked');
     // A rest heals the reserve too; the next battle enters with the deployed members only.
-    s = { ...s, hp: { ...s.hp, healer: 10 } }; s = rest(s, map, rosterLookup).state; expect(s.hp.healer).toBe(33);
+    s = { ...s, hp: { ...s.hp, healer: 10 } }; s = rest(s, map, rosterLookup).state; expect(s.hp.healer).toBe(10 + Math.ceil(46 * map.camp.restHealPercent / 100));
     s = { ...s, position: { x: 10, y: 22 }, tutorialDone: true };
     while (!s.battle) s = move(s, map, s.steps % 2 ? 'right' : 'left').state;
     expect(Object.keys(s.battle.entry)).toEqual(['guardian', 'weaver-b']);

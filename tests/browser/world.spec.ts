@@ -184,7 +184,7 @@ test('walking until the first encounter opens the tutorial battle in place', asy
   expect(issues).toEqual([]);
 });
 
-test('victory returns to the same tile with surviving HP and loot; a camp rest heals the standing by half and an ember revives', async ({ page }, info) => {
+test('victory returns to the same tile with surviving HP and loot; a camp rest heals the standing by 70% and an ember revives', async ({ page }, info) => {
   // Plays a whole battle through the UI; the production build on CI needs more than the 45 s default.
   test.setTimeout(90000);
   const data = encounterById('shadow-stalker')!; const hp = { guardian: 40, tracer: 20, weaver: 30, healer: 4 };
@@ -217,7 +217,7 @@ test('victory returns to the same tile with surviving HP and loot; a camp rest h
   await page.locator('#camp-rest').click();
   await expect(page.locator('#world-message')).toContainText('พักที่แคมป์แล้ว');
   const rested = await saved(page);
-  expect(rested.hp).toEqual(Object.fromEntries(b.heroes.map(h => [h.id, h.hp > 0 ? Math.min(full[h.id as keyof typeof full], h.hp + Math.ceil(full[h.id as keyof typeof full] / 2)) : 0])));
+  expect(rested.hp).toEqual(Object.fromEntries(b.heroes.map(h => [h.id, h.hp > 0 ? Math.min(full[h.id as keyof typeof full], h.hp + Math.ceil(full[h.id as keyof typeof full] * 70 / 100)) : 0])));
   await expect(page.locator('#camp-rest')).toBeDisabled(); expect(rested.restReady).toBe(false);
   const down = b.heroes.find(h => h.hp <= 0);
   if (down) {

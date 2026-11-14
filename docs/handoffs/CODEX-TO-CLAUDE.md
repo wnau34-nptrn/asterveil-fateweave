@@ -1,3 +1,10 @@
+## 2026-11-14 — P04-05/06 pacing: catch-up EXP + campfire 70% (Opus; branch claude/p04-05-pacing)
+- Measured first (new `tests/probe/p0405-pacing.test.ts`, sim `hooks`): casual rush enters the rift at camp Lv4–5 and its failures are the walk back from the mini-boss at 30–60% HP into a random fight 2–3 levels up. Fatigue thresholds, reserve heal, relight 3→2 and field reserve swaps were not the bottleneck (field swap hurt: the party pushes on instead of resting).
+- Changes (draft, no save/boss change): `expPercent` 2 levels under 115% (was 100), 3+ 130% (was 110); `camp.restHealPercent` 50→70.
+- Campaign: casual rush rift #1 83→96%, advisor rush 92→100%, casual explorer forest #1 71→81%, advisor explorer forest 92→100%. Cost: blind attacks win the forest boss more for rush companies (casual 12→34%, advisor 0→25%); advisor gate holds.
+- Tests: `npm run sim` 29/29 (gate without a new baseline), unit/typecheck/lint/build pass; levels/world tests follow the new numbers. [Validation](../validation/p04-05-2026-11-14/README_TH.md).
+- Owner questions: accept the forest blind-attack cost or use the campfire alone; recheck with P06 camp-level caps.
+
 ## 2026-11-14 — P05-03 veil golem bark (Sonnet; branch claude/p05-03-golem)
 - Content only (draft): `mini-veil-golem` v9→v10 wears the `veilguard` bark (barkRules), weaver chip 50%, golem announced moves ×1.8 (22→40, 30→54). Map 1 captain unchanged (blind 0%; Guard/Bash, Ward from Eira, Mark from Lyra).
 - Bench first tries blind attacks rush 63→11%, explorer 92→19%; casual 97→96 / 100→100, keep 79→79 / 91→89, advisor 98/100 unchanged. Campaign mini blind (with replays) 86→73%.

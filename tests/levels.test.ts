@@ -52,7 +52,7 @@ describe('monster levels', () => {
 
 describe('member levels and EXP', () => {
   it('EXP tapers when a member is far above the monster, never to zero, and rewards fighting up', () => {
-    expect([-4, -3, 0, 2, 3, 4, 5, 6, 9].map(g => expPercent(5 + g, 5))).toEqual([110, 110, 100, 100, 75, 50, 25, 10, 10]);
+    expect([-4, -3, -2, -1, 0, 2, 3, 4, 5, 6, 9].map(g => expPercent(5 + g, 5))).toEqual([130, 130, 115, 100, 100, 100, 75, 50, 25, 10, 10]);
   });
   it('a victory gives the camp EXP once (P01), level-ups raise max HP and standing HP', () => {
     const s = randomBattle(); const level = s.battle!.level!; const foes = battleData(s, map, lookup)!.enemies; const pr = map.progression;
