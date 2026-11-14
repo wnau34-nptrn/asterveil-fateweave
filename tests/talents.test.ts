@@ -110,7 +110,7 @@ describe('save v8', () => {
   });
   it('rejects invalid talents', () => {
     const profile = newProfile(map, 4); profile.members.tracer = { stars: 1, shards: 0, talents: { a1: 1 } };
-    expect(() => parseGame(JSON.stringify({ version: 37, profile, run: null }), map, lookup)).toThrow();
+    expect(() => parseGame(JSON.stringify({ version: 60, profile, run: null }), map, lookup)).toThrow();
   });
 });
 

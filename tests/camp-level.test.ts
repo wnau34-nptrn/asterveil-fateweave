@@ -53,8 +53,8 @@ describe('camp level thresholds and cap', () => {
     p = hire(p, map, lookup, offer).profile; const hired = p.company.at(-1)!;
     expect(p.members[hired]).toEqual({ stars: 1, shards: 0 });
     for (const id of p.company) expect(memberDef(lookup, map, p, id)!.maxHp).toBe(memberDef(lookup, map, { members: { [id]: { stars: p.members[id]!.stars, shards: 0 } }, campXp: xpAt(6) }, id)!.maxHp);
-    // Talent points come from the camp level (stars still add theirs until P04).
-    expect(talentPoints(map, p.members[hired], hired, levelOf(map, p))).toBe(5);
+    // Talent points come from the camp level and first map clears, never from stars (P04-03).
+    expect(talentPoints(map, levelOf(map, p), p.cleared.length)).toBe(5 + p.cleared.length);
     const run = depart(p, map, lookup, 9).run; expect(run.campXp).toBe(p.campXp); expect(levelOf(map, run)).toBe(6);
   });
 });
@@ -174,8 +174,8 @@ describe('save v43 → v44 migration', () => {
     const raw = v43({ profile: p, run: null }, { guardian: [5, 0], tracer: [2, 0] });
     const g = parseGame(JSON.stringify(raw), map, lookup);
     expect(g.profile.members).toEqual(p.members); expect(levelOf(map, g.profile)).toBe(5);
-    for (const [id, m] of Object.entries(g.profile.members)) expect(talentsValid(map, id, levelOf(map, g.profile), m.talents ?? {}, m.stars, m.grants)).toBe(true);
-    expect(talentPoints(map, g.profile.members.tracer, 'tracer', levelOf(map, g.profile))).toBeGreaterThan(talentPoints(map, g.profile.members.tracer, 'tracer', 2));
+    for (const [id, m] of Object.entries(g.profile.members)) expect(talentsValid(map, id, levelOf(map, g.profile), m.talents ?? {}, g.profile.cleared.length, m.grants)).toBe(true);
+    expect(talentPoints(map, levelOf(map, g.profile))).toBeGreaterThan(talentPoints(map, 2));
   });
   it('an active run uses its members’ newer levels (not guests), keeps the map, and restarts its battle from entry', () => {
     const start = firstBattle(veteran()); const s = fought(start.run!);

@@ -1,6 +1,6 @@
 import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { upgrade, upgradeCost, upgradeReason } from '../core/world/profile';
-import { isBigTree, talentPoints } from '../core/world/talents';
+import { isBigTree } from '../core/world/talents';
 import type { MapDefinition, Profile, ProfileEvent } from '../core/world/types';
 import { levelOf, starred, wounded } from '../core/world/world';
 import { icon } from './icons';
@@ -62,9 +62,8 @@ export class StarUpgrade {
     const hero=(profile:Profile,stars:number)=>{const member=profile.members[this.id]!;return wounded(starred(this.heroes.find(h=>h.id===this.id)!,stars,this.map,levelOf(this.map,profile),member.talents,member.gear,member),member.wound);};
     const old=hero(before,m.stars),next=hero(after??before,to),level=levelOf(this.map,before);
     const fields=[['เลือดสูงสุด',old.maxHp,next.maxHp,''],['พลังโจมตี',old.attack,next.attack,''],['พลังเวท',old.skillBonus??0,next.skillBonus??0,'%'],['SPD',old.speed,next.speed,'']] as const;
-    const points=talentPoints(this.map,{stars:to},this.id,level)-talentPoints(this.map,m,this.id,level);
     const newActions=next.actions.filter(a=>!old.actions.includes(a));
-    const effects=[...(points?[`แต้มผังความถนัด +${points} · ระบบปัจจุบัน`]:[]),...newActions.map(a=>`ปลด ${this.template.skills[a].name}`),...(next.passive&&next.passive!==old.passive?['ปลดพาสซีฟประจำอาชีพ']:[])];
+    const effects=[...newActions.map(a=>`ปลด ${this.template.skills[a].name}`),...(next.passive&&next.passive!==old.passive?['ปลดพาสซีฟประจำอาชีพ']:[])];
     const ledger=cost?[
       {label:`เศษ${name}`,have:m.shards,use:cost.shards,left:after?.members[this.id]?.shards??m.shards-cost.shards,glyph:portrait(this.id)},
       {label:'เศษกลาง',have:before.bank.shard,use:cost.universal,left:after?.bank.shard??before.bank.shard-cost.universal,glyph:icon('seal')},

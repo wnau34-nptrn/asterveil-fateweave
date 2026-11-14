@@ -15,12 +15,14 @@ export interface TreeBuild { id: string; name: string; talents: Talents; loadout
 // C12 examples use the same paid level/star budget and validator as the player. All four branch
 // priorities are sampled; the personal-branch comparison below removes only p ranks, keeping the same gear/team.
 const rosterIds = ['metta', 'thiran', 'lalin', 'wila', 'kael', 'wynne', 'astrid'] as const;
+// P04-03: 11 tree points = camp Lv10 with two maps first-cleared (the same 11 the ★3 Lv10 builds were written for).
+export const TREE_LEVEL = 10, TREE_STARS = 3, TREE_CLEARS = 2;
 function rosterBuilds(): TreeBuild[] {
   return rosterIds.flatMap(id => (['a', 'b', 'c', 'p'] as const).map(branch => {
     const tree = map.talents[id] ?? [], talents: Talents = {}, member = { stars: 3, shards: 0 };
     const ordered = [...tree].sort((a,b) => Number(b.branch === branch) - Number(a.branch === branch) || (a.tier ?? 0) - (b.tier ?? 0) || a.id.localeCompare(b.id));
     for (let i = 0; i < 50; i++) {
-      const next = ordered.find(n => !memberTalentReason(map, id, {...member, talents}, n.id, 10));
+      const next = ordered.find(n => !memberTalentReason(map, id, {...member, talents}, n.id, TREE_LEVEL, TREE_CLEARS));
       if (!next) break; talents[next.id] = (talents[next.id] ?? 0) + 1;
     }
     const base = heroCatalog(lookup,map).find(h => h.id === id)!;
@@ -76,7 +78,6 @@ export const TREE_BUILDS: readonly TreeBuild[] = [
 ];
 const fights = ['thicket-ambush', 'shadow-stalker', 'crystal-stampede', 'rear-ambush', 'elite-tusk-chief', 'elite-briar-lord', 'beetle-wall', 'forest-swarm', 'channeler-wisps', 'crawler-pack'];
 export interface TreeRow { id: string; build: string; won: number; fought: number; partyHp: number; rounds: number; used: number; actions: Partial<Record<ActionId, number>>; disabled: Partial<Record<ActionId, { won: number; hp: number }>>; personal?: { points: number; won: number; hp: number } }
-export const TREE_LEVEL = 10, TREE_STARS = 3;
 export function treeSim(fightLevel = 15): TreeRow[] {
   const catalog = heroCatalog(lookup, map); const teaching = catalog.slice(0, 4);
   const rows: TreeRow[] = [];

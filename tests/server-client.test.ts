@@ -169,7 +169,7 @@ describe('P09-02c server switch', () => {
     s.clock.t += 60_000;
     const out = await c.importSave(raw);
     if (out.kind !== 'imported') throw new Error(JSON.stringify(out));
-    expect(out.from).toBe(59); expect(out.state.view?.profile.commander?.name).toBe('ทดสอบ');
+    expect(out.from).toBe(60); expect(out.state.view?.profile.commander?.name).toBe('ทดสอบ');
     const imports = w.seen.filter(x => x.path === '/v1/import').map(x => (JSON.parse(x.body) as { requestId: string }).requestId);
     expect(imports).toHaveLength(2); expect(new Set(imports).size).toBe(1);
     // The game goes on from the imported save; the same save cannot go into a second account.

@@ -8,7 +8,7 @@ import { formation } from '../core/world/formation';
 import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { AUTO_GOALS, planEquipment, type AutoEquipmentPlan, type AutoGoal, type EquipmentEntry } from '../core/world/auto-equipment';
 import { SET_IDS, type GearSlot, type MapDefinition, type SetId, type TalentNode, type TomeLine, type TomeSize, type Profile, type ProfileEvent, type ProfileResult } from '../core/world/types';
-import { talentPoints, talentsSpent } from '../core/world/talents';
+import { talentPoints, talentsSpent, treeClears } from '../core/world/talents';
 import { levelOf, starred, wounded } from '../core/world/world';
 import { characterEquipmentComparison, characterOverview, characterTabs, characterTabIcons, type CharacterTab, type SkillTomeView } from './character-view';
 import type { CharacterState } from './character-metrics';
@@ -228,7 +228,7 @@ export class CharacterPanel {
     const id=this.heroId,h=this.hero(model),m=model.state.members[id]!,base=this.heroes.find(v=>v.id===id)!,focus=this.dialog.contains(document.activeElement)?(document.activeElement as HTMLElement).id:'',scroll=this.content().scrollTop;
     this.dialog.querySelector(`#${this.id('character-title')}`)!.textContent=`${heroText[id]!.name} · Lv${levelOf(this.map,model.state)} · ★${m.stars}`;
     const picker=this.dialog.querySelector<HTMLElement>(`#${this.id('character-members')}`)!,left=picker.scrollLeft;
-    picker.innerHTML=this.ids(model.ids.map(c=>{const member=model.state.members[c]!,free=talentPoints(this.map,member,c,levelOf(this.map,model.state))-talentsSpent(member.talents);return `<button id="character-member-${c}" data-world="character-member" data-hero="${c}" class="tree-member" aria-pressed="${c===id}" aria-label="${heroText[c]!.name} · แต้มเหลือ ${free}">${portrait(c)}<small>${heroText[c]!.name}</small>${free?`<i>+${free}</i>`:''}</button>`;}).join(''));picker.scrollLeft=left;
+    picker.innerHTML=this.ids(model.ids.map(c=>{const member=model.state.members[c]!,free=talentPoints(this.map,levelOf(this.map,model.state),treeClears(model.state))-talentsSpent(member.talents);return `<button id="character-member-${c}" data-world="character-member" data-hero="${c}" class="tree-member" aria-pressed="${c===id}" aria-label="${heroText[c]!.name} · แต้มเหลือ ${free}">${portrait(c)}<small>${heroText[c]!.name}</small>${free?`<i>+${free}</i>`:''}</button>`;}).join(''));picker.scrollLeft=left;
     this.dialog.style.setProperty('--character-tab-count',String(this.visibleTabs().length));
     this.dialog.querySelector(`#${this.id('character-tabs')}`)!.innerHTML=this.ids(this.visibleTabs().map(tab=>`<button id="character-tab-${tab}" data-world="character-tab" data-tab="${tab}" role="tab" aria-controls="character-content" aria-selected="${tab===this.tab}" tabindex="${tab===this.tab?0:-1}">${icon(characterTabIcons[tab as CharacterTab])}<span>${characterTabs[tab]}</span></button>`).join(''));
     const position=model.state.roster.deployed.includes(id)?`ตัวหลักช่อง ${model.state.roster.deployed.indexOf(id)+1}`:model.state.roster.reserve.includes(id)?'สำรอง':'ในค่าย';

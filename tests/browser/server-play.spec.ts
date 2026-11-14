@@ -253,7 +253,7 @@ test('server play import (D11): the title offers the local save once and the ser
   await page.screenshot({ path: info.outputPath('server-import-offer-390.png') });
   await page.locator('#import-save').click();
   await expect(page.locator('#continue')).toBeVisible();
-  await expect(page.locator('.title-server-note')).toContainText('นำเข้าเซฟเดิม (v59) แล้ว');
+  await expect(page.locator('.title-server-note')).toContainText('นำเข้าเซฟเดิม (v60) แล้ว');
   await expect(page.locator('#import-save')).toHaveCount(0);
   await page.screenshot({ path: info.outputPath('server-import-done-390.png') });
   // The local save stays as it was; the account now plays on the server.

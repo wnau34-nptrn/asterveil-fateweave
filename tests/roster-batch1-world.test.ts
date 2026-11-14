@@ -90,13 +90,13 @@ describe('C12 personal branches use existing talent budgets and validators', () 
   for (const id of added) it(`${id}: pays for personal ranks, gates sequentially and round-trips choices`, () => {
     const p = newProfile(map, 2, [id]);
     p.members[id] = { stars: 1, shards: 0}; p.campXp = Math.max(p.campXp, xpAt(5));
-    expect(talentPoints(map, p.members[id], id, 5)).toBe(4);
+    expect(talentPoints(map, 5)).toBe(4);
     expect(memberTalentReason(map, id, p.members[id], 'p2', 5)).toBe('locked');
     const first = learnTalent(p, map, id, 'p1').profile;
     expect(first.members[id]!.talents).toEqual({ p1: 1 });
     const second = learnTalent(first, map, id, 'p2').profile;
     expect(second.members[id]!.talents).toEqual({ p1: 1, p2: 1 });
-    expect(talentPoints(map, second.members[id], id, 5)).toBe(4);
+    expect(talentPoints(map, 5)).toBe(4);
     expect(talentsValid(map, id, 5, { p1: 1, p2: 1 })).toBe(true);
     expect(talentsValid(map, id, 5, { p2: 1 })).toBe(false);
     expect(talentsValid(map, id, 5, { p1: 2 })).toBe(false);
@@ -128,7 +128,7 @@ describe('C12 v42 → v43 migration', () => {
     expect(boardOffers(migrated.profile, map, lookup)).toEqual(boardOffers(p, legacyMap, lookup));
     expect(migrated.profile.taken).toEqual([1]);
     expect(migrated.profile.company.some(id => added.includes(id))).toBe(false);
-    expect(JSON.parse(write(migrated)).version).toBe(59);
+    expect(JSON.parse(write(migrated)).version).toBe(60);
     expect(parseGame(write(migrated), map, lookup)).toEqual({ profile: migrated.profile, run: null });
     const refreshed = refreshBoard(migrated.profile, map).profile;
     expect(refreshed.boardPool).toBeUndefined();
