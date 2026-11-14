@@ -1,3 +1,9 @@
+## 2026-11-14 — P05-03 veil golem bark (Sonnet; branch claude/p05-03-golem)
+- Content only (draft): `mini-veil-golem` v9→v10 wears the `veilguard` bark (barkRules), weaver chip 50%, golem announced moves ×1.8 (22→40, 30→54). Map 1 captain unchanged (blind 0%; Guard/Bash, Ward from Eira, Mark from Lyra).
+- Bench first tries blind attacks rush 63→11%, explorer 92→19%; casual 97→96 / 100→100, keep 79→79 / 91→89, advisor 98/100 unchanged. Campaign mini blind (with replays) 86→73%.
+- Tests: campaign-sim 5/5 (no fixture change), other 7 sim files, unit 1805, typecheck, lint, coverage:presentation pass; p05-boss-bark +golem. [Validation](../validation/p05-03-2026-11-14/README_TH.md).
+- Open: P04-05/06 fatigue/reserve-swap + pacing (OD-34).
+
 ## 2026-11-14 — P05 enemy difficulty: boss bark + chip shift (Opus; branch claude/p05-enemy-difficulty)
 - Measured first (new bench of captured boss states, `tests/probe/p05-*.test.ts`): casual rift #1 failures = rift warden + arriving hurt; helpers' unanswered chip cost every style the same, bosses' announced moves split advisor from blind attacks; the Briar Lord fell to blind attacks only narrowly (end HP 8–33%).
 - Changes (content only, draft): `veilguard` bark on Briar Lord (v11) and rift warden (v21) on normal mode at the hard-mode numbers (answer: Aira's Mark from the prologue, acid, dispel); warden wisps 70%; tusk chief (v8) sprite −25%, charges +25%; briar stalker −20%, lord moves ~+10%. No save/rule change.

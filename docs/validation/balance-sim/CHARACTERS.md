@@ -40,7 +40,7 @@ Every catalog character at ★1 and the map boss level; epic map-level main-stat
 | astrid | Seer | deep-forest | 6 | 12/12 | 97.1% | 3.2 | {"a1":2,"a2x":1,"b1":2} / deflectfate, turncycle |
 | guardian | Knight | veil-frontier | 10 | 12/12 | 96.6% | 12.6 | {"b1":2,"b2":1,"b3f":1,"a1":2,"c1":2,"c1s":1} / guard, bash, challenge |
 | tracer | Duelist | veil-frontier | 10 | 12/12 | 93.8% | 12.6 | {"c1":2,"c1s":1,"c2m":1,"c3":1,"a1":2,"b1":2} / mark, parry, sweep |
-| weaver | Mage | veil-frontier | 10 | 12/12 | 99.8% | 12.6 | {"a1":2,"a2p":1,"a3":1,"a3s":1,"b1":2,"c1":2} / bolt, ward, storm |
+| weaver | Mage | veil-frontier | 10 | 12/12 | 100.0% | 12.6 | {"a1":2,"a2p":1,"a3":1,"a3s":1,"b1":2,"c1":2} / bolt, ward, storm |
 | healer | Priest | veil-frontier | 10 | 12/12 | 92.1% | 12.6 | {"a1":2,"a2b":1,"a3":1,"b1":2,"b1s":1,"c1":2} / heal, prayer, revive |
 | mira | Archer | veil-frontier | 10 | 12/12 | 99.8% | 12.6 | {"a1":2,"a2h":1,"a3":1,"b1":2,"c1":2,"c1s":1} / hinder, volley, disengage |
 | toma | Alchemist | veil-frontier | 10 | 12/12 | 96.1% | 12.6 | {"a1":2,"a2d":1,"a3":1,"b1":2,"c1":2,"c1s":1} / acid, bomb, smoke |
@@ -50,8 +50,8 @@ Every catalog character at ★1 and the map boss level; epic map-level main-stat
 | garran | Spear | veil-frontier | 10 | 12/12 | 97.6% | 12.6 | {"c1":2,"c1s":1,"c2b":1,"c3":1,"a1":2,"b1":2} / brace, hold, warcry |
 | metta | Saint | veil-frontier | 10 | 12/12 | 97.7% | 12.6 | {"a1":2,"a2y":1,"a3":1,"p1":1,"c1s":1,"c1":2,"b1":1} / communion, saintarc, sharewound |
 | thiran | Saint | veil-frontier | 10 | 12/12 | 96.5% | 12.6 | {"a1":2,"a2y":1,"a3":1,"p1":1,"c1s":1,"c1":2,"b1":1} / communion, saintarc, sharewound |
-| lalin | Dancer | veil-frontier | 10 | 12/12 | 99.2% | 12.6 | {"c1":2,"c1s":1,"c2x":1,"c3":1,"a1":2,"b1":2} / cadence, echofoot, closingstep |
-| wila | Dancer | veil-frontier | 10 | 12/12 | 99.2% | 12.6 | {"c1":2,"c1s":1,"c2x":1,"c3":1,"a1":2,"b1":2} / cadence, echofoot, closingstep |
+| lalin | Dancer | veil-frontier | 10 | 12/12 | 99.1% | 12.6 | {"c1":2,"c1s":1,"c2x":1,"c3":1,"a1":2,"b1":2} / cadence, echofoot, closingstep |
+| wila | Dancer | veil-frontier | 10 | 12/12 | 99.1% | 12.6 | {"c1":2,"c1s":1,"c2x":1,"c3":1,"a1":2,"b1":2} / cadence, echofoot, closingstep |
 | kael | Martial | veil-frontier | 10 | 12/12 | 93.5% | 12.6 | {"a1":2,"a2x":1,"a3":1,"b1":2,"c1":2,"c1s":1} / gatherfist, flowfist, storedfist |
 | wynne | Hexer | veil-frontier | 10 | 12/12 | 96.1% | 12.6 | {"b1":2,"b2y":1,"b3":1,"p1":1,"c1s":1,"c1":2,"a1":1} / threadhex, tollring, longthread |
 | astrid | Seer | veil-frontier | 10 | 12/12 | 94.3% | 12.6 | {"a1":2,"a2x":1,"a3":1,"b1":2,"c1":2,"c1s":1} / deflectfate, crossing, starneedle |
