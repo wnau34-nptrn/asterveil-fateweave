@@ -2,6 +2,10 @@
 
 These owner-scoped rules still apply. They were moved here verbatim so CLAUDE.md stays short. Before changing a system, read its section here.
 
+## Boss bark and chip shift — P05 2026-11-14 (draft, encounter versions only)
+
+OD-09 answer/penalty without a new rule: the Briar Lord (`elite-briar-lord` v11: forest boss and the map 3 gate) and the rift warden (`rift-warden` v21) carry the existing `veilguard` trait on normal mode (`catalog.ts` `barkRules` = `progression.hardTraits` numbers, 25%): hits are cut until a Mark (Aira, prologue recruit — every company), acid or a dispel opens it; status text comes from `battle-status.ts` as in hard mode, which still sets its own traits. Unanswered chip of their helpers moved into the bosses' announced moves (`softened`): warden wisps 70%; tusk-chief sprite −25% with chief charges +25% (`elite-tusk-chief` v8); briar stalker −20% with the lord's moves ~+10%. Sim yardstick and numbers: `docs/validation/p05-2026-11-14/README_TH.md`; probes `tests/probe/p05-*.test.ts` (bench of captured boss states, `BENCH_IN`/`BENCH_CAPTURE`).
+
 ## Direct-effect skill rework — owner 2026-11-05 (save v48)
 Dancer kit (engine `BEAT_MAX`, `quickenable`): cadence = Support-scaled barrier 8 + one cooldown −1 under the quicken cap (once per use, never before the round after use, cooldown ≥4/revive once per battle); duet binds an ally whose next skill is echoed 40% (`HeroState.echo`); other allies' skills give beats (cap 3) that closing step spends on every foe (6 + 6/beat); round dance shields others 8 and gives a beat per ally; deep beat (party) cuts every enemy hit this round 40% and counters the cut (`BattleState.steady`); echo foot hits 12. No dance picks a cooling skill/recipient. Astrid's turn cycle lands energy 8. Painted dance VFX follow the real events. Drafts and sim: `docs/validation/skill-rework-2026-11-05/README_TH.md`.
 

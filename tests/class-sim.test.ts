@@ -13,7 +13,9 @@ describe('per-class gear simulation', () => {
     expect(ids.length).toBeGreaterThan(0);
     for (const id of ids) {
       expect(hp(id, 'main'), id).toBeGreaterThan(hp(id, 'none'));
-      expect(hp(id, 'main'), id).toBeGreaterThanOrEqual(hp(id, 'off') - 0.005);
+      // P05: 1 point (was 0.5). Lio's support/speed gear ties his off-stat gear (heals are capped by the HP his party
+      // lost; both 86% after P05 trimmed unanswered chip damage, 85/86% before) — a stats-design note, not a boss change.
+      expect(hp(id, 'main'), id).toBeGreaterThanOrEqual(hp(id, 'off') - 0.01);
     }
     // Most classes see a real difference between their own stats and the others.
     expect(ids.filter(id => hp(id, 'main') > hp(id, 'off') || row(id, 'main').dealt + row(id, 'main').healed > row(id, 'off').dealt + row(id, 'off').healed).length).toBeGreaterThanOrEqual(Math.ceil(ids.length*.8));

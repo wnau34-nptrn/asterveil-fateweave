@@ -2,6 +2,8 @@ import type { EncounterDefinition } from '../../core/battle/types';
 import { veilSiege } from './veil-siege';
 import { SPECIES, foes } from '../enemies/species';
 import { rosterBatch1 as BATCH_ONE } from '../heroes/roster-batch1';
+import { gameRules } from '../world/rules';
+import type { EnemySlot, IntentDefinition } from '../../core/battle/types';
 
 // Every encounter reuses the four-hero party, skills and numeric rules.
 // Bosses (`boss`) are steadfast: a cancelled turn shields their next round from Bash/Sigil; their signature move
@@ -27,19 +29,30 @@ export const rearAmbush: EncounterDefinition = {
   ],
 };
 
+// P05 (OD-09, draft): a boss's bark (`veilguard`, the hard-mode trait at the hard-mode numbers) blunts hits until a Mark,
+// acid or a dispel opens it. Aira's Mark (prologue recruit, every company) is the answer every party has; a party that
+// never answers kills it slower and eats more of its announced moves. `softened` trims the unanswered chip of a boss's
+// helpers so the damage sits in the moves a player can read and answer (docs/validation/p05-2026-11-14/README_TH.md).
+const { thornsPercent, veilguardPercent, enrageBelow, enragePercent } = gameRules.progression.hardTraits;
+const barkRules = { ...veilSiege.rules, traits: { thornsPercent, veilguardPercent, enrageBelow, enragePercent } };
+const softened = (xs: readonly IntentDefinition[], ids: readonly EnemySlot[], percent: number): IntentDefinition[] =>
+  xs.map(m => (ids.includes(m.sourceId as EnemySlot) ? { ...m, damage: Math.round(m.damage * percent / 100) } : m));
+
 // P02: the reference party of five-foe fields (the four plus Corin, the Saint, in front).
 const fiveHeroes = [...veilSiege.heroes, BATCH_ONE.find(h => h.id === 'metta')!];
 // Boss phases (owner 2026-10-22): at 70% the warden calls two rift wisps from the back row (hard mode: also a second
 // shard crawler, if there is room); at 35% it charges, then strikes with a cataclysm and rift waves that hit the whole
 // party. P02 (owner 2026-10-31): the warden no longer stands alone at the start: a shard crawler (f2) and a rift wisp
-// (b3) guard it from round 1, so the full field reaches five when it calls the rift (draft).
+// (b3) guard it from round 1, so the full field reaches five when it calls the rift (draft). P05: the warden wears its bark
+// and its wisps hit 70% as hard (their chip cost every style the same ~170 HP; casual rush first tries lost the warden 18%).
 const wardenWisps = foes(10, [['b1', SPECIES.riftWisp, { reserve: true }], ['b2', SPECIES.riftWisp, { reserve: true }], ['f2', SPECIES.shardCrawler], ['b3', SPECIES.riftWisp], ['f3', SPECIES.shardCrawler, { reserve: true }]]);
 export const riftWarden: EncounterDefinition = {
-  ...veilSiege, heroes: fiveHeroes, id: 'rift-warden', version: 20, level: 10, name: 'ศึกผู้คุมรอยแยก',
+  ...veilSiege, heroes: fiveHeroes, id: 'rift-warden', version: 21, level: 10, name: 'ศึกผู้คุมรอยแยก',
   phases: [{ sourceId: 'f1', below: 70, summon: ['b1', 'b2'], hardSummon: ['f3'], name: 'Call the Rift' }, { sourceId: 'f1', below: 35, name: 'Rift Awakening' }],
+  rules: barkRules,
   // The Veilbound Sentinel, an ancient gate guardian cracked by the rift (mini boss art: gold and violet).
-  enemies: [...wardenWisps.enemies, { id: 'f1', row: 'front', large: true, boss: true, speed: 70, name: 'Rift Warden', displayName: 'ผู้คุมรอยแยก', maxHp: 350, color: 0xd9bf86, art: 'foe_sentinel' }],
-  intents: [...wardenWisps.intents,
+  enemies: [...wardenWisps.enemies, { id: 'f1', row: 'front', large: true, boss: true, speed: 70, name: 'Rift Warden', displayName: 'ผู้คุมรอยแยก', maxHp: 350, color: 0xd9bf86, art: 'foe_sentinel', traits: ['veilguard'] }],
+  intents: [...softened(wardenWisps.intents, ['b1', 'b2', 'b3'], 70),
     { sourceId: 'f1', targetSlot: 1, name: 'Crushing Blow', damage: 29, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 2, name: 'Rift Bolt', damage: 25, kind: 'energy' },
     { sourceId: 'f1', targetSlot: 0, name: 'Crushing Blow', damage: 33, kind: 'physical', unstoppable: true },
@@ -138,47 +151,50 @@ export const crystalStampede: EncounterDefinition = {
 };
 
 // Phase 3A elites guard the one-tile gates between zones (level = zone top + 2). Each brings one extra signature move.
-// A spore puff drifts behind the chief.
+// A spore puff drifts behind the chief. P05 (draft): the sprite's chip −25% and the chief's announced charges +25%
+// (blind attacks pay for not bashing or guarding them; answering parties leave the gate with more HP).
 const chiefSprite = foes(5, [['b2', SPECIES.sporePuff]]);
 export const eliteTuskChief: EncounterDefinition = {
-  ...veilSiege, id: 'elite-tusk-chief', version: 7, level: 5, name: 'จ่าฝูงแห่งทุ่ง',
+  ...veilSiege, id: 'elite-tusk-chief', version: 8, level: 5, name: 'จ่าฝูงแห่งทุ่ง',
   enemies: [...chiefSprite.enemies,
     { id: 'b1', row: 'back', speed: 110, name: 'Dandelion Sprite', displayName: 'ภูตแดนดิไลออน', maxHp: 70, color: 0xa6dfce, art: 'foe_sprite' },
     { id: 'f1', row: 'front', large: true, speed: 70, name: 'Tusker Chief', displayName: 'จ่าฝูงหมูป่าหลังตะไคร่', maxHp: 190, color: 0x718746, art: 'foe_tusker' },
   ],
   intents: [...chiefSprite.intents,
-    { sourceId: 'b1', targetSlot: 2, name: 'Seed Spark', damage: 13, kind: 'energy' },
-    { sourceId: 'f1', targetSlot: 1, name: 'Tusk Charge', damage: 20, kind: 'physical' },
-    { sourceId: 'b1', targetSlot: 3, name: 'Seed Spark', damage: 14, kind: 'energy' },
+    { sourceId: 'b1', targetSlot: 2, name: 'Seed Spark', damage: 10, kind: 'energy' },
+    { sourceId: 'f1', targetSlot: 1, name: 'Tusk Charge', damage: 25, kind: 'physical' },
+    { sourceId: 'b1', targetSlot: 3, name: 'Seed Spark', damage: 11, kind: 'energy' },
     // Signature: the chief's stampede, the round's heaviest physical hit (Shield Bash can stop it).
-    { sourceId: 'f1', targetSlot: 0, name: 'Stampede', damage: 26, kind: 'physical' },
-    { sourceId: 'b1', targetSlot: 2, name: 'Seed Spark', damage: 13, kind: 'energy' },
-    { sourceId: 'f1', targetSlot: 1, name: 'Tusk Charge', damage: 20, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 0, name: 'Stampede', damage: 33, kind: 'physical' },
+    { sourceId: 'b1', targetSlot: 2, name: 'Seed Spark', damage: 10, kind: 'energy' },
+    { sourceId: 'f1', targetSlot: 1, name: 'Tusk Charge', damage: 25, kind: 'physical' },
   ],
 };
 // Boss phase (owner 2026-10-22): at 50% the lord rages, gathers thorns, then lashes the whole party with a thorn
-// tempest (hard mode: a second spore puff joins).
+// tempest (hard mode: a second spore puff joins). P05 (draft): the lord wears its bark and its own moves hit ~10% harder,
+// the stalker's pounce ~20% softer, so blind attacks no longer win the forest boss and the map 3 gate most of the time.
 const lordSpore = foes(8, [['b1', SPECIES.sporePuff], ['b2', SPECIES.sporePuff, { reserve: true }]]);
 export const eliteBriarLord: EncounterDefinition = {
-  ...veilSiege, id: 'elite-briar-lord', version: 10, level: 8, name: 'เจ้าป่าหนาม',
+  ...veilSiege, id: 'elite-briar-lord', version: 11, level: 8, name: 'เจ้าป่าหนาม',
   phases: [{ sourceId: 'f1', below: 50, hardSummon: ['b2'], name: 'Thorn Rage' }],
+  rules: barkRules,
   enemies: [...lordSpore.enemies,
     { id: 'f2', row: 'front', speed: 110, name: 'Briar Stalker', displayName: 'ลิงซ์หนามพราง', maxHp: 100, color: 0x397e77, art: 'foe_stalker' },
-    { id: 'f1', row: 'front', large: true, speed: 70, boss: true, name: 'Briar Lord', displayName: 'เจ้าป่าหนาม', maxHp: 200, color: 0x397e77, art: 'foe_matriarch' },
+    { id: 'f1', row: 'front', large: true, speed: 70, boss: true, name: 'Briar Lord', displayName: 'เจ้าป่าหนาม', maxHp: 200, color: 0x397e77, art: 'foe_matriarch', traits: ['veilguard'] },
   ],
   intents: [...lordSpore.intents,
-    { sourceId: 'f2', targetSlot: 1, name: 'Thorn Pounce', damage: 19, kind: 'physical' },
-    { sourceId: 'f1', targetSlot: 3, name: 'Thorn Bloom', damage: 22, kind: 'energy' },
-    { sourceId: 'f2', targetSlot: 0, name: 'Thorn Pounce', damage: 18, kind: 'physical' },
+    { sourceId: 'f2', targetSlot: 1, name: 'Thorn Pounce', damage: 15, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 3, name: 'Thorn Bloom', damage: 24, kind: 'energy' },
+    { sourceId: 'f2', targetSlot: 0, name: 'Thorn Pounce', damage: 14, kind: 'physical' },
     // Signature: a storm of thorns at the back line (energy: Sigil Bind or a Ward answer it).
-    { sourceId: 'f1', targetSlot: 2, name: 'Thorn Storm', damage: 27, kind: 'energy', unstoppable: true },
-    { sourceId: 'f2', targetSlot: 1, name: 'Thorn Pounce', damage: 19, kind: 'physical' },
-    { sourceId: 'f1', targetSlot: 1, name: 'Briar Lash', damage: 22, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 2, name: 'Thorn Storm', damage: 30, kind: 'energy', unstoppable: true },
+    { sourceId: 'f2', targetSlot: 1, name: 'Thorn Pounce', damage: 15, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 1, name: 'Briar Lash', damage: 24, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 0, name: 'Gather Thorns', damage: 0, kind: 'energy', charge: true, phase: 1 },
     // OD-09 (claude 2026-11-04): Gather Thorns telegraphs the Tempest; a Sigil Bind seals it, barriers/heals soften it, and
     // a party that ignores it takes 28 each (was 13 and unsealable, so plain attacks won the forest boss 50–71% of the time).
     { sourceId: 'f1', targetSlot: 0, name: 'Thorn Tempest', damage: 28, kind: 'energy', all: true, phase: 1 },
-    { sourceId: 'f1', targetSlot: 1, name: 'Briar Lash', damage: 24, kind: 'physical', phase: 1 },
+    { sourceId: 'f1', targetSlot: 1, name: 'Briar Lash', damage: 26, kind: 'physical', phase: 1 },
   ],
 };
 

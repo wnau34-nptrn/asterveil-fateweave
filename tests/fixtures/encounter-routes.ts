@@ -63,8 +63,9 @@ export const rearSupport: readonly Move[] = [
 ];
 // The scripted boss routes keep the four-hero warden that stood alone until its phase (v19 shape): P02 gave the warden
 // starting guards (f2/b3) and a five-hero reference party, which the advisor tests in tests/encounters.test.ts cover.
+// P05 gave the warden its bark (veilguard); these routes keep the bare warden (tests/p05-boss-bark.test.ts covers the bark).
 const wardenAlone: EncounterDefinition = { ...riftWarden, heroes: riftWarden.heroes.slice(0, 4),
-  enemies: riftWarden.enemies.filter(e => !['f2', 'b3', 'f3'].includes(e.id)), intents: riftWarden.intents.filter(i => !['f2', 'b3', 'f3'].includes(i.sourceId)),
+  enemies: riftWarden.enemies.filter(e => !['f2', 'b3', 'f3'].includes(e.id)).map(e => ({ ...e, traits: undefined })), intents: riftWarden.intents.filter(i => !['f2', 'b3', 'f3'].includes(i.sourceId)),
   phases: riftWarden.phases!.map(p => ({ ...p, hardSummon: undefined })) };
 export const bossCombo: readonly Move[] = [
   ['tracer', 'mark', 'f1'],
@@ -132,6 +133,6 @@ export const bossSupport: readonly Move[] = [
 export const encounterRoutes = [
  {data:rearAmbush,name:'rearCombo',moves:rearCombo,hp:[69, 50, 40, 32]},
  {data:rearAmbush,name:'rearSupport',moves:rearSupport,hp:[40, 53, 35, 32]},
- {data:wardenAlone,name:'bossCombo',moves:bossCombo,hp:[71, 56, 48, 24]},
- {data:wardenAlone,name:'bossSupport',moves:bossSupport,hp:[56, 56, 29, 46]},
+ {data:wardenAlone,name:'bossCombo',moves:bossCombo,hp:[76, 56, 48, 30]},
+ {data:wardenAlone,name:'bossSupport',moves:bossSupport,hp:[67, 56, 38, 46]},
 ] as const;

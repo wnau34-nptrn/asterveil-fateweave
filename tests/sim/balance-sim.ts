@@ -109,11 +109,12 @@ const hpPercent = (s: ExpeditionState, ids = s.roster.deployed) => {
 };
 
 // Plays a battle to the end in the given style (no world effects).
-export function playOut(s: ExpeditionState, style: Style): { bs: BattleState; low: number } {
+// `salt` varies the casual player's turn rolls for battle benches (0 = the campaign's own rolls).
+export function playOut(s: ExpeditionState, style: Style, salt = 0): { bs: BattleState; low: number } {
   const data = battleData(s, map, lookup)!; let bs = battleState(s, map, lookup)!;
   const max = data.heroes.reduce((a, h) => a + h.maxHp, 0); const now = () => bs.heroes.reduce((a, h) => a + h.hp, 0) / max * 100; let low = now();
   for (let guard = 0; bs.outcome === 'active' && guard < 400; guard++) {
-    const follow = style === 'advisor' || (style === 'casual' && rollPercent(s.seed ^ 0x9e3779b9, s.rolls * 997 + bs.commands.length) < 70);
+    const follow = style === 'advisor' || (style === 'casual' && rollPercent((s.seed ^ 0x9e3779b9 ^ salt) >>> 0, s.rolls * 997 + bs.commands.length) < 70);
     const l = follow ? battleLesson(bs, data) : undefined;
     if (l) { bs = resolveCommand(bs, data, { beat: bs.beat, heroId: l.heroId, action: l.action, targetId: l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}), ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }).state; low = Math.min(low, now()); continue; }
     const hero = currentHeroId(bs, data)!; const t = targetOptions(bs, data, hero, 'attack').find(o => o.valid)!;
