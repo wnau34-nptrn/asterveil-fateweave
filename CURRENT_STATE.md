@@ -11,6 +11,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Active task
 
+- **Combat impact proposal archived (not implementation):** [issue #246](https://github.com/wnau34-nptrn/asterveil-fateweave/issues/246), reference branch `docs/combat-impact-proposal-2026-11-14`; [3 boards / 6 skill concepts](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/docs/combat-impact-proposal-2026-11-14/incoming/ART-COMBAT-IMPACT-001/README_TH.md). Future 3-skill slice; no runtime/motion approval or deployment.
+
 - **Gacha visual references saved:** PR #212, branch `art/art-ui-gacha-002`, package `incoming/ART-UI-GACHA-002/` on that branch. [Gallery](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/art/art-ui-gacha-002/incoming/ART-UI-GACHA-002/README_TH.md). Reference only; no runtime integration/motion approval.
 
 - **G00/G01 analysis delivered:** `docs/design/GACHA_G00_DECISIONS_TH.md`, `GACHA_G01_ECONOMY_TH.md`, `GACHA_G01_MIGRATION_TH.md`; reproducible 33-case/365-day research in `docs/validation/gacha-g00-g01-2026-11-09/README_TH.md`.

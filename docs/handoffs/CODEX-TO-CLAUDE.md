@@ -1,3 +1,11 @@
+## 2026-11-14 — Combat impact proposal archived (no implementation)
+- Owner asked to save suggestions in GitHub for later development; issue [#246](https://github.com/wnau34-nptrn/asterveil-fateweave/issues/246).
+- Reference branch `docs/combat-impact-proposal-2026-11-14`; no PR/merge/deploy. Gallery: [ART-COMBAT-IMPACT-001](../../incoming/ART-COMBAT-IMPACT-001/README_TH.md).
+- Saved 3 mockup boards / 6 skill concepts, contact/recoil/audio/HP-trail proposal, first 3-skill slice and acceptance checklist.
+- Observations refer to the 2026-11-13 QA review at 356afdd, not a fresh audit of today's head; image UI/numbers/timing are illustrative.
+- Checks: uploaded WebP blob hashes match local git hash-object; docs/images-only diff; no game tests rerun for this archive.
+- No owner approval of implementation or motion inferred; Claude integration and real 390px motion review remain future work.
+
 ## 2026-11-14 — P04-04 low-star role check + rift #1 recheck (measurement only)
 - Branch `claude/p04-04-low-star-sim` → PR. No rule/number/save change. New `tests/sim/low-star-sim.ts` + `tests/low-star-sim.test.ts` (in `npm run sim`; `STRESS=1` = no gear, camp −2); `rosterMap` takes an optional camp EXP/clears/hard.
 - 15 classes, team of five (companions ★3), maps 1–3 + hard: subject ★1/★3/★5 clear 180/180/180 everywhere, ★1 never falls, ★1/★5 own output 0.69–1.04 (median 0.82–0.91; stats alone 0.76–0.80) → OD-01 holds. Hard without gear fails at every star alike.
