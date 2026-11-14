@@ -1,3 +1,10 @@
+## 2026-11-14 — Owner requested Claude handoff + Codex art loop
+- Owner requests Claude handoff and missing-art briefs back to Codex.
+- [Slice 01 handoff](COMBAT_IMPACT_SLICE_01_TO_CLAUDE_TH.md): attack/Shield Bash/Arcane Bolt, event/timing boundaries, real 390px motion review.
+- Claude specifies missing art; Codex supplies small batches in incoming; Claude integrates. No automatic session delivery claimed.
+- Reference branch docs/combat-impact-proposal-2026-11-14, issue #246; no PR/merge/runtime/deploy by Codex in this task.
+- Docs reviewed for scope/links/workflow; no game tests for handoff-only changes. Motion approval remains future review.
+
 ## 2026-11-14 — Combat impact proposal archived (no implementation)
 - Owner asked to save suggestions in GitHub for later development; issue [#246](https://github.com/wnau34-nptrn/asterveil-fateweave/issues/246).
 - Reference branch `docs/combat-impact-proposal-2026-11-14`; no PR/merge/deploy. Gallery: [ART-COMBAT-IMPACT-001](../../incoming/ART-COMBAT-IMPACT-001/README_TH.md).
