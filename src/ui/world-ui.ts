@@ -6,7 +6,7 @@ import type { CharacterTab } from './character-view';
 import { CharacterPanel, type CharacterModel } from './character-panel';
 import { applyRunEquipment, runEquipment, type AutoEquipmentPlan } from '../core/world/auto-equipment';
 import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gearFilterControls } from './gear-inventory';
-import { talentPoints, talentsSpent } from '../core/world/talents';
+import { talentPoints, talentsSpent, treeClears } from '../core/world/talents';
 import { PRESET_SLOTS } from '../core/world/types';
 import type { TalentNode } from '../core/world/types';
 import { shortcutBlocked } from '../platform/keyboard';
@@ -579,7 +579,7 @@ export class WorldUI {
       const hp = s.hp[h.id] ?? 0; const ratio = hp / h.maxHp; const text = heroText[h.id]!;
       const state = hp <= 0 ? 'fallen' : ratio < .25 ? 'critical' : ratio < .6 ? 'hurt' : 'healthy';
       const tired = fatigueOf(s, h.id), cut = fatigueCut(this.map, tired);
-      return `<button data-world="character-open" data-hero="${h.id}" aria-haspopup="dialog" aria-controls="character-dialog" class="world-hero ${state}${s.guests?.includes(h.id) ? ' guest' : ''}" id="world-hero-${h.id}" aria-label="${text.name}${s.guests?.includes(h.id) ? ' ผู้ร่วมทางชั่วคราว' : ''} ${this.stars(s, h.id)} ดาว เลเวล ${levelOf(this.map, s)} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`} ความล้า ${tired} แต้ม${cut ? ` โจมตีและรักษาลด ${cut}%` : ''}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}${this.stars(s, h.id) > 1 ? `<i class="hero-stars">★${this.stars(s, h.id)}</i>` : ''}<i class="hero-level">Lv${levelOf(this.map, s)}</i></b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span>${talentPoints(this.map, s.members[h.id], h.id, levelOf(this.map, s)) - talentsSpent(s.members[h.id]?.talents) > 0 ? '<span class="world-talent-badge">+แต้ม</span>' : ''}</span><span class="world-fatigue" data-fatigue="${tired}">${fatigueDot(cut)}<span>ล้า ${tired}</span></span></button>`;
+      return `<button data-world="character-open" data-hero="${h.id}" aria-haspopup="dialog" aria-controls="character-dialog" class="world-hero ${state}${s.guests?.includes(h.id) ? ' guest' : ''}" id="world-hero-${h.id}" aria-label="${text.name}${s.guests?.includes(h.id) ? ' ผู้ร่วมทางชั่วคราว' : ''} ${this.stars(s, h.id)} ดาว เลเวล ${levelOf(this.map, s)} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`} ความล้า ${tired} แต้ม${cut ? ` โจมตีและรักษาลด ${cut}%` : ''}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}${this.stars(s, h.id) > 1 ? `<i class="hero-stars">★${this.stars(s, h.id)}</i>` : ''}<i class="hero-level">Lv${levelOf(this.map, s)}</i></b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span>${talentPoints(this.map, levelOf(this.map, s), treeClears(s)) - talentsSpent(s.members[h.id]?.talents) > 0 ? '<span class="world-talent-badge">+แต้ม</span>' : ''}</span><span class="world-fatigue" data-fatigue="${tired}">${fatigueDot(cut)}<span>ล้า ${tired}</span></span></button>`;
     }).join('');
   }
 

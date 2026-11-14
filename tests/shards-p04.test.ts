@@ -62,7 +62,7 @@ describe('P04-02 shards', () => {
 
 describe('save v59 (P04-02)', () => {
   it('converts v58 duplicates, seals, a bought seal and the last result with no loss, and marks story recruits met', () => {
-    expect(SAVE_VERSION).toBe(59);
+    expect(SAVE_VERSION).toBe(60);
     const p = newProfile(map, 7, ['guardian', 'tracer', 'weaver', 'healer']);
     const legacy = JSON.parse(JSON.stringify(p)) as Record<string, unknown> & { members: Record<string, Record<string, unknown>>; bank: Record<string, unknown> };
     for (const m of Object.values(legacy.members)) { delete m.shards; m.dupes = 0; }
@@ -89,7 +89,7 @@ describe('save v59 (P04-02)', () => {
     legacyProfile.bank = { ore: 0, gold: 0, seal: 0, dust: 0 };
     const back = parseGame(JSON.stringify({ version: 58, profile: legacyProfile, run: legacyRun }), map, lookup, MAPS);
     expect(back.run!.resources).toEqual({ ore: 4, gold: 3, ember: 0, shard: 20 });
-    expect(() => parseGame(JSON.stringify({ version: 59, profile: legacyProfile, run: null }), map, lookup, MAPS)).toThrow();
+    expect(() => parseGame(JSON.stringify({ version: 60, profile: legacyProfile, run: null }), map, lookup, MAPS)).toThrow();
   });
 });
 

@@ -12,7 +12,7 @@ import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gea
 import { shortcutBlocked } from '../platform/keyboard';
 import type { BossPower, ActionId, HeroDefinition } from '../core/battle/types';
 import { withParty } from '../core/battle/engine';
-import { hardReason, reserveSlots, activeGuides, guideDone, featureMap, featureOpen, mapUnlocked, brewReason, buyReason, claimReason, refreshReason, shopLeft, dismissReason, equip, groupOf, talentPoints, talentsSpent, type Group } from '../core/world/profile';
+import { hardReason, reserveSlots, activeGuides, guideDone, featureMap, featureOpen, mapUnlocked, brewReason, buyReason, claimReason, refreshReason, shopLeft, dismissReason, equip, groupOf, talentPoints, talentsSpent, treeClears, type Group } from '../core/world/profile';
 import { isBigTree } from '../core/world/talents';
 import { salvageValue } from '../core/world/equipment';
 import { campPresetPlan, matchesPreset, presetOf, presetSlots } from '../core/world/presets';
@@ -328,7 +328,7 @@ export class LobbyUI {
     if(!p)return;const hp=Object.fromEntries(p.company.map(id=>{const m=p.members[id]!,base=this.heroes.find(h=>h.id===id)!;return [id,starred(base,m.stars,this.map,levelOf(this.map,p),m.talents,m.gear,m).maxHp];}));
     // Skill tomes (save v37): levels are raised here at the camp, never on the map.
     const tomes={open:this.open('tomes'),bag:p.tomes??emptyTomes(),gold:p.bank.gold,core:p.riftCore??0,reason:(id:string,a:ActionId)=>skillLevelReason(p,this.maps,this.map,this.lookup,id,a),trade:(l:TomeLine,z:TomeSize,t?:TomeLine)=>tradeReason(p,this.maps,this.map,l,z,t),levelable:(id:string)=>levelableSkills(this.lookup,this.map,id,p.members[id])};
-    return {skillProfile:this.open('tomes')?p:undefined,starSources:{hire:this.open('hire'),contracts:shopLeft(p,this.map,'contract'),shards:shopLeft(p,this.map,'shard')},starProfile:this.open('team')?p:undefined,source:p,state:{members:p.members,roster:p.party,hp,campXp:p.campXp},ids:p.company,entries:campEquipment(p),available:true,camp:true,capacity:storageCap(p,this.map),tomes};
+    return {skillProfile:this.open('tomes')?p:undefined,starSources:{hire:this.open('hire'),contracts:shopLeft(p,this.map,'contract'),shards:shopLeft(p,this.map,'shard')},starProfile:this.open('team')?p:undefined,source:p,state:{members:p.members,roster:p.party,hp,campXp:p.campXp,clears:p.cleared.length,...(p.treeReset?{treeReset:p.treeReset}:{})},ids:p.company,entries:campEquipment(p),available:true,camp:true,capacity:storageCap(p,this.map),tomes};
   }
   private escape(text: string): string { return text.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]!); }
   private focus(sel: string): void { this.root.querySelector<HTMLElement>(sel)?.focus({ preventScroll: true }); }
@@ -515,7 +515,7 @@ export class LobbyUI {
   // What ★3 (a third skill) and ★5 (a passive) unlock for this class, and whether they are open yet.
   private unlocks(id: string, stars: number): string {
     // Big skill trees (A6) unlock skills and the passive in the tree; each star adds a tree point instead.
-    if (isBigTree(this.map.talents[id])) return `<p class="camp-note member-unlocks-tree">อาชีพนี้ปลดสกิลและพาสซีฟในผังสกิล · ทุกดาวให้แต้มผังสกิล +1 (ตอนนี้ ★${stars})</p>`;
+    if (isBigTree(this.map.talents[id])) return `<p class="camp-note member-unlocks-tree">อาชีพนี้ปลดสกิลและพาสซีฟในผังสกิล · แต้มผังมาจากเลเวลค่ายและการผ่านแมพครั้งแรก</p>`;
     const unlocks = this.heroes.find(h => h.id === id)?.unlocks; if (!unlocks) return '';
     const data = this.lookup(this.map.tutorialEncounterId)!; const skill = data.skills[unlocks.skill]; const passive = passiveText[unlocks.passive];
     const row = (need: number, iconName: Parameters<typeof icon>[0], name: string, help: string) =>
@@ -555,7 +555,7 @@ export class LobbyUI {
   // Opens the member's talent tree in its own sheet.
   private treeButton(p: Profile, id: string): string {
     if (!this.map.talents[id]) return '';
-    const m = p.members[id]!; const points = talentPoints(this.map, m, id, levelOf(this.map, p)); const spent = talentsSpent(m.talents); const free = points - spent;
+    const m = p.members[id]!; const points = talentPoints(this.map, levelOf(this.map, p), treeClears(p)); const spent = talentsSpent(m.talents); const free = points - spent;
     return `<button id="lobby-tree-open" data-lobby="tree" class="secondary tree-toggle">${icon('starFilled')}<span>ผังสกิล</span><small>${free > 0 ? `แต้มว่าง ${free}` : `ใช้ ${spent}/${points} แต้ม`}</small></button>`;
   }
   private board(p: Profile): string {

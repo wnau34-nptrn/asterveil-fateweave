@@ -20,9 +20,9 @@ const localSave = (): string => {
   return s.data.get(expeditionKey)!;
 };
 const upload = (payload: string, patch: Partial<CloudSaveUpload> = {}): CloudSaveUpload => ({
-  format: CLOUD_FORMAT, requestId: 'req_0123456789abcdef', baseRevision: 0, saveVersion: 59, payload, payloadBytes: utf8Bytes(payload), payloadSha256: sha(payload), ...patch,
+  format: CLOUD_FORMAT, requestId: 'req_0123456789abcdef', baseRevision: 0, saveVersion: 60, payload, payloadBytes: utf8Bytes(payload), payloadSha256: sha(payload), ...patch,
 });
-const v58 = (n: number): boolean => n === 59;
+const v58 = (n: number): boolean => n === 60;
 
 describe('cloud save envelope checks', () => {
   it('accepts the exact local save string, and the same payload still passes replay validation', () => {
@@ -42,7 +42,7 @@ describe('cloud save envelope checks', () => {
       [upload(raw, { format: 2 as typeof CLOUD_FORMAT }), 'format'],
       [upload(raw, { requestId: 'short' }), 'requestId'],
       [upload(raw, { baseRevision: -1 }), 'baseRevision'],
-      [upload(raw, { saveVersion: 60 }), 'saveVersion'],
+      [upload(raw, { saveVersion: 61 }), 'saveVersion'],
       [upload(raw, { payloadBytes: utf8Bytes(raw) + 1 }), 'bytes'],
       [upload(raw, { payloadSha256: 'ABC' }), 'digestFormat'],
       [upload(raw, { payloadSha256: sha(raw + ' ') }), 'digestMismatch'],
@@ -82,7 +82,7 @@ describe('server upload decision (compare-and-swap on revision)', () => {
     expect(decideUpload(head, [], { ...u, requestId: 'req_another_device_01', baseRevision: 2 })).toEqual({ kind: 'unchanged', revision: 5 });
   });
   it('never lets an older save format overwrite a newer one', () => {
-    expect(decideUpload({ revision: 2, saveVersion: 60, payloadSha256: sha('n') }, [], { ...u, baseRevision: 2 })).toEqual({ kind: 'downgrade', saveVersion: 60 });
+    expect(decideUpload({ revision: 2, saveVersion: 61, payloadSha256: sha('n') }, [], { ...u, baseRevision: 2 })).toEqual({ kind: 'downgrade', saveVersion: 61 });
   });
 });
 

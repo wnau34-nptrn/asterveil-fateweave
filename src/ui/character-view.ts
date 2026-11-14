@@ -5,7 +5,7 @@ import { levelBarrier, skillCooldown, withParty } from '../core/battle/engine';
 import { skillLevelCost, skillLevelOf, tomeLine } from '../core/world/tomes';
 import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } from '../core/world/types';
 import { campProgress, levelOf, skillChoices } from '../core/world/world';
-import { isBigTree, memberTalentReason, talentPoints, talentsSpent } from '../core/world/talents';
+import { isBigTree, memberTalentReason, talentPoints, talentsSpent, treeClears } from '../core/world/talents';
 import { icon, lineIcon } from './icons';
 import { heroArt, starRow } from './portraits';
 import { tomeLineText, tomeSizeText, heroText, itemLines, itemName, itemOwner, passiveText, rarityText, setText, skillDescription, specialText, bigBranches, talentBranches, talentHelp, wornSets, slotIcon, slotText, gearStatName, statText } from './th';
@@ -111,11 +111,11 @@ export function characterEquipmentComparison(before: CharacterState, after: Char
 const statNodeIcon = { hp: 'stat-hp', attack: 'stat-attack', skill: 'stat-support', armour: 'stat-armour' } as const;
 function bigTalents(s: CharacterState, map: MapDefinition, id: string, data: EncounterDefinition, h: HeroDefinition, base: HeroDefinition, selected?: string, unified=false): string {
   const m = s.members[id]!, nodes = map.talents[id]!, hd = withParty(data, [h]);
-  const points = talentPoints(map, m, id, levelOf(map, s)), free = points - talentsSpent(m.talents), names = bigBranches[id] ?? ['สาย A', 'สาย B', 'สาย C'];
+  const points = talentPoints(map, levelOf(map, s), treeClears(s)), free = points - talentsSpent(m.talents), names = bigBranches[id] ?? ['สาย A', 'สาย B', 'สาย C'];
   const tiers = map.progression.treeTiers, branches = ['a', 'b', 'c'] as const;
   const why: Record<string, string> = { max: 'เต็มแล้ว', locked: 'ต้องลงชั้นก่อนหน้าในสายนี้', choice: 'เลือกอีกทางไว้แล้ว', points: 'แต้มไม่พอ', unknown: 'ไม่พบความถนัด' };
   const info = (def: TalentNodeDef) => {
-    const granted = !!m.grants?.includes(def.id), rank = granted ? def.max : m.talents?.[def.id] ?? 0, reason = memberTalentReason(map, id, m, def.id, levelOf(map, s));
+    const granted = !!m.grants?.includes(def.id), rank = granted ? def.max : m.talents?.[def.id] ?? 0, reason = memberTalentReason(map, id, m, def.id, levelOf(map, s), treeClears(s));
     const state = rank >= def.max ? 'full' : rank ? 'partial' : reason === 'locked' || reason === 'level' || reason === 'choice' ? 'locked' : 'open';
     const note = granted ? 'ได้ฟรีจากดาวเดิม' : reason === 'level' ? `เปิดที่ Lv${tiers[(def.tier ?? 1) - 1]}` : reason ? why[reason]! : 'ลงได้ 1 แต้ม';
     const kind = 'unlock' in def.effect ? 'skill' : def.choice ? 'choice' : def.tier === 4 ? 'capstone' : 'passive';
@@ -135,20 +135,20 @@ function bigTalents(s: CharacterState, map: MapDefinition, id: string, data: Enc
   const choices = skillChoices(base, map, m.talents, m.grants), now: ActionId[] = h.actions.filter(a => a !== 'attack'), size = map.progression.loadoutSize;
   const loadout = choices.map(a => { const on = now.includes(a), why = !on && now.length >= size ? `ติดครบ ${size} ช่องแล้ว ถอดก่อน` : on && now.length <= 1 ? 'ต้องติดอย่างน้อย 1 สกิล' : '';
     return `<button id="character-loadout-${a}" data-world="character-loadout" data-skill="${a}" class="loadout-skill" aria-pressed="${on}" aria-disabled="${!!why}" aria-label="${hd.skills[a].name} · ${on ? 'ติดอยู่' : 'ยังไม่ติด'}${why ? ` · ${why}` : ''}">${icon(a)}<b>${hd.skills[a].name}</b><small>${on ? 'ติดอยู่' : why || 'แตะเพื่อติด'}</small></button>`; }).join('');
-  return `<section class="talent-tree big-tree node-tree" aria-label="ผังสกิลของ${heroText[id]!.name}"><div class="tree-head"><h3>เส้นทาง${heroText[id]!.role}</h3><span class="ui-pill talent-points" role="status">${icon('stat-level')}<span>แต้มเหลือ <strong>${free}</strong>/${points}</span></span></div>
+  return `<section class="talent-tree big-tree node-tree" aria-label="ผังสกิลของ${heroText[id]!.name}"><div class="tree-head"><h3>เส้นทาง${heroText[id]!.role}</h3><span class="ui-pill talent-points" role="status">${icon('stat-level')}<span>แต้มเหลือ <strong>${free}</strong>/${points}</span></span></div>${s.treeReset?.includes(id) ? '<p class="talent-gate tree-reset-note" role="status">รีเซ็ตผังให้ฟรีแล้ว: แต้มผังไม่ขึ้นกับดาวอีกต่อไป มาจากเลเวลค่ายและการผ่านแมพครั้งแรก เลือกใหม่ได้เลย และรีเซ็ตได้ฟรีเสมอ</p>' : ''}
     ${grid}${personalGrid}${card}
     ${unified?'':`<div class="loadout-head"><h3>สกิลที่ติดตั้ง</h3><span>${now.length}/${size}</span></div><div class="loadout-list">${loadout}</div>`}
     <p class="tree-legend" aria-hidden="true"><span class="lg skill"></span>สกิล <span class="lg choice"></span>ปรับสกิล <span class="lg passive"></span>พาสซีฟ <span class="lg capstone"></span>ขั้นสูงสุด</p>
-    <p class="camp-note">ได้ 1 แต้มทุกเลเวลอัปและทุกดาว · ศึกมี 4 ปุ่ม: โจมตีปกติ + สกิลที่ติดไว้ · คืนแต้มฟรีที่ครูฝึกในค่าย</p></section>`;
+    <p class="camp-note">ได้ 1 แต้มทุกเลเวลค่ายถึง Lv10 และเมื่อผ่านแมพครั้งแรก · ศึกมี 4 ปุ่ม: โจมตีปกติ + สกิลที่ติดไว้ · คืนแต้มฟรีที่ครูฝึกในค่าย</p></section>`;
 }
 export function characterTalents(s: CharacterState, map: MapDefinition, id: string, data: EncounterDefinition, h?: HeroDefinition, base?: HeroDefinition, selected?: string, unified=false): string {
   const m = s.members[id]!, nodes = map.talents[id];
   if (!nodes) return '<p>ตัวละครนี้ไม่มีผังสกิล</p>';
   if (isBigTree(nodes) && h && base) return bigTalents(s, map, id, data, h, base, selected, unified);
-  const points = talentPoints(map, m, id, levelOf(map, s)), free = points - talentsSpent(m.talents), branches = talentBranches[id] ?? ['สาย A', 'สาย B'];
+  const points = talentPoints(map, levelOf(map, s), treeClears(s)), free = points - talentsSpent(m.talents), branches = talentBranches[id] ?? ['สาย A', 'สาย B'];
   const why: Record<string, string> = { max: 'เต็มแล้ว', locked: 'ต้องลงขั้นก่อนหน้า', points: 'แต้มไม่พอ', unknown: 'ไม่พบความถนัด' };
   const node = (n: TalentNode) => {
-    const def = nodes.find(v => v.id === n)!, rank = m.talents?.[n] ?? 0, reason = memberTalentReason(map, id, m, n, levelOf(map, s));
+    const def = nodes.find(v => v.id === n)!, rank = m.talents?.[n] ?? 0, reason = memberTalentReason(map, id, m, n, levelOf(map, s), treeClears(s));
     const state = rank >= def.max ? 'full' : rank ? 'partial' : reason === 'locked' ? 'locked' : 'open';
     return `<button id="character-talent-${n}" data-world="character-talent" data-node="${n}" class="talent-node${n.endsWith('3') ? ' capstone' : ''}" data-state="${state}" aria-disabled="${!!reason}" aria-label="${def.name} ขั้น ${rank}/${def.max} · ${talentHelp(def,data)}${reason?` · ${why[reason]}`:''}"><b>${def.name}</b><i>${rank}/${def.max}</i><small>${talentHelp(def, data)}</small><small>${reason ? why[reason] : 'แตะเพื่อลง 1 แต้ม'}</small></button>`;
   };

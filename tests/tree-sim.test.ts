@@ -6,13 +6,13 @@ import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { beginBattle, withParty } from '../src/core/battle/engine';
 import { heroCatalog, starred } from '../src/core/world/world';
 import { battleLesson } from '../src/ui/tutorial';
-import { TREE_BUILDS, TREE_LEVEL, TREE_STARS, treeReport, treeSim } from './sim/tree-sim';
+import { TREE_BUILDS, TREE_CLEARS, TREE_LEVEL, treeReport, treeSim } from './sim/tree-sim';
 
 // Release A big trees: the example builds of docs/design/SKILL_TREES_ALL_TH.md are legal at ★3 Lv10, the advisor uses
 // their tree skills, and each keeps a winning route. `npm run sim` writes docs/validation/balance-sim/TREES.md.
 describe('big tree builds (release A and the recruits)', () => {
-  it('every example build is a legal tree at ★3 Lv10', () => {
-    for (const b of TREE_BUILDS) expect(talentsValid(map, b.id, TREE_LEVEL, b.talents, TREE_STARS), `${b.id} ${b.name}`).toBe(true);
+  it('every example build is a legal tree at Lv10 with two maps cleared (11 points)', () => {
+    for (const b of TREE_BUILDS) expect(talentsValid(map, b.id, TREE_LEVEL, b.talents, TREE_CLEARS), `${b.id} ${b.name}`).toBe(true);
   });
   const rows = treeSim();
   it('the advisor wins with every build and uses its tree skills', () => {

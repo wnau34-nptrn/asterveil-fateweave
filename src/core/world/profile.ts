@@ -1,7 +1,7 @@
 import {startBossPlan} from './boss-equipment';
 import {startHunt} from './targeted-loot';
 import {storageCap,departureBlocked} from './storage';
-import { memberTalentReason, talentsSpent } from './talents';
+import { memberTalentReason, talentPoints, talentsSpent, treeClears } from './talents';
 import type { Lane, GuideDefinition, GuideKind, LobbyFeature, Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
 import { addTomes, dismissTomes, emptyTomes, firstClearTomes, tomeCount } from './tomes';
@@ -148,6 +148,7 @@ export function dismiss(initial: Profile, map: MapDefinition, id: string): Profi
   for (const item of Object.values(profile.members[id]?.gear ?? {}).sort((a,b)=>Number(!!b?.locked)-Number(!!a?.locked))) if (item) stash(profile, map, item);
   if(profile.hunt?.target===id)delete profile.hunt.target;
   profile.company = profile.company.filter(m => m !== id); delete profile.members[id]; unarchive(profile, id);
+  if (profile.treeReset) { profile.treeReset = profile.treeReset.filter(m => m !== id); if (!profile.treeReset.length) delete profile.treeReset; }
   profile.party.deployed = profile.party.deployed.filter(m => m !== id); profile.party.reserve = profile.party.reserve.filter(m => m !== id); if (profile.party.lanes) delete profile.party.lanes[id];
   dropFromPresets(profile, id);
   profile.bank.gold += map.company.dismissRefund;
@@ -158,14 +159,16 @@ export function dismiss(initial: Profile, map: MapDefinition, id: string): Profi
 }
 
 // Talent gates are shared with exploration spending; only the lobby can reset points.
-export { talentPoints, talentsSpent, talentOpen, talentsValid } from './talents';
+export { talentPoints, talentsSpent, talentOpen, talentsValid, treeClears } from './talents';
 export function talentReason(profile: Profile, map: MapDefinition, id: string, node: TalentNode): string {
-  return memberTalentReason(map, id, profile.members[id], node, levelOf(map, profile));
+  return memberTalentReason(map, id, profile.members[id], node, levelOf(map, profile), treeClears(profile));
 }
 export function learnTalent(initial: Profile, map: MapDefinition, id: string, node: TalentNode): ProfileResult {
   const reason = talentReason(initial, map, id, node); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial); const m = profile.members[id]!;
   m.talents = { ...m.talents, [node]: (m.talents?.[node] ?? 0) + 1 };
+  // The free-reset notice (save v60) has done its job once the member spends a point again.
+  if (profile.treeReset) { profile.treeReset = profile.treeReset.filter(x => x !== id); if (!profile.treeReset.length) delete profile.treeReset; }
   return { profile, event: { type: 'talent', heroId: id } };
 }
 // Resetting is free and returns every point.
@@ -296,7 +299,7 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   const profile = structuredClone(initial); const ids = [...profile.party.deployed, ...profile.party.reserve];
   const potions = Object.fromEntries(POTION_IDS.map(id => [id, Math.min(map.potions.carry, profile.potions[id])])) as Potions;
   for (const id of POTION_IDS) profile.potions[id] -= potions[id];
-  const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions, campXp: profile.campXp, reserveSlots: reserveSlots(profile, map) }, profile.tutorialDone);
+  const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions, campXp: profile.campXp, ...(profile.cleared.length ? { clears: profile.cleared.length } : {}), reserveSlots: reserveSlots(profile, map) }, profile.tutorialDone);
   run.hunt=startHunt(profile);if(map.bossCharm)run.bossLoot=startBossPlan(profile,map);
   if (hard) run.hard = true;
   // Story recruits not yet in the company (owner 2026-10-23). Before the prologue they come along as guests in free
@@ -386,6 +389,11 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.talents) profile.members[id] = { ...profile.members[id]!, talents: structuredClone(m.talents) };
   // A loadout chosen on the map comes home with the member.
   for (const [id, m] of Object.entries(run.members)) if (profile.members[id] && m.loadout) profile.members[id]!.loadout = [...m.loadout];
+  // P04-03: a run that set out before tree points left stars may bring home more than the allowance; that tree is reset free.
+  for (const id of Object.keys(run.members)) {
+    const m = profile.members[id]; if (!m || talentsSpent(m.talents) <= talentPoints(map, levelOf(map, profile), profile.cleared.length)) continue;
+    delete m.talents; delete m.loadout; if (!profile.treeReset?.includes(id)) (profile.treeReset ??= []).push(id);
+  }
   // 3D: side quests count what this run did (herbs are lost on a wipe), capped at each target.
   for (const q of map.sideQuests) {
     const now = profile.quests[q.id] ?? { progress: 0, claimed: false }; if (now.claimed) continue;

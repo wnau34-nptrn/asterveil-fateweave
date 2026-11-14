@@ -6,7 +6,7 @@ import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt
 import type { EnemyTrait, BattleEntry, BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents, ActionId, PassiveId } from '../battle/types';
 import type { RecruitPoint, ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
 import { affixPool, gearTotals } from './equipment';
-import { effectiveTalents, isBigTree, memberTalentReason } from './talents';
+import { effectiveTalents, isBigTree, memberTalentReason, treeClears } from './talents';
 import { battleTomes, chestTomes } from './tomes';
 import type { TalentNode } from './types';
 import { LEGACY_RESERVE, PARTY_SLOTS, POTION_IDS, SET_IDS, type Lane, type Roster } from './types';
@@ -250,7 +250,7 @@ export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed:
     resources: { ore: 0, gold: 0, ember: 0, shard: 0 }, openedChests: [], restReady: true,
     tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null, found: [], dry: 0,
     potions: company?.potions ? { ...company.potions } : { salve: 0, tonic: 0, repel: 0, calm: 0 }, repel: 0,
-    ...(company?.reserveSlots ? { reserveSlots: company.reserveSlots } : {}),
+    ...(company?.reserveSlots ? { reserveSlots: company.reserveSlots } : {}), ...(company?.clears ? { clears: company.clears } : {}),
     elitesDefeated: [], eventsDone: [], dust: 0, herbs: [], visited: [], respawns: {}, spare: [],
     runes: {}, solved: [], levers: [], boulders: {}, secrets: [],
   };
@@ -425,7 +425,7 @@ export function revive(initial: ExpeditionState, map: MapDefinition, lookup: Enc
 export const canManage = (state: ExpeditionState): boolean => !state.battle && !state.completed;
 // Spend only unallocated level points during exploration. Reset remains a lobby action.
 export function learnRunTalent(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, id: string, node: TalentNode): WorldResult {
-  if (!canManage(initial) || !rosterIds(initial).includes(id) || memberTalentReason(map, id, initial.members[id], node, levelOf(map, initial))) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  if (!canManage(initial) || !rosterIds(initial).includes(id) || memberTalentReason(map, id, initial.members[id], node, levelOf(map, initial), treeClears(initial))) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial), m = state.members[id]!;
   m.talents = { ...m.talents, [node]: (m.talents?.[node] ?? 0) + 1 };
   // Learning a max-HP talent must not heal living or fallen heroes for free.

@@ -274,6 +274,8 @@ export interface ProgressionRules {
     bossLevels: number };
   // Big skill trees (A6): the member level each tier opens at, and how many active skills go into battle.
   treeTiers: readonly number[]; loadoutSize: number;
+  // P04-03: tree points = (camp level, at most `treePointLevel`) − 1 + `treePointsPerClear` per map first cleared on normal.
+  treePointLevel: number; treePointsPerClear: number;
   // Skill levels with tomes (A6 part 2, docs/design/SKILL_TOMES_TH.md, draft numbers).
   skillLevels: SkillLevelRules;
 }
@@ -334,7 +336,7 @@ export interface MemberProgress { stars: number; shards: number; talents?: Talen
 // `potions`: what the expedition packs (2D-5; missing = none).
 // `campXp`: the camp's EXP the expedition sets out with (P01; missing = 0).
 // `reserveSlots`: the reserve the camp has unlocked (P02; missing = the legacy four).
-export interface Company { roster: Roster; members: Record<string, MemberProgress>; potions?: Potions; campXp?: number; reserveSlots?: number }
+export interface Company { roster: Roster; members: Record<string, MemberProgress>; potions?: Potions; campXp?: number; reserveSlots?: number; clears?: number }
 
 // ---- Lobby profile (persistent between expeditions) ----
 export type RunOutcome = 'complete' | 'withdrawn' | 'wiped';
@@ -392,6 +394,9 @@ export interface Profile {
   expeditions: number; completes: number;
   // Chapters (2026-10-17): ids of the maps this company has completed at least once (each opens the next map).
   cleared: string[];
+  // P04-03 (OD-19): members whose tree was reset free when tree points left stars (save v60); an id leaves the list
+  // when that member next learns a node. Missing = none.
+  treeReset?: string[];
   // P04-02 (OD-22): story recruits already compensated (or met through the story), each at most once. Missing = none.
   storyShards?: string[];
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
@@ -472,6 +477,8 @@ export interface ExpeditionState {
   // P02 (save v45): the reserve slots this run may fill (fixed at departure; missing = LEGACY_RESERVE) and each brought
   // member's fatigue points (OD-11; missing or absent = 0). Fatigue belongs to the run and ends with it.
   reserveSlots?: number; fatigue?: Record<string, number>;
+  // P04-03: maps the camp had first-cleared when this run set out (tree points; missing = none).
+  clears?: number;
   // Hard mode (A9, save v33): set on departure, never changed during the run.
   hard?: true;
   bossLoot?:BossPlan;

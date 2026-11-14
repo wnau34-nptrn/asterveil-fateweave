@@ -8,7 +8,7 @@ import { campLevel, draftOffers, skillChoices, battleState, expToNext, findTiles
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { boardOfferCount, commanderReason, defaultCamp, newProfile, reserveSlots, settle, talentsValid } from '../world/profile';
-import { grantsValid, isBigTree } from '../world/talents';
+import { grantsValid, isBigTree, talentPoints } from '../world/talents';
 import { classSkills } from '../world/tomes';
 import { BANK_CAP, POTION_CAP, RIFT_CORE_CAP, RUN_CAP, TOME_CAP } from '../world/caps';
 import { TOME_LINES, TOME_SIZES, type TomeBag } from '../world/types';
@@ -145,7 +145,12 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // contract seals. Loading an older save converts with no loss: every stored duplicate becomes 10 shards of that member,
 // every seal (bank, carried on a run, last result) 10 universal shards, and a bought seal counts as the shard pack.
 // Story recruits already in the company are marked as met, so the new story-duplicate payment (OD-22) is not paid twice.
-export const SAVE_VERSION = 59;
+// v60 (P04-03, owner OD-02/19/20/27): tree points come from the camp level and first map clears, not stars. A member who
+// had spent more than the new allowance gets the whole tree back free (talents and loadout cleared, `treeReset` lists
+// them for the notice); everyone else keeps their build. A run in progress gains `clears` from its camp.
+export const SAVE_VERSION = 60;
+// Trees refunded by older migrations were legal under star points (at most ★5 = 4 extra).
+const LEGACY_STAR_POINTS = 4;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
 const REWORKED_V57: readonly ActionId[] = ['backstab', 'knives', 'disarm'];
 const REWORKED_V54: readonly ActionId[] = ['storedfist', 'circlefist', 'solo', 'finale'];
@@ -240,8 +245,10 @@ function tomesOf(v: unknown): TomeBag {
 }
 const badProfile = (): never => { throw new Error('Invalid profile'); };
 const campXpOf = (v: unknown, map: MapDefinition): number => { if (!isInt(v, 0, maxCampXp(map))) throw new Error('Invalid camp EXP'); return v; };
-// `level`: the camp level every member fights at (talent points and tree tiers).
-function membersOf(v: unknown, map: MapDefinition, ids: readonly string[], lookup: EncounterLookup, level: number, run = false): Record<string, MemberProgress> {
+// P04-03: the maps a run's camp had first-cleared when it set out (missing = none).
+const clearsOf = (v: unknown): number => v === undefined ? 0 : isInt(v, 1, 99) ? v : badRun();
+// `level`: the camp level every member fights at (talent points and tree tiers); `clears`: maps first-cleared (points).
+function membersOf(v: unknown, map: MapDefinition, ids: readonly string[], lookup: EncounterLookup, level: number, run = false, clears = 0): Record<string, MemberProgress> {
   const raw = obj(v);
   if (Object.keys(raw).length !== ids.length) throw new Error('Invalid members');
   return Object.fromEntries(ids.map(id => {
@@ -253,7 +260,7 @@ function membersOf(v: unknown, map: MapDefinition, ids: readonly string[], looku
     if ('grants' in m) { if (!grantsValid(map, id, m.grants)) throw new Error('Invalid talents'); out.grants = [...m.grants as string[]]; }
     if ('talents' in m) {
       const t = obj(m.talents) as Talents;
-      if (!Object.keys(t).length || !talentsValid(map, id, level, t, out.stars, out.grants)) throw new Error('Invalid talents');
+      if (!Object.keys(t).length || !talentsValid(map, id, level, t, clears, out.grants)) throw new Error('Invalid talents');
       out.talents = { ...t };
     }
     // Skill levels (v37): Lv2–max for skills of the member's class (a forgotten tree skill keeps its level).
@@ -326,9 +333,9 @@ function idList(v: unknown, allowed: readonly string[]): string[] {
 class StaleRun extends Error { constructor(readonly run: ExpeditionState) { super('Stale run'); } }
 function staleRun(s: Record<string, unknown>, map: MapDefinition, lookup: EncounterLookup): ExpeditionState {
   const roster = rosterOf(s.roster, lookup, map); const ids = [...roster.deployed, ...roster.reserve];
-  const campXp = campXpOf(s.campXp, map); const members = membersOf(s.members, map, ids, lookup, campLevel(map, campXp), true); const r = obj(s.resources);
+  const campXp = campXpOf(s.campXp, map); const clears = clearsOf(s.clears); const members = membersOf(s.members, map, ids, lookup, campLevel(map, campXp), true, clears); const r = obj(s.resources);
   if (!isInt(r.ore, 0, 999999) || !isInt(r.shard, 0, 99999) || !isInt(s.steps) || !isInt(s.wins)) throw new Error('Invalid run');
-  const run = newExpedition(map, lookup, 0, { roster, members, campXp });
+  const run = newExpedition(map, lookup, 0, { roster, members, campXp, ...(clears ? { clears } : {}) });
   const travel = (v: unknown) => Array.isArray(v) ? v.filter((id): id is string => typeof id === 'string' && ids.includes(id)) : undefined;
   const guests = travel(s.guests), recruited = travel(s.recruited);
   return { ...run, ...(guests?.length ? { guests } : {}), ...(recruited?.length ? { recruited } : {}), resources: { ore: r.ore, gold: isInt(r.gold, 0, 999999) ? r.gold : 0, ember: 0, shard: r.shard }, steps: s.steps, wins: s.wins, found: foundOf(s.found, map, lookup), spare: spareOf(s.spare, map, lookup),
@@ -411,7 +418,8 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     fatigue = { ...f } as Record<string, number>;
   }
   const campXp = campXpOf(s.campXp, map);
-  const members = membersOf(s.members, map, ids, lookup, campLevel(map, campXp), true); const party = { members, campXp };
+  const clears = clearsOf(s.clears);
+  const members = membersOf(s.members, map, ids, lookup, campLevel(map, campXp), true, clears); const party = { members, campXp };
   const hp = hpRecord(s.hp, lookup, map, ids, party);
   const r = obj(s.resources);
   if (Object.keys(r).length !== 4 || !isInt(r.ore, 0, RUN_CAP.ore) || !isInt(r.gold, 0, RUN_CAP.gold) || !isInt(r.ember, 0, RUN_CAP.ember) || !isInt(r.shard, 0, RUN_CAP.shard)) throw new Error('Invalid resources');
@@ -485,7 +493,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     ...(guests ? { guests } : {}), ...(recruited ? { recruited } : {}), ...(arrivals ? { arrivals } : {}), ...(s.hard === true ? { hard: true as const } : {}),
     ...(runTomes ? { tomes: runTomes } : {}), ...(s.riftCore !== undefined ? { riftCore: s.riftCore as number } : {}), ...(s.tomeWins !== undefined ? { tomeWins: s.tomeWins as number } : {}),
     ...(s.bossLoot===undefined?{}:{bossLoot:bossPlanOf(s.bossLoot,map)}),
-    ...(reserveSlots !== undefined ? { reserveSlots } : {}), ...(fatigue ? { fatigue } : {}),
+    ...(reserveSlots !== undefined ? { reserveSlots } : {}), ...(fatigue ? { fatigue } : {}), ...(clears ? { clears } : {}),
     ...(s.hunt===undefined?{}:{hunt:huntPlan(s.hunt,map,lookup)}),
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map, true),
     steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, hp, campXp,
@@ -546,7 +554,8 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if(hunt.target&&!company.includes(hunt.target))throw new Error('Unowned hunt target');
   const presets = p.presets === undefined ? undefined : presetsOf(p.presets, company as string[]);
   const campXp = campXpOf(p.campXp, map);
-  const members = membersOf(p.members, map, company as string[], lookup, campLevel(map, campXp));
+  const members = membersOf(p.members, map, company as string[], lookup, campLevel(map, campXp), false,
+    (version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps) : clearedList(p.cleared, maps)).length);
   // The archive (P01) holds bench members only.
   const archived = p.archived === undefined ? undefined : idList(p.archived, (company as string[]).filter(id => ![...party.deployed, ...party.reserve].includes(id)));
   if (archived && !archived.length) throw new Error('Invalid archive');
@@ -600,6 +609,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const clearedHard = p.clearedHard === undefined ? undefined : clearedList(p.clearedHard, maps);
   // P04-02 (OD-22): story recruits already met or paid once (company members only, no repeats).
   const storyShards = p.storyShards === undefined ? undefined : idList(p.storyShards, company as string[]);
+  const treeReset = p.treeReset === undefined ? undefined : idList(p.treeReset, company as string[]);
   if (clearedHard?.some(id => !cleared.includes(id))) throw new Error('Invalid profile');
   // v44 → v45 (P02): the fifth field slot is filled from the reserve, and a reserve above the chapter's slots steps into
   // the field first (there is always room: four deployed at most before v45). Nobody leaves the team.
@@ -607,7 +617,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (version < 45) while (party.reserve.length && party.deployed.length < PARTY_SLOTS) party.deployed.push(party.reserve.shift()!);
   if (party.reserve.length > slots) throw new Error('Invalid party');
   return {...(presets ? { presets } : {}),...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(boardFeatured ? { boardFeatured: [...boardFeatured as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
-    ...(storyShards ? { storyShards } : {}),
+    ...(storyShards ? { storyShards } : {}), ...(treeReset?.length ? { treeReset } : {}),
     bank: { ore: bank.ore as number, gold: bank.gold as number, shard: bank.shard as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, POTION_CAP), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -711,7 +721,7 @@ function refundAuditTrees(envelope: Record<string, unknown>, maps: readonly MapD
     for (const id of AUDIT_TREES) if (members[id]?.talents && typeof members[id]!.talents === 'object' && Object.keys(members[id]!.talents as object).length) {
       const m = members[id]!;
       const map = maps.find(m => m.talents[id]);
-      if (!map || !talentsValid(map, id, (m.level as number) ?? 1, m.talents as Talents, m.stars as number, m.grants as string[] | undefined)) throw new Error('Invalid talents');
+      if (!map || !talentsValid(map, id, (m.level as number) ?? 1, m.talents as Talents, LEGACY_STAR_POINTS, m.grants as string[] | undefined)) throw new Error('Invalid talents');
       delete m.talents; delete m.loadout; changed = true;
     }
     // A changed run is settled home; a run without spent changed trees can restart its battle from its recorded entry.
@@ -763,8 +773,38 @@ function migrateCampLevels(envelope: Record<string, unknown>, map: MapDefinition
 export function upgradeStoredGame<T>(game: T, maps: readonly MapDefinition[]): T {
   if (!game || typeof game !== 'object') return game;
   const g = game as Record<string, unknown>; const bank = obj(g.profile ?? {}).bank;
-  if (!bank || typeof bank !== 'object' || !('seal' in bank)) return game;
-  const copy = structuredClone(g); migrateShards(copy, maps); return copy as T;
+  const seals = !!bank && typeof bank === 'object' && 'seal' in bank;
+  const copy = structuredClone(g); if (seals) migrateShards(copy, maps);
+  // P04-03: the tree-point switch is safe to repeat (it only resets a tree that is over the allowance).
+  const trees = !!maps[0] && migrateTreePoints(copy, maps[0], maps);
+  return seals || trees ? copy as T : game;
+}
+// v59 → v60 (P04-03): tree points leave stars. Runs before validation, and again on every stored server game. A member
+// over the new allowance gets the whole tree back; a run in progress keeps what it had spent until it returns (its
+// `clears` covers it), and settling applies the same reset then.
+function migrateTreePoints(envelope: Record<string, unknown>, map: MapDefinition, maps: readonly MapDefinition[], legacyClears?: number): boolean {
+  if (envelope.profile === null || typeof envelope.profile !== 'object') return false;
+  const p = obj(envelope.profile); let changed = false;
+  const known = new Set(maps.map(m => m.id));
+  const clears = legacyClears ?? (Array.isArray(p.cleared) ? new Set((p.cleared as unknown[]).filter(id => typeof id === 'string' && known.has(id))).size : 0);
+  const levelOfXp = (v: unknown) => isInt(v, 0, maxCampXp(map)) ? campLevel(map, v) : 1;
+  const spent = (m: Record<string, unknown>) => m.talents && typeof m.talents === 'object' ? Object.values(m.talents as object).reduce<number>((a, b) => a + (typeof b === 'number' ? b : 0), 0) : 0;
+  const members = (v: unknown): Record<string, unknown>[] => v && typeof v === 'object' ? Object.values(v).filter((m): m is Record<string, unknown> => !!m && typeof m === 'object') : [];
+  const points = talentPoints(map, levelOfXp(p.campXp), clears); const reset: string[] = [];
+  if (p.members && typeof p.members === 'object') for (const [id, m] of Object.entries(p.members as Record<string, unknown>)) {
+    if (!m || typeof m !== 'object' || spent(obj(m)) <= points) continue;
+    delete obj(m).talents; delete obj(m).loadout; reset.push(id);
+  }
+  if (reset.length) { p.treeReset = [...new Set([...(Array.isArray(p.treeReset) ? p.treeReset as string[] : []), ...reset])]; changed = true; }
+  if (envelope.run && typeof envelope.run === 'object') {
+    const run = obj(envelope.run);
+    if (run.clears === undefined) {
+      const base = talentPoints(map, levelOfXp(run.campXp), 0), per = Math.max(1, map.progression.treePointsPerClear);
+      const need = Math.max(clears, ...members(run.members).map(m => Math.ceil((spent(m) - base) / per)));
+      if (need > 0) { run.clears = need; changed = true; }
+    }
+  }
+  return changed;
 }
 // v58 → v59 (P04-02): duplicates and seals become shards (10 each) before anything is validated; see SAVE_VERSION.
 function migrateShards(envelope: Record<string, unknown>, maps: readonly MapDefinition[]): void {
@@ -793,7 +833,8 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (version < 60 && version >= 5) { const p = obj(envelope.profile ?? {}); migrateTreePoints(envelope, map, maps.length ? maps : [map], version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps).length : undefined); }
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
