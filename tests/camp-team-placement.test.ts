@@ -6,7 +6,7 @@ import { formation } from '../src/core/world/formation';
 import { recommendedLane } from '../src/core/world/world';
 import { placeCampMember } from '../src/core/world/camp-team';
 
-function profile(){const p=newProfile(map,17);for(const id of ['lio','toma'])if(!p.company.includes(id)){p.company.push(id);p.members[id]={stars:1,dupes:0};}p.party={deployed:['guardian','tracer','weaver','healer'],reserve:['lio'],lanes:{guardian:'front',tracer:'front',weaver:'back',healer:'back'}};return p;}
+function profile(){const p=newProfile(map,17);for(const id of ['lio','toma'])if(!p.company.includes(id)){p.company.push(id);p.members[id]={stars:1,shards:0};}p.party={deployed:['guardian','tracer','weaver','healer'],reserve:['lio'],lanes:{guardian:'front',tracer:'front',weaver:'back',healer:'back'}};return p;}
 it('places a reserve into the chosen lane atomically without moving the existing field order or lanes',()=>{
   const p=profile(),before=structuredClone(p),r=placeCampMember(p,map,lookup,'lio','deployed',undefined,'front');
   expect(r.event.type).toBe('party');expect(p).toEqual(before);expect(r.profile.party.deployed).toEqual([...p.party.deployed,'lio']);expect(r.profile.party.reserve).toEqual([]);

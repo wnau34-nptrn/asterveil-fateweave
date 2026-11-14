@@ -19,9 +19,9 @@ function profile(): Profile {
   p.cleared = ['ruined-border', 'deep-forest', 'veil-frontier'];
   for (const id of ['metta', 'thiran', 'lalin', 'wila']) {
     p.company.push(id);
-    p.members[id] = { stars: 1, dupes: 0}; p.campXp = Math.max(p.campXp, xpAt(10));
+    p.members[id] = { stars: 1, shards: 0}; p.campXp = Math.max(p.campXp, xpAt(10));
   }
-  p.members.weaver = { stars: 1, dupes: 0}; p.campXp = Math.max(p.campXp, xpAt(10));
+  p.members.weaver = { stars: 1, shards: 0}; p.campXp = Math.max(p.campXp, xpAt(10));
   p.members.lalin!.talents = { p1: 1, p2: 1 };
   p.party = { deployed: ['weaver', 'lalin', 'metta', 'thiran'], reserve: ['guardian', 'tracer', 'healer', 'wila'] };
   return p;

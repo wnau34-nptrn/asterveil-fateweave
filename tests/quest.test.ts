@@ -59,7 +59,7 @@ describe('mini-boss', () => {
     const L = map.eventRules.miniBoss.loot;
     expect(done.event.loot.ore).toBeGreaterThanOrEqual(L.ore[0]); expect(done.event.loot.ore).toBeLessThanOrEqual(L.ore[1]);
     expect(done.event.loot.gold).toBeGreaterThanOrEqual(L.gold[0]); expect(done.event.loot.gold).toBeLessThanOrEqual(L.gold[1]);
-    expect(done.event.loot.seal).toBeGreaterThanOrEqual(1); expect(done.event.loot.seal).toBeLessThanOrEqual(2);
+    expect(done.event.loot.shard).toBe(map.eventRules.miniBoss.loot.shard[0]);
     expect(done.event.item!.rarity).toBeGreaterThanOrEqual(3);
     expect(done.state.elitesDefeated).toEqual([golem.id]); expect(questDone(done.state, map)).toEqual(['golem']);
   });

@@ -94,7 +94,7 @@ export function recruit(state: ExpeditionState, map: MapDefinition, at: RecruitP
   for (const id of arriving) {
     state.arrivals = state.arrivals!.filter(x => x !== id); if (!state.arrivals.length) delete state.arrivals;
     state.roster[state.roster.deployed.length < PARTY_SLOTS ? 'deployed' : 'reserve'].push(id);
-    state.members[id] = { stars: 1, dupes: 0 }; state.hp[id] = memberDef(lookup!, map, state, id)!.maxHp;
+    state.members[id] = { stars: 1, shards: 0 }; state.hp[id] = memberDef(lookup!, map, state, id)!.maxHp;
   }
   const joined = [...ids.filter(id => state.guests?.includes(id)), ...arriving];
   if (joined.length) { state.recruited = [...state.recruited ?? [], ...joined]; if (state.guests) state.guests = state.guests.filter(id => !joined.includes(id)); }
@@ -135,7 +135,7 @@ export function draftPick(initial: ExpeditionState, map: MapDefinition, index: n
   if (!id || initial.battle) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial); const draft = state.draft!;
   state.roster[state.roster.deployed.length < PARTY_SLOTS ? 'deployed' : 'reserve'].push(id);
-  state.members[id] = { stars: 1, dupes: 0 };
+  state.members[id] = { stars: 1, shards: 0 };
   if (lookup) state.hp[id] = memberDef(lookup, map, state, id)!.maxHp;
   state.recruited = [...state.recruited ?? [], id];
   if (--draft.left > 0) draft.offers = draftOffers(state, map); else delete state.draft;
@@ -242,12 +242,12 @@ export function fullParty(lookup: EncounterLookup, map: MapDefinition, ids?: rea
 export function newExpedition(map: MapDefinition, lookup: EncounterLookup, seed: number, company?: Company, tutorialDone = false): ExpeditionState {
   const width = map.rows[0]!.length;
   const roster = company ? structuredClone(company.roster) : { deployed: [...map.startingRoster], reserve: [] };
-  const members = company ? structuredClone(company.members) : Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, dupes: 0 }]));
+  const members = company ? structuredClone(company.members) : Object.fromEntries(map.startingRoster.map(id => [id, { stars: 1, shards: 0 }]));
   const state: ExpeditionState = {
     mapId: map.id, mapVersion: map.version, seed: seed >>> 0, rolls: 0, position: startOf(map), steps: 0, pressure: 0,
     revealed: '0'.repeat(width * map.rows.length), roster, members,
     hp: fullParty(lookup, map, [...roster.deployed, ...roster.reserve], { members, campXp: company?.campXp ?? 0 }), camp: null, campXp: company?.campXp ?? 0,
-    resources: { ore: 0, gold: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true,
+    resources: { ore: 0, gold: 0, ember: 0, shard: 0 }, openedChests: [], restReady: true,
     tutorialDone, bossDefeated: false, completed: false, wins: 0, defeats: 0, battle: null, found: [], dry: 0,
     potions: company?.potions ? { ...company.potions } : { salve: 0, tonic: 0, repel: 0, calm: 0 }, repel: 0,
     ...(company?.reserveSlots ? { reserveSlots: company.reserveSlots } : {}),
@@ -506,10 +506,10 @@ function capHp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLook
 function rollLoot(state: ExpeditionState, table: LootTable): Resources {
   const range = ([lo, hi]: readonly [number, number]) => lo + (hi > lo ? rollPercent(state.seed, state.rolls++) % (hi - lo + 1) : 0);
   const extra = ([base, chance]: readonly [number, number]) => base + (chance > 0 && rollPercent(state.seed, state.rolls++) < chance ? 1 : 0);
-  // Gold rolls last so the ore, ember and seal rolls of earlier saves keep their order.
-  const ore = range(table.ore); const ember = extra(table.ember); const seal = extra(table.seal); const gold = range(table.gold);
-  const loot = { ore, gold, ember, seal };
-  state.resources = { ore: state.resources.ore + ore, gold: state.resources.gold + gold, ember: state.resources.ember + ember, seal: state.resources.seal + seal };
+  // Gold rolls last so the ore, ember and shard (formerly seal) rolls of earlier saves keep their order.
+  const ore = range(table.ore); const ember = extra(table.ember); const shard = extra(table.shard); const gold = range(table.gold);
+  const loot = { ore, gold, ember, shard };
+  state.resources = { ore: state.resources.ore + ore, gold: state.resources.gold + gold, ember: state.resources.ember + ember, shard: state.resources.shard + shard };
   clampRun(state);
   return loot;
 }
@@ -556,7 +556,7 @@ export function usePotion(initial: ExpeditionState, map: MapDefinition, lookup: 
   }
   return { state, event: { type: 'potion', potion, heal } };
 }
-const noLoot: LootTable = { ore: [0, 0], gold: [0, 0], ember: [0, 0], seal: [0, 0] };
+const noLoot: LootTable = { ore: [0, 0], gold: [0, 0], ember: [0, 0], shard: [0, 0] };
 function battleLoot(state: ExpeditionState, map: MapDefinition, kind: BattleKind): LootTable {
   if (kind === 'tutorial') return map.loot.tutorial;
   if (kind === 'boss') return map.loot.boss;
@@ -606,8 +606,8 @@ export function chooseEvent(initial: ExpeditionState, map: MapDefinition, lookup
       state.hp[id] = Math.min(state.hp[id]!, memberDef(lookup, map, state, id)!.maxHp);
     }
   }
-  if (choice === 'offer') { state.resources.ore -= r.offerOre; state.resources.seal += r.offerSeal; }
-  if (choice === 'help') { state.potions.salve--; state.resources.ore += r.traveller.ore; state.resources.seal += r.traveller.seal; }
+  if (choice === 'offer') { state.resources.ore -= r.offerOre; state.resources.shard += r.offerShard; }
+  if (choice === 'help') { state.potions.salve--; state.resources.ore += r.traveller.ore; state.resources.shard += r.traveller.shard; }
   if (choice.startsWith('buy-')) { const potion = choice.slice(4) as PotionId; state.resources.ore -= r.merchant[potion]; state.potions[potion]++; }
   if (ev.kind !== 'merchant') state.eventsDone.push(ev.id);
   clampRun(state);
@@ -771,8 +771,8 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
     // A mini-boss pays its own loot table instead of the zone's.
     const loot = rollLoot(state, miniBoss(map, source) ? map.eventRules.miniBoss.loot : battleLoot(state, map, kind));
     if (kind === 'elite' && optionalElite(map, source) && !state.respawns[source ?? '']) {
-      const { gold, seal } = map.eventRules.optionalElite;
-      loot.gold += gold; loot.seal += seal; state.resources.gold += gold; state.resources.seal += seal;
+      const { gold, shard } = map.eventRules.optionalElite;
+      loot.gold += gold; loot.shard += shard; state.resources.gold += gold; state.resources.shard += shard;
     }
     const items = dropItems(state, map, kind, data.level ?? 1, source);
     // Skill tomes on maps that drop them (no rolls, so loot and items are unchanged).

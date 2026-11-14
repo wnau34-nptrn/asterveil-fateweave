@@ -226,7 +226,7 @@ describe('P03 Kael in the world', () => {
   });
   it('v46 → v47 keeps the open board, its featured offer and paid indexes; a refresh brings Kael in', () => {
     // A v46 profile: no stored lineup, the featured slot already bought.
-    const p: Profile = { ...newProfile(map, 12), taken: [3], bank: { gold: 90, ore: 0, seal: 0, dust: 0 } };
+    const p: Profile = { ...newProfile(map, 12), taken: [3], bank: { gold: 90, ore: 0, shard: 0, dust: 0 } };
     delete p.boardFeatured;
     const v46Offers = boardOffers({ ...p, boardFeatured: ['metta', 'lalin'] }, map, lookup);
     const old = JSON.parse(write({ profile: p, run: null })); old.version = 46; delete old.profile.boardFeatured;
@@ -234,7 +234,7 @@ describe('P03 Kael in the world', () => {
     expect(loaded.boardFeatured).toEqual(['metta', 'lalin']);
     expect(boardOffers(loaded, map, lookup)).toEqual(v46Offers);
     expect(loaded.taken).toEqual([3]);
-    expect(JSON.parse(write({ profile: loaded, run: null })).version).toBe(58);
+    expect(JSON.parse(write({ profile: loaded, run: null })).version).toBe(59);
     const refreshed = refreshBoard({ ...loaded, bank: { ...loaded.bank, gold: 90 } }, map).profile;
     expect(refreshed.boardFeatured).toEqual(featuredLineup(map));
     expect(refreshed.boardFeatured).toContain('kael');
@@ -247,12 +247,12 @@ describe('P03 Kael in the world', () => {
     }
   });
   it('hiring Kael from the featured slot adds one member and keeps the original three offers', () => {
-    let p = { ...newProfile(map, 0), bank: { gold: 200, ore: 0, seal: 0, dust: 0 } };
+    let p = { ...newProfile(map, 0), bank: { gold: 200, ore: 0, shard: 0, dust: 0 } };
     for (let seed = 0; seed < 500 && boardOffers(p, map, lookup)[3] !== 'kael'; seed++) p = { ...p, seed };
     expect(boardOffers(p, map, lookup)[3]).toBe('kael');
     const next = hire(p, map, lookup, 3);
     expect(next.event).toEqual({ type: 'hired', heroId: 'kael', duplicate: false });
-    expect(next.profile.members.kael).toEqual({ stars: 1, dupes: 0 });
+    expect(next.profile.members.kael).toEqual({ stars: 1, shards: 0 });
     expect(boardOffers(next.profile, map, lookup).slice(0, 3)).toEqual(boardOffers(p, map, lookup).slice(0, 3));
   });
 });

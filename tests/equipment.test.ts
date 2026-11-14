@@ -208,8 +208,8 @@ describe('save v9', () => {
   it.each([
     ['a duplicated uid', (p: ReturnType<typeof newProfile>) => ({ ...p, items: [item({ uid: 1 }), item({ uid: 1 })], nextItem: 2 })],
     ['a uid at or above nextItem', (p: ReturnType<typeof newProfile>) => ({ ...p, items: [item({ uid: 4 })], nextItem: 4 })],
-    ['another class’s weapon equipped', (p: ReturnType<typeof newProfile>) => ({ ...p, nextItem: 5, members: { ...p.members, guardian: { stars: 1, dupes: 0, gear: { weapon: item({ uid: 4, slot: 'weapon', hero: 'tracer' }) } } } })],
-    ['an item in the wrong slot', (p: ReturnType<typeof newProfile>) => ({ ...p, nextItem: 5, members: { ...p.members, guardian: { stars: 1, dupes: 0, gear: { head: item({ uid: 4 }) } } } })],
+    ['another class’s weapon equipped', (p: ReturnType<typeof newProfile>) => ({ ...p, nextItem: 5, members: { ...p.members, guardian: { stars: 1, shards: 0, gear: { weapon: item({ uid: 4, slot: 'weapon', hero: 'tracer' }) } } } })],
+    ['an item in the wrong slot', (p: ReturnType<typeof newProfile>) => ({ ...p, nextItem: 5, members: { ...p.members, guardian: { stars: 1, shards: 0, gear: { head: item({ uid: 4 }) } } } })],
   ])('rejects %s', (_, make) => {
     expect(() => parseGame(JSON.stringify({ version: 9, profile: make(newProfile(map, 4)), run: null }), map, lookup)).toThrow();
   });

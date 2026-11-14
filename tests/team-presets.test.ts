@@ -15,7 +15,7 @@ import { currentSave } from './fixtures/current-save';
 const rec = recommendedLane(lookup, map);
 const ids = ['guardian', 'tracer', 'weaver', 'healer', 'garran', 'mira', 'brann', 'lio', 'metta', 'lalin'];
 const company = (cleared: string[] = ['ruined-border', 'deep-forest', 'veil-frontier']): Profile => ({
-  ...newProfile(map, 3), tutorialDone: true, cleared, company: [...ids], members: Object.fromEntries(ids.map(id => [id, { stars: 1, dupes: 0 }])),
+  ...newProfile(map, 3), tutorialDone: true, cleared, company: [...ids], members: Object.fromEntries(ids.map(id => [id, { stars: 1, shards: 0 }])),
   party: { deployed: ['guardian', 'tracer', 'weaver', 'healer', 'garran'], reserve: ['mira', 'brann', 'lio'] },
 });
 const write = (game: Game): string => { let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, game); return raw; };
@@ -117,7 +117,7 @@ describe('team presets on the map', () => {
 describe('save v56 team presets', () => {
   it('round-trips presets with a run; an older profile has none; forged presets are rejected', () => {
     const { p, s } = (() => { const x = savePreset(company(), map, lookup, 1, 'สายรับ').profile; return { p: x, s: depart(x, map, lookup, 9).run }; })();
-    const raw = write({ profile: p, run: s }); expect(JSON.parse(raw).version).toBe(58);
+    const raw = write({ profile: p, run: s }); expect(JSON.parse(raw).version).toBe(59);
     expect(parseGame(raw, map, lookup, MAPS)).toEqual({ profile: p, run: s });
     const old = JSON.parse(raw); old.version = 55; delete old.profile.presets; expect(parseGame(JSON.stringify(old), map, lookup, MAPS).profile.presets).toBeUndefined();
     const forged = (f: (j: { profile: { presets: unknown[] } }) => void) => { const j = JSON.parse(raw); f(j); return () => parseGame(JSON.stringify(j), map, lookup, MAPS); };

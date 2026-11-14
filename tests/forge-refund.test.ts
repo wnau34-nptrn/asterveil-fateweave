@@ -7,7 +7,7 @@ import { enhancementInvestment, salvageValue, itemValid } from '../src/core/worl
 import { parseGame, saveGame } from '../src/core/save/expedition-save';
 import type { Item } from '../src/core/world/types';
 const item=(uid:number,patch:Partial<Item>={}):Item=>({uid,slot:'body',rarity:0,level:1,affixes:[],...patch});
-const setup=()=>({...newProfile(map,17),tutorialDone:true,items:[item(1),item(2),item(3)],nextItem:4,bank:{ore:1000,dust:1000,gold:50,seal:3}});
+const setup=()=>({...newProfile(map,17),tutorialDone:true,items:[item(1),item(2),item(3)],nextItem:4,bank:{ore:1000,dust:1000,gold:50,shard:3}});
 it('credits legacy remaining + and returns paid ore/dust exactly once with base salvage',()=>{
   const p=setup();p.items=[item(1,{plus:5})];const credit=enhancementInvestment(map,p.items[0]!);
   expect(credit).toEqual({ore:30,dust:9});expect(salvageValue(map,p.items[0]!)).toEqual({ore:32,dust:10});
@@ -41,7 +41,7 @@ it('preserves the paid ledger through full-plus fusion and excludes zero-plus in
 it('round-trips locks and exact credits through departure, run item ownership and v23 persistence',()=>{
   let p=lockEquipment(enhanceTo(setup(),map,1,3).profile,1).profile;p=equip(p,'guardian',1).profile;
   const game=depart(p,map,lookup,23);let raw='';saveGame({getItem:()=>null,setItem:(_k,s)=>{raw=s;}},game);
-  expect(JSON.parse(raw).version).toBe(58);const back=parseGame(raw,map,lookup);expect(back).toEqual(game);
+  expect(JSON.parse(raw).version).toBe(59);const back=parseGame(raw,map,lookup);expect(back).toEqual(game);
   const changed=JSON.parse(raw);changed.run.members.guardian.gear.body.investment.ore++;expect(()=>parseGame(JSON.stringify(changed),map,lookup)).toThrow();
   const legacy=JSON.parse(raw);legacy.version=21;delete legacy.profile.members.guardian.gear.body.investment;delete legacy.run.members.guardian.gear.body.investment;
   const migrated=parseGame(JSON.stringify(legacy),map,lookup);expect(migrated.run!.members.guardian!.gear).toEqual(migrated.profile.members.guardian!.gear);

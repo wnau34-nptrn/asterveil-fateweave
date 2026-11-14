@@ -65,7 +65,7 @@ test('equipment art: mixed loot and a matching full set at 390px', async ({ brow
     affixes: affixPool(map.equipment, slot, extra.hero ?? 'guardian').slice(0, map.equipment.affixCount[rarity]),
     ...(rarity === 4 && !extra.boss ? { special: 'laststand' as const } : {}), ...extra,
   });
-  profile.members.guardian = { stars: 3, dupes: 0, gear: Object.fromEntries(GEAR_SLOTS.map(slot => [slot, item(slot, 3, { set: 'dawn' })]))}; profile.campXp = Math.max(profile.campXp, xpAt(10));
+  profile.members.guardian = { stars: 3, shards: 0, gear: Object.fromEntries(GEAR_SLOTS.map(slot => [slot, item(slot, 3, { set: 'dawn' })]))}; profile.campXp = Math.max(profile.campXp, xpAt(10));
   const slots = ['head', 'body', 'gloves', 'boots', 'charm'] as const;
   profile.items = [
     ...[0, 2, 3].flatMap(rarity => slots.map(slot => item(slot, rarity))),

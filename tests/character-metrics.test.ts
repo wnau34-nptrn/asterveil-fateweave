@@ -13,7 +13,7 @@ import { xpAt } from './fixtures/camp-level';
 const template = lookup(map.tutorialEncounterId)!;
 const setup = () => depart(newProfile(map,77),map,lookup,1234).run;
 it('trial wear replaces rather than adds gear, updates sets/wounds and never mutates the real run', () => {
-  const s = setup(); s.members.guardian = { stars:3, dupes:0, wound:20, gear:{ body:{uid:1,slot:'body',rarity:0,level:10,affixes:[],set:'dawn'},head:{uid:2,slot:'head',rarity:0,level:1,affixes:[],set:'dawn'} } }; s.campXp = Math.max(s.campXp, xpAt(5));
+  const s = setup(); s.members.guardian = { stars:3, shards:0, wound:20, gear:{ body:{uid:1,slot:'body',rarity:0,level:10,affixes:[],set:'dawn'},head:{uid:2,slot:'head',rarity:0,level:1,affixes:[],set:'dawn'} } }; s.campXp = Math.max(s.campXp, xpAt(5));
   const candidate: Item = {uid:0,slot:'body',rarity:0,level:1,affixes:[],set:'shadow'}; s.found=[candidate]; s.hp.guardian=11;
   const snapshot = structuredClone(s), next=wear(s,map,lookup,'guardian','found',0).state;
   const h=memberDef(lookup, map, s, 'guardian')!, n=memberDef(lookup, map, next, 'guardian')!;
@@ -23,7 +23,7 @@ it('trial wear replaces rather than adds gear, updates sets/wounds and never mut
   expect(html).toContain('HP ปัจจุบัน 11 → 11'); expect(html).toContain('<h3>ผลต่อสกิล</h3>');
 });
 it('shows effective defense/leech caps and deployed team luck while keeping reserve trail regen', () => {
-  const s=setup(); s.roster.reserve=['lio']; s.members.lio={stars:1,dupes:0,gear:{ boots:{uid:1,slot:'boots',rarity:1,level:99,affixes:['regen']},head:{uid:2,slot:'head',rarity:1,level:99,affixes:['luck']} }};
+  const s=setup(); s.roster.reserve=['lio']; s.members.lio={stars:1,shards:0,gear:{ boots:{uid:1,slot:'boots',rarity:1,level:99,affixes:['regen']},head:{uid:2,slot:'head',rarity:1,level:99,affixes:['luck']} }};
   const h={...memberDef(lookup, map, s, 'guardian')!,armour:99,resist:99,leech:99};
   const stats=characterStats(s,map,h,template), value=(id:string)=>stats.find(v=>v.id===id)!.value;
   expect(value('armour')).toBe(template.rules.defenseCap); expect(value('resist')).toBe(template.rules.defenseCap); expect(value('leech')).toBe(template.rules.leechCap); expect(value('party-luck')).toBe(0);
@@ -36,7 +36,7 @@ it('every catalog character exposes finite stats and meaningful active metrics, 
     // The Knight's star skills are tree nodes now (A6); a migrated ★5 company keeps them as grants.
     // Release A big trees grant the same way from their `legacyStars` nodes.
     const tree=map.talents[base.id]!, legacy=tree.filter(n=>n.legacyStars!==undefined).map(n=>n.id);
-    s.members[base.id]={stars:5,dupes:0,...(legacy.length?{grants:legacy}:{})}; s.campXp = Math.max(s.campXp, xpAt(8)); s.hp[base.id]=1;
+    s.members[base.id]={stars:5,shards:0,...(legacy.length?{grants:legacy}:{})}; s.campXp = Math.max(s.campXp, xpAt(8)); s.hp[base.id]=1;
     const h=memberDef(lookup, map, s, base.id)!;
     expect(characterStats(s,map,h,template).every(v=>Number.isFinite(v.value)&&v.help.length>10)).toBe(true);
     for(const a of h.actions) { const v=characterSkillMetric(a,h,template); expect(v.target.length).toBeGreaterThan(0); if(v.value!==undefined) expect(Number.isFinite(v.value)).toBe(true); }
@@ -57,7 +57,7 @@ it('every catalog character exposes finite stats and meaningful active metrics, 
 it('displayed damage/healing/song powers agree with real resolver events before and after a gear swap', () => {
   for(const [id,action] of [['guardian','bash'],['weaver','bolt'],['healer','heal'],['lio','valor'],['lio','finale']] as const) {
     const s=setup(); const base=heroCatalog(lookup,map).find(h=>h.id===id)!;
-    s.members[id]={stars:5,dupes:0}; s.campXp = Math.max(s.campXp, xpAt(5)); if(!s.roster.deployed.includes(id)) s.roster.reserve.push(id);
+    s.members[id]={stars:5,shards:0}; s.campXp = Math.max(s.campXp, xpAt(5)); if(!s.roster.deployed.includes(id)) s.roster.reserve.push(id);
     s.found=[{uid:0,slot:'charm',rarity:1,level:9,affixes:['attack']}];
     for(const state of [s,wear(s,map,lookup,id,'found',0).state]) {
       // The bard's finale comes from his big tree (granted to a ★3+ member, owner 2026-10-23).

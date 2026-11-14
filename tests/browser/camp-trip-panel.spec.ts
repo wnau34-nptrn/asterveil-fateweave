@@ -8,7 +8,7 @@ const key = 'asterveil.fateweave.expedition.v1';
 // UX audit 2026-11-04 #3/#4: the whole five-person team sits at the fire and the trip summary is a readable panel above Depart.
 for (const [w, h] of [[390, 844], [390, 650]] as const) test(`camp shows all five deployed members and a readable trip panel at ${w}x${h}`, async ({ page }) => {
   const p = newProfile(map, 17); p.tutorialDone = true; p.veteran = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; p.campXp = xpAt(6); p.cleared = ['ruined-border', 'deep-forest', 'veil-frontier'];
-  for (const id of ['mira', 'toma', 'sefa', 'brann', 'lio', 'garran']) if (!p.company.includes(id)) { p.company.push(id); p.members[id] = { stars: 1, dupes: 0 }; }
+  for (const id of ['mira', 'toma', 'sefa', 'brann', 'lio', 'garran']) if (!p.company.includes(id)) { p.company.push(id); p.members[id] = { stars: 1, shards: 0 }; }
   p.party.deployed = p.company.slice(0, 5); p.party.reserve = p.company.slice(5, 8);
   const raw = JSON.stringify({ version: 47, profile: p, run: null }); parseGame(raw, map, encounterById);
   await page.addInitScript(({ key, raw }) => { localStorage.setItem(key, raw); }, { key, raw });

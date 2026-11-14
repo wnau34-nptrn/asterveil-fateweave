@@ -107,7 +107,7 @@ describe('gear rolls and map stats', () => {
   });
   it('the forge rerolls an affix with a fresh quality and fused affixes get one too', () => {
     const own: Item = { uid: 1, slot: 'body', rarity: 1, level: 5, affixes: ['hp'], q: { main: 90, affixes: [81] } };
-    const p = { ...newProfile(map, 3), items: [own, { ...own, uid: 2 }, { ...own, uid: 3 }], nextItem: 4, bank: { ore: 999, gold: 0, seal: 9, dust: 999 } };
+    const p = { ...newProfile(map, 3), items: [own, { ...own, uid: 2 }, { ...own, uid: 3 }], nextItem: 4, bank: { ore: 999, gold: 0, shard: 90, dust: 999 } };
     const r = reroll(p, map, 1, 0).profile.items[0]!;
     expect(r.affixes[0]).not.toBe('hp'); expect(r.q!.main).toBe(90); expect(itemValid(map, r, ['guardian'])).toBe(true);
     const f = fuse(p, map, 1).profile.items[0]!;

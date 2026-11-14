@@ -10,7 +10,7 @@ const button=(action:string,extra:Record<string,string>={})=>({dataset:{forge:ac
 const select=(id:string,value:string)=>({id,value,dataset:{}}) as HTMLSelectElement;
 type Service='craft'|'recycle'|'smelt';
 function fixture(tab:Service){
- const p=newProfile(map,17);p.bank={ore:120,dust:48,gold:20,seal:3};p.forgeLevel=6;
+ const p=newProfile(map,17);p.bank={ore:120,dust:48,gold:20,shard:3};p.forgeLevel=6;
  p.items=[{uid:1,slot:'body',rarity:1,level:3,affixes:['hp'],plus:2,investment:{ore:9,dust:2},levelInvestment:{ore:20,dust:2},set:'dawn'}];p.nextItem=2;
  const host={enhance:vi.fn(),level:vi.fn(),fuse:vi.fn(),reroll:vi.fn(),transfer:vi.fn(),craft:vi.fn(),lock:vi.fn(),salvage:vi.fn(),smelt:vi.fn()};
  const ui=new ForgeWorkbench(map,heroCatalog(encounterById,map),encounterById(map.tutorialEncounterId)!,host);ui.open(1);ui.render(p);ui.click(button('tasks'),p);ui.click(button('task',{task:tab}),p);ui.render(p);

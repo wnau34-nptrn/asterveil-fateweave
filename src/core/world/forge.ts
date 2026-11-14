@@ -85,7 +85,7 @@ export function fuse(initial: Profile, map: MapDefinition, uid: number, donors?:
 export function rerollReason(profile: Profile, map: MapDefinition, uid: number, index: number): string {
   const item = findItem(profile, uid)?.item; if (!item || !Number.isInteger(index) || !item.affixes[index]) return 'unknown';
   if (!affixPool(map.equipment, item.slot, item.hero).some(a => !item.affixes.includes(a))) return 'maxed';
-  return profile.bank.seal < map.equipment.forge.rerollSeals ? 'seal' : '';
+  return profile.bank.shard < map.equipment.forge.rerollShards ? 'shard' : '';
 }
 export function reroll(initial: Profile, map: MapDefinition, uid: number, index: number): ProfileResult {
   const reason = rerollReason(initial, map, uid, index); if (reason) return blocked(initial, reason);
@@ -93,7 +93,7 @@ export function reroll(initial: Profile, map: MapDefinition, uid: number, index:
   const pool = affixPool(map.equipment, item.slot, item.hero).filter(a => !item.affixes.includes(a)); const roll = () => rollPercent(profile.seed ^ 0x6f726765, profile.forge++);
   item.affixes[index] = pool[(roll() * 7919 + roll()) % pool.length]!;
   const q = item.q ?? { main: 100, affixes: item.affixes.map(() => 100) }; q.affixes[index] = rollQuality(map.equipment, roll); item.q = q;
-  profile.bank.seal -= map.equipment.forge.rerollSeals;
+  profile.bank.shard -= map.equipment.forge.rerollShards;
   return { profile, event: { type: 'forged', uid, action: 'reroll' } };
 }
 
@@ -170,7 +170,7 @@ export function transferCandidate(map:MapDefinition,main:Item,index:number,donor
 export function transferReason(p:Profile,map:MapDefinition,uid:number,index:number,donorUid:number,sourceIndex:number):string {
   const main=findItem(p,uid)?.item,donor=p.items.find(i=>i.uid===donorUid);
   if(!main||!donor||donor.locked||!transferCandidate(map,main,index,donor,sourceIndex))return 'materials';
-  const c=map.equipment.forge.transfer;if(p.bank.ore<c.ore)return 'ore';if(p.bank.dust<c.dust)return 'dust';if(p.bank.seal<c.seal)return 'seal';
+  const c=map.equipment.forge.transfer;if(p.bank.ore<c.ore)return 'ore';if(p.bank.dust<c.dust)return 'dust';if(p.bank.shard<c.shard)return 'shard';
   const refund=fusionRefund(p,map,[donorUid]);return bankFits(p.bank,{ore:refund.ore-c.ore,dust:refund.dust-c.dust})?'':'full';
 }
 export function transferAffix(initial:Profile,map:MapDefinition,uid:number,index:number,donorUid:number,sourceIndex:number):ProfileResult {
@@ -178,6 +178,6 @@ export function transferAffix(initial:Profile,map:MapDefinition,uid:number,index
   const candidate=transferCandidate(map,findItem(initial,uid)!.item,index,initial.items.find(i=>i.uid===donorUid)!,sourceIndex)!;
   const profile=structuredClone(initial),c=map.equipment.forge.transfer,refund=fusionRefund(initial,map,[donorUid]);
   Object.assign(findItem(profile,uid)!.item,candidate);profile.items=profile.items.filter(i=>i.uid!==donorUid);
-  profile.bank.ore+=refund.ore-c.ore;profile.bank.dust+=refund.dust-c.dust;profile.bank.seal-=c.seal;
+  profile.bank.ore+=refund.ore-c.ore;profile.bank.dust+=refund.dust-c.dust;profile.bank.shard-=c.shard;
   return {profile,event:{type:'forged',uid,action:'transfer'}};
 }

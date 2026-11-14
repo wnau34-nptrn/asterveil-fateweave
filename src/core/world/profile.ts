@@ -19,9 +19,9 @@ import type { ActionId } from '../battle/types';
 export function newProfile(map: MapDefinition, seed: number, first: readonly string[] = map.startingRoster): Profile {
   return {
     bossLoot:{}, hunt:{pity:{}}, seed: seed >>> 0, returns: 0, tutorialDone: false, commander: null,
-    company: [...first], members: Object.fromEntries(first.map(id => [id, { stars: 1, dupes: 0 }])), campXp: 0,
+    company: [...first], members: Object.fromEntries(first.map(id => [id, { stars: 1, shards: 0 }])), campXp: 0,
     party: { deployed: [...first], reserve: [] }, boardFeatured: featuredLineup(map),
-    forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, seal: 0, dust: 0 }, items: [], overflow:[],storageTier:0, nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0, calm: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, cleared: [], last: null,
+    forgeLevel: map.equipment.forge.itemLevel.baseCap, bank: { ore: 0, gold: 0, shard: 0, dust: 0 }, items: [], overflow:[],storageTier:0, nextItem: 1, forge: 0, potions: { salve: 0, tonic: 0, repel: 0, calm: 0 }, quests: {}, shop: {}, refreshes: 0, smelted: 0, taken: [], expeditions: 0, completes: 0, cleared: [], last: null,
   };
 }
 // The featured-slot lineup is stored with each board (save v47), so a game update that adds a character changes the
@@ -94,39 +94,45 @@ export function reserveSlots(profile: Pick<Profile, 'cleared' | 'veteran'>, map:
   return profile.veteran ? slots[slots.length - 1]! : slots[Math.min(profile.cleared.length, slots.length - 1)]!;
 }
 // P01: the company holds every unique catalog ID (no cap, no paid slot) and every member fights at the camp level.
-// Hiring someone already in the company stores a duplicate for star upgrades instead (never a second ID).
+// Hiring someone already in the company stores a duplicate for star upgrades instead (never a second ID): P04-02
+// (OD-15) `shardsPerDuplicate` character shards, or as many universal shards once the member is at full stars (OD-04).
 // A new mercenary joins the company and, if there is room, the reserve for the next trip.
 export function hire(initial: Profile, map: MapDefinition, lookup: EncounterLookup, index: number): ProfileResult {
   const reason = hireReason(initial, map, lookup, index); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial); const id = boardOffers(profile, map, lookup)[index]!;
   const duplicate = !!profile.members[id];
   profile.bank.gold -= map.company.hireCost; profile.taken.push(index);
-  if (duplicate) profile.members[id]!.dupes++;
+  if (duplicate) addDuplicate(profile, map, id);
   else {
-    profile.members[id] = { stars: 1, dupes: 0 }; profile.company.push(id);
+    profile.members[id] = { stars: 1, shards: 0 }; profile.company.push(id);
     if (profile.party.reserve.length < reserveSlots(profile, map)) profile.party.reserve.push(id);
   }
   return { profile, event: { type: 'hired', heroId: id, duplicate } };
 }
-// Cost of the next star: duplicates first; contract seals may stand in for up to `sealSharePercent` (rounded up)
-// of the duplicates the star needs.
-export function upgradeCost(profile: Profile, map: MapDefinition, id: string): { dupes: number; seals: number; ore: number } | undefined {
+// A duplicate of `id` (hire, contract, story recruit already owned — OD-22): character shards, or universal shards when
+// the member is already at full stars (OD-04).
+export function addDuplicate(profile: Profile, map: MapDefinition, id: string): void {
+  const m = profile.members[id]; const n = map.company.shardsPerDuplicate;
+  if (!m) return;
+  if (m.stars >= map.company.maxStars) profile.bank.shard += n; else m.shards += n;
+}
+// Cost of the next star (P04-02, OD-15/16): the member's own shards first; universal shards pay any of the rest.
+export function upgradeCost(profile: Profile, map: MapDefinition, id: string): { shards: number; universal: number; ore: number } | undefined {
   const m = profile.members[id]; const cost = m && map.company.starCosts[m.stars - 1];
   if (!m || !cost || m.stars >= map.company.maxStars) return undefined;
-  const dupes = Math.min(m.dupes, cost.dupes);
-  return { dupes, seals: cost.dupes - dupes, ore: cost.ore };
+  const shards = Math.min(m.shards, cost.shards);
+  return { shards, universal: cost.shards - shards, ore: cost.ore };
 }
-export const sealLimit = (map: MapDefinition, stars: number): number => Math.ceil((map.company.starCosts[stars - 1]?.dupes ?? 0) * map.company.sealSharePercent / 100);
 export function upgradeReason(profile: Profile, map: MapDefinition, id: string): string {
   const cost = upgradeCost(profile, map, id);
   if (!cost) return 'maxed';
-  if (cost.seals > sealLimit(map, profile.members[id]!.stars) || cost.seals > profile.bank.seal) return 'dupes';
+  if (cost.universal > profile.bank.shard) return 'shards';
   return profile.bank.ore < cost.ore ? 'ore' : '';
 }
 export function upgrade(initial: Profile, map: MapDefinition, id: string): ProfileResult {
   const reason = upgradeReason(initial, map, id); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial); const cost = upgradeCost(profile, map, id)!; const m = profile.members[id]!;
-  m.dupes -= cost.dupes; m.stars++; profile.bank.seal -= cost.seals; profile.bank.ore -= cost.ore;
+  m.shards -= cost.shards; m.stars++; profile.bank.shard -= cost.universal; profile.bank.ore -= cost.ore;
   return { profile, event: { type: 'upgraded', heroId: id, stars: m.stars } };
 }
 // Dismissing loses the member's stars and duplicates; half the hire cost comes back.
@@ -305,7 +311,7 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
     if (!temporary.includes(id)) free--;
     if (run.tutorialDone && at !== 'prologue') { (run.arrivals ??= []).push(id); continue; }
     const group = run.roster.deployed.length < PARTY_SLOTS ? 'deployed' : 'reserve';
-    run.roster[group].push(id); run.members[id] = { stars: 1, dupes: 0 };
+    run.roster[group].push(id); run.members[id] = { stars: 1, shards: 0 };
     run.hp[id] = memberDef(lookup, map, run, id)!.maxHp;
     if (run.tutorialDone) (run.recruited ??= []).push(id); else (run.guests ??= []).push(id);
   }
@@ -330,9 +336,15 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   while (run.draft) run = draftPick(run, map, 0).state;
   // Story recruits join for good (whatever the outcome); guests who never joined leave, and what they wore goes to the
   // bag (finds) or back to the company's spare items (own items).
+  // P04-02 (OD-22): a story recruit the company already had (hired or picked before its story point) pays one duplicate
+  // instead, once per character (`storyShards`), when the map is completed.
+  if (outcome === 'complete') for (const { hero: id } of map.recruits ?? []) {
+    if (run.recruited?.includes(id) || profile.storyShards?.includes(id)) { if (run.recruited?.includes(id)) (profile.storyShards ??= []).push(id); continue; }
+    if (profile.members[id]) { addDuplicate(profile, map, id); (profile.storyShards ??= []).push(id); }
+  }
   for (const id of run.recruited ?? []) {
     if (profile.members[id]) continue;
-    profile.members[id] = { stars: 1, dupes: 0 }; profile.company.push(id);
+    profile.members[id] = { stars: 1, shards: 0 }; profile.company.push(id);
     const group = profile.party.deployed.length < PARTY_SLOTS ? 'deployed' : profile.party.reserve.length < reserveSlots(profile, map) ? 'reserve' : undefined;
     if (group) profile.party[group].push(id);
   }
@@ -342,9 +354,9 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   }
   if(run.hunt?.target){profile.hunt??={pity:{}};profile.hunt.pity[run.hunt.target]=run.hunt.misses;}
   if(run.bossLoot){const {target,misses,rewarded}=run.bossLoot;profile.bossLoot??={};profile.bossLoot[map.bossEncounterId]={target,misses,rewarded};}
-  const ore = Math.floor(run.resources.ore * pct / 100); const seal = Math.floor(run.resources.seal * pct / 100);
+  const ore = Math.floor(run.resources.ore * pct / 100); const shard = Math.floor(run.resources.shard * pct / 100);
   const dust = Math.floor(run.dust * pct / 100); const gold = Math.floor(run.resources.gold * pct / 100);
-  profile.bank.ore += ore; profile.bank.gold += gold; profile.bank.seal += seal; profile.bank.dust += dust;
+  profile.bank.ore += ore; profile.bank.gold += gold; profile.bank.shard += shard; profile.bank.dust += dust;
   // Found equipment comes home, in the bag, pending tray or worn; a wiped team keeps only its `wipeKeep` best finds (rarity,
   // then level, then the earliest found). A full bag preserves the rest for an explicit camp choice. Map bag (2026-10-17): members keep
   // what they wear; a lost find leaves its slot to the item the member left the lobby with, when that is spare.
@@ -387,14 +399,16 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   const tomes = emptyTomes(); addTomes(tomes, run.tomes, pct); let core = Math.floor((run.riftCore ?? 0) * pct / 100);
   if (outcome === 'complete' && !profile.cleared.includes(run.mapId)) { const first = firstClearTomes(map, run.roster.deployed); if (first) { addTomes(tomes, first.tomes); core += first.core; } }
   if (tomeCount(tomes) || core) { addTomes(profile.tomes ??= emptyTomes(), tomes); clampTomes(profile.tomes); if (core) profile.riftCore = Math.min(RIFT_CORE_CAP, (profile.riftCore ?? 0) + core); }
+  // P04-02 (OD-17): universal shards for each map's first normal clear (hard pays its own below).
+  if (outcome === 'complete' && !run.hard && !profile.cleared.includes(run.mapId)) profile.bank.shard += map.progression.firstClearShards;
   if (outcome === 'complete' && !profile.cleared.includes(run.mapId)) profile.cleared.push(run.mapId);
   if (outcome === 'complete' && run.hard && !profile.clearedHard?.includes(run.mapId)) {
-    (profile.clearedHard ??= []).push(run.mapId); const r = map.progression.hardFirstClear; profile.bank.gold += r.gold; profile.bank.seal += r.seal;
+    (profile.clearedHard ??= []).push(run.mapId); const r = map.progression.hardFirstClear; profile.bank.gold += r.gold; profile.bank.shard += r.shard;
   }
   // A return home cannot be refused: what passes a storage ceiling is lost (caps.ts), so the profile always saves.
   clampBank(profile.bank); clampPotions(profile.potions);
   profile.returns++; delete profile.boardPool; profile.boardFeatured = featuredLineup(map); profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
-  profile.last = { outcome, ore, gold, seal, steps: run.steps, wins: run.wins, items, salvaged, ...(tomeCount(tomes) ? { tomes: Math.min(TOME_CAP, tomeCount(tomes)) } : {}) };
+  profile.last = { outcome, ore, gold, shard, steps: run.steps, wins: run.wins, items, salvaged, ...(tomeCount(tomes) ? { tomes: Math.min(TOME_CAP, tomeCount(tomes)) } : {}) };
   return profile;
 }
 // Every item found this run, in the bag or worn on the map (uid 0), in that order.
@@ -446,7 +460,7 @@ export function claimReason(profile: Profile, map: MapDefinition, questId: strin
 export function claimQuest(initial: Profile, map: MapDefinition, questId: string): ProfileResult {
   const reason = claimReason(initial, map, questId); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial); const q = map.sideQuests.find(s => s.id === questId)!; const r = q.reward;
-  profile.bank.ore += r.ore ?? 0; profile.bank.gold += r.gold ?? 0; profile.bank.seal += r.seal ?? 0; profile.bank.dust += r.dust ?? 0;
+  profile.bank.ore += r.ore ?? 0; profile.bank.gold += r.gold ?? 0; profile.bank.shard += r.shard ?? 0; profile.bank.dust += r.dust ?? 0;
   for (const id of POTION_IDS) profile.potions[id] += r.potions?.[id] ?? 0;
   profile.quests[q.id] = { progress: q.target, claimed: true };
   return { profile, event: { type: 'claimed', questId: q.id } };
@@ -475,7 +489,7 @@ export function claimGuide(initial: Profile, maps: readonly MapDefinition[], id:
   if (!skip && !guideDone(initial, g.kind)) return blocked(initial, 'notDone');
   if (!skip && (!bankFits(initial.bank, g.reward) || !potionsFit(initial.potions, g.reward.potions))) return blocked(initial, 'full');
   const profile = structuredClone(initial); (profile.guides ??= {})[id] = skip ? 'skipped' : 'claimed';
-  if (!skip) { const r = g.reward; profile.bank.ore += r.ore ?? 0; profile.bank.gold += r.gold ?? 0; profile.bank.seal += r.seal ?? 0; profile.bank.dust += r.dust ?? 0;
+  if (!skip) { const r = g.reward; profile.bank.ore += r.ore ?? 0; profile.bank.gold += r.gold ?? 0; profile.bank.shard += r.shard ?? 0; profile.bank.dust += r.dust ?? 0;
     for (const p of POTION_IDS) profile.potions[p] += r.potions?.[p] ?? 0; }
   return { profile, event: { type: 'guide', id, skipped: skip } };
 }
@@ -503,7 +517,7 @@ export function buyReason(profile: Profile, map: MapDefinition, item: ShopItemId
   }
   if (item === 'gearbox' && profile.items.length >= storageCap(profile,map)) return 'bag';
   if (profile.bank.gold < def.price) return 'gold';
-  if (item === 'seal' && !bankFits(profile.bank, { gold: -def.price, seal: 1 })) return 'full';
+  if (item === 'shard' && !bankFits(profile.bank, { gold: -def.price, shard: map.company.shardsPerDuplicate })) return 'full';
   return item === 'repel' && !potionsFit(profile.potions, { repel: 1 }) ? 'full' : '';
 }
 // The gear box rolls from the profile's lobby roll counter (shared with the forge), so a reload cannot re-roll it.
@@ -511,9 +525,9 @@ export function buy(initial: Profile, map: MapDefinition, item: ShopItemId, hero
   const reason = buyReason(initial, map, item, heroId); if (reason) return blocked(initial, reason);
   const profile = structuredClone(initial);
   profile.bank.gold -= map.shop.items[item].price; profile.shop[item] = (profile.shop[item] ?? 0) + 1;
-  if (item === 'seal') profile.bank.seal++;
+  if (item === 'shard') profile.bank.shard += map.company.shardsPerDuplicate;
   if (item === 'repel') profile.potions.repel++;
-  if (item === 'contract') { profile.members[heroId!]!.dupes++; return { profile, event: { type: 'bought', item, heroId: heroId! } }; }
+  if (item === 'contract') { addDuplicate(profile, map, heroId!); return { profile, event: { type: 'bought', item, heroId: heroId! } }; }
   if (item === 'gearbox') {
     const level = levelOf(map, profile);
     const piece = rollItem(map.equipment, () => rollPercent(profile.seed ^ 0x4f1bbcdc, profile.forge++), level, map.shop.gearboxWeights, profile.company, SET_IDS);

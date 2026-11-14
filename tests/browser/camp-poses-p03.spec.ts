@@ -9,7 +9,7 @@ const key = 'asterveil.fateweave.expedition.v1';
 test('Corin, Cerise, Kael, Wynne and Astrid use painted camp poses', async ({ page }) => {
   const p = newProfile(map, 17); p.tutorialDone = true; p.veteran = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; p.campXp = xpAt(6); p.cleared = ['ruined-border', 'deep-forest', 'veil-frontier'];
   const ids = ['metta', 'lalin', 'kael', 'wynne', 'astrid'];
-  for (const id of ids) if (!p.company.includes(id)) { p.company.push(id); p.members[id] = { stars: 1, dupes: 0 }; }
+  for (const id of ids) if (!p.company.includes(id)) { p.company.push(id); p.members[id] = { stars: 1, shards: 0 }; }
   p.party.deployed = ids; p.party.reserve = [];
   const raw = JSON.stringify({ version: 47, profile: p, run: null }); parseGame(raw, map, encounterById);
   await page.addInitScript(({ key, raw }) => { localStorage.setItem(key, raw); }, { key, raw });

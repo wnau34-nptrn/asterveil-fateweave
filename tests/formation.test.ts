@@ -90,7 +90,7 @@ describe('formation in the world and save v36', () => {
     expect(battleData(run, map, lookup)!.heroes.find(h => h.id === 'weaver')!.lane).toBe('front');
     expect(setLane(run, map, lookup, 'weaver', 'back').event.type).toBe('blocked');
     let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, { profile: p, run });
-    expect(JSON.parse(raw).version).toBe(58); expect(parseGame(raw, map, lookup)).toEqual({ profile: p, run });
+    expect(JSON.parse(raw).version).toBe(59); expect(parseGame(raw, map, lookup)).toEqual({ profile: p, run });
     const bad = JSON.parse(raw); bad.run.roster.lanes.weaver = 'middle'; expect(() => parseGame(JSON.stringify(bad), map, lookup)).toThrow();
     const stray = JSON.parse(raw); stray.run.battle.lanes = { mira: 'front' }; expect(() => parseGame(JSON.stringify(stray), map, lookup)).toThrow();
   });
@@ -106,7 +106,7 @@ describe('formation in the world and save v36', () => {
   it('a v35 battle keeps every class lane, uncapped', () => {
     const { profile, run } = depart(newProfile(map, 5), map, lookup, 9);
     run.roster = { deployed: ['guardian', 'tracer', 'sefa', 'brann'], reserve: ['weaver', 'healer'] };
-    for (const id of ['sefa', 'brann']) { run.members[id] = { stars: 1, dupes: 0 }; run.hp[id] = heroDef(lookup, map, id)!.maxHp; profile.company.push(id); profile.members[id] = { stars: 1, dupes: 0 }; }
+    for (const id of ['sefa', 'brann']) { run.members[id] = { stars: 1, shards: 0 }; run.hp[id] = heroDef(lookup, map, id)!.maxHp; profile.company.push(id); profile.members[id] = { stars: 1, shards: 0 }; }
     run.battle = { kind: 'random', encounterId: map.tutorialEncounterId, entry: Object.fromEntries(run.roster.deployed.map(id => [id, run.hp[id]!])), commands: [] };
     const raw = JSON.stringify({ version: 35, profile, run });
     const back = parseGame(raw, map, lookup).run!;

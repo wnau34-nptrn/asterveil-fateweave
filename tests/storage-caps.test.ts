@@ -40,28 +40,28 @@ describe('storage ceilings shared by commands and saves', () => {
     expect(smelt(p, map, 1).event).toEqual({ type: 'blocked', reason: 'ore' });
   });
   it('buying a seal or repel and brewing stop at their ceilings', () => {
-    const p = newProfile(map, 3); p.bank.gold = 100_000; p.bank.seal = BANK_CAP.seal; p.potions.repel = POTION_CAP; p.bank.ore = 10_000; p.bank.dust = 10_000; p.potions.salve = POTION_CAP;
-    expect(buy(p, map, 'seal').event).toEqual({ type: 'blocked', reason: 'full' });
+    const p = newProfile(map, 3); p.bank.gold = 100_000; p.bank.shard = BANK_CAP.shard; p.potions.repel = POTION_CAP; p.bank.ore = 10_000; p.bank.dust = 10_000; p.potions.salve = POTION_CAP;
+    expect(buy(p, map, 'shard').event).toEqual({ type: 'blocked', reason: 'full' });
     expect(buy(p, map, 'repel').event).toEqual({ type: 'blocked', reason: 'full' });
     expect(brew(p, map, 'salve').event).toEqual({ type: 'blocked', reason: 'full' });
-    p.bank.seal--; p.potions.repel--; p.potions.salve--;
-    for (const r of [buy(p, map, 'seal'), buy(p, map, 'repel'), brew(p, map, 'salve')]) { expect(r.event.type).not.toBe('blocked'); expect(roundTrip(r.profile)).toEqual(r.profile); }
+    p.bank.shard -= map.company.shardsPerDuplicate; p.potions.repel--; p.potions.salve--;
+    for (const r of [buy(p, map, 'shard'), buy(p, map, 'repel'), brew(p, map, 'salve')]) { expect(r.event.type).not.toBe('blocked'); expect(roundTrip(r.profile)).toEqual(r.profile); }
   });
   it('a side-quest reward that would pass a ceiling waits until resources are used', () => {
-    const q = map.sideQuests.find(s => s.reward.gold || s.reward.ore || s.reward.seal || s.reward.dust)!; const key = (['gold', 'ore', 'seal', 'dust'] as const).find(k => q.reward[k])!;
+    const q = map.sideQuests.find(s => s.reward.gold || s.reward.ore || s.reward.shard || s.reward.dust)!; const key = (['gold', 'ore', 'shard', 'dust'] as const).find(k => q.reward[k])!;
     const p = newProfile(map, 3); p.quests[q.id] = { progress: q.target, claimed: false }; p.bank[key] = BANK_CAP[key];
     expect(claimQuest(p, map, q.id).event).toEqual({ type: 'blocked', reason: 'full' }); expect(p.quests[q.id]!.claimed).toBe(false);
     p.bank[key] = BANK_CAP[key] - q.reward[key]!; const r = claimQuest(p, map, q.id); expect(r.event.type).toBe('claimed'); expect(roundTrip(r.profile)).toEqual(r.profile);
   });
   it('a guide reward past a ceiling is refused, but skipping it still works', () => {
-    const p = newProfile(map, 3); const g = activeGuides(p, maps).find(x => x.reward.gold || x.reward.ore || x.reward.dust || x.reward.seal);
-    if (!g) return; const key = (['gold', 'ore', 'seal', 'dust'] as const).find(k => g.reward[k])!; p.bank[key] = BANK_CAP[key];
+    const p = newProfile(map, 3); const g = activeGuides(p, maps).find(x => x.reward.gold || x.reward.ore || x.reward.dust || x.reward.shard);
+    if (!g) return; const key = (['gold', 'ore', 'shard', 'dust'] as const).find(k => g.reward[k])!; p.bank[key] = BANK_CAP[key];
     expect(claimGuide(p, maps, g.id, true).event).toEqual({ type: 'guide', id: g.id, skipped: true });
   });
   it('a return home fills each store to its ceiling and always saves', () => {
-    const p = newProfile(map, 5); p.bank = { gold: BANK_CAP.gold, ore: BANK_CAP.ore - 1, seal: BANK_CAP.seal, dust: BANK_CAP.dust }; p.potions.salve = POTION_CAP;
+    const p = newProfile(map, 5); p.bank = { gold: BANK_CAP.gold, ore: BANK_CAP.ore - 1, shard: BANK_CAP.shard, dust: BANK_CAP.dust }; p.potions.salve = POTION_CAP;
     p.tomes = emptyTomes(); p.tomes.blade.small = TOME_CAP; p.riftCore = RIFT_CORE_CAP;
-    const run = depart(p, map, lookup, 9).run; run.resources.ore = 500; run.resources.gold = 500; run.resources.seal = 5; run.dust = 50; run.potions.salve = 1;
+    const run = depart(p, map, lookup, 9).run; run.resources.ore = 500; run.resources.gold = 500; run.resources.shard = 5; run.dust = 50; run.potions.salve = 1;
     run.tomes = emptyTomes(); run.tomes.blade.small = 3; run.riftCore = 2;
     const home = settle(p, run, 'withdrawn', map);
     expect(home.bank).toEqual(BANK_CAP); expect(home.potions.salve).toBe(POTION_CAP); expect(home.tomes!.blade.small).toBe(TOME_CAP); expect(home.riftCore).toBe(RIFT_CORE_CAP);

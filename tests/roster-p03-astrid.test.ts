@@ -239,7 +239,7 @@ describe('P03 Astrid in the world', () => {
     expect(map.company.featured).toContain('astrid');
     expect(map.talents.astrid).toHaveLength(20);
     expect(talentsValid(map, 'astrid', 5, { p1: 1, p2: 1 })).toBe(true);
-    const p = newProfile(map, 5); p.company.push('astrid'); p.members.astrid = { stars: 1, dupes: 0 };
+    const p = newProfile(map, 5); p.company.push('astrid'); p.members.astrid = { stars: 1, shards: 0 };
     p.party = { deployed: ['astrid', 'guardian'], reserve: [] };
     const game = depart(p, map, lookup, 41);
     game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(game.run.roster.deployed.map(id => [id, game.run.hp[id]!])), commands: [{ beat: 1, heroId: 'astrid', action: 'attack', targetId: 'f1', recipientId: 'f2' }] };

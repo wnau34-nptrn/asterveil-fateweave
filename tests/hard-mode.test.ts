@@ -30,7 +30,7 @@ describe('hard mode', () => {
     const p = open(); const run = { ...depart(p, map, lookup, 3, { maps: MAPS }).run, completed: true };
     const once = settle(p, run, 'complete', map); const r = map.progression.hardFirstClear;
     expect(once.clearedHard).toEqual([map.id]); expect(once.bank.gold - p.bank.gold).toBeGreaterThanOrEqual(r.gold);
-    const twice = settle(once, run, 'complete', map); expect(twice.bank.seal - once.bank.seal).toBe(0);
+    const twice = settle(once, run, 'complete', map); expect(twice.bank.shard - once.bank.shard).toBe(0);
   });
   it('saves v33 hard runs and hard clears; a hard clear must also be a normal clear', () => {
     const { profile, run } = depart({ ...open(), clearedHard: [map.id] }, map, lookup, 3, { maps: MAPS }); let raw = '';

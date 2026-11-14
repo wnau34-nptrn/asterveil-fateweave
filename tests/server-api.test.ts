@@ -235,7 +235,7 @@ describe.runIf(process.env.SERVER_MEASURE === '1')('P09-02b measurements (Node, 
     const cur = store.load()!;
     const { buy, newProfile } = await import('../src/core/world/profile');
     let p: Profile = { ...newProfile(GAME_CONTEXT.home, 4), tutorialDone: true, commander, cleared: GAME_CONTEXT.maps.map(m => m.id), campXp: 400000,
-      bank: { ore: 9000, gold: 9000, seal: 60, dust: 9000 } };
+      bank: { ore: 9000, gold: 9000, shard: 60, dust: 9000 } };
     for (let i = 0; i < 6; i++) { const r = buy(p, GAME_CONTEXT.home, 'gearbox'); if (r.event.type !== 'blocked') p = r.profile; }
     seq++;
     store.commit({ game: { profile: p, run: null }, book: { ...cur.book, lastSeq: seq } }, { seq, requestId: requestId(), command: { kind: 'measure-inject' }, seeds: [], status: 'applied', contentVersion: VERSION, at: 0 });

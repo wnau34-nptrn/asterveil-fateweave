@@ -19,7 +19,7 @@ for (const [width, height, touch] of [[320,568,true], [390,844,true], [1366,768,
     delete run.bossLoot;
     const [goal] = findTiles(map, 'goal'); run.position = { x: goal!.x, y: goal!.y + 1 };
     run.bossDefeated = true; run.elitesDefeated = ['scar-golem']; run.eventsDone = ['scar-rift'];
-    run.resources = { ore: 20, gold: 20, ember: 2, seal: 4 };
+    run.resources = { ore: 20, gold: 20, ember: 2, shard: 4 };
     run.found = Array.from({ length: 12 }, () => ({ uid: 0, slot: 'body' as const, rarity: 0 as const, level: 3, affixes: [] }));
     run.campXp = xpAt(6);
     reveal(run, map);

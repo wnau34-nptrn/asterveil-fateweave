@@ -45,13 +45,13 @@ export const chapterOne: MapDefinition = {
   zones: [
     { id: 'meadow', name: 'ทุ่งชายแดน', safe: false, base: 4, step: 3, cap: 35, levels: [6, 7], sets: ['dawn', 'wind'],
       pool: [{ encounterId: 'slime-pair', weight: 3 }, { encounterId: 'bat-swarm', weight: 2 }, { encounterId: 'slime-nest', weight: 1 }, { encounterId: 'scout-patrol', weight: 2 }, { encounterId: 'tusker-bats', weight: 1 }],
-      loot: { ore: [4, 6], gold: [2, 4], ember: [0, 8], seal: [0, 0] } },
+      loot: { ore: [4, 6], gold: [2, 4], ember: [0, 8], shard: [0, 0] } },
     { id: 'thicket', name: 'พงหนามชายแดน', safe: false, base: 6, step: 4, cap: 45, levels: [7, 9], sets: ['shadow', 'thorn'],
       pool: [{ encounterId: 'beetle-spore', weight: 3 }, { encounterId: 'beetle-wall', weight: 2 }, { encounterId: 'stalker-spore', weight: 2 }, { encounterId: 'forest-swarm', weight: 1 }, { encounterId: 'thorn-host', weight: 1 }, { encounterId: 'shadow-stalker', weight: 1 }, { encounterId: 'rift-whelp', weight: 1 }],
-      loot: { ore: [5, 8], gold: [2, 5], ember: [0, 12], seal: [0, 0] } },
+      loot: { ore: [5, 8], gold: [2, 5], ember: [0, 12], shard: [0, 0] } },
     { id: 'scar', name: 'แผลรอยแยก', safe: false, base: 8, step: 5, cap: 50, levels: [9, 10], sets: ['starveil', 'mender'],
       pool: [{ encounterId: 'channeler-wisps', weight: 2 }, { encounterId: 'crawler-pack', weight: 2 }, { encounterId: 'rift-host', weight: 1 }, { encounterId: 'rift-legion', weight: 1 }, { encounterId: 'veil-siege', weight: 1 }, { encounterId: 'rear-ambush', weight: 1 }, { encounterId: 'crystal-stampede', weight: 1 }],
-      loot: { ore: [7, 11], gold: [4, 6], ember: [0, 15], seal: [0, 0] } },
+      loot: { ore: [7, 11], gold: [4, 6], ember: [0, 15], shard: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ประตูรอยแยก', safe: true, base: 0, step: 0, cap: 0, pool: [] },
   ],
@@ -81,9 +81,9 @@ export const chapterOne: MapDefinition = {
     secrets: [{ id: 'meadow-secret', x: 3, y: 24 }, { id: 'thicket-secret', x: 3, y: 15 }, { id: 'scar-secret', x: 3, y: 8 }],
   },
   loot: {
-    tutorial: { ore: [10, 10], gold: [5, 5], ember: [1, 0], seal: [0, 0] },
-    boss: { ore: [36, 36], gold: [18, 18], ember: [1, 0], seal: [2, 0] },
-    chest: { common: { ore: [10, 14], gold: [5, 7], ember: [0, 30], seal: [0, 0] }, rare: { ore: [18, 24], gold: [9, 12], ember: [1, 0], seal: [1, 0] } },
+    tutorial: { ore: [10, 10], gold: [5, 5], ember: [1, 0], shard: [0, 0] },
+    boss: { ore: [36, 36], gold: [18, 18], ember: [1, 0], shard: [6, 0] },
+    chest: { common: { ore: [10, 14], gold: [5, 7], ember: [0, 30], shard: [0, 0] }, rare: { ore: [18, 24], gold: [9, 12], ember: [1, 0], shard: [3, 0] } },
   },
   // Map potions (2D-5, draft numbers).
   // Phase 3A (draft numbers): elites hold the one-tile gates; events wait in the side areas, two per zone.

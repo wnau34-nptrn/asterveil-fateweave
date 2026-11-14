@@ -10,7 +10,7 @@ const key='asterveil.fateweave.expedition.v1';
 test('390px mage spells and shields display Magic Power and remain readonly on inspection/reload',async({page},info)=>{
  await page.setViewportSize({width:390,height:844});
  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;
- p.members.weaver={stars:1,dupes:0,talents:{a1:1,c1:1},gear:{weapon:{uid:1,slot:'weapon',hero:'weaver',level:3,rarity:1,affixes:['support']}}}; p.campXp = Math.max(p.campXp, xpAt(4));p.nextItem=2;
+ p.members.weaver={stars:1,shards:0,talents:{a1:1,c1:1},gear:{weapon:{uid:1,slot:'weapon',hero:'weaver',level:3,rarity:1,affixes:['support']}}}; p.campXp = Math.max(p.campXp, xpAt(4));p.nextItem=2;
  const game=depart(p,map,lookup,77);let raw='';saveGame({getItem:()=>null,setItem:(_k,v)=>raw=v},game);
  await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('magic-seed')){localStorage.setItem(key,raw);sessionStorage.setItem('magic-seed','1');}},{key,raw});
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));

@@ -141,7 +141,11 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // progress that used any of them restarts from its entry HP.
 // v58 (owner 2026-11-06, skill rework step 6): Sefa's Shadow Step hits (8) before the dodge. Profiles are unchanged; a
 // battle in progress that used it restarts from its entry HP.
-export const SAVE_VERSION = 58;
+// v59 (P04-02, owner OD-15–OD-24): stars cost character shards (a duplicate = 10) and universal shards replace
+// contract seals. Loading an older save converts with no loss: every stored duplicate becomes 10 shards of that member,
+// every seal (bank, carried on a run, last result) 10 universal shards, and a bought seal counts as the shard pack.
+// Story recruits already in the company are marked as met, so the new story-duplicate payment (OD-22) is not paid twice.
+export const SAVE_VERSION = 59;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
 const REWORKED_V57: readonly ActionId[] = ['backstab', 'knives', 'disarm'];
 const REWORKED_V54: readonly ActionId[] = ['storedfist', 'circlefist', 'solo', 'finale'];
@@ -242,9 +246,9 @@ function membersOf(v: unknown, map: MapDefinition, ids: readonly string[], looku
   if (Object.keys(raw).length !== ids.length) throw new Error('Invalid members');
   return Object.fromEntries(ids.map(id => {
     const m = obj(raw[id]); const keys = Object.keys(m);
-    if (keys.some(k => !['stars', 'dupes', 'talents', 'gear', 'wound', 'grants', 'loadout', 'skillLevels'].includes(k))) throw new Error('Invalid members');
-    if (!isInt(m.stars, 1, map.company.maxStars) || !isInt(m.dupes, 0, 99)) throw new Error('Invalid members');
-    const out: MemberProgress = { stars: m.stars, dupes: m.dupes };
+    if (keys.some(k => !['stars', 'shards', 'talents', 'gear', 'wound', 'grants', 'loadout', 'skillLevels'].includes(k))) throw new Error('Invalid members');
+    if (!isInt(m.stars, 1, map.company.maxStars) || !isInt(m.shards, 0, 9999)) throw new Error('Invalid members');
+    const out: MemberProgress = { stars: m.stars, shards: m.shards };
     if ('wound' in m) { if (!isInt(m.wound, 1, map.eventRules.maxWound)) throw new Error('Invalid members'); out.wound = m.wound; }
     if ('grants' in m) { if (!grantsValid(map, id, m.grants)) throw new Error('Invalid talents'); out.grants = [...m.grants as string[]]; }
     if ('talents' in m) {
@@ -323,11 +327,11 @@ class StaleRun extends Error { constructor(readonly run: ExpeditionState) { supe
 function staleRun(s: Record<string, unknown>, map: MapDefinition, lookup: EncounterLookup): ExpeditionState {
   const roster = rosterOf(s.roster, lookup, map); const ids = [...roster.deployed, ...roster.reserve];
   const campXp = campXpOf(s.campXp, map); const members = membersOf(s.members, map, ids, lookup, campLevel(map, campXp), true); const r = obj(s.resources);
-  if (!isInt(r.ore, 0, 999999) || !isInt(r.seal, 0, 9999) || !isInt(s.steps) || !isInt(s.wins)) throw new Error('Invalid run');
+  if (!isInt(r.ore, 0, 999999) || !isInt(r.shard, 0, 99999) || !isInt(s.steps) || !isInt(s.wins)) throw new Error('Invalid run');
   const run = newExpedition(map, lookup, 0, { roster, members, campXp });
   const travel = (v: unknown) => Array.isArray(v) ? v.filter((id): id is string => typeof id === 'string' && ids.includes(id)) : undefined;
   const guests = travel(s.guests), recruited = travel(s.recruited);
-  return { ...run, ...(guests?.length ? { guests } : {}), ...(recruited?.length ? { recruited } : {}), resources: { ore: r.ore, gold: isInt(r.gold, 0, 999999) ? r.gold : 0, ember: 0, seal: r.seal }, steps: s.steps, wins: s.wins, found: foundOf(s.found, map, lookup), spare: spareOf(s.spare, map, lookup),
+  return { ...run, ...(guests?.length ? { guests } : {}), ...(recruited?.length ? { recruited } : {}), resources: { ore: r.ore, gold: isInt(r.gold, 0, 999999) ? r.gold : 0, ember: 0, shard: r.shard }, steps: s.steps, wins: s.wins, found: foundOf(s.found, map, lookup), spare: spareOf(s.spare, map, lookup),
     potions: potionsOf(s.potions, map.potions.carry), dust: isInt(s.dust, 0, 999999) ? s.dust : 0, tutorialDone: s.tutorialDone === true };
 }
 // 3C puzzle state, validated against the map's puzzles.
@@ -373,11 +377,11 @@ function foundOf(v: unknown, map: MapDefinition, lookup: EncounterLookup): Item[
 // the current rules; any mismatch rejects the save.
 function parseRun(v: unknown, version: number, map: MapDefinition, lookup: EncounterLookup): ExpeditionState {
   const s = obj(v);
-  if (version === 1) Object.assign(s, { resources: { ore: 0, ember: 0, seal: 0 }, openedChests: [], restReady: true });
+  if (version === 1) Object.assign(s, { resources: { ore: 0, ember: 0, shard: 0 }, openedChests: [], restReady: true });
   if (version < 3) s.roster = { deployed: [...map.startingRoster], reserve: [] };
   if (version < 4) {
     const r = obj(s.roster); const ids = [...(r.deployed as unknown[] ?? []), ...(r.reserve as unknown[] ?? [])];
-    s.members = Object.fromEntries(ids.map(id => [String(id), { stars: 1, dupes: 0 }]));
+    s.members = Object.fromEntries(ids.map(id => [String(id), { stars: 1, shards: 0 }]));
   }
   if (version === 4) delete s.board;
   if (version < 9) Object.assign(s, { found: [], dry: 0 });
@@ -410,7 +414,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   const members = membersOf(s.members, map, ids, lookup, campLevel(map, campXp), true); const party = { members, campXp };
   const hp = hpRecord(s.hp, lookup, map, ids, party);
   const r = obj(s.resources);
-  if (Object.keys(r).length !== 4 || !isInt(r.ore, 0, RUN_CAP.ore) || !isInt(r.gold, 0, RUN_CAP.gold) || !isInt(r.ember, 0, RUN_CAP.ember) || !isInt(r.seal, 0, RUN_CAP.seal)) throw new Error('Invalid resources');
+  if (Object.keys(r).length !== 4 || !isInt(r.ore, 0, RUN_CAP.ore) || !isInt(r.gold, 0, RUN_CAP.gold) || !isInt(r.ember, 0, RUN_CAP.ember) || !isInt(r.shard, 0, RUN_CAP.shard)) throw new Error('Invalid resources');
   const chestIds = map.chests.map(c => c.id);
   if (!Array.isArray(s.openedChests) || s.openedChests.some(id => !chestIds.includes(id)) || new Set(s.openedChests).size !== s.openedChests.length) throw new Error('Invalid chests');
   let battle: ActiveBattle | null = null;
@@ -486,7 +490,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map, true),
     steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, hp, campXp,
     camp: s.camp === null ? null : point(s.camp, map),
-    resources: { ore: r.ore as number, gold: r.gold as number, ember: r.ember as number, seal: r.seal as number }, openedChests: [...s.openedChests as string[]], restReady: s.restReady as boolean,
+    resources: { ore: r.ore as number, gold: r.gold as number, ember: r.ember as number, shard: r.shard as number }, openedChests: [...s.openedChests as string[]], restReady: s.restReady as boolean,
     ...(s.restWins !== undefined ? { restWins: !s.restReady && isInt(s.restWins, 1, map.camp.relightWins - 1) ? s.restWins : badRun() } : {}),
     tutorialDone: s.tutorialDone as boolean, bossDefeated: s.bossDefeated as boolean,
     completed: s.completed as boolean, wins: s.wins as number, defeats: s.defeats as number, battle,
@@ -547,7 +551,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const archived = p.archived === undefined ? undefined : idList(p.archived, (company as string[]).filter(id => ![...party.deployed, ...party.reserve].includes(id)));
   if (archived && !archived.length) throw new Error('Invalid archive');
   const bank = obj(p.bank); if (version < 9) bank.dust = 0; if (version < 14 && bank.gold === undefined) bank.gold = map.company.hireCost;
-  if (Object.keys(bank).length !== 4 || !isInt(bank.gold, 0, BANK_CAP.gold) || !isInt(bank.ore, 0, BANK_CAP.ore) || !isInt(bank.seal, 0, BANK_CAP.seal) || !isInt(bank.dust, 0, BANK_CAP.dust)) throw new Error('Invalid bank');
+  if (Object.keys(bank).length !== 4 || !isInt(bank.gold, 0, BANK_CAP.gold) || !isInt(bank.ore, 0, BANK_CAP.ore) || !isInt(bank.shard, 0, BANK_CAP.shard) || !isInt(bank.dust, 0, BANK_CAP.dust)) throw new Error('Invalid bank');
   if (version < 9) Object.assign(p, { items: [], nextItem: 1 });
   if (version < 11) p.forge = 0;
   if (version < 12) p.potions = { salve: 0, tonic: 0, repel: 0 };
@@ -570,9 +574,9 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     const l = obj(p.last);
     if (version < 9) Object.assign(l, { items: 0, salvaged: 0 });
     if (version < 14 && l.gold === undefined) l.gold = 0;
-    if (!['complete', 'withdrawn', 'wiped'].includes(l.outcome as string) || !isInt(l.ore) || !isInt(l.gold) || !isInt(l.seal) || !isInt(l.steps) || !isInt(l.wins) || !isInt(l.items) || !isInt(l.salvaged)) throw new Error('Invalid result');
+    if (!['complete', 'withdrawn', 'wiped'].includes(l.outcome as string) || !isInt(l.ore) || !isInt(l.gold) || !isInt(l.shard) || !isInt(l.steps) || !isInt(l.wins) || !isInt(l.items) || !isInt(l.salvaged)) throw new Error('Invalid result');
     if (l.tomes !== undefined && !isInt(l.tomes, 1, 99999)) throw new Error('Invalid result');
-    last = { outcome: l.outcome as RunOutcome, ore: l.ore, gold: l.gold as number, seal: l.seal, steps: l.steps, wins: l.wins, items: l.items, salvaged: l.salvaged, ...(l.tomes !== undefined ? { tomes: l.tomes as number } : {}) };
+    last = { outcome: l.outcome as RunOutcome, ore: l.ore, gold: l.gold as number, shard: l.shard, steps: l.steps, wins: l.wins, items: l.items, salvaged: l.salvaged, ...(l.tomes !== undefined ? { tomes: l.tomes as number } : {}) };
   }
   let commander: Profile['commander'] = null;
   if (p.commander !== null && p.commander !== undefined) {
@@ -594,6 +598,8 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const veteran = p.veteran === true || (version < 31 && p.tutorialDone === true);
   const tomes = p.tomes === undefined ? undefined : tomesOf(p.tomes); const riftCore = p.riftCore === undefined ? undefined : isInt(p.riftCore, 0, RIFT_CORE_CAP) ? p.riftCore : badProfile();
   const clearedHard = p.clearedHard === undefined ? undefined : clearedList(p.clearedHard, maps);
+  // P04-02 (OD-22): story recruits already met or paid once (company members only, no repeats).
+  const storyShards = p.storyShards === undefined ? undefined : idList(p.storyShards, company as string[]);
   if (clearedHard?.some(id => !cleared.includes(id))) throw new Error('Invalid profile');
   // v44 → v45 (P02): the fifth field slot is filled from the reserve, and a reserve above the chapter's slots steps into
   // the field first (there is always room: four deployed at most before v45). Nobody leaves the team.
@@ -601,7 +607,8 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (version < 45) while (party.reserve.length && party.deployed.length < PARTY_SLOTS) party.deployed.push(party.reserve.shift()!);
   if (party.reserve.length > slots) throw new Error('Invalid party');
   return {...(presets ? { presets } : {}),...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(boardFeatured ? { boardFeatured: [...boardFeatured as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
-    bank: { ore: bank.ore as number, gold: bank.gold as number, seal: bank.seal as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, POTION_CAP), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
+    ...(storyShards ? { storyShards } : {}),
+    bank: { ore: bank.ore as number, gold: bank.gold as number, shard: bank.shard as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, POTION_CAP), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
 function respawnsOf(v: unknown, map: MapDefinition): Record<string, number> {
@@ -751,8 +758,34 @@ function migrateCampLevels(envelope: Record<string, unknown>, map: MapDefinition
   return { campXp, ...(best ? { best } : {}), battle };
 }
 // `map` is the home map (the frontier); `maps` lists every map a run may have been started on.
+// P04-02: a game kept by the server before v59 (a Durable Object stores the game itself, without a save envelope) is
+// converted the same way when it is read; a current game comes back unchanged.
+export function upgradeStoredGame<T>(game: T, maps: readonly MapDefinition[]): T {
+  if (!game || typeof game !== 'object') return game;
+  const g = game as Record<string, unknown>; const bank = obj(g.profile ?? {}).bank;
+  if (!bank || typeof bank !== 'object' || !('seal' in bank)) return game;
+  const copy = structuredClone(g); migrateShards(copy, maps); return copy as T;
+}
+// v58 → v59 (P04-02): duplicates and seals become shards (10 each) before anything is validated; see SAVE_VERSION.
+function migrateShards(envelope: Record<string, unknown>, maps: readonly MapDefinition[]): void {
+  const per = 10; let legacy = false;
+  const members = (v: unknown) => { if (!v || typeof v !== 'object') return; for (const m of Object.values(v)) { if (!m || typeof m !== 'object') continue; const x = obj(m); if ('dupes' in x) { legacy = true; x.shards = isInt(x.dupes, 0, 999) ? x.dupes * per : x.dupes; delete x.dupes; } } };
+  const seal = (v: unknown) => { const x = obj(v); if ('seal' in x) { legacy = true; x.shard = isInt(x.seal, 0, 99999) ? x.seal * per : x.seal; delete x.seal; } };
+  for (const key of ['state', 'run']) {
+    if (envelope[key] === null || typeof envelope[key] !== 'object') continue;
+    const run = obj(envelope[key]); members(run.members); if (run.resources && typeof run.resources === 'object') seal(run.resources);
+  }
+  if (envelope.profile === null || typeof envelope.profile !== 'object') return;
+  const p = obj(envelope.profile);
+  members(p.members); if (p.bank && typeof p.bank === 'object') seal(p.bank); if (p.last && typeof p.last === 'object') seal(p.last);
+  if (p.shop && typeof p.shop === 'object') { const shop = obj(p.shop); if ('seal' in shop) { if (isInt(shop.seal, 1)) shop.shard = 1; delete shop.seal; } }
+  const recruits = new Set(maps.flatMap(m => (m.recruits ?? []).map(r => r.hero)));
+  const met = Array.isArray(p.company) ? (p.company as unknown[]).filter((id): id is string => typeof id === 'string' && recruits.has(id)) : [];
+  if (legacy && met.length && p.storyShards === undefined) p.storyShards = met;
+}
 export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLookup, maps: readonly MapDefinition[] = [map]): Game {
   const envelope = obj(JSON.parse(raw)); const version = envelope.version as number;
+  if (version < 59) migrateShards(envelope, maps.length ? maps : [map]);
   if (version < 41) migrateMagicWeapons(envelope);
   if (version < 21) migrateItems(envelope, map);
   if (version < 34) migrateTrees(envelope, maps.length ? maps : [map]);
@@ -760,7 +793,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   else if (version < 39) migrateTrees(envelope, maps.length ? maps : [map], RECRUIT_TREES);
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

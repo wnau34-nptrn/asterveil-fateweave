@@ -43,8 +43,9 @@ const shards: readonly [string, string, string, string, string][] = [
 ];
 
 // Painted item frame (ART-WORLD-LOOT-001) for the pack and camp sheets.
-export function itemArt(id: 'ore' | 'ember' | 'seal'): string {
-  const f = itemFrame(id);
+// The universal shard (P04-02) keeps the contract-seal painting until it has its own art.
+export function itemArt(id: 'ore' | 'ember' | 'shard'): string {
+  const f = itemFrame(id === 'shard' ? 'seal' : id);
   return `<span class="item-art" data-item="${id}" style="--fx:${f.x / f.w}" aria-hidden="true"></span>`;
 }
 export { portrait, starRow } from './portraits';
@@ -496,7 +497,7 @@ export class WorldUI {
     this.root.querySelector('#camp-title')!.innerHTML = `${icon(camp ? 'camp' : 'flag')} ${camp ? 'แคมป์พักแรม' : 'ทางเข้าด่าน'}`;
     const targets = travelTargets(s, this.map); if (!targets.length && this.campTab === 'travel') this.campTab = camp ? 'care' : 'team';
     const tabs = `<div class="camp-tabs ${camp && targets.length ? 'three' : 'two'}" role="tablist" aria-label="แคมป์">${camp ? tab('care', 'พัก/ชุบ') : ''}${tab('team', `ทีม <small>${s.roster.deployed.length}+${s.roster.reserve.length}</small>`)}${targets.length ? tab('travel', 'วาร์ป') : ''}</div>`;
-    const leave = `<section class="camp-section withdraw-section"><button id="withdraw" data-world="withdraw" class="danger-button">${this.confirmWithdraw ? 'ยืนยันถอนตัว · กลับค่ายพร้อมของที่เก็บได้' : `${icon('flag')} ถอนตัวกลับค่าย`}</button><p class="camp-note">ของที่เก็บได้ (แร่ดาว ${s.resources.ore} ตรา ${s.resources.seal}) กลับค่ายครบ ถ่านคืนชีพใช้ได้เฉพาะในด่าน</p></section>`;
+    const leave = `<section class="camp-section withdraw-section"><button id="withdraw" data-world="withdraw" class="danger-button">${this.confirmWithdraw ? 'ยืนยันถอนตัว · กลับค่ายพร้อมของที่เก็บได้' : `${icon('flag')} ถอนตัวกลับค่าย`}</button><p class="camp-note">ของที่เก็บได้ (แร่ดาว ${s.resources.ore} ตรา ${s.resources.shard}) กลับค่ายครบ ถ่านคืนชีพใช้ได้เฉพาะในด่าน</p></section>`;
     const showTabs = camp || targets.length > 0;
     this.root.querySelector('#camp-content')!.innerHTML = (showTabs ? tabs : '') + (this.campTab === 'care' ? this.campCare(s) : this.campTab === 'travel' ? this.campTravel(targets) : this.campTeam(s)) + leave;
   }
@@ -727,11 +728,11 @@ export class WorldUI {
       <section class="world-rules"><h3>เดินทีละช่อง</h3><p>แตะช่องที่ไฮไลต์ ใช้ปุ่มลูกศรมุมซ้ายล่าง หรือแป้น ←↑↓→ / WASD ทุกก้าวในพื้นที่อันตรายมีโอกาสพบศัตรู ตัวเลขมุมขวาบนคือโอกาสของก้าวถัดไป ยิ่งเดินโดยไม่เจอ โอกาสยิ่งเพิ่ม และกลับไปต่ำสุดเมื่อพบศัตรูหรือพักที่แคมป์</p>
       <h3>เลือดติดตัว</h3><p>จบศึกแล้วเลือดไม่ฟื้นเอง สมาชิกที่ล้มยังล้มอยู่จนกว่าจะชุบที่แคมป์ ศึกถัดไปเริ่มด้วยเลือดที่เหลือ</p>
       <h3>${icon('camp')} แคมป์</h3><p>ยืนบนแคมป์แล้วกด “พัก” มุมขวาล่าง พักฟื้นได้ ${this.map.camp.restHealPercent}% ครั้งเดียวจนกว่าจะชนะศึกถัดไป คนที่ล้มต้องใช้ถ่านคืนชีพชุบทีละคน แคมป์ล่าสุดที่ไปถึงคือจุดกลับเมื่อแพ้</p>
-      <h3>${icon('chest')} ของตกและกล่องสมบัติ</h3><p>ชนะศึกได้แร่ดาวและบางครั้งได้ถ่านคืนชีพ ยืนบนกล่องแล้วกด “เปิด” กล่องหายากมีตราสัญญา ดูของที่มีได้จากช่องสัมภาระ</p>
+      <h3>${icon('chest')} ของตกและกล่องสมบัติ</h3><p>ชนะศึกได้แร่ดาวและบางครั้งได้ถ่านคืนชีพ ยืนบนกล่องแล้วกด “เปิด” กล่องหายากมีเศษกลาง ดูของที่มีได้จากช่องสัมภาระ</p>
       <h3>${icon('flag')} ทีมและตัวสำรอง</h3><p>ลงสนามได้สูงสุด 5 คน สำรองตามความคืบหน้าสูงสุด 5 คน · เปิด “ทีม” (T) เพื่อสลับสมาชิก ใช้ Preset และจัดแผนการยืน · เปิด “กระเป๋า” (B) เพื่อดูของและอุปกรณ์ ทุกอย่างเปลี่ยนได้เฉพาะนอกการต่อสู้ ศัตรูเล็งตามหมายเลขช่อง ใครยืนช่องนั้นคือเป้า (กายภาพยังโดนแนวหน้าก่อน)</p>
       <h3>เมื่อแพ้</h3><p>ทีมถอยกลับแคมป์ล่าสุดที่ไปถึง (หรือทางเข้า) คนที่ล้มยังล้มอยู่ ต้องชุบหรือสลับตัวสำรอง ถ้าทุกคนที่พามาล้มหมด การเดินทางล้มเหลว กลับค่ายพร้อมแร่ดาวและตราครึ่งเดียว</p>
       <h3>${icon('camp')} กลับค่าย</h3><p>ถอนตัวได้ที่แคมป์หรือทางเข้าด่าน ของที่เก็บได้กลับค่ายครบ ไปถึง${this.map.goalName}คือสำเร็จการเดินทาง</p>
-      ${this.map.elites.length ? `<h3>${icon('boss')} อีลิท</h3><p>อีลิทขอบแดงเฝ้าด่านทางเดียว ต้องชนะถึงจะผ่าน · อีลิทขอบทองที่มีหีบเหนือหัวเดินอ้อมได้ แต่ถ้าท้าสู้แล้วชนะจะได้ EXP ×${this.map.eventRules.optionalElite.exp} อุปกรณ์ชั้นดีกว่า เหรียญทอง +${this.map.eventRules.optionalElite.gold} และตราสัญญา +${this.map.eventRules.optionalElite.seal}</p>` : ''}
+      ${this.map.elites.length ? `<h3>${icon('boss')} อีลิท</h3><p>อีลิทขอบแดงเฝ้าด่านทางเดียว ต้องชนะถึงจะผ่าน · อีลิทขอบทองที่มีหีบเหนือหัวเดินอ้อมได้ แต่ถ้าท้าสู้แล้วชนะจะได้ EXP ×${this.map.eventRules.optionalElite.exp} อุปกรณ์ชั้นดีกว่า เหรียญทอง +${this.map.eventRules.optionalElite.gold} และเศษกลาง +${this.map.eventRules.optionalElite.shard}</p>` : ''}
       ${this.map.quest.need ? `<h3>${icon('boss')} ผนึกรอยแยก</h3><p>ผู้คุมรอยแยกถูกผนึกไว้ ต้องทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนจึงท้าสู้ได้: ชนะมินิบอสยักษ์หินในรอยแผล, เปิดกล่องสมบัติ 6 กล่อง หรือชำระรอยแยกเล็ก ดูความคืบหน้าได้จากช่องเป้าหมายมุมซ้ายบน</p>` : ''}
       ${this.map.puzzles.runes.length + this.map.puzzles.secrets.length ? `<h3>${icon('star')} ปริศนาและทางลับ</h3><p>แต่ละโซนมีปริศนาเฝ้ากล่องหายาก: ทุ่งมีหินรูน 3 ก้อน เหยียบตามลำดับสัญลักษณ์บนประตูหิน · พงหนามมีก้อนหิน เดินชนเพื่อผลักลงหลุม · รอยแผลมีคันโยก 2 อันคนละฝั่ง ดึงให้ครบ · กำแพงที่มีรอยร้าวเรืองแสงจาง ๆ บางช่องเดินทะลุได้</p>` : ''}
       <h3>${icon('boss')} ${this.map.bossName}</h3><p>บอสเฝ้าทางเดียวไป${this.map.goalName} เดินชนบอสเพื่อเริ่มศึก ชนะแล้วเดินไปที่ประตูเพื่อจบการเดินทาง</p></section>

@@ -1,3 +1,9 @@
+## 2026-11-13 — P04-02 character + universal shards (save v59)
+- Owner “ตามที่แนะนำ” on P04-01 → OD-23–26 (ore 160, shard set A, OD-07 from account start, core five 35–45). Branch `claude/p04-02-shards` (on top of P04-01 #240) → PR.
+- Stars cost own shards 10/20/30/40 (+ ore 15/30/45/70); universal shards (`bank.shard`) pay any of the rest; seals removed (loot seal → 3 shards, quests/hard ×10, market pack 10/60 gold once per return, forge fees 10); first normal clear +10; ★5 duplicates → universal; owned story recruits paid once (`profile.storyShards`). Save v59 converts dupes/seals ×10; the server converts DO-stored games when read (`upgradeStoredGame`).
+- Tests: typecheck/lint/unit all pass (new `shards-p04` 8), Playwright `star-upgrade` 15/15, `npm run sim` 28/28 after refreshing the C12 campaign baseline (14 equal/3 up/3 down, total 1859→1867; stars equal or higher). Details: [p04-02 validation](../validation/p04-02-2026-11-13/README_TH.md).
+- Open: P04-03 tree points (12 vs 15), shard art (uses the seal painting), real devices.
+
 ## 2026-11-13 — P04 owner choices + P04-01 star pacing simulation
 - Owner “ตามที่แนะนำทั้งหมด” on P04-00 S1–S8 → OD-15–OD-22 in OWNER_DECISIONS. Branch `claude/p04-01-sim` → PR.
 - [P04-01 validation](../validation/p04-01-2026-11-13/README_TH.md): stdlib Python model in sessions (character shards, 100% universal fill, run/first-clear/weekly-shop sources, ore kept, no gacha), 30 sets × thin/standard × 5 schedules × 1,000 accounts. Thin ore income caps the first ★5 at ~12 sessions; sets A/B meet OD-07 with core five ≈37–39. Tree points: boss win = map clear today, so OD-20 gives 12 (15 with hard clears).

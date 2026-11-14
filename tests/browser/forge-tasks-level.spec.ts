@@ -10,10 +10,10 @@ import { chooseForgeTask } from './forge-navigation';
 
 const key='asterveil.fateweave.expedition.v1';
 async function seed(page:Page,withTrialHero=false){
-  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.forgeLevel=9;p.bank={ore:120,dust:48,gold:20,seal:3};
-  p.members.guardian={stars:3,dupes:0,gear:{body:{uid:1,slot:'body',rarity:2,level:6,affixes:affixPool(map.equipment,'body').slice(0,2),plus:4,set:'dawn',levelInvestment:{ore:40,dust:2}}}};
+  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.forgeLevel=9;p.bank={ore:120,dust:48,gold:20,shard:3};
+  p.members.guardian={stars:3,shards:0,gear:{body:{uid:1,slot:'body',rarity:2,level:6,affixes:affixPool(map.equipment,'body').slice(0,2),plus:4,set:'dawn',levelInvestment:{ore:40,dust:2}}}};
   p.items=[{uid:2,slot:'body',rarity:0,level:9,affixes:[]},{uid:3,slot:'body',rarity:0,level:24,affixes:[]}];p.nextItem=4;
-  if(withTrialHero){if(!p.company.includes('healer'))p.company.push('healer');p.members.healer={stars:1,dupes:0};p.items.push({...p.members.guardian.gear!.body!,uid:4});p.nextItem=5;}
+  if(withTrialHero){if(!p.company.includes('healer'))p.company.push('healer');p.members.healer={stars:1,shards:0};p.items.push({...p.members.guardian.gear!.body!,uid:4});p.nextItem=5;}
   const raw=currentSave({profile:p,run:null});parseGame(raw,map,encounterById);
   await page.addInitScript(({key,raw})=>{
     localStorage.setItem(key,raw);const w=window as unknown as {forgeWrites:number};w.forgeWrites=0;const set=Storage.prototype.setItem;

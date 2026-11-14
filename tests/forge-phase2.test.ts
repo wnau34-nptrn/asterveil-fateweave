@@ -8,7 +8,7 @@ import { parseGame, saveGame } from '../src/core/save/expedition-save';
 import type { Item } from '../src/core/world/types';
 import { xpAt } from './fixtures/camp-level';
 const piece=(uid:number,patch:Partial<Item>={}):Item=>({uid,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[],set:'dawn',q:{main:113,affixes:[]},...patch});
-const setup=()=>({...newProfile(map,17),tutorialDone:true,items:[piece(1),piece(2),piece(3),piece(4,{locked:true}),piece(5)],nextItem:6,bank:{ore:1000,dust:1000,gold:20,seal:3}});
+const setup=()=>({...newProfile(map,17),tutorialDone:true,items:[piece(1),piece(2),piece(3),piece(4,{locked:true}),piece(5)],nextItem:6,bank:{ore:1000,dust:1000,gold:20,shard:3}});
 it('levels atomically to the area cap, retains all rolls and +, refunds only actual paid level costs',()=>{
   const p=enhanceTo(setup(),map,1,5).profile,original=structuredClone(p),item=p.items[0]!;
   expect(itemLevelCost(map,item,3)).toEqual({ore:20,dust:2});
@@ -51,7 +51,7 @@ it('rejects stale, locked, worn, wrong-type, duplicate, main and overflow donors
 });
 it('v23 preserves level capital through run provenance; v22 migration respects prior completion without inventing capital',()=>{
   const p=equip(raiseItemLevel(setup(),map,1,3).profile,'guardian',1).profile,game=depart(p,map,lookup,8);let raw='';saveGame({getItem:()=>null,setItem:(_k,s)=>{raw=s;}},game);
-  expect(JSON.parse(raw).version).toBe(58);expect(parseGame(raw,map,lookup)).toEqual(game);
+  expect(JSON.parse(raw).version).toBe(59);expect(parseGame(raw,map,lookup)).toEqual(game);
   const corrupt=JSON.parse(raw);corrupt.run.members.guardian.gear.weapon.levelInvestment.ore++;expect(()=>parseGame(JSON.stringify(corrupt),map,lookup)).toThrow();
   const legacy=setup();const old={version:22,profile:legacy,run:null};delete old.profile.forgeLevel;expect(parseGame(JSON.stringify(old),map,lookup).profile.forgeLevel).toBe(3);old.profile.completes=1;const migrated=parseGame(JSON.stringify(old),map,lookup).profile;expect(migrated.forgeLevel).toBe(10);expect(migrated.items[0]!.levelInvestment).toBeUndefined();
 });

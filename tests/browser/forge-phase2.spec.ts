@@ -9,8 +9,8 @@ for(const [width,height,touch] of [[320,568,true],[390,650,true],[390,844,true],
   test(`item Lv and manual fusion preserve capital at ${width}x${height}`,async({browser},info)=>{
     const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'}),page=await context.newPage(),errors:string[]=[];
     page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
-    const profile=newProfile(map,17);profile.commander={name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'};profile.tutorialDone=true;profile.forgeLevel=6;profile.bank={ore:500,dust:50,gold:20,seal:1};
-    profile.members.guardian={stars:3,dupes:0,gear:{weapon:{uid:1,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[],plus:5,set:'dawn',q:{main:113,affixes:[]}}}}; profile.campXp = Math.max(profile.campXp, xpAt(6));
+    const profile=newProfile(map,17);profile.commander={name:'อารี',crest:'star',color:'gold', camp: 'ค่ายอารี'};profile.tutorialDone=true;profile.forgeLevel=6;profile.bank={ore:500,dust:50,gold:20,shard:1};
+    profile.members.guardian={stars:3,shards:0,gear:{weapon:{uid:1,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[],plus:5,set:'dawn',q:{main:113,affixes:[]}}}}; profile.campXp = Math.max(profile.campXp, xpAt(6));
     profile.items=[{uid:2,slot:'weapon',hero:'guardian',rarity:0,level:3,affixes:[],plus:2,investment:{ore:9,dust:2},levelInvestment:{ore:20,dust:2}},{uid:3,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[]},{uid:4,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[],locked:true},{uid:5,slot:'weapon',hero:'guardian',rarity:0,level:1,affixes:[]}];profile.nextItem=6;
     const raw=JSON.stringify(legacyEnvelope({version:23,profile,run:null}));
     await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('phase2-seeded')){localStorage.setItem(key,raw);sessionStorage.setItem('phase2-seeded','1');}const w=window as unknown as {forgeWrites:number};w.forgeWrites=0;const set=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k===key)w.forgeWrites++;set.call(this,k,v);};},{key,raw});

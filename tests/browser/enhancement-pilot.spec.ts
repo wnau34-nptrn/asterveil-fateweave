@@ -9,7 +9,7 @@ for(const [width,height,touch] of [[320,568,true],[390,650,true],[390,844,true],
   test(`enhancement pilot preserves context and commits once ${width}x${height}`,async({browser})=>{
     const context=await browser.newContext({viewport:{width,height},hasTouch:touch,isMobile:touch,reducedMotion:'reduce'}),page=await context.newPage();
     const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
-    const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.bank={ore:100,dust:50,gold:0,seal:0};
+    const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.bank={ore:100,dust:50,gold:0,shard:0};
     p.members.guardian!.gear={body:{uid:1,slot:'body',rarity:1,level:1,affixes:['hp'],plus:2,set:'dawn'}};p.nextItem=2;
     const raw=currentSave({profile:p,run:null});
     await page.addInitScript(({key,raw})=>{
@@ -57,7 +57,7 @@ test('enhancement shows all shortages, cap, and returns to the inventory item',a
 
 test('baseline star and skill routes remain readonly before selecting a command',async({browser})=>{
   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'}),page=await context.newPage();
-  const p=newProfile(map,31);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.bank.ore=100;p.members.guardian!.stars=3;p.members.guardian!.dupes=3;
+  const p=newProfile(map,31);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.bank.ore=100;p.members.guardian!.stars=3;p.members.guardian!.shards=3;
   await page.addInitScript(({key,raw})=>localStorage.setItem(key,raw),{key,raw:currentSave({profile:p,run:null})});
   await page.goto('./');await page.locator('#continue').click();const initial=await page.evaluate(k=>localStorage.getItem(k),key);
   await page.locator('#lobby-tab-team').click();await page.locator('#lobby-member-guardian').click();await expect(page.locator('#lobby-upgrade')).toBeEnabled();

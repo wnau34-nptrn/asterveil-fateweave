@@ -20,9 +20,9 @@ const localSave = (): string => {
   return s.data.get(expeditionKey)!;
 };
 const upload = (payload: string, patch: Partial<CloudSaveUpload> = {}): CloudSaveUpload => ({
-  format: CLOUD_FORMAT, requestId: 'req_0123456789abcdef', baseRevision: 0, saveVersion: 58, payload, payloadBytes: utf8Bytes(payload), payloadSha256: sha(payload), ...patch,
+  format: CLOUD_FORMAT, requestId: 'req_0123456789abcdef', baseRevision: 0, saveVersion: 59, payload, payloadBytes: utf8Bytes(payload), payloadSha256: sha(payload), ...patch,
 });
-const v58 = (n: number): boolean => n === 58;
+const v58 = (n: number): boolean => n === 59;
 
 describe('cloud save envelope checks', () => {
   it('accepts the exact local save string, and the same payload still passes replay validation', () => {
@@ -42,7 +42,7 @@ describe('cloud save envelope checks', () => {
       [upload(raw, { format: 2 as typeof CLOUD_FORMAT }), 'format'],
       [upload(raw, { requestId: 'short' }), 'requestId'],
       [upload(raw, { baseRevision: -1 }), 'baseRevision'],
-      [upload(raw, { saveVersion: 59 }), 'saveVersion'],
+      [upload(raw, { saveVersion: 60 }), 'saveVersion'],
       [upload(raw, { payloadBytes: utf8Bytes(raw) + 1 }), 'bytes'],
       [upload(raw, { payloadSha256: 'ABC' }), 'digestFormat'],
       [upload(raw, { payloadSha256: sha(raw + ' ') }), 'digestMismatch'],
@@ -60,8 +60,8 @@ describe('cloud save envelope checks', () => {
   });
 
   it('fact for the trust boundary: an edited bank at the ceiling still passes local replay validation', () => {
-    const p = newProfile(map, 9); const raw = JSON.stringify({ version: 58, profile: { ...p, bank: { ore: 9_999_999, gold: 9_999_999, seal: 99_999, dust: 9_999_999 } }, run: null });
-    expect(parseGame(raw, map, lookup).profile.bank.seal).toBe(99_999);
+    const p = newProfile(map, 9); const raw = JSON.stringify({ version: 58, profile: { ...p, bank: { ore: 9_999_999, gold: 9_999_999, shard: 99_999, dust: 9_999_999 } }, run: null });
+    expect(parseGame(raw, map, lookup).profile.bank.shard).toBe(99_999);
   });
 });
 
@@ -82,7 +82,7 @@ describe('server upload decision (compare-and-swap on revision)', () => {
     expect(decideUpload(head, [], { ...u, requestId: 'req_another_device_01', baseRevision: 2 })).toEqual({ kind: 'unchanged', revision: 5 });
   });
   it('never lets an older save format overwrite a newer one', () => {
-    expect(decideUpload({ revision: 2, saveVersion: 59, payloadSha256: sha('n') }, [], { ...u, baseRevision: 2 })).toEqual({ kind: 'downgrade', saveVersion: 59 });
+    expect(decideUpload({ revision: 2, saveVersion: 60, payloadSha256: sha('n') }, [], { ...u, baseRevision: 2 })).toEqual({ kind: 'downgrade', saveVersion: 60 });
   });
 });
 

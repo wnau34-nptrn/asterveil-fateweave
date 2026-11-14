@@ -27,7 +27,7 @@ export const ruinsMap: MapDefinition = {
   zones: [
     { id: 'meadow', name: 'ซากป้อมชายแดน', safe: false, base: 8, step: 5, cap: 40, levels: [1, 3], sets: ['dawn', 'wind'],
       pool: [{ encounterId: 'slime-pair', weight: 3 }, { encounterId: 'bat-swarm', weight: 2 }, { encounterId: 'slime-nest', weight: 1 }, { encounterId: 'scout-patrol', weight: 2 }, { encounterId: 'tusker-bats', weight: 1 }],
-      loot: { ore: [4, 6], gold: [2, 4], ember: [0, 10], seal: [0, 0] } },
+      loot: { ore: [4, 6], gold: [2, 4], ember: [0, 10], shard: [0, 0] } },
     { id: 'camp', name: 'แคมป์', safe: true, base: 0, step: 0, cap: 0, pool: [] },
     { id: 'sanctum', name: 'ประตูป้อม', safe: true, base: 0, step: 0, cap: 0, pool: [] },
   ],
@@ -49,9 +49,9 @@ export const ruinsMap: MapDefinition = {
   herbs: [],
   puzzles: { runes: [], boulders: [], levers: [], secrets: [] },
   loot: {
-    tutorial: { ore: [10, 10], gold: [5, 5], ember: [1, 0], seal: [0, 0] },
-    boss: { ore: [30, 30], gold: [12, 12], ember: [1, 0], seal: [1, 0] },
-    chest: { common: { ore: [8, 12], gold: [4, 6], ember: [0, 30], seal: [0, 0] }, rare: { ore: [14, 18], gold: [7, 9], ember: [1, 0], seal: [0, 0] } },
+    tutorial: { ore: [10, 10], gold: [5, 5], ember: [1, 0], shard: [0, 0] },
+    boss: { ore: [30, 30], gold: [12, 12], ember: [1, 0], shard: [3, 0] },
+    chest: { common: { ore: [8, 12], gold: [4, 6], ember: [0, 30], shard: [0, 0] }, rare: { ore: [14, 18], gold: [7, 9], ember: [1, 0], shard: [0, 0] } },
   },
   // P02 (draft): a team of five beat this boss with plain attacks 58% of the time at 100%; 115% keeps a choice needed.
   bossPercent: 115,

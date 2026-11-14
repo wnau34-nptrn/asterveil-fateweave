@@ -7,9 +7,9 @@ import { currentSave } from '../fixtures/current-save';
 import { xpAt } from '../fixtures/camp-level';
 const key='asterveil.fateweave.expedition.v1';
 async function open(page:Page) {
-  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.forgeLevel=9;p.bank={ore:120,dust:48,gold:20,seal:3};
+  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.forgeLevel=9;p.bank={ore:120,dust:48,gold:20,shard:3};
   const weapon={uid:1,slot:'weapon' as const,hero:'guardian',rarity:3,level:6,affixes:affixPool(map.equipment,'weapon','guardian').slice(0,3),plus:4,set:'dawn' as const};
-  p.members.guardian={stars:3,dupes:0,gear:{weapon}};p.items=[{...weapon,uid:2,plus:20},{...weapon,uid:3}];p.nextItem=4;
+  p.members.guardian={stars:3,shards:0,gear:{weapon}};p.items=[{...weapon,uid:2,plus:20},{...weapon,uid:3}];p.nextItem=4;
   await page.addInitScript(({key,raw})=>localStorage.setItem(key,raw),{key,raw:currentSave({profile:p,run:null})});
   await page.goto('./');await page.locator('#continue').click();await page.locator('#lobby-tab-forge').click();await chooseForgeTask(page,'enhance');await page.locator('#forge-item-1').click();await page.evaluate(()=>document.fonts.ready);
 }

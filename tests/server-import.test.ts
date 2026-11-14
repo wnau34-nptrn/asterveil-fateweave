@@ -55,7 +55,7 @@ async function midBattleSave(s: Server): Promise<string> {
 }
 
 describe('P09-02e one-time import of a local save (D11)', () => {
-  it('imports a mid-battle v58 save once, answers a retry the same, and plays on from it', async () => {
+  it('imports a mid-battle v59 save once, answers a retry the same, and plays on from it', async () => {
     const s = server(Array.from({ length: 200 }, (_, i) => 101 + i * 7));
     const raw = await midBattleSave(s);
     const b = await account(s);
@@ -63,12 +63,12 @@ describe('P09-02e one-time import of a local save (D11)', () => {
     const first = await importSave(s, b.token, body);
     expect(first.status).toBe(201);
     const out = await first.json() as { lastSeq: number; view: { run: { battle: unknown } | null } | null; from: number };
-    expect(out.from).toBe(58); expect(out.lastSeq).toBe(0); expect(out.view?.run?.battle).toBeTruthy();
+    expect(out.from).toBe(59); expect(out.lastSeq).toBe(0); expect(out.view?.run?.battle).toBeTruthy();
     // The stored game is the save as `parseGame` read it; the raw save and its fingerprint are kept.
     expect(canonicalJson(JSON.parse(currentSave(storedGame(s, b.accountId)!)))).toBe(canonicalJson(JSON.parse(raw)));
     expect(fingerprint(s, b.accountId)).toBe(body.payloadSha256);
     const kept = s.objects.get(b.accountId)!.state.db.prepare('SELECT payload, save_version AS v FROM legacy_import').get() as { payload: string; v: number };
-    expect(kept).toEqual({ payload: raw, v: 58 });
+    expect(kept).toEqual({ payload: raw, v: 59 });
     // A retry (lost answer) is the same request: same answer, nothing written twice.
     const again = await importSave(s, b.token, body);
     expect(again.status).toBe(201); expect(await again.json()).toEqual(out);
@@ -129,7 +129,7 @@ describe('P09-02e one-time import of a local save (D11)', () => {
     await bad({ ...(await envelope(raw)), payloadSha256: 'f'.repeat(64) }, 422, 'digestMismatch');
     await bad({ ...(await envelope(raw)), payloadBytes: 3 }, 422, 'bytes');
     await bad({ ...(await envelope(raw)), extra: 1 }, 422, 'shape');
-    await bad(await envelope(JSON.stringify({ ...(JSON.parse(raw) as object), version: 59 })), 422, 'saveVersion');
+    await bad(await envelope(JSON.stringify({ ...(JSON.parse(raw) as object), version: 60 })), 422, 'saveVersion');
     const huge = JSON.stringify({ version: 58, pad: 'x'.repeat(MAX_PAYLOAD_BYTES) });
     await bad(await envelope(huge), 413, 'too_large');
     // A battle whose recorded turns no longer replay (a foe's turn was rewritten) is refused by `parseGame`.

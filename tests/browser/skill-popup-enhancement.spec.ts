@@ -5,7 +5,7 @@ import {currentSave} from '../fixtures/current-save';
 import {xpAt} from '../fixtures/camp-level';
 const key='asterveil.fateweave.expedition.v1';
 async function open(page:Page){
-  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.bank={ore:21,dust:10,gold:0,seal:0};
+  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.bank={ore:21,dust:10,gold:0,shard:0};
   p.items=[{uid:1,slot:'body',rarity:0,level:1,affixes:[],plus:2}];p.nextItem=2;
   await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('popup-seeded')){localStorage.setItem(key,raw);sessionStorage.setItem('popup-seeded','1');}},{key,raw:currentSave({profile:p,run:null})});
   await page.goto('./');await expect(page).toHaveTitle(/Asterveil/);await page.locator('#continue').click();await expect(page.locator('vite-error-overlay')).toHaveCount(0);

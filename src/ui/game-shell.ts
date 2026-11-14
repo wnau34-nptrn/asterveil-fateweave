@@ -462,7 +462,7 @@ export class GameShell {
     const e = result.event; const name = (id: string) => heroText[id]?.name ?? '';
     if (e.type === 'blocked') return;
     this.game = { ...this.game, profile: { ...result.profile, last: null } }; this.persist();
-    this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้ตัวซ้ำของ${name(e.heroId)} · ใช้อัปดาวที่ตัวละคร → พัฒนา` : `จ้าง${name(e.heroId)}แล้ว`)
+    this.lobbyMessage = e.type === 'hired' ? (e.duplicate ? `ได้เศษของ${name(e.heroId)} (หรือเศษกลางถ้าครบดาวแล้ว) · ใช้อัปดาวที่ตัวละคร → พัฒนา` : `จ้าง${name(e.heroId)}แล้ว`)
       : e.type==='bossTarget'?'บันทึกเป้าหมายบอสแล้ว':e.type==='huntTarget'?'บันทึกเป้าหมายฟาร์มแล้ว':e.type==='storageCollected'?`เก็บเข้าคลัง ${e.count} ชิ้นแล้ว`:e.type==='storageExpanded'?'ขยายคลังแล้ว': e.type === 'upgraded' ? `${name(e.heroId)}ขึ้นเป็น ★${e.stars} แล้ว` : e.type === 'archived' ? (e.archived ? `เก็บ${name(e.heroId)}เข้าคลังสมาชิกแล้ว · ดาว ของ และความถนัดอยู่ครบ` : `นำ${name(e.heroId)}ออกจากคลังสมาชิกแล้ว`) : e.type === 'dismissed' ? `เลิกจ้าง${name(e.heroId)}แล้ว · ได้เหรียญทองคืน ${this.map.company.dismissRefund}` : e.type === 'talent' || e.type === 'equipped' ? '' : e.type === 'skillLevel' ? `${name(e.heroId)} · ${this.lookup(this.map.tutorialEncounterId)!.skills[e.action].name} ขึ้นเป็น Lv${e.level}` : e.type === 'tomeTrade' ? `แลกได้ตำรา${tomeLineText[e.line]}${tomeSizeText[e.size]} 1 เล่ม` : e.type === 'salvaged' ? `แยกชิ้น ${e.count} ชิ้น · ได้แร่ดาว ${e.ore} ฝุ่นดาว ${e.dust}`
       : e.type === 'equipmentLocked' ? `${e.locked?'ล็อก':'ปลดล็อก'}${itemName(findItem(result.profile,e.uid)!.item)}แล้ว` : e.type === 'forged' ? this.forgedText(result.profile, e.uid, e.action) : e.type === 'brewed' ? `ปรุง${potionText[e.potion].name}แล้ว · มีอยู่ ${result.profile.potions[e.potion]} ขวด`
       : e.type === 'smelted' ? `ลุงบอร์กหลอมแร่ดาวเป็นฝุ่นดาว ${e.dust} · มีฝุ่นดาว ${result.profile.bank.dust}`
@@ -490,7 +490,7 @@ export class GameShell {
   // Market purchase (4A): what was bought and where it went.
   private boughtText(profile: Profile, e: { item: ShopItemId; heroId?: string; uid?: number }): string {
     const item = e.uid ? profile.items.find(i => i.uid === e.uid) : undefined;
-    if (e.item === 'contract') return `ซื้อใบสัญญาซ้ำ · ${heroText[e.heroId!]?.name ?? ''} มีตัวซ้ำ ${profile.members[e.heroId!]?.dupes ?? 0} ตัว`;
+    if (e.item === 'contract') return `ซื้อใบสัญญาซ้ำ · ${heroText[e.heroId!]?.name ?? ''} มีเศษ ${profile.members[e.heroId!]?.shards ?? 0} ชิ้น`;
     if (item) return `เปิดหีบอุปกรณ์ · ได้${itemName(item)} Lv${item.level}`;
     return `ซื้อ${shopText[e.item].name}แล้ว`;
   }
@@ -658,7 +658,7 @@ export class GameShell {
       const healed = Object.entries(done.heal ?? {}).map(([id, n]) => `${heroText[id]?.name ?? id} +${n}`).join(' · ');
       const detail: Partial<Record<EventChoice, string>> = {
         sneak: 'ลอบผ่านไปได้ · ศัตรูในโซนตื่นตัวเต็มที่', pray: `ศาลประทานพร${healed ? ` · ${healed}` : ''} · เลือดสูงสุดลด ${this.map.eventRules.prayWound}%`,
-        offer: `ถวายแร่ ${this.map.eventRules.offerOre} · ได้ตราสัญญา ${this.map.eventRules.offerSeal}`, help: `ช่วยนักเดินทาง · ได้แร่ดาว ${this.map.eventRules.traveller.ore} และตราสัญญา ${this.map.eventRules.traveller.seal}`,
+        offer: `ถวายแร่ ${this.map.eventRules.offerOre} · ได้เศษกลาง ${this.map.eventRules.offerShard}`, help: `ช่วยนักเดินทาง · ได้แร่ดาว ${this.map.eventRules.traveller.ore} และเศษกลาง ${this.map.eventRules.traveller.shard}`,
       };
       this.message = `${eventText[ev.kind].name} · ${detail[choice] ?? `${choiceText(choice, this.map.eventRules).label} แล้ว`}`;
       if (choice === 'pray') this.effect = 'rest'; else if (choice !== 'sneak') this.effect = 'loot';
@@ -736,7 +736,7 @@ export class GameShell {
   private describe(event: WorldEvent): string {
     switch (event.type) {
       case 'moved': return event.chance ? `ก้าวต่อไป · ไม่พบศัตรู (โอกาส ${event.chance}%)` : 'พื้นที่ปลอดภัย';
-      case 'encounter': return event.kind === 'boss' ? `${this.map.bossName}ขวาง${this.map.goalName}ไว้!` : event.kind === 'elite' ? (this.eliteMini() ? 'มินิบอสยักษ์หินลุกขึ้นขวาง · ชนะแล้วนับเป็นเป้าหมายผนึกรอยแยก' : this.eliteForced() ? 'อีลิทเฝ้าด่านขวางทางไว้ · ต้องชนะถึงจะผ่าน' : `ท้าสู้อีลิท · ชนะได้ EXP ×${this.map.eventRules.optionalElite.exp} เหรียญทอง +${this.map.eventRules.optionalElite.gold} ตราสัญญา +${this.map.eventRules.optionalElite.seal} และอุปกรณ์ชั้นดี`) : 'พบศัตรู!';
+      case 'encounter': return event.kind === 'boss' ? `${this.map.bossName}ขวาง${this.map.goalName}ไว้!` : event.kind === 'elite' ? (this.eliteMini() ? 'มินิบอสยักษ์หินลุกขึ้นขวาง · ชนะแล้วนับเป็นเป้าหมายผนึกรอยแยก' : this.eliteForced() ? 'อีลิทเฝ้าด่านขวางทางไว้ · ต้องชนะถึงจะผ่าน' : `ท้าสู้อีลิท · ชนะได้ EXP ×${this.map.eventRules.optionalElite.exp} เหรียญทอง +${this.map.eventRules.optionalElite.gold} เศษกลาง +${this.map.eventRules.optionalElite.shard} และอุปกรณ์ชั้นดี`) : 'พบศัตรู!';
       case 'event': return eventText[this.map.events.find(e => e.id === event.eventId)!.kind].name;
       // 3C puzzles and secrets.
       case 'rune': return event.solved ? 'หินรูนเรืองแสงครบ · ประตูหินเปิดออกแล้ว' : event.reset ? 'หินรูนดับลง · ลำดับผิด ดูสัญลักษณ์บนประตูหิน' : `หินรูนเรืองแสง ${event.step}/3`;

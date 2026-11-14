@@ -19,7 +19,7 @@ const profile = () => {
   p.party = { deployed: ['tracer', 'weaver', 'toma', 'sefa'], reserve: ['brann', 'lio'] };
   p.tutorialDone = true; p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' };
   p.cleared = ['ruined-border', 'deep-forest']; p.veteran = true;
-  for (const id of p.company) p.members[id] = { stars: 3, dupes: 0}; p.campXp = Math.max(p.campXp, xpAt(10));
+  for (const id of p.company) p.members[id] = { stars: 3, shards: 0}; p.campXp = Math.max(p.campXp, xpAt(10));
   p.members.tracer!.talents = { a1: 2, a2d: 1, a3s: 1, c1s: 1 };
   p.members.tracer!.loadout = ['mark', 'execute', 'lunge'];
   return p;
