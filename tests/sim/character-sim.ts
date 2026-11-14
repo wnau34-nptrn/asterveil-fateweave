@@ -4,7 +4,7 @@ import { beginBattle, resolveCommand, withLevel, withParty } from '../../src/cor
 import type { HeroDefinition } from '../../src/core/battle/types';
 import type { MapDefinition, MemberProgress, Talents } from '../../src/core/world/types';
 import { memberTalentReason } from '../../src/core/world/talents';
-import { heroCatalog, skillChoices, starred } from '../../src/core/world/world';
+import { heroCatalog, levelXp, skillChoices, starred } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 import { gearFor } from './class-sim';
 import { rosterMap } from './balance-sim';
@@ -42,7 +42,7 @@ function squad(catalog: readonly HeroDefinition[], subject: HeroDefinition): Her
 }
 export function characterSim(seeds: readonly number[]): CharacterRow[] {
   const rows: CharacterRow[] = [];
-  for (const m of MAPS) {
+  for (const [mapIndex, m] of MAPS.entries()) {
     const catalog = heroCatalog(lookup, m), level = Math.min(m.progression.levelCap, m.bossLevel ?? 1);
     for (const subject of catalog) {
       const team = squad(catalog, subject), builds = candidates(m, subject, level);
@@ -57,12 +57,12 @@ export function characterSim(seeds: readonly number[]): CharacterRow[] {
       }
       members[subject.id] = {...best, gear: members[subject.id]!.gear};
       const row: CharacterRow = { id:subject.id,role:subject.role,map:m.id,level,build:best,tried:seeds.length,won:0,hp:0,wins:0 };
-      for (const seed of seeds) { const run = rosterMap(m,seed,team.map(h => h.id),members); if(run.complete) row.won++; row.hp += run.hp; row.wins += run.wins; }
+      for (const seed of seeds) { const run = rosterMap(m,seed,team.map(h => h.id),members,{ campXp: levelXp(m, level), clears: mapIndex }); if(run.complete) row.won++; row.hp += run.hp; row.wins += run.wins; }
       rows.push(row);
     }
   }
   return rows;
 }
 export function characterReport(rows: readonly CharacterRow[]): string {
-  return ['# Per-character map traversal (C12 Batch 1)', '', 'Every catalog character at ★1 and the map boss level; epic map-level main-stat gear, no sets/tomes. Standard capability-selected squad of four, same rush routes/seeds, carried HP and real camp/boss/goal rules. Best tested legal build chosen on a separate boss probe. C12 batch release gate: every character/map cell 12/12 on full run; general C11 regression floor ≥80%; across-character clear spread ≤20 points, final HP spread ≤30 points. New heroes/classes enter through the catalog and tree data.', '', '| Character | Class | Map | Level | Clear | HP after route | Wins | Best tested tree / loadout |', '|---|---|---|---|---|---|---|---|', ...rows.map(r => `| ${r.id} | ${r.role} | ${r.map} | ${r.level} | ${r.won}/${r.tried} | ${(r.hp/r.tried).toFixed(1)}% | ${(r.wins/r.tried).toFixed(1)} | ${JSON.stringify(r.build.talents ?? {})} / ${r.build.loadout?.join(', ') ?? 'base'} |`)].join('\n');
+  return ['# Per-character map traversal (C12 Batch 1)', '', 'Every catalog character at ★1 and the map boss level; epic map-level main-stat gear, no sets/tomes. Standard capability-selected squad of four, same rush routes/seeds, the traversal starts at the camp level of the map and first-clear count (P04-04b; earlier reports started at camp Lv1), carried HP and real camp/boss/goal rules. Best tested legal build chosen on a separate boss probe. C12 batch release gate: every character/map cell 12/12 on full run; general C11 regression floor ≥80%; across-character clear spread ≤20 points, final HP spread ≤30 points. New heroes/classes enter through the catalog and tree data.', '', '| Character | Class | Map | Level | Clear | HP after route | Wins | Best tested tree / loadout |', '|---|---|---|---|---|---|---|---|', ...rows.map(r => `| ${r.id} | ${r.role} | ${r.map} | ${r.level} | ${r.won}/${r.tried} | ${(r.hp/r.tried).toFixed(1)}% | ${(r.wins/r.tried).toFixed(1)} | ${JSON.stringify(r.build.talents ?? {})} / ${r.build.loadout?.join(', ') ?? 'base'} |`)].join('\n');
 }
