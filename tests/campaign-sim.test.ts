@@ -8,11 +8,14 @@ import { MAPS } from '../src/content/world/maps';
 // tomes, then replays veil-frontier and plays it on hard. `npm run sim` writes docs/validation/balance-sim/CAMPAIGN.md;
 // the normal run keeps one seed per policy as a regression guard on the draft numbers.
 const full = process.env.SIM_REPORT === '1';
-const seeds = full ? Array.from({ length: 12 }, (_, i) => 1001 + i * 37) : [1001];
+// P04-04b (OD-32): the casual style plays 48 companies (12 companies swung by noise alone and forced a new baseline in P02, P04-02 and P04-03); the advisor keeps 12.
+const seedsOf = (n: number) => Array.from({ length: n }, (_, i) => 1001 + i * 37);
+const seedCount = (style: string) => (style === 'casual' ? 48 : 12);
+const seeds = full ? seedsOf(12) : [1001];
 let releaseCampaigns: CampaignReport[] = [];
 const csForGate = () => releaseCampaigns;
 describe('campaign simulation (A10)', () => {
-  const cs: CampaignReport[] = seeds.flatMap(seed => (full ? ['advisor', 'casual'] as const : ['advisor'] as const).flatMap(style => (['rush', 'explorer'] as const).map(policy => simulateCampaign(seed, policy, style))));
+  const cs: CampaignReport[] = (['advisor', ...(full ? ['casual' as const] : [])] as const).flatMap(style => (full ? seedsOf(seedCount(style)) : seeds).flatMap(seed => (['rush', 'explorer'] as const).map(policy => simulateCampaign(seed, policy, style))));
   releaseCampaigns = cs;
   const advisor = cs.filter(c => c.style === 'advisor');
   it('the advisor clears every map in order and reaches hard mode', () => {
@@ -41,8 +44,8 @@ describe('campaign simulation (A10)', () => {
   });
 });
 
-// Campaign gate (owner 2026-11-06, "ดูทั้งแคมเปญ"): the twenty paired cells are read as company counts (12 a group). A cell
-// may lose at most one company, and only when its group (one policy × style: the first tries at every map and the hard
+// Campaign gate (owner 2026-11-06, "ดูทั้งแคมเปญ"): the twenty paired cells are read as company counts (advisor groups 12, casual groups 48). A cell
+// may lose at most one company per twelve (four of 48), and only when its group (one policy × style: the first tries at every map and the hard
 // tries) clears at least as many first tries in total as before. A company that clears the previous map sooner reaches the
 // next one at a lower level, which can cost that one first try without the campaign getting any slower
 // (docs/validation/skill-rework-2026-11-05/README_TH.md §9.5).
@@ -55,8 +58,9 @@ if (full) it('C12 campaign gate: no campaign-wide regression in first-normal or 
     if (cells[2]?.endsWith('%')) actual[`${group} / ${cells[0]}`] = Number(cells[2].slice(0, -1));
   }
   expect(Object.keys(actual)).toHaveLength(20);
-  const companies = (rate: number) => Math.round(rate * seeds.length / 100); const groupOf = (cell: string) => cell.split(' / ')[0]!;
-  const sum = (cells: Record<string, number>, group: string) => Object.entries(cells).filter(([c]) => groupOf(c) === group).reduce((n, [, r]) => n + companies(r), 0);
-  for (const [cell, rate] of Object.entries(before.cells)) expect(companies(actual[cell]!), cell).toBeGreaterThanOrEqual(companies(rate) - 1);
+  const groupOf = (cell: string) => cell.split(' / ')[0]!; const sizeOf = (cell: string) => Number(/· (\d+) companies/.exec(groupOf(cell))![1]);
+  const companies = (rate: number, cell: string) => Math.round(rate * sizeOf(cell) / 100);
+  const sum = (cells: Record<string, number>, group: string) => Object.entries(cells).filter(([c]) => groupOf(c) === group).reduce((n, [c, r]) => n + companies(r, c), 0);
+  for (const [cell, rate] of Object.entries(before.cells)) expect(companies(actual[cell]!, cell), cell).toBeGreaterThanOrEqual(companies(rate, cell) - sizeOf(cell) / 12);
   for (const group of new Set(Object.keys(before.cells).map(groupOf))) expect(sum(actual, group), group).toBeGreaterThanOrEqual(sum(before.cells, group));
 });
