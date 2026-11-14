@@ -1,3 +1,10 @@
+## 2026-11-14 — P04-03 tree points off stars (save v60) + PR #241 browser fixes
+- Owner first asked for the whole-chapter picture (10 maps, node levels, level caps, hit games) → [TREE_BIGPICTURE_P04_03_TH](../design/p04/TREE_BIGPICTURE_P04_03_TH.md); then “ดำเนินการตามที่คุณแนะนำได้” → OD-27–OD-30.
+- Branch `claude/p04-03-tree-points` (on top of P04-02) → PR. `talentPoints(map, level, clears)` = camp Lv2–10 + 1 per map in `Profile.cleared`; a run carries `clears`; stars/hard give none. v60 resets an over-allowance tree free (`Profile.treeReset` notice in the tree page), keeps other builds, lets a run in progress finish and resets at settle; `upgradeStoredGame` does the same for server games.
+- Tests: typecheck/lint/unit pass (new `tree-points` 8, exhaustive build counter `tests/sim/tree-points.ts`); `npm run sim` 28/28 after refreshing the C12 campaign baseline (total 224→224; rush/casual rift #1 9→7 companies) and the tome floor 1.5→1.4. Details: [validation](../validation/p04-03-2026-11-14/README_TH.md).
+- PR #241 (P04-02): browser gate was red on stale expectations only (ore 15, seal→3 shards, fees 10 shards, `seal-list` class, v59 import note); fixed in `tests/browser`.
+- Open: OD-29/30 content (personal branches for 10 characters, tier 4, level caps) at P06; no load-time dialog for the reset notice; P04-04 low-star role check.
+
 ## 2026-11-13 — P04-02 character + universal shards (save v59)
 - Owner “ตามที่แนะนำ” on P04-01 → OD-23–26 (ore 160, shard set A, OD-07 from account start, core five 35–45). Branch `claude/p04-02-shards` (on top of P04-01 #240) → PR.
 - Stars cost own shards 10/20/30/40 (+ ore 15/30/45/70); universal shards (`bank.shard`) pay any of the rest; seals removed (loot seal → 3 shards, quests/hard ×10, market pack 10/60 gold once per return, forge fees 10); first normal clear +10; ★5 duplicates → universal; owned story recruits paid once (`profile.storyShards`). Save v59 converts dupes/seals ×10; the server converts DO-stored games when read (`upgradeStoredGame`).
