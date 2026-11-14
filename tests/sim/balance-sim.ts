@@ -489,10 +489,12 @@ export function campaignReport(campaigns: CampaignReport[]): string {
 
 // A fixed standard squad traverses the actual map, with carried HP, camp care, encounters and boss/goal rules.
 // No hiring, equipment drops or lobby optimization is applied mid-run. Story arrivals can occupy reserves only.
-export function rosterMap(m: MapDefinition, seed: number, ids: readonly string[], members: Record<string, MemberProgress>): { complete: boolean; hp: number; wins: number } {
+// `camp` (P04-04): start at a camp EXP, with map clears for tree points, optionally on hard. Omitted = camp Lv1 (C11/C12 rows).
+export function rosterMap(m: MapDefinition, seed: number, ids: readonly string[], members: Record<string, MemberProgress>, camp?: { campXp: number; clears: number; hard?: boolean }): { complete: boolean; hp: number; wins: number } {
   map = m; checks = false;
   const report: ExpeditionReport = { index: 1, outcome: 'withdrawn', steps: 0, wins: 0, defeats: 0, lowestHp: 100, battles: {}, gained: { ore: 0, gold: 0, shard: 0, dust: 0 }, items: [0,0,0,0,0], chests: 0, elites: 0, objectives: 0, bossBeaten: false, level: 0, stars: 1, company: 4, claimed: [] };
-  const s = newExpedition(m, lookup, seed, { roster: { deployed: [...ids], reserve: [] }, members }, true);
+  const s = newExpedition(m, lookup, seed, { roster: { deployed: [...ids], reserve: [] }, members, ...(camp ? { campXp: camp.campXp, ...(camp.clears ? { clears: camp.clears } : {}) } : {}) }, true);
+  if (camp?.hard) s.hard = true;
   const result = runExpedition(s, 'rush', 'advisor', report);
   const hp = hpPercent(result.state);
   map = chapterOne;
