@@ -309,7 +309,7 @@ test('lobby market (4A): the broker sheet redraws the board for gold twice per r
   await expect(page.locator('#buy-contract')).toBeDisabled();
   await page.locator('#buy-gearbox').click(); await expect(page.locator('.lobby-result')).toContainText('หีบอุปกรณ์');
   p = await savedProfile(page);
-  expect(p.members.tracer!.shards).toBe(1); expect(p.shop).toEqual({ contract: 1, gearbox: 1 }); expect(p.items).toHaveLength(1); expect(p.items[0]!.rarity).toBeGreaterThanOrEqual(2);
+  expect(p.members.tracer!.shards).toBe(map.company.shardsPerDuplicate); expect(p.shop).toEqual({ contract: 1, gearbox: 1 }); expect(p.items).toHaveLength(1); expect(p.items[0]!.rarity).toBeGreaterThanOrEqual(2);
   expect(await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).version, key)).toBe(59);
   expect(issues).toEqual([]);
 });
@@ -1259,7 +1259,7 @@ test('lobby forge: enhance, fuse and reroll from its own menu; saved v11', async
   await page.locator('#forge-enhance').click();
   await expect(page.locator('.forge-item-head')).toContainText('+1');
   await openForgeTools(page);await page.locator('#forge-mode-reroll').click();await page.locator('#forge-reroll-0').click();await page.locator('#forge-confirm').click();
-  await expect(page.locator('#forge-success')).toContainText('สุ่มคุณสมบัติสำเร็จ');await page.locator('#forge-next-preview').click();await expect(page.locator('#forge-reroll-0')).toBeDisabled();await expect(page.locator('.forge-reason')).toContainText('ตราสัญญาไม่พอ');
+  await expect(page.locator('#forge-success')).toContainText('สุ่มคุณสมบัติสำเร็จ');await page.locator('#forge-next-preview').click();await expect(page.locator('#forge-reroll-0')).toBeDisabled();await expect(page.locator('.forge-reason')).toContainText('เศษกลางไม่พอ');
   await openForgeTools(page);await page.locator('#forge-mode-fuse').click();await expect(page.locator('.forge-mats')).toContainText('จะทำลาย');
   await page.locator('#forge-fuse').click();await page.locator('#forge-confirm').click();
   await expect(page.locator('.forge-item-head')).toContainText('หายาก');await expect(page.locator('#forge-success')).toContainText('เลื่อนความหายากสำเร็จ');await page.locator('#forge-next-preview').click();
