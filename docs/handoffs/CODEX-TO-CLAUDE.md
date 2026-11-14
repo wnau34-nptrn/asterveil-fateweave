@@ -1,3 +1,9 @@
+## 2026-11-14 — P05-01 activity inventory (Sonnet; branch claude/p05-01-activity-inventory)
+- Docs only: [ACTIVITY_INVENTORY_TH.md](../design/p05/ACTIVITY_INVENTORY_TH.md) lists what exists (6 camp side quests, 7 guides, map-3 rift seal only, 5 event kinds / 8 placements: map1 0, map2 2, map3 6, no contracts; shop item `contract` is a duplicate purchase, a name clash) and marks reuse/adjust/add against 3/6/6.
+- Proposal: story quests map1 explore (3 chests, add), map2 choice (traveller+shrine events, add), map3 reuse seal; events 3 reuse / 2 adjust (shrine text, traveller second choice) / 1 add (abandoned camp); 6 contracts all new (fast, explorer, no-fight events, small team, no one downed, herb carry) — no "kill N" ones.
+- P05-02 must decide: optional (non-gating) quest field, cross-run choice flags (save migration from v60), counters for event choices and downed members, contract rewards/N from simulation. No runtime/save/test change; `git diff --check` only.
+- Owner questions: one traveller on map 1? contracts penalty-free? rename shop "contract" label? Owner P04-05 / P05-04 questions still unanswered, nothing applied.
+
 ## 2026-11-14 — P05-04 rest/defeat/hard-mode review + hard trait merge (Opus; branch claude/p05-04-hard-rewards)
 - Measured (new `tests/probe/p0504-hard.test.ts`; bench `BENCH_HARD=1 BENCH_REPLAYS=n`): wipes are rare (normal #1 casual rush 8%, hard #1 2–4%); a hard boss loss mostly sends the party back to camp with the reserve. Hard warden per attempt: casual rush 22/79/98% after 0/1/3 normal replays, explorer 75/96/100%, blind ≤15% — a real first challenge that eases with replays (OD-35).
 - Hard pays like a normal replay plus ~2 tomes, 1 rift core (the Lv5 key), +0.5–1.5 epic+ items and the one-time 30 gold/20 shards; no number change. Owner P04-05 question still unanswered, so nothing applied there.
