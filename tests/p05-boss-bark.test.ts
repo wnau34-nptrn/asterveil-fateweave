@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { eliteBriarLord, encounterById as lookup, riftWarden } from '../src/content/encounters/catalog';
+import { eliteBriarLord, encounterById as lookup, miniVeilGolem, riftWarden } from '../src/content/encounters/catalog';
 import { heroes } from '../src/content/heroes/team';
 import { ruinsMap } from '../src/content/world/chapter-ruins';
 import { chapterOne as map } from '../src/content/world/chapter1';
@@ -10,7 +10,7 @@ import { hardEncounter } from '../src/core/world/world';
 
 // P05 (OD-09): the forest boss / map 3 gate (Briar Lord) and the rift warden wear a bark (veilguard) on normal mode: hits are
 // blunted until a Mark, acid or a dispel opens it. Answer every party has: Aira's Mark (the prologue recruit).
-const bosses: [string, EncounterDefinition][] = [['briar lord', eliteBriarLord], ['rift warden', riftWarden]];
+const bosses: [string, EncounterDefinition][] = [['briar lord', eliteBriarLord], ['rift warden', riftWarden], ['veil golem', miniVeilGolem]];
 // Advance with plain attacks until a hero who can hit the boss (f1) has the turn.
 function heroOnBoss(data: EncounterDefinition): { s: BattleState; heroId: string } {
   let s = createBattle(data);

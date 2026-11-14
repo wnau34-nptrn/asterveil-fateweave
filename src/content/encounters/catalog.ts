@@ -201,12 +201,12 @@ export const eliteBriarLord: EncounterDefinition = {
 // Mini-boss (3B): a stone golem guarding the scar's side pocket with a rift weaver. Optional, but beating it is one of
 // the rift seal's three objectives. Physical golem, energy weaver.
 export const miniVeilGolem: EncounterDefinition = {
-  ...veilSiege, id: 'mini-veil-golem', version: 9, level: 9, name: 'ยักษ์หินแห่งรอยแผล',
+  ...veilSiege, rules: barkRules, id: 'mini-veil-golem', version: 10, level: 9, name: 'ยักษ์หินแห่งรอยแผล',
   enemies: [
     { id: 'b1', row: 'back', speed: 105, name: 'Rift Weaver', displayName: 'ผู้ถักรอยแยก', maxHp: 80, color: 0x8a6cc7, art: 'foe_riftweaver' },
-    { id: 'f1', row: 'front', large: true, speed: 65, boss: true, name: 'Veil Golem', displayName: 'ยักษ์หินรอยแยก', maxHp: 200, color: 0x7d8a96, art: 'foe_golem' },
+    { id: 'f1', row: 'front', large: true, speed: 65, boss: true, name: 'Veil Golem', displayName: 'ยักษ์หินรอยแยก', maxHp: 200, color: 0x7d8a96, art: 'foe_golem', traits: ['veilguard'] },
   ],
-  intents: [
+  intents: softened([
     { sourceId: 'b1', targetSlot: 2, name: 'Rift Needle', damage: 18, kind: 'energy' },
     { sourceId: 'f1', targetSlot: 0, name: 'Stone Fist', damage: 22, kind: 'physical' },
     { sourceId: 'b1', targetSlot: 3, name: 'Rift Needle', damage: 18, kind: 'energy' },
@@ -214,7 +214,7 @@ export const miniVeilGolem: EncounterDefinition = {
     { sourceId: 'f1', targetSlot: 1, name: 'Veil Quake', damage: 30, kind: 'physical' },
     { sourceId: 'b1', targetSlot: 2, name: 'Rift Needle', damage: 19, kind: 'energy' },
     { sourceId: 'f1', targetSlot: 0, name: 'Stone Fist', damage: 22, kind: 'physical' },
-  ],
+  ], ['b1'], 50).map(m => (m.sourceId === 'f1' ? { ...m, damage: Math.round(m.damage * 1.8) } : m)),
 };
 
 // Map 1 boss (chapters, draft): the captain of Vargoth's vanguard holds the fort gate. One signature hit per cycle
