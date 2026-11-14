@@ -53,11 +53,12 @@ function probeFights(st: Stage): { id: string; level: number }[] {
   return [...elites, { id: st.map.bossEncounterId, level: (st.map.bossLevel ?? 1) + hard + (st.hard ? st.map.progression.hardTraits.bossLevels : 0) }];
 }
 // `stress`: no gear and the camp two levels under the map level (the tree points of that lower level), so fights are close.
+// Hard is left out of stress: with no gear it fails for every star alike (0/12 at ★1, ★3 and ★5), so it says nothing about stars.
 export function lowStarSim(seeds: readonly number[], only?: readonly string[], stress = false): LowStarRow[] {
   const rows: LowStarRow[] = [];
-  for (const base of stages()) {
+  for (const base of stages().filter(s => !stress || !s.hard)) {
     const st = stress ? { ...base, level: Math.max(1, base.level - 2) } : base;
-    const m = st.map, catalog = heroCatalog(lookup, m);
+    const m = st.map, catalog = heroCatalog(lookup, m).filter(h => !m.company.parked?.includes(h.id));
     for (const subject of catalog) {
       if (only && !only.includes(subject.id)) continue;
       const ids = team(catalog, subject);
