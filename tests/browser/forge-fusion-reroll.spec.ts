@@ -7,7 +7,7 @@ import { xpAt } from '../fixtures/camp-level';
 import { legacyEnvelope } from '../fixtures/legacy-save';
 const key='asterveil.fateweave.expedition.v1';
 async function seed(page:Page){
-  const profile=newProfile(map,17);profile.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};profile.tutorialDone=true;profile.campXp=Math.max(profile.campXp,xpAt(6));profile.bank={ore:500,dust:50,gold:20,shard:5};
+  const profile=newProfile(map,17);profile.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};profile.tutorialDone=true;profile.campXp=Math.max(profile.campXp,xpAt(6));profile.bank={ore:500,dust:50,gold:20,shard:50};
   profile.members.guardian={stars:3,shards:0,gear:{weapon:{uid:1,slot:'weapon',hero:'guardian',rarity:2,level:3,affixes:['hp','armour'],plus:2,q:{main:113,affixes:[97,105]},set:'dawn',investment:{ore:9,dust:2},levelInvestment:{ore:20,dust:2}}}};profile.nextItem=2;
   const raw=JSON.stringify(legacyEnvelope({version:23,profile,run:null}));
   await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('uxd03-seeded')){localStorage.setItem(key,raw);sessionStorage.setItem('uxd03-seeded','1');}const w=window as unknown as {forgeWrites:number};w.forgeWrites=0;const set=Storage.prototype.setItem;Storage.prototype.setItem=function(k,v){if(k===key)w.forgeWrites++;set.call(this,k,v);};},{key,raw});

@@ -8,7 +8,7 @@ import { currentSave } from '../fixtures/current-save';
 import { xpAt } from '../fixtures/camp-level';
 const key='asterveil.fateweave.expedition.v1';
 async function open(page:Page,poor=false){
-  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.bank={ore:poor?11:100,dust:poor?2:100,shard:poor?0:5,gold:20};
+  const p=newProfile(map,17);p.commander={name:'อารี',crest:'star',color:'gold',camp:'ค่ายอารี'};p.tutorialDone=true;p.veteran=true;p.campXp=xpAt(6);p.bank={ore:poor?11:100,dust:poor?2:100,shard:poor?0:50,gold:20};
   p.items=[{uid:1,slot:'body',rarity:3,level:6,affixes:['hp','armour','regen'],q:{main:109,affixes:[80,95,105]},set:'dawn',plus:5,investment:{ore:30,dust:9},levelInvestment:{ore:20,dust:2},locked:true},
     {uid:2,slot:'body',rarity:4,level:3,affixes:['support','resist','barrier'],q:{main:90,affixes:[120,88,100]},special:'renewal',set:'wind',plus:2,investment:{ore:9,dust:2},levelInvestment:{ore:20,dust:2}}];p.nextItem=3;
   const raw=currentSave({profile:p,run:null});parseGame(raw,map,encounterById);
@@ -21,7 +21,7 @@ async function reachable(page:Page,selector:string){
 test('transfer refuses net-affordable refunds until all upfront fees are owned',async({browser})=>{
   const context=await browser.newContext({viewport:{width:390,height:650},hasTouch:true,isMobile:true,reducedMotion:'reduce'}),page=await context.newPage();await open(page,true);const original=await page.evaluate(k=>localStorage.getItem(k),key);
   expect(await page.locator('#forge-cost tbody tr').first().locator('td').allTextContents()).toEqual(['11','12','29','28']);expect(await page.locator('#forge-cost tbody tr').nth(1).locator('td').allTextContents()).toEqual(['2','3','4','3']);
-  for(const text of ['แร่ขาด 1','ฝุ่นขาด 1','ตราขาด 1'])await expect(page.locator('.forge-cost-status')).toContainText(text);await expect(page.locator('#forge-transfer')).toBeDisabled();
+  for(const text of ['แร่ขาด 1','ฝุ่นขาด 1','เศษกลางขาด 10'])await expect(page.locator('.forge-cost-status')).toContainText(text);await expect(page.locator('#forge-transfer')).toBeDisabled();
   await page.locator('#forge-transfer').dispatchEvent('click');await expect(page.locator('#forge-confirm')).toHaveCount(0);expect(await page.evaluate(k=>localStorage.getItem(k),key)).toBe(original);await context.close();
 });
 test('transfer keeps the receiver, clears changed reviews, and returns inventory focus',async({browser},info)=>{
