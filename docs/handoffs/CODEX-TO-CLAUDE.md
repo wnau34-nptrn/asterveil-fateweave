@@ -1,3 +1,11 @@
+## 2026-11-14 — P05-04 rest/defeat/hard-mode review + hard trait merge (Opus; branch claude/p05-04-hard-rewards)
+- Measured (new `tests/probe/p0504-hard.test.ts`; bench `BENCH_HARD=1 BENCH_REPLAYS=n`): wipes are rare (normal #1 casual rush 8%, hard #1 2–4%); a hard boss loss mostly sends the party back to camp with the reserve. Hard warden per attempt: casual rush 22/79/98% after 0/1/3 normal replays, explorer 75/96/100%, blind ≤15% — a real first challenge that eases with replays (OD-35).
+- Hard pays like a normal replay plus ~2 tomes, 1 rift core (the Lv5 key), +0.5–1.5 epic+ items and the one-time 30 gold/20 shards; no number change. Owner P04-05 question still unanswered, so nothing applied there.
+- Fix: `hardEncounter` replaced a foe's own traits, so the veil golem lost its P05-03 bark on hard; hard traits now add to them (`mini-veil-golem` v10→v11, the only encounter whose hard form changes). Hard golem blind attacks rush 25→11%, explorer 68→58% (no replays).
+- Report pointer: `npm run sim` writes `docs/validation/roster-30/batch-1/CAMPAIGN.md` (rows count attempts); the 11-08 `balance-sim/CAMPAIGN.md` is labelled frozen; CLAUDE.md index fixed.
+- Tests: p05-boss-bark +1, `npm run sim` 29/29 (no new baseline), unit 1827, typecheck, lint, coverage:presentation pass. [Validation](../validation/p05-04-2026-11-14/README_TH.md).
+- Owner questions: P04-05 forest cost; hard non-boss fights fall to blind attacks 61–100% (accept like OD-35?); hard ore/gold premium (e.g. 125%) or keep.
+
 ## 2026-11-14 — P04-05/06 pacing: catch-up EXP + campfire 70% (Opus; branch claude/p04-05-pacing)
 - Measured first (new `tests/probe/p0405-pacing.test.ts`, sim `hooks`): casual rush enters the rift at camp Lv4–5 and its failures are the walk back from the mini-boss at 30–60% HP into a random fight 2–3 levels up. Fatigue thresholds, reserve heal, relight 3→2 and field reserve swaps were not the bottleneck (field swap hurt: the party pushes on instead of resting).
 - Changes (draft, no save/boss change): `expPercent` 2 levels under 115% (was 100), 3+ 130% (was 110); `camp.restHealPercent` 50→70.

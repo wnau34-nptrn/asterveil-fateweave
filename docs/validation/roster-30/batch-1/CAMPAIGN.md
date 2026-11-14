@@ -43,7 +43,7 @@ C12 selective deployed-duplicate policy, paired against the same policy on base 
 | แนวรอยแยก (ยาก) | elite-forced | 24 | 100% | 95 | 100 |
 | แนวรอยแยก (ยาก) | elite-forced:attack | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | event-rift | 24 | 100% | 98 | 100 |
-| แนวรอยแยก (ยาก) | mini | 24 | 100% | 96 | 100 |
+| แนวรอยแยก (ยาก) | mini | 24 | 100% | 96 | 99 |
 | แนวรอยแยก (ยาก) | mini:attack | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | random | 207 | 100% | 97 | 99 |
 
@@ -100,7 +100,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก (ยาก) | elite-optional:attack | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | event-bandits | 48 | 100% | 97 | 99 |
 | แนวรอยแยก (ยาก) | event-rift | 24 | 100% | 99 | 100 |
-| แนวรอยแยก (ยาก) | mini | 24 | 100% | 97 | 100 |
+| แนวรอยแยก (ยาก) | mini | 24 | 100% | 97 | 99 |
 | แนวรอยแยก (ยาก) | mini:attack | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | random | 715 | 100% | 98 | 99 |
 
@@ -153,7 +153,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก (ยาก) | elite-forced:attack | 96 | 100% | – | – |
 | แนวรอยแยก (ยาก) | event-rift | 96 | 100% | 98 | 99 |
 | แนวรอยแยก (ยาก) | mini | 96 | 100% | 90 | 96 |
-| แนวรอยแยก (ยาก) | mini:attack | 96 | 100% | – | – |
+| แนวรอยแยก (ยาก) | mini:attack | 96 | 97% | – | – |
 | แนวรอยแยก (ยาก) | random | 789 | 100% | 95 | 99 |
 
 First boss attempt won: ซากชายแดน 98% (party Lv 2.8, boss Lv 3) · เส้นทางป่าทึบ 98% (party Lv 5.0, boss Lv 6) · แนวรอยแยก 98% (party Lv 9.1, boss Lv 11).

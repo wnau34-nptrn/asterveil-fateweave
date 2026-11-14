@@ -199,9 +199,9 @@ export const eliteBriarLord: EncounterDefinition = {
 };
 
 // Mini-boss (3B): a stone golem guarding the scar's side pocket with a rift weaver. Optional, but beating it is one of
-// the rift seal's three objectives. Physical golem, energy weaver.
+// the rift seal's three objectives. Physical golem, energy weaver. P05-04 (v11): hard mode keeps its bark (traits merge).
 export const miniVeilGolem: EncounterDefinition = {
-  ...veilSiege, rules: barkRules, id: 'mini-veil-golem', version: 10, level: 9, name: 'ยักษ์หินแห่งรอยแผล',
+  ...veilSiege, rules: barkRules, id: 'mini-veil-golem', version: 11, level: 9, name: 'ยักษ์หินแห่งรอยแผล',
   enemies: [
     { id: 'b1', row: 'back', speed: 105, name: 'Rift Weaver', displayName: 'ผู้ถักรอยแยก', maxHp: 80, color: 0x8a6cc7, art: 'foe_riftweaver' },
     { id: 'f1', row: 'front', large: true, speed: 65, boss: true, name: 'Veil Golem', displayName: 'ยักษ์หินรอยแยก', maxHp: 200, color: 0x7d8a96, art: 'foe_golem', traits: ['veilguard'] },

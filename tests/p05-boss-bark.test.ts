@@ -58,4 +58,13 @@ describe('P05 boss bark', () => {
     expect(hardEncounter(lookup('elite-briar-lord')!, 'boss', map).enemies.find(e => e.id === 'f1')!.traits).toEqual(['enrage', 'veilguard']);
     expect(hardEncounter(riftWarden, 'boss', map).enemies.find(e => e.id === 'f1')!.traits).toEqual(['enrage', 'veilguard']);
   });
+  it('P05-04: a hard-mode trait is added to a foe\'s own bark, never replaces it', () => {
+    // The golem (mini-boss, an elite fight) used to lose veilguard on hard when its salt drew enrage.
+    const golem = hardEncounter(lookup('mini-veil-golem')!, 'elite', map).enemies.find(e => e.id === 'f1')!;
+    expect(golem.traits).toEqual(['enrage', 'veilguard']);
+    for (const id of ['elite-briar-lord', 'mini-veil-golem', 'rift-warden']) {
+      const base = lookup(id)!; const hard = hardEncounter(base, id === 'rift-warden' ? 'boss' : 'elite', map);
+      for (const e of base.enemies) for (const t of e.traits ?? []) expect(hard.enemies.find(x => x.id === e.id)!.traits, `${id} ${e.id}`).toContain(t);
+    }
+  });
 });
