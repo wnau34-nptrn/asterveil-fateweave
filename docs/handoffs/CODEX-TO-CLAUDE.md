@@ -1,3 +1,11 @@
+## 2026-11-14 — P04-04 low-star role check + rift #1 recheck (measurement only)
+- Branch `claude/p04-04-low-star-sim` → PR. No rule/number/save change. New `tests/sim/low-star-sim.ts` + `tests/low-star-sim.test.ts` (in `npm run sim`; `STRESS=1` = no gear, camp −2); `rosterMap` takes an optional camp EXP/clears/hard.
+- 15 classes, team of five (companions ★3), maps 1–3 + hard: subject ★1/★3/★5 clear 180/180/180 everywhere, ★1 never falls, ★1/★5 own output 0.69–1.04 (median 0.82–0.91; stats alone 0.76–0.80) → OD-01 holds. Hard without gear fails at every star alike.
+- Rift #1 rush/casual 9→7 was noise: same arrival level/stars per company, +1 tree point not −; 48 companies 32→34 (P04-02→P04-03), advisor 45→45. Casual ~70% at the rift predates P04-03.
+- Found: `character-sim` traversal starts at camp Lv1 (no `campXp`), so CHARACTERS.md overstates "map level".
+- Proposals for owner (none applied): keep stars; 48-company casual campaign gate/baseline; fix character-sim camp level; casual rift with P05; fatigue/reserve swap check later. Details: [validation](../validation/p04-04-2026-11-14/README_TH.md).
+- Tests: typecheck, lint, low-star gate under SIM_REPORT=1.
+
 ## 2026-11-14 — P04-03 tree points off stars (save v60) + PR #241 browser fixes
 - Owner first asked for the whole-chapter picture (10 maps, node levels, level caps, hit games) → [TREE_BIGPICTURE_P04_03_TH](../design/p04/TREE_BIGPICTURE_P04_03_TH.md); then “ดำเนินการตามที่คุณแนะนำได้” → OD-27–OD-30.
 - Branch `claude/p04-03-tree-points` (on top of P04-02) → PR. `talentPoints(map, level, clears)` = camp Lv2–10 + 1 per map in `Profile.cleared`; a run carries `clears`; stars/hard give none. v60 resets an over-allowance tree free (`Profile.treeReset` notice in the tree page), keeps other builds, lets a run in progress finish and resets at settle; `upgradeStoredGame` does the same for server games.
