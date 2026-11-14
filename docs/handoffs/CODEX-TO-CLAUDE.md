@@ -1,3 +1,8 @@
+## 2026-11-14 — P04-04b sim gates (Sonnet; branch claude/p04-04b-sim-gates)
+- Tooling only (OD-32): casual campaign companies 48 seeds (advisor 12), gate scales cell/group counts, fixture rebuilt from base 444f06b; character-sim passes camp EXP/clears to rosterMap, CHARACTERS.md regenerated (clears/builds unchanged, HP 41 cells slightly changed).
+- Tests: campaign-sim 5/5, character-sim 4/4 (SIM_REPORT=1). Details: docs/validation/p04-04b-2026-11-14/README_TH.md.
+- Open: casual rift #1 ~71% (P05).
+
 ## 2026-11-14 — P04-04 low-star role check + rift #1 recheck (measurement only)
 - Branch `claude/p04-04-low-star-sim` → PR. No rule/number/save change. New `tests/sim/low-star-sim.ts` + `tests/low-star-sim.test.ts` (in `npm run sim`; `STRESS=1` = no gear, camp −2); `rosterMap` takes an optional camp EXP/clears/hard.
 - 15 classes, team of five (companions ★3), maps 1–3 + hard: subject ★1/★3/★5 clear 180/180/180 everywhere, ★1 never falls, ★1/★5 own output 0.69–1.04 (median 0.82–0.91; stats alone 0.76–0.80) → OD-01 holds. Hard without gear fails at every star alike.
