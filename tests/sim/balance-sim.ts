@@ -43,6 +43,8 @@ let checks = false;
 export const captured: { company: string; mapId: string; label: string; hard: boolean; state: ExpeditionState }[] = []; let capture = false; let company = '';
 export const setCapture = (on: boolean) => { capture = on; captured.length = 0; };
 export const useMap = (m: MapDefinition) => { map = m; };
+// Tuning probes: called after every battle and expedition of a campaign (unset in normal runs).
+export const hooks: { battle?: (s: ExpeditionState, label: string, won: boolean, before: number, mapId: string, company: string) => void; run?: (s: ExpeditionState, outcome: RunOutcome, mapId: string, company: string) => void } = {};
 
 const dirs: Record<Direction, Point> = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
 const same = (a: Point, b: Point) => a.x === b.x && a.y === b.y;
@@ -139,11 +141,12 @@ function fight(s: ExpeditionState, report: ExpeditionReport, style: Style): { st
   const label = b.kind === 'elite' ? (mini ? 'mini' : map.elites.find(e => e.id === b.source)?.forced ? 'elite-forced' : 'elite-optional') : b.kind === 'event' ? `event-${map.events.find(e => e.id === b.source)?.kind}` : b.kind;
   if (checks && (b.kind === 'boss' || b.kind === 'elite')) shadows(s, label, report);
   if (capture && (b.kind === 'boss' || b.kind === 'elite')) captured.push({ company, mapId: map.id, label, hard: !!s.hard, state: structuredClone(s) });
-  const { bs, low } = playOut(s, style);
+  const { bs, low } = playOut(s, style); const before = hpPercent(s);
   const r = finishBattle(recordBattle(s, map, lookup, bs.commands), map, lookup);
   const st = (report.battles[label] ??= { fought: 0, won: 0, hpAfter: 0, low: 0 }); st.fought++; st.low += low;
   if (r.event.type === 'victory') { st.won++; st.hpAfter += hpPercent(r.state); report.lowestHp = Math.min(report.lowestHp, hpPercent(r.state)); }
   else report.lowestHp = 0;
+  hooks.battle?.(r.state, label, r.event.type === 'victory', before, map.id, company);
   return { state: r.state, wiped: r.event.type === 'defeat' && !!r.event.wiped };
 }
 
@@ -393,7 +396,7 @@ export function simulateCampaign(seed: number, policy: Policy, style: Style = 'a
       const want = starters?.[n]; const d = s.draft;
       s = draftPick(want ? { ...s, draft: { ...d, offers: [want] } } : s, map, want ? 0 : (seed + n) % d.offers.length, lookup).state;
     }
-    const r = runExpedition(s, policy, style, report); s = r.state;
+    const r = runExpedition(s, policy, style, report); s = r.state; hooks.run?.(s, r.outcome, map.id, company);
     const before = { ...p.bank }; p = settle(p, s, r.outcome, map);
     if (!next) { if (isHard) hardRuns++; else normalAfter++; }
     const ids = p.party.deployed;

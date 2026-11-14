@@ -144,7 +144,7 @@ Elites (phase 3) will add guaranteed seals.
 **Chests.** There are six, defined as map content (`chests`) on floor tiles in side pockets: meadow west/east, thicket west/east (east is rare), and scar west (rare)/east. Standing on an unopened chest turns the lower-right action into **เปิด**. Each chest opens once (`openedChests`). The chest tile still rolls encounters like any floor tile. The chest markers are code-native placeholders until chest art is commissioned.
 
 **Camp.** Pressing **พัก** on a camp opens the camp sheet.
-- **Rest:** standing members heal 50% of max HP (rounded up, capped at max). Pressure resets, and the camp becomes the return point. The campfire (`restReady`) then goes out; any won battle relights it. The fallen do not heal.
+- **Rest:** standing members heal `camp.restHealPercent` of max HP (70% since P04-05/06, was 50%; rounded up, capped at max). Pressure resets, and the camp becomes the return point. The campfire (`restReady`) then goes out; any won battle relights it. The fallen do not heal.
 - **Revive:** one fallen member per ember, to 30% of max HP (rounded up). This works whether or not the fire is lit.
 
 **Balance evidence.** The advisor's full run (seed 2026, revive then rest at each camp) still reaches the goal. The advisor still wins every encounter from 60% HP. Human playtesting is still needed.

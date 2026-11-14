@@ -229,10 +229,12 @@ export function monsterLevelAt(map: MapDefinition, p: Point): number | undefined
   const [lo, hi] = zone.levels; const top = Math.min(...ys), bottom = Math.max(...ys);
   return bottom === top ? lo : lo + Math.round((bottom - p.y) / (bottom - top) * (hi - lo));
 }
-// EXP multiplier by how far the camp's level is above the monster's (never zero), with a bonus for fighting up.
+// EXP multiplier by how far the camp's level is above the monster's (never zero), with a catch-up bonus for fighting up.
+// P04-05/06 (OD-34, draft): two levels under pays 115%, three or more 130% (was 110%), so a company that rushes maps 1–2
+// reaches the rift warden nearer the map's level (docs/validation/p04-05-2026-11-14/README_TH.md).
 export function expPercent(campLevel: number, monsterLevel: number): number {
   const gap = campLevel - monsterLevel;
-  return gap <= -3 ? 110 : gap <= 2 ? 100 : gap === 3 ? 75 : gap === 4 ? 50 : gap === 5 ? 25 : 10;
+  return gap <= -3 ? 130 : gap === -2 ? 115 : gap <= 2 ? 100 : gap === 3 ? 75 : gap === 4 ? 50 : gap === 5 ? 25 : 10;
 }
 // Max HP for the given members (default: the starting roster at ★1).
 export function fullParty(lookup: EncounterLookup, map: MapDefinition, ids?: readonly string[], party: Party = { members: {}, campXp: 0 }): Record<string, number> {

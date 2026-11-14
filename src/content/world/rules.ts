@@ -20,7 +20,8 @@ export const gameRules: GameRules = {
     { id: 'herbalist-glow', npc: 'herbalist', kind: 'herbs', target: 6, reward: { potions: { salve: 2, tonic: 2 } } },
     { id: 'scout-puzzles', npc: 'scout', kind: 'puzzles', target: 6, reward: { ore: 40, shard: 10 } },
   ],
-  camp: { restHealPercent: 50, reviveHpPercent: 30, reserveHealPercent: 25, relightWins: 3, fatigue: { cap: 12, steps: [7, 11], stepPercent: 10, rest: 5 } },
+  // P04-05/06 (OD-34, draft): a campfire rest heals 70% (was 50%); casual parties left camp still hurt and lost the walk back.
+  camp: { restHealPercent: 70, reviveHpPercent: 30, reserveHealPercent: 25, relightWins: 3, fatigue: { cap: 12, steps: [7, 11], stepPercent: 10, rest: 5 } },
   startingRoster: ['guardian', 'tracer', 'weaver', 'healer'],
   // A new ค่ายทหารรับจ้าง starts with the Knight alone (owner 2026-10-21); the other three join on map 1.
   firstCompany: ['guardian'],
