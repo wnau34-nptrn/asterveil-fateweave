@@ -1,3 +1,10 @@
+## 2026-11-14 — P05 enemy difficulty: boss bark + chip shift (Opus; branch claude/p05-enemy-difficulty)
+- Measured first (new bench of captured boss states, `tests/probe/p05-*.test.ts`): casual rift #1 failures = rift warden + arriving hurt; helpers' unanswered chip cost every style the same, bosses' announced moves split advisor from blind attacks; the Briar Lord fell to blind attacks only narrowly (end HP 8–33%).
+- Changes (content only, draft): `veilguard` bark on Briar Lord (v11) and rift warden (v21) on normal mode at the hard-mode numbers (answer: Aira's Mark from the prologue, acid, dispel); warden wisps 70%; tusk chief (v8) sprite −25%, charges +25%; briar stalker −20%, lord moves ~+10%. No save/rule change.
+- Campaign before→after: casual rush rift #1 71→79%, explorer/casual forest #1 58→71%, advisor rush rift #1 83→92%, casual hard #1 90→98%; blind attacks forest boss 42–71%→0–46%, map 3 gate first try 57/85%→23/65%. Cost: explorer/advisor forest #1 100→92 (one seed, random fight after a changed path) → gate baseline rebuilt with reason; rush/casual forest #1 96→92.
+- Tests: new p05-boss-bark (7); warden route HP fixture; class-sim main/off tolerance 0.5→1 pt (Lio support/speed ties off gear, 86/86). campaign-sim 5/5, other `npm run sim` suites, typecheck, lint, unit, coverage:presentation pass. [Validation](../validation/p05-2026-11-14/README_TH.md).
+- Owner questions in the validation note: further rift #1 gains belong to level pacing/campfire; map 3 gate in Lv10 replays still falls to blind attacks 78–91%; no 390px clip of the bark yet.
+
 ## 2026-11-14 — P04-04b sim gates (Sonnet; branch claude/p04-04b-sim-gates)
 - Tooling only (OD-32): casual campaign companies 48 seeds (advisor 12), gate scales cell/group counts, fixture rebuilt from base 444f06b; character-sim passes camp EXP/clears to rosterMap, CHARACTERS.md regenerated (clears/builds unchanged, HP 41 cells slightly changed).
 - Tests: campaign-sim 5/5, character-sim 4/4 (SIM_REPORT=1). Details: docs/validation/p04-04b-2026-11-14/README_TH.md.
