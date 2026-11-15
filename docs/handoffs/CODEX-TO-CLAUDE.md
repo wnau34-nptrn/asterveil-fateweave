@@ -3,7 +3,7 @@
 - New `tests/sim/week-sim.ts` (`playExpedition` in balance-sim) plays post-campaign weeks on the real rules (lobby, one map-3 run per session, sweeps, board claims); probe `tests/probe/p0406-budget.test.ts` (`BUDGET_OUT`).
 - Finding: old drafts gave sweep+board 39–45% (explorer) / 63–68% (rush) of weekly ore, and a login-only player 1523 ore/week (> 3 rush sessions). Cut: sweep supply 2/day kept to 6 (was 6/18), map-3 sweep 30/15/2/1 (hard tomes 2), maps 1–2 10/5; board dailies ~½, weeklies/contracts ~⅔. Now explorer 22–30%, rush 42–53%, login-only 530; 3 sessions lose no sweeps vs daily.
 - No profit loops: new `tests/farm-budget-p04.test.ts` (craft/enhance/level→salvage, fuse, transfer, smelt one-way, no gold back, reward kinds). Duplicates and targeted farming checked; old maps' sets also drop on map 3 (open for P06).
-- Tests: unit suite, typecheck/lint, browser `sweep-p05`/`quest-board-p05` (390px), `npm run sim`. [Validation](../validation/p04-06-2026-11-15/README_TH.md).
+- Tests: unit suite, typecheck/lint, browser `sweep-p05`/`quest-board-p05` (390px), `npm run sim` 29/29 (no report change). [Validation](../validation/p04-06-2026-11-15/README_TH.md).
 - Open (owner): target share ~20–30%; login-only sweep income; board + World Boss + weekly universal shards (after P09 ledger) share one budget.
 
 ## 2026-11-15 — P05-06 quest board prototype (Opus; branch claude/p05-06-quest-board)
