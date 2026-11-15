@@ -33,11 +33,9 @@ jobs:
         with:
           path: dist
 
-  # Pre-release (owner 2026-11-04): the full browser gate already runs on every PR (browser.yml), so pushes deploy after
-  # lint/unit/build only. Run this workflow manually (workflow_dispatch) for a full browser check of the branch.
-  # Before the external test (OD-13), remove the `if:` below and put `browser` back into deploy's `needs`.
+  # P12 (OD-13 external test): the Chromium suite gates every deploy again (it was skipped on pushes pre-release since
+  # 2026-11-04). A failed shard stops the deploy; fix it and push, or re-run the failed jobs.
   browser:
-    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -50,7 +48,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      # The build job above already type-checks this commit and deploy needs both jobs; shards only need the bundle.
+      # The build job type-checks this commit and deploy needs both jobs; the shards only need the bundle.
       - run: npx vite build --base=/asterveil-fateweave/
       - run: npx playwright install --with-deps chromium
       - name: Verify painted blade, defense, healing, projectile, earth, alchemy and arcane seal source fixtures
@@ -72,7 +70,7 @@ jobs:
           retention-days: 7
 
   deploy:
-    needs: [build]
+    needs: [build, browser]
     runs-on: ubuntu-latest
     permissions:
       pages: write
