@@ -44,6 +44,8 @@ LOAD_URL=http://127.0.0.1:8799 LOAD_CONTENT=local LOAD_ACCOUNTS=3 LOAD_CHAT_SECO
 
 ## ข้อจำกัด
 
+- **ยังสั่งรันไม่ได้ (2026-11-15):** GitHub สั่ง `workflow_dispatch` ได้เฉพาะ workflow ที่มีไฟล์อยู่บนสาขา default (`main`) — dispatch บนสาขาเกมตอบ 404. ทางแก้ (เจ้าของเลือก): ก) เพิ่มไฟล์ `cloudflare-load.yml` ลง `main` ครั้งเดียว แล้วสั่งรันด้วย ref สาขาเกม; ข) เปลี่ยนสาขา default ของ repo เป็นสาขาเกม
+
 - รันบน Cloudflare จริงต้องใช้ secret ของ repo (`CLOUDFLARE_API_TOKEN` มี D1 Edit + Workers Scripts Edit) ผ่าน workflow เท่านั้น; ห้ามชี้ `LOAD_URL` ไปที่ dev API (เขียนแชทและดาเมจ World Boss จริง)
 - HP ส่วนกลางของ staging ใหม่ = ขั้นต่ำ 5000 → ศึกจะถูกฆ่าระหว่างทดสอบ (ทดสอบทางตัดดาเมจที่ 0 ไปด้วย)
 - ทาง outbox เมื่อ `/contribute` ล้มจริง ตรวจด้วย unit test (`tests/world-boss-p11.test.ts`) — ที่นี่ตรวจว่าทางปกติ + `/v1/state` ไม่ทำ hit หาย/ซ้ำ
