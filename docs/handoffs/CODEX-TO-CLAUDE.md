@@ -1,3 +1,11 @@
+## 2026-11-15 — P12 external-test readiness: Pages browser gate, staging load test, owner checklist (Opus; branch claude/p12-external-test-readiness)
+- No owner comment on chat PR #261. No rule/save/number change (save v64); no payments, PvP or Co-op.
+- `pages.yml`: the Chromium suite (4 shards + FX fixtures) runs on every push again and `deploy` needs `build` + `browser` (OD-13 gate restored); CLAUDE.md line updated.
+- Load test `tests/server-load.test.ts` (runs only with `LOAD_URL`): guests → import a cleared-map camp save → 5 World Boss attempts each sent twice at once + `/v1/state` (outbox), chat polling 1/s and sends every 12 s; asserts HP ≥ 0 and drops by at least own damage, identical retry answers, every sent message seen, no 5xx. Workflow `cloudflare-load.yml` (manual): deploys a throwaway `asterveil-api-staging` + D1 `asterveil-staging`, 1–4 runners, then deletes both. [Plan/results](../validation/p12-load/README_TH.md).
+- Local `wrangler dev` runs pass (3 accounts: 15/15 identical retries, HP matches damage, chat 19/19). Cloudflare run: see the PR/handoff below if dispatched; dev API is never the target.
+- Owner checklist [EXTERNAL_TEST_CHECKLIST_TH.md](../design/EXTERNAL_TEST_CHECKLIST_TH.md): T, privacy contact, admin row, Google consent publish, `CHAT_WRITE`, chat privacy wording, Cloudflare plan, invites + open draft numbers.
+- Tests: typecheck, lint, unit 1933 pass, `git diff --check`. Open: everything in checklist §1, token-reuse detection, real devices.
+
 ## 2026-11-15 — P11 chat: world channel, server + camp UI (Opus; branch claude/p11-chat)
 - No owner comment on PR #259/#260. OD-13 order: World Boss done → chat (this) → external test. No rule/save/balance change (save v64), no payments, no PvP/Co-op.
 - Design [CHAT_P11_TH.md](../design/CHAT_P11_TH.md): one world channel, HTTP polling 8 s, pseudonymous handle `ค่าย-XXXXX` (SHA-256 of account id), 160 chars, links/e-mail/long numbers refused, profanity masked, pace 4 s / 8 a min / 60 an hr per account (exact, in the DO) + 30/min per IP net (RateLimit gate), report ×3 auto-hide, admin list/hide/mute via D1 `admins` (audited), retention 7 d / 500 msgs (reported 30 d), purge on account deletion, owner switch `CHAT_WRITE` all|linked|off.

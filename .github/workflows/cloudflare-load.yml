@@ -1,0 +1,122 @@
+name: Cloudflare staging load test
+
+# P12 (docs/validation/p12-load/README_TH.md): deploys a throwaway staging copy of the API (Worker
+# `asterveil-api-staging` + its own D1 `asterveil-staging`, fresh Durable Objects), runs tests/server-load.test.ts
+# from several runners at once (each runner is one IP, so the per-IP limits stay real), then deletes the Worker and the
+# D1 database in every outcome. Never touches the dev API players use. Manual only.
+on:
+  workflow_dispatch:
+    inputs:
+      runners: { description: 'Runners (IPs) in parallel, 1-4', default: '4' }
+      accounts: { description: 'Accounts per runner (guests are limited to 5 a minute per IP)', default: '5' }
+      seconds: { description: 'Chat seconds', default: '120' }
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-staging-load
+  cancel-in-progress: false
+
+env:
+  WRANGLER: npx --yes wrangler@4.153.0
+  WRANGLER_SEND_METRICS: 'false'
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+  D1_NAME: asterveil-staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+      content: ${{ steps.config.outputs.content }}
+      shards: ${{ steps.config.outputs.shards }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Wrangler prints the account name, which contains the owner's e-mail: every Wrangler output is filtered.
+      - name: Create the staging D1 database and write the staging config
+        id: config
+        env:
+          RUNNERS: ${{ inputs.runners }}
+        run: |
+          set -o pipefail
+          $WRANGLER d1 list --json > /tmp/d1.json 2>/dev/null || { echo 'wrangler d1 list failed (output hidden)'; exit 1; }
+          if ! node -e "process.exit(JSON.parse(require('fs').readFileSync('/tmp/d1.json','utf8')).some(d=>d.name===process.env.D1_NAME)?0:1)"; then
+            $WRANGLER d1 create "$D1_NAME" 2>&1 | grep -iE 'success|creat|error' | grep -v '@'
+            $WRANGLER d1 list --json > /tmp/d1.json 2>/dev/null
+          fi
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const db = JSON.parse(readFileSync('/tmp/d1.json', 'utf8')).find(d => d.name === process.env.D1_NAME);
+          if (!db?.uuid) throw new Error('staging D1 not found');
+          const c = JSON.parse(readFileSync('cloudflare/wrangler.json', 'utf8'));
+          c.name = 'asterveil-api-staging';
+          c.d1_databases[0] = { ...c.d1_databases[0], database_name: process.env.D1_NAME, database_id: db.uuid };
+          // The load test seeds each account through the one-time import, so the copy keeps it open whatever dev uses.
+          c.vars = { ...c.vars, ALLOWED_ORIGINS: 'http://localhost:5173', LEGACY_IMPORT: 'open', CHAT_WRITE: 'all' };
+          delete c.vars.LEGACY_IMPORT_UNTIL;
+          delete c.triggers; // no hourly cleanup on a copy that lives minutes
+          writeFileSync('cloudflare/wrangler.staging.json', JSON.stringify(c, null, 2));
+          NODE
+          n=$(( ${RUNNERS:-4} )); [ "$n" -ge 1 ] && [ "$n" -le 4 ] || n=4
+          echo "shards=$(node -e "console.log(JSON.stringify(Array.from({length:$n},(_, i)=>String.fromCharCode(97+i))))")" >> "$GITHUB_OUTPUT"
+          echo "content=$(node scripts/content-version.mjs)" >> "$GITHUB_OUTPUT"
+      - name: Apply D1 migrations
+        run: $WRANGLER d1 migrations apply DB --remote --config cloudflare/wrangler.staging.json 2>&1 | grep -vE '@|Account' | tail -n 5
+      - name: Deploy the staging Worker
+        id: deploy
+        env:
+          CONTENT: ${{ steps.config.outputs.content }}
+        run: |
+          $WRANGLER deploy --config cloudflare/wrangler.staging.json --var "CONTENT_VERSION:$CONTENT" > /tmp/deploy.txt 2>&1 || { grep -v '@' /tmp/deploy.txt | tail -n 30; exit 1; }
+          url=$(grep -oE 'https://[a-z0-9.-]+\.workers\.dev' /tmp/deploy.txt | head -n1); test -n "$url"
+          for i in $(seq 1 30); do [ "$(curl -s -o /dev/null -w '%{http_code}' -X POST -H "X-Fateweave-Content: $CONTENT" "$url/v1/session")" = 401 ] && break; sleep 3; done
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+  load:
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: ${{ fromJson(needs.deploy.outputs.shards) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Load (runner ${{ matrix.runner }})
+        env:
+          LOAD_URL: ${{ needs.deploy.outputs.url }}
+          LOAD_CONTENT: ${{ needs.deploy.outputs.content }}
+          LOAD_ACCOUNTS: ${{ inputs.accounts }}
+          LOAD_CHAT_SECONDS: ${{ inputs.seconds }}
+          LOAD_RUNNER: ${{ matrix.runner }}
+          LOAD_OUT: /tmp/load.md
+        run: |
+          set -o pipefail
+          npx vitest run tests/server-load.test.ts 2>&1 | grep -vE 'ExperimentalWarning|trace-warnings' | tail -n 40
+          { echo "## Runner ${{ matrix.runner }}"; cat /tmp/load.md 2>/dev/null || echo 'no result'; } >> "$GITHUB_STEP_SUMMARY"
+
+  teardown:
+    needs: [deploy, load]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Delete the staging Worker and D1 database
+        run: |
+          printf 'y\n' | $WRANGLER delete --name asterveil-api-staging --force 2>&1 | grep -iE 'success|delet|error|not exist' | grep -v '@' || true
+          $WRANGLER d1 delete "$D1_NAME" --skip-confirmation 2>&1 | grep -iE 'delet|error' | grep -v '@' || true
+          echo "Staging Worker and D1 deleted (or absent)." >> "$GITHUB_STEP_SUMMARY"
