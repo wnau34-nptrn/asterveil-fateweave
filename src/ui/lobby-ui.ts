@@ -31,6 +31,8 @@ import { gearArt, potionArt } from './equip-art';
 import { sweepBook, sweepReason, sweepsLeft } from '../core/world/sweep';
 import { partyLine } from '../core/world/tomes';
 import { boardReady, questBoardBody, questTabs, type QuestTab } from './quest-board';
+import { worldBossBody, worldBossReady } from './world-boss-panel';
+import type { WorldBossStatus } from '../platform/server-client';
 import { sweepReasonText, sweepText, campLines, skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
 
 import { heroArt, portrait, starRow } from './portraits';
@@ -40,11 +42,11 @@ export interface LobbyHost { archive(id: string, archived: boolean): void; autoE
   transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; guide(id: string, skip: boolean): void;
-  enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; claimBoard(tab: BoardTab, id: string, period: number): void; depart(mapId?: string, hard?: boolean): void; sweep(mapId: string, hard: boolean): void; home(): void }
+  enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; claimBoard(tab: BoardTab, id: string, period: number): void; depart(mapId?: string, hard?: boolean): void; sweep(mapId: string, hard: boolean): void; startWorldBoss(): void; claimWorldBoss(id: string, week: number): void; worldBossStatus(): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
 // `board`: the hiring board from the seed-free client view (`core/command/client-view.ts`), never worked out here.
 // `day` (P05-05): the device's calendar day, for the sweep supplies and the day's sweeps.
-export interface LobbyView { profile: Profile; board: readonly HireSlot[]; message: string; saved: boolean; day: number; cheer?: string; npcCheer?: NpcId }
+export interface LobbyView { profile: Profile; board: readonly HireSlot[]; message: string; saved: boolean; day: number; cheer?: string; npcCheer?: NpcId; worldBoss?: WorldBossStatus | null; online?: boolean }
 type Sheet = 'team' | 'hire' | 'tree' | 'gear' | 'forge' | 'brew' | 'hunt' | 'maps' | 'board';
 // Each camp NPC stands at a fixed spot along the back of the camp (x %, left half faces right) and runs one service.
 // `px`: the spot on portrait phones, where the camp is wider than the screen (3×) and pans sideways: the staff
@@ -212,7 +214,9 @@ export class LobbyUI {
           this.confirmSalvage = undefined; this.host.salvage([uid]); this.focus('#lobby-sub-back'); break;
         }
         case 'claim': { const q = b.dataset.quest!; this.host.claim(q); this.focus(`#quest-claim-${q}`); break; }
-        case 'quest-tab': this.questTab = b.dataset.tab as QuestTab; this.draw(); this.focus(`#quest-tab-${this.questTab}`); break;
+        case 'quest-tab': this.questTab = b.dataset.tab as QuestTab; if (this.questTab === 'boss') this.host.worldBossStatus(); this.draw(); this.focus(`#quest-tab-${this.questTab}`); break;
+        case 'wb-start': this.host.startWorldBoss(); break;
+        case 'wb-claim': this.host.claimWorldBoss(b.dataset.id!, Number(b.dataset.week)); this.focus('#quest-tab-boss'); break;
         case 'board-claim': this.host.claimBoard(b.dataset.tab as BoardTab, b.dataset.id!, Number(b.dataset.period)); this.focus(`#quest-tab-${this.questTab}`); break;
         case 'brew': { const potion = b.dataset.potion as PotionId; this.host.brew(potion); this.focus(`#brew-${potion}`); break; }
         case 'forge-open': this.openForge(Number(b.dataset.uid),undefined,b.id);break;
@@ -285,8 +289,8 @@ export class LobbyUI {
     return lines.map((l, i) => `<small class="camp-line">${l}${i === 0 && story ? ` · ${rewardText(story.reward)}` : ''}</small>`).join('');
   }
   // P05-06: rewards ready on the whole board (daily, weekly, contracts and the camp side quests).
-  private boardCounts(p: Profile): Record<QuestTab, number> { return { ...boardReady(p, this.maps, this.view!.day), camp: this.readyQuests(p).length }; }
-  private readyAll(p: Profile): number { if (!this.open('quests')) return 0; const c = this.boardCounts(p); return c.daily + c.weekly + c.contract + c.camp; }
+  private boardCounts(p: Profile): Record<QuestTab, number> { return { ...boardReady(p, this.maps, this.view!.day), boss: worldBossReady(p, this.maps, this.view!.day, this.view!.worldBoss), camp: this.readyQuests(p).length }; }
+  private readyAll(p: Profile): number { if (!this.open('quests')) return 0; const c = this.boardCounts(p); return c.daily + c.weekly + c.contract + c.boss + c.camp; }
   private questEntry(p:Profile):string {
     if(!this.open('quests'))return '';
     const ready=this.readyAll(p),active=this.map.sideQuests.filter(q=>!p.quests[q.id]?.claimed).length;
@@ -304,6 +308,7 @@ export class LobbyUI {
     };
     const open = sorted.filter(r => state(r) < 2), done = sorted.filter(r => state(r) === 2);
     const tabs = questTabs(this.questTab, this.boardCounts(p));
+    if (this.questTab === 'boss') return `${tabs}${worldBossBody(p, this.maps, this.view!.day, this.view!.worldBoss, !!this.view!.online)}`;
     if (this.questTab !== 'camp') return `${tabs}${questBoardBody(p, this.maps, this.view!.day, this.questTab)}`;
     return `${tabs}<div class="quest-board"><p class="camp-note">งานจาก NPC ในค่าย รับรางวัลได้ครั้งเดียว · ความคืบหน้าจากรอบเดินทางที่จบแล้ว · แตะเควสต์เพื่อดูรายละเอียด</p>${open.map(card).join('')}${done.length ? `<details class="quest-done-list"><summary>รับรางวัลแล้ว ${done.length} งาน</summary>${done.map(card).join('')}</details>` : ''}</div>`;
   }

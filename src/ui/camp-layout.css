@@ -55,8 +55,8 @@
 #lobby-view .side-quest[data-state=ready] { border-color:#d5b77488; }
 #lobby-view .side-quest[data-state=ready] .quest-row-status { color:var(--gold-light); }
 /* P05-06 quest board: four tabs, one heading per open period, task cards without a fold. */
-#lobby-view .quest-tabs { grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px; }
-#lobby-view .quest-tabs button { padding:0 4px; font-size:13px; gap:4px; }
+#lobby-view .quest-tabs { grid-template-columns:repeat(5,minmax(0,1fr)); gap:3px; }
+#lobby-view .quest-tabs button { padding:0 2px; font-size:12px; gap:3px; }
 #lobby-view .quest-tabs .trip-badge { position:static; }
 #lobby-view .board-period { margin:8px 0 0; font-size:13px; color:#d4be90; font-weight:600; }
 #lobby-view .board-task-body { padding:12px; display:grid; gap:6px; }
@@ -71,3 +71,15 @@
   #lobby-view .lobby-who .eyebrow { font-size:9px; }
   #app #lobby-view .lobby-menu-button { font-size:10px; }
 }
+/* P11-04 World Boss tab (390px first): one card with the week's attempts, the shared HP bar and the start button. */
+#lobby-view .wb-card { display:grid; gap:8px; padding:12px; border:1px solid #e8f5ff2a; border-radius:14px; background:#0d1c2ecc; }
+#lobby-view .wb-head { display:flex; gap:10px; align-items:center; }
+#lobby-view .wb-head h3 { margin:0; font-size:16px; }
+#lobby-view .wb-head small { color:var(--text-muted); }
+#lobby-view .wb-emblem { width:40px; height:40px; display:grid; place-items:center; border-radius:12px; background:#2a2210cc; color:var(--gold-light); flex:none; }
+#lobby-view .wb-card p { margin:0; font-size:13px; line-height:1.55; }
+#lobby-view .wb-bar { height:14px; border-radius:8px; background:#06101c; border:1px solid #e8f5ff2a; overflow:hidden; }
+#lobby-view .wb-bar span { display:block; height:100%; width:var(--wb-pct,0%); background:linear-gradient(90deg,#9b3f4e,#e0a24a); transition:width .3s; }
+#lobby-view .wb-bar-text { margin-top:4px !important; color:var(--text-muted); }
+#lobby-view .wb-card button.primary { min-height:48px; }
+@media (prefers-reduced-motion: reduce) { #lobby-view .wb-bar span { transition:none; } }
