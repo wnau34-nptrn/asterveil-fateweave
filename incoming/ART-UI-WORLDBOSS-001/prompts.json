@@ -1,0 +1,8 @@
+{
+  "tool": "image_gen.imagegen",
+  "initial": "Create a single art delivery sheet with TWO wide 3:1 banners stacked vertically, each 1536x512, total 1536x1024. No gutters. R1 upper banner: exact attached Rift Warden standing idle. R2 lower banner: same exact Warden raising its SAME axe weapon. Match seed silhouette, gold ivory violet armour, elaborate spiked circular halo behind head, huge double crescent violet axe, helmet and purple glowing eyes, cloth, two arms two legs, proportions precisely, no redesign. Each banner boss entire body including halo and axe contained in RIGHT HALF, no clipping, left half calm near-black navy gradient for DOM overlay. Low angle slight, gold rim light, glowing violet cyan rift behind boss, crystal landscape continuing attached riftline battle background. Painterly polished mobile RPG art. No text, letters, numbers, logos, UI, player characters, blood. These are two independent complete opaque banners, not animation.",
+  "revision": "Preserve upper panel; shrink lower boss 18%, move down, fit raised axe and halo with margin. Same seed and palette. No text.",
+  "emblem": "Exact seed helmeted face inside thick circular gold frame, navy interior, transparent outside, bold readable at 40px, no text.",
+  "generation_seed": "Tool does not expose numeric seed",
+  "postprocessing": "handoff.py: split sheet, Lanczos resize, clamp dark left half, PNG + exact lossless WebP, Thai sample overlay in preview only."
+}

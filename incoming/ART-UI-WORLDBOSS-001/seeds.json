@@ -1,0 +1,24 @@
+{
+  "repository": "wnau34-nptrn/asterveil-fateweave",
+  "ref": "feature/fateweave-initial-prototype",
+  "commit": "8f39dc8a6f6936d7861455e4580eb1f6ae7cf7c4",
+  "frame": {
+    "sheet": "foes",
+    "frame": 8,
+    "cell": 512,
+    "crop": [
+      0,
+      2048,
+      512,
+      2560
+    ],
+    "file": "seeds/foe_sentinel_frame8.png",
+    "atlas_blob": "885a4f9fe375de1f43deaf9271ee4a59cbd0cf08"
+  },
+  "sources": [
+    "public/assets/art/units_foes.webp",
+    "public/assets/art/battle_riftline.webp",
+    "docs/validation/p11-04-2026-11-15/boss-tab-390.png"
+  ],
+  "external_art_sources": []
+}
