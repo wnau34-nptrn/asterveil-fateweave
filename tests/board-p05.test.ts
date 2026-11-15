@@ -35,7 +35,7 @@ describe('P05-06 board content', () => {
   it('one board: 3 daily and 5 weekly tasks with existing resources, six contracts, contracts on every map', () => {
     expect(rules.daily).toHaveLength(3); expect(rules.weekly).toHaveLength(5); expect(rules.contracts.map(c => c.kind)).toEqual(['swift', 'explorer', 'bloodless', 'small', 'unharmed', 'herbs']);
     expect(rules.contracts.every(c => c.id.startsWith('job-'))).toBe(true);
-    for (const o of [...rules.daily, ...rules.weekly]) expect(Object.keys(o.reward).every(k => ['ore', 'gold', 'dust', 'tomes'].includes(k))).toBe(true);
+    for (const o of [...rules.daily, ...rules.weekly]) expect(Object.keys(o.reward).every(k => ['ore', 'gold', 'dust', 'tomes', 'shard'].includes(k))).toBe(true);
     // A sweep counts only where an objective names it.
     expect([...rules.daily, ...rules.weekly].filter(o => o.kind === 'sweeps' || o.alt?.kind === 'sweeps').map(o => o.id)).toEqual(['d-patrol', 'w-return']);
     for (const m of MAPS) { expect(m.board).toBe(rules); expect(m.contract!.swiftSteps).toBeGreaterThan(0); }

@@ -36,7 +36,7 @@ export function sweepReason(profile: Profile, map: MapDefinition, hard: boolean,
   if (book.count >= MAX_SWEEP_COUNT) return 'full';
   if (sweepsLeft(book, map) <= 0) return 'quota';
   if (book.supply < map.sweep.cost) return 'supply';
-  if (!bankFits(profile.bank, { ore: reward.ore, gold: reward.gold, dust: reward.dust ?? 0 })) return 'full';
+  if (!bankFits(profile.bank, { ore: reward.ore, gold: reward.gold, dust: reward.dust ?? 0, shard: reward.shard ?? 0 })) return 'full';
   const line = partyLine(map, profile.party.deployed);
   return (profile.tomes?.[line].small ?? 0) + (reward.tomes ?? 0) > TOME_CAP ? 'full' : '';
 }
@@ -46,7 +46,7 @@ export function sweep(initial: Profile, map: MapDefinition, hard: boolean, day: 
   const reason = sweepReason(initial, map, hard, day, serial); if (reason) return { profile: initial, event: { type: 'blocked', reason } };
   const profile = structuredClone(initial); const reward = sweepReward(map, hard)!; const book = sweepBook(profile, map, day);
   book.supply -= map.sweep.cost; book.used[map.id] = (book.used[map.id] ?? 0) + 1; book.count++; profile.sweep = book;
-  profile.bank.ore += reward.ore; profile.bank.gold += reward.gold; profile.bank.dust += reward.dust ?? 0;
+  profile.bank.ore += reward.ore; profile.bank.gold += reward.gold; profile.bank.dust += reward.dust ?? 0; profile.bank.shard += reward.shard ?? 0;
   if (reward.tomes) (profile.tomes ??= emptyTomes())[partyLine(map, profile.party.deployed)].small += reward.tomes;
   const board = boardBook(profile, map.board, day); addBoard(board, map.board, { sweeps: 1 }); profile.board = board;
   return { profile, event: { type: 'swept', mapId: map.id, hard, reward, supply: book.supply, left: sweepsLeft(book, map) } };

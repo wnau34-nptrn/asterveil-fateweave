@@ -624,7 +624,7 @@ export const sideQuestText: Record<SideQuestKind, { name: string; ask: (n: numbe
 };
 // P05-05: what one sweep pays (small tomes go to the deployed party's line) and why a sweep is not possible now.
 export function sweepText(r: SweepReward, line: TomeLine): string {
-  return [`แร่ดาว ${r.ore}`, `เหรียญทอง ${r.gold}`, ...r.dust ? [`ฝุ่นดาว ${r.dust}`] : [], ...r.tomes ? [`ตำรา${tomeLineText[line]}${tomeSizeText.small} ${r.tomes}`] : []].join(' ');
+  return [`แร่ดาว ${r.ore}`, `เหรียญทอง ${r.gold}`, ...r.dust ? [`ฝุ่นดาว ${r.dust}`] : [], ...r.shard ? [`เศษกลาง ${r.shard}`] : [], ...r.tomes ? [`ตำรา${tomeLineText[line]}${tomeSizeText.small} ${r.tomes}`] : []].join(' ');
 }
 // P05-06 quest board: what each counted thing is called, the six contracts and why a claim is closed.
 export const boardKindText: Record<BoardKind, (n: number) => string> = {

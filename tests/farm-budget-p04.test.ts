@@ -52,5 +52,7 @@ it('sweep, board and contract rewards stay within resources play already gives',
   for (const m of MAPS) {
     for (const r of [m.sweepReward?.normal, m.sweepReward?.hard, m.contract?.reward]) if (r) for (const k of Object.keys(r)) expect(allowed).toContain(k);
   }
-  for (const o of [...map.board.daily, ...map.board.weekly]) for (const k of Object.keys(o.reward)) expect(allowed).toContain(k);
+  // P09 part 2: universal star shards (an existing resource, OD-17) only on weekly tasks; tests/shards-p09.test.ts.
+  for (const o of map.board.daily) for (const k of Object.keys(o.reward)) expect(allowed).toContain(k);
+  for (const o of map.board.weekly) for (const k of Object.keys(o.reward)) expect([...allowed, 'shard']).toContain(k);
 });

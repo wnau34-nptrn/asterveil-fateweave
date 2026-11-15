@@ -317,7 +317,8 @@ export interface SkillLevelRules {
 // up to `cap`; one sweep costs `cost` supplies and each map takes `perMapDaily` sweeps a day, normal and hard together.
 export interface SweepRules { daily: number; cap: number; cost: number; perMapDaily: number }
 // What one sweep pays: existing resources only. `tomes` are small tomes in the deployed party's line.
-export interface SweepReward { ore: number; gold: number; dust?: number; tomes?: number }
+// `shard` = universal star shards (P09 part 2, OD-17): only the weekly board tasks that need real play pay them.
+export interface SweepReward { ore: number; gold: number; dust?: number; tomes?: number; shard?: number }
 // The camp's sweep book (save v62). `day` is the calendar day (days since 1970-01-01) the book was last brought up to,
 // `supply` the supplies held then, `used` the sweeps made on each map that day and `count` every sweep ever made (the
 // next sweep's serial number, so a repeated request is refused instead of paid twice).
