@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "task": "ART-CHAR-WORLDBOSS-001",
+  "base_commit": "8f39dc8a6f6936d7861455e4580eb1f6ae7cf7c4",
+  "generation_reproducibility": "Generator exposes no numeric random seed; retained source PNG bytes, references and exact prompts reproduce asset processing, not model sampling.",
+  "records": [
+    {
+      "variant": "a",
+      "seed": {
+        "tool": "image_gen.imagegen",
+        "prompt": "Create ONE ORIGINAL world boss sprite, static ready combat stance, full body facing LEFT (three-quarter left: face, chest and claws directed to left edge). References are style and palette ONLY: do not copy existing characters. Painterly fantasy mobile RPG sprite, crisp strong silhouette readable at 220 pixels high, luminous violet cyan gold against dark stone. A: colossal RIFT TITAN, ancient broad obsidian stone armour, enormous unarmed crushing fists with three massive claw fingers, short powerful legs, layered monolithic shoulders, floating crown of FIVE large violet crystal shards rather than tiny filigree. A single brilliant cyan vertical rift wound in chest is the focal weak point. Face small and deeply set in the stone crown, no helmet horns, no axe, no cape. Gold seams only as restrained accents. Majestic mountainlike threatening mass, greater than map bosses. Both feet visible on same ground level. Entire crown, hands and body inside image with wide clear empty margins. One character only. Transparent background with REAL alpha, no ground, no shadow ellipse, no particles far from body, no lettering, no numbers, no logos, no UI, no sheet. Square canvas, character occupies central 75 percent, crown about y=130 and sole at about y=896 in 1024 square. Not from any existing franchise or Asterveil Rise Beyond.",
+        "reference_paths": [
+          "incoming/ART-UNIT-ANIMATION-A9-001/sentinel-preview.png",
+          "incoming/ART-UNIT-ANIMATION-A9-001/captain-preview.png",
+          "public/assets/art/battle_riftline.webp"
+        ],
+        "transparent_background": true,
+        "source": "source/seed-a-original.png",
+        "generator_rng_seed": null
+      },
+      "turnaround": {
+        "tool": "image_gen.imagegen",
+        "prompt": "Character model TURNAROUND of EXACT SAME RIFT TITAN as attached image. ONE wide horizontal image, THREE equal-width panels separated by wide blank gutters. LEFT panel exact straight FRONT orthographic view, CENTER panel exact LEFT SIDE profile orthographic view looking left, RIGHT panel exact straight BACK orthographic view. Three full-body static neutral standing figures, SAME character and SAME height/scale, soles aligned. Preserve stone armour shapes, five floating crown crystals, massive three-clawed fists, short legs, violet stone and restrained gold rims. Front has cyan vertical chest wound; BACK shows closed dark monolithic back armour with modest violet seams, NO cyan chest wound visible through back. Profile shows heavy shoulder depth and forward claw hands. Exact same model, not variants. All crown, toes and hands inside each panel with ample margins. Painterly game model reference with clear large forms, NO text, NO panel titles, NO annotations, NO letters, no watermark, no UI. Simple flat dark navy background, evenly lit, no scenery, no ground decorations. Deliver a landscape 3:1 or 3:2 composition.",
+        "reference": "source/seed-a-original.png",
+        "transparent_background": false,
+        "output": "turnaround-a.png",
+        "generator_rng_seed": null
+      },
+      "concept": {
+        "method": "Deterministic 2048x2048 plain navy presentation of the exact normalized seed; no independent redraw or design change.",
+        "output": "concept-a.png"
+      }
+    },
+    {
+      "variant": "b",
+      "seed": {
+        "tool": "image_gen.imagegen",
+        "prompt": "ONE original fantasy mobile RPG WORLD BOSS sprite B, a colossal FOUR-LEGGED dimensional rift beast, facing LEFT in clear left side three-quarter profile, muzzle pointing to left edge, ready combat stance. All four feet visible, no humanoid anatomy. Huge deep indigo feline-reptilian body, massive forepaws with gold claws, short powerful muzzle, restrained gold armour ridges, violet crystalline hide. TWO majestic wings made of five broad broken-dimensional floating crystal panels EACH, held folded UPWARD like tall cathedral arches, NOT spread sideways; readable broad panels rather than tiny shards. A SINGLE bright cyan circular rift heart visibly embedded at left-facing near SHOULDER is the only main focal weak point. Long thick tail curls upward BEHIND body on the RIGHT and ends inside the frame, thin cyan light runs along its tip. Painterly clean fantasy rendering matching reference sprite finish and luminous purple cyan gold palette; not photorealistic. Monumental threatening animal, compact strong silhouette readable at 220px high. Full entire body, wings, tail and claws visible with generous transparent margin on all four sides. No cropping. No detached particles, no ground plane, no shadow puddle, no letters, no labels, no UI, no logos. TRUE transparent alpha background. Square canvas, design confined to central 76 percent. References are palette and paint finish only; invent new creature, do not copy existing boss. Not from existing franchise or Asterveil Rise Beyond.",
+        "reference_paths": [
+          "incoming/ART-UNIT-ANIMATION-A9-001/sentinel-preview.png",
+          "incoming/ART-UNIT-ANIMATION-A9-001/captain-preview.png",
+          "public/assets/art/battle_riftline.webp"
+        ],
+        "transparent_background": true,
+        "source": "source/seed-b-original.png",
+        "generator_rng_seed": null
+      },
+      "turnaround": {
+        "tool": "image_gen.imagegen",
+        "prompt": "Character TURNAROUND of EXACT SAME colossal four-legged rift beast in reference. ONE wide landscape sheet with THREE equal panels in order: straight FRONT, exact LEFT SIDE profile (muzzle to LEFT), straight BACK. All three complete full bodies, same model and same scale, feet on same baseline, evenly separated by generous blank gutters. Must preserve FOUR legs, two tall upward folded broken dimensional crystal wings, thick upward curled tail on RIGHT in profile, feline short muzzle, broad paws with gold claws, indigo hide and purple gold armour. Cyan circular weak point on anatomical LEFT shoulder only: visible on left side profile, on viewer right in FRONT, on viewer left edge in BACK if visible, never mirrored to opposite shoulder. Wings are five broad panels per wing, not feathers. Front/back clearly show two wings and four legs with depth. Left side reveals clear wing root, fore/hind legs and tail attachment. No extra limbs, no humanoid hands, no detached magic. All wings/tails/feet entirely inside their own panels, no overlap across panels. Painterly fantasy game model reference faithfully preserving source design. Simple flat dark navy background, no scenery, no decorations. NO text, NO labels, NO letters, NO UI, NO watermark. Wide landscape 3:1 or 3:2.",
+        "reference": "source/seed-b-original.png",
+        "transparent_background": false,
+        "output": "turnaround-b.png",
+        "generator_rng_seed": null
+      },
+      "concept": {
+        "method": "Deterministic 2048x2048 plain navy presentation of the exact normalized seed; no independent redraw or design change.",
+        "output": "concept-b.png"
+      }
+    },
+    {
+      "variant": "c",
+      "seed": {
+        "tool": "image_gen.imagegen",
+        "prompt": "ONE entirely ORIGINAL fantasy mobile RPG world boss C: floating multi-armed SHADOW MONARCH, a spectral upper body with SIX ARMS (three pairs), distinct from a stone golem and dragon. Facing LEFT in three quarter profile, small crowned head looking left, shoulders and chest angled left. Tall narrow imperial silhouette, hovering with NO LEGS and NO FEET, lower body becomes three broad sweeping ribbons of dark indigo cloak with violet rift-light lining tapering to a clearly defined lowest tip. Exactly three pairs of clearly separated arms, upper pair raised in a solemn summoning arc, middle pair massive armoured crushing hands held forward left, lower pair claw hands cupping the central magic. Large negative spaces between arms, hands simple and readable, no tiny fingers clutter. ONE brilliant CYAN spherical singularity embedded in chest is the dominant weak point. Gold thin segmented floating crown, pale gold broad chest collar and forearm plates, otherwise dark shadow with purple edges. Grand and terrifying arcane emperor, painterly sharp fantasy sprite, matching provided references in rendering and violet cyan gold palette ONLY, do not copy their anatomy or weapons. Compact symmetrical overall mass angled left, no throne, no weapons, no giant aura circle. Full figure including all six hands crown and cloak tips with wide empty margins, readable at 220 pixels high. TRUE alpha transparent background, no ground, no detached particles far from body, no text, numbers, logo, UI. Square canvas with figure confined to central 75 percent, lowest cloak point is virtual ground contact for later alignment. Not from any existing franchise or Asterveil Rise Beyond.",
+        "reference_paths": [
+          "incoming/ART-UNIT-ANIMATION-A9-001/sentinel-preview.png",
+          "incoming/ART-UNIT-ANIMATION-A9-001/captain-preview.png",
+          "public/assets/art/battle_riftline.webp"
+        ],
+        "transparent_background": true,
+        "source": "source/seed-c-original.png",
+        "generator_rng_seed": null
+      },
+      "turnaround": {
+        "tool": "image_gen.imagegen",
+        "prompt": "Faithful character model TURNAROUND of EXACT SAME six-armed floating SHADOW MONARCH in reference. One wide landscape image with THREE evenly separated full-body figures. Order left to right: exact straight FRONT view, exact LEFT SIDE profile facing left, exact straight BACK view. SAME DESIGN, same height and scale, crown tops aligned and lowest cloak tips aligned. EXACTLY SIX arms / THREE PAIRS in each view (far arms can be partly hidden in side view, never invented extra arms). Upper pair raised open hands; middle pair oversized crushing claw hands forward; lower pair smaller cupped hands. Preserve clearly separated negative spaces, gold floating pointed crown, gold shoulder collar and broad forearm cuffs, dark purple shadow face, three flowing broad cloak ribbons instead of legs. NO FEET, no lower human body. Single brilliant cyan sphere in CHEST visible in front and left profile; back has broad dark flowing cloak with subtle violet seams, NO cyan sphere painted on back. Rear palms face away appropriately. Full crown hands and all three cloak tips inside each panel with ample gutters; no figures touching each other. Painterly fantasy game model reference consistent with source. Flat dark navy background, no scenery, no platform. NO words, NO letters, NO labels, NO annotations, NO UI, NO logos. Landscape 3:1 or 3:2 composition.",
+        "reference": "source/seed-c-original.png",
+        "transparent_background": false,
+        "output": "turnaround-c.png",
+        "generator_rng_seed": null
+      },
+      "concept": {
+        "method": "Deterministic 2048x2048 plain navy presentation of the exact normalized seed; no independent redraw or design change.",
+        "output": "concept-c.png"
+      }
+    }
+  ]
+}
