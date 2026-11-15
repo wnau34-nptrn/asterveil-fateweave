@@ -287,6 +287,8 @@ export function questDone(state: ExpeditionState, map: MapDefinition): string[] 
     : o.kind === 'elite' ? state.elitesDefeated.includes(o.target) : state.eventsDone.includes(o.target)).map(o => o.id);
 }
 export const questComplete = (state: ExpeditionState, map: MapDefinition): boolean => questDone(state, map).length >= map.quest.need;
+// P05-02: an optional quest (maps 1–2) never seals the boss.
+export const bossSealed = (state: ExpeditionState, map: MapDefinition): boolean => !map.quest.optional && !state.bossDefeated && !questComplete(state, map);
 // A shrine wound lowers max HP by a percent for the rest of the run.
 export const wounded = (def: HeroDefinition, wound = 0): HeroDefinition => wound ? { ...def, maxHp: Math.max(1, Math.round(def.maxHp * (100 - wound) / 100)) } : def;
 export const eliteAt = (map: MapDefinition, p: Point): EliteDefinition | undefined => map.elites.find(e => e.x === p.x && e.y === p.y);
@@ -321,7 +323,7 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   }
   // The boss is visible and blocks its tile: stepping into it starts the fight in place.
   // Until the rift seal is broken (enough objectives), the boss cannot be challenged.
-  if (tile.kind === 'boss' && !state.bossDefeated && !questComplete(state, map)) return { state: initial, event: { type: 'blocked', reason: 'sealed' } };
+  if (tile.kind === 'boss' && bossSealed(state, map)) return { state: initial, event: { type: 'blocked', reason: 'sealed' } };
   if (tile.kind === 'boss' && !state.bossDefeated) {
     // The boss's story recruit comes back as the fight starts and fights it with the party (owner 2026-10-23: a map-1
     // party of three wins the boss far too rarely, docs/validation/balance-sim/CAMPAIGN.md).
@@ -565,13 +567,17 @@ function battleLoot(state: ExpeditionState, map: MapDefinition, kind: BattleKind
   return zoneOf(map, tileAt(map, state.position)?.zoneId ?? '')?.loot ?? noLoot;
 }
 
+// The choices each event kind offers (P05-02: the traveller can be pointed the way; the abandoned camp has three).
+export const EVENT_CHOICES: Readonly<Record<MapEventKind, readonly EventChoice[]>> = {
+  bandits: ['fight', 'sneak'], shrine: ['pray', 'offer'], merchant: ['buy-salve', 'buy-tonic', 'buy-repel'], traveller: ['help', 'guide'], rift: ['fight'],
+  abandoned: ['shelter', 'search', 'pass'],
+};
 // Event choices (3A). Valid only while standing on the unfinished event and outside battle. Fights start a battle
 // that finishes the event on victory; other choices finish it at once (the merchant stays open for more trades).
 export function eventChoiceReason(state: ExpeditionState, map: MapDefinition, choice: EventChoice): string {
   const ev = pendingEvent(state, map); const r = map.eventRules;
   if (!ev || state.battle || state.completed) return 'busy';
-  const allowed: Record<MapEventKind, readonly EventChoice[]> = { bandits: ['fight', 'sneak'], shrine: ['pray', 'offer'], merchant: ['buy-salve', 'buy-tonic', 'buy-repel'], traveller: ['help'], rift: ['fight'] };
-  if (!allowed[ev.kind].includes(choice)) return 'choice';
+  if (!EVENT_CHOICES[ev.kind].includes(choice)) return 'choice';
   if (choice === 'offer' && state.resources.ore < r.offerOre) return 'ore';
   if (choice === 'help' && state.potions.salve < 1) return 'salve';
   if (choice.startsWith('buy-')) {
@@ -585,12 +591,16 @@ export function chooseEvent(initial: ExpeditionState, map: MapDefinition, lookup
   if (eventChoiceReason(initial, map, choice)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial); const ev = pendingEvent(state, map)!; const r = map.eventRules;
   const zone = zoneOf(map, tileAt(map, state.position)!.zoneId); const level = monsterLevelAt(map, state.position) ?? 1;
-  if (choice === 'fight') {
+  // P05-02: the contract log keeps the latest choice made at each event this run (the merchant's last trade).
+  (state.choices ??= {})[ev.id] = choice;
+  // Searching an abandoned camp may wake what sleeps there first (the dust comes after the win).
+  const ambush = choice === 'search' && rollPercent(state.seed, state.rolls++) < r.abandoned.searchFightPercent;
+  if (choice === 'fight' || ambush) {
     let encounterId = r.riftEncounterId; let lv = level;
-    if (ev.kind === 'bandits') {
+    if (ev.kind === 'bandits' || ambush) {
       const pool = zone?.pool ?? []; const total = pool.reduce((sum, e) => sum + e.weight, 0);
       let pick = rollPercent(state.seed, state.rolls++) % Math.max(1, total);
-      encounterId = pool.find(e => (pick -= e.weight) < 0)?.encounterId ?? r.riftEncounterId; lv = level + r.banditLevelBonus;
+      encounterId = pool.find(e => (pick -= e.weight) < 0)?.encounterId ?? r.riftEncounterId; lv = ambush ? level : level + r.banditLevelBonus;
     }
     state.battle = startBattle(state, 'event', encounterId, lv, ev.id);
     return { state, event: { type: 'encounter', kind: 'event', encounterId, chance: 100 } };
@@ -610,6 +620,15 @@ export function chooseEvent(initial: ExpeditionState, map: MapDefinition, lookup
   }
   if (choice === 'offer') { state.resources.ore -= r.offerOre; state.resources.shard += r.offerShard; }
   if (choice === 'help') { state.potions.salve--; state.resources.ore += r.traveller.ore; state.resources.shard += r.traveller.shard; }
+  if (choice === 'guide') state.resources.ore += r.travellerGuide.ore;
+  if (choice === 'search') state.dust += r.abandoned.searchDust;
+  if (choice === 'shelter') {
+    for (const id of rosterIds(state)) {
+      const max = memberDef(lookup, map, state, id)!.maxHp; if (!state.hp[id]) continue;
+      const amount = Math.min(max - state.hp[id]!, Math.ceil(max * r.abandoned.healPercent / 100)); if (amount > 0) { state.hp[id]! += amount; heal[id] = amount; }
+    }
+    state.pressure = zone?.cap ?? state.pressure;
+  }
   if (choice.startsWith('buy-')) { const potion = choice.slice(4) as PotionId; state.resources.ore -= r.merchant[potion]; state.potions[potion]++; }
   if (ev.kind !== 'merchant') state.eventsDone.push(ev.id);
   clampRun(state);
@@ -637,9 +656,9 @@ function dropItems(state: ExpeditionState, map: MapDefinition, kind: BattleKind,
     const item: Item = { uid: 0, slot: f.slot, rarity: f.rarity, level: 1, affixes, q: { main: 100, affixes: affixes.map(() => 100) } };
     state.found.push(item); return [item];
   }
-  // Event fights: bandits always drop an item; a rift pays in veil dust instead.
+  // Event fights: bandits always drop an item; a rift and an abandoned camp pay in veil dust instead.
   if (kind === 'event' && !state.eventsDone.includes(source ?? '')) return [];
-  if (kind === 'event' && map.events.find(e => e.id === source)?.kind === 'rift') return [];
+  if (kind === 'event' && ['rift', 'abandoned'].includes(map.events.find(e => e.id === source)?.kind ?? '')) return [];
   if (kind === 'random') {
     const lucky = rollPercent(state.seed, state.rolls++) < rules.dropPercent + partyLuck(state, map) || state.dry + 1 >= rules.pity;
     if (!lucky) { state.dry++; return []; }
@@ -745,6 +764,9 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
   const result = battleState(initial, map, lookup, play);
   if (!initial.battle || !result || result.outcome === 'active') throw new Error('The battle has not finished.');
   const state = structuredClone(initial); const { kind, encounterId } = initial.battle;
+  // P05-02: every brought member who stood at the start and fell in this battle counts once (not the prologue).
+  const fell = kind === 'tutorial' ? 0 : result.heroes.filter(h => h.hp <= 0 && (initial.battle!.entry[h.id] ?? 0) > 0).length;
+  if (fell) state.downed = (state.downed ?? 0) + fell;
   if (result.outcome === 'victory') {
     for (const h of result.heroes) state.hp[h.id] = h.hp;
     state.battle = null; state.wins++;
@@ -767,7 +789,9 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
     if (kind === 'elite' && source) state.elitesDefeated.push(source);
     if (kind === 'event' && source) {
       state.eventsDone.push(source);
-      if (map.events.find(e => e.id === source)?.kind === 'rift') { dust = map.eventRules.riftDust; state.dust += dust; }
+      const evKind = map.events.find(e => e.id === source)?.kind;
+      if (evKind === 'rift') { dust = map.eventRules.riftDust; state.dust += dust; }
+      if (evKind === 'abandoned') { dust = map.eventRules.abandoned.searchDust; state.dust += dust; }
     }
     const data = battleData(initial, map, lookup)!;
     const summoned = data.enemies.filter(e => e.reserve && !result.enemies.find(x => x.id === e.id)?.absent).map(e => e.id);

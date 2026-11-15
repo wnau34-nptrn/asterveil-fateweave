@@ -6,7 +6,7 @@ import type { Lane, GuideDefinition, GuideKind, LobbyFeature, Commander, ShopIte
 import { rollItem, salvageValue } from './equipment';
 import { addTomes, dismissTomes, emptyTomes, firstClearTomes, tomeCount } from './tomes';
 import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, SET_IDS } from './types';
-import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, recommendedLane, rollPercent, reserveCap, rosterIds, type EncounterLookup } from './world';
+import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, questComplete, recommendedLane, rollPercent, reserveCap, rosterIds, type EncounterLookup } from './world';
 import { laneReason, withLane } from './formation';
 import { dropFromPresets } from './presets';
 import { bankFits, clampBank, clampPotions, clampTomes, potionsFit, RIFT_CORE_CAP, TOME_CAP } from './caps';
@@ -413,10 +413,21 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   if (outcome === 'complete' && run.hard && !profile.clearedHard?.includes(run.mapId)) {
     (profile.clearedHard ??= []).push(run.mapId); const r = map.progression.hardFirstClear; profile.bank.gold += r.gold; profile.bank.shard += r.shard;
   }
+  // P05-02: the choices made at map events are remembered across runs (the latest wins), whatever the outcome.
+  const events = Object.keys(run.choices ?? {});
+  if (events.length) profile.choices = { ...profile.choices, ...run.choices };
+  // P05-02: an optional quest done on a run that came home pays once per company.
+  const story = outcome !== 'wiped' && map.quest.optional && !profile.storyQuests?.includes(map.id) && questComplete(run, map) ? map.id : undefined;
+  if (story) {
+    const r = map.quest.optional!.reward; (profile.storyQuests ??= []).push(story);
+    profile.bank.ore += r.ore ?? 0; profile.bank.gold += r.gold ?? 0; profile.bank.shard += r.shard ?? 0; profile.bank.dust += r.dust ?? 0;
+    for (const id of POTION_IDS) profile.potions[id] += r.potions?.[id] ?? 0;
+  }
   // A return home cannot be refused: what passes a storage ceiling is lost (caps.ts), so the profile always saves.
   clampBank(profile.bank); clampPotions(profile.potions);
   profile.returns++; delete profile.boardPool; profile.boardFeatured = featuredLineup(map); profile.taken = []; profile.shop = {}; profile.refreshes = 0; profile.smelted = 0;
-  profile.last = { outcome, ore, gold, shard, steps: run.steps, wins: run.wins, items, salvaged, ...(tomeCount(tomes) ? { tomes: Math.min(TOME_CAP, tomeCount(tomes)) } : {}) };
+  profile.last = { outcome, ore, gold, shard, steps: run.steps, wins: run.wins, items, salvaged, ...(tomeCount(tomes) ? { tomes: Math.min(TOME_CAP, tomeCount(tomes)) } : {}),
+    ...(events.length ? { events } : {}), ...(story ? { story } : {}) };
   return profile;
 }
 // Every item found this run, in the bag or worn on the map (uid 0), in that order.

@@ -17,7 +17,7 @@ import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Lane, Poin
 import { GEAR_SLOTS, PARTY_SLOTS } from '../../src/core/world/types';
 import {
   atCamp, atMuster, levelOf, levelXp, monsterLevelAt, battleData, battleState, canOpenChest, canRest, canRevive, eliteAt, eventAt, finishBattle, findTiles, memberDef, move, openChest,
-  newExpedition, draftPick, heroDef, loadoutActions, pendingEvent, questComplete, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, fatigueOf, fatigueStep, fatigueCut, chooseEvent, eventChoiceReason, potionReason,
+  newExpedition, draftPick, heroDef, loadoutActions, pendingEvent, bossSealed, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, fatigueOf, fatigueStep, fatigueCut, chooseEvent, eventChoiceReason, potionReason,
 } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 
@@ -171,7 +171,7 @@ function rotate(s: ExpeditionState): ExpeditionState {
   const power = (id: string) => { const d = memberDef(lookup, map, s, id)!; return d.maxHp * d.attack * (100 - fatigueCut(map, fatigueOf(s, id))) / 100; };
   const lane = (id: string) => s.roster.lanes?.[id] ?? heroDef(lookup, map, id)!.lane;
   // Heading for the boss: field the strongest of each lane whatever the steps (rested or not).
-  const boss = questComplete(s, map) && !s.bossDefeated;
+  const boss = !bossSealed(s, map) && !s.bossDefeated;
   for (const d of [...s.roster.deployed].sort((a, b) => fatigueOf(s, b) - fatigueOf(s, a))) {
     if (!s.hp[d] || (!boss && step(d) < Number(process.env.SIM_ROTATE_STEP ?? 1))) continue;
     if (HEALERS.includes(d) && s.roster.deployed.filter(id => HEALERS.includes(id) && s.hp[id]).length < 2 && !s.roster.reserve.some(id => HEALERS.includes(id))) continue;
@@ -198,7 +198,7 @@ function chooseFor(s: ExpeditionState): ExpeditionState {
   const ok = (c: Parameters<typeof chooseEvent>[3]) => !eventChoiceReason(s, map, c);
   const pick = ev.kind === 'rift' ? 'fight' : ev.kind === 'bandits' ? (hpPercent(s) >= 60 ? 'fight' : 'sneak')
     : ev.kind === 'shrine' ? (ok('offer') ? 'offer' : hpPercent(s) < 50 ? 'pray' : undefined)
-    : ev.kind === 'traveller' ? (ok('help') ? 'help' : undefined) : ok('buy-salve') && s.resources.ore >= 40 ? 'buy-salve' : undefined;
+    : ev.kind === 'traveller' ? (ok('help') ? 'help' : 'guide') : ev.kind === 'abandoned' ? (hpPercent(s) >= 60 ? 'search' : 'shelter') : ok('buy-salve') && s.resources.ore >= 40 ? 'buy-salve' : undefined;
   return pick && ok(pick) ? chooseEvent(s, map, lookup, pick).state : s;
 }
 
@@ -230,7 +230,7 @@ function runExpedition(start: ExpeditionState, policy: Policy, style: Style, rep
     // Work through the zones in order: only tasks within two levels of the easiest pending one.
     const lv = (p: Point) => monsterLevelAt(map, p) ?? 0; const easiest = Math.min(...pending.map(t => lv(t.at)));
     if (!best && !leaving) best = nearest(pending.filter(t => lv(t.at) <= easiest + 2).map(t => t.at)) ?? nearest(pending.map(t => t.at));
-    if (!best && !leaving && questComplete(s, map)) best = nearest([s.bossDefeated ? goal : boss]);
+    if (!best && !leaving && !bossSealed(s, map)) best = nearest([s.bossDefeated ? goal : boss]);
     if (!best) return { state: s, outcome: 'withdrawn' };
     const r = move(s, map, best.step!.dir, lookup);
     if (r.event.type === 'blocked') { const t = plan.find(x => same(x.at, best.t)); if (t) skipped.add(t.id); else return { state: s, outcome: 'withdrawn' }; continue; }

@@ -14,13 +14,13 @@ import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/batt
 
 import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId, Profile } from '../core/world/types';
 import { matchesPreset, runPresetPlan } from '../core/world/presets';
-import { canManage, fatigueCut, fatigueOf, reserveCap, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, questComplete, questDone, encounterChance, eventChoiceReason, isRevealed, levelOf, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
+import { canManage, fatigueCut, fatigueOf, reserveCap, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, bossSealed, questDone, encounterChance, eventChoiceReason, isRevealed, levelOf, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, POTION_IDS, type Lane, type TeamPreset } from '../core/world/types';
 import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
 import { heroArt, portrait, starRow } from './portraits';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { questLine, sideQuestText, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
+import { questLine, rewardText, storyQuestText, sideQuestText, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
 import { tomeCount } from '../core/world/tomes';
 import { icon, lineIcon } from './icons';
 import { gearArt, potionArt } from './equip-art';
@@ -32,7 +32,7 @@ export interface WorldHost { travel(to: Point): void; move(dir: Direction): void
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void; draft(index: number): void;
   wear(heroId: string, from: BagList, index: number): void; takeOff(heroId: string, slot: GearSlot): void }
 export interface WorldBanner { kind: 'encounter' | 'boss' | 'elite' | 'tutorial' | 'complete'; eyebrow: string; title: string; detail: string }
-export interface WorldView { presets?: (TeamPreset | null)[]; questBoard?: { definitions: MapDefinition['sideQuests']; progress: Profile['quests']; unlocked: boolean }; state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' | 'loot' }
+export interface WorldView { storyDone?: boolean; presets?: (TeamPreset | null)[]; questBoard?: { definitions: MapDefinition['sideQuests']; progress: Profile['quests']; unlocked: boolean }; state: ExpeditionState; message: string; locked: boolean; saved: boolean; banner?: WorldBanner; effect?: 'rest' | 'loot' }
 
 const keyDirections: Record<string, Direction> = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right', w: 'up', s: 'down', a: 'left', d: 'right', W: 'up', S: 'down', A: 'left', D: 'right' };
 const dirLabel: Record<Direction, string> = { up: 'เดินขึ้น', down: 'เดินลง', left: 'เดินซ้าย', right: 'เดินขวา' };
@@ -51,7 +51,7 @@ export function itemArt(id: 'ore' | 'ember' | 'shard'): string {
 export { portrait, starRow } from './portraits';
 // The rift seal (3B) sits between the camp and the boss: any `need` of its objectives break it.
 const goals = (s: ExpeditionState, map: MapDefinition) => {
-  const seal = questDone(s, map).length; const need = map.quest.need;
+  const seal = questDone(s, map).length; const need = map.quest.optional ? 0 : map.quest.need;
   return [
     { done: s.tutorialDone, label: 'ขับไล่กองหน้าของวาร์กอธ' }, { done: !!s.camp, label: 'ไปถึงแคมป์' },
     ...(need ? [{ done: seal >= need || s.bossDefeated, label: `ทำลายผนึกรอยแยก ${Math.min(seal, need)}/${need}` }] : []),
@@ -640,7 +640,7 @@ export class WorldUI {
       const p = { x: s.position.x + o.x, y: s.position.y + o.y }; const t = tileAt(this.map, p);
       // Opened doors and found secret passages get a hint; an open pit does not, and unfound secrets stay secret.
       if (!t || (t.kind === 'wall' && !doorOpen(s, this.map, p) && !(secretAt(this.map, p) && s.secrets.some(id => id === secretAt(this.map, p)!.id))) || openPit(s, this.map, p)) return '';
-      const sealed = t.kind === 'boss' && !s.bossDefeated && !questComplete(s, this.map);
+      const sealed = t.kind === 'boss' && bossSealed(s, this.map);
       return `<span class="step-hint${sealed ? ' sealed' : (t.kind === 'boss' && !s.bossDefeated) || eliteBlocks(s, this.map, p) ? ' boss' : ''}" data-dir="${dir}" style="--x:${p.x};--y:${p.y}"><i>${icon(dir)}</i></span>`;
     }).join('');
   }
@@ -697,7 +697,9 @@ export class WorldUI {
   private renderGoals(): void {
     const s = this.view?.state; if (!s) return;
     const sealed = questDone(s, this.map);
-    const seal = !this.map.quest.need ? '' : `<h3 class="seal-title">${icon('boss')} ผนึกรอยแยก · ทำให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนท้าผู้คุม</h3><ul class="goal-list seal-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>`;
+    // P05-02: an optional story quest (maps 1–2) shows its objectives and reward but seals nothing.
+    const story = this.map.quest.optional && storyQuestText[this.map.id] ? `<h3 class="seal-title story-title">${icon('star')} ${storyQuestText[this.map.id]!.name} · ไม่บังคับ</h3><p class="map-quest-note">${storyQuestText[this.map.id]!.ask} · รางวัลครั้งเดียว ${rewardText(this.map.quest.optional.reward)}${this.view?.storyDone ? ' (รับแล้ว)' : ''}</p><ul class="goal-list seal-list story-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>` : '';
+    const seal = !this.map.quest.need || this.map.quest.optional ? story : `<h3 class="seal-title">${icon('boss')} ผนึกรอยแยก · ทำให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนท้าผู้คุม</h3><ul class="goal-list seal-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>`;
     this.root.querySelector('#world-goals-content')!.innerHTML = `<ul class="goal-list">${goals(s, this.map).map(g => `<li class="${g.done ? 'done' : ''}">${icon(g.done ? 'check' : 'circle')}<span>${g.label}</span></li>`).join('')}</ul>${seal}<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>`;
     this.renderQuests();
   }
@@ -733,7 +735,7 @@ export class WorldUI {
       <h3>เมื่อแพ้</h3><p>ทีมถอยกลับแคมป์ล่าสุดที่ไปถึง (หรือทางเข้า) คนที่ล้มยังล้มอยู่ ต้องชุบหรือสลับตัวสำรอง ถ้าทุกคนที่พามาล้มหมด การเดินทางล้มเหลว กลับค่ายพร้อมแร่ดาวและตราครึ่งเดียว</p>
       <h3>${icon('camp')} กลับค่าย</h3><p>ถอนตัวได้ที่แคมป์หรือทางเข้าด่าน ของที่เก็บได้กลับค่ายครบ ไปถึง${this.map.goalName}คือสำเร็จการเดินทาง</p>
       ${this.map.elites.length ? `<h3>${icon('boss')} อีลิท</h3><p>อีลิทขอบแดงเฝ้าด่านทางเดียว ต้องชนะถึงจะผ่าน · อีลิทขอบทองที่มีหีบเหนือหัวเดินอ้อมได้ แต่ถ้าท้าสู้แล้วชนะจะได้ EXP ×${this.map.eventRules.optionalElite.exp} อุปกรณ์ชั้นดีกว่า เหรียญทอง +${this.map.eventRules.optionalElite.gold} และเศษกลาง +${this.map.eventRules.optionalElite.shard}</p>` : ''}
-      ${this.map.quest.need ? `<h3>${icon('boss')} ผนึกรอยแยก</h3><p>ผู้คุมรอยแยกถูกผนึกไว้ ต้องทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนจึงท้าสู้ได้: ชนะมินิบอสยักษ์หินในรอยแผล, เปิดกล่องสมบัติ 6 กล่อง หรือชำระรอยแยกเล็ก ดูความคืบหน้าได้จากช่องเป้าหมายมุมซ้ายบน</p>` : ''}
+      ${this.map.quest.need && !this.map.quest.optional ? `<h3>${icon('boss')} ผนึกรอยแยก</h3><p>ผู้คุมรอยแยกถูกผนึกไว้ ต้องทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนจึงท้าสู้ได้: ชนะมินิบอสยักษ์หินในรอยแผล, เปิดกล่องสมบัติ 6 กล่อง หรือชำระรอยแยกเล็ก ดูความคืบหน้าได้จากช่องเป้าหมายมุมซ้ายบน</p>` : ''}
       ${this.map.puzzles.runes.length + this.map.puzzles.secrets.length ? `<h3>${icon('star')} ปริศนาและทางลับ</h3><p>แต่ละโซนมีปริศนาเฝ้ากล่องหายาก: ทุ่งมีหินรูน 3 ก้อน เหยียบตามลำดับสัญลักษณ์บนประตูหิน · พงหนามมีก้อนหิน เดินชนเพื่อผลักลงหลุม · รอยแผลมีคันโยก 2 อันคนละฝั่ง ดึงให้ครบ · กำแพงที่มีรอยร้าวเรืองแสงจาง ๆ บางช่องเดินทะลุได้</p>` : ''}
       <h3>${icon('boss')} ${this.map.bossName}</h3><p>บอสเฝ้าทางเดียวไป${this.map.goalName} เดินชนบอสเพื่อเริ่มศึก ชนะแล้วเดินไปที่ประตูเพื่อจบการเดินทาง</p></section>
       ${s ? `<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>` : ''}

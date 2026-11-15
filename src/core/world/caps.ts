@@ -28,8 +28,8 @@ export function clampPotions(potions: Potions): void {
 
 // What an expedition in progress may carry (the run limits of the same validator). Random encounters have no end, so a
 // very long run could otherwise farm past them; every gain on the map fills to the ceiling instead (claude 2026-11-04).
-export const RUN_CAP: Readonly<Resources> & { dust: number; riftCore: number; tomeWins: number; respawns: number } =
-  { ore: 999_999, gold: 999_999, ember: 9_999, shard: 9_999, dust: 999_999, riftCore: 999, tomeWins: 9_999, respawns: 99 };
+export const RUN_CAP: Readonly<Resources> & { dust: number; riftCore: number; tomeWins: number; respawns: number; downed: number } =
+  { ore: 999_999, gold: 999_999, ember: 9_999, shard: 9_999, dust: 999_999, riftCore: 999, tomeWins: 9_999, respawns: 99, downed: 9_999 };
 export function clampRun(state: ExpeditionState): void {
   const r = state.resources;
   state.resources = { ore: Math.min(r.ore, RUN_CAP.ore), gold: Math.min(r.gold, RUN_CAP.gold), ember: Math.min(r.ember, RUN_CAP.ember), shard: Math.min(r.shard, RUN_CAP.shard) };
@@ -37,4 +37,5 @@ export function clampRun(state: ExpeditionState): void {
   if (state.tomes) clampTomes(state.tomes);
   if (state.riftCore !== undefined) state.riftCore = Math.min(state.riftCore, RUN_CAP.riftCore);
   if (state.tomeWins !== undefined) state.tomeWins = Math.min(state.tomeWins, RUN_CAP.tomeWins);
+  if (state.downed !== undefined) state.downed = Math.min(state.downed, RUN_CAP.downed);
 }

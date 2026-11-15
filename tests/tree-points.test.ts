@@ -26,7 +26,7 @@ const v59 = (profile: Profile, run: unknown = null): string => JSON.stringify({ 
 
 describe('tree points from the camp level and first clears (P04-03)', () => {
   it('gives 9 for Lv2–10 and one per first clear, whatever the stars', () => {
-    expect(SAVE_VERSION).toBe(60);
+    expect(SAVE_VERSION).toBe(61);
     expect([1, 2, 10, 30].map(lv => talentPoints(map, lv))).toEqual([0, 1, 9, 9]);
     expect(talentPoints(map, 10, 3)).toBe(12);
     expect(treeClears({ cleared })).toBe(3); expect(treeClears({ clears: 2 })).toBe(2); expect(treeClears({})).toBe(0);

@@ -392,6 +392,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .lobby-bank span:first-child .icon { color: var(--veil-cyan); } .lobby-bank span:last-child .icon { color: var(--gold-light); }
 .lobby-bank .icon { width: 18px; height: 18px; }
 .lobby-result { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 16px; font-size: 13px; line-height: 1.5; }
+.lobby-result .camp-line { display: block; margin-top: 2px; font-size: 12px; opacity: .9; }
 .lobby-result .icon { width: 20px; height: 20px; flex: none; color: var(--gold-light); }
 .lobby-result[data-outcome=wiped] { border-color: #ed927f88; } .lobby-result[data-outcome=wiped] .icon { color: var(--danger-coral); }
 .lobby-result[data-outcome=complete] { border-color: var(--gold-light); }

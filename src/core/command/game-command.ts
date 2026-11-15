@@ -108,7 +108,7 @@ type Field = 'int' | 'str' | 'bool' | 'ints' | 'strs' | 'point' | 'object' | 'co
 type Spec = Record<string, Field | { optional: Field }>;
 const opt = (f: Field) => ({ optional: f });
 const DIRECTIONS = ['up', 'down', 'left', 'right'] as const, LANES = ['front', 'back'] as const, GROUPS = ['deployed', 'reserve', 'bench'] as const;
-const EVENT_CHOICES = ['fight', 'sneak', 'pray', 'offer', 'buy-salve', 'buy-tonic', 'buy-repel', 'help'] as const;
+const EVENT_CHOICES = ['fight', 'sneak', 'pray', 'offer', 'buy-salve', 'buy-tonic', 'buy-repel', 'help', 'guide', 'shelter', 'search', 'pass'] as const;
 const SPECS: Record<CommandKind, Spec> = {
   createCommander: { commander: 'object', replace: 'bool' }, hire: { index: 'int' }, refreshBoard: {}, buy: { item: SHOP_ITEMS, heroId: opt('str') },
   smelt: { dust: 'int' }, upgrade: { heroId: 'str' }, setArchived: { heroId: 'str', archived: 'bool' }, dismiss: { heroId: 'str' },

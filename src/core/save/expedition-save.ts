@@ -4,7 +4,7 @@ import { entryReason, MAGIC_DAMAGE_SKILLS, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { presetNameReason } from '../world/presets';
 import { LEGACY_RESERVE, PARTY_SLOTS, PRESET_SLOTS, RESERVE_SLOTS, type TeamPreset, type ActiveBattle, type CampMigration, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
-import { campLevel, draftOffers, skillChoices, battleState, expToNext, findTiles, levelXp, maxCampXp, type Party, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
+import { EVENT_CHOICES, campLevel, draftOffers, skillChoices, battleState, expToNext, findTiles, levelXp, maxCampXp, type Party, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { boardOfferCount, commanderReason, defaultCamp, newProfile, reserveSlots, settle, talentsValid } from '../world/profile';
@@ -12,7 +12,7 @@ import { grantsValid, isBigTree, talentPoints } from '../world/talents';
 import { classSkills } from '../world/tomes';
 import { BANK_CAP, POTION_CAP, RIFT_CORE_CAP, RUN_CAP, TOME_CAP } from '../world/caps';
 import { TOME_LINES, TOME_SIZES, type TomeBag } from '../world/types';
-import type { GearSlot, GearStat, Item, MemberProgress, Potions, Talents } from '../world/types';
+import type { EventChoice, GearSlot, GearStat, Item, MapEventDefinition, MemberProgress, Potions, Talents } from '../world/types';
 import { GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/types';
 
 export interface StoragePort { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem?(key: string): void }
@@ -148,7 +148,10 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // v60 (P04-03, owner OD-02/19/20/27): tree points come from the camp level and first map clears, not stars. A member who
 // had spent more than the new allowance gets the whole tree back free (talents and loadout cleared, `treeReset` lists
 // them for the notice); everyone else keeps their build. A run in progress gains `clears` from its camp.
-export const SAVE_VERSION = 60;
+// v61 (P05-02, owner OD-36–38): cross-run story state. The profile may carry `choices` (the latest choice at each map
+// event), `storyQuests` (maps whose optional quest paid) and `last.events`/`last.story`; a run may carry the contract
+// counters `choices` and `downed`. All are optional, so a v60 save loads unchanged (missing = none).
+export const SAVE_VERSION = 61;
 // Trees refunded by older migrations were legal under star points (at most ★5 = 4 extra).
 const LEGACY_STAR_POINTS = 4;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
@@ -382,6 +385,18 @@ function foundOf(v: unknown, map: MapDefinition, lookup: EncounterLookup): Item[
 }
 // Rebuilds a run field by field. Battles are validated by replaying every command under
 // the current rules; any mismatch rejects the save.
+// P05-02: event choices keyed by event id, each one the event kind offers. A run's log is checked against its map
+// (unknown ids reject it); the profile's flags against every map, and ids no map knows any more are dropped.
+function choicesOf(v: unknown, events: readonly MapEventDefinition[], dropUnknown: boolean): Record<string, EventChoice> {
+  const out: Record<string, EventChoice> = {};
+  for (const [id, c] of Object.entries(obj(v))) {
+    const ev = events.find(e => e.id === id);
+    if (!ev) { if (dropUnknown) continue; throw new Error('Invalid choices'); }
+    if (!EVENT_CHOICES[ev.kind].includes(c as EventChoice)) throw new Error('Invalid choices');
+    out[id] = c as EventChoice;
+  }
+  return out;
+}
 function parseRun(v: unknown, version: number, map: MapDefinition, lookup: EncounterLookup): ExpeditionState {
   const s = obj(v);
   if (version === 1) Object.assign(s, { resources: { ore: 0, ember: 0, shard: 0 }, openedChests: [], restReady: true });
@@ -494,6 +509,8 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     ...(runTomes ? { tomes: runTomes } : {}), ...(s.riftCore !== undefined ? { riftCore: s.riftCore as number } : {}), ...(s.tomeWins !== undefined ? { tomeWins: s.tomeWins as number } : {}),
     ...(s.bossLoot===undefined?{}:{bossLoot:bossPlanOf(s.bossLoot,map)}),
     ...(reserveSlots !== undefined ? { reserveSlots } : {}), ...(fatigue ? { fatigue } : {}), ...(clears ? { clears } : {}),
+    ...(s.choices !== undefined ? { choices: choicesOf(s.choices, map.events, false) } : {}),
+    ...(s.downed !== undefined ? { downed: isInt(s.downed, 1, RUN_CAP.downed) ? s.downed : badRun() } : {}),
     ...(s.hunt===undefined?{}:{hunt:huntPlan(s.hunt,map,lookup)}),
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map, true),
     steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, hp, campXp,
@@ -585,7 +602,12 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     if (version < 14 && l.gold === undefined) l.gold = 0;
     if (!['complete', 'withdrawn', 'wiped'].includes(l.outcome as string) || !isInt(l.ore) || !isInt(l.gold) || !isInt(l.shard) || !isInt(l.steps) || !isInt(l.wins) || !isInt(l.items) || !isInt(l.salvaged)) throw new Error('Invalid result');
     if (l.tomes !== undefined && !isInt(l.tomes, 1, 99999)) throw new Error('Invalid result');
-    last = { outcome: l.outcome as RunOutcome, ore: l.ore, gold: l.gold as number, shard: l.shard, steps: l.steps, wins: l.wins, items: l.items, salvaged: l.salvaged, ...(l.tomes !== undefined ? { tomes: l.tomes as number } : {}) };
+    const allEvents = maps.flatMap(m => m.events.map(e => e.id));
+    const events = l.events === undefined ? undefined : Array.isArray(l.events) && l.events.every(id => typeof id === 'string') && new Set(l.events).size === l.events.length
+      ? (l.events as string[]).filter(id => allEvents.includes(id)) : badProfile();
+    if (l.story !== undefined && (typeof l.story !== 'string' || !maps.some(m => m.id === l.story && m.quest.optional))) throw new Error('Invalid result');
+    last = { outcome: l.outcome as RunOutcome, ore: l.ore, gold: l.gold as number, shard: l.shard, steps: l.steps, wins: l.wins, items: l.items, salvaged: l.salvaged, ...(l.tomes !== undefined ? { tomes: l.tomes as number } : {}),
+      ...(events?.length ? { events } : {}), ...(l.story !== undefined ? { story: l.story as string } : {}) };
   }
   let commander: Profile['commander'] = null;
   if (p.commander !== null && p.commander !== undefined) {
@@ -610,6 +632,9 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   // P04-02 (OD-22): story recruits already met or paid once (company members only, no repeats).
   const storyShards = p.storyShards === undefined ? undefined : idList(p.storyShards, company as string[]);
   const treeReset = p.treeReset === undefined ? undefined : idList(p.treeReset, company as string[]);
+  // P05-02 (v61): story flags and paid optional quests (known optional-quest maps only, no repeats).
+  const choices = p.choices === undefined ? undefined : choicesOf(p.choices, maps.flatMap(m => m.events), true);
+  const storyQuests = p.storyQuests === undefined ? undefined : idList(p.storyQuests, maps.filter(m => m.quest.optional).map(m => m.id));
   if (clearedHard?.some(id => !cleared.includes(id))) throw new Error('Invalid profile');
   // v44 → v45 (P02): the fifth field slot is filled from the reserve, and a reserve above the chapter's slots steps into
   // the field first (there is always room: four deployed at most before v45). Nobody leaves the team.
@@ -618,6 +643,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (party.reserve.length > slots) throw new Error('Invalid party');
   return {...(presets ? { presets } : {}),...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(boardFeatured ? { boardFeatured: [...boardFeatured as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     ...(storyShards ? { storyShards } : {}), ...(treeReset?.length ? { treeReset } : {}),
+    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}),
     bank: { ore: bank.ore as number, gold: bank.gold as number, shard: bank.shard as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, POTION_CAP), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -834,7 +860,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
   if (version < 60 && version >= 5) { const p = obj(envelope.profile ?? {}); migrateTreePoints(envelope, map, maps.length ? maps : [map], version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps).length : undefined); }
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

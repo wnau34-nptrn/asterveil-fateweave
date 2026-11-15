@@ -180,13 +180,17 @@ export interface SideQuestDefinition {
 // profile (`guideDone`); the small reward is claimed once, or the task is skipped.
 export type GuideKind = 'wear' | 'enhance' | 'talent' | 'brew' | 'itemLevel' | 'hire' | 'reserve';
 export interface GuideDefinition { id: string; npc: string; feature: LobbyFeature; kind: GuideKind; reward: SideQuestDefinition['reward'] }
-export interface QuestDefinition { need: number; objectives: readonly QuestObjective[] }
+// P05-02: an `optional` quest never seals the boss. Done in one run that comes home (complete or withdrawn, not wiped), it
+// pays `reward` once per company (`Profile.storyQuests`); progress is the run's own, so nothing expires between runs.
+export interface QuestDefinition { need: number; objectives: readonly QuestObjective[]; optional?: { reward: SideQuestDefinition['reward'] } }
 // `level`: the fight level (4E tuning; missing = the encounter's own level).
 // `percent` (A10): this elite's foes fight with that percent of their HP and move damage (missing = 100).
 export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean; mini?: boolean; level?: number; percent?: number }
-export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift';
+// P05-02: `abandoned` — an abandoned camp (rest with pressure, search for dust with a fight risk, or walk past).
+export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift' | 'abandoned';
 export interface MapEventDefinition { id: string; x: number; y: number; kind: MapEventKind }
-export type EventChoice = 'fight' | 'sneak' | 'pray' | 'offer' | 'buy-salve' | 'buy-tonic' | 'buy-repel' | 'help';
+// P05-02: `guide` (traveller: point the way, no salve), `shelter`/`search`/`pass` (abandoned camp).
+export type EventChoice = 'fight' | 'sneak' | 'pray' | 'offer' | 'buy-salve' | 'buy-tonic' | 'buy-repel' | 'help' | 'guide' | 'shelter' | 'search' | 'pass';
 export interface EventRules {
   // Bandits: a battle from the zone pool one level above the tile; the win always drops an item. Sneaking fills pressure.
   banditLevelBonus: number;
@@ -194,6 +198,11 @@ export interface EventRules {
   prayHeal: number; prayWound: number; maxWound: number; offerOre: number; offerShard: number;
   merchant: Readonly<Record<PotionId, number>>;
   traveller: { ore: number; shard: number };
+  // P05-02 (draft): pointing the traveller the way pays `guideOre` and costs nothing.
+  travellerGuide: { ore: number };
+  // P05-02 (draft): abandoned camp. `shelter` heals standing members `healPercent`% and fills the zone pressure; `search`
+  // finds `searchDust` veil dust, but at `searchFightPercent`% a zone battle comes first (no item; the dust after the win).
+  abandoned: { healPercent: number; searchDust: number; searchFightPercent: number };
   // Rift: an energy battle at the tile's level; the win brings veil dust home.
   riftEncounterId: string; riftDust: number;
   // Elites: EXP multiplier and the drop's rarity weights.
@@ -397,11 +406,16 @@ export interface Profile {
   // P04-03 (OD-19): members whose tree was reset free when tree points left stars (save v60); an id leaves the list
   // when that member next learns a node. Missing = none.
   treeReset?: string[];
+  // P05-02 (save v61): the latest choice made at each map event across runs (story flags for camp lines; missing = none)
+  // and the maps whose optional quest has paid its reward (missing = none).
+  choices?: Record<string, EventChoice>; storyQuests?: string[];
   // P04-02 (OD-22): story recruits already compensated (or met through the story), each at most once. Missing = none.
   storyShards?: string[];
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
   // `tomes` (save v37): skill tomes brought home by that run (missing = none).
-  last: { outcome: RunOutcome; ore: number; gold: number; shard: number; steps: number; wins: number; items: number; salvaged: number; tomes?: number } | null;
+  // P05-02 (save v61): `events` the map events this run chose at (for the camp lines) and `story` the map whose optional
+  // quest paid on this return (missing = none).
+  last: { outcome: RunOutcome; ore: number; gold: number; shard: number; steps: number; wins: number; items: number; salvaged: number; tomes?: number; events?: string[]; story?: string } | null;
 }
 // What the v43 → v44 boundary did when an old save loaded (P01, never saved): the camp level taken from the best owned
 // member, and whether a battle in progress restarted from its entry HP.
@@ -479,6 +493,9 @@ export interface ExpeditionState {
   reserveSlots?: number; fatigue?: Record<string, number>;
   // P04-03: maps the camp had first-cleared when this run set out (tree points; missing = none).
   clears?: number;
+  // P05-02 (save v61): contract counters. `choices` logs the choice made at each event this run (a later choice at the
+  // same event replaces it); `downed` counts every time a brought member fell (missing = none).
+  choices?: Record<string, EventChoice>; downed?: number;
   // Hard mode (A9, save v33): set on departure, never changed during the run.
   hard?: true;
   bossLoot?:BossPlan;

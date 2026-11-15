@@ -28,7 +28,7 @@ import { type IconName, icon } from './icons';
 import region from '../content/world/region_ch1.json';
 import { worldArtUrl } from '../game/visuals/world-art';
 import { gearArt, potionArt } from './equip-art';
-import { skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
+import { campLines, skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
 
 import { heroArt, portrait, starRow } from './portraits';
 
@@ -255,6 +255,12 @@ export class LobbyUI {
     const p = this.view!.profile, n = this.readyQuests(p).filter(q => q.npc === npc).length;
     return n ? `<button id="quest-hint-${npc}" data-lobby="board" class="secondary quest-hint">${icon('flag')}<span>มีรางวัลเควสต์ให้รับ · ไปกระดานเควสต์</span></button>` : '';
   }
+  // P05-02: short camp lines for what the latest return chose at map events and the story quest it finished.
+  private campLines(p: Profile): string {
+    const lines = campLines(p, this.maps.flatMap(m => m.events));
+    const story = p.last?.story ? this.maps.find(m => m.id === p.last!.story)?.quest.optional : undefined;
+    return lines.map((l, i) => `<small class="camp-line">${l}${i === 0 && story ? ` · ${rewardText(story.reward)}` : ''}</small>`).join('');
+  }
   private questEntry(p:Profile):string {
     if(!this.open('quests'))return '';
     const ready=this.readyQuests(p).length,active=this.map.sideQuests.filter(q=>!p.quests[q.id]?.claimed).length;
@@ -391,7 +397,7 @@ export class LobbyUI {
         <button id="lobby-bank" class="lobby-bank" data-lobby="bank" aria-expanded="${this.bankInfo}" aria-controls="lobby-bank-legend" aria-label="คลัง เหรียญทอง ${p.bank.gold} แร่ดาว ${p.bank.ore} เศษกลาง ${p.bank.shard} ฝุ่นดาว ${p.bank.dust} · แตะเพื่อดูชื่อและการใช้งาน"><span class="glass-capsule" data-bank="gold">${icon('gold')}<b>${p.bank.gold}</b></span><span class="glass-capsule" data-bank="ore">${icon('ore')}<b>${p.bank.ore}</b></span><span class="glass-capsule">${icon('seal')}<b>${p.bank.shard}</b></span><span class="glass-capsule">${icon('dust')}<b>${p.bank.dust}</b></span></button></header>${this.bankInfo ? this.bankLegend(p) : ''}
       ${this.questEntry(p)}
       ${p.overflow?.length?`<button id="lobby-overflow" data-lobby="overflow" class="secondary storage-notice">ของรอจัด ${p.overflow.length} ชิ้น · เปิดถาดก่อนออกเดินทาง</button>`:""}
-      ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.gold ? ` เหรียญทอง ${last.gold}` : ''}${last.shard ? ` เศษกลาง ${last.shard}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}</span></p>`
+      ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.gold ? ` เหรียญทอง ${last.gold}` : ''}${last.shard ? ` เศษกลาง ${last.shard}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}${this.campLines(p)}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
         <div class="lobby-sheet-head">${this.sheet==='forge'&&forgeBody&&this.forgeUI.taskNavigation?`<button id="forge-open-tasks" data-forge="tasks" class="round-glass" aria-label="เลือกงานโรงตีเหล็ก">${icon('left')}</button>`:''}${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="${this.forgeStorageReturn?'กลับไปสร้างอาวุธ':'กลับไปจัดทีม'}">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title" tabindex="-1">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ผังสกิล` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : this.sheet === 'board' ? `${icon('flag')} กระดานเควสต์ <small>รับได้ ${this.readyQuests(p).length}</small>` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
