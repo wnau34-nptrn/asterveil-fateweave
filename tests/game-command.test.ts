@@ -1,3 +1,4 @@
+import { sweep } from '../src/core/world/sweep';
 import { describe, expect, it } from 'vitest';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { chapterOne as home } from '../src/content/world/chapter1';
@@ -130,6 +131,7 @@ const CASES: Record<CommandKind, Case> = {
   reroll: { game: campGame, cmd: { kind: 'reroll', uid: campProfile().items[0]!.uid, index: 0 }, direct: g => reroll(P(g), home, P(g).items[0]!.uid, 0) },
   brew: { game: campGame, cmd: { kind: 'brew', potion: 'salve' }, direct: g => brew(P(g), home, 'salve') },
   claimQuest: { game: campGame, cmd: { kind: 'claimQuest', questId: home.sideQuests[0]!.id }, direct: g => claimQuest(P(g), home, home.sideQuests[0]!.id) },
+  sweep: { game: campGame, cmd: { kind: 'sweep', mapId: home.id, hard: false, day: 20000, serial: 0 }, direct: g => sweep(P(g), home, false, 20000, 0) },
   depart: { game: campGame, cmd: { kind: 'depart', mapId: home.id, hard: false }, seeds: [7], direct: g => { const out = depart(P(g), home, lookup, 7); return { game: { profile: { ...out.profile, last: null }, run: out.run } }; } },
   move: { game: () => runGame(), cmd: { kind: 'move', dir: openDir() }, direct: g => move(R(g), home, openDir(), lookup) },
   travel: { game: () => runGame({ visited: [key(campTile)] }), cmd: { kind: 'travel', to: campTile }, direct: g => travel(R(g), home, campTile) },

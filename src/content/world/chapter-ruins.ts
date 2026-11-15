@@ -7,6 +7,8 @@ import { gameRules } from './rules';
 export const ruinsMap: MapDefinition = {
   ...gameRules,
   id: 'ruined-border', version: 3, name: 'ซากชายแดน', chapter: 1, bossName: 'หัวหน้ากองหน้า', goalName: 'ประตูป้อม',
+  // P05-05 (draft): about a third of a quick completed run's ore/gold (docs/validation/p05-05-2026-11-15); no tomes here.
+  sweepReward: { normal: { ore: 15, gold: 7 }, hard: { ore: 15, gold: 7 } },
   summary: 'ซากป้อมชายแดนที่กองหน้าของวาร์กอธบุกเข้ามา ฝึกเดินทาง เปิดหีบ สวมอุปกรณ์ แล้วขับไล่หัวหน้ากองหน้า',
   rows: [
     '##############',

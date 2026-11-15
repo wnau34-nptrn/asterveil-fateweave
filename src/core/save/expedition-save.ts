@@ -11,7 +11,8 @@ import { boardOfferCount, commanderReason, defaultCamp, newProfile, reserveSlots
 import { grantsValid, isBigTree, talentPoints } from '../world/talents';
 import { classSkills } from '../world/tomes';
 import { BANK_CAP, POTION_CAP, RIFT_CORE_CAP, RUN_CAP, TOME_CAP } from '../world/caps';
-import { TOME_LINES, TOME_SIZES, type TomeBag } from '../world/types';
+import { MAX_SWEEP_COUNT, MAX_SWEEP_DAY } from '../world/sweep';
+import { TOME_LINES, TOME_SIZES, type SweepBook, type TomeBag } from '../world/types';
 import type { EventChoice, GearSlot, GearStat, Item, MapEventDefinition, MemberProgress, Potions, Talents } from '../world/types';
 import { GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/types';
 
@@ -151,7 +152,9 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // v61 (P05-02, owner OD-36–38): cross-run story state. The profile may carry `choices` (the latest choice at each map
 // event), `storyQuests` (maps whose optional quest paid) and `last.events`/`last.story`; a run may carry the contract
 // counters `choices` and `downed`. All are optional, so a v60 save loads unchanged (missing = none).
-export const SAVE_VERSION = 61;
+// v62 (P05-05): the profile may carry the sweep book `sweep` (supplies, the day's sweeps per map, the sweep serial).
+// Optional, so a v61 save loads unchanged (missing = never swept).
+export const SAVE_VERSION = 62;
 // Trees refunded by older migrations were legal under star points (at most ★5 = 4 extra).
 const LEGACY_STAR_POINTS = 4;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
@@ -326,6 +329,18 @@ function potionsOf(v: unknown, max: number): Potions {
 function clearedList(v: unknown, maps: readonly MapDefinition[]): string[] {
   if (!Array.isArray(v) || v.some(id => typeof id !== 'string') || new Set(v).size !== v.length) throw new Error('Invalid profile');
   return (v as string[]).filter(id => maps.some(m => m.id === id));
+}
+// P05-05 (v62): the sweep book. Supplies within the cap, counts only for cleared maps that can be swept, each within the
+// day's limit; a map that no longer exists is dropped like a cleared map is.
+function sweepOf(v: unknown, map: MapDefinition, maps: readonly MapDefinition[], cleared: readonly string[]): SweepBook {
+  const b = obj(v); const used = obj(b.used); const r = map.sweep; const out: Record<string, number> = {};
+  if (!isInt(b.day, 0, MAX_SWEEP_DAY) || !isInt(b.supply, 0, r.cap) || !isInt(b.count, 0, MAX_SWEEP_COUNT) || Object.keys(b).length !== 4) throw new Error('Invalid sweep');
+  for (const [id, n] of Object.entries(used)) {
+    const m = maps.find(x => x.id === id); if (!m) continue;
+    if (!m.sweepReward || !cleared.includes(id) || !isInt(n, 1, r.perMapDaily)) throw new Error('Invalid sweep');
+    out[id] = n;
+  }
+  return { day: b.day, supply: b.supply, used: out, count: b.count };
 }
 function idList(v: unknown, allowed: readonly string[]): string[] {
   if (!Array.isArray(v) || v.some(id => !allowed.includes(id)) || new Set(v).size !== v.length) throw new Error('Invalid run');
@@ -636,6 +651,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const choices = p.choices === undefined ? undefined : choicesOf(p.choices, maps.flatMap(m => m.events), true);
   const storyQuests = p.storyQuests === undefined ? undefined : idList(p.storyQuests, maps.filter(m => m.quest.optional).map(m => m.id));
   if (clearedHard?.some(id => !cleared.includes(id))) throw new Error('Invalid profile');
+  const sweep = p.sweep === undefined ? undefined : sweepOf(p.sweep, map, maps, cleared);
   // v44 → v45 (P02): the fifth field slot is filled from the reserve, and a reserve above the chapter's slots steps into
   // the field first (there is always room: four deployed at most before v45). Nobody leaves the team.
   const slots = reserveSlots({ cleared, ...(veteran ? { veteran: true as const } : {}) }, map);
@@ -643,7 +659,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (party.reserve.length > slots) throw new Error('Invalid party');
   return {...(presets ? { presets } : {}),...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(boardFeatured ? { boardFeatured: [...boardFeatured as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     ...(storyShards ? { storyShards } : {}), ...(treeReset?.length ? { treeReset } : {}),
-    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}),
+    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}), ...(sweep ? { sweep } : {}),
     bank: { ore: bank.ore as number, gold: bank.gold as number, shard: bank.shard as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, POTION_CAP), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -860,7 +876,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
   if (version < 60 && version >= 5) { const p = obj(envelope.profile ?? {}); migrateTreePoints(envelope, map, maps.length ? maps : [map], version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps).length : undefined); }
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

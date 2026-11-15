@@ -6,7 +6,7 @@ import { talentTrees } from '../heroes/talents';
 // forge, potions, market, talents, event numbers and the camp NPCs' side quests. A map spreads these and adds its
 // own board, zones, encounters, loot and objectives; tests check that every map uses this exact object.
 export type GameRules = Pick<MapDefinition, 'tutorialEncounterId' | 'camp' | 'startingRoster' | 'firstCompany' | 'unlocks' | 'guides' | 'mercenaries' | 'shop' | 'company' | 'progression' | 'talents'
-  | 'eventRules' | 'potions' | 'equipment' | 'sideQuests'>;
+  | 'eventRules' | 'potions' | 'equipment' | 'sideQuests' | 'sweep'>;
 export const gameRules: GameRules = {
   // The prologue's first battle (Vargoth's vanguard).
   tutorialEncounterId: 'first-clash',
@@ -20,6 +20,9 @@ export const gameRules: GameRules = {
     { id: 'herbalist-glow', npc: 'herbalist', kind: 'herbs', target: 6, reward: { potions: { salve: 2, tonic: 2 } } },
     { id: 'scout-puzzles', npc: 'scout', kind: 'puzzles', target: 6, reward: { ore: 40, shard: 10 } },
   ],
+  // P05-05 (prototype, draft numbers from docs/design/WORLD_BOSS_SWEEP_TH.md §4): 6 supplies a day kept up to 18, one per
+  // sweep, 3 sweeps per map per day shared by normal and hard. Each map's rewards are its own `sweepReward`.
+  sweep: { daily: 6, cap: 18, cost: 1, perMapDaily: 3 },
   // P04-05/06 (OD-34, draft): a campfire rest heals 70% (was 50%); casual parties left camp still hurt and lost the walk back.
   camp: { restHealPercent: 70, reviveHpPercent: 30, reserveHealPercent: 25, relightWins: 3, fatigue: { cap: 12, steps: [7, 11], stepPercent: 10, rest: 5 } },
   startingRoster: ['guardian', 'tracer', 'weaver', 'healer'],

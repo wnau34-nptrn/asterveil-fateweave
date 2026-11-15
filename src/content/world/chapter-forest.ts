@@ -9,6 +9,8 @@ export const forestMap: MapDefinition = {
   id: 'deep-forest', version: 2, name: 'เส้นทางป่าทึบ', chapter: 2, bossName: 'เจ้าป่าหนาม', goalName: 'ทางออกป่า',
   // Skill tomes (docs/design/SKILL_TOMES_TH.md, draft): the thorn lord pays tomes every win, a large one on the first clear.
   tomes: { boss: { medium: 1, small: 2 }, first: { large: 1, core: 0 } },
+  // P05-05 (draft): about a third of a quick completed run; hard pays the same ore/gold (OD-41) and one more tome.
+  sweepReward: { normal: { ore: 15, gold: 7, tomes: 1 }, hard: { ore: 15, gold: 7, tomes: 2 } },
   summary: 'ทางผ่านป่าที่รอยแยกบิดให้กลายเป็นหนาม ฝ่าด่านอีลิท เจอเหตุการณ์กลางทาง แล้วสงบเจ้าป่าหนาม',
   rows: [
     '################',

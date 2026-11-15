@@ -9,6 +9,8 @@ export const chapterOne: MapDefinition = {
   id: 'veil-frontier', version: 7, name: 'แนวรอยแยก',
   // Skill tomes (docs/design/SKILL_TOMES_TH.md, draft): the rift warden pays more, and its first clear a rift core.
   tomes: { boss: { medium: 3, small: 2 }, first: { large: 1, core: 0 } },
+  // P05-05 (draft): about a third of a quick completed run; hard pays the same ore/gold (OD-41) and one more tome.
+  sweepReward: { normal: { ore: 48, gold: 25, dust: 4, tomes: 2 }, hard: { ore: 48, gold: 25, dust: 4, tomes: 3 } },
   chapter: 3, summary: 'ชายแดนแอสเตอร์เวลที่รอยแยกเปิดกว้าง ทำลายผนึกแล้วโค่นผู้คุมรอยแยก', clearStory: 'warden', bossCharm: true, bossName: 'ผู้คุมรอยแยก', goalName: 'ประตูรอยแยก',
   rows: [
     '#######################',
