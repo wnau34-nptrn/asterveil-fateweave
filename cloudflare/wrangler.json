@@ -7,7 +7,8 @@
   "vars": {
     "ALLOWED_ORIGINS": "https://wnau34-nptrn.github.io,http://localhost:5173,http://127.0.0.1:5173",
     "GOOGLE_CLIENT_ID": "982054923877-79lqr98hgklktknar98k6jsnvs4dk4fb.apps.googleusercontent.com",
-    "LEGACY_IMPORT": "open"
+    "LEGACY_IMPORT": "open",
+    "CHAT_WRITE": "all"
   },
   "d1_databases": [
     {
@@ -30,6 +31,10 @@
       {
         "name": "WORLD_BOSS",
         "class_name": "WorldBoss"
+      },
+      {
+        "name": "CHAT",
+        "class_name": "Chat"
       }
     ]
   },
@@ -50,6 +55,12 @@
       "tag": "v3",
       "new_sqlite_classes": [
         "WorldBoss"
+      ]
+    },
+    {
+      "tag": "v4",
+      "new_sqlite_classes": [
+        "Chat"
       ]
     }
   ],

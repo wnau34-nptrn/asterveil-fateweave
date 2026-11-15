@@ -36,7 +36,11 @@ export interface ApiDeps {
   defer?(work: Promise<unknown>): void;
   // P11-04: the shared World Boss object (absent: no shared HP; attempts still count for their players, claims refused).
   boss?: AccountGame;
+  // P11 chat: the one `Chat` object (absent: chat closed, 503) and who may write (`CHAT_WRITE`: all | linked | off).
+  chat?: AccountGame;
+  chatWrite?: ChatWrite;
 }
+export type ChatWrite = 'all' | 'linked' | 'off';
 
 export const CONTENT_HEADER = 'X-Fateweave-Content';
 const HEALTH = { status: 'ok', service: 'asterveil-api', environment: 'dev' } as const;
@@ -51,7 +55,11 @@ export const LIMITS = {
   verifyPerMinute: 10, importPerMinute: 5, commandPerSecond: 10, guestPerMinute: 5, readPerSecond: 10, signInPerMinute: 10, recoverPerMinute: 5, accountPerMinute: 20,
   // P09-03 (drafts): device error reports, feedback (per 10 minutes), admin reads.
   telemetryPerMinute: 6, feedbackPer10Minutes: 3, adminReadPerMinute: 20,
+  // P11 chat (drafts, docs/design/CHAT_P11_TH.md §3): reads per second (first filter), sends per IP network a minute,
+  // reports per account in 10 minutes. The per-account send pace is counted exactly in the `Chat` object.
+  chatReadPerSecond: 2, chatSendPerIpMinute: 30, chatReportPer10Minutes: 10,
 } as const;
+const CHAT_BODY_BYTES = 2048;
 // P09-03: adds telemetry items to the daily totals after answering; a failure never changes the answer.
 async function track(deps: ApiDeps, items: readonly TelemetryItem[], now: number): Promise<void> {
   if (items.length === 0) return;
@@ -108,9 +116,11 @@ const ROUTES: Record<string, 'GET' | 'POST'> = {
   '/v1/account': 'GET', '/v1/link': 'POST', '/v1/signin': 'POST', '/v1/recovery-code': 'POST', '/v1/recover': 'POST', '/v1/sessions/revoke': 'POST',
   '/v1/account/delete': 'POST', '/v1/account/cancel': 'POST',
   '/v1/token/rotate': 'POST', '/v1/telemetry': 'POST', '/v1/feedback': 'POST', '/v1/admin/telemetry': 'GET', '/v1/admin/feedback': 'GET',
+  '/v1/chat': 'GET', '/v1/chat/send': 'POST', '/v1/chat/report': 'POST', '/v1/admin/chat': 'GET', '/v1/admin/chat/hide': 'POST', '/v1/admin/chat/mute': 'POST',
 };
 const ACCOUNT_ROUTES = new Set(['/v1/account', '/v1/link', '/v1/signin', '/v1/recovery-code', '/v1/recover', '/v1/sessions/revoke', '/v1/account/delete', '/v1/account/cancel',
-  '/v1/token/rotate', '/v1/telemetry', '/v1/feedback', '/v1/admin/telemetry', '/v1/admin/feedback']);
+  '/v1/token/rotate', '/v1/telemetry', '/v1/feedback', '/v1/admin/telemetry', '/v1/admin/feedback',
+  '/v1/chat', '/v1/chat/send', '/v1/chat/report', '/v1/admin/chat', '/v1/admin/chat/hide', '/v1/admin/chat/mute']);
 // P09-02g: what a `deleting` account may still do (read the account, cancel, sign devices out; P09-03: keep its
 // credential fresh and report errors).
 const WHILE_DELETING = new Set(['/v1/account', '/v1/account/cancel', '/v1/sessions/revoke', '/v1/account/delete', '/v1/token/rotate', '/v1/telemetry']);
@@ -304,6 +314,7 @@ async function accountRoute(request: Request, path: string, deps: ApiDeps, now: 
   const auth = await authenticateAccount(deps.db, request.headers.get('Authorization'), now);
   if (!auth) return error('unauthorized', 401, { 'WWW-Authenticate': 'Bearer' });
   const accountId = auth.accountId;
+  if (path.startsWith('/v1/chat') || path.startsWith('/v1/admin/chat')) return chatRoute(request, path, accountId, auth.status, ip, deps, now);
   if (path === '/v1/telemetry' || path === '/v1/feedback' || path.startsWith('/v1/admin/')) return reportRoute(request, path, accountId, auth.status, deps, now);
   if (!await allowed(deps, `account:${accountId}`, LIMITS.accountPerMinute, 60_000, now)) return limited(60);
   if (auth.status === 'deleting' && !WHILE_DELETING.has(path)) return deletingError();
@@ -395,4 +406,74 @@ async function reportRoute(request: Request, path: string, accountId: string, st
   const rows = await readFeedback(deps.db, Number.isFinite(before) && before > 0 ? before : null, limit);
   await auditAdmin(deps.db, accountId, 'feedback_read', Number.isFinite(before) ? `before:${before}` : 'latest', `rows:${rows.length}`, now);
   return json({ rows });
+}
+
+// P11 chat (docs/design/CHAT_P11_TH.md): the Worker authenticates and decides who may write; the `Chat` object filters,
+// paces each account exactly and keeps the messages. Admin routes need a D1 `admins` row and are audited.
+async function chatRoute(request: Request, path: string, accountId: string, status: string, ip: string, deps: ApiDeps, now: number): Promise<Response> {
+  const chat = deps.chat;
+  if (!chat) return error('chat_unavailable', 503);
+  const call = async (p: string, body?: unknown): Promise<Response | null> => {
+    try {
+      return await chat.fetch(new Request(`https://chat${p}`, body === undefined ? {} : { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } }));
+    } catch { return null; }
+  };
+  const pass = async (r: Response | null, extra: Record<string, string> = {}): Promise<Response> => {
+    if (!r) return error('chat_unavailable', 503);
+    return json(await r.json(), r.status, extra);
+  };
+  // Why this account may not write now (null: it may).
+  const writeBlock = (): string | null => {
+    if (status === 'deleting') return 'account_deleting';
+    if (status === 'suspended') return 'account_suspended';
+    if (deps.chatWrite === 'off') return 'chat_readonly';
+    if (deps.chatWrite === 'linked' && status !== 'linked') return 'chat_linked_only';
+    return null;
+  };
+  if (path === '/v1/chat') {
+    if (!deps.limiter.allow(`chatread:${accountId}`, LIMITS.chatReadPerSecond, 1000, now)) return limited(1);
+    const after = Number.parseInt(new URL(request.url).searchParams.get('after') ?? '0', 10);
+    const r = await call(`/read?account=${accountId}&after=${Number.isSafeInteger(after) && after > 0 ? after : 0}`);
+    if (!r?.ok) return error('chat_unavailable', 503);
+    return json({ ...await r.json() as object, write: writeBlock() });
+  }
+  if (path === '/v1/chat/send' || path === '/v1/chat/report') {
+    const block = writeBlock();
+    if (block && (path === '/v1/chat/send' || block.startsWith('account_'))) return error(block, 403);
+    if (!/^application\/json\b/i.test(request.headers.get('Content-Type') ?? '')) return error('unsupported_media_type', 415);
+    const raw = await readLimited(request, CHAT_BODY_BYTES);
+    if (raw === null) return error('too_large', 413);
+    let body: Record<string, unknown>;
+    try { const v: unknown = JSON.parse(raw); if (typeof v !== 'object' || v === null || Array.isArray(v)) return error('invalid_request', 400); body = v as Record<string, unknown>; } catch { return error('invalid_json', 400); }
+    if (path === '/v1/chat/report') {
+      if (!await allowed(deps, `chatreport:${accountId}`, LIMITS.chatReportPer10Minutes, 600_000, now)) return limited(600);
+      return pass(await call('/report', { account: accountId, id: body.id, reason: body.reason }));
+    }
+    if (typeof body.text !== 'string') return error('invalid_request', 400);
+    if (!await allowed(deps, `chatip:${ip}`, LIMITS.chatSendPerIpMinute, 60_000, now)) return limited(60);
+    const r = await call('/post', { account: accountId, text: body.text });
+    if (r?.status === 429) { const b = await r.json() as { retryAfter?: number }; return json(b, 429, { 'Retry-After': String(b.retryAfter ?? 5) }); }
+    return pass(r);
+  }
+  if (!await isAdmin(deps.db, accountId)) return error('forbidden', 403);
+  if (!await allowed(deps, `admin:${accountId}`, LIMITS.adminReadPerMinute, 60_000, now)) return limited(60);
+  if (path === '/v1/admin/chat') {
+    const r = await call('/admin');
+    if (!r?.ok) return error('chat_unavailable', 503);
+    const out = await r.json() as { rows: unknown[] };
+    await auditAdmin(deps.db, accountId, 'chat_read', 'chat', `rows:${out.rows.length}`, now);
+    return json(out);
+  }
+  const body = await readJson(request);
+  if (body instanceof Response) return body;
+  if (path === '/v1/admin/chat/hide') {
+    const r = await call('/hide', { id: body.id, hidden: body.hidden });
+    if (r?.ok) await auditAdmin(deps.db, accountId, body.hidden === true ? 'chat_hide' : 'chat_unhide', `msg:${String(body.id)}`, 'ok', now);
+    return pass(r);
+  }
+  const target = str(body.accountId);
+  if (!ACCOUNT_ID.test(target)) return error('invalid_request', 400);
+  const r = await call('/mute', { account: target, minutes: body.minutes, by: accountId });
+  if (r?.ok) await auditAdmin(deps.db, accountId, 'chat_mute', target, `minutes:${String(body.minutes)}`, now);
+  return pass(r);
 }

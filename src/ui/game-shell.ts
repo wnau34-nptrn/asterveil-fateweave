@@ -8,6 +8,7 @@ import { wbBook, wbEncounter, wbWeekOf } from '../core/world/world-boss';
 import { attemptReasonText, claimText, worldBossStartReason } from './world-boss-panel';
 import { AccountPanel } from './account-panel';
 import { FeedbackPanel } from './feedback-panel';
+import { ChatPanel } from './chat-panel';
 import { setSavePlace } from './save-place';
 import { gameFromView, resultFromReply } from './server-game';
 import { localSeedSource } from '../platform/seed-source';
@@ -177,6 +178,9 @@ export class GameShell {
       const entry = '<section class="feedback-entry"><h3>ส่งความเห็น</h3><p>เจอปัญหาหรืออยากบอกอะไรผู้พัฒนา ส่งได้จากตรงนี้</p><button type="button" class="secondary" data-feedback-open>ส่งความเห็น / แจ้งปัญหา</button></section>';
       for (const id of ['#world-panel-settings', '#battle-panel-settings']) this.root.querySelector(id)?.insertAdjacentHTML('beforeend', entry);
       root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-feedback-open]')) this.feedback?.open(this.place()); });
+      // P11: the world chat (camp button; docs/design/CHAT_P11_TH.md).
+      this.chat = new ChatPanel(root, server, this.storage);
+      root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-chat-open]:not(:disabled)')) this.chat?.open(); });
       window.addEventListener('error', () => server.report('js_error', this.place()));
       window.addEventListener('unhandledrejection', () => server.report('promise_error', this.place()));
     }
@@ -336,6 +340,7 @@ export class GameShell {
   private account: AccountPanel | undefined;
   private titleNote = '';
   private feedback: FeedbackPanel | undefined;
+  private chat: ChatPanel | undefined;
   private place(): ReportPlace {
     if (this.account?.isOpen) return 'account';
     const view = this.root.dataset.view;

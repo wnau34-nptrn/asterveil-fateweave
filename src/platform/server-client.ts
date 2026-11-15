@@ -67,6 +67,12 @@ export interface FeedbackRow { id: number; accountId: string; category: string; 
 // P11-04: `GET /v1/worldboss`.
 export interface SharedBoss { week: number; hp: number; left: number; accounts: number }
 export interface WorldBossStatus { week: number; current: SharedBoss | null; last: SharedBoss | null }
+// P11 chat (docs/design/CHAT_P11_TH.md).
+export interface ChatMessage { id: number; handle: string; text: string; at: number; mine: boolean }
+export interface ChatRead { messages: ChatMessage[]; hidden: number[]; last: number; muted: number | null; write: string | null }
+export type ChatReportReason = 'abuse' | 'spam' | 'personal' | 'other';
+export interface ChatAdminRow { id: number; account: string; handle: string; text: string; at: number; hidden: string | null; reports: number; reasons: string[] }
+export interface ChatAdmin { rows: ChatAdminRow[]; mutes: { account: string; until: number }[] }
 export interface TelemetryRow { day: string; kind: string; key: string; count: number }
 const SERVER_KEY = 'fateweave-server';
 
@@ -289,6 +295,52 @@ export class ServerClient {
     if (!headers) return { kind: 'failed', reason: 'unauthorized' };
     return this.accountCall(`/v1/admin/telemetry?days=${days}`, { method: 'GET', headers }, 200, b => (b as { rows: TelemetryRow[] }).rows);
   }
+  // ---- P11 chat ----
+  // Reads once without retries (the panel polls again anyway).
+  async chatRead(after: number): Promise<AccountOutcome<ChatRead>> {
+    const headers = this.bearer(false);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    let r: Response;
+    try { r = await this.port.fetch(`${this.base}/v1/chat?after=${after}`, { method: 'GET', headers, signal: AbortSignal.timeout(TIMEOUT_MS) }); } catch { return { kind: 'failed', reason: 'network' }; }
+    const body: unknown = await r.json().catch(() => ({}));
+    if (r.status === 200) return { kind: 'ok', value: body as ChatRead };
+    if (r.status === 401) return { kind: 'failed', reason: 'unauthorized' };
+    return { kind: 'refused', error: (body as { error?: string }).error ?? `http_${r.status}` };
+  }
+  // One send, never retried (a lost answer could otherwise post twice). `refused` carries the server's reason
+  // (filter refusals, `too_fast`, `duplicate`, `muted`, `chat_linked_only` ...).
+  async chatSend(text: string): Promise<AccountOutcome<ChatMessage> & { until?: number; retryAfter?: number }> {
+    const headers = this.bearer(true);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    let r: Response;
+    try { r = await this.port.fetch(`${this.base}/v1/chat/send`, { method: 'POST', headers, body: JSON.stringify({ text }), signal: AbortSignal.timeout(TIMEOUT_MS) }); } catch { return { kind: 'failed', reason: 'network' }; }
+    const body = await r.json().catch(() => ({})) as { message?: ChatMessage; error?: string; until?: number; retryAfter?: number };
+    if (r.status === 201 && body.message) return { kind: 'ok', value: body.message };
+    if (r.status === 401) return { kind: 'failed', reason: 'unauthorized' };
+    if (r.status >= 500) return { kind: 'failed', reason: 'server' };
+    return { kind: 'refused', error: body.error ?? `http_${r.status}`, ...(body.until ? { until: body.until } : {}), ...(body.retryAfter ? { retryAfter: body.retryAfter } : {}) };
+  }
+  async chatReport(id: number, reason: ChatReportReason): Promise<AccountOutcome<true>> {
+    const headers = this.bearer(true);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    return this.accountCall('/v1/chat/report', { method: 'POST', headers, body: JSON.stringify({ id, reason }) }, 200, () => true as const);
+  }
+  async chatAdmin(): Promise<AccountOutcome<ChatAdmin>> {
+    const headers = this.bearer(false);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    return this.accountCall('/v1/admin/chat', { method: 'GET', headers }, 200, b => b as ChatAdmin);
+  }
+  async chatHide(id: number, hidden: boolean): Promise<AccountOutcome<true>> {
+    const headers = this.bearer(true);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    return this.accountCall('/v1/admin/chat/hide', { method: 'POST', headers, body: JSON.stringify({ id, hidden }) }, 200, () => true as const);
+  }
+  async chatMute(accountId: string, minutes: number): Promise<AccountOutcome<number | null>> {
+    const headers = this.bearer(true);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    return this.accountCall('/v1/admin/chat/mute', { method: 'POST', headers, body: JSON.stringify({ accountId, minutes }) }, 200, b => (b as { until: number | null }).until);
+  }
+
   // A new recovery code (replaces the old one); shown once.
   async recoveryCode(): Promise<AccountOutcome<string>> {
     const headers = this.bearer(false);
