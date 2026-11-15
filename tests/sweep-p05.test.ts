@@ -137,8 +137,8 @@ describe('P05-05 sweep command', () => {
 describe('save v62', () => {
   const swept = (): Profile => ok(ok(base({ choices: { 'forest-shrine': 'pray' }, storyQuests: [ruinsMap.id] })), forestMap);
   it('round-trips the sweep book beside the v61 story state, and a v61 save loads without one', () => {
-    expect(SAVE_VERSION).toBe(63);
-    const p = swept(); const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(63);
+    expect(SAVE_VERSION).toBe(64);
+    const p = swept(); const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(64);
     const back = parseGame(raw, home, lookup, MAPS); expect(back).toEqual({ profile: p, run: null });
     expect(back.profile.choices).toEqual({ 'forest-shrine': 'pray' }); expect(back.profile.storyQuests).toEqual([ruinsMap.id]);
     const old = base({ choices: { 'forest-shrine': 'pray' } });

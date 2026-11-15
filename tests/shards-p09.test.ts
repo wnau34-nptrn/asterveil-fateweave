@@ -50,7 +50,9 @@ describe('P09 weekly universal shards: content', () => {
     // P04-06 (before shards): weekly tasks 180 ore / 90 gold; map-3 sweep 30 ore / 15 gold; 2 supplies a day.
     const before = 180 + 2 * 90 + 14 * (30 + 2 * 15);
     const map3 = MAPS[MAPS.length - 1]!; const sweeps = gameRules.sweep.daily * 7;
-    const after = rules.weekly.reduce((n, o) => n + value(o.reward), 0) + sweeps * value(map3.sweepReward!.normal);
+    // P11-04: the World Boss's weekly value (attempts + personal + shared milestones) is inside the same budget.
+    const wb = gameRules.worldBoss; const boss = wb.attempts * value(wb.attemptReward) + [...wb.personal, ...wb.shared].reduce((n, m) => n + value(m.reward), 0);
+    const after = rules.weekly.reduce((n, o) => n + value(o.reward), 0) + sweeps * value(map3.sweepReward!.normal) + boss;
     expect(after).toBeLessThanOrEqual(before);
     expect(after).toBeGreaterThanOrEqual(before * 0.98); // the shards replace value; they do not shrink the budget
     // Dust and tomes were not traded.

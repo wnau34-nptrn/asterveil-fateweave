@@ -13,7 +13,8 @@ import {
 import { collectOverflow, departureBlocked, expandStorage, recycleSelection, type StorageSource } from '../world/storage';
 import { chooseHuntTarget } from '../world/targeted-loot';
 import { sweep } from '../world/sweep';
-import { claimBoard } from '../world/board';
+import { claimBoard, weekOf } from '../world/board';
+import { claimWorldBoss, worldBossAttempt, type WorldBossShared } from '../world/world-boss';
 import { raiseSkill, tradeTomes } from '../world/tomes';
 import {
   GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, TOME_LINES, TOME_SIZES,
@@ -76,6 +77,11 @@ export type CampCommand =
   // P05-06: a quest-board reward. `period` is the daily set's day or the week (`weekOf`) and `day` the device's day
   // (left out online, as for `sweep`).
   | { kind: 'claimBoard'; tab: BoardTab; id: string; period: number; day?: number }
+  // P11-04: one finished World Boss attempt with the camp's field team: `attempt` is the week's next attempt number (a
+  // repeat is refused) and `commands` every committed turn, replayed by the resolver. A shared milestone claim names its
+  // `week` (this week or last). `day` as for `sweep` (left out online).
+  | { kind: 'worldBoss'; attempt: number; commands: Command[]; day?: number }
+  | { kind: 'claimWorldBoss'; id: string; week: number; day?: number }
   // `day` (P05-06): the device's calendar day, for the run's quest-board progress (missing = the run counts nowhere;
   // online the server's day is used and a device day is refused).
   | { kind: 'depart'; mapId?: string; hard: boolean; day?: number };
@@ -112,8 +118,10 @@ export type CommandEvent = ProfileEvent | WorldEvent
 // new ones (same resolver, same result). Default: the full replay.
 // `clock` (P09 reward ledger): the server's calendar day. When it is given, `sweep`, `claimBoard` and `depart` use it and
 // refuse a command that names its own `day` ('client_day'); without it (offline) they use the device's `day`.
-export interface CommandContext { home: MapDefinition; maps: readonly MapDefinition[]; lookup: EncounterLookup; seeds: SeedSource; battles?: BattleReplay; clock?: { day: number } }
-const DATED: ReadonlySet<CommandKind> = new Set(['sweep', 'claimBoard', 'depart']);
+// `worldBoss` (P11-04, server only): the shared HP of the week a `claimWorldBoss` names, as the server's World Boss object
+// reported it before the command ran (offline there is none and shared claims are refused).
+export interface CommandContext { home: MapDefinition; maps: readonly MapDefinition[]; lookup: EncounterLookup; seeds: SeedSource; battles?: BattleReplay; clock?: { day: number }; worldBoss?: WorldBossShared }
+const DATED: ReadonlySet<CommandKind> = new Set(['sweep', 'claimBoard', 'worldBoss', 'claimWorldBoss', 'depart']);
 export type CommandResult = { game: Game; events: CommandEvent[] } | { rejected: string };
 export const isRejected = (r: CommandResult): r is { rejected: string } => 'rejected' in r;
 
@@ -136,6 +144,7 @@ const SPECS: Record<CommandKind, Spec> = {
   recycleStored: { source: ['bag', 'overflow'], ids: 'ints' }, expandStorage: {}, salvage: { uids: 'ints' }, enhance: { uid: 'int', target: 'int' },
   lockEquipment: { uid: 'int' }, fuse: { uid: 'int', donors: opt('ints') }, raiseItemLevel: { uid: 'int', target: 'int' }, reroll: { uid: 'int', index: 'int' },
   brew: { potion: POTION_IDS }, claimQuest: { questId: 'str' }, sweep: { mapId: 'str', hard: 'bool', day: opt('int'), serial: 'int' }, claimBoard: { tab: ['daily', 'weekly', 'contract'], id: 'str', period: 'int', day: opt('int') },
+  worldBoss: { attempt: 'int', commands: 'commands', day: opt('int') }, claimWorldBoss: { id: 'str', week: 'int', day: opt('int') },
   depart: { mapId: opt('str'), hard: 'bool', day: opt('int') },
   move: { dir: DIRECTIONS }, travel: { to: 'point' }, rest: {}, revive: { heroId: 'str' }, swapMembers: { a: 'str', b: 'str' },
   setLane: { heroId: 'str', lane: LANES, other: opt('str') }, moveMember: { heroId: 'str' }, runPreset: { slot: 'int' }, withdraw: {}, openChest: {},
@@ -258,6 +267,8 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
     case 'claimQuest': return camp(claimQuest(p, map, cmd.questId));
     case 'sweep': { const m = maps.find(x => x.id === cmd.mapId); return m ? camp(sweep(p, m, cmd.hard, day ?? -1, cmd.serial)) : reject('unknown'); }
     case 'claimBoard': return featureOpen(p, maps, 'quests') ? camp(claimBoard(p, maps, cmd.tab, cmd.id, cmd.period, day ?? -1)) : reject('locked');
+    case 'worldBoss': return camp(worldBossAttempt(p, maps, lookup, weekOf(day ?? -7), cmd.attempt, cmd.commands));
+    case 'claimWorldBoss': return camp(claimWorldBoss(p, maps, cmd.id, cmd.week, weekOf(day ?? -7), ctx.worldBoss));
     case 'depart': {
       if (departureBlocked(p)) return reject('storage');
       // The prologue always starts on the first map; otherwise the named open map (default: the furthest open one).

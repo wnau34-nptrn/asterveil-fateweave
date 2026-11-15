@@ -46,6 +46,8 @@ const fiveHeroes = [...veilSiege.heroes, BATCH_ONE.find(h => h.id === 'metta')!]
 // (b3) guard it from round 1, so the full field reaches five when it calls the rift (draft). P05: the warden wears its bark
 // and its wisps hit 70% as hard (their chip cost every style the same ~170 HP; casual rush first tries lost the warden 18%).
 const wardenWisps = foes(10, [['b1', SPECIES.riftWisp, { reserve: true }], ['b2', SPECIES.riftWisp, { reserve: true }], ['f2', SPECIES.shardCrawler], ['b3', SPECIES.riftWisp], ['f3', SPECIES.shardCrawler, { reserve: true }]]);
+// P11-04: the World Boss copy's HP (draft; tests/probe/p1104-world-boss.test.ts).
+export const WORLD_BOSS_HP = 2400;
 export const riftWarden: EncounterDefinition = {
   ...veilSiege, heroes: fiveHeroes, id: 'rift-warden', version: 21, level: 10, name: 'ศึกผู้คุมรอยแยก',
   phases: [{ sourceId: 'f1', below: 70, summon: ['b1', 'b2'], hardSummon: ['f3'], name: 'Call the Rift' }, { sourceId: 'f1', below: 35, name: 'Rift Awakening' }],
@@ -284,6 +286,13 @@ export const thornHost: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes
 export const riftLegion: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes, id: 'rift-legion', version: 1, level: 8, name: 'กองทัพวิญญาณรอยแยก',
   ...fifth(foes(8, [['f1', S.shardCrawler], ['f2', S.shardCrawler], ['b1', S.riftWisp], ['b2', S.riftWisp], ['b3', S.riftWisp]])) };
 
+// P11-04 World Boss (draft): the rift warden's field with a warden that cannot fall inside an attempt's eight rounds, so
+// every attempt counts the damage it lands (the warden's own phases still come at 70% / 35% of this copy's HP).
+export const worldBossWarden: EncounterDefinition = {
+  ...riftWarden, id: 'world-boss-warden', version: 1, name: 'บอสโลก: ผู้คุมรอยแยก',
+  enemies: riftWarden.enemies.map(e => e.id === 'f1' ? { ...e, maxHp: WORLD_BOSS_HP } : e),
+};
+
 export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, crystalStampede, riftWarden, eliteTuskChief, eliteBriarLord, miniVeilGolem, vanguardCaptain,
-  slimePair, batSwarm, slimeNest, tuskerBats, beetleSpore, beetleWall, stalkerSpore, forestSwarm, channelerWisps, crawlerPack, riftHost, thornHost, riftLegion];
+  slimePair, batSwarm, slimeNest, tuskerBats, beetleSpore, beetleWall, stalkerSpore, forestSwarm, channelerWisps, crawlerPack, riftHost, thornHost, riftLegion, worldBossWarden];
 export const encounterById = (id: string): EncounterDefinition | undefined => encounters.find(e => e.id === id);

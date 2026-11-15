@@ -26,6 +26,10 @@
       {
         "name": "LIMIT",
         "class_name": "RateLimit"
+      },
+      {
+        "name": "WORLD_BOSS",
+        "class_name": "WorldBoss"
       }
     ]
   },
@@ -40,6 +44,12 @@
       "tag": "v2",
       "new_sqlite_classes": [
         "RateLimit"
+      ]
+    },
+    {
+      "tag": "v3",
+      "new_sqlite_classes": [
+        "WorldBoss"
       ]
     }
   ],

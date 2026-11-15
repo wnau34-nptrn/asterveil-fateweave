@@ -5044,7 +5044,8 @@
     "crawler-pack",
     "rift-host",
     "rift-legion",
-    "rift-warden"
+    "rift-warden",
+    "world-boss-warden"
    ]
   },
   {
@@ -5222,7 +5223,8 @@
    "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
    "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
    "encounters": [
-    "rift-warden"
+    "rift-warden",
+    "world-boss-warden"
    ]
   },
   {
@@ -5255,7 +5257,8 @@
    "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
    "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
    "encounters": [
-    "rift-warden"
+    "rift-warden",
+    "world-boss-warden"
    ]
   },
   {
@@ -5289,7 +5292,8 @@
    "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
    "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
    "encounters": [
-    "rift-warden"
+    "rift-warden",
+    "world-boss-warden"
    ]
   },
   {
@@ -5322,7 +5326,8 @@
    "target": "ตัวเอง (รวมพลัง ไม่มี damage)",
    "point": "ตัวบอส + ค้างจนปล่อยท่า",
    "encounters": [
-    "rift-warden"
+    "rift-warden",
+    "world-boss-warden"
    ]
   },
   {
@@ -5355,7 +5360,8 @@
    "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
    "point": "ผู้รับ damage จริง",
    "encounters": [
-    "rift-warden"
+    "rift-warden",
+    "world-boss-warden"
    ]
   },
   {
@@ -5388,7 +5394,8 @@
    "target": "ฮีโร่ทุกคนที่ยืนอยู่",
    "point": "ฮีโร่ที่โดนจริงทุกคน",
    "encounters": [
-    "rift-warden"
+    "rift-warden",
+    "world-boss-warden"
    ]
   },
   {
@@ -5421,7 +5428,8 @@
    "target": "ตัวเอง + กำลังเสริมที่ปรากฏจริง",
    "point": "ตำแหน่งตัวที่ถูกเรียกจริง",
    "encounters": [
-    "rift-warden"
+    "rift-warden",
+    "world-boss-warden"
    ]
   },
   {
@@ -5454,7 +5462,8 @@
    "target": "ตัวเอง (เปลี่ยนช่วง)",
    "point": "ตัวบอส",
    "encounters": [
-    "rift-warden"
+    "rift-warden",
+    "world-boss-warden"
    ]
   },
   {
@@ -5493,7 +5502,8 @@
     "crawler-pack",
     "rift-host",
     "rift-legion",
-    "rift-warden"
+    "rift-warden",
+    "world-boss-warden"
    ]
   },
   {

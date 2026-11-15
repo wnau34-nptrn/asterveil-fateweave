@@ -1,5 +1,6 @@
 import { sweep } from '../src/core/world/sweep';
 import { claimBoard } from '../src/core/world/board';
+import { claimWorldBoss, worldBossAttempt } from '../src/core/world/world-boss';
 import { describe, expect, it } from 'vitest';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { chapterOne as home } from '../src/content/world/chapter1';
@@ -135,6 +136,9 @@ const CASES: Record<CommandKind, Case> = {
   sweep: { game: campGame, cmd: { kind: 'sweep', mapId: home.id, hard: false, day: 20000, serial: 0 }, direct: g => sweep(P(g), home, false, 20000, 0) },
   claimBoard: { game: () => { const g = campGame(); return { ...g, profile: { ...g.profile, board: { day: 20000, days: [{ day: 20000, n: { wins: 3 }, claimed: [] }], weeks: [{ week: 2857, n: { wins: 3 }, claimed: [], jobs: {} }] } } }; },
     cmd: { kind: 'claimBoard', tab: 'daily', id: 'd-patrol', period: 20000, day: 20000 }, direct: g => claimBoard(P(g), maps, 'daily', 'd-patrol', 20000, 20000) },
+  // P11-04 (behaviour in tests/world-boss-p11.test.ts): the processor calls the same rule with the day's week.
+  worldBoss: { game: campGame, cmd: { kind: 'worldBoss', attempt: 1, commands: [], day: 20000 }, direct: g => worldBossAttempt(P(g), maps, lookup, 2857, 1, []) },
+  claimWorldBoss: { game: campGame, cmd: { kind: 'claimWorldBoss', id: 's-50', week: 2857, day: 20000 }, direct: g => claimWorldBoss(P(g), maps, 's-50', 2857, 2857) },
   depart: { game: campGame, cmd: { kind: 'depart', mapId: home.id, hard: false }, seeds: [7], direct: g => { const out = depart(P(g), home, lookup, 7); return { game: { profile: { ...out.profile, last: null }, run: out.run } }; } },
   move: { game: () => runGame(), cmd: { kind: 'move', dir: openDir() }, direct: g => move(R(g), home, openDir(), lookup) },
   travel: { game: () => runGame({ visited: [key(campTile)] }), cmd: { kind: 'travel', to: campTile }, direct: g => travel(R(g), home, campTile) },
@@ -161,7 +165,7 @@ const CASES: Record<CommandKind, Case> = {
   battle: { game: inBattle, cmd: { kind: 'battle', commands: turns(inBattle()).slice(0, 1) }, direct: g => ({ game: { profile: P(g), run: recordBattle(R(g), home, lookup, turns(g).slice(0, 1)) } }) },
 };
 // Fixtures that end in a refusal (equality is then checked on the reason); every other kind must make a real change.
-const REFUSED: CommandKind[] = ['claimGuide', 'transferAffix', 'fuse', 'raiseItemLevel', 'claimQuest'];
+const REFUSED: CommandKind[] = ['worldBoss', 'claimWorldBoss', 'claimGuide', 'transferAffix', 'fuse', 'raiseItemLevel', 'claimQuest'];
 
 // What the shell stored after a direct call (or the refusal it ignored).
 function expected(g: Game, direct: ReturnType<Direct>): { game: Game } | { rejected: string } {

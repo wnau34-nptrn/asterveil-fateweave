@@ -1,3 +1,11 @@
+## 2026-11-15 — P11-04 World Boss part 1: rules + server (Opus; branch claude/p11-04-world-boss, PR #259)
+- No owner comment on weekly shards (#258), P04-06 budget or the Bangkok-midnight reset: kept. Save v64 (`Profile.worldBoss`, optional); no D1 migration, gacha wallet or payments.
+- Rules `core/world/world-boss.ts`: weekly `world-boss-warden` (boss copy HP 2400), camp field team at full HP; `worldBoss { attempt, commands }` carries every turn and the resolver replays it (≤8 rounds, must end and hurt the boss). 5 attempts/week (OD-06, not 3/day). Attempt ore 6/gold 3; personal p-2/p-4 by attempt count (shard 1/2); shared s-50/s-100 (gold 3/shard 1) via `claimWorldBoss`, online only. No World Boss sweep. Offline uses the device day like sweep/board.
+- Server: receipts `wb:w<week>:a<n>`/`wb:w<week>:<id>` in the account `reward_ledger`; hits queue in account DO `wb_hits`, Worker hands them to new `WorldBoss` DO (taken once, HP ≥ 0, late hits 0, resent on next answer). Claims use the HP the Worker read, logged (`boss`) for `/verify`. `GET /v1/worldboss`; `ServerClient.worldBoss()`. Wrangler DO migration v3.
+- Budget: map-3 sweep 28/14 → 24/12 pays 114 ore-eq/week (formula 1195 ≤ 1200); week sim ±2% for players, login-only −11%. Shared HP 2500/last-week account, min 5000.
+- Tests: `tests/world-boss-p11.test.ts` (15) + ledger/shards/game-command updates; unit suite, typecheck, lint, build; Chromium 390px sweep/quest-board specs. [Validation](../validation/p11-04-2026-11-15/README_TH.md).
+- Open: owner review of 5/week, 8 rounds, sweep cut, unlock after map 1, HP numbers; part 2 = screen/art/clips + load test of the single DO.
+
 ## 2026-11-15 — P09 part 2: weekly universal star shards on the ledger (Opus; branch claude/p09-weekly-shards)
 - No owner comment on #256 (P04-06) or #257 (ledger): budget and Bangkok-midnight reset kept. Save stays v63; no D1 migration, no gacha wallet.
 - Farmable weekly source (OD-17): `SweepReward.shard`; weekly board tasks `w-elites` 4, `w-stories` 3, `w-jobs` 3 = 10 universal shards/week (none has a sweep option, so login-only earns none). Receipted by the existing `board:weekly:w<week>:<id>` rows; offline rules identical (`claimBoard` pays `bank.shard`, refuses `full` at the cap).

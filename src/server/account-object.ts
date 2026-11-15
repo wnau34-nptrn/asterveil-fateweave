@@ -4,12 +4,17 @@ import type { Game } from '../core/save/expedition-save';
 import { sha256Hex } from './accounts';
 import type { RateLimiter } from './rate-limit';
 import type { LedgerRow } from './ledger';
+import type { WorldBossShared } from '../core/world/world-boss';
 import { OTHER_DEVICE, type GameHost, type HostState, type HostStore, type ImportRecord, type LogEntry, type Snapshot } from './game-host';
 
 // The Worker forwards the device's session id (checked there) in this header.
 export const SESSION_HEADER = 'X-Fateweave-Session';
 // P09-03: from the Durable Object to the Worker only (telemetry items of a committed command).
 export const TELEMETRY_HEADER = 'X-Fateweave-Telemetry';
+// P11-04, between the Worker and the Durable Object only: the shared HP the Worker read for a `claimWorldBoss` (in), and
+// the account's World Boss hits still waiting for the shared object (out).
+export const BOSS_HEADER = 'X-Fateweave-Boss';
+export const HITS_HEADER = 'X-Fateweave-Hits';
 
 // P09-02b: the Durable Object for one account (SQLite storage backend). It adapts the DO's SQL storage to `HostStore`
 // and its HTTP requests from the Worker to `GameHost`. Only the Worker reaches it (no public route).
@@ -32,9 +37,11 @@ const SCHEMA = [
   // once. Lives in the account's own SQLite (Durable Object storage), not in D1.
   `CREATE TABLE IF NOT EXISTS reward_ledger (receipt TEXT PRIMARY KEY, seq INTEGER NOT NULL, kind TEXT NOT NULL, period TEXT NOT NULL,
      ref TEXT NOT NULL, reward TEXT NOT NULL, day INTEGER NOT NULL, at INTEGER NOT NULL)`,
+  // P11-04: World Boss hits waiting for (sent = 0) or taken by (sent = 1) the shared World Boss object.
+  'CREATE TABLE IF NOT EXISTS wb_hits (id TEXT PRIMARY KEY, week INTEGER NOT NULL, damage INTEGER NOT NULL, sent INTEGER NOT NULL, at INTEGER NOT NULL)',
 ];
 // Columns added to the log after P09-02b (an object created earlier gets them on its next start).
-const LOG_COLUMNS: readonly [string, string][] = [['day', 'INTEGER'], ['refused', 'TEXT']];
+const LOG_COLUMNS: readonly [string, string][] = [['day', 'INTEGER'], ['refused', 'TEXT'], ['boss', 'TEXT']];
 const STATE_UPSERT = 'INSERT INTO state (id, game, book, updated_at) VALUES (1, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET game = excluded.game, book = excluded.book, updated_at = excluded.updated_at';
 const SNAPSHOT_UPSERT = 'INSERT INTO snapshots (seq, game, origin, at) VALUES (?, ?, ?, ?) ON CONFLICT(seq) DO UPDATE SET game = excluded.game, origin = excluded.origin, at = excluded.at';
 const gameText = (game: Game | null) => game ? JSON.stringify(game) : null;
@@ -58,11 +65,12 @@ export function sqlStore(state: DurableStateLike): HostStore {
       }
       return cached ? copy(cached) : null;
     },
-    commit(next, e, snapshot, ledger = []) {
+    commit(next, e, snapshot, ledger = [], hits = []) {
       state.storage.transactionSync(() => {
         sql.exec(STATE_UPSERT, gameText(next.game), JSON.stringify(next.book), e.at);
-        sql.exec('INSERT INTO log (seq, request_id, command, seeds, status, content_version, at, day, refused) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-          e.seq, e.requestId, JSON.stringify(e.command), JSON.stringify(e.seeds), e.status, e.contentVersion, e.at, e.day ?? null, e.refused ?? null);
+        sql.exec('INSERT INTO log (seq, request_id, command, seeds, status, content_version, at, day, refused, boss) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          e.seq, e.requestId, JSON.stringify(e.command), JSON.stringify(e.seeds), e.status, e.contentVersion, e.at, e.day ?? null, e.refused ?? null, e.boss ? JSON.stringify(e.boss) : null);
+        for (const h of hits) sql.exec('INSERT INTO wb_hits (id, week, damage, sent, at) VALUES (?, ?, ?, 0, ?)', h.id, h.week, h.damage, e.at);
         if (snapshot) sql.exec(SNAPSHOT_UPSERT, snapshot.seq, gameText(snapshot.game), snapshot.origin, snapshot.at);
         // A receipt that exists already fails the INSERT and rolls the whole command back.
         for (const r of ledger) sql.exec('INSERT INTO reward_ledger (receipt, seq, kind, period, ref, reward, day, at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
@@ -70,6 +78,11 @@ export function sqlStore(state: DurableStateLike): HostStore {
       });
       cached = copy(next);
     },
+    pendingHits() {
+      return sql.exec<{ id: string; week: number; damage: number }>('SELECT id, week, damage FROM wb_hits WHERE sent = 0 ORDER BY at, id LIMIT 64').toArray()
+        .map(r => ({ id: r.id, week: r.week, damage: r.damage }));
+    },
+    markHits(ids) { for (const id of ids) sql.exec('UPDATE wb_hits SET sent = 1 WHERE id = ?', id); },
     hasReceipt(receipt) { return sql.exec('SELECT 1 FROM reward_ledger WHERE receipt = ?', receipt).toArray().length > 0; },
     ledger() {
       return sql.exec<{ receipt: string; seq: number; kind: LedgerRow['kind']; period: string; ref: string; reward: string; day: number; at: number }>(
@@ -77,10 +90,10 @@ export function sqlStore(state: DurableStateLike): HostStore {
         .map(r => ({ ...r, reward: JSON.parse(r.reward) as LedgerRow['reward'] }));
     },
     entries(after = 0) {
-      return sql.exec<{ seq: number; request_id: string; command: string; seeds: string; status: LogEntry['status']; content_version: string; at: number; day: number | null; refused: string | null }>(
-        'SELECT seq, request_id, command, seeds, status, content_version, at, day, refused FROM log WHERE seq > ? ORDER BY seq', after).toArray()
+      return sql.exec<{ seq: number; request_id: string; command: string; seeds: string; status: LogEntry['status']; content_version: string; at: number; day: number | null; refused: string | null; boss: string | null }>(
+        'SELECT seq, request_id, command, seeds, status, content_version, at, day, refused, boss FROM log WHERE seq > ? ORDER BY seq', after).toArray()
         .map(r => ({ seq: r.seq, requestId: r.request_id, command: JSON.parse(r.command), seeds: JSON.parse(r.seeds) as number[], status: r.status, contentVersion: r.content_version, at: r.at,
-          ...(r.day !== null ? { day: r.day } : {}), ...(r.refused === 'receipt' ? { refused: 'receipt' as const } : {}) }));
+          ...(r.day !== null ? { day: r.day } : {}), ...(r.refused === 'receipt' ? { refused: 'receipt' as const } : {}), ...(r.boss ? { boss: JSON.parse(r.boss) as LogEntry['boss'] } : {}) }));
     },
     latestSnapshot() {
       const r = sql.exec<{ seq: number; game: string | null; origin: Snapshot['origin']; at: number }>('SELECT seq, game, origin, at FROM snapshots ORDER BY seq DESC LIMIT 1').toArray()[0];
@@ -131,6 +144,21 @@ export interface AccountObjectOptions {
   purge?: () => Promise<void>;
 }
 
+// P11-04: the shared HP the Worker read (`{ week, hp, left }`, whole numbers); anything else is ignored (no shared HP).
+function bossOf(raw: string | null): WorldBossShared | undefined {
+  if (!raw) return undefined;
+  try {
+    const v = JSON.parse(raw) as Record<string, unknown>;
+    return ['week', 'hp', 'left'].every(k => Number.isSafeInteger(v[k]) && (v[k] as number) >= 0) ? { week: v.week as number, hp: v.hp as number, left: v.left as number } : undefined;
+  } catch { return undefined; }
+}
+// Every answer to the Worker carries the hits still waiting, so a hit lost between commit and delivery is sent again.
+function withHits(host: GameHost, response: Response): Response {
+  const hits = host.pendingHits();
+  if (hits.length) response.headers.set(HITS_HEADER, JSON.stringify(hits));
+  return response;
+}
+
 // Request handling shared by the real Durable Object and tests.
 export async function handleAccountRequest(host: GameHost, request: Request, options: AccountObjectOptions = {}): Promise<Response> {
   const path = new URL(request.url).pathname;
@@ -140,6 +168,14 @@ export async function handleAccountRequest(host: GameHost, request: Request, opt
     return reply({ purged: true });
   }
   if (path === '/verify' && request.method === 'POST') return reply(host.verify());
+  // P11-04: the Worker reports the hits the shared World Boss object has taken.
+  if (path === '/hits/taken' && request.method === 'POST') {
+    let ids: unknown;
+    try { ids = (JSON.parse(await request.text()) as { ids?: unknown }).ids; } catch { return reply({ error: 'invalid_json' }, 400); }
+    if (!Array.isArray(ids) || ids.length > 64 || !ids.every(id => typeof id === 'string')) return reply({ error: 'invalid_request' }, 400);
+    host.markHits(ids as string[]);
+    return reply({ ok: true });
+  }
   if (options.limiter && options.limits && (path === '/command' || path === '/state' || path === '/session')) {
     const writes = path === '/command';
     const limit = writes ? options.limits.commandPerSecond : options.limits.readPerSecond;
@@ -151,11 +187,11 @@ export async function handleAccountRequest(host: GameHost, request: Request, opt
   // D12: entering on this session takes the account over; any other session now gets 423 until it enters again.
   // P09 ledger: entering and reading also carry the server's calendar (the device shows the server's day; command answers
   // stay byte-identical on a retry, so they carry none).
-  if (path === '/session' && request.method === 'POST') { host.claim(session); return reply({ ...host.view(), clock: host.clock() }); }
+  if (path === '/session' && request.method === 'POST') { host.claim(session); return withHits(host, reply({ ...host.view(), clock: host.clock() })); }
   const known = (path === '/state' && request.method === 'GET') || ((path === '/command' || path === '/import') && request.method === 'POST');
   if (!known) return reply({ error: 'not_found' }, 404);
   if (!host.admits(session)) return reply(OTHER_DEVICE.body, OTHER_DEVICE.status);
-  if (path === '/state') return reply({ ...host.view(), clock: host.clock() });
+  if (path === '/state') return withHits(host, reply({ ...host.view(), clock: host.clock() }));
   // P09-02e (D11): the Worker already ran `checkUpload` and holds the save's fingerprint for this account.
   if (path === '/import') {
     let upload: CloudSaveUpload;
@@ -169,8 +205,8 @@ export async function handleAccountRequest(host: GameHost, request: Request, opt
   if (!req) return reply({ error: 'invalid_request' }, 400);
   // Hash before entering the synchronous load → process → commit section (no await inside it).
   const digest = await sha256Hex(canonicalJson(req.command));
-  const answer = host.command(req, digest);
-  const out = reply(answer.body, answer.status);
+  const answer = host.command(req, digest, bossOf(request.headers.get(BOSS_HEADER)));
+  const out = withHits(host, reply(answer.body, answer.status));
   // P09-03: the Worker adds these to the daily totals and does not pass the header on.
   if (answer.status === 200 && answer.telemetry?.length) out.headers.set(TELEMETRY_HEADER, JSON.stringify(answer.telemetry));
   return out;

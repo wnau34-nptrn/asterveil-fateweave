@@ -6,7 +6,7 @@ import { talentTrees } from '../heroes/talents';
 // forge, potions, market, talents, event numbers and the camp NPCs' side quests. A map spreads these and adds its
 // own board, zones, encounters, loot and objectives; tests check that every map uses this exact object.
 export type GameRules = Pick<MapDefinition, 'tutorialEncounterId' | 'camp' | 'startingRoster' | 'firstCompany' | 'unlocks' | 'guides' | 'mercenaries' | 'shop' | 'company' | 'progression' | 'talents'
-  | 'eventRules' | 'potions' | 'equipment' | 'sideQuests' | 'sweep' | 'board'>;
+  | 'eventRules' | 'potions' | 'equipment' | 'sideQuests' | 'sweep' | 'board' | 'worldBoss'>;
 export const gameRules: GameRules = {
   // The prologue's first battle (Vargoth's vanguard).
   tutorialEncounterId: 'first-clash',
@@ -29,6 +29,14 @@ export const gameRules: GameRules = {
   // the reward of the best map it was done on (`MapDefinition.contract`). A sweep counts only for `sweeps`.
   // P09 part 2 (OD-17, draft; docs/validation/p09-shards-2026-11-15): the weekly universal star shards — 10 a week from
   // the three tasks a sweep cannot finish, paid for by cutting their ore/gold and the map-3 sweep (same weekly value).
+  // P11-04 World Boss (draft numbers; docs/design/WORLD_BOSS_P11_04_TH.md). Five attempts a week, eight rounds each;
+  // weekly value 114 ore-equivalent at most (60 attempts + 36 personal + 18 shared), paid for by the map-3 sweep cut.
+  worldBoss: {
+    encounterId: 'world-boss-warden', attempts: 5, maxRounds: 8, attemptReward: { ore: 6, gold: 3 },
+    personal: [{ id: 'p-2', attempts: 2, reward: { ore: 0, gold: 0, shard: 1 } }, { id: 'p-4', attempts: 4, reward: { ore: 0, gold: 0, shard: 2 } }],
+    shared: [{ id: 's-50', percent: 50, reward: { ore: 0, gold: 3 } }, { id: 's-100', percent: 100, reward: { ore: 0, gold: 0, shard: 1 } }],
+    hp: { perAccount: 2500, min: 5000, max: 5_000_000 },
+  },
   board: {
     keepDays: 3, smallTeam: 3,
     daily: [

@@ -20,7 +20,9 @@ export const nextDayAt = (nowMs: number, offsetMinutes = GAME_DAY_OFFSET_MINUTES
 export interface ServerClock { day: number; next: number; now: number }
 
 // `period`: `d<day>` for a sweep or a daily task, `w<week>` for a weekly task or a contract.
-export interface LedgerRow { receipt: string; seq: number; kind: 'sweep' | 'board'; period: string; ref: string; reward: SweepReward; day: number; at: number }
+// `worldBoss` (P11-04): `wb:w<week>:a<attempt>` for an attempt's own reward and `wb:w<week>:<milestone>` for a personal or
+// shared milestone.
+export interface LedgerRow { receipt: string; seq: number; kind: 'sweep' | 'board' | 'worldBoss'; period: string; ref: string; reward: SweepReward; day: number; at: number }
 
 // The payouts an applied command made, read from its events. `sweepCount` is the profile's sweep count after the
 // command (each sweep's serial is unique for the account).
@@ -32,7 +34,20 @@ export function ledgerRows(events: readonly ClientEvent[], sweepCount: number, d
     } else if (e.type === 'boardClaimed') {
       const period = e.tab === 'daily' ? `d${e.period}` : `w${e.period}`;
       rows.push({ receipt: `board:${e.tab}:${period}:${e.id}`, seq, kind: 'board', period, ref: e.id, reward: e.reward, day, at });
+    } else if (e.type === 'wbAttempt') {
+      const period = `w${e.week}`;
+      rows.push({ receipt: `wb:${period}:a${e.attempt}`, seq, kind: 'worldBoss', period, ref: 'attempt', reward: e.reward, day, at });
+      for (const m of e.milestones) rows.push({ receipt: `wb:${period}:${m.id}`, seq, kind: 'worldBoss', period, ref: m.id, reward: m.reward, day, at });
+    } else if (e.type === 'wbClaimed') {
+      rows.push({ receipt: `wb:w${e.week}:${e.id}`, seq, kind: 'worldBoss', period: `w${e.week}`, ref: e.id, reward: e.reward, day, at });
     }
   }
   return rows;
+}
+
+// P11-04: an attempt's hit on the shared HP, waiting in the account's outbox until the World Boss object has taken it.
+// `id` is local to the account (`w<week>:a<attempt>`); the Worker prefixes the account id.
+export interface PendingHit { id: string; week: number; damage: number }
+export function hitsOf(events: readonly ClientEvent[]): PendingHit[] {
+  return events.flatMap(e => e.type === 'wbAttempt' ? [{ id: `w${e.week}:a${e.attempt}`, week: e.week, damage: e.damage }] : []);
 }
