@@ -3,7 +3,9 @@ import { bindInfoTabs } from './info-tabs';
 import { rosterIds } from '../core/world/world';
 import { applyCommand, isRejected, type CampCommand, type CommandEvent, type CommandResult, type GameCommand, type RunCommand } from '../core/command/game-command';
 import { clientView, type HireSlot } from '../core/command/client-view';
-import type { ReportPlace, ServerClient, ServerFailure, ServerOutcome, ServerState } from '../platform/server-client';
+import type { ReportPlace, ServerClient, ServerFailure, ServerOutcome, ServerState, WorldBossStatus } from '../platform/server-client';
+import { wbBook, wbEncounter, wbWeekOf } from '../core/world/world-boss';
+import { attemptReasonText, claimText, worldBossStartReason } from './world-boss-panel';
 import { AccountPanel } from './account-panel';
 import { FeedbackPanel } from './feedback-panel';
 import { setSavePlace } from './save-place';
@@ -138,7 +140,8 @@ export class GameShell {
       salvage: uids => camp({ kind: 'salvage', uids: [...uids] }),
       enhance: (uid,target) => camp({ kind: 'enhance', uid, target }), lock: uid=>camp({ kind: 'lockEquipment', uid }), fuse: (uid,donors) => camp({ kind: 'fuse', uid, ...has('donors', donors ? [...donors] : undefined) }), level:(uid,target)=>camp({ kind: 'raiseItemLevel', uid, target }),
       reroll: (uid, i) => camp({ kind: 'reroll', uid, index: i }), brew: potion => camp({ kind: 'brew', potion }), claim: id => camp({ kind: 'claimQuest', questId: id }), claimBoard: (tab, id, period) => camp({ kind: 'claimBoard', tab, id, period, day: this.today() }),
-      depart: (id, hard) => this.depart(id, hard), sweep: (id, hard) => this.campCommand({ kind: 'sweep', mapId: id, hard, day: this.today(), serial: this.game?.profile.sweep?.count ?? 0 }), home: () => this.showTitle(),
+      depart: (id, hard) => this.depart(id, hard), startWorldBoss: () => this.startWorldBoss(), claimWorldBoss: (id, week) => this.claimWorldBoss(id, week), worldBossStatus: () => this.refreshWorldBoss(),
+      sweep: (id, hard) => this.campCommand({ kind: 'sweep', mapId: id, hard, day: this.today(), serial: this.game?.profile.sweep?.count ?? 0 }), home: () => this.showTitle(),
     }, maps);
     const story = document.createElement('section'); root.append(story); this.story = new StoryUI(story);
     const summary = document.createElement('section'); root.append(summary); this.summary = new SummaryUI(summary, map);
@@ -439,11 +442,59 @@ export class GameShell {
   // P05-05: the device's calendar day (days since 1970-01-01 in local time). Offline only; P09 uses the server's day.
   // The calendar day the screens show: online the server's (P09 ledger, it stamps the real one), else the device's.
   private today(): number { const online = this.server?.day; if (online !== undefined) return online; const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000); }
+  // ---- P11-04 World Boss: the attempt is fought in the battle view and sent once, as one command, when it ends ----
+  private wbStatus: WorldBossStatus | null = null;
+  private wbRun: { attempt: number; sent: boolean; message: string } | undefined;
+  // Server play: the shared HP of this week and last (offline there is none).
+  private refreshWorldBoss(): void {
+    if (!this.server) return;
+    void this.server.worldBoss().then(status => { this.wbStatus = status; if (this.root.dataset.view === 'lobby' && !this.game?.run && !this.wbRun) this.showLobby(); });
+  }
+  private startWorldBoss(): void {
+    const g = this.game; if (!g || g.run || this.wbRun || this.waiting) return;
+    const day = this.today(); if (worldBossStartReason(g.profile, this.maps, day)) return;
+    const data = wbEncounter(g.profile, this.home, this.lookup); if (!data) return;
+    const attempt = wbBook(g.profile, wbWeekOf(day)).weeks.at(-1)!.attempts + 1;
+    this.wbRun = { attempt, sent: false, message: '' }; this.music.play('ruins');
+    this.show('battle');
+    this.battle.open({
+      kind: 'worldBoss', roundLimit: this.home.worldBoss.maxRounds, scene: 'riftline', data, entry: { hp: {} }, commands: [],
+      commit: state => this.commitWorldBoss(state),
+      leaveLabel: () => 'กลับค่าย →', leave: () => this.leaveWorldBoss(),
+    });
+  }
+  // Every turn is only kept in the battle view; the finished list goes to the rules (and the server) once.
+  private commitWorldBoss(state: BattleState): boolean {
+    const run = this.wbRun; if (!run) return false;
+    if (run.sent || (state.outcome === 'active' && state.round <= this.home.worldBoss.maxRounds)) return true;
+    run.sent = true;
+    this.exec({ kind: 'worldBoss', attempt: run.attempt, commands: state.commands, day: this.today() }, out => {
+      if (isRejected(out)) { run.message = `ผลศึกไม่ถูกบันทึก · ${attemptReasonText[out.rejected] ?? out.rejected}`; return; }
+      const e = out.events[0]; if (e?.type !== 'wbAttempt') { run.message = 'ผลศึกไม่ถูกบันทึก'; return; }
+      this.game = out.game; this.persist();
+      const line = partyLine(this.home, out.game.profile.party.deployed);
+      run.message = `บอสโลกครั้งที่ ${e.attempt}/${this.home.worldBoss.attempts} · ดาเมจ ${e.damage} · ได้ ${sweepText(e.reward, line)}${e.milestones.map(m => ` · รางวัลส่วนตัว ${sweepText(m.reward, line)}`).join('')}`;
+    }, true, true);
+    return true;
+  }
+  private leaveWorldBoss(): void {
+    if (this.waiting) { this.afterWait = () => this.leaveWorldBoss(); return; }
+    const run = this.wbRun; this.wbRun = undefined;
+    this.lobbyMessage = run?.message ?? ''; this.lobbyCheer = ''; this.locked = false;
+    this.music.play('camp'); this.showLobby(); this.refreshWorldBoss();
+  }
+  private claimWorldBoss(id: string, week: number): void {
+    if (!this.game || this.game.run) return;
+    this.exec({ kind: 'claimWorldBoss', id, week, day: this.today() }, r => {
+      if (isRejected(r)) { this.lobbyMessage = `รับรางวัลไม่ได้ · ${claimText[r.rejected] ?? r.rejected}`; this.refreshWorldBoss(); this.showLobby(); return; }
+      this.profileChange({ profile: r.game.profile, event: r.events[0] as ProfileEvent }); this.refreshWorldBoss();
+    });
+  }
   private showLobby(): void {
     this.migrationNote = '';
     const entering = this.root.dataset.view !== 'lobby';
     this.show('lobby');
-    this.lobby.render({ profile: this.game!.profile, board: this.server ? this.board : clientView(this.game!, { home: this.home, lookup: this.lookup }).hireBoard, message: this.lobbyMessage, day: this.today(), cheer: this.lobbyCheer, saved: this.saved && (!!this.storage || !!this.server), ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
+    this.lobby.render({ profile: this.game!.profile, board: this.server ? this.board : clientView(this.game!, { home: this.home, lookup: this.lookup }).hireBoard, message: this.lobbyMessage, day: this.today(), worldBoss: this.wbStatus, online: !!this.server, cheer: this.lobbyCheer, saved: this.saved && (!!this.storage || !!this.server), ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
     this.npcCheer = undefined;
     // Arriving in the camp opens on the fire; later redraws keep where the player panned to.
     if (entering) this.lobby.centreScene();
@@ -474,10 +525,11 @@ export class GameShell {
       : e.type === 'bought' ? this.boughtText(result.profile, e)
       : e.type === 'swept' ? `กวาดล้าง${this.maps.find(m => m.id === e.mapId)?.name ?? ''}${e.hard ? ' (ยาก)' : ''} · ได้ ${sweepText(e.reward, partyLine(this.map, result.profile.party.deployed))} · เสบียงเหลือ ${e.supply} · วันนี้เหลือ ${e.left} ครั้ง`
       : e.type === 'boardClaimed' ? `ได้รับรางวัล${e.tab === 'contract' ? `สัญญาจ้าง${contractText[this.map.board.contracts.find(c => c.id === e.id)!.kind].name}` : boardTaskName[e.id] ?? 'เควสต์'} · ${sweepText(e.reward, partyLine(this.map, result.profile.party.deployed))}`
+      : e.type === 'wbClaimed' ? `ได้รับรางวัลส่วนรวมบอสโลก · ${sweepText(e.reward, partyLine(this.map, result.profile.party.deployed))}`
       : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : e.type === 'party' && e.heroId && e.lane ? `จัดแผนแล้ว · ${name(e.heroId)}ยืน${laneName(e.lane)}` : e.type === 'party' && e.presetAction ? this.presetText(result.profile, e.preset!, e.presetAction, e.left) : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     // The camp NPC whose service just succeeded cheers once.
-    sfx.play(({ hired: 'coin', upgraded: 'upgrade', dismissed: 'close', talent: 'buff', equipped: 'guard', salvaged: 'anvil', forged: 'anvil', smelted: 'anvil', brewed: 'potion', claimed: 'claim', bought: 'coin', refreshed: 'coin', swept: 'claim', boardClaimed: 'claim' } as Partial<Record<string, SfxName>>)[e.type] ?? 'click');
+    sfx.play(({ hired: 'coin', upgraded: 'upgrade', dismissed: 'close', talent: 'buff', equipped: 'guard', salvaged: 'anvil', forged: 'anvil', smelted: 'anvil', brewed: 'potion', claimed: 'claim', bought: 'coin', refreshed: 'coin', swept: 'claim', boardClaimed: 'claim', wbClaimed: 'claim' } as Partial<Record<string, SfxName>>)[e.type] ?? 'click');
     this.npcCheer = e.type === 'bought' || e.type === 'refreshed' ? 'broker' : e.type === 'claimed' ? this.map.sideQuests.find(q => q.id === e.questId)!.npc as NpcId
       : ({ hired: 'broker', talent: 'trainer', equipped: 'keeper', salvaged: 'keeper', forged: 'smith', smelted: 'smith', brewed: 'herbalist' } as Partial<Record<string, NpcId>>)[e.type];
     if(e.type==='forged'&&e.action==='enhance')this.lobby.forgeEnhanced(this.game.profile,e.uid);

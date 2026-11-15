@@ -17,6 +17,7 @@ import { icon, lineIcon } from './icons';
 import { damageKindOf, kindGlyph, kindPill } from './damage-kind';
 import { infoTabs, selectInfoTab } from './info-tabs';
 import { foeProfile, unitStatuses } from './battle-status';
+import { wbDamage } from '../core/world/world-boss';
 import { battleLesson } from './tutorial';
 import { bossCrown, fieldHealthPath, healthColors, healthRatio, healthTone } from './battle-health';
 import { heroVoice } from './story-ui';
@@ -25,12 +26,12 @@ const tutorialKey = 'asterveil.fateweave.tutorial.v1';
 
 // The expedition owns persistence: every commit is handed to the session before playback.
 export interface BattleSession {
-  kind: BattleKind; scene?: 'ruins' | 'forest' | 'riftline'; data: EncounterDefinition; entry: BattleEntry; commands: readonly Command[];
+  kind: BattleKind | 'worldBoss'; roundLimit?: number; scene?: 'ruins' | 'forest' | 'riftline'; data: EncounterDefinition; entry: BattleEntry; commands: readonly Command[];
   commit(state: BattleState): boolean;
   leaveLabel(outcome: Outcome): string;
   leave(): void;
 }
-const kindLabel: Record<BattleKind, string> = { tutorial: 'ศึกแรก', random: 'พบศัตรู', boss: 'บอส', elite: 'อีลิท', event: 'เหตุการณ์' };
+const kindLabel: Record<BattleKind | 'worldBoss', string> = { tutorial: 'ศึกแรก', random: 'พบศัตรู', boss: 'บอส', elite: 'อีลิท', event: 'เหตุการณ์', worldBoss: 'บอสโลก' };
 
 // Rounds a hero's skill still cools (0 = ready).
 const cooling = (s: BattleState, heroId: string, action: ActionId): number => Math.max(0, (s.heroes.find(h => h.id === heroId)?.cooldowns[action] ?? 0) - s.round);
@@ -131,7 +132,7 @@ export class BattleUI {
         case 'info-close': this.root.querySelector<HTMLDialogElement>('#game-info')!.close(); break;
         case 'start': if (this.session && !this.started) { this.started = true; this.present(beginBattle(this.data, this.session.entry, true)); } break;
         case 'hero': if (value) this.selectHero(value); break;
-        case 'action': if (value && !this.busy && this.started && this.state.outcome === 'active' && this.data.heroes.find(h => h.id === currentHeroId(this.state, this.data))?.actions.includes(value as ActionId)) { this.closeSkill(); this.action = value as ActionId; this.targeting = true; this.render(); } break;
+        case 'action': if (value && !this.busy && this.started && this.live() && this.data.heroes.find(h => h.id === currentHeroId(this.state, this.data))?.actions.includes(value as ActionId)) { this.closeSkill(); this.action = value as ActionId; this.targeting = true; this.render(); } break;
         case 'skill-info': this.showSkill(); break;
         case 'cancel-action': this.cancelAction(); break;
         case 'turn-info': this.showTurnInfo(button); break;
@@ -142,7 +143,7 @@ export class BattleUI {
         case 'deflect-recipient': if (value) this.finishCooldownChoice({ recipientId: value }); break;
         case 'target': if (value) this.choose(value); break;
         case 'skip-turn': this.finishPresentation(); break;
-        case 'leave': if (!this.busy && this.state.outcome !== 'active') this.session?.leave(); break;
+        case 'leave': if (!this.busy && !this.live()) this.session?.leave(); break;
         case 'coach-dismiss': this.setHints(false); break;
         case 'combat-speed': case 'combat-intensity': {
           if (button.dataset.ui === 'combat-speed') this.combatPrefs.speed = this.combatPrefs.speed === 'normal' ? 'fast' : 'normal';
@@ -175,12 +176,12 @@ export class BattleUI {
       if (e.key === 'Escape') {
         if (root.querySelector('#skill-popover:popover-open')) { e.preventDefault(); this.closeSkill(true); }
         else if (root.querySelector('#turn-detail:popover-open')) { e.preventDefault(); root.querySelector<HTMLElement>('#turn-detail')!.hidePopover(); }
-        else if (this.started && !this.busy && this.state.outcome === 'active') { e.preventDefault(); this.cancelAction(); }
+        else if (this.started && !this.busy && this.live()) { e.preventDefault(); this.cancelAction(); }
         return;
       }
       const match = /^(?:Digit|Numpad)([1-4])$/.exec(e.code);
       const slot = match ? Number(match[1]) : /^[1-4]$/.test(e.key) ? Number(e.key) : 0;
-      if (!slot || !this.started || this.busy || this.state.outcome !== 'active') return;
+      if (!slot || !this.started || this.busy || !this.live()) return;
       const action = this.data.heroes.find(h => h.id === currentHeroId(this.state, this.data))?.actions[slot - 1];
       if (!action) return;
       e.preventDefault(); this.closeSkill(); this.root.querySelector<HTMLButtonElement>(`#action-${action}`)?.click();
@@ -216,6 +217,9 @@ export class BattleUI {
   }
   private get teaching(): boolean { return this.session?.kind === 'tutorial' && this.hintsEnabled; }
   get encounter(): EncounterDefinition { return this.data; }
+  // P11-04: a World Boss attempt also ends when round `roundLimit + 1` begins (the same rule as `wbPlay`).
+  private live(s: BattleState = this.state): boolean { const limit = this.session?.roundLimit; return s.outcome === 'active' && !(limit && s.round > limit); }
+  private get timeUp(): boolean { return this.state.outcome === 'active' && !this.live(); }
   sceneReady(): void { this.render(); }
   fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderFieldStatuses(); this.renderTutorial(); this.placeBackdrop(); }
   // The battle painting lies behind the whole view, framed to the arena so fighters stand on its floor.
@@ -234,7 +238,7 @@ export class BattleUI {
 
   choose(id: string, source: 'target' | 'canvas' = 'target'): void {
     if (!this.targeting || this.root.closest('[inert]') || this.root.querySelector('dialog[open]') || source === 'canvas' && performance.now() < this.canvasInputAfterInfo) return;
-    if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
+    if (!this.scene?.isReady || !this.started || this.busy || !this.live()) return;
     const actualTarget = targetKind(this.action) === 'party' && this.state.heroes.some(h => h.id === id && h.hp > 0) ? 'party'
       : targetKind(this.action) === 'enemies' && this.state.enemies.some(e => e.id === id && e.hp > 0) ? 'enemies' : id;
     const target = targetOptions(this.state, this.data, this.heroId, this.action).find(t => t.id === actualTarget);
@@ -257,7 +261,7 @@ export class BattleUI {
     try { this.storage?.setItem(tutorialKey, enabled ? 'on' : 'off'); } catch { /* Preference is optional. */ }
     this.render();
     const focus = this.root.querySelector<HTMLDialogElement>('#game-info')!.open ? '#coach-toggle' :
-      enabled && this.started && this.state.outcome === 'active' ? '#coach-dismiss' : '#battle-info';
+      enabled && this.started && this.live() ? '#coach-dismiss' : '#battle-info';
     this.root.querySelector<HTMLElement>(focus)?.focus({ preventScroll: true });
   }
 
@@ -295,7 +299,7 @@ export class BattleUI {
   }
 
   private showSkill(): void {
-    if (!this.started || this.busy || this.state.outcome !== 'active') return;
+    if (!this.started || this.busy || !this.live()) return;
     const skill = this.data.skills[this.action];
     this.root.querySelector('#skill-title')!.textContent = `${skill.name} · ${actorName(this.heroId, this.data)}`;
     this.root.querySelector('#skill-copy')!.textContent = skillDescription(this.action, this.heroId, this.data);
@@ -369,7 +373,7 @@ export class BattleUI {
   }
 
   private execute(targetId: string, extra: Pick<Command, 'cooldownAction' | 'cooldownTargetId' | 'recipientId'> = {}): void {
-    if (!this.scene?.isReady || !this.started || this.busy || this.state.outcome !== 'active') return;
+    if (!this.scene?.isReady || !this.started || this.busy || !this.live()) return;
     const command: Command = { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId, ...extra };
     this.present(resolveCommand(this.state, this.data, command, true));
   }
@@ -445,13 +449,13 @@ export class BattleUI {
   private finishPresentation(audible = true): void {
     if (!this.presentation) return;
     this.playback.cancel(); this.scene?.stopEffects();
-    if (audible && !document.hidden && this.state.outcome !== 'active') this.playback.own(sfx.play(this.state.outcome === 'victory' ? 'victory' : 'defeat'));
+    if (audible && !document.hidden && !this.live()) this.playback.own(sfx.play(this.state.outcome === 'victory' ? 'victory' : this.timeUp ? 'claim' : 'defeat'));
     this.presentation = undefined; this.busy = false;
     const nextHero = currentHeroId(this.state, this.data);
     this.heroId = nextHero ?? this.heroId;
     this.fieldInspectedActorId = nextHero ?? this.fieldInspectedActorId;
     this.action = 'attack'; this.targeting = true; this.render();
-    if (this.state.outcome === 'active' && !document.hidden && !this.root.closest('[inert]') && !this.root.querySelector('dialog[open]')) this.root.querySelector<HTMLElement>('#action-attack')?.focus({ preventScroll: true });
+    if (this.live() && !document.hidden && !this.root.closest('[inert]') && !this.root.querySelector('dialog[open]')) this.root.querySelector<HTMLElement>('#action-attack')?.focus({ preventScroll: true });
   }
 
   private set(id: string, content: string): void { this.root.querySelector(`#${id}`)!.innerHTML = content; }
@@ -462,10 +466,10 @@ export class BattleUI {
   private renderPhase(): void {
     const turn = this.stage; const d = this.data; const s = this.displayState;
     const canceled = turn?.events.some(e => e.type === 'cancel');
-    const mode = turn?.side ?? (s.outcome !== 'active' ? 'finished' : 'choice');
+    const mode = turn?.side ?? (!this.live(s) ? 'finished' : 'choice');
     const actor = turn?.actorId ?? this.heroId;
-    const title = !this.started ? 'เรียงเทิร์นตามความเร็ว' : turn ? canceled ? `${actorName(actor, d)} · ถูกขัดจังหวะ` : `เทิร์น${turn.side === 'hero' ? 'ฮีโร่' : 'ศัตรู'} · ${actorName(actor, d)}` : s.outcome !== 'active' ? `จบการต่อสู้ · ${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}` : `เทิร์นของคุณ · ${actorName(actor, d)}`;
-    const detail = turn ? canceled ? 'ศัตรูเสียเทิร์นนี้' : `${turn.action ? d.skills[turn.action].name : turn.intent ? intentName(turn.intent) : 'ลงมือ'} → ${actorName(turn.targetId, d)}` : s.outcome !== 'active' ? 'กดปุ่มด้านล่างเพื่อไปต่อ' : 'SPD มากเริ่มก่อน · คนละ 1 ครั้งต่อรอบ';
+    const title = !this.started ? 'เรียงเทิร์นตามความเร็ว' : turn ? canceled ? `${actorName(actor, d)} · ถูกขัดจังหวะ` : `เทิร์น${turn.side === 'hero' ? 'ฮีโร่' : 'ศัตรู'} · ${actorName(actor, d)}` : !this.live(s) ? `จบการต่อสู้ · ${s.outcome === 'victory' ? 'ชนะแล้ว' : s.outcome === 'active' ? 'ครบรอบ' : 'แพ้แล้ว'}` : `เทิร์นของคุณ · ${actorName(actor, d)}`;
+    const detail = turn ? canceled ? 'ศัตรูเสียเทิร์นนี้' : `${turn.action ? d.skills[turn.action].name : turn.intent ? intentName(turn.intent) : 'ลงมือ'} → ${actorName(turn.targetId, d)}` : !this.live(s) ? 'กดปุ่มด้านล่างเพื่อไปต่อ' : 'SPD มากเริ่มก่อน · คนละ 1 ครั้งต่อรอบ';
     this.turnTitle = title;
     const phaseRoot = this.root.querySelector<HTMLElement>('#turn-phase')!;
     phaseRoot.dataset.phase = mode; phaseRoot.dataset.actor = actor; phaseRoot.dataset.canceled = String(!!canceled);
@@ -506,8 +510,8 @@ export class BattleUI {
       return `<div class="enemy-card ${enemy.hp <= 0 ? 'fallen' : ''} ${this.actingActor === e.id ? 'active-actor' : ''}" data-enemy="${e.id}">${this.portrait(e.id)}<div><strong>${actorName(e.id, d)}</strong><span class="enemy-hp">HP <b>${enemy.hp} / ${e.maxHp}</b>${enemy.markedUntil > s.round ? ' · ติดตรา' : enemy.hp <= 0 ? ' · กำจัดแล้ว' : ''}</span><span class="hp-track"><span style="width:${enemy.hp / e.maxHp * 100}%"></span></span></div></div>`;
     }).join(''));
     const living = s.heroes.filter(h => h.hp > 0);
-    this.set('beat-status', `<span class="beat-chip">${this.busy ? 'กำลังแสดงผล…' : s.outcome === 'active' ? `รอบ ${s.round}` : s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</span><span class="turn-title" aria-hidden="true">${escapeHtml(this.turnTitle)}</span><span class="formation-chip">หน้า ${living.filter(h => d.heroes.find(v => v.id === h.id)!.lane === 'front').length} · หลัง ${living.filter(h => d.heroes.find(v => v.id === h.id)!.lane === 'back').length}</span>`);
-    if (intent) {
+    this.set('beat-status', `<span class="beat-chip">${this.busy ? 'กำลังแสดงผล…' : this.live(s) ? `รอบ ${s.round}${this.session?.roundLimit ? `/${this.session.roundLimit}` : ''}` : s.outcome === 'victory' ? 'ชนะแล้ว' : s.outcome === 'active' ? 'ครบรอบ' : 'แพ้แล้ว'}</span><span class="turn-title" aria-hidden="true">${escapeHtml(this.turnTitle)}</span><span class="formation-chip">หน้า ${living.filter(h => d.heroes.find(v => v.id === h.id)!.lane === 'front').length} · หลัง ${living.filter(h => d.heroes.find(v => v.id === h.id)!.lane === 'back').length}</span>`);
+    if (intent && (this.live(s) || this.presentation)) {
       const response = this.presentation?.phase === 'enemy';
       const hit = response ? this.stage?.events.find(e => e.type === 'damage') : undefined;
       const canceled = response ? this.stage?.events.some(e => e.type === 'cancel') : s.enemies.find(e => e.id === intent.sourceId)?.interruptedRound === intent.round;
@@ -518,22 +522,22 @@ export class BattleUI {
       const heading = canceled ? 'การโจมตีนี้ถูกขัดจังหวะ' : dodge ? 'การโจมตีนี้พลาด' : response ? 'ศัตรูกำลังลงมือ' : `การโจมตีศัตรูถัดไป · รอบ ${intent.round}`;
       this.set('intent', `<div class="intent-icon" data-kind="${intent.kind}">${lineIcon(intent.kind === 'energy' ? 'bolt' : 'attack')}</div><div class="intent-copy"><p class="eyebrow">${heading}</p><h2>${actorName(intent.sourceId, d)} <span>→</span> ${intentTargetThai(intent, d, recipient)}</h2><p>${intentName(intent)}${damageKindOf(intent) ? ` ${kindPill(intent.kind)}` : ''}${intentDelayThai(intent) ? ` <b class="intent-delay">${escapeHtml(intentDelayThai(intent))}</b>` : ''} <span class="intent-rule">${intentRuleThai(intent)}</span></p>${lethal ? `<p class="lethal-warning">⚠ ${actorName(intent.targetId, d)} จะล้มหากรับการโจมตีนี้โดยไม่มีการป้องกัน</p>` : ''}</div><div class="intent-damage"><strong>${canceled || (!hit && !dodge && (intent.special === 'phase' || intent.charge)) ? '—' : dodge ? 0 : hit ? hit.amount : intent.damage}</strong><small>${dodge ? 'หลบได้' : hit ? 'เสียเลือด' : intent.special === 'phase' ? 'ไม่โจมตี' : intent.charge ? 'สะสมพลัง' : 'พลังโจมตี'}</small></div>`);
       this.root.querySelector('#intent')?.setAttribute('data-kind', damageKindOf(intent) ?? 'none');
-    } else this.set('intent', `<div class="intent-icon">✧</div><div class="intent-copy"><p class="eyebrow">การต่อสู้จบแล้ว</p><h2>${s.outcome === 'victory' ? 'ศัตรูถูกกำจัดแล้ว' : 'ทีมของคุณล้มทั้งหมด'}</h2><p>${s.outcome === 'victory' ? 'เลือดที่เหลือติดตัวไปศึกถัดไป' : 'ทีมจะถอยกลับไปฟื้นตัว'}</p></div>`);
-    this.root.querySelector<HTMLElement>('#forecast-details')!.hidden = s.outcome !== 'active';
-    this.set('forecast', plannedIntents(s, d).map(next => `<div><b>รอบ ${next.round} · ${actorName(next.sourceId, d)} · ${intentName(next)}</b><small>${intentTargetThai(next, d)}${next.special || next.charge ? '' : ` · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'เวท' : 'กายภาพ'}`}${next.special || next.charge || next.all || next.unstoppable || intentDelayThai(next) ? ` · ${intentRuleThai(next)}` : ''}</small></div>`).join('') + (s.outcome === 'active' ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม เป้าหมายจะถูกกำหนดจริงเมื่อถึงเทิร์นศัตรู</p>' : ''));
+    } else this.set('intent', `<div class="intent-icon">✧</div><div class="intent-copy"><p class="eyebrow">การต่อสู้จบแล้ว</p><h2>${s.outcome === 'victory' ? 'ศัตรูถูกกำจัดแล้ว' : s.outcome === 'active' ? 'ครบจำนวนรอบ' : 'ทีมของคุณล้มทั้งหมด'}</h2><p>${this.session?.kind === 'worldBoss' ? 'ผลศึกนับดาเมจที่ลงกับบอส · ทีมไม่เสียเลือดหรืออะไรในค่าย' : s.outcome === 'victory' ? 'เลือดที่เหลือติดตัวไปศึกถัดไป' : 'ทีมจะถอยกลับไปฟื้นตัว'}</p></div>`);
+    this.root.querySelector<HTMLElement>('#forecast-details')!.hidden = !this.live(s);
+    this.set('forecast', plannedIntents(s, d).map(next => `<div><b>รอบ ${next.round} · ${actorName(next.sourceId, d)} · ${intentName(next)}</b><small>${intentTargetThai(next, d)}${next.special || next.charge ? '' : ` · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'เวท' : 'กายภาพ'}`}${next.special || next.charge || next.all || next.unstoppable || intentDelayThai(next) ? ` · ${intentRuleThai(next)}` : ''}</small></div>`).join('') + (this.live(s) ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม เป้าหมายจะถูกกำหนดจริงเมื่อถึงเทิร์นศัตรู</p>' : ''));
     this.set('formation-info', '<div><strong>แนวหน้า 2 · แนวหลัง 2</strong><p>กายภาพโจมตีแนวหน้าก่อน · พลังงานถึงแนวหลังได้ · สกิลเฉพาะมีคูลดาวน์</p></div><div><strong>ศัตรูแถวหน้าบังแถวหลัง</strong><p>ฮีโร่แนวหน้าตีแถวหลังได้เมื่อแถวหน้าล้ม หรือใช้สกิลตีทะลุ (แทงทะลวง ติดตรา แทงข้างหลัง ท้าดวล) · ฮีโร่แนวหลังตีได้ทุกช่อง</p></div>');
     const k = this.session?.kind ?? 'random'; const fallen = s.heroes.filter(h => h.hp <= 0).length;
-    this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">${kindLabel[k]}</p><h2>${escapeHtml(d.name)}</h2><p>${k === 'tutorial' ? 'ศึกแรกของการเดินทาง · คำแนะนำจะพาใช้สกิลของทุกอาชีพ' : k === 'boss' ? 'บอสสลับโจมตีกายภาพและพลังงาน · อ่านแผนแล้วป้องกันให้ทัน' : 'ศัตรูขวางทาง · เลือดที่เหลือติดตัวเข้าศึกนี้'}${fallen ? `<br>${fallen} คนล้มอยู่และไม่ได้ลงมือในศึกนี้` : ''}</p><button data-ui="start" id="start" class="primary" ${!this.scene?.isReady ? 'disabled' : ''}>${this.scene?.isReady ? 'เริ่มต่อสู้ →' : 'กำลังเตรียมสนาม…'}</button></div>` : !this.presentation && s.outcome !== 'active' ? `<div class="result-card" role="status"><p class="eyebrow">${s.outcome === 'victory' ? 'ชนะศึก' : k === 'tutorial' ? 'ลองอีกครั้งได้' : 'ถอยกลับไปตั้งหลัก'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : 'แพ้แล้ว'}</h2><p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่สมาชิกที่ล้มต้องรอพักที่แคมป์'}</strong>` : ''}<button data-ui="leave" id="leave-battle" class="primary">${escapeHtml(this.session?.leaveLabel(s.outcome) ?? 'ไปต่อ')}</button></div>` : '');
+    this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">${kindLabel[k]}</p><h2>${escapeHtml(d.name)}</h2><p>${k === 'tutorial' ? 'ศึกแรกของการเดินทาง · คำแนะนำจะพาใช้สกิลของทุกอาชีพ' : k === 'worldBoss' ? `ทีมเลือดเต็ม · สูงสุด ${this.session?.roundLimit} รอบ · นับเฉพาะเลือดที่บอสเสียจริง` : k === 'boss' ? 'บอสสลับโจมตีกายภาพและพลังงาน · อ่านแผนแล้วป้องกันให้ทัน' : 'ศัตรูขวางทาง · เลือดที่เหลือติดตัวเข้าศึกนี้'}${fallen ? `<br>${fallen} คนล้มอยู่และไม่ได้ลงมือในศึกนี้` : ''}</p><button data-ui="start" id="start" class="primary" ${!this.scene?.isReady ? 'disabled' : ''}>${this.scene?.isReady ? 'เริ่มต่อสู้ →' : 'กำลังเตรียมสนาม…'}</button></div>` : !this.presentation && !this.live(s) ? `<div class="result-card" role="status"><p class="eyebrow">${k === 'worldBoss' ? 'บอสโลก' : s.outcome === 'victory' ? 'ชนะศึก' : k === 'tutorial' ? 'ลองอีกครั้งได้' : 'ถอยกลับไปตั้งหลัก'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : s.outcome === 'active' ? `ครบ ${this.session?.roundLimit} รอบ` : 'แพ้แล้ว'}</h2>${k === 'worldBoss' ? `<p class="wb-damage">ดาเมจที่ลงกับบอส <b>${wbDamage(s, d)}</b></p>` : ''}<p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่สมาชิกที่ล้มต้องรอพักที่แคมป์'}</strong>` : ''}<button data-ui="leave" id="leave-battle" class="primary">${escapeHtml(this.session?.leaveLabel(s.outcome) ?? 'ไปต่อ')}</button></div>` : '');
   }
 
   private renderParty(disabled: boolean): void {
     const s = this.displayState; const d = this.data;
     // Owner 2026-10-31: a move for our side (an ally, oneself or the whole team) can also be cast by tapping the hero's
     // card in the HUD; it commits exactly like tapping that hero on the field.
-    const allySide = this.targeting && !disabled && this.started && !this.busy && s.outcome === 'active' && ['ally', 'self', 'party'].includes(targetKind(this.action));
+    const allySide = this.targeting && !disabled && this.started && !this.busy && this.live(s) && ['ally', 'self', 'party'].includes(targetKind(this.action));
     const hudTargets = new Map(allySide ? this.currentTargets().map(t => [t.id, t] as const) : []);
     this.set('party', this.data.heroes.map((h, i) => {
-      const hero = s.heroes[i]!; const text = heroText[h.id]!; const selected = h.id === this.heroId; const waiting = s.outcome === 'active' && !selected;
+      const hero = s.heroes[i]!; const text = heroText[h.id]!; const selected = h.id === this.heroId; const waiting = this.live(s) && !selected;
       // As a target the card keeps its content; only its role (and the disabled rule) changes.
       const hud = hudTargets.get(h.id);
       const hudLabel = hud ? ` aria-label="${escapeHtml(`ใช้${d.skills[this.action].name}กับ${targetKind(this.action) === 'party' ? 'ทั้งทีม โดยแตะ' : ''}${text.name} · เลือด ${hero.hp}/${h.maxHp}${!hud.valid ? ` · ${reasonThai(hud.reason)}` : ''}`)}"` : '';
@@ -541,7 +545,7 @@ export class BattleUI {
       return `<button id="hero-${h.id}" data-ui="${hud ? 'target' : 'hero'}" data-value="${h.id}" data-lane="${h.lane}" class="hero-card ${h.id} ${hud ? `hud-target${hud.valid ? ' valid-target' : ''}` : ''} ${hero.hp <= 0 ? 'fallen' : ''} ${selected ? 'selected' : 'waiting-turn'} ${this.actingActor === h.id ? 'active-actor' : ''}" aria-pressed="${selected}"${hudLabel} ${hud ? (hud.valid ? '' : 'disabled') : disabled || hero.hp <= 0 || waiting ? 'disabled' : ''}><span class="hero-emblem">${this.portrait(h.id)}</span><span class="hero-copy"><span class="hero-class"><b>${h.lane === 'front' ? 'FRONT' : 'BACK'}</b> ${text.role}</span><strong>${text.name}</strong>${hud?.valid ? '<span class="hud-cast-cue" aria-hidden="true">ร่าย</span>' : ''}<span class="hero-hp"><span class="hp-amount"><span class="hp-label">HP</span> ${hero.hp} / ${h.maxHp}</span>${hero.barrier ? `<small class="barrier-info">โล่ ${hero.barrier}</small>` : ''}${hero.evading ? '<small class="barrier-info">ก้าวเงา</small>' : ''}${s.taunt?.heroId === h.id ? '<small class="barrier-info">ยั่วยุ</small>' : ''}${s.song?.heroId === h.id ? `<small class="barrier-info">${d.skills[s.song.action].name}</small>` : ''}${s.rally?.ids.includes(h.id) ? '<small class="barrier-info">ตั้งรับหมู่</small>' : ''}${s.sanctuary?.targetId === h.id ? '<small class="barrier-info">คุ้มภัย</small>' : ''}${s.counter?.heroId === h.id && s.counter.wall ? '<small class="barrier-info">กำแพงทวน</small>' : ''}${fatigueDot(h.fatigue)}${hero.hp <= 0 ? ' · ล้มแล้ว' : ''}</span><span class="hp-track"><span style="width:${healthRatio(hero.hp, h.maxHp) * 100}%;background:${healthColors[healthTone(hero.hp, h.maxHp)]}"></span></span></span><span class="hero-skills">${skills.map(action => {
         const remaining = Math.max(0, (hero.cooldowns[action] ?? 0) - s.round);
         const available = targetOptions(s, d, h.id, action).some(t => t.valid);
-        const status = hero.hp <= 0 ? 'ล้มแล้ว' : s.outcome !== 'active' ? 'จบแล้ว' : waiting ? 'รอเทิร์น' : remaining ? `รอ ${remaining} รอบ` : available ? 'พร้อมใช้' : action === 'heal' || action === 'prayer' ? 'เลือดเต็ม' : action === 'ward' ? 'โล่เต็ม' : action === 'finale' ? 'ยังไม่มีเพลง' : 'ยังใช้ไม่ได้';
+        const status = hero.hp <= 0 ? 'ล้มแล้ว' : !this.live(s) ? 'จบแล้ว' : waiting ? 'รอเทิร์น' : remaining ? `รอ ${remaining} รอบ` : available ? 'พร้อมใช้' : action === 'heal' || action === 'prayer' ? 'เลือดเต็ม' : action === 'ward' ? 'โล่เต็ม' : action === 'finale' ? 'ยังไม่มีเพลง' : 'ยังใช้ไม่ได้';
         return `<span class="skill-status ${available ? 'ready' : 'cooling'}" data-skill="${action}">${icon(action)}<span>${d.skills[action].name}<small>${status}</small></span></span>`;
       }).join('')}</span>${selected ? `<span class="selected-tag">${this.presentation?.phase === 'hero' ? 'ลงมือ' : this.presentation ? 'รอ' : 'ถึงเทิร์น'}</span>` : ''}</button>`;
     }).join(''));
@@ -556,7 +560,7 @@ export class BattleUI {
     this.root.querySelector<HTMLElement>('.command-dock')!.dataset.ready = String(!disabled);
     this.set('commands', `<h2 class="step-heading"><span>2</span>${heroText[this.heroId]!.role} · เลือกคำสั่ง</h2><div class="actions">${hero.actions.map((action, index) => {
       const text = { ...d.skills[action], cooldown: skillCooldown(d, this.heroId, action) }; const reason = actionReason(s, d, this.heroId, action);
-      const info = this.targeting && action === this.action ? `<button id="skill-details" data-ui="skill-info" class="skill-info" aria-label="ดูคำอธิบายสกิล${text.name}" aria-haspopup="dialog" aria-controls="skill-popover"${!this.started || this.busy || s.outcome !== 'active' || disabled ? ' disabled' : ''}>ⓘ</button>` : '';
+      const info = this.targeting && action === this.action ? `<button id="skill-details" data-ui="skill-info" class="skill-info" aria-label="ดูคำอธิบายสกิล${text.name}" aria-haspopup="dialog" aria-controls="skill-popover"${!this.started || this.busy || !this.live(s) || disabled ? ' disabled' : ''}>ⓘ</button>` : '';
       return `<div class="action-option">${info}<button id="action-${action}" data-ui="action" data-value="${action}" aria-keyshortcuts="${index + 1}" class="action ${action} ${this.targeting && this.action === action ? 'selected' : ''}" aria-pressed="${this.targeting && this.action === action}" aria-describedby="reason-${action}" ${disabled ? 'disabled' : ''} data-unavailable="${!!reason}"><kbd class="key-hint">${index + 1}</kbd>${icon(action)}<strong>${text.name}</strong><small>${text.english}</small><span class="skill-value">${action === 'cadence' ? `โล่ ${skillPower(d, this.heroId, action)}` : action === 'duet' ? `ตามซ้ำ ${skillPower(d, this.heroId, action)}%` : action === 'rounddance' ? `โล่ ${skillPower(d, this.heroId, action)} ทุกคน` : action === 'deepbeat' ? `ลด ${skillPower(d, this.heroId, action)}%` : action === 'closingstep' ? `จังหวะ ${s.heroes.find(h => h.id === this.heroId)?.beats ?? 0}/${BEAT_MAX}` : action === 'releasefist' ? `พลัง ${releasePower(d, this.heroId, Math.max(1, chiOf(s, this.heroId)))} · ปราณ ${chiOf(s, this.heroId)}` : action === 'attack' ? `พลัง ${hero.attack}` : action === 'mark' ? `โบนัส +${d.rules.markedBonus}` : action === 'guard' ? `ลด ${Math.round(guardReductionOf(d, this.heroId) * 100)}%` : action === 'rally' ? `ลด ${d.rules.rallyReduction * 100}%` : action === 'sanctuary' ? 'กันล้ม' : `พลัง ${skillPower(d, this.heroId, action)}`}</span></button>${cooling(s, this.heroId, action) ? `<span class="cd-badge" aria-hidden="true">รอ ${cooling(s, this.heroId, action)}</span>` : ''}<p id="reason-${action}" class="${reason ? 'unavailable-reason' : ''}">${escapeHtml(reason ? reasonThai(reason) : text.cooldown ? `คูลดาวน์ ${text.cooldown} รอบ` : 'ใช้ได้ทุกเทิร์น')}</p></div>`;
     }).join('')}</div><details class="action-help"><summary>วิธีใช้${d.skills[this.action].name}</summary><p class="action-description">${skillDescription(this.action, this.heroId, d)}</p></details><p class="target-hint">${!disabled && this.targeting && ['ally', 'self', 'party'].includes(targetKind(this.action)) && !noTarget ? 'แตะการ์ดขอบทองหรือเพื่อนในสนามเพื่อร่าย' : !this.targeting ? 'เลือกสกิลเพื่อเล็งเป้าหมาย' : noTarget || `${d.skills[this.action].name} — ` + (targetKind(this.action) === 'party' ? 'แตะเพื่อนในสนามเพื่อใช้สกิลกับทั้งทีม' : targetKind(this.action) === 'enemies' ? 'แตะศัตรูตัวใดก็ได้เพื่อโจมตีทุกตัว' : this.action === 'evade' ? 'แตะตัวเองในสนามเพื่อก้าวเงา' : this.action === 'taunt' ? 'แตะตัวเองในสนามเพื่อยั่วยุ' : this.action === 'valor' || this.action === 'mend' ? 'แตะตัวเองในสนามเพื่อบรรเลงเพลง' : targetKind(this.action) === 'self' ? `แตะตัวเองในสนามเพื่อใช้${d.skills[this.action].name}` : targetKind(this.action) === 'ally' ? 'แตะเพื่อนในสนามที่มีเครื่องหมาย' : 'แตะศัตรูในสนามที่มีเครื่องหมาย')}</p>`);
   }
@@ -571,7 +575,7 @@ export class BattleUI {
   private renderFieldTargets(): void {
     if (!this.scene) return;
     const s = this.displayState; const d = this.data;
-    const disabled = !this.targeting || !this.scene.isReady || !this.started || this.busy || s.outcome !== 'active';
+    const disabled = !this.targeting || !this.scene.isReady || !this.started || this.busy || !this.live(s);
     const targets = this.currentTargets();
     this.set('field-targets', targets.map(t => {
       const position = this.scene!.actorTargets.get(t.id); if (!position) return '';
@@ -633,7 +637,7 @@ export class BattleUI {
     const actors = [...d.heroes, ...d.enemies.filter(e => !s.enemies.find(v => v.id === e.id)?.absent)];
     if (!actors.some(a => a.id === this.inspectedActorId)) this.inspectedActorId = this.heroId;
     const states = [...s.heroes, ...s.enemies];
-    this.set('status-frame', this.presentation ? `รอบ ${s.round} · สถานะตามจังหวะที่กำลังแสดง` : `รอบ ${s.round} · ${s.outcome === 'active' ? 'สถานะปัจจุบัน' : 'จบการต่อสู้แล้ว'}`);
+    this.set('status-frame', this.presentation ? `รอบ ${s.round} · สถานะตามจังหวะที่กำลังแสดง` : `รอบ ${s.round} · ${this.live(s) ? 'สถานะปัจจุบัน' : 'จบการต่อสู้แล้ว'}`);
     this.set('status-units', actors.map(a => {
       const actor = states.find(v => v.id === a.id)!;
       const rows = unitStatuses(s, d, a.id), ally = d.heroes.some(h => h.id === a.id);
@@ -645,7 +649,7 @@ export class BattleUI {
     this.set('status-details', `<div class="status-selected">${this.portrait(id)}<div><h3>${escapeHtml(actorName(id, d))}</h3><p>HP ${actor.hp} / ${def.maxHp}${actor.hp <= 0 ? ' · ล้มแล้ว' : ''}</p></div></div>${this.foeSheet(id)}${def && 'role' in def ? fatigueSection((def as { fatigue?: number }).fatigue) : ''}${rows.length ? (['buff', 'debuff'] as const).map(kind => {
       const group = rows.filter(r => r.kind === kind);
       return group.length ? `<section class="status-group ${kind}"><h4>${kind === 'buff' ? 'บัฟ · ผลเสริม' : 'ดีบัฟ · ผลลดทอน'}</h4><ul>${group.map(r => `<li data-status="${r.id}"><div class="status-name">${icon(r.icon)}<strong>${escapeHtml(r.name)}</strong></div><p>${escapeHtml(r.detail)}</p><p class="status-duration">${escapeHtml(r.duration)}</p></li>`).join('')}</ul></section>` : '';
-    }).join('') : `<p class="status-empty">${actor.hp <= 0 ? 'ยูนิตล้มแล้ว ไม่มีสถานะชั่วคราวที่มีผล' : s.outcome !== 'active' ? 'การต่อสู้จบแล้ว ไม่มีสถานะชั่วคราวที่มีผล' : 'ไม่มีบัฟหรือดีบัฟชั่วคราว'}</p>` }`);
+    }).join('') : `<p class="status-empty">${actor.hp <= 0 ? 'ยูนิตล้มแล้ว ไม่มีสถานะชั่วคราวที่มีผล' : !this.live(s) ? 'การต่อสู้จบแล้ว ไม่มีสถานะชั่วคราวที่มีผล' : 'ไม่มีบัฟหรือดีบัฟชั่วคราว'}</p>` }`);
   }
 
   // Enemy stats and move cycle in the status panel (presentation only).
@@ -659,7 +663,7 @@ export class BattleUI {
 
   private render(repaint = true): void {
     const focus = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
-    const s = this.state; const d = this.data; const disabled = !this.scene?.isReady || !this.started || this.busy || s.outcome !== 'active';
+    const s = this.state; const d = this.data; const disabled = !this.scene?.isReady || !this.started || this.busy || !this.live(s);
     this.set('encounter-title', escapeHtml(d.name));
     this.set('encounter-kind', kindLabel[this.session?.kind ?? 'random']);
     this.root.classList.add('mobile-layout');
