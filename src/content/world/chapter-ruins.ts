@@ -3,7 +3,7 @@ import { gameRules } from './rules';
 
 // Map 1 (chapters plan, owner-approved 2026-10-17): a short teaching expedition through the ruined frontier fort.
 // The prologue starts here. It teaches moving, battles, chests and potions, wearing the first find from the bag,
-// a camp rest and a small boss; no elites, events, puzzles or rift seal. Draft numbers until playtested.
+// a camp rest and a small boss; no elites, puzzles or rift seal (one traveller event since P05-02). Draft numbers until playtested.
 export const ruinsMap: MapDefinition = {
   ...gameRules,
   id: 'ruined-border', version: 3, name: 'ซากชายแดน', chapter: 1, bossName: 'หัวหน้ากองหน้า', goalName: 'ประตูป้อม',
@@ -56,7 +56,9 @@ export const ruinsMap: MapDefinition = {
   // P02 (draft): a team of five beat this boss with plain attacks 58% of the time at 100%; 115% keeps a choice needed.
   bossPercent: 115,
   elites: [],
-  // No rift seal on the teaching map: the captain can be challenged at once.
-  quest: { need: 0, objectives: [] },
-  events: [],
+  // No rift seal on the teaching map: the captain can be challenged at once. P05-02 (OD-36, draft reward): an optional
+  // story quest — open all three chests in one run and come home — pays once and never seals the boss.
+  quest: { need: 1, objectives: [{ id: 'flags', kind: 'chests', count: 3 }], optional: { reward: { shard: 10, ore: 20 } } },
+  // P05-02 (owner OD-36): one wounded traveller teaches the event choice early; neither choice starts a battle.
+  events: [{ id: 'ruins-traveller', x: 12, y: 5, kind: 'traveller' }],
 };

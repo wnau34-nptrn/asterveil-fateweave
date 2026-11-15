@@ -41,7 +41,10 @@ describe('map 1: ซากชายแดน', () => {
     expect(route(startOf(map), findTiles(map, 'camp')[0]!, false).length).toBeGreaterThan(0);
     expect(route(startOf(map), goal!, false)).toEqual([]); expect(route(startOf(map), goal!, true).length).toBeGreaterThan(0);
     for (const c of map.chests) expect(route(startOf(map), c, false).length).toBeGreaterThan(0);
-    expect(map.elites).toEqual([]); expect(map.events).toEqual([]); expect(map.quest.need).toBe(0); expect(map.bossCharm).toBeUndefined();
+    expect(map.elites).toEqual([]); expect(map.bossCharm).toBeUndefined();
+    // P05-02 (OD-36): one traveller (no battle choice) on a reachable floor tile, and an optional quest that seals nothing.
+    expect(map.events.map(e => e.kind)).toEqual(['traveller']); expect(route(startOf(map), map.events[0]!, false).length).toBeGreaterThan(0);
+    expect(map.quest.optional).toBeDefined();
     for (const z of map.zones.filter(z => !z.safe)) expect(z.levels![1]).toBeLessThanOrEqual(3);
   });
   it('the map opens for everyone; the forest opens once it is cleared, then the frontier', () => {

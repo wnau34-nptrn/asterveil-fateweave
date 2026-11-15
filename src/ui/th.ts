@@ -1,7 +1,7 @@
 import {bossNames,bossDescription} from './boss-equipment';
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
 import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } from '../core/world/types';
-import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId } from '../core/world/types';
+import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId, MapEventDefinition, Profile } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
 import { BEAT_MAX, braceStrikePower, CHARGE_EXPOSED, PIERCE_BEHIND, PIN_PERCENT, SHOVE_LOCK, SPEARWALL_MAX, SPEARWALL_STEP, DEEP_BEAT_LOW, ROUND_PAIR_BONUS, HEX_MAX, hexTickPower, CHI_MAX, RELEASE_PER_CHI, releasePower, saintRatioOf, CATALYST_PER_ROUND, CATALYST_SPLASH, HASTE_BATON, SLAM_GRUDGE, SLAM_GRUDGE_MAX, AEGIS_SHARD, ARCANE_MAX, DISPEL_PER_CHARGE, CIRCLE_HP_PERCENT, SOLO_NOTE, FINALE_PER_ROUND, NOTE_MAX_ROUNDS, CHALLENGE_GRUDGE_MAX, ROUSE_CUT, SANCTUARY_HEAL, BLADE_HITS, COAT_HITS, VENOM_MAX, VENOM_TICK, VENOM_ROUNDS, VENOM_BURST, DREAD_FINALE, FURY_EXPOSED, GUARD_STONE_HEAL, SOLO_TIMES, PARRY_REDUCTION, levelBarrier, rallyReductionOf, skillCooldown, skillLevel, ambushBonusOf, capAmount, corrodeBonusOf, finaleHealPower, guardReductionOf, hasCap, skillPower, songPower, talentRule, tauntReductionOf } from '../core/battle/engine';
@@ -545,7 +545,43 @@ export const npcText: Record<'smith' | 'broker' | 'trainer' | 'keeper' | 'herbal
 // ---- Rift seal (3B): objective lines with live progress. ----
 export function questLine(o: QuestObjective, state: ExpeditionState): string {
   if (o.kind === 'chests') return `เปิดกล่องสมบัติ ${o.count} กล่อง (${Math.min(o.count, state.openedChests.length)}/${o.count})`;
-  return o.kind === 'elite' ? 'ชนะยักษ์หินแห่งรอยแผล (มินิบอส)' : 'ชำระรอยแยกเล็กในรอยแผล';
+  if (o.kind === 'elite') return 'ชนะยักษ์หินแห่งรอยแผล (มินิบอส)';
+  return questEventText[o.target] ?? 'ชำระรอยแยกเล็กในรอยแผล';
+}
+// P05-02: event objectives of the optional story quests (map 2) and the rift seal (map 3).
+const questEventText: Record<string, string> = {
+  'scar-rift': 'ชำระรอยแยกเล็กในรอยแผล',
+  'forest-traveller': 'ตัดสินใจเรื่องนักเดินทางบาดเจ็บกลางป่า (ช่วยหรือชี้ทางก็ได้)',
+  'forest-shrine': 'ตัดสินใจที่ศาลเก่ากลางป่า (สวดหรือถวายก็ได้)',
+};
+// P05-02: optional story quests of maps 1–2, by map id (the objectives come from the map's `quest`).
+export const storyQuestText: Record<string, { name: string; ask: string; done: string }> = {
+  'ruined-border': { name: 'รอยธงของคนที่หนี', ask: 'ทหารที่หนีไปซ่อนธงประจำกองไว้ในกล่องสามใบทั่วซากป้อม เปิดให้ครบในรอบเดียวแล้วกลับค่าย', done: 'มิมี่: ธงของคนที่หนีกลับมาครบแล้ว ข้าเก็บเข้าคลังให้' },
+  'deep-forest': { name: 'ด้ายที่ป่าฝืน', ask: 'ป่าบิดเบี้ยวเพราะรอยแยก ตัดสินใจเรื่องนักเดินทางและศาลเก่าให้ครบในรอบเดียวแล้วกลับค่าย', done: 'คาเอล: ป่าสงบลงหน่อยแล้ว คนเดินทางเริ่มกลับมาใช้เส้นทางนั้น' },
+};
+// P05-02: one short camp line per choice remembered from the latest return (speaker: line).
+const campLineText: Record<string, string> = {
+  'traveller:help': 'เฟิร์น: นักเดินทางที่ท่านให้ยาไว้ฝากคำขอบคุณมาถึงค่าย',
+  'traveller:guide': 'คาเอล: คนที่ท่านชี้ทางให้ไปถึงหมู่บ้านแล้ว แม้จะยังเจ็บอยู่',
+  'shrine:pray': 'ครูฮัลดา: พรจากศาลเก่ารักษาได้จริง แต่แผลที่มันทิ้งไว้ก็จริงเหมือนกัน',
+  'shrine:offer': 'มิมี่: แร่ที่ถวายศาลไว้ได้เศษกลางกลับมา ข้าจดลงบัญชีแล้ว',
+  'bandits:fight': 'พีโน่: ข่าวว่าเราตีด่านโจรแตก ลูกค้าเริ่มถามหาแล้ว',
+  'bandits:sneak': 'คาเอล: ด่านโจรยังตั้งอยู่ที่เดิม คราวหน้าอาจต้องเจอกันตรง ๆ',
+  'rift:fight': 'ครูฮัลดา: รอยแยกที่ปิดไปเงียบลงหนึ่งแห่ง',
+  'merchant:buy': 'พีโน่: พ่อค้าเร่ฝากบอกว่าจะแวะเส้นทางเดิมอีก',
+  'abandoned:shelter': 'ลุงบอร์ก: ค่ายร้างยังพอให้พักได้ แต่กองไฟของมันเรียกอะไรมาด้วย',
+  'abandoned:search': 'มิมี่: ฝุ่นดาวจากค่ายร้าง ข้าเก็บเข้าคลังแล้ว',
+  'abandoned:pass': 'คาเอล: ค่ายร้างยังรออยู่ที่เดิม ไม่มีใครแตะ',
+};
+// Short camp lines for the latest return: the story quest that paid, then each event chosen at (at most three).
+export function campLines(profile: Pick<Profile, 'last' | 'choices'>, events: readonly MapEventDefinition[]): string[] {
+  const out: string[] = []; const last = profile.last; if (!last) return out;
+  if (last.story && storyQuestText[last.story]) out.push(storyQuestText[last.story]!.done);
+  for (const id of last.events ?? []) {
+    const kind = events.find(e => e.id === id)?.kind; const choice = profile.choices?.[id]; if (!kind || !choice) continue;
+    const line = campLineText[`${kind}:${choice.startsWith('buy-') ? 'buy' : choice}`]; if (line && !out.includes(line)) out.push(line);
+  }
+  return out.slice(0, 3);
 }
 // ---- Map events (3A): live Thai text for each event and choice; numbers come from the rules. ----
 export const eventText: Record<MapEventKind, { name: string; scene: string; icon: IconName }> = {
@@ -554,6 +590,7 @@ export const eventText: Record<MapEventKind, { name: string; scene: string; icon
   merchant: { name: 'พ่อค้าเร่', scene: 'พ่อค้าเร่แวะพักริมทาง ขายยาแลกแร่ดาว', icon: 'pack' },
   traveller: { name: 'นักเดินทางบาดเจ็บ', scene: 'นักเดินทางคนหนึ่งบาดเจ็บนั่งพิงต้นไม้ ขอยาสักขวด', icon: 'talk' },
   rift: { name: 'รอยแยกเล็ก', scene: 'รอยแยกเล็ก ๆ กำลังสั่น มีบางอย่างกำลังจะคลานออกมา', icon: 'boss' },
+  abandoned: { name: 'ค่ายร้าง', scene: 'ค่ายพักที่ใครสักคนทิ้งไว้ กองไฟยังอุ่น ของบางอย่างยังวางอยู่', icon: 'camp' },
 };
 export function choiceText(choice: EventChoice, r: EventRules): { label: string; help: string } {
   switch (choice) {
@@ -565,10 +602,15 @@ export function choiceText(choice: EventChoice, r: EventRules): { label: string;
     case 'buy-tonic': return { label: `ซื้อยาฟื้นหมู่ · ${r.merchant.tonic} แร่`, help: '' };
     case 'buy-repel': return { label: `ซื้อยาไล่อสูร · ${r.merchant.repel} แร่`, help: '' };
     case 'help': return { label: 'ให้ยาฟื้นแผล', help: `ใช้ยาฟื้นแผล 1 ขวด ได้แร่ดาว ${r.traveller.ore} และเศษกลาง ${r.traveller.shard}` };
+    case 'guide': return { label: 'ชี้ทางให้', help: `ไม่เสียยา ได้แร่ดาว ${r.travellerGuide.ore} เป็นค่าน้ำใจ` };
+    case 'shelter': return { label: 'พักที่นี่', help: `คนที่ยืนอยู่ฟื้นเลือด ${r.abandoned.healPercent}% แต่ศัตรูในโซนจะตื่นตัวเต็มที่` };
+    case 'search': return { label: 'ค้นของ', help: `ได้ฝุ่นดาว ${r.abandoned.searchDust} แต่มีโอกาส ${r.abandoned.searchFightPercent}% ที่ต้องสู้ก่อน (ไม่มีอุปกรณ์ดรอป)` };
+    case 'pass': return { label: 'เดินผ่าน', help: 'ไม่ได้อะไร ไม่เสียอะไร' };
   }
 }
 export const eventChoices: Record<MapEventKind, readonly EventChoice[]> = {
-  bandits: ['fight', 'sneak'], shrine: ['pray', 'offer'], merchant: ['buy-salve', 'buy-tonic', 'buy-repel'], traveller: ['help'], rift: ['fight'],
+  bandits: ['fight', 'sneak'], shrine: ['pray', 'offer'], merchant: ['buy-salve', 'buy-tonic', 'buy-repel'], traveller: ['help', 'guide'], rift: ['fight'],
+  abandoned: ['shelter', 'search', 'pass'],
 };
 export const eventReasonText: Record<string, string> = { ore: 'แร่ดาวไม่พอ', salve: 'ไม่มียาฟื้นแผล', carry: 'พกเต็มแล้ว', busy: 'ทำตอนนี้ไม่ได้', choice: 'ทำไม่ได้' };
 // ---- Camp side quests (3D): each NPC's request and its reward, in Thai. ----
@@ -590,7 +632,8 @@ export function rewardText(r: SideQuestDefinition['reward']): string {
 // ---- Camp market (4A): goods sold by the broker for gold coins. ----
 export const shopText: Record<ShopItemId, { name: string; help: string }> = {
   shard: { name: 'ห่อเศษกลาง', help: 'เศษกลาง 10 ชิ้น ใช้แทนเศษของใครก็ได้ตอนอัปดาว' },
-  contract: { name: 'ใบสัญญาซ้ำ', help: 'เพิ่มเศษ 10 ชิ้นให้สมาชิกที่เลือก ไว้อัปดาว' },
+  // P05-02 (owner OD-38): shown as a summons so it never reads as a contract job; the internal id stays `contract`.
+  contract: { name: 'ใบเรียกตัวซ้ำ', help: 'เพิ่มเศษ 10 ชิ้นให้สมาชิกที่เลือก ไว้อัปดาว' },
   gearbox: { name: 'หีบอุปกรณ์', help: 'อุปกรณ์ระดับหายากขึ้นไป เลเวลเท่าสมาชิกที่เลเวลสูงสุด' },
   repel: { name: 'ยาไล่อสูร', help: 'เก็บไว้ในคลังยา พกไปได้ตอนออกเดินทาง' },
 };

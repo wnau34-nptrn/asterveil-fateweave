@@ -490,7 +490,7 @@ export class GameShell {
   // Market purchase (4A): what was bought and where it went.
   private boughtText(profile: Profile, e: { item: ShopItemId; heroId?: string; uid?: number }): string {
     const item = e.uid ? profile.items.find(i => i.uid === e.uid) : undefined;
-    if (e.item === 'contract') return `ซื้อใบสัญญาซ้ำ · ${heroText[e.heroId!]?.name ?? ''} มีเศษ ${profile.members[e.heroId!]?.shards ?? 0} ชิ้น`;
+    if (e.item === 'contract') return `ซื้อใบเรียกตัวซ้ำ · ${heroText[e.heroId!]?.name ?? ''} มีเศษ ${profile.members[e.heroId!]?.shards ?? 0} ชิ้น`;
     if (item) return `เปิดหีบอุปกรณ์ · ได้${itemName(item)} Lv${item.level}`;
     return `ซื้อ${shopText[e.item].name}แล้ว`;
   }
@@ -570,7 +570,7 @@ export class GameShell {
     this.world.setMap(this.map, this.eliteArtOf(this.map));
     this.show('world');
     const profile = this.game!.profile;
-    this.world.render({ presets: profile.presets, questBoard: { definitions: this.home.sideQuests, progress: profile.quests, unlocked: featureOpen(profile, this.maps, 'quests') }, state: preview ?? this.state!, message: this.message, locked: this.locked, saved: this.saved && (!!this.storage || !!this.server), banner: this.banner, effect: this.effect });
+    this.world.render({ storyDone: !!profile.storyQuests?.includes(this.map.id), presets: profile.presets, questBoard: { definitions: this.home.sideQuests, progress: profile.quests, unlocked: featureOpen(profile, this.maps, 'quests') }, state: preview ?? this.state!, message: this.message, locked: this.locked, saved: this.saved && (!!this.storage || !!this.server), banner: this.banner, effect: this.effect });
     this.effect = undefined;
   }
   // Story recruits: play each newly joined guest once per session (a reload shows the ones already joined as seen).
@@ -633,6 +633,8 @@ export class GameShell {
   private sealNote(before: ExpeditionState, after: ExpeditionState): string {
     const was = questDone(before, this.map).length; const now = questDone(after, this.map).length; const need = this.map.quest.need;
     if (now <= was || was >= need) return '';
+    // P05-02: an optional story quest pays when the run comes home.
+    if (this.map.quest.optional) return now >= need ? ' · เควสต์เรื่องครบแล้ว รับรางวัลเมื่อกลับค่าย' : ` · เควสต์เรื่อง ${now}/${need}`;
     return now >= need ? ' · ผนึกรอยแยกแตกแล้ว! ท้าผู้คุมได้' : ` · ผนึกรอยแยก ${now}/${need}`;
   }
   private eliteForced(): boolean { return !!this.map.elites.find(e => e.id === this.state?.battle?.source)?.forced; }
@@ -651,17 +653,21 @@ export class GameShell {
     if (!this.state || this.locked) return;
     this.step({ kind: 'chooseEvent', choice }, result => {
       if (result.event.type === 'blocked') return;
+      const before = this.state!;
       this.state = result.state; this.persist();
-      if (result.event.type === 'encounter') { this.message = 'เข้าสู่การต่อสู้!'; this.startEncounter(result.event.kind, result.event.encounterId); return; }
+      if (result.event.type === 'encounter') { this.message = choice === 'search' ? 'ค้นค่ายร้าง · มีบางอย่างตื่นขึ้น!' : 'เข้าสู่การต่อสู้!'; this.startEncounter(result.event.kind, result.event.encounterId); return; }
       const done = result.event; if (done.type !== 'eventDone') return;
       const ev = this.map.events.find(e => e.id === done.eventId)!;
       const healed = Object.entries(done.heal ?? {}).map(([id, n]) => `${heroText[id]?.name ?? id} +${n}`).join(' · ');
       const detail: Partial<Record<EventChoice, string>> = {
         sneak: 'ลอบผ่านไปได้ · ศัตรูในโซนตื่นตัวเต็มที่', pray: `ศาลประทานพร${healed ? ` · ${healed}` : ''} · เลือดสูงสุดลด ${this.map.eventRules.prayWound}%`,
         offer: `ถวายแร่ ${this.map.eventRules.offerOre} · ได้เศษกลาง ${this.map.eventRules.offerShard}`, help: `ช่วยนักเดินทาง · ได้แร่ดาว ${this.map.eventRules.traveller.ore} และเศษกลาง ${this.map.eventRules.traveller.shard}`,
+        guide: `ชี้ทางให้นักเดินทาง · ได้แร่ดาว ${this.map.eventRules.travellerGuide.ore}`,
+        shelter: `พักในค่ายร้าง${healed ? ` · ${healed}` : ''} · ศัตรูในโซนตื่นตัวเต็มที่`, search: `ค้นค่ายร้าง · ได้ฝุ่นดาว ${this.map.eventRules.abandoned.searchDust}`, pass: 'เดินผ่านค่ายร้างไป',
       };
       this.message = `${eventText[ev.kind].name} · ${detail[choice] ?? `${choiceText(choice, this.map.eventRules).label} แล้ว`}`;
-      if (choice === 'pray') this.effect = 'rest'; else if (choice !== 'sneak') this.effect = 'loot';
+      if (choice === 'pray' || choice === 'shelter') this.effect = 'rest'; else if (choice !== 'sneak' && choice !== 'pass') this.effect = 'loot';
+      this.message += this.sealNote(before, result.state);
       this.renderWorld();
     });
   }

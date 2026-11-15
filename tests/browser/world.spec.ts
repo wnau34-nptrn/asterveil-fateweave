@@ -305,7 +305,7 @@ test('lobby market (4A): the broker sheet redraws the board for gold twice per r
   await reachable(page, '#buy-contract');
   await page.screenshot({ path: info.outputPath('lobby-market.png') });
   await page.locator('#contract-hero').selectOption('tracer'); await page.locator('#buy-contract').click();
-  await expect(page.locator('.lobby-result')).toContainText('ใบสัญญาซ้ำ');
+  await expect(page.locator('.lobby-result')).toContainText('ใบเรียกตัวซ้ำ');
   await expect(page.locator('#buy-contract')).toBeDisabled();
   await page.locator('#buy-gearbox').click(); await expect(page.locator('.lobby-result')).toContainText('หีบอุปกรณ์');
   p = await savedProfile(page);

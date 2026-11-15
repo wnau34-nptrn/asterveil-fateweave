@@ -69,7 +69,8 @@ export const gameRules: GameRules = {
   talents: talentTrees,
   eventRules: {
     banditLevelBonus: 1, prayHeal: 25, prayWound: 5, maxWound: 20, offerOre: 10, offerShard: 3,
-    merchant: { salve: 8, tonic: 14, repel: 10, calm: 10 }, traveller: { ore: 10, shard: 3 },
+    merchant: { salve: 8, tonic: 14, repel: 10, calm: 10 }, traveller: { ore: 10, shard: 3 }, travellerGuide: { ore: 4 },
+    abandoned: { healPercent: 20, searchDust: 8, searchFightPercent: 40 },
     riftEncounterId: 'scout-patrol', riftDust: 12,
     eliteExp: 2, eliteRarityWeights: [0, 0, 60, 30, 10],
     optionalElite: { exp: 3, rarityWeights: [0, 0, 20, 50, 30], gold: 12, shard: 3 },

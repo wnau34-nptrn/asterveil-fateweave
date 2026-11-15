@@ -60,6 +60,10 @@ export const forestMap: MapDefinition = {
     // Optional: a dead-end pocket in the north-west.
     { id: 'forest-matriarch', x: 1, y: 6, encounterId: 'thicket-ambush', forced: false, level: 6 },
   ],
-  quest: { need: 0, objectives: [] },
-  events: [{ id: 'forest-traveller', x: 14, y: 8, kind: 'traveller' }, { id: 'forest-shrine', x: 2, y: 11, kind: 'shrine' }],
+  // P05-02 (draft reward): an optional story quest — settle the traveller and the shrine in one run and come home — pays
+  // once and never seals the thorn lord.
+  quest: { need: 2, objectives: [{ id: 'traveller', kind: 'event', target: 'forest-traveller' }, { id: 'shrine', kind: 'event', target: 'forest-shrine' }],
+    optional: { reward: { shard: 15, dust: 15 } } },
+  // P05-02: an abandoned camp below the gate (rest with pressure, search with a fight risk, or walk past).
+  events: [{ id: 'forest-traveller', x: 14, y: 8, kind: 'traveller' }, { id: 'forest-shrine', x: 2, y: 11, kind: 'shrine' }, { id: 'forest-camp', x: 10, y: 10, kind: 'abandoned' }],
 };
