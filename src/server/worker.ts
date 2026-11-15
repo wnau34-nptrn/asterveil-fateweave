@@ -8,6 +8,8 @@ import { purgeDue } from './deletion';
 import { durableGate, handleLimitRequest, RateLimiter } from './rate-limit';
 import { GameHost, type GameContext } from './game-host';
 import { GOOGLE_JWKS_URL, googleVerifier, type GoogleVerifier } from './google';
+import { ChatHost, handleChatRequest } from './chat';
+import type { ChatWrite } from './api';
 import { handleBossRequest, sqlBossStore, WorldBossHost } from './world-boss';
 
 // P09-02b Cloudflare entry (bundled by Wrangler from cloudflare/wrangler.json): the Worker and the per-account
@@ -18,7 +20,7 @@ interface DurableObjectNamespaceLike {
   get(id: unknown): { fetch(request: Request): Promise<Response> };
 }
 export interface Env {
-  DB: D1Like; GAME: DurableObjectNamespaceLike; LIMIT?: DurableObjectNamespaceLike; WORLD_BOSS?: DurableObjectNamespaceLike;
+  DB: D1Like; GAME: DurableObjectNamespaceLike; LIMIT?: DurableObjectNamespaceLike; WORLD_BOSS?: DurableObjectNamespaceLike; CHAT?: DurableObjectNamespaceLike; CHAT_WRITE?: string;
   CONTENT_VERSION?: string; ALLOWED_ORIGINS?: string; GOOGLE_CLIENT_ID?: string; LEGACY_IMPORT?: string; LEGACY_IMPORT_UNTIL?: string;
 }
 interface ExecutionContextLike { waitUntil(promise: Promise<unknown>): void }
@@ -75,7 +77,22 @@ export class WorldBoss {
   fetch(request: Request): Promise<Response> { return handleBossRequest(this.host, request); }
 }
 
+// P11 chat: one object (name `chat`) for the world channel's messages, reports and mutes (chat.ts).
+export class Chat {
+  private readonly host: ChatHost;
+  constructor(state: DurableStateLike) { this.host = new ChatHost(state); }
+  fetch(request: Request): Promise<Response> { return handleChatRequest(this.host, request); }
+}
+const chatObject = (env: Env) => env.CHAT?.get(env.CHAT.idFromName('chat'));
+export const chatWrite = (raw: string | undefined): ChatWrite => { const v = raw?.trim(); return v === 'linked' || v === 'off' ? v : 'all'; };
+
+// The account's chat messages go first (P11), then its game object; a failure of either is retried next hour.
 async function purgeGame(env: Env, accountId: string): Promise<boolean> {
+  const chat = chatObject(env);
+  if (chat) {
+    const c = await chat.fetch(new Request('https://chat/purge', { method: 'POST', body: JSON.stringify({ account: accountId }), headers: { 'Content-Type': 'application/json' } }));
+    if (c.status !== 200) return false;
+  }
   const r = await env.GAME.get(env.GAME.idFromName(accountId)).fetch(new Request('https://game/purge', { method: 'POST' }));
   return r.status === 200;
 }
@@ -92,6 +109,7 @@ export default {
       limiter,
       ...(env.LIMIT ? { gate: durableGate(env.LIMIT) } : {}),
       ...(env.WORLD_BOSS ? { boss: env.WORLD_BOSS.get(env.WORLD_BOSS.idFromName('world-boss')) } : {}),
+      ...(env.CHAT ? { chat: chatObject(env)!, chatWrite: chatWrite(env.CHAT_WRITE) } : {}),
       legacyImport: legacyImportOpen(env, Date.now()),
       ...(ctx ? { defer: (work: Promise<unknown>) => ctx.waitUntil(work) } : {}),
       ...(verify ? { google: verify } : {}),

@@ -384,6 +384,11 @@ export class LobbyUI {
   private stars(n: number): string { return starRow(n, this.map.company.maxStars); }
 
   // The music toggle is handled by the shell; the lobby only draws it from the current preference.
+  // P11: the world chat (server play only; offline the button stays visible, disabled, with its reason).
+  private chatEntry(): string {
+    const online = !!this.view?.online;
+    return `<button id="lobby-chat" type="button" class="lobby-chat round-glass" data-chat-open aria-haspopup="dialog"${online ? ' aria-label="เปิดแชทโลก"' : ' disabled aria-describedby="lobby-chat-why"'}>${icon('talk')}<span>แชท</span>${online ? '' : '<small id="lobby-chat-why">เฉพาะเล่นออนไลน์</small>'}</button>`;
+  }
   private musicButton(): string {
     const muted = document.documentElement.dataset.musicMuted === 'true';
     return `<button id="lobby-music" data-music-toggle class="round-glass" aria-pressed="${!muted}" aria-label="${muted ? 'เปิดเพลง' : 'ปิดเพลง'}">${icon(muted ? 'musicOff' : 'music')}</button>`;
@@ -428,7 +433,7 @@ export class LobbyUI {
       <header class="lobby-top"><button data-lobby="home" class="round-glass" aria-label="กลับหน้าแรก">${icon('left')}</button>${this.musicButton()}
         <div class="lobby-who"><p class="eyebrow">${p.commander ? 'ผู้บัญชาการ' : 'ค่ายทหารรับจ้าง'} · ${savePlace() === 'server' ? 'บันทึกบนเซิร์ฟเวอร์' : this.view!.saved ? 'บันทึกอัตโนมัติ' : 'บันทึกบนเครื่องนี้ไม่ได้'}</p><h1 id="lobby-commander">${p.commander ? this.escape(p.commander.name) : 'ค่ายทหารรับจ้าง'} <small>· ค่าย Lv${levelOf(this.map,p)}</small></h1></div><button id="lobby-tab-hunt" data-lobby="tab" data-tab="hunt" class="lobby-farm round-glass" aria-controls="lobby-sheet" aria-expanded="${this.sheet==='hunt'}">${icon('goal')}<span>แผนฟาร์ม${this.locked('hunt')?' 🔒':''}</span></button>
         <button id="lobby-bank" class="lobby-bank" data-lobby="bank" aria-expanded="${this.bankInfo}" aria-controls="lobby-bank-legend" aria-label="คลัง เหรียญทอง ${p.bank.gold} แร่ดาว ${p.bank.ore} เศษกลาง ${p.bank.shard} ฝุ่นดาว ${p.bank.dust} · แตะเพื่อดูชื่อและการใช้งาน"><span class="glass-capsule" data-bank="gold">${icon('gold')}<b>${p.bank.gold}</b></span><span class="glass-capsule" data-bank="ore">${icon('ore')}<b>${p.bank.ore}</b></span><span class="glass-capsule">${icon('seal')}<b>${p.bank.shard}</b></span><span class="glass-capsule">${icon('dust')}<b>${p.bank.dust}</b></span></button></header>${this.bankInfo ? this.bankLegend(p) : ''}
-      ${this.questEntry(p)}
+      ${this.questEntry(p)}${this.chatEntry()}
       ${p.overflow?.length?`<button id="lobby-overflow" data-lobby="overflow" class="secondary storage-notice">ของรอจัด ${p.overflow.length} ชิ้น · เปิดถาดก่อนออกเดินทาง</button>`:""}
       ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.gold ? ` เหรียญทอง ${last.gold}` : ''}${last.shard ? ` เศษกลาง ${last.shard}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}${this.campLines(p)}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}

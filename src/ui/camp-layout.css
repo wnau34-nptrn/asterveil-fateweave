@@ -83,3 +83,11 @@
 #lobby-view .wb-bar-text { margin-top:4px !important; color:var(--text-muted); }
 #lobby-view .wb-card button.primary { min-height:48px; }
 @media (prefers-reduced-motion: reduce) { #lobby-view .wb-bar span { transition:none; } }
+/* P11 chat: the camp's world-chat button (right edge, under the quest entry). Offline it stays, disabled, with its reason. */
+#lobby-view .lobby-chat { position:absolute; z-index:24; top:calc(max(12px,var(--safe-top,0px)) + 174px); right:max(14px,env(safe-area-inset-right)); min-width:56px; min-height:48px; padding:4px 8px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; border-radius:14px; font-size:11px; background:#0a192b8a; border:1px solid #e1eaf035; box-shadow:none; pointer-events:auto; }
+#lobby-view .lobby-chat .icon { width:20px; height:20px; }
+#lobby-view .lobby-chat small { font-size:10px; color:#d9e4ed; white-space:nowrap; }
+#lobby-view .lobby-chat:disabled { opacity:1; color:#b9c8d8; background:#0a192b66; }
+#lobby-view .lobby-hud:has(.lobby-sheet) .lobby-chat { display:none; }
+#lobby-view .lobby-hud:has(.lobby-chat) > .storage-notice,
+#lobby-view .lobby-hud:has(.lobby-chat) > .lobby-result { right:calc(max(14px,env(safe-area-inset-right)) + 104px); }
