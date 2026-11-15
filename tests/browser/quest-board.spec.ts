@@ -13,7 +13,7 @@ for (const [w, h] of [[390, 844], [390, 650], [320, 568]] as const) test(`quest 
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('qb')) { localStorage.setItem(key, raw); sessionStorage.setItem('qb', '1'); } }, { key, raw });
   await page.setViewportSize({ width: w, height: h }); await page.goto('./'); await page.locator('#continue').click();
   await expect(page.locator('#lobby-board .trip-badge')).toHaveText('1');
-  await page.locator('#lobby-board').click();
+  await page.locator('#lobby-board').click(); await page.locator('#quest-tab-camp').click();
   await expect(page.locator('.quest-board .side-quest')).toHaveCount(map.sideQuests.length);
   await expect(page.locator('.quest-board .side-quest').first()).toHaveAttribute('data-state', 'ready');   // claimable first
   const first=page.locator('.quest-board .side-quest').first();

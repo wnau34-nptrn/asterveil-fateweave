@@ -23,7 +23,7 @@ for (const milestone of [0, 1, 2]) test(`approved pacing after MAP ${milestone},
   await expect(page.locator('.lobby-guide')).toHaveCount(milestone ? 1 : 0);
   if (!milestone) await expect(page.locator('#lobby-board')).toHaveCount(0);
   else {
-    await page.locator('#lobby-board').click();
+    await page.locator('#lobby-board').click(); await page.locator('#quest-tab-camp').click();
     await expect(page.locator('.quest-board .side-quest')).toHaveCount(map.sideQuests.length);
     await expect(page.locator(`#quest-claim-${map.sideQuests[0]!.id}`)).toBeDisabled();
     if (milestone === 1) await page.screenshot({ path: 'docs/validation/system-unlock-pacing/quests-map1-390.png' });

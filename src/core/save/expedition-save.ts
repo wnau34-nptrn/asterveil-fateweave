@@ -12,7 +12,8 @@ import { grantsValid, isBigTree, talentPoints } from '../world/talents';
 import { classSkills } from '../world/tomes';
 import { BANK_CAP, POTION_CAP, RIFT_CORE_CAP, RUN_CAP, TOME_CAP } from '../world/caps';
 import { MAX_SWEEP_COUNT, MAX_SWEEP_DAY } from '../world/sweep';
-import { TOME_LINES, TOME_SIZES, type SweepBook, type TomeBag } from '../world/types';
+import { BOARD_KINDS, MAX_BOARD_COUNT, MAX_BOARD_DAY, objectiveDone, weekOf } from '../world/board';
+import { TOME_LINES, TOME_SIZES, type BoardBook, type BoardSet, type SweepBook, type TomeBag } from '../world/types';
 import type { EventChoice, GearSlot, GearStat, Item, MapEventDefinition, MemberProgress, Potions, Talents } from '../world/types';
 import { GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/types';
 
@@ -154,7 +155,9 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // counters `choices` and `downed`. All are optional, so a v60 save loads unchanged (missing = none).
 // v62 (P05-05): the profile may carry the sweep book `sweep` (supplies, the day's sweeps per map, the sweep serial).
 // Optional, so a v61 save loads unchanged (missing = never swept).
-export const SAVE_VERSION = 62;
+// v63 (P05-06): the profile may carry the quest board book `board` (open daily/weekly sets, counts, claimed tasks and
+// the week's contracts) and a run the device day it set out on (`day`). Optional, so a v62 save loads unchanged.
+export const SAVE_VERSION = 63;
 // Trees refunded by older migrations were legal under star points (at most ★5 = 4 extra).
 const LEGACY_STAR_POINTS = 4;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
@@ -342,6 +345,39 @@ function sweepOf(v: unknown, map: MapDefinition, maps: readonly MapDefinition[],
   }
   return { day: b.day, supply: b.supply, used: out, count: b.count };
 }
+// P05-06 (v63): the quest board book. Open days are the newest `keepDays` (oldest first, ending on `day`), weeks this
+// week and at most the one before; counts are known kinds within the cap; a claimed task must exist and be done (a
+// contract on a map that has contracts).
+function boardOf(v: unknown, map: MapDefinition, maps: readonly MapDefinition[]): BoardBook {
+  const b = obj(v); const r = map.board; const bad = (): never => { throw new Error('Invalid board'); };
+  if (Object.keys(b).length !== 3 || !isInt(b.day, 0, MAX_BOARD_DAY) || !Array.isArray(b.days) || !Array.isArray(b.weeks)) bad();
+  const day = b.day as number;
+  const setOf = (raw: unknown, keys: readonly string[]): BoardSet => {
+    const x = obj(raw); const n = obj(x.n); const out: BoardSet['n'] = {};
+    if (Object.keys(x).length !== keys.length || keys.some(k => !(k in x)) || !Array.isArray(x.claimed) || new Set(x.claimed).size !== x.claimed.length) bad();
+    for (const [k, c] of Object.entries(n)) { if (!BOARD_KINDS.includes(k as never) || !isInt(c, 1, MAX_BOARD_COUNT)) bad(); out[k as keyof BoardSet['n']] = c as number; }
+    return { n: out, claimed: [...(x.claimed as unknown[]).map(id => typeof id === 'string' ? id : bad())] };
+  };
+  const days = (b.days as unknown[]).map(raw => ({ day: obj(raw).day as number, ...setOf(raw, ['day', 'n', 'claimed']) }));
+  if (!days.length || days.length > r.keepDays || days.at(-1)!.day !== day || days.some((d, i) => !isInt(d.day, day - r.keepDays + 1, day) || (i && d.day <= days[i - 1]!.day))) bad();
+  for (const d of days) for (const id of d.claimed) { const o = r.daily.find(x => x.id === id); if (!o || !objectiveDone(o, d)) bad(); }
+  const contractMaps = maps.filter(m => m.contract).map(m => m.id);
+  const weeks = (b.weeks as unknown[]).map(raw => {
+    const w = obj(raw); const set = setOf(raw, ['week', 'n', 'claimed', 'jobs']); const jobs: Record<string, string[]> = {};
+    for (const [id, at] of Object.entries(obj(w.jobs))) {
+      if (!r.contracts.some(c => c.id === id) || !Array.isArray(at) || !at.length || new Set(at).size !== at.length || at.some(m => typeof m !== 'string')) bad();
+      const known = (at as string[]).filter(m => contractMaps.includes(m)); if (known.length) jobs[id] = known;
+    }
+    return { week: w.week as number, ...set, jobs };
+  });
+  const week = weekOf(day);
+  if (!weeks.length || weeks.length > 2 || weeks.at(-1)!.week !== week || (weeks.length === 2 && weeks[0]!.week !== week - 1)) bad();
+  for (const w of weeks) for (const id of w.claimed) {
+    const o = r.weekly.find(x => x.id === id);
+    if (o ? !objectiveDone(o, w) : !w.jobs[id]) bad();
+  }
+  return { day, days, weeks };
+}
 function idList(v: unknown, allowed: readonly string[]): string[] {
   if (!Array.isArray(v) || v.some(id => !allowed.includes(id)) || new Set(v).size !== v.length) throw new Error('Invalid run');
   return [...v as string[]];
@@ -526,6 +562,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     ...(reserveSlots !== undefined ? { reserveSlots } : {}), ...(fatigue ? { fatigue } : {}), ...(clears ? { clears } : {}),
     ...(s.choices !== undefined ? { choices: choicesOf(s.choices, map.events, false) } : {}),
     ...(s.downed !== undefined ? { downed: isInt(s.downed, 1, RUN_CAP.downed) ? s.downed : badRun() } : {}),
+    ...(s.day !== undefined ? { day: isInt(s.day, 0, MAX_BOARD_DAY) ? s.day : badRun() } : {}),
     ...(s.hunt===undefined?{}:{hunt:huntPlan(s.hunt,map,lookup)}),
     mapId: map.id, mapVersion: map.version, seed: s.seed as number, rolls: s.rolls as number, position: point(s.position, map, true),
     steps: s.steps as number, pressure: s.pressure as number, revealed: s.revealed, roster, members, hp, campXp,
@@ -652,6 +689,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const storyQuests = p.storyQuests === undefined ? undefined : idList(p.storyQuests, maps.filter(m => m.quest.optional).map(m => m.id));
   if (clearedHard?.some(id => !cleared.includes(id))) throw new Error('Invalid profile');
   const sweep = p.sweep === undefined ? undefined : sweepOf(p.sweep, map, maps, cleared);
+  const board = p.board === undefined ? undefined : boardOf(p.board, map, maps);
   // v44 → v45 (P02): the fifth field slot is filled from the reserve, and a reserve above the chapter's slots steps into
   // the field first (there is always room: four deployed at most before v45). Nobody leaves the team.
   const slots = reserveSlots({ cleared, ...(veteran ? { veteran: true as const } : {}) }, map);
@@ -659,7 +697,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (party.reserve.length > slots) throw new Error('Invalid party');
   return {...(presets ? { presets } : {}),...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(boardFeatured ? { boardFeatured: [...boardFeatured as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     ...(storyShards ? { storyShards } : {}), ...(treeReset?.length ? { treeReset } : {}),
-    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}), ...(sweep ? { sweep } : {}),
+    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}), ...(sweep ? { sweep } : {}), ...(board ? { board } : {}),
     bank: { ore: bank.ore as number, gold: bank.gold as number, shard: bank.shard as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, POTION_CAP), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -876,7 +914,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
   if (version < 60 && version >= 5) { const p = obj(envelope.profile ?? {}); migrateTreePoints(envelope, map, maps.length ? maps : [map], version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps).length : undefined); }
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

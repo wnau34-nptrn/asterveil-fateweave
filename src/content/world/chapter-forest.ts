@@ -11,6 +11,8 @@ export const forestMap: MapDefinition = {
   tomes: { boss: { medium: 1, small: 2 }, first: { large: 1, core: 0 } },
   // P05-05 (draft): about a third of a quick completed run; hard pays the same ore/gold (OD-41) and one more tome.
   sweepReward: { normal: { ore: 15, gold: 7, tomes: 1 }, hard: { ore: 15, gold: 7, tomes: 2 } },
+  // P05-06 (draft, tests/probe/p0506-board.test.ts): rush clears took 11–13 steps, explorers 87–105.
+  contract: { reward: { ore: 15, gold: 8, tomes: 1 }, swiftSteps: 30 },
   summary: 'ทางผ่านป่าที่รอยแยกบิดให้กลายเป็นหนาม ฝ่าด่านอีลิท เจอเหตุการณ์กลางทาง แล้วสงบเจ้าป่าหนาม',
   rows: [
     '################',

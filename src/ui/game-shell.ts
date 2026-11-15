@@ -22,7 +22,7 @@ import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import { leaderArt, type NpcId } from '../game/visuals/assets';
 import { partyLine } from '../core/world/tomes';
-import { sweepText, choiceText, eventText, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText, tomeLineText, tomeSizeText, tomeThai } from './th';
+import { boardTaskName, contractText, sweepText, choiceText, eventText, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText, tomeLineText, tomeSizeText, tomeThai } from './th';
 import { laneName } from './formation-grid';
 import { findItem } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
@@ -137,7 +137,7 @@ export class GameShell {
       collect:ids=>camp({ kind: 'collectOverflow', ids: [...ids] }), recycleStored:(source,ids)=>camp({ kind: 'recycleStored', source, ids: [...ids] }),expandStorage:()=>camp({ kind: 'expandStorage' }),
       salvage: uids => camp({ kind: 'salvage', uids: [...uids] }),
       enhance: (uid,target) => camp({ kind: 'enhance', uid, target }), lock: uid=>camp({ kind: 'lockEquipment', uid }), fuse: (uid,donors) => camp({ kind: 'fuse', uid, ...has('donors', donors ? [...donors] : undefined) }), level:(uid,target)=>camp({ kind: 'raiseItemLevel', uid, target }),
-      reroll: (uid, i) => camp({ kind: 'reroll', uid, index: i }), brew: potion => camp({ kind: 'brew', potion }), claim: id => camp({ kind: 'claimQuest', questId: id }),
+      reroll: (uid, i) => camp({ kind: 'reroll', uid, index: i }), brew: potion => camp({ kind: 'brew', potion }), claim: id => camp({ kind: 'claimQuest', questId: id }), claimBoard: (tab, id, period) => camp({ kind: 'claimBoard', tab, id, period, day: this.today() }),
       depart: (id, hard) => this.depart(id, hard), sweep: (id, hard) => this.campCommand({ kind: 'sweep', mapId: id, hard, day: this.today(), serial: this.game?.profile.sweep?.count ?? 0 }), home: () => this.showTitle(),
     }, maps);
     const story = document.createElement('section'); root.append(story); this.story = new StoryUI(story);
@@ -472,10 +472,11 @@ export class GameShell {
       : e.type === 'refreshed' ? `พีโน่เปลี่ยนป้ายจ้างใหม่แล้ว · สุ่มได้อีก ${this.map.shop.refreshCosts.length - result.profile.refreshes} ครั้ง`
       : e.type === 'bought' ? this.boughtText(result.profile, e)
       : e.type === 'swept' ? `กวาดล้าง${this.maps.find(m => m.id === e.mapId)?.name ?? ''}${e.hard ? ' (ยาก)' : ''} · ได้ ${sweepText(e.reward, partyLine(this.map, result.profile.party.deployed))} · เสบียงเหลือ ${e.supply} · วันนี้เหลือ ${e.left} ครั้ง`
+      : e.type === 'boardClaimed' ? `ได้รับรางวัล${e.tab === 'contract' ? `สัญญาจ้าง${contractText[this.map.board.contracts.find(c => c.id === e.id)!.kind].name}` : boardTaskName[e.id] ?? 'เควสต์'} · ${sweepText(e.reward, partyLine(this.map, result.profile.party.deployed))}`
       : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : e.type === 'party' && e.heroId && e.lane ? `จัดแผนแล้ว · ${name(e.heroId)}ยืน${laneName(e.lane)}` : e.type === 'party' && e.presetAction ? this.presetText(result.profile, e.preset!, e.presetAction, e.left) : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     // The camp NPC whose service just succeeded cheers once.
-    sfx.play(({ hired: 'coin', upgraded: 'upgrade', dismissed: 'close', talent: 'buff', equipped: 'guard', salvaged: 'anvil', forged: 'anvil', smelted: 'anvil', brewed: 'potion', claimed: 'claim', bought: 'coin', refreshed: 'coin', swept: 'claim' } as Partial<Record<string, SfxName>>)[e.type] ?? 'click');
+    sfx.play(({ hired: 'coin', upgraded: 'upgrade', dismissed: 'close', talent: 'buff', equipped: 'guard', salvaged: 'anvil', forged: 'anvil', smelted: 'anvil', brewed: 'potion', claimed: 'claim', bought: 'coin', refreshed: 'coin', swept: 'claim', boardClaimed: 'claim' } as Partial<Record<string, SfxName>>)[e.type] ?? 'click');
     this.npcCheer = e.type === 'bought' || e.type === 'refreshed' ? 'broker' : e.type === 'claimed' ? this.map.sideQuests.find(q => q.id === e.questId)!.npc as NpcId
       : ({ hired: 'broker', talent: 'trainer', equipped: 'keeper', salvaged: 'keeper', forged: 'smith', smelted: 'smith', brewed: 'herbalist' } as Partial<Record<string, NpcId>>)[e.type];
     if(e.type==='forged'&&e.action==='enhance')this.lobby.forgeEnhanced(this.game.profile,e.uid);
@@ -513,7 +514,7 @@ export class GameShell {
   // The prologue always starts on the first map; otherwise the Lobby names an open map (default: the furthest open one).
   private depart(mapId?: string, hard = false): void {
     if (!this.game || this.game.run) return;
-    this.exec({ kind: 'depart', ...(mapId !== undefined ? { mapId } : {}), hard }, out => this.departed(out));
+    this.exec({ kind: 'depart', ...(mapId !== undefined ? { mapId } : {}), hard, day: this.today() }, out => this.departed(out));
   }
   private departed(out: CommandResult): void {
     if (isRejected(out)) { if (out.rejected === 'storage') { this.lobbyMessage = 'จัดถาดรอเก็บในกระเป๋าก่อนออกเดินทาง'; this.showLobby(); } return; }
