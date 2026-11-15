@@ -28,7 +28,9 @@ import { type IconName, icon } from './icons';
 import region from '../content/world/region_ch1.json';
 import { worldArtUrl } from '../game/visuals/world-art';
 import { gearArt, potionArt } from './equip-art';
-import { campLines, skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
+import { sweepBook, sweepReason, sweepsLeft } from '../core/world/sweep';
+import { partyLine } from '../core/world/tomes';
+import { sweepReasonText, sweepText, campLines, skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
 
 import { heroArt, portrait, starRow } from './portraits';
 
@@ -37,10 +39,11 @@ export interface LobbyHost { archive(id: string, archived: boolean): void; autoE
   transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; guide(id: string, skip: boolean): void;
-  enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(mapId?: string, hard?: boolean): void; home(): void }
+  enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(mapId?: string, hard?: boolean): void; sweep(mapId: string, hard: boolean): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
 // `board`: the hiring board from the seed-free client view (`core/command/client-view.ts`), never worked out here.
-export interface LobbyView { profile: Profile; board: readonly HireSlot[]; message: string; saved: boolean; cheer?: string; npcCheer?: NpcId }
+// `day` (P05-05): the device's calendar day, for the sweep supplies and the day's sweeps.
+export interface LobbyView { profile: Profile; board: readonly HireSlot[]; message: string; saved: boolean; day: number; cheer?: string; npcCheer?: NpcId }
 type Sheet = 'team' | 'hire' | 'tree' | 'gear' | 'forge' | 'brew' | 'hunt' | 'maps' | 'board';
 // Each camp NPC stands at a fixed spot along the back of the camp (x %, left half faces right) and runs one service.
 // `px`: the spot on portrait phones, where the camp is wider than the screen (3×) and pans sideways: the staff
@@ -62,6 +65,20 @@ const guideText: Record<GuideKind, string> = {
 export class LobbyUI {
   private view: LobbyView | undefined;
   private get offers(): readonly HireSlot[] { return this.view?.board ?? []; }
+  // P05-05: sweeping a cleared map — what it pays (shown before the tap), what it costs and what is left today.
+  private sweepRow(p: Profile, m: MapDefinition): string {
+    if (!m.sweepReward) return '';
+    const day = this.view!.day, book = sweepBook(p, m, day), left = sweepsLeft(book, m), line = partyLine(m, p.party.deployed);
+    const button = (hard: boolean): string => {
+      const reason = sweepReason(p, m, hard, day);
+      return `<button id="map-sweep-${hard ? 'hard-' : ''}${m.id}" data-lobby="sweep" data-map="${m.id}" data-hard="${hard}" class="secondary map-sweep-go"${reason ? ' disabled' : ''} aria-label="กวาดล้าง${m.name}${hard ? 'โหมดยาก' : ''} ใช้เสบียง ${m.sweep.cost} ได้ ${sweepText(m.sweepReward![hard ? 'hard' : 'normal'], line)}">${hard ? 'กวาดล้างยาก' : 'กวาดล้าง'}</button>`;
+    };
+    const hard = p.clearedHard?.includes(m.id) ?? false, reason = sweepReason(p, m, false, day);
+    return `<div class="map-sweep" id="map-sweep-row-${m.id}"><p><b>กวาดล้าง</b> · เสบียง ${book.supply}/${m.sweep.cap} · วันนี้เหลือ ${left}/${m.sweep.perMapDaily} ครั้ง</p>
+      <p class="map-sweep-pay">ครั้งละเสบียง ${m.sweep.cost} · ได้ ${sweepText(m.sweepReward.normal, line)}${hard ? `<br>ยาก: ${sweepText(m.sweepReward.hard, line)}` : ''}</p>
+      ${reason ? `<small class="hire-status" role="status">${sweepReasonText[reason] ?? ''}</small>` : ''}
+      <span class="map-actions">${button(false)}${hard ? button(true) : ''}</span></div>`;
+  }
   // The team, hire or talent-tree sheet floats over the camp; the scene alone shows when it is closed.
   // The tree sheet is its own window, opened from a member in the team sheet (`picked`).
   // The equipment sheet (2D-2) works the same way.
@@ -210,6 +227,7 @@ export class LobbyUI {
         case 'bank': this.bankInfo = !this.bankInfo; this.draw(); this.focus('#lobby-bank'); break;
         case 'maps': this.sheet = 'maps'; this.mapPicked = undefined; this.draw(); this.regionScroll(); this.focus(`#map-node-${this.openMaps().at(-1)!.id}`); break;
         case 'pick-map': this.mapPicked = b.dataset.map; this.draw(); this.focus(`#map-node-${b.dataset.map}`); break;
+        case 'sweep': this.host.sweep(b.dataset.map!, b.dataset.hard === 'true'); this.focus(`#map-sweep-${b.dataset.hard === 'true' ? 'hard-' : ''}${b.dataset.map}`); break;
         case 'go': this.sheet = null; this.host.depart(b.dataset.map, b.dataset.hard === 'true'); break;
         case 'home': this.host.home(); break;
         case 'guide': this.host.guide(b.dataset.guide!, b.dataset.skip === 'true'); this.focus('#lobby-depart'); break;
@@ -636,7 +654,7 @@ export class LobbyUI {
     const cards = this.maps.map((m, i) => { const open = mapUnlocked(p, this.maps, m.id); const done = p.cleared.includes(m.id);
       return `<li class="map-choice${open ? '' : ' locked'}" data-map="${m.id}"${m.id === picked ? '' : ' hidden'}><span class="market-icon" aria-hidden="true">${icon(open ? 'map' : 'seal')}</span>
         <span><b>แผนที่ ${m.chapter} · ${m.name}</b>${done ? ' <em class="map-cleared">ผ่านแล้ว</em>' : ''}<small>${m.summary}</small>${open ? '' : `<small class="hire-status">ผ่าน${this.maps[i - 1]!.name}ก่อน</small>`}</span>
-        <span class="map-actions"><button id="map-go-${m.id}" data-lobby="go" data-map="${m.id}" class="${open ? 'primary' : 'secondary'}"${open ? '' : ' disabled'}>${open ? 'ออกเดินทาง' : 'ยังล็อก'}</button>${open && this.open('hard') ? `<button id="map-hard-${m.id}" data-lobby="go" data-map="${m.id}" data-hard="true" class="secondary map-hard"${hardReason(p, this.maps, m.id) ? ' disabled' : ''}>ยาก${p.clearedHard?.includes(m.id) ? ' ✓' : ''}</button>` : ''}</span></li>`; }).join('');
+        <span class="map-actions"><button id="map-go-${m.id}" data-lobby="go" data-map="${m.id}" class="${open ? 'primary' : 'secondary'}"${open ? '' : ' disabled'}>${open ? 'ออกเดินทาง' : 'ยังล็อก'}</button>${open && this.open('hard') ? `<button id="map-hard-${m.id}" data-lobby="go" data-map="${m.id}" data-hard="true" class="secondary map-hard"${hardReason(p, this.maps, m.id) ? ' disabled' : ''}>ยาก${p.clearedHard?.includes(m.id) ? ' ✓' : ''}</button>` : ''}</span>${done ? this.sweepRow(p, m) : ''}</li>`; }).join('');
     const hard = this.open('hard') ? `<p class="camp-note">โหมดยาก: มอนสเตอร์ +${this.map.progression.hardLevels} เลเวล (บอส +${this.map.progression.hardLevels + this.map.progression.hardTraits.bossLevels}) ของดีขึ้น · เปิดเมื่อจบแผนที่นั้นแบบปกติ · จบครั้งแรกได้ทอง ${this.map.progression.hardFirstClear.gold} เศษกลาง ${this.map.progression.hardFirstClear.shard}</p>` : '';
     return `<div class="region-map" style="aspect-ratio:${W}/${H}"><img class="region-art" src="${worldArtUrl('region_ch1')}" alt="แผนที่บทที่ 1 แอสเตอร์เวล" draggable="false">${fog}${nodes}</div>
       <div class="region-card"><ul class="hire-list map-list">${cards}</ul>${hard}</div>`;

@@ -12,6 +12,7 @@ import {
 } from '../world/profile';
 import { collectOverflow, departureBlocked, expandStorage, recycleSelection, type StorageSource } from '../world/storage';
 import { chooseHuntTarget } from '../world/targeted-loot';
+import { sweep } from '../world/sweep';
 import { raiseSkill, tradeTomes } from '../world/tomes';
 import {
   GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, TOME_LINES, TOME_SIZES,
@@ -67,6 +68,9 @@ export type CampCommand =
   | { kind: 'reroll'; uid: number; index: number }
   | { kind: 'brew'; potion: PotionId }
   | { kind: 'claimQuest'; questId: string }
+  // P05-05: `day` is the device's calendar day (days since 1970-01-01, local time) and `serial` the sweep count the
+  // device saw (`profile.sweep.count`, 0 before the first). Online, P09 replaces `day` with the server's.
+  | { kind: 'sweep'; mapId: string; hard: boolean; day: number; serial: number }
   | { kind: 'depart'; mapId?: string; hard: boolean };
 // Map (expedition) commands: only while an expedition is running.
 export type RunCommand =
@@ -121,7 +125,7 @@ const SPECS: Record<CommandKind, Spec> = {
   bossTarget: { target: BOSS_POWERS }, huntTarget: { target: opt('str') }, collectOverflow: { ids: 'ints' },
   recycleStored: { source: ['bag', 'overflow'], ids: 'ints' }, expandStorage: {}, salvage: { uids: 'ints' }, enhance: { uid: 'int', target: 'int' },
   lockEquipment: { uid: 'int' }, fuse: { uid: 'int', donors: opt('ints') }, raiseItemLevel: { uid: 'int', target: 'int' }, reroll: { uid: 'int', index: 'int' },
-  brew: { potion: POTION_IDS }, claimQuest: { questId: 'str' }, depart: { mapId: opt('str'), hard: 'bool' },
+  brew: { potion: POTION_IDS }, claimQuest: { questId: 'str' }, sweep: { mapId: 'str', hard: 'bool', day: 'int', serial: 'int' }, depart: { mapId: opt('str'), hard: 'bool' },
   move: { dir: DIRECTIONS }, travel: { to: 'point' }, rest: {}, revive: { heroId: 'str' }, swapMembers: { a: 'str', b: 'str' },
   setLane: { heroId: 'str', lane: LANES, other: opt('str') }, moveMember: { heroId: 'str' }, runPreset: { slot: 'int' }, withdraw: {}, openChest: {},
   usePotion: { potion: POTION_IDS, heroId: opt('str') }, chooseEvent: { choice: EVENT_CHOICES }, draftPick: { index: 'int' },
@@ -235,6 +239,7 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
     case 'reroll': return camp(reroll(p, map, cmd.uid, cmd.index));
     case 'brew': return camp(brew(p, map, cmd.potion));
     case 'claimQuest': return camp(claimQuest(p, map, cmd.questId));
+    case 'sweep': { const m = maps.find(x => x.id === cmd.mapId); return m ? camp(sweep(p, m, cmd.hard, cmd.day, cmd.serial)) : reject('unknown'); }
     case 'depart': {
       if (departureBlocked(p)) return reject('storage');
       // The prologue always starts on the first map; otherwise the named open map (default: the furthest open one).

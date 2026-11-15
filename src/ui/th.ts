@@ -1,6 +1,6 @@
 import {bossNames,bossDescription} from './boss-equipment';
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
-import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } from '../core/world/types';
+import { TOME_LINES, TOME_SIZES, type SweepReward, type TomeBag, type TomeLine, type TomeSize } from '../core/world/types';
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId, MapEventDefinition, Profile } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
@@ -621,6 +621,14 @@ export const sideQuestText: Record<SideQuestKind, { name: string; ask: (n: numbe
   secrets: { name: 'ห้องลับในกำแพง', ask: n => `หาทางลับในกำแพงร้าวให้เจอ ${n} แห่ง ของที่ซ่อนไว้ต้องมาอยู่ในคลังนะคะ` },
   herbs: { name: 'สมุนไพรเรืองแสง', ask: n => `เก็บสมุนไพรเรืองแสง ${n} ต้นจากในแผนที่ แล้วกลับมาถึงแคมป์อย่างปลอดภัยนะ` },
   puzzles: { name: 'ไขกลไกโบราณ', ask: n => `ไขกลไกโบราณ (หินรูน ก้อนหิน คันโยก) ให้ได้ ${n} อย่าง` },
+};
+// P05-05: what one sweep pays (small tomes go to the deployed party's line) and why a sweep is not possible now.
+export function sweepText(r: SweepReward, line: TomeLine): string {
+  return [`แร่ดาว ${r.ore}`, `เหรียญทอง ${r.gold}`, ...r.dust ? [`ฝุ่นดาว ${r.dust}`] : [], ...r.tomes ? [`ตำรา${tomeLineText[line]}${tomeSizeText.small} ${r.tomes}`] : []].join(' ');
+}
+export const sweepReasonText: Record<string, string> = {
+  quota: 'วันนี้กวาดล้างแผนที่นี้ครบแล้ว · พรุ่งนี้กวาดล้างได้อีก', supply: 'เสบียงหมด · ได้เสบียงเพิ่มทุกวัน',
+  full: 'คลังเต็ม · ใช้ทรัพยากรก่อนแล้วค่อยกวาดล้าง', uncleared: 'ผ่านแผนที่นี้ก่อน', hard: 'ผ่านโหมดยากของแผนที่นี้ก่อน',
 };
 export function rewardText(r: SideQuestDefinition['reward']): string {
   const parts: string[] = [];

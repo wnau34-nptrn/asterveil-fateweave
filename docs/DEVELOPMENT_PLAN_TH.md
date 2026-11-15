@@ -178,7 +178,7 @@ C5.4ล่าสุด: เจ้าของเลือกR1แล้ว ต�
 - [ ] **P05-03** บอสต้นแบบแต่ละตัวมีอย่างน้อยสองคำตอบ หนึ่งคำตอบใช้ของ/คนที่ได้แน่นอนก่อนถึงบอส ตรวจทุกทางเลือก starter; telegraph/preview/สรุปแพ้ให้เหตุผลที่ตรวจได้; ไม่ใช้กาชารายเดือนเป็นกุญแจ
 - [ ] **P05-04** A6c พัก/สำรอง/ความเสี่ยง ถอนตัว/แพ้และ hard-mode rewards ประเมินกับทีมใหม่; คง free travel ที่มีอยู่ ไม่สร้างอีกครั้ง; ไม่เพิ่มภาระเดินซ้ำเพื่อยืดเวลา
 
-- [ ] **P05-05** ต้นแบบกวาดล้าง: clear unlock, ตารางรางวัลซ้ำ, cost/reward atomic, normal/hard quota และ retry; onlineใช้เวลา/ledger P09 ไม่กวาดล้างWorld Boss
+- [x] **P05-05** ต้นแบบกวาดล้าง: clear unlock, ตารางรางวัลซ้ำ, cost/reward atomic, normal/hard quota และ retry; onlineใช้เวลา/ledger P09 ไม่กวาดล้างWorld Boss — ต้นแบบออฟไลน์เสร็จ 2026-11-15 ([ผล](validation/p05-05-2026-11-15/README_TH.md), เซฟ v62)
 
 - [ ] **P05-06** กระดานเดียวแท็บdaily/weekly/contracts; ต้นแบบรายวัน3รายสัปดาห์5 เก็บprogressอัตโนมัติ งานทางเลือกและcatch-up; reward-once/period/claim windows; ไม่เปลี่ยนเควสต์สะสมเดิมเป็นวนรับซ้ำ; onlineหลังP09
 

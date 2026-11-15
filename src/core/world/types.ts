@@ -33,6 +33,8 @@ export interface MapDefinition {
   chapter: number; summary: string; clearStory?: 'warden';
   // Skill tomes (save v37): the boss's tome reward on maps that drop tomes (missing = no tomes on this map).
   tomes?: MapTomes;
+  // P05-05: the repeat rewards one sweep of this cleared map pays (missing = the map cannot be swept).
+  sweepReward?: { normal: SweepReward; hard: SweepReward };
   // `firstFind`: the tutorial (prologue) win leaves this plain piece in the bag (map 1 teaches wearing gear).
   // `bossCharm`: the boss pays the targeted boss charm (boss-equipment.ts); teaching maps leave it out.
   firstFind?: { slot: GearSlot; rarity: number }; bossCharm?: boolean;
@@ -88,6 +90,7 @@ export interface MapDefinition {
   puzzles: PuzzleDefinitions;
   // 3D: side quests from the camp NPCs, and the herbs one of them asks for.
   sideQuests: readonly SideQuestDefinition[];
+  sweep: SweepRules;
   herbs: readonly (Point & { id: string })[];
   events: readonly MapEventDefinition[];
   eventRules: EventRules;
@@ -306,6 +309,15 @@ export interface SkillLevelRules {
   battleEvery: number; chest: { common: number; rare: number }; elite: number; hardPercent: number; hardCore: number;
   refundPercent: number; tradeUp: number; swap: number;
 }
+// P05-05 sweep prototype (docs/design/WORLD_BOSS_SWEEP_TH.md §4, draft numbers). Supplies arrive `daily` per calendar day
+// up to `cap`; one sweep costs `cost` supplies and each map takes `perMapDaily` sweeps a day, normal and hard together.
+export interface SweepRules { daily: number; cap: number; cost: number; perMapDaily: number }
+// What one sweep pays: existing resources only. `tomes` are small tomes in the deployed party's line.
+export interface SweepReward { ore: number; gold: number; dust?: number; tomes?: number }
+// The camp's sweep book (save v62). `day` is the calendar day (days since 1970-01-01) the book was last brought up to,
+// `supply` the supplies held then, `used` the sweeps made on each map that day and `count` every sweep ever made (the
+// next sweep's serial number, so a repeated request is refused instead of paid twice).
+export interface SweepBook { day: number; supply: number; used: Record<string, number>; count: number }
 // A map's boss tomes (maps 2–3): `boss` every win, `first` added the first time the map is cleared.
 export interface MapTomes { boss: { medium: number; small: number }; first: { large: number; core: number } }
 // Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).
@@ -409,6 +421,8 @@ export interface Profile {
   // P05-02 (save v61): the latest choice made at each map event across runs (story flags for camp lines; missing = none)
   // and the maps whose optional quest has paid its reward (missing = none).
   choices?: Record<string, EventChoice>; storyQuests?: string[];
+  // P05-05 (save v62): supplies, the day's sweeps and the sweep serial (missing = never swept).
+  sweep?: SweepBook;
   // P04-02 (OD-22): story recruits already compensated (or met through the story), each at most once. Missing = none.
   storyShards?: string[];
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
@@ -443,6 +457,7 @@ export type ProfileEvent =
   | { type: 'smelted'; dust: number }
   | { type: 'brewed'; potion: PotionId }
   | { type: 'claimed'; questId: string }
+  | { type: 'swept'; mapId: string; hard: boolean; reward: SweepReward; supply: number; left: number }
   | { type: 'bought'; item: ShopItemId; heroId?: string; uid?: number }
   | { type: 'refreshed' };
 export interface ProfileResult { profile: Profile; event: ProfileEvent }
