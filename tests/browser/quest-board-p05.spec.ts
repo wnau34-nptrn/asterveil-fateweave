@@ -21,7 +21,7 @@ test('the quest board counts by itself, keeps a catch-up day and pays each task 
   const yesterday = { day: day - 1, n: { wins: 3, chests: 2 }, claimed: [] };
   // The contract sits on yesterday's week: this week, or last week (still claimable) when today is a Monday.
   const week = weekOf(day - 1);
-  p.board = { day: day - 1, days: [yesterday], weeks: [{ week, n: { wins: 3, chests: 2, contracts: 1 }, claimed: [], jobs: { 'job-unharmed': ['veil-frontier'] } }] };
+  p.board = { day: day - 1, days: [yesterday], weeks: [{ week, n: { wins: 3, chests: 2, contracts: 1, elites: 3 }, claimed: [], jobs: { 'job-unharmed': ['veil-frontier'] } }] };
   const raw = JSON.stringify({ version: 63, profile: p, run: null }); parseGame(raw, chapterOne, encounterById, MAPS);
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('p0506')) { localStorage.setItem(key, raw); sessionStorage.setItem('p0506', '1'); } }, { key, raw });
   await page.setViewportSize({ width: 390, height: 844 }); await page.goto('./'); await page.locator('#continue').click();
@@ -40,14 +40,21 @@ test('the quest board counts by itself, keeps a catch-up day and pays each task 
   await todayPatrol.click();
   await expect(page.locator('.lobby-result')).toContainText('ลาดตระเวนประจำวัน');
   await expect(page.locator(`#board-d-patrol-${day}`)).toHaveAttribute('data-state', 'claimed');
-  let s = await saved(page); expect(s.bank.ore).toBe(100 + 30 * 2 + 10); expect(s.board!.days.at(-1)!.claimed).toEqual(['d-patrol']);
+  let s = await saved(page); expect(s.bank.ore).toBe(100 + 28 * 2 + 10); expect(s.board!.days.at(-1)!.claimed).toEqual(['d-patrol']);
+  // P09 part 2: the weekly elite hunt pays universal star shards (shown with the reward) once.
+  await page.locator('#quest-tab-weekly').click();
+  const hunt = page.locator(`#board-claim-weekly-w-elites-${week}`); await expect(hunt).toBeVisible();
+  await expect(page.locator(`#board-w-elites-${week}`)).toContainText('เศษกลาง 4');
+  await page.screenshot({ path: 'docs/validation/p09-shards-2026-11-15/board-weekly-390.png' });
+  await hunt.click(); await expect(page.locator(`#board-w-elites-${week}`)).toHaveAttribute('data-state', 'claimed');
+  s = await saved(page); expect(s.bank).toMatchObject({ ore: 100 + 28 * 2 + 10 + 20, shard: 4 });
   // The contract tab pays the map-3 reward once.
   await page.locator('#quest-tab-contract').click();
   const job = page.locator(`#board-claim-contract-job-unharmed-${week}`); await expect(job).toBeVisible();
   await expect(page.locator('.quest-board')).toContainText('ไม่มีโทษ');
   await page.screenshot({ path: info.outputPath('board-contracts.png') });
   await job.click(); await expect(page.locator(`#board-job-unharmed-${week}`)).toHaveAttribute('data-state', 'claimed');
-  s = await saved(page); expect(s.bank.ore).toBe(100 + 30 * 2 + 10 + 25);
+  s = await saved(page); expect(s.bank.ore).toBe(100 + 28 * 2 + 10 + 20 + 25);
   // The camp tab keeps the six one-time side quests.
   await page.locator('#quest-tab-camp').click(); await expect(page.locator('.quest-board .side-quest')).toHaveCount(chapterOne.sideQuests.length);
   // A reload keeps what was paid; the catch-up day is still open to claim.

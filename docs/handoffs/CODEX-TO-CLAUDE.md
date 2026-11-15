@@ -1,3 +1,10 @@
+## 2026-11-15 — P09 part 2: weekly universal star shards on the ledger (Opus; branch claude/p09-weekly-shards)
+- No owner comment on #256 (P04-06) or #257 (ledger): budget and Bangkok-midnight reset kept. Save stays v63; no D1 migration, no gacha wallet.
+- Farmable weekly source (OD-17): `SweepReward.shard`; weekly board tasks `w-elites` 4, `w-stories` 3, `w-jobs` 3 = 10 universal shards/week (none has a sweep option, so login-only earns none). Receipted by the existing `board:weekly:w<week>:<id>` rows; offline rules identical (`claimBoard` pays `bank.shard`, refuses `full` at the cap).
+- Same total budget: 1 shard = 12 ore-eq (shop 10 for 60 gold; 1 gold = 2 ore); those tasks' ore/gold cut (20/10, 20/10, 25/12) and map-3 sweep 30/15 → 28/14. Week sim: sweep+board value ±1% for every playing pattern, login-only −5%; rush-3 gets 7/10 shards.
+- Tests: new `tests/shards-p09.test.ts` (7: content, budget guard, claim once/cap, week boundary/catch-up/expired, sweep pays none, server Sunday 23:59 claim + retry after midnight + receipts + verify); unit 1890 pass, typecheck/lint/build, `npm run sim` 29/29, browser `quest-board-p05`/`sweep-p05` at 390px. [Validation](../validation/p09-shards-2026-11-15/README_TH.md).
+- Open (owner): 10/week and the shard rate; sweep shards would need a weekly counter (save bump); P04-06 open items; reset time zone.
+
 ## 2026-11-15 — P09 reward ledger for sweep and quest board (Opus; branch claude/p09-reward-ledger)
 - No owner comment on P04-06 (#256): payouts and numbers unchanged. Save stays v63; no D1 migration (the ledger lives in each account's Durable Object SQLite).
 - Server owns the calendar: `CommandContext.clock` — online `sweep`/`claimBoard`/`depart` run on the server's game day (midnight Asia/Bangkok, `GAME_DAY_OFFSET_MINUTES` draft) and a command carrying its own `day` is refused `client_day`. Offline keeps the device day (missing day → `day`).

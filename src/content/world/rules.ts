@@ -27,6 +27,8 @@ export const gameRules: GameRules = {
   // weekly tasks that ordinary play fills by itself; `alt` is the second way to finish one. Daily sets stay open three
   // days (today and two catch-up days). Contracts (P05-01 §2.3, OD-37): no fee, no penalty, each pays once a week with
   // the reward of the best map it was done on (`MapDefinition.contract`). A sweep counts only for `sweeps`.
+  // P09 part 2 (OD-17, draft; docs/validation/p09-shards-2026-11-15): the weekly universal star shards — 10 a week from
+  // the three tasks a sweep cannot finish, paid for by cutting their ore/gold and the map-3 sweep (same weekly value).
   board: {
     keepDays: 3, smallTeam: 3,
     daily: [
@@ -37,9 +39,9 @@ export const gameRules: GameRules = {
     weekly: [
       { id: 'w-return', kind: 'completes', target: 4, alt: { kind: 'sweeps', target: 9 }, reward: { ore: 40, gold: 20 } },
       { id: 'w-battles', kind: 'wins', target: 15, reward: { ore: 40, gold: 20, tomes: 2 } },
-      { id: 'w-elites', kind: 'elites', target: 3, reward: { ore: 30, gold: 15, dust: 4 } },
-      { id: 'w-stories', kind: 'events', target: 4, alt: { kind: 'finds', target: 3 }, reward: { ore: 30, gold: 15, dust: 3 } },
-      { id: 'w-jobs', kind: 'contracts', target: 3, reward: { ore: 40, gold: 20, tomes: 2 } },
+      { id: 'w-elites', kind: 'elites', target: 3, reward: { ore: 20, gold: 10, dust: 4, shard: 4 } },
+      { id: 'w-stories', kind: 'events', target: 4, alt: { kind: 'finds', target: 3 }, reward: { ore: 20, gold: 10, dust: 3, shard: 3 } },
+      { id: 'w-jobs', kind: 'contracts', target: 3, reward: { ore: 25, gold: 12, tomes: 2, shard: 3 } },
     ],
     contracts: [
       { id: 'job-swift', kind: 'swift' }, { id: 'job-explorer', kind: 'explorer' }, { id: 'job-bloodless', kind: 'bloodless' },
