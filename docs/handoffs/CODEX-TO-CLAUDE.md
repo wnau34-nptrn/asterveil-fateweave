@@ -1,3 +1,11 @@
+## 2026-11-15 — P09 reward ledger for sweep and quest board (Opus; branch claude/p09-reward-ledger)
+- No owner comment on P04-06 (#256): payouts and numbers unchanged. Save stays v63; no D1 migration (the ledger lives in each account's Durable Object SQLite).
+- Server owns the calendar: `CommandContext.clock` — online `sweep`/`claimBoard`/`depart` run on the server's game day (midnight Asia/Bangkok, `GAME_DAY_OFFSET_MINUTES` draft) and a command carrying its own `day` is refused `client_day`. Offline keeps the device day (missing day → `day`).
+- `reward_ledger` (receipt PK, one row per payout: `sweep:<n>` per `d<day>`, `board:<tab>:<d|w period>:<id>`) written in the same transaction as game+log; replies carry `receipts` (stored in the book, retry byte-identical, retry across midnight pays nothing). An existing receipt refuses the command (`duplicate_receipt`, log `refused`). Log gains `day`/`refused` columns (added to old tables); `replayLog` replays with the stamped day.
+- Device: `ServerClient` strips `day` from dated commands, reads `clock {day,next,now}` from `/v1/session`/`/v1/state` and shows the server day (advances at `next` by elapsed time, ignoring device clock skew).
+- Tests: new `tests/server-ledger.test.ts` (14: day/week boundaries, quota reset, catch-up/expired periods, retry, client day refused, verify + tamper, duplicate receipt, DO column migration/unique rollback, skewed device); full unit suite 1883 pass, typecheck/lint/build. Doc [LEDGER_P09_TH.md](../design/p09/LEDGER_P09_TH.md).
+- Open: owner on day-reset time zone (Bangkok midnight draft), P04-06 target share/login-only income; universal shards (OD-17) can now use the ledger; admin ledger view not built.
+
 ## 2026-11-15 — P04-06 farm and quest budget (Opus; branch claude/p04-06-farm-budget)
 - No owner comment on PR #254 (sweep) or #255 (board): rules kept; only draft numbers changed, by simulation. Save stays v63.
 - New `tests/sim/week-sim.ts` (`playExpedition` in balance-sim) plays post-campaign weeks on the real rules (lobby, one map-3 run per session, sweeps, board claims); probe `tests/probe/p0406-budget.test.ts` (`BUDGET_OUT`).

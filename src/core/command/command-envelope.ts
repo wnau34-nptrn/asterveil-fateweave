@@ -13,7 +13,8 @@ export interface CommandRequest { requestId: string; seq: number; command: unkno
 // The answer for a sequence number. A command refused by its shape or the rules still uses up its sequence number,
 // so the device always sends `lastSeq + 1` next; the state does not change.
 export type CommandReply =
-  | { seq: number; status: 'applied'; view: ClientGame; events: ClientEvent[] }
+  // `receipts` (P09 ledger, server only): the ledger ids of the payouts this command made.
+  | { seq: number; status: 'applied'; view: ClientGame; events: ClientEvent[]; receipts?: string[] }
   | { seq: number; status: 'rejected'; reason: string };
 export interface CommandRecord { requestId: string; seq: number; argsSha256: string; reply: CommandReply }
 // What the server keeps per account besides the game: the last sequence number and the recent answers.

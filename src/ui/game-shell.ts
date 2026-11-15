@@ -437,7 +437,8 @@ export class GameShell {
     });
   }
   // P05-05: the device's calendar day (days since 1970-01-01 in local time). Offline only; P09 uses the server's day.
-  private today(): number { const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000); }
+  // The calendar day the screens show: online the server's (P09 ledger, it stamps the real one), else the device's.
+  private today(): number { const online = this.server?.day; if (online !== undefined) return online; const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000); }
   private showLobby(): void {
     this.migrationNote = '';
     const entering = this.root.dataset.view !== 'lobby';

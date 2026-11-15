@@ -3,6 +3,7 @@ import type { CloudSaveUpload } from '../core/cloud/cloud-save';
 import type { Game } from '../core/save/expedition-save';
 import { sha256Hex } from './accounts';
 import type { RateLimiter } from './rate-limit';
+import type { LedgerRow } from './ledger';
 import { OTHER_DEVICE, type GameHost, type HostState, type HostStore, type ImportRecord, type LogEntry, type Snapshot } from './game-host';
 
 // The Worker forwards the device's session id (checked there) in this header.
@@ -27,7 +28,13 @@ const SCHEMA = [
   'CREATE TABLE IF NOT EXISTS snapshots (seq INTEGER PRIMARY KEY, game TEXT, origin TEXT NOT NULL, at INTEGER NOT NULL)',
   `CREATE TABLE IF NOT EXISTS legacy_import (id INTEGER PRIMARY KEY CHECK (id = 1), request_id TEXT NOT NULL, payload_sha256 TEXT NOT NULL,
      save_version INTEGER NOT NULL, seq INTEGER NOT NULL, payload TEXT NOT NULL, at INTEGER NOT NULL)`,
+  // P09 reward ledger: one row per payout (sweep or quest-board claim); the receipt id is unique, so a payout is recorded
+  // once. Lives in the account's own SQLite (Durable Object storage), not in D1.
+  `CREATE TABLE IF NOT EXISTS reward_ledger (receipt TEXT PRIMARY KEY, seq INTEGER NOT NULL, kind TEXT NOT NULL, period TEXT NOT NULL,
+     ref TEXT NOT NULL, reward TEXT NOT NULL, day INTEGER NOT NULL, at INTEGER NOT NULL)`,
 ];
+// Columns added to the log after P09-02b (an object created earlier gets them on its next start).
+const LOG_COLUMNS: readonly [string, string][] = [['day', 'INTEGER'], ['refused', 'TEXT']];
 const STATE_UPSERT = 'INSERT INTO state (id, game, book, updated_at) VALUES (1, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET game = excluded.game, book = excluded.book, updated_at = excluded.updated_at';
 const SNAPSHOT_UPSERT = 'INSERT INTO snapshots (seq, game, origin, at) VALUES (?, ?, ?, ?) ON CONFLICT(seq) DO UPDATE SET game = excluded.game, origin = excluded.origin, at = excluded.at';
 const gameText = (game: Game | null) => game ? JSON.stringify(game) : null;
@@ -35,6 +42,8 @@ const gameText = (game: Game | null) => game ? JSON.stringify(game) : null;
 export function sqlStore(state: DurableStateLike): HostStore {
   const { sql } = state.storage;
   for (const s of SCHEMA) sql.exec(s);
+  const have = new Set(sql.exec<{ name: string }>('PRAGMA table_info(log)').toArray().map(c => c.name));
+  for (const [name, type] of LOG_COLUMNS) if (!have.has(name)) sql.exec(`ALTER TABLE log ADD COLUMN ${name} ${type}`);
   // P09-02f: the book (up to RECENT_REPLIES stored answers, each with a whole view) is only ever replaced, never changed
   // in place (`processCommand` builds a new one), so it is shared instead of copied on every load and commit; the game
   // is still copied.
@@ -49,19 +58,29 @@ export function sqlStore(state: DurableStateLike): HostStore {
       }
       return cached ? copy(cached) : null;
     },
-    commit(next, e, snapshot) {
+    commit(next, e, snapshot, ledger = []) {
       state.storage.transactionSync(() => {
         sql.exec(STATE_UPSERT, gameText(next.game), JSON.stringify(next.book), e.at);
-        sql.exec('INSERT INTO log (seq, request_id, command, seeds, status, content_version, at) VALUES (?, ?, ?, ?, ?, ?, ?)',
-          e.seq, e.requestId, JSON.stringify(e.command), JSON.stringify(e.seeds), e.status, e.contentVersion, e.at);
+        sql.exec('INSERT INTO log (seq, request_id, command, seeds, status, content_version, at, day, refused) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          e.seq, e.requestId, JSON.stringify(e.command), JSON.stringify(e.seeds), e.status, e.contentVersion, e.at, e.day ?? null, e.refused ?? null);
         if (snapshot) sql.exec(SNAPSHOT_UPSERT, snapshot.seq, gameText(snapshot.game), snapshot.origin, snapshot.at);
+        // A receipt that exists already fails the INSERT and rolls the whole command back.
+        for (const r of ledger) sql.exec('INSERT INTO reward_ledger (receipt, seq, kind, period, ref, reward, day, at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+          r.receipt, r.seq, r.kind, r.period, r.ref, JSON.stringify(r.reward), r.day, r.at);
       });
       cached = copy(next);
     },
+    hasReceipt(receipt) { return sql.exec('SELECT 1 FROM reward_ledger WHERE receipt = ?', receipt).toArray().length > 0; },
+    ledger() {
+      return sql.exec<{ receipt: string; seq: number; kind: LedgerRow['kind']; period: string; ref: string; reward: string; day: number; at: number }>(
+        'SELECT receipt, seq, kind, period, ref, reward, day, at FROM reward_ledger ORDER BY seq, receipt').toArray()
+        .map(r => ({ ...r, reward: JSON.parse(r.reward) as LedgerRow['reward'] }));
+    },
     entries(after = 0) {
-      return sql.exec<{ seq: number; request_id: string; command: string; seeds: string; status: LogEntry['status']; content_version: string; at: number }>(
-        'SELECT seq, request_id, command, seeds, status, content_version, at FROM log WHERE seq > ? ORDER BY seq', after).toArray()
-        .map(r => ({ seq: r.seq, requestId: r.request_id, command: JSON.parse(r.command), seeds: JSON.parse(r.seeds) as number[], status: r.status, contentVersion: r.content_version, at: r.at }));
+      return sql.exec<{ seq: number; request_id: string; command: string; seeds: string; status: LogEntry['status']; content_version: string; at: number; day: number | null; refused: string | null }>(
+        'SELECT seq, request_id, command, seeds, status, content_version, at, day, refused FROM log WHERE seq > ? ORDER BY seq', after).toArray()
+        .map(r => ({ seq: r.seq, requestId: r.request_id, command: JSON.parse(r.command), seeds: JSON.parse(r.seeds) as number[], status: r.status, contentVersion: r.content_version, at: r.at,
+          ...(r.day !== null ? { day: r.day } : {}), ...(r.refused === 'receipt' ? { refused: 'receipt' as const } : {}) }));
     },
     latestSnapshot() {
       const r = sql.exec<{ seq: number; game: string | null; origin: Snapshot['origin']; at: number }>('SELECT seq, game, origin, at FROM snapshots ORDER BY seq DESC LIMIT 1').toArray()[0];
@@ -130,11 +149,13 @@ export async function handleAccountRequest(host: GameHost, request: Request, opt
   }
   const session = request.headers.get(SESSION_HEADER) ?? '';
   // D12: entering on this session takes the account over; any other session now gets 423 until it enters again.
-  if (path === '/session' && request.method === 'POST') { host.claim(session); return reply(host.view()); }
+  // P09 ledger: entering and reading also carry the server's calendar (the device shows the server's day; command answers
+  // stay byte-identical on a retry, so they carry none).
+  if (path === '/session' && request.method === 'POST') { host.claim(session); return reply({ ...host.view(), clock: host.clock() }); }
   const known = (path === '/state' && request.method === 'GET') || ((path === '/command' || path === '/import') && request.method === 'POST');
   if (!known) return reply({ error: 'not_found' }, 404);
   if (!host.admits(session)) return reply(OTHER_DEVICE.body, OTHER_DEVICE.status);
-  if (path === '/state') return reply(host.view());
+  if (path === '/state') return reply({ ...host.view(), clock: host.clock() });
   // P09-02e (D11): the Worker already ran `checkUpload` and holds the save's fingerprint for this account.
   if (path === '/import') {
     let upload: CloudSaveUpload;

@@ -70,11 +70,14 @@ export type CampCommand =
   | { kind: 'brew'; potion: PotionId }
   | { kind: 'claimQuest'; questId: string }
   // P05-05: `day` is the device's calendar day (days since 1970-01-01, local time) and `serial` the sweep count the
-  // device saw (`profile.sweep.count`, 0 before the first). Online, P09 replaces `day` with the server's.
-  | { kind: 'sweep'; mapId: string; hard: boolean; day: number; serial: number }
-  // P05-06: a quest-board reward. `period` is the daily set's day or the week (`weekOf`) and `day` the device's day.
-  | { kind: 'claimBoard'; tab: BoardTab; id: string; period: number; day: number }
-  // `day` (P05-06): the device's calendar day, for the run's quest-board progress (missing = the run counts nowhere).
+  // device saw (`profile.sweep.count`, 0 before the first). Online (P09 ledger) the device leaves `day` out: the server
+  // stamps its own (`CommandContext.clock`) and refuses a command that carries one.
+  | { kind: 'sweep'; mapId: string; hard: boolean; day?: number; serial: number }
+  // P05-06: a quest-board reward. `period` is the daily set's day or the week (`weekOf`) and `day` the device's day
+  // (left out online, as for `sweep`).
+  | { kind: 'claimBoard'; tab: BoardTab; id: string; period: number; day?: number }
+  // `day` (P05-06): the device's calendar day, for the run's quest-board progress (missing = the run counts nowhere;
+  // online the server's day is used and a device day is refused).
   | { kind: 'depart'; mapId?: string; hard: boolean; day?: number };
 // Map (expedition) commands: only while an expedition is running.
 export type RunCommand =
@@ -107,7 +110,10 @@ export type CommandEvent = ProfileEvent | WorldEvent
   | { type: 'settled'; outcome: RunOutcome; run: ExpeditionState };
 // `battles` (P09-02f): how a `battle` command replays its turns; the server passes a `battleMemo` that resolves only the
 // new ones (same resolver, same result). Default: the full replay.
-export interface CommandContext { home: MapDefinition; maps: readonly MapDefinition[]; lookup: EncounterLookup; seeds: SeedSource; battles?: BattleReplay }
+// `clock` (P09 reward ledger): the server's calendar day. When it is given, `sweep`, `claimBoard` and `depart` use it and
+// refuse a command that names its own `day` ('client_day'); without it (offline) they use the device's `day`.
+export interface CommandContext { home: MapDefinition; maps: readonly MapDefinition[]; lookup: EncounterLookup; seeds: SeedSource; battles?: BattleReplay; clock?: { day: number } }
+const DATED: ReadonlySet<CommandKind> = new Set(['sweep', 'claimBoard', 'depart']);
 export type CommandResult = { game: Game; events: CommandEvent[] } | { rejected: string };
 export const isRejected = (r: CommandResult): r is { rejected: string } => 'rejected' in r;
 
@@ -129,7 +135,7 @@ const SPECS: Record<CommandKind, Spec> = {
   bossTarget: { target: BOSS_POWERS }, huntTarget: { target: opt('str') }, collectOverflow: { ids: 'ints' },
   recycleStored: { source: ['bag', 'overflow'], ids: 'ints' }, expandStorage: {}, salvage: { uids: 'ints' }, enhance: { uid: 'int', target: 'int' },
   lockEquipment: { uid: 'int' }, fuse: { uid: 'int', donors: opt('ints') }, raiseItemLevel: { uid: 'int', target: 'int' }, reroll: { uid: 'int', index: 'int' },
-  brew: { potion: POTION_IDS }, claimQuest: { questId: 'str' }, sweep: { mapId: 'str', hard: 'bool', day: 'int', serial: 'int' }, claimBoard: { tab: ['daily', 'weekly', 'contract'], id: 'str', period: 'int', day: 'int' },
+  brew: { potion: POTION_IDS }, claimQuest: { questId: 'str' }, sweep: { mapId: 'str', hard: 'bool', day: opt('int'), serial: 'int' }, claimBoard: { tab: ['daily', 'weekly', 'contract'], id: 'str', period: 'int', day: opt('int') },
   depart: { mapId: opt('str'), hard: 'bool', day: opt('int') },
   move: { dir: DIRECTIONS }, travel: { to: 'point' }, rest: {}, revive: { heroId: 'str' }, swapMembers: { a: 'str', b: 'str' },
   setLane: { heroId: 'str', lane: LANES, other: opt('str') }, moveMember: { heroId: 'str' }, runPreset: { slot: 'int' }, withdraw: {}, openChest: {},
@@ -208,6 +214,12 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
   if (!game) return reject('noGame');
   if (game.run) return reject('inRun');
   const p = game.profile;
+  // P09 ledger: the calendar day a dated command runs on (the server's when it gives one, else the device's).
+  let day: number | undefined;
+  if (DATED.has(cmd.kind)) {
+    const own = (cmd as { day?: number }).day;
+    if (ctx.clock) { if (own !== undefined) return reject('client_day'); day = ctx.clock.day; } else day = own;
+  }
   switch (cmd.kind) {
     case 'hire': return camp(hire(p, map, lookup, cmd.index));
     case 'refreshBoard': return camp(refreshBoard(p, map));
@@ -244,8 +256,8 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
     case 'reroll': return camp(reroll(p, map, cmd.uid, cmd.index));
     case 'brew': return camp(brew(p, map, cmd.potion));
     case 'claimQuest': return camp(claimQuest(p, map, cmd.questId));
-    case 'sweep': { const m = maps.find(x => x.id === cmd.mapId); return m ? camp(sweep(p, m, cmd.hard, cmd.day, cmd.serial)) : reject('unknown'); }
-    case 'claimBoard': return featureOpen(p, maps, 'quests') ? camp(claimBoard(p, maps, cmd.tab, cmd.id, cmd.period, cmd.day)) : reject('locked');
+    case 'sweep': { const m = maps.find(x => x.id === cmd.mapId); return m ? camp(sweep(p, m, cmd.hard, day ?? -1, cmd.serial)) : reject('unknown'); }
+    case 'claimBoard': return featureOpen(p, maps, 'quests') ? camp(claimBoard(p, maps, cmd.tab, cmd.id, cmd.period, day ?? -1)) : reject('locked');
     case 'depart': {
       if (departureBlocked(p)) return reject('storage');
       // The prologue always starts on the first map; otherwise the named open map (default: the furthest open one).
@@ -253,7 +265,7 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
       const chosen = !p.tutorialDone ? maps[0]! : open.find(m => m.id === cmd.mapId) ?? open.at(-1)!;
       if (cmd.mapId && chosen.id !== cmd.mapId) return reject('mapClosed');
       if (cmd.hard) { const reason = hardReason(p, maps, chosen.id); if (reason) return reject(reason); }
-      const out = depart(p, chosen, lookup, ctx.seeds.next(), cmd.hard ? { maps } : undefined, cmd.day);
+      const out = depart(p, chosen, lookup, ctx.seeds.next(), cmd.hard ? { maps } : undefined, day);
       const events: CommandEvent[] = [{ type: 'departed', mapId: chosen.id, hard: cmd.hard }];
       // A first expedition meets Vargoth's vanguard before the first step.
       const prologue = startPrologue(out.run, chosen);
