@@ -498,6 +498,25 @@
     "download": 9564568
    },
    "bossFx": false
+  },
+  {
+   "id": "world-boss-warden",
+   "foes": 6,
+   "reserves": 3,
+   "foeSheets": [
+    "wisp",
+    "crawler",
+    "sentinel"
+   ],
+   "four": {
+    "decoded": 30811088,
+    "download": 9528005
+   },
+   "five": {
+    "decoded": 35315336,
+    "download": 10973922
+   },
+   "bossFx": true
   }
  ]
 }

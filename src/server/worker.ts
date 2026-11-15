@@ -8,6 +8,7 @@ import { purgeDue } from './deletion';
 import { durableGate, handleLimitRequest, RateLimiter } from './rate-limit';
 import { GameHost, type GameContext } from './game-host';
 import { GOOGLE_JWKS_URL, googleVerifier, type GoogleVerifier } from './google';
+import { handleBossRequest, sqlBossStore, WorldBossHost } from './world-boss';
 
 // P09-02b Cloudflare entry (bundled by Wrangler from cloudflare/wrangler.json): the Worker and the per-account
 // Durable Object class `GameAccount` (SQLite storage). Bindings and vars are declared in wrangler.json.
@@ -17,7 +18,7 @@ interface DurableObjectNamespaceLike {
   get(id: unknown): { fetch(request: Request): Promise<Response> };
 }
 export interface Env {
-  DB: D1Like; GAME: DurableObjectNamespaceLike; LIMIT?: DurableObjectNamespaceLike;
+  DB: D1Like; GAME: DurableObjectNamespaceLike; LIMIT?: DurableObjectNamespaceLike; WORLD_BOSS?: DurableObjectNamespaceLike;
   CONTENT_VERSION?: string; ALLOWED_ORIGINS?: string; GOOGLE_CLIENT_ID?: string; LEGACY_IMPORT?: string; LEGACY_IMPORT_UNTIL?: string;
 }
 interface ExecutionContextLike { waitUntil(promise: Promise<unknown>): void }
@@ -67,6 +68,13 @@ export class RateLimit {
   fetch(request: Request): Promise<Response> { return handleLimitRequest(this.limiter, request, Date.now()); }
 }
 
+// P11-04: the one World Boss object (name `world-boss`): each week's shared HP and the hits taken (world-boss.ts).
+export class WorldBoss {
+  private readonly host: WorldBossHost;
+  constructor(state: DurableStateLike) { this.host = new WorldBossHost(sqlBossStore(state), chapterOne.worldBoss); }
+  fetch(request: Request): Promise<Response> { return handleBossRequest(this.host, request); }
+}
+
 async function purgeGame(env: Env, accountId: string): Promise<boolean> {
   const r = await env.GAME.get(env.GAME.idFromName(accountId)).fetch(new Request('https://game/purge', { method: 'POST' }));
   return r.status === 200;
@@ -83,6 +91,7 @@ export default {
       now: () => Date.now(),
       limiter,
       ...(env.LIMIT ? { gate: durableGate(env.LIMIT) } : {}),
+      ...(env.WORLD_BOSS ? { boss: env.WORLD_BOSS.get(env.WORLD_BOSS.idFromName('world-boss')) } : {}),
       legacyImport: legacyImportOpen(env, Date.now()),
       ...(ctx ? { defer: (work: Promise<unknown>) => ctx.waitUntil(work) } : {}),
       ...(verify ? { google: verify } : {}),

@@ -7,18 +7,24 @@ import { MAPS } from '../../src/content/world/maps';
 import { boardBook, boardClaimReason, claimBoard } from '../../src/core/world/board';
 import { sweep, sweepReason, sweepBook } from '../../src/core/world/sweep';
 import { tomeCount } from '../../src/core/world/tomes';
+import { claimWorldBoss, wbBook, wbClaimReason, wbEncounter, worldBossAttempt } from '../../src/core/world/world-boss';
+import { weekOf } from '../../src/core/world/board';
+import { encounterById } from '../../src/content/encounters/catalog';
+import { wbTurns } from '../fixtures/world-boss';
 import type { MapDefinition, Profile } from '../../src/core/world/types';
 import { playExpedition, simulateCampaign, type Policy, type Style } from './balance-sim';
 
-export type Source = 'run' | 'drops' | 'sweep' | 'board';
+export type Source = 'run' | 'drops' | 'sweep' | 'board' | 'boss';
 export interface Income { ore: number; gold: number; dust: number; shard: number; tomes: number }
 export interface WeekPlan {
   /** Weekday indexes (0 = Monday) with a 20–30 minute session: one expedition. */ play: readonly number[];
   /** Weekday indexes with a short login: sweep and claim only. */ login?: readonly number[];
   sweep: boolean; board: boolean; hard?: boolean;
+  /** P11-04: one World Boss attempt per session (up to the weekly allowance); the shared milestones are taken as reached. */ boss?: boolean;
 }
 export interface WeekReport { income: Record<Source, Income>; spent: Income; runs: number; complete: number; items: number; sweeps: number; claims: number; blocked: Record<string, number>;
-  /** At the week's end, over the field team: stars, skill levels above 1 and forge pluses summed. */ stars: number; skills: number; plus: number }
+  /** At the week's end, over the field team: stars, skill levels above 1 and forge pluses summed. */ stars: number; skills: number; plus: number;
+  /** P11-04: World Boss damage landed this week. */ bossDamage: number }
 
 const zero = (): Income => ({ ore: 0, gold: 0, dust: 0, shard: 0, tomes: 0 });
 const home = MAPS[0]!; const last = MAPS[MAPS.length - 1]!;
@@ -55,6 +61,22 @@ function claimAll(p: Profile, day: number, r: WeekReport): Profile {
   return p;
 }
 
+// P11-04: one attempt with the advisor, then every shared milestone of this and last week (the server is assumed to
+// have reached them: the most a player can take).
+function bossDay(p: Profile, day: number, r: WeekReport): Profile {
+  const week = weekOf(day); const w = wbBook(p, week).weeks.at(-1)!;
+  if (w.attempts < home.worldBoss.attempts) {
+    const data = wbEncounter(p, home, encounterById)!; const res = worldBossAttempt(p, MAPS, encounterById, week, w.attempts + 1, wbTurns(data, home.worldBoss.maxRounds));
+    if (res.event.type === 'wbAttempt') { add(r.income.boss, p, res.profile); p = res.profile; r.bossDamage += res.event.damage; } else { const why = `boss:${res.event.type === 'blocked' ? res.event.reason : res.event.type}`; r.blocked[why] = (r.blocked[why] ?? 0) + 1; }
+  }
+  for (const k of [week - 1, week]) for (const m of home.worldBoss.shared) {
+    const shared = { week: k, hp: 1, left: 0 };
+    if (wbClaimReason(p, MAPS, m.id, k, week, shared)) continue;
+    const next = claimWorldBoss(p, MAPS, m.id, k, week, shared).profile; add(r.income.boss, p, next); p = next;
+  }
+  return p;
+}
+
 /** The endgame company of one campaign (maps 1→3, two normal replays and one hard try), ready to be played weekly. */
 export function endgameCompany(seed: number, policy: Policy, style: Style): Profile {
   return simulateCampaign(seed, policy, style, 2, 1).profile;
@@ -64,7 +86,7 @@ export function endgameCompany(seed: number, policy: Policy, style: Style): Prof
 export function simulateWeeks(start: Profile, seed: number, policy: Policy, style: Style, plan: WeekPlan, weeks: number): WeekReport[] {
   let p = start; const out: WeekReport[] = [];
   for (let w = 0; w < weeks; w++) {
-    const r: WeekReport = { income: { run: zero(), drops: zero(), sweep: zero(), board: zero() }, spent: zero(), runs: 0, complete: 0, items: 0, sweeps: 0, claims: 0, blocked: {}, stars: 0, skills: 0, plus: 0 };
+    const r: WeekReport = { income: { run: zero(), drops: zero(), sweep: zero(), board: zero(), boss: zero() }, spent: zero(), runs: 0, complete: 0, items: 0, sweeps: 0, claims: 0, blocked: {}, stars: 0, skills: 0, plus: 0, bossDamage: 0 };
     for (let wd = 0; wd < 7; wd++) {
       const day = MONDAY + w * 7 + wd; const session = plan.play.includes(wd);
       if (!session && !plan.login?.includes(wd)) continue;
@@ -79,6 +101,7 @@ export function simulateWeeks(start: Profile, seed: number, policy: Policy, styl
         r.income.drops.ore += x.drops.ore; r.income.drops.dust += x.drops.dust; r.items += x.drops.count;
         p = x.profile; r.runs++; if (x.outcome === 'complete') r.complete++;
       }
+      if (session && plan.boss) p = bossDay(p, day, r);
       if (plan.board) p = claimAll(p, day, r);
     }
     const team = p.party.deployed.map(id => p.members[id]!);

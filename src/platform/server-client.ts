@@ -16,7 +16,7 @@ export const SESSION_HEADER = 'X-Fateweave-Session';
 export interface ServerClock { day: number; next: number; now: number }
 export interface ServerState { lastSeq: number; view: ClientGame | null; clock?: ServerClock }
 // Commands whose calendar day the server stamps itself (P09 ledger); the device leaves its own day out.
-const DATED_KINDS: ReadonlySet<string> = new Set(['sweep', 'claimBoard', 'depart']);
+const DATED_KINDS: ReadonlySet<string> = new Set(['sweep', 'claimBoard', 'worldBoss', 'claimWorldBoss', 'depart']);
 // `deleting` (P09-02g): the account waits for deletion; the game refuses until the player cancels in the account panel.
 export type ServerFailure = 'content_version' | 'unauthorized' | 'network' | 'server' | 'deleting';
 export type ServerOutcome =
@@ -64,6 +64,9 @@ export type ReportCode = 'js_error' | 'promise_error' | 'network' | 'server' | '
 export type ReportPlace = 'title' | 'commander' | 'lobby' | 'world' | 'battle' | 'account' | 'unknown';
 export type FeedbackCategory = 'bug' | 'balance' | 'idea' | 'other';
 export interface FeedbackRow { id: number; accountId: string; category: string; text: string; place: string; contentVersion: string; at: number }
+// P11-04: `GET /v1/worldboss`.
+export interface SharedBoss { week: number; hp: number; left: number; accounts: number }
+export interface WorldBossStatus { week: number; current: SharedBoss | null; last: SharedBoss | null }
 export interface TelemetryRow { day: string; kind: string; key: string; count: number }
 const SERVER_KEY = 'fateweave-server';
 
@@ -212,6 +215,14 @@ export class ServerClient {
     const state = await r.json() as ServerState;
     this.lastSeq = state.lastSeq; this.noteClock(state.clock);
     return { kind: 'state', state };
+  }
+
+  // P11-04: the World Boss's shared HP this week and last (`null` when that week has no record or the server has none).
+  async worldBoss(): Promise<WorldBossStatus | null> {
+    const token = this.memoryToken ?? this.token();
+    if (!token) return null;
+    const r = await this.request('/v1/worldboss', { method: 'GET', headers: this.headers(token, false) });
+    return r?.status === 200 ? await r.json() as WorldBossStatus : null;
   }
 
   // ---- P09-02d account ----

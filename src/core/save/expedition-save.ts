@@ -13,7 +13,8 @@ import { classSkills } from '../world/tomes';
 import { BANK_CAP, POTION_CAP, RIFT_CORE_CAP, RUN_CAP, TOME_CAP } from '../world/caps';
 import { MAX_SWEEP_COUNT, MAX_SWEEP_DAY } from '../world/sweep';
 import { BOARD_KINDS, MAX_BOARD_COUNT, MAX_BOARD_DAY, objectiveDone, weekOf } from '../world/board';
-import { TOME_LINES, TOME_SIZES, type BoardBook, type BoardSet, type SweepBook, type TomeBag } from '../world/types';
+import { MAX_WB_DAMAGE, MAX_WB_WEEK } from '../world/world-boss';
+import { TOME_LINES, TOME_SIZES, type BoardBook, type BoardSet, type SweepBook, type TomeBag, type WorldBossBook } from '../world/types';
 import type { EventChoice, GearSlot, GearStat, Item, MapEventDefinition, MemberProgress, Potions, Talents } from '../world/types';
 import { GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, type ShopItemId } from '../world/types';
 
@@ -157,7 +158,9 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // Optional, so a v61 save loads unchanged (missing = never swept).
 // v63 (P05-06): the profile may carry the quest board book `board` (open daily/weekly sets, counts, claimed tasks and
 // the week's contracts) and a run the device day it set out on (`day`). Optional, so a v62 save loads unchanged.
-export const SAVE_VERSION = 63;
+// v64 (P11-04): the profile may carry the World Boss book `worldBoss` (this week and last: finished attempts, damage,
+// milestones paid). Optional, so a v63 save loads unchanged (missing = never fought).
+export const SAVE_VERSION = 64;
 // Trees refunded by older migrations were legal under star points (at most ★5 = 4 extra).
 const LEGACY_STAR_POINTS = 4;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
@@ -377,6 +380,28 @@ function boardOf(v: unknown, map: MapDefinition, maps: readonly MapDefinition[])
     if (o ? !objectiveDone(o, w) : !w.jobs[id]) bad();
   }
   return { day, days, weeks };
+}
+// P11-04 (v64): the World Boss book: one or two consecutive weeks (oldest first); attempts within the weekly allowance,
+// damage at most the boss's HP per attempt, best within the total, and paid milestones known and reached (a personal
+// one by its attempt count; a shared one only with an attempt that week).
+function worldBossOf(v: unknown, map: MapDefinition): WorldBossBook {
+  const b = obj(v); const r = map.worldBoss; const bad = (): never => { throw new Error('Invalid world boss'); };
+  if (Object.keys(b).length !== 1 || !Array.isArray(b.weeks) || !b.weeks.length || b.weeks.length > 2) bad();
+  const weeks = (b.weeks as unknown[]).map(raw => {
+    const w = obj(raw);
+    if (Object.keys(w).length !== 5 || !isInt(w.week, 0, MAX_WB_WEEK) || !isInt(w.attempts, 0, r.attempts) || !isInt(w.damage, 0, MAX_WB_DAMAGE)
+      || !isInt(w.best, 0, w.damage as number) || !Array.isArray(w.claimed) || new Set(w.claimed).size !== w.claimed.length) bad();
+    const attempts = w.attempts as number;
+    if ((attempts === 0) !== (w.damage === 0) || (attempts > 0 && (w.best as number) < 1)) bad();
+    for (const id of w.claimed as unknown[]) {
+      const personal = r.personal.find(m => m.id === id); const shared = r.shared.some(m => m.id === id);
+      if (personal ? attempts < personal.attempts : !shared || attempts === 0) bad();
+    }
+    if (r.personal.some(m => attempts >= m.attempts && !(w.claimed as string[]).includes(m.id))) bad();
+    return { week: w.week as number, attempts, damage: w.damage as number, best: w.best as number, claimed: [...w.claimed as string[]] };
+  });
+  if (weeks.length === 2 && weeks[0]!.week !== weeks[1]!.week - 1) bad();
+  return { weeks };
 }
 function idList(v: unknown, allowed: readonly string[]): string[] {
   if (!Array.isArray(v) || v.some(id => !allowed.includes(id)) || new Set(v).size !== v.length) throw new Error('Invalid run');
@@ -690,6 +715,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (clearedHard?.some(id => !cleared.includes(id))) throw new Error('Invalid profile');
   const sweep = p.sweep === undefined ? undefined : sweepOf(p.sweep, map, maps, cleared);
   const board = p.board === undefined ? undefined : boardOf(p.board, map, maps);
+  const worldBoss = p.worldBoss === undefined ? undefined : worldBossOf(p.worldBoss, map);
   // v44 → v45 (P02): the fifth field slot is filled from the reserve, and a reserve above the chapter's slots steps into
   // the field first (there is always room: four deployed at most before v45). Nobody leaves the team.
   const slots = reserveSlots({ cleared, ...(veteran ? { veteran: true as const } : {}) }, map);
@@ -697,7 +723,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (party.reserve.length > slots) throw new Error('Invalid party');
   return {...(presets ? { presets } : {}),...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(boardFeatured ? { boardFeatured: [...boardFeatured as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     ...(storyShards ? { storyShards } : {}), ...(treeReset?.length ? { treeReset } : {}),
-    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}), ...(sweep ? { sweep } : {}), ...(board ? { board } : {}),
+    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}), ...(sweep ? { sweep } : {}), ...(board ? { board } : {}), ...(worldBoss ? { worldBoss } : {}),
     bank: { ore: bank.ore as number, gold: bank.gold as number, shard: bank.shard as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, POTION_CAP), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -914,7 +940,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
   if (version < 60 && version >= 5) { const p = obj(envelope.profile ?? {}); migrateTreePoints(envelope, map, maps.length ? maps : [map], version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps).length : undefined); }
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

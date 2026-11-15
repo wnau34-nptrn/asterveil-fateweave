@@ -10,7 +10,8 @@ import {
 import type { GoogleVerifier } from './google';
 import { cancelDeletion, DELETE_CONFIRM, requestDeletion } from './deletion';
 import { ipKey, RateLimiter, type RateGate } from './rate-limit';
-import { SESSION_HEADER, TELEMETRY_HEADER } from './account-object';
+import { BOSS_HEADER, HITS_HEADER, SESSION_HEADER, TELEMETRY_HEADER } from './account-object';
+import type { PendingHit } from './ledger';
 import { MAX_COMMAND_BYTES } from './game-host';
 
 // P09-02b: the Worker's front door. Routing, request size/shape limits, content-version check, guest accounts, bearer
@@ -33,6 +34,8 @@ export interface ApiDeps {
   legacyImport?: boolean;
   // P09-03: runs work after the answer (the Worker's `ctx.waitUntil`); without it the work is awaited (tests).
   defer?(work: Promise<unknown>): void;
+  // P11-04: the shared World Boss object (absent: no shared HP; attempts still count for their players, claims refused).
+  boss?: AccountGame;
 }
 
 export const CONTENT_HEADER = 'X-Fateweave-Content';
@@ -101,7 +104,7 @@ export async function handle(request: Request, deps: ApiDeps): Promise<Response>
 }
 
 const ROUTES: Record<string, 'GET' | 'POST'> = {
-  '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/command': 'POST', '/v1/verify': 'POST', '/v1/import': 'POST',
+  '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/command': 'POST', '/v1/worldboss': 'GET', '/v1/verify': 'POST', '/v1/import': 'POST',
   '/v1/account': 'GET', '/v1/link': 'POST', '/v1/signin': 'POST', '/v1/recovery-code': 'POST', '/v1/recover': 'POST', '/v1/sessions/revoke': 'POST',
   '/v1/account/delete': 'POST', '/v1/account/cancel': 'POST',
   '/v1/token/rotate': 'POST', '/v1/telemetry': 'POST', '/v1/feedback': 'POST', '/v1/admin/telemetry': 'GET', '/v1/admin/feedback': 'GET',
@@ -139,19 +142,22 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
   const writes = path === '/v1/command';
   if (!deps.limiter.allow(`${writes ? 'cmd' : 'read'}:${accountId}`, writes ? LIMITS.commandPerSecond : LIMITS.readPerSecond, 1000, now)) return limited(1);
   const game = deps.game(accountId);
+  if (path === '/v1/worldboss') return worldBossRoute(deps);
   const session = request.headers.get(SESSION_HEADER) ?? '';
   if (!SESSION.test(session)) return error('session_required', 400);
   const sessionHeaders = { [SESSION_HEADER]: session };
   if (path === '/v1/session') {
-    const entered = await game.fetch(new Request('https://game/session', { method: 'POST', headers: sessionHeaders }));
+    const entered = await deliverHits(deps, accountId, game, await game.fetch(new Request('https://game/session', { method: 'POST', headers: sessionHeaders })));
     if (entered.status === 200) await track(deps, [{ kind: 'session', key: 'enter' }], now);
     return entered;
   }
-  if (path === '/v1/state') return game.fetch(new Request('https://game/state', { headers: sessionHeaders }));
+  if (path === '/v1/state') return deliverHits(deps, accountId, game, await game.fetch(new Request('https://game/state', { headers: sessionHeaders })));
   if (!/^application\/json\b/i.test(request.headers.get('Content-Type') ?? '')) return error('unsupported_media_type', 415);
   const body = await readLimited(request, MAX_COMMAND_BYTES);
   if (body === null) return error('too_large', 413);
-  const answer = await game.fetch(new Request('https://game/command', { method: 'POST', body, headers: { 'Content-Type': 'application/json', ...sessionHeaders } }));
+  const boss = await bossFor(deps, body);
+  const answer = await deliverHits(deps, accountId, game,
+    await game.fetch(new Request('https://game/command', { method: 'POST', body, headers: { 'Content-Type': 'application/json', ...sessionHeaders, ...(boss ? { [BOSS_HEADER]: boss } : {}) } })));
   const items = answer.headers.get(TELEMETRY_HEADER);
   if (!items) return answer;
   const out = new Response(answer.body, answer);
@@ -160,6 +166,48 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
   try { parsed = JSON.parse(items) as TelemetryItem[]; } catch { /* nothing counted */ }
   await track(deps, parsed, now);
   return out;
+}
+
+// P11-04: a `claimWorldBoss` runs with the shared HP of the week it names, read from the World Boss object first (the
+// account's object records it in its log so the claim replays the same). Any other command, or no object: nothing.
+async function bossFor(deps: ApiDeps, body: string): Promise<string | undefined> {
+  if (!deps.boss) return undefined;
+  let week: unknown;
+  try { const v = JSON.parse(body) as { command?: { kind?: unknown; week?: unknown } }; if (v.command?.kind !== 'claimWorldBoss') return undefined; week = v.command.week; } catch { return undefined; }
+  if (!Number.isSafeInteger(week)) return undefined;
+  try {
+    const r = await deps.boss.fetch(new Request(`https://boss/status?week=${week as number}`));
+    const status = r.ok ? (await r.json() as { status: { week: number; hp: number; left: number } | null }).status : null;
+    return status ? JSON.stringify({ week: status.week, hp: status.hp, left: status.left }) : undefined;
+  } catch { return undefined; }
+}
+// P11-04: hands the account's waiting World Boss hits to the shared object and marks the ones it took. Never changes the
+// answer; a failure leaves the hits waiting for the next answer (they are taken once, however often they are sent).
+async function deliverHits(deps: ApiDeps, accountId: string, game: AccountGame, answer: Response): Promise<Response> {
+  const raw = answer.headers.get(HITS_HEADER);
+  if (!raw) return answer;
+  const out = new Response(answer.body, answer);
+  out.headers.delete(HITS_HEADER);
+  if (!deps.boss) return out;
+  try {
+    const hits = (JSON.parse(raw) as PendingHit[]).map(h => ({ id: `${accountId}:${h.id}`, week: h.week, account: accountId, damage: h.damage }));
+    const r = await deps.boss.fetch(new Request('https://boss/contribute', { method: 'POST', body: JSON.stringify({ hits }), headers: { 'Content-Type': 'application/json' } }));
+    if (r.ok) {
+      const { taken } = await r.json() as { taken: string[] };
+      const ids = taken.filter(id => id.startsWith(`${accountId}:`)).map(id => id.slice(accountId.length + 1));
+      if (ids.length) await game.fetch(new Request('https://game/hits/taken', { method: 'POST', body: JSON.stringify({ ids }), headers: { 'Content-Type': 'application/json' } }));
+    }
+  } catch { /* left waiting */ }
+  return out;
+}
+// P11-04: the shared HP of this week and last week, for the World Boss screen.
+async function worldBossRoute(deps: ApiDeps): Promise<Response> {
+  if (!deps.boss) return error('world_boss_unavailable', 503);
+  const now = await deps.boss.fetch(new Request('https://boss/status'));
+  if (!now.ok) return error('world_boss_unavailable', 503);
+  const current = await now.json() as { week: number; status: unknown };
+  const last = await deps.boss.fetch(new Request(`https://boss/status?week=${current.week - 1}`));
+  return json({ week: current.week, current: current.status, last: last.ok ? (await last.json() as { status: unknown }).status : null });
 }
 
 // P09-02f: the replay audit is for admins only (an account with a row in D1 `admins`, added by the owner; no secret).

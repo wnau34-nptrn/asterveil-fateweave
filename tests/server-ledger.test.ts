@@ -238,7 +238,11 @@ describe('P09 ledger: device side', () => {
     await c.send({ kind: 'claimBoard', tab: 'daily', id: 'd-patrol', period: D, day: D + 3 });
     await c.send({ kind: 'depart', hard: false, day: D + 3 });
     await c.send({ kind: 'refreshBoard' });
-    expect(sent).toEqual([{ kind: 'sweep', mapId: home.id, hard: false, serial: 0 }, { kind: 'claimBoard', tab: 'daily', id: 'd-patrol', period: D }, { kind: 'depart', hard: false }, { kind: 'refreshBoard' }]);
+    // P11-04: the World Boss commands are dated the same way.
+    await c.send({ kind: 'worldBoss', attempt: 1, commands: [], day: D + 3 });
+    await c.send({ kind: 'claimWorldBoss', id: 's-50', week: 1, day: D + 3 });
+    expect(sent).toEqual([{ kind: 'sweep', mapId: home.id, hard: false, serial: 0 }, { kind: 'claimBoard', tab: 'daily', id: 'd-patrol', period: D }, { kind: 'depart', hard: false }, { kind: 'refreshBoard' },
+      { kind: 'worldBoss', attempt: 1, commands: [] }, { kind: 'claimWorldBoss', id: 's-50', week: 1 }]);
     // Two hours later by the device's own clock the server's midnight has passed: the screens move on to D+1.
     device.t += 2 * HOUR + 1;
     expect(c.day).toBe(D + 1);

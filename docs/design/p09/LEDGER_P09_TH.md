@@ -21,6 +21,7 @@
 ## ไม่ได้ทำ (ตามขอบเขต)
 
 - ~~ไม่มีเศษกลาง~~ → ทำแล้วใน P09 ตอน 2: เศษกลางรายสัปดาห์ 10 จากงานรายสัปดาห์สามงาน ใช้ receipt `board:weekly:w<สัปดาห์>:<id>` เดิม ([ผล](../../validation/p09-shards-2026-11-15/README_TH.md)) · ยังไม่มี gacha/ตั๋วฟรี
+- P11-04: World Boss ใช้ ledger เดียวกัน `wb:w<สัปดาห์>:a<ครั้ง>` / `wb:w<สัปดาห์>:<milestone>` ([design](../WORLD_BOSS_P11_04_TH.md))
 - ไม่มีหน้าผู้ดูแลสำหรับดู ledger (อ่านได้ผ่าน `HostStore.ledger()`; เพิ่มใน `/v1/verify` หรือ admin view ภายหลัง)
 - ตัวเลขรางวัล/เพดาน P04-06 ไม่เปลี่ยน (เจ้าของยังไม่ตอบเรื่อง target share / login-only)
 

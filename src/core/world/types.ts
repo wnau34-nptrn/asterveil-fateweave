@@ -1,4 +1,4 @@
-import type { ActionId, BossPower, Command, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule } from '../battle/types';
+import type { ActionId, BossPower, Command, GearSpecial, HeroDefinition, Outcome, PassiveId, TalentCap, TalentRule } from '../battle/types';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export interface Point { x: number; y: number }
@@ -95,6 +95,8 @@ export interface MapDefinition {
   sideQuests: readonly SideQuestDefinition[];
   sweep: SweepRules;
   board: BoardRules;
+  // P11-04 World Boss (shared by every map, `content/world/rules.ts`).
+  worldBoss: WorldBossRules;
   herbs: readonly (Point & { id: string })[];
   events: readonly MapEventDefinition[];
   eventRules: EventRules;
@@ -337,6 +339,21 @@ export interface BoardRules { keepDays: number; smallTeam: number; daily: readon
 export interface BoardSet { n: Partial<Record<BoardKind, number>>; claimed: string[] }
 // The board book (save v63). `day` is the newest calendar day the book was brought up to; `days` the open daily sets
 // (oldest first, the last is `day`); `weeks` this week and, while still claimable, the week before (oldest first).
+// P11-04 World Boss (docs/design/WORLD_BOSS_P11_04_TH.md, draft numbers). One boss a week (weeks as `weekOf`), fought
+// (`encounterId`, a catalog encounter) from the camp with the field team at full HP on the deterministic resolver; an attempt lasts at most `maxRounds`
+// rounds and counts the boss's own HP lost. `attempts` free attempts a week (no daily obligation, OD-06); each finished
+// attempt that hurt the boss pays `attemptReward`; `personal` milestones pay once a week at that many finished attempts;
+// `shared` milestones pay once a week when the whole server has taken `percent` of the week's shared HP (online only).
+// `hp`: the week's shared HP is fixed when the week opens from last week's participants (`perAccount` each), clamped.
+export interface WorldBossRules {
+  encounterId: string; attempts: number; maxRounds: number; attemptReward: SweepReward;
+  personal: readonly { id: string; attempts: number; reward: SweepReward }[];
+  shared: readonly { id: string; percent: number; reward: SweepReward }[];
+  hp: { perAccount: number; min: number; max: number };
+}
+// One week of the book: finished attempts, total and best damage, milestones paid (personal and shared ids).
+export interface WorldBossWeek { week: number; attempts: number; damage: number; best: number; claimed: string[] }
+export interface WorldBossBook { weeks: WorldBossWeek[] }
 export interface BoardBook { day: number; days: (BoardSet & { day: number })[]; weeks: (BoardSet & { week: number; jobs: Record<string, string[]> })[] }
 // A map's boss tomes (maps 2–3): `boss` every win, `first` added the first time the map is cleared.
 export interface MapTomes { boss: { medium: number; small: number }; first: { large: number; core: number } }
@@ -445,6 +462,8 @@ export interface Profile {
   sweep?: SweepBook;
   // P05-06 (save v63): the quest board's open periods (missing = nothing counted yet).
   board?: BoardBook;
+  // P11-04 (save v64): the World Boss weeks (this week and, while its shared rewards are claimable, the one before).
+  worldBoss?: WorldBossBook;
   // P04-02 (OD-22): story recruits already compensated (or met through the story), each at most once. Missing = none.
   storyShards?: string[];
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
@@ -481,6 +500,10 @@ export type ProfileEvent =
   | { type: 'claimed'; questId: string }
   | { type: 'swept'; mapId: string; hard: boolean; reward: SweepReward; supply: number; left: number }
   | { type: 'boardClaimed'; tab: BoardTab; id: string; period: number; reward: SweepReward }
+  // P11-04: one finished World Boss attempt (`damage` to the boss, `reward` the attempt's own and `milestones` the
+  // personal milestones it reached) and a shared milestone claimed.
+  | { type: 'wbAttempt'; week: number; attempt: number; damage: number; rounds: number; outcome: Outcome; reward: SweepReward; milestones: { id: string; reward: SweepReward }[] }
+  | { type: 'wbClaimed'; week: number; id: string; reward: SweepReward }
   | { type: 'bought'; item: ShopItemId; heroId?: string; uid?: number }
   | { type: 'refreshed' };
 export interface ProfileResult { profile: Profile; event: ProfileEvent }

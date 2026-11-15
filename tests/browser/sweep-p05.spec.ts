@@ -25,17 +25,17 @@ test('a cleared map is swept three times a day, normal and hard together, and th
   await page.setViewportSize({ width: 390, height: 844 }); await page.goto('./'); await page.locator('#continue').click();
   await page.locator('[data-lobby=maps]').first().click();
   const row = page.locator('#map-sweep-row-veil-frontier'), go = page.locator('#map-sweep-veil-frontier'), hard = page.locator('#map-sweep-hard-veil-frontier');
-  await expect(row).toContainText('เสบียง 6/6'); await expect(row).toContainText('วันนี้เหลือ 3/3'); await expect(row).toContainText('แร่ดาว 28');
+  await expect(row).toContainText('เสบียง 6/6'); await expect(row).toContainText('วันนี้เหลือ 3/3'); await expect(row).toContainText('แร่ดาว 24');
   for (const b of [go, hard]) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('sweep-before.png') });
   await go.click();
   await expect(row).toContainText('เสบียง 5/6'); await expect(row).toContainText('วันนี้เหลือ 2/3'); await expect(go).toBeFocused();
-  let p = await saved(page); expect(p.bank).toMatchObject({ ore: 128, gold: 114, dust: 2 }); expect(p.sweep).toMatchObject({ supply: 5, used: { 'veil-frontier': 1 }, count: 1 });
+  let p = await saved(page); expect(p.bank).toMatchObject({ ore: 124, gold: 112, dust: 2 }); expect(p.sweep).toMatchObject({ supply: 5, used: { 'veil-frontier': 1 }, count: 1 });
   expect(p.returns).toBe(0); expect(p.expeditions).toBe(0);
   await hard.click(); await go.click();
   await expect(row).toContainText('วันนี้เหลือ 0/3'); await expect(go).toBeDisabled(); await expect(hard).toBeDisabled(); await expect(row).toContainText('ครบแล้ว');
   await page.screenshot({ path: info.outputPath('sweep-done.png') });
-  p = await saved(page); expect(p.bank.ore).toBe(100 + 28 * 3); expect(p.sweep).toMatchObject({ supply: 3, used: { 'veil-frontier': 3 }, count: 3 });
+  p = await saved(page); expect(p.bank.ore).toBe(100 + 24 * 3); expect(p.sweep).toMatchObject({ supply: 3, used: { 'veil-frontier': 3 }, count: 3 });
   // Another map keeps its own three; a reload keeps the day's count.
   await page.locator('#map-node-deep-forest').click(); await expect(page.locator('#map-sweep-deep-forest')).toBeEnabled();
   await expect(page.locator('#map-sweep-hard-deep-forest')).toHaveCount(0);

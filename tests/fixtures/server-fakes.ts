@@ -1,3 +1,4 @@
+import { handleBossRequest, sqlBossStore, WorldBossHost } from '../../src/server/world-boss';
 import { readdirSync, readFileSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
 import { sequenceSeeds } from '../../src/core/command/seed-source';
@@ -50,11 +51,14 @@ export function fakeDurableState(): DurableStateLike & { db: DatabaseSync } {
   };
 }
 
-export interface Server { deps: ApiDeps; d1: ReturnType<typeof fakeD1>; objects: Map<string, { host: GameHost; state: ReturnType<typeof fakeDurableState>; limiter: RateLimiter }>; clock: { t: number } }
+export interface Server { deps: ApiDeps; d1: ReturnType<typeof fakeD1>; objects: Map<string, { host: GameHost; state: ReturnType<typeof fakeDurableState>; limiter: RateLimiter }>; clock: { t: number }; boss: { host: WorldBossHost; up: boolean } }
 export function server(seeds: number[] = [11, 22, 33, 44, 55, 66, 77, 88, 99], contentVersion = VERSION, context: GameContext = GAME_CONTEXT): Server {
   const d1 = fakeD1(); const objects: Server['objects'] = new Map(); const clock = { t: 1_000_000 };
   const draw = sequenceSeeds(seeds);
+  // P11-04: the shared World Boss object (SQLite like the real one); `up = false` makes it fail every request.
+  const boss = { host: new WorldBossHost(sqlBossStore(fakeDurableState()), context.home.worldBoss, () => clock.t), up: true };
   const deps: ApiDeps = {
+    boss: { fetch: (r: Request) => boss.up ? handleBossRequest(boss.host, r) : Promise.reject(new Error('down')) },
     db: d1, contentVersion, allowedOrigins: ['https://wnau34-nptrn.github.io'], now: () => clock.t, limiter: new RateLimiter(),
     game(accountId) {
       let o = objects.get(accountId);
@@ -64,7 +68,7 @@ export function server(seeds: number[] = [11, 22, 33, 44, 55, 66, 77, 88, 99], c
       return { fetch: (r: Request) => handleAccountRequest(host, r, { limiter, limits: LIMITS, now: () => clock.t, purge: async () => { objects.delete(accountId); } }) };
     },
   };
-  return { deps, d1, objects, clock };
+  return { deps, d1, objects, clock, boss };
 }
 
 // P09-02f: the owner makes an account an admin with a D1 row (`wrangler d1 execute`); tests do the same.
