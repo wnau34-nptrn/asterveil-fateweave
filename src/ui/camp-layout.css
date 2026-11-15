@@ -54,6 +54,15 @@
 #lobby-view .side-quest > button { margin:0 12px 12px; width:calc(100% - 24px); }
 #lobby-view .side-quest[data-state=ready] { border-color:#d5b77488; }
 #lobby-view .side-quest[data-state=ready] .quest-row-status { color:var(--gold-light); }
+/* P05-06 quest board: four tabs, one heading per open period, task cards without a fold. */
+#lobby-view .quest-tabs { grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px; }
+#lobby-view .quest-tabs button { padding:0 4px; font-size:13px; gap:4px; }
+#lobby-view .quest-tabs .trip-badge { position:static; }
+#lobby-view .board-period { margin:8px 0 0; font-size:13px; color:#d4be90; font-weight:600; }
+#lobby-view .board-task-body { padding:12px; display:grid; gap:6px; }
+#lobby-view .board-task-body p { margin:0; font-size:13px; line-height:1.55; }
+#lobby-view .board-task[data-state=ready] .side-quest-head small { color:var(--gold-light); }
+#lobby-view .board-task[data-state=claimed] { opacity:.7; }
 @container game (max-width:360px) {
   #app #lobby-view .lobby-top { grid-template-columns:44px minmax(0,1fr) 44px 66px; gap:5px; }
   #lobby-view .lobby-farm { width:66px; }

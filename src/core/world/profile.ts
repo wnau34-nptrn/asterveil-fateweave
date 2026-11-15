@@ -9,6 +9,7 @@ import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, SET_IDS } from './types';
 import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, questComplete, recommendedLane, rollPercent, reserveCap, rosterIds, type EncounterLookup } from './world';
 import { laneReason, withLane } from './formation';
 import { dropFromPresets } from './presets';
+import { settleBoard } from './board';
 import { bankFits, clampBank, clampPotions, clampTomes, potionsFit, RIFT_CORE_CAP, TOME_CAP } from './caps';
 import type { ActionId } from '../battle/types';
 
@@ -293,7 +294,8 @@ export function hardReason(profile: Profile, maps: readonly MapDefinition[], map
   if (!featureOpen(profile, maps, 'hard')) return 'locked';
   return profile.cleared.includes(mapId) ? '' : 'normal';
 }
-export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLookup, seed: number, hard?: { maps: readonly MapDefinition[] }): { profile: Profile; run: ExpeditionState } {
+// `day` (P05-06): the device's calendar day, stamped on the run so its quest-board progress counts there.
+export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLookup, seed: number, hard?: { maps: readonly MapDefinition[] }, day?: number): { profile: Profile; run: ExpeditionState } {
   if (hard && hardReason(initial, hard.maps, map.id)) throw new Error('Hard mode is not open for this map');
   if(departureBlocked(initial))throw new Error('Resolve overflow before departing');
   const profile = structuredClone(initial); const ids = [...profile.party.deployed, ...profile.party.reserve];
@@ -302,6 +304,7 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   const run = newExpedition(map, lookup, seed, { roster: structuredClone(profile.party), members: Object.fromEntries(ids.map(id => [id, { ...profile.members[id]! }])), potions, campXp: profile.campXp, ...(profile.cleared.length ? { clears: profile.cleared.length } : {}), reserveSlots: reserveSlots(profile, map) }, profile.tutorialDone);
   run.hunt=startHunt(profile);if(map.bossCharm)run.bossLoot=startBossPlan(profile,map);
   if (hard) run.hard = true;
+  if (day !== undefined) run.day = day;
   // Story recruits not yet in the company (owner 2026-10-23). Before the prologue they come along as guests in free
   // party slots and fight it with the team, with any prologue-only guests (world.ts `recruit` parts them after the win).
   // Past the prologue each waits for its own point (`arrivals`), a roster slot kept for it; the prologue's own recruit
@@ -400,6 +403,8 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
     const add = sideQuestGain(q.kind, run, outcome, map);
     if (add) profile.quests[q.id] = { ...now, progress: Math.min(q.target, now.progress + add) };
   }
+  // P05-06: the quest board counts the run on the day it set out (contracts only on a completed run, OD-37).
+  settleBoard(profile, run, outcome, map);
   const levels=map.equipment.forge.itemLevel;
   profile.forgeLevel=Math.max(profile.forgeLevel??levels.baseCap,...levels.unlocks.filter(u=>run.elitesDefeated.includes(u.elite)||(run.respawns[u.elite]??0)>0).map(u=>u.cap),...levels.clears.filter(c=>outcome==='complete'&&c.map===run.mapId).map(c=>c.cap));
   profile.tutorialDone ||= run.tutorialDone; profile.expeditions++; if (outcome === 'complete') profile.completes++;

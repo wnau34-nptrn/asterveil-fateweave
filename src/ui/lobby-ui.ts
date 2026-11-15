@@ -16,7 +16,7 @@ import { hardReason, reserveSlots, activeGuides, guideDone, featureMap, featureO
 import { isBigTree } from '../core/world/talents';
 import { salvageValue } from '../core/world/equipment';
 import { campPresetPlan, matchesPreset, presetOf, presetSlots } from '../core/world/presets';
-import { PARTY_SLOTS, POTION_IDS, SHOP_ITEMS, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type ProfileEvent, type TalentNode } from '../core/world/types';
+import { PARTY_SLOTS, POTION_IDS, SHOP_ITEMS, type BoardTab, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type ProfileEvent, type TalentNode } from '../core/world/types';
 import { levelOf, recommendedLane, starred, type EncounterLookup } from '../core/world/world';
 import { emptyTomes, raiseSkill, tradeTomes, levelableSkills, skillLevelReason, tradeReason } from '../core/world/tomes';
 import type { TomeLine, TomeSize } from '../core/world/types';
@@ -30,6 +30,7 @@ import { worldArtUrl } from '../game/visuals/world-art';
 import { gearArt, potionArt } from './equip-art';
 import { sweepBook, sweepReason, sweepsLeft } from '../core/world/sweep';
 import { partyLine } from '../core/world/tomes';
+import { boardReady, questBoardBody, questTabs, type QuestTab } from './quest-board';
 import { sweepReasonText, sweepText, campLines, skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
 
 import { heroArt, portrait, starRow } from './portraits';
@@ -39,7 +40,7 @@ export interface LobbyHost { archive(id: string, archived: boolean): void; autoE
   transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; guide(id: string, skip: boolean): void;
-  enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; depart(mapId?: string, hard?: boolean): void; sweep(mapId: string, hard: boolean): void; home(): void }
+  enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; claimBoard(tab: BoardTab, id: string, period: number): void; depart(mapId?: string, hard?: boolean): void; sweep(mapId: string, hard: boolean): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
 // `board`: the hiring board from the seed-free client view (`core/command/client-view.ts`), never worked out here.
 // `day` (P05-05): the device's calendar day, for the sweep supplies and the day's sweeps.
@@ -108,6 +109,8 @@ export class LobbyUI {
   private confirmDismiss = false;
   // The broker's sheet shows the hiring board or the market (4A).
   private market = false;
+  // P05-06: the quest board's open tab.
+  private questTab: QuestTab = 'daily';
   private npcOpen = false;
   private lane: 'all' | 'front' | 'back' = 'all';
   // The hiring offer being previewed (stats, skills and star unlocks) before hiring.
@@ -209,6 +212,8 @@ export class LobbyUI {
           this.confirmSalvage = undefined; this.host.salvage([uid]); this.focus('#lobby-sub-back'); break;
         }
         case 'claim': { const q = b.dataset.quest!; this.host.claim(q); this.focus(`#quest-claim-${q}`); break; }
+        case 'quest-tab': this.questTab = b.dataset.tab as QuestTab; this.draw(); this.focus(`#quest-tab-${this.questTab}`); break;
+        case 'board-claim': this.host.claimBoard(b.dataset.tab as BoardTab, b.dataset.id!, Number(b.dataset.period)); this.focus(`#quest-tab-${this.questTab}`); break;
         case 'brew': { const potion = b.dataset.potion as PotionId; this.host.brew(potion); this.focus(`#brew-${potion}`); break; }
         case 'forge-open': this.openForge(Number(b.dataset.uid),undefined,b.id);break;
         case 'lock': this.host.lock(Number(b.dataset.uid));this.focus('#lock-'+b.dataset.uid);break;
@@ -223,7 +228,7 @@ export class LobbyUI {
         // Chapters: with more than one open map, departing first asks where to go.
         // Chapters: departing goes to the furthest open map; with more than one open, the map button picks another.
         case 'depart': this.host.depart(this.openMaps().at(-1)?.id); break;
-        case 'board': this.forgeStorageReturn = false; this.huntUI.cancel(); this.preview = undefined; this.confirmDismiss = false; this.sheet = 'board'; this.draw(); this.focus('#lobby-sheet-title'); break;
+        case 'board': if (b.id.startsWith('quest-hint')) this.questTab = 'camp'; this.forgeStorageReturn = false; this.huntUI.cancel(); this.preview = undefined; this.confirmDismiss = false; this.sheet = 'board'; this.draw(); this.focus('#lobby-sheet-title'); break;
         case 'bank': this.bankInfo = !this.bankInfo; this.draw(); this.focus('#lobby-bank'); break;
         case 'maps': this.sheet = 'maps'; this.mapPicked = undefined; this.draw(); this.regionScroll(); this.focus(`#map-node-${this.openMaps().at(-1)!.id}`); break;
         case 'pick-map': this.mapPicked = b.dataset.map; this.draw(); this.focus(`#map-node-${b.dataset.map}`); break;
@@ -279,10 +284,13 @@ export class LobbyUI {
     const story = p.last?.story ? this.maps.find(m => m.id === p.last!.story)?.quest.optional : undefined;
     return lines.map((l, i) => `<small class="camp-line">${l}${i === 0 && story ? ` · ${rewardText(story.reward)}` : ''}</small>`).join('');
   }
+  // P05-06: rewards ready on the whole board (daily, weekly, contracts and the camp side quests).
+  private boardCounts(p: Profile): Record<QuestTab, number> { return { ...boardReady(p, this.maps, this.view!.day), camp: this.readyQuests(p).length }; }
+  private readyAll(p: Profile): number { if (!this.open('quests')) return 0; const c = this.boardCounts(p); return c.daily + c.weekly + c.contract + c.camp; }
   private questEntry(p:Profile):string {
     if(!this.open('quests'))return '';
-    const ready=this.readyQuests(p).length,active=this.map.sideQuests.filter(q=>!p.quests[q.id]?.claimed).length;
-    return `<button id="lobby-board" data-lobby="board" class="lobby-quest-entry" aria-controls="lobby-sheet" aria-expanded="${this.sheet==='board'}"><strong>${icon('flag')} กระดานเควสต์ ${ready?`<small class="trip-badge">${ready}</small>`:''}${icon('right')}</strong><span>${ready?`มีรางวัลให้รับ ${ready} งาน`:`กำลังดำเนินการ ${active} งาน · แตะเพื่อดู`}</span></button>`;
+    const ready=this.readyAll(p),active=this.map.sideQuests.filter(q=>!p.quests[q.id]?.claimed).length;
+    return `<button id="lobby-board" data-lobby="board" class="lobby-quest-entry" aria-controls="lobby-sheet" aria-expanded="${this.sheet==='board'}"><strong>${icon('flag')} กระดานเควสต์ ${ready?`<small class="trip-badge">${ready}</small>`:''}${icon('right')}</strong><span>${ready?`มีรางวัลให้รับ ${ready} งาน`:`งานรายวัน รายสัปดาห์ สัญญาจ้าง และงานค่าย ${active} งาน · แตะเพื่อดู`}</span></button>`;
   }
   private questBoard(p: Profile): string {
     const rows = this.map.sideQuests.map(q => ({ q, st: p.quests[q.id] ?? { progress: 0, claimed: false }, reason: claimReason(p, this.map, q.id) }));
@@ -295,7 +303,9 @@ export class LobbyUI {
       return `<section class="side-quest" id="quest-${q.id}" data-state="${st.claimed?'claimed':reason?'open':'ready'}" aria-label="เควสต์ ${t.name}"><details class="quest-detail"><summary><span class="side-quest-head">${icon('flag')}<b>${t.name}</b><small>${Math.min(st.progress,q.target)}/${q.target}</small></span><span class="quest-row-status">${status}<small>ดูรายละเอียด</small></span></summary><div class="quest-detail-body"><p class="side-quest-from">จาก ${who.name} · ${who.role}</p><p class="side-quest-ask">${t.ask(q.target)}</p><p class="side-quest-reward">รางวัล: ${rewardText(q.reward)}</p>${reason?claim:''}</div></details>${!reason?claim:''}</section>`;
     };
     const open = sorted.filter(r => state(r) < 2), done = sorted.filter(r => state(r) === 2);
-    return `<div class="quest-board"><p class="camp-note">ความคืบหน้าจากรอบเดินทางที่จบแล้ว · แตะเควสต์เพื่อดูรายละเอียด</p>${open.map(card).join('')}${done.length ? `<details class="quest-done-list"><summary>รับรางวัลแล้ว ${done.length} งาน</summary>${done.map(card).join('')}</details>` : ''}</div>`;
+    const tabs = questTabs(this.questTab, this.boardCounts(p));
+    if (this.questTab !== 'camp') return `${tabs}${questBoardBody(p, this.maps, this.view!.day, this.questTab)}`;
+    return `${tabs}<div class="quest-board"><p class="camp-note">งานจาก NPC ในค่าย รับรางวัลได้ครั้งเดียว · ความคืบหน้าจากรอบเดินทางที่จบแล้ว · แตะเควสต์เพื่อดูรายละเอียด</p>${open.map(card).join('')}${done.length ? `<details class="quest-done-list"><summary>รับรางวัลแล้ว ${done.length} งาน</summary>${done.map(card).join('')}</details>` : ''}</div>`;
   }
   // The scene and the NPC tap targets pan together (portrait phones); the HUD stays put above them.
   private build(): void {
@@ -418,7 +428,7 @@ export class LobbyUI {
       ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.gold ? ` เหรียญทอง ${last.gold}` : ''}${last.shard ? ` เศษกลาง ${last.shard}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}${this.campLines(p)}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
-        <div class="lobby-sheet-head">${this.sheet==='forge'&&forgeBody&&this.forgeUI.taskNavigation?`<button id="forge-open-tasks" data-forge="tasks" class="round-glass" aria-label="เลือกงานโรงตีเหล็ก">${icon('left')}</button>`:''}${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="${this.forgeStorageReturn?'กลับไปสร้างอาวุธ':'กลับไปจัดทีม'}">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title" tabindex="-1">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ผังสกิล` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : this.sheet === 'board' ? `${icon('flag')} กระดานเควสต์ <small>รับได้ ${this.readyQuests(p).length}</small>` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
+        <div class="lobby-sheet-head">${this.sheet==='forge'&&forgeBody&&this.forgeUI.taskNavigation?`<button id="forge-open-tasks" data-forge="tasks" class="round-glass" aria-label="เลือกงานโรงตีเหล็ก">${icon('left')}</button>`:''}${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="${this.forgeStorageReturn?'กลับไปสร้างอาวุธ':'กลับไปจัดทีม'}">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title" tabindex="-1">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ผังสกิล` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : this.sheet === 'board' ? `${icon('flag')} กระดานเควสต์ <small>รับได้ ${this.readyAll(p)}</small>` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
         <div class="lobby-content">${this.sheet==='forge'||this.sheet==='board'||this.sheet==='team'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p, 'hire'):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcFold(p, this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'board' ? this.questBoard(p) : this.board(p)}</div>${this.sheet==='team'&&!this.locked('team')?this.presetSaveBar(p):''}</section>` : ''}
       <footer class="lobby-bottom">

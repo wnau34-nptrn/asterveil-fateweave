@@ -35,6 +35,9 @@ export interface MapDefinition {
   tomes?: MapTomes;
   // P05-05: the repeat rewards one sweep of this cleared map pays (missing = the map cannot be swept).
   sweepReward?: { normal: SweepReward; hard: SweepReward };
+  // P05-06: contracts on this map pay `reward` (once per contract per week) and the swift contract needs at most
+  // `swiftSteps` steps (missing = no contract counts here).
+  contract?: { reward: SweepReward; swiftSteps: number };
   // `firstFind`: the tutorial (prologue) win leaves this plain piece in the bag (map 1 teaches wearing gear).
   // `bossCharm`: the boss pays the targeted boss charm (boss-equipment.ts); teaching maps leave it out.
   firstFind?: { slot: GearSlot; rarity: number }; bossCharm?: boolean;
@@ -91,6 +94,7 @@ export interface MapDefinition {
   // 3D: side quests from the camp NPCs, and the herbs one of them asks for.
   sideQuests: readonly SideQuestDefinition[];
   sweep: SweepRules;
+  board: BoardRules;
   herbs: readonly (Point & { id: string })[];
   events: readonly MapEventDefinition[];
   eventRules: EventRules;
@@ -318,6 +322,21 @@ export interface SweepReward { ore: number; gold: number; dust?: number; tomes?:
 // `supply` the supplies held then, `used` the sweeps made on each map that day and `count` every sweep ever made (the
 // next sweep's serial number, so a repeated request is refused instead of paid twice).
 export interface SweepBook { day: number; supply: number; used: Record<string, number>; count: number }
+// P05-06 quest board prototype (docs/design/CHAT_MARKET_QUEST_BOARD_TH.md §5, draft numbers). Daily and weekly
+// objectives count what settled runs and sweeps did; `alt` is a second way to finish the same task. Rewards are existing
+// resources (small tomes go to the deployed party's line). `keepDays` daily sets stay open (today and the catch-up days).
+export type BoardKind = 'wins' | 'completes' | 'chests' | 'herbs' | 'elites' | 'events' | 'finds' | 'sweeps' | 'contracts';
+export interface BoardObjective { id: string; kind: BoardKind; target: number; alt?: { kind: BoardKind; target: number }; reward: SweepReward }
+// The six contracts (P05-01 inventory §2.3, OD-37: no fee, no penalty, paid only when done).
+export type ContractKind = 'swift' | 'explorer' | 'bloodless' | 'small' | 'unharmed' | 'herbs';
+export type BoardTab = 'daily' | 'weekly' | 'contract';
+export interface BoardRules { keepDays: number; smallTeam: number; daily: readonly BoardObjective[]; weekly: readonly BoardObjective[]; contracts: readonly { id: string; kind: ContractKind }[] }
+// A period's counts and the objectives already paid. Weeks also hold the contracts done (contract id → the map it was
+// done on: every map it was done on this week; the claim pays the best of them).
+export interface BoardSet { n: Partial<Record<BoardKind, number>>; claimed: string[] }
+// The board book (save v63). `day` is the newest calendar day the book was brought up to; `days` the open daily sets
+// (oldest first, the last is `day`); `weeks` this week and, while still claimable, the week before (oldest first).
+export interface BoardBook { day: number; days: (BoardSet & { day: number })[]; weeks: (BoardSet & { week: number; jobs: Record<string, string[]> })[] }
 // A map's boss tomes (maps 2–3): `boss` every win, `first` added the first time the map is cleared.
 export interface MapTomes { boss: { medium: number; small: number }; first: { large: number; core: number } }
 // Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).
@@ -423,6 +442,8 @@ export interface Profile {
   choices?: Record<string, EventChoice>; storyQuests?: string[];
   // P05-05 (save v62): supplies, the day's sweeps and the sweep serial (missing = never swept).
   sweep?: SweepBook;
+  // P05-06 (save v63): the quest board's open periods (missing = nothing counted yet).
+  board?: BoardBook;
   // P04-02 (OD-22): story recruits already compensated (or met through the story), each at most once. Missing = none.
   storyShards?: string[];
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
@@ -458,6 +479,7 @@ export type ProfileEvent =
   | { type: 'brewed'; potion: PotionId }
   | { type: 'claimed'; questId: string }
   | { type: 'swept'; mapId: string; hard: boolean; reward: SweepReward; supply: number; left: number }
+  | { type: 'boardClaimed'; tab: BoardTab; id: string; period: number; reward: SweepReward }
   | { type: 'bought'; item: ShopItemId; heroId?: string; uid?: number }
   | { type: 'refreshed' };
 export interface ProfileResult { profile: Profile; event: ProfileEvent }
@@ -511,6 +533,8 @@ export interface ExpeditionState {
   // P05-02 (save v61): contract counters. `choices` logs the choice made at each event this run (a later choice at the
   // same event replaces it); `downed` counts every time a brought member fell (missing = none).
   choices?: Record<string, EventChoice>; downed?: number;
+  // P05-06 (save v63): the device's calendar day the run set out on; its board progress counts there (missing = none).
+  day?: number;
   // Hard mode (A9, save v33): set on departure, never changed during the run.
   hard?: true;
   bossLoot?:BossPlan;

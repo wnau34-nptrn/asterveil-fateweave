@@ -67,7 +67,9 @@ describe('P05-05 sweep rules', () => {
     const tomes = emptyTomes(); tomes[line].small = r.tomes!; expect(out.tomes).toEqual(tomes);
     expect(out.sweep).toEqual({ day: DAY, supply: 5, used: { [home.id]: 1 }, count: 1 });
     // Everything a real expedition would move stays as it was: no EXP, items, cores, counters, quests, market or board.
-    expect({ ...out, bank: p.bank, tomes: undefined, sweep: undefined }).toEqual({ ...p, tomes: undefined, sweep: undefined });
+    // P05-06: on the quest board it counts only as one sweep.
+    expect(out.board!.days.at(-1)!.n).toEqual({ sweeps: 1 }); expect(out.board!.weeks.at(-1)!).toMatchObject({ n: { sweeps: 1 }, jobs: {} });
+    expect({ ...out, bank: p.bank, tomes: undefined, sweep: undefined, board: undefined }).toEqual({ ...p, tomes: undefined, sweep: undefined, board: undefined });
     expect(p.sweep).toBeUndefined(); expect(p.bank.ore).toBe(100);
   });
   it('hard pays its own row and shares the map limit with normal', () => {
@@ -133,8 +135,8 @@ describe('P05-05 sweep command', () => {
 describe('save v62', () => {
   const swept = (): Profile => ok(ok(base({ choices: { 'forest-shrine': 'pray' }, storyQuests: [ruinsMap.id] })), forestMap);
   it('round-trips the sweep book beside the v61 story state, and a v61 save loads without one', () => {
-    expect(SAVE_VERSION).toBe(62);
-    const p = swept(); const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(62);
+    expect(SAVE_VERSION).toBe(63);
+    const p = swept(); const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(63);
     const back = parseGame(raw, home, lookup, MAPS); expect(back).toEqual({ profile: p, run: null });
     expect(back.profile.choices).toEqual({ 'forest-shrine': 'pray' }); expect(back.profile.storyQuests).toEqual([ruinsMap.id]);
     const old = base({ choices: { 'forest-shrine': 'pray' } });

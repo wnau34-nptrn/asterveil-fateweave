@@ -180,7 +180,7 @@ C5.4ล่าสุด: เจ้าของเลือกR1แล้ว ต�
 
 - [x] **P05-05** ต้นแบบกวาดล้าง: clear unlock, ตารางรางวัลซ้ำ, cost/reward atomic, normal/hard quota และ retry; onlineใช้เวลา/ledger P09 ไม่กวาดล้างWorld Boss — ต้นแบบออฟไลน์เสร็จ 2026-11-15 ([ผล](validation/p05-05-2026-11-15/README_TH.md), เซฟ v62)
 
-- [ ] **P05-06** กระดานเดียวแท็บdaily/weekly/contracts; ต้นแบบรายวัน3รายสัปดาห์5 เก็บprogressอัตโนมัติ งานทางเลือกและcatch-up; reward-once/period/claim windows; ไม่เปลี่ยนเควสต์สะสมเดิมเป็นวนรับซ้ำ; onlineหลังP09
+- [x] **P05-06** กระดานเดียวแท็บdaily/weekly/contracts; ต้นแบบรายวัน3รายสัปดาห์5 เก็บprogressอัตโนมัติ งานทางเลือกและcatch-up; reward-once/period/claim windows; ไม่เปลี่ยนเควสต์สะสมเดิมเป็นวนรับซ้ำ; onlineหลังP09 — ต้นแบบออฟไลน์เสร็จ 2026-11-15 ([ผล](validation/p05-06-2026-11-15/README_TH.md), เซฟ v63)
 
 ### P06 — แมพ 4–7 และอาชีพขั้นสูง
 

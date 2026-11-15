@@ -1,11 +1,13 @@
 import { bankFits, TOME_CAP } from './caps';
 import { emptyTomes, partyLine } from './tomes';
+import { addBoard, boardBook } from './board';
 import type { MapDefinition, Profile, ProfileResult, SweepBook, SweepReward } from './types';
 
 // P05-05 sweep prototype (docs/design/WORLD_BOSS_SWEEP_TH.md §4): a cleared map pays a small fixed repeat reward for one
 // supply, without an expedition. Pure rules: the calendar day is an argument (the device's date offline; the server's
 // clock and ledger are P09 work). A sweep is not an expedition: it gives no camp EXP, items, shards or rift cores, no
-// first-clear, chest, secret, puzzle or event reward, and moves no quest, counter, market or hiring-board state.
+// first-clear, chest, secret, puzzle or event reward, and moves no quest, counter, market or hiring-board state. On the
+// P05-06 quest board it counts only as a sweep (`sweeps` objectives), never as battles, chests or contracts.
 export const MAX_SWEEP_DAY = 999_999;
 export const MAX_SWEEP_COUNT = 9_999_999;
 const validDay = (day: number): boolean => Number.isInteger(day) && day >= 0 && day <= MAX_SWEEP_DAY;
@@ -46,5 +48,6 @@ export function sweep(initial: Profile, map: MapDefinition, hard: boolean, day: 
   book.supply -= map.sweep.cost; book.used[map.id] = (book.used[map.id] ?? 0) + 1; book.count++; profile.sweep = book;
   profile.bank.ore += reward.ore; profile.bank.gold += reward.gold; profile.bank.dust += reward.dust ?? 0;
   if (reward.tomes) (profile.tomes ??= emptyTomes())[partyLine(map, profile.party.deployed)].small += reward.tomes;
+  const board = boardBook(profile, map.board, day); addBoard(board, map.board, { sweeps: 1 }); profile.board = board;
   return { profile, event: { type: 'swept', mapId: map.id, hard, reward, supply: book.supply, left: sweepsLeft(book, map) } };
 }

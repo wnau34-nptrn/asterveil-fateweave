@@ -1,6 +1,6 @@
 import {bossNames,bossDescription} from './boss-equipment';
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
-import { TOME_LINES, TOME_SIZES, type SweepReward, type TomeBag, type TomeLine, type TomeSize } from '../core/world/types';
+import { TOME_LINES, TOME_SIZES, type BoardKind, type ContractKind, type SweepReward, type TomeBag, type TomeLine, type TomeSize } from '../core/world/types';
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId, MapEventDefinition, Profile } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
 import { setCounts, statLines } from '../core/world/equipment';
@@ -626,6 +626,27 @@ export const sideQuestText: Record<SideQuestKind, { name: string; ask: (n: numbe
 export function sweepText(r: SweepReward, line: TomeLine): string {
   return [`แร่ดาว ${r.ore}`, `เหรียญทอง ${r.gold}`, ...r.dust ? [`ฝุ่นดาว ${r.dust}`] : [], ...r.tomes ? [`ตำรา${tomeLineText[line]}${tomeSizeText.small} ${r.tomes}`] : []].join(' ');
 }
+// P05-06 quest board: what each counted thing is called, the six contracts and why a claim is closed.
+export const boardKindText: Record<BoardKind, (n: number) => string> = {
+  wins: n => `ชนะศึก ${n} ครั้ง`, completes: n => `ผ่านแผนที่จนถึงทางออก ${n} ครั้ง`, chests: n => `เปิดหีบสมบัติ ${n} ใบ`,
+  herbs: n => `เก็บสมุนไพรกลับค่าย ${n} ต้น`, elites: n => `ปราบศัตรูหัวหน้า ${n} ตัว`, events: n => `จัดการเหตุการณ์บนแผนที่ ${n} ครั้ง`,
+  finds: n => `ไขกลไกหรือหาทางลับ ${n} แห่ง`, sweeps: n => `กวาดล้าง ${n} ครั้ง`, contracts: n => `ทำสัญญาจ้างสำเร็จ ${n} ครั้ง`,
+};
+export const boardTaskName: Record<string, string> = {
+  'd-patrol': 'ลาดตระเวนประจำวัน', 'd-gather': 'เก็บเสบียงข้างทาง', 'd-job': 'งานจ้างวันนี้',
+  'w-return': 'เที่ยวกลับค่ายของสัปดาห์', 'w-battles': 'ผลงานในสนามรบ', 'w-elites': 'ล่าหัวหน้า', 'w-stories': 'เรื่องเล่าระหว่างทาง', 'w-jobs': 'สัญญาจ้างของสัปดาห์',
+};
+export const contractText: Record<ContractKind, { name: string; ask: string }> = {
+  swift: { name: 'เบาเท้า', ask: 'ผ่านแผนที่ภายในจำนวนก้าวที่กำหนด' },
+  explorer: { name: 'นักสำรวจ', ask: 'เปิดหีบและหาทางลับทั้งหมดของแผนที่ในเที่ยวเดียว แล้วผ่านแผนที่' },
+  bloodless: { name: 'ไม่นองเลือด', ask: 'จัดการเหตุการณ์ทุกจุดที่มีทางสงบด้วยทางที่ไม่สู้ (ย่อง ช่วย อธิษฐาน เดินผ่าน) แล้วผ่านแผนที่' },
+  small: { name: 'ทีมเล็ก', ask: 'ผ่านแผนที่โหมดปกติโดยพาสมาชิกไม่เกิน 3 คน (ลงสนามรวมสำรอง)' },
+  unharmed: { name: 'ไม่ล้มสักคน', ask: 'ผ่านแผนที่โดยไม่มีสมาชิกล้มเลย' },
+  herbs: { name: 'ส่งสมุนไพรถึงมือ', ask: 'เก็บสมุนไพรทุกต้นของแผนที่แล้วผ่านแผนที่' },
+};
+export const boardReasonText: Record<string, string> = {
+  progress: 'ยังไม่ครบ · สะสมจากการเดินทาง', full: 'รางวัลเกินเพดานคลัง · ใช้ทรัพยากรก่อน', claimed: 'รับรางวัลแล้ว', expired: 'หมดเขตรับรางวัล',
+};
 export const sweepReasonText: Record<string, string> = {
   quota: 'วันนี้กวาดล้างแผนที่นี้ครบแล้ว · พรุ่งนี้กวาดล้างได้อีก', supply: 'เสบียงหมด · ได้เสบียงเพิ่มทุกวัน',
   full: 'คลังเต็ม · ใช้ทรัพยากรก่อนแล้วค่อยกวาดล้าง', uncleared: 'ผ่านแผนที่นี้ก่อน', hard: 'ผ่านโหมดยากของแผนที่นี้ก่อน',

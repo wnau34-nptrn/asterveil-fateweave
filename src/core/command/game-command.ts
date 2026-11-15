@@ -7,16 +7,17 @@ import { craftWeapon, enhanceTo, fuse, lockEquipment, raiseItemLevel, reroll, sm
 import { applyPreset, applyRunPreset, clearPreset, renamePreset, savePreset } from '../world/presets';
 import {
   brew, buy, canWithdraw, chooseLoadout, claimGuide, claimQuest, createCommander, depart, dismiss, equip, hardReason, hire,
-  learnTalent, mapUnlocked, newProfile, refreshBoard, resetTalents, salvage, setArchived, setPartyLane, settle, unequip, upgrade,
+  featureOpen, learnTalent, mapUnlocked, newProfile, refreshBoard, resetTalents, salvage, setArchived, setPartyLane, settle, unequip, upgrade,
   type Group,
 } from '../world/profile';
 import { collectOverflow, departureBlocked, expandStorage, recycleSelection, type StorageSource } from '../world/storage';
 import { chooseHuntTarget } from '../world/targeted-loot';
 import { sweep } from '../world/sweep';
+import { claimBoard } from '../world/board';
 import { raiseSkill, tradeTomes } from '../world/tomes';
 import {
   GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, TOME_LINES, TOME_SIZES,
-  type Commander, type Direction, type EventChoice, type ExpeditionState, type GearSlot, type Lane, type MapDefinition, type Point,
+  type BoardTab, type Commander, type Direction, type EventChoice, type ExpeditionState, type GearSlot, type Lane, type MapDefinition, type Point,
   type PotionId, type Profile, type ProfileEvent, type ProfileResult, type RunOutcome, type ShopItemId, type TalentNode, type TomeLine,
   type TomeSize, type WorldEvent, type WorldResult,
 } from '../world/types';
@@ -71,7 +72,10 @@ export type CampCommand =
   // P05-05: `day` is the device's calendar day (days since 1970-01-01, local time) and `serial` the sweep count the
   // device saw (`profile.sweep.count`, 0 before the first). Online, P09 replaces `day` with the server's.
   | { kind: 'sweep'; mapId: string; hard: boolean; day: number; serial: number }
-  | { kind: 'depart'; mapId?: string; hard: boolean };
+  // P05-06: a quest-board reward. `period` is the daily set's day or the week (`weekOf`) and `day` the device's day.
+  | { kind: 'claimBoard'; tab: BoardTab; id: string; period: number; day: number }
+  // `day` (P05-06): the device's calendar day, for the run's quest-board progress (missing = the run counts nowhere).
+  | { kind: 'depart'; mapId?: string; hard: boolean; day?: number };
 // Map (expedition) commands: only while an expedition is running.
 export type RunCommand =
   | { kind: 'move'; dir: Direction }
@@ -125,7 +129,8 @@ const SPECS: Record<CommandKind, Spec> = {
   bossTarget: { target: BOSS_POWERS }, huntTarget: { target: opt('str') }, collectOverflow: { ids: 'ints' },
   recycleStored: { source: ['bag', 'overflow'], ids: 'ints' }, expandStorage: {}, salvage: { uids: 'ints' }, enhance: { uid: 'int', target: 'int' },
   lockEquipment: { uid: 'int' }, fuse: { uid: 'int', donors: opt('ints') }, raiseItemLevel: { uid: 'int', target: 'int' }, reroll: { uid: 'int', index: 'int' },
-  brew: { potion: POTION_IDS }, claimQuest: { questId: 'str' }, sweep: { mapId: 'str', hard: 'bool', day: 'int', serial: 'int' }, depart: { mapId: opt('str'), hard: 'bool' },
+  brew: { potion: POTION_IDS }, claimQuest: { questId: 'str' }, sweep: { mapId: 'str', hard: 'bool', day: 'int', serial: 'int' }, claimBoard: { tab: ['daily', 'weekly', 'contract'], id: 'str', period: 'int', day: 'int' },
+  depart: { mapId: opt('str'), hard: 'bool', day: opt('int') },
   move: { dir: DIRECTIONS }, travel: { to: 'point' }, rest: {}, revive: { heroId: 'str' }, swapMembers: { a: 'str', b: 'str' },
   setLane: { heroId: 'str', lane: LANES, other: opt('str') }, moveMember: { heroId: 'str' }, runPreset: { slot: 'int' }, withdraw: {}, openChest: {},
   usePotion: { potion: POTION_IDS, heroId: opt('str') }, chooseEvent: { choice: EVENT_CHOICES }, draftPick: { index: 'int' },
@@ -240,6 +245,7 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
     case 'brew': return camp(brew(p, map, cmd.potion));
     case 'claimQuest': return camp(claimQuest(p, map, cmd.questId));
     case 'sweep': { const m = maps.find(x => x.id === cmd.mapId); return m ? camp(sweep(p, m, cmd.hard, cmd.day, cmd.serial)) : reject('unknown'); }
+    case 'claimBoard': return featureOpen(p, maps, 'quests') ? camp(claimBoard(p, maps, cmd.tab, cmd.id, cmd.period, cmd.day)) : reject('locked');
     case 'depart': {
       if (departureBlocked(p)) return reject('storage');
       // The prologue always starts on the first map; otherwise the named open map (default: the furthest open one).
@@ -247,7 +253,7 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
       const chosen = !p.tutorialDone ? maps[0]! : open.find(m => m.id === cmd.mapId) ?? open.at(-1)!;
       if (cmd.mapId && chosen.id !== cmd.mapId) return reject('mapClosed');
       if (cmd.hard) { const reason = hardReason(p, maps, chosen.id); if (reason) return reject(reason); }
-      const out = depart(p, chosen, lookup, ctx.seeds.next(), cmd.hard ? { maps } : undefined);
+      const out = depart(p, chosen, lookup, ctx.seeds.next(), cmd.hard ? { maps } : undefined, cmd.day);
       const events: CommandEvent[] = [{ type: 'departed', mapId: chosen.id, hard: cmd.hard }];
       // A first expedition meets Vargoth's vanguard before the first step.
       const prologue = startPrologue(out.run, chosen);
