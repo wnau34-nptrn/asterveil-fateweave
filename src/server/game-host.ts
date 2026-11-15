@@ -7,6 +7,7 @@ import { decideUpload, type CloudSaveUpload } from '../core/cloud/cloud-save';
 import { parseGame, upgradeStoredGame, type Game } from '../core/save/expedition-save';
 import type { BattleReplay } from '../core/world/world';
 import { battleMemo } from '../core/command/battle-memo';
+import { ledgerRows, nextDayAt, serverDay, type LedgerRow, type ServerClock } from './ledger';
 
 // P09-02b: the per-account game host the Durable Object wraps. It keeps the authoritative `Game` and the command book,
 // runs every device request through the same `processCommand` the game uses, draws seeds from a server source, and
@@ -18,7 +19,10 @@ export type GameContext = Omit<CommandContext, 'seeds' | 'battles'>;
 export interface HostState { game: Game | null; book: CommandBook }
 // One applied sequence number. `seeds` are the server draws the command consumed, in order; with them the log replays
 // to the same game. They never leave the server.
-export interface LogEntry { seq: number; requestId: string; command: unknown; seeds: number[]; status: CommandReply['status']; contentVersion: string; at: number }
+// `day` (P09 ledger): the server's calendar day the command ran on (absent in logs written before the ledger; those
+// commands carried the device's day). `refused: 'receipt'`: the rules paid out but a receipt already existed, so the
+// server refused the command and changed nothing.
+export interface LogEntry { seq: number; requestId: string; command: unknown; seeds: number[]; status: CommandReply['status']; contentVersion: string; at: number; day?: number; refused?: 'receipt' }
 // P09-02e: the game as it stood right after sequence number `seq`. The log replays from the latest one, so `/verify`
 // costs at most SNAPSHOT_EVERY commands. `import`: the game an imported local save became (D11); `periodic`: written by
 // the server itself every SNAPSHOT_EVERY commands and when an expedition ends.
@@ -27,8 +31,11 @@ export interface Snapshot { seq: number; game: Game | null; origin: 'import' | '
 export interface ImportRecord { requestId: string; payloadSha256: string; saveVersion: number; seq: number; at: number }
 export interface HostStore {
   load(): HostState | null;
-  // Must store `state`, append `entry` and write `snapshot` (when given) atomically (one transaction).
-  commit(state: HostState, entry: LogEntry, snapshot?: Snapshot): void;
+  // Must store `state`, append `entry`, write `snapshot` (when given) and insert `ledger` atomically (one transaction).
+  commit(state: HostState, entry: LogEntry, snapshot?: Snapshot, ledger?: readonly LedgerRow[]): void;
+  // P09 ledger: whether a payout with this receipt id was already recorded, and the rows (newest last).
+  hasReceipt(receipt: string): boolean;
+  ledger(): LedgerRow[];
   // Log entries with a sequence number above `after` (all of them by default).
   entries(after?: number): LogEntry[];
   latestSnapshot(): Snapshot | null;
@@ -86,26 +93,39 @@ export class GameHost {
     return active === session;
   }
 
+  // P09 ledger: the server's calendar (the game day, when the next one starts, the time), sent on entering and reading.
+  clock(): ServerClock { const at = this.now(); return { day: serverDay(at), next: nextDayAt(at), now: at }; }
+
   // Synchronous between load and commit, so a Durable Object never interleaves two commands (hash the command first).
+  // The server's day is stamped on the command's context (and in the log, for replay); a retry of a stored request gets
+  // its stored answer whatever the day is now, so a retry across midnight never pays on the new day.
   command(request: CommandRequest, argsSha256: string): HostAnswer {
     const { game, book } = this.current();
     const seeds = recordingSeeds(this.draw);
-    const out = processCommand(game, book, request, argsSha256, { ...this.ctx, seeds, battles: this.battles.replay });
+    const at = this.now(), day = serverDay(at);
+    const out = processCommand(game, book, request, argsSha256, { ...this.ctx, seeds, battles: this.battles.replay, clock: { day } });
     switch (out.kind) {
       case 'replayed': return { status: 200, body: out.reply, replayed: true };
       case 'invalid': return { status: 400, body: { error: 'invalid_request' } };
       case 'requestReused': return { status: 409, body: { error: 'request_reused' } };
       case 'stale': case 'gap': return { status: 409, body: { error: out.kind, lastSeq: out.lastSeq } };
       case 'committed': {
-        const at = this.now(), seq = out.reply.seq;
-        const ended = game?.run != null && out.game?.run == null;
-        const snapshot: Snapshot | undefined = seq % SNAPSHOT_EVERY === 0 || ended ? { seq, game: out.game, origin: 'periodic', at } : undefined;
-        this.store.commit({ game: out.game, book: out.book }, {
+        const seq = out.reply.seq;
+        let next = out.game, reply = out.reply, refused: 'receipt' | undefined;
+        const rows = reply.status === 'applied' ? ledgerRows(reply.events, next?.profile.sweep?.count ?? 0, day, seq, at) : [];
+        if (rows.some(r => this.store.hasReceipt(r.receipt))) {
+          // Never expected (the rules refuse a second payout); if it happens the payout is refused, not made twice.
+          next = game; reply = { seq, status: 'rejected', reason: 'duplicate_receipt' }; refused = 'receipt';
+        } else if (rows.length && reply.status === 'applied') reply = { ...reply, receipts: rows.map(r => r.receipt) };
+        const recent = reply === out.reply ? out.book.recent : [...out.book.recent.slice(0, -1), { ...out.book.recent.at(-1)!, reply }];
+        const ended = game?.run != null && next?.run == null;
+        const snapshot: Snapshot | undefined = seq % SNAPSHOT_EVERY === 0 || ended ? { seq, game: next, origin: 'periodic', at } : undefined;
+        this.store.commit({ game: next, book: { lastSeq: out.book.lastSeq, recent } }, {
           seq, requestId: request.requestId, command: request.command, seeds: seeds.used,
-          status: out.reply.status, contentVersion: this.contentVersion, at,
-        }, snapshot);
-        const telemetry = out.reply.status === 'applied' ? telemetryOf(game, out.game, out.reply.events) : [];
-        return { status: 200, body: out.reply, replayed: false, telemetry };
+          status: reply.status, contentVersion: this.contentVersion, at, day, ...(refused ? { refused } : {}),
+        }, snapshot, refused ? [] : rows);
+        const telemetry = reply.status === 'applied' ? telemetryOf(game, next, reply.events) : [];
+        return { status: 200, body: reply, replayed: false, telemetry };
       }
     }
   }
@@ -163,21 +183,29 @@ export function replayLog(entries: readonly LogEntry[], ctx: GameContext, expect
     const seeds: SeedSource = { next: () => { if (i >= e.seeds.length) throw new Error('seeds'); return e.seeds[i++]! >>> 0; } };
     const cmd = parseCommand(e.command);
     let result;
-    try { result = cmd ? applyCommand(game, cmd, { ...ctx, seeds, ...(play ? { battles: play } : {}) }) : { rejected: 'shape' }; } catch { return { ok: false, seq, reason: 'seeds' }; }
+    const clock = e.day !== undefined ? { clock: { day: e.day } } : {};
+    try { result = cmd ? applyCommand(game, cmd, { ...ctx, seeds, ...clock, ...(play ? { battles: play } : {}) }) : { rejected: 'shape' }; } catch { return { ok: false, seq, reason: 'seeds' }; }
     if (i !== e.seeds.length) return { ok: false, seq, reason: 'seeds' };
+    // A command the ledger refused ran as applied by the rules and changed nothing.
+    if (e.refused === 'receipt') { if (isRejected(result) || e.status !== 'rejected') return { ok: false, seq, reason: 'status' }; continue; }
     if ((isRejected(result) ? 'rejected' : 'applied') !== e.status) return { ok: false, seq, reason: 'status' };
     if (!isRejected(result)) game = result.game;
   }
   return canonicalJson(game) === canonicalJson(expected) ? { ok: true, seq } : { ok: false, seq, reason: 'snapshot' };
 }
 
-export function memoryStore(): HostStore & { state: HostState | null; log: LogEntry[]; snapshots: Snapshot[]; record: ImportRecord | null; raw: string | null; session: string | null } {
+export function memoryStore(): HostStore & { state: HostState | null; log: LogEntry[]; snapshots: Snapshot[]; record: ImportRecord | null; raw: string | null; session: string | null; rows: LedgerRow[] } {
   const s = {
     state: null as HostState | null, log: [] as LogEntry[], snapshots: [] as Snapshot[], record: null as ImportRecord | null, raw: null as string | null,
+    rows: [] as LedgerRow[],
     load: () => s.state ? structuredClone(s.state) : null,
-    commit: (state: HostState, entry: LogEntry, snapshot?: Snapshot) => {
+    commit: (state: HostState, entry: LogEntry, snapshot?: Snapshot, ledger: readonly LedgerRow[] = []) => {
+      if (ledger.some(r => s.rows.some(x => x.receipt === r.receipt))) throw new Error('receipt');
       s.state = structuredClone(state); s.log.push(structuredClone(entry)); if (snapshot) s.snapshots.push(structuredClone(snapshot));
+      s.rows.push(...structuredClone([...ledger]));
     },
+    hasReceipt: (receipt: string) => s.rows.some(r => r.receipt === receipt),
+    ledger: () => structuredClone(s.rows),
     entries: (after = 0) => structuredClone(s.log.filter(e => e.seq > after)),
     latestSnapshot: () => s.snapshots.length ? structuredClone(s.snapshots[s.snapshots.length - 1]!) : null,
     imported: () => s.record ? { ...s.record } : null,

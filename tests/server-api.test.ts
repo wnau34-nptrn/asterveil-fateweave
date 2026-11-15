@@ -135,7 +135,7 @@ describe('P09-02b account Durable Object', () => {
   it('runs commands in seq order, answers retries with the same bytes and never sends a seed', async () => {
     const s = server(); const { accountId, token } = await guest(s);
     const empty = await call(s, '/v1/state', { headers: gameHeaders(token) });
-    expect(await empty.json()).toEqual({ lastSeq: 0, view: null });
+    expect(await empty.json()).toMatchObject({ lastSeq: 0, view: null });
 
     const first = { requestId: requestId(), seq: 1, command: { kind: 'createCommander', commander, replace: false } };
     const r1 = await send(s, token, first); const t1 = await r1.text();
@@ -180,7 +180,7 @@ describe('P09-02b account Durable Object', () => {
     expect(await (await call(s, '/v1/verify', { method: 'POST', headers: gameHeaders(token) })).json()).toEqual({ ok: true, seq: 4, from: 0 });
     // Accounts never share a Durable Object.
     const other = await guest(s);
-    expect(await (await call(s, '/v1/state', { headers: gameHeaders(other.token) })).json()).toEqual({ lastSeq: 0, view: null });
+    expect(await (await call(s, '/v1/state', { headers: gameHeaders(other.token) })).json()).toMatchObject({ lastSeq: 0, view: null });
   });
 
   it('replay notices changed seeds, a changed status or a changed snapshot', () => {

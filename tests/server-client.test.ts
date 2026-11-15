@@ -44,7 +44,7 @@ describe('P09-02c server client', () => {
   it('makes a guest account once, enters, and plays commands that come back as seed-free views', async () => {
     const s = server(); const store = memory(); const w = wire(s);
     const c = new ServerClient(BASE, VERSION, store, w);
-    expect(await c.enter()).toEqual({ kind: 'state', state: { lastSeq: 0, view: null } });
+    expect(await c.enter()).toMatchObject({ kind: 'state', state: { lastSeq: 0, view: null } });
     expect([...store.data.keys()].sort()).toEqual([`fateweave-server-token-at:${BASE}`, `fateweave-server-token:${BASE}`]);
     const out = await c.send({ kind: 'createCommander', commander, replace: false });
     if (out.kind !== 'reply' || out.reply.status !== 'applied') throw new Error(JSON.stringify(out));
@@ -135,7 +135,7 @@ describe('P09-02c server client', () => {
     expect(await new ServerClient(BASE, 'old-build', store, wire(s)).enter()).toEqual({ kind: 'failed', reason: 'content_version' });
     store.data.set(`fateweave-server-token:${BASE}`, `${'0'.repeat(32)}.${'0'.repeat(64)}`);
     const c = new ServerClient(BASE, VERSION, store, wire(s));
-    expect(await c.enter()).toEqual({ kind: 'state', state: { lastSeq: 0, view: null } });
+    expect(await c.enter()).toMatchObject({ kind: 'state', state: { lastSeq: 0, view: null } });
     expect(store.data.get(`fateweave-server-token:${BASE}`)).not.toBe(`${'0'.repeat(32)}.${'0'.repeat(64)}`);
   });
 });

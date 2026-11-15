@@ -12,7 +12,11 @@ import type { StoragePort } from '../core/save/expedition-save';
 
 export const CONTENT_HEADER = 'X-Fateweave-Content';
 export const SESSION_HEADER = 'X-Fateweave-Session';
-export interface ServerState { lastSeq: number; view: ClientGame | null }
+// `clock` (P09 ledger): the server's game day, when the next starts and its time (ms); missing from older servers.
+export interface ServerClock { day: number; next: number; now: number }
+export interface ServerState { lastSeq: number; view: ClientGame | null; clock?: ServerClock }
+// Commands whose calendar day the server stamps itself (P09 ledger); the device leaves its own day out.
+const DATED_KINDS: ReadonlySet<string> = new Set(['sweep', 'claimBoard', 'depart']);
 // `deleting` (P09-02g): the account waits for deletion; the game refuses until the player cancels in the account panel.
 export type ServerFailure = 'content_version' | 'unauthorized' | 'network' | 'server' | 'deleting';
 export type ServerOutcome =
@@ -94,6 +98,16 @@ export class ServerClient {
     this.session = port.randomHex(16);
   }
   get waitingRetry(): boolean { return this.pending !== undefined; }
+  // P09 ledger: the last clock the server sent and this device's time when it arrived.
+  private clock: { at: number; server: ServerClock } | undefined;
+  private noteClock(clock: ServerClock | undefined): void { if (clock && Number.isInteger(clock.day)) this.clock = { at: this.now(), server: clock }; }
+  // The server's game day as of now (moved on locally once the server's next day has started), for what the screens
+  // show; the server stamps the real day on each command. Undefined until the server has answered once.
+  get day(): number | undefined {
+    if (!this.clock) return undefined;
+    const { at, server } = this.clock;
+    return server.now + (this.now() - at) >= server.next ? server.day + 1 : server.day;
+  }
 
   private token(): string | null { return this.read(TOKEN_KEY); }
   private read(key: string): string | null { try { return this.storage?.getItem(key + this.base) ?? null; } catch { return null; } }
@@ -182,7 +196,7 @@ export class ServerClient {
       if (r?.status === 423) return { kind: 'otherDevice' };
       if (!r || r.status !== 200) return { kind: 'failed', reason: ServerClient.failure(r) };
       const state = await r.json() as ServerState;
-      this.lastSeq = state.lastSeq; this.pending = undefined;
+      this.lastSeq = state.lastSeq; this.pending = undefined; this.noteClock(state.clock);
       return { kind: 'state', state };
     }
     return { kind: 'failed', reason: 'unauthorized' };
@@ -196,7 +210,7 @@ export class ServerClient {
     if (r?.status === 423) return { kind: 'otherDevice' };
     if (!r || r.status !== 200) return { kind: 'failed', reason: ServerClient.failure(r) };
     const state = await r.json() as ServerState;
-    this.lastSeq = state.lastSeq;
+    this.lastSeq = state.lastSeq; this.noteClock(state.clock);
     return { kind: 'state', state };
   }
 
@@ -323,7 +337,9 @@ export class ServerClient {
 
   async send(command: GameCommand): Promise<ServerOutcome> {
     if (this.pending) return { kind: 'failed', reason: 'network' };
-    this.pending = { requestId: `c${this.port.randomHex(16)}`, seq: this.lastSeq + 1, command };
+    // The server refuses a device day on dated commands ('client_day') and uses its own.
+    const sent = DATED_KINDS.has(command.kind) ? Object.fromEntries(Object.entries(command).filter(([k]) => k !== 'day')) as GameCommand : command;
+    this.pending = { requestId: `c${this.port.randomHex(16)}`, seq: this.lastSeq + 1, command: sent };
     return this.retry();
   }
 
