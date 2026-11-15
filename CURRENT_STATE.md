@@ -17,11 +17,10 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ## Next (owner review)
 
 - P09: 02g (#236), 03 (#237) done; Pages plays through the dev API by default (#238, owner “ข้อ 1”). Owner: privacy contact line, test date T, own admin row, Google consent publish. Open: inactive-guest cleanup, old-token reuse detection.
-- P04: OD-15–33 recorded; P04-02/03/04/04b done (shards replace dupes/seals; tree points = camp Lv2–10 + 1 per first normal clear; camp Lv cap by newest map for P06; ★1 in a ★3 team clears like ★5). See [P04-03](docs/validation/p04-03-2026-11-14/README_TH.md), [P04-04](docs/validation/p04-04-2026-11-14/README_TH.md).
-
+- P04: OD-15–33; P04-02/03/04/04b done (shards replace dupes/seals; tree points camp Lv2–10 + first clears; camp Lv cap by newest map). [P04-04](docs/validation/p04-04-2026-11-14/README_TH.md).
 - P05-01–04 done (bosses, OD-34–41; [inventory](docs/design/p05/ACTIVITY_INVENTORY_TH.md); P05-02 [optional quests, story flags, counters](docs/validation/p05-02-2026-11-15/README_TH.md)).
-- P05-05 done ([validation](docs/validation/p05-05-2026-11-15/README_TH.md), PR #254): offline sweep (`core/world/sweep.ts`): cleared maps, 1 supply, 3/map/day shared normal/hard, fixed table, no EXP/items. Owner has not commented; rules kept.
-- P05-06 done ([validation](docs/validation/p05-06-2026-11-15/README_TH.md)): one camp board (รายวัน/รายสัปดาห์/สัญญา/งานค่าย, `core/world/board.ts`, command `claimBoard`), 3 daily + 5 weekly with alt ways, auto-counted from settled runs/sweeps, ≤2 catch-up days, six auto-checked contracts (OD-37). Server day online since the P09 ledger. P05 complete.
+- P05-05 done ([validation](docs/validation/p05-05-2026-11-15/README_TH.md), PR #254): offline sweep: cleared maps, 1 supply, 3/map/day shared normal/hard, no EXP/items.
+- P05-06 done ([validation](docs/validation/p05-06-2026-11-15/README_TH.md)): one camp board: 3 daily + 5 weekly, ≤2 catch-up days, six auto-checked contracts (OD-37). Server day online since the P09 ledger. P05 complete.
 - P09 reward ledger done ([doc](docs/design/p09/LEDGER_P09_TH.md)): online `sweep`/`claimBoard`/`depart` use the server game day (midnight Asia/Bangkok, draft) and refuse a device `day` (`client_day`); each payout gets one receipt in the DO `reward_ledger` (same transaction, retry-safe, `duplicate_receipt` guard); log stores the day for replay; device shows the server day. Offline keeps the device day. Owner open: reset time zone.
 - P04-06 done ([validation](docs/validation/p04-06-2026-11-15/README_TH.md)): week sim `tests/sim/week-sim.ts` + probe `p0406-budget`. Sweep supply 2/day keep 6, map-3 sweep 30/15/2/1, board rewards cut → sweep+board 22–30% of weekly ore for a full-run player (rush 42–53%, login-only 530 ore/week). Owner open: target share, login-only income, old-map unique sets (P06).
 - P04-05 pacing: catch-up EXP 115%/130%, campfire 70% kept (OD-39); recheck with P06.
