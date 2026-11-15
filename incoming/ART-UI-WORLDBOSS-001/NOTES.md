@@ -25,3 +25,5 @@ python3 -I incoming/ART-UI-WORLDBOSS-001/handoff.py --verify
 ไม่ได้นำเข้าเกม ไม่ทดสอบ runtime ไม่เปลี่ยนสถานะ ไม่ merge; Claude นำเข้าหลังเจ้าของเลือก
 คำสั่งเฉพาะงานอนุญาตเฉพาะ incoming นี้ จึงบันทึก handoff ที่นี่แทนการแก้ CURRENT_STATE.md/docs/handoffs
 Git CLI ติดต่อเครือข่ายไม่ได้ จึงใช้ GitHub connector สร้าง branch/commit/PR และ fetch กลับมาตรวจแทน git push/fetch
+
+raw/*.png.part0–2 คือสำเนา byte chunks ของ raw PNG เพื่อ fetch กลับผ่าน Contents API ที่ไม่คืนไฟล์ >1MB สคริปต์ตรวจ SHA-256 ของการต่อ chunks และ decode PNG ที่ได้อีกครั้ง (raw PNG ต้นฉบับยังเก็บครบ)

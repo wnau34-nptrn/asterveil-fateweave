@@ -61,6 +61,13 @@ def build():
     (P/'validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 def verify():
     report=json.loads((P/'validation.json').read_text())
+    for n in ('banner_sheet','emblem'):
+        parts=sorted((P/'raw').glob(n+'.png.part*'))
+        if parts:
+            data=b''.join(x.read_bytes() for x in parts)
+            assert hashlib.sha256(data).hexdigest()==report['files']['raw/'+n+'.png']['sha256']
+            if not (P/'raw'/(n+'.png')).exists() or (P/'raw'/(n+'.png')).stat().st_size==0:
+                (P/'raw'/(n+'.png')).write_bytes(data)
     for name,item in report['files'].items():
         p=P/name; assert digest(p)==item['sha256'],name
         if p.suffix in ('.png','.webp'):
