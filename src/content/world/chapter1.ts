@@ -10,9 +10,9 @@ export const chapterOne: MapDefinition = {
   // Skill tomes (docs/design/SKILL_TOMES_TH.md, draft): the rift warden pays more, and its first clear a rift core.
   tomes: { boss: { medium: 3, small: 2 }, first: { large: 1, core: 0 } },
   // P05-05 (draft): about a third of a quick completed run; hard pays the same ore/gold (OD-41) and one more tome.
-  sweepReward: { normal: { ore: 48, gold: 25, dust: 4, tomes: 2 }, hard: { ore: 48, gold: 25, dust: 4, tomes: 3 } },
+  sweepReward: { normal: { ore: 30, gold: 15, dust: 2, tomes: 1 }, hard: { ore: 30, gold: 15, dust: 2, tomes: 2 } },
   // P05-06 (draft, tests/probe/p0506-board.test.ts): rush clears took 53–65 steps, explorers 197.
-  contract: { reward: { ore: 40, gold: 20, dust: 2, tomes: 1 }, swiftSteps: 90 },
+  contract: { reward: { ore: 25, gold: 12, dust: 1, tomes: 1 }, swiftSteps: 90 },
   chapter: 3, summary: 'ชายแดนแอสเตอร์เวลที่รอยแยกเปิดกว้าง ทำลายผนึกแล้วโค่นผู้คุมรอยแยก', clearStory: 'warden', bossCharm: true, bossName: 'ผู้คุมรอยแยก', goalName: 'ประตูรอยแยก',
   rows: [
     '#######################',

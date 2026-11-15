@@ -11,6 +11,7 @@ import { TREE_BUILDS } from './tree-sim';
 import { resolveCommand, targetOptions, currentHeroId } from '../../src/core/battle/engine';
 import { buy, buyReason, chooseLoadout, refreshBoard, refreshReason, claimQuest, claimReason, createCommander, depart, equip, hire, hireReason, boardOffers, learnTalent, newProfile, salvage, settle, talentReason, upgrade, upgradeReason, brew, brewReason, homeItems } from '../../src/core/world/profile';
 import { enhance, enhanceCost, enhanceReason, smelt, smeltReason } from '../../src/core/world/forge';
+import { salvageValue } from '../../src/core/world/equipment';
 import { boulderAt, openPit, passableWall, runePuzzleAt } from '../../src/core/world/puzzles';
 import type { ActionId, BattleState } from '../../src/core/battle/types';
 import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Lane, Point, Profile, MemberProgress, RunOutcome } from '../../src/core/world/types';
@@ -410,6 +411,35 @@ export function simulateCampaign(seed: number, policy: Policy, style: Style = 'a
   }
   map = chapterOne; checks = false;
   return { seed, policy, style, expeditions: out, profile: p };
+}
+
+// P04-06 (farm budget, tests/sim/week-sim.ts): one lobby visit and one expedition on `mapDef` for a company that has
+// finished the campaign, stamped with the calendar `day` so the quest board counts it. `spent` is what the lobby paid
+// (skills, market, hiring, stars, forge, potions), `gained` what the settled run added, `drops` the salvage value of
+// the items it carried home and `tomes` the small-tome equivalents it brought.
+export function playExpedition(p: Profile, mapDef: MapDefinition, hard: boolean, policy: Policy, style: Style, seed: number, day: number):
+  { profile: Profile; outcome: RunOutcome; run: ExpeditionState; spent: { ore: number; gold: number; shard: number; dust: number }; gained: { ore: number; gold: number; shard: number; dust: number }; drops: { ore: number; dust: number; count: number } } {
+  map = mapDef; checks = true; company = `${seed}:${policy}:${style}`; skillGold = 0;
+  const b0 = { ...p.bank };
+  // Weeks of play fill the bag: like a player, salvage loose pieces below epic before the lobby's own clean-up.
+  if (p.items.length > map.equipment.bagCap - 10) { const loose = p.items.filter(i => i.rarity <= 2 && !protectedItem(i)).map(i => i.uid); if (loose.length) p = salvage(p, map, loose).profile; }
+  p = lobby(p).profile;
+  // Pieces still waiting past a full bag: make room from loose bag pieces below legendary, then take or recycle the rest.
+  if (p.overflow?.length) {
+    const loose = p.items.filter(i => i.rarity <= 3 && !protectedItem(i)).map(i => i.uid); if (loose.length) p = salvage(p, map, loose).profile;
+    p = collectOverflow(p, map, p.overflow!.map(i => i.uid)).profile;
+    if (p.overflow?.length) p = recycleSelection(p, map, 'overflow', p.overflow.map(i => i.uid)).profile;
+  }
+  const b1 = { ...p.bank };
+  const d = depart(p, map, lookup, seed >>> 0, hard ? { maps: MAPS } : undefined, day); p = d.profile;
+  const report: ExpeditionReport = { index: 0, outcome: 'withdrawn', steps: 0, wins: 0, defeats: 0, lowestHp: 100, battles: {}, gained: { ore: 0, gold: 0, shard: 0, dust: 0 },
+    items: [0, 0, 0, 0, 0], chests: 0, elites: 0, objectives: 0, bossBeaten: false, level: 0, stars: 0, company: p.company.length, claimed: [] };
+  const r = runExpedition(d.run, policy, style, report); const before = { ...p.bank };
+  const home = homeItems(r.state, r.outcome, map); p = settle(p, r.state, r.outcome, map);
+  const drops = home.reduce((v, i) => { const n = salvageValue(map, i); return { ore: v.ore + n.ore, dust: v.dust + n.dust, count: v.count + 1 }; }, { ore: 0, dust: 0, count: 0 });
+  const delta = (a: typeof b0, b: typeof b0) => ({ ore: a.ore - b.ore, gold: a.gold - b.gold, shard: a.shard - b.shard, dust: a.dust - b.dust });
+  const out = { profile: p, outcome: r.outcome, run: r.state, spent: delta(b0, b1), gained: delta(p.bank, before), drops };
+  map = chapterOne; checks = false; return out;
 }
 
 // ---- Report ----

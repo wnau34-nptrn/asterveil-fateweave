@@ -22,7 +22,7 @@ export const gameRules: GameRules = {
   ],
   // P05-05 (prototype, draft numbers from docs/design/WORLD_BOSS_SWEEP_TH.md §4): 6 supplies a day kept up to 18, one per
   // sweep, 3 sweeps per map per day shared by normal and hard. Each map's rewards are its own `sweepReward`.
-  sweep: { daily: 6, cap: 18, cost: 1, perMapDaily: 3 },
+  sweep: { daily: 2, cap: 6, cost: 1, perMapDaily: 3 },
   // P05-06 quest board (prototype, draft numbers; docs/validation/p05-06-2026-11-15/README_TH.md). Three daily and five
   // weekly tasks that ordinary play fills by itself; `alt` is the second way to finish one. Daily sets stay open three
   // days (today and two catch-up days). Contracts (P05-01 §2.3, OD-37): no fee, no penalty, each pays once a week with
@@ -30,16 +30,16 @@ export const gameRules: GameRules = {
   board: {
     keepDays: 3, smallTeam: 3,
     daily: [
-      { id: 'd-patrol', kind: 'wins', target: 3, alt: { kind: 'sweeps', target: 2 }, reward: { ore: 20, gold: 10 } },
-      { id: 'd-gather', kind: 'chests', target: 2, alt: { kind: 'herbs', target: 3 }, reward: { ore: 15, gold: 10, dust: 2 } },
-      { id: 'd-job', kind: 'contracts', target: 1, alt: { kind: 'completes', target: 1 }, reward: { ore: 20, gold: 10, tomes: 1 } },
+      { id: 'd-patrol', kind: 'wins', target: 3, alt: { kind: 'sweeps', target: 2 }, reward: { ore: 10, gold: 5 } },
+      { id: 'd-gather', kind: 'chests', target: 2, alt: { kind: 'herbs', target: 3 }, reward: { ore: 8, gold: 5, dust: 1 } },
+      { id: 'd-job', kind: 'contracts', target: 1, alt: { kind: 'completes', target: 1 }, reward: { ore: 10, gold: 5, tomes: 1 } },
     ],
     weekly: [
-      { id: 'w-return', kind: 'completes', target: 4, alt: { kind: 'sweeps', target: 9 }, reward: { ore: 60, gold: 30 } },
-      { id: 'w-battles', kind: 'wins', target: 15, reward: { ore: 50, gold: 30, tomes: 2 } },
-      { id: 'w-elites', kind: 'elites', target: 3, reward: { ore: 40, gold: 20, dust: 6 } },
-      { id: 'w-stories', kind: 'events', target: 4, alt: { kind: 'finds', target: 3 }, reward: { ore: 40, gold: 25, dust: 4 } },
-      { id: 'w-jobs', kind: 'contracts', target: 3, reward: { ore: 60, gold: 30, tomes: 3 } },
+      { id: 'w-return', kind: 'completes', target: 4, alt: { kind: 'sweeps', target: 9 }, reward: { ore: 40, gold: 20 } },
+      { id: 'w-battles', kind: 'wins', target: 15, reward: { ore: 40, gold: 20, tomes: 2 } },
+      { id: 'w-elites', kind: 'elites', target: 3, reward: { ore: 30, gold: 15, dust: 4 } },
+      { id: 'w-stories', kind: 'events', target: 4, alt: { kind: 'finds', target: 3 }, reward: { ore: 30, gold: 15, dust: 3 } },
+      { id: 'w-jobs', kind: 'contracts', target: 3, reward: { ore: 40, gold: 20, tomes: 2 } },
     ],
     contracts: [
       { id: 'job-swift', kind: 'swift' }, { id: 'job-explorer', kind: 'explorer' }, { id: 'job-bloodless', kind: 'bloodless' },

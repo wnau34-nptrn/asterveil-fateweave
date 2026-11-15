@@ -8,9 +8,9 @@ export const ruinsMap: MapDefinition = {
   ...gameRules,
   id: 'ruined-border', version: 3, name: 'ซากชายแดน', chapter: 1, bossName: 'หัวหน้ากองหน้า', goalName: 'ประตูป้อม',
   // P05-05 (draft): about a third of a quick completed run's ore/gold (docs/validation/p05-05-2026-11-15); no tomes here.
-  sweepReward: { normal: { ore: 15, gold: 7 }, hard: { ore: 15, gold: 7 } },
+  sweepReward: { normal: { ore: 10, gold: 5 }, hard: { ore: 10, gold: 5 } },
   // P05-06 (draft, tests/probe/p0506-board.test.ts): rush clears took 10 steps, explorers 34.
-  contract: { reward: { ore: 15, gold: 8 }, swiftSteps: 18 },
+  contract: { reward: { ore: 10, gold: 5 }, swiftSteps: 18 },
   summary: 'ซากป้อมชายแดนที่กองหน้าของวาร์กอธบุกเข้ามา ฝึกเดินทาง เปิดหีบ สวมอุปกรณ์ แล้วขับไล่หัวหน้ากองหน้า',
   rows: [
     '##############',

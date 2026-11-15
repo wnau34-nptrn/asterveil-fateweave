@@ -40,14 +40,14 @@ test('the quest board counts by itself, keeps a catch-up day and pays each task 
   await todayPatrol.click();
   await expect(page.locator('.lobby-result')).toContainText('ลาดตระเวนประจำวัน');
   await expect(page.locator(`#board-d-patrol-${day}`)).toHaveAttribute('data-state', 'claimed');
-  let s = await saved(page); expect(s.bank.ore).toBe(100 + 48 * 2 + 20); expect(s.board!.days.at(-1)!.claimed).toEqual(['d-patrol']);
+  let s = await saved(page); expect(s.bank.ore).toBe(100 + 30 * 2 + 10); expect(s.board!.days.at(-1)!.claimed).toEqual(['d-patrol']);
   // The contract tab pays the map-3 reward once.
   await page.locator('#quest-tab-contract').click();
   const job = page.locator(`#board-claim-contract-job-unharmed-${week}`); await expect(job).toBeVisible();
   await expect(page.locator('.quest-board')).toContainText('ไม่มีโทษ');
   await page.screenshot({ path: info.outputPath('board-contracts.png') });
   await job.click(); await expect(page.locator(`#board-job-unharmed-${week}`)).toHaveAttribute('data-state', 'claimed');
-  s = await saved(page); expect(s.bank.ore).toBe(100 + 48 * 2 + 20 + 40);
+  s = await saved(page); expect(s.bank.ore).toBe(100 + 30 * 2 + 10 + 25);
   // The camp tab keeps the six one-time side quests.
   await page.locator('#quest-tab-camp').click(); await expect(page.locator('.quest-board .side-quest')).toHaveCount(chapterOne.sideQuests.length);
   // A reload keeps what was paid; the catch-up day is still open to claim.

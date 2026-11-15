@@ -18,7 +18,8 @@ import type { Profile } from '../src/core/world/types';
 
 // P05-05 sweep prototype (save v62): a cleared map pays a fixed repeat reward for one supply. Covers the clear unlock,
 // the all-or-nothing payment, the shared normal/hard limit per map and day, supplies over days, retries and the save.
-const home = chapterOne; const DAY = 20_772;
+const home = chapterOne; const DAY = 20_772; const R = gameRules.sweep;
+const stocked = (patch: Partial<Profile> = {}): Profile => base({ sweep: { day: DAY, supply: R.cap, used: {}, count: 0 }, ...patch });
 const base = (patch: Partial<Profile> = {}): Profile => ({ ...newProfile(home, 5), tutorialDone: true, commander: { name: 'ทดสอบ', crest: 'star', color: 'gold', camp: 'ค่ายทดสอบ' },
   cleared: MAPS.map(m => m.id), bank: { ore: 100, gold: 100, shard: 7, dust: 10 }, ...patch });
 const ok = (p: Profile, map = home, hard = false, day = DAY): Profile => {
@@ -33,7 +34,8 @@ const write = (game: Game): string => { let raw = ''; saveGame({ getItem: () => 
 
 describe('P05-05 sweep content', () => {
   it('every map shares the sweep rules and has its own repeat reward from existing resources', () => {
-    expect(gameRules.sweep).toEqual({ daily: 6, cap: 18, cost: 1, perMapDaily: 3 });
+    // P04-06 budget (docs/validation/p04-06-2026-11-15): 2 a day kept up to 6 (three days, a 3-session week loses none).
+    expect(gameRules.sweep).toEqual({ daily: 2, cap: 6, cost: 1, perMapDaily: 3 });
     for (const m of MAPS) {
       expect(m.sweep).toBe(gameRules.sweep);
       const { normal, hard } = m.sweepReward!;
@@ -65,7 +67,7 @@ describe('P05-05 sweep rules', () => {
     const out = ok(p); const r = home.sweepReward!.normal; const line = partyLine(home, p.party.deployed);
     expect(out.bank).toEqual({ ore: 100 + r.ore, gold: 100 + r.gold, shard: 7, dust: 10 + r.dust! });
     const tomes = emptyTomes(); tomes[line].small = r.tomes!; expect(out.tomes).toEqual(tomes);
-    expect(out.sweep).toEqual({ day: DAY, supply: 5, used: { [home.id]: 1 }, count: 1 });
+    expect(out.sweep).toEqual({ day: DAY, supply: R.daily - 1, used: { [home.id]: 1 }, count: 1 });
     // Everything a real expedition would move stays as it was: no EXP, items, cores, counters, quests, market or board.
     // P05-06: on the quest board it counts only as one sweep.
     expect(out.board!.days.at(-1)!.n).toEqual({ sweeps: 1 }); expect(out.board!.weeks.at(-1)!).toMatchObject({ n: { sweeps: 1 }, jobs: {} });
@@ -73,7 +75,7 @@ describe('P05-05 sweep rules', () => {
     expect(p.sweep).toBeUndefined(); expect(p.bank.ore).toBe(100);
   });
   it('hard pays its own row and shares the map limit with normal', () => {
-    let p = base({ clearedHard: [home.id] });
+    let p = stocked({ clearedHard: [home.id] });
     p = ok(p, home, true); expect(p.tomes![partyLine(home, p.party.deployed)].small).toBe(home.sweepReward!.hard.tomes);
     p = ok(p, home, false); p = ok(p, home, true);
     expect(sweepsLeft(sweepBook(p, home, DAY), home)).toBe(0);
@@ -81,21 +83,21 @@ describe('P05-05 sweep rules', () => {
     // Another map has its own three, and tomorrow this one opens again.
     expect(sweepReason(p, forestMap, false, DAY)).toBe(''); expect(sweepReason(p, home, true, DAY + 1)).toBe('');
   });
-  it('supplies: six on the first day, six more each day up to eighteen, and none when the clock goes back', () => {
+  it('supplies: two on the first day, two more each day up to six, and none when the clock goes back', () => {
     let p = base();
-    expect(sweepBook(p, home, DAY).supply).toBe(6);
-    for (const m of [home, home, home, forestMap, forestMap, forestMap]) p = ok(p, m);
+    expect(sweepBook(p, home, DAY).supply).toBe(R.daily);
+    for (const m of [home, forestMap]) p = ok(p, m);
     expect(p.sweep!.supply).toBe(0); expect(refused(p, ruinsMap)).toBe('supply');
     expect(refused(p, ruinsMap, false, DAY - 3)).toBe('supply'); expect(sweepBook(p, home, DAY - 3)).toEqual(p.sweep);
-    expect(sweepBook(p, home, DAY + 1)).toEqual({ day: DAY + 1, supply: 6, used: {}, count: 6 });
-    expect(sweepBook(p, home, DAY + 2).supply).toBe(12); expect(sweepBook(p, home, DAY + 40).supply).toBe(18);
-    p = ok(p, ruinsMap, false, DAY + 40); expect(p.sweep).toEqual({ day: DAY + 40, supply: 17, used: { [ruinsMap.id]: 1 }, count: 7 });
+    expect(sweepBook(p, home, DAY + 1)).toEqual({ day: DAY + 1, supply: 2, used: {}, count: 2 });
+    expect(sweepBook(p, home, DAY + 2).supply).toBe(4); expect(sweepBook(p, home, DAY + 3).supply).toBe(6); expect(sweepBook(p, home, DAY + 40).supply).toBe(6);
+    p = ok(p, ruinsMap, false, DAY + 40); expect(p.sweep).toEqual({ day: DAY + 40, supply: 5, used: { [ruinsMap.id]: 1 }, count: 3 });
     // Back on an earlier date the book keeps its own day: the count of that day still stands.
     expect(sweepsLeft(sweepBook(p, ruinsMap, DAY), ruinsMap)).toBe(2);
   });
   it('a full store refuses the sweep and keeps the supply', () => {
     expect(refused(base({ bank: { ore: BANK_CAP.ore - 1, gold: 0, shard: 0, dust: 0 } }))).toBe('full');
-    const tomes = emptyTomes(); const p = base(); tomes[partyLine(home, p.party.deployed)].small = TOME_CAP - 1;
+    const tomes = emptyTomes(); const p = base(); tomes[partyLine(home, p.party.deployed)].small = TOME_CAP - home.sweepReward!.normal.tomes! + 1;
     expect(refused({ ...p, tomes })).toBe('full');
   });
   it('a repeated request is refused instead of paid twice', () => {
@@ -109,7 +111,7 @@ describe('P05-05 sweep command', () => {
   it('runs the same rule, only at camp, and never for anything but a map', () => {
     const p = base(); const game: Game = { profile: p, run: null };
     const out = applyCommand(game, cmd(p), ctx()); if (isRejected(out)) throw new Error(out.rejected);
-    expect(out.game.profile).toEqual({ ...sweep(p, home, false, DAY, 0).profile, last: null }); expect(out.events[0]).toMatchObject({ type: 'swept', mapId: home.id, supply: 5, left: 2 });
+    expect(out.game.profile).toEqual({ ...sweep(p, home, false, DAY, 0).profile, last: null }); expect(out.events[0]).toMatchObject({ type: 'swept', mapId: home.id, supply: R.daily - 1, left: 2 });
     // The same command again (a double tap or a resend) changes nothing.
     expect(applyCommand(out.game, cmd(p), ctx())).toEqual({ rejected: 'stale' });
     expect(applyCommand(game, cmd(p, { mapId: 'world-boss' }), ctx())).toEqual({ rejected: 'unknown' });
@@ -148,7 +150,7 @@ describe('save v62', () => {
   it('rejects a book outside the rules', () => {
     const p = swept(); const bad = (sweepPatch: unknown, patch: Partial<Profile> = {}) => () => parseGame(JSON.stringify({ version: 62, profile: { ...p, ...patch, sweep: sweepPatch }, run: null }), home, lookup, MAPS);
     const b = p.sweep!;
-    expect(bad({ ...b, supply: 19 })).toThrow(); expect(bad({ ...b, supply: -1 })).toThrow(); expect(bad({ ...b, day: 1.5 })).toThrow(); expect(bad({ ...b, count: -1 })).toThrow();
+    expect(bad({ ...b, supply: R.cap + 1 })).toThrow(); expect(bad({ ...b, supply: -1 })).toThrow(); expect(bad({ ...b, day: 1.5 })).toThrow(); expect(bad({ ...b, count: -1 })).toThrow();
     expect(bad({ ...b, used: { [home.id]: 4 } })).toThrow(); expect(bad({ ...b, used: { [home.id]: 0 } })).toThrow(); expect(bad({ ...b, bonus: 1 })).toThrow(); expect(bad(null)).toThrow();
     expect(bad(b, { cleared: [ruinsMap.id, forestMap.id] })).toThrow();
     // A map that no longer exists is dropped, as cleared maps are.

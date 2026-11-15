@@ -10,9 +10,9 @@ export const forestMap: MapDefinition = {
   // Skill tomes (docs/design/SKILL_TOMES_TH.md, draft): the thorn lord pays tomes every win, a large one on the first clear.
   tomes: { boss: { medium: 1, small: 2 }, first: { large: 1, core: 0 } },
   // P05-05 (draft): about a third of a quick completed run; hard pays the same ore/gold (OD-41) and one more tome.
-  sweepReward: { normal: { ore: 15, gold: 7, tomes: 1 }, hard: { ore: 15, gold: 7, tomes: 2 } },
+  sweepReward: { normal: { ore: 10, gold: 5, tomes: 1 }, hard: { ore: 10, gold: 5, tomes: 2 } },
   // P05-06 (draft, tests/probe/p0506-board.test.ts): rush clears took 11–13 steps, explorers 87–105.
-  contract: { reward: { ore: 15, gold: 8, tomes: 1 }, swiftSteps: 30 },
+  contract: { reward: { ore: 10, gold: 5, tomes: 1 }, swiftSteps: 30 },
   summary: 'ทางผ่านป่าที่รอยแยกบิดให้กลายเป็นหนาม ฝ่าด่านอีลิท เจอเหตุการณ์กลางทาง แล้วสงบเจ้าป่าหนาม',
   rows: [
     '################',
