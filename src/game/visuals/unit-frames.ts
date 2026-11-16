@@ -163,6 +163,12 @@ export const unitRegistry = {
     intents: { 'Shard Talon': 'move1', 'Wing Gust': 'move2', 'Wing Gathering': 'move3', 'Worldshard Dive': 'move4', Staggered: 'move5', 'Sky Rend': 'move6' },
     clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21) },
     reactions: { hit: [25, 26], down: [27, 28, 29] } },
+  // WB-C (World Boss Morvane, ART-UNIT-ANIMATION-WB-C-001): same boss layout; it floats, its lowest cloak tip is the sole (896/1024).
+  // Call the Court is the no-damage summon turn; Severed Crown is the 70% phase gesture. The atlas is never mirrored.
+  foe_morvane: { sheet: 'morvane', displayRatio: 2, soleOrigin: BOSS_SOLE, downFrame: 29,
+    intents: { 'Six-Hand Rend': 'move1', 'Severing Bolt': 'move2', 'Fate Lash': 'move3', 'Call the Court': 'move4', 'Shadow Tide': 'move5', 'Severed Crown': 'move6' },
+    clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21) },
+    reactions: { hit: [25, 26], down: [27, 28, 29] } },
   foe_captain: { sheet: 'captain', displayRatio: 2, soleOrigin: BOSS_SOLE, downFrame: 17,
     intents: { 'War Cry': 'move1', 'Crushing Blow': 'move2', 'Call the Hunt': 'move3' },
     clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9) }, reactions: { hit: [13, 14], down: [15, 16, 17] } },

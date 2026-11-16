@@ -22,8 +22,8 @@ describe('WB-B Valdrakk body: real intents, phase, clips and layout',()=>{
   expect(wbValdrakk.enemies.filter(e=>e.art===ART).map(e=>e.id)).toEqual(['f1']);
   expect([...found].sort()).toEqual(moves.filter(m=>!engineOnly.includes(m)).sort());
   expect(Object.keys(unitRegistry[ART].intents).sort()).toEqual([...moves].sort());
-  // Morvane keeps the warden art until WB-C; the catalog lookup still finds all three.
-  expect(presentedEncounters.map(d=>d.id)).toContain('wb-valdrakk');expect(encounters.map(d=>d.id)).not.toContain('wb-valdrakk');expect(encounterById('wb-kragmor')!.enemies.find(e=>e.boss)!.art).toBe('foe_kragmor');expect(encounterById('wb-morvane')!.enemies.find(e=>e.boss)!.art).toBe('foe_sentinel');
+  // Morvane has its own art since WB-C; the catalog lookup still finds all three.
+  expect(presentedEncounters.map(d=>d.id)).toContain('wb-valdrakk');expect(encounters.map(d=>d.id)).not.toContain('wb-valdrakk');expect(encounterById('wb-kragmor')!.enemies.find(e=>e.boss)!.art).toBe('foe_kragmor');expect(encounterById('wb-morvane')!.enemies.find(e=>e.boss)!.art).toBe('foe_morvane');
  });
  for(const name of moves.filter(m=>!engineOnly.includes(m)))it(`plays the real ${name} turn once, ending on the seed`,()=>{
   const f=unitA9Fixture(ART,name),turn=f.result.turns.find(t=>t.side==='enemy')!;

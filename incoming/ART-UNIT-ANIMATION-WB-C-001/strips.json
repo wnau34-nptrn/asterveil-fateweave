@@ -1,0 +1,2994 @@
+{
+  "task": "ART-UNIT-ANIMATION-WB-C-001",
+  "base_commit": "c8e7f935248a8e96adfa3080e656ad643d3a1954",
+  "seed": "seeds/seed-c.png",
+  "logical_frame_count": 44,
+  "canonical_body_scale": 2.440514469453376,
+  "calibration": {
+    "source": "raw/original/six-hand-rend-r3.png",
+    "frame": 0,
+    "crown_apex_xy": [
+      197,
+      225
+    ],
+    "cloak_tip_y": 536,
+    "source_span": 311,
+    "global_scale": 2.440514469453376,
+    "method": "One crown-to-middle-cloak-tip calibration on Six-Hand Rend ready; no arm-height fit and no per-frame/per-strip pose fit.",
+    "note": "Calibration retained ONCE from R3 ready before whole-strip spacing revisions R4/R5; original R3 retained. No per-pose/strip scale fit."
+  },
+  "scale_policy": "Calibrate once from Six-Hand Rend ready. Original canvas width/N converts raster resolution only; no per-frame or per-strip anatomical fit.",
+  "raw_policy": "raw/original is byte-exact generator output incl rejected versions. raw/<move> is DERIVED: clear alpha<=8 and hidden RGB, crop alpha bbox and pad >=64px; no redraw/rescale. Original and padded bboxes/gaps separate.",
+  "anchor_policy": "No feet: actual cleaned-alpha lowest cloak endpoint maps to896; alpha bbox <=899. Down uses pooled cloth contact. All actual hover offsets0; torso/cloth articulation preserves original pose.",
+  "preview_scale": 0.21,
+  "preview_seed_height_px": 160.23,
+  "preview_positions": {
+    "six-hand-rend": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -10,
+          32
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          185,
+          32
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -10,
+          270
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          185,
+          270
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -10,
+          508
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          185,
+          508
+        ],
+        "scale": 0.21
+      }
+    ],
+    "severing-bolt": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -10,
+          782
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          185,
+          782
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -10,
+          1020
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          185,
+          1020
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -10,
+          1258
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          185,
+          1258
+        ],
+        "scale": 0.21
+      }
+    ],
+    "fate-lash": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -10,
+          1532
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          185,
+          1532
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -10,
+          1770
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          185,
+          1770
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -10,
+          2008
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          185,
+          2008
+        ],
+        "scale": 0.21
+      }
+    ],
+    "call-the-court": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -10,
+          2282
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          185,
+          2282
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -10,
+          2520
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          185,
+          2520
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -10,
+          2758
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          185,
+          2758
+        ],
+        "scale": 0.21
+      }
+    ],
+    "shadow-tide": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -10,
+          3032
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          185,
+          3032
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -10,
+          3270
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          185,
+          3270
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -10,
+          3508
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          185,
+          3508
+        ],
+        "scale": 0.21
+      }
+    ],
+    "severed-crown": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -10,
+          3782
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          185,
+          3782
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -10,
+          4020
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          185,
+          4020
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -10,
+          4258
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          185,
+          4258
+        ],
+        "scale": 0.21
+      }
+    ],
+    "hit": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -10,
+          4532
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          185,
+          4532
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -10,
+          4770
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          185,
+          4770
+        ],
+        "scale": 0.21
+      }
+    ],
+    "down": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -10,
+          5044
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          185,
+          5044
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -10,
+          5282
+        ],
+        "scale": 0.21
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          185,
+          5282
+        ],
+        "scale": 0.21
+      }
+    ]
+  },
+  "moves": [
+    {
+      "move": "six-hand-rend",
+      "file": "strips/six-hand-rend.png",
+      "raw": "raw/six-hand-rend.png",
+      "generator_original": "raw/original/six-hand-rend-r5.png",
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "middle pair draws back; upper pair high",
+        "middle pair open; slight right anticipation",
+        "both middle hands sweep low left",
+        "middle pair follow-through low; cloak trails",
+        "ready"
+      ],
+      "facing": "left",
+      "mirror": false,
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          221,
+          320,
+          536
+        ],
+        [
+          450,
+          206,
+          674,
+          537
+        ],
+        [
+          836,
+          209,
+          1147,
+          537
+        ],
+        [
+          1222,
+          219,
+          1524,
+          538
+        ],
+        [
+          1608,
+          221,
+          1930,
+          539
+        ],
+        [
+          1994,
+          222,
+          2253,
+          537
+        ]
+      ],
+      "original_pose_bounds_xyxy": [
+        [
+          51,
+          221,
+          307,
+          536
+        ],
+        [
+          447,
+          206,
+          671,
+          537
+        ],
+        [
+          754,
+          209,
+          1065,
+          537
+        ],
+        [
+          1142,
+          219,
+          1444,
+          538
+        ],
+        [
+          1504,
+          221,
+          1826,
+          539
+        ],
+        [
+          1863,
+          222,
+          2122,
+          537
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1826,
+        2172
+      ],
+      "original_gaps_after_cleanup_px": [
+        140,
+        83,
+        77,
+        60,
+        37
+      ],
+      "derived_raw_clear_gutters_px": [
+        130,
+        162,
+        75,
+        84,
+        64
+      ],
+      "canonical_body_scale": 2.440514469453376,
+      "source_resolution_scale": 1.0,
+      "effective_source_scale": 2.440514469453376,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            221,
+            320,
+            536
+          ],
+          "original_pose_bbox_xyxy": [
+            51,
+            221,
+            307,
+            536
+          ],
+          "source_crown_xy": [
+            197,
+            223
+          ],
+          "source_cloak_tip_y": 535,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            200,
+            130
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            450,
+            206,
+            674,
+            537
+          ],
+          "original_pose_bbox_xyxy": [
+            447,
+            206,
+            671,
+            537
+          ],
+          "source_crown_xy": [
+            557,
+            220
+          ],
+          "source_cloak_tip_y": 536,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            238,
+            91
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.3697749196141,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            836,
+            209,
+            1147,
+            537
+          ],
+          "original_pose_bbox_xyxy": [
+            754,
+            209,
+            1065,
+            537
+          ],
+          "source_crown_xy": [
+            918,
+            221
+          ],
+          "source_cloak_tip_y": 536,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            132,
+            98
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.048231511254,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1222,
+            219,
+            1524,
+            538
+          ],
+          "original_pose_bbox_xyxy": [
+            1142,
+            219,
+            1444,
+            538
+          ],
+          "source_crown_xy": [
+            1291,
+            226
+          ],
+          "source_cloak_tip_y": 537,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            144,
+            120
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0836012861736,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1608,
+            221,
+            1930,
+            539
+          ],
+          "original_pose_bbox_xyxy": [
+            1504,
+            221,
+            1826,
+            539
+          ],
+          "source_crown_xy": [
+            1648,
+            231
+          ],
+          "source_cloak_tip_y": 538,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            119,
+            122
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 895.6430868167201,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1994,
+            222,
+            2253,
+            537
+          ],
+          "original_pose_bbox_xyxy": [
+            1863,
+            222,
+            2122,
+            537
+          ],
+          "source_crown_xy": [
+            2009,
+            223
+          ],
+          "source_cloak_tip_y": 536,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            196,
+            130
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          191,
+          134,
+          832,
+          897
+        ],
+        [
+          238,
+          91,
+          785,
+          899
+        ],
+        [
+          132,
+          98,
+          891,
+          898
+        ],
+        [
+          144,
+          120,
+          881,
+          899
+        ],
+        [
+          119,
+          122,
+          905,
+          898
+        ],
+        [
+          191,
+          134,
+          832,
+          897
+        ]
+      ],
+      "hold_frame_0based": null,
+      "choice": null,
+      "runtime_intake_indices_0based": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "move": "severing-bolt",
+      "file": "strips/severing-bolt.png",
+      "raw": "raw/severing-bolt.png",
+      "generator_original": "raw/original/severing-bolt-r3.png",
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "lower pair clasps at chest",
+        "lower pair opens aiming; chest bright",
+        "lower small palms push left",
+        "lower pair follows through",
+        "ready"
+      ],
+      "facing": "left",
+      "mirror": false,
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          224,
+          326,
+          535
+        ],
+        [
+          392,
+          224,
+          655,
+          535
+        ],
+        [
+          720,
+          223,
+          982,
+          535
+        ],
+        [
+          1048,
+          224,
+          1310,
+          535
+        ],
+        [
+          1376,
+          224,
+          1638,
+          534
+        ],
+        [
+          1704,
+          223,
+          1968,
+          535
+        ]
+      ],
+      "original_pose_bounds_xyxy": [
+        [
+          50,
+          224,
+          312,
+          535
+        ],
+        [
+          411,
+          224,
+          674,
+          535
+        ],
+        [
+          774,
+          223,
+          1036,
+          535
+        ],
+        [
+          1136,
+          224,
+          1398,
+          535
+        ],
+        [
+          1498,
+          224,
+          1760,
+          534
+        ],
+        [
+          1860,
+          223,
+          2124,
+          535
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "original_gaps_after_cleanup_px": [
+        99,
+        100,
+        100,
+        100,
+        100
+      ],
+      "derived_raw_clear_gutters_px": [
+        66,
+        65,
+        66,
+        66,
+        66
+      ],
+      "canonical_body_scale": 2.440514469453376,
+      "source_resolution_scale": 1.0,
+      "effective_source_scale": 2.440514469453376,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            224,
+            326,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            50,
+            224,
+            312,
+            535
+          ],
+          "source_crown_xy": [
+            197,
+            224
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            192,
+            139
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            392,
+            224,
+            655,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            411,
+            224,
+            674,
+            535
+          ],
+          "source_crown_xy": [
+            560,
+            224
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            191,
+            139
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 895.5594855305466,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            720,
+            223,
+            982,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            774,
+            223,
+            1036,
+            535
+          ],
+          "source_crown_xy": [
+            921,
+            224
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            192,
+            137
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1048,
+            224,
+            1310,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            1136,
+            224,
+            1398,
+            535
+          ],
+          "source_crown_xy": [
+            1283,
+            224
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            192,
+            139
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 895.5594855305466,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1376,
+            224,
+            1638,
+            534
+          ],
+          "original_pose_bbox_xyxy": [
+            1498,
+            224,
+            1760,
+            534
+          ],
+          "source_crown_xy": [
+            1645,
+            225
+          ],
+          "source_cloak_tip_y": 533,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            192,
+            142
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.1189710610931,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1704,
+            223,
+            1968,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            1860,
+            223,
+            2124,
+            535
+          ],
+          "source_crown_xy": [
+            2008,
+            224
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            190,
+            137
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          191,
+          134,
+          832,
+          897
+        ],
+        [
+          191,
+          139,
+          833,
+          898
+        ],
+        [
+          192,
+          137,
+          831,
+          898
+        ],
+        [
+          192,
+          139,
+          831,
+          898
+        ],
+        [
+          192,
+          142,
+          831,
+          899
+        ],
+        [
+          191,
+          134,
+          832,
+          897
+        ]
+      ],
+      "hold_frame_0based": null,
+      "choice": null,
+      "runtime_intake_indices_0based": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "move": "fate-lash",
+      "file": "strips/fate-lash.png",
+      "raw": "raw/fate-lash.png",
+      "generator_original": "raw/original/fate-lash.png",
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "upper pair pinches before face",
+        "upper wrists cross overhead",
+        "upper pair lashes down left",
+        "upper pair follow-through",
+        "ready"
+      ],
+      "facing": "left",
+      "mirror": false,
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          225,
+          324,
+          535
+        ],
+        [
+          393,
+          225,
+          655,
+          534
+        ],
+        [
+          722,
+          181,
+          981,
+          534
+        ],
+        [
+          1051,
+          225,
+          1312,
+          535
+        ],
+        [
+          1380,
+          225,
+          1645,
+          534
+        ],
+        [
+          1709,
+          224,
+          1971,
+          535
+        ]
+      ],
+      "original_pose_bounds_xyxy": [
+        [
+          51,
+          225,
+          311,
+          535
+        ],
+        [
+          411,
+          225,
+          673,
+          534
+        ],
+        [
+          776,
+          181,
+          1035,
+          534
+        ],
+        [
+          1137,
+          225,
+          1398,
+          535
+        ],
+        [
+          1495,
+          225,
+          1760,
+          534
+        ],
+        [
+          1860,
+          224,
+          2122,
+          535
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "original_gaps_after_cleanup_px": [
+        100,
+        103,
+        102,
+        97,
+        100
+      ],
+      "derived_raw_clear_gutters_px": [
+        69,
+        67,
+        70,
+        68,
+        64
+      ],
+      "canonical_body_scale": 2.440514469453376,
+      "source_resolution_scale": 1.0,
+      "effective_source_scale": 2.440514469453376,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            225,
+            324,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            51,
+            225,
+            311,
+            535
+          ],
+          "source_crown_xy": [
+            197,
+            225
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            194,
+            142
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            393,
+            225,
+            655,
+            534
+          ],
+          "original_pose_bbox_xyxy": [
+            411,
+            225,
+            673,
+            534
+          ],
+          "source_crown_xy": [
+            559,
+            225
+          ],
+          "source_cloak_tip_y": 533,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            192,
+            144
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 895.6784565916398,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            722,
+            181,
+            981,
+            534
+          ],
+          "original_pose_bbox_xyxy": [
+            776,
+            181,
+            1035,
+            534
+          ],
+          "source_crown_xy": [
+            922,
+            218
+          ],
+          "source_cloak_tip_y": 533,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            196,
+            37
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0610932475884,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1051,
+            225,
+            1312,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            1137,
+            225,
+            1398,
+            535
+          ],
+          "source_crown_xy": [
+            1284,
+            225
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            194,
+            142
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.1189710610931,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1380,
+            225,
+            1645,
+            534
+          ],
+          "original_pose_bbox_xyxy": [
+            1495,
+            225,
+            1760,
+            534
+          ],
+          "source_crown_xy": [
+            1645,
+            226
+          ],
+          "source_cloak_tip_y": 533,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            188,
+            144
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 895.6784565916398,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1709,
+            224,
+            1971,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            1860,
+            224,
+            2122,
+            535
+          ],
+          "source_crown_xy": [
+            2007,
+            225
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            192,
+            139
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          191,
+          134,
+          832,
+          897
+        ],
+        [
+          192,
+          144,
+          831,
+          898
+        ],
+        [
+          196,
+          37,
+          828,
+          899
+        ],
+        [
+          194,
+          142,
+          831,
+          899
+        ],
+        [
+          188,
+          144,
+          835,
+          898
+        ],
+        [
+          191,
+          134,
+          832,
+          897
+        ]
+      ],
+      "hold_frame_0based": null,
+      "choice": null,
+      "runtime_intake_indices_0based": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "move": "call-the-court",
+      "file": "strips/call-the-court.png",
+      "raw": "raw/call-the-court.png",
+      "generator_original": "raw/original/call-the-court.png",
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "upper pair draws together above crown",
+        "upper pair opens outward",
+        "held wide opening; chest bright",
+        "upper pair releases slowly",
+        "ready"
+      ],
+      "facing": "left",
+      "mirror": false,
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          224,
+          327,
+          536
+        ],
+        [
+          407,
+          222,
+          671,
+          536
+        ],
+        [
+          750,
+          221,
+          1012,
+          536
+        ],
+        [
+          1093,
+          208,
+          1372,
+          536
+        ],
+        [
+          1436,
+          223,
+          1705,
+          536
+        ],
+        [
+          1779,
+          223,
+          2041,
+          536
+        ]
+      ],
+      "original_pose_bounds_xyxy": [
+        [
+          50,
+          224,
+          313,
+          536
+        ],
+        [
+          410,
+          222,
+          674,
+          536
+        ],
+        [
+          774,
+          221,
+          1036,
+          536
+        ],
+        [
+          1135,
+          208,
+          1414,
+          536
+        ],
+        [
+          1498,
+          223,
+          1767,
+          536
+        ],
+        [
+          1860,
+          223,
+          2122,
+          536
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "original_gaps_after_cleanup_px": [
+        97,
+        100,
+        99,
+        84,
+        93
+      ],
+      "derived_raw_clear_gutters_px": [
+        80,
+        79,
+        81,
+        64,
+        74
+      ],
+      "canonical_body_scale": 2.440514469453376,
+      "source_resolution_scale": 1.0,
+      "effective_source_scale": 2.440514469453376,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            224,
+            327,
+            536
+          ],
+          "original_pose_bbox_xyxy": [
+            50,
+            224,
+            313,
+            536
+          ],
+          "source_crown_xy": [
+            199,
+            224
+          ],
+          "source_cloak_tip_y": 535,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            191,
+            137
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            407,
+            222,
+            671,
+            536
+          ],
+          "original_pose_bbox_xyxy": [
+            410,
+            222,
+            674,
+            536
+          ],
+          "source_crown_xy": [
+            559,
+            224
+          ],
+          "source_cloak_tip_y": 535,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            190,
+            132
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 895.8810289389066,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            750,
+            221,
+            1012,
+            536
+          ],
+          "original_pose_bbox_xyxy": [
+            774,
+            221,
+            1036,
+            536
+          ],
+          "source_crown_xy": [
+            921,
+            224
+          ],
+          "source_cloak_tip_y": 535,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            192,
+            130
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.3215434083601,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1093,
+            208,
+            1372,
+            536
+          ],
+          "original_pose_bbox_xyxy": [
+            1135,
+            208,
+            1414,
+            536
+          ],
+          "source_crown_xy": [
+            1285,
+            217
+          ],
+          "source_cloak_tip_y": 535,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            172,
+            98
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.048231511254,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1436,
+            223,
+            1705,
+            536
+          ],
+          "original_pose_bbox_xyxy": [
+            1498,
+            223,
+            1767,
+            536
+          ],
+          "source_crown_xy": [
+            1645,
+            224
+          ],
+          "source_cloak_tip_y": 535,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            184,
+            135
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.4405144694533,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1779,
+            223,
+            2041,
+            536
+          ],
+          "original_pose_bbox_xyxy": [
+            1860,
+            223,
+            2122,
+            536
+          ],
+          "source_crown_xy": [
+            2008,
+            224
+          ],
+          "source_cloak_tip_y": 535,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            192,
+            135
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          191,
+          134,
+          832,
+          897
+        ],
+        [
+          190,
+          132,
+          834,
+          898
+        ],
+        [
+          192,
+          130,
+          831,
+          899
+        ],
+        [
+          172,
+          98,
+          853,
+          898
+        ],
+        [
+          184,
+          135,
+          840,
+          899
+        ],
+        [
+          191,
+          134,
+          832,
+          897
+        ]
+      ],
+      "hold_frame_0based": 3,
+      "choice": "R1",
+      "runtime_intake_indices_0based": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "move": "shadow-tide",
+      "file": "strips/shadow-tide.png",
+      "raw": "raw/shadow-tide.png",
+      "generator_original": "raw/original/shadow-tide.png",
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "all three pairs tuck inward",
+        "six hands open low",
+        "six palms press down; cloak spreads",
+        "release low",
+        "ready"
+      ],
+      "facing": "left",
+      "mirror": false,
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          224,
+          308,
+          534
+        ],
+        [
+          394,
+          224,
+          614,
+          534
+        ],
+        [
+          724,
+          224,
+          990,
+          537
+        ],
+        [
+          1054,
+          229,
+          1313,
+          538
+        ],
+        [
+          1384,
+          224,
+          1611,
+          538
+        ],
+        [
+          1714,
+          224,
+          1959,
+          534
+        ]
+      ],
+      "original_pose_bounds_xyxy": [
+        [
+          62,
+          224,
+          306,
+          534
+        ],
+        [
+          447,
+          224,
+          667,
+          534
+        ],
+        [
+          781,
+          224,
+          1047,
+          537
+        ],
+        [
+          1150,
+          229,
+          1409,
+          538
+        ],
+        [
+          1526,
+          224,
+          1753,
+          538
+        ],
+        [
+          1859,
+          224,
+          2104,
+          534
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "original_gaps_after_cleanup_px": [
+        141,
+        114,
+        103,
+        117,
+        106
+      ],
+      "derived_raw_clear_gutters_px": [
+        86,
+        110,
+        64,
+        71,
+        103
+      ],
+      "canonical_body_scale": 2.440514469453376,
+      "source_resolution_scale": 1.0,
+      "effective_source_scale": 2.440514469453376,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            224,
+            308,
+            534
+          ],
+          "original_pose_bbox_xyxy": [
+            62,
+            224,
+            306,
+            534
+          ],
+          "source_crown_xy": [
+            197,
+            225
+          ],
+          "source_cloak_tip_y": 533,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            214,
+            142
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            394,
+            224,
+            614,
+            534
+          ],
+          "original_pose_bbox_xyxy": [
+            447,
+            224,
+            667,
+            534
+          ],
+          "source_crown_xy": [
+            558,
+            224
+          ],
+          "source_cloak_tip_y": 533,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            244,
+            142
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.1189710610931,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            724,
+            224,
+            990,
+            537
+          ],
+          "original_pose_bbox_xyxy": [
+            781,
+            224,
+            1047,
+            537
+          ],
+          "source_crown_xy": [
+            915,
+            225
+          ],
+          "source_cloak_tip_y": 536,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            188,
+            135
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.4405144694533,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1054,
+            229,
+            1313,
+            538
+          ],
+          "original_pose_bbox_xyxy": [
+            1150,
+            229,
+            1409,
+            538
+          ],
+          "source_crown_xy": [
+            1278,
+            230
+          ],
+          "source_cloak_tip_y": 537,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            196,
+            144
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 895.6784565916398,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1384,
+            224,
+            1611,
+            538
+          ],
+          "original_pose_bbox_xyxy": [
+            1526,
+            224,
+            1753,
+            538
+          ],
+          "source_crown_xy": [
+            1639,
+            225
+          ],
+          "source_cloak_tip_y": 537,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            235,
+            132
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 895.8810289389066,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1714,
+            224,
+            1959,
+            534
+          ],
+          "original_pose_bbox_xyxy": [
+            1859,
+            224,
+            2104,
+            534
+          ],
+          "source_crown_xy": [
+            1990,
+            225
+          ],
+          "source_cloak_tip_y": 533,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            213,
+            142
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          191,
+          134,
+          832,
+          897
+        ],
+        [
+          244,
+          142,
+          781,
+          899
+        ],
+        [
+          188,
+          135,
+          837,
+          899
+        ],
+        [
+          196,
+          144,
+          828,
+          898
+        ],
+        [
+          235,
+          132,
+          789,
+          898
+        ],
+        [
+          191,
+          134,
+          832,
+          897
+        ]
+      ],
+      "hold_frame_0based": null,
+      "choice": null,
+      "runtime_intake_indices_0based": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "move": "severed-crown",
+      "file": "strips/severed-crown.png",
+      "raw": "raw/severed-crown.png",
+      "generator_original": "raw/original/severed-crown-r3.png",
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "bow; arms contract",
+        "head rises; upper pair raised; internal glow",
+        "held open-mouth roar",
+        "relax",
+        "ready"
+      ],
+      "facing": "left",
+      "mirror": false,
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          222,
+          328,
+          535
+        ],
+        [
+          444,
+          230,
+          684,
+          535
+        ],
+        [
+          824,
+          221,
+          1123,
+          535
+        ],
+        [
+          1204,
+          221,
+          1520,
+          535
+        ],
+        [
+          1584,
+          223,
+          1847,
+          535
+        ],
+        [
+          1964,
+          222,
+          2225,
+          535
+        ]
+      ],
+      "original_pose_bounds_xyxy": [
+        [
+          49,
+          222,
+          313,
+          535
+        ],
+        [
+          431,
+          230,
+          671,
+          535
+        ],
+        [
+          761,
+          221,
+          1060,
+          535
+        ],
+        [
+          1117,
+          221,
+          1433,
+          535
+        ],
+        [
+          1501,
+          223,
+          1764,
+          535
+        ],
+        [
+          1870,
+          222,
+          2131,
+          535
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "original_gaps_after_cleanup_px": [
+        118,
+        90,
+        57,
+        68,
+        106
+      ],
+      "derived_raw_clear_gutters_px": [
+        116,
+        140,
+        81,
+        64,
+        117
+      ],
+      "canonical_body_scale": 2.440514469453376,
+      "source_resolution_scale": 1.0,
+      "effective_source_scale": 2.440514469453376,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            222,
+            328,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            49,
+            222,
+            313,
+            535
+          ],
+          "source_crown_xy": [
+            198,
+            223
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            190,
+            135
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            444,
+            230,
+            684,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            431,
+            230,
+            671,
+            535
+          ],
+          "source_crown_xy": [
+            543,
+            231
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            219,
+            154
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 895.9163987138263,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            824,
+            221,
+            1123,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            761,
+            221,
+            1060,
+            535
+          ],
+          "source_crown_xy": [
+            921,
+            222
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            147,
+            132
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 895.8810289389066,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1204,
+            221,
+            1520,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            1117,
+            221,
+            1433,
+            535
+          ],
+          "source_crown_xy": [
+            1281,
+            222
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            126,
+            132
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 895.8810289389066,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1584,
+            223,
+            1847,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            1501,
+            223,
+            1764,
+            535
+          ],
+          "source_crown_xy": [
+            1651,
+            224
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            191,
+            137
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1964,
+            222,
+            2225,
+            535
+          ],
+          "original_pose_bbox_xyxy": [
+            1870,
+            222,
+            2131,
+            535
+          ],
+          "source_crown_xy": [
+            2017,
+            224
+          ],
+          "source_cloak_tip_y": 534,
+          "uniform_scale": 2.440514469453376,
+          "paste_xy": [
+            194,
+            135
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          191,
+          134,
+          832,
+          897
+        ],
+        [
+          219,
+          154,
+          805,
+          898
+        ],
+        [
+          147,
+          132,
+          877,
+          898
+        ],
+        [
+          126,
+          132,
+          897,
+          898
+        ],
+        [
+          191,
+          137,
+          833,
+          898
+        ],
+        [
+          191,
+          134,
+          832,
+          897
+        ]
+      ],
+      "hold_frame_0based": null,
+      "choice": null,
+      "runtime_intake_indices_0based": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "move": "hit",
+      "file": "strips/hit.png",
+      "raw": "raw/hit.png",
+      "generator_original": "raw/original/hit.png",
+      "frame_count": 4,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "recoil right; cloak flutters",
+        "brace",
+        "ready"
+      ],
+      "facing": "left",
+      "mirror": false,
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          173,
+          451,
+          640
+        ],
+        [
+          549,
+          170,
+          970,
+          640
+        ],
+        [
+          1034,
+          173,
+          1421,
+          640
+        ],
+        [
+          1519,
+          173,
+          1906,
+          640
+        ]
+      ],
+      "original_pose_bounds_xyxy": [
+        [
+          78,
+          173,
+          465,
+          640
+        ],
+        [
+          595,
+          170,
+          1016,
+          640
+        ],
+        [
+          1163,
+          173,
+          1550,
+          640
+        ],
+        [
+          1707,
+          173,
+          2094,
+          640
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        543,
+        1086,
+        1629,
+        2172
+      ],
+      "original_gaps_after_cleanup_px": [
+        130,
+        147,
+        157
+      ],
+      "derived_raw_clear_gutters_px": [
+        98,
+        64,
+        98
+      ],
+      "canonical_body_scale": 2.440514469453376,
+      "source_resolution_scale": 0.6666666666666666,
+      "effective_source_scale": 1.6270096463022505,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            173,
+            451,
+            640
+          ],
+          "original_pose_bbox_xyxy": [
+            78,
+            173,
+            465,
+            640
+          ],
+          "source_crown_xy": [
+            297,
+            174
+          ],
+          "source_cloak_tip_y": 639,
+          "uniform_scale": 1.6270096463022505,
+          "paste_xy": [
+            197,
+            138
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            549,
+            170,
+            970,
+            640
+          ],
+          "original_pose_bbox_xyxy": [
+            595,
+            170,
+            1016,
+            640
+          ],
+          "source_crown_xy": [
+            894,
+            171
+          ],
+          "source_cloak_tip_y": 639,
+          "uniform_scale": 1.6270096463022505,
+          "paste_xy": [
+            170,
+            133
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0675241157555,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1034,
+            173,
+            1421,
+            640
+          ],
+          "original_pose_bbox_xyxy": [
+            1163,
+            173,
+            1550,
+            640
+          ],
+          "source_crown_xy": [
+            1382,
+            174
+          ],
+          "source_cloak_tip_y": 639,
+          "uniform_scale": 1.6270096463022505,
+          "paste_xy": [
+            197,
+            138
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.1864951768488,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1519,
+            173,
+            1906,
+            640
+          ],
+          "original_pose_bbox_xyxy": [
+            1707,
+            173,
+            2094,
+            640
+          ],
+          "source_crown_xy": [
+            1926,
+            174
+          ],
+          "source_cloak_tip_y": 639,
+          "uniform_scale": 1.6270096463022505,
+          "paste_xy": [
+            197,
+            138
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          191,
+          134,
+          832,
+          897
+        ],
+        [
+          170,
+          133,
+          855,
+          898
+        ],
+        [
+          197,
+          138,
+          827,
+          898
+        ],
+        [
+          191,
+          134,
+          832,
+          897
+        ]
+      ],
+      "hold_frame_0based": null,
+      "choice": null,
+      "runtime_intake_indices_0based": [
+        1,
+        2
+      ]
+    },
+    {
+      "move": "down",
+      "file": "strips/down.png",
+      "raw": "raw/down.png",
+      "generator_original": "raw/original/down-r2.png",
+      "frame_count": 4,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "sink; six arms hang",
+        "collapse; three cloth tails pool; core dark",
+        "held collapsed pile; core dark; no rise"
+      ],
+      "facing": "left",
+      "mirror": false,
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          165,
+          461,
+          654
+        ],
+        [
+          525,
+          217,
+          919,
+          649
+        ],
+        [
+          986,
+          407,
+          1362,
+          656
+        ],
+        [
+          1447,
+          406,
+          1824,
+          656
+        ]
+      ],
+      "original_pose_bounds_xyxy": [
+        [
+          75,
+          165,
+          472,
+          654
+        ],
+        [
+          624,
+          217,
+          1018,
+          649
+        ],
+        [
+          1127,
+          407,
+          1503,
+          656
+        ],
+        [
+          1673,
+          406,
+          2050,
+          656
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        543,
+        1086,
+        1629,
+        2172
+      ],
+      "original_gaps_after_cleanup_px": [
+        152,
+        109,
+        170
+      ],
+      "derived_raw_clear_gutters_px": [
+        64,
+        67,
+        85
+      ],
+      "canonical_body_scale": 2.440514469453376,
+      "source_resolution_scale": 0.6666666666666666,
+      "effective_source_scale": 1.6270096463022505,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            165,
+            461,
+            654
+          ],
+          "original_pose_bbox_xyxy": [
+            75,
+            165,
+            472,
+            654
+          ],
+          "source_crown_xy": [
+            300,
+            168
+          ],
+          "source_cloak_tip_y": 653,
+          "uniform_scale": 1.6270096463022505,
+          "paste_xy": [
+            189,
+            102
+          ],
+          "seed_locked": true,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.0,
+          "hover_offset_y": 0,
+          "hover_note": "lowest cloth-tip hover anchor remains y896; no feet; arm motion preserves anchor",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            525,
+            217,
+            919,
+            649
+          ],
+          "original_pose_bbox_xyxy": [
+            624,
+            217,
+            1018,
+            649
+          ],
+          "source_crown_xy": [
+            767,
+            220
+          ],
+          "source_cloak_tip_y": 648,
+          "uniform_scale": 1.6270096463022505,
+          "paste_xy": [
+            192,
+            195
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.24115755627,
+          "hover_offset_y": 0,
+          "hover_note": "intentional collapse; cloth pooled on y896, not upright hover",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            986,
+            407,
+            1362,
+            656
+          ],
+          "original_pose_bbox_xyxy": [
+            1127,
+            407,
+            1503,
+            656
+          ],
+          "source_crown_xy": [
+            1182,
+            411
+          ],
+          "source_cloak_tip_y": 655,
+          "uniform_scale": 1.6270096463022505,
+          "paste_xy": [
+            206,
+            493
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.4983922829581,
+          "hover_offset_y": 0,
+          "hover_note": "intentional collapse; cloth pooled on y896, not upright hover",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        },
+        {
+          "source_crop_xyxy": [
+            1447,
+            406,
+            1824,
+            656
+          ],
+          "original_pose_bbox_xyxy": [
+            1673,
+            406,
+            2050,
+            656
+          ],
+          "source_crown_xy": [
+            1727,
+            410
+          ],
+          "source_cloak_tip_y": 655,
+          "uniform_scale": 1.6270096463022505,
+          "paste_xy": [
+            206,
+            491
+          ],
+          "seed_locked": false,
+          "sole_y": 896,
+          "measured_cloak_tip_y": 896.1254019292603,
+          "hover_offset_y": 0,
+          "hover_note": "intentional collapse; cloth pooled on y896, not upright hover",
+          "anchor_x_policy": "alpha-silhouette center x512; no pose fitting/scaling"
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          191,
+          134,
+          832,
+          897
+        ],
+        [
+          192,
+          195,
+          833,
+          898
+        ],
+        [
+          206,
+          493,
+          818,
+          898
+        ],
+        [
+          206,
+          491,
+          819,
+          898
+        ]
+      ],
+      "hold_frame_0based": 3,
+      "choice": null,
+      "runtime_intake_indices_0based": [
+        1,
+        2,
+        3
+      ]
+    }
+  ]
+}

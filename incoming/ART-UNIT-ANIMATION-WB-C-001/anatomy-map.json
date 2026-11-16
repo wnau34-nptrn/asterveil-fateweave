@@ -1,0 +1,222 @@
+[
+  {
+    "audit_frame": 0,
+    "move": "six-hand-rend",
+    "frame": 0
+  },
+  {
+    "audit_frame": 1,
+    "move": "six-hand-rend",
+    "frame": 1
+  },
+  {
+    "audit_frame": 2,
+    "move": "six-hand-rend",
+    "frame": 2
+  },
+  {
+    "audit_frame": 3,
+    "move": "six-hand-rend",
+    "frame": 3
+  },
+  {
+    "audit_frame": 4,
+    "move": "six-hand-rend",
+    "frame": 4
+  },
+  {
+    "audit_frame": 5,
+    "move": "six-hand-rend",
+    "frame": 5
+  },
+  {
+    "audit_frame": 6,
+    "move": "severing-bolt",
+    "frame": 0
+  },
+  {
+    "audit_frame": 7,
+    "move": "severing-bolt",
+    "frame": 1
+  },
+  {
+    "audit_frame": 8,
+    "move": "severing-bolt",
+    "frame": 2
+  },
+  {
+    "audit_frame": 9,
+    "move": "severing-bolt",
+    "frame": 3
+  },
+  {
+    "audit_frame": 10,
+    "move": "severing-bolt",
+    "frame": 4
+  },
+  {
+    "audit_frame": 11,
+    "move": "severing-bolt",
+    "frame": 5
+  },
+  {
+    "audit_frame": 12,
+    "move": "fate-lash",
+    "frame": 0
+  },
+  {
+    "audit_frame": 13,
+    "move": "fate-lash",
+    "frame": 1
+  },
+  {
+    "audit_frame": 14,
+    "move": "fate-lash",
+    "frame": 2
+  },
+  {
+    "audit_frame": 15,
+    "move": "fate-lash",
+    "frame": 3
+  },
+  {
+    "audit_frame": 16,
+    "move": "fate-lash",
+    "frame": 4
+  },
+  {
+    "audit_frame": 17,
+    "move": "fate-lash",
+    "frame": 5
+  },
+  {
+    "audit_frame": 18,
+    "move": "call-the-court",
+    "frame": 0
+  },
+  {
+    "audit_frame": 19,
+    "move": "call-the-court",
+    "frame": 1
+  },
+  {
+    "audit_frame": 20,
+    "move": "call-the-court",
+    "frame": 2
+  },
+  {
+    "audit_frame": 21,
+    "move": "call-the-court",
+    "frame": 3
+  },
+  {
+    "audit_frame": 22,
+    "move": "call-the-court",
+    "frame": 4
+  },
+  {
+    "audit_frame": 23,
+    "move": "call-the-court",
+    "frame": 5
+  },
+  {
+    "audit_frame": 24,
+    "move": "shadow-tide",
+    "frame": 0
+  },
+  {
+    "audit_frame": 25,
+    "move": "shadow-tide",
+    "frame": 1
+  },
+  {
+    "audit_frame": 26,
+    "move": "shadow-tide",
+    "frame": 2
+  },
+  {
+    "audit_frame": 27,
+    "move": "shadow-tide",
+    "frame": 3
+  },
+  {
+    "audit_frame": 28,
+    "move": "shadow-tide",
+    "frame": 4
+  },
+  {
+    "audit_frame": 29,
+    "move": "shadow-tide",
+    "frame": 5
+  },
+  {
+    "audit_frame": 30,
+    "move": "severed-crown",
+    "frame": 0
+  },
+  {
+    "audit_frame": 31,
+    "move": "severed-crown",
+    "frame": 1
+  },
+  {
+    "audit_frame": 32,
+    "move": "severed-crown",
+    "frame": 2
+  },
+  {
+    "audit_frame": 33,
+    "move": "severed-crown",
+    "frame": 3
+  },
+  {
+    "audit_frame": 34,
+    "move": "severed-crown",
+    "frame": 4
+  },
+  {
+    "audit_frame": 35,
+    "move": "severed-crown",
+    "frame": 5
+  },
+  {
+    "audit_frame": 36,
+    "move": "hit",
+    "frame": 0
+  },
+  {
+    "audit_frame": 37,
+    "move": "hit",
+    "frame": 1
+  },
+  {
+    "audit_frame": 38,
+    "move": "hit",
+    "frame": 2
+  },
+  {
+    "audit_frame": 39,
+    "move": "hit",
+    "frame": 3
+  },
+  {
+    "audit_frame": 40,
+    "move": "down",
+    "frame": 0
+  },
+  {
+    "audit_frame": 41,
+    "move": "down",
+    "frame": 1
+  },
+  {
+    "audit_frame": 42,
+    "move": "down",
+    "frame": 2
+  },
+  {
+    "audit_frame": 43,
+    "move": "down",
+    "frame": 3
+  }
+]

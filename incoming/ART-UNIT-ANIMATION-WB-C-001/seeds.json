@@ -1,0 +1,41 @@
+{
+  "task": "ART-UNIT-ANIMATION-WB-C-001",
+  "character": "Morvane / มอร์เวน ราชันด้ายขาด",
+  "source_commit": "46f366dc931e4994d3a6ccd9ad3951ac444a70cf",
+  "source_path": "incoming/ART-CHAR-WORLDBOSS-001/seed-c.png",
+  "local_seed": "seeds/seed-c.png",
+  "sha256": "47e5fbbaf06a18ee56a7c8c46771e00f65e13df7998b8c3d78c5cfa98f160105",
+  "size": [
+    1024,
+    1024
+  ],
+  "facing": "left",
+  "mirror": false,
+  "virtual_sole_y": 896,
+  "no_feet": true,
+  "priority": "Seed primary; turnaround only shape guide",
+  "numeric_rng_seed": null,
+  "generation_note": "Generator exposes no numeric seed; original PNGs retained. All prompts include seed-c. Each request creates one whole strip.",
+  "files_sha256": {
+    "seeds/concept-c.png": "a7c207b89b4637bb6237e89954226a8d3a64a0eb17b3e5b16b5001947a7b80f1",
+    "seeds/context.json": "a4482f3677db3ef398f60da2a913a4a7e6b995c90ca67178496da096038cf27e",
+    "seeds/layout-4.png": "a6b7a584656cacab1d03e2feaea441644f13372795108fdac09cdebb32dbc457",
+    "seeds/layout-6.png": "8413699e20ecf3cdae6895aaf3825b5ac7549e4924a518e59c44776b45fbb569",
+    "seeds/ready-strip-4.png": "8e0b8acfe950680f3ad31107d569efc7d4dc1aa1bd0e18f80689a846e5af9fee",
+    "seeds/ready-strip-6.png": "75aee5daf76308a8c49f874bf3813a635d65ebcdb84bf431912d33aaf6075827",
+    "seeds/seed-c.png": "47e5fbbaf06a18ee56a7c8c46771e00f65e13df7998b8c3d78c5cfa98f160105",
+    "seeds/seeds.json": "56308548eb781862f4e4c715a2b26666a8cbb6dffe574816f94ff64d788246e8",
+    "seeds/sentinel-ready.png": "3e855364ad3a94858f7afb717b0ad2e82495679dfaf5828f852a40eeec0bc4c3",
+    "seeds/sentinel-reference.json": "e5970916a84764ba66122cefd23595a4df469697de9799bf3d3a271c68a19222",
+    "seeds/turnaround-c.png": "b7c81fe59009efb4fbc75e8760b6590ab1f770ec78e44431200c0cade79cc988"
+  },
+  "invariants": [
+    "upper pair slim gold bracers",
+    "middle pair huge gold cuffs/large hands",
+    "lower pair small hands at waist",
+    "one round cyan chestcore",
+    "one gold crown",
+    "three cloak tails; no legs"
+  ],
+  "owner_motion_approval": "pending"
+}

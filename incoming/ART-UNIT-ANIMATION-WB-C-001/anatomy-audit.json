@@ -1,0 +1,337 @@
+{
+  "tolerance": 0.12,
+  "minInliers": 12,
+  "report": {
+    "morvane": [
+      {
+        "frame": 0,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 1,
+        "height": 405,
+        "scale": 1.037,
+        "inliers": 51,
+        "status": "ok"
+      },
+      {
+        "frame": 2,
+        "height": 402,
+        "scale": 1.023,
+        "inliers": 55,
+        "status": "ok"
+      },
+      {
+        "frame": 3,
+        "height": 392,
+        "scale": 1.042,
+        "inliers": 18,
+        "status": "ok"
+      },
+      {
+        "frame": 4,
+        "height": 389,
+        "scale": 1.101,
+        "inliers": 19,
+        "status": "ok"
+      },
+      {
+        "frame": 5,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 6,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 7,
+        "height": 382,
+        "scale": 1.006,
+        "inliers": 120,
+        "status": "ok"
+      },
+      {
+        "frame": 8,
+        "height": 382,
+        "scale": 1.004,
+        "inliers": 117,
+        "status": "ok"
+      },
+      {
+        "frame": 9,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 120,
+        "status": "ok"
+      },
+      {
+        "frame": 10,
+        "height": 382,
+        "scale": 1.001,
+        "inliers": 130,
+        "status": "ok"
+      },
+      {
+        "frame": 11,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 12,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 13,
+        "height": 379,
+        "scale": 0.991,
+        "inliers": 74,
+        "status": "ok"
+      },
+      {
+        "frame": 14,
+        "height": 436,
+        "scale": 0.984,
+        "inliers": 51,
+        "status": "ok"
+      },
+      {
+        "frame": 15,
+        "height": 380,
+        "scale": 0.995,
+        "inliers": 30,
+        "status": "ok"
+      },
+      {
+        "frame": 16,
+        "height": 378,
+        "scale": 0.993,
+        "inliers": 26,
+        "status": "ok"
+      },
+      {
+        "frame": 17,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 18,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 19,
+        "height": 385,
+        "scale": 1.006,
+        "inliers": 103,
+        "status": "ok"
+      },
+      {
+        "frame": 20,
+        "height": 386,
+        "scale": 0.996,
+        "inliers": 106,
+        "status": "ok"
+      },
+      {
+        "frame": 21,
+        "height": 403,
+        "scale": 1.021,
+        "inliers": 75,
+        "status": "ok"
+      },
+      {
+        "frame": 22,
+        "height": 385,
+        "scale": 0.994,
+        "inliers": 96,
+        "status": "ok"
+      },
+      {
+        "frame": 23,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 24,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 25,
+        "height": 382,
+        "scale": 0.973,
+        "inliers": 32,
+        "status": "ok"
+      },
+      {
+        "frame": 26,
+        "height": 385,
+        "scale": 1.012,
+        "inliers": 27,
+        "status": "ok"
+      },
+      {
+        "frame": 27,
+        "height": 379,
+        "scale": 1.01,
+        "inliers": 27,
+        "status": "ok"
+      },
+      {
+        "frame": 28,
+        "height": 383,
+        "scale": 0.996,
+        "inliers": 28,
+        "status": "ok"
+      },
+      {
+        "frame": 29,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 30,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 31,
+        "height": 374,
+        "scale": 0.985,
+        "inliers": 12,
+        "status": "ok"
+      },
+      {
+        "frame": 32,
+        "height": 384,
+        "scale": 1.066,
+        "inliers": 49,
+        "status": "ok"
+      },
+      {
+        "frame": 33,
+        "height": 385,
+        "scale": 1.041,
+        "inliers": 15,
+        "status": "ok"
+      },
+      {
+        "frame": 34,
+        "height": 382,
+        "scale": 1.015,
+        "inliers": 27,
+        "status": "ok"
+      },
+      {
+        "frame": 35,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 36,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 37,
+        "height": 383,
+        "scale": 1.053,
+        "inliers": 48,
+        "status": "ok"
+      },
+      {
+        "frame": 38,
+        "height": 380,
+        "scale": 0.984,
+        "inliers": 250,
+        "status": "ok"
+      },
+      {
+        "frame": 39,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 40,
+        "height": 382,
+        "scale": 1.0,
+        "inliers": 1805,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 41,
+        "height": 353,
+        "scale": 1.172,
+        "inliers": 10,
+        "status": "not-measured"
+      },
+      {
+        "frame": 42,
+        "height": 205,
+        "scale": 0.007,
+        "inliers": 7,
+        "status": "not-measured"
+      },
+      {
+        "frame": 43,
+        "height": 206,
+        "scale": 0.0,
+        "inliers": 5,
+        "status": "not-measured"
+      }
+    ]
+  },
+  "provenance": {
+    "script": "scripts/unit-anatomy-audit.py",
+    "script_sha256": "7980867467bf894fad629274639ee2769fc4920eb61aeeabcdbf312952c9a57c",
+    "input": "512px QA copies, original normalized frames unchanged",
+    "not_measured_policy": "Not a pass; review anatomy manually at play scale."
+  }
+}

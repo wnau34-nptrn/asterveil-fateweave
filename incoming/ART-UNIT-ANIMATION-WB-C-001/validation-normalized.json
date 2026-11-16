@@ -1,0 +1,73 @@
+{
+  "morvane": {
+    "factor": 0.32,
+    "cell": 328,
+    "displayRatio": 2,
+    "origin": [
+      0.5,
+      0.875
+    ],
+    "layout": {
+      "six-hand-rend": 1,
+      "severing-bolt": 5,
+      "fate-lash": 9,
+      "call-the-court": 13,
+      "shadow-tide": 17,
+      "severed-crown": 21,
+      "hit": 25,
+      "down": 27
+    },
+    "rawSha256": {
+      "six-hand-rend": "f0d3b70385c7189b652fa4d45dc69521093c85f2f1064c0327d105653746af0f",
+      "severing-bolt": "5c8a1bdaa8276d0ec3ad7a9fa3bfab6c35191b186e505f1ac3918fe8da26df65",
+      "fate-lash": "2ba532a950dd95b80de0cbeb700ab8ddec4d23e63d224f87f09ca6ce81d9473f",
+      "call-the-court": "fe5b66bcfbd4696de88c9b2566d6996695e49f1766a9c54a650933da6f8fef23",
+      "shadow-tide": "2477e954773a1125cc4b7f1b09e669ec80f272d6b22cd2b1de907ef2b97ca63b",
+      "severed-crown": "01434811a83c8c190d64535a851e35b4a8376a671b0eab8927acc270aea550ce",
+      "hit": "3d89dd999efebed551c729aa15589703889a9cc6ebb0fb5ccb0f1d1b0936bbb0",
+      "down": "4dee6c7042cece6f450c3cb590066fb1ec3de0eca84c3e2211ba566a50774f8b"
+    },
+    "exactSeedFrames": {
+      "six-hand-rend": [
+        true,
+        true
+      ],
+      "severing-bolt": [
+        true,
+        true
+      ],
+      "fate-lash": [
+        true,
+        true
+      ],
+      "call-the-court": [
+        true,
+        true
+      ],
+      "shadow-tide": [
+        true,
+        true
+      ],
+      "severed-crown": [
+        true,
+        true
+      ],
+      "hit": [
+        true,
+        true
+      ],
+      "down": [
+        true,
+        null
+      ]
+    },
+    "uniqueFrames": 30,
+    "image": "morvane_wbc.1e867b20b7ab.webp",
+    "atlas": "morvane_wbc.25862c8b0b73.json",
+    "width": 1024,
+    "height": 1774,
+    "frames": 30,
+    "decodedBytes": 7266304,
+    "downloadBytes": 1850434
+  }
+}

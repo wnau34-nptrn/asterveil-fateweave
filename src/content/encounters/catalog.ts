@@ -339,7 +339,7 @@ const court = foes(10, [['f2', SPECIES.shardCrawler], ['f3', SPECIES.shardCrawle
 export const wbMorvane: EncounterDefinition = {
   ...riftWarden, id: 'wb-morvane', version: 1, name: 'บอสโลก: มอร์เวน',
   phases: [{ sourceId: 'f1', below: 70, name: 'Severed Crown' }],
-  enemies: [...court.enemies, boss('Morvane', 'มอร์เวน', 80, { court: { percent: 10, by: COURT } })],
+  enemies: [...court.enemies, boss('Morvane', 'มอร์เวน', 80, { court: { percent: 10, by: COURT }, art: 'foe_morvane' })],
   intents: [...court.intents.map(m => ({ ...m, damage: Math.round(m.damage * 0.7) })),
     mv('Six-Hand Rend', 1, 24, 'physical'), mv('Severing Bolt', 3, 22, 'energy'), mv('Call the Court', 0, 0, 'energy', { summon: COURT }),
     mv('Fate Lash', 2, 26, 'energy'), mv('Six-Hand Rend', 0, 28, 'physical'), mv('Shadow Tide', 0, 14, 'energy', { all: true }),
@@ -356,6 +356,6 @@ export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatr
 // `presentedEncounters` is what the presentation coverage and the texture-budget audit walk: `encounters` plus every trio boss
 // whose moves have body clips (Kragmor with WB-A, step 5; Valdrakk/Morvane join with WB-B/WB-C). Until `WorldBossTrioRules.from`
 // is set nobody can fight them.
-export const presentedEncounters: readonly EncounterDefinition[] = [...encounters, wbKragmor, wbValdrakk];
+export const presentedEncounters: readonly EncounterDefinition[] = [...encounters, wbKragmor, wbValdrakk, wbMorvane];
 const lookupList: readonly EncounterDefinition[] = [...encounters, ...WORLD_BOSS_TRIO];
 export const encounterById = (id: string): EncounterDefinition | undefined => lookupList.find(e => e.id === id);
