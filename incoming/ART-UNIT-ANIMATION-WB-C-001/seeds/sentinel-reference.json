@@ -1,0 +1,38 @@
+{
+  "base_commit": "081766e1cfec0b66f5e4de136adb062c894e3daf",
+  "manifest": {
+    "image": "sentinel_a9.616021ce3ce4.webp",
+    "atlas": "sentinel_a9.0c30c1349c42.json",
+    "width": 1024,
+    "height": 934,
+    "frames": 34,
+    "decodedBytes": 3825664,
+    "downloadBytes": 1409354
+  },
+  "frame_0": {
+    "frame": {
+      "h": 155,
+      "w": 154,
+      "x": 451,
+      "y": 184
+    },
+    "rotated": false,
+    "sourceSize": {
+      "h": 317,
+      "w": 317
+    },
+    "spriteSourceSize": {
+      "h": 155,
+      "w": 154,
+      "x": 81,
+      "y": 125
+    },
+    "trimmed": true
+  },
+  "sole_origin": 0.875,
+  "display_ratio": 2,
+  "sha256": {
+    "public/assets/units/sentinel_a9.616021ce3ce4.webp": "616021ce3ce43cfb1d997b841af408a988467c3a5251269bedbad82564d887e8",
+    "public/assets/units/sentinel_a9.0c30c1349c42.json": "0c30c1349c42c208e0c333ee134c44e23a216b12ebddb6ac00d15301ebb87a1b"
+  }
+}

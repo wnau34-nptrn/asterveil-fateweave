@@ -1,0 +1,210 @@
+{
+  "task": "ART-UNIT-ANIMATION-WB-C-001",
+  "generator": "image_gen.imagegen",
+  "method": "Every request generates a WHOLE strip; seed-c attached every time. Revisions also whole strip. No pose generated independently.",
+  "generations": [
+    {
+      "id": "six-hand-rend",
+      "prompt": "Edit the attached padded layout into ONE WHOLE SPRITE ANIMATION STRIP, exactly 6 complete full-body poses in ONE left-to-right row, no second row. Reference1 approved seed Morvane is the PRIMARY MODEL, reference2 fixes slot geometry. SAME floating violet shadow monarch, facing LEFT three-quarter as seed, never mirror; gold armor and light EXACTLY like seed. One floating gold crown, one round CYAN CHEST core, no legs. EXACTLY SIX ARMS IN THREE FIXED PAIRS: UPPER pair grows behind upper shoulders, slim gold forearm bracers; MIDDLE pair grows below upper pair, LARGE hands and HUGE heavy gold cuffs; LOWER pair grows at waist, SMALL hands and slim gold wrist guards. Do not exchange origins, cuffs or hand sizes. All six arms must be distinct and countable, including foreshortened hands; preserve face/crown/core visibility. Three separate long cloak tails, middle tail lowest. Same exact body scale/torso/head/crown sizes every pose as seed; crown-to-lowest-middle-cloak-tip height must remain within4% seed unless intentional down collapse. Do not enlarge or miniaturize individual poses. Keep cloak tips on one baseline, no walking/no feet. Upper hands can reach a little above crown but leave generous empty TOP margin; no figure taller by more than30px than seed at final source scale. At least80px completely ALPHA0 gaps between silhouettes; no haze in gaps. Transparent background REAL ALPHA, no checkerboard, no floor, no shadow plate, no scenery/text/UI/logos. BODY ONLY, no energy balls, no strings/threads, no portals/rifts, no smoke/beams/aura, no free-floating VFX. MOVE SIX HAND REND: 1 exact seed ready; 2 MIDDLE huge-cuff pair draws backward close to ribs, claws open, UPPER pair raised; 3 MIDDLE huge-cuff pair opens outward widest while torso rotates slightly RIGHT in anticipation, LOWER small pair stays at belly, UPPER slim-bracer pair still high; 4 BOTH MIDDLE heavy-cuff hands slash diagonally DOWN-LEFT together with body leaning LEFT, keep head/core clear, upper pair high and lower pair at waist; 5 MIDDLE hands follow-through low LEFT, three cloak tails stream right without shortening, six arms countable; 6 exact seed ready.",
+      "references": [
+        "seeds/seed-c.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/six-hand-rend.png",
+      "selected": false,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "six-hand-rend-r2",
+      "prompt": "Edit the attached padded layout into ONE WHOLE SPRITE ANIMATION STRIP, exactly 6 complete full-body poses in ONE left-to-right row, no second row. Reference1 approved seed Morvane is the PRIMARY MODEL, reference2 fixes slot geometry. SAME floating violet shadow monarch, facing LEFT three-quarter as seed, never mirror; gold armor and light EXACTLY like seed. One floating gold crown, one round CYAN CHEST core, no legs. EXACTLY SIX ARMS IN THREE FIXED PAIRS: UPPER pair grows behind upper shoulders, slim gold forearm bracers; MIDDLE pair grows below upper pair, LARGE hands and HUGE heavy gold cuffs; LOWER pair grows at waist, SMALL hands and slim gold wrist guards. Do not exchange origins, cuffs or hand sizes. All six arms must be distinct and countable, including foreshortened hands; preserve face/crown/core visibility. Three separate long cloak tails, middle tail lowest. Same exact body scale/torso/head/crown sizes every pose as seed; crown-to-lowest-middle-cloak-tip height must remain within4% seed unless intentional down collapse. Do not enlarge or miniaturize individual poses. Keep cloak tips on one baseline, no walking/no feet. Upper hands can reach a little above crown but leave generous empty TOP margin; no figure taller by more than30px than seed at final source scale. At least80px completely ALPHA0 gaps between silhouettes; no haze in gaps. Transparent background REAL ALPHA, no checkerboard, no floor, no shadow plate, no scenery/text/UI/logos. BODY ONLY, no energy balls, no strings/threads, no portals/rifts, no smoke/beams/aura, no free-floating VFX.  SOURCE RESOLUTION RULE: final strip canvas 2172x724. For a SIX-pose sheet, crown apex to lowest center-cloak tip is approximately270px in EVERY standing pose, silhouette width at most300px per362px slot (not355px tall). For FOUR poses, same proportions at resolution conversion1.5: crown-to-tip405px, silhouette width450px per543px slot. Keep >=62px clear alpha0 gaps even when hands/cloak extend. All cloak tails must remain inside each slot; do not trail far into neighboring pose. SIX HAND REND: 1 exact seed ready; 2 MIDDLE huge-cuff pair draws backward close to ribs, claws open, UPPER pair raised; 3 MIDDLE huge-cuff pair opens outward widest while torso rotates slightly RIGHT in anticipation, LOWER small pair stays at belly, UPPER slim-bracer pair still high; 4 BOTH MIDDLE heavy-cuff hands slash diagonally DOWN-LEFT together with body leaning LEFT, keep head/core clear, upper pair high and lower pair at waist; 5 MIDDLE hands follow-through low LEFT, three cloak tails stream right without shortening, six arms countable; 6 exact seed ready. Revise third reference WHOLE six-pose strip: render all figures about25% smaller on the SAME canvas; preserve same six-arm identity and action. Fix follow-through cloak tips so none enter next slot. In poses4/5 keep BOTH small LOWER waist hands visible below core, distinct from two large middle attacking hands and two raised upper hands. ALL SIX HANDS COUNTABLE. No alpha haze.",
+      "references": [
+        "seeds/seed-c.png",
+        "seeds/layout-6.png",
+        "raw/original/six-hand-rend.png"
+      ],
+      "original": "raw/original/six-hand-rend-r2.png",
+      "selected": false,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "six-hand-rend-r3",
+      "prompt": "EDIT FIRST IMAGE as exact existing canvas of ready sprites. KEEP2172x724 canvas, exact figure centers, crown/head/chest/torso/cloak dimensions unchanged; only articulate the requested arms/torso gesture. First image is the canvas to edit. Second is approved seed-c PRIMARY CHARACTER, third padded layout. Same left-facing three-quarter model, gold trim, violet cloak, no mirror. EXACTLY6 arms in fixed3 pairs: UPPER behind shoulders slim gold bracers, MIDDLE huge hands HUGE gold cuffs, LOWER at waist small hands/slim wrist guards; never exchange their origins or cuffs. One cyan chest core, one floating GOLD CROWN, THREE long cloak tails with middle tail lowest, NO legs. Each pair's two hands remain distinct/countable. Unused pairs stay in seed positions, do not borrow motion from another pair. Head/crown/core visible. SIX-pose figures crown apex225px to lowest cloak-tip536px ~311px high EVERY pose (within4%, 299..323px). FOUR-pose figures crown174 to tip640 ~466px (448..484px). Never enlarge bodies or fit to image blank space. Upper hands can move modestly above crown, remain entirely in slot, margin32sourcepixels. Allfigures separate >=48px REAL alpha0 gaps, no haze, no floor/shadow plate/background, no text/UI/logos. BODY ONLY no energy spheres, no light in hands, no projectiles, no threads/strings, no portals, no smoke/beams/aura or external glows. Cyan glow only INSIDE CHEST core, never belly or hands. MOVE SIX HAND REND: 1 exact seed ready; 2 MIDDLE huge-cuff pair draws backward close to ribs, claws open, UPPER pair raised; 3 MIDDLE huge-cuff pair opens outward widest while torso rotates slightly RIGHT in anticipation, LOWER small pair stays at belly, UPPER slim-bracer pair still high; 4 BOTH MIDDLE heavy-cuff hands slash diagonally DOWN-LEFT together with body leaning LEFT, keep head/core clear, upper pair high and lower pair at waist; 5 MIDDLE hands follow-through low LEFT, three cloak tails stream right without shortening, six arms countable; 6 exact seed ready. Keep all crown apices y215..235 and middle cloak tip y536 despite modest lateral torso lean. Fling MIDDLE huge-cuff pair together low LEFT, not lower pair. LOWER tiny wristguards/hands visible at belly in ALL6 poses, upper slim-bracer pair clearly raised. Keep following cloak tails INSIDE ownslot so>=48px transparentgap. No cloth extending farther than330px silhouettewidth. Head facesleft exactlyseed, no orb anywhere, cyanlight onlycore.",
+      "references": [
+        "seeds/ready-strip-6.png",
+        "seeds/seed-c.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/six-hand-rend-r3.png",
+      "selected": false,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "severing-bolt",
+      "prompt": "Edit the attached padded layout into ONE WHOLE SPRITE ANIMATION STRIP, exactly 6 complete full-body poses in ONE left-to-right row, no second row. Reference1 approved seed Morvane is the PRIMARY MODEL, reference2 fixes slot geometry. SAME floating violet shadow monarch, facing LEFT three-quarter as seed, never mirror; gold armor and light EXACTLY like seed. One floating gold crown, one round CYAN CHEST core, no legs. EXACTLY SIX ARMS IN THREE FIXED PAIRS: UPPER pair grows behind upper shoulders, slim gold forearm bracers; MIDDLE pair grows below upper pair, LARGE hands and HUGE heavy gold cuffs; LOWER pair grows at waist, SMALL hands and slim gold wrist guards. Do not exchange origins, cuffs or hand sizes. All six arms must be distinct and countable, including foreshortened hands; preserve face/crown/core visibility. Three separate long cloak tails, middle tail lowest. Same exact body scale/torso/head/crown sizes every pose as seed; crown-to-lowest-middle-cloak-tip height must remain within4% seed unless intentional down collapse. Do not enlarge or miniaturize individual poses. Keep cloak tips on one baseline, no walking/no feet. Upper hands can reach a little above crown but leave generous empty TOP margin; no figure taller by more than30px than seed at final source scale. At least80px completely ALPHA0 gaps between silhouettes; no haze in gaps. Transparent background REAL ALPHA, no checkerboard, no floor, no shadow plate, no scenery/text/UI/logos. BODY ONLY, no energy balls, no strings/threads, no portals/rifts, no smoke/beams/aura, no free-floating VFX.  SOURCE RESOLUTION RULE: final strip canvas 2172x724. For a SIX-pose sheet, crown apex to lowest center-cloak tip is approximately311px in EVERY standing pose, silhouette width at most300px per362px slot (never355px tall). For FOUR poses, same proportions at resolution conversion1.5: crown-to-tip466px, silhouette width450px per543px slot. Keep >=62px clear alpha0 gaps even when hands/cloak extend. All cloak tails must remain inside each slot; do not trail far into neighboring pose.  Reference3 is the accepted first motion strip for SCALE/STYLE ONLY: six-pose ready crown apex225px, lowest cloak tip536px, crown-to-tip311px. Match that body height for six-pose sheets; all action poses within4% of that height (299..323px), preserve long middle cloak tip. Do not copy reference3 actions, use THIS move. MOVE SEVERING BOLT: 1 exact seed ready; 2 LOWER small waist pair lifts from waist to clasp together in front of lower chest, upper pair remains raised and middle huge-cuff pair stays separate at ribs; 3 LOWER small hands draw apart in aiming shape below exposed brighter chest core (NO orb); 4 LOWER small pair pushes BOTH small open palms toward LEFT in front of abdomen to fire (no projectile), middle pair held at ribs and upper pair still raised, six hands countable; 5 LOWER pair follows through relaxing while middle and upper pairs remain distinct; 6 exact seed ready.",
+      "references": [
+        "seeds/seed-c.png",
+        "seeds/layout-6.png",
+        "raw/original/six-hand-rend-r2.png"
+      ],
+      "original": "raw/original/severing-bolt.png",
+      "selected": false,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "severing-bolt-r2",
+      "prompt": "EDIT FIRST IMAGE ONLY as the existing canvas. KEEP ITS EXACT2172x724 CANVAS, figure CENTERS, crown and cloth endpoints, and same BODY SIZES. First image six-hand-rend-r2.png is the animation STRIP to edit, NOT a style board. Its FIRST ready figure crownY225 to cloth-tipY536 (311px); use this figure as unchanged rigid body for all SIX poses. DO NOT enlarge to fill blank space. Second image seed is identity reference, third is layout reference. Change only the LOWER pair arm gestures to new move, restoring UPPER pair raised and MIDDLE large-cuff pair to seed in ALL poses. ExactlySIX arms (upper slim bracers, middle huge cuffs, lower small hands/wrist guards), single chest core, crown, three cloak tails, no legs; face LEFT same as seed. 1 exact seed ready; 2 LOWER small waist pair lifts from waist to clasp together in front of lower chest, upper pair remains raised and middle huge-cuff pair stays separate at ribs; 3 LOWER small hands draw apart in aiming shape below exposed brighter chest core (NO orb); 4 LOWER small pair pushes BOTH small open palms toward LEFT in front of abdomen to fire (no projectile), middle pair held at ribs and upper pair still raised, six hands countable; 5 LOWER pair follows through relaxing while middle and upper pairs remain distinct; 6 exact seed ready. Pose4 clearly pushes BOTH small lower palms horizontally LEFT, not down. Same cloak lengths, 311px crown-to-cloak-tip EVERY pose; do not redraw taller bodies. First/lastready unchanged. Whole strip regenerated together, true alpha0 background with>=48px gaps, no haze, no floor, no energy orbs/projectiles/strings/VFX/text/UI.",
+      "references": [
+        "raw/original/six-hand-rend-r2.png",
+        "seeds/seed-c.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/severing-bolt-r2.png",
+      "selected": false,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "severing-bolt-r3",
+      "prompt": "EDIT FIRST IMAGE as exact existing canvas of ready sprites. KEEP2172x724 canvas, exact figure centers, crown/head/chest/torso/cloak dimensions unchanged; only articulate the requested arms/torso gesture. First image is the canvas to edit. Second is approved seed-c PRIMARY CHARACTER, third padded layout. Same left-facing three-quarter model, gold trim, violet cloak, no mirror. EXACTLY6 arms in fixed3 pairs: UPPER behind shoulders slim gold bracers, MIDDLE huge hands HUGE gold cuffs, LOWER at waist small hands/slim wrist guards; never exchange their origins or cuffs. One cyan chest core, one floating GOLD CROWN, THREE long cloak tails with middle tail lowest, NO legs. Each pair's two hands remain distinct/countable. Unused pairs stay in seed positions, do not borrow motion from another pair. Head/crown/core visible. SIX-pose figures crown apex225px to lowest cloak-tip536px ~311px high EVERY pose (within4%, 299..323px). FOUR-pose figures crown174 to tip640 ~466px (448..484px). Never enlarge bodies or fit to image blank space. Upper hands can move modestly above crown, remain entirely in slot, margin32sourcepixels. Allfigures separate >=48px REAL alpha0 gaps, no haze, no floor/shadow plate/background, no text/UI/logos. BODY ONLY no energy spheres, no light in hands, no projectiles, no threads/strings, no portals, no smoke/beams/aura or external glows. Cyan glow only INSIDE CHEST core, never belly or hands. MOVE SEVERING BOLT: 1 exact seed ready; 2 LOWER small waist pair lifts from waist to clasp together in front of lower chest, upper pair remains raised and middle huge-cuff pair stays separate at ribs; 3 LOWER small hands draw apart in aiming shape below exposed brighter chest core (NO orb); 4 LOWER small pair pushes BOTH small open palms toward LEFT in front of abdomen to fire (no projectile), middle pair held at ribs and upper pair still raised, six hands countable; 5 LOWER pair follows through relaxing while middle and upper pairs remain distinct; 6 exact seed ready. LOWER palms push horizontally LEFT in pose4. No cyan/white spot between hands or in abdomen, interior there is plain violet cloth. Keep middle huge-cuff hands still (left one extends left at rib height, right one across ribs), NOT opened outward in pose3. Six arms countable!",
+      "references": [
+        "seeds/ready-strip-6.png",
+        "seeds/seed-c.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/severing-bolt-r3.png",
+      "selected": true,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "fate-lash",
+      "prompt": "EDIT FIRST IMAGE as exact existing canvas of ready sprites. KEEP2172x724 canvas, exact figure centers, crown/head/chest/torso/cloak dimensions unchanged; only articulate the requested arms/torso gesture. First image is the canvas to edit. Second is approved seed-c PRIMARY CHARACTER, third padded layout. Same left-facing three-quarter model, gold trim, violet cloak, no mirror. EXACTLY6 arms in fixed3 pairs: UPPER behind shoulders slim gold bracers, MIDDLE huge hands HUGE gold cuffs, LOWER at waist small hands/slim wrist guards; never exchange their origins or cuffs. One cyan chest core, one floating GOLD CROWN, THREE long cloak tails with middle tail lowest, NO legs. Each pair's two hands remain distinct/countable. Unused pairs stay in seed positions, do not borrow motion from another pair. Head/crown/core visible. SIX-pose figures crown apex225px to lowest cloak-tip536px ~311px high EVERY pose (within4%, 299..323px). FOUR-pose figures crown174 to tip640 ~466px (448..484px). Never enlarge bodies or fit to image blank space. Upper hands can move modestly above crown, remain entirely in slot, margin32sourcepixels. Allfigures separate >=48px REAL alpha0 gaps, no haze, no floor/shadow plate/background, no text/UI/logos. BODY ONLY no energy spheres, no light in hands, no projectiles, no threads/strings, no portals, no smoke/beams/aura or external glows. Cyan glow only INSIDE CHEST core, never belly or hands. MOVE FATE LASH: 1 exact seed ready; 2 UPPER slim-bracer pair lowers BEFORE FACE without obscuring face or core, fingers pinch as if holding invisible thread, middle huge pair and lower small pair retain seed positions; 3 UPPER slim-bracer pair raises and CROSSES WRISTS immediately ABOVE CROWN (hands within30px of crown at source scale), crown still visible, no threads; 4 UPPER slim-bracer pair whips diagonally DOWN-LEFT in sharp slashing gesture, keep them separate from middle HUGE-cuff pair; 5 UPPER pair follows through toward LEFT, elbows re-open, all six hands identifiable; 6 exact seed ready.",
+      "references": [
+        "seeds/ready-strip-6.png",
+        "seeds/seed-c.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/fate-lash.png",
+      "selected": true,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "call-the-court",
+      "prompt": "EDIT FIRST IMAGE as exact existing canvas of ready sprites. KEEP2172x724 canvas, exact figure centers, crown/head/chest/torso/cloak dimensions unchanged; only articulate the requested arms/torso gesture. First image is the canvas to edit. Second is approved seed-c PRIMARY CHARACTER, third padded layout. Same left-facing three-quarter model, gold trim, violet cloak, no mirror. EXACTLY6 arms in fixed3 pairs: UPPER behind shoulders slim gold bracers, MIDDLE huge hands HUGE gold cuffs, LOWER at waist small hands/slim wrist guards; never exchange their origins or cuffs. One cyan chest core, one floating GOLD CROWN, THREE long cloak tails with middle tail lowest, NO legs. Each pair's two hands remain distinct/countable. Unused pairs stay in seed positions, do not borrow motion from another pair. Head/crown/core visible. SIX-pose figures crown apex225px to lowest cloak-tip536px ~311px high EVERY pose (within4%, 299..323px). FOUR-pose figures crown174 to tip640 ~466px (448..484px). Never enlarge bodies or fit to image blank space. Upper hands can move modestly above crown, remain entirely in slot, margin32sourcepixels. Allfigures separate >=48px REAL alpha0 gaps, no haze, no floor/shadow plate/background, no text/UI/logos. BODY ONLY no energy spheres, no light in hands, no projectiles, no threads/strings, no portals, no smoke/beams/aura or external glows. Cyan glow only INSIDE CHEST core, never belly or hands. MOVE CALL THE COURT: R1. 1 exact seed ready; 2 UPPER slim-bracer pair raises together to either side of crown, hands close but not crossing; 3 UPPER slim-bracer pair opens APART symmetrically over crown, palms grasp outward as if tearing an INVISIBLE curtain (NO portal or rift needed); 4 UPPER pair HOLDS WIDE OPEN ABOVE crown in a stable symmetrical summoning warning pose, torso slightly lifted chin up, exposed chest core brighter; middle HUGE-cuff pair remains at ribs, lower small pair at belly, all six arms distinct; 5 UPPER pair lowers slowly out to sides, NOT a slashing follow-through; 6 exact seed ready. This move must look like a held two-hand overhead opening, never like Fate Lash crossed-wrist whip. Upper arms: pull OUTWARD above crown with wrists never crossing, then hold; huge middle arms and tiny lower arms remain at own levels in seed pose. NO rift graphic needed, completely empty alpha0 between raised hands. Read as summoning HALT gesture, NOT a whip. Middle cloak tip remains lowest at normal baseline; no lifting entire body.",
+      "references": [
+        "seeds/ready-strip-6.png",
+        "seeds/seed-c.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/call-the-court.png",
+      "selected": true,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "shadow-tide",
+      "prompt": "EDIT FIRST IMAGE as exact existing canvas of ready sprites. KEEP2172x724 canvas, exact figure centers, crown/head/chest/torso/cloak dimensions unchanged; only articulate the requested arms/torso gesture. First image is the canvas to edit. Second is approved seed-c PRIMARY CHARACTER, third padded layout. Same left-facing three-quarter model, gold trim, violet cloak, no mirror. EXACTLY6 arms in fixed3 pairs: UPPER behind shoulders slim gold bracers, MIDDLE huge hands HUGE gold cuffs, LOWER at waist small hands/slim wrist guards; never exchange their origins or cuffs. One cyan chest core, one floating GOLD CROWN, THREE long cloak tails with middle tail lowest, NO legs. Each pair's two hands remain distinct/countable. Unused pairs stay in seed positions, do not borrow motion from another pair. Head/crown/core visible. SIX-pose figures crown apex225px to lowest cloak-tip536px ~311px high EVERY pose (within4%, 299..323px). FOUR-pose figures crown174 to tip640 ~466px (448..484px). Never enlarge bodies or fit to image blank space. Upper hands can move modestly above crown, remain entirely in slot, margin32sourcepixels. Allfigures separate >=48px REAL alpha0 gaps, no haze, no floor/shadow plate/background, no text/UI/logos. BODY ONLY no energy spheres, no light in hands, no projectiles, no threads/strings, no portals, no smoke/beams/aura or external glows. Cyan glow only INSIDE CHEST core, never belly or hands. MOVE SHADOW TIDE: 1 exact seed ready; 2 ALL SIX arms tuck inward at their own three levels without hiding face or chest core: upper pair beside head, middle big cuffs beside ribs, lower pair belly; 3 ALL THREE PAIRS spread LOWER to both sides in three clear layers, exactly6 visible hands, three cloak tails swell slightly; 4 ALL SIX arms press down with palms downward, distinct six hands, body floats10px lower but cloak center tip does NOT extend below its normal baseline, long three-tail cloak spreads sideways by at most10%, no wave/VFX; 5 arms follow through down and start re-opening, cloak settles retaining normal length; 6 exact seed ready. Arrange six lowered hands visibly in three layered pairs, do not merge adjacent arms into four hands or add seventh hand. Middle huge cuffs at ribs, lower small cuffs at waist, upper pair articulated down from HIGH shoulder origins. Keep middle cloak tail LONG, crown-to-tip same311px. To indicate sinking, lower the torso/crown by ONLY3px in source and extend no cloth below baseline. Cloak spread <=300px width so large alpha gaps remain.",
+      "references": [
+        "seeds/ready-strip-6.png",
+        "seeds/seed-c.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/shadow-tide.png",
+      "selected": true,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "severed-crown",
+      "prompt": "EDIT FIRST IMAGE as exact existing canvas of ready sprites. KEEP2172x724 canvas, exact figure centers, crown/head/chest/torso/cloak dimensions unchanged; only articulate the requested arms/torso gesture. First image is the canvas to edit. Second is approved seed-c PRIMARY CHARACTER, third padded layout. Same left-facing three-quarter model, gold trim, violet cloak, no mirror. EXACTLY6 arms in fixed3 pairs: UPPER behind shoulders slim gold bracers, MIDDLE huge hands HUGE gold cuffs, LOWER at waist small hands/slim wrist guards; never exchange their origins or cuffs. One cyan chest core, one floating GOLD CROWN, THREE long cloak tails with middle tail lowest, NO legs. Each pair's two hands remain distinct/countable. Unused pairs stay in seed positions, do not borrow motion from another pair. Head/crown/core visible. SIX-pose figures crown apex225px to lowest cloak-tip536px ~311px high EVERY pose (within4%, 299..323px). FOUR-pose figures crown174 to tip640 ~466px (448..484px). Never enlarge bodies or fit to image blank space. Upper hands can move modestly above crown, remain entirely in slot, margin32sourcepixels. Allfigures separate >=48px REAL alpha0 gaps, no haze, no floor/shadow plate/background, no text/UI/logos. BODY ONLY no energy spheres, no light in hands, no projectiles, no threads/strings, no portals, no smoke/beams/aura or external glows. Cyan glow only INSIDE CHEST core, never belly or hands. MOVE SEVERED CROWN: 1 exact seed ready; 2 slight bow, all three arm pairs contract at their own levels, keep face/crown/core visible; 3 head rises, UPPER slim-bracer pair raised highest just above crown, chest core and gold crown and cloak EDGES brighten ONLY INSIDE the body; middle huge-cuff pair wide and lower small pair near waist, exactly6 arms; 4 HOLD PEAK ROAR, neck lifts mouth open, upper hands high and spread not crossed, exactly6 arms visible, crown floats slightly above head but total crown-to-tip length stays same, no external light; 5 relax three arm pairs and dim back to seed lighting; 6 exact seed ready. Maintain 311px crown-to-middle-cloak-tip height even bow/roar; bow modest10degrees, no crouch shortening. Head not obscured; crown one only. Huge middle pair opens at rib level and small lower pair open at belly for peak; upper pair points upward. Only internal chest/crown/cloth edge brighter, no halos.",
+      "references": [
+        "seeds/ready-strip-6.png",
+        "seeds/seed-c.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/severed-crown.png",
+      "selected": false,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "severed-crown-r2",
+      "prompt": "Edit FIRST IMAGE whole6-pose strip, SAME2172x724 canvas, preserve arm poses/body sizes/gold cuff identity/cloak shapes and proportions; second image approved seed, third layout. Correct ONLY neck/head/crown HEIGHT of poses2 and4, not resize any figure: pose2 is bowed too low, straighten neck modestly and raise head/crown by10 source pixels; pose4 neck overextended/crown too high, bend neck forward and LOWER head/crown by25 source pixels while keeping roaring OPEN MOUTH visible. Every crown apex must be BETWEEN y213 and237, tips of center cloak at y535. Face LEFT. Pose3 stays as is. ONE crown, one cyan chest core,6 arms three pairs correctly placed,3 cloak tails,no legs. Head/skull SIZE constant; move by articulated neck only, never scale. Four middle poses show bow -> arms open bright -> roar -> release. Keep 48px+ alpha0 gutters, transparent background, no haze/floor or aura/VFX/text. Whole strip regenerate all6 together.",
+      "references": [
+        "raw/original/severed-crown.png",
+        "seeds/seed-c.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/severed-crown-r2.png",
+      "selected": false,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "severed-crown-r3",
+      "prompt": "Edit FIRST IMAGE as the WHOLE six-pose strip, exact2172x724 canvas. Only revise the neck/head/crown POSITIONS in poses THREE and FOUR: move the head/crown DOWN by8 source pixels by slightly bending the neck, not resizing it. Crown apex of poses3/4 should be at y222..225, NOT y213..214; keep middle cloak tips y537. Pose4 still open-mouthed roar, face LEFT visible. All other four poses, hands, cuffs, arms and cloak lengths unchanged. Second reference original seed-c primary design, third layout. EXACTLY SIX arms in fixed three pairs (upper slimbracers, middle hugecuffs, lower smallwaist), one crown, one chestcore, three cloa ktails, NO legs. First/lastready remainseedpose. Fullbodyheightcrown-to-cloaktip311px +-10, not bodyenlargement. Nothingcropped, empty alpha0gaps>=48px, true transparentbackground, no haze/floor/threads/projectiles/orbs/externalVFX/text/UI. Regenerate all six together.",
+      "references": [
+        "raw/original/severed-crown-r2.png",
+        "seeds/seed-c.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/severed-crown-r3.png",
+      "selected": true,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "hit",
+      "prompt": "EDIT FIRST IMAGE as exact existing canvas of ready sprites. KEEP2172x724 canvas, exact figure centers, crown/head/chest/torso/cloak dimensions unchanged; only articulate the requested arms/torso gesture. First image is the canvas to edit. Second is approved seed-c PRIMARY CHARACTER, third padded layout. Same left-facing three-quarter model, gold trim, violet cloak, no mirror. EXACTLY6 arms in fixed3 pairs: UPPER behind shoulders slim gold bracers, MIDDLE huge hands HUGE gold cuffs, LOWER at waist small hands/slim wrist guards; never exchange their origins or cuffs. One cyan chest core, one floating GOLD CROWN, THREE long cloak tails with middle tail lowest, NO legs. Each pair's two hands remain distinct/countable. Unused pairs stay in seed positions, do not borrow motion from another pair. Head/crown/core visible. SIX-pose figures crown apex225px to lowest cloak-tip536px ~311px high EVERY pose (within4%, 299..323px). FOUR-pose figures crown174 to tip640 ~466px (448..484px). Never enlarge bodies or fit to image blank space. Upper hands can move modestly above crown, remain entirely in slot, margin32sourcepixels. Allfigures separate >=48px REAL alpha0 gaps, no haze, no floor/shadow plate/background, no text/UI/logos. BODY ONLY no energy spheres, no light in hands, no projectiles, no threads/strings, no portals, no smoke/beams/aura or external glows. Cyan glow only INSIDE CHEST core, never belly or hands. MOVE HIT, exactly FOUR poses, not6: 1 exact seed ready; 2 recoil backwards to RIGHT with head and upper torso thrown back a little, crown remains over head, all6 arms jerk backward at THEIR OWN LEVELS, cloak three tails flutter left, lowest center cloth tip stays at baseline; 3 brace upright, all six arms re-establish seed three-level arrangement, crown/face/core clear, tail lengths unchanged; 4 exact seed ready. Maintain CROWN APEX y174 and longest middle cloak tip y640 in ALL FOUR poses. Recoil moves head to RIGHT only, not upwards. Bow/rotation may change height by at most10 source pixels. Exactly6 arms even in recoil, no legs. Keep body dimensions of FIRST image ready canvas EXACTLY unchanged. No VFX.",
+      "references": [
+        "seeds/ready-strip-4.png",
+        "seeds/seed-c.png",
+        "seeds/layout-4.png"
+      ],
+      "original": "raw/original/hit.png",
+      "selected": true,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "down",
+      "prompt": "EDIT FIRST IMAGE as exact existing canvas of ready sprites. KEEP2172x724 canvas, exact figure centers, crown/head/chest/torso/cloak dimensions unchanged; only articulate the requested arms/torso gesture. First image is the canvas to edit. Second is approved seed-c PRIMARY CHARACTER, third padded layout. Same left-facing three-quarter model, gold trim, violet cloak, no mirror. EXACTLY6 arms in fixed3 pairs: UPPER behind shoulders slim gold bracers, MIDDLE huge hands HUGE gold cuffs, LOWER at waist small hands/slim wrist guards; never exchange their origins or cuffs. One cyan chest core, one floating GOLD CROWN, THREE long cloak tails with middle tail lowest, NO legs. Each pair's two hands remain distinct/countable. Unused pairs stay in seed positions, do not borrow motion from another pair. Head/crown/core visible. SIX-pose figures crown apex225px to lowest cloak-tip536px ~311px high EVERY pose (within4%, 299..323px). FOUR-pose figures crown174 to tip640 ~466px (448..484px). Never enlarge bodies or fit to image blank space. Upper hands can move modestly above crown, remain entirely in slot, margin32sourcepixels. Allfigures separate >=48px REAL alpha0 gaps, no haze, no floor/shadow plate/background, no text/UI/logos. BODY ONLY no energy spheres, no light in hands, no projectiles, no threads/strings, no portals, no smoke/beams/aura or external glows. Cyan glow only INSIDE CHEST core, never belly or hands. MOVE DOWN, exactly FOUR poses, not6: 1 exact seed ready; 2 torso sinks, all SIX arms hang in three separate paired levels with correct original cuffs, crown tilts over head, three cloak tails bend rather than shrink; 3 collapse sideways LEFT into a low pile of three cloak tails against the ground line, head and dark chest core visible, ALL SIX arms folded/draped separately around torso with original cuffs countable, gold crown resting adjacent head (one crown only), no legs; 4 HELD LYING low sideways pile with head/one crown/dark chest core and exactlySIX arms countable, three cloak tails pooled on ground line, core extinguished, never stands up. Intentional down collapse changes crown-to-floor height but NOT head/torso/arm sizes, no shattering or extra rubble. For this DEATH ONLY crown-to-floor height intentionally collapses; do NOT shrink head/torso/hands relative to first ready. Lying character can occupy450px width per543px slot. Show all6 arms separately on and beside collapsed cloak, upper slim bracers nearest head, two huge middle cuffs at ribs, two small lower wrists near waist. Middle and side cloth tails fold into THREE distinct pointed ends along ground. Rest one gold crown adjacent tilted head in lying frames (no duplicate crown above head). Dark purple core housing remains round in same chest location, no glow in final. No broken chunks, no detached gold pieces, no smoke/floor/shadow/VFX. Lowest cloth contact y640 all poses; transparent below.",
+      "references": [
+        "seeds/ready-strip-4.png",
+        "seeds/seed-c.png",
+        "seeds/layout-4.png"
+      ],
+      "original": "raw/original/down.png",
+      "selected": false,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "down-r2",
+      "prompt": "Edit FIRST IMAGE as WHOLE FOUR-pose death strip. Keep2172x724 canvas, same ready head/torso/hand dimensions and positions, second image approved seed reference, third layout. Change TWO things only in poses THREE and FOUR: (1) extinguish cyan chest core in BOTH lying poses, round chest housing dark violet, ZERO cyan/white glow; (2) fold the left and right sides of pooled three-tail cloak INWARD underneath itself by35px each side, maximum width of each lying figure450px within its543px slot. No resizing bodies/heads/hands, only cloth folds. Leave >=60px ALPHA0 gap between all silhouettes, no haze anywhere. Show EXACTLY SIX arms: upper slim bracers draped nearest head, middle two HUGE cuffs/hands by ribs, lower two slim wristguards/small hands on pooled cloth, all separate and countable. THREE cloth pointed tails remain distinguishable despite folds. ONE crown near tilted head in lying frames, NO legs. Pose1 ready with bright core unchanged; pose2 sinking/hangingarms with core dimming; pose3 low fallen pile with DARK core; pose4 held corpse pile DARK core never rises. All cloth contact on sourcey640. No rubble, no extra pieces, no floor shadow, no VFX/text/UI, true transparentbackground. Regenerate allfour as single strip.",
+      "references": [
+        "raw/original/down.png",
+        "seeds/seed-c.png",
+        "seeds/layout-4.png"
+      ],
+      "original": "raw/original/down-r2.png",
+      "selected": true,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "six-hand-rend-r4",
+      "prompt": "Edit FIRST IMAGE whole6-pose strip, SAME2172x724 canvas, exact same body SCALE, crown/torso/cloth lengths and six-arm character model. Second reference original seed-c, third layout. Correct gap between THIRD and FOURTH figures: in THIRD figure only, bend the MIDDLE pair's rightmost elbow to pull that huge-cuff right hand INWARD toward ribs by16 source pixels. Keep this anticipation pose widest middle-arm opening but don't reach neighbor. In FOURTH figure tuck the farthest LEFT attacking middle hand INWARD toward its own body by10 source pixels. Do NOT move heads/crowns/cloth or scale figures. These two hand-joint changes must create >=65px completely ALPHA0 gap between figures3/4; every other silhouette gap>=48px. Keep top/side margin, no haze. Exactly6 arms with upper slimbracers raised, middle hugecuffs do attack, lower smallwaisthands still countable, single cyan chestcore, one floatinggoldcrown,3 cloak tails,NO legs. Same seed facingLEFT, no mirror, no externalVFX/text/UI. All6 poses regenerate as one strip. Preserve firstready body crown apex225 and cloth tip536, all othercrown-to-tip lengthswithin4% of311; transparent alpha0background, no floor.",
+      "references": [
+        "raw/original/six-hand-rend-r3.png",
+        "seeds/seed-c.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/six-hand-rend-r4.png",
+      "selected": false,
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "six-hand-rend-r5",
+      "prompt": "FIRST IMAGE is a whole6-pose sprite strip. Preserve ALL original six CHARACTER MODELS and POSES EXACTLY, especially OPEN MIDDLE CLAWS, face/head/crown/body/hand sizes, arm cuff identities and cloak folds. Do NOT bend/close/resize any hand. Do NOT change arm or body proportions. Only rearrange spacing: keep figures1,2,3 and6 exactly in place; TRANSLATE ENTIRE FOURTH figure16pixels to RIGHT, translate ENTIRE FIFTH figure12pixels to RIGHT. Canvas stays2172x724. This makes transparent gutters between figures3/4 and4/5 at least50px; no anatomy editing necessary. Body crown-to-cloak311px approximate unchanged. SECOND image is approved Morvane seed-c for identity only, third layout reference. Six arms per figure (upper slimbracers raised, middle hugecuffs claws perform attack, lower smallwaisthands), onegoldcrown, one cyan chestcore, three cloth tails, nolegs, faceLEFT nevermirror. Pose3 wide middleclaws anticipation, pose4 two middleclaws sweeping lowLEFT, pose5 openclaw followthrough. Whole strip, all6 figures together, realtransparentalpha0background, gapscleanandempty, nofloor/haze/VFX/text/UI. Keep open claw fingers not fists.",
+      "references": [
+        "raw/original/six-hand-rend-r3.png",
+        "seeds/seed-c.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/six-hand-rend-r5.png",
+      "selected": true,
+      "numeric_rng_seed": null
+    }
+  ]
+}

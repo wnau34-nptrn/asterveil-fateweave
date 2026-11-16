@@ -20,8 +20,8 @@ describe('WB-A Kragmor body: real intents, phase, clips and layout',()=>{
   expect(wbKragmor.enemies.filter(e=>e.art===ART).map(e=>e.id)).toEqual(['f1']);
   expect([...found].sort()).toEqual([...moves].sort());
   expect(Object.keys(unitRegistry[ART].intents).sort()).toEqual([...moves].sort());
-  // Valdrakk has its own art since WB-B; Morvane keeps the warden art until WB-C; the catalog lookup still finds all three.
-  expect(presentedEncounters.map(d=>d.id)).toContain('wb-kragmor');expect(encounters.map(d=>d.id)).not.toContain('wb-kragmor');expect(encounterById('wb-valdrakk')!.enemies.find(e=>e.boss)!.art).toBe('foe_valdrakk');expect(encounterById('wb-morvane')!.enemies.find(e=>e.boss)!.art).toBe('foe_sentinel');
+  // Valdrakk (WB-B) and Morvane (WB-C) have their own art too; the catalog lookup still finds all three.
+  expect(presentedEncounters.map(d=>d.id)).toContain('wb-kragmor');expect(encounters.map(d=>d.id)).not.toContain('wb-kragmor');expect(encounterById('wb-valdrakk')!.enemies.find(e=>e.boss)!.art).toBe('foe_valdrakk');expect(encounterById('wb-morvane')!.enemies.find(e=>e.boss)!.art).toBe('foe_morvane');
  });
  for(const name of moves)it(`plays the real ${name} turn once, ending on the seed`,()=>{
   const f=unitA9Fixture(ART,name),turn=f.result.turns.find(t=>t.side==='enemy')!;

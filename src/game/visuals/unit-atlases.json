@@ -349,5 +349,14 @@
     "frames": 30,
     "decodedBytes": 5650432,
     "downloadBytes": 1931778
+  },
+  "morvane": {
+    "image": "morvane_wbc.1e867b20b7ab.webp",
+    "atlas": "morvane_wbc.25862c8b0b73.json",
+    "width": 1024,
+    "height": 1774,
+    "frames": 30,
+    "decodedBytes": 7266304,
+    "downloadBytes": 1850434
   }
 }

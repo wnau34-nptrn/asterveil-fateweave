@@ -1,0 +1,608 @@
+{
+  "schema": 1,
+  "task": "ART-UNIT-ANIMATION-WB-C-001",
+  "base_commit": "c8e7f935248a8e96adfa3080e656ad643d3a1954",
+  "self_excluded": true,
+  "self_sha_receipt": "validation.json SHA is recorded in PR body, outside manifest to avoid recursion",
+  "logical_cells": 44,
+  "owner_motion_approval": "pending",
+  "runtime_test": "offline previews only; not integrated or tested in game",
+  "checks": "SHA/bytes/modes/full decode; seed locks; transform reconstruction; one calibrated scale; real alpha; margins; cloth-tip anchor; crown-to-cloak height excluding raised arms",
+  "anatomy_note": "Height check is not head/torso anatomy approval. Consult anatomy-audit.json and anatomy-review.json; not-measured never passes.",
+  "files": {
+    "NOTES.md": {
+      "sha256": "31778bbb2c9dbf0fe5a9053715110ad0859604dc89dd9941ea2948f3682fb1ff",
+      "bytes": 13713
+    },
+    "anatomy-audit.json": {
+      "sha256": "fbbddd51db16495422a047fab53f847b5a6eb839a94492788999bfdf0e21a7da",
+      "bytes": 6538
+    },
+    "anatomy-map.json": {
+      "sha256": "6acc7cf8e519390a234b515849f9dd7a7acaadbcce55069f6e0434f0709a0f0c",
+      "bytes": 3231
+    },
+    "anatomy-review.json": {
+      "sha256": "288f116e066209b5272990796a5b9ba9c3449a6a9692df6c49acee0879c7c34c",
+      "bytes": 42452
+    },
+    "annotations.json": {
+      "sha256": "991d8424a26a791e472320b78321373d6983cfa977854661dfa9b6f821972168",
+      "bytes": 5563
+    },
+    "audit_anatomy.py": {
+      "sha256": "68d68cfd7aed3b588553051d0d3827fcd8d8b6e91ac6f0cb9b557043e3537872",
+      "bytes": 2054
+    },
+    "build_handoff.py": {
+      "sha256": "f8453217f6180acfff5fadbadfb4d4fc06cbf6e601fb66cb32837879ccaabb32",
+      "bytes": 17873
+    },
+    "height-audit.json": {
+      "sha256": "7e3fd812cd99047e0c0b2ee920ea5e7db820cd58c9cd949bdbd64be7952a59bf",
+      "bytes": 22715
+    },
+    "motion-specs.json": {
+      "sha256": "5ed3321f6c8ff02278da8af10b63d3e0890145110f16f959bc5a93b121743061",
+      "bytes": 5523
+    },
+    "preview-390.png": {
+      "sha256": "9ec656065b02293b28002580f3e92c78274accdfbac26e4fcac6beba8f38ec4f",
+      "bytes": 1484336,
+      "size": [
+        390,
+        5532
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "preview-keyposes-390.png": {
+      "sha256": "c78493453f1658679054b3fbd5c5ef1a3f73e1adf18c79b101bcecfe6aa5d7ad",
+      "bytes": 557157,
+      "size": [
+        390,
+        2200
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "previews/call-the-court.webp": {
+      "sha256": "2314bf5194582eff7dcb25bd7f5f91424113f4314634afcbbe1b4f86be46ce36",
+      "bytes": 199844,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/down.webp": {
+      "sha256": "d8ad79f68d50ac7d73fc8503e2bd5853c7cd6a2f14d9620884543501d294c34a",
+      "bytes": 118410,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 4
+    },
+    "previews/fate-lash.webp": {
+      "sha256": "6368e0cb3b88f8e27cdaca7c323f0a3531964b46683952b5f6578f4649ca65ee",
+      "bytes": 191868,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/height-landmarks-390.png": {
+      "sha256": "e8f84a996aa89fada7bdf3361136683e52252b8267d8449923f22ab302bf8fdc",
+      "bytes": 1497526,
+      "size": [
+        390,
+        5532
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "previews/hit.webp": {
+      "sha256": "90d8cf2da8bebc77b3e9f8cf64607ec11a409b5f8f81ba494cc9816dacb9bceb",
+      "bytes": 135336,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 4
+    },
+    "previews/severed-crown.webp": {
+      "sha256": "ab1b6e1a6ff98ebc426958847984e6632317feedadb2816548513caa7a083f75",
+      "bytes": 201840,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/severing-bolt.webp": {
+      "sha256": "156cf96c7314a525300dd70fcd20084627e8b95d161ee1c1b491e1ec07f037b1",
+      "bytes": 192738,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/shadow-tide.webp": {
+      "sha256": "3d3477d35ed65d291457868e7bebf1d58ca1ed6375497480fe8795290cb80cd1",
+      "bytes": 193056,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/six-hand-rend.webp": {
+      "sha256": "517eaff56a2fb8935ad823fc7339cc62586b7a09f7506cadf8c1f86005c64aa2",
+      "bytes": 206330,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "prompts.json": {
+      "sha256": "ab2d3760c92bf620b443037c1a8594b98a6cca5cb53bc977306b4dd1b259aaea",
+      "bytes": 39537
+    },
+    "raw/call-the-court.png": {
+      "sha256": "8348719e711153137a56fc01fb3b5ca6faeeb2fb909bd927a1c0e82d2dc82bee",
+      "bytes": 694971,
+      "size": [
+        2122,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/down.png": {
+      "sha256": "96701ccd832dd7f57d3c1c3d110590069d30032367692a49547a300abc9b455a",
+      "bytes": 822658,
+      "size": [
+        1908,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/fate-lash.png": {
+      "sha256": "4f35d7ada1fedac67f81453545e9134e8c1f61c92256a0a351fbf7d635c1cb2a",
+      "bytes": 674123,
+      "size": [
+        2038,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/hit.png": {
+      "sha256": "0509efb612dea87068231d6fdd5fd92215b6a75ae421dcc903aa1fbb49fec934",
+      "bytes": 904066,
+      "size": [
+        2004,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/call-the-court.png": {
+      "sha256": "a853765a6bec4414e4a38a08c1a91aa4f7e78f20a921a5b4dc392a19f746e013",
+      "bytes": 888602,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/down-r2.png": {
+      "sha256": "007a99b141f88b242418dd93c2a6dd321045f66022728e40b8f5d60c1c973d9f",
+      "bytes": 948491,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/down.png": {
+      "sha256": "4eaefede0873d109df1b2b963aa8e2738afc9417716a3eb02b465077bdb4ca31",
+      "bytes": 1019437,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/fate-lash.png": {
+      "sha256": "9d2a36b0b75ea7fae41028df17de0780ba3535137749bec09be3a3deb2e7f5c2",
+      "bytes": 867641,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/hit.png": {
+      "sha256": "e2a39e2497cf483733cf3d877f8d571a69791997a1c2a67aa4ef72c4e4897cd4",
+      "bytes": 1098637,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/severed-crown-r2.png": {
+      "sha256": "e5f62ffd2a4d0cec2f11ece3143cefa6faeb863e36011babd159af3dec30f032",
+      "bytes": 970080,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/severed-crown-r3.png": {
+      "sha256": "c6677eae6ecc584b97d2483c72802d88684ca204ed4202c8a8b1c50fb8d8775b",
+      "bytes": 888753,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/severed-crown.png": {
+      "sha256": "fa1d5e56cb04a8723c8284e2d4556c6be7ff6bc4de88bfa04d5ff52c97d4bcbc",
+      "bytes": 1061051,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/severing-bolt-r2.png": {
+      "sha256": "6cea647eff0ab1ed4b3546fb4412f0a0031a3d59ae00d4139b16b01f4adb6445",
+      "bytes": 872792,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/severing-bolt-r3.png": {
+      "sha256": "d0d348337edf56d6ddbd2e7cfc42e642e23ffa5eef13891f512b06ee1b336fc8",
+      "bytes": 886489,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/severing-bolt.png": {
+      "sha256": "8ca264e47ca8f7717b4161e8a47f68b25ad34bbb7c76b3eb24447e90cca5cef1",
+      "bytes": 1180349,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/shadow-tide.png": {
+      "sha256": "bdf367be52272214f1d035c28eb3d278c267f3f4123a162cf6b66285066500c7",
+      "bytes": 916749,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/six-hand-rend-r2.png": {
+      "sha256": "59237105ea1ea2702f0b89b633a9d2b2136c30b3125c97daf7605a6a4d4d95d6",
+      "bytes": 831029,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/six-hand-rend-r3.png": {
+      "sha256": "2a5cd5ef934271ce929310eebbc6f1505b9a613dbb34232ff16cf0227741b0fb",
+      "bytes": 889672,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/six-hand-rend-r4.png": {
+      "sha256": "ca753ff7107499ffd87dfb226ecbe8cc338e437b13e11a5b903e660e91b4eb1c",
+      "bytes": 877946,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/six-hand-rend-r5.png": {
+      "sha256": "eb325b28cd8d73caa803d1a18d2fb3ff2359b77810cadd99a664bf2eafaca9de",
+      "bytes": 883352,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/six-hand-rend.png": {
+      "sha256": "2eb164d06aba0aeb62238a20cafcde14fce9c107a4906a294c7c7c9b35e34f9d",
+      "bytes": 1175468,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/severed-crown.png": {
+      "sha256": "869372f908fd3528aeb36db09fadff01a84f64a2e3d85b19fad40d241a4f6013",
+      "bytes": 705165,
+      "size": [
+        2344,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/severing-bolt.png": {
+      "sha256": "4787ccdef2e290c54c78586e123ea5c396576d1ec02cc856d621adef6572799b",
+      "bytes": 677122,
+      "size": [
+        2032,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/shadow-tide.png": {
+      "sha256": "2638a349659f61fa734698100a4be6f2a7ff810655af2224a0e1d1ce75445bc5",
+      "bytes": 680638,
+      "size": [
+        2044,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/six-hand-rend.png": {
+      "sha256": "3a4b00f511507ce40b225048c4bb2f74c40eebd93c7456f6349a53475eeebe71",
+      "bytes": 716646,
+      "size": [
+        2380,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "requirements.txt": {
+      "sha256": "b6d1cc91d045d7f947d0b58bedc80b24c1680ef7c590116565cc6724afb3df14",
+      "bytes": 62
+    },
+    "seeds/concept-c.png": {
+      "sha256": "a7c207b89b4637bb6237e89954226a8d3a64a0eb17b3e5b16b5001947a7b80f1",
+      "bytes": 1716264,
+      "size": [
+        2048,
+        2048
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/context.json": {
+      "sha256": "a4482f3677db3ef398f60da2a913a4a7e6b995c90ca67178496da096038cf27e",
+      "bytes": 607
+    },
+    "seeds/layout-4.png": {
+      "sha256": "a6b7a584656cacab1d03e2feaea441644f13372795108fdac09cdebb32dbc457",
+      "bytes": 189749,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/layout-6.png": {
+      "sha256": "8413699e20ecf3cdae6895aaf3825b5ac7549e4924a518e59c44776b45fbb569",
+      "bytes": 195519,
+      "size": [
+        3072,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/ready-strip-4.png": {
+      "sha256": "8e0b8acfe950680f3ad31107d569efc7d4dc1aa1bd0e18f80689a846e5af9fee",
+      "bytes": 273777,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/ready-strip-6.png": {
+      "sha256": "75aee5daf76308a8c49f874bf3813a635d65ebcdb84bf431912d33aaf6075827",
+      "bytes": 143986,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/seed-c.png": {
+      "sha256": "47e5fbbaf06a18ee56a7c8c46771e00f65e13df7998b8c3d78c5cfa98f160105",
+      "bytes": 596229,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/seeds.json": {
+      "sha256": "56308548eb781862f4e4c715a2b26666a8cbb6dffe574816f94ff64d788246e8",
+      "bytes": 7367
+    },
+    "seeds/sentinel-ready.png": {
+      "sha256": "3e855364ad3a94858f7afb717b0ad2e82495679dfaf5828f852a40eeec0bc4c3",
+      "bytes": 57363,
+      "size": [
+        317,
+        317
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/sentinel-reference.json": {
+      "sha256": "e5970916a84764ba66122cefd23595a4df469697de9799bf3d3a271c68a19222",
+      "bytes": 905
+    },
+    "seeds/turnaround-c.png": {
+      "sha256": "b7c81fe59009efb4fbc75e8760b6590ab1f770ec78e44431200c0cade79cc988",
+      "bytes": 1922767,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "seeds.json": {
+      "sha256": "4e385a006d3052c46307507c7df418c6cb2331dbec44652b98639fb5a0b30547",
+      "bytes": 2084
+    },
+    "sentinel-compare.png": {
+      "sha256": "4bc3ed752d4dc3752d2c4dd6c66fe618e03f9e0dcc1643a36b8a95d8ea2bff6c",
+      "bytes": 64421,
+      "size": [
+        390,
+        300
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/call-the-court.png": {
+      "sha256": "fe5b66bcfbd4696de88c9b2566d6996695e49f1766a9c54a650933da6f8fef23",
+      "bytes": 2796374,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/down.png": {
+      "sha256": "4dee6c7042cece6f450c3cb590066fb1ec3de0eca84c3e2211ba566a50774f8b",
+      "bytes": 1945119,
+      "size": [
+        4096,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/fate-lash.png": {
+      "sha256": "2ba532a950dd95b80de0cbeb700ab8ddec4d23e63d224f87f09ca6ce81d9473f",
+      "bytes": 2700945,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/hit.png": {
+      "sha256": "3d89dd999efebed551c729aa15589703889a9cc6ebb0fb5ccb0f1d1b0936bbb0",
+      "bytes": 1690588,
+      "size": [
+        4096,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/severed-crown.png": {
+      "sha256": "01434811a83c8c190d64535a851e35b4a8376a671b0eab8927acc270aea550ce",
+      "bytes": 2813475,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/severing-bolt.png": {
+      "sha256": "5c8a1bdaa8276d0ec3ad7a9fa3bfab6c35191b186e505f1ac3918fe8da26df65",
+      "bytes": 2723267,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/shadow-tide.png": {
+      "sha256": "2477e954773a1125cc4b7f1b09e669ec80f272d6b22cd2b1de907ef2b97ca63b",
+      "bytes": 2710415,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/six-hand-rend.png": {
+      "sha256": "f0d3b70385c7189b652fa4d45dc69521093c85f2f1064c0327d105653746af0f",
+      "bytes": 2878481,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips.json": {
+      "sha256": "b683da64c0899be515cf7b14aef000fa971772223c9c3b84fa8e241a7bf471e3",
+      "bytes": 63613
+    }
+  }
+}

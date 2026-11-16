@@ -1,0 +1,10 @@
+{
+  "base_commit": "c8e7f935248a8e96adfa3080e656ad643d3a1954",
+  "seed_source_commit": "46f366dc931e4994d3a6ccd9ad3951ac444a70cf",
+  "layout_policy": "WB-A 512x768 slot geometry; replace ready references with half-size Morvane seed. Whole seed fits512px slot.",
+  "file_sha256": {
+    "src/content/encounters/catalog.ts": "f8a37883be27da7f1229bb26a5f64c2d6bc3aad6096ff7ef8a4cd774e5f54135",
+    "src/game/visuals/unit-frames.ts": "ab3f041c9f39d163a8388e1f646f09d7f020c6ef395d081c920e5d7b7b771035",
+    "scripts/unit-anatomy-audit.py": "7980867467bf894fad629274639ee2769fc4920eb61aeeabcdbf312952c9a57c"
+  }
+}

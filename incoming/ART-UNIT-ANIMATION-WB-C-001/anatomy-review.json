@@ -1,0 +1,1216 @@
+{
+  "task": "ART-UNIT-ANIMATION-WB-C-001",
+  "owner_motion_approval": "pending",
+  "not_measured_is_pass": false,
+  "project_audit_summary": {
+    "idle": 15,
+    "not-measured": 3,
+    "ok": 26
+  },
+  "not_measured_frames": [
+    {
+      "move": "down",
+      "frame": 1
+    },
+    {
+      "move": "down",
+      "frame": 2
+    },
+    {
+      "move": "down",
+      "frame": 3
+    }
+  ],
+  "height_summary": "41 cells crown-to-cloak within4%;3 intentional down collapse exceptions. Height alignment alone is not anatomy approval.",
+  "manual_policy": "Three down frames must be reviewed visually against seed; head/crown turn, arm overlap and pooled cloth defeat the top-region SIFT fit. No failed/unmeasured row is silently passed.",
+  "rows": [
+    {
+      "move": "six-hand-rend",
+      "frame": 0,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "six-hand-rend",
+      "frame": 1,
+      "audit_status": "ok",
+      "audit_scale": 1.037,
+      "audit_inliers": 51,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.0160771704180063,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Upper slim-bracer pair high; middle huge-cuff pair is the attacking pair; lower small waist hands remain below core. Middle fingers open during sweep; lower hands partly occluded by near sweeping cuff but pair traceable. R5 retained R3 character proportions; source spacing fixed, same canonical scale."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "six-hand-rend",
+      "frame": 2,
+      "audit_status": "ok",
+      "audit_scale": 1.023,
+      "audit_inliers": 55,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.0128617363344052,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Upper slim-bracer pair high; middle huge-cuff pair is the attacking pair; lower small waist hands remain below core. Middle fingers open during sweep; lower hands partly occluded by near sweeping cuff but pair traceable. R5 retained R3 character proportions; source spacing fixed, same canonical scale."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "six-hand-rend",
+      "frame": 3,
+      "audit_status": "ok",
+      "audit_scale": 1.042,
+      "audit_inliers": 18,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Upper slim-bracer pair high; middle huge-cuff pair is the attacking pair; lower small waist hands remain below core. Middle fingers open during sweep; lower hands partly occluded by near sweeping cuff but pair traceable. R5 retained R3 character proportions; source spacing fixed, same canonical scale."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "six-hand-rend",
+      "frame": 4,
+      "audit_status": "ok",
+      "audit_scale": 1.101,
+      "audit_inliers": 19,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.9871382636655949,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Upper slim-bracer pair high; middle huge-cuff pair is the attacking pair; lower small waist hands remain below core. Middle fingers open during sweep; lower hands partly occluded by near sweeping cuff but pair traceable. R5 retained R3 character proportions; source spacing fixed, same canonical scale."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "six-hand-rend",
+      "frame": 5,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "severing-bolt",
+      "frame": 0,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "severing-bolt",
+      "frame": 1,
+      "audit_status": "ok",
+      "audit_scale": 1.006,
+      "audit_inliers": 120,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.9967845659163986,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Upper pair stays raised, middle huge cuffs at ribs, lower small pair clasp/open/push LEFT. Core bright, no hand/belly orb."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "severing-bolt",
+      "frame": 2,
+      "audit_status": "ok",
+      "audit_scale": 1.004,
+      "audit_inliers": 117,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.9967845659163986,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Upper pair stays raised, middle huge cuffs at ribs, lower small pair clasp/open/push LEFT. Core bright, no hand/belly orb."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "severing-bolt",
+      "frame": 3,
+      "audit_status": "ok",
+      "audit_scale": 1.0,
+      "audit_inliers": 120,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.9967845659163986,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Upper pair stays raised, middle huge cuffs at ribs, lower small pair clasp/open/push LEFT. Core bright, no hand/belly orb."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "severing-bolt",
+      "frame": 4,
+      "audit_status": "ok",
+      "audit_scale": 1.001,
+      "audit_inliers": 130,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.990353697749196,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Upper pair stays raised, middle huge cuffs at ribs, lower small pair clasp/open/push LEFT. Core bright, no hand/belly orb."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "severing-bolt",
+      "frame": 5,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "fate-lash",
+      "frame": 0,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "fate-lash",
+      "frame": 1,
+      "audit_status": "ok",
+      "audit_scale": 0.991,
+      "audit_inliers": 74,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.990353697749196,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Upper slim-bracer pair pinches/crosses/sweeps left, middle huge cuffs and lower waist pair distinct. Crossed wrists above crown are not the crown apex; manual landmark retained."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "fate-lash",
+      "frame": 2,
+      "audit_status": "ok",
+      "audit_scale": 0.984,
+      "audit_inliers": 51,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.0128617363344052,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Upper slim-bracer pair pinches/crosses/sweeps left, middle huge cuffs and lower waist pair distinct. Crossed wrists above crown are not the crown apex; manual landmark retained."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "fate-lash",
+      "frame": 3,
+      "audit_status": "ok",
+      "audit_scale": 0.995,
+      "audit_inliers": 30,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.9935691318327973,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Upper slim-bracer pair pinches/crosses/sweeps left, middle huge cuffs and lower waist pair distinct. Crossed wrists above crown are not the crown apex; manual landmark retained."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "fate-lash",
+      "frame": 4,
+      "audit_status": "ok",
+      "audit_scale": 0.993,
+      "audit_inliers": 26,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.9871382636655949,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Upper slim-bracer pair pinches/crosses/sweeps left, middle huge cuffs and lower waist pair distinct. Crossed wrists above crown are not the crown apex; manual landmark retained."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "fate-lash",
+      "frame": 5,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "call-the-court",
+      "frame": 0,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "call-the-court",
+      "frame": 1,
+      "audit_status": "ok",
+      "audit_scale": 1.006,
+      "audit_inliers": 103,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "R1 upper pair opens outward above crown and holds, not crossed-whip follow-through. No rift graphic. At160px reads separately from Fate Lash."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "call-the-court",
+      "frame": 2,
+      "audit_status": "ok",
+      "audit_scale": 0.996,
+      "audit_inliers": 106,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "R1 upper pair opens outward above crown and holds, not crossed-whip follow-through. No rift graphic. At160px reads separately from Fate Lash."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "call-the-court",
+      "frame": 3,
+      "audit_status": "ok",
+      "audit_scale": 1.021,
+      "audit_inliers": 75,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.022508038585209,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "R1 upper pair opens outward above crown and holds, not crossed-whip follow-through. No rift graphic. At160px reads separately from Fate Lash."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "call-the-court",
+      "frame": 4,
+      "audit_status": "ok",
+      "audit_scale": 0.994,
+      "audit_inliers": 96,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "R1 upper pair opens outward above crown and holds, not crossed-whip follow-through. No rift graphic. At160px reads separately from Fate Lash."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "call-the-court",
+      "frame": 5,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "shadow-tide",
+      "frame": 0,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "shadow-tide",
+      "frame": 1,
+      "audit_status": "ok",
+      "audit_scale": 0.973,
+      "audit_inliers": 32,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.9935691318327973,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Six hands spread and press down in three levels, huge middle cuffs separate from upper/lower smaller bracers. Three cloth tails spread within cell; no wave/VFX."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "shadow-tide",
+      "frame": 2,
+      "audit_status": "ok",
+      "audit_scale": 1.012,
+      "audit_inliers": 27,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Six hands spread and press down in three levels, huge middle cuffs separate from upper/lower smaller bracers. Three cloth tails spread within cell; no wave/VFX."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "shadow-tide",
+      "frame": 3,
+      "audit_status": "ok",
+      "audit_scale": 1.01,
+      "audit_inliers": 27,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.9871382636655949,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Six hands spread and press down in three levels, huge middle cuffs separate from upper/lower smaller bracers. Three cloth tails spread within cell; no wave/VFX."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "shadow-tide",
+      "frame": 4,
+      "audit_status": "ok",
+      "audit_scale": 0.996,
+      "audit_inliers": 28,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.0032154340836013,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Six hands spread and press down in three levels, huge middle cuffs separate from upper/lower smaller bracers. Three cloth tails spread within cell; no wave/VFX."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "shadow-tide",
+      "frame": 5,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "severed-crown",
+      "frame": 0,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "severed-crown",
+      "frame": 1,
+      "audit_status": "ok",
+      "audit_scale": 0.985,
+      "audit_inliers": 12,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.9742765273311897,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Modest bow then upper hands rise and middle hands open; mouth open on peak, crown/head height corrected by neck pose, not rescaling. Glow stays internal."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "severed-crown",
+      "frame": 2,
+      "audit_status": "ok",
+      "audit_scale": 1.066,
+      "audit_inliers": 49,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.0032154340836013,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Modest bow then upper hands rise and middle hands open; mouth open on peak, crown/head height corrected by neck pose, not rescaling. Glow stays internal."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "severed-crown",
+      "frame": 3,
+      "audit_status": "ok",
+      "audit_scale": 1.041,
+      "audit_inliers": 15,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.0032154340836013,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Modest bow then upper hands rise and middle hands open; mouth open on peak, crown/head height corrected by neck pose, not rescaling. Glow stays internal."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "severed-crown",
+      "frame": 4,
+      "audit_status": "ok",
+      "audit_scale": 1.015,
+      "audit_inliers": 27,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.9967845659163986,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Modest bow then upper hands rise and middle hands open; mouth open on peak, crown/head height corrected by neck pose, not rescaling. Glow stays internal."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "severed-crown",
+      "frame": 5,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "hit",
+      "frame": 0,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "hit",
+      "frame": 1,
+      "audit_status": "ok",
+      "audit_scale": 1.053,
+      "audit_inliers": 48,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 1.003215434083601,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Body/head recoil RIGHT, three cloth tails flutter LEFT, six arms remain in correct levels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "hit",
+      "frame": 2,
+      "audit_status": "ok",
+      "audit_scale": 0.984,
+      "audit_inliers": 250,
+      "height_status": "within-4pct",
+      "height_ratio_vs_seed": 0.9967845659163985,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Body/head recoil RIGHT, three cloth tails flutter LEFT, six arms remain in correct levels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "hit",
+      "frame": 3,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "down",
+      "frame": 0,
+      "audit_status": "idle",
+      "audit_scale": 1.0,
+      "audit_inliers": 1805,
+      "height_status": "seed-exact",
+      "height_ratio_vs_seed": 1.0,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Exact approved seed pixels."
+      },
+      "review_outcome": "technical measurement available; owner review pending"
+    },
+    {
+      "move": "down",
+      "frame": 1,
+      "audit_status": "not-measured",
+      "audit_scale": 1.172,
+      "audit_inliers": 10,
+      "height_status": "intentional-collapse",
+      "height_ratio_vs_seed": 0.9174705251875668,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": true,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Intentional sink/collapse, six arms drape: slim upper near head, two huge middle cuffs by ribs, small lower wrists on pooled cloth. Three cloth tails fold, no legs. One tilted crown remains; core dark at index2/3; held pile, never stands."
+      },
+      "review_outcome": "owner review pending; down not-measured is not a pass"
+    },
+    {
+      "move": "down",
+      "frame": 2,
+      "audit_status": "not-measured",
+      "audit_scale": 0.007,
+      "audit_inliers": 7,
+      "height_status": "intentional-collapse",
+      "height_ratio_vs_seed": 0.5230439442658091,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": false,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Intentional sink/collapse, six arms drape: slim upper near head, two huge middle cuffs by ribs, small lower wrists on pooled cloth. Three cloth tails fold, no legs. One tilted crown remains; core dark at index2/3; held pile, never stands."
+      },
+      "review_outcome": "owner review pending; down not-measured is not a pass"
+    },
+    {
+      "move": "down",
+      "frame": 3,
+      "audit_status": "not-measured",
+      "audit_scale": 0.0,
+      "audit_inliers": 5,
+      "height_status": "intentional-collapse",
+      "height_ratio_vs_seed": 0.52518756698821,
+      "visual_review": {
+        "reviewer": "Codex visual inspection, NOT owner approval",
+        "arms": 6,
+        "pairs": {
+          "upper": "slim gold bracers, high shoulder origin",
+          "middle": "huge gold cuffs and large hands",
+          "lower": "small hands/wristguards at waist"
+        },
+        "cloak_tails": 3,
+        "crowns": 1,
+        "chest_core_housings": 1,
+        "core_lit": false,
+        "legs": 0,
+        "facing": "left",
+        "mirror": false,
+        "note": "Intentional sink/collapse, six arms drape: slim upper near head, two huge middle cuffs by ribs, small lower wrists on pooled cloth. Three cloth tails fold, no legs. One tilted crown remains; core dark at index2/3; held pile, never stands."
+      },
+      "review_outcome": "owner review pending; down not-measured is not a pass"
+    }
+  ]
+}

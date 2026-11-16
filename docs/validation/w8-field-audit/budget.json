@@ -554,6 +554,25 @@
     "download": 11109577
    },
    "bossFx": false
+  },
+  {
+   "id": "wb-morvane",
+   "foes": 4,
+   "reserves": 0,
+   "foeSheets": [
+    "wisp",
+    "crawler",
+    "morvane"
+   ],
+   "four": {
+    "decoded": 34251728,
+    "download": 9969085
+   },
+   "five": {
+    "decoded": 38755976,
+    "download": 11415002
+   },
+   "bossFx": false
   }
  ]
 }
