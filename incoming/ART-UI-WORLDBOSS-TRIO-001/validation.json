@@ -1,0 +1,544 @@
+{
+  "schema": 1,
+  "task": "ART-UI-WORLDBOSS-TRIO-001",
+  "checks": {
+    "banners": {
+      "kragmor": {
+        "size": [
+          1080,
+          360
+        ],
+        "mode": "RGB",
+        "png_webp_pixel_equal": true,
+        "safe_area_xyxy": [
+          0,
+          0,
+          540,
+          360
+        ],
+        "native_left_half": {
+          "white_contrast_min": 15.558662507537353,
+          "max_relative_luminance": 0.017486520739898453,
+          "worst_pixel_xy": [
+            539,
+            243
+          ],
+          "pixels_checked": 194400,
+          "pixels_below_4_5": 0
+        },
+        "display_358_size": [
+          358,
+          119
+        ],
+        "display_358_left_half": {
+          "white_contrast_min": 15.99039478726481,
+          "max_relative_luminance": 0.0156644200452292,
+          "worst_pixel_xy": [
+            178,
+            92
+          ],
+          "pixels_checked": 21301,
+          "pixels_below_4_5": 0
+        }
+      },
+      "valdrakk": {
+        "size": [
+          1080,
+          360
+        ],
+        "mode": "RGB",
+        "png_webp_pixel_equal": true,
+        "safe_area_xyxy": [
+          0,
+          0,
+          540,
+          360
+        ],
+        "native_left_half": {
+          "white_contrast_min": 10.719435788867251,
+          "max_relative_luminance": 0.047952916616235096,
+          "worst_pixel_xy": [
+            529,
+            249
+          ],
+          "pixels_checked": 194400,
+          "pixels_below_4_5": 0
+        },
+        "display_358_size": [
+          358,
+          119
+        ],
+        "display_358_left_half": {
+          "white_contrast_min": 12.651852086010905,
+          "max_relative_luminance": 0.032991801742685574,
+          "worst_pixel_xy": [
+            177,
+            82
+          ],
+          "pixels_checked": 21301,
+          "pixels_below_4_5": 0
+        }
+      },
+      "morvane": {
+        "size": [
+          1080,
+          360
+        ],
+        "mode": "RGB",
+        "png_webp_pixel_equal": true,
+        "safe_area_xyxy": [
+          0,
+          0,
+          540,
+          360
+        ],
+        "native_left_half": {
+          "white_contrast_min": 14.277879834705098,
+          "max_relative_luminance": 0.02354033036808277,
+          "worst_pixel_xy": [
+            410,
+            338
+          ],
+          "pixels_checked": 194400,
+          "pixels_below_4_5": 0
+        },
+        "display_358_size": [
+          358,
+          119
+        ],
+        "display_358_left_half": {
+          "white_contrast_min": 15.639951936934423,
+          "max_relative_luminance": 0.017135756186077506,
+          "worst_pixel_xy": [
+            135,
+            111
+          ],
+          "pixels_checked": 21301,
+          "pixels_below_4_5": 0
+        }
+      },
+      "trio": {
+        "size": [
+          1080,
+          288
+        ],
+        "mode": "RGB",
+        "png_webp_pixel_equal": true,
+        "safe_area_xyxy": [
+          0,
+          0,
+          540,
+          288
+        ],
+        "native_left_half": {
+          "white_contrast_min": 18.4644473332739,
+          "max_relative_luminance": 0.006866039965780356,
+          "worst_pixel_xy": [
+            530,
+            219
+          ],
+          "pixels_checked": 155520,
+          "pixels_below_4_5": 0
+        },
+        "display_358_size": [
+          358,
+          95
+        ],
+        "display_358_left_half": {
+          "white_contrast_min": 18.5930330590414,
+          "max_relative_luminance": 0.006472765721750126,
+          "worst_pixel_xy": [
+            174,
+            71
+          ],
+          "pixels_checked": 17005,
+          "pixels_below_4_5": 0
+        }
+      }
+    },
+    "emblems": {
+      "kragmor": {
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "alpha_extrema": [
+          0,
+          255
+        ],
+        "alpha_bbox_xyxy": [
+          10,
+          8,
+          246,
+          248
+        ],
+        "transparent_corners": true,
+        "png_webp_pixel_equal": true,
+        "readability_review_size": [
+          40,
+          40
+        ]
+      },
+      "valdrakk": {
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "alpha_extrema": [
+          0,
+          255
+        ],
+        "alpha_bbox_xyxy": [
+          10,
+          8,
+          246,
+          248
+        ],
+        "transparent_corners": true,
+        "png_webp_pixel_equal": true,
+        "readability_review_size": [
+          40,
+          40
+        ]
+      },
+      "morvane": {
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "alpha_extrema": [
+          0,
+          255
+        ],
+        "alpha_bbox_xyxy": [
+          11,
+          8,
+          245,
+          248
+        ],
+        "transparent_corners": true,
+        "png_webp_pixel_equal": true,
+        "readability_review_size": [
+          40,
+          40
+        ]
+      }
+    }
+  },
+  "contrast_method": "WCAG sRGB linearization, Rec.709 luminance, (1.0+0.05)/(L+0.05), white #FFFFFF; exhaustive pixels, not averages",
+  "visual_review": {
+    "no_text_logo_ui_heroes_in_assets": true,
+    "seed_identity": "reviewed; final judgement belongs to owner",
+    "trio": "A center-back, B group-left, C group-right, entire group on right half after uniform height fit",
+    "emblems": "reviewed as distinct faces at40px; portrait crops do not validate hidden limbs"
+  },
+  "owner_approval": "pending; technical checks are not approval",
+  "runtime_test": "not integrated; preview is offline simulation",
+  "self_excluded": true,
+  "self_sha_receipt": "validation.json digest recorded externally in PR description",
+  "files": {
+    "NOTES.md": {
+      "sha256": "5b0629712936f62b155584c8659cdabb32795d783acbc57f261cc2ab95e48366",
+      "bytes": 11846
+    },
+    "banner_kragmor.png": {
+      "sha256": "cc43f2b01752327eae2b6e5e74953d896f712b216ddce82e65972c41e135350a",
+      "bytes": 451035,
+      "size": [
+        1080,
+        360
+      ],
+      "mode": "RGB"
+    },
+    "banner_kragmor.webp": {
+      "sha256": "458224546483eeedb0918ce84d5a6f983fe523498eec703c5d18b75448da7dfa",
+      "bytes": 366684,
+      "size": [
+        1080,
+        360
+      ],
+      "mode": "RGB"
+    },
+    "banner_morvane.png": {
+      "sha256": "5fe6472a716eaab021a39d0dac304ca971544af299f7f48d19f2655fba06fa77",
+      "bytes": 463283,
+      "size": [
+        1080,
+        360
+      ],
+      "mode": "RGB"
+    },
+    "banner_morvane.webp": {
+      "sha256": "f9b3c9a1682783dfbc57681459f7c2c3fdc1ac74a4eb83557bd459766ae63ffe",
+      "bytes": 367350,
+      "size": [
+        1080,
+        360
+      ],
+      "mode": "RGB"
+    },
+    "banner_trio.png": {
+      "sha256": "f24c0f06bf347b2e747b0a722baf97a9730c4eec568e4a710a05c696f82173f7",
+      "bytes": 309442,
+      "size": [
+        1080,
+        288
+      ],
+      "mode": "RGB"
+    },
+    "banner_trio.webp": {
+      "sha256": "a1a01931ca41827b241eeca462ffbf99cb0451cf8252c0bbeb5d5e8a6bf9e994",
+      "bytes": 251690,
+      "size": [
+        1080,
+        288
+      ],
+      "mode": "RGB"
+    },
+    "banner_valdrakk.png": {
+      "sha256": "5e8382dfd5caa58ddc34887149feb6e9c6c6a19c10c09ef4ebff2cc0c5383d49",
+      "bytes": 477489,
+      "size": [
+        1080,
+        360
+      ],
+      "mode": "RGB"
+    },
+    "banner_valdrakk.webp": {
+      "sha256": "f2b7c6970d66cd5654b850ece85afbe7961673b6a93e297691a1b538d9b8c662",
+      "bytes": 384548,
+      "size": [
+        1080,
+        360
+      ],
+      "mode": "RGB"
+    },
+    "emblem_kragmor.png": {
+      "sha256": "752d105be523dd5f809fd16c78e27151b92b0b446a2ca547aee79948e73c424b",
+      "bytes": 115077,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "emblem_kragmor.webp": {
+      "sha256": "406df3639fcb95c2af93c62e3d2d853808fd22bc0ee59650d4fb601f092f2885",
+      "bytes": 91012,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "emblem_morvane.png": {
+      "sha256": "62047d361e39bbd4aceb89172695c0431bafd8e87f76e0692e6213757fcde98a",
+      "bytes": 108961,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "emblem_morvane.webp": {
+      "sha256": "3f4be547440dce03511377dd1708196c2bb547ce572305f5d98b3865845504e6",
+      "bytes": 83216,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "emblem_valdrakk.png": {
+      "sha256": "088dbd707d03afded0cef9a162e3c932b2125768a6388e47ad64af6bd1382b6c",
+      "bytes": 122471,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "emblem_valdrakk.webp": {
+      "sha256": "393f32308b05aa26957a868fcb5333ca192cdc7f7fdc2619771f551b2d6ba59c",
+      "bytes": 96036,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "handoff.py": {
+      "sha256": "d725e964934be375ae34e5a252c7c6fdc44294666c6d5f44cff2b9462e1c61f6",
+      "bytes": 14023
+    },
+    "preview_390.png": {
+      "sha256": "a9d15f0742536b7cabfc355c43c291780004b1767b812afac56effd9e2bd1817",
+      "bytes": 270065,
+      "size": [
+        390,
+        876
+      ],
+      "mode": "RGB"
+    },
+    "prompts.json": {
+      "sha256": "5ec0d9ceb4bf6b64f6de0899ea598a715d7831b71e1fef7c2cf2c00963e03f2b",
+      "bytes": 10136
+    },
+    "references/battle_riftline.webp": {
+      "sha256": "6e4114f65a7ab521e310a6e6baa9687205b1527dfb272542b0c550aed4ae72ac",
+      "bytes": 477024,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    "references/concept-a.png": {
+      "sha256": "aa161a2a9f0154d2dbbe9309cdb76973ed7d9899ae33d6aa2c6470561e132ddb",
+      "bytes": 2814067,
+      "size": [
+        2048,
+        2048
+      ],
+      "mode": "RGBA"
+    },
+    "references/concept-b.png": {
+      "sha256": "9f5b76f988e69c25a4699cb7464708806b188215c35886e06e22671bd10af5d8",
+      "bytes": 2754330,
+      "size": [
+        2048,
+        2048
+      ],
+      "mode": "RGBA"
+    },
+    "references/concept-c.png": {
+      "sha256": "a7c207b89b4637bb6237e89954226a8d3a64a0eb17b3e5b16b5001947a7b80f1",
+      "bytes": 1716264,
+      "size": [
+        2048,
+        2048
+      ],
+      "mode": "RGBA"
+    },
+    "references/context.json": {
+      "sha256": "b863245fa7e2f54b30141c1e7665ce649336b11332a3d88b19c908d0c4182bf1",
+      "bytes": 542
+    },
+    "references/emblem_worldboss_reference.png": {
+      "sha256": "6631ef6d581b2c8e22d2dbc7d60f1e417a20b67eac100260b3db1c821ca08202",
+      "bytes": 120371,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "references/fonts/Noto-package-copyright.txt": {
+      "sha256": "075f91382875da1c4b491f1facf2586f55448705133264d98ce15cab6211b125",
+      "bytes": 5208
+    },
+    "references/fonts/NotoSans-Bold.ttf": {
+      "sha256": "e83493c945848ecd4a9ad0f6d19164541a0d3e23a9c952304a00a46e00272ac5",
+      "bytes": 515752
+    },
+    "references/fonts/NotoSans-Regular.ttf": {
+      "sha256": "89c3c497f618fdaa0b2d1e98fef93582f28c71debd2c4a8cdf41f190ced2909d",
+      "bytes": 512672
+    },
+    "references/fonts/NotoSansThai-Bold.ttf": {
+      "sha256": "97bbc8ea98328325285f2f552228c7aac1db39d8f38f0096a61ba7df1f1f780e",
+      "bytes": 37788
+    },
+    "references/fonts/NotoSansThai-OFL.txt": {
+      "sha256": "6db87e563a421ba02fc1b7dabbf0d269234fb0b7908006b3efda318814fc2d88",
+      "bytes": 4381
+    },
+    "references/fonts/NotoSansThai-Regular.ttf": {
+      "sha256": "dfbd5ed0f1e68c3cbc51aa08f646d1ab0e68e7c4ceab70a69e465225ff701f93",
+      "bytes": 37744
+    },
+    "references/seed-a.png": {
+      "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97",
+      "bytes": 927372,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "references/seed-b.png": {
+      "sha256": "c3fe15c71d82c7cddc09df874fb9c21480bf2168e7b16248d692878ffb7ec214",
+      "bytes": 904214,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "references/seed-c.png": {
+      "sha256": "47e5fbbaf06a18ee56a7c8c46771e00f65e13df7998b8c3d78c5cfa98f160105",
+      "bytes": 596229,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "requirements.txt": {
+      "sha256": "d0524439f7a0da67c1283d44683e00fcc795a0657e726f22087cfcbe198f7c89",
+      "bytes": 28
+    },
+    "seeds.json": {
+      "sha256": "c2c393843d8002714ecda77a2e91e53c69495d3cea24101242f68d64b86e5d86",
+      "bytes": 7866
+    },
+    "source/emblems.png": {
+      "sha256": "079a58266403cdb4bc4491b52cbf1f654fd5b01dcdae5a90c645a7a1a1c98735",
+      "bytes": 2088987,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "source/kragmor.png": {
+      "sha256": "a180d6152ed36d4ccddfa98ee0f89bbf2956e3483005f250690ec872f2a4aa94",
+      "bytes": 2124901,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGB"
+    },
+    "source/morvane.png": {
+      "sha256": "a9b82b5610e99cdcdf0f4f974e5afc9901783959997026d305667ad3235ee313",
+      "bytes": 2131861,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGB"
+    },
+    "source/trio.png": {
+      "sha256": "ce5a152b413c4ba7f4281898c6c23e2658a5a1873d7c0e3e6455123acf92f24e",
+      "bytes": 2282598,
+      "size": [
+        1983,
+        793
+      ],
+      "mode": "RGB"
+    },
+    "source/valdrakk.png": {
+      "sha256": "a19fd8e2916d83750cce45cf2011f3c0851e38b092d787c05eee943b0e442d5b",
+      "bytes": 2232641,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGB"
+    }
+  }
+}
