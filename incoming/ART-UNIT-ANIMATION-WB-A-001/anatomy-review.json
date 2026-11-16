@@ -1,0 +1,114 @@
+{
+  "schema": 1,
+  "scope": "manual visual follow-up, not owner approval",
+  "measured_summary": {
+    "exact_seed": 15,
+    "measured_ok": 19,
+    "drift": 0,
+    "not_measured": 10,
+    "scale_min": 0.954,
+    "scale_max": 1.106,
+    "median": 1.045
+  },
+  "checks": [
+    "left facing throughout",
+    "five-shard crown identity with natural occlusion",
+    "three-clawed massive hands, no added limbs",
+    "single cyan chest wound; final down wound off",
+    "same near hand carries/releases rock, no projectile in release/followthrough",
+    "no external body VFX",
+    "source frame first/last replaced by exact seed where specified"
+  ],
+  "unmeasured_frames": [
+    {
+      "audit_frame": 4,
+      "move": "stone-fist",
+      "frame": 4,
+      "audit_status": "not-measured",
+      "automated_pass": false,
+      "visual_review": "Reviewed source and normalized at ~162px play scale and enlarged; no obvious head/hand size jump, intended pose readable. Owner motion approval pending.",
+      "why_unmeasured": "Low follow-through tilts face; crown/shoulder matches under minimum inliers."
+    },
+    {
+      "audit_frame": 13,
+      "move": "mountain-fall",
+      "frame": 1,
+      "audit_status": "not-measured",
+      "automated_pass": false,
+      "visual_review": "Reviewed source and normalized at ~162px play scale and enlarged; no obvious head/hand size jump, intended pose readable. Owner motion approval pending.",
+      "why_unmeasured": "Clasped overhead hands overlap crown/head; deep squat."
+    },
+    {
+      "audit_frame": 14,
+      "move": "mountain-fall",
+      "frame": 2,
+      "audit_status": "not-measured",
+      "automated_pass": false,
+      "visual_review": "Reviewed source and normalized at ~162px play scale and enlarged; no obvious head/hand size jump, intended pose readable. Owner motion approval pending.",
+      "why_unmeasured": "Deepest squat and overhead hands occlude upper model."
+    },
+    {
+      "audit_frame": 15,
+      "move": "mountain-fall",
+      "frame": 3,
+      "audit_status": "not-measured",
+      "automated_pass": false,
+      "visual_review": "Reviewed source and normalized at ~162px play scale and enlarged; no obvious head/hand size jump, intended pose readable. Owner motion approval pending.",
+      "why_unmeasured": "Head folded forward over forearms at contact, foreshortened."
+    },
+    {
+      "audit_frame": 16,
+      "move": "mountain-fall",
+      "frame": 4,
+      "audit_status": "not-measured",
+      "automated_pass": false,
+      "visual_review": "Reviewed source and normalized at ~162px play scale and enlarged; no obvious head/hand size jump, intended pose readable. Owner motion approval pending.",
+      "why_unmeasured": "Head stays low/foreshortened in post-smash hold."
+    },
+    {
+      "audit_frame": 27,
+      "move": "boulder-hurl",
+      "frame": 3,
+      "audit_status": "not-measured",
+      "automated_pass": false,
+      "visual_review": "Reviewed source and normalized at ~162px play scale and enlarged; no obvious head/hand size jump, intended pose readable. Owner motion approval pending.",
+      "why_unmeasured": "Near arm crosses chest at release and shoulders rotate."
+    },
+    {
+      "audit_frame": 31,
+      "move": "fault-awakening",
+      "frame": 1,
+      "audit_status": "not-measured",
+      "automated_pass": false,
+      "visual_review": "Reviewed source and normalized at ~162px play scale and enlarged; no obvious head/hand size jump, intended pose readable. Owner motion approval pending.",
+      "why_unmeasured": "Bowed head foreshortened."
+    },
+    {
+      "audit_frame": 33,
+      "move": "fault-awakening",
+      "frame": 3,
+      "audit_status": "not-measured",
+      "automated_pass": false,
+      "visual_review": "Reviewed source and normalized at ~162px play scale and enlarged; no obvious head/hand size jump, intended pose readable. Owner motion approval pending.",
+      "why_unmeasured": "Roaring open mouth/chin lift changes face projection."
+    },
+    {
+      "audit_frame": 42,
+      "move": "down",
+      "frame": 2,
+      "audit_status": "not-measured",
+      "automated_pass": false,
+      "visual_review": "Reviewed source and normalized at ~162px play scale and enlarged; no obvious head/hand size jump, intended pose readable. Owner motion approval pending.",
+      "why_unmeasured": "Collapsed head/torso partly occluded by own stone limbs."
+    },
+    {
+      "audit_frame": 43,
+      "move": "down",
+      "frame": 3,
+      "audit_status": "not-measured",
+      "automated_pass": false,
+      "visual_review": "Reviewed source and normalized at ~162px play scale and enlarged; no obvious head/hand size jump, intended pose readable. Owner motion approval pending.",
+      "why_unmeasured": "Prone low head and collapsed plates, insufficient upright features."
+    }
+  ]
+}

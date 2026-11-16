@@ -1,0 +1,198 @@
+{
+  "schema": 1,
+  "base_commit": "8f39dc8a6f6936d7861455e4580eb1f6ae7cf7c4",
+  "variants": {
+    "a": {
+      "file": "seed-a.png",
+      "source": "source/seed-a-original.png",
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "facing": "left",
+      "pose": "static combat ready",
+      "sole_xy": [
+        512,
+        896
+      ],
+      "anchor_type": "feet",
+      "source_alpha_gt32_bbox_xyxy": [
+        21,
+        40,
+        1236,
+        1184
+      ],
+      "uniform_scale": 0.6643356643356644,
+      "paste_xy": [
+        94,
+        110
+      ],
+      "source_sole_y": 1183,
+      "alpha_cleanup": "alpha <=8 removed as generator haze; remaining values preserved before Lanczos resize",
+      "alpha_gt32_bbox_xyxy": [
+        108,
+        136,
+        915,
+        897
+      ],
+      "alpha_gt0_bbox_xyxy": [
+        106,
+        134,
+        918,
+        899
+      ],
+      "concept": {
+        "size": [
+          2048,
+          2048
+        ],
+        "method": "2x normalized seed over plain navy; not native 2048 generation"
+      },
+      "turnaround_views_left_to_right": [
+        "front",
+        "left side",
+        "back"
+      ],
+      "seed_priority": "Seed controls final anatomy and ornament placement if turnaround paint differs."
+    },
+    "b": {
+      "file": "seed-b.png",
+      "source": "source/seed-b-original.png",
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "facing": "left",
+      "pose": "static combat ready",
+      "sole_xy": [
+        512,
+        896
+      ],
+      "anchor_type": "feet",
+      "source_alpha_gt32_bbox_xyxy": [
+        55,
+        114,
+        1224,
+        1128
+      ],
+      "uniform_scale": 0.718562874251497,
+      "paste_xy": [
+        52,
+        86
+      ],
+      "source_sole_y": 1127,
+      "alpha_cleanup": "alpha <=8 removed as generator haze; remaining values preserved before Lanczos resize",
+      "alpha_gt32_bbox_xyxy": [
+        91,
+        168,
+        931,
+        896
+      ],
+      "alpha_gt0_bbox_xyxy": [
+        89,
+        165,
+        934,
+        899
+      ],
+      "concept": {
+        "size": [
+          2048,
+          2048
+        ],
+        "method": "2x normalized seed over plain navy; not native 2048 generation"
+      },
+      "turnaround_views_left_to_right": [
+        "front",
+        "left side",
+        "back"
+      ],
+      "seed_priority": "Seed controls final anatomy and ornament placement if turnaround paint differs."
+    },
+    "c": {
+      "file": "seed-c.png",
+      "source": "source/seed-c-original.png",
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "facing": "left",
+      "pose": "static combat ready",
+      "sole_xy": [
+        512,
+        896
+      ],
+      "anchor_type": "lowest cloak tip, virtual sole",
+      "source_alpha_gt32_bbox_xyxy": [
+        64,
+        27,
+        1060,
+        1218
+      ],
+      "uniform_scale": 0.6381192275398825,
+      "paste_xy": [
+        153,
+        119
+      ],
+      "source_sole_y": 1217,
+      "alpha_cleanup": "alpha <=8 removed as generator haze; remaining values preserved before Lanczos resize",
+      "alpha_gt32_bbox_xyxy": [
+        194,
+        137,
+        829,
+        896
+      ],
+      "alpha_gt0_bbox_xyxy": [
+        191,
+        134,
+        832,
+        897
+      ],
+      "concept": {
+        "size": [
+          2048,
+          2048
+        ],
+        "method": "2x normalized seed over plain navy; not native 2048 generation"
+      },
+      "turnaround_views_left_to_right": [
+        "front",
+        "left side",
+        "back"
+      ],
+      "seed_priority": "Seed controls final anatomy and ornament placement if turnaround paint differs."
+    }
+  },
+  "reference_sha256": {
+    "docs/design/WORLD_BOSS_P11_04_TH.md": "0fa4d2fd5633469ed05cd0b6b505caf47ef5c382b2ddc4fc527bd478c78a7dcd",
+    "docs/LORE_CHAPTER1_TH.md": "60f6d9d101247abd808b807a67d2de548cd6b29c99de7a70e2de4915b24bb9f2",
+    "src/content/encounters/catalog.ts": "8202c88f4519325328c20935ccc8bd14a1462081b9c0eac0d2323264e3011508",
+    "src/game/visuals/unit-frames.ts": "bb023656573f0cbb7eb8e5dbf9ce4e1ca15686c98bd6581aff5efd10866f563b",
+    "src/game/visuals/field-layout.ts": "9076567d994729822d4d1ada61ba84bd18c6853a6d5e39e226bae0c6aa50fbc7",
+    "src/game/visuals/unit-atlases.json": "873869cdd3cbf213d1efff74188af1191bcaf4a2ff7511b20b01ce7e0bbba734",
+    "incoming/ART-UNIT-ANIMATION-A9-001/sentinel-preview.png": "2fee8553f024fe3f246661a7fab7b161db0c9428a441338fc930519f9df73da9",
+    "incoming/ART-UNIT-ANIMATION-A9-001/captain-preview.png": "f5fddb1429b8c0ec0b1380286e91ff9724518b08820442727591395b624e138c",
+    "incoming/ART-UNIT-ANIMATION-A9-001/preview-390.png": "20623da5be55ff505431185d1fcdabd426504e280f9cf055e904f5b2a778ea9e",
+    "public/assets/art/battle_riftline.webp": "6e4114f65a7ab521e310a6e6baa9687205b1527dfb272542b0c550aed4ae72ac",
+    "public/assets/units/aegis_a2.9136d3bfc15c.json": "9136d3bfc15c112ae325f88ecdcf5d1a5b997571f1ef0f07b94023ae1b3a52a3",
+    "public/assets/units/aegis_a2.2b9070aaeacc.webp": "2b9070aaeacc3fe4bcf941f4afbf4b95265b821f01abb79c63ae3e1c0d7db831",
+    "public/assets/units/lyra_pilot.5e5d1ef4dade.json": "5e5d1ef4dade1fe75cc3e0b9eab3fcb6dd54eff2cf35dac77b81e4ab9db0dc15",
+    "public/assets/units/lyra_pilot.9334b0792c36.webp": "9334b0792c367290ccfd525050cb9f9bbc3fd64f60a0f807680e74cf7aceca5a",
+    "public/assets/units/eira_a1.bd1097cc0ed3.json": "bd1097cc0ed3875a87665dc72095c5f3eb8cd09bf310369ec02950d57c53a9d7",
+    "public/assets/units/eira_a1.573c1cfd9b43.webp": "573c1cfd9b4374d12225e5f75408bdd2913cdd33b0d6766a41d941cf99d8eabb",
+    "public/assets/units/seren_a3.3d911a21c2db.json": "3d911a21c2dbd561b152993c13f28c340a421a2deacb8238860be00431d02fde",
+    "public/assets/units/seren_a3.8ee02ab5e681.webp": "8ee02ab5e6817fcdde9ba8d48ebe89558dfb94f30e60f966bb41804019f58eda",
+    "public/assets/units/metta_a7.b3f4b95c298f.json": "b3f4b95c298fd3dc491f7bf7f6ffbc6e75a51b0333975368f7852cb49ad5d098",
+    "public/assets/units/metta_a7.1961fbe088c4.webp": "1961fbe088c4116538342844bdd13ebdf5398cb84e6104fab17b8daf112c4768",
+    "public/assets/units/wisp_a8.a22ecd578279.json": "a22ecd578279646a55ae550f180471dd2e398b9eea64c480bb3d44a351073969",
+    "public/assets/units/wisp_a8.f9b9ef229c93.webp": "f9b9ef229c93df74243098c6fe060f8aa4a80411b979efa3c82cfec97475f288",
+    "public/assets/units/crawler_a8.61d4d6d4d1b5.json": "61d4d6d4d1b576daf10f001e1d853d8253ec7082a4a2bcde889dacecc347efce",
+    "public/assets/units/crawler_a8.4c402f135a49.webp": "4c402f135a49eee5e55332a05b2daa22c51393ae77793befbf17bf91190345c0",
+    "public/assets/units/sentinel_a9.0c30c1349c42.json": "0c30c1349c42c208e0c333ee134c44e23a216b12ebddb6ac00d15301ebb87a1b",
+    "public/assets/units/sentinel_a9.616021ce3ce4.webp": "616021ce3ce43cfb1d997b841af408a988467c3a5251269bedbad82564d887e8",
+    "public/assets/units/captain_a9.84200ceb12ef.json": "84200ceb12ef91ec911acc6c9f58ccb43e146a8cc649f7dac8d60d193f15fc93",
+    "public/assets/units/captain_a9.93e9e7fb305a.webp": "93e9e7fb305a4fe268f1ece3edec46b200928f109950f282671f2c14178046e5"
+  },
+  "reference_discrepancy": "A9 preview-390.png is a 390x914 signature pose contact sheet, not a battle screenshot and contains no heroes. New previews use shipped atlas frame 0 for the five actual heroes and companions.",
+  "generation_random_seeds": null,
+  "owner_selection": null
+}

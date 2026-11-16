@@ -1,0 +1,2326 @@
+{
+  "schema": 1,
+  "task": "ART-UNIT-ANIMATION-WB-A-001",
+  "base_commit": "081766e1cfec0b66f5e4de136adb062c894e3daf",
+  "seed": "references/seed-a.png",
+  "logical_frame_count": 44,
+  "canonical_body_scale": 2.804428044280443,
+  "scale_policy": "One calibration from Stone Fist ready; sheet canvas-width/N only converts source resolution. No per-strip pose-height fit and no per-frame scaling.",
+  "ground_policy": "Every grounded/contact landmark maps to y896, with deep crouch and down shape preserved.",
+  "raw_cleanup": "Originals retained in source/. Raw removes alpha<=8 haze and clears hidden RGB at alpha0; no pose redrawing or per-pose resize.",
+  "preview_scale": 0.213,
+  "preview_seed_height_px": 161.88,
+  "preview_positions": {
+    "stone-fist": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -12,
+          32
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          184,
+          32
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -12,
+          270
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          184,
+          270
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -12,
+          508
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          184,
+          508
+        ],
+        "scale": 0.213
+      }
+    ],
+    "titan-gathering": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -12,
+          782
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          184,
+          782
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -12,
+          1020
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          184,
+          1020
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -12,
+          1258
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          184,
+          1258
+        ],
+        "scale": 0.213
+      }
+    ],
+    "mountain-fall": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -12,
+          1532
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          184,
+          1532
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -12,
+          1770
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          184,
+          1770
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -12,
+          2008
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          184,
+          2008
+        ],
+        "scale": 0.213
+      }
+    ],
+    "rift-quake": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -12,
+          2282
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          184,
+          2282
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -12,
+          2520
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          184,
+          2520
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -12,
+          2758
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          184,
+          2758
+        ],
+        "scale": 0.213
+      }
+    ],
+    "boulder-hurl": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -12,
+          3032
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          184,
+          3032
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -12,
+          3270
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          184,
+          3270
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -12,
+          3508
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          184,
+          3508
+        ],
+        "scale": 0.213
+      }
+    ],
+    "fault-awakening": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -12,
+          3782
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          184,
+          3782
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -12,
+          4020
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          184,
+          4020
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -12,
+          4258
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          184,
+          4258
+        ],
+        "scale": 0.213
+      }
+    ],
+    "hit": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -12,
+          4532
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          184,
+          4532
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -12,
+          4770
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          184,
+          4770
+        ],
+        "scale": 0.213
+      }
+    ],
+    "down": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -12,
+          5044
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          184,
+          5044
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          86,
+          5282
+        ],
+        "scale": 0.213
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          86,
+          5520
+        ],
+        "scale": 0.213
+      }
+    ]
+  },
+  "moves": [
+    {
+      "move": "stone-fist",
+      "intent": "Stone Fist",
+      "file": "strips/stone-fist.png",
+      "raw": "raw/stone-fist.png",
+      "generator_original": "source/stone-fist.png",
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "draw right fist back",
+        "full anticipation",
+        "low-left punch contact",
+        "follow-through",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          36,
+          272,
+          326,
+          545
+        ],
+        [
+          418,
+          266,
+          691,
+          545
+        ],
+        [
+          772,
+          264,
+          1042,
+          545
+        ],
+        [
+          1104,
+          285,
+          1419,
+          545
+        ],
+        [
+          1468,
+          285,
+          1777,
+          546
+        ],
+        [
+          1849,
+          273,
+          2136,
+          545
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "raw_clear_gutters_px": [
+        92,
+        81,
+        62,
+        49,
+        72
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 1.0,
+      "canonical_body_scale": 2.804428044280443,
+      "effective_source_scale": 2.804428044280443,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            36,
+            272,
+            326,
+            545
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            106,
+            133
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.19557195571951524
+        },
+        {
+          "source_crop_xyxy": [
+            418,
+            266,
+            691,
+            545
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            129,
+            116
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 895.6309963099632,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.3690036900368341
+        },
+        {
+          "source_crop_xyxy": [
+            772,
+            264,
+            1042,
+            545
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            134,
+            111
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 896.239852398524,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.23985239852402174
+        },
+        {
+          "source_crop_xyxy": [
+            1104,
+            285,
+            1419,
+            545
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            70,
+            170
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 896.3468634686348,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.34686346863475137
+        },
+        {
+          "source_crop_xyxy": [
+            1468,
+            285,
+            1777,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            78,
+            170
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 896.3468634686348,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.34686346863475137
+        },
+        {
+          "source_crop_xyxy": [
+            1849,
+            273,
+            2136,
+            545
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            110,
+            136
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.0
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          106,
+          134,
+          918,
+          899
+        ],
+        [
+          129,
+          116,
+          895,
+          898
+        ],
+        [
+          134,
+          111,
+          891,
+          899
+        ],
+        [
+          70,
+          170,
+          953,
+          899
+        ],
+        [
+          78,
+          170,
+          945,
+          902
+        ],
+        [
+          106,
+          134,
+          918,
+          899
+        ]
+      ],
+      "hold_frame_0based": null,
+      "contact_frame_0based": 3,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "prepare": [
+          0,
+          1,
+          2
+        ],
+        "recover": [
+          3,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "move": "titan-gathering",
+      "intent": "Titan Gathering",
+      "file": "strips/titan-gathering.png",
+      "raw": "raw/titan-gathering.png",
+      "generator_original": "source/titan-gathering.png",
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "hands toward chest",
+        "chest charge hold",
+        "press hands down",
+        "straighten",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          36,
+          273,
+          323,
+          545
+        ],
+        [
+          421,
+          263,
+          672,
+          544
+        ],
+        [
+          784,
+          281,
+          1032,
+          544
+        ],
+        [
+          1145,
+          273,
+          1396,
+          545
+        ],
+        [
+          1484,
+          262,
+          1755,
+          545
+        ],
+        [
+          1844,
+          273,
+          2131,
+          545
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "raw_clear_gutters_px": [
+        98,
+        112,
+        113,
+        88,
+        89
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 1.0,
+      "canonical_body_scale": 2.804428044280443,
+      "effective_source_scale": 2.804428044280443,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            36,
+            273,
+            323,
+            545
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            110,
+            139
+          ],
+          "source_sole_y": 543,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.19557195571962893
+        },
+        {
+          "source_crop_xyxy": [
+            421,
+            263,
+            672,
+            544
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            160,
+            111
+          ],
+          "source_sole_y": 543,
+          "sole_y": 896,
+          "mapped_ground_y": 896.239852398524,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.23985239852402174
+        },
+        {
+          "source_crop_xyxy": [
+            784,
+            281,
+            1032,
+            544
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            164,
+            161
+          ],
+          "source_sole_y": 543,
+          "sole_y": 896,
+          "mapped_ground_y": 895.7601476014761,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.23985239852390805
+        },
+        {
+          "source_crop_xyxy": [
+            1145,
+            273,
+            1396,
+            545
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            160,
+            139
+          ],
+          "source_sole_y": 543,
+          "sole_y": 896,
+          "mapped_ground_y": 896.1955719557196,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.19557195571962893
+        },
+        {
+          "source_crop_xyxy": [
+            1484,
+            262,
+            1755,
+            545
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            132,
+            108
+          ],
+          "source_sole_y": 543,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0442804428045,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.04428044280450649
+        },
+        {
+          "source_crop_xyxy": [
+            1844,
+            273,
+            2131,
+            545
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            110,
+            139
+          ],
+          "source_sole_y": 543,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.19557195571962893
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          106,
+          134,
+          918,
+          899
+        ],
+        [
+          160,
+          111,
+          864,
+          899
+        ],
+        [
+          164,
+          161,
+          859,
+          899
+        ],
+        [
+          160,
+          139,
+          864,
+          902
+        ],
+        [
+          132,
+          108,
+          892,
+          902
+        ],
+        [
+          106,
+          134,
+          918,
+          899
+        ]
+      ],
+      "hold_frame_0based": 2,
+      "contact_frame_0based": 3,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "prepare": [
+          0,
+          1,
+          2
+        ],
+        "recover": [
+          3,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "move": "mountain-fall",
+      "intent": "Mountain Fall",
+      "file": "strips/mountain-fall.png",
+      "raw": "raw/mountain-fall.png",
+      "generator_original": "source/mountain-fall.png",
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "clasped fists overhead with squat",
+        "deepest anticipation squat",
+        "two-hand ground smash left",
+        "low post-smash hold",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          36,
+          268,
+          325,
+          548
+        ],
+        [
+          409,
+          301,
+          667,
+          548
+        ],
+        [
+          758,
+          322,
+          1019,
+          548
+        ],
+        [
+          1082,
+          333,
+          1399,
+          548
+        ],
+        [
+          1452,
+          352,
+          1769,
+          549
+        ],
+        [
+          1846,
+          269,
+          2135,
+          548
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        362,
+        724,
+        1081,
+        1448,
+        1810,
+        2172
+      ],
+      "raw_clear_gutters_px": [
+        84,
+        91,
+        63,
+        53,
+        77
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 1.0,
+      "canonical_body_scale": 2.804428044280443,
+      "effective_source_scale": 2.804428044280443,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            36,
+            268,
+            325,
+            548
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            107,
+            114
+          ],
+          "source_sole_y": 547,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.43542435424365067
+        },
+        {
+          "source_crop_xyxy": [
+            409,
+            301,
+            667,
+            548
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            150,
+            209
+          ],
+          "source_sole_y": 546,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0848708487085,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.08487084870853323
+        },
+        {
+          "source_crop_xyxy": [
+            758,
+            322,
+            1019,
+            548
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            146,
+            268
+          ],
+          "source_sole_y": 546,
+          "sole_y": 896,
+          "mapped_ground_y": 896.1918819188193,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.19188191881926286
+        },
+        {
+          "source_crop_xyxy": [
+            1082,
+            333,
+            1399,
+            548
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            68,
+            296
+          ],
+          "source_sole_y": 547,
+          "sole_y": 896,
+          "mapped_ground_y": 896.1476014760148,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.14760147601475637
+        },
+        {
+          "source_crop_xyxy": [
+            1452,
+            352,
+            1769,
+            549
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            68,
+            349
+          ],
+          "source_sole_y": 547,
+          "sole_y": 896,
+          "mapped_ground_y": 895.8634686346863,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.13653136531365817
+        },
+        {
+          "source_crop_xyxy": [
+            1846,
+            269,
+            2135,
+            548
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            107,
+            116
+          ],
+          "source_sole_y": 547,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.3690036900368341
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          106,
+          134,
+          918,
+          899
+        ],
+        [
+          150,
+          209,
+          874,
+          902
+        ],
+        [
+          146,
+          268,
+          878,
+          902
+        ],
+        [
+          68,
+          296,
+          957,
+          899
+        ],
+        [
+          68,
+          349,
+          957,
+          901
+        ],
+        [
+          106,
+          134,
+          918,
+          899
+        ]
+      ],
+      "hold_frame_0based": null,
+      "contact_frame_0based": 3,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "prepare": [
+          0,
+          1,
+          2
+        ],
+        "recover": [
+          3,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "move": "rift-quake",
+      "intent": "Rift Quake",
+      "file": "strips/rift-quake.png",
+      "raw": "raw/rift-quake.png",
+      "generator_original": "source/rift-quake.png",
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "front foot lifted",
+        "front foot high, rear foot planted",
+        "stomp contact",
+        "body recoil",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          34,
+          271,
+          326,
+          546
+        ],
+        [
+          423,
+          256,
+          674,
+          546
+        ],
+        [
+          762,
+          245,
+          1051,
+          546
+        ],
+        [
+          1112,
+          283,
+          1424,
+          546
+        ],
+        [
+          1489,
+          266,
+          1776,
+          546
+        ],
+        [
+          1850,
+          272,
+          2139,
+          546
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "raw_clear_gutters_px": [
+        97,
+        88,
+        61,
+        65,
+        74
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 1.0,
+      "canonical_body_scale": 2.804428044280443,
+      "effective_source_scale": 2.804428044280443,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            34,
+            271,
+            326,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            102,
+            130
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.3911439114390305
+        },
+        {
+          "source_crop_xyxy": [
+            423,
+            256,
+            674,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            160,
+            88
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 895.6752767527676,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "front foot intentionally lifted; rear/support foot is sole landmark",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.3247232472324413
+        },
+        {
+          "source_crop_xyxy": [
+            762,
+            245,
+            1051,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            107,
+            55
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "mapped_ground_y": 896.3284132841329,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "front foot intentionally lifted; rear/support foot is sole landmark",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.32841328413292104
+        },
+        {
+          "source_crop_xyxy": [
+            1112,
+            283,
+            1424,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            74,
+            164
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 895.9557195571956,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.044280442804392806
+        },
+        {
+          "source_crop_xyxy": [
+            1489,
+            266,
+            1776,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            110,
+            114
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "mapped_ground_y": 896.4354243542437,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.43542435424365067
+        },
+        {
+          "source_crop_xyxy": [
+            1850,
+            272,
+            2139,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            107,
+            133
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.19557195571951524
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          106,
+          134,
+          918,
+          899
+        ],
+        [
+          160,
+          88,
+          864,
+          901
+        ],
+        [
+          107,
+          55,
+          917,
+          899
+        ],
+        [
+          74,
+          164,
+          949,
+          902
+        ],
+        [
+          110,
+          114,
+          915,
+          899
+        ],
+        [
+          106,
+          134,
+          918,
+          899
+        ]
+      ],
+      "hold_frame_0based": null,
+      "contact_frame_0based": 3,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "prepare": [
+          0,
+          1,
+          2
+        ],
+        "recover": [
+          3,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "move": "boulder-hurl",
+      "intent": "Boulder Hurl",
+      "file": "strips/boulder-hurl.png",
+      "raw": "raw/boulder-hurl.png",
+      "generator_original": "source/boulder-hurl.png",
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "near hand takes rock from shoulder, holds at waist",
+        "same near hand cocks rock beside head",
+        "same near arm releases left, empty hand",
+        "same arm follows through empty",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          35,
+          270,
+          322,
+          546
+        ],
+        [
+          397,
+          289,
+          684,
+          546
+        ],
+        [
+          766,
+          264,
+          1042,
+          546
+        ],
+        [
+          1099,
+          272,
+          1400,
+          546
+        ],
+        [
+          1529,
+          277,
+          1770,
+          546
+        ],
+        [
+          1855,
+          272,
+          2139,
+          546
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "raw_clear_gutters_px": [
+        75,
+        82,
+        57,
+        129,
+        85
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 1.0,
+      "canonical_body_scale": 2.804428044280443,
+      "effective_source_scale": 2.804428044280443,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            35,
+            270,
+            322,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            110,
+            128
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.4132841328413406
+        },
+        {
+          "source_crop_xyxy": [
+            397,
+            289,
+            684,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            110,
+            181
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 896.1291512915129,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.12915129151292604
+        },
+        {
+          "source_crop_xyxy": [
+            766,
+            264,
+            1042,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            125,
+            108
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0442804428045,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.04428044280450649
+        },
+        {
+          "source_crop_xyxy": [
+            1099,
+            272,
+            1400,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            90,
+            133
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 895.8044280442805,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.19557195571951524
+        },
+        {
+          "source_crop_xyxy": [
+            1529,
+            277,
+            1770,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            174,
+            147
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 895.7822878228783,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.21771217712171165
+        },
+        {
+          "source_crop_xyxy": [
+            1855,
+            272,
+            2139,
+            546
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            114,
+            133
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.19557195571951524
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          106,
+          134,
+          918,
+          899
+        ],
+        [
+          110,
+          181,
+          915,
+          902
+        ],
+        [
+          125,
+          108,
+          899,
+          899
+        ],
+        [
+          90,
+          133,
+          934,
+          901
+        ],
+        [
+          174,
+          147,
+          850,
+          901
+        ],
+        [
+          106,
+          134,
+          918,
+          899
+        ]
+      ],
+      "hold_frame_0based": null,
+      "contact_frame_0based": 3,
+      "held_rock_frames_0based": [
+        1,
+        2
+      ],
+      "projectile_absent_frames_0based": [
+        3,
+        4
+      ],
+      "runtime_mapping_guidance": {
+        "prepare": [
+          0,
+          1,
+          2
+        ],
+        "recover": [
+          3,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "move": "fault-awakening",
+      "intent": "Fault Awakening",
+      "file": "strips/fault-awakening.png",
+      "raw": "raw/fault-awakening.png",
+      "generator_original": "source/fault-awakening.png",
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "bow",
+        "arms open, chest brightens",
+        "lift chin and roar left",
+        "relax",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          37,
+          269,
+          321,
+          547
+        ],
+        [
+          420,
+          307,
+          648,
+          547
+        ],
+        [
+          772,
+          269,
+          1031,
+          548
+        ],
+        [
+          1136,
+          267,
+          1394,
+          547
+        ],
+        [
+          1496,
+          269,
+          1760,
+          547
+        ],
+        [
+          1849,
+          269,
+          2132,
+          547
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "raw_clear_gutters_px": [
+        99,
+        124,
+        105,
+        102,
+        89
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 1.0,
+      "canonical_body_scale": 2.804428044280443,
+      "effective_source_scale": 2.804428044280443,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            37,
+            269,
+            321,
+            547
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            114,
+            119
+          ],
+          "source_sole_y": 546,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.17343173431731884
+        },
+        {
+          "source_crop_xyxy": [
+            420,
+            307,
+            648,
+            547
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            192,
+            226
+          ],
+          "source_sole_y": 546,
+          "sole_y": 896,
+          "mapped_ground_y": 896.2583025830259,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.2583025830258521
+        },
+        {
+          "source_crop_xyxy": [
+            772,
+            269,
+            1031,
+            548
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            149,
+            119
+          ],
+          "source_sole_y": 546,
+          "sole_y": 896,
+          "mapped_ground_y": 895.8265682656827,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.17343173431731884
+        },
+        {
+          "source_crop_xyxy": [
+            1136,
+            267,
+            1394,
+            547
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            150,
+            114
+          ],
+          "source_sole_y": 546,
+          "sole_y": 896,
+          "mapped_ground_y": 896.4354243542437,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.43542435424365067
+        },
+        {
+          "source_crop_xyxy": [
+            1496,
+            269,
+            1760,
+            547
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            142,
+            119
+          ],
+          "source_sole_y": 546,
+          "sole_y": 896,
+          "mapped_ground_y": 895.8265682656827,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.17343173431731884
+        },
+        {
+          "source_crop_xyxy": [
+            1849,
+            269,
+            2132,
+            547
+          ],
+          "uniform_scale": 2.804428044280443,
+          "paste_xy": [
+            115,
+            119
+          ],
+          "source_sole_y": 546,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.17343173431731884
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          106,
+          134,
+          918,
+          899
+        ],
+        [
+          192,
+          226,
+          831,
+          899
+        ],
+        [
+          149,
+          119,
+          875,
+          901
+        ],
+        [
+          150,
+          114,
+          874,
+          899
+        ],
+        [
+          142,
+          119,
+          882,
+          899
+        ],
+        [
+          106,
+          134,
+          918,
+          899
+        ]
+      ],
+      "hold_frame_0based": null,
+      "contact_frame_0based": 3,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "prepare": [
+          0,
+          1,
+          2
+        ],
+        "recover": [
+          3,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "move": "hit",
+      "intent": "hit",
+      "file": "strips/hit.png",
+      "raw": "raw/hit.png",
+      "generator_original": "source/hit.png",
+      "frame_count": 4,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "recoil to right",
+        "brace",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          52,
+          251,
+          458,
+          644
+        ],
+        [
+          583,
+          241,
+          980,
+          644
+        ],
+        [
+          1077,
+          256,
+          1462,
+          645
+        ],
+        [
+          1588,
+          255,
+          1993,
+          644
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        512,
+        1024,
+        1536,
+        2048
+      ],
+      "raw_clear_gutters_px": [
+        125,
+        97,
+        126
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 0.70703125,
+      "canonical_body_scale": 2.804428044280443,
+      "effective_source_scale": 1.982818265682657,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            52,
+            251,
+            458,
+            644
+          ],
+          "uniform_scale": 1.982818265682657,
+          "paste_xy": [
+            110,
+            119
+          ],
+          "source_sole_y": 643,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.26476014760157796
+        },
+        {
+          "source_crop_xyxy": [
+            583,
+            241,
+            980,
+            644
+          ],
+          "uniform_scale": 1.982818265682657,
+          "paste_xy": [
+            118,
+            99
+          ],
+          "source_sole_y": 643,
+          "sole_y": 896,
+          "mapped_ground_y": 896.092942804428,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.09294280442804848
+        },
+        {
+          "source_crop_xyxy": [
+            1077,
+            256,
+            1462,
+            645
+          ],
+          "uniform_scale": 1.982818265682657,
+          "paste_xy": [
+            130,
+            129
+          ],
+          "source_sole_y": 643,
+          "sole_y": 896,
+          "mapped_ground_y": 896.3506688191883,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.35066881918828585
+        },
+        {
+          "source_crop_xyxy": [
+            1588,
+            255,
+            1993,
+            644
+          ],
+          "uniform_scale": 1.982818265682657,
+          "paste_xy": [
+            110,
+            127
+          ],
+          "source_sole_y": 643,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.3334870848708533
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          106,
+          134,
+          918,
+          899
+        ],
+        [
+          118,
+          99,
+          905,
+          898
+        ],
+        [
+          130,
+          129,
+          893,
+          900
+        ],
+        [
+          106,
+          134,
+          918,
+          899
+        ]
+      ],
+      "hold_frame_0based": null,
+      "contact_frame_0based": null,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "reaction": [
+          1,
+          2
+        ],
+        "final_down_hold": null
+      }
+    },
+    {
+      "move": "down",
+      "intent": "down",
+      "file": "strips/down.png",
+      "raw": "raw/down.png",
+      "generator_original": "source/down.png",
+      "frame_count": 4,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "knees buckle, brace hand",
+        "torso crumples into half-height heap",
+        "held prone heap, chest dark"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          67,
+          220,
+          484,
+          620
+        ],
+        [
+          572,
+          277,
+          1013,
+          621
+        ],
+        [
+          1114,
+          360,
+          1591,
+          621
+        ],
+        [
+          1659,
+          414,
+          2141,
+          620
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        543,
+        1086,
+        1629,
+        2172
+      ],
+      "raw_clear_gutters_px": [
+        88,
+        101,
+        68
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 0.6666666666666666,
+      "canonical_body_scale": 2.804428044280443,
+      "effective_source_scale": 1.8696186961869619,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            67,
+            220,
+            484,
+            620
+          ],
+          "uniform_scale": 1.8696186961869619,
+          "paste_xy": [
+            122,
+            150
+          ],
+          "source_sole_y": 619,
+          "sole_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "feet remain grounded",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.022140221402196403
+        },
+        {
+          "source_crop_xyxy": [
+            572,
+            277,
+            1013,
+            621
+          ],
+          "uniform_scale": 1.8696186961869619,
+          "paste_xy": [
+            100,
+            255
+          ],
+          "source_sole_y": 620,
+          "sole_y": 896,
+          "mapped_ground_y": 896.279212792128,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "knees/brace contact ground; not an upright sole",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.27921279212796435
+        },
+        {
+          "source_crop_xyxy": [
+            1114,
+            360,
+            1591,
+            621
+          ],
+          "uniform_scale": 1.8696186961869619,
+          "paste_xy": [
+            66,
+            412
+          ],
+          "source_sole_y": 619,
+          "sole_y": 896,
+          "mapped_ground_y": 896.2312423124231,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "collapsed body contact, not feet; body scale unchanged",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.2312423124230918
+        },
+        {
+          "source_crop_xyxy": [
+            1659,
+            414,
+            2141,
+            620
+          ],
+          "uniform_scale": 1.8696186961869619,
+          "paste_xy": [
+            62,
+            513
+          ],
+          "source_sole_y": 619,
+          "sole_y": 896,
+          "mapped_ground_y": 896.2718327183272,
+          "ground_measurement": "annotated visible feet/support contact, not alpha-bbox bottom",
+          "ground_note": "prone body contact, not feet; held down, never returns to seed",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.2718327183272322
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          106,
+          134,
+          918,
+          899
+        ],
+        [
+          100,
+          255,
+          925,
+          898
+        ],
+        [
+          66,
+          412,
+          958,
+          900
+        ],
+        [
+          62,
+          513,
+          963,
+          898
+        ]
+      ],
+      "hold_frame_0based": 3,
+      "contact_frame_0based": null,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "reaction": [
+          1,
+          2,
+          3
+        ],
+        "final_down_hold": 3
+      }
+    }
+  ]
+}

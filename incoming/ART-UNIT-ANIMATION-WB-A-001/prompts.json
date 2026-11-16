@@ -1,0 +1,280 @@
+{
+  "schema": 1,
+  "base_commit": "081766e1cfec0b66f5e4de136adb062c894e3daf",
+  "seed_source_commit": "46f366dc931e4994d3a6ccd9ad3951ac444a70cf",
+  "numeric_rng_seed": null,
+  "attempts": [
+    {
+      "id": "stone-fist",
+      "prompt": "Edit the provided wide layout into ONE WHOLE SPRITE ANIMATION STRIP, EXACTLY SIX full-body poses in ONE HORIZONTAL ROW, equal spaced slots. Preserve the seed titan's exact anatomy, armour shapes, proportions, palette and painterly lighting. Reference 1 is the approved 1024 seed; reference 2 is the padded SIX-SLOT layout, preserve its wide horizontal aspect ratio. Fill the four empty slots; redraw the first and last only if needed but keep them identical ready pose. SAME Kragmor crystal-stone titan facing LEFT in every slot, five floating crown crystals, two enormous stone hands with exactly THREE claw fingers each, one cyan vertical chest wound, violet secondary cracks. No weapons. Move STONE FIST: 1 ready stance as seed; 2 twist right shoulder back, draw RIGHT fist back beside shoulder, left fist near belly; 3 deep full-body anticipation, right fist fully cocked high/back, torso leans back right, knees bent, feet stay planted; 4 punch RIGHT fist forcefully DIAGONALLY DOWN toward LEFT in foreshortened perspective, shoulders lean forward, other hand tucked, fist attached to arm and stays inside slot; 5 low forward follow-through after punch, knees bent, fist still low left but relaxing; 6 exact original ready pose. Every figure has same head/torso and limb scale as first; no stretching or per-pose zoom. ALL SOLES on the SAME horizontal line as layout. Keep a clear transparent gap of at least 60 output pixels between silhouettes and >32px at outside edges. All five crown shards, feet and extended hands inside each slot, nothing clipped or overlapping neighbouring pose. Use a wide landscape image, six readable separated figures only, NOT two rows. Real alpha transparency, no background, no floor or shadow plate, no text/labels/UI, no shockwaves, no dust, no projectiles, no explosions.",
+      "output": "/workspace/generated_images/exec-e2f066cc-268b-486f-9547-cf6959462524.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": true,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "file": "references/layout-6.png",
+          "sha256": "119becbb935da7b30e5a88ab366016e95b28897b75972307cd3f6119a5d06225"
+        }
+      ],
+      "package_source": "source/stone-fist.png",
+      "sha256": "1e52ce05d90097d28998b008e8e4ccd9b62f380347f78bb56671e3f725579dc9"
+    },
+    {
+      "id": "titan-gathering",
+      "prompt": "ONE wide WHOLE ANIMATION STRIP of exactly SIX separated full-body poses in ONE HORIZONTAL ROW, read left to right. Reference 1 is Kragmor's approved seed and MUST define the SAME model; reference 2 is six-slot padded layout with first/last ready pose. Same crystal-stone titan facing LEFT, same head torso limb size, exactly FIVE floating crown crystals, THREE claw fingers per massive hand, two arms two legs, one cyan vertical chest fissure and secondary violet cracks, same gold trim/lighting. Move TITAN GATHERING R1, no attack: 1 exact seed ready; 2 bring BOTH hands inward toward either side of chest, open palms pointing toward central fissure; 3 deep charge/hold: shoulders hunched, knees bent slightly, BOTH hands clearly separate framing the chest, cyan fissure brighter but confined INSIDE chest, silhouette compact; 4 press BOTH hands DOWN beside belly as if containing energy, do NOT punch or strike floor; 5 straighten torso, hands relax outward/down; 6 exact seed ready. Key: first/last same scale, each middle pose keeps the exact model proportions, no enlargement. Every sole sits on same flat ground line. Keep each figure smaller than its slot with >=60px truly empty transparent gaps, full crown and claws inside panel and no clipping. Wide landscape SIX figures only, no second row. Real alpha transparency. NO energy ball outside chest, NO aura, NO beam, NO VFX, no dust, no ground or shadow plate, no scene, no text/labels/numbers/UI. Whole strip in a single generated image.",
+      "output": "/workspace/generated_images/exec-3d4fc723-3390-4386-bd53-0f5596df85fe.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": true,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "file": "references/layout-6.png",
+          "sha256": "119becbb935da7b30e5a88ab366016e95b28897b75972307cd3f6119a5d06225"
+        }
+      ],
+      "package_source": "source/titan-gathering.png",
+      "sha256": "2c56b32a51384d54c40d6ee5a06969b6538a77cb137f330db59c7f2b2b31bd85"
+    },
+    {
+      "id": "mountain-fall",
+      "prompt": "Create EXACTLY SIX poses of ONE same titan in ONE wide horizontal sprite animation strip, six equal slots, based on both references. Reference 1 approved seed Kragmor; reference 2 six-slot horizontal guide. Preserve EXACT head/torso/limb scale and stone armour design in every pose, all five floating purple crown shards, three claw fingers per each huge hand, cyan vertical chest wound, violet cracks, gold edges. Facing LEFT throughout. Move MOUNTAIN FALL, a massive TWO-HANDED overhead smash: slot1 exact seed ready; slot2 BOTH fists clasped TOGETHER OVER HEAD in one unmistakable overhead silhouette, upper arms raised, bend knees moderately and tuck head/shoulders LOW under fists to keep overall silhouette within seed height plus only a little; slot3 deepest anticipation crouch, knees bent deeply, BOTH clasped fists still HIGH OVER HEAD behind crown, torso low under arms, visibly loaded for downward swing; slot4 BOTH hands smash down together to GROUND on LEFT, torso folded forward, deepest low squat, hands touch ground to LEFT of toes, distinct from slot3; slot5 low post-smash hold, BOTH hands still down left near ground, head lowered, feet planted; slot6 exact seed ready. The two raised-arm poses and two low ground-smash poses must be visibly different, not a series of standing punches. Crown moves with head; it does not become extra shards or a weapon. Body only, NO impact art, NO dust, NO debris, NO shockwave. Same sole baseline in all frames, use the visible FEET as ground landmark, do not confuse hands touching ground with feet. Upper fists must NEVER go outside slot or image: keep figure compact through knee bend, not scaling down arms or entire pose. >=60px transparent gap between every silhouette, generous outer margin, no clipping. ONE row only, no labels/no text/no UI, true transparent alpha, no floor or shadow plate.",
+      "output": "/workspace/generated_images/exec-b0576f8f-8309-4dcc-983c-0f5d90c691e9.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": false,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "file": "references/layout-6.png",
+          "sha256": "119becbb935da7b30e5a88ab366016e95b28897b75972307cd3f6119a5d06225"
+        }
+      ],
+      "not_selected_reason": "Overhead hands overflow at locked seed scale; replaced with deeper squat."
+    },
+    {
+      "id": "mountain-fall-r2",
+      "prompt": "Revise the WHOLE SIX-POSE Mountain Fall strip in reference 2, preserving six poses in ONE horizontal row, their scale, spacing, colours and exact same Kragmor model from reference 1 seed. Problem to fix: SECOND pose's raised fists are too high for the final 1024 game cell when body scale is locked to seed. Redraw SECOND pose in a MUCH DEEPER squat: hips lowered almost to knees, torso and head lowered visibly by at least a hand's height, fists still unmistakably clasped together OVER his lowered head. The TOP of those overhead fists should sit only slightly ABOVE the top of the first ready pose's floating crown, at most 5 percent of ready figure height higher. Do NOT shrink the character/head/hands; keep anatomy size identical. Lower the upper body by bending both knees more, planted feet remain same exact baseline. THIRD pose is EVEN DEEPER crouch with hands still clasped above head; keep its maximum top no higher than second pose. Preserve first and last seed-ready poses. Preserve fourth and fifth as both-hands-down ground-smash and low followthrough, full feet visible and same body scale. Preserve five floating crown crystals per pose, three claw fingers per hand, two hands and one cyan chest wound. Every hand and crown stays inside its slot, clear empty transparent gaps >=60px, full outer margins. No clipping, no background/no ground plane, true alpha, no dust/debris/energy waves or VFX, no words/numbers/UI. Output all six poses together as single wide strip, not a single isolated frame.",
+      "output": "/workspace/generated_images/exec-b6efbe81-0788-41b8-88e7-8936edbb15f7.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": true,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "unshipped_attempt": "mountain-fall",
+          "generator_file": "/workspace/generated_images/exec-b0576f8f-8309-4dcc-983c-0f5d90c691e9.png",
+          "sha256": "e7f7bf289e0f9845199cdf8c3249c528c535500a94528650ca6f9a645c465a29"
+        }
+      ],
+      "package_source": "source/mountain-fall.png",
+      "sha256": "34647695469d3ebe3aed13a00dd90fab352b5c99848da3929f145b08baab4625"
+    },
+    {
+      "id": "rift-quake",
+      "prompt": "ONE WHOLE SPRITE ANIMATION STRIP, exactly SIX poses in a single wide HORIZONTAL row, equal-sized separate slots. Use reference 1 approved seed Kragmor titan, reference 2 six-slot guide. Same exact violet stone/crystal armour and gold edges, identical head torso limb scale, five floating crown crystals, three claw fingers per huge hand, one central CYAN chest fissure, secondary violet cracks. Facing LEFT all frames, two arms and two legs. Move RIFT QUAKE, a clear FOOT STOMP with NO VFX: 1 exact seed-ready stance; 2 lift FRONT/NEAR foot (the leg on viewer LEFT) clearly off ground with knee drawn upward, all weight on back/right leg, arms counterbalance close to torso; 3 maximum anticipation hold, lifted foot higher and forward LEFT, body leans slightly back/right, supporting rear/right foot stays planted on SAME baseline, do not enlarge torso; 4 stomp that lifted foot firmly back onto ground LEFT, knee bent and body compressed, BOTH hands remain off ground; 5 body recoils vertically after stomp, feet planted, shoulders settle, arms still no ground contact; 6 exact seed-ready stance. Stomp must be visibly leg action, NOT a fist punch or two-hand smash. Keep raised foot visibly separated from ground, five crown shards follow head, no extra limbs. Same ground baseline in all slots, no jumping or whole-body flight. Compact silhouette within same game cell, generous gutters >=60px empty alpha between figures, no body parts clipped. SIX figures together, no second row. Real alpha background, no floor/shadow plate, no dust, no waves, no light rings, no loose rocks or particles, no words/numbers/UI/logos.",
+      "output": "/workspace/generated_images/exec-3838cd85-58e3-4502-9248-8487cd2f7e11.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": true,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "file": "references/layout-6.png",
+          "sha256": "119becbb935da7b30e5a88ab366016e95b28897b75972307cd3f6119a5d06225"
+        }
+      ],
+      "package_source": "source/rift-quake.png",
+      "sha256": "ed211e67f624f1cf44724ff24eb2036e6626e89aea72b5148b2e5a0c52e4ff66"
+    },
+    {
+      "id": "boulder-hurl",
+      "prompt": "Exactly SIX full-body poses in ONE wide horizontal SPRITE ANIMATION STRIP of SAME Kragmor titan in reference 1 approved seed, reference 2 six-slot guide. Same model, stone plates, gold trim, violet cracks, ONE cyan vertical chest fissure, FIVE crown crystals, THREE claw fingers per hand. Face LEFT all six poses, preserve same head/torso/limb scale and planted foot baseline, same two arms two legs. Move BOULDER HURL: 1 exact seed ready; 2 bend knees and reach RIGHT hand down to left-front ground, pick up ONE compact dull dark-violet rock held IN that hand, other hand balances close to body; 3 RIGHT arm draws that SAME rock back behind head/right shoulder, rock stays gripped visibly in right hand, body twists back RIGHT, keep head lowered a little and rock NO HIGHER than seed crown top; 4 THROW release, RIGHT arm extended toward LEFT at shoulder height, open three-clawed hand EMPTY after release, NO rock anywhere in this frame; 5 follow through, torso leans left, throwing arm low-left and EMPTY, rock nowhere in frame; 6 exact seed ready. The single rock appears ONLY physically held in frames 2 and 3, never floating/thrown/in flight. Keep rock compact, no oversized boulder above crown, cannot extend beyond silhouette margin. Foreshorten throwing arm to stay inside slot without changing limb/head scale. Clear separate hand/arm anatomy, no extra hands or duplicated rock. >=60px transparent empty gaps, nothing cropped, figures inside equal slots, full crown and toes visible. One row no second row. True transparent alpha, no floor/shadow plate, no debris/dust/speed lines/shockwave/explosion or other VFX. No text, labels, numbers or UI.",
+      "output": "/workspace/generated_images/exec-35990b7d-f37e-459e-b5b1-e8e488e31e06.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": false,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "file": "references/layout-6.png",
+          "sha256": "119becbb935da7b30e5a88ab366016e95b28897b75972307cd3f6119a5d06225"
+        }
+      ],
+      "not_selected_reason": "Rock changes hands between pickup and windup."
+    },
+    {
+      "id": "boulder-hurl-r2",
+      "prompt": "Create ONE whole sprite strip of SIX full-body Kragmor titan poses in ONE HORIZONTAL ROW using approved seed (reference1) and six-slot guide(reference2). Exact same model, scale, head/arm proportions, five crown crystals, three claws per hand, cyan central chest wound, violet/gold stone plates, facing LEFT. BOULDER HURL: MUST use the SAME NEAR-CAMERA ARM in frames 2,3,4,5, the arm attached to the BIG shoulder on VIEWER RIGHT of seed. The far arm stays empty and close to torso the entire time. Pose1 seed ready. Pose2 crouch and reach the NEAR/VIEWER-RIGHT hand DOWN BESIDE THE VIEWER-RIGHT KNEE to scoop ONE small dark unlit stone, keep its shoulder and elbow clearly connected on viewer-right. Far/viewer-left hand stays empty at waist. Pose3 SAME near/viewer-right arm now cocked with rock held behind and beside head at VIEWER RIGHT; far hand empty tucked at belly. Pose4 SAME NEAR arm now sweeps ACROSS FRONT OF CHEST and extends diagonally toward LEFT, OPEN and EMPTY after release. Its elbow/forearm must visibly connect back to VIEWER-RIGHT SHOULDER across torso; far arm stays tucked, NOT the throwing arm. Pose5 same near-arm follows through low-left ACROSS body, EMPTY; far arm empty at belly. Pose6 seed ready. CRITICAL continuity: viewer-right shoulder powers throw, never switch boulder into far/viewer-left arm. Rock appears ONLY gripped in poses2/3, absent in4/5. No flying rock. Make arm foreshortened and compact so all six silhouettes have at least EIGHTY PIXELS of clear transparent gap, no figure touching another. Same sole baseline, identical head/torso scale, complete crown/feet/hands with generous outer margins. No per-pose shrinking. True transparent background, NO floor or shadow, no dust/debris/shockwave or other VFX, no text/numbers/UI. Six figures together as single strip.",
+      "output": "/workspace/generated_images/exec-5d9db534-c24a-46a9-bbee-083c8faea02b.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": false,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "file": "references/layout-6.png",
+          "sha256": "119becbb935da7b30e5a88ab366016e95b28897b75972307cd3f6119a5d06225"
+        }
+      ],
+      "not_selected_reason": "Pickup still uses far hand; release near hand corrected but pickup needs revision."
+    },
+    {
+      "id": "boulder-hurl-r3",
+      "prompt": "Edit this ENTIRE six-pose Boulder Hurl strip (reference2) guided by exact approved seed (reference1). Preserve all six figures in ONE row and their model scale, baseline and spacing. FIX ONLY SECOND pose's hand continuity: currently rock is in the wrong far/left hand. In pose2 the rock must instead be held in the NEAR HAND on VIEWER RIGHT of that figure, lifted to VIEWER-RIGHT WAIST beside the right thigh/hip, elbow clearly attached to viewer-right large shoulder. This hand has just pulled the small dull rock OFF THE NEAR SHOULDER rather than from ground. The FAR HAND on VIEWER LEFT must be OPEN and EMPTY hanging near left thigh. Do NOT leave any stone in the far/left hand. Pose2 may stand with slightly bent knees while holding rock at right waist. Pose3 already has SAME viewer-right hand raised holding rock beside right side of head; KEEP this. Pose4 already has SAME viewer-right arm crossing chest to left, hand OPEN EMPTY; KEEP this. Pose5 follows through with SAME viewer-right arm low-left across torso and EMPTY; KEEP this. Poses1/6 seed-ready. Important rock should appear on VIEWER RIGHT of chest in BOTH poses2 and3, move from right waist to right side of head, never change hands. Three claws per hand, five crown crystals, one cyan chest wound, same purple/gold armour. No stone in flight, no VFX/dust/debris/shockwaves, no text/UI. Real transparent alpha, clear wide blank gutters >=60px, nothing clipped, all six whole-body poses retained together.",
+      "output": "/workspace/generated_images/exec-d96d38de-be1d-4f0a-b29c-3638e6cb6b72.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": true,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "unshipped_attempt": "boulder-hurl-r2",
+          "generator_file": "/workspace/generated_images/exec-5d9db534-c24a-46a9-bbee-083c8faea02b.png",
+          "sha256": "467c98902671d09b91313faec8bb7fa03551c1c52ec420a26fb986db1d4624b2"
+        }
+      ],
+      "package_source": "source/boulder-hurl.png",
+      "sha256": "e48104b9b59a4b5d66aa485e091b90c9ac3d870c1c1a9b043d5d1f8869e3cb36"
+    },
+    {
+      "id": "fault-awakening",
+      "prompt": "ONE single wide horizontal whole sprite strip, EXACTLY SIX full-body poses of SAME Kragmor crystal-stone titan. Ref1 approved seed defines exact model, ref2 six-slot layout. Facing LEFT in each pose, identical stone armour/gold trim/head and limb proportions, FIVE crown crystals, THREE claw fingers per each of TWO hands, ONE central cyan vertical chest wound, violet cracks secondary. FAULT AWAKENING (70% phase transition) BODY ONLY, not attack: 1 exact seed ready; 2 bow forward deeply, hunch shoulders, head lowered, fists close to hips; 3 draw arms outward APART at LOW shoulder level with elbows bent, chest fissure and violet seams brighten INSIDE body only, slightly bent knees, aggressive wide compact silhouette; 4 lift chin and ROAR with mouth visibly OPEN facing left, arms still spread but ELBOWS BENT down and hands below shoulders, knees slightly bent so crown maximum height stays within seed height + 5 percent, full body not stretched; 5 lower chin, relax arms and light settles back; 6 exact seed ready. Raise head visibly but no growing or zooming; full five-shard crown stays near head, not a big detached energy halo. Hands stay near body, no straight horizontal T-pose that would extend out of slot. Same sole baseline in all six. At least60px clear transparent gutters, all fingers/crown/feet inside each equal slot with margins. One row only. True alpha background, no ground or shadow puddle, NO aura/flames/waves/explosion/dust/debris/VFX outside body, NO words/labels/numbers/UI. Single whole strip generation.",
+      "output": "/workspace/generated_images/exec-68c13060-db55-47a1-b129-b61d8dc0992b.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": false,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "file": "references/layout-6.png",
+          "sha256": "119becbb935da7b30e5a88ab366016e95b28897b75972307cd3f6119a5d06225"
+        }
+      ],
+      "not_selected_reason": "Arms spread too wide for canonical cell/gutters."
+    },
+    {
+      "id": "fault-awakening-r2",
+      "prompt": "Edit ENTIRE SIX-POSE Fault Awakening strip ref2, keeping six figures in one horizontal row, exact same Kragmor from seed ref1, identical head/torso/limb size and planted-foot baseline. FIX poses3 and4: arms are too wide for locked 1024 cells and gutters. BEND BOTH ELBOWS MORE and bring BOTH HANDS inward so hands stay close just outside HIPS, elbows visibly outward but not a broad T pose. Maximum overall width in EACH middle pose must be no wider than first ready pose's hand-to-hand width plus 5 percent. Do NOT shrink the titan or hands. Pose3 has shoulder/chest open and arms held away from torso with negative space, cyan fissure/secondary violet seams brighter INSIDE body; hands at HIP level, close to hips. Pose4 chin lifted and mouth OPEN roaring LEFT, arms slightly wider than3 but still within width limit, keep same scale/crown. Preserve pose2 bow and pose5 settle. Preserve poses1/6 seed ready. FIVE crown crystals, THREE claws per hand, ONE cyan chest wound, no extra limbs. Keep very wide truly empty transparent gutters >=80px between all figures. No overlapping poses, no cropping, full body inside each slot. No external aura, no bloom clouds, no background/floor/shadow plate, no VFX, no text/UI. Return all six figures together as one whole strip.",
+      "output": "/workspace/generated_images/exec-c40b7c6f-8856-4fc3-8334-9e11cdbebe56.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": true,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "unshipped_attempt": "fault-awakening",
+          "generator_file": "/workspace/generated_images/exec-68c13060-db55-47a1-b129-b61d8dc0992b.png",
+          "sha256": "b532d74d40c4b9d931b2d9ab0e3a2a92178e60c5945f73e9e48852bd5233fb68"
+        }
+      ],
+      "package_source": "source/fault-awakening.png",
+      "sha256": "bbcc8613d79f4011c673643b9bef2b277c3f10c719bd2aa7bed2af9aa3e626d5"
+    },
+    {
+      "id": "hit",
+      "prompt": "ONE whole sprite reaction strip of EXACTLY FOUR full-body poses in ONE horizontal row. Ref1 exact approved Kragmor seed, ref2 four-slot layout. Preserve identical model and head/torso/limb scale, painterly violet/gold crystal stone armour, FIVE floating crown shards, THREE claw fingers per huge hand, ONE cyan chest fissure, facing LEFT throughout. HIT reaction, not attack: pose1 exact seed ready. Pose2 recoil from impact coming from LEFT: upper torso and head jerk BACK toward RIGHT, shoulders tilt right, knees bend, both hands instinctively retract defensively, keep feet planted on baseline, no exaggerated stretch or growing head. Pose3 brace and recover balance: torso returns forward-left slightly, knees still bent, one hand guarding chest and other low, stable support, clearly distinct from full ready. Pose4 exact seed ready. No fall, no knockback travel across slots. Compact reaction retains exactly same body size, feet ground line identical. Four poses only, no extra inbetweens or second row. Clear wide empty alpha gutters at least80px, complete crown/hands/toes with outer margins, nothing clipped. Real transparency, no painted checkerboard, no background/floor/shadow plate, no blood/dust/rocks/particles/impact VFX, NO text, numbers, labels, logo, UI.",
+      "output": "/workspace/generated_images/exec-0fd64385-cc56-4402-bf02-f7969541032a.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": false,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "file": "references/layout-4.png",
+          "sha256": "8c0aa3995eae13fbbf6430ab65964e6ad56da017082b1ff64fff8bc1005428fc"
+        }
+      ],
+      "not_selected_reason": "Second matte clarification pass selected. Actual compositing confirms hidden RGB haze is alpha0; not an asserted alpha failure."
+    },
+    {
+      "id": "hit-r2",
+      "prompt": "Edit the ENTIRE FOUR-POSE HIT strip in reference2, using exact Kragmor seed reference1. Keep all four full-body poses, same scale, same left facing, same recoil-to-right and brace motion, identical crown five shards and three claws per hand, first/last ready. REMOVE ALL purple smoke/aura/background light completely. This must be a CLEAN BODY CUTOUT with TRUE transparent ALPHA (0) everywhere outside the titan's physical body and its five crown shards. Absolutely NO purple gradient, NO glow cloud, NO haze, NO shadow plate, NO ambience, NO bloom outside body, NO floor, NO background. Keep painted cyan/violet light INSIDE the stone body only; edge anti-aliasing is fine, a large blurred aura is NOT. Ensure at least80px totally EMPTY alpha gutters between all four figures and clear outside margins. All crown/hands/feet fully visible. Four poses on one horizontal row in one image. No text, labels, numbers, UI or impact VFX. Do not turn transparent space into black painted background; pixels outside character must actually be alpha0.",
+      "output": "/workspace/generated_images/exec-d1d7da6e-a5d5-451b-b0b0-1dbe874e91f8.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": true,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "unshipped_attempt": "hit",
+          "generator_file": "/workspace/generated_images/exec-0fd64385-cc56-4402-bf02-f7969541032a.png",
+          "sha256": "39c4352ef0932e341d225262b0cfaa2a7ee44917a035b501e7dc61e9189e1e2d"
+        }
+      ],
+      "package_source": "source/hit.png",
+      "sha256": "189f3ddd53f56ae1971188a1e393d5d1f0d07fc5384b8a3eb50b2bf84e384fc4"
+    },
+    {
+      "id": "down",
+      "prompt": "ONE whole DEATH/COLLAPSE sprite strip of EXACTLY FOUR complete poses in ONE horizontal row, same model Kragmor from approved seed reference1, four-slot guide reference2. Identical head/torso/limb scale and armour details, LEFT facing, five floating crown shards, three claws per each huge hand, cyan chest fissure initially, purple stone and gold edges. Pose1 exact seed ready. Pose2 both knees buckle to ground, torso folds forward, one hand braces on ground, cyan chest light DIMMING, crown lowers with head. Pose3 massive torso collapses FORWARD LEFT into a low compact heap about HALF standing height, chest stone plates slump and partly separate but remain attached/overlapping, head and two huge hands still recognizable, knees folded under, cyan chest light nearly off. Pose4 FINAL PRONE HELD DOWN POSE, NEVER STANDS: titan lies crumpled on LEFT side in low compact pile of his OWN overlapping stone body blocks, near hand resting on ground, head low looking left, chest fissure COMPLETELY DARK (NO CYAN LIGHT), violet seams dim, FIVE crown crystals fallen close around head but kept compact in this same silhouette, no flying pieces. Keep body parts SAME absolute size as seed, do NOT shrink final body to fit. Fold limbs into compact pile, not spread wide. All figures have stable ground line, use feet for upright/bracing and the actual body contact ground for final collapse, no new floor or shadow. Clear transparent gutters at least80px between figures, all crown/hand/body pieces wholly inside each equal slot with generous margins, no cropping. Four poses together only, no second row. Real alpha transparency; no dust cloud, debris flying away, magic smoke, explosion or VFX, no aura/background scenery. No text, labels, numbers, logo or UI.",
+      "output": "/workspace/generated_images/exec-12d7bcec-fd84-47b8-a2eb-fe4785f5f485.png",
+      "tool": "image_gen.imagegen",
+      "seed_attached_every_call": true,
+      "transparent_background": true,
+      "selected": true,
+      "input_references": [
+        {
+          "file": "references/seed-a.png",
+          "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97"
+        },
+        {
+          "file": "references/layout-4.png",
+          "sha256": "8c0aa3995eae13fbbf6430ab65964e6ad56da017082b1ff64fff8bc1005428fc"
+        }
+      ],
+      "package_source": "source/down.png",
+      "sha256": "df7f4b50d3402512f2f609a90d8b1cf4baa2b4cecfe52849010c04f2d5caf95f"
+    }
+  ]
+}

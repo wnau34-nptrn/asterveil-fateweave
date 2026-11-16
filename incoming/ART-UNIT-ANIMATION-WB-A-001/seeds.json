@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "character": "Kragmor / คราก์มอร์ ไททันรอยแยก",
+  "source_branch": "art/art-char-worldboss-001",
+  "source_commit": "46f366dc931e4994d3a6ccd9ad3951ac444a70cf",
+  "source_path": "incoming/ART-CHAR-WORLDBOSS-001/seed-a.png",
+  "local_seed": "references/seed-a.png",
+  "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97",
+  "size": [
+    1024,
+    1024
+  ],
+  "facing": "left",
+  "sole_y": 896,
+  "silhouette_center_x": 512,
+  "seed_priority": "Seed primary, turnaround secondary; owner request selects A/Kragmor for this body batch.",
+  "sampling_seed": null,
+  "sampling_note": "Image tool exposes no numeric RNG seed; retained original PNGs make processing reproducible.",
+  "invariants": [
+    "five crown shards",
+    "three claws per hand",
+    "two hands",
+    "single cyan chest fissure",
+    "secondary violet seams"
+  ],
+  "motion_approval": "pending; technical checks do not constitute owner motion approval"
+}
