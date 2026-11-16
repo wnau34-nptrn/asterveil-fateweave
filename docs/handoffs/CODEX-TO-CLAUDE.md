@@ -1,3 +1,7 @@
+## 2026-11-16 — Game day reset at 06:00 Bangkok (Opus; branch claude/day-reset-6am)
+- Owner: "เวลารีเซ็ตวัน ตั้งไว้ 6 โมงเช้า". `GAME_DAY_RESET_HOUR = 6` in `src/server/ledger.ts` (offset UTC+7−6h; the server day, the Monday week and the World Boss week start 06:00 Bangkok = 23:00 UTC). Offline device day in `game-shell.ts` `today()` also turns at 06:00 local. No rule/number/save change.
+- Tests: `server-ledger` boundary checks updated (05:59 = previous day, 23:00 UTC start); server/world-boss/shard unit tests pass; browser specs `quest-board-p05`/`world-boss-p11` use the same 06:00 day. Docs: LEDGER_P09_TH.md, CURRENT_STATE.md.
+
 ## 2026-11-15 — P12 external-test readiness: Pages browser gate, staging load test, owner checklist (Opus; branch claude/p12-external-test-readiness)
 - No owner comment on chat PR #261. No rule/save/number change (save v64); no payments, PvP or Co-op.
 - `pages.yml`: the Chromium suite (4 shards + FX fixtures) runs on every push again and `deploy` needs `build` + `browser` (OD-13 gate restored); CLAUDE.md line updated.

@@ -445,8 +445,9 @@ export class GameShell {
     });
   }
   // P05-05: the device's calendar day (days since 1970-01-01 in local time). Offline only; P09 uses the server's day.
-  // The calendar day the screens show: online the server's (P09 ledger, it stamps the real one), else the device's.
-  private today(): number { const online = this.server?.day; if (online !== undefined) return online; const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000); }
+  // The calendar day the screens show: online the server's (P09 ledger, it stamps the real one), else the device's,
+  // which turns at 06:00 local time like the server's (owner 2026-11-16, GAME_DAY_RESET_HOUR).
+  private today(): number { const online = this.server?.day; if (online !== undefined) return online; const d = new Date(Date.now() - 6 * 3_600_000); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000); }
   // ---- P11-04 World Boss: the attempt is fought in the battle view and sent once, as one command, when it ends ----
   private wbStatus: WorldBossStatus | null = null;
   private wbRun: { attempt: number; sent: boolean; message: string } | undefined;

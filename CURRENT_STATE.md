@@ -16,7 +16,7 @@ All online systems before outsiders are built: W8 → P01 → P02 → P09 → P0
 - Staging load test ready ([plan](docs/validation/p12-load/README_TH.md)): workflow `Cloudflare staging load test` (manual) deploys a throwaway `asterveil-api-staging` + D1, runs `tests/server-load.test.ts` from 1–4 runners (WorldBoss attempts with concurrent retries + outbox, chat poll/send), deletes both. Local wrangler runs pass. Not yet run on Cloudflare: dispatch needs the workflow file on the default branch `main` (404 otherwise) — owner picks: copy the file to `main` once, or make the game branch the default. Never point `LOAD_URL` at the dev API.
 - World Boss (#259/#260): owner open 5/week, 8 rounds, sweep cut, HP 2500/account; no rotation/scaling or motion clips yet. **Owner 2026-11-15 OD-42–45**: three new bosses (concepts A/B/C, PR #263) open together each 7-day round with different mechanics, per-boss shards crafting different items, own banner/page; design+sim next, names/attempt split open; banner PR #262 (old warden) superseded.
 - Chat (#261): owner open numbers, `CHAT_WRITE`, word list, WebSocket/more channels.
-- P09 open: inactive-guest cleanup, old-token reuse detection, reset time zone. P04-06/shards owner numbers open. P04-05 catch-up EXP recheck with P06.
+- P09 open: inactive-guest cleanup, old-token reuse detection. Day reset 06:00 Bangkok (owner 2026-11-16). P04-06/shards owner numbers open. P04-05 catch-up EXP recheck with P06.
 - Gacha: G00/G01 analysis delivered (`docs/design/GACHA_G00_DECISIONS_TH.md`, `GACHA_G01_*`); owner wants system/visual discussion first. No G02–G05/payments; real gacha needs the server wallet on the ledger.
 - UXD-08 done; real-device/human trial and team-preset usability review open.
 
