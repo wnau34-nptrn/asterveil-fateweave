@@ -52,12 +52,14 @@ const applied = (a: ReturnType<ReturnType<typeof setup>['send']>['answer']) => {
 const rejected = (a: ReturnType<ReturnType<typeof setup>['send']>['answer']) => { expect(a.status).toBe(200); return (a.body as Extract<CommandReply, { status: 'rejected' }>).reason; };
 
 describe('P09 server calendar', () => {
-  it('the game day turns at midnight Asia/Bangkok; the next day starts exactly there', () => {
+  it('the game day turns at 06:00 Asia/Bangkok; the next day starts exactly there', () => {
     expect(serverDay(midnight(D))).toBe(D); expect(serverDay(midnight(D) - 1)).toBe(D - 1);
     expect(serverDay(midnight(D + 1) - 1)).toBe(D);
     expect(nextDayAt(midnight(D) + 5 * HOUR)).toBe(midnight(D + 1)); expect(nextDayAt(midnight(D))).toBe(midnight(D + 1));
-    // 17:00 UTC is midnight in Bangkok.
-    expect(new Date(midnight(D)).getUTCHours()).toBe(17);
+    // 23:00 UTC the evening before is 06:00 in Bangkok.
+    expect(new Date(midnight(D)).getUTCHours()).toBe(23); expect(midnight(D)).toBe(D * DAY_MS - HOUR);
+    // 05:59 Bangkok still belongs to the previous game day.
+    expect(serverDay(D * DAY_MS - 7 * HOUR + 6 * HOUR - 60_000)).toBe(D - 1);
   });
 });
 

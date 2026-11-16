@@ -4,8 +4,11 @@
 - Rewards: attempt ore 4/gold 2 + 3 boss shards; p-2/p-4 one universal shard + 2/3 boss shards; per-boss s-50/s-100 online only. Items body `bulwark`/gloves `breaker`/head `reaper` (Lv11 legendary, 40 shards + 30 ore + 10 dust, chosen affixes/set, no RNG). Budget 76 tradeable + 38 in boss shards → 1195 ≤ 1200.
 - Save v65 plan (per-boss book, `legacy` warden week, `bossShards`, new `Item.boss` values), one DO with three bars, receipts `wb:w<W>:<boss>:s-50`, HP = last week's attempts on that boss × 400 (min 1500).
 - Probe `tests/probe/p1105-world-boss-trio.test.ts` (TRIO_OUT): [validation](../validation/p11-05-2026-11-16/README_TH.md) — no instant loss for advisor play at any camp tier, visible penalties for ignoring, shared-HP falls most weeks from ~20 accounts. tsc + eslint pass; no `npm run sim`/browser (no game change).
-- Open (owner): trio for the 14 Dec external test or warden first; OD renumbering; chosen-affix crafting and price; WB universal shard 3→2; HP ×400; Morvane's lower damage; 06:00 week start if #269 merges. Next: implementation step 1 (resolver R1/R2 + encounters, Opus).
+- Open (owner): trio for the 14 Dec external test or warden first; OD renumbering; chosen-affix crafting and price; WB universal shard 3→2; HP ×400; Morvane's lower damage. Next: implementation step 1 (resolver R1/R2 + encounters, Opus).
 
+## 2026-11-16 — Game day reset at 06:00 Bangkok (Opus; branch claude/day-reset-6am)
+- Owner: "เวลารีเซ็ตวัน ตั้งไว้ 6 โมงเช้า". `GAME_DAY_RESET_HOUR = 6` in `src/server/ledger.ts` (offset UTC+7−6h; the server day, the Monday week and the World Boss week start 06:00 Bangkok = 23:00 UTC). Offline device day in `game-shell.ts` `today()` also turns at 06:00 local. No rule/number/save change.
+- Tests: `server-ledger` boundary checks updated (05:59 = previous day, 23:00 UTC start); server/world-boss/shard unit tests pass; browser specs `quest-board-p05`/`world-boss-p11` use the same 06:00 day. Docs: LEDGER_P09_TH.md, CURRENT_STATE.md.
 ## 2026-11-16 — P12 owner decisions OD-46: external test T = 14 Dec (Opus; branch claude/p12-owner-decisions)
 - Owner: "ให้บัญชี guest ก็พิมพ์ได้ ที่เหลืออนุมัติตามแนะนำ" → OD-46: T = 2026-12-14, `CHAT_WRITE=all`, Cloudflare Free first, 10–20 known invitees, draft numbers kept, load workflow added to `main`.
 - `cloudflare/wrangler.json`: `LEGACY_IMPORT_UNTIL` = 2026-11-30T00:00:00+07:00 (T−14, closes itself); T−7 switch to `closed` is the next session's job. Checklist + CURRENT_STATE updated; `git diff --check`.
