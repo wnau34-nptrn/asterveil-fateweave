@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { encounters, WORLD_BOSS_HP } from '../src/content/encounters/catalog';
+import { encounterById, encounters, WORLD_BOSS_HP } from '../src/content/encounters/catalog';
 import { WORLD_BOSS_TRIO, wbKragmor, wbMorvane, wbValdrakk } from '../src/content/encounters/world-boss-trio';
 import { rosterP03 } from '../src/content/heroes/roster-p03';
 import { gameRules } from '../src/content/world/rules';
@@ -33,13 +33,13 @@ describe('World Boss trio v1 content', () => {
     for (const d of WORLD_BOSS_TRIO) {
       expect(encounterProblems(d)).toEqual([]);
       expect(d.enemies.find(e => e.boss)!.maxHp).toBe(WORLD_BOSS_HP);
-      expect(encounters.some(e => e.id === d.id)).toBe(false); // not offered in game yet (design §8 step 2)
+      expect(encounterById(d.id)).toBe(d); expect(encounters.some(e => e.id === d.id)).toBe(false); // catalog lookup only (design §8 step 2)
     }
     expect(wbValdrakk.intents.filter(i => i.breakable).every(i => i.charge)).toBe(true);
     expect(wbMorvane.enemies.find(e => e.id === 'f1')!.court).toEqual({ percent: 10, by: ['f2', 'f3', 'b2'] });
   });
   it('no existing encounter uses the new fields, so their rules are unchanged without a version bump', () => {
-    for (const d of encounters) {
+    for (const d of encounters.filter(e => !WORLD_BOSS_TRIO.includes(e))) {
       expect(d.intents.some(i => i.breakable || i.summon)).toBe(false);
       expect(d.enemies.some(e => e.court)).toBe(false);
     }

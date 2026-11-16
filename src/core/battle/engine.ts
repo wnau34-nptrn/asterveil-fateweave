@@ -1,4 +1,4 @@
-import type { SongId, BossPhase, IntentDefinition, EnemyTrait, HeroGear, ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
+import type { SongId, BossPhase, IntentDefinition, EnemyTrait, HeroGear, TrioPower, ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
 
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
@@ -409,15 +409,28 @@ export const hasGear = (data: EncounterDefinition, heroId: string | undefined, s
   !!heroId && !!data.heroes.find(h => h.id === heroId)?.gear?.specials?.includes(special);
 
 export function bossPowerReady(state:BattleState,data:EncounterDefinition,heroId:string,power:NonNullable<HeroGear['boss']>['power']):number {
-  const gear=data.heroes.find(h=>h.id===heroId)?.gear?.boss,actor=state.heroes.find(h=>h.id===heroId);
-  return actor&&actor.hp>0&&actor.bossUsedRound!==state.round&&gear?.power===power?gear.amount:0;
+  const gear=data.heroes.find(h=>h.id===heroId)?.gear,actor=state.heroes.find(h=>h.id===heroId);
+  if(!actor||actor.hp<=0||actor.bossUsedRound===state.round)return 0;
+  return gear?.boss?.power===power?gear.boss.amount:gear?.trio?.find(t=>t.power===power)?.amount??0;
 }
-function bossBarrier(state:BattleState,data:EncounterDefinition,ownerId:string,targetId:string,power:'aegis'|'lantern',events:BattleEvent[]):void {
+// P11-05: the `at` number of a worn trio power (bulwark's least HP loss, reaper's barrier cap).
+const trioAt=(data:EncounterDefinition,heroId:string,power:TrioPower):number=>data.heroes.find(h=>h.id===heroId)?.gear?.trio?.find(t=>t.power===power)?.at??0;
+const BOSS_BARRIER_TEXT={aegis:'ตราพิทักษ์ผู้คุมมอบโล่หลังรับการโจมตี',lantern:'ประทีปผนึกมอบโล่หลังรักษาเพื่อน',bulwark:'เกราะศิลาไททันมอบโล่หลังรับการโจมตีหนัก'} as const;
+function bossBarrier(state:BattleState,data:EncounterDefinition,ownerId:string,targetId:string,power:'aegis'|'lantern'|'bulwark',events:BattleEvent[]):void {
   const amount=bossPowerReady(state,data,ownerId,power),target=state.heroes.find(h=>h.id===targetId);
   if(!amount||!target||target.hp<=0)return;
   state.heroes.find(h=>h.id===ownerId)!.bossUsedRound=state.round;
   const added=Math.max(target.barrier,amount)-target.barrier;target.barrier+=added;
-  if(added)events.push({type:'barrier',sourceId:ownerId,targetId,amount:added,text:power==='aegis'?'ตราพิทักษ์ผู้คุมมอบโล่หลังรับการโจมตี':'ประทีปผนึกมอบโล่หลังรักษาเพื่อน'});
+  if(added)events.push({type:'barrier',sourceId:ownerId,targetId,amount:added,text:BOSS_BARRIER_TEXT[power]});
+}
+// P11-05 reaper: the wearer's hit downed a foe that is not a boss: heal, and healing past max HP becomes a capped barrier.
+function reap(state:BattleState,data:EncounterDefinition,heroId:string,foe:EnemyState,events:BattleEvent[]):void {
+  const amount=bossPowerReady(state,data,heroId,'reaper');
+  if(!amount||data.enemies.find(e=>e.id===foe.id)?.boss)return;
+  const actor=state.heroes.find(h=>h.id===heroId)!,max=data.heroes.find(h=>h.id===heroId)!.maxHp;actor.bossUsedRound=state.round;
+  const healed=Math.min(amount,max-actor.hp),extra=Math.min(amount-healed,trioAt(data,heroId,'reaper'));
+  if(healed){actor.hp+=healed;events.push({type:'heal',sourceId:heroId,targetId:heroId,amount:healed,text:'มงกุฎด้ายขาดฟื้นพลังเมื่อกำจัดลูกน้อง'});}
+  if(extra){actor.barrier+=extra;events.push({type:'barrier',sourceId:heroId,targetId:heroId,amount:extra,text:'มงกุฎด้ายขาดเปลี่ยนส่วนที่เกินเป็นโล่'});}
 }
 // Healing cast by this hero, raised by its equipment's heal bonus.
 // Deploys a party (in slot order) into an encounter; enemy slots then resolve to these heroes.
@@ -718,6 +731,8 @@ function hit(state: BattleState, data: EncounterDefinition, enemy: EnemyState, i
       }
     }
   }
+  // P11-05 bulwark (a heavy hit) comes before the charm's aegis: one boss power per wearer per round.
+  if(recipient.hp>0&&amount>0&&amount>=trioAt(data,recipient.id,'bulwark')&&bossPowerReady(state,data,recipient.id,'bulwark'))bossBarrier(state,data,recipient.id,recipient.id,'bulwark',events);
   if(amount>0&&recipient.hp>0)bossBarrier(state,data,recipient.id,recipient.id,'aegis',events);
   if (reflect && living(state, reflect.heroId) && enemy.hp > 0) strikeBack(state, data, reflect.heroId, enemy, reflect.amount, events, 'The ward reflects the hit.');
   if (shard && living(state, shard.heroId) && enemy.hp > 0) strikeBack(state, data, shard.heroId, enemy, shard.amount, events, 'The crystal shard strikes back.');
@@ -1088,7 +1103,10 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   const bruise = actor.bruise ?? 0; delete actor.bruise;
   // Every hero hit adds corrosion, valor and its own capstone bonuses.
   const strike = (foe: EnemyState, power: number, text: string) => {
-    const boss=foe===enemy&&targetKind(command.action)==='enemy'&&power>0&&foe.markedUntil>state.round?bossPowerReady(state,data,hero.id,'focus'):0;
+    const chosen=foe===enemy&&targetKind(command.action)==='enemy'&&power>0;
+    let boss=chosen&&foe.markedUntil>state.round?bossPowerReady(state,data,hero.id,'focus'):0;
+    // P11-05 breaker: the chosen foe was interrupted this round or announces a charge next.
+    if(!boss&&chosen&&bossPowerReady(state,data,hero.id,'breaker')&&(foe.interruptedRound===state.round||!!nextIntentOf(state,data,foe.id)?.charge))boss=bossPowerReady(state,data,hero.id,'breaker');
     if(boss)actor.bossUsedRound=state.round;
     const banner = (actor.empowered?.round ?? 0) >= state.round ? actor.empowered!.percent : 0;
     const raised = banner || baton ? Math.round(power * (100 + banner + baton) / 100) : power;
@@ -1097,7 +1115,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     const spite = power > 0 ? grudge : 0; if (spite) grudge = 0;
     const amount = Math.min(foe.hp, tired(data, hero.id, veiled(state, data, foe, raised + boss + solo + spite + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)))); foe.hp -= amount; directDamage += amount;
     events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text });
-    if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); }
+    if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); reap(state, data, hero.id, foe, events); }
     // A coated blade (save v56) poisons each foe it lands on, one stack a hit.
     if (actor.coated && amount > 0 && foe.hp > 0) {
       actor.coated--; if (!actor.coated) delete actor.coated;

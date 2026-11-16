@@ -62,7 +62,7 @@ describe('P04-02 shards', () => {
 
 describe('save v59 (P04-02)', () => {
   it('converts v58 duplicates, seals, a bought seal and the last result with no loss, and marks story recruits met', () => {
-    expect(SAVE_VERSION).toBe(64);
+    expect(SAVE_VERSION).toBe(65);
     const p = newProfile(map, 7, ['guardian', 'tracer', 'weaver', 'healer']);
     const legacy = JSON.parse(JSON.stringify(p)) as Record<string, unknown> & { members: Record<string, Record<string, unknown>>; bank: Record<string, unknown> };
     for (const m of Object.values(legacy.members)) { delete m.shards; m.dupes = 0; }

@@ -1,4 +1,4 @@
-import type { ActionId, BossPower, Command } from '../battle/types';
+import type { ActionId, CharmPower, Command } from '../battle/types';
 import type { Game } from '../save/expedition-save';
 import { applyCampEquipment, applyRunEquipment, type AutoEquipmentPlan } from '../world/auto-equipment';
 import { BOSS_POWERS, chooseBossTarget } from '../world/boss-equipment';
@@ -14,10 +14,10 @@ import { collectOverflow, departureBlocked, expandStorage, recycleSelection, typ
 import { chooseHuntTarget } from '../world/targeted-loot';
 import { sweep } from '../world/sweep';
 import { claimBoard, weekOf } from '../world/board';
-import { claimWorldBoss, worldBossAttempt, type WorldBossShared } from '../world/world-boss';
+import { claimWorldBoss, craftBossItem, worldBossAttempt, type WorldBossShared } from '../world/world-boss';
 import { raiseSkill, tradeTomes } from '../world/tomes';
 import {
-  GEAR_SLOTS, POTION_IDS, SHOP_ITEMS, TOME_LINES, TOME_SIZES,
+  GEAR_SLOTS, POTION_IDS, SET_IDS, SHOP_ITEMS, TOME_LINES, TOME_SIZES, WB_BOSSES, type GearStat, type SetId, type WbBossId,
   type BoardTab, type Commander, type Direction, type EventChoice, type ExpeditionState, type GearSlot, type Lane, type MapDefinition, type Point,
   type PotionId, type Profile, type ProfileEvent, type ProfileResult, type RunOutcome, type ShopItemId, type TalentNode, type TomeLine,
   type TomeSize, type WorldEvent, type WorldResult,
@@ -57,7 +57,9 @@ export type CampCommand =
   | { kind: 'autoEquipCamp'; plan: AutoEquipmentPlan }
   | { kind: 'transferAffix'; uid: number; index: number; donor: number; sourceIndex: number }
   | { kind: 'craftWeapon'; heroId: string; level: number }
-  | { kind: 'bossTarget'; target: BossPower }
+  // P11-05: a World Boss trio item from that boss's shards: the two chosen affixes and an optional set.
+  | { kind: 'craftBossItem'; boss: WbBossId; affixes: GearStat[]; set?: SetId }
+  | { kind: 'bossTarget'; target: CharmPower }
   | { kind: 'huntTarget'; target?: string }
   | { kind: 'collectOverflow'; ids: number[] }
   | { kind: 'recycleStored'; source: StorageSource; ids: number[] }
@@ -80,7 +82,8 @@ export type CampCommand =
   // P11-04: one finished World Boss attempt with the camp's field team: `attempt` is the week's next attempt number (a
   // repeat is refused) and `commands` every committed turn, replayed by the resolver. A shared milestone claim names its
   // `week` (this week or last). `day` as for `sweep` (left out online).
-  | { kind: 'worldBoss'; attempt: number; commands: Command[]; day?: number }
+  // P11-05: `boss` names the trio boss fought (required from `trio.from` on; left out while the warden stands).
+  | { kind: 'worldBoss'; attempt: number; commands: Command[]; day?: number; boss?: WbBossId }
   | { kind: 'claimWorldBoss'; id: string; week: number; day?: number }
   // `day` (P05-06): the device's calendar day, for the run's quest-board progress (missing = the run counts nowhere;
   // online the server's day is used and a device day is refused).
@@ -139,12 +142,12 @@ const SPECS: Record<CommandKind, Spec> = {
   tradeTomes: { line: TOME_LINES, size: TOME_SIZES, to: opt(TOME_LINES) }, learnTalent: { heroId: 'str', node: 'str' },
   chooseLoadout: { heroId: 'str', actions: 'strs' }, resetTalents: { heroId: 'str' }, claimGuide: { id: 'str', skip: 'bool' },
   equip: { heroId: 'str', uid: 'int' }, unequip: { heroId: 'str', slot: GEAR_SLOTS }, autoEquipCamp: { plan: 'object' },
-  transferAffix: { uid: 'int', index: 'int', donor: 'int', sourceIndex: 'int' }, craftWeapon: { heroId: 'str', level: 'int' },
+  transferAffix: { uid: 'int', index: 'int', donor: 'int', sourceIndex: 'int' }, craftWeapon: { heroId: 'str', level: 'int' }, craftBossItem: { boss: WB_BOSSES, affixes: 'strs', set: opt(SET_IDS) },
   bossTarget: { target: BOSS_POWERS }, huntTarget: { target: opt('str') }, collectOverflow: { ids: 'ints' },
   recycleStored: { source: ['bag', 'overflow'], ids: 'ints' }, expandStorage: {}, salvage: { uids: 'ints' }, enhance: { uid: 'int', target: 'int' },
   lockEquipment: { uid: 'int' }, fuse: { uid: 'int', donors: opt('ints') }, raiseItemLevel: { uid: 'int', target: 'int' }, reroll: { uid: 'int', index: 'int' },
   brew: { potion: POTION_IDS }, claimQuest: { questId: 'str' }, sweep: { mapId: 'str', hard: 'bool', day: opt('int'), serial: 'int' }, claimBoard: { tab: ['daily', 'weekly', 'contract'], id: 'str', period: 'int', day: opt('int') },
-  worldBoss: { attempt: 'int', commands: 'commands', day: opt('int') }, claimWorldBoss: { id: 'str', week: 'int', day: opt('int') },
+  worldBoss: { attempt: 'int', commands: 'commands', day: opt('int'), boss: opt(WB_BOSSES) }, claimWorldBoss: { id: 'str', week: 'int', day: opt('int') },
   depart: { mapId: opt('str'), hard: 'bool', day: opt('int') },
   move: { dir: DIRECTIONS }, travel: { to: 'point' }, rest: {}, revive: { heroId: 'str' }, swapMembers: { a: 'str', b: 'str' },
   setLane: { heroId: 'str', lane: LANES, other: opt('str') }, moveMember: { heroId: 'str' }, runPreset: { slot: 'int' }, withdraw: {}, openChest: {},
@@ -252,6 +255,7 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
     case 'autoEquipCamp': return camp(applyCampEquipment(p, cmd.plan));
     case 'transferAffix': return camp(transferAffix(p, map, cmd.uid, cmd.index, cmd.donor, cmd.sourceIndex));
     case 'craftWeapon': return camp(craftWeapon(p, map, cmd.heroId, cmd.level));
+    case 'craftBossItem': return camp(craftBossItem(p, maps, cmd.boss, cmd.affixes, cmd.set));
     case 'bossTarget': return camp(chooseBossTarget(p, map, cmd.target));
     case 'huntTarget': return camp(chooseHuntTarget(p, cmd.target));
     case 'collectOverflow': return camp(collectOverflow(p, map, cmd.ids));
@@ -267,7 +271,7 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
     case 'claimQuest': return camp(claimQuest(p, map, cmd.questId));
     case 'sweep': { const m = maps.find(x => x.id === cmd.mapId); return m ? camp(sweep(p, m, cmd.hard, day ?? -1, cmd.serial)) : reject('unknown'); }
     case 'claimBoard': return featureOpen(p, maps, 'quests') ? camp(claimBoard(p, maps, cmd.tab, cmd.id, cmd.period, day ?? -1)) : reject('locked');
-    case 'worldBoss': return camp(worldBossAttempt(p, maps, lookup, weekOf(day ?? -7), cmd.attempt, cmd.commands));
+    case 'worldBoss': return camp(worldBossAttempt(p, maps, lookup, weekOf(day ?? -7), cmd.attempt, cmd.commands, cmd.boss));
     case 'claimWorldBoss': return camp(claimWorldBoss(p, maps, cmd.id, cmd.week, weekOf(day ?? -7), ctx.worldBoss));
     case 'depart': {
       if (departureBlocked(p)) return reject('storage');

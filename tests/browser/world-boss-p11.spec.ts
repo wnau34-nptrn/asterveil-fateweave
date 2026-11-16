@@ -49,7 +49,7 @@ test('the World Boss tab shows the week, plays one attempt and pays once', async
   await expect(page.locator('#leave-battle')).toBeVisible(); await expect(page.locator('.wb-damage')).toContainText('ดาเมจที่ลงกับบอส');
   await page.screenshot({ path: 'docs/validation/p11-04-2026-11-15/boss-result-390.png' });
   const after = await saved(page);
-  expect(after.worldBoss!.weeks.at(-1)).toMatchObject({ week, attempts: 1 }); expect(after.worldBoss!.weeks.at(-1)!.damage).toBeGreaterThan(0);
+  expect(after.worldBoss!.weeks.at(-1)).toMatchObject({ week, attempts: 1 }); expect(after.worldBoss!.weeks.at(-1)!.legacy!.damage).toBeGreaterThan(0);
   expect(after.bank.ore).toBe(106); expect(after.bank.gold).toBe(103);
   await page.locator('#leave-battle').click();
   await expect(page.locator('.lobby-result')).toContainText('บอสโลกครั้งที่ 1/5');

@@ -1,14 +1,14 @@
-import type {BossPower} from '../battle/types';
+import type {CharmPower} from '../battle/types';
 import type {BossPlan,Item,MapDefinition,Profile,ProfileResult} from './types';
 import {rollItem} from './equipment';
 import {SET_IDS} from './types';
 
-export const BOSS_POWERS:readonly BossPower[]=['aegis','focus','lantern'];
-export const isBossPower=(value:unknown):value is BossPower=>BOSS_POWERS.includes(value as BossPower);
+export const BOSS_POWERS:readonly CharmPower[]=['aegis','focus','lantern'];
+export const isBossPower=(value:unknown):value is CharmPower=>BOSS_POWERS.includes(value as CharmPower);
 export function startBossPlan(p:Profile,map:MapDefinition):BossPlan {
   return {version:1,boss:map.bossEncounterId,...(p.bossLoot?.[map.bossEncounterId]??{target:'aegis',misses:0,rewarded:false})};
 }
-export function chooseBossTarget(p:Profile,map:MapDefinition,target:BossPower):ProfileResult {
+export function chooseBossTarget(p:Profile,map:MapDefinition,target:CharmPower):ProfileResult {
   if(!isBossPower(target))return {profile:p,event:{type:'blocked',reason:'unknown'}};
   const before=startBossPlan(p,map);
   if(before.target===target)return {profile:p,event:{type:'blocked',reason:'unchanged'}};

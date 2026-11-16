@@ -14,6 +14,7 @@ import { applyCampEquipment, applyRunEquipment, type AutoEquipmentPlan } from '.
 import { chooseBossTarget } from '../src/core/world/boss-equipment';
 import { placeCampMember } from '../src/core/world/camp-team';
 import { formation } from '../src/core/world/formation';
+import { craftBossItem } from '../src/core/world/world-boss';
 import { craftWeapon, enhanceTo, fuse, lockEquipment, raiseItemLevel, reroll, smelt, transferAffix } from '../src/core/world/forge';
 import { applyPreset, applyRunPreset, clearPreset, renamePreset, savePreset } from '../src/core/world/presets';
 import {
@@ -138,6 +139,7 @@ const CASES: Record<CommandKind, Case> = {
     cmd: { kind: 'claimBoard', tab: 'daily', id: 'd-patrol', period: 20000, day: 20000 }, direct: g => claimBoard(P(g), maps, 'daily', 'd-patrol', 20000, 20000) },
   // P11-04 (behaviour in tests/world-boss-p11.test.ts): the processor calls the same rule with the day's week.
   worldBoss: { game: campGame, cmd: { kind: 'worldBoss', attempt: 1, commands: [], day: 20000 }, direct: g => worldBossAttempt(P(g), maps, lookup, 2857, 1, []) },
+  craftBossItem: { game: () => campGame({ bossShards: { kragmor: 41 } }), cmd: { kind: 'craftBossItem', boss: 'kragmor', affixes: ['armour', 'regen'], set: 'dawn' }, direct: g => craftBossItem(P(g), maps, 'kragmor', ['armour', 'regen'], 'dawn') },
   claimWorldBoss: { game: campGame, cmd: { kind: 'claimWorldBoss', id: 's-50', week: 2857, day: 20000 }, direct: g => claimWorldBoss(P(g), maps, 's-50', 2857, 2857) },
   depart: { game: campGame, cmd: { kind: 'depart', mapId: home.id, hard: false }, seeds: [7], direct: g => { const out = depart(P(g), home, lookup, 7); return { game: { profile: { ...out.profile, last: null }, run: out.run } }; } },
   move: { game: () => runGame(), cmd: { kind: 'move', dir: openDir() }, direct: g => move(R(g), home, openDir(), lookup) },

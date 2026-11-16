@@ -58,7 +58,7 @@ describe('P11-04 World Boss rules (offline and server alike)', () => {
     const r = worldBossAttempt(p, MAPS, lookup, W, 1, list);
     expect(r.event).toEqual({ type: 'wbAttempt', week: W, attempt: 1, damage: a.damage, rounds: a.rounds, outcome: a.state.outcome, reward: rules.attemptReward, milestones: [] });
     expect(r.profile.bank).toEqual({ ...p.bank, ore: p.bank.ore + rules.attemptReward.ore, gold: p.bank.gold + rules.attemptReward.gold });
-    expect(r.profile.worldBoss).toEqual({ weeks: [{ week: W, attempts: 1, damage: a.damage, best: a.damage, claimed: [] }] });
+    expect(r.profile.worldBoss).toEqual({ weeks: [{ week: W, attempts: 1, bosses: {}, legacy: { attempts: 1, damage: a.damage, best: a.damage }, claimed: [] }] });
     expect(p.worldBoss).toBeUndefined(); // never mutates its input
   });
 
@@ -117,18 +117,18 @@ describe('P11-04 World Boss rules (offline and server alike)', () => {
     expect(sharedHpFor(rules, 1e9)).toBe(rules.hp.max);
   });
 
-  it('save v64 keeps the book; a v63 save loads unchanged; a broken book is refused', () => {
+  it('save v65 keeps the book; a v63 save loads unchanged; a broken book is refused', () => {
     const p = attempts(base(), 2); const game: Game = { profile: p, run: null };
-    const raw = currentSave(game); expect(JSON.parse(raw).version).toBe(SAVE_VERSION); expect(SAVE_VERSION).toBe(64);
+    const raw = currentSave(game); expect(JSON.parse(raw).version).toBe(SAVE_VERSION); expect(SAVE_VERSION).toBe(65);
     expect(parseGame(raw, home, lookup, MAPS).profile.worldBoss).toEqual(p.worldBoss);
     const v63: Profile = { ...p }; delete v63.worldBoss;
     expect(parseGame(JSON.stringify({ version: 63, profile: v63, run: null }), home, lookup, MAPS).profile.worldBoss).toBeUndefined();
     const w = p.worldBoss!.weeks[0]!;
-    const bad = (weeks: unknown) => () => parseGame(JSON.stringify({ version: 64, profile: { ...p, worldBoss: { weeks } }, run: null }), home, lookup, MAPS);
+    const bad = (weeks: unknown) => () => parseGame(JSON.stringify({ version: SAVE_VERSION, profile: { ...p, worldBoss: { weeks } }, run: null }), home, lookup, MAPS);
     expect(bad([{ ...w, attempts: rules.attempts + 1 }])).toThrow();
     expect(bad([{ ...w, claimed: [] }])).toThrow(); // p-2 reached but unpaid
     expect(bad([{ ...w, attempts: 1, claimed: ['p-2'] }])).toThrow(); // paid before it was reached
-    expect(bad([{ ...w, best: w.damage + 1 }])).toThrow();
+    expect(bad([{ ...w, legacy: { ...w.legacy!, best: w.legacy!.damage + 1 } }])).toThrow();
     expect(bad([{ ...w, week: W - 2 }, w])).toThrow(); // not consecutive
     expect(bad([{ ...w, claimed: ['p-2', 's-77'] }])).toThrow();
   });

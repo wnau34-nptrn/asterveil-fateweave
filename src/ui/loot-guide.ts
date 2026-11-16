@@ -1,6 +1,6 @@
 import {bossGuide,bossNames,startBossPlan} from './boss-equipment';
 import {BOSS_POWERS,isBossPower} from '../core/world/boss-equipment';
-import type {BossPower} from '../core/battle/types';
+import type {CharmPower as BossPower} from '../core/battle/types';
 import type {HuntPlan,MapDefinition,Profile} from '../core/world/types';
 import {startHunt} from '../core/world/targeted-loot';
 import {heroText,setText} from './th';

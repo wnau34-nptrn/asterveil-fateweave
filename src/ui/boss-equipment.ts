@@ -2,9 +2,11 @@ import {BOSS_POWERS,startBossPlan} from '../core/world/boss-equipment';
 import type {BossPlan,MapDefinition} from '../core/world/types';
 import type {BossPower,HeroDefinition} from '../core/battle/types';
 
-export const bossNames:Record<BossPower,string>={aegis:'ตราพิทักษ์ผู้คุม',focus:'เศษแกนรอยแยก',lantern:'ประทีปผนึก'};
+export const bossNames:Record<BossPower,string>={aegis:'ตราพิทักษ์ผู้คุม',focus:'เศษแกนรอยแยก',lantern:'ประทีปผนึก',bulwark:'เกราะศิลาไททัน',breaker:'ถุงมือปีกผลึก',reaper:'มงกุฎด้ายขาด'};
 export function bossDescription(power:BossPower,amount:number):string {
-  return ({aegis:`ครั้งแรกต่อรอบที่เสีย HP จากการโจมตีศัตรูและยังยืนอยู่ ได้โล่ขั้นต่ำ ${amount} หลังรับ hit นั้น ไม่กันตายและไม่ย้อนลดดาเมจ`,focus:`ครั้งแรกต่อรอบที่โจมตีหรือใช้สกิลดาเมจเป้าหมายเดี่ยวใส่ศัตรูติดตรา เพิ่มดาเมจ ${amount} เฉพาะเป้าหมายหลัก ไม่เพิ่มดาเมจหมู่/รอง/สวนกลับ`,lantern:`ครั้งแรกต่อรอบที่ใช้ Heal ฟื้น HP ให้เพื่อนคนอื่นจริง มอบโล่ขั้นต่ำ ${amount} หลังผลปกติ ไม่ทำงานกับ HP เต็ม รักษาตัวเอง Prayer หรือเพลง`})[power];
+  return ({aegis:`ครั้งแรกต่อรอบที่เสีย HP จากการโจมตีศัตรูและยังยืนอยู่ ได้โล่ขั้นต่ำ ${amount} หลังรับ hit นั้น ไม่กันตายและไม่ย้อนลดดาเมจ`,focus:`ครั้งแรกต่อรอบที่โจมตีหรือใช้สกิลดาเมจเป้าหมายเดี่ยวใส่ศัตรูติดตรา เพิ่มดาเมจ ${amount} เฉพาะเป้าหมายหลัก ไม่เพิ่มดาเมจหมู่/รอง/สวนกลับ`,lantern:`ครั้งแรกต่อรอบที่ใช้ Heal ฟื้น HP ให้เพื่อนคนอื่นจริง มอบโล่ขั้นต่ำ ${amount} หลังผลปกติ ไม่ทำงานกับ HP เต็ม รักษาตัวเอง Prayer หรือเพลง`,
+    // P11-05 trio items: placeholder wording until the step-4 UI (the numbers come from the rules).
+    bulwark:`ครั้งแรกต่อรอบที่การโจมตีศัตรูครั้งเดียวทำให้เสีย HP มาก (หลังการลดทั้งหมด) และยังยืนอยู่ ได้โล่ขั้นต่ำ ${amount}`,breaker:`ครั้งแรกต่อรอบที่โจมตีเป้าที่เลือกซึ่งถูกขัดจังหวะรอบนี้ หรือกำลังจะชาร์จ เพิ่มดาเมจ ${amount}`,reaper:`ครั้งแรกต่อรอบที่กำจัดศัตรูที่ไม่ใช่บอส ฟื้น HP ${amount} ส่วนที่เกินเป็นโล่`})[power];
 }
 export function heroBossEffect(h:HeroDefinition):string {
   const boss=h.gear?.boss;if(!boss)return '';
