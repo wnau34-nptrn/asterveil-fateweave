@@ -1,6 +1,10 @@
 ## 2026-11-16 — Game day reset at 06:00 Bangkok (Opus; branch claude/day-reset-6am)
 - Owner: "เวลารีเซ็ตวัน ตั้งไว้ 6 โมงเช้า". `GAME_DAY_RESET_HOUR = 6` in `src/server/ledger.ts` (offset UTC+7−6h; the server day, the Monday week and the World Boss week start 06:00 Bangkok = 23:00 UTC). Offline device day in `game-shell.ts` `today()` also turns at 06:00 local. No rule/number/save change.
 - Tests: `server-ledger` boundary checks updated (05:59 = previous day, 23:00 UTC start); server/world-boss/shard unit tests pass; browser specs `quest-board-p05`/`world-boss-p11` use the same 06:00 day. Docs: LEDGER_P09_TH.md, CURRENT_STATE.md.
+## 2026-11-16 — P12 owner decisions OD-46: external test T = 14 Dec (Opus; branch claude/p12-owner-decisions)
+- Owner: "ให้บัญชี guest ก็พิมพ์ได้ ที่เหลืออนุมัติตามแนะนำ" → OD-46: T = 2026-12-14, `CHAT_WRITE=all`, Cloudflare Free first, 10–20 known invitees, draft numbers kept, load workflow added to `main`.
+- `cloudflare/wrangler.json`: `LEGACY_IMPORT_UNTIL` = 2026-11-30T00:00:00+07:00 (T−14, closes itself); T−7 switch to `closed` is the next session's job. Checklist + CURRENT_STATE updated; `git diff --check`.
+- Open (owner): privacy contact text, `accountId` for the admin row, Google consent Publish before 30 Nov.
 
 ## 2026-11-15 — P12 external-test readiness: Pages browser gate, staging load test, owner checklist (Opus; branch claude/p12-external-test-readiness)
 - No owner comment on chat PR #261. No rule/save/number change (save v64); no payments, PvP or Co-op.
