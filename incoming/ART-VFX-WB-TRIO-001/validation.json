@@ -1,0 +1,1219 @@
+{
+  "task": "ART-VFX-WB-TRIO-001",
+  "base_commit": "eb0d60b7284300bcc1872172da89b6c0a1a14f5b",
+  "pillow": "12.3.0",
+  "files": {
+    "NOTES.md": {
+      "sha256": "8d94d5a3ebc334b9bd66b8adba4bb582ef85a39aa64d3d4122959efff3d0ec39",
+      "bytes": 14544
+    },
+    "alternatives/call-the-court-r2/layers/call-the-court-peak.png": {
+      "sha256": "0ebb313b256f82c416f0406cbaf3dbb26175a637bd781b9892d60c2d5fc04e77",
+      "bytes": 52729,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "alternatives/call-the-court-r2/layers/call-the-court-prepare.png": {
+      "sha256": "0fdace52a3bd850f65c421be9773eff1699e6c15130cb320a68991f0b7b05b49",
+      "bytes": 45520,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "alternatives/call-the-court-r2/layers/call-the-court-settle.png": {
+      "sha256": "ec9681ab6c529c383a2671eee73662c1c99f1369b36ffbfed35550ac438afe3c",
+      "bytes": 9469,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "alternatives/wing-gathering-r2/layers/wing-gathering-peak.png": {
+      "sha256": "6ff56c3f24b3bb15f11506e03749ddfa5ae8fab1dc5464e3f22ccf3289409375",
+      "bytes": 77053,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "alternatives/wing-gathering-r2/layers/wing-gathering-prepare.png": {
+      "sha256": "fb243797cab4e210ee68a2e49572fa3208dc04c5d3469a32a115e481e37f255c",
+      "bytes": 72438,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "alternatives/wing-gathering-r2/layers/wing-gathering-settle.png": {
+      "sha256": "67b4c26352d00b1d9c5d3eb8610881ea352d91810991675bf7b7ce63a63354c4",
+      "bytes": 15255,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "build_handoff.py": {
+      "sha256": "63f566839c153473df7293a6ba7cc83f1825fd0c439eaf9d1185ab52679a7665",
+      "bytes": 19163
+    },
+    "effects-specs.json": {
+      "sha256": "a9ab4cff1ca637721dd890a40aae73ecd24fc7f2f811db06cfcde150b909bd5e",
+      "bytes": 11040
+    },
+    "generation-prompts.json": {
+      "sha256": "816821707389317ee46f99c935537a18cf7fe233dca54deb098524052bd72ff9",
+      "bytes": 40367
+    },
+    "layers/call-the-court-peak.png": {
+      "sha256": "918e72d9570b7101af5d8a55e177b17543176539021b094f0874cdb3c9ce9c97",
+      "bytes": 76369,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/call-the-court-prepare.png": {
+      "sha256": "686e08cbe00ebb85dbb27272879605d4be7772ae48f6cef4c2f970a4250319c8",
+      "bytes": 29766,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/call-the-court-settle.png": {
+      "sha256": "09c5dbbe9ca8549a54604b6c66dc9f5ec39eb72cade815d341dd10b941e180a2",
+      "bytes": 10797,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/fate-lash-peak.png": {
+      "sha256": "f206a02715bda2473c29a91355ef79608ee773cb95386a9584bdb30f3604c061",
+      "bytes": 57394,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/fate-lash-prepare.png": {
+      "sha256": "5c665f620e4d6faf654ea3833a5e58d45bac72f6a48701fd7469c71000ecdcee",
+      "bytes": 42056,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/fate-lash-settle.png": {
+      "sha256": "8435d7176891d902b9c7e85b4ad6108b3dce2d767b8a2bc328d63c4bc7424516",
+      "bytes": 6825,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/fault-awakening-peak.png": {
+      "sha256": "57cc397bc30219797e70ae4d5db22a076cd20d2b8ea4fb2d3ff3604198075afe",
+      "bytes": 67008,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/fault-awakening-prepare.png": {
+      "sha256": "ad96d11213542cd2e8aa2c5d29391aaac086003ae42dfdeb6ebaafdf10173616",
+      "bytes": 52834,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/fault-awakening-settle.png": {
+      "sha256": "d1e1a5a04e6e050159751dee22959265324ba1ec9ac68eacde4e6e53e84b2c20",
+      "bytes": 8839,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/mountain-fall-peak.png": {
+      "sha256": "89aa115374d16a6d7d1fb12ba2a8fa7f77b7adeb255c59452b8d92ff24ba6ab1",
+      "bytes": 73736,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/mountain-fall-prepare.png": {
+      "sha256": "1a80699b958ff8d634128ec0c699db81ae95f489212d8ceee9fed099d28f00f4",
+      "bytes": 61180,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/mountain-fall-settle.png": {
+      "sha256": "6ed1facaf485a1143630e435b3a3775707b5a9ff5fc53bed7ade2119f0fbdc4a",
+      "bytes": 7125,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/rift-quake-peak.png": {
+      "sha256": "4a819695aafbd5b9bcdffe171bbdecf73486ca00243e4aefda8a2f36edb3f025",
+      "bytes": 57349,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/rift-quake-prepare.png": {
+      "sha256": "425fa88226052237605553854f5a93fae2da3f07ff6b525c138c8a60955b7661",
+      "bytes": 26404,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/rift-quake-settle.png": {
+      "sha256": "aa77c3be5ba9c7bafdf39cf89dd3d041772564663868c5083c52a445ed992c99",
+      "bytes": 10117,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/severed-crown-peak.png": {
+      "sha256": "afe1b572615a9d85b8e6ca4b82ffdb9e4070a46c7db8a44395ab90042c4c9489",
+      "bytes": 55423,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/severed-crown-prepare.png": {
+      "sha256": "3fc012d6f9fc969895bc1a1149b16a8986f01920be729ba707424b9f3a84241a",
+      "bytes": 39472,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/severed-crown-settle.png": {
+      "sha256": "8c68f360e69a2c7d86bd8fe55fbd27bc20d7e8b5fe6bc47cda50b52b78b96b1d",
+      "bytes": 9980,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/severing-bolt-peak.png": {
+      "sha256": "2182419e9ea69c6c65e10ab1a217274ab00fd2c648301e3a706ed1c6d61fd26f",
+      "bytes": 21147,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/severing-bolt-prepare.png": {
+      "sha256": "1fa415c3c32154dd883b0498dc0a4dee66c956b18bec97ad96d60993ff1587e8",
+      "bytes": 20591,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/severing-bolt-settle.png": {
+      "sha256": "4c469c601405c7ad3cf130928c3174af52ebfb4d5a07956e5c3ff8348df4e3b8",
+      "bytes": 11284,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/shadow-tide-peak.png": {
+      "sha256": "e286e00f11607f59926857a77a54afe47e2a56f9f9d8b7d64ec844d9ca8b1572",
+      "bytes": 28175,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/shadow-tide-prepare.png": {
+      "sha256": "7855847d06ca2972bfaacda9243336fccc2536950469811ebcfe2345ae80b8d6",
+      "bytes": 12067,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/shadow-tide-settle.png": {
+      "sha256": "d839d9691b9130520d87bffa45ad07a05403dfb1df7bd48bf49fdda5883d7def",
+      "bytes": 5337,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/sky-rend-peak.png": {
+      "sha256": "fb1524fbd1442d15d7b42538d8883a4b3b31a16e360b2692148c93289f1453b2",
+      "bytes": 62852,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/sky-rend-prepare.png": {
+      "sha256": "007d3ce838e6a6a70bb628074844098eda906454c7a4f7e312293918f401427b",
+      "bytes": 36872,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/sky-rend-settle.png": {
+      "sha256": "975970f92153d86a7eec739d26d243a0417918ea8739822577dae3fd9665b42a",
+      "bytes": 11233,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/titan-gathering-peak.png": {
+      "sha256": "2c336cc82ac52b85f0f0187f1a9724073d1928655b8f0bd66b9d948080b124e5",
+      "bytes": 114386,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/titan-gathering-prepare.png": {
+      "sha256": "2f568fa8571170d742f9e336ac5bbb009104c8ab30dfb36699850c0b3036d877",
+      "bytes": 52384,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/titan-gathering-settle.png": {
+      "sha256": "18dbc0b257f8aba4bdb1056372b27be4006504b8f942b3186b45b833dc980545",
+      "bytes": 7270,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/wing-gathering-peak.png": {
+      "sha256": "53e5b8ab31d3dfa64961ec21fe5d36f00899b0cdd011b98835f3ea890e6df3a2",
+      "bytes": 72854,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/wing-gathering-prepare.png": {
+      "sha256": "0ed9730955f7c202a189d6c933a31f7456539c16429b1a901293f35a7ed6c30e",
+      "bytes": 53423,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/wing-gathering-settle.png": {
+      "sha256": "07ec324eaf89ca97a4012b12e89b11e5ef82b1b635c5563936b10a159c57695d",
+      "bytes": 7004,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/wing-gust-peak.png": {
+      "sha256": "7ab09a421164e74d4095332790a97e707f6b295db50ed6fb0ddd8e1c61a77ee9",
+      "bytes": 48529,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/wing-gust-prepare.png": {
+      "sha256": "4c22695b25020fd98051599788c19b05fab9c358139b6cb6c3a8d8a986c7ad36",
+      "bytes": 46388,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/wing-gust-settle.png": {
+      "sha256": "13da6b6423247f84ab39589e6bb0be312472f51a718378788bf1624e8cd9bb40",
+      "bytes": 8368,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/worldshard-dive-peak.png": {
+      "sha256": "ae664e5749f5db8bafea97ac68d17b14b6ec42c3fdb8aa644efbf033e713a80d",
+      "bytes": 57201,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/worldshard-dive-prepare.png": {
+      "sha256": "585590373e090ee61765bc91c256735e0f7198858c903f4bd185175a5901c3ce",
+      "bytes": 40853,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/worldshard-dive-settle.png": {
+      "sha256": "c317fb2937221c000f2120f2771ba468e75d4b20725399a728308535688e502e",
+      "bytes": 5444,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers.json": {
+      "sha256": "2c7302a7f8f013d349bc46bb77852a8003359631df29763112c54dde70d64675",
+      "bytes": 279089
+    },
+    "preview-390.png": {
+      "sha256": "c98bd0f93d3612adc059b4f13ea4badc29971d2404a87a586bcfdae46e7f548b",
+      "bytes": 140616,
+      "size": [
+        390,
+        666
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "preview-peaks-390.png": {
+      "sha256": "eb1b8541d899ec81ca0482103499f5c2d76ded28d8f3f82d86ba7b6cabe24246",
+      "bytes": 205510,
+      "size": [
+        390,
+        1366
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "production-sources.json": {
+      "sha256": "7a495d46c7536e917ec2a3211a8a9c7c56ff23a968941ed862f8f195cea25fdf",
+      "bytes": 5314
+    },
+    "prompts.json": {
+      "sha256": "bb583fdaa765df895057002cf361bbcca828d1802192f9fe5a383dfd58f84ad3",
+      "bytes": 234
+    },
+    "requirements.txt": {
+      "sha256": "0200fcb77cc5dd684f8dfc257329fa42084ec26ba116693a21447ee4f7855981",
+      "bytes": 28
+    },
+    "review_boards.py": {
+      "sha256": "11fbd42a71e17f178d5ae3fff18087f0f11f0e7a422392f6b294ded23448d3d0",
+      "bytes": 13986
+    },
+    "seeds/battle_riftline.webp": {
+      "sha256": "6e4114f65a7ab521e310a6e6baa9687205b1527dfb272542b0c550aed4ae72ac",
+      "bytes": 477024,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "seeds/context.json": {
+      "sha256": "076f7091dd63d65991cebf70d8d39af8c0209b99a76d1f93d2be1b29edb855ec",
+      "bytes": 626
+    },
+    "seeds/gold-hero.png": {
+      "sha256": "0e888a0d889c61f2e4005361d43121e13478944cd3438a9ed6ca3578ee0dbaff",
+      "bytes": 420757,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/pose-provenance.json": {
+      "sha256": "c2c3ae7058fbd73dea1bb3e7e07ed7592c287cf99f5c488a4ffaa910ebc50ecd",
+      "bytes": 3883
+    },
+    "seeds/poses/call-the-court.png": {
+      "sha256": "da2755b106858086d95b061315f02a1291af7a22105f3e606fc10a4a8568b43f",
+      "bytes": 571271,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/poses/fate-lash.png": {
+      "sha256": "1f31c68dde9ee68c2a12c1ae7ffab77a810c50aa93db267b8caccef610ab2d89",
+      "bytes": 506334,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/poses/fault-awakening.png": {
+      "sha256": "275356a21b8ff1b0158878586d2d7455f99e54c7730333aa960230a9aa1d3c92",
+      "bytes": 727327,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/poses/mountain-fall.png": {
+      "sha256": "15ce57261e61912578b2e9f8461cb64640dc9ab330189a3e33bf19d36207e239",
+      "bytes": 639275,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/poses/rift-quake.png": {
+      "sha256": "1ce84c9ebcd6b8e463794ce1be5d3023186c1efa9dfd373fbd1b69b7181270e0",
+      "bytes": 775288,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/poses/severed-crown.png": {
+      "sha256": "4a420b38a72f7f5ad1b948e3de4cae1c9e170df481483dbb4e52114e646d5dbf",
+      "bytes": 598496,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/poses/severing-bolt.png": {
+      "sha256": "d365ebd38d58fb3c92c1ec1e20334e47fa5bccf90888ea1bf0f6245ed795d4b9",
+      "bytes": 532967,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/poses/shadow-tide.png": {
+      "sha256": "a42594e0755c344badc3a8f35168789ab7666a484e117894135175acc9e13490",
+      "bytes": 529649,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/poses/sky-rend.png": {
+      "sha256": "164809ed5e9229ec97db746f816eac34363c33c037e53d52f6b52c1da907a860",
+      "bytes": 862777,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/poses/titan-gathering.png": {
+      "sha256": "b2e83a55411398db50ba0746bad046892abaac0e41557e6241df04abb49d2bd9",
+      "bytes": 674580,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/poses/wing-gathering.png": {
+      "sha256": "ac5cee90e8d47f9917b4ab1300fd78d74cce7c2abbea32a46cbf127ec0f346c8",
+      "bytes": 601470,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/poses/wing-gust.png": {
+      "sha256": "4fafdb69c3d76957c689870e90e350657498e3ba921fa5b56785620610ccbd30",
+      "bytes": 858568,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/poses/worldshard-dive.png": {
+      "sha256": "5640efbdb8a9f882c716c27413ac9712823c073c672da0aca6225eeb87d4c69a",
+      "bytes": 737541,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/rift-wisp.png": {
+      "sha256": "214dc76cac21f14f3448e669f5bd0e933a085ace60fb3cd3e01cff4d1c3e9038",
+      "bytes": 134955,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/seed-a.png": {
+      "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97",
+      "bytes": 927372,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/seed-b.png": {
+      "sha256": "c3fe15c71d82c7cddc09df874fb9c21480bf2168e7b16248d692878ffb7ec214",
+      "bytes": 904214,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/seed-c.png": {
+      "sha256": "47e5fbbaf06a18ee56a7c8c46771e00f65e13df7998b8c3d78c5cfa98f160105",
+      "bytes": 596229,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/sentinel.png": {
+      "sha256": "33329874d21ddd767790ac55d23b43cfb07a7272dc6f46985c1021adb64f5c2b",
+      "bytes": 492946,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/shard-crawler.png": {
+      "sha256": "ff87cb5db070fcac8fbad7ae195a1986b7d84c5fde53af1039b82dc71b200a4e",
+      "bytes": 213846,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/style/call-the-rift-peak.png": {
+      "sha256": "2191b3320f0d0790ecc4a8dc5114f2dffd69aa6aae1a051b5cd0acc8a525634a",
+      "bytes": 47873,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/style/rift-awakening-peak.png": {
+      "sha256": "07170f0f705ba792973c9cd023cadbe2505159ac586323fb0af0deaf00b447f6",
+      "bytes": 51858,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/style/rift-cataclysm-prepare.png": {
+      "sha256": "92df136f5c9ce978a47d964bd9afe752fd8c84a32688c6a56cfb165d24ef536e",
+      "bytes": 47160,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/style/rift-gathering-prepare.png": {
+      "sha256": "e9bc5dc637167aca415a9c15b777e243fc26aa8f51ef1f80b479571604deecb1",
+      "bytes": 56380,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/style/rift-wave-peak.png": {
+      "sha256": "3364adf18465c5fbdbe1e4c3b5cd8e8f39960a32b43257cb5c3ae5a020967499",
+      "bytes": 61497,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds.json": {
+      "sha256": "993242fd47e8416cc3ff8503212d1ab50523d13ed85d6eedade208ad549f0df8",
+      "bytes": 4934
+    },
+    "source/call-the-court-r2.png": {
+      "sha256": "4d0e3cbb4b2683c9e4e6c8a7ac3d9c9bbf7df29c6ed104c2de995a1ae85a466f",
+      "bytes": 601292,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/call-the-court.png": {
+      "sha256": "987497bd1dc4ded935b40c660b8a820c3a6e613c6e36797779efcdf8c0ca8f28",
+      "bytes": 634469,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/fate-lash.png": {
+      "sha256": "2bd877c128e871bc6ecc46ae1fea0d1c4ba3371640a5c7a1cca8a012af794d49",
+      "bytes": 488463,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/fault-awakening.png": {
+      "sha256": "f5b106917f3dff49a31cb504a751f4aaeecf117c784f4ccfe082f0a58c70260c",
+      "bytes": 507451,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/mountain-fall-r2.png": {
+      "sha256": "4707d7d51466127224158854cc2d1d234c49652f4338f555fbb711161fd6ea15",
+      "bytes": 636955,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/mountain-fall.png": {
+      "sha256": "bda45fbd5358dbb423a32dbb7d13597288e9d89ac1d60c195451ff4c8ed6962e",
+      "bytes": 1506730,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/rift-quake.png": {
+      "sha256": "78d3b808ab8628d46eebba2778f8fba2aaa8d67db7b9a4979c6dba010ec07068",
+      "bytes": 402616,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/severed-crown.png": {
+      "sha256": "5a00f0b538f977de3cd71fa97b817b61d3c39f84cc456346b68100eeb922bc34",
+      "bytes": 859708,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/severing-bolt-r2.png": {
+      "sha256": "dcb38b2db91f8b09644c79c49ef8507d4b949e338c5f48c5694746a85bf72cf1",
+      "bytes": 323231,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/severing-bolt.png": {
+      "sha256": "97607c8bc3a7fb1292ebe835568619d81529315a9f19e2d47e9fa394863a13fb",
+      "bytes": 295642,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/shadow-tide.png": {
+      "sha256": "51a64eb8bfe0b3191146ca0237932a1fb7cbea721166ad15c8f6cc19b66f881f",
+      "bytes": 517970,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/sky-rend.png": {
+      "sha256": "3d05d9e784070c6b88c64b6037944aaacdf460d6a325bdf7f23ff13536da74ab",
+      "bytes": 884794,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/titan-gathering.png": {
+      "sha256": "06a8742a661be09cee4a918b123ac69d38793faa5e56549706d3f6dea49d9368",
+      "bytes": 496374,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/wing-gathering-r2-clean.png": {
+      "sha256": "816aa208fd4a11bc4b6fbe2a89e5a2d497f3a3b538a05497e4f7338e0c190dd1",
+      "bytes": 851677,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/wing-gathering-r2.png": {
+      "sha256": "49e3cb8571fe53327d0161445b6c74cc1545cb0e732deac513cf817cf1d92344",
+      "bytes": 1580696,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/wing-gathering.png": {
+      "sha256": "bce0c43d7df5c02de85ef17771c3b1fb9090b84614a979a2ecdb257ed86b2ed5",
+      "bytes": 610428,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/wing-gust.png": {
+      "sha256": "a51a932611c522ee7b82d501f3aa6b6e701a8e1453c9a43bcdbf43dabde046b9",
+      "bytes": 619658,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/worldshard-dive.png": {
+      "sha256": "9c837cdd285d29c5fc3d8e5520d4854e572b8950937634a76797cd3af80a5316",
+      "bytes": 404105,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboard-audit.json": {
+      "sha256": "2cfde1d90777f619ee9b9000cb391ca55bf5317ce1de3fd43858dbd801e29c3a",
+      "bytes": 186943
+    },
+    "storyboards/call-the-court-390.png": {
+      "sha256": "61e5ec7b7bcc9bbe624ec3e8fbb8fed1ab8111bdc0d0ff05fa58d35114b2e56c",
+      "bytes": 867746,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/call-the-court-r2-390.png": {
+      "sha256": "0332bf14037da2d89f2b077697f6008c95170069fe29bb46726fb64b0892fb83",
+      "bytes": 868564,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/contrast-kragmor-390.png": {
+      "sha256": "811282563c2e29a4f02725ef622bbefcd9ea364dbded14c6ff0cab48feb035bc",
+      "bytes": 375653,
+      "size": [
+        390,
+        1368
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/contrast-morvane-390.png": {
+      "sha256": "5044ad6b2d4c75f04e3d42f9d447b9aefff2e75a6745375dd79c79c663503706",
+      "bytes": 431919,
+      "size": [
+        390,
+        2020
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/contrast-valdrakk-390.png": {
+      "sha256": "02a26bede9ad27bbe85c54e8ecb44609931754da2e44d14df42a67c6d86b8971",
+      "bytes": 423790,
+      "size": [
+        390,
+        1694
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/court-vs-rift-390.png": {
+      "sha256": "07e1e02c7e7fe48e744a40ae79ba1dea0c26ced5046ffe1ed82e9ca84d0be371",
+      "bytes": 146805,
+      "size": [
+        390,
+        666
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/fate-lash-390.png": {
+      "sha256": "738627a5470986c01e4b4bbd225994651c406a903818bbf700c41edb318fc834",
+      "bytes": 815969,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/fault-awakening-390.png": {
+      "sha256": "bfd13b7e8ab0696732daef35354766f93d4e563b77fa8671d59a9b081390a37d",
+      "bytes": 850069,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/mountain-fall-390.png": {
+      "sha256": "5430c73cc1c1ebae1f11579abefffee1c151f5808687ed5bebe82af8a8bff3c5",
+      "bytes": 846824,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/rift-quake-390.png": {
+      "sha256": "7574d841de906dac06db326fbd9c9e64a4797fd060366c670387907072b00fd3",
+      "bytes": 839399,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/severed-crown-390.png": {
+      "sha256": "671466e70589191cf42e145609e95d70fecd058ca1909b6d41de94fbdab19e89",
+      "bytes": 821161,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/severing-bolt-390.png": {
+      "sha256": "34eb7a3f52152689a53f55d6078291f528c76ca81d863315bd3e3e73062a5cfb",
+      "bytes": 815832,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/severing-vs-lash-390.png": {
+      "sha256": "325ea653b5ead79810a83f0c00c8feae7e0e4b2fa12a5a42da011fc602f5581b",
+      "bytes": 99627,
+      "size": [
+        390,
+        474
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/shadow-tide-390.png": {
+      "sha256": "ae02471d0ec26be90c146dc87fab1ceb1641d5d04a27dd1a344998abf7824c78",
+      "bytes": 803999,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/sky-rend-390.png": {
+      "sha256": "e2a971a576824ba036c1de37b0e1f47f1b14812bdca875f459a793d1ea0c0c3a",
+      "bytes": 854212,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/telegraphs-390.png": {
+      "sha256": "c98bd0f93d3612adc059b4f13ea4badc29971d2404a87a586bcfdae46e7f548b",
+      "bytes": 140616,
+      "size": [
+        390,
+        666
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/titan-gathering-390.png": {
+      "sha256": "09d77fcba67689f13db2a93603da5aa67d2270c54a4d2d4db0fccaf413c91699",
+      "bytes": 847608,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/waiting-holds-390.png": {
+      "sha256": "11ebfca543de13435d6c869bde156e8e535c9f631a20aa4dc87c3b13e6cd939a",
+      "bytes": 485585,
+      "size": [
+        390,
+        780
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/wing-gathering-390.png": {
+      "sha256": "b25179d1081916d2a73874605aaeb81230fc2d8a048048bcbea8d20968f2cba1",
+      "bytes": 844528,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/wing-gathering-r2-390.png": {
+      "sha256": "bc634d3ad805f5869925aa19931a9eca84f176469b52e5bc77d5fabfe5d4b9e9",
+      "bytes": 844837,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/wing-gathering-variants-390.png": {
+      "sha256": "6aa75a8e11985562bda5ac53d90bba731c30305cb95741fee28329510934b845",
+      "bytes": 96071,
+      "size": [
+        390,
+        474
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/wing-gust-390.png": {
+      "sha256": "9992a9db4d6065da910df1bbaf4e9c24fecee65d8cb3b2d973cafc4027e91021",
+      "bytes": 851902,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "storyboards/worldshard-dive-390.png": {
+      "sha256": "9676ef650e11cd14f2e7420c7f8a7d08cab5301f2e991f43434f601f336f859c",
+      "bytes": 840421,
+      "size": [
+        390,
+        1372
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    }
+  },
+  "self_excluded": true,
+  "self_receipt": "validation.json SHA recorded in PR; --git-ref separately compares manifest bytes",
+  "checks": {
+    "primary_moves": 13,
+    "primary_layers": 39,
+    "alternative_layers": 6,
+    "straight_rgba_256": true,
+    "minimum_alpha_margin_px": 12,
+    "storyboard_width": 390,
+    "masked_remaining_face_hp_name_intent_overlap": 0,
+    "normal_blend": true,
+    "runtime_tested": false,
+    "owner_visual_motion_approval": "pending"
+  },
+  "mask_totals": {
+    "panels": 47,
+    "overlap_pixels_before_removed_by_stencils": 11017,
+    "remaining_overlap": 0
+  },
+  "mask_limit": "Zero remaining overlap is after illustrative effect-only stencils, not naturally clear runtime placement. Every removed-pixel count retained."
+}

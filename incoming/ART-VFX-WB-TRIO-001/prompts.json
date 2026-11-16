@@ -1,0 +1,1 @@
+{"task":"ART-VFX-WB-TRIO-001","exact_prompts":"generation-prompts.json","source_policy":"Every generator output retained byte-for-byte in source/. Exact prompts, ordered references and selection recorded in generation-prompts.json."}

@@ -1,0 +1,8264 @@
+{
+  "boards": [
+    {
+      "design": "titan-gathering",
+      "file": "storyboards/titan-gathering-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 1985,
+          "masked_pixels": 103,
+          "masked_fraction": 0.05188916876574307,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 103
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "kragmor",
+              "kind": "name",
+              "xyxy": [
+                240,
+                186,
+                326,
+                200
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                202,
+                326,
+                209
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                167,
+                366,
+                184
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "face",
+              "xyxy": [
+                245,
+                245,
+                295,
+                278
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                222,
+                116,
+                236
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                238,
+                116,
+                245
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                249,
+                101,
+                290
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                224.6875,
+                297.796875
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                185,
+                258
+              ]
+            }
+          ],
+          "route": "charge",
+          "anchor": "caster.forward_chest",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/seed-a.png",
+          "caster_chest_xy": [
+            284.6875,
+            297.796875
+          ]
+        },
+        {
+          "overlay_pixels_before": 7590,
+          "masked_pixels": 2218,
+          "masked_fraction": 0.2922266139657444,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 2218
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "kragmor",
+              "kind": "name",
+              "xyxy": [
+                240,
+                622,
+                326,
+                636
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                638,
+                326,
+                645
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                603,
+                366,
+                620
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "face",
+              "xyxy": [
+                240,
+                654,
+                304,
+                713
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                652,
+                116,
+                666
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                668,
+                116,
+                675
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                679,
+                101,
+                720
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                270.39766158170113,
+                722.7863725343823
+              ],
+              "width": 110,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                215,
+                668
+              ]
+            }
+          ],
+          "route": "charge",
+          "anchor": "caster.chest",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/poses/titan-gathering.png",
+          "caster_chest_xy": [
+            270.39766158170113,
+            722.7863725343823
+          ]
+        },
+        {
+          "overlay_pixels_before": 142,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "kragmor",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1046,
+                326,
+                1060
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1062,
+                326,
+                1069
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1027,
+                366,
+                1044
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "face",
+              "xyxy": [
+                245,
+                1105,
+                295,
+                1138
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                1082,
+                116,
+                1096
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                1098,
+                116,
+                1105
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                1109,
+                101,
+                1150
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                284.6875,
+                1157.796875
+              ],
+              "width": 54,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                258,
+                1131
+              ]
+            }
+          ],
+          "route": "charge",
+          "anchor": "caster.chest",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/seed-a.png",
+          "caster_chest_xy": [
+            284.6875,
+            1157.796875
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "mountain-fall",
+      "file": "storyboards/mountain-fall-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 2291,
+          "masked_pixels": 30,
+          "masked_fraction": 0.013094718463553033,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 30
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "kragmor",
+              "kind": "name",
+              "xyxy": [
+                240,
+                186,
+                326,
+                200
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                202,
+                326,
+                209
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                167,
+                366,
+                184
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "face",
+              "xyxy": [
+                245,
+                245,
+                295,
+                278
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                222,
+                116,
+                236
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                238,
+                116,
+                245
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                249,
+                101,
+                290
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                224.6875,
+                297.796875
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                185,
+                258
+              ]
+            }
+          ],
+          "route": "single",
+          "anchor": "caster.forward_chest",
+          "fixture_actual_targets": [
+            "h1"
+          ],
+          "body_pose": "seeds/seed-a.png",
+          "caster_chest_xy": [
+            284.6875,
+            297.796875
+          ]
+        },
+        {
+          "overlay_pixels_before": 6671,
+          "masked_pixels": 708,
+          "masked_fraction": 0.10613101484035377,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 708
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "kragmor",
+              "kind": "name",
+              "xyxy": [
+                240,
+                650,
+                326,
+                664
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                666,
+                326,
+                673
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                631,
+                366,
+                648
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "face",
+              "xyxy": [
+                240,
+                654,
+                304,
+                713
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                652,
+                116,
+                666
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                668,
+                116,
+                675
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                679,
+                101,
+                720
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                73.0,
+                781.8359375
+              ],
+              "width": 130,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                8,
+                675
+              ]
+            }
+          ],
+          "route": "single",
+          "anchor": "target.feet",
+          "fixture_actual_targets": [
+            "h1"
+          ],
+          "body_pose": "seeds/poses/mountain-fall.png",
+          "caster_chest_xy": [
+            264.2002092746345,
+            748.7586039124553
+          ]
+        },
+        {
+          "overlay_pixels_before": 207,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "kragmor",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1046,
+                326,
+                1060
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1062,
+                326,
+                1069
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1027,
+                366,
+                1044
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "face",
+              "xyxy": [
+                245,
+                1105,
+                295,
+                1138
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                1082,
+                116,
+                1096
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                1098,
+                116,
+                1105
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                1109,
+                101,
+                1150
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                73.0,
+                1211.8359375
+              ],
+              "width": 60,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                43,
+                1163
+              ]
+            }
+          ],
+          "route": "single",
+          "anchor": "target.feet",
+          "fixture_actual_targets": [
+            "h1"
+          ],
+          "body_pose": "seeds/seed-a.png",
+          "caster_chest_xy": [
+            284.6875,
+            1157.796875
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "rift-quake",
+      "file": "storyboards/rift-quake-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 1068,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "kragmor",
+              "kind": "name",
+              "xyxy": [
+                240,
+                186,
+                326,
+                200
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                202,
+                326,
+                209
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                167,
+                366,
+                184
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "face",
+              "xyxy": [
+                245,
+                245,
+                295,
+                278
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                14,
+                186,
+                70,
+                200
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                14,
+                202,
+                70,
+                209
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                34,
+                213,
+                59,
+                238
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "name",
+              "xyxy": [
+                74,
+                186,
+                130,
+                200
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "hp",
+              "xyxy": [
+                74,
+                202,
+                130,
+                209
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "face",
+              "xyxy": [
+                94,
+                213,
+                119,
+                238
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "name",
+              "xyxy": [
+                134,
+                186,
+                190,
+                200
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "hp",
+              "xyxy": [
+                134,
+                202,
+                190,
+                209
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "face",
+              "xyxy": [
+                154,
+                213,
+                179,
+                238
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "name",
+              "xyxy": [
+                44,
+                302,
+                100,
+                316
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "hp",
+              "xyxy": [
+                44,
+                318,
+                100,
+                325
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "face",
+              "xyxy": [
+                64,
+                329,
+                89,
+                354
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "name",
+              "xyxy": [
+                106,
+                302,
+                162,
+                316
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "hp",
+              "xyxy": [
+                106,
+                318,
+                162,
+                325
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "face",
+              "xyxy": [
+                126,
+                329,
+                151,
+                354
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                283.0,
+                375.0
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                243,
+                309
+              ]
+            }
+          ],
+          "route": "all",
+          "anchor": "caster.feet",
+          "fixture_actual_targets": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5"
+          ],
+          "body_pose": "seeds/seed-a.png",
+          "caster_chest_xy": [
+            284.6875,
+            297.796875
+          ]
+        },
+        {
+          "overlay_pixels_before": 8778,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "kragmor",
+              "kind": "name",
+              "xyxy": [
+                240,
+                623,
+                326,
+                637
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                639,
+                326,
+                646
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                604,
+                366,
+                621
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "face",
+              "xyxy": [
+                240,
+                654,
+                304,
+                713
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                14,
+                616,
+                70,
+                630
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                14,
+                632,
+                70,
+                639
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                34,
+                643,
+                59,
+                668
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "name",
+              "xyxy": [
+                74,
+                616,
+                130,
+                630
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "hp",
+              "xyxy": [
+                74,
+                632,
+                130,
+                639
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "face",
+              "xyxy": [
+                94,
+                643,
+                119,
+                668
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "name",
+              "xyxy": [
+                134,
+                616,
+                190,
+                630
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "hp",
+              "xyxy": [
+                134,
+                632,
+                190,
+                639
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "face",
+              "xyxy": [
+                154,
+                643,
+                179,
+                668
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "name",
+              "xyxy": [
+                44,
+                732,
+                100,
+                746
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "hp",
+              "xyxy": [
+                44,
+                748,
+                100,
+                755
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "face",
+              "xyxy": [
+                64,
+                759,
+                89,
+                784
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "name",
+              "xyxy": [
+                106,
+                732,
+                162,
+                746
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "hp",
+              "xyxy": [
+                106,
+                748,
+                162,
+                755
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "face",
+              "xyxy": [
+                126,
+                759,
+                151,
+                784
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                42.0,
+                704.125
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                5,
+                643
+              ]
+            },
+            {
+              "actor_id": "h2",
+              "anchor_xy": [
+                102.0,
+                704.125
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                65,
+                643
+              ]
+            },
+            {
+              "actor_id": "h3",
+              "anchor_xy": [
+                162.0,
+                704.125
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                125,
+                643
+              ]
+            },
+            {
+              "actor_id": "h4",
+              "anchor_xy": [
+                72.0,
+                820.125
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                35,
+                759
+              ]
+            },
+            {
+              "actor_id": "h5",
+              "anchor_xy": [
+                134.0,
+                820.125
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                97,
+                759
+              ]
+            }
+          ],
+          "route": "all",
+          "anchor": "whole_hero_side.actual_target_feet",
+          "fixture_actual_targets": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5"
+          ],
+          "body_pose": "seeds/poses/rift-quake.png",
+          "caster_chest_xy": [
+            263.5411245870516,
+            730.5054583860692
+          ]
+        },
+        {
+          "overlay_pixels_before": 905,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "kragmor",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1046,
+                326,
+                1060
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1062,
+                326,
+                1069
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1027,
+                366,
+                1044
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "face",
+              "xyxy": [
+                245,
+                1105,
+                295,
+                1138
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                14,
+                1046,
+                70,
+                1060
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                14,
+                1062,
+                70,
+                1069
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                34,
+                1073,
+                59,
+                1098
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "name",
+              "xyxy": [
+                74,
+                1046,
+                130,
+                1060
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "hp",
+              "xyxy": [
+                74,
+                1062,
+                130,
+                1069
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "face",
+              "xyxy": [
+                94,
+                1073,
+                119,
+                1098
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "name",
+              "xyxy": [
+                134,
+                1046,
+                190,
+                1060
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "hp",
+              "xyxy": [
+                134,
+                1062,
+                190,
+                1069
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "face",
+              "xyxy": [
+                154,
+                1073,
+                179,
+                1098
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "name",
+              "xyxy": [
+                44,
+                1162,
+                100,
+                1176
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "hp",
+              "xyxy": [
+                44,
+                1178,
+                100,
+                1185
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "face",
+              "xyxy": [
+                64,
+                1189,
+                89,
+                1214
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "name",
+              "xyxy": [
+                106,
+                1162,
+                162,
+                1176
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "hp",
+              "xyxy": [
+                106,
+                1178,
+                162,
+                1185
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "face",
+              "xyxy": [
+                126,
+                1189,
+                151,
+                1214
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                42.0,
+                1134.125
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                21,
+                1100
+              ]
+            },
+            {
+              "actor_id": "h2",
+              "anchor_xy": [
+                102.0,
+                1134.125
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                81,
+                1100
+              ]
+            },
+            {
+              "actor_id": "h3",
+              "anchor_xy": [
+                162.0,
+                1134.125
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                141,
+                1100
+              ]
+            },
+            {
+              "actor_id": "h4",
+              "anchor_xy": [
+                72.0,
+                1250.125
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                51,
+                1216
+              ]
+            },
+            {
+              "actor_id": "h5",
+              "anchor_xy": [
+                134.0,
+                1250.125
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                113,
+                1216
+              ]
+            }
+          ],
+          "route": "all",
+          "anchor": "whole_hero_side.actual_target_feet",
+          "fixture_actual_targets": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5"
+          ],
+          "body_pose": "seeds/seed-a.png",
+          "caster_chest_xy": [
+            284.6875,
+            1157.796875
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "fault-awakening",
+      "file": "storyboards/fault-awakening-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 2114,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "kragmor",
+              "kind": "name",
+              "xyxy": [
+                240,
+                186,
+                326,
+                200
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                202,
+                326,
+                209
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                167,
+                366,
+                184
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "face",
+              "xyxy": [
+                245,
+                245,
+                295,
+                278
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                222,
+                116,
+                236
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                238,
+                116,
+                245
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                249,
+                101,
+                290
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                224.6875,
+                297.796875
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                185,
+                258
+              ]
+            }
+          ],
+          "route": "caster",
+          "anchor": "caster.forward_chest",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/seed-a.png",
+          "caster_chest_xy": [
+            284.6875,
+            297.796875
+          ]
+        },
+        {
+          "overlay_pixels_before": 5832,
+          "masked_pixels": 1579,
+          "masked_fraction": 0.27074759945130317,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 1579
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "kragmor",
+              "kind": "name",
+              "xyxy": [
+                240,
+                612,
+                326,
+                626
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                628,
+                326,
+                635
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                593,
+                366,
+                610
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "face",
+              "xyxy": [
+                240,
+                654,
+                304,
+                713
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                652,
+                116,
+                666
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                668,
+                116,
+                675
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                679,
+                101,
+                720
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                265.7267323798709,
+                717.471134963631
+              ],
+              "width": 130,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                201,
+                652
+              ]
+            }
+          ],
+          "route": "caster",
+          "anchor": "caster.chest",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/poses/fault-awakening.png",
+          "caster_chest_xy": [
+            265.7267323798709,
+            717.471134963631
+          ]
+        },
+        {
+          "overlay_pixels_before": 268,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "kragmor",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1046,
+                326,
+                1060
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1062,
+                326,
+                1069
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1027,
+                366,
+                1044
+              ]
+            },
+            {
+              "actor": "kragmor",
+              "kind": "face",
+              "xyxy": [
+                245,
+                1105,
+                295,
+                1138
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                1082,
+                116,
+                1096
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                1098,
+                116,
+                1105
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                1109,
+                101,
+                1150
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                284.6875,
+                1157.796875
+              ],
+              "width": 60,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                255,
+                1128
+              ]
+            }
+          ],
+          "route": "caster",
+          "anchor": "caster.chest",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/seed-a.png",
+          "caster_chest_xy": [
+            284.6875,
+            1157.796875
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "wing-gust",
+      "file": "storyboards/wing-gust-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 1768,
+          "masked_pixels": 1,
+          "masked_fraction": 0.0005656108597285068,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 1
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                193,
+                326,
+                207
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                209,
+                326,
+                216
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                174,
+                366,
+                191
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                194,
+                296,
+                240,
+                335
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                222,
+                116,
+                236
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                238,
+                116,
+                245
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                249,
+                101,
+                290
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                277.3046875,
+                286.1953125
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                237,
+                246
+              ]
+            }
+          ],
+          "route": "single",
+          "anchor": "caster.wing_base",
+          "fixture_actual_targets": [
+            "h1"
+          ],
+          "body_pose": "seeds/seed-b.png",
+          "caster_chest_xy": [
+            262.328125,
+            316.359375
+          ]
+        },
+        {
+          "overlay_pixels_before": 4026,
+          "masked_pixels": 549,
+          "masked_fraction": 0.13636363636363635,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 549
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                625,
+                326,
+                639
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                641,
+                326,
+                648
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                606,
+                366,
+                623
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                188,
+                700,
+                245,
+                791
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                652,
+                116,
+                666
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                668,
+                116,
+                675
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                679,
+                101,
+                720
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                73.0,
+                740.28125
+              ],
+              "width": 130,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                8,
+                675
+              ]
+            }
+          ],
+          "route": "single",
+          "anchor": "target.chest",
+          "fixture_actual_targets": [
+            "h1"
+          ],
+          "body_pose": "seeds/poses/wing-gust.png",
+          "caster_chest_xy": [
+            260.65515906044084,
+            750.0761018845103
+          ]
+        },
+        {
+          "overlay_pixels_before": 241,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1053,
+                326,
+                1067
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1069,
+                326,
+                1076
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1034,
+                366,
+                1051
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                194,
+                1156,
+                240,
+                1195
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                1082,
+                116,
+                1096
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                1098,
+                116,
+                1105
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                1109,
+                101,
+                1150
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                73.0,
+                1170.28125
+              ],
+              "width": 60,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                43,
+                1140
+              ]
+            }
+          ],
+          "route": "single",
+          "anchor": "target.chest",
+          "fixture_actual_targets": [
+            "h1"
+          ],
+          "body_pose": "seeds/seed-b.png",
+          "caster_chest_xy": [
+            262.328125,
+            1176.359375
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "wing-gathering",
+      "file": "storyboards/wing-gathering-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 2026,
+          "masked_pixels": 2,
+          "masked_fraction": 0.0009871668311944718,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 2
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                193,
+                326,
+                207
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                209,
+                326,
+                216
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                174,
+                366,
+                191
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                194,
+                296,
+                240,
+                335
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                222,
+                116,
+                236
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                238,
+                116,
+                245
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                249,
+                101,
+                290
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                274.328125,
+                316.359375
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                234,
+                276
+              ]
+            }
+          ],
+          "route": "charge",
+          "anchor": "caster.left_shoulder_core",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/seed-b.png",
+          "caster_chest_xy": [
+            262.328125,
+            316.359375
+          ]
+        },
+        {
+          "overlay_pixels_before": 4451,
+          "masked_pixels": 437,
+          "masked_fraction": 0.09818018422826331,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 437
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                676,
+                326,
+                690
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                692,
+                326,
+                699
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                657,
+                366,
+                674
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                188,
+                700,
+                245,
+                791
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                652,
+                116,
+                666
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                668,
+                116,
+                675
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                679,
+                101,
+                720
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                278.9785249828629,
+                753.0939512640261
+              ],
+              "width": 110,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                224,
+                698
+              ]
+            }
+          ],
+          "route": "charge",
+          "anchor": "caster.left_shoulder_core",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/poses/wing-gathering.png",
+          "caster_chest_xy": [
+            266.9785249828629,
+            753.0939512640261
+          ]
+        },
+        {
+          "overlay_pixels_before": 182,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1053,
+                326,
+                1067
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1069,
+                326,
+                1076
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1034,
+                366,
+                1051
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                194,
+                1156,
+                240,
+                1195
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                1082,
+                116,
+                1096
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                1098,
+                116,
+                1105
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                1109,
+                101,
+                1150
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                274.328125,
+                1176.359375
+              ],
+              "width": 54,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                247,
+                1149
+              ]
+            }
+          ],
+          "route": "charge",
+          "anchor": "caster.left_shoulder_core",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/seed-b.png",
+          "caster_chest_xy": [
+            262.328125,
+            1176.359375
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "wing-gathering-r2",
+      "file": "storyboards/wing-gathering-r2-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 2342,
+          "masked_pixels": 3,
+          "masked_fraction": 0.0012809564474807857,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 3
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                193,
+                326,
+                207
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                209,
+                326,
+                216
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                174,
+                366,
+                191
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                194,
+                296,
+                240,
+                335
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                222,
+                116,
+                236
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                238,
+                116,
+                245
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                249,
+                101,
+                290
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                274.328125,
+                316.359375
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                234,
+                276
+              ]
+            }
+          ],
+          "route": "charge",
+          "anchor": "caster.left_shoulder_core",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/seed-b.png",
+          "caster_chest_xy": [
+            262.328125,
+            316.359375
+          ]
+        },
+        {
+          "overlay_pixels_before": 4676,
+          "masked_pixels": 228,
+          "masked_fraction": 0.04875962360992301,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 228
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                676,
+                326,
+                690
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                692,
+                326,
+                699
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                657,
+                366,
+                674
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                188,
+                700,
+                245,
+                791
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                652,
+                116,
+                666
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                668,
+                116,
+                675
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                679,
+                101,
+                720
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                278.9785249828629,
+                753.0939512640261
+              ],
+              "width": 110,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                224,
+                698
+              ]
+            }
+          ],
+          "route": "charge",
+          "anchor": "caster.left_shoulder_core",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/poses/wing-gathering.png",
+          "caster_chest_xy": [
+            266.9785249828629,
+            753.0939512640261
+          ]
+        },
+        {
+          "overlay_pixels_before": 266,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1053,
+                326,
+                1067
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1069,
+                326,
+                1076
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1034,
+                366,
+                1051
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                194,
+                1156,
+                240,
+                1195
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                1082,
+                116,
+                1096
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                1098,
+                116,
+                1105
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                1109,
+                101,
+                1150
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                274.328125,
+                1176.359375
+              ],
+              "width": 54,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                247,
+                1149
+              ]
+            }
+          ],
+          "route": "charge",
+          "anchor": "caster.left_shoulder_core",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/seed-b.png",
+          "caster_chest_xy": [
+            262.328125,
+            1176.359375
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "worldshard-dive",
+      "file": "storyboards/worldshard-dive-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 1661,
+          "masked_pixels": 11,
+          "masked_fraction": 0.006622516556291391,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 11
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                193,
+                326,
+                207
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                209,
+                326,
+                216
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                174,
+                366,
+                191
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                194,
+                296,
+                240,
+                335
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                14,
+                186,
+                70,
+                200
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                14,
+                202,
+                70,
+                209
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                34,
+                213,
+                59,
+                238
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "name",
+              "xyxy": [
+                74,
+                186,
+                130,
+                200
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "hp",
+              "xyxy": [
+                74,
+                202,
+                130,
+                209
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "face",
+              "xyxy": [
+                94,
+                213,
+                119,
+                238
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "name",
+              "xyxy": [
+                134,
+                186,
+                190,
+                200
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "hp",
+              "xyxy": [
+                134,
+                202,
+                190,
+                209
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "face",
+              "xyxy": [
+                154,
+                213,
+                179,
+                238
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "name",
+              "xyxy": [
+                44,
+                302,
+                100,
+                316
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "hp",
+              "xyxy": [
+                44,
+                318,
+                100,
+                325
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "face",
+              "xyxy": [
+                64,
+                329,
+                89,
+                354
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "name",
+              "xyxy": [
+                106,
+                302,
+                162,
+                316
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "hp",
+              "xyxy": [
+                106,
+                318,
+                162,
+                325
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "face",
+              "xyxy": [
+                126,
+                329,
+                151,
+                354
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                277.3046875,
+                286.1953125
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                237,
+                246
+              ]
+            }
+          ],
+          "route": "all",
+          "anchor": "caster.wing_base",
+          "fixture_actual_targets": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5"
+          ],
+          "body_pose": "seeds/seed-b.png",
+          "caster_chest_xy": [
+            262.328125,
+            316.359375
+          ]
+        },
+        {
+          "overlay_pixels_before": 9055,
+          "masked_pixels": 1410,
+          "masked_fraction": 0.15571507454445058,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 1410
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                636,
+                326,
+                650
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                652,
+                326,
+                659
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                617,
+                366,
+                634
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                188,
+                700,
+                245,
+                791
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                14,
+                616,
+                70,
+                630
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                14,
+                632,
+                70,
+                639
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                34,
+                643,
+                59,
+                668
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "name",
+              "xyxy": [
+                74,
+                616,
+                130,
+                630
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "hp",
+              "xyxy": [
+                74,
+                632,
+                130,
+                639
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "face",
+              "xyxy": [
+                94,
+                643,
+                119,
+                668
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "name",
+              "xyxy": [
+                134,
+                616,
+                190,
+                630
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "hp",
+              "xyxy": [
+                134,
+                632,
+                190,
+                639
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "face",
+              "xyxy": [
+                154,
+                643,
+                179,
+                668
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "name",
+              "xyxy": [
+                44,
+                732,
+                100,
+                746
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "hp",
+              "xyxy": [
+                44,
+                748,
+                100,
+                755
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "face",
+              "xyxy": [
+                64,
+                759,
+                89,
+                784
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "name",
+              "xyxy": [
+                106,
+                732,
+                162,
+                746
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "hp",
+              "xyxy": [
+                106,
+                748,
+                162,
+                755
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "face",
+              "xyxy": [
+                126,
+                759,
+                151,
+                784
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                42.0,
+                679.5
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                5,
+                642
+              ]
+            },
+            {
+              "actor_id": "h2",
+              "anchor_xy": [
+                102.0,
+                679.5
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                65,
+                642
+              ]
+            },
+            {
+              "actor_id": "h3",
+              "anchor_xy": [
+                162.0,
+                679.5
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                125,
+                642
+              ]
+            },
+            {
+              "actor_id": "h4",
+              "anchor_xy": [
+                72.0,
+                795.5
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                35,
+                758
+              ]
+            },
+            {
+              "actor_id": "h5",
+              "anchor_xy": [
+                134.0,
+                795.5
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                97,
+                758
+              ]
+            }
+          ],
+          "route": "all",
+          "anchor": "whole_hero_side.actual_target_chests",
+          "fixture_actual_targets": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5"
+          ],
+          "body_pose": "seeds/poses/worldshard-dive.png",
+          "caster_chest_xy": [
+            276.2409326008092,
+            757.1196235999978
+          ]
+        },
+        {
+          "overlay_pixels_before": 665,
+          "masked_pixels": 20,
+          "masked_fraction": 0.03007518796992481,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 20
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1053,
+                326,
+                1067
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1069,
+                326,
+                1076
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1034,
+                366,
+                1051
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                194,
+                1156,
+                240,
+                1195
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                14,
+                1046,
+                70,
+                1060
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                14,
+                1062,
+                70,
+                1069
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                34,
+                1073,
+                59,
+                1098
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "name",
+              "xyxy": [
+                74,
+                1046,
+                130,
+                1060
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "hp",
+              "xyxy": [
+                74,
+                1062,
+                130,
+                1069
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "face",
+              "xyxy": [
+                94,
+                1073,
+                119,
+                1098
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "name",
+              "xyxy": [
+                134,
+                1046,
+                190,
+                1060
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "hp",
+              "xyxy": [
+                134,
+                1062,
+                190,
+                1069
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "face",
+              "xyxy": [
+                154,
+                1073,
+                179,
+                1098
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "name",
+              "xyxy": [
+                44,
+                1162,
+                100,
+                1176
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "hp",
+              "xyxy": [
+                44,
+                1178,
+                100,
+                1185
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "face",
+              "xyxy": [
+                64,
+                1189,
+                89,
+                1214
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "name",
+              "xyxy": [
+                106,
+                1162,
+                162,
+                1176
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "hp",
+              "xyxy": [
+                106,
+                1178,
+                162,
+                1185
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "face",
+              "xyxy": [
+                126,
+                1189,
+                151,
+                1214
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                42.0,
+                1109.5
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                21,
+                1088
+              ]
+            },
+            {
+              "actor_id": "h2",
+              "anchor_xy": [
+                102.0,
+                1109.5
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                81,
+                1088
+              ]
+            },
+            {
+              "actor_id": "h3",
+              "anchor_xy": [
+                162.0,
+                1109.5
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                141,
+                1088
+              ]
+            },
+            {
+              "actor_id": "h4",
+              "anchor_xy": [
+                72.0,
+                1225.5
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                51,
+                1204
+              ]
+            },
+            {
+              "actor_id": "h5",
+              "anchor_xy": [
+                134.0,
+                1225.5
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                113,
+                1204
+              ]
+            }
+          ],
+          "route": "all",
+          "anchor": "whole_hero_side.actual_target_chests",
+          "fixture_actual_targets": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5"
+          ],
+          "body_pose": "seeds/seed-b.png",
+          "caster_chest_xy": [
+            262.328125,
+            1176.359375
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "sky-rend",
+      "file": "storyboards/sky-rend-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 1195,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                193,
+                326,
+                207
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                209,
+                326,
+                216
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                174,
+                366,
+                191
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                194,
+                296,
+                240,
+                335
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                222,
+                116,
+                236
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                238,
+                116,
+                245
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                249,
+                101,
+                290
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                301.5625,
+                270.375
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                262,
+                230
+              ]
+            }
+          ],
+          "route": "caster",
+          "anchor": "caster.upper_back",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/seed-b.png",
+          "caster_chest_xy": [
+            262.328125,
+            316.359375
+          ]
+        },
+        {
+          "overlay_pixels_before": 5050,
+          "masked_pixels": 9,
+          "masked_fraction": 0.0017821782178217822,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 9
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                604,
+                326,
+                618
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                620,
+                326,
+                627
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                585,
+                366,
+                602
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                188,
+                700,
+                245,
+                791
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                652,
+                116,
+                666
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                668,
+                116,
+                675
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                679,
+                101,
+                720
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                301.5625,
+                700.375
+              ],
+              "width": 130,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                237,
+                635
+              ]
+            }
+          ],
+          "route": "caster",
+          "anchor": "caster.upper_back",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/poses/sky-rend.png",
+          "caster_chest_xy": [
+            265.4118680341064,
+            746.082104641654
+          ]
+        },
+        {
+          "overlay_pixels_before": 260,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "valdrakk",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1053,
+                326,
+                1067
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1069,
+                326,
+                1076
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1034,
+                366,
+                1051
+              ]
+            },
+            {
+              "actor": "valdrakk",
+              "kind": "face",
+              "xyxy": [
+                194,
+                1156,
+                240,
+                1195
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                1082,
+                116,
+                1096
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                1098,
+                116,
+                1105
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                1109,
+                101,
+                1150
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                301.5625,
+                1130.375
+              ],
+              "width": 60,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                272,
+                1100
+              ]
+            }
+          ],
+          "route": "caster",
+          "anchor": "caster.upper_back",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/seed-b.png",
+          "caster_chest_xy": [
+            262.328125,
+            1176.359375
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "severing-bolt",
+      "file": "storyboards/severing-bolt-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 785,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                186,
+                326,
+                200
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                202,
+                326,
+                209
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                167,
+                366,
+                184
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                279,
+                230,
+                309,
+                250
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                222,
+                116,
+                236
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                238,
+                116,
+                245
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                249,
+                101,
+                290
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                286.796875,
+                293.578125
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                247,
+                254
+              ]
+            }
+          ],
+          "route": "single",
+          "anchor": "caster.lower_hands",
+          "fixture_actual_targets": [
+            "h1"
+          ],
+          "body_pose": "seeds/seed-c.png",
+          "caster_chest_xy": [
+            286.375,
+            262.359375
+          ]
+        },
+        {
+          "overlay_pixels_before": 1667,
+          "masked_pixels": 217,
+          "masked_fraction": 0.13017396520695862,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 217
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                617,
+                326,
+                631
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                633,
+                326,
+                640
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                598,
+                366,
+                615
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                274,
+                654,
+                312,
+                684
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                652,
+                116,
+                666
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                668,
+                116,
+                675
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                679,
+                101,
+                720
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                73.0,
+                740.28125
+              ],
+              "width": 130,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                8,
+                675
+              ]
+            }
+          ],
+          "route": "single",
+          "anchor": "target.chest",
+          "fixture_actual_targets": [
+            "h1"
+          ],
+          "body_pose": "seeds/poses/severing-bolt.png",
+          "caster_chest_xy": [
+            286.02062509222264,
+            692.9464292911559
+          ]
+        },
+        {
+          "overlay_pixels_before": 352,
+          "masked_pixels": 1,
+          "masked_fraction": 0.002840909090909091,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 1
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1046,
+                326,
+                1060
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1062,
+                326,
+                1069
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1027,
+                366,
+                1044
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                279,
+                1090,
+                309,
+                1110
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                1082,
+                116,
+                1096
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                1098,
+                116,
+                1105
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                1109,
+                101,
+                1150
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                73.0,
+                1170.28125
+              ],
+              "width": 60,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                43,
+                1140
+              ]
+            }
+          ],
+          "route": "single",
+          "anchor": "target.chest",
+          "fixture_actual_targets": [
+            "h1"
+          ],
+          "body_pose": "seeds/seed-c.png",
+          "caster_chest_xy": [
+            286.375,
+            1122.359375
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "fate-lash",
+      "file": "storyboards/fate-lash-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 1711,
+          "masked_pixels": 205,
+          "masked_fraction": 0.11981297486849796,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 118,
+            "hp": 87,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                186,
+                326,
+                200
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                202,
+                326,
+                209
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                167,
+                366,
+                184
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                279,
+                230,
+                309,
+                250
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                222,
+                116,
+                236
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                238,
+                116,
+                245
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                249,
+                101,
+                290
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                217.1875,
+                220.8046875
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                177,
+                181
+              ]
+            }
+          ],
+          "route": "single",
+          "anchor": "caster.upper_hands_safe",
+          "fixture_actual_targets": [
+            "h1"
+          ],
+          "body_pose": "seeds/seed-c.png",
+          "caster_chest_xy": [
+            286.375,
+            262.359375
+          ]
+        },
+        {
+          "overlay_pixels_before": 5432,
+          "masked_pixels": 891,
+          "masked_fraction": 0.1640279823269514,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 891
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                618,
+                326,
+                632
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                634,
+                326,
+                641
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                599,
+                366,
+                616
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                274,
+                654,
+                312,
+                684
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                652,
+                116,
+                666
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                668,
+                116,
+                675
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                679,
+                101,
+                720
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                73.0,
+                740.28125
+              ],
+              "width": 130,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                8,
+                675
+              ]
+            }
+          ],
+          "route": "single",
+          "anchor": "target.chest",
+          "fixture_actual_targets": [
+            "h1"
+          ],
+          "body_pose": "seeds/poses/fate-lash.png",
+          "caster_chest_xy": [
+            287.393764686078,
+            695.2992891097476
+          ]
+        },
+        {
+          "overlay_pixels_before": 196,
+          "masked_pixels": 1,
+          "masked_fraction": 0.00510204081632653,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 1
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1046,
+                326,
+                1060
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1062,
+                326,
+                1069
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1027,
+                366,
+                1044
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                279,
+                1090,
+                309,
+                1110
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                1082,
+                116,
+                1096
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                1098,
+                116,
+                1105
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                1109,
+                101,
+                1150
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                73.0,
+                1170.28125
+              ],
+              "width": 60,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                43,
+                1140
+              ]
+            }
+          ],
+          "route": "single",
+          "anchor": "target.chest",
+          "fixture_actual_targets": [
+            "h1"
+          ],
+          "body_pose": "seeds/seed-c.png",
+          "caster_chest_xy": [
+            286.375,
+            1122.359375
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "call-the-court",
+      "file": "storyboards/call-the-court-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 1484,
+          "masked_pixels": 425,
+          "masked_fraction": 0.2863881401617251,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 425
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                186,
+                326,
+                200
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                202,
+                326,
+                209
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                167,
+                366,
+                184
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                279,
+                230,
+                309,
+                250
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                222,
+                116,
+                236
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                238,
+                116,
+                245
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                249,
+                101,
+                290
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "name",
+              "xyxy": [
+                23,
+                385,
+                109,
+                399
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "hp",
+              "xyxy": [
+                23,
+                401,
+                109,
+                408
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "face",
+              "xyxy": [
+                40,
+                438,
+                58,
+                457
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "name",
+              "xyxy": [
+                152,
+                385,
+                238,
+                399
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "hp",
+              "xyxy": [
+                152,
+                401,
+                238,
+                408
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "face",
+              "xyxy": [
+                169,
+                438,
+                187,
+                457
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "name",
+              "xyxy": [
+                281,
+                373,
+                367,
+                387
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "hp",
+              "xyxy": [
+                281,
+                389,
+                367,
+                396
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "face",
+              "xyxy": [
+                299,
+                437,
+                318,
+                451
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f2",
+              "anchor_xy": [
+                66.0,
+                441.59375
+              ],
+              "width": 64,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                34,
+                410
+              ]
+            },
+            {
+              "actor_id": "b2",
+              "anchor_xy": [
+                324.0,
+                441.59375
+              ],
+              "width": 64,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                292,
+                410
+              ]
+            }
+          ],
+          "route": "summon",
+          "anchor": "summoned_slot.chest",
+          "fixture_actual_targets": [
+            "f2",
+            "b2"
+          ],
+          "body_pose": "seeds/seed-c.png",
+          "caster_chest_xy": [
+            286.375,
+            262.359375
+          ]
+        },
+        {
+          "overlay_pixels_before": 5042,
+          "masked_pixels": 284,
+          "masked_fraction": 0.05632685442284808,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 14,
+            "intent": 0,
+            "face": 270
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                609,
+                326,
+                623
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                625,
+                326,
+                632
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                590,
+                366,
+                607
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                274,
+                654,
+                312,
+                684
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                652,
+                116,
+                666
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                668,
+                116,
+                675
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                679,
+                101,
+                720
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "name",
+              "xyxy": [
+                23,
+                815,
+                109,
+                829
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "hp",
+              "xyxy": [
+                23,
+                831,
+                109,
+                838
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "face",
+              "xyxy": [
+                40,
+                868,
+                58,
+                887
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "name",
+              "xyxy": [
+                152,
+                815,
+                238,
+                829
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "hp",
+              "xyxy": [
+                152,
+                831,
+                238,
+                838
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "face",
+              "xyxy": [
+                169,
+                868,
+                187,
+                887
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "name",
+              "xyxy": [
+                281,
+                803,
+                367,
+                817
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "hp",
+              "xyxy": [
+                281,
+                819,
+                367,
+                826
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "face",
+              "xyxy": [
+                299,
+                867,
+                318,
+                881
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "f2",
+              "anchor_xy": [
+                66.0,
+                871.59375
+              ],
+              "width": 78,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                27,
+                833
+              ]
+            },
+            {
+              "actor_id": "b2",
+              "anchor_xy": [
+                324.0,
+                871.59375
+              ],
+              "width": 78,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                285,
+                833
+              ]
+            }
+          ],
+          "route": "summon",
+          "anchor": "summoned_slot.chest",
+          "fixture_actual_targets": [
+            "f2",
+            "b2"
+          ],
+          "body_pose": "seeds/poses/call-the-court.png",
+          "caster_chest_xy": [
+            281.6535682986548,
+            692.4854285638218
+          ]
+        },
+        {
+          "overlay_pixels_before": 352,
+          "masked_pixels": 29,
+          "masked_fraction": 0.08238636363636363,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 29
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1046,
+                326,
+                1060
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1062,
+                326,
+                1069
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1027,
+                366,
+                1044
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                279,
+                1090,
+                309,
+                1110
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                1082,
+                116,
+                1096
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                1098,
+                116,
+                1105
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                1109,
+                101,
+                1150
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "name",
+              "xyxy": [
+                23,
+                1245,
+                109,
+                1259
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "hp",
+              "xyxy": [
+                23,
+                1261,
+                109,
+                1268
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "face",
+              "xyxy": [
+                40,
+                1298,
+                58,
+                1317
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "name",
+              "xyxy": [
+                152,
+                1245,
+                238,
+                1259
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "hp",
+              "xyxy": [
+                152,
+                1261,
+                238,
+                1268
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "face",
+              "xyxy": [
+                169,
+                1298,
+                187,
+                1317
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "name",
+              "xyxy": [
+                281,
+                1233,
+                367,
+                1247
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "hp",
+              "xyxy": [
+                281,
+                1249,
+                367,
+                1256
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "face",
+              "xyxy": [
+                299,
+                1297,
+                318,
+                1311
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "f2",
+              "anchor_xy": [
+                66.0,
+                1301.59375
+              ],
+              "width": 40,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                46,
+                1282
+              ]
+            },
+            {
+              "actor_id": "b2",
+              "anchor_xy": [
+                324.0,
+                1301.59375
+              ],
+              "width": 40,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                304,
+                1282
+              ]
+            }
+          ],
+          "route": "summon",
+          "anchor": "summoned_slot.chest",
+          "fixture_actual_targets": [
+            "f2",
+            "b2"
+          ],
+          "body_pose": "seeds/seed-c.png",
+          "caster_chest_xy": [
+            286.375,
+            1122.359375
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "call-the-court-r2",
+      "file": "storyboards/call-the-court-r2-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 2532,
+          "masked_pixels": 356,
+          "masked_fraction": 0.1406003159557662,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 356
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                186,
+                326,
+                200
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                202,
+                326,
+                209
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                167,
+                366,
+                184
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                279,
+                230,
+                309,
+                250
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                222,
+                116,
+                236
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                238,
+                116,
+                245
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                249,
+                101,
+                290
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "name",
+              "xyxy": [
+                23,
+                385,
+                109,
+                399
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "hp",
+              "xyxy": [
+                23,
+                401,
+                109,
+                408
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "face",
+              "xyxy": [
+                40,
+                438,
+                58,
+                457
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "name",
+              "xyxy": [
+                152,
+                385,
+                238,
+                399
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "hp",
+              "xyxy": [
+                152,
+                401,
+                238,
+                408
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "face",
+              "xyxy": [
+                169,
+                438,
+                187,
+                457
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "name",
+              "xyxy": [
+                281,
+                373,
+                367,
+                387
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "hp",
+              "xyxy": [
+                281,
+                389,
+                367,
+                396
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "face",
+              "xyxy": [
+                299,
+                437,
+                318,
+                451
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f2",
+              "anchor_xy": [
+                66.0,
+                441.59375
+              ],
+              "width": 64,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                34,
+                410
+              ]
+            },
+            {
+              "actor_id": "b2",
+              "anchor_xy": [
+                324.0,
+                441.59375
+              ],
+              "width": 64,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                292,
+                410
+              ]
+            }
+          ],
+          "route": "summon",
+          "anchor": "summoned_slot.chest",
+          "fixture_actual_targets": [
+            "f2",
+            "b2"
+          ],
+          "body_pose": "seeds/seed-c.png",
+          "caster_chest_xy": [
+            286.375,
+            262.359375
+          ]
+        },
+        {
+          "overlay_pixels_before": 3738,
+          "masked_pixels": 470,
+          "masked_fraction": 0.12573568753344033,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 470
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                609,
+                326,
+                623
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                625,
+                326,
+                632
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                590,
+                366,
+                607
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                274,
+                654,
+                312,
+                684
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                652,
+                116,
+                666
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                668,
+                116,
+                675
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                679,
+                101,
+                720
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "name",
+              "xyxy": [
+                23,
+                815,
+                109,
+                829
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "hp",
+              "xyxy": [
+                23,
+                831,
+                109,
+                838
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "face",
+              "xyxy": [
+                40,
+                868,
+                58,
+                887
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "name",
+              "xyxy": [
+                152,
+                815,
+                238,
+                829
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "hp",
+              "xyxy": [
+                152,
+                831,
+                238,
+                838
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "face",
+              "xyxy": [
+                169,
+                868,
+                187,
+                887
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "name",
+              "xyxy": [
+                281,
+                803,
+                367,
+                817
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "hp",
+              "xyxy": [
+                281,
+                819,
+                367,
+                826
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "face",
+              "xyxy": [
+                299,
+                867,
+                318,
+                881
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "f2",
+              "anchor_xy": [
+                66.0,
+                871.59375
+              ],
+              "width": 78,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                27,
+                833
+              ]
+            },
+            {
+              "actor_id": "b2",
+              "anchor_xy": [
+                324.0,
+                871.59375
+              ],
+              "width": 78,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                285,
+                833
+              ]
+            }
+          ],
+          "route": "summon",
+          "anchor": "summoned_slot.chest",
+          "fixture_actual_targets": [
+            "f2",
+            "b2"
+          ],
+          "body_pose": "seeds/poses/call-the-court.png",
+          "caster_chest_xy": [
+            281.6535682986548,
+            692.4854285638218
+          ]
+        },
+        {
+          "overlay_pixels_before": 354,
+          "masked_pixels": 32,
+          "masked_fraction": 0.0903954802259887,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 32
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1046,
+                326,
+                1060
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1062,
+                326,
+                1069
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1027,
+                366,
+                1044
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                279,
+                1090,
+                309,
+                1110
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                1082,
+                116,
+                1096
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                1098,
+                116,
+                1105
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                1109,
+                101,
+                1150
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "name",
+              "xyxy": [
+                23,
+                1245,
+                109,
+                1259
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "hp",
+              "xyxy": [
+                23,
+                1261,
+                109,
+                1268
+              ]
+            },
+            {
+              "actor": "f2",
+              "kind": "face",
+              "xyxy": [
+                40,
+                1298,
+                58,
+                1317
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "name",
+              "xyxy": [
+                152,
+                1245,
+                238,
+                1259
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "hp",
+              "xyxy": [
+                152,
+                1261,
+                238,
+                1268
+              ]
+            },
+            {
+              "actor": "f3",
+              "kind": "face",
+              "xyxy": [
+                169,
+                1298,
+                187,
+                1317
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "name",
+              "xyxy": [
+                281,
+                1233,
+                367,
+                1247
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "hp",
+              "xyxy": [
+                281,
+                1249,
+                367,
+                1256
+              ]
+            },
+            {
+              "actor": "b2",
+              "kind": "face",
+              "xyxy": [
+                299,
+                1297,
+                318,
+                1311
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "f2",
+              "anchor_xy": [
+                66.0,
+                1301.59375
+              ],
+              "width": 40,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                46,
+                1282
+              ]
+            },
+            {
+              "actor_id": "b2",
+              "anchor_xy": [
+                324.0,
+                1301.59375
+              ],
+              "width": 40,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                304,
+                1282
+              ]
+            }
+          ],
+          "route": "summon",
+          "anchor": "summoned_slot.chest",
+          "fixture_actual_targets": [
+            "f2",
+            "b2"
+          ],
+          "body_pose": "seeds/seed-c.png",
+          "caster_chest_xy": [
+            286.375,
+            1122.359375
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "shadow-tide",
+      "file": "storyboards/shadow-tide-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 569,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                186,
+                326,
+                200
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                202,
+                326,
+                209
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                167,
+                366,
+                184
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                279,
+                230,
+                309,
+                250
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                14,
+                186,
+                70,
+                200
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                14,
+                202,
+                70,
+                209
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                34,
+                213,
+                59,
+                238
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "name",
+              "xyxy": [
+                74,
+                186,
+                130,
+                200
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "hp",
+              "xyxy": [
+                74,
+                202,
+                130,
+                209
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "face",
+              "xyxy": [
+                94,
+                213,
+                119,
+                238
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "name",
+              "xyxy": [
+                134,
+                186,
+                190,
+                200
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "hp",
+              "xyxy": [
+                134,
+                202,
+                190,
+                209
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "face",
+              "xyxy": [
+                154,
+                213,
+                179,
+                238
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "name",
+              "xyxy": [
+                44,
+                302,
+                100,
+                316
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "hp",
+              "xyxy": [
+                44,
+                318,
+                100,
+                325
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "face",
+              "xyxy": [
+                64,
+                329,
+                89,
+                354
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "name",
+              "xyxy": [
+                106,
+                302,
+                162,
+                316
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "hp",
+              "xyxy": [
+                106,
+                318,
+                162,
+                325
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "face",
+              "xyxy": [
+                126,
+                329,
+                151,
+                354
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                283.0,
+                375.0
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                243,
+                309
+              ]
+            }
+          ],
+          "route": "all",
+          "anchor": "caster.feet",
+          "fixture_actual_targets": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5"
+          ],
+          "body_pose": "seeds/seed-c.png",
+          "caster_chest_xy": [
+            286.375,
+            262.359375
+          ]
+        },
+        {
+          "overlay_pixels_before": 5016,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                618,
+                326,
+                632
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                634,
+                326,
+                641
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                599,
+                366,
+                616
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                274,
+                654,
+                312,
+                684
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                14,
+                616,
+                70,
+                630
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                14,
+                632,
+                70,
+                639
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                34,
+                643,
+                59,
+                668
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "name",
+              "xyxy": [
+                74,
+                616,
+                130,
+                630
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "hp",
+              "xyxy": [
+                74,
+                632,
+                130,
+                639
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "face",
+              "xyxy": [
+                94,
+                643,
+                119,
+                668
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "name",
+              "xyxy": [
+                134,
+                616,
+                190,
+                630
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "hp",
+              "xyxy": [
+                134,
+                632,
+                190,
+                639
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "face",
+              "xyxy": [
+                154,
+                643,
+                179,
+                668
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "name",
+              "xyxy": [
+                44,
+                732,
+                100,
+                746
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "hp",
+              "xyxy": [
+                44,
+                748,
+                100,
+                755
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "face",
+              "xyxy": [
+                64,
+                759,
+                89,
+                784
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "name",
+              "xyxy": [
+                106,
+                732,
+                162,
+                746
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "hp",
+              "xyxy": [
+                106,
+                748,
+                162,
+                755
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "face",
+              "xyxy": [
+                126,
+                759,
+                151,
+                784
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                42.0,
+                704.125
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                5,
+                643
+              ]
+            },
+            {
+              "actor_id": "h2",
+              "anchor_xy": [
+                102.0,
+                704.125
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                65,
+                643
+              ]
+            },
+            {
+              "actor_id": "h3",
+              "anchor_xy": [
+                162.0,
+                704.125
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                125,
+                643
+              ]
+            },
+            {
+              "actor_id": "h4",
+              "anchor_xy": [
+                72.0,
+                820.125
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                35,
+                759
+              ]
+            },
+            {
+              "actor_id": "h5",
+              "anchor_xy": [
+                134.0,
+                820.125
+              ],
+              "width": 74,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                97,
+                759
+              ]
+            }
+          ],
+          "route": "all",
+          "anchor": "whole_hero_side.actual_target_feet",
+          "fixture_actual_targets": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5"
+          ],
+          "body_pose": "seeds/poses/shadow-tide.png",
+          "caster_chest_xy": [
+            278.5499782659185,
+            696.8529071567153
+          ]
+        },
+        {
+          "overlay_pixels_before": 560,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1046,
+                326,
+                1060
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1062,
+                326,
+                1069
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1027,
+                366,
+                1044
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                279,
+                1090,
+                309,
+                1110
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                14,
+                1046,
+                70,
+                1060
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                14,
+                1062,
+                70,
+                1069
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                34,
+                1073,
+                59,
+                1098
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "name",
+              "xyxy": [
+                74,
+                1046,
+                130,
+                1060
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "hp",
+              "xyxy": [
+                74,
+                1062,
+                130,
+                1069
+              ]
+            },
+            {
+              "actor": "H2",
+              "kind": "face",
+              "xyxy": [
+                94,
+                1073,
+                119,
+                1098
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "name",
+              "xyxy": [
+                134,
+                1046,
+                190,
+                1060
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "hp",
+              "xyxy": [
+                134,
+                1062,
+                190,
+                1069
+              ]
+            },
+            {
+              "actor": "H3",
+              "kind": "face",
+              "xyxy": [
+                154,
+                1073,
+                179,
+                1098
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "name",
+              "xyxy": [
+                44,
+                1162,
+                100,
+                1176
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "hp",
+              "xyxy": [
+                44,
+                1178,
+                100,
+                1185
+              ]
+            },
+            {
+              "actor": "H4",
+              "kind": "face",
+              "xyxy": [
+                64,
+                1189,
+                89,
+                1214
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "name",
+              "xyxy": [
+                106,
+                1162,
+                162,
+                1176
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "hp",
+              "xyxy": [
+                106,
+                1178,
+                162,
+                1185
+              ]
+            },
+            {
+              "actor": "H5",
+              "kind": "face",
+              "xyxy": [
+                126,
+                1189,
+                151,
+                1214
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "h1",
+              "anchor_xy": [
+                42.0,
+                1134.125
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                21,
+                1100
+              ]
+            },
+            {
+              "actor_id": "h2",
+              "anchor_xy": [
+                102.0,
+                1134.125
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                81,
+                1100
+              ]
+            },
+            {
+              "actor_id": "h3",
+              "anchor_xy": [
+                162.0,
+                1134.125
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                141,
+                1100
+              ]
+            },
+            {
+              "actor_id": "h4",
+              "anchor_xy": [
+                72.0,
+                1250.125
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                51,
+                1216
+              ]
+            },
+            {
+              "actor_id": "h5",
+              "anchor_xy": [
+                134.0,
+                1250.125
+              ],
+              "width": 42,
+              "pivot": [
+                128,
+                210
+              ],
+              "paste_xy": [
+                113,
+                1216
+              ]
+            }
+          ],
+          "route": "all",
+          "anchor": "whole_hero_side.actual_target_feet",
+          "fixture_actual_targets": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5"
+          ],
+          "body_pose": "seeds/seed-c.png",
+          "caster_chest_xy": [
+            286.375,
+            1122.359375
+          ]
+        }
+      ],
+      "runtime_capture": false
+    },
+    {
+      "design": "severed-crown",
+      "file": "storyboards/severed-crown-390.png",
+      "panels": [
+        {
+          "overlay_pixels_before": 1346,
+          "masked_pixels": 0,
+          "masked_fraction": 0.0,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 0
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                186,
+                326,
+                200
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                202,
+                326,
+                209
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                167,
+                366,
+                184
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                279,
+                230,
+                309,
+                250
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                222,
+                116,
+                236
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                238,
+                116,
+                245
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                249,
+                101,
+                290
+              ]
+            }
+          ],
+          "beat": "prepare",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                226.375,
+                262.359375
+              ],
+              "width": 80,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                186,
+                222
+              ]
+            }
+          ],
+          "route": "caster",
+          "anchor": "caster.forward_chest",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/seed-c.png",
+          "caster_chest_xy": [
+            286.375,
+            262.359375
+          ]
+        },
+        {
+          "overlay_pixels_before": 4337,
+          "masked_pixels": 744,
+          "masked_fraction": 0.17154715240949966,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 744
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                616,
+                326,
+                630
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                632,
+                326,
+                639
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                597,
+                366,
+                614
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                274,
+                654,
+                312,
+                684
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                652,
+                116,
+                666
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                668,
+                116,
+                675
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                679,
+                101,
+                720
+              ]
+            }
+          ],
+          "beat": "peak",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                282.0383916609167,
+                698.2242532695336
+              ],
+              "width": 130,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                217,
+                633
+              ]
+            }
+          ],
+          "route": "caster",
+          "anchor": "caster.chest",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/poses/severed-crown.png",
+          "caster_chest_xy": [
+            282.0383916609167,
+            698.2242532695336
+          ]
+        },
+        {
+          "overlay_pixels_before": 296,
+          "masked_pixels": 43,
+          "masked_fraction": 0.14527027027027026,
+          "before_overlap_by_kind_sum_may_double_count": {
+            "name": 0,
+            "hp": 0,
+            "intent": 0,
+            "face": 43
+          },
+          "remaining_overlap": 0,
+          "protected_rects": [
+            {
+              "actor": "morvane",
+              "kind": "name",
+              "xyxy": [
+                240,
+                1046,
+                326,
+                1060
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "hp",
+              "xyxy": [
+                240,
+                1062,
+                326,
+                1069
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "intent",
+              "xyxy": [
+                200,
+                1027,
+                366,
+                1044
+              ]
+            },
+            {
+              "actor": "morvane",
+              "kind": "face",
+              "xyxy": [
+                279,
+                1090,
+                309,
+                1110
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "name",
+              "xyxy": [
+                30,
+                1082,
+                116,
+                1096
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "hp",
+              "xyxy": [
+                30,
+                1098,
+                116,
+                1105
+              ]
+            },
+            {
+              "actor": "H1",
+              "kind": "face",
+              "xyxy": [
+                60,
+                1109,
+                101,
+                1150
+              ]
+            }
+          ],
+          "beat": "settle",
+          "instances": [
+            {
+              "actor_id": "f1",
+              "anchor_xy": [
+                286.375,
+                1122.359375
+              ],
+              "width": 60,
+              "pivot": [
+                128,
+                128
+              ],
+              "paste_xy": [
+                256,
+                1092
+              ]
+            }
+          ],
+          "route": "caster",
+          "anchor": "caster.chest",
+          "fixture_actual_targets": [
+            "f1"
+          ],
+          "body_pose": "seeds/seed-c.png",
+          "caster_chest_xy": [
+            286.375,
+            1122.359375
+          ]
+        }
+      ],
+      "runtime_capture": false
+    }
+  ],
+  "waiting_holds": [
+    {
+      "overlay_pixels_before": 2291,
+      "masked_pixels": 9,
+      "masked_fraction": 0.00392841553906591,
+      "before_overlap_by_kind_sum_may_double_count": {
+        "name": 0,
+        "hp": 0,
+        "intent": 0,
+        "face": 9
+      },
+      "remaining_overlap": 0,
+      "protected_rects": [
+        {
+          "actor": "kragmor",
+          "kind": "name",
+          "xyxy": [
+            240,
+            162,
+            326,
+            176
+          ]
+        },
+        {
+          "actor": "kragmor",
+          "kind": "hp",
+          "xyxy": [
+            240,
+            178,
+            326,
+            185
+          ]
+        },
+        {
+          "actor": "kragmor",
+          "kind": "intent",
+          "xyxy": [
+            200,
+            143,
+            366,
+            160
+          ]
+        },
+        {
+          "actor": "kragmor",
+          "kind": "face",
+          "xyxy": [
+            240,
+            194,
+            304,
+            253
+          ]
+        },
+        {
+          "actor": "H1",
+          "kind": "name",
+          "xyxy": [
+            30,
+            177,
+            116,
+            191
+          ]
+        },
+        {
+          "actor": "H1",
+          "kind": "hp",
+          "xyxy": [
+            30,
+            193,
+            116,
+            200
+          ]
+        },
+        {
+          "actor": "H1",
+          "kind": "face",
+          "xyxy": [
+            60,
+            204,
+            101,
+            245
+          ]
+        }
+      ],
+      "charge": "titan-gathering",
+      "hold_layer": "layers/mountain-fall-prepare.png",
+      "placement": {
+        "anchor_xy": [
+          210.39766158170113,
+          262.78637253438234
+        ],
+        "width": 80,
+        "pivot": [
+          128,
+          128
+        ],
+        "paste_xy": [
+          170,
+          223
+        ]
+      }
+    },
+    {
+      "overlay_pixels_before": 2026,
+      "masked_pixels": 2,
+      "masked_fraction": 0.0009871668311944718,
+      "before_overlap_by_kind_sum_may_double_count": {
+        "name": 0,
+        "hp": 0,
+        "intent": 0,
+        "face": 2
+      },
+      "remaining_overlap": 0,
+      "protected_rects": [
+        {
+          "actor": "valdrakk",
+          "kind": "name",
+          "xyxy": [
+            240,
+            562,
+            326,
+            576
+          ]
+        },
+        {
+          "actor": "valdrakk",
+          "kind": "hp",
+          "xyxy": [
+            240,
+            578,
+            326,
+            585
+          ]
+        },
+        {
+          "actor": "valdrakk",
+          "kind": "intent",
+          "xyxy": [
+            200,
+            543,
+            366,
+            560
+          ]
+        },
+        {
+          "actor": "valdrakk",
+          "kind": "face",
+          "xyxy": [
+            188,
+            586,
+            245,
+            677
+          ]
+        },
+        {
+          "actor": "H1",
+          "kind": "name",
+          "xyxy": [
+            30,
+            523,
+            116,
+            537
+          ]
+        },
+        {
+          "actor": "H1",
+          "kind": "hp",
+          "xyxy": [
+            30,
+            539,
+            116,
+            546
+          ]
+        },
+        {
+          "actor": "H1",
+          "kind": "face",
+          "xyxy": [
+            60,
+            550,
+            101,
+            591
+          ]
+        }
+      ],
+      "charge": "wing-gathering",
+      "hold_layer": "layers/wing-gathering-prepare.png",
+      "placement": {
+        "anchor_xy": [
+          278.9785249828629,
+          639.0939512640261
+        ],
+        "width": 80,
+        "pivot": [
+          128,
+          128
+        ],
+        "paste_xy": [
+          239,
+          599
+        ]
+      }
+    }
+  ],
+  "contrast": [
+    {
+      "design": "titan-gathering",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 13984,
+      "ink_pixels_alpha_gt8": 14872,
+      "visible_fraction": 0.9402904787520172
+    },
+    {
+      "design": "titan-gathering",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 13977,
+      "ink_pixels_alpha_gt8": 14872,
+      "visible_fraction": 0.9398197955890264
+    },
+    {
+      "design": "titan-gathering",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 36051,
+      "ink_pixels_alpha_gt8": 36401,
+      "visible_fraction": 0.9903848795362765
+    },
+    {
+      "design": "titan-gathering",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 36228,
+      "ink_pixels_alpha_gt8": 36401,
+      "visible_fraction": 0.9952473833136453
+    },
+    {
+      "design": "titan-gathering",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 1489,
+      "ink_pixels_alpha_gt8": 1696,
+      "visible_fraction": 0.8779481132075472
+    },
+    {
+      "design": "titan-gathering",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 1575,
+      "ink_pixels_alpha_gt8": 1696,
+      "visible_fraction": 0.9286556603773585
+    },
+    {
+      "design": "mountain-fall",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 16416,
+      "ink_pixels_alpha_gt8": 16855,
+      "visible_fraction": 0.973954316226639
+    },
+    {
+      "design": "mountain-fall",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 16716,
+      "ink_pixels_alpha_gt8": 16855,
+      "visible_fraction": 0.9917531889646989
+    },
+    {
+      "design": "mountain-fall",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 20515,
+      "ink_pixels_alpha_gt8": 21233,
+      "visible_fraction": 0.966184712475863
+    },
+    {
+      "design": "mountain-fall",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 20819,
+      "ink_pixels_alpha_gt8": 21233,
+      "visible_fraction": 0.9805020486977818
+    },
+    {
+      "design": "mountain-fall",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 1397,
+      "ink_pixels_alpha_gt8": 1488,
+      "visible_fraction": 0.9388440860215054
+    },
+    {
+      "design": "mountain-fall",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 1446,
+      "ink_pixels_alpha_gt8": 1488,
+      "visible_fraction": 0.9717741935483871
+    },
+    {
+      "design": "rift-quake",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 6671,
+      "ink_pixels_alpha_gt8": 6921,
+      "visible_fraction": 0.9638780523045802
+    },
+    {
+      "design": "rift-quake",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 6769,
+      "ink_pixels_alpha_gt8": 6921,
+      "visible_fraction": 0.9780378558011849
+    },
+    {
+      "design": "rift-quake",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 15396,
+      "ink_pixels_alpha_gt8": 15750,
+      "visible_fraction": 0.9775238095238096
+    },
+    {
+      "design": "rift-quake",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 15537,
+      "ink_pixels_alpha_gt8": 15750,
+      "visible_fraction": 0.9864761904761905
+    },
+    {
+      "design": "rift-quake",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 2257,
+      "ink_pixels_alpha_gt8": 2369,
+      "visible_fraction": 0.9527226677923174
+    },
+    {
+      "design": "rift-quake",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 2323,
+      "ink_pixels_alpha_gt8": 2369,
+      "visible_fraction": 0.9805825242718447
+    },
+    {
+      "design": "fault-awakening",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 15361,
+      "ink_pixels_alpha_gt8": 15715,
+      "visible_fraction": 0.9774737511931276
+    },
+    {
+      "design": "fault-awakening",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 15458,
+      "ink_pixels_alpha_gt8": 15715,
+      "visible_fraction": 0.9836461979000954
+    },
+    {
+      "design": "fault-awakening",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 18577,
+      "ink_pixels_alpha_gt8": 18804,
+      "visible_fraction": 0.9879281004041693
+    },
+    {
+      "design": "fault-awakening",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 18662,
+      "ink_pixels_alpha_gt8": 18804,
+      "visible_fraction": 0.992448415230802
+    },
+    {
+      "design": "fault-awakening",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 1298,
+      "ink_pixels_alpha_gt8": 1353,
+      "visible_fraction": 0.959349593495935
+    },
+    {
+      "design": "fault-awakening",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 1298,
+      "ink_pixels_alpha_gt8": 1353,
+      "visible_fraction": 0.959349593495935
+    },
+    {
+      "design": "wing-gust",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 10902,
+      "ink_pixels_alpha_gt8": 11726,
+      "visible_fraction": 0.9297288077775883
+    },
+    {
+      "design": "wing-gust",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 11048,
+      "ink_pixels_alpha_gt8": 11726,
+      "visible_fraction": 0.9421797714480641
+    },
+    {
+      "design": "wing-gust",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 10946,
+      "ink_pixels_alpha_gt8": 11293,
+      "visible_fraction": 0.9692730009740548
+    },
+    {
+      "design": "wing-gust",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 11047,
+      "ink_pixels_alpha_gt8": 11293,
+      "visible_fraction": 0.9782165943504826
+    },
+    {
+      "design": "wing-gust",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 1247,
+      "ink_pixels_alpha_gt8": 1362,
+      "visible_fraction": 0.9155653450807636
+    },
+    {
+      "design": "wing-gust",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 1300,
+      "ink_pixels_alpha_gt8": 1362,
+      "visible_fraction": 0.9544787077826725
+    },
+    {
+      "design": "wing-gathering",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 13440,
+      "ink_pixels_alpha_gt8": 13904,
+      "visible_fraction": 0.9666283084004603
+    },
+    {
+      "design": "wing-gathering",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 13670,
+      "ink_pixels_alpha_gt8": 13904,
+      "visible_fraction": 0.9831703107019563
+    },
+    {
+      "design": "wing-gathering",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 18903,
+      "ink_pixels_alpha_gt8": 19415,
+      "visible_fraction": 0.9736286376513006
+    },
+    {
+      "design": "wing-gathering",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 19184,
+      "ink_pixels_alpha_gt8": 19415,
+      "visible_fraction": 0.9881019830028328
+    },
+    {
+      "design": "wing-gathering",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 1103,
+      "ink_pixels_alpha_gt8": 1254,
+      "visible_fraction": 0.879585326953748
+    },
+    {
+      "design": "wing-gathering",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 1217,
+      "ink_pixels_alpha_gt8": 1254,
+      "visible_fraction": 0.970494417862839
+    },
+    {
+      "design": "wing-gathering-r2",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 18651,
+      "ink_pixels_alpha_gt8": 20764,
+      "visible_fraction": 0.898237333847043
+    },
+    {
+      "design": "wing-gathering-r2",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 17954,
+      "ink_pixels_alpha_gt8": 20764,
+      "visible_fraction": 0.864669620497014
+    },
+    {
+      "design": "wing-gathering-r2",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 22905,
+      "ink_pixels_alpha_gt8": 23700,
+      "visible_fraction": 0.9664556962025317
+    },
+    {
+      "design": "wing-gathering-r2",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 22568,
+      "ink_pixels_alpha_gt8": 23700,
+      "visible_fraction": 0.9522362869198312
+    },
+    {
+      "design": "wing-gathering-r2",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 3040,
+      "ink_pixels_alpha_gt8": 3613,
+      "visible_fraction": 0.8414060337669527
+    },
+    {
+      "design": "wing-gathering-r2",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 3030,
+      "ink_pixels_alpha_gt8": 3613,
+      "visible_fraction": 0.8386382507611403
+    },
+    {
+      "design": "worldshard-dive",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 10368,
+      "ink_pixels_alpha_gt8": 10559,
+      "visible_fraction": 0.9819111658300975
+    },
+    {
+      "design": "worldshard-dive",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 10333,
+      "ink_pixels_alpha_gt8": 10559,
+      "visible_fraction": 0.9785964579979165
+    },
+    {
+      "design": "worldshard-dive",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 14672,
+      "ink_pixels_alpha_gt8": 14859,
+      "visible_fraction": 0.9874150346591292
+    },
+    {
+      "design": "worldshard-dive",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 14672,
+      "ink_pixels_alpha_gt8": 14859,
+      "visible_fraction": 0.9874150346591292
+    },
+    {
+      "design": "worldshard-dive",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 639,
+      "ink_pixels_alpha_gt8": 717,
+      "visible_fraction": 0.891213389121339
+    },
+    {
+      "design": "worldshard-dive",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 675,
+      "ink_pixels_alpha_gt8": 717,
+      "visible_fraction": 0.9414225941422594
+    },
+    {
+      "design": "sky-rend",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 7490,
+      "ink_pixels_alpha_gt8": 9368,
+      "visible_fraction": 0.799530315969257
+    },
+    {
+      "design": "sky-rend",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 7398,
+      "ink_pixels_alpha_gt8": 9368,
+      "visible_fraction": 0.7897096498719044
+    },
+    {
+      "design": "sky-rend",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 16070,
+      "ink_pixels_alpha_gt8": 18015,
+      "visible_fraction": 0.8920344157646406
+    },
+    {
+      "design": "sky-rend",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 15197,
+      "ink_pixels_alpha_gt8": 18015,
+      "visible_fraction": 0.8435747987787955
+    },
+    {
+      "design": "sky-rend",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 1822,
+      "ink_pixels_alpha_gt8": 2378,
+      "visible_fraction": 0.7661900756938604
+    },
+    {
+      "design": "sky-rend",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 1821,
+      "ink_pixels_alpha_gt8": 2378,
+      "visible_fraction": 0.7657695542472666
+    },
+    {
+      "design": "severing-bolt",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 4970,
+      "ink_pixels_alpha_gt8": 5319,
+      "visible_fraction": 0.9343861628125587
+    },
+    {
+      "design": "severing-bolt",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 5070,
+      "ink_pixels_alpha_gt8": 5319,
+      "visible_fraction": 0.9531866892272983
+    },
+    {
+      "design": "severing-bolt",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 4359,
+      "ink_pixels_alpha_gt8": 4602,
+      "visible_fraction": 0.9471968709256845
+    },
+    {
+      "design": "severing-bolt",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 4447,
+      "ink_pixels_alpha_gt8": 4602,
+      "visible_fraction": 0.9663189917427205
+    },
+    {
+      "design": "severing-bolt",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 1769,
+      "ink_pixels_alpha_gt8": 1928,
+      "visible_fraction": 0.9175311203319502
+    },
+    {
+      "design": "severing-bolt",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 1877,
+      "ink_pixels_alpha_gt8": 1928,
+      "visible_fraction": 0.9735477178423236
+    },
+    {
+      "design": "fate-lash",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 10921,
+      "ink_pixels_alpha_gt8": 11328,
+      "visible_fraction": 0.9640713276836158
+    },
+    {
+      "design": "fate-lash",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 11022,
+      "ink_pixels_alpha_gt8": 11328,
+      "visible_fraction": 0.9729872881355932
+    },
+    {
+      "design": "fate-lash",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 16756,
+      "ink_pixels_alpha_gt8": 17038,
+      "visible_fraction": 0.9834487615917361
+    },
+    {
+      "design": "fate-lash",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 16846,
+      "ink_pixels_alpha_gt8": 17038,
+      "visible_fraction": 0.9887310717220331
+    },
+    {
+      "design": "fate-lash",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 1057,
+      "ink_pixels_alpha_gt8": 1156,
+      "visible_fraction": 0.9143598615916955
+    },
+    {
+      "design": "fate-lash",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 1097,
+      "ink_pixels_alpha_gt8": 1156,
+      "visible_fraction": 0.948961937716263
+    },
+    {
+      "design": "call-the-court",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 7674,
+      "ink_pixels_alpha_gt8": 8160,
+      "visible_fraction": 0.9404411764705882
+    },
+    {
+      "design": "call-the-court",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 7748,
+      "ink_pixels_alpha_gt8": 8160,
+      "visible_fraction": 0.9495098039215686
+    },
+    {
+      "design": "call-the-court",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 20385,
+      "ink_pixels_alpha_gt8": 23156,
+      "visible_fraction": 0.880333390913802
+    },
+    {
+      "design": "call-the-court",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 20735,
+      "ink_pixels_alpha_gt8": 23156,
+      "visible_fraction": 0.8954482639488686
+    },
+    {
+      "design": "call-the-court",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 1777,
+      "ink_pixels_alpha_gt8": 2031,
+      "visible_fraction": 0.8749384539635647
+    },
+    {
+      "design": "call-the-court",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 1876,
+      "ink_pixels_alpha_gt8": 2031,
+      "visible_fraction": 0.9236829148202855
+    },
+    {
+      "design": "call-the-court-r2",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 12925,
+      "ink_pixels_alpha_gt8": 13239,
+      "visible_fraction": 0.9762821965405242
+    },
+    {
+      "design": "call-the-court-r2",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 12950,
+      "ink_pixels_alpha_gt8": 13239,
+      "visible_fraction": 0.9781705566885717
+    },
+    {
+      "design": "call-the-court-r2",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 13663,
+      "ink_pixels_alpha_gt8": 13841,
+      "visible_fraction": 0.9871396575391952
+    },
+    {
+      "design": "call-the-court-r2",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 13651,
+      "ink_pixels_alpha_gt8": 13841,
+      "visible_fraction": 0.9862726681598151
+    },
+    {
+      "design": "call-the-court-r2",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 1385,
+      "ink_pixels_alpha_gt8": 1477,
+      "visible_fraction": 0.9377115775220041
+    },
+    {
+      "design": "call-the-court-r2",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 1409,
+      "ink_pixels_alpha_gt8": 1477,
+      "visible_fraction": 0.953960731211916
+    },
+    {
+      "design": "shadow-tide",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 3167,
+      "ink_pixels_alpha_gt8": 3302,
+      "visible_fraction": 0.9591156874621442
+    },
+    {
+      "design": "shadow-tide",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 3232,
+      "ink_pixels_alpha_gt8": 3302,
+      "visible_fraction": 0.9788007268322229
+    },
+    {
+      "design": "shadow-tide",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 7946,
+      "ink_pixels_alpha_gt8": 8217,
+      "visible_fraction": 0.9670195935256176
+    },
+    {
+      "design": "shadow-tide",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 8078,
+      "ink_pixels_alpha_gt8": 8217,
+      "visible_fraction": 0.98308385055373
+    },
+    {
+      "design": "shadow-tide",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 834,
+      "ink_pixels_alpha_gt8": 898,
+      "visible_fraction": 0.9287305122494433
+    },
+    {
+      "design": "shadow-tide",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 850,
+      "ink_pixels_alpha_gt8": 898,
+      "visible_fraction": 0.9465478841870824
+    },
+    {
+      "design": "severed-crown",
+      "beat": "prepare",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 8599,
+      "ink_pixels_alpha_gt8": 10236,
+      "visible_fraction": 0.8400742477530285
+    },
+    {
+      "design": "severed-crown",
+      "beat": "prepare",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 8604,
+      "ink_pixels_alpha_gt8": 10236,
+      "visible_fraction": 0.8405627198124267
+    },
+    {
+      "design": "severed-crown",
+      "beat": "peak",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 11364,
+      "ink_pixels_alpha_gt8": 12634,
+      "visible_fraction": 0.8994776001266424
+    },
+    {
+      "design": "severed-crown",
+      "beat": "peak",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 11610,
+      "ink_pixels_alpha_gt8": 12634,
+      "visible_fraction": 0.9189488681336078
+    },
+    {
+      "design": "severed-crown",
+      "beat": "settle",
+      "surface": "navy",
+      "visible_delta_gt6_pixels": 1337,
+      "ink_pixels_alpha_gt8": 1526,
+      "visible_fraction": 0.8761467889908257
+    },
+    {
+      "design": "severed-crown",
+      "beat": "settle",
+      "surface": "gold",
+      "visible_delta_gt6_pixels": 1373,
+      "ink_pixels_alpha_gt8": 1526,
+      "visible_fraction": 0.8997378768020969
+    }
+  ],
+  "runtime_capture": false,
+  "assertion": "remaining_overlap=0 after effect-only masks; before counts and removed fractions retained"
+}

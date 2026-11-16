@@ -1,0 +1,148 @@
+{
+  "task": "ART-VFX-WB-TRIO-001",
+  "boss_seed_commit": "46f366dc931e4994d3a6ccd9ad3951ac444a70cf",
+  "numeric_rng_seed": null,
+  "seed_policy": "Boss seed attached every generation as palette/identity context only; original old VFX layers also attached. Hero/background/minions/poses are read-only composition/anchor references, not new body art.",
+  "files": [
+    {
+      "file": "seeds/battle_riftline.webp",
+      "sha256": "6e4114f65a7ab521e310a6e6baa9687205b1527dfb272542b0c550aed4ae72ac",
+      "bytes": 477024
+    },
+    {
+      "file": "seeds/context.json",
+      "sha256": "076f7091dd63d65991cebf70d8d39af8c0209b99a76d1f93d2be1b29edb855ec",
+      "bytes": 626
+    },
+    {
+      "file": "seeds/gold-hero.png",
+      "sha256": "0e888a0d889c61f2e4005361d43121e13478944cd3438a9ed6ca3578ee0dbaff",
+      "bytes": 420757
+    },
+    {
+      "file": "seeds/pose-provenance.json",
+      "sha256": "c2c3ae7058fbd73dea1bb3e7e07ed7592c287cf99f5c488a4ffaa910ebc50ecd",
+      "bytes": 3883
+    },
+    {
+      "file": "seeds/poses/call-the-court.png",
+      "sha256": "da2755b106858086d95b061315f02a1291af7a22105f3e606fc10a4a8568b43f",
+      "bytes": 571271
+    },
+    {
+      "file": "seeds/poses/fate-lash.png",
+      "sha256": "1f31c68dde9ee68c2a12c1ae7ffab77a810c50aa93db267b8caccef610ab2d89",
+      "bytes": 506334
+    },
+    {
+      "file": "seeds/poses/fault-awakening.png",
+      "sha256": "275356a21b8ff1b0158878586d2d7455f99e54c7730333aa960230a9aa1d3c92",
+      "bytes": 727327
+    },
+    {
+      "file": "seeds/poses/mountain-fall.png",
+      "sha256": "15ce57261e61912578b2e9f8461cb64640dc9ab330189a3e33bf19d36207e239",
+      "bytes": 639275
+    },
+    {
+      "file": "seeds/poses/rift-quake.png",
+      "sha256": "1ce84c9ebcd6b8e463794ce1be5d3023186c1efa9dfd373fbd1b69b7181270e0",
+      "bytes": 775288
+    },
+    {
+      "file": "seeds/poses/severed-crown.png",
+      "sha256": "4a420b38a72f7f5ad1b948e3de4cae1c9e170df481483dbb4e52114e646d5dbf",
+      "bytes": 598496
+    },
+    {
+      "file": "seeds/poses/severing-bolt.png",
+      "sha256": "d365ebd38d58fb3c92c1ec1e20334e47fa5bccf90888ea1bf0f6245ed795d4b9",
+      "bytes": 532967
+    },
+    {
+      "file": "seeds/poses/shadow-tide.png",
+      "sha256": "a42594e0755c344badc3a8f35168789ab7666a484e117894135175acc9e13490",
+      "bytes": 529649
+    },
+    {
+      "file": "seeds/poses/sky-rend.png",
+      "sha256": "164809ed5e9229ec97db746f816eac34363c33c037e53d52f6b52c1da907a860",
+      "bytes": 862777
+    },
+    {
+      "file": "seeds/poses/titan-gathering.png",
+      "sha256": "b2e83a55411398db50ba0746bad046892abaac0e41557e6241df04abb49d2bd9",
+      "bytes": 674580
+    },
+    {
+      "file": "seeds/poses/wing-gathering.png",
+      "sha256": "ac5cee90e8d47f9917b4ab1300fd78d74cce7c2abbea32a46cbf127ec0f346c8",
+      "bytes": 601470
+    },
+    {
+      "file": "seeds/poses/wing-gust.png",
+      "sha256": "4fafdb69c3d76957c689870e90e350657498e3ba921fa5b56785620610ccbd30",
+      "bytes": 858568
+    },
+    {
+      "file": "seeds/poses/worldshard-dive.png",
+      "sha256": "5640efbdb8a9f882c716c27413ac9712823c073c672da0aca6225eeb87d4c69a",
+      "bytes": 737541
+    },
+    {
+      "file": "seeds/rift-wisp.png",
+      "sha256": "214dc76cac21f14f3448e669f5bd0e933a085ace60fb3cd3e01cff4d1c3e9038",
+      "bytes": 134955
+    },
+    {
+      "file": "seeds/seed-a.png",
+      "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97",
+      "bytes": 927372
+    },
+    {
+      "file": "seeds/seed-b.png",
+      "sha256": "c3fe15c71d82c7cddc09df874fb9c21480bf2168e7b16248d692878ffb7ec214",
+      "bytes": 904214
+    },
+    {
+      "file": "seeds/seed-c.png",
+      "sha256": "47e5fbbaf06a18ee56a7c8c46771e00f65e13df7998b8c3d78c5cfa98f160105",
+      "bytes": 596229
+    },
+    {
+      "file": "seeds/sentinel.png",
+      "sha256": "33329874d21ddd767790ac55d23b43cfb07a7272dc6f46985c1021adb64f5c2b",
+      "bytes": 492946
+    },
+    {
+      "file": "seeds/shard-crawler.png",
+      "sha256": "ff87cb5db070fcac8fbad7ae195a1986b7d84c5fde53af1039b82dc71b200a4e",
+      "bytes": 213846
+    },
+    {
+      "file": "seeds/style/call-the-rift-peak.png",
+      "sha256": "2191b3320f0d0790ecc4a8dc5114f2dffd69aa6aae1a051b5cd0acc8a525634a",
+      "bytes": 47873
+    },
+    {
+      "file": "seeds/style/rift-awakening-peak.png",
+      "sha256": "07170f0f705ba792973c9cd023cadbe2505159ac586323fb0af0deaf00b447f6",
+      "bytes": 51858
+    },
+    {
+      "file": "seeds/style/rift-cataclysm-prepare.png",
+      "sha256": "92df136f5c9ce978a47d964bd9afe752fd8c84a32688c6a56cfb165d24ef536e",
+      "bytes": 47160
+    },
+    {
+      "file": "seeds/style/rift-gathering-prepare.png",
+      "sha256": "e9bc5dc637167aca415a9c15b777e243fc26aa8f51ef1f80b479571604deecb1",
+      "bytes": 56380
+    },
+    {
+      "file": "seeds/style/rift-wave-peak.png",
+      "sha256": "3364adf18465c5fbdbe1e4c3b5cd8e8f39960a32b43257cb5c3ae5a020967499",
+      "bytes": 61497
+    }
+  ]
+}

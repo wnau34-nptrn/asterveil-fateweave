@@ -1,0 +1,238 @@
+{
+  "sources": [
+    {
+      "design": "titan-gathering",
+      "file": "source/titan-gathering.png",
+      "sha256": "06a8742a661be09cee4a918b123ac69d38793faa5e56549706d3f6dea49d9368",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "mountain-fall",
+      "file": "source/mountain-fall-r2.png",
+      "sha256": "4707d7d51466127224158854cc2d1d234c49652f4338f555fbb711161fd6ea15",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "rift-quake",
+      "file": "source/rift-quake.png",
+      "sha256": "78d3b808ab8628d46eebba2778f8fba2aaa8d67db7b9a4979c6dba010ec07068",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "fault-awakening",
+      "file": "source/fault-awakening.png",
+      "sha256": "f5b106917f3dff49a31cb504a751f4aaeecf117c784f4ccfe082f0a58c70260c",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "wing-gust",
+      "file": "source/wing-gust.png",
+      "sha256": "a51a932611c522ee7b82d501f3aa6b6e701a8e1453c9a43bcdbf43dabde046b9",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        712,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "wing-gathering",
+      "file": "source/wing-gathering.png",
+      "sha256": "bce0c43d7df5c02de85ef17771c3b1fb9090b84614a979a2ecdb257ed86b2ed5",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "wing-gathering-r2",
+      "file": "source/wing-gathering-r2-clean.png",
+      "sha256": "816aa208fd4a11bc4b6fbe2a89e5a2d497f3a3b538a05497e4f7338e0c190dd1",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "worldshard-dive",
+      "file": "source/worldshard-dive.png",
+      "sha256": "9c837cdd285d29c5fc3d8e5520d4854e572b8950937634a76797cd3af80a5316",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "sky-rend",
+      "file": "source/sky-rend.png",
+      "sha256": "3d05d9e784070c6b88c64b6037944aaacdf460d6a325bdf7f23ff13536da74ab",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "severing-bolt",
+      "file": "source/severing-bolt-r2.png",
+      "sha256": "dcb38b2db91f8b09644c79c49ef8507d4b949e338c5f48c5694746a85bf72cf1",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "fate-lash",
+      "file": "source/fate-lash.png",
+      "sha256": "2bd877c128e871bc6ecc46ae1fea0d1c4ba3371640a5c7a1cca8a012af794d49",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "call-the-court",
+      "file": "source/call-the-court.png",
+      "sha256": "987497bd1dc4ded935b40c660b8a820c3a6e613c6e36797779efcdf8c0ca8f28",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "call-the-court-r2",
+      "file": "source/call-the-court-r2.png",
+      "sha256": "4d0e3cbb4b2683c9e4e6c8a7ac3d9c9bbf7df29c6ed104c2de995a1ae85a466f",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        714,
+        1466,
+        2172
+      ]
+    },
+    {
+      "design": "shadow-tide",
+      "file": "source/shadow-tide.png",
+      "sha256": "51a64eb8bfe0b3191146ca0237932a1fb7cbea721166ad15c8f6cc19b66f881f",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    },
+    {
+      "design": "severed-crown",
+      "file": "source/severed-crown.png",
+      "sha256": "5a00f0b538f977de3cd71fa97b817b61d3c39f84cc456346b68100eeb922bc34",
+      "size": [
+        2172,
+        724
+      ],
+      "cuts_x": [
+        0,
+        724,
+        1448,
+        2172
+      ]
+    }
+  ],
+  "normalization": "source bytes immutable; clear only alpha<=8/invisible RGB; proportional resize; fresh transparent padding>=12px; optional recorded VFX-only flip, no recolour/repaint/keying.",
+  "source_beats": "Each source request paints one complete prepare/peak/settle row. Every selected crop/transform recorded in layers.json. Rejected outputs retained too.",
+  "ground_contact": "[128,210] pivot for feet layers. Mountain peak contact manually proposed at source(1104,553); other ground motifs use lower footprint82%/settle90%. Verify actual renderer feet during intake.",
+  "flips": [
+    {
+      "file": "layers/rift-quake-peak.png",
+      "why": "Generated fracture ridges lead toward right; mirrored VFX only to propagate left. No boss/hero seed is mirrored."
+    }
+  ]
+}
