@@ -2,7 +2,7 @@
 
 16 พ.ย. 2026 · Claude เขียน prompt (ยังไม่มีภาพใหม่) · ตาม [คู่มือ prompt](ANIMATION_PROMPT_QUALITY_TH.md) และ skill `fateweave-codex-art-brief` · design [§7](../design/WORLD_BOSS_TRIO_P11_05_TH.md)
 
-ลำดับส่ง: WB-A + แบนเนอร์ + ไอคอน ส่งแล้ว (PR #280/#281/#283; WB-A นำเข้าและเจ้าของอนุมัติ motion 2026-11-16) → **WB-B ส่งได้ตอนนี้** → WB-C หลัง WB-B · ภาพที่ใช้ได้กับการขยับในเกมต้องให้เจ้าของเลือกและอนุมัติเอง (Claude เลือกแทนได้ตามที่มอบหมาย 2026-11-04 แต่บันทึกเป็นการตัดสินของ Claude) ผลเทสต์/CI ไม่ใช่การอนุมัติ
+ลำดับส่ง: WB-A + แบนเนอร์ + ไอคอน ส่งแล้ว (PR #280/#281/#283; WB-A นำเข้าและเจ้าของอนุมัติ motion 2026-11-16) → **WB-B และ WB-C ส่งได้ตอนนี้ (ขนานกันได้เพราะเวลา)** · ภาพที่ใช้ได้กับการขยับในเกมต้องให้เจ้าของเลือกและอนุมัติเอง (Claude เลือกแทนได้ตามที่มอบหมาย 2026-11-04 แต่บันทึกเป็นการตัดสินของ Claude) ผลเทสต์/CI ไม่ใช่การอนุมัติ
 
 ## กติการ่วม (ใส่ทุกงาน)
 
@@ -192,14 +192,63 @@ Prompt สำหรับเครื่องมือสร้างภาพ 
 ขอบเขตงานที่ผู้ใช้อนุญาต: (ใส่ "กติการ่วม" ด้านบนทั้งบล็อก) · branch art/art-unit-animation-wb-b-001 จาก feature/fateweave-initial-prototype (ฐานล่าสุดรวม WB-A แล้ว) · เจ้าของเลือกภาพและอนุมัติ motion เอง ผล CI/เทสต์ไม่ใช่การอนุมัติ
 ```
 
-## WB-C — ART-UNIT-ANIMATION-WB-C-001 (Morvane) · หลัง WB-B ผ่าน
+## WB-C — ART-UNIT-ANIMATION-WB-C-001 (Morvane) · **ส่งได้แล้ว** (ส่งขนานกับ WB-B ได้เพราะเวลา; บทเรียนจาก WB-B ที่จะได้ภายหลังให้ Claude แจ้งกลับ)
+
+ฉบับนี้ครบในตัว · ใช้ package `incoming/ART-UNIT-ANIMATION-WB-A-001/` (อยู่ในสาขาเกมแล้ว) เป็นแบบอย่างรูปแบบไฟล์
 
 ```text
-ใช้แม่แบบ WB-A ทุกหัวข้อ เปลี่ยนเป็น:
-- seed: incoming/ART-CHAR-WORLDBOSS-001/seed-c.png (หันซ้าย ลอยตัว ไม่มีเท้า: ปลายผ้าคลุม = virtual sole y≈896) + turnaround-c.png · encounter wb-morvane
-- ล็อก: แขนสามคู่ (คู่บน/กลางใหญ่/ล่างเล็ก) จับคู่ cuff ตามตำแหน่ง ห้ามสลับคู่ · ผ้าคลุมสามแฉก · แกนพลังกลางอกจุดเดียว · ลอยตัว: ปลายผ้าคลุมอยู่ y=896 ±6px (ลอยขึ้นลงเล็กน้อยได้ บันทึกใน strips.json) · ปลายผ้าห้ามยาวทับพื้นที่แถบ HP ใต้ตัว
-- ท่า (ชื่อตรงเกม): six-hand-rend (Six-Hand Rend แขนคู่กลางฟาด) · severing-bolt (Severing Bolt มือคู่ล่างรวมพลังยิง ไม่วาดลูกพลัง) · fate-lash (Fate Lash แขนคู่บนสะบัดด้าย ไม่วาดด้ายยาวออกนอกตัว) · call-the-court (Call the Court: แขนคู่บนเปิดรอยแยกเหนือหัว — รอยแยกเล็กติดมือได้ ไม่ใช่ VFX ใหญ่) · shadow-tide (Shadow Tide ทั้งทีม: หกแขนกางลง ผ้าคลุมพองเล็กน้อย) · severed-crown (เฟส 70%: แกนอกและขอบผ้าคลุมสว่าง ศีรษะเงย) · hit 4 · down 4 (ผ้าคลุมยุบลงกองกับพื้น แสงดับ ค้าง)
-- ลูกน้อง (มือเงา f2/f3 + วิญญาณ b2): [R1 แนะนำ: ใช้สไปรต์ crawler/wisp เดิมของเกม ไม่ทำภาพใหม่ — ไม่เพิ่ม atlas] · R2: ร่างมือเงาใหม่ ถ้าเจ้าของเลือก R2 ให้แยกเป็นงาน ART-UNIT-ANIMATION-WB-C-COURT-001 หลังจากนี้
-- prompt: "the SAME floating six-armed severed monarch ... three pairs of arms (upper, large middle, small lower), three-tailed cloak, one cyan core in the chest, no legs" และย้ำ "each pair of arms keeps its own position and cuffs"
-- เกณฑ์เพิ่ม: นับแขน 6 ทุกเฟรมและคู่ไม่สลับ · ผ้าคลุมไม่ล้น frame
+เป้าหมาย:
+ชุดท่าร่างกายของบอสโลก Morvane (มอร์เวน ราชันด้ายขาด) จาก seed C เพื่อให้ Claude ประกอบ atlas บอสใหม่ (sheet morvane) แทนการยืมสไปรต์ผู้คุม (foe_sentinel)
+
+บริบทเกมและไฟล์ที่ตรวจแล้ว:
+- encounter wb-morvane ใน src/content/encounters/catalog.ts: บอส f1 SPD 80, ท่าจริง Six-Hand Rend (กายภาพ ตีเดี่ยว) · Severing Bolt (พลังงาน) · Fate Lash (พลังงาน) · Call the Court (ไม่มีดาเมจ: เรียกลูกน้องที่ล้มกลับ) · Shadow Tide (ทั้งทีม พลังงาน) · เฟส 70% "Severed Crown"
+- ลูกน้อง (มือเงา f2/f3 + วิญญาณ b2) ใช้สไปรต์ crawler/wisp เดิมของเกม **ไม่ต้องทำภาพใหม่**
+- ในเกมบอสเล่นแบบ bossMove: เฟรมพร้อม(seed) → 2 เฟรมเตรียม → 2 เฟรมคืนท่า → seed; hit 2 เฟรม; down 3 เฟรมค้างท่าล้ม · displayRatio 2, sole 896/1024 · ไม่มี idle loop (เฟรมพร้อม = seed)
+- Claude จะประกอบเป็น atlas 30 เฟรม: 0 = seed; move1–6 ท่าละ 4 เฟรม (strip เฟรม 2–5); hit 2; down 3 — ตามงาน WB-A
+
+ภาพอ้างอิงที่แนบ/เข้าถึงได้ (แนบ seed ให้ generator ทุกครั้ง):
+- seed: origin/art/art-char-worldboss-001 commit 46f366dc931e4994d3a6ccd9ad3951ac444a70cf → incoming/ART-CHAR-WORLDBOSS-001/seed-c.png (1024×1024 RGBA หันซ้าย; ตัวกว้าง x 191–832 สูง y 134–897) + turnaround-c.png (รูปทรงเท่านั้น seed เป็นหลัก) + concept-c.png + seeds.json (transform)
+- layout: incoming/ART-UNIT-ANIMATION-WB-A-001/references/layout-6.png (6 ช่อง) และ layout-4.png (4 ช่อง) ตัวสูง ~74% ของ cell เท่า Kragmor ตรวจว่า seed-c พอดีช่อง ถ้าไม่พอให้สร้าง layout ใหม่ในสัดส่วนเดียวกันและบันทึก
+
+ข้อกำหนดที่ยืนยันแล้ว:
+- ทิศตาม seed ห้าม mirror · uniform scale เดียวทั้งชุดเท่า seed (วัดจาก six-hand-rend เฟรมพร้อมครั้งเดียว)
+- **ลอยตัว ไม่มีเท้า**: ปลายผ้าคลุมแฉกกลาง (จุดต่ำสุดใน seed y≈897) = เส้นพื้นเสมือน y=896 ในเฟรมพร้อม · ท่าที่ตั้งใจลอยขึ้น/ลงได้ไม่เกิน ~24px (บันทึก sole_y ที่วัดใน strips.json) · ปลายผ้าห้ามต่ำกว่า y=899 ยกเว้น down ที่ผ้ากองกับพื้น (ปลายผ้าห้ามทับพื้นที่แถบ HP ใต้ตัว)
+- ล็อกภาพจำ: **แขนสามคู่** — คู่บนชูสูงมีปลอกทองที่ปลายแขน · คู่กลางใหญ่ปลอกทองขนาดใหญ่ (ใน seed ข้างหนึ่งเหยียดไปทางซ้าย อีกข้างพาดเข้าหน้าอก) · คู่ล่างเล็กที่เอว มือแนบกันหน้าท้อง · จับคู่ตามตำแหน่ง/ปลอก ห้ามสลับคู่หรือเพิ่ม/ลดแขน · ผ้าคลุมสามแฉกแทนขา · แกนพลัง cyan กลมหนึ่งดวงกลางอก · มงกุฎทองลอยเหนือศีรษะ · ไม่มีขา
+- ช่องว่างด้านบน: ยอดมงกุฎ seed อยู่ y≈134 ทุกเฟรมต้องมีที่ว่าง ≥32px บน/ซ้าย/ขวา (แขนชูสูงต้องไม่ล้น)
+- ช่องโปร่งใสระหว่างท่าใน raw sheet ≥48px · alpha จริง ไม่มีลายตารางปลอม · body เท่านั้น: ไม่วาดลูกพลัง ด้านทอง เส้นด้ายยาวออกนอกตัว รอยแยกใหญ่ ควัน แสงนอกร่าง (VFX มาจากโค้ด/งานอื่น) — Call the Court อนุญาตรอยแยกเล็กที่ติดปลายมือเท่านั้น
+- บทเรียนจาก WB-A: (1) เฟรมที่หัวก้ม/แขนบัง ทำให้เครื่องวัดกายวิภาคอัตโนมัติวัดไม่ได้ 10 จาก 44 เฟรม — ท่าหลักให้เห็นหัว มงกุฎ และแกนอกชัดเมื่อทำได้ (down เป็นข้อยกเว้น) (2) เฟรมแรก/สุดท้ายของทุกท่า (ยกเว้น down) ต้องเป็น seed ตรงทุก pixel (3) ตัวใหญ่เต็มช่องทำให้ atlas ต้องย่อ — อย่าขยายตัวเกิน seed
+
+ท่า ทิศ จำนวนเฟรม และจังหวะ (ชื่อท่าตรงเกม; 6 เฟรมต่อท่าหลัก; แต่ละเฟรมต้องเห็นการเปลี่ยนชัด):
+1. six-hand-rend (Six-Hand Rend กายภาพ แขนคู่กลางฟาด) 6: พร้อม(seed ตรง) → คู่กลางดึงถอยเข้าหาตัว กรงเล็บกาง คู่บนยกสูง → คู่กลางกางออกข้างสุด ลำตัวหมุนไปขวาเล็กน้อย (anticipation) → ฟาดคู่กลางลงทางซ้ายพร้อมกัน ลำตัวโน้มซ้าย → ตามแรง ผ้าคลุมพลิ้วตาม → คืนท่า(seed ตรง)
+2. severing-bolt (Severing Bolt พลังงาน มือคู่ล่างรวมพลังยิง) 6: พร้อม → คู่ล่างยกขึ้นประกบกันหน้าอก → คู่ล่างดึงห่างกันเป็นรูปเตรียมยิง แกนอกสว่างขึ้น (ไม่มีลูกพลังในมือ) → คู่ล่างผลักไปข้างหน้าทางซ้าย มือเปิด → ตามแรง ปรับตัว → คืนท่า
+3. fate-lash (Fate Lash พลังงาน แขนคู่บนสะบัดด้าย) 6: พร้อม → คู่บนลดลงมาตรงหน้า นิ้วเหมือนจับด้าย → คู่บนยกสูงสุดไขว้เหนือหัว (ไม่วาดด้าย) → สะบัดคู่บนเฉียงลงทางซ้าย → ตามแรง → คืนท่า
+4. call-the-court (Call the Court ไม่มีดาเมจ ท่าเตือน) 6: พร้อม → คู่บนยกสองข้าง → คู่บนเปิดแยกกันเหนือหัวเหมือนฉีกม่าน (รอยแยกเล็กติดปลายมือเท่านั้น) → ค้างเปิดสูงสุด ตัวเงยเล็กน้อย แกนอกสว่าง → ปล่อยมือลงช้า → คืนท่า [R1 แนะนำ: คู่บนฉีกม่านเหนือหัว · R2: ทุกคู่ยื่นลงหาพื้น เรียกจากเงา]
+5. shadow-tide (Shadow Tide ทั้งทีม พลังงาน) 6: พร้อม → หกแขนหุบเข้าหาตัว → หกแขนกางลงต่ำสองข้าง ผ้าคลุมพองเล็กน้อย → กดพลังลง ตัวลอยต่ำลงเล็กน้อย ผ้าคลุมแผ่ในเฟรม → ตามแรง → คืนท่า
+6. severed-crown (เฟส 70% "Severed Crown") 6: พร้อม → ก้มตัว หดแขน → ศีรษะเงย ยกคู่บนสุด แกนอกและขอบผ้าคลุมสว่างขึ้นในตัวภาพ มงกุฎสว่าง → ค้างพีค คำราม → ผ่อนลง → คืนท่า
+7. hit 4: พร้อม → สะท้านถอยหลัง (ไปทางขวา) ผ้าคลุมกระพือ → ตั้งหลัก → คืนท่า
+8. down 4: พร้อม → ตัวทรุดลง แขนห้อย → ผ้าคลุมยุบลงกองกับพื้น แกนดับ → นอนกองค้าง ไม่ลุก (ท่านี้ผ้าติดพื้นที่ y=896)
+
+ขนาดเฟรม จุดยึด และรูปแบบไฟล์ (เหมือน WB-A):
+- raw: หนึ่งภาพต่อท่า สร้างทุก pose ของท่านั้นในภาพเดียวเรียงซ้ายไปขวา (whole strip) ไม่สร้างทีละเฟรม; ถ้าทำ 6 pose ในภาพเดียวไม่ได้ ให้ลด 1 pose กลางแล้วบันทึกใน NOTES (ห้ามแยกสร้างทีละเฟรม)
+- normalized: strips/<move>.png = N×(1024×1024) RGBA แถวเดียว uniform scale เดียวกับ seed, x กลางตัวตาม seed; ผล: 6 ท่า×6 + hit 4 + down 4 = 44 เฟรม
+- strips.json (ต่อท่า: raw, bbox แต่ละ pose, scale, paste_xy, sole_y ที่วัด, ข้อยกเว้นลอยตัว) · preview-390.png (ทุกเฟรมสเกลเดียว บอสสูง ~160px) + preview-keyposes-390.png + previews/<move>.webp ขนาด 390×280 + compare กับผู้คุมเดิม · anatomy audit ด้วย scripts/unit-anatomy-audit.py ผ่าน audit_anatomy.py (ดูแบบอย่าง WB-A) พร้อม anatomy-review.json สำหรับเฟรมที่วัดไม่ได้
+
+คำอธิบายด้านภาพ:
+ราชันเงาลอยตัวหกแขน ดูสง่าและน่ากลัว ท่าต้องอ่านจาก silhouette ที่สูง 160px แยกด้วยคู่แขน: ฟาด = คู่กลางกวาดลงต่ำชัด, ยิง = คู่ล่างผลักไปหน้า, สะบัดด้าย = คู่บนฟาดจากเหนือหัว, เรียก = คู่บนฉีกออกจากกันเหนือหัวนิ่งแล้วค้าง (สัญญาณเตือนผู้เล่น), Tide = ทุกแขนกางต่ำและผ้าคลุมแผ่
+
+Prompt สำหรับเครื่องมือสร้างภาพ (แนบ seed-c.png และ layout เป็น reference ทุกครั้ง; เปลี่ยน <N> และ <MOVE POSES>):
+"Sprite animation strip of the SAME floating six-armed severed monarch from the attached reference, identical design, colors, proportions and lighting: violet shadow body with gold armor trim, a floating gold crown above the head, ONE round cyan power core in the chest, THREE PAIRS of arms (upper pair raised with gold bracers, large middle pair with big gold cuffs, small lower pair near the waist), a three-tailed tattered violet cloak instead of legs, no legs. Same facing as the reference, full body, floating with the lowest cloak tip on one flat ground line. Exactly <N> poses in one row, left to right: <MOVE POSES>. Same scale in every pose, never enlarged beyond the reference, wide empty transparent gaps between poses, nothing touching the image edges, each pair of arms keeps its own position and cuffs (never swap pairs), exactly six arms, one core, three cloak tails in every pose. Transparent background (real alpha, no checkerboard, no floor, no shadow plate). No energy orbs, no threads or strings, no big rifts or portals, no smoke, no light beams, no text, no UI."
+
+งานปรับ asset และ metadata (Codex): ตัดแต่ละ pose ด้วย alpha bbox → scale เดียวของชุด → วางลง 1024×1024 ให้ปลายผ้าต่ำสุดของเฟรมพร้อม y=896 → strips.json · ห้ามยืด/ย่อรายเฟรมเพื่อให้ "พอดี" ถ้า pose ล้นให้สร้างใหม่
+
+งานนำเข้าเกมและการเปลี่ยนสถานะ (Claude ภายหลัง ไม่ใช่งาน Codex): atlas lossless sheet morvane (identity foe_morvane, move1–6), encounter-only loading, presentation coverage, คลิป 390px ให้เจ้าของอนุมัติ motion
+
+เกณฑ์ตรวจรับ:
+- นับ แขน 6 (สามคู่ไม่สลับ) / แกนอก 1 / ผ้าคลุม 3 แฉก / มงกุฎ 1 ทุกเฟรม (ยกเว้น down ที่แกนดับ) · ท่าที่แขนซ้อนกันตามมุมมองยังเห็นว่าเป็นคู่ไหน
+- สเกลตัวห่างจาก seed ไม่เกิน ±4% (วัดความสูงจากมงกุฎถึงปลายผ้าไม่รวมแขนที่ชู) · ปลายผ้าต่ำสุดของเฟรมพร้อมที่ y=896 ±3px
+- ไม่มีส่วนใดตัดขอบ frame · ไม่มี VFX ในร่าง · alpha จริง · เฟรมแรก/สุดท้ายตรง seed (ยกเว้น down)
+- call-the-court อ่านต่างจาก fate-lash ที่ 160px (ฉีกออกจากกันแล้วค้าง ไม่ใช่สะบัด)
+- strips.json, validation.json ตรงไฟล์จริง และ --verify ผ่านหลัง fetch กลับ
+
+ขอบเขตงานที่ผู้ใช้อนุญาต: ตามบล็อก "ขอบเขตงานที่ผู้ใช้อนุญาต" ด้านบนทั้งหมด · branch art/art-unit-animation-wb-c-001 จาก feature/fateweave-initial-prototype (ฐานล่าสุดรวม WB-A แล้ว) · เจ้าของเลือกภาพและอนุมัติ motion เอง ผล CI/เทสต์ไม่ใช่การอนุมัติ
 ```
