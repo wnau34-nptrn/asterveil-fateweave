@@ -36,6 +36,20 @@ export const gameRules: GameRules = {
     personal: [{ id: 'p-2', attempts: 2, reward: { ore: 0, gold: 0, shard: 1 } }, { id: 'p-4', attempts: 4, reward: { ore: 0, gold: 0, shard: 2 } }],
     shared: [{ id: 's-50', percent: 50, reward: { ore: 0, gold: 3 } }, { id: 's-100', percent: 100, reward: { ore: 0, gold: 0, shard: 1 } }],
     hp: { perAccount: 2500, min: 5000, max: 5_000_000 },
+    // P11-05 trio (draft numbers, OD-51 §9 items 3–5; docs/design/WORLD_BOSS_TRIO_P11_05_TH.md §2–§3). `from` is left out
+    // (OD-51: the warden opens the 14 Dec test; the trio is scheduled only once steps 1–4 and art A pass before 7 Dec).
+    // Weekly at most (5 attempts on all three, online): 76 ore-equivalent tradeable + 35 boss shards (the 38 cut from
+    // the warden's 114), so the P04-06 total stays 1195 ≤ 1200.
+    trio: {
+      bosses: { kragmor: 'wb-kragmor', valdrakk: 'wb-valdrakk', morvane: 'wb-morvane' },
+      attemptReward: { ore: 4, gold: 2 }, attemptShards: 3,
+      personal: [{ id: 'p-2', attempts: 2, reward: { ore: 0, gold: 0, shard: 1 }, shards: 2 }, { id: 'p-4', attempts: 4, reward: { ore: 0, gold: 0, shard: 1 }, shards: 3 }],
+      shared: [{ id: 's-50', percent: 50, reward: { ore: 0, gold: 2 }, shards: 2 }, { id: 's-100', percent: 100, reward: { ore: 0, gold: 0 }, shards: 3 }],
+      hp: { perAttempt: 400, min: 1500, max: 5_000_000 },
+      shardCap: 200,
+      craft: { shards: 40, ore: 30, dust: 10, level: 11 },
+      items: { kragmor: { slot: 'body', power: 'bulwark', first: 'hp' }, valdrakk: { slot: 'gloves', power: 'breaker', first: 'attack' }, morvane: { slot: 'head', power: 'reaper', first: 'support' } },
+    },
   },
   board: {
     keepDays: 3, smallTeam: 3,
@@ -119,7 +133,9 @@ export const gameRules: GameRules = {
   },
   // Equipment (2D-2, draft numbers; docs/EXPEDITION_DESIGN.md "Equipment").
   equipment: {
-    boss:{chance:25,pity:4,barrier:6,damage:4},
+    boss:{chance:25,pity:4,barrier:6,damage:4,
+      // P11-05 trio items (draft): bulwark barrier 10 after a hit of 15+, breaker +6, reaper heals 8 (barrier ≤6 past max HP).
+      trio:{bulwark:{amount:10,at:15},breaker:{amount:6,at:0},reaper:{amount:8,at:6}}},
     bagCap: 60,
     // Stats design (owner-approved 2026-10-17, draft numbers): attack and support are percents; armour/resist/leech
     // are battle percents; regen and luck work on the map. Each value rolls 80–120% of its level value.

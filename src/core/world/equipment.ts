@@ -1,4 +1,4 @@
-import type { GearSpecial, HeroGear } from '../battle/types';
+import type { BossPower, GearSpecial, HeroGear, TrioPower } from '../battle/types';
 import type { EquipmentRules, Gear, GearSlot, GearStat, Item, MapDefinition, SetId, StatCurve } from './types';
 import { GEAR_SLOTS, SET_IDS } from './types';
 
@@ -7,6 +7,12 @@ import { GEAR_SLOTS, SET_IDS } from './types';
 export const GEAR_SPECIALS: readonly GearSpecial[] = ['laststand', 'markhunter', 'renewal'];
 export const GEAR_STATS: readonly GearStat[] = ['hp', 'attack', 'support', 'speed', 'armour', 'resist', 'leech', 'barrier', 'regen', 'luck'];
 export const RARITIES = 5;
+// P11-05 World Boss trio items (save v65): each power has one slot and one fixed first affix (tests check the content's
+// `WorldBossTrioRules.items` names the same).
+export const TRIO_POWERS: readonly TrioPower[] = ['bulwark', 'breaker', 'reaper'];
+export const isTrioPower = (p: BossPower): p is TrioPower => (TRIO_POWERS as readonly string[]).includes(p);
+export const TRIO_SLOTS: Readonly<Record<TrioPower, GearSlot>> = { bulwark: 'body', breaker: 'gloves', reaper: 'head' };
+export const TRIO_FIRST: Readonly<Record<TrioPower, GearStat>> = { bulwark: 'hp', breaker: 'attack', reaper: 'support' };
 const curve = ([base, per]: StatCurve, level: number) => base + per * (level - 1);
 // A support class's weapon has its own main stat and affix pool.
 const slotKey = (rules: EquipmentRules, slot: GearSlot, hero?: string): GearSlot | 'supportWeapon' | 'magicWeapon' =>
@@ -56,6 +62,9 @@ export function gearTotals(map: MapDefinition, gear: Gear | undefined): GearTota
   let hpPercent = 0; const extra: HeroGear = {};
   const boss=gear?.charm?.boss;
   if(boss)extra.boss={power:boss,amount:boss==='focus'?map.equipment.boss.damage:map.equipment.boss.barrier};
+  // P11-05 trio items (body/gloves/head): each slot's power once, in slot order.
+  const trio=(['body','gloves','head'] as const).flatMap(slot=>{const power=gear?.[slot]?.boss;return power&&isTrioPower(power)?[{power,...map.equipment.boss.trio[power]}]:[];});
+  if(trio.length)extra.trio=trio;
   for (const [id, n] of Object.entries(setCounts(gear)) as [SetId, number][]) {
     const set = map.equipment.sets[id];
     if (n >= 2) for (const { stat, value } of set.two) { if (stat === 'hp') hpPercent += value; else sum[stat] += value; }
@@ -100,7 +109,8 @@ export function itemValid(map: MapDefinition, item: Item, heroIds: readonly stri
   const inRange = (n: unknown) => Number.isInteger(n) && (n as number) >= rules.quality[0] && (n as number) <= rules.quality[1];
   if (item.q !== undefined && (typeof item.q !== 'object' || Object.keys(item.q).length !== 2 || !inRange(item.q.main) || !Array.isArray(item.q.affixes)
     || item.q.affixes.length !== item.affixes.length || !item.q.affixes.every(inRange))) return false;
-  if(item.boss!==undefined){if(!['aegis','focus','lantern'].includes(item.boss)||item.slot!=='charm'||item.rarity!==4||item.special!==undefined)return false;}
+  if(item.boss!==undefined){if(item.rarity!==4||item.special!==undefined)return false;
+    if(isTrioPower(item.boss)?item.slot!==TRIO_SLOTS[item.boss]||item.affixes[0]!==TRIO_FIRST[item.boss]:!['aegis','focus','lantern'].includes(item.boss)||item.slot!=='charm')return false;}
   else if ((item.rarity === RARITIES - 1) !== (item.special !== undefined) || (item.special !== undefined && !GEAR_SPECIALS.includes(item.special))) return false;
   if (item.set !== undefined && !SET_IDS.includes(item.set)) return false;
   if (item.plus !== undefined && (!Number.isInteger(item.plus) || item.plus < 1 || item.plus > rules.forge.plusCap[item.rarity]!)) return false;

@@ -1,4 +1,4 @@
-import { sharedPercent, wbBook, wbClaimReason, wbWeekOf, type WorldBossShared } from '../core/world/world-boss';
+import { sharedPercent, wbBook, wbClaimReason, wbWeekDamage, wbWeekOf, type WorldBossShared } from '../core/world/world-boss';
 import { partyLine } from '../core/world/tomes';
 import type { MapDefinition, Profile } from '../core/world/types';
 import type { SharedBoss, WorldBossStatus } from '../platform/server-client';
@@ -50,7 +50,7 @@ export function worldBossBody(p: Profile, maps: readonly MapDefinition[], day: n
   const w = book.weeks.find(x => x.week === week)!; const line = partyLine(home, p.party.deployed);
   const reason = worldBossStartReason(p, maps, day);
   const head = `<section class="wb-card" id="wb-card" aria-label="บอสโลกสัปดาห์นี้"><div class="wb-head"><span class="wb-emblem">${icon('flag')}</span><div><h3>บอสโลก · ผู้คุมรอยแยก</h3><small>สัปดาห์นี้ · ถึง ${dayLabel(weekEnd(week))} · สูงสุด ${rules.maxRounds} รอบต่อครั้ง</small></div></div>
-    <p class="wb-attempts" id="wb-attempts">ใช้สิทธิ์แล้ว <b>${w.attempts}/${rules.attempts}</b> ครั้ง${w.attempts ? ` · ดาเมจรวม <b>${w.damage.toLocaleString('th-TH')}</b> · ครั้งที่ดีที่สุด <b>${w.best.toLocaleString('th-TH')}</b>` : ''}</p>
+    <p class="wb-attempts" id="wb-attempts">ใช้สิทธิ์แล้ว <b>${w.attempts}/${rules.attempts}</b> ครั้ง${w.attempts ? ` · ดาเมจรวม <b>${wbWeekDamage(w).damage.toLocaleString('th-TH')}</b> · ครั้งที่ดีที่สุด <b>${wbWeekDamage(w).best.toLocaleString('th-TH')}</b>` : ''}</p>
     ${online ? (status?.current ? bar(status.current) : '<p class="camp-note" id="wb-bar-missing">ยังอ่านเลือดส่วนกลางจากเซิร์ฟเวอร์ไม่ได้ · ลองเปิดแท็บนี้อีกครั้ง</p>') : '<p class="camp-note" id="wb-offline">เล่นออฟไลน์: ไม่มีแถบเลือดส่วนกลางและรางวัลส่วนรวม · รางวัลเข้าร่วมกับรางวัลส่วนตัวยังได้ตามปกติ</p>'}
     <p class="camp-note">ลงสนามด้วยทีมสนามของค่ายเลือดเต็ม · นับเฉพาะเลือดที่บอสเสียจริง · ศึกต้องจบ (ชนะ แพ้ หรือครบ ${rules.maxRounds} รอบ) จึงนับสิทธิ์ · ส่งผลครั้งเดียวตอนจบศึก</p>
     <p class="side-quest-reward">รางวัลเข้าร่วมต่อครั้ง: ${sweepText(rules.attemptReward, line)}</p>

@@ -13,7 +13,7 @@ const commander = { name: 'ทดสอบ', crest: 'star', color: 'gold', camp:
 const base = (patch: Partial<Profile> = {}): Profile => ({ ...newProfile(home, 5), tutorialDone: true, commander: { ...commander }, cleared: MAPS.map(m => m.id), ...patch });
 const status = (current: number, last: number | null = null): WorldBossStatus => ({ week: W,
   current: { week: W, hp: 5000, left: 5000 - current, accounts: 12 }, last: last === null ? null : { week: W - 1, hp: 5000, left: 5000 - last, accounts: 9 } });
-const played = (attempts: number, claimed: string[] = [], week = W): Profile => base({ worldBoss: { weeks: [{ week, attempts, damage: attempts * 300, best: 300, claimed }] } });
+const played = (attempts: number, claimed: string[] = [], week = W): Profile => base({ worldBoss: { weeks: [{ week, attempts, bosses: {}, ...(attempts ? { legacy: { attempts, damage: attempts * 300, best: 300 } } : {}), claimed }] } });
 
 describe('World Boss tab (P11-04 part 2)', () => {
   it('shows the week, the attempts and the personal milestones; offline has no shared bar', () => {
@@ -32,11 +32,11 @@ describe('World Boss tab (P11-04 part 2)', () => {
     expect(worldBossReady(played(1), MAPS, D, null)).toBe(0);
   });
   it('last week stays claimable for those who took part, and only what is unclaimed shows', () => {
-    const p = base({ worldBoss: { weeks: [{ week: W - 1, attempts: 3, damage: 900, best: 300, claimed: ['p-2'] }, { week: W, attempts: 0, damage: 0, best: 0, claimed: [] }] } });
+    const p = base({ worldBoss: { weeks: [{ week: W - 1, attempts: 3, bosses: {}, legacy: { attempts: 3, damage: 900, best: 300 }, claimed: ['p-2'] }, { week: W, attempts: 0, bosses: {}, claimed: [] }] } });
     const html = worldBossBody(p, MAPS, D, status(0, 5000), true);
     expect(html).toContain(`data-id="s-50" data-week="${W - 1}"`); expect(html).toContain(`data-id="s-100" data-week="${W - 1}"`);
     expect(worldBossReady(p, MAPS, D, status(0, 5000))).toBe(2);
-    const done = worldBossBody(base({ worldBoss: { weeks: [{ week: W - 1, attempts: 3, damage: 900, best: 300, claimed: ['s-50', 's-100'] }] } }), MAPS, D, status(0, 5000), true);
+    const done = worldBossBody(base({ worldBoss: { weeks: [{ week: W - 1, attempts: 3, bosses: {}, legacy: { attempts: 3, damage: 900, best: 300 }, claimed: ['s-50', 's-100'] }] } }), MAPS, D, status(0, 5000), true);
     expect(done).not.toContain(`data-week="${W - 1}"`);
   });
   it('the start button closes when the five attempts are used or there is no field team', () => {

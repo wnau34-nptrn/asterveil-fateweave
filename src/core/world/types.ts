@@ -1,4 +1,4 @@
-import type { ActionId, BossPower, Command, GearSpecial, HeroDefinition, Outcome, PassiveId, TalentCap, TalentRule } from '../battle/types';
+import type { ActionId, BossPower, CharmPower, Command, TrioPower, GearSpecial, HeroDefinition, Outcome, PassiveId, TalentCap, TalentRule } from '../battle/types';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export interface Point { x: number; y: number }
@@ -135,10 +135,12 @@ export interface SetDefinition {
 // A value at item level L = round(base + perLevel × (L − 1)).
 export type StatCurve = readonly [base: number, perLevel: number];
 export interface HuntPlan {target?:string;misses:number}
-export interface BossProgress {target:BossPower;misses:number;rewarded:boolean}
+export interface BossProgress {target:CharmPower;misses:number;rewarded:boolean}
 export interface BossPlan extends BossProgress {version:1;boss:string}
 export interface EquipmentRules {
-  boss:{chance:number;pity:number;barrier:number;damage:number};
+  boss:{chance:number;pity:number;barrier:number;damage:number;
+    // P11-05 (save v65) trio item powers: `at` is bulwark's least HP loss and reaper's barrier cap (unused by breaker).
+    trio: Readonly<Record<TrioPower, { amount: number; at: number }>>};
   hunt:{weaponBiasPercent:number;pityDrops:number};
   bagCap: number;
   // Main stats per slot (a support class's weapon uses `supportWeapon`); affix values per stat; the affixes each
@@ -350,9 +352,35 @@ export interface WorldBossRules {
   personal: readonly { id: string; attempts: number; reward: SweepReward }[];
   shared: readonly { id: string; percent: number; reward: SweepReward }[];
   hp: { perAccount: number; min: number; max: number };
+  // P11-05 (save v65): the trio that replaces the warden from week `trio.from` on.
+  trio: WorldBossTrioRules;
 }
-// One week of the book: finished attempts, total and best damage, milestones paid (personal and shared ids).
-export interface WorldBossWeek { week: number; attempts: number; damage: number; best: number; claimed: string[] }
+// P11-05 World Boss trio (docs/design/WORLD_BOSS_TRIO_P11_05_TH.md §2–§4, draft numbers; OD-46–49, OD-51). From week
+// `from` (missing = not scheduled: the warden stays) three bosses stand each week and the week's `attempts` (the warden's
+// allowance) are shared among them. Every finished attempt pays `attemptReward` plus `attemptShards` of that boss's
+// shards; `personal` milestones count the week's attempts on all three and pay `shards` of the boss fought in the attempt
+// that reached them; `shared` milestones are per boss (`<boss>:<id>`), online only (OD-49), for those who fought that
+// boss that week. `hp`: each boss's shared HP is `perAttempt` × its finished attempts last week, within [min, max].
+// Boss shards (`Profile.bossShards`, at most `shardCap` each) only `craft` that boss's item (`items`).
+export interface WorldBossTrioRules {
+  from?: number;
+  bosses: Readonly<Record<WbBossId, string>>;
+  attemptReward: SweepReward; attemptShards: number;
+  personal: readonly { id: string; attempts: number; reward: SweepReward; shards: number }[];
+  shared: readonly { id: string; percent: number; reward: SweepReward; shards: number }[];
+  hp: { perAttempt: number; min: number; max: number };
+  shardCap: number;
+  craft: { shards: number; ore: number; dust: number; level: number };
+  items: Readonly<Record<WbBossId, { slot: GearSlot; power: TrioPower; first: GearStat }>>;
+}
+export type WbBossId = 'kragmor' | 'valdrakk' | 'morvane';
+export const WB_BOSSES: readonly WbBossId[] = ['kragmor', 'valdrakk', 'morvane'];
+// One boss's tally in a week: finished attempts, total and best damage.
+export interface WorldBossTally { attempts: number; damage: number; best: number }
+// One week of the book (v65): `attempts` the week's finished attempts (the sum of `bosses` and `legacy`), each trio
+// boss's tally, `legacy` the warden's (weeks before the trio, and v64 weeks), milestones paid (`p-2`/`p-4`, trio shared
+// ids `<boss>:s-50`, warden shared ids without a prefix).
+export interface WorldBossWeek { week: number; attempts: number; bosses: Partial<Record<WbBossId, WorldBossTally>>; legacy?: WorldBossTally; claimed: string[] }
 export interface WorldBossBook { weeks: WorldBossWeek[] }
 export interface BoardBook { day: number; days: (BoardSet & { day: number })[]; weeks: (BoardSet & { week: number; jobs: Record<string, string[]> })[] }
 // A map's boss tomes (maps 2–3): `boss` every win, `first` added the first time the map is cleared.
@@ -464,6 +492,8 @@ export interface Profile {
   board?: BoardBook;
   // P11-04 (save v64): the World Boss weeks (this week and, while its shared rewards are claimable, the one before).
   worldBoss?: WorldBossBook;
+  // P11-05 (save v65): World Boss trio shards, each 1..`trio.shardCap` (missing or absent id = none).
+  bossShards?: Partial<Record<WbBossId, number>>;
   // P04-02 (OD-22): story recruits already compensated (or met through the story), each at most once. Missing = none.
   storyShards?: string[];
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
@@ -502,8 +532,10 @@ export type ProfileEvent =
   | { type: 'boardClaimed'; tab: BoardTab; id: string; period: number; reward: SweepReward }
   // P11-04: one finished World Boss attempt (`damage` to the boss, `reward` the attempt's own and `milestones` the
   // personal milestones it reached) and a shared milestone claimed.
-  | { type: 'wbAttempt'; week: number; attempt: number; damage: number; rounds: number; outcome: Outcome; reward: SweepReward; milestones: { id: string; reward: SweepReward }[] }
-  | { type: 'wbClaimed'; week: number; id: string; reward: SweepReward }
+  // `boss`/`shards` (P11-05): the trio boss fought and the boss shards each part paid (missing = the warden).
+  | { type: 'wbAttempt'; week: number; attempt: number; damage: number; rounds: number; outcome: Outcome; reward: SweepReward; milestones: { id: string; reward: SweepReward; shards?: number }[]; boss?: WbBossId; shards?: number }
+  | { type: 'wbClaimed'; week: number; id: string; reward: SweepReward; boss?: WbBossId; shards?: number }
+  | { type: 'bossCrafted'; uid: number; boss: WbBossId }
   | { type: 'bought'; item: ShopItemId; heroId?: string; uid?: number }
   | { type: 'refreshed' };
 export interface ProfileResult { profile: Profile; event: ProfileEvent }

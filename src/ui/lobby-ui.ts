@@ -10,7 +10,7 @@ import { type CharacterTab } from './character-view';
 import { applyCampEquipment, campEquipment, type AutoEquipmentPlan } from '../core/world/auto-equipment';
 import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gearFilterControls } from './gear-inventory';
 import { shortcutBlocked } from '../platform/keyboard';
-import type { BossPower, ActionId, HeroDefinition } from '../core/battle/types';
+import type { CharmPower as BossPower, ActionId, HeroDefinition } from '../core/battle/types';
 import { withParty } from '../core/battle/engine';
 import { hardReason, reserveSlots, activeGuides, guideDone, featureMap, featureOpen, mapUnlocked, brewReason, buyReason, claimReason, refreshReason, shopLeft, dismissReason, equip, groupOf, talentPoints, talentsSpent, treeClears, type Group } from '../core/world/profile';
 import { isBigTree } from '../core/world/talents';

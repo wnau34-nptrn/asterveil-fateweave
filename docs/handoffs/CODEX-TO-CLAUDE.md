@@ -1,3 +1,11 @@
+## 2026-11-16 — P11-05 step 2: World Boss trio world rules, items, save v65 (Opus; branch claude/p11-05-trio-world)
+- `gameRules.worldBoss.trio` (OD-51 drafts): 5 attempts shared by the three bosses, per-boss tallies, attempt 4/2 + 3 boss shards, p-2/p-4 1 universal + 2/3 shards of that attempt's boss, per-boss `<boss>:s-50/s-100` online only (OD-49), `Profile.bossShards` ≤200, `trioSharedHp` ×400 min 1500. `trio.from` unset → the warden stays live (OD-51); `worldBoss { boss }` required only from `from`.
+- Items: `bulwark`/`breaker`/`reaper` (body/gloves/head, `HeroGear.trio`, one boss power per wearer per round with the charm) + `craftBossItem` command (chosen affixes/set, Lv11 q100 locked, 40 shards + 30 ore + 10 dust). Trio encounters moved into `catalog.ts` and served by `encounterById` (not `encounters`: no body clips until steps 4–5).
+- Save v65: week `{ week, attempts, bosses, legacy?, claimed }`; v64 weeks move to `legacy` with their attempts (no refill). `legacy` carries `attempts` (deviation from design §4, noted there).
+- Server untouched: it still sends warden attempts/claims (no `boss`), which v65 handles; ledger ignores boss shards until step 3. UI: only compile fixes (damage via `wbWeekDamage`, placeholder power names).
+- Tests: `tests/world-boss-trio-world.test.ts` (18: rules, milestones, claims, crafting, powers with preview equality, save/migration, budget 1195 ≤ 1200, three-boss week sim); typecheck, lint, `npm test` (1966), build, `npm run sim` (29, reports unchanged), step-1 probe byte-identical. [validation](../validation/p11-05-2026-11-16/README_TH.md)
+- Next: step 3 server (per-boss bars, ledger shard receipts, `/v1/worldboss`, verify, load test).
+
 ## 2026-11-16 — OD-51: warden opens the external test, trio drafts approved (Opus; branch claude/od-51-trio-launch)
 - Owner "ทำตามที่คุณแนะนำ": 14 Dec test opens with the current warden; the trio replaces it only if steps 1–4 + art A pass before 7 Dec. P11-05 §9 drafts 3–5 approved for the test (crafting 40/30/10, central shards 3→2, ore/gold 4/2, shared HP ×400 min 1500). §9 item 6 (Morvane damage) stays open. Docs only; `git diff --check`.
 - Still from the owner: privacy contact text, `accountId` for the admin row, Google consent Publish before 30 Nov.

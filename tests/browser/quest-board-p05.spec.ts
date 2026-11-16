@@ -47,14 +47,16 @@ test('the quest board counts by itself, keeps a catch-up day and pays each task 
   const hunt = page.locator(`#board-claim-weekly-w-elites-${week}`); await expect(hunt).toBeVisible();
   await expect(page.locator(`#board-w-elites-${week}`)).toContainText('เศษกลาง 4');
   await page.screenshot({ path: 'docs/validation/p09-shards-2026-11-15/board-weekly-390.png' });
-  await hunt.click(); await expect(page.locator(`#board-w-elites-${week}`)).toHaveAttribute('data-state', 'claimed');
+  // On a Monday the task is last week's: a paid last-week card leaves the board instead of showing as claimed.
+  const claimed = async (id: string) => week === weekOf(day) ? expect(page.locator(id)).toHaveAttribute('data-state', 'claimed') : expect(page.locator(id)).toHaveCount(0);
+  await hunt.click(); await claimed(`#board-w-elites-${week}`);
   s = await saved(page); expect(s.bank).toMatchObject({ ore: 100 + 24 * 2 + 10 + 20, shard: 4 });
   // The contract tab pays the map-3 reward once.
   await page.locator('#quest-tab-contract').click();
   const job = page.locator(`#board-claim-contract-job-unharmed-${week}`); await expect(job).toBeVisible();
   await expect(page.locator('.quest-board')).toContainText('ไม่มีโทษ');
   await page.screenshot({ path: info.outputPath('board-contracts.png') });
-  await job.click(); await expect(page.locator(`#board-job-unharmed-${week}`)).toHaveAttribute('data-state', 'claimed');
+  await job.click(); await claimed(`#board-job-unharmed-${week}`);
   s = await saved(page); expect(s.bank.ore).toBe(100 + 24 * 2 + 10 + 20 + 25);
   // The camp tab keeps the six one-time side quests.
   await page.locator('#quest-tab-camp').click(); await expect(page.locator('.quest-board .side-quest')).toHaveCount(chapterOne.sideQuests.length);

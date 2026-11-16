@@ -57,13 +57,22 @@ export interface HeroTalents { power?: Partial<Record<ActionId, number>>; rules?
 // Legendary equipment specials (2D-2): last stand (once per battle a downing hit leaves 1 HP),
 // mark hunter (hits on a marked enemy +amount), renewal (heal at the start of each own turn).
 export type GearSpecial = 'laststand' | 'markhunter' | 'renewal';
-export type BossPower = 'aegis' | 'focus' | 'lantern';
+export type CharmPower = 'aegis' | 'focus' | 'lantern';
+export type BossPower = CharmPower | TrioPower;
+// P11-05 World Boss trio items (save v65): `bulwark` (body), `breaker` (gloves), `reaper` (head); see `HeroGear.trio`.
+export type TrioPower = 'bulwark' | 'breaker' | 'reaper';
 // What a member's equipment adds beyond max HP/Attack/SPD/skill power (world `starred` builds it).
 // Set 4-piece bonuses (2D-3): `firstStrike` acts first in round 1, `freshHit` adds to hits on an enemy that has not
 // acted yet this round, `thorns` answers physical hits taken, `freeCast` spares the battle's first skill its cooldown,
 // `overflowCap` turns overhealing into a barrier up to that cap. A 4-piece starting barrier adds to `barrier`.
 export interface HeroGear { barrier?: number; specials?: GearSpecial[];
   boss?:{power:BossPower;amount:number};
+  // P11-05 trio items worn on body/gloves/head (each at most once). They share `bossUsedRound` with the charm's power: one
+  // boss power per wearer per round. `bulwark`: a single enemy hit that took at least `at` HP and left the wearer standing
+  // gives a barrier of at least `amount`. `breaker`: the wearer's hit on its action's chosen foe gains `amount` when that
+  // foe was interrupted this round or announces a charge next. `reaper`: a wearer's hit that downs a foe that is not a
+  // boss heals `amount`; healing past max HP becomes a barrier of at most `at`.
+  trio?: { power: TrioPower; amount: number; at: number }[];
   firstStrike?: boolean; freshHit?: number; thorns?: number; freeCast?: boolean; overflowCap?: number }
 export type Outcome = 'active' | 'victory' | 'defeat';
 export interface SkillDefinition { name: string; english: string; icon: string; power: number; cooldown: number }
