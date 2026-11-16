@@ -1,3 +1,5 @@
+import { wbArtUrl } from '../game/visuals/world-boss-art';
+import { gearArt } from './equip-art';
 import { bossCraftReason, isWbBoss, sharedPercent, trioLive, wbBook, wbClaimReason, wbWeekDamage, wbWeekOf, type WorldBossShared } from '../core/world/world-boss';
 import { affixPool } from '../core/world/equipment';
 import { featureMap, featureOpen } from '../core/world/profile';
@@ -37,7 +39,7 @@ const tabName: Record<WbTab, string> = { fight: 'ต่อสู้', rewards: '
 export interface WbCraft { boss: WbBossId; affixes: GearStat[]; set?: SetId }
 export interface WbPageState { tab: WbTab; pick: WbBossId; craft?: WbCraft }
 
-// Names are placeholders for the art queue (WB-A…): the medallion shows the initial until the sprites arrive.
+// Names; the painted emblems and banners come from ART-UI-WORLDBOSS-TRIO-001 (world-boss-art.ts).
 export const wbBossText: Record<WbBossId, { name: string; title: string; tag: string; gist: string; answer: string; ignore: string; moves: string }> = {
   kragmor: { name: 'Kragmor', title: 'ไททันรอยแยก', tag: 'เกราะหิน · ชาร์จแล้วทุบ',
     moves: 'Stone Fist · Titan Gathering (ชาร์จ) · Mountain Fall (ทุบแรง ตัดจังหวะไม่ได้ ลงช่องหน้า) · Rift Quake (โดนทั้งทีม) · Boulder Hurl',
@@ -100,14 +102,15 @@ const bar = (s: SharedBoss, label: string): string => {
   return `<div class="wb-shared" role="group" aria-label="${label}"><div class="wb-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" style="--wb-pct:${pct}%"><span></span></div>
     <p class="wb-bar-text">เลือดส่วนกลาง <b>${n(s.left)} / ${n(s.hp)}</b> · ลดไปแล้ว <b>${pct}%</b> · ผู้ร่วมสู้ ${s.accounts} บัญชี</p></div>`;
 };
-const medallion = (boss: WbBossId): string => `<span class="wb-medal" data-boss="${boss}" aria-hidden="true">${wbBossText[boss].name[0]}</span>`;
+// The trio's painted emblem (ART-UI-WORLDBOSS-TRIO-001); decorative, the boss name stays DOM text beside it.
+const medallion = (boss: WbBossId): string => `<span class="wb-medal" data-boss="${boss}" aria-hidden="true" style="--emblem:url(${wbArtUrl(`emblem_${boss}`)})"></span>`;
 
 // ---- camp banner (above the bottom nav) ----
 export function worldBossBanner(p: Profile, maps: readonly MapDefinition[], day: number, status: WorldBossStatus | null | undefined, expanded: boolean): string {
   const home = maps[0]; if (!home || !featureOpen(p, maps, 'quests')) return '';
   const week = wbWeekOf(day); const w = wbBook(p, week).weeks.at(-1)!; const ready = worldBossReady(p, maps, day, status); const trio = trioLive(home.worldBoss, week);
   const left = Math.max(1, weekEnd(week) - day + 1);
-  return `<button id="lobby-wboss" data-lobby="wboss" class="lobby-wboss" data-trio="${trio}" aria-controls="lobby-sheet" aria-expanded="${expanded}"><span class="wb-medals" aria-hidden="true">${trio ? WB_BOSSES.map(medallion).join('') : `<span class="wb-medal" data-boss="warden">ผ</span>`}</span>
+  return `<button id="lobby-wboss" data-lobby="wboss" class="lobby-wboss" data-trio="${trio}"${trio ? ` style="--banner:url(${wbArtUrl('banner_trio')})"` : ''} aria-controls="lobby-sheet" aria-expanded="${expanded}">${trio ? '' : `<span class="wb-medals" aria-hidden="true"><span class="wb-medal" data-boss="warden">ผ</span></span>`}
     <span class="wb-banner-text"><b>บอสโลก${trio ? '' : ' · ผู้คุมรอยแยก'}</b><small>สิทธิ์ ${w.attempts}/${home.worldBoss.attempts} · เหลือ ${left} วัน</small></span>${ready ? `<small class="trip-badge" aria-label="รางวัลรอรับ ${ready}">${ready}</small>` : ''}${icon('right')}</button>`;
 }
 
@@ -125,7 +128,7 @@ function fightTab(p: Profile, maps: readonly MapDefinition[], day: number, statu
   }
   const cards = WB_BOSSES.map(b => {
     const t = wbBossText[b]; const sel = v.pick === b; const sharedBar = online ? barOf(status, week, week, b) : undefined; const tally = w.bosses[b];
-    return `<button id="wb-pick-${b}" class="wb-boss-card" data-lobby="wb-pick" data-boss="${b}" aria-pressed="${sel}" data-selected="${sel}">${medallion(b)}<span class="wb-boss-text"><b>${t.name} <small>${t.title}</small></b><small>${t.tag}</small>
+    return `<button id="wb-pick-${b}" class="wb-boss-card" data-lobby="wb-pick" data-boss="${b}" aria-pressed="${sel}" data-selected="${sel}" style="--banner:url(${wbArtUrl(`banner_${b}`)})"><span class="wb-boss-text"><b>${t.name} <small>${t.title}</small></b><small>${t.tag}</small>
       ${online ? (sharedBar ? `<span class="wb-mini" role="progressbar" aria-label="เลือดส่วนกลาง ${t.name}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${sharedPercent(sharedBar)}" style="--wb-pct:${sharedPercent(sharedBar)}%"><span></span></span><small>เลือดส่วนกลาง ${n(sharedBar.left)} / ${n(sharedBar.hp)} · ลดแล้ว ${sharedPercent(sharedBar)}%</small>` : '<small>ยังอ่านเลือดส่วนกลางไม่ได้</small>') : ''}
       <small>${tally?.attempts ? `ลงสนาม ${tally.attempts} ครั้ง · ดาเมจดีที่สุด ${n(tally.best)}` : 'ยังไม่เคยสู้สัปดาห์นี้'}</small></span></button>`;
   }).join('');
@@ -167,7 +170,7 @@ function craftTab(p: Profile, maps: readonly MapDefinition[], v: WbPageState): s
   const lock = open ? '' : `<div class="lobby-locked" role="status">${icon('seal')}<p><b>ยังไม่เปิด</b><span>ผ่านแผนที่ ${fm?.chapter ?? ''} · ${fm?.name ?? ''} ก่อน แล้วโรงตีเหล็กจะสร้างของบอสได้</span></p></div>`;
   const cards = WB_BOSSES.map(b => {
     const it = t.items[b]; const have = p.bossShards?.[b] ?? 0; const amount = home.equipment.boss.trio[it.power].amount; const sel = v.craft?.boss === b;
-    return `<section class="wb-item" id="wb-item-${b}" data-selected="${sel}">${medallion(b)}<div class="wb-item-text"><b>${bossNames[it.power]} <small>${slotText[it.slot]} · ทุกอาชีพ</small></b>
+    return `<section class="wb-item" id="wb-item-${b}" data-selected="${sel}">${gearArt({ uid: 0, slot: it.slot, rarity: 4, level: t.craft.level, affixes: [], boss: it.power })}<div class="wb-item-text"><b>${bossNames[it.power]} <small>${slotText[it.slot]} · ทุกอาชีพ</small></b>
       <p>${bossDescription(it.power, amount)}</p><small>คุณสมบัติแรกคงที่: ${statName[it.first]} · ระดับ ${t.craft.level} ตำนาน คุณภาพเต็ม · ล็อกไว้ ไม่เข้าหลอม/ถ่ายโอน</small>
       <small class="wb-cost">เศษ ${wbBossText[b].name} <b>${have}/${t.craft.shards}</b> · แร่ดาว ${t.craft.ore} · ฝุ่นดาว ${t.craft.dust}</small></div>
       <button id="wb-craft-${b}" data-lobby="wb-craft" data-boss="${b}" class="${sel ? 'secondary' : 'primary'}"${open ? '' : ' disabled'}>${sel ? 'กำลังเลือก' : 'เลือกคุณสมบัติ'}</button></section>`;

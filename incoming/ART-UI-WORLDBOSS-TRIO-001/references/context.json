@@ -1,0 +1,10 @@
+{
+  "base_commit": "cca1c3db38028781306072011d8dc4c0aed438f3",
+  "source_sha256": {
+    "src/ui/world-boss-panel.ts": "d1f7069783fcb8623d13b32b3966bf7e0dce144908105e33369845c4d1f8cb80",
+    "src/ui/camp-layout.css": "b2af9264f39c2790e9e5304d780c94c20d1386dbbd5b0d66de75be746ca36a31",
+    "public/assets/art/battle_riftline.webp": "6e4114f65a7ab521e310a6e6baa9687205b1527dfb272542b0c550aed4ae72ac"
+  },
+  "reference_art_commit": "46f366dc931e4994d3a6ccd9ad3951ac444a70cf",
+  "reference_ui_commit": "1895f837c02cdfe1d8744a7a98ff1fad0cc2bc32"
+}

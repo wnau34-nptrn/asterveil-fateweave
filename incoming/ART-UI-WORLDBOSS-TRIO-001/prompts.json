@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "task": "ART-UI-WORLDBOSS-TRIO-001",
+  "base_commit": "cca1c3db38028781306072011d8dc4c0aed438f3",
+  "records": [
+    {
+      "id": "kragmor",
+      "tool": "image_gen.imagegen",
+      "prompt": "Create ONE original cinematic mobile RPG header BANNER, wide 3:1 landscape. The EXACT SAME Kragmor crystal-stone titan from reference 1 seed and reference2 concept, in the RIGHT HALF ONLY. Preserve the exact character model: massive purple obsidian/crystal stone armour with restrained gold rims, two enormous THREE-clawed hands, two short legs, FIVE separate floating violet crown crystals, ONE bright cyan vertical chest wound and secondary violet cracks. Facing LEFT three-quarter combat stance, dramatic slightly low camera, but keep same anatomy and silhouette. FULL entire titan including crown, hands and feet inside image, not cut off; body fills most of image height, centered around x=78 percent, all parts to RIGHT of image midpoint with visible right margin. Background reference3 riftline crystal battlefield, rift-torn navy night sky, subtle violet/cyan light behind titan on right, faint dark stone ground. LEFT HALF must be empty very dark NAVY smoke/sky for overlaid WHITE DOM text, no subject/weapon/shards/bright lights on left. Smooth gradual dark-to-light transition, not a vertical hard dividing line. Majestic heavy world boss, painterly fantasy sprite-compatible art, violet-cyan-gold palette, strong silhouette readable as a 358px wide card. No other characters, no humans/heroes, no text, no letters/numbers, no logos, no UI, no frame border, no watermark. Output one wide banner image, not a sheet.",
+      "generator_output": "/workspace/generated_images/exec-89c53096-4037-4367-a5c7-382f1ead7bda.png",
+      "source": "source/kragmor.png",
+      "transparent_background": false,
+      "numeric_rng_seed": null,
+      "input_references": [
+        "references/seed-a.png",
+        "references/concept-a.png",
+        "references/battle_riftline.webp"
+      ]
+    },
+    {
+      "id": "valdrakk",
+      "tool": "image_gen.imagegen",
+      "prompt": "ONE wide cinematic mobile RPG BANNER 3:1 landscape. EXACT SAME VALDRAKK creature from reference1 seed-b and reference2 concept-b; do NOT mirror or reinterpret it. A colossal FOUR-LEGGED indigo violet crystal rift beast, short fierce feline/reptile muzzle facing LEFT, FOUR paws, TWO tall broken-dimension crystalline wings held UPWARD (not spread horizontally), ONE thick tail curling upward behind on RIGHT, gold ridges and claws. ONE bright CYAN circular weak point on its ANATOMICAL LEFT SHOULDER, which is the visible near shoulder in this exact left-facing reference; keep on that SAME side. No extra limbs or wings. Place COMPLETE beast ONLY in RIGHT HALF, centered x=78 percent, entire feet, upward wing tips and curled tail inside image with margins, roughly85 percent of image height. Dramatic low camera while preserving character proportions. Reference3 is riftline battlefield: crystal towers, violet-cyan rift-torn night sky on right, faint dark ground. LEFT HALF EMPTY very dark navy smoke and sky for overlaid white DOM text, no boss parts or bright focal elements there. Smooth dark fade into right scene, no straight vertical seam. Painterly fantasy matching approved sprite finish, clear animal silhouette at a 358px wide card. No humans/heroes/other creatures, no text/letters/numbers, no UI/logo/watermark/frame. Single finished banner, not collage or sheet.",
+      "generator_output": "/workspace/generated_images/exec-eeaf724a-676f-4b3f-aecd-f8d1e0746f3b.png",
+      "source": "source/valdrakk.png",
+      "transparent_background": false,
+      "numeric_rng_seed": null,
+      "input_references": [
+        "references/seed-b.png",
+        "references/concept-b.png",
+        "references/battle_riftline.webp"
+      ]
+    },
+    {
+      "id": "morvane",
+      "tool": "image_gen.imagegen",
+      "prompt": "ONE wide 3:1 cinematic mobile RPG header BANNER. EXACT SAME MORVANE shadow monarch from reference1 seed-c and reference2 concept-c. Place complete floating character ONLY in RIGHT HALF, centered x=78 percent, full crown, ALL SIX ARMS (THREE PAIRS) and THREE cloak-ribbon tips visible inside image with margins. No legs/feet. Facing LEFT three-quarter, tall dark violet shadow body, gold crown and shoulder collar/cuffs, ONE cyan spherical chest core. Upper arm pair raised in summoning arc, middle pair huge claw hands forward toward left, lower pair smaller cupped hands beside chest/waist. Preserve wide negative spaces between the three arm pairs, no extra arms, no weapons. THREE flowing dark-purple energy cloak tails instead of legs. Same model and colour palette as reference, not a new interpretation. Dramatic low camera preserving proportions. Riftline battlefield reference3, rift-torn violet/cyan night sky and dim crystal towers on right. LEFT HALF EMPTY VERY DARK NAVY smoke/sky, reserved for white DOM text, no body parts or strong lights there. Smooth fade from navy left into luminous right, no straight seam. Painterly fantasy mobile RPG matching approved sprite, clear floating six-armed silhouette at 358px card size. No other characters, humans/heroes, text, letters/numbers, logo, UI, frame or watermark. One finished banner image.",
+      "generator_output": "/workspace/generated_images/exec-98503da0-239f-48e5-9c4e-d9cab599b3b5.png",
+      "source": "source/morvane.png",
+      "transparent_background": false,
+      "numeric_rng_seed": null,
+      "input_references": [
+        "references/seed-c.png",
+        "references/concept-c.png",
+        "references/battle_riftline.webp"
+      ]
+    },
+    {
+      "id": "trio",
+      "tool": "image_gen.imagegen",
+      "prompt": "ONE CINEMATIC WORLD BOSS TRIO CAMP HEADER, very wide 15:4 composition intended for 1080x288. Exactly THREE bosses from attached seeds, NOT three separate panels. ALL THREE grouped ENTIRELY in RIGHT HALF (x>52 percent), leaving LEFT HALF completely empty dark navy smoke/sky for white text. Group order WITHIN RIGHT HALF: VALDRAKK quadruped beast on group LEFT FOREGROUND, KRAGMOR titan CENTER BEHIND rising above them, MORVANE shadow monarch on group RIGHT FOREGROUND. Use large BUST / upper-body portraits to remain identifiable at 358px total width, intentionally crop lower bodies at bottom; keep all three FACES and CROWNS/WING TIPS inside safe central vertical 70 percent of composition with empty headroom, do not crop faces or crown. Kragmor EXACT seed-a: five distinct floating violet crown crystals, huge dark stone shoulders with gold rims, single cyan vertical chest fissure, two giant three-clawed hands. Valdrakk EXACT seed-b, facing LEFT, no mirroring: short beast muzzle, two upright broken-crystal wings recognizable behind near shoulders, cyan circular weak point on SAME visible anatomical LEFT shoulder, gold clawed forepaws, only one tail if visible. Morvane EXACT seed-c: six arms / three pairs around upper torso, gold floating crown/collar, one cyan chest orb, lower body shadow cloak if any visible. Do NOT merge anatomies or add heads/arms. Preserve all three separate silhouettes with thin clear separation, especially Kragmor's five crown shards vs beast wings. Reference4 riftline sky/crystal battlefield, violet/cyan/gold palette, painterly fantasy mobile RPG. Left half VERY DARK navy with no faces, no focal bright rift, no text/letters/numbers, no UI/logo/frame, no heroes/other characters. One integrated scene, not contact sheet. Dramatic majestic but clean readable small-scale group.",
+      "generator_output": "/workspace/generated_images/exec-331f1e6f-ac58-4fcf-95a7-d02a4b7ba685.png",
+      "source": "source/trio.png",
+      "transparent_background": false,
+      "numeric_rng_seed": null,
+      "input_references": [
+        "references/seed-a.png",
+        "references/seed-b.png",
+        "references/seed-c.png",
+        "references/battle_riftline.webp"
+      ]
+    },
+    {
+      "id": "emblems",
+      "tool": "image_gen.imagegen",
+      "prompt": "Create a matched set of exactly THREE fantasy mobile RPG BOSS FACE EMBLEMS in ONE wide horizontal sheet, three equal square slots with wide empty transparent gutters. Order LEFT to RIGHT: KRAGMOR, VALDRAKK, MORVANE, using corresponding three seed references. Reference4 is STYLE OF GOLD CIRCULAR FRAME ONLY, do not copy that old character. Each emblem is a clean circular gold double ring, dark navy opaque interior, cropped BOSS HEAD/upper neck portrait large within ring, crisp broad shapes readable at 40px, same ring diameter/material/lighting across all three. LEFT Kragmor: EXACT stone titan HEAD from seed-a, purple obsidian mask-like face with small cyan eyes, restrained gold edges, all FIVE large violet crown crystals visible above head INSIDE circle, no new horn helmet. CENTER Valdrakk: EXACT short feline/reptile crystal BEAST FACE from seed-b looking LEFT 3/4, indigo/violet scales with gold ridges, cyan eyes, two small upright wing-root hints behind head if needed, do not turn it into a humanoid. RIGHT Morvane: EXACT shadow monarch FACE from seed-c looking LEFT 3/4, violet shadow face and flowing dark-purple hair, its gold crown above, gold collar hint below; no new facial beard or helmet. Portrait-only crops intentionally omit lower body/limbs. Keep each face clearly distinct, strong dark-light hierarchy, no tiny filigree, no excessive aura. Ring and all crown crystals entirely inside each square with margin; badges never touch one another or image edges. TRUE transparent alpha OUTSIDE the three round badges, no checkerboard, no floor/shadow plates, no background scene. No text, no letters, no names/numbers, no UI, no logos. One matched three-emblem sheet, horizontal 3:1.",
+      "generator_output": "/workspace/generated_images/exec-c9039f05-0507-4350-abf5-83ac57fde477.png",
+      "source": "source/emblems.png",
+      "transparent_background": true,
+      "numeric_rng_seed": null,
+      "input_references": [
+        "references/seed-a.png",
+        "references/seed-b.png",
+        "references/seed-c.png",
+        "references/emblem_worldboss_reference.png"
+      ]
+    }
+  ]
+}

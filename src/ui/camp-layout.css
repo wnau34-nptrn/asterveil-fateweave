@@ -93,21 +93,22 @@
 #lobby-view .lobby-hud:has(.lobby-chat) > .storage-notice,
 #lobby-view .lobby-hud:has(.lobby-chat) > .lobby-result { right:calc(max(14px,env(safe-area-inset-right)) + 104px); }
 
-/* P11-05 step 4: the camp banner and the World Boss page (390px first). Placeholder medallions stand in for the boss art (WB-A…). */
+/* P11-05 step 4: the camp banner and the World Boss page (390px first). Painted banners/emblems: ART-UI-WORLDBOSS-TRIO-001; the warden keeps its letter medallion. */
 #lobby-view .lobby-wboss { position:relative; display:flex; align-items:center; gap:10px; width:100%; min-height:52px; padding:6px 12px; border:1px solid #e8cd8a66; border-left:3px solid #e8cd8a; border-radius:4px 14px 14px 4px; background:linear-gradient(100deg,#0a1a2cd8,#0a1a2c99); color:var(--text); text-align:left; box-shadow:0 4px 12px #0008; }
 #lobby-view .lobby-wboss .icon { width:17px; margin-left:auto; color:var(--gold-light); }
 #lobby-view .wb-banner-text { display:grid; min-width:0; } #lobby-view .wb-banner-text b { font-size:15px; color:#ffe4a5; } #lobby-view .wb-banner-text small { font-size:12px; color:#edf0f4; }
 #lobby-view .lobby-wboss .trip-badge { position:static; background:#ead093; color:#102036; border-radius:12px; min-width:22px; padding:1px 6px; text-align:center; }
 #lobby-view .wb-medals { display:flex; } #lobby-view .wb-medals .wb-medal + .wb-medal { margin-left:-8px; }
 #lobby-view .wb-medal { flex:none; width:36px; height:36px; display:grid; place-items:center; border-radius:50%; border:2px solid #f2d59699; background:radial-gradient(circle at 50% 30%,#4a5f78,#0d1c2e); font:700 16px var(--font-heading); color:#fff6e0; }
-#lobby-view .wb-medal[data-boss=kragmor] { background:radial-gradient(circle at 50% 30%,#7d6a58,#2a2018); } #lobby-view .wb-medal[data-boss=valdrakk] { background:radial-gradient(circle at 50% 30%,#4f7f94,#0f2a38); } #lobby-view .wb-medal[data-boss=morvane] { background:radial-gradient(circle at 50% 30%,#7a5a8c,#24142e); }
+#lobby-view .wb-medal[style*="--emblem"] { width:44px; height:44px; border:0; background:var(--emblem) center/contain no-repeat; }
+#lobby-view .lobby-wboss[data-trio=true] { height:96px; min-height:96px; padding:8px 12px; background:linear-gradient(90deg,#0a1220d9 0,#0a122080 45%,transparent 75%),var(--banner) right center/cover no-repeat,#0a1a2c; }
+#lobby-view .lobby-wboss[data-trio=true] .wb-banner-text { max-width:55%; text-shadow:0 1px 3px #000c; } #lobby-view .lobby-wboss[data-trio=true] .icon { filter:drop-shadow(0 1px 2px #000c); }
 #lobby-view .wb-tabs button { min-height:44px; }
 #lobby-view .wb-trio { display:grid; gap:8px; } #lobby-view .wb-trio p, #lobby-view .wb-board p { margin:0; font-size:13px; line-height:1.55; }
 #lobby-view .wb-boss-list { display:grid; gap:8px; }
-#lobby-view .wb-boss-card { display:flex; gap:10px; align-items:center; width:100%; min-height:96px; padding:10px 12px; text-align:left; border:1px solid #e8f5ff2a; border-radius:14px; background:#0d1c2ecc; color:var(--text); }
+#lobby-view .wb-boss-card { display:flex; gap:10px; align-items:center; width:100%; min-height:96px; padding:10px 12px; text-align:left; border:1px solid #e8f5ff2a; border-radius:14px; background:linear-gradient(90deg,#08111de6 0,#08111dc2 58%,#08111d40 100%),var(--banner) right center/cover no-repeat,#0d1c2e; color:var(--text); overflow:hidden; }
 #lobby-view .wb-boss-card[data-selected=true] { border-color:#ffd36e; box-shadow:0 0 12px #ffd36e44; }
-#lobby-view .wb-boss-card .wb-medal { width:56px; height:56px; font-size:24px; }
-#lobby-view .wb-boss-text { display:grid; gap:3px; min-width:0; flex:1; } #lobby-view .wb-boss-text b { font-size:15px; } #lobby-view .wb-boss-text small { font-size:12px; color:var(--text-muted); }
+#lobby-view .wb-boss-text { display:grid; gap:3px; min-width:0; flex:1; max-width:68%; text-shadow:0 1px 3px #000c; } #lobby-view .wb-boss-text b { font-size:15px; } #lobby-view .wb-boss-text small { font-size:12px; color:var(--text-muted); }
 #lobby-view .wb-mini { display:block; height:8px; border-radius:5px; background:#06101c; border:1px solid #e8f5ff2a; overflow:hidden; } #lobby-view .wb-mini span { display:block; height:100%; width:var(--wb-pct,0%); background:linear-gradient(90deg,#9a6a2a,#ffd36e); }
 #lobby-view .wb-item, #lobby-view .wb-info { display:grid; grid-template-columns:auto 1fr; gap:6px 10px; padding:10px 12px; border:1px solid #e8f5ff2a; border-radius:14px; background:#0d1c2ecc; }
 #lobby-view .wb-item[data-selected=true] { border-color:#ffd36e; } #lobby-view .wb-item > button { grid-column:1 / -1; min-height:44px; }

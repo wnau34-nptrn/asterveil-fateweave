@@ -2,7 +2,7 @@
 
 16 พ.ย. 2026 · Claude เขียน prompt (ยังไม่มีภาพใหม่) · ตาม [คู่มือ prompt](ANIMATION_PROMPT_QUALITY_TH.md) และ skill `fateweave-codex-art-brief` · design [§7](../design/WORLD_BOSS_TRIO_P11_05_TH.md)
 
-ลำดับส่ง: **WB-A + แบนเนอร์ + ไอคอน ส่งพร้อมกันได้** → WB-B หลังเจ้าของดูคลิป WB-A ในเกมแล้ว → WB-C หลัง WB-B · ภาพที่ใช้ได้กับการขยับในเกมต้องให้เจ้าของเลือกและอนุมัติเอง (Claude เลือกแทนได้ตามที่มอบหมาย 2026-11-04 แต่บันทึกเป็นการตัดสินของ Claude) ผลเทสต์/CI ไม่ใช่การอนุมัติ
+ลำดับส่ง: WB-A + แบนเนอร์ + ไอคอน ส่งแล้ว (PR #280/#281/#283; WB-A นำเข้าและเจ้าของอนุมัติ motion 2026-11-16) → **WB-B ส่งได้ตอนนี้** → WB-C หลัง WB-B · ภาพที่ใช้ได้กับการขยับในเกมต้องให้เจ้าของเลือกและอนุมัติเอง (Claude เลือกแทนได้ตามที่มอบหมาย 2026-11-04 แต่บันทึกเป็นการตัดสินของ Claude) ผลเทสต์/CI ไม่ใช่การอนุมัติ
 
 ## กติการ่วม (ใส่ทุกงาน)
 
@@ -133,15 +133,63 @@ Prompt (ต่อชิ้น แนบ crop ไอคอนเดิม + seed)
 
 ---
 
-## WB-B — ART-UNIT-ANIMATION-WB-B-001 (Valdrakk) · หลัง WB-A ผ่าน
+## WB-B — ART-UNIT-ANIMATION-WB-B-001 (Valdrakk) · **ส่งได้แล้ว** (เจ้าของอนุมัติ motion WB-A 2026-11-16, PR #282 merge แล้ว)
+
+ฉบับนี้ครบในตัว (ไม่ต้องอ้างแม่แบบ WB-A) · ใช้ package `incoming/ART-UNIT-ANIMATION-WB-A-001/` (อยู่ในสาขาเกมแล้ว) เป็นแบบอย่างรูปแบบไฟล์ ซึ่ง Claude นำเข้าได้โดยไม่ต้องแก้ pipeline
 
 ```text
-ใช้แม่แบบ WB-A ทุกหัวข้อ เปลี่ยนเป็น:
-- seed: incoming/ART-CHAR-WORLDBOSS-001/seed-b.png (หันซ้าย เท้า y≈896) + turnaround-b.png · encounter wb-valdrakk
-- ล็อก: สี่ขา ปีกผลึกสองข้าง หางเดียว แกนพลัง cyan บนไหล่ซ้าย — ห้าม mirror ภาพ (แกนจะย้ายข้าง) · ปีกชู/พับในทุกท่าหลัก ไม่กางแนวนอน (ล้น frame) · หางโค้งเก็บใกล้ตัว
-- ท่า (ชื่อตรงเกม): shard-talon (Shard Talon ตะปบอุ้งเท้าหน้า) · wing-gust (Wing Gust ปีกตีลม ไม่วาดลม) · wing-gathering (Wing Gathering ชาร์จ: ปีกพับคลุมไหล่ แกนไหล่สว่าง — ท่าค้างเตือน) · worldshard-dive (Worldshard Dive ทั้งทีม: ย่อ → พุ่งต่ำไปซ้าย ตัวยังอยู่ใน frame ใช้ท่าโน้มไม่ใช่บินออกนอกเฟรม) · staggered 6 เฟรม (Staggered: หลังถูกตัดชาร์จ เสียหลัก ปีกข้างหนึ่งตก หัวส่าย → ตั้งหลัก) [R1 แนะนำ: เสียหลักปีกตก · R2: สะบัดหัวมึน] · sky-rend (เฟส 70%: ชูปีกสูงคำราม แนวปีกสว่าง) · hit 4 · down 4 (นอนตะแคง ปีกพับทับตัว ค้าง)
-- prompt: เปลี่ยนคำบรรยายเป็น "the SAME four-legged worldshard behemoth ... two raised crystal wings, one curved tail, cyan power core on its LEFT shoulder (never mirrored)" และย้ำ "wings raised or folded, never spread horizontally"
-- เกณฑ์เพิ่ม: แกนไหล่อยู่ไหล่ซ้ายทุกเฟรม · นับขา 4 ปีก 2 หาง 1 ทุกเฟรม
+เป้าหมาย:
+ชุดท่าร่างกายของบอสโลก Valdrakk (วัลดรัค อสูรโลกแตก) จาก seed B เพื่อให้ Claude ประกอบ atlas บอสใหม่ (sheet valdrakk) แทนการยืมสไปรต์ผู้คุม (foe_sentinel)
+
+บริบทเกมและไฟล์ที่ตรวจแล้ว:
+- encounter wb-valdrakk ใน src/content/encounters/catalog.ts: บอส f1 SPD 125, ท่าจริง Shard Talon (กายภาพ) · Wing Gust (พลังงาน) · Wing Gathering (ชาร์จ ไม่มีดาเมจ ทำลายได้) · Worldshard Dive (ทั้งทีม พลังงาน) · เฟส 70% "Sky Rend" · และท่าที่เอนจินสร้างเอง "Staggered" (ไม่มีดาเมจ เกิดเมื่อชาร์จถูกตัด: เสียหลักแทนที่ Dive รอบถัดไป)
+- ในเกมบอสเล่นแบบ bossMove: เฟรมพร้อม(seed) → 2 เฟรมเตรียม → 2 เฟรมคืนท่า → seed; hit 2 เฟรม; down 3 เฟรมค้างท่าล้ม · displayRatio 2, sole 896/1024 · ไม่มี idle loop (เฟรมพร้อม = seed)
+- Claude จะประกอบเป็น atlas 30 เฟรม: 0 = seed; move1–6 ท่าละ 4 เฟรม (strip เฟรม 2–5); hit 2; down 3 — ตามงาน WB-A
+
+ภาพอ้างอิงที่แนบ/เข้าถึงได้ (แนบ seed ให้ generator ทุกครั้ง):
+- seed: origin/art/art-char-worldboss-001 commit 46f366dc931e4994d3a6ccd9ad3951ac444a70cf → incoming/ART-CHAR-WORLDBOSS-001/seed-b.png (1024×1024 RGBA หันซ้าย เท้า y≈896; ตัวกว้าง x 89–934, สูง y 170–899) + turnaround-b.png (รูปทรงเท่านั้น seed เป็นหลัก) + concept-b.png + seeds.json (transform)
+- layout: incoming/ART-UNIT-ANIMATION-WB-A-001/references/layout-6.png (6 ช่อง) และ layout-4.png (4 ช่อง) ใช้ซ้ำได้ ตรวจว่า seed-b พอดีช่องก่อน (ตัวกว้างกว่า Kragmor ถ้าไม่พอให้สร้าง layout ใหม่ในสัดส่วนเดียวกันและบันทึก)
+
+ข้อกำหนดที่ยืนยันแล้ว:
+- หันซ้าย ห้าม mirror seed · uniform scale เดียวทั้งชุดเท่า seed · เท้าหน้า/หลังที่รับน้ำหนักแตะ y=896 (ยกเว้นท่าที่ตั้งใจย่อ/ลอยบันทึกใน strips.json)
+- ล็อกภาพจำ: สี่ขากรงเล็บทอง · ปีกผลึกม่วงสองข้างชูขึ้น (ข้างหลังอีกข้างอยู่ฝั่งไกลกล้อง) · หางเดียวม้วนโค้งขึ้นด้านขวา ปลายสว่างฟ้า · แกนพลังวงกลมสีฟ้าหนึ่งดวงบนไหล่ด้านใกล้กล้อง (ไหล่ซ้ายของสัตว์) · ตาสีฟ้า · ห้ามเพิ่มแขน/ขา/ปีกที่สาม
+- ปีกชูหรือพับตลอด ห้ามกางแนวนอน (ล้ม frame) ยอดปีกใน seed อยู่ y≈170 ดังนั้นทุกเฟรมต้องมีที่ว่างบน ≥32px และซ้าย/ขวา ≥32px
+- ช่องโปร่งใสระหว่างท่าใน raw sheet ≥48px · alpha จริง ไม่มีลายตารางปลอม · body เท่านั้น: ไม่วาดลม แสง ฝุ่น คลื่น เศษผลึกที่หลุดตัว หรือเงาพื้น (VFX มาจากโค้ด/งานอื่น)
+- บทเรียนจาก WB-A (ช่วยให้ผ่านรอบแรก): (1) เฟรมที่หัวก้ม/แขนบัง ทำให้เครื่องวัดกายวิภาคอัตโนมัติวัดไม่ได้ 10 จาก 44 เฟรม — ท่าหลักให้เห็นหัวและแกนไหล่ชัดเมื่อทำได้ ไม่ให้ปีกบังหัวหรือแกนทั้งหมด (down เป็นข้อยกเว้น) (2) เฟรมแรก/สุดท้ายของทุกท่า (ยกเว้น down) ต้องเป็น seed ตรงทุก pixel (3) ตัวใหญ่เต็มช่องทำให้ atlas ต้องย่อ — อย่าขยายตัวเกิน seed
+
+ท่า ทิศ จำนวนเฟรม และจังหวะ (ชื่อท่าตรงเกม; 6 เฟรมต่อท่าหลัก; ผู้ดูควรเห็นการเปลี่ยนใหญ่ทุกเฟรม):
+1. shard-talon (Shard Talon ตะปบกายภาพ) 6: พร้อม(seed ตรง) → ยกอุ้งเท้าหน้าขวาสูงถอยหลังตัวเล็กน้อย → ย่อตัวหลัง เอนหน้า เล็งต่ำ → ตะปบลงซ้ายต่ำ (เล็บถึงพื้น) → ตามแรง ตัวต่ำ → คืนท่า(seed ตรง)
+2. wing-gust (Wing Gust พลังงาน) 6: พร้อม → หุบปีกลงเล็กน้อย → ยกปีกสองข้างสูง/ตั้ง สูดอก → สะบัดปีกไปข้างหน้าทางซ้าย (ปีกอยู่ในเฟรม ไม่วาดลม) → ปีกตามแรง → คืนท่า
+3. wing-gathering (Wing Gathering ชาร์จ ไม่มีดาเมจ ท่าค้างเตือน) 6: พร้อม → ปีกเริ่มพับเข้า → ปีกพับแนบหลัง/คลุมไหล่หลัง ตัวย่อ ย่อเข่า (แกนไหล่ด้านใกล้กล้อง**ต้องยังมองเห็น** และสว่างขึ้น) → กดตัวต่ำสุด พลังอัด → เริ่มคลาย → คืนท่า [R1 แนะนำ: ปีกพับแนบหลัง · R2: ปีกหุบเป็นโดมเหนือหลัง]
+4. worldshard-dive (Worldshard Dive ทั้งทีม) 6: พร้อม → ย่อหลัง ปีกกางเฉียงหลัง → ยกก้นขึ้น โน้มหัวต่ำ → พุ่งต่ำไปทางซ้าย (แสดงด้วยการลดส่วนหน้า/ยืดส่วนหลัง ตัวยังอยู่ในเฟรม ขอบซ้ายขยับเกินตำแหน่ง seed ไม่เกิน ~40px) → ไถลหยุด ตัวต่ำ → คืนท่า
+5. staggered (Staggered: เสียหลักหลังถูกตัดชาร์จ ไม่มีดาเมจ) 6: พร้อม → สะดุ้ง ปีกข้างหนึ่งหลุดจากแนว → ปีกข้างหน้าตก ตัวเอียง ขาหน้าอ่อน → หัวส่ายต่ำ ตาพร่า → ตั้งหลัก → คืนท่า [R1 แนะนำ: ปีกข้างหนึ่งตก · R2: สะบัดหัวมึนปีกคงชู]
+6. sky-rend (เฟส 70% "Sky Rend") 6: พร้อม → ย่อตัว → ชูปีกสองข้างสูงสุด (แนวปีกสว่างภายในตัวปีก ไม่มีแสงนอกร่าง) → ยืดคอเงยหน้าคำราม ปากเปิด → ผ่อนลง → คืนท่า
+7. hit 4: พร้อม → สะท้านถอยหลัง (ไปทางขวา) → ตั้งหลัก → คืนท่า
+8. down 4: พร้อม → ขาหน้าทรุด → ตะแคงล้ม ปีกพับทับตัว → นอนตะแคงค้าง ไม่ลุก แกนไหล่ดับ
+
+ขนาดเฟรม จุดยึด และรูปแบบไฟล์ (เหมือน WB-A):
+- raw: หนึ่งภาพต่อท่า สร้างทุก pose ของท่านั้นในภาพเดียวเรียงซ้ายไปขวา (whole strip) ไม่สร้างทีละเฟรม; ถ้าทำ 6 pose ในภาพเดียวไม่ได้ ให้ลด 1 pose กลางแล้วบันทึกใน NOTES (ห้ามแยกสร้างทีละเฟรม)
+- normalized: strips/<move>.png = N×(1024×1024) RGBA แถวเดียว uniform scale เดียวกับ seed (วัดจาก shard-talon เฟรมพร้อมครั้งเดียว) เท้า y=896 x กลางตัวตาม seed; ผล: 6 ท่า×6 + hit 4 + down 4 = 44 เฟรม
+- strips.json (ต่อท่า: raw, bbox แต่ละ pose, scale, paste_xy, sole_y ที่วัด, ข้อยกเว้น) · preview-390.png (ทุกเฟรมสเกลเดียว บอสสูง ~160px) + preview-keyposes-390.png + previews/<move>.webp ขนาด 390×280 + compare กับผู้คุมเดิม · anatomy audit ด้วย scripts/unit-anatomy-audit.py ผ่าน audit_anatomy.py (ดูแบบอย่าง WB-A) พร้อม anatomy-review.json สำหรับเฟรมที่วัดไม่ได้
+
+คำอธิบายด้านภาพ:
+อสูรสี่ขาคล้ายสิงห์ปีกผลึก เร็วและดุ ท่าต้องอ่านจาก silhouette ที่สูง 160px: ตะปบ = อุ้งเท้าหน้ายกสูงแล้วลงต่ำชัด, ชาร์จ = ปีกพับ ตัวต่ำ แกนไหล่สว่าง (สัญญาณให้ผู้เล่นตัดจังหวะ), Dive = หัวต่ำตัวลาด, เสียหลัก = ปีกตกข้างเดียวและตัวเอียง ต่างจากท่าอื่นอย่างชัดเจน
+
+Prompt สำหรับเครื่องมือสร้างภาพ (แนบ seed-b.png และ layout เป็น reference ทุกครั้ง; เปลี่ยน <N> และ <MOVE POSES>):
+"Sprite animation strip of the SAME four-legged worldshard behemoth from the attached reference, identical design, colors, proportions and lighting: crystal-scaled violet body with gold thorn trim, two raised crystal wings, ONE curved tail with a glowing cyan tip, ONE round cyan power core on the near-side (left) shoulder, cyan eyes, golden claws. Facing left, side-on 3/4 game view, full body, feet on one flat ground line. Exactly <N> poses in one row, left to right: <MOVE POSES>. Same scale in every pose, never enlarged beyond the reference, wide empty transparent gaps between poses, nothing touching the image edges, wings always raised or folded (never spread horizontally), the core stays on the same shoulder (never mirrored), exactly four legs, two wings, one tail in every pose. Transparent background (real alpha, no checkerboard, no floor, no shadow plate). No wind, no light beams, no dust, no shockwaves, no detached crystal shards, no explosions, no text, no UI."
+
+งานปรับ asset และ metadata (Codex): ตัดแต่ละ pose ด้วย alpha bbox → scale เดียวของชุด → วางลง 1024×1024 ที่ y=896 → strips.json · ห้ามยืด/ย่อรายเฟรมเพื่อให้ "พอดี" ถ้า pose ล้นให้สร้างใหม่
+
+งานนำเข้าเกมและการเปลี่ยนสถานะ (Claude ภายหลัง ไม่ใช่งาน Codex): atlas lossless sheet valdrakk (identity foe_valdrakk, move1–6), encounter-only loading, presentation coverage, คลิป 390px ให้เจ้าของอนุมัติ motion
+
+เกณฑ์ตรวจรับ:
+- นับ ขา 4 / ปีก 2 / หาง 1 / แกนไหล่ 1 ทุกเฟรม แกนอยู่ไหล่ด้านใกล้กล้องทุกเฟรม (ยกเว้น down ที่แกนดับแต่ตำแหน่งเดิม)
+- สเกลตัวห่างจาก seed ไม่เกิน ±4% (วัดความยาวลำตัวไม่รวมปีกและหาง) · เท้าที่รับน้ำหนัก y=896 ±3px ยกเว้นที่บันทึกไว้
+- ไม่มีส่วนใดตัดขอบ frame · ไม่มี VFX ในร่าง · alpha จริง · เฟรมแรก/สุดท้ายตรง seed (ยกเว้น down)
+- staggered อ่านต่างจาก hit และ down ได้ที่ 160px
+- strips.json, validation.json ตรงไฟล์จริง และ --verify ผ่านหลัง fetch กลับ
+
+ขอบเขตงานที่ผู้ใช้อนุญาต: (ใส่ "กติการ่วม" ด้านบนทั้งบล็อก) · branch art/art-unit-animation-wb-b-001 จาก feature/fateweave-initial-prototype (ฐานล่าสุดรวม WB-A แล้ว) · เจ้าของเลือกภาพและอนุมัติ motion เอง ผล CI/เทสต์ไม่ใช่การอนุมัติ
 ```
 
 ## WB-C — ART-UNIT-ANIMATION-WB-C-001 (Morvane) · หลัง WB-B ผ่าน

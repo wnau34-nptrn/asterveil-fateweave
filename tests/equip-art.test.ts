@@ -68,6 +68,13 @@ describe('painted equipment mapping', () => {
     ];
     expect(new Set(names.map(name => JSON.stringify(position(name)))).size).toBe(85);
   });
+  it('paints the three World Boss items (P11-05, ART-ITEM-WORLDBOSS-001) in their own cells', () => {
+    const trio = [['bulwark', 'body'], ['breaker', 'gloves'], ['reaper', 'head']] as const;
+    const cells = trio.map(([boss, slot]) => { const item: Item = { uid: 1, slot, rarity: 4, level: 1, affixes: [], boss }; const c = gearCell(item)!; expect(c, boss).toBeDefined(); expect(c).not.toEqual(position(`gear_${slot}`)); return JSON.stringify(c); });
+    expect(new Set(cells).size).toBe(3);
+    // The legacy boss items keep their cells.
+    for (const boss of ['aegis', 'focus', 'lantern']) expect(gearCell({ slot: 'charm', rarity: 4, boss: boss as 'focus' })).toEqual(position(`boss_${boss}`));
+  });
   it('falls back to the legacy frame when new art is absent', () => {
     const cases = [
       { item: { slot: 'head', rarity: 0 }, name: 'gear_head_worn', legacy: 'gear_head' },
