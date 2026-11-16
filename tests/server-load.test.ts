@@ -5,6 +5,7 @@ import { MAPS } from '../src/content/world/maps';
 import { gameRules } from '../src/content/world/rules';
 import type { Game } from '../src/core/save/expedition-save';
 import { newProfile } from '../src/core/world/profile';
+import { WB_BOSSES, type WbBossId } from '../src/core/world/types';
 import { wbEncounter } from '../src/core/world/world-boss';
 import { CONTENT_HEADER } from '../src/server/api';
 import { SESSION_HEADER } from '../src/server/account-object';
@@ -17,7 +18,8 @@ import { wbTurns } from './fixtures/world-boss';
 // Every runner (one IP) makes LOAD_ACCOUNTS guests (≤ 5 a minute per IP, so it waits between them), imports a camp save
 // with every map cleared, then for LOAD_CHAT_SECONDS: each account polls chat once a second, sends a message every
 // LOAD_CHAT_GAP seconds (under 30 sends a minute per IP and the 4 s / 8 a minute per account pace) and plays its five
-// World Boss attempts, each sent twice at once (a retry). Never point it at the dev API players use: it writes chat
+// World Boss attempts, each sent twice at once (a retry). P11-05: when the server reports the three trio bars (`trio.from`
+// reached), each attempt goes to a random trio boss and every bar is checked on its own; otherwise the warden's one bar. Never point it at the dev API players use: it writes chat
 // messages and World Boss damage. Prints a table; prints no token.
 const base = process.env.LOAD_URL;
 const version = process.env.LOAD_CONTENT ?? '';
@@ -35,7 +37,7 @@ const samples: Sample[] = [];
 // The answer fields this test reads (every route's answer is a subset).
 interface Body {
   token?: string; lastSeq?: number; status?: string; error?: string; events?: { type?: string; damage?: number }[];
-  messages?: { id: number; text: string }[]; message?: { text: string }; week?: number; current?: { hp: number; left: number } | null;
+  messages?: { id: number; text: string }[]; message?: { text: string }; week?: number; bars?: { boss: string; hp: number; left: number }[];
 }
 async function call(route: string, path: string, init: RequestInit = {}): Promise<{ status: number; text: string; json: Body | null }> {
   const t = performance.now();
@@ -70,25 +72,31 @@ async function player(): Promise<Player> {
   return p;
 }
 
-async function bossLeft(p: Player): Promise<{ week: number; hp: number; left: number } | null> {
+// Every bar of this week (`warden`, or the three trio bosses).
+interface Bars { week: number; bars: Record<string, { hp: number; left: number }> }
+async function bossLeft(p: Player): Promise<Bars | null> {
   const r = await call('worldboss', '/v1/worldboss', { headers: p.headers() });
-  const s = r.json?.current; return s && typeof s.left === 'number' ? { week: r.json!.week!, hp: s.hp, left: s.left } : null;
+  const bars = r.json?.bars;
+  return Array.isArray(bars) && bars.length && bars.every(b => typeof b.left === 'number') ? { week: r.json!.week!, bars: Object.fromEntries(bars.map(b => [b.boss, { hp: b.hp, left: b.left }])) } : null;
 }
+const isTrio = (b: Bars | null) => !!b && WB_BOSSES.every(x => x in b.bars);
 
 // Five attempts, one at a time per account; each request is sent twice at once (a lost answer retried): both answers
 // must be the same and the hit counted once.
-async function bossRun(p: Player): Promise<{ damage: number; retriesSame: number; attempts: number }> {
-  const commands = wbTurns(wbEncounter(p.profile, home, lookup)!, gameRules.worldBoss.maxRounds);
-  let damage = 0; let retriesSame = 0; let attempts = 0;
+async function bossRun(p: Player, trio: boolean): Promise<{ damage: Record<string, number>; retriesSame: number; attempts: number }> {
+  const turns = new Map<string, ReturnType<typeof wbTurns>>();
+  const commandsFor = (boss?: WbBossId) => { const k = boss ?? 'warden'; if (!turns.has(k)) turns.set(k, wbTurns(wbEncounter(p.profile, home, lookup, boss)!, gameRules.worldBoss.maxRounds)); return turns.get(k)!; };
+  const damage: Record<string, number> = {}; let retriesSame = 0; let attempts = 0;
   for (let a = 1; a <= gameRules.worldBoss.attempts; a++) {
-    const env = JSON.stringify({ requestId: `load${hex(14)}`, seq: p.seq + 1, command: { kind: 'worldBoss', attempt: a, commands } });
+    const boss = trio ? WB_BOSSES[crypto.getRandomValues(new Uint8Array(1))[0]! % WB_BOSSES.length] : undefined;
+    const env = JSON.stringify({ requestId: `load${hex(14)}`, seq: p.seq + 1, command: { kind: 'worldBoss', attempt: a, commands: commandsFor(boss), ...(boss ? { boss } : {}) } });
     const send = () => call('worldBoss', '/v1/command', { method: 'POST', headers: p.headers(true), body: env });
     const [x, y] = await Promise.all([send(), send()]);
     const ok = [x, y].find(r => r.status === 200 && r.json?.status === 'applied');
     if (!ok) break;
     if (x.text === y.text) retriesSame++;
     p.seq++; attempts++;
-    for (const e of ok.json!.events ?? []) if (e?.type === 'wbAttempt') damage += Number(e.damage ?? 0);
+    for (const e of ok.json!.events ?? []) if (e?.type === 'wbAttempt') damage[boss ?? 'warden'] = (damage[boss ?? 'warden'] ?? 0) + Number(e.damage ?? 0);
   }
   // The outbox path: any hit not yet handed over goes with the next answer.
   await call('state', '/v1/state', { headers: p.headers() });
@@ -143,23 +151,29 @@ describe.runIf(!!base)('P12 staging load: WorldBoss and Chat objects', () => {
     for (let i = 0; i < ACCOUNTS; i++) { players.push(await player()); if (i < ACCOUNTS - 1) await sleep(12_500); }
     const before = await bossLeft(players[0]!);
     const until = Date.now() + CHAT_SECONDS * 1000;
-    const [boss, chat] = await Promise.all([Promise.all(players.map(bossRun)), chatRun(players, until)]);
+    const trio = isTrio(before);
+    const [boss, chat] = await Promise.all([Promise.all(players.map(p => bossRun(p, trio))), chatRun(players, until)]);
     await sleep(2000);
     const after = await bossLeft(players[0]!);
-    const own = boss.reduce((t, b) => t + b.damage, 0);
+    const own: Record<string, number> = {};
+    for (const b of boss) for (const [k, v] of Object.entries(b.damage)) own[k] = (own[k] ?? 0) + v;
+    const barText = Object.entries(after?.bars ?? {}).map(([k, v]) => `${k} hp ${v.hp}: left ${before?.bars[k]?.left} → ${v.left}, this runner's damage ${own[k] ?? 0}`).join('; ');
     const lines = [
       `runner ${RUNNER} · accounts ${ACCOUNTS} · chat ${CHAT_SECONDS} s, a send every ${CHAT_GAP} s per account`,
-      `World Boss week ${after?.week} hp ${after?.hp}: left ${before?.left} → ${after?.left}; this runner's damage ${own} in ${boss.reduce((t, b) => t + b.attempts, 0)} attempts; identical retry answers ${boss.reduce((t, b) => t + b.retriesSame, 0)}`,
+      `World Boss week ${after?.week} (${trio ? 'trio' : 'warden'}): ${barText}; ${boss.reduce((t, b) => t + b.attempts, 0)} attempts; identical retry answers ${boss.reduce((t, b) => t + b.retriesSame, 0)}`,
       `chat: sent ${chat.sent.length}, seen by this runner ${chat.sent.filter(t => chat.seen.has(t)).length}, refused ${JSON.stringify(chat.refused)}`,
       table(),
     ];
     process.stdout.write(`${lines.join('\n')}\n`);
     if (process.env.LOAD_OUT) (await import('node:fs')).writeFileSync(process.env.LOAD_OUT, `${lines.join('\n')}\n`);
-    // Invariants: the shared HP never goes below 0 and has lost at least this runner's damage (others only lower it);
+    // Invariants: no bar goes below 0 and each has lost at least this runner's damage on it (others only lower it);
     // every attempt was applied; a retry gives the same answer; every message this runner sent reached its readers.
     expect(before && after).toBeTruthy();
-    expect(after!.left).toBeGreaterThanOrEqual(0);
-    if (after!.week === before!.week) expect(after!.left).toBeLessThanOrEqual(Math.max(0, before!.left - own));
+    for (const bar of Object.values(after!.bars)) expect(bar.left).toBeGreaterThanOrEqual(0);
+    if (after!.week === before!.week) {
+      expect(Object.keys(after!.bars)).toEqual(Object.keys(before!.bars));
+      for (const [k, bar] of Object.entries(after!.bars)) expect(bar.left).toBeLessThanOrEqual(Math.max(0, before!.bars[k]!.left - (own[k] ?? 0)));
+    }
     expect(boss.every(b => b.attempts === gameRules.worldBoss.attempts)).toBe(true);
     expect(boss.every(b => b.retriesSame === b.attempts)).toBe(true);
     expect(chat.sent.length).toBeGreaterThan(0);

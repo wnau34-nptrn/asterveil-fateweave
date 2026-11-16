@@ -25,7 +25,7 @@ function fresh(hp: number) {
   return { state, host, call: (r: Request) => handleBossRequest(host, r) };
 }
 const rows = (s: ReturnType<typeof fresh>) => ({
-  week: s.state.db.prepare('SELECT hp, left_hp AS "left", accounts FROM weeks WHERE week = ?').get(WEEK) as { hp: number; left: number; accounts: number },
+  week: s.state.db.prepare('SELECT hp, left_hp AS "left", accounts FROM bars WHERE week = ? AND boss = ?').get(WEEK, 'warden') as { hp: number; left: number; accounts: number },
   hits: (s.state.db.prepare('SELECT COUNT(*) AS n, COALESCE(SUM(applied), 0) AS applied, COUNT(DISTINCT account) AS accounts FROM hits').get()) as { n: number; applied: number; accounts: number },
 });
 const out: string[] = ['| scenario | requests | ms | req/s | µs/req |', '|---|---|---|---|---|'];

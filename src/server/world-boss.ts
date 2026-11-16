@@ -1,119 +1,168 @@
 import { weekOf } from '../core/world/board';
-import type { WorldBossRules } from '../core/world/types';
-import { MAX_WB_DAMAGE, sharedHpFor, type WorldBossShared } from '../core/world/world-boss';
+import { WB_BOSSES, type WbBossId, type WorldBossRules } from '../core/world/types';
+import { isWbBoss, MAX_WB_DAMAGE, sharedHpFor, trioLive, trioSharedHp, type WorldBossShared } from '../core/world/world-boss';
 import type { DurableStateLike } from './account-object';
 import { serverDay } from './ledger';
 
-// P11-04 World Boss, part 1 (docs/design/WORLD_BOSS_P11_04_TH.md): the shared HP. One Durable Object (name
-// `world-boss`) keeps each week's shared HP and every attempt that hit it. Accounts never write here directly: an
-// account's object commits the attempt (replayed by the rules, rewards receipted in its own `reward_ledger`) and keeps
-// the hit in its outbox; the Worker hands the outbox here and tells the account which hits were taken. A hit is taken
-// once (its id is `<account>:w<week>:a<attempt>`), so a resend after a lost answer changes nothing; the HP removed is at
-// most what was left, so attempts that finish together never take the HP below 0, and attempts after the kill still
-// count for their players (personal rewards) but remove nothing (`applied` 0). Pure apart from the injected store and
-// clock; tests run it in memory. Load and contention are not tested yet (open item before the external test).
+// P11-04 World Boss, part 1 (docs/design/WORLD_BOSS_P11_04_TH.md); P11-05 trio, step 3 (WORLD_BOSS_TRIO_P11_05_TH.md
+// §5). One Durable Object (name `world-boss`) keeps each week's shared HP bars and every attempt that hit them: one bar
+// (`warden`) in a warden week, three (`kragmor`/`valdrakk`/`morvane`) from `trio.from` on. Accounts never write here
+// directly: an account's object commits the attempt (replayed by the rules, rewards receipted in its own
+// `reward_ledger`) and keeps the hit in its outbox; the Worker hands the outbox here and tells the account which hits
+// were taken. A hit is taken once (its id is `<account>:w<week>:a<attempt>`, the attempt number unique over the three
+// bosses), so a resend after a lost answer changes nothing; the HP removed is at most what its bar had left, so attempts
+// that finish together never take a bar below 0, and attempts after the kill still count for their players (personal
+// rewards) but remove nothing (`applied` 0). A hit on a bar the week does not have (a trio boss in a warden week, or the
+// reverse) is acknowledged and takes nothing; the rules never make one. Pure apart from the injected store and clock.
 
-export interface BossWeek extends WorldBossShared { accounts: number; opened: number }
-export interface Hit { id: string; week: number; account: string; damage: number }
+export type BarBoss = WbBossId | 'warden';
+// `accounts`: accounts that hit the bar; `attempts`: hits taken (both feed the next week's HP).
+export interface BossBar { week: number; boss: BarBoss; hp: number; left: number; accounts: number; attempts: number; opened: number }
+export interface Hit { id: string; week: number; account: string; damage: number; boss?: WbBossId }
 export interface BossStore {
-  week(week: number): BossWeek | null;
-  // How many accounts hit the week (for the next week's HP).
-  open(week: BossWeek): void;
+  // The bars a week has (none before it opens).
+  bars(week: number): BossBar[];
+  // Opens a week's bars together.
+  open(bars: readonly BossBar[]): void;
   hit(id: string): { applied: number } | null;
-  // Must insert the hit and update the week (left, accounts) atomically.
+  // Must insert the hit and update its bar (left, accounts, attempts) atomically.
   take(hit: Hit, applied: number, firstOfAccount: boolean, at: number): void;
-  hasAccount(week: number, account: string): boolean;
+  hasAccount(week: number, boss: BarBoss, account: string): boolean;
 }
+export const barOf = (h: Pick<Hit, 'boss'>): BarBoss => h.boss ?? 'warden';
 
 const HIT_ID = /^[0-9a-f]{32}:w\d{1,6}:a\d{1,2}$/;
 export const isHit = (v: unknown): v is Hit => {
   if (typeof v !== 'object' || v === null) return false;
   const h = v as Record<string, unknown>;
-  return Object.keys(h).length === 4 && typeof h.id === 'string' && HIT_ID.test(h.id) && Number.isSafeInteger(h.week) && (h.week as number) >= 0
+  return Object.keys(h).length === ('boss' in h ? 5 : 4) && ('boss' in h ? isWbBoss(h.boss) : true)
+    && typeof h.id === 'string' && HIT_ID.test(h.id) && Number.isSafeInteger(h.week) && (h.week as number) >= 0
     && typeof h.account === 'string' && h.id.startsWith(`${h.account}:w${h.week}:`) && Number.isSafeInteger(h.damage) && (h.damage as number) >= 1 && (h.damage as number) <= MAX_WB_DAMAGE;
 };
 
 export class WorldBossHost {
   constructor(private readonly store: BossStore, private readonly rules: WorldBossRules, private readonly now: () => number = () => Date.now()) {}
-  // The server's week (Monday 00:00 on the game calendar, `ledger.ts`).
+  // The server's week (Monday on the game calendar, `ledger.ts`).
   week(): number { return weekOf(serverDay(this.now())); }
-  // This week and last week only; this week opens on first touch with its HP fixed from last week's accounts.
-  private ensure(week: number): BossWeek | null {
+  // The bars a week stands with.
+  bossesOf(week: number): readonly BarBoss[] { return trioLive(this.rules, week) ? WB_BOSSES : ['warden']; }
+  // This week and last week only; a week opens on first touch with every bar's HP fixed from last week: the warden's
+  // from last week's accounts, a trio boss's from last week's attempts on it (the first trio week: the warden's attempts
+  // ÷ 3 for each).
+  private ensure(week: number): BossBar[] | null {
     const current = this.week();
     if (week !== current && week !== current - 1) return null;
-    const have = this.store.week(week); if (have) return have;
-    const hp = sharedHpFor(this.rules, this.store.week(week - 1)?.accounts ?? 0);
-    const opened: BossWeek = { week, hp, left: hp, accounts: 0, opened: this.now() };
-    this.store.open(opened); return opened;
+    const have = this.store.bars(week); if (have.length) return have;
+    const last = this.store.bars(week - 1); const at = this.now();
+    const lastWarden = last.find(b => b.boss === 'warden');
+    const bars = this.bossesOf(week).map((boss): BossBar => {
+      const hp = boss === 'warden' ? sharedHpFor(this.rules, lastWarden?.accounts ?? 0)
+        : trioSharedHp(this.rules, last.find(b => b.boss === boss)?.attempts ?? Math.floor((lastWarden?.attempts ?? 0) / 3));
+      return { week, boss, hp, left: hp, accounts: 0, attempts: 0, opened: at };
+    });
+    this.store.open(bars); return bars;
   }
-  status(week = this.week()): BossWeek | null { return this.ensure(week); }
-  // Takes each new hit once. Answers the ids it has now (taken before or now; a hit for a closed week is acknowledged
-  // without taking anything) and what each removed.
+  bars(week = this.week()): BossBar[] | null { return this.ensure(week); }
+  // One bar (`null`: a week outside the window, or a bar the week does not have).
+  status(week = this.week(), boss: BarBoss = 'warden'): BossBar | null { return this.ensure(week)?.find(b => b.boss === boss) ?? null; }
+  // Takes each new hit once. Answers the ids it has now (taken before or now; a hit for a closed week or a bar the week
+  // does not have is acknowledged without taking anything) and what each removed.
   contribute(hits: readonly Hit[]): { taken: string[]; applied: Record<string, number> } {
     const taken: string[] = []; const applied: Record<string, number> = {};
     for (const h of hits) {
       const seen = this.store.hit(h.id);
       if (seen) { taken.push(h.id); applied[h.id] = seen.applied; continue; }
-      const w = this.ensure(h.week);
-      if (!w) { taken.push(h.id); applied[h.id] = 0; continue; }
-      const cut = Math.min(h.damage, w.left);
-      this.store.take(h, cut, !this.store.hasAccount(h.week, h.account), this.now());
+      const bar = this.ensure(h.week)?.find(b => b.boss === barOf(h));
+      if (!bar) { taken.push(h.id); applied[h.id] = 0; continue; }
+      const cut = Math.max(0, Math.min(h.damage, bar.left));
+      this.store.take(h, cut, !this.store.hasAccount(h.week, bar.boss, h.account), this.now());
       taken.push(h.id); applied[h.id] = cut;
     }
     return { taken, applied };
   }
 }
 
-export function memoryBossStore(): BossStore & { weeks: BossWeek[]; hits: (Hit & { applied: number })[] } {
+export function memoryBossStore(): BossStore & { weeks: BossBar[]; hits: (Hit & { applied: number })[] } {
   const s = {
-    weeks: [] as BossWeek[], hits: [] as (Hit & { applied: number })[],
-    week: (week: number) => { const w = s.weeks.find(x => x.week === week); return w ? { ...w } : null; },
-    open: (w: BossWeek) => { s.weeks.push({ ...w }); },
+    weeks: [] as BossBar[], hits: [] as (Hit & { applied: number })[],
+    bars: (week: number) => s.weeks.filter(x => x.week === week).map(b => ({ ...b })),
+    open: (bars: readonly BossBar[]) => { s.weeks.push(...bars.map(b => ({ ...b }))); },
     hit: (id: string) => { const h = s.hits.find(x => x.id === id); return h ? { applied: h.applied } : null; },
     take: (hit: Hit, applied: number, first: boolean) => {
       if (s.hits.some(x => x.id === hit.id)) throw new Error('hit');
-      const w = s.weeks.find(x => x.week === hit.week)!; w.left -= applied; if (first) w.accounts++;
+      const w = s.weeks.find(x => x.week === hit.week && x.boss === barOf(hit))!; w.left -= applied; w.attempts++; if (first) w.accounts++;
       s.hits.push({ ...hit, applied });
     },
-    hasAccount: (week: number, account: string) => s.hits.some(x => x.week === week && x.account === account),
+    hasAccount: (week: number, boss: BarBoss, account: string) => s.hits.some(x => x.week === week && barOf(x) === boss && x.account === account),
   };
   return s;
 }
 
 const SCHEMA = [
-  'CREATE TABLE IF NOT EXISTS weeks (week INTEGER PRIMARY KEY, hp INTEGER NOT NULL, left_hp INTEGER NOT NULL, accounts INTEGER NOT NULL, opened INTEGER NOT NULL)',
+  // P11-05: one row per week and boss (replaces P11-04's `weeks`, whose rows become the `warden` bars below).
+  `CREATE TABLE IF NOT EXISTS bars (week INTEGER NOT NULL, boss TEXT NOT NULL, hp INTEGER NOT NULL, left_hp INTEGER NOT NULL,
+     accounts INTEGER NOT NULL, attempts INTEGER NOT NULL, opened INTEGER NOT NULL, PRIMARY KEY (week, boss))`,
   'CREATE TABLE IF NOT EXISTS hits (id TEXT PRIMARY KEY, week INTEGER NOT NULL, account TEXT NOT NULL, damage INTEGER NOT NULL, applied INTEGER NOT NULL, at INTEGER NOT NULL)',
-  'CREATE INDEX IF NOT EXISTS hits_week_account ON hits (week, account)',
 ];
+// Runs when the object starts (before any request): P11-04 objects get `hits.boss` (old rows: the warden) and their
+// `weeks` rows copied into `bars` as the warden's (attempts counted from the hits), once, in one transaction.
+function migrate(state: DurableStateLike): void {
+  const { sql } = state.storage;
+  state.storage.transactionSync(() => {
+    for (const q of SCHEMA) sql.exec(q);
+    const cols = new Set(sql.exec<{ name: string }>('PRAGMA table_info(hits)').toArray().map(c => c.name));
+    if (!cols.has('boss')) sql.exec("ALTER TABLE hits ADD COLUMN boss TEXT NOT NULL DEFAULT 'warden'");
+    sql.exec('CREATE INDEX IF NOT EXISTS hits_bar_account ON hits (week, boss, account)');
+    sql.exec('DROP INDEX IF EXISTS hits_week_account');
+    if (sql.exec('PRAGMA table_info(weeks)').toArray().length) {
+      sql.exec(`INSERT OR IGNORE INTO bars (week, boss, hp, left_hp, accounts, attempts, opened)
+        SELECT w.week, 'warden', w.hp, w.left_hp, w.accounts, (SELECT COUNT(*) FROM hits h WHERE h.week = w.week), w.opened FROM weeks w`);
+      sql.exec('DROP TABLE weeks');
+    }
+  });
+}
+type BarRow = { week: number; boss: string; hp: number; left_hp: number; accounts: number; attempts: number; opened: number };
 export function sqlBossStore(state: DurableStateLike): BossStore {
   const { sql } = state.storage;
-  for (const q of SCHEMA) sql.exec(q);
+  migrate(state);
   return {
-    week(week) {
-      const r = sql.exec<{ week: number; hp: number; left_hp: number; accounts: number; opened: number }>('SELECT week, hp, left_hp, accounts, opened FROM weeks WHERE week = ?', week).toArray()[0];
-      return r ? { week: r.week, hp: r.hp, left: r.left_hp, accounts: r.accounts, opened: r.opened } : null;
+    bars(week) {
+      return sql.exec<BarRow>('SELECT week, boss, hp, left_hp, accounts, attempts, opened FROM bars WHERE week = ? ORDER BY rowid', week).toArray()
+        .map(r => ({ week: r.week, boss: r.boss as BarBoss, hp: r.hp, left: r.left_hp, accounts: r.accounts, attempts: r.attempts, opened: r.opened }));
     },
-    open(w) { sql.exec('INSERT INTO weeks (week, hp, left_hp, accounts, opened) VALUES (?, ?, ?, ?, ?)', w.week, w.hp, w.left, w.accounts, w.opened); },
+    open(bars) {
+      state.storage.transactionSync(() => {
+        for (const b of bars) sql.exec('INSERT INTO bars (week, boss, hp, left_hp, accounts, attempts, opened) VALUES (?, ?, ?, ?, ?, ?, ?)', b.week, b.boss, b.hp, b.left, b.accounts, b.attempts, b.opened);
+      });
+    },
     hit(id) { const r = sql.exec<{ applied: number }>('SELECT applied FROM hits WHERE id = ?', id).toArray()[0]; return r ? { applied: r.applied } : null; },
     take(hit, applied, first, at) {
       state.storage.transactionSync(() => {
-        sql.exec('INSERT INTO hits (id, week, account, damage, applied, at) VALUES (?, ?, ?, ?, ?, ?)', hit.id, hit.week, hit.account, hit.damage, applied, at);
-        sql.exec('UPDATE weeks SET left_hp = left_hp - ?, accounts = accounts + ? WHERE week = ?', applied, first ? 1 : 0, hit.week);
+        sql.exec('INSERT INTO hits (id, week, account, damage, applied, at, boss) VALUES (?, ?, ?, ?, ?, ?, ?)', hit.id, hit.week, hit.account, hit.damage, applied, at, barOf(hit));
+        sql.exec('UPDATE bars SET left_hp = left_hp - ?, accounts = accounts + ?, attempts = attempts + 1 WHERE week = ? AND boss = ?', applied, first ? 1 : 0, hit.week, barOf(hit));
       });
     },
-    hasAccount(week, account) { return sql.exec('SELECT 1 FROM hits WHERE week = ? AND account = ? LIMIT 1', week, account).toArray().length > 0; },
+    hasAccount(week, boss, account) { return sql.exec('SELECT 1 FROM hits WHERE week = ? AND boss = ? AND account = ? LIMIT 1', week, boss, account).toArray().length > 0; },
   };
 }
 
+// What a device reads of a bar; `WorldBossShared` is what an account object's claim runs with (no `boss` for the warden).
+export interface PublicBar { week: number; boss: BarBoss; hp: number; left: number; accounts: number; attempts: number }
+const publicBar = (b: BossBar | null): PublicBar | null => b && { week: b.week, boss: b.boss, hp: b.hp, left: Math.max(0, b.left), accounts: b.accounts, attempts: b.attempts };
+export const sharedOfBar = (b: Pick<PublicBar, 'week' | 'boss' | 'hp' | 'left'>): WorldBossShared =>
+  ({ week: b.week, hp: b.hp, left: b.left, ...(b.boss === 'warden' ? {} : { boss: b.boss }) });
+const isBarBoss = (v: string): v is BarBoss => v === 'warden' || isWbBoss(v);
 const reply = (body: unknown, status = 200) => Response.json(body, { status, headers: { 'Cache-Control': 'no-store' } });
-const publicWeek = (w: BossWeek | null) => w && { week: w.week, hp: w.hp, left: Math.max(0, w.left), accounts: w.accounts };
-// The Durable Object's requests (from the Worker only): `GET /status?week=` and `POST /contribute { hits }`.
+// The Durable Object's requests (from the Worker only): `GET /status?week=&boss=` (`status`: that bar, the warden's by
+// default; `bars`: every bar of the week) and `POST /contribute { hits }`.
 export async function handleBossRequest(host: WorldBossHost, request: Request): Promise<Response> {
   const url = new URL(request.url);
   if (url.pathname === '/status' && request.method === 'GET') {
     const raw = url.searchParams.get('week'); const week = raw === null ? host.week() : Number(raw);
-    if (!Number.isSafeInteger(week)) return reply({ error: 'invalid_request' }, 400);
-    return reply({ week: host.week(), status: publicWeek(host.status(week)) });
+    const boss = url.searchParams.get('boss') ?? 'warden';
+    if (!Number.isSafeInteger(week) || !isBarBoss(boss)) return reply({ error: 'invalid_request' }, 400);
+    const bars = host.bars(week) ?? [];
+    return reply({ week: host.week(), status: publicBar(bars.find(b => b.boss === boss) ?? null), bars: bars.map(b => publicBar(b)!) });
   }
   if (url.pathname === '/contribute' && request.method === 'POST') {
     let body: unknown;

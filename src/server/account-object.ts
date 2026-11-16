@@ -4,7 +4,7 @@ import type { Game } from '../core/save/expedition-save';
 import { sha256Hex } from './accounts';
 import type { RateLimiter } from './rate-limit';
 import type { LedgerRow } from './ledger';
-import type { WorldBossShared } from '../core/world/world-boss';
+import { isWbBoss, type WorldBossShared } from '../core/world/world-boss';
 import { OTHER_DEVICE, type GameHost, type HostState, type HostStore, type ImportRecord, type LogEntry, type Snapshot } from './game-host';
 
 // The Worker forwards the device's session id (checked there) in this header.
@@ -40,8 +40,10 @@ const SCHEMA = [
   // P11-04: World Boss hits waiting for (sent = 0) or taken by (sent = 1) the shared World Boss object.
   'CREATE TABLE IF NOT EXISTS wb_hits (id TEXT PRIMARY KEY, week INTEGER NOT NULL, damage INTEGER NOT NULL, sent INTEGER NOT NULL, at INTEGER NOT NULL)',
 ];
-// Columns added to the log after P09-02b (an object created earlier gets them on its next start).
-const LOG_COLUMNS: readonly [string, string][] = [['day', 'INTEGER'], ['refused', 'TEXT'], ['boss', 'TEXT']];
+// Columns added after a table was first made (an object created earlier gets them on its next start): the log's after
+// P09-02b; P11-05 the trio boss of a hit and the boss shards a payout recorded.
+const ADDED_COLUMNS: readonly [string, string, string][] = [['log', 'day', 'INTEGER'], ['log', 'refused', 'TEXT'], ['log', 'boss', 'TEXT'],
+  ['wb_hits', 'boss', 'TEXT'], ['reward_ledger', 'boss', 'TEXT'], ['reward_ledger', 'shards', 'INTEGER']];
 const STATE_UPSERT = 'INSERT INTO state (id, game, book, updated_at) VALUES (1, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET game = excluded.game, book = excluded.book, updated_at = excluded.updated_at';
 const SNAPSHOT_UPSERT = 'INSERT INTO snapshots (seq, game, origin, at) VALUES (?, ?, ?, ?) ON CONFLICT(seq) DO UPDATE SET game = excluded.game, origin = excluded.origin, at = excluded.at';
 const gameText = (game: Game | null) => game ? JSON.stringify(game) : null;
@@ -49,8 +51,10 @@ const gameText = (game: Game | null) => game ? JSON.stringify(game) : null;
 export function sqlStore(state: DurableStateLike): HostStore {
   const { sql } = state.storage;
   for (const s of SCHEMA) sql.exec(s);
-  const have = new Set(sql.exec<{ name: string }>('PRAGMA table_info(log)').toArray().map(c => c.name));
-  for (const [name, type] of LOG_COLUMNS) if (!have.has(name)) sql.exec(`ALTER TABLE log ADD COLUMN ${name} ${type}`);
+  for (const table of new Set(ADDED_COLUMNS.map(c => c[0]))) {
+    const have = new Set(sql.exec<{ name: string }>(`PRAGMA table_info(${table})`).toArray().map(c => c.name));
+    for (const [t, name, type] of ADDED_COLUMNS) if (t === table && !have.has(name)) sql.exec(`ALTER TABLE ${table} ADD COLUMN ${name} ${type}`);
+  }
   // P09-02f: the book (up to RECENT_REPLIES stored answers, each with a whole view) is only ever replaced, never changed
   // in place (`processCommand` builds a new one), so it is shared instead of copied on every load and commit; the game
   // is still copied.
@@ -70,24 +74,24 @@ export function sqlStore(state: DurableStateLike): HostStore {
         sql.exec(STATE_UPSERT, gameText(next.game), JSON.stringify(next.book), e.at);
         sql.exec('INSERT INTO log (seq, request_id, command, seeds, status, content_version, at, day, refused, boss) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
           e.seq, e.requestId, JSON.stringify(e.command), JSON.stringify(e.seeds), e.status, e.contentVersion, e.at, e.day ?? null, e.refused ?? null, e.boss ? JSON.stringify(e.boss) : null);
-        for (const h of hits) sql.exec('INSERT INTO wb_hits (id, week, damage, sent, at) VALUES (?, ?, ?, 0, ?)', h.id, h.week, h.damage, e.at);
+        for (const h of hits) sql.exec('INSERT INTO wb_hits (id, week, damage, sent, at, boss) VALUES (?, ?, ?, 0, ?, ?)', h.id, h.week, h.damage, e.at, h.boss ?? null);
         if (snapshot) sql.exec(SNAPSHOT_UPSERT, snapshot.seq, gameText(snapshot.game), snapshot.origin, snapshot.at);
         // A receipt that exists already fails the INSERT and rolls the whole command back.
-        for (const r of ledger) sql.exec('INSERT INTO reward_ledger (receipt, seq, kind, period, ref, reward, day, at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-          r.receipt, r.seq, r.kind, r.period, r.ref, JSON.stringify(r.reward), r.day, r.at);
+        for (const r of ledger) sql.exec('INSERT INTO reward_ledger (receipt, seq, kind, period, ref, reward, day, at, boss, shards) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          r.receipt, r.seq, r.kind, r.period, r.ref, JSON.stringify(r.reward), r.day, r.at, r.boss ?? null, r.shards ?? null);
       });
       cached = copy(next);
     },
     pendingHits() {
-      return sql.exec<{ id: string; week: number; damage: number }>('SELECT id, week, damage FROM wb_hits WHERE sent = 0 ORDER BY at, id LIMIT 64').toArray()
-        .map(r => ({ id: r.id, week: r.week, damage: r.damage }));
+      return sql.exec<{ id: string; week: number; damage: number; boss: string | null }>('SELECT id, week, damage, boss FROM wb_hits WHERE sent = 0 ORDER BY at, id LIMIT 64').toArray()
+        .map(r => ({ id: r.id, week: r.week, damage: r.damage, ...(r.boss && isWbBoss(r.boss) ? { boss: r.boss } : {}) }));
     },
     markHits(ids) { for (const id of ids) sql.exec('UPDATE wb_hits SET sent = 1 WHERE id = ?', id); },
     hasReceipt(receipt) { return sql.exec('SELECT 1 FROM reward_ledger WHERE receipt = ?', receipt).toArray().length > 0; },
     ledger() {
-      return sql.exec<{ receipt: string; seq: number; kind: LedgerRow['kind']; period: string; ref: string; reward: string; day: number; at: number }>(
-        'SELECT receipt, seq, kind, period, ref, reward, day, at FROM reward_ledger ORDER BY seq, receipt').toArray()
-        .map(r => ({ ...r, reward: JSON.parse(r.reward) as LedgerRow['reward'] }));
+      return sql.exec<{ receipt: string; seq: number; kind: LedgerRow['kind']; period: string; ref: string; reward: string; day: number; at: number; boss: string | null; shards: number | null }>(
+        'SELECT receipt, seq, kind, period, ref, reward, day, at, boss, shards FROM reward_ledger ORDER BY seq, receipt').toArray()
+        .map(({ boss, shards, ...r }) => ({ ...r, reward: JSON.parse(r.reward) as LedgerRow['reward'], ...(boss && isWbBoss(boss) ? { boss } : {}), ...(shards ? { shards } : {}) }));
     },
     entries(after = 0) {
       return sql.exec<{ seq: number; request_id: string; command: string; seeds: string; status: LogEntry['status']; content_version: string; at: number; day: number | null; refused: string | null; boss: string | null }>(
@@ -144,12 +148,15 @@ export interface AccountObjectOptions {
   purge?: () => Promise<void>;
 }
 
-// P11-04: the shared HP the Worker read (`{ week, hp, left }`, whole numbers); anything else is ignored (no shared HP).
+// P11-04: the shared HP the Worker read (`{ week, hp, left }`, whole numbers, and P11-05 the trio `boss` of the bar);
+// anything else is ignored (no shared HP).
 function bossOf(raw: string | null): WorldBossShared | undefined {
   if (!raw) return undefined;
   try {
     const v = JSON.parse(raw) as Record<string, unknown>;
-    return ['week', 'hp', 'left'].every(k => Number.isSafeInteger(v[k]) && (v[k] as number) >= 0) ? { week: v.week as number, hp: v.hp as number, left: v.left as number } : undefined;
+    if (v.boss !== undefined && !isWbBoss(v.boss)) return undefined;
+    return ['week', 'hp', 'left'].every(k => Number.isSafeInteger(v[k]) && (v[k] as number) >= 0)
+      ? { week: v.week as number, hp: v.hp as number, left: v.left as number, ...(v.boss ? { boss: v.boss } : {}) } : undefined;
   } catch { return undefined; }
 }
 // Every answer to the Worker carries the hits still waiting, so a hit lost between commit and delivery is sent again.
