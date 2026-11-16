@@ -16,7 +16,7 @@ import { hardReason, reserveSlots, activeGuides, guideDone, featureMap, featureO
 import { isBigTree } from '../core/world/talents';
 import { salvageValue } from '../core/world/equipment';
 import { campPresetPlan, matchesPreset, presetOf, presetSlots } from '../core/world/presets';
-import { PARTY_SLOTS, POTION_IDS, SHOP_ITEMS, type BoardTab, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type ProfileEvent, type TalentNode } from '../core/world/types';
+import { PARTY_SLOTS, POTION_IDS, SHOP_ITEMS, type GearStat, type SetId, type WbBossId, type BoardTab, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type ProfileEvent, type TalentNode } from '../core/world/types';
 import { levelOf, recommendedLane, starred, type EncounterLookup } from '../core/world/world';
 import { emptyTomes, raiseSkill, tradeTomes, levelableSkills, skillLevelReason, tradeReason } from '../core/world/tomes';
 import type { TomeLine, TomeSize } from '../core/world/types';
@@ -31,7 +31,9 @@ import { gearArt, potionArt } from './equip-art';
 import { sweepBook, sweepReason, sweepsLeft } from '../core/world/sweep';
 import { partyLine } from '../core/world/tomes';
 import { boardReady, questBoardBody, questTabs, type QuestTab } from './quest-board';
-import { worldBossBody, worldBossReady } from './world-boss-panel';
+import { weekOf } from '../core/world/board';
+import { trioLive } from '../core/world/world-boss';
+import { worldBossBanner, worldBossPage, type WbCraft, type WbTab } from './world-boss-panel';
 import type { WorldBossStatus } from '../platform/server-client';
 import { sweepReasonText, sweepText, campLines, skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
 
@@ -42,12 +44,12 @@ export interface LobbyHost { archive(id: string, archived: boolean): void; autoE
   transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; guide(id: string, skip: boolean): void;
-  enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; claimBoard(tab: BoardTab, id: string, period: number): void; depart(mapId?: string, hard?: boolean): void; sweep(mapId: string, hard: boolean): void; startWorldBoss(): void; claimWorldBoss(id: string, week: number): void; worldBossStatus(): void; home(): void }
+  enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; claimBoard(tab: BoardTab, id: string, period: number): void; depart(mapId?: string, hard?: boolean): void; sweep(mapId: string, hard: boolean): void; startWorldBoss(boss?: WbBossId): void; claimWorldBoss(id: string, week: number): void; craftBossItem(boss: WbBossId, affixes: GearStat[], set?: SetId): void; worldBossStatus(): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
 // `board`: the hiring board from the seed-free client view (`core/command/client-view.ts`), never worked out here.
 // `day` (P05-05): the device's calendar day, for the sweep supplies and the day's sweeps.
 export interface LobbyView { profile: Profile; board: readonly HireSlot[]; message: string; saved: boolean; day: number; cheer?: string; npcCheer?: NpcId; worldBoss?: WorldBossStatus | null; online?: boolean }
-type Sheet = 'team' | 'hire' | 'tree' | 'gear' | 'forge' | 'brew' | 'hunt' | 'maps' | 'board';
+type Sheet = 'team' | 'hire' | 'tree' | 'gear' | 'forge' | 'brew' | 'hunt' | 'maps' | 'board' | 'wboss';
 // Each camp NPC stands at a fixed spot along the back of the camp (x %, left half faces right) and runs one service.
 // `px`: the spot on portrait phones, where the camp is wider than the screen (3×) and pans sideways: the staff
 // stand in the side areas and the team stays around the fire in the middle.
@@ -114,6 +116,8 @@ export class LobbyUI {
   // P05-06: the quest board's open tab.
   private questTab: QuestTab = 'daily';
   private npcOpen = false;
+  // P11-05 step 4: the World Boss page's open tab, the picked trio boss and the craft sheet.
+  private wbTab: WbTab = 'fight'; private wbPick: WbBossId = 'kragmor'; private wbCraft: WbCraft | undefined;
   private lane: 'all' | 'front' | 'back' = 'all';
   // The hiring offer being previewed (stats, skills and star unlocks) before hiring.
   private preview: number | undefined;
@@ -214,9 +218,17 @@ export class LobbyUI {
           this.confirmSalvage = undefined; this.host.salvage([uid]); this.focus('#lobby-sub-back'); break;
         }
         case 'claim': { const q = b.dataset.quest!; this.host.claim(q); this.focus(`#quest-claim-${q}`); break; }
-        case 'quest-tab': this.questTab = b.dataset.tab as QuestTab; if (this.questTab === 'boss') this.host.worldBossStatus(); this.draw(); this.focus(`#quest-tab-${this.questTab}`); break;
-        case 'wb-start': this.host.startWorldBoss(); break;
-        case 'wb-claim': this.host.claimWorldBoss(b.dataset.id!, Number(b.dataset.week)); this.focus('#quest-tab-boss'); break;
+        case 'quest-tab': this.questTab = b.dataset.tab as QuestTab; this.draw(); this.focus(`#quest-tab-${this.questTab}`); break;
+        case 'wboss': this.forgeStorageReturn = false; this.huntUI.cancel(); this.preview = undefined; this.confirmDismiss = false; this.sheet = 'wboss'; this.host.worldBossStatus(); this.draw(); this.focus('#lobby-sheet-title'); break;
+        case 'wb-tab': this.wbTab = b.dataset.tab as WbTab; this.wbCraft = undefined; if (this.wbTab !== 'bosses') this.host.worldBossStatus(); this.draw(); this.focus(`#wb-tab-${this.wbTab}`); break;
+        case 'wb-pick': this.wbPick = b.dataset.boss as WbBossId; this.draw(); this.focus(`#wb-pick-${this.wbPick}`); break;
+        case 'wb-start': this.host.startWorldBoss(this.trioWeek() ? this.wbPick : undefined); break;
+        case 'wb-claim': this.host.claimWorldBoss(b.dataset.id!, Number(b.dataset.week)); this.focus('#wb-tab-rewards'); break;
+        case 'wb-craft': this.wbCraft = this.wbCraft?.boss === b.dataset.boss ? undefined : { boss: b.dataset.boss as WbBossId, affixes: [] }; this.draw(); this.focus(this.wbCraft ? '#wb-craft-sheet' : `#wb-craft-${b.dataset.boss}`); break;
+        case 'wb-affix': if (this.wbCraft) { const a = b.dataset.stat as GearStat; const had = this.wbCraft.affixes.includes(a); this.wbCraft = { ...this.wbCraft, affixes: had ? this.wbCraft.affixes.filter(x => x !== a) : [...this.wbCraft.affixes, a] }; this.draw(); this.focus(`[data-lobby="wb-affix"][data-stat="${a}"]`); } break;
+        case 'wb-set': if (this.wbCraft) { const next: WbCraft = { boss: this.wbCraft.boss, affixes: this.wbCraft.affixes }; if (b.dataset.set) next.set = b.dataset.set as SetId; this.wbCraft = next; this.draw(); this.focus(`[data-lobby="wb-set"][data-set="${b.dataset.set ?? ''}"]`); } break;
+        case 'wb-craft-cancel': { const boss = this.wbCraft?.boss; this.wbCraft = undefined; this.draw(); this.focus(boss ? `#wb-craft-${boss}` : '#wb-tab-craft'); break; }
+        case 'wb-craft-confirm': if (this.wbCraft) { const c = this.wbCraft; this.wbCraft = undefined; this.host.craftBossItem(c.boss, c.affixes, c.set); this.focus('#wb-tab-craft'); } break;
         case 'board-claim': this.host.claimBoard(b.dataset.tab as BoardTab, b.dataset.id!, Number(b.dataset.period)); this.focus(`#quest-tab-${this.questTab}`); break;
         case 'brew': { const potion = b.dataset.potion as PotionId; this.host.brew(potion); this.focus(`#brew-${potion}`); break; }
         case 'forge-open': this.openForge(Number(b.dataset.uid),undefined,b.id);break;
@@ -289,13 +301,15 @@ export class LobbyUI {
     return lines.map((l, i) => `<small class="camp-line">${l}${i === 0 && story ? ` · ${rewardText(story.reward)}` : ''}</small>`).join('');
   }
   // P05-06: rewards ready on the whole board (daily, weekly, contracts and the camp side quests).
-  private boardCounts(p: Profile): Record<QuestTab, number> { return { ...boardReady(p, this.maps, this.view!.day), boss: worldBossReady(p, this.maps, this.view!.day, this.view!.worldBoss), camp: this.readyQuests(p).length }; }
-  private readyAll(p: Profile): number { if (!this.open('quests')) return 0; const c = this.boardCounts(p); return c.daily + c.weekly + c.contract + c.boss + c.camp; }
+  private boardCounts(p: Profile): Record<QuestTab, number> { return { ...boardReady(p, this.maps, this.view!.day), camp: this.readyQuests(p).length }; }
+  private readyAll(p: Profile): number { if (!this.open('quests')) return 0; const c = this.boardCounts(p); return c.daily + c.weekly + c.contract + c.camp; }
   private questEntry(p:Profile):string {
     if(!this.open('quests'))return '';
     const ready=this.readyAll(p),active=this.map.sideQuests.filter(q=>!p.quests[q.id]?.claimed).length;
     return `<button id="lobby-board" data-lobby="board" class="lobby-quest-entry" aria-controls="lobby-sheet" aria-expanded="${this.sheet==='board'}"><strong>${icon('flag')} กระดานเควสต์ ${ready?`<small class="trip-badge">${ready}</small>`:''}${icon('right')}</strong><span>${ready?`มีรางวัลให้รับ ${ready} งาน`:`งานรายวัน รายสัปดาห์ สัญญาจ้าง และงานค่าย ${active} งาน · แตะเพื่อดู`}</span></button>`;
   }
+  private wbWeek(): number { return weekOf(this.view!.day); }
+  private trioWeek(): boolean { return trioLive(this.maps[0]!.worldBoss, this.wbWeek()); }
   private questBoard(p: Profile): string {
     const rows = this.map.sideQuests.map(q => ({ q, st: p.quests[q.id] ?? { progress: 0, claimed: false }, reason: claimReason(p, this.map, q.id) }));
     const state = (r: typeof rows[number]) => r.st.claimed ? 2 : r.reason ? 1 : 0;
@@ -308,7 +322,6 @@ export class LobbyUI {
     };
     const open = sorted.filter(r => state(r) < 2), done = sorted.filter(r => state(r) === 2);
     const tabs = questTabs(this.questTab, this.boardCounts(p));
-    if (this.questTab === 'boss') return `${tabs}${worldBossBody(p, this.maps, this.view!.day, this.view!.worldBoss, !!this.view!.online)}`;
     if (this.questTab !== 'camp') return `${tabs}${questBoardBody(p, this.maps, this.view!.day, this.questTab)}`;
     return `${tabs}<div class="quest-board"><p class="camp-note">งานจาก NPC ในค่าย รับรางวัลได้ครั้งเดียว · ความคืบหน้าจากรอบเดินทางที่จบแล้ว · แตะเควสต์เพื่อดูรายละเอียด</p>${open.map(card).join('')}${done.length ? `<details class="quest-done-list"><summary>รับรางวัลแล้ว ${done.length} งาน</summary>${done.map(card).join('')}</details>` : ''}</div>`;
   }
@@ -438,11 +451,12 @@ export class LobbyUI {
       ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.gold ? ` เหรียญทอง ${last.gold}` : ''}${last.shard ? ` เศษกลาง ${last.shard}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}${this.campLines(p)}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
-        <div class="lobby-sheet-head">${this.sheet==='forge'&&forgeBody&&this.forgeUI.taskNavigation?`<button id="forge-open-tasks" data-forge="tasks" class="round-glass" aria-label="เลือกงานโรงตีเหล็ก">${icon('left')}</button>`:''}${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="${this.forgeStorageReturn?'กลับไปสร้างอาวุธ':'กลับไปจัดทีม'}">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title" tabindex="-1">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ผังสกิล` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : this.sheet === 'board' ? `${icon('flag')} กระดานเควสต์ <small>รับได้ ${this.readyAll(p)}</small>` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
+        <div class="lobby-sheet-head">${this.sheet==='forge'&&forgeBody&&this.forgeUI.taskNavigation?`<button id="forge-open-tasks" data-forge="tasks" class="round-glass" aria-label="เลือกงานโรงตีเหล็ก">${icon('left')}</button>`:''}${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="${this.forgeStorageReturn?'กลับไปสร้างอาวุธ':'กลับไปจัดทีม'}">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title" tabindex="-1">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ผังสกิล` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : this.sheet === 'board' ? `${icon('flag')} กระดานเควสต์ <small>รับได้ ${this.readyAll(p)}</small>` : this.sheet === 'wboss' ? `${icon('flag')} บอสโลก` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.sheet==='forge'||this.sheet==='board'||this.sheet==='team'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p, 'hire'):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcFold(p, this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'board' ? this.questBoard(p) : this.board(p)}</div>${this.sheet==='team'&&!this.locked('team')?this.presetSaveBar(p):''}</section>` : ''}
+        <div class="lobby-content">${this.sheet==='forge'||this.sheet==='board'||this.sheet==='wboss'||this.sheet==='team'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p, 'hire'):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcFold(p, this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'board' ? this.questBoard(p) : this.sheet === 'wboss' ? worldBossPage(p, this.maps, this.view!.day, this.view!.worldBoss, !!this.view!.online, { tab: this.wbTab, pick: this.wbPick, ...(this.wbCraft ? { craft: this.wbCraft } : {}) }) : this.board(p)}</div>${this.sheet==='team'&&!this.locked('team')?this.presetSaveBar(p):''}</section>` : ''}
       <footer class="lobby-bottom">
         ${this.guideCard(p)}
+        ${worldBossBanner(p, this.maps, this.view!.day, this.view!.worldBoss, this.sheet === 'wboss')}
         <section class="lobby-trip" aria-label="การเดินทาง"><div class="trip-head"><div><b>${this.openMaps().at(-1)?.name ?? this.map.name}</b><span class="trip-team" data-ready="${ready}">${ready ? 'ทีมพร้อม' : 'ทีมยังไม่พร้อม'} · ลงสนาม ${p.party.deployed.length} · สำรอง ${p.party.reserve.length}</span></div><div class="trip-actions">${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary" aria-label="เลือกแผนที่">${icon('map')}</button>` : ''}</div></div>
           <button id="lobby-depart" data-lobby="depart" class="primary"${ready ? '' : ' disabled'}>${icon('map')}<span>ออกเดินทาง</span></button></section>
         <nav class="lobby-menu" aria-label="ค่าย">${menu('team', 'tab-team', 'ทีม', `${p.party.deployed.length}+${p.party.reserve.length}`)}<button id="lobby-tab-characters" data-lobby="character-home" data-tab="characters" class="lobby-menu-button" aria-controls="camp-character-dialog" aria-expanded="false">${icon('star')}<span>ตัวละคร</span></button>${menu('hire', 'tab-hire', 'จ้าง', openOffers ? String(openOffers) : '')}${menu('gear', 'tab-bag', 'กระเป๋า', p.items.length ? String(p.items.length) : '')}${menu('forge', 'tab-forge', 'ช่าง', '')}${menu('brew', 'brew', 'ยา', '')}</nav>
@@ -644,7 +658,7 @@ export class LobbyUI {
   // Lobby systems by chapter (A3). A locked sheet still opens, showing which map opens it.
   private open(feature: LobbyFeature): boolean { const p = this.view?.profile; return !p || featureOpen(p, this.maps, feature); }
   private locked(sheet: Sheet | null): LobbyFeature | undefined {
-    const feature: Partial<Record<Sheet, LobbyFeature>> = { team: 'team', hire: 'hire', gear: 'gear', forge: 'forge', brew: 'brew', hunt: 'hunt', tree: 'tree', board: 'quests' };
+    const feature: Partial<Record<Sheet, LobbyFeature>> = { team: 'team', hire: 'hire', gear: 'gear', forge: 'forge', brew: 'brew', hunt: 'hunt', tree: 'tree', board: 'quests', wboss: 'quests' };
     const f = sheet ? feature[sheet] : undefined; return f && !this.open(f) ? f : undefined;
   }
   private lockedPanel(feature: LobbyFeature): string {

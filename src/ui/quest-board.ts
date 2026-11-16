@@ -6,9 +6,9 @@ import { boardKindText, boardReasonText, boardTaskName, contractText, sweepText 
 
 // P05-06 quest board (camp sheet): daily, weekly and contract tabs beside the camp's one-time side quests. Pure view of
 // the board book on the device's day; every claim goes through the `claimBoard` command.
-export type QuestTab = BoardTab | 'boss' | 'camp';
-export const QUEST_TABS: readonly QuestTab[] = ['daily', 'weekly', 'contract', 'boss', 'camp'];
-const tabName: Record<QuestTab, string> = { daily: 'รายวัน', weekly: 'รายสัปดาห์', contract: 'สัญญา', boss: 'บอสโลก', camp: 'งานค่าย' };
+export type QuestTab = BoardTab | 'camp';
+export const QUEST_TABS: readonly QuestTab[] = ['daily', 'weekly', 'contract', 'camp'];
+const tabName: Record<QuestTab, string> = { daily: 'รายวัน', weekly: 'รายสัปดาห์', contract: 'สัญญา', camp: 'งานค่าย' };
 const dayLabel = (day: number): string => { const d = new Date(day * 86_400_000); return `${d.getUTCDate()}/${d.getUTCMonth() + 1}`; };
 // The last day of a week (Sunday).
 const weekEnd = (week: number): number => week * 7 + 3;

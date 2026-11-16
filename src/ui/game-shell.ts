@@ -5,6 +5,7 @@ import { applyCommand, isRejected, type CampCommand, type CommandEvent, type Com
 import { clientView, type HireSlot } from '../core/command/client-view';
 import type { ReportPlace, ServerClient, ServerFailure, ServerOutcome, ServerState, WorldBossStatus } from '../platform/server-client';
 import { wbBook, wbEncounter, wbWeekOf } from '../core/world/world-boss';
+import type { WbBossId } from '../core/world/types';
 import { attemptReasonText, claimText, worldBossStartReason } from './world-boss-panel';
 import { AccountPanel } from './account-panel';
 import { FeedbackPanel } from './feedback-panel';
@@ -141,7 +142,7 @@ export class GameShell {
       salvage: uids => camp({ kind: 'salvage', uids: [...uids] }),
       enhance: (uid,target) => camp({ kind: 'enhance', uid, target }), lock: uid=>camp({ kind: 'lockEquipment', uid }), fuse: (uid,donors) => camp({ kind: 'fuse', uid, ...has('donors', donors ? [...donors] : undefined) }), level:(uid,target)=>camp({ kind: 'raiseItemLevel', uid, target }),
       reroll: (uid, i) => camp({ kind: 'reroll', uid, index: i }), brew: potion => camp({ kind: 'brew', potion }), claim: id => camp({ kind: 'claimQuest', questId: id }), claimBoard: (tab, id, period) => camp({ kind: 'claimBoard', tab, id, period, day: this.today() }),
-      depart: (id, hard) => this.depart(id, hard), startWorldBoss: () => this.startWorldBoss(), claimWorldBoss: (id, week) => this.claimWorldBoss(id, week), worldBossStatus: () => this.refreshWorldBoss(),
+      depart: (id, hard) => this.depart(id, hard), startWorldBoss: boss => this.startWorldBoss(boss), craftBossItem: (boss, affixes, set) => camp({ kind: 'craftBossItem', boss, affixes, ...(set ? { set } : {}) }), claimWorldBoss: (id, week) => this.claimWorldBoss(id, week), worldBossStatus: () => this.refreshWorldBoss(),
       sweep: (id, hard) => this.campCommand({ kind: 'sweep', mapId: id, hard, day: this.today(), serial: this.game?.profile.sweep?.count ?? 0 }), home: () => this.showTitle(),
     }, maps);
     const story = document.createElement('section'); root.append(story); this.story = new StoryUI(story);
@@ -450,18 +451,19 @@ export class GameShell {
   private today(): number { const online = this.server?.day; if (online !== undefined) return online; const d = new Date(Date.now() - 6 * 3_600_000); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000); }
   // ---- P11-04 World Boss: the attempt is fought in the battle view and sent once, as one command, when it ends ----
   private wbStatus: WorldBossStatus | null = null;
-  private wbRun: { attempt: number; sent: boolean; message: string } | undefined;
+  private wbRun: { attempt: number; sent: boolean; message: string; boss?: WbBossId } | undefined;
   // Server play: the shared HP of this week and last (offline there is none).
   private refreshWorldBoss(): void {
     if (!this.server) return;
     void this.server.worldBoss().then(status => { this.wbStatus = status; if (this.root.dataset.view === 'lobby' && !this.game?.run && !this.wbRun) this.showLobby(); });
   }
-  private startWorldBoss(): void {
+  // `boss`: the trio boss picked on the World Boss page (none while the warden stands, OD-51).
+  private startWorldBoss(boss?: WbBossId): void {
     const g = this.game; if (!g || g.run || this.wbRun || this.waiting) return;
-    const day = this.today(); if (worldBossStartReason(g.profile, this.maps, day)) return;
-    const data = wbEncounter(g.profile, this.home, this.lookup); if (!data) return;
+    const day = this.today(); if (worldBossStartReason(g.profile, this.maps, day, boss)) return;
+    const data = wbEncounter(g.profile, this.home, this.lookup, boss); if (!data) return;
     const attempt = wbBook(g.profile, wbWeekOf(day)).weeks.at(-1)!.attempts + 1;
-    this.wbRun = { attempt, sent: false, message: '' }; this.music.play('ruins');
+    this.wbRun = { attempt, sent: false, message: '', ...(boss ? { boss } : {}) }; this.music.play('ruins');
     this.show('battle');
     this.battle.open({
       kind: 'worldBoss', roundLimit: this.home.worldBoss.maxRounds, scene: 'riftline', data, entry: { hp: {} }, commands: [],
@@ -474,12 +476,12 @@ export class GameShell {
     const run = this.wbRun; if (!run) return false;
     if (run.sent || (state.outcome === 'active' && state.round <= this.home.worldBoss.maxRounds)) return true;
     run.sent = true;
-    this.exec({ kind: 'worldBoss', attempt: run.attempt, commands: state.commands, day: this.today() }, out => {
+    this.exec({ kind: 'worldBoss', attempt: run.attempt, commands: state.commands, day: this.today(), ...(run.boss ? { boss: run.boss } : {}) }, out => {
       if (isRejected(out)) { run.message = `ผลศึกไม่ถูกบันทึก · ${attemptReasonText[out.rejected] ?? out.rejected}`; return; }
       const e = out.events[0]; if (e?.type !== 'wbAttempt') { run.message = 'ผลศึกไม่ถูกบันทึก'; return; }
       this.game = out.game; this.persist();
       const line = partyLine(this.home, out.game.profile.party.deployed);
-      run.message = `บอสโลกครั้งที่ ${e.attempt}/${this.home.worldBoss.attempts} · ดาเมจ ${e.damage} · ได้ ${sweepText(e.reward, line)}${e.milestones.map(m => ` · รางวัลส่วนตัว ${sweepText(m.reward, line)}`).join('')}`;
+      run.message = `บอสโลกครั้งที่ ${e.attempt}/${this.home.worldBoss.attempts} · ดาเมจ ${e.damage} · ได้ ${sweepText(e.reward, line)}${e.shards ? ` เศษบอส ${e.shards}` : ''}${e.milestones.map(m => ` · รางวัลส่วนตัว ${sweepText(m.reward, line)}${m.shards ? ` เศษบอส ${m.shards}` : ''}`).join('')}`;
     }, true, true);
     return true;
   }

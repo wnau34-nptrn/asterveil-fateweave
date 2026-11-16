@@ -49,10 +49,13 @@ export function intentDelayThai(intent: Intent): string {
 // The rule line under an announced enemy turn.
 export function intentRuleThai(intent: Intent): string {
   if (intent.special === 'phase') return 'ไม่โจมตีเทิร์นนี้ · เรียกพวก/เปลี่ยนท่า · ขัดจังหวะไม่ได้';
+  // P11-05: a staggered move (a breakable charge was cancelled), a summon, the breakable charge and the court bonus.
+  if (intent.special === 'stagger') return 'เสียหลัก · ไม่มีดาเมจรอบนี้';
   const label = intentDelayThai(intent), delay = label ? `${label} · ` : '';
-  if (intent.charge) return `${delay}ไม่ทำความเสียหาย · ท่าถัดไปแรงมาก เตรียมป้องกัน`;
+  if (intent.summon) return `${delay}ไม่ทำความเสียหาย · เรียกลูกน้องที่ล้มกลับมา · ขัดจังหวะไม่ได้`;
+  if (intent.charge) return `${delay}${intent.breakable ? '<b class="intent-tag">ทำลายได้</b> · ตัดจังหวะ (Bash/Sigil) แล้วท่าถัดไปเสียหลัก · ' : ''}ไม่ทำความเสียหาย · ท่าถัดไปแรงมาก เตรียมป้องกัน`;
   const reach = intent.all ? 'โดนทุกคน · ตั้งรับแทนไม่ได้' : intent.kind === 'physical' ? 'แนวหน้ารับก่อน' : 'ถึงแนวหลังได้';
-  return delay + (intent.unstoppable ? `${reach} · ขัดจังหวะไม่ได้` : reach);
+  return delay + (intent.court ? `<b class="intent-tag">ราชสำนัก +${intent.court}%</b> · ` : '') + (intent.unstoppable ? `${reach} · ขัดจังหวะไม่ได้` : reach);
 }
 // A boss phase's name, from the same move-name table.
 export const phaseThai = (name: string): string => intentName({ name } as Intent);
