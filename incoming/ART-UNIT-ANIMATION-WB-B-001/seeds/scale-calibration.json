@@ -1,0 +1,74 @@
+{
+  "source": "raw/original/shard-talon-r3.png",
+  "pose": 0,
+  "method": "SIFT similarity on torso-only seed polygon, provisional global2.8; solve once for unit scale; not silhouette-height fit",
+  "seed_mask_polygon": [
+    [
+      355,
+      585
+    ],
+    [
+      480,
+      570
+    ],
+    [
+      625,
+      600
+    ],
+    [
+      740,
+      625
+    ],
+    [
+      770,
+      690
+    ],
+    [
+      650,
+      710
+    ],
+    [
+      480,
+      685
+    ],
+    [
+      360,
+      670
+    ]
+  ],
+  "probe": {
+    "frame": 0,
+    "scale": 0.9859,
+    "inliers": 37,
+    "span": 392.2,
+    "posterior": 7,
+    "ground": 545,
+    "crop": [
+      29,
+      279,
+      332,
+      546
+    ],
+    "bounds": [
+      88,
+      151,
+      936,
+      899
+    ],
+    "matrix": [
+      [
+        0.9857589187348259,
+        -0.01384579347230519,
+        17.818321506833676
+      ],
+      [
+        0.01384579347230519,
+        0.9857589187348259,
+        -4.385972823335038
+      ]
+    ]
+  },
+  "provisional_scale": 2.8,
+  "provisional_torso_fit": 0.9858561517088235,
+  "global_scale": 2.8401709469953085
+}

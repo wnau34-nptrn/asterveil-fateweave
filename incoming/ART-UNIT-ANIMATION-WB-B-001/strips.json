@@ -1,0 +1,2764 @@
+{
+  "schema": 1,
+  "task": "ART-UNIT-ANIMATION-WB-B-001",
+  "base_commit": "8e672a17211239ab5b12acf2f33d51d01bae0ecd",
+  "seed": "seeds/seed-b.png",
+  "logical_frame_count": 44,
+  "canonical_body_scale": 2.8401709469953085,
+  "scale_policy": "One torso-only calibration from Shard Talon ready (seeds/scale-calibration.json); original generator canvas width/N converts source resolution. No per-frame or per-strip anatomical rescaling. Body shape review is separate.",
+  "ground_policy": "Every grounded/contact landmark maps to y896, with deep crouch and down shape preserved.",
+  "raw_cleanup": "raw/original contains EVERY generator PNG byte-for-byte including rejected iterations. Derived raw/<move>.png clears alpha<=8 and invisible RGB, crops alpha bboxes then adds64px alpha0 gaps WITHOUT resizing or painting. Original gaps are reported separately and are not claimed to pass.",
+  "preview_scale": 0.22,
+  "preview_seed_height_px": 161.48,
+  "preview_positions": {
+    "shard-talon": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -15,
+          32
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          180,
+          32
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          82,
+          270
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          82,
+          508
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          82,
+          746
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          82,
+          984
+        ],
+        "scale": 0.22
+      }
+    ],
+    "wing-gust": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          82,
+          1258
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          82,
+          1496
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          82,
+          1734
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          82,
+          1972
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          82,
+          2210
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          82,
+          2448
+        ],
+        "scale": 0.22
+      }
+    ],
+    "wing-gathering": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -15,
+          2722
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          180,
+          2722
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          82,
+          2960
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          82,
+          3198
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -15,
+          3436
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          180,
+          3436
+        ],
+        "scale": 0.22
+      }
+    ],
+    "worldshard-dive": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          82,
+          3710
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          82,
+          3948
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          82,
+          4186
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          82,
+          4424
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          82,
+          4662
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          82,
+          4900
+        ],
+        "scale": 0.22
+      }
+    ],
+    "staggered": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          -15,
+          5174
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          180,
+          5174
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          -15,
+          5412
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          180,
+          5412
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -15,
+          5650
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          180,
+          5650
+        ],
+        "scale": 0.22
+      }
+    ],
+    "sky-rend": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          82,
+          5924
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          82,
+          6162
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          82,
+          6400
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          82,
+          6638
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 4,
+        "paste_xy": [
+          -15,
+          6876
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 5,
+        "paste_xy": [
+          180,
+          6876
+        ],
+        "scale": 0.22
+      }
+    ],
+    "hit": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          82,
+          7150
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          82,
+          7388
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          82,
+          7626
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          82,
+          7864
+        ],
+        "scale": 0.22
+      }
+    ],
+    "down": [
+      {
+        "frame": 0,
+        "paste_xy": [
+          82,
+          8138
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 1,
+        "paste_xy": [
+          82,
+          8376
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 2,
+        "paste_xy": [
+          82,
+          8614
+        ],
+        "scale": 0.22
+      },
+      {
+        "frame": 3,
+        "paste_xy": [
+          82,
+          8852
+        ],
+        "scale": 0.22
+      }
+    ]
+  },
+  "moves": [
+    {
+      "move": "shard-talon",
+      "intent": "Shard Talon",
+      "file": "strips/shard-talon.png",
+      "raw": "raw/shard-talon.png",
+      "generator_original": "raw/original/shard-talon-r3.png",
+      "original_pose_bounds_xyxy": [
+        [
+          29,
+          279,
+          332,
+          546
+        ],
+        [
+          408,
+          277,
+          707,
+          547
+        ],
+        [
+          760,
+          306,
+          1067,
+          547
+        ],
+        [
+          1106,
+          312,
+          1421,
+          551
+        ],
+        [
+          1477,
+          298,
+          1791,
+          548
+        ],
+        [
+          1851,
+          280,
+          2150,
+          547
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "original_clear_gutters_after_alpha_cleanup_px": [
+        76,
+        53,
+        39,
+        56,
+        60
+      ],
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "raise far front-right paw; lean back",
+        "rear crouch; aim low",
+        "low left claw contact",
+        "low follow-through",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          279,
+          367,
+          546
+        ],
+        [
+          443,
+          277,
+          742,
+          547
+        ],
+        [
+          822,
+          306,
+          1129,
+          547
+        ],
+        [
+          1201,
+          312,
+          1516,
+          551
+        ],
+        [
+          1580,
+          298,
+          1894,
+          548
+        ],
+        [
+          1959,
+          280,
+          2258,
+          547
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        411,
+        790,
+        1169,
+        1548,
+        1927,
+        2338
+      ],
+      "raw_clear_gutters_px": [
+        76,
+        80,
+        72,
+        64,
+        65
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 1.0,
+      "canonical_body_scale": 2.8401709469953085,
+      "effective_source_scale": 2.8401709469953085,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            279,
+            367,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            82,
+            141
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.4854719007520316
+        },
+        {
+          "source_crop_xyxy": [
+            443,
+            277,
+            742,
+            547
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            88,
+            132
+          ],
+          "source_sole_y": 546,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.005984741738,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.005984741737961485
+        },
+        {
+          "source_crop_xyxy": [
+            822,
+            306,
+            1129,
+            547
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            76,
+            217
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.8008563318788,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.19914366812122353
+        },
+        {
+          "source_crop_xyxy": [
+            1201,
+            312,
+            1516,
+            551
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            64,
+            220
+          ],
+          "source_sole_y": 550,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.9606853848834,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.039314615116609275
+        },
+        {
+          "source_crop_xyxy": [
+            1580,
+            298,
+            1894,
+            548
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            66,
+            192
+          ],
+          "source_sole_y": 546,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.3623948548365,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.3623948548364524
+        },
+        {
+          "source_crop_xyxy": [
+            1959,
+            280,
+            2258,
+            547
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            88,
+            141
+          ],
+          "source_sole_y": 546,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.4854719007520316
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          89,
+          165,
+          934,
+          899
+        ],
+        [
+          88,
+          132,
+          937,
+          899
+        ],
+        [
+          76,
+          217,
+          948,
+          901
+        ],
+        [
+          64,
+          220,
+          959,
+          899
+        ],
+        [
+          66,
+          192,
+          958,
+          902
+        ],
+        [
+          89,
+          165,
+          934,
+          899
+        ]
+      ],
+      "hold_frame_0based": null,
+      "contact_frame_0based": 3,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "prepare": [
+          0,
+          1,
+          2
+        ],
+        "recover": [
+          3,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "move": "wing-gust",
+      "intent": "Wing Gust",
+      "file": "strips/wing-gust.png",
+      "raw": "raw/wing-gust.png",
+      "generator_original": "raw/original/wing-gust-r2.png",
+      "original_pose_bounds_xyxy": [
+        [
+          30,
+          281,
+          336,
+          546
+        ],
+        [
+          394,
+          340,
+          700,
+          546
+        ],
+        [
+          756,
+          258,
+          1065,
+          546
+        ],
+        [
+          1117,
+          292,
+          1423,
+          546
+        ],
+        [
+          1467,
+          293,
+          1788,
+          546
+        ],
+        [
+          1843,
+          281,
+          2148,
+          546
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "original_clear_gutters_after_alpha_cleanup_px": [
+        58,
+        56,
+        52,
+        44,
+        55
+      ],
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "lower both wings",
+        "raise both wings",
+        "sweep wings forward left",
+        "curved forward wing follow-through",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          281,
+          370,
+          546
+        ],
+        [
+          449,
+          340,
+          755,
+          546
+        ],
+        [
+          834,
+          258,
+          1143,
+          546
+        ],
+        [
+          1219,
+          292,
+          1525,
+          546
+        ],
+        [
+          1604,
+          293,
+          1925,
+          546
+        ],
+        [
+          1989,
+          281,
+          2294,
+          546
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        417,
+        802,
+        1187,
+        1572,
+        1957,
+        2374
+      ],
+      "raw_clear_gutters_px": [
+        79,
+        79,
+        76,
+        79,
+        64
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 1.0,
+      "canonical_body_scale": 2.8401709469953085,
+      "effective_source_scale": 2.8401709469953085,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            281,
+            370,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            78,
+            146
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.1948699932385125
+        },
+        {
+          "source_crop_xyxy": [
+            449,
+            340,
+            755,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            78,
+            314
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.2350441340383,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.23504413403827584
+        },
+        {
+          "source_crop_xyxy": [
+            834,
+            258,
+            1143,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            73,
+            81
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.1290617876535,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.1290617876535407
+        },
+        {
+          "source_crop_xyxy": [
+            1219,
+            292,
+            1525,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            78,
+            177
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.563249589813,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.4367504101869599
+        },
+        {
+          "source_crop_xyxy": [
+            1604,
+            293,
+            1925,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            56,
+            180
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.7230786428178,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.276921357182232
+        },
+        {
+          "source_crop_xyxy": [
+            1989,
+            281,
+            2294,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            79,
+            146
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.1948699932385125
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          89,
+          165,
+          934,
+          899
+        ],
+        [
+          78,
+          314,
+          947,
+          899
+        ],
+        [
+          73,
+          81,
+          951,
+          899
+        ],
+        [
+          78,
+          177,
+          947,
+          898
+        ],
+        [
+          56,
+          180,
+          968,
+          899
+        ],
+        [
+          89,
+          165,
+          934,
+          899
+        ]
+      ],
+      "hold_frame_0based": null,
+      "contact_frame_0based": 3,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "prepare": [
+          0,
+          1,
+          2
+        ],
+        "recover": [
+          3,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "move": "wing-gathering",
+      "intent": "Wing Gathering",
+      "file": "strips/wing-gathering.png",
+      "raw": "raw/wing-gathering.png",
+      "generator_original": "raw/original/wing-gathering-r2.png",
+      "original_pose_bounds_xyxy": [
+        [
+          28,
+          279,
+          336,
+          543
+        ],
+        [
+          398,
+          306,
+          698,
+          542
+        ],
+        [
+          758,
+          372,
+          1055,
+          542
+        ],
+        [
+          1112,
+          373,
+          1420,
+          543
+        ],
+        [
+          1481,
+          314,
+          1783,
+          542
+        ],
+        [
+          1842,
+          278,
+          2147,
+          543
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "original_clear_gutters_after_alpha_cleanup_px": [
+        62,
+        60,
+        57,
+        61,
+        59
+      ],
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "start folding wings back",
+        "fold along back; visible bright core; charge hold",
+        "deepest compression",
+        "partly release",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          279,
+          372,
+          543
+        ],
+        [
+          436,
+          306,
+          736,
+          542
+        ],
+        [
+          808,
+          372,
+          1105,
+          542
+        ],
+        [
+          1180,
+          373,
+          1488,
+          543
+        ],
+        [
+          1552,
+          314,
+          1854,
+          542
+        ],
+        [
+          1924,
+          278,
+          2229,
+          543
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        404,
+        776,
+        1148,
+        1520,
+        1892,
+        2296
+      ],
+      "raw_clear_gutters_px": [
+        64,
+        72,
+        75,
+        64,
+        70
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 1.0,
+      "canonical_body_scale": 2.8401709469953085,
+      "effective_source_scale": 2.8401709469953085,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            279,
+            372,
+            543
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            74,
+            149
+          ],
+          "source_sole_y": 542,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.035040940233898255
+        },
+        {
+          "source_crop_xyxy": [
+            436,
+            306,
+            736,
+            542
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            86,
+            229
+          ],
+          "source_sole_y": 541,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.4401725438975,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.44017254389746086
+        },
+        {
+          "source_crop_xyxy": [
+            808,
+            372,
+            1105,
+            542
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            90,
+            419
+          ],
+          "source_sole_y": 540,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.1487190952118,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.14871909521184534
+        },
+        {
+          "source_crop_xyxy": [
+            1180,
+            373,
+            1488,
+            543
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            74,
+            416
+          ],
+          "source_sole_y": 542,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.9888900422071,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.011109957792882597
+        },
+        {
+          "source_crop_xyxy": [
+            1552,
+            314,
+            1854,
+            542
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            83,
+            251
+          ],
+          "source_sole_y": 541,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.7188049679351,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.281195032064943
+        },
+        {
+          "source_crop_xyxy": [
+            1924,
+            278,
+            2229,
+            543
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            79,
+            149
+          ],
+          "source_sole_y": 541,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.035040940233898255
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          89,
+          165,
+          934,
+          899
+        ],
+        [
+          86,
+          229,
+          938,
+          899
+        ],
+        [
+          90,
+          419,
+          934,
+          902
+        ],
+        [
+          74,
+          416,
+          949,
+          899
+        ],
+        [
+          83,
+          251,
+          941,
+          899
+        ],
+        [
+          89,
+          165,
+          934,
+          899
+        ]
+      ],
+      "hold_frame_0based": 2,
+      "contact_frame_0based": 3,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "prepare": [
+          0,
+          1,
+          2
+        ],
+        "recover": [
+          3,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "move": "worldshard-dive",
+      "intent": "Worldshard Dive",
+      "file": "strips/worldshard-dive.png",
+      "raw": "raw/worldshard-dive.png",
+      "generator_original": "raw/original/worldshard-dive-r3.png",
+      "original_pose_bounds_xyxy": [
+        [
+          28,
+          280,
+          336,
+          546
+        ],
+        [
+          398,
+          291,
+          709,
+          547
+        ],
+        [
+          753,
+          278,
+          1070,
+          546
+        ],
+        [
+          1109,
+          313,
+          1419,
+          550
+        ],
+        [
+          1478,
+          293,
+          1784,
+          550
+        ],
+        [
+          1851,
+          280,
+          2153,
+          547
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "original_clear_gutters_after_alpha_cleanup_px": [
+        62,
+        44,
+        39,
+        59,
+        67
+      ],
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "rear crouch",
+        "hips raised; head low",
+        "low left dive; rear knees tucked",
+        "low skid stop",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          280,
+          372,
+          546
+        ],
+        [
+          445,
+          291,
+          756,
+          547
+        ],
+        [
+          826,
+          278,
+          1143,
+          546
+        ],
+        [
+          1207,
+          313,
+          1517,
+          550
+        ],
+        [
+          1588,
+          293,
+          1894,
+          550
+        ],
+        [
+          1969,
+          280,
+          2271,
+          547
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        413,
+        794,
+        1175,
+        1556,
+        1937,
+        2350
+      ],
+      "raw_clear_gutters_px": [
+        73,
+        70,
+        64,
+        71,
+        75
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 1.0,
+      "canonical_body_scale": 2.8401709469953085,
+      "effective_source_scale": 2.8401709469953085,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            280,
+            372,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            74,
+            143
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.35469904624324045
+        },
+        {
+          "source_crop_xyxy": [
+            445,
+            291,
+            756,
+            547
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            70,
+            175
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.4034205368083,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.40342053680831214
+        },
+        {
+          "source_crop_xyxy": [
+            826,
+            278,
+            1143,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            62,
+            141
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.485471900752,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "rear support paw is anchor; forebody lifted/low head",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.4854719007520316
+        },
+        {
+          "source_crop_xyxy": [
+            1207,
+            313,
+            1517,
+            550
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            72,
+            226
+          ],
+          "source_sole_y": 549,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.2803434908928,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "low dive; front contact paw anchor, trailing rear feet above baseline",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.2803434908928466
+        },
+        {
+          "source_crop_xyxy": [
+            1588,
+            293,
+            1894,
+            550
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            78,
+            169
+          ],
+          "source_sole_y": 549,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.083762430799,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.08376243079896994
+        },
+        {
+          "source_crop_xyxy": [
+            1969,
+            280,
+            2271,
+            547
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            83,
+            143
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.35469904624324045
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          89,
+          165,
+          934,
+          899
+        ],
+        [
+          70,
+          175,
+          953,
+          902
+        ],
+        [
+          62,
+          141,
+          962,
+          902
+        ],
+        [
+          72,
+          226,
+          952,
+          899
+        ],
+        [
+          78,
+          169,
+          947,
+          899
+        ],
+        [
+          89,
+          165,
+          934,
+          899
+        ]
+      ],
+      "hold_frame_0based": null,
+      "contact_frame_0based": 3,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "prepare": [
+          0,
+          1,
+          2
+        ],
+        "recover": [
+          3,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "move": "staggered",
+      "intent": "Staggered",
+      "file": "strips/staggered.png",
+      "raw": "raw/staggered.png",
+      "generator_original": "raw/original/staggered.png",
+      "original_pose_bounds_xyxy": [
+        [
+          26,
+          266,
+          331,
+          546
+        ],
+        [
+          398,
+          262,
+          691,
+          542
+        ],
+        [
+          756,
+          258,
+          1053,
+          544
+        ],
+        [
+          1123,
+          262,
+          1415,
+          547
+        ],
+        [
+          1486,
+          261,
+          1781,
+          545
+        ],
+        [
+          1847,
+          265,
+          2154,
+          546
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "original_clear_gutters_after_alpha_cleanup_px": [
+        67,
+        65,
+        70,
+        71,
+        66
+      ],
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "near wing loses alignment",
+        "near wing droops; knees weak",
+        "head sways low; near wing droops",
+        "brace; recover balance",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          266,
+          369,
+          546
+        ],
+        [
+          435,
+          262,
+          728,
+          542
+        ],
+        [
+          806,
+          258,
+          1103,
+          544
+        ],
+        [
+          1177,
+          262,
+          1469,
+          547
+        ],
+        [
+          1548,
+          261,
+          1843,
+          545
+        ],
+        [
+          1919,
+          265,
+          2226,
+          546
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        403,
+        774,
+        1145,
+        1516,
+        1887,
+        2290
+      ],
+      "raw_clear_gutters_px": [
+        66,
+        78,
+        74,
+        79,
+        76
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 1.0,
+      "canonical_body_scale": 2.8401709469953085,
+      "effective_source_scale": 2.8401709469953085,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            266,
+            369,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            79,
+            104
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.40769421169102316
+        },
+        {
+          "source_crop_xyxy": [
+            435,
+            262,
+            728,
+            542
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            96,
+            104
+          ],
+          "source_sole_y": 541,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.407694211691,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.40769421169102316
+        },
+        {
+          "source_crop_xyxy": [
+            806,
+            258,
+            1103,
+            544
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            90,
+            89
+          ],
+          "source_sole_y": 542,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.6085489466676,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.39145105333238917
+        },
+        {
+          "source_crop_xyxy": [
+            1177,
+            262,
+            1469,
+            547
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            98,
+            92
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.7683779996723,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.23162200032766123
+        },
+        {
+          "source_crop_xyxy": [
+            1548,
+            261,
+            1843,
+            545
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            93,
+            92
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.7683779996723,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.23162200032766123
+        },
+        {
+          "source_crop_xyxy": [
+            1919,
+            265,
+            2226,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            76,
+            101
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.2478651586864089
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          89,
+          165,
+          934,
+          899
+        ],
+        [
+          96,
+          104,
+          928,
+          899
+        ],
+        [
+          90,
+          89,
+          934,
+          901
+        ],
+        [
+          98,
+          92,
+          927,
+          901
+        ],
+        [
+          93,
+          92,
+          931,
+          899
+        ],
+        [
+          89,
+          165,
+          934,
+          899
+        ]
+      ],
+      "hold_frame_0based": null,
+      "contact_frame_0based": 3,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "prepare": [
+          0,
+          1,
+          2
+        ],
+        "recover": [
+          3,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "move": "sky-rend",
+      "intent": "Sky Rend / phase70%",
+      "file": "strips/sky-rend.png",
+      "raw": "raw/sky-rend.png",
+      "generator_original": "raw/original/sky-rend.png",
+      "original_pose_bounds_xyxy": [
+        [
+          32,
+          285,
+          335,
+          546
+        ],
+        [
+          390,
+          313,
+          702,
+          546
+        ],
+        [
+          757,
+          258,
+          1059,
+          546
+        ],
+        [
+          1110,
+          257,
+          1420,
+          546
+        ],
+        [
+          1480,
+          290,
+          1784,
+          546
+        ],
+        [
+          1843,
+          285,
+          2143,
+          546
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        362,
+        724,
+        1086,
+        1448,
+        1810,
+        2172
+      ],
+      "original_clear_gutters_after_alpha_cleanup_px": [
+        55,
+        55,
+        51,
+        60,
+        59
+      ],
+      "frame_count": 6,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "crouch",
+        "both wings high; internal glow",
+        "neck raised; mouth open roar",
+        "relax",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          285,
+          367,
+          546
+        ],
+        [
+          440,
+          313,
+          752,
+          546
+        ],
+        [
+          816,
+          258,
+          1118,
+          546
+        ],
+        [
+          1192,
+          257,
+          1502,
+          546
+        ],
+        [
+          1568,
+          290,
+          1872,
+          546
+        ],
+        [
+          1944,
+          285,
+          2244,
+          546
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        408,
+        784,
+        1160,
+        1536,
+        1912,
+        2320
+      ],
+      "raw_clear_gutters_px": [
+        73,
+        64,
+        74,
+        66,
+        72
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 1.0,
+      "canonical_body_scale": 2.8401709469953085,
+      "effective_source_scale": 2.8401709469953085,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            285,
+            367,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            82,
+            158
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.4444462187801719
+        },
+        {
+          "source_crop_xyxy": [
+            440,
+            313,
+            752,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            69,
+            240
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0794887559163,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.07948875591625892
+        },
+        {
+          "source_crop_xyxy": [
+            816,
+            258,
+            1118,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            83,
+            84
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.2888908406583,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.28889084065826864
+        },
+        {
+          "source_crop_xyxy": [
+            1192,
+            257,
+            1502,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            72,
+            78
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.9692327346488,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.030767265351187234
+        },
+        {
+          "source_crop_xyxy": [
+            1568,
+            290,
+            1872,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            80,
+            175
+          ],
+          "source_sole_y": 544,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.4034205368083,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.40342053680831214
+        },
+        {
+          "source_crop_xyxy": [
+            1944,
+            285,
+            2244,
+            546
+          ],
+          "uniform_scale": 2.8401709469953085,
+          "paste_xy": [
+            86,
+            158
+          ],
+          "source_sole_y": 545,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.4444462187801719
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          89,
+          165,
+          934,
+          899
+        ],
+        [
+          69,
+          240,
+          955,
+          902
+        ],
+        [
+          83,
+          84,
+          941,
+          902
+        ],
+        [
+          72,
+          78,
+          952,
+          899
+        ],
+        [
+          80,
+          175,
+          943,
+          902
+        ],
+        [
+          89,
+          165,
+          934,
+          899
+        ]
+      ],
+      "hold_frame_0based": null,
+      "contact_frame_0based": 3,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "prepare": [
+          0,
+          1,
+          2
+        ],
+        "recover": [
+          3,
+          4,
+          0
+        ]
+      }
+    },
+    {
+      "move": "hit",
+      "intent": "hit",
+      "file": "strips/hit.png",
+      "raw": "raw/hit.png",
+      "generator_original": "raw/original/hit.png",
+      "original_pose_bounds_xyxy": [
+        [
+          50,
+          244,
+          499,
+          643
+        ],
+        [
+          573,
+          258,
+          1052,
+          643
+        ],
+        [
+          1125,
+          272,
+          1585,
+          643
+        ],
+        [
+          1678,
+          244,
+          2127,
+          643
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        543,
+        1086,
+        1629,
+        2172
+      ],
+      "original_clear_gutters_after_alpha_cleanup_px": [
+        74,
+        73,
+        93
+      ],
+      "frame_count": 4,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "recoil right",
+        "brace",
+        "ready"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          244,
+          513,
+          643
+        ],
+        [
+          607,
+          258,
+          1086,
+          643
+        ],
+        [
+          1150,
+          272,
+          1610,
+          643
+        ],
+        [
+          1693,
+          244,
+          2142,
+          643
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        575,
+        1118,
+        1661,
+        2236
+      ],
+      "raw_clear_gutters_px": [
+        94,
+        64,
+        83
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 0.6666666666666666,
+      "canonical_body_scale": 2.8401709469953085,
+      "effective_source_scale": 1.8934472979968722,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            244,
+            513,
+            643
+          ],
+          "uniform_scale": 1.8934472979968722,
+          "paste_xy": [
+            87,
+            142
+          ],
+          "source_sole_y": 642,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.4079753972448543
+        },
+        {
+          "source_crop_xyxy": [
+            607,
+            258,
+            1086,
+            643
+          ],
+          "uniform_scale": 1.8934472979968722,
+          "paste_xy": [
+            58,
+            169
+          ],
+          "source_sole_y": 642,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.083762430799,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.08376243079896994
+        },
+        {
+          "source_crop_xyxy": [
+            1150,
+            272,
+            1610,
+            643
+          ],
+          "uniform_scale": 1.8934472979968722,
+          "paste_xy": [
+            76,
+            195
+          ],
+          "source_sole_y": 642,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.5755002588427,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.4244997411573195
+        },
+        {
+          "source_crop_xyxy": [
+            1693,
+            244,
+            2142,
+            643
+          ],
+          "uniform_scale": 1.8934472979968722,
+          "paste_xy": [
+            87,
+            142
+          ],
+          "source_sole_y": 642,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.4079753972448543
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          89,
+          165,
+          934,
+          899
+        ],
+        [
+          58,
+          169,
+          965,
+          898
+        ],
+        [
+          76,
+          195,
+          947,
+          897
+        ],
+        [
+          89,
+          165,
+          934,
+          899
+        ]
+      ],
+      "hold_frame_0based": null,
+      "contact_frame_0based": null,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "reaction": [
+          1,
+          2
+        ],
+        "final_down_hold": null
+      }
+    },
+    {
+      "move": "down",
+      "intent": "down",
+      "file": "strips/down.png",
+      "raw": "raw/down.png",
+      "generator_original": "raw/original/down.png",
+      "original_pose_bounds_xyxy": [
+        [
+          46,
+          198,
+          488,
+          586
+        ],
+        [
+          561,
+          302,
+          1043,
+          584
+        ],
+        [
+          1102,
+          368,
+          1590,
+          577
+        ],
+        [
+          1651,
+          383,
+          2136,
+          576
+        ]
+      ],
+      "original_cuts_x": [
+        0,
+        543,
+        1086,
+        1629,
+        2172
+      ],
+      "original_clear_gutters_after_alpha_cleanup_px": [
+        73,
+        59,
+        61
+      ],
+      "frame_count": 4,
+      "frame_size": [
+        1024,
+        1024
+      ],
+      "frame_order": [
+        "ready",
+        "front knees buckle",
+        "side collapse; wings folded; core dark",
+        "held side-prone; core dark; never rises"
+      ],
+      "facing": "left",
+      "raw_pose_bounds_xyxy": [
+        [
+          64,
+          198,
+          506,
+          586
+        ],
+        [
+          616,
+          302,
+          1098,
+          584
+        ],
+        [
+          1168,
+          368,
+          1656,
+          577
+        ],
+        [
+          1720,
+          383,
+          2205,
+          576
+        ]
+      ],
+      "raw_cuts_x": [
+        0,
+        584,
+        1136,
+        1688,
+        2272
+      ],
+      "raw_clear_gutters_px": [
+        110,
+        70,
+        64
+      ],
+      "canonical_slot_width": 362,
+      "source_resolution_scale": 0.6666666666666666,
+      "canonical_body_scale": 2.8401709469953085,
+      "effective_source_scale": 1.8934472979968722,
+      "transforms": [
+        {
+          "source_crop_xyxy": [
+            64,
+            198,
+            506,
+            586
+          ],
+          "uniform_scale": 1.8934472979968722,
+          "paste_xy": [
+            94,
+            163
+          ],
+          "source_sole_y": 585,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "primary support paw on y896; other paws preserve three-quarter perspective",
+          "seed_locked": true,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.23589567521048593
+        },
+        {
+          "source_crop_xyxy": [
+            616,
+            302,
+            1098,
+            584
+          ],
+          "uniform_scale": 1.8934472979968722,
+          "paste_xy": [
+            56,
+            364
+          ],
+          "source_sole_y": 583,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 896.0586907371211,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "front knee/paw contact; not upright four-paw stance",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": 0.05869073712108275
+        },
+        {
+          "source_crop_xyxy": [
+            1168,
+            368,
+            1656,
+            577
+          ],
+          "uniform_scale": 1.8934472979968722,
+          "paste_xy": [
+            50,
+            504
+          ],
+          "source_sole_y": 575,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.9435906853525,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "collapsed body/paws contact; other paws tucked",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.05640931464745336
+        },
+        {
+          "source_crop_xyxy": [
+            1720,
+            383,
+            2205,
+            576
+          ],
+          "uniform_scale": 1.8934472979968722,
+          "paste_xy": [
+            53,
+            534
+          ],
+          "source_sole_y": 574,
+          "sole_y": 896,
+          "measured_primary_contact_y": 896,
+          "mapped_ground_y": 895.6484339174026,
+          "ground_measurement": "annotated lowest visible gold support-claw/body contact in source; perspective-staggered other paws can be higher",
+          "ground_note": "held lying body/paw contact; not an upright sole",
+          "seed_locked": false,
+          "anchor_x_policy": "alpha silhouette center x=512; no per-frame scaling",
+          "rounding_error_y_px": -0.35156608259740096
+        }
+      ],
+      "frame_bounds_xyxy": [
+        [
+          89,
+          165,
+          934,
+          899
+        ],
+        [
+          56,
+          364,
+          969,
+          898
+        ],
+        [
+          50,
+          504,
+          974,
+          900
+        ],
+        [
+          53,
+          534,
+          971,
+          899
+        ]
+      ],
+      "hold_frame_0based": 3,
+      "contact_frame_0based": null,
+      "held_rock_frames_0based": [],
+      "projectile_absent_frames_0based": [],
+      "runtime_mapping_guidance": {
+        "reaction": [
+          1,
+          2,
+          3
+        ],
+        "final_down_hold": 3
+      }
+    }
+  ]
+}
