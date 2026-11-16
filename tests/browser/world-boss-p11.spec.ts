@@ -7,7 +7,7 @@ import { parseGame } from '../../src/core/save/expedition-save';
 import { weekOf } from '../../src/core/world/board';
 import { xpAt } from '../fixtures/camp-level';
 
-// P11-04 part 2: the World Boss tab of the camp quest board at 390px, offline: attempts and personal milestones, the
+// P11-04 part 2: the World Boss page (camp banner, four tabs) at 390px, offline: attempts and personal milestones, the
 // battle with its round counter (8 rounds), one `worldBoss` command at the end, the reward and the attempt count
 // surviving a reload. The shared bar belongs to server play (no bar offline).
 const key = 'asterveil.fateweave.expedition.v1';
@@ -26,7 +26,7 @@ async function playOut(page: Page): Promise<void> {
   }
 }
 
-test('the World Boss tab shows the week, plays one attempt and pays once', async ({ page }) => {
+test('the World Boss page shows the week, plays one attempt and pays once', async ({ page }) => {
   test.setTimeout(240_000);
   const day = today(); const week = weekOf(day);
   const p = newProfile(chapterOne, 17, ['guardian', 'tracer', 'weaver', 'healer']); p.tutorialDone = true;
@@ -35,10 +35,11 @@ test('the World Boss tab shows the week, plays one attempt and pays once', async
   const raw = JSON.stringify({ version: 64, profile: p, run: null }); parseGame(raw, chapterOne, encounterById, MAPS);
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('p1104')) { localStorage.setItem(key, raw); sessionStorage.setItem('p1104', '1'); } }, { key, raw });
   await page.setViewportSize({ width: 390, height: 844 }); await page.goto('./'); await page.locator('#continue').click();
-  await page.locator('#lobby-board').click(); await page.locator('#quest-tab-boss').click();
-  for (const t of ['daily', 'weekly', 'contract', 'boss', 'camp']) expect((await page.locator(`#quest-tab-${t}`).boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await page.locator('#lobby-wboss').click();
+  await expect(page.locator('#quest-tab-boss')).toHaveCount(0);
+  for (const t of ['fight', 'rewards', 'craft', 'bosses']) expect((await page.locator(`#wb-tab-${t}`).boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await expect(page.locator('#wb-attempts')).toContainText('0/5'); await expect(page.locator('#wb-offline')).toBeVisible();
-  await expect(page.locator('#wb-p-2')).toHaveAttribute('data-state', 'open');
+  await page.locator('#wb-tab-rewards').click(); await expect(page.locator('#wb-p-2')).toHaveAttribute('data-state', 'open'); await page.locator('#wb-tab-fight').click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: 'docs/validation/p11-04-2026-11-15/boss-tab-390.png' });
   await page.locator('#wb-start').click();
@@ -54,6 +55,6 @@ test('the World Boss tab shows the week, plays one attempt and pays once', async
   await page.locator('#leave-battle').click();
   await expect(page.locator('.lobby-result')).toContainText('บอสโลกครั้งที่ 1/5');
   await expect(page.locator('#wb-attempts')).toContainText('1/5');
-  await page.reload(); await page.locator('#continue').click(); await page.locator('#lobby-board').click(); await page.locator('#quest-tab-boss').click();
+  await page.reload(); await page.locator('#continue').click(); await page.locator('#lobby-wboss').click();
   await expect(page.locator('#wb-attempts')).toContainText('1/5'); await expect(page.locator('#wb-start')).toContainText('ครั้งที่ 2/5');
 });

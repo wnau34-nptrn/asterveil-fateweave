@@ -65,3 +65,7 @@
 ## เทสต์
 
 - probe ผ่าน (`TRIO_OUT` ตั้ง) · ข้ามในชุดปกติ (`skipIf`) · `npx tsc --noEmit`, eslint ของไฟล์ probe ผ่าน · ไม่ได้รัน `npm run sim`/Chromium (ไม่มีโค้ดเกมเปลี่ยน)
+
+## ขั้น 4: UI (16 พ.ย.)
+
+แบนเนอร์ค่าย `#lobby-wboss` + หน้าบอสโลก 4 แท็บ (ต่อสู้/รางวัล/สร้างของ/บอส) ใน `src/ui/world-boss-panel.ts`; ป้าย "ทำลายได้" / "ราชสำนัก +n%" จาก `intentRuleThai` · ผู้คุมยังเปิดอยู่ตอน `trio.from` ไม่ตั้ง (หน้าเดียวกัน 4 แท็บ) · เทสต์: `tests/world-boss-panel.test.ts`, `tests/browser/world-boss-trio-ui.spec.ts` (แก้ `rules.ts` ระหว่างโหลดให้ `from: 0`), `world-boss-p11.spec.ts` · ภาพ 390px: `trio-camp-390.png`, `trio-fight-390.png` · สไปรต์เป็นเหรียญ K/V/M ชั่วคราวจนกว่า WB-A จะผ่าน
