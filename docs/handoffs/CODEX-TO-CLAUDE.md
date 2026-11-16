@@ -1,3 +1,10 @@
+## 2026-11-16 — P11-05 step 1: World Boss trio resolver rules R1/R2 + encounters v1 (Opus; branch claude/world-boss-trio-rules)
+- Resolver: R1 `IntentDefinition.breakable` (cancelled charge → `EnemyState.staggerRound`, next move is a generated `special: 'stagger'` intent, damage 0 in forecast and result, event `stagger`; Seer delay/phase clears it); R2 `EnemyDefinition.court` (`courtPercent`, +10% per standing listed foe, `Intent.court`) and `IntentDefinition.summon` (locked no-damage move; brings back down/absent listed foes fresh at full HP, acting next round, `roomFor` shared with phases). `encounterProblems` checks court/summon slots. Thai event text for `stagger`/court return.
+- `src/content/encounters/world-boss-trio.ts`: `wb-kragmor`/`wb-valdrakk`/`wb-morvane` v1 (probe drafts, HP 2400), not in the game catalog. No save/world/server/UI screen change (save v64); no existing encounter bumped.
+- Old vs new engine on all 27 encounters × normal/hard × advisor/attack: identical states/events. `tests/world-boss-trio.test.ts` (14, design §1.4). Probe rerun with real rules → [validation](../validation/p11-05-2026-11-16/README_TH.md): Valdrakk = old "ignored" bound (advisor never bashes the charge on purpose); **Morvane harder than the old bound** (starter advisor 36 dmg, HP −192, 2 down; strong teams 361–444) — numbers kept, tune in step 6/owner.
+- Tests: typecheck, lint, `npm test`, build pass locally; Chromium in CI.
+- Next: step 2 (world rules, items, save v65, budget test).
+
 ## 2026-11-16 — P11-05 World Boss trio: design + simulation (Opus; branch claude/world-boss-trio-design)
 - Design only, no game code (save v64). Includes PR #272's OD-46–49 commit (names, 5 shared attempts, items, offline shards); the OD-46 id collides with main's external-test OD-46 (open question 2).
 - [WORLD_BOSS_TRIO_P11_05_TH.md](../design/WORLD_BOSS_TRIO_P11_05_TH.md): Kragmor (existing rules: veilguard, charge→unstoppable, quake), Valdrakk (new R1 breakable charge: a cancelled charge staggers the dive), Morvane (new R2 court: +10% per standing minion, a move that calls downed minions back); encounters `wb-*` v1, no other bumps.

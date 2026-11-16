@@ -59,6 +59,7 @@ export function effectCaption(event: BattleEvent): string {
     case 'finale': return 'บทส่งท้าย';
     case 'phase': return 'เปลี่ยนช่วง!';
     case 'summon': return 'ปรากฏตัว';
+    case 'stagger': return 'เสียหลัก!';
     case 'charge': return 'รวบรวมพลัง';
     case 'resist': return event.text === 'Unstoppable move.' ? 'ขัดไม่ได้' : 'ไม่หวั่นไหว';
     case 'parry': return 'ปัดดาบ';
