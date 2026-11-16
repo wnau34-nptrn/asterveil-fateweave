@@ -1,3 +1,7 @@
+## 2026-11-16 — OD-51: warden opens the external test, trio drafts approved (Opus; branch claude/od-51-trio-launch)
+- Owner "ทำตามที่คุณแนะนำ": 14 Dec test opens with the current warden; the trio replaces it only if steps 1–4 + art A pass before 7 Dec. P11-05 §9 drafts 3–5 approved for the test (crafting 40/30/10, central shards 3→2, ore/gold 4/2, shared HP ×400 min 1500). §9 item 6 (Morvane damage) stays open. Docs only; `git diff --check`.
+- Still from the owner: privacy contact text, `accountId` for the admin row, Google consent Publish before 30 Nov.
+
 ## 2026-11-16 — P11-05 step 1: World Boss trio resolver rules R1/R2 + encounters v1 (Opus; branch claude/world-boss-trio-rules)
 - Resolver: R1 `IntentDefinition.breakable` (cancelled charge → `EnemyState.staggerRound`, next move is a generated `special: 'stagger'` intent, damage 0 in forecast and result, event `stagger`; Seer delay/phase clears it); R2 `EnemyDefinition.court` (`courtPercent`, +10% per standing listed foe, `Intent.court`) and `IntentDefinition.summon` (locked no-damage move; brings back down/absent listed foes fresh at full HP, acting next round, `roomFor` shared with phases). `encounterProblems` checks court/summon slots. Thai event text for `stagger`/court return.
 - `src/content/encounters/world-boss-trio.ts`: `wb-kragmor`/`wb-valdrakk`/`wb-morvane` v1 (probe drafts, HP 2400), not in the game catalog. No save/world/server/UI screen change (save v64); no existing encounter bumped.
