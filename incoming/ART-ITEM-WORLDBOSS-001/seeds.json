@@ -1,0 +1,269 @@
+{
+  "schema": 1,
+  "base_commit": "cca1c3db38028781306072011d8dc4c0aed438f3",
+  "seed_commit": "46f366dc931e4994d3a6ccd9ad3951ac444a70cf",
+  "items": {
+    "bulwark": {
+      "slot": "body",
+      "boss": "Kragmor",
+      "seed": "a",
+      "master": "gear_body_master",
+      "legacy": "boss_aegis"
+    },
+    "breaker": {
+      "slot": "gloves",
+      "boss": "Valdrakk",
+      "seed": "b",
+      "master": "gear_gloves_master",
+      "legacy": "boss_focus"
+    },
+    "reaper": {
+      "slot": "head",
+      "boss": "Morvane",
+      "seed": "c",
+      "master": "gear_head_master",
+      "legacy": "boss_lantern"
+    }
+  },
+  "transforms": {
+    "bulwark": {
+      "source": "source/boss_bulwark.png",
+      "source_crop_xyxy": [
+        128,
+        155,
+        1124,
+        1155
+      ],
+      "uniform_scale": 0.104,
+      "resize": [
+        104,
+        104
+      ],
+      "paste_xy": [
+        12,
+        12
+      ],
+      "target_longest_dimension": 104,
+      "mirror": false,
+      "alpha_cleanup": "source alpha<=8 discarded, transparent RGB cleared; no redraw or per-axis stretch"
+    },
+    "breaker": {
+      "source": "source/boss_breaker.png",
+      "source_crop_xyxy": [
+        112,
+        170,
+        1153,
+        1109
+      ],
+      "uniform_scale": 0.09990393852065321,
+      "resize": [
+        104,
+        94
+      ],
+      "paste_xy": [
+        12,
+        17
+      ],
+      "target_longest_dimension": 104,
+      "mirror": false,
+      "alpha_cleanup": "source alpha<=8 discarded, transparent RGB cleared; no redraw or per-axis stretch"
+    },
+    "reaper": {
+      "source": "source/boss_reaper.png",
+      "source_crop_xyxy": [
+        202,
+        157,
+        1190,
+        1088
+      ],
+      "uniform_scale": 0.10526315789473684,
+      "resize": [
+        104,
+        98
+      ],
+      "paste_xy": [
+        12,
+        15
+      ],
+      "target_longest_dimension": 104,
+      "mirror": false,
+      "alpha_cleanup": "source alpha<=8 discarded, transparent RGB cleared; no redraw or per-axis stretch"
+    }
+  },
+  "reference_sha256": {
+    "references/boss_aegis.png": "4be98efb10e56bb6d82993772164fcad0fa766433acf84fd4cb3b16846df40c7",
+    "references/boss_focus.png": "7d5c675d52d5b654c34e41177584457d1a2aa4964d988ef33882f06b0df4d993",
+    "references/boss_lantern.png": "aee0f8ff2642b507cbdcf6e66e2bb10c79030ecdf995327fd2e3dccdccf9f4c1",
+    "references/context.json": "554e8a04829cca7466a826c24054fd698ca9ca90875fd45dfadc2ea63a633d20",
+    "references/gear_body_master.png": "27430704de2f1dbe4b3506d9abaf1324a4bef3cda8acd3111043827b0788e636",
+    "references/gear_gloves_master.png": "6790f856b1d1bfd29d5a560ff9700f083b3f63e6afe8e9dc519eaaf0984c405f",
+    "references/gear_head_master.png": "01000710b3286cd8a217d4f7701a4f8fc84eb83d05453abaa8b5eeab129f6d2a",
+    "references/seed-a.png": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97",
+    "references/seed-b.png": "c3fe15c71d82c7cddc09df874fb9c21480bf2168e7b16248d692878ffb7ec214",
+    "references/seed-c.png": "47e5fbbaf06a18ee56a7c8c46771e00f65e13df7998b8c3d78c5cfa98f160105"
+  },
+  "preview": {
+    "bulwark": [
+      {
+        "size": 128,
+        "columns_master_new_legacy_xy": [
+          [
+            1,
+            97
+          ],
+          [
+            131,
+            97
+          ],
+          [
+            261,
+            97
+          ]
+        ]
+      },
+      {
+        "size": 64,
+        "columns_master_new_legacy_xy": [
+          [
+            33,
+            251
+          ],
+          [
+            163,
+            251
+          ],
+          [
+            293,
+            251
+          ]
+        ]
+      },
+      {
+        "size": 40,
+        "columns_master_new_legacy_xy": [
+          [
+            45,
+            341
+          ],
+          [
+            175,
+            341
+          ],
+          [
+            305,
+            341
+          ]
+        ]
+      }
+    ],
+    "breaker": [
+      {
+        "size": 128,
+        "columns_master_new_legacy_xy": [
+          [
+            1,
+            464
+          ],
+          [
+            131,
+            464
+          ],
+          [
+            261,
+            464
+          ]
+        ]
+      },
+      {
+        "size": 64,
+        "columns_master_new_legacy_xy": [
+          [
+            33,
+            618
+          ],
+          [
+            163,
+            618
+          ],
+          [
+            293,
+            618
+          ]
+        ]
+      },
+      {
+        "size": 40,
+        "columns_master_new_legacy_xy": [
+          [
+            45,
+            708
+          ],
+          [
+            175,
+            708
+          ],
+          [
+            305,
+            708
+          ]
+        ]
+      }
+    ],
+    "reaper": [
+      {
+        "size": 128,
+        "columns_master_new_legacy_xy": [
+          [
+            1,
+            831
+          ],
+          [
+            131,
+            831
+          ],
+          [
+            261,
+            831
+          ]
+        ]
+      },
+      {
+        "size": 64,
+        "columns_master_new_legacy_xy": [
+          [
+            33,
+            985
+          ],
+          [
+            163,
+            985
+          ],
+          [
+            293,
+            985
+          ]
+        ]
+      },
+      {
+        "size": 40,
+        "columns_master_new_legacy_xy": [
+          [
+            45,
+            1075
+          ],
+          [
+            175,
+            1075
+          ],
+          [
+            305,
+            1075
+          ]
+        ]
+      }
+    ]
+  },
+  "rng_seed": null,
+  "reproducibility": "Generator exposes no numeric RNG seed; retained source images make processing deterministic.",
+  "frame_policy": "None baked. Legendary rarity3/4 uses master icon tier; frame, boss marker and set emblem belong to DOM."
+}

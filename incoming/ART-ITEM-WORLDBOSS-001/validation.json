@@ -1,0 +1,256 @@
+{
+  "schema": 1,
+  "task": "ART-ITEM-WORLDBOSS-001",
+  "icons": {
+    "bulwark": {
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_corners": true,
+      "alpha_bbox_xyxy": [
+        12,
+        12,
+        116,
+        116
+      ],
+      "transparent_pixels": 9184,
+      "partial_alpha_pixels": 6931,
+      "largest_dimension_fraction": 0.8125,
+      "slot": "body",
+      "expected_atlas_key": "boss_bulwark"
+    },
+    "breaker": {
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_corners": true,
+      "alpha_bbox_xyxy": [
+        12,
+        17,
+        116,
+        111
+      ],
+      "transparent_pixels": 9956,
+      "partial_alpha_pixels": 6151,
+      "largest_dimension_fraction": 0.8125,
+      "slot": "gloves",
+      "expected_atlas_key": "boss_breaker"
+    },
+    "reaper": {
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_corners": true,
+      "alpha_bbox_xyxy": [
+        12,
+        15,
+        116,
+        113
+      ],
+      "transparent_pixels": 10487,
+      "partial_alpha_pixels": 5446,
+      "largest_dimension_fraction": 0.8125,
+      "slot": "head",
+      "expected_atlas_key": "boss_reaper"
+    }
+  },
+  "visual_review": {
+    "style": "compared to exact atlas crops at128/64/40px; owner decides final style match",
+    "bulwark": "stone chest, central cyan fissure, five attached crystal rim tips; no detached boss badge",
+    "breaker": "paired wearable claw gauntlets, wing plate motif, cyan wrist core",
+    "reaper": "empty crown/helm, central core, three severed shadow threads",
+    "no_baked_text_marker_set_emblem_or_rarity_frame": true
+  },
+  "integration": "not imported; gear_items.webp and mapping unchanged; Claude performs lossless repack",
+  "approval": "pending; technical checks are not artwork approval",
+  "self_excluded": true,
+  "manifest_receipt": "SHA-256 of validation.json recorded externally in PR description",
+  "files": {
+    "NOTES.md": {
+      "sha256": "801bb4603366bc63b0bde4377c0b6c87517124ab39486ef3e58d1125a5a0103a",
+      "bytes": 9258
+    },
+    "boss_breaker.png": {
+      "sha256": "15bbcdfd191fbc64aa0740ba2e1af0e2c3a3d7ded84c989b7a672eacad04c7be",
+      "bytes": 22614,
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "boss_bulwark.png": {
+      "sha256": "fd54c54fa69b5ec4a6ab0bc32dae04d88cf41937c170c2cae9de0cf24540e988",
+      "bytes": 23656,
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "boss_reaper.png": {
+      "sha256": "49b5f0417cfc7a32c841396239fcfade8f9fae9623a79c5d1a52637c1c2cdda1",
+      "bytes": 19889,
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "handoff.py": {
+      "sha256": "489f00ba199b544eed74a3c223fbace8bb0fde1c9d973689d966e78d036c2def",
+      "bytes": 8095
+    },
+    "preview_390.png": {
+      "sha256": "81635082152f03ecf47d3c43ea59b987d372e8fbd3f88bfeef472e283567dfa6",
+      "bytes": 221335,
+      "size": [
+        390,
+        1177
+      ],
+      "mode": "RGB"
+    },
+    "prompts.json": {
+      "sha256": "860be59bddef735ecd87884d192d12acc64eb52a4abb0561016978e691d6afeb",
+      "bytes": 8460
+    },
+    "references/boss_aegis.png": {
+      "sha256": "4be98efb10e56bb6d82993772164fcad0fa766433acf84fd4cb3b16846df40c7",
+      "bytes": 12011,
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "references/boss_focus.png": {
+      "sha256": "7d5c675d52d5b654c34e41177584457d1a2aa4964d988ef33882f06b0df4d993",
+      "bytes": 11802,
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "references/boss_lantern.png": {
+      "sha256": "aee0f8ff2642b507cbdcf6e66e2bb10c79030ecdf995327fd2e3dccdccf9f4c1",
+      "bytes": 9692,
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "references/context.json": {
+      "sha256": "554e8a04829cca7466a826c24054fd698ca9ca90875fd45dfadc2ea63a633d20",
+      "bytes": 2260
+    },
+    "references/gear_body_master.png": {
+      "sha256": "27430704de2f1dbe4b3506d9abaf1324a4bef3cda8acd3111043827b0788e636",
+      "bytes": 23130,
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "references/gear_gloves_master.png": {
+      "sha256": "6790f856b1d1bfd29d5a560ff9700f083b3f63e6afe8e9dc519eaaf0984c405f",
+      "bytes": 21089,
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "references/gear_head_master.png": {
+      "sha256": "01000710b3286cd8a217d4f7701a4f8fc84eb83d05453abaa8b5eeab129f6d2a",
+      "bytes": 22305,
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    "references/seed-a.png": {
+      "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97",
+      "bytes": 927372,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "references/seed-b.png": {
+      "sha256": "c3fe15c71d82c7cddc09df874fb9c21480bf2168e7b16248d692878ffb7ec214",
+      "bytes": 904214,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "references/seed-c.png": {
+      "sha256": "47e5fbbaf06a18ee56a7c8c46771e00f65e13df7998b8c3d78c5cfa98f160105",
+      "bytes": 596229,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "requirements.txt": {
+      "sha256": "d0524439f7a0da67c1283d44683e00fcc795a0657e726f22087cfcbe198f7c89",
+      "bytes": 28
+    },
+    "seeds.json": {
+      "sha256": "7ecc40a6e98a1137287638e0e43c1bfa0e32d4830b6b9b6effd02a0943d12bb1",
+      "bytes": 5798
+    },
+    "source/boss_breaker.png": {
+      "sha256": "7c184db0d3671f76a21b82ed25293565f178e427ed631cf8459b495ff18cd79b",
+      "bytes": 1404323,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "source/boss_bulwark.png": {
+      "sha256": "f153da6cd6782b9135321e11107df283c5055fd1bbaf2cc9167b03473b99c425",
+      "bytes": 1383576,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "source/boss_reaper.png": {
+      "sha256": "a11d51d22825c33422fa979b7f4bdce49fa9cc9abae79a6d77c80b34471033e2",
+      "bytes": 1108480,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    }
+  }
+}

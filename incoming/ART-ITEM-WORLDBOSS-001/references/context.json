@@ -1,0 +1,77 @@
+{
+  "base_commit": "cca1c3db38028781306072011d8dc4c0aed438f3",
+  "atlas": "public/assets/ui/equip/gear_items.webp",
+  "atlas_size": [
+    1280,
+    1152
+  ],
+  "atlas_sha256": "40e346737293f47ea117ee06bb033dcdcc05a57e7f908ca77192a1cd7d53f1e8",
+  "mapping": "src/game/visuals/equip/gear_items.json",
+  "mapping_sha256": "a8d538769721a36eafbbfedeac912b6f1fef4a8d5c5822847cd596b72f79d2ec",
+  "crops": {
+    "boss_aegis": {
+      "atlas_rect": {
+        "x": 640,
+        "y": 896,
+        "w": 128,
+        "h": 128
+      },
+      "crop": "references/boss_aegis.png",
+      "sha256": "4be98efb10e56bb6d82993772164fcad0fa766433acf84fd4cb3b16846df40c7"
+    },
+    "boss_focus": {
+      "atlas_rect": {
+        "x": 768,
+        "y": 896,
+        "w": 128,
+        "h": 128
+      },
+      "crop": "references/boss_focus.png",
+      "sha256": "7d5c675d52d5b654c34e41177584457d1a2aa4964d988ef33882f06b0df4d993"
+    },
+    "boss_lantern": {
+      "atlas_rect": {
+        "x": 896,
+        "y": 896,
+        "w": 128,
+        "h": 128
+      },
+      "crop": "references/boss_lantern.png",
+      "sha256": "aee0f8ff2642b507cbdcf6e66e2bb10c79030ecdf995327fd2e3dccdccf9f4c1"
+    },
+    "gear_body_master": {
+      "atlas_rect": {
+        "x": 128,
+        "y": 128,
+        "w": 128,
+        "h": 128
+      },
+      "crop": "references/gear_body_master.png",
+      "sha256": "27430704de2f1dbe4b3506d9abaf1324a4bef3cda8acd3111043827b0788e636"
+    },
+    "gear_gloves_master": {
+      "atlas_rect": {
+        "x": 256,
+        "y": 128,
+        "w": 128,
+        "h": 128
+      },
+      "crop": "references/gear_gloves_master.png",
+      "sha256": "6790f856b1d1bfd29d5a560ff9700f083b3f63e6afe8e9dc519eaaf0984c405f"
+    },
+    "gear_head_master": {
+      "atlas_rect": {
+        "x": 0,
+        "y": 128,
+        "w": 128,
+        "h": 128
+      },
+      "crop": "references/gear_head_master.png",
+      "sha256": "01000710b3286cd8a217d4f7701a4f8fc84eb83d05453abaa8b5eeab129f6d2a"
+    }
+  },
+  "seed_commit": "46f366dc931e4994d3a6ccd9ad3951ac444a70cf",
+  "dom_file": "src/ui/equip-art.ts",
+  "dom_sha256": "9127f9dfd9cbb070ff070971f412823572d84f429bcbc133347fce08bb5180aa",
+  "legendary_mapping": "rarity3/4 share master tier; no *_legendary key; rarity frame drawn by DOM"
+}
