@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync, statSync, writeFileSync, mkdirSync } from 'node:fs';
-import { encounters } from '../src/content/encounters/catalog';
+import { presentedEncounters as encounters } from '../src/content/encounters/catalog';
 import { encounterUnitSheets } from '../src/game/visuals/optional-unit-assets';
 import { heroes } from '../src/content/heroes/team';
 import { mercenaries } from '../src/content/heroes/mercenaries';

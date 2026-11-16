@@ -1,5 +1,5 @@
 // Presentation fixtures only; all outcomes are owned by the real resolver.
-import {encounters,thicketAmbush} from '../../src/content/encounters/catalog';
+import {presentedEncounters as encounters,thicketAmbush} from '../../src/content/encounters/catalog';
 import {mercenaries} from '../../src/content/heroes/mercenaries';
 import {beginBattle,resolveCommand,targetOptions} from '../../src/core/battle/engine';
 import type {Command,EncounterDefinition} from '../../src/core/battle/types';
@@ -16,7 +16,7 @@ export const bossMoves:Record<BossArt,readonly string[]>={
 export const phaseNames=['Thorn Rage','Rift Awakening','Call the Rift','Call the Hunt'] as const;
 // scenario: normal | hurt/down (foe hits the hero) | enemy-down (foe has 1 HP). A phase name builds the real phase turn: one hero hit takes
 // the boss below that phase threshold, so the resolver itself queues the phase change as the boss's next turn.
-export function unitA9Fixture(art:BossArt,name:string,scenario='normal'){
+export function unitA9Fixture(art:string,name:string,scenario='normal'){
  const phase=encounters.flatMap(d=>(d.phases??[]).map(p=>({d,p}))).find(({d,p})=>p.name===name&&d.enemies.some(e=>e.id===p.sourceId&&e.art===art));
  const from=phase?.d??encounters.find(d=>d.enemies.some(e=>e.art===art&&d.intents.some(i=>i.sourceId===e.id&&i.name===name)))!;
  const foe=from.enemies.find(e=>e.art===art&&(phase?e.id===phase.p.sourceId:from.intents.some(i=>i.sourceId===e.id&&i.name===name)))!;

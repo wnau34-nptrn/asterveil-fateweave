@@ -1,0 +1,461 @@
+{
+  "schema": 1,
+  "task": "ART-UNIT-ANIMATION-WB-A-001",
+  "base_commit": "081766e1cfec0b66f5e4de136adb062c894e3daf",
+  "self_excluded": true,
+  "self_sha_receipt": "validation.json SHA-256 recorded in PR body, outside this manifest",
+  "motion_frames": 44,
+  "checks": "44 cells, seed lock, one canonical body scale, source resolution conversion, true alpha, margins, >=48px raw gutters, complete image decode",
+  "runtime_test": "not integrated; previews are offline body playback, not game captures",
+  "owner_motion_approval": "pending",
+  "files": {
+    "NOTES.md": {
+      "sha256": "82b7a0cc8d9e6146b5dc403a63f107e9873c32e80193568b64616ab05f369dc2",
+      "bytes": 16759
+    },
+    "anatomy-audit.json": {
+      "sha256": "15b8e36cb68f66cbdadb94a73d4d45afc713315e0396b2d78e4ddb569ed5d985",
+      "bytes": 6597
+    },
+    "anatomy-map.json": {
+      "sha256": "f1b6462c540897951ebaf7936638c9f5a5bb154f14bdf1efce4b908e95f4a387",
+      "bytes": 3243
+    },
+    "anatomy-review.json": {
+      "sha256": "3f0591994ad076a80748ea1a6eefafcd3fbd67a928afc5b432697fd59f6693e3",
+      "bytes": 4824
+    },
+    "audit_anatomy.py": {
+      "sha256": "97b4cb04be3e69017f71329652ce6ff213fd5a1b5dd45c0fbc69eddbc167ab32",
+      "bytes": 1946
+    },
+    "build_handoff.py": {
+      "sha256": "b1cb37175c38952b7bb3856c18c54884ae91994ef864e862a6a9c396bcd6e5ed",
+      "bytes": 16565
+    },
+    "preview-390.png": {
+      "sha256": "137cbfae1cb1a6cb00a82a5b1d58ce8f753fdabace145afc68139d77404c73b7",
+      "bytes": 2194872,
+      "size": [
+        390,
+        5770
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "preview-keyposes-390.png": {
+      "sha256": "40a99f254b760eafc645eb8a1029fd521f54eb2e4bef3e103145c4a342718d02",
+      "bytes": 784393,
+      "size": [
+        390,
+        2438
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "previews/boulder-hurl.webp": {
+      "sha256": "225aafea04c6fae3d840a4e6456e22d222ac759f814181d0b2ad744cf30d9530",
+      "bytes": 274838,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/down.webp": {
+      "sha256": "e74d9f82e24a691523d7ade16c8d56b50743097520e4e6ff19f07a54a19a797b",
+      "bytes": 165616,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 4
+    },
+    "previews/fault-awakening.webp": {
+      "sha256": "1fef43963d36fe013a6717cd9bedbec457509176d449f8ec44ae2e76c042dfd2",
+      "bytes": 275600,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/hit.webp": {
+      "sha256": "51de70dd5fc05244cc18ceacff7bc91b80d101a845f774b542a0141e2d913a8c",
+      "bytes": 196606,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 4
+    },
+    "previews/mountain-fall.webp": {
+      "sha256": "54336c86d429fba93bd2ea0571a0ef10f5f5b00ac69e3c8c6746d81a310807d2",
+      "bytes": 259948,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/rift-quake.webp": {
+      "sha256": "a52daa3d46f63843f4491b4fbcb8b06c47920aa70b34ff981910d1b002644bce",
+      "bytes": 276146,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/stone-fist.webp": {
+      "sha256": "0f7424c04a234485de7e9219ea0cf7a403f32859d3bfe7a74e28aa30e0a53094",
+      "bytes": 282004,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/titan-gathering.webp": {
+      "sha256": "50b07b388d52266181896a9e9aeefff0cd4d8d650690e5281bd0f03266b64adb",
+      "bytes": 272154,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "prompts.json": {
+      "sha256": "7d7a6ab34e2c2fdea0e953f8912aa9975e24992f7be9cc3bc5c0a80ee308bbc5",
+      "bytes": 30557
+    },
+    "raw/boulder-hurl.png": {
+      "sha256": "474faa95572ec7436f0d0b66c0e0ef348dd614a534fa06277e9deee3ff847f3d",
+      "bytes": 799885,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/down.png": {
+      "sha256": "880f86603ff370191f87ba4cfc6c4def05a59bc4d26e26f0dc7f26032939aa03",
+      "bytes": 939645,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/fault-awakening.png": {
+      "sha256": "b8f58aa13b30c29ac56965fc922e18172630ca505dede00493d3aab8f98921d1",
+      "bytes": 769162,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/hit.png": {
+      "sha256": "0dd1eb30be6f15d39d3b56f9ccb33c382a37909febbeb3d408d7e45658aecaf4",
+      "bytes": 960099,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/mountain-fall.png": {
+      "sha256": "e7200e33bfe57aec77342d89d6cbd982eafbdd119427cd07ee328947c5059d5b",
+      "bytes": 742140,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/rift-quake.png": {
+      "sha256": "2523125d6dc1f412044dadf18fb5d8cfbd625b52d8f4fee5b0c914a398e21268",
+      "bytes": 801990,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/stone-fist.png": {
+      "sha256": "8056e1990fd51796f4347760cb072cba26f8a596ccca9e24dfab2953dbbbc1aa",
+      "bytes": 806129,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/titan-gathering.png": {
+      "sha256": "4283219442209dbc30afd00b10f16762dbda0a87c5576ccf0aba708e801a1722",
+      "bytes": 779409,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "references/concept-seeds.json": {
+      "sha256": "56308548eb781862f4e4c715a2b26666a8cbb6dffe574816f94ff64d788246e8",
+      "bytes": 7367
+    },
+    "references/layout-4.png": {
+      "sha256": "8c0aa3995eae13fbbf6430ab65964e6ad56da017082b1ff64fff8bc1005428fc",
+      "bytes": 284933,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "references/layout-6.png": {
+      "sha256": "119becbb935da7b30e5a88ab366016e95b28897b75972307cd3f6119a5d06225",
+      "bytes": 291255,
+      "size": [
+        3072,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "references/seed-a.png": {
+      "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97",
+      "bytes": 927372,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "references/sentinel-ready.png": {
+      "sha256": "3e855364ad3a94858f7afb717b0ad2e82495679dfaf5828f852a40eeec0bc4c3",
+      "bytes": 57363,
+      "size": [
+        317,
+        317
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "references/sentinel-reference.json": {
+      "sha256": "e5970916a84764ba66122cefd23595a4df469697de9799bf3d3a271c68a19222",
+      "bytes": 905
+    },
+    "references/turnaround-a.png": {
+      "sha256": "b0855415b4fcda38a5548d4b0c51838e7f0ccd4e96a1ffb0b781b4f1e07de6b8",
+      "bytes": 1947314,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "requirements.txt": {
+      "sha256": "b6d1cc91d045d7f947d0b58bedc80b24c1680ef7c590116565cc6724afb3df14",
+      "bytes": 62
+    },
+    "seeds.json": {
+      "sha256": "effd55ac71eeb036ec1a59fb9f4e51a7a30bc455e5345bb767e551fb3c915f11",
+      "bytes": 1003
+    },
+    "sentinel-compare.png": {
+      "sha256": "741264e1a750f80cc53b38deed18a86080733eec711c7aa14ee65839b211e8f8",
+      "bytes": 84131,
+      "size": [
+        390,
+        300
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/boulder-hurl.png": {
+      "sha256": "e48104b9b59a4b5d66aa485e091b90c9ac3d870c1c1a9b043d5d1f8869e3cb36",
+      "bytes": 967957,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/down.png": {
+      "sha256": "df7f4b50d3402512f2f609a90d8b1cf4baa2b4cecfe52849010c04f2d5caf95f",
+      "bytes": 1156699,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/fault-awakening.png": {
+      "sha256": "bbcc8613d79f4011c673643b9bef2b277c3f10c719bd2aa7bed2af9aa3e626d5",
+      "bytes": 926293,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/hit.png": {
+      "sha256": "189f3ddd53f56ae1971188a1e393d5d1f0d07fc5384b8a3eb50b2bf84e384fc4",
+      "bytes": 1863789,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/mountain-fall.png": {
+      "sha256": "34647695469d3ebe3aed13a00dd90fab352b5c99848da3929f145b08baab4625",
+      "bytes": 887278,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/rift-quake.png": {
+      "sha256": "ed211e67f624f1cf44724ff24eb2036e6626e89aea72b5148b2e5a0c52e4ff66",
+      "bytes": 1021925,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/stone-fist.png": {
+      "sha256": "1e52ce05d90097d28998b008e8e4ccd9b62f380347f78bb56671e3f725579dc9",
+      "bytes": 1082119,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/titan-gathering.png": {
+      "sha256": "2c56b32a51384d54c40d6ee5a06969b6538a77cb137f330db59c7f2b2b31bd85",
+      "bytes": 952200,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/boulder-hurl.png": {
+      "sha256": "2daa3fde4fe3a9e6315295256183d48dc309bd627006b8f77fb88227264a33ed",
+      "bytes": 3926212,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/down.png": {
+      "sha256": "1e3ff3f9937ffe837d7ce12765f383b8e692c2e461aa967763c2d8011e260e33",
+      "bytes": 2854134,
+      "size": [
+        4096,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/fault-awakening.png": {
+      "sha256": "2265135a1d27e9ac5c4ce2d49d09026a683cafe12e20e53cfc2b2081f56e6280",
+      "bytes": 3838668,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/hit.png": {
+      "sha256": "20bb6fab969158650b37d2c7a4a07248620c76dd494c4c78cf6af1afae84324c",
+      "bytes": 2509842,
+      "size": [
+        4096,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/mountain-fall.png": {
+      "sha256": "3d417b0796739f89abbbbaa0829934a1a0e184194f6a1ec6848b552bb1ddd12b",
+      "bytes": 3557739,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/rift-quake.png": {
+      "sha256": "907996742a290a76bfd203fdadc860f312fe043dc06e79eb0ec07dcfb5911365",
+      "bytes": 3972795,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/stone-fist.png": {
+      "sha256": "bdf164ef9acc26964e391940dbcf6e257ae82f5c7bd9dd5319ba8c9392848fdc",
+      "bytes": 3987054,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/titan-gathering.png": {
+      "sha256": "36a3d970c62c16b5965f92ce409be6c0f67718376c90e22866a978a3d60e3b56",
+      "bytes": 3854435,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips.json": {
+      "sha256": "64bfe172f49831987e9124b959dd1febe3c578b4dbc1c8b1979f00eb37cb00cf",
+      "bytes": 53407
+    }
+  }
+}

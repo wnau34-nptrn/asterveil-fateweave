@@ -1,6 +1,6 @@
 import type { ActionId, EncounterDefinition, IntentDefinition } from '../../core/battle/types';
 import { targetKind } from '../../core/battle/engine';
-import { encounters } from '../../content/encounters/catalog';
+import { presentedEncounters } from '../../content/encounters/catalog';
 import { veilSiege } from '../../content/encounters/veil-siege';
 import { heroes } from '../../content/heroes/team';
 import { mercenaries } from '../../content/heroes/mercenaries';
@@ -167,7 +167,7 @@ export interface PresentationCoverage {
     spriteRows: number; proceduralRows: number; paintedRows: number; sharedRows: number; codeRows: number };
   identities: IdentityCoverage[]; rows: CoverageRow[];
 }
-export function presentationCoverage(list: readonly EncounterDefinition[] = encounters): PresentationCoverage {
+export function presentationCoverage(list: readonly EncounterDefinition[] = presentedEncounters): PresentationCoverage {
   const rows: CoverageRow[] = [], identities: IdentityCoverage[] = [];
   const skills = veilSiege.skills as Record<string, { name: string }>;
   const ident = (identity: string, side: 'hero' | 'enemy', name: string): IdentityCoverage => {

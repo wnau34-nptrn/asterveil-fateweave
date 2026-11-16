@@ -307,7 +307,7 @@ const kragAdds = foes(10, [['f2', SPECIES.shardCrawler], ['b3', SPECIES.riftWisp
 export const wbKragmor: EncounterDefinition = {
   ...riftWarden, id: 'wb-kragmor', version: 1, name: 'บอสโลก: คราก์มอร์',
   phases: [{ sourceId: 'f1', below: 70, name: 'Fault Awakening' }],
-  enemies: [...kragAdds.enemies, boss('Kragmor', 'คราก์มอร์', 60, { traits: ['veilguard'] })],
+  enemies: [...kragAdds.enemies, boss('Kragmor', 'คราก์มอร์', 60, { traits: ['veilguard'], art: 'foe_kragmor' })],
   intents: [...kragAdds.intents,
     mv('Stone Fist', 1, 30, 'physical'), mv('Titan Gathering', 0, 0, 'physical', { charge: true }), mv('Mountain Fall', 0, 50, 'physical', { unstoppable: true }),
     mv('Rift Quake', 0, 14, 'physical', { all: true }), mv('Boulder Hurl', 3, 26, 'physical'), mv('Stone Fist', 2, 30, 'physical'),
@@ -351,8 +351,11 @@ export const WORLD_BOSS_TRIO: readonly EncounterDefinition[] = [wbKragmor, wbVal
 
 export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, crystalStampede, riftWarden, eliteTuskChief, eliteBriarLord, miniVeilGolem, vanguardCaptain,
   slimePair, batSwarm, slimeNest, tuskerBats, beetleSpore, beetleWall, stalkerSpore, forestSwarm, channelerWisps, crawlerPack, riftHost, thornHost, riftLegion, worldBossWarden];
-// P11-05 step 2: the catalog lookup also knows the World Boss trio (world rules, saves and replays name them). They join
-// `encounters` (the list the presentation coverage and the all-encounter tests walk) once their moves have body clips
-// (steps 4–5, art WB-A); until `WorldBossTrioRules.from` is set nobody can fight them.
+// P11-05 step 2: the catalog lookup also knows the World Boss trio (world rules, saves and replays name them). They stay out of
+// `encounters` (the rule tests walk it and assert the advisor wins from full HP, which a World Boss never allows by design).
+// `presentedEncounters` is what the presentation coverage and the texture-budget audit walk: `encounters` plus every trio boss
+// whose moves have body clips (Kragmor with WB-A, step 5; Valdrakk/Morvane join with WB-B/WB-C). Until `WorldBossTrioRules.from`
+// is set nobody can fight them.
+export const presentedEncounters: readonly EncounterDefinition[] = [...encounters, wbKragmor];
 const lookupList: readonly EncounterDefinition[] = [...encounters, ...WORLD_BOSS_TRIO];
 export const encounterById = (id: string): EncounterDefinition | undefined => lookupList.find(e => e.id === id);

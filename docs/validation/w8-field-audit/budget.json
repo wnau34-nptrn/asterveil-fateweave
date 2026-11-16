@@ -517,6 +517,25 @@
     "download": 10973922
    },
    "bossFx": true
+  },
+  {
+   "id": "wb-kragmor",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "wisp",
+    "crawler",
+    "kragmor"
+   ],
+   "four": {
+    "decoded": 33052624,
+    "download": 10022578
+   },
+   "five": {
+    "decoded": 37556872,
+    "download": 11468495
+   },
+   "bossFx": false
   }
  ]
 }
