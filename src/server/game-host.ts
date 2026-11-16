@@ -216,7 +216,7 @@ export function memoryStore(): HostStore & { state: HostState | null; log: LogEn
       s.state = structuredClone(state); s.log.push(structuredClone(entry)); if (snapshot) s.snapshots.push(structuredClone(snapshot));
       s.rows.push(...structuredClone([...ledger])); s.hits.push(...hits.map(h => ({ ...h, sent: false })));
     },
-    pendingHits: () => s.hits.filter(h => !h.sent).map(h => ({ id: h.id, week: h.week, damage: h.damage })),
+    pendingHits: () => s.hits.filter(h => !h.sent).map(h => ({ id: h.id, week: h.week, damage: h.damage, ...(h.boss ? { boss: h.boss } : {}) })),
     markHits: (ids: readonly string[]) => { for (const h of s.hits) if (ids.includes(h.id)) h.sent = true; },
     hasReceipt: (receipt: string) => s.rows.some(r => r.receipt === receipt),
     ledger: () => structuredClone(s.rows),

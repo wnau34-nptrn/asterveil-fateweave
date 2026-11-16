@@ -56,6 +56,12 @@
 - ของ: `bulwark` โล่ 10 หลังโดน ≥15 (ก่อน aegis), `breaker` +6 (หลัง focus), `reaper` ฟื้น 8 / เกินเป็นโล่ ≤6 — ทั้งหมด preview = ผลจริง, หนึ่งพลังบอสต่อผู้สวมต่อรอบ · `craftBossItem` ไม่มีสุ่ม
 - probe ขั้น 1 รันซ้ำหลังย้าย encounter เข้า catalog: damage/budget/shared-hp เท่าเดิมทุกไบต์ · `npm run sim` 8 ไฟล์ 29 เทสต์ผ่าน รายงานไม่เปลี่ยน (สามบอสไม่อยู่ในแคมเปญ)
 
+## ขั้น 3 — server สามแถบ (16 พ.ย. 2026)
+
+- DO `world-boss`: ตาราง `bars (week, boss, hp, left_hp, accounts, attempts, opened)` แทน `weeks` (แถวเดิม → `warden`, attempts นับจาก hits) และ `hits.boss` (แถวเดิม `warden`) ย้ายครั้งเดียวตอนวัตถุเริ่ม · สัปดาห์ผู้คุม = แถบ `warden` · สัปดาห์สามบอส = สามแถบ HP `trioSharedHp(ครั้งบนบอสนั้นสัปดาห์ก่อน)` สัปดาห์แรก = ครั้งผู้คุม ÷ 3 · hit มี `boss` ลดเฉพาะแถบตัวเอง ครั้งเดียว ไม่ต่ำกว่า 0
+- บัญชี: outbox `wb_hits.boss`, ledger `boss`/`shards` (`wb:w<W>:a<n>`, `p-2`/`p-4`, `wb:w<W>:<boss>:s-50`) · Worker อ่านแถบตาม prefix ของ id ส่งเข้า claim และ log (`/verify` replay ได้, แก้ log แล้ว verify ล้ม) · `/v1/worldboss` = `bars`/`lastBars` + `current`/`last` ผู้คุม (null ในสัปดาห์สามบอส)
+- เทสต์ `tests/world-boss-trio-server.test.ts` 8 ข้อ (แถบ, HP สัปดาห์ถัดไป, ฆ่าพร้อมกัน, ย้ายตาราง DO และบัญชี P11-04, receipt/เศษ, claim ผิดแถบถูกปฏิเสธ, outbox, verify, Worker ทั้งเส้น) · เทสต์ผู้คุม P11-04 ผ่านเท่าเดิม · `tests/server-load.test.ts` สุ่มบอสต่อครั้งเมื่อ server รายงานสามแถบและตรวจทุกแถบ — ยังไม่รันบน Cloudflare (staging ใช้กฎจริงที่ `from` ยังไม่ตั้ง จึงเป็นผู้คุม)
+
 ## เทสต์
 
 - probe ผ่าน (`TRIO_OUT` ตั้ง) · ข้ามในชุดปกติ (`skipIf`) · `npx tsc --noEmit`, eslint ของไฟล์ probe ผ่าน · ไม่ได้รัน `npm run sim`/Chromium (ไม่มีโค้ดเกมเปลี่ยน)

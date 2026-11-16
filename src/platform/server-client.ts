@@ -66,7 +66,9 @@ export type FeedbackCategory = 'bug' | 'balance' | 'idea' | 'other';
 export interface FeedbackRow { id: number; accountId: string; category: string; text: string; place: string; contentVersion: string; at: number }
 // P11-04: `GET /v1/worldboss`.
 export interface SharedBoss { week: number; hp: number; left: number; accounts: number }
-export interface WorldBossStatus { week: number; current: SharedBoss | null; last: SharedBoss | null }
+// P11-05: every bar of the week (`boss`: a trio boss or `warden`); `current`/`last` stay the warden's bar.
+export interface SharedBar extends SharedBoss { boss: 'warden' | 'kragmor' | 'valdrakk' | 'morvane'; attempts: number }
+export interface WorldBossStatus { week: number; current: SharedBoss | null; last: SharedBoss | null; bars?: SharedBar[]; lastBars?: SharedBar[] }
 // P11 chat (docs/design/CHAT_P11_TH.md).
 export interface ChatMessage { id: number; handle: string; text: string; at: number; mine: boolean }
 export interface ChatRead { messages: ChatMessage[]; hidden: number[]; last: number; muted: number | null; write: string | null }

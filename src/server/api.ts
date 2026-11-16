@@ -13,6 +13,8 @@ import { ipKey, RateLimiter, type RateGate } from './rate-limit';
 import { BOSS_HEADER, HITS_HEADER, SESSION_HEADER, TELEMETRY_HEADER } from './account-object';
 import type { PendingHit } from './ledger';
 import { MAX_COMMAND_BYTES } from './game-host';
+import { sharedOfBar, type PublicBar } from './world-boss';
+import { isWbBoss } from '../core/world/world-boss';
 
 // P09-02b: the Worker's front door. Routing, request size/shape limits, content-version check, guest accounts, bearer
 // auth and rate limits (P09-02g: shared across isolates through `gate`, see rate-limit.ts); the game itself runs in the account's Durable Object (`account-object.ts`).
@@ -179,16 +181,19 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
 }
 
 // P11-04: a `claimWorldBoss` runs with the shared HP of the week it names, read from the World Boss object first (the
-// account's object records it in its log so the claim replays the same). Any other command, or no object: nothing.
+// account's object records it in its log so the claim replays the same). P11-05: the bar is the boss the id names
+// (`kragmor:s-50`; no prefix: the warden's). Any other command, an unknown boss, or no object: nothing.
 async function bossFor(deps: ApiDeps, body: string): Promise<string | undefined> {
   if (!deps.boss) return undefined;
-  let week: unknown;
-  try { const v = JSON.parse(body) as { command?: { kind?: unknown; week?: unknown } }; if (v.command?.kind !== 'claimWorldBoss') return undefined; week = v.command.week; } catch { return undefined; }
-  if (!Number.isSafeInteger(week)) return undefined;
+  let week: unknown, id: unknown;
+  try { const v = JSON.parse(body) as { command?: { kind?: unknown; week?: unknown; id?: unknown } }; if (v.command?.kind !== 'claimWorldBoss') return undefined; week = v.command.week; id = v.command.id; } catch { return undefined; }
+  if (!Number.isSafeInteger(week) || typeof id !== 'string') return undefined;
+  const at = id.indexOf(':'); const boss = at < 0 ? 'warden' : id.slice(0, at);
+  if (boss !== 'warden' && !isWbBoss(boss)) return undefined;
   try {
-    const r = await deps.boss.fetch(new Request(`https://boss/status?week=${week as number}`));
-    const status = r.ok ? (await r.json() as { status: { week: number; hp: number; left: number } | null }).status : null;
-    return status ? JSON.stringify({ week: status.week, hp: status.hp, left: status.left }) : undefined;
+    const r = await deps.boss.fetch(new Request(`https://boss/status?week=${week as number}&boss=${boss}`));
+    const status = r.ok ? (await r.json() as { status: PublicBar | null }).status : null;
+    return status ? JSON.stringify(sharedOfBar(status)) : undefined;
   } catch { return undefined; }
 }
 // P11-04: hands the account's waiting World Boss hits to the shared object and marks the ones it took. Never changes the
@@ -200,7 +205,7 @@ async function deliverHits(deps: ApiDeps, accountId: string, game: AccountGame, 
   out.headers.delete(HITS_HEADER);
   if (!deps.boss) return out;
   try {
-    const hits = (JSON.parse(raw) as PendingHit[]).map(h => ({ id: `${accountId}:${h.id}`, week: h.week, account: accountId, damage: h.damage }));
+    const hits = (JSON.parse(raw) as PendingHit[]).map(h => ({ id: `${accountId}:${h.id}`, week: h.week, account: accountId, damage: h.damage, ...(h.boss ? { boss: h.boss } : {}) }));
     const r = await deps.boss.fetch(new Request('https://boss/contribute', { method: 'POST', body: JSON.stringify({ hits }), headers: { 'Content-Type': 'application/json' } }));
     if (r.ok) {
       const { taken } = await r.json() as { taken: string[] };
@@ -210,14 +215,17 @@ async function deliverHits(deps: ApiDeps, accountId: string, game: AccountGame, 
   } catch { /* left waiting */ }
   return out;
 }
-// P11-04: the shared HP of this week and last week, for the World Boss screen.
+// P11-04: the shared HP of this week and last week, for the World Boss screen. P11-05: `bars` and `lastBars` hold every
+// bar of the week (the three trio bosses, or the warden alone); `current`/`last` stay the warden's bar (null in a trio
+// week) for the P11-04 screen until step 4 reads the bars.
 async function worldBossRoute(deps: ApiDeps): Promise<Response> {
   if (!deps.boss) return error('world_boss_unavailable', 503);
   const now = await deps.boss.fetch(new Request('https://boss/status'));
   if (!now.ok) return error('world_boss_unavailable', 503);
-  const current = await now.json() as { week: number; status: unknown };
-  const last = await deps.boss.fetch(new Request(`https://boss/status?week=${current.week - 1}`));
-  return json({ week: current.week, current: current.status, last: last.ok ? (await last.json() as { status: unknown }).status : null });
+  const current = await now.json() as { week: number; status: PublicBar | null; bars: PublicBar[] };
+  const res = await deps.boss.fetch(new Request(`https://boss/status?week=${current.week - 1}`));
+  const last = res.ok ? await res.json() as { status: PublicBar | null; bars: PublicBar[] } : { status: null, bars: [] };
+  return json({ week: current.week, current: current.status, last: last.status, bars: current.bars, lastBars: last.bars });
 }
 
 // P09-02f: the replay audit is for admins only (an account with a row in D1 `admins`, added by the owner; no secret).

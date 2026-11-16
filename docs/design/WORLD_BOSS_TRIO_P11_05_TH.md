@@ -110,6 +110,7 @@
 - `GET /v1/worldboss` → `{ week, bars: [{boss, hp, left}×3], last: [...] }` (ของสัปดาห์ก่อนรวม `warden` ถ้ามี)
 - ออฟไลน์เหมือนเดิม: ใช้วันของเครื่อง ได้เข้าร่วม/ส่วนตัวและเศษจากสองส่วนนั้น (OD-49) ส่วนรวม `offline` · ออนไลน์ server ประทับวัน
 - load test: เพิ่ม boss สุ่มต่อ attempt ใน `tests/server-load.test.ts` และ assert ว่า `left` ต่อแถบ = hp − ผลรวม applied ของแถบนั้น
+- **ขั้น 3 (สร้างจริง 16 พ.ย.):** `bars` มี `accounts` ด้วย (HP ผู้คุมยังใช้บัญชี) · ย้ายตารางใน `transactionSync` ตอนวัตถุเริ่ม (ไม่ต้อง `blockConcurrencyWhile`: constructor รันก่อน request) · สัปดาห์ผู้คุมมีแถบ `warden` แถบเดียว สัปดาห์สามบอสมีสามแถบ; hit ที่แถบไม่มีในสัปดาห์นั้นรับทราบแต่ไม่ลด HP · `claimWorldBoss` ไม่มีช่อง `boss`: Worker อ่านบอสจาก prefix ของ id (`kragmor:s-50`) · `/v1/worldboss` ตอบ `bars`/`lastBars` และคง `current`/`last` = แถบผู้คุม (null ในสัปดาห์สามบอส) ให้หน้าจอ P11-04 จนขั้น 4 · ledger มีคอลัมน์ `boss`/`shards` · load test สุ่มบอสเมื่อ server รายงานสามแถบ (staging จะเล่นสามบอสได้เมื่อตั้ง `from` แล้วเท่านั้น)
 
 ## 6. หน้าจอที่ 390px
 
