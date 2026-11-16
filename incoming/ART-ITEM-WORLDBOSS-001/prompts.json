@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "task": "ART-ITEM-WORLDBOSS-001",
+  "base_commit": "cca1c3db38028781306072011d8dc4c0aed438f3",
+  "records": [
+    {
+      "id": "bulwark",
+      "prompt": "ONE SINGLE wearable game equipment inventory ICON: BOSS BULWARK CHEST ARMOUR. Match EXACT painterly 3D game-item icon style of reference1 golden chest armour: same three-quarter LEFT-front angle, upper-left warm key light, subtle rim highlight, dark defined outline weight and compact silhouette, similar restrained saturation. Reference2/3/4 are existing boss item icons for finish/palette only. Reference5 is Kragmor titan, use its materials but NOT its body or face. Design one EMPTY wearable breastplate, no person inside: broad dark violet-grey stone chest plates with restrained antique GOLD edging and pale warm highlights, exactly FIVE large crystal prongs along upper/shoulder rim like a broken crown, ONE narrow jagged CYAN glowing fissure running vertically down center of chest. This is chest armour with collar opening, shoulder plates and short waist edge, not a monster bust, shield or talisman. Violet crystal details secondary, cyan wound main accent; no overall neon aura. Item centered, fills about80 percent of square canvas, generous empty margin, all prongs visible and nothing clipped. Physical armour only. TRUE alpha TRANSPARENT background with no floor, no shadow plate, no checkerboard. NO UI rarity border/frame (reference items themselves have no frame), no text/letters/numbers, no diamond boss marker, NO floating diamond or star badge, NO set insignia, no symbols/runes/logos. One item only, no variations, no sheet. Crisp silhouette remains readable when reduced to128px/64px/40px.",
+      "tool": "image_gen.imagegen",
+      "transparent_background": true,
+      "numeric_rng_seed": null,
+      "output": "/workspace/generated_images/exec-d2ce2c28-5f01-45d2-9196-1619876507bd.png",
+      "input_references": [
+        "references/gear_body_master.png",
+        "references/boss_aegis.png",
+        "references/boss_focus.png",
+        "references/boss_lantern.png",
+        "references/seed-a.png"
+      ],
+      "selected": false,
+      "package_source": null,
+      "not_selected_reason": "Central rim crystal looked like a detached diamond badge; regenerated as an attached triangular wedge."
+    },
+    {
+      "id": "breaker",
+      "prompt": "ONE SINGLE game inventory equipment ICON showing a PAIR OF WEARABLE ARMOURED GLOVES / claw gauntlets as one item, BOSS BREAKER. Match reference1 existing gloves_master EXACT angle/composition: two gauntlets next to each other diagonally, wrists at upper-right and fingers pointing DOWN-LEFT, same painterly gold/ivory metallic lighting from upper-left, same crisp dark outline weight and saturation hierarchy. References2/3/4 are existing boss items for finish only. Reference5 Valdrakk seed supplies motifs/materials, not its paws or face. Design two empty wearable gauntlets of dark indigo-violet crystal plates with antique GOLD articulation and pale warm highlights, sharp compact crystal CLAWS at fingertips, broad back-of-hand plates layered like the boss's upright broken wings. ONE small round CYAN power core embedded physically in visible NEAR WRIST cuff; far wrist core hidden by overlap. No loose magic or external glow cloud. Clearly gloves with articulated fingers and cuff openings, NOT a creature head, boots, armour torso or actual animal paws. Centered paired-item silhouette fills around80 percent of square, full fingertips/wrists inside with generous transparent margins. Real alpha transparent background, no floor/shadow plate/checkerboard. NO decorative square/rarity frame (reference has none baked), NO text/letters/numbers/runes, no diamond boss marker, no set emblem/star badge, no logos or other symbols. Just one paired-gloves equipment icon, no variants or sheet. Readable when reduced to128px,64px,40px.",
+      "tool": "image_gen.imagegen",
+      "transparent_background": true,
+      "numeric_rng_seed": null,
+      "output": "/workspace/generated_images/exec-cae2c7e9-337e-4fa8-93b0-5bc36b978558.png",
+      "input_references": [
+        "references/gear_gloves_master.png",
+        "references/boss_aegis.png",
+        "references/boss_focus.png",
+        "references/boss_lantern.png",
+        "references/seed-b.png"
+      ],
+      "selected": true,
+      "package_source": "source/boss_breaker.png",
+      "not_selected_reason": null
+    },
+    {
+      "id": "reaper",
+      "prompt": "ONE SINGLE wearable game equipment inventory ICON: BOSS REAPER CROWN/HELMET of severed shadow threads, inspired by Morvane. Match reference1 existing head_master EXACT three-quarter LEFT-front angle, crisp dark outline weight, upper-left warm lighting, antique golden metallic finish and ivory highlights, compact silhouette and saturation hierarchy. Reference2/3/4 existing boss-item icons define painterly game-item finish, not their necklaces. Reference5 Morvane seed supplies gold crown silhouette, dark violet materials and cyan core. Design ONE EMPTY WEARABLE angular GOLD CROWN-HELM / open-faced circlet with dark indigo-violet inner band and restrained crystal insets. No actual head/face/eyes/hair or person inside. ONE small round CYAN CORE embedded in the FRONT center of crown band. Exactly THREE severed SHADOW THREADS physically attached behind the crown crest, trailing short to upper-right/back: three clearly separate dark-purple tapered ribbon/filament shapes with visibly BROKEN jagged ends, not a big smoke cloud or extra floating symbols. These three threads are part of item silhouette and stay compact, no aura VFX. Overall helmet/crown and threads centered filling about80 percent of square with empty margins, nothing clipped. True alpha transparent background, no floor/shadow plate/checkerboard. No decorative rarity/UI frame (none in reference), NO letters/numbers/runes/text, no diamond boss marker, no set insignia/star badge, no logos or other symbols. One item only, not character portrait or sheet. Large clear shapes readable at128,64 and40 pixels.",
+      "tool": "image_gen.imagegen",
+      "transparent_background": true,
+      "numeric_rng_seed": null,
+      "output": "/workspace/generated_images/exec-31e7655e-bd15-4257-9d43-19cd982fb74e.png",
+      "input_references": [
+        "references/gear_head_master.png",
+        "references/boss_aegis.png",
+        "references/boss_focus.png",
+        "references/boss_lantern.png",
+        "references/seed-c.png"
+      ],
+      "selected": true,
+      "package_source": "source/boss_reaper.png",
+      "not_selected_reason": null
+    },
+    {
+      "id": "bulwark-r2",
+      "prompt": "Edit the SAME SINGLE Bulwark breastplate icon in reference1. Reference2 is existing inventory armour style and reference3 is Kragmor seed. Keep its three-quarter angle, empty wearable torso shape, gold rim lighting, dark stone material and cyan vertical chest fissure. FIX THE UPPER RIM: there must be exactly FIVE PHYSICALLY ATTACHED jagged crystal SPIKE TIPS rising directly from collar/shoulder plates. The central crystal currently looks like a detached FLOATING DIAMOND BADGE: remove that detached rhombus shape. Replace it with a SHORT TRIANGULAR CRYSTAL WEDGE physically FUSED to the center collar rim, with a broad BASE visibly connected to collar metal. The other four crystal tips remain fused to shoulders/upper rim. All five tips are parts of the breastplate, NOT floating crystals, NOT a crown hovering over item, NOT a diamond UI marker. Reduce secondary purple crack emission a little so metallic gold highlights and stone plates look like the existing inventory icon; cyan chest wound stays main accent. Do not add engravings, text, runes, set badge, frame, symbols or a boss marker. One empty chest armour item only. Centered 80 percent of square, complete body and all five attached prongs with margins. Preserve exact painterly icon perspective/outline, true alpha background, no floor/shadow plate/checkerboard.",
+      "tool": "image_gen.imagegen",
+      "transparent_background": true,
+      "numeric_rng_seed": null,
+      "output": "/workspace/generated_images/exec-05d96c4a-6541-469d-b747-1005452dc8bc.png",
+      "input_references": [
+        "unshipped bulwark attempt1",
+        "references/gear_body_master.png",
+        "references/seed-a.png"
+      ],
+      "selected": true,
+      "package_source": "source/boss_bulwark.png",
+      "not_selected_reason": null
+    }
+  ]
+}

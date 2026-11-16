@@ -43,6 +43,7 @@ test('banner, three boss cards, craft sheet and boss notes at 390px', async ({ p
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: `${shots}/trio-fight-390.png` });
   await page.locator('#wb-tab-craft').click(); await expect(page.locator('#wb-item-kragmor')).toContainText('40/40');
+  await page.screenshot({ path: `${shots}/trio-craft-390.png` });
   await page.locator('#wb-craft-kragmor').click(); await expect(page.locator('#wb-craft-confirm')).toBeDisabled();
   const chips = page.locator('#wb-craft-sheet [data-lobby=wb-affix]'); expect(await chips.count()).toBeGreaterThanOrEqual(2);
   for (let i = 0; i < 2; i++) { await chips.nth(i).click(); }

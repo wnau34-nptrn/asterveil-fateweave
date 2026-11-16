@@ -1,0 +1,329 @@
+{
+  "schema": 1,
+  "base_commit": "cca1c3db38028781306072011d8dc4c0aed438f3",
+  "art_reference_commit": "46f366dc931e4994d3a6ccd9ad3951ac444a70cf",
+  "prior_ui_reference_commit": "1895f837c02cdfe1d8744a7a98ff1fad0cc2bc32",
+  "reference_sha256": {
+    "references/battle_riftline.webp": "6e4114f65a7ab521e310a6e6baa9687205b1527dfb272542b0c550aed4ae72ac",
+    "references/concept-a.png": "aa161a2a9f0154d2dbbe9309cdb76973ed7d9899ae33d6aa2c6470561e132ddb",
+    "references/concept-b.png": "9f5b76f988e69c25a4699cb7464708806b188215c35886e06e22671bd10af5d8",
+    "references/concept-c.png": "a7c207b89b4637bb6237e89954226a8d3a64a0eb17b3e5b16b5001947a7b80f1",
+    "references/context.json": "b863245fa7e2f54b30141c1e7665ce649336b11332a3d88b19c908d0c4182bf1",
+    "references/emblem_worldboss_reference.png": "6631ef6d581b2c8e22d2dbc7d60f1e417a20b67eac100260b3db1c821ca08202",
+    "references/fonts/Noto-package-copyright.txt": "075f91382875da1c4b491f1facf2586f55448705133264d98ce15cab6211b125",
+    "references/fonts/NotoSans-Bold.ttf": "e83493c945848ecd4a9ad0f6d19164541a0d3e23a9c952304a00a46e00272ac5",
+    "references/fonts/NotoSans-Regular.ttf": "89c3c497f618fdaa0b2d1e98fef93582f28c71debd2c4a8cdf41f190ced2909d",
+    "references/fonts/NotoSansThai-Bold.ttf": "97bbc8ea98328325285f2f552228c7aac1db39d8f38f0096a61ba7df1f1f780e",
+    "references/fonts/NotoSansThai-OFL.txt": "96ac951c8caddd87d8a66fe0d02342127696131d3e935ce4a936dc68cf032e33",
+    "references/fonts/NotoSansThai-Regular.ttf": "dfbd5ed0f1e68c3cbc51aa08f646d1ab0e68e7c4ceab70a69e465225ff701f93",
+    "references/seed-a.png": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97",
+    "references/seed-b.png": "c3fe15c71d82c7cddc09df874fb9c21480bf2168e7b16248d692878ffb7ec214",
+    "references/seed-c.png": "47e5fbbaf06a18ee56a7c8c46771e00f65e13df7998b8c3d78c5cfa98f160105"
+  },
+  "banners": {
+    "kragmor": {
+      "method": "uniform full-image resize, no crop/no mirror",
+      "source_size": [
+        2172,
+        724
+      ],
+      "resize": [
+        1080,
+        360
+      ],
+      "paste_xy": [
+        0,
+        0
+      ]
+    },
+    "valdrakk": {
+      "method": "uniform full-image resize, no crop/no mirror",
+      "source_size": [
+        2172,
+        724
+      ],
+      "resize": [
+        1080,
+        360
+      ],
+      "paste_xy": [
+        0,
+        0
+      ]
+    },
+    "morvane": {
+      "method": "uniform full-image resize, no crop/no mirror",
+      "source_size": [
+        2172,
+        724
+      ],
+      "resize": [
+        1080,
+        360
+      ],
+      "paste_xy": [
+        0,
+        0
+      ]
+    },
+    "trio": {
+      "method": "uniform height fit, right alignment, empty sky edge extended left",
+      "source_size": [
+        1983,
+        793
+      ],
+      "resize": [
+        720,
+        288
+      ],
+      "paste_xy": [
+        360,
+        0
+      ],
+      "character_crop": "none; generated group includes natural portrait occlusion"
+    }
+  },
+  "emblems": {
+    "kragmor": {
+      "source": "source/emblems.png",
+      "source_crop_xyxy": [
+        37,
+        24,
+        681,
+        680
+      ],
+      "uniform_scale": 0.36585365853658536,
+      "resize": [
+        236,
+        240
+      ],
+      "paste_xy": [
+        10,
+        8
+      ],
+      "mirror": false,
+      "crop_semantics": "head/neck portraits intentionally omit limbs/lower body",
+      "alpha_cleanup": "discard source alpha<=8; clear RGB at output alpha0; no character redraw"
+    },
+    "valdrakk": {
+      "source": "source/emblems.png",
+      "source_crop_xyxy": [
+        761,
+        23,
+        1406,
+        680
+      ],
+      "uniform_scale": 0.365296803652968,
+      "resize": [
+        236,
+        240
+      ],
+      "paste_xy": [
+        10,
+        8
+      ],
+      "mirror": false,
+      "crop_semantics": "head/neck portraits intentionally omit limbs/lower body",
+      "alpha_cleanup": "discard source alpha<=8; clear RGB at output alpha0; no character redraw"
+    },
+    "morvane": {
+      "source": "source/emblems.png",
+      "source_crop_xyxy": [
+        1486,
+        22,
+        2129,
+        682
+      ],
+      "uniform_scale": 0.36363636363636365,
+      "resize": [
+        234,
+        240
+      ],
+      "paste_xy": [
+        11,
+        8
+      ],
+      "mirror": false,
+      "crop_semantics": "head/neck portraits intentionally omit limbs/lower body",
+      "alpha_cleanup": "discard source alpha<=8; clear RGB at output alpha0; no character redraw"
+    }
+  },
+  "text_safe_region": "all x<540, full banner height",
+  "navy_veil": {
+    "rgb": [
+      8,
+      18,
+      32
+    ],
+    "opacity_x_0_through_540": 0.72,
+    "smoothstep_release_x": [
+      540,
+      720
+    ]
+  },
+  "preview": {
+    "kragmor": {
+      "banner_xy": [
+        16,
+        59
+      ],
+      "display_size": [
+        358,
+        119
+      ],
+      "white_text": [
+        {
+          "text": "Kragmor",
+          "bounds_xyxy": [
+            28,
+            75,
+            98,
+            91
+          ]
+        },
+        {
+          "text": "ไททันรอยแยก",
+          "bounds_xyxy": [
+            27,
+            101,
+            89,
+            110
+          ]
+        },
+        {
+          "text": "สิทธิ์ 2/5 · ดาเมจ 12,480",
+          "bounds_xyxy": [
+            28,
+            126,
+            139,
+            136
+          ]
+        }
+      ],
+      "text_is_preview_only": true
+    },
+    "valdrakk": {
+      "banner_xy": [
+        16,
+        268
+      ],
+      "display_size": [
+        358,
+        119
+      ],
+      "white_text": [
+        {
+          "text": "Valdrakk",
+          "bounds_xyxy": [
+            28,
+            284,
+            99,
+            296
+          ]
+        },
+        {
+          "text": "อสูรปีกรอยแยก",
+          "bounds_xyxy": [
+            28,
+            310,
+            97,
+            322
+          ]
+        },
+        {
+          "text": "สิทธิ์ 2/5 · ดาเมจ 12,480",
+          "bounds_xyxy": [
+            28,
+            335,
+            139,
+            345
+          ]
+        }
+      ],
+      "text_is_preview_only": true
+    },
+    "morvane": {
+      "banner_xy": [
+        16,
+        477
+      ],
+      "display_size": [
+        358,
+        119
+      ],
+      "white_text": [
+        {
+          "text": "Morvane",
+          "bounds_xyxy": [
+            28,
+            493,
+            99,
+            505
+          ]
+        },
+        {
+          "text": "ราชันเงาเหนือรอยแยก",
+          "bounds_xyxy": [
+            28,
+            519,
+            124,
+            528
+          ]
+        },
+        {
+          "text": "สิทธิ์ 2/5 · ดาเมจ 12,480",
+          "bounds_xyxy": [
+            28,
+            544,
+            139,
+            554
+          ]
+        }
+      ],
+      "text_is_preview_only": true
+    },
+    "trio": {
+      "banner_xy": [
+        16,
+        686
+      ],
+      "display_size": [
+        358,
+        95
+      ],
+      "white_text": [
+        {
+          "text": "บอสโลก",
+          "bounds_xyxy": [
+            28,
+            701,
+            82,
+            714
+          ]
+        },
+        {
+          "text": "สามบอสแห่งรอยแยก",
+          "bounds_xyxy": [
+            28,
+            727,
+            121,
+            737
+          ]
+        },
+        {
+          "text": "สิทธิ์ 2/5 · เหลือ 4 วัน",
+          "bounds_xyxy": [
+            28,
+            753,
+            122,
+            762
+          ]
+        }
+      ],
+      "text_is_preview_only": true
+    }
+  },
+  "no_mirror": true,
+  "rng_seed": null,
+  "reproducibility": "Retained image outputs make processing deterministic; generator exposes no numeric RNG seed."
+}
