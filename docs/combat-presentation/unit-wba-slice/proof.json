@@ -1,0 +1,114 @@
+{
+  "validationJsonSha256": "b4e3e42b204cddc62007ab84c32d27073783c1d4b8cfa4069ff0de21ebfe13d0",
+  "environment": "Chromium / SwiftShader / cloud 390x844 touch emulation, not a physical phone or iOS Safari",
+  "retiming": "none; every captured frame preserved using CDP timestamps",
+  "ownerMotionApproval": "pending; none inferred from generation or tests",
+  "clips": [
+    {
+      "file": "foe_kragmor-fault-awakening-normal-normal-390.mp4",
+      "sha256": "1b26eab0bce3c4d221cbbb5483a63326a769568e434c1be67bcaded57aad94bd",
+      "bytes": 442520
+    },
+    {
+      "file": "foe_kragmor-boulder-hurl-normal-normal-390.mp4",
+      "sha256": "18975a0cc9d96420f1023df19f6bb7fde25d839e65919d258ecd049846cd9086",
+      "bytes": 468643
+    },
+    {
+      "file": "foe_kragmor-titan-gathering-normal-normal-390.mp4",
+      "sha256": "89fbcf4e85fb373eb290c094a232a66b5c8f16ef7391811ea8e6ccd1d86f0182",
+      "bytes": 434157
+    },
+    {
+      "file": "foe_kragmor-mountain-fall-normal-normal-390.mp4",
+      "sha256": "ec6999a4f1f4af39a7bf2f6c453e088100b2c7b144e9e265fcfad75da28122a9",
+      "bytes": 454385
+    },
+    {
+      "file": "foe_kragmor-stone-fist-enemy-down-normal-390.mp4",
+      "sha256": "1eeeb749ee1a2c205e7c0adb93a1bb78a39b87390eec8b93125ce06d71810087",
+      "bytes": 276804
+    },
+    {
+      "file": "foe_kragmor-stone-fist-normal-normal-390.mp4",
+      "sha256": "54f3d83f198984c6e58f836dbdf643da621c5bc3dad75e68a0d601843a10edf5",
+      "bytes": 459959
+    },
+    {
+      "file": "foe_kragmor-rift-quake-normal-normal-390.mp4",
+      "sha256": "2fcc5ace1b39dd5ab7d778a79cbc28e5785432d5850b7a77cb46664ea1de4e7b",
+      "bytes": 463294
+    }
+  ],
+  "atlas": {
+    "factor": 0.27,
+    "cell": 276,
+    "displayRatio": 2,
+    "origin": [
+      0.5,
+      0.875
+    ],
+    "layout": {
+      "stone-fist": 1,
+      "titan-gathering": 5,
+      "mountain-fall": 9,
+      "rift-quake": 13,
+      "boulder-hurl": 17,
+      "fault-awakening": 21,
+      "hit": 25,
+      "down": 27
+    },
+    "rawSha256": {
+      "stone-fist": "bdf164ef9acc26964e391940dbcf6e257ae82f5c7bd9dd5319ba8c9392848fdc",
+      "titan-gathering": "36a3d970c62c16b5965f92ce409be6c0f67718376c90e22866a978a3d60e3b56",
+      "mountain-fall": "3d417b0796739f89abbbbaa0829934a1a0e184194f6a1ec6848b552bb1ddd12b",
+      "rift-quake": "907996742a290a76bfd203fdadc860f312fe043dc06e79eb0ec07dcfb5911365",
+      "boulder-hurl": "2daa3fde4fe3a9e6315295256183d48dc309bd627006b8f77fb88227264a33ed",
+      "fault-awakening": "2265135a1d27e9ac5c4ce2d49d09026a683cafe12e20e53cfc2b2081f56e6280",
+      "hit": "20bb6fab969158650b37d2c7a4a07248620c76dd494c4c78cf6af1afae84324c",
+      "down": "1e3ff3f9937ffe837d7ce12765f383b8e692c2e461aa967763c2d8011e260e33"
+    },
+    "exactSeedFrames": {
+      "stone-fist": [
+        true,
+        true
+      ],
+      "titan-gathering": [
+        true,
+        true
+      ],
+      "mountain-fall": [
+        true,
+        true
+      ],
+      "rift-quake": [
+        true,
+        true
+      ],
+      "boulder-hurl": [
+        true,
+        true
+      ],
+      "fault-awakening": [
+        true,
+        true
+      ],
+      "hit": [
+        true,
+        true
+      ],
+      "down": [
+        true,
+        null
+      ]
+    },
+    "uniqueFrames": 30,
+    "image": "kragmor_wba.3234efb60c1f.webp",
+    "atlas": "kragmor_wba.9a14ad1f9c65.json",
+    "width": 1280,
+    "height": 1185,
+    "frames": 30,
+    "decodedBytes": 6067200,
+    "downloadBytes": 1903927
+  }
+}

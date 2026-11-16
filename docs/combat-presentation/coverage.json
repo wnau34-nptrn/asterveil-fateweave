@@ -1,19 +1,19 @@
 {
  "counts": {
-  "identities": 39,
+  "identities": 40,
   "heroes": 17,
-  "enemies": 22,
-  "atlases": 37,
+  "enemies": 23,
+  "atlases": 38,
   "parked": 2,
   "actionIds": 91,
   "heroRows": 119,
-  "intents": 40,
-  "foeRows": 49,
-  "spriteRows": 154,
+  "intents": 45,
+  "foeRows": 55,
+  "spriteRows": 160,
   "proceduralRows": 14,
   "paintedRows": 112,
-  "sharedRows": 52,
-  "codeRows": 4
+  "sharedRows": 57,
+  "codeRows": 5
  },
  "identities": [
   {
@@ -459,6 +459,25 @@
     "block": "procedural (tint/lift)",
     "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
     "down": "sprite 11,12,13 · ค้าง 13"
+   }
+  },
+  {
+   "identity": "foe_kragmor",
+   "side": "enemy",
+   "name": "คราก์มอร์",
+   "sheet": "kragmor",
+   "atlas": {
+    "image": "kragmor_wba.3234efb60c1f.webp",
+    "atlas": "kragmor_wba.9a14ad1f9c65.json",
+    "frames": 30,
+    "decodedBytes": 6067200,
+    "downloadBytes": 1903927
+   },
+   "reactions": {
+    "hit": "sprite 25,26",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 27,28,29 · ค้าง 29"
    }
   },
   {
@@ -4702,6 +4721,210 @@
    ]
   },
   {
+   "identity": "foe_kragmor",
+   "side": "enemy",
+   "move": "Stone Fist",
+   "name": "Stone Fist",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move1",
+    "frames": {
+     "prepare": [
+      0,
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "wb-kragmor"
+   ]
+  },
+  {
+   "identity": "foe_kragmor",
+   "side": "enemy",
+   "move": "Titan Gathering",
+   "name": "Titan Gathering",
+   "kind": "physical/charge",
+   "body": {
+    "kind": "sprite",
+    "clip": "move2",
+    "frames": {
+     "prepare": [
+      0,
+      5,
+      6
+     ],
+     "recover": [
+      7,
+      8,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ตัวเอง (รวมพลัง ไม่มี damage)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "wb-kragmor"
+   ]
+  },
+  {
+   "identity": "foe_kragmor",
+   "side": "enemy",
+   "move": "Mountain Fall",
+   "name": "Mountain Fall",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move3",
+    "frames": {
+     "prepare": [
+      0,
+      9,
+      10
+     ],
+     "recover": [
+      11,
+      12,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "wb-kragmor"
+   ]
+  },
+  {
+   "identity": "foe_kragmor",
+   "side": "enemy",
+   "move": "Rift Quake",
+   "name": "Rift Quake",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move4",
+    "frames": {
+     "prepare": [
+      0,
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "wb-kragmor"
+   ]
+  },
+  {
+   "identity": "foe_kragmor",
+   "side": "enemy",
+   "move": "Boulder Hurl",
+   "name": "Boulder Hurl",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move5",
+    "frames": {
+     "prepare": [
+      0,
+      17,
+      18
+     ],
+     "recover": [
+      19,
+      20,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "wb-kragmor"
+   ]
+  },
+  {
+   "identity": "foe_kragmor",
+   "side": "enemy",
+   "move": "phase:Fault Awakening",
+   "name": "Fault Awakening",
+   "kind": "phase",
+   "body": {
+    "kind": "sprite",
+    "clip": "move6",
+    "frames": {
+     "prepare": [
+      0,
+      21,
+      22
+     ],
+     "recover": [
+      23,
+      24,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+   },
+   "target": "ตัวเอง (เปลี่ยนช่วง)",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "wb-kragmor"
+   ]
+  },
+  {
    "identity": "foe_matriarch",
    "side": "enemy",
    "move": "Thorn Bloom",
@@ -5045,6 +5268,7 @@
     "rift-host",
     "rift-legion",
     "rift-warden",
+    "wb-kragmor",
     "world-boss-warden"
    ]
   },
@@ -5503,6 +5727,7 @@
     "rift-host",
     "rift-legion",
     "rift-warden",
+    "wb-kragmor",
     "world-boss-warden"
    ]
   },

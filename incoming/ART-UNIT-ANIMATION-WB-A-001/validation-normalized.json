@@ -1,0 +1,73 @@
+{
+  "kragmor": {
+    "factor": 0.27,
+    "cell": 276,
+    "displayRatio": 2,
+    "origin": [
+      0.5,
+      0.875
+    ],
+    "layout": {
+      "stone-fist": 1,
+      "titan-gathering": 5,
+      "mountain-fall": 9,
+      "rift-quake": 13,
+      "boulder-hurl": 17,
+      "fault-awakening": 21,
+      "hit": 25,
+      "down": 27
+    },
+    "rawSha256": {
+      "stone-fist": "bdf164ef9acc26964e391940dbcf6e257ae82f5c7bd9dd5319ba8c9392848fdc",
+      "titan-gathering": "36a3d970c62c16b5965f92ce409be6c0f67718376c90e22866a978a3d60e3b56",
+      "mountain-fall": "3d417b0796739f89abbbbaa0829934a1a0e184194f6a1ec6848b552bb1ddd12b",
+      "rift-quake": "907996742a290a76bfd203fdadc860f312fe043dc06e79eb0ec07dcfb5911365",
+      "boulder-hurl": "2daa3fde4fe3a9e6315295256183d48dc309bd627006b8f77fb88227264a33ed",
+      "fault-awakening": "2265135a1d27e9ac5c4ce2d49d09026a683cafe12e20e53cfc2b2081f56e6280",
+      "hit": "20bb6fab969158650b37d2c7a4a07248620c76dd494c4c78cf6af1afae84324c",
+      "down": "1e3ff3f9937ffe837d7ce12765f383b8e692c2e461aa967763c2d8011e260e33"
+    },
+    "exactSeedFrames": {
+      "stone-fist": [
+        true,
+        true
+      ],
+      "titan-gathering": [
+        true,
+        true
+      ],
+      "mountain-fall": [
+        true,
+        true
+      ],
+      "rift-quake": [
+        true,
+        true
+      ],
+      "boulder-hurl": [
+        true,
+        true
+      ],
+      "fault-awakening": [
+        true,
+        true
+      ],
+      "hit": [
+        true,
+        true
+      ],
+      "down": [
+        true,
+        null
+      ]
+    },
+    "uniqueFrames": 30,
+    "image": "kragmor_wba.3234efb60c1f.webp",
+    "atlas": "kragmor_wba.9a14ad1f9c65.json",
+    "width": 1280,
+    "height": 1185,
+    "frames": 30,
+    "decodedBytes": 6067200,
+    "downloadBytes": 1903927
+  }
+}

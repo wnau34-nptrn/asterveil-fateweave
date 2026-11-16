@@ -331,5 +331,14 @@
     "frames": 35,
     "decodedBytes": 2809856,
     "downloadBytes": 972387
+  },
+  "kragmor": {
+    "image": "kragmor_wba.3234efb60c1f.webp",
+    "atlas": "kragmor_wba.9a14ad1f9c65.json",
+    "width": 1280,
+    "height": 1185,
+    "frames": 30,
+    "decodedBytes": 6067200,
+    "downloadBytes": 1903927
   }
 }

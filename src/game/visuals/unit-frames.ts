@@ -151,6 +151,12 @@ export const unitRegistry = {
       'Rift Gathering': 'move5', 'Rift Awakening': 'move6', 'Call the Rift': 'move7' },
     clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21), move7: bossMove(25) },
     reactions: { hit: [29, 30], down: [31, 32, 33] } },
+  // WB-A (World Boss Kragmor, ART-UNIT-ANIMATION-WB-A-001): same boss layout, one strip per move in the order of the encounter's
+  // intents; Fault Awakening is the 70% phase gesture. The atlas faces left and is never mirrored at runtime.
+  foe_kragmor: { sheet: 'kragmor', displayRatio: 2, soleOrigin: BOSS_SOLE, downFrame: 29,
+    intents: { 'Stone Fist': 'move1', 'Titan Gathering': 'move2', 'Mountain Fall': 'move3', 'Rift Quake': 'move4', 'Boulder Hurl': 'move5', 'Fault Awakening': 'move6' },
+    clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21) },
+    reactions: { hit: [25, 26], down: [27, 28, 29] } },
   foe_captain: { sheet: 'captain', displayRatio: 2, soleOrigin: BOSS_SOLE, downFrame: 17,
     intents: { 'War Cry': 'move1', 'Crushing Blow': 'move2', 'Call the Hunt': 'move3' },
     clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9) }, reactions: { hit: [13, 14], down: [15, 16, 17] } },
