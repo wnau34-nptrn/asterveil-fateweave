@@ -1,0 +1,807 @@
+{
+  "task": "ART-UNIT-ANIMATION-WB-B-001",
+  "owner_approval": "pending",
+  "integration_ready": false,
+  "not_measured_is_pass": false,
+  "torso_summary": {
+    "not-measured": 20,
+    "seed-exact": 15,
+    "within-4pct-proxy": 9
+  },
+  "project_audit_note": "Project audit masks top42% of silhouette, which on a quadruped mostly covers articulated wings instead of torso/head. Its drift flags and not-measured rows are retained verbatim, not waived as passes. Independent torso audit excludes those structures and requires posterior coverage. A proxy fit does not certify skeleton length.",
+  "open_acceptance": "20 non-seed frames have insufficient torso feature coverage. Cannot certify +/-4% torso length for all44. Review against seed, revise whole strips if needed, do not rescale individual frames.",
+  "rows": [
+    {
+      "move": "shard-talon",
+      "frame": 0,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "shard-talon",
+      "frame": 1,
+      "anatomy_audit_status": "ok",
+      "anatomy_audit_scale": 1.02,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Far-front paw raised then swept low left; count raised paw plus near front and both rear paws. Head/core remain visible."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "shard-talon",
+      "frame": 2,
+      "anatomy_audit_status": "ok",
+      "anatomy_audit_scale": 1.05,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Far-front paw raised then swept low left; count raised paw plus near front and both rear paws. Head/core remain visible."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "shard-talon",
+      "frame": 3,
+      "anatomy_audit_status": "ok",
+      "anatomy_audit_scale": 1.042,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Far-front paw raised then swept low left; count raised paw plus near front and both rear paws. Head/core remain visible."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "shard-talon",
+      "frame": 4,
+      "anatomy_audit_status": "ok",
+      "anatomy_audit_scale": 1.011,
+      "torso_audit_status": "within-4pct-proxy",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Far-front paw raised then swept low left; count raised paw plus near front and both rear paws. Head/core remain visible."
+      },
+      "acceptance": "owner review pending; torso proxy within4%"
+    },
+    {
+      "move": "shard-talon",
+      "frame": 5,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "wing-gust",
+      "frame": 0,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "wing-gust",
+      "frame": 1,
+      "anatomy_audit_status": "not-measured",
+      "anatomy_audit_scale": 1.011,
+      "torso_audit_status": "within-4pct-proxy",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Two wings rotate/flex in depth while staying raised. At small scale the arched near wing remains separate from far wing."
+      },
+      "acceptance": "owner review pending; torso proxy within4%"
+    },
+    {
+      "move": "wing-gust",
+      "frame": 2,
+      "anatomy_audit_status": "drift",
+      "anatomy_audit_scale": 1.177,
+      "torso_audit_status": "within-4pct-proxy",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Two wings rotate/flex in depth while staying raised. At small scale the arched near wing remains separate from far wing."
+      },
+      "acceptance": "owner review pending; torso proxy within4%"
+    },
+    {
+      "move": "wing-gust",
+      "frame": 3,
+      "anatomy_audit_status": "drift",
+      "anatomy_audit_scale": 1.152,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Two wings rotate/flex in depth while staying raised. At small scale the arched near wing remains separate from far wing."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "wing-gust",
+      "frame": 4,
+      "anatomy_audit_status": "ok",
+      "anatomy_audit_scale": 1.012,
+      "torso_audit_status": "within-4pct-proxy",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Two wings rotate/flex in depth while staying raised. At small scale the arched near wing remains separate from far wing."
+      },
+      "acceptance": "owner review pending; torso proxy within4%"
+    },
+    {
+      "move": "wing-gust",
+      "frame": 5,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "wing-gathering",
+      "frame": 0,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "wing-gathering",
+      "frame": 1,
+      "anatomy_audit_status": "not-measured",
+      "anatomy_audit_scale": 0.975,
+      "torso_audit_status": "within-4pct-proxy",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "R1 folded-back wings; cyan near-shoulder core visible brighter in frames2/3 (0-based). Hold2 for charge signal."
+      },
+      "acceptance": "owner review pending; torso proxy within4%"
+    },
+    {
+      "move": "wing-gathering",
+      "frame": 2,
+      "anatomy_audit_status": "not-measured",
+      "anatomy_audit_scale": 1.415,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "R1 folded-back wings; cyan near-shoulder core visible brighter in frames2/3 (0-based). Hold2 for charge signal."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "wing-gathering",
+      "frame": 3,
+      "anatomy_audit_status": "not-measured",
+      "anatomy_audit_scale": 1.086,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "R1 folded-back wings; cyan near-shoulder core visible brighter in frames2/3 (0-based). Hold2 for charge signal."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "wing-gathering",
+      "frame": 4,
+      "anatomy_audit_status": "not-measured",
+      "anatomy_audit_scale": 0.989,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "R1 folded-back wings; cyan near-shoulder core visible brighter in frames2/3 (0-based). Hold2 for charge signal."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "wing-gathering",
+      "frame": 5,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "worldshard-dive",
+      "frame": 0,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "worldshard-dive",
+      "frame": 1,
+      "anatomy_audit_status": "drift",
+      "anatomy_audit_scale": 1.133,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Fourth pose regenerated with tucked rear knees/tighter tail, not shrunk. Low dive remains distinguishable from skid. Primary front paw anchors contact; rear paws can lift."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "worldshard-dive",
+      "frame": 2,
+      "anatomy_audit_status": "drift",
+      "anatomy_audit_scale": 1.141,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Fourth pose regenerated with tucked rear knees/tighter tail, not shrunk. Low dive remains distinguishable from skid. Primary front paw anchors contact; rear paws can lift."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "worldshard-dive",
+      "frame": 3,
+      "anatomy_audit_status": "drift",
+      "anatomy_audit_scale": 1.139,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Fourth pose regenerated with tucked rear knees/tighter tail, not shrunk. Low dive remains distinguishable from skid. Primary front paw anchors contact; rear paws can lift."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "worldshard-dive",
+      "frame": 4,
+      "anatomy_audit_status": "ok",
+      "anatomy_audit_scale": 1.073,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Fourth pose regenerated with tucked rear knees/tighter tail, not shrunk. Low dive remains distinguishable from skid. Primary front paw anchors contact; rear paws can lift."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "worldshard-dive",
+      "frame": 5,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "staggered",
+      "frame": 0,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "staggered",
+      "frame": 1,
+      "anatomy_audit_status": "ok",
+      "anatomy_audit_scale": 1.108,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "R1 near wing droops across rear shoulder while far wing remains upright. Four paws visible below; head/core remain visible. Compare to hit and down in keyposes."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "staggered",
+      "frame": 2,
+      "anatomy_audit_status": "drift",
+      "anatomy_audit_scale": 1.18,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "R1 near wing droops across rear shoulder while far wing remains upright. Four paws visible below; head/core remain visible. Compare to hit and down in keyposes."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "staggered",
+      "frame": 3,
+      "anatomy_audit_status": "drift",
+      "anatomy_audit_scale": 1.199,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "R1 near wing droops across rear shoulder while far wing remains upright. Four paws visible below; head/core remain visible. Compare to hit and down in keyposes."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "staggered",
+      "frame": 4,
+      "anatomy_audit_status": "drift",
+      "anatomy_audit_scale": 1.147,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "R1 near wing droops across rear shoulder while far wing remains upright. Four paws visible below; head/core remain visible. Compare to hit and down in keyposes."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "staggered",
+      "frame": 5,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "sky-rend",
+      "frame": 0,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "sky-rend",
+      "frame": 1,
+      "anatomy_audit_status": "ok",
+      "anatomy_audit_scale": 1.028,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Both wings stay raised. Neck lifted and mouth open on frame3. Only internal wing glow, no free VFX."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "sky-rend",
+      "frame": 2,
+      "anatomy_audit_status": "drift",
+      "anatomy_audit_scale": 1.21,
+      "torso_audit_status": "within-4pct-proxy",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Both wings stay raised. Neck lifted and mouth open on frame3. Only internal wing glow, no free VFX."
+      },
+      "acceptance": "owner review pending; torso proxy within4%"
+    },
+    {
+      "move": "sky-rend",
+      "frame": 3,
+      "anatomy_audit_status": "not-measured",
+      "anatomy_audit_scale": 1.038,
+      "torso_audit_status": "within-4pct-proxy",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Both wings stay raised. Neck lifted and mouth open on frame3. Only internal wing glow, no free VFX."
+      },
+      "acceptance": "owner review pending; torso proxy within4%"
+    },
+    {
+      "move": "sky-rend",
+      "frame": 4,
+      "anatomy_audit_status": "ok",
+      "anatomy_audit_scale": 0.979,
+      "torso_audit_status": "within-4pct-proxy",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Both wings stay raised. Neck lifted and mouth open on frame3. Only internal wing glow, no free VFX."
+      },
+      "acceptance": "owner review pending; torso proxy within4%"
+    },
+    {
+      "move": "sky-rend",
+      "frame": 5,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "hit",
+      "frame": 0,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "hit",
+      "frame": 1,
+      "anatomy_audit_status": "drift",
+      "anatomy_audit_scale": 1.149,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Recoil neck/head back toward right, both wings still raised; does not use one-wing droop of Staggered."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "hit",
+      "frame": 2,
+      "anatomy_audit_status": "ok",
+      "anatomy_audit_scale": 1.08,
+      "torso_audit_status": "within-4pct-proxy",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Recoil neck/head back toward right, both wings still raised; does not use one-wing droop of Staggered."
+      },
+      "acceptance": "owner review pending; torso proxy within4%"
+    },
+    {
+      "move": "hit",
+      "frame": 3,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "down",
+      "frame": 0,
+      "anatomy_audit_status": "idle",
+      "anatomy_audit_scale": 1.0,
+      "torso_audit_status": "seed-exact",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Exact seed pixel lock."
+      },
+      "acceptance": "seed identity confirmed"
+    },
+    {
+      "move": "down",
+      "frame": 1,
+      "anatomy_audit_status": "ok",
+      "anatomy_audit_scale": 0.995,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Four tucked paws remain visible. Two folded wings overlap back; tail remains single. Core dark at final pose; held prone, no return."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "down",
+      "frame": 2,
+      "anatomy_audit_status": "not-measured",
+      "anatomy_audit_scale": 1.027,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Four tucked paws remain visible. Two folded wings overlap back; tail remains single. Core dark at final pose; held prone, no return."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    },
+    {
+      "move": "down",
+      "frame": 3,
+      "anatomy_audit_status": "not-measured",
+      "anatomy_audit_scale": 1.017,
+      "torso_audit_status": "not-measured",
+      "visual_review": {
+        "reviewer": "Codex visual inspection, not owner approval",
+        "legs": 4,
+        "wings": 2,
+        "tails": 1,
+        "near_left_shoulder_core": 1,
+        "facing": "left",
+        "mirrored": false,
+        "note": "Four tucked paws remain visible. Two folded wings overlap back; tail remains single. Core dark at final pose; held prone, no return."
+      },
+      "acceptance": "torso +/-4% NOT established; manual anatomical review required"
+    }
+  ]
+}

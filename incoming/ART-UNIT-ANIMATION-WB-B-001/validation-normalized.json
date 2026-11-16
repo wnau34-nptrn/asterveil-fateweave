@@ -1,0 +1,73 @@
+{
+  "valdrakk": {
+    "factor": 0.26,
+    "cell": 266,
+    "displayRatio": 2,
+    "origin": [
+      0.5,
+      0.875
+    ],
+    "layout": {
+      "shard-talon": 1,
+      "wing-gust": 5,
+      "wing-gathering": 9,
+      "worldshard-dive": 13,
+      "staggered": 17,
+      "sky-rend": 21,
+      "hit": 25,
+      "down": 27
+    },
+    "rawSha256": {
+      "shard-talon": "9fd97fe8b5d403d51a59ec11489c24f2eccfc79376170588fbe957c70804bc43",
+      "wing-gust": "fe7b7a6e7363ffc0736ff40a91c7bfecc5b60e52ded62c1bc1fa6b64e137da32",
+      "wing-gathering": "7aac59d47539a4ddf00087322e1568619d84efeea5be9062e2e0b4dc75571e23",
+      "worldshard-dive": "b74784e162c610c9196851c5e4a49060c076cad81dd967c8b2057be4d302a5f2",
+      "staggered": "229af181a542e7d25cc5fdcc67541ed71771095594910aec967c85fcbaae5e4f",
+      "sky-rend": "1de9d90403d953650b6500a4c789f9f2af6067c628d5013ca1598c68e7c5971c",
+      "hit": "674c16d60d839b32368633fc68051d3603f8e1f02838b4105e30ed318a520ffc",
+      "down": "23057fc4d7226f70986e63a527c424c2ab9428d1de0770a448f451b5eb1be04f"
+    },
+    "exactSeedFrames": {
+      "shard-talon": [
+        true,
+        true
+      ],
+      "wing-gust": [
+        true,
+        true
+      ],
+      "wing-gathering": [
+        true,
+        true
+      ],
+      "worldshard-dive": [
+        true,
+        true
+      ],
+      "staggered": [
+        true,
+        true
+      ],
+      "sky-rend": [
+        true,
+        true
+      ],
+      "hit": [
+        true,
+        true
+      ],
+      "down": [
+        true,
+        null
+      ]
+    },
+    "uniqueFrames": 30,
+    "image": "valdrakk_wbb.7987cfe5b464.webp",
+    "atlas": "valdrakk_wbb.03334e5611bb.json",
+    "width": 512,
+    "height": 2759,
+    "frames": 30,
+    "decodedBytes": 5650432,
+    "downloadBytes": 1931778
+  }
+}

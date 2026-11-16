@@ -157,6 +157,12 @@ export const unitRegistry = {
     intents: { 'Stone Fist': 'move1', 'Titan Gathering': 'move2', 'Mountain Fall': 'move3', 'Rift Quake': 'move4', 'Boulder Hurl': 'move5', 'Fault Awakening': 'move6' },
     clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21) },
     reactions: { hit: [25, 26], down: [27, 28, 29] } },
+  // WB-B (World Boss Valdrakk, ART-UNIT-ANIMATION-WB-B-001): same boss layout; Staggered is the engine's turn after a cancelled
+  // breakable charge (not hit, not down); Sky Rend is the 70% phase gesture. The atlas faces left and is never mirrored.
+  foe_valdrakk: { sheet: 'valdrakk', displayRatio: 2, soleOrigin: BOSS_SOLE, downFrame: 29,
+    intents: { 'Shard Talon': 'move1', 'Wing Gust': 'move2', 'Wing Gathering': 'move3', 'Worldshard Dive': 'move4', Staggered: 'move5', 'Sky Rend': 'move6' },
+    clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21) },
+    reactions: { hit: [25, 26], down: [27, 28, 29] } },
   foe_captain: { sheet: 'captain', displayRatio: 2, soleOrigin: BOSS_SOLE, downFrame: 17,
     intents: { 'War Cry': 'move1', 'Crushing Blow': 'move2', 'Call the Hunt': 'move3' },
     clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9) }, reactions: { hit: [13, 14], down: [15, 16, 17] } },

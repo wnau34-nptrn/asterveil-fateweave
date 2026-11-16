@@ -340,5 +340,14 @@
     "frames": 30,
     "decodedBytes": 6067200,
     "downloadBytes": 1903927
+  },
+  "valdrakk": {
+    "image": "valdrakk_wbb.7987cfe5b464.webp",
+    "atlas": "valdrakk_wbb.03334e5611bb.json",
+    "width": 512,
+    "height": 2759,
+    "frames": 30,
+    "decodedBytes": 5650432,
+    "downloadBytes": 1931778
   }
 }

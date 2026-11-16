@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "character": "Valdrakk / วัลดรัค อสูรโลกแตก",
+  "source_branch": "art/art-char-worldboss-001",
+  "source_commit": "46f366dc931e4994d3a6ccd9ad3951ac444a70cf",
+  "source_path": "incoming/ART-CHAR-WORLDBOSS-001/seed-b.png",
+  "local_seed": "seeds/seed-b.png",
+  "sha256": "c3fe15c71d82c7cddc09df874fb9c21480bf2168e7b16248d692878ffb7ec214",
+  "files_sha256": {
+    "seeds/concept-b.png": "9f5b76f988e69c25a4699cb7464708806b188215c35886e06e22671bd10af5d8",
+    "seeds/context.json": "5b0dc5d04d6c978d707613f363247a3dc69635fb77dee6ea133c4fad99c2daaf",
+    "seeds/layout-4.png": "40ca3f8b67a63c5d04512d2e9ecd8fdea76fe2cc3e823a8e608d317511b818bd",
+    "seeds/layout-6.png": "87e46d7bcace133915e5f621c111cb36824ac9487f422faf5e714b065b4a9293",
+    "seeds/scale-calibration.json": "5656e95697019ed480fdfb0453c04d9565b50add2965b2881dd09a7d03f6e790",
+    "seeds/seed-b.png": "c3fe15c71d82c7cddc09df874fb9c21480bf2168e7b16248d692878ffb7ec214",
+    "seeds/seeds.json": "56308548eb781862f4e4c715a2b26666a8cbb6dffe574816f94ff64d788246e8",
+    "seeds/sentinel-ready.png": "3e855364ad3a94858f7afb717b0ad2e82495679dfaf5828f852a40eeec0bc4c3",
+    "seeds/sentinel-reference.json": "e5970916a84764ba66122cefd23595a4df469697de9799bf3d3a271c68a19222",
+    "seeds/turnaround-b.png": "f66b57f352c176db98353632e078475092befd985902b8b481b06c6339ab4487"
+  },
+  "size": [
+    1024,
+    1024
+  ],
+  "facing": "left",
+  "mirror": false,
+  "sole_y": 896,
+  "silhouette_center_x": 512,
+  "priority": "Seed primary; turnaround only shape guide",
+  "sampling_seed": null,
+  "sampling_note": "Generator exposes no numeric RNG seed; all original PNG bytes retained.",
+  "invariants": [
+    "four legs/gold claws",
+    "two raised or folded wings",
+    "one up-curled right tail/cyan tip",
+    "one round cyan near-left shoulder core",
+    "cyan eyes"
+  ],
+  "motion_approval": "pending owner; technical checks are not approval"
+}

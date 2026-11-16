@@ -4,10 +4,10 @@
 
 ## สรุป
 
-- identities 40 (ฝ่ายเรา 17 · ศัตรู 23) · มี atlas 38 · พักตาม OD-14 2 (โอดราน `thiran` / อิโซลด์ `wila`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่งรออนิเมชัน 0
-- ActionId ฝ่ายเรา 91 รายการ (119 แถว ตัวละคร×ท่า รวมท่าจากต้นไม้) · ชื่อท่าศัตรู/phase 45 ชื่อ (55 แถว identity×ท่า)
-- ท่าร่างกาย: sprite 160 · procedural 14 (ตัวที่พักตาม OD-14 และภาพนิ่ง P03 ที่รออนิเมชัน CODEX-A12)
-- VFX: วาดเฉพาะ 112 · ชุดร่วมโดยตั้งใจ 57 · วาดด้วยโค้ดโดยตั้งใจ 5
+- identities 41 (ฝ่ายเรา 17 · ศัตรู 24) · มี atlas 39 · พักตาม OD-14 2 (โอดราน `thiran` / อิโซลด์ `wila`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่งรออนิเมชัน 0
+- ActionId ฝ่ายเรา 91 รายการ (119 แถว ตัวละคร×ท่า รวมท่าจากต้นไม้) · ชื่อท่าศัตรู/phase 50 ชื่อ (60 แถว identity×ท่า)
+- ท่าร่างกาย: sprite 165 · procedural 14 (ตัวที่พักตาม OD-14 และภาพนิ่ง P03 ที่รออนิเมชัน CODEX-A12)
+- VFX: วาดเฉพาะ 112 · ชุดร่วมโดยตั้งใจ 59 · วาดด้วยโค้ดโดยตั้งใจ 8
 
 ความหมาย: **sprite** = เฟรม atlas (prepare → recover; contact = เฟรม recover แรก, เวลา contact/end มาจาก UI ไม่ใช่ FPS ภาพ) · **procedural** = ภาพนิ่ง + การเคลื่อนไหวด้วยโค้ด · **วาด** = painted atlas ของท่านั้น · **ชุดร่วม** = painted atlas ร่วมตระกูลโดยตั้งใจ · **โค้ด** = วาดด้วย Graphics ตั้งใจ (ไม่มีภาพเฉพาะ) · จุดเกิดผลทุกแถวอ่านจาก event จริงของ resolver
 
@@ -53,6 +53,7 @@
 | `foe_stalker` | ลิงซ์หนามพราง | ศัตรู | 22 · 2.44 MiB · 0.70 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_thorn_beetle` | ด้วงหนาม | ศัตรู | 22 · 1.78 MiB · 0.48 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_tusker` | หมูป่าหลังตะไคร่ | ศัตรู | 22 · 4.08 MiB · 1.20 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
+| `foe_valdrakk` | วัลดรัค | ศัตรู | 30 · 5.39 MiB · 1.93 MB | sprite 25,26 | procedural (tint/lift) | sprite 27,28,29 · ค้าง 29 | — |
 | `foe_vargoth_guard` | องครักษ์อสูร | ศัตรู | 32 · 4.10 MiB · 1.39 MB | sprite 17,18 | sprite 22,23 | sprite 19,20,21 · ค้าง 21 | — |
 | `raider` | นักจู่โจม | ศัตรู | 24 · 3.72 MiB · 1.14 MB | sprite 17,18 | sprite 22,23 | sprite 19,20,21 · ค้าง 21 | — |
 
@@ -215,7 +216,7 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_mycon` | Spore Hex (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `foe-signature-fx` | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | thicket-ambush |
 | `foe_rift_channeler` | Rift Bolt (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | rear-ambush |
 | `foe_rift_channeler` | Rift Beam (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | channeler-wisps, rift-host |
-| `foe_rift_wisp` | Star Flame (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `foe-signature-fx` | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | channeler-wisps, crawler-pack, rift-host, rift-legion, rift-warden, wb-kragmor, world-boss-warden |
+| `foe_rift_wisp` | Star Flame (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `foe-signature-fx` | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | channeler-wisps, crawler-pack, rift-host, rift-legion, rift-warden, wb-kragmor, wb-valdrakk, world-boss-warden |
 | `foe_riftweaver` | Rune Lash (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `foe-signature-fx` | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | rear-ambush |
 | `foe_riftweaver` | Ribbon Snare (physical) | sprite `snare` 22,23,24,25 → 26,27,28,29 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | rear-ambush |
 | `foe_riftweaver` | Rift Needle (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | mini-veil-golem |
@@ -235,6 +236,11 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_thorn_beetle` | Thorn Bite (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | beetle-spore, beetle-wall, forest-swarm, thicket-ambush, thorn-host |
 | `foe_tusker` | Tusk Charge (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | elite-tusk-chief, rift-whelp, tusker-bats |
 | `foe_tusker` | Stampede (physical) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `boss-signature-fx` | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | elite-tusk-chief |
+| `foe_valdrakk` | Shard Talon (physical) | sprite `move1` 0,1,2 → 3,4,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | wb-valdrakk |
+| `foe_valdrakk` | Wing Gust (energy) | sprite `move2` 0,5,6 → 7,8,0 | โค้ด `generic-code` — ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | wb-valdrakk |
+| `foe_valdrakk` | Wing Gathering (physical/charge) | sprite `move3` 0,9,10 → 11,12,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ตัวเอง (รวมพลัง ไม่มี damage) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | wb-valdrakk |
+| `foe_valdrakk` | Worldshard Dive (energy) | sprite `move4` 0,13,14 → 15,16,0 | โค้ด `generic-code` — ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด | ฮีโร่ทุกคนที่ยืนอยู่ | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | wb-valdrakk |
+| `foe_valdrakk` | Sky Rend (phase) | sprite `move6` 0,21,22 → 23,24,0 | โค้ด `generic-code` — ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด | ตัวเอง (เปลี่ยนช่วง) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | wb-valdrakk |
 | `foe_vargoth_guard` | Rift Bolt (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | first-clash |
 | `foe_vargoth_guard` | Crushing Blow (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | first-clash |
 | `foe_vargoth_guard` | Shield Smash (physical) | sprite `bash` 24,25,26,27 → 28,29,30,31 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | vanguard-captain |
@@ -245,4 +251,4 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 ## งานค้างที่รู้อยู่แล้ว (สร้างจากตาราง)
 
 - ท่าร่างกาย procedural 14 แถว: `thiran`, `wila` — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)
-- VFX วาดด้วยโค้ดโดยตั้งใจ 5 แถว: `mira` โจมตี, `toma` โจมตี, `foe_hunter` Shadow Knife, `foe_kragmor` Fault Awakening, `raider` Shadow Knife
+- VFX วาดด้วยโค้ดโดยตั้งใจ 8 แถว: `mira` โจมตี, `toma` โจมตี, `foe_hunter` Shadow Knife, `foe_kragmor` Fault Awakening, `foe_valdrakk` Wing Gust, `foe_valdrakk` Worldshard Dive, `foe_valdrakk` Sky Rend, `raider` Shadow Knife

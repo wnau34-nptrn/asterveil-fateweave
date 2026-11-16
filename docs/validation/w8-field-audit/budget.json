@@ -536,6 +536,24 @@
     "download": 11468495
    },
    "bossFx": false
+  },
+  {
+   "id": "wb-valdrakk",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "wisp",
+    "valdrakk"
+   ],
+   "four": {
+    "decoded": 31275984,
+    "download": 9663660
+   },
+   "five": {
+    "decoded": 35780232,
+    "download": 11109577
+   },
+   "bossFx": false
   }
  ]
 }

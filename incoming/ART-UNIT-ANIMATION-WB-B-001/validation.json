@@ -1,0 +1,558 @@
+{
+  "schema": 1,
+  "task": "ART-UNIT-ANIMATION-WB-B-001",
+  "base_commit": "8e672a17211239ab5b12acf2f33d51d01bae0ecd",
+  "self_excluded": true,
+  "self_sha_receipt": "validation.json SHA-256 recorded in PR body, outside this manifest",
+  "motion_frames": 44,
+  "checks": "44 cells, seed lock, one canonical body scale, source resolution conversion, true alpha, margins, >=48px raw gutters, complete image decode",
+  "runtime_test": "not integrated; previews are offline body playback, not game captures",
+  "torso_tolerance_status": "See torso-audit.json and anatomy-review.json. Not-measured is NOT passed; +/-4% anatomical acceptance remains pending for those frames.",
+  "owner_motion_approval": "pending",
+  "files": {
+    "NOTES.md": {
+      "sha256": "58e996a01e55f6d8d8d2e487f403973fc70ed2575c77eb5514fe827598075a36",
+      "bytes": 11925
+    },
+    "anatomy-audit.json": {
+      "sha256": "accf6f77eb067aebbfc16f178479defe76465d95a6efa6dc66abc39ac790fd1d",
+      "bytes": 6609
+    },
+    "anatomy-map.json": {
+      "sha256": "0994988d6d3635984ac69642036a54af541b2b1181bad7a6ed91e29031da0028",
+      "bytes": 3189
+    },
+    "anatomy-review.json": {
+      "sha256": "35084243d542816cf5986210ef5493a2b74e9f429843f0ad8a04ab3cd31c5bf9",
+      "bytes": 27539
+    },
+    "audit_anatomy.py": {
+      "sha256": "d91c4480252bd968b60937d14eb8f55fa9603c8349ae59b8db844491a6bc6931",
+      "bytes": 2065
+    },
+    "audit_torso.py": {
+      "sha256": "467fffc9aff550e513b6430a7f1597367ccab3bfa8169e8b1007fdf9ea34b622",
+      "bytes": 3643
+    },
+    "build_handoff.py": {
+      "sha256": "aaa95b88e35680b6f021fc138d341ab5b9d56ec7506b8b4bf2a0c23ff49d4b26",
+      "bytes": 19728
+    },
+    "preview-390.png": {
+      "sha256": "5f9de61ba27f35c2d4c221dc5bcac8ec736ea17715d82821d5c9383cac4a5740",
+      "bytes": 2388020,
+      "size": [
+        390,
+        9102
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "preview-keyposes-390.png": {
+      "sha256": "f510bc3ba4e087cfbb0887f6e8e2bd3481618761850d0911d34093ee369adbcf",
+      "bytes": 866029,
+      "size": [
+        390,
+        3866
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "previews/down.webp": {
+      "sha256": "f7d04441a7c529bdb55455db46f0b1015e9a2c8d05eb0cf5b661bffefefe1ce4",
+      "bytes": 175390,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 4
+    },
+    "previews/hit.webp": {
+      "sha256": "a7e020853c3d2a7bea0f6ca52c6d334963e86a738461b4fb15223548584f372a",
+      "bytes": 212074,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 4
+    },
+    "previews/shard-talon.webp": {
+      "sha256": "f19560db55ed25fcbdd38581511796d28667e75b4b78fa7715967a8a5716997b",
+      "bytes": 303616,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/sky-rend.webp": {
+      "sha256": "e049eeea74e6b169efd5a9c628be96584c5ee0067181dd6ecd97cf3f0f2d2dd9",
+      "bytes": 309204,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/staggered.webp": {
+      "sha256": "467c5ada0399e6099240d799607810c8eddeb9d3cffb85a8566b291d17ee3158",
+      "bytes": 292980,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/torso-reference-mask.png": {
+      "sha256": "9a7e0ccea84c6c7218e6ca721da789cfdaa9b52be6e490c453e4708fd14cef93",
+      "bytes": 904037,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "previews/wing-gathering.webp": {
+      "sha256": "46f2d6d6d680adbce01369ce3e8a16ec59a0b0a2aab9c030369c57fbd610ce45",
+      "bytes": 268502,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/wing-gust.webp": {
+      "sha256": "276cab4d9fa1bbef0b8d0beb831246ed13da9a7428663e11cc859c938ba92402",
+      "bytes": 308364,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "previews/worldshard-dive.webp": {
+      "sha256": "56a5bad172f5ee525b5e8b0df3e38da1987f453daa01538700a81db883bde84f",
+      "bytes": 311578,
+      "size": [
+        390,
+        280
+      ],
+      "mode": "RGBA",
+      "frames": 6
+    },
+    "prompts.json": {
+      "sha256": "9bc5a1e4a6f50b90162bd2d36915c6e6c419c07a78837cc5f4d886fa6ba3f922",
+      "bytes": 29461
+    },
+    "raw/down.png": {
+      "sha256": "e5cbc454ddce01689f758e546fea1f0de10bbc3dd769c5322672ba417b558236",
+      "bytes": 931204,
+      "size": [
+        2272,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/hit.png": {
+      "sha256": "e20715d2e4a4e41f485631f7d6dc8597486fc0b7514b58372429ce831c9a1e63",
+      "bytes": 1148358,
+      "size": [
+        2236,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/down.png": {
+      "sha256": "e2f74a62d1f408658b0b8509447bf55e4408a4af11b49ce5402e1190bd75da73",
+      "bytes": 1103415,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/hit.png": {
+      "sha256": "7d8da45088fcab5b2eef85b6614011ba55e734cabf8402444973893ed67491af",
+      "bytes": 1377338,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/shard-talon-r2.png": {
+      "sha256": "480dd5d0810166d4a45ad5c1d86cd1ed4f5d1042863ac7c7dcc62e9fcb40c352",
+      "bytes": 1000650,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/shard-talon-r3.png": {
+      "sha256": "a7df49ae5d27ff7b88cdf6df09802035aca473ff740b1231cbd11ade11197739",
+      "bytes": 976136,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/shard-talon.png": {
+      "sha256": "169b4b8cacc642835e7ed0545847742bb5b55a4ea281657cb229d2227645aff9",
+      "bytes": 1006358,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/sky-rend.png": {
+      "sha256": "a54cc3912820816b60b3b745f2c60c21cb1eea7ec3b11017d5b2911da0ab7706",
+      "bytes": 1089740,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/staggered.png": {
+      "sha256": "afc52172e77fff8945e27e3da965572d00a2940a32d908d6df5c24ad4ab1cd47",
+      "bytes": 1019528,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/wing-gathering-r2.png": {
+      "sha256": "31c8fa54f4fb018582b98d9b3b80164cfabb2eafdf98d28c06e28aabe03bd78d",
+      "bytes": 908107,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/wing-gathering.png": {
+      "sha256": "aa412189671e66387ab3e464636a89c4d4f547705f3148d81e4421d498bbbea4",
+      "bytes": 1570690,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/wing-gust-r2.png": {
+      "sha256": "8295caebee4f894d0a4b19c26fa6d8063a918d8fb953875295903f889a749b7d",
+      "bytes": 1036612,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/wing-gust.png": {
+      "sha256": "4894f7fb413357686d8c245e0aa114d086c86c4c3ef71156ab77f0037516dfd2",
+      "bytes": 988825,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/worldshard-dive-r2.png": {
+      "sha256": "cf9bed34138f0588676787157a031bf3785e74dd4f50aa780dcf84a941e4eca4",
+      "bytes": 1010843,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/worldshard-dive-r3.png": {
+      "sha256": "c9d3c1aaeadd9db6380ef463d7c0b436be6eee36831ed97b585419e76b4ed7d9",
+      "bytes": 1072834,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/original/worldshard-dive.png": {
+      "sha256": "4dbfcdd975ed2c87229447ddbeb128716d5927c74b65a48b31575d5ef429f67e",
+      "bytes": 2166302,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/shard-talon.png": {
+      "sha256": "06f8e032caa0454b06e69c0530b82f36da7c5105ca2a3635d0a27119242be636",
+      "bytes": 798678,
+      "size": [
+        2338,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/sky-rend.png": {
+      "sha256": "8ea634662f0bc07b7ac7b587bc5f5bc19ff3578f8c7279f52922ea2c733618c4",
+      "bytes": 823728,
+      "size": [
+        2320,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/staggered.png": {
+      "sha256": "f1174c362e18c6d7de896bd54a2a157da3fe0e6ab6bb42f68d7639169825debc",
+      "bytes": 809794,
+      "size": [
+        2290,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/wing-gathering.png": {
+      "sha256": "906ad10b5a42e6026a253114c84d317c58e0c7ba380ca39c69f28d28f5cc1f83",
+      "bytes": 718625,
+      "size": [
+        2296,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/wing-gust.png": {
+      "sha256": "1f3596e720123c4e033fd8f2f5178525390ece7b58e69522fbe3e3fcc2371664",
+      "bytes": 829393,
+      "size": [
+        2374,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/worldshard-dive.png": {
+      "sha256": "af44097d0da2034a29d777ac969ae06ece03d4dae18cf593ae4895e589c85c31",
+      "bytes": 833317,
+      "size": [
+        2350,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "requirements.txt": {
+      "sha256": "b6d1cc91d045d7f947d0b58bedc80b24c1680ef7c590116565cc6724afb3df14",
+      "bytes": 62
+    },
+    "seeds/concept-b.png": {
+      "sha256": "9f5b76f988e69c25a4699cb7464708806b188215c35886e06e22671bd10af5d8",
+      "bytes": 2754330,
+      "size": [
+        2048,
+        2048
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/context.json": {
+      "sha256": "5b0dc5d04d6c978d707613f363247a3dc69635fb77dee6ea133c4fad99c2daaf",
+      "bytes": 712
+    },
+    "seeds/layout-4.png": {
+      "sha256": "40ca3f8b67a63c5d04512d2e9ecd8fdea76fe2cc3e823a8e608d317511b818bd",
+      "bytes": 278069,
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/layout-6.png": {
+      "sha256": "87e46d7bcace133915e5f621c111cb36824ac9487f422faf5e714b065b4a9293",
+      "bytes": 282889,
+      "size": [
+        3072,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/scale-calibration.json": {
+      "sha256": "5656e95697019ed480fdfb0453c04d9565b50add2965b2881dd09a7d03f6e790",
+      "bytes": 1096
+    },
+    "seeds/seed-b.png": {
+      "sha256": "c3fe15c71d82c7cddc09df874fb9c21480bf2168e7b16248d692878ffb7ec214",
+      "bytes": 904214,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/seeds.json": {
+      "sha256": "56308548eb781862f4e4c715a2b26666a8cbb6dffe574816f94ff64d788246e8",
+      "bytes": 7367
+    },
+    "seeds/sentinel-ready.png": {
+      "sha256": "3e855364ad3a94858f7afb717b0ad2e82495679dfaf5828f852a40eeec0bc4c3",
+      "bytes": 57363,
+      "size": [
+        317,
+        317
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/sentinel-reference.json": {
+      "sha256": "e5970916a84764ba66122cefd23595a4df469697de9799bf3d3a271c68a19222",
+      "bytes": 905
+    },
+    "seeds/turnaround-b.png": {
+      "sha256": "f66b57f352c176db98353632e078475092befd985902b8b481b06c6339ab4487",
+      "bytes": 2175098,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "seeds.json": {
+      "sha256": "6546d56d2519514f9852abb8670c70047560bfca779de6c9c3c3b56e65235b58",
+      "bytes": 1944
+    },
+    "sentinel-compare.png": {
+      "sha256": "f38e91ce06efe956cae0dc1b534fb6ae587828093225645180d76bb40411f643",
+      "bytes": 86678,
+      "size": [
+        390,
+        300
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/down.png": {
+      "sha256": "23057fc4d7226f70986e63a527c424c2ab9428d1de0770a448f451b5eb1be04f",
+      "bytes": 2895049,
+      "size": [
+        4096,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/hit.png": {
+      "sha256": "674c16d60d839b32368633fc68051d3603f8e1f02838b4105e30ed318a520ffc",
+      "bytes": 2704707,
+      "size": [
+        4096,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/shard-talon.png": {
+      "sha256": "9fd97fe8b5d403d51a59ec11489c24f2eccfc79376170588fbe957c70804bc43",
+      "bytes": 4113351,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/sky-rend.png": {
+      "sha256": "1de9d90403d953650b6500a4c789f9f2af6067c628d5013ca1598c68e7c5971c",
+      "bytes": 4267722,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/staggered.png": {
+      "sha256": "229af181a542e7d25cc5fdcc67541ed71771095594910aec967c85fcbaae5e4f",
+      "bytes": 4006807,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/wing-gathering.png": {
+      "sha256": "7aac59d47539a4ddf00087322e1568619d84efeea5be9062e2e0b4dc75571e23",
+      "bytes": 3589682,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/wing-gust.png": {
+      "sha256": "fe7b7a6e7363ffc0736ff40a91c7bfecc5b60e52ded62c1bc1fa6b64e137da32",
+      "bytes": 4253654,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/worldshard-dive.png": {
+      "sha256": "b74784e162c610c9196851c5e4a49060c076cad81dd967c8b2057be4d302a5f2",
+      "bytes": 4222263,
+      "size": [
+        6144,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips.json": {
+      "sha256": "73a0df096656aa5b757618b80603ce9fe9b247f67fe10b5b2b6f154e7864596e",
+      "bytes": 65731
+    },
+    "torso-audit.json": {
+      "sha256": "77ef849c76389a972415f2816e131a86a17f07016fcf622a546a09457cd2782c",
+      "bytes": 17298
+    }
+  }
+}

@@ -1,19 +1,19 @@
 {
  "counts": {
-  "identities": 40,
+  "identities": 41,
   "heroes": 17,
-  "enemies": 23,
-  "atlases": 38,
+  "enemies": 24,
+  "atlases": 39,
   "parked": 2,
   "actionIds": 91,
   "heroRows": 119,
-  "intents": 45,
-  "foeRows": 55,
-  "spriteRows": 160,
+  "intents": 50,
+  "foeRows": 60,
+  "spriteRows": 165,
   "proceduralRows": 14,
   "paintedRows": 112,
-  "sharedRows": 57,
-  "codeRows": 5
+  "sharedRows": 59,
+  "codeRows": 8
  },
  "identities": [
   {
@@ -725,6 +725,25 @@
     "block": "procedural (tint/lift)",
     "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
     "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_valdrakk",
+   "side": "enemy",
+   "name": "วัลดรัค",
+   "sheet": "valdrakk",
+   "atlas": {
+    "image": "valdrakk_wbb.7987cfe5b464.webp",
+    "atlas": "valdrakk_wbb.03334e5611bb.json",
+    "frames": 30,
+    "decodedBytes": 5650432,
+    "downloadBytes": 1931778
+   },
+   "reactions": {
+    "hit": "sprite 25,26",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 27,28,29 · ค้าง 29"
    }
   },
   {
@@ -5269,6 +5288,7 @@
     "rift-legion",
     "rift-warden",
     "wb-kragmor",
+    "wb-valdrakk",
     "world-boss-warden"
    ]
   },
@@ -5958,6 +5978,176 @@
    "point": "ผู้รับ damage จริง",
    "encounters": [
     "elite-tusk-chief"
+   ]
+  },
+  {
+   "identity": "foe_valdrakk",
+   "side": "enemy",
+   "move": "Shard Talon",
+   "name": "Shard Talon",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move1",
+    "frames": {
+     "prepare": [
+      0,
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "wb-valdrakk"
+   ]
+  },
+  {
+   "identity": "foe_valdrakk",
+   "side": "enemy",
+   "move": "Wing Gust",
+   "name": "Wing Gust",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move2",
+    "frames": {
+     "prepare": [
+      0,
+      5,
+      6
+     ],
+     "recover": [
+      7,
+      8,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "wb-valdrakk"
+   ]
+  },
+  {
+   "identity": "foe_valdrakk",
+   "side": "enemy",
+   "move": "Wing Gathering",
+   "name": "Wing Gathering",
+   "kind": "physical/charge",
+   "body": {
+    "kind": "sprite",
+    "clip": "move3",
+    "frames": {
+     "prepare": [
+      0,
+      9,
+      10
+     ],
+     "recover": [
+      11,
+      12,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ตัวเอง (รวมพลัง ไม่มี damage)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "wb-valdrakk"
+   ]
+  },
+  {
+   "identity": "foe_valdrakk",
+   "side": "enemy",
+   "move": "Worldshard Dive",
+   "name": "Worldshard Dive",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move4",
+    "frames": {
+     "prepare": [
+      0,
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+   },
+   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "wb-valdrakk"
+   ]
+  },
+  {
+   "identity": "foe_valdrakk",
+   "side": "enemy",
+   "move": "phase:Sky Rend",
+   "name": "Sky Rend",
+   "kind": "phase",
+   "body": {
+    "kind": "sprite",
+    "clip": "move6",
+    "frames": {
+     "prepare": [
+      0,
+      21,
+      22
+     ],
+     "recover": [
+      23,
+      24,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+   },
+   "target": "ตัวเอง (เปลี่ยนช่วง)",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "wb-valdrakk"
    ]
   },
   {
