@@ -100,15 +100,22 @@ export type EnemyTrait = 'thorns' | 'veilguard' | 'enrage';
 // at once and at most three per row. The first four ids keep their order (SPD tie-breaks follow the encounter list).
 export type EnemySlot = 'f1' | 'f2' | 'b1' | 'b2' | 'f3' | 'b3';
 // `reserve`: a minion that waits off the field until a boss phase summons it (owner 2026-10-22).
-export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?: boolean; boss?: boolean; reserve?: boolean; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[] }
+// `court` (P11-05 R2, World Boss Morvane): each standing foe in `by` raises this foe's moves by `percent` (applied to the move
+// before enrage/weaken; the intent carries the total as `court`).
+export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?: boolean; boss?: boolean; reserve?: boolean; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[];
+  court?: { percent: number; by: readonly EnemySlot[] } }
 // Enemy moves aim at a party slot (0-4 in deployment order), not a named hero, so any
 // mercenary in that slot is the target. The resolved hero id is stored on Intent.
 // `unstoppable` (boss signature moves, owner 2026-10-22): Bash and Sigil cannot cancel it; Guard, Ward and taunts still answer it.
 // Boss phases (owner 2026-10-22): `phase` puts the move in that phase's cycle (missing = the opening cycle); `all` hits
 // every standing hero (Guard and taunts cannot redirect it); `charge` gathers power and deals no damage.
-// `special` is set only on the generated phase-change turn.
+// `special` is set only on generated turns: a phase change, or a stagger (below).
+// P11-05 R1 `breakable` (on a charge): when Bash/Sigil cancels the charge, the foe's next move (its next turn) is
+// "Staggered": no damage, the same in preview. P11-05 R2 `summon`: a no-damage move that brings back the listed foes that
+// are down or not yet on the field, at full HP with no statuses, while the field and their row have room (P02 limits);
+// they act from the next round.
 export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy'; unstoppable?: boolean;
-  phase?: number; all?: boolean; charge?: boolean; special?: 'phase' }
+  phase?: number; all?: boolean; charge?: boolean; special?: 'phase' | 'stagger'; breakable?: boolean; summon?: readonly EnemySlot[] }
 // A boss phase: once the boss's HP falls to `below` percent, its next turn summons the `summon` reserves (if any) and
 // switches its moves to that phase's cycle. `hardSummon` reserves join only in hard mode (world `hardEncounter`).
 export interface BossPhase { sourceId: EnemySlot; below: number; summon?: readonly EnemySlot[]; hardSummon?: readonly EnemySlot[]; name: string }
@@ -174,7 +181,9 @@ export interface HeroState { id: string; hp: number; barrier: number; cooldowns:
 // `phase`/`phaseRound`: how many boss phases have begun, and the round the latest began (its cycle counts from there).
 // `interruptedBy`: the hero whose Bash/Sigil cancelled that turn. `weaken`: its next move is cut by this percent
 // (archer heavy hinder). `dispelledUntil`: a mage's dispel switches off its veilguard while the round is below this.
-export interface EnemyState { id: string; hp: number; markedUntil: number; absent?: boolean; phase?: number; phaseRound?: number; interruptedRound?: number; interruptedBy?: string; steadyRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number;
+// `staggerRound` (P11-05 R1): its move in that round is staggered (a breakable charge was cancelled). `summonedRound`: a
+// summon move brought it back that round, so it acts from the next.
+export interface EnemyState { id: string; hp: number; markedUntil: number; absent?: boolean; staggerRound?: number; summonedRound?: number; phase?: number; phaseRound?: number; interruptedRound?: number; interruptedBy?: string; steadyRound?: number; delayedRound?: number; corrodedUntil?: number; corrodeBonus?: number;
   // `clash`: a martial stored fist (save v54) takes `amount` off this foe's next hit on that hero.
   clash?: { heroId: string; amount: number };
   // Scout poison (save v56): `stacks` bite each round end up to round `until`.
@@ -195,7 +204,9 @@ export interface EnemyState { id: string; hp: number; markedUntil: number; absen
 // `stoned`: a warden's guardian stone turned this move from the covered ally to him.
 // `delayedMove` (Seer delay, save v51): this move stands in for the named big move, which comes next round;
 // `delayedOnce`: this big move was delayed already and cannot be delayed again.
-export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; stoned?: boolean; stoneTargetId?: string; delayedMove?: string; delayedOnce?: boolean }
+// `staggeredMove`: the move a stagger replaced. `court`: the court bonus percent already in `damage` (P11-05 R2).
+export interface Intent extends IntentDefinition { targetId: string; beat: number; round: number; stoned?: boolean; stoneTargetId?: string; delayedMove?: string; delayedOnce?: boolean;
+  staggeredMove?: string; court?: number }
 // Party condition carried in from the expedition. Missing ids start at max HP.
 export interface BattleEntry { hp: Readonly<Record<string, number>> }
 // `recipientId` (Seer deflect): the foe the move is bent onto.
@@ -264,7 +275,7 @@ export interface BattleState {
 export type SongId = 'valor' | 'mend' | 'dread';
 export interface BattleEvent {
   type: 'damage' | 'guard' | 'mark' | 'barrier' | 'heal' | 'interrupt' | 'cancel' | 'down' | 'outcome' | 'brace' | 'counter' | 'delay' | 'corrode' | 'haste' | 'evade' | 'dodge' | 'taunt' | 'song' | 'rally' | 'sigil' | 'sanctuary' | 'stand' | 'finale' | 'resist' | 'phase' | 'summon' | 'charge'
-    | 'parry' | 'revive' | 'buff' | 'shove' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'deflect' | 'dial' | 'meteor' | 'beat' | 'clash' | 'arcane' | 'venom';
+    | 'parry' | 'revive' | 'buff' | 'shove' | 'pin' | 'dispel' | 'weaken' | 'cooldown' | 'chi' | 'hex' | 'deflect' | 'dial' | 'meteor' | 'beat' | 'clash' | 'arcane' | 'venom' | 'stagger';
   text: string; sourceId?: string; targetId?: string; action?: ActionId; amount?: number; absorbed?: number; cause?: 'defeated' | 'interrupted' | 'sealed';
 }
 // One frame per real actor turn. Only Resolution.state is committed/saved.

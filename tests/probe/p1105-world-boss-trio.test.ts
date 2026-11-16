@@ -1,11 +1,11 @@
 import { test } from 'vitest';
 import { writeFileSync } from 'node:fs';
-import { encounterById as lookup, riftWarden, WORLD_BOSS_HP } from '../../src/content/encounters/catalog';
-import { SPECIES, foes } from '../../src/content/enemies/species';
+import { encounterById as lookup } from '../../src/content/encounters/catalog';
+import { wbKragmor, wbMorvane, wbValdrakk } from '../../src/content/encounters/world-boss-trio';
 import { MAPS } from '../../src/content/world/maps';
 import { gameRules } from '../../src/content/world/rules';
 import { createBattle } from '../../src/core/battle/engine';
-import type { EncounterDefinition, IntentDefinition } from '../../src/core/battle/types';
+import type { EncounterDefinition } from '../../src/core/battle/types';
 import { campLevel } from '../../src/core/world/world';
 import { newProfile } from '../../src/core/world/profile';
 import { wbEncounter, wbPlay } from '../../src/core/world/world-boss';
@@ -13,70 +13,14 @@ import type { Profile } from '../../src/core/world/types';
 import { simulateCampaign, type Policy } from '../sim/balance-sim';
 import { wbTurns } from '../fixtures/world-boss';
 
-// P11-05 World Boss trio — design probe (docs/design/WORLD_BOSS_TRIO_P11_05_TH.md). No game code changes: the three
-// draft encounters below are built here from existing resolver features only. The two new rules the design asks for
-// (Valdrakk's breakable charge, Morvane's court empowerment) are bounded by two variants each:
-//   Valdrakk  'ignored'  = the dive always lands (today's resolver)   'answered' = every dive after a charge removed
-//   Morvane   'ignored'  = boss moves +10% per court foe, all 3 standing all battle   'answered' = no empowerment
+// P11-05 World Boss trio — probe (docs/design/WORLD_BOSS_TRIO_P11_05_TH.md). Step 1 (2026-11-16): the three encounters
+// are the real v1 content (`src/content/encounters/world-boss-trio.ts`) on the real rules R1 breakable charge (Valdrakk)
+// and R2 court + summon (Morvane); the first design run bounded those two rules by "answered/ignored" variants instead.
 // `TRIO_OUT=<dir> npx vitest run tests/probe/p1105-world-boss-trio.test.ts` writes damage.md, budget.md, shared-hp.md.
 
 const MAX_ROUNDS = gameRules.worldBoss.maxRounds;
-const boss = (name: string, displayName: string, speed: number, extra: Partial<EncounterDefinition['enemies'][number]> = {}) =>
-  ({ id: 'f1' as const, row: 'front' as const, large: true, boss: true, speed, name, displayName, maxHp: WORLD_BOSS_HP, color: 0xd9bf86, art: 'foe_sentinel', ...extra });
-const mv = (name: string, slot: number, damage: number, kind: 'physical' | 'energy', more: Partial<IntentDefinition> = {}): IntentDefinition =>
-  ({ sourceId: 'f1', targetSlot: slot, name, damage, kind, ...more });
-
-// A — Kragmor, the Riftborn Titan: armour (veilguard; Mark/acid/dispel open it), a charge before an unstoppable fist
-// on the front slot (Guard/taunt/stone/barriers answer it), a quake on the whole party (healing answers it).
-const kragAdds = foes(10, [['f2', SPECIES.shardCrawler], ['b3', SPECIES.riftWisp]]);
-export const kragmor: EncounterDefinition = {
-  ...riftWarden, id: 'wb-kragmor', version: 1, name: 'บอสโลก: คราก์มอร์',
-  phases: [{ sourceId: 'f1', below: 70, name: 'Fault Awakening' }],
-  enemies: [...kragAdds.enemies, boss('Kragmor', 'คราก์มอร์', 60, { traits: ['veilguard'] })],
-  intents: [...kragAdds.intents,
-    mv('Stone Fist', 1, 30, 'physical'), mv('Titan Gathering', 0, 0, 'physical', { charge: true }), mv('Mountain Fall', 0, 50, 'physical', { unstoppable: true }),
-    mv('Rift Quake', 0, 14, 'physical', { all: true }), mv('Boulder Hurl', 3, 26, 'physical'), mv('Stone Fist', 2, 30, 'physical'),
-    // 70%: the charge comes every third turn.
-    mv('Titan Gathering', 0, 0, 'physical', { charge: true, phase: 1 }), mv('Mountain Fall', 0, 56, 'physical', { unstoppable: true, phase: 1 }), mv('Rift Quake', 0, 18, 'physical', { all: true, phase: 1 }),
-  ],
-};
-
-// B — Valdrakk, the Worldshard Beast: fast (SPD 125, acts before most heroes), energy gusts and a wing charge before a
-// dive on the whole party. New rule (design §1.2): a charge marked `breakable` that Bash/Sigil cancels staggers the dive.
-const valdAdds = foes(10, [['b1', SPECIES.riftWisp], ['b2', SPECIES.riftWisp]]);
-const valdIntents = (answered: boolean): IntentDefinition[] => [...valdAdds.intents,
-  mv('Shard Talon', 1, 26, 'physical'), mv('Wing Gust', 2, 22, 'energy'), mv('Wing Gathering', 0, 0, 'physical', { charge: true }),
-  answered ? mv('Staggered', 0, 0, 'energy') : mv('Worldshard Dive', 0, 20, 'energy', { all: true }),
-  mv('Shard Talon', 0, 28, 'physical'), mv('Wing Gust', 3, 22, 'energy'),
-  mv('Wing Gathering', 0, 0, 'physical', { charge: true, phase: 1 }), answered ? mv('Staggered', 0, 0, 'energy', { phase: 1 }) : mv('Worldshard Dive', 0, 24, 'energy', { all: true, phase: 1 }),
-  mv('Shard Talon', 1, 30, 'physical', { phase: 1 }),
-];
-const valdrakk = (answered: boolean): EncounterDefinition => ({
-  ...riftWarden, id: 'wb-valdrakk', version: 1, name: 'บอสโลก: วัลดรัค', phases: [{ sourceId: 'f1', below: 70, name: 'Sky Rend' }],
-  enemies: [...valdAdds.enemies, boss('Valdrakk', 'วัลดรัค', 125)], intents: valdIntents(answered),
-});
-
-// C — Morvane, the Severed Monarch: a court of three (two hands in front, a wisp behind) that it calls back every fourth
-// turn. New rule (design §1.3): each standing court foe raises the monarch's moves by 10%; area attacks answer it. The
-// court hits 70% as hard as plain foes (as the warden's wisps do) so a starter camp is not overrun.
-const court = foes(10, [['f2', SPECIES.shardCrawler], ['f3', SPECIES.shardCrawler], ['b2', SPECIES.riftWisp]]);
-const morvane = (answered: boolean): EncounterDefinition => {
-  const k = answered ? 1 : 1 + 0.10 * 3; const s = (n: number) => Math.round(n * k);
-  return {
-    ...riftWarden, id: 'wb-morvane', version: 1, name: 'บอสโลก: มอร์เวน', phases: [{ sourceId: 'f1', below: 70, name: 'Severed Crown' }],
-    enemies: [...court.enemies, boss('Morvane', 'มอร์เวน', 80)],
-    intents: [...court.intents.map(m => ({ ...m, damage: Math.round(m.damage * 0.7) })),
-      mv('Six-Hand Rend', 1, s(24), 'physical'), mv('Severing Bolt', 3, s(22), 'energy'), mv('Call the Court', 0, 0, 'energy'),
-      mv('Fate Lash', 2, s(26), 'energy'), mv('Six-Hand Rend', 0, s(28), 'physical'), mv('Shadow Tide', 0, s(14), 'energy', { all: true }),
-      mv('Severing Bolt', 2, s(26), 'energy', { phase: 1 }), mv('Call the Court', 0, 0, 'energy', { phase: 1 }), mv('Shadow Tide', 0, s(18), 'energy', { all: true, phase: 1 }),
-    ],
-  };
-};
-
 const VARIANTS: [string, EncounterDefinition][] = [
-  ['ผู้คุม (ปัจจุบัน)', lookup('world-boss-warden')!], ['คราก์มอร์', kragmor],
-  ['วัลดรัค ไม่ตอบ', valdrakk(false)], ['วัลดรัค ตอบ', valdrakk(true)],
-  ['มอร์เวน ไม่ตอบ', morvane(false)], ['มอร์เวน ตอบ', morvane(true)],
+  ['ผู้คุม (ปัจจุบัน)', lookup('world-boss-warden')!], ['คราก์มอร์', wbKragmor], ['วัลดรัค', wbValdrakk], ['มอร์เวน', wbMorvane],
 ];
 const home = MAPS[0]!;
 // The camp's field team placed into a draft encounter exactly as `wbEncounter` places it into the warden copy.

@@ -3,7 +3,8 @@ import type { SongId, BossPhase, IntentDefinition, EnemyTrait, HeroGear, ActionI
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
 // A hero revived this round stands but acts only from the next round.
-const acts = (state: BattleState, id: string) => living(state, id) && state.heroes.find(h => h.id === id)?.revivedRound !== state.round;
+const acts = (state: BattleState, id: string) => living(state, id) && state.heroes.find(h => h.id === id)?.revivedRound !== state.round
+  && state.enemies.find(e => e.id === id)?.summonedRound !== state.round;
 export function roundOrder(state: BattleState, data: EncounterDefinition, round = state.round): string[] {
   // Explicit original index breaks SPD ties, including ties across the two sides.
   // Enemies delayed for this round (archer's hindering shot) act after everyone else.
@@ -143,7 +144,11 @@ export function encounterProblems(data: EncounterDefinition): string[] {
     if (!data.enemies.find(e => e.id === p.sourceId)?.boss) problems.push(`${data.id}: phase on a non-boss ${p.sourceId}`);
     for (const slot of [...p.summon ?? [], ...p.hardSummon ?? []]) if (!data.enemies.find(e => e.id === slot)?.reserve) problems.push(`${data.id}: summons non-reserve ${slot}`);
   }
-  for (const e of data.enemies.filter(x => x.reserve)) if (!(data.phases ?? []).some(p => [...p.summon ?? [], ...p.hardSummon ?? []].includes(e.id))) problems.push(`${data.id}: reserve ${e.id} is never summoned`);
+  // P11-05: a summon move brings back other foes of the encounter; a court counts other foes of the encounter.
+  for (const i of data.intents) for (const slot of i.summon ?? []) if (slot === i.sourceId || !ids.includes(slot)) problems.push(`${data.id}: ${i.sourceId} summons ${slot}`);
+  for (const e of data.enemies) for (const slot of e.court?.by ?? []) if (slot === e.id || !ids.includes(slot)) problems.push(`${data.id}: ${e.id} court ${slot}`);
+  const summoned = (id: string) => (data.phases ?? []).some(p => [...p.summon ?? [], ...p.hardSummon ?? []].includes(id as never)) || data.intents.some(i => i.summon?.includes(id as never));
+  for (const e of data.enemies.filter(x => x.reserve)) if (!summoned(e.id)) problems.push(`${data.id}: reserve ${e.id} is never summoned`);
   if (!data.enemies.some(e => !e.reserve)) problems.push(`${data.id}: no foe on the field`);
   return problems;
 }
@@ -345,7 +350,7 @@ function hexTicks(state: BattleState, data: EncounterDefinition, events: BattleE
 // Only an announced normal single-target move may be bent: whole-party moves, charges, phase turns and unstoppable
 // signature moves are locked. A bent move keeps its power, kind and attacker and lands on another foe; it never reaches an
 // ally, never chains and never cancels the move. SPD and the queue never change.
-export const lockedMove = (intent: Intent | IntentDefinition | null | undefined): boolean => !intent || !!intent.special || !!intent.all || !!intent.charge || !!intent.unstoppable;
+export const lockedMove = (intent: Intent | IntentDefinition | null | undefined): boolean => !intent || !!intent.special || !!intent.all || !!intent.charge || !!intent.unstoppable || !!intent.summon;
 // Seer rework (owner 2026-11-06 "เห็นด้วย", save v51): a foe's "big move" is a move marked charge, all or unstoppable, or the
 // top damage of its current cycle when that cycle has at least two different damages. A phase turn is never one.
 export function bigMove(state: BattleState, data: EncounterDefinition, enemyId: string, intent: Intent | IntentDefinition | null | undefined): boolean {
@@ -370,7 +375,7 @@ export function postponeReason(state: BattleState, data: EncounterDefinition, en
 }
 function postponeMove(state: BattleState, data: EncounterDefinition, foe: EnemyState, heroId: string): void {
   const next = nextIntentOf(state, data, foe.id)!; const block = next.charge ? 2 : 1;
-  foe.cycleLag = (foe.cycleLag ?? 0) + 1;
+  foe.cycleLag = (foe.cycleLag ?? 0) + 1; delete foe.staggerRound;
   foe.postpone = { heroId, round: next.round, skip: block + 1, until: next.round + block };
 }
 // Why this foe's next move cannot be bent onto `recipientId` (empty when it can); `until` = the last round it may happen.
@@ -490,8 +495,13 @@ export function enemyIntent(state: BattleState, data: EncounterDefinition, id: s
   if (phase) return alive[0] ? { sourceId: id, targetSlot: 0, name: phase.name, damage: 0, kind: 'energy', unstoppable: true, special: 'phase', targetId: alive[0].id, beat: state.beat, round } : null;
   // Each phase's moves cycle from the round after the phase began (the opening cycle from round 1).
   const moves = phaseMoves(state, data, id);
-  const template = moves[cycleIndex(state, data, id, round)];
-  if (!template) return null;
+  const base = moves[cycleIndex(state, data, id, round)];
+  if (!base) return null;
+  // P11-05 R1: after its breakable charge was cancelled, the move that would follow is staggered (no damage, no target).
+  if (foe.staggerRound === round) return alive[0] ? { sourceId: id, targetSlot: 0, name: 'Staggered', damage: 0, kind: base.kind, special: 'stagger', staggeredMove: base.name, targetId: alive[0].id, beat: state.beat, round } : null;
+  // P11-05 R2: each standing court foe raises the move by its percent.
+  const court = courtPercent(state, data, id);
+  const template = court && base.damage ? { ...base, damage: Math.ceil(base.damage * (100 + court) / 100), court } : base;
   const delay = foe.postpone && round >= foe.postpone.round && round <= foe.postpone.until ? foe.postpone : undefined;
   const marks = delay ? delay.round === round ? { delayedMove: moves[cycleIndex(state, data, id, round + 1)]!.name } : { delayedOnce: true } : {};
   const front = alive.filter(h => data.heroes.find(d => d.id === h.id)!.lane === 'front');
@@ -504,6 +514,11 @@ export function enemyIntent(state: BattleState, data: EncounterDefinition, id: s
   const stoned = !warden && !duel && !drawn && !template.all && !template.charge && state.stone?.ids.includes(target.id)
     ? taunted(state, data, id, round, state.stone) : undefined;
   return { ...template, targetId: warden ?? duel ?? drawn ?? stoned ?? target.id, beat: state.beat, round, ...(stoned ? { stoned: true, stoneTargetId: target.id } : {}), ...marks };
+}
+// P11-05 R2: the court bonus (percent) a foe's moves have now, from its listed court foes that stand.
+export function courtPercent(state: BattleState, data: EncounterDefinition, id: string): number {
+  const court = data.enemies.find(e => e.id === id)?.court; if (!court) return 0;
+  return court.percent * court.by.filter(slot => state.enemies.some(e => e.id === slot && e.hp > 0)).length;
 }
 export function plannedIntents(state: BattleState, data: EncounterDefinition, count = 2): Intent[] {
   return upcomingTurns(state, data, (data.heroes.length + data.enemies.length) * (count + 1))
@@ -744,14 +759,27 @@ function spearFury(state: BattleState, data: EncounterDefinition, heroId: string
 // next round) and its moves switch to the new phase's cycle.
 function beginPhase(state: BattleState, data: EncounterDefinition, enemy: EnemyState, events: BattleEvent[]): void {
   const phase = pendingPhase(state, data, enemy.id); if (!phase) return;
-  enemy.phase = (enemy.phase ?? 0) + 1; enemy.phaseRound = state.round; delete enemy.cycleLag; delete enemy.postpone; delete enemy.deflect;
+  enemy.phase = (enemy.phase ?? 0) + 1; enemy.phaseRound = state.round; delete enemy.cycleLag; delete enemy.postpone; delete enemy.deflect; delete enemy.staggerRound;
   events.push({ type: 'phase', sourceId: enemy.id, targetId: enemy.id, text: phase.name });
   for (const slot of phase.summon ?? []) {
     const minion = state.enemies.find(e => e.id === slot); const def = data.enemies.find(e => e.id === slot);
-    // P02: a full field (five standing, or three in that row) leaves the reserve waiting; it never replaces anyone.
-    const standing = state.enemies.filter(e => e.hp > 0);
-    if (standing.length >= MAX_SIDE || standing.filter(e => data.enemies.find(d => d.id === e.id)?.row === def?.row).length >= ROW_SLOTS) continue;
+    if (!roomFor(state, data, def)) continue;
     if (minion?.absent && def) { delete minion.absent; minion.hp = def.maxHp; events.push({ type: 'summon', sourceId: enemy.id, targetId: slot, text: 'Reinforcements.' }); }
+  }
+}
+// P02: a full field (five standing, or three in that row) leaves a summoned foe waiting; it never replaces anyone.
+function roomFor(state: BattleState, data: EncounterDefinition, def: EncounterDefinition['enemies'][number] | undefined): boolean {
+  const standing = state.enemies.filter(e => e.hp > 0);
+  return !!def && standing.length < MAX_SIDE && standing.filter(e => data.enemies.find(d => d.id === e.id)?.row === def.row).length < ROW_SLOTS;
+}
+// P11-05 R2 summon move: each listed foe that is down or not yet on the field comes back at full HP with no statuses (a
+// fresh state, so no Mark, acid, venom, curse or shove carries over) while there is room; it acts from the next round.
+function summonMove(state: BattleState, data: EncounterDefinition, enemy: EnemyState, slots: readonly string[], events: BattleEvent[]): void {
+  for (const slot of slots) {
+    const index = state.enemies.findIndex(e => e.id === slot); const def = data.enemies.find(e => e.id === slot);
+    if (index < 0 || !def || state.enemies[index]!.hp > 0 || !roomFor(state, data, def)) continue;
+    state.enemies[index] = { id: def.id, hp: def.maxHp, markedUntil: 0, summonedRound: state.round };
+    events.push({ type: 'summon', sourceId: enemy.id, targetId: slot, text: 'The court returns.' });
   }
 }
 // A duelist's parry: the parried attacker is countered (marked with parry mark) and the parry is spent; endless dance
@@ -846,13 +874,17 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
         }
       };
       if (intent.special === 'phase') beginPhase(state, data, enemy, events);
+      else if (intent.special === 'stagger') events.push({ type: 'stagger', sourceId: actorId, targetId: actorId, text: 'Staggered.' });
       else if (enemy.interruptedRound === state.round) {
         events.push({ type: 'cancel', sourceId: actorId, cause: intent.kind === 'energy' ? 'sealed' : 'interrupted', text: intent.kind === 'energy' ? 'Energy move sealed.' : 'Physical attack interrupted.' });
         if (data.enemies.find(e => e.id === actorId)?.boss) enemy.steadyRound = state.round + STEADFAST_ROUNDS;
+        // P11-05 R1: a cancelled breakable charge staggers the foe's next move (each foe acts once a round).
+        if (intent.charge && intent.breakable) enemy.staggerRound = state.round + 1;
         // Mage sigil reflect (tree modifier): a sealed move strikes its own caster for a share of its damage.
         const by = enemy.interruptedBy;
         if (by && intent.kind === 'energy' && hasCap(data, by, 'sigilreflect') && living(state, by)) strikeBack(state, data, by, enemy, Math.floor(intent.damage * capAmount(data, by, 'sigilreflect') / 100), events, 'The seal reflects the move.');
       } else if (intent.charge) events.push({ type: 'charge', sourceId: actorId, targetId: intent.targetId, text: 'Gathering power.' });
+      else if (intent.summon) summonMove(state, data, enemy, intent.summon, events);
       // A whole-party move strikes every standing hero; Guard cannot cover it.
       else if (intent.all) { for (const h of state.heroes.filter(x => x.hp > 0)) if (h.hp > 0) strike(h, null); }
       else if (enemy.deflect && enemy.deflect.until >= state.round && !lockedMove(intent) && state.enemies.some(e => e.id === enemy.deflect!.recipientId && e.hp > 0)) {
@@ -876,6 +908,7 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
       delete enemy.drawnBy;
     }
     delete enemy.interruptedRound; delete enemy.interruptedBy; delete enemy.weaken; delete enemy.clash;
+    if (enemy.staggerRound !== undefined && enemy.staggerRound <= state.round) delete enemy.staggerRound;
     // A shoved foe (and its partner) return to their rows once its own next turn ends.
     if (enemy.shoved) { const partner = enemy.shoved.partnerId; delete enemy.shoved; events.push({ type: 'shove', targetId: enemy.id, text: 'Back in its row.' }); if (partner) events.push({ type: 'shove', targetId: partner, text: 'Back in its row.' }); }
     const frame = structuredClone(state); const beat = state.beat; const round = state.round;

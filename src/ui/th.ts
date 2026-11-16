@@ -442,7 +442,8 @@ export function eventThai(event: BattleEvent, after: BattleState, data: Encounte
     case 'dodge': return `${target}หลบการโจมตีของ${source}ได้`;
     case 'delay': return event.text === 'Enemy acts last this round.' ? `${target}ถูกหยุดยั้ง · ไปลงมือท้ายสุดของรอบนี้` : `${target}จะลงมือท้ายสุดในรอบถัดไป`;
     case 'phase': return `${source}เข้าสู่ช่วงใหม่ · ${phaseThai(event.text)}`;
-    case 'summon': return `${target}ถูกเรียกเข้าสนาม · เริ่มลงมือรอบหน้า`;
+    case 'summon': return event.text === 'The court returns.' ? `${source}เรียก${target}กลับมา · เลือดเต็ม เริ่มลงมือรอบหน้า` : `${target}ถูกเรียกเข้าสนาม · เริ่มลงมือรอบหน้า`;
+    case 'stagger': return `${source}เสียหลักหลังถูกตัดการรวบพลัง · เทิร์นนี้ไม่โจมตี`;
     case 'charge': return `${source}รวบรวมพลัง · ท่าถัดไปจะรุนแรงและขัดจังหวะไม่ได้`;
     case 'resist': return event.text === 'Unstoppable move.' ? `${target}กำลังใช้ท่าไม้ตาย · ขัดจังหวะไม่ได้` : `${target}ไม่หวั่นไหว · เพิ่งถูกขัดจังหวะ จึงขัดซ้ำไม่ได้จนพ้น 2 รอบ`;
     case 'parry': return event.sourceId === event.targetId ? `${source}ตั้งท่าปัดดาบ · การโจมตีกายภาพครั้งแรกที่โดนจะเบาลงและถูกสวน` : `${source}ปัดดาบของ${target}ได้`;
