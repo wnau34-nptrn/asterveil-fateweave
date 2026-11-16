@@ -252,3 +252,69 @@ Prompt สำหรับเครื่องมือสร้างภาพ 
 
 ขอบเขตงานที่ผู้ใช้อนุญาต: ตามบล็อก "ขอบเขตงานที่ผู้ใช้อนุญาต" ด้านบนทั้งหมด · branch art/art-unit-animation-wb-c-001 จาก feature/fateweave-initial-prototype (ฐานล่าสุดรวม WB-A แล้ว) · เจ้าของเลือกภาพและอนุมัติ motion เอง ผล CI/เทสต์ไม่ใช่การอนุมัติ
 ```
+
+---
+
+## VFX ท่าบอสโลก — ART-VFX-WB-TRIO-001 · **ส่งได้แล้ว** (ทำคู่กับ WB-B/WB-C ได้ ไม่ขึ้นกับภาพร่างกาย)
+
+บอสโลกทั้งสามตัวมีท่าร่างกายแล้ว แต่ท่าพลังงาน ท่าทั้งทีม ท่าเฟส 70% และท่าชาร์จยังใช้ VFX ที่วาดด้วยโค้ดหรือชุดฟันร่วม ต้องการ VFX วาดเฉพาะ รูปแบบเดียวกับ `incoming/ART-VFX-BOSS-SIGNATURE-001/` (ผ่านและใช้ในเกมแล้ว) · ฝั่ง Claude ภายหลัง: เพิ่มชื่อท่าใน `bossMoves` ของ `boss-signature-fx.ts`, atlas, คลิป 390px ให้เจ้าของอนุมัติ
+
+```text
+เป้าหมาย:
+ชุด VFX วาดเฉพาะของท่าบอสโลก Kragmor / Valdrakk / Morvane รวม 13 ท่า × 3 จังหวะ (prepare → peak → settle) = 39 เลเยอร์โปร่งใส เพื่อแทนเอฟเฟกต์วาดด้วยโค้ดและชุดร่วม และให้ผู้เล่นอ่านออกว่าท่าไหนตัดจังหวะได้ ตัดไม่ได้ หรือโดนทั้งทีม (OD-09–OD-12: บอสบอกกลไกล่วงหน้า ผู้เล่นเลือกตอบหรือไม่ตอบ)
+
+บริบทเกมและไฟล์ที่ตรวจแล้ว:
+- ระบบเดิม: src/game/visuals/boss-signature-fx.ts + boss-signature-art.json (anchor, pivot, width ต่อเลเยอร์) + atlas public/assets/fx/boss_signature_fx.* · เลเยอร์ 256×256 RGBA ตรง (straight alpha) ชื่อ <move>-<beat>.png, pivot กลาง [128,128] (ท่าพื้น [128,210]) · blend ปกติ ไม่ใช้ additive
+- เส้นทางของท่า (Claude จะผูกเอง): charge = วางที่หน้าอกบอสตลอดเทิร์นรอ; single = ที่ตัวฮีโร่ที่โดนจริง; all = เฉพาะฮีโร่ที่โดนจริงทีละตัวเล็ก ไม่คลุมจอ; caster = ที่ตัวบอส (เฟสเปลี่ยน ไม่มีดาเมจ); summon = ที่ช่องลูกน้องที่ถูกเรียกจริง ใต้แถบ HP ไม่ใช่วงพื้น
+- telegraph ในเทิร์นรอ: ท่าชาร์จที่ตามด้วยท่าตัดไม่ได้ (unstoppable) ใช้ layer prepare ของ "ท่าที่ปล่อย" เป็นสัญลักษณ์เตือน = วงเล็บแข็งมีฟันสองอันประสานกัน ช่องกลางเห็นชัด (ไม่หมุน) ส่วนชาร์จปกติใช้เส้นโค้งเปิดยืดหยุ่น หนึ่งท่าชาร์จ (Wing Gathering) "ทำลายได้" ต้องดูต่างจากทั้งสองแบบ
+- ทิศปล่อย: ฝั่งศัตรูไปทางขวา→ฮีโร่ซ้ายของจอ · ไม่วาดบนใบหน้าและป้าย HP/ชื่อ/เจตนา ไม่มีตัวอักษร ตัวเลข
+
+ภาพอ้างอิงที่แนบ/เข้าถึงได้:
+- รูปแบบและเกณฑ์: incoming/ART-VFX-BOSS-SIGNATURE-001/ (NOTES.md, layers/, layers.json, storyboards/, validation.json, build_handoff.py) และ docs/handoffs/CODEX-ANIMATION-VFX-PROMPTS-TH.md §W7-b
+- seed ตัวบอส (เพื่อคุมสี/สเกล): origin/art/art-char-worldboss-001 commit 46f366dc931e4994d3a6ccd9ad3951ac444a70cf → incoming/ART-CHAR-WORLDBOSS-001/seed-a.png (Kragmor), seed-b.png (Valdrakk), seed-c.png (Morvane) · เฟรมท่าจริงอยู่ที่ incoming/ART-UNIT-ANIMATION-WB-A-001, WB-B-001, WB-C-001 (strips/*.png ใช้ดูท่าและตำแหน่งมือ/ปีก/แขนตอนปล่อย)
+- seed ฮีโร่/พื้นหลังสำหรับ storyboard: ใช้ชุดเดียวกับ ART-VFX-BOSS-SIGNATURE-001 (seeds/) + พื้นหลัง battle_riftline
+
+ท่าที่ต้องทำ 13 ท่า (ชื่อตรงเกม; คอลัมน์เส้นทาง/จุดยึดเป็นข้อเสนอให้ปรับได้ใน layers.json):
+KRAGMOR (ไททันหินผลึก ม่วง/cyan หนักช้า — ภาษา VFX: เศษผลึก หิน แรงอัด ไม่มีสายลม)
+1. Titan Gathering — charge ปกติ, ศูนย์ดาเมจ · prepare=ผลึก/หินเล็กลอยเข้าหาอก เส้นโค้งเปิด; peak=บีบเป็นก้อนแกนผลึกกลางอก; settle=เศษหลุดช้า · จุดยึด caster.chest/forward_chest
+2. Mountain Fall — ตัดไม่ได้ ตีเดี่ยวช่องหน้า · **prepare = วงเล็บแข็งมีฟัน** (ใช้เป็น telegraph เทิร์นรอ), peak=แรงทุบลงพื้นใต้ฮีโร่ แรงอัดตั้งฉากลง รอยแตกสั้น, settle=ฝุ่นผลึกจาง · จุดยึด target.feet pivot [128,210]
+3. Rift Quake — ทั้งทีม (ปกติตัดได้) · prepare=เสี้ยวรอยร้าวที่พื้นหน้าบอส; peak=สามคลื่นรอยร้าววิ่งไปใต้เท้าฮีโร่แต่ละตัว (ต่อฮีโร่ที่โดนจริงเท่านั้น); settle=เศษหินตกเบา · whole_hero_side.actual_target_feet
+4. Fault Awakening — เฟสเปลี่ยน ที่ตัวบอส ไม่มีดาเมจ · prepare=รอยแตก cyan ไหลขึ้นจากอก; peak=ผลึกมงกุฎและรอยแยกกระจายออก; settle=ประกายม่วงจาง · caster.chest
+
+VALDRAKK (อสูรปีกผลึก ม่วง/cyan เร็ว — ภาษา VFX: ขนผลึกคม รอยตัดลม ไม่ใช่เมฆหรือสายฟ้า)
+5. Wing Gust — ตีเดี่ยวพลังงาน · prepare=ขนผลึกสามชิ้นหุบเป็นเสี้ยว; peak=รอยโค้งขนผลึกพุ่งเฉียงไปที่ฮีโร่; settle=ขนผลึกร่วงจาง · target.chest
+6. Wing Gathering — charge **ทำลายได้** (Bash/Sigil ตัดได้) · prepare ต้องดู "เปราะ": เส้นโค้งผลึกบางมีรอยร้าวสว่างชัด ต่างจากชาร์จปกติและจากวงเล็บแข็ง; peak=ผลึกอัดแน่นที่ไหล่แกน cyan; settle=เศษหลุด · caster.chest [R1 แนะนำ: เปลือกผลึกบางร้าว · R2: ขนผลึกพับซ้อนมีรอยแตก]
+7. Worldshard Dive — ทั้งทีมพลังงาน (ปกติ) · prepare=เสี้ยวผลึกชี้ลง; peak=เศษโลกแตกเฉียงพุ่งผ่านแต่ละฮีโร่ (ต่อฮีโร่ที่โดนจริง); settle=ผงผลึกจาง · whole_hero_side.actual_target_chests
+8. Sky Rend — เฟสเปลี่ยน ที่ตัวบอส · prepare=ลายแตกวิ่งตามขอบปีก; peak=ขนผลึกกางเป็นมงกุฎเหนือหลัง กระจายออก; settle=ประกายจาง · caster.chest
+
+MORVANE (ราชันเงาหกแขน ม่วง/ทอง/cyan — ภาษา VFX: ด้ายเงา ผ้าคลุม รอยฉีก ไม่ใช่ขนหรือผลึกหิน)
+9. Severing Bolt — ตีเดี่ยวพลังงาน · prepare=ด้ายเงาสองเส้นดึงตึงที่มือคู่ล่าง; peak=ลำตัดแคบเฉียงสว่างปลาย cyan ไปที่ฮีโร่; settle=เส้นด้ายขาดสั้นๆ · target.chest
+10. Fate Lash — ตีเดี่ยวพลังงาน · prepare=เส้นด้ายสะบัดโค้งเหนือหัวบอส (ไม่ทับป้าย); peak=ด้ายหนาฟาดเป็นวงโค้งผ่านฮีโร่; settle=เศษด้ายร่วง · target.chest · ต้องอ่านต่างจาก Severing Bolt (โค้งยาวหนา vs ลำตรงแคบ)
+11. Call the Court — summon: เรียกลูกน้องที่ล้มกลับ ไม่มีดาเมจ · prepare=ผ้าเงาเปิดที่ช่องลูกน้อง; peak=มือ/ด้ายเงายื่นขึ้นจากช่องที่ถูกเรียก; settle=เศษเงาจาง · summoned_slot.chest ใต้ป้าย HP ไม่ใช่วงพื้น ต้องต่างจาก Call the Rift ของผู้คุมเดิม (ไม่ใช่รอยฉีกตั้งตรง) [R1 แนะนำ: มือเงายื่นขึ้น · R2: ผ้าคลุมเงาพุ่งขึ้นเป็นเสา]
+12. Shadow Tide — ทั้งทีมพลังงาน · prepare=ขอบเงาคลื่นต่ำที่หน้าบอส; peak=คลื่นเงาเตี้ยผ่านใต้ตัวฮีโร่แต่ละตัว (ต่อฮีโร่ที่โดนจริง); settle=ฝอยเงาจาง · whole_hero_side.actual_target_chests (หรือเท้า เสนอใน layers.json)
+13. Severed Crown — เฟสเปลี่ยน ที่ตัวบอส · prepare=ขอบมงกุฎทองสว่างเป็นเส้น; peak=วงมงกุฎด้ายขาดกระจายออก; settle=ประกายทองจาง · caster.chest
+
+ไม่ต้องทำ VFX ใหม่: Stone Fist, Boulder Hurl, Shard Talon, Six-Hand Rend (กายภาพ ใช้ชุดฟันร่วมแล้ว) และ Staggered (ท่าเสียหลัก ไม่มีเอฟเฟกต์) · ห้ามทำตัวบอสซ้ำ (ร่างกายมีใน WB-A/B/C แล้ว)
+
+ข้อกำหนดที่ยืนยันแล้ว:
+- เลเยอร์ 256×256 RGBA ตรง ขอบว่างพอ ไม่ตัดขอบ; blend ปกติ: ใช้เส้นขอบมืด (ม่วงเข้ม/คราม) + ขอบสว่าง (งาช้าง/มิ้นต์/cyan) ให้อ่านได้บนพื้นนาวีและบนเกราะทอง (ทดสอบทั้งคู่ใน storyboard เหมือนชุดเดิม)
+- หนึ่งดีไซน์สุดท้ายต่อท่า (ท่าที่มี R1/R2 ให้ส่งทั้งสองและระบุตัวที่แนะนำ) · ท่าใหญ่ต้องอ่านได้ที่ความกว้างจริง: peak ~130px, prepare ~80px ในจอ 390px (บอสโลกใหญ่กว่าบอสเดิม ให้เสนอ width ใน layers.json)
+- ท่าทั้งทีมใช้ชิ้นเล็กต่อฮีโร่ที่โดนจริง ไม่คลุมทั้งจอ · settle ถอยลงและเลือนหาย ไม่ค้างเป็นการโจมตีอีกครั้ง · ไม่วาดดาเมจ ตัวเลข สถานะ หรือแสงนอกบริบท
+- ห้ามเดา ให้บันทึกที่ไม่แน่ใจใน NOTES.md "ฝากถึง Claude"; ห้ามเปลี่ยนกติกา เซฟ ตัวเลข เวลาเล่น
+
+ไฟล์ส่งมอบ (ตามรูปแบบ ART-VFX-BOSS-SIGNATURE-001): layers/<move>-<prepare|peak|settle>.png, storyboards/<move>-390.png (สามช่องต่อท่า: พื้นนาวี + เกราะทอง), storyboards/telegraphs-390.png เทียบ telegraph ทั้งสามแบบ (ชาร์จปกติ / ทำลายได้ / วงเล็บแข็งตัดไม่ได้), storyboards/contrast-*-390.png, layers.json (anchor, pivot, width ที่เสนอ, route, unstoppable, breakable, phase_change, checksum), generation-prompts.json, seeds/ + seeds.json, source/ (ผล generator ทุก byte), production-sources.json, validation.json, NOTES.md, build_handoff.py ที่ทำซ้ำได้ (--verify และ --git-ref)
+
+Prompt สำหรับเครื่องมือสร้างภาพ (ปรับต่อท่า; แนบ seed บอสตัวนั้นและตัวอย่างเลเยอร์เดิม 1–2 ชิ้นเป็นภาพอ้างอิงสไตล์ทุกครั้ง):
+"A single transparent game VFX painting for the <BEAT> beat of the <BOSS> move '<MOVE>': <DESCRIPTION FROM THE TABLE>. Matches the painted style, line weight and rim lighting of the attached reference layers. Dark plum/indigo contour with bright ivory, mint and cyan edge light so it reads on both dark navy and polished gold armor. Centered in a square canvas with generous empty margin, real alpha transparency (no checkerboard, no background, no floor shadow), normal blending only. No characters, no bodies, no faces, no text, no numbers, no UI, no damage figures."
+
+งานนำเข้าเกม (Claude ภายหลัง ไม่ใช่งาน Codex): ต่อ atlas boss_signature_fx, เพิ่มชื่อท่าใน bossMoves/art json, anchor เท้า/หน้าอกของบอสโลก, telegraph ทำลายได้, คลิป 390px ให้เจ้าของอนุมัติ
+
+เกณฑ์ตรวจรับ:
+- ครบ 13 ท่า × 3 เลเยอร์ = 39 ไฟล์ ขนาด 256×256 RGBA, alpha จริง, ขอบว่าง ≥ 12px, SHA-256 ตรง validation.json ทั้งหลัง push และ fetch กลับ
+- telegraph สามแบบแยกออกจากกันที่ 390px: ชาร์จปกติ (Titan Gathering) / ทำลายได้ (Wing Gathering) / วงเล็บแข็งตัดไม่ได้ (Mountain Fall)
+- ท่าเดี่ยว/ทั้งทีม/เฟส/summon ตรงเส้นทาง ไม่บังใบหน้า ป้าย HP ชื่อ เจตนา (ตรวจด้วย mask ใน storyboard และบันทึกพิกเซลที่ทับ)
+- Severing Bolt ≠ Fate Lash, Call the Court ≠ Call the Rift อ่านต่างกันที่ขนาดจริง
+- ภาษา VFX ของแต่ละบอสต่างกัน (ผลึก/ขนผลึก/ด้ายเงา) แต่เส้นขอบและแสงขอบตระกูลเดียวกับชุดเดิม
+
+ขอบเขตงานที่ผู้ใช้อนุญาต: ตามบล็อก "ขอบเขตงานที่ผู้ใช้อนุญาต" ด้านบนทั้งหมด · branch art/art-vfx-wb-trio-001 จาก feature/fateweave-initial-prototype (ฐานล่าสุด) · เจ้าของเลือกภาพและอนุมัติ motion เอง ผล CI/เทสต์ไม่ใช่การอนุมัติ
+```
