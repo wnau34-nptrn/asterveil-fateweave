@@ -1,0 +1,849 @@
+{
+  "task": "ART-UNIT-ANIMATION-WB-C-001",
+  "seed_crown_xy": [
+    554,
+    137
+  ],
+  "seed_cloak_tip_y": 896,
+  "seed_body_height": 759,
+  "tolerance": 0.04,
+  "policy": "Crown apex to longest center-cloak tip excludes raised arms. Down collapse intentionally reduces projected height, not a per-pose rescale. Manual landmark overlay retained; this is not a head/torso anatomy certificate.",
+  "frames": [
+    {
+      "move": "six-hand-rend",
+      "frame": 0,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        197,
+        223
+      ],
+      "source_cloak_tip_y": 535
+    },
+    {
+      "move": "six-hand-rend",
+      "frame": 1,
+      "seed_locked": false,
+      "crown_xy": [
+        506.45659163987136,
+        125.16720257234726
+      ],
+      "cloak_tip_y": 896.3697749196141,
+      "height_px": 771.2025723472668,
+      "height_ratio_vs_seed": 1.0160771704180063,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        557,
+        220
+      ],
+      "source_cloak_tip_y": 536
+    },
+    {
+      "move": "six-hand-rend",
+      "frame": 2,
+      "seed_locked": false,
+      "crown_xy": [
+        532.2443729903537,
+        127.28617363344051
+      ],
+      "cloak_tip_y": 896.048231511254,
+      "height_px": 768.7620578778135,
+      "height_ratio_vs_seed": 1.0128617363344052,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        918,
+        221
+      ],
+      "source_cloak_tip_y": 536
+    },
+    {
+      "move": "six-hand-rend",
+      "frame": 3,
+      "seed_locked": false,
+      "crown_xy": [
+        507.636655948553,
+        137.08360128617363
+      ],
+      "cloak_tip_y": 896.0836012861736,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1291,
+        226
+      ],
+      "source_cloak_tip_y": 537
+    },
+    {
+      "move": "six-hand-rend",
+      "frame": 4,
+      "seed_locked": false,
+      "crown_xy": [
+        470.43408360128615,
+        146.40514469453376
+      ],
+      "cloak_tip_y": 895.6430868167201,
+      "height_px": 749.2379421221865,
+      "height_ratio_vs_seed": 0.9871382636655949,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1648,
+        231
+      ],
+      "source_cloak_tip_y": 538
+    },
+    {
+      "move": "six-hand-rend",
+      "frame": 5,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        2009,
+        223
+      ],
+      "source_cloak_tip_y": 536
+    },
+    {
+      "move": "severing-bolt",
+      "frame": 0,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        197,
+        224
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "severing-bolt",
+      "frame": 1,
+      "seed_locked": false,
+      "crown_xy": [
+        554.636655948553,
+        139.0
+      ],
+      "cloak_tip_y": 895.5594855305466,
+      "height_px": 756.5594855305466,
+      "height_ratio_vs_seed": 0.9967845659163986,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        560,
+        224
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "severing-bolt",
+      "frame": 2,
+      "seed_locked": false,
+      "crown_xy": [
+        550.7556270096463,
+        139.44051446945338
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 756.5594855305466,
+      "height_ratio_vs_seed": 0.9967845659163986,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        921,
+        224
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "severing-bolt",
+      "frame": 3,
+      "seed_locked": false,
+      "crown_xy": [
+        550.7556270096463,
+        139.0
+      ],
+      "cloak_tip_y": 895.5594855305466,
+      "height_px": 756.5594855305466,
+      "height_ratio_vs_seed": 0.9967845659163986,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1283,
+        224
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "severing-bolt",
+      "frame": 4,
+      "seed_locked": false,
+      "crown_xy": [
+        550.7556270096463,
+        144.44051446945338
+      ],
+      "cloak_tip_y": 896.1189710610931,
+      "height_px": 751.6784565916398,
+      "height_ratio_vs_seed": 0.990353697749196,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1645,
+        225
+      ],
+      "source_cloak_tip_y": 533
+    },
+    {
+      "move": "severing-bolt",
+      "frame": 5,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        2008,
+        224
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "fate-lash",
+      "frame": 0,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        197,
+        225
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "fate-lash",
+      "frame": 1,
+      "seed_locked": false,
+      "crown_xy": [
+        553.1961414790997,
+        144.0
+      ],
+      "cloak_tip_y": 895.6784565916398,
+      "height_px": 751.6784565916398,
+      "height_ratio_vs_seed": 0.990353697749196,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        559,
+        225
+      ],
+      "source_cloak_tip_y": 533
+    },
+    {
+      "move": "fate-lash",
+      "frame": 2,
+      "seed_locked": false,
+      "crown_xy": [
+        552.3151125401929,
+        127.29903536977491
+      ],
+      "cloak_tip_y": 896.0610932475884,
+      "height_px": 768.7620578778135,
+      "height_ratio_vs_seed": 1.0128617363344052,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        922,
+        218
+      ],
+      "source_cloak_tip_y": 533
+    },
+    {
+      "move": "fate-lash",
+      "frame": 3,
+      "seed_locked": false,
+      "crown_xy": [
+        552.7556270096463,
+        142.0
+      ],
+      "cloak_tip_y": 896.1189710610931,
+      "height_px": 754.1189710610931,
+      "height_ratio_vs_seed": 0.9935691318327973,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1284,
+        225
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "fate-lash",
+      "frame": 4,
+      "seed_locked": false,
+      "crown_xy": [
+        554.0771704180064,
+        146.44051446945338
+      ],
+      "cloak_tip_y": 895.6784565916398,
+      "height_px": 749.2379421221865,
+      "height_ratio_vs_seed": 0.9871382636655949,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1645,
+        226
+      ],
+      "source_cloak_tip_y": 533
+    },
+    {
+      "move": "fate-lash",
+      "frame": 5,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        2007,
+        225
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "call-the-court",
+      "frame": 0,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        199,
+        224
+      ],
+      "source_cloak_tip_y": 535
+    },
+    {
+      "move": "call-the-court",
+      "frame": 1,
+      "seed_locked": false,
+      "crown_xy": [
+        553.636655948553,
+        136.88102893890675
+      ],
+      "cloak_tip_y": 895.8810289389066,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        559,
+        224
+      ],
+      "source_cloak_tip_y": 535
+    },
+    {
+      "move": "call-the-court",
+      "frame": 2,
+      "seed_locked": false,
+      "crown_xy": [
+        550.7556270096463,
+        137.32154340836013
+      ],
+      "cloak_tip_y": 896.3215434083601,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        921,
+        224
+      ],
+      "source_cloak_tip_y": 535
+    },
+    {
+      "move": "call-the-court",
+      "frame": 3,
+      "seed_locked": false,
+      "crown_xy": [
+        538.0771704180064,
+        119.96463022508038
+      ],
+      "cloak_tip_y": 896.048231511254,
+      "height_px": 776.0836012861736,
+      "height_ratio_vs_seed": 1.022508038585209,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1285,
+        217
+      ],
+      "source_cloak_tip_y": 535
+    },
+    {
+      "move": "call-the-court",
+      "frame": 4,
+      "seed_locked": false,
+      "crown_xy": [
+        542.7556270096463,
+        137.44051446945338
+      ],
+      "cloak_tip_y": 896.4405144694533,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1645,
+        224
+      ],
+      "source_cloak_tip_y": 535
+    },
+    {
+      "move": "call-the-court",
+      "frame": 5,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        2008,
+        224
+      ],
+      "source_cloak_tip_y": 535
+    },
+    {
+      "move": "shadow-tide",
+      "frame": 0,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        197,
+        225
+      ],
+      "source_cloak_tip_y": 533
+    },
+    {
+      "move": "shadow-tide",
+      "frame": 1,
+      "seed_locked": false,
+      "crown_xy": [
+        514.8971061093248,
+        142.0
+      ],
+      "cloak_tip_y": 896.1189710610931,
+      "height_px": 754.1189710610931,
+      "height_ratio_vs_seed": 0.9935691318327973,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        558,
+        224
+      ],
+      "source_cloak_tip_y": 533
+    },
+    {
+      "move": "shadow-tide",
+      "frame": 2,
+      "seed_locked": false,
+      "crown_xy": [
+        515.0289389067524,
+        137.44051446945338
+      ],
+      "cloak_tip_y": 896.4405144694533,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        915,
+        225
+      ],
+      "source_cloak_tip_y": 536
+    },
+    {
+      "move": "shadow-tide",
+      "frame": 3,
+      "seed_locked": false,
+      "crown_xy": [
+        508.38585209003213,
+        146.44051446945338
+      ],
+      "cloak_tip_y": 895.6784565916398,
+      "height_px": 749.2379421221865,
+      "height_ratio_vs_seed": 0.9871382636655949,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1278,
+        230
+      ],
+      "source_cloak_tip_y": 537
+    },
+    {
+      "move": "shadow-tide",
+      "frame": 4,
+      "seed_locked": false,
+      "crown_xy": [
+        510.7781350482315,
+        134.44051446945338
+      ],
+      "cloak_tip_y": 895.8810289389066,
+      "height_px": 761.4405144694533,
+      "height_ratio_vs_seed": 1.0032154340836013,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1639,
+        225
+      ],
+      "source_cloak_tip_y": 537
+    },
+    {
+      "move": "shadow-tide",
+      "frame": 5,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1990,
+        225
+      ],
+      "source_cloak_tip_y": 533
+    },
+    {
+      "move": "severed-crown",
+      "frame": 0,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        198,
+        223
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "severed-crown",
+      "frame": 1,
+      "seed_locked": false,
+      "crown_xy": [
+        492.3376205787781,
+        156.44051446945338
+      ],
+      "cloak_tip_y": 895.9163987138263,
+      "height_px": 739.475884244373,
+      "height_ratio_vs_seed": 0.9742765273311897,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        543,
+        231
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "severed-crown",
+      "frame": 2,
+      "seed_locked": false,
+      "crown_xy": [
+        537.4823151125402,
+        134.44051446945338
+      ],
+      "cloak_tip_y": 895.8810289389066,
+      "height_px": 761.4405144694533,
+      "height_ratio_vs_seed": 1.0032154340836013,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        921,
+        222
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "severed-crown",
+      "frame": 3,
+      "seed_locked": false,
+      "crown_xy": [
+        526.2443729903537,
+        134.44051446945338
+      ],
+      "cloak_tip_y": 895.8810289389066,
+      "height_px": 761.4405144694533,
+      "height_ratio_vs_seed": 1.0032154340836013,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1281,
+        222
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "severed-crown",
+      "frame": 4,
+      "seed_locked": false,
+      "crown_xy": [
+        557.0771704180064,
+        139.44051446945338
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 756.5594855305466,
+      "height_ratio_vs_seed": 0.9967845659163986,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1651,
+        224
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "severed-crown",
+      "frame": 5,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        2017,
+        224
+      ],
+      "source_cloak_tip_y": 534
+    },
+    {
+      "move": "hit",
+      "frame": 0,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        297,
+        174
+      ],
+      "source_cloak_tip_y": 639
+    },
+    {
+      "move": "hit",
+      "frame": 1,
+      "seed_locked": false,
+      "crown_xy": [
+        656.475884244373,
+        134.62700964630224
+      ],
+      "cloak_tip_y": 896.0675241157555,
+      "height_px": 761.4405144694532,
+      "height_ratio_vs_seed": 1.003215434083601,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        894,
+        171
+      ],
+      "source_cloak_tip_y": 639
+    },
+    {
+      "move": "hit",
+      "frame": 2,
+      "seed_locked": false,
+      "crown_xy": [
+        553.3151125401928,
+        139.62700964630224
+      ],
+      "cloak_tip_y": 896.1864951768488,
+      "height_px": 756.5594855305465,
+      "height_ratio_vs_seed": 0.9967845659163985,
+      "status": "within-4pct",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1382,
+        174
+      ],
+      "source_cloak_tip_y": 639
+    },
+    {
+      "move": "hit",
+      "frame": 3,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1926,
+        174
+      ],
+      "source_cloak_tip_y": 639
+    },
+    {
+      "move": "down",
+      "frame": 0,
+      "seed_locked": true,
+      "crown_xy": [
+        554.0,
+        137.0
+      ],
+      "cloak_tip_y": 896.0,
+      "height_px": 759.0,
+      "height_ratio_vs_seed": 1.0,
+      "status": "seed-exact",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        300,
+        168
+      ],
+      "source_cloak_tip_y": 653
+    },
+    {
+      "move": "down",
+      "frame": 1,
+      "seed_locked": false,
+      "crown_xy": [
+        424.66237942122183,
+        199.88102893890675
+      ],
+      "cloak_tip_y": 896.24115755627,
+      "height_px": 696.3601286173632,
+      "height_ratio_vs_seed": 0.9174705251875668,
+      "status": "intentional-collapse",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        767,
+        220
+      ],
+      "source_cloak_tip_y": 648
+    },
+    {
+      "move": "down",
+      "frame": 2,
+      "seed_locked": false,
+      "crown_xy": [
+        295.48553054662375,
+        499.508038585209
+      ],
+      "cloak_tip_y": 896.4983922829581,
+      "height_px": 396.99035369774913,
+      "height_ratio_vs_seed": 0.5230439442658091,
+      "status": "intentional-collapse",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1182,
+        411
+      ],
+      "source_cloak_tip_y": 655
+    },
+    {
+      "move": "down",
+      "frame": 3,
+      "seed_locked": false,
+      "crown_xy": [
+        293.85852090032154,
+        497.508038585209
+      ],
+      "cloak_tip_y": 896.1254019292603,
+      "height_px": 398.6173633440514,
+      "height_ratio_vs_seed": 0.52518756698821,
+      "status": "intentional-collapse",
+      "measurement": "visible gold crown apex to lowest cleaned-alpha center cloth tip; raised arms excluded",
+      "source_crown_xy": [
+        1727,
+        410
+      ],
+      "source_cloak_tip_y": 655
+    }
+  ]
+}

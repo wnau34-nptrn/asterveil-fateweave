@@ -1,0 +1,46 @@
+{
+  "selected": {
+    "six-hand-rend": "six-hand-rend-r5",
+    "severing-bolt": "severing-bolt-r3",
+    "fate-lash": "fate-lash",
+    "call-the-court": "call-the-court",
+    "shadow-tide": "shadow-tide",
+    "severed-crown": "severed-crown-r3",
+    "hit": "hit",
+    "down": "down-r2"
+  },
+  "specs": {
+    "six-hand-rend": {
+      "n": 6,
+      "poses": "1 exact seed ready; 2 MIDDLE huge-cuff pair draws backward close to ribs, claws open, UPPER pair raised; 3 MIDDLE huge-cuff pair opens outward widest while torso rotates slightly RIGHT in anticipation, LOWER small pair stays at belly, UPPER slim-bracer pair still high; 4 BOTH MIDDLE heavy-cuff hands slash diagonally DOWN-LEFT together with body leaning LEFT, keep head/core clear, upper pair high and lower pair at waist; 5 MIDDLE hands follow-through low LEFT, three cloak tails stream right without shortening, six arms countable; 6 exact seed ready."
+    },
+    "severing-bolt": {
+      "n": 6,
+      "poses": "1 exact seed ready; 2 LOWER small waist pair lifts from waist to clasp together in front of lower chest, upper pair remains raised and middle huge-cuff pair stays separate at ribs; 3 LOWER small hands draw apart in aiming shape below exposed brighter chest core (NO orb); 4 LOWER small pair pushes BOTH small open palms toward LEFT in front of abdomen to fire (no projectile), middle pair held at ribs and upper pair still raised, six hands countable; 5 LOWER pair follows through relaxing while middle and upper pairs remain distinct; 6 exact seed ready."
+    },
+    "fate-lash": {
+      "n": 6,
+      "poses": "1 exact seed ready; 2 UPPER slim-bracer pair lowers BEFORE FACE without obscuring face or core, fingers pinch as if holding invisible thread, middle huge pair and lower small pair retain seed positions; 3 UPPER slim-bracer pair raises and CROSSES WRISTS immediately ABOVE CROWN (hands within30px of crown at source scale), crown still visible, no threads; 4 UPPER slim-bracer pair whips diagonally DOWN-LEFT in sharp slashing gesture, keep them separate from middle HUGE-cuff pair; 5 UPPER pair follows through toward LEFT, elbows re-open, all six hands identifiable; 6 exact seed ready."
+    },
+    "call-the-court": {
+      "n": 6,
+      "poses": "R1. 1 exact seed ready; 2 UPPER slim-bracer pair raises together to either side of crown, hands close but not crossing; 3 UPPER slim-bracer pair opens APART symmetrically over crown, palms grasp outward as if tearing an INVISIBLE curtain (NO portal or rift needed); 4 UPPER pair HOLDS WIDE OPEN ABOVE crown in a stable symmetrical summoning warning pose, torso slightly lifted chin up, exposed chest core brighter; middle HUGE-cuff pair remains at ribs, lower small pair at belly, all six arms distinct; 5 UPPER pair lowers slowly out to sides, NOT a slashing follow-through; 6 exact seed ready. This move must look like a held two-hand overhead opening, never like Fate Lash crossed-wrist whip."
+    },
+    "shadow-tide": {
+      "n": 6,
+      "poses": "1 exact seed ready; 2 ALL SIX arms tuck inward at their own three levels without hiding face or chest core: upper pair beside head, middle big cuffs beside ribs, lower pair belly; 3 ALL THREE PAIRS spread LOWER to both sides in three clear layers, exactly6 visible hands, three cloak tails swell slightly; 4 ALL SIX arms press down with palms downward, distinct six hands, body floats10px lower but cloak center tip does NOT extend below its normal baseline, long three-tail cloak spreads sideways by at most10%, no wave/VFX; 5 arms follow through down and start re-opening, cloak settles retaining normal length; 6 exact seed ready."
+    },
+    "severed-crown": {
+      "n": 6,
+      "poses": "1 exact seed ready; 2 slight bow, all three arm pairs contract at their own levels, keep face/crown/core visible; 3 head rises, UPPER slim-bracer pair raised highest just above crown, chest core and gold crown and cloak EDGES brighten ONLY INSIDE the body; middle huge-cuff pair wide and lower small pair near waist, exactly6 arms; 4 HOLD PEAK ROAR, neck lifts mouth open, upper hands high and spread not crossed, exactly6 arms visible, crown floats slightly above head but total crown-to-tip length stays same, no external light; 5 relax three arm pairs and dim back to seed lighting; 6 exact seed ready."
+    },
+    "hit": {
+      "n": 4,
+      "poses": "1 exact seed ready; 2 recoil backwards to RIGHT with head and upper torso thrown back a little, crown remains over head, all6 arms jerk backward at THEIR OWN LEVELS, cloak three tails flutter left, lowest center cloth tip stays at baseline; 3 brace upright, all six arms re-establish seed three-level arrangement, crown/face/core clear, tail lengths unchanged; 4 exact seed ready."
+    },
+    "down": {
+      "n": 4,
+      "poses": "1 exact seed ready; 2 torso sinks, all SIX arms hang in three separate paired levels with correct original cuffs, crown tilts over head, three cloak tails bend rather than shrink; 3 collapse sideways LEFT into a low pile of three cloak tails against the ground line, head and dark chest core visible, ALL SIX arms folded/draped separately around torso with original cuffs countable, gold crown resting adjacent head (one crown only), no legs; 4 HELD LYING low sideways pile with head/one crown/dark chest core and exactlySIX arms countable, three cloak tails pooled on ground line, core extinguished, never stands up. Intentional down collapse changes crown-to-floor height but NOT head/torso/arm sizes, no shattering or extra rubble."
+    }
+  }
+}

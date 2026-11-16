@@ -1,0 +1,349 @@
+{
+  "seed_crown_apex_xy": [
+    554,
+    137
+  ],
+  "seed_cloak_tip_y": 896,
+  "seed_body_height": 759,
+  "canonical_slot_width": 362,
+  "calibration": {
+    "source": "raw/original/six-hand-rend-r3.png",
+    "frame": 0,
+    "crown_apex_xy": [
+      197,
+      225
+    ],
+    "cloak_tip_y": 536,
+    "source_span": 311,
+    "global_scale": 2.440514469453376,
+    "method": "One crown-to-middle-cloak-tip calibration on Six-Hand Rend ready; no arm-height fit and no per-frame/per-strip pose fit.",
+    "note": "Calibration retained ONCE from R3 ready before whole-strip spacing revisions R4/R5; original R3 retained. No per-pose/strip scale fit."
+  },
+  "landmark_policy": "Crown gold apex visually reviewed; gold threshold assists most poses. Fate Lash crossed-wrist frame2 uses manual visible crown apex(922,218), not higher gold forearm cuffs. Cloak contact is lowest alpha>8 point after cleanup, all images retain originals. Crown point uncertainty ~1-2sourcepx, hand overlap needs visual review.",
+  "frames": {
+    "six-hand-rend": [
+      {
+        "frame": 0,
+        "crown_xy": [
+          197,
+          223
+        ]
+      },
+      {
+        "frame": 1,
+        "crown_xy": [
+          557,
+          220
+        ]
+      },
+      {
+        "frame": 2,
+        "crown_xy": [
+          918,
+          221
+        ]
+      },
+      {
+        "frame": 3,
+        "crown_xy": [
+          1291,
+          226
+        ]
+      },
+      {
+        "frame": 4,
+        "crown_xy": [
+          1648,
+          231
+        ]
+      },
+      {
+        "frame": 5,
+        "crown_xy": [
+          2009,
+          223
+        ]
+      }
+    ],
+    "severing-bolt": [
+      {
+        "frame": 0,
+        "crown_xy": [
+          197,
+          224
+        ]
+      },
+      {
+        "frame": 1,
+        "crown_xy": [
+          560,
+          224
+        ]
+      },
+      {
+        "frame": 2,
+        "crown_xy": [
+          921,
+          224
+        ]
+      },
+      {
+        "frame": 3,
+        "crown_xy": [
+          1283,
+          224
+        ]
+      },
+      {
+        "frame": 4,
+        "crown_xy": [
+          1645,
+          225
+        ]
+      },
+      {
+        "frame": 5,
+        "crown_xy": [
+          2008,
+          224
+        ]
+      }
+    ],
+    "fate-lash": [
+      {
+        "frame": 0,
+        "crown_xy": [
+          197,
+          225
+        ]
+      },
+      {
+        "frame": 1,
+        "crown_xy": [
+          559,
+          225
+        ]
+      },
+      {
+        "frame": 2,
+        "crown_xy": [
+          922,
+          218
+        ]
+      },
+      {
+        "frame": 3,
+        "crown_xy": [
+          1284,
+          225
+        ]
+      },
+      {
+        "frame": 4,
+        "crown_xy": [
+          1645,
+          226
+        ]
+      },
+      {
+        "frame": 5,
+        "crown_xy": [
+          2007,
+          225
+        ]
+      }
+    ],
+    "call-the-court": [
+      {
+        "frame": 0,
+        "crown_xy": [
+          199,
+          224
+        ]
+      },
+      {
+        "frame": 1,
+        "crown_xy": [
+          559,
+          224
+        ]
+      },
+      {
+        "frame": 2,
+        "crown_xy": [
+          921,
+          224
+        ]
+      },
+      {
+        "frame": 3,
+        "crown_xy": [
+          1285,
+          217
+        ]
+      },
+      {
+        "frame": 4,
+        "crown_xy": [
+          1645,
+          224
+        ]
+      },
+      {
+        "frame": 5,
+        "crown_xy": [
+          2008,
+          224
+        ]
+      }
+    ],
+    "shadow-tide": [
+      {
+        "frame": 0,
+        "crown_xy": [
+          197,
+          225
+        ]
+      },
+      {
+        "frame": 1,
+        "crown_xy": [
+          558,
+          224
+        ]
+      },
+      {
+        "frame": 2,
+        "crown_xy": [
+          915,
+          225
+        ]
+      },
+      {
+        "frame": 3,
+        "crown_xy": [
+          1278,
+          230
+        ]
+      },
+      {
+        "frame": 4,
+        "crown_xy": [
+          1639,
+          225
+        ]
+      },
+      {
+        "frame": 5,
+        "crown_xy": [
+          1990,
+          225
+        ]
+      }
+    ],
+    "severed-crown": [
+      {
+        "frame": 0,
+        "crown_xy": [
+          198,
+          223
+        ]
+      },
+      {
+        "frame": 1,
+        "crown_xy": [
+          543,
+          231
+        ]
+      },
+      {
+        "frame": 2,
+        "crown_xy": [
+          921,
+          222
+        ]
+      },
+      {
+        "frame": 3,
+        "crown_xy": [
+          1281,
+          222
+        ]
+      },
+      {
+        "frame": 4,
+        "crown_xy": [
+          1651,
+          224
+        ]
+      },
+      {
+        "frame": 5,
+        "crown_xy": [
+          2017,
+          224
+        ]
+      }
+    ],
+    "hit": [
+      {
+        "frame": 0,
+        "crown_xy": [
+          297,
+          174
+        ]
+      },
+      {
+        "frame": 1,
+        "crown_xy": [
+          894,
+          171
+        ]
+      },
+      {
+        "frame": 2,
+        "crown_xy": [
+          1382,
+          174
+        ]
+      },
+      {
+        "frame": 3,
+        "crown_xy": [
+          1926,
+          174
+        ]
+      }
+    ],
+    "down": [
+      {
+        "frame": 0,
+        "crown_xy": [
+          300,
+          168
+        ]
+      },
+      {
+        "frame": 1,
+        "crown_xy": [
+          767,
+          220
+        ]
+      },
+      {
+        "frame": 2,
+        "crown_xy": [
+          1182,
+          411
+        ]
+      },
+      {
+        "frame": 3,
+        "crown_xy": [
+          1727,
+          410
+        ]
+      }
+    ]
+  }
+}
