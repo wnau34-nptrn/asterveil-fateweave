@@ -322,7 +322,7 @@ const valdAdds = foes(10, [['b1', SPECIES.riftWisp], ['b2', SPECIES.riftWisp]]);
 export const wbValdrakk: EncounterDefinition = {
   ...riftWarden, id: 'wb-valdrakk', version: 1, name: 'บอสโลก: วัลดรัค',
   phases: [{ sourceId: 'f1', below: 70, name: 'Sky Rend' }],
-  enemies: [...valdAdds.enemies, boss('Valdrakk', 'วัลดรัค', 125)],
+  enemies: [...valdAdds.enemies, boss('Valdrakk', 'วัลดรัค', 125, { art: 'foe_valdrakk' })],
   intents: [...valdAdds.intents,
     mv('Shard Talon', 1, 26, 'physical'), mv('Wing Gust', 2, 22, 'energy'), mv('Wing Gathering', 0, 0, 'physical', { charge: true, breakable: true }),
     mv('Worldshard Dive', 0, 20, 'energy', { all: true }), mv('Shard Talon', 0, 28, 'physical'), mv('Wing Gust', 3, 22, 'energy'),
@@ -356,6 +356,6 @@ export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatr
 // `presentedEncounters` is what the presentation coverage and the texture-budget audit walk: `encounters` plus every trio boss
 // whose moves have body clips (Kragmor with WB-A, step 5; Valdrakk/Morvane join with WB-B/WB-C). Until `WorldBossTrioRules.from`
 // is set nobody can fight them.
-export const presentedEncounters: readonly EncounterDefinition[] = [...encounters, wbKragmor];
+export const presentedEncounters: readonly EncounterDefinition[] = [...encounters, wbKragmor, wbValdrakk];
 const lookupList: readonly EncounterDefinition[] = [...encounters, ...WORLD_BOSS_TRIO];
 export const encounterById = (id: string): EncounterDefinition | undefined => lookupList.find(e => e.id === id);

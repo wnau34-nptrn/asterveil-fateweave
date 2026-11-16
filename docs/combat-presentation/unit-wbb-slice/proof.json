@@ -1,0 +1,109 @@
+{
+  "validationJsonSha256": "cd122e5179f4bf739c07daf61b3ea417527bde09ca279fbea96394985556afe1",
+  "environment": "Chromium / SwiftShader / cloud 390x844 touch emulation, not a physical phone or iOS Safari",
+  "retiming": "none; every captured frame preserved using CDP timestamps",
+  "ownerMotionApproval": "pending; none inferred from generation or tests",
+  "clips": [
+    {
+      "file": "foe_valdrakk-worldshard-dive-normal-normal-390.mp4",
+      "sha256": "0c5e3b4a5234a669dd2eda46f4d6ad1cbcbdc5ef71cc3e25e5d46bd98c1598a7",
+      "bytes": 495488
+    },
+    {
+      "file": "foe_valdrakk-sky-rend-normal-normal-390.mp4",
+      "sha256": "719febf2463f5cf58de882cd46221b11a6d4fedd0eb6105db8a5fabccd37b707",
+      "bytes": 460499
+    },
+    {
+      "file": "foe_valdrakk-wing-gathering-normal-normal-390.mp4",
+      "sha256": "26acada68c5f6108188c9cad6f00bcb500fe74f4e8ed2d86809ef65ffb092773",
+      "bytes": 439901
+    },
+    {
+      "file": "foe_valdrakk-wing-gust-normal-normal-390.mp4",
+      "sha256": "facc3ed9df9d73d05f62804bed6ab612d84d0b53baef24ae2486c2e1f94bdfa1",
+      "bytes": 501968
+    },
+    {
+      "file": "foe_valdrakk-shard-talon-enemy-down-normal-390.mp4",
+      "sha256": "fcd0da3630ac074861d1a17b4ec1ef62f5ca0c52a5d196655b06e2caab029cb7",
+      "bytes": 289585
+    },
+    {
+      "file": "foe_valdrakk-shard-talon-normal-normal-390.mp4",
+      "sha256": "4b863600a6550733b69bab22682f4b1e771abef7bb5777df4783a969c0d15abc",
+      "bytes": 479955
+    }
+  ],
+  "atlas": {
+    "factor": 0.26,
+    "cell": 266,
+    "displayRatio": 2,
+    "origin": [
+      0.5,
+      0.875
+    ],
+    "layout": {
+      "shard-talon": 1,
+      "wing-gust": 5,
+      "wing-gathering": 9,
+      "worldshard-dive": 13,
+      "staggered": 17,
+      "sky-rend": 21,
+      "hit": 25,
+      "down": 27
+    },
+    "rawSha256": {
+      "shard-talon": "9fd97fe8b5d403d51a59ec11489c24f2eccfc79376170588fbe957c70804bc43",
+      "wing-gust": "fe7b7a6e7363ffc0736ff40a91c7bfecc5b60e52ded62c1bc1fa6b64e137da32",
+      "wing-gathering": "7aac59d47539a4ddf00087322e1568619d84efeea5be9062e2e0b4dc75571e23",
+      "worldshard-dive": "b74784e162c610c9196851c5e4a49060c076cad81dd967c8b2057be4d302a5f2",
+      "staggered": "229af181a542e7d25cc5fdcc67541ed71771095594910aec967c85fcbaae5e4f",
+      "sky-rend": "1de9d90403d953650b6500a4c789f9f2af6067c628d5013ca1598c68e7c5971c",
+      "hit": "674c16d60d839b32368633fc68051d3603f8e1f02838b4105e30ed318a520ffc",
+      "down": "23057fc4d7226f70986e63a527c424c2ab9428d1de0770a448f451b5eb1be04f"
+    },
+    "exactSeedFrames": {
+      "shard-talon": [
+        true,
+        true
+      ],
+      "wing-gust": [
+        true,
+        true
+      ],
+      "wing-gathering": [
+        true,
+        true
+      ],
+      "worldshard-dive": [
+        true,
+        true
+      ],
+      "staggered": [
+        true,
+        true
+      ],
+      "sky-rend": [
+        true,
+        true
+      ],
+      "hit": [
+        true,
+        true
+      ],
+      "down": [
+        true,
+        null
+      ]
+    },
+    "uniqueFrames": 30,
+    "image": "valdrakk_wbb.7987cfe5b464.webp",
+    "atlas": "valdrakk_wbb.03334e5611bb.json",
+    "width": 512,
+    "height": 2759,
+    "frames": 30,
+    "decodedBytes": 5650432,
+    "downloadBytes": 1931778
+  }
+}

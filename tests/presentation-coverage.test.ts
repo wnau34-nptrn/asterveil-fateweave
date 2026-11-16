@@ -40,7 +40,7 @@ function markdown(c: PresentationCoverage): string {
 describe('W8 presentation coverage', () => {
   const c = presentationCoverage();
   it('counts every identity in the game and every ActionId', () => {
-    expect(c.counts.identities).toBe(40);
+    expect(c.counts.identities).toBe(41);
     expect(c.counts.heroes).toBe(17);
     expect(c.counts.actionIds).toBe(Object.keys(veilSiege.skills).length);
     expect(unusedRegistry(c)).toEqual([]);
@@ -61,8 +61,8 @@ describe('W8 presentation coverage', () => {
   });
   it('no move falls back to an unexplained route', () => {
     // Code-drawn on purpose: the basic arrow/flask (AV03) and Shadow Knife's thrown energy blade. WB-A (P11-05 step 5):
-    // Kragmor's 70% phase turn plays its painted body gesture; a painted World Boss signature VFX is a later art item.
-    for (const r of c.rows.filter(r => r.vfx.kind === 'code')) expect(r.move === 'attack' || r.move === 'Shadow Knife' || (r.identity === 'foe_kragmor' && r.move === 'phase:Fault Awakening'), `${r.identity} ${r.move}`).toBe(true);
+    // Kragmor's 70% phase turn and Valdrakk's two energy moves and 70% phase play their painted body gestures; painted World Boss signature VFX is a later art item.
+    for (const r of c.rows.filter(r => r.vfx.kind === 'code')) expect(r.move === 'attack' || r.move === 'Shadow Knife' || (r.identity === 'foe_kragmor' && r.move === 'phase:Fault Awakening') || (r.identity === 'foe_valdrakk' && ['Wing Gust', 'Worldshard Dive', 'phase:Sky Rend'].includes(r.move)), `${r.identity} ${r.move}`).toBe(true);
     // Shared on purpose: hero basic cuts by class palette and physical foe moves on the blade family.
     // P03: Wynne's curses share the Mark painting; Kael's fists share the Saint strike paintings until a Martial family exists.
     for (const r of c.rows.filter(r => r.vfx.kind === 'shared')) expect(r.vfx.module, `${r.identity} ${r.move}`).toBe(['kael', 'wynne', 'astrid'].includes(r.identity) && r.move !== 'attack' ? (r.identity === 'kael' ? 'saint-dance-fx' : 'arcane-seal-fx') : 'blade-fx');

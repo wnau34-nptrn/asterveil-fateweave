@@ -1,0 +1,782 @@
+{
+  "task": "ART-UNIT-ANIMATION-WB-B-001",
+  "method": "SIFT similarity constrained by spatial torso coverage; seed mask excludes wings/tail/head/feet. Scale of torso texture across shoulder AND posterior is a proxy for body length, not full skeletal measurement.",
+  "seed_mask_polygon": [
+    [
+      355,
+      585
+    ],
+    [
+      480,
+      570
+    ],
+    [
+      625,
+      600
+    ],
+    [
+      740,
+      625
+    ],
+    [
+      770,
+      690
+    ],
+    [
+      650,
+      710
+    ],
+    [
+      480,
+      685
+    ],
+    [
+      360,
+      670
+    ]
+  ],
+  "tolerance": 0.04,
+  "min_inliers": 12,
+  "min_seed_x_span": 180,
+  "min_posterior_inliers": 3,
+  "not_measured_policy": "Never passed. Owner/artist must compare torso length with seed; do not import on the basis of technical verification alone.",
+  "summary": {
+    "not-measured": 20,
+    "seed-exact": 15,
+    "within-4pct-proxy": 9
+  },
+  "rows": [
+    {
+      "move": "shard-talon",
+      "frame": 0,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "shard-talon",
+      "frame": 1,
+      "scale": 1.1246235387029244,
+      "inliers": 13,
+      "seed_inlier_span_x": 220.64761352539062,
+      "posterior_inliers": 1,
+      "status": "not-measured",
+      "matrix": [
+        [
+          1.1074084670206648,
+          -0.1960219145290375,
+          68.49344191395842
+        ],
+        [
+          0.1960219145290375,
+          1.1074084670206648,
+          -200.0807785546437
+        ]
+      ]
+    },
+    {
+      "move": "shard-talon",
+      "frame": 2,
+      "scale": 1.0516823500526948,
+      "inliers": 19,
+      "seed_inlier_span_x": 140.51638793945312,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          1.047806145512822,
+          0.09021112369282398,
+          -64.91503443592917
+        ],
+        [
+          -0.09021112369282398,
+          1.047806145512822,
+          43.587154665981004
+        ]
+      ]
+    },
+    {
+      "move": "shard-talon",
+      "frame": 3,
+      "scale": 0.9886263242510069,
+      "inliers": 7,
+      "seed_inlier_span_x": 197.09762573242188,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          0.9828992175865628,
+          0.10625976223283992,
+          -16.379838112928244
+        ],
+        [
+          -0.10625976223283992,
+          0.9828992175865628,
+          104.96656502470199
+        ]
+      ]
+    },
+    {
+      "move": "shard-talon",
+      "frame": 4,
+      "scale": 1.0090817003248216,
+      "inliers": 21,
+      "seed_inlier_span_x": 348.2600402832031,
+      "posterior_inliers": 5,
+      "status": "within-4pct-proxy",
+      "matrix": [
+        [
+          1.0086120722878786,
+          0.030782552941305236,
+          -9.394606351297394
+        ],
+        [
+          -0.030782552941305236,
+          1.0086120722878786,
+          18.42434853975933
+        ]
+      ]
+    },
+    {
+      "move": "shard-talon",
+      "frame": 5,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "wing-gust",
+      "frame": 0,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "wing-gust",
+      "frame": 1,
+      "scale": 1.003319566183481,
+      "inliers": 47,
+      "seed_inlier_span_x": 392.1731262207031,
+      "posterior_inliers": 10,
+      "status": "within-4pct-proxy",
+      "matrix": [
+        [
+          1.0033191625783615,
+          0.000899938700238048,
+          -7.6425762543345535
+        ],
+        [
+          -0.000899938700238048,
+          1.0033191625783615,
+          -6.600803763407334
+        ]
+      ]
+    },
+    {
+      "move": "wing-gust",
+      "frame": 2,
+      "scale": 0.9919402935371278,
+      "inliers": 45,
+      "seed_inlier_span_x": 390.72357177734375,
+      "posterior_inliers": 16,
+      "status": "within-4pct-proxy",
+      "matrix": [
+        [
+          0.991927725140113,
+          0.004993399732025016,
+          -7.585350348268883
+        ],
+        [
+          -0.004993399732025016,
+          0.991927725140113,
+          0.9058764131426346
+        ]
+      ]
+    },
+    {
+      "move": "wing-gust",
+      "frame": 3,
+      "scale": 1.0105087052349628,
+      "inliers": 28,
+      "seed_inlier_span_x": 194.2142333984375,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          1.0095280967841325,
+          0.044506911362712585,
+          -38.71124722751778
+        ],
+        [
+          -0.044506911362712585,
+          1.0095280967841325,
+          30.51585169536687
+        ]
+      ]
+    },
+    {
+      "move": "wing-gust",
+      "frame": 4,
+      "scale": 0.9889472558646467,
+      "inliers": 46,
+      "seed_inlier_span_x": 344.403564453125,
+      "posterior_inliers": 19,
+      "status": "within-4pct-proxy",
+      "matrix": [
+        [
+          0.9889197229211615,
+          0.0073794647331777,
+          13.78192433545094
+        ],
+        [
+          -0.0073794647331777,
+          0.9889197229211615,
+          5.897601882953315
+        ]
+      ]
+    },
+    {
+      "move": "wing-gust",
+      "frame": 5,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "wing-gathering",
+      "frame": 0,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "wing-gathering",
+      "frame": 1,
+      "scale": 0.9824569737978398,
+      "inliers": 14,
+      "seed_inlier_span_x": 306.2294616699219,
+      "posterior_inliers": 6,
+      "status": "within-4pct-proxy",
+      "matrix": [
+        [
+          0.9824504404185878,
+          0.003582943668571943,
+          9.157099615961016
+        ],
+        [
+          -0.003582943668571943,
+          0.9824504404185878,
+          28.061978628836812
+        ]
+      ]
+    },
+    {
+      "move": "wing-gathering",
+      "frame": 2,
+      "scale": 0.993173476374407,
+      "inliers": 9,
+      "seed_inlier_span_x": 259.8075866699219,
+      "posterior_inliers": 3,
+      "status": "not-measured",
+      "matrix": [
+        [
+          0.9928941472048998,
+          -0.023553484240756147,
+          44.72903278920063
+        ],
+        [
+          0.023553484240756147,
+          0.9928941472048998,
+          32.701207307790895
+        ]
+      ]
+    },
+    {
+      "move": "wing-gathering",
+      "frame": 3,
+      "scale": 1.042543030836133,
+      "inliers": 8,
+      "seed_inlier_span_x": 314.71978759765625,
+      "posterior_inliers": 2,
+      "status": "not-measured",
+      "matrix": [
+        [
+          1.042474020864193,
+          0.011995289418448386,
+          0.5945679982177332
+        ],
+        [
+          -0.011995289418448386,
+          1.042474020864193,
+          42.42878899961221
+        ]
+      ]
+    },
+    {
+      "move": "wing-gathering",
+      "frame": 4,
+      "scale": 0.99253220651652,
+      "inliers": 13,
+      "seed_inlier_span_x": 233.21701049804688,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          0.992531796501329,
+          -0.0009021676098769551,
+          1.8582051416961143
+        ],
+        [
+          0.0009021676098769551,
+          0.992531796501329,
+          22.971817337671915
+        ]
+      ]
+    },
+    {
+      "move": "wing-gathering",
+      "frame": 5,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "worldshard-dive",
+      "frame": 0,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "worldshard-dive",
+      "frame": 1,
+      "scale": 1.042049370224207,
+      "inliers": 9,
+      "seed_inlier_span_x": 80.81402587890625,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          1.0413984568968795,
+          -0.0368258599012261,
+          4.541113828341568
+        ],
+        [
+          0.0368258599012261,
+          1.0413984568968795,
+          -19.92026449051807
+        ]
+      ]
+    },
+    {
+      "move": "worldshard-dive",
+      "frame": 2,
+      "scale": 1.0076669328481451,
+      "inliers": 5,
+      "seed_inlier_span_x": 151.18154907226562,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          0.9693127019492075,
+          0.27536436478875603,
+          -155.46482636792393
+        ],
+        [
+          -0.27536436478875603,
+          0.9693127019492075,
+          155.3194211302919
+        ]
+      ]
+    },
+    {
+      "move": "worldshard-dive",
+      "frame": 3,
+      "scale": 0.9957095482674441,
+      "inliers": 6,
+      "seed_inlier_span_x": 336.0994567871094,
+      "posterior_inliers": 3,
+      "status": "not-measured",
+      "matrix": [
+        [
+          0.9660282909996447,
+          0.241302394309015,
+          -69.89732612711762
+        ],
+        [
+          -0.241302394309015,
+          0.9660282909996447,
+          173.30251785375344
+        ]
+      ]
+    },
+    {
+      "move": "worldshard-dive",
+      "frame": 4,
+      "scale": 1.0237527984298285,
+      "inliers": 5,
+      "seed_inlier_span_x": 94.12582397460938,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          0.9971386644945684,
+          0.2319143722646219,
+          -107.48988421074353
+        ],
+        [
+          -0.2319143722646219,
+          0.9971386644945684,
+          145.13663492355215
+        ]
+      ]
+    },
+    {
+      "move": "worldshard-dive",
+      "frame": 5,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "staggered",
+      "frame": 0,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "staggered",
+      "frame": 1,
+      "scale": 1.0556862166856118,
+      "inliers": 17,
+      "seed_inlier_span_x": 136.29306030273438,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          1.0535323134482,
+          -0.06740217074000247,
+          43.32478068968696
+        ],
+        [
+          0.06740217074000247,
+          1.0535323134482,
+          -96.76329809138295
+        ]
+      ]
+    },
+    {
+      "move": "staggered",
+      "frame": 2,
+      "scale": 1.0125953070858205,
+      "inliers": 12,
+      "seed_inlier_span_x": 348.6820373535156,
+      "posterior_inliers": 1,
+      "status": "not-measured",
+      "matrix": [
+        [
+          1.0121607722518389,
+          0.029661878679347713,
+          3.065490500277493
+        ],
+        [
+          -0.029661878679347713,
+          1.0121607722518389,
+          6.982447775020076
+        ]
+      ]
+    },
+    {
+      "move": "staggered",
+      "frame": 3,
+      "scale": 1.064198042685289,
+      "inliers": 9,
+      "seed_inlier_span_x": 72.37155151367188,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          1.0550856966524582,
+          0.13896635123150175,
+          -56.36026260540631
+        ],
+        [
+          -0.13896635123150175,
+          1.0550856966524582,
+          39.63154753688762
+        ]
+      ]
+    },
+    {
+      "move": "staggered",
+      "frame": 4,
+      "scale": 1.039819410267955,
+      "inliers": 30,
+      "seed_inlier_span_x": 180.84255981445312,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          1.0397775451279694,
+          -0.009330735107763406,
+          15.803491097097414
+        ],
+        [
+          0.009330735107763406,
+          1.0397775451279694,
+          -47.81399743235403
+        ]
+      ]
+    },
+    {
+      "move": "staggered",
+      "frame": 5,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "sky-rend",
+      "frame": 0,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "sky-rend",
+      "frame": 1,
+      "scale": 0.9862732743475634,
+      "inliers": 12,
+      "seed_inlier_span_x": 230.88851928710938,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          0.9862597035378415,
+          0.005173864098813387,
+          2.309875956547793
+        ],
+        [
+          -0.005173864098813387,
+          0.9862597035378415,
+          33.56704389846475
+        ]
+      ]
+    },
+    {
+      "move": "sky-rend",
+      "frame": 2,
+      "scale": 0.9795938860574964,
+      "inliers": 37,
+      "seed_inlier_span_x": 321.87237548828125,
+      "posterior_inliers": 6,
+      "status": "within-4pct-proxy",
+      "matrix": [
+        [
+          0.9793397879013225,
+          -0.022310567778970572,
+          20.84314537661532
+        ],
+        [
+          0.022310567778970572,
+          0.9793397879013225,
+          6.6111898707478565
+        ]
+      ]
+    },
+    {
+      "move": "sky-rend",
+      "frame": 3,
+      "scale": 0.9691710513351434,
+      "inliers": 22,
+      "seed_inlier_span_x": 327.2266845703125,
+      "posterior_inliers": 6,
+      "status": "within-4pct-proxy",
+      "matrix": [
+        [
+          0.9688881613193424,
+          -0.023414901265884355,
+          41.404935464364634
+        ],
+        [
+          0.023414901265884355,
+          0.9688881613193424,
+          10.342159197424103
+        ]
+      ]
+    },
+    {
+      "move": "sky-rend",
+      "frame": 4,
+      "scale": 0.9814633818806132,
+      "inliers": 29,
+      "seed_inlier_span_x": 319.53912353515625,
+      "posterior_inliers": 4,
+      "status": "within-4pct-proxy",
+      "matrix": [
+        [
+          0.9811051579620709,
+          -0.026514882476647784,
+          22.804996071595195
+        ],
+        [
+          0.026514882476647784,
+          0.9811051579620709,
+          2.4018295136051906
+        ]
+      ]
+    },
+    {
+      "move": "sky-rend",
+      "frame": 5,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "hit",
+      "frame": 0,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "hit",
+      "frame": 1,
+      "scale": 1.0355200413963142,
+      "inliers": 28,
+      "seed_inlier_span_x": 121.43783569335938,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          0.9365485272899611,
+          -0.44179023547881774,
+          338.7885911426674
+        ],
+        [
+          0.44179023547881774,
+          0.9365485272899611,
+          -147.14987806002853
+        ]
+      ]
+    },
+    {
+      "move": "hit",
+      "frame": 2,
+      "scale": 1.0241118674125915,
+      "inliers": 50,
+      "seed_inlier_span_x": 368.5002136230469,
+      "posterior_inliers": 15,
+      "status": "within-4pct-proxy",
+      "matrix": [
+        [
+          1.0223743917320507,
+          -0.05962985917998323,
+          31.457794036535216
+        ],
+        [
+          0.05962985917998323,
+          1.0223743917320507,
+          -39.10688740703145
+        ]
+      ]
+    },
+    {
+      "move": "hit",
+      "frame": 3,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "down",
+      "frame": 0,
+      "scale": 1.0,
+      "inliers": 395,
+      "seed_inlier_span_x": 415,
+      "posterior_inliers": null,
+      "status": "seed-exact"
+    },
+    {
+      "move": "down",
+      "frame": 1,
+      "scale": 1.0331132632751419,
+      "inliers": 27,
+      "seed_inlier_span_x": 193.03863525390625,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          1.0206793033694563,
+          0.15980229794422252,
+          -114.21247959025735
+        ],
+        [
+          -0.15980229794422252,
+          1.0206793033694563,
+          115.3432830206771
+        ]
+      ]
+    },
+    {
+      "move": "down",
+      "frame": 2,
+      "scale": 0.9313161907501261,
+      "inliers": 6,
+      "seed_inlier_span_x": 90.09805297851562,
+      "posterior_inliers": 0,
+      "status": "not-measured",
+      "matrix": [
+        [
+          0.9313152051457674,
+          0.0013549234747739318,
+          45.94721129914871
+        ],
+        [
+          -0.0013549234747739318,
+          0.9313152051457674,
+          153.94857822822024
+        ]
+      ]
+    },
+    {
+      "move": "down",
+      "frame": 3,
+      "scale": null,
+      "inliers": 0,
+      "seed_inlier_span_x": 0,
+      "posterior_inliers": 0,
+      "status": "not-measured"
+    }
+  ]
+}

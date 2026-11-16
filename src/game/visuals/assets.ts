@@ -18,7 +18,7 @@ export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number 
   foe_tusker: { sheet: 'foes', frame: 0 }, foe_sprite: { sheet: 'foes', frame: 1 }, foe_stalker: { sheet: 'foes', frame: 2 },
   foe_mycon: { sheet: 'foes', frame: 3 }, foe_golem: { sheet: 'foes', frame: 4 }, foe_riftweaver: { sheet: 'foes', frame: 5 },
   foe_matriarch: { sheet: 'foes', frame: 6 }, foe_juggernaut: { sheet: 'foes', frame: 7 }, foe_sentinel: { sheet: 'foes', frame: 8 },
-  foe_kragmor: { sheet: 'foes', frame: 8 }, // placeholder still, see PLACEHOLDER_STILLS
+  foe_kragmor: { sheet: 'foes', frame: 8 }, foe_valdrakk: { sheet: 'foes', frame: 8 }, // placeholder stills, see PLACEHOLDER_STILLS
   foe_hunter: { sheet: 'foes', frame: 9 }, foe_captain: { sheet: 'foes', frame: 10 },
   foe_dew_slime: { sheet: 'foes2', frame: 0 }, foe_ember_slime: { sheet: 'foes2', frame: 1 }, foe_ruin_bat: { sheet: 'foes2', frame: 2 },
   foe_vargoth_guard: { sheet: 'foes2', frame: 3 }, foe_thorn_beetle: { sheet: 'foes2', frame: 4 }, foe_spore_puff: { sheet: 'foes2', frame: 5 },
@@ -27,7 +27,7 @@ export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number 
 // WB-A (P11-05 step 5): identities whose static still and portrait are borrowed until Codex paints their own (World Boss portraits
 // come with the banner/icon queue). Kragmor shows the Rift Warden's still while its atlas loads and in the turn-order portrait.
 // Each entry shares the lender's frame on purpose; tests/world.test.ts exempts exactly these and fails if one is not a real lender.
-export const PLACEHOLDER_STILLS: Readonly<Record<string, string>> = { foe_kragmor: 'foe_sentinel' };
+export const PLACEHOLDER_STILLS: Readonly<Record<string, string>> = { foe_kragmor: 'foe_sentinel', foe_valdrakk: 'foe_sentinel' };
 // Enemy ids are field slots (`f1`/`f2` front, `b1`/`b2` back); `art` picks the illustration (`raider`/`brute` are the
 // original cast's frames).
 // Frames drawn facing the wrong way for their side (party faces right, enemies face left, ART-PLACEMENT-RULES):
@@ -49,7 +49,7 @@ export const actorFootOrigins: Readonly<Record<string, number>> = {
 // Top row of each frame's painted figure (alpha > 40) in its 512 px cell, measured from the atlases: a field HP panel
 // sits just above it (owner 2026-10-22). Re-measure when an atlas changes.
 const figureTops: Readonly<Record<string, number>> = {
-  guardian: 19, tracer: 17, weaver: 0, healer: 0, raider: 0, brute: 0, garran: 37, mira: 37, toma: 37, sefa: 37, brann: 37, lio: 37, metta: 37, thiran: 37, lalin: 37, wila: 37, kael: 31, wynne: 37, astrid: 46, foe_tusker: 57, foe_sprite: 197, foe_stalker: 57, foe_mycon: 37, foe_golem: 17, foe_riftweaver: 37, foe_matriarch: 17, foe_juggernaut: 40, foe_sentinel: 5, foe_kragmor: 5, foe_hunter: 35, foe_captain: 37, foe_dew_slime: 182, foe_ember_slime: 227, foe_ruin_bat: 218, foe_vargoth_guard: 133, foe_thorn_beetle: 191, foe_spore_puff: 107, foe_rift_channeler: 68, foe_rift_wisp: 127, foe_shard_crawler: 191,
+  guardian: 19, tracer: 17, weaver: 0, healer: 0, raider: 0, brute: 0, garran: 37, mira: 37, toma: 37, sefa: 37, brann: 37, lio: 37, metta: 37, thiran: 37, lalin: 37, wila: 37, kael: 31, wynne: 37, astrid: 46, foe_tusker: 57, foe_sprite: 197, foe_stalker: 57, foe_mycon: 37, foe_golem: 17, foe_riftweaver: 37, foe_matriarch: 17, foe_juggernaut: 40, foe_sentinel: 5, foe_kragmor: 5, foe_valdrakk: 5, foe_hunter: 35, foe_captain: 37, foe_dew_slime: 182, foe_ember_slime: 227, foe_ruin_bat: 218, foe_vargoth_guard: 133, foe_thorn_beetle: 191, foe_spore_puff: 107, foe_rift_channeler: 68, foe_rift_wisp: 127, foe_shard_crawler: 191,
 };
 // How far the painted figure rises above its feet, as a fraction of the drawn size.
 export const figureRise = (art: string): number => (actorFootOrigins[art] ?? 1) - (figureTops[art] ?? 0) / 512;

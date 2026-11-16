@@ -1,0 +1,180 @@
+{
+  "task": "ART-UNIT-ANIMATION-WB-B-001",
+  "method": "Each request generates a whole strip; seed B attached on every call; revisions regenerate whole strip.",
+  "generations": [
+    {
+      "id": "shard-talon",
+      "prompt": "Edit the padded SIX-slot layout into ONE WHOLE SPRITE ANIMATION STRIP, EXACTLY SIX full-body poses in ONE HORIZONTAL ROW, equal slots. Reference1 is approved Valdrakk seed; reference2 six-slot layout. SAME exact model/materials/lighting every frame: four-legged violet crystal behemoth with gold thorn trim, EXACTLY FOUR legs with gold claws, TWO tall upright crystal wings (near and far wing), ONE tail curled UP on RIGHT with cyan tip, ONE circular cyan core on near/anatomical LEFT shoulder, cyan eyes. Facing LEFT three-quarter, NEVER mirror core. Keep head and shoulder core visible. Strict SAME TORSO LENGTH (shoulder core to rear hip, excluding wings/tail) and head/limb proportions in all six; do not scale up/down any pose, do not enlarge beyond seed. Move SHARD TALON: 1 exact seed ready; 2 lift FRONT-RIGHT paw (far-side front leg, on VIEWER LEFT) HIGH off ground and cock it backward near chest, head still visible, other three feet planted, torso shifts back a little; 3 rear knees crouch, chest leans forward aiming low, raised same paw drawn ready, same rigid torso length; 4 same raised FRONT-RIGHT paw swipes DOWN toward LEFT, gold claws contact ground LOW LEFT close to toes, compact foreshortened reach entirely within slot; 5 low forward follow-through, same paw low left relaxing, other three legs clear; 6 exact seed ready. Exactly TWO front paws and TWO rear paws in EACH pose, separate all four legs/feet so countable, no human arms. Wings stay raised/folded close to back, never spread horizontally, wing tops no more than modestly above seed crown height. Same planted-foot baseline, full body/cyan-tail tip/wing tips visible with large margins. AT LEAST100px completely empty ALPHA0 gaps between silhouettes, no alpha haze in gaps, outer margin32px, six figures together not two rows. True transparent background, NO floor/shadow plate, NO wind/dust/light beams/shockwaves/detached shards/VFX, no text/letters/UI/logos.",
+      "selected": false,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/shard-talon.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "shard-talon-r2",
+      "prompt": "Edit the padded SIX-slot layout into ONE WHOLE SPRITE ANIMATION STRIP, EXACTLY SIX full-body poses in ONE HORIZONTAL ROW, equal slots. Reference1 is approved Valdrakk seed; reference2 six-slot layout. SAME exact model/materials/lighting every frame: four-legged violet crystal behemoth with gold thorn trim, EXACTLY FOUR legs with gold claws, TWO tall upright crystal wings (near and far wing), ONE tail curled UP on RIGHT with cyan tip, ONE circular cyan core on near/anatomical LEFT shoulder, cyan eyes. Facing LEFT three-quarter, NEVER mirror core. Keep head and shoulder core visible. Strict SAME TORSO LENGTH (shoulder core to rear hip, excluding wings/tail) and head/limb proportions in all six; do not scale up/down any pose, do not enlarge beyond seed. Move SHARD TALON: 1 exact seed ready; 2 lift FRONT-RIGHT paw (far-side front leg, on VIEWER LEFT) HIGH off ground and cock it backward near chest, head still visible, other three feet planted, torso shifts back a little; 3 rear knees crouch, chest leans forward aiming low, raised same paw drawn ready, same rigid torso length; 4 same raised FRONT-RIGHT paw swipes DOWN toward LEFT, gold claws contact ground LOW LEFT close to toes, compact foreshortened reach entirely within slot; 5 low forward follow-through, same paw low left relaxing, other three legs clear; 6 exact seed ready. Exactly TWO front paws and TWO rear paws in EACH pose, separate all four legs/feet so countable, no human arms. Wings stay raised/folded close to back, never spread horizontally, wing tops no more than modestly above seed crown height. Same planted-foot baseline, full body/cyan-tail tip/wing tips visible with large margins. AT LEAST100px completely empty ALPHA0 gaps between silhouettes, no alpha haze in gaps, outer margin32px, six figures together not two rows. True transparent background, NO floor/shadow plate, NO wind/dust/light beams/shockwaves/detached shards/VFX, no text/letters/UI/logos. CORRECTION TO THIRD REFERENCE: Regenerate the ENTIRE six-pose strip together. In pose TWO ONLY the core-to-croup torso must be 6 percent LONGER than it appears in third reference, to MATCH reference1 seed torso length and the other poses. Do not resize the whole character, keep paw and head sizes fixed. Same rigid barrel shoulder-to-hip length across ALL poses. Four legs countable. Keep all other silhouettes and timings of third reference. No labels.",
+      "selected": false,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-6.png",
+        "raw/original/shard-talon.png"
+      ],
+      "original": "raw/original/shard-talon-r2.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "shard-talon-r3",
+      "prompt": "Edit the padded SIX-slot layout into ONE WHOLE SPRITE ANIMATION STRIP, EXACTLY SIX full-body poses in ONE HORIZONTAL ROW, equal slots. Reference1 is approved Valdrakk seed; reference2 six-slot layout. SAME exact model/materials/lighting every frame: four-legged violet crystal behemoth with gold thorn trim, EXACTLY FOUR legs with gold claws, TWO tall upright crystal wings (near and far wing), ONE tail curled UP on RIGHT with cyan tip, ONE circular cyan core on near/anatomical LEFT shoulder, cyan eyes. Facing LEFT three-quarter, NEVER mirror core. Keep head and shoulder core visible. Strict SAME TORSO LENGTH (shoulder core to rear hip, excluding wings/tail) and head/limb proportions in all six; do not scale up/down any pose, do not enlarge beyond seed. Move SHARD TALON: 1 exact seed ready; 2 lift FRONT-RIGHT paw (far-side front leg, on VIEWER LEFT) HIGH off ground and cock it backward near chest, head still visible, other three feet planted, torso shifts back a little; 3 rear knees crouch, chest leans forward aiming low, raised same paw drawn ready, same rigid torso length; 4 same raised FRONT-RIGHT paw swipes DOWN toward LEFT, gold claws contact ground LOW LEFT close to toes, compact foreshortened reach entirely within slot; 5 low forward follow-through, same paw low left relaxing, other three legs clear; 6 exact seed ready. Exactly TWO front paws and TWO rear paws in EACH pose, separate all four legs/feet so countable, no human arms. Wings stay raised/folded close to back, never spread horizontally, wing tops no more than modestly above seed crown height. Same planted-foot baseline, full body/cyan-tail tip/wing tips visible with large margins. AT LEAST100px completely empty ALPHA0 gaps between silhouettes, no alpha haze in gaps, outer margin32px, six figures together not two rows. True transparent background, NO floor/shadow plate, NO wind/dust/light beams/shockwaves/detached shards/VFX, no text/letters/UI/logos. WHOLE-STRIP REVISION: All six creatures must have shoulder-core to rear-hip distance of approximately 120 pixels at a 2172px wide final sheet. Keep EXACT seed size. SECOND pose in third reference is anatomically too short; extend ONLY its barrel/ribcage rearwards to the RIGHT by 10 percent (core stays put, move rear hip and rear legs right) without scaling head, paws, wings or entire figure. No yaw, same side view. Preserve its raised far forepaw. All six silhouettes regenerated as ONE sheet. Maintain >48px alpha0 gaps. The other five poses retain third reference positions.",
+      "selected": true,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-6.png",
+        "raw/original/shard-talon-r2.png"
+      ],
+      "original": "raw/original/shard-talon-r3.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "wing-gust",
+      "prompt": "ONE WHOLE SPRITE ANIMATION STRIP of EXACTLY SIX full-body Valdrakk poses in ONE HORIZONTAL ROW, six equally spaced slots from layout reference2, exact approved seed model in reference1. Four violet crystal legs with gold claws, TWO wings only (near and far), ONE tail curling up RIGHT with cyan tip, ONE round CYAN core on NEAR LEFT SHOULDER, cyan eyes. Never mirror, always facing LEFT 3/4. All FOUR paws/legs must remain countable in each pose; head and shoulder core visible throughout. Identical torso length from shoulder core to rump/tail attachment, excluding wings/tail, and same head/leg scale as seed, no per-pose growth/shrink. WING GUST poses: 1 seed ready; 2 lower/fold both wings slightly closer to back, chest compresses, four paws planted; 3 inhale chest and raise BOTH wings HIGH/VERTICAL, keep wing tips compact and no more than modestly above seed wing-top, same torso size, paws planted; 4 BOTH wings sweep FORWARD toward LEFT while remaining mostly UPRIGHT (hinge and bend into tall forward-curved sails, NOT horizontal spread), shoulders lean forward, head and near-side blue core NOT hidden by wings; 5 forward wing follow-through, chest settles, wings still upright and clearly two separate wings; 6 seed ready. Show a large readable wing-position change every middle pose. Wings NEVER spread sideways/horizontally, never extend beyond own slot, maximum overall silhouette only slightly taller than seed so no clipping at locked scale. Four paws planted on same ground baseline, single tail curled right unchanged. At least100px fully empty ALPHA0 gutters between figures, generous outside margins, full wing/foot/tail tips inside image. Transparent cutout background, no ground/shadow plate, no wind, beams, dust, shockwaves, detached shards or any VFX. No text/numbers/labels/UI/logos. Exactly six figures together, no second row.",
+      "selected": false,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/wing-gust.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "wing-gust-r2",
+      "prompt": "Edit the WHOLE SIX-POSE Wing Gust strip in reference3, keeping exact same Valdrakk model from seed reference1 and six-slot layout reference2. Keep one row, six complete figures, same scale, torso length, four legs/two wings/one curled right tail/one near-left shoulder cyan core throughout. Fix ONLY pose5 (second from RIGHT): it currently returns too close to ready too early. Pose5 must be WING FORWARD FOLLOW-THROUGH: BOTH wing tips still lean and curve strongly toward LEFT after the flap, fold wing panels a little lower and inward but keep wings MOSTLY UPRIGHT, never horizontal. This pose should visibly differ from final pose6 which is seed ready with straight upright wing arches. Pose4 has forward-curved wings already; pose5 continues that arc slightly DOWN and FORWARD, still with tall folded arches above back, head and near-side shoulder core entirely visible below wings. Do NOT let a wing hide the core or head. Keep first, second, third, fourth and sixth poses unchanged. All body dimensions remain identical, no per-pose resizing. Keep four paws countable, same ground baseline, tail one curling right with cyan tip, no mirror. Ensure wide empty alpha gutters >=80px and generous margins, no cropping. True transparent background, no floor/shadow, no wind/dust/beams/shards/particles/VFX, no text/UI. Return ALL SIX poses together, not an isolated frame.",
+      "selected": true,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-6.png",
+        "raw/original/wing-gust.png"
+      ],
+      "original": "raw/original/wing-gust-r2.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "wing-gathering",
+      "prompt": "ONE WHOLE SIX-POSE horizontal sprite animation strip, exact same Valdrakk quadruped from seed ref1 and six-slot layout ref2. Preserve SAME torso length (shoulder to rump/tail root, not wings/tail), head/leg size, violet crystal armour/gold trim and lighting. EXACTLY FOUR gold-clawed legs, TWO crystal wings, ONE curled tail on RIGHT with cyan tip, ONE cyan circular core on NEAR/anatomical LEFT shoulder; NEVER mirror. Head/face/core must remain clearly visible throughout, all four paws separately countable. WING GATHERING R1 CHARGE: 1 seed ready; 2 BOTH wings start folding inward BACK toward rump, lower body by bending legs, core visible; 3 CHARGE HOLD, both wings FOLDED CLOSE along upper BACK pointing toward rump, two layered folded wing shapes clearly separate, keep them BEHIND shoulder core so head and entire near-side cyan core unobstructed; knees bent and body low, same rigid torso length, core becomes brighter INSIDE disk only; 4 body presses slightly LOWER in deepest charge while wings stay folded along back behind shoulder, core bright, four feet planted; 5 begin to UNFOLD both wings partway UP from back, body rises halfway, distinct from full seed ready; 6 seed ready. No dome obscuring face/core, wings do NOT become extra legs or a blanket covering the head. Wings always upright/folded, never horizontally spread. Keep same scale in every pose, lower stance by leg bend not shrinking torso. Same ground line. Full wing/paw/tail tips inside own slots, wide EMPTY alpha gutters >=110px and outside margins, no overlap or clipping. Exactly six figures in one row. Transparent background true alpha, no floor/shadow plate, no glowing cloud/energy ball/wind/dust/beams/shockwave/detached shards/VFX, no text/numbers/UI.",
+      "selected": false,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/wing-gathering.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "wing-gathering-r2",
+      "prompt": "Regenerate the ENTIRE SIX-POSE Wing Gathering strip as CLEAN PRODUCTION SPRITES. Ref1 approved Valdrakk seed; ref2 required six-slot layout; ref3 previous charge poses, use pose order but REMOVE the visible white/grey HALO completely. Output exactly six complete figures in ONE horizontal row, same scale and torso length as seed. 1 ready,2 wings start folding back,3 wings folded along back with low crouch and visible bright near-left shoulder core,4 deeper crouch and same folded wings/core,5 partially unfold wings/body rises,6 ready. EXACTLY four separately countable legs, TWO wings folded/raised only, ONE tail curling right with cyan tip, ONE cyan circular core on same near-left shoulder. Face left, never mirror. Head/core remain visible, do not change body/head/leg size. Crucial matte: outside physical BODY, WINGS, TAIL there must be EXACT ALPHA ZERO, NOT semi-transparent GREY/WHITE smoke, NOT edge bloom/cloud, NOT glow beyond silhouette. Normal narrow anti-alias edge only. There is absolutely NO LIGHT HALO around figures, core illumination stays INSIDE core disk, purple light stays inside crystal plates. Empty gaps at least100px truly alpha0, no cloudy strip connecting poses. No background/floor/shadow plate/checkerboard, no VFX, no text/UI. Preserve all six poses together in one image, not individual frames.",
+      "selected": true,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-6.png",
+        "raw/original/wing-gathering.png"
+      ],
+      "original": "raw/original/wing-gathering-r2.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "worldshard-dive",
+      "prompt": "ONE whole SIX-POSE sprite strip in ONE HORIZONTAL row, SAME exact Valdrakk from approved seed ref1 and six-slot layout ref2. Facing LEFT 3/4 never mirror. EXACTLY FOUR legs (two front/two rear), TWO raised/folded violet crystal wings, ONE tail curled up RIGHT with cyan tip, ONE round CYAN core on near/anatomical LEFT shoulder; cyan eyes/gold claws/gold thorn trim. Every leg/paw separately countable, head/core visible. Same TORSO length shoulder-to-rump excluding wings/tail, same head and limb proportions in EVERY pose, never enlarge torso. WORLD SHARD DIVE: 1 seed ready; 2 crouch rear legs and load hips, wings lean diagonally BACK while remaining UPRIGHT, neck/head still facing left; 3 lift hindquarters and slope chest/head LOW, forelegs bend ready to push, core visible; 4 LOW forward-left DIVE CONTACT, front half reaches low-left, rear LEGS extend/trail backward but TORSO DOES NOT stretch or change scale, front gold claws low near ground, belly/chest low, head clearly lowered left; 5 skid-stop low: four legs bent, chest/head low, compact wings folding back upright, tail curls tight to stay inside; 6 seed ready. No flying high, no horizontal wing spreading. Keep dive compact: nose/forepaw leftmost point in pose4/5 extends at most14 source pixels farther LEFT than first ready in each slot (about40px after normalization), not a huge lunge outside cell. Tail curl tight behind hips so full silhouette remains near seed width. Generous top/left/right blank margins and >=100px alpha0 gutters, full paws/tail/wing tips visible, nothing touches another pose. Body-only, real transparent alpha background, no floor/shadow plate, no speed lines, dust, wind, light beams, shockwaves, shards or any VFX. Exactly six figures together, not separate frames or second row, no text/UI.",
+      "selected": false,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/worldshard-dive.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "worldshard-dive-r2",
+      "prompt": "Regenerate ENTIRE SIX-POSE Worldshard Dive strip ref3 as CLEAN ALPHA SPRITES, exact Valdrakk seed ref1 and required six-slot layout ref2. Keep the six pose order and physical model, all four legs/paws visible, two raised/back-folded wings, one tail curled right/cyan tip, ONE round cyan core on same near-left shoulder, facing LEFT never mirrored. 1 ready,2 crouch rear,3 hindquarters up/head low,4 compact low-left dive with REAR LEGS trailing,5 low skid stop,6 ready. SAME torso length from shoulder core to rump/tail attachment as pose1 in EVERY pose; especially pose4/5 do NOT stretch the torso, extend only limbs/neck naturally. Left reach no more than14 source pixels beyond ready, tail curls tight, all body parts within slots. MATTE FIX: old sheet has a real semi-transparent WHITE BACKGROUND and floor haze. Remove it COMPLETELY: outside physical creature must be exact ALPHA0, no semi-transparent white/grey/cream veil, no glow/cloud/shadow plate/floor/background. Only a narrow clean anti-aliased silhouette edge. Crystal/cyan lighting confined inside body. Require >=100px truly empty alpha0 gutters, no cloudy sheet connecting figures. Same body scale all six, no per-pose shrinking, full wing/paw/tail tips with margins. No wind/dust/shockwaves/fragments/particles/VFX, no text/UI. Return whole six-figure single-row strip together.",
+      "selected": false,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-6.png",
+        "raw/original/worldshard-dive.png"
+      ],
+      "original": "raw/original/worldshard-dive-r2.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "worldshard-dive-r3",
+      "prompt": "Regenerate ENTIRE SIX-POSE Worldshard Dive strip ref3 as CLEAN ALPHA SPRITES, exact Valdrakk seed ref1 and required six-slot layout ref2. Keep the six pose order and physical model, all four legs/paws visible, two raised/back-folded wings, one tail curled right/cyan tip, ONE round cyan core on same near-left shoulder, facing LEFT never mirrored. 1 ready,2 crouch rear,3 hindquarters up/head low,4 compact low-left dive with REAR LEGS trailing,5 low skid stop,6 ready. SAME torso length from shoulder core to rump/tail attachment as pose1 in EVERY pose; especially pose4/5 do NOT stretch the torso, extend only limbs/neck naturally. Left reach no more than14 source pixels beyond ready, tail curls tight, all body parts within slots. MATTE FIX: old sheet has a real semi-transparent WHITE BACKGROUND and floor haze. Remove it COMPLETELY: outside physical creature must be exact ALPHA0, no semi-transparent white/grey/cream veil, no glow/cloud/shadow plate/floor/background. Only a narrow clean anti-aliased silhouette edge. Crystal/cyan lighting confined inside body. Require >=100px truly empty alpha0 gutters, no cloudy sheet connecting figures. Same body scale all six, no per-pose shrinking, full wing/paw/tail tips with margins. No wind/dust/shockwaves/fragments/particles/VFX, no text/UI. Return whole six-figure single-row strip together. WHOLE STRIP REVISION: The FOURTH (low dive) silhouette in reference3 is too wide. Keep its TORSO, HEAD and PAW sizes exactly unchanged, but bend the rear legs sharply under rump and curl the tail TIGHTER back over its hip, so the entire fourth silhouette is NO MORE THAN 320px wide in a 2172px wide strip (all six reference figures are approx310px wide). Pull forward paw reach inward by 12px while keeping head low left. Do NOT scale whole pose down; only bend limb joints, no body squash or stretch. Keep two front paws and two rear paws countable and separated. Other five poses unchanged; regenerate all SIX together. ALPHA0 gaps at least48px, no floor or haze. Same rigid seed torso length throughout. Head and near shoulder cyan core always visible.",
+      "selected": true,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-6.png",
+        "raw/original/worldshard-dive-r2.png"
+      ],
+      "original": "raw/original/worldshard-dive-r3.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "staggered",
+      "prompt": "ONE WHOLE SIX-POSE SPRITE STRIP, six figures in ONE horizontal row. Exact same Valdrakk model from seed ref1, six-slot guide ref2. Facing LEFT 3/4 never mirrored, exactly FOUR clawed legs, TWO wings, ONE tail curled RIGHT with cyan tip, ONE round cyan core on near/anatomical LEFT shoulder, cyan eyes, violet crystals/gold thorn trim. SAME torso length shoulder-to-rump and same head/leg proportions, no pose resizing. STAGGERED R1 after INTERRUPTED CHARGE, NO ATTACK and NOT death: 1 seed ready; 2 startled recoil, NEAR wing loses alignment and starts DROOPING forward/down, FAR wing remains high upright, four legs tense; 3 NEAR wing slumps low partly folded along side, FAR wing STILL upright, torso tilts/rolls slightly off balance without yawing away, front knees weak, all four paws countable, core and head still visible; 4 head sways LOW LEFT, eyes slightly DIM (no spiral/star icons), near wing still drooped, far wing upright, one front knee dips but animal still standing on other paws, no collapse; 5 BRACE to recover, near wing rises HALFWAY back up while far stays high, legs regain strength, distinct from full ready; 6 exact seed ready. The visual signature is clearly ONE WING LOW and OTHER HIGH, not ordinary hit recoil and not lying down. Drooped wing must remain folded/inward, NEVER spread horizontally, do not add third wing, do not cover shoulder core/head completely. Same grounded primary support-paw baseline, no full-body sliding out of slot. Whole animal, wings, four paws, tail tip inside each slot, wide empty alpha0 gutters >=110px, no overlap or cropping. True alpha, no floor/shadow plate, NO dizzy stars, wind, dust, light beams, fragments or any VFX, no text/UI. All six poses together in one image.",
+      "selected": true,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/staggered.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "sky-rend",
+      "prompt": "ONE whole SIX-POSE horizontal sprite strip, same exact Valdrakk quadruped from approved seed reference1, six-slot layout reference2. Facing LEFT 3/4, never mirror. Exactly FOUR separately countable gold-clawed legs, TWO violet crystal wings, ONE tail curled up RIGHT with cyan tip, ONE circular CYAN core on near LEFT shoulder, cyan eyes/gold trim. Same head/leg scale and same torso length from shoulder core to rump excluding wings/tail in EVERY pose. SKY REND 70% PHASE BODY MOTION: 1 seed ready; 2 crouch body by bending knees, wings lower slightly, head/core fully visible; 3 raise/straighten BOTH wings to their highest UPRIGHT position while keeping KNEES SLIGHTLY BENT so overall wing-tip silhouette is at most8 percent taller than seed, wing crystal seams brighten INSIDE wing material only, no aura; 4 extend NECK and lift chin to ROAR with OPEN MOUTH facing LEFT, both wings still high/vertical, do not stretch torso, knees stay slightly bent to keep wing tips within frame, core visible and on same shoulder; 5 lower chin and relax wings HALFWAY down toward ready, shoulders settle, visibly between roar and ready; 6 exact seed ready. Keep all four legs and two distinct wings visible, far wing behind near wing but clearly separate. Never spread wings horizontally, never grow body or turn into biped. Tail remains one compact right curl. Same primary planted-paw baseline, no jump. Full wing tips/feet/tail inside each slot, ample32px outside margins and >=100px empty alpha0 gutters. True alpha transparent cutout, no floor/shadow plate, NO external glow cloud/beams/wind/dust/shards/explosion/VFX, no text/UI. All six poses together in a single row.",
+      "selected": true,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-6.png"
+      ],
+      "original": "raw/original/sky-rend.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "hit",
+      "prompt": "ONE WHOLE reaction sprite strip, EXACTLY FOUR full-body Valdrakk poses in ONE HORIZONTAL ROW. Ref1 approved seed, ref2 required four-slot layout. Same violet crystal quadruped/gold trim, exactly FOUR legs with separate gold paws, TWO raised wings, ONE curled tail RIGHT/cyan tip, ONE round cyan core on near LEFT shoulder, cyan eyes. Facing LEFT 3/4, never mirror core, same torso length from shoulder to rump and same head/leg size, no per-pose scale change. HIT reaction ONLY: pose1 exact seed ready; pose2 recoil torso/head sharply BACK toward RIGHT from impact on left, all four feet brace, knees bend a little, BOTH wings recoil together while staying raised and symmetric (NOT one wing drooping, that is Staggered), core visible; pose3 regain balance with head forward-left, knees still slightly bent, wings halfway settling, clearly distinct from full ready; pose4 exact seed ready. Do not fall over, do not attack, no big displacement out of slot. Keep head and near-side core unobstructed and four paws countable. Same support-paw ground baseline. Full wings/paws/tail visible with generous margins and >=100px empty alpha0 gaps. True alpha CUTOUT, no grey/white halo, no haze, no floor/shadow plate, no dust/wind/beams/fragments/impact VFX, no text/labels/UI. Four figures together in a single row.",
+      "selected": true,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-4.png"
+      ],
+      "original": "raw/original/hit.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    },
+    {
+      "id": "down",
+      "prompt": "ONE whole DEATH strip of EXACTLY FOUR full-body Valdrakk poses in ONE horizontal row. Ref1 approved seed model, ref2 four-slot guide. Same physical TORSO length shoulder-to-rump, same head/limb size and violet-crystal/gold armour, facing LEFT 3/4 never mirrored. Exactly FOUR legs and FOUR identifiable GOLD PAWS in every pose, TWO crystal wings, ONE tail curled RIGHT with cyan tip, ONE circular core on near LEFT shoulder. Pose1 seed ready. Pose2 front legs buckle, chest/head lower, rear legs begin bending, both wings start FOLDING CLOSE over back, shoulder core DIM but clearly visible on same shoulder. Pose3 roll onto FAR/RIGHT side so NEAR LEFT shoulder faces UP toward viewer: head remains left, FOUR paws fold under/in front with all four gold paw tips separately visible (two front near head, two rear near rump), BOTH wings folded layered atop back, body lying low, core nearly dark. Pose4 FINAL HELD PRONE SIDE-LYING pose, NEVER STANDS: same four folded legs/paws visible along lower edge, two folded wing plates distinguishable on back, one tail curls compact up RIGHT, head rests low LEFT, same near-left shoulder disk remains in correct place facing viewer but COMPLETELY DARK, no cyan light in core (eyes/tail may be faint). No extra legs or third wing, no missing paw; use four clear gold claw clusters attached to their legs. Do not shrink or lengthen body to fit; fold limbs/wings instead, preserve torso length excluding tail/wings. Keep final silhouette compact and within seed width plus only small allowance. Full body/tail/wing tips inside each slot with large blank margins and >=100px empty alpha0 gutters. Real alpha transparent clean cutouts, no floor/shadow plate, NO dust/haze/grey halo, no particles/shards/wind/explosion/VFX, no text/UI. Four poses together as one row, no alternate sheet.",
+      "selected": true,
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/layout-4.png"
+      ],
+      "original": "raw/original/down.png",
+      "tool": "image_gen.imagegen",
+      "numeric_rng_seed": null
+    }
+  ]
+}

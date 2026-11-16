@@ -1,0 +1,11 @@
+{
+  "base_commit": "8e672a17211239ab5b12acf2f33d51d01bae0ecd",
+  "seed_source_commit": "46f366dc931e4994d3a6ccd9ad3951ac444a70cf",
+  "layout_policy": "same 512x768 slot geometry as WB-A, replace ready images with Valdrakk; B significant width~420px fits512px slot",
+  "file_sha256": {
+    "src/content/encounters/catalog.ts": "f8a37883be27da7f1229bb26a5f64c2d6bc3aad6096ff7ef8a4cd774e5f54135",
+    "src/game/visuals/unit-frames.ts": "ab3f041c9f39d163a8388e1f646f09d7f020c6ef395d081c920e5d7b7b771035",
+    "src/core/battle/engine.ts": "828e601c7fe4d6fc1eee7823ba7ad9c9a1346102dd6c76ffafa72e200a12ab4c",
+    "scripts/unit-anatomy-audit.py": "7980867467bf894fad629274639ee2769fc4920eb61aeeabcdbf312952c9a57c"
+  }
+}
