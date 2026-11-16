@@ -7,9 +7,10 @@ import type { SweepReward } from '../core/world/types';
 // already refuse a second payout; the ledger is the server's own record of what was paid and when, and its unique
 // receipt is a second guard: a command whose payout already has a receipt is refused instead of paying again.
 
-// Draft (owner may change): the game day starts at midnight Asia/Bangkok (UTC+7, no daylight saving), so a Thai
-// player's server day matches the device day of a correctly set phone.
-export const GAME_DAY_OFFSET_MINUTES = 7 * 60;
+// Owner 2026-11-16: the game day (and the Monday week) starts at 06:00 Asia/Bangkok (UTC+7, no daylight saving), i.e.
+// 23:00 UTC. The offline device day turns at 06:00 local time too (`src/ui/game-shell.ts`, `today`).
+export const GAME_DAY_RESET_HOUR = 6;
+export const GAME_DAY_OFFSET_MINUTES = 7 * 60 - GAME_DAY_RESET_HOUR * 60;
 const DAY_MS = 86_400_000;
 // Days since 1970-01-01 on the game calendar.
 export const serverDay = (nowMs: number, offsetMinutes = GAME_DAY_OFFSET_MINUTES): number => Math.floor((nowMs + offsetMinutes * 60_000) / DAY_MS);

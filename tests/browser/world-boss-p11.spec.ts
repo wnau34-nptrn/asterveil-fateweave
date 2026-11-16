@@ -11,7 +11,8 @@ import { xpAt } from '../fixtures/camp-level';
 // battle with its round counter (8 rounds), one `worldBoss` command at the end, the reward and the attempt count
 // surviving a reload. The shared bar belongs to server play (no bar offline).
 const key = 'asterveil.fateweave.expedition.v1';
-const today = (): number => { const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000); };
+// The game day turns at 06:00 local time (owner 2026-11-16).
+const today = (): number => { const d = new Date(Date.now() - 6 * 3_600_000); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000); };
 const saved = async (page: Page) => parseGame(await page.evaluate(k => localStorage.getItem(k)!, key), chapterOne, encounterById, MAPS).profile;
 
 async function playOut(page: Page): Promise<void> {

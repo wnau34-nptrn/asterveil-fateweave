@@ -10,7 +10,8 @@ import { xpAt } from '../fixtures/camp-level';
 // P05-06: the quest board at 390px — daily/weekly/contract tabs beside the camp quests, progress already counted
 // (yesterday's catch-up set and a sweep), one claim pays once and the result survives a reload.
 const key = 'asterveil.fateweave.expedition.v1';
-const today = (): number => { const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000); };
+// The game day turns at 06:00 local time (owner 2026-11-16).
+const today = (): number => { const d = new Date(Date.now() - 6 * 3_600_000); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000); };
 const saved = async (page: import('@playwright/test').Page) => parseGame(await page.evaluate(k => localStorage.getItem(k)!, key), chapterOne, encounterById, MAPS).profile;
 
 test('the quest board counts by itself, keeps a catch-up day and pays each task once', async ({ page }, info) => {
