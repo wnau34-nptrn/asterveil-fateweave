@@ -1,0 +1,699 @@
+{
+  "task": "ART-VFX-WB-TRIO-REV-001",
+  "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+  "layers": [
+    {
+      "replaces": "incoming/ART-VFX-WB-TRIO-001/layers/severing-bolt-prepare.png",
+      "source_sha256": "1fa415c3c32154dd883b0498dc0a4dee66c956b18bec97ad96d60993ff1587e8",
+      "file": "layers/severing-bolt-prepare.png",
+      "original_metadata": {
+        "design": "severing-bolt",
+        "move": "severing-bolt",
+        "name": "Severing Bolt",
+        "boss": "morvane",
+        "beat": "prepare",
+        "version": "R1",
+        "recommended": true,
+        "file": "layers/severing-bolt-prepare.png",
+        "source": "source/severing-bolt-r2.png",
+        "source_crop": [
+          0,
+          0,
+          724,
+          724
+        ],
+        "transform": {
+          "source_crop_xyxy": [
+            0,
+            0,
+            724,
+            724
+          ],
+          "source_alpha_bbox_xyxy": [
+            130,
+            288,
+            607,
+            466
+          ],
+          "alpha_cleanup": "alpha<=8 and hidden RGB cleared; source bytes unchanged",
+          "uniform_scale": 0.48218029350104824,
+          "paste_xy": [
+            13,
+            85
+          ],
+          "resized": [
+            230,
+            86
+          ],
+          "flip_x": false,
+          "pivot_in_cropped_source_after_flip": [
+            238.5,
+            89.0
+          ],
+          "source_contact_xy": null,
+          "settle_max_extent": null
+        },
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "alpha": "straight",
+        "alpha_bbox": [
+          13,
+          85,
+          243,
+          171
+        ],
+        "checksum": "1fa415c3c32154dd883b0498dc0a4dee66c956b18bec97ad96d60993ff1587e8",
+        "sha256": "1fa415c3c32154dd883b0498dc0a4dee66c956b18bec97ad96d60993ff1587e8",
+        "anchor": "caster.lower_hands",
+        "pivot_px": [
+          128,
+          128
+        ],
+        "pivot_normalized": [
+          0.5,
+          0.5
+        ],
+        "width_390": 80,
+        "suggested_canvas_width_390": 80,
+        "visible_width_390": 71.875,
+        "offset_390": [
+          0,
+          0
+        ],
+        "route": "single",
+        "actual_targets_only": true,
+        "zero_damage_cue": false,
+        "unstoppable": false,
+        "breakable": false,
+        "phase_change": false,
+        "blend": "normal",
+        "additive_intended": false,
+        "direction": "enemy-right toward hero-left; local phase/charge/summon has no hero impact",
+        "suggested_ms": [
+          0,
+          140
+        ],
+        "timing_note": "Art windows only; preserve existing normal/fast/reduced-motion duration and actual event contacts; settle fades and never emits damage."
+      },
+      "processing": "ImageMagick resize full generator canvas, split equal cells, source-atop original RGBA; original alpha retained exactly; no trim, pivot/anchor/width/offset change",
+      "sha256": "9cbbafe04f52c74ad07408804335ab71907c0c02612ffcea40eb3e14cf86a31b"
+    },
+    {
+      "replaces": "incoming/ART-VFX-WB-TRIO-001/layers/severing-bolt-peak.png",
+      "source_sha256": "2182419e9ea69c6c65e10ab1a217274ab00fd2c648301e3a706ed1c6d61fd26f",
+      "file": "layers/severing-bolt-peak.png",
+      "original_metadata": {
+        "design": "severing-bolt",
+        "move": "severing-bolt",
+        "name": "Severing Bolt",
+        "boss": "morvane",
+        "beat": "peak",
+        "version": "R1",
+        "recommended": true,
+        "file": "layers/severing-bolt-peak.png",
+        "source": "source/severing-bolt-r2.png",
+        "source_crop": [
+          724,
+          0,
+          1448,
+          724
+        ],
+        "transform": {
+          "source_crop_xyxy": [
+            724,
+            0,
+            1448,
+            724
+          ],
+          "source_alpha_bbox_xyxy": [
+            808,
+            86,
+            1397,
+            633
+          ],
+          "alpha_cleanup": "alpha<=8 and hidden RGB cleared; source bytes unchanged",
+          "uniform_scale": 0.3904923599320883,
+          "paste_xy": [
+            13,
+            21
+          ],
+          "resized": [
+            230,
+            214
+          ],
+          "flip_x": false,
+          "pivot_in_cropped_source_after_flip": [
+            294.5,
+            273.5
+          ],
+          "source_contact_xy": null,
+          "settle_max_extent": null
+        },
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "alpha": "straight",
+        "alpha_bbox": [
+          13,
+          21,
+          243,
+          235
+        ],
+        "checksum": "2182419e9ea69c6c65e10ab1a217274ab00fd2c648301e3a706ed1c6d61fd26f",
+        "sha256": "2182419e9ea69c6c65e10ab1a217274ab00fd2c648301e3a706ed1c6d61fd26f",
+        "anchor": "target.chest",
+        "pivot_px": [
+          128,
+          128
+        ],
+        "pivot_normalized": [
+          0.5,
+          0.5
+        ],
+        "width_390": 130,
+        "suggested_canvas_width_390": 130,
+        "visible_width_390": 116.796875,
+        "offset_390": [
+          0,
+          0
+        ],
+        "route": "single",
+        "actual_targets_only": true,
+        "zero_damage_cue": false,
+        "unstoppable": false,
+        "breakable": false,
+        "phase_change": false,
+        "blend": "normal",
+        "additive_intended": false,
+        "direction": "enemy-right toward hero-left; local phase/charge/summon has no hero impact",
+        "suggested_ms": [
+          140,
+          320
+        ],
+        "timing_note": "Art windows only; preserve existing normal/fast/reduced-motion duration and actual event contacts; settle fades and never emits damage."
+      },
+      "processing": "ImageMagick resize full generator canvas, split equal cells, source-atop original RGBA; original alpha retained exactly; no trim, pivot/anchor/width/offset change",
+      "sha256": "58727fa75a69747ac5cfef4eed46e9dc2b598d199fc2153fe3b36429f170f572"
+    },
+    {
+      "replaces": "incoming/ART-VFX-WB-TRIO-001/layers/severing-bolt-settle.png",
+      "source_sha256": "4c469c601405c7ad3cf130928c3174af52ebfb4d5a07956e5c3ff8348df4e3b8",
+      "file": "layers/severing-bolt-settle.png",
+      "original_metadata": {
+        "design": "severing-bolt",
+        "move": "severing-bolt",
+        "name": "Severing Bolt",
+        "boss": "morvane",
+        "beat": "settle",
+        "version": "R1",
+        "recommended": true,
+        "file": "layers/severing-bolt-settle.png",
+        "source": "source/severing-bolt-r2.png",
+        "source_crop": [
+          1448,
+          0,
+          2172,
+          724
+        ],
+        "transform": {
+          "source_crop_xyxy": [
+            1448,
+            0,
+            2172,
+            724
+          ],
+          "source_alpha_bbox_xyxy": [
+            1683,
+            176,
+            1997,
+            562
+          ],
+          "alpha_cleanup": "alpha<=8 and hidden RGB cleared; source bytes unchanged",
+          "uniform_scale": 0.41450777202072536,
+          "paste_xy": [
+            63,
+            48
+          ],
+          "resized": [
+            130,
+            160
+          ],
+          "flip_x": false,
+          "pivot_in_cropped_source_after_flip": [
+            157.0,
+            193.0
+          ],
+          "source_contact_xy": null,
+          "settle_max_extent": 160
+        },
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "alpha": "straight",
+        "alpha_bbox": [
+          63,
+          48,
+          193,
+          208
+        ],
+        "checksum": "4c469c601405c7ad3cf130928c3174af52ebfb4d5a07956e5c3ff8348df4e3b8",
+        "sha256": "4c469c601405c7ad3cf130928c3174af52ebfb4d5a07956e5c3ff8348df4e3b8",
+        "anchor": "target.chest",
+        "pivot_px": [
+          128,
+          128
+        ],
+        "pivot_normalized": [
+          0.5,
+          0.5
+        ],
+        "width_390": 60,
+        "suggested_canvas_width_390": 60,
+        "visible_width_390": 30.46875,
+        "offset_390": [
+          0,
+          0
+        ],
+        "route": "single",
+        "actual_targets_only": true,
+        "zero_damage_cue": false,
+        "unstoppable": false,
+        "breakable": false,
+        "phase_change": false,
+        "blend": "normal",
+        "additive_intended": false,
+        "direction": "enemy-right toward hero-left; local phase/charge/summon has no hero impact",
+        "suggested_ms": [
+          320,
+          540
+        ],
+        "timing_note": "Art windows only; preserve existing normal/fast/reduced-motion duration and actual event contacts; settle fades and never emits damage."
+      },
+      "processing": "ImageMagick resize full generator canvas, split equal cells, source-atop original RGBA; original alpha retained exactly; no trim, pivot/anchor/width/offset change",
+      "sha256": "dc4df5491056a5c69973e64f87eef31b6905fa788fba725d0244a92a94a391d8"
+    },
+    {
+      "replaces": "incoming/ART-VFX-WB-TRIO-001/layers/shadow-tide-prepare.png",
+      "source_sha256": "7855847d06ca2972bfaacda9243336fccc2536950469811ebcfe2345ae80b8d6",
+      "file": "layers/shadow-tide-prepare.png",
+      "original_metadata": {
+        "design": "shadow-tide",
+        "move": "shadow-tide",
+        "name": "Shadow Tide",
+        "boss": "morvane",
+        "beat": "prepare",
+        "version": "R1",
+        "recommended": true,
+        "file": "layers/shadow-tide-prepare.png",
+        "source": "source/shadow-tide.png",
+        "source_crop": [
+          0,
+          0,
+          724,
+          724
+        ],
+        "transform": {
+          "source_crop_xyxy": [
+            0,
+            0,
+            724,
+            724
+          ],
+          "source_alpha_bbox_xyxy": [
+            107,
+            390,
+            597,
+            476
+          ],
+          "alpha_cleanup": "alpha<=8 and hidden RGB cleared; source bytes unchanged",
+          "uniform_scale": 0.46938775510204084,
+          "paste_xy": [
+            13,
+            177
+          ],
+          "resized": [
+            230,
+            40
+          ],
+          "flip_x": false,
+          "pivot_in_cropped_source_after_flip": [
+            245.0,
+            70.52
+          ],
+          "source_contact_xy": null,
+          "settle_max_extent": null
+        },
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "alpha": "straight",
+        "alpha_bbox": [
+          13,
+          177,
+          243,
+          217
+        ],
+        "checksum": "7855847d06ca2972bfaacda9243336fccc2536950469811ebcfe2345ae80b8d6",
+        "sha256": "7855847d06ca2972bfaacda9243336fccc2536950469811ebcfe2345ae80b8d6",
+        "anchor": "caster.feet",
+        "pivot_px": [
+          128,
+          210
+        ],
+        "pivot_normalized": [
+          0.5,
+          0.8203125
+        ],
+        "width_390": 80,
+        "suggested_canvas_width_390": 80,
+        "visible_width_390": 71.875,
+        "offset_390": [
+          0,
+          0
+        ],
+        "route": "all",
+        "actual_targets_only": true,
+        "zero_damage_cue": false,
+        "unstoppable": false,
+        "breakable": false,
+        "phase_change": false,
+        "blend": "normal",
+        "additive_intended": false,
+        "direction": "enemy-right toward hero-left; local phase/charge/summon has no hero impact",
+        "suggested_ms": [
+          0,
+          140
+        ],
+        "timing_note": "Art windows only; preserve existing normal/fast/reduced-motion duration and actual event contacts; settle fades and never emits damage."
+      },
+      "processing": "ImageMagick resize full generator canvas, split equal cells, source-atop original RGBA; original alpha retained exactly; no trim, pivot/anchor/width/offset change; generated RGB sigmoid contrast 6x40%, original alpha unchanged; pale lilac inner silhouette rim from original alpha threshold35%, EdgeIn Diamond:3; Atop, no alpha enlargement",
+      "sha256": "3e35fa931af4ccee3235bb104d5fdf517855a88c97c0c673c9b989affa5d8a86"
+    },
+    {
+      "replaces": "incoming/ART-VFX-WB-TRIO-001/layers/shadow-tide-peak.png",
+      "source_sha256": "e286e00f11607f59926857a77a54afe47e2a56f9f9d8b7d64ec844d9ca8b1572",
+      "file": "layers/shadow-tide-peak.png",
+      "original_metadata": {
+        "design": "shadow-tide",
+        "move": "shadow-tide",
+        "name": "Shadow Tide",
+        "boss": "morvane",
+        "beat": "peak",
+        "version": "R1",
+        "recommended": true,
+        "file": "layers/shadow-tide-peak.png",
+        "source": "source/shadow-tide.png",
+        "source_crop": [
+          724,
+          0,
+          1448,
+          724
+        ],
+        "transform": {
+          "source_crop_xyxy": [
+            724,
+            0,
+            1448,
+            724
+          ],
+          "source_alpha_bbox_xyxy": [
+            744,
+            284,
+            1410,
+            490
+          ],
+          "alpha_cleanup": "alpha<=8 and hidden RGB cleared; source bytes unchanged",
+          "uniform_scale": 0.34534534534534533,
+          "paste_xy": [
+            13,
+            152
+          ],
+          "resized": [
+            230,
+            71
+          ],
+          "flip_x": false,
+          "pivot_in_cropped_source_after_flip": [
+            333.0,
+            168.92
+          ],
+          "source_contact_xy": null,
+          "settle_max_extent": null
+        },
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "alpha": "straight",
+        "alpha_bbox": [
+          13,
+          152,
+          243,
+          223
+        ],
+        "checksum": "e286e00f11607f59926857a77a54afe47e2a56f9f9d8b7d64ec844d9ca8b1572",
+        "sha256": "e286e00f11607f59926857a77a54afe47e2a56f9f9d8b7d64ec844d9ca8b1572",
+        "anchor": "whole_hero_side.actual_target_feet",
+        "pivot_px": [
+          128,
+          210
+        ],
+        "pivot_normalized": [
+          0.5,
+          0.8203125
+        ],
+        "width_390": 74,
+        "suggested_canvas_width_390": 74,
+        "visible_width_390": 66.484375,
+        "offset_390": [
+          0,
+          0
+        ],
+        "route": "all",
+        "actual_targets_only": true,
+        "zero_damage_cue": false,
+        "unstoppable": false,
+        "breakable": false,
+        "phase_change": false,
+        "blend": "normal",
+        "additive_intended": false,
+        "direction": "enemy-right toward hero-left; local phase/charge/summon has no hero impact",
+        "suggested_ms": [
+          140,
+          320
+        ],
+        "timing_note": "Art windows only; preserve existing normal/fast/reduced-motion duration and actual event contacts; settle fades and never emits damage."
+      },
+      "processing": "ImageMagick resize full generator canvas, split equal cells, source-atop original RGBA; original alpha retained exactly; no trim, pivot/anchor/width/offset change; generated RGB sigmoid contrast 6x40%, original alpha unchanged; pale lilac inner silhouette rim from original alpha threshold35%, EdgeIn Diamond:3; Atop, no alpha enlargement",
+      "sha256": "f526cd92031640d447a7a37244873e1df79e2b27ad19f470ca748868e733605d"
+    },
+    {
+      "replaces": "incoming/ART-VFX-WB-TRIO-001/layers/shadow-tide-settle.png",
+      "source_sha256": "d839d9691b9130520d87bffa45ad07a05403dfb1df7bd48bf49fdda5883d7def",
+      "file": "layers/shadow-tide-settle.png",
+      "original_metadata": {
+        "design": "shadow-tide",
+        "move": "shadow-tide",
+        "name": "Shadow Tide",
+        "boss": "morvane",
+        "beat": "settle",
+        "version": "R1",
+        "recommended": true,
+        "file": "layers/shadow-tide-settle.png",
+        "source": "source/shadow-tide.png",
+        "source_crop": [
+          1448,
+          0,
+          2172,
+          724
+        ],
+        "transform": {
+          "source_crop_xyxy": [
+            1448,
+            0,
+            2172,
+            724
+          ],
+          "source_alpha_bbox_xyxy": [
+            1613,
+            379,
+            2032,
+            471
+          ],
+          "alpha_cleanup": "alpha<=8 and hidden RGB cleared; source bytes unchanged",
+          "uniform_scale": 0.3818615751789976,
+          "paste_xy": [
+            48,
+            178
+          ],
+          "resized": [
+            160,
+            35
+          ],
+          "flip_x": false,
+          "pivot_in_cropped_source_after_flip": [
+            209.5,
+            82.8
+          ],
+          "source_contact_xy": null,
+          "settle_max_extent": 160
+        },
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "alpha": "straight",
+        "alpha_bbox": [
+          48,
+          178,
+          208,
+          213
+        ],
+        "checksum": "d839d9691b9130520d87bffa45ad07a05403dfb1df7bd48bf49fdda5883d7def",
+        "sha256": "d839d9691b9130520d87bffa45ad07a05403dfb1df7bd48bf49fdda5883d7def",
+        "anchor": "whole_hero_side.actual_target_feet",
+        "pivot_px": [
+          128,
+          210
+        ],
+        "pivot_normalized": [
+          0.5,
+          0.8203125
+        ],
+        "width_390": 42,
+        "suggested_canvas_width_390": 42,
+        "visible_width_390": 26.25,
+        "offset_390": [
+          0,
+          0
+        ],
+        "route": "all",
+        "actual_targets_only": true,
+        "zero_damage_cue": false,
+        "unstoppable": false,
+        "breakable": false,
+        "phase_change": false,
+        "blend": "normal",
+        "additive_intended": false,
+        "direction": "enemy-right toward hero-left; local phase/charge/summon has no hero impact",
+        "suggested_ms": [
+          320,
+          540
+        ],
+        "timing_note": "Art windows only; preserve existing normal/fast/reduced-motion duration and actual event contacts; settle fades and never emits damage."
+      },
+      "processing": "ImageMagick resize full generator canvas, split equal cells, source-atop original RGBA; original alpha retained exactly; no trim, pivot/anchor/width/offset change; generated RGB sigmoid contrast 6x40%, original alpha unchanged; pale lilac inner silhouette rim from original alpha threshold35%, EdgeIn Diamond:3; Atop, no alpha enlargement",
+      "sha256": "b10c11442599cd23003378c6b8aefe4b68b12a7262adb33b64107a7cc9b3cd66"
+    },
+    {
+      "replaces": "incoming/ART-VFX-WB-TRIO-001/layers/wing-gathering-prepare.png",
+      "source_sha256": "0ed9730955f7c202a189d6c933a31f7456539c16429b1a901293f35a7ed6c30e",
+      "file": "layers/wing-gathering-prepare.png",
+      "original_metadata": {
+        "design": "wing-gathering",
+        "move": "wing-gathering",
+        "name": "Wing Gathering",
+        "boss": "valdrakk",
+        "beat": "prepare",
+        "version": "R1",
+        "recommended": true,
+        "file": "layers/wing-gathering-prepare.png",
+        "source": "source/wing-gathering.png",
+        "source_crop": [
+          0,
+          0,
+          724,
+          724
+        ],
+        "transform": {
+          "source_crop_xyxy": [
+            0,
+            0,
+            724,
+            724
+          ],
+          "source_alpha_bbox_xyxy": [
+            206,
+            160,
+            549,
+            542
+          ],
+          "alpha_cleanup": "alpha<=8 and hidden RGB cleared; source bytes unchanged",
+          "uniform_scale": 0.6020942408376964,
+          "paste_xy": [
+            25,
+            13
+          ],
+          "resized": [
+            207,
+            230
+          ],
+          "flip_x": false,
+          "pivot_in_cropped_source_after_flip": [
+            171.5,
+            191.0
+          ],
+          "source_contact_xy": null,
+          "settle_max_extent": null
+        },
+        "size": [
+          256,
+          256
+        ],
+        "mode": "RGBA",
+        "alpha": "straight",
+        "alpha_bbox": [
+          25,
+          13,
+          232,
+          243
+        ],
+        "checksum": "0ed9730955f7c202a189d6c933a31f7456539c16429b1a901293f35a7ed6c30e",
+        "sha256": "0ed9730955f7c202a189d6c933a31f7456539c16429b1a901293f35a7ed6c30e",
+        "anchor": "caster.left_shoulder_core",
+        "pivot_px": [
+          128,
+          128
+        ],
+        "pivot_normalized": [
+          0.5,
+          0.5
+        ],
+        "width_390": 80,
+        "suggested_canvas_width_390": 80,
+        "visible_width_390": 64.6875,
+        "offset_390": [
+          12,
+          0
+        ],
+        "route": "charge",
+        "actual_targets_only": true,
+        "zero_damage_cue": true,
+        "unstoppable": false,
+        "breakable": true,
+        "phase_change": false,
+        "blend": "normal",
+        "additive_intended": false,
+        "direction": "enemy-right toward hero-left; local phase/charge/summon has no hero impact",
+        "suggested_ms": [
+          0,
+          140
+        ],
+        "timing_note": "Art windows only; preserve existing normal/fast/reduced-motion duration and actual event contacts; settle fades and never emits damage."
+      },
+      "processing": "ImageMagick resize full generator canvas, split equal cells, source-atop original RGBA; original alpha retained exactly; no trim, pivot/anchor/width/offset change",
+      "sha256": "2d0cbad0126e1466158cd4fba1867e11e97bf4d9032b189bd8ae7882508cd232"
+    }
+  ]
+}

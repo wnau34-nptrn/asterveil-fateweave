@@ -1,0 +1,93 @@
+[
+  {
+    "file": "evidence/severing-bolt-prepare-compare-390.png",
+    "kind": "static composite on unchanged real game frame",
+    "panel_width": 390,
+    "x": 213,
+    "y": 421,
+    "canvas_width": 80,
+    "pivot": [
+      128,
+      128
+    ],
+    "placement": "manual landmark approximation; original metadata retained; no runtime socket measurement"
+  },
+  {
+    "file": "evidence/severing-bolt-peak-compare-390.png",
+    "kind": "static composite on unchanged real game frame",
+    "panel_width": 390,
+    "x": 43,
+    "y": 575,
+    "canvas_width": 130,
+    "pivot": [
+      128,
+      128
+    ],
+    "placement": "manual landmark approximation; original metadata retained; no runtime socket measurement"
+  },
+  {
+    "file": "evidence/severing-bolt-settle-compare-390.png",
+    "kind": "static composite on unchanged real game frame",
+    "panel_width": 390,
+    "x": 43,
+    "y": 575,
+    "canvas_width": 60,
+    "pivot": [
+      128,
+      128
+    ],
+    "placement": "manual landmark approximation; original metadata retained; no runtime socket measurement"
+  },
+  {
+    "file": "evidence/shadow-tide-prepare-compare-390.png",
+    "kind": "static composite on unchanged real game frame",
+    "panel_width": 390,
+    "x": 244,
+    "y": 483,
+    "canvas_width": 80,
+    "pivot": [
+      128,
+      210
+    ],
+    "placement": "manual landmark approximation; original metadata retained; no runtime socket measurement"
+  },
+  {
+    "file": "evidence/shadow-tide-peak-compare-390.png",
+    "kind": "static composite on unchanged real game frame",
+    "panel_width": 390,
+    "x": 43,
+    "y": 629,
+    "canvas_width": 74,
+    "pivot": [
+      128,
+      210
+    ],
+    "placement": "manual landmark approximation; original metadata retained; no runtime socket measurement"
+  },
+  {
+    "file": "evidence/shadow-tide-settle-compare-390.png",
+    "kind": "static composite on unchanged real game frame",
+    "panel_width": 390,
+    "x": 43,
+    "y": 629,
+    "canvas_width": 42,
+    "pivot": [
+      128,
+      210
+    ],
+    "placement": "manual landmark approximation; original metadata retained; no runtime socket measurement"
+  },
+  {
+    "file": "evidence/wing-gathering-prepare-compare-390.png",
+    "kind": "static composite on unchanged real game frame",
+    "panel_width": 390,
+    "x": 247,
+    "y": 409,
+    "canvas_width": 80,
+    "pivot": [
+      128,
+      128
+    ],
+    "placement": "manual landmark approximation; original metadata retained; no runtime socket measurement"
+  }
+]
