@@ -2,8 +2,8 @@
   "task": "ART-VFX-WB-TRIO-REV-001 intake",
   "files": {
     "docs/combat-presentation/wb-vfx-revision-slice/README_TH.md": {
-      "sha256": "09e9d3597d68967f4fc44f3a16560b8c5308b10b8ed86b91f95a638ba05a4a7b",
-      "bytes": 3665
+      "sha256": "6decf7323e18c968bc9242442f1c453d95397e9ddda83a204512224271d4b110",
+      "bytes": 3930
     },
     "docs/combat-presentation/wb-vfx-revision-slice/clips.js": {
       "sha256": "a6eed30c3c24e7925857442f9a0b99b02ab4f7e204512d296e39a24759ab9043",
@@ -163,9 +163,13 @@
       "mode": "RGB",
       "frames": 1
     },
+    "docs/validation/wb-vfx-revision/CODEX_VISUAL_REVIEW_TH.md": {
+      "sha256": "2462ab3ab2c2488a24e4f1d7520561b05027eb977eb6e4c2f7bd56bc830b3d58",
+      "bytes": 8847
+    },
     "docs/validation/wb-vfx-revision/README_TH.md": {
-      "sha256": "b99e4cb163922a6ea14ba25290796dc2599234881a319ca88f4f6fb415168980",
-      "bytes": 8081
+      "sha256": "70799427117bc02388e5f4e9f8135bb92a2d74a543a40cb9173e447555740704",
+      "bytes": 8418
     },
     "docs/validation/wb-vfx-revision/before/severing-bolt-normal-peak-390.jpg": {
       "sha256": "517885323fdaa3aa8c681c2a3b12937d7efecbf6885960b7362eb43132c4fec2",
@@ -229,6 +233,10 @@
       "mode": "RGBA",
       "frames": 1
     },
+    "docs/validation/wb-vfx-revision/visual-review.json": {
+      "sha256": "03ac47fcf88b1cdef572d77c0f11507cad10d170786bdf048f232a170ef8b231",
+      "bytes": 7545
+    },
     "docs/validation/wb-vfx-revision/wing-gathering-before-after-390.png": {
       "sha256": "c97d576916c757dab63e3a20bf0f47586cb50bf8047ac9169dca32b9911c35bf",
       "bytes": 1324542,
@@ -286,6 +294,16 @@
   },
   "owner": {
     "intake_authorized": "นำเข้าเกมได้",
-    "new_motion_approved": false
+    "review_delegation": "คุณทำการตรวจสอบแทนเจ้าของ",
+    "direct_owner_visual_approval_claimed": false
+  },
+  "delegatedReview": {
+    "reviewer": "Codex",
+    "decision": "accepted_for_three_clarity_changes_at_390px",
+    "requiresRepeatOwnerReview": false,
+    "continuousPlaybackViewed": false,
+    "selectedFrames": 162,
+    "decodedFrames": 544,
+    "report": "docs/validation/wb-vfx-revision/CODEX_VISUAL_REVIEW_TH.md"
   }
 }

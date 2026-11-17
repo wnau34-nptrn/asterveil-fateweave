@@ -1,3 +1,8 @@
+## 2026-11-17 — WB VFX delegated visual review (Codex; PR #294, unmerged)
+- Owner delegated: “คุณทำการตรวจสอบแทนเจ้าของ”. Codex accepts the three clarity changes at390px; no repeat owner-review gate for this delegated scope. This is Codex’s decision, not a claim of the owner’s direct visual approval.
+- Inspected162 selected decoded frames across5 clips (544 decoded total), real before/after and Wing variants. Bolt/Tide/Wing hold + release/break pass the visual brief; cyan-core/bright-bow/small-settle limits accepted. [Decision/evidence](../validation/wb-vfx-revision/CODEX_VISUAL_REVIEW_TH.md).
+- Review is still/frame-sequence based, never continuous playback. Existing QA supports anchors/state only; tests do not constitute visual approval. No asset/runtime/rule/timing changes; #292 remains unmerged, no publication.
+
 ## 2026-11-17 — WB VFX clarity revision intake (Codex; PR #294, codex/wb-vfx-revision-intake; unmerged)
 - Owner: “นำเข้าเกมได้” after #293; recorded as intake authorization, new motion approval still pending. No merge of #292 or publication.
 - Replaced only 7 atlas slots: Bolt/Tide prepare/peak/settle + Wing prepare/hold. All other74 canvases RGBA-identical, alpha/layout/runtime metadata unchanged; no rules/save/catalog/balance/timing/content-version change. Both incoming packages preserved.
