@@ -1,0 +1,291 @@
+{
+  "task": "ART-VFX-WB-TRIO-REV-001 intake",
+  "files": {
+    "docs/combat-presentation/wb-vfx-revision-slice/README_TH.md": {
+      "sha256": "09e9d3597d68967f4fc44f3a16560b8c5308b10b8ed86b91f95a638ba05a4a7b",
+      "bytes": 3665
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/clips.js": {
+      "sha256": "a6eed30c3c24e7925857442f9a0b99b02ab4f7e204512d296e39a24759ab9043",
+      "bytes": 5044
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/clips.json": {
+      "sha256": "9c4ac22d22f7a53fe25d7e1328897e1ae42b5fdb723dae4597e5b7bb09da5c89",
+      "bytes": 7621
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/severing-bolt-normal-390.mp4": {
+      "sha256": "60456c9aaa0444d880ca08a1eddc30a2cae0f475f00b4d7b2fba455bf8697189",
+      "bytes": 542010
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/severing-bolt-normal-end-390.jpg": {
+      "sha256": "87d3316d99c54f380c08ea23d136f459c47ab14bb52f918385ad47f445237fa8",
+      "bytes": 136388,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/severing-bolt-normal-peak-390.jpg": {
+      "sha256": "9a167163453c4b727123fab4c2f651a28344b8cc3e74e2e6394ae54d2998c5b5",
+      "bytes": 123124,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/severing-bolt-normal-prepare-390.jpg": {
+      "sha256": "9f46089e8c557b1f479c9fb9b524f7c0f405feb28f7c017649fcb5d425fc13f6",
+      "bytes": 124689,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/shadow-tide-normal-390.mp4": {
+      "sha256": "2894174be391c70a3fdba894c09c7e0ab0b0b81df8c175944499a1f4ba4d51c6",
+      "bytes": 653617
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/shadow-tide-normal-end-390.jpg": {
+      "sha256": "331f398a47dc3e72fc51b5b64beec5aecd78cfae1f69678f574e269978d55aad",
+      "bytes": 136243,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/shadow-tide-normal-peak-390.jpg": {
+      "sha256": "88e7e39920b1466937497e9707aedc25434c21a13435a2d317e013b2fb66276f",
+      "bytes": 124008,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/shadow-tide-normal-prepare-390.jpg": {
+      "sha256": "39046614bd7d0c936006c17cd16889c5f666716c02c6e7e09612950391d6b0ef",
+      "bytes": 123839,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/wing-gathering-break-390.mp4": {
+      "sha256": "539583cf74ac3bd59f06882f37a001a56ecea5877805717c6219e5b120313791",
+      "bytes": 416200
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/wing-gathering-break-end-390.jpg": {
+      "sha256": "94c1d1d519bad752a6428d7b6427ca1616cbf1aa46422a13bc2135d35fc9d263",
+      "bytes": 132195,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/wing-gathering-normal-390.mp4": {
+      "sha256": "bd4807f51060d169c88e2cb80451ea434d3f4c3fe07ef298726d0badcf728b18",
+      "bytes": 774516
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/wing-gathering-normal-end-390.jpg": {
+      "sha256": "7cdfa49a249186bea1276a47892a417d791d04f467b88cc9a4b3732ab49370c5",
+      "bytes": 133493,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/wing-gathering-normal-peak-390.jpg": {
+      "sha256": "68b0b973afa715be017eac19e309561d8eb4cd878d49e15dd37556ebfb3d33fc",
+      "bytes": 121972,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/wing-gathering-normal-prepare-390.jpg": {
+      "sha256": "5cd26493d817dfbd76c054fdb793291ce74f794c83495b1d6b47353c5f1b2b26",
+      "bytes": 122065,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/wing-gathering-release-390.mp4": {
+      "sha256": "bade74b4909164cf334e54c58234f9aa8a18353c645f41bcb041ca9d501ea690",
+      "bytes": 687441
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/wing-gathering-release-end-390.jpg": {
+      "sha256": "3c787c4f6ce3f30c986434c2fddbd2022ed452033320eae0e92eb2dc1640e79c",
+      "bytes": 132262,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/wing-gathering-release-peak-390.jpg": {
+      "sha256": "267965a85bd204ca5db756ebc329cc07a8a94f98ef591aa3cb1c199edef51245",
+      "bytes": 123205,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/combat-presentation/wb-vfx-revision-slice/wing-gathering-release-prepare-390.jpg": {
+      "sha256": "9cb2301d33f9c90c6b373bd7a70fcbe517dcd06b209d07c2f08ab5a175d38ca1",
+      "bytes": 123576,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/validation/wb-vfx-revision/README_TH.md": {
+      "sha256": "b99e4cb163922a6ea14ba25290796dc2599234881a319ca88f4f6fb415168980",
+      "bytes": 8081
+    },
+    "docs/validation/wb-vfx-revision/before/severing-bolt-normal-peak-390.jpg": {
+      "sha256": "517885323fdaa3aa8c681c2a3b12937d7efecbf6885960b7362eb43132c4fec2",
+      "bytes": 123402,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/validation/wb-vfx-revision/before/shadow-tide-normal-peak-390.jpg": {
+      "sha256": "de5c5337feee1052940827baf0bbfa307afdde50cc8017cde939e7e99f1ae9f9",
+      "bytes": 122004,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/validation/wb-vfx-revision/before/wing-gathering-normal-end-390.jpg": {
+      "sha256": "3666043790c8e42e16c458ff1cbe4e3f11ce30493773a9a25bd0e4d73b4dad12",
+      "bytes": 133334,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "docs/validation/wb-vfx-revision/comparisons.json": {
+      "sha256": "092b534f968d6f8e87ec9d6a943a9dd5bf4507b7fb08f7f57dc1cd35063ec4cf",
+      "bytes": 2152
+    },
+    "docs/validation/wb-vfx-revision/intake-report.json": {
+      "sha256": "0641e4a9200585bf8643ef3270ef96af5448d5ed76ca42ca0d38c6bd75806fd3",
+      "bytes": 18232
+    },
+    "docs/validation/wb-vfx-revision/modes.json": {
+      "sha256": "f5b384f45bdabbe2beb7bd72b5121b63728bc1b07a447d64738d597ec8c87220",
+      "bytes": 3435
+    },
+    "docs/validation/wb-vfx-revision/severing-bolt-before-after-390.png": {
+      "sha256": "67cf5aeaaddd7c83ec866a37e9015881b3236a843219136727f26aef63a2c521",
+      "bytes": 1373089,
+      "size": [
+        780,
+        874
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "docs/validation/wb-vfx-revision/shadow-tide-before-after-390.png": {
+      "sha256": "38a8bfccbd58edda44bd0c4098fc56952b7d9b8c7797c66685c7f76376c7eb99",
+      "bytes": 1443691,
+      "size": [
+        780,
+        874
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "docs/validation/wb-vfx-revision/wing-gathering-before-after-390.png": {
+      "sha256": "c97d576916c757dab63e3a20bf0f47586cb50bf8047ac9169dca32b9911c35bf",
+      "bytes": 1324542,
+      "size": [
+        780,
+        874
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "public/assets/fx/boss_signature_fx.webp": {
+      "sha256": "f452a9c727ad87e3ac0448d18563267bdb5be83c6bad95b78a09fd73dd14ab8e",
+      "bytes": 2721618,
+      "size": [
+        1778,
+        1949
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "scripts/apply-wb-vfx-revision.py": {
+      "sha256": "ea94cbfa78f61841f3be3888a49f2536c1b7d9e2b09656404e42bbab2c0014e9",
+      "bytes": 5199
+    },
+    "scripts/check-wb-vfx-revision-modes.mjs": {
+      "sha256": "314390150887c20be0d31527da6651cbe5bc4a84c4cab0a10ff8f035b942674a",
+      "bytes": 3801
+    },
+    "tests/browser/fixtures/encode-wb-vfx-clips.py": {
+      "sha256": "5f9723d3054bcfdb911a758d1aeed84f5bb82f0e48897b2731bf0b39545bd021",
+      "bytes": 3881
+    },
+    "tests/wb-vfx.test.ts": {
+      "sha256": "5badb3a7fd69806589792ea14fc6055e835409c57db1aaaa983bfb037b43b4fc",
+      "bytes": 8809
+    }
+  },
+  "self_excluded": "docs/validation/wb-vfx-revision/delivery-validation.json",
+  "checks": {
+    "replaced_layers": 7,
+    "unchanged_atlas_frames": 74,
+    "atlas_size": [
+      1778,
+      1949
+    ],
+    "original_alpha_retained": true,
+    "layout_and_runtime_art_unchanged": true,
+    "clips": 5,
+    "viewport": [
+      390,
+      844
+    ],
+    "contentVersion": "5278f631cd330bde",
+    "rules_save_content_timing_unchanged": true
+  },
+  "owner": {
+    "intake_authorized": "นำเข้าเกมได้",
+    "new_motion_approved": false
+  }
+}

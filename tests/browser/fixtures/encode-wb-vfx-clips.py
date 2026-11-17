@@ -4,7 +4,7 @@ from pathlib import Path
 from PIL import Image
 import json, shutil, subprocess, sys, re
 ROOT=Path(__file__).resolve().parents[3]
-CAP=ROOT/(sys.argv[1] if len(sys.argv)>1 else 'test-results/wb-vfx-delivery');OUT=ROOT/'docs/combat-presentation/wb-vfx-slice';OUT.mkdir(parents=True,exist_ok=True)
+CAP=ROOT/(sys.argv[1] if len(sys.argv)>1 else 'test-results/wb-vfx-delivery');OUT=ROOT/(sys.argv[2] if len(sys.argv)>2 else 'docs/combat-presentation/wb-vfx-slice');OUT.mkdir(parents=True,exist_ok=True)
 manifest=[]
 for stamps in sorted(CAP.glob('*/stamps.txt')):
  lines=stamps.read_text().splitlines();click=float(lines[0].split()[1]);frames=sorted([(n,float(t)) for n,t in (s.split() for s in lines[1:])],key=lambda f:f[1]);assert frames[0][1]<=click<=frames[-1][1]

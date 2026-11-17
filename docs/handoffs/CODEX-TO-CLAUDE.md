@@ -1,3 +1,9 @@
+## 2026-11-17 — WB VFX clarity revision intake (Codex; codex/wb-vfx-revision-intake)
+- Owner: “นำเข้าเกมได้” after #293; recorded as intake authorization, new motion approval still pending. No merge of #292 or publication.
+- Replaced only 7 atlas slots: Bolt/Tide prepare/peak/settle + Wing prepare/hold. All other74 canvases RGBA-identical, alpha/layout/runtime metadata unchanged; no rules/save/catalog/balance/timing/content-version change. Both incoming packages preserved.
+- Quality: typecheck/lint/build, coverage6/6, unit2038 passed23 skipped, WB browser18/18; 390px real clips of Bolt/Tide normal + Wing normal/hold/release/break. [Evidence, receipt and limits](../validation/wb-vfx-revision/README_TH.md).
+- Codex eye review uses stills/frame sequences only; owner must review the new clips. Next: owner visual/motion decision, then handle integration/merge within the explicit #292 constraint.
+
 ## 2026-11-17 — P11-05 step 5e: World Boss trio VFX intake (Sonnet; branch claude/vfx-world-boss-p11-05-q3smh5)
 - Codex PR #291 (`art/art-vfx-wb-trio-001` `deacd23`) checked: touches only `incoming/ART-VFX-WB-TRIO-001/` (128 added), 127 SHA-256 + `validation.json` (`cea8cc88…`) match, `build_handoff.py --verify` passes, 45 layers 256² RGBA, true alpha, margin ≥13 px, no text/figures. Telegraph keys differ by shape (open curves / cracked shell / rigid brackets); Severing Bolt straight vs Fate Lash curved; Court hand vs Rift tear.
 - Imported R1 (39 layers; R2 of Wing Gathering/Call the Court left in `incoming/`) by `incoming/ART-VFX-WB-TRIO-001/build_assets.py`: `boss_signature_fx` repacked losslessly (81 frames, every frame RGBA-identical; 1778×1949, 13.2 MiB decoded, 2.7 MB — was 7.9 MiB/1.55 MB, loaded only by boss encounters). `boss-signature-art.json` gains Codex anchor/pivot/width/offset.

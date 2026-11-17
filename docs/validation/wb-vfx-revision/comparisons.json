@@ -1,0 +1,32 @@
+[
+  {
+    "file": "docs/validation/wb-vfx-revision/severing-bolt-before-after-390.png",
+    "panelWidth": 390,
+    "beforeCommit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "beforeFile": "docs/combat-presentation/wb-vfx-slice/severing-bolt-normal-peak-390.jpg",
+    "beforeSha256": "517885323fdaa3aa8c681c2a3b12937d7efecbf6885960b7362eb43132c4fec2",
+    "afterFile": "docs/combat-presentation/wb-vfx-revision-slice/severing-bolt-normal-peak-390.jpg",
+    "afterSha256": "9a167163453c4b727123fab4c2f651a28344b8cc3e74e2e6394ae54d2998c5b5",
+    "note": "Independently recorded real game frames, no VFX compositing/relocation; body pose and capture instant may differ. Only header and side-by-side layout added."
+  },
+  {
+    "file": "docs/validation/wb-vfx-revision/shadow-tide-before-after-390.png",
+    "panelWidth": 390,
+    "beforeCommit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "beforeFile": "docs/combat-presentation/wb-vfx-slice/shadow-tide-normal-peak-390.jpg",
+    "beforeSha256": "de5c5337feee1052940827baf0bbfa307afdde50cc8017cde939e7e99f1ae9f9",
+    "afterFile": "docs/combat-presentation/wb-vfx-revision-slice/shadow-tide-normal-peak-390.jpg",
+    "afterSha256": "88e7e39920b1466937497e9707aedc25434c21a13435a2d317e013b2fb66276f",
+    "note": "Independently recorded real game frames, no VFX compositing/relocation; body pose and capture instant may differ. Only header and side-by-side layout added."
+  },
+  {
+    "file": "docs/validation/wb-vfx-revision/wing-gathering-before-after-390.png",
+    "panelWidth": 390,
+    "beforeCommit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "beforeFile": "docs/combat-presentation/wb-vfx-slice/wing-gathering-normal-end-390.jpg",
+    "beforeSha256": "3666043790c8e42e16c458ff1cbe4e3f11ce30493773a9a25bd0e4d73b4dad12",
+    "afterFile": "docs/combat-presentation/wb-vfx-revision-slice/wing-gathering-normal-end-390.jpg",
+    "afterSha256": "7cdfa49a249186bea1276a47892a417d791d04f467b88cc9a4b3732ab49370c5",
+    "note": "Independently recorded real game frames, no VFX compositing/relocation; body pose and capture instant may differ. Only header and side-by-side layout added."
+  }
+]

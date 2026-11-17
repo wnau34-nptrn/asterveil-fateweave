@@ -10,6 +10,7 @@ import { wbVfxFixture, wbVfxMoves, type WbVfxMove } from './fixtures/wb-vfx';
 const atlas = JSON.parse(readFileSync('public/assets/fx/boss_signature_fx.json', 'utf8'));
 const layers = JSON.parse(readFileSync('incoming/ART-VFX-WB-TRIO-001/layers.json', 'utf8')).layers as { file: string; move: string; beat: string; anchor: string; pivot_px: number[]; suggested_canvas_width_390: number; route: string; sha256: string }[];
 const intake = JSON.parse(readFileSync('incoming/ART-VFX-WB-TRIO-001/intake-report.json', 'utf8'));
+const revision = JSON.parse(readFileSync('docs/validation/wb-vfx-revision/intake-report.json', 'utf8'));
 const moves = Object.keys(wbVfxMoves) as WbVfxMove[];
 const slug = (m: string) => m.toLowerCase().replace(/ /g, '-');
 const routeOf: Record<string, string> = { charge: 'charge', single: 'single', all: 'all', caster: 'caster', summon: 'summon' };
@@ -25,7 +26,7 @@ describe('World Boss trio VFX: names, routes and art', () => {
     for (const m of ['Stone Fist', 'Boulder Hurl', 'Shard Talon', 'Six-Hand Rend']) expect(Object.hasOwn(bossMoves, m), m).toBe(false);
     for (const d of WORLD_BOSS_TRIO) expect(usesBossSignature(d), d.id).toBe(true);
   });
-  it('ships every primary layer (R1) in the lossless atlas with Codex pivot, width and anchor; R2 stays out', () => {
+  it('ships R1 with the seven clarity replacements, retaining every original pivot, width and anchor; R2 stays out', () => {
     for (const l of layers.filter(x => x.file.startsWith('layers/'))) {
       const name = `${l.move}_${l.beat}` as keyof typeof art;
       expect(atlas.frames[name], name).toBeDefined();
@@ -33,10 +34,27 @@ describe('World Boss trio VFX: names, routes and art', () => {
       expect(art[name]).toMatchObject({ anchor: l.anchor, pivot: l.pivot_px, width: l.suggested_canvas_width_390 });
       expect(intake.layers[name]).toBe(l.sha256);
       expect(createHash('sha256').update(readFileSync(`incoming/ART-VFX-WB-TRIO-001/${l.file}`)).digest('hex')).toBe(l.sha256);
+      const replacement = revision.replaced[name];
+      if (replacement) {
+        expect(replacement.originalSha256).toBe(l.sha256);
+        expect(createHash('sha256').update(readFileSync(replacement.file)).digest('hex')).toBe(replacement.sha256);
+      }
     }
     expect(Object.keys(atlas.frames)).toHaveLength(81);
-    expect(intake.atlasSha256).toBe(createHash('sha256').update(readFileSync('public/assets/fx/boss_signature_fx.webp')).digest('hex'));
+    expect(revision.baselineAtlasSha256).toBe(intake.atlasSha256);
+    expect(revision.atlasSha256).toBe(createHash('sha256').update(readFileSync('public/assets/fx/boss_signature_fx.webp')).digest('hex'));
+    expect(revision.layoutSha256).toBe(createHash('sha256').update(readFileSync('public/assets/fx/boss_signature_fx.json')).digest('hex'));
+    expect(revision.runtimeArtSha256).toBe(createHash('sha256').update(readFileSync('src/game/visuals/boss-signature-art.json')).digest('hex'));
     const { w, h } = atlas.meta.size; expect(Math.max(w, h)).toBeLessThanOrEqual(2048);
+  });
+  it('limits changed artwork to Bolt/Tide three beats and Wing prepare; all other 74 frame canvases stay unchanged', () => {
+    const allowed = ['severing-bolt', 'shadow-tide'].flatMap(m => ['prepare', 'peak', 'settle'].map(b => `${m}_${b}`));
+    allowed.push('wing-gathering_prepare');
+    expect(Object.keys(revision.replaced).sort()).toEqual(allowed.sort());
+    const changed = Object.keys(atlas.frames).filter(name => revision.frameRgbaBefore[name] !== revision.frameRgbaAfter[name]);
+    expect(changed.sort()).toEqual(allowed.sort());
+    expect(revision.unchangedFrames).toBe(74);
+    expect(revision.size).toEqual([atlas.meta.size.w, atlas.meta.size.h]);
   });
 });
 
