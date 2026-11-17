@@ -1,0 +1,226 @@
+{
+  "task": "ART-VFX-WB-TRIO-001",
+  "generator": "image_gen.imagegen",
+  "method": "One whole three-cell prepare/peak/settle sheet per design, mechanically exported as independent256px layers. Full boss seed and2old VFX layers attached to every generation. No body art produced.",
+  "generations": [
+    {
+      "id": "titan-gathering",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally. MOVE: Titan Gathering of KRAGMOR. Heavy STONE/CRYSTAL compression, no wind or feathers. LEFT prepare: four small rough violet stones drift inward between TWO FLEXIBLE OPEN cyan-edged curved wisps, open center, no hard teeth or closed ring; normal charge symbol. MIDDLE peak: compact compressed rough crystal-stone core/knot with cyan seams, a few thick fragments close around it, no explosion. RIGHT settle: three tiny slowly dropping violet crystal chips with faint mint rims, sparse and visibly receding.",
+      "references": [
+        "seeds/seed-a.png",
+        "seeds/style/rift-gathering-prepare.png",
+        "seeds/style/rift-awakening-peak.png"
+      ],
+      "source": "source/titan-gathering.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "mountain-fall",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally. MOVE: Mountain Fall of KRAGMOR. Heavy stone vertical compression, NOT lightning or wind. LEFT prepare WARNING: TWO rigid angular dark violet stone brackets facing each other, each with ONE hard inward tooth, two teeth TOTAL visibly offset and interlocking while center remains a clear OPEN GAP; broad solid silhouette, no ring, no flexible curves, no spinning marks. MIDDLE peak: short powerful DOWNWARD stone/crystal slam, thick vertical compressed cyan pressure strokes ending at compact ground impact with short jagged cracks; NO full ground plane and no long horizontal blanket. RIGHT settle: very few tiny crystal dust/stone chips dropping down, faint, no second explosion. Ground contact near bottom of cell.",
+      "references": [
+        "seeds/seed-a.png",
+        "seeds/style/rift-cataclysm-prepare.png",
+        "seeds/style/rift-awakening-peak.png"
+      ],
+      "source": "source/mountain-fall.png",
+      "numeric_rng_seed": null,
+      "selected": false
+    },
+    {
+      "id": "rift-quake",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Rift Quake of KRAGMOR. Low heavy FRACTURED STONE, no wind/feathers/lightning. LEFT prepare: a short open crescent of thin cyan cracks with two pebbles, low compact footprint. MIDDLE peak: THREE distinct short staggered fracture-wave ridges running RIGHT to LEFT through a SMALL single-target footprint; violet crystal fissures with bright cyan/ivory rims and dark rough rock contour, not three giant screen-wide waves. RIGHT settle: four tiny stone fragments falling, sparse low dim cyan seams. Keep ALL motifs LOW and COMPACT, three fracturewave fronts not circular halos; contact footprint at lower cell center.",
+      "references": [
+        "seeds/seed-a.png",
+        "seeds/style/rift-wave-peak.png",
+        "seeds/style/rift-awakening-peak.png"
+      ],
+      "source": "source/rift-quake.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "fault-awakening",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Fault Awakening of KRAGMOR. Local phase-change aura of rough stone and crystal, NO hero hit. LEFT prepare: three short cyan cracks flowing UP from central small chest light, rough stone chips attached to cracks. MIDDLE peak: FIVE major violet crystal crown shards fan outward/upward with short jagged cyan rift seams from lower center; local crown of stone power, NOT a physical boss crown/face/body, no circular blast or wind. RIGHT settle: five tiny violet crystal sparks drifting DOWN and OUT, dim, no impact. Peak fan roughly500x450px, fully inside middlecell, no paint closer than80px to sheetedges. Allnegative space alpha0 no luminousfog.",
+      "references": [
+        "seeds/seed-a.png",
+        "seeds/style/rift-awakening-peak.png",
+        "seeds/style/rift-gathering-prepare.png"
+      ],
+      "source": "source/fault-awakening.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "wing-gust",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Wing Gust of VALDRAKK. Fast SHARP CRYSTAL FEATHERS with cutting airflow traces, no clouds/lightning/rocks. LEFT prepare: exactly THREE slender violet crystal feathers fold into a small crescent, bright mint rim and dark indigo edges. MIDDLE peak: three sharp long curved feather-cuts sweeping diagonally from UPPER RIGHT toward LOWER LEFT, crisp tips and clean gaps, one compact target footprint. RIGHT settle: three small broken crystal feather tips falling down-left, dim and sparse, no new slash. Peak LEADING bright sharp tips at LOWER-LEFT, trailing wisps at UPPER-RIGHT. Feathers have a thin quill and swept blade edge, not thick rocky plates.",
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/style/rift-wave-peak.png",
+        "seeds/style/rift-gathering-prepare.png"
+      ],
+      "source": "source/wing-gust.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "wing-gathering",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Wing Gathering of VALDRAKK. R1 recommended BREAKABLE charge key: visibly FRAGILE THIN CRACKED CRYSTAL SHELL, never rigid brackets, never ordinary smooth open curves. LEFT prepare: two thin asymmetric curved violet crystal shell arcs with a LARGE BRIGHT jagged fracture/gap across them, delicate broken tips, visibly brittle at80px, open center; cyan fracture highlights. MIDDLE peak: compact compressed cyan shoulder-core cluster wrapped in broken thin crystal shell/feather pieces, split seam still visible, no orb projectile. RIGHT settle: four tiny shell splinters detach and fall slowly, fading, no impact. LEFT brittle shell must be THIN and visibly broken into three delicate curved plates by a bold bright ZIGZAG missing section, not two thick rigid toothed brackets, not smooth circular swirls. No huge halo behind core. Transparent space through broken shell.",
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/style/rift-gathering-prepare.png",
+        "seeds/style/rift-awakening-peak.png"
+      ],
+      "source": "source/wing-gathering.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "wing-gathering-r2",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Wing Gathering R2 of VALDRAKK. R2 alternative BREAKABLE charge key made of folded CRYSTAL FEATHERS, NOT shell and NOT rigid brackets. LEFT prepare: THREE thin folded crystal feather slivers stacked in a delicate open fan, one prominent BRIGHT zigzag fracture crosses the feather fold and visibly breaks the silhouette, open center. MIDDLE peak: the cracked layered feathers overlap tightly around a small cyan shoulder-core, thin sharp split seams remain; no energy projectile. RIGHT settle: three tiny folded feather shards loosen and drift down, dim sparse. Compact tightly FOLDED feather cluster, not broad spiky explosion, not a complete circle. No smooth wispy arc. Prepare fracture must leave a visible missing zigzag bite, verythinbrittle silhouette.",
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/style/rift-gathering-prepare.png",
+        "seeds/style/rift-wave-peak.png"
+      ],
+      "source": "source/wing-gathering-r2.png",
+      "numeric_rng_seed": null,
+      "selected": false
+    },
+    {
+      "id": "worldshard-dive",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Worldshard Dive of VALDRAKK. Sharp broken-dimensional CRYSTAL FEATHERS, no boulders/clouds/lightning. LEFT prepare: a small downward-pointing crescent of three crystal feather shards, diagonal RIGHT-to-LEFT intent. MIDDLE peak: compact oblique wedge of FIVE jagged crystal feather plates piercing from UPPER RIGHT to LOWER LEFT through ONE hero footprint, ivory/cyan leading edges, indigo separation, no long screen-wide beam. RIGHT settle: very fine sparse violet feather-crystal dust/chips drifting downward, low opacity, not another attack. Sharp LEADING tips at lowerLEFT and trailingfeatherchips upperRIGHT, narrow diagonalfan of shardplates, never all-screenblast, no smoke or hazebackground.",
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/style/rift-wave-peak.png",
+        "seeds/style/rift-awakening-peak.png"
+      ],
+      "source": "source/worldshard-dive.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "sky-rend",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Sky Rend of VALDRAKK. Local phase aura of SHARP CRYSTAL FEATHERS, not stone crystals or gold crown. LEFT prepare: two short branching cyan fissure traces curl upward like wing-edge cracks, feather-shaped tips. MIDDLE peak: SEVEN slender faceted violet-cyan feather blades open as an airy crown/fan above a small central seam, sparse gaps, no actual wings/animal/body and no wind cloud. RIGHT settle: a handful of very tiny cyan feather-shaped sparks drift outward/down and fade, no slash or explosion. Seven SLENDER FEATHERBLADES with quill centers and long airy gaps; not five bulky crystal diamonds. Wholephasefanwithin500x450pxcenteredcell, total no clouds/halos.",
+      "references": [
+        "seeds/seed-b.png",
+        "seeds/style/rift-awakening-peak.png",
+        "seeds/style/rift-wave-peak.png"
+      ],
+      "source": "source/sky-rend.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "severing-bolt",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Severing Bolt of MORVANE. Shadow THREADS and torn SILK, no rocks/feathers. LEFT prepare: TWO short thin shadow threads pulled taut in a small open diamond between invisible lower hands; NO hands/bodies, no orb. MIDDLE peak: a VERY NARROW STRAIGHT diagonal cutting filament from UPPER RIGHT to LOWER LEFT, bright cyan sharp leading tip at lower-left, dark plum/indigo contour and a little warm gold rim, short tied thread trails; NOT curved arc or wide beam. RIGHT settle: four short broken black-violet silk threads falling, sparse gold/cyan flecks, visibly dim. Peak is a taut narrow filament, cyanleadingtip LOWER LEFT, gold-edged trailing shortthreads upperRIGHT, fully bounded500x450px. No feather shape/barbs, no crystalfacets, no rockslabs. Frayed silk texture and dark violet contour, warm gold trim.",
+      "references": [
+        "seeds/seed-c.png",
+        "seeds/style/rift-gathering-prepare.png",
+        "seeds/style/rift-wave-peak.png"
+      ],
+      "source": "source/severing-bolt.png",
+      "numeric_rng_seed": null,
+      "selected": false
+    },
+    {
+      "id": "fate-lash",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Fate Lash of MORVANE. Shadow THREAD WHIP and flowing SILK, no crystal/feathers. LEFT prepare: a short thin curved loop of taut violet shadow thread winding locally, open asymmetrical curve. MIDDLE peak: ONE LONG THICK flowing C-SHAPED shadow-thread lash sweeps from upper-right into a broad LEFTWARD curve, cyan/ivory leading rim with small gold accent, layered torn silk edges. Must differ clearly from the narrow STRAIGHT Severing Bolt. RIGHT settle: three small torn thread curls dangle and fall downward, low dim sparse texture, no new whipping arc. Flowing frayed silk RIBBON/TWISTED THREAD texture, NO crystalfacets/barbs/rocks. Highlight the opening prepare loop with brightthinivory/cyanrim so visibleat80px, darkplumoutlineouteredge. Peak one verythick Ccurve with leadingedgeLEFT, fullyinside500x500area withwidetransparenthole.",
+      "references": [
+        "seeds/seed-c.png",
+        "seeds/style/rift-gathering-prepare.png",
+        "seeds/style/rift-wave-peak.png"
+      ],
+      "source": "source/fate-lash.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "call-the-court",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Call the Court of MORVANE. R1 recommended SUMMON at a revived minion CHEST slot, NO damage. LEFT prepare: two small frayed shadow-cloth folds peel apart horizontally into a shallow OPEN CUP, NOT a vertical dimensional tear or floor ring. MIDDLE peak: ONE eerie shadow HAND reaches UP from the small cupped torn cloth, thin dangling shadow threads attached to its wrist, cyan/gold rim on dark violet fingers, no arm/body/face/character; this is an ephemeral VFX hand not a minion sprite. Compact upright hand silhouette with clear fingers, no portal oval/slit/frame/ring and no floor. RIGHT settle: four short frayed cloth/thread wisps shrink and fade downward. Visually unlike the old Call the Rift vertical pointed portal. Summon is LOCAL UPRIGHT at an enemy slot, no attack direction or impact. Peak thin smoke-free shadowhand rises with 5 clear finger tips from torn silk at wrist; only one hand fragment, NO long forearm/character. No portalframe/tear/oval, no floor ellipse. Bright mint/cyan fingertip edges plus darkplum palm, smallgoldclothtrim.",
+      "references": [
+        "seeds/seed-c.png",
+        "seeds/style/rift-gathering-prepare.png",
+        "seeds/style/rift-wave-peak.png"
+      ],
+      "source": "source/call-the-court.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "call-the-court-r2",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Call the Court R2 of MORVANE. R2 alternative SUMMON at revived minion CHEST slot, NO damage. LEFT prepare: small gathered shadow SILK folds twist at lower center, NOT a closed ring. MIDDLE peak: a rising curved PLUME OF TATTERED SHADOW CLOTH, branching into THREE separated flowing cloth tips, cyan/gold thin rim on violet silk; no hand, no body, no face, no stones/feathers, no outlined portal/vertical slit/oval or floor ring. Cloth folds and curved silhouette must clearly differ from old Call the Rift's rigid upright dimensional tear. RIGHT settle: sparse tiny ragged cloth/thread fragments fall and vanish. Local UPRIGHT summon, no heroattack. Peak three slender cloth streamers bend and flare in differentdirections with frayed silk edges and broken goldthreadtrim, free flowing NOT enclosed by any portaloutline. Veryclear THREE pointed cloth tips, NO hands or characters. No luminousfogbehindmotifs.",
+      "references": [
+        "seeds/seed-c.png",
+        "seeds/style/rift-gathering-prepare.png",
+        "seeds/style/rift-wave-peak.png"
+      ],
+      "source": "source/call-the-court-r2.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "shadow-tide",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Shadow Tide of MORVANE. LOW FLOWING SHADOW SILK, no water/clouds/rocks/crystals. LEFT prepare: a shallow horizontal torn-cloth wave lip with two loose threads, small low silhouette. MIDDLE peak: ONE compact LOW crest of violet shadow-cloth rolling RIGHT to LEFT, trailing short torn silk threads, dark indigo contour and mint/cyan rim with tiny gold accents, ONE hero footprint only, no giant screen-covering wall. RIGHT settle: three tiny frayed shadow tassels sink and dissipate, sparse low-opacity, no new wave. All THREE motifs LOW, wide horizontal cloth-wave lip, peak width around500px height200px, no tallwall or circularportal, leadingcrest pointsLEFT and frayedtrailsRIGHT. Layerwillattachatfeet ofeachaffectedhero, no floorplane or baked shadow.",
+      "references": [
+        "seeds/seed-c.png",
+        "seeds/style/rift-gathering-prepare.png",
+        "seeds/style/rift-wave-peak.png"
+      ],
+      "source": "source/shadow-tide.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "severed-crown",
+      "prompt": "Original hand-painted fantasy mobile RPG VFX ONLY. A SINGLE WIDE TRANSPARENT SHEET with EXACTLY THREE separate SQUARE CELLS side by side in ONE ROW: LEFT=prepare, MIDDLE=peak, RIGHT=settle. Each cell has ONE isolated effect motif, centered, generous clear margin, at least100px completely transparent gaps between effects, no painting touching sheet edges. Prepare subtle readable small cue, peak bold clear silhouette, settle sparse SMALL DIM falling fragments rather than another impact. Match attached old VFX layers: textured dark PLUM/INDIGO contour, bright IVORY/MINT/CYAN rim light, saturated violet inner paint. Must read with NORMAL alpha blending on dark navy and shiny gold armor, no additive blending needed. Boss reference sets PALETTE ONLY: NEVER paint boss/body/face/character/hero/creature, no scenery, floor plane or shadow plate. TRUE transparent background real alpha0, NO checkerboard, NO black/white backdrop, NO text, numbers, letters, icons, labels, logos, UI, damage indicators. Enemy RIGHT releases toward hero LEFT: directional cuts/trails travel from upper RIGHT toward lower LEFT; phase/charge bursts radiate locally.  No broad luminous halos, white/gray fog, glow clouds or baked backgrounds: all negative space and gaps MUST be alpha0; bright edge light confined to painted motif, no haze behind effects. MOVE: Severed Crown of MORVANE. Local phase-change sigil of GOLD CROWN and BROKEN SHADOW THREADS, no crystal feathers/stones. LEFT prepare: thin warm gold crown-edge outline made from three pointed torn silk folds, sparse cyan seams. MIDDLE peak: an OPEN ring-like CROWN OF SEVERED THREADS expanding locally, five warm GOLD pointed crown tips connected by flowing broken violet silk filaments with CLEAR GAPS, elegant asymmetrical arc and ragged dark cloth edges, no text/symbols, no physical body/head and no full-screen explosion. RIGHT settle: tiny sparse warm gold sparks and short frayed violet threads fall and fade, no new crown/attack. Readable warmGOLD pointedCROWN broken into five tips and darkvioletsilk THREADS with clearGAPS, no solid ring/halo. Preparegoldoutline has brightivoryedge at tips to remainvisibleat80px. All motifs bounded500x450cellarea, no fog/background.",
+      "references": [
+        "seeds/seed-c.png",
+        "seeds/style/rift-gathering-prepare.png",
+        "seeds/style/rift-awakening-peak.png"
+      ],
+      "source": "source/severed-crown.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "mountain-fall-r2",
+      "prompt": "EDIT FIRST IMAGE as a whole3-cell VFX sheet. Keep2172x724 canvas. REMOVE ALL WHITE/GRAY/VIOLET HAZE/SMOKE/FOG/BACKGROUND behind motifs in ALL three cells, leaving real ALPHA0 in every negative space including center between prepare brackets. Retain LEFT two hard angular STONE brackets with ONE inward tooth each, two teeth TOTAL and clear transparent central gap; solid darkplum/violet surfaces and narrowbrightcyanedges. MIDDLE regenerate as COMPACT vertically downward stone-compression impact with SHORT cyan pressure streaks, short cracks below. No long beam; entire peak including streaks/fragments fits within a500x500px area centered in its724px cell, topmargin>=100px; no paint touching topedge. Source top was cropped, redraw complete bounded effect, do not just crop it. RIGHT sparse three tiny falling stone chips, absolutely no cloud/fog behind them. Purple roughstone/cyanseams, NO feathers/wind/lightning/clouds/characters/faces/body/UI/text. Realtransparentbackground, no additiveglow needed. Secondimage Kragmor seed paletteonly, third and fourth oldlayer references forstyle; no boss/body painted. LEFT prepare normalwidthrigidbrackets NOT crescent curves; MIDDLE strong slam; RIGHT weakrecurringfragments. Exactly3separatecells, amplealpha0gaps.",
+      "references": [
+        "source/mountain-fall.png",
+        "seeds/seed-a.png",
+        "seeds/style/rift-cataclysm-prepare.png",
+        "seeds/style/rift-awakening-peak.png"
+      ],
+      "source": "source/mountain-fall-r2.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "wing-gathering-r2-clean",
+      "prompt": "EDIT FIRST IMAGE wholethree-cell VFX sheet. Preserve EXACTLY the three effect motifs and their shapes/colors: LEFT three brittle folded violet gold-edged crystal feathers with a bold visible zigzag fracture, MIDDLE compact folded feather cluster hugging cyan shouldercore, RIGHT three tiny loosening feather shards. REMOVE ALL gray/white/purple HAZE, SMOKE, FOG, halo/background anywhere around/behind/between the motifs; ALL negative space between feathers and all gaps between cells must be TRUE ALPHA0. No luminous cloud or colored background plate, no checkerboard. Keep brightlight only inside paintedcore/featheredges; darkindigocontours separate on goldarmor. Second reference Valdrakk seed paletteonly no body; third/fourth oldVFXstyle. SAME2172x724canvas, threeisolatedcells, all motifs complete with100pxoutermargins, no parts touchingedges or crossingcells. No body/character/face/UI/text/numbers. This is a BREAKABLE fragile charge cue, no rigidbrackets or projectile.",
+      "references": [
+        "source/wing-gathering-r2.png",
+        "seeds/seed-b.png",
+        "seeds/style/rift-gathering-prepare.png",
+        "seeds/style/rift-wave-peak.png"
+      ],
+      "source": "source/wing-gathering-r2-clean.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    },
+    {
+      "id": "severing-bolt-r2",
+      "prompt": "Edit FIRST IMAGE wholethree-beat SeveringBolt VFX sheet, same2172x724canvas. Keep MIDDLE narrowSTRAIGHTdiagonalfilament with sharpcyanleadingtipatLOWERLEFT and RIGHT sparsebroken-threadsettle as theyare. ONLY LEFT prepare is too darkat80px: add a CLEAR BRIGHTIVORY/MINT/CYAN INNER RIM about12sourcepixels thick along BOTH taut shadowthreads that form the open flatteneddiamond, leaving a THICK darkindigocontouroutside the highlight. Keep purpleclothtexture and tinywarmgoldaccent, NO orb, no filleddiamondcenter, no broadwhitebackgroundglow. Negative center/cellgaps truealpha0. Need thin-but-readable two tautthreads at80px on both NAVY and GOLD ARMOR, not faint purple lines. Secondreference approvedMorvaneseed paletteonly no body; third/fourth oldVFXstyle for rimlight. Exactly3separatecells, completeeffectsnocrop, outer100pxemptyspace, truealpha, no UI/text/numbers/bodies/faces/scenery/shadows. This is threadmagic not feathers/rocks/crystals; do not curve middlebolt.",
+      "references": [
+        "source/severing-bolt.png",
+        "seeds/seed-c.png",
+        "seeds/style/rift-gathering-prepare.png",
+        "seeds/style/rift-wave-peak.png"
+      ],
+      "source": "source/severing-bolt-r2.png",
+      "numeric_rng_seed": null,
+      "selected": true
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "seeds/shadow-tide-settle.png": {
+    "sha256": "d839d9691b9130520d87bffa45ad07a05403dfb1df7bd48bf49fdda5883d7def",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "incoming/ART-VFX-WB-TRIO-001/layers/shadow-tide-settle.png"
+  },
+  "seeds/game-shadow-tide.png": {
+    "sha256": "2064bdd387a8cc5e3c2334d8d2fe855e4bc6eea102057c852faa6383e629b546",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "MP4 frame 0 of docs/combat-presentation/wb-vfx-slice/shadow-tide-normal-390.mp4"
+  },
+  "seeds/severing-bolt-settle.png": {
+    "sha256": "4c469c601405c7ad3cf130928c3174af52ebfb4d5a07956e5c3ff8348df4e3b8",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "incoming/ART-VFX-WB-TRIO-001/layers/severing-bolt-settle.png"
+  },
+  "seeds/shadow-tide-peak.png": {
+    "sha256": "e286e00f11607f59926857a77a54afe47e2a56f9f9d8b7d64ec844d9ca8b1572",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "incoming/ART-VFX-WB-TRIO-001/layers/shadow-tide-peak.png"
+  },
+  "seeds/shadow-tide-prepare.png": {
+    "sha256": "7855847d06ca2972bfaacda9243336fccc2536950469811ebcfe2345ae80b8d6",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "incoming/ART-VFX-WB-TRIO-001/layers/shadow-tide-prepare.png"
+  },
+  "seeds/game-wing-gathering.png": {
+    "sha256": "b20d44d299103694706bbfa364244d14bbf86cfbe9e386729d58284f848fa813",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "MP4 frame 0 of docs/combat-presentation/wb-vfx-slice/wing-gathering-normal-390.mp4"
+  },
+  "seeds/wing-gathering-r2-prepare.png": {
+    "sha256": "fb243797cab4e210ee68a2e49572fa3208dc04c5d3469a32a115e481e37f255c",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "incoming/ART-VFX-WB-TRIO-001/alternatives/wing-gathering-r2/layers/wing-gathering-prepare.png"
+  },
+  "seeds/game-severing-bolt.png": {
+    "sha256": "2701c7385c98630b02a5c774d4110c31153bcc0ae19109dee0e978701214ae49",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "MP4 frame 0 of docs/combat-presentation/wb-vfx-slice/severing-bolt-normal-390.mp4"
+  },
+  "seeds/severing-bolt-peak.png": {
+    "sha256": "2182419e9ea69c6c65e10ab1a217274ab00fd2c648301e3a706ed1c6d61fd26f",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "incoming/ART-VFX-WB-TRIO-001/layers/severing-bolt-peak.png"
+  },
+  "seeds/wing-gathering-prepare.png": {
+    "sha256": "0ed9730955f7c202a189d6c933a31f7456539c16429b1a901293f35a7ed6c30e",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "incoming/ART-VFX-WB-TRIO-001/layers/wing-gathering-prepare.png"
+  },
+  "seeds/severing-bolt-prepare.png": {
+    "sha256": "1fa415c3c32154dd883b0498dc0a4dee66c956b18bec97ad96d60993ff1587e8",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "incoming/ART-VFX-WB-TRIO-001/layers/severing-bolt-prepare.png"
+  },
+  "seeds/input-severing-bolt.png": {
+    "sha256": "84b93b027079e6e856891e4d5e2da3887d98ace98aa44ed1d489dc28adcb6ef8",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "ImageMagick montage of the three original 256x256 RGBA layers, left to right prepare/peak/settle, zero gap; reference actually passed to image generator"
+  },
+  "seeds/input-shadow-tide.png": {
+    "sha256": "a953246dc4b6b34202269ab24c42e89f81840be44a7064c7db8cecdf823aae32",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "source": "ImageMagick montage of the three original 256x256 RGBA layers, left to right prepare/peak/settle, zero gap; reference actually passed to image generator"
+  }
+}

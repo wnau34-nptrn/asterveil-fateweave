@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { REWORK_ATLAS, reworkAtlasUrls, reworkCues, reworkMarks, reworkContact } from '../visuals/rework-fx';
 import { unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals/basic-attack-fx';
-import { BOSS_ATLAS, bossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, usesBossSignature, type BossPoint } from '../visuals/boss-signature-fx';
+import { BOSS_ATLAS, bossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, holdPlacement, usesBossSignature, type BossPoint } from '../visuals/boss-signature-fx';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
 import { unitFrameView } from '../visuals/unit-frame-view';
 import { UnitAnimation } from '../visuals/unit-animation';
@@ -191,16 +191,23 @@ export class BattleScene extends Phaser.Scene {
       if (this.holds.has(id)) continue;
       const body = this.bodies.get(id), box = this.figureBox(id), slot = this.actorPanels.get(id);
       if (!body || !box || !slot) continue;
-      // Just forward (hero side) of the rendered lower chest, never over the face or the name/HP labels.
-      const x = box.left - body.x + (box.right - box.left) * .18 - slot.size * .12, y = box.top - body.y + (box.bottom - box.top) * .55;
-      const width = 90 * Phaser.Math.Clamp(slot.size / 96, .7, 1.25) / (111 / 96);
+      // Just forward (hero side) of the rendered lower chest, never over the face or the name/HP labels. The World Boss
+      // trio's holds use their layer anchor instead (Mountain Fall: forward chest; Wing Gathering: shoulder core).
+      const scale = Phaser.Math.Clamp(slot.size / 96, .7, 1.25), at = this.bossAnchor(id), placed = at && holdPlacement(at, hold, scale);
+      const x = placed ? placed.x - body.x : box.left - body.x + (box.right - box.left) * .18 - slot.size * .12;
+      const y = placed ? placed.y - body.y : box.top - body.y + (box.bottom - box.top) * .55;
+      const width = placed?.width ?? 90 * scale / (111 / 96);
       let item: Phaser.GameObjects.Image | Phaser.GameObjects.Graphics;
       if (this.textures.exists(BOSS_ATLAS)) item = this.add.image(x, y, BOSS_ATLAS, hold.frame).setScale(width / 256);
       else {
-        // Fallback keys by shape, not colour: rigid interlocked teeth for an unstoppable release, open curves otherwise.
+        // Fallback keys by shape, not colour: rigid interlocked teeth for an unstoppable release, a cracked ring with a
+        // jagged gap for a breakable charge, open curves otherwise.
         const g = this.add.graphics().setPosition(x, y), r = width * .32;
         g.lineStyle(3, hold.kind === 'unstoppable' ? 0xf4e3ff : 0xd8c4ff, .95);
-        if (hold.kind === 'unstoppable') for (const d of [-1, 1]) {
+        if (hold.kind === 'breakable') {
+          g.beginPath(); g.arc(0, 0, r, .5, 5.4); g.strokePath();
+          g.strokePoints([new Phaser.Math.Vector2(r * .9, -r * .4), new Phaser.Math.Vector2(r * .45, -r * .1), new Phaser.Math.Vector2(r * .75, r * .1), new Phaser.Math.Vector2(r * .35, r * .45)], false);
+        } else if (hold.kind === 'unstoppable') for (const d of [-1, 1]) {
           g.strokePoints([new Phaser.Math.Vector2(d * r * .35, -r), new Phaser.Math.Vector2(d * r, -r), new Phaser.Math.Vector2(d * r * .7, -r * .5), new Phaser.Math.Vector2(d * r, 0),
             new Phaser.Math.Vector2(d * r * .7, r * .5), new Phaser.Math.Vector2(d * r, r), new Phaser.Math.Vector2(d * r * .35, r)], false);
         } else for (const a of [0, 2.1, 4.2]) { g.beginPath(); g.arc(0, 0, r, a, a + 1.4); g.strokePath(); }
@@ -208,8 +215,8 @@ export class BattleScene extends Phaser.Scene {
       }
       item.setData('holdFrame', hold.frame).setData('holdKind', hold.kind);
       body.add(item); this.holds.set(id, item);
-      // Normal holds breathe gently; unstoppable brackets stay rigid. Reduced motion and quiet keep both still.
-      if (hold.kind === 'normal' && !this.quiet && !this.reducedMotion) this.idle.push(this.tweens.add({ targets: item, alpha: { from: 1, to: .85 }, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+      // Normal and breakable holds breathe gently; unstoppable brackets stay rigid. Reduced motion and quiet keep all still.
+      if (hold.kind !== 'unstoppable' && !this.quiet && !this.reducedMotion) this.idle.push(this.tweens.add({ targets: item, alpha: { from: 1, to: .85 }, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
     }
   }
   private reworkEmblems = new Set<Phaser.GameObjects.Image>();

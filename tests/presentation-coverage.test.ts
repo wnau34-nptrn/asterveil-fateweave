@@ -60,14 +60,10 @@ describe('W8 presentation coverage', () => {
     }
   });
   it('no move falls back to an unexplained route', () => {
-    // Code-drawn on purpose: the basic arrow/flask (AV03) and Shadow Knife's thrown energy blade. P11-05 step 5: the World Boss trio's
-    // energy moves and 70% phase turns play their painted body gestures; painted World Boss signature VFX is a later art item.
-    const WORLD_BOSS_CODE_VFX: Record<string, readonly string[]> = {
-      foe_kragmor: ['phase:Fault Awakening'],
-      foe_valdrakk: ['Wing Gust', 'Worldshard Dive', 'phase:Sky Rend'],
-      foe_morvane: ['Severing Bolt', 'Call the Court', 'Fate Lash', 'Shadow Tide', 'phase:Severed Crown'],
-    };
-    for (const r of c.rows.filter(r => r.vfx.kind === 'code')) expect(r.move === 'attack' || r.move === 'Shadow Knife' || (WORLD_BOSS_CODE_VFX[r.identity]?.includes(r.move) ?? false), `${r.identity} ${r.move}`).toBe(true);
+    // Code-drawn on purpose: the basic arrow/flask (AV03) and Shadow Knife's thrown energy blade. The World Boss trio's energy
+    // moves and phases are painted since ART-VFX-WB-TRIO-001 (P11-05 step 5); no code-drawn exception remains for them.
+    for (const r of c.rows.filter(r => r.vfx.kind === 'code')) expect(r.move === 'attack' || r.move === 'Shadow Knife', `${r.identity} ${r.move}`).toBe(true);
+    for (const r of c.rows.filter(r => ['foe_kragmor', 'foe_valdrakk', 'foe_morvane'].includes(r.identity) && r.vfx.kind !== 'shared')) expect(r.vfx.module, `${r.identity} ${r.move}`).toBe('boss-signature-fx');
     // Shared on purpose: hero basic cuts by class palette and physical foe moves on the blade family.
     // P03: Wynne's curses share the Mark painting; Kael's fists share the Saint strike paintings until a Martial family exists.
     for (const r of c.rows.filter(r => r.vfx.kind === 'shared')) expect(r.vfx.module, `${r.identity} ${r.move}`).toBe(['kael', 'wynne', 'astrid'].includes(r.identity) && r.move !== 'attack' ? (r.identity === 'kael' ? 'saint-dance-fx' : 'arcane-seal-fx') : 'blade-fx');

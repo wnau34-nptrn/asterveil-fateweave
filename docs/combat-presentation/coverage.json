@@ -11,9 +11,9 @@
   "foeRows": 66,
   "spriteRows": 171,
   "proceduralRows": 14,
-  "paintedRows": 112,
-  "sharedRows": 60,
-  "codeRows": 13
+  "paintedRows": 125,
+  "sharedRows": 56,
+  "codeRows": 4
  },
  "identities": [
   {
@@ -4816,12 +4816,11 @@
     "pose": "cast"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ตัวเอง (รวมพลัง ไม่มี damage)",
-   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "point": "ตัวบอส + ค้างจนปล่อยท่า",
    "encounters": [
     "wb-kragmor"
    ]
@@ -4850,12 +4849,11 @@
     "pose": "weapon"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "point": "ผู้รับ damage จริง",
    "encounters": [
     "wb-kragmor"
    ]
@@ -4884,12 +4882,11 @@
     "pose": "weapon"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ฮีโร่ทุกคนที่ยืนอยู่",
-   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "point": "ฮีโร่ที่โดนจริงทุกคน",
    "encounters": [
     "wb-kragmor"
    ]
@@ -4952,12 +4949,11 @@
     "pose": "cast"
    },
    "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ตัวเอง (เปลี่ยนช่วง)",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "point": "ตัวบอส",
    "encounters": [
     "wb-kragmor"
    ]
@@ -5221,12 +5217,11 @@
     "pose": "cast"
    },
    "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "point": "ผู้รับ damage จริง",
    "encounters": [
     "wb-morvane"
    ]
@@ -5255,12 +5250,11 @@
     "pose": "cast"
    },
    "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "point": "ตำแหน่งตัวที่ถูกเรียกจริง",
    "encounters": [
     "wb-morvane"
    ]
@@ -5289,12 +5283,11 @@
     "pose": "cast"
    },
    "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "point": "ผู้รับ damage จริง",
    "encounters": [
     "wb-morvane"
    ]
@@ -5323,12 +5316,11 @@
     "pose": "cast"
    },
    "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ฮีโร่ทุกคนที่ยืนอยู่",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "point": "ฮีโร่ที่โดนจริงทุกคน",
    "encounters": [
     "wb-morvane"
    ]
@@ -5357,12 +5349,11 @@
     "pose": "cast"
    },
    "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ตัวเอง (เปลี่ยนช่วง)",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "point": "ตัวบอส",
    "encounters": [
     "wb-morvane"
    ]
@@ -6263,12 +6254,11 @@
     "pose": "cast"
    },
    "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "point": "ผู้รับ damage จริง",
    "encounters": [
     "wb-valdrakk"
    ]
@@ -6297,12 +6287,11 @@
     "pose": "cast"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ตัวเอง (รวมพลัง ไม่มี damage)",
-   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "point": "ตัวบอส + ค้างจนปล่อยท่า",
    "encounters": [
     "wb-valdrakk"
    ]
@@ -6331,12 +6320,11 @@
     "pose": "cast"
    },
    "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ฮีโร่ทุกคนที่ยืนอยู่",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "point": "ฮีโร่ที่โดนจริงทุกคน",
    "encounters": [
     "wb-valdrakk"
    ]
@@ -6365,12 +6353,11 @@
     "pose": "cast"
    },
    "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด"
+    "module": "boss-signature-fx",
+    "kind": "painted"
    },
    "target": "ตัวเอง (เปลี่ยนช่วง)",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "point": "ตัวบอส",
    "encounters": [
     "wb-valdrakk"
    ]

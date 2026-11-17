@@ -1,4 +1,28 @@
 {
+  "call-the-court_peak": {
+    "anchor": "summoned_slot.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 78
+  },
+  "call-the-court_prepare": {
+    "anchor": "summoned_slot.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 64
+  },
+  "call-the-court_settle": {
+    "anchor": "summoned_slot.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 40
+  },
   "call-the-hunt_peak": {
     "anchor": "caster.hand",
     "pivot": [
@@ -47,6 +71,54 @@
     ],
     "width": 54
   },
+  "fate-lash_peak": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 130
+  },
+  "fate-lash_prepare": {
+    "anchor": "caster.upper_hands_safe",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 80
+  },
+  "fate-lash_settle": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 60
+  },
+  "fault-awakening_peak": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 130
+  },
+  "fault-awakening_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 80
+  },
+  "fault-awakening_settle": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 60
+  },
   "gather-thorns_peak": {
     "anchor": "caster.chest",
     "pivot": [
@@ -94,6 +166,30 @@
       128
     ],
     "width": 54
+  },
+  "mountain-fall_peak": {
+    "anchor": "target.feet",
+    "pivot": [
+      128,
+      210
+    ],
+    "width": 130
+  },
+  "mountain-fall_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 80
+  },
+  "mountain-fall_settle": {
+    "anchor": "target.feet",
+    "pivot": [
+      128,
+      210
+    ],
+    "width": 60
   },
   "rift-awakening_peak": {
     "anchor": "caster.chest",
@@ -167,6 +263,30 @@
     ],
     "width": 54
   },
+  "rift-quake_peak": {
+    "anchor": "whole_hero_side.actual_target_feet",
+    "pivot": [
+      128,
+      210
+    ],
+    "width": 74
+  },
+  "rift-quake_prepare": {
+    "anchor": "caster.feet",
+    "pivot": [
+      128,
+      210
+    ],
+    "width": 80
+  },
+  "rift-quake_settle": {
+    "anchor": "whole_hero_side.actual_target_feet",
+    "pivot": [
+      128,
+      210
+    ],
+    "width": 42
+  },
   "rift-wave_peak": {
     "anchor": "whole_hero_side.actual_target_chests",
     "pivot": [
@@ -190,6 +310,102 @@
       128
     ],
     "width": 54
+  },
+  "severed-crown_peak": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 130
+  },
+  "severed-crown_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 80
+  },
+  "severed-crown_settle": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 60
+  },
+  "severing-bolt_peak": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 130
+  },
+  "severing-bolt_prepare": {
+    "anchor": "caster.lower_hands",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 80
+  },
+  "severing-bolt_settle": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 60
+  },
+  "shadow-tide_peak": {
+    "anchor": "whole_hero_side.actual_target_feet",
+    "pivot": [
+      128,
+      210
+    ],
+    "width": 74
+  },
+  "shadow-tide_prepare": {
+    "anchor": "caster.feet",
+    "pivot": [
+      128,
+      210
+    ],
+    "width": 80
+  },
+  "shadow-tide_settle": {
+    "anchor": "whole_hero_side.actual_target_feet",
+    "pivot": [
+      128,
+      210
+    ],
+    "width": 42
+  },
+  "sky-rend_peak": {
+    "anchor": "caster.upper_back",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 130
+  },
+  "sky-rend_prepare": {
+    "anchor": "caster.upper_back",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 80
+  },
+  "sky-rend_settle": {
+    "anchor": "caster.upper_back",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 60
   },
   "stampede_peak": {
     "anchor": "target.feet",
@@ -311,6 +527,30 @@
     ],
     "width": 54
   },
+  "titan-gathering_peak": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 110
+  },
+  "titan-gathering_prepare": {
+    "anchor": "caster.forward_chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 80
+  },
+  "titan-gathering_settle": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
   "war-cry_peak": {
     "anchor": "caster.forward_chest",
     "pivot": [
@@ -334,5 +574,89 @@
       128
     ],
     "width": 54
+  },
+  "wing-gathering_peak": {
+    "anchor": "caster.left_shoulder_core",
+    "offset": [
+      12,
+      0
+    ],
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 110
+  },
+  "wing-gathering_prepare": {
+    "anchor": "caster.left_shoulder_core",
+    "offset": [
+      12,
+      0
+    ],
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 80
+  },
+  "wing-gathering_settle": {
+    "anchor": "caster.left_shoulder_core",
+    "offset": [
+      12,
+      0
+    ],
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 54
+  },
+  "wing-gust_peak": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 130
+  },
+  "wing-gust_prepare": {
+    "anchor": "caster.wing_base",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 80
+  },
+  "wing-gust_settle": {
+    "anchor": "target.chest",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 60
+  },
+  "worldshard-dive_peak": {
+    "anchor": "whole_hero_side.actual_target_chests",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 74
+  },
+  "worldshard-dive_prepare": {
+    "anchor": "caster.wing_base",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 80
+  },
+  "worldshard-dive_settle": {
+    "anchor": "whole_hero_side.actual_target_chests",
+    "pivot": [
+      128,
+      128
+    ],
+    "width": 42
   }
 }

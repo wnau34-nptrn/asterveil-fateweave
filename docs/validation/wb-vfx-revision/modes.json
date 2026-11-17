@@ -1,0 +1,108 @@
+{
+  "browser": "system Chromium, touch emulation; not a physical phone",
+  "browserPlugin": "skill listed but no callable Browser JS tool; project Playwright fallback",
+  "cases": [
+    {
+      "move": "Severing Bolt",
+      "mode": "fast",
+      "url": "http://127.0.0.1:5174/tests/browser/fixtures/wb-vfx.html?move=Severing%20Bolt&speed=fast",
+      "title": "",
+      "viewport": [
+        390,
+        844
+      ],
+      "meaningfulPage": true,
+      "frameworkOverlay": false,
+      "consoleErrors": [],
+      "ignoredConsoleError": "Only /favicon.ico 404 (fixture has no icon) is excluded; no game asset errors allowed",
+      "peakInstances": 1,
+      "platesOnTop": true,
+      "resolverStateMatches": true
+    },
+    {
+      "move": "Shadow Tide",
+      "mode": "fast",
+      "url": "http://127.0.0.1:5174/tests/browser/fixtures/wb-vfx.html?move=Shadow%20Tide&speed=fast",
+      "title": "",
+      "viewport": [
+        390,
+        844
+      ],
+      "meaningfulPage": true,
+      "frameworkOverlay": false,
+      "consoleErrors": [],
+      "ignoredConsoleError": "Only /favicon.ico 404 (fixture has no icon) is excluded; no game asset errors allowed",
+      "peakInstances": 5,
+      "platesOnTop": true,
+      "resolverStateMatches": true
+    },
+    {
+      "move": "Wing Gathering",
+      "mode": "fast",
+      "url": "http://127.0.0.1:5174/tests/browser/fixtures/wb-vfx.html?move=Wing%20Gathering&speed=fast",
+      "title": "",
+      "viewport": [
+        390,
+        844
+      ],
+      "meaningfulPage": true,
+      "frameworkOverlay": false,
+      "consoleErrors": [],
+      "ignoredConsoleError": "Only /favicon.ico 404 (fixture has no icon) is excluded; no game asset errors allowed",
+      "peakInstances": 1,
+      "platesOnTop": true,
+      "resolverStateMatches": true
+    },
+    {
+      "move": "Severing Bolt",
+      "mode": "reduce",
+      "url": "http://127.0.0.1:5174/tests/browser/fixtures/wb-vfx.html?move=Severing%20Bolt&speed=normal",
+      "title": "",
+      "viewport": [
+        390,
+        844
+      ],
+      "meaningfulPage": true,
+      "frameworkOverlay": false,
+      "consoleErrors": [],
+      "ignoredConsoleError": "Only /favicon.ico 404 (fixture has no icon) is excluded; no game asset errors allowed",
+      "peakInstances": 1,
+      "platesOnTop": true,
+      "resolverStateMatches": true
+    },
+    {
+      "move": "Shadow Tide",
+      "mode": "reduce",
+      "url": "http://127.0.0.1:5174/tests/browser/fixtures/wb-vfx.html?move=Shadow%20Tide&speed=normal",
+      "title": "",
+      "viewport": [
+        390,
+        844
+      ],
+      "meaningfulPage": true,
+      "frameworkOverlay": false,
+      "consoleErrors": [],
+      "ignoredConsoleError": "Only /favicon.ico 404 (fixture has no icon) is excluded; no game asset errors allowed",
+      "peakInstances": 5,
+      "platesOnTop": true,
+      "resolverStateMatches": true
+    },
+    {
+      "move": "Wing Gathering",
+      "mode": "reduce",
+      "url": "http://127.0.0.1:5174/tests/browser/fixtures/wb-vfx.html?move=Wing%20Gathering&speed=normal",
+      "title": "",
+      "viewport": [
+        390,
+        844
+      ],
+      "meaningfulPage": true,
+      "frameworkOverlay": false,
+      "consoleErrors": [],
+      "ignoredConsoleError": "Only /favicon.ico 404 (fixture has no icon) is excluded; no game asset errors allowed",
+      "peakInstances": 1,
+      "platesOnTop": true,
+      "resolverStateMatches": true
+    }
+  ]
+}

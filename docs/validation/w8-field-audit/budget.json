@@ -13,8 +13,8 @@
  },
  "optional": {
   "boss": {
-   "decoded": 8319096,
-   "download": 1566040
+   "decoded": 13861288,
+   "download": 2744677
   },
   "foe": {
    "decoded": 6733392,
@@ -535,7 +535,7 @@
     "decoded": 37556872,
     "download": 11468495
    },
-   "bossFx": false
+   "bossFx": true
   },
   {
    "id": "wb-valdrakk",
@@ -553,7 +553,7 @@
     "decoded": 35780232,
     "download": 11109577
    },
-   "bossFx": false
+   "bossFx": true
   },
   {
    "id": "wb-morvane",
@@ -572,7 +572,7 @@
     "decoded": 38755976,
     "download": 11415002
    },
-   "bossFx": false
+   "bossFx": true
   }
  ]
 }
