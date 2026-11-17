@@ -1,0 +1,31 @@
+{
+  "tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "random_seed": "not exposed by tool",
+  "calls": [
+    {
+      "id": "severing-bolt",
+      "references": [
+        "seeds/input-severing-bolt.png"
+      ],
+      "output": "source/severing-bolt.png",
+      "prompt": "Edit this exact 768 by 256 transparent VFX strip with three equal 256px cells, prepare peak settle. Preserve the artwork coordinates, silhouette, margins, diagonal straight narrow filament direction and all negative spaces. Increase the value separation: nearly white lilac narrow inner filament, deep violet dark outline immediately alongside it, restrained purple crystal edges. The middle attack must remain a fine straight needle, never a curved lash, never broad. First gathering slit remains same shape; last tiny wisps remain small. No added particles or new forms. Do not move/scale/crop any cell. Transparent background, no characters, text, numbers, floor or borders. Output same strip arrangement."
+    },
+    {
+      "id": "shadow-tide",
+      "references": [
+        "seeds/input-shadow-tide.png"
+      ],
+      "output": "source/shadow-tide.png",
+      "prompt": "Edit this exact 768 by 256 transparent VFX strip, three equal cells. Preserve pixel placement, low ground-wave silhouette and empty upper 150px in every cell. Improve readability over blue stone tiles with a thin pale lilac crest followed by a deep near-black violet trough, then medium purple cloth surface. Distinct light-dark order, localized small crest highlights, not entire mass glowing. Keep each tiny trailing fragment and prepare/peak/settle shape at original coordinates. Never a wall or vertical plume. Do not add any characters, floor, words or numbers. True transparency, same arrangement and generous original empty area."
+    },
+    {
+      "id": "wing-hold",
+      "references": [
+        "seeds/wing-gathering-prepare.png"
+      ],
+      "output": "source/wing-hold.png",
+      "prompt": "Edit this exact transparent 256x256 cracked purple crystal shell, preserving exact shape/coordinates/size, two crescent brittle plates with the existing broad diagonal jagged missing seam. Make the jagged crack lips and outer rim pale lilac almost white; thin deep violet dark line just inside rim for separation against bright purple dragon armor. Keep interior purple crystalline, lower saturation, translucent open centre; high value only on fracture lips and selected rim. It must read as fragile breakable cracked shell, never rigid brackets, never a smooth ring or feathers. No new particles outside current silhouette, text, numbers, character, background. Retain true alpha transparency and original padding."
+    }
+  ]
+}

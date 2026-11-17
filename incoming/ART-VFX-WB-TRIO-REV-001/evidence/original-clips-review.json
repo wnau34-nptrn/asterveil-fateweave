@@ -1,0 +1,47 @@
+[
+  {
+    "file": "docs/combat-presentation/wb-vfx-slice/severing-bolt-normal-390.mp4",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "sha256": "1f8187436caefd9162277492a9ae248e12ce1fc1eb4c9235d0f9a38a1fd251e6",
+    "duration_seconds": "2.614678",
+    "review": "sampled frames every 0.5 seconds, static frame sequences only; not continuous motion review",
+    "width": 390,
+    "height": 844
+  },
+  {
+    "file": "docs/combat-presentation/wb-vfx-slice/shadow-tide-normal-390.mp4",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "sha256": "0b40ca2e40d47cc78e8a79dea3bb4c789507ef403f98369e5754f1e8dc714ef3",
+    "duration_seconds": "2.665644",
+    "review": "sampled frames every 0.5 seconds, static frame sequences only; not continuous motion review",
+    "width": 390,
+    "height": 844
+  },
+  {
+    "file": "docs/combat-presentation/wb-vfx-slice/wing-gathering-normal-390.mp4",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "sha256": "83bd6637a78691a65de3a6fc77bc61d9f55eb0c74139c7399493c6feebe3dc05",
+    "duration_seconds": "4.083678",
+    "review": "sampled frames every 0.5 seconds, static frame sequences only; not continuous motion review",
+    "width": 390,
+    "height": 844
+  },
+  {
+    "file": "docs/combat-presentation/wb-vfx-slice/wing-gathering-release-390.mp4",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "sha256": "2c997daa1ae14a25c56a0ff93ab0e5ba25a375008aa457966af4b8f272bdf53c",
+    "duration_seconds": "3.265233",
+    "review": "sampled frames every 0.5 seconds, static frame sequences only; not continuous motion review",
+    "width": 390,
+    "height": 844
+  },
+  {
+    "file": "docs/combat-presentation/wb-vfx-slice/wing-gathering-break-390.mp4",
+    "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+    "sha256": "8e62aa411b78e12e3f55aaeff0080117fc8e74205830409703b0c28145a63a67",
+    "duration_seconds": "2.181356",
+    "review": "sampled frames every 0.5 seconds, static frame sequences only; not continuous motion review",
+    "width": 390,
+    "height": 844
+  }
+]

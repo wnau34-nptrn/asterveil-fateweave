@@ -1,0 +1,632 @@
+{
+  "task": "ART-VFX-WB-TRIO-REV-001",
+  "source_commit": "df25df95ce31581e418b19a595aca3780a5d62a6",
+  "pillow": "12.3.0",
+  "files": {
+    "NOTES.md": {
+      "sha256": "4f54a33779c5445b669d76936f70dd87329e2c2432323e1cdc4cedff4862af34",
+      "bytes": 13760
+    },
+    "build_revision.py": {
+      "sha256": "37d8cc250c66234a945eb5588ffad080c1190105f34379b6345f3b4f2426f99c",
+      "bytes": 7370
+    },
+    "evidence/index.html": {
+      "sha256": "e371250f205500e61a3ccf948e329d14af074bd2068b06e64458dfd076677e14",
+      "bytes": 1329
+    },
+    "evidence/original-clips-review.json": {
+      "sha256": "5cc7c85799b7fb630d0e99248f676a1f9f9dfb8ab36a93ce85a4fd952ba44791",
+      "bytes": 2099
+    },
+    "evidence/placements.json": {
+      "sha256": "c79da006b39b113a62af3b6876e5f66edc357f88216484bc8fb02173faf44e7c",
+      "bytes": 2500
+    },
+    "evidence/severing-bolt-peak-compare-390.png": {
+      "sha256": "53f0b1cdc7fb20d14848bbbc33edf5273a2a10c61e35b2856050ae7650509aa4",
+      "bytes": 861380,
+      "size": [
+        780,
+        880
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/severing-bolt-peak-detail-390.png": {
+      "sha256": "29cfdc68c1a5a19989a262a85285d4e7866772e89a6fa8cf050c148dd22c952f",
+      "bytes": 142707,
+      "size": [
+        780,
+        170
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/severing-bolt-prepare-compare-390.png": {
+      "sha256": "790bd8924c147ec2ae75ca2b54bee6f83b78725744f2e0de45028763161b6f85",
+      "bytes": 857031,
+      "size": [
+        780,
+        880
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/severing-bolt-prepare-detail-390.png": {
+      "sha256": "59a6b4fcfc611c2b553430d9e82bc140c8991007a9d509455d02ced1d38ad4b5",
+      "bytes": 143025,
+      "size": [
+        780,
+        170
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/severing-bolt-settle-compare-390.png": {
+      "sha256": "db5d449d5ad069923632d23290aafeadaeb4bf98bcfc792b795bba5b49724ba2",
+      "bytes": 853562,
+      "size": [
+        780,
+        880
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/severing-bolt-settle-detail-390.png": {
+      "sha256": "09cf73274a24a01ec39cc663fb0fa7e4e633f46b891d1d2423803b87e7b4a2a6",
+      "bytes": 101708,
+      "size": [
+        780,
+        120
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/shadow-tide-peak-compare-390.png": {
+      "sha256": "5b070c3d0b9fc1e01fe1995eeac8e8377778a04a2063235e521537d3985e8782",
+      "bytes": 856259,
+      "size": [
+        780,
+        880
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/shadow-tide-peak-detail-390.png": {
+      "sha256": "3a4584867eecdc1f37c61be8c2e1b078a82b498d1d3c8d8749ce4cfc146f8a73",
+      "bytes": 77683,
+      "size": [
+        780,
+        100
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/shadow-tide-prepare-compare-390.png": {
+      "sha256": "7efb3951a0edf221f9c45bd5096b8ffe61d688be38813a4bd641b19e158e2074",
+      "bytes": 854443,
+      "size": [
+        780,
+        880
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/shadow-tide-prepare-detail-390.png": {
+      "sha256": "a9a3e4c9417777caa66dabcdd6ad85ee1e8c709a80da9a3b70ff21b465bfdecd",
+      "bytes": 87489,
+      "size": [
+        780,
+        100
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/shadow-tide-settle-compare-390.png": {
+      "sha256": "504074bcf7b51746dc02424ff1dd272550cd41f6046d6de7addf18267f3c7dcf",
+      "bytes": 851241,
+      "size": [
+        780,
+        880
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/shadow-tide-settle-detail-390.png": {
+      "sha256": "7210bbde81b6b8a09a19813301bc581f4450c45037886a4e7e4f961294438445",
+      "bytes": 66588,
+      "size": [
+        780,
+        90
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/wing-gathering-prepare-compare-390.png": {
+      "sha256": "1ccb918ab8734829eccfa209b4bf45471ed4751818d3a68e8981b57ec6a860d6",
+      "bytes": 855864,
+      "size": [
+        780,
+        880
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/wing-gathering-prepare-detail-390.png": {
+      "sha256": "2b16ae29fea7302b0d668c261a5f4cdcbfbe46f7d77f773f70272d7f9005002b",
+      "bytes": 136717,
+      "size": [
+        780,
+        150
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "evidence/wing-r1-r2-rev-on-valdrakk-390.png": {
+      "sha256": "98359c9fe6c0ca373a73fb34cde025151c0e8f3f1b0cb46643e6a1d5ea02c598",
+      "bytes": 394737,
+      "size": [
+        1170,
+        310
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "layers/severing-bolt-peak.png": {
+      "sha256": "58727fa75a69747ac5cfef4eed46e9dc2b598d199fc2153fe3b36429f170f572",
+      "bytes": 21213,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/severing-bolt-prepare.png": {
+      "sha256": "9cbbafe04f52c74ad07408804335ab71907c0c02612ffcea40eb3e14cf86a31b",
+      "bytes": 20009,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/severing-bolt-settle.png": {
+      "sha256": "dc4df5491056a5c69973e64f87eef31b6905fa788fba725d0244a92a94a391d8",
+      "bytes": 11158,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/shadow-tide-peak.png": {
+      "sha256": "f526cd92031640d447a7a37244873e1df79e2b27ad19f470ca748868e733605d",
+      "bytes": 26413,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/shadow-tide-prepare.png": {
+      "sha256": "3e35fa931af4ccee3235bb104d5fdf517855a88c97c0c673c9b989affa5d8a86",
+      "bytes": 11271,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/shadow-tide-settle.png": {
+      "sha256": "b10c11442599cd23003378c6b8aefe4b68b12a7262adb33b64107a7cc9b3cd66",
+      "bytes": 4708,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers/wing-gathering-prepare.png": {
+      "sha256": "2d0cbad0126e1466158cd4fba1867e11e97bf4d9032b189bd8ae7882508cd232",
+      "bytes": 50925,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "layers.json": {
+      "sha256": "6c6fbea08fdd8fa2146310962ee7743fb0fc8d6d93e941098bc1c642accb7004",
+      "bytes": 21388
+    },
+    "prompts.json": {
+      "sha256": "7fb55a2aef156771d08971cb9e78ac2c62185cf1f2795a5ccb05542407ef83f2",
+      "bytes": 2703
+    },
+    "requirements.txt": {
+      "sha256": "41b54a6fb2918667ca47a61d73b522629d84490f3d78f0f20b21135faba10d35",
+      "bytes": 15
+    },
+    "seeds/game-severing-bolt.png": {
+      "sha256": "2701c7385c98630b02a5c774d4110c31153bcc0ae19109dee0e978701214ae49",
+      "bytes": 684969,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "seeds/game-shadow-tide.png": {
+      "sha256": "2064bdd387a8cc5e3c2334d8d2fe855e4bc6eea102057c852faa6383e629b546",
+      "bytes": 684638,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "seeds/game-wing-gathering.png": {
+      "sha256": "b20d44d299103694706bbfa364244d14bbf86cfbe9e386729d58284f848fa813",
+      "bytes": 684179,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "seeds/input-severing-bolt.png": {
+      "sha256": "84b93b027079e6e856891e4d5e2da3887d98ace98aa44ed1d489dc28adcb6ef8",
+      "bytes": 53948,
+      "size": [
+        768,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/input-shadow-tide.png": {
+      "sha256": "a953246dc4b6b34202269ab24c42e89f81840be44a7064c7db8cecdf823aae32",
+      "bytes": 45702,
+      "size": [
+        768,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/original-metadata.json": {
+      "sha256": "776c2250b4738f10fef57fb63650d412fe0bc471139985a7cb097ca9cd42ba52",
+      "bytes": 14503
+    },
+    "seeds/severing-bolt-peak.png": {
+      "sha256": "2182419e9ea69c6c65e10ab1a217274ab00fd2c648301e3a706ed1c6d61fd26f",
+      "bytes": 21147,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/severing-bolt-prepare.png": {
+      "sha256": "1fa415c3c32154dd883b0498dc0a4dee66c956b18bec97ad96d60993ff1587e8",
+      "bytes": 20591,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/severing-bolt-settle.png": {
+      "sha256": "4c469c601405c7ad3cf130928c3174af52ebfb4d5a07956e5c3ff8348df4e3b8",
+      "bytes": 11284,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/shadow-tide-peak.png": {
+      "sha256": "e286e00f11607f59926857a77a54afe47e2a56f9f9d8b7d64ec844d9ca8b1572",
+      "bytes": 28175,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/shadow-tide-prepare.png": {
+      "sha256": "7855847d06ca2972bfaacda9243336fccc2536950469811ebcfe2345ae80b8d6",
+      "bytes": 12067,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/shadow-tide-settle.png": {
+      "sha256": "d839d9691b9130520d87bffa45ad07a05403dfb1df7bd48bf49fdda5883d7def",
+      "bytes": 5337,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/wing-gathering-prepare.png": {
+      "sha256": "0ed9730955f7c202a189d6c933a31f7456539c16429b1a901293f35a7ed6c30e",
+      "bytes": 53423,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/wing-gathering-r2-prepare.png": {
+      "sha256": "fb243797cab4e210ee68a2e49572fa3208dc04c5d3469a32a115e481e37f255c",
+      "bytes": 72438,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds.json": {
+      "sha256": "67fcaed6d862937470b5349d001b9d03f504f11b14c99ab406120b159748c609",
+      "bytes": 3735
+    },
+    "source/severing-bolt.png": {
+      "sha256": "3d3882f79d4cabc560ecd7916cb87811760ddf8dc2a50d51e32f16493568e363",
+      "bytes": 458037,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/shadow-tide.png": {
+      "sha256": "0842c028444ac95abf877bbed10ddc8e393a00d8580a2c4d606874ca5b91a61e",
+      "bytes": 342052,
+      "size": [
+        2170,
+        725
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "source/wing-hold.png": {
+      "sha256": "05a2b91429ebea073c5b5d8a4bc9ad7a78481a88fce5e758581425bf656a6cc8",
+      "bytes": 982628,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    }
+  },
+  "self_excluded": "validation.json",
+  "checks": [
+    {
+      "file": "layers/severing-bolt-prepare.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        13,
+        85,
+        243,
+        171
+      ],
+      "clear_margins_ltrb": [
+        13,
+        85,
+        13,
+        85
+      ],
+      "alpha_equal_original": true,
+      "transparent_pixels": 59653,
+      "nonzero_pixels": 5883,
+      "metadata_equal_original": true
+    },
+    {
+      "file": "layers/severing-bolt-peak.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        13,
+        21,
+        243,
+        235
+      ],
+      "clear_margins_ltrb": [
+        13,
+        21,
+        13,
+        21
+      ],
+      "alpha_equal_original": true,
+      "transparent_pixels": 60172,
+      "nonzero_pixels": 5364,
+      "metadata_equal_original": true
+    },
+    {
+      "file": "layers/severing-bolt-settle.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        63,
+        48,
+        193,
+        208
+      ],
+      "clear_margins_ltrb": [
+        63,
+        48,
+        63,
+        48
+      ],
+      "alpha_equal_original": true,
+      "transparent_pixels": 62904,
+      "nonzero_pixels": 2632,
+      "metadata_equal_original": true
+    },
+    {
+      "file": "layers/shadow-tide-prepare.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        13,
+        177,
+        243,
+        217
+      ],
+      "clear_margins_ltrb": [
+        13,
+        177,
+        13,
+        39
+      ],
+      "alpha_equal_original": true,
+      "transparent_pixels": 61700,
+      "nonzero_pixels": 3836,
+      "metadata_equal_original": true
+    },
+    {
+      "file": "layers/shadow-tide-peak.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        13,
+        152,
+        243,
+        223
+      ],
+      "clear_margins_ltrb": [
+        13,
+        152,
+        13,
+        33
+      ],
+      "alpha_equal_original": true,
+      "transparent_pixels": 56444,
+      "nonzero_pixels": 9092,
+      "metadata_equal_original": true
+    },
+    {
+      "file": "layers/shadow-tide-settle.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        48,
+        178,
+        208,
+        213
+      ],
+      "clear_margins_ltrb": [
+        48,
+        178,
+        48,
+        43
+      ],
+      "alpha_equal_original": true,
+      "transparent_pixels": 64299,
+      "nonzero_pixels": 1237,
+      "metadata_equal_original": true
+    },
+    {
+      "file": "layers/wing-gathering-prepare.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        25,
+        13,
+        232,
+        243
+      ],
+      "clear_margins_ltrb": [
+        25,
+        13,
+        24,
+        13
+      ],
+      "alpha_equal_original": true,
+      "transparent_pixels": 49967,
+      "nonzero_pixels": 15569,
+      "metadata_equal_original": true
+    }
+  ],
+  "status": {
+    "created": true,
+    "visually_reviewed": "static composites and sampled original clip frames only",
+    "in_game_tested": false,
+    "owner_approved": false
+  }
+}
