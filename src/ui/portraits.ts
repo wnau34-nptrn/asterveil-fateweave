@@ -1,4 +1,4 @@
-import { actorArt, portraitsUrl, sheetRows, unitsUrl } from '../game/visuals/assets';
+import { actorArt, artCellSize, portraitsUrl, sheetRows, unitsUrl } from '../game/visuals/assets';
 import { icon } from './icons';
 import { starSocketUrl } from '../game/visuals/tome-art';
 
@@ -10,10 +10,10 @@ export function starRow(n: number, max: number, sockets = false): string {
 }
 // The full-body illustration from the unit atlas (ART-UI-MODERN-001 character sheet), decorative.
 export function heroArt(id: string): string {
-  const { sheet, frame } = actorArt[id]!; const rows = sheetRows[sheet];
-  return `<span class="hero-art" data-actor="${id}" style="--art-x:${frame % 2};--art-y:${Math.floor(frame / 2)};--art-rows:${rows}" aria-hidden="true"><img src="${unitsUrl(sheet)}" alt="" width="1024" height="${rows * 512}" draggable="false"></span>`;
+  const { sheet, frame } = actorArt[id]!; const rows = sheetRows[sheet], cell = artCellSize(sheet);
+  return `<span class="hero-art" data-actor="${id}" style="--art-x:${frame % 2};--art-y:${Math.floor(frame / 2)};--art-rows:${rows}" aria-hidden="true"><img src="${unitsUrl(sheet)}" alt="" width="${cell * 2}" height="${rows * cell}" draggable="false"></span>`;
 }
 export function portrait(id: string): string {
-  const { sheet, frame } = actorArt[id]!; const rows = sheetRows[sheet];
-  return `<span class="portrait" data-actor="${id}" style="--portrait-x:${frame % 2};--portrait-y:${Math.floor(frame / 2)};--portrait-rows:${rows}" aria-hidden="true"><img src="${portraitsUrl(sheet)}" alt="" width="1024" height="${rows * 512}" draggable="false"></span>`;
+  const { sheet, frame } = actorArt[id]!; const rows = sheetRows[sheet], cell = artCellSize(sheet);
+  return `<span class="portrait" data-actor="${id}" style="--portrait-x:${frame % 2};--portrait-y:${Math.floor(frame / 2)};--portrait-rows:${rows}" aria-hidden="true"><img src="${portraitsUrl(sheet)}" alt="" width="${cell * 2}" height="${rows * cell}" draggable="false"></span>`;
 }

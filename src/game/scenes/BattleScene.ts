@@ -25,7 +25,7 @@ import { COMMAND_ATLAS, commandAtlasUrls, commandCues, commandPrepare, commandCo
 import { ALCHEMY_ATLAS, alchemyAtlasUrls, alchemyCues, alchemyEvents, alchemyPrepare, alchemyContact, alchemyHealingCues, isAlchemySkill, type AlchemySkill } from '../visuals/alchemy-fx';
 import { EARTH_ATLAS, earthAtlasUrls, earthCues, earthPrepare, earthContact, earthHealingCues, earthHealingEvents, isEarthSkill, type EarthSkill } from '../visuals/earth-fx';
 import { FOE_SLOT_INDEX, fieldSlots, slotPlan, standSlotId, type FieldSlot } from '../visuals/field-layout';
-import { actorArt, actorFootOrigins, artOf, artUrl, figureRise, mirroredArt, unitsUrl } from '../visuals/assets';
+import { actorArt, actorFootOrigins, artCellSize, staticActorGeometry, staticDisplayRatio, artOf, artUrl, figureRise, mirroredArt, unitsUrl } from '../visuals/assets';
 
 // The unit's own sprite in its body container. Song/shadow floor layers and boss holds also live in the body (some
 // inserted before the sprite), so never take simply the first image.
@@ -119,7 +119,7 @@ export class BattleScene extends Phaser.Scene {
     this.load.atlas(SONG_ATLAS, ...songAtlasUrls());
     this.load.atlas(DEFENSE_ATLAS, ...defenseAtlasUrls());
     this.load.atlas(HEALING_ATLAS, ...healingAtlasUrls());
-    for (const sheet of ['units', 'mercs', 'foes', 'foes2'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: 512, frameHeight: 512 });
+    for (const sheet of ['units', 'mercs', 'foes', 'foes2', 'worldboss'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: artCellSize(sheet), frameHeight: artCellSize(sheet) });
   }
   create(): void {
     this.ready = true;
@@ -351,7 +351,7 @@ export class BattleScene extends Phaser.Scene {
     // Packed animation atlases already face their side (A9 Matriarch, A10 Raider); only the static seed cell is mirrored.
     const pilot = unitKey(key), framed = !!pilot && this.textures.exists(pilot);
     const sprite = this.add.image(0, 0, framed ? pilot : `battle-${art.sheet}`, framed ? hp <= 0 ? unitDownFrame(key) : 0 : art.frame)
-      .setOrigin(.5, framed ? unitSoleOrigin(key) : actorFootOrigins[key] ?? 1).setDisplaySize(size * (framed ? ratio : 1), size * (framed ? ratio : 1)).setFlipX(!framed && mirroredArt.has(key));
+      .setOrigin(.5, framed ? unitSoleOrigin(key) : actorFootOrigins[key] ?? 1).setDisplaySize(size * (framed ? ratio : staticDisplayRatio(key)), size * (framed ? ratio : staticDisplayRatio(key))).setFlipX(!framed && mirroredArt.has(key));
     body.add(sprite);
     const nextFrame = framed ? this.add.image(0, 0, pilot, 0)
       .setOrigin(sprite.originX, sprite.originY).setDisplaySize(size * ratio, size * ratio).setFlipX(sprite.flipX).setVisible(false) : undefined;
@@ -459,7 +459,7 @@ export class BattleScene extends Phaser.Scene {
     if(!sprite||!slot)return;
     const knife=this.encounter.heroes.find(h=>h.id===id)?.role==='Scout';
     const matrix=sprite.getWorldTransformMatrix(),framed=sprite.texture.key.startsWith('unit-pilot-');
-    const ratio=framed?unitDisplayRatio(artOf(this.encounter,id)):1;
+    const ratio=framed?unitDisplayRatio(artOf(this.encounter,id)):staticDisplayRatio(artOf(this.encounter,id));
     const point=(x:number,y:number)=>{const p=matrix.transformPoint(x*sprite.width/ratio,y*sprite.height/ratio);return {x:p.x/this.dpr,y:p.y/this.dpr};};
     const at=framed&&from?from.point:[knife?-.4:.36,-(knife?.58:.86)] as const;
     const bodyAt=point(0,-.48),release=point(at[0],at[1]);
@@ -469,7 +469,7 @@ export class BattleScene extends Phaser.Scene {
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
     const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
-    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1;
+    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):staticDisplayRatio(artOf(this.encounter,id));
     const x=prepare?.10:skill==='bash'?-.31:skill==='slam'?-.30:0;
     const y=prepare?-.98:skill==='bash'?-.80:skill==='slam'?-.62:.04;
     const p=sprite.getWorldTransformMatrix().transformPoint(x*sprite.width/ratio,y*sprite.height/ratio);
@@ -479,7 +479,7 @@ export class BattleScene extends Phaser.Scene {
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
     const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
-    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1,matrix=sprite.getWorldTransformMatrix();
+    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):staticDisplayRatio(artOf(this.encounter,id)),matrix=sprite.getWorldTransformMatrix();
     const sole=matrix.transformPoint(0,0),support=skill==='haste'||skill==='fury';
     const rightEdge=sole.x/this.dpr>this.viewW*.76;
     const x=prepare?.10:support?.40:rightEdge?.33:-.46,y=prepare?-.98:support?-.35:-.64;
@@ -491,7 +491,7 @@ export class BattleScene extends Phaser.Scene {
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
     const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
-    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1,matrix=sprite.getWorldTransformMatrix();
+    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):staticDisplayRatio(artOf(this.encounter,id)),matrix=sprite.getWorldTransformMatrix();
     const x=spot==='hand'?.36:0,y=spot==='hand'?-.86:spot==='centre'?-.40:.04;
     const p=matrix.transformPoint(x*sprite.width/ratio,y*sprite.height/ratio),sole=matrix.transformPoint(0,0);
     return {x:p.x/this.dpr,y:p.y/this.dpr,size:slot.size,side:(sole.x/this.dpr>this.viewW*.76?-1:1) as 1|-1};
@@ -501,7 +501,7 @@ export class BattleScene extends Phaser.Scene {
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
     const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
-    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1,matrix=sprite.getWorldTransformMatrix();
+    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):staticDisplayRatio(artOf(this.encounter,id)),matrix=sprite.getWorldTransformMatrix();
     const at={chest:[.08,-.58],forward:[.24,-.60],shield:[.30,-.50],crown:[.28,-.68],foe:[0,-.55]}[spot];
     const p=matrix.transformPoint(at[0]!*sprite.width/ratio,at[1]!*sprite.height/ratio),sole=matrix.transformPoint(0,0);
     return {x:p.x/this.dpr,y:p.y/this.dpr,size:slot.size,side:(sole.x/this.dpr>this.viewW*.76?-1:1) as 1|-1};
@@ -511,7 +511,7 @@ export class BattleScene extends Phaser.Scene {
     const body=this.bodies.get(id),slot=this.actorPanels.get(id);
     const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
-    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1;
+    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):staticDisplayRatio(artOf(this.encounter,id));
     const at={chest:[0,-.50],hand:[-.34,-.62],feet:[0,.04]}[spot];
     const p=sprite.getWorldTransformMatrix().transformPoint(at[0]!*sprite.width/ratio,at[1]!*sprite.height/ratio);
     return {x:p.x/this.dpr,y:p.y/this.dpr,size:slot.size};
@@ -522,7 +522,7 @@ export class BattleScene extends Phaser.Scene {
     // Floor layers live inside the body (flagged `songLocal`); the unit's own sprite is the first image that is not one of them.
     const sprite=bodySprite(body) as Phaser.GameObjects.Image|undefined;
     if(!sprite||!slot)return;
-    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):1,matrix=sprite.getWorldTransformMatrix();
+    const ratio=sprite.texture.key.startsWith('unit-pilot-')?unitDisplayRatio(artOf(this.encounter,id)):staticDisplayRatio(artOf(this.encounter,id)),matrix=sprite.getWorldTransformMatrix();
     const x=spot==='hand'?.36:0,y=spot==='hand'?-.86:spot==='waist'?-.40:.04;
     const p=matrix.transformPoint(x*sprite.width/ratio,y*sprite.height/ratio),sole=matrix.transformPoint(0,0);
     return {x:p.x/this.dpr,y:p.y/this.dpr,size:slot.size,side:(sole.x/this.dpr>this.viewW*.76?-1:1) as 1|-1};
@@ -575,7 +575,8 @@ export class BattleScene extends Phaser.Scene {
     const sprite = bodySprite(body) as Phaser.GameObjects.Image | undefined;
     if (!sprite || !slot) return;
     const frame = sprite.frame, w = frame.realWidth, h = frame.realHeight;
-    const trim = frame.trimmed ? (frame as unknown as { data: { spriteSourceSize: { x: number; y: number; w: number; h: number } } }).data.spriteSourceSize : undefined;
+    const still = sprite.texture.key === 'battle-worldboss' ? staticActorGeometry(artOf(this.encounter, id))?.bounds : undefined;
+    const trim = frame.trimmed ? (frame as unknown as { data: { spriteSourceSize: { x: number; y: number; w: number; h: number } } }).data.spriteSourceSize : still;
     const art = artOf(this.encounter, id), top = trim ? trim.y : (1 - figureRise(art) - (1 - (actorFootOrigins[art] ?? 1))) * h;
     const box = trim ? [trim.x, trim.y, trim.x + trim.w, trim.y + trim.h] : [w * .22, top, w * .78, h * sprite.originY];
     const m = sprite.getWorldTransformMatrix(), xs: number[] = [], ys: number[] = [];

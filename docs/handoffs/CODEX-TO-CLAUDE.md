@@ -1,3 +1,10 @@
+## 2026-11-17 — World Boss own stills/portraits (Codex; PR #295; codex/wb-stills-portraits → game branch; squash commit: see PR)
+- Owner: “ชื่อท่าภาษาไทยไม่เอา”, “ดำเนินการเรื่องที่ยังค้างได้เลย”. Finish existing-art hookup only; no Thai move names, balance or scheduling changes.
+- Derived fallback stills from approved ready frames and cropped original seed portraits for Kragmor/Valdrakk/Morvane; removed Warden placeholder mapping. Separate 256px-cell lossless sheets, real alpha and reproducible provenance; original incoming/animation/VFX preserved.
+- Preserved field layout, sole, fallback→atlas scale and VFX anchors; source trim owns caption bounds. New Chromium390px loading/failure tests6/6, prior unit-loading3/3, unit2038/23 skipped, typecheck/lint/build, coverage6/6 passed. [Evidence/limits](../validation/wb-stills-portraits/README_TH.md).
+- Codex inspected six real-game stills; this is agent visual judgment, not owner direct viewing or continuous motion approval. PR merge requires quality+browser; existing Pages workflow publishes afterward, no Pages polling. #292 remains unmerged.
+- Next: P11-05 step6 simulation/probe in a separate task, not part of this presentation change.
+
 ## 2026-11-17 — WB VFX owner acceptance / game intake (Codex; PR #294 → feature/fateweave-initial-prototype)
 - Owner: “อนุมัติ นำเข้าเกมได้”, following delegated review. #294 carries the #292 intake dependency plus #293’s7 clarity layers into the game; #292 itself is not merged. No unrelated work or Rise Beyond changes.
 - Local checks already passed: unit2038/23 skipped, browser WB18/18, fast/reduced6/6, typecheck/lint/build, coverage6/6, lossless81-frame audit. Merge is gated on PR quality + browser CI; the existing Pages workflow handles publication afterward (do not wait/poll Pages).
