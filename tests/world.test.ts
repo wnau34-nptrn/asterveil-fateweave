@@ -6,7 +6,7 @@ import { clearLegacySaves, expeditionKey, legacyKeys, loadGame, parseGame, saveG
 import { boardOffers, commanderReason, createCommander, departure, dismiss, dismissReason, groupOf, hire, hireReason, newProfile, placeMember, settle, upgrade, upgradeCost, upgradeReason } from '../src/core/world/profile';
 import type { Direction, ExpeditionState, Point, Profile } from '../src/core/world/types';
 import { levelOf, startPrologue, chooseEvent, questComplete, atMuster, heroCatalog, battleData, battleState, canOpenChest, memberDef, moveMember, swapMembers, canRest, canRevive, chestAt, encounterChance, findTiles, finishBattle, isRevealed, move, newExpedition, openChest, recordBattle, rest, revive, rollPercent, startOf, tileAt } from '../src/core/world/world';
-import { actorArt, artOf, PLACEHOLDER_STILLS } from '../src/game/visuals/assets';
+import { actorArt, artOf } from '../src/game/visuals/assets';
 import { battleLesson } from '../src/ui/tutorial';
 import { xpAt } from './fixtures/camp-level';
 
@@ -476,13 +476,11 @@ describe('character art', () => {
   it('maps every hireable mercenary and every encounter enemy to its own illustrated frame', () => {
     const ids = [...heroCatalog(lookup, map).map(h => h.id), ...encounters.flatMap(e => e.enemies.map(x => artOf(e, x.id)))];
     for (const id of new Set(ids)) expect(actorArt[id], id).toBeDefined();
-    // All nine Veil Frontier foes fight somewhere (World Boss identities with a borrowed still: presentedEncounters), and every random pool entry exists.
+    // All nine Veil Frontier foes fight somewhere (World Boss identities: presentedEncounters), and every random pool entry exists.
     const presented = new Set([...ids, ...presentedEncounters.flatMap(e => e.enemies.map(x => artOf(e, x.id)))]);
     expect(Object.keys(actorArt).filter(k => k.startsWith('foe_')).every(k => presented.has(k))).toBe(true);
     for (const zone of map.zones) for (const p of zone.pool) expect(encounterById(p.encounterId), p.encounterId).toBeDefined();
-    // WB-A: a borrowed still (PLACEHOLDER_STILLS) must copy a real lender's frame; every other identity has its own.
-    for (const [id, lender] of Object.entries(PLACEHOLDER_STILLS)) { expect(actorArt[lender], lender).toBeDefined(); expect(actorArt[id], id).toEqual(actorArt[lender]); }
-    const used = Object.entries(actorArt).filter(([id]) => !(id in PLACEHOLDER_STILLS)).map(([, a]) => `${a.sheet}:${a.frame}`);
+    const used = Object.values(actorArt).map(a => `${a.sheet}:${a.frame}`);
     expect(new Set(used).size).toBe(used.length);
   });
 });

@@ -35,7 +35,7 @@ const load=()=>{ui.open({kind:'random',data:fixture.data,entry:fixture.entry,com
 load();
 new ResizeObserver(()=>scene.refreshLayout()).observe(document.querySelector('#game')!);
 void document.fonts.ready.then(()=>scene.refreshLayout());
-const qa={reactionTiming:()=>{
+const qa={geometry:()=>({figure:scene.figureBox('f1'),anchor:scene.foeAnchor('f1','hand')}),reactionTiming:()=>{
  const motion=(scene as unknown as {unitAnimation:{motions:Map<string,{duration:number;elapsed:number;phase:string}>}}).unitAnimation.motions.get(hero);
  return motion?{duration:motion.duration,remaining:motion.duration-motion.elapsed,phase:motion.phase}:null;
  },impacts,turns:()=>fixture.result.turns,otherEncounter:()=>{

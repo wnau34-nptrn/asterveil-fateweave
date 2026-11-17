@@ -1,0 +1,191 @@
+{
+  "method": "Ready frame 0 reconstructed and resampled; portraits cropped from existing approved seeds. Lossless WebP.",
+  "sources": {
+    "kragmor": {
+      "seed": "incoming/ART-UNIT-ANIMATION-WB-A-001/references/seed-a.png",
+      "seedSha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97",
+      "portraitCrop": [
+        260,
+        165,
+        650,
+        555
+      ],
+      "atlas": "public/assets/units/kragmor_wba.9a14ad1f9c65.json",
+      "atlasSha256": "9a14ad1f9c659fc9345689f17f1ee8885168f43179eb0a7ba392a7ab1c8fbcdd",
+      "image": "public/assets/units/kragmor_wba.3234efb60c1f.webp",
+      "imageSha256": "3234efb60c1f640f4801b4a9d658d4f476468623f95382d3561b2ca905819ad4",
+      "readyFrame": {
+        "frame": {
+          "h": 208,
+          "w": 222,
+          "x": 2,
+          "y": 450
+        },
+        "rotated": false,
+        "sourceSize": {
+          "h": 276,
+          "w": 276
+        },
+        "spriteSourceSize": {
+          "h": 208,
+          "w": 222,
+          "x": 27,
+          "y": 36
+        },
+        "trimmed": true
+      },
+      "stillAlphaBounds": [
+        25,
+        32,
+        231,
+        227
+      ],
+      "stillEmptyMargins": [
+        25,
+        32,
+        25,
+        29
+      ],
+      "portraitAlphaBounds": [
+        0,
+        0,
+        256,
+        256
+      ]
+    },
+    "valdrakk": {
+      "seed": "incoming/ART-UNIT-ANIMATION-WB-B-001/seeds/seed-b.png",
+      "seedSha256": "c3fe15c71d82c7cddc09df874fb9c21480bf2168e7b16248d692878ffb7ec214",
+      "portraitCrop": [
+        72,
+        405,
+        512,
+        845
+      ],
+      "atlas": "public/assets/units/valdrakk_wbb.03334e5611bb.json",
+      "atlasSha256": "03334e5611bb0764e986a14b308743229cee73abb0ab08fcaa3acee8541079de",
+      "image": "public/assets/units/valdrakk_wbb.7987cfe5b464.webp",
+      "imageSha256": "7987cfe5b4647ebe683e31a71d8a5c5b26c42aeb42c035155083a2ffbdf20b9d",
+      "readyFrame": {
+        "frame": {
+          "h": 191,
+          "w": 221,
+          "x": 240,
+          "y": 862
+        },
+        "rotated": false,
+        "sourceSize": {
+          "h": 266,
+          "w": 266
+        },
+        "spriteSourceSize": {
+          "h": 191,
+          "w": 221,
+          "x": 22,
+          "y": 42
+        },
+        "trimmed": true
+      },
+      "stillAlphaBounds": [
+        20,
+        39,
+        235,
+        227
+      ],
+      "stillEmptyMargins": [
+        20,
+        39,
+        21,
+        29
+      ],
+      "portraitAlphaBounds": [
+        9,
+        0,
+        256,
+        256
+      ]
+    },
+    "morvane": {
+      "seed": "incoming/ART-UNIT-ANIMATION-WB-C-001/seeds/seed-c.png",
+      "seedSha256": "47e5fbbaf06a18ee56a7c8c46771e00f65e13df7998b8c3d78c5cfa98f160105",
+      "portraitCrop": [
+        310,
+        112,
+        710,
+        512
+      ],
+      "atlas": "public/assets/units/morvane_wbc.25862c8b0b73.json",
+      "atlasSha256": "25862c8b0b736077790f5dc4879ad8a5c55886d9c8d3b6deed9de081fc57185f",
+      "image": "public/assets/units/morvane_wbc.1e867b20b7ab.webp",
+      "imageSha256": "1e867b20b7abdbd01f32b3bc8c64a8e31897fcba069ea6935ddd674cea188a90",
+      "readyFrame": {
+        "frame": {
+          "h": 244,
+          "w": 208,
+          "x": 426,
+          "y": 786
+        },
+        "rotated": false,
+        "sourceSize": {
+          "h": 328,
+          "w": 328
+        },
+        "spriteSourceSize": {
+          "h": 244,
+          "w": 208,
+          "x": 60,
+          "y": 43
+        },
+        "trimmed": true
+      },
+      "stillAlphaBounds": [
+        46,
+        32,
+        210,
+        224
+      ],
+      "stillEmptyMargins": [
+        46,
+        32,
+        46,
+        32
+      ],
+      "portraitAlphaBounds": [
+        0,
+        13,
+        256,
+        256
+      ]
+    }
+  },
+  "outputs": {
+    "public/assets/art/units_worldboss.webp": {
+      "sha256": "0a48e7a2d5652f31fd6d314b234e129f9f778cfd44ebc096889d372d6ccb5034",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 172490,
+      "decodedBytes": 1048576,
+      "alphaRange": [
+        0,
+        255
+      ],
+      "emptyFourthCell": true
+    },
+    "public/assets/art/portraits_worldboss.webp": {
+      "sha256": "68cc3528a2a5efa3b13f15d1ab9516fe01b2764cfc30445f9868bc095e12900f",
+      "size": [
+        512,
+        512
+      ],
+      "bytes": 329346,
+      "decodedBytes": 1048576,
+      "alphaRange": [
+        0,
+        255
+      ],
+      "emptyFourthCell": true
+    }
+  }
+}
