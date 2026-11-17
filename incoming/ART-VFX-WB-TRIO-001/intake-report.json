@@ -1,0 +1,61 @@
+{
+ "frames": 81,
+ "added": 39,
+ "size": [
+  1778,
+  1949
+ ],
+ "decodedBytes": 13861288,
+ "webpBytes": 2713368,
+ "before": {
+  "size": [
+   1362,
+   1527
+  ],
+  "decodedBytes": 8319096,
+  "webpBytes": 1554042
+ },
+ "verified": "all frames RGBA-identical where visible after lossless encode/decode; 39 layer SHA-256 match layers.json and validation.json",
+ "atlasSha256": "7b7088ba0721871cb66d8b230a4d1cab66cbc85c3308202cc4449abc56a1bf47",
+ "layers": {
+  "titan-gathering_prepare": "2f568fa8571170d742f9e336ac5bbb009104c8ab30dfb36699850c0b3036d877",
+  "titan-gathering_peak": "2c336cc82ac52b85f0f0187f1a9724073d1928655b8f0bd66b9d948080b124e5",
+  "titan-gathering_settle": "18dbc0b257f8aba4bdb1056372b27be4006504b8f942b3186b45b833dc980545",
+  "mountain-fall_prepare": "1a80699b958ff8d634128ec0c699db81ae95f489212d8ceee9fed099d28f00f4",
+  "mountain-fall_peak": "89aa115374d16a6d7d1fb12ba2a8fa7f77b7adeb255c59452b8d92ff24ba6ab1",
+  "mountain-fall_settle": "6ed1facaf485a1143630e435b3a3775707b5a9ff5fc53bed7ade2119f0fbdc4a",
+  "rift-quake_prepare": "425fa88226052237605553854f5a93fae2da3f07ff6b525c138c8a60955b7661",
+  "rift-quake_peak": "4a819695aafbd5b9bcdffe171bbdecf73486ca00243e4aefda8a2f36edb3f025",
+  "rift-quake_settle": "aa77c3be5ba9c7bafdf39cf89dd3d041772564663868c5083c52a445ed992c99",
+  "fault-awakening_prepare": "ad96d11213542cd2e8aa2c5d29391aaac086003ae42dfdeb6ebaafdf10173616",
+  "fault-awakening_peak": "57cc397bc30219797e70ae4d5db22a076cd20d2b8ea4fb2d3ff3604198075afe",
+  "fault-awakening_settle": "d1e1a5a04e6e050159751dee22959265324ba1ec9ac68eacde4e6e53e84b2c20",
+  "wing-gust_prepare": "4c22695b25020fd98051599788c19b05fab9c358139b6cb6c3a8d8a986c7ad36",
+  "wing-gust_peak": "7ab09a421164e74d4095332790a97e707f6b295db50ed6fb0ddd8e1c61a77ee9",
+  "wing-gust_settle": "13da6b6423247f84ab39589e6bb0be312472f51a718378788bf1624e8cd9bb40",
+  "wing-gathering_prepare": "0ed9730955f7c202a189d6c933a31f7456539c16429b1a901293f35a7ed6c30e",
+  "wing-gathering_peak": "53e5b8ab31d3dfa64961ec21fe5d36f00899b0cdd011b98835f3ea890e6df3a2",
+  "wing-gathering_settle": "07ec324eaf89ca97a4012b12e89b11e5ef82b1b635c5563936b10a159c57695d",
+  "worldshard-dive_prepare": "585590373e090ee61765bc91c256735e0f7198858c903f4bd185175a5901c3ce",
+  "worldshard-dive_peak": "ae664e5749f5db8bafea97ac68d17b14b6ec42c3fdb8aa644efbf033e713a80d",
+  "worldshard-dive_settle": "c317fb2937221c000f2120f2771ba468e75d4b20725399a728308535688e502e",
+  "sky-rend_prepare": "007d3ce838e6a6a70bb628074844098eda906454c7a4f7e312293918f401427b",
+  "sky-rend_peak": "fb1524fbd1442d15d7b42538d8883a4b3b31a16e360b2692148c93289f1453b2",
+  "sky-rend_settle": "975970f92153d86a7eec739d26d243a0417918ea8739822577dae3fd9665b42a",
+  "severing-bolt_prepare": "1fa415c3c32154dd883b0498dc0a4dee66c956b18bec97ad96d60993ff1587e8",
+  "severing-bolt_peak": "2182419e9ea69c6c65e10ab1a217274ab00fd2c648301e3a706ed1c6d61fd26f",
+  "severing-bolt_settle": "4c469c601405c7ad3cf130928c3174af52ebfb4d5a07956e5c3ff8348df4e3b8",
+  "fate-lash_prepare": "5c665f620e4d6faf654ea3833a5e58d45bac72f6a48701fd7469c71000ecdcee",
+  "fate-lash_peak": "f206a02715bda2473c29a91355ef79608ee773cb95386a9584bdb30f3604c061",
+  "fate-lash_settle": "8435d7176891d902b9c7e85b4ad6108b3dce2d767b8a2bc328d63c4bc7424516",
+  "call-the-court_prepare": "686e08cbe00ebb85dbb27272879605d4be7772ae48f6cef4c2f970a4250319c8",
+  "call-the-court_peak": "918e72d9570b7101af5d8a55e177b17543176539021b094f0874cdb3c9ce9c97",
+  "call-the-court_settle": "09c5dbbe9ca8549a54604b6c66dc9f5ec39eb72cade815d341dd10b941e180a2",
+  "shadow-tide_prepare": "7855847d06ca2972bfaacda9243336fccc2536950469811ebcfe2345ae80b8d6",
+  "shadow-tide_peak": "e286e00f11607f59926857a77a54afe47e2a56f9f9d8b7d64ec844d9ca8b1572",
+  "shadow-tide_settle": "d839d9691b9130520d87bffa45ad07a05403dfb1df7bd48bf49fdda5883d7def",
+  "severed-crown_prepare": "3fc012d6f9fc969895bc1a1149b16a8986f01920be729ba707424b9f3a84241a",
+  "severed-crown_peak": "afe1b572615a9d85b8e6ca4b82ffdb9e4070a46c7db8a44395ab90042c4c9489",
+  "severed-crown_settle": "8c68f360e69a2c7d86bd8fe55fbd27bc20d7e8b5fe6bc47cda50b52b78b96b1d"
+ }
+}

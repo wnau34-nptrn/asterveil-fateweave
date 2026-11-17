@@ -5,7 +5,7 @@
 - ฮีโร่ที่ atlas หนักสุด 5 คน (กรณีแย่สุด): `lyra`, `lalin`, `seren`, `brann`, `lio`
 - สนามแย่สุด (ทีม 5 ตาม OD-05): `vanguard-captain` 40.0 MiB decoded / 12.49 MB download (งบ ≤64 MiB / ~12 MB)
 - VFX ที่ preload ทุก battle (13 atlas): 74.3 MiB decoded / 10.89 MB — นอกงบ animation แต่วัดแยกตาม §7
-- VFX โหลดเฉพาะ encounter ที่ใช้: boss 7.9 MiB · foe signature 6.4 MiB · saint/dance 6.7 MiB (ปล่อยเมื่อ encounter ถัดไปไม่ใช้)
+- VFX โหลดเฉพาะ encounter ที่ใช้: boss 13.2 MiB · foe signature 6.4 MiB · saint/dance 6.7 MiB (ปล่อยเมื่อ encounter ถัดไปไม่ใช้)
 
 | encounter | ศัตรู (สำรอง) | atlas ศัตรู | ทีม 4: decoded / download | ทีม 5: decoded / download | boss VFX |
 | --- | --- | --- | --- | --- | --- |
@@ -36,8 +36,8 @@
 | `thorn-host` | 5 (0) | stalker, beetle, sporepuff | 28.9 MiB / 9.02 MB | 33.2 MiB / 10.47 MB | — |
 | `rift-legion` | 5 (0) | wisp, crawler | 25.7 MiB / 8.12 MB | 30.0 MiB / 9.56 MB | — |
 | `world-boss-warden` | 6 (3) | wisp, crawler, sentinel | 29.4 MiB / 9.53 MB | 33.7 MiB / 10.97 MB | โหลด |
-| `wb-kragmor` | 3 (0) | wisp, crawler, kragmor | 31.5 MiB / 10.02 MB | 35.8 MiB / 11.47 MB | — |
-| `wb-valdrakk` | 3 (0) | wisp, valdrakk | 29.8 MiB / 9.66 MB | 34.1 MiB / 11.11 MB | — |
-| `wb-morvane` | 4 (0) | wisp, crawler, morvane | 32.7 MiB / 9.97 MB | 37.0 MiB / 11.42 MB | — |
+| `wb-kragmor` | 3 (0) | wisp, crawler, kragmor | 31.5 MiB / 10.02 MB | 35.8 MiB / 11.47 MB | โหลด |
+| `wb-valdrakk` | 3 (0) | wisp, valdrakk | 29.8 MiB / 9.66 MB | 34.1 MiB / 11.11 MB | โหลด |
+| `wb-morvane` | 4 (0) | wisp, crawler, morvane | 32.7 MiB / 9.97 MB | 37.0 MiB / 11.42 MB | โหลด |
 
 ชนิดซ้ำในสนามใช้ texture เดียวกัน (นับครั้งเดียว) · decoded = กว้าง×สูง×4 ของ atlas (RGBA) ไม่ใช่ RAM/GPU รวมของเครื่อง

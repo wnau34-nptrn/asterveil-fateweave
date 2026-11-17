@@ -7,7 +7,7 @@
 - identities 42 (ฝ่ายเรา 17 · ศัตรู 25) · มี atlas 40 · พักตาม OD-14 2 (โอดราน `thiran` / อิโซลด์ `wila`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่งรออนิเมชัน 0
 - ActionId ฝ่ายเรา 91 รายการ (119 แถว ตัวละคร×ท่า รวมท่าจากต้นไม้) · ชื่อท่าศัตรู/phase 56 ชื่อ (66 แถว identity×ท่า)
 - ท่าร่างกาย: sprite 171 · procedural 14 (ตัวที่พักตาม OD-14 และภาพนิ่ง P03 ที่รออนิเมชัน CODEX-A12)
-- VFX: วาดเฉพาะ 112 · ชุดร่วมโดยตั้งใจ 60 · วาดด้วยโค้ดโดยตั้งใจ 13
+- VFX: วาดเฉพาะ 125 · ชุดร่วมโดยตั้งใจ 56 · วาดด้วยโค้ดโดยตั้งใจ 4
 
 ความหมาย: **sprite** = เฟรม atlas (prepare → recover; contact = เฟรม recover แรก, เวลา contact/end มาจาก UI ไม่ใช่ FPS ภาพ) · **procedural** = ภาพนิ่ง + การเคลื่อนไหวด้วยโค้ด · **วาด** = painted atlas ของท่านั้น · **ชุดร่วม** = painted atlas ร่วมตระกูลโดยตั้งใจ · **โค้ด** = วาดด้วย Graphics ตั้งใจ (ไม่มีภาพเฉพาะ) · จุดเกิดผลทุกแถวอ่านจาก event จริงของ resolver
 
@@ -203,11 +203,11 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_juggernaut` | Horn Charge (physical) | sprite `move1` 0,1,2 → 3,4,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | crystal-stampede |
 | `foe_juggernaut` | Shard Burst (energy) | sprite `move2` 0,5,6 → 7,8,0 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | crystal-stampede |
 | `foe_kragmor` | Stone Fist (physical) | sprite `move1` 0,1,2 → 3,4,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | wb-kragmor |
-| `foe_kragmor` | Titan Gathering (physical/charge) | sprite `move2` 0,5,6 → 7,8,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ตัวเอง (รวมพลัง ไม่มี damage) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | wb-kragmor |
-| `foe_kragmor` | Mountain Fall (physical) | sprite `move3` 0,9,10 → 11,12,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | wb-kragmor |
-| `foe_kragmor` | Rift Quake (physical) | sprite `move4` 0,13,14 → 15,16,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ทุกคนที่ยืนอยู่ | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | wb-kragmor |
+| `foe_kragmor` | Titan Gathering (physical/charge) | sprite `move2` 0,5,6 → 7,8,0 | วาด `boss-signature-fx` | ตัวเอง (รวมพลัง ไม่มี damage) | ตัวบอส + ค้างจนปล่อยท่า | wb-kragmor |
+| `foe_kragmor` | Mountain Fall (physical) | sprite `move3` 0,9,10 → 11,12,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | wb-kragmor |
+| `foe_kragmor` | Rift Quake (physical) | sprite `move4` 0,13,14 → 15,16,0 | วาด `boss-signature-fx` | ฮีโร่ทุกคนที่ยืนอยู่ | ฮีโร่ที่โดนจริงทุกคน | wb-kragmor |
 | `foe_kragmor` | Boulder Hurl (physical) | sprite `move5` 0,17,18 → 19,20,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | wb-kragmor |
-| `foe_kragmor` | Fault Awakening (phase) | sprite `move6` 0,21,22 → 23,24,0 | โค้ด `generic-code` — ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด | ตัวเอง (เปลี่ยนช่วง) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | wb-kragmor |
+| `foe_kragmor` | Fault Awakening (phase) | sprite `move6` 0,21,22 → 23,24,0 | วาด `boss-signature-fx` | ตัวเอง (เปลี่ยนช่วง) | ตัวบอส | wb-kragmor |
 | `foe_matriarch` | Thorn Bloom (energy) | sprite `move4` 0,13,14 → 15,16,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | elite-briar-lord, thicket-ambush |
 | `foe_matriarch` | Briar Lash (physical) | sprite `move2` 0,5,6 → 7,8,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | elite-briar-lord, thicket-ambush |
 | `foe_matriarch` | Thorn Storm (energy) | sprite `move4` 0,13,14 → 15,16,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | elite-briar-lord |
@@ -215,11 +215,11 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_matriarch` | Thorn Tempest (energy) | sprite `move1` 0,1,2 → 3,4,0 | วาด `boss-signature-fx` | ฮีโร่ทุกคนที่ยืนอยู่ | ฮีโร่ที่โดนจริงทุกคน | elite-briar-lord |
 | `foe_matriarch` | Thorn Rage (phase) | sprite `move5` 0,17,18 → 19,20,0 | วาด `boss-signature-fx` | ตัวเอง + กำลังเสริมที่ปรากฏจริง | ตัวบอส | elite-briar-lord |
 | `foe_morvane` | Six-Hand Rend (physical) | sprite `move1` 0,1,2 → 3,4,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | wb-morvane |
-| `foe_morvane` | Severing Bolt (energy) | sprite `move2` 0,5,6 → 7,8,0 | โค้ด `generic-code` — ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | wb-morvane |
-| `foe_morvane` | Call the Court (energy) | sprite `move4` 0,13,14 → 15,16,0 | โค้ด `generic-code` — ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | wb-morvane |
-| `foe_morvane` | Fate Lash (energy) | sprite `move3` 0,9,10 → 11,12,0 | โค้ด `generic-code` — ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | wb-morvane |
-| `foe_morvane` | Shadow Tide (energy) | sprite `move5` 0,17,18 → 19,20,0 | โค้ด `generic-code` — ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด | ฮีโร่ทุกคนที่ยืนอยู่ | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | wb-morvane |
-| `foe_morvane` | Severed Crown (phase) | sprite `move6` 0,21,22 → 23,24,0 | โค้ด `generic-code` — ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด | ตัวเอง (เปลี่ยนช่วง) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | wb-morvane |
+| `foe_morvane` | Severing Bolt (energy) | sprite `move2` 0,5,6 → 7,8,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | wb-morvane |
+| `foe_morvane` | Call the Court (energy) | sprite `move4` 0,13,14 → 15,16,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตำแหน่งตัวที่ถูกเรียกจริง | wb-morvane |
+| `foe_morvane` | Fate Lash (energy) | sprite `move3` 0,9,10 → 11,12,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | wb-morvane |
+| `foe_morvane` | Shadow Tide (energy) | sprite `move5` 0,17,18 → 19,20,0 | วาด `boss-signature-fx` | ฮีโร่ทุกคนที่ยืนอยู่ | ฮีโร่ที่โดนจริงทุกคน | wb-morvane |
+| `foe_morvane` | Severed Crown (phase) | sprite `move6` 0,21,22 → 23,24,0 | วาด `boss-signature-fx` | ตัวเอง (เปลี่ยนช่วง) | ตัวบอส | wb-morvane |
 | `foe_mycon` | Spore Hex (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `foe-signature-fx` | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | thicket-ambush |
 | `foe_rift_channeler` | Rift Bolt (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | rear-ambush |
 | `foe_rift_channeler` | Rift Beam (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | channeler-wisps, rift-host |
@@ -244,10 +244,10 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_tusker` | Tusk Charge (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | elite-tusk-chief, rift-whelp, tusker-bats |
 | `foe_tusker` | Stampede (physical) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `boss-signature-fx` | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | elite-tusk-chief |
 | `foe_valdrakk` | Shard Talon (physical) | sprite `move1` 0,1,2 → 3,4,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | wb-valdrakk |
-| `foe_valdrakk` | Wing Gust (energy) | sprite `move2` 0,5,6 → 7,8,0 | โค้ด `generic-code` — ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | wb-valdrakk |
-| `foe_valdrakk` | Wing Gathering (physical/charge) | sprite `move3` 0,9,10 → 11,12,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ตัวเอง (รวมพลัง ไม่มี damage) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | wb-valdrakk |
-| `foe_valdrakk` | Worldshard Dive (energy) | sprite `move4` 0,13,14 → 15,16,0 | โค้ด `generic-code` — ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด | ฮีโร่ทุกคนที่ยืนอยู่ | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | wb-valdrakk |
-| `foe_valdrakk` | Sky Rend (phase) | sprite `move6` 0,21,22 → 23,24,0 | โค้ด `generic-code` — ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด | ตัวเอง (เปลี่ยนช่วง) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | wb-valdrakk |
+| `foe_valdrakk` | Wing Gust (energy) | sprite `move2` 0,5,6 → 7,8,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | wb-valdrakk |
+| `foe_valdrakk` | Wing Gathering (physical/charge) | sprite `move3` 0,9,10 → 11,12,0 | วาด `boss-signature-fx` | ตัวเอง (รวมพลัง ไม่มี damage) | ตัวบอส + ค้างจนปล่อยท่า | wb-valdrakk |
+| `foe_valdrakk` | Worldshard Dive (energy) | sprite `move4` 0,13,14 → 15,16,0 | วาด `boss-signature-fx` | ฮีโร่ทุกคนที่ยืนอยู่ | ฮีโร่ที่โดนจริงทุกคน | wb-valdrakk |
+| `foe_valdrakk` | Sky Rend (phase) | sprite `move6` 0,21,22 → 23,24,0 | วาด `boss-signature-fx` | ตัวเอง (เปลี่ยนช่วง) | ตัวบอส | wb-valdrakk |
 | `foe_vargoth_guard` | Rift Bolt (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | first-clash |
 | `foe_vargoth_guard` | Crushing Blow (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | first-clash |
 | `foe_vargoth_guard` | Shield Smash (physical) | sprite `bash` 24,25,26,27 → 28,29,30,31 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | vanguard-captain |
@@ -258,4 +258,4 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 ## งานค้างที่รู้อยู่แล้ว (สร้างจากตาราง)
 
 - ท่าร่างกาย procedural 14 แถว: `thiran`, `wila` — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)
-- VFX วาดด้วยโค้ดโดยตั้งใจ 13 แถว: `mira` โจมตี, `toma` โจมตี, `foe_hunter` Shadow Knife, `foe_kragmor` Fault Awakening, `foe_morvane` Severing Bolt, `foe_morvane` Call the Court, `foe_morvane` Fate Lash, `foe_morvane` Shadow Tide, `foe_morvane` Severed Crown, `foe_valdrakk` Wing Gust, `foe_valdrakk` Worldshard Dive, `foe_valdrakk` Sky Rend, `raider` Shadow Knife
+- VFX วาดด้วยโค้ดโดยตั้งใจ 4 แถว: `mira` โจมตี, `toma` โจมตี, `foe_hunter` Shadow Knife, `raider` Shadow Knife

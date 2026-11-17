@@ -17,7 +17,7 @@ for oj,oi,nj,ni in pairs:
   od=json.loads(git(oj));oimg=Image.open(io.BytesIO(git(oi))).convert('RGBA')
   nd=json.load(open(nj));nimg=Image.open(ni).convert('RGBA')
   of=dict(r.frames_of(od));nf=dict(r.frames_of(nd))
-  assert set(of)==set(nf),nj
+  assert set(of)<=set(nf),nj  # frames added later (ART-VFX-WB-TRIO-001) are checked by their own intake
   for k in of:
     a=r.source_canvas(oimg,of[k]);b=r.source_canvas(nimg,nf[k])
     assert a.size==b.size and r.same_render(b,a),(nj,k)

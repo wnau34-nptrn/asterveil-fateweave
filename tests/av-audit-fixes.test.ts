@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { eliteBriarLord, encounters, riftWarden, vanguardCaptain } from '../src/content/encounters/catalog';
+import { eliteBriarLord, encounters, presentedEncounters, riftWarden, vanguardCaptain } from '../src/content/encounters/catalog';
 import { createBattle, currentHeroId, resolveCommand, targetOptions } from '../src/core/battle/engine';
 import type { BattleState, EncounterDefinition, TurnStage } from '../src/core/battle/types';
 import { basicCues, basicWeapon } from '../src/game/visuals/basic-attack-fx';
@@ -97,7 +97,7 @@ describe('AV05 generic hit lift keeps detail', () => {
 
 describe('AV07 boss signature and charge holds', () => {
   it('every routed move is a real intent or phase name with a full three-beat art set', () => {
-    const names = new Set(encounters.flatMap(e => [...e.intents.map(i => i.name), ...(e.phases ?? []).map(p => p.name)]));
+    const names = new Set(presentedEncounters.flatMap(e => [...e.intents.map(i => i.name), ...(e.phases ?? []).map(p => p.name)]));
     for (const move of Object.keys(bossMoves)) {
       expect(names.has(move), move).toBe(true);
       for (const beat of ['prepare', 'peak', 'settle']) expect(Object.keys(art)).toContain(`${move.toLowerCase().replace(/ /g, '-')}_${beat}`);
