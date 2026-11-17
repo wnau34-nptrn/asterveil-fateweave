@@ -1,4 +1,4 @@
-## 2026-11-17 — World Boss own stills/portraits (Codex; codex/wb-stills-portraits → game branch)
+## 2026-11-17 — World Boss own stills/portraits (Codex; PR #295; codex/wb-stills-portraits → game branch; squash commit: see PR)
 - Owner: “ชื่อท่าภาษาไทยไม่เอา”, “ดำเนินการเรื่องที่ยังค้างได้เลย”. Finish existing-art hookup only; no Thai move names, balance or scheduling changes.
 - Derived fallback stills from approved ready frames and cropped original seed portraits for Kragmor/Valdrakk/Morvane; removed Warden placeholder mapping. Separate 256px-cell lossless sheets, real alpha and reproducible provenance; original incoming/animation/VFX preserved.
 - Preserved field layout, sole, fallback→atlas scale and VFX anchors; source trim owns caption bounds. New Chromium390px loading/failure tests6/6, prior unit-loading3/3, unit2038/23 skipped, typecheck/lint/build, coverage6/6 passed. [Evidence/limits](../validation/wb-stills-portraits/README_TH.md).
