@@ -1,4 +1,4 @@
-## 2026-11-17 — WB VFX clarity revision intake (Codex; codex/wb-vfx-revision-intake)
+## 2026-11-17 — WB VFX clarity revision intake (Codex; PR #294, codex/wb-vfx-revision-intake; unmerged)
 - Owner: “นำเข้าเกมได้” after #293; recorded as intake authorization, new motion approval still pending. No merge of #292 or publication.
 - Replaced only 7 atlas slots: Bolt/Tide prepare/peak/settle + Wing prepare/hold. All other74 canvases RGBA-identical, alpha/layout/runtime metadata unchanged; no rules/save/catalog/balance/timing/content-version change. Both incoming packages preserved.
 - Quality: typecheck/lint/build, coverage6/6, unit2038 passed23 skipped, WB browser18/18; 390px real clips of Bolt/Tide normal + Wing normal/hold/release/break. [Evidence, receipt and limits](../validation/wb-vfx-revision/README_TH.md).
