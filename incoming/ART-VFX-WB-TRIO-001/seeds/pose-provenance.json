@@ -1,0 +1,93 @@
+[
+  {
+    "file": "seeds/poses/titan-gathering.png",
+    "commit": "eb0d60b7284300bcc1872172da89b6c0a1a14f5b",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-A-001/strips/titan-gathering.png",
+    "frame_0based": 2,
+    "source_sha256": "36a3d970c62c16b5965f92ce409be6c0f67718376c90e22866a978a3d60e3b56"
+  },
+  {
+    "file": "seeds/poses/mountain-fall.png",
+    "commit": "eb0d60b7284300bcc1872172da89b6c0a1a14f5b",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-A-001/strips/mountain-fall.png",
+    "frame_0based": 3,
+    "source_sha256": "3d417b0796739f89abbbbaa0829934a1a0e184194f6a1ec6848b552bb1ddd12b"
+  },
+  {
+    "file": "seeds/poses/rift-quake.png",
+    "commit": "eb0d60b7284300bcc1872172da89b6c0a1a14f5b",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-A-001/strips/rift-quake.png",
+    "frame_0based": 3,
+    "source_sha256": "907996742a290a76bfd203fdadc860f312fe043dc06e79eb0ec07dcfb5911365"
+  },
+  {
+    "file": "seeds/poses/fault-awakening.png",
+    "commit": "eb0d60b7284300bcc1872172da89b6c0a1a14f5b",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-A-001/strips/fault-awakening.png",
+    "frame_0based": 3,
+    "source_sha256": "2265135a1d27e9ac5c4ce2d49d09026a683cafe12e20e53cfc2b2081f56e6280"
+  },
+  {
+    "file": "seeds/poses/wing-gust.png",
+    "commit": "8ab34af6ce2d7331350e6a2d22ed6cddb402d9ef",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-B-001/strips/wing-gust.png",
+    "frame_0based": 3,
+    "source_sha256": "fe7b7a6e7363ffc0736ff40a91c7bfecc5b60e52ded62c1bc1fa6b64e137da32"
+  },
+  {
+    "file": "seeds/poses/wing-gathering.png",
+    "commit": "8ab34af6ce2d7331350e6a2d22ed6cddb402d9ef",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-B-001/strips/wing-gathering.png",
+    "frame_0based": 2,
+    "source_sha256": "7aac59d47539a4ddf00087322e1568619d84efeea5be9062e2e0b4dc75571e23"
+  },
+  {
+    "file": "seeds/poses/worldshard-dive.png",
+    "commit": "8ab34af6ce2d7331350e6a2d22ed6cddb402d9ef",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-B-001/strips/worldshard-dive.png",
+    "frame_0based": 3,
+    "source_sha256": "b74784e162c610c9196851c5e4a49060c076cad81dd967c8b2057be4d302a5f2"
+  },
+  {
+    "file": "seeds/poses/sky-rend.png",
+    "commit": "8ab34af6ce2d7331350e6a2d22ed6cddb402d9ef",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-B-001/strips/sky-rend.png",
+    "frame_0based": 3,
+    "source_sha256": "1de9d90403d953650b6500a4c789f9f2af6067c628d5013ca1598c68e7c5971c"
+  },
+  {
+    "file": "seeds/poses/severing-bolt.png",
+    "commit": "7d692008460d5e6645509cb9bcbfe7e4d4568614",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-C-001/strips/severing-bolt.png",
+    "frame_0based": 3,
+    "source_sha256": "5c8a1bdaa8276d0ec3ad7a9fa3bfab6c35191b186e505f1ac3918fe8da26df65"
+  },
+  {
+    "file": "seeds/poses/fate-lash.png",
+    "commit": "7d692008460d5e6645509cb9bcbfe7e4d4568614",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-C-001/strips/fate-lash.png",
+    "frame_0based": 3,
+    "source_sha256": "2ba532a950dd95b80de0cbeb700ab8ddec4d23e63d224f87f09ca6ce81d9473f"
+  },
+  {
+    "file": "seeds/poses/call-the-court.png",
+    "commit": "7d692008460d5e6645509cb9bcbfe7e4d4568614",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-C-001/strips/call-the-court.png",
+    "frame_0based": 3,
+    "source_sha256": "fe5b66bcfbd4696de88c9b2566d6996695e49f1766a9c54a650933da6f8fef23"
+  },
+  {
+    "file": "seeds/poses/shadow-tide.png",
+    "commit": "7d692008460d5e6645509cb9bcbfe7e4d4568614",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-C-001/strips/shadow-tide.png",
+    "frame_0based": 3,
+    "source_sha256": "2477e954773a1125cc4b7f1b09e669ec80f272d6b22cd2b1de907ef2b97ca63b"
+  },
+  {
+    "file": "seeds/poses/severed-crown.png",
+    "commit": "7d692008460d5e6645509cb9bcbfe7e4d4568614",
+    "path": "incoming/ART-UNIT-ANIMATION-WB-C-001/strips/severed-crown.png",
+    "frame_0based": 3,
+    "source_sha256": "01434811a83c8c190d64535a851e35b4a8376a671b0eab8927acc270aea550ce"
+  }
+]

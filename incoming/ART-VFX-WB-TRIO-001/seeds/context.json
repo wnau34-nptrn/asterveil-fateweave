@@ -1,0 +1,11 @@
+{
+  "base_commit": "eb0d60b7284300bcc1872172da89b6c0a1a14f5b",
+  "seed_commit": "46f366dc931e4994d3a6ccd9ad3951ac444a70cf",
+  "code_sha256": {
+    "src/game/visuals/boss-signature-fx.ts": "b6958a10e1df31d3bfecfd1a339c417965516043e3802c310200e1aac62fa37c",
+    "src/game/visuals/boss-signature-art.json": "19cbf7fd13a3179071e713c19b9188868a10ff10dc37123fc277b06142b837db",
+    "src/content/encounters/catalog.ts": "f8a37883be27da7f1229bb26a5f64c2d6bc3aad6096ff7ef8a4cd774e5f54135"
+  },
+  "style_source": "incoming/ART-VFX-BOSS-SIGNATURE-001/layers",
+  "hero_source": "incoming/ART-VFX-BOSS-SIGNATURE-001/seeds/gold-hero.png"
+}

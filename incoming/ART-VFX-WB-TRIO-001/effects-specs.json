@@ -1,0 +1,142 @@
+{
+  "designs": [
+    {
+      "id": "titan-gathering",
+      "boss": "kragmor",
+      "seed": "a",
+      "name": "Titan Gathering",
+      "route": "charge",
+      "desc": "Heavy STONE/CRYSTAL compression, no wind or feathers. LEFT prepare: four small rough violet stones drift inward between TWO FLEXIBLE OPEN cyan-edged curved wisps, open center, no hard teeth or closed ring; normal charge symbol. MIDDLE peak: compact compressed rough crystal-stone core/knot with cyan seams, a few thick fragments close around it, no explosion. RIGHT settle: three tiny slowly dropping violet crystal chips with faint mint rims, sparse and visibly receding."
+    },
+    {
+      "id": "mountain-fall",
+      "boss": "kragmor",
+      "seed": "a",
+      "name": "Mountain Fall",
+      "route": "single",
+      "unstoppable": true,
+      "ground": true,
+      "desc": "Heavy stone vertical compression, NOT lightning or wind. LEFT prepare WARNING: TWO rigid angular dark violet stone brackets facing each other, each with ONE hard inward tooth, two teeth TOTAL visibly offset and interlocking while center remains a clear OPEN GAP; broad solid silhouette, no ring, no flexible curves, no spinning marks. MIDDLE peak: short powerful DOWNWARD stone/crystal slam, thick vertical compressed cyan pressure strokes ending at compact ground impact with short jagged cracks; NO full ground plane and no long horizontal blanket. RIGHT settle: very few tiny crystal dust/stone chips dropping down, faint, no second explosion. Ground contact near bottom of cell."
+    },
+    {
+      "id": "rift-quake",
+      "boss": "kragmor",
+      "seed": "a",
+      "name": "Rift Quake",
+      "route": "all",
+      "ground": true,
+      "desc": "Low heavy FRACTURED STONE, no wind/feathers/lightning. LEFT prepare: a short open crescent of thin cyan cracks with two pebbles, low compact footprint. MIDDLE peak: THREE distinct short staggered fracture-wave ridges running RIGHT to LEFT through a SMALL single-target footprint; violet crystal fissures with bright cyan/ivory rims and dark rough rock contour, not three giant screen-wide waves. RIGHT settle: four tiny stone fragments falling, sparse low dim cyan seams."
+    },
+    {
+      "id": "fault-awakening",
+      "boss": "kragmor",
+      "seed": "a",
+      "name": "Fault Awakening",
+      "route": "caster",
+      "phase_change": true,
+      "desc": "Local phase-change aura of rough stone and crystal, NO hero hit. LEFT prepare: three short cyan cracks flowing UP from central small chest light, rough stone chips attached to cracks. MIDDLE peak: FIVE major violet crystal crown shards fan outward/upward with short jagged cyan rift seams from lower center; local crown of stone power, NOT a physical boss crown/face/body, no circular blast or wind. RIGHT settle: five tiny violet crystal sparks drifting DOWN and OUT, dim, no impact."
+    },
+    {
+      "id": "wing-gust",
+      "boss": "valdrakk",
+      "seed": "b",
+      "name": "Wing Gust",
+      "route": "single",
+      "desc": "Fast SHARP CRYSTAL FEATHERS with cutting airflow traces, no clouds/lightning/rocks. LEFT prepare: exactly THREE slender violet crystal feathers fold into a small crescent, bright mint rim and dark indigo edges. MIDDLE peak: three sharp long curved feather-cuts sweeping diagonally from UPPER RIGHT toward LOWER LEFT, crisp tips and clean gaps, one compact target footprint. RIGHT settle: three small broken crystal feather tips falling down-left, dim and sparse, no new slash."
+    },
+    {
+      "id": "wing-gathering",
+      "boss": "valdrakk",
+      "seed": "b",
+      "name": "Wing Gathering",
+      "route": "charge",
+      "breakable": true,
+      "desc": "R1 recommended BREAKABLE charge key: visibly FRAGILE THIN CRACKED CRYSTAL SHELL, never rigid brackets, never ordinary smooth open curves. LEFT prepare: two thin asymmetric curved violet crystal shell arcs with a LARGE BRIGHT jagged fracture/gap across them, delicate broken tips, visibly brittle at80px, open center; cyan fracture highlights. MIDDLE peak: compact compressed cyan shoulder-core cluster wrapped in broken thin crystal shell/feather pieces, split seam still visible, no orb projectile. RIGHT settle: four tiny shell splinters detach and fall slowly, fading, no impact."
+    },
+    {
+      "id": "wing-gathering-r2",
+      "base": "wing-gathering",
+      "boss": "valdrakk",
+      "seed": "b",
+      "name": "Wing Gathering R2",
+      "route": "charge",
+      "breakable": true,
+      "alternative": "R2",
+      "desc": "R2 alternative BREAKABLE charge key made of folded CRYSTAL FEATHERS, NOT shell and NOT rigid brackets. LEFT prepare: THREE thin folded crystal feather slivers stacked in a delicate open fan, one prominent BRIGHT zigzag fracture crosses the feather fold and visibly breaks the silhouette, open center. MIDDLE peak: the cracked layered feathers overlap tightly around a small cyan shoulder-core, thin sharp split seams remain; no energy projectile. RIGHT settle: three tiny folded feather shards loosen and drift down, dim sparse."
+    },
+    {
+      "id": "worldshard-dive",
+      "boss": "valdrakk",
+      "seed": "b",
+      "name": "Worldshard Dive",
+      "route": "all",
+      "desc": "Sharp broken-dimensional CRYSTAL FEATHERS, no boulders/clouds/lightning. LEFT prepare: a small downward-pointing crescent of three crystal feather shards, diagonal RIGHT-to-LEFT intent. MIDDLE peak: compact oblique wedge of FIVE jagged crystal feather plates piercing from UPPER RIGHT to LOWER LEFT through ONE hero footprint, ivory/cyan leading edges, indigo separation, no long screen-wide beam. RIGHT settle: very fine sparse violet feather-crystal dust/chips drifting downward, low opacity, not another attack."
+    },
+    {
+      "id": "sky-rend",
+      "boss": "valdrakk",
+      "seed": "b",
+      "name": "Sky Rend",
+      "route": "caster",
+      "phase_change": true,
+      "desc": "Local phase aura of SHARP CRYSTAL FEATHERS, not stone crystals or gold crown. LEFT prepare: two short branching cyan fissure traces curl upward like wing-edge cracks, feather-shaped tips. MIDDLE peak: SEVEN slender faceted violet-cyan feather blades open as an airy crown/fan above a small central seam, sparse gaps, no actual wings/animal/body and no wind cloud. RIGHT settle: a handful of very tiny cyan feather-shaped sparks drift outward/down and fade, no slash or explosion."
+    },
+    {
+      "id": "severing-bolt",
+      "boss": "morvane",
+      "seed": "c",
+      "name": "Severing Bolt",
+      "route": "single",
+      "desc": "Shadow THREADS and torn SILK, no rocks/feathers. LEFT prepare: TWO short thin shadow threads pulled taut in a small open diamond between invisible lower hands; NO hands/bodies, no orb. MIDDLE peak: a VERY NARROW STRAIGHT diagonal cutting filament from UPPER RIGHT to LOWER LEFT, bright cyan sharp leading tip at lower-left, dark plum/indigo contour and a little warm gold rim, short tied thread trails; NOT curved arc or wide beam. RIGHT settle: four short broken black-violet silk threads falling, sparse gold/cyan flecks, visibly dim."
+    },
+    {
+      "id": "fate-lash",
+      "boss": "morvane",
+      "seed": "c",
+      "name": "Fate Lash",
+      "route": "single",
+      "desc": "Shadow THREAD WHIP and flowing SILK, no crystal/feathers. LEFT prepare: a short thin curved loop of taut violet shadow thread winding locally, open asymmetrical curve. MIDDLE peak: ONE LONG THICK flowing C-SHAPED shadow-thread lash sweeps from upper-right into a broad LEFTWARD curve, cyan/ivory leading rim with small gold accent, layered torn silk edges. Must differ clearly from the narrow STRAIGHT Severing Bolt. RIGHT settle: three small torn thread curls dangle and fall downward, low dim sparse texture, no new whipping arc."
+    },
+    {
+      "id": "call-the-court",
+      "boss": "morvane",
+      "seed": "c",
+      "name": "Call the Court",
+      "route": "summon",
+      "desc": "R1 recommended SUMMON at a revived minion CHEST slot, NO damage. LEFT prepare: two small frayed shadow-cloth folds peel apart horizontally into a shallow OPEN CUP, NOT a vertical dimensional tear or floor ring. MIDDLE peak: ONE eerie shadow HAND reaches UP from the small cupped torn cloth, thin dangling shadow threads attached to its wrist, cyan/gold rim on dark violet fingers, no arm/body/face/character; this is an ephemeral VFX hand not a minion sprite. Compact upright hand silhouette with clear fingers, no portal oval/slit/frame/ring and no floor. RIGHT settle: four short frayed cloth/thread wisps shrink and fade downward. Visually unlike the old Call the Rift vertical pointed portal."
+    },
+    {
+      "id": "call-the-court-r2",
+      "base": "call-the-court",
+      "boss": "morvane",
+      "seed": "c",
+      "name": "Call the Court R2",
+      "route": "summon",
+      "alternative": "R2",
+      "desc": "R2 alternative SUMMON at revived minion CHEST slot, NO damage. LEFT prepare: small gathered shadow SILK folds twist at lower center, NOT a closed ring. MIDDLE peak: a rising curved PLUME OF TATTERED SHADOW CLOTH, branching into THREE separated flowing cloth tips, cyan/gold thin rim on violet silk; no hand, no body, no face, no stones/feathers, no outlined portal/vertical slit/oval or floor ring. Cloth folds and curved silhouette must clearly differ from old Call the Rift's rigid upright dimensional tear. RIGHT settle: sparse tiny ragged cloth/thread fragments fall and vanish."
+    },
+    {
+      "id": "shadow-tide",
+      "boss": "morvane",
+      "seed": "c",
+      "name": "Shadow Tide",
+      "route": "all",
+      "ground": true,
+      "desc": "LOW FLOWING SHADOW SILK, no water/clouds/rocks/crystals. LEFT prepare: a shallow horizontal torn-cloth wave lip with two loose threads, small low silhouette. MIDDLE peak: ONE compact LOW crest of violet shadow-cloth rolling RIGHT to LEFT, trailing short torn silk threads, dark indigo contour and mint/cyan rim with tiny gold accents, ONE hero footprint only, no giant screen-covering wall. RIGHT settle: three tiny frayed shadow tassels sink and dissipate, sparse low-opacity, no new wave."
+    },
+    {
+      "id": "severed-crown",
+      "boss": "morvane",
+      "seed": "c",
+      "name": "Severed Crown",
+      "route": "caster",
+      "phase_change": true,
+      "desc": "Local phase-change sigil of GOLD CROWN and BROKEN SHADOW THREADS, no crystal feathers/stones. LEFT prepare: thin warm gold crown-edge outline made from three pointed torn silk folds, sparse cyan seams. MIDDLE peak: an OPEN ring-like CROWN OF SEVERED THREADS expanding locally, five warm GOLD pointed crown tips connected by flowing broken violet silk filaments with CLEAR GAPS, elegant asymmetrical arc and ragged dark cloth edges, no text/symbols, no physical body/head and no full-screen explosion. RIGHT settle: tiny sparse warm gold sparks and short frayed violet threads fall and fade, no new crown/attack."
+    }
+  ],
+  "selected_sources": {
+    "mountain-fall": "mountain-fall-r2",
+    "wing-gathering-r2": "wing-gathering-r2-clean",
+    "severing-bolt": "severing-bolt-r2"
+  }
+}
