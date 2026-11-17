@@ -2,8 +2,8 @@
   "task": "ART-VFX-WB-TRIO-REV-001 intake",
   "files": {
     "docs/combat-presentation/wb-vfx-revision-slice/README_TH.md": {
-      "sha256": "6decf7323e18c968bc9242442f1c453d95397e9ddda83a204512224271d4b110",
-      "bytes": 3930
+      "sha256": "d7f9b65ca9f40b62266ab8d1264a00461125f9661d5b9a0c5eea7910899827b4",
+      "bytes": 4160
     },
     "docs/combat-presentation/wb-vfx-revision-slice/clips.js": {
       "sha256": "a6eed30c3c24e7925857442f9a0b99b02ab4f7e204512d296e39a24759ab9043",
@@ -168,8 +168,8 @@
       "bytes": 8847
     },
     "docs/validation/wb-vfx-revision/README_TH.md": {
-      "sha256": "70799427117bc02388e5f4e9f8135bb92a2d74a543a40cb9173e447555740704",
-      "bytes": 8418
+      "sha256": "5235bff693bcd0925f58b59c6b6b8867bdfb608de5d5c76cc92d353a41301756",
+      "bytes": 8816
     },
     "docs/validation/wb-vfx-revision/before/severing-bolt-normal-peak-390.jpg": {
       "sha256": "517885323fdaa3aa8c681c2a3b12937d7efecbf6885960b7362eb43132c4fec2",
@@ -295,7 +295,10 @@
   "owner": {
     "intake_authorized": "นำเข้าเกมได้",
     "review_delegation": "คุณทำการตรวจสอบแทนเจ้าของ",
-    "direct_owner_visual_approval_claimed": false
+    "direct_owner_visual_approval_claimed": false,
+    "owner_approval_recorded": true,
+    "owner_approval_quote": "อนุมัติ นำเข้าเกมได้",
+    "owner_personally_viewed_continuous_playback_claimed": false
   },
   "delegatedReview": {
     "reviewer": "Codex",

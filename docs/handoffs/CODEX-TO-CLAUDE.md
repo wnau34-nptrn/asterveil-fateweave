@@ -1,3 +1,8 @@
+## 2026-11-17 — WB VFX owner acceptance / game intake (Codex; PR #294 → feature/fateweave-initial-prototype)
+- Owner: “อนุมัติ นำเข้าเกมได้”, following delegated review. #294 carries the #292 intake dependency plus #293’s7 clarity layers into the game; #292 itself is not merged. No unrelated work or Rise Beyond changes.
+- Local checks already passed: unit2038/23 skipped, browser WB18/18, fast/reduced6/6, typecheck/lint/build, coverage6/6, lossless81-frame audit. Merge is gated on PR quality + browser CI; the existing Pages workflow handles publication afterward (do not wait/poll Pages).
+- Owner acceptance is recorded; frame-based review limits remain explicit. [Evidence/receipt](../validation/wb-vfx-revision/README_TH.md). Rules/save/catalog/balance/timing remain unchanged.
+
 ## 2026-11-17 — WB VFX delegated visual review (Codex; PR #294, unmerged)
 - Owner delegated: “คุณทำการตรวจสอบแทนเจ้าของ”. Codex accepts the three clarity changes at390px; no repeat owner-review gate for this delegated scope. This is Codex’s decision, not a claim of the owner’s direct visual approval.
 - Inspected162 selected decoded frames across5 clips (544 decoded total), real before/after and Wing variants. Bolt/Tide/Wing hold + release/break pass the visual brief; cyan-core/bright-bow/small-settle limits accepted. [Decision/evidence](../validation/wb-vfx-revision/CODEX_VISUAL_REVIEW_TH.md).
