@@ -1,4 +1,4 @@
-## 2026-11-18 — World Boss pre-fight guides (Codex; fix/world-boss-prefight-guide → game branch; see PR for merge commit)
+## 2026-11-18 — World Boss pre-fight guides (Codex; fix/world-boss-prefight-guide → game branch; [PR #299 and merge commit](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/299))
 - Owner asked for all three bosses to show tactics before battle. The Fight tab displays one guide below the current selection and scrolls it into view while preserving selection focus. The Bosses tab shares the same advice.
 - Kragmor explains the armour and Mountain Fall, Valdrakk explains Bash on Wing Gathering and a fallback for Dive, and Morvane explains the court and the damage-credit requirement. Confirmed Bash targets physical charge and Sigil targets energy.
 - Regression coverage checks the three selections at 390px, the guide/Start association and unchanged attempt count. Warden stays for 14 Dec per OD-51. Checks linked in the PR.
