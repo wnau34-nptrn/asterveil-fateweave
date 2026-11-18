@@ -22,7 +22,7 @@ import { wbTurns } from './fixtures/world-boss';
 // P11-05 step 3 (docs/design/WORLD_BOSS_TRIO_P11_05_TH.md §5): the World Boss object keeps three bars a week from
 // `trio.from` on (the warden's one bar before it, and P11-04 tables migrate to it), each bar's HP from last week's
 // attempts on that boss, hits carry their boss, claims read the bar the id names, the ledger records boss shards, and
-// `/verify` replays trio attempts and claims. The live rules leave `trio.from` unset (OD-51), so these tests schedule it.
+// `/verify` replays trio attempts and claims. The shipped rules start the trio in week 2969 (OD-52); these tests schedule it at W (2968) on a copy.
 
 const rules = gameRules.worldBoss; const trio = rules.trio;
 const D = 20_773; const W = weekOf(D); // D is a Monday
@@ -62,6 +62,19 @@ describe('P11-05 World Boss object: three bars', () => {
     clock.t = midnight(D + 7) + HOUR;
     expect(boss.bars()!.map(b => [b.boss, b.hp])).toEqual([['kragmor', trioSharedHp(liveRules, 5)], ['valdrakk', trio.hp.min], ['morvane', trio.hp.min]]);
     expect(trioSharedHp(liveRules, 5)).toBe(2000);
+  });
+
+  it('the shipped rules (OD-52): week 2968 is the warden\'s, week 2969 opens the trio from the warden\'s attempts ÷ 3', () => {
+    expect(W).toBe(2968); expect(trio.from).toBe(W + 1);
+    const clock = { t: midnight(D) + HOUR }; const boss = new WorldBossHost(memoryBossStore(), rules, () => clock.t);
+    expect(boss.bars()!.map(b => b.boss)).toEqual(['warden']);
+    const hits = Array.from({ length: 30 }, (_, i) => hit(`${i % 10}`.repeat(32), Math.floor(i / 10) + 1, 50));
+    boss.contribute(hits);
+    expect(boss.status(W)).toMatchObject({ accounts: 10, attempts: 30 });
+    clock.t = midnight(D + 7) + HOUR;
+    expect(boss.bars()!.map(b => [b.boss, b.hp, b.left])).toEqual(['kragmor', 'valdrakk', 'morvane'].map(b => [b, 4000, 4000]));
+    expect(boss.status(W + 1, 'warden')).toBeNull();
+    expect(boss.status(W)).toMatchObject({ attempts: 30, left: boss.status(W)!.hp - 1500 });
   });
 
   it('each hit lowers only its own bar, once, never below 0; a hit on a bar the week lacks takes nothing', () => {

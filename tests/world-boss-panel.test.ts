@@ -11,7 +11,7 @@ import type { Intent } from '../src/core/battle/types';
 import type { WorldBossStatus } from '../src/platform/server-client';
 
 // P11-04 part 2 / P11-05 step 4: the World Boss page is a pure view of the book and the shared bars the server reports.
-// The warden pages run on the shipped rules (`trio.from` unset, OD-51); the trio pages on a rules copy that sets `from`.
+// The warden pages run on the shipped rules (week W = 2968, before the trio's first week 2969, OD-52); the trio pages on a rules copy that sets `from`.
 const D = 20_773; const W = weekOf(D);
 const TRIO: readonly MapDefinition[] = MAPS.map((m, i) => i === 0 ? { ...m, worldBoss: { ...m.worldBoss, trio: { ...m.worldBoss.trio, from: W } } } : m);
 const commander = { name: 'ทดสอบ', crest: 'star', color: 'gold', camp: 'ค่ายทดสอบ' } as const;
@@ -26,7 +26,7 @@ const trioPlayed = (boss: 'kragmor' | 'valdrakk' | 'morvane', attempts: number, 
   base({ worldBoss: { weeks: [{ week, attempts, bosses: { [boss]: { attempts, damage: attempts * 300, best: 300 } }, claimed }] }, ...extra });
 const view = (tab: WbPageState['tab'], extra: Partial<WbPageState> = {}): WbPageState => ({ tab, pick: 'kragmor', ...extra });
 
-describe('World Boss page, warden weeks (trio.from unset)', () => {
+describe('World Boss page, warden weeks (before trio.from)', () => {
   it('shows the week, the attempts and the personal milestones; offline has no shared bar', () => {
     const fight = worldBossPage(played(2, ['p-2']), MAPS, D, null, false, view('fight'));
     expect(fight).toContain('2/5'); expect(fight).toContain('id="wb-offline"'); expect(fight).not.toContain('class="wb-bar"'); expect(fight).toContain('ครั้งที่ 3/5'); expect(fight).not.toContain('wb-boss-card'); expect(fight).not.toContain('wb-fight-advice');

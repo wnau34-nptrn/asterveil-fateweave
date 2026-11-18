@@ -28,7 +28,7 @@ const copyWeek = (w: WorldBossWeek): WorldBossWeek => ({ week: w.week, attempts:
   ...(w.legacy ? { legacy: { ...w.legacy } } : {}), claimed: [...w.claimed] });
 export const wbWeekOf = weekOf;
 export const isWbBoss = (v: unknown): v is WbBossId => (WB_BOSSES as readonly unknown[]).includes(v);
-// P11-05: the trio stands from week `trio.from` on; before it (and while `from` is not set, OD-51) the warden does.
+// P11-05: the trio stands from week `trio.from` on; before it (or if `from` is not set) the warden does. OD-52: from week 2969.
 export const trioLive = (rules: WorldBossRules, week: number): boolean => rules.trio.from !== undefined && week >= rules.trio.from;
 // A week's total and best damage over the trio and the warden (`legacy`).
 export function wbWeekDamage(w: WorldBossWeek): { damage: number; best: number } {

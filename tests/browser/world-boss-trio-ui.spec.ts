@@ -7,18 +7,18 @@ import { parseGame } from '../../src/core/save/expedition-save';
 import { xpAt } from '../fixtures/camp-level';
 
 // P11-05 step 4 at 390px, offline: the camp banner, the four-tab World Boss page and the trio fight/craft views. The shipped
-// rules leave `trio.from` unset (OD-51), so the dev server's `rules.ts` is rewritten in flight to set it (week 0 on).
+// rules start the trio in week 2969 (OD-52), so the dev server's `rules.ts` is rewritten in flight to start it at week 0.
 const key = 'asterveil.fateweave.expedition.v1';
 const shots = 'docs/validation/p11-05-2026-11-16';
 
 async function openTrio(page: Page, shards = 0): Promise<void> {
   // Dev server: `rules.ts` is served as source; the CI build (PLAYWRIGHT_PAGES) bundles it into JS chunks. Both keep the `bosses: { kragmor:` key.
-  const at = /bosses:\s*\{\s*kragmor:/;
+  const at = /(?:from:\s*\d+,\s*)?(bosses:\s*\{\s*kragmor:)/;
   let patched = 0;
   await page.route(/\/(src\/content\/world\/rules\.ts|assets\/[^/]+\.js)(\?.*)?$/, async route => {
     const r = await route.fetch(); const body = await r.text();
     if (!at.test(body)) { await route.fulfill({ response: r, body }); return; }
-    patched++; await route.fulfill({ response: r, body: body.replace(at, 'from:0,$&') });
+    patched++; await route.fulfill({ response: r, body: body.replace(at, 'from:0,$1') });
   });
   page.on('close', () => { expect(patched).toBeGreaterThan(0); });
   const p = newProfile(chapterOne, 17, ['guardian', 'tracer', 'weaver', 'healer']); p.tutorialDone = true;

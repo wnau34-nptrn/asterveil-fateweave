@@ -11,6 +11,7 @@ import { applyCommand, parseCommand } from '../src/core/command/game-command';
 import { sequenceSeeds } from '../src/core/command/seed-source';
 import { parseGame, SAVE_VERSION, type Game } from '../src/core/save/expedition-save';
 import { weekOf } from '../src/core/world/board';
+import { serverDay } from '../src/server/ledger';
 import { gearTotals, itemValid, TRIO_FIRST, TRIO_SLOTS } from '../src/core/world/equipment';
 import { protectedItem } from '../src/core/world/storage';
 import { newProfile, equip } from '../src/core/world/profile';
@@ -25,7 +26,7 @@ import { morvaneLesson } from '../src/ui/world-boss-advice';
 
 // P11-05 step 2 (docs/design/WORLD_BOSS_TRIO_P11_05_TH.md §2–§4, §8): the trio's world rules (attempts shared by three
 // bosses, a tally per boss, boss shards, milestones), the three item powers in the resolver, crafting, save v65 with the
-// v64 migration, the weekly budget and a three-boss week simulation. The warden stays live (OD-51: `trio.from` unset);
+// v64 migration, the weekly budget and a three-boss week simulation. The shipped rules start the trio in week 2969 (OD-52), so week W (2968) is still the warden's;
 // tests that play the trio schedule it with a copy of the rules.
 
 const rules = gameRules.worldBoss; const trio = rules.trio;
@@ -47,8 +48,9 @@ const value = (r: SweepReward): number => r.ore + 2 * r.gold + 12 * (r.shard ?? 
 const dead = (boss?: WbBossId, week = W) => ({ week, hp: 1500, left: 0, ...(boss ? { boss } : {}) });
 
 describe('P11-05 trio content and scheduling', () => {
-  it('names three catalog encounters, one item per boss on its own slot, and stays unscheduled (OD-51: the warden stays)', () => {
-    expect(trio.from).toBeUndefined(); expect(trioLive(rules, W)).toBe(false); expect(trioLive(liveHome.worldBoss, W)).toBe(true); expect(trioLive(liveHome.worldBoss, W - 1)).toBe(false);
+  it('names three catalog encounters, one item per boss on its own slot, and is scheduled from week 2969 (OD-52: Monday 23 Nov 2026 06:00 Bangkok)', () => {
+    expect(trio.from).toBe(2969); expect(W).toBe(2968); expect(trioLive(rules, W)).toBe(false); expect(trioLive(rules, W + 1)).toBe(true);
+    expect(weekOf(serverDay(Date.parse('2026-11-23T05:59:59+07:00')))).toBe(2968); expect(weekOf(serverDay(Date.parse('2026-11-23T06:00:00+07:00')))).toBe(2969); expect(trioLive(liveHome.worldBoss, W)).toBe(true); expect(trioLive(liveHome.worldBoss, W - 1)).toBe(false);
     expect(WB_BOSSES.map(b => lookup(trio.bosses[b]))).toEqual(WORLD_BOSS_TRIO);
     for (const b of WB_BOSSES) { const it = trio.items[b]; expect(TRIO_SLOTS[it.power]).toBe(it.slot); expect(TRIO_FIRST[it.power]).toBe(it.first); }
     expect(new Set(WB_BOSSES.map(b => trio.items[b].slot)).size).toBe(3);

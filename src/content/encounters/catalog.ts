@@ -295,7 +295,7 @@ export const worldBossWarden: EncounterDefinition = {
 
 // P11-05 World Boss trio v1 (docs/design/WORLD_BOSS_TRIO_P11_05_TH.md §1, draft numbers from the design probe). Each keeps
 // the warden's field shape (five heroes, bark rules) and a boss with the World Boss HP that cannot fall inside an attempt's
-// eight rounds. Registered in the catalog from step 2 (save v65); offered once `WorldBossTrioRules.from` is set.
+// eight rounds. Registered in the catalog from step 2 (save v65); offered from `WorldBossTrioRules.from` (week 2969, OD-52).
 const boss = (name: string, displayName: string, speed: number, extra: Partial<EncounterDefinition['enemies'][number]> = {}) =>
   ({ id: 'f1' as const, row: 'front' as const, large: true, boss: true, speed, name, displayName, maxHp: WORLD_BOSS_HP, color: 0xd9bf86, art: 'foe_sentinel', ...extra });
 const mv = (name: string, slot: number, damage: number, kind: 'physical' | 'energy', more: Partial<IntentDefinition> = {}): IntentDefinition =>
@@ -354,8 +354,8 @@ export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatr
 // P11-05 step 2: the catalog lookup also knows the World Boss trio (world rules, saves and replays name them). They stay out of
 // `encounters` (the rule tests walk it and assert the advisor wins from full HP, which a World Boss never allows by design).
 // `presentedEncounters` is what the presentation coverage and the texture-budget audit walk: `encounters` plus every trio boss
-// whose moves have body clips (Kragmor with WB-A, step 5; Valdrakk/Morvane join with WB-B/WB-C). Until `WorldBossTrioRules.from`
-// is set nobody can fight them.
+// whose moves have body clips (Kragmor with WB-A, step 5; Valdrakk/Morvane join with WB-B/WB-C). They are fought from
+// `WorldBossTrioRules.from` (week 2969, OD-52).
 export const presentedEncounters: readonly EncounterDefinition[] = [...encounters, wbKragmor, wbValdrakk, wbMorvane];
 const lookupList: readonly EncounterDefinition[] = [...encounters, ...WORLD_BOSS_TRIO];
 export const encounterById = (id: string): EncounterDefinition | undefined => lookupList.find(e => e.id === id);
