@@ -1,3 +1,9 @@
+## 2026-11-18 — P11-05 step 6 (Codex; chore/p1105-step6-balance → game branch; merge commit in PR)
+- Resolver and server replay probe compared nine field teams, four bosses, basic attacks, advisor and boss-specific responses. [Results and reproduction](../validation/p11-05-step6/README_TH.md).
+- OD-51: activation gate did not pass. Morvane starter adds-first scores 0; advisor-based shared kill rate at 10–20 accounts is 3–17%. The court HP trial helps survival and the pressure route helps damage. Balance questions are in “ฝากถึง Claude”.
+- Warden stays, `trio.from` unset. Candidate week 2971 is 7 Dec 06:00 Bangkok. No trio staging run. Content hash `5278f631cd330bde`; the direct live API version read was blocked by the proxy.
+- Checks and limits in validation and the PR. Chromium Warden spec verifies the real prerelease gate. No runtime or approved asset changes.
+
 ## 2026-11-18 — Asset intake audit (Codex; codex/asset-intake-audit → game branch)
 - Owner asked whether anything failed to enter the game. Read-only runtime audit of game c0e6319 (#295): no missing authorized trio artwork/routes; 19 file hashes, VFX lossless receipts and seven revision layers match.
 - Body/banner/emblem/item/stills/portraits/VFX are integrated via game PRs although original art PRs remain open. #292 stays unmerged. Trio is still gated by unset `trio.from`; step6 remains a separate task.
