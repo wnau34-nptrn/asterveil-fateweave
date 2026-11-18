@@ -1,4 +1,4 @@
-## 2026-11-18 — Compact title and Setup (Codex; fix/compact-title-setup → game branch; see PR for merge commit)
+## 2026-11-18 — Compact title and Setup (Codex; fix/compact-title-setup → game branch; [PR #300 and merge commit](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/300))
 - Owner approved implementation of the portrait mockups. The current artwork stays full-bleed with one bottom HUD action and top-right Setup. Reuses game audio prefs, account/recovery, feedback, privacy, and restart confirmation.
 - A pending local-save import remains the primary action, and save details move into Setup. Blocking save/connection messages stay discoverable. #234 remains separate.
 - Tests cover responsive frame, sound persistence, Escape and focus, account/feedback/import flows, and restart without save loss on cancellation. Playwright Chromium used because Browser plugin unavailable. See PR checks.
