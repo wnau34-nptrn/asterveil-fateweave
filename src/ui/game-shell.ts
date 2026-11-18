@@ -149,9 +149,14 @@ export class GameShell {
     const summary = document.createElement('section'); root.append(summary); this.summary = new SummaryUI(summary, map);
     this.commander = new CommanderUI(views.commander, { create: c => this.createCommander(c), back: () => { this.replacing = false; this.showTitle(); } });
     views.title.addEventListener('click', e => {
-      const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-title]');
+      const target = e.target as HTMLElement;
+      const setup = views.title.querySelector<HTMLDetailsElement>('#title-setup');
+      if (setup?.open && !setup.contains(target)) setup.open = false;
+      const button = target.closest<HTMLButtonElement>('button[data-title]');
       if (!button) return;
-      if (button.dataset.title === 'account') { void this.account?.open(); return; }
+      if (button.dataset.title === 'account' || button.dataset.title === 'recovery') {
+        void this.account?.open(button.dataset.title === 'account' ? 'google' : 'recovery', button); return;
+      }
       if (button.dataset.title === 'feedback') { this.feedback?.open('title'); return; }
       if (button.dataset.title === 'import') { this.importLocal(); return; }
       if (button.dataset.title === 'continue' && this.game) { if (this.state) this.resume(); else if (!this.game.profile.commander) this.showCommander(false); else this.showLobby(); }
@@ -159,6 +164,13 @@ export class GameShell {
         if (this.game && button.dataset.confirm !== 'yes') { button.dataset.confirm = 'yes'; button.textContent = 'ยืนยัน: ลบค่ายและทีมทั้งหมดแล้วเริ่มใหม่'; return; }
         this.showCommander(true);
       }
+    });
+    views.title.addEventListener('keydown', e => {
+      const setup = views.title.querySelector<HTMLDetailsElement>('#title-setup[open]');
+      if (e.key !== 'Escape' || !setup) return;
+      setup.open = false;
+      setup.querySelector('summary')?.focus({ preventScroll: true });
+      e.preventDefault();
     });
     // Shared audio preferences in the in-game settings tabs.
     root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-music-toggle]')) { this.music.setMuted(!this.music.settings.muted); this.refreshMusicControls(); } });
@@ -204,14 +216,16 @@ export class GameShell {
     for (const [id, key] of [['world-team', 'T'], ['world-pack', 'B'], ['world-info-button', 'I'], ['battle-info', 'I']]) root.querySelector(`#${id}`)?.setAttribute('aria-keyshortcuts', key!);
   }
   private refreshMusicControls(): void {
-    const p = this.music.settings;
-    this.root.querySelectorAll<HTMLButtonElement>('[data-music-toggle]').forEach(b => { b.setAttribute('aria-pressed', String(!p.muted)); b.setAttribute('aria-label', p.muted ? 'เปิดเพลง' : 'ปิดเพลง'); b.innerHTML = icon(p.muted ? 'musicOff' : 'music') + (b.classList.contains('audio-toggle') ? `<span>เพลง: ${p.muted ? 'ปิด' : 'เปิด'}</span>` : ''); });
-    this.root.querySelectorAll<HTMLInputElement>('[data-music-volume]').forEach(v => { v.disabled = p.muted; v.value = String(Math.round(p.volume * 100)); });
-    this.root.querySelectorAll<HTMLOutputElement>('[data-music-level]').forEach(ml => { ml.value = `${Math.round(p.volume * 100)}%`; });
-    const s = sfx.settings;
-    this.root.querySelectorAll<HTMLButtonElement>('[data-sfx-toggle]').forEach(st => { st.setAttribute('aria-pressed', String(!s.muted)); st.setAttribute('aria-label', s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'); st.innerHTML = icon(s.muted ? 'soundOff' : 'sound') + `<span>เอฟเฟกต์: ${s.muted ? 'ปิด' : 'เปิด'}</span>`; });
-    this.root.querySelectorAll<HTMLInputElement>('[data-sfx-volume]').forEach(sv => { sv.disabled = s.muted; sv.value = String(Math.round(s.volume * 100)); });
-    this.root.querySelectorAll<HTMLOutputElement>('[data-sfx-level]').forEach(sl => { sl.value = `${Math.round(s.volume * 100)}%`; });
+    for (const kind of ['music', 'sfx'] as const) {
+      const { muted, volume, toggleLabel, toggleIcon, toggleContent } = this.audioState(kind);
+      this.root.querySelectorAll<HTMLButtonElement>(`[data-${kind}-toggle]`).forEach(button => {
+        button.setAttribute('aria-pressed', String(!muted)); button.setAttribute('aria-label', toggleLabel);
+        button.innerHTML = button.classList.contains('title-audio-toggle') ? (muted ? 'เปิด' : 'ปิด')
+          : button.classList.contains('audio-toggle') ? toggleContent : toggleIcon;
+      });
+      this.root.querySelectorAll<HTMLInputElement>(`[data-${kind}-volume]`).forEach(input => { input.disabled = muted; input.value = String(volume); });
+      this.root.querySelectorAll<HTMLOutputElement>(`[data-${kind}-level]`).forEach(output => { output.value = `${volume}%`; });
+    }
   }
   setBattleVisibilityListener(listener: (visible: boolean) => void): void { this.onBattleVisibility = listener; }
 
@@ -232,16 +246,25 @@ export class GameShell {
     if (view === 'battle') { const b = this.state?.battle; return b?.kind === 'boss' || (b?.kind === 'elite' && this.map.elites.find(e => e.id === b.source)?.mini) ? 'boss' : 'battle'; }
     return ({ title: 'camp', commander: 'archway', lobby: 'ruins', world: 'meadow' } as const)[view];
   }
-  private musicControls(prefix = ''): string {
-    const p = this.music.settings;
-    return `<div class="music-controls audio-settings"><button id="${prefix}music-toggle" data-music-toggle class="round-glass audio-toggle" aria-pressed="${!p.muted}" aria-label="${p.muted ? 'เปิดเพลง' : 'ปิดเพลง'}">${icon(p.muted ? 'musicOff' : 'music')}<span>เพลง: ${p.muted ? 'ปิด' : 'เปิด'}</span></button>`
-      + `<label class="music-volume"><input id="${prefix}music-volume" data-music-volume type="range" min="0" max="100" step="5" value="${Math.round(p.volume * 100)}" aria-label="ระดับเสียงเพลง"${p.muted ? ' disabled' : ''}></label><output id="${prefix}music-level" data-music-level for="${prefix}music-volume">${Math.round(p.volume * 100)}%</output></div>`
-      + this.effectsControls(prefix);
+  private audioState(kind: 'music' | 'sfx') {
+    const music = kind === 'music';
+    const { muted, volume } = music ? this.music.settings : sfx.settings;
+    const label = music ? 'เพลง' : 'เอฟเฟกต์';
+    const toggleLabel = `${muted ? 'เปิด' : 'ปิด'}${music ? 'เพลง' : 'เสียงเอฟเฟกต์'}`;
+    const toggleIcon = icon(music ? muted ? 'musicOff' : 'music' : muted ? 'soundOff' : 'sound');
+    const toggleContent = toggleIcon + `<span>${label}: ${muted ? 'ปิด' : 'เปิด'}</span>`;
+    return { label, muted, volume: Math.round(volume * 100), toggleLabel, toggleIcon, toggleContent };
   }
-  private effectsControls(prefix: string): string {
-    const s = sfx.settings;
-    return `<div class="music-controls audio-settings"><button id="${prefix}sfx-toggle" data-sfx-toggle class="round-glass audio-toggle" aria-pressed="${!s.muted}" aria-label="${s.muted ? 'เปิดเสียงเอฟเฟกต์' : 'ปิดเสียงเอฟเฟกต์'}">${icon(s.muted ? 'soundOff' : 'sound')}<span>เอฟเฟกต์: ${s.muted ? 'ปิด' : 'เปิด'}</span></button>`
-      + `<label class="music-volume"><input id="${prefix}sfx-volume" data-sfx-volume type="range" min="0" max="100" step="5" value="${Math.round(s.volume * 100)}" aria-label="ระดับเสียงเอฟเฟกต์"${s.muted ? ' disabled' : ''}></label><output id="${prefix}sfx-level" data-sfx-level for="${prefix}sfx-volume">${Math.round(s.volume * 100)}%</output></div>`;
+  private musicControls(prefix: string, compact = false): string {
+    return (['music', 'sfx'] as const).map(kind => {
+      const { label, muted, volume, toggleLabel, toggleContent } = this.audioState(kind);
+      const id = `${prefix}${kind}`;
+      const toggle = `<button type="button" id="${id}-toggle" data-${kind}-toggle class="${compact ? 'title-audio-toggle' : 'round-glass audio-toggle'}" aria-pressed="${!muted}" aria-label="${toggleLabel}">${compact ? muted ? 'เปิด' : 'ปิด' : toggleContent}</button>`;
+      const range = `<input id="${id}-volume" data-${kind}-volume type="range" min="0" max="100" step="5" value="${volume}" aria-label="ระดับเสียง${label}"${muted ? ' disabled' : ''}>`;
+      const output = `<output id="${id}-level" data-${kind}-level for="${id}-volume">${volume}%</output>`;
+      return compact ? `<div class="title-audio-row"><div class="title-audio-volume"><label for="${id}-volume">${label}</label>${output}${range}</div>${toggle}</div>`
+        : `<div class="music-controls audio-settings">${toggle}<label class="music-volume">${range}</label>${output}</div>`;
+    }).join('');
   }
   private showTitle(): void {
     const g = this.game; const s = g?.run;
@@ -253,15 +276,38 @@ export class GameShell {
     const offer = g ? undefined : this.importOffer();
     const offerChips = offer ? [['flag', `ทีม ${offer.game.profile.company.length} คน`], ['ore', `แร่ดาว ${offer.game.profile.bank.ore}`], ...(offer.game.run ? [['footprints', 'มีการเดินทางค้างอยู่']] : [])]
       .map(([i, t]) => `<span>${icon(i as IconName)}${t}</span>`).join('') : '';
-    // Layered title: drifting painting, light rays and motes behind a logo that resolves into focus.
-    this.views.title.innerHTML = `<div class="title-stage" aria-hidden="true"><div class="title-bg"></div><div class="title-rays"></div>
-      <div class="title-motes">${'<i></i>'.repeat(14)}</div><div class="title-vignette"></div></div>
-      <div class="title-card"><h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1><p class="title-copy">ข้ามรอยแยก · ถักทอโชคชะตา</p>
-      <div class="title-actions">${g ? `<p class="title-save">${s ? 'การเดินทางที่บันทึกไว้' : 'ค่ายของคุณ'}<span class="title-chips">${summary}</span></p><button id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ →' : 'เข้าค่าย →'}</button>` : ''}
-      ${offer ? `<div class="title-import"><p class="title-save">พบเซฟเดิมในเครื่องนี้<span class="title-chips">${offerChips}</span></p><button id="import-save" data-title="import" class="primary">นำเข้าเซฟนี้ไปยังบัญชีเซิร์ฟเวอร์</button><p class="title-import-note">นำเข้าได้ครั้งเดียวต่อบัญชี · เซฟในเครื่องยังเก็บไว้เหมือนเดิม</p></div>` : ''}
-      <button id="new-game" data-title="new" class="${g || offer ? 'secondary' : 'primary'}">${g ? 'เริ่มเกมใหม่' : offer ? 'เริ่มเกมใหม่บนเซิร์ฟเวอร์' : 'เริ่มเกม'}</button>
-
-      ${this.server ? `<button id="account-open" data-title="account" class="secondary">บัญชี · Google · รหัสกู้คืน</button><button id="feedback-open" data-title="feedback" class="secondary">ส่งความเห็น / แจ้งปัญหา</button><p class="title-server">เล่นผ่านเซิร์ฟเวอร์ทดลอง · ความคืบหน้าบันทึกบนเซิร์ฟเวอร์</p>${this.titleNote ? `<p class="title-server-note" role="status">${this.titleNote}</p>` : ''}` : this.storage ? '' : '<p class="title-warning">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>'}</div><p class="title-footer">ชายแดนแอสเตอร์เวล</p><a class="title-privacy" href="${import.meta.env.BASE_URL}privacy.html" target="_blank" rel="noopener">นโยบายความเป็นส่วนตัว</a></div>`;
+    const play = g ? `<button type="button" id="continue" data-title="continue" class="primary">${s ? 'เดินทางต่อ' : 'เข้าค่าย'} <span aria-hidden="true">→</span></button>`
+      : offer ? '<button type="button" id="import-save" data-title="import" class="primary" aria-describedby="title-import-note">นำเข้าเซฟเดิม <span aria-hidden="true">→</span></button>'
+        : '<button type="button" id="new-game" data-title="new" class="primary">เริ่มเกม <span aria-hidden="true">→</span></button>';
+    this.views.title.innerHTML = `<div class="title-stage" aria-hidden="true"><div class="title-bg"></div><div class="title-motes">${'<i></i>'.repeat(14)}</div></div>
+      <h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1>
+      <details id="title-setup" class="title-setup">
+        <summary id="title-setup-toggle" aria-controls="title-setup-panel">Setup <span aria-hidden="true">×</span></summary>
+        <div id="title-setup-panel" class="title-setup-panel">
+          <section class="title-setup-group" aria-labelledby="title-audio-heading"><h2 id="title-audio-heading">เสียง</h2>${this.musicControls('title-', true)}</section>
+          ${this.server || g || offer ? `<section class="title-setup-group" aria-labelledby="title-account-heading"><h2 id="title-account-heading">บัญชีและเซฟ</h2>
+            ${this.server ? '<button type="button" id="account-open" data-title="account" class="title-menu-entry">จัดการบัญชี Google <span aria-hidden="true">›</span></button><button type="button" id="recovery-open" data-title="recovery" class="title-menu-entry">รหัสกู้คืนบัญชี <span aria-hidden="true">›</span></button><p class="title-server">ความคืบหน้าบันทึกบนเซิร์ฟเวอร์</p>' : ''}
+            ${g ? `<p class="title-save">${s ? 'การเดินทางที่บันทึกไว้' : 'ค่ายของคุณ'}<span class="title-chips">${summary}</span></p>` : ''}
+            ${offer ? `<div class="title-import"><p class="title-save">พบเซฟเดิมในเครื่องนี้<span class="title-chips">${offerChips}</span></p><p class="title-import-note">นำเข้าได้ครั้งเดียวต่อบัญชี · เซฟในเครื่องยังเก็บไว้เหมือนเดิม</p></div>` : ''}
+          </section>` : ''}
+          <section class="title-setup-group" aria-labelledby="title-help-heading"><h2 id="title-help-heading">ความช่วยเหลือ</h2>
+            ${this.server ? '<button type="button" id="feedback-open" data-title="feedback" class="title-menu-entry">ส่งความเห็น / แจ้งปัญหา <span aria-hidden="true">›</span></button>' : ''}
+            <a class="title-privacy title-menu-entry" href="${import.meta.env.BASE_URL}privacy.html" target="_blank" rel="noopener">นโยบายความเป็นส่วนตัว <span aria-hidden="true">›</span></a>
+          </section>
+          ${g || offer ? `<div class="title-setup-group"><button type="button" id="new-game" data-title="new" class="title-menu-entry title-restart">${g ? 'เริ่มเกมใหม่' : 'เริ่มเกมใหม่บนเซิร์ฟเวอร์'}</button></div>` : ''}
+        </div>
+      </details>
+      <div class="title-hud">
+        ${offer ? '<p id="title-import-note">พบเซฟเดิมในเครื่อง · นำเข้าไปยังบัญชีเซิร์ฟเวอร์ได้ครั้งเดียว</p>' : ''}
+        ${this.titleNote ? `<p class="title-server-note" role="status">${this.titleNote}</p>` : ''}
+        ${!this.server && !this.storage ? '<p class="title-warning" role="status">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>' : ''}
+        ${play}
+      </div>`;
+    const setup = this.views.title.querySelector<HTMLDetailsElement>('#title-setup')!;
+    setup.addEventListener('toggle', () => {
+      const restart = setup.querySelector<HTMLButtonElement>('[data-confirm="yes"]');
+      if (!setup.open && restart) { delete restart.dataset.confirm; restart.textContent = 'เริ่มเกมใหม่'; }
+    });
     this.show('title');
     this.views.title.querySelector<HTMLElement>(g ? '#continue' : offer ? '#import-save' : '#new-game')?.focus({ preventScroll: true });
   }

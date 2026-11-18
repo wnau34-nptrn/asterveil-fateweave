@@ -1,3 +1,4 @@
+import { openTitleSetup } from './fixtures/title-setup';
 import {closeTalentDetails} from './talent-navigation';
 import { openForgeTools, chooseForgeTask } from './forge-navigation';
 import { expect, test, type Page } from '@playwright/test';
@@ -61,7 +62,9 @@ test('a new expedition walks tile by tile with buttons, keys and adjacent taps; 
   await expect.poll(async () => (await saved(page)).position).toEqual({ x: start.x + 1, y: start.y });
   expect((await saved(page)).steps).toBe(3);
   await page.screenshot({ path: info.outputPath('world-start.png') });
-  await page.reload(); await expect(page.locator('#title-view')).toContainText('เดินแล้ว 3 ก้าว'); await page.locator('#continue').click();
+  await page.reload(); await openTitleSetup(page);
+  await expect(page.locator('.title-save')).toContainText('เดินแล้ว 3 ก้าว');
+  await page.locator('#continue').click();
   await expect(page.locator('#party-token')).toHaveCSS('--x', String(start.x + 1));
   expect(issues).toEqual([]);
 });
@@ -362,7 +365,9 @@ for (const [width, height] of [[320, 568], [390, 844], [1366, 768]]) {
     await page.setViewportSize({ width: width!, height: height! });
     const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
     await seed(page, base()); await page.goto('./');
-    await expect(page.locator('#title-view [data-music-volume], #title-view [data-sfx-volume], [data-sfx-test]')).toHaveCount(0);
+    await expect(page.locator('#title-music-volume')).toBeHidden();
+    await expect(page.locator('#title-sfx-volume')).toBeHidden();
+    await expect(page.locator('[data-sfx-test]')).toHaveCount(0);
     await reachable(page, '#continue');
     await page.screenshot({ path: info.outputPath('bright-home.png') });
     await page.locator('#continue').click(); await page.locator('#world-info-button').click();
@@ -383,7 +388,11 @@ for (const [width, height] of [[320, 568], [390, 844], [1366, 768]]) {
     await expect(page.locator('#world-tab-guide')).toBeFocused();
     await expect(page.locator('#world-panel-guide')).toBeVisible();
     await page.keyboard.press('Escape'); await expect(page.locator('#world-info-button')).toBeFocused();
-    await page.reload(); await page.locator('#continue').click(); await page.locator('#world-info-button').click(); await page.locator('#world-tab-settings').click();
+    await page.reload(); await openTitleSetup(page);
+    await expect(page.locator('#title-music-volume')).toHaveValue('35');
+    await expect(page.locator('#title-sfx-volume')).toHaveValue('45');
+    await expect(page.locator('#title-sfx-volume')).toBeDisabled();
+    await page.locator('#continue').click(); await page.locator('#world-info-button').click(); await page.locator('#world-tab-settings').click();
     await expect(page.locator('#world-sfx-volume')).toHaveValue('45');
     await expect(page.locator('#world-sfx-volume')).toBeDisabled();
     await expect(page.locator('#world-music-volume')).toHaveValue('35');
@@ -911,10 +920,16 @@ test('map events: stepping on one opens its choices; the shrine heals with a wou
 test('starting a new game from the title requires confirmation and resets the company', async ({ page }) => {
   const issues = await open(page, base({ steps: 9 }));
   await page.reload(); await expect(page.locator('#continue')).toContainText('เดินทางต่อ');
+  await openTitleSetup(page);
   await page.locator('#new-game').click(); await expect(page.locator('#new-game')).toContainText('ยืนยัน'); expect((await saved(page)).steps).toBe(9);
+  await page.keyboard.press('Escape'); await expect(page.locator('#title-setup-toggle')).toBeFocused();
+  await openTitleSetup(page);
+  await expect(page.locator('#new-game')).toHaveText('เริ่มเกมใหม่');
+  await page.locator('#new-game').click();
   await page.locator('#new-game').click(); await expect(page.locator('#commander-view')).toBeVisible();
   // Backing out keeps the old save; confirming a commander replaces it.
   await page.locator('[data-cmd=back]').click(); expect((await saved(page)).steps).toBe(9);
+  await openTitleSetup(page);
   await page.locator('#new-game').click(); await page.locator('#new-game').click();
   await page.locator('#commander-name').fill('ผู้กองใหม่'); await page.locator('#commander-create').click();
   // The new company starts with the prologue and its first battle.

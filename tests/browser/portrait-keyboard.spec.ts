@@ -1,3 +1,4 @@
+import { openTitleSetup } from './fixtures/title-setup';
 import { expect, test, type Page } from '@playwright/test';
 import { chapterOne as map } from '../../src/content/world/chapter1';
 import { encounterById } from '../../src/content/encounters/catalog';
@@ -47,7 +48,13 @@ for (const [width, height, touch] of [[1366, 768, false], [1920, 1080, false], [
     const frame = (await page.locator('#app').boundingBox())!;
     expect(frame.width).toBeLessThanOrEqual(480); expect(frame.width).toBeLessThan(frame.height);
     expect(Math.abs(frame.x + frame.width / 2 - width / 2)).toBeLessThanOrEqual(1);
-    for (const id of ['#continue', '#new-game']) await inFrame(page, id);
+    for (const id of ['#continue', '#title-setup-toggle']) await inFrame(page, id);
+    await expect(page.locator('#new-game')).toBeHidden();
+    await openTitleSetup(page);
+    await page.locator('#new-game').scrollIntoViewIfNeeded();
+    await inFrame(page, '#new-game');
+    await page.locator('#title-setup-toggle').press('Escape');
+    await expect(page.locator('#title-setup-panel')).toBeHidden();
     await page.screenshot({ path: info.outputPath('portrait-title.png') });
     await page.locator('#continue').click(); await expect(page.locator('#lobby-view')).toBeVisible();
     await inFrame(page, '#lobby-depart'); await page.locator('#lobby-tab-team').click();
@@ -188,4 +195,34 @@ test('short PC window requests more height without scaling buttons below their t
   await page.setViewportSize({ width: 844, height: 600 }); await expect(page.locator('#orientation-gate')).not.toBeVisible();
   const frame = (await page.locator('#app').boundingBox())!; expect(frame.height).toBe(600); expect(frame.width).toBeLessThan(frame.height);
   await inFrame(page, '#new-game');
+});
+
+test('compact title: Setup changes shared audio and closes at the original focus', async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const issues: string[] = [];
+  page.on('pageerror', error => issues.push(error.message));
+  page.on('console', message => { if (message.type() === 'error') issues.push(message.text()); });
+  const run = newExpedition(map, encounterById, 35, undefined, true); run.tutorialDone = true;
+  await seed(page, run);
+  await expect(page.locator('.title-hud button')).toHaveCount(1);
+  await expect(page.locator('#continue')).toContainText('เดินทางต่อ');
+  await expect(page.locator('#title-setup-panel')).toBeHidden();
+  await page.screenshot({ path: info.outputPath('compact-title-390.png') });
+  await openTitleSetup(page);
+  const music = page.locator('#title-music-volume');
+  await music.focus(); await page.keyboard.press('Home'); await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#title-music-level')).toHaveText('5%');
+  const toggle = page.locator('#title-sfx-toggle');
+  await toggle.click(); await expect(page.locator('#title-sfx-volume')).toBeDisabled();
+  await expect(page.locator('#world-sfx-volume')).toBeDisabled();
+  await toggle.click(); await expect(page.locator('#title-sfx-volume')).toBeEnabled();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#title-setup-toggle')).toBeFocused();
+  await expect(page.locator('#title-setup-panel')).toBeHidden();
+  await page.reload();
+  await openTitleSetup(page);
+  await expect(page.locator('#title-music-volume')).toHaveValue('5');
+  await page.screenshot({ path: info.outputPath('title-setup-390.png') });
+  await page.locator('#continue').click(); await expect(page.locator('#world-view')).toBeVisible();
+  expect(issues).toEqual([]);
 });

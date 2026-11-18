@@ -1,3 +1,8 @@
+## 2026-11-18 — Compact title and Setup (Codex; fix/compact-title-setup → game branch; [PR #300 and merge commit](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/300))
+- Owner approved implementation of the portrait mockups. The current artwork stays full-bleed with one bottom HUD action and top-right Setup. Reuses game audio prefs, account/recovery, feedback, privacy, and restart confirmation.
+- A pending local-save import remains the primary action, and save details move into Setup. Blocking save/connection messages stay discoverable. #234 remains separate.
+- Tests cover responsive frame, sound persistence, Escape and focus, account/feedback/import flows, and restart without save loss on cancellation. Playwright Chromium used because Browser plugin unavailable. See PR checks.
+
 ## 2026-11-18 — World Boss pre-fight guides (Codex; fix/world-boss-prefight-guide → game branch; [PR #299 and merge commit](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/299))
 - Owner asked for all three bosses to show tactics before battle. The Fight tab displays one guide below the current selection and scrolls it into view while preserving selection focus. The Bosses tab shares the same advice.
 - Kragmor explains the armour and Mountain Fall, Valdrakk explains Bash on Wing Gathering and a fallback for Dive, and Morvane explains the court and the damage-credit requirement. Confirmed Bash targets physical charge and Sigil targets energy.

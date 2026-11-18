@@ -2,6 +2,7 @@ import { expect, test, type Browser, type Page, type Route } from '@playwright/t
 import { contentVersion } from '../../scripts/content-version.mjs';
 import { SESSION_HEADER } from '../../src/server/account-object';
 import { CONTENT_HEADER, handle } from '../../src/server/api';
+import { openTitleSetup } from './fixtures/title-setup';
 import { currentSave } from '../fixtures/current-save';
 import { withGoogle } from '../fixtures/google-fake';
 import { battleTurns, grantAdmin, server, storedGame, type Server } from '../fixtures/server-fakes';
@@ -44,6 +45,7 @@ test('server play: a guest account plays through the dev API with retries, input
   await page.setViewportSize({ width: 390, height: 844 });
   const w = await serve(page);
   await page.goto(`./?server=${encodeURIComponent(API)}`);
+  await openTitleSetup(page);
   await expect(page.locator('.title-server')).toBeVisible();
   await expect(page.locator('#continue')).toHaveCount(0);
 
@@ -160,7 +162,8 @@ async function device(browser: Browser, s: Server): Promise<{ page: Page; close(
   await page.route('https://accounts.google.com/gsi/client', route => route.fulfill({ contentType: 'text/javascript', body: GIS_STUB }));
   await serve(page, s);
   await page.goto(`./?server=${encodeURIComponent(API)}`);
-  await expect(page.locator('#account-open')).toBeVisible();
+  await expect(page.locator('#title-setup-toggle')).toBeVisible();
+  await expect(page.locator('#account-open')).toBeHidden();
   return { page, close: () => context.close() };
 }
 
@@ -175,6 +178,8 @@ test('server play account: link Google, sign in on a second device, recover on a
   await phone.page.locator('[data-story=skip]').click();
   await expect(phone.page.locator('#save-status')).toHaveText('บันทึกบนเซิร์ฟเวอร์ทุกเทิร์น');
   await phone.page.reload();
+  await openTitleSetup(phone.page);
+  await phone.page.screenshot({ path: info.outputPath('title-setup-online-390.png') });
   await phone.page.locator('#account-open').click();
   await expect(phone.page.locator('.account-status')).toHaveAttribute('data-status', 'guest');
   await phone.page.locator('[data-account="code"]').click();
@@ -191,6 +196,7 @@ test('server play account: link Google, sign in on a second device, recover on a
   // Laptop: its own guest first; Google is already on the phone's account, so it offers to switch (never merges).
   const laptop = await device(browser, s);
   await expect(laptop.page.locator('#continue')).toHaveCount(0);
+  await openTitleSetup(laptop.page);
   await laptop.page.locator('#account-open').click();
   await tokenFor(laptop.page, 'g-owner');
   await laptop.page.locator('#fake-google').click();
@@ -206,11 +212,14 @@ test('server play account: link Google, sign in on a second device, recover on a
 
   // Tablet: the recovery code reaches the same account once; the same code on another device is refused.
   const tablet = await device(browser, s);
-  await tablet.page.locator('#account-open').click();
+  await openTitleSetup(tablet.page);
+  await tablet.page.locator('#recovery-open').click();
+  await expect(tablet.page.locator('#account-recovery')).toBeFocused();
   await tablet.page.locator('#account-code-input').fill(code.toLowerCase());
   await tablet.page.locator('[data-account="recover"]').click();
   await expect(tablet.page.locator('#continue')).toBeVisible();
   const again = await device(browser, s);
+  await openTitleSetup(again.page);
   await again.page.locator('#account-open').click();
   await again.page.locator('#account-code-input').fill(code);
   await again.page.locator('[data-account="recover"]').click();
@@ -218,6 +227,7 @@ test('server play account: link Google, sign in on a second device, recover on a
 
   // P09-02f sign-out: the tablet signs the phone and laptop out, then itself (linked to Google: no warning) and starts
   // over as a new guest; Google brings it back.
+  await openTitleSetup(tablet.page);
   await tablet.page.locator('#account-open').click();
   await tablet.page.locator('[data-account="signout-others"]').click();
   await expect(tablet.page.locator('.account-note')).toHaveText('ออกจากระบบเครื่องอื่นแล้ว 2 เครื่อง');
@@ -226,6 +236,7 @@ test('server play account: link Google, sign in on a second device, recover on a
   await expect(tablet.page.locator('#account-panel')).toBeHidden();
   await expect(tablet.page.locator('.title-server-note')).toContainText('ออกจากระบบแล้ว');
   await expect(tablet.page.locator('#continue')).toHaveCount(0);
+  await openTitleSetup(tablet.page);
   await tablet.page.locator('#account-open').click();
   await expect(tablet.page.locator('.account-status')).toHaveAttribute('data-status', 'guest');
   // The fresh guest has no Google or code: signing it out asks first.
@@ -248,7 +259,10 @@ test('server play import (D11): the title offers the local save once and the ser
   await page.addInitScript(([k, v]) => { if (!localStorage.getItem(k!)) localStorage.setItem(k!, v!); }, [SAVE_KEY, raw]);
   await page.goto(`./?server=${encodeURIComponent(API)}`);
   await expect(page.locator('#import-save')).toBeVisible();
+  await openTitleSetup(page);
+  await expect(page.locator('.title-import')).toBeVisible();
   await expect(page.locator('.title-import')).toContainText('พบเซฟเดิมในเครื่องนี้');
+  await page.locator('#title-setup-toggle').click();
   await expect(page.locator('#new-game')).toHaveText('เริ่มเกมใหม่บนเซิร์ฟเวอร์');
   await page.screenshot({ path: info.outputPath('server-import-offer-390.png') });
   await page.locator('#import-save').click();
@@ -277,6 +291,7 @@ test('server play account: delete with a typed confirm, the waiting state, cance
   await page.locator('[data-story=skip]').click();
   await expect(page.locator('#save-status')).toHaveText('บันทึกบนเซิร์ฟเวอร์ทุกเทิร์น');
   await page.reload();
+  await openTitleSetup(page);
   await page.locator('#account-open').click();
   await page.locator('[data-account="delete"]').click();
   await expect(page.locator('.account-delete .account-warn')).toContainText('14 วัน');
@@ -309,6 +324,7 @@ test('server play account: delete with a typed confirm, the waiting state, cance
 test('server play feedback: send from the title and from battle settings; admin views', async ({ browser }, info) => {
   const s = server(undefined, contentVersion());
   const d = await device(browser, s); const page = d.page;
+  await openTitleSetup(page);
   await page.locator('#feedback-open').click();
   await expect(page.locator('#feedback-dialog')).toBeVisible();
   await page.locator('[data-feedback="send"]').click();
@@ -337,6 +353,7 @@ test('server play feedback: send from the title and from battle settings; admin 
   const accountId = (s.d1.db.prepare('SELECT id FROM accounts').get() as { id: string }).id;
   grantAdmin(s, accountId);
   await page.reload();
+  await openTitleSetup(page);
   await page.locator('#feedback-open').click();
   await page.locator('[data-feedback="admin-telemetry"]').click();
   await expect(page.locator('.feedback-table')).toContainText('feedback · idea');
