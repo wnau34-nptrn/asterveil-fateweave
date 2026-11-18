@@ -110,6 +110,8 @@
 #lobby-view .wb-tabs button { min-height:44px; }
 #lobby-view .wb-trio { display:grid; gap:8px; } #lobby-view .wb-trio p, #lobby-view .wb-board p { margin:0; font-size:13px; line-height:1.55; }
 #lobby-view .wb-boss-list { display:grid; gap:8px; }
+#lobby-view .wb-prefight { gap:4px; border-color:#ffd36e66; }
+#lobby-view .wb-prefight h4 { margin:0; color:var(--gold-light); font-size:14px; }
 #lobby-view .wb-boss-card { display:flex; gap:10px; align-items:center; width:100%; min-height:96px; padding:10px 12px; text-align:left; border:1px solid #e8f5ff2a; border-radius:14px; background:linear-gradient(90deg,#08111de6 0,#08111dc2 58%,#08111d40 100%),var(--banner) right center/cover no-repeat,#0d1c2e; color:var(--text); overflow:hidden; }
 #lobby-view .wb-boss-card[data-selected=true] { border-color:#ffd36e; box-shadow:0 0 12px #ffd36e44; }
 #lobby-view .wb-boss-text { display:grid; gap:3px; min-width:0; flex:1; max-width:68%; text-shadow:0 1px 3px #000c; } #lobby-view .wb-boss-text b { font-size:15px; } #lobby-view .wb-boss-text small { font-size:12px; color:var(--text-muted); }

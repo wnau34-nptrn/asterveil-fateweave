@@ -221,7 +221,12 @@ export class LobbyUI {
         case 'quest-tab': this.questTab = b.dataset.tab as QuestTab; this.draw(); this.focus(`#quest-tab-${this.questTab}`); break;
         case 'wboss': this.forgeStorageReturn = false; this.huntUI.cancel(); this.preview = undefined; this.confirmDismiss = false; this.sheet = 'wboss'; this.host.worldBossStatus(); this.draw(); this.focus('#lobby-sheet-title'); break;
         case 'wb-tab': this.wbTab = b.dataset.tab as WbTab; this.wbCraft = undefined; if (this.wbTab !== 'bosses') this.host.worldBossStatus(); this.draw(); this.focus(`#wb-tab-${this.wbTab}`); break;
-        case 'wb-pick': this.wbPick = b.dataset.boss as WbBossId; this.draw(); this.focus(`#wb-pick-${this.wbPick}`); break;
+        case 'wb-pick': {
+          this.wbPick = b.dataset.boss as WbBossId;
+          this.draw(); this.focus(`#wb-pick-${this.wbPick}`);
+          this.root.querySelector('#wb-fight-guide')?.scrollIntoView({ block: 'nearest' });
+          break;
+        }
         case 'wb-start': this.host.startWorldBoss(this.trioWeek() ? this.wbPick : undefined); break;
         case 'wb-claim': this.host.claimWorldBoss(b.dataset.id!, Number(b.dataset.week)); this.focus('#wb-tab-rewards'); break;
         case 'wb-craft': this.wbCraft = this.wbCraft?.boss === b.dataset.boss ? undefined : { boss: b.dataset.boss as WbBossId, affixes: [] }; this.draw(); this.focus(this.wbCraft ? '#wb-craft-sheet' : `#wb-craft-${b.dataset.boss}`); break;
