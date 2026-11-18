@@ -1,0 +1,81 @@
+{
+  "gameCommit": "c0e6319546cd75ff7993f90d0fce0a459b5bf291",
+  "files": [
+    {
+      "file": "public/assets/units/kragmor_wba.3234efb60c1f.webp",
+      "sha256": "3234efb60c1f640f4801b4a9d658d4f476468623f95382d3561b2ca905819ad4"
+    },
+    {
+      "file": "public/assets/units/kragmor_wba.9a14ad1f9c65.json",
+      "sha256": "9a14ad1f9c659fc9345689f17f1ee8885168f43179eb0a7ba392a7ab1c8fbcdd"
+    },
+    {
+      "file": "public/assets/units/valdrakk_wbb.7987cfe5b464.webp",
+      "sha256": "7987cfe5b4647ebe683e31a71d8a5c5b26c42aeb42c035155083a2ffbdf20b9d"
+    },
+    {
+      "file": "public/assets/units/valdrakk_wbb.03334e5611bb.json",
+      "sha256": "03334e5611bb0764e986a14b308743229cee73abb0ab08fcaa3acee8541079de"
+    },
+    {
+      "file": "public/assets/units/morvane_wbc.1e867b20b7ab.webp",
+      "sha256": "1e867b20b7abdbd01f32b3bc8c64a8e31897fcba069ea6935ddd674cea188a90"
+    },
+    {
+      "file": "public/assets/units/morvane_wbc.25862c8b0b73.json",
+      "sha256": "25862c8b0b736077790f5dc4879ad8a5c55886d9c8d3b6deed9de081fc57185f"
+    },
+    {
+      "file": "public/assets/ui/worldboss/banner_kragmor.25a871b5.webp",
+      "sha256": "25a871b5203aa24c36e9cf13ddd7ee823cd54563be0d26f0487573310d6e35a6"
+    },
+    {
+      "file": "public/assets/ui/worldboss/emblem_kragmor.971f11f8.webp",
+      "sha256": "971f11f830f18cda495e1fb9a94f47e5e3bfaadfe222724478bf00502eedab25"
+    },
+    {
+      "file": "public/assets/ui/worldboss/banner_valdrakk.7cb9a173.webp",
+      "sha256": "7cb9a173ed4df580688bfab9138748746d55d602800954e852fb46b96eac1186"
+    },
+    {
+      "file": "public/assets/ui/worldboss/emblem_valdrakk.4e22528c.webp",
+      "sha256": "4e22528ce8718a23f4daa327234c78d013e5af56130a5e2a7bc011fc3044f21c"
+    },
+    {
+      "file": "public/assets/ui/worldboss/banner_morvane.e2d490ce.webp",
+      "sha256": "e2d490ce41b6c12295eeda171774d48bd3fd1523572af615bb9dfd74ae3a56e3"
+    },
+    {
+      "file": "public/assets/ui/worldboss/emblem_morvane.73abccf0.webp",
+      "sha256": "73abccf09aa795191abbee5782c61ec7750549d11eaa93c03eb9b9824518b2b7"
+    },
+    {
+      "file": "public/assets/ui/worldboss/banner_trio.128f8d66.webp",
+      "sha256": "128f8d66efe9b069eb26fb6106e98f08a0f8318657a2e4fe0590491c71269a0c"
+    },
+    {
+      "file": "public/assets/art/units_worldboss.webp",
+      "sha256": "0a48e7a2d5652f31fd6d314b234e129f9f778cfd44ebc096889d372d6ccb5034"
+    },
+    {
+      "file": "public/assets/art/portraits_worldboss.webp",
+      "sha256": "68cc3528a2a5efa3b13f15d1ab9516fe01b2764cfc30445f9868bc095e12900f"
+    },
+    {
+      "file": "public/assets/fx/boss_signature_fx.webp",
+      "sha256": "f452a9c727ad87e3ac0448d18563267bdb5be83c6bad95b78a09fd73dd14ab8e"
+    },
+    {
+      "file": "public/assets/fx/boss_signature_fx.json",
+      "sha256": "98852464b7eb5ac915b1de8a5932d4ba6a7fa9a7101440da5d7d1dfa77682407"
+    },
+    {
+      "file": "src/game/visuals/boss-signature-art.json",
+      "sha256": "e4672fa0f843f8f41b1d2463a62721fcbd52a6befdf35e3a6c3758319cccb2e0"
+    },
+    {
+      "file": "public/assets/ui/equip/gear_items.webp",
+      "sha256": "41f13dbb98b0c2c7ae2f9e4b124c21ef5b2a6ffd1db939aff7b963e9aaf9e870"
+    }
+  ]
+}
