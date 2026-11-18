@@ -1,3 +1,8 @@
+## 2026-11-18 — Battle HUD: status icons under HP, glass inspector, top-row spacing (Opus; claude/battle-hud-status-spacing → game branch)
+- Owner request with a 390px battle screenshot: (1) buff/debuff icons move from beside the field HP track to a band under it; (2) the unit inspector (กำลังดู) becomes glass like the turn strip; (3) the top row comes down so its gap to the middle row matches the middle→bottom gap.
+- `field-layout.ts`: each row reserves a 13px status band (dropped on fields too short for 44px figures, where icons stay beside the track), up to 4 icons per unit; each side's top row drops to its own middle row, held up by another side's large figure only where its painted middle ¾ reaches under the track. Presentation only: no rules/save/content change.
+- Tests: field-layout unit test (rule updated + new spacing test), full Vitest (2041), typecheck, lint, build, Chromium status/battle-hud/team-five specs (23). Shot: `docs/validation/battle-hud-2026-11-18/battle-390.png`. Not yet approved by the owner visually.
+
 ## 2026-11-18 — P11-05 trio go-live, OD-52 (Opus; claude/p11-05-trio-go-live → game branch; [PR #301](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/301))
 - Owner: “ไม่ต้องสนใจเส้นตายทดสอบภาพนอกอะไรนั่น” + “ทำข้อ 1 เลย” → OD-52 replaces OD-51's Warden-until-test part. `trio.from = 2969` (Mon 23 Nov 06:00 Bangkok, first reset after release); week 2968 stays the Warden's.
 - No number changes: the sim (29 passed) and the probe on the shipped rules match the coach evidence (400 HP, half-coach 20 accounts: Morvane 50% in 98% of weeks, killed in 47–48%). Save v65 and encounter versions are unchanged; the content version changes, and dev API + Pages deploy together on push.

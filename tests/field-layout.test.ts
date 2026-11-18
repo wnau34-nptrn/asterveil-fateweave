@@ -43,10 +43,23 @@ describe('adaptive front-arc battlefield geometry', () => {
         expect(a.label).toBeUndefined();
         for (const j of plan.used) if (i !== j) {
           expect(intersects(a.panel, slots[j]!.panel), `${width}x${height} panels ${i}/${j}`).toBe(false);
-          expect(intersects(a.panel, slots[j]!.body), `${width}x${height} panel ${i}/body ${j}`).toBe(false);
+          // Owner 2026-11-18: a top row may come down beside the other side's large figure; there only its painted
+          // middle three quarters must stay clear of the drawn track and the status band under it.
+          const b = slots[j]!.body, other = (i >= 4 && i <= 7 || i >= 10) !== (j >= 4 && j <= 7 || j >= 10);
+          const bar = Math.min(a.panel.width, 72), track = { x: a.panel.x + (a.panel.width - bar) / 2, y: a.panel.y, width: bar, height: a.panel.height + a.statusBand };
+          expect(other && plan.large.has(j) ? intersects(track, { x: b.x + b.width * .125, y: b.y, width: b.width * .75, height: b.height }) : intersects({ ...a.panel, height: a.panel.height + a.statusBand }, b),
+            `${width}x${height} panel ${i}/body ${j}`).toBe(false);
         }
       }
     }
+  });
+  it('brings a side\'s top row down to its own middle row, under a status band (owner 2026-11-18)', () => {
+    const plan = slotPlan(party(['front', 'front', 'front', 'back', 'back']), [{ id: 'f1', large: true }, { id: 'b1' }], new Set());
+    const slots = fieldSlots(378, 481, plan);
+    expect(slots[2]!.statusBand).toBe(13); expect(slots[2]!.maxIcons).toBeGreaterThan(1);
+    const gap = (top: number, below: number) => slots[below]!.body.y - (slots[top]!.panel.y + slots[top]!.panel.height + slots[top]!.statusBand);
+    // The heroes' top-to-middle gap matches their middle-to-bottom gap although the middle row holds a large foe.
+    expect(gap(2, 9)).toBeCloseTo(gap(9, 3), 0);
   });
   it('keeps a 1.5× boss on a tall phone and caps scale on a short phone before shrinking normal figures below 44px', () => {
     const plan = slotPlan(party(['front', 'front', 'front', 'back', 'back']), [

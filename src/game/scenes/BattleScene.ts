@@ -597,7 +597,7 @@ export class BattleScene extends Phaser.Scene {
     const obstacles: [Box, number][] = [[{ x: fig.left, y: fig.top, width: fig.right - fig.left, height: figH * .42 }, 3]];
     for (const [other, panel] of this.actorPanels) {
       const bar = Math.min(panel.panel.width, 72);
-      obstacles.push([{ x: panel.panel.x + (panel.panel.width - bar) / 2, y: panel.panel.y, width: bar, height: panel.panel.height }, 3]);
+      obstacles.push([{ x: panel.panel.x + (panel.panel.width - bar) / 2, y: panel.panel.y, width: bar, height: panel.panel.height + panel.statusBand }, 3]); // + the status icon band under the track
       if (panel.label) obstacles.push([panel.label, 2]);
       const box = other === id ? undefined : this.figureBox(other);
       if (box) obstacles.push([{ x: box.left, y: box.top, width: box.right - box.left, height: box.bottom - box.top }, 1]);

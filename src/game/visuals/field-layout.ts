@@ -2,6 +2,8 @@ export interface FieldBox { x: number; y: number; width: number; height: number 
 export interface FieldSlot {
   x: number; y: number; size: number; body: FieldBox; panel: FieldBox; label?: FieldBox;
   compact: boolean; tiny: boolean; side: boolean; iconSize: number; maxIcons: number;
+  // Height of the icon band under the track (0 on fields too short for it: the icons then sit beside the track).
+  statusBand: number;
 }
 
 /** Stable tactical cells: heroes back/front, foes front/back; top/middle/bottom.
@@ -36,13 +38,17 @@ const none: SlotLayout = { large: new Set(), rows: new Map(), trio: new Set() };
 export function fieldSlots(width: number, height: number, layout: SlotLayout = none): FieldSlot[] {
   const used = layout.used ?? SLOT_IDS;
   const rowOf = (id: number): Row => layout.rows.get(id) ?? (id >= 8 ? 1 : id % 2 ? 2 : 0);
+  // `status`: the band under each HP track that holds the buff/debuff icons (owner 2026-11-18: icons below the track).
+  // A field too short to keep 44px figures with the band drops it (the icons then overlap the gap below the track).
   const panel = 14, gap = 8, edge = height < 240 ? 4 : 8;
+  let status = 13;
   const cap = Math.floor(Math.min(140, width * UNIT_WIDTH) * UNIT_SCALE);
   const geometry = (base: number, scale: number) => {
     const rises = [0, 1, 2].map(row => Math.max(base * 1.022, ...used.filter(id => rowOf(id) === row).map(id =>
       base * (layout.large.has(id) ? scale : 1) * (layout.rise?.get(id) ?? 1) * 1.022 + (layout.large.has(id) ? 12 : 0))));
-    return { rises, required: edge * 2 + rises.reduce((a, b) => a + b, 0) + 3 * panel + 2 * gap };
+    return { rises, required: edge * 2 + rises.reduce((a, b) => a + b, 0) + 3 * (panel + status) + 2 * gap };
   };
+  if (geometry(Math.min(44, cap), 1).required > height) status = 0;
   let scale = LARGE_SCALE;
   // The minimum is a visual size, not a control size (hit targets stay >=44px).
   while (scale > 1 && geometry(Math.min(44, cap), scale).required > height) scale = Math.max(1, Math.round((scale - .05) * 100) / 100);
@@ -52,8 +58,8 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
   const extra = Math.max(0, height - required), stepExtra = extra / 3;
   const rows: number[] = [];
   let cursor = edge + stepExtra;
-  for (let row = 0; row < 3; row++) { cursor += rises[row]!; rows.push(cursor); cursor += panel + gap + stepExtra; }
-  return SLOT_IDS.map(id => {
+  for (let row = 0; row < 3; row++) { cursor += rises[row]!; rows.push(cursor); cursor += panel + status + gap + stepExtra; }
+  const slots = SLOT_IDS.map(id => {
     const large = layout.large.has(id), size = base * (large ? scale : 1), row = rowOf(id), y = rows[row]!;
     let x = width * COLUMNS[columnOf(id)]!;
     // A large front-middle foe may borrow the empty back-middle cell, keeping clear
@@ -63,11 +69,31 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
     const cellWidth = Math.min(width * .24, Math.max(72, base * .78));
     const rise = layout.rise?.get(id) ?? 1;
     return {
-      x, y, size, compact: base < 70, tiny: base < 44, side: false, iconSize: 12, maxIcons: 1,
+      x, y, size, compact: base < 70, tiny: base < 44, side: false, iconSize: 12, statusBand: status, maxIcons: status ? Math.max(1, Math.min(4, Math.floor((Math.min(cellWidth, 72) + 2) / 14))) : 1,
       body: { x: x - size * .5, y: y - size * rise * 1.022, width: size, height: size * rise * 1.022 },
       panel: { x: Math.max(0, Math.min(width - cellWidth, x - cellWidth / 2)), y: y + 2, width: cellWidth, height: panel - 2 },
     };
   });
+  // The row is as tall as its tallest figure (often a large foe), which left a side's top row floating far above its own
+  // middle row. Owner 2026-11-18: each side's top row comes down so the space above that side's middle-row figures
+  // matches the other row gaps. A figure of the other side still holds it up where its painted body (about three quarters
+  // of its box, centred) would reach under the top row's HP track and status band.
+  for (const side of [[0, 1], [2, 3]] as const) {
+    const top = used.filter(id => rowOf(id) === 0 && side.includes(columnOf(id) as never));
+    if (!top.length) continue;
+    const bands = top.map(id => { const p = slots[id]!.panel, bar = Math.min(p.width, 72); return [p.x + (p.width - bar) / 2, p.x + (p.width + bar) / 2] as const; });
+    const under = used.filter(id => rowOf(id) === 1).filter(id => {
+      if (side.includes(columnOf(id) as never)) return true;
+      const b = slots[id]!.body, l = b.x + b.width * .125, r = b.x + b.width * .875;
+      return bands.some(([bl, br]) => l < br && r > bl);
+    });
+    if (!under.length) continue;
+    const lowest = Math.min(...under.map(id => slots[id]!.body.y - (layout.large.has(id) ? 12 : 0))) - (gap + stepExtra) - status - panel;
+    const drop = lowest - rows[0]!;
+    if (drop <= 0) continue;
+    for (const id of top) { const s = slots[id]!; s.y += drop; s.body.y += drop; s.panel.y += drop; }
+  }
+  return slots;
 }
 
 export interface SlotPlan extends SlotLayout { heroSlots: Map<string, number>; used: number[] }
