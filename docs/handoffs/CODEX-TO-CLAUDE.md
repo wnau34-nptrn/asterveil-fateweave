@@ -1,3 +1,10 @@
+## 2026-11-18 — Asset intake audit (Codex; codex/asset-intake-audit → game branch)
+- Owner asked whether anything failed to enter the game. Read-only runtime audit of game c0e6319 (#295): no missing authorized trio artwork/routes; 19 file hashes, VFX lossless receipts and seven revision layers match.
+- Body/banner/emblem/item/stills/portraits/VFX are integrated via game PRs although original art PRs remain open. #292 stays unmerged. Trio is still gated by unset `trio.from`; step6 remains a separate task.
+- Real pending intake: #262 Warden banner, #169 continent, #234 compact title; #55/#53 await systems, #122 parked. #165 poses and #133 UX have separate game implementations. [Audit/scope](../validation/intake-audit/README_TH.md).
+- Checks: WB/coverage61, equip122 and Chromium390px24 passed; revision verify48 files + seven layers and lossless81 canvases passed. Direct live HTTP blocked by environment proxy; do not infer a game failure from that. No new visual/motion approval claimed.
+- Docs only; no art/runtime/rules/save/balance/timing or Thai move-name change. No additional imports or merges of old art PRs.
+
 ## 2026-11-17 — World Boss own stills/portraits (Codex; PR #295; codex/wb-stills-portraits → game branch; squash commit: see PR)
 - Owner: “ชื่อท่าภาษาไทยไม่เอา”, “ดำเนินการเรื่องที่ยังค้างได้เลย”. Finish existing-art hookup only; no Thai move names, balance or scheduling changes.
 - Derived fallback stills from approved ready frames and cropped original seed portraits for Kragmor/Valdrakk/Morvane; removed Warden placeholder mapping. Separate 256px-cell lossless sheets, real alpha and reproducible provenance; original incoming/animation/VFX preserved.
