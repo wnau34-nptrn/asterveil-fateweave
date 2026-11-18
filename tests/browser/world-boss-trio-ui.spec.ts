@@ -50,14 +50,30 @@ test('banner, three boss cards, craft sheet and boss notes at 390px', async ({ p
   await expect(page.locator('#wb-craft-confirm')).toBeEnabled();
   await page.locator('#wb-craft-confirm').click();
   await expect(page.locator('#wb-item-kragmor')).toContainText('0/40');
-  await page.locator('#wb-tab-bosses').click(); await expect(page.locator('#wb-info-morvane')).toContainText('ไม่ตอบก็สู้ได้แต่');
+  await page.locator('#wb-tab-bosses').click(); await expect(page.locator('#wb-info-morvane')).toContainText('ลงดาเมจใส่บอสเพื่อให้ศึกนับสิทธิ์');
 });
 
-test('a trio attempt opens the battle with the round counter and the picked boss', async ({ page }) => {
+test('a Morvane attempt shows optional advice without committing a turn', async ({ page }) => {
   test.setTimeout(120_000);
   await openTrio(page);
   await page.locator('#lobby-wboss').click(); await page.locator('#wb-pick-morvane').click(); await page.locator('#wb-start').click();
   await expect(page.locator('#battle-view')).not.toHaveClass(/view-off/);
   await expect(page.locator('#start')).toBeEnabled({ timeout: 20_000 }); await page.locator('#start').click();
+  await expect(page.locator('#beat-status')).toContainText('รอบ 1/8');
+  const coach = page.locator('#battle-coach');
+  await expect(coach).toBeVisible();
+  await expect(page.locator('#coach-title')).toContainText('Morvane');
+  await expect(page.locator('#coach-copy')).toContainText('มอร์เวน');
+  const opening = await coach.getAttribute('data-lesson');
+  expect(opening).toBe('1');
+  const dismiss = page.locator('#coach-dismiss');
+  expect((await dismiss.boundingBox())!.width).toBeGreaterThanOrEqual(44);
+  await dismiss.click();
+  await expect(coach).toBeHidden();
+  await page.locator('#battle-info').click();
+  await page.locator('#battle-tab-settings').click();
+  await page.locator('#coach-toggle').click();
+  await page.locator('[data-ui=info-close]').click();
+  await expect(coach).toHaveAttribute('data-lesson', opening!);
   await expect(page.locator('#beat-status')).toContainText('รอบ 1/8');
 });

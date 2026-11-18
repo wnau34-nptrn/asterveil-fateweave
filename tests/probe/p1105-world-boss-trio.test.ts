@@ -11,6 +11,7 @@ import { wbEncounter, wbPlay } from '../../src/core/world/world-boss';
 import { WB_BOSSES, type Profile, type WbBossId } from '../../src/core/world/types';
 import { simulateCampaign, type Policy } from '../sim/balance-sim';
 import { battleLesson } from '../../src/ui/tutorial';
+import { morvaneLesson } from '../../src/ui/world-boss-advice';
 
 // P11-05 World Boss trio — probe (docs/design/WORLD_BOSS_TRIO_P11_05_TH.md). Step 1 (2026-11-16): the three encounters
 // are the real v1 content (`src/content/encounters/world-boss-trio.ts`) on the real rules R1 breakable charge (Valdrakk)
@@ -20,7 +21,7 @@ import { battleLesson } from '../../src/ui/tutorial';
 const OLD = gameRules.worldBoss;
 const MAX_ROUNDS = OLD.maxRounds;
 const home = MAPS[0]!;
-type Style = 'boss-first' | 'adds-first' | 'advisor' | 'answer' | 'pressure';
+type Style = 'boss-first' | 'adds-first' | 'advisor' | 'answer' | 'pressure' | 'morvane-coach';
 interface Sample {
   damage: number;
   hp: number;
@@ -72,8 +73,8 @@ function choice(state: BattleState, data: EncounterDefinition, style: Style, bos
       }
     }
   }
-  if (style === 'advisor' || style === 'answer' || style === 'pressure') {
-    const lesson = battleLesson(state, data);
+  if (style === 'advisor' || style === 'answer' || style === 'pressure' || style === 'morvane-coach') {
+    const lesson = (style === 'morvane-coach' ? morvaneLesson : battleLesson)(state, data);
     if (lesson) {
       const { action, targetId, recipientId, cooldownAction, cooldownTargetId } = lesson;
       // Keep defensive plays and area damage, but put single-target offense into the boss when legal.
@@ -175,7 +176,7 @@ const oldWeek = (): number => value({ ...Z, ...OLD.attemptReward, shard: 0 }) * 
 // ---- Shared HP: does a normal week fall? Deterministic population, previous-week participation sets the HP. ----
 function lcg(seed: number) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 2 ** 32); }
 // Same tier and campaign seed across all bosses. Population and allocation are model inputs; damage is measured.
-function sharedRun(accounts: number, focus: number, perAttempt: number, seed: number, tiers: number[][][]): { fall50: number[]; fall100: number[] } {
+function sharedRun(accounts: number, focus: number, perAttempt: number, seed: number, tiers: number[][][], morvanePerAttempt = perAttempt): { fall50: number[]; fall100: number[] } {
   const rnd = lcg(seed); const players = Array.from({ length: accounts }, () => {
     const t = rnd();
     const pool = tiers[t < 0.25 ? 0 : t < 0.70 ? 1 : 2]!;
@@ -183,7 +184,7 @@ function sharedRun(accounts: number, focus: number, perAttempt: number, seed: nu
   });
   let last = [0, 0, 0]; const fall50 = [0, 0, 0], fall100 = [0, 0, 0];
   for (let w = 0; w < 8; w++) {
-    const hp = last.map(a => Math.min(TRIO.hp.max, Math.max(TRIO.hp.min, a * perAttempt))); const dealt = [0, 0, 0]; const tries = [0, 0, 0];
+    const hp = last.map((a, i) => Math.min(TRIO.hp.max, Math.max(TRIO.hp.min, a * (WB_BOSSES[i] === 'morvane' ? morvanePerAttempt : perAttempt)))); const dealt = [0, 0, 0]; const tries = [0, 0, 0];
     players.forEach(p => { if (!p.active && rnd() < 0.5) return; for (let a = 0; a < p.plays; a++) { const b = rnd() < focus ? p.fav : Math.floor(rnd() * 3); const damage = p.dmg[b]!; if (damage > 0) { dealt[b]! += damage; tries[b]!++; } } });
     if (w >= 2) for (let b = 0; b < 3; b++) { if (dealt[b]! >= hp[b]! / 2) fall50[b]!++; if (dealt[b]! >= hp[b]!) fall100[b]!++; }
     last = tries;
@@ -198,12 +199,17 @@ test.skipIf(!process.env.TRIO_OUT)('world boss trio probe', () => {
   const tiers: number[][][] = [[], [], []];
   const lowerCourtTiers: number[][][] = [[], [], []];
   const mixedTiers: number[][][] = [[], [], []];
+  const coachedTiers: number[][][] = [[], [], []];
+  const mixedCoachedTiers: number[][][] = [[], [], []];
+  const coaching = ['| ค่าย | ดาเมจเดิม → coach | HP คงเหลือเดิม → coach | ล้มเดิม → coach | จบเดิม → coach | กลไกด้วย coach |',
+    '|---|---:|---:|---|---|---|'];
   const tuning = ['| ค่าย | วิธี | ดาเมจบอส เดิม → ทดลอง | HP คงเหลือ เดิม → ทดลอง | คืนชีพ เดิม → ทดลอง |',
     '|---|---|---:|---:|---|'];
   for (const [index, [name, profile]] of companies().entries()) {
     const profileDamage: number[] = [];
     let lowerCourtDamage = 0;
     let pressureDamage = 0;
+    let coachedDamage = 0;
     for (const boss of [undefined, ...WB_BOSSES]) {
       const data = wbEncounter(profile, home, lookup, boss)!;
       const styles: Style[] = ['boss-first', 'adds-first', 'advisor'];
@@ -216,6 +222,11 @@ test.skipIf(!process.env.TRIO_OUT)('world boss trio probe', () => {
       for (const style of styles) {
         const r = sample(data, style, boss);
         if (boss && style === 'advisor') profileDamage.push(r.damage);
+        if (boss === 'morvane' && style === 'advisor') {
+          const coached = sample(data, 'morvane-coach', boss);
+          coachedDamage = coached.damage;
+          coaching.push(`| ${name} | ${r.damage} → ${coached.damage} | ${r.hp}/${r.startHp} → ${coached.hp}/${coached.startHp} | ${r.downs} → ${coached.downs} | ${r.result} → ${coached.result} | ${coached.mechanic} |`);
+        }
         if (style === 'pressure') pressureDamage = r.damage;
         if (candidate && style !== 'boss-first') {
           const trial = sample(candidate, style, boss);
@@ -229,6 +240,9 @@ test.skipIf(!process.env.TRIO_OUT)('world boss trio probe', () => {
     tiers[tier]!.push(profileDamage);
     lowerCourtTiers[tier]!.push([profileDamage[0]!, profileDamage[1]!, lowerCourtDamage]);
     mixedTiers[tier]!.push(profileDamage, [profileDamage[0]!, profileDamage[1]!, pressureDamage]);
+    const coached = [profileDamage[0]!, profileDamage[1]!, coachedDamage];
+    coachedTiers[tier]!.push(coached);
+    mixedCoachedTiers[tier]!.push(profileDamage, coached);
   }
   lines.push('', '¹ ผลรวม damage events ที่ลง HP ในเทิร์นศัตรูตามผู้โจมตี ไม่หักฮีลและไม่รวมความเสียหายนอกเทิร์นศัตรู');
   writeFileSync(`${dir}/damage.md`, lines.join('\n') + '\n');
@@ -275,4 +289,47 @@ test.skipIf(!process.env.TRIO_OUT)('world boss trio probe', () => {
     }
   }
   writeFileSync(`${dir}/shared-hp.md`, s.join('\n') + '\n');
+
+  const draft = home.draft!;
+  const pairs = draft.pool.flatMap((a, i) => draft.pool.slice(i + 1).map(b => [a, b]))
+    .filter(pair => pair.some(id => draft.support.includes(id)));
+  coaching.push('', 'ทีมหลังจบแมพ 1 จากคู่รับสมัครของเกม · เล่นแผนที่จริงด้วย rush/explorer',
+    '', '| คู่รับสมัคร | ทีมที่ลง | แผน / seed | ดาเมจเดิม → coach | HP คงเหลือเดิม → coach | จบเดิม → coach |',
+    '|---|---|---|---:|---:|---|');
+  for (const pair of pairs) for (const [policy, seed] of [['rush', 11], ['explorer', 23]] as const) {
+    // Stop on the first completed map so the fixture carries no progress from later maps.
+    let profile = simulateCampaign(seed, policy, 'advisor', 0, 0, 1, pair).profile;
+    for (let limit = 2; limit <= 3 && !profile.cleared.includes(home.id); limit++) {
+      profile = simulateCampaign(seed, policy, 'advisor', 0, 0, limit, pair).profile;
+    }
+    expect(profile.cleared).toEqual([home.id]);
+    const data = wbEncounter(profile, home, lookup, 'morvane')!;
+    const prev = sample(data, 'advisor', 'morvane');
+    const next = sample(data, 'morvane-coach', 'morvane');
+    expect(next.damage).toBeGreaterThan(0);
+    expect(next.result).toBe(`cap R${MAX_ROUNDS}`);
+    coaching.push(`| ${pair.join(' + ')} | ${data.heroes.map(h => h.id).join(', ')} | ${policy} #${seed} | ${prev.damage} → ${next.damage} | ${prev.hp}/${prev.startHp} → ${next.hp}/${next.startHp} | ${prev.result} → ${next.result} |`);
+  }
+
+  coaching.push('', 'สัดส่วนรอบที่ชุมชนถึงรางวัล · 30 seeds × 6 สัปดาห์ต่อกลุ่ม · ลำดับ Kragmor / Valdrakk / Morvane', '',
+    '| บัญชี | เลือกตัวโปรด | การเล่น Morvane | HP Morvane/ครั้ง | ถึง 50% | ล้ม 100% |', '|---|---|---|---:|---|---|');
+  for (const accounts of [10, 20, 200]) for (const focus of [0.34, 0.7]) {
+    for (const [label, population, per] of [
+      ['advisor เดิมทั้งหมด', tiers, TRIO.hp.perAttempt],
+      ['coach ครึ่งกลุ่ม', mixedCoachedTiers, TRIO.hp.perAttempt],
+      ['coach ทั้งกลุ่ม', coachedTiers, TRIO.hp.perAttempt],
+      ['coach ครึ่งกลุ่ม (ทดลอง HP)', mixedCoachedTiers, 350],
+      ['coach ครึ่งกลุ่ม (ทดลอง HP)', mixedCoachedTiers, 300],
+    ] as const) {
+      const hits = [0, 0, 0], kills = [0, 0, 0];
+      for (let seed = 1; seed <= 30; seed++) {
+        const result = sharedRun(accounts, focus, TRIO.hp.perAttempt, seed * 1009, population, per);
+        result.fall50.forEach((v, i) => { hits[i]! += v; });
+        result.fall100.forEach((v, i) => { kills[i]! += v; });
+      }
+      const rate = (counts: number[]) => counts.map(n => (100 * n / 180).toFixed(0) + '%').join(' / ');
+      coaching.push(`| ${accounts} | ${Math.round(focus * 100)}% | ${label} | ${per} | ${rate(hits)} | ${rate(kills)} |`);
+    }
+  }
+  writeFileSync(`${dir}/morvane-advisor.md`, coaching.join('\n') + '\n');
 }, 3_600_000);
