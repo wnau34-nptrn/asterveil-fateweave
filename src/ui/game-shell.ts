@@ -503,7 +503,7 @@ export class GameShell {
     if (!this.server) return;
     void this.server.worldBoss().then(status => { this.wbStatus = status; if (this.root.dataset.view === 'lobby' && !this.game?.run && !this.wbRun) this.showLobby(); });
   }
-  // `boss`: the trio boss picked on the World Boss page (none while the warden stands, OD-51).
+  // `boss`: the trio boss picked on the World Boss page (none while the warden stands, weeks before `trio.from`).
   private startWorldBoss(boss?: WbBossId): void {
     const g = this.game; if (!g || g.run || this.wbRun || this.waiting) return;
     const day = this.today(); if (worldBossStartReason(g.profile, this.maps, day, boss)) return;

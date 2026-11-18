@@ -31,7 +31,8 @@ import { wbTurns } from './fixtures/world-boss';
 // `reward_ledger`, hits handed to the shared World Boss object once, concurrent kills and late arrivals, retries and
 // week boundaries on the server calendar, and the weekly budget kept with the sweep cut.
 
-const rules = gameRules.worldBoss; const D = 20_773; const W = weekOf(D); // D is a Monday
+// D is a Monday three weeks before the trio's first week (OD-52: week 2969), so W..W+3 stay the warden's.
+const rules = gameRules.worldBoss; const D = 20_752; const W = weekOf(D);
 const HOUR = 3_600_000, DAY_MS = 24 * HOUR;
 const midnight = (d: number) => d * DAY_MS - GAME_DAY_OFFSET_MINUTES * 60_000;
 const commander = { name: 'ทดสอบ', crest: 'star', color: 'gold', camp: 'ค่ายทดสอบ' } as const;

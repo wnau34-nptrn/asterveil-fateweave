@@ -14,7 +14,7 @@ import { setText, slotText, statName, sweepText } from './th';
 // P11-04 part 2 + P11-05 step 4: the World Boss page of the camp (docs/design/WORLD_BOSS_TRIO_P11_05_TH.md §6) and its camp
 // banner. Pure views of the profile's World Boss book and, in server play, of the shared bars the server reports
 // (`ServerClient.worldBoss()`); offline there is no shared bar. Every action is a command (`worldBoss` from the battle,
-// `claimWorldBoss`, `craftBossItem`); nothing is worked out in this file but wording. While `trio.from` is unset (OD-51)
+// `claimWorldBoss`, `craftBossItem`); nothing is worked out in this file but wording. In weeks before `trio.from` (2969, OD-52)
 // the page shows the warden of P11-04 on the same four tabs.
 const dayLabel = (day: number): string => { const d = new Date(day * 86_400_000); return `${d.getUTCDate()}/${d.getUTCMonth() + 1}`; };
 const weekEnd = (week: number): number => week * 7 + 3;

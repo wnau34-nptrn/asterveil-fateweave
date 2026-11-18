@@ -10,6 +10,7 @@ on:
       runners: { description: 'Runners (IPs) in parallel, 1-4', default: '4' }
       accounts: { description: 'Accounts per runner (guests are limited to 5 a minute per IP)', default: '5' }
       seconds: { description: 'Chat seconds', default: '120' }
+      trio: { description: 'World Boss trio on the staging copy: blank = shipped rules, "now" = from this week (staging only)', default: '' }
 
 permissions:
   contents: read
@@ -45,8 +46,21 @@ jobs:
         id: config
         env:
           RUNNERS: ${{ inputs.runners }}
+          TRIO: ${{ inputs.trio }}
         run: |
           set -o pipefail
+          # P11-05: "now" moves the trio's first week to this week in the staging copy only (the content version below
+          # is taken after the change, so the staging Worker and the load runners agree); the shipped rules are untouched.
+          if [ "$TRIO" = now ]; then
+            node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const f = 'src/content/world/rules.ts'; const s = readFileSync(f, 'utf8');
+          const week = Math.floor((Math.floor((Date.now() + 60 * 60_000) / 86_400_000) + 3) / 7);
+          if (!/trio: \{\n\s*from: \d+,/.test(s)) throw new Error('trio.from not found');
+          writeFileSync(f, s.replace(/(trio: \{\n\s*from: )\d+,/, `$1${week},`));
+          console.log(`staging trio from week ${week}`);
+          NODE
+          fi
           $WRANGLER d1 list --json > /tmp/d1.json 2>/dev/null || { echo 'wrangler d1 list failed (output hidden)'; exit 1; }
           if ! node -e "process.exit(JSON.parse(require('fs').readFileSync('/tmp/d1.json','utf8')).some(d=>d.name===process.env.D1_NAME)?0:1)"; then
             $WRANGLER d1 create "$D1_NAME" 2>&1 | grep -iE 'success|creat|error' | grep -v '@'

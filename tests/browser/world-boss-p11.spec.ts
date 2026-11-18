@@ -13,7 +13,7 @@ import { xpAt } from '../fixtures/camp-level';
 // surviving a reload. The shared bar belongs to server play (no bar offline).
 const key = 'asterveil.fateweave.expedition.v1';
 test.use({ timezoneId: 'Asia/Bangkok' });
-const beforeTrioWindow = new Date('2026-12-07T05:59:59+07:00');
+const beforeTrioWindow = new Date('2026-11-23T05:59:59+07:00');
 const saved = async (page: Page) => parseGame(await page.evaluate(k => localStorage.getItem(k)!, key), chapterOne, encounterById, MAPS).profile;
 
 async function playOut(page: Page): Promise<void> {
@@ -27,7 +27,7 @@ async function playOut(page: Page): Promise<void> {
   }
 }
 
-test('Warden is available before the OD-51 cutover window and pays once', async ({ page }) => {
+test('Warden is available before the trio starts (OD-52) and pays once', async ({ page }) => {
   test.setTimeout(240_000);
   await page.clock.setFixedTime(beforeTrioWindow);
   const week = weekOf(serverDay(beforeTrioWindow.valueOf()));

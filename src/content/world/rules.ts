@@ -36,11 +36,13 @@ export const gameRules: GameRules = {
     personal: [{ id: 'p-2', attempts: 2, reward: { ore: 0, gold: 0, shard: 1 } }, { id: 'p-4', attempts: 4, reward: { ore: 0, gold: 0, shard: 2 } }],
     shared: [{ id: 's-50', percent: 50, reward: { ore: 0, gold: 3 } }, { id: 's-100', percent: 100, reward: { ore: 0, gold: 0, shard: 1 } }],
     hp: { perAccount: 2500, min: 5000, max: 5_000_000 },
-    // P11-05 trio (draft numbers, OD-51 §9 items 3–5; docs/design/WORLD_BOSS_TRIO_P11_05_TH.md §2–§3). `from` is left out
-    // (OD-51: the warden opens the 14 Dec test; the trio is scheduled only once steps 1–4 and art A pass before 7 Dec).
+    // P11-05 trio (draft numbers, OD-51 §9 items 3–5; docs/design/WORLD_BOSS_TRIO_P11_05_TH.md §2–§3). OD-52 (owner
+    // 2026-11-18): the trio replaces the warden from week 2969 = Monday 23 Nov 2026 06:00 Bangkok (the first week reset
+    // after release); the warden's week 2968 and its claims stay as they were.
     // Weekly at most (5 attempts on all three, online): 76 ore-equivalent tradeable + 35 boss shards (the 38 cut from
     // the warden's 114), so the P04-06 total stays 1195 ≤ 1200.
     trio: {
+      from: 2969,
       bosses: { kragmor: 'wb-kragmor', valdrakk: 'wb-valdrakk', morvane: 'wb-morvane' },
       attemptReward: { ore: 4, gold: 2 }, attemptShards: 3,
       personal: [{ id: 'p-2', attempts: 2, reward: { ore: 0, gold: 0, shard: 1 }, shards: 2 }, { id: 'p-4', attempts: 4, reward: { ore: 0, gold: 0, shard: 1 }, shards: 3 }],
