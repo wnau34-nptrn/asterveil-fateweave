@@ -1,4 +1,4 @@
-## 2026-11-18 — Morvane coaching (Codex; fix/morvane-advisor → game branch; see PR for merge commit)
+## 2026-11-18 — Morvane coaching (Codex; fix/morvane-advisor → game branch; [PR #298 and merge commit](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/298))
 - Owner asked to implement the recommendations after #297. Add the optional Morvane battle coach and damage-credit guidance. The coach favors boss damage while preserving the general advisor's defensive and area skills.
 - Actual commands through the resolver and attempt validation. All 10 map-1 recruitment profiles scored and reached round 8. The original starter fixture went 36 → 123 damage. [Evidence and reproduction](../validation/p11-05-morvane-coach/README_TH.md).
 - At 400 HP/attempt and 50% coach adoption, 20 modeled accounts reach 50% in 98% of weeks and kill in 47–48%. Adoption is unmeasured. Warden stays per OD-51. No rules, boss numbers, save format or scheduling change.
