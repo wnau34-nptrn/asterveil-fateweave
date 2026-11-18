@@ -391,7 +391,7 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 
 /* Read-only inspector takes real layout space below the queue; the battlefield keeps
    straight thin HP tracks with numeric counters. Bottom allied name/HP cards retain their original layout. */
-#battle-view .unit-inspector { display: flex; align-items: center; gap: 7px; flex: 0 0 44px; min-height: 44px; width: 100%; padding: 2px 10px; border: 0; border-block: 1px solid #728eaa38; border-radius: 0; background: #102333e8; text-align: left; color: #e8eff8; }
+#battle-view .unit-inspector { display: flex; align-items: center; gap: 7px; flex: 0 0 44px; min-height: 44px; width: 100%; padding: 2px 10px; /* owner 2026-11-18: glass like the turn strip above */ border: 1px solid #e8f5ff1f; border-radius: var(--radius-md); background: linear-gradient(180deg, #0b1626b8, #0b162680); box-shadow: 0 8px 24px #0006; text-align: left; color: #e8eff8; }
 .unit-inspector .portrait { width: 30px; height: 30px; flex: 0 0 30px; }
 .inspector-copy { display: flex; flex-direction: column; flex: 1; min-width: 0; line-height: 1.2; }
 .inspector-copy small { font-size: 9px; color: #acc0d1; }
