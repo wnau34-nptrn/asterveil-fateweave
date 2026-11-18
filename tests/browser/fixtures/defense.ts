@@ -68,7 +68,7 @@ function painted(atlas=DEFENSE_ATLAS){
   }};visit(scene.children.getChildren());return items;
 }
 const qa = {impacts,painted,frames:()=>painted().map(p=>p.frame),bladeFrames:()=>painted('blade-fx').map(p=>p.frame),
-  point:(id:string)=>{const p=scene.actorPanels.get(id)!;return {x:p.x,y:p.y-p.size*.48,footY:p.y};},
+  point:(id:string)=>{const p=scene.actorPanels.get(id)!;return {x:p.x,y:p.y-p.size*.48,footY:p.y,size:p.size};},
   target:()=>selectedTarget(ui.state),
   prime:()=>{primeState(ui.state);ui.attach(scene);},
   sequence:()=>resolution().turns,

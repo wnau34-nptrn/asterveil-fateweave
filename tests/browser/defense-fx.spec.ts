@@ -37,8 +37,9 @@ for(const skill of skills)test(`defense ${skill} uses truthful contact and owned
       expect(prepare.filter(f=>f==='rally_prepare')).toHaveLength(1);
       const lead=(await page.evaluate(()=>window.defenseQA.painted())).find(p=>p.frame==='rally_prepare')!;
       const caster=await page.evaluate(id=>window.defenseQA.point(id),turn.actorId);
-      // The ring sits a scaled step below the feet: 27px at the original unit size, ×UNIT_SCALE (.95, P02 owner 2026-10-31).
-      expect(lead.x).toBeCloseTo(caster.x);expect(lead.y-caster.footY).toBeCloseTo(27*.95,0);
+      // The ring sits a scaled step below the feet: 27px at a 111px unit, in proportion to the unit's real size (the field
+      // may shrink units, e.g. for the status band under the HP track, owner 2026-11-18).
+      expect(lead.x).toBeCloseTo(caster.x);expect(lead.y-caster.footY).toBeCloseTo(27*caster.size/111,0);
       expect(prepare.some(f=>f.startsWith('rally_command_'))).toBe(false);
     }
     await page.clock.runFor(61);
@@ -48,8 +49,8 @@ for(const skill of skills)test(`defense ${skill} uses truthful contact and owned
     if(skill==='rally'){
       expect((await page.evaluate(()=>window.defenseQA.frames())).some(f=>f.startsWith('rally_command_'))).toBe(false);
       for(const [i,cue]of cues.entries()){
-        const foot=(await page.evaluate(id=>window.defenseQA.point(id),cue.targetId)).footY;
-        expect(peaks[i]!.y-foot).toBeCloseTo(27*.95,0);
+        const at=await page.evaluate(id=>window.defenseQA.point(id),cue.targetId);
+        expect(peaks[i]!.y-at.footY).toBeCloseTo(27*at.size/111,0);
       }
     }
     if(['stonearmor','aegis'].includes(skill)){
