@@ -1,3 +1,4 @@
+import { morvaneAdvice } from './world-boss-advice';
 import { wbArtUrl } from '../game/visuals/world-boss-art';
 import { gearArt } from './equip-art';
 import { bossCraftReason, isWbBoss, sharedPercent, trioLive, wbBook, wbClaimReason, wbWeekDamage, wbWeekOf, type WorldBossShared } from '../core/world/world-boss';
@@ -51,8 +52,8 @@ export const wbBossText: Record<WbBossId, { name: string; title: string; tag: st
     answer: 'ตัดการชาร์จด้วย Bash/Sigil ได้ ทำให้ Dive รอบถัดไปเสียหลักและไม่มีดาเมจ · ตัดไม่ทันก็รับด้วย Ward/Halo/Aegis หรือฮีลได้', ignore: 'ทุกคนเสีย 20–24 เลือดทุกหกเทิร์น' },
   morvane: { name: 'Morvane', title: 'ราชันด้ายขาด', tag: 'ราชสำนักเสริมพลัง',
     moves: 'Six-Hand Rend · Severing Bolt · Call the Court (เรียกลูกน้องที่ล้มกลับ) · Fate Lash · Shadow Tide (โดนทั้งทีม)',
-    gist: 'ลูกน้องที่ยังยืนอยู่ทำให้ท่าบอสแรงขึ้น +10% ต่อตัว และ Call the Court เรียกกลับทุกสี่เทิร์น',
-    answer: 'การโจมตีวงกว้างกำจัดลูกน้องพร้อมกันได้ดีที่สุด · ฮีลช่วยรับ Shadow Tide', ignore: 'ท่าบอสแรงขึ้นสูงสุด +30% และลูกน้องตีต่อ' },
+    gist: 'ลูกน้องที่ยังยืนอยู่ทำให้ท่าบอสแรงขึ้น +10% ต่อตัว และเมื่อใช้ Call the Court จะเรียกลูกน้องที่ล้มกลับ',
+    answer: morvaneAdvice, ignore: 'ท่าบอสแรงขึ้นสูงสุด +30% และลูกน้องตีต่อ' },
 };
 
 // The shared bar a milestone is judged against: the warden's (`current`/`last`) or a trio boss's (`bars`/`lastBars`).

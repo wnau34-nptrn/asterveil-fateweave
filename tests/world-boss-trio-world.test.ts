@@ -21,6 +21,7 @@ import {
 import { GAME_CONTEXT } from '../src/server/worker';
 import { currentSave } from './fixtures/current-save';
 import { wbTurns } from './fixtures/world-boss';
+import { morvaneLesson } from '../src/ui/world-boss-advice';
 
 // P11-05 step 2 (docs/design/WORLD_BOSS_TRIO_P11_05_TH.md §2–§4, §8): the trio's world rules (attempts shared by three
 // bosses, a tally per boss, boss shards, milestones), the three item powers in the resolver, crafting, save v65 with the
@@ -90,6 +91,22 @@ describe('P11-05 trio attempts and milestones', () => {
     const sum = wbWeekDamage(w); expect(sum.damage).toBe(WB_BOSSES.reduce((n, b) => n + w.bosses[b]!.damage, 0));
     expect(sum.best).toBe(Math.max(...WB_BOSSES.map(b => w.bosses[b]!.best)));
     for (const b of WB_BOSSES) expect(wbAttemptReason(p, LIVE, lookup, W, 6, turns(p, b), b)).toBe('used');
+  });
+
+  it('the Morvane coach leads the starter team to a completed, credited attempt', () => {
+    const p = { ...newProfile(liveHome, 7), tutorialDone: true, cleared: [liveHome.id] };
+    const data = wbEncounter(p, liveHome, lookup, 'morvane')!;
+    let state = beginBattle(data).state;
+    while (state.outcome === 'active' && state.round <= rules.maxRounds) {
+      const lesson = morvaneLesson(state, data);
+      expect(lesson).toBeDefined();
+      const { heroId, action, targetId, recipientId, cooldownAction, cooldownTargetId } = lesson!;
+      state = resolveCommand(state, data, { beat: state.beat, heroId, action, targetId, recipientId, cooldownAction, cooldownTargetId }).state;
+    }
+    expect(state.round).toBeGreaterThan(rules.maxRounds);
+    const result = worldBossAttempt(p, LIVE, lookup, W, 1, state.commands, 'morvane');
+    expect(result.event).toMatchObject({ type: 'wbAttempt', boss: 'morvane', attempt: 1 });
+    expect(result.profile.worldBoss?.weeks[0]?.bosses.morvane?.damage).toBeGreaterThan(0);
   });
 
   it('the event names the boss and its shards; a full shard store refuses the attempt whole', () => {

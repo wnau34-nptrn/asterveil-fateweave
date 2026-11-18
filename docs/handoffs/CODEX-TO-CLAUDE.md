@@ -1,3 +1,9 @@
+## 2026-11-18 — Morvane coaching (Codex; fix/morvane-advisor → game branch; see PR for merge commit)
+- Owner asked to implement the recommendations after #297. Add the optional Morvane battle coach and damage-credit guidance. The coach favors boss damage while preserving the general advisor's defensive and area skills.
+- Actual commands through the resolver and attempt validation. All 10 map-1 recruitment profiles scored and reached round 8. The original starter fixture went 36 → 123 damage. [Evidence and reproduction](../validation/p11-05-morvane-coach/README_TH.md).
+- At 400 HP/attempt and 50% coach adoption, 20 modeled accounts reach 50% in 98% of weeks and kill in 47–48%. Adoption is unmeasured. Warden stays per OD-51. No rules, boss numbers, save format or scheduling change.
+- Checks are linked in the PR. Browser coverage includes 390px Morvane hint toggle, ordinary and tutorial combat, and the Warden path.
+
 ## 2026-11-18 — P11-05 step 6 (Codex; chore/p1105-step6-balance → game branch; [PR #297 and merge commit](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/297))
 - Resolver and server replay probe compared nine field teams, four bosses, basic attacks, advisor and boss-specific responses. [Results and reproduction](../validation/p11-05-step6/README_TH.md).
 - OD-51: activation gate did not pass. Morvane starter adds-first scores 0; advisor-based shared kill rate at 10–20 accounts is 3–17%. The court HP trial helps survival and the pressure route helps damage. Balance questions are in “ฝากถึง Claude”.
@@ -178,11 +184,4 @@
 - Tests: new `sweep-p05` (12) + browser `sweep-p05.spec.ts` (390px), full unit suite, typecheck/lint/build, `npm run sim` 29/29 (no report changed; sweep is outside the sim paths). Yardstick probe `tests/probe/p0505-sweep.test.ts`. [Validation](../validation/p05-05-2026-11-15/README_TH.md).
 - Open (owner review): shared normal/hard limit at equal cost, no EXP/items from a sweep, table/supply numbers (with P04-06 farm budget and P05-06 board). Not tried on real devices or against the deployed dev API.
 
-## 2026-11-15 — P05-02 cross-run story state (Opus; branch claude/p05-02-story-state, PR #253)
-- Owner answered the P05-01 questions "ทำตามที่แนะนำ" → OD-36 (traveller on map 1), OD-37 (contracts never penalise), OD-38 (market `contract` shown as ใบเรียกตัวซ้ำ, id kept). P04-05/P05-04 questions still open; nothing applied there.
-- Runtime (draft numbers, save v61, all fields optional): `quest.optional` on maps 1–2 never seals the boss (`bossSealed`), pays once on a run that comes home (`Profile.storyQuests`); traveller `guide`; abandoned camp on map 2 (`shelter`/`search` 40% fight/`pass`); `Profile.choices` flags + `last.events`/`last.story` → `campLines`; run counters `choices`, `downed`. Map versions unchanged (rows same).
-- Tests: new `story-p05` (12) + browser `story-p05.spec.ts` (390px), unit 1839, typecheck/lint/build, `npm run sim` 29/29 (forest boss arrival HP 72→64%, all rows 100%). [Validation](../validation/p05-02-2026-11-15/README_TH.md).
-- Open: contract N/rewards for P05-06; abandoned-camp art (uses faded bandit prop, Claude pick).
-
-
-Earlier entries preserved verbatim: [2026-11-15 archive](archive/2026-11-15/CODEX-TO-CLAUDE.md), [2026-11-13 archive](archive/2026-11-13/CODEX-TO-CLAUDE.md), [2026-11-10 archive](archive/2026-11-10/CODEX-TO-CLAUDE.md).
+Earlier entries preserved verbatim: [2026-11-18 archive](archive/2026-11-18/CODEX-TO-CLAUDE.md), [2026-11-15 archive](archive/2026-11-15/CODEX-TO-CLAUDE.md), [2026-11-13 archive](archive/2026-11-13/CODEX-TO-CLAUDE.md), [2026-11-10 archive](archive/2026-11-10/CODEX-TO-CLAUDE.md).
