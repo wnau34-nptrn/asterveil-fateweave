@@ -5,14 +5,15 @@ import { encounterById } from '../../src/content/encounters/catalog';
 import { newProfile } from '../../src/core/world/profile';
 import { parseGame } from '../../src/core/save/expedition-save';
 import { weekOf } from '../../src/core/world/board';
+import { serverDay } from '../../src/server/ledger';
 import { xpAt } from '../fixtures/camp-level';
 
 // P11-04 part 2: the World Boss page (camp banner, four tabs) at 390px, offline: attempts and personal milestones, the
 // battle with its round counter (8 rounds), one `worldBoss` command at the end, the reward and the attempt count
 // surviving a reload. The shared bar belongs to server play (no bar offline).
 const key = 'asterveil.fateweave.expedition.v1';
-// The game day turns at 06:00 local time (owner 2026-11-16).
-const today = (): number => { const d = new Date(Date.now() - 6 * 3_600_000); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000); };
+test.use({ timezoneId: 'Asia/Bangkok' });
+const beforeTrioWindow = new Date('2026-12-07T05:59:59+07:00');
 const saved = async (page: Page) => parseGame(await page.evaluate(k => localStorage.getItem(k)!, key), chapterOne, encounterById, MAPS).profile;
 
 async function playOut(page: Page): Promise<void> {
@@ -26,9 +27,10 @@ async function playOut(page: Page): Promise<void> {
   }
 }
 
-test('the World Boss page shows the week, plays one attempt and pays once', async ({ page }) => {
+test('Warden is available before the OD-51 cutover window and pays once', async ({ page }) => {
   test.setTimeout(240_000);
-  const day = today(); const week = weekOf(day);
+  await page.clock.setFixedTime(beforeTrioWindow);
+  const week = weekOf(serverDay(beforeTrioWindow.valueOf()));
   const p = newProfile(chapterOne, 17, ['guardian', 'tracer', 'weaver', 'healer']); p.tutorialDone = true;
   p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; p.campXp = xpAt(10); p.cleared = MAPS.map(m => m.id);
   p.bank = { ore: 100, gold: 100, shard: 0, dust: 0 };
@@ -37,6 +39,7 @@ test('the World Boss page shows the week, plays one attempt and pays once', asyn
   await page.setViewportSize({ width: 390, height: 844 }); await page.goto('./'); await page.locator('#continue').click();
   await page.locator('#lobby-wboss').click();
   await expect(page.locator('#quest-tab-boss')).toHaveCount(0);
+  await expect(page.locator('#wb-pick-kragmor')).toHaveCount(0);
   for (const t of ['fight', 'rewards', 'craft', 'bosses']) expect((await page.locator(`#wb-tab-${t}`).boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await expect(page.locator('#wb-attempts')).toContainText('0/5'); await expect(page.locator('#wb-offline')).toBeVisible();
   await page.locator('#wb-tab-rewards').click(); await expect(page.locator('#wb-p-2')).toHaveAttribute('data-state', 'open'); await page.locator('#wb-tab-fight').click();
