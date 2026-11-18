@@ -29,7 +29,7 @@ const view = (tab: WbPageState['tab'], extra: Partial<WbPageState> = {}): WbPage
 describe('World Boss page, warden weeks (trio.from unset)', () => {
   it('shows the week, the attempts and the personal milestones; offline has no shared bar', () => {
     const fight = worldBossPage(played(2, ['p-2']), MAPS, D, null, false, view('fight'));
-    expect(fight).toContain('2/5'); expect(fight).toContain('id="wb-offline"'); expect(fight).not.toContain('class="wb-bar"'); expect(fight).toContain('ครั้งที่ 3/5'); expect(fight).not.toContain('wb-boss-card');
+    expect(fight).toContain('2/5'); expect(fight).toContain('id="wb-offline"'); expect(fight).not.toContain('class="wb-bar"'); expect(fight).toContain('ครั้งที่ 3/5'); expect(fight).not.toContain('wb-boss-card'); expect(fight).not.toContain('wb-fight-advice');
     const rewards = worldBossPage(played(2, ['p-2']), MAPS, D, null, false, view('rewards'));
     expect(rewards).toContain('id="wb-p-2" data-state="claimed"'); expect(rewards).toContain('id="wb-p-4" data-state="open"'); expect(rewards).toContain('อีก 2 ครั้ง'); expect(rewards).not.toContain('wb-claim');
   });
@@ -81,6 +81,9 @@ describe('World Boss page, trio weeks (rules copy with trio.from)', () => {
     const html = worldBossPage(trioPlayed('valdrakk', 1), TRIO, D, bars({ kragmor: 500, valdrakk: 1000 }), true, view('fight', { pick: 'valdrakk' }));
     for (const b of ['kragmor', 'valdrakk', 'morvane']) expect(html).toContain(`id="wb-pick-${b}"`);
     expect(html).toContain('id="wb-pick-valdrakk" class="wb-boss-card" data-lobby="wb-pick" data-boss="valdrakk" aria-pressed="true"');
+    expect(html.match(/id="wb-fight-guide"/g)).toHaveLength(1);
+    expect(html).toContain('แนวทางก่อนสู้ Valdrakk');
+    expect(html).toContain('เก็บ Bash ไว้ใช้เมื่อท่าถัดไปคือ Wing Gathering');
     expect(html).toContain('aria-valuenow="25"'); expect(html).toContain('aria-valuenow="50"'); expect(html).toContain('เริ่มศึก Valdrakk · ครั้งที่ 2/5'); expect(html).toContain('ใช้สิทธิ์แล้ว <b>1/5</b>');
     const used = worldBossPage(trioPlayed('kragmor', 5), TRIO, D, null, false, view('fight'));
     expect(used).toMatch(/id="wb-start"[^>]*disabled/); expect(used).toContain('id="wb-offline"'); expect(used).not.toContain('wb-mini');

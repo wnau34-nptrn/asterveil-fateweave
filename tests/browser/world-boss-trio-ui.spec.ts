@@ -39,7 +39,25 @@ test('banner, three boss cards, craft sheet and boss notes at 390px', async ({ p
   await banner.click();
   for (const t of ['fight', 'rewards', 'craft', 'bosses']) expect((await page.locator(`#wb-tab-${t}`).boundingBox())!.height).toBeGreaterThanOrEqual(44);
   for (const b of ['kragmor', 'valdrakk', 'morvane']) await expect(page.locator(`#wb-pick-${b}`)).toBeVisible();
-  await page.locator('#wb-pick-valdrakk').click(); await expect(page.locator('#wb-start')).toContainText('Valdrakk');
+  const guide = page.locator('.wb-prefight');
+  for (const [id, name, cue] of [
+    ['kragmor', 'Kragmor', 'Mountain Fall'],
+    ['morvane', 'Morvane', 'Call the Court'],
+    ['valdrakk', 'Valdrakk', 'Wing Gathering'],
+  ] as const) {
+    const pick = page.locator(`#wb-pick-${id}`);
+    await pick.click();
+    await expect(pick).toBeFocused();
+    await expect(pick).toHaveAttribute('aria-pressed', 'true');
+    await expect(guide).toHaveCount(1);
+    await expect(guide).toBeInViewport({ ratio: 0.9 });
+    await expect(guide).toContainText(`แนวทางก่อนสู้ ${name}`);
+    await expect(guide).toContainText(cue);
+    await expect(page.locator('#wb-start')).toContainText(name);
+    await expect(page.locator('#wb-start')).toHaveAttribute('aria-describedby', 'wb-fight-advice');
+    expect(await guide.evaluate(el => el.compareDocumentPosition(document.getElementById('wb-start')!) & Node.DOCUMENT_POSITION_FOLLOWING)).toBeTruthy();
+  }
+  await expect(page.locator('#wb-attempts')).toContainText('0/5');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: `${shots}/trio-fight-390.png` });
   await page.locator('#wb-tab-craft').click(); await expect(page.locator('#wb-item-kragmor')).toContainText('40/40');

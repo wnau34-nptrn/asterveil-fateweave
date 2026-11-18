@@ -45,15 +45,15 @@ export const wbBossText: Record<WbBossId, { name: string; title: string; tag: st
   kragmor: { name: 'Kragmor', title: 'ไททันรอยแยก', tag: 'เกราะหิน · ชาร์จแล้วทุบ',
     moves: 'Stone Fist · Titan Gathering (ชาร์จ) · Mountain Fall (ทุบแรง ตัดจังหวะไม่ได้ ลงช่องหน้า) · Rift Quake (โดนทั้งทีม) · Boulder Hurl',
     gist: 'ช้าและหนัก มีเกราะศิลา: ดาเมจที่ไม่ใช่เป้าที่ถูกมาร์ก/กัดกร่อนจะถูกลด ท่า Titan Gathering ชาร์จแล้วตามด้วย Mountain Fall',
-    answer: 'ตราหรือกรดบนบอสเปิดเกราะให้ดาเมจเต็ม · รับ Mountain Fall ด้วยป้องกัน/ยั่วยุ โล่ หรือหินผู้พิทักษ์ · Seer เลื่อนท่าได้', ignore: 'Mountain Fall ลงคนหน้าเต็มแรง และดาเมจที่ลงกับบอสลดลงเพราะเกราะ' },
+    answer: 'ใช้ Mark หรือ Acid เปิดเกราะก่อนโจมตี เมื่อเห็น Titan Gathering ให้เตรียม Guard หรือโล่คุ้มกันแนวหน้าจาก Mountain Fall ที่ตัดจังหวะไม่ได้', ignore: 'Mountain Fall ลงคนหน้าเต็มแรง และดาเมจที่ลงกับบอสลดลงเพราะเกราะ' },
   valdrakk: { name: 'Valdrakk', title: 'อสูรโลกแตก', tag: 'เร็วมาก · ชาร์จทำลายได้',
     moves: 'Shard Talon · Wing Gust (พลังงาน) · Wing Gathering (ชาร์จแบบกายภาพ ทำลายได้) · Worldshard Dive (โดนทั้งทีม พลังงาน)',
     gist: 'SPD สูงเกือบทุกคนช้ากว่า ท่า Wing Gathering ชาร์จเพื่อ Worldshard Dive ซึ่งโดนทั้งทีม',
-    answer: 'ตัดการชาร์จด้วย Bash/Sigil ได้ ทำให้ Dive รอบถัดไปเสียหลักและไม่มีดาเมจ · ตัดไม่ทันก็รับด้วย Ward/Halo/Aegis หรือฮีลได้', ignore: 'ทุกคนเสีย 20–24 เลือดทุกหกเทิร์น' },
+    answer: 'เก็บ Bash ไว้ใช้เมื่อท่าถัดไปคือ Wing Gathering เพื่อตัดชาร์จและหยุด Worldshard Dive ถ้าตัดไม่ทันให้เตรียมโล่รับดาเมจและฮีลหลังท่าโจมตีทั้งทีม', ignore: 'ทุกคนเสีย 20–24 เลือดทุกหกเทิร์น' },
   morvane: { name: 'Morvane', title: 'ราชันด้ายขาด', tag: 'ราชสำนักเสริมพลัง',
     moves: 'Six-Hand Rend · Severing Bolt · Call the Court (เรียกลูกน้องที่ล้มกลับ) · Fate Lash · Shadow Tide (โดนทั้งทีม)',
     gist: 'ลูกน้องที่ยังยืนอยู่ทำให้ท่าบอสแรงขึ้น +10% ต่อตัว และเมื่อใช้ Call the Court จะเรียกลูกน้องที่ล้มกลับ',
-    answer: morvaneAdvice, ignore: 'ท่าบอสแรงขึ้นสูงสุด +30% และลูกน้องตีต่อ' },
+    answer: `${morvaneAdvice} · เตรียมรับลูกน้องที่ Call the Court เรียกกลับ`, ignore: 'ท่าบอสแรงขึ้นสูงสุด +30% และลูกน้องตีต่อ' },
 };
 
 // The shared bar a milestone is judged against: the warden's (`current`/`last`) or a trio boss's (`bars`/`lastBars`).
@@ -129,9 +129,10 @@ function fightTab(p: Profile, maps: readonly MapDefinition[], day: number, statu
   }
   const cards = WB_BOSSES.map(b => {
     const t = wbBossText[b]; const sel = v.pick === b; const sharedBar = online ? barOf(status, week, week, b) : undefined; const tally = w.bosses[b];
-    return `<button id="wb-pick-${b}" class="wb-boss-card" data-lobby="wb-pick" data-boss="${b}" aria-pressed="${sel}" data-selected="${sel}" style="--banner:url(${wbArtUrl(`banner_${b}`)})"><span class="wb-boss-text"><b>${t.name} <small>${t.title}</small></b><small>${t.tag}</small>
+    return `<button id="wb-pick-${b}" class="wb-boss-card" data-lobby="wb-pick" data-boss="${b}" aria-pressed="${sel}"${sel ? ' aria-describedby="wb-fight-advice"' : ''} data-selected="${sel}" style="--banner:url(${wbArtUrl(`banner_${b}`)})"><span class="wb-boss-text"><b>${t.name} <small>${t.title}</small></b><small>${t.tag}</small>
       ${online ? (sharedBar ? `<span class="wb-mini" role="progressbar" aria-label="เลือดส่วนกลาง ${t.name}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${sharedPercent(sharedBar)}" style="--wb-pct:${sharedPercent(sharedBar)}%"><span></span></span><small>เลือดส่วนกลาง ${n(sharedBar.left)} / ${n(sharedBar.hp)} · ลดแล้ว ${sharedPercent(sharedBar)}%</small>` : '<small>ยังอ่านเลือดส่วนกลางไม่ได้</small>') : ''}
-      <small>${tally?.attempts ? `ลงสนาม ${tally.attempts} ครั้ง · ดาเมจดีที่สุด ${n(tally.best)}` : 'ยังไม่เคยสู้สัปดาห์นี้'}</small></span></button>`;
+      <small>${tally?.attempts ? `ลงสนาม ${tally.attempts} ครั้ง · ดาเมจดีที่สุด ${n(tally.best)}` : 'ยังไม่เคยสู้สัปดาห์นี้'}</small></span></button>
+      ${sel ? `<section class="wb-card wb-prefight" id="wb-fight-guide" aria-labelledby="wb-fight-guide-title"><h4 id="wb-fight-guide-title">แนวทางก่อนสู้ ${t.name}</h4><p id="wb-fight-advice">${t.answer}</p></section>` : ''}`;
   }).join('');
   const t = rules.trio;
   return `<div class="wb-trio" id="wb-trio"><div class="wb-head"><span class="wb-emblem">${icon('flag')}</span><div><h3>บอสโลก · สามตัว</h3><small>เลือกบอสหนึ่งตัวต่อครั้ง · สูงสุด ${rules.maxRounds} รอบ</small></div></div>${attempts}
@@ -140,7 +141,7 @@ function fightTab(p: Profile, maps: readonly MapDefinition[], day: number, statu
     <p class="side-quest-reward">รางวัลเข้าร่วมต่อครั้ง: ${sweepText(t.attemptReward, line)} · เศษ ${wbBossText[v.pick].name} ${t.attemptShards}</p>${startButton(reason, w.attempts, rules.attempts, wbBossText[v.pick].name)}</div>`;
 }
 const startButton = (reason: string, done: number, total: number, boss?: string): string =>
-  `<button id="wb-start" data-lobby="wb-start" class="primary"${reason ? ' disabled' : ''}>${reason ? attemptReasonText[reason] ?? 'ยังเข้าไม่ได้' : `เริ่มศึก${boss ? ` ${boss}` : ''} · ครั้งที่ ${done + 1}/${total}`}</button>`;
+  `<button id="wb-start" data-lobby="wb-start" class="primary"${boss ? ' aria-describedby="wb-fight-advice"' : ''}${reason ? ' disabled' : ''}>${reason ? attemptReasonText[reason] ?? 'ยังเข้าไม่ได้' : `เริ่มศึก${boss ? ` ${boss}` : ''} · ครั้งที่ ${done + 1}/${total}`}</button>`;
 
 const bossShardText = (boss: WbBossId, shards: number): string => `เศษ ${wbBossText[boss].name} ${shards}`;
 function rewardsTab(p: Profile, maps: readonly MapDefinition[], day: number, status: WorldBossStatus | null | undefined, online: boolean): string {
