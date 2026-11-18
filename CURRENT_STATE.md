@@ -1,4 +1,4 @@
-# Current state — updated 2026-11-18 (compact title and Setup)
+# Current state — updated 2026-11-18 (World Boss trio go-live, OD-52)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
@@ -12,10 +12,10 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## OD-13 status
 
-All online systems before outsiders are built. **Owner 2026-11-16 OD-50**: external test **T = 14 Dec 2026**; legacy import closes itself 30 Nov 00:00 +07:00 (`LEGACY_IMPORT_UNTIL` set), set `LEGACY_IMPORT=closed` on 7 Dec (T−7); `CHAT_WRITE=all` (guests write); Cloudflare Free first; 10–20 known invitees, in-game feedback; draft numbers kept. Still from the owner: privacy contact text (E2), `accountId` for the admin row (E3), Google consent Publish before 30 Nov (E4). [Checklist](docs/design/EXTERNAL_TEST_CHECKLIST_TH.md).
+All online systems before outsiders are built. External-test items (OD-50 dates, E2–E4, `LEGACY_IMPORT`) are parked: owner 2026-11-18 “ไม่ต้องสนใจเส้นตายทดสอบภาพนอกอะไรนั่น”; do not raise them as gates. [Checklist](docs/design/EXTERNAL_TEST_CHECKLIST_TH.md) stays for reference.
 
-- Staging load test ready ([plan](docs/validation/p12-load/README_TH.md)): workflow `Cloudflare staging load test` (manual) deploys a throwaway `asterveil-api-staging` + D1, runs `tests/server-load.test.ts` from 1–4 runners (WorldBoss attempts with concurrent retries + outbox, chat poll/send), deletes both. **Cloudflare run 2026-11-16 passed** (4 runners × 5 accounts: 100 attempts with identical retries, ~2,200 chat reads + ~195 sends, no 429/5xx, worst 0.73 s); workflow file on `main` (dispatch with ref = game branch). Never point `LOAD_URL` at the dev API.
-- World Boss (#259/#260): Warden stays for the 14 Dec test under OD-51 (5/week, 8 rounds, HP 2500/account). P11-05 trio steps 1–5 are integrated (save v65, DO bars, UI, approved art/animations, #294 VFX and #295 stills/portraits; no Thai move names; #292 stays separate and unmerged). All three trio bosses show a pre-fight guide below the selected card. Morvane also has an optional in-battle coach. It produced credited damage through round 8 for all 10 map-1 recruitment profiles tested. At 400 HP/attempt, 20 modeled accounts with half using the coach reached 50% in 98% of weeks and killed in 47–48%. The 14 Dec test stays on Warden; no change to Call the Court, HP or `trio.from`. Candidate boundary 7 Dec 06:00 Bangkok = week 2971. [Coach evidence](docs/validation/p11-05-morvane-coach/README_TH.md).
+- Staging load test ([plan](docs/validation/p12-load/README_TH.md)): workflow `Cloudflare staging load test` (manual; dispatch with ref = game branch) deploys a throwaway `asterveil-api-staging` + D1, runs `tests/server-load.test.ts` from 1–4 runners, deletes both. Input `trio=now` starts the trio on the staging copy only. Trio run 2026-11-18 passed (4×5 accounts, 100 attempts on three bars, identical retries, no 429/5xx, worst 0.78 s). Never point `LOAD_URL` at the dev API.
+- World Boss: **OD-52 (2026-11-18): the trio Kragmor/Valdrakk/Morvane replaces the Warden from week 2969 = Mon 23 Nov 2026 06:00 Bangkok** (`trio.from`, PR #301). Week 2968 is the last Warden week (its claims stay open a week). Draft numbers unchanged: 400 HP/attempt (min 1500), first trio week HP = Warden attempts ÷ 3 × 400, Call the Court as is. Pre-fight guides on all three; optional Morvane coach. Sim: 20 accounts with half using the coach reach 50% in 98% of weeks, kill 47–48% (Morvane); Kragmor/Valdrakk 97–100%. [Go-live evidence](docs/validation/p11-05-go-live/README_TH.md). #292 stays separate and unmerged.
 - Chat (#261): owner open numbers, `CHAT_WRITE`, word list, WebSocket/more channels.
 - P09 open: inactive-guest cleanup, old-token reuse detection. Day reset 06:00 Bangkok (owner 2026-11-16). P04-06/shards owner numbers open. P04-05 catch-up EXP recheck with P06.
 - Gacha: G00/G01 analysis delivered (`docs/design/GACHA_G00_DECISIONS_TH.md`, `GACHA_G01_*`); owner wants system/visual discussion first. No G02–G05/payments; real gacha needs the server wallet on the ledger.
@@ -33,4 +33,4 @@ Verify remote ancestry; preserve unpushed/gacha work. No old checkpoint imports.
 
 ## Opening prompt for next chat
 
-P11-05 release readiness — read the Morvane coach evidence and OD-51. Use playtest feedback to validate coach uptake and the projected 50%/100% rewards; keep Warden until the activation gate and staging plan are ready. If shared HP still needs tuning, see “ฝากถึง Claude” in `docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md`.
+The owner picks the next task. Suggested (Sonnet is enough): “P11-05 post-switch check — after Mon 23 Nov 06:00 Bangkok, read `GET /v1/worldboss` on the dev API (three bars, HP = last Warden week's attempts ÷ 3 × 400, min 1500) and the Warden week-2968 claims. Play one trio attempt per boss at 390px on Pages, and record the results in `docs/validation/p11-05-go-live/README_TH.md`. Change numbers only with playtest evidence (`ฝากถึง Claude` in `docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md`: compare Morvane at 350/300 HP if coach uptake is low).”
