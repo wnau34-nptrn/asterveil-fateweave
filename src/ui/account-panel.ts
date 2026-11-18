@@ -49,6 +49,7 @@ export class AccountPanel {
   private confirmOut = false;
   // P09-02g: the deletion confirm step is open.
   private confirmDelete = false;
+  private opener: HTMLElement | undefined;
   private readonly el: HTMLElement;
   constructor(parent: HTMLElement, private readonly host: AccountHost) {
     this.el = document.createElement('section');
@@ -61,16 +62,23 @@ export class AccountPanel {
   }
   get isOpen(): boolean { return !this.el.hidden; }
 
-  async open(): Promise<void> {
+  async open(section?: 'google' | 'recovery', opener?: HTMLElement): Promise<void> {
+    this.opener = opener;
     this.note = ''; this.code = undefined; this.conflict = undefined; this.confirmCode = false; this.confirmOut = false; this.confirmDelete = false;
     this.el.hidden = false; this.el.innerHTML = '<div class="account-card"><p class="server-note">กำลังโหลดบัญชี…</p></div>';
     const out = await this.call('กำลังโหลดบัญชี…', () => this.host.client.account());
     if (out.kind === 'ok') this.info = out.value; else { this.info = undefined; this.note = message(reasonOf(out)); }
     this.render();
+    if (section && this.info?.status !== 'deleting') {
+      const heading = this.el.querySelector<HTMLElement>(`#account-${section}`);
+      heading?.focus();
+    }
   }
   close(): void {
     this.el.hidden = true; this.el.innerHTML = ''; this.code = undefined;
-    document.querySelector<HTMLElement>('#account-open')?.focus({ preventScroll: true });
+    const opener = this.opener?.getClientRects().length ? this.opener : document.querySelector<HTMLElement>('#title-setup-toggle');
+    this.opener = undefined;
+    opener?.focus({ preventScroll: true });
   }
 
   private async call<T>(note: string, run: () => Promise<AccountOutcome<T>>): Promise<AccountOutcome<T>> {
@@ -102,11 +110,11 @@ export class AccountPanel {
     const code = this.code ? `<div class="account-code" role="status"><p>รหัสกู้คืน · แสดงครั้งเดียว ใช้ได้ครั้งเดียว</p><output id="account-code">${this.code}</output>`
       + '<p>จดหรือคัดลอกเก็บไว้ที่ปลอดภัย · ใครมีรหัสนี้เข้าบัญชีนี้ได้</p><button type="button" class="secondary" data-account="copy">คัดลอกรหัส</button></div>' : '';
     const codeLine = i ? (i.recoveryCodeAt === null ? 'ยังไม่มีรหัสกู้คืน' : `มีรหัสที่ออกเมื่อ ${dateText(i.recoveryCodeAt)} · ออกใหม่แล้วรหัสเดิมใช้ไม่ได้`) : '';
-    this.el.innerHTML = `<div class="account-card"><h2 id="account-title">บัญชีบนเซิร์ฟเวอร์</h2>${status}`
+    this.el.innerHTML = `<div class="account-card"><h2 id="account-title" tabindex="-1">บัญชีบนเซิร์ฟเวอร์</h2>${status}`
       + (this.note ? `<p class="account-note" role="status">${this.note}</p>` : '')
       + conflict
-      + (i ? `<section aria-labelledby="account-google"><h3 id="account-google">Google</h3><p>${i.google ? 'สลับไปบัญชีเกมที่ผูกกับ Google อื่น:' : 'ผูกบัญชีนี้กับ Google เพื่อเข้าเล่นบนเครื่องอื่น:'}</p><div class="account-google" id="account-google-button"></div></section>`
-        + `<section aria-labelledby="account-recovery"><h3 id="account-recovery">รหัสกู้คืน</h3><p>${codeLine}</p>${code}`
+      + (i ? `<section aria-labelledby="account-google"><h3 id="account-google" tabindex="-1">Google</h3><p>${i.google ? 'สลับไปบัญชีเกมที่ผูกกับ Google อื่น:' : 'ผูกบัญชีนี้กับ Google เพื่อเข้าเล่นบนเครื่องอื่น:'}</p><div class="account-google" id="account-google-button"></div></section>`
+        + `<section aria-labelledby="account-recovery"><h3 id="account-recovery" tabindex="-1">รหัสกู้คืน</h3><p>${codeLine}</p>${code}`
         + `<button type="button" class="secondary" data-account="code">${this.confirmCode ? 'ยืนยัน: ออกรหัสใหม่ (รหัสเดิมใช้ไม่ได้)' : i.recoveryCodeAt === null ? 'ออกรหัสกู้คืน' : 'ออกรหัสใหม่'}</button></section>` : '')
       + '<form class="account-recover" aria-labelledby="account-use"><h3 id="account-use">มีรหัสกู้คืนของบัญชีอื่น</h3>'
       + (i && !i.google && i.recoveryCodeAt === null ? '<p class="account-warn">ใช้รหัสของบัญชีอื่นแล้ว บัญชีทดลองบนเครื่องนี้จะกลับมาไม่ได้ ถ้ายังไม่ผูกหรือออกรหัสไว้</p>' : '')

@@ -1,4 +1,4 @@
-# Current state — updated 2026-11-18 (World Boss pre-fight guides)
+# Current state — updated 2026-11-18 (compact title and Setup)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
@@ -7,6 +7,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`, which again runs the Chromium suite before deploy (P12).
 - Save v65 (P11-05 trio book/boss shards/trio items; v64 World Boss book; v63 board book); Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked. No gacha wallet. P09 server authority, ledger, weekly shards done (dev API default on Pages, `?server=off` for local; [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md)).
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3.
+- Title uses the original party artwork with a compact primary dock and top-right Setup for audio, save details, account/recovery, feedback, privacy and restart. Import stays the primary action while a local-save offer is available.
 - Art delegation remains: record agent picks as agent decisions, never owner visual approval.
 
 ## OD-13 status
@@ -24,7 +25,7 @@ All online systems before outsiders are built. **Owner 2026-11-16 OD-50**: exter
 
 - Skill step6 notes (Challenge unused by advisor, Rouse ΔHP−8.6): skill-rework validation.
 - Map 3 Briar Lord gate: first try falls to blind attacks 23% (rush)/65% (explorer); Lv10 replays 78–91% accepted (OD-35). No real Safari/iPhone/Android or human usability validation.
-- Pending intake: #262 Warden banner, #169 continent, #234 compact title. #55 pets/#53 later bosses wait systems; #122 parked (OD-14). #133 UX and #165 poses have game implementations. Lyra atlas above guideline.
+- Pending intake: #262 Warden banner, #169 continent. Compact title is implemented from the owner mockup; #234 remains a separate proposal. #55 pets/#53 later bosses wait systems; #122 parked (OD-14). #133 UX and #165 poses have game implementations. Lyra atlas above guideline.
 
 ## Workspace
 
