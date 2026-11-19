@@ -1,3 +1,7 @@
+## 2026-11-20 — Shorter field HP bars, smaller numbers (Opus; claude/field-hp-compact → game branch)
+- Owner (390px screenshot): “ปรับลดความยาวของหลอดเลือดลงให้เหมาะสม และปรับขนาดตัวเลขของเลือดให้เล็กลง”. `.field-health` max width 72 → 50px; overlaid counter 9/8/7 → 7.5/6.5/6px by length (`battle-ui.ts`). Presentation only; no rule/save change.
+- Tests: battle-hud, status, combat specs (55, Chromium 390px incl. 9999/9999 fit + centring), full Vitest 2082, typecheck, lint, build. Shot `docs/validation/field-hp-compact-2026-11-20/battle-390.png`. Not owner-viewed; no real device.
+
 ## 2026-11-19 — OD-56 friends + private 1:1 chat (Opus; claude/friends-dm-od56 → game branch)
 - Owner: “เพิ่มระบบเพื่อน และ chat 1:1”. Followed CHAT_CHANNELS_TH.md §2. D1 migration 0007 (`friend_codes`, `friend_requests`, `friends` two rows/pair with per-side refs, `friend_blocks`); `server/friends.ts`; Worker `/v1/friends*`; pure rules `core/chat/friends.ts`. Devices see handles + opaque 16-hex refs only; unknown/blocked/deleting/full-inbox codes all answer 404 `friend_code_unavailable`.
 - `dm` channel open: Worker derives `dm:<a>:<b>` from the auth account + a mutual, unblocked friend's ref (403 `not_friends`). `Chat` object: per-kind pace (dm 2 s/20 min/200 h), retention per channel (world 500, dm 200), read markers → unread, report checks channel + stores 5-message context, admin sees reported dm rows only. Purge: friend rows both sides (D1) + every dm room of the account (DO).
