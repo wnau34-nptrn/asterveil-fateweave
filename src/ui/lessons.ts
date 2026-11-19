@@ -57,9 +57,15 @@ export function lobbyLesson(profile: Profile, seen: readonly LessonId[]): Lesson
     text: 'ของที่เก็บมาเข้าคลัง ทีมฟื้นเต็ม งานแนะนำของ NPC อยู่ในการ์ดนี้ ทำแล้วรับรางวัลได้' };
 }
 
+// An automated browser (navigator.webdriver: the browser test suites) starts with the lessons off unless a test saved
+// its own preference, so lesson bubbles never sit over the controls other suites click; tests/browser/lessons.spec.ts
+// saves one and covers the lessons themselves.
+const automated = (): boolean => typeof navigator !== 'undefined' && navigator.webdriver === true;
 export function loadPrefs(): LessonPrefs {
-  try { const v = JSON.parse(localStorage.getItem(KEY) ?? 'null') as Partial<LessonPrefs> | null; return { seen: Array.isArray(v?.seen) ? v!.seen : [], off: v?.off === true }; }
-  catch { return { seen: [], off: false }; }
+  try {
+    const raw = localStorage.getItem(KEY); if (raw === null) return { seen: [], off: automated() };
+    const v = JSON.parse(raw) as Partial<LessonPrefs> | null; return { seen: Array.isArray(v?.seen) ? v!.seen : [], off: v?.off === true };
+  } catch { return { seen: [], off: automated() }; }
 }
 function savePrefs(p: LessonPrefs): void { try { localStorage.setItem(KEY, JSON.stringify(p)); } catch { /* private mode: the lesson shows again next time */ } }
 
