@@ -66,6 +66,7 @@ const groupName: Record<Group, string> = { deployed: 'ลงสนาม', reser
 const guideText: Record<GuideKind, string> = {
   wear: 'สวมอุปกรณ์ 1 ชิ้นให้สมาชิก', enhance: 'ตีบวกอุปกรณ์ 1 ชิ้นที่ช่าง', talent: 'ลงแต้มผังสกิล 1 แต้ม (ครูฝึก)', brew: 'ปรุงยา 1 ขวด',
   itemLevel: 'เพิ่ม Lv อุปกรณ์ 1 ชิ้นที่ช่าง', hire: 'จ้างทหารรับจ้างคนใหม่', reserve: 'จัดตัวสำรองอย่างน้อย 1 คน',
+  calm: 'รับยาฟื้นความเหนื่อยไว้ใช้ตอนทีมเหนื่อย (ลดความเหนื่อย 4 แต้ม)',
 };
 export class LobbyUI {
   private view: LobbyView | undefined;

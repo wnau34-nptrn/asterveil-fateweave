@@ -747,7 +747,10 @@ function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLo
   const worth = hpWorth / (rules.expFoeHp * (1 + (level - 1) * rules.monsterLevelPercent / 100));
   const base = worth * (rules.expBase + rules.expPerLevel * level) * (kind === 'boss' ? rules.bossExpMultiplier : kind === 'elite' ? (miniBoss(map, source) ? map.eventRules.miniBoss.exp : optionalElite(map, source) ? map.eventRules.optionalElite.exp : map.eventRules.eliteExp) : 1);
   const start = levelOf(map, state); const percent = expPercent(start, level);
-  const gained = state.campXp >= capXp(map) ? 0 : Math.min(Math.round(base * percent / 100), capXp(map) - state.campXp);
+  // OD-54 (owner 2026-11-19, R1): the prologue win always reaches camp Lv2, so a new company has its first tree point to
+  // learn right after the prologue (docs/design/TUTORIAL_FLOW_TH.md).
+  const earned = state.campXp >= capXp(map) ? 0 : Math.min(Math.round(base * percent / 100), capXp(map) - state.campXp);
+  const gained = kind === 'tutorial' ? Math.max(earned, Math.min(capXp(map), levelXp(map, 2)) - state.campXp) : earned;
   const before = Object.fromEntries(rosterIds(state).map(id => [id, memberDef(lookup, map, state, id)!.maxHp]));
   state.campXp += gained;
   const lv = levelOf(map, state);

@@ -495,6 +495,7 @@ const ownedItems = (p: Profile): Item[] => [...p.items, ...Object.values(p.membe
 export function guideDone(p: Profile, kind: GuideKind): boolean {
   switch (kind) {
     case 'wear': return Object.values(p.members).some(m => Object.keys(m.gear ?? {}).length > 0);
+    case 'calm': return true;
     case 'enhance': return ownedItems(p).some(i => (i.plus ?? 0) > 0);
     case 'talent': return Object.values(p.members).some(m => Object.values(m.talents ?? {}).some(r => (r ?? 0) > 0));
     case 'brew': return POTION_IDS.some(id => p.potions[id] > 0);
@@ -507,6 +508,18 @@ export function guideDone(p: Profile, kind: GuideKind): boolean {
 export function activeGuides(p: Profile, maps: readonly MapDefinition[]): GuideDefinition[] {
   if (p.veteran) return [];
   return (maps[0]?.guides ?? []).filter(g => !p.guides?.[g.id] && featureOpen(p, maps, g.feature));
+}
+// OD-54: a gift guide (`calm`) claimed on the map goes into the run's carried potions, within the carry limit; the
+// profile records it so it is given once per company. Outside battle only.
+export function claimRunGuide(profile: Profile, run: ExpeditionState, maps: readonly MapDefinition[], map: MapDefinition, id: string):
+  { profile: Profile; run: ExpeditionState } | { reason: string } {
+  const g = activeGuides(profile, maps).find(x => x.id === id);
+  if (!g || g.kind !== 'calm') return { reason: 'unknown' };
+  if (run.battle || run.completed) return { reason: 'busy' };
+  const gift = g.reward.potions ?? {};
+  if (POTION_IDS.some(p => run.potions[p] + (gift[p] ?? 0) > map.potions.carry)) return { reason: 'carry' };
+  const next = structuredClone(run); for (const p of POTION_IDS) next.potions[p] += gift[p] ?? 0;
+  return { profile: { ...profile, guides: { ...profile.guides, [id]: 'claimed' } }, run: next };
 }
 export function claimGuide(initial: Profile, maps: readonly MapDefinition[], id: string, skip = false): ProfileResult {
   const g = activeGuides(initial, maps).find(x => x.id === id); if (!g) return blocked(initial, 'unknown');

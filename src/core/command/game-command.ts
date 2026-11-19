@@ -6,7 +6,7 @@ import { placeCampMember } from '../world/camp-team';
 import { craftWeapon, enhanceTo, fuse, lockEquipment, raiseItemLevel, reroll, smelt, transferAffix } from '../world/forge';
 import { applyPreset, applyRunPreset, clearPreset, renamePreset, savePreset } from '../world/presets';
 import {
-  brew, buy, canWithdraw, chooseLoadout, claimGuide, claimQuest, createCommander, depart, dismiss, equip, hardReason, hire,
+  brew, buy, canWithdraw, chooseLoadout, claimGuide, claimRunGuide, claimQuest, createCommander, depart, dismiss, equip, hardReason, hire,
   featureOpen, learnTalent, mapUnlocked, newProfile, refreshBoard, resetTalents, salvage, setArchived, setPartyLane, settle, unequip, upgrade,
   type Group,
 } from '../world/profile';
@@ -101,6 +101,7 @@ export type RunCommand =
   | { kind: 'withdraw' }
   | { kind: 'openChest' }
   | { kind: 'usePotion'; potion: PotionId; heroId?: string }
+  | { kind: 'claimRunGuide'; id: string }
   | { kind: 'chooseEvent'; choice: EventChoice }
   | { kind: 'draftPick'; index: number }
   | { kind: 'learnRunTalent'; heroId: string; node: TalentNode }
@@ -151,7 +152,7 @@ const SPECS: Record<CommandKind, Spec> = {
   depart: { mapId: opt('str'), hard: 'bool', day: opt('int') },
   move: { dir: DIRECTIONS }, travel: { to: 'point' }, rest: {}, revive: { heroId: 'str' }, swapMembers: { a: 'str', b: 'str' },
   setLane: { heroId: 'str', lane: LANES, other: opt('str') }, moveMember: { heroId: 'str' }, runPreset: { slot: 'int' }, withdraw: {}, openChest: {},
-  usePotion: { potion: POTION_IDS, heroId: opt('str') }, chooseEvent: { choice: EVENT_CHOICES }, draftPick: { index: 'int' },
+  usePotion: { potion: POTION_IDS, heroId: opt('str') }, claimRunGuide: { id: 'str' }, chooseEvent: { choice: EVENT_CHOICES }, draftPick: { index: 'int' },
   learnRunTalent: { heroId: 'str', node: 'str' }, chooseRunLoadout: { heroId: 'str', actions: 'strs' },
   wear: { heroId: 'str', from: ['found', 'spare'], index: 'int' }, takeOff: { heroId: 'str', slot: GEAR_SLOTS }, autoEquipRun: { plan: 'object' },
   battle: { commands: 'commands' },
@@ -310,6 +311,10 @@ function applyRunCommand(game: Game | null, cmd: RunCommand, ctx: CommandContext
     case 'withdraw': return canWithdraw(run, map) ? settled(game.profile, run, 'withdrawn', map, []) : reject('withdraw');
     case 'openChest': return onRun(game, openChest(run, map), 'chest');
     case 'usePotion': return onRun(game, usePotion(run, map, lookup, cmd.potion, cmd.heroId), 'potion');
+    case 'claimRunGuide': {
+      const r = claimRunGuide(game.profile, run, ctx.maps, map, cmd.id);
+      return 'reason' in r ? reject(r.reason) : { game: { profile: r.profile, run: r.run }, events: [{ type: 'potion', potion: 'calm' }] };
+    }
     case 'chooseEvent': return onRun(game, chooseEvent(run, map, lookup, cmd.choice));
     case 'draftPick': return onRun(game, draftPick(run, map, cmd.index, lookup), 'drafted');
     case 'learnRunTalent': return onRun(game, learnRunTalent(run, home, lookup, cmd.heroId, cmd.node), 'talent');

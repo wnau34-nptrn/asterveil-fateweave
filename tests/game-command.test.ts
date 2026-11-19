@@ -18,7 +18,7 @@ import { craftBossItem } from '../src/core/world/world-boss';
 import { craftWeapon, enhanceTo, fuse, lockEquipment, raiseItemLevel, reroll, smelt, transferAffix } from '../src/core/world/forge';
 import { applyPreset, applyRunPreset, clearPreset, renamePreset, savePreset } from '../src/core/world/presets';
 import {
-  activeGuides, brew, buy, canWithdraw, chooseLoadout, claimGuide, claimQuest, COMMANDER_COLORS, COMMANDER_CRESTS, createCommander, depart, dismiss,
+  activeGuides, brew, buy, canWithdraw, chooseLoadout, claimGuide, claimRunGuide, claimQuest, COMMANDER_COLORS, COMMANDER_CRESTS, createCommander, depart, dismiss,
   equip, hire, learnTalent, newProfile, refreshBoard, resetTalents, salvage, setArchived, setPartyLane, settle, unequip, upgrade,
 } from '../src/core/world/profile';
 import { collectOverflow, expandStorage, recycleSelection } from '../src/core/world/storage';
@@ -153,6 +153,8 @@ const CASES: Record<CommandKind, Case> = {
   runPreset: { game: () => runGame(), cmd: { kind: 'runPreset', slot: 0 }, direct: g => applyRunPreset(R(g), P(g).presets?.[0] ?? undefined, 0) },
   withdraw: { game: () => runGame(), cmd: { kind: 'withdraw' }, direct: g => ({ game: { profile: settle(P(g), R(g), 'withdrawn', home), run: null } }) },
   openChest: { game: () => runGame({ position: { x: chest.x, y: chest.y } }), cmd: { kind: 'openChest' }, direct: g => openChest(R(g), home) },
+  claimRunGuide: { game: runGame, cmd: { kind: 'claimRunGuide', id: 'guide-calm' },
+    direct: g => { const r = claimRunGuide(P(g), R(g), maps, home, 'guide-calm'); return 'reason' in r ? { state: R(g), event: { type: 'blocked', reason: r.reason } } as WorldResult : { game: { profile: r.profile, run: r.run } }; } },
   usePotion: { game: () => { const g = hurt(runGame()); return { ...g, run: { ...g.run!, potions: { salve: 1, tonic: 0, repel: 0, calm: 0 } } }; },
     cmd: { kind: 'usePotion', potion: 'salve', heroId: 'guardian' }, direct: g => usePotion(R(g), home, lookup, 'salve', 'guardian') },
   chooseEvent: { game: () => runGame({ position: { x: bandit.x, y: bandit.y } }), cmd: { kind: 'chooseEvent', choice: 'fight' }, direct: g => chooseEvent(R(g), home, lookup, 'fight') },
@@ -167,7 +169,8 @@ const CASES: Record<CommandKind, Case> = {
   battle: { game: inBattle, cmd: { kind: 'battle', commands: turns(inBattle()).slice(0, 1) }, direct: g => ({ game: { profile: P(g), run: recordBattle(R(g), home, lookup, turns(g).slice(0, 1)) } }) },
 };
 // Fixtures that end in a refusal (equality is then checked on the reason); every other kind must make a real change.
-const REFUSED: CommandKind[] = ['worldBoss', 'claimWorldBoss', 'claimGuide', 'transferAffix', 'fuse', 'raiseItemLevel', 'claimQuest'];
+// OD-54: gear opens after the prologue, so a company with no map cleared already has a guide to skip.
+const REFUSED: CommandKind[] = ['worldBoss', 'claimWorldBoss', 'transferAffix', 'fuse', 'raiseItemLevel', 'claimQuest'];
 
 // What the shell stored after a direct call (or the refusal it ignored).
 function expected(g: Game, direct: ReturnType<Direct>): { game: Game } | { rejected: string } {

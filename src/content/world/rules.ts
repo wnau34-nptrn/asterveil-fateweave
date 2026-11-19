@@ -84,6 +84,8 @@ export const gameRules: GameRules = {
     { id: 'guide-wear', npc: 'keeper', feature: 'gear', kind: 'wear', reward: { ore: 6 } },
     { id: 'guide-enhance', npc: 'smith', feature: 'forge', kind: 'enhance', reward: { dust: 6 } },
     { id: 'guide-talent', npc: 'trainer', feature: 'tree', kind: 'talent', reward: { ore: 8 } },
+    // OD-54 (owner 2026-11-19 "แจกยา"): one calming draught, claimed on the map when the team first tires (else here).
+    { id: 'guide-calm', npc: 'herbalist', feature: 'gear', kind: 'calm', reward: { potions: { calm: 1 } } },
     { id: 'guide-brew', npc: 'herbalist', feature: 'brew', kind: 'brew', reward: { potions: { salve: 1 } } },
     { id: 'guide-level', npc: 'smith', feature: 'level', kind: 'itemLevel', reward: { dust: 4 } },
     { id: 'guide-hire', npc: 'broker', feature: 'hire', kind: 'hire', reward: { gold: 10 } },
@@ -92,7 +94,8 @@ export const gameRules: GameRules = {
   // Owner 2026-11-07, approved pacing: quests/team after MAP 1; hire/market/hunt after MAP 2.
   // Advanced services stay at MAP 3 explicitly: adding maps must not silently move existing rights to 5/7/9.
   // Revisit the historical A3 future-chapter table only with a new owner-approved progression task.
-  unlocks: { tree: 1, forge: 1, brew: 1, gear: 1, level: 2, quests: 1, hire: 2, team: 1, market: 2, fuse: 3, craft: 3, hunt: 2, transfer: 3, bossCharm: 3, hard: 3, tomes: 2 },
+  // OD-54 (owner 2026-11-19, R2): gear and the skill tree open right after the prologue (0 = no map to clear first).
+  unlocks: { tree: 0, forge: 1, brew: 1, gear: 0, level: 2, quests: 1, hire: 2, team: 1, market: 2, fuse: 3, craft: 3, hunt: 2, transfer: 3, bossCharm: 3, hard: 3, tomes: 2 },
   // Phase 4A (draft): the camp market, paid in gold coins, and paid hiring-board refreshes (2 per return).
   shop: {
     items: { shard: { price: 60, limit: 1 }, contract: { price: 150, limit: 1 }, gearbox: { price: 120, limit: 1 }, repel: { price: 30, limit: 2 } },
