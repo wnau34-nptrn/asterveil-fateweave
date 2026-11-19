@@ -100,7 +100,7 @@ test('offline the camp chat button is disabled with its reason', async ({ page }
 
 // Camp chat feed, hidden camps and closed channels (owner 2026-11-19): off by default, no reading while off, a toggle on
 // the camp, in the chat window and in Setup, lines from the last 45 s, a hidden camp leaves the feed and can be shown again.
-test('camp feed: off by default and silent, on shows new lines, a hidden camp can be shown again, private and guild tabs are closed', async ({ page }) => {
+test('camp feed: off by default and silent, on shows new lines, a hidden camp can be shown again, the friends tab is open and guild is closed', async ({ page }) => {
   test.setTimeout(90_000);
   const s = await serve(page);
   const me = await guest(s, 'อารี'); const other = await guest(s);
@@ -120,9 +120,9 @@ test('camp feed: off by default and silent, on shows new lines, a hidden camp ca
   await expect(feed).toContainText('ใครไปด่านสองบ้าง'); await expect(feed).not.toContainText('ข้อความก่อนเปิดแถบ');
   await page.screenshot({ path: `${SHOTS}/camp-feed-390.png` });
   const fb = (await feed.boundingBox())!; expect(fb.x + fb.width).toBeLessThanOrEqual(390 - 60);
-  // The feed opens the full chat; there the camp can be hidden and shown again, and the other channels show why they are closed.
+  // The feed opens the full chat; there the camp can be hidden and shown again, the friends tab is open (OD-56) and guild shows why it is closed.
   await feed.click(); const dialog = page.locator('#chat-dialog'); await expect(dialog).toBeVisible(); await expect(feed).toBeHidden();
-  await expect(dialog.locator('[data-chat-tab="dm"]')).toBeDisabled(); await expect(dialog.locator('[data-chat-tab="guild"]')).toBeDisabled();
+  await expect(dialog.locator('[data-chat-tab="dm"]')).toBeEnabled(); await expect(dialog.locator('[data-chat-tab="guild"]')).toBeDisabled();
   await expect(dialog.locator('[data-chat-tab="world"]')).toHaveAttribute('aria-current', 'true');
   await dialog.locator('.chat-msg').last().locator('.chat-more').click(); await dialog.locator('[data-chat="block"]').click();
   await dialog.locator('#chat-blocked summary').click(); await expect(dialog.locator('.chat-blocked-row')).toHaveCount(1);

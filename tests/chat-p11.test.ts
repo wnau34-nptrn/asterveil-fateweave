@@ -164,7 +164,7 @@ describe('chat through the Worker', () => {
 });
 
 // Channels (owner 2026-11-19, docs/design/CHAT_CHANNELS_TH.md): 1:1 and guild chat are prepared but closed.
-describe('chat channels (prepared, closed)', () => {
+describe('chat channels (guild closed; private open since OD-56)', () => {
   it('stored channel ids are canonical: a private channel is the same for both sides, ids never come from a device', () => {
     expect(dmChannel(B, A)).toBe(dmChannel(A, B)); expect(dmChannel(A, B)).toBe(`dm:${A}:${B}`);
     expect(dmChannel(A, A)).toBeUndefined(); expect(dmChannel(A, 'zz')).toBeUndefined();
@@ -173,20 +173,23 @@ describe('chat channels (prepared, closed)', () => {
     expect(channelKind('guild:0123456789abcdef')).toBe('guild'); expect(channelKind('lobby')).toBeUndefined();
   });
   it('only the world is open; who may read follows the channel', () => {
-    expect(CHANNELS.world.open).toBe(true); expect(CHANNELS.dm.open).toBe(false); expect(CHANNELS.guild.open).toBe(false);
-    expect(channelOpen('world')).toBe(true); expect(channelOpen(`dm:${A}:${B}`)).toBe(false); expect(channelOpen('nonsense')).toBe(false);
+    expect(CHANNELS.world.open).toBe(true); expect(CHANNELS.dm.open).toBe(true); expect(CHANNELS.guild.open).toBe(false);
+    expect(channelOpen('world')).toBe(true); expect(channelOpen(`dm:${A}:${B}`)).toBe(true); expect(channelOpen('guild:0123456789abcdef')).toBe(false); expect(channelOpen('nonsense')).toBe(false);
     expect(mayRead('world', C)).toBe(true); expect(mayRead(`dm:${A}:${B}`, A)).toBe(true); expect(mayRead(`dm:${A}:${B}`, C)).toBe(false);
     expect(mayRead('guild:0123456789abcdef', A)).toBe(false); expect(mayRead('guild:0123456789abcdef', A, [A])).toBe(true);
   });
   it('the Chat object refuses a closed channel and never leaks world messages into it', () => {
     const { chat, clock } = host();
     expect(chat.post(A, 'ค่าย-A', 'สวัสดี')).toMatchObject({ ok: true });
-    clock.t += 5000; expect(chat.post(A, 'ค่าย-A', 'ลับ', `dm:${A}:${B}`)).toEqual({ ok: false, error: 'channel_closed' });
-    expect(chat.read(B, 0, `dm:${A}:${B}`).messages).toEqual([]); expect(chat.read(B, 0).messages).toHaveLength(1);
+    clock.t += 5000; expect(chat.post(A, 'ค่าย-A', 'กิลด์', 'guild:0123456789abcdef')).toEqual({ ok: false, error: 'channel_closed' });
+    expect(chat.read(B, 0, `dm:${A}:${B}`).messages).toEqual([]); expect(chat.read(B, 0, 'guild:0123456789abcdef').messages).toEqual([]); expect(chat.read(B, 0).messages).toHaveLength(1);
   });
   it('the Worker answers a closed or unknown channel kind without touching the world', async () => {
     const s = server(); const a = await guest(s);
-    for (const kind of ['dm', 'guild']) {
+    // OD-56: a private channel needs a friend ref (400 without one, 403 not_friends for a ref that names no friend).
+    expect((await call(s, '/v1/chat?channel=dm', { method: 'GET', headers: bearer(a.token) })).status).toBe(400);
+    expect(await (await call(s, `/v1/chat?channel=dm&friend=${'0'.repeat(16)}`, { method: 'GET', headers: bearer(a.token) })).json()).toEqual({ error: 'not_friends' });
+    for (const kind of ['guild']) {
       const r = await call(s, `/v1/chat?channel=${kind}`, { method: 'GET', headers: bearer(a.token) }); expect(r.status).toBe(403); expect(await r.json()).toEqual({ error: 'chat_channel_closed' });
       const w = await handle(new Request('https://api.test/v1/chat/send', { method: 'POST', headers: bearer(a.token, true), body: JSON.stringify({ text: 'สวัสดี', channel: kind }) }), s.deps); expect(w.status).toBe(403);
     }

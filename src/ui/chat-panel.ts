@@ -2,11 +2,15 @@ import { CHANNELS, channelKinds } from '../core/chat/channels';
 import { CHAT_MAX, CHAT_REFUSAL_TEXT, filterChat, type ChatRefusal } from '../core/chat/filter';
 import type { ChatAdminRow, ChatMessage, ChatReportReason, ServerClient } from '../platform/server-client';
 import type { StoragePort } from '../core/save/expedition-save';
+import { FriendsPanel } from './friends-panel';
 
 // P11 chat (docs/design/CHAT_P11_TH.md): the world channel as a modal <dialog> opened from the camp. Server play only
 // (the camp button is disabled offline with its reason). Polls every 8 s while open and the page is visible; message
 // text is always set with textContent. "ซ่อนค่ายนี้" is kept on this device only (localStorage), never in the save.
-// Admins (D1 `admins`) also get the reported/hidden list with hide, restore and mute.
+// Admins (D1 `admins`) also get the reported/hidden list with hide, restore and mute. OD-56: the "เพื่อน" tab
+// (friends-panel.ts) holds friends and private chat; the world polling runs only while the world tab shows, and the camp
+// chat button carries a small unread badge for private messages (read when the friends tab polls, and once a minute at
+// most when the camp is shown).
 
 export const CHAT_POLL_MS = 8000;
 // The translucent feed on the camp (owner 2026-11-19): off by default, a per-device preference like the lessons. It reads
@@ -41,6 +45,7 @@ export class ChatPanel {
   private wait = 0;
   private admin: boolean | undefined;
   private blocked: Set<string>;
+  private tab: 'world' | 'dm' = 'world'; private readonly friends: FriendsPanel; private unread = 0;
   private readonly feed: HTMLButtonElement; private feedOn = feedPref(); private campShown = false; private feedTimer: ReturnType<typeof setInterval> | undefined; private readonly seenAt = new Map<number, number>();
   constructor(parent: HTMLElement, private readonly client: ServerClient, private readonly storage: StoragePort | undefined) {
     this.blocked = new Set(this.loadBlocked());
@@ -48,23 +53,25 @@ export class ChatPanel {
     this.dialog.id = 'chat-dialog'; this.dialog.setAttribute('aria-labelledby', 'chat-title');
     this.dialog.innerHTML = '<div class="account-card chat-card"><header class="chat-head"><h2 id="chat-title">แชทโลก</h2><button type="button" class="secondary" data-chat="close">ปิด</button></header>'
       // Channels (owner 2026-11-19): only the world is open; private and guild show why they are closed.
-      + `<nav class="chat-tabs" aria-label="ช่องแชท">${channelKinds.map(k => `<button type="button" class="chat-tab" data-chat-tab="${k}"${CHANNELS[k].open ? ' aria-current="true"' : ' disabled aria-disabled="true" title="' + CHANNELS[k].why + '"'}>${CHANNELS[k].label}${CHANNELS[k].open ? '' : '<small>เร็ว ๆ นี้</small>'}</button>`).join('')}</nav>`
-      + '<p class="chat-note">ชื่อในแชทเป็นชื่อแฝงของค่าย · อย่าใส่ข้อมูลส่วนตัว · ข้อความเก็บ 7 วัน · แตะ ⋯ เพื่อแจ้งหรือซ่อนค่าย</p>'
+      + `<nav class="chat-tabs" aria-label="ช่องแชท">${channelKinds.map(k => `<button type="button" class="chat-tab" data-chat-tab="${k}"${k === 'world' ? ' aria-current="true"' : CHANNELS[k].open ? ' aria-current="false"' : ' disabled aria-disabled="true" title="' + CHANNELS[k].why + '"'}>${CHANNELS[k].label}${CHANNELS[k].open ? (k === 'dm' ? '<small data-chat-unread hidden></small>' : '') : '<small>เร็ว ๆ นี้</small>'}</button>`).join('')}</nav>`
+      + '<div id="chat-world"><p class="chat-note">ชื่อในแชทเป็นชื่อแฝงของค่าย · อย่าใส่ข้อมูลส่วนตัว · ข้อความเก็บ 7 วัน · แตะ ⋯ เพื่อแจ้งหรือซ่อนค่าย</p>'
       + '<div class="chat-tools"><button type="button" class="secondary" id="chat-feed-toggle" data-chat="feed-toggle" data-chat-feed-toggle aria-pressed="false">แถบแชทในค่าย: <span data-feed-state>ปิด</span></button>'
       + '<details id="chat-blocked" class="chat-blocked"><summary id="chat-blocked-summary">ค่ายที่ซ่อนไว้ (0)</summary><div id="chat-blocked-list"></div></details></div>'
       + '<ol id="chat-log" class="chat-log" role="log" aria-live="polite" aria-label="ข้อความแชทโลก"></ol>'
       + '<p class="chat-status" id="chat-status" role="status" hidden></p>'
       + `<form class="chat-form"><label for="chat-text" class="chat-sr">ข้อความ</label><input id="chat-text" type="text" maxlength="${CHAT_MAX}" autocomplete="off" enterkeyhint="send" placeholder="พิมพ์ข้อความถึงทุกค่าย…"><button type="submit" class="primary" id="chat-send" data-chat="send">ส่ง</button></form>`
-      + `<p class="feedback-count" id="chat-count">0 / ${CHAT_MAX}</p><div id="chat-admin"></div></div>`;
+      + `<p class="feedback-count" id="chat-count">0 / ${CHAT_MAX}</p></div><div id="chat-admin"></div></div>`;
     parent.append(this.dialog);
+    this.friends = new FriendsPanel(client, n => this.setUnread(n));
+    this.dialog.querySelector('#chat-world')!.after(this.friends.root);
     this.feed = el('button', 'chat-feed'); this.feed.id = 'chat-feed'; this.feed.type = 'button'; this.feed.hidden = true; this.feed.dataset.chatOpen = '';
     this.feed.setAttribute('aria-label', 'แชทโลก · ข้อความล่าสุด · แตะเพื่อเปิดแชท'); parent.append(this.feed);
     this.feed.addEventListener('click', () => this.open());
     this.dialog.addEventListener('click', e => this.click(e));
     this.dialog.addEventListener('submit', e => { e.preventDefault(); void this.send(); });
     this.dialog.addEventListener('input', e => { if ((e.target as HTMLElement).id === 'chat-text') this.count(); });
-    this.dialog.addEventListener('close', () => { this.stop(); this.syncFeed(); });
-    document.addEventListener('visibilitychange', () => { if ((this.dialog.open || this.feedActive) && document.visibilityState === 'visible') void this.poll(); });
+    this.dialog.addEventListener('close', () => { this.stop(); this.friends.show(false); this.syncFeed(); });
+    document.addEventListener('visibilitychange', () => { if (((this.dialog.open && this.tab === 'world') || this.feedActive) && document.visibilityState === 'visible') void this.poll(); });
   }
   // ---- the camp feed ----
   get feedEnabled(): boolean { return this.feedOn; }
@@ -74,7 +81,33 @@ export class ChatPanel {
     this.syncFeed(); this.syncToggles();
   }
   // The shell tells the panel whether the camp is the visible view.
-  showOnCamp(shown: boolean): void { this.campShown = shown; this.syncFeed(); this.syncToggles(); }
+  showOnCamp(shown: boolean): void {
+    this.campShown = shown; this.syncFeed(); this.syncToggles();
+    if (shown && !this.dialog.open && Date.now() - this.friends.fetchedAt > 60_000) void this.friends.refresh();
+  }
+  // Private unread messages: the "เพื่อน" tab and the camp chat button show the count.
+  private setUnread(n: number): void { this.unread = Math.max(0, n); this.syncBadge(); }
+  private syncBadge(): void {
+    const tab = this.dialog.querySelector<HTMLElement>('[data-chat-unread]');
+    if (tab) { tab.textContent = this.unread ? `ใหม่ ${Math.min(this.unread, 99)}` : ''; tab.hidden = !this.unread; }
+    const camp = document.querySelector<HTMLElement>('#lobby-chat');
+    if (!camp || camp.hasAttribute('disabled')) return;
+    let badge = camp.querySelector<HTMLElement>('.chat-badge');
+    if (!badge) { badge = el('span', 'chat-badge'); badge.id = 'chat-unread-badge'; camp.append(badge); }
+    badge.textContent = this.unread ? String(Math.min(this.unread, 99)) : ''; badge.hidden = !this.unread;
+    camp.setAttribute('aria-label', this.unread ? `เปิดแชท · ข้อความส่วนตัวใหม่ ${this.unread}` : 'เปิดแชทโลก');
+  }
+  private setTab(tab: 'world' | 'dm'): void {
+    this.tab = tab;
+    for (const b of this.dialog.querySelectorAll<HTMLButtonElement>('[data-chat-tab]:not(:disabled)')) b.setAttribute('aria-current', String(b.dataset.chatTab === tab));
+    const title = this.dialog.querySelector('#chat-title'); if (title) title.textContent = tab === 'world' ? 'แชทโลก' : 'เพื่อน';
+    const world = this.dialog.querySelector<HTMLElement>('#chat-world'); if (world) world.hidden = tab !== 'world';
+    this.stop();
+    if (tab === 'world') {
+      this.friends.show(false);
+      if (this.dialog.open) { void this.poll(); this.timer = setInterval(() => { if (document.visibilityState === 'visible') void this.poll(); }, CHAT_POLL_MS); }
+    } else this.friends.show(this.dialog.open);
+  }
   private syncFeed(): void {
     if (this.feedTimer) clearInterval(this.feedTimer); this.feedTimer = undefined;
     const active = this.feedActive; this.feed.hidden = !active || !this.feedLines().length;
@@ -93,6 +126,7 @@ export class ChatPanel {
   }
   // Every on/off button for the feed (the camp, the chat window, Setup) shows the same state.
   syncToggles(): void {
+    this.syncBadge();
     for (const b of document.querySelectorAll<HTMLButtonElement>('[data-chat-feed-toggle]')) {
       b.setAttribute('aria-pressed', String(this.feedOn));
       const label = b.querySelector('[data-feed-state]'); if (label) label.textContent = this.feedOn ? 'เปิด' : 'ปิด';
@@ -105,9 +139,8 @@ export class ChatPanel {
     this.syncFeed(); this.renderBlockedList(); this.syncToggles();
     if (this.admin === undefined) void this.client.account().then(o => { this.admin = o.kind === 'ok' && o.value.admin === true; this.renderAdmin(); });
     this.renderAdmin(); this.render(); this.inputState();
-    void this.poll();
-    this.stop(); this.timer = setInterval(() => { if (document.visibilityState === 'visible') void this.poll(); }, CHAT_POLL_MS);
-    this.input()?.focus({ preventScroll: true });
+    this.setTab(this.tab);
+    if (this.tab === 'world') this.input()?.focus({ preventScroll: true });
   }
   close(): void { if (this.dialog.open) this.dialog.close(); }
   private stop(): void { if (this.timer) clearInterval(this.timer); this.timer = undefined; }
@@ -192,6 +225,8 @@ export class ChatPanel {
   }
 
   private click(e: Event): void {
+    const tab = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-chat-tab]:not(:disabled)');
+    if (tab) { this.setTab(tab.dataset.chatTab === 'dm' ? 'dm' : 'world'); tab.focus(); return; }
     const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button[data-chat]');
     if (!b || b.disabled) return;
     const id = Number(b.dataset.id);
@@ -259,8 +294,10 @@ export class ChatPanel {
     const btn = (text: string, data: Record<string, string>) => { const b = el('button', 'secondary', text); b.type = 'button'; Object.assign(b.dataset, data); return b; };
     for (const r of rows as ChatAdminRow[]) {
       const li = el('li'); li.dataset.id = String(r.id);
-      li.append(el('p', '', `${r.handle} · ${clock(r.at)} · แจ้ง ${r.reports} (${r.reasons.map(x => REASONS[x as ChatReportReason] ?? x).join(', ') || '-'})${r.hidden ? ` · ซ่อนแล้ว (${r.hidden === 'admin' ? 'ผู้ดูแล' : 'แจ้งครบ'})` : ''}`),
-        el('p', 'chat-text', r.text), el('p', '', `บัญชี ${r.account}`));
+      li.append(el('p', '', `${r.channel === 'dm' ? 'แชทส่วนตัว · ' : ''}${r.handle} · ${clock(r.at)} · แจ้ง ${r.reports} (${r.reasons.map(x => REASONS[x as ChatReportReason] ?? x).join(', ') || '-'})${r.hidden ? ` · ซ่อนแล้ว (${r.hidden === 'admin' ? 'ผู้ดูแล' : 'แจ้งครบ'})` : ''}`));
+      // A reported private message comes with the few messages before it (OD-56); nothing else of that conversation.
+      if (r.context?.length) { const ctx = el('ol', 'chat-admin-context'); ctx.setAttribute('aria-label', 'ข้อความก่อนหน้า'); for (const c of r.context) ctx.append(el('li', '', `${c.handle} ${clock(c.at)}: ${c.text}`)); li.append(ctx); }
+      li.append(el('p', 'chat-text', r.text), el('p', '', `บัญชี ${r.account}`));
       const row = el('div', 'account-row');
       row.append(btn(r.hidden ? 'คืนข้อความ' : 'ซ่อนข้อความ', { chat: 'admin-hide', id: String(r.id), hidden: String(!r.hidden) }),
         btn('ระงับ 1 ชม.', { chat: 'admin-mute', account: r.account, minutes: '60' }), btn('ระงับ 1 วัน', { chat: 'admin-mute', account: r.account, minutes: '1440' }));

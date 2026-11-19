@@ -1,11 +1,12 @@
-// Chat channels (owner 2026-11-19: "เตรียมไว้" for 1:1 chat and guild chat; docs/design/CHAT_CHANNELS_TH.md). Only the
-// world channel is open. The private (1:1) and guild channels have a fixed id format, a registry entry and the server
-// plumbing, but stay closed (`open: false`): the Worker refuses them until the owner opens each one. Pure, no I/O.
+// Chat channels (owner 2026-11-19: "เตรียมไว้" for 1:1 chat and guild chat; docs/design/CHAT_CHANNELS_TH.md). The world
+// and, since OD-56 (owner 2026-11-19 "เพิ่มระบบเพื่อน และ chat 1:1", docs/design/FRIENDS_TH.md), the private channel are
+// open; the Worker admits a private channel only for two mutual friends (and the `FRIENDS` flag). Guild stays closed
+// (`open: false`) until the game has guilds. Pure, no I/O.
 export type ChannelKind = 'world' | 'dm' | 'guild';
 export interface ChannelInfo { kind: ChannelKind; open: boolean; label: string; why: string }
 export const CHANNELS: Readonly<Record<ChannelKind, ChannelInfo>> = {
   world: { kind: 'world', open: true, label: 'แชทโลก', why: '' },
-  dm: { kind: 'dm', open: false, label: 'แชทส่วนตัว', why: 'ยังไม่เปิด · ต้องมีรายชื่อเพื่อนและการยินยอมสองฝ่ายก่อน' },
+  dm: { kind: 'dm', open: true, label: 'เพื่อน', why: '' },
   guild: { kind: 'guild', open: false, label: 'แชทกิลด์', why: 'ยังไม่เปิด · เกมยังไม่มีกิลด์' },
 };
 export const channelKinds = Object.keys(CHANNELS) as ChannelKind[];

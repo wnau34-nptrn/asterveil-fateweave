@@ -1,4 +1,7 @@
-import { CHANNELS, type ChannelKind } from '../core/chat/channels';
+import { CHANNELS, dmChannel, WORLD_CHANNEL, type ChannelKind } from '../core/chat/channels';
+import { formatFriendCode, FRIEND_LIMITS, FRIEND_REF } from '../core/chat/friends';
+import { chatHandle } from './chat';
+import { blockByRef, cancelRequest, friendCode, friendOverview, mutualFriend, removeFriend, requestByCode, respondRequest, unblock } from './friends';
 import { checkUpload, MAX_PAYLOAD_BYTES } from '../core/cloud/cloud-save';
 import { SAVE_VERSION } from '../core/save/expedition-save';
 import {
@@ -42,6 +45,9 @@ export interface ApiDeps {
   // P11 chat: the one `Chat` object (absent: chat closed, 503) and who may write (`CHAT_WRITE`: all | linked | off).
   chat?: AccountGame;
   chatWrite?: ChatWrite;
+  // OD-56 friends and private chat (`FRIENDS` = on | off; absent counts as on). Off: the friend routes and the private
+  // channel answer 403 `friends_off`; the world chat is unchanged.
+  friends?: boolean;
 }
 export type ChatWrite = 'all' | 'linked' | 'off';
 
@@ -120,10 +126,13 @@ const ROUTES: Record<string, 'GET' | 'POST'> = {
   '/v1/account/delete': 'POST', '/v1/account/cancel': 'POST',
   '/v1/token/rotate': 'POST', '/v1/telemetry': 'POST', '/v1/feedback': 'POST', '/v1/admin/telemetry': 'GET', '/v1/admin/feedback': 'GET',
   '/v1/chat': 'GET', '/v1/chat/send': 'POST', '/v1/chat/report': 'POST', '/v1/admin/chat': 'GET', '/v1/admin/chat/hide': 'POST', '/v1/admin/chat/mute': 'POST',
+  '/v1/friends': 'GET', '/v1/friends/request': 'POST', '/v1/friends/respond': 'POST', '/v1/friends/cancel': 'POST', '/v1/friends/remove': 'POST',
+  '/v1/friends/block': 'POST', '/v1/friends/unblock': 'POST', '/v1/friends/code': 'POST',
 };
 const ACCOUNT_ROUTES = new Set(['/v1/account', '/v1/link', '/v1/signin', '/v1/recovery-code', '/v1/recover', '/v1/sessions/revoke', '/v1/account/delete', '/v1/account/cancel',
   '/v1/token/rotate', '/v1/telemetry', '/v1/feedback', '/v1/admin/telemetry', '/v1/admin/feedback',
-  '/v1/chat', '/v1/chat/send', '/v1/chat/report', '/v1/admin/chat', '/v1/admin/chat/hide', '/v1/admin/chat/mute']);
+  '/v1/chat', '/v1/chat/send', '/v1/chat/report', '/v1/admin/chat', '/v1/admin/chat/hide', '/v1/admin/chat/mute',
+  '/v1/friends', '/v1/friends/request', '/v1/friends/respond', '/v1/friends/cancel', '/v1/friends/remove', '/v1/friends/block', '/v1/friends/unblock', '/v1/friends/code']);
 // P09-02g: what a `deleting` account may still do (read the account, cancel, sign devices out; P09-03: keep its
 // credential fresh and report errors).
 const WHILE_DELETING = new Set(['/v1/account', '/v1/account/cancel', '/v1/sessions/revoke', '/v1/account/delete', '/v1/token/rotate', '/v1/telemetry']);
@@ -324,6 +333,7 @@ async function accountRoute(request: Request, path: string, deps: ApiDeps, now: 
   if (!auth) return error('unauthorized', 401, { 'WWW-Authenticate': 'Bearer' });
   const accountId = auth.accountId;
   if (path.startsWith('/v1/chat') || path.startsWith('/v1/admin/chat')) return chatRoute(request, path, accountId, auth.status, ip, deps, now);
+  if (path.startsWith('/v1/friends')) return friendsRoute(request, path, accountId, auth.status, ip, deps, now);
   if (path === '/v1/telemetry' || path === '/v1/feedback' || path.startsWith('/v1/admin/')) return reportRoute(request, path, accountId, auth.status, deps, now);
   if (!await allowed(deps, `account:${accountId}`, LIMITS.accountPerMinute, 60_000, now)) return limited(60);
   if (auth.status === 'deleting' && !WHILE_DELETING.has(path)) return deletingError();
@@ -439,14 +449,26 @@ async function chatRoute(request: Request, path: string, accountId: string, stat
     if (deps.chatWrite === 'linked' && status !== 'linked') return 'chat_linked_only';
     return null;
   };
-  // Channels (owner 2026-11-19, docs/design/CHAT_CHANNELS_TH.md): a device names a channel kind, never a stored id. Only
-  // the world is open; private and guild answer 403 `chat_channel_closed` until the owner opens them.
-  const kindOf = (v: unknown): 'ok' | 'closed' | 'bad' => v === undefined || v === null || v === 'world' ? 'ok' : typeof v === 'string' && v in CHANNELS ? (CHANNELS[v as ChannelKind].open ? 'ok' : 'closed') : 'bad';
+  // Channels (owner 2026-11-19, docs/design/CHAT_CHANNELS_TH.md): a device names a channel kind, never a stored id. The
+  // world is open; guild answers 403 `chat_channel_closed`. A private channel (OD-56) names the friend by the device's
+  // opaque friend ref; the Worker derives the stored id from this account and that friend, only for mutual friends with
+  // no block either way (403 `not_friends` otherwise, the same answer whatever the reason).
+  const channelFor = async (v: unknown, friend: unknown): Promise<string | Response> => {
+    if (v === undefined || v === null || v === 'world') return WORLD_CHANNEL;
+    if (typeof v !== 'string' || !(v in CHANNELS)) return error('invalid_request', 400);
+    if (!CHANNELS[v as ChannelKind].open || v !== 'dm') return error('chat_channel_closed', 403);
+    if (deps.friends === false) return error('friends_off', 403);
+    if (status === 'deleting') return deletingError();
+    if (typeof friend !== 'string' || !FRIEND_REF.test(friend)) return error('invalid_request', 400);
+    const other = await mutualFriend(deps.db, accountId, friend);
+    return other ? dmChannel(accountId, other)! : error('not_friends', 403);
+  };
   if (path === '/v1/chat') {
-    const k = kindOf(new URL(request.url).searchParams.get('channel')); if (k === 'bad') return error('invalid_request', 400); if (k === 'closed') return error('chat_channel_closed', 403);
+    const q = new URL(request.url).searchParams;
     if (!deps.limiter.allow(`chatread:${accountId}`, LIMITS.chatReadPerSecond, 1000, now)) return limited(1);
-    const after = Number.parseInt(new URL(request.url).searchParams.get('after') ?? '0', 10);
-    const r = await call(`/read?account=${accountId}&after=${Number.isSafeInteger(after) && after > 0 ? after : 0}`);
+    const channel = await channelFor(q.get('channel'), q.get('friend')); if (channel instanceof Response) return channel;
+    const after = Number.parseInt(q.get('after') ?? '0', 10);
+    const r = await call(`/read?account=${accountId}&after=${Number.isSafeInteger(after) && after > 0 ? after : 0}${channel === WORLD_CHANNEL ? '' : `&channel=${encodeURIComponent(channel)}`}`);
     if (!r?.ok) return error('chat_unavailable', 503);
     return json({ ...await r.json() as object, write: writeBlock() });
   }
@@ -460,12 +482,13 @@ async function chatRoute(request: Request, path: string, accountId: string, stat
     try { const v: unknown = JSON.parse(raw); if (typeof v !== 'object' || v === null || Array.isArray(v)) return error('invalid_request', 400); body = v as Record<string, unknown>; } catch { return error('invalid_json', 400); }
     if (path === '/v1/chat/report') {
       if (!await allowed(deps, `chatreport:${accountId}`, LIMITS.chatReportPer10Minutes, 600_000, now)) return limited(600);
-      return pass(await call('/report', { account: accountId, id: body.id, reason: body.reason }));
+      const channel = await channelFor(body.channel, body.friend); if (channel instanceof Response) return channel;
+      return pass(await call('/report', { account: accountId, id: body.id, reason: body.reason, channel }));
     }
     if (typeof body.text !== 'string') return error('invalid_request', 400);
-    const kind = kindOf(body.channel); if (kind === 'bad') return error('invalid_request', 400); if (kind === 'closed') return error('chat_channel_closed', 403);
+    const channel = await channelFor(body.channel, body.friend); if (channel instanceof Response) return channel;
     if (!await allowed(deps, `chatip:${ip}`, LIMITS.chatSendPerIpMinute, 60_000, now)) return limited(60);
-    const r = await call('/post', { account: accountId, text: body.text });
+    const r = await call('/post', { account: accountId, text: body.text, channel });
     if (r?.status === 429) { const b = await r.json() as { retryAfter?: number }; return json(b, 429, { 'Retry-After': String(b.retryAfter ?? 5) }); }
     return pass(r);
   }
@@ -490,4 +513,71 @@ async function chatRoute(request: Request, path: string, accountId: string, stat
   const r = await call('/mute', { account: target, minutes: body.minutes, by: accountId });
   if (r?.ok) await auditAdmin(deps.db, accountId, 'chat_mute', target, `minutes:${String(body.minutes)}`, now);
   return pass(r);
+}
+
+// OD-56 friends (docs/design/FRIENDS_TH.md). The device sees its own code, handles and opaque refs, never an account id.
+// A request by code is the only lookup: limited per account and per IP network, and every reason a code cannot be used
+// (unknown, blocked, being deleted, inbox full) answers the same 404 `friend_code_unavailable`.
+async function friendsRoute(request: Request, path: string, accountId: string, status: string, ip: string, deps: ApiDeps, now: number): Promise<Response> {
+  if (deps.friends === false) return error('friends_off', 403);
+  if (status === 'deleting') return deletingError();
+  if (path === '/v1/friends') {
+    if (!deps.limiter.allow(`friendread:${accountId}`, FRIEND_LIMITS.readPerSecond, 1000, now)) return limited(1);
+    const [code, all] = await Promise.all([friendCode(deps.db, accountId, now), friendOverview(deps.db, accountId)]);
+    // Unread private messages per friend from the chat object (an outage shows none rather than failing the list).
+    const channels = all.friends.map(f => dmChannel(accountId, f.other)!);
+    let unread: Record<string, number> = {};
+    if (deps.chat && channels.length) {
+      try {
+        const r = await deps.chat.fetch(new Request('https://chat/unread', { method: 'POST', body: JSON.stringify({ account: accountId, channels }), headers: { 'Content-Type': 'application/json' } }));
+        if (r.ok) unread = (await r.json() as { unread: Record<string, number> }).unread;
+      } catch { /* none */ }
+    }
+    const view = async (rows: { ref: string; other: string; at: number }[]) => Promise.all(rows.map(async r => ({ ref: r.ref, handle: await chatHandle(r.other), at: r.at })));
+    const friends = await Promise.all(all.friends.map(async (f, i) => ({ ref: f.ref, handle: await chatHandle(f.other), since: f.at, unread: unread[channels[i]!] ?? 0 })));
+    return json({
+      code: formatFriendCode(code), friends, incoming: await view(all.incoming), outgoing: await view(all.outgoing), blocked: await view(all.blocked),
+      unread: friends.reduce((n, f) => n + f.unread, 0), limits: { maxFriends: FRIEND_LIMITS.maxFriends, maxOutgoing: FRIEND_LIMITS.maxOutgoing },
+    });
+  }
+  const body = await readJson(request);
+  if (body instanceof Response) return body;
+  if (path === '/v1/friends/request') {
+    if (!await allowed(deps, `friendcode:${accountId}`, FRIEND_LIMITS.codePer10Minutes, 600_000, now)) return limited(600);
+    if (!await allowed(deps, `friendcodeip:${ip}`, FRIEND_LIMITS.codePerIpHour, 3_600_000, now)) return limited(3600);
+    const out = await requestByCode(deps.db, accountId, body.code, now);
+    switch (out) {
+      case 'sent': case 'already_sent': return json({ status: 'sent' }, 201);
+      case 'accepted': return json({ status: 'friends' });
+      case 'unavailable': return error('friend_code_unavailable', 404);
+      case 'invalid_code': return error('invalid_code', 400);
+      case 'self': return error('friend_self', 409);
+      case 'list_full': return error('friend_list_full', 409);
+      default: return error(out, 409);
+    }
+  }
+  if (path === '/v1/friends/code') {
+    if (!await allowed(deps, `friendrotate:${accountId}`, FRIEND_LIMITS.rotatePerDay, 86_400_000, now)) return limited(3600);
+    return json({ code: formatFriendCode(await friendCode(deps.db, accountId, now, true)) });
+  }
+  if (!await allowed(deps, `friendact:${accountId}`, FRIEND_LIMITS.actionPerMinute, 60_000, now)) return limited(60);
+  const ref = str(body.ref);
+  if (!FRIEND_REF.test(ref)) return error('invalid_request', 400);
+  const done = (ok: boolean) => ok ? json({ ok: true }) : error('not_found', 404);
+  switch (path) {
+    case '/v1/friends/respond': {
+      if (typeof body.accept !== 'boolean') return error('invalid_request', 400);
+      const out = await respondRequest(deps.db, accountId, ref, body.accept, now);
+      if (out === 'accepted') return json({ status: 'friends' });
+      if (out === 'declined') return json({ status: 'declined' });
+      return out === 'not_found' ? error('not_found', 404) : error(out === 'list_full' ? 'friend_list_full' : 'friend_list_full_other', 409);
+    }
+    case '/v1/friends/cancel': return done(await cancelRequest(deps.db, accountId, ref));
+    case '/v1/friends/remove': return done(await removeFriend(deps.db, accountId, ref));
+    case '/v1/friends/unblock': return done(await unblock(deps.db, accountId, ref));
+    default: {
+      const out = await blockByRef(deps.db, accountId, ref, now);
+      return out === 'blocked' ? json({ ok: true }) : out === 'not_found' ? error('not_found', 404) : error(out, 409);
+    }
+  }
 }

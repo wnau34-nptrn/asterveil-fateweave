@@ -1,11 +1,12 @@
 import { GOOGLE, type D1Like } from './accounts';
+import { FRIEND_PURGE } from './friends';
 
 // P09-02g: account deletion with a grace period (docs/design/p09/SAFETY_P09_02G_TH.md, ACCOUNT_FLOW_TH.md).
 // Request: status `deleting`, `delete_after` = now + DELETE_GRACE_MS, every other device signed out, one audit row. The
 // requesting device stays signed in so it can cancel; any device can also sign in again (Google / recovery code) to
 // cancel. While `deleting` the game routes refuse (403 account_deleting). Cancel: back to `linked`/`guest`. Purge (the
 // hourly Cron): once `delete_after` has passed by PURGE_MARGIN_MS, the account's Durable Object data is deleted, then its
-// D1 rows (P09-03: its feedback too), in that order, so a failed run is simply retried. `account_audit` keeps only the random id, action and time.
+// D1 rows (P09-03: its feedback too; OD-56: its friend rows on both sides), in that order, so a failed run is simply retried. `account_audit` keeps only the random id, action and time.
 
 export const DELETE_GRACE_MS = 14 * 24 * 60 * 60 * 1000;
 // Cancel is allowed until `delete_after`; the purge waits this much longer, so the two never overlap.
@@ -64,6 +65,8 @@ export async function purgeDue(db: D1Like, purgeGame: PurgeGame, now: number, li
       db.prepare(`DELETE FROM recovery_codes WHERE account_id = ? AND EXISTS ${guard}`).bind(id, id, now - PURGE_MARGIN_MS),
       db.prepare(`DELETE FROM admins WHERE account_id = ? AND EXISTS ${guard}`).bind(id, id, now - PURGE_MARGIN_MS),
       db.prepare(`DELETE FROM feedback WHERE account_id = ? AND EXISTS ${guard}`).bind(id, id, now - PURGE_MARGIN_MS),
+      // OD-56: the friend code, friendships, requests and blocks on either side (the other side's list loses it too).
+      ...FRIEND_PURGE.map(([table, cond]) => db.prepare(`DELETE FROM ${table} WHERE (${cond}) AND EXISTS (SELECT 1 FROM accounts WHERE id = ?1 AND status = 'deleting' AND delete_after <= ?2)`).bind(id, now - PURGE_MARGIN_MS)),
       db.prepare(`INSERT INTO account_audit (account_id, action, detail, at) SELECT ?, 'purged', '', ? WHERE EXISTS ${guard}`).bind(id, now, id, now - PURGE_MARGIN_MS),
       db.prepare("DELETE FROM accounts WHERE id = ? AND status = 'deleting' AND delete_after <= ?").bind(id, now - PURGE_MARGIN_MS),
     ]);

@@ -73,7 +73,13 @@ export interface WorldBossStatus { week: number; current: SharedBoss | null; las
 export interface ChatMessage { id: number; handle: string; text: string; at: number; mine: boolean }
 export interface ChatRead { messages: ChatMessage[]; hidden: number[]; last: number; muted: number | null; write: string | null }
 export type ChatReportReason = 'abuse' | 'spam' | 'personal' | 'other';
-export interface ChatAdminRow { id: number; account: string; handle: string; text: string; at: number; hidden: string | null; reports: number; reasons: string[] }
+export interface ChatContextLine { account: string; handle: string; text: string; at: number }
+export interface ChatAdminRow { id: number; account: string; handle: string; text: string; at: number; hidden: string | null; reports: number; reasons: string[]; channel?: 'world' | 'dm'; context?: ChatContextLine[] }
+// OD-56 friends: the device sees handles and opaque refs only.
+export interface FriendEntry { ref: string; handle: string; at: number }
+export interface FriendRow { ref: string; handle: string; since: number; unread: number }
+export interface FriendsView { code: string; friends: FriendRow[]; incoming: FriendEntry[]; outgoing: FriendEntry[]; blocked: FriendEntry[]; unread: number; limits: { maxFriends: number; maxOutgoing: number } }
+export type FriendAction = 'respond' | 'cancel' | 'remove' | 'block' | 'unblock';
 export interface ChatAdmin { rows: ChatAdminRow[]; mutes: { account: string; until: number }[] }
 export interface TelemetryRow { day: string; kind: string; key: string; count: number }
 const SERVER_KEY = 'fateweave-server';
@@ -299,11 +305,12 @@ export class ServerClient {
   }
   // ---- P11 chat ----
   // Reads once without retries (the panel polls again anyway).
-  async chatRead(after: number): Promise<AccountOutcome<ChatRead>> {
+  // `friend` (OD-56): the friend's ref for a private conversation; without it the world channel.
+  async chatRead(after: number, friend?: string): Promise<AccountOutcome<ChatRead>> {
     const headers = this.bearer(false);
     if (!headers) return { kind: 'failed', reason: 'unauthorized' };
     let r: Response;
-    try { r = await this.port.fetch(`${this.base}/v1/chat?after=${after}`, { method: 'GET', headers, signal: AbortSignal.timeout(TIMEOUT_MS) }); } catch { return { kind: 'failed', reason: 'network' }; }
+    try { r = await this.port.fetch(`${this.base}/v1/chat?after=${after}${friend ? `&channel=dm&friend=${encodeURIComponent(friend)}` : ''}`, { method: 'GET', headers, signal: AbortSignal.timeout(TIMEOUT_MS) }); } catch { return { kind: 'failed', reason: 'network' }; }
     const body: unknown = await r.json().catch(() => ({}));
     if (r.status === 200) return { kind: 'ok', value: body as ChatRead };
     if (r.status === 401) return { kind: 'failed', reason: 'unauthorized' };
@@ -311,22 +318,43 @@ export class ServerClient {
   }
   // One send, never retried (a lost answer could otherwise post twice). `refused` carries the server's reason
   // (filter refusals, `too_fast`, `duplicate`, `muted`, `chat_linked_only` ...).
-  async chatSend(text: string): Promise<AccountOutcome<ChatMessage> & { until?: number; retryAfter?: number }> {
+  async chatSend(text: string, friend?: string): Promise<AccountOutcome<ChatMessage> & { until?: number; retryAfter?: number }> {
     const headers = this.bearer(true);
     if (!headers) return { kind: 'failed', reason: 'unauthorized' };
     let r: Response;
-    try { r = await this.port.fetch(`${this.base}/v1/chat/send`, { method: 'POST', headers, body: JSON.stringify({ text }), signal: AbortSignal.timeout(TIMEOUT_MS) }); } catch { return { kind: 'failed', reason: 'network' }; }
+    try { r = await this.port.fetch(`${this.base}/v1/chat/send`, { method: 'POST', headers, body: JSON.stringify(friend ? { text, channel: 'dm', friend } : { text }), signal: AbortSignal.timeout(TIMEOUT_MS) }); } catch { return { kind: 'failed', reason: 'network' }; }
     const body = await r.json().catch(() => ({})) as { message?: ChatMessage; error?: string; until?: number; retryAfter?: number };
     if (r.status === 201 && body.message) return { kind: 'ok', value: body.message };
     if (r.status === 401) return { kind: 'failed', reason: 'unauthorized' };
     if (r.status >= 500) return { kind: 'failed', reason: 'server' };
     return { kind: 'refused', error: body.error ?? `http_${r.status}`, ...(body.until ? { until: body.until } : {}), ...(body.retryAfter ? { retryAfter: body.retryAfter } : {}) };
   }
-  async chatReport(id: number, reason: ChatReportReason): Promise<AccountOutcome<true>> {
+  async chatReport(id: number, reason: ChatReportReason, friend?: string): Promise<AccountOutcome<true>> {
     const headers = this.bearer(true);
     if (!headers) return { kind: 'failed', reason: 'unauthorized' };
-    return this.accountCall('/v1/chat/report', { method: 'POST', headers, body: JSON.stringify({ id, reason }) }, 200, () => true as const);
+    return this.accountCall('/v1/chat/report', { method: 'POST', headers, body: JSON.stringify(friend ? { id, reason, channel: 'dm', friend } : { id, reason }) }, 200, () => true as const);
   }
+  // ---- OD-56 friends: one request each, never retried (the panel reads again; a lost answer is safe to repeat by hand) ----
+  private async once<T>(path: string, body: unknown, ok: readonly number[], read: (b: unknown) => T): Promise<AccountOutcome<T>> {
+    const headers = this.bearer(body !== undefined);
+    if (!headers) return { kind: 'failed', reason: 'unauthorized' };
+    let r: Response;
+    try {
+      r = await this.port.fetch(this.base + path, { method: body === undefined ? 'GET' : 'POST', headers, ...(body === undefined ? {} : { body: JSON.stringify(body) }), signal: AbortSignal.timeout(TIMEOUT_MS) });
+    } catch { return { kind: 'failed', reason: 'network' }; }
+    const b: unknown = await r.json().catch(() => ({}));
+    if (ok.includes(r.status)) return { kind: 'ok', value: read(b) };
+    if (r.status === 401) return { kind: 'failed', reason: 'unauthorized' };
+    if (r.status >= 500) return { kind: 'failed', reason: 'server' };
+    return { kind: 'refused', error: (b as { error?: string }).error ?? `http_${r.status}` };
+  }
+  friends(): Promise<AccountOutcome<FriendsView>> { return this.once('/v1/friends', undefined, [200], b => b as FriendsView); }
+  // `sent` (waiting for the other side) or `friends` (they had asked too).
+  friendRequest(code: string): Promise<AccountOutcome<'sent' | 'friends'>> { return this.once('/v1/friends/request', { code }, [200, 201], b => (b as { status: 'sent' | 'friends' }).status); }
+  friendAction(action: FriendAction, ref: string, accept?: boolean): Promise<AccountOutcome<true>> {
+    return this.once(`/v1/friends/${action}`, action === 'respond' ? { ref, accept: accept === true } : { ref }, [200], () => true as const);
+  }
+  friendNewCode(): Promise<AccountOutcome<string>> { return this.once('/v1/friends/code', {}, [200], b => (b as { code: string }).code); }
   async chatAdmin(): Promise<AccountOutcome<ChatAdmin>> {
     const headers = this.bearer(false);
     if (!headers) return { kind: 'failed', reason: 'unauthorized' };
