@@ -31,7 +31,7 @@ export class FriendsPanel {
   private msgs: ChatMessage[] = [];
   private last = 0;
   private timer: ReturnType<typeof setInterval> | undefined;
-  private busy = false; private reading = false; private sending = false;
+  private busy = false; private again = false; private reading = false; private sending = false;
   private menuFor: string | undefined; private msgMenu: number | undefined; private confirm: string | undefined;
   private block: string | null = null; private wait = 0;
   private active = false;
@@ -70,9 +70,12 @@ export class FriendsPanel {
   private tick(): Promise<void> { return this.conv ? this.readConv() : this.refresh(); }
 
   // One read of the list (the camp badge also calls this, at most once a minute, while the camp is shown).
+  // A refresh asked for while one is in flight (e.g. right after a block) runs once more afterwards, so the list never
+  // keeps the answer of a read that started before the change.
   async refresh(): Promise<void> {
-    if (this.busy) return;
+    if (this.busy) { this.again = true; return; }
     this.busy = true; const out = await this.client.friends(); this.busy = false;
+    if (this.again) { this.again = false; return this.refresh(); }
     this.fetchedAt = Date.now();
     if (out.kind !== 'ok') { if (this.active && !this.conv) this.status(why(out)); this.root.dataset.friends = out.kind === 'refused' ? out.error : 'down'; return; }
     if (this.root.dataset.friends !== 'live') this.status('');
