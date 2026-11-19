@@ -1,0 +1,998 @@
+{
+  "schema": 1,
+  "task": "ART-CHAR-WORLDBOSS-001",
+  "base_commit": "8f39dc8a6f6936d7861455e4580eb1f6ae7cf7c4",
+  "validation_self_excluded": true,
+  "self_hash_receipt": "SHA-256 of validation.json must be recorded outside this manifest (PR body). A cryptographic manifest cannot hash itself.",
+  "preview_checks": {
+    "a": {
+      "kind": "offline art mockup, not in-game capture",
+      "canvas": [
+        390,
+        844
+      ],
+      "f1_sole_xy": [
+        246,
+        510
+      ],
+      "boss_bbox_xyxy": [
+        160,
+        348,
+        332,
+        510
+      ],
+      "boss_painted_size_px": [
+        172,
+        162
+      ],
+      "other_actor_bounds": {
+        "eira-0": [
+          16,
+          243,
+          73,
+          302
+        ],
+        "aegis-1": [
+          114,
+          242,
+          175,
+          302
+        ],
+        "metta-2": [
+          16,
+          415,
+          74,
+          490
+        ],
+        "seren-3": [
+          17,
+          599,
+          73,
+          656
+        ],
+        "lyra-4": [
+          113,
+          595,
+          175,
+          656
+        ],
+        "wisp-5": [
+          326,
+          238,
+          365,
+          291
+        ],
+        "wisp-6": [
+          326,
+          445,
+          365,
+          498
+        ],
+        "wisp-7": [
+          326,
+          603,
+          365,
+          656
+        ],
+        "crawler-8": [
+          214,
+          613,
+          278,
+          656
+        ]
+      },
+      "hp_rects_xywh": [
+        [
+          19,
+          308,
+          52,
+          11
+        ],
+        [
+          118,
+          308,
+          52,
+          11
+        ],
+        [
+          19,
+          496,
+          52,
+          11
+        ],
+        [
+          19,
+          662,
+          52,
+          11
+        ],
+        [
+          118,
+          662,
+          52,
+          11
+        ],
+        [
+          319,
+          297,
+          52,
+          11
+        ],
+        [
+          319,
+          504,
+          52,
+          11
+        ],
+        [
+          319,
+          662,
+          52,
+          11
+        ],
+        [
+          220,
+          662,
+          52,
+          11
+        ],
+        [
+          205,
+          526,
+          82,
+          13
+        ]
+      ],
+      "boss_overlaps_actor_pixels_alpha_gt32": {
+        "eira-0": 0,
+        "aegis-1": 0,
+        "metta-2": 0,
+        "seren-3": 0,
+        "lyra-4": 0,
+        "wisp-5": 0,
+        "wisp-6": 0,
+        "wisp-7": 0,
+        "crawler-8": 0
+      },
+      "boss_overlaps_hp_pixels_alpha_gt32": 0,
+      "tactical_columns": [
+        0.115,
+        0.37,
+        0.63,
+        0.885
+      ],
+      "staging": "f1 center; f2 crawler bottom; b1/b3/b2 wisps top/middle/bottom; five heroes in proposed 2-front/3-back formation",
+      "runtime_limitation": "Pixel row spacing and enlarged art scale are proposed for concept comparison. Current fieldSlots is not executed or changed."
+    },
+    "b": {
+      "kind": "offline art mockup, not in-game capture",
+      "canvas": [
+        390,
+        844
+      ],
+      "f1_sole_xy": [
+        246,
+        510
+      ],
+      "boss_bbox_xyxy": [
+        160,
+        361,
+        332,
+        510
+      ],
+      "boss_painted_size_px": [
+        172,
+        149
+      ],
+      "other_actor_bounds": {
+        "eira-0": [
+          16,
+          243,
+          73,
+          302
+        ],
+        "aegis-1": [
+          114,
+          242,
+          175,
+          302
+        ],
+        "metta-2": [
+          16,
+          415,
+          74,
+          490
+        ],
+        "seren-3": [
+          17,
+          599,
+          73,
+          656
+        ],
+        "lyra-4": [
+          113,
+          595,
+          175,
+          656
+        ],
+        "wisp-5": [
+          326,
+          238,
+          365,
+          291
+        ],
+        "wisp-6": [
+          326,
+          445,
+          365,
+          498
+        ],
+        "wisp-7": [
+          326,
+          603,
+          365,
+          656
+        ],
+        "crawler-8": [
+          214,
+          613,
+          278,
+          656
+        ]
+      },
+      "hp_rects_xywh": [
+        [
+          19,
+          308,
+          52,
+          11
+        ],
+        [
+          118,
+          308,
+          52,
+          11
+        ],
+        [
+          19,
+          496,
+          52,
+          11
+        ],
+        [
+          19,
+          662,
+          52,
+          11
+        ],
+        [
+          118,
+          662,
+          52,
+          11
+        ],
+        [
+          319,
+          297,
+          52,
+          11
+        ],
+        [
+          319,
+          504,
+          52,
+          11
+        ],
+        [
+          319,
+          662,
+          52,
+          11
+        ],
+        [
+          220,
+          662,
+          52,
+          11
+        ],
+        [
+          205,
+          526,
+          82,
+          13
+        ]
+      ],
+      "boss_overlaps_actor_pixels_alpha_gt32": {
+        "eira-0": 0,
+        "aegis-1": 0,
+        "metta-2": 0,
+        "seren-3": 0,
+        "lyra-4": 0,
+        "wisp-5": 0,
+        "wisp-6": 0,
+        "wisp-7": 0,
+        "crawler-8": 0
+      },
+      "boss_overlaps_hp_pixels_alpha_gt32": 0,
+      "tactical_columns": [
+        0.115,
+        0.37,
+        0.63,
+        0.885
+      ],
+      "staging": "f1 center; f2 crawler bottom; b1/b3/b2 wisps top/middle/bottom; five heroes in proposed 2-front/3-back formation",
+      "runtime_limitation": "Pixel row spacing and enlarged art scale are proposed for concept comparison. Current fieldSlots is not executed or changed."
+    },
+    "c": {
+      "kind": "offline art mockup, not in-game capture",
+      "canvas": [
+        390,
+        844
+      ],
+      "f1_sole_xy": [
+        246,
+        510
+      ],
+      "boss_bbox_xyxy": [
+        166,
+        319,
+        326,
+        510
+      ],
+      "boss_painted_size_px": [
+        160,
+        191
+      ],
+      "other_actor_bounds": {
+        "eira-0": [
+          16,
+          243,
+          73,
+          302
+        ],
+        "aegis-1": [
+          114,
+          242,
+          175,
+          302
+        ],
+        "metta-2": [
+          16,
+          415,
+          74,
+          490
+        ],
+        "seren-3": [
+          17,
+          599,
+          73,
+          656
+        ],
+        "lyra-4": [
+          113,
+          595,
+          175,
+          656
+        ],
+        "wisp-5": [
+          326,
+          238,
+          365,
+          291
+        ],
+        "wisp-6": [
+          326,
+          445,
+          365,
+          498
+        ],
+        "wisp-7": [
+          326,
+          603,
+          365,
+          656
+        ],
+        "crawler-8": [
+          214,
+          613,
+          278,
+          656
+        ]
+      },
+      "hp_rects_xywh": [
+        [
+          19,
+          308,
+          52,
+          11
+        ],
+        [
+          118,
+          308,
+          52,
+          11
+        ],
+        [
+          19,
+          496,
+          52,
+          11
+        ],
+        [
+          19,
+          662,
+          52,
+          11
+        ],
+        [
+          118,
+          662,
+          52,
+          11
+        ],
+        [
+          319,
+          297,
+          52,
+          11
+        ],
+        [
+          319,
+          504,
+          52,
+          11
+        ],
+        [
+          319,
+          662,
+          52,
+          11
+        ],
+        [
+          220,
+          662,
+          52,
+          11
+        ],
+        [
+          205,
+          526,
+          82,
+          13
+        ]
+      ],
+      "boss_overlaps_actor_pixels_alpha_gt32": {
+        "eira-0": 0,
+        "aegis-1": 0,
+        "metta-2": 0,
+        "seren-3": 0,
+        "lyra-4": 0,
+        "wisp-5": 0,
+        "wisp-6": 0,
+        "wisp-7": 0,
+        "crawler-8": 0
+      },
+      "boss_overlaps_hp_pixels_alpha_gt32": 0,
+      "tactical_columns": [
+        0.115,
+        0.37,
+        0.63,
+        0.885
+      ],
+      "staging": "f1 center; f2 crawler bottom; b1/b3/b2 wisps top/middle/bottom; five heroes in proposed 2-front/3-back formation",
+      "runtime_limitation": "Pixel row spacing and enlarged art scale are proposed for concept comparison. Current fieldSlots is not executed or changed."
+    }
+  },
+  "baseline_previews": {
+    "sentinel": {
+      "kind": "offline art mockup, not in-game capture",
+      "canvas": [
+        390,
+        844
+      ],
+      "f1_sole_xy": [
+        246,
+        510
+      ],
+      "boss_bbox_xyxy": [
+        189,
+        394,
+        303,
+        510
+      ],
+      "boss_painted_size_px": [
+        114,
+        116
+      ],
+      "other_actor_bounds": {
+        "eira-0": [
+          16,
+          243,
+          73,
+          302
+        ],
+        "aegis-1": [
+          114,
+          242,
+          175,
+          302
+        ],
+        "metta-2": [
+          16,
+          415,
+          74,
+          490
+        ],
+        "seren-3": [
+          17,
+          599,
+          73,
+          656
+        ],
+        "lyra-4": [
+          113,
+          595,
+          175,
+          656
+        ],
+        "wisp-5": [
+          326,
+          238,
+          365,
+          291
+        ],
+        "wisp-6": [
+          326,
+          445,
+          365,
+          498
+        ],
+        "wisp-7": [
+          326,
+          603,
+          365,
+          656
+        ],
+        "crawler-8": [
+          214,
+          613,
+          278,
+          656
+        ]
+      },
+      "hp_rects_xywh": [
+        [
+          19,
+          308,
+          52,
+          11
+        ],
+        [
+          118,
+          308,
+          52,
+          11
+        ],
+        [
+          19,
+          496,
+          52,
+          11
+        ],
+        [
+          19,
+          662,
+          52,
+          11
+        ],
+        [
+          118,
+          662,
+          52,
+          11
+        ],
+        [
+          319,
+          297,
+          52,
+          11
+        ],
+        [
+          319,
+          504,
+          52,
+          11
+        ],
+        [
+          319,
+          662,
+          52,
+          11
+        ],
+        [
+          220,
+          662,
+          52,
+          11
+        ],
+        [
+          205,
+          526,
+          82,
+          13
+        ]
+      ],
+      "boss_overlaps_actor_pixels_alpha_gt32": {
+        "eira-0": 0,
+        "aegis-1": 0,
+        "metta-2": 0,
+        "seren-3": 0,
+        "lyra-4": 0,
+        "wisp-5": 0,
+        "wisp-6": 0,
+        "wisp-7": 0,
+        "crawler-8": 0
+      },
+      "boss_overlaps_hp_pixels_alpha_gt32": 0,
+      "tactical_columns": [
+        0.115,
+        0.37,
+        0.63,
+        0.885
+      ],
+      "staging": "f1 center; f2 crawler bottom; b1/b3/b2 wisps top/middle/bottom; five heroes in proposed 2-front/3-back formation",
+      "runtime_limitation": "Pixel row spacing and enlarged art scale are proposed for concept comparison. Current fieldSlots is not executed or changed."
+    },
+    "captain": {
+      "kind": "offline art mockup, not in-game capture",
+      "canvas": [
+        390,
+        844
+      ],
+      "f1_sole_xy": [
+        246,
+        510
+      ],
+      "boss_bbox_xyxy": [
+        186,
+        394,
+        307,
+        510
+      ],
+      "boss_painted_size_px": [
+        121,
+        116
+      ],
+      "other_actor_bounds": {
+        "eira-0": [
+          16,
+          243,
+          73,
+          302
+        ],
+        "aegis-1": [
+          114,
+          242,
+          175,
+          302
+        ],
+        "metta-2": [
+          16,
+          415,
+          74,
+          490
+        ],
+        "seren-3": [
+          17,
+          599,
+          73,
+          656
+        ],
+        "lyra-4": [
+          113,
+          595,
+          175,
+          656
+        ],
+        "wisp-5": [
+          326,
+          238,
+          365,
+          291
+        ],
+        "wisp-6": [
+          326,
+          445,
+          365,
+          498
+        ],
+        "wisp-7": [
+          326,
+          603,
+          365,
+          656
+        ],
+        "crawler-8": [
+          214,
+          613,
+          278,
+          656
+        ]
+      },
+      "hp_rects_xywh": [
+        [
+          19,
+          308,
+          52,
+          11
+        ],
+        [
+          118,
+          308,
+          52,
+          11
+        ],
+        [
+          19,
+          496,
+          52,
+          11
+        ],
+        [
+          19,
+          662,
+          52,
+          11
+        ],
+        [
+          118,
+          662,
+          52,
+          11
+        ],
+        [
+          319,
+          297,
+          52,
+          11
+        ],
+        [
+          319,
+          504,
+          52,
+          11
+        ],
+        [
+          319,
+          662,
+          52,
+          11
+        ],
+        [
+          220,
+          662,
+          52,
+          11
+        ],
+        [
+          205,
+          526,
+          82,
+          13
+        ]
+      ],
+      "boss_overlaps_actor_pixels_alpha_gt32": {
+        "eira-0": 0,
+        "aegis-1": 0,
+        "metta-2": 0,
+        "seren-3": 0,
+        "lyra-4": 0,
+        "wisp-5": 0,
+        "wisp-6": 0,
+        "wisp-7": 0,
+        "crawler-8": 0
+      },
+      "boss_overlaps_hp_pixels_alpha_gt32": 0,
+      "tactical_columns": [
+        0.115,
+        0.37,
+        0.63,
+        0.885
+      ],
+      "staging": "f1 center; f2 crawler bottom; b1/b3/b2 wisps top/middle/bottom; five heroes in proposed 2-front/3-back formation",
+      "runtime_limitation": "Pixel row spacing and enlarged art scale are proposed for concept comparison. Current fieldSlots is not executed or changed."
+    }
+  },
+  "visual_review": {
+    "left_facing": "reviewed all 3 seeds",
+    "full_body": "reviewed: 2 feet A, 4 paws/2 wings/tail B, 6 arms/3 cloak tips C",
+    "lettering": "no visible lettering in generated art or mockups",
+    "turnarounds": "front/left/back reviewed; orthographic paint guidance, not exact mesh projections",
+    "owner_approval": "pending; no test or CI result is approval"
+  },
+  "runtime_testing": "Not integrated. No animations, game launch, runtime screenshots or motion approval claimed.",
+  "files": {
+    "NOTES.md": {
+      "sha256": "1c26e2525d4f649b8a789e9e0b42deaf76a4e8cf7d2f7f841bb8f0062aece71c",
+      "bytes": 15750
+    },
+    "baseline-390-captain.png": {
+      "sha256": "991fb5f24fb83b3b40e8cb0ee94cecf97d2e55f2646d71d8d6fa8a0c0171a80c",
+      "bytes": 454494,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGBA"
+    },
+    "baseline-390-sentinel.png": {
+      "sha256": "7f687076391253503c2a96d2e9fe28a09c9abd6debc7e785a3bc9edcbcd31699",
+      "bytes": 458249,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGBA"
+    },
+    "build_handoff.py": {
+      "sha256": "46ebc1ce967a66ba52351d8c4eb971af04862fabcb2bc1e5dbd290782b9c6b1c",
+      "bytes": 13825
+    },
+    "concept-a.png": {
+      "sha256": "aa161a2a9f0154d2dbbe9309cdb76973ed7d9899ae33d6aa2c6470561e132ddb",
+      "bytes": 2814067,
+      "size": [
+        2048,
+        2048
+      ],
+      "mode": "RGBA"
+    },
+    "concept-b.png": {
+      "sha256": "9f5b76f988e69c25a4699cb7464708806b188215c35886e06e22671bd10af5d8",
+      "bytes": 2754330,
+      "size": [
+        2048,
+        2048
+      ],
+      "mode": "RGBA"
+    },
+    "concept-c.png": {
+      "sha256": "a7c207b89b4637bb6237e89954226a8d3a64a0eb17b3e5b16b5001947a7b80f1",
+      "bytes": 1716264,
+      "size": [
+        2048,
+        2048
+      ],
+      "mode": "RGBA"
+    },
+    "preview-390-a.png": {
+      "sha256": "3d14ec7acac4266af16c6c590c0fe68d16992301374e2465da18c1210f05d49f",
+      "bytes": 466157,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGBA"
+    },
+    "preview-390-b.png": {
+      "sha256": "f40857777c46c2f4a212b97d6796aeaa4d9f97d59dd7f5a4ef619038446f640a",
+      "bytes": 464605,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGBA"
+    },
+    "preview-390-c.png": {
+      "sha256": "f8ea9d5e9531a77aa0a87233bb293b491dfc13063797713a7c72102e0d0bff6c",
+      "bytes": 462728,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGBA"
+    },
+    "prompts.json": {
+      "sha256": "5a39e3ac60a54f3fc71b08dcc4b6e3b2deeb9e0046708e48f6399dcffe58ee4c",
+      "bytes": 11363
+    },
+    "requirements.txt": {
+      "sha256": "41b54a6fb2918667ca47a61d73b522629d84490f3d78f0f20b21135faba10d35",
+      "bytes": 15
+    },
+    "seed-a.png": {
+      "sha256": "ebefafd4696527f71a8e8eeb196447e2b0ba77a6506995bc1a5ddf39909afd97",
+      "bytes": 927372,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "seed-b.png": {
+      "sha256": "c3fe15c71d82c7cddc09df874fb9c21480bf2168e7b16248d692878ffb7ec214",
+      "bytes": 904214,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "seed-c.png": {
+      "sha256": "47e5fbbaf06a18ee56a7c8c46771e00f65e13df7998b8c3d78c5cfa98f160105",
+      "bytes": 596229,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "seeds.json": {
+      "sha256": "56308548eb781862f4e4c715a2b26666a8cbb6dffe574816f94ff64d788246e8",
+      "bytes": 7367
+    },
+    "silhouette-220-390.png": {
+      "sha256": "9af2b3ea7c1ffbfdeabc12ed4a02084a6e1cde602264fe5de0bcd8d61cc363a7",
+      "bytes": 248055,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGBA"
+    },
+    "source/seed-a-original.png": {
+      "sha256": "ca7f1a08bc07893adb69547ef5a3c6344b3a111141dca84f6ff778c2c8c346a6",
+      "bytes": 1998460,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "source/seed-b-original.png": {
+      "sha256": "08c419b7c489d373cdcf606978371efc27b6e4ff7cd16b51b987640c9cbd01fa",
+      "bytes": 1763813,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "source/seed-c-original.png": {
+      "sha256": "69824ae8bd64f3b198ce68cfd27a3ff670f17ae5d44c4b02778a6a4a0117fcd2",
+      "bytes": 1534809,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "turnaround-a.png": {
+      "sha256": "b0855415b4fcda38a5548d4b0c51838e7f0ccd4e96a1ffb0b781b4f1e07de6b8",
+      "bytes": 1947314,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGB"
+    },
+    "turnaround-b.png": {
+      "sha256": "f66b57f352c176db98353632e078475092befd985902b8b481b06c6339ab4487",
+      "bytes": 2175098,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGB"
+    },
+    "turnaround-c.png": {
+      "sha256": "b7c81fe59009efb4fbc75e8760b6590ab1f770ec78e44431200c0cade79cc988",
+      "bytes": 1922767,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    }
+  }
+}
