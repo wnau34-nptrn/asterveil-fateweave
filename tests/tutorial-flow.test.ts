@@ -99,12 +99,40 @@ describe('OD-54 stage C: camp lessons follow the NPC cards and newly opened syst
     const after1 = claimedAll({ ...fresh(), cleared: [MAPS[0]!.id] });
     expect(lobbyLesson(after1, MAPS, ['home'])).toMatchObject({ id: 'open:quests', target: '#lobby-board' });
     expect(lobbyLesson(after1, MAPS, ['home', 'open:quests'])).toMatchObject({ id: 'open:team' });
-    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:team'])).toBeUndefined();
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:team'])?.id).toBe('farm');
     const after2 = { ...after1, cleared: MAPS.slice(0, 2).map(m => m.id) };
     expect(lobbyLesson(after2, MAPS, ['home'])?.id).toBe('open:market');
     // A company far ahead does not get every earlier system at once.
     const after3 = { ...after1, cleared: MAPS.slice(0, 3).map(m => m.id) };
     expect(lobbyLesson(after3, MAPS, ['home'])?.id).toBe('open:fuse');
     expect(lobbyLesson({ ...after3, veteran: true }, MAPS, [])).toBeUndefined();
+  });
+
+  it('farming lessons: replay pointer last, sweep row in the maps sheet, hunt and boss targets in the hunt sheet', () => {
+    const m1 = MAPS[0]!, after1 = claimedAll({ ...fresh(), cleared: [m1.id] }), done: LessonId[] = ['home', 'open:quests', 'open:team'];
+    // The replay pointer waits for the camp's own lessons, then points at the maps button.
+    expect(lobbyLesson(after1, MAPS, ['home'])?.id).toBe('open:quests');
+    expect(lobbyLesson(after1, MAPS, done)).toMatchObject({ id: 'farm', target: '#lobby-maps' });
+    expect(lobbyLesson(after1, MAPS, [...done, 'farm'])).toBeUndefined();
+    expect(lobbyLesson(fresh(), MAPS, ['home', 'card:guide-wear', 'claim:guide-wear'])).toBeUndefined();
+    // The sweep row (real numbers from the map) shows once the maps sheet is open after the first clear, once only.
+    // Another map's card is showing: select the cleared map first, then the row appears.
+    expect(lobbyLesson(after1, MAPS, ['home'], 'maps', MAPS[1]!.id)).toMatchObject({ id: 'sweeppick', target: `#map-node-${m1.id}` });
+    const sw = lobbyLesson(after1, MAPS, ['home'], 'maps', m1.id)!;
+    expect(sw).toMatchObject({ id: 'sweep', target: `#map-sweep-row-${m1.id}` });
+    expect(sw.text).toContain(`เสบียง ${m1.sweep.cost}`); expect(sw.text).toContain(`${m1.sweep.perMapDaily} ครั้ง`); expect(sw.text).toContain(`${m1.sweep.cap}`);
+    expect(lobbyLesson(after1, MAPS, ['home', 'sweep'], 'maps', m1.id)?.id).not.toBe('sweep');
+    expect(lobbyLesson(fresh(), MAPS, ['home'], 'maps', m1.id)?.id).not.toBe('sweep');
+    // Hunt opens after map 2; its target is pointed at inside the hunt sheet. The boss target needs map 3.
+    const after2 = { ...after1, cleared: MAPS.slice(0, 2).map(m => m.id) };
+    expect(lobbyLesson(after2, MAPS, ['home'], 'hunt')).toMatchObject({ id: 'hunt', target: '#hunt-target' });
+    expect(lobbyLesson(after2, MAPS, ['home', 'hunt'], 'hunt')?.id).not.toBe('bosstarget');
+    expect(lobbyLesson(after1, MAPS, ['home'], 'hunt')?.id).not.toBe('hunt');
+    const after3 = { ...after1, cleared: MAPS.slice(0, 3).map(m => m.id) };
+    expect(lobbyLesson(after3, MAPS, ['home', 'hunt'], 'hunt')).toMatchObject({ id: 'bosstarget', target: '#boss-target' });
+    expect(lobbyLesson(after3, MAPS, ['home', 'hunt', 'bosstarget'], 'hunt')?.id).not.toBe('bosstarget');
+    expect(lobbyLesson(after3, MAPS, ['home', 'open:fuse'], undefined)).toMatchObject({ id: 'open:bossCharm', target: '#lobby-tab-hunt' });
+    // A veteran company never gets them.
+    expect(lobbyLesson({ ...after3, veteran: true }, MAPS, [], 'hunt')).toBeUndefined();
   });
 });

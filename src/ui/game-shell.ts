@@ -147,6 +147,7 @@ export class GameShell {
       depart: (id, hard) => this.depart(id, hard), startWorldBoss: boss => this.startWorldBoss(boss), craftBossItem: (boss, affixes, set) => camp({ kind: 'craftBossItem', boss, affixes, ...(set ? { set } : {}) }), claimWorldBoss: (id, week) => this.claimWorldBoss(id, week), worldBossStatus: () => this.refreshWorldBoss(),
       sweep: (id, hard) => this.campCommand({ kind: 'sweep', mapId: id, hard, day: this.today(), serial: this.game?.profile.sweep?.count ?? 0 }), home: () => this.showTitle(),
     }, maps);
+    this.lobby.onDraw = () => requestAnimationFrame(() => this.updateLessons());
     const story = document.createElement('section'); root.append(story); this.story = new StoryUI(story);
     const summary = document.createElement('section'); root.append(summary); this.summary = new SummaryUI(summary, map);
     this.commander = new CommanderUI(views.commander, { create: c => this.createCommander(c), back: () => { this.replacing = false; this.showTitle(); } });
@@ -239,7 +240,7 @@ export class GameShell {
     const view = this.root.dataset.view, g = this.game;
     if (!g || !['world', 'lobby', 'battle'].includes(view ?? '')) { this.lessons.show(undefined); return; }
     if (view === 'world' && g.run) this.lessons.show(worldLesson(g.profile, g.run, this.map, this.maps, this.lessons.seen, id => memberDef(this.lookup, this.map, g.run!, id)?.maxHp ?? 1));
-    else if (view === 'lobby' && !g.run) this.lessons.show(lobbyLesson(g.profile, this.maps, this.lessons.seen));
+    else if (view === 'lobby' && !g.run) this.lessons.show(lobbyLesson(g.profile, this.maps, this.lessons.seen, this.lobby.openSheet, this.lobby.pickedMap));
     else if (view === 'battle' && g.run?.battle) this.lessons.show(battleLessonTip(g.profile, g.run.battle.kind, this.lessons.seen));
     else this.lessons.show(undefined);
   }

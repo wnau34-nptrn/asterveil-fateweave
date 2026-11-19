@@ -1,3 +1,8 @@
+## 2026-11-19 — OD-54 farming lessons (Sonnet; claude/lessons-farming → game branch)
+- Owner: “ทำทั้ง 4 ข้อเลย”. Four camp lessons in `lobbyLesson(profile, maps, seen, sheet?, picked?)`: `farm` (replay, ring on `#lobby-maps`, last in the camp queue), `sweeppick`→`sweep` (maps sheet: pick a cleared map, then `#map-sweep-row-<id>`; cost/daily limit/cap read from `MapDefinition.sweep`), `hunt` (`#hunt-target`, hunt sheet), `open:bossCharm`→`bosstarget` (hunt tab, then `#boss-target`).
+- LobbyUI gains `openSheet`, `pickedMap` and `onDraw` so GameShell refreshes lessons when a sheet draws; `LessonGuide.place` scrolls a target inside `.lobby-content` into view. Camp sheets are inline (not `<dialog>`), so the layer is not hidden. No rule, reward or save change.
+- Tests: tutorial-flow (10, one new + `open:quests/team` expectation now reaches `farm`), lessons.spec (6 at 390px, 2 new). Shots `docs/validation/lessons-farming-2026-11-19/`. Design §8 in TUTORIAL_FLOW_TH.md. Not owner-viewed yet.
+
 ## 2026-11-19 — OD-54 stage C + Setup lessons toggle (Opus; claude/lessons-stage-c → game branch)
 - Owner: “ทำช่วง C ต่อเลย และเพิ่มปุ่มเปิดคำแนะนำใน Setup”. `lobbyLesson(profile, maps, seen)`: first camp visit, then `card:<guide>` (ring on the camp menu the card needs) and `claim:<guide>` (claim button once done), then `open:<feature>` for quests/team, market/hunt/tomes, fuse/hard only when the map that opens them was the last cleared. No new rewards or rules.
 - Tapping the highlighted control completes its lesson (no bubble over the opened sheet). Title Setup → ความช่วยเหลือ: `#lessons-toggle` (off hides all; on again resets `seen`).
