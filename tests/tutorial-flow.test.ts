@@ -81,6 +81,30 @@ describe('OD-54 lessons on the map (ui/lessons.ts)', () => {
     expect(battleLessonTip(fresh(), 'random', [])?.target).toBe('#intent');
     expect(battleLessonTip(fresh(), 'tutorial', [])).toBeUndefined();
     expect(battleLessonTip(fresh(), 'random', ['battle'])).toBeUndefined();
-    expect(lobbyLesson(fresh(), [])?.id).toBe('home'); expect(lobbyLesson({ ...fresh(), veteran: true }, [])).toBeUndefined();
+    expect(lobbyLesson(fresh(), MAPS, [])?.id).toBe('home'); expect(lobbyLesson({ ...fresh(), veteran: true }, MAPS, [])).toBeUndefined();
+  });
+});
+
+describe('OD-54 stage C: camp lessons follow the NPC cards and newly opened systems', () => {
+  const claimedAll = (p: Profile): Profile => ({ ...p, guides: Object.fromEntries(MAPS[0]!.guides.map(g => [g.id, 'claimed' as const])) });
+  it('points at the system the current card asks for, then at its claim button once done', () => {
+    const p = fresh();
+    expect(lobbyLesson(p, MAPS, ['home'])).toMatchObject({ id: 'card:guide-wear', target: '#lobby-tab-gear' });
+    const worn = structuredClone(p); const id = worn.party.deployed[0]!;
+    worn.members[id] = { ...worn.members[id]!, gear: { body: { uid: 1, slot: 'body', rarity: 1, level: 1, affixes: [], q: { main: 100, affixes: [] } } } };
+    expect(lobbyLesson(worn, MAPS, ['home'])).toMatchObject({ id: 'claim:guide-wear', target: '#guide-claim' });
+    expect(lobbyLesson(worn, MAPS, ['home', 'claim:guide-wear'])).toBeUndefined();
+  });
+  it('shows a system once, only when the map that opens it was the last one cleared', () => {
+    const after1 = claimedAll({ ...fresh(), cleared: [MAPS[0]!.id] });
+    expect(lobbyLesson(after1, MAPS, ['home'])).toMatchObject({ id: 'open:quests', target: '#lobby-board' });
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests'])).toMatchObject({ id: 'open:team' });
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:team'])).toBeUndefined();
+    const after2 = { ...after1, cleared: MAPS.slice(0, 2).map(m => m.id) };
+    expect(lobbyLesson(after2, MAPS, ['home'])?.id).toBe('open:market');
+    // A company far ahead does not get every earlier system at once.
+    const after3 = { ...after1, cleared: MAPS.slice(0, 3).map(m => m.id) };
+    expect(lobbyLesson(after3, MAPS, ['home'])?.id).toBe('open:fuse');
+    expect(lobbyLesson({ ...after3, veteran: true }, MAPS, [])).toBeUndefined();
   });
 });

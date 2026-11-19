@@ -1,12 +1,15 @@
-import { activeGuides } from '../core/world/profile';
+import { activeGuides, featureMap, featureOpen, guideDone } from '../core/world/profile';
 import { talentPoints, talentsSpent } from '../core/world/talents';
-import type { ExpeditionState, MapDefinition, Profile } from '../core/world/types';
+import type { ExpeditionState, GuideKind, LobbyFeature, MapDefinition, Profile } from '../core/world/types';
 import { canOpenChest, fatigueOf, findTiles, levelOf, rosterIds } from '../core/world/world';
 
 // OD-54 (owner 2026-11-19, docs/design/TUTORIAL_FLOW_TH.md): short lessons after the prologue. One at a time, pointing at
 // the real control; each shows once per device (a UI preference, like the battle coach) and all can be turned off. They
 // read the committed state only and never act for the player, except the one-time calming draught the player taps for.
-export type LessonId = 'levelup' | 'wear' | 'tree' | 'lanes' | 'walk' | 'chest' | 'lowhp' | 'fatigue' | 'calm' | 'elite' | 'boss' | 'battle' | 'home';
+// Stage C (owner 2026-11-19): `card:<guide>` points at the system an NPC card asks for, `claim:<guide>` at its claim
+// button once done, `open:<feature>` at a camp system the moment its map is cleared.
+export type LessonId = 'levelup' | 'wear' | 'tree' | 'lanes' | 'walk' | 'chest' | 'lowhp' | 'fatigue' | 'calm' | 'elite' | 'boss' | 'battle' | 'home'
+  | `card:${string}` | `claim:${string}` | `open:${string}`;
 export interface Lesson { id: LessonId; target: string; title: string; text: string; action?: 'calm' }
 export interface LessonPrefs { seen: LessonId[]; off: boolean }
 const KEY = 'asterveil.fateweave.lessons.v1';
@@ -50,11 +53,44 @@ export function battleLessonTip(profile: Profile, kind: string, seen: readonly L
   if (!learning(profile) || kind === 'tutorial' || seen.includes('battle')) return undefined;
   return { id: 'battle', target: '#intent', title: 'อ่านท่าศัตรู', text: 'แถบนี้บอกว่าศัตรูตัวถัดไปจะใช้ท่าอะไร เล็งใคร แรงเท่าไร แตะ ⓘ มุมขวาบนเพื่อดูรายละเอียด' };
 }
-// The camp after the first expedition.
-export function lobbyLesson(profile: Profile, seen: readonly LessonId[]): Lesson | undefined {
-  if (profile.veteran || profile.cleared.length > 1 || seen.includes('home')) return undefined;
-  return { id: 'home', target: '.lobby-guide, #lobby-depart', title: 'กลับค่ายแล้ว',
+// The camp: the first visit, then the NPC card in hand (where to do it, then claim it), then systems just opened.
+// Where each camp system is opened from (the visible camp menu or banner).
+const FEATURE_TARGET: Record<LobbyFeature, string> = {
+  gear: '#lobby-tab-gear', tree: '#lobby-tab-team', team: '#lobby-tab-team', tomes: '#lobby-tab-team', forge: '#lobby-tab-forge', level: '#lobby-tab-forge',
+  fuse: '#lobby-tab-forge', craft: '#lobby-tab-forge', transfer: '#lobby-tab-forge', bossCharm: '#lobby-tab-forge', brew: '#lobby-tab-brew',
+  hire: '#lobby-tab-hire', market: '#lobby-tab-hire', hunt: '#lobby-tab-hunt', quests: '#lobby-board', hard: '#lobby-maps',
+};
+const CARD_TEXT: Record<GuideKind, string> = {
+  wear: 'เปิดอุปกรณ์ แล้วสวมของ 1 ชิ้นให้สมาชิก', talent: 'เปิดทีม → ตัวละคร → สกิลกิ่ง แล้วลงแต้ม 1 แต้ม', calm: 'กดรับยาฟื้นความเหนื่อยในการ์ดนี้',
+  enhance: 'เปิดช่างตีเหล็ก แล้วตีบวกอุปกรณ์ 1 ชิ้น', brew: 'เปิดปรุงยา แล้วปรุงยา 1 ขวด', itemLevel: 'เปิดช่างตีเหล็ก → เพิ่ม Lv อุปกรณ์ 1 ชิ้น',
+  hire: 'เปิดนายหน้า แล้วจ้างทหารรับจ้าง 1 คน', reserve: 'เปิดทีม แล้วจัดตัวสำรองอย่างน้อย 1 คน (ตัวสำรองหายเหนื่อยศึกละ 1)',
+};
+// Systems that get their own pointer when they open (the ones without an NPC card), in the order they unlock.
+const OPENED: readonly [LobbyFeature, string, string][] = [
+  ['quests', 'กระดานภารกิจเปิดแล้ว', 'งานรายวัน/รายสัปดาห์ให้แร่ ทอง และเศษดาว ทำได้ระหว่างเดินทาง'],
+  ['team', 'จัดทีมเปิดแล้ว', 'ลงสนามได้ 5 คน และมีตัวสำรอง จัดแนวหน้า/หลังและบันทึกชุดทีมได้'],
+  ['market', 'ตลาดเปิดแล้ว', 'ที่นายหน้ามีแท็บตลาด ซื้อเศษดาว สัญญา กล่องอุปกรณ์ และยาไล่ศัตรูด้วยทอง'],
+  ['hunt', 'ล่าของเปิดแล้ว', 'เลือกชุดหรือช่องที่อยากได้ แผนที่จะดรอปของแบบนั้นบ่อยขึ้น'],
+  ['tomes', 'ตำราสกิลเปิดแล้ว', 'ใช้ตำราที่ได้จากบอส/อีลีทอัป Lv สกิลในหน้าตัวละคร'],
+  ['fuse', 'หลอมรวมเปิดแล้ว', 'ที่ช่างตีเหล็ก หลอมของซ้ำเพื่อเพิ่มระดับ สร้างอาวุธ และย้าย affix ได้'],
+  ['hard', 'โหมดยากเปิดแล้ว', 'เลือกแผนที่ที่ผ่านแล้วแบบยาก มอนสเตอร์แรงขึ้น รางวัลครั้งแรกดีกว่า'],
+];
+export function lobbyLesson(profile: Profile, maps: readonly MapDefinition[], seen: readonly LessonId[]): Lesson | undefined {
+  if (profile.veteran) return undefined;
+  if (profile.cleared.length <= 1 && !seen.includes('home')) return { id: 'home', target: '.lobby-guide, #lobby-depart', title: 'กลับค่ายแล้ว',
     text: 'ของที่เก็บมาเข้าคลัง ทีมฟื้นเต็ม งานแนะนำของ NPC อยู่ในการ์ดนี้ ทำแล้วรับรางวัลได้' };
+  const g = activeGuides(profile, maps)[0];
+  if (g) {
+    if (guideDone(profile, g.kind)) { const id: LessonId = `claim:${g.id}`; if (!seen.includes(id)) return { id, target: '#guide-claim', title: 'งานแนะนำเสร็จแล้ว', text: 'กดรับรางวัลในการ์ดได้เลย' }; }
+    else { const id: LessonId = `card:${g.id}`; if (!seen.includes(id)) return { id, target: g.kind === 'calm' ? '#guide-claim' : FEATURE_TARGET[g.feature], title: 'งานแนะนำ', text: CARD_TEXT[g.kind] }; }
+  }
+  // Only the systems the latest cleared map just opened (a company far ahead does not get them all at once).
+  for (const [feature, title, text] of OPENED) {
+    const id: LessonId = `open:${feature}`, at = featureMap(maps, feature);
+    if (seen.includes(id) || !featureOpen(profile, maps, feature) || !at || profile.cleared.length !== at.chapter) continue;
+    return { id, target: FEATURE_TARGET[feature], title, text };
+  }
+  return undefined;
 }
 
 // An automated browser (navigator.webdriver: the browser test suites) starts with the lessons off unless a test saved
@@ -83,6 +119,11 @@ export class LessonGuide {
       if (kind === 'action' && lesson.action) this.onAction(lesson.action); else this.onDone();
     });
     addEventListener('resize', () => this.place());
+    // Tapping the highlighted control completes its lesson (the sheet or dialog it opens is not covered by the bubble).
+    frame.addEventListener('click', e => {
+      const lesson = this.current; if (!lesson || this.el.contains(e.target as Node)) return;
+      const hit = (e.target as Element | null)?.closest?.(lesson.target); if (hit) this.markSeen(lesson.id);
+    }, true);
   }
   get seen(): readonly LessonId[] { return this.prefs.seen; }
   get off(): boolean { return this.prefs.off; }
