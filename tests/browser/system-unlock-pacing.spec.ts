@@ -20,7 +20,9 @@ for (const milestone of [0, 1, 2]) test(`approved pacing after MAP ${milestone},
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('pacing')) { localStorage.setItem(key, raw); sessionStorage.setItem('pacing', '1'); } }, { key, raw });
   const saved = async () => parseGame((await page.evaluate(k => localStorage.getItem(k), key))!, map, lookup, MAPS).profile;
   await page.goto('./'); await page.locator('#continue').click();
-  await expect(page.locator('.lobby-guide')).toHaveCount(milestone ? 1 : 0);
+  // OD-54: gear and the tree open right after the prologue, so a guide card shows from MAP 0 on (the wear task first).
+  await expect(page.locator('.lobby-guide')).toHaveCount(1);
+  if (!milestone) await expect(page.locator('#guide-guide-wear')).toBeVisible();
   if (!milestone) await expect(page.locator('#lobby-board')).toHaveCount(0);
   else {
     await page.locator('#lobby-board').click(); await page.locator('#quest-tab-camp').click();
