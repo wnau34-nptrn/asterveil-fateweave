@@ -1,0 +1,60 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "odran-attack": [
+   {
+    "frame": 0,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2306,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2306,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 2,
+    "height": 410,
+    "scale": 0.971,
+    "inliers": 54,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 458,
+    "scale": 0.956,
+    "inliers": 51,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 465,
+    "scale": 0.941,
+    "inliers": 59,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 405,
+    "scale": 0.991,
+    "inliers": 73,
+    "status": "ok"
+   },
+   {
+    "frame": 6,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2306,
+    "idle": true,
+    "status": "idle"
+   }
+  ]
+ }
+}

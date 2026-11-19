@@ -1,0 +1,148 @@
+[
+  {
+    "character": "odran",
+    "move": "attack",
+    "median": 0.9635,
+    "max": 0.991,
+    "gate": true,
+    "notMeasured": [],
+    "auditExit": 0
+  },
+  {
+    "character": "odran",
+    "move": "arc",
+    "median": 0.9955,
+    "max": 1.007,
+    "gate": true,
+    "notMeasured": [],
+    "auditExit": 0
+  },
+  {
+    "character": "odran",
+    "move": "communion",
+    "median": 0.9345,
+    "max": 0.956,
+    "gate": true,
+    "notMeasured": [
+      2,
+      3
+    ],
+    "auditExit": 0
+  },
+  {
+    "character": "odran",
+    "move": "lastlight",
+    "median": 1.023,
+    "max": 1.04,
+    "gate": true,
+    "notMeasured": [],
+    "auditExit": 0
+  },
+  {
+    "character": "odran",
+    "move": "hit",
+    "median": 0.988,
+    "max": 0.995,
+    "gate": true,
+    "notMeasured": [],
+    "auditExit": 0
+  },
+  {
+    "character": "odran",
+    "move": "block",
+    "median": 0.9664999999999999,
+    "max": 0.985,
+    "gate": true,
+    "notMeasured": [],
+    "auditExit": 0
+  },
+  {
+    "character": "odran",
+    "move": "down",
+    "median": 0.935,
+    "max": 0.952,
+    "gate": true,
+    "notMeasured": [
+      3,
+      4
+    ],
+    "auditExit": 0
+  },
+  {
+    "character": "isolde",
+    "move": "attack",
+    "median": 1.0390000000000001,
+    "max": 1.063,
+    "gate": true,
+    "notMeasured": [],
+    "auditExit": 0
+  },
+  {
+    "character": "isolde",
+    "move": "partner",
+    "median": 0.9575,
+    "max": 0.974,
+    "gate": true,
+    "notMeasured": [],
+    "auditExit": 0
+  },
+  {
+    "character": "isolde",
+    "move": "circle",
+    "median": 0.945,
+    "max": 0.971,
+    "gate": true,
+    "notMeasured": [
+      3
+    ],
+    "auditExit": 0
+  },
+  {
+    "character": "isolde",
+    "move": "closing",
+    "median": 0.9844999999999999,
+    "max": 1.012,
+    "gate": true,
+    "notMeasured": [],
+    "auditExit": 0
+  },
+  {
+    "character": "isolde",
+    "move": "echo",
+    "median": 0.9735,
+    "max": 1.0,
+    "gate": true,
+    "notMeasured": [],
+    "auditExit": 0
+  },
+  {
+    "character": "isolde",
+    "move": "hit",
+    "median": 0.9864999999999999,
+    "max": 0.999,
+    "gate": true,
+    "notMeasured": [],
+    "auditExit": 0
+  },
+  {
+    "character": "isolde",
+    "move": "block",
+    "median": 0.966,
+    "max": 0.977,
+    "gate": true,
+    "notMeasured": [],
+    "auditExit": 0
+  },
+  {
+    "character": "isolde",
+    "move": "down",
+    "median": 1.0939999999999999,
+    "max": 1.095,
+    "gate": true,
+    "notMeasured": [
+      3,
+      4
+    ],
+    "auditExit": 0
+  }
+]

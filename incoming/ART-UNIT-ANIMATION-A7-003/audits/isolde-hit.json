@@ -1,0 +1,46 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "isolde-hit": [
+   {
+    "frame": 0,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 2,
+    "height": 446,
+    "scale": 0.974,
+    "inliers": 59,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 413,
+    "scale": 0.999,
+    "inliers": 90,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   }
+  ]
+ }
+}
