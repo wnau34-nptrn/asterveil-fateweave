@@ -6,7 +6,7 @@ C12 selective deployed-duplicate policy, paired against the same policy on base 
 
 | Stage | Runs | Complete | Wiped | Wins | Party Lv (min/avg) | Best equipped skill Lv at departure (avg per member) | All equipped skills Lv | Gold gained | Gold on skills before it | Tomes held after |
 |---|---|---|---|---|---|---|---|---|---|---|
-| ซากชายแดน #1 | 12 | 100% | 0% | 3.2 | 2.8/2.8 | 1.0 | 1.0 | 20 | 0 | 0 |
+| ซากชายแดน #1 | 12 | 100% | 0% | 3.2 | 3.0/3.0 | 1.0 | 1.0 | 20 | 0 | 0 |
 | เส้นทางป่าทึบ #1 | 12 | 100% | 0% | 3.2 | 5.0/5.0 | 1.0 | 1.0 | 22 | 0 | 6 |
 | แนวรอยแยก #1 | 12 | 100% | 0% | 12.9 | 9.0/9.0 | 1.2 | 1.1 | 77 | 7 | 15 |
 | แนวรอยแยก #2 | 12 | 100% | 0% | 12.8 | 10.0/10.0 | 1.8 | 1.5 | 77 | 24 | 18 |
@@ -17,10 +17,10 @@ C12 selective deployed-duplicate policy, paired against the same policy on base 
 
 | Map | Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |
 |---|---|---|---|---|---|
-| ซากชายแดน | boss | 12 | 100% | 69 | 71 |
+| ซากชายแดน | boss | 12 | 100% | 70 | 71 |
 | ซากชายแดน | boss:attack | 12 | 17% | – | – |
 | ซากชายแดน | boss:under2 | 12 | 100% | – | – |
-| ซากชายแดน | random | 14 | 100% | 90 | 90 |
+| ซากชายแดน | random | 14 | 100% | 91 | 91 |
 | ซากชายแดน | tutorial | 12 | 100% | 85 | 100 |
 | เส้นทางป่าทึบ | boss | 12 | 100% | 70 | 73 |
 | เส้นทางป่าทึบ | boss:attack | 12 | 17% | – | – |
@@ -47,7 +47,7 @@ C12 selective deployed-duplicate policy, paired against the same policy on base 
 | แนวรอยแยก (ยาก) | mini:attack | 24 | 96% | – | – |
 | แนวรอยแยก (ยาก) | random | 207 | 100% | 97 | 99 |
 
-First boss attempt won: ซากชายแดน 100% (party Lv 2.8, boss Lv 3) · เส้นทางป่าทึบ 100% (party Lv 5.0, boss Lv 6) · แนวรอยแยก 100% (party Lv 9.0, boss Lv 11).
+First boss attempt won: ซากชายแดน 100% (party Lv 3.0, boss Lv 3) · เส้นทางป่าทึบ 100% (party Lv 5.0, boss Lv 6) · แนวรอยแยก 100% (party Lv 9.0, boss Lv 11).
 
 Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after 1 / 2 / 3 clears): 1.8 / 2.4 / 2.7. First skill at Lv5 departs on: แนวรอยแยก (ยาก) #2 ×12. Gold on skill levels: 35% of the gold gained.
 
@@ -66,13 +66,13 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 
 | Map | Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |
 |---|---|---|---|---|---|
-| ซากชายแดน | boss | 12 | 100% | 70 | 72 |
+| ซากชายแดน | boss | 12 | 100% | 71 | 72 |
 | ซากชายแดน | boss:attack | 12 | 8% | – | – |
 | ซากชายแดน | boss:under2 | 12 | 100% | – | – |
-| ซากชายแดน | random | 66 | 100% | 83 | 84 |
+| ซากชายแดน | random | 66 | 100% | 84 | 84 |
 | ซากชายแดน | tutorial | 12 | 100% | 85 | 100 |
-| เส้นทางป่าทึบ | boss | 12 | 100% | 68 | 71 |
-| เส้นทางป่าทึบ | boss:attack | 12 | 42% | – | – |
+| เส้นทางป่าทึบ | boss | 12 | 100% | 69 | 71 |
+| เส้นทางป่าทึบ | boss:attack | 12 | 50% | – | – |
 | เส้นทางป่าทึบ | boss:under2 | 12 | 100% | – | – |
 | เส้นทางป่าทึบ | elite-forced | 12 | 100% | 62 | 64 |
 | เส้นทางป่าทึบ | elite-forced:attack | 12 | 25% | – | – |
@@ -113,8 +113,8 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 
 | Stage | Runs | Complete | Wiped | Wins | Party Lv (min/avg) | Best equipped skill Lv at departure (avg per member) | All equipped skills Lv | Gold gained | Gold on skills before it | Tomes held after |
 |---|---|---|---|---|---|---|---|---|---|---|
-| ซากชายแดน #1 | 48 | 100% | 0% | 3.3 | 2.9/2.9 | 1.0 | 1.0 | 21 | 0 | 0 |
-| เส้นทางป่าทึบ #1 | 48 | 94% | 2% | 3.0 | 4.9/4.9 | 1.0 | 1.0 | 20 | 0 | 6 |
+| ซากชายแดน #1 | 48 | 100% | 0% | 3.3 | 3.0/3.0 | 1.0 | 1.0 | 21 | 0 | 0 |
+| เส้นทางป่าทึบ #1 | 48 | 94% | 2% | 3.0 | 5.0/5.0 | 1.0 | 1.0 | 20 | 0 | 6 |
 | แนวรอยแยก #1 | 48 | 96% | 4% | 12.4 | 9.0/9.0 | 1.2 | 1.1 | 73 | 5 | 16 |
 | แนวรอยแยก #2 | 48 | 98% | 0% | 12.2 | 10.0/10.0 | 1.8 | 1.5 | 74 | 24 | 18 |
 | แนวรอยแยก #3 | 48 | 100% | 0% | 12.6 | 10.0/10.0 | 2.4 | 1.6 | 75 | 35 | 18 |
@@ -127,17 +127,17 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 
 | Map | Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |
 |---|---|---|---|---|---|
-| ซากชายแดน | boss | 48 | 100% | 57 | 60 |
+| ซากชายแดน | boss | 48 | 100% | 59 | 61 |
 | ซากชายแดน | boss:attack | 48 | 13% | – | – |
 | ซากชายแดน | boss:under2 | 48 | 100% | – | – |
 | ซากชายแดน | random | 63 | 100% | 90 | 90 |
 | ซากชายแดน | tutorial | 48 | 100% | 83 | 100 |
-| เส้นทางป่าทึบ | boss | 49 | 100% | 60 | 64 |
-| เส้นทางป่าทึบ | boss:attack | 49 | 31% | – | – |
-| เส้นทางป่าทึบ | boss:under2 | 49 | 98% | – | – |
-| เส้นทางป่าทึบ | elite-forced | 51 | 100% | 63 | 66 |
+| เส้นทางป่าทึบ | boss | 50 | 98% | 60 | 65 |
+| เส้นทางป่าทึบ | boss:attack | 50 | 36% | – | – |
+| เส้นทางป่าทึบ | boss:under2 | 50 | 96% | – | – |
+| เส้นทางป่าทึบ | elite-forced | 51 | 100% | 64 | 67 |
 | เส้นทางป่าทึบ | elite-forced:attack | 51 | 45% | – | – |
-| เส้นทางป่าทึบ | random | 57 | 96% | 76 | 80 |
+| เส้นทางป่าทึบ | random | 58 | 98% | 76 | 78 |
 | แนวรอยแยก | boss | 195 | 99% | 85 | 93 |
 | แนวรอยแยก | boss:attack | 195 | 64% | – | – |
 | แนวรอยแยก | boss:under2 | 195 | 99% | – | – |
@@ -147,7 +147,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก | mini | 195 | 100% | 84 | 90 |
 | แนวรอยแยก | mini:attack | 195 | 73% | – | – |
 | แนวรอยแยก | random | 1654 | 100% | 92 | 96 |
-| แนวรอยแยก (ยาก) | boss | 97 | 98% | 67 | 81 |
+| แนวรอยแยก (ยาก) | boss | 97 | 98% | 67 | 80 |
 | แนวรอยแยก (ยาก) | boss:attack | 97 | 4% | – | – |
 | แนวรอยแยก (ยาก) | boss:under2 | 97 | 99% | – | – |
 | แนวรอยแยก (ยาก) | elite-forced | 96 | 100% | 92 | 99 |
@@ -157,7 +157,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก (ยาก) | mini:attack | 96 | 99% | – | – |
 | แนวรอยแยก (ยาก) | random | 783 | 100% | 95 | 99 |
 
-First boss attempt won: ซากชายแดน 100% (party Lv 2.9, boss Lv 3) · เส้นทางป่าทึบ 100% (party Lv 5.0, boss Lv 6) · แนวรอยแยก 96% (party Lv 9.0, boss Lv 11).
+First boss attempt won: ซากชายแดน 100% (party Lv 3.0, boss Lv 3) · เส้นทางป่าทึบ 98% (party Lv 5.0, boss Lv 6) · แนวรอยแยก 96% (party Lv 9.0, boss Lv 11).
 
 Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after 1 / 2 / 3 clears): 1.8 / 2.4 / 2.6. First skill at Lv5 departs on: แนวรอยแยก (ยาก) #2 ×47, never ×1. Gold on skill levels: 35% of the gold gained.
 
@@ -166,34 +166,34 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | Stage | Runs | Complete | Wiped | Wins | Party Lv (min/avg) | Best equipped skill Lv at departure (avg per member) | All equipped skills Lv | Gold gained | Gold on skills before it | Tomes held after |
 |---|---|---|---|---|---|---|---|---|---|---|
 | ซากชายแดน #1 | 48 | 98% | 2% | 7.7 | 3.0/3.0 | 1.0 | 1.0 | 51 | 0 | 0 |
-| เส้นทางป่าทึบ #1 | 48 | 79% | 10% | 15.7 | 5.6/5.6 | 1.0 | 1.0 | 92 | 0 | 10 |
-| เส้นทางป่าทึบ #2 | 10 | 100% | 0% | 16.8 | 6.8/6.8 | 1.0 | 1.0 | 105 | 0 | 15 |
-| แนวรอยแยก #1 | 48 | 100% | 0% | 37.4 | 10.0/10.0 | 1.7 | 1.4 | 275 | 22 | 29 |
-| แนวรอยแยก #2 | 48 | 100% | 0% | 36.5 | 10.0/10.0 | 2.9 | 1.8 | 273 | 66 | 29 |
+| เส้นทางป่าทึบ #1 | 48 | 79% | 10% | 15.7 | 5.7/5.7 | 1.0 | 1.0 | 92 | 0 | 10 |
+| เส้นทางป่าทึบ #2 | 10 | 100% | 0% | 16.9 | 7.0/7.0 | 1.0 | 1.0 | 105 | 0 | 15 |
+| แนวรอยแยก #1 | 48 | 100% | 0% | 37.1 | 10.0/10.0 | 1.7 | 1.4 | 274 | 22 | 29 |
+| แนวรอยแยก #2 | 48 | 100% | 0% | 36.5 | 10.0/10.0 | 2.9 | 1.8 | 273 | 65 | 29 |
 | แนวรอยแยก #3 | 48 | 100% | 0% | 37.4 | 10.0/10.0 | 3.2 | 2.3 | 275 | 62 | 31 |
 | แนวรอยแยก #4 | 48 | 100% | 0% | 37.6 | 10.0/10.0 | 3.4 | 2.8 | 274 | 54 | 35 |
-| แนวรอยแยก (ยาก) #1 | 48 | 100% | 0% | 37.3 | 10.0/10.0 | 3.5 | 3.1 | 304 | 55 | 42 |
-| แนวรอยแยก (ยาก) #2 | 48 | 100% | 0% | 36.8 | 10.0/10.0 | 3.8 | 3.4 | 272 | 64 | 54 |
+| แนวรอยแยก (ยาก) #1 | 48 | 100% | 0% | 37.3 | 10.0/10.0 | 3.5 | 3.1 | 304 | 56 | 42 |
+| แนวรอยแยก (ยาก) #2 | 48 | 100% | 0% | 36.8 | 10.0/10.0 | 3.8 | 3.4 | 272 | 63 | 53 |
 | ซากชายแดน #2 | 1 | 100% | 0% | 5.0 | 3.0/3.0 | 1.0 | 1.0 | 41 | 0 | 0 |
 
 | Map | Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |
 |---|---|---|---|---|---|
-| ซากชายแดน | boss | 49 | 98% | 57 | 61 |
+| ซากชายแดน | boss | 49 | 98% | 58 | 62 |
 | ซากชายแดน | boss:attack | 49 | 12% | – | – |
 | ซากชายแดน | boss:under2 | 49 | 100% | – | – |
 | ซากชายแดน | random | 279 | 100% | 84 | 84 |
 | ซากชายแดน | tutorial | 48 | 100% | 83 | 100 |
-| เส้นทางป่าทึบ | boss | 48 | 100% | 61 | 64 |
-| เส้นทางป่าทึบ | boss:attack | 48 | 56% | – | – |
+| เส้นทางป่าทึบ | boss | 48 | 100% | 62 | 65 |
+| เส้นทางป่าทึบ | boss:attack | 48 | 63% | – | – |
 | เส้นทางป่าทึบ | boss:under2 | 48 | 100% | – | – |
-| เส้นทางป่าทึบ | elite-forced | 57 | 96% | 51 | 56 |
-| เส้นทางป่าทึบ | elite-forced:attack | 57 | 18% | – | – |
-| เส้นทางป่าทึบ | elite-optional | 50 | 98% | 69 | 71 |
-| เส้นทางป่าทึบ | elite-optional:attack | 50 | 94% | – | – |
+| เส้นทางป่าทึบ | elite-forced | 57 | 98% | 53 | 56 |
+| เส้นทางป่าทึบ | elite-forced:attack | 57 | 21% | – | – |
+| เส้นทางป่าทึบ | elite-optional | 50 | 98% | 69 | 72 |
+| เส้นทางป่าทึบ | elite-optional:attack | 50 | 96% | – | – |
 | เส้นทางป่าทึบ | event-abandoned | 15 | 100% | 94 | 94 |
-| เส้นทางป่าทึบ | random | 760 | 99% | 79 | 80 |
+| เส้นทางป่าทึบ | random | 762 | 99% | 79 | 81 |
 | แนวรอยแยก | boss | 192 | 100% | 90 | 95 |
-| แนวรอยแยก | boss:attack | 192 | 82% | – | – |
+| แนวรอยแยก | boss:attack | 192 | 83% | – | – |
 | แนวรอยแยก | boss:under2 | 192 | 100% | – | – |
 | แนวรอยแยก | elite-forced | 192 | 100% | 91 | 98 |
 | แนวรอยแยก | elite-forced:attack | 192 | 92% | – | – |
@@ -201,10 +201,10 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก | elite-optional:attack | 192 | 99% | – | – |
 | แนวรอยแยก | event-bandits | 384 | 100% | 95 | 98 |
 | แนวรอยแยก | event-rift | 192 | 100% | 97 | 99 |
-| แนวรอยแยก | mini | 192 | 100% | 89 | 93 |
-| แนวรอยแยก | mini:attack | 192 | 81% | – | – |
-| แนวรอยแยก | random | 5797 | 100% | 96 | 98 |
-| แนวรอยแยก (ยาก) | boss | 96 | 100% | 67 | 78 |
+| แนวรอยแยก | mini | 192 | 100% | 89 | 94 |
+| แนวรอยแยก | mini:attack | 192 | 80% | – | – |
+| แนวรอยแยก | random | 5786 | 100% | 96 | 99 |
+| แนวรอยแยก (ยาก) | boss | 96 | 100% | 68 | 80 |
 | แนวรอยแยก (ยาก) | boss:attack | 96 | 4% | – | – |
 | แนวรอยแยก (ยาก) | boss:under2 | 96 | 100% | – | – |
 | แนวรอยแยก (ยาก) | elite-forced | 96 | 100% | 93 | 100 |
