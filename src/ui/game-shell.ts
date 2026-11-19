@@ -160,6 +160,8 @@ export class GameShell {
         void this.account?.open(button.dataset.title === 'account' ? 'google' : 'recovery', button); return;
       }
       if (button.dataset.title === 'feedback') { this.feedback?.open('title'); return; }
+      // OD-54: turning the lessons on again starts them over (every lesson shows once more); off hides them all.
+      if (button.dataset.title === 'lessons') { this.lessons.setOff(!this.lessons.off); button.outerHTML = this.lessonToggle(); views.title.querySelector<HTMLElement>('#lessons-toggle')?.focus(); return; }
       if (button.dataset.title === 'import') { this.importLocal(); return; }
       if (button.dataset.title === 'continue' && this.game) { if (this.state) this.resume(); else if (!this.game.profile.commander) this.showCommander(false); else this.showLobby(); }
       if (button.dataset.title === 'new') {
@@ -237,9 +239,13 @@ export class GameShell {
     const view = this.root.dataset.view, g = this.game;
     if (!g || !['world', 'lobby', 'battle'].includes(view ?? '')) { this.lessons.show(undefined); return; }
     if (view === 'world' && g.run) this.lessons.show(worldLesson(g.profile, g.run, this.map, this.maps, this.lessons.seen, id => memberDef(this.lookup, this.map, g.run!, id)?.maxHp ?? 1));
-    else if (view === 'lobby' && !g.run) this.lessons.show(lobbyLesson(g.profile, this.lessons.seen));
+    else if (view === 'lobby' && !g.run) this.lessons.show(lobbyLesson(g.profile, this.maps, this.lessons.seen));
     else if (view === 'battle' && g.run?.battle) this.lessons.show(battleLessonTip(g.profile, g.run.battle.kind, this.lessons.seen));
     else this.lessons.show(undefined);
+  }
+  private lessonToggle(): string {
+    const on = !this.lessons.off;
+    return `<button type="button" id="lessons-toggle" data-title="lessons" class="title-menu-entry" aria-pressed="${on}">คำแนะนำการเล่น: ${on ? 'เปิด' : 'ปิด'} <small>${on ? 'แตะเพื่อปิดทั้งหมด' : 'แตะเพื่อเปิดและเริ่มแนะนำใหม่'}</small></button>`;
   }
   // The one-time calming draught, claimed from its lesson on the map (claimRunGuide; a full bag or a refusal changes nothing).
   private claimCalm(): void {
@@ -314,6 +320,7 @@ export class GameShell {
             ${offer ? `<div class="title-import"><p class="title-save">พบเซฟเดิมในเครื่องนี้<span class="title-chips">${offerChips}</span></p><p class="title-import-note">นำเข้าได้ครั้งเดียวต่อบัญชี · เซฟในเครื่องยังเก็บไว้เหมือนเดิม</p></div>` : ''}
           </section>` : ''}
           <section class="title-setup-group" aria-labelledby="title-help-heading"><h2 id="title-help-heading">ความช่วยเหลือ</h2>
+            ${this.lessonToggle()}
             ${this.server ? '<button type="button" id="feedback-open" data-title="feedback" class="title-menu-entry">ส่งความเห็น / แจ้งปัญหา <span aria-hidden="true">›</span></button>' : ''}
             <a class="title-privacy title-menu-entry" href="${import.meta.env.BASE_URL}privacy.html" target="_blank" rel="noopener">นโยบายความเป็นส่วนตัว <span aria-hidden="true">›</span></a>
           </section>

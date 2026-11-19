@@ -73,3 +73,27 @@ test('the first battle after the prologue points at the enemy plan once', async 
   await page.locator('#lesson-ok').click(); await expect(page.locator('#lesson-layer')).toBeHidden();
   await expect(page.locator('#action-attack')).toBeEnabled();
 });
+
+test('camp: the first visit, then the card points at gear; tapping it completes the lesson; Setup turns lessons off and on', async ({ page }, info) => {
+  const raw = JSON.stringify({ version: 65, profile: profile(), run: null }); parseGame(raw, ruinsMap, encounterById, MAPS);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(({ key, raw, lessonKey }) => {
+    if (sessionStorage.getItem('camp-seeded')) return;
+    localStorage.setItem(key, raw); localStorage.setItem(lessonKey, JSON.stringify({ seen: [], off: false })); sessionStorage.setItem('camp-seeded', '1');
+  }, { key, raw, lessonKey });
+  await page.goto('./'); await page.locator('#continue').click();
+  await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'home'); await page.locator('#lesson-ok').click();
+  await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'card:guide-wear'); expect(await ringOver(page, '#lobby-tab-gear')).toBe(true);
+  await page.screenshot({ path: info.outputPath('lesson-camp-card-390.png') });
+  await page.locator('#lobby-tab-gear').click(); await expect(page.locator('#lesson-layer')).toBeHidden();
+  const prefs = () => page.evaluate(k => JSON.parse(localStorage.getItem(k)!), lessonKey);
+  expect((await prefs()).seen).toEqual(['home', 'card:guide-wear']);
+  // Setup on the title: off hides every lesson; on again starts them over.
+  await page.reload(); await page.locator('#title-setup-toggle').click();
+  const toggle = page.locator('#lessons-toggle'); await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+  await toggle.click(); await expect(page.locator('#lessons-toggle')).toHaveAttribute('aria-pressed', 'false'); expect((await prefs()).off).toBe(true);
+  await page.locator('#lessons-toggle').click(); await expect(page.locator('#lessons-toggle')).toHaveAttribute('aria-pressed', 'true');
+  expect(await prefs()).toEqual({ seen: [], off: false });
+  await page.keyboard.press('Escape'); await page.locator('#continue').click();
+  await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'home');
+});

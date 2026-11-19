@@ -1,3 +1,8 @@
+## 2026-11-19 — OD-54 stage C + Setup lessons toggle (Opus; claude/lessons-stage-c → game branch)
+- Owner: “ทำช่วง C ต่อเลย และเพิ่มปุ่มเปิดคำแนะนำใน Setup”. `lobbyLesson(profile, maps, seen)`: first camp visit, then `card:<guide>` (ring on the camp menu the card needs) and `claim:<guide>` (claim button once done), then `open:<feature>` for quests/team, market/hunt/tomes, fuse/hard only when the map that opens them was the last cleared. No new rewards or rules.
+- Tapping the highlighted control completes its lesson (no bubble over the opened sheet). Title Setup → ความช่วยเหลือ: `#lessons-toggle` (off hides all; on again resets `seen`).
+- Tests: tutorial-flow (9), lessons.spec (4 at 390px incl. camp card + Setup), full Vitest, lint, build.
+
 ## 2026-11-19 — OD-54 lessons after the prologue (Opus; claude/tutorial-flow → game branch; [PR #304](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/304))
 - Owner: design first, then “R1 R2 เอา คงเกราะอก ช่วง B ครบ รางวัลเดิม แจกยา”. Design [TUTORIAL_FLOW_TH.md](../design/TUTORIAL_FLOW_TH.md). Rules: prologue win reaches camp Lv2 (`gainExp`), `unlocks.gear/tree = 0`, one-time `guide-calm` (calming draught) via new run command `claimRunGuide` or the camp card; no save bump (guide ids already validated).
 - UI `src/ui/lessons.ts` + GameShell `updateLessons`: one ring+bubble lesson at a time on the real control (map order levelup→wear→tree→lanes→walk→chest→lowhp→fatigue→calm→elite→boss, first-battle `#intent` tip, first camp). Seen/off per device (localStorage); automated browsers start off unless a test saves a preference (`tests/browser/lessons.spec.ts` does).
