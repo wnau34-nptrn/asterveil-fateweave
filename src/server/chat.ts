@@ -1,3 +1,4 @@
+import { channelOpen, WORLD_CHANNEL } from '../core/chat/channels';
 import { filterChat, type ChatRefusal } from '../core/chat/filter';
 import type { DurableStateLike } from './account-object';
 
@@ -11,11 +12,11 @@ export const CHAT_LIMITS = {
   readBatch: 50, keepMessages: 500, keepMs: 7 * 86_400_000, keepReportedMs: 30 * 86_400_000,
   hideAtReports: 3, maxMuteMinutes: 30 * 24 * 60,
 } as const;
-export const CHANNEL = 'world';
+export const CHANNEL = WORLD_CHANNEL;
 export const REPORT_REASONS = ['abuse', 'spam', 'personal', 'other'] as const;
 export type ReportReason = typeof REPORT_REASONS[number];
 export interface ChatMessage { id: number; handle: string; text: string; at: number; mine: boolean }
-export type PostResult = { ok: true; message: ChatMessage; masked: boolean } | { ok: false; error: ChatRefusal | 'muted' | 'too_fast' | 'duplicate'; until?: number; retryAfter?: number };
+export type PostResult = { ok: true; message: ChatMessage; masked: boolean } | { ok: false; error: ChatRefusal | 'muted' | 'too_fast' | 'duplicate' | 'channel_closed'; until?: number; retryAfter?: number };
 export type ReportResult = 'reported' | 'already' | 'own' | 'no_message';
 export interface AdminRow { id: number; account: string; handle: string; text: string; at: number; hidden: string | null; reports: number; reasons: string[] }
 
@@ -56,16 +57,17 @@ export class ChatHost {
 
   // Messages after `after` (the newest `readBatch` of them), and the ids hidden among recent ones so a device that
   // already shows them can take them away.
-  read(account: string, after: number): { messages: ChatMessage[]; hidden: number[]; last: number; muted: number | null } {
-    const list = this.rows<Row>('SELECT id, account, handle, text, at, hidden, reports FROM messages WHERE channel = ? AND id > ? AND hidden IS NULL ORDER BY id DESC LIMIT ?',
-      CHANNEL, after, CHAT_LIMITS.readBatch).reverse();
-    const hidden = after > 0 ? this.rows<{ id: number }>('SELECT id FROM messages WHERE id > ? AND id <= ? AND hidden IS NOT NULL', Math.max(0, after - 200), after).map(r => r.id) : [];
-    const last = this.rows<{ id: number | null }>('SELECT MAX(id) AS id FROM messages')[0]?.id ?? 0;
+  read(account: string, after: number, channel: string = CHANNEL): { messages: ChatMessage[]; hidden: number[]; last: number; muted: number | null } {
+    const list = channelOpen(channel) ? this.rows<Row>('SELECT id, account, handle, text, at, hidden, reports FROM messages WHERE channel = ? AND id > ? AND hidden IS NULL ORDER BY id DESC LIMIT ?',
+      channel, after, CHAT_LIMITS.readBatch).reverse() : [];
+    const hidden = after > 0 ? this.rows<{ id: number }>('SELECT id FROM messages WHERE channel = ? AND id > ? AND id <= ? AND hidden IS NOT NULL', channel, Math.max(0, after - 200), after).map(r => r.id) : [];
+    const last = this.rows<{ id: number | null }>('SELECT MAX(id) AS id FROM messages WHERE channel = ?', channel)[0]?.id ?? 0;
     return { messages: list.map(r => this.view(r, account)), hidden, last: Math.max(last, 0), muted: this.mutedUntil(account) };
   }
 
-  post(account: string, handle: string, raw: string): PostResult {
+  post(account: string, handle: string, raw: string, channel: string = CHANNEL): PostResult {
     const now = this.now();
+    if (!channelOpen(channel)) return { ok: false, error: 'channel_closed' };
     const until = this.mutedUntil(account);
     if (until) return { ok: false, error: 'muted', until };
     const f = filterChat(raw);
@@ -77,7 +79,7 @@ export class ChatHost {
     if (mine.length >= CHAT_LIMITS.perHour) return { ok: false, error: 'too_fast', retryAfter: 600 };
     if (mine[0] && now - mine[0].at < CHAT_LIMITS.duplicateMs && mine[0].text === f.text) return { ok: false, error: 'duplicate' };
     const id = this.state.storage.transactionSync(() => {
-      const r = this.rows<{ id: number }>('INSERT INTO messages (channel, account, handle, text, at) VALUES (?, ?, ?, ?, ?) RETURNING id', CHANNEL, account, handle, f.text, now)[0]!.id;
+      const r = this.rows<{ id: number }>('INSERT INTO messages (channel, account, handle, text, at) VALUES (?, ?, ?, ?, ?) RETURNING id', channel, account, handle, f.text, now)[0]!.id;
       this.retain(now);
       return r;
     });
@@ -150,7 +152,8 @@ export async function handleChatRequest(host: ChatHost, request: Request): Promi
     if (url.pathname === '/read') {
       const account = url.searchParams.get('account') ?? ''; const after = int(Number(url.searchParams.get('after') ?? '0'), 0, Number.MAX_SAFE_INTEGER);
       if (!ACCOUNT.test(account) || after === null) return reply({ error: 'invalid_request' }, 400);
-      return reply(host.read(account, after));
+      const channel = url.searchParams.get('channel') ?? CHANNEL;
+      return reply(host.read(account, after, channel));
     }
     if (url.pathname === '/admin') return reply(host.admin());
     return reply({ error: 'not_found' }, 404);
@@ -162,8 +165,8 @@ export async function handleChatRequest(host: ChatHost, request: Request): Promi
   switch (url.pathname) {
     case '/post': {
       if (!account || typeof b.text !== 'string') return reply({ error: 'invalid_request' }, 400);
-      const out = host.post(account, await chatHandle(account), b.text);
-      return out.ok ? reply(out, 201) : reply(out, out.error === 'too_fast' ? 429 : out.error === 'muted' ? 403 : 422);
+      const out = host.post(account, await chatHandle(account), b.text, typeof b.channel === 'string' ? b.channel : CHANNEL);
+      return out.ok ? reply(out, 201) : reply(out, out.error === 'too_fast' ? 429 : out.error === 'muted' || out.error === 'channel_closed' ? 403 : 422);
     }
     case '/report': {
       const id = int(b.id, 1, Number.MAX_SAFE_INTEGER); const reason = REPORT_REASONS.find(r => r === b.reason);

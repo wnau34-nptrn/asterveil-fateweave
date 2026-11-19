@@ -411,7 +411,7 @@ export class LobbyUI {
   // P11: the world chat (server play only; offline the button stays visible, disabled, with its reason).
   private chatEntry(): string {
     const online = !!this.view?.online;
-    return `<button id="lobby-chat" type="button" class="lobby-chat round-glass" data-chat-open aria-haspopup="dialog"${online ? ' aria-label="เปิดแชทโลก"' : ' disabled aria-describedby="lobby-chat-why"'}>${icon('talk')}<span>แชท</span>${online ? '' : '<small id="lobby-chat-why">เฉพาะเล่นออนไลน์</small>'}</button>`;
+    return `<button id="lobby-chat" type="button" class="lobby-chat round-glass" data-chat-open aria-haspopup="dialog"${online ? ' aria-label="เปิดแชทโลก"' : ' disabled aria-describedby="lobby-chat-why"'}>${icon('talk')}<span>แชท</span>${online ? '' : '<small id="lobby-chat-why">เฉพาะเล่นออนไลน์</small>'}</button>${online ? '<button id="chat-feed-camp" type="button" class="lobby-chat-feed round-glass" data-chat-feed-toggle aria-pressed="false" aria-label="เปิดหรือปิดแถบแชทบนหน้าค่าย">แถบแชท<small data-feed-state>ปิด</small></button>' : ''}`;
   }
   private musicButton(): string {
     const muted = document.documentElement.dataset.musicMuted === 'true';

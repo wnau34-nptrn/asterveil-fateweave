@@ -97,3 +97,41 @@ test('offline the camp chat button is disabled with its reason', async ({ page }
   await expect(page.locator('#chat-dialog')).toHaveCount(0);
   await page.screenshot({ path: `${SHOTS}/camp-offline-390.png` });
 });
+
+// Camp chat feed, hidden camps and closed channels (owner 2026-11-19): off by default, no reading while off, a toggle on
+// the camp, in the chat window and in Setup, lines from the last 45 s, a hidden camp leaves the feed and can be shown again.
+test('camp feed: off by default and silent, on shows new lines, a hidden camp can be shown again, private and guild tabs are closed', async ({ page }) => {
+  test.setTimeout(90_000);
+  const s = await serve(page);
+  const me = await guest(s, 'อารี'); const other = await guest(s);
+  const reads: string[] = []; page.on('request', r => { if (r.url().startsWith(`${API}/v1/chat?`)) reads.push(r.url()); });
+  await page.addInitScript(([k, v]) => { localStorage.setItem(k!, v!); }, [`fateweave-server-token:${API}`, me.token]);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`./?server=${encodeURIComponent(API)}`);
+  await page.locator('#continue').click(); await expect(page.locator('#lobby-chat')).toBeEnabled();
+  const toggle = page.locator('#chat-feed-camp'); await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+  const tb = (await toggle.boundingBox())!; expect(tb.height).toBeGreaterThanOrEqual(44); expect(tb.width).toBeGreaterThanOrEqual(44);
+  await say(s, other.token, 'ข้อความก่อนเปิดแถบ'); await page.waitForTimeout(1500);
+  await expect(page.locator('#chat-feed')).toBeHidden(); expect(reads).toEqual([]);
+  // On: only what arrives afterwards (the first read hides old history), and it survives a reload.
+  await toggle.click(); await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+  await say(s, other.token, 'ใครไปด่านสองบ้าง');
+  const feed = page.locator('#chat-feed'); await expect(feed).toBeVisible({ timeout: 15_000 });
+  await expect(feed).toContainText('ใครไปด่านสองบ้าง'); await expect(feed).not.toContainText('ข้อความก่อนเปิดแถบ');
+  await page.screenshot({ path: `${SHOTS}/camp-feed-390.png` });
+  const fb = (await feed.boundingBox())!; expect(fb.x + fb.width).toBeLessThanOrEqual(390 - 60);
+  // The feed opens the full chat; there the camp can be hidden and shown again, and the other channels show why they are closed.
+  await feed.click(); const dialog = page.locator('#chat-dialog'); await expect(dialog).toBeVisible(); await expect(feed).toBeHidden();
+  await expect(dialog.locator('[data-chat-tab="dm"]')).toBeDisabled(); await expect(dialog.locator('[data-chat-tab="guild"]')).toBeDisabled();
+  await expect(dialog.locator('[data-chat-tab="world"]')).toHaveAttribute('aria-current', 'true');
+  await dialog.locator('.chat-msg').last().locator('.chat-more').click(); await dialog.locator('[data-chat="block"]').click();
+  await dialog.locator('#chat-blocked summary').click(); await expect(dialog.locator('.chat-blocked-row')).toHaveCount(1);
+  await page.screenshot({ path: `${SHOTS}/chat-blocked-390.png` });
+  for (const b of await dialog.locator('button').all()) if (await b.isVisible()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  await dialog.locator('[data-chat="unblock"]').click();
+  await expect(dialog.locator('.chat-msg')).toHaveCount(2); await expect(dialog.locator('#chat-blocked-summary')).toContainText('(0)');
+  await page.locator('[data-chat="close"]').click();
+  // Reload: the preference is kept; turning it off hides the feed again.
+  await page.reload(); await page.locator('#continue').click(); await expect(page.locator('#chat-feed-camp')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#chat-feed-camp').click(); await expect(page.locator('#chat-feed-camp')).toHaveAttribute('aria-pressed', 'false'); await expect(feed).toBeHidden();
+});
