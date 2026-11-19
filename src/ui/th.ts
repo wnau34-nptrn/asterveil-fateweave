@@ -1,5 +1,5 @@
 import {bossNames,bossDescription} from './boss-equipment';
-import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, TalentCap, TalentRule } from '../core/battle/types';
+import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, IntentAim, TalentCap, TalentRule } from '../core/battle/types';
 import { TOME_LINES, TOME_SIZES, type BoardKind, type ContractKind, type SweepReward, type TomeBag, type TomeLine, type TomeSize } from '../core/world/types';
 import type { EquipmentRules, ExpGain, ExpeditionState, Gear, GearSlot, GearStat, Item, PotionId, PotionRules, ResourceId, Resources, SetDefinition, SetId, TalentNodeDef, MapEventKind, EventChoice, EventRules, QuestObjective, SideQuestDefinition, SideQuestKind, ShopItemId, MapEventDefinition, Profile } from '../core/world/types';
 import type { GearSpecial, HeroDefinition } from '../core/battle/types';
@@ -46,6 +46,9 @@ export function intentTargetThai(intent: Intent, data: EncounterDefinition, reci
 export function intentDelayThai(intent: Intent): string {
   return intent.delayedMove ? `${intentName({ ...intent, name: intent.delayedMove })} เลื่อนไปรอบหน้า` : intent.delayedOnce ? 'ถูกเลื่อนแล้ว · เลื่อนซ้ำไม่ได้' : '';
 }
+// Enemy aim (owner 2026-11-19): how a move picks its target, shown with the announced move and in the foe's notes.
+export const aimThai: Record<IntentAim, string> = { weakest: 'เล็ง HP ต่ำสุด', support: 'ไล่สายสนับสนุน', pack: 'ตามฝูง' };
+export const aimNoteThai: Record<IntentAim, string> = { weakest: 'เลือกคนที่ HP เหลือ % ต่ำสุด', support: 'เลือกสายสนับสนุน/ฮีลก่อน', pack: 'ตีตามเป้าของศัตรูตัวแรกในกลุ่ม' };
 // The rule line under an announced enemy turn.
 export function intentRuleThai(intent: Intent): string {
   if (intent.special === 'phase') return 'ไม่โจมตีเทิร์นนี้ · เรียกพวก/เปลี่ยนท่า · ขัดจังหวะไม่ได้';
@@ -55,7 +58,7 @@ export function intentRuleThai(intent: Intent): string {
   if (intent.summon) return `${delay}ไม่ทำความเสียหาย · เรียกลูกน้องที่ล้มกลับมา · ขัดจังหวะไม่ได้`;
   if (intent.charge) return `${delay}${intent.breakable ? '<b class="intent-tag">ทำลายได้</b> · ตัดจังหวะ (Bash/Sigil) แล้วท่าถัดไปเสียหลัก · ' : ''}ไม่ทำความเสียหาย · ท่าถัดไปแรงมาก เตรียมป้องกัน`;
   const reach = intent.all ? 'โดนทุกคน · ตั้งรับแทนไม่ได้' : intent.kind === 'physical' ? 'แนวหน้ารับก่อน' : 'ถึงแนวหลังได้';
-  return delay + (intent.court ? `<b class="intent-tag">ราชสำนัก +${intent.court}%</b> · ` : '') + (intent.unstoppable ? `${reach} · ขัดจังหวะไม่ได้` : reach);
+  return delay + (intent.court ? `<b class="intent-tag">ราชสำนัก +${intent.court}%</b> · ` : '') + (intent.aim ? `<b class="intent-tag">${aimThai[intent.aim]}</b> · ` : '') + (intent.unstoppable ? `${reach} · ขัดจังหวะไม่ได้` : reach);
 }
 // A boss phase's name, from the same move-name table.
 export const phaseThai = (name: string): string => intentName({ name } as Intent);

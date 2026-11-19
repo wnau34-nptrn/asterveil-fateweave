@@ -7,6 +7,9 @@ export interface FoeMove { name: string; damage: number; kind: 'physical' | 'ene
 export interface Species {
   name: string; displayName: string; row: 'front' | 'back'; large?: boolean; art: string; color: number;
   hp: number; speed: number; moves: readonly FoeMove[];
+  // Enemy aim B (owner 2026-11-19, docs/design/ENEMY_AIM_PROPOSAL_TH.md): a back-row "assassin" kind on maps 1–2 whose
+  // energy moves aim at the first support-role hero (the map-3 Rift Wisp lost guarded fights from 60% HP, so it keeps slots).
+  assassin?: boolean;
 }
 const move = (name: string, damage: number, kind: FoeMove['kind'], slot: number): FoeMove => ({ name, damage, kind, slot });
 
@@ -14,7 +17,7 @@ export const SPECIES = {
   // Map 1 ซากชายแดน (ART-CHAR-FOES-002): soft, weak-looking creatures.
   dewSlime: { name: 'Dew Slime', displayName: 'สไลม์น้ำค้าง', row: 'front', art: 'foe_dew_slime', color: 0x8fd8d0, hp: 30, speed: 70,
     moves: [move('Jelly Bounce', 6, 'physical', 1), move('Jelly Bounce', 6, 'physical', 0), move('Jelly Bounce', 7, 'physical', 1)] },
-  emberSlime: { name: 'Ember Slime', displayName: 'สไลม์ถ่านไฟ', row: 'back', art: 'foe_ember_slime', color: 0xf0a070, hp: 22, speed: 90,
+  emberSlime: { name: 'Ember Slime', displayName: 'สไลม์ถ่านไฟ', row: 'back', assassin: true, art: 'foe_ember_slime', color: 0xf0a070, hp: 22, speed: 90,
     moves: [move('Ember Spark', 7, 'energy', 2), move('Ember Spark', 7, 'energy', 3), move('Ember Spark', 8, 'energy', 0)] },
   ruinBat: { name: 'Ruin Bat', displayName: 'ค้างคาวซาก', row: 'back', art: 'foe_ruin_bat', color: 0xb8a6d0, hp: 18, speed: 125,
     moves: [move('Nip', 5, 'physical', 0), move('Nip', 5, 'physical', 1), move('Nip', 6, 'physical', 0)] },
@@ -31,7 +34,7 @@ export const SPECIES = {
   // Map 2 เส้นทางป่าทึบ.
   thornBeetle: { name: 'Thorn Beetle', displayName: 'ด้วงหนาม', row: 'front', art: 'foe_thorn_beetle', color: 0x6f7f3a, hp: 50, speed: 65,
     moves: [move('Thorn Bite', 9, 'physical', 1), move('Thorn Bite', 9, 'physical', 0), move('Thorn Bite', 10, 'physical', 1)] },
-  sporePuff: { name: 'Spore Puff', displayName: 'ภูตสปอร์', row: 'back', art: 'foe_spore_puff', color: 0x4fb3a6, hp: 34, speed: 100,
+  sporePuff: { name: 'Spore Puff', displayName: 'ภูตสปอร์', row: 'back', assassin: true, art: 'foe_spore_puff', color: 0x4fb3a6, hp: 34, speed: 100,
     moves: [move('Spore Dust', 8, 'energy', 3), move('Spore Dust', 8, 'energy', 2), move('Spore Dust', 9, 'energy', 1)] },
   // Map 3 แนวรอยแยก.
   riftChanneler: { name: 'Rift Channeler', displayName: 'อสูรส่งพลัง', row: 'front', large: true, art: 'foe_rift_channeler', color: 0x8a5cd6, hp: 110, speed: 70,
@@ -52,7 +55,7 @@ export function foes(level: number, placed: readonly [EnemySlot, Species, Partia
     enemies.push({ id, row: s.row, ...(s.large ? { large: true } : {}), name: s.name, displayName: s.displayName, maxHp: atLevel(s.hp, level), speed: s.speed, color: s.color, art: s.art, ...extra });
     for (let i = 0; i < s.moves.length; i++) {
       const m = s.moves[(i + copy) % s.moves.length]!;
-      intents.push({ sourceId: id, targetSlot: m.slot, name: m.name, damage: atLevel(m.damage, level), kind: m.kind });
+      intents.push({ sourceId: id, targetSlot: m.slot, name: m.name, damage: atLevel(m.damage, level), kind: m.kind, ...(s.assassin && m.kind === 'energy' ? { aim: 'support' as const } : {}) });
     }
   }
   return { enemies, intents };

@@ -1,7 +1,7 @@
 import {bossNames,bossDescription} from './boss-equipment';
 import { VENOM_TICK, VENOM_BURST, SLAM_GRUDGE, SLAM_GRUDGE_MAX, slamGrudge, ARCANE_MAX, DISPEL_PER_CHARGE, CHALLENGE_GRUDGE_MAX, ROUSE_CUT, SANCTUARY_HEAL, CHARGE_EXPOSED, CHI_MAX, HEX_MAX, foeRow, hexTickPower, capAmount, corrodeBonus, bigMove, cycleIndex, enemyIntent, guardReductionOf, hasCap, nextIntentOf, phaseMoves, skillPower, rallyReductionOf, songPower, tauntReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleState, EncounterDefinition } from '../core/battle/types';
-import { actorName, intentName, phaseThai } from './th';
+import { actorName, aimNoteThai, intentName, phaseThai } from './th';
 
 export interface UnitStatus {
   id: string; kind: 'buff' | 'debuff'; icon: ActionId;
@@ -123,7 +123,8 @@ export function foeProfile(s: BattleState, d: EncounterDefinition, id: string): 
   const nextIndex = next && !next.special ? cycleIndex(s, d, id, next.round) : -1;
   const moves = cycle.map((m, i) => {
     const hero = d.heroes[m.targetSlot];
-    const target = `${hero ? actorName(hero.id, d) : `ช่อง ${m.targetSlot + 1}`}${m.kind === 'physical' ? ' (กายภาพ: แนวหน้าก่อนถ้ายังยืน)' : ''}`;
+    const slot = `${hero ? actorName(hero.id, d) : `ช่อง ${m.targetSlot + 1}`}${m.kind === 'physical' ? ' (กายภาพ: แนวหน้าก่อนถ้ายังยืน)' : ''}`;
+    const target = m.aim ? `${aimNoteThai[m.aim]} · สำรอง: ${slot}` : slot;
     return { name: intentName({ ...m, targetId: hero?.id ?? '', beat: 0, round: 0 }), kind: m.kind, damage: m.damage, target: m.charge ? 'ไม่โจมตี · ท่าถัดไปแรงมาก' : m.all ? 'ทั้งทีม' : target, next: i === nextIndex, unstoppable: !!m.unstoppable, big: bigMove(s, d, id, m) };
   });
   return { stats, position, moves };
