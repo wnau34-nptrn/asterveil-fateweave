@@ -1,0 +1,53 @@
+{
+  "tolerance": 0.12,
+  "minInliers": 12,
+  "report": {
+    "lalin": [
+      {
+        "frame": 0,
+        "height": 460,
+        "scale": 1.0,
+        "inliers": 3093,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 1,
+        "height": 460,
+        "scale": 1.034,
+        "inliers": 124,
+        "status": "ok"
+      },
+      {
+        "frame": 2,
+        "height": 485,
+        "scale": 0.894,
+        "inliers": 181,
+        "status": "ok"
+      },
+      {
+        "frame": 3,
+        "height": 493,
+        "scale": 0.958,
+        "inliers": 101,
+        "status": "ok"
+      },
+      {
+        "frame": 4,
+        "height": 489,
+        "scale": 1.029,
+        "inliers": 105,
+        "status": "ok"
+      }
+    ]
+  },
+  "frames": [
+    "seed",
+    "lalin_sit",
+    "lalin_cheer",
+    "lalin_idle_alt",
+    "lalin_idle_alt_r2"
+  ],
+  "command": "python3 scripts/unit-anatomy-audit.py --cells <seed+lalin-poses> --json audit/lalin.json",
+  "scriptExitCode": 0
+}

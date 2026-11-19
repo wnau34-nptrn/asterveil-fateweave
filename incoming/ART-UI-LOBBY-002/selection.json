@@ -1,0 +1,83 @@
+{
+  "baseCommit": "db09e3e775cd6c2853198003bc7682840823821d",
+  "briefCommit": "8ceffd18f120e9f7c7ed132e5fc280714f12f130",
+  "poses": {
+    "metta_sit": {
+      "raw": "raw/metta_sit.png",
+      "scale": 1.0,
+      "seatY": 365
+    },
+    "metta_cheer": {
+      "raw": "raw/metta_cheer_r2.png",
+      "scale": 1.0
+    },
+    "metta_idle_alt": {
+      "raw": "raw/metta_idle_alt.png",
+      "scale": 0.98
+    },
+    "lalin_sit": {
+      "raw": "raw/lalin_sit.png",
+      "scale": 1.0,
+      "seatY": 365,
+      "baselineAdjustment": 1
+    },
+    "lalin_cheer": {
+      "raw": "raw/lalin_cheer.png",
+      "scale": 0.98
+    },
+    "lalin_idle_alt": {
+      "raw": "raw/lalin_idle_alt.png",
+      "scale": 0.98
+    },
+    "kael_sit": {
+      "raw": "raw/kael_sit.png",
+      "scale": 1.0,
+      "seatY": 374
+    },
+    "kael_cheer": {
+      "raw": "raw/kael_cheer.png",
+      "scale": 0.98
+    },
+    "kael_idle_alt": {
+      "raw": "raw/kael_idle_alt_r3.png",
+      "scale": 1.0
+    },
+    "wynne_sit": {
+      "raw": "raw/wynne_sit.png",
+      "scale": 1.0,
+      "seatY": 375,
+      "baselineAdjustment": 2
+    },
+    "wynne_cheer": {
+      "raw": "raw/wynne_cheer.png",
+      "scale": 1.0
+    },
+    "wynne_idle_alt": {
+      "raw": "raw/wynne_idle_alt.png",
+      "scale": 1.0
+    },
+    "astrid_sit": {
+      "raw": "raw/astrid_sit.png",
+      "scale": 1.0,
+      "seatY": 378
+    },
+    "astrid_cheer": {
+      "raw": "raw/astrid_cheer_r2.png",
+      "scale": 1.0
+    },
+    "astrid_idle_alt": {
+      "raw": "raw/astrid_idle_alt.png",
+      "scale": 1.0
+    }
+  },
+  "variants": {
+    "lalin_idle_alt_r2": {
+      "raw": "raw/lalin_idle_alt_r2.png",
+      "scale": 1.0
+    },
+    "kael_idle_alt_r2": {
+      "raw": "raw/kael_idle_alt_r2.png",
+      "scale": 1.0
+    }
+  }
+}

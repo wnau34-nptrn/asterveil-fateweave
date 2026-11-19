@@ -1,0 +1,559 @@
+{
+  "schema": 1,
+  "files": {
+    "NOTES.md": {
+      "sha256": "489206ad1f7a0d03a1c6f42f3bc0ecca6e219cbc54efaaf58095194e18277df8",
+      "bytes": 10893
+    },
+    "audit/astrid.json": {
+      "sha256": "03a51e77688436cedff146ebdf7ccfdca959c470457f1111937bf181da8545c9",
+      "bytes": 851
+    },
+    "audit/kael.json": {
+      "sha256": "474750db601bd0e813c70344d8f8148e31132db78e0e15ea9c4f9fd95cb7ac98",
+      "bytes": 993
+    },
+    "audit/lalin.json": {
+      "sha256": "e187fbf725a48534e40882ae33b30a292ca5bbc15132ed9f6d00082847a2dc6f",
+      "bytes": 1002
+    },
+    "audit/metta.json": {
+      "sha256": "83f8c1807dc8e3ef70cbc6aac31cbb537ec6eebfe2fbe5bdf6c0a3402f69379e",
+      "bytes": 845
+    },
+    "audit/wynne.json": {
+      "sha256": "2251ffcbb9fd528d601badbe4d10cc2bc06415e8e4d1b7a743ba1e1702d19fe4",
+      "bytes": 845
+    },
+    "build_handoff.py": {
+      "sha256": "38ddcf3361b1c8967bdae0cb22872184fd90e3d28ee07d035036c5bee25d3c8e",
+      "bytes": 11234
+    },
+    "cells/astrid_cheer.png": {
+      "sha256": "4ff21c96845bd0a9c8b6308900d4f30ee20292f24c9401e525e075e97efc6067",
+      "bytes": 265555,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/astrid_idle_alt.png": {
+      "sha256": "202087edffab735f2e4dce4f9103993024ea7e53ffcbb18a9367c9594a6e3a7e",
+      "bytes": 241410,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/astrid_sit.png": {
+      "sha256": "929aecf9124f1cec7b58d8757de8cc49ca64b36f920641816a3477352772bd20",
+      "bytes": 301250,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/kael_cheer.png": {
+      "sha256": "fec8446a433ad4dddd52641e42e70a196f369090a977007fb4086a1838c83c91",
+      "bytes": 198183,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/kael_idle_alt.png": {
+      "sha256": "22d36fb0ae8af9e054d876a6591c68bf6270e8251689cb7a13706e6691dcb61f",
+      "bytes": 238258,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/kael_sit.png": {
+      "sha256": "a0da6e54932d881ba1bba75803329cd59f4007185105b760f694f27dfee5799f",
+      "bytes": 270482,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/lalin_cheer.png": {
+      "sha256": "0fab9e44bdaa0047efc924a807664f923b3a68235573860e059dadad4b945c17",
+      "bytes": 283356,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/lalin_idle_alt.png": {
+      "sha256": "7952cfce1b2850b21e54229b8a761b8c38fc94af9a62d570de2b49f98acb0126",
+      "bytes": 301229,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/lalin_sit.png": {
+      "sha256": "7982dae3f17178696b87647a457dbd3c96c74ead8340cd74becbea4ba9a9690e",
+      "bytes": 317845,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/metta_cheer.png": {
+      "sha256": "72243fe05127536081b5dc743ec42aa337da831f88178fb8b3d3d0082d430d73",
+      "bytes": 279389,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/metta_idle_alt.png": {
+      "sha256": "b969e4e924309bdc07e12748d1461b9b229dc7cd569bed38b616d7b6a048696f",
+      "bytes": 205035,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/metta_sit.png": {
+      "sha256": "60466d756a1433ea8d2b86dadf4749d09a6963afe90f8913ed35f915e1815a37",
+      "bytes": 327529,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/wynne_cheer.png": {
+      "sha256": "6eabd323e1d5cd2141528f2299267749a02b4dd5d282184672bfd81dd631501e",
+      "bytes": 274656,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/wynne_idle_alt.png": {
+      "sha256": "740e15b22962eacbdee595fee0b0ab76f8c7bf2e67538132f235e24e55912c8a",
+      "bytes": 303258,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "cells/wynne_sit.png": {
+      "sha256": "b973df85fd26948b5e43db58da07e09324135fb28a8ed23a373394e393d19e20",
+      "bytes": 350585,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "lobby_poses_p03.json": {
+      "sha256": "9cc18cc29728eba364a93a4959ffc3a60a1de0620c89175cc344ccf81c17b79e",
+      "bytes": 1551
+    },
+    "lobby_poses_p03.webp": {
+      "sha256": "e4d7074245715792cbe4ff4b77fdac7dcbbf6ebcfec87f3d50370b4f4b7524a7",
+      "bytes": 3141380,
+      "size": [
+        1536,
+        2560
+      ],
+      "mode": "RGBA"
+    },
+    "normalization.json": {
+      "sha256": "0921dd73720552ada6189714a730598671fdcda46b519f49774a6cc5eb19721c",
+      "bytes": 2780
+    },
+    "prompts.json": {
+      "sha256": "967f9df9b6390778f061bb53fcb591f9106bcd3374edc9ba85f44d9427fe5ffc",
+      "bytes": 40567
+    },
+    "protected-sha256.json": {
+      "sha256": "82766e66666e9caa4c3baf07fdbe4b3a6a1a7a63b9ba0681b4382286c0fb2924",
+      "bytes": 878
+    },
+    "raw/astrid_cheer.png": {
+      "sha256": "4702316140174821c06627434c40fcc0227aa50f177b9b38fefc645ee3b2d7a3",
+      "bytes": 1789353,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/astrid_cheer_r2.png": {
+      "sha256": "59c5429263f69db2f5e77463d58c4a85ae6614c2593674ae02f75649803e8a57",
+      "bytes": 1418151,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/astrid_idle_alt.png": {
+      "sha256": "2c17562334c8083c3c41a0351089fff0ccb40d10dbca76e98d98df744c593710",
+      "bytes": 1306167,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/astrid_sit.png": {
+      "sha256": "6a2e1da4f91eeeb6f66ce7a639afcfffb8b7d8cf1cd558d1b2e7482d4c58de53",
+      "bytes": 1578440,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/kael_cheer.png": {
+      "sha256": "f02cc6ca85e9250d3b9c670c2a734e6c7b9bb7e44d7a70ccec077d0d25ed9d20",
+      "bytes": 1056502,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/kael_idle_alt.png": {
+      "sha256": "d9b7af0a6e9f23899eca96301b016b34bfbc114235a4916853029596d27aa88f",
+      "bytes": 926229,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/kael_idle_alt_r2.png": {
+      "sha256": "b1c29fdb974610641d7a4b76f0a7f774e5742373a308404a7664f399cc3a40f0",
+      "bytes": 1179553,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/kael_idle_alt_r3.png": {
+      "sha256": "44343d20c1fbdb9efd52870635efa1bbe3b5a6dc76d959b3dd6a2dde4d5753f6",
+      "bytes": 1248689,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/kael_sit.png": {
+      "sha256": "2a77699f7042ca0f1338399761632fbc8e06ca40733d05eb1fb03a6abb320623",
+      "bytes": 1407274,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/lalin_cheer.png": {
+      "sha256": "75d5ad621852300849f3196e13614a0b92aca4ebc55313aa26d6e888eb6d7f47",
+      "bytes": 1552961,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/lalin_idle_alt.png": {
+      "sha256": "87425c9e3c2b6cbddcfe527502ad1b68149747adff9f20e4879c1a6e2e4d23db",
+      "bytes": 1633966,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/lalin_idle_alt_r2.png": {
+      "sha256": "685d0330120516aea3b6e0d3233b3b52be873c6f3768e99c757c7c81aae4ed91",
+      "bytes": 1496674,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/lalin_sit.png": {
+      "sha256": "78dca4f0cfe200d0d469833dcaa3918aff690c398081e62b56baf0c6e7c9bf80",
+      "bytes": 1630294,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/metta_cheer.png": {
+      "sha256": "c9da92e0c2432641cdba64b20ad15730f0b11c53acaf04db5f1e53d4834e8236",
+      "bytes": 1295497,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/metta_cheer_r2.png": {
+      "sha256": "fb3db88952680a844e94a46234cc5417fa97eeb35b1c7f745d72d332c4d1f50b",
+      "bytes": 1437688,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/metta_idle_alt.png": {
+      "sha256": "8ebaf24f68cf918eb38a2f5ef8df97a5cc64a733b425e037efdb29495d5e4c0b",
+      "bytes": 1109604,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/metta_sit.png": {
+      "sha256": "454c1b781bcd4794cabb6b9271ee9b994f38a87544d446e2b5bd1696f8aa06d3",
+      "bytes": 1644724,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/wynne_cheer.png": {
+      "sha256": "1065dc15cde89e6eeab23ad903df7b532789f013c5fb60aa84b69ae82a02d168",
+      "bytes": 1442985,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/wynne_idle_alt.png": {
+      "sha256": "48dc350c0fd74e5590027424ee02f58ba809247ecab8df95accdd021440d9a91",
+      "bytes": 1595661,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/wynne_sit.png": {
+      "sha256": "6e4a604bc9645836ae0d2e2e20199f1c63ca3a99e42024f78420bb97f2608ce4",
+      "bytes": 1811681,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "review/composition.json": {
+      "sha256": "c540e56e34d7dc372fd99bfb42d37059d22c501b6d373bf64da9f9828bafd246",
+      "bytes": 1035
+    },
+    "review/lobby-phone.png": {
+      "sha256": "c3dec7dd68bd0f78f7e9d925a6e4aa9512f2626a903dfff699f4d1ec7d22bc17",
+      "bytes": 515361,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "review/mirrored-90.png": {
+      "sha256": "351b18aaef36bce87d3b1c22b9025cfb41d00fdeb688ce719f0560462bd5e183",
+      "bytes": 295575,
+      "size": [
+        540,
+        450
+      ],
+      "mode": "RGB"
+    },
+    "review/poses-lineup.png": {
+      "sha256": "cfee3024fc6d21e701e3a428165584cdaf83a942513679be03776b36502c730a",
+      "bytes": 1348795,
+      "size": [
+        1024,
+        1280
+      ],
+      "mode": "RGB"
+    },
+    "review/silhouettes.png": {
+      "sha256": "7801a3418e9c3a5470ba2ad34df4241bfa8c9aa29d18c060f2acb2889b004a53",
+      "bytes": 101711,
+      "size": [
+        360,
+        450
+      ],
+      "mode": "RGB"
+    },
+    "review/variants.png": {
+      "sha256": "5c16d9dfcfe0515014775cfa55237cb11ae098bdc283dae7e40e141742265be6",
+      "bytes": 530354,
+      "size": [
+        1024,
+        512
+      ],
+      "mode": "RGB"
+    },
+    "seeds/astrid.png": {
+      "sha256": "a2d2ac7833818ff62cc877ecd0e90e87f24d8f56365f57e6c32d9321b36f1b29",
+      "bytes": 276250,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/kael.png": {
+      "sha256": "5d9f344d4d44cad32c169e74780c2ff10bed401fd9f9dd43ea27f4c2171dde1c",
+      "bytes": 234094,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/lalin.png": {
+      "sha256": "3fc6f8259ca286dc11d2952c05a19518896d9cb56ea4a361d4c11c9fffccbeb6",
+      "bytes": 388422,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/metta.png": {
+      "sha256": "62126d7f84767d640e41a96515df67774fd153221fc43ad16c75e410f6b26fd2",
+      "bytes": 297149,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/style-log-garran.png": {
+      "sha256": "b697e0181b2cca3b82886daf9c80882e7108248b70ee693f9ce93add190c89ac",
+      "bytes": 858215,
+      "size": [
+        1536,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/wynne.png": {
+      "sha256": "b2888ab61fcb39fc5e4fc508c0a6695efae1c74224c5460d32f724a24fa091e6",
+      "bytes": 287571,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds.json": {
+      "sha256": "ca9be78d70e026044639ed8db38f16f53fe27b2b3d49871aae60f7e87b22c1d9",
+      "bytes": 1837
+    },
+    "selection.json": {
+      "sha256": "6ae336343d74f9431eb9812f265068b29c4559faa67842696ee0670a603c2f57",
+      "bytes": 1779
+    },
+    "variants/kael_idle_alt_r2.png": {
+      "sha256": "ac041a5390dc590964d6b4ec3f611e4fdd69b2493b58db9eb4dd43fe6e6e1bf1",
+      "bytes": 229666,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "variants/lalin_idle_alt_r2.png": {
+      "sha256": "d5e32914177df819c7315860c709b7dbd57bc1cf2777faa88c6eab6c4e5ba2fc",
+      "bytes": 281023,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "verify_remote.py": {
+      "sha256": "73568ca76ba57e081d19edb00b3f6484730dbe67a4552f3461759960763b2659",
+      "bytes": 2839
+    }
+  },
+  "anatomy": {
+    "metta": {
+      "measured": 3,
+      "total": 3,
+      "median": 0.952,
+      "max": 0.976,
+      "notMeasured": [],
+      "scriptExitCode": 0
+    },
+    "lalin": {
+      "measured": 4,
+      "total": 4,
+      "median": 0.9934999999999999,
+      "max": 1.034,
+      "notMeasured": [],
+      "scriptExitCode": 0
+    },
+    "kael": {
+      "measured": 4,
+      "total": 4,
+      "median": 0.9675,
+      "max": 1.007,
+      "notMeasured": [],
+      "scriptExitCode": 0
+    },
+    "wynne": {
+      "measured": 3,
+      "total": 3,
+      "median": 0.959,
+      "max": 0.968,
+      "notMeasured": [],
+      "scriptExitCode": 0
+    },
+    "astrid": {
+      "measured": 3,
+      "total": 3,
+      "median": 0.987,
+      "max": 1.018,
+      "notMeasured": [],
+      "scriptExitCode": 0
+    }
+  },
+  "atlas": {
+    "size": [
+      1536,
+      2560
+    ],
+    "frames": 15,
+    "losslessPixelRoundtrip": true,
+    "bytes": 3141380
+  },
+  "ownerArtworkApproval": "pending",
+  "runtimeTested": false
+}
