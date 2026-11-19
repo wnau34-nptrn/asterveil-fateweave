@@ -147,7 +147,7 @@ export class GameShell {
       depart: (id, hard) => this.depart(id, hard), startWorldBoss: boss => this.startWorldBoss(boss), craftBossItem: (boss, affixes, set) => camp({ kind: 'craftBossItem', boss, affixes, ...(set ? { set } : {}) }), claimWorldBoss: (id, week) => this.claimWorldBoss(id, week), worldBossStatus: () => this.refreshWorldBoss(),
       sweep: (id, hard) => this.campCommand({ kind: 'sweep', mapId: id, hard, day: this.today(), serial: this.game?.profile.sweep?.count ?? 0 }), home: () => this.showTitle(),
     }, maps);
-    this.lobby.onDraw = () => requestAnimationFrame(() => this.updateLessons());
+    this.lobby.onDraw = () => { this.chat?.syncToggles(); requestAnimationFrame(() => this.updateLessons()); };
     const story = document.createElement('section'); root.append(story); this.story = new StoryUI(story);
     const summary = document.createElement('section'); root.append(summary); this.summary = new SummaryUI(summary, map);
     this.commander = new CommanderUI(views.commander, { create: c => this.createCommander(c), back: () => { this.replacing = false; this.showTitle(); } });
@@ -162,6 +162,7 @@ export class GameShell {
       }
       if (button.dataset.title === 'feedback') { this.feedback?.open('title'); return; }
       // OD-54: turning the lessons on again starts them over (every lesson shows once more); off hides them all.
+      if (button.dataset.title === 'chatfeed') { this.chat?.setFeed(!this.chat.feedEnabled); button.focus(); return; }
       if (button.dataset.title === 'lessons') { this.lessons.setOff(!this.lessons.off); button.outerHTML = this.lessonToggle(); views.title.querySelector<HTMLElement>('#lessons-toggle')?.focus(); return; }
       if (button.dataset.title === 'import') { this.importLocal(); return; }
       if (button.dataset.title === 'continue' && this.game) { if (this.state) this.resume(); else if (!this.game.profile.commander) this.showCommander(false); else this.showLobby(); }
@@ -199,6 +200,9 @@ export class GameShell {
       // P11: the world chat (camp button; docs/design/CHAT_P11_TH.md).
       this.chat = new ChatPanel(root, server, this.storage);
       root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-chat-open]:not(:disabled)')) this.chat?.open(); });
+      // The camp's feed button (the chat window and Setup have their own); every toggle shows the same state.
+      root.addEventListener('click', e => { if ((e.target as HTMLElement).closest('#chat-feed-camp')) this.chat?.setFeed(!this.chat.feedEnabled); });
+      this.chat.syncToggles();
       window.addEventListener('error', () => server.report('js_error', this.place()));
       window.addEventListener('unhandledrejection', () => server.report('promise_error', this.place()));
     }
@@ -264,7 +268,7 @@ export class GameShell {
     // The battle view keeps its layout while hidden so Phaser never sizes to zero.
     this.views.battle.classList.toggle('view-off', view !== 'battle');
     this.views.battle.inert = view !== 'battle';
-    this.root.dataset.view = view;
+    this.root.dataset.view = view; this.chat?.showOnCamp(view === 'lobby');
     this.music.play(this.trackFor(view));
     this.onBattleVisibility(view === 'battle');
     // Lessons follow the view once it has drawn (the battle UI and camp render after `show`).
@@ -322,6 +326,7 @@ export class GameShell {
           </section>` : ''}
           <section class="title-setup-group" aria-labelledby="title-help-heading"><h2 id="title-help-heading">ความช่วยเหลือ</h2>
             ${this.lessonToggle()}
+            ${this.server ? '<button type="button" id="chat-feed-setup" data-title="chatfeed" data-chat-feed-toggle class="title-menu-entry" aria-pressed="false">แถบแชทบนหน้าค่าย: <span data-feed-state>ปิด</span> <small>ข้อความล่าสุดแบบใส · ปิดไว้ก่อน</small></button>' : ''}
             ${this.server ? '<button type="button" id="feedback-open" data-title="feedback" class="title-menu-entry">ส่งความเห็น / แจ้งปัญหา <span aria-hidden="true">›</span></button>' : ''}
             <a class="title-privacy title-menu-entry" href="${import.meta.env.BASE_URL}privacy.html" target="_blank" rel="noopener">นโยบายความเป็นส่วนตัว <span aria-hidden="true">›</span></a>
           </section>
@@ -334,6 +339,7 @@ export class GameShell {
         ${!this.server && !this.storage ? '<p class="title-warning" role="status">เบราว์เซอร์นี้ไม่อนุญาตให้บันทึก เล่นได้แต่จะไม่จำความคืบหน้า</p>' : ''}
         ${play}
       </div>`;
+    this.chat?.syncToggles();
     const setup = this.views.title.querySelector<HTMLDetailsElement>('#title-setup')!;
     setup.addEventListener('toggle', () => {
       const restart = setup.querySelector<HTMLButtonElement>('[data-confirm="yes"]');

@@ -1,3 +1,4 @@
+import { CHANNELS, type ChannelKind } from '../core/chat/channels';
 import { checkUpload, MAX_PAYLOAD_BYTES } from '../core/cloud/cloud-save';
 import { SAVE_VERSION } from '../core/save/expedition-save';
 import {
@@ -438,7 +439,11 @@ async function chatRoute(request: Request, path: string, accountId: string, stat
     if (deps.chatWrite === 'linked' && status !== 'linked') return 'chat_linked_only';
     return null;
   };
+  // Channels (owner 2026-11-19, docs/design/CHAT_CHANNELS_TH.md): a device names a channel kind, never a stored id. Only
+  // the world is open; private and guild answer 403 `chat_channel_closed` until the owner opens them.
+  const kindOf = (v: unknown): 'ok' | 'closed' | 'bad' => v === undefined || v === null || v === 'world' ? 'ok' : typeof v === 'string' && v in CHANNELS ? (CHANNELS[v as ChannelKind].open ? 'ok' : 'closed') : 'bad';
   if (path === '/v1/chat') {
+    const k = kindOf(new URL(request.url).searchParams.get('channel')); if (k === 'bad') return error('invalid_request', 400); if (k === 'closed') return error('chat_channel_closed', 403);
     if (!deps.limiter.allow(`chatread:${accountId}`, LIMITS.chatReadPerSecond, 1000, now)) return limited(1);
     const after = Number.parseInt(new URL(request.url).searchParams.get('after') ?? '0', 10);
     const r = await call(`/read?account=${accountId}&after=${Number.isSafeInteger(after) && after > 0 ? after : 0}`);
@@ -458,6 +463,7 @@ async function chatRoute(request: Request, path: string, accountId: string, stat
       return pass(await call('/report', { account: accountId, id: body.id, reason: body.reason }));
     }
     if (typeof body.text !== 'string') return error('invalid_request', 400);
+    const kind = kindOf(body.channel); if (kind === 'bad') return error('invalid_request', 400); if (kind === 'closed') return error('chat_channel_closed', 403);
     if (!await allowed(deps, `chatip:${ip}`, LIMITS.chatSendPerIpMinute, 60_000, now)) return limited(60);
     const r = await call('/post', { account: accountId, text: body.text });
     if (r?.status === 429) { const b = await r.json() as { retryAfter?: number }; return json(b, 429, { 'Retry-After': String(b.retryAfter ?? 5) }); }

@@ -59,7 +59,7 @@
 .feedback-table td:last-child, .feedback-table th:last-child { text-align: right; }
 /* P11 chat: the world channel dialog (390px first; the log scrolls, the form stays at the bottom). */
 .chat-dialog { height: calc(100dvh - 32px); overflow: hidden; }
-.chat-card { height: 100%; grid-template-rows: auto auto minmax(0, 1fr) auto auto auto auto; gap: 8px; padding: 14px 12px; }
+.chat-card { height: 100%; grid-template-rows: auto auto auto auto minmax(0, 1fr) auto auto auto auto; gap: 8px; padding: 14px 12px; }
 .chat-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .chat-head button { min-width: 64px; }
 .chat-note { font-size: 12px !important; }
@@ -83,3 +83,26 @@
 .chat-admin-list .account-row button { flex: 1 1 90px; }
 @media (prefers-reduced-motion: reduce) { .chat-log { scroll-behavior: auto; } }
 .chat-status { margin: 0; padding: 8px 10px; border-radius: 10px; background: #e8f5ff12; color: var(--text, #e8f5ff); font-size: 14px; }
+
+/* Channels, the hidden camps and the camp feed (owner 2026-11-19). Private and guild tabs are shown closed. */
+.chat-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.chat-tab { min-height: 44px; padding: 2px 4px; border-radius: 10px; border: 1px solid #e8f5ff30; background: #e8f5ff0d; color: var(--text, #e8f5ff); font-size: 13px; display: grid; place-items: center; line-height: 1.2; }
+.chat-tab[aria-current="true"] { border-color: #f2d59688; background: #f2d59620; color: var(--gold-light, #f2d596); }
+.chat-tab:disabled { opacity: .6; } .chat-tab small { font-size: 10px; color: var(--text-muted, #b9c8d8); }
+.chat-tools { display: grid; gap: 6px; }
+.chat-tools > button { min-height: 44px; font-size: 13px; }
+.chat-tools button[aria-pressed="true"] { border-color: #f2d59688; color: var(--gold-light, #f2d596); }
+.chat-blocked summary { min-height: 44px; display: flex; align-items: center; font-size: 13px; color: var(--text-muted, #b9c8d8); cursor: pointer; }
+.chat-blocked[open] #chat-blocked-list { display: grid; gap: 6px; max-height: 132px; overflow-y: auto; }
+.chat-blocked-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; }
+.chat-blocked-row button, #chat-blocked-list > button { min-height: 44px; min-width: 88px; font-size: 13px; }
+/* The camp feed: translucent lines under the camp's top row, never wider than the space left of the camp's right-hand buttons. */
+.chat-feed { position: absolute; z-index: 23; top: calc(max(12px, var(--safe-top, 0px)) + 176px); left: max(14px, env(safe-area-inset-left)); right: calc(max(14px, env(safe-area-inset-right)) + 66px);
+  display: grid; gap: 2px; padding: 6px 10px; text-align: left; border: 0; border-radius: 12px; background: #0a192b59; color: #eef4fa; font: inherit; font-size: 12px; line-height: 1.35; text-shadow: 0 1px 2px #000a; min-height: 0; }
+.chat-feed[hidden] { display: none; }
+.chat-feed-line { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.chat-feed-line b { color: var(--gold-light, #f2d596); font-weight: 600; } .chat-feed-line.mine b { color: #bfe3ff; }
+#app:not([data-view="lobby"]) .chat-feed { display: none; }
+#lobby-view .lobby-chat-feed { position: absolute; z-index: 24; top: calc(max(12px, var(--safe-top, 0px)) + 230px); right: max(14px, env(safe-area-inset-right)); min-width: 56px; min-height: 44px; padding: 4px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-radius: 14px; font-size: 10px; background: #0a192b8a; border: 1px solid #e1eaf035; color: #d9e4ed; pointer-events: auto; }
+#lobby-view .lobby-chat-feed[aria-pressed="true"] { border-color: #f2d59699; color: #f2d596; }
+#lobby-view .lobby-hud:has(.lobby-sheet) .lobby-chat-feed { display: none; }
