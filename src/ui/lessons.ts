@@ -1,5 +1,6 @@
 import { activeGuides, featureMap, featureOpen, guideDone } from '../core/world/profile';
 import { talentPoints, talentsSpent } from '../core/world/talents';
+import { sweepReward } from '../core/world/sweep';
 import type { ExpeditionState, GuideKind, LobbyFeature, MapDefinition, Profile } from '../core/world/types';
 import { canOpenChest, fatigueOf, findTiles, levelOf, rosterIds } from '../core/world/world';
 
@@ -8,7 +9,7 @@ import { canOpenChest, fatigueOf, findTiles, levelOf, rosterIds } from '../core/
 // read the committed state only and never act for the player, except the one-time calming draught the player taps for.
 // Stage C (owner 2026-11-19): `card:<guide>` points at the system an NPC card asks for, `claim:<guide>` at its claim
 // button once done, `open:<feature>` at a camp system the moment its map is cleared.
-export type LessonId = 'levelup' | 'wear' | 'tree' | 'lanes' | 'walk' | 'chest' | 'lowhp' | 'fatigue' | 'calm' | 'elite' | 'boss' | 'battle' | 'home'
+export type LessonId = 'levelup' | 'wear' | 'tree' | 'lanes' | 'walk' | 'chest' | 'lowhp' | 'fatigue' | 'calm' | 'elite' | 'boss' | 'battle' | 'home' | 'farm' | 'sweeppick' | 'sweep' | 'hunt' | 'bosstarget'
   | `card:${string}` | `claim:${string}` | `open:${string}`;
 export interface Lesson { id: LessonId; target: string; title: string; text: string; action?: 'calm' }
 export interface LessonPrefs { seen: LessonId[]; off: boolean }
@@ -57,7 +58,7 @@ export function battleLessonTip(profile: Profile, kind: string, seen: readonly L
 // Where each camp system is opened from (the visible camp menu or banner).
 const FEATURE_TARGET: Record<LobbyFeature, string> = {
   gear: '#lobby-tab-gear', tree: '#lobby-tab-team', team: '#lobby-tab-team', tomes: '#lobby-tab-team', forge: '#lobby-tab-forge', level: '#lobby-tab-forge',
-  fuse: '#lobby-tab-forge', craft: '#lobby-tab-forge', transfer: '#lobby-tab-forge', bossCharm: '#lobby-tab-forge', brew: '#lobby-tab-brew',
+  fuse: '#lobby-tab-forge', craft: '#lobby-tab-forge', transfer: '#lobby-tab-forge', bossCharm: '#lobby-tab-hunt', brew: '#lobby-tab-brew',
   hire: '#lobby-tab-hire', market: '#lobby-tab-hire', hunt: '#lobby-tab-hunt', quests: '#lobby-board', hard: '#lobby-maps',
 };
 const CARD_TEXT: Record<GuideKind, string> = {
@@ -73,10 +74,32 @@ const OPENED: readonly [LobbyFeature, string, string][] = [
   ['hunt', 'ล่าของเปิดแล้ว', 'เลือกชุดหรือช่องที่อยากได้ แผนที่จะดรอปของแบบนั้นบ่อยขึ้น'],
   ['tomes', 'ตำราสกิลเปิดแล้ว', 'ใช้ตำราที่ได้จากบอส/อีลีทอัป Lv สกิลในหน้าตัวละคร'],
   ['fuse', 'หลอมรวมเปิดแล้ว', 'ที่ช่างตีเหล็ก หลอมของซ้ำเพื่อเพิ่มระดับ สร้างอาวุธ และย้าย affix ได้'],
+  ['bossCharm', 'เป้าหมายบอสเปิดแล้ว', 'ที่แท็บล่าของ เลือกอุปกรณ์ที่อยากได้จากผู้คุมรอยแยกได้แล้ว'],
   ['hard', 'โหมดยากเปิดแล้ว', 'เลือกแผนที่ที่ผ่านแล้วแบบยาก มอนสเตอร์แรงขึ้น รางวัลครั้งแรกดีกว่า'],
 ];
-export function lobbyLesson(profile: Profile, maps: readonly MapDefinition[], seen: readonly LessonId[]): Lesson | undefined {
+// Farming (OD-54 follow-up, owner 2026-11-19 "ทำทั้ง 4 ข้อเลย"): lessons that point inside an open camp sheet (`sheet`: the
+// maps sheet for the sweep row, the hunt sheet for the two targets), and the replay pointer at the maps button.
+function farmingLessons(profile: Profile, maps: readonly MapDefinition[], seen: readonly LessonId[], sheet: string | undefined, picked: string | undefined): Lesson | undefined {
+  const todo = (id: LessonId) => !seen.includes(id);
+  if (sheet === 'maps' && todo('sweep')) {
+    const m = maps.find(x => x.id === picked && profile.cleared.includes(x.id) && x.sweepReward) ?? maps.find(x => profile.cleared.includes(x.id) && x.sweepReward);
+    // The sweep row belongs to the selected map's card: select a cleared map first when another one is shown.
+    if (m && m.id !== picked && todo('sweeppick')) return { id: 'sweeppick', target: `#map-node-${m.id}`, title: 'แผนที่ที่ผ่านแล้ว',
+      text: 'แตะแผนที่ที่ผ่านแล้ว จะเห็นปุ่มกวาดล้างและเล่นซ้ำ' };
+    if (m && m.id === picked && sweepReward(m, false)) return { id: 'sweep', target: `#map-sweep-row-${m.id}`, title: 'กวาดล้าง',
+      text: `จ่ายเสบียง ${m.sweep.cost} รับรางวัลทันทีโดยไม่ต้องเดิน วันละ ${m.sweep.perMapDaily} ครั้งต่อแผนที่ เสบียงเติมทุกวัน (เก็บได้ ${m.sweep.cap}) เดินจริงได้ของและ EXP มากกว่า` };
+  }
+  if (sheet === 'hunt') {
+    if (todo('hunt') && featureOpen(profile, maps, 'hunt')) return { id: 'hunt', target: '#hunt-target', title: 'ล่าของ',
+      text: 'เลือกอาชีพที่อยากได้อาวุธ แล้วกดบันทึก ออกเดินทางรอบหน้าจะดรอปของแบบนั้นบ่อยขึ้น' };
+    if (todo('bosstarget') && featureOpen(profile, maps, 'bossCharm')) return { id: 'bosstarget', target: '#boss-target', title: 'เป้าหมายบอส',
+      text: 'เลือกอุปกรณ์ที่อยากได้จากผู้คุมรอยแยก แล้วกดบันทึก รอบหน้าบอสจะดรอปชิ้นนั้นบ่อยขึ้น' };
+  }
+  return undefined;
+}
+export function lobbyLesson(profile: Profile, maps: readonly MapDefinition[], seen: readonly LessonId[], sheet?: string, picked?: string): Lesson | undefined {
   if (profile.veteran) return undefined;
+  const inSheet = farmingLessons(profile, maps, seen, sheet, picked); if (inSheet) return inSheet;
   if (profile.cleared.length <= 1 && !seen.includes('home')) return { id: 'home', target: '.lobby-guide, #lobby-depart', title: 'กลับค่ายแล้ว',
     text: 'ของที่เก็บมาเข้าคลัง ทีมฟื้นเต็ม งานแนะนำของ NPC อยู่ในการ์ดนี้ ทำแล้วรับรางวัลได้' };
   const g = activeGuides(profile, maps)[0];
@@ -89,6 +112,12 @@ export function lobbyLesson(profile: Profile, maps: readonly MapDefinition[], se
     const id: LessonId = `open:${feature}`, at = featureMap(maps, feature);
     if (seen.includes(id) || !featureOpen(profile, maps, feature) || !at || profile.cleared.length !== at.chapter) continue;
     return { id, target: FEATURE_TARGET[feature], title, text };
+  }
+  // Last: any cleared map can be played again (and the sweep row is in the same sheet).
+  if (profile.cleared.length > 0 && !seen.includes('farm')) {
+    const hard = featureMap(maps, 'hard'), hardOpen = featureOpen(profile, maps, 'hard');
+    return { id: 'farm', target: '#lobby-maps', title: 'ฟาร์มซ้ำ',
+      text: `แผนที่ที่ผ่านแล้วเล่นซ้ำได้ เก็บของ EXP และตำราสกิลเพิ่ม${hardOpen || !hard ? '' : ` โหมดยากเปิดหลังผ่านแผนที่ ${hard.chapter}`}` };
   }
   return undefined;
 }
@@ -143,6 +172,8 @@ export class LessonGuide {
     const target = this.frame.querySelector<HTMLElement>(this.current.target), ring = this.el.querySelector<HTMLElement>('.lesson-ring')!, bubble = this.el.querySelector<HTMLElement>('.lesson-bubble')!;
     const f = this.frame.getBoundingClientRect();
     if (!target || !target.getClientRects().length) { ring.hidden = true; bubble.style.top = `${f.height * .35}px`; return; }
+    // A target inside a scrolling camp sheet is brought into view first.
+    if (target.closest('.lobby-content')) target.scrollIntoView({ block: 'nearest' });
     const r = target.getBoundingClientRect(); ring.hidden = false;
     Object.assign(ring.style, { left: `${r.left - f.left - 4}px`, top: `${r.top - f.top - 4}px`, width: `${r.width + 8}px`, height: `${r.height + 8}px` });
     // Below the control when it sits in the top half of the frame, above it otherwise.

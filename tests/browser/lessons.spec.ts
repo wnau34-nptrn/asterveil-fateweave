@@ -97,3 +97,44 @@ test('camp: the first visit, then the card points at gear; tapping it completes 
   await page.keyboard.press('Escape'); await page.locator('#continue').click();
   await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'home');
 });
+
+// OD-54 farming lessons (owner 2026-11-19 "ทำทั้ง 4 ข้อเลย"): the replay pointer, then the sweep row inside the maps sheet.
+async function openCamp(page: Page, p: Profile, seen: string[]) {
+  const raw = JSON.stringify({ version: 65, profile: p, run: null }); parseGame(raw, ruinsMap, encounterById, MAPS);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(({ key, raw, lessonKey, seen }) => {
+    if (sessionStorage.getItem('farm-seeded')) return;
+    localStorage.setItem(key, raw); localStorage.setItem(lessonKey, JSON.stringify({ seen, off: false })); sessionStorage.setItem('farm-seeded', '1');
+  }, { key, raw, lessonKey, seen });
+  await page.goto('./'); await page.locator('#continue').click();
+}
+const clearedCamp = (n: number): Profile => {
+  const p = profile(); p.cleared = MAPS.slice(0, n).map(m => m.id);
+  p.guides = Object.fromEntries(MAPS[0]!.guides.map(g => [g.id, 'claimed' as const])); return p;
+};
+test('camp after the first clear: replay pointer at the maps button, then the sweep row in the maps sheet', async ({ page }, info) => {
+  await openCamp(page, clearedCamp(1), ['home', 'open:quests', 'open:team']);
+  await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'farm'); expect(await ringOver(page, '#lobby-maps')).toBe(true);
+  await page.locator('#lobby-maps').click();
+  await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'sweeppick'); expect(await ringOver(page, `#map-node-${ruinsMap.id}`)).toBe(true);
+  await page.locator(`#map-node-${ruinsMap.id}`).click();
+  await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'sweep');
+  const row = `#map-sweep-row-${ruinsMap.id}`; await expect(page.locator(row)).toBeVisible();
+  expect(await ringOver(page, row)).toBe(true);
+  await expect(bubble(page)).toContainText(`เสบียง ${ruinsMap.sweep.cost}`);
+  await page.screenshot({ path: info.outputPath('lesson-sweep-390.png') });
+  await page.locator('#lesson-ok').click(); await expect(page.locator('#lesson-layer')).toBeHidden();
+  const seen = await page.evaluate(k => JSON.parse(localStorage.getItem(k)!).seen, lessonKey);
+  expect(seen).toEqual(expect.arrayContaining(['farm', 'sweeppick', 'sweep']));
+});
+
+test('camp after map 3: the hunt target, then the boss target, point inside the hunt sheet', async ({ page }, info) => {
+  await openCamp(page, clearedCamp(3), ['home', 'farm', 'sweep', 'open:fuse', 'open:bossCharm', 'open:hard']);
+  await page.locator('#lobby-tab-hunt').click();
+  await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'hunt'); expect(await ringOver(page, '#hunt-target')).toBe(true);
+  await page.locator('#lesson-ok').click();
+  await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'bosstarget'); await expect(page.locator('#boss-target')).toBeVisible();
+  expect(await ringOver(page, '#boss-target')).toBe(true);
+  await page.screenshot({ path: info.outputPath('lesson-boss-target-390.png') });
+  await page.locator('#lesson-ok').click(); await expect(page.locator('#lesson-layer')).toBeHidden();
+});

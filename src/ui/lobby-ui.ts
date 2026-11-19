@@ -433,6 +433,10 @@ export class LobbyUI {
     for(const el of this.root.querySelectorAll<HTMLElement>('.lobby-pan,.lobby-hud > :not(.lobby-bottom),.lobby-bottom > :not(.lobby-menu)'))el.inert=open;
     this.measureNavigation();
   }
+  // OD-54: the camp sheet that is open ('maps', 'hunt', …) and a callback after each draw, for the farming lessons.
+  get openSheet(): string | undefined { return this.sheet ?? undefined; }
+  get pickedMap(): string | undefined { return this.mapPicked ?? this.openMaps().at(-1)?.id; }
+  onDraw: (() => void) | undefined;
   private draw(): void {
     this.enhancementLayout.disconnect();this.navigationLayout.disconnect();
     this.root.dataset.lobbySheet=this.sheet??'';
@@ -474,6 +478,7 @@ export class LobbyUI {
     this.enhancementLayout.mount(this.root,this.forgeUI.scroll);
     this.navigationLayout.observe(this.root);const nav=this.root.querySelector('.lobby-menu');if(nav)this.navigationLayout.observe(nav);this.characterNavigation(this.characters.open);
     if(huntScroll!==undefined&&(this.sheet==='hunt'||this.sheet==='maps'))this.root.querySelector('.lobby-content')!.scrollTop=huntScroll;
+    this.onDraw?.();
   }
 
   // Warm camp scene (ART-UI-LOBBY-001): the brought team gathers around the fire. Front members sit on
