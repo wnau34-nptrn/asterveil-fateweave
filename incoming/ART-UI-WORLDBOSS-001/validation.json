@@ -1,0 +1,200 @@
+{
+  "schema": 1,
+  "approval": "pending owner selection; technical checks are not approval",
+  "checks": {
+    "R1": {
+      "white_contrast_min_left_half": 13.232203260027587,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "png_webp_pixel_equal": true
+    },
+    "R2": {
+      "white_contrast_min_left_half": 13.232203260027587,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "png_webp_pixel_equal": true
+    }
+  },
+  "hash_policy": "Every delivery file except validation.json (self hash is impossible); remote verification report is external.",
+  "files": {
+    "NOTES.md": {
+      "sha256": "296f843d67995d1dcf958c963476956ddab4ef8f745b0b01f5d7bdfcf0949946",
+      "bytes": 4190
+    },
+    "R1/banner_worldboss.png": {
+      "sha256": "ce3de68607f8681c17b5b9bfeb92209e59706c49907efa8d59e2f828ef58ba23",
+      "bytes": 572606,
+      "size": [
+        1080,
+        360
+      ],
+      "mode": "RGB"
+    },
+    "R1/banner_worldboss.webp": {
+      "sha256": "f272c98583cc7a8633e4661dbc4761a3d45511a1a4e1ff994b297b9860d43718",
+      "bytes": 468934,
+      "size": [
+        1080,
+        360
+      ],
+      "mode": "RGB"
+    },
+    "R1/emblem_worldboss.png": {
+      "sha256": "6631ef6d581b2c8e22d2dbc7d60f1e417a20b67eac100260b3db1c821ca08202",
+      "bytes": 120371,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "R1/emblem_worldboss.webp": {
+      "sha256": "7996c4a067481e2d9dff2894e135408927c9794e382885ed7bbf912300e3165a",
+      "bytes": 91924,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "R2/banner_worldboss.png": {
+      "sha256": "2277c60400ebf6d9fe41fa34dbb056ad0f227a4ce661cab0961427c2860c16fd",
+      "bytes": 550921,
+      "size": [
+        1080,
+        360
+      ],
+      "mode": "RGB"
+    },
+    "R2/banner_worldboss.webp": {
+      "sha256": "302dea7388a74c2b9f04080aba32f454f72416a65eb58bae0c30fc7e8cbd0844",
+      "bytes": 434188,
+      "size": [
+        1080,
+        360
+      ],
+      "mode": "RGB"
+    },
+    "R2/emblem_worldboss.png": {
+      "sha256": "6631ef6d581b2c8e22d2dbc7d60f1e417a20b67eac100260b3db1c821ca08202",
+      "bytes": 120371,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "R2/emblem_worldboss.webp": {
+      "sha256": "7996c4a067481e2d9dff2894e135408927c9794e382885ed7bbf912300e3165a",
+      "bytes": 91924,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "handoff.py": {
+      "sha256": "1bd618c380f51dede577d0cb6627983e3da53d509d98d27a261d70a4a308453c",
+      "bytes": 4959
+    },
+    "preview_390.png": {
+      "sha256": "d6a6fca72477b4079730af79944e266060cea6ce8f49411cdafba8e76e58645d",
+      "bytes": 181207,
+      "size": [
+        390,
+        610
+      ],
+      "mode": "RGB"
+    },
+    "prompts.json": {
+      "sha256": "714ca8bf97ab8024b8dd7d835d0635b1fcea9ad62bedf1e8546376befde89dad",
+      "bytes": 1461
+    },
+    "raw/banner_sheet.png": {
+      "sha256": "85c4bb90623fcc9f069a8adf2bdd9de1f6e41ebf4d55651bddd578b367567bd1",
+      "bytes": 2192897,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGB"
+    },
+    "raw/banner_sheet.png.part0": {
+      "sha256": "c63258182163100bc1cf05d3e247f04a37b7d713c0f71ba96f944b3e4692db60",
+      "bytes": 750000
+    },
+    "raw/banner_sheet.png.part1": {
+      "sha256": "01d577d0a1dd0ed896be953677b4c0941d4f380ff95f8139bebd4eb2706bb23f",
+      "bytes": 750000
+    },
+    "raw/banner_sheet.png.part2": {
+      "sha256": "0a2c44f821179c2b8ad28280141078417a9eea89b3df9894c1041c1ee8fa8722",
+      "bytes": 692897
+    },
+    "raw/emblem.png": {
+      "sha256": "2e29b67938d97532334460fff4b20811d1716c83b3c6ba91be29a92f8dbbe61b",
+      "bytes": 2162043,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "raw/emblem.png.part0": {
+      "sha256": "a7d08c56fd81415443cc0e8638a596887f1d30619b066bf8b7f89125f9c8e0a6",
+      "bytes": 750000
+    },
+    "raw/emblem.png.part1": {
+      "sha256": "a0afc501bd722f8852f8572b455bcf8bc2b4915b24fcb4c7d843840e093734ed",
+      "bytes": 750000
+    },
+    "raw/emblem.png.part2": {
+      "sha256": "ea0ac4aba6845db57bd93d06e6911d9a42fae2c59cd684e16d3640c0df1d18bc",
+      "bytes": 662043
+    },
+    "seeds/battle_riftline.webp": {
+      "sha256": "6e4114f65a7ab521e310a6e6baa9687205b1527dfb272542b0c550aed4ae72ac",
+      "bytes": 477024,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    "seeds/boss-tab-390.png": {
+      "sha256": "ea422378fcad43c5f56bebd864ab7a238184342394dce5f16f219b5415b5b63c",
+      "bytes": 105642,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "seeds/foe_sentinel_frame8.png": {
+      "sha256": "33329874d21ddd767790ac55d23b43cfb07a7272dc6f46985c1021adb64f5c2b",
+      "bytes": 492946,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/units_foes.webp": {
+      "sha256": "dcf79e09f2b0b813aa03894bd65222ae3afb2df875e84870d1dba968c49a1895",
+      "bytes": 804920,
+      "size": [
+        1024,
+        3072
+      ],
+      "mode": "RGBA"
+    },
+    "seeds.json": {
+      "sha256": "f7c9b89c584170f26d1970796f52d4dfc9d51c1a92b123b0e82331339a38e76c",
+      "bytes": 595
+    }
+  }
+}
