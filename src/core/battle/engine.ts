@@ -1,4 +1,5 @@
 import type { SongId, BossPhase, IntentDefinition, EnemyTrait, HeroGear, TrioPower, ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
+import { SUPPORT_ROLES } from './types';
 
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
@@ -498,7 +499,7 @@ export function cycleIndex(state: BattleState, data: EncounterDefinition, id: st
   const at = round - (foe.phaseRound ?? 0) - 1 - (foe.cycleLag ?? 0) + (foe.postpone?.round === round ? foe.postpone.skip : 0);
   return (at % n + n) % n;
 }
-export function enemyIntent(state: BattleState, data: EncounterDefinition, id: string, round: number): Intent | null {
+export function enemyIntent(state: BattleState, data: EncounterDefinition, id: string, round: number, follower = false): Intent | null {
   const foe = state.enemies.find(e => e.id === id);
   if (!foe || !living(state, id)) return null;
   const alive = state.heroes.filter(h => h.hp > 0);
@@ -519,7 +520,8 @@ export function enemyIntent(state: BattleState, data: EncounterDefinition, id: s
   const marks = delay ? delay.round === round ? { delayedMove: moves[cycleIndex(state, data, id, round + 1)]!.name } : { delayedOnce: true } : {};
   const front = alive.filter(h => data.heroes.find(d => d.id === h.id)!.lane === 'front');
   const allowed = template.kind === 'physical' && front.length ? front : alive;
-  const target = allowed.find(h => h.id === data.heroes[template.targetSlot]?.id) ?? allowed[0];
+  const slotHero = allowed.find(h => h.id === data.heroes[template.targetSlot]?.id) ?? allowed[0];
+  const target = slotHero && template.aim && !template.all && !template.charge ? aimed(state, data, id, round, template.aim, allowed, slotHero, follower) : slotHero;
   const warden = taunted(state, data, id, round);
   const c = state.challenge; const duel = c && c.enemyId === id && c.round === round && living(state, c.heroId) ? c.heroId : undefined;
   if (!target) return null;
@@ -527,6 +529,20 @@ export function enemyIntent(state: BattleState, data: EncounterDefinition, id: s
   const stoned = !warden && !duel && !drawn && !template.all && !template.charge && state.stone?.ids.includes(target.id)
     ? taunted(state, data, id, round, state.stone) : undefined;
   return { ...template, targetId: warden ?? duel ?? drawn ?? stoned ?? target.id, beat: state.beat, round, ...(stoned ? { stoned: true, stoneTargetId: target.id } : {}), ...marks };
+}
+// The proposal's aim rules (IntentDefinition.aim): pure reads of the state, ties keep the slot hero.
+function aimed<H extends BattleState['heroes'][number]>(state: BattleState, data: EncounterDefinition, id: string, round: number, aim: NonNullable<IntentDefinition['aim']>,
+  allowed: readonly H[], slotHero: H, follower: boolean): H {
+  const def = (h: H) => data.heroes.find(d => d.id === h.id)!;
+  if (aim === 'weakest') {
+    const ratio = (h: H) => h.hp / def(h).maxHp; const low = Math.min(...allowed.map(ratio));
+    return ratio(slotHero) === low ? slotHero : allowed.find(h => ratio(h) === low)!;
+  }
+  if (aim === 'support') return SUPPORT_ROLES.includes(def(slotHero).role) ? slotHero : allowed.find(h => SUPPORT_ROLES.includes(def(h).role)) ?? slotHero;
+  if (follower) return slotHero;
+  const leader = data.enemies.find(e => e.id !== id && living(state, e.id));
+  const led = leader && enemyIntent(state, data, leader.id, round, true);
+  return (led && !led.all && allowed.find(h => h.id === led.targetId)) || slotHero;
 }
 // P11-05 R2: the court bonus (percent) a foe's moves have now, from its listed court foes that stand.
 export function courtPercent(state: BattleState, data: EncounterDefinition, id: string): number {

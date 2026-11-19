@@ -5,39 +5,39 @@ Every catalog character at ★1 and the map boss level; epic map-level main-stat
 | Character | Class | Map | Level | Clear | HP after route | Wins | Best tested tree / loadout |
 |---|---|---|---|---|---|---|---|
 | guardian | Knight | ruined-border | 3 | 12/12 | 97.9% | 2.3 | {"a1":2} / guard, bash |
-| tracer | Duelist | ruined-border | 3 | 12/12 | 100.0% | 2.3 | {"c1s":1,"c1":1} / mark, execute, parry |
+| tracer | Duelist | ruined-border | 3 | 12/12 | 97.3% | 2.3 | {"c1s":1,"c1":1} / mark, execute, parry |
 | weaver | Mage | ruined-border | 3 | 12/12 | 97.9% | 2.3 | {"b1":2} / bolt, ward |
 | healer | Priest | ruined-border | 3 | 12/12 | 97.9% | 2.3 | {"b1":2} / heal, prayer |
 | mira | Archer | ruined-border | 3 | 12/12 | 97.9% | 2.3 | {"c1":2} / hinder, volley |
-| toma | Alchemist | ruined-border | 3 | 12/12 | 99.0% | 2.3 | {"b1":2} / acid, haste |
-| sefa | Scout | ruined-border | 3 | 12/12 | 97.5% | 2.3 | {"c1s":1,"c1":1} / ambush, evade, knives |
-| brann | Warden | ruined-border | 3 | 12/12 | 91.3% | 2.3 | {"c1s":1,"c1":1} / taunt, slam, guardstone |
-| lio | Bard | ruined-border | 3 | 12/12 | 97.9% | 2.3 | {"b1":2} / valor, mend |
-| garran | Spear | ruined-border | 3 | 12/12 | 92.8% | 2.3 | {"b1":2} / brace, pierce |
+| toma | Alchemist | ruined-border | 3 | 12/12 | 99.1% | 2.3 | {"b1":2} / acid, haste |
+| sefa | Scout | ruined-border | 3 | 12/12 | 97.6% | 2.3 | {"c1s":1,"c1":1} / ambush, evade, knives |
+| brann | Warden | ruined-border | 3 | 12/12 | 91.5% | 2.3 | {"c1s":1,"c1":1} / taunt, slam, guardstone |
+| lio | Bard | ruined-border | 3 | 12/12 | 98.5% | 2.3 | {"b1":2} / valor, mend |
+| garran | Spear | ruined-border | 3 | 12/12 | 95.1% | 2.3 | {"b1":2} / brace, pierce |
 | metta | Saint | ruined-border | 3 | 12/12 | 97.8% | 2.3 | {"p1":1,"c1s":1} / saintstrike, communion, sharewound |
 | thiran | Saint | ruined-border | 3 | 12/12 | 97.8% | 2.3 | {"c1s":1,"c1":1} / saintstrike, communion, sharewound |
 | lalin | Dancer | ruined-border | 3 | 12/12 | 100.0% | 2.3 | {"a1":2} / cadence, duet |
 | wila | Dancer | ruined-border | 3 | 12/12 | 100.0% | 2.3 | {"a1":2} / cadence, duet |
-| kael | Martial | ruined-border | 3 | 12/12 | 90.9% | 2.3 | {"b1":2} / gatherfist, releasefist |
+| kael | Martial | ruined-border | 3 | 12/12 | 92.2% | 2.3 | {"b1":2} / gatherfist, releasefist |
 | wynne | Hexer | ruined-border | 3 | 12/12 | 95.4% | 2.3 | {"b1":2} / threadhex, lifetoll |
 | astrid | Seer | ruined-border | 3 | 12/12 | 93.7% | 2.3 | {"b1":2} / deflectfate, turncycle |
 | guardian | Knight | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"b1":2,"b2":1,"c1s":1,"c1":1} / bash, challenge, rally |
 | tracer | Duelist | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"b1":2,"b2":1,"a1":2} / mark, execute, finisher |
 | weaver | Mage | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2p":1,"b1":2} / bolt, ward |
 | healer | Priest | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2b":1,"b1":2} / heal, prayer |
-| mira | Archer | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2h":1,"b1":2} / hinder, volley |
-| toma | Alchemist | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2d":1,"b1":2} / acid, haste |
-| sefa | Scout | deep-forest | 6 | 12/12 | 98.9% | 3.2 | {"a1":2,"a2b":1,"b1":2} / ambush, evade |
-| brann | Warden | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"c1":2,"c1s":1,"c2k":1,"a1":1} / taunt, slam, guardstone |
-| lio | Bard | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"b1":2,"b2o":1,"a1":2} / valor, mend |
-| garran | Spear | deep-forest | 6 | 12/12 | 99.5% | 3.2 | {"b1":2,"b2l":1,"c1s":1,"c1":1} / brace, pierce, hold |
-| metta | Saint | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"c1":2,"c1s":1,"c2x":1,"a1":1} / saintstrike, communion, sharewound |
-| thiran | Saint | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"c1":2,"c1s":1,"c2x":1,"a1":1} / saintstrike, communion, sharewound |
+| mira | Archer | deep-forest | 6 | 12/12 | 97.9% | 3.2 | {"c1":2,"c1s":1,"c2c":1,"a1":1} / hinder, volley, disengage |
+| toma | Alchemist | deep-forest | 6 | 12/12 | 99.5% | 3.2 | {"a1":2,"a2d":1,"b1":2} / acid, haste |
+| sefa | Scout | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2b":1,"b1":2} / ambush, evade |
+| brann | Warden | deep-forest | 6 | 12/12 | 99.4% | 3.2 | {"c1":2,"c1s":1,"c2k":1,"a1":1} / taunt, slam, guardstone |
+| lio | Bard | deep-forest | 6 | 12/12 | 96.5% | 3.2 | {"b1":2,"b2o":1,"a1":2} / valor, mend |
+| garran | Spear | deep-forest | 6 | 12/12 | 96.4% | 3.2 | {"a1":2,"a2f":1,"b1":2} / brace, pierce |
+| metta | Saint | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2y":1,"p1":1,"c1s":1} / saintstrike, communion, sharewound |
+| thiran | Saint | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2y":1,"p1":1,"c1s":1} / saintstrike, communion, sharewound |
 | lalin | Dancer | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2x":1,"b1":2} / cadence, duet |
 | wila | Dancer | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2x":1,"b1":2} / cadence, duet |
-| kael | Martial | deep-forest | 6 | 12/12 | 98.0% | 3.2 | {"a1":2,"a2x":1,"b1":2} / gatherfist, releasefist |
-| wynne | Hexer | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"a1":2,"a2y":1,"p1":1,"c1s":1} / threadhex, lifetoll, longthread |
-| astrid | Seer | deep-forest | 6 | 12/12 | 97.1% | 3.2 | {"a1":2,"a2x":1,"b1":2} / deflectfate, turncycle |
+| kael | Martial | deep-forest | 6 | 12/12 | 99.9% | 3.2 | {"a1":2,"a2x":1,"b1":2} / gatherfist, releasefist |
+| wynne | Hexer | deep-forest | 6 | 12/12 | 100.0% | 3.2 | {"b1":2,"b2y":1,"p1":1,"c1s":1} / threadhex, lifetoll, longthread |
+| astrid | Seer | deep-forest | 6 | 12/12 | 95.0% | 3.2 | {"b1":2,"b2x":1,"a1":2} / deflectfate, turncycle |
 | guardian | Knight | veil-frontier | 10 | 12/12 | 96.6% | 12.6 | {"b1":2,"b2":1,"b3f":1,"a1":2,"c1":2,"c1s":1} / guard, bash, challenge |
 | tracer | Duelist | veil-frontier | 10 | 12/12 | 93.8% | 12.6 | {"c1":2,"c1s":1,"c2m":1,"c3":1,"a1":2,"b1":2} / mark, parry, sweep |
 | weaver | Mage | veil-frontier | 10 | 12/12 | 100.0% | 12.6 | {"a1":2,"a2p":1,"a3":1,"a3s":1,"b1":2,"c1":2} / bolt, ward, storm |
@@ -49,9 +49,9 @@ Every catalog character at ★1 and the map boss level; epic map-level main-stat
 | lio | Bard | veil-frontier | 10 | 12/12 | 97.6% | 12.6 | {"b1":2,"b2o":1,"b3":1,"a1":2,"c1":2,"c1s":1} / valor, mend, note |
 | garran | Spear | veil-frontier | 10 | 12/12 | 97.6% | 12.6 | {"c1":2,"c1s":1,"c2b":1,"c3":1,"a1":2,"b1":2} / brace, hold, warcry |
 | metta | Saint | veil-frontier | 10 | 12/12 | 97.7% | 12.6 | {"a1":2,"a2y":1,"a3":1,"p1":1,"c1s":1,"c1":2,"b1":1} / communion, saintarc, sharewound |
-| thiran | Saint | veil-frontier | 10 | 12/12 | 96.5% | 12.6 | {"a1":2,"a2y":1,"a3":1,"p1":1,"c1s":1,"c1":2,"b1":1} / communion, saintarc, sharewound |
+| thiran | Saint | veil-frontier | 10 | 12/12 | 96.7% | 12.6 | {"a1":2,"a2y":1,"a3":1,"p1":1,"c1s":1,"c1":2,"b1":1} / communion, saintarc, sharewound |
 | lalin | Dancer | veil-frontier | 10 | 12/12 | 99.1% | 12.6 | {"c1":2,"c1s":1,"c2x":1,"c3":1,"a1":2,"b1":2} / cadence, echofoot, closingstep |
 | wila | Dancer | veil-frontier | 10 | 12/12 | 99.1% | 12.6 | {"c1":2,"c1s":1,"c2x":1,"c3":1,"a1":2,"b1":2} / cadence, echofoot, closingstep |
-| kael | Martial | veil-frontier | 10 | 12/12 | 93.5% | 12.6 | {"a1":2,"a2x":1,"a3":1,"b1":2,"c1":2,"c1s":1} / gatherfist, flowfist, storedfist |
+| kael | Martial | veil-frontier | 10 | 12/12 | 94.3% | 12.6 | {"c1s":1,"c1":2,"c2y":1,"c3":1,"p1":1,"b1":2,"a1":1} / releasefist, storedfist, perfectfist |
 | wynne | Hexer | veil-frontier | 10 | 12/12 | 96.1% | 12.6 | {"b1":2,"b2y":1,"b3":1,"p1":1,"c1s":1,"c1":2,"a1":1} / threadhex, tollring, longthread |
 | astrid | Seer | veil-frontier | 10 | 12/12 | 94.3% | 12.6 | {"a1":2,"a2x":1,"a3":1,"b1":2,"c1":2,"c1s":1} / deflectfate, crossing, starneedle |

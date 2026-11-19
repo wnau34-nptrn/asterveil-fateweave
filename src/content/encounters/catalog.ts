@@ -347,10 +347,33 @@ export const wbMorvane: EncounterDefinition = {
   ],
 };
 
-export const WORLD_BOSS_TRIO: readonly EncounterDefinition[] = [wbKragmor, wbValdrakk, wbMorvane];
+// World Bosses (balanced on written slots, P11-05) drop the assassin aims their court kinds carry (enemy aim B, owner 2026-11-19).
+function noAims(e: EncounterDefinition): EncounterDefinition {
+  return e.intents.some(m => m.aim) ? { ...e, intents: e.intents.map(m => m.aim ? Object.fromEntries(Object.entries(m).filter(([k]) => k !== 'aim')) as typeof m : m) } : e;
+}
+export const WORLD_BOSS_TRIO: readonly EncounterDefinition[] = [wbKragmor, wbValdrakk, wbMorvane].map(e => noAims(e));
 
+// Enemy aim (owner 2026-11-19 "ทำ D + C + B", docs/design/ENEMY_AIM_PROPOSAL_TH.md): C — front-row foes that are not bosses
+// strike the target of the first other standing foe ('pack'); D — a boss aims its third move of every three (per phase)
+// at the lowest HP percent ('weakest'; every second move lost guarded fights from 60% HP); B is set on the assassin kinds (`species.ts`). World Bosses keep their written
+// slots. An encounter whose moves gain an aim is one version newer, so a battle saved before is refused safely.
+// veil-siege is the reference battle whose written slots the rule and browser suites script against (Guard, Mark, heal routes);
+// first-clash is the tutorial, whose coach teaches guarding the announced target.
+const AIM_EXEMPT = new Set(['veil-siege', 'first-clash', 'world-boss-warden', 'wb-kragmor', 'wb-valdrakk', 'wb-morvane']);
+function withAims(e: EncounterDefinition): EncounterDefinition {
+  if (AIM_EXEMPT.has(e.id)) return noAims(e);
+  const seen = new Map<string, number>();
+  const intents = e.intents.map(m => {
+    const foe = e.enemies.find(f => f.id === m.sourceId); const key = `${m.sourceId}:${m.phase ?? 0}`;
+    const i = seen.get(key) ?? 0; seen.set(key, i + 1);
+    if (m.aim || !foe || m.all || m.charge || m.special || m.summon) return m;
+    if (foe.boss) return i % 3 === 2 ? { ...m, aim: 'weakest' as const } : m;
+    return foe.row === 'front' ? { ...m, aim: 'pack' as const } : m;
+  });
+  return intents.some(m => m.aim) ? { ...e, version: e.version + 1, intents } : e;
+}
 export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, crystalStampede, riftWarden, eliteTuskChief, eliteBriarLord, miniVeilGolem, vanguardCaptain,
-  slimePair, batSwarm, slimeNest, tuskerBats, beetleSpore, beetleWall, stalkerSpore, forestSwarm, channelerWisps, crawlerPack, riftHost, thornHost, riftLegion, worldBossWarden];
+  slimePair, batSwarm, slimeNest, tuskerBats, beetleSpore, beetleWall, stalkerSpore, forestSwarm, channelerWisps, crawlerPack, riftHost, thornHost, riftLegion, worldBossWarden].map(withAims);
 // P11-05 step 2: the catalog lookup also knows the World Boss trio (world rules, saves and replays name them). They stay out of
 // `encounters` (the rule tests walk it and assert the advisor wins from full HP, which a World Boss never allows by design).
 // `presentedEncounters` is what the presentation coverage and the texture-budget audit walk: `encounters` plus every trio boss
