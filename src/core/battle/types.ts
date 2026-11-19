@@ -123,8 +123,14 @@ export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?:
 // "Staggered": no damage, the same in preview. P11-05 R2 `summon`: a no-damage move that brings back the listed foes that
 // are down or not yet on the field, at full HP with no statuses, while the field and their row have room (P02 limits);
 // they act from the next round.
+// `aim` (proposal, docs/design/ENEMY_AIM_PROPOSAL_TH.md; no content uses it yet): how the target is chosen among the heroes
+// the move may reach. Missing = the `targetSlot` hero (today's rule). 'weakest': lowest HP percent; 'support': the first
+// support-role hero (else the slot); 'pack': the target of the first other standing foe (else the slot). The pick is
+// made when the intent is announced and frozen at the foe's turn like every intent; ties keep the slot hero.
+export type IntentAim = 'weakest' | 'support' | 'pack';
+export const SUPPORT_ROLES: readonly string[] = ['Priest', 'Saint', 'Bard', 'Dancer', 'Alchemist', 'Seer'];
 export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy'; unstoppable?: boolean;
-  phase?: number; all?: boolean; charge?: boolean; special?: 'phase' | 'stagger'; breakable?: boolean; summon?: readonly EnemySlot[] }
+  aim?: IntentAim; phase?: number; all?: boolean; charge?: boolean; special?: 'phase' | 'stagger'; breakable?: boolean; summon?: readonly EnemySlot[] }
 // A boss phase: once the boss's HP falls to `below` percent, its next turn summons the `summon` reserves (if any) and
 // switches its moves to that phase's cycle. `hardSummon` reserves join only in hard mode (world `hardEncounter`).
 export interface BossPhase { sourceId: EnemySlot; below: number; summon?: readonly EnemySlot[]; hardSummon?: readonly EnemySlot[]; name: string }
