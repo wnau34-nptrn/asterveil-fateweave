@@ -189,7 +189,8 @@ export interface SideQuestDefinition {
 }
 // Guided tasks (master plan A4): one per camp NPC and lobby system, shown once the system opens. Done is read from the
 // profile (`guideDone`); the small reward is claimed once, or the task is skipped.
-export type GuideKind = 'wear' | 'enhance' | 'talent' | 'brew' | 'itemLevel' | 'hire' | 'reserve';
+// OD-54: `calm` is a one-time gift (a calming draught), given on the map the first time the team tires, else in camp.
+export type GuideKind = 'wear' | 'enhance' | 'talent' | 'brew' | 'itemLevel' | 'hire' | 'reserve' | 'calm';
 export interface GuideDefinition { id: string; npc: string; feature: LobbyFeature; kind: GuideKind; reward: SideQuestDefinition['reward'] }
 // P05-02: an `optional` quest never seals the boss. Done in one run that comes home (complete or withdrawn, not wiped), it
 // pays `reward` once per company (`Profile.storyQuests`); progress is the run's own, so nothing expires between runs.

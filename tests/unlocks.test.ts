@@ -23,11 +23,12 @@ describe('lobby systems by chapter', () => {
     expect(featureOpen({ ...after1, cleared: [ruinsMap.id, chapterOne.id] }, MAPS, 'transfer')).toBe(true);
   });
   it('stages current services after maps 1, 2 and 3 without a veteran bypass', () => {
-    const expected = { team: 1, gear: 1, tree: 1, forge: 1, brew: 1, level: 2, quests: 1, tomes: 2,
+    // OD-54: gear and the tree open right after the prologue (no map to clear: featureMap is undefined, chapter 0).
+    const expected = { team: 1, gear: 0, tree: 0, forge: 1, brew: 1, level: 2, quests: 1, tomes: 2,
       hire: 2, market: 2, hard: 3, fuse: 3, craft: 3, hunt: 2, transfer: 3, bossCharm: 3 };
     for (const [feature, chapter] of Object.entries(expected)) {
       const f = feature as LobbyFeature;
-      expect(featureMap(MAPS, f)?.chapter).toBe(chapter);
+      expect(featureMap(MAPS, f)?.chapter ?? 0).toBe(chapter);
       for (let milestone = 0; milestone <= 3; milestone++) {
         const profile = { ...fresh(), cleared: MAPS.filter(m => m.chapter <= milestone).map(m => m.id) };
         expect(featureOpen(profile, MAPS, f)).toBe(milestone >= chapter);

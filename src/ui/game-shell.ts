@@ -18,7 +18,8 @@ import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, expeditionKey, loadGame, parseGame, saveGame, type Game } from '../core/save/expedition-save';
 import { type createCommander, featureOpen } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileEvent, ProfileResult, ShopItemId, WorldEvent, WorldResult } from '../core/world/types';
-import { tileAt, questDone, battleData, heroCatalog, type EncounterLookup } from '../core/world/world';
+import { tileAt, questDone, battleData, heroCatalog, memberDef, type EncounterLookup } from '../core/world/world';
+import { LessonGuide, battleLessonTip, lobbyLesson, worldLesson } from './lessons';
 import { Music, type Track } from '../platform/music';
 import { firstClearStory, runSummary, SummaryUI, type RunSummary } from './summary-ui';
 import { sfx, type SfxName } from '../platform/sfx';
@@ -79,6 +80,7 @@ export class GameShell {
     private readonly views: { title: HTMLElement; commander: HTMLElement; lobby: HTMLElement; world: HTMLElement; battle: HTMLElement },
     private readonly maps: readonly MapDefinition[] = [home], private readonly server?: ServerClient) {
     const map = home;
+    this.lessons = new LessonGuide(root, () => this.claimCalm(), () => this.updateLessons());
     // P09-02c server play never reads or writes the local save: the account lives on the server.
     if (!server) clearLegacySaves(this.storage); sfx.init(this.storage);
     setSavePlace(server ? 'server' : 'device');
@@ -229,6 +231,25 @@ export class GameShell {
   }
   setBattleVisibilityListener(listener: (visible: boolean) => void): void { this.onBattleVisibility = listener; }
 
+  // OD-54 lessons after the prologue (ui/lessons.ts): one at a time, on the map, in the first battle and the camp.
+  private readonly lessons: LessonGuide;
+  private updateLessons(): void {
+    const view = this.root.dataset.view, g = this.game;
+    if (!g || !['world', 'lobby', 'battle'].includes(view ?? '')) { this.lessons.show(undefined); return; }
+    if (view === 'world' && g.run) this.lessons.show(worldLesson(g.profile, g.run, this.map, this.maps, this.lessons.seen, id => memberDef(this.lookup, this.map, g.run!, id)?.maxHp ?? 1));
+    else if (view === 'lobby' && !g.run) this.lessons.show(lobbyLesson(g.profile, this.lessons.seen));
+    else if (view === 'battle' && g.run?.battle) this.lessons.show(battleLessonTip(g.profile, g.run.battle.kind, this.lessons.seen));
+    else this.lessons.show(undefined);
+  }
+  // The one-time calming draught, claimed from its lesson on the map (claimRunGuide; a full bag or a refusal changes nothing).
+  private claimCalm(): void {
+    if (!this.state || this.locked) return;
+    this.exec({ kind: 'claimRunGuide', id: 'guide-calm' }, r => {
+      if (isRejected(r)) { this.message = r.rejected === 'carry' ? 'กระเป๋าเต็ม รับยาได้ที่ค่ายภายหลัง' : this.message; this.renderWorld(); return; }
+      this.game = r.game; this.persist(); sfx.play('potion');
+      this.message = 'ได้รับยาฟื้นความเหนื่อย 1 ขวด · เปิดกระเป๋าเพื่อใช้'; this.renderWorld();
+    });
+  }
   private show(view: 'title' | 'commander' | 'lobby' | 'world' | 'battle'): void {
     // Entering a different view replays a short fade-and-settle (off under reduced motion).
     if (this.root.dataset.view !== view) { const next = this.views[view]; next.classList.remove('view-enter'); void next.offsetWidth; next.classList.add('view-enter'); }
@@ -239,6 +260,8 @@ export class GameShell {
     this.root.dataset.view = view;
     this.music.play(this.trackFor(view));
     this.onBattleVisibility(view === 'battle');
+    // Lessons follow the view once it has drawn (the battle UI and camp render after `show`).
+    requestAnimationFrame(() => this.updateLessons());
   }
   // Title and prologue: camp; commander creation and Vargoth's retreat: archway; lobby: ruins; map: meadow;
   // battles: the battle theme, or the boss theme for the boss and the mini-boss.
@@ -682,6 +705,7 @@ export class GameShell {
     this.world.setMap(this.map, this.eliteArtOf(this.map));
     this.show('world');
     const profile = this.game!.profile;
+    requestAnimationFrame(() => this.updateLessons());
     this.world.render({ storyDone: !!profile.storyQuests?.includes(this.map.id), presets: profile.presets, questBoard: { definitions: this.home.sideQuests, progress: profile.quests, unlocked: featureOpen(profile, this.maps, 'quests') }, state: preview ?? this.state!, message: this.message, locked: this.locked, saved: this.saved && (!!this.storage || !!this.server), banner: this.banner, effect: this.effect });
     this.effect = undefined;
   }
