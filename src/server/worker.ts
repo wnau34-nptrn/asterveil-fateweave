@@ -20,7 +20,7 @@ interface DurableObjectNamespaceLike {
   get(id: unknown): { fetch(request: Request): Promise<Response> };
 }
 export interface Env {
-  DB: D1Like; GAME: DurableObjectNamespaceLike; LIMIT?: DurableObjectNamespaceLike; WORLD_BOSS?: DurableObjectNamespaceLike; CHAT?: DurableObjectNamespaceLike; CHAT_WRITE?: string;
+  DB: D1Like; GAME: DurableObjectNamespaceLike; LIMIT?: DurableObjectNamespaceLike; WORLD_BOSS?: DurableObjectNamespaceLike; CHAT?: DurableObjectNamespaceLike; CHAT_WRITE?: string; FRIENDS?: string;
   CONTENT_VERSION?: string; ALLOWED_ORIGINS?: string; GOOGLE_CLIENT_ID?: string; LEGACY_IMPORT?: string; LEGACY_IMPORT_UNTIL?: string;
 }
 interface ExecutionContextLike { waitUntil(promise: Promise<unknown>): void }
@@ -84,6 +84,8 @@ export class Chat {
   fetch(request: Request): Promise<Response> { return handleChatRequest(this.host, request); }
 }
 const chatObject = (env: Env) => env.CHAT?.get(env.CHAT.idFromName('chat'));
+// OD-56: friends and private chat are on unless `FRIENDS` is `off` (a Worker variable, no code deploy needed).
+export const friendsOn = (raw: string | undefined): boolean => raw?.trim() !== 'off';
 export const chatWrite = (raw: string | undefined): ChatWrite => { const v = raw?.trim(); return v === 'linked' || v === 'off' ? v : 'all'; };
 
 // The account's chat messages go first (P11), then its game object; a failure of either is retried next hour.
@@ -110,6 +112,7 @@ export default {
       ...(env.LIMIT ? { gate: durableGate(env.LIMIT) } : {}),
       ...(env.WORLD_BOSS ? { boss: env.WORLD_BOSS.get(env.WORLD_BOSS.idFromName('world-boss')) } : {}),
       ...(env.CHAT ? { chat: chatObject(env)!, chatWrite: chatWrite(env.CHAT_WRITE) } : {}),
+      friends: friendsOn(env.FRIENDS),
       legacyImport: legacyImportOpen(env, Date.now()),
       ...(ctx ? { defer: (work: Promise<unknown>) => ctx.waitUntil(work) } : {}),
       ...(verify ? { google: verify } : {}),

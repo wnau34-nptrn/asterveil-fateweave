@@ -59,7 +59,12 @@
 .feedback-table td:last-child, .feedback-table th:last-child { text-align: right; }
 /* P11 chat: the world channel dialog (390px first; the log scrolls, the form stays at the bottom). */
 .chat-dialog { height: calc(100dvh - 32px); overflow: hidden; }
-.chat-card { height: 100%; grid-template-rows: auto auto auto auto minmax(0, 1fr) auto auto auto auto; gap: 8px; padding: 14px 12px; }
+.chat-card { height: 100%; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: 8px; padding: 14px 12px; }
+/* OD-56: the world channel and the friends tab each fill the card's middle row; their log takes the spare height. */
+#chat-world { grid-template-rows: auto auto minmax(0, 1fr) auto auto auto; min-height: 0; }
+.friends-view { min-height: 0; grid-template-rows: minmax(0, 1fr); }
+#friends-home { min-height: 0; overflow-y: auto; align-content: start; }
+#dm-view { min-height: 0; grid-template-rows: auto minmax(0, 1fr) auto auto auto; }
 .chat-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .chat-head button { min-width: 64px; }
 .chat-note { font-size: 12px !important; }
@@ -106,3 +111,37 @@
 #lobby-view .lobby-chat-feed { position: absolute; z-index: 24; top: calc(max(12px, var(--safe-top, 0px)) + 230px); right: max(14px, env(safe-area-inset-right)); min-width: 56px; min-height: 44px; padding: 4px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-radius: 14px; font-size: 10px; background: #0a192b8a; border: 1px solid #e1eaf035; color: #d9e4ed; pointer-events: auto; }
 #lobby-view .lobby-chat-feed[aria-pressed="true"] { border-color: #f2d59699; color: #f2d596; }
 #lobby-view .lobby-hud:has(.lobby-sheet) .lobby-chat-feed { display: none; }
+
+/* OD-56 friends + private chat: the "เพื่อน" tab, a conversation, the unread badge on the camp chat button. */
+.chat-tab small[data-chat-unread] { color: #ffd2a8; font-weight: 600; }
+.chat-tab small[hidden] { display: none; }
+#chat-world[hidden], .friends-view[hidden], #friends-home[hidden], #dm-view[hidden] { display: none; }
+#chat-world, .friends-view, #friends-home, #dm-view { display: grid; gap: 8px; min-width: 0; }
+.friends-code { display: grid; gap: 6px; padding: 8px 10px; border-radius: 12px; background: #e8f5ff0d; border: 1px solid #e8f5ff24; }
+.friends-code p { margin: 0; font-size: 14px; color: var(--text-muted, #b9c8d8); }
+.friends-code b { color: var(--gold-light, #f2d596); font-size: 18px; letter-spacing: .08em; font-variant-numeric: tabular-nums; }
+.friends-code-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.friends-code-row button { min-height: 44px; font-size: 13px; }
+.friends-add { grid-template-columns: minmax(0, 1fr) 92px; }
+.friends-add input { text-transform: uppercase; letter-spacing: .06em; }
+#friends-lists { display: grid; gap: 10px; }
+.friends-section h3 { margin: 0 0 4px; font-size: 14px; color: var(--text-muted, #b9c8d8); font-weight: 600; }
+.friends-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.friends-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px; font-size: 14px; }
+.friends-row > .friends-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.friends-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.friends-actions button { min-height: 44px; min-width: 64px; font-size: 13px; padding: 0 10px; }
+.friends-menu { grid-column: 1 / -1; }
+.friends-open { min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-align: left; font-size: 14px; padding: 0 12px; min-width: 0; }
+.friends-open .friends-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.friends-unread, .chat-badge { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #e2603f; color: #fff; font-size: 12px; font-weight: 700; line-height: 20px; text-align: center; flex: none; }
+.friends-danger { border-color: #e2603f99 !important; color: #ffb39c !important; }
+.friends-row .chat-more { min-width: 44px; min-height: 44px; }
+.friends-blocked-list { display: grid; gap: 6px; }
+.dm-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; }
+.dm-head h3 { margin: 0; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--gold-light, #f2d596); }
+.dm-head button { min-height: 44px; font-size: 13px; padding: 0 12px; }
+.chat-admin-context { margin: 4px 0; padding-left: 18px; font-size: 12px; color: var(--text-muted, #b9c8d8); }
+#lobby-view .lobby-chat { position: absolute; }
+#lobby-view .lobby-chat .chat-badge { position: absolute; top: -6px; right: -6px; }
+.chat-badge[hidden] { display: none; }
