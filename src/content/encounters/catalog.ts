@@ -357,7 +357,9 @@ export const WORLD_BOSS_TRIO: readonly EncounterDefinition[] = [wbKragmor, wbVal
 // strike the target of the first other standing foe ('pack'); D — a boss aims its third move of every three (per phase)
 // at the lowest HP percent ('weakest'; every second move lost guarded fights from 60% HP); B is set on the assassin kinds (`species.ts`). World Bosses keep their written
 // slots. An encounter whose moves gain an aim is one version newer, so a battle saved before is refused safely.
-const AIM_EXEMPT = new Set(['world-boss-warden', 'wb-kragmor', 'wb-valdrakk', 'wb-morvane']);
+// veil-siege is the reference battle whose written slots the rule and browser suites script against (Guard, Mark, heal routes);
+// first-clash is the tutorial, whose coach teaches guarding the announced target.
+const AIM_EXEMPT = new Set(['veil-siege', 'first-clash', 'world-boss-warden', 'wb-kragmor', 'wb-valdrakk', 'wb-morvane']);
 function withAims(e: EncounterDefinition): EncounterDefinition {
   if (AIM_EXEMPT.has(e.id)) return noAims(e);
   const seen = new Map<string, number>();

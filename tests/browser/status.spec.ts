@@ -13,7 +13,7 @@ async function openBattle(page: Page) {
   const hp = Object.fromEntries(data.heroes.map(h => [h.id, h.maxHp]));
   let s = createBattle(data, { hp });
   s = resolveCommand(s, data, { beat: s.beat, heroId: 'tracer', action: 'mark', targetId: 'f1' }).state;
-  s = resolveCommand(s, data, { beat: s.beat, heroId: 'weaver', action: 'ward', targetId: 'tracer' }).state; // OD-53: f1 follows b1's target (tracer), so the barrier it breaks is tracer's
+  s = resolveCommand(s, data, { beat: s.beat, heroId: 'weaver', action: 'ward', targetId: 'weaver' }).state;
   const run = newExpedition(map, encounterById, 1234); run.tutorialDone = true;
   run.battle = { kind: 'random', encounterId: data.id, entry: hp, commands: s.commands };
   const profile = { ...newProfile(map, 5), tutorialDone: true, commander: { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' } };
@@ -84,16 +84,16 @@ test('status inspection follows each displayed actor stage instead of leaking th
   await page.clock.pauseAt(new Date('2026-10-19T00:01:00Z'));
   await page.locator('#action-bash').click(); await page.locator('#target-f1').click();
   const committed = await page.evaluate(k => localStorage.getItem(k), key);
-  await page.locator('#battle-info').click(); await page.locator('#status-unit-tracer').click();
+  await page.locator('#battle-info').click(); await page.locator('#status-unit-weaver').click();
   await expect(page.locator('#status-frame')).toContainText('จังหวะที่กำลังแสดง');
   await expect(page.locator('#status-details [data-status=barrier]')).toBeVisible();
   await expect(page.locator('#unit-inspector [data-inspector-status=barrier]')).toBeVisible();
-  await expect(page.locator('[data-status-actor=tracer] [data-status=barrier]')).toHaveCount(1);
+  await expect(page.locator('[data-status-actor=weaver] [data-status=barrier]')).toHaveCount(1);
   await page.clock.runFor(1000);
   await expect(page.locator('#status-details [data-status=barrier]')).toHaveCount(0);
-  await page.locator('#status-unit-tracer').click();
+  await page.locator('#status-unit-weaver').click();
   await expect(page.locator('#unit-inspector [data-inspector-status=barrier]')).toHaveCount(0);
-  await expect(page.locator('[data-status-actor=tracer]')).toHaveCount(0);
+  await expect(page.locator('[data-status-actor=weaver]')).toHaveCount(0);
   await expect(page.locator('#battle-tab-status')).toHaveAttribute('aria-selected', 'true');
   expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(committed);
   await page.keyboard.press('Escape'); await page.clock.runFor(1000);
@@ -106,7 +106,7 @@ for (const [width, height, touch] of [[320, 568, true], [390, 844, true], [1366,
     const page = await context.newPage(), issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
     await openBattle(page); await page.locator('#action-bash').click();
     await expect(page.locator('[data-status-actor=f1] .debuff[data-status=mark]')).toBeVisible();
-    await expect(page.locator('[data-status-actor=tracer] .buff[data-status=barrier]')).toBeVisible();
+    await expect(page.locator('[data-status-actor=weaver] .buff[data-status=barrier]')).toBeVisible();
     await expect(page.locator('[data-status-actor=healer]')).toHaveCount(0);
     // Badges remain visible without a selected skill and do not consume target input.
     await page.keyboard.press('Escape');
@@ -124,7 +124,7 @@ for (const [width, height, touch] of [[320, 568, true], [390, 844, true], [1366,
     await expect(page.locator('[data-ui=status-unit]')).toHaveCount(6);
     await page.locator('#status-unit-f1').click();
     await expect(page.locator('#status-details [data-status=mark]')).toContainText('เหลือ 2 รอบ');
-    await page.locator('#status-unit-tracer').click();
+    await page.locator('#status-unit-weaver').click();
     await expect(page.locator('#status-details [data-status=barrier]')).toContainText('ดูดซับความเสียหาย');
     await page.locator('#status-unit-healer').click();
     await expect(page.locator('#status-details')).toContainText('ไม่มีบัฟหรือดีบัฟชั่วคราว');
@@ -152,9 +152,9 @@ for (const [width, height, touch] of [[320, 568, true], [390, 844, true], [1366,
     await page.locator('#target-f1').click();
     const skip = page.locator('#skip-turn'); if (await skip.count()) await skip.click({ timeout: 2500 }).catch(() => {});
     await expect.poll(() => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.battle.commands.length, key)).toBe(3);
-    await page.locator('#battle-info').click(); await page.locator('#status-unit-tracer').click();
+    await page.locator('#battle-info').click(); await page.locator('#status-unit-weaver').click();
     await expect(page.locator('#status-details [data-status=barrier]')).toHaveCount(0);
-  await page.locator('#status-unit-tracer').click();
+  await page.locator('#status-unit-weaver').click();
   await expect(page.locator('#unit-inspector [data-inspector-status=barrier]')).toHaveCount(0);
     expect(issues).toEqual([]); await context.close();
   });
