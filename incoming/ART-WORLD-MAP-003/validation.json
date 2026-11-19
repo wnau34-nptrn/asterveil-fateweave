@@ -1,0 +1,263 @@
+{
+  "files": {
+    "NOTES.md": {
+      "bytes": 12495,
+      "sha256": "13c648483f62838f5019f13f09dcf8ab68e444364198774ca0e58887368a2048"
+    },
+    "build_handoff.py": {
+      "bytes": 9517,
+      "sha256": "2b402fe508148777ac528077eda2f5b7858a6891c42443dbf85a43db94ec2396"
+    },
+    "generation_outputs.json": {
+      "bytes": 409,
+      "sha256": "41152f9b4e437a80c10cb2858c8325f4db0c3946cacfafd79869f2136c6fdc78"
+    },
+    "match_region1.png": {
+      "bytes": 1000531,
+      "sha256": "0ddf23567c5f9469e4604124c18d829fcc72ef85a12190b8c3cfec741e7d5c45",
+      "size": [
+        1296,
+        936
+      ],
+      "mode": "RGB"
+    },
+    "preview_390.png": {
+      "bytes": 2466562,
+      "sha256": "c815765fcda24944fdb8e642b14844a89ff393ae18ed05bb96e70502ec2f3992",
+      "size": [
+        1170,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "preview_fog_390.png": {
+      "bytes": 1680857,
+      "sha256": "73e165097a67938a5bb3cdff699130936caa1f5717afecdffd659ae44efd3018",
+      "size": [
+        1170,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "prompts.json": {
+      "bytes": 7613,
+      "sha256": "7c92cfabef0569a1280bbcc21669747e4a72bc1fd253aeda8db01ae348268912"
+    },
+    "raw/composition.png": {
+      "bytes": 3778940,
+      "sha256": "31f11f76116ca4a25e99e5c0221ac81daf94b1e53d4a1db425763e77dfba103e",
+      "size": [
+        753,
+        2089
+      ],
+      "mode": "RGB"
+    },
+    "raw/panel_1.png": {
+      "bytes": 3909616,
+      "sha256": "502f56e355abb8e7f6ab4b7ea16ef9ca2f523e5dd759141ee8f24a9967dcc901",
+      "size": [
+        1189,
+        1323
+      ],
+      "mode": "RGB"
+    },
+    "raw/panel_2.png": {
+      "bytes": 3677429,
+      "sha256": "a9bc2f8890bd2bc239c163895184302cd43cccd4eaf92b148df4e371f2032001",
+      "size": [
+        1189,
+        1323
+      ],
+      "mode": "RGB"
+    },
+    "raw/panel_2_before_transition.png": {
+      "bytes": 3996570,
+      "sha256": "a85277c851e9c484dbfc4761b68dcc13c4e3bd135516d0f75ad9227e2a4d964e",
+      "size": [
+        1189,
+        1323
+      ],
+      "mode": "RGB"
+    },
+    "raw/panel_3.png": {
+      "bytes": 3330121,
+      "sha256": "6d84324781e5520c7cd5db09314e09b2dded624644f4132a94ca8353fb0f437c",
+      "size": [
+        1189,
+        1323
+      ],
+      "mode": "RGB"
+    },
+    "raw/panel_3_before_seam.png": {
+      "bytes": 3511481,
+      "sha256": "a8df75b25bb48b0ba85f180c72b9ea99a2b5a4837a8eb5023166fecfd6c0d1a9",
+      "size": [
+        1189,
+        1323
+      ],
+      "mode": "RGB"
+    },
+    "region1_world_geometry.json": {
+      "bytes": 4837,
+      "sha256": "44c46bbb9825bda032c6fdd0aa9d4c6651753440042ced2a505ef147a99fc972"
+    },
+    "regions_overlay.png": {
+      "bytes": 1936919,
+      "sha256": "6511b972a2b84912864dfcc364d6f444e157d1c166164371a436839fd670bb44",
+      "size": [
+        540,
+        1500
+      ],
+      "mode": "RGB"
+    },
+    "seeds/layout.png": {
+      "bytes": 1004650,
+      "sha256": "8e67503d2e8ff9741240f02eb95d18006ed051ce21b8cb91decf71df6eb881ea",
+      "size": [
+        1080,
+        3000
+      ],
+      "mode": "RGB"
+    },
+    "seeds/panel_1_layout.png": {
+      "bytes": 7641079,
+      "sha256": "658c1e1ec3ad970dafce7f1d92911539dcc23bd1eecd7e0004592e8b46b5a2f4",
+      "size": [
+        2160,
+        2400
+      ],
+      "mode": "RGB"
+    },
+    "seeds/panel_2_layout.png": {
+      "bytes": 8267922,
+      "sha256": "b3eaffaaa819572984a6e462a7c2cd142bb87466b9e88142c4feebdf43e55549",
+      "size": [
+        2160,
+        2400
+      ],
+      "mode": "RGB"
+    },
+    "seeds/panel_3_layout.png": {
+      "bytes": 8003843,
+      "sha256": "5eaa1204cf7224a739e0c6e383e9523a736b30e4abd93752acebdd3f2cdb6d60",
+      "size": [
+        2160,
+        2400
+      ],
+      "mode": "RGB"
+    },
+    "seeds/region_ch1.json": {
+      "bytes": 8053,
+      "sha256": "636da88b386057eae27b50d7bc0e9f4251d8ca378284bbdf745f3e9623eeba1a"
+    },
+    "seeds/region_ch1.webp": {
+      "bytes": 851260,
+      "sha256": "fcd10f4763a8d815bad026d7b8c528e366c2a323fcda7268dbd5314d7f780557",
+      "size": [
+        1080,
+        2340
+      ],
+      "mode": "RGB"
+    },
+    "seeds/region_ch1_fog.webp": {
+      "bytes": 439048,
+      "sha256": "58d68981a08d6c957afda2f206015c6ee5a4fb43d31daa5c628ee4de78cd66ef",
+      "size": [
+        1080,
+        2340
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ]
+    },
+    "seeds/world_concept.png": {
+      "bytes": 12777969,
+      "sha256": "ad6d0bf8bbc93457b44b0b7c5de68a2e8a3d1c8f5f48a0415ad1c345bde84113",
+      "size": [
+        3840,
+        2160
+      ],
+      "mode": "RGB"
+    },
+    "seeds/world_portrait.png": {
+      "bytes": 3973344,
+      "sha256": "7f9c175b97b12ece612d0a0a68ab9d3aabd8a1f61f887d32e2775c343be7edf1",
+      "size": [
+        1080,
+        2340
+      ],
+      "mode": "RGB"
+    },
+    "seeds.json": {
+      "bytes": 1961,
+      "sha256": "8992648768d3540c84f46b17464d6a9aede1e6405ebdd3b63cefff00bfe8f5b4"
+    },
+    "verify_remote.py": {
+      "bytes": 1924,
+      "sha256": "61f289b39d6a7dd5c1b7afc40f22e4b7a27496e383ab80604b0f7e72dc9810e0"
+    },
+    "world_map.json": {
+      "bytes": 2984,
+      "sha256": "7480cbfdc6302f78d8c9bdfc51e63e20e4a99ac744762921239d8b3b63d30992"
+    },
+    "world_map.png": {
+      "bytes": 22477364,
+      "sha256": "d985094221ab842fa1a131cd49f844117db2e05534d488c1b30dab90a34222f6",
+      "size": [
+        2160,
+        6000
+      ],
+      "mode": "RGB"
+    },
+    "world_map.webp": {
+      "bytes": 1419836,
+      "sha256": "0300a6f501d738510979552ccd0da559f27bb12aeb1f2fc4a429f1b99c42de3c",
+      "size": [
+        1080,
+        3000
+      ],
+      "mode": "RGB"
+    },
+    "world_map_2x.webp": {
+      "bytes": 3165506,
+      "sha256": "f3741d1f2c2fc8e184dd6bb0c5ce4b0ce0b79ec54d52722ea20a3f29f375771a",
+      "size": [
+        2160,
+        6000
+      ],
+      "mode": "RGB"
+    },
+    "world_map_fog.webp": {
+      "bytes": 124682,
+      "sha256": "dbdd26e4cc73affee9709a96e7e30d678b513e9e1612638ff6a09bda622776bd",
+      "size": [
+        1080,
+        3000
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        227
+      ]
+    }
+  },
+  "checks": {
+    "region1_pre_encode_rgb_exact": true,
+    "region1_webp_mean_absolute_rgb_error": 4.323480606079102,
+    "region1_geometry_error_px": 0,
+    "source_node_count": 10,
+    "source_route_count": 9,
+    "polygon_count": 6,
+    "polygon_intersection_area_px2": 0,
+    "polygon_union_area_px2": 3240000,
+    "polygon_partition": "Shapely valid polygons, disjoint interiors, full canvas union, anchors and source rectangle contained",
+    "runtime_integration": false,
+    "owner_approval": false
+  },
+  "dependencies": {
+    "Pillow": "12.3.0",
+    "numpy": "2.5.4"
+  }
+}
