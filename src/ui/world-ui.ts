@@ -1,4 +1,5 @@
 import { savePlace } from './save-place';
+import { replayClass, setHtml } from './dom-cheap';
 import {bossGuide} from './boss-equipment';
 import {lootGuide} from './loot-guide';
 import { infoTabs } from './info-tabs';
@@ -299,7 +300,7 @@ export class WorldUI {
     grid.querySelector('.floor-layer')!.innerHTML = this.floorCells();
     const token = this.root.querySelector('#party-token')!;
     const sprites = this.root.querySelector('#sprite-layer')!; sprites.innerHTML = this.staticSprites(); sprites.append(token);
-    this.root.querySelector('#fog-layer')!.innerHTML = ''; this.root.querySelector('#hint-layer')!.innerHTML = '';
+    this.root.querySelector('#fog-layer')!.innerHTML = ''; this.fogCells = []; setHtml(this.root.querySelector('#hint-layer')!, '');
     this.root.querySelector('#map-name')!.textContent = map.name;
   }
   private floorCells(): string {
@@ -382,18 +383,18 @@ export class WorldUI {
     this.root.querySelector('#map-name')!.textContent = `${this.map.name}${s.hard ? ' · ยาก' : ''}`;
     const team = levelOf(this.map, s);
     const danger = level !== undefined && team <= level - 2;
-    this.root.querySelector('#zone-name')!.innerHTML = `<span class="zone-title">${tile.kind === 'camp' ? 'แคมป์พักแรม' : zone?.name ?? ''}</span>${level !== undefined ? ` <span class="zone-level${danger ? ' danger' : ''}">Lv${level}${danger ? ' · อันตราย' : ''}</span>` : ''}`;
+    setHtml(this.root.querySelector('#zone-name')!, `<span class="zone-title">${tile.kind === 'camp' ? 'แคมป์พักแรม' : zone?.name ?? ''}</span>${level !== undefined ? ` <span class="zone-level${danger ? ' danger' : ''}">Lv${level}${danger ? ' · อันตราย' : ''}</span>` : ''}`);
     this.root.querySelector<HTMLElement>('#zone-name')!.title = this.root.querySelector('#zone-name')!.textContent ?? '';
-    this.root.dataset.zone = tile.kind === 'camp' ? 'camp' : tile.zoneId;
+    const zoneKey = tile.kind === 'camp' ? 'camp' : tile.zoneId; if (this.root.dataset.zone !== zoneKey) this.root.dataset.zone = zoneKey;
     this.renderDanger(encounterChance(s, this.map), prev?.chance);
     this.renderParty(s);
     const all = goals(s, this.map); const done = all.filter(g => g.done).length; const next = all.find(g => !g.done);
-    this.root.querySelector('#objective-button')!.innerHTML = `<span class="objective-symbol">${icon('goal')}</span><span class="objective-text">${next ? next.label : 'สำเร็จการเดินทาง'}</span><span class="objective-count">${done}/${all.length}</span>${icon('right')}`;
+    setHtml(this.root.querySelector('#objective-button')!, `<span class="objective-symbol">${icon('goal')}</span><span class="objective-text">${next ? next.label : 'สำเร็จการเดินทาง'}</span><span class="objective-count">${done}/${all.length}</span>${icon('right')}`);
     this.root.querySelector('#objective-button')!.setAttribute('aria-label', `เป้าหมาย ${done} จาก ${all.length} · ${next ? `ถัดไป ${next.label}` : 'สำเร็จแล้ว'} · เปิดเป้าหมายและเควสต์`);
     if (this.root.querySelector<HTMLDialogElement>('#world-goals')!.open) this.renderGoals();
     const message = this.root.querySelector<HTMLElement>('#world-message')!;
     // A new notice pops in as a toast and fades by itself; the text stays for assistive tech.
-    if (message.textContent !== view.message) { message.textContent = view.message; message.classList.remove('toast-live'); void message.offsetWidth; message.classList.add('toast-live'); }
+    if (message.textContent !== view.message) { message.textContent = view.message; replayClass(message, 'toast-live', true); }
     message.hidden = !view.message;
     message.classList.toggle('rest-feedback', view.effect === 'rest');
     message.classList.toggle('loot-feedback', view.effect === 'loot');
@@ -425,7 +426,7 @@ export class WorldUI {
     action.disabled = !available; action.classList.toggle('available', available);
     action.dataset.context = camp ? 'camp' : entrance ? 'entrance' : chest ? 'chest' : ev ? 'event' : 'none';
     const label = camp ? 'พัก' : entrance ? 'ทางออก' : chest ? 'เปิด' : ev ? 'ดู' : 'โต้ตอบ';
-    action.innerHTML = `${icon(camp ? 'rest' : entrance ? 'flag' : chest ? 'chest' : 'talk')}<span>${label}</span>${available ? '<i class="context-dot"></i>' : ''}`;
+    setHtml(action, `${icon(camp ? 'rest' : entrance ? 'flag' : chest ? 'chest' : 'talk')}<span>${label}</span>${available ? '<i class="context-dot"></i>' : ''}`);
     const caption = camp ? (canRest(s, this.map) ? 'พักฟื้นหรือชุบคนที่ล้ม' : fallen ? 'ชุบคนที่ล้มด้วยถ่าน' : `ไฟแคมป์ติดอีก ${this.map.camp.relightWins - (s.restWins ?? 0)} ศึก`) : entrance ? 'จัดทีมหรือถอนตัวกลับค่าย' : chest ? 'เปิดกล่องสมบัติ' : ev ? eventText[ev.kind].name : 'ยืนบนแคมป์หรือกล่องสมบัติ';
     action.setAttribute('aria-label', camp ? `แคมป์ · เปิดหน้าต่างพักและชุบ · ${caption}` : entrance ? `ทางเข้าด่าน · ${caption}` : chest ? 'เปิดกล่องสมบัติ' : ev ? `${eventText[ev.kind].name} · เปิดหน้าต่างตัวเลือก` : 'โต้ตอบ · ยังไม่มีจุดให้โต้ตอบ ยืนบนแคมป์หรือกล่องสมบัติ');
     this.root.querySelector('#action-caption')!.textContent = caption;
@@ -433,9 +434,9 @@ export class WorldUI {
 
   private renderPackButton(s: ExpeditionState, gained: boolean): void {
     const pack = this.root.querySelector<HTMLElement>('#world-pack')!;
-    pack.innerHTML = `<span class="pack-bag">${icon('pack')}</span><span>กระเป๋า</span>`;
+    setHtml(pack, `<span class="pack-bag">${icon('pack')}</span><span>กระเป๋า</span>`);
     pack.setAttribute('aria-label', `กระเป๋า · ${resourceOrder.map(id => `${resourceText[id].name} ${s.resources[id]}`).join(' · ')} · เปิดดูของและอุปกรณ์`);
-    if (gained && !this.reduced.matches) { pack.classList.remove('gain'); void pack.offsetWidth; pack.classList.add('gain'); }
+    if (gained && !this.reduced.matches) replayClass(pack, 'gain');
   }
 
   // A salve or calming draught first asks who drinks it (P02 adds the draught).
@@ -569,27 +570,36 @@ export class WorldUI {
     chip.dataset.level = level;
     const fill = level === 'safe' ? 1 : Math.min(1, chance / 40);
     const repel = this.view?.state.repel ?? 0;
-    chip.innerHTML = `<span class="danger-label">${icon(level === 'safe' ? (repel ? 'potionRepel' : 'safe') : 'danger')}<span>${repel ? `ไล่อสูร ${repel} ก้าว` : level === 'safe' ? 'ปลอดภัย' : 'ก้าวถัดไป'}</span><strong>${chance}%</strong></span><span class="gauge"><span style="width:${fill * 100}%"></span></span>`;
+    setHtml(chip, `<span class="danger-label">${icon(level === 'safe' ? (repel ? 'potionRepel' : 'safe') : 'danger')}<span>${repel ? `ไล่อสูร ${repel} ก้าว` : level === 'safe' ? 'ปลอดภัย' : 'ก้าวถัดไป'}</span><strong>${chance}%</strong></span><span class="gauge"><span style="width:${fill * 100}%"></span></span>`);
     chip.setAttribute('aria-label', level === 'safe' ? 'พื้นที่ปลอดภัย โอกาสพบศัตรู 0 เปอร์เซ็นต์' : `โอกาสพบศัตรูในก้าวถัดไป ${chance} เปอร์เซ็นต์`);
-    if (before !== undefined && chance > before && !this.reduced.matches) { chip.classList.remove('rise'); void chip.offsetWidth; chip.classList.add('rise'); }
+    // A rise re-renders the gauge (the percentage changed), and a fresh gauge plays the rise on insertion: no reflow trick.
+    chip.classList.toggle('rise', before !== undefined && chance > before && !this.reduced.matches);
   }
 
   private renderParty(s: ExpeditionState): void {
-    this.root.querySelector('#world-party')!.innerHTML = s.roster.deployed.map(id => this.hero(id, s)).map(h => {
+    setHtml(this.root.querySelector('#world-party')!, s.roster.deployed.map(id => this.hero(id, s)).map(h => {
       const hp = s.hp[h.id] ?? 0; const ratio = hp / h.maxHp; const text = heroText[h.id]!;
       const state = hp <= 0 ? 'fallen' : ratio < .25 ? 'critical' : ratio < .6 ? 'hurt' : 'healthy';
       const tired = fatigueOf(s, h.id), cut = fatigueCut(this.map, tired);
       return `<button data-world="character-open" data-hero="${h.id}" aria-haspopup="dialog" aria-controls="character-dialog" class="world-hero ${state}${s.guests?.includes(h.id) ? ' guest' : ''}" id="world-hero-${h.id}" aria-label="${text.name}${s.guests?.includes(h.id) ? ' ผู้ร่วมทางชั่วคราว' : ''} ${this.stars(s, h.id)} ดาว เลเวล ${levelOf(this.map, s)} ${hp <= 0 ? 'ล้มแล้ว' : `เลือด ${hp} จาก ${h.maxHp}`} ความล้า ${tired} แต้ม${cut ? ` โจมตีและรักษาลด ${cut}%` : ''}">${portrait(h.id)}<span class="hero-copy"><b>${text.name}${this.stars(s, h.id) > 1 ? `<i class="hero-stars">★${this.stars(s, h.id)}</i>` : ''}<i class="hero-level">Lv${levelOf(this.map, s)}</i></b><small>${hp <= 0 ? 'ล้มแล้ว' : `${hp}/${h.maxHp}`}</small><span class="hp"><span style="width:${ratio * 100}%"></span></span>${talentPoints(this.map, levelOf(this.map, s), treeClears(s)) - talentsSpent(s.members[h.id]?.talents) > 0 ? '<span class="world-talent-badge">+แต้ม</span>' : ''}</span><span class="world-fatigue" data-fatigue="${tired}">${fatigueDot(cut)}<span>ล้า ${tired}</span></span></button>`;
-    }).join('');
+    }).join(''));
   }
 
+  // Perf R4: one element per fogged cell, kept between steps; a step only touches the cells whose layers changed
+  // (the layer used to be rebuilt from a full-map HTML string on every reveal).
+  private fogCells: (HTMLElement | undefined)[] = [];
   private renderFog(s: ExpeditionState): void {
-    let html = '';
+    const layer = this.root.querySelector('#fog-layer')!;
     for (let y = 0; y < this.map.rows.length; y++) for (let x = 0; x < this.width; x++) {
-      const layers = fogLayers(this.map, s, { x, y });
-      if (layers.length) html += `<div class="fog-cell${layers[0]!.startsWith('fog_tile') ? ' opaque' : ''}" style="--x:${x};--y:${y};background-image:${layers.map(l => `url(${worldArtUrl(l)})`).join(',')}"></div>`;
+      const i = y * this.width + x, layers = fogLayers(this.map, s, { x, y });
+      const art = layers.map(l => `url(${worldArtUrl(l)})`).join(',');
+      let cell = this.fogCells[i];
+      if (!layers.length) { if (cell) { cell.remove(); this.fogCells[i] = undefined; } continue; }
+      if (cell && cell.dataset.art === art) continue;
+      if (!cell) { cell = document.createElement('div'); cell.style.setProperty('--x', String(x)); cell.style.setProperty('--y', String(y)); this.fogCells[i] = cell; layer.append(cell); }
+      cell.className = `fog-cell${layers[0]!.startsWith('fog_tile') ? ' opaque' : ''}`;
+      cell.dataset.art = art; cell.style.backgroundImage = art;
     }
-    this.root.querySelector('#fog-layer')!.innerHTML = html;
     this.root.querySelectorAll<HTMLElement>('.sprite[data-cell]').forEach(el => {
       const [x, y] = el.dataset.cell!.split(',').map(Number); el.hidden = !isRevealed(s, this.map, { x: x!, y: y! });
     });
@@ -603,7 +613,7 @@ export class WorldUI {
       const changed = !!el.dataset.art; el.dataset.art = art;
       el.style.backgroundImage = `url(${worldArtUrl(art)})`;
       el.classList.toggle('has-boss', art === 'boss_pedestal');
-      if (changed && !this.reduced.matches) { el.classList.remove('lv-gate-open'); void el.offsetWidth; el.classList.add('lv-gate-open'); }
+      if (changed && !this.reduced.matches) replayClass(el, 'lv-gate-open');
     });
     // Beaten elites leave their gate; finished events lose their marker (the merchant stays).
     this.root.querySelectorAll<HTMLElement>('.elite-unit').forEach(el => { el.classList.toggle('beaten', s.elitesDefeated.includes(el.dataset.elite!)); });
@@ -614,7 +624,7 @@ export class WorldUI {
       const changed = el.dataset.open !== undefined; el.dataset.open = String(open);
       const f = chestFrame(el.dataset.tier as 'common' | 'rare', open);
       el.style.setProperty('--fx', String(f.x / f.w)); el.innerHTML = '';
-      if (changed && open && !this.reduced.matches) { el.classList.remove('lv-chest-open'); void el.offsetWidth; el.classList.add('lv-chest-open'); }
+      if (changed && open && !this.reduced.matches) replayClass(el, 'lv-chest-open');
     });
     const token = this.root.querySelector<HTMLElement>('#party-token')!;
     token.style.setProperty('--x', String(s.position.x)); token.style.setProperty('--y', String(s.position.y));
@@ -623,7 +633,7 @@ export class WorldUI {
     const hop = moved && Math.abs(prev!.position.x - s.position.x) + Math.abs(prev!.position.y - s.position.y) === 1;
     token.classList.toggle('instant', !!moved && !hop);
     if (hop && !this.reduced.matches) {
-      token.classList.remove('lv-hop'); void token.offsetWidth; token.classList.add('lv-hop');
+      replayClass(token, 'lv-hop');
       const dust = document.createElement('span');
       dust.className = 'step-dust sprite'; dust.style.setProperty('--x', String(prev!.position.x)); dust.style.setProperty('--y', String(prev!.position.y));
       dust.style.zIndex = String(prev!.position.y * 3 + 2);
@@ -635,14 +645,14 @@ export class WorldUI {
   // Only legal neighbours get a hint; a boss tile is a legal step that starts its fight.
   private renderHints(s: ExpeditionState, locked: boolean): void {
     const layer = this.root.querySelector('#hint-layer')!;
-    if (locked || s.completed) { layer.innerHTML = ''; return; }
-    layer.innerHTML = (Object.entries(offsets) as [Direction, Point][]).map(([dir, o]) => {
+    if (locked || s.completed) { setHtml(layer, ''); return; }
+    setHtml(layer, (Object.entries(offsets) as [Direction, Point][]).map(([dir, o]) => {
       const p = { x: s.position.x + o.x, y: s.position.y + o.y }; const t = tileAt(this.map, p);
       // Opened doors and found secret passages get a hint; an open pit does not, and unfound secrets stay secret.
       if (!t || (t.kind === 'wall' && !doorOpen(s, this.map, p) && !(secretAt(this.map, p) && s.secrets.some(id => id === secretAt(this.map, p)!.id))) || openPit(s, this.map, p)) return '';
       const sealed = t.kind === 'boss' && bossSealed(s, this.map);
       return `<span class="step-hint${sealed ? ' sealed' : (t.kind === 'boss' && !s.bossDefeated) || eliteBlocks(s, this.map, p) ? ' boss' : ''}" data-dir="${dir}" style="--x:${p.x};--y:${p.y}"><i>${icon(dir)}</i></span>`;
-    }).join('');
+    }).join(''));
   }
 
   private renderBanner(view: WorldView): void {
@@ -673,7 +683,7 @@ export class WorldUI {
     if (!this.view || !viewport.clientWidth) return;
     const w = viewport.clientWidth, h = viewport.clientHeight;
     this.tile = tileSizeFor(w, h); const t = this.tile;
-    this.root.style.setProperty('--t', `${t}px`);
+    if (this.root.style.getPropertyValue('--t') !== `${t}px`) this.root.style.setProperty('--t', `${t}px`);
     const band = (r: DOMRect) => r.width > 0 && r.right > w / 2 - 1.5 * t && r.left < w / 2 + 1.5 * t;
     const bounds = viewport.getBoundingClientRect();
     const rect = (sel: string) => {
@@ -691,7 +701,9 @@ export class WorldUI {
     if (gw > w) ox = Math.min(0, Math.max(w - gw, ox));
     if (gh > bottom - top) oy = Math.min(top, Math.max(Math.round(bottom - gh), oy));
     grid.style.transform = `translate(${ox}px, ${oy}px)`;
-    viewport.style.setProperty('--ox', `${ox}px`); viewport.style.setProperty('--oy', `${oy}px`);
+    // Perf R3: the fog backdrop follows the camera through a plain (non-inherited) property; a custom property on the
+    // viewport made every map element recompute its style on each step.
+    const fogAt = `0 0, ${ox}px ${oy}px`; if (viewport.style.backgroundPosition !== fogAt) viewport.style.backgroundPosition = fogAt;
   }
 
   private renderGoals(): void {

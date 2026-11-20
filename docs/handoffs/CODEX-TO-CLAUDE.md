@@ -1,3 +1,8 @@
+## 2026-11-20 — Perf R3+R4: smooth map steps (Opus; claude/perf-r3-r4 → game branch)
+- Owner: “ต่อ R3 กับ R4 เลย”. `ui/dom-cheap.ts` (`replayClass` rewinds one-shot animations instead of `void offsetWidth`; `setHtml` skips unchanged markup); `world-ui.ts` incremental fog (one element per cell), fog backdrop via `background-position` instead of inherited `--ox/--oy` (that alone recalculated ~1,370 elements per step), `--t`/`data-zone` only on change; `game-shell.ts` `show()` writes only changed attributes, no repeated `focus()` on the pad.
+- Result (Chromium 390px, CPU 4×, local play): press → visible step p50/p95 154/215 → 27/42 ms, no long tasks (was 12 per 10 steps). [Validation](../validation/perf-r3-r4-2026-11-20/README_TH.md). The 120 ms key-repeat guard is unchanged.
+- Tests: Vitest all, typecheck, lint, build, Playwright world/keyboard/lessons/map tabs/team-five/server-play/story (141). No real device. Next suggested: R5 server step queue (Opus).
+
 ## 2026-11-20 — Perf audit + R1/R2 (Opus; claude/perf-audit-2026-11-20 report only, claude/perf-r1-r2 → game branch)
 - Owner: “ตรวจสอบอาการดีเลย์ โหลดภาพช้า เดินหน่วงๆ … ยังไม่ต้องแก้ไขจริง”, then “แก้ R1 กับ R2 ก่อนเลย” and “ทำต่อจนเปิด PR แล้ว merge ได้เลย”. Audit report (causes C1–C7, recommendations R1–R11) stays unmerged on `claude/perf-audit-2026-11-20`.
 - R1: `game/visuals/battle-assets.ts`; `BattleScene` lazy mode (`main.ts`): no startup VFX/unit-sheet preload; each encounter loads 6 core atlases + skill-family atlases its heroes use + its still sheets; `fieldReady` gates Start/inputs (checked per added texture; failures never block; pilots still optional); GameShell prefetches the team/map set on the map. QA fixtures stay eager.

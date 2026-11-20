@@ -264,11 +264,13 @@ export class GameShell {
   private show(view: 'title' | 'commander' | 'lobby' | 'world' | 'battle'): void {
     // Entering a different view replays a short fade-and-settle (off under reduced motion).
     if (this.root.dataset.view !== view) { const next = this.views[view]; next.classList.remove('view-enter'); void next.offsetWidth; next.classList.add('view-enter'); }
-    this.views.title.hidden = view !== 'title'; this.views.commander.hidden = view !== 'commander'; this.views.world.hidden = view !== 'world'; this.views.lobby.hidden = view !== 'lobby';
+    // Perf R3: write only what changes; re-setting the same attributes on every map step invalidated styles app-wide.
+    for (const name of ['title', 'commander', 'world', 'lobby'] as const) if (this.views[name].hidden !== (view !== name)) this.views[name].hidden = view !== name;
     // The battle view keeps its layout while hidden so Phaser never sizes to zero.
     this.views.battle.classList.toggle('view-off', view !== 'battle');
-    this.views.battle.inert = view !== 'battle';
-    this.root.dataset.view = view; this.chat?.showOnCamp(view === 'lobby');
+    if (this.views.battle.inert !== (view !== 'battle')) this.views.battle.inert = view !== 'battle';
+    if (this.root.dataset.view !== view) this.root.dataset.view = view;
+    this.chat?.showOnCamp(view === 'lobby');
     this.music.play(this.trackFor(view));
     this.onBattleVisibility(view === 'battle');
     // Lessons follow the view once it has drawn (the battle UI and camp render after `show`).
@@ -789,7 +791,9 @@ export class GameShell {
     if (result.event.type === 'encounter') { const { kind, encounterId } = result.event; this.locked = true; this.playRecruits(() => this.startEncounter(kind, encounterId)); return; }
     this.renderWorld();
     if (result.event.type === 'event') this.world.openEvent();
-    else this.playRecruits(() => this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true }));
+    // Perf R3: after a plain step keep focus where it is when it already sits on the movement pad; focus() forces a
+    // synchronous style/layout pass, and the pad keeps keyboard play going either way.
+    else this.playRecruits(() => { if (!document.activeElement?.matches('#world-view .hud-movement button')) this.views.world.querySelector<HTMLElement>('#move-up')?.focus({ preventScroll: true }); });
   }
   // Map sounds by world event (placeholder synth, platform/sfx.ts).
   private worldSound(e: WorldEvent): void {

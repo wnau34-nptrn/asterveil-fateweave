@@ -49,7 +49,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 /* ---------- World: full-bleed map ---------- */
 .world-view { position: absolute; inset: 0; display: block; width: 100%; max-width: none; isolation: isolate; background: var(--navy-950); --t: 48px; }
 .map-view { position: absolute; inset: 0; overflow: hidden; touch-action: manipulation;
-  background: linear-gradient(#0d1c2e73, #0d1c2e73), url('/assets/world/fog_tile.webp') var(--ox, 0) var(--oy, 0) / var(--t) var(--t) repeat, #0f2236; }
+  background: linear-gradient(#0d1c2e73, #0d1c2e73), url('/assets/world/fog_tile.webp') 0 0 / var(--t) var(--t) repeat, #0f2236; }
 .map-grid { position: absolute; left: 0; top: 0; width: calc(var(--cols, 20) * var(--t)); height: calc(var(--rows, 28) * var(--t)); transition: transform var(--hop-ms) var(--ease-out); will-change: transform; }
 .floor-layer, .sprite-layer, .fog-layer, .hint-layer { position: absolute; inset: 0; }
 .floor-layer { z-index: 0; } .sprite-layer { z-index: 1; } .fog-layer { z-index: 2; } .hint-layer { z-index: 3; }
