@@ -1,4 +1,4 @@
-import { actorArt, artCellSize, portraitsUrl, sheetRows, unitsUrl } from '../game/visuals/assets';
+import { actorArt, artCellSize, portraitsHalfUrl, portraitsUrl, sheetRows, unitsUrl } from '../game/visuals/assets';
 import { icon } from './icons';
 import { starSocketUrl } from '../game/visuals/tome-art';
 
@@ -13,7 +13,9 @@ export function heroArt(id: string): string {
   const { sheet, frame } = actorArt[id]!; const rows = sheetRows[sheet], cell = artCellSize(sheet);
   return `<span class="hero-art" data-actor="${id}" style="--art-x:${frame % 2};--art-y:${Math.floor(frame / 2)};--art-rows:${rows}" aria-hidden="true"><img src="${unitsUrl(sheet)}" alt="" width="${cell * 2}" height="${rows * cell}" draggable="false"></span>`;
 }
-export function portrait(id: string): string {
-  const { sheet, frame } = actorArt[id]!; const rows = sheetRows[sheet], cell = artCellSize(sheet);
-  return `<span class="portrait" data-actor="${id}" style="--portrait-x:${frame % 2};--portrait-y:${Math.floor(frame / 2)};--portrait-rows:${rows}" aria-hidden="true"><img src="${portraitsUrl(sheet)}" alt="" width="${cell * 2}" height="${rows * cell}" draggable="false"></span>`;
+// `large`: the 512 px master (the story scene's big figure); otherwise the half-size atlas (perf audit R10), same grid.
+export function portrait(id: string, large = false): string {
+  const { sheet, frame } = actorArt[id]!; const rows = sheetRows[sheet], half = large ? undefined : portraitsHalfUrl(sheet);
+  const cell = artCellSize(sheet) / (half ? 2 : 1);
+  return `<span class="portrait" data-actor="${id}" style="--portrait-x:${frame % 2};--portrait-y:${Math.floor(frame / 2)};--portrait-rows:${rows}" aria-hidden="true"><img src="${half ?? portraitsUrl(sheet)}" alt="" width="${cell * 2}" height="${rows * cell}" draggable="false"></span>`;
 }
