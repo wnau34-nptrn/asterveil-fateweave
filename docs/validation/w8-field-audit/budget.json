@@ -7,9 +7,14 @@
   "lio"
  ],
  "always": {
-  "decoded": 77892976,
-  "download": 10885264,
-  "atlases": 13
+  "decoded": 26109808,
+  "download": 4749346,
+  "atlases": 6
+ },
+ "family": {
+  "decoded": 51783168,
+  "download": 6135918,
+  "atlases": 7
  },
  "optional": {
   "boss": {

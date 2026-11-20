@@ -30,7 +30,7 @@ app.innerHTML = '<section id="title-view" class="view title-view"></section><sec
 const views = { title: app.querySelector<HTMLElement>('#title-view')!, commander: app.querySelector<HTMLElement>('#commander-view')!, lobby: app.querySelector<HTMLElement>('#lobby-view')!, world: app.querySelector<HTMLElement>('#world-view')!, battle: app.querySelector<HTMLElement>('#battle-view')! };
 const ui = new BattleUI(views.battle, encounterById(chapterOne.tutorialEncounterId)!);
 let battleVisible = false;
-const scene = new BattleScene(ui.encounter, id => ui.choose(id, 'canvas'), () => { ui.sceneReady(); if (!battleVisible) game.loop.sleep(); }, () => ui.fieldLayoutChanged());
+const scene = new BattleScene(ui.encounter, id => ui.choose(id, 'canvas'), () => { ui.sceneReady(); if (!battleVisible) game.loop.sleep(); }, () => ui.fieldLayoutChanged(), true);
 ui.attach(scene);
 const game = new Phaser.Game({
   type: Phaser.AUTO,

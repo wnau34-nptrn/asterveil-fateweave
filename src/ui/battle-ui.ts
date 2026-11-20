@@ -136,7 +136,7 @@ export class BattleUI {
         }
         case 'status-unit': if (value) { this.inspectedActorId = value; this.fieldInspectedActorId = value; this.renderStatuses(); this.root.querySelector<HTMLElement>(`#status-unit-${value}`)?.focus({ preventScroll: true }); } break;
         case 'info-close': this.root.querySelector<HTMLDialogElement>('#game-info')!.close(); break;
-        case 'start': if (this.session && !this.started) { this.started = true; this.present(beginBattle(this.data, this.session.entry, true)); } break;
+        case 'start': if (this.session && !this.started && this.scene?.fieldReady) { this.started = true; this.present(beginBattle(this.data, this.session.entry, true)); } break;
         case 'hero': if (value) this.selectHero(value); break;
         case 'action': if (value && !this.busy && this.started && this.live() && this.data.heroes.find(h => h.id === currentHeroId(this.state, this.data))?.actions.includes(value as ActionId)) { this.closeSkill(); this.action = value as ActionId; this.targeting = true; this.render(); } break;
         case 'skill-info': this.showSkill(); break;
@@ -205,6 +205,8 @@ export class BattleUI {
   }
 
   attach(scene: BattleScene): void { this.scene = scene; this.render(); }
+  /** Map prefetch of battle artwork (lazy scene); false until the scene is up, so the caller tries again later. */
+  prefetch(actions: readonly string[], art: readonly string[]): boolean { if (!this.scene?.isReady) return false; this.scene.prefetch(actions, art); return true; }
   // Starts or resumes a battle from the expedition's recorded entry and commands.
   open(session: BattleSession): void {
     this.playback.cancel(); this.scene?.stopEffects(); this.presentation = undefined; this.busy = false;
@@ -246,7 +248,7 @@ export class BattleUI {
 
   choose(id: string, source: 'target' | 'canvas' = 'target'): void {
     if (!this.targeting || this.root.closest('[inert]') || this.root.querySelector('dialog[open]') || source === 'canvas' && performance.now() < this.canvasInputAfterInfo) return;
-    if (!this.scene?.isReady || !this.started || this.busy || !this.live()) return;
+    if (!this.scene?.fieldReady || !this.started || this.busy || !this.live()) return;
     const actualTarget = targetKind(this.action) === 'party' && this.state.heroes.some(h => h.id === id && h.hp > 0) ? 'party'
       : targetKind(this.action) === 'enemies' && this.state.enemies.some(e => e.id === id && e.hp > 0) ? 'enemies' : id;
     const target = targetOptions(this.state, this.data, this.heroId, this.action).find(t => t.id === actualTarget);
@@ -391,7 +393,7 @@ export class BattleUI {
   }
 
   private execute(targetId: string, extra: Pick<Command, 'cooldownAction' | 'cooldownTargetId' | 'recipientId'> = {}): void {
-    if (!this.scene?.isReady || !this.started || this.busy || !this.live()) return;
+    if (!this.scene?.fieldReady || !this.started || this.busy || !this.live()) return;
     const command: Command = { beat: this.state.beat, heroId: this.heroId, action: this.action, targetId, ...extra };
     this.present(resolveCommand(this.state, this.data, command, true));
   }
@@ -545,7 +547,7 @@ export class BattleUI {
     this.set('forecast', plannedIntents(s, d).map(next => `<div><b>รอบ ${next.round} · ${actorName(next.sourceId, d)} · ${intentName(next)}</b><small>${intentTargetThai(next, d)}${next.special || next.charge || next.summon ? '' : ` · พลังโจมตี ${next.damage} · ${next.kind === 'energy' ? 'เวท' : 'กายภาพ'}`}${next.special || next.charge || next.summon || next.court || next.aim || next.all || next.unstoppable || intentDelayThai(next) ? ` · ${intentRuleThai(next)}` : ''}</small></div>`).join('') + (this.live(s) ? '<p>แผนนี้สมมติว่าตัวละครยังอยู่ เปลี่ยนได้เมื่อมีใครล้ม เป้าหมายจะถูกกำหนดจริงเมื่อถึงเทิร์นศัตรู</p>' : ''));
     this.set('formation-info', '<div><strong>แนวหน้า 2 · แนวหลัง 2</strong><p>กายภาพโจมตีแนวหน้าก่อน · พลังงานถึงแนวหลังได้ · สกิลเฉพาะมีคูลดาวน์</p></div><div><strong>ศัตรูแถวหน้าบังแถวหลัง</strong><p>ฮีโร่แนวหน้าตีแถวหลังได้เมื่อแถวหน้าล้ม หรือใช้สกิลตีทะลุ (แทงทะลวง ติดตรา แทงข้างหลัง ท้าดวล) · ฮีโร่แนวหลังตีได้ทุกช่อง</p></div>');
     const k = this.session?.kind ?? 'random'; const fallen = s.heroes.filter(h => h.hp <= 0).length;
-    this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">${kindLabel[k]}</p><h2>${escapeHtml(d.name)}</h2><p>${k === 'tutorial' ? 'ศึกแรกของการเดินทาง · คำแนะนำจะพาใช้สกิลของทุกอาชีพ' : k === 'worldBoss' ? `ทีมเลือดเต็ม · สูงสุด ${this.session?.roundLimit} รอบ · นับเฉพาะเลือดที่บอสเสียจริง` : k === 'boss' ? 'บอสสลับโจมตีกายภาพและพลังงาน · อ่านแผนแล้วป้องกันให้ทัน' : 'ศัตรูขวางทาง · เลือดที่เหลือติดตัวเข้าศึกนี้'}${fallen ? `<br>${fallen} คนล้มอยู่และไม่ได้ลงมือในศึกนี้` : ''}</p><button data-ui="start" id="start" class="primary" ${!this.scene?.isReady ? 'disabled' : ''}>${this.scene?.isReady ? 'เริ่มต่อสู้ →' : 'กำลังเตรียมสนาม…'}</button></div>` : !this.presentation && !this.live(s) ? `<div class="result-card" role="status"><p class="eyebrow">${k === 'worldBoss' ? 'บอสโลก' : s.outcome === 'victory' ? 'ชนะศึก' : k === 'tutorial' ? 'ลองอีกครั้งได้' : 'ถอยกลับไปตั้งหลัก'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : s.outcome === 'active' ? `ครบ ${this.session?.roundLimit} รอบ` : 'แพ้แล้ว'}</h2>${k === 'worldBoss' ? `<p class="wb-damage">ดาเมจที่ลงกับบอส <b>${wbDamage(s, d)}</b></p>` : ''}<p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่สมาชิกที่ล้มต้องรอพักที่แคมป์'}</strong>` : ''}<button data-ui="leave" id="leave-battle" class="primary">${escapeHtml(this.session?.leaveLabel(s.outcome) ?? 'ไปต่อ')}</button></div>` : '');
+    this.set('start-screen', !this.started ? `<div class="start-card"><p class="eyebrow">${kindLabel[k]}</p><h2>${escapeHtml(d.name)}</h2><p>${k === 'tutorial' ? 'ศึกแรกของการเดินทาง · คำแนะนำจะพาใช้สกิลของทุกอาชีพ' : k === 'worldBoss' ? `ทีมเลือดเต็ม · สูงสุด ${this.session?.roundLimit} รอบ · นับเฉพาะเลือดที่บอสเสียจริง` : k === 'boss' ? 'บอสสลับโจมตีกายภาพและพลังงาน · อ่านแผนแล้วป้องกันให้ทัน' : 'ศัตรูขวางทาง · เลือดที่เหลือติดตัวเข้าศึกนี้'}${fallen ? `<br>${fallen} คนล้มอยู่และไม่ได้ลงมือในศึกนี้` : ''}</p><button data-ui="start" id="start" class="primary" ${!this.scene?.fieldReady ? 'disabled' : ''}>${this.scene?.fieldReady ? 'เริ่มต่อสู้ →' : 'กำลังเตรียมสนาม…'}</button></div>` : !this.presentation && !this.live(s) ? `<div class="result-card" role="status"><p class="eyebrow">${k === 'worldBoss' ? 'บอสโลก' : s.outcome === 'victory' ? 'ชนะศึก' : k === 'tutorial' ? 'ลองอีกครั้งได้' : 'ถอยกลับไปตั้งหลัก'}</p><h2>${s.outcome === 'victory' ? 'ชนะแล้ว' : s.outcome === 'active' ? `ครบ ${this.session?.roundLimit} รอบ` : 'แพ้แล้ว'}</h2>${k === 'worldBoss' ? `<p class="wb-damage">ดาเมจที่ลงกับบอส <b>${wbDamage(s, d)}</b></p>` : ''}<p>ยืนอยู่ ${s.heroes.filter(h => h.hp > 0).length} / ${s.heroes.length} คน · เลือดทีม ${s.heroes.reduce((hp, h) => hp + h.hp, 0)}<br>ใช้ ${s.commands.length} คำสั่ง</p>${s.outcome === 'victory' ? `<strong class="party-result">${s.heroes.every(h => h.hp > 0) ? 'รักษาทีมครบทุกคน' : 'ชนะ แต่สมาชิกที่ล้มต้องรอพักที่แคมป์'}</strong>` : ''}<button data-ui="leave" id="leave-battle" class="primary">${escapeHtml(this.session?.leaveLabel(s.outcome) ?? 'ไปต่อ')}</button></div>` : '');
   }
 
   private renderParty(disabled: boolean): void {
@@ -593,7 +595,7 @@ export class BattleUI {
   private renderFieldTargets(): void {
     if (!this.scene) return;
     const s = this.displayState; const d = this.data;
-    const disabled = !this.targeting || !this.scene.isReady || !this.started || this.busy || !this.live(s);
+    const disabled = !this.targeting || !this.scene.fieldReady || !this.started || this.busy || !this.live(s);
     const targets = this.currentTargets();
     this.set('field-targets', targets.map(t => {
       const position = this.scene!.actorTargets.get(t.id); if (!position) return '';
@@ -681,7 +683,7 @@ export class BattleUI {
 
   private render(repaint = true): void {
     const focus = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
-    const s = this.state; const d = this.data; const disabled = !this.scene?.isReady || !this.started || this.busy || !this.live(s);
+    const s = this.state; const d = this.data; const disabled = !this.scene?.fieldReady || !this.started || this.busy || !this.live(s);
     this.set('encounter-title', escapeHtml(d.name));
     this.set('encounter-kind', kindLabel[this.session?.kind ?? 'random']);
     this.root.classList.add('mobile-layout');

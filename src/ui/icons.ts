@@ -106,7 +106,9 @@ export type IconName = ActionId | keyof typeof svgs | UiIconName | 'restart';
 // Painted skill icons (ART-SKILL-ICON-001-R1 + Attack from -002 + big trees from -003, 256 px cells) replace the line icon of every skill that has one;
 // every non-skill icon stays line art. The span keeps the `icon` class so each view's icon sizing still applies.
 // Bump the revision (SHA256 prefix) when the atlas pixels change (P03 appended 18 icons).
-const skillAtlasUrl = `${import.meta.env.BASE_URL}assets/ui/skill_icons.webp?v=3b11491a`;
+// Perf audit R2 (2026-11-20): the game loads the half-size runtime sheet (128 px cells, 1.7 MB instead of 5.8 MB, 6 MiB
+// decoded instead of 24); the 256 px master stays in `skill_icons.webp`. Rebuild with `scripts/skill-icons-runtime.py`.
+const skillAtlasUrl = `${import.meta.env.BASE_URL}assets/ui/skill_icons_128.webp?v=91657ac5`;
 const paintedSkills = new Map(skillAtlas.order.map((id, i) => [id, i]));
 export function icon(name: IconName): string {
   const cell = paintedSkills.get(name);

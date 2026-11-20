@@ -1,9 +1,10 @@
 import Phaser from 'phaser';
-import { REWORK_ATLAS, reworkAtlasUrls, reworkCues, reworkMarks, reworkContact } from '../visuals/rework-fx';
+import { REWORK_ATLAS, reworkCues, reworkMarks, reworkContact } from '../visuals/rework-fx';
 import { unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals/basic-attack-fx';
 import { BOSS_ATLAS, bossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, holdPlacement, usesBossSignature, type BossPoint } from '../visuals/boss-signature-fx';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
+import { ALL_SHEETS, allBattleAtlases, atlasesForActions, encounterAtlases, encounterSheets, sheetKey, sheetsForArt, type AtlasRequest } from '../visuals/battle-assets';
 import { unitFrameView } from '../visuals/unit-frame-view';
 import { UnitAnimation } from '../visuals/unit-animation';
 import { unitPose, unitReactions } from '../visuals/unit-animation-map';
@@ -11,19 +12,19 @@ import type { BattleEvent, BattleState, EncounterDefinition, TurnStage } from '.
 import { effectFamily, effectCaption, hitLift, type CombatPrefs } from '../visuals/combat-effects';
 import { thaiFont } from '../../ui/th';
 import { palette } from '../visuals/palette';
-import { BOLT_ATLAS, boltAtlasUrls, boltCast, boltImpact, type FxContext } from '../visuals/bolt-fx';
-import { EXECUTE_ATLAS, WARD_ATLAS, executeAtlasUrls, wardAtlasUrls, executeCast, executeImpact, wardCast, wardSettle } from '../visuals/exec-ward-fx';
-import { BLADE_ATLAS, bladeAtlasUrls, bladeCast, bladeImpact, bladeStance, bladeCues, bladePalettes, isBladeSkill } from '../visuals/blade-fx';
-import { DEFENSE_ATLAS, defenseAtlasUrls, defenseCast, defenseContact, defenseCues, isDefenseSkill } from '../visuals/defense-fx';
-import { HEALING_ATLAS, healingAtlasUrls, healingPrepare, healingContact, healingCues, isHealingSkill, type HealingContext } from '../visuals/healing-fx';
-import { PROJECTILE_ATLAS, projectileAtlasUrls, projectileCues, projectilePrepare, projectileContact, isProjectileSkill } from '../visuals/projectile-fx';
-import { SEAL_ATLAS, sealAtlasUrls, sealCues, sealEvents, sealPrepare, sealContact, isSealFx, type SealSpot } from '../visuals/arcane-seal-fx';
-import { SONG_ATLAS, songAtlasUrls, isSongSkill, songPlan, songPrepare, songContact, type SongSpot } from '../visuals/song-fx';
+import { boltCast, boltImpact, type FxContext } from '../visuals/bolt-fx';
+import { executeCast, executeImpact, wardCast, wardSettle } from '../visuals/exec-ward-fx';
+import { bladeCast, bladeImpact, bladeStance, bladeCues, bladePalettes, isBladeSkill } from '../visuals/blade-fx';
+import { DEFENSE_ATLAS, defenseCast, defenseContact, defenseCues, isDefenseSkill } from '../visuals/defense-fx';
+import { HEALING_ATLAS, healingPrepare, healingContact, healingCues, isHealingSkill, type HealingContext } from '../visuals/healing-fx';
+import { PROJECTILE_ATLAS, projectileCues, projectilePrepare, projectileContact, isProjectileSkill } from '../visuals/projectile-fx';
+import { SEAL_ATLAS, sealCues, sealEvents, sealPrepare, sealContact, isSealFx, type SealSpot } from '../visuals/arcane-seal-fx';
+import { SONG_ATLAS, isSongSkill, songPlan, songPrepare, songContact, type SongSpot } from '../visuals/song-fx';
 import { FOE_SIGNATURE_ATLAS, foeSignatureAtlasUrls, foeSignatureCues, foeSignaturePrepare, foeSignatureContact, isFoeSignatureMove, type FoeSpot } from '../visuals/foe-signature-fx';
 import { SAINT_DANCE_ATLAS, saintDanceAtlasUrls, isSdFx, sdPlan, sdPrepare, sdContact } from '../visuals/saint-dance-fx';
-import { COMMAND_ATLAS, commandAtlasUrls, commandCues, commandPrepare, commandContact, isCommandSkill, type CommandSpot } from '../visuals/command-fx';
-import { ALCHEMY_ATLAS, alchemyAtlasUrls, alchemyCues, alchemyEvents, alchemyPrepare, alchemyContact, alchemyHealingCues, isAlchemySkill, type AlchemySkill } from '../visuals/alchemy-fx';
-import { EARTH_ATLAS, earthAtlasUrls, earthCues, earthPrepare, earthContact, earthHealingCues, earthHealingEvents, isEarthSkill, type EarthSkill } from '../visuals/earth-fx';
+import { COMMAND_ATLAS, commandCues, commandPrepare, commandContact, isCommandSkill, type CommandSpot } from '../visuals/command-fx';
+import { ALCHEMY_ATLAS, alchemyCues, alchemyEvents, alchemyPrepare, alchemyContact, alchemyHealingCues, isAlchemySkill, type AlchemySkill } from '../visuals/alchemy-fx';
+import { EARTH_ATLAS, earthCues, earthPrepare, earthContact, earthHealingCues, earthHealingEvents, isEarthSkill, type EarthSkill } from '../visuals/earth-fx';
 import { FOE_SLOT_INDEX, fieldSlots, slotPlan, standSlotId, type FieldSlot } from '../visuals/field-layout';
 import { actorArt, actorFootOrigins, artCellSize, staticActorGeometry, staticDisplayRatio, artOf, artUrl, figureRise, mirroredArt, unitsUrl } from '../visuals/assets';
 
@@ -68,14 +69,45 @@ export class BattleScene extends Phaser.Scene {
   private stageActive = false;
   private battleVisible = false;
   private optionalRequest = true;
-  constructor(private encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void) { super('battle'); this.optionalUnits.setEncounter(encounter); }
+  // `lazyAssets` (the game page, perf audit R1): startup loads no VFX atlas or unit sheet; each encounter fetches what it
+  // uses and the field waits for it (`fieldReady`). QA fixtures keep the eager startup preload of everything.
+  constructor(private encounter: EncounterDefinition, private readonly choose: (id: string) => void, private readonly onReady: () => void, private readonly onLayout: () => void, private readonly lazyAssets = false) { super('battle'); this.optionalUnits.setEncounter(encounter); }
   get isReady(): boolean { return this.ready; }
+  /** The scene is up and the encounter's VFX atlases and unit sheets are loaded (or failed: play never waits on a broken file). */
+  get fieldReady(): boolean { return this.ready && this.missingAssets().length === 0; }
+  private failedAssets = new Set<string>();
+  private assetsSettled = false;
+  private requiredAssets(): AtlasRequest[] {
+    if (!this.lazyAssets) return [];
+    return [...encounterAtlases(this.encounter), ...encounterSheets(this.encounter).map(sheet => ({ key: sheetKey(sheet), urls: [unitsUrl(sheet), ''] as [string, string] }))];
+  }
+  private missingAssets(): AtlasRequest[] { return this.requiredAssets().filter(r => !this.textures.exists(r.key) && !this.failedAssets.has(r.key)); }
+  // Queue atlases/sheets that are neither loaded nor already queued; returns whether anything was added.
+  private queueAssets(list: AtlasRequest[]): boolean {
+    let added = false;
+    for (const r of list) {
+      if (this.textures.exists(r.key) || this.failedAssets.has(r.key) || this.queuedAssets.has(r.key)) continue;
+      const sheet = ALL_SHEETS.find(s => sheetKey(s) === r.key);
+      if (sheet) this.load.spritesheet(r.key, r.urls[0], { frameWidth: artCellSize(sheet), frameHeight: artCellSize(sheet) });
+      else this.load.atlas(r.key, ...r.urls);
+      this.queuedAssets.add(r.key); added = true;
+    }
+    return added;
+  }
+  private queuedAssets = new Set<string>();
+  /** Map prefetch (lazy mode): fetch the team's VFX atlases and the map's unit sheets before a fight starts. */
+  prefetch(actions: readonly string[], art: readonly string[]): void {
+    if (!this.lazyAssets || !this.ready) return;
+    if (this.queueAssets([...atlasesForActions(actions), ...sheetsForArt(art).map(sheet => ({ key: sheetKey(sheet), urls: [unitsUrl(sheet), ''] as [string, string] }))]) && !this.load.isLoading()) this.load.start();
+  }
   setBattleVisible(visible: boolean): void { this.battleVisible = visible; if (visible) this.optionalRequest = true; }
   setEncounter(data: EncounterDefinition): void {
     this.stopEffects(); this.encounter = data; this.view = undefined;
     this.actorTargets.clear(); this.actorPanels.clear();
     this.optionalUnits.setEncounter(data);
-    this.optionalRequest = true;
+    this.optionalRequest = true; this.assetsSettled = false;
+    // Lazy mode: start the encounter's own artwork at once, even while the battle view is still hidden.
+    if (this.ready && this.queueAssets(this.missingAssets()) && !this.load.isLoading()) this.load.start();
   }
   refreshLayout(): void {
     // DOM teaching strips change the field without a window resize. Refresh
@@ -106,20 +138,10 @@ export class BattleScene extends Phaser.Scene {
   }
   preload(): void {
     this.load.image('rift-ruins', artUrl('ruins'));
-    this.load.atlas(BOLT_ATLAS, ...boltAtlasUrls());
-    this.load.atlas(EXECUTE_ATLAS, ...executeAtlasUrls());
-    this.load.atlas(WARD_ATLAS, ...wardAtlasUrls());
-    this.load.atlas(BLADE_ATLAS, ...bladeAtlasUrls());
-    this.load.atlas(REWORK_ATLAS, ...reworkAtlasUrls());
-    this.load.atlas(PROJECTILE_ATLAS, ...projectileAtlasUrls());
-    this.load.atlas(EARTH_ATLAS, ...earthAtlasUrls());
-    this.load.atlas(ALCHEMY_ATLAS, ...alchemyAtlasUrls());
-    this.load.atlas(SEAL_ATLAS, ...sealAtlasUrls());
-    this.load.atlas(COMMAND_ATLAS, ...commandAtlasUrls());
-    this.load.atlas(SONG_ATLAS, ...songAtlasUrls());
-    this.load.atlas(DEFENSE_ATLAS, ...defenseAtlasUrls());
-    this.load.atlas(HEALING_ATLAS, ...healingAtlasUrls());
-    for (const sheet of ['units', 'mercs', 'foes', 'foes2', 'worldboss'] as const) this.load.spritesheet(`battle-${sheet}`, unitsUrl(sheet), { frameWidth: artCellSize(sheet), frameHeight: artCellSize(sheet) });
+    this.load.on('loaderror', (file: Phaser.Loader.File) => { if (this.queuedAssets.has(file.key)) this.failedAssets.add(file.key); });
+    if (this.lazyAssets) return;
+    for (const r of allBattleAtlases()) this.load.atlas(r.key, ...r.urls);
+    for (const sheet of ALL_SHEETS) this.load.spritesheet(sheetKey(sheet), unitsUrl(sheet), { frameWidth: artCellSize(sheet), frameHeight: artCellSize(sheet) });
   }
   create(): void {
     this.ready = true;
@@ -157,6 +179,7 @@ export class BattleScene extends Phaser.Scene {
     // which also keeps the startup preload under the loader's parallel-download limit.
     let fetching = false;
     for (const [key, urls, used] of this.encounterFx()) if (used && !this.textures.exists(key)) { this.load.atlas(key, ...urls); fetching = true; }
+    if (this.queueAssets(this.missingAssets())) fetching = true;
     if ((names.length || fetching) && !this.load.isLoading()) this.load.start();
   }
   // Encounter-only VFX atlases and whether the current encounter uses them (W8: released like unit sheets when unused).
@@ -171,6 +194,12 @@ export class BattleScene extends Phaser.Scene {
   private optionalUnitsLoaded(): void {
     if (!this.bossArt && this.textures.exists(BOSS_ATLAS)) { this.bossArt = true; this.optionalDirty = true; }
     if (!this.load.isLoading() && this.optionalUnits.complete(this.hasOptionalUnit)) this.optionalDirty = true;
+    if (!this.load.isLoading()) {
+      for (const key of this.queuedAssets) { if (!this.textures.exists(key)) this.failedAssets.add(key); }
+      this.queuedAssets.clear();
+    }
+    // Lazy mode: the field became ready; redraw with the real art and let the UI enable Start.
+    if (this.lazyAssets && !this.assetsSettled && this.fieldReady) { this.assetsSettled = true; this.optionalDirty = true; this.onReady(); }
   }
   private bossArt = false;
   private corpseAlpha(id: string): number {
@@ -352,6 +381,9 @@ export class BattleScene extends Phaser.Scene {
     const pilot = unitKey(key), framed = !!pilot && this.textures.exists(pilot);
     const sprite = this.add.image(0, 0, framed ? pilot : `battle-${art.sheet}`, framed ? hp <= 0 ? unitDownFrame(key) : 0 : art.frame)
       .setOrigin(.5, framed ? unitSoleOrigin(key) : actorFootOrigins[key] ?? 1).setDisplaySize(size * (framed ? ratio : staticDisplayRatio(key)), size * (framed ? ratio : staticDisplayRatio(key))).setFlipX(!framed && mirroredArt.has(key));
+    // Lazy mode: a still sheet that has not arrived yet draws nothing (never the missing-texture box); the load's
+    // completion repaints the field before Start is enabled.
+    if (!framed && !this.textures.exists(`battle-${art.sheet}`)) sprite.setVisible(false);
     body.add(sprite);
     const nextFrame = framed ? this.add.image(0, 0, pilot, 0)
       .setOrigin(sprite.originX, sprite.originY).setDisplaySize(size * ratio, size * ratio).setFlipX(sprite.flipX).setVisible(false) : undefined;
