@@ -1,4 +1,5 @@
 import { watchForUpdate } from './platform/update-check';
+import { registerAssetCache } from './platform/service-worker-register';
 import { UpdateBanner } from './ui/update-banner';
 import Phaser from 'phaser';
 import { encounterById } from './content/encounters/catalog';
@@ -66,5 +67,7 @@ shell.setBattleVisibilityListener(visible => {
 });
 // W8 on-device measurement panel (docs/validation/w8-field-audit/MOBILE_PERF_TH.md): only with ?perf=1, loaded on demand.
 if (new URLSearchParams(location.search).has('perf')) void import('./platform/perf-probe').then(m => m.startPerfProbe({ game, textures: () => scene.sys?.textures }));
+// Perf audit R8: keep artwork on the device between visits (production only; `?sw=off` removes it).
+registerAssetCache({ base: import.meta.env.BASE_URL, prod: import.meta.env.PROD, search: location.search });
 // Startup finished: index.html's boot guard stands down.
 (window as unknown as { __fateweaveReady?: boolean }).__fateweaveReady = true;
