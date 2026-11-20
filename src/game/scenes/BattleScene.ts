@@ -305,8 +305,23 @@ export class BattleScene extends Phaser.Scene {
     const present = view.state.enemies.filter(e => !e.absent).map(e => e.id);
     // ...and a shove or its end moves two foes between rows.
     const swaps = (s?: BattleState) => s?.enemies.map(e => e.shoved ? `${e.id}>${e.shoved.partnerId ?? ''}` : '').join(',');
-    if (repaint || present.some(id => !this.bodies.has(id)) || swaps(previous) !== swaps(view.state)) this.paint();
+    // Perf R6: a repaint asked for while the field is quiet and would draw exactly what it shows (same bodies, same
+    // alive/down set, same acting pair, same size) only refreshes the bodies; choosing a hero, skill or target no
+    // longer rebuilds every sprite, tween and texture binding.
+    const same = repaint && this.fieldIdle() && this.paintKey(view) === this.paintedKey;
+    if ((repaint && !same) || present.some(id => !this.bodies.has(id)) || swaps(previous) !== swaps(view.state)) this.paint();
     else this.syncBodies(previous, view);
+  }
+  private paintedKey = '';
+  private paintKey(view: SceneView): string {
+    const s = view.state;
+    return [this.viewW, this.viewH, this.dpr, view.activeActorId ?? '', view.activeTargetId ?? '',
+      ...s.heroes.map(h => `${h.id}:${h.hp > 0 ? 1 : 0}`), ...s.enemies.map(e => `${e.id}:${e.absent ? 'a' : e.hp > 0 ? 1 : 0}:${e.shoved?.partnerId ?? ''}`)].join('|');
+  }
+  // Nothing is playing: no stage, timer, shake, fall, placed cue or effect layer that a paint would have to stop.
+  private fieldIdle(): boolean {
+    return !this.stageActive && !this.effectTimers.size && !this.shaking && !this.falling.size && !this.placed.length
+      && this.resolvedActor === undefined && this.unitAnimation.still && !this.effects && !this.healingLayer && !this.songFloor.size && !this.optionalDirty;
   }
   private syncBodies(previous: BattleState | undefined, view: SceneView): void {
     this.paintHolds();
@@ -323,7 +338,7 @@ export class BattleScene extends Phaser.Scene {
   }
   private paint(): void {
     if (!this.view) return;
-    this.optionalDirty = false;
+    this.optionalDirty = false; this.paintedKey = this.paintKey(this.view);
     this.stopEffects(); this.unitAnimation.clear(); this.bodies.clear();
     for (const t of this.idle) t.remove(); this.idle = [];
     // The camera only carries the pixel-ratio zoom; clear any effect so art and DOM targets share one origin.
