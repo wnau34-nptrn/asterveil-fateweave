@@ -540,7 +540,8 @@ main { width: 100%; max-width: 1600px; flex: 1; min-height: 0; display: flex; fl
 #field-targets { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
 #field-statuses { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 .field-unit-info { position: absolute; display: flex; align-items: center; justify-content: center; gap: 2px; pointer-events: none; font-size: 9px; line-height: 11px; color: #f0f5ff; }
-.field-health { position: relative; display: block; width: 100%; max-width: 72px; min-width: 0; height: 12px; flex: 1 1 auto; }
+/* Owner 2026-11-20: shorter field HP bars (max 50px, was 72px) and smaller numbers. */
+.field-health { position: relative; display: block; width: 100%; max-width: 50px; min-width: 0; height: 12px; flex: 1 1 auto; }
 .field-unit-info.has-status .field-health { flex: 0 0 calc(100% - 30px); }
 .field-unit-info .field-statuses { position: absolute; inset: 0; justify-content: space-between; }
 /* Owner 2026-11-18: buff/debuff icons sit in their own band under the HP track (field-layout reserves it). */
