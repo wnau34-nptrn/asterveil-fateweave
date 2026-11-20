@@ -95,6 +95,10 @@ export class BattleScene extends Phaser.Scene {
     return added;
   }
   private queuedAssets = new Set<string>();
+  // Lazy mode: the field became ready; redraw with the real art and let the UI enable Start.
+  private checkField(): void {
+    if (this.lazyAssets && !this.assetsSettled && this.fieldReady) { this.assetsSettled = true; this.optionalDirty = true; this.onReady(); }
+  }
   /** Map prefetch (lazy mode): fetch the team's VFX atlases and the map's unit sheets before a fight starts. */
   prefetch(actions: readonly string[], art: readonly string[]): void {
     if (!this.lazyAssets || !this.ready) return;
@@ -138,7 +142,9 @@ export class BattleScene extends Phaser.Scene {
   }
   preload(): void {
     this.load.image('rift-ruins', artUrl('ruins'));
-    this.load.on('loaderror', (file: Phaser.Loader.File) => { if (this.queuedAssets.has(file.key)) this.failedAssets.add(file.key); });
+    this.load.on('loaderror', (file: Phaser.Loader.File) => { if (this.queuedAssets.has(file.key)) { this.failedAssets.add(file.key); this.checkField(); } });
+    // Each needed texture as it arrives (never the whole queue: slow optional unit animations must not hold Start).
+    this.textures.on('addtexture', () => this.checkField());
     if (this.lazyAssets) return;
     for (const r of allBattleAtlases()) this.load.atlas(r.key, ...r.urls);
     for (const sheet of ALL_SHEETS) this.load.spritesheet(sheetKey(sheet), unitsUrl(sheet), { frameWidth: artCellSize(sheet), frameHeight: artCellSize(sheet) });
@@ -198,8 +204,7 @@ export class BattleScene extends Phaser.Scene {
       for (const key of this.queuedAssets) { if (!this.textures.exists(key)) this.failedAssets.add(key); }
       this.queuedAssets.clear();
     }
-    // Lazy mode: the field became ready; redraw with the real art and let the UI enable Start.
-    if (this.lazyAssets && !this.assetsSettled && this.fieldReady) { this.assetsSettled = true; this.optionalDirty = true; this.onReady(); }
+    this.checkField();
   }
   private bossArt = false;
   private corpseAlpha(id: string): number {
@@ -379,11 +384,12 @@ export class BattleScene extends Phaser.Scene {
     const ratio = unitDisplayRatio(key);
     // Packed animation atlases already face their side (A9 Matriarch, A10 Raider); only the static seed cell is mirrored.
     const pilot = unitKey(key), framed = !!pilot && this.textures.exists(pilot);
-    const sprite = this.add.image(0, 0, framed ? pilot : `battle-${art.sheet}`, framed ? hp <= 0 ? unitDownFrame(key) : 0 : art.frame)
+    // Lazy mode: a still sheet that has not arrived yet draws Phaser's blank texture (never a missing-frame lookup);
+    // the field repaints when it lands, before Start is enabled.
+    const still = `battle-${art.sheet}`, waiting = !framed && !this.textures.exists(still);
+    const sprite = this.add.image(0, 0, framed ? pilot : waiting ? '__DEFAULT' : still, framed ? hp <= 0 ? unitDownFrame(key) : 0 : waiting ? undefined : art.frame)
       .setOrigin(.5, framed ? unitSoleOrigin(key) : actorFootOrigins[key] ?? 1).setDisplaySize(size * (framed ? ratio : staticDisplayRatio(key)), size * (framed ? ratio : staticDisplayRatio(key))).setFlipX(!framed && mirroredArt.has(key));
-    // Lazy mode: a still sheet that has not arrived yet draws nothing (never the missing-texture box); the load's
-    // completion repaints the field before Start is enabled.
-    if (!framed && !this.textures.exists(`battle-${art.sheet}`)) sprite.setVisible(false);
+    if (waiting) sprite.setVisible(false);
     body.add(sprite);
     const nextFrame = framed ? this.add.image(0, 0, pilot, 0)
       .setOrigin(sprite.originX, sprite.originY).setDisplaySize(size * ratio, size * ratio).setFlipX(sprite.flipX).setVisible(false) : undefined;
