@@ -1,5 +1,6 @@
 import type { SongId, BossPhase, IntentDefinition, EnemyTrait, HeroGear, TrioPower, ActionId, BattleEntry, GearSpecial, HeroDefinition, PassiveId, TalentCap, TalentRule, HeroState, EnemyState, BattleEvent, BattleState, Command, EncounterDefinition, Intent, Resolution, TargetOption, TurnSlot, TurnStage } from './types';
 import { SUPPORT_ROLES } from './types';
+import { foeLine, foeLineRows } from './foe-lines';
 
 const living = (state: BattleState, id: string) => [...state.heroes, ...state.enemies].some(a => a.id === id && a.hp > 0);
 const definitions = (data: EncounterDefinition) => [...data.heroes, ...data.enemies];
@@ -151,6 +152,13 @@ export function encounterProblems(data: EncounterDefinition): string[] {
   const summoned = (id: string) => (data.phases ?? []).some(p => [...p.summon ?? [], ...p.hardSummon ?? []].includes(id as never)) || data.intents.some(i => i.summon?.includes(id as never));
   for (const e of data.enemies.filter(x => x.reserve)) if (!summoned(e.id)) problems.push(`${data.id}: reserve ${e.id} is never summoned`);
   if (!data.enemies.some(e => !e.reserve)) problems.push(`${data.id}: no foe on the field`);
+  // Owner 2026-11-20: a boss stands in the centre of its side with at most four escorts (reserves included) and no foe
+  // behind it in its line, so the escorts take the four corners and spear lines stay straight.
+  const boss = data.enemies.find(e => e.boss);
+  if (boss) {
+    if (data.enemies.length > MAX_SIDE) problems.push(`${data.id}: ${data.enemies.length - 1} escorts`);
+    if (boss.row !== 'front' || data.enemies.some(e => e !== boss && foeLine(e.id) === foeLine(boss.id))) problems.push(`${data.id}: a foe in the boss's line`);
+  }
   return problems;
 }
 // Bosses resist control (owner 2026-10-22): a boss (`boss`) whose turn was cancelled is steadfast for its next two rounds,
@@ -240,13 +248,17 @@ function chainReaction(state: BattleState, data: EncounterDefinition, foe: Enemy
   delete foe.corrodedUntil; delete foe.corrodeBonus;
   events.push({ type: 'corrode', sourceId: alchemist.id, targetId: next.id, amount: next.corrodeBonus, text: 'Chain reaction.' });
 }
-// A foe's neighbours (save v52): the nearest standing foe on each side of it in its current row (slot numbers, empty slots skipped).
+// A foe's neighbours (save v52): the nearest standing foe on each side of it in its current row, empty cells skipped. Owner
+// 2026-11-20: "each side" follows the field rows its lines stand in (`foeLineRows`), so the neighbours are the foes drawn
+// next to it (before: slot numbers, which put f1 and f2 together around a middle f3).
 export function foeNeighbours(state: BattleState, data: EncounterDefinition, enemyId: string): EnemyState[] {
-  const row = foeRow(state, data, enemyId); const at = Number(enemyId[1]);
-  const mates = state.enemies.filter(e => e.hp > 0 && e.id !== enemyId && foeRow(state, data, e.id) === row && Number.isFinite(Number(e.id[1])));
-  const left = mates.filter(e => Number(e.id[1]) < at).sort((a, b) => Number(b.id[1]) - Number(a.id[1]))[0];
-  const right = mates.filter(e => Number(e.id[1]) > at).sort((a, b) => Number(a.id[1]) - Number(b.id[1]))[0];
-  return [left, right].filter((e): e is EnemyState => !!e);
+  const row = foeRow(state, data, enemyId); const rows = foeLineRows(data.enemies); const at = rows.get(foeLine(enemyId));
+  if (at === undefined) return [];
+  const mates = state.enemies.filter(e => e.hp > 0 && e.id !== enemyId && foeRow(state, data, e.id) === row && rows.has(foeLine(e.id)));
+  const place = (e: EnemyState) => rows.get(foeLine(e.id))!;
+  const above = mates.filter(e => place(e) < at).sort((a, b) => place(b) - place(a))[0];
+  const below = mates.filter(e => place(e) > at).sort((a, b) => place(a) - place(b))[0];
+  return [above, below].filter((e): e is EnemyState => !!e);
 }
 // Duelist shared mark (tree modifier): allies' hits on a marked foe gain her bonus.
 const sharedMark = (state: BattleState, data: EncounterDefinition, heroId: string): number =>

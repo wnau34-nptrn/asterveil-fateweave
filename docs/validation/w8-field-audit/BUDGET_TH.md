@@ -17,7 +17,7 @@
 | `veil-siege` | 2 (0) | raider, brute | 31.0 MiB / 9.98 MB | 35.3 MiB / 11.43 MB | — |
 | `rear-ambush` | 2 (0) | riftweaver, channeler | 28.9 MiB / 9.09 MB | 33.2 MiB / 10.54 MB | — |
 | `crystal-stampede` | 2 (0) | golem, juggernaut | 30.5 MiB / 9.90 MB | 34.8 MiB / 11.34 MB | โหลด |
-| `rift-warden` | 6 (3) | wisp, crawler, sentinel | 29.4 MiB / 9.53 MB | 33.7 MiB / 10.97 MB | โหลด |
+| `rift-warden` | 5 (2) | wisp, crawler, sentinel | 29.4 MiB / 9.53 MB | 33.7 MiB / 10.97 MB | โหลด |
 | `elite-tusk-chief` | 3 (0) | sprite, tusker, sporepuff | 30.0 MiB / 9.41 MB | 34.3 MiB / 10.86 MB | โหลด |
 | `elite-briar-lord` | 4 (1) | stalker, sporepuff, matriarch | 30.5 MiB / 9.97 MB | 34.8 MiB / 11.41 MB | โหลด |
 | `mini-veil-golem` | 2 (0) | riftweaver, golem | 30.1 MiB / 9.62 MB | 34.4 MiB / 11.07 MB | — |
@@ -35,7 +35,7 @@
 | `rift-host` | 3 (0) | channeler, wisp, crawler | 27.8 MiB / 8.67 MB | 32.1 MiB / 10.11 MB | — |
 | `thorn-host` | 5 (0) | stalker, beetle, sporepuff | 28.9 MiB / 9.02 MB | 33.2 MiB / 10.47 MB | — |
 | `rift-legion` | 5 (0) | wisp, crawler | 25.7 MiB / 8.12 MB | 30.0 MiB / 9.56 MB | — |
-| `world-boss-warden` | 6 (3) | wisp, crawler, sentinel | 29.4 MiB / 9.53 MB | 33.7 MiB / 10.97 MB | โหลด |
+| `world-boss-warden` | 5 (2) | wisp, crawler, sentinel | 29.4 MiB / 9.53 MB | 33.7 MiB / 10.97 MB | โหลด |
 | `wb-kragmor` | 3 (0) | wisp, crawler, kragmor | 31.5 MiB / 10.02 MB | 35.8 MiB / 11.47 MB | โหลด |
 | `wb-valdrakk` | 3 (0) | wisp, valdrakk | 29.8 MiB / 9.66 MB | 34.1 MiB / 11.11 MB | โหลด |
 | `wb-morvane` | 4 (0) | wisp, crawler, morvane | 32.7 MiB / 9.97 MB | 37.0 MiB / 11.42 MB | โหลด |

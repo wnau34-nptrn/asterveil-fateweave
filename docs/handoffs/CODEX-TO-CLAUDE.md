@@ -1,3 +1,11 @@
+## 2026-11-20 — Foe lines: spear-straight rows, centred boss, ≤4 escorts (Opus; claude/review-standing-positions-j1gnf4 → game branch)
+- Owner (vanguard-captain 390px shot, “ตำแหน่งยืนมั่วมาก”): no half rows (spear lines), boss exactly centred, balanced non-boss fields, a boss keeps ≤4 escorts and nobody in b1; “ดำเนินการตามที่แนะนำได้”.
+- `core/battle/foe-lines.ts`: f_n/b_n share a row; boss line middle (3 top, 2 bottom); no boss 1/2/3 lines → mid / top+bottom / 1 top, 3 mid, 2 bottom. `foeNeighbours` follows these rows. `encounterProblems` rejects a boss with >4 escorts or a foe in its line. `bossRole` marks a stripped boss `leader`.
+- `field-layout.ts`: rows by line, boss with nobody behind at the centre of the foes' half, shared rows across sides with an evenly placed middle row (replaces the 2026-11-18 per-side top-row drop).
+- Content: b1→b3 golem (v12, HP 200→190 so the Garran advisor route still wins), captain (v8), briar lord (v12), Valdrakk (v2); warden/World Boss warden (v22/v2) drop b1 and call b2+f3 in both modes; thorn-host, rift-legion, Morvane v2 (neighbour rule).
+- Tests: foe-lines.test (new), field-layout, boss-phases, team-five, world-boss-trio, encounter routes; full Vitest, typecheck, lint, build, `npm run sim` (hard warden blind attack 4%→11%). [Validation](../validation/foe-lines-2026-11-20/README_TH.md). Not owner-viewed in game; Chromium 390px only.
+- Open: hard-mode warden is a little easier (one wisp fewer); World Boss warden's last week (2968) changes composition mid-week.
+
 ## 2026-11-20 — Content version grace + refresh notice (Sonnet; claude/content-version-grace → game branch)
 - Owner (after the 409 “เวอร์ชันเกมไม่ตรงกับเซิร์ฟเวอร์” on 19 Nov: the dev API deploys in minutes, Pages ~40 min later): “ให้เซิร์ฟเวอร์ยอมรับเวอร์ชันก่อนหน้าได้ชั่วคราวระหว่าง deploy แล้ว deploy เสร็จจะมีประกาศให้ทำการ Refresh version ใหม่” (OD-57).
 - API: `contentAccepted`/`graceActive` (`api.ts`), Worker vars `CONTENT_PREVIOUS` + `CONTENT_PREVIOUS_UNTIL`; the 409 names the chain. `cloudflare-dev.yml` step “Work out the content version grace” (`scripts/content-grace.mjs`: live API's own 409, chained, ≤3, 3 h; `[no-grace]`/`no_grace` input turns it off). Page: build writes `version.json`; `update-check.ts` + `update-banner.ts` show “มีเวอร์ชันใหม่พร้อมแล้ว” with refresh/later only when the live build differs.

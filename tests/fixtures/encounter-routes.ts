@@ -64,9 +64,12 @@ export const rearSupport: readonly Move[] = [
 // The scripted boss routes keep the four-hero warden that stood alone until its phase (v19 shape): P02 gave the warden
 // starting guards (f2/b3) and a five-hero reference party, which the advisor tests in tests/encounters.test.ts cover.
 // P05 gave the warden its bark (veilguard); these routes keep the bare warden (tests/p05-boss-bark.test.ts covers the bark).
+// Owner 2026-11-20: a boss has nobody behind it in its line, so the two wisps it calls at 70% stand in b3 and b2 (were b1/b2).
 const wardenAlone: EncounterDefinition = { ...riftWarden, heroes: riftWarden.heroes.slice(0, 4),
-  enemies: riftWarden.enemies.filter(e => !['f2', 'b3', 'f3'].includes(e.id)).map(e => ({ ...e, traits: undefined })), intents: riftWarden.intents.filter(i => !['f2', 'b3', 'f3'].includes(i.sourceId)),
-  phases: riftWarden.phases!.map(p => ({ ...p, hardSummon: undefined })) };
+  enemies: riftWarden.enemies.filter(e => !['f2', 'f3'].includes(e.id)).map(e => ({ ...e, traits: undefined, ...(e.id === 'b3' ? { reserve: true } : {}) }))
+    .sort((a, b) => (a.id === 'b3' ? -1 : 0) - (b.id === 'b3' ? -1 : 0)),
+  intents: riftWarden.intents.filter(i => !['f2', 'f3'].includes(i.sourceId)),
+  phases: riftWarden.phases!.map(p => ({ ...p, summon: p.summon && ['b3', 'b2'], hardSummon: undefined })) };
 export const bossCombo: readonly Move[] = [
   ['tracer', 'mark', 'f1'],
   ['weaver', 'bolt', 'f1'],
@@ -81,7 +84,7 @@ export const bossCombo: readonly Move[] = [
   ['guardian', 'attack', 'f1'],
   ['healer', 'attack', 'f1'],
   ['tracer', 'execute', 'f1'],
-  ['weaver', 'attack', 'b1'],
+  ['weaver', 'attack', 'b3'],
   ['guardian', 'bash', 'f1'],
   ['healer', 'heal', 'healer'],
   ['tracer', 'mark', 'f1'],
@@ -89,7 +92,7 @@ export const bossCombo: readonly Move[] = [
   ['guardian', 'guard', 'weaver'],
   ['healer', 'prayer', 'party'],
   ['tracer', 'execute', 'f1'],
-  ['weaver', 'bolt', 'b1'],
+  ['weaver', 'bolt', 'b3'],
   ['guardian', 'attack', 'f1'],
   ['healer', 'heal', 'guardian'],
   ['tracer', 'mark', 'f1'],
@@ -114,13 +117,13 @@ export const bossSupport: readonly Move[] = [
   ['tracer', 'execute', 'f1'],
   ['weaver', 'attack', 'f1'],
   ['guardian', 'attack', 'f1'],
-  ['healer', 'attack', 'b1'],
+  ['healer', 'attack', 'b3'],
   ['tracer', 'mark', 'f1'],
   ['weaver', 'bolt', 'f1'],
   ['guardian', 'guard', 'tracer'],
   ['healer', 'heal', 'guardian'],
   ['tracer', 'execute', 'f1'],
-  ['weaver', 'attack', 'b1'],
+  ['weaver', 'attack', 'b3'],
   ['guardian', 'attack', 'f1'],
   ['healer', 'prayer', 'party'],
   ['tracer', 'mark', 'f1'],

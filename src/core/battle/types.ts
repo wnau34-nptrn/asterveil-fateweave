@@ -111,7 +111,9 @@ export type EnemySlot = 'f1' | 'f2' | 'b1' | 'b2' | 'f3' | 'b3';
 // `reserve`: a minion that waits off the field until a boss phase summons it (owner 2026-10-22).
 // `court` (P11-05 R2, World Boss Morvane): each standing foe in `by` raises this foe's moves by `percent` (applied to the move
 // before enrage/weaken; the intent carries the total as `court`).
-export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?: boolean; boss?: boolean; reserve?: boolean; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[];
+// `leader` (owner 2026-11-20): a boss fought without boss mechanics (a boss encounter reused as an elite gate) still stands
+// where a boss stands (`foeLineRows`).
+export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?: boolean; boss?: boolean; leader?: boolean; reserve?: boolean; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[];
   court?: { percent: number; by: readonly EnemySlot[] } }
 // Enemy moves aim at a party slot (0-4 in deployment order), not a named hero, so any
 // mercenary in that slot is the target. The resolved hero id is stored on Intent.
