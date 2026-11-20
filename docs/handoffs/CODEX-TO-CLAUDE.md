@@ -1,3 +1,8 @@
+## 2026-11-20 — Perf R11: shorter server retry (Sonnet; perf/r11-server-timeout → game branch)
+- Owner: “เริ่ม R11”. `server-client.ts`: waited requests 3 attempts × 7 s (was 5 × 15 s), same requestId/seq each time; import/chat/report keep old limits; `onReconnecting` hook → shell shows “กำลังเชื่อมต่อใหม่…” at once. Numbers are drafts.
+- Result (Chromium 390px, blackholed command): card 81.5 → 22.3 s, reconnecting note 60.9 → 7.2 s. [Validation](../validation/perf-r11-2026-11-20/README_TH.md). No real device/dev API.
+- Tests: server-client-retry.test (6 new), Vitest all, typecheck, lint, build, Playwright server-play (7). Remaining audit items: none from R1–R11 except owner picks.
+
 ## 2026-11-20 — Perf R9: idle animations off the main thread (Opus; claude/perf-r9 → game branch)
 - Owner: “ต่อ R9 เลย”. Measured idle main-thread time per screen (CPU 4×, 5 s): title 691 ms and map 184 ms came from `logo-glow` (animated `drop-shadow`) and `toast-life` (`visibility` keyframe). Toast keyframe drops `visibility`; the title glow is a second `aria-hidden` logo copy behind with a fixed glow, faded by opacity.
 - Result: title 691 → 6 ms, map 184 → 38 ms per 5 s idle. [Validation](../validation/perf-r9-2026-11-20/README_TH.md) (glow still: fixed 22 px radius fading instead of a growing radius; not owner-viewed).

@@ -81,6 +81,8 @@ export class GameShell {
     private readonly views: { title: HTMLElement; commander: HTMLElement; lobby: HTMLElement; world: HTMLElement; battle: HTMLElement },
     private readonly maps: readonly MapDefinition[] = [home], private readonly server?: ServerClient) {
     const map = home;
+    // R11: the first failed attempt shows "reconnecting…" at once (also during a soft wait, which is otherwise silent for 0.9 s).
+    if (server) server.onReconnecting = () => { if (this.waiting && !this.serverPanel.dataset.problem) { this.serverPanel.innerHTML = '<p class="server-note">กำลังเชื่อมต่อใหม่…</p>'; this.serverPanel.hidden = false; } };
     this.lessons = new LessonGuide(root, () => this.claimCalm(), () => this.updateLessons());
     // P09-02c server play never reads or writes the local save: the account lives on the server.
     if (!server) clearLegacySaves(this.storage); sfx.init(this.storage);
