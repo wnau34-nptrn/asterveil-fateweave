@@ -49,7 +49,10 @@ const g = await call('guest', '/v1/guest', { method: 'POST' });
 assert.equal(g.status, 201);
 const token = g.json.token;
 assert.equal((await call('wrong content', '/v1/state', { token, contentVersion: 'other' })).status, 409);
-assert.deepEqual((await call('session (empty)', '/v1/session', { method: 'POST', token })).json, { lastSeq: 0, view: null });
+// The session answer also carries the server day clock (added with #307); check its shape, not its values.
+const empty = (await call('session (empty)', '/v1/session', { method: 'POST', token })).json;
+assert.deepEqual({ lastSeq: empty.lastSeq, view: empty.view }, { lastSeq: 0, view: null });
+assert.ok(Number.isSafeInteger(empty.clock?.day) && empty.clock.next > empty.clock.now, 'session clock');
 const first = { requestId: rid(), seq: 1, command: { kind: 'createCommander', commander, replace: false } };
 const c1 = await call('createCommander', '/v1/command', { method: 'POST', token, body: first });
 assert.equal(c1.status, 200, c1.text); assert.equal(c1.json.status, 'applied', c1.text);
