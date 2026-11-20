@@ -49,7 +49,9 @@ button:active:not(:disabled) { transform: scale(.97); }
   0% { opacity: 0; transform: translateX(-50%) translateY(10px) scale(.94); }
   7% { opacity: 1; transform: translateX(-50%) translateY(-2px) scale(1.02); }
   11%, 82% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-6px) scale(.98); visibility: hidden; }
+  /* Perf R9: no `visibility` here; it is not compositor-animatable and kept the toast ticking on the main thread every
+     frame. The faded toast already ignores pointers (`pointer-events: none`). */
+  100% { opacity: 0; transform: translateX(-50%) translateY(-6px) scale(.98); }
 }
 .hud-event { font-family: var(--font-heading); font-weight: 600; font-size: 14px; letter-spacing: .01em; backdrop-filter: blur(8px); }
 .hud-event.toast-live { animation: toast-life 4.6s var(--ease-out) both; pointer-events: none; }
@@ -97,9 +99,12 @@ button:active:not(:disabled) { transform: scale(.97); }
 .title-motes i:nth-child(11) { --x: 87%; --s: 3px; --d: 12s; --w: -10s; } .title-motes i:nth-child(12) { --x: 93%; --d: 14s; --w: -1.5s; --dx: 18px; }
 .title-motes i:nth-child(13) { --x: 4%; --s: 5px; --d: 17s; --w: -12s; } .title-motes i:nth-child(14) { --x: 47%; --s: 4px; --d: 15s; --w: -13s; --dx: 24px; }
 /* The logo resolves out of a blur, then glows softly; copy and buttons follow in stages. */
-.title-logo img { animation: logo-in 1.5s var(--ease-out) both, logo-glow 5s ease-in-out 1.6s infinite alternate; }
+.title-logo-art { position: relative; filter: drop-shadow(0 4px 18px #08121fcc); animation: logo-in 1.5s var(--ease-out) both; }
+/* Perf R9: the breathing gold glow is a second copy of the logo behind it with a fixed glow, faded by opacity (runs on
+   the compositor). Animating drop-shadow itself recomputed style and repainted every frame on the title screen. */
+.title-logo-glow { position: absolute; inset: 0; filter: drop-shadow(0 0 22px #f2d59666); opacity: 0; animation: logo-glow 5s ease-in-out 1.6s infinite alternate; }
 @keyframes logo-in { from { opacity: 0; transform: scale(1.12); filter: blur(10px) drop-shadow(0 0 0 #08121f00); } to { opacity: 1; transform: scale(1); filter: blur(0) drop-shadow(0 4px 18px #08121fcc); } }
-@keyframes logo-glow { from { filter: drop-shadow(0 4px 18px #08121fcc) drop-shadow(0 0 0 #f2d59600); } to { filter: drop-shadow(0 4px 18px #08121fcc) drop-shadow(0 0 22px #f2d59666); } }
+@keyframes logo-glow { from { opacity: 0; } to { opacity: 1; } }
 
 /* ================= P2: commander creation ================= */
 /* No boxes: the camp painting fills the screen; the banner hangs in the scene and the controls float over it. */
@@ -172,6 +177,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 
 @media (prefers-reduced-motion: reduce) {
   .title-bg, .title-motes i, .title-logo img, .commander-stage .commander-banner { animation: none !important; }
+  .title-logo-glow { display: none; }
   .title-motes { display: none; }
 }
 

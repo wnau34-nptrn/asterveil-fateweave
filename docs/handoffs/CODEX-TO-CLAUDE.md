@@ -1,3 +1,8 @@
+## 2026-11-20 — Perf R9: idle animations off the main thread (Opus; claude/perf-r9 → game branch)
+- Owner: “ต่อ R9 เลย”. Measured idle main-thread time per screen (CPU 4×, 5 s): title 691 ms and map 184 ms came from `logo-glow` (animated `drop-shadow`) and `toast-life` (`visibility` keyframe). Toast keyframe drops `visibility`; the title glow is a second `aria-hidden` logo copy behind with a fixed glow, faded by opacity.
+- Result: title 691 → 6 ms, map 184 → 38 ms per 5 s idle. [Validation](../validation/perf-r9-2026-11-20/README_TH.md) (glow still: fixed 22 px radius fading instead of a growing radius; not owner-viewed).
+- Tests: Vitest all, typecheck, lint, build, Playwright world/keyboard/update-banner/lessons/ui-shots (117).
+
 ## 2026-11-20 — Perf R8: asset-cache service worker (Opus; claude/perf-r8 → game branch)
 - Owner: “ต่อ R8 เลย”. Build writes `sw.js` (vite plugin `fateweave-service-worker`: `src/platform/service-worker.js` + build id + SHA-256 manifest of `assets/`, music excluded); cache-first by path+hash, prunes on activate, never touches pages/version.json/API/music. Registered in production only, not under automation unless `?sw=1`; `?sw=off` removes it and its cache. No file renames.
 - Result (preview build, 4G, CPU 4×, revisit): warm HTTP cache 40 → 11 network requests; cleared HTTP cache 9.0 → 2.3–4.4 MB. [Validation](../validation/perf-r8-2026-11-20/README_TH.md). Not measured on real Pages/Safari.
