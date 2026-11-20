@@ -84,7 +84,7 @@ jobs:
       - name: Apply D1 migrations
         run: $WRANGLER d1 migrations apply DB --remote --config cloudflare/wrangler.deploy.json 2>&1 | grep -vE '@|Account' | tail -n 15
       # Deploy grace (owner 2026-11-20, docs/design/p09/CONTENT_GRACE_TH.md): the game page goes live ~40 minutes after this
-      # deploy, so for 3 hours the API also takes the versions it ran before. `[no-grace]` in the commit message or the
+      # deploy, so for 3 hours the API also takes the versions it ran before. `[no-grace]` in the commit subject or the
       # `no_grace` input turns it off for a change old pages must not run against.
       - name: Work out the content version grace
         env:
@@ -92,7 +92,9 @@ jobs:
           COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
           NO_GRACE_INPUT: ${{ inputs.no_grace }}
         run: |
-          off=on; case "$COMMIT_MESSAGE" in *'[no-grace]'*) off=off;; esac; [ "$NO_GRACE_INPUT" = "true" ] && off=off
+          # Only the commit's first line (the subject) can switch it off; a body that merely mentions the marker must not.
+          subject=${COMMIT_MESSAGE%%$'\n'*}
+          off=on; case "$subject" in *'[no-grace]'*) off=off;; esac; [ "$NO_GRACE_INPUT" = "true" ] && off=off
           node scripts/content-grace.mjs "$DEV_API" "$CONTENT_VERSION" "$off" | tee /tmp/grace.env >> "$GITHUB_ENV"
       - name: Deploy
         id: deploy
