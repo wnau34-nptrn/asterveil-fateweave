@@ -1,3 +1,8 @@
+## 2026-11-20 — Perf R6+R7: lighter battles (Opus; claude/perf-r6-r7 → game branch)
+- Owner: “ต่อ R6 กับ R7 เลย”. `battle-ui.ts` `set()` via `setHtml`, focus restored only when replaced, backdrop measured once per frame; `BattleScene.sync()` skips the full `paint()` when the field is idle (`fieldIdle`, `UnitAnimation.still`) and `paintKey` is unchanged; `GameShell.local()` passes `battleMemo` (R7).
+- Result (Chromium 390px, CPU 4×, SwiftShader, 3 wins in a row vs after R1): FPS 20.5–23.9 → 23.2–26.4, long tasks per fight 2.1–13.8 s → 0.9–7.3 s. [Validation](../validation/perf-r6-r7-2026-11-20/README_TH.md).
+- Tests: Vitest all, typecheck, lint, build, Playwright 16 battle specs (132). No real device. Remaining audit items: R8 hashed asset names/SW cache, R9 idle CSS animations, R10 small portraits, R11 shorter retry.
+
 ## 2026-11-20 — Perf R5: server-play steps at the player's pace (Opus; claude/perf-r5 → game branch)
 - Owner: “ต่อ R5 เลย”. `game-shell.ts` `guesses` replaces the one-step `nextMove`: up to 3 steps shown at once (each guessed on the device from the previous guess), sent one by one in order; a confirmed `moved` keeps the token on the furthest guess, any other answer drops the rest and shows the server state. No API/protocol/rule/save change.
 - Result (local Worker/DO + 300 ms delay, CPU 4×): taps every 200 ms 7/8 → 8/8 sent, press → visible step 24–286 → 12–24 ms. [Validation](../validation/perf-r5-2026-11-20/README_TH.md). Accepted risk: a fight on the first step snaps the token back from up to 3 tiles ahead (`MAX_AHEAD`).
