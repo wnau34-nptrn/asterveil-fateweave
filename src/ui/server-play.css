@@ -145,3 +145,10 @@
 #lobby-view .lobby-chat { position: absolute; }
 #lobby-view .lobby-chat .chat-badge { position: absolute; top: -6px; right: -6px; }
 .chat-badge[hidden] { display: none; }
+
+/* A newer game version is live (src/ui/update-banner.ts): a slim glass bar over the top of the frame, above the camp/map HUD. */
+#update-banner { position: absolute; z-index: 60; top: max(8px, var(--safe-top, 0px)); left: max(10px, env(safe-area-inset-left)); right: max(10px, env(safe-area-inset-right)); display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 8px 10px; border-radius: 14px; border: 1px solid #f2d59666; background: #0a192bf0; color: #eef4fa; box-shadow: 0 6px 20px #0008; max-width: 460px; margin: 0 auto; }
+#update-banner[hidden] { display: none; }
+#update-banner p { margin: 0; display: grid; gap: 2px; font-size: 12px; line-height: 1.35; min-width: 0; } #update-banner b { color: #f2d596; font-size: 13px; }
+#update-banner div { display: flex; gap: 6px; flex: none; } #update-banner button { min-height: 44px; min-width: 64px; padding: 0 10px; font-size: 13px; }
