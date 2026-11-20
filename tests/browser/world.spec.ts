@@ -618,7 +618,7 @@ test('Garran (spear) fights from the front slot: brace strikes a foe then braces
   await expect(page.locator('#action-brace')).toContainText('ตั้งทวน'); await expect(page.locator('#action-pierce')).toContainText('แทงทะลวง');
   await page.locator('#action-brace').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('แทงสวนกลับ 14');
   await page.locator('[data-ui=skill-close]').click(); await page.screenshot({ path: info.outputPath('garran-battle.png') });
-  await expect(page.locator('#hero-garran .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
+  await expect(page.locator('#hero-garran .portrait img')).toHaveAttribute('src', /portraits_mercs_half\.webp\?v=[0-9a-f]{8}$/);
   await page.locator('#target-f1').click(); await finishPlayback(page);
   expect((await saved(page)).battle!.commands.map(c => [c.action, c.targetId])).toEqual([['attack', 'f1'], ['attack', 'f1'], ['brace', 'f1']]);
   expect(issues).toEqual([]);
@@ -680,7 +680,7 @@ test('Sefa (scout) steps aside: the announced slash at her misses and the intent
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
   await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-f1').click(); await finishPlayback(page);
   await expect(page.locator('#hero-sefa')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('#hero-sefa .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
+  await expect(page.locator('#hero-sefa .portrait img')).toHaveAttribute('src', /portraits_mercs_half\.webp\?v=[0-9a-f]{8}$/);
   await page.locator('#action-ambush').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('ยังไม่ได้ลงมือในรอบนี้');
   await page.locator('#action-evade').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('จะพลาดทั้งหมด');
   // Save v58: the shadow step hits a foe first, then dodges.
@@ -708,7 +708,7 @@ test('Brann (warden) challenges: the announced hit and the forecast turn to him,
     await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-f1').click(); await finishPlayback(page);
   }
   await expect(page.locator('#hero-brann')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('#hero-brann .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
+  await expect(page.locator('#hero-brann .portrait img')).toHaveAttribute('src', /portraits_mercs_half\.webp\?v=[0-9a-f]{8}$/);
   await page.locator('#action-taunt').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('รับเบาลง 35%');
   await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-brann').click(); await finishPlayback(page);
   await expect(page.locator('#intent h2')).toContainText('แบรนน์');
@@ -729,7 +729,7 @@ test('Lio (bard) plays a song of valor: it stays on his card and the next ally h
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
   await page.locator('#action-attack').click();await page.locator('#skill-details').click(); await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-f1').click(); await finishPlayback(page);
   await expect(page.locator('#hero-lio')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('#hero-lio .portrait img')).toHaveAttribute('src', /portraits_mercs\.webp$/);
+  await expect(page.locator('#hero-lio .portrait img')).toHaveAttribute('src', /portraits_mercs_half\.webp\?v=[0-9a-f]{8}$/);
   await page.locator('#action-mend').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('เมื่อเริ่มแต่ละรอบใหม่');
   await page.locator('#action-valor').click();await page.locator('#skill-details').click(); await expect(page.locator('#skill-popover')).toContainText('+4');
   await page.locator('[data-ui=skill-close]').click(); await page.locator('#target-lio').click(); await finishPlayback(page);
@@ -750,7 +750,7 @@ test('new Veil Frontier foes fight with their own art: Mycon and the elite Thorn
   const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
   await page.goto('./'); await page.locator('#continue').click(); await page.locator('#start').click();
   await expect(page.locator('[data-enemy=f1]')).toContainText('ราชินีหนาม'); await expect(page.locator('[data-enemy=b1]')).toContainText('เห็ดหมอผีกลวง');
-  await expect(page.locator('[data-enemy=f1] .portrait img')).toHaveAttribute('src', /portraits_foes\.webp$/);
+  await expect(page.locator('[data-enemy=f1] .portrait img')).toHaveAttribute('src', /portraits_foes_half\.webp\?v=[0-9a-f]{8}$/);
   await expect(page.locator('[data-enemy=f1] .portrait')).toHaveAttribute('data-actor', 'foe_matriarch');
   await expect(page.locator('#intent')).toContainText('คำสาปสปอร์');
   await page.screenshot({ path: info.outputPath('foes-thicket.png') });

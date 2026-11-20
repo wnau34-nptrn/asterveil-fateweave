@@ -88,7 +88,7 @@ export class StoryUI {
     this.root.dataset.speaker = p.speaker; this.root.dataset.scene = p.scene;
     this.root.style.setProperty('--story-bg', `url(${storyArt(`story_${p.scene}`)})`);
     // Vargoth stands full-figure on the painted scene; the heroes speak from their portraits.
-    const figure = p.speaker === 'vargoth' ? `<img class="story-vargoth" src="${storyArt('vargoth_full')}" alt="">` : who ? portrait(who.art) : '';
+    const figure = p.speaker === 'vargoth' ? `<img class="story-vargoth" src="${storyArt('vargoth_full')}" alt="">` : who ? portrait(who.art, true) : '';
     const face = p.speaker === 'vargoth' ? `<span class="story-bust" aria-hidden="true" style="background-image:url(${storyArt('vargoth_bust')})"></span>` : '';
     this.root.innerHTML = `${figure ? `<div class="story-figure" aria-hidden="true">${figure}</div>` : ''}
       <div class="story-card">

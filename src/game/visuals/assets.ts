@@ -1,4 +1,5 @@
 import worldBossStills from './world-boss-stills.json';
+import portraitsHalf from './portraits-half.json';
 import type { EncounterDefinition } from '../../core/battle/types';
 
 // Each actor's full-body frame and portrait live in a 2-column atlas (512 px cells; World Boss stills 256 px):
@@ -61,6 +62,13 @@ const ART_REV: Partial<Record<ArtName, string>> = { units: '6263840f', units_wor
 export const artUrl = (name: ArtName): string => `${import.meta.env.BASE_URL}assets/art/${name}.webp${ART_REV[name] ? `?v=${ART_REV[name]}` : ''}`;
 export const unitsUrl = (sheet: ArtSheet): string => artUrl(sheet === 'units' ? 'units' : `units_${sheet}`);
 export const portraitsUrl = (sheet: ArtSheet): string => artUrl(sheet === 'units' ? 'portraits' : `portraits_${sheet}`);
+// Perf audit R10: half-size portrait atlases (256 px cells) for every portrait shown at up to ~84 CSS px; the 512 px
+// masters stay for the story scene's large figure. Rebuild with `scripts/portraits-half.py` (writes the revisions).
+type HalfName = keyof typeof portraitsHalf;
+export const portraitsHalfUrl = (sheet: ArtSheet): string | undefined => {
+  const name = (sheet === 'units' ? 'portraits' : `portraits_${sheet}`) as HalfName;
+  return portraitsHalf[name] ? `${import.meta.env.BASE_URL}assets/art/${name}_half.webp?v=${portraitsHalf[name]}` : undefined;
+};
 
 // Lobby camp poses (ART-UI-LOBBY-001): 3 columns (sit, cheer, idle_alt) of 512 px frames, one row per
 // character. Every frame faces right with soles at y=496 (sitting frames include their log).
