@@ -317,7 +317,7 @@ export class GameShell {
       : offer ? '<button type="button" id="import-save" data-title="import" class="primary" aria-describedby="title-import-note">นำเข้าเซฟเดิม <span aria-hidden="true">→</span></button>'
         : '<button type="button" id="new-game" data-title="new" class="primary">เริ่มเกม <span aria-hidden="true">→</span></button>';
     this.views.title.innerHTML = `<div class="title-stage" aria-hidden="true"><div class="title-bg"></div><div class="title-motes">${'<i></i>'.repeat(14)}</div></div>
-      <h1 class="title-logo"><img src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1>
+      <h1 class="title-logo"><img class="title-logo-glow" src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="" aria-hidden="true" width="700" height="224"><img class="title-logo-art" src="${import.meta.env.BASE_URL}assets/title/logo.svg" alt="Asterveil · Fateweave" width="700" height="224"></h1>
       <details id="title-setup" class="title-setup">
         <summary id="title-setup-toggle" aria-controls="title-setup-panel">Setup <span aria-hidden="true">×</span></summary>
         <div id="title-setup-panel" class="title-setup-panel">
