@@ -40,21 +40,22 @@ const softened = (xs: readonly IntentDefinition[], ids: readonly EnemySlot[], pe
 
 // P02: the reference party of five-foe fields (the four plus Corin, the Saint, in front).
 const fiveHeroes = [...veilSiege.heroes, BATCH_ONE.find(h => h.id === 'metta')!];
-// Boss phases (owner 2026-10-22): at 70% the warden calls two rift wisps from the back row (hard mode: also a second
-// shard crawler, if there is room); at 35% it charges, then strikes with a cataclysm and rift waves that hit the whole
+// Boss phases (owner 2026-10-22): at 70% the warden calls the rift (owner 2026-11-20, a boss keeps at most four escorts
+// and nobody behind it: a rift wisp b2 and a second shard crawler f3, both modes, if there is room; was wisps b1+b2, crawler
+// f3 in hard mode); at 35% it charges, then strikes with a cataclysm and rift waves that hit the whole
 // party. P02 (owner 2026-10-31): the warden no longer stands alone at the start: a shard crawler (f2) and a rift wisp
 // (b3) guard it from round 1, so the full field reaches five when it calls the rift (draft). P05: the warden wears its bark
 // and its wisps hit 70% as hard (their chip cost every style the same ~170 HP; casual rush first tries lost the warden 18%).
-const wardenWisps = foes(10, [['b1', SPECIES.riftWisp, { reserve: true }], ['b2', SPECIES.riftWisp, { reserve: true }], ['f2', SPECIES.shardCrawler], ['b3', SPECIES.riftWisp], ['f3', SPECIES.shardCrawler, { reserve: true }]]);
+const wardenWisps = foes(10, [['b2', SPECIES.riftWisp, { reserve: true }], ['f2', SPECIES.shardCrawler], ['b3', SPECIES.riftWisp], ['f3', SPECIES.shardCrawler, { reserve: true }]]);
 // P11-04: the World Boss copy's HP (draft; tests/probe/p1104-world-boss.test.ts).
 export const WORLD_BOSS_HP = 2400;
 export const riftWarden: EncounterDefinition = {
-  ...veilSiege, heroes: fiveHeroes, id: 'rift-warden', version: 21, level: 10, name: 'ศึกผู้คุมรอยแยก',
-  phases: [{ sourceId: 'f1', below: 70, summon: ['b1', 'b2'], hardSummon: ['f3'], name: 'Call the Rift' }, { sourceId: 'f1', below: 35, name: 'Rift Awakening' }],
+  ...veilSiege, heroes: fiveHeroes, id: 'rift-warden', version: 22, level: 10, name: 'ศึกผู้คุมรอยแยก',
+  phases: [{ sourceId: 'f1', below: 70, summon: ['b2', 'f3'], name: 'Call the Rift' }, { sourceId: 'f1', below: 35, name: 'Rift Awakening' }],
   rules: barkRules,
   // The Veilbound Sentinel, an ancient gate guardian cracked by the rift (mini boss art: gold and violet).
   enemies: [...wardenWisps.enemies, { id: 'f1', row: 'front', large: true, boss: true, speed: 70, name: 'Rift Warden', displayName: 'ผู้คุมรอยแยก', maxHp: 350, color: 0xd9bf86, art: 'foe_sentinel', traits: ['veilguard'] }],
-  intents: [...softened(wardenWisps.intents, ['b1', 'b2', 'b3'], 70),
+  intents: [...softened(wardenWisps.intents, ['b2', 'b3'], 70),
     { sourceId: 'f1', targetSlot: 1, name: 'Crushing Blow', damage: 29, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 2, name: 'Rift Bolt', damage: 25, kind: 'energy' },
     { sourceId: 'f1', targetSlot: 0, name: 'Crushing Blow', damage: 33, kind: 'physical', unstoppable: true },
@@ -175,9 +176,9 @@ export const eliteTuskChief: EncounterDefinition = {
 // Boss phase (owner 2026-10-22): at 50% the lord rages, gathers thorns, then lashes the whole party with a thorn
 // tempest (hard mode: a second spore puff joins). P05 (draft): the lord wears its bark and its own moves hit ~10% harder,
 // the stalker's pounce ~20% softer, so blind attacks no longer win the forest boss and the map 3 gate most of the time.
-const lordSpore = foes(8, [['b1', SPECIES.sporePuff], ['b2', SPECIES.sporePuff, { reserve: true }]]);
+const lordSpore = foes(8, [['b3', SPECIES.sporePuff], ['b2', SPECIES.sporePuff, { reserve: true }]]);
 export const eliteBriarLord: EncounterDefinition = {
-  ...veilSiege, id: 'elite-briar-lord', version: 11, level: 8, name: 'เจ้าป่าหนาม',
+  ...veilSiege, id: 'elite-briar-lord', version: 12, level: 8, name: 'เจ้าป่าหนาม',
   phases: [{ sourceId: 'f1', below: 50, hardSummon: ['b2'], name: 'Thorn Rage' }],
   rules: barkRules,
   enemies: [...lordSpore.enemies,
@@ -203,20 +204,22 @@ export const eliteBriarLord: EncounterDefinition = {
 // Mini-boss (3B): a stone golem guarding the scar's side pocket with a rift weaver. Optional, but beating it is one of
 // the rift seal's three objectives. Physical golem, energy weaver. P05-04 (v11): hard mode keeps its bark (traits merge).
 export const miniVeilGolem: EncounterDefinition = {
-  ...veilSiege, rules: barkRules, id: 'mini-veil-golem', version: 11, level: 9, name: 'ยักษ์หินแห่งรอยแผล',
+  ...veilSiege, rules: barkRules, id: 'mini-veil-golem', version: 12, level: 9, name: 'ยักษ์หินแห่งรอยแผล',
   enemies: [
-    { id: 'b1', row: 'back', speed: 105, name: 'Rift Weaver', displayName: 'ผู้ถักรอยแยก', maxHp: 80, color: 0x8a6cc7, art: 'foe_riftweaver' },
-    { id: 'f1', row: 'front', large: true, speed: 65, boss: true, name: 'Veil Golem', displayName: 'ยักษ์หินรอยแยก', maxHp: 200, color: 0x7d8a96, art: 'foe_golem', traits: ['veilguard'] },
+    { id: 'b3', row: 'back', speed: 105, name: 'Rift Weaver', displayName: 'ผู้ถักรอยแยก', maxHp: 80, color: 0x8a6cc7, art: 'foe_riftweaver' },
+    // Owner 2026-11-20: the weaver moved from behind the golem (b1) to b3, so a spear's pierce on the golem no longer runs
+    // on to it; 200 → 190 HP keeps the spear-for-guardian advisor route winning (tests/encounters.test.ts).
+    { id: 'f1', row: 'front', large: true, speed: 65, boss: true, name: 'Veil Golem', displayName: 'ยักษ์หินรอยแยก', maxHp: 190, color: 0x7d8a96, art: 'foe_golem', traits: ['veilguard'] },
   ],
   intents: softened([
-    { sourceId: 'b1', targetSlot: 2, name: 'Rift Needle', damage: 18, kind: 'energy' },
+    { sourceId: 'b3', targetSlot: 2, name: 'Rift Needle', damage: 18, kind: 'energy' },
     { sourceId: 'f1', targetSlot: 0, name: 'Stone Fist', damage: 22, kind: 'physical' },
-    { sourceId: 'b1', targetSlot: 3, name: 'Rift Needle', damage: 18, kind: 'energy' },
+    { sourceId: 'b3', targetSlot: 3, name: 'Rift Needle', damage: 18, kind: 'energy' },
     // Signature: a quake that lands on the front line hardest (physical: Guard or Bash answer it).
     { sourceId: 'f1', targetSlot: 1, name: 'Veil Quake', damage: 30, kind: 'physical' },
-    { sourceId: 'b1', targetSlot: 2, name: 'Rift Needle', damage: 19, kind: 'energy' },
+    { sourceId: 'b3', targetSlot: 2, name: 'Rift Needle', damage: 19, kind: 'energy' },
     { sourceId: 'f1', targetSlot: 0, name: 'Stone Fist', damage: 22, kind: 'physical' },
-  ], ['b1'], 50).map(m => (m.sourceId === 'f1' ? { ...m, damage: Math.round(m.damage * 1.8) } : m)),
+  ], ['b3'], 50).map(m => (m.sourceId === 'f1' ? { ...m, damage: Math.round(m.damage * 1.8) } : m)),
 };
 
 // Map 1 boss (chapters, draft): the captain of Vargoth's vanguard holds the fort gate. One signature hit per cycle
@@ -226,19 +229,19 @@ export const miniVeilGolem: EncounterDefinition = {
 const captainGuard = foes(3, [['f2', SPECIES.vargothGuard]]);
 const captainHunter = { id: 'b2', row: 'back', reserve: true, speed: 110, name: 'Vargoth Hunter', displayName: 'นักล่าเผ่าอสูร', maxHp: 60, color: 0xee80bd, art: 'foe_hunter' } as const;
 export const vanguardCaptain: EncounterDefinition = {
-  ...veilSiege, id: 'vanguard-captain', version: 7, level: 3, name: 'หัวหน้ากองหน้าของวาร์กอธ',
+  ...veilSiege, id: 'vanguard-captain', version: 8, level: 3, name: 'หัวหน้ากองหน้าของวาร์กอธ',
   phases: [{ sourceId: 'f1', below: 60, summon: ['b2'], name: 'Call the Hunt' }],
   enemies: [...captainGuard.enemies, captainHunter,
-    { id: 'b1', row: 'back', speed: 110, name: 'Vargoth Hunter', displayName: 'นักล่าเผ่าอสูร', maxHp: 60, color: 0xee80bd, art: 'foe_hunter' },
+    { id: 'b3', row: 'back', speed: 110, name: 'Vargoth Hunter', displayName: 'นักล่าเผ่าอสูร', maxHp: 60, color: 0xee80bd, art: 'foe_hunter' },
     { id: 'f1', row: 'front', large: true, speed: 70, boss: true, name: 'Vanguard Captain', displayName: 'หัวหน้ากองหน้า', maxHp: 170, color: 0x9785f2, art: 'foe_captain' },
   ],
   intents: [...captainGuard.intents,
-    { sourceId: 'b1', targetSlot: 2, name: 'Raking Slash', damage: 11, kind: 'physical' },
+    { sourceId: 'b3', targetSlot: 2, name: 'Raking Slash', damage: 11, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 1, name: 'Crushing Blow', damage: 16, kind: 'physical' },
-    { sourceId: 'b1', targetSlot: 3, name: 'Shadow Knife', damage: 12, kind: 'energy' },
+    { sourceId: 'b3', targetSlot: 3, name: 'Shadow Knife', damage: 12, kind: 'energy' },
     // Signature: the captain's war cry, an energy blast on the front line (Ward answers it, Bash cannot).
     { sourceId: 'f1', targetSlot: 0, name: 'War Cry', damage: 22, kind: 'energy', unstoppable: true },
-    { sourceId: 'b1', targetSlot: 1, name: 'Raking Slash', damage: 11, kind: 'physical' },
+    { sourceId: 'b3', targetSlot: 1, name: 'Raking Slash', damage: 11, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 2, name: 'Crushing Blow', damage: 16, kind: 'physical' },
     { sourceId: 'b2', targetSlot: 3, name: 'Shadow Knife', damage: 12, kind: 'energy' },
     { sourceId: 'b2', targetSlot: 1, name: 'Raking Slash', damage: 11, kind: 'physical' },
@@ -280,16 +283,16 @@ const fifth = (set: Pick<EncounterDefinition, 'enemies' | 'intents'>): Pick<Enco
   return { ...set, intents: set.intents.map((i, n) => n === first ? { ...i, targetSlot: 4 } : i) };
 };
 // Map 2 at Lv5: a thorn host, three front.
-export const thornHost: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes, id: 'thorn-host', version: 1, level: 5, name: 'ทัพหนามป่าลึก',
+export const thornHost: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes, id: 'thorn-host', version: 2, level: 5, name: 'ทัพหนามป่าลึก',
   ...fifth(foes(5, [['f1', S.thornBeetle], ['f2', S.stalker], ['f3', S.thornBeetle], ['b1', S.sporePuff], ['b2', S.sporePuff]])) };
 // Map 3 at Lv8: a rift legion, three back.
-export const riftLegion: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes, id: 'rift-legion', version: 1, level: 8, name: 'กองทัพวิญญาณรอยแยก',
+export const riftLegion: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes, id: 'rift-legion', version: 2, level: 8, name: 'กองทัพวิญญาณรอยแยก',
   ...fifth(foes(8, [['f1', S.shardCrawler], ['f2', S.shardCrawler], ['b1', S.riftWisp], ['b2', S.riftWisp], ['b3', S.riftWisp]])) };
 
 // P11-04 World Boss (draft): the rift warden's field with a warden that cannot fall inside an attempt's eight rounds, so
 // every attempt counts the damage it lands (the warden's own phases still come at 70% / 35% of this copy's HP).
 export const worldBossWarden: EncounterDefinition = {
-  ...riftWarden, id: 'world-boss-warden', version: 1, name: 'บอสโลก: ผู้คุมรอยแยก',
+  ...riftWarden, id: 'world-boss-warden', version: 2, name: 'บอสโลก: ผู้คุมรอยแยก',
   enemies: riftWarden.enemies.map(e => e.id === 'f1' ? { ...e, maxHp: WORLD_BOSS_HP } : e),
 };
 
@@ -318,9 +321,9 @@ export const wbKragmor: EncounterDefinition = {
 
 // Valdrakk, the Worldshard Beast: fast (SPD 125), energy gusts and a breakable wing charge (R1): Bash/Sigil that cancels it
 // staggers the dive that follows; otherwise the dive strikes the whole party (Ward/Halo/healing answer it).
-const valdAdds = foes(10, [['b1', SPECIES.riftWisp], ['b2', SPECIES.riftWisp]]);
+const valdAdds = foes(10, [['b3', SPECIES.riftWisp], ['b2', SPECIES.riftWisp]]);
 export const wbValdrakk: EncounterDefinition = {
-  ...riftWarden, id: 'wb-valdrakk', version: 1, name: 'บอสโลก: วัลดรัค',
+  ...riftWarden, id: 'wb-valdrakk', version: 2, name: 'บอสโลก: วัลดรัค',
   phases: [{ sourceId: 'f1', below: 70, name: 'Sky Rend' }],
   enemies: [...valdAdds.enemies, boss('Valdrakk', 'วัลดรัค', 125, { art: 'foe_valdrakk' })],
   intents: [...valdAdds.intents,
@@ -337,7 +340,7 @@ export const wbValdrakk: EncounterDefinition = {
 const COURT = ['f2', 'f3', 'b2'] as const;
 const court = foes(10, [['f2', SPECIES.shardCrawler], ['f3', SPECIES.shardCrawler], ['b2', SPECIES.riftWisp]]);
 export const wbMorvane: EncounterDefinition = {
-  ...riftWarden, id: 'wb-morvane', version: 1, name: 'บอสโลก: มอร์เวน',
+  ...riftWarden, id: 'wb-morvane', version: 2, name: 'บอสโลก: มอร์เวน',
   phases: [{ sourceId: 'f1', below: 70, name: 'Severed Crown' }],
   enemies: [...court.enemies, boss('Morvane', 'มอร์เวน', 80, { court: { percent: 10, by: COURT }, art: 'foe_morvane' })],
   intents: [...court.intents.map(m => ({ ...m, damage: Math.round(m.damage * 0.7) })),

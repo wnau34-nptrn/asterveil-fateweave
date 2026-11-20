@@ -704,7 +704,7 @@ export function bossRole(data: EncounterDefinition, kind: BattleKind, map: MapDe
   if (kind === 'boss' || !data.enemies.some(e => e.boss)) return data;
   const mini = kind === 'elite' && miniBoss(map, source);
   return { ...data, phases: undefined, intents: data.intents.map(i => i.unstoppable ? { ...i, unstoppable: false } : i),
-    enemies: mini ? data.enemies : data.enemies.map(e => e.boss ? { ...e, boss: false } : e) };
+    enemies: mini ? data.enemies : data.enemies.map(e => e.boss ? { ...e, boss: false, leader: true } : e) };
 }
 export function battleData(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): EncounterDefinition | undefined {
   const base = state.battle && lookup(state.battle.encounterId);

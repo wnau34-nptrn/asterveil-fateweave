@@ -80,15 +80,18 @@ describe('five a side in the resolver', () => {
     expect(enemyIntent(s, d, 'b3', 1)!.targetId).toBe('mira');
   });
   it('a boss phase summons only into room: five standing or a full row leaves the reserve waiting', () => {
-    // The warden with its front guard only (its P02 back guard b3 and hard-mode f3 left out).
-    const alone = { ...riftWarden, enemies: riftWarden.enemies.filter(e => !['b3', 'f3'].includes(e.id)), intents: riftWarden.intents.filter(i => !['b3', 'f3'].includes(i.sourceId)), phases: riftWarden.phases!.map(p => ({ ...p, hardSummon: undefined })) };
+    // The warden with its front guard only (its P02 back guard b3 and f3 left out) and its pre-2026-11-20 wisp b1. Since the
+    // owner's 2026-11-20 rule (a boss keeps at most four escorts, nobody behind it) real content never fills the field, but
+    // the resolver still guards it.
+    const wisp = foes(10, [['b1', SPECIES.riftWisp, { reserve: true }]]);
+    const alone = { ...riftWarden, enemies: [...wisp.enemies, ...riftWarden.enemies.filter(e => !['b3', 'f3'].includes(e.id))], intents: [...wisp.intents, ...riftWarden.intents.filter(i => !['b3', 'f3'].includes(i.sourceId))], phases: riftWarden.phases!.map(p => ({ ...p, summon: ['b1', 'b2'] as const, hardSummon: undefined })) };
     const roomy = withParty(alone, five);
     const crowd: EncounterDefinition = { ...roomy, enemies: [...roomy.enemies, ...foes(10, [['f3', SPECIES.shardCrawler], ['b3', SPECIES.riftWisp]]).enemies],
       intents: [...roomy.intents, ...foes(10, [['f3', SPECIES.shardCrawler], ['b3', SPECIES.riftWisp]]).intents],
       phases: [{ sourceId: 'f1', below: 70, summon: ['b1', 'b2'], name: 'Call the Rift' }] };
     // f1 (the boss, below its threshold and fastest) f2 f3 b3 stand: the phase calls b1 and b2 but only one fits.
     const crowdData = { ...crowd, enemies: crowd.enemies.map(e => e.id === 'f1' ? { ...e, speed: 999 } : e) };
-    expect(encounterProblems(crowdData)).toEqual([]);
+    expect(encounterProblems(crowdData)).toEqual([`${crowd.id}: 5 escorts`, `${crowd.id}: a foe in the boss's line`]);
     const entryFoe = (data: EncounterDefinition) => ({ ...data, enemies: data.enemies.map(e => e.id === 'f1' ? { ...e, maxHp: 1000 } : e) });
     const low = entryFoe(crowdData); const s = createBattle({ ...low, phases: [{ sourceId: 'f1', below: 100, summon: ['b1', 'b2'], name: 'Call the Rift' }] });
     expect(s.enemies.filter(e => e.hp > 0)).toHaveLength(5);

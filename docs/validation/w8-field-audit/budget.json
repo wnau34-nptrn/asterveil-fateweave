@@ -170,8 +170,8 @@
   },
   {
    "id": "rift-warden",
-   "foes": 6,
-   "reserves": 3,
+   "foes": 5,
+   "reserves": 2,
    "foeSheets": [
     "wisp",
     "crawler",
@@ -501,8 +501,8 @@
   },
   {
    "id": "world-boss-warden",
-   "foes": 6,
-   "reserves": 3,
+   "foes": 5,
+   "reserves": 2,
    "foeSheets": [
     "wisp",
     "crawler",

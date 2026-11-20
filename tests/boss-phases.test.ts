@@ -53,12 +53,14 @@ describe('boss summons', () => {
 
 describe('boss phase two', () => {
   const d = riftWarden;
-  it('the warden summons two wisps at 70%, then at 35% charges before its cataclysm and rift waves', () => {
+  it('the warden calls a wisp and a crawler at 70%, then at 35% charges before its cataclysm and rift waves', () => {
     let s = createBattle(d); const max = d.enemies.find(e => e.id === 'f1')!.maxHp;
+    expect(['b2', 'f3'].every(id => foe(s, id).absent)).toBe(true);
     foe(s, 'f1').hp = Math.floor(max * .7);
     while (foe(s, 'f1').phase !== 1) s = step(s, d).state;
-    expect(['b1', 'b2'].map(id => foe(s, id).hp)).toEqual(d.enemies.filter(e => e.id === 'b1' || e.id === 'b2').map(e => e.maxHp));
-    expect(foe(s, 'f3').absent).toBe(true); // hard mode only
+    // Owner 2026-11-20: at most four escorts and nobody behind the boss (b1 is gone; f3 comes in both modes).
+    expect(['b2', 'f3'].map(id => foe(s, id).hp)).toEqual(['b2', 'f3'].map(id => d.enemies.find(e => e.id === id)!.maxHp));
+    expect(d.enemies.some(e => e.id === 'b1')).toBe(false);
     // P02 (owner 2026-10-31): the warden's guards stand from round 1.
     expect(['f2', 'b3'].every(id => !foe(createBattle(d), id).absent)).toBe(true);
     foe(s, 'f1').hp = Math.floor(max * .35);
@@ -76,7 +78,7 @@ describe('boss phase two', () => {
   it('hard mode starts each phase 10% earlier and calls its hard-mode reserves', () => {
     const hard = hardEncounter(d, 'boss', map);
     expect(hard.phases!.map(p => p.below)).toEqual([80, 45]);
-    expect(hard.phases![0]!.summon).toEqual(['b1', 'b2', 'f3']);
+    expect(hard.phases![0]!.summon).toEqual(['b2', 'f3']);
     expect(hardEncounter(lookup('elite-briar-lord')!, 'boss', map).phases![0]).toMatchObject({ below: 60, summon: ['b2'] });
   });
   it('previews and replays phase turns exactly; the foe sheet shows the next threshold', () => {

@@ -29,7 +29,7 @@ const chargeNext = (heroId: string) => (s: BattleState) => currentHeroId(s, wbVa
 
 describe('World Boss trio v1 content', () => {
   it('three valid encounters with the World Boss HP that existing encounters do not share', () => {
-    expect(WORLD_BOSS_TRIO.map(d => [d.id, d.version])).toEqual([['wb-kragmor', 1], ['wb-valdrakk', 1], ['wb-morvane', 1]]);
+    expect(WORLD_BOSS_TRIO.map(d => [d.id, d.version])).toEqual([['wb-kragmor', 1], ['wb-valdrakk', 2], ['wb-morvane', 2]]);
     for (const d of WORLD_BOSS_TRIO) {
       expect(encounterProblems(d)).toEqual([]);
       expect(d.enemies.find(e => e.boss)!.maxHp).toBe(WORLD_BOSS_HP);
@@ -184,7 +184,8 @@ describe('R2 court and summon (Morvane)', () => {
       enemies: [...d.enemies, { ...wisp, id: 'b1' }, { ...wisp, id: 'b3', reserve: true }],
       intents: [...d.intents.filter(i => i.sourceId === 'b2').flatMap(i => [{ ...i, sourceId: 'b1' }, { ...i, sourceId: 'b3' }]),
         ...d.intents.map(i => i.summon ? { ...i, summon: ['f3', 'b3'] as const } : i)] };
-    expect(encounterProblems(crowd)).toEqual([]);
+    // Real content keeps a boss to four escorts with nobody behind it (owner 2026-11-20); the resolver still guards a full field.
+    expect(encounterProblems(crowd)).toEqual([`${d.id}: 5 escorts`, `${d.id}: a foe in the boss's line`]);
     let s = createBattle(crowd); expect(s.enemies.filter(e => e.hp > 0).length).toBe(5);
     s = until(s, crowd, x => nextIntentOf(x, crowd, 'f1')?.name === 'Call the Court' && !!currentHeroId(x, crowd));
     for (const e of s.enemies) if (e.id !== 'f1' && !e.absent) e.hp = crowd.enemies.find(x => x.id === e.id)!.maxHp;
