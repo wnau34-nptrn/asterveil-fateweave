@@ -1,3 +1,8 @@
+## 2026-11-20 — Content version grace + refresh notice (Sonnet; claude/content-version-grace → game branch)
+- Owner (after the 409 “เวอร์ชันเกมไม่ตรงกับเซิร์ฟเวอร์” on 19 Nov: the dev API deploys in minutes, Pages ~40 min later): “ให้เซิร์ฟเวอร์ยอมรับเวอร์ชันก่อนหน้าได้ชั่วคราวระหว่าง deploy แล้ว deploy เสร็จจะมีประกาศให้ทำการ Refresh version ใหม่” (OD-57).
+- API: `contentAccepted`/`graceActive` (`api.ts`), Worker vars `CONTENT_PREVIOUS` + `CONTENT_PREVIOUS_UNTIL`; the 409 names the chain. `cloudflare-dev.yml` step “Work out the content version grace” (`scripts/content-grace.mjs`: live API's own 409, chained, ≤3, 3 h; `[no-grace]`/`no_grace` input turns it off). Page: build writes `version.json`; `update-check.ts` + `update-banner.ts` show “มีเวอร์ชันใหม่พร้อมแล้ว” with refresh/later only when the live build differs.
+- Tests: content-grace.test (9), update-banner.spec (2 at 390px), full Vitest, typecheck, lint, build. Design [CONTENT_GRACE_TH.md](../design/p09/CONTENT_GRACE_TH.md). Not yet seen across a real deploy: the first push after this merge deploys the grace itself (it only protects the push after that).
+
 ## 2026-11-20 — Shorter field HP bars, smaller numbers (Opus; claude/field-hp-compact → game branch)
 - Owner (390px screenshot): “ปรับลดความยาวของหลอดเลือดลงให้เหมาะสม และปรับขนาดตัวเลขของเลือดให้เล็กลง”. `.field-health` max width 72 → 50px; overlaid counter 9/8/7 → 7.5/6.5/6px by length (`battle-ui.ts`). Presentation only; no rule/save change.
 - Tests: battle-hud, status, combat specs (55, Chromium 390px incl. 9999/9999 fit + centring), full Vitest 2082, typecheck, lint, build. Shot `docs/validation/field-hp-compact-2026-11-20/battle-390.png`. Not owner-viewed; no real device.

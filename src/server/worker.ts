@@ -21,7 +21,7 @@ interface DurableObjectNamespaceLike {
 }
 export interface Env {
   DB: D1Like; GAME: DurableObjectNamespaceLike; LIMIT?: DurableObjectNamespaceLike; WORLD_BOSS?: DurableObjectNamespaceLike; CHAT?: DurableObjectNamespaceLike; CHAT_WRITE?: string; FRIENDS?: string;
-  CONTENT_VERSION?: string; ALLOWED_ORIGINS?: string; GOOGLE_CLIENT_ID?: string; LEGACY_IMPORT?: string; LEGACY_IMPORT_UNTIL?: string;
+  CONTENT_VERSION?: string; ALLOWED_ORIGINS?: string; GOOGLE_CLIENT_ID?: string; LEGACY_IMPORT?: string; LEGACY_IMPORT_UNTIL?: string; CONTENT_PREVIOUS?: string; CONTENT_PREVIOUS_UNTIL?: string;
 }
 interface ExecutionContextLike { waitUntil(promise: Promise<unknown>): void }
 
@@ -38,6 +38,15 @@ export function legacyImportOpen(env: Pick<Env, 'LEGACY_IMPORT' | 'LEGACY_IMPORT
 // The same content the game shell runs (`ui/game-shell.ts`).
 export const GAME_CONTEXT: GameContext = { home: chapterOne, maps: MAPS, lookup: encounterById };
 const contentVersion = (env: Env) => env.CONTENT_VERSION?.trim() ?? '';
+// Deploy grace: `CONTENT_PREVIOUS` (comma list of earlier 16-hex content versions, at most 3) is taken until the ISO
+// date-time in `CONTENT_PREVIOUS_UNTIL`. Both are written by the deploy workflow (scripts/content-grace.mjs); anything
+// malformed means no grace.
+export function contentGrace(env: Pick<Env, 'CONTENT_PREVIOUS' | 'CONTENT_PREVIOUS_UNTIL'>): { previousVersions: string[]; previousUntil: number } | undefined {
+  const list = (env.CONTENT_PREVIOUS ?? '').split(',').map(v => v.trim()).filter(Boolean);
+  const until = Date.parse(env.CONTENT_PREVIOUS_UNTIL?.trim() ?? '');
+  if (!list.length || list.length > 3 || !list.every(v => /^[0-9a-f]{16}$/.test(v)) || !Number.isFinite(until)) return undefined;
+  return { previousVersions: list, previousUntil: until };
+}
 const limiter = new RateLimiter();
 // One verifier per isolate keeps Google's keys cached between requests.
 let google: { clientId: string; verify: GoogleVerifier } | undefined;
@@ -106,6 +115,7 @@ export default {
       db: env.DB,
       game: accountId => env.GAME.get(env.GAME.idFromName(accountId)),
       contentVersion: contentVersion(env),
+      ...contentGrace(env),
       allowedOrigins: (env.ALLOWED_ORIGINS ?? '').split(',').map(s => s.trim()).filter(Boolean),
       now: () => Date.now(),
       limiter,

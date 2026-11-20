@@ -29,6 +29,9 @@ export interface ApiDeps {
   db: D1Like;
   game(accountId: string): AccountGame;
   contentVersion: string;
+  // Grace for a deploy (owner 2026-11-20, docs/design/p09/CONTENT_GRACE_TH.md): the game page is published later than this
+  // API, so for a few hours devices still on these earlier content versions are accepted. Empty = the strict rule.
+  previousVersions?: readonly string[]; previousUntil?: number;
   allowedOrigins: readonly string[];
   now(): number;
   // In-isolate first filter; `gate` (P09-02g) is the shared count behind it. Without a gate only the filter applies.
@@ -52,6 +55,12 @@ export interface ApiDeps {
 export type ChatWrite = 'all' | 'linked' | 'off';
 
 export const CONTENT_HEADER = 'X-Fateweave-Content';
+// The device may run this server's content, or (until the grace ends) one of the versions the last deploys replaced.
+export const graceActive = (deps: Pick<ApiDeps, 'previousVersions' | 'previousUntil'>, now: number): boolean => !!deps.previousVersions?.length && deps.previousUntil !== undefined && now < deps.previousUntil;
+export function contentAccepted(deps: Pick<ApiDeps, 'contentVersion' | 'previousVersions' | 'previousUntil'>, header: string | null, now: number): boolean {
+  if (header === null) return false;
+  return header === deps.contentVersion || (graceActive(deps, now) && deps.previousVersions!.includes(header));
+}
 const HEALTH = { status: 'ok', service: 'asterveil-api', environment: 'dev' } as const;
 
 export { RateLimiter } from './rate-limit';
@@ -153,7 +162,10 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
   if (ACCOUNT_ROUTES.has(path)) return accountRoute(request, path, deps, now);
   // Every game route: the device must run the same content as the server (a server deployed without one refuses all).
   if (!deps.contentVersion) return error('content_version_unset', 503);
-  if (request.headers.get(CONTENT_HEADER) !== deps.contentVersion) return json({ error: 'content_version', server: deps.contentVersion }, 409);
+  if (!contentAccepted(deps, request.headers.get(CONTENT_HEADER), now)) {
+    // The answer names the server's version and, while a grace is on, the earlier ones it still takes (the deploy reads this to chain them).
+    return json({ error: 'content_version', server: deps.contentVersion, ...(graceActive(deps, now) ? { previous: [...deps.previousVersions!], until: deps.previousUntil! } : {}) }, 409);
+  }
   const auth = await authenticateAccount(deps.db, request.headers.get('Authorization'), now);
   if (!auth) return error('unauthorized', 401, { 'WWW-Authenticate': 'Bearer' });
   if (auth.status === 'deleting') return deletingError();

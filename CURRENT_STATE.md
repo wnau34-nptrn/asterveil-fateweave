@@ -5,7 +5,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`, which again runs the Chromium suite before deploy (P12).
-- Save v65 (P11-05 trio book/boss shards/trio items; v64 World Boss book; v63 board book); Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked. No gacha wallet. P09 server authority, ledger, weekly shards done (dev API default on Pages, `?server=off` for local; [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md)).
+- Save v65 (P11-05 trio book/boss shards/trio items; v64 World Boss book; v63 board book); Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked. No gacha wallet. P09 server authority, ledger, weekly shards done (`?server=off` for local; [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md)).
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3.
 - Title uses the original party artwork with a compact primary dock and top-right Setup for audio, save details, account/recovery, feedback, privacy and restart. Import stays the primary action while a local-save offer is available.
 - Art delegation remains: record agent picks as agent decisions, never owner visual approval.
@@ -14,12 +14,12 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 All online systems before outsiders are built. External-test items (OD-50 dates, E2–E4, `LEGACY_IMPORT`) are parked: owner 2026-11-18 “ไม่ต้องสนใจเส้นตายทดสอบภาพนอกอะไรนั่น”; do not raise them as gates. [Checklist](docs/design/EXTERNAL_TEST_CHECKLIST_TH.md) stays for reference.
 
-- Staging load test ([plan](docs/validation/p12-load/README_TH.md)): workflow `Cloudflare staging load test` (manual; dispatch with ref = game branch) deploys a throwaway `asterveil-api-staging` + D1, runs `tests/server-load.test.ts` from 1–4 runners, deletes both. Input `trio=now` starts the trio on the staging copy only. Trio run 2026-11-18 passed (4×5 accounts, 100 attempts on three bars, identical retries, no 429/5xx, worst 0.78 s). Never point `LOAD_URL` at the dev API.
+- Staging load test ([plan](docs/validation/p12-load/README_TH.md)): workflow `Cloudflare staging load test` (manual; dispatch with ref = game branch) deploys a throwaway `asterveil-api-staging` + D1, runs `tests/server-load.test.ts`, deletes both. Input `trio=now` starts the trio on the staging copy only. Trio run 2026-11-18 passed (4×5 accounts, 100 attempts, no 429/5xx). Never aim `LOAD_URL` at the dev API.
 - World Boss: **OD-52 (2026-11-18): the trio Kragmor/Valdrakk/Morvane replaces the Warden from week 2969 = Mon 23 Nov 2026 06:00 Bangkok** (`trio.from`, PR #301). Week 2968 is the last Warden week (its claims stay open a week). Draft numbers unchanged: 400 HP/attempt (min 1500), first trio week HP = Warden attempts ÷ 3 × 400, Call the Court as is. Pre-fight guides on all three; optional Morvane coach. Sim: 20 accounts with half using the coach reach 50% in 98% of weeks, kill 47–48% (Morvane); Kragmor/Valdrakk 97–100%. [Go-live evidence](docs/validation/p11-05-go-live/README_TH.md). #292 stays separate and unmerged.
 - Enemy aim **OD-53** (2026-11-19): pack front-row foes, bosses aim lowest HP% every third move, Ember Slime/Spore Puff chase supports; labels on moves. Casual explorer map-2 first clear 88% → 79% (gate ok); drop Spore Puff `assassin` first if testers find map 2 heavy. [Proposal + results](docs/design/ENEMY_AIM_PROPOSAL_TH.md).
 - Lessons after the prologue **OD-54** (2026-11-19): camp Lv2 after the prologue, gear/tree open at once, one free calming draught; ring+bubble lessons on the map/first battle/first camp (`ui/lessons.ts`). Stage C (camp cards and newly opened systems point at their controls), a Setup on/off toggle and the farming lessons (replay, sweep, hunt target, boss target; owner “ทำทั้ง 4 ข้อเลย”) done. [Design](docs/design/TUTORIAL_FLOW_TH.md).
 - Chat (#261): owner open numbers, `CHAT_WRITE`, word list, WebSocket. **OD-55**: translucent camp feed (off by default), hidden-camps list. **OD-56** (2026-11-19 “เพิ่มระบบเพื่อน และ chat 1:1”): server friend system (codes, requests, account-wide block, D1 0007) + 1:1 chat for mutual friends in the `Chat` object, “เพื่อน” tab + camp unread badge, flag `FRIENDS` (default on); drafts 50 friends, 2 s/20 per min, 7 d/200 per room ([design](docs/design/FRIENDS_TH.md)). Open: block also hiding world chat?, cap 50, 1:1 during the external test. Guild chat stays closed (no guilds).
-- P09 open: inactive-guest cleanup, old-token reuse detection. Day reset 06:00 Bangkok (owner 2026-11-16). P04-06/shards owner numbers open. P04-05 catch-up EXP recheck with P06.
+- P09 open: inactive-guest cleanup, old-token reuse detection. Day reset 06:00 Bangkok. P04-06/shards owner numbers open. P04-05 catch-up EXP recheck with P06. Deploy grace **OD-57**: the API takes the previous content versions for 3 h after a deploy (`[no-grace]` ends it); open pages show a refresh bar ([design](docs/design/p09/CONTENT_GRACE_TH.md)).
 - Gacha: G00/G01 analysis delivered (`docs/design/GACHA_G00_DECISIONS_TH.md`, `GACHA_G01_*`); owner wants system/visual discussion first. No G02–G05/payments; real gacha needs the server wallet on the ledger.
 - UXD-08 done; real-device/human trial and team-preset usability review open.
 
@@ -31,7 +31,7 @@ All online systems before outsiders are built. External-test items (OD-50 dates,
 
 ## Workspace
 
-Verify remote ancestry; preserve unpushed/gacha work. No old checkpoint imports.
+Preserve unpushed/gacha work.
 
 ## Opening prompt for next chat
 

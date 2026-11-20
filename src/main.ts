@@ -1,3 +1,5 @@
+import { watchForUpdate } from './platform/update-check';
+import { UpdateBanner } from './ui/update-banner';
 import Phaser from 'phaser';
 import { encounterById } from './content/encounters/catalog';
 import { chapterOne } from './content/world/chapter1';
@@ -45,6 +47,9 @@ const game = new Phaser.Game({
 // P09-02c: server play only when switched on (`?server=<api url>`, remembered; `?server=off` returns to local play).
 const api = serverSwitch(location.search, browserStorage(), import.meta.env.VITE_FATEWEAVE_API ?? '');
 const shell = new GameShell(app, chapterOne, encounterById, ui, views, MAPS, api ? new ServerClient(api, __CONTENT_VERSION__, browserStorage()) : undefined);
+// A newer publish while this page stays open: ask the player to refresh (owner 2026-11-20); never reloads by itself.
+const updateBanner = new UpdateBanner(app);
+watchForUpdate({ running: __BUILD_ID__, base: import.meta.env.BASE_URL, onNew: build => updateBanner.show(build) });
 // Web fonts and DOM strips can resize the arena without a window resize; re-measure the canvas.
 new ResizeObserver(() => scene.refreshLayout()).observe(document.querySelector('#game')!);
 void document.fonts?.ready.then(() => scene.refreshLayout());

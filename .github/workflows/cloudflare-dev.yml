@@ -7,6 +7,11 @@ on:
     branches: [feature/fateweave-initial-prototype]
     paths: ['cloudflare/**', 'src/server/**', 'src/core/**', 'src/content/**', 'scripts/content-version.mjs', '.github/workflows/cloudflare-dev.yml']
   workflow_dispatch:
+    inputs:
+      no_grace:
+        description: 'Do not accept earlier content versions after this deploy (use for a change old pages cannot survive)'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -78,10 +83,23 @@ jobs:
           echo "CONTENT_VERSION=$(node scripts/content-version.mjs)" >> "$GITHUB_ENV"
       - name: Apply D1 migrations
         run: $WRANGLER d1 migrations apply DB --remote --config cloudflare/wrangler.deploy.json 2>&1 | grep -vE '@|Account' | tail -n 15
+      # Deploy grace (owner 2026-11-20, docs/design/p09/CONTENT_GRACE_TH.md): the game page goes live ~40 minutes after this
+      # deploy, so for 3 hours the API also takes the versions it ran before. `[no-grace]` in the commit message or the
+      # `no_grace` input turns it off for a change old pages must not run against.
+      - name: Work out the content version grace
+        env:
+          DEV_API: https://asterveil-api-dev.wn-au34.workers.dev
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          NO_GRACE_INPUT: ${{ inputs.no_grace }}
+        run: |
+          off=on; case "$COMMIT_MESSAGE" in *'[no-grace]'*) off=off;; esac; [ "$NO_GRACE_INPUT" = "true" ] && off=off
+          node scripts/content-grace.mjs "$DEV_API" "$CONTENT_VERSION" "$off" | tee /tmp/grace.env >> "$GITHUB_ENV"
       - name: Deploy
         id: deploy
         run: |
-          $WRANGLER deploy --config cloudflare/wrangler.deploy.json --var "CONTENT_VERSION:$CONTENT_VERSION" > /tmp/deploy.txt 2>&1 || { grep -v '@' /tmp/deploy.txt | tail -n 30; exit 1; }
+          vars=(--var "CONTENT_VERSION:$CONTENT_VERSION")
+          if [ -n "$CONTENT_PREVIOUS" ] && [ -n "$CONTENT_PREVIOUS_UNTIL" ]; then vars+=(--var "CONTENT_PREVIOUS:$CONTENT_PREVIOUS" --var "CONTENT_PREVIOUS_UNTIL:$CONTENT_PREVIOUS_UNTIL"); fi
+          $WRANGLER deploy --config cloudflare/wrangler.deploy.json "${vars[@]}" > /tmp/deploy.txt 2>&1 || { grep -v '@' /tmp/deploy.txt | tail -n 30; exit 1; }
           grep -iE 'uploaded|deployed|workers.dev|Durable|D1' /tmp/deploy.txt | grep -v '@'
           url=$(grep -oE 'https://[a-z0-9.-]+\.workers\.dev' /tmp/deploy.txt | head -n1)
           test -n "$url"
