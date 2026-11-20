@@ -107,4 +107,6 @@ export class UnitAnimation {
     if (rig) { this.restore(rig); rig.idle(false); }
   }
   clear(): void { this.settle(); this.bindings.clear(); }
+  /** No pose or reaction is playing (perf R6: a repaint can then be skipped safely). */
+  get still(): boolean { return this.motions.size === 0; }
 }

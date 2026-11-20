@@ -1,4 +1,5 @@
 import { savePlace } from './save-place';
+import { setHtml } from './dom-cheap';
 import { BEAT_MAX, deflectReason, chiOf, releasePower, skillCooldown, actionReason, beginBattle, createBattle, currentHeroId, enemyIntent, plannedIntents, replay, resolveCommand, targetOptions, targetKind, upcomingTurns, skillPower, guardReductionOf } from '../core/battle/engine';
 import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TargetOption, TurnStage } from '../core/battle/types';
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
@@ -233,7 +234,14 @@ export class BattleUI {
   sceneReady(): void { this.render(); }
   fieldLayoutChanged(): void { this.renderFieldTargets(); this.renderFieldStatuses(); this.renderTutorial(); this.placeBackdrop(); }
   // The battle painting lies behind the whole view, framed to the arena so fighters stand on its floor.
+  // Perf R6: measured once per frame after the DOM settles (it was read right after every render's writes, forcing layout).
+  private backdropQueued = false;
   private placeBackdrop(): void {
+    if (this.backdropQueued) return;
+    this.backdropQueued = true;
+    requestAnimationFrame(() => { this.backdropQueued = false; this.placeBackdropNow(); });
+  }
+  private placeBackdropNow(): void {
     const arena = this.root.querySelector<HTMLElement>('.arena'); if (!arena) return;
     const v = this.root.getBoundingClientRect(), a = arena.getBoundingClientRect(); if (!a.width || !a.height) return;
     const f = riftBackdropFrame({ w: v.width, h: v.height }, { x: a.left - v.left, y: a.top - v.top, w: a.width, h: a.height });
@@ -478,7 +486,8 @@ export class BattleUI {
     if (this.live() && !document.hidden && !this.root.closest('[inert]') && !this.root.querySelector('dialog[open]')) this.root.querySelector<HTMLElement>('#action-attack')?.focus({ preventScroll: true });
   }
 
-  private set(id: string, content: string): void { this.root.querySelector(`#${id}`)!.innerHTML = content; }
+  // Perf R6: rewrite a HUD part only when its markup changed (most renders change one or two of ~25 parts).
+  private set(id: string, content: string): void { setHtml(this.root.querySelector(`#${id}`)!, content); }
 
   // Enemy ids are field positions; their portrait follows the encounter's art.
   private portrait(id: string): string { return portrait(artOf(this.data, id)); }
@@ -707,7 +716,8 @@ export class BattleUI {
     this.renderFieldStatuses();
     this.renderFieldBanner();
     this.renderTutorial();
-    if (focus) this.root.querySelector<HTMLElement>(`#${focus}`)?.focus({ preventScroll: true });
+    // Restore focus only when the focused control was replaced (focus() forces a synchronous style/layout pass).
+    if (focus && (document.activeElement as HTMLElement | null)?.id !== focus) this.root.querySelector<HTMLElement>(`#${focus}`)?.focus({ preventScroll: true });
     this.placeBackdrop();
   }
 }

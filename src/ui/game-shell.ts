@@ -1,4 +1,5 @@
 import { showBattleRewards, type BattleRewards } from './battle-rewards';
+import { battleMemo } from '../core/command/battle-memo';
 import { bindInfoTabs } from './info-tabs';
 import { rosterIds } from '../core/world/world';
 import { applyCommand, isRejected, type CampCommand, type CommandEvent, type CommandResult, type GameCommand, type RunCommand } from '../core/command/game-command';
@@ -410,7 +411,10 @@ export class GameShell {
     if (!this.game || this.game.run) return;
     this.exec(cmd, r => { if (isRejected(r)) return; this.profileChange({ profile: r.game.profile, event: r.events[0] as ProfileEvent }); });
   }
-  private local(cmd: GameCommand): CommandResult { return applyCommand(this.game ?? null, cmd, { home: this.home, maps: this.maps, lookup: this.lookup, seeds: this.seeds }); }
+  // Perf R7: the same incremental battle replay the Durable Object uses (P09-02f): each committed turn resolves only the
+  // new turn instead of replaying the whole battle; results are bit-identical (tests/server-perf.test.ts).
+  private readonly battles = battleMemo();
+  private local(cmd: GameCommand): CommandResult { return applyCommand(this.game ?? null, cmd, { home: this.home, maps: this.maps, lookup: this.lookup, seeds: this.seeds, battles: this.battles.replay }); }
   // ---- P09-02c server play (off unless switched on; see platform/server-client.ts) ----
   // Perf R5 (server play): steps already shown on the device and not yet confirmed, oldest first. The first one is with
   // the server (or about to be); the others go out one by one, in order, as the answers come back. Each was checked on
