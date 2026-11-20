@@ -1,3 +1,8 @@
+## 2026-11-20 — Perf R5: server-play steps at the player's pace (Opus; claude/perf-r5 → game branch)
+- Owner: “ต่อ R5 เลย”. `game-shell.ts` `guesses` replaces the one-step `nextMove`: up to 3 steps shown at once (each guessed on the device from the previous guess), sent one by one in order; a confirmed `moved` keeps the token on the furthest guess, any other answer drops the rest and shows the server state. No API/protocol/rule/save change.
+- Result (local Worker/DO + 300 ms delay, CPU 4×): taps every 200 ms 7/8 → 8/8 sent, press → visible step 24–286 → 12–24 ms. [Validation](../validation/perf-r5-2026-11-20/README_TH.md). Accepted risk: a fight on the first step snaps the token back from up to 3 tiles ahead (`MAX_AHEAD`).
+- Tests: server-play.spec 7/7 (one updated, one new), Vitest all, typecheck, lint, build. Not measured against the real dev API; no real device.
+
 ## 2026-11-20 — Perf R3+R4: smooth map steps (Opus; claude/perf-r3-r4 → game branch)
 - Owner: “ต่อ R3 กับ R4 เลย”. `ui/dom-cheap.ts` (`replayClass` rewinds one-shot animations instead of `void offsetWidth`; `setHtml` skips unchanged markup); `world-ui.ts` incremental fog (one element per cell), fog backdrop via `background-position` instead of inherited `--ox/--oy` (that alone recalculated ~1,370 elements per step), `--t`/`data-zone` only on change; `game-shell.ts` `show()` writes only changed attributes, no repeated `focus()` on the pad.
 - Result (Chromium 390px, CPU 4×, local play): press → visible step p50/p95 154/215 → 27/42 ms, no long tasks (was 12 per 10 steps). [Validation](../validation/perf-r3-r4-2026-11-20/README_TH.md). The 120 ms key-repeat guard is unchanged.

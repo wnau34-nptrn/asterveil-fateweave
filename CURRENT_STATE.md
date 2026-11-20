@@ -6,7 +6,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`, which again runs the Chromium suite before deploy (P12).
 - Save v65 (P11-05 trio book/boss shards/trio items; v64 World Boss book; v63 board book); Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked. No gacha wallet. P09 server authority, ledger, weekly shards done (`?server=off` for local; [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md)).
-- Perf (2026-11-20): audit report on unmerged branch `claude/perf-audit-2026-11-20` (R1–R11). R1–R4 merged: per-encounter battle art + map prefetch, half-size skill icons, smooth map steps ([R1/R2](docs/validation/perf-r1-r2-2026-11-20/README_TH.md), [R3/R4](docs/validation/perf-r3-r4-2026-11-20/README_TH.md)).
+- Perf (2026-11-20): audit report on unmerged branch `claude/perf-audit-2026-11-20` (R1–R11). R1–R5 merged ([R1/R2](docs/validation/perf-r1-r2-2026-11-20/README_TH.md), [R3/R4](docs/validation/perf-r3-r4-2026-11-20/README_TH.md), [R5](docs/validation/perf-r5-2026-11-20/README_TH.md)).
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3.
 - Title uses the original party artwork with a compact primary dock and top-right Setup for audio, save details, account/recovery, feedback, privacy and restart. Import stays the primary action while a local-save offer is available.
 - Art delegation remains: record agent picks as agent decisions, never owner visual approval.
@@ -36,4 +36,4 @@ Preserve unpushed/gacha work.
 
 ## Opening prompt for next chat
 
-Suggested (Opus): “Perf R5 — server play: queue several guessed steps and pipeline them to the server in order (`game-shell.ts` `move`/`nextMove`), roll back on a fight/event/mismatch; audit report C3/R5 on branch `claude/perf-audit-2026-11-20` (`server.perf.ts`).” Also P11-05 check.
+Suggested (Opus): “Perf R6+R7 — battle: render only what changed (`battle-ui.ts` `set()`/`render()`, no full `BattleScene.paint()` per render) + `battleMemo` in client `local()`; audit C4 on branch `claude/perf-audit-2026-11-20`.” Also P11-05 check.
