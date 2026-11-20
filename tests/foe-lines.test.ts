@@ -13,6 +13,8 @@ describe('foe lines (owner 2026-11-20)', () => {
     expect([...foeLineRows([{ id: 'f1' }, { id: 'f2' }, { id: 'f3' }, { id: 'b2' }])].sort()).toEqual([[1, 0], [2, 2], [3, 1]]);
     expect([...foeLineRows([{ id: 'f1' }, { id: 'b2' }])].sort()).toEqual([[1, 0], [2, 2]]);
     expect([...foeLineRows([{ id: 'f2' }, { id: 'b2' }])]).toEqual([[2, 1]]);
+    // Two lines with one large foe: its line stands at the bottom, under the empty middle row.
+    expect([...foeLineRows([{ id: 'f1', large: true }, { id: 'f2' }, { id: 'b1' }])].sort()).toEqual([[1, 2], [2, 0]]);
   });
   it('row neighbours are the foes drawn next to each other', () => {
     // Thorn host: f1 top, f3 middle, f2 bottom (before: f1 and f2 were neighbours around the middle f3).

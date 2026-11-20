@@ -293,6 +293,9 @@ export class BattleUI {
       ? (morvane ? morvaneLesson : battleLesson)(hintState, this.data) : undefined;
     const resized = coach.hidden !== !lesson;
     coach.hidden = !lesson;
+    // Owner 2026-11-20: the coach takes the inspector's place instead of a strip of the field, so the first battle's
+    // figures are as large as in any other battle (the inspector returns when the hints end or are dismissed).
+    this.root.querySelector<HTMLElement>('#unit-inspector')!.hidden = !!lesson;
     this.root.querySelectorAll('.coach-focus').forEach(el => el.classList.remove('coach-focus'));
     if (!lesson) { delete coach.dataset.lesson; if (resized) this.scene?.refreshLayout(); return; }
     coach.dataset.lesson = String(lesson.step);

@@ -45,10 +45,48 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
   const panel = 14, gap = 8, edge = height < 240 ? 4 : 8;
   let status = 13;
   const cap = Math.floor(Math.min(140, width * UNIT_WIDTH) * UNIT_SCALE);
+  const backMiddle = used.some(other => columnOf(other) === 3 && rowOf(other) === 1);
+  const xOf = (id: number, base: number): number => {
+    const x = width * COLUMNS[columnOf(id)]!;
+    // A boss with nobody behind it stands at the exact centre of the foes' half (owner 2026-11-20). Another large
+    // front-middle foe may borrow the empty back-middle cell, keeping clear of the opposing front hero. Never borrow a
+    // cell occupied by a reserve or shove.
+    if (layout.centre?.has(id)) return width * (COLUMNS[2] + COLUMNS[3]) / 2;
+    if (layout.large.has(id) && columnOf(id) === 2 && rowOf(id) === 1 && !backMiddle) return x + Math.min(base * .33, width * .09);
+    return x;
+  };
+  const cellOf = (base: number) => Math.min(width * .24, Math.max(72, base * .78));
+  const sizeOf = (id: number, base: number, scale: number) => base * (layout.large.has(id) ? scale : 1);
+  // Height a figure needs above its row line (a large figure also keeps 12px for its crown/marker).
+  const riseOf = (id: number, base: number, scale: number) => sizeOf(id, base, scale) * (layout.rise?.get(id) ?? 1) * 1.022 + (layout.large.has(id) ? 12 : 0);
+  // Owner 2026-11-20: a large figure only takes extra height where something stands above it. A figure must clear the
+  // HP track and status band of the nearest row above that has a unit over it (its panel or painted body overlaps the
+  // figure across): its own side's figure box, or for a large figure of the other side its painted middle three quarters
+  // under the track only. With nobody above it, it may rise to the top edge. Before, every row was as tall as its tallest
+  // figure, so one large foe shrank every figure on the field.
+  const hero = (id: number) => columnOf(id) < 2;
+  const over = (upper: number, lower: number, base: number, scale: number): boolean => {
+    const cell = cellOf(base), ux = xOf(upper, base), us = sizeOf(upper, base, scale), px = Math.max(0, Math.min(width - cell, ux - cell / 2));
+    const lx = xOf(lower, base), ls = sizeOf(lower, base, scale), narrow = hero(upper) !== hero(lower) && layout.large.has(lower);
+    const half = narrow ? ls * .375 : ls * .5, l = lx - half, r = lx + half;
+    const bar = Math.min(cell, 72), track = narrow ? [px + (cell - bar) / 2, px + (cell + bar) / 2] : [px, px + cell];
+    return (l < track[1]! && r > track[0]!) || (l < ux + us * .375 && r > ux - us * .375);
+  };
+  // Read at call time: a short field drops the status band below.
+  const band = () => panel + status + gap;
+  // The lowest a row line may sit given the rows above it, for each figure of the row: below the band of the nearest
+  // row above with a unit over it, or below the top edge.
+  const floorOf = (row: Row, ys: readonly number[], base: number, scale: number): number => Math.max(
+    row ? ys[row - 1]! + band() + base * 1.022 : edge + base * 1.022,
+    ...used.filter(id => rowOf(id) === row).map(id => {
+      let above = edge;
+      for (let k = row - 1; k >= 0; k--) if (used.some(u => rowOf(u) === k && over(u, id, base, scale))) { above = ys[k]! + band(); break; }
+      return above + riseOf(id, base, scale);
+    }));
   const geometry = (base: number, scale: number) => {
-    const rises = [0, 1, 2].map(row => Math.max(base * 1.022, ...used.filter(id => rowOf(id) === row).map(id =>
-      base * (layout.large.has(id) ? scale : 1) * (layout.rise?.get(id) ?? 1) * 1.022 + (layout.large.has(id) ? 12 : 0))));
-    return { rises, required: edge * 2 + rises.reduce((a, b) => a + b, 0) + 3 * (panel + status) + 2 * gap };
+    const ys: number[] = [];
+    for (const row of [0, 1, 2] as const) ys.push(floorOf(row, ys, base, scale));
+    return { ys, required: ys[2]! + panel + status + edge };
   };
   if (geometry(Math.min(44, cap), 1).required > height) status = 0;
   let scale = LARGE_SCALE;
@@ -56,21 +94,23 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
   while (scale > 1 && geometry(Math.min(44, cap), scale).required > height) scale = Math.max(1, Math.round((scale - .05) * 100) / 100);
   let base = cap;
   while (base > 1 && geometry(base, scale).required > height) base--;
-  const { rises, required } = geometry(base, scale);
+  const { ys, required } = geometry(base, scale);
   const extra = Math.max(0, height - required), stepExtra = extra / 3;
-  const rows: number[] = [];
-  let cursor = edge + stepExtra;
-  for (let row = 0; row < 3; row++) { cursor += rises[row]!; rows.push(cursor); cursor += panel + status + gap + stepExtra; }
-  const slots = SLOT_IDS.map(id => {
-    const large = layout.large.has(id), size = base * (large ? scale : 1), row = rowOf(id), y = rows[row]!;
-    let x = width * COLUMNS[columnOf(id)]!;
-    // A boss with nobody behind it stands at the exact centre of the foes' half (owner 2026-11-20). Another large
-    // front-middle foe may borrow the empty back-middle cell, keeping clear of the opposing front hero. Never borrow a
-    // cell occupied by a reserve or shove.
-    const backMiddle = used.some(other => columnOf(other) === 3 && rowOf(other) === 1);
-    if (layout.centre?.has(id)) x = width * (COLUMNS[2] + COLUMNS[3]) / 2;
-    else if (large && columnOf(id) === 2 && row === 1 && !backMiddle) x += Math.min(base * .33, width * .09);
-    const cellWidth = Math.min(width * .24, Math.max(72, base * .78));
+  const rows = ys.map((y, row) => y + stepExtra * (row + 1));
+  // Owner 2026-11-20: both sides share the three rows (a hero and a foe of the same row stand on one line) and the rows
+  // stand evenly apart. The top and bottom rows keep their places; the middle row moves to halfway between them as far
+  // as the same clearances allow (replaces the 2026-11-18 per-side top-row drop).
+  const usedRows = new Set(used.map(rowOf));
+  if (usedRows.has(0) && usedRows.has(1) && usedRows.has(2)) {
+    const low = floorOf(1, rows, base, scale);
+    // The bottom row's figures under a middle-row unit bound the middle row from below.
+    const high = Math.min(rows[2]! - band() - base * 1.022, ...used.filter(id => rowOf(id) === 2 && used.some(u => rowOf(u) === 1 && over(u, id, base, scale)))
+      .map(id => rows[2]! - riseOf(id, base, scale) - band()));
+    rows[1] = Math.max(low, Math.min(high, (rows[0]! + rows[2]!) / 2));
+  }
+  const cellWidth = cellOf(base);
+  return SLOT_IDS.map(id => {
+    const size = sizeOf(id, base, scale), y = rows[rowOf(id)]!, x = xOf(id, base);
     const rise = layout.rise?.get(id) ?? 1;
     return {
       x, y, size, compact: base < 70, tiny: base < 44, side: false, iconSize: 12, statusBand: status, maxIcons: status ? Math.max(1, Math.min(4, Math.floor((Math.min(cellWidth, 72) + 2) / 14))) : 1,
@@ -78,28 +118,6 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
       panel: { x: Math.max(0, Math.min(width - cellWidth, x - cellWidth / 2)), y: y + 2, width: cellWidth, height: panel - 2 },
     };
   });
-  // Owner 2026-11-20: both sides share the three rows (a hero and a foe of the same row stand on one line) and the rows
-  // stand evenly apart. The top and bottom rows keep their places; the middle row moves to halfway between them unless a
-  // figure would then reach under a top-row HP track and status band (or a middle-row band over a bottom-row figure):
-  // the middle row's own side always counts, a figure of the other side only where its painted body (about three quarters
-  // of its box, centred) is under the band. (Replaces the 2026-11-18 per-side top-row drop, which left the two sides'
-  // top rows at different heights.)
-  const band = panel + status + gap;
-  const reach = (upper: Row, lower: Row): number => {
-    const tops = used.filter(id => rowOf(id) === upper);
-    const spans = tops.map(id => { const p = slots[id]!.panel, bar = Math.min(p.width, 72); return [p.x + (p.width - bar) / 2, p.x + (p.width + bar) / 2, columnOf(id) < 2] as const; });
-    return Math.max(0, ...used.filter(id => rowOf(id) === lower).filter(id => {
-      const b = slots[id]!.body, l = b.x + b.width * .125, r = b.x + b.width * .875, hero = columnOf(id) < 2;
-      return spans.some(([bl, br, side]) => side === hero || (l < br && r > bl));
-    }).map(id => slots[id]!.y - slots[id]!.body.y + (layout.large.has(id) ? 12 : 0)));
-  };
-  const usedRows = new Set(used.map(rowOf));
-  if (usedRows.has(0) && usedRows.has(1) && usedRows.has(2)) {
-    const low = rows[0]! + reach(0, 1) + band, high = rows[2]! - reach(1, 2) - band;
-    const middle = Math.max(low, Math.min(high, (rows[0]! + rows[2]!) / 2)), shift = middle - rows[1]!;
-    if (shift) for (const id of SLOT_IDS) if (rowOf(id) === 1) { const s = slots[id]!; s.y += shift; s.body.y += shift; s.panel.y += shift; }
-  }
-  return slots;
 }
 
 export interface SlotPlan extends SlotLayout { heroSlots: Map<string, number>; used: number[]; centre: Set<number> }

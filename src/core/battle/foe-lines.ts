@@ -2,12 +2,13 @@
 // back foe of its line and a shove swaps the two, so both foes of a line always stand in one field row. The row of each
 // line is fixed for the whole encounter (reserves included), so a summon or a fall never moves anyone.
 // - With a boss (or a `leader`, a boss fought without its mechanics): the boss's line stands in the middle row, line 3 at the top and line 2 at the bottom.
-// - Without one: one line in the middle; two lines at the top (lower number) and bottom; three lines 1 top, 3 middle, 2 bottom.
+// - Without one: one line in the middle; two lines at the top (lower number, or the line without a large foe) and bottom;
+//   three lines 1 top, 3 middle, 2 bottom.
 // Row neighbours (acid, smoke, venom splashes) follow these rows, so the foes drawn next to each other are the neighbours.
 export type FoeLineRow = 0 | 1 | 2;
 export const foeLine = (id: string): number => Number(id[1]);
 
-export function foeLineRows(enemies: readonly { id: string; boss?: boolean; leader?: boolean }[]): Map<number, FoeLineRow> {
+export function foeLineRows(enemies: readonly { id: string; boss?: boolean; leader?: boolean; large?: boolean }[]): Map<number, FoeLineRow> {
   const lines = [...new Set(enemies.map(e => foeLine(e.id)).filter(Number.isFinite))].sort((a, b) => a - b);
   const rows = new Map<number, FoeLineRow>();
   const boss = enemies.find(e => e.boss || e.leader);
@@ -21,7 +22,13 @@ export function foeLineRows(enemies: readonly { id: string; boss?: boolean; lead
     return rows;
   }
   if (lines.length === 1) rows.set(lines[0]!, 1);
-  else if (lines.length === 2) { rows.set(lines[0]!, 0); rows.set(lines[1]!, 2); }
+  else if (lines.length === 2) {
+    // A line with a large foe stands at the bottom (owner 2026-11-20): above it is the empty middle row, so its figure
+    // needs no extra height and the field keeps every figure at full size.
+    const big = lines.filter(l => enemies.some(e => e.large && foeLine(e.id) === l));
+    const [top, bottom] = big.length === 1 ? [lines.find(l => l !== big[0])!, big[0]!] : lines;
+    rows.set(top!, 0); rows.set(bottom!, 2);
+  }
   else if (lines.length === 3) { rows.set(lines[0]!, 0); rows.set(lines[2]!, 1); rows.set(lines[1]!, 2); }
   return rows;
 }

@@ -1,3 +1,10 @@
+## 2026-11-20 — Same figure size in every fight; the first battle's coach no longer shrinks the field (Opus; claude/field-size-coach → game branch)
+- Owner (first-battle 390px shot: figures smaller than other fights): “ดำเนินการทั้ง 2 ข้อ”.
+- Coach: while a lesson shows, `#battle-coach` takes the `#unit-inspector` place (inspector hidden, back when hints end/dismissed); arena 425 → 473px.
+- `fieldSlots`: a figure clears only the band of the nearest row above with a unit over it (else the top edge), not the tallest figure of every row; one large foe no longer shrinks the whole field. `foeLineRows`: of two non-boss lines, the one with a large foe stands at the bottom (rules unchanged: two foes in a column stay neighbours).
+- Sizes (378×477, hero px): every non-boss fight 104–105 (first battle 98 → 104; with the coach 83 → ~104); boss fights unchanged (98, captain 83).
+- Tests: field-layout (+ same size in every non-boss fight), foe-lines, full Vitest 2113, lint, typecheck, build; Playwright combat/battle-hud/status/team-five/field-a11 (64). Shot `docs/validation/field-size-2026-11-20/first-battle-390.png`. Chromium only.
+
 ## 2026-11-20 — Perf R11: shorter server retry (Sonnet; perf/r11-server-timeout → game branch)
 - Owner: “เริ่ม R11”. `server-client.ts`: waited requests 3 attempts × 7 s (was 5 × 15 s), same requestId/seq each time; import/chat/report keep old limits; `onReconnecting` hook → shell shows “กำลังเชื่อมต่อใหม่…” at once. Numbers are drafts.
 - Result (Chromium 390px, blackholed command): card 81.5 → 22.3 s, reconnecting note 60.9 → 7.2 s. [Validation](../validation/perf-r11-2026-11-20/README_TH.md). No real device/dev API.
