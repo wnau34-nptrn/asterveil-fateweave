@@ -104,6 +104,12 @@ describe('foe lines and shared rows (owner 2026-11-20)', () => {
       }
     }
   });
+  it('keeps every figure the same size in every fight without a boss, large foes included (owner 2026-11-20)', () => {
+    for (const lanes of fives) for (const [width, height] of [[378, 477], [378, 425]] as const) {
+      const sizes = catalog.filter(d => !d.enemies.some(e => e.boss)).map(d => fieldSlots(width, height, slotPlan(party(lanes), d.enemies, called(d)))[2]!.size);
+      expect(Math.max(...sizes) - Math.min(...sizes), `${width}x${height}`).toBeLessThanOrEqual(2);
+    }
+  });
   it('spaces the three rows evenly when the field has room (the vanguard captain at the 390px phone)', () => {
     const d = catalog.find(e => e.id === 'vanguard-captain')!;
     const plan = slotPlan(party(['front', 'front', 'front', 'back', 'back']), d.enemies, called(d));

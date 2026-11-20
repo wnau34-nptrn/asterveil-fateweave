@@ -1,3 +1,10 @@
+## 2026-11-20 — Same figure size in every fight; the first battle's coach no longer shrinks the field (Opus; claude/field-size-coach → game branch)
+- Owner (first-battle 390px shot: figures smaller than other fights): “ดำเนินการทั้ง 2 ข้อ”.
+- Coach: while a lesson shows, `#battle-coach` takes the `#unit-inspector` place (inspector hidden, back when hints end/dismissed); arena 425 → 473px.
+- `fieldSlots`: a figure clears only the band of the nearest row above with a unit over it (else the top edge), not the tallest figure of every row; one large foe no longer shrinks the whole field. `foeLineRows`: of two non-boss lines, the one with a large foe stands at the bottom (rules unchanged: two foes in a column stay neighbours).
+- Sizes (378×477, hero px): every non-boss fight 104–105 (first battle 98 → 104; with the coach 83 → ~104); boss fights unchanged (98, captain 83).
+- Tests: field-layout (+ same size in every non-boss fight), foe-lines, full Vitest 2113, lint, typecheck, build; Playwright combat/battle-hud/status/team-five/field-a11 (64). Shot `docs/validation/field-size-2026-11-20/first-battle-390.png`. Chromium only.
+
 ## 2026-11-20 — Perf R10: half-size DOM portraits (Opus; claude/perf-r10 → game branch)
 - Owner: “ต่อ R10 เลย”. `scripts/portraits-half.py` builds `portraits*_half.webp` (256 px cells, same encoding as the master) + `portraits-half.json` revisions; `portrait(id)` uses them, `portrait(id, true)` keeps the 512 px master for the story figure; World Boss unchanged.
 - Result (camp/map, starting team): portraits 1.55 → 0.67 MB, decoded 28 → 7 MiB (mercs sheet 4.93 MB/14 MiB → 1.45 MB/3.5 MiB). [Validation](../validation/perf-r10-2026-11-20/README_TH.md). Not owner-viewed.
