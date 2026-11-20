@@ -1,0 +1,302 @@
+{
+ "heap0MiB": 28.7,
+ "nodes0": 2176,
+ "listeners0": 241,
+ "fights": [
+  {
+   "profile": {
+    "self": [
+     [
+      "(program) :0",
+      47097.9
+     ],
+     [
+      "getBoundingClientRect :0",
+      2140.4
+     ],
+     [
+      "set src/ui/battle-ui.ts:673",
+      2064.9
+     ],
+     [
+      "texImage2D :0",
+      1543.8
+     ],
+     [
+      "query :5816",
+      659.4
+     ],
+     [
+      "getParameter :0",
+      644.9
+     ],
+     [
+      "(garbage collector) :0",
+      337.2
+     ],
+     [
+      "bufferSubData :0",
+      247.5
+     ],
+     [
+      "elementsFromPoint :0",
+      238.4
+     ],
+     [
+      "(idle) :0",
+      230.7
+     ],
+     [
+      "get memory :0",
+      210.8
+     ],
+     [
+      "renderWebGLStep node_modules/.vite/deps/phaser.js:35744",
+      202.5
+     ],
+     [
+      "(anon) :1",
+      192.5
+     ],
+     [
+      "querySelectorAll :0",
+      182.7
+     ],
+     [
+      "report src/platform/perf-probe.ts:65",
+      164.4
+     ],
+     [
+      "requestAnimationFrame :0",
+      159
+     ],
+     [
+      "batch node_modules/.vite/deps/phaser.js:138528",
+      149.6
+     ],
+     [
+      "ContainerWebGLRenderer node_modules/.vite/deps/phaser.js:39515",
+      143.6
+     ],
+     [
+      "focus :0",
+      139.2
+     ],
+     [
+      "update node_modules/.vite/deps/phaser.js:185679",
+      138.4
+     ],
+     [
+      "render src/platform/perf-probe.ts:147",
+      123.6
+     ],
+     [
+      "stats src/platform/perf-probe.ts:51",
+      115.8
+     ],
+     [
+      "fit src/game/scenes/BattleScene.ts:100",
+      114.2
+     ],
+     [
+      "clear :0",
+      111.9
+     ],
+     [
+      "resolveCommand src/core/battle/engine.ts:1874",
+      101.8
+     ],
+     [
+      "(anon) :5814",
+      97
+     ],
+     [
+      "emit node_modules/.vite/deps/phaser.js:120",
+      94
+     ],
+     [
+      "querySelector :0",
+      88.9
+     ],
+     [
+      "(anon) src/platform/perf-probe.ts:52",
+      74.7
+     ],
+     [
+      "GraphicsWebGLRenderer node_modules/.vite/deps/phaser.js:43017",
+      71.4
+     ]
+    ],
+    "inclusiveSrc": [
+     [
+      "render src/ui/battle-ui.ts:899",
+      5152.1
+     ],
+     [
+      "(anon) src/ui/battle-playback.ts:124",
+      3193.9
+     ],
+     [
+      "set src/ui/battle-ui.ts:673",
+      2085.2
+     ],
+     [
+      "placeBackdrop src/ui/battle-ui.ts:354",
+      1811.9
+     ],
+     [
+      "sync src/game/scenes/BattleScene.ts:377",
+      1795.7
+     ],
+     [
+      "paint src/game/scenes/BattleScene.ts:405",
+      1787
+     ],
+     [
+      "showStage src/ui/battle-ui.ts:592",
+      1646.8
+     ],
+     [
+      "run src/ui/battle-ui.ts:640",
+      1609.4
+     ],
+     [
+      "(anon) src/game/scenes/BattleScene.ts:520",
+      1600.2
+     ],
+     [
+      "(anon) src/main.ts:38",
+      1599.7
+     ],
+     [
+      "choose src/ui/battle-ui.ts:386",
+      1599.2
+     ],
+     [
+      "run src/ui/battle-ui.ts:622",
+      1575.3
+     ],
+     [
+      "(anon) src/platform/perf-probe.ts:32",
+      1555
+     ],
+     [
+      "execute src/ui/battle-ui.ts:550",
+      1554.9
+     ],
+     [
+      "present src/ui/battle-ui.ts:561",
+      1530.3
+     ],
+     [
+      "(anon) src/ui/battle-ui.ts:121",
+      1385.6
+     ],
+     [
+      "render src/platform/perf-probe.ts:147",
+      1301.4
+     ],
+     [
+      "finishPresentation src/ui/battle-ui.ts:658",
+      1245
+     ],
+     [
+      "(anon) src/main.ts:41",
+      1244.9
+     ],
+     [
+      "fieldLayoutChanged src/ui/battle-ui.ts:347",
+      1243.5
+     ],
+     [
+      "report src/platform/perf-probe.ts:65",
+      1177.6
+     ],
+     [
+      "renderCommands src/ui/battle-ui.ts:777",
+      720.8
+     ],
+     [
+      "renderSituation src/ui/battle-ui.ts:718",
+      458.5
+     ],
+     [
+      "update src/game/scenes/BattleScene.ts:352",
+      357.7
+     ],
+     [
+      "commitBattle src/ui/game-shell.ts:1705",
+      350.4
+     ],
+     [
+      "commit src/ui/game-shell.ts:1700",
+      350.4
+     ],
+     [
+      "exec src/ui/game-shell.ts:769",
+      350.3
+     ],
+     [
+      "applyCommand src/core/command/game-command.ts:512",
+      337.1
+     ],
+     [
+      "local src/ui/game-shell.ts:811",
+      337.1
+     ],
+     [
+      "applyRunCommand src/core/command/game-command.ts:434",
+      335.6
+     ]
+    ]
+   }
+  },
+  {
+   "n": 0,
+   "fieldReadyMs": 1418,
+   "turns": 20,
+   "won": true,
+   "battleMs": 58638,
+   "commandClickMs": {
+    "n": 20,
+    "p50": 1123,
+    "p95": 1432,
+    "max": 1485,
+    "mean": 1178.2
+   },
+   "frames": {
+    "n": 1128,
+    "p50": 49.9,
+    "p95": 116.6,
+    "max": 233,
+    "mean": 49.9,
+    "fps": 20,
+    "over50": 242,
+    "over100": 64
+   },
+   "victoryIdle": {
+    "n": 81,
+    "fps": 26.6,
+    "p50": 33.4,
+    "p95": 50,
+    "worst": 67,
+    "over50": 2,
+    "over100": 0
+   },
+   "longTasks": {
+    "count": 160,
+    "total": 11307,
+    "worst": 340
+   },
+   "heapMiB": 32.6,
+   "nodes": 3092,
+   "listeners": 256,
+   "textures": {
+    "texturesMiB": 170.5,
+    "peakTexturesMiB": 170.6,
+    "heapMiB": 66.7,
+    "peakHeapMiB": 78.1
+   }
+  }
+ ]
+}

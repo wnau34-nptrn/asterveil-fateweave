@@ -1,0 +1,1214 @@
+{
+ "title": {
+  "readyMs": 1834,
+  "titleButtonsMs": 2113,
+  "titleNetworkIdleMs": 24914,
+  "nav": {
+   "dcl": 1819,
+   "load": 0,
+   "fcp": 2300,
+   "lcp": 4416,
+   "gameReady": 1808,
+   "jsEnd": 1024,
+   "cssEnd": 515,
+   "titleBgEnd": 0,
+   "skillIconsEnd": 24372,
+   "battlePreloadEnd": 20302,
+   "musicEnd": 0
+  },
+  "long": [
+   {
+    "start": 1057,
+    "dur": 762,
+    "name": "self"
+   },
+   {
+    "start": 1844,
+    "dur": 70,
+    "name": "self"
+   },
+   {
+    "start": 4056,
+    "dur": 178,
+    "name": "self"
+   },
+   {
+    "start": 5975,
+    "dur": 97,
+    "name": "self"
+   },
+   {
+    "start": 6374,
+    "dur": 83,
+    "name": "self"
+   },
+   {
+    "start": 7823,
+    "dur": 75,
+    "name": "self"
+   },
+   {
+    "start": 10218,
+    "dur": 127,
+    "name": "self"
+   },
+   {
+    "start": 10807,
+    "dur": 138,
+    "name": "self"
+   },
+   {
+    "start": 11245,
+    "dur": 140,
+    "name": "self"
+   },
+   {
+    "start": 12735,
+    "dur": 126,
+    "name": "self"
+   },
+   {
+    "start": 12898,
+    "dur": 180,
+    "name": "self"
+   },
+   {
+    "start": 13124,
+    "dur": 61,
+    "name": "self"
+   },
+   {
+    "start": 13206,
+    "dur": 72,
+    "name": "self"
+   },
+   {
+    "start": 16101,
+    "dur": 107,
+    "name": "self"
+   },
+   {
+    "start": 18539,
+    "dur": 100,
+    "name": "self"
+   },
+   {
+    "start": 20318,
+    "dur": 581,
+    "name": "self"
+   },
+   {
+    "start": 20945,
+    "dur": 344,
+    "name": "self"
+   },
+   {
+    "start": 21297,
+    "dur": 232,
+    "name": "self"
+   },
+   {
+    "start": 22324,
+    "dur": 191,
+    "name": "self"
+   },
+   {
+    "start": 24415,
+    "dur": 539,
+    "name": "self"
+   }
+  ],
+  "metrics": {
+   "Documents": 2,
+   "Frames": 2,
+   "JSEventListeners": 218,
+   "Nodes": 2712,
+   "LayoutCount": 19,
+   "RecalcStyleCount": 1216,
+   "LayoutDuration": 0.167,
+   "RecalcStyleDuration": 1.23,
+   "ScriptDuration": 4.561,
+   "TaskDuration": 10.403,
+   "JSHeapUsedSize": 9357580
+  },
+  "requests": 71,
+  "bytes": 26349912,
+  "byType": {
+   "Document": {
+    "n": 1,
+    "bytes": 1741
+   },
+   "Stylesheet": {
+    "n": 1,
+    "bytes": 61469
+   },
+   "Script": {
+    "n": 2,
+    "bytes": 694867
+   },
+   "Image": {
+    "n": 31,
+    "bytes": 8297274
+   },
+   "Fetch": {
+    "n": 1,
+    "bytes": 325
+   },
+   "Font": {
+    "n": 3,
+    "bytes": 52676
+   },
+   "XHR": {
+    "n": 32,
+    "bytes": 17241560
+   }
+  },
+  "slowest": [
+   {
+    "url": "assets/ui/skill_icons.webp?v=3b11491a",
+    "type": "Image",
+    "bytes": 5780304,
+    "ms": 22919,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_mercs.webp",
+    "type": "XHR",
+    "bytes": 3125682,
+    "ms": 11165,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units.webp?v=6263840f",
+    "type": "XHR",
+    "bytes": 1985194,
+    "ms": 9177,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/healing_fx.webp",
+    "type": "XHR",
+    "bytes": 1376936,
+    "ms": 7404,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_foes.webp",
+    "type": "XHR",
+    "bytes": 805190,
+    "ms": 7158,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/blade_fx.webp",
+    "type": "XHR",
+    "bytes": 1072126,
+    "ms": 6964,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/earth_fx.webp",
+    "type": "XHR",
+    "bytes": 1182060,
+    "ms": 6372,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/ward_fx.webp",
+    "type": "XHR",
+    "bytes": 729314,
+    "ms": 5899,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/defense_fx.webp",
+    "type": "XHR",
+    "bytes": 1063244,
+    "ms": 5786,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/alchemy_fx.webp",
+    "type": "XHR",
+    "bytes": 895546,
+    "ms": 4906,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/song_shadow_fx.webp",
+    "type": "XHR",
+    "bytes": 901928,
+    "ms": 4826,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/portraits_foes2.webp",
+    "type": "Image",
+    "bytes": 409434,
+    "ms": 4724,
+    "status": 200,
+    "cache": "no-cache"
+   }
+  ],
+  "largest": [
+   {
+    "url": "assets/ui/skill_icons.webp?v=3b11491a",
+    "type": "Image",
+    "bytes": 5780304,
+    "ms": 22919,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_mercs.webp",
+    "type": "XHR",
+    "bytes": 3125682,
+    "ms": 11165,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units.webp?v=6263840f",
+    "type": "XHR",
+    "bytes": 1985194,
+    "ms": 9177,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/healing_fx.webp",
+    "type": "XHR",
+    "bytes": 1376936,
+    "ms": 7404,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/earth_fx.webp",
+    "type": "XHR",
+    "bytes": 1182060,
+    "ms": 6372,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/blade_fx.webp",
+    "type": "XHR",
+    "bytes": 1072126,
+    "ms": 6964,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/defense_fx.webp",
+    "type": "XHR",
+    "bytes": 1063244,
+    "ms": 5786,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/song_shadow_fx.webp",
+    "type": "XHR",
+    "bytes": 901928,
+    "ms": 4826,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/alchemy_fx.webp",
+    "type": "XHR",
+    "bytes": 895546,
+    "ms": 4906,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/projectile_fx.webp",
+    "type": "XHR",
+    "bytes": 807506,
+    "ms": 4661,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_foes.webp",
+    "type": "XHR",
+    "bytes": 805190,
+    "ms": 7158,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/rework_fx.webp",
+    "type": "XHR",
+    "bytes": 772428,
+    "ms": 4471,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/portraits_foes.webp",
+    "type": "Image",
+    "bytes": 746156,
+    "ms": 3745,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/ward_fx.webp",
+    "type": "XHR",
+    "bytes": 729314,
+    "ms": 5899,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/bolt_fx.webp",
+    "type": "XHR",
+    "bytes": 608602,
+    "ms": 4058,
+    "status": 200,
+    "cache": "no-cache"
+   }
+  ],
+  "cacheHeaders": [
+   "Document:no-cache",
+   "Stylesheet:no-cache",
+   "Script:no-cache",
+   "Image:-",
+   "Fetch:no-cache",
+   "Font:no-cache",
+   "Image:no-cache",
+   "XHR:no-cache"
+  ]
+ },
+ "camp": {
+  "readyMs": 1707,
+  "titleButtonsMs": 1864,
+  "titleNetworkIdleMs": 24828,
+  "nav": {
+   "dcl": 1690,
+   "load": 24826,
+   "fcp": 1852,
+   "lcp": 4328,
+   "gameReady": 1684,
+   "jsEnd": 1026,
+   "cssEnd": 514,
+   "titleBgEnd": 0,
+   "skillIconsEnd": 24288,
+   "battlePreloadEnd": 20220,
+   "musicEnd": 0
+  },
+  "afterContinue": {
+   "shownMs": 225,
+   "idleMs": 1729,
+   "requests": 10,
+   "bytes": 1247327
+  },
+  "long": [
+   {
+    "start": 1067,
+    "dur": 625,
+    "name": "self"
+   },
+   {
+    "start": 1718,
+    "dur": 52,
+    "name": "self"
+   },
+   {
+    "start": 2138,
+    "dur": 50,
+    "name": "self"
+   },
+   {
+    "start": 4015,
+    "dur": 176,
+    "name": "self"
+   },
+   {
+    "start": 5879,
+    "dur": 124,
+    "name": "self"
+   },
+   {
+    "start": 7751,
+    "dur": 92,
+    "name": "self"
+   },
+   {
+    "start": 10102,
+    "dur": 145,
+    "name": "self"
+   },
+   {
+    "start": 10754,
+    "dur": 149,
+    "name": "self"
+   },
+   {
+    "start": 11130,
+    "dur": 132,
+    "name": "self"
+   },
+   {
+    "start": 12666,
+    "dur": 120,
+    "name": "self"
+   },
+   {
+    "start": 12839,
+    "dur": 158,
+    "name": "self"
+   },
+   {
+    "start": 13102,
+    "dur": 74,
+    "name": "self"
+   },
+   {
+    "start": 15982,
+    "dur": 102,
+    "name": "self"
+   },
+   {
+    "start": 18488,
+    "dur": 137,
+    "name": "self"
+   },
+   {
+    "start": 20246,
+    "dur": 689,
+    "name": "self"
+   },
+   {
+    "start": 21008,
+    "dur": 442,
+    "name": "self"
+   },
+   {
+    "start": 21462,
+    "dur": 280,
+    "name": "self"
+   },
+   {
+    "start": 22206,
+    "dur": 223,
+    "name": "self"
+   },
+   {
+    "start": 24321,
+    "dur": 498,
+    "name": "self"
+   },
+   {
+    "start": 24878,
+    "dur": 128,
+    "name": "self"
+   }
+  ],
+  "metrics": {
+   "Documents": 2,
+   "Frames": 2,
+   "JSEventListeners": 219,
+   "Nodes": 2956,
+   "LayoutCount": 21,
+   "RecalcStyleCount": 1262,
+   "LayoutDuration": 0.211,
+   "RecalcStyleDuration": 1.445,
+   "ScriptDuration": 4.828,
+   "TaskDuration": 11.615,
+   "JSHeapUsedSize": 9753892
+  },
+  "requests": 81,
+  "bytes": 27597239,
+  "byType": {
+   "Document": {
+    "n": 1,
+    "bytes": 1741
+   },
+   "Stylesheet": {
+    "n": 1,
+    "bytes": 61469
+   },
+   "Script": {
+    "n": 2,
+    "bytes": 694867
+   },
+   "Image": {
+    "n": 39,
+    "bytes": 9455824
+   },
+   "Fetch": {
+    "n": 1,
+    "bytes": 325
+   },
+   "Font": {
+    "n": 3,
+    "bytes": 52676
+   },
+   "XHR": {
+    "n": 32,
+    "bytes": 17241560
+   },
+   "Other": {
+    "n": 2,
+    "bytes": 88777
+   }
+  },
+  "slowest": [
+   {
+    "url": "assets/ui/skill_icons.webp?v=3b11491a",
+    "type": "Image",
+    "bytes": 5780304,
+    "ms": 22921,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_mercs.webp",
+    "type": "XHR",
+    "bytes": 3125682,
+    "ms": 11172,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units.webp?v=6263840f",
+    "type": "XHR",
+    "bytes": 1985194,
+    "ms": 9160,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/healing_fx.webp",
+    "type": "XHR",
+    "bytes": 1376936,
+    "ms": 7386,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_foes.webp",
+    "type": "XHR",
+    "bytes": 805190,
+    "ms": 7153,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/blade_fx.webp",
+    "type": "XHR",
+    "bytes": 1072126,
+    "ms": 7087,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/earth_fx.webp",
+    "type": "XHR",
+    "bytes": 1182060,
+    "ms": 6376,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/ward_fx.webp",
+    "type": "XHR",
+    "bytes": 729314,
+    "ms": 5964,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/defense_fx.webp",
+    "type": "XHR",
+    "bytes": 1063244,
+    "ms": 5785,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/alchemy_fx.webp",
+    "type": "XHR",
+    "bytes": 895546,
+    "ms": 4908,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/song_shadow_fx.webp",
+    "type": "XHR",
+    "bytes": 901928,
+    "ms": 4824,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/portraits_foes2.webp",
+    "type": "Image",
+    "bytes": 409434,
+    "ms": 4759,
+    "status": 200,
+    "cache": "no-cache"
+   }
+  ],
+  "largest": [
+   {
+    "url": "assets/ui/skill_icons.webp?v=3b11491a",
+    "type": "Image",
+    "bytes": 5780304,
+    "ms": 22921,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_mercs.webp",
+    "type": "XHR",
+    "bytes": 3125682,
+    "ms": 11172,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units.webp?v=6263840f",
+    "type": "XHR",
+    "bytes": 1985194,
+    "ms": 9160,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/healing_fx.webp",
+    "type": "XHR",
+    "bytes": 1376936,
+    "ms": 7386,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/earth_fx.webp",
+    "type": "XHR",
+    "bytes": 1182060,
+    "ms": 6376,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/blade_fx.webp",
+    "type": "XHR",
+    "bytes": 1072126,
+    "ms": 7087,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/defense_fx.webp",
+    "type": "XHR",
+    "bytes": 1063244,
+    "ms": 5785,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/song_shadow_fx.webp",
+    "type": "XHR",
+    "bytes": 901928,
+    "ms": 4824,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/alchemy_fx.webp",
+    "type": "XHR",
+    "bytes": 895546,
+    "ms": 4908,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/projectile_fx.webp",
+    "type": "XHR",
+    "bytes": 807506,
+    "ms": 4670,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_foes.webp",
+    "type": "XHR",
+    "bytes": 805190,
+    "ms": 7153,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/rework_fx.webp",
+    "type": "XHR",
+    "bytes": 772428,
+    "ms": 4469,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/portraits_foes.webp",
+    "type": "Image",
+    "bytes": 746156,
+    "ms": 3755,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/ward_fx.webp",
+    "type": "XHR",
+    "bytes": 729314,
+    "ms": 5964,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/bolt_fx.webp",
+    "type": "XHR",
+    "bytes": 608602,
+    "ms": 4076,
+    "status": 200,
+    "cache": "no-cache"
+   }
+  ],
+  "cacheHeaders": [
+   "Document:no-cache",
+   "Stylesheet:no-cache",
+   "Script:no-cache",
+   "Image:-",
+   "Fetch:no-cache",
+   "Font:no-cache",
+   "Image:no-cache",
+   "XHR:no-cache",
+   "Other:no-cache"
+  ]
+ },
+ "map": {
+  "readyMs": 1590,
+  "titleButtonsMs": 1755,
+  "titleNetworkIdleMs": 25472,
+  "nav": {
+   "dcl": 1578,
+   "load": 24791,
+   "fcp": 2052,
+   "lcp": 4200,
+   "gameReady": 1574,
+   "jsEnd": 1015,
+   "cssEnd": 505,
+   "titleBgEnd": 0,
+   "skillIconsEnd": 24206,
+   "battlePreloadEnd": 20096,
+   "musicEnd": 0
+  },
+  "afterContinue": {
+   "shownMs": 721,
+   "idleMs": 2222,
+   "requests": 15,
+   "bytes": 291738
+  },
+  "long": [
+   {
+    "start": 1038,
+    "dur": 543,
+    "name": "self"
+   },
+   {
+    "start": 1618,
+    "dur": 54,
+    "name": "self"
+   },
+   {
+    "start": 3883,
+    "dur": 183,
+    "name": "self"
+   },
+   {
+    "start": 5772,
+    "dur": 124,
+    "name": "self"
+   },
+   {
+    "start": 6140,
+    "dur": 50,
+    "name": "self"
+   },
+   {
+    "start": 7590,
+    "dur": 88,
+    "name": "self"
+   },
+   {
+    "start": 10001,
+    "dur": 139,
+    "name": "self"
+   },
+   {
+    "start": 10628,
+    "dur": 156,
+    "name": "self"
+   },
+   {
+    "start": 10998,
+    "dur": 136,
+    "name": "self"
+   },
+   {
+    "start": 12510,
+    "dur": 144,
+    "name": "self"
+   },
+   {
+    "start": 12695,
+    "dur": 165,
+    "name": "self"
+   },
+   {
+    "start": 12916,
+    "dur": 70,
+    "name": "self"
+   },
+   {
+    "start": 13021,
+    "dur": 98,
+    "name": "self"
+   },
+   {
+    "start": 15854,
+    "dur": 127,
+    "name": "self"
+   },
+   {
+    "start": 18305,
+    "dur": 109,
+    "name": "self"
+   },
+   {
+    "start": 20124,
+    "dur": 739,
+    "name": "self"
+   },
+   {
+    "start": 20950,
+    "dur": 349,
+    "name": "self"
+   },
+   {
+    "start": 21309,
+    "dur": 211,
+    "name": "self"
+   },
+   {
+    "start": 22101,
+    "dur": 176,
+    "name": "self"
+   },
+   {
+    "start": 24178,
+    "dur": 581,
+    "name": "self"
+   },
+   {
+    "start": 25543,
+    "dur": 465,
+    "name": "self"
+   }
+  ],
+  "metrics": {
+   "Documents": 2,
+   "Frames": 2,
+   "JSEventListeners": 219,
+   "Nodes": 2848,
+   "LayoutCount": 26,
+   "RecalcStyleCount": 1351,
+   "LayoutDuration": 0.168,
+   "RecalcStyleDuration": 1.751,
+   "ScriptDuration": 4.812,
+   "TaskDuration": 12.153,
+   "JSHeapUsedSize": 9569272
+  },
+  "requests": 87,
+  "bytes": 26644939,
+  "byType": {
+   "Document": {
+    "n": 1,
+    "bytes": 1741
+   },
+   "Stylesheet": {
+    "n": 1,
+    "bytes": 61469
+   },
+   "Script": {
+    "n": 2,
+    "bytes": 694867
+   },
+   "Image": {
+    "n": 45,
+    "bytes": 8503524
+   },
+   "Fetch": {
+    "n": 1,
+    "bytes": 325
+   },
+   "Font": {
+    "n": 3,
+    "bytes": 52676
+   },
+   "XHR": {
+    "n": 32,
+    "bytes": 17241560
+   },
+   "Other": {
+    "n": 2,
+    "bytes": 88777
+   }
+  },
+  "slowest": [
+   {
+    "url": "assets/ui/skill_icons.webp?v=3b11491a",
+    "type": "Image",
+    "bytes": 5780304,
+    "ms": 22923,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_mercs.webp",
+    "type": "XHR",
+    "bytes": 3125682,
+    "ms": 11132,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units.webp?v=6263840f",
+    "type": "XHR",
+    "bytes": 1985194,
+    "ms": 9165,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/healing_fx.webp",
+    "type": "XHR",
+    "bytes": 1376936,
+    "ms": 7402,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/blade_fx.webp",
+    "type": "XHR",
+    "bytes": 1072126,
+    "ms": 7105,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_foes.webp",
+    "type": "XHR",
+    "bytes": 805190,
+    "ms": 7096,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/earth_fx.webp",
+    "type": "XHR",
+    "bytes": 1182060,
+    "ms": 6382,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/ward_fx.webp",
+    "type": "XHR",
+    "bytes": 729314,
+    "ms": 5902,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/defense_fx.webp",
+    "type": "XHR",
+    "bytes": 1063244,
+    "ms": 5771,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/alchemy_fx.webp",
+    "type": "XHR",
+    "bytes": 895546,
+    "ms": 4905,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/song_shadow_fx.webp",
+    "type": "XHR",
+    "bytes": 901928,
+    "ms": 4856,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/portraits_foes2.webp",
+    "type": "Image",
+    "bytes": 409434,
+    "ms": 4756,
+    "status": 200,
+    "cache": "no-cache"
+   }
+  ],
+  "largest": [
+   {
+    "url": "assets/ui/skill_icons.webp?v=3b11491a",
+    "type": "Image",
+    "bytes": 5780304,
+    "ms": 22923,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_mercs.webp",
+    "type": "XHR",
+    "bytes": 3125682,
+    "ms": 11132,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units.webp?v=6263840f",
+    "type": "XHR",
+    "bytes": 1985194,
+    "ms": 9165,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/healing_fx.webp",
+    "type": "XHR",
+    "bytes": 1376936,
+    "ms": 7402,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/earth_fx.webp",
+    "type": "XHR",
+    "bytes": 1182060,
+    "ms": 6382,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/blade_fx.webp",
+    "type": "XHR",
+    "bytes": 1072126,
+    "ms": 7105,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/defense_fx.webp",
+    "type": "XHR",
+    "bytes": 1063244,
+    "ms": 5771,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/song_shadow_fx.webp",
+    "type": "XHR",
+    "bytes": 901928,
+    "ms": 4856,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/alchemy_fx.webp",
+    "type": "XHR",
+    "bytes": 895546,
+    "ms": 4905,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/projectile_fx.webp",
+    "type": "XHR",
+    "bytes": 807506,
+    "ms": 4677,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_foes.webp",
+    "type": "XHR",
+    "bytes": 805190,
+    "ms": 7096,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/rework_fx.webp",
+    "type": "XHR",
+    "bytes": 772428,
+    "ms": 4472,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/portraits_foes.webp",
+    "type": "Image",
+    "bytes": 746156,
+    "ms": 3740,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/ward_fx.webp",
+    "type": "XHR",
+    "bytes": 729314,
+    "ms": 5902,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/bolt_fx.webp",
+    "type": "XHR",
+    "bytes": 608602,
+    "ms": 4065,
+    "status": 200,
+    "cache": "no-cache"
+   }
+  ],
+  "cacheHeaders": [
+   "Document:no-cache",
+   "Stylesheet:no-cache",
+   "Script:no-cache",
+   "Image:-",
+   "Fetch:no-cache",
+   "Font:no-cache",
+   "Image:no-cache",
+   "XHR:no-cache",
+   "Other:no-cache"
+  ]
+ }
+}

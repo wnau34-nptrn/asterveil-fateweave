@@ -1,0 +1,91 @@
+{
+ "idle": {
+  "n": 240,
+  "fps": 60,
+  "p50": 16.7,
+  "p95": 16.8,
+  "worst": 17,
+  "over50": 0,
+  "over100": 0
+ },
+ "heavy": {
+  "backdrop": 8,
+  "filter": 22,
+  "anim": 18,
+  "imgs": 27,
+  "bigImg": [
+   "portraits_foes.webp 1024x3072",
+   "portraits_foes.webp 1024x3072",
+   "portraits_foes.webp 1024x3072",
+   "portraits.webp 1024x1536",
+   "portraits.webp 1024x1536",
+   "portraits.webp 1024x1536",
+   "portraits_foes.webp 1024x3072",
+   "portraits.webp 1024x1536",
+   "portraits.webp 1024x1536",
+   "portraits_foes2.webp 1024x2560",
+   "portraits.webp 1024x1536",
+   "portraits.webp 1024x1536",
+   "portraits_foes.webp 1024x3072",
+   "portraits_foes.webp 1024x3072",
+   "portraits_foes2.webp 1024x2560",
+   "portraits.webp 1024x1536",
+   "portraits.webp 1024x1536",
+   "portraits.webp 1024x1536",
+   "portraits.webp 1024x1536",
+   "portraits.webp 1024x1536",
+   "portraits.webp 1024x1536",
+   "portraits.webp 1024x1536",
+   "portraits.webp 1024x1536",
+   "portraits_foes.webp 1024x3072",
+   "portraits_foes2.webp 1024x2560",
+   "portraits.webp 1024x1536"
+  ],
+  "nodes": 1714
+ },
+ "opens": [
+  {
+   "tab": "lobby-tab-team",
+   "clickToFrameMs": 59,
+   "long": 51
+  },
+  {
+   "tab": "lobby-tab-characters",
+   "clickToFrameMs": 29,
+   "long": 0
+  },
+  {
+   "tab": "lobby-tab-hire",
+   "clickToFrameMs": 28,
+   "long": 0
+  },
+  {
+   "tab": "lobby-tab-gear",
+   "clickToFrameMs": 32,
+   "long": 0
+  },
+  {
+   "tab": "lobby-tab-forge",
+   "clickToFrameMs": 18,
+   "long": 0
+  },
+  {
+   "tab": "lobby-tab-brew",
+   "clickToFrameMs": 25,
+   "long": 0
+  }
+ ],
+ "metrics": {
+  "Documents": 2,
+  "Frames": 2,
+  "JSEventListeners": 219,
+  "Nodes": 4491,
+  "LayoutCount": 40,
+  "RecalcStyleCount": 442,
+  "LayoutDuration": 0.277,
+  "RecalcStyleDuration": 0.82,
+  "ScriptDuration": 4.853,
+  "TaskDuration": 7.923,
+  "JSHeapUsedSize": 9916796
+ }
+}

@@ -1,0 +1,709 @@
+{
+ "top": [
+  [
+   "RunTask",
+   5792,
+   5145
+  ],
+  [
+   "FunctionCall",
+   85,
+   754
+  ],
+  [
+   "EventDispatch",
+   51,
+   747
+  ],
+  [
+   "UpdateLayoutTree",
+   185,
+   665
+  ],
+  [
+   "Paint",
+   4098,
+   433
+  ],
+  [
+   "PrePaint",
+   201,
+   405
+  ],
+  [
+   "Layout",
+   65,
+   319
+  ],
+  [
+   "Layerize",
+   153,
+   313
+  ],
+  [
+   "RasterTask",
+   401,
+   159
+  ],
+  [
+   "Commit",
+   153,
+   133
+  ],
+  [
+   "PaintImage",
+   3956,
+   108
+  ],
+  [
+   "ParseHTML",
+   72,
+   20
+  ],
+  [
+   "HitTest",
+   56,
+   13
+  ],
+  [
+   "FireAnimationFrame",
+   10,
+   13
+  ],
+  [
+   "UpdateLayer",
+   1810,
+   12
+  ],
+  [
+   "ImageDecodeTask",
+   340,
+   5
+  ],
+  [
+   "V8.StackGuard",
+   18,
+   4
+  ],
+  [
+   "IntersectionObserverController::computeIntersections",
+   301,
+   4
+  ],
+  [
+   "V8.HandleInterrupts",
+   17,
+   4
+  ],
+  [
+   "RunMicrotasks",
+   14,
+   3
+  ],
+  [
+   "V8.BytecodeBudgetInterrupt",
+   71,
+   2
+  ],
+  [
+   "MinorGC",
+   1,
+   2
+  ],
+  [
+   "V8.GC_SCAVENGER",
+   1,
+   2
+  ],
+  [
+   "V8.GC_SCAVENGER_SCAVENGE",
+   1,
+   2
+  ],
+  [
+   "Decode LazyPixelRef",
+   1,
+   1
+  ]
+ ],
+ "recalcElements": [
+  11,
+  1,
+  1374,
+  1,
+  8,
+  1,
+  8,
+  18,
+  18,
+  18,
+  18,
+  18,
+  18,
+  18,
+  18,
+  18,
+  18,
+  17,
+  14,
+  14,
+  14,
+  14,
+  14,
+  14,
+  14,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  1371,
+  1,
+  9,
+  9,
+  17,
+  17,
+  17,
+  17,
+  17,
+  17,
+  17,
+  17,
+  17,
+  17,
+  16,
+  16,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  1376,
+  1,
+  9,
+  9,
+  18,
+  18,
+  18,
+  18,
+  18,
+  18,
+  18,
+  17,
+  17,
+  14,
+  14,
+  14,
+  14,
+  14,
+  14,
+  14,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  1371,
+  1,
+  9,
+  9,
+  9,
+  17,
+  17,
+  17,
+  17,
+  17,
+  17,
+  17,
+  17,
+  16,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  12,
+  1376,
+  1,
+  9,
+  18,
+  18,
+  18,
+  18,
+  18,
+  18,
+  18,
+  18,
+  14,
+  14,
+  14,
+  14,
+  14,
+  14,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13,
+  13
+ ],
+ "reasons": [
+  [
+   "StyleRecalc:Animation:I",
+   996
+  ],
+  [
+   "StyleRecalc:Node was inserted into tree:DIV class='fog-cell opaque'",
+   596
+  ],
+  [
+   "StyleRecalc:Animation:::before",
+   543
+  ],
+  [
+   "StyleRecalc:Animation:I class='map-prop herb-glow'",
+   166
+  ],
+  [
+   "StyleRecalc:Animation:::after",
+   166
+  ],
+  [
+   "StyleRecalc:Animation:P id='world-message' class='hud-event glass-capsule toast-live'",
+   162
+  ],
+  [
+   "StyleRecalc:Animation:DIV id='map-grid' class='map-grid'",
+   85
+  ],
+  [
+   "StyleRecalc:Animation:DIV id='party-token' class='party-token lv-hop'",
+   49
+  ],
+  [
+   "StyleRecalc:Animation:SPAN class='step-dust sprite'",
+   49
+  ],
+  [
+   "StyleRecalc:Attribute:SPAN class='decor sprite'",
+   26
+  ],
+  [
+   "StyleRecalc:Animation:BUTTON id='rest' class='interact-button'",
+   25
+  ],
+  [
+   "StyleRecalc:Node was inserted into tree:DIV class='fog-cell'",
+   18
+  ],
+  [
+   "StyleRecalc:Node was inserted into tree:SPAN class='step-hint'",
+   18
+  ],
+  [
+   "StyleRecalc:Animation:BUTTON id='rest' class='interact-button available'",
+   18
+  ],
+  [
+   "StyleRecalc:Node was inserted into tree:#text",
+   14
+  ],
+  [
+   "StyleInvalidator:Invalidation set invalidates self:DIV id='party-token' class='party-token lv-hop'",
+   14
+  ],
+  [
+   "StyleRecalc:Related style rule:DIV id='party-token' class='party-token lv-hop'",
+   14
+  ],
+  [
+   "StyleRecalc:Attribute:SPAN class='chest sprite'",
+   12
+  ],
+  [
+   "StyleInvalidator:Invalidation set invalidates self:BUTTON id='rest' class='interact-button available'",
+   11
+  ],
+  [
+   "StyleRecalc:Related style rule:BUTTON id='rest' class='interact-button available'",
+   11
+  ],
+  [
+   "StyleRecalc:Node was inserted into tree:svg class='icon'",
+   10
+  ],
+  [
+   "StyleRecalc:Node was inserted into tree:SPAN",
+   10
+  ],
+  [
+   "StyleRecalc:Attribute:DIV id='lesson-layer'",
+   10
+  ],
+  [
+   "StyleInvalidator:Invalidation set invalidates self:BUTTON id='rest' class='interact-button'",
+   9
+  ],
+  [
+   "StyleRecalc:Related style rule:BUTTON id='rest' class='interact-button'",
+   9
+  ],
+  [
+   "StyleInvalidator:Invalidation set invalidates self:DIV id='party-token' class='party-token'",
+   9
+  ],
+  [
+   "StyleRecalc:Related style rule:DIV id='party-token' class='party-token'",
+   9
+  ],
+  [
+   "StyleRecalc:Inline CSS style declaration was mutated:SECTION id='map-viewport' class='map-view'",
+   7
+  ],
+  [
+   "ScheduleStyle::SECTION id='map-viewport' class='map-view'[style]",
+   7
+  ],
+  [
+   "StyleInvalidator:Invalidation set invalidates self:SECTION id='map-viewport' class='map-view'",
+   7
+  ],
+  [
+   "StyleRecalc:Related style rule:SECTION id='map-viewport' class='map-view'",
+   7
+  ],
+  [
+   "ScheduleStyle::BUTTON id='rest' class='interact-button available'",
+   6
+  ],
+  [
+   "StyleRecalc:Attribute:SPAN class='event-mark sprite'",
+   6
+  ],
+  [
+   "StyleRecalc:Attribute:SPAN class='boulder sprite'",
+   6
+  ],
+  [
+   "StyleRecalc:Attribute:SECTION id='title-view' class='view title-view view-enter'",
+   5
+  ],
+  [
+   "StyleRecalc:Attribute:SECTION id='commander-view' class='view lobby-view commander-view'",
+   5
+  ],
+  [
+   "StyleRecalc:Attribute:SECTION id='lobby-view' class='view lobby-view'",
+   5
+  ],
+  [
+   "StyleRecalc:Attribute:SECTION id='battle-view' class='view battle-view view-off mobile-layout'",
+   5
+  ],
+  [
+   "StyleRecalc:Node was inserted into tree:SPAN class='zone-title'",
+   5
+  ],
+  [
+   "StyleRecalc:Node was inserted into tree:SPAN class='zone-level danger'",
+   5
+  ]
+ ],
+ "profile": {
+  "self": [
+   [
+    "(program) :0",
+    2551.9
+   ],
+   [
+    "(idle) :0",
+    1912.6
+   ],
+   [
+    "get offsetWidth :0",
+    222
+   ],
+   [
+    "focus :0",
+    108
+   ],
+   [
+    "renderFog src/ui/world-ui.ts:1050",
+    100.7
+   ],
+   [
+    "get clientWidth :0",
+    43.4
+   ],
+   [
+    "renderParty src/ui/world-ui.ts:1040",
+    40.2
+   ],
+   [
+    "render src/ui/world-ui.ts:742",
+    30.1
+   ],
+   [
+    "play src/platform/sfx.ts:694",
+    21
+   ],
+   [
+    "renderDanger src/ui/world-ui.ts:1026",
+    20
+   ],
+   [
+    "renderHints src/ui/world-ui.ts:1128",
+    14.2
+   ],
+   [
+    "querySelector :0",
+    9.2
+   ],
+   [
+    "renderPackButton src/ui/world-ui.ts:829",
+    8.4
+   ],
+   [
+    "setProperty :0",
+    8.1
+   ],
+   [
+    "renderAction src/ui/world-ui.ts:812",
+    7.6
+   ],
+   [
+    "toggle :0",
+    7.3
+   ],
+   [
+    "show src/ui/game-shell.ts:589",
+    6.8
+   ],
+   [
+    "renderSprites src/ui/world-ui.ts:1068",
+    6.2
+   ],
+   [
+    "move src/core/world/world.ts:489",
+    5.5
+   ],
+   [
+    "layout src/ui/world-ui.ts:1184",
+    4.9
+   ],
+   [
+    "(anon) src/core/world/world.ts:60",
+    4.1
+   ],
+   [
+    "add :0",
+    4
+   ],
+   [
+    "update node_modules/.vite/deps/phaser.js:86933",
+    4
+   ],
+   [
+    "remove :0",
+    3.2
+   ],
+   [
+    "querySelectorAll :0",
+    2.5
+   ],
+   [
+    "setItem :0",
+    2.4
+   ],
+   [
+    "skillChoices src/core/world/world.ts:215",
+    2.4
+   ],
+   [
+    "createBiquadFilter :0",
+    2.3
+   ],
+   [
+    "applyRunCommand src/core/command/game-command.ts:434",
+    2.3
+   ],
+   [
+    "starred src/core/world/world.ts:227",
+    2.3
+   ]
+  ],
+  "inclusiveSrc": [
+   [
+    "(anon) src/ui/world-ui.ts:466",
+    713.8
+   ],
+   [
+    "input src/ui/world-ui.ts:617",
+    707.3
+   ],
+   [
+    "move src/ui/game-shell.ts:1411",
+    707.1
+   ],
+   [
+    "move src/ui/game-shell.ts:115",
+    707.1
+   ],
+   [
+    "exec src/ui/game-shell.ts:769",
+    706.9
+   ],
+   [
+    "moved src/ui/game-shell.ts:1446",
+    694.9
+   ],
+   [
+    "(anon) src/ui/game-shell.ts:1444",
+    694.9
+   ],
+   [
+    "renderWorld src/ui/game-shell.ts:1375",
+    555.1
+   ],
+   [
+    "render src/ui/world-ui.ts:742",
+    546.4
+   ],
+   [
+    "renderSprites src/ui/world-ui.ts:1068",
+    219.8
+   ],
+   [
+    "playRecruits src/ui/game-shell.ts:1402",
+    108.8
+   ],
+   [
+    "(anon) src/ui/game-shell.ts:1490",
+    108
+   ],
+   [
+    "renderFog src/ui/world-ui.ts:1050",
+    103.4
+   ],
+   [
+    "layout src/ui/world-ui.ts:1184",
+    55.3
+   ],
+   [
+    "renderParty src/ui/world-ui.ts:1040",
+    45.1
+   ],
+   [
+    "play src/platform/sfx.ts:694",
+    26.1
+   ],
+   [
+    "worldSound src/ui/game-shell.ts:1493",
+    26.1
+   ],
+   [
+    "renderDanger src/ui/world-ui.ts:1026",
+    21.1
+   ],
+   [
+    "renderHints src/ui/world-ui.ts:1128",
+    15.7
+   ],
+   [
+    "renderAction src/ui/world-ui.ts:812",
+    15.2
+   ],
+   [
+    "applyCommand src/core/command/game-command.ts:512",
+    12
+   ],
+   [
+    "local src/ui/game-shell.ts:811",
+    12
+   ],
+   [
+    "applyRunCommand src/core/command/game-command.ts:434",
+    11
+   ],
+   [
+    "renderPackButton src/ui/world-ui.ts:829",
+    9.2
+   ],
+   [
+    "updateLessons src/ui/game-shell.ts:551",
+    8.7
+   ],
+   [
+    "worldLesson src/ui/lessons.ts:10",
+    7.9
+   ],
+   [
+    "show src/ui/game-shell.ts:589",
+    7.5
+   ],
+   [
+    "move src/core/world/world.ts:489",
+    7.3
+   ],
+   [
+    "renderPuzzles src/ui/world-ui.ts:719",
+    6.4
+   ],
+   [
+    "(anon) src/ui/game-shell.ts:609",
+    5.5
+   ]
+  ]
+ }
+}

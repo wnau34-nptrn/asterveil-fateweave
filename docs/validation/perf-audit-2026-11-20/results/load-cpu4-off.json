@@ -1,0 +1,1225 @@
+{
+ "title": {
+  "readyMs": 842,
+  "titleButtonsMs": 1282,
+  "titleNetworkIdleMs": 4067,
+  "nav": {
+   "dcl": 699,
+   "load": 915,
+   "fcp": 0,
+   "gameReady": 690,
+   "jsEnd": 102,
+   "cssEnd": 65,
+   "titleBgEnd": 0,
+   "skillIconsEnd": 767,
+   "battlePreloadEnd": 2421,
+   "musicEnd": 0
+  },
+  "long": [
+   {
+    "start": 156,
+    "dur": 543,
+    "name": "self"
+   },
+   {
+    "start": 844,
+    "dur": 54,
+    "name": "self"
+   },
+   {
+    "start": 1073,
+    "dur": 187,
+    "name": "self"
+   },
+   {
+    "start": 1279,
+    "dur": 91,
+    "name": "self"
+   },
+   {
+    "start": 1411,
+    "dur": 81,
+    "name": "self"
+   },
+   {
+    "start": 1497,
+    "dur": 110,
+    "name": "self"
+   },
+   {
+    "start": 1682,
+    "dur": 119,
+    "name": "self"
+   },
+   {
+    "start": 1807,
+    "dur": 170,
+    "name": "self"
+   },
+   {
+    "start": 1984,
+    "dur": 126,
+    "name": "self"
+   },
+   {
+    "start": 2116,
+    "dur": 162,
+    "name": "self"
+   },
+   {
+    "start": 2288,
+    "dur": 95,
+    "name": "self"
+   },
+   {
+    "start": 2501,
+    "dur": 70,
+    "name": "self"
+   },
+   {
+    "start": 2581,
+    "dur": 77,
+    "name": "self"
+   },
+   {
+    "start": 2659,
+    "dur": 92,
+    "name": "self"
+   },
+   {
+    "start": 2755,
+    "dur": 570,
+    "name": "self"
+   },
+   {
+    "start": 3330,
+    "dur": 176,
+    "name": "self"
+   },
+   {
+    "start": 3560,
+    "dur": 350,
+    "name": "self"
+   },
+   {
+    "start": 3915,
+    "dur": 219,
+    "name": "self"
+   },
+   {
+    "start": 4169,
+    "dur": 486,
+    "name": "self"
+   }
+  ],
+  "metrics": {
+   "Documents": 2,
+   "Frames": 3,
+   "JSEventListeners": 218,
+   "Nodes": 2720,
+   "LayoutCount": 14,
+   "RecalcStyleCount": 51,
+   "LayoutDuration": 0.119,
+   "RecalcStyleDuration": 0.109,
+   "ScriptDuration": 3.769,
+   "TaskDuration": 4.604,
+   "JSHeapUsedSize": 11754536
+  },
+  "requests": 72,
+  "bytes": 26353201,
+  "byType": {
+   "Document": {
+    "n": 1,
+    "bytes": 1741
+   },
+   "Stylesheet": {
+    "n": 1,
+    "bytes": 61469
+   },
+   "Script": {
+    "n": 2,
+    "bytes": 694867
+   },
+   "Image": {
+    "n": 31,
+    "bytes": 8297274
+   },
+   "Font": {
+    "n": 3,
+    "bytes": 52676
+   },
+   "Fetch": {
+    "n": 1,
+    "bytes": 325
+   },
+   "XHR": {
+    "n": 32,
+    "bytes": 17241560
+   },
+   "Other": {
+    "n": 1,
+    "bytes": 3289
+   }
+  },
+  "slowest": [
+   {
+    "url": "assets/ui/skill_icons.webp?v=3b11491a",
+    "type": "Image",
+    "bytes": 5780304,
+    "ms": 363,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fonts/noto-sans-thai-700.woff2",
+    "type": "Font",
+    "bytes": 14516,
+    "ms": 309,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fonts/noto-sans-thai-400.woff2",
+    "type": "Font",
+    "bytes": 14412,
+    "ms": 308,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fonts/kanit-600.woff2",
+    "type": "Font",
+    "bytes": 23748,
+    "ms": 308,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_mercs.webp",
+    "type": "XHR",
+    "bytes": 3125682,
+    "ms": 145,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/phaser-D8EC1TLR.js",
+    "type": "Script",
+    "bytes": 356310,
+    "ms": 56,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/index-D-5soYT0.js",
+    "type": "Script",
+    "bytes": 338557,
+    "ms": 48,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/index-BRWKfx84.css",
+    "type": "Stylesheet",
+    "bytes": 61469,
+    "ms": 20,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/bolt_fx.webp",
+    "type": "XHR",
+    "bytes": 608602,
+    "ms": 20,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/ward_fx.webp",
+    "type": "XHR",
+    "bytes": 729314,
+    "ms": 19,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/execute_fx.webp",
+    "type": "XHR",
+    "bytes": 440512,
+    "ms": 18,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units.webp?v=6263840f",
+    "type": "XHR",
+    "bytes": 1985194,
+    "ms": 14,
+    "status": 200,
+    "cache": "no-cache"
+   }
+  ],
+  "largest": [
+   {
+    "url": "assets/ui/skill_icons.webp?v=3b11491a",
+    "type": "Image",
+    "bytes": 5780304,
+    "ms": 363,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_mercs.webp",
+    "type": "XHR",
+    "bytes": 3125682,
+    "ms": 145,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units.webp?v=6263840f",
+    "type": "XHR",
+    "bytes": 1985194,
+    "ms": 14,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/healing_fx.webp",
+    "type": "XHR",
+    "bytes": 1376936,
+    "ms": 8,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/earth_fx.webp",
+    "type": "XHR",
+    "bytes": 1182060,
+    "ms": 12,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/blade_fx.webp",
+    "type": "XHR",
+    "bytes": 1072126,
+    "ms": 5,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/defense_fx.webp",
+    "type": "XHR",
+    "bytes": 1063244,
+    "ms": 12,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/song_shadow_fx.webp",
+    "type": "XHR",
+    "bytes": 901928,
+    "ms": 11,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/alchemy_fx.webp",
+    "type": "XHR",
+    "bytes": 895546,
+    "ms": 5,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/projectile_fx.webp",
+    "type": "XHR",
+    "bytes": 807506,
+    "ms": 8,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_foes.webp",
+    "type": "XHR",
+    "bytes": 805190,
+    "ms": 8,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/rework_fx.webp",
+    "type": "XHR",
+    "bytes": 772428,
+    "ms": 5,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/portraits_foes.webp",
+    "type": "Image",
+    "bytes": 746156,
+    "ms": 9,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/ward_fx.webp",
+    "type": "XHR",
+    "bytes": 729314,
+    "ms": 19,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/bolt_fx.webp",
+    "type": "XHR",
+    "bytes": 608602,
+    "ms": 20,
+    "status": 200,
+    "cache": "no-cache"
+   }
+  ],
+  "cacheHeaders": [
+   "Document:no-cache",
+   "Stylesheet:no-cache",
+   "Script:no-cache",
+   "Image:-",
+   "Image:no-cache",
+   "Font:no-cache",
+   "Fetch:no-cache",
+   "XHR:no-cache",
+   "Other:no-cache"
+  ]
+ },
+ "camp": {
+  "readyMs": 861,
+  "titleButtonsMs": 1725,
+  "titleNetworkIdleMs": 3353,
+  "nav": {
+   "dcl": 739,
+   "load": 931,
+   "fcp": 0,
+   "gameReady": 731,
+   "jsEnd": 105,
+   "cssEnd": 64,
+   "titleBgEnd": 0,
+   "skillIconsEnd": 806,
+   "battlePreloadEnd": 2444,
+   "musicEnd": 0
+  },
+  "afterContinue": {
+   "shownMs": 437,
+   "idleMs": 1941,
+   "requests": 15,
+   "bytes": 6658404
+  },
+  "long": [
+   {
+    "start": 183,
+    "dur": 558,
+    "name": "self"
+   },
+   {
+    "start": 864,
+    "dur": 50,
+    "name": "self"
+   },
+   {
+    "start": 1111,
+    "dur": 227,
+    "name": "self"
+   },
+   {
+    "start": 1345,
+    "dur": 73,
+    "name": "self"
+   },
+   {
+    "start": 1419,
+    "dur": 93,
+    "name": "self"
+   },
+   {
+    "start": 1518,
+    "dur": 91,
+    "name": "self"
+   },
+   {
+    "start": 1611,
+    "dur": 102,
+    "name": "self"
+   },
+   {
+    "start": 1796,
+    "dur": 129,
+    "name": "self"
+   },
+   {
+    "start": 1931,
+    "dur": 124,
+    "name": "self"
+   },
+   {
+    "start": 2058,
+    "dur": 134,
+    "name": "self"
+   },
+   {
+    "start": 2201,
+    "dur": 155,
+    "name": "self"
+   },
+   {
+    "start": 2362,
+    "dur": 62,
+    "name": "self"
+   },
+   {
+    "start": 2480,
+    "dur": 56,
+    "name": "self"
+   },
+   {
+    "start": 2536,
+    "dur": 97,
+    "name": "self"
+   },
+   {
+    "start": 2637,
+    "dur": 109,
+    "name": "self"
+   },
+   {
+    "start": 2854,
+    "dur": 611,
+    "name": "self"
+   },
+   {
+    "start": 3471,
+    "dur": 355,
+    "name": "self"
+   },
+   {
+    "start": 3831,
+    "dur": 227,
+    "name": "self"
+   },
+   {
+    "start": 4084,
+    "dur": 191,
+    "name": "self"
+   },
+   {
+    "start": 4283,
+    "dur": 577,
+    "name": "self"
+   },
+   {
+    "start": 4930,
+    "dur": 137,
+    "name": "self"
+   }
+  ],
+  "metrics": {
+   "Documents": 2,
+   "Frames": 2,
+   "JSEventListeners": 219,
+   "Nodes": 2956,
+   "LayoutCount": 16,
+   "RecalcStyleCount": 91,
+   "LayoutDuration": 0.127,
+   "RecalcStyleDuration": 0.188,
+   "ScriptDuration": 4.052,
+   "TaskDuration": 5.428,
+   "JSHeapUsedSize": 12631532
+  },
+  "requests": 87,
+  "bytes": 33011605,
+  "byType": {
+   "Document": {
+    "n": 1,
+    "bytes": 1741
+   },
+   "Stylesheet": {
+    "n": 1,
+    "bytes": 61469
+   },
+   "Script": {
+    "n": 2,
+    "bytes": 694867
+   },
+   "Image": {
+    "n": 43,
+    "bytes": 10548858
+   },
+   "Font": {
+    "n": 3,
+    "bytes": 52676
+   },
+   "Fetch": {
+    "n": 1,
+    "bytes": 325
+   },
+   "XHR": {
+    "n": 32,
+    "bytes": 17241560
+   },
+   "Other": {
+    "n": 2,
+    "bytes": 88777
+   },
+   "Media": {
+    "n": 2,
+    "bytes": 4321332
+   }
+  },
+  "slowest": [
+   {
+    "url": "assets/ui/skill_icons.webp?v=3b11491a",
+    "type": "Image",
+    "bytes": 5780304,
+    "ms": 371,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fonts/kanit-600.woff2",
+    "type": "Font",
+    "bytes": 23748,
+    "ms": 321,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fonts/noto-sans-thai-400.woff2",
+    "type": "Font",
+    "bytes": 14412,
+    "ms": 321,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fonts/noto-sans-thai-700.woff2",
+    "type": "Font",
+    "bytes": 14516,
+    "ms": 320,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_mercs.webp",
+    "type": "XHR",
+    "bytes": 3125682,
+    "ms": 286,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/music/bgm_camp.mp3",
+    "type": "Media",
+    "bytes": 2171481,
+    "ms": 202,
+    "status": 206,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/phaser-D8EC1TLR.js",
+    "type": "Script",
+    "bytes": 356310,
+    "ms": 61,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/index-D-5soYT0.js",
+    "type": "Script",
+    "bytes": 338557,
+    "ms": 59,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "blob:http://127.0.0.1:4173/f8e4ca44-a736-46a9-9f17-8ea202ac1007",
+    "type": "Image",
+    "bytes": 0,
+    "ms": 29,
+    "status": 200
+   },
+   {
+    "url": "assets/art/units.webp?v=6263840f",
+    "type": "XHR",
+    "bytes": 1985194,
+    "ms": 22,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/index-BRWKfx84.css",
+    "type": "Stylesheet",
+    "bytes": 61469,
+    "ms": 21,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/music/bgm_ruins.mp3",
+    "type": "Media",
+    "bytes": 2149851,
+    "ms": 21,
+    "status": 206,
+    "cache": "no-cache"
+   }
+  ],
+  "largest": [
+   {
+    "url": "assets/ui/skill_icons.webp?v=3b11491a",
+    "type": "Image",
+    "bytes": 5780304,
+    "ms": 371,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_mercs.webp",
+    "type": "XHR",
+    "bytes": 3125682,
+    "ms": 286,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/music/bgm_camp.mp3",
+    "type": "Media",
+    "bytes": 2171481,
+    "ms": 202,
+    "status": 206,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/music/bgm_ruins.mp3",
+    "type": "Media",
+    "bytes": 2149851,
+    "ms": 21,
+    "status": 206,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units.webp?v=6263840f",
+    "type": "XHR",
+    "bytes": 1985194,
+    "ms": 22,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/healing_fx.webp",
+    "type": "XHR",
+    "bytes": 1376936,
+    "ms": 8,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/earth_fx.webp",
+    "type": "XHR",
+    "bytes": 1182060,
+    "ms": 14,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/blade_fx.webp",
+    "type": "XHR",
+    "bytes": 1072126,
+    "ms": 6,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/defense_fx.webp",
+    "type": "XHR",
+    "bytes": 1063244,
+    "ms": 10,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/song_shadow_fx.webp",
+    "type": "XHR",
+    "bytes": 901928,
+    "ms": 9,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/alchemy_fx.webp",
+    "type": "XHR",
+    "bytes": 895546,
+    "ms": 8,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/projectile_fx.webp",
+    "type": "XHR",
+    "bytes": 807506,
+    "ms": 12,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_foes.webp",
+    "type": "XHR",
+    "bytes": 805190,
+    "ms": 14,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/rework_fx.webp",
+    "type": "XHR",
+    "bytes": 772428,
+    "ms": 12,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/portraits_foes.webp",
+    "type": "Image",
+    "bytes": 746156,
+    "ms": 13,
+    "status": 200,
+    "cache": "no-cache"
+   }
+  ],
+  "cacheHeaders": [
+   "Document:no-cache",
+   "Stylesheet:no-cache",
+   "Script:no-cache",
+   "Image:-",
+   "Image:no-cache",
+   "Font:no-cache",
+   "Fetch:no-cache",
+   "XHR:no-cache",
+   "Other:no-cache",
+   "Media:no-cache"
+  ]
+ },
+ "map": {
+  "readyMs": 794,
+  "titleButtonsMs": 991,
+  "titleNetworkIdleMs": 3682,
+  "nav": {
+   "dcl": 695,
+   "load": 922,
+   "fcp": 0,
+   "gameReady": 688,
+   "jsEnd": 119,
+   "cssEnd": 72,
+   "titleBgEnd": 0,
+   "skillIconsEnd": 761,
+   "battlePreloadEnd": 2629,
+   "musicEnd": 0
+  },
+  "afterContinue": {
+   "shownMs": 952,
+   "idleMs": 2456,
+   "requests": 18,
+   "bytes": 4095433
+  },
+  "long": [
+   {
+    "start": 157,
+    "dur": 542,
+    "name": "self"
+   },
+   {
+    "start": 827,
+    "dur": 54,
+    "name": "self"
+   },
+   {
+    "start": 1040,
+    "dur": 203,
+    "name": "self"
+   },
+   {
+    "start": 1257,
+    "dur": 82,
+    "name": "self"
+   },
+   {
+    "start": 1339,
+    "dur": 67,
+    "name": "self"
+   },
+   {
+    "start": 1418,
+    "dur": 91,
+    "name": "self"
+   },
+   {
+    "start": 1511,
+    "dur": 113,
+    "name": "self"
+   },
+   {
+    "start": 1703,
+    "dur": 131,
+    "name": "self"
+   },
+   {
+    "start": 1852,
+    "dur": 195,
+    "name": "self"
+   },
+   {
+    "start": 2058,
+    "dur": 152,
+    "name": "self"
+   },
+   {
+    "start": 2217,
+    "dur": 154,
+    "name": "self"
+   },
+   {
+    "start": 2385,
+    "dur": 194,
+    "name": "self"
+   },
+   {
+    "start": 2649,
+    "dur": 105,
+    "name": "self"
+   },
+   {
+    "start": 2792,
+    "dur": 174,
+    "name": "self"
+   },
+   {
+    "start": 2975,
+    "dur": 108,
+    "name": "self"
+   },
+   {
+    "start": 3183,
+    "dur": 741,
+    "name": "self"
+   },
+   {
+    "start": 3932,
+    "dur": 450,
+    "name": "self"
+   },
+   {
+    "start": 4389,
+    "dur": 324,
+    "name": "self"
+   },
+   {
+    "start": 4758,
+    "dur": 193,
+    "name": "self"
+   },
+   {
+    "start": 4956,
+    "dur": 579,
+    "name": "self"
+   },
+   {
+    "start": 5655,
+    "dur": 558,
+    "name": "self"
+   }
+  ],
+  "metrics": {
+   "Documents": 2,
+   "Frames": 2,
+   "JSEventListeners": 219,
+   "Nodes": 2848,
+   "LayoutCount": 19,
+   "RecalcStyleCount": 165,
+   "LayoutDuration": 0.183,
+   "RecalcStyleDuration": 0.616,
+   "ScriptDuration": 4.733,
+   "TaskDuration": 6.765,
+   "JSHeapUsedSize": 9461312
+  },
+  "requests": 90,
+  "bytes": 30448634,
+  "byType": {
+   "Document": {
+    "n": 1,
+    "bytes": 1741
+   },
+   "Stylesheet": {
+    "n": 1,
+    "bytes": 61469
+   },
+   "Script": {
+    "n": 2,
+    "bytes": 694867
+   },
+   "Image": {
+    "n": 47,
+    "bytes": 10147964
+   },
+   "Font": {
+    "n": 3,
+    "bytes": 52676
+   },
+   "Fetch": {
+    "n": 1,
+    "bytes": 325
+   },
+   "XHR": {
+    "n": 32,
+    "bytes": 17241560
+   },
+   "Other": {
+    "n": 2,
+    "bytes": 88777
+   },
+   "Media": {
+    "n": 1,
+    "bytes": 2159255
+   }
+  },
+  "slowest": [
+   {
+    "url": "assets/ui/skill_icons.webp?v=3b11491a",
+    "type": "Image",
+    "bytes": 5780304,
+    "ms": 362,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fonts/kanit-600.woff2",
+    "type": "Font",
+    "bytes": 23748,
+    "ms": 311,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fonts/noto-sans-thai-400.woff2",
+    "type": "Font",
+    "bytes": 14412,
+    "ms": 310,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fonts/noto-sans-thai-700.woff2",
+    "type": "Font",
+    "bytes": 14516,
+    "ms": 309,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_mercs.webp",
+    "type": "XHR",
+    "bytes": 3125682,
+    "ms": 180,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/index-D-5soYT0.js",
+    "type": "Script",
+    "bytes": 338557,
+    "ms": 69,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/phaser-D8EC1TLR.js",
+    "type": "Script",
+    "bytes": 356310,
+    "ms": 64,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units.webp?v=6263840f",
+    "type": "XHR",
+    "bytes": 1985194,
+    "ms": 28,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/music/bgm_meadow.mp3",
+    "type": "Media",
+    "bytes": 2159255,
+    "ms": 26,
+    "status": 206,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/bolt_fx.webp",
+    "type": "XHR",
+    "bytes": 608602,
+    "ms": 23,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/execute_fx.webp",
+    "type": "XHR",
+    "bytes": 440512,
+    "ms": 23,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/ward_fx.webp",
+    "type": "XHR",
+    "bytes": 729314,
+    "ms": 23,
+    "status": 200,
+    "cache": "no-cache"
+   }
+  ],
+  "largest": [
+   {
+    "url": "assets/ui/skill_icons.webp?v=3b11491a",
+    "type": "Image",
+    "bytes": 5780304,
+    "ms": 362,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_mercs.webp",
+    "type": "XHR",
+    "bytes": 3125682,
+    "ms": 180,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/music/bgm_meadow.mp3",
+    "type": "Media",
+    "bytes": 2159255,
+    "ms": 26,
+    "status": 206,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units.webp?v=6263840f",
+    "type": "XHR",
+    "bytes": 1985194,
+    "ms": 28,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/healing_fx.webp",
+    "type": "XHR",
+    "bytes": 1376936,
+    "ms": 20,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/earth_fx.webp",
+    "type": "XHR",
+    "bytes": 1182060,
+    "ms": 11,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/blade_fx.webp",
+    "type": "XHR",
+    "bytes": 1072126,
+    "ms": 5,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/defense_fx.webp",
+    "type": "XHR",
+    "bytes": 1063244,
+    "ms": 11,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/world/tileset.webp",
+    "type": "Image",
+    "bytes": 907690,
+    "ms": 7,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/song_shadow_fx.webp",
+    "type": "XHR",
+    "bytes": 901928,
+    "ms": 11,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/alchemy_fx.webp",
+    "type": "XHR",
+    "bytes": 895546,
+    "ms": 6,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/projectile_fx.webp",
+    "type": "XHR",
+    "bytes": 807506,
+    "ms": 11,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/units_foes.webp",
+    "type": "XHR",
+    "bytes": 805190,
+    "ms": 13,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/fx/rework_fx.webp",
+    "type": "XHR",
+    "bytes": 772428,
+    "ms": 6,
+    "status": 200,
+    "cache": "no-cache"
+   },
+   {
+    "url": "assets/art/portraits_foes.webp",
+    "type": "Image",
+    "bytes": 746156,
+    "ms": 12,
+    "status": 200,
+    "cache": "no-cache"
+   }
+  ],
+  "cacheHeaders": [
+   "Document:no-cache",
+   "Stylesheet:no-cache",
+   "Script:no-cache",
+   "Image:-",
+   "Image:no-cache",
+   "Font:no-cache",
+   "Fetch:no-cache",
+   "XHR:no-cache",
+   "Other:no-cache",
+   "Media:no-cache"
+  ]
+ }
+}

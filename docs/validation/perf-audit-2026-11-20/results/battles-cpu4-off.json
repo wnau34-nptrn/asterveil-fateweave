@@ -1,0 +1,290 @@
+{
+ "heap0MiB": 8.5,
+ "nodes0": 2146,
+ "listeners0": 236,
+ "fights": [
+  {},
+  {
+   "n": 0,
+   "fieldReadyMs": 2574,
+   "turns": 20,
+   "won": true,
+   "battleMs": 56948,
+   "commandClickMs": {
+    "n": 20,
+    "p50": 1072,
+    "p95": 1172,
+    "max": 1194,
+    "mean": 1072.8
+   },
+   "frames": {
+    "n": 1154,
+    "p50": 33.4,
+    "p95": 100,
+    "max": 183,
+    "mean": 46.3,
+    "fps": 21.6,
+    "over50": 193,
+    "over100": 47
+   },
+   "victoryIdle": {
+    "n": 91,
+    "fps": 30,
+    "p50": 33.3,
+    "p95": 50,
+    "worst": 67,
+    "over50": 3,
+    "over100": 0
+   },
+   "longTasks": {
+    "count": 122,
+    "total": 9025,
+    "worst": 353
+   },
+   "heapMiB": 12.1,
+   "nodes": 3047,
+   "listeners": 251,
+   "textures": {
+    "texturesMiB": 170.5,
+    "peakTexturesMiB": 170.6,
+    "heapMiB": 20.5,
+    "peakHeapMiB": 31
+   }
+  },
+  {
+   "n": 1,
+   "fieldReadyMs": 213,
+   "turns": 7,
+   "won": true,
+   "battleMs": 17335,
+   "commandClickMs": {
+    "n": 7,
+    "p50": 945,
+    "p95": 1007,
+    "max": 1174,
+    "mean": 973.4
+   },
+   "frames": {
+    "n": 392,
+    "p50": 33.4,
+    "p95": 83.4,
+    "max": 267,
+    "mean": 42.3,
+    "fps": 23.7,
+    "over50": 52,
+    "over100": 11
+   },
+   "victoryIdle": {
+    "n": 101,
+    "fps": 33.3,
+    "p50": 33.3,
+    "p95": 50,
+    "worst": 50,
+    "over50": 1,
+    "over100": 0
+   },
+   "longTasks": {
+    "count": 22,
+    "total": 1619,
+    "worst": 197
+   },
+   "heapMiB": 12.3,
+   "nodes": 2979,
+   "listeners": 242,
+   "textures": {
+    "texturesMiB": 151,
+    "peakTexturesMiB": 170.6,
+    "heapMiB": 20.9,
+    "peakHeapMiB": 31
+   }
+  },
+  {
+   "n": 2,
+   "fieldReadyMs": 228,
+   "turns": 7,
+   "won": true,
+   "battleMs": 19209,
+   "commandClickMs": {
+    "n": 7,
+    "p50": 1107,
+    "p95": 1203,
+    "max": 1376,
+    "mean": 1137.1
+   },
+   "frames": {
+    "n": 387,
+    "p50": 33.4,
+    "p95": 100,
+    "max": 200,
+    "mean": 47.5,
+    "fps": 21.1,
+    "over50": 74,
+    "over100": 20
+   },
+   "victoryIdle": {
+    "n": 83,
+    "fps": 27.5,
+    "p50": 33.3,
+    "p95": 50.1,
+    "worst": 67,
+    "over50": 6,
+    "over100": 0
+   },
+   "longTasks": {
+    "count": 49,
+    "total": 3216,
+    "worst": 155
+   },
+   "heapMiB": 12.5,
+   "nodes": 3017,
+   "listeners": 245,
+   "textures": {
+    "texturesMiB": 152.3,
+    "peakTexturesMiB": 170.6,
+    "heapMiB": 21.3,
+    "peakHeapMiB": 31
+   }
+  },
+  {
+   "n": 3,
+   "fieldReadyMs": 381,
+   "turns": 4,
+   "won": true,
+   "battleMs": 16581,
+   "commandClickMs": {
+    "n": 4,
+    "p50": 1292,
+    "p95": 1368,
+    "max": 1375,
+    "mean": 1301
+   },
+   "frames": {
+    "n": 278,
+    "p50": 50,
+    "p95": 116.7,
+    "max": 250,
+    "mean": 55.8,
+    "fps": 17.9,
+    "over50": 84,
+    "over100": 25
+   },
+   "victoryIdle": {
+    "n": 79,
+    "fps": 26,
+    "p50": 33.4,
+    "p95": 50,
+    "worst": 67,
+    "over50": 4,
+    "over100": 0
+   },
+   "longTasks": {
+    "count": 60,
+    "total": 4151,
+    "worst": 195
+   },
+   "heapMiB": 12.8,
+   "nodes": 3393,
+   "listeners": 246,
+   "textures": {
+    "texturesMiB": 154.2,
+    "peakTexturesMiB": 170.6,
+    "heapMiB": 21.7,
+    "peakHeapMiB": 33.2
+   }
+  },
+  {
+   "n": 4,
+   "fieldReadyMs": 60010,
+   "turns": 0,
+   "won": false,
+   "battleMs": 180092,
+   "commandClickMs": {
+    "n": 0,
+    "p50": 0,
+    "p95": 0,
+    "max": 0,
+    "mean": 0
+   },
+   "frames": {
+    "n": 7190,
+    "p50": 16.7,
+    "p95": 16.7,
+    "max": 50,
+    "mean": 16.7,
+    "fps": 59.9,
+    "over50": 0,
+    "over100": 0
+   },
+   "victoryIdle": {
+    "n": 181,
+    "fps": 60,
+    "p50": 16.7,
+    "p95": 16.7,
+    "worst": 17,
+    "over50": 0,
+    "over100": 0
+   },
+   "longTasks": {
+    "count": 0,
+    "total": 0,
+    "worst": 0
+   },
+   "heapMiB": 12.1,
+   "nodes": 3402,
+   "listeners": 246,
+   "textures": {
+    "texturesMiB": 154.2,
+    "peakTexturesMiB": 170.6,
+    "heapMiB": 20.9,
+    "peakHeapMiB": 33.2
+   }
+  },
+  {
+   "n": 5,
+   "fieldReadyMs": 60010,
+   "turns": 0,
+   "won": false,
+   "battleMs": 180080,
+   "commandClickMs": {
+    "n": 0,
+    "p50": 0,
+    "p95": 0,
+    "max": 0,
+    "mean": 0
+   },
+   "frames": {
+    "n": 7183,
+    "p50": 16.7,
+    "p95": 16.8,
+    "max": 33,
+    "mean": 16.7,
+    "fps": 59.9,
+    "over50": 0,
+    "over100": 0
+   },
+   "victoryIdle": {
+    "n": 181,
+    "fps": 60,
+    "p50": 16.7,
+    "p95": 16.7,
+    "worst": 17,
+    "over50": 0,
+    "over100": 0
+   },
+   "longTasks": {
+    "count": 0,
+    "total": 0,
+    "worst": 0
+   },
+   "heapMiB": 12.2,
+   "nodes": 3402,
+   "listeners": 246,
+   "textures": {
+    "texturesMiB": 154.2,
+    "peakTexturesMiB": 170.6,
+    "heapMiB": 21,
+    "peakHeapMiB": 33.2
+   }
+  }
+ ]
+}

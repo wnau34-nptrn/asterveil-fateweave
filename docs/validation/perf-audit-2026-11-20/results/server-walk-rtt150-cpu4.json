@@ -1,0 +1,96 @@
+{
+ "rtt": 150,
+ "cpu": 4,
+ "steady-600ms": {
+  "pressed": 8,
+  "tokenChanges": 8,
+  "commandsSent": 8,
+  "firstTokenMs": [
+   87,
+   47,
+   23,
+   24,
+   33,
+   25,
+   27,
+   24
+  ],
+  "commandMs": [
+   155,
+   153,
+   155,
+   153,
+   153,
+   153,
+   153,
+   154
+  ]
+ },
+ "taps-200ms": {
+  "pressed": 16,
+  "tokenChanges": 16,
+  "commandsSent": 8,
+  "firstTokenMs": [
+   36,
+   36,
+   27,
+   27,
+   28,
+   28,
+   33,
+   33,
+   26,
+   26,
+   32,
+   31,
+   20,
+   20,
+   26,
+   26
+  ],
+  "commandMs": [
+   154,
+   154,
+   153,
+   153,
+   152,
+   153,
+   153,
+   154
+  ]
+ },
+ "burst-60ms": {
+  "pressed": 24,
+  "tokenChanges": 18,
+  "commandsSent": 6,
+  "firstTokenMs": [
+   54,
+   54,
+   54,
+   69,
+   69,
+   69,
+   72,
+   72,
+   72,
+   65,
+   65,
+   65,
+   271,
+   271,
+   271,
+   176,
+   176,
+   176
+  ],
+  "commandMs": [
+   154,
+   154,
+   153,
+   154,
+   154,
+   155
+  ]
+ },
+ "waitingUi": null
+}
