@@ -722,6 +722,26 @@ export class GameShell {
     requestAnimationFrame(() => this.updateLessons());
     this.world.render({ storyDone: !!profile.storyQuests?.includes(this.map.id), presets: profile.presets, questBoard: { definitions: this.home.sideQuests, progress: profile.quests, unlocked: featureOpen(profile, this.maps, 'quests') }, state: preview ?? this.state!, message: this.message, locked: this.locked, saved: this.saved && (!!this.storage || !!this.server), banner: this.banner, effect: this.effect });
     this.effect = undefined;
+    this.prefetchBattle();
+  }
+  // Perf audit R1: on the map, fetch the battle artwork the team and this map's foes use (after the map's own images have
+  // had a head start), so a fight's field is usually ready at once. Once per map and team; the scene skips what it has.
+  private prefetched = '';
+  private prefetchTimer: ReturnType<typeof setTimeout> | undefined;
+  private prefetchBattle(): void {
+    const s = this.state; if (!s || this.prefetchTimer) return;
+    const ids = [...s.roster.deployed, ...s.roster.reserve];
+    const key = `${this.map.id}:${ids.join(',')}`; if (key === this.prefetched) return;
+    this.prefetchTimer = setTimeout(() => {
+      this.prefetchTimer = undefined;
+      const run = this.state; if (!run) return;
+      const team = [...run.roster.deployed, ...run.roster.reserve];
+      const actions = team.flatMap(id => memberDef(this.lookup, this.map, run, id)?.actions ?? []);
+      const map = this.map;
+      const foes = [...map.zones.flatMap(z => z.pool.map(p => p.encounterId)), ...map.elites.map(e => e.encounterId), map.bossEncounterId]
+        .flatMap(id => this.lookup(id)?.enemies.map(e => e.art ?? e.id) ?? []);
+      if (this.battle.prefetch(actions, [...team, ...foes])) this.prefetched = `${map.id}:${team.join(',')}`;
+    }, 1200);
   }
   // Story recruits: play each newly joined guest once per session (a reload shows the ones already joined as seen).
   private recruitSeen = new Set<string>();

@@ -1,4 +1,4 @@
-# Current state — updated 2026-11-19 (friends + 1:1 chat, OD-56)
+# Current state — updated 2026-11-20 (perf audit, R1+R2)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
@@ -6,6 +6,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`, which again runs the Chromium suite before deploy (P12).
 - Save v65 (P11-05 trio book/boss shards/trio items; v64 World Boss book; v63 board book); Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked. No gacha wallet. P09 server authority, ledger, weekly shards done (`?server=off` for local; [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md)).
+- Perf (2026-11-20): audit report on unmerged branch `claude/perf-audit-2026-11-20` (R1–R11). R1+R2 merged: per-encounter battle art + map prefetch, half-size skill icons ([validation](docs/validation/perf-r1-r2-2026-11-20/README_TH.md)).
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3.
 - Title uses the original party artwork with a compact primary dock and top-right Setup for audio, save details, account/recovery, feedback, privacy and restart. Import stays the primary action while a local-save offer is available.
 - Art delegation remains: record agent picks as agent decisions, never owner visual approval.
@@ -20,7 +21,7 @@ All online systems before outsiders are built. External-test items (OD-50 dates,
 - Lessons after the prologue **OD-54** (2026-11-19): camp Lv2 after the prologue, gear/tree open at once, one free calming draught; ring+bubble lessons on the map/first battle/first camp (`ui/lessons.ts`). Stage C (camp cards and newly opened systems point at their controls), a Setup on/off toggle and the farming lessons (replay, sweep, hunt target, boss target; owner “ทำทั้ง 4 ข้อเลย”) done. [Design](docs/design/TUTORIAL_FLOW_TH.md).
 - Chat (#261): owner open numbers, `CHAT_WRITE`, word list, WebSocket. **OD-55**: translucent camp feed (off by default), hidden-camps list. **OD-56** (2026-11-19 “เพิ่มระบบเพื่อน และ chat 1:1”): server friend system (codes, requests, account-wide block, D1 0007) + 1:1 chat for mutual friends in the `Chat` object, “เพื่อน” tab + camp unread badge, flag `FRIENDS` (default on); drafts 50 friends, 2 s/20 per min, 7 d/200 per room ([design](docs/design/FRIENDS_TH.md)). Open: block also hiding world chat?, cap 50, 1:1 during the external test. Guild chat stays closed (no guilds).
 - P09 open: inactive-guest cleanup, old-token reuse detection. Day reset 06:00 Bangkok. P04-06/shards owner numbers open. P04-05 catch-up EXP recheck with P06. Deploy grace **OD-57**: the API takes the previous content versions for 3 h after a deploy (`[no-grace]` ends it); open pages show a refresh bar ([design](docs/design/p09/CONTENT_GRACE_TH.md)).
-- Gacha: G00/G01 analysis delivered (`docs/design/GACHA_G00_DECISIONS_TH.md`, `GACHA_G01_*`); owner wants system/visual discussion first. No G02–G05/payments; real gacha needs the server wallet on the ledger.
+- Gacha: G00/G01 analysis delivered (`docs/design/GACHA_G0*`); owner wants system/visual discussion first. No G02–G05/payments; real gacha needs the server wallet on the ledger.
 - UXD-08 done; real-device/human trial and team-preset usability review open.
 
 ## Open items
@@ -35,4 +36,4 @@ Preserve unpushed/gacha work.
 
 ## Opening prompt for next chat
 
-The owner picks the next task. Suggested (Sonnet is enough): “P11-05 post-switch check — after Mon 23 Nov 06:00 Bangkok, read `GET /v1/worldboss` on the dev API (three bars, HP = last Warden week's attempts ÷ 3 × 400, min 1500) and the Warden week-2968 claims. Play one trio attempt per boss at 390px on Pages, and record the results in `docs/validation/p11-05-go-live/README_TH.md`. Change numbers only with playtest evidence (`ฝากถึง Claude` in `docs/handoffs/CLAUDE-TO-CODEX-DEV-TH.md`: compare Morvane at 350/300 HP if coach uptake is low).”
+Suggested (Sonnet): “Perf R3+R4 — smooth map walking: no per-step forced reflow (`offsetWidth` restarts in `world-ui.ts`, `focus()` per step in `game-shell.ts`), incremental fog, skip unchanged `innerHTML`; audit report C2/R3/R4 on branch `claude/perf-audit-2026-11-20`, measure with its `audit.perf.ts` (`walk`).” Also P11-05 post-switch check.

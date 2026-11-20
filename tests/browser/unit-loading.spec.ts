@@ -34,11 +34,11 @@ test('optional animation failures retain playable original-art fallback without 
  await expect(page.locator('#action-bolt')).toBeEnabled();expect(await count(page)).toBe(1);
  await expect.poll(()=>requests).toBe(6);expect(errors).toEqual([]);
 });
-test('title loads no optional unit art and an encounter without Hunter never downloads Hunter',async({page})=>{
- const names:string[]=[];page.on('request',r=>{if(r.url().includes('/assets/units/'))names.push(r.url());});
+test('title loads no battle art and an encounter without Hunter never downloads Hunter',async({page})=>{
+ const names:string[]=[],battle:string[]=[];page.on('request',r=>{if(r.url().includes('/assets/units/'))names.push(r.url());if(/\/assets\/(fx|art)\//.test(r.url()))battle.push(r.url());});
  await seed(page,veilSiege.id);await page.goto('./');await expect(page.locator('#continue')).toBeVisible();
- // Wait for core readiness even though the battle view is hidden behind the title.
- await expect(page.locator('#start')).toBeEnabled();expect(names).toEqual([]);
+ // Perf R1: the title downloads no VFX atlas, unit sheet or optional unit animation (portraits are DOM art, not battle art).
+ await page.waitForLoadState('networkidle');expect(names).toEqual([]);expect(battle.filter(u=>!/portraits|\/ruins\./.test(u))).toEqual([]);
  const loaded=page.waitForResponse(r=>r.url().endsWith(manifest.lyra.image)&&r.ok());
  await page.locator('#continue').click();await expect(page.locator('#start')).toBeEnabled();await (await loaded).finished();
  expect(names.some(n=>n.includes('lyra_pilot'))).toBe(true);expect(names.some(n=>n.includes('hunter_pilot'))).toBe(false);
