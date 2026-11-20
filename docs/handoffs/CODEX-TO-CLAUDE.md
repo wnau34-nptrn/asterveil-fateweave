@@ -1,3 +1,8 @@
+## 2026-11-20 — Perf R8: asset-cache service worker (Opus; claude/perf-r8 → game branch)
+- Owner: “ต่อ R8 เลย”. Build writes `sw.js` (vite plugin `fateweave-service-worker`: `src/platform/service-worker.js` + build id + SHA-256 manifest of `assets/`, music excluded); cache-first by path+hash, prunes on activate, never touches pages/version.json/API/music. Registered in production only, not under automation unless `?sw=1`; `?sw=off` removes it and its cache. No file renames.
+- Result (preview build, 4G, CPU 4×, revisit): warm HTTP cache 40 → 11 network requests; cleared HTTP cache 9.0 → 2.3–4.4 MB. [Validation](../validation/perf-r8-2026-11-20/README_TH.md). Not measured on real Pages/Safari.
+- Tests: service-worker.test (4), Vitest all, typecheck, lint, build, Playwright update-banner/unit-loading/perf-probe/portrait-keyboard (22).
+
 ## 2026-11-20 — Perf R6+R7: lighter battles (Opus; claude/perf-r6-r7 → game branch)
 - Owner: “ต่อ R6 กับ R7 เลย”. `battle-ui.ts` `set()` via `setHtml`, focus restored only when replaced, backdrop measured once per frame; `BattleScene.sync()` skips the full `paint()` when the field is idle (`fieldIdle`, `UnitAnimation.still`) and `paintKey` is unchanged; `GameShell.local()` passes `battleMemo` (R7).
 - Result (Chromium 390px, CPU 4×, SwiftShader, 3 wins in a row vs after R1): FPS 20.5–23.9 → 23.2–26.4, long tasks per fight 2.1–13.8 s → 0.9–7.3 s. [Validation](../validation/perf-r6-r7-2026-11-20/README_TH.md).
