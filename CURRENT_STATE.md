@@ -6,7 +6,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`, which again runs the Chromium suite before deploy (P12).
 - Save v65 (P11-05 trio book/boss shards/trio items; v64 World Boss book; v63 board book); Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked. No gacha wallet. P09 server authority, ledger, weekly shards done (`?server=off` for local; [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md)).
-- Perf (2026-11-20): audit report on unmerged branch `claude/perf-audit-2026-11-20` (R1–R11). R1–R10 merged; results in `docs/validation/perf-r*-2026-11-20/` (`?sw=off` clears the R8 asset cache).
+- Perf (2026-11-20): audit report on unmerged branch `claude/perf-audit-2026-11-20` (R1–R11). R1–R11 merged; results in `docs/validation/perf-r*-2026-11-20/` (`?sw=off` clears the R8 asset cache).
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3.
 - Title uses the original party artwork with a compact primary dock and top-right Setup for audio, save details, account/recovery, feedback, privacy and restart. Import stays the primary action while a local-save offer is available.
 - Art delegation remains: record agent picks as agent decisions, never owner visual approval.
@@ -36,4 +36,4 @@ Preserve unpushed/gacha work.
 
 ## Opening prompt for next chat
 
-Owner picks. Remaining perf items (audit report on branch `claude/perf-audit-2026-11-20`): R11 shorter server retry. Also P11-05 check.
+Owner picks. Perf audit R1–R11 done (R11: retry 3×7 s). Report on branch `claude/perf-audit-2026-11-20`. Also P11-05 check.

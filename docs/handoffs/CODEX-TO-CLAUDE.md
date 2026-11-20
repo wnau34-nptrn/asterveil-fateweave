@@ -1,3 +1,8 @@
+## 2026-11-20 — Perf R11: shorter server retry (Sonnet; perf/r11-server-timeout → game branch)
+- Owner: “เริ่ม R11”. `server-client.ts`: waited requests 3 attempts × 7 s (was 5 × 15 s), same requestId/seq each time; import/chat/report keep old limits; `onReconnecting` hook → shell shows “กำลังเชื่อมต่อใหม่…” at once. Numbers are drafts.
+- Result (Chromium 390px, blackholed command): card 81.5 → 22.3 s, reconnecting note 60.9 → 7.2 s. [Validation](../validation/perf-r11-2026-11-20/README_TH.md). No real device/dev API.
+- Tests: server-client-retry.test (6 new), Vitest all, typecheck, lint, build, Playwright server-play (7). Remaining audit items: none from R1–R11 except owner picks.
+
 ## 2026-11-20 — Perf R10: half-size DOM portraits (Opus; claude/perf-r10 → game branch)
 - Owner: “ต่อ R10 เลย”. `scripts/portraits-half.py` builds `portraits*_half.webp` (256 px cells, same encoding as the master) + `portraits-half.json` revisions; `portrait(id)` uses them, `portrait(id, true)` keeps the 512 px master for the story figure; World Boss unchanged.
 - Result (camp/map, starting team): portraits 1.55 → 0.67 MB, decoded 28 → 7 MiB (mercs sheet 4.93 MB/14 MiB → 1.45 MB/3.5 MiB). [Validation](../validation/perf-r10-2026-11-20/README_TH.md). Not owner-viewed.
