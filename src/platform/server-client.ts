@@ -50,9 +50,14 @@ export const browserServerPort = (): ServerPort => ({
   randomHex: bytes => Array.from(crypto.getRandomValues(new Uint8Array(bytes)), b => b.toString(16).padStart(2, '0')).join(''),
 });
 
-// Attempts for one request before reporting `network`/`server` (backoff 0.4 s, 0.8 s, 1.6 s, 3.2 s).
-export const SEND_ATTEMPTS = 5;
-const TIMEOUT_MS = 15_000;
+// R11 (draft numbers): a request the player waits for is sent at most 3 times (backoff 0.4 s, 0.8 s), each with a 7 s
+// timeout, so a dead connection shows the "cannot connect" card after ~23 s instead of ~80 s. Every attempt carries the
+// same requestId/seq, so the server never runs it twice. The slow import upload keeps the older, longer limits.
+export const SEND_ATTEMPTS = 3;
+export const ATTEMPT_TIMEOUT_MS = 7_000;
+export const LONG_SEND_ATTEMPTS = 5;
+export const LONG_TIMEOUT_MS = 15_000;
+const TIMEOUT_MS = LONG_TIMEOUT_MS; // fire-and-forget reports and chat polls
 const TOKEN_KEY = 'fateweave-server-token:';
 // P09-03 rotation: the next credential is stored before it is sent (so a lost answer never strands the device), and the
 // time of the last rotation decides when the next one is due.
@@ -159,16 +164,19 @@ export class ServerClient {
     return { Authorization: `Bearer ${token}`, [CONTENT_HEADER]: this.contentVersion, [SESSION_HEADER]: this.session, ...(json ? { 'Content-Type': 'application/json' } : {}) };
   }
 
+  // R11: called once an attempt got no usable answer and another attempt follows (the page shows "reconnecting…").
+  onReconnecting?: () => void;
   // One request with retries on no answer, 5xx and 429. Returns the final response, or null when none came.
-  private async request(path: string, init: RequestInit): Promise<Response | null> {
+  private async request(path: string, init: RequestInit, attempts = SEND_ATTEMPTS, timeoutMs = ATTEMPT_TIMEOUT_MS): Promise<Response | null> {
     let last: Response | null = null;
-    for (let attempt = 0; attempt < SEND_ATTEMPTS; attempt++) {
+    for (let attempt = 0; attempt < attempts; attempt++) {
       if (attempt > 0) {
+        try { this.onReconnecting?.(); } catch { /* presentation only */ }
         const after = Number(last?.headers.get('Retry-After') ?? '');
         await this.port.sleep(Number.isFinite(after) && after > 0 ? Math.min(after, 5) * 1000 : 400 * 2 ** (attempt - 1));
       }
       try {
-        last = await this.port.fetch(this.base + path, { ...init, signal: AbortSignal.timeout(TIMEOUT_MS) });
+        last = await this.port.fetch(this.base + path, { ...init, signal: AbortSignal.timeout(timeoutMs) });
         if (last.status < 500 && last.status !== 429) return last;
       } catch { last = null; }
     }
@@ -412,7 +420,7 @@ export class ServerClient {
     const bytes = new TextEncoder().encode(raw);
     const sha = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)), b => b.toString(16).padStart(2, '0')).join('');
     const upload = { format: 1, requestId: `imp_${sha.slice(0, 40)}`, baseRevision: 0, saveVersion, payload: raw, payloadBytes: bytes.byteLength, payloadSha256: sha };
-    const r = await this.request('/v1/import', { method: 'POST', headers: this.headers(token, true), body: JSON.stringify(upload) });
+    const r = await this.request('/v1/import', { method: 'POST', headers: this.headers(token, true), body: JSON.stringify(upload) }, LONG_SEND_ATTEMPTS, LONG_TIMEOUT_MS);
     if (!r) return { kind: 'failed', reason: 'network' };
     if (r.status === 423) return { kind: 'otherDevice' };
     const body: unknown = await r.json().catch(() => ({}));
