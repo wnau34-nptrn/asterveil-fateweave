@@ -127,9 +127,12 @@ test('server play: a step moves the token before the answer, keeps the map live 
   await expect.poll(tokenAt, { timeout: 1000 }).not.toBe(start);
   await expect(page.locator('#app')).toHaveAttribute('data-server', 'sending');
   expect(await page.locator('#world-view').evaluate(el => (el as HTMLElement).inert)).toBe(false);
-  // A second step tapped meanwhile waits and goes out after the first answer, with the next sequence number.
+  // Perf R5: a second step tapped meanwhile moves the token at once too, and goes out after the first answer with
+  // the next sequence number.
   const back = ({ up: 'down', down: 'up', left: 'right', right: 'left' } as Record<string, string>)[dir!]!;
   await page.locator(`.step-hint[data-dir="${back}"]`).click();
+  await expect.poll(tokenAt, { timeout: 1000 }).toBe(start);
+  expect(w.commands.length - before).toBe(1);
   await expect(page.locator('#app')).not.toHaveAttribute('data-server', /./, { timeout: 5000 });
   const sent = w.commands.slice(before).map(b => JSON.parse(b) as { seq: number; command: { kind: string; dir?: string } });
   expect(sent[0]).toMatchObject({ command: { kind: 'move', dir } });
@@ -147,6 +150,36 @@ test('server play: a step moves the token before the answer, keeps the map live 
     await expect(page.locator('#world-message')).toContainText('ไปต่อไม่ได้');
     expect(w.commands.length).toBe(count);
   }
+  expect(issues).toEqual([]);
+});
+
+test('server play (perf R5): quick taps walk at the player pace and reach the server in order', async ({ page }) => {
+  const issues: string[] = []; page.on('pageerror', e => issues.push(e.message));
+  await page.setViewportSize({ width: 390, height: 844 });
+  const w = await serve(page);
+  const token = await onTheMap(w);
+  await page.addInitScript(([k, v]) => { localStorage.setItem(k!, v!); }, [`fateweave-server-token:${API}`, token]);
+  await page.goto(`./?server=${encodeURIComponent(API)}`);
+  await page.locator('#continue').click();
+  await expect(page.locator('#world-view')).toBeVisible();
+  const tokenAt = () => page.locator('#party-token').evaluate(el => `${(el as HTMLElement).style.getPropertyValue('--x')},${(el as HTMLElement).style.getPropertyValue('--y')}`);
+  const start = await tokenAt(); const before = w.commands.length;
+  const dir = await page.locator('.step-hint').first().getAttribute('data-dir');
+  const back = ({ up: 'down', down: 'up', left: 'right', right: 'left' } as Record<string, string>)[dir!]!;
+  // The first answer is held: three taps all show at once (there, back, there).
+  w.holdNext = 1500;
+  await page.locator(`.step-hint[data-dir="${dir}"]`).click(); const there = await tokenAt(); expect(there).not.toBe(start);
+  await page.locator(`.step-hint[data-dir="${back}"]`).click(); await expect.poll(tokenAt, { timeout: 500 }).toBe(start);
+  await page.locator(`.step-hint[data-dir="${dir}"]`).click(); await expect.poll(tokenAt, { timeout: 500 }).toBe(there);
+  expect(w.commands.length - before).toBe(1);
+  // The answers come back one by one; the token stays on the furthest step and the server ends where it stands.
+  await expect.poll(() => w.commands.length - before, { timeout: 8000 }).toBe(3);
+  await expect(page.locator('#app')).not.toHaveAttribute('data-server', /./, { timeout: 8000 });
+  const sent = w.commands.slice(before).map(b => JSON.parse(b) as { seq: number; command: { dir: string } });
+  expect(sent.map(c => c.command.dir)).toEqual([dir, back, dir]);
+  expect(sent.map(c => c.seq - sent[0]!.seq)).toEqual([0, 1, 2]);
+  expect(await tokenAt()).toBe(there);
+  const pos = storedGame(w.s, [...w.s.objects.keys()][0]!)!.run!.position; expect(`${pos.x},${pos.y}`).toBe(there);
   expect(issues).toEqual([]);
 });
 

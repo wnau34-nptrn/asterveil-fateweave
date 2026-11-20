@@ -391,7 +391,7 @@ export class GameShell {
   // P09-02c: `then` gets the result at once in local play; in server play after the server answered, with input
   // locked meanwhile (one command at a time). `queue` keeps the latest command sent while waiting (battle turns).
   // `soft` (map steps, battle turns): the screen stays live while the server answers; other commands are refused
-  // until it has, and steps tapped meanwhile wait in `nextMove`.
+  // until it has, and steps tapped meanwhile join `guesses` (perf R5).
   private exec(cmd: GameCommand, then: (result: CommandResult) => void, queue = false, soft = false): void {
     if (!this.server) { then(this.local(cmd)); return; }
     if (this.waiting) { if (queue) this.queued = { cmd, then }; return; }
@@ -412,8 +412,14 @@ export class GameShell {
   }
   private local(cmd: GameCommand): CommandResult { return applyCommand(this.game ?? null, cmd, { home: this.home, maps: this.maps, lookup: this.lookup, seeds: this.seeds }); }
   // ---- P09-02c server play (off unless switched on; see platform/server-client.ts) ----
-  // A step tapped while the previous one is still with the server (one is kept; the newest wins).
-  private nextMove: Direction | undefined;
+  // Perf R5 (server play): steps already shown on the device and not yet confirmed, oldest first. The first one is with
+  // the server (or about to be); the others go out one by one, in order, as the answers come back. Each was checked on
+  // the device from the previous guess with the public map rules, so the token walks at the player's pace instead of
+  // one tile per round trip. An answer that differs (a fight, an event, a refusal, another tile) drops the rest and
+  // the server's state is shown. At most `MAX_AHEAD` tiles ahead; a guess that does more than walk (pushing a stone,
+  // a lever, a rune, a secret) ends the chain until it is confirmed.
+  private guesses: { dir: Direction; at: Point; open: boolean }[] = [];
+  private static readonly MAX_AHEAD = 3;
   // The token already moved for this step (`move`), so the answer does not hop or step again.
   private stepShown = false;
   private waiting = false;
@@ -459,15 +465,18 @@ export class GameShell {
     if (this.waiting) return;
     const next = this.queued; this.queued = undefined;
     if (next) { this.exec(next.cmd, next.then, false, true); return; }
-    const dir = this.nextMove; this.nextMove = undefined;
-    // A buffered step goes only where a fresh tap could (no fight, story, dialog or summary has opened since).
-    if (dir && this.root.dataset.view === 'world' && !document.querySelector('dialog[open], .story-view:not([hidden]), .summary-view:not([hidden])')) { this.move(dir); return; }
+    // A shown step goes out only where a fresh tap could (no fight, story, dialog or summary has opened since);
+    // otherwise the remaining guesses are dropped and the confirmed state is drawn again.
+    if (this.guesses.length) {
+      if (this.state && !this.locked && this.root.dataset.view === 'world' && !document.querySelector('dialog[open], .story-view:not([hidden]), .summary-view:not([hidden])')) { this.sendGuess(); return; }
+      this.guesses = []; if (this.state && this.root.dataset.view === 'world') this.renderWorld();
+    }
     const after = this.afterWait; this.afterWait = undefined; after?.();
   }
   // Takes the server's state as the game and shows it: on the title (entering) or where the player is (catching up).
   private adopt(state: ServerState, screen: 'title' | 'current', note = ''): void {
     this.game = state.view ? gameFromView(state.view) : undefined; this.board = state.view?.hireBoard ?? [];
-    this.queued = undefined; this.nextMove = undefined; this.stepShown = false; this.pendingRewards = undefined;
+    this.queued = undefined; this.guesses = []; this.stepShown = false; this.pendingRewards = undefined;
     // As a local load does: recruits already on the roster have had their scene.
     this.markRecruits(); this.banner = undefined; this.locked = false; this.saved = true;
     if (screen === 'title' || !this.game) { this.showTitle(); return; }
@@ -497,7 +506,7 @@ export class GameShell {
     const [title, detail] = text[problem];
     this.server?.report(problem, this.place());
     if (this.root.dataset.server === 'sending') { this.unlockForServer(); this.lockForServer('กำลังส่งไปเซิร์ฟเวอร์…'); }
-    this.nextMove = undefined; this.stepShown = false;
+    this.guesses = []; this.stepShown = false;
     this.serverPanel.dataset.problem = problem; this.serverPanel.hidden = false;
     this.serverPanel.innerHTML = `<div class="server-card" role="alertdialog" aria-labelledby="server-problem-title"><h2 id="server-problem-title">${title}</h2><p>${detail}</p>`
       + `<button type="button" class="primary" data-server="act">${action}</button><button type="button" class="secondary" data-server="local">เล่นในเครื่องแทน</button></div>`;
@@ -757,18 +766,48 @@ export class GameShell {
   private move(dir: Direction): void {
     if (!this.state || this.locked) return;
     if (this.server) {
-      if (this.waiting) { if (this.root.dataset.server === 'sending') this.nextMove = dir; return; }
+      // Another command (not a step) is with the server: ignore the tap, as before.
+      if (this.waiting && this.root.dataset.server !== 'sending') return;
+      if (this.waiting && !this.guesses.length) return;
       // Server play: where a step lands follows from the public map alone (walls, doors, stones, pits, seals), so the
       // device checks it with the same rules and moves the token at once. What the step finds (a fight, an event, loot)
       // stays hidden until the server's answer. A refused step changes nothing, so it is not sent.
-      const guess = this.local({ kind: 'move', dir });
-      if (isRejected(guess)) { this.moved(guess); return; }
-      if (guess.game.run) {
-        const p = guess.game.run.position;
-        if (p.x !== this.state.position.x || p.y !== this.state.position.y) { this.stepShown = true; sfx.play('step'); this.renderWorld({ ...this.state, position: { ...p } }); }
-      }
+      const last = this.guesses.at(-1);
+      if (last && (!last.open || this.guesses.length >= GameShell.MAX_AHEAD)) return;
+      const from = last?.at ?? this.state.position;
+      const guess = applyCommand(this.game ? { ...this.game, run: { ...this.state, position: { ...from } } } : null, { kind: 'move', dir },
+        { home: this.home, maps: this.maps, lookup: this.lookup, seeds: this.seeds });
+      if (isRejected(guess)) { if (!last) this.moved(guess); else sfx.play('bump'); return; }
+      const p = guess.game.run?.position;
+      // The goal settles the run, and a step that does not move the party (a refused push) shows nothing: send those
+      // only from the confirmed state, never as part of a chain.
+      if (!p || (p.x === from.x && p.y === from.y)) { if (!last) this.exec({ kind: 'move', dir }, out => this.moved(out), false, true); return; }
+      // Plain walking (a random fight is drawn by the server either way) can be followed by more guesses.
+      const kind = (guess.events[0] as WorldEvent | undefined)?.type;
+      this.guesses.push({ dir, at: { ...p }, open: kind === 'moved' || kind === 'encounter' });
+      sfx.play('step'); this.renderWorld({ ...this.state, position: { ...p } });
+      if (!this.waiting) this.sendGuess();
+      return;
     }
     this.exec({ kind: 'move', dir }, out => this.moved(out), false, true);
+  }
+  // The oldest shown step goes to the server; its answer is checked against the guess in `moved`.
+  private sendGuess(): void {
+    const next = this.guesses[0]; if (!next) return;
+    this.stepShown = true;
+    this.exec({ kind: 'move', dir: next.dir }, out => {
+      const sent = this.guesses.shift();
+      const ok = isRejected(out) ? undefined : out; const run = ok?.game.run ?? undefined; const event = ok?.events[0] as WorldEvent | undefined;
+      const same = !!sent && !!run && event?.type === 'moved' && run.position.x === sent.at.x && run.position.y === sent.at.y;
+      if (same && this.guesses.length) {
+        // Confirmed and more steps are already shown: keep the token on the furthest guess.
+        this.state = run!; this.persist(); this.stepShown = false;
+        this.renderWorld({ ...run!, position: { ...this.guesses.at(-1)!.at } });
+        return;
+      }
+      if (!same) this.guesses = [];
+      this.moved(out);
+    }, false, true);
   }
   private moved(out: CommandResult): void {
     // The token already stepped (server play): the answer neither hops nor plays a second step sound.
