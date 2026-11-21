@@ -2,6 +2,7 @@ import { shortcutBlocked } from '../platform/keyboard';
 import { storyArt } from '../game/visuals/assets';
 import { heroText } from './th';
 import { portrait } from './portraits';
+import { trackLqip } from './lqip';
 
 // Story scenes (lore 2026-10-16): a few full-screen panels with a speaker and one line each, shown between
 // views. They own no rules: the host saves first, then plays the scene, then continues. Skippable at any time.
@@ -87,6 +88,7 @@ export class StoryUI {
     const who = p.speaker === 'narrator' ? undefined : p.speaker === 'vargoth' ? VARGOTH : { name: heroText[p.speaker]!.name, role: heroText[p.speaker]!.role, art: p.speaker };
     this.root.dataset.speaker = p.speaker; this.root.dataset.scene = p.scene;
     this.root.style.setProperty('--story-bg', `url(${storyArt(`story_${p.scene}`)})`);
+    trackLqip(this.root, storyArt(`story_${p.scene}`));
     // Vargoth stands full-figure on the painted scene; the heroes speak from their portraits.
     const figure = p.speaker === 'vargoth' ? `<img class="story-vargoth" src="${storyArt('vargoth_full')}" alt="">` : who ? portrait(who.art, true) : '';
     const face = p.speaker === 'vargoth' ? `<span class="story-bust" aria-hidden="true" style="background-image:url(${storyArt('vargoth_bust')})"></span>` : '';

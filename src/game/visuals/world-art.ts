@@ -14,7 +14,11 @@ const decor: Readonly<Record<string, Frame & { zone: string }>> = decorFrames;
 // ART-WORLD-LOOT-001 atlases: 128 px chest frames (sole baseline footY) and item frames.
 export const chestFrame = (tier: 'common' | 'rare', open: boolean): Frame & { footY: number } => chestFrames[`chest_${tier}${open ? '_open' : ''}`];
 export const itemFrame = (id: 'ore' | 'ember' | 'seal'): Frame => itemFrames[`item_${id}`];
-export const worldArtUrl = (name: string): string => `${import.meta.env.BASE_URL}assets/world/${name}.webp`;
+// B5 (2026-11-21): the two big map atlases ship lossy (built from assets-master/world by scripts/build-lossy-world.py);
+// the revision (first 8 hex of the shipped file's SHA-256) goes into the URL so browsers and the service worker refetch.
+// world.css / game-feel.css name the same URLs (tests/world-art-rev.test.ts keeps all three in step).
+export const WORLD_REV: Readonly<Record<string, string>> = { tileset: '6ced91a5', decor: 'e9278e34' };
+export const worldArtUrl = (name: string): string => `${import.meta.env.BASE_URL}assets/world/${name}.webp${WORLD_REV[name] ? `?v=${WORLD_REV[name]}` : ''}`;
 
 // Stable integer hash of a coordinate (and a salt) for variants and decor.
 export function cellHash(x: number, y: number, salt = 0): number {

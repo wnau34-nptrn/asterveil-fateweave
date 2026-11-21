@@ -44,7 +44,7 @@ test('the camp waits for its backdrop and NPCs; the Continue button shows loadin
 });
 
 test('the map waits for its tiles, and a tap during the wait does nothing', async ({ page }) => {
-  await hold(page, '**/assets/world/tileset.webp', 900); await hold(page, '**/assets/world/decor.webp', 900);
+  await hold(page, '**/assets/world/tileset.webp*', 900); await hold(page, '**/assets/world/decor.webp*', 900);
   await seed(page, mapSave()); await page.goto('./');
   await expect(page.locator('#continue')).toBeVisible();
   await watchView(page, '#world-view', ['tileset.webp', 'decor.webp']);
