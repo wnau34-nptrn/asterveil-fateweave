@@ -1,0 +1,300 @@
+{
+ "source": "ART-UI-GACHA-003 R1 @ 4323d51 + ART-UI-GACHA-002 key-art (PR #212)",
+ "stage": [
+  390,
+  844
+ ],
+ "files": {
+  "idle": {
+   "file": "idle-845280f4f4.webp",
+   "cell": [
+    512,
+    512
+   ],
+   "frames": 4,
+   "pivot": [
+    256,
+    256
+   ],
+   "anchor": "loom_crystal",
+   "width_390": 278,
+   "ms": [
+    220,
+    220,
+    220,
+    220
+   ],
+   "loop": true
+  },
+  "sparkles": {
+   "file": "sparkles-687244cd42.webp",
+   "cell": [
+    256,
+    256
+   ],
+   "frames": 4,
+   "pivot": [
+    128,
+    128
+   ],
+   "anchor": "decorative_spawn",
+   "width_390": 30,
+   "ms": [
+    480,
+    480,
+    480,
+    480
+   ],
+   "loop": false
+  },
+  "loom-charge": {
+   "file": "loom-charge-68de2e5bf8.webp",
+   "cell": [
+    512,
+    512
+   ],
+   "frames": 3,
+   "pivot": [
+    256,
+    256
+   ],
+   "anchor": "loom_crystal",
+   "width_390": 280,
+   "ms": [
+    250,
+    380,
+    120
+   ],
+   "loop": false
+  },
+  "thread-pillar": {
+   "file": "thread-pillar-1385d877fd.webp",
+   "cell": [
+    512,
+    1024
+   ],
+   "frames": 3,
+   "pivot": [
+    256,
+    1024
+   ],
+   "anchor": "loom_crystal",
+   "width_390": 268,
+   "ms": [
+    140,
+    325,
+    130
+   ],
+   "loop": false
+  },
+  "ten-burst": {
+   "file": "ten-burst-3312e201bd.webp",
+   "cell": [
+    512,
+    1024
+   ],
+   "frames": 3,
+   "pivot": [
+    256,
+    1024
+   ],
+   "anchor": "loom_crystal",
+   "width_390": 360,
+   "ms": [
+    115,
+    370,
+    165
+   ],
+   "loop": false
+  },
+  "reveal-character": {
+   "file": "reveal-character-4c69fc132d.webp",
+   "cell": [
+    512,
+    512
+   ],
+   "frames": 3,
+   "pivot": [
+    256,
+    256
+   ],
+   "anchor": "reward_center",
+   "width_390": 356,
+   "ms": [
+    180,
+    460,
+    360
+   ],
+   "loop": false
+  },
+  "reveal-shard": {
+   "file": "reveal-shard-e6d2801d92.webp",
+   "cell": [
+    512,
+    512
+   ],
+   "frames": 3,
+   "pivot": [
+    256,
+    256
+   ],
+   "anchor": "reward_center",
+   "width_390": 334,
+   "ms": [
+    145,
+    330,
+    295
+   ],
+   "loop": false
+  },
+  "character-card": {
+   "file": "character-card-66800ccc59.webp",
+   "cell": [
+    384,
+    512
+   ],
+   "pivot": [
+    192,
+    256
+   ],
+   "width_390": 184,
+   "alpha_bounds": [
+    40,
+    54,
+    343,
+    458
+   ]
+  },
+  "character-card-new": {
+   "file": "character-card-new-1ee1e5607c.webp",
+   "cell": [
+    384,
+    512
+   ],
+   "pivot": [
+    192,
+    256
+   ],
+   "width_390": 184,
+   "alpha_bounds": [
+    18,
+    16,
+    366,
+    496
+   ]
+  },
+  "character-shard": {
+   "file": "character-shard-3e40603fff.webp",
+   "cell": [
+    384,
+    384
+   ],
+   "pivot": [
+    192,
+    192
+   ],
+   "width_390": 166,
+   "alpha_bounds": [
+    59,
+    16,
+    325,
+    368
+   ]
+  },
+  "mask": {
+   "file": "mask-c897911589.webp",
+   "cell": [
+    384,
+    512
+   ],
+   "pivot": [
+    192,
+    256
+   ],
+   "width_390": 184,
+   "alpha_bounds": [
+    54,
+    81,
+    331,
+    431
+   ]
+  },
+  "mask-shard": {
+   "file": "mask-shard-270b27aedb.webp",
+   "cell": [
+    384,
+    384
+   ],
+   "pivot": [
+    192,
+    192
+   ],
+   "width_390": 166,
+   "alpha_bounds": [
+    117,
+    112,
+    268,
+    269
+   ]
+  },
+  "fate-ticket": {
+   "file": "fate-ticket-86586e7125.webp",
+   "cell": [
+    256,
+    256
+   ],
+   "pivot": [
+    128,
+    128
+   ],
+   "width_390": 24,
+   "alpha_bounds": [
+    14,
+    30,
+    242,
+    225
+   ]
+  },
+  "exchange-knot": {
+   "file": "exchange-knot-9b84d74e03.webp",
+   "cell": [
+    256,
+    256
+   ],
+   "pivot": [
+    128,
+    128
+   ],
+   "width_390": 24,
+   "alpha_bounds": [
+    16,
+    14,
+    239,
+    242
+   ]
+  },
+  "key-art": {
+   "file": "key-art-570934b4c8.webp",
+   "cell": [
+    780,
+    1686
+   ]
+  }
+ },
+ "bytes": 2827438,
+ "anchors": {
+  "loom_crystal": [
+   197,
+   313
+  ],
+  "loom_platform": [
+   195,
+   543
+  ],
+  "reward_center": [
+   195,
+   347
+  ],
+  "button_area_y_inclusive": 590
+ }
+}

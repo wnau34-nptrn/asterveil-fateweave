@@ -21,6 +21,7 @@ import './ui/portrait.css';
 import './ui/components.css';
 import './ui/forge-enhancement.css';
 import './ui/sheet-frame.css';
+import './ui/gacha.css';
 import './ui/camp-layout.css';
 import './ui/team-formation.css';
 import './ui/server-play.css';

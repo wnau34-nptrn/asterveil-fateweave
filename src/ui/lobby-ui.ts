@@ -35,6 +35,7 @@ import { boardReady, questBoardBody, questTabs, type QuestTab } from './quest-bo
 import { weekOf } from '../core/world/board';
 import { trioLive } from '../core/world/world-boss';
 import { worldBossBanner, worldBossPage, type WbCraft, type WbTab } from './world-boss-panel';
+import { gachaPage, type GachaState, type GachaView } from './gacha-panel';
 import type { WorldBossStatus } from '../platform/server-client';
 import { sweepReasonText, sweepText, campLines, skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
 
@@ -45,7 +46,7 @@ export interface LobbyHost { archive(id: string, archived: boolean): void; autoE
   transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; guide(id: string, skip: boolean): void;
-  enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; claimBoard(tab: BoardTab, id: string, period: number): void; depart(mapId?: string, hard?: boolean): void; sweep(mapId: string, hard: boolean): void; startWorldBoss(boss?: WbBossId): void; claimWorldBoss(id: string, week: number): void; craftBossItem(boss: WbBossId, affixes: GearStat[], set?: SetId): void; worldBossStatus(): void; home(): void }
+  enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; claimBoard(tab: BoardTab, id: string, period: number): void; depart(mapId?: string, hard?: boolean): void; sweep(mapId: string, hard: boolean): void; startWorldBoss(boss?: WbBossId): void; claimWorldBoss(id: string, week: number): void; craftBossItem(boss: WbBossId, affixes: GearStat[], set?: SetId): void; worldBossStatus(): void; gachaPull(count: number): void; gachaExchange(heroId: string): void; home(): void }
 // `npcCheer`: the camp NPC whose service just succeeded (plays its cheer once).
 // `board`: the hiring board from the seed-free client view (`core/command/client-view.ts`), never worked out here.
 // `day` (P05-05): the device's calendar day, for the sweep supplies and the day's sweeps.
@@ -115,6 +116,8 @@ export class LobbyUI {
   private confirmDismiss = false;
   // The broker's sheet shows the hiring board or the market (4A).
   private market = false;
+  // P10 cabinet: the third hiring tab, its step, and the serial the shown result must pass (set when a pull is sent).
+  private gacha = false; private gachaState: GachaState = { view: 'home', count: 10, skip: false }; private gachaAwait?: number;
   // P05-06: the quest board's open tab.
   private questTab: QuestTab = 'daily';
   private npcOpen = false;
@@ -197,7 +200,17 @@ export class LobbyUI {
         case 'hire-preview': this.preview = Number(b.dataset.index); this.draw(); this.root.querySelector('.lobby-content')?.scrollTo(0, 0); this.focus('#hire-preview-back'); break;
         case 'hire-preview-back': { const i = this.preview; this.preview = undefined; this.draw(); this.focus(`#hire-open-${i}`); break; }
         case 'hire-lane': this.lane = b.dataset.lane as 'all' | 'front' | 'back'; this.draw(); this.focus(`#hire-lane-${this.lane}`); break;
-        case 'hire-tab': this.market = b.dataset.tab === 'market'; this.preview = undefined; this.draw(); this.focus(`#hire-tab-${b.dataset.tab}`); break;
+        case 'hire-tab': this.market = b.dataset.tab === 'market'; this.gacha = b.dataset.tab === 'gacha'; this.gachaState = { ...this.gachaState, view: 'home' }; this.preview = undefined; this.draw(); this.focus(`#hire-tab-${b.dataset.tab}`); break;
+        case 'gacha-view': { const view = b.dataset.view as GachaView; this.gachaState = { ...this.gachaState, view }; this.draw(); this.focus(view === 'home' ? '#gacha-title' : `#gacha-${view === 'rates' ? 'rates' : view === 'exchange' ? 'exchange' : 'history'}-title`); break; }
+        case 'gacha-ask': this.gachaState = { ...this.gachaState, view: 'confirm', count: Number(b.dataset.count) }; this.draw(); this.focus('#gacha-confirm-title'); break;
+        case 'gacha-pick': this.gachaState = { ...this.gachaState, pick: b.dataset.hero! }; this.draw(); this.focus(`#gacha-pick-${b.dataset.hero}`); break;
+        case 'gacha-skip': this.gachaState = { ...this.gachaState, skip: true }; this.draw(); this.focus('#gacha-back'); break;
+        case 'gacha-pull': case 'gacha-exchange':
+          // Sent once from the confirmation step; the result view opens only when a newer committed entry arrives.
+          if (this.gachaAwait !== undefined || b.disabled) break;
+          b.disabled = true; this.gachaAwait = this.view!.profile.gacha?.serial ?? 0;
+          if (b.dataset.lobby === 'gacha-pull') this.host.gachaPull(Number(b.dataset.count)); else if (this.gachaState.pick) this.host.gachaExchange(this.gachaState.pick);
+          break;
         case 'smelt': this.host.smelt(Number(b.dataset.dust)); this.focus(`#smelt-${b.dataset.dust}`); break;
         case 'refresh': this.host.refresh(); this.focus('#hire-refresh'); break;
         case 'buy': { const item = b.dataset.item as ShopItemId; const hero = item === 'contract' ? this.root.querySelector<HTMLSelectElement>('#contract-hero')?.value : undefined;
@@ -381,6 +394,11 @@ export class LobbyUI {
   render(view: LobbyView): void {
     const cheer = view.npcCheer && view !== this.view ? view.npcCheer : undefined;
     this.view = view;
+    if (this.gachaAwait !== undefined) {
+      const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if ((view.profile.gacha?.serial ?? 0) > this.gachaAwait) this.gachaState = { ...this.gachaState, view: 'result', skip: reduce };
+      this.gachaAwait = undefined;
+    }
     if (this.picked && !view.profile.company.includes(this.picked)) this.picked = undefined;
     if ((this.sheet === 'tree' || this.sheet === 'gear') && !this.picked) this.sheet = 'team';
     this.draw(); this.characters.refresh();
@@ -633,7 +651,10 @@ export class LobbyUI {
     return `<button id="lobby-tree-open" data-lobby="tree" class="secondary tree-toggle">${icon('starFilled')}<span>ผังสกิล</span><small>${free > 0 ? `แต้มว่าง ${free}` : `ใช้ ${spent}/${points} แต้ม`}</small></button>`;
   }
   private board(p: Profile): string {
-    const tabs = `<div class="hire-tabs" role="tablist">${(['board', 'market'] as const).map(t => `<button id="hire-tab-${t}" role="tab" data-lobby="hire-tab" data-tab="${t}" aria-selected="${(t === 'market') === this.market}" class="${(t === 'market') === this.market ? 'active' : ''}">${icon(t === 'market' ? 'pack' : 'gold')}<span>${t === 'market' ? 'ตลาด' : 'ป้ายจ้าง'}</span></button>`).join('')}</div>`;
+    const gacha = this.gacha && this.open('gacha'); const current = gacha ? 'gacha' : this.market ? 'market' : 'board';
+    const names = { board: ['gold', 'ป้ายจ้าง'], market: ['pack', 'ตลาด'], gacha: ['reroll', 'ทอชะตา'] } as const;
+    const tabs = `<div class="hire-tabs" role="tablist">${(this.open('gacha') ? ['board', 'market', 'gacha'] as const : ['board', 'market'] as const).map(t => `<button id="hire-tab-${t}" role="tab" data-lobby="hire-tab" data-tab="${t}" aria-selected="${t === current}" class="${t === current ? 'active' : ''}">${icon(names[t][0])}<span>${names[t][1]}${t === 'gacha' && (p.gacha?.tickets ?? 0) >= 10 ? ' <small class="trip-badge" aria-label="ตั๋วพอสุ่มสิบครั้ง">!</small>' : ''}</span></button>`).join('')}</div>`;
+    if (gacha) return tabs + gachaPage(p, this.maps, this.map, this.gachaState);
     if (this.market) return tabs + this.marketList(p);
     if (this.preview !== undefined && this.offers[this.preview]) return this.hirePreview(p, this.preview);
     const why: Record<string, string> = { taken: 'จ้างแล้ว', gold: 'เหรียญทองไม่พอ', maxed: 'ดาวเต็มแล้ว' };

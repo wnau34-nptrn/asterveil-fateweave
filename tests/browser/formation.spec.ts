@@ -74,8 +74,10 @@ for (const [name, lanes, chip] of [['3-1', { weaver: 'front' }, 'หน้า 3 
   const data = encounterById('slime-nest')!; const hp = Object.fromEntries(run.roster.deployed.map(id => [id, run.hp[id]!]));
   run.battle = { kind: 'random', encounterId: data.id, entry: hp, commands: [], lanes: { ...lanes } };
   await seed(page, camp(), run);
-  const start = page.locator('[data-ui=start]'); if (await start.isVisible().catch(() => false)) await start.click();
-  await expect(page.locator('#action-attack')).toBeEnabled();
+  // The battle screen appears only once its images are decoded (image-blank fix, up to 1.8 s), so the start button may
+  // not be there yet when the page loads: keep pressing it while it shows until Attack is enabled.
+  const start = page.locator('[data-ui=start]'), attack = page.locator('#action-attack');
+  await expect.poll(async () => { if (await start.isVisible().catch(() => false)) await start.click().catch(() => undefined); return attack.isEnabled().catch(() => false); }, { timeout: 15_000 }).toBe(true);
   await expect(page.locator('.formation-chip')).toContainText(chip);
   if (dir) { await page.waitForTimeout(400); await page.screenshot({ path: `${dir}/formation-battle-${name}-390.png` }); }
   await context.close();
