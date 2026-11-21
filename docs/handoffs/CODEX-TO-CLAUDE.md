@@ -1,3 +1,10 @@
+## 2026-11-21 — Image-blank B4 (blurred placeholders) + B5 (lossy map atlases) (Sonnet; claude/image-blank-b4-b5, PR open, NOT merged)
+- Owner: “ทำ B4 กับ B5 ต่อใน chat ใหม่”. Presentation/encoding only. **Merge waits for the owner's own words approving the images** (map before/after, blurred title/camp); none given yet.
+- B4: `scripts/build-lqip.py` → `src/ui/lqip.generated.ts` (8 paintings), `src/ui/lqip.ts` `trackLqip`, CSS at the end of `game-feel.css`; wired into title, camp backdrop, battle, story.
+- B5: `tileset` 907→239 KB, `decor` 736→255 KB (q92, alpha lossless); masters in `assets-master/world/`, `scripts/build-lossy-world.py`, `WORLD_REV` `?v=`. `title_party` left as is (only 1.4×).
+- Tests: typecheck, lint, Vitest 2136 pass, build, Playwright lqip/image-ready/lobby/story/world/battle-hud/portrait/combat/region pass; `image-ready.spec` camp test now gates the backdrop until after the click. Perf single sample: no blank images at screen switch; times noisy. [Validation](../validation/image-blank-b4-b5-2026-11-21/README_TH.md).
+- Open: owner image approval; re-measure on a real phone.
+
 ## 2026-11-21 — P11-05 go-live check before the trio switch (Opus; claude/p11-05-trio-check → game branch, PR #324)
 - Owner: “เริ่มข้อ 4” (check readiness before OD-52, Mon 23 Nov 2026 06:00 Bangkok = week 2969). No game code/rules/numbers changed; tests only.
 - `tests/world-boss-trio-switch.test.ts` (shipped rules, clock pinned around 2026-11-22T23:00Z): calendar/reset, offline rules, Worker + World Boss object (warden to 05:59:59, three bars at 06:00 = floor(warden attempts ÷ 3) × 400 / min 1500, warden refused after, trio pays boss shards, warden `s-50` of 2968 claimable in 2969, closed in 2970, verify ok). `tests/browser/world-boss-trio-switch.spec.ts` (offline, Asia/Bangkok, 05:59 → 06:00:30): banner/page warden → trio, three guides, Kragmor fight drawn.
