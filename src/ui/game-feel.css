@@ -663,7 +663,7 @@ html, body { background: #0a1422; }
 /* Open doorways and found passages: the painted arch or rubble over the floor tile of a walkable neighbour. */
 .puzzle-door.open, .secret-wall.found {
   background: url('/assets/world/puzzle.webp') calc(var(--px) * var(--t) * -1) calc(var(--py) * var(--t) * -1) / calc(var(--t) * 5) calc(var(--t) * 4) no-repeat,
-    url('/assets/world/tileset.webp') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 9) no-repeat; }
+    url('/assets/world/tileset.webp?v=6ced91a5') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 9) no-repeat; }
 .puzzle-door.open { --px: 3; --py: 2; } .secret-wall.found { --px: 0; --py: 3; }
 /* The rune door shows the stone order in its three sockets. */
 .door-glyph { position: absolute; top: 8%; left: calc(29% + var(--n) * 14.5%); width: calc(var(--t) * .14); height: calc(var(--t) * .14);
@@ -936,3 +936,17 @@ button.is-loading::before { content: ''; position: absolute; top: 50%; right: 14
   .title-stage .title-bg { transition: none; }
   button.is-loading::before { animation: none; border-right-color: currentColor; opacity: .5; }
 }
+
+/* ================= B4: blurred placeholders while a big painting loads (2026-11-21) ================= */
+/* The host sets --lqip (ui/lqip.ts); the layer sits over the host's own (still incomplete) painting and fades out. */
+.lqip-on::before, .lqip-on::after { transition: opacity .4s var(--ease-out); }
+.lqip-on.lqip-done::before, .lqip-on.lqip-done::after { opacity: 0; }
+.title-stage.lqip-on::after { content: ''; position: absolute; inset: 0; background: var(--lqip) 50% 50% / cover no-repeat; pointer-events: none; z-index: 2; }
+#lobby-view .lobby-backdrop.lqip-on::after { content: ''; position: absolute; inset: 0; background: var(--lqip) 50% 72% / cover no-repeat; pointer-events: none; }
+#battle-view.lqip-on { isolation: isolate; }
+#battle-view.lqip-on::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background:
+  linear-gradient(180deg, #050b14c0 0%, #050b1400 22%, #050b1400 52%, #050b14b3 74%, #050b14e6 100%),
+  var(--lqip) var(--bd-x, 50%) var(--bd-y, 0) / var(--bd-w, cover) var(--bd-h, auto) no-repeat, #0a1422; }
+.story-view.lqip-on::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background:
+  linear-gradient(180deg, #050b14cc, #050b1466 40%, #050b14ee 100%), var(--lqip) 50% 50% / cover no-repeat, #050b14; }
+@media (prefers-reduced-motion: reduce) { .lqip-on::before, .lqip-on::after { transition: none; } }

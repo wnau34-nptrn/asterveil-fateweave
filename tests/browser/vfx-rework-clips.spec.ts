@@ -9,7 +9,7 @@ for(const {scenario,mode} of cases)test(`rework clip ${scenario}-${mode}`,async(
  await page.goto(`tests/browser/fixtures/vfx-rework.html?scenario=${scenario}&speed=${mode==='fast'?'fast':'normal'}&intensity=${mode==='reduced'?'reduced':'standard'}`);
  await expect.poll(()=>page.evaluate(()=>window.vfxReworkQA.ready()),{timeout:15000}).toBe(true);
  await expect.poll(()=>page.evaluate(()=>window.vfxReworkQA.artReady()),{timeout:15000}).toBe(true);
- if(await page.locator('#start').isVisible())await page.locator('#start').click();
+ await page.locator('#battle-view').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}); if(await page.locator('#start').isVisible())await page.locator('#start').click();
  const skill=await page.evaluate(()=>window.vfxReworkQA.skill);await page.locator(`#action-${skill}`).click();
  await page.evaluate(()=>document.fonts.ready.then(()=>undefined));
  await page.waitForTimeout(3000);
