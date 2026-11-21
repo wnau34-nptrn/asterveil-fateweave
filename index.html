@@ -36,6 +36,8 @@
           var el = event.target;
           // Uncaught script errors, or the game's own script/stylesheet failing to load (not images).
           if (el && el !== window && el.tagName !== 'SCRIPT' && el.tagName !== 'LINK') return;
+          // An image preload (title art) that fails is not fatal: the screen falls back to loading it normally.
+          if (el && el.tagName === 'LINK' && el.rel === 'preload' && el.getAttribute('as') === 'image') return;
           var detail = event.message || (el && (el.src || el.href)) || '';
           show('เปิดเกมไม่สำเร็จ\n' + detail + '\n\nรอสักครู่แล้วรีโหลดหน้านี้');
         }, true);

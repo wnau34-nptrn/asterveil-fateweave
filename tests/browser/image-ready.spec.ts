@@ -65,3 +65,10 @@ test('a very slow or broken image never holds a screen past the cap', async ({ p
   expect(Date.now() - t0).toBeLessThan(5000);
   await expect(page.locator('#continue')).not.toHaveClass(/is-loading/);
 });
+
+test('a failed title image preload is not reported as a failed game load', async ({ page }) => {
+  await hold(page, '**/assets/title/title_party.webp', 0, 503);
+  await seed(page, campSave()); await page.goto('./');
+  await expect(page.locator('#continue')).toBeVisible();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+});
