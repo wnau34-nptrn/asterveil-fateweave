@@ -74,7 +74,7 @@ test('C12: Duet commits in one tap with no cooling-skill choice (save v48) and S
   game.run.hp.thiran = Math.floor(game.run.hp.thiran! / 2);
   game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(game.run.roster.deployed.map(id => [id, game.run.hp[id]!])), commands: [] };
   const errors = await open(page, serialize(game));
-  if (await page.locator('#start').isVisible()) await page.locator('#start').click();
+  await page.locator('#battle-view').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}); if (await page.locator('#start').isVisible()) await page.locator('#start').click();
   await expect(page.locator('#hero-weaver')).toHaveAttribute('aria-pressed', 'true');
   await page.locator('#action-bolt').click();
   await page.locator('#target-f1').click();

@@ -8,7 +8,7 @@ for(const scenario of ['coat','stack','tick','burst','storm','early','shadow','a
  await expect.poll(()=>page.evaluate(()=>window.vfxReworkQA.ready()),{timeout:15000}).toBe(true);
  await expect.poll(()=>page.evaluate(()=>window.vfxReworkQA.artReady()),{timeout:15000}).toBe(true);
  await page.waitForTimeout(1000);
- if(await page.locator('#start').isVisible())await page.locator('#start').click();
+ await page.locator('#battle-view').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}); if(await page.locator('#start').isVisible())await page.locator('#start').click();
  const skill=await page.evaluate(()=>window.vfxReworkQA.skill);await page.locator(`#action-${skill}`).click();
  await page.evaluate(()=>{const seen=new Set<string>();(window as unknown as {reworkSeen:Set<string>}).reworkSeen=seen;setInterval(()=>window.vfxReworkQA.painted().forEach(i=>seen.add(i.frame)),16);});
  await page.locator(`#target-${await page.evaluate(()=>window.vfxReworkQA.target)}`).click();
@@ -31,7 +31,7 @@ for(const mode of ['fast','reduced','osreduce'])test(`rework storm ${mode} prese
  await expect.poll(()=>page.evaluate(()=>window.vfxReworkQA.ready()),{timeout:15000}).toBe(true);
  await expect.poll(()=>page.evaluate(()=>window.vfxReworkQA.artReady()),{timeout:15000}).toBe(true);
  await page.waitForTimeout(1000);
- if(await page.locator('#start').isVisible())await page.locator('#start').click();
+ await page.locator('#battle-view').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}); if(await page.locator('#start').isVisible())await page.locator('#start').click();
  await page.locator('#action-backstab').click();await page.locator('#target-f1').click();
  const saved=await page.evaluate(()=>localStorage.getItem('rework-committed'));
  await page.setViewportSize({width:391,height:844});await expect(page.locator('#skip-turn')).toBeHidden();

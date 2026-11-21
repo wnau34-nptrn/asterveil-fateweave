@@ -16,7 +16,7 @@ test('C11: changed skill descriptions, targeting and saved outcome agree at 390p
  await page.addInitScript(({key,raw})=>{if(!sessionStorage.getItem('audit-seed')){localStorage.setItem(key,raw);sessionStorage.setItem('audit-seed','1');}},{key,raw});
  const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('./');await expect(page).toHaveTitle(/Asterveil/);await page.locator('#continue').click();
- if(await page.locator('#start').isVisible())await page.locator('#start').click();
+ await page.locator('#battle-view').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}); if(await page.locator('#start').isVisible())await page.locator('#start').click();
  await expect(page.locator('#hero-sefa')).toHaveAttribute('aria-pressed','true');
  // Save v56: the venom burst needs her poison first, so the audit opens the poison coat (a whole-row throw) instead.
  await page.locator('#action-knives').click();await page.locator('#skill-details').click();

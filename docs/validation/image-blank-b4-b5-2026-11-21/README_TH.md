@@ -33,4 +33,5 @@
 
 - ใหม่: `tests/lqip.test.ts`, `tests/world-art-rev.test.ts`, `tests/browser/lqip.spec.ts` (ชื่อเกม/ค่าย: placeholder ขึ้นระหว่างไฟล์ค้าง แล้วหายเมื่อมาถึง); `image-ready.spec` ปรับให้ค้างพื้นหลังค่ายจนหลังกด (ค่ายถูกสร้างตอนเปิดแอป)
 - typecheck, eslint, `npm test` (2136 ผ่าน), build; Playwright: lqip, image-ready, lobby-shots, story-p05, world, battle-hud, portrait-keyboard, combat, region-shots ผ่านทั้งหมด. Chromium เท่านั้น — ไม่ได้ทดสอบ iOS Safari/มือถือจริง
+- CI รอบแรก: shard 2/3 หมดเวลา 45 s ที่ `roster-batch1` และ `skill-audit` (เรียกซ้ำในเครื่องได้ ~1 ใน 20; base 0/20) — สาเหตุ: เทสต์ตรวจ `#start` ด้วย `isVisible()` ครั้งเดียวทันทีหลังกด “เดินทางต่อ” ขณะที่หน้าจอสลับแบบรอภาพ (B1) จึงพลาดปุ่มเริ่มต่อสู้ → แก้ 14 จุดใน 10 สเปคให้รอ `#battle-view` ก่อน (ไม่เกิน 8 s) ผ่าน 32/32 และ 29/29 ซ้ำ
 - สคริปต์ถ่ายภาพ: [`scripts/b4b5-shots.spec.ts`](scripts/b4b5-shots.spec.ts) (คัดลอกไว้ใน `tests/browser/` แล้วรันด้วย `SHOTS_DIR`)
