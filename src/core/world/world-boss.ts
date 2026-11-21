@@ -3,6 +3,7 @@ import type { BattleState, Command, EncounterDefinition } from '../battle/types'
 import { weekOf } from './board';
 import { bankFits, TOME_CAP } from './caps';
 import { formation, placed } from './formation';
+import { addTickets, ticketsFit } from './gacha';
 import { featureOpen } from './profile';
 import { emptyTomes, partyLine } from './tomes';
 import { affixPool } from './equipment';
@@ -75,18 +76,18 @@ export function wbPlay(data: EncounterDefinition, commands: readonly Command[], 
 }
 
 const total = (parts: readonly SweepReward[]): SweepReward => parts.reduce<SweepReward>((a, r) => ({
-  ore: a.ore + r.ore, gold: a.gold + r.gold, dust: (a.dust ?? 0) + (r.dust ?? 0), tomes: (a.tomes ?? 0) + (r.tomes ?? 0), shard: (a.shard ?? 0) + (r.shard ?? 0),
-}), { ore: 0, gold: 0, dust: 0, tomes: 0, shard: 0 });
+  ore: a.ore + r.ore, gold: a.gold + r.gold, dust: (a.dust ?? 0) + (r.dust ?? 0), tomes: (a.tomes ?? 0) + (r.tomes ?? 0), shard: (a.shard ?? 0) + (r.shard ?? 0), tickets: (a.tickets ?? 0) + (r.tickets ?? 0),
+}), { ore: 0, gold: 0, dust: 0, tomes: 0, shard: 0, tickets: 0 });
 // `shards` more of `boss`'s shards fit under the cap.
 const shardsFit = (profile: Profile, map: MapDefinition, boss: WbBossId | undefined, shards: number): boolean =>
   !boss || !shards || (profile.bossShards?.[boss] ?? 0) + shards <= map.worldBoss.trio.shardCap;
 function fits(profile: Profile, map: MapDefinition, r: SweepReward, boss?: WbBossId, shards = 0): boolean {
   if (!bankFits(profile.bank, { ore: r.ore, gold: r.gold, dust: r.dust ?? 0, shard: r.shard ?? 0 })) return false;
-  if (!shardsFit(profile, map, boss, shards)) return false;
+  if (!shardsFit(profile, map, boss, shards) || !ticketsFit(profile, map, r.tickets)) return false;
   return (profile.tomes?.[partyLine(map, profile.party.deployed)].small ?? 0) + (r.tomes ?? 0) <= TOME_CAP;
 }
 function pay(profile: Profile, map: MapDefinition, r: SweepReward, boss?: WbBossId, shards = 0): void {
-  profile.bank.ore += r.ore; profile.bank.gold += r.gold; profile.bank.dust += r.dust ?? 0; profile.bank.shard += r.shard ?? 0;
+  profile.bank.ore += r.ore; profile.bank.gold += r.gold; profile.bank.dust += r.dust ?? 0; profile.bank.shard += r.shard ?? 0; addTickets(profile, r.tickets);
   if (r.tomes) (profile.tomes ??= emptyTomes())[partyLine(map, profile.party.deployed)].small += r.tomes;
   if (boss && shards) (profile.bossShards ??= {})[boss] = (profile.bossShards[boss] ?? 0) + shards;
 }

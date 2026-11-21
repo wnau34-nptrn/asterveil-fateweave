@@ -97,6 +97,8 @@ export interface MapDefinition {
   board: BoardRules;
   // P11-04 World Boss (shared by every map, `content/world/rules.ts`).
   worldBoss: WorldBossRules;
+  // P10 free-ticket gacha (shared by every map; docs/design/GACHA_P10_SPEC_TH.md).
+  gacha: GachaRules;
   herbs: readonly (Point & { id: string })[];
   events: readonly MapEventDefinition[];
   eventRules: EventRules;
@@ -323,7 +325,8 @@ export interface SkillLevelRules {
 export interface SweepRules { daily: number; cap: number; cost: number; perMapDaily: number }
 // What one sweep pays: existing resources only. `tomes` are small tomes in the deployed party's line.
 // `shard` = universal star shards (P09 part 2, OD-17): only the weekly board tasks that need real play pay them.
-export interface SweepReward { ore: number; gold: number; dust?: number; tomes?: number; shard?: number }
+// `tickets` (P10, save v66): free gacha tickets (only the quest board and the World Boss trio pay them; OD-58).
+export interface SweepReward { ore: number; gold: number; dust?: number; tomes?: number; shard?: number; tickets?: number }
 // The camp's sweep book (save v62). `day` is the calendar day (days since 1970-01-01) the book was last brought up to,
 // `supply` the supplies held then, `used` the sweeps made on each map that day and `count` every sweep ever made (the
 // next sweep's serial number, so a repeated request is refused instead of paid twice).
@@ -495,6 +498,8 @@ export interface Profile {
   worldBoss?: WorldBossBook;
   // P11-05 (save v65): World Boss trio shards, each 1..`trio.shardCap` (missing or absent id = none).
   bossShards?: Partial<Record<WbBossId, number>>;
+  // P10 (save v66): the free-ticket gacha wallet, counters and recent history (missing = never earned a ticket).
+  gacha?: GachaBook;
   // P04-02 (OD-22): story recruits already compensated (or met through the story), each at most once. Missing = none.
   storyShards?: string[];
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
@@ -535,11 +540,34 @@ export type ProfileEvent =
   // personal milestones it reached) and a shared milestone claimed.
   // `boss`/`shards` (P11-05): the trio boss fought and the boss shards each part paid (missing = the warden).
   | { type: 'wbAttempt'; week: number; attempt: number; damage: number; rounds: number; outcome: Outcome; reward: SweepReward; milestones: { id: string; reward: SweepReward; shards?: number }[]; boss?: WbBossId; shards?: number }
+  | { type: 'gacha'; entry: GachaEntry }
   | { type: 'wbClaimed'; week: number; id: string; reward: SweepReward; boss?: WbBossId; shards?: number }
   | { type: 'bossCrafted'; uid: number; boss: WbBossId }
   | { type: 'bought'; item: ShopItemId; heroId?: string; uid?: number }
   | { type: 'refreshed' };
 export interface ProfileResult { profile: Profile; event: ProfileEvent }
+
+// ---- P10 free-ticket gacha (docs/design/GACHA_P10_SPEC_TH.md, owner OD-58; numbers are drafts) ----
+// `version` is the cabinet's config version: a pull or exchange names the version the player saw and is refused when it
+// differs ('config'). `pool`: the characters a pull can give, each equally likely; `fullBp` the chance in basis points
+// (of 10000) that a pull gives a full copy, otherwise `shardWeights` picks how many of that character's shards.
+// `exchangePoints`: points (one per committed pull, never expiring) that exchange for a full copy of a chosen character.
+// `unlockShards`: character shards that bring an unowned character into the company at ★1.
+export interface GachaRules {
+  version: number; pool: readonly string[]; fullBp: number; shardWeights: readonly { qty: number; weight: number }[];
+  counts: readonly number[]; ticketCost: number; exchangePoints: number; unlockShards: number; historyKeep: number;
+  ticketCap: number; pointCap: number;
+}
+// What one result granted: `joined` (a full copy of an unowned character: ★1), `duplicate` (a full copy of an owned one:
+// `shardsPerDuplicate` character shards), `universal` (a full copy at full stars: universal shards, OD-04), `shards`
+// (character shards to an owned member, kept even at full stars), `stored` (shards of an unowned character, kept in
+// `pending`) and `unlocked` (stored shards reached `unlockShards`: the character joins at ★1 with the rest).
+export type GachaGrant = 'joined' | 'duplicate' | 'universal' | 'shards' | 'stored' | 'unlocked';
+export interface GachaResult { heroId: string; full: boolean; qty: number; grant: GachaGrant }
+// One committed pull (1 or 10) or exchange. `serial` numbers them for the account (the server receipt `gacha:<serial>`);
+// `tickets` spent, `points` gained (a pull) or spent (an exchange).
+export interface GachaEntry { serial: number; kind: 'pull' | 'exchange'; config: number; tickets: number; points: number; results: GachaResult[] }
+export interface GachaBook { tickets: number; points: number; serial: number; pending?: Record<string, number>; history: GachaEntry[] }
 // P02 (OD-05/OD-11): up to 5 deployed (slot order = enemy target slots) and a reserve unlocked by chapter (3 → 4 → 5,
 // `company.reserveSlots`), at most 10 carried. RESERVE_SLOTS is the largest reserve; LEGACY_RESERVE what a run started
 // before v45 keeps.
@@ -564,7 +592,7 @@ export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `percent` (A10): the map strength stored at the start (foe HP and move damage; missing = 100).
 export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; percent?: number; source?: string; lanes?: Record<string, Lane> }
 export type RecruitPoint = 'prologue' | 'camp' | 'boss';
-export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm' | 'hard' | 'tomes';
+export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm' | 'hard' | 'tomes' | 'gacha';
 export interface ExpeditionState {
   // Skill tomes (save v37, maps with `MapDefinition.tomes`): `tomes`/`riftCore` are this
   // run's finds (added to the profile when it settles) and `tomeWins` counts its ordinary wins toward the next tome.

@@ -6,7 +6,7 @@ import { talentTrees } from '../heroes/talents';
 // forge, potions, market, talents, event numbers and the camp NPCs' side quests. A map spreads these and adds its
 // own board, zones, encounters, loot and objectives; tests check that every map uses this exact object.
 export type GameRules = Pick<MapDefinition, 'tutorialEncounterId' | 'camp' | 'startingRoster' | 'firstCompany' | 'unlocks' | 'guides' | 'mercenaries' | 'shop' | 'company' | 'progression' | 'talents'
-  | 'eventRules' | 'potions' | 'equipment' | 'sideQuests' | 'sweep' | 'board' | 'worldBoss'>;
+  | 'eventRules' | 'potions' | 'equipment' | 'sideQuests' | 'sweep' | 'board' | 'worldBoss' | 'gacha'>;
 export const gameRules: GameRules = {
   // The prologue's first battle (Vargoth's vanguard).
   tutorialEncounterId: 'first-clash',
@@ -45,27 +45,38 @@ export const gameRules: GameRules = {
       from: 2969,
       bosses: { kragmor: 'wb-kragmor', valdrakk: 'wb-valdrakk', morvane: 'wb-morvane' },
       attemptReward: { ore: 4, gold: 2 }, attemptShards: 3,
-      personal: [{ id: 'p-2', attempts: 2, reward: { ore: 0, gold: 0, shard: 1 }, shards: 2 }, { id: 'p-4', attempts: 4, reward: { ore: 0, gold: 0, shard: 1 }, shards: 3 }],
-      shared: [{ id: 's-50', percent: 50, reward: { ore: 0, gold: 2 }, shards: 2 }, { id: 's-100', percent: 100, reward: { ore: 0, gold: 0 }, shards: 3 }],
+      personal: [{ id: 'p-2', attempts: 2, reward: { ore: 0, gold: 0, shard: 1, tickets: 2 }, shards: 2 }, { id: 'p-4', attempts: 4, reward: { ore: 0, gold: 0, shard: 1, tickets: 2 }, shards: 3 }],
+      shared: [{ id: 's-50', percent: 50, reward: { ore: 0, gold: 2, tickets: 1 }, shards: 2 }, { id: 's-100', percent: 100, reward: { ore: 0, gold: 0 }, shards: 3 }],
       hp: { perAttempt: 400, min: 1500, max: 5_000_000 },
       shardCap: 200,
       craft: { shards: 40, ore: 30, dust: 10, level: 11 },
       items: { kragmor: { slot: 'body', power: 'bulwark', first: 'hp' }, valdrakk: { slot: 'gloves', power: 'breaker', first: 'attack' }, morvane: { slot: 'head', power: 'reaper', first: 'support' } },
     },
   },
+  // P10 free-ticket gacha (owner OD-58, 2026-11-21; draft numbers, docs/design/GACHA_P10_SPEC_TH.md). Tickets come only
+  // from sources that exist: the daily patrol 1/day, each weekly task 2, the trio's personal milestones 2+2 and each trio
+  // boss's 50% shared milestone 1 (online) — at most 24 a week = 96 per 28 days. 7.5% a full copy, else 1 or 2 shards
+  // (half each) of one of the 15 active characters, all equally likely; 80 points (1 per pull) exchange for a chosen one.
+  // Parked thiran/wila are not in the pool (OD-14). Changing anything here that changes an outcome bumps `version`.
+  gacha: {
+    version: 1,
+    pool: ['guardian', 'tracer', 'weaver', 'healer', 'mira', 'toma', 'sefa', 'brann', 'lio', 'garran', 'metta', 'lalin', 'kael', 'wynne', 'astrid'],
+    fullBp: 750, shardWeights: [{ qty: 1, weight: 1 }, { qty: 2, weight: 1 }], counts: [1, 10], ticketCost: 1,
+    exchangePoints: 80, unlockShards: 50, historyKeep: 30, ticketCap: 9_999, pointCap: 99_999,
+  },
   board: {
     keepDays: 3, smallTeam: 3,
     daily: [
-      { id: 'd-patrol', kind: 'wins', target: 3, alt: { kind: 'sweeps', target: 2 }, reward: { ore: 10, gold: 5 } },
+      { id: 'd-patrol', kind: 'wins', target: 3, alt: { kind: 'sweeps', target: 2 }, reward: { ore: 10, gold: 5, tickets: 1 } },
       { id: 'd-gather', kind: 'chests', target: 2, alt: { kind: 'herbs', target: 3 }, reward: { ore: 8, gold: 5, dust: 1 } },
       { id: 'd-job', kind: 'contracts', target: 1, alt: { kind: 'completes', target: 1 }, reward: { ore: 10, gold: 5, tomes: 1 } },
     ],
     weekly: [
-      { id: 'w-return', kind: 'completes', target: 4, alt: { kind: 'sweeps', target: 9 }, reward: { ore: 40, gold: 20 } },
-      { id: 'w-battles', kind: 'wins', target: 15, reward: { ore: 40, gold: 20, tomes: 2 } },
-      { id: 'w-elites', kind: 'elites', target: 3, reward: { ore: 20, gold: 10, dust: 4, shard: 4 } },
-      { id: 'w-stories', kind: 'events', target: 4, alt: { kind: 'finds', target: 3 }, reward: { ore: 20, gold: 10, dust: 3, shard: 3 } },
-      { id: 'w-jobs', kind: 'contracts', target: 3, reward: { ore: 25, gold: 12, tomes: 2, shard: 3 } },
+      { id: 'w-return', kind: 'completes', target: 4, alt: { kind: 'sweeps', target: 9 }, reward: { ore: 40, gold: 20, tickets: 2 } },
+      { id: 'w-battles', kind: 'wins', target: 15, reward: { ore: 40, gold: 20, tomes: 2, tickets: 2 } },
+      { id: 'w-elites', kind: 'elites', target: 3, reward: { ore: 20, gold: 10, dust: 4, shard: 4, tickets: 2 } },
+      { id: 'w-stories', kind: 'events', target: 4, alt: { kind: 'finds', target: 3 }, reward: { ore: 20, gold: 10, dust: 3, shard: 3, tickets: 2 } },
+      { id: 'w-jobs', kind: 'contracts', target: 3, reward: { ore: 25, gold: 12, tomes: 2, shard: 3, tickets: 2 } },
     ],
     contracts: [
       { id: 'job-swift', kind: 'swift' }, { id: 'job-explorer', kind: 'explorer' }, { id: 'job-bloodless', kind: 'bloodless' },
@@ -95,7 +106,7 @@ export const gameRules: GameRules = {
   // Advanced services stay at MAP 3 explicitly: adding maps must not silently move existing rights to 5/7/9.
   // Revisit the historical A3 future-chapter table only with a new owner-approved progression task.
   // OD-54 (owner 2026-11-19, R2): gear and the skill tree open right after the prologue (0 = no map to clear first).
-  unlocks: { tree: 0, forge: 1, brew: 1, gear: 0, level: 2, quests: 1, hire: 2, team: 1, market: 2, fuse: 3, craft: 3, hunt: 2, transfer: 3, bossCharm: 3, hard: 3, tomes: 2 },
+  unlocks: { tree: 0, forge: 1, brew: 1, gear: 0, level: 2, quests: 1, hire: 2, team: 1, market: 2, fuse: 3, craft: 3, hunt: 2, transfer: 3, bossCharm: 3, hard: 3, tomes: 2, gacha: 2 },
   // Phase 4A (draft): the camp market, paid in gold coins, and paid hiring-board refreshes (2 per return).
   shop: {
     items: { shard: { price: 60, limit: 1 }, contract: { price: 150, limit: 1 }, gearbox: { price: 120, limit: 1 }, repel: { price: 30, limit: 2 } },

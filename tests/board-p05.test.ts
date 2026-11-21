@@ -35,7 +35,7 @@ describe('P05-06 board content', () => {
   it('one board: 3 daily and 5 weekly tasks with existing resources, six contracts, contracts on every map', () => {
     expect(rules.daily).toHaveLength(3); expect(rules.weekly).toHaveLength(5); expect(rules.contracts.map(c => c.kind)).toEqual(['swift', 'explorer', 'bloodless', 'small', 'unharmed', 'herbs']);
     expect(rules.contracts.every(c => c.id.startsWith('job-'))).toBe(true);
-    for (const o of [...rules.daily, ...rules.weekly]) expect(Object.keys(o.reward).every(k => ['ore', 'gold', 'dust', 'tomes', 'shard'].includes(k))).toBe(true);
+    for (const o of [...rules.daily, ...rules.weekly]) expect(Object.keys(o.reward).every(k => ['ore', 'gold', 'dust', 'tomes', 'shard', 'tickets'].includes(k))).toBe(true);
     // A sweep counts only where an objective names it.
     expect([...rules.daily, ...rules.weekly].filter(o => o.kind === 'sweeps' || o.alt?.kind === 'sweeps').map(o => o.id)).toEqual(['d-patrol', 'w-return']);
     for (const m of MAPS) { expect(m.board).toBe(rules); expect(m.contract!.swiftSteps).toBeGreaterThan(0); }
@@ -144,9 +144,9 @@ describe('P05-06 claims', () => {
 
 describe('save v63', () => {
   it('round-trips the board book and the run day; a v62 save loads without them', () => {
-    expect(SAVE_VERSION).toBe(65);
+    expect(SAVE_VERSION).toBe(66);
     const p = claim(played(base(), { wins: 3, steps: 10 }), 'daily', 'd-patrol', DAY);
-    const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(65);
+    const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(66);
     expect(parseGame(raw, home, lookup, MAPS)).toEqual({ profile: p, run: null });
     const away = depart(p, home, lookup, 9, undefined, DAY + 1); const mid = parseGame(write(away), home, lookup, MAPS);
     expect(mid.run!.day).toBe(DAY + 1); expect(mid.profile.board).toEqual(p.board);
