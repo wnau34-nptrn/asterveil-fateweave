@@ -131,7 +131,7 @@ test('PC: fourth unlocked skill uses slot 4 and a later cooldown has no valid ta
 test('PC: movement keys, B and I act only in the world and pause behind dialogs', async ({ page }) => {
   await page.setViewportSize({ width: 1366, height: 768 });
   const run = newExpedition(map, encounterById, 35, undefined, true); run.repel = map.potions.repelSteps; run.tutorialDone = true;
-  await seed(page, run); await page.locator('#continue').click();
+  await seed(page, run); await page.locator('#continue').click(); await expect(page.locator('#world-view')).toBeVisible();
   const steps = () => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run.steps as number, key);
   await page.keyboard.press('a'); expect(await steps()).toBe(1); await page.waitForTimeout(130);
   await page.keyboard.press('ArrowRight'); expect(await steps()).toBe(2);
