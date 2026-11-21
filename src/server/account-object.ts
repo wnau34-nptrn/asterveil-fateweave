@@ -43,7 +43,7 @@ const SCHEMA = [
 // Columns added after a table was first made (an object created earlier gets them on its next start): the log's after
 // P09-02b; P11-05 the trio boss of a hit and the boss shards a payout recorded.
 const ADDED_COLUMNS: readonly [string, string, string][] = [['log', 'day', 'INTEGER'], ['log', 'refused', 'TEXT'], ['log', 'boss', 'TEXT'],
-  ['wb_hits', 'boss', 'TEXT'], ['reward_ledger', 'boss', 'TEXT'], ['reward_ledger', 'shards', 'INTEGER']];
+  ['wb_hits', 'boss', 'TEXT'], ['reward_ledger', 'boss', 'TEXT'], ['reward_ledger', 'shards', 'INTEGER'], ['reward_ledger', 'detail', 'TEXT']];
 const STATE_UPSERT = 'INSERT INTO state (id, game, book, updated_at) VALUES (1, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET game = excluded.game, book = excluded.book, updated_at = excluded.updated_at';
 const SNAPSHOT_UPSERT = 'INSERT INTO snapshots (seq, game, origin, at) VALUES (?, ?, ?, ?) ON CONFLICT(seq) DO UPDATE SET game = excluded.game, origin = excluded.origin, at = excluded.at';
 const gameText = (game: Game | null) => game ? JSON.stringify(game) : null;
@@ -77,8 +77,8 @@ export function sqlStore(state: DurableStateLike): HostStore {
         for (const h of hits) sql.exec('INSERT INTO wb_hits (id, week, damage, sent, at, boss) VALUES (?, ?, ?, 0, ?, ?)', h.id, h.week, h.damage, e.at, h.boss ?? null);
         if (snapshot) sql.exec(SNAPSHOT_UPSERT, snapshot.seq, gameText(snapshot.game), snapshot.origin, snapshot.at);
         // A receipt that exists already fails the INSERT and rolls the whole command back.
-        for (const r of ledger) sql.exec('INSERT INTO reward_ledger (receipt, seq, kind, period, ref, reward, day, at, boss, shards) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-          r.receipt, r.seq, r.kind, r.period, r.ref, JSON.stringify(r.reward), r.day, r.at, r.boss ?? null, r.shards ?? null);
+        for (const r of ledger) sql.exec('INSERT INTO reward_ledger (receipt, seq, kind, period, ref, reward, day, at, boss, shards, detail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          r.receipt, r.seq, r.kind, r.period, r.ref, JSON.stringify(r.reward), r.day, r.at, r.boss ?? null, r.shards ?? null, r.gacha ? JSON.stringify(r.gacha) : null);
       });
       cached = copy(next);
     },
@@ -89,9 +89,10 @@ export function sqlStore(state: DurableStateLike): HostStore {
     markHits(ids) { for (const id of ids) sql.exec('UPDATE wb_hits SET sent = 1 WHERE id = ?', id); },
     hasReceipt(receipt) { return sql.exec('SELECT 1 FROM reward_ledger WHERE receipt = ?', receipt).toArray().length > 0; },
     ledger() {
-      return sql.exec<{ receipt: string; seq: number; kind: LedgerRow['kind']; period: string; ref: string; reward: string; day: number; at: number; boss: string | null; shards: number | null }>(
-        'SELECT receipt, seq, kind, period, ref, reward, day, at, boss, shards FROM reward_ledger ORDER BY seq, receipt').toArray()
-        .map(({ boss, shards, ...r }) => ({ ...r, reward: JSON.parse(r.reward) as LedgerRow['reward'], ...(boss && isWbBoss(boss) ? { boss } : {}), ...(shards ? { shards } : {}) }));
+      return sql.exec<{ receipt: string; seq: number; kind: LedgerRow['kind']; period: string; ref: string; reward: string; day: number; at: number; boss: string | null; shards: number | null; detail: string | null }>(
+        'SELECT receipt, seq, kind, period, ref, reward, day, at, boss, shards, detail FROM reward_ledger ORDER BY seq, receipt').toArray()
+        .map(({ boss, shards, detail, ...r }) => ({ ...r, reward: JSON.parse(r.reward) as LedgerRow['reward'], ...(boss && isWbBoss(boss) ? { boss } : {}), ...(shards ? { shards } : {}),
+          ...(detail ? { gacha: JSON.parse(detail) as NonNullable<LedgerRow['gacha']> } : {}) }));
     },
     entries(after = 0) {
       return sql.exec<{ seq: number; request_id: string; command: string; seeds: string; status: LogEntry['status']; content_version: string; at: number; day: number | null; refused: string | null; boss: string | null }>(
@@ -195,10 +196,16 @@ export async function handleAccountRequest(host: GameHost, request: Request, opt
   // P09 ledger: entering and reading also carry the server's calendar (the device shows the server's day; command answers
   // stay byte-identical on a retry, so they carry none).
   if (path === '/session' && request.method === 'POST') { host.claim(session); return withHits(host, reply({ ...host.view(), clock: host.clock() })); }
-  const known = (path === '/state' && request.method === 'GET') || ((path === '/command' || path === '/import') && request.method === 'POST');
+  const known = ((path === '/state' || path === '/gacha') && request.method === 'GET') || ((path === '/command' || path === '/import') && request.method === 'POST');
   if (!known) return reply({ error: 'not_found' }, 404);
   if (!host.admits(session)) return reply(OTHER_DEVICE.body, OTHER_DEVICE.status);
   if (path === '/state') return withHits(host, reply({ ...host.view(), clock: host.clock() }));
+  // P10: the gacha journal from the ledger, newest first (`before` a serial, at most `limit` ≤ 50 entries).
+  if (path === '/gacha') {
+    const q = new URL(request.url).searchParams; const before = Number(q.get('before') ?? 0), limit = Number(q.get('limit') ?? 20);
+    if (!Number.isSafeInteger(before) || before < 0 || !Number.isSafeInteger(limit) || limit < 1 || limit > 50) return reply({ error: 'invalid_request' }, 400);
+    return reply(host.gachaHistory(before, limit));
+  }
   // P09-02e (D11): the Worker already ran `checkUpload` and holds the save's fingerprint for this account.
   if (path === '/import') {
     let upload: CloudSaveUpload;

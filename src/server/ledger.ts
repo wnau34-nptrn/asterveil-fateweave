@@ -1,5 +1,5 @@
 import type { ClientEvent } from '../core/command/client-view';
-import type { SweepReward, WbBossId } from '../core/world/types';
+import type { GachaEntry, SweepReward, WbBossId } from '../core/world/types';
 
 // P09 reward ledger (docs/design/p09/LEDGER_P09_TH.md). Online, the server owns the calendar: it stamps its own day on
 // `sweep`, `claimBoard` and `depart` (the device's day is refused) and writes each payout of a sweep or a quest-board
@@ -24,7 +24,10 @@ export interface ServerClock { day: number; next: number; now: number }
 // `worldBoss` (P11-04): `wb:w<week>:a<attempt>` for an attempt's own reward and `wb:w<week>:<milestone>` for a personal or
 // shared milestone; P11-05 trio: the attempt row names its `boss` and the shared ids are `<boss>:s-50`/`<boss>:s-100`
 // (`wb:w<week>:kragmor:s-50`), and every trio row records the boss `shards` it paid (missing: none, the warden).
-export interface LedgerRow { receipt: string; seq: number; kind: 'sweep' | 'board' | 'worldBoss'; period: string; ref: string; reward: SweepReward; day: number; at: number; boss?: WbBossId; shards?: number }
+// P10 gacha: one row per committed pull (1 or 10) or exchange, receipt `gacha:<serial>`, `ref` `pull:<count>` or
+// `exchange:<heroId>`, the reward empty and the whole entry (cost, points, every result in order) in `gacha`.
+// Board and trio rows already carry the tickets they paid in `reward.tickets`.
+export interface LedgerRow { receipt: string; seq: number; kind: 'sweep' | 'board' | 'worldBoss' | 'gacha'; period: string; ref: string; reward: SweepReward; day: number; at: number; boss?: WbBossId; shards?: number; gacha?: GachaEntry }
 const bossPart = (boss: WbBossId | undefined, shards: number | undefined): Pick<LedgerRow, 'boss' | 'shards'> => boss ? { boss, ...(shards ? { shards } : {}) } : {};
 
 // The payouts an applied command made, read from its events. `sweepCount` is the profile's sweep count after the
@@ -41,6 +44,9 @@ export function ledgerRows(events: readonly ClientEvent[], sweepCount: number, d
       const period = `w${e.week}`;
       rows.push({ receipt: `wb:${period}:a${e.attempt}`, seq, kind: 'worldBoss', period, ref: 'attempt', reward: e.reward, day, at, ...bossPart(e.boss, e.shards) });
       for (const m of e.milestones) rows.push({ receipt: `wb:${period}:${m.id}`, seq, kind: 'worldBoss', period, ref: m.id, reward: m.reward, day, at, ...bossPart(e.boss, m.shards) });
+    } else if (e.type === 'gacha') {
+      const g = e.entry; const ref = g.kind === 'pull' ? `pull:${g.results.length}` : `exchange:${g.results[0]!.heroId}`;
+      rows.push({ receipt: `gacha:${g.serial}`, seq, kind: 'gacha', period: `d${day}`, ref, reward: { ore: 0, gold: 0 }, day, at, gacha: g });
     } else if (e.type === 'wbClaimed') {
       rows.push({ receipt: `wb:w${e.week}:${e.id}`, seq, kind: 'worldBoss', period: `w${e.week}`, ref: e.id, reward: e.reward, day, at, ...bossPart(e.boss, e.shards) });
     }
