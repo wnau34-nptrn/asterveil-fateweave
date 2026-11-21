@@ -921,3 +921,18 @@ html, body { background: #0a1422; }
   .commander-top .eyebrow { display: none; }
   .commander-footer #commander-create { min-height: 44px; }
 }
+
+/* ================= Image-blank fix 2026-11-21 (B1) ================= */
+/* The title painting fades in once decoded instead of painting top-down over the dark stage. */
+.title-stage .title-bg { transition: opacity .45s var(--ease-out); }
+.title-stage[data-art="wait"] .title-bg { opacity: 0; }
+/* A button whose screen is waiting for its images: pressed look and a small spinner at once; input is held meanwhile. */
+button.is-loading { position: relative; cursor: progress; filter: brightness(.92); }
+button.is-loading::before { content: ''; position: absolute; top: 50%; right: 14px; width: 16px; height: 16px; margin-top: -8px; border-radius: 50%;
+  border: 2px solid currentColor; border-right-color: transparent; opacity: .85; animation: screen-wait-spin .7s linear infinite; pointer-events: none; }
+@keyframes screen-wait-spin { to { transform: rotate(360deg); } }
+#app[data-switching="true"] { cursor: progress; }
+@media (prefers-reduced-motion: reduce) {
+  .title-stage .title-bg { transition: none; }
+  button.is-loading::before { animation: none; border-right-color: currentColor; opacity: .5; }
+}

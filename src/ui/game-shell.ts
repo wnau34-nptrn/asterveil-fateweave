@@ -37,6 +37,9 @@ import { forgeStrike } from './forge-strike';
 import { prologue, prologueEnd, recruitStory, StoryUI } from './story-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
 import { icon, type IconName } from './icons';
+import { SCREEN_IMAGE_CAP_MS, imagesReady, prefetchImagesIdle, whenImagesReady } from './image-ready';
+import { battleBackdropUrl, battleSceneOf, campImages, worldImages, type BattleBackdrop } from './screen-images';
+import { lobbyArt } from '../game/visuals/assets';
 
 // Owns the authoritative game (lobby profile + current run) and switches between the
 // title, lobby, world and battle views. Every commit is saved before anything animates.
@@ -168,12 +171,18 @@ export class GameShell {
       if (button.dataset.title === 'chatfeed') { this.chat?.setFeed(!this.chat.feedEnabled); button.focus(); return; }
       if (button.dataset.title === 'lessons') { this.lessons.setOff(!this.lessons.off); button.outerHTML = this.lessonToggle(); views.title.querySelector<HTMLElement>('#lessons-toggle')?.focus(); return; }
       if (button.dataset.title === 'import') { this.importLocal(); return; }
-      if (button.dataset.title === 'continue' && this.game) { if (this.state) this.resume(); else if (!this.game.profile.commander) this.showCommander(false); else this.showLobby(); }
+      if (button.dataset.title === 'continue' && this.game) {
+        const s = this.state, g = this.game;
+        this.afterImages(s ? s.battle ? this.battleMain() : this.worldMain() : !g.profile.commander ? [lobbyArt('lobby_bg')] : campImages(g.profile).main,
+          () => { if (!this.game) return; if (this.state) this.resume(); else if (!this.game.profile.commander) this.showCommander(false); else this.showLobby(); }, button);
+      }
       if (button.dataset.title === 'new') {
         if (this.game && button.dataset.confirm !== 'yes') { button.dataset.confirm = 'yes'; button.textContent = 'ยืนยัน: ลบค่ายและทีมทั้งหมดแล้วเริ่มใหม่'; return; }
-        this.showCommander(true);
+        this.afterImages([lobbyArt('lobby_bg')], () => this.showCommander(true), button);
       }
     });
+    // B1: while a screen waits for its images, the old screen stays up but takes no input (the pressed button shows loading).
+    for (const type of ['click', 'pointerdown', 'keydown'] as const) window.addEventListener(type, e => { if (this.switching && !(e instanceof KeyboardEvent && e.key === 'Tab')) { e.preventDefault(); e.stopImmediatePropagation(); } }, { capture: true });
     views.title.addEventListener('keydown', e => {
       const setup = views.title.querySelector<HTMLDetailsElement>('#title-setup[open]');
       if (e.key !== 'Escape' || !setup) return;
@@ -264,7 +273,46 @@ export class GameShell {
       this.message = 'ได้รับยาฟื้นความเหนื่อย 1 ขวด · เปิดกระเป๋าเพื่อใช้'; this.renderWorld();
     });
   }
+  // ---- Image-blank fix 2026-11-21 (B1/B2/B6): screens switch once their main images are decoded (capped), and the
+  // next screen's images are fetched while the player is still on this one. Presentation only: every command has
+  // already been committed and saved before a wait starts; the wait only delays drawing the next screen.
+  private switching: { token: number; trigger?: HTMLElement | undefined } | undefined;
+  private switchToken = 0;
+  private afterImages(urls: readonly string[], go: () => void, trigger?: HTMLElement | null): void {
+    this.cancelSwitch();
+    if (imagesReady(urls)) { go(); return; }
+    const token = ++this.switchToken;
+    this.switching = { token, trigger: trigger ?? undefined };
+    if (trigger) { trigger.classList.add('is-loading'); trigger.setAttribute('aria-busy', 'true'); }
+    this.root.dataset.switching = 'true';
+    void whenImagesReady(urls, SCREEN_IMAGE_CAP_MS).then(() => { if (this.switching?.token !== token) return; this.cancelSwitch(); go(); });
+  }
+  private cancelSwitch(): void {
+    const w = this.switching; if (!w) return;
+    this.switching = undefined; delete this.root.dataset.switching;
+    if (w.trigger) { w.trigger.classList.remove('is-loading'); w.trigger.removeAttribute('aria-busy'); }
+  }
+  private teamIds(): string[] { const s = this.state; return s ? [...s.roster.deployed, ...s.roster.reserve] : this.game?.profile.party.deployed ?? []; }
+  private worldMain(): string[] { return worldImages().main; }
+  private battleScene(): BattleBackdrop { return battleSceneOf(this.map.id); }
+  private battleMain(scene: BattleBackdrop = this.battleScene()): string[] { return [battleBackdropUrl(scene)]; }
+  // B6: a save that stopped mid-battle starts the encounter's atlases and unit sheets from the title (the scene may still
+  // be booting: try again shortly). The battle painting comes with the title's image prefetch.
+  private prefetchSavedBattle(tries = 0): void {
+    const s = this.state; const data = s?.battle ? battleData(s, this.map, this.lookup) : undefined; if (!data) return;
+    const art = [...data.heroes.map(h => h.id), ...data.enemies.map(e => e.art ?? e.id)];
+    if (!this.battle.prefetch(data.heroes.flatMap(h => h.actions), art) && tries < 60) setTimeout(() => this.prefetchSavedBattle(tries + 1), 250);
+  }
+  // B2 from the title: what "continue" opens first, then where the run leads (the camp after it).
+  private prefetchFromTitle(): void {
+    const g = this.game, s = g?.run; if (!g) return;
+    const camp = campImages(g.profile), world = worldImages(this.teamIds());
+    if (s?.battle) { prefetchImagesIdle(this.battleMain()); this.prefetchSavedBattle(); }
+    prefetchImagesIdle(s ? [...world.main, ...camp.main, ...world.extra] : [...camp.main, ...world.main, ...camp.extra]);
+  }
   private show(view: 'title' | 'commander' | 'lobby' | 'world' | 'battle'): void {
+    // Another screen took over while one was waiting for its images (server catch-up, a dialog): the wait is dropped.
+    this.cancelSwitch();
     // Entering a different view replays a short fade-and-settle (off under reduced motion).
     if (this.root.dataset.view !== view) { const next = this.views[view]; next.classList.remove('view-enter'); void next.offsetWidth; next.classList.add('view-enter'); }
     // Perf R3: write only what changes; re-setting the same attributes on every map step invalidated styles app-wide.
@@ -352,6 +400,11 @@ export class GameShell {
     });
     this.show('title');
     this.views.title.querySelector<HTMLElement>(g ? '#continue' : offer ? '#import-save' : '#new-game')?.focus({ preventScroll: true });
+    // B1 on the title: the party painting fades in once decoded instead of painting top-down; B2/B6 start after it.
+    const titleArt = [`${import.meta.env.BASE_URL}assets/title/title_party.webp`, `${import.meta.env.BASE_URL}assets/title/logo.svg`];
+    const stage = this.views.title.querySelector<HTMLElement>('.title-stage');
+    if (stage && !imagesReady(titleArt)) stage.dataset.art = 'wait';
+    void whenImagesReady(titleArt, SCREEN_IMAGE_CAP_MS).then(() => { if (stage) delete stage.dataset.art; this.prefetchFromTitle(); });
   }
   // P09-02e (owner D11): server play leaves the local save untouched; while the account has no game it may become the
   // account's game once. Offered only for a save this build can read (the server replays it the same way).
@@ -542,7 +595,7 @@ export class GameShell {
       this.persist();
       // A company that has never fought starts with the prologue: depart at once and meet Vargoth's vanguard.
       if (!result.game.profile.tutorialDone && !this.game.run) { this.lobbyMessage = ''; this.depart(); return; }
-      this.showLobby();
+      this.afterImages(campImages(result.game.profile).main, () => { if (this.game && !this.game.run) this.showLobby(); });
     });
   }
   // P05-05: the device's calendar day (days since 1970-01-01 in local time). Offline only; P09 uses the server's day.
@@ -564,6 +617,10 @@ export class GameShell {
     const data = wbEncounter(g.profile, this.home, this.lookup, boss); if (!data) return;
     const attempt = wbBook(g.profile, wbWeekOf(day)).weeks.at(-1)!.attempts + 1;
     this.wbRun = { attempt, sent: false, message: '', ...(boss ? { boss } : {}) }; this.music.play('ruins');
+    this.afterImages(this.battleMain('riftline'), () => this.openWorldBoss(data));
+  }
+  private openWorldBoss(data: NonNullable<ReturnType<typeof wbEncounter>>): void {
+    if (!this.wbRun) return;
     this.show('battle');
     this.battle.open({
       kind: 'worldBoss', roundLimit: this.home.worldBoss.maxRounds, scene: 'riftline', data, entry: { hp: {} }, commands: [],
@@ -605,7 +662,7 @@ export class GameShell {
     this.lobby.render({ profile: this.game!.profile, board: this.server ? this.board : clientView(this.game!, { home: this.home, lookup: this.lookup }).hireBoard, message: this.lobbyMessage, day: this.today(), worldBoss: this.wbStatus, online: !!this.server, cheer: this.lobbyCheer, saved: this.saved && (!!this.storage || !!this.server), ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
     this.npcCheer = undefined;
     // Arriving in the camp opens on the fire; later redraws keep where the player panned to.
-    if (entering) this.lobby.centreScene();
+    if (entering) { this.lobby.centreScene(); const w = worldImages(this.game!.profile.party.deployed); prefetchImagesIdle([...w.main, ...w.extra]); }
   }
   private guide(id: string, skip: boolean): void {
     if (!this.game || this.game.run) return;
@@ -684,13 +741,21 @@ export class GameShell {
     this.persist(); this.banner = undefined; this.locked = false; this.lobbyMessage = ''; this.lobbyCheer = '';
     this.message = 'แตะช่องที่ไฮไลต์หรือใช้ลูกศรเพื่อเดิน';
     // First expedition (lore): the prologue plays, then Vargoth's vanguard attacks before the first step (same command).
-    if (out.events.some(e => e.type === 'encounter')) {
-      this.locked = true; this.renderWorld();
-      this.music.play('camp'); this.story.play(prologue(this.game.profile.commander?.name ?? 'ผู้บัญชาการ'), 'เข้าสู่การต่อสู้', () => { this.locked = false; this.openBattle(); });
-      return;
-    }
-    this.renderWorld();
+    const prologueFight = out.events.some(e => e.type === 'encounter');
+    if (prologueFight) this.locked = true;
+    // B1: the departure is saved; the map comes up once its tiles are decoded (the camp stays up meanwhile, capped).
+    this.afterImages(this.worldMain(), () => {
+      if (!this.state) return;
+      if (prologueFight) {
+        this.renderWorld();
+        this.music.play('camp'); this.story.play(prologue(this.game!.profile.commander?.name ?? 'ผู้บัญชาการ'), 'เข้าสู่การต่อสู้', () => { this.locked = false; this.openBattleWhenReady(); });
+        return;
+      }
+      this.renderWorld();
+    }, this.views.lobby.querySelector<HTMLElement>('#lobby-depart'));
   }
+  // B1: a battle opens once its painting is decoded (capped); the encounter is already saved.
+  private openBattleWhenReady(): void { this.afterImages(this.battleMain(), () => { if (this.state?.battle) this.openBattle(); }); }
   // Settles the run into the profile in the same write that clears it.
   private withdraw(): void {
     if (!this.game || !this.state) return;
@@ -700,7 +765,7 @@ export class GameShell {
     const map = this.map; const before = this.game!.profile; const run = this.settledRun(events)!;
     this.game = game; this.pendingSummary = runSummary(before, run, game.profile, outcome, map);
     this.persist(); this.lobbyMessage = ''; this.lobbyCheer = ''; this.banner = undefined; this.locked = false;
-    this.showSummary();
+    this.afterImages(campImages(game.profile).main, () => this.showSummary());
   }
   // The lobby comes up behind the summary (and, after the first clear, Vargoth's answer), so closing it lands there.
   private showSummary(): void {
@@ -740,10 +805,13 @@ export class GameShell {
     this.world.render({ storyDone: !!profile.storyQuests?.includes(this.map.id), presets: profile.presets, questBoard: { definitions: this.home.sideQuests, progress: profile.quests, unlocked: featureOpen(profile, this.maps, 'quests') }, state: preview ?? this.state!, message: this.message, locked: this.locked, saved: this.saved && (!!this.storage || !!this.server), banner: this.banner, effect: this.effect });
     this.effect = undefined;
     this.prefetchBattle();
+    // B2: the map's battle painting and the camp the run returns to (once per map; skipped when already fetched).
+    if (this.prefetchedArt !== this.map.id) { this.prefetchedArt = this.map.id; prefetchImagesIdle([...this.battleMain(), ...campImages(profile).main]); }
   }
   // Perf audit R1: on the map, fetch the battle artwork the team and this map's foes use (after the map's own images have
   // had a head start), so a fight's field is usually ready at once. Once per map and team; the scene skips what it has.
   private prefetched = '';
+  private prefetchedArt = '';
   private prefetchTimer: ReturnType<typeof setTimeout> | undefined;
   private prefetchBattle(): void {
     const s = this.state; if (!s || this.prefetchTimer) return;
@@ -865,7 +933,7 @@ export class GameShell {
     this.banner = { kind, eyebrow, title: data.name, detail: data.enemies.map(e => e.displayName ?? e.name).join(' · ') };
     this.renderWorld();
     // Veil-shatter presentation (720 ms, 100 ms crossfade under reduced motion); the battle is already saved.
-    setTimeout(() => { this.banner = undefined; this.openBattle(); }, this.reducedMotion.matches ? 100 : 720);
+    setTimeout(() => { this.banner = undefined; this.openBattleWhenReady(); }, this.reducedMotion.matches ? 100 : 720);
   }
   // Event choices (3A) are saved at once; a fight starts like any encounter.
   private chooseEvent(choice: EventChoice): void {
@@ -978,7 +1046,7 @@ export class GameShell {
     const s = this.state!; const b = s.battle!; const data = battleData(s, this.map, this.lookup)!;
     this.show('battle');
     this.battle.open({
-      kind: b.kind, scene: this.map.id === 'deep-forest' ? 'forest' : this.map.id === 'veil-frontier' ? 'riftline' : 'ruins', data, entry: { hp: b.entry }, commands: b.commands,
+      kind: b.kind, scene: this.battleScene(), data, entry: { hp: b.entry }, commands: b.commands,
       commit: (state: BattleState) => this.commitBattle(state),
       leaveLabel: (outcome: Outcome) => outcome === 'victory' ? (b.kind === 'boss' ? `ไปยัง${this.map.goalName} →` : 'กลับสู่แผนที่ →') : b.kind === 'tutorial' ? 'ลองศึกแรกอีกครั้ง ↻' : !this.state ? 'ทีมล้มหมด · กลับค่าย →' : this.state.camp ? 'กลับแคมป์ →' : 'กลับทางเข้าด่าน →',
       leave: () => this.leaveBattle(),
@@ -1019,7 +1087,7 @@ export class GameShell {
   private leaveBattle(): void {
     // Server play: the last turn's answer decides where the battle leads (loot, settlement); wait for it.
     if (this.waiting) { this.afterWait = () => this.leaveBattle(); return; }
-    if (!this.state) { this.lobbyMessage = ''; this.lobbyCheer = ''; this.locked = false; this.showSummary(); return; }
+    if (!this.state) { this.lobbyMessage = ''; this.lobbyCheer = ''; this.locked = false; const g = this.game; this.afterImages(g ? campImages(g.profile).main : [], () => this.showSummary()); return; }
     if (this.state.battle) { this.openBattle(); return; }
     if (this.pendingRewards) {
       const rewards = this.pendingRewards; this.pendingRewards = undefined;
