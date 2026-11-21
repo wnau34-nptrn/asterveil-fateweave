@@ -1,3 +1,8 @@
+## 2026-11-21 — Image-blank fix B1/B2/B3/B6 (Opus; claude/image-blank-fix → game branch)
+- Owner: “ไม่ต้องการให้คนเล่นเห็นว่าภาพเป็นช่องว่าง…” → “ดำเนินการตามที่แนะนำ”. `ui/image-ready.ts` (`whenImagesReady`, cap 1800 ms draft, never throws), `ui/screen-images.ts` (camp/map/battle image lists); `GameShell.afterImages` holds the old screen with a loading button until the next one's main images decode; idle low-priority prefetch of the next screen; title preload in `index.html`; mid-battle save prefetches its encounter after 2.5 s on the title (immediate start blocked the main thread 4+ s). Presentation only.
+- Result (Chromium 4G+CPU 4×, cold): no blank images on title/map/battle when shown (title 5.0 → 2.3 s, map 3.9 → 1.3 s, battle bg 6.4 → 1.6 s); camp still hits the cap when tapped at once. [Validation](../validation/image-blank-fix-2026-11-21/README_TH.md).
+- Tests: image-ready.test (8), Vitest all, typecheck, lint, build; Playwright image-ready (new, 3) + world/keyboard/lessons/server-play/combat/story-p05/lobby-shots/update-banner/unit-loading (3 expectations updated for B6/async switch). Open: B4/B5 need owner image review; real-device decode time.
+
 ## 2026-11-20 — Same figure size in every fight; the first battle's coach no longer shrinks the field (Opus; claude/field-size-coach → game branch)
 - Owner (first-battle 390px shot: figures smaller than other fights): “ดำเนินการทั้ง 2 ข้อ”.
 - Coach: while a lesson shows, `#battle-coach` takes the `#unit-inspector` place (inspector hidden, back when hints end/dismissed); arena 425 → 473px.

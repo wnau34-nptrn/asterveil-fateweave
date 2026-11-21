@@ -40,7 +40,7 @@ test('title loads no battle art and an encounter without Hunter never downloads 
  await seed(page,veilSiege.id);await page.goto('./');await expect(page.locator('#continue')).toBeVisible();
  // Perf R1: the title downloads no optional unit animation. Image-blank fix B6 (2026-11-21): a save stopped mid-battle
  // starts that encounter's own VFX atlases, unit sheets and painting from the title; families it does not use stay unloaded.
- await page.waitForLoadState('networkidle');expect(names).toEqual([]);
+ await expect.poll(()=>battle.filter(u=>u.includes('/assets/fx/')).length,{timeout:10000}).toBeGreaterThan(0);await page.waitForLoadState('networkidle');expect(names).toEqual([]);
  const fx=battle.filter(u=>u.includes('/assets/fx/'));expect(fx.length).toBeGreaterThan(0);expect(new Set(fx).size).toBe(fx.length);
  expect(battle.some(u=>/battle_riftline|ruins|battle_forest/.test(u))).toBe(true);
  const loaded=page.waitForResponse(r=>r.url().endsWith(manifest.lyra.image)&&r.ok());

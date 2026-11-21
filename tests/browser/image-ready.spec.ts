@@ -23,7 +23,7 @@ async function watchView(page: Page, view: string, names: string[]) {
     new MutationObserver(check).observe(el, { attributes: true });
   }, { view, names });
 }
-const shown = (page: Page) => page.waitForFunction(() => (window as unknown as { __shown?: { at: number; loaded: string[] } }).__shown).then(h => h.jsonValue());
+const shown = (page: Page) => page.waitForFunction(() => (window as unknown as { __shown?: { at: number; loaded: string[] } }).__shown).then(h => h.jsonValue() as Promise<{ at: number; loaded: string[] }>);
 const hold = (page: Page, pattern: string, ms: number, status = 200) => page.route(pattern, async route => {
   await new Promise(r => setTimeout(r, ms)); if (status === 200) await route.continue(); else await route.fulfill({ status, body: '' });
 });

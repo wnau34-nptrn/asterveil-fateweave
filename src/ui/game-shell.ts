@@ -40,6 +40,8 @@ import { icon, type IconName } from './icons';
 import { SCREEN_IMAGE_CAP_MS, imagesReady, prefetchImagesIdle, whenImagesReady } from './image-ready';
 import { battleBackdropUrl, battleSceneOf, campImages, worldImages, type BattleBackdrop } from './screen-images';
 import { lobbyArt } from '../game/visuals/assets';
+// B6: how long the title stays up before a mid-battle save starts building its battle textures (draft).
+const SAVED_BATTLE_PREFETCH_DELAY_MS = 2500;
 
 // Owns the authoritative game (lobby profile + current run) and switches between the
 // title, lobby, world and battle views. Every commit is saved before anything animates.
@@ -307,7 +309,9 @@ export class GameShell {
   private prefetchFromTitle(): void {
     const g = this.game, s = g?.run; if (!g) return;
     const camp = campImages(g.profile), world = worldImages(this.teamIds());
-    if (s?.battle) { prefetchImagesIdle(this.battleMain()); this.prefetchSavedBattle(); }
+    // B6 waits until the player has stayed on the title a moment: building the big battle textures blocks the main thread
+    // for seconds on slow phones, and a quick tap on Continue must never feel stuck (it then loads as before).
+    if (s?.battle) { prefetchImagesIdle(this.battleMain()); setTimeout(() => { if (this.root.dataset.view === 'title' && !this.switching) this.prefetchSavedBattle(); }, SAVED_BATTLE_PREFETCH_DELAY_MS); }
     prefetchImagesIdle(s ? [...world.main, ...camp.main, ...world.extra] : [...camp.main, ...world.main, ...camp.extra]);
   }
   private show(view: 'title' | 'commander' | 'lobby' | 'world' | 'battle'): void {

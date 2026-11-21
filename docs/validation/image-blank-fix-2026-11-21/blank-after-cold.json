@@ -1,0 +1,79 @@
+[
+ {
+  "name": "1-title",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 2284
+ },
+ {
+  "name": "2-camp",
+  "missingAtStart": [
+   "lobby/lobby_poses_heroes.webp"
+  ],
+  "lastSeenMissingMs": {
+   "lobby/lobby_poses_heroes.webp": 2730
+  },
+  "allVisibleMs": 4471,
+  "shownMs": 2693
+ },
+ {
+  "name": "3-sheet-characters",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 212
+ },
+ {
+  "name": "3-sheet-team",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 226
+ },
+ {
+  "name": "3-sheet-hire",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 172
+ },
+ {
+  "name": "3-sheet-gear",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 258
+ },
+ {
+  "name": "3-sheet-forge",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 171
+ },
+ {
+  "name": "3-sheet-brew",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 190
+ },
+ {
+  "name": "4-map",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 1255,
+  "shownMs": 1170
+ },
+ {
+  "name": "5-battle",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 1590,
+  "shownMs": 1360,
+  "startEnabledMs": 18762
+ },
+ {
+  "name": "5b-battle-after-title",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 2535,
+  "shownMs": 961,
+  "startEnabledMs": 7756,
+  "lastBattleFileMs": 4366
+ }
+]
