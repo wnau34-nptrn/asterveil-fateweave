@@ -1,4 +1,5 @@
 import { showBattleRewards, type BattleRewards } from './battle-rewards';
+import { gachaReasonText } from './gacha-panel';
 import { battleMemo } from '../core/command/battle-memo';
 import { bindInfoTabs } from './info-tabs';
 import { rosterIds } from '../core/world/world';
@@ -153,6 +154,7 @@ export class GameShell {
       enhance: (uid,target) => camp({ kind: 'enhance', uid, target }), lock: uid=>camp({ kind: 'lockEquipment', uid }), fuse: (uid,donors) => camp({ kind: 'fuse', uid, ...has('donors', donors ? [...donors] : undefined) }), level:(uid,target)=>camp({ kind: 'raiseItemLevel', uid, target }),
       reroll: (uid, i) => camp({ kind: 'reroll', uid, index: i }), brew: potion => camp({ kind: 'brew', potion }), claim: id => camp({ kind: 'claimQuest', questId: id }), claimBoard: (tab, id, period) => camp({ kind: 'claimBoard', tab, id, period, day: this.today() }),
       depart: (id, hard) => this.depart(id, hard), startWorldBoss: boss => this.startWorldBoss(boss), craftBossItem: (boss, affixes, set) => camp({ kind: 'craftBossItem', boss, affixes, ...(set ? { set } : {}) }), claimWorldBoss: (id, week) => this.claimWorldBoss(id, week), worldBossStatus: () => this.refreshWorldBoss(),
+      gachaPull: count => this.gachaCommand({ kind: 'gachaPull', count, config: this.home.gacha.version }), gachaExchange: heroId => this.gachaCommand({ kind: 'gachaExchange', heroId, config: this.home.gacha.version }),
       sweep: (id, hard) => this.campCommand({ kind: 'sweep', mapId: id, hard, day: this.today(), serial: this.game?.profile.sweep?.count ?? 0 }), home: () => this.showTitle(),
     }, maps);
     this.lobby.onDraw = () => { this.chat?.syncToggles(); requestAnimationFrame(() => this.updateLessons()); };
@@ -466,6 +468,15 @@ export class GameShell {
     });
   }
   // A camp service: refusals change nothing, as before; a result goes through the lobby's usual messages and effects.
+  // P10: a pull or exchange that is refused (another config version online, too few tickets) says why and redraws the
+  // camp, so the cabinet never waits on an answer that changed nothing.
+  private gachaCommand(cmd: CampCommand): void {
+    if (!this.game || this.game.run) return;
+    this.exec(cmd, r => {
+      if (isRejected(r)) { this.lobbyMessage = `ทอชะตาไม่สำเร็จ · ${gachaReasonText[r.rejected] ?? r.rejected}`; this.showLobby(); return; }
+      this.profileChange({ profile: r.game.profile, event: r.events[0] as ProfileEvent });
+    });
+  }
   private campCommand(cmd: CampCommand): void {
     if (!this.game || this.game.run) return;
     this.exec(cmd, r => { if (isRejected(r)) return; this.profileChange({ profile: r.game.profile, event: r.events[0] as ProfileEvent }); });
@@ -695,6 +706,7 @@ export class GameShell {
       : e.type === 'swept' ? `กวาดล้าง${this.maps.find(m => m.id === e.mapId)?.name ?? ''}${e.hard ? ' (ยาก)' : ''} · ได้ ${sweepText(e.reward, partyLine(this.map, result.profile.party.deployed))} · เสบียงเหลือ ${e.supply} · วันนี้เหลือ ${e.left} ครั้ง`
       : e.type === 'boardClaimed' ? `ได้รับรางวัล${e.tab === 'contract' ? `สัญญาจ้าง${contractText[this.map.board.contracts.find(c => c.id === e.id)!.kind].name}` : boardTaskName[e.id] ?? 'เควสต์'} · ${sweepText(e.reward, partyLine(this.map, result.profile.party.deployed))}`
       : e.type === 'wbClaimed' ? `ได้รับรางวัลส่วนรวมบอสโลก · ${sweepText(e.reward, partyLine(this.map, result.profile.party.deployed))}`
+      : e.type === 'gacha' ? `${e.entry.kind === 'pull' ? `ทอชะตา ${e.entry.results.length} ครั้ง` : 'แลกแต้ม'} · ${e.entry.results.filter(r => r.full).map(r => `${name(r.heroId)} ตัวเต็ม`).join(' ') || 'ได้เศษ'} · ตั๋วเหลือ ${result.profile.gacha?.tickets ?? 0} แต้ม ${result.profile.gacha?.points ?? 0}`
       : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : e.type === 'party' && e.heroId && e.lane ? `จัดแผนแล้ว · ${name(e.heroId)}ยืน${laneName(e.lane)}` : e.type === 'party' && e.presetAction ? this.presetText(result.profile, e.preset!, e.presetAction, e.left) : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     // The camp NPC whose service just succeeded cheers once.
