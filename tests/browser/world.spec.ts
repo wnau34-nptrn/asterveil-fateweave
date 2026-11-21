@@ -33,6 +33,8 @@ async function open(page: Page, state?: ExpeditionState) {
   if (state) await seed(page, state);
   await page.goto('./');
   await page.locator(state ? '#continue' : '#new-game').click();
+  // Image-blank fix B1: a screen may wait (capped) for its images before it switches.
+  await page.locator(state ? (state.battle ? '#battle-view:not(.view-off)' : '#world-view') : '#commander-view').waitFor();
   return issues;
 }
 const saved = (page: Page): Promise<ExpeditionState> => page.evaluate(k => JSON.parse(localStorage.getItem(k)!).run, key);
