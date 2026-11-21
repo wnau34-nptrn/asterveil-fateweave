@@ -67,7 +67,7 @@ test('a tired team learns about fatigue and takes the one-time calming draught',
 
 test('the first battle after the prologue points at the enemy plan once', async ({ page }) => {
   const run = afterPrologue(); run.battle = { kind: 'random', encounterId: 'slime-pair', entry: Object.fromEntries(run.roster.deployed.map(id => [id, run.hp[id]!])), commands: [] };
-  await open(page, run, ['levelup', 'wear', 'tree', 'lanes', 'walk'], '');
+  await open(page, run, ['levelup', 'wear', 'tree', 'lanes', 'walk'], '#battle-view:not(.view-off)');
   const start = page.locator('[data-ui=start]'); if (await start.isVisible({ timeout: 3000 }).catch(() => false)) await start.click();
   await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'battle');
   await page.locator('#lesson-ok').click(); await expect(page.locator('#lesson-layer')).toBeHidden();

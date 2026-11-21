@@ -59,9 +59,9 @@ test('asset readiness gates Start and inputs; first SPD hero commits once',async
  await page.route('**/assets/art/units.webp*',async route=>{requested=true;await gate;await route.continue();});
  const issues:string[]=[];page.on('pageerror',e=>issues.push(e.message));
  try{
-  // Perf R1: the title fetches no battle art; the encounter's sheets load once the battle opens.
-  await seedRaw(page,expedition(veilSiege,[]));await page.goto('./',{waitUntil:'domcontentloaded'});await page.waitForTimeout(500);expect(requested).toBe(false);
-  await page.locator('#continue').click();await expect.poll(()=>requested).toBe(true);await expect(page.locator('#start')).toBeDisabled();await expect(page.locator('#hero-tracer')).toBeDisabled();
+  // Image-blank fix B6 (2026-11-21): a save stopped mid-battle starts its encounter's sheets from the title; Start still waits for them.
+  await seedRaw(page,expedition(veilSiege,[]));await page.goto('./',{waitUntil:'domcontentloaded'});await expect.poll(()=>requested).toBe(true);
+  await page.locator('#continue').click();await expect(page.locator('#start')).toBeDisabled();await expect(page.locator('#hero-tracer')).toBeDisabled();
   release();await expect(page.locator('#start')).toBeEnabled();await page.locator('#start').click();await page.clock.pauseAt(new Date('2026-10-14T01:00:00Z'));
   await cast(page,'tracer','mark','f1');await expect(page.locator('#turn-phase')).toHaveAttribute('data-phase','hero');expect(await count(page)).toBe(1);
   await finish(page);await owner(page,'weaver');expect(issues).toEqual([]);

@@ -23,7 +23,7 @@ async function open(page: Page, encounterId: string | null) {
   run.fatigue = { guardian: 7, tracer: 11, mira: 1 }; run.potions.calm = 1;
   if (encounterId) run.battle = { kind: 'random', encounterId, entry: Object.fromEntries(ids.map(id => [id, run.hp[id]!])), commands: [] };
   await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw: JSON.stringify({ version: 45, profile: profile(), run }) });
-  await page.goto('./'); await page.locator('#continue').click();
+  await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator(encounterId ? '#battle-view:not(.view-off)' : '#world-view')).toBeVisible();
   const start = page.locator('[data-ui=start]'); if (encounterId && await start.isVisible({ timeout: 3000 }).catch(() => false)) await start.click();
   return run;
 }
@@ -119,7 +119,7 @@ test('the rift warden stands with two guards from round 1 (owner 2026-10-31) at 
   const run = newExpedition(map, encounterById, 1234, { roster: { deployed: [...ids], reserve: [...reserve] }, members, reserveSlots: 3 }, true);
   run.battle = { kind: 'boss', encounterId: 'rift-warden', entry: Object.fromEntries(ids.map(id => [id, run.hp[id]!])), commands: [] };
   await page.addInitScript(({ key, raw }) => localStorage.setItem(key, raw), { key, raw: JSON.stringify({ version: 45, profile: profile(), run }) });
-  await page.goto('./'); await page.locator('#continue').click();
+  await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#battle-view:not(.view-off)')).toBeVisible();
   const start = page.locator('[data-ui=start]'); if (await start.isVisible({ timeout: 3000 }).catch(() => false)) await start.click();
   await expect(page.locator('#action-attack')).toBeEnabled({ timeout: 20000 }); await page.waitForTimeout(500);
   for (const foe of ['f1', 'f2', 'b3']) await expect(page.locator(`[data-field-unit=${foe}]`)).toBeVisible();

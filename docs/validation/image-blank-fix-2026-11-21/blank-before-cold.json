@@ -1,0 +1,124 @@
+[
+ {
+  "name": "1-title",
+  "missingAtStart": [
+   "title/title_party.webp",
+   "title/logo.svg"
+  ],
+  "lastSeenMissingMs": {
+   "title/title_party.webp": 3502,
+   "title/logo.svg": 2096
+  },
+  "allVisibleMs": 5004
+ },
+ {
+  "name": "2-camp",
+  "missingAtStart": [
+   "lobby/lobby_bg.webp",
+   "lobby/lobby_firepit.webp",
+   "lobby/camp_flame.webp",
+   "lobby/npc/npc_smith.webp",
+   "lobby/npc/npc_stations.webp",
+   "lobby/npc/npc_broker.webp",
+   "lobby/npc/npc_trainer.webp",
+   "lobby/npc/npc_keeper.webp",
+   "lobby/npc/npc_herbalist.webp",
+   "lobby/lobby_poses_heroes.webp",
+   "lobby/lobby_fg.webp"
+  ],
+  "lastSeenMissingMs": {
+   "lobby/npc/npc_broker.webp": 3004,
+   "lobby/npc/npc_herbalist.webp": 3004,
+   "lobby/lobby_poses_heroes.webp": 3004,
+   "lobby/lobby_bg.webp": 1925,
+   "lobby/npc/npc_smith.webp": 1925,
+   "lobby/npc/npc_trainer.webp": 1925,
+   "lobby/npc/npc_keeper.webp": 1925,
+   "lobby/npc/npc_scout.webp": 1925,
+   "lobby/lobby_firepit.webp": 1037,
+   "lobby/camp_flame.webp": 1037,
+   "lobby/npc/npc_stations.webp": 1037,
+   "lobby/lobby_fg.webp": 1037
+  },
+  "allVisibleMs": 4449,
+  "shownMs": 963
+ },
+ {
+  "name": "3-sheet-characters",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 241
+ },
+ {
+  "name": "3-sheet-team",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 225
+ },
+ {
+  "name": "3-sheet-hire",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 238
+ },
+ {
+  "name": "3-sheet-gear",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 210
+ },
+ {
+  "name": "3-sheet-forge",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 260
+ },
+ {
+  "name": "3-sheet-brew",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 274
+ },
+ {
+  "name": "4-map",
+  "missingAtStart": [
+   "world/tileset.webp",
+   "world/decor.webp",
+   "world/fog_inner_ne.webp",
+   "world/fog_edge_w.webp",
+   "world/fog_edge_e.webp",
+   "world/step_hint.webp"
+  ],
+  "lastSeenMissingMs": {
+   "world/tileset.webp": 2719,
+   "world/decor.webp": 2719,
+   "world/fog_inner_ne.webp": 1396,
+   "world/fog_edge_w.webp": 1396,
+   "world/fog_edge_e.webp": 1396,
+   "world/step_hint.webp": 1396
+  },
+  "allVisibleMs": 3923,
+  "shownMs": 1217
+ },
+ {
+  "name": "5-battle",
+  "missingAtStart": [
+   "art/battle_riftline.webp"
+  ],
+  "lastSeenMissingMs": {
+   "art/battle_riftline.webp": 6316
+  },
+  "allVisibleMs": 6436,
+  "shownMs": 1290,
+  "startEnabledMs": 20201
+ },
+ {
+  "name": "5b-battle-after-title",
+  "missingAtStart": [],
+  "lastSeenMissingMs": {},
+  "allVisibleMs": 2793,
+  "shownMs": 626,
+  "startEnabledMs": 10689,
+  "lastBattleFileMs": 6015
+ }
+]
