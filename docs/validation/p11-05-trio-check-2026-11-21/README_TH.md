@@ -11,7 +11,7 @@
 | 1 การสลับสัปดาห์ (client + server) | **ผ่าน** | `tests/world-boss-trio-switch.test.ts` (4 เทสต์) |
 | 2 HP สัปดาห์แรก, Call the Court, guides, coach, รางวัล/ledger/เศษ | **ผ่าน** | เทสต์ใหม่ + ชุด world-boss เดิม 118 ผ่าน |
 | 3 UI ค่ายก่อน/หลัง 06:00, ศึก trio มีภาพ | **ผ่าน** (Chromium 390px) | `tests/browser/world-boss-trio-switch.spec.ts`, ภาพด้านล่าง |
-| 4 Staging load test `trio=now` | ดูหัวข้อ staging | workflow `Cloudflare staging load test` บนสาขาเกม |
+| 4 Staging load test `trio=now` | **ผ่าน** | workflow `Cloudflare staging load test` บนสาขาเกม (d7ab0be) |
 
 ### 1 การสลับสัปดาห์
 
@@ -35,7 +35,7 @@
 
 ### 4 Staging
 
-ผลอยู่ในรายการ handoff ของวันนี้ (ใส่หลัง run จบ)
+รันบนสาขาเกม (ไม่ใช่ dev API) ด้วย `trio=now` และค่าเริ่มต้น 4 runners × 5 บัญชี: deploy Worker/D1 staging → load ทั้งสี่ runner ผ่าน → ลบ Worker และ D1 แล้ว ตัวอย่าง runner c: `worldBoss` 50 ครั้ง 200×50 (p95 371 ms, ช้าสุด 385 ms), chat ส่ง 49 ทุกข้อความเห็นครบ ไม่ถูกปฏิเสธ, ไม่มี 429/5xx
 
 ## ข้อสังเกต (ไม่แก้)
 
