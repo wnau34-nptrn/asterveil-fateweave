@@ -1,0 +1,1357 @@
+{
+  "schema": 1,
+  "coordinates": "x/y pixels from top left; bounds use exclusive right/bottom",
+  "stage_390": [
+    390,
+    844
+  ],
+  "key_art_size": [
+    853,
+    1844
+  ],
+  "key_art_anchors": {
+    "loom_crystal": [
+      431,
+      683
+    ],
+    "loom_platform": [
+      426,
+      1187
+    ]
+  },
+  "stage_anchors": {
+    "loom_crystal": [
+      197,
+      313
+    ],
+    "loom_platform": [
+      195,
+      543
+    ],
+    "reward_center": [
+      195,
+      347
+    ],
+    "button_area_y_inclusive": 590
+  },
+  "idle_glint_centers_canvas": [
+    [
+      [
+        421,
+        188
+      ],
+      [
+        91,
+        324
+      ]
+    ],
+    [
+      [
+        262,
+        368
+      ],
+      [
+        250,
+        144
+      ]
+    ],
+    [
+      [
+        91,
+        324
+      ],
+      [
+        421,
+        188
+      ]
+    ],
+    [
+      [
+        250,
+        144
+      ],
+      [
+        262,
+        368
+      ]
+    ]
+  ],
+  "ten_peak_targets_canvas_left_to_right": [
+    [
+      42,
+      695
+    ],
+    [
+      68,
+      646
+    ],
+    [
+      112,
+      623
+    ],
+    [
+      171,
+      603
+    ],
+    [
+      238,
+      589
+    ],
+    [
+      304,
+      584
+    ],
+    [
+      368,
+      584
+    ],
+    [
+      424,
+      595
+    ],
+    [
+      465,
+      611
+    ],
+    [
+      478,
+      649
+    ]
+  ],
+  "single_suggested_ms": {
+    "character": 2345,
+    "shard": 2115
+  },
+  "skip": "Cut directly to the already committed reward display at any beat; timings are art proposals.",
+  "layers": [
+    {
+      "path": "frames/mask.png",
+      "size": [
+        384,
+        512
+      ],
+      "pivot": [
+        192,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        54,
+        81,
+        331,
+        431
+      ],
+      "loop": false,
+      "recommended": true,
+      "anchor": "reward_center",
+      "width_390": 184,
+      "role": "portrait_clip_white_alpha",
+      "sha256": "a0a475fa6cdac4350135c312884d283e82c29057ae8c220986a5ea7387b567fc"
+    },
+    {
+      "path": "frames/mask-shard.png",
+      "size": [
+        384,
+        384
+      ],
+      "pivot": [
+        192,
+        192
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        117,
+        112,
+        268,
+        269
+      ],
+      "loop": false,
+      "recommended": true,
+      "anchor": "reward_center",
+      "width_390": 166,
+      "role": "portrait_clip_white_alpha",
+      "sha256": "c3eb0e3bf44bd50827e83f3289f7d2472bffd2377200b74e4a600e6a722f01a2"
+    },
+    {
+      "path": "icons/fate-ticket.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        128,
+        128
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        14,
+        30,
+        242,
+        225
+      ],
+      "loop": false,
+      "recommended": true,
+      "anchor": "dom_icon_center",
+      "width_390": 24,
+      "width_range_390": [
+        20,
+        48
+      ],
+      "sha256": "32007df1c7c860735403bfd318878f3ba041ef2929665bc7d56d9179e6dd565c"
+    },
+    {
+      "path": "icons/exchange-knot.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        128,
+        128
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        16,
+        14,
+        239,
+        242
+      ],
+      "loop": false,
+      "recommended": true,
+      "anchor": "dom_icon_center",
+      "width_390": 24,
+      "width_range_390": [
+        20,
+        48
+      ],
+      "sha256": "8d4df40ef89aa35e5b2b1043627f0bf6ae804966d1ccdc176db870a4a7205da9"
+    },
+    {
+      "path": "frames/character-card.png",
+      "size": [
+        384,
+        512
+      ],
+      "pivot": [
+        192,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        40,
+        54,
+        343,
+        458
+      ],
+      "loop": false,
+      "recommended": true,
+      "anchor": "reward_center",
+      "width_390": 184,
+      "portrait_mask": "frames/mask.png",
+      "sha256": "ea45cd7209b8dadda5ba04736d0ef4ad1a831b1bbb0d064b464f388b647a8919"
+    },
+    {
+      "path": "frames/character-card-new.png",
+      "size": [
+        384,
+        512
+      ],
+      "pivot": [
+        192,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        18,
+        16,
+        366,
+        496
+      ],
+      "loop": false,
+      "recommended": true,
+      "anchor": "reward_center",
+      "width_390": 184,
+      "portrait_mask": "frames/mask.png",
+      "sha256": "363f897f0f15b43979d3d96a41b418779d06558d4f6cd4a220fec769b7b4701a"
+    },
+    {
+      "path": "frames/character-shard.png",
+      "size": [
+        384,
+        384
+      ],
+      "pivot": [
+        192,
+        192
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        59,
+        16,
+        325,
+        368
+      ],
+      "loop": false,
+      "recommended": true,
+      "anchor": "reward_center",
+      "width_390": 166,
+      "portrait_mask": "frames/mask-shard.png",
+      "sha256": "b6088f4093b97711c5e4e19f24a35ec10b92402183c807530c7f44404081f196"
+    },
+    {
+      "path": "vfx/ambient-sparkles-01.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        128,
+        128
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        49,
+        35,
+        207,
+        220
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "ambient-sparkles",
+      "beat": "01",
+      "width_390": 30,
+      "anchor": "decorative_spawn",
+      "suggested_ms": 480,
+      "sha256": "0bf906d9faffe14760b06c58f2a8583f4e69c7c39706d0b7d33b36aa3994b2f0"
+    },
+    {
+      "path": "vfx/ambient-sparkles-02.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        128,
+        128
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        50,
+        36,
+        207,
+        221
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "ambient-sparkles",
+      "beat": "02",
+      "width_390": 30,
+      "anchor": "decorative_spawn",
+      "suggested_ms": 480,
+      "sha256": "fcf8f8f487f1c15f839e37530127127bcda5a385be63c831049d680942198a28"
+    },
+    {
+      "path": "vfx/ambient-sparkles-03.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        128,
+        128
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        50,
+        35,
+        206,
+        221
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "ambient-sparkles",
+      "beat": "03",
+      "width_390": 30,
+      "anchor": "decorative_spawn",
+      "suggested_ms": 480,
+      "sha256": "19ead2f3ef25a607420ffd58b234b7e7c2931c2328680d581539e6ebd32b0cd0"
+    },
+    {
+      "path": "vfx/ambient-sparkles-04.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        128,
+        128
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        50,
+        35,
+        206,
+        221
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "ambient-sparkles",
+      "beat": "04",
+      "width_390": 30,
+      "anchor": "decorative_spawn",
+      "suggested_ms": 480,
+      "sha256": "f24361dc90c78ba4f36ea3e88ccbbf1c6cacebd812705acaca131b495decf742"
+    },
+    {
+      "path": "vfx/loom-idle-01.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        58,
+        101,
+        454,
+        406
+      ],
+      "loop": true,
+      "recommended": true,
+      "family": "loom-idle",
+      "beat": "01",
+      "width_390": 278,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "suggested_ms": 220,
+      "sha256": "df421454a5648bf59e40148aaadd4ae1477dfd1709ceead50b613decb26f004a"
+    },
+    {
+      "path": "vfx/loom-idle-02.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        58,
+        101,
+        454,
+        406
+      ],
+      "loop": true,
+      "recommended": true,
+      "family": "loom-idle",
+      "beat": "02",
+      "width_390": 278,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "suggested_ms": 220,
+      "sha256": "48faa0a0ea483aea23e8760750f33ca73e4d80d68ff11b3765482c89034cd847"
+    },
+    {
+      "path": "vfx/loom-idle-03.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        58,
+        101,
+        454,
+        406
+      ],
+      "loop": true,
+      "recommended": true,
+      "family": "loom-idle",
+      "beat": "03",
+      "width_390": 278,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "suggested_ms": 220,
+      "sha256": "e811b7dbd489c1c08290066428143f1ead74bf6a1b672207acd89a772a44842b"
+    },
+    {
+      "path": "vfx/loom-idle-04.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        58,
+        101,
+        454,
+        406
+      ],
+      "loop": true,
+      "recommended": true,
+      "family": "loom-idle",
+      "beat": "04",
+      "width_390": 278,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "suggested_ms": 220,
+      "sha256": "bcc77e594e1e45c0847f90cda61d4b1f841bb769abfb84628ede0083bae0ce25"
+    },
+    {
+      "path": "vfx/loom-charge-prepare.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        85,
+        22,
+        442,
+        493
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "loom-charge",
+      "beat": "prepare",
+      "width_390": 280,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "suggested_ms": 250,
+      "sha256": "ba46629b9e85254fb9a37244f2be21740a21ca7bf56414803fc6c48314acfc1c"
+    },
+    {
+      "path": "vfx/loom-charge-peak.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        61,
+        23,
+        447,
+        493
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "loom-charge",
+      "beat": "peak",
+      "width_390": 280,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "suggested_ms": 380,
+      "sha256": "152c16deda8ec4bc12dbba8ba76ad50e1371aaa6ad594ed8b76f7f4213ef3681"
+    },
+    {
+      "path": "vfx/loom-charge-settle.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        100,
+        26,
+        414,
+        489
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "loom-charge",
+      "beat": "settle",
+      "width_390": 280,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "suggested_ms": 120,
+      "sha256": "7d357c8ec5bbc9d2fe6d11dd5931a33b0e880d486d929196fcf1e17572414258"
+    },
+    {
+      "path": "alternatives/loom-charge-r2/vfx/loom-charge-prepare.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        95,
+        110,
+        411,
+        395
+      ],
+      "loop": false,
+      "recommended": false,
+      "family": "loom-charge",
+      "beat": "prepare",
+      "width_390": 280,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "suggested_ms": 250,
+      "sha256": "2c9ceb06349f36af458ccf7d186c6ba01a6f32d71b5eecca807254092418c61b"
+    },
+    {
+      "path": "alternatives/loom-charge-r2/vfx/loom-charge-peak.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        25,
+        19,
+        484,
+        490
+      ],
+      "loop": false,
+      "recommended": false,
+      "family": "loom-charge",
+      "beat": "peak",
+      "width_390": 280,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "suggested_ms": 380,
+      "sha256": "b1eb36f6628135a40b689e914bb45e1fd1667674e03d935bdc967892baf95021"
+    },
+    {
+      "path": "alternatives/loom-charge-r2/vfx/loom-charge-settle.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        48,
+        54,
+        447,
+        465
+      ],
+      "loop": false,
+      "recommended": false,
+      "family": "loom-charge",
+      "beat": "settle",
+      "width_390": 280,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "suggested_ms": 120,
+      "sha256": "fb1db8060daff149e555e4d96898924737a14a8b3f443cddaa79d76496b9d9ce"
+    },
+    {
+      "path": "vfx/thread-pillar-prepare.png",
+      "size": [
+        512,
+        1024
+      ],
+      "pivot": [
+        256,
+        1024
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        139,
+        317,
+        372,
+        1006
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "thread-pillar",
+      "beat": "prepare",
+      "width_390": 268,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "pivot_anchor": "loom_platform",
+      "anchor_offset_key_art": [
+        -5,
+        504
+      ],
+      "suggested_ms": 140,
+      "sha256": "083cc383b71a81233c27e0d7f8b2d096fdbeaed693d3e121826ba843922def06"
+    },
+    {
+      "path": "vfx/thread-pillar-peak.png",
+      "size": [
+        512,
+        1024
+      ],
+      "pivot": [
+        256,
+        1024
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        48,
+        199,
+        472,
+        1009
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "thread-pillar",
+      "beat": "peak",
+      "width_390": 268,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "pivot_anchor": "loom_platform",
+      "anchor_offset_key_art": [
+        -5,
+        504
+      ],
+      "suggested_ms": 325,
+      "sha256": "85632f3654b674b9ce74ef7e07e4936a6436147500490fb8c9db1927c51ae5a7"
+    },
+    {
+      "path": "vfx/thread-pillar-settle.png",
+      "size": [
+        512,
+        1024
+      ],
+      "pivot": [
+        256,
+        1024
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        71,
+        309,
+        445,
+        1005
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "thread-pillar",
+      "beat": "settle",
+      "width_390": 268,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "pivot_anchor": "loom_platform",
+      "anchor_offset_key_art": [
+        -5,
+        504
+      ],
+      "suggested_ms": 130,
+      "sha256": "c2878f14e47339d263b1690d76378eda3c1d7352cb710c790d6c8cd9319584eb"
+    },
+    {
+      "path": "alternatives/thread-pillar-r2/vfx/thread-pillar-prepare.png",
+      "size": [
+        512,
+        1024
+      ],
+      "pivot": [
+        256,
+        1024
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        142,
+        575,
+        375,
+        995
+      ],
+      "loop": false,
+      "recommended": false,
+      "family": "thread-pillar",
+      "beat": "prepare",
+      "width_390": 268,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "pivot_anchor": "loom_platform",
+      "anchor_offset_key_art": [
+        -5,
+        504
+      ],
+      "suggested_ms": 140,
+      "sha256": "0b7992650f0eac270bb1a389ad042f135a413d11d3df38de4935a78b7ae8a9e9"
+    },
+    {
+      "path": "alternatives/thread-pillar-r2/vfx/thread-pillar-peak.png",
+      "size": [
+        512,
+        1024
+      ],
+      "pivot": [
+        256,
+        1024
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        60,
+        327,
+        451,
+        1008
+      ],
+      "loop": false,
+      "recommended": false,
+      "family": "thread-pillar",
+      "beat": "peak",
+      "width_390": 268,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "pivot_anchor": "loom_platform",
+      "anchor_offset_key_art": [
+        -5,
+        504
+      ],
+      "suggested_ms": 325,
+      "sha256": "0c9a9272468438804251c2ed321292ceb1c75200d7a78117370e71c1a881482d"
+    },
+    {
+      "path": "alternatives/thread-pillar-r2/vfx/thread-pillar-settle.png",
+      "size": [
+        512,
+        1024
+      ],
+      "pivot": [
+        256,
+        1024
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        93,
+        410,
+        407,
+        992
+      ],
+      "loop": false,
+      "recommended": false,
+      "family": "thread-pillar",
+      "beat": "settle",
+      "width_390": 268,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "pivot_anchor": "loom_platform",
+      "anchor_offset_key_art": [
+        -5,
+        504
+      ],
+      "suggested_ms": 130,
+      "sha256": "ca99a2cdcddc9b7c6799e7ad1504ef9d865b27fbe0c9a6a29b24c928281995c9"
+    },
+    {
+      "path": "vfx/ten-burst-prepare.png",
+      "size": [
+        512,
+        1024
+      ],
+      "pivot": [
+        256,
+        1024
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        173,
+        658,
+        366,
+        988
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "ten-burst",
+      "beat": "prepare",
+      "width_390": 360,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "pivot_anchor": "loom_platform",
+      "anchor_offset_key_art": [
+        -5,
+        504
+      ],
+      "suggested_ms": 115,
+      "sha256": "ee79eec9d8ad7e2ad0cf09bc5e465348964f28b8847d332b00c455c91f84a51f"
+    },
+    {
+      "path": "vfx/ten-burst-peak.png",
+      "size": [
+        512,
+        1024
+      ],
+      "pivot": [
+        256,
+        1024
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        29,
+        569,
+        492,
+        997
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "ten-burst",
+      "beat": "peak",
+      "width_390": 360,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "pivot_anchor": "loom_platform",
+      "anchor_offset_key_art": [
+        -5,
+        504
+      ],
+      "suggested_ms": 370,
+      "sha256": "bd03836ea71da5b20ecd65923014dae9778a40ea25dcffbbbc53189cee27e993"
+    },
+    {
+      "path": "vfx/ten-burst-settle.png",
+      "size": [
+        512,
+        1024
+      ],
+      "pivot": [
+        256,
+        1024
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        64,
+        614,
+        444,
+        990
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "ten-burst",
+      "beat": "settle",
+      "width_390": 360,
+      "anchor": "loom_crystal",
+      "anchor_key_art": [
+        431,
+        683
+      ],
+      "pivot_anchor": "loom_platform",
+      "anchor_offset_key_art": [
+        -5,
+        504
+      ],
+      "suggested_ms": 165,
+      "sha256": "8c303f27796ba8763cb0c647573b9d9041225817a8f10429166a6b96868c453e"
+    },
+    {
+      "path": "vfx/reveal-character-prepare.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        32,
+        26,
+        479,
+        480
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "reveal-character",
+      "beat": "prepare",
+      "width_390": 356,
+      "anchor": "reward_center",
+      "protected_face_390": [
+        149,
+        288,
+        241,
+        385
+      ],
+      "suggested_ms": 180,
+      "ten_short_suggested_ms": 55,
+      "sha256": "84c73423aee7e6f76dd95f2cbd12284d35c03c550ccfca77626065f22ff79b81"
+    },
+    {
+      "path": "vfx/reveal-character-peak.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        22,
+        24,
+        487,
+        490
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "reveal-character",
+      "beat": "peak",
+      "width_390": 356,
+      "anchor": "reward_center",
+      "protected_face_390": [
+        149,
+        288,
+        241,
+        385
+      ],
+      "suggested_ms": 460,
+      "ten_short_suggested_ms": 130,
+      "sha256": "7427c9d4692147ee45631549df136b3319f94c22cd31dd64fb9939ac432c3f58"
+    },
+    {
+      "path": "vfx/reveal-character-settle.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        27,
+        22,
+        493,
+        488
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "reveal-character",
+      "beat": "settle",
+      "width_390": 356,
+      "anchor": "reward_center",
+      "protected_face_390": [
+        149,
+        288,
+        241,
+        385
+      ],
+      "suggested_ms": 360,
+      "ten_short_suggested_ms": 65,
+      "sha256": "67167bc08792c18983fa48806c20a2e5e53b981e28dac209560771dce697054e"
+    },
+    {
+      "path": "alternatives/reveal-character-r2/vfx/reveal-character-prepare.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        91,
+        38,
+        421,
+        472
+      ],
+      "loop": false,
+      "recommended": false,
+      "family": "reveal-character",
+      "beat": "prepare",
+      "width_390": 356,
+      "anchor": "reward_center",
+      "protected_face_390": [
+        149,
+        288,
+        241,
+        385
+      ],
+      "suggested_ms": 180,
+      "ten_short_suggested_ms": 55,
+      "sha256": "63c220f7e0357c5a819e392a611d031b6e71d365e033c0a6e53b48e966a9f695"
+    },
+    {
+      "path": "alternatives/reveal-character-r2/vfx/reveal-character-peak.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        23,
+        26,
+        492,
+        477
+      ],
+      "loop": false,
+      "recommended": false,
+      "family": "reveal-character",
+      "beat": "peak",
+      "width_390": 356,
+      "anchor": "reward_center",
+      "protected_face_390": [
+        149,
+        288,
+        241,
+        385
+      ],
+      "suggested_ms": 460,
+      "ten_short_suggested_ms": 130,
+      "sha256": "a5fc1a8912f39db49bff5083cac15ea1932b19f63a574f193d11b2d7daaddba3"
+    },
+    {
+      "path": "alternatives/reveal-character-r2/vfx/reveal-character-settle.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        20,
+        27,
+        487,
+        484
+      ],
+      "loop": false,
+      "recommended": false,
+      "family": "reveal-character",
+      "beat": "settle",
+      "width_390": 356,
+      "anchor": "reward_center",
+      "protected_face_390": [
+        149,
+        288,
+        241,
+        385
+      ],
+      "suggested_ms": 360,
+      "ten_short_suggested_ms": 65,
+      "sha256": "0a2d45e1d1fb16096cd4d8e91bef5ebcaf34690168fb2baa405ba1ff9c6ee064"
+    },
+    {
+      "path": "vfx/reveal-shard-prepare.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        65,
+        60,
+        443,
+        458
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "reveal-shard",
+      "beat": "prepare",
+      "width_390": 334,
+      "anchor": "reward_center",
+      "protected_face_390": [
+        149,
+        288,
+        241,
+        385
+      ],
+      "suggested_ms": 145,
+      "ten_short_suggested_ms": 40,
+      "sha256": "84b322e7fd2d330d47eb8773c607d9aafdc1893bf8b20b7aa4d9045882c1f464"
+    },
+    {
+      "path": "vfx/reveal-shard-peak.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        34,
+        36,
+        481,
+        493
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "reveal-shard",
+      "beat": "peak",
+      "width_390": 334,
+      "anchor": "reward_center",
+      "protected_face_390": [
+        149,
+        288,
+        241,
+        385
+      ],
+      "suggested_ms": 330,
+      "ten_short_suggested_ms": 115,
+      "sha256": "c444f778f3076baeb43415e0af48925cea7a041f0e1109abe8a75ec856c6ce71"
+    },
+    {
+      "path": "vfx/reveal-shard-settle.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        256,
+        256
+      ],
+      "blend": "normal",
+      "alpha": "straight",
+      "alpha_bounds": [
+        75,
+        71,
+        444,
+        448
+      ],
+      "loop": false,
+      "recommended": true,
+      "family": "reveal-shard",
+      "beat": "settle",
+      "width_390": 334,
+      "anchor": "reward_center",
+      "protected_face_390": [
+        149,
+        288,
+        241,
+        385
+      ],
+      "suggested_ms": 295,
+      "ten_short_suggested_ms": 65,
+      "sha256": "747f6b39e1f18af789fc5e0186361b2a847eec1cfd26e6512ced3a29cc027528"
+    }
+  ]
+}

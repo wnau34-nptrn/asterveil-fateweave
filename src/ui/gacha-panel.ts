@@ -1,8 +1,40 @@
 import { exchangeReason, gachaRates, pullReason } from '../core/world/gacha';
 import type { GachaEntry, GachaGrant, GachaResult, MapDefinition, Profile } from '../core/world/types';
 import { icon } from './icons';
-import { heroArt, portrait } from './portraits';
+import { portrait } from './portraits';
 import { heroText } from './th';
+import art from './gacha-art.json';
+
+// ART-UI-GACHA-003 R1 (owner pick 2026-11-21) on the ART-UI-GACHA-002 key art. The stage is a 390×500 window of the
+// 390×844 layout the art was drawn for (y 90–590: the loom and the reward centre, above the button area), so every anchor
+// and width from layers.json is a percentage of the stage. Files load only while the cabinet is on screen (CSS urls on
+// cabinet elements). The pull timeline is CSS only and starts when the committed result is drawn; skip and reduced motion
+// cut straight to the cards.
+type ArtKey = keyof typeof art.files;
+const url = (k: ArtKey) => `${import.meta.env.BASE_URL}assets/gacha/${art.files[k].file}`;
+const TOP = 90, H = 500;
+const at = (x: number, y: number, w: number) => `--x:${(x / 390 * 100).toFixed(2)}%;--y:${((y - TOP) / H * 100).toFixed(2)}%;--w:${(w / 390 * 100).toFixed(2)}%`;
+function layer(k: Exclude<ArtKey, 'key-art'>, x: number, y: number, extra = ''): string {
+  const f = art.files[k] as { cell: number[]; frames?: number; pivot: number[]; width_390: number };
+  // The pivot of the cell sits on the anchor; the cell is drawn `width_390` wide.
+  const px = f.pivot[0]! / f.cell[0]! * 100, py = f.pivot[1]! / f.cell[1]! * 100;
+  return `<i class="gacha-fx" data-fx="${k}" style="${at(x, y, f.width_390)};--px:${px.toFixed(2)}%;--py:${py.toFixed(2)}%;--n:${f.frames ?? 1};--ratio:${f.cell[0]}/${f.cell[1]};background-image:url(${url(k)});${extra}" aria-hidden="true"></i>`;
+}
+const A = art.anchors;
+// The sequence for one committed entry (ms): charge → pillar → reveal (one) or ten-burst (ten). Returns layers and the end.
+function timeline(e: GachaEntry): { html: string; end: number } {
+  const ms = (k: 'loom-charge' | 'thread-pillar' | 'ten-burst' | 'reveal-character' | 'reveal-shard') => art.files[k].ms.reduce((a: number, b) => a + (b ?? 0), 0);
+  let t = 0; const parts: string[] = [];
+  const add = (k: Parameters<typeof ms>[0], x: number, y: number) => { const d = ms(k); parts.push(layer(k, x, y, `--t:${t}ms;--d:${d}ms`)); t += d; };
+  add('loom-charge', A.loom_crystal[0]!, A.loom_crystal[1]!); add('thread-pillar', A.loom_platform[0]!, A.loom_platform[1]!);
+  if (e.results.length > 1) add('ten-burst', A.loom_platform[0]!, A.loom_platform[1]!);
+  else add(e.results[0]!.full ? 'reveal-character' : 'reveal-shard', A.reward_center[0]!, A.reward_center[1]!);
+  return { html: parts.join(''), end: t };
+}
+function stage(inner: string, run = false): string {
+  return `<div class="gacha-stage"${run ? ' data-run="true"' : ''} style="background-image:url(${url('key-art')})" aria-hidden="true">${layer('idle', A.loom_crystal[0]!, A.loom_crystal[1]!)}${layer('sparkles', 120, 260)}${layer('sparkles', 290, 400, 'animation-delay:-900ms')}${inner}</div>`;
+}
+const tIcon = `<img class="gacha-icon" src="${url('fate-ticket')}" alt="" width="20" height="20">`, pIcon = `<img class="gacha-icon" src="${url('exchange-knot')}" alt="" width="20" height="20">`;
 
 // P10 free-ticket cabinet (docs/design/GACHA_P10_SPEC_TH.md, OD-58). DOM-native, built only from the committed profile:
 // tickets, points, rates and every result come from state and the map's `gacha` rules; nothing here draws, spends or
@@ -24,7 +56,7 @@ const name = (id: string) => heroText[id]?.name ?? id;
 const wallet = (p: Profile, map: MapDefinition) => {
   const g = p.gacha; const t = g?.tickets ?? 0, pts = g?.points ?? 0;
   return `<div class="gacha-wallet" role="group" aria-label="ตั๋ว ${t} ใบ · แต้มแลก ${pts}/${map.gacha.exchangePoints}">
-    <span class="ui-pill" id="gacha-tickets">${icon('seal')}ตั๋ว <b>${t}</b></span><span class="ui-pill" id="gacha-points">${icon('starFilled')}แต้ม <b>${pts}</b>/${map.gacha.exchangePoints}</span></div>`;
+    <span class="ui-pill" id="gacha-tickets">${tIcon}ตั๋ว <b>${t}</b></span><span class="ui-pill" id="gacha-points">${pIcon}แต้ม <b>${pts}</b>/${map.gacha.exchangePoints}</span></div>`;
 };
 const back = (to: GachaView = 'home', label = 'กลับหน้าตู้') => `<button id="gacha-back" data-lobby="gacha-view" data-view="${to}" class="secondary">${icon('left')}<span>${label}</span></button>`;
 
@@ -33,12 +65,12 @@ function home(p: Profile, maps: readonly MapDefinition[], map: MapDefinition): s
   const pull = (n: number) => { const why = pullReason(p, maps, map, n, g.version);
     return `<button id="gacha-pull-${n}" data-lobby="gacha-ask" data-count="${n}" class="${n === 10 ? 'primary' : 'secondary'} gacha-pull"${why ? ' data-blocked="true"' : ''}>${icon('reroll')}<span>สุ่ม ${n} ครั้ง<small>ใช้ตั๋ว ${n * g.ticketCost}${why ? ` · ${gachaReasonText[why] ?? why}` : ''}</small></span></button>`; };
   const pending = Object.entries(p.gacha?.pending ?? {});
-  return `<section class="gacha-shrine" aria-labelledby="gacha-title"><div class="gacha-altar" aria-hidden="true"><span class="gacha-crystal"></span></div>
+  return `<section class="gacha-shrine" aria-labelledby="gacha-title">${stage('')}
     <h3 id="gacha-title">แท่นทอชะตา</h3><p class="gacha-lede">ทุกครั้ง: ตัวเต็ม ${pct(full)} (สุ่มเท่ากัน ${g.pool.length} คน) · นอกนั้นเศษเฉพาะตัว ${shards.map(s => `${s.qty} ชิ้น ${pct(s.chance)}`).join(' / ')} · ไม่มีการันตีในสิบครั้ง</p>
     ${wallet(p, map)}<div class="gacha-pulls">${pull(1)}${pull(10)}</div>
     <div class="gacha-points-bar" role="progressbar" aria-label="แต้มแลกตัวที่เลือก" aria-valuemin="0" aria-valuemax="${g.exchangePoints}" aria-valuenow="${Math.min(pts, g.exchangePoints)}"><i style="width:${Math.min(100, pts / g.exchangePoints * 100)}%"></i></div>
     <p class="camp-note">สุ่ม 1 ครั้ง = 1 แต้ม ไม่หมดอายุ · ครบ ${g.exchangePoints} แต้มแลกตัวที่เลือกได้ 1 ตัว</p>
-    <div class="gacha-links"><button id="gacha-open-exchange" data-lobby="gacha-view" data-view="exchange" class="secondary">${icon('starFilled')}<span>แลกแต้ม</span></button><button id="gacha-open-rates" data-lobby="gacha-view" data-view="rates" class="secondary">${icon('info')}<span>อัตราทั้งหมด</span></button><button id="gacha-open-history" data-lobby="gacha-view" data-view="history" class="secondary">${icon('flag')}<span>ประวัติ</span></button></div>
+    <div class="gacha-links"><button id="gacha-open-exchange" data-lobby="gacha-view" data-view="exchange" class="secondary">${pIcon}<span>แลกแต้ม</span></button><button id="gacha-open-rates" data-lobby="gacha-view" data-view="rates" class="secondary">${icon('info')}<span>อัตราทั้งหมด</span></button><button id="gacha-open-history" data-lobby="gacha-view" data-view="history" class="secondary">${icon('flag')}<span>ประวัติ</span></button></div>
     ${pending.length ? `<p class="camp-note gacha-pending">เศษรอเข้าค่าย: ${pending.map(([id, n]) => `${name(id)} ${n}/${g.unlockShards}`).join(' · ')}</p>` : ''}
     <p class="camp-note">ตั๋วฟรีจากงานรายวัน งานรายสัปดาห์ และบอสโลก · ไม่มีการขาย · ทุกคนยังได้จากเนื้อเรื่องและป้ายจ้างเหมือนเดิม</p></section>`;
 }
@@ -70,14 +102,16 @@ function exchange(p: Profile, maps: readonly MapDefinition[], map: MapDefinition
 }
 function resultCard(r: GachaResult, map: MapDefinition, i: number): string {
   const label = `${name(r.heroId)} · ${r.full ? 'ตัวเต็ม' : `เศษ ×${r.qty}`} · ${grantText(r, map)}`;
-  return r.full
-    ? `<li class="gacha-card" data-kind="full" data-grant="${r.grant}" style="--i:${i}" aria-label="${label}">${heroArt(r.heroId)}<b>${name(r.heroId)}</b><span class="gacha-tag">ตัวเต็ม</span><small>${grantText(r, map)}</small></li>`
-    : `<li class="gacha-card" data-kind="shard" data-grant="${r.grant}" style="--i:${i}" aria-label="${label}"><span class="gacha-shard">${portrait(r.heroId)}<i>×${r.qty}</i></span><b>${name(r.heroId)}</b><span class="gacha-tag">เศษ</span><small>${grantText(r, map)}</small></li>`;
+  // The portrait sits under the frame, clipped by the frame's mask (white = the face window).
+  const frame = r.full ? (r.grant === 'joined' ? 'character-card-new' : 'character-card') : 'character-shard';
+  const mask = r.full ? 'mask' : 'mask-shard';
+  const face = `<span class="gacha-frame" data-frame="${frame}"><span class="gacha-face" style="-webkit-mask-image:url(${url(mask)});mask-image:url(${url(mask)})">${portrait(r.heroId, true)}</span><img src="${url(frame)}" alt="" draggable="false">${r.full ? '' : `<i>×${r.qty}</i>`}</span>`;
+  return `<li class="gacha-card" data-kind="${r.full ? 'full' : 'shard'}" data-grant="${r.grant}" style="--i:${i}" aria-label="${label}">${face}<b>${name(r.heroId)}</b><span class="gacha-tag">${r.full ? 'ตัวเต็ม' : 'เศษ'}</span><small>${grantText(r, map)}</small></li>`;
 }
 function result(p: Profile, map: MapDefinition, skip: boolean): string {
   const e = p.gacha?.history.at(-1); if (!e) return home(p, [map], map);
-  const fulls = e.results.filter(r => r.full).length;
-  return `<section class="gacha-result" data-skip="${skip}" aria-labelledby="gacha-result-title"><h3 id="gacha-result-title" tabindex="-1">${e.kind === 'exchange' ? 'แลกสำเร็จ' : `ผลสุ่ม ${e.results.length} ครั้ง`} <small>${e.kind === 'pull' ? (fulls ? `ตัวเต็ม ${fulls}` : 'ได้เศษทั้งหมด') : ''}</small></h3>
+  const fulls = e.results.filter(r => r.full).length; const run = skip ? { html: '', end: 0 } : timeline(e);
+  return `<section class="gacha-result" data-skip="${skip}" style="--t0:${run.end}ms" aria-labelledby="gacha-result-title">${skip ? '' : stage(run.html, true)}<h3 id="gacha-result-title" tabindex="-1">${e.kind === 'exchange' ? 'แลกสำเร็จ' : `ผลสุ่ม ${e.results.length} ครั้ง`} <small>${e.kind === 'pull' ? (fulls ? `ตัวเต็ม ${fulls}` : 'ได้เศษทั้งหมด') : ''}</small></h3>
     <ol class="gacha-cards" role="list">${e.results.map((r, i) => resultCard(r, map, i)).join('')}</ol>
     <p class="camp-note" role="status">บันทึกแล้ว · รายการ #${e.serial}${e.kind === 'pull' ? ` · ใช้ตั๋ว ${e.tickets} · แต้ม +${e.points}` : ` · ใช้แต้ม ${e.points}`}</p>${wallet(p, map)}
     <div class="gacha-actions">${skip ? '' : `<button id="gacha-skip" data-lobby="gacha-skip" class="secondary">ข้ามแอนิเมชัน</button>`}${back('home', 'กลับหน้าตู้')}</div></section>`;

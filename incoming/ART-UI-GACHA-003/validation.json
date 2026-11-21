@@ -1,0 +1,725 @@
+{
+  "schema": 1,
+  "generated_pngs": 43,
+  "shipping_rgba_layers_including_alternatives_and_masks": 39,
+  "source_pngs": 17,
+  "primary_runtime_png_bytes": 3377163,
+  "primary_runtime_estimated_lossless_webp_bytes": 2744568,
+  "alternative_png_bytes": 1511883,
+  "all_runtime_variants_estimated_lossless_webp_bytes": 3990320,
+  "replacement_cost_by_variant": {
+    "loom-charge": {
+      "r1_estimated_lossless_webp_bytes": 505960,
+      "r2_estimated_lossless_webp_bytes": 309542
+    },
+    "thread-pillar": {
+      "r1_estimated_lossless_webp_bytes": 506102,
+      "r2_estimated_lossless_webp_bytes": 310348
+    },
+    "reveal-character": {
+      "r1_estimated_lossless_webp_bytes": 620926,
+      "r2_estimated_lossless_webp_bytes": 625862
+    }
+  },
+  "largest_primary_pngs": [
+    {
+      "path": "vfx/thread-pillar-peak.png",
+      "bytes": 364709
+    },
+    {
+      "path": "vfx/reveal-character-peak.png",
+      "bytes": 336029
+    },
+    {
+      "path": "vfx/loom-charge-peak.png",
+      "bytes": 303618
+    },
+    {
+      "path": "vfx/reveal-character-settle.png",
+      "bytes": 256035
+    }
+  ],
+  "button_region_start_y_390": 590,
+  "protected_face_390": [
+    149,
+    288,
+    241,
+    385
+  ],
+  "status": {
+    "canvas_margins": "pass",
+    "portrait_masks": "pass",
+    "reveal_face_and_button_region_in_390_fixture": "pass",
+    "ten_terminal_positions": "pass",
+    "idle_glint_phases": "pass",
+    "owner_approval": "pending"
+  },
+  "manifest_self_sha256": "Excluded to avoid circular hashing. Compare the manifest bytes separately.",
+  "files": [
+    {
+      "path": "NOTES.md",
+      "bytes": 10566,
+      "sha256": "253eeb1a284d8124d48ac19b8f5d65cfce7e51960b02c429624761ebdee6ba49"
+    },
+    {
+      "path": "alternatives/loom-charge-r2/vfx/loom-charge-peak.png",
+      "bytes": 244335,
+      "sha256": "b1eb36f6628135a40b689e914bb45e1fd1667674e03d935bdc967892baf95021",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "alternatives/loom-charge-r2/vfx/loom-charge-prepare.png",
+      "bytes": 51558,
+      "sha256": "2c9ceb06349f36af458ccf7d186c6ba01a6f32d71b5eecca807254092418c61b",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "alternatives/loom-charge-r2/vfx/loom-charge-settle.png",
+      "bytes": 72742,
+      "sha256": "fb1db8060daff149e555e4d96898924737a14a8b3f443cddaa79d76496b9d9ce",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "alternatives/reveal-character-r2/vfx/reveal-character-peak.png",
+      "bytes": 305514,
+      "sha256": "a5fc1a8912f39db49bff5083cac15ea1932b19f63a574f193d11b2d7daaddba3",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "alternatives/reveal-character-r2/vfx/reveal-character-prepare.png",
+      "bytes": 152096,
+      "sha256": "63c220f7e0357c5a819e392a611d031b6e71d365e033c0a6e53b48e966a9f695",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "alternatives/reveal-character-r2/vfx/reveal-character-settle.png",
+      "bytes": 313081,
+      "sha256": "0a2d45e1d1fb16096cd4d8e91bef5ebcaf34690168fb2baa405ba1ff9c6ee064",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "alternatives/thread-pillar-r2/vfx/thread-pillar-peak.png",
+      "bytes": 189194,
+      "sha256": "0c9a9272468438804251c2ed321292ceb1c75200d7a78117370e71c1a881482d",
+      "size": [
+        512,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "alternatives/thread-pillar-r2/vfx/thread-pillar-prepare.png",
+      "bytes": 92393,
+      "sha256": "0b7992650f0eac270bb1a389ad042f135a413d11d3df38de4935a78b7ae8a9e9",
+      "size": [
+        512,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "alternatives/thread-pillar-r2/vfx/thread-pillar-settle.png",
+      "bytes": 90970,
+      "sha256": "ca99a2cdcddc9b7c6799e7ad1504ef9d865b27fbe0c9a6a29b24c928281995c9",
+      "size": [
+        512,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "build_handoff.py",
+      "bytes": 28459,
+      "sha256": "ccf48b08f15ace2026cedaf0b080366c60bd96bb7fe0b7cd6f7ec8dc22868de1"
+    },
+    {
+      "path": "frames/character-card-new.png",
+      "bytes": 87710,
+      "sha256": "363f897f0f15b43979d3d96a41b418779d06558d4f6cd4a220fec769b7b4701a",
+      "size": [
+        384,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "frames/character-card.png",
+      "bytes": 48979,
+      "sha256": "ea45cd7209b8dadda5ba04736d0ef4ad1a831b1bbb0d064b464f388b647a8919",
+      "size": [
+        384,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "frames/character-shard.png",
+      "bytes": 93332,
+      "sha256": "b6088f4093b97711c5e4e19f24a35ec10b92402183c807530c7f44404081f196",
+      "size": [
+        384,
+        384
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "frames/mask-shard.png",
+      "bytes": 1235,
+      "sha256": "c3eb0e3bf44bd50827e83f3289f7d2472bffd2377200b74e4a600e6a722f01a2",
+      "size": [
+        384,
+        384
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "frames/mask.png",
+      "bytes": 1368,
+      "sha256": "a0a475fa6cdac4350135c312884d283e82c29057ae8c220986a5ea7387b567fc",
+      "size": [
+        384,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "icons/exchange-knot.png",
+      "bytes": 51021,
+      "sha256": "8d4df40ef89aa35e5b2b1043627f0bf6ae804966d1ccdc176db870a4a7205da9",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "icons/fate-ticket.png",
+      "bytes": 64302,
+      "sha256": "32007df1c7c860735403bfd318878f3ba041ef2929665bc7d56d9179e6dd565c",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "layers.json",
+      "bytes": 26738,
+      "sha256": "e672c0798fef83dc134d7a2b54442327bdf4e883da2f209e44117a75c2b24783"
+    },
+    {
+      "path": "preview-390.png",
+      "bytes": 7500033,
+      "sha256": "ee04df02dc3ca0774f5807727f322d0fc104d4a1afed19b3da3fe6d5c608348a",
+      "size": [
+        3228,
+        4926
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "prompts.json",
+      "bytes": 30129,
+      "sha256": "d1e0310bfc2517a7ca31005d05749427eda1287b097d7082a2a940a59c679d64"
+    },
+    {
+      "path": "reference/corin-portrait.png",
+      "bytes": 170403,
+      "sha256": "68268565e90ef317b09f9ab7b5a2a49b3a50aa020f5bb3447d2b4a978354c733",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "reference/key-art-390.png",
+      "bytes": 558681,
+      "sha256": "91c07aea7f484b0bcafbd4a3729e495e42a201601a1325a7e7e5e5f70cf7742b",
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "reference/mira-portrait.png",
+      "bytes": 153971,
+      "sha256": "f725a287d1358855d5efc912b8dda4c72e701492da53be577235514c21fe305b",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "reference/toma-portrait.png",
+      "bytes": 153333,
+      "sha256": "cfd11fa0964ba0a5af99f67ea1525e9d295c7f082000213434664a794421fd97",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 28,
+      "sha256": "d0524439f7a0da67c1283d44683e00fcc795a0657e726f22087cfcbe198f7c89"
+    },
+    {
+      "path": "source/ambient-sparkles.png",
+      "bytes": 295961,
+      "sha256": "aea5720b57fe3762194486fadf2fd545819670db0e481d744afaea544efa63c6",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/character-card-new.png",
+      "bytes": 1438455,
+      "sha256": "683104edd25efb4f8f53f5dcd9d14d560a341044a22270254f57b476e7677bba",
+      "size": [
+        1086,
+        1448
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/character-card.png",
+      "bytes": 859468,
+      "sha256": "8c173fc8dbd76a0926083ac8845c29f62c8e462bcc8905f251f36f47d51a9b55",
+      "size": [
+        1086,
+        1448
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/character-shard.png",
+      "bytes": 1071288,
+      "sha256": "1462c1500bce458a42fa3893900a9e4edbf608a85b5178b7193da98920a6e6b5",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/exchange-knot.png",
+      "bytes": 1369091,
+      "sha256": "3deb75e17f6e0a09fb4a8360ae70494418dc88d34171d877639ec01460e6c68c",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/fate-ticket.png",
+      "bytes": 1333379,
+      "sha256": "bc99f9f1c5d80e16d2416bf165d4703d1ca69260457a6d75d81477e75df8a778",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/loom-charge-r2-retry.png",
+      "bytes": 1110940,
+      "sha256": "7d5e9b4f3e1fe50f04664153093b81f770010be1324cc80abd88d914febb1689",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/loom-charge-r2.png",
+      "bytes": 1499601,
+      "sha256": "2e0ff4a502eb8a77746c9ec0fe597ae1688aa68b574aac52cc69363a8e060af6",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/loom-charge.png",
+      "bytes": 2015312,
+      "sha256": "b82b54623931ec35ea16e6816d470b6f1308e909a947543f79eefbda37b49921",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/loom-idle.png",
+      "bytes": 792654,
+      "sha256": "04e748fddb5b8fd3a9c5c540a4bc6c9c16e68d7aacd7ddb36cc5bd8b21e625d9",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/reveal-character-r2.png",
+      "bytes": 2395291,
+      "sha256": "f0e3e5ca43702d807ab38f84bda0857cedbe32fe90d2d0f683e87dc89b6bef84",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/reveal-character.png",
+      "bytes": 2672450,
+      "sha256": "438b7a3656c445d09864b03fda051b88162443ed673891511f9bdcb9a0df70d5",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/reveal-shard.png",
+      "bytes": 1438458,
+      "sha256": "b9a11d34d930f947032bd7d69e65b790078e8d02aa212a3e32fdc78e4386d56e",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/ten-burst-retry.png",
+      "bytes": 1007834,
+      "sha256": "67999d11bec20d15ba53c78b4a54aef38b4914fb30367cbc2a7be718bce29371",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/ten-burst.png",
+      "bytes": 2312312,
+      "sha256": "4d38f4903158bb25b69d7728a3b5b1e3babf767a099a6d47ae4574032f7d322a",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/thread-pillar-r2.png",
+      "bytes": 1699510,
+      "sha256": "d120d04e47389d0fbe2e949b8aad0bf359052b217d1be7e11126950315f90a27",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "source/thread-pillar.png",
+      "bytes": 1771172,
+      "sha256": "a68dcb1917b3d8a119e727d59b9b34f5b598c301d13248a53c9f6fdaae6b9969",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "storyboards/reveal-grayscale-390.png",
+      "bytes": 436895,
+      "sha256": "8c66e9c20cbad35b8cbe9001f18c62198d899deff379e99ebc63d97dc5641ad5",
+      "size": [
+        816,
+        868
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "storyboards/single-390.png",
+      "bytes": 1964780,
+      "sha256": "54298dd999a855eeecc56e98e59ffbe60006a6e8ee5edae47582e058a443f43e",
+      "size": [
+        1620,
+        1724
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "storyboards/ten-390.png",
+      "bytes": 1900434,
+      "sha256": "aa26723b2d6bb6bcc32fd1013ff3fe29f2b05a52e73ea4972cf17e429f0ba251",
+      "size": [
+        1620,
+        1724
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/ambient-sparkles-01.png",
+      "bytes": 10128,
+      "sha256": "0bf906d9faffe14760b06c58f2a8583f4e69c7c39706d0b7d33b36aa3994b2f0",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/ambient-sparkles-02.png",
+      "bytes": 34093,
+      "sha256": "fcf8f8f487f1c15f839e37530127127bcda5a385be63c831049d680942198a28",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/ambient-sparkles-03.png",
+      "bytes": 11494,
+      "sha256": "19ead2f3ef25a607420ffd58b234b7e7c2931c2328680d581539e6ebd32b0cd0",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/ambient-sparkles-04.png",
+      "bytes": 13484,
+      "sha256": "f24361dc90c78ba4f36ea3e88ccbbf1c6cacebd812705acaca131b495decf742",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/loom-charge-peak.png",
+      "bytes": 303618,
+      "sha256": "152c16deda8ec4bc12dbba8ba76ad50e1371aaa6ad594ed8b76f7f4213ef3681",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/loom-charge-prepare.png",
+      "bytes": 209650,
+      "sha256": "ba46629b9e85254fb9a37244f2be21740a21ca7bf56414803fc6c48314acfc1c",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/loom-charge-settle.png",
+      "bytes": 92877,
+      "sha256": "7d357c8ec5bbc9d2fe6d11dd5931a33b0e880d486d929196fcf1e17572414258",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/loom-idle-01.png",
+      "bytes": 91569,
+      "sha256": "df421454a5648bf59e40148aaadd4ae1477dfd1709ceead50b613decb26f004a",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/loom-idle-02.png",
+      "bytes": 90615,
+      "sha256": "48faa0a0ea483aea23e8760750f33ca73e4d80d68ff11b3765482c89034cd847",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/loom-idle-03.png",
+      "bytes": 91337,
+      "sha256": "e811b7dbd489c1c08290066428143f1ead74bf6a1b672207acd89a772a44842b",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/loom-idle-04.png",
+      "bytes": 90780,
+      "sha256": "bcc77e594e1e45c0847f90cda61d4b1f841bb769abfb84628ede0083bae0ce25",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/reveal-character-peak.png",
+      "bytes": 336029,
+      "sha256": "7427c9d4692147ee45631549df136b3319f94c22cd31dd64fb9939ac432c3f58",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/reveal-character-prepare.png",
+      "bytes": 183546,
+      "sha256": "84c73423aee7e6f76dd95f2cbd12284d35c03c550ccfca77626065f22ff79b81",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/reveal-character-settle.png",
+      "bytes": 256035,
+      "sha256": "67167bc08792c18983fa48806c20a2e5e53b981e28dac209560771dce697054e",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/reveal-shard-peak.png",
+      "bytes": 177938,
+      "sha256": "c444f778f3076baeb43415e0af48925cea7a041f0e1109abe8a75ec856c6ce71",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/reveal-shard-prepare.png",
+      "bytes": 78399,
+      "sha256": "84b322e7fd2d330d47eb8773c607d9aafdc1893bf8b20b7aa4d9045882c1f464",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/reveal-shard-settle.png",
+      "bytes": 53810,
+      "sha256": "747f6b39e1f18af789fc5e0186361b2a847eec1cfd26e6512ced3a29cc027528",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/ten-burst-peak.png",
+      "bytes": 197419,
+      "sha256": "bd03836ea71da5b20ecd65923014dae9778a40ea25dcffbbbc53189cee27e993",
+      "size": [
+        512,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/ten-burst-prepare.png",
+      "bytes": 36194,
+      "sha256": "ee79eec9d8ad7e2ad0cf09bc5e465348964f28b8847d332b00c455c91f84a51f",
+      "size": [
+        512,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/ten-burst-settle.png",
+      "bytes": 63999,
+      "sha256": "8c303f27796ba8763cb0c647573b9d9041225817a8f10429166a6b96868c453e",
+      "size": [
+        512,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/thread-pillar-peak.png",
+      "bytes": 364709,
+      "sha256": "85632f3654b674b9ce74ef7e07e4936a6436147500490fb8c9db1927c51ae5a7",
+      "size": [
+        512,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/thread-pillar-prepare.png",
+      "bytes": 117673,
+      "sha256": "083cc383b71a81233c27e0d7f8b2d096fdbeaed693d3e121826ba843922def06",
+      "size": [
+        512,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "vfx/thread-pillar-settle.png",
+      "bytes": 126423,
+      "sha256": "c2878f14e47339d263b1690d76378eda3c1d7352cb710c790d6c8cd9319584eb",
+      "size": [
+        512,
+        1024
+      ],
+      "mode": "RGBA"
+    }
+  ]
+}
