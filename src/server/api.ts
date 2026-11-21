@@ -130,7 +130,7 @@ export async function handle(request: Request, deps: ApiDeps): Promise<Response>
 }
 
 const ROUTES: Record<string, 'GET' | 'POST'> = {
-  '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/command': 'POST', '/v1/worldboss': 'GET', '/v1/verify': 'POST', '/v1/import': 'POST',
+  '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/gacha/history': 'GET', '/v1/command': 'POST', '/v1/worldboss': 'GET', '/v1/verify': 'POST', '/v1/import': 'POST',
   '/v1/account': 'GET', '/v1/link': 'POST', '/v1/signin': 'POST', '/v1/recovery-code': 'POST', '/v1/recover': 'POST', '/v1/sessions/revoke': 'POST',
   '/v1/account/delete': 'POST', '/v1/account/cancel': 'POST',
   '/v1/token/rotate': 'POST', '/v1/telemetry': 'POST', '/v1/feedback': 'POST', '/v1/admin/telemetry': 'GET', '/v1/admin/feedback': 'GET',
@@ -186,6 +186,7 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
     return entered;
   }
   if (path === '/v1/state') return deliverHits(deps, accountId, game, await game.fetch(new Request('https://game/state', { headers: sessionHeaders })));
+  if (path === '/v1/gacha/history') { const q = new URL(request.url).search; return game.fetch(new Request(`https://game/gacha${q}`, { headers: sessionHeaders })); }
   if (!/^application\/json\b/i.test(request.headers.get('Content-Type') ?? '')) return error('unsupported_media_type', 415);
   const body = await readLimited(request, MAX_COMMAND_BYTES);
   if (body === null) return error('too_large', 413);

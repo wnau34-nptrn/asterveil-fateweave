@@ -156,11 +156,21 @@ export class GameHost {
     let parsed: Game;
     try { parsed = parseGame(upload.payload, this.ctx.home, this.ctx.lookup, this.ctx.maps); } catch { return { status: 422, body: { error: 'replay_failed' } }; }
     // The one-time migration summary is for a local load's message; the server keeps the game itself.
-    const next: Game = { profile: parsed.profile, run: parsed.run };
+    // P10 (D24, agent recommendation): a wallet earned on a device never becomes online rights. The import keeps every
+    // character, star and shard the save holds (as D11 always did) but starts the gacha wallet empty.
+    const { gacha: _local, ...profile } = parsed.profile; void _local;
+    const next: Game = { profile, run: parsed.run };
     const at = this.now();
     this.store.commitImport({ game: next, book }, { seq: book.lastSeq, game: next, origin: 'import', at },
       { requestId: upload.requestId, payloadSha256: upload.payloadSha256, saveVersion: upload.saveVersion, seq: book.lastSeq, at }, upload.payload);
     return { status: 201, body: { ...this.view(), from: upload.saveVersion }, replayed: false };
+  }
+
+  // P10: committed gacha entries from the ledger (the server's own journal, kept beyond the profile's recent history),
+  // newest first, below serial `before` (0 = from the newest); `more` when older ones remain.
+  gachaHistory(before: number, limit: number): { entries: { entry: NonNullable<LedgerRow['gacha']>; day: number; at: number }[]; more: boolean } {
+    const rows = this.store.ledger().filter(r => r.kind === 'gacha' && r.gacha && (!before || r.gacha.serial < before)).reverse();
+    return { entries: rows.slice(0, limit).map(r => ({ entry: r.gacha!, day: r.day, at: r.at })), more: rows.length > limit };
   }
 
   // P11-04: the hits waiting for the shared object, and the ones it has taken.

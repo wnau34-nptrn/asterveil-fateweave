@@ -7,7 +7,7 @@ import type { D1Like } from './accounts';
 // error codes. No account id, device, IP or free text is stored.
 
 export interface TelemetryItem { kind: TelemetryKind; key: string }
-export type TelemetryKind = 'session' | 'commander' | 'run_start' | 'run_end' | 'battle' | 'client_error' | 'feedback';
+export type TelemetryKind = 'session' | 'commander' | 'run_start' | 'run_end' | 'battle' | 'client_error' | 'feedback' | 'gacha';
 
 const SAFE_KEY = /^[a-z0-9_:-]{1,64}$/i;
 const safe = (s: string) => SAFE_KEY.test(s) ? s : 'other';
@@ -17,6 +17,10 @@ export function telemetryOf(before: Game | null, after: Game | null, events: rea
   const out: TelemetryItem[] = [];
   if (!before?.profile.commander && after?.profile.commander) out.push({ kind: 'commander', key: 'created' });
   for (const e of events) if (e.type === 'departed') out.push({ kind: 'run_start', key: safe(`${e.mapId}${e.hard ? ':hard' : ''}`) });
+  // P10: daily counts with no account id, to check the observed rates against the published ones (pull, full, shard
+  // quantity per draw; exchanges). One item per draw.
+  for (const e of events) if (e.type === 'gacha') for (const r of e.entry.results)
+    out.push({ kind: 'gacha', key: e.entry.kind === 'exchange' ? 'exchange' : r.full ? 'full' : `shard:${r.qty}` });
   const settled = events.find(e => e.type === 'settled');
   const prevRun = before?.run ?? null, nextRun = after?.run ?? null;
   if (prevRun?.battle && (!nextRun || !nextRun.battle || nextRun.battle.encounterId !== prevRun.battle.encounterId || nextRun.battle.commands.length < prevRun.battle.commands.length)) {

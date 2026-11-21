@@ -1,3 +1,11 @@
+## 2026-11-21 — P10 free-ticket gacha: spec, rules, server, 390px cabinet (Opus; claude/p10-gacha-* → game branch, PRs #327–#330)
+- Owner: “ทำระบบกาชาก่อน”; 80-point exchange, 7.5% full over 15, else 1–2 shards, 96 tickets/28 days from existing sources, no sales → OD-58 + [spec](../design/GACHA_P10_SPEC_TH.md) (#327 merged).
+- #328 core: `core/world/gacha.ts` (one seed per pull, 10 = 10×1, grants joined/duplicate/universal/shards/stored/unlocked), commands `gachaPull`/`gachaExchange` (config version checked), `rules.ts` `gacha` v1 + tickets on board/trio (24/week), opens after MAP2, save v66. Shard units mapped to P04-02 (dup 10, unlock 50).
+- #329 server: ledger `gacha:<serial>` (+`detail` column), `GET /v1/gacha/history`, id-free telemetry `gacha`, import starts the wallet empty (D24 recommendation). No D1 migration needed.
+- #330 UI: third hiring tab “ทอชะตา” (confirm → results from the committed entry, rates, exchange, history). **Waits for owner visual approval** (390px shots + clip in [validation](../validation/p10-gacha-2026-11-21/README_TH.md)).
+- Tests: typecheck, lint, `npm test` 2155+, gacha/server-gacha/gacha-sim, Playwright gacha (3) locally; CI per PR. Simulated: real rules, 2,000 players (spec §4).
+- Open: owner approval of UI + D24 + shard-unit mapping; staging load test with concurrent pulls; #212 art not integrated; real devices.
+
 ## 2026-11-21 — Image-blank B4 (blurred placeholders) + B5 (lossy map atlases) (Sonnet; claude/image-blank-b4-b5 → game branch, PR #325)
 - Owner: “ทำ B4 กับ B5 ต่อใน chat ใหม่”. Presentation/encoding only. Owner approved the images in their own words: “ภาพใช้ได้ merge ได้เลย”.
 - B4: `scripts/build-lqip.py` → `src/ui/lqip.generated.ts` (8 paintings), `src/ui/lqip.ts` `trackLqip`, CSS at the end of `game-feel.css`; wired into title, camp backdrop, battle, story.
