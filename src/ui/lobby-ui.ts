@@ -1,4 +1,5 @@
 import { savePlace } from './save-place';
+import { trackLqip } from './lqip';
 import {HuntPanel} from './loot-guide';
 import {StorageManager} from './storage-manager';
 import {storageCap,departureBlocked,type StorageSource} from '../core/world/storage';
@@ -357,7 +358,7 @@ export class LobbyUI {
     const edges = () => { const max = pan.scrollWidth - pan.clientWidth; shell.classList.toggle('pan-start', pan.scrollLeft <= 4); shell.classList.toggle('pan-end', pan.scrollLeft >= max - 4); };
     // The camp painting is drawn on a screen-sized backdrop that follows the pan, not on the 3-screen-wide world:
     // one huge painted layer left black bands at the ends on iOS. Same placement as `cover` on the world.
-    const backdrop = this.root.querySelector<HTMLElement>('.lobby-backdrop')!;
+    const backdrop = this.root.querySelector<HTMLElement>('.lobby-backdrop')!; trackLqip(backdrop, lobbyArt('lobby_bg'));
     const place = () => {
       const worldW = pan.scrollWidth, h = pan.clientHeight; const scale = Math.max(worldW / 2400, h / 1000); const iw = 2400 * scale, ih = 1000 * scale;
       backdrop.style.backgroundSize = `${iw}px ${ih}px`; backdrop.style.backgroundPosition = `${(worldW - iw) / 2 - pan.scrollLeft}px ${(h - ih) * .72}px`;

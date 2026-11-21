@@ -39,6 +39,7 @@ import { prologue, prologueEnd, recruitStory, StoryUI } from './story-ui';
 import { WorldUI, type WorldBanner } from './world-ui';
 import { icon, type IconName } from './icons';
 import { SCREEN_IMAGE_CAP_MS, imagesReady, prefetchImagesIdle, whenImagesReady } from './image-ready';
+import { trackLqip } from './lqip';
 import { battleBackdropUrl, battleSceneOf, campImages, worldImages, type BattleBackdrop } from './screen-images';
 import { lobbyArt } from '../game/visuals/assets';
 // B6: how long the title stays up before a mid-battle save starts building its battle textures (draft).
@@ -409,7 +410,7 @@ export class GameShell {
     // B1 on the title: the party painting fades in once decoded instead of painting top-down; B2/B6 start after it.
     const titleArt = [`${import.meta.env.BASE_URL}assets/title/title_party.webp`, `${import.meta.env.BASE_URL}assets/title/logo.svg`];
     const stage = this.views.title.querySelector<HTMLElement>('.title-stage');
-    if (stage && !imagesReady(titleArt)) stage.dataset.art = 'wait';
+    if (stage && !imagesReady(titleArt)) { stage.dataset.art = 'wait'; trackLqip(stage, titleArt[0]!); }
     void whenImagesReady(titleArt, SCREEN_IMAGE_CAP_MS).then(() => { if (stage) delete stage.dataset.art; this.prefetchFromTitle(); });
   }
   // P09-02e (owner D11): server play leaves the local save untouched; while the account has no game it may become the

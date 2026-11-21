@@ -62,7 +62,7 @@ test('P03 Kael: gathers chi from a real hit, shows it, then releases it; reload 
   const game = depart(profile(), map, lookup, 223);
   game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(game.run.roster.deployed.map(id => [id, game.run.hp[id]!])), commands: [] };
   const errors = await open(page, serialize(game));
-  if (await page.locator('#start').isVisible()) await page.locator('#start').click();
+  await page.locator('#battle-view').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}); if (await page.locator('#start').isVisible()) await page.locator('#start').click();
   const kaelTurn = async () => {
     for (let i = 0; i < 12; i++) {
       // Wait for playback to hand the next command to the player.
@@ -92,7 +92,7 @@ test('P03 Wynne: a curse is laid on a real foe, shown in its status and ticks at
   const game = depart(p, map, lookup, 227);
   game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(game.run.roster.deployed.map(id => [id, game.run.hp[id]!])), commands: [] };
   const errors = await open(page, serialize(game));
-  if (await page.locator('#start').isVisible()) await page.locator('#start').click();
+  await page.locator('#battle-view').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}); if (await page.locator('#start').isVisible()) await page.locator('#start').click();
   for (let i = 0; i < 12; i++) {
     await expect(page.getByRole('heading', { name: /เทิร์นของคุณ/ })).toBeVisible({ timeout: 15000 });
     if (await page.locator('#hero-wynne').getAttribute('aria-pressed') === 'true') break;
@@ -116,7 +116,7 @@ test('P03 Astrid: deflect asks for the recipient before one commit; closing the 
   const game = depart(p, map, lookup, 229);
   game.run.battle = { kind: 'random', encounterId: 'veil-siege', entry: Object.fromEntries(game.run.roster.deployed.map(id => [id, game.run.hp[id]!])), commands: [] };
   const errors = await open(page, serialize(game));
-  if (await page.locator('#start').isVisible()) await page.locator('#start').click();
+  await page.locator('#battle-view').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}); if (await page.locator('#start').isVisible()) await page.locator('#start').click();
   for (let i = 0; i < 12; i++) {
     await expect(page.getByRole('heading', { name: /เทิร์นของคุณ/ })).toBeVisible({ timeout: 15000 });
     if (await page.locator('#hero-astrid').getAttribute('aria-pressed') === 'true' && await page.locator('#action-deflectfate').isEnabled()

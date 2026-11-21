@@ -29,11 +29,15 @@ const hold = (page: Page, pattern: string, ms: number, status = 200) => page.rou
 });
 
 test('the camp waits for its backdrop and NPCs; the Continue button shows loading meanwhile', async ({ page }) => {
-  await hold(page, '**/assets/lobby/lobby_bg.webp', 900); await hold(page, '**/assets/lobby/npc/npc_smith.webp', 900);
-  await seed(page, campSave()); await page.goto('./');
+  // The camp is built (and its backdrop requested) at start-up, so the backdrop is held until after the click.
+  let release = () => {}; const gate = new Promise<void>(r => { release = r; });
+  await page.route('**/assets/lobby/lobby_bg.webp', async route => { await gate; await route.continue(); });
+  await hold(page, '**/assets/lobby/npc/npc_smith.webp', 900);
+  await seed(page, campSave()); await page.goto('./', { waitUntil: 'commit' });
   await expect(page.locator('#continue')).toBeVisible();
   await watchView(page, '#lobby-view', ['lobby_bg.webp', 'npc_smith.webp']);
   const t0 = Date.now(); await page.locator('#continue').click();
+  setTimeout(release, 700);
   await expect(page.locator('#continue')).toHaveClass(/is-loading/); await expect(page.locator('#continue')).toHaveAttribute('aria-busy', 'true');
   await expect(page.locator('#title-view')).toBeVisible();
   const at = await shown(page);
@@ -44,7 +48,7 @@ test('the camp waits for its backdrop and NPCs; the Continue button shows loadin
 });
 
 test('the map waits for its tiles, and a tap during the wait does nothing', async ({ page }) => {
-  await hold(page, '**/assets/world/tileset.webp', 900); await hold(page, '**/assets/world/decor.webp', 900);
+  await hold(page, '**/assets/world/tileset.webp*', 900); await hold(page, '**/assets/world/decor.webp*', 900);
   await seed(page, mapSave()); await page.goto('./');
   await expect(page.locator('#continue')).toBeVisible();
   await watchView(page, '#world-view', ['tileset.webp', 'decor.webp']);
