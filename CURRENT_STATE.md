@@ -6,7 +6,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml`, which again runs the Chromium suite before deploy (P12).
 - Save v65 (P11-05 trio book/boss shards/trio items; v64 World Boss book; v63 board book); Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5 by chapter, carry≤10, fatigue and team presets. W1–W8/P01/P02 done; 15 classes×1 active character; thiran/wila parked. No gacha wallet. P09 server authority, ledger, weekly shards done (`?server=off` for local; [docs/design/p09/README_TH.md](docs/design/p09/README_TH.md)).
-- Perf: R1–R11 merged (`docs/validation/perf-r*-2026-11-20/`, `?sw=off` clears the R8 cache). Image-blank fix (2026-11-21, B1/B2/B3/B6): screens wait ≤1.8 s for decoded main images, next screen prefetched, title preload, saved battle prefetched after 2.5 s on the title (drafts). B4/B5 built on `claude/image-blank-b4-b5` (PR open; waits for the owner's approval of the images, [validation](docs/validation/image-blank-b4-b5-2026-11-21/README_TH.md)).
+- Perf: R1–R11 merged (`docs/validation/perf-r*-2026-11-20/`, `?sw=off` clears the R8 cache). Image-blank fix (2026-11-21, B1/B2/B3/B6): screens wait ≤1.8 s for decoded main images, next screen prefetched, title preload, saved battle prefetched after 2.5 s on the title (drafts). B4/B5 (blurred placeholders, lossy map atlases; owner approved the images 2026-11-21, PR #325, [validation](docs/validation/image-blank-b4-b5-2026-11-21/README_TH.md)).
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3.
 - Title uses the original party artwork with a compact primary dock and top-right Setup for audio, save details, account/recovery, feedback, privacy and restart. Import stays the primary action while a local-save offer is available.
 - Art delegation remains: record agent picks as agent decisions, never owner visual approval.
@@ -36,4 +36,4 @@ Preserve unpushed/gacha work.
 
 ## Opening prompt for next chat
 
-Owner picks. P11-05 readiness check done (nothing to do before the switch). Image-blank B4/B5 PR waits for the owner's image approval, then merge. After Mon 23 Nov 06:00 Bangkok: confirm the trio on the dev API (`/v1/worldboss` three bars).
+Owner picks. P11-05 readiness check done (nothing to do before the switch). Re-measure image loading on a real phone. After Mon 23 Nov 06:00 Bangkok: confirm the trio on the dev API (`/v1/worldboss` three bars).
