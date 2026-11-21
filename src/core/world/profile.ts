@@ -105,10 +105,23 @@ export function hire(initial: Profile, map: MapDefinition, lookup: EncounterLook
   profile.bank.gold -= map.company.hireCost; profile.taken.push(index);
   if (duplicate) addDuplicate(profile, map, id);
   else {
-    profile.members[id] = { stars: 1, shards: 0 }; profile.company.push(id);
+    profile.members[id] = { stars: 1, shards: takePending(profile, id) }; profile.company.push(id);
     if (profile.party.reserve.length < reserveSlots(profile, map)) profile.party.reserve.push(id);
   }
   return { profile, event: { type: 'hired', heroId: id, duplicate } };
+}
+// P10: character shards a gacha kept for `id` before it joined (removed from the wallet; 0 when none).
+function takePending(profile: Profile, id: string): number {
+  const pending = profile.gacha?.pending; const n = pending?.[id] ?? 0;
+  if (pending && id in pending) { delete pending[id]; if (!Object.keys(pending).length) delete profile.gacha!.pending; }
+  return n;
+}
+// A new member joins the company at ★1 (story recruit, starter pick, gacha): the field if there is room, else the
+// reserve if there is room, else the bench. Shards the gacha kept for them come along (P10).
+export function joinCompany(profile: Profile, map: MapDefinition, id: string): void {
+  profile.members[id] = { stars: 1, shards: takePending(profile, id) }; profile.company.push(id);
+  const group = profile.party.deployed.length < PARTY_SLOTS ? 'deployed' : profile.party.reserve.length < reserveSlots(profile, map) ? 'reserve' : undefined;
+  if (group) profile.party[group].push(id);
 }
 // A duplicate of `id` (hire, contract, story recruit already owned — OD-22): character shards, or universal shards when
 // the member is already at full stars (OD-04).
@@ -348,12 +361,7 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
     if (run.recruited?.includes(id) || profile.storyShards?.includes(id)) { if (run.recruited?.includes(id)) (profile.storyShards ??= []).push(id); continue; }
     if (profile.members[id]) { addDuplicate(profile, map, id); (profile.storyShards ??= []).push(id); }
   }
-  for (const id of run.recruited ?? []) {
-    if (profile.members[id]) continue;
-    profile.members[id] = { stars: 1, shards: 0 }; profile.company.push(id);
-    const group = profile.party.deployed.length < PARTY_SLOTS ? 'deployed' : profile.party.reserve.length < reserveSlots(profile, map) ? 'reserve' : undefined;
-    if (group) profile.party[group].push(id);
-  }
+  for (const id of run.recruited ?? []) if (!profile.members[id]) joinCompany(profile, map, id);
   for (const id of run.guests ?? []) {
     for (const item of Object.values(run.members[id]?.gear ?? {}) as Item[]) (item.uid ? run.spare : run.found).push(item);
     delete run.members[id];

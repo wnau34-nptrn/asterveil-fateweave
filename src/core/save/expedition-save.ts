@@ -3,7 +3,7 @@ import {storageCap} from '../world/storage';
 import { entryReason, MAGIC_DAMAGE_SKILLS, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { presetNameReason } from '../world/presets';
-import { LEGACY_RESERVE, PARTY_SLOTS, PRESET_SLOTS, RESERVE_SLOTS, type TeamPreset, type ActiveBattle, type CampMigration, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
+import { LEGACY_RESERVE, PARTY_SLOTS, PRESET_SLOTS, RESERVE_SLOTS, type TeamPreset, type GachaBook, type GachaEntry, type GachaGrant, type GachaResult, type ActiveBattle, type CampMigration, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
 import { EVENT_CHOICES, campLevel, draftOffers, skillChoices, battleState, expToNext, findTiles, levelXp, maxCampXp, type Party, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
@@ -164,7 +164,10 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // warden's `legacy` tally (a v64 week moves there with its attempts, so no attempt is refilled); trio shared milestone
 // ids carry the boss (`kragmor:s-50`); the profile may carry `bossShards`; items may carry the trio powers
 // bulwark/breaker/reaper (body/gloves/head). Older saves load unchanged otherwise.
-export const SAVE_VERSION = 65;
+// v66 (P10): the profile may carry the free-ticket gacha wallet `gacha` (tickets, points, serial, shards kept for
+// characters not yet owned, recent history); board and trio rewards may pay tickets. Optional, so a v65 save loads
+// unchanged (missing = no tickets yet).
+export const SAVE_VERSION = 66;
 // Trees refunded by older migrations were legal under star points (at most ★5 = 4 extra).
 const LEGACY_STAR_POINTS = 4;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
@@ -423,6 +426,37 @@ function worldBossOf(v: unknown, map: MapDefinition): WorldBossBook {
   });
   if (weeks.length === 2 && weeks[0]!.week !== weeks[1]!.week - 1) bad();
   return { weeks };
+}
+// P10 (v66): the gacha wallet. Pending shards belong to cabinet characters the company does not own, below the unlock
+// amount; history entries are the newest `historyKeep` in serial order, each shaped as its kind makes it.
+const GACHA_GRANTS: readonly GachaGrant[] = ['joined', 'duplicate', 'universal', 'shards', 'stored', 'unlocked'];
+function gachaOf(v: unknown, map: MapDefinition, company: readonly string[]): GachaBook {
+  const g = obj(v); const r = map.gacha; const bad = (): never => { throw new Error('Invalid gacha'); };
+  if (Object.keys(g).some(k => !['tickets', 'points', 'serial', 'pending', 'history'].includes(k))) bad();
+  if (!isInt(g.tickets, 0, r.ticketCap) || !isInt(g.points, 0, r.pointCap) || !isInt(g.serial, 0, 1e9) || !Array.isArray(g.history) || g.history.length > r.historyKeep) bad();
+  const known = new Set([...r.pool, ...map.mercenaries.map(m => m.id), ...company]);
+  let pending: Record<string, number> | undefined;
+  if (g.pending !== undefined) {
+    const raw = obj(g.pending); const keys = Object.keys(raw);
+    if (!keys.length || keys.some(k => !r.pool.includes(k) || company.includes(k) || !isInt(raw[k], 1, r.unlockShards - 1))) bad();
+    pending = Object.fromEntries(keys.map(k => [k, raw[k] as number]));
+  }
+  let last = 0; const max = Math.max(...r.counts);
+  const history = (g.history as unknown[]).map((raw): GachaEntry => {
+    const e = obj(raw);
+    if (Object.keys(e).length !== 6 || !isInt(e.serial, last + 1, g.serial as number) || !isInt(e.config, 1, 1e6) || (e.kind !== 'pull' && e.kind !== 'exchange')
+      || !isInt(e.tickets, 0, max * 99) || !isInt(e.points, 1, r.pointCap) || !Array.isArray(e.results) || !e.results.length || e.results.length > max) bad();
+    last = e.serial as number;
+    if (e.kind === 'pull' ? e.points !== (e.results as unknown[]).length : e.tickets !== 0 || (e.results as unknown[]).length !== 1) bad();
+    const results = (e.results as unknown[]).map((x): GachaResult => {
+      const o = obj(x);
+      if (Object.keys(o).length !== 4 || typeof o.heroId !== 'string' || !known.has(o.heroId) || typeof o.full !== 'boolean' || !isInt(o.qty, 0, 999)
+        || !GACHA_GRANTS.includes(o.grant as GachaGrant) || (e.kind === 'exchange' && !o.full)) bad();
+      return { heroId: o.heroId as string, full: o.full as boolean, qty: o.qty as number, grant: o.grant as GachaGrant };
+    });
+    return { serial: e.serial as number, kind: e.kind as GachaEntry['kind'], config: e.config as number, tickets: e.tickets as number, points: e.points as number, results };
+  });
+  return { tickets: g.tickets as number, points: g.points as number, serial: g.serial as number, ...(pending ? { pending } : {}), history };
 }
 function bossShardsOf(v: unknown, map: MapDefinition): Partial<Record<WbBossId, number>> {
   const b = obj(v); const keys = Object.keys(b);
@@ -755,6 +789,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const board = p.board === undefined ? undefined : boardOf(p.board, map, maps);
   const worldBoss = p.worldBoss === undefined ? undefined : worldBossOf(p.worldBoss, map);
   const bossShards = p.bossShards === undefined ? undefined : bossShardsOf(p.bossShards, map);
+  const gacha = p.gacha === undefined ? undefined : gachaOf(p.gacha, map, company as string[]);
   // v44 → v45 (P02): the fifth field slot is filled from the reserve, and a reserve above the chapter's slots steps into
   // the field first (there is always room: four deployed at most before v45). Nobody leaves the team.
   const slots = reserveSlots({ cleared, ...(veteran ? { veteran: true as const } : {}) }, map);
@@ -762,7 +797,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (party.reserve.length > slots) throw new Error('Invalid party');
   return {...(presets ? { presets } : {}),...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(boardFeatured ? { boardFeatured: [...boardFeatured as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     ...(storyShards ? { storyShards } : {}), ...(treeReset?.length ? { treeReset } : {}),
-    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}), ...(sweep ? { sweep } : {}), ...(board ? { board } : {}), ...(worldBoss ? { worldBoss } : {}), ...(bossShards ? { bossShards } : {}),
+    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}), ...(sweep ? { sweep } : {}), ...(board ? { board } : {}), ...(worldBoss ? { worldBoss } : {}), ...(bossShards ? { bossShards } : {}), ...(gacha ? { gacha } : {}),
     bank: { ore: bank.ore as number, gold: bank.gold as number, shard: bank.shard as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, POTION_CAP), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -980,7 +1015,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
   if (version < 60 && version >= 5) { const p = obj(envelope.profile ?? {}); migrateTreePoints(envelope, map, maps.length ? maps : [map], version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps).length : undefined); }
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

@@ -164,10 +164,10 @@ describe('settling: flags, story reward and camp lines', () => {
 describe('save v61', () => {
   const profile = (): Profile => { const p = newProfile(ruinsMap, 3, ['guardian', 'tracer', 'weaver', 'healer']); p.tutorialDone = true; return p; };
   it('round-trips the story flags, paid quests, last result and the run counters', () => {
-    expect(SAVE_VERSION).toBe(65);
+    expect(SAVE_VERSION).toBe(66);
     const p = settle(profile(), run(ruinsMap, { openedChests: ruinsMap.chests.map(c => c.id), choices: { 'ruins-traveller': 'guide' }, eventsDone: ['ruins-traveller'] }), 'withdrawn', ruinsMap);
     const r = { ...run(forestMap), choices: { 'forest-camp': 'search' as const, 'forest-shrine': 'offer' as const }, downed: 3 };
-    const raw = write({ profile: p, run: r }); expect(JSON.parse(raw).version).toBe(65);
+    const raw = write({ profile: p, run: r }); expect(JSON.parse(raw).version).toBe(66);
     expect(parseGame(raw, forestMap, lookup, MAPS)).toEqual({ profile: p, run: r });
   });
   it('a v60 save without the new fields loads unchanged', () => {

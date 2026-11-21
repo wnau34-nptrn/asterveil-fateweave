@@ -59,7 +59,7 @@ export function battleLessonTip(profile: Profile, kind: string, seen: readonly L
 const FEATURE_TARGET: Record<LobbyFeature, string> = {
   gear: '#lobby-tab-gear', tree: '#lobby-tab-team', team: '#lobby-tab-team', tomes: '#lobby-tab-team', forge: '#lobby-tab-forge', level: '#lobby-tab-forge',
   fuse: '#lobby-tab-forge', craft: '#lobby-tab-forge', transfer: '#lobby-tab-forge', bossCharm: '#lobby-tab-hunt', brew: '#lobby-tab-brew',
-  hire: '#lobby-tab-hire', market: '#lobby-tab-hire', hunt: '#lobby-tab-hunt', quests: '#lobby-board', hard: '#lobby-maps',
+  hire: '#lobby-tab-hire', market: '#lobby-tab-hire', hunt: '#lobby-tab-hunt', quests: '#lobby-board', hard: '#lobby-maps', gacha: '#lobby-tab-hire',
 };
 const CARD_TEXT: Record<GuideKind, string> = {
   wear: 'เปิดอุปกรณ์ แล้วสวมของ 1 ชิ้นให้สมาชิก', talent: 'เปิดทีม → ตัวละคร → สกิลกิ่ง แล้วลงแต้ม 1 แต้ม', calm: 'กดรับยาฟื้นความเหนื่อยในการ์ดนี้',

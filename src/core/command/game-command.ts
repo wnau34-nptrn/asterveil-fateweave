@@ -14,6 +14,7 @@ import { collectOverflow, departureBlocked, expandStorage, recycleSelection, typ
 import { chooseHuntTarget } from '../world/targeted-loot';
 import { sweep } from '../world/sweep';
 import { claimBoard, weekOf } from '../world/board';
+import { gachaExchange, gachaPull, pullReason } from '../world/gacha';
 import { claimWorldBoss, craftBossItem, worldBossAttempt, type WorldBossShared } from '../world/world-boss';
 import { raiseSkill, tradeTomes } from '../world/tomes';
 import {
@@ -85,6 +86,10 @@ export type CampCommand =
   // P11-05: `boss` names the trio boss fought (required from `trio.from` on; left out while the warden stands).
   | { kind: 'worldBoss'; attempt: number; commands: Command[]; day?: number; boss?: WbBossId }
   | { kind: 'claimWorldBoss'; id: string; week: number; day?: number }
+  // P10 free-ticket gacha: `count` pulls (1 or 10) or an exchange of points for `heroId`, each naming the cabinet's config
+  // `version` the player saw (another version is refused, so nothing is drawn under rules the player did not confirm).
+  | { kind: 'gachaPull'; count: number; config: number }
+  | { kind: 'gachaExchange'; heroId: string; config: number }
   // `day` (P05-06): the device's calendar day, for the run's quest-board progress (missing = the run counts nowhere;
   // online the server's day is used and a device day is refused).
   | { kind: 'depart'; mapId?: string; hard: boolean; day?: number };
@@ -149,6 +154,7 @@ const SPECS: Record<CommandKind, Spec> = {
   lockEquipment: { uid: 'int' }, fuse: { uid: 'int', donors: opt('ints') }, raiseItemLevel: { uid: 'int', target: 'int' }, reroll: { uid: 'int', index: 'int' },
   brew: { potion: POTION_IDS }, claimQuest: { questId: 'str' }, sweep: { mapId: 'str', hard: 'bool', day: opt('int'), serial: 'int' }, claimBoard: { tab: ['daily', 'weekly', 'contract'], id: 'str', period: 'int', day: opt('int') },
   worldBoss: { attempt: 'int', commands: 'commands', day: opt('int'), boss: opt(WB_BOSSES) }, claimWorldBoss: { id: 'str', week: 'int', day: opt('int') },
+  gachaPull: { count: 'int', config: 'int' }, gachaExchange: { heroId: 'str', config: 'int' },
   depart: { mapId: opt('str'), hard: 'bool', day: opt('int') },
   move: { dir: DIRECTIONS }, travel: { to: 'point' }, rest: {}, revive: { heroId: 'str' }, swapMembers: { a: 'str', b: 'str' },
   setLane: { heroId: 'str', lane: LANES, other: opt('str') }, moveMember: { heroId: 'str' }, runPreset: { slot: 'int' }, withdraw: {}, openChest: {},
@@ -274,6 +280,9 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
     case 'claimBoard': return featureOpen(p, maps, 'quests') ? camp(claimBoard(p, maps, cmd.tab, cmd.id, cmd.period, day ?? -1)) : reject('locked');
     case 'worldBoss': return camp(worldBossAttempt(p, maps, lookup, weekOf(day ?? -7), cmd.attempt, cmd.commands, cmd.boss));
     case 'claimWorldBoss': return camp(claimWorldBoss(p, maps, cmd.id, cmd.week, weekOf(day ?? -7), ctx.worldBoss));
+    // The seed is drawn only for a pull the rules accept, so a refused pull uses none (the log replays the same draws).
+    case 'gachaPull': { const why = pullReason(p, maps, map, cmd.count, cmd.config); return why ? reject(why) : camp(gachaPull(p, maps, map, cmd.count, cmd.config, ctx.seeds.next()), 'gacha'); }
+    case 'gachaExchange': return camp(gachaExchange(p, maps, map, cmd.heroId, cmd.config), 'gacha');
     case 'depart': {
       if (departureBlocked(p)) return reject('storage');
       // The prologue always starts on the first map; otherwise the named open map (default: the furthest open one).
@@ -341,7 +350,7 @@ function applyRunCommand(game: Game | null, cmd: RunCommand, ctx: CommandContext
 }
 
 const CAMP_KINDS = new Set<CommandKind>(COMMAND_KINDS.slice(0, COMMAND_KINDS.indexOf('depart') + 1));
-// Pure: never mutates `game`; seeds come only from `ctx.seeds` (createCommander with a new profile, depart).
+// Pure: never mutates `game`; seeds come only from `ctx.seeds` (createCommander with a new profile, depart, gachaPull).
 export function applyCommand(game: Game | null, cmd: GameCommand, ctx: CommandContext): CommandResult {
   return CAMP_KINDS.has(cmd.kind) ? applyCampCommand(game, cmd as CampCommand, ctx) : applyRunCommand(game, cmd as RunCommand, ctx);
 }

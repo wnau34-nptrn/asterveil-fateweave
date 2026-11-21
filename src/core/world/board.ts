@@ -1,4 +1,5 @@
 import { bankFits, TOME_CAP } from './caps';
+import { addTickets, ticketsFit } from './gacha';
 import { emptyTomes, partyLine } from './tomes';
 import { rosterIds } from './world';
 import type {
@@ -119,7 +120,7 @@ export function boardClaimReason(profile: Profile, maps: readonly MapDefinition[
   if (e.set.claimed.includes(id)) return 'claimed';
   if (!e.done || !e.reward) return 'progress';
   const r = e.reward;
-  if (!bankFits(profile.bank, { ore: r.ore, gold: r.gold, dust: r.dust ?? 0, shard: r.shard ?? 0 })) return 'full';
+  if (!bankFits(profile.bank, { ore: r.ore, gold: r.gold, dust: r.dust ?? 0, shard: r.shard ?? 0 }) || !ticketsFit(profile, home, r.tickets)) return 'full';
   return (profile.tomes?.[partyLine(home, profile.party.deployed)].small ?? 0) + (r.tomes ?? 0) > TOME_CAP ? 'full' : '';
 }
 // All or nothing: the reward and the claimed mark change in one returned profile (a repeated claim is refused as
@@ -129,7 +130,7 @@ export function claimBoard(initial: Profile, maps: readonly MapDefinition[], tab
   const profile = structuredClone(initial); const home = maps[0]!; const book = boardBook(profile, home.board, day);
   const e = entry(book, home.board, maps, tab, id, period); const r = e.reward!;
   e.set!.claimed.push(id); profile.board = book;
-  profile.bank.ore += r.ore; profile.bank.gold += r.gold; profile.bank.dust += r.dust ?? 0; profile.bank.shard += r.shard ?? 0;
+  profile.bank.ore += r.ore; profile.bank.gold += r.gold; profile.bank.dust += r.dust ?? 0; profile.bank.shard += r.shard ?? 0; addTickets(profile, r.tickets);
   if (r.tomes) (profile.tomes ??= emptyTomes())[partyLine(home, profile.party.deployed)].small += r.tomes;
   return { profile, event: { type: 'boardClaimed', tab, id, period, reward: r } };
 }
