@@ -23,6 +23,8 @@ import { battleLesson } from './tutorial';
 import { morvaneAdvice, morvaneLesson } from './world-boss-advice';
 import { bossCrown, fieldHealthPath, healthColors, healthRatio, healthTone } from './battle-health';
 import { heroVoice } from './story-ui';
+import { trackLqip } from './lqip';
+import { battleBackdropUrl } from './screen-images';
 
 const tutorialKey = 'asterveil.fateweave.tutorial.v1';
 const morvaneHintsKey = 'asterveil.fateweave.morvane-hints.v1';
@@ -213,7 +215,7 @@ export class BattleUI {
     this.playback.cancel(); this.scene?.stopEffects(); this.presentation = undefined; this.busy = false;
     // Looping idles (the A4 bat hover) follow the saved effect level and OS preference from the first frame, not only once a turn plays.
     this.scene?.configureEffects(this.combatPrefs, window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    this.closeSkill(); this.session = session; this.root.dataset.scene = session.scene ?? 'ruins'; this.action = 'attack'; this.targeting = true;
+    this.closeSkill(); this.session = session; this.root.dataset.scene = session.scene ?? 'ruins'; trackLqip(this.root, battleBackdropUrl(session.scene ?? 'ruins')); this.action = 'attack'; this.targeting = true;
     this.canvasInputAfterInfo = performance.now() + 250;
     if (this.data !== session.data) { this.scene?.setEncounter(session.data); this.data = session.data; }
     this.state = replay(session.data, session.commands, session.entry);

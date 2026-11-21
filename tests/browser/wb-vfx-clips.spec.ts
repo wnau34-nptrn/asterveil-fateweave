@@ -14,7 +14,7 @@ for(const c of cases)test(`WB VFX clip ${slug(c)}`,async({browser},info)=>{
  const page=await ctx.newPage(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(`tests/browser/fixtures/wb-vfx.html?move=${encodeURIComponent(c.move)}&scenario=${c.scenario}`);
  await page.waitForFunction(()=>window.wbVfxQA.atlasReady(),undefined,{timeout:30000});
- if(await page.locator('#start').isVisible())await page.locator('#start').click();
+ await page.locator('#battle-view').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}); if(await page.locator('#start').isVisible())await page.locator('#start').click();
  await page.locator(`#action-${await page.evaluate(()=>window.wbVfxQA.action())}`).click();await page.evaluate(()=>document.fonts.ready.then(()=>undefined));
  await page.waitForTimeout(1200);
  await page.evaluate(()=>document.addEventListener('pointerdown',()=>{document.documentElement.dataset.wbClick=String(Date.now()/1000);},{capture:true,once:true}));

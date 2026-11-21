@@ -183,7 +183,7 @@ for (const [w, h] of sizes) test(`ui language audit ${w}x${h}`, async ({ browser
     for (let n = 0; b.outcome === 'active' && n < 200; n++) { const hero = currentHeroId(b, data)!; b = resolveCommand(b, data, { beat: b.beat, heroId: hero, action: 'attack', targetId: targetOptions(b, data, hero, 'attack').find(t => t.valid)!.id }).state; }
     const last = b.commands.at(-1)!; run.battle.commands = b.commands.slice(0, -1);
     const s = await open(browser, w, h, currentSave(game as never)), page = s.page;
-    await shot(page, '54-battle-victory', async () => { await click(page, '#continue'); if (await page.locator('#start').isVisible().catch(() => false)) await page.locator('#start').click(); await click(page, '#action-attack'); await click(page, `#target-${last.targetId}`); await expect(page.locator('#leave-battle')).toBeVisible({ timeout: 30000 }); });
+    await shot(page, '54-battle-victory', async () => { await click(page, '#continue'); await page.locator('#battle-view').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}); if (await page.locator('#start').isVisible().catch(() => false)) await page.locator('#start').click(); await click(page, '#action-attack'); await click(page, `#target-${last.targetId}`); await expect(page.locator('#leave-battle')).toBeVisible({ timeout: 30000 }); });
     await shot(page, '55-battle-rewards', async () => { await click(page, '#leave-battle'); await expect(page.locator('.battle-rewards')).toBeVisible({ timeout: 6000 }); });
     await s.close(); }
 

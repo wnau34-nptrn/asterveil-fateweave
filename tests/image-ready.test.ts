@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SCREEN_IMAGE_CAP_MS, imageCache, prefetchImagesIdle, whenImagesReady } from '../src/ui/image-ready';
 import { battleBackdropUrl, battleSceneOf, campImages, worldImages } from '../src/ui/screen-images';
+import { worldArtUrl } from '../src/game/visuals/world-art';
 
 // Image-blank fix 2026-11-21 (B1/B2): the screen-switch wait is presentation only — capped, never throws, a broken
 // file never holds a screen.
@@ -59,7 +60,7 @@ describe('screen image lists', () => {
     expect(new Set(main).size).toBe(main.length);
   });
   it('names the map tiles and the battle painting of each map', () => {
-    expect(worldImages().main).toEqual(expect.arrayContaining(['/assets/world/tileset.webp', '/assets/world/decor.webp', '/assets/world/fog_tile.webp']));
+    expect(worldImages().main).toEqual(expect.arrayContaining([worldArtUrl('tileset'), worldArtUrl('decor'), '/assets/world/fog_tile.webp']));
     expect(battleBackdropUrl(battleSceneOf('deep-forest'))).toBe('/assets/art/battle_forest.webp');
     expect(battleBackdropUrl(battleSceneOf('veil-frontier'))).toBe('/assets/art/battle_riftline.webp');
     expect(battleBackdropUrl('ruins')).toBe('/assets/art/ruins.webp');

@@ -7,6 +7,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml` (runs the Chromium suite before deploy).
 - Save **v66** (P10 gacha wallet; v65 trio; v64 World Boss; v63 board). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, team presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
 - **P10 gacha (OD-58, [spec](docs/design/GACHA_P10_SPEC_TH.md))**: rules/server merged via #328/#329; tickets from daily patrol 1, weekly tasks 2 each, trio p-2/p-4 2+2, trio 50% shared 1 each (≤24/week = 96/28 d); 7.5% full copy over 15, else 1–2 shards; 80 points exchange; opens after MAP2; journal `GET /v1/gacha/history`. **UI #330 waits for owner visual approval** (screens + clip in `docs/validation/p10-gacha-2026-11-21/`). No sales (G07 out of scope).
+- Perf R1–R11 merged; image-blank B1–B6 done (B4 blurred placeholders, B5 lossy map atlases: owner approved 2026-11-21, PR #325, [validation](docs/validation/image-blank-b4-b5-2026-11-21/README_TH.md)); re-measure on a real phone.
 - Unlock pacing #202: quests/team after MAP1; hire/market/hunt/gacha after MAP2; advanced services/hard after MAP3.
 - Art delegation: record agent picks as agent decisions, never owner visual approval.
 
@@ -21,7 +22,6 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 1. Approve the cabinet look/flow (#330) in their own words, then merge it.
 2. Confirm D24 (a device wallet never becomes online rights; import starts it empty) and the shard-unit mapping (duplicate 10, unlock 50, 1–2 live shards per pull; spec §3).
-3. Image-blank B4/B5 image review.
 
 ## Open items
 
