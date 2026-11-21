@@ -23,7 +23,7 @@ function fixture(camp = false) {
 async function open(page: Page, camp = false) {
   watchPage(page); const raw = fixture(camp);
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('team-tabs')) { localStorage.setItem(key, raw); sessionStorage.setItem('team-tabs', '1'); } }, { key, raw });
-  await page.goto('./'); await page.locator('#continue').click();
+  await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator(camp ? '#lobby-depart' : '#world-team')).toBeVisible();
 }
 const saved = (page: Page) => page.evaluate(k => localStorage.getItem(k)!, key);
 const game = async (page: Page) => parseGame(await saved(page), map, lookup, MAPS);
