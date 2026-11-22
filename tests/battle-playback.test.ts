@@ -37,7 +37,8 @@ describe('presentation boundaries without rule changes', () => {
     expect(enemy.after!.heroes[2]!.hp).toBe(24);
     expect(r.state.heroes[2]!.hp).toBe(24);
   });
-  it('keeps replay/save state free of transient snapshots through every encounter route', () => {
+  // Replays every encounter from scratch each turn; with the map 4 sets it outgrew the 5 s default on CI runners.
+  it('keeps replay/save state free of transient snapshots through every encounter route', { timeout: 30_000 }, () => {
     for(const data of encounters){
       let s=createBattle(data);
       for(let n=0;n<100&&s.outcome==='active';n++){
