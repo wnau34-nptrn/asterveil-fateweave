@@ -1,0 +1,53 @@
+{
+  "tolerance": 0.12,
+  "minInliers": 12,
+  "report": {
+    "kael": [
+      {
+        "frame": 0,
+        "height": 466,
+        "scale": 1.0,
+        "inliers": 815,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 1,
+        "height": 478,
+        "scale": 0.973,
+        "inliers": 152,
+        "status": "ok"
+      },
+      {
+        "frame": 2,
+        "height": 490,
+        "scale": 0.888,
+        "inliers": 117,
+        "status": "ok"
+      },
+      {
+        "frame": 3,
+        "height": 474,
+        "scale": 1.007,
+        "inliers": 129,
+        "status": "ok"
+      },
+      {
+        "frame": 4,
+        "height": 471,
+        "scale": 0.962,
+        "inliers": 56,
+        "status": "ok"
+      }
+    ]
+  },
+  "frames": [
+    "seed",
+    "kael_sit",
+    "kael_cheer",
+    "kael_idle_alt",
+    "kael_idle_alt_r2"
+  ],
+  "command": "python3 scripts/unit-anatomy-audit.py --cells <seed+kael-poses> --json audit/kael.json",
+  "scriptExitCode": 0
+}

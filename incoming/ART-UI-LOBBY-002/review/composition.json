@@ -1,0 +1,59 @@
+{
+  "type": "art-only mock, not an in-game screenshot",
+  "size": [
+    390,
+    844
+  ],
+  "actors": [
+    {
+      "id": "guardian",
+      "x": 55,
+      "footY": 606,
+      "canvasSize": 90,
+      "mirrored": false
+    },
+    {
+      "id": "garran",
+      "x": 335,
+      "footY": 606,
+      "canvasSize": 90,
+      "mirrored": true
+    },
+    {
+      "id": "wynne",
+      "x": 195,
+      "footY": 606,
+      "canvasSize": 90,
+      "mirrored": false
+    },
+    {
+      "id": "lalin",
+      "x": 120,
+      "footY": 640,
+      "canvasSize": 105,
+      "mirrored": false
+    },
+    {
+      "id": "astrid",
+      "x": 274,
+      "footY": 640,
+      "canvasSize": 105,
+      "mirrored": true
+    },
+    {
+      "id": "metta",
+      "x": 64,
+      "footY": 721,
+      "canvasSize": 120,
+      "mirrored": false
+    },
+    {
+      "id": "kael",
+      "x": 326,
+      "footY": 721,
+      "canvasSize": 120,
+      "mirrored": true
+    }
+  ],
+  "note": "5 new + 2 existing = 7; requested staging mock, not current runtime party capacity."
+}

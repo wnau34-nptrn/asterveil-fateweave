@@ -1,0 +1,45 @@
+{
+  "tolerance": 0.12,
+  "minInliers": 12,
+  "report": {
+    "metta": [
+      {
+        "frame": 0,
+        "height": 460,
+        "scale": 1.0,
+        "inliers": 1939,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 1,
+        "height": 476,
+        "scale": 0.952,
+        "inliers": 227,
+        "status": "ok"
+      },
+      {
+        "frame": 2,
+        "height": 460,
+        "scale": 0.976,
+        "inliers": 197,
+        "status": "ok"
+      },
+      {
+        "frame": 3,
+        "height": 489,
+        "scale": 0.913,
+        "inliers": 91,
+        "status": "ok"
+      }
+    ]
+  },
+  "frames": [
+    "seed",
+    "metta_sit",
+    "metta_cheer",
+    "metta_idle_alt"
+  ],
+  "command": "python3 scripts/unit-anatomy-audit.py --cells <seed+metta-poses> --json audit/metta.json",
+  "scriptExitCode": 0
+}
