@@ -4,7 +4,7 @@ import { campLevel } from '../core/world/world';
 import { storyArt } from '../game/visuals/assets';
 import { gearArt, riftCoreArt } from './equip-art';
 import { icon, type IconName } from './icons';
-import { itemName, rarityText, sideQuestText } from './th';
+import { itemName, rarityText, mapQuestText, sideQuestText } from './th';
 import type { StoryPanel } from './story-ui';
 
 // 4F: the expedition summary shown once when a run ends, before the lobby. It is built from the profile before
@@ -65,7 +65,7 @@ export class SummaryUI {
     const items = s.items.slice(0, 12).map(i => `<li data-rarity="${i.rarity}" title="${itemName(i)} Lv${i.level}"><span class="tile">${gearArt(i)}<span class="tile-lv">Lv${i.level}</span>${i.plus?`<i class="tile-plus">+${i.plus}</i>`:''}</span><small>${itemName(i)}</small><em>${rarityText[i.rarity]}</em></li>`).join('');
     const levels = s.campLevel ? `<li><span><b>เลเวลค่าย</b><small>Lv${s.campLevel.from} → <em>Lv${s.campLevel.to}</em> · ทุกคนในค่าย</small></span></li>` : '';
     const quests = s.quests.map(q => { const kind = this.map.sideQuests.find(x => x.id === q.id)!.kind;
-      return `<li class="${q.ready ? 'ready' : ''}"><b>${sideQuestText[kind].name}</b><span class="summary-bar"><i style="width:${Math.round(q.to / q.target * 100)}%"></i></span><small>${q.to}/${q.target}${q.ready ? ' · พร้อมรับรางวัลที่ค่าย!' : ` (+${q.to - q.from})`}</small></li>`; }).join('');
+      return `<li class="${q.ready ? 'ready' : ''}"><b>${(mapQuestText[q.id] ?? sideQuestText[kind]).name}</b><span class="summary-bar"><i style="width:${Math.round(q.to / q.target * 100)}%"></i></span><small>${q.to}/${q.target}${q.ready ? ' · พร้อมรับรางวัลที่ค่าย!' : ` (+${q.to - q.from})`}</small></li>`; }).join('');
     this.root.dataset.outcome = s.outcome;
     this.root.style.setProperty('--summary-bg', `url(${storyArt(`story_${t.scene}`)})`);
     this.root.innerHTML = `<div class="summary-card">

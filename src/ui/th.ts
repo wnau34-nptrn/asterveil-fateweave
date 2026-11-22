@@ -568,6 +568,7 @@ const questEventText: Record<string, string> = {
 };
 // P05-02: optional story quests of maps 1–2, by map id (the objectives come from the map's `quest`).
 export const storyQuestText: Record<string, { name: string; ask: string; done: string }> = {
+  'moon-lake': { name: 'เรือของคนพายเรือ', ask: 'คนพายเรือแก่ที่ท่าเรือร้างทำไม้พายหายไปบนเกาะกลางน้ำ ช่วยเขา หาไม้พายในกล่องบนเกาะ แล้วกลับค่ายในรอบเดียว · ได้เรือเล็กข้ามน้ำได้ทุกช่วงในรอบต่อ ๆ ไป', done: 'คาเอล: คนพายเรือฝากเรือเล็กไว้ให้ค่ายเรา ข้ามทะเลสาบได้ไม่ต้องรอน้ำลงแล้ว' },
   'ruined-border': { name: 'รอยธงของคนที่หนี', ask: 'ทหารที่หนีไปซ่อนธงประจำกองไว้ในกล่องสามใบทั่วซากป้อม เปิดให้ครบในรอบเดียวแล้วกลับค่าย', done: 'มิมี่: ธงของคนที่หนีกลับมาครบแล้ว ข้าเก็บเข้าคลังให้' },
   'deep-forest': { name: 'ด้ายที่ป่าฝืน', ask: 'ป่าบิดเบี้ยวเพราะรอยแยก ตัดสินใจเรื่องนักเดินทางและศาลเก่าให้ครบในรอบเดียวแล้วกลับค่าย', done: 'คาเอล: ป่าสงบลงหน่อยแล้ว คนเดินทางเริ่มกลับมาใช้เส้นทางนั้น' },
 };
@@ -596,6 +597,14 @@ export function campLines(profile: Pick<Profile, 'last' | 'choices'>, events: re
   return out.slice(0, 3);
 }
 // ---- Map events (3A): live Thai text for each event and choice; numbers come from the rules. ----
+// Map 4 (save v68): the camp journal's pages (lost notes and gazed memories), keyed by note id. Draft text from the approved
+// chapter-1 lore (docs/LORE_CHAPTER1_TH.md, act 2): the lake shows the commander's past; the other child is Vargoth.
+export const journalText: Record<string, { title: string; body: string }> = {
+  'note-weaver-book': { title: 'สมุดทอด้ายของเด็กชาย', body: 'ลายมือเด็กเขียนว่า “วันนี้ทอด้ายสีเงินได้ยาวกว่าเพื่อน เขาบอกว่าวันหนึ่งจะทอสะพานข้ามทะเลสาบให้ได้” หน้าสุดท้ายมีด้ายสองเส้นผูกติดกันไว้ เส้นหนึ่งขาดครึ่ง' },
+  'note-keeper-letter': { title: 'จดหมายถึงผู้ดูแลทะเลสาบ', body: '“ท่านผู้ดูแล เด็กสองคนนั้นมานั่งริมน้ำทุกคืนจันทร์เต็มดวง ขอท่านช่วยดูแลพวกเขาด้วย” ลายเซ็นเลือนจนอ่านไม่ออก มีคราบน้ำตาหยดลงกลางกระดาษ' },
+  'memory:shore-reflection': { title: 'ความทรงจำ · ริมท่าเรือ', body: 'ในน้ำท่านเห็นเด็กสองคนนั่งทอด้ายใต้แสงจันทร์ คนหนึ่งคือตัวท่านเอง อีกคนหันมายิ้ม ดวงตาสีเดียวกับวาร์กอธ' },
+  'memory:east-reflection': { title: 'ความทรงจำ · ฝั่งตะวันออก', body: 'เด็กคนนั้นยื่นด้ายเส้นหนึ่งให้ท่าน “ถ้าวันหนึ่งเราแยกทางกัน ด้ายนี้จะพาข้ากลับมาหาเจ้า” แล้วผิวน้ำก็สั่นจนภาพหายไป' },
+};
 export const eventText: Record<MapEventKind, { name: string; scene: string; icon: IconName }> = {
   bandits: { name: 'ด่านโจร', scene: 'กลุ่มโจรตั้งด่านขวางทาง พวกมันเฝ้าของที่ปล้นมา', icon: 'danger' },
   shrine: { name: 'ศาลเก่า', scene: 'ศาลหินเรืองแสงจาง ๆ พลังของมันรักษาได้แต่ต้องแลกกับบางอย่าง', icon: 'star' },
@@ -629,6 +638,10 @@ export const eventChoices: Record<MapEventKind, readonly EventChoice[]> = {
 };
 export const eventReasonText: Record<string, string> = { ore: 'แร่ดาวไม่พอ', salve: 'ไม่มียาฟื้นแผล', carry: 'พกเต็มแล้ว', busy: 'ทำตอนนี้ไม่ได้', choice: 'ทำไม่ได้' };
 // ---- Camp side quests (3D): each NPC's request and its reward, in Thai. ----
+// Map 4: a camp job counted on one map only (`SideQuestDefinition.map`) has its own name and ask.
+export const mapQuestText: Record<string, { name: string; ask: (n: number) => string }> = {
+  'scout-lake': { name: 'ปริศนาแห่งทะเลสาบ', ask: n => `ไขปริศนาในทะเลสาบเงาจันทร์ให้ครบ ${n} อย่าง (หินรูนเงาสะท้อน ประตูน้ำ ก้อนหินลงน้ำ) นับเฉพาะรอบที่ไปทะเลสาบ` },
+};
 export const sideQuestText: Record<SideQuestKind, { name: string; ask: (n: number) => string }> = {
   rareChests: { name: 'แร่จากกล่องหายาก', ask: n => `เปิดกล่องสมบัติหายาก ${n} กล่อง แล้วเล่าให้ข้าฟังว่าข้างในมีอะไร` },
   wins: { name: 'ผลงานให้ลูกค้าดู', ask: n => `ชนะการต่อสู้ให้ได้ ${n} ครั้ง ข้าจะเอาไปโฆษณาให้ทหารรับจ้างอยากมาร่วม` },

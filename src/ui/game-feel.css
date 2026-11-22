@@ -950,3 +950,9 @@ button.is-loading::before { content: ''; position: absolute; top: 50%; right: 14
 .story-view.lqip-on::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background:
   linear-gradient(180deg, #050b14cc, #050b1466 40%, #050b14ee 100%), var(--lqip) 50% 50% / cover no-repeat, #050b14; }
 @media (prefers-reduced-motion: reduce) { .lqip-on::before, .lqip-on::after { transition: none; } }
+/* Map 4: the camp journal under the camp jobs; the rune door shows the stones' order as a reflection (mirrored). */
+.journal { margin-top: 14px; } .journal h3 small { color: var(--text-muted, #b9c6d8); font-weight: 400; }
+.journal-list { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 6px; }
+.journal-list summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; }
+.journal-list p { margin: 4px 0 8px; line-height: 1.55; }
+.door-glyph.mirrored { transform: scaleX(-1); opacity: .85; }

@@ -27,7 +27,9 @@ export function cellHash(x: number, y: number, salt = 0): number {
   return h >>> 0;
 }
 const walkable = (map: MapDefinition, p: Point) => { const t = tileAt(map, p); return !!t && t.kind !== 'wall'; };
-const floorZone: Record<string, string> = { meadow: 'meadow', thicket: 'thicket', scar: 'scar', sanctum: 'sanctum' };
+// Map 4 (stand-in until ART-WORLD-LAKE-001): shore/isle/pavilion borrow the meadow/thicket/scar floors; water is drawn over a
+// meadow floor by the DOM (`.tile.water`, world.css).
+const floorZone: Record<string, string> = { meadow: 'meadow', thicket: 'thicket', scar: 'scar', sanctum: 'sanctum', shore: 'meadow', isle: 'thicket', shallows: 'meadow', pavilion: 'scar' };
 
 // Map 2's trail uses its own painted materials (ART-WORLD-TILES-002): trail floor with deeper grove pockets
 // (coarse 4×4-cell blocks so the two never checker) and its own cliff walls; camp and exit keep the shared art.
