@@ -38,6 +38,7 @@ const samples: Sample[] = [];
 interface Body {
   token?: string; lastSeq?: number; status?: string; error?: string; events?: { type?: string; damage?: number }[];
   messages?: { id: number; text: string }[]; message?: { text: string }; week?: number; bars?: { boss: string; hp: number; left: number }[];
+  view?: { profile?: { gacha?: { tickets: number; points: number; serial: number } } } | null; entries?: { entry: { serial: number; results: unknown[] } }[]; more?: boolean;
 }
 async function call(route: string, path: string, init: RequestInit = {}): Promise<{ status: number; text: string; json: Body | null }> {
   const t = performance.now();
@@ -143,6 +144,30 @@ function table(): string {
   }
   return out.join('\n');
 }
+// P10: the tickets the trio's personal milestones paid (2+2 after five attempts) are spent one pull at a time. Each pull
+// is sent twice at once with one request id (a lost answer retried: same answer, one charge), and once more under a
+// second request id with the same sequence number (another device racing: refused 409 stale, nothing charged). The wallet
+// must end at 0 tickets with one point per pull, and the server journal must hold exactly those pulls, in order.
+async function gachaRun(p: Player): Promise<{ tickets: number; pulls: number; retriesSame: number; racesRefused: number; journal: number; points: number; left: number }> {
+  const wallet = async () => (await call('state', '/v1/state', { headers: p.headers() })).json?.view?.profile?.gacha ?? { tickets: 0, points: 0, serial: 0 };
+  const start = await wallet(); let pulls = 0, retriesSame = 0, racesRefused = 0;
+  for (let i = 0; i < start.tickets; i++) {
+    const command = { kind: 'gachaPull', count: 1, config: gameRules.gacha.version };
+    const env = JSON.stringify({ requestId: `load${hex(14)}`, seq: p.seq + 1, command });
+    const race = JSON.stringify({ requestId: `load${hex(14)}`, seq: p.seq + 1, command });
+    const send = (body: string) => call('gachaPull', '/v1/command', { method: 'POST', headers: p.headers(true), body });
+    const [x, y] = await Promise.all([send(env), send(env)]);
+    const ok = [x, y].find(r => r.status === 200 && r.json?.status === 'applied');
+    if (!ok) break;
+    if (x.text === y.text) retriesSame++;
+    p.seq++; pulls++;
+    const late = await send(race);
+    if (late.status === 409) racesRefused++;
+  }
+  const end = await wallet();
+  const hist = await call('gachaHistory', '/v1/gacha/history?limit=50', { headers: p.headers() });
+  return { tickets: start.tickets, pulls, retriesSame, racesRefused, journal: hist.json?.entries?.length ?? -1, points: end.points - start.points, left: end.tickets };
+}
 
 describe.runIf(!!base)('P12 staging load: WorldBoss and Chat objects', () => {
   it('many accounts hit the World Boss and use chat at once; every hit counts once, every message reaches the others', async () => {
@@ -153,6 +178,8 @@ describe.runIf(!!base)('P12 staging load: WorldBoss and Chat objects', () => {
     const until = Date.now() + CHAT_SECONDS * 1000;
     const trio = isTrio(before);
     const [boss, chat] = await Promise.all([Promise.all(players.map(p => bossRun(p, trio))), chatRun(players, until)]);
+    // P10: all accounts spend their trio tickets at the same time (the warden pays none, so this needs the trio).
+    const gacha = trio ? await Promise.all(players.map(p => gachaRun(p))) : [];
     await sleep(2000);
     const after = await bossLeft(players[0]!);
     const own: Record<string, number> = {};
@@ -161,6 +188,7 @@ describe.runIf(!!base)('P12 staging load: WorldBoss and Chat objects', () => {
     const lines = [
       `runner ${RUNNER} · accounts ${ACCOUNTS} · chat ${CHAT_SECONDS} s, a send every ${CHAT_GAP} s per account`,
       `World Boss week ${after?.week} (${trio ? 'trio' : 'warden'}): ${barText}; ${boss.reduce((t, b) => t + b.attempts, 0)} attempts; identical retry answers ${boss.reduce((t, b) => t + b.retriesSame, 0)}`,
+      `gacha: ${trio ? `tickets ${gacha.reduce((t, g) => t + g.tickets, 0)}, pulls ${gacha.reduce((t, g) => t + g.pulls, 0)}, identical retry answers ${gacha.reduce((t, g) => t + g.retriesSame, 0)}, racing requests refused ${gacha.reduce((t, g) => t + g.racesRefused, 0)}, journal entries ${gacha.reduce((t, g) => t + g.journal, 0)}` : 'skipped (warden week pays no tickets; dispatch with trio=now)'}`,
       `chat: sent ${chat.sent.length}, seen by this runner ${chat.sent.filter(t => chat.seen.has(t)).length}, refused ${JSON.stringify(chat.refused)}`,
       table(),
     ];
@@ -176,6 +204,10 @@ describe.runIf(!!base)('P12 staging load: WorldBoss and Chat objects', () => {
     }
     expect(boss.every(b => b.attempts === gameRules.worldBoss.attempts)).toBe(true);
     expect(boss.every(b => b.retriesSame === b.attempts)).toBe(true);
+    for (const g of gacha) {
+      expect(g.tickets).toBe(gameRules.worldBoss.trio.personal.reduce((t, m) => t + (m.reward.tickets ?? 0), 0));
+      expect([g.pulls, g.retriesSame, g.racesRefused, g.journal, g.points, g.left]).toEqual([g.tickets, g.tickets, g.tickets, g.tickets, g.tickets, 0]);
+    }
     expect(chat.sent.length).toBeGreaterThan(0);
     expect(chat.sent.filter(t => !chat.seen.has(t))).toEqual([]);
     expect(samples.filter(s => s.status === 0 || s.status >= 500).length).toBe(0);
