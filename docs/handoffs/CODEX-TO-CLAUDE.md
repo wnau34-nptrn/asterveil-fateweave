@@ -1,7 +1,7 @@
 ## 2026-11-22 — C12 campaign gate: OD-59 starter pairs re-baselined (OD-60) (Opus; claude/eloquent-albattani-jrtn3t → game branch)
 - `npm run sim` failed the C12 gate (explorer/casual 220 < 226) since #333. Per-commit probes: #313–#332 = 229, #333 = 220; gacha P10 has no sim effect. Tip code with the old pairs = 229 seed for seed, so only the starter mix moved it (no lio+toma; support first; the test seeds give Toma 29/48).
 - Owner: “ทำตามที่คุณแนะนำ” → that group re-baselined in `tests/fixtures/c12-campaign-before.json` (ซากชายแดน #1 94%, ป่าทึบ #1 65%); other 15 cells unchanged. CAMPAIGN.md refreshed.
-- Tests: `SIM_REPORT=1 npx vitest run tests/campaign-sim.test.ts` (see the PR). [Validation](../validation/c12-gate-od59-2026-11-22/README_TH.md). Open: Toma-first pairs weak at the forest first try (casual 23–30/48), only if the owner wants a balance pass.
+- Tests: typecheck, lint, `npm test` 2160 passed, `npm run sim` 29/29 (C12 gate included). [Validation](../validation/c12-gate-od59-2026-11-22/README_TH.md). Open: Toma-first pairs weak at the forest first try (casual 23–30/48), only if the owner wants a balance pass.
 
 ## 2026-11-22 — OD-59 first fate weave + cabinet after map 1; lessons on a new game (Opus; claude/fate-first PR #333, claude/lessons-new-game PR #332)
 - Owner: gacha after the prologue instead of the starter choice → recommendation → “เห็นด้วย ดำเนินการได้”; screens “อนุมัติ”. Also reported lessons vanishing after a restart (#332: `LessonGuide.restart()` on a new company; "off" kept).
