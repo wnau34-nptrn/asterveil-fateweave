@@ -1,0 +1,2458 @@
+{
+  "base": "72c3d0584c0b98c8267314b7d89461a5ac589e4f",
+  "strips": [
+    {
+      "actor": "tide-slime",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "Water Spit",
+      "clip": "skill",
+      "file": "raw/tide-slime-r1-water-spit.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Wells up through the dome, puckers left, opens and bounces back.",
+      "seedLayoutIndices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          80,
+          250,
+          432,
+          500
+        ],
+        [
+          82,
+          257,
+          434,
+          500
+        ],
+        [
+          85,
+          265,
+          435,
+          500
+        ],
+        [
+          87,
+          274,
+          436,
+          500
+        ],
+        [
+          66,
+          243,
+          427,
+          500
+        ],
+        [
+          70,
+          245,
+          428,
+          500
+        ],
+        [
+          76,
+          247,
+          431,
+          500
+        ],
+        [
+          80,
+          250,
+          432,
+          500
+        ]
+      ],
+      "gaps": [
+        162,
+        163,
+        164,
+        142,
+        155,
+        160,
+        161
+      ]
+    },
+    {
+      "actor": "tide-slime",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "hit",
+      "clip": "hit",
+      "file": "raw/tide-slime-r1-hit.png",
+      "frames": 2,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "recoil",
+        "settle"
+      ],
+      "gesture": "Recoils right, then catches its balance.",
+      "seedLayoutIndices": [
+        17,
+        18
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          90,
+          266,
+          438,
+          500
+        ],
+        [
+          83,
+          254,
+          434,
+          500
+        ]
+      ],
+      "gaps": [
+        157
+      ]
+    },
+    {
+      "actor": "tide-slime",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "down",
+      "clip": "down",
+      "file": "raw/tide-slime-r1-down.png",
+      "frames": 3,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "buckle",
+        "drop",
+        "hold"
+      ],
+      "gesture": "Settles into its down hold.",
+      "seedLayoutIndices": [
+        19,
+        20,
+        21
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          80,
+          266,
+          433,
+          500
+        ],
+        [
+          81,
+          286,
+          434,
+          500
+        ],
+        [
+          81,
+          301,
+          434,
+          500
+        ]
+      ],
+      "gaps": [
+        160,
+        159
+      ]
+    },
+    {
+      "actor": "mist-wisp",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "Mist Needle",
+      "clip": "attack",
+      "file": "raw/mist-wisp-r1-mist-needle.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Draws mist inward, then points the mask left in a short forward hover.",
+      "seedLayoutIndices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          134,
+          127,
+          378,
+          481
+        ],
+        [
+          137,
+          127,
+          383,
+          479
+        ],
+        [
+          142,
+          127,
+          388,
+          475
+        ],
+        [
+          148,
+          126,
+          392,
+          470
+        ],
+        [
+          119,
+          126,
+          368,
+          488
+        ],
+        [
+          123,
+          126,
+          370,
+          486
+        ],
+        [
+          129,
+          126,
+          374,
+          483
+        ],
+        [
+          134,
+          127,
+          378,
+          481
+        ]
+      ],
+      "gaps": [
+        271,
+        271,
+        272,
+        239,
+        267,
+        271,
+        272
+      ]
+    },
+    {
+      "actor": "mist-wisp",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "hit",
+      "clip": "hit",
+      "file": "raw/mist-wisp-r1-hit.png",
+      "frames": 2,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "recoil",
+        "settle"
+      ],
+      "gesture": "Recoils right, then catches its balance.",
+      "seedLayoutIndices": [
+        17,
+        18
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          138,
+          121,
+          382,
+          474
+        ],
+        [
+          135,
+          125,
+          379,
+          479
+        ]
+      ],
+      "gaps": [
+        265
+      ]
+    },
+    {
+      "actor": "mist-wisp",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "down",
+      "clip": "down",
+      "file": "raw/mist-wisp-r1-down.png",
+      "frames": 3,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "buckle",
+        "drop",
+        "hold"
+      ],
+      "gesture": "Settles into its down hold.",
+      "seedLayoutIndices": [
+        19,
+        20,
+        21
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          134,
+          142,
+          378,
+          487
+        ],
+        [
+          134,
+          159,
+          378,
+          495
+        ],
+        [
+          134,
+          172,
+          378,
+          500
+        ]
+      ],
+      "gaps": [
+        268,
+        268
+      ]
+    },
+    {
+      "actor": "mist-wisp",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "idle",
+      "clip": "idle",
+      "file": "raw/mist-wisp-r1-idle.png",
+      "frames": 3,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "rest",
+        "bob-up",
+        "bob-down"
+      ],
+      "gesture": "Three hover poses, loop at 160 ms per frame.",
+      "seedLayoutIndices": [
+        22,
+        23,
+        24
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          134,
+          127,
+          378,
+          481
+        ],
+        [
+          134,
+          113,
+          377,
+          470
+        ],
+        [
+          134,
+          136,
+          379,
+          489
+        ]
+      ],
+      "gaps": [
+        268,
+        269
+      ]
+    },
+    {
+      "actor": "stone-crab",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "Pincer",
+      "clip": "attack",
+      "file": "raw/stone-crab-r1-pincer.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Cocks both claws, leading claw snaps forward, rear legs brace.",
+      "seedLayoutIndices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          47,
+          198,
+          465,
+          500
+        ],
+        [
+          48,
+          196,
+          466,
+          500
+        ],
+        [
+          51,
+          195,
+          467,
+          500
+        ],
+        [
+          55,
+          194,
+          468,
+          500
+        ],
+        [
+          37,
+          202,
+          468,
+          500
+        ],
+        [
+          39,
+          200,
+          467,
+          500
+        ],
+        [
+          43,
+          199,
+          466,
+          500
+        ],
+        [
+          47,
+          198,
+          465,
+          500
+        ]
+      ],
+      "gaps": [
+        95,
+        97,
+        100,
+        81,
+        83,
+        88,
+        93
+      ]
+    },
+    {
+      "actor": "stone-crab",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "hit",
+      "clip": "hit",
+      "file": "raw/stone-crab-r1-hit.png",
+      "frames": 2,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "recoil",
+        "settle"
+      ],
+      "gesture": "Recoils right, then catches its balance.",
+      "seedLayoutIndices": [
+        17,
+        18
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          54,
+          202,
+          465,
+          500
+        ],
+        [
+          48,
+          199,
+          465,
+          500
+        ]
+      ],
+      "gaps": [
+        95
+      ]
+    },
+    {
+      "actor": "stone-crab",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "down",
+      "clip": "down",
+      "file": "raw/stone-crab-r1-down.png",
+      "frames": 3,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "buckle",
+        "drop",
+        "hold"
+      ],
+      "gesture": "Settles into its down hold.",
+      "seedLayoutIndices": [
+        19,
+        20,
+        21
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          49,
+          208,
+          465,
+          500
+        ],
+        [
+          51,
+          222,
+          465,
+          500
+        ],
+        [
+          54,
+          234,
+          465,
+          500
+        ]
+      ],
+      "gaps": [
+        98,
+        101
+      ]
+    },
+    {
+      "actor": "shadow-serpent",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "Shadow Fang",
+      "clip": "attack",
+      "file": "raw/shadow-serpent-r1-shadow-fang.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Head draws back above the coil and pitches left into a short bite.",
+      "seedLayoutIndices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          66,
+          139,
+          445,
+          500
+        ],
+        [
+          66,
+          136,
+          445,
+          500
+        ],
+        [
+          66,
+          134,
+          445,
+          500
+        ],
+        [
+          66,
+          131,
+          445,
+          500
+        ],
+        [
+          66,
+          148,
+          445,
+          500
+        ],
+        [
+          66,
+          145,
+          445,
+          500
+        ],
+        [
+          66,
+          142,
+          445,
+          500
+        ],
+        [
+          66,
+          139,
+          445,
+          500
+        ]
+      ],
+      "gaps": [
+        133,
+        133,
+        133,
+        133,
+        133,
+        133,
+        133
+      ]
+    },
+    {
+      "actor": "shadow-serpent",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "Venom Spit",
+      "clip": "skill",
+      "file": "raw/shadow-serpent-r1-venom-spit.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Lifts the throat, flicks its jaw open, then recoils with its coil planted.",
+      "seedLayoutIndices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          66,
+          139,
+          445,
+          500
+        ],
+        [
+          66,
+          135,
+          445,
+          500
+        ],
+        [
+          66,
+          130,
+          445,
+          500
+        ],
+        [
+          66,
+          125,
+          445,
+          500
+        ],
+        [
+          66,
+          131,
+          446,
+          500
+        ],
+        [
+          66,
+          133,
+          446,
+          500
+        ],
+        [
+          66,
+          136,
+          446,
+          500
+        ],
+        [
+          66,
+          139,
+          445,
+          500
+        ]
+      ],
+      "gaps": [
+        133,
+        133,
+        133,
+        133,
+        132,
+        132,
+        132
+      ]
+    },
+    {
+      "actor": "shadow-serpent",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "Coil Gathering",
+      "clip": "skill",
+      "file": "raw/shadow-serpent-r1-coil-gathering.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Tucks its head and draws the outer loop in around the lower neck.",
+      "seedLayoutIndices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          66,
+          139,
+          445,
+          500
+        ],
+        [
+          66,
+          144,
+          445,
+          500
+        ],
+        [
+          66,
+          149,
+          445,
+          500
+        ],
+        [
+          66,
+          155,
+          444,
+          500
+        ],
+        [
+          66,
+          161,
+          443,
+          500
+        ],
+        [
+          66,
+          155,
+          444,
+          500
+        ],
+        [
+          66,
+          152,
+          444,
+          500
+        ],
+        [
+          66,
+          139,
+          445,
+          500
+        ]
+      ],
+      "gaps": [
+        133,
+        133,
+        133,
+        134,
+        135,
+        134,
+        134
+      ]
+    },
+    {
+      "actor": "shadow-serpent",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "Crushing Coil",
+      "clip": "skill",
+      "file": "raw/shadow-serpent-r1-crushing-coil.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Rears up, then drives down hard as the outer coil squeezes inward.",
+      "seedLayoutIndices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          66,
+          139,
+          445,
+          500
+        ],
+        [
+          66,
+          133,
+          446,
+          500
+        ],
+        [
+          66,
+          126,
+          446,
+          500
+        ],
+        [
+          66,
+          120,
+          446,
+          500
+        ],
+        [
+          66,
+          171,
+          443,
+          500
+        ],
+        [
+          66,
+          162,
+          443,
+          500
+        ],
+        [
+          66,
+          149,
+          445,
+          500
+        ],
+        [
+          66,
+          139,
+          445,
+          500
+        ]
+      ],
+      "gaps": [
+        133,
+        132,
+        132,
+        132,
+        135,
+        135,
+        133
+      ]
+    },
+    {
+      "actor": "shadow-serpent",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "hit",
+      "clip": "hit",
+      "file": "raw/shadow-serpent-r1-hit.png",
+      "frames": 2,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "recoil",
+        "settle"
+      ],
+      "gesture": "Recoils right, then catches its balance.",
+      "seedLayoutIndices": [
+        17,
+        18
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          66,
+          149,
+          445,
+          500
+        ],
+        [
+          66,
+          142,
+          445,
+          500
+        ]
+      ],
+      "gaps": [
+        133
+      ]
+    },
+    {
+      "actor": "shadow-serpent",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "down",
+      "clip": "down",
+      "file": "raw/shadow-serpent-r1-down.png",
+      "frames": 3,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "buckle",
+        "drop",
+        "hold"
+      ],
+      "gesture": "Settles into its down hold.",
+      "seedLayoutIndices": [
+        19,
+        20,
+        21
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          66,
+          167,
+          445,
+          500
+        ],
+        [
+          66,
+          201,
+          445,
+          500
+        ],
+        [
+          66,
+          225,
+          446,
+          500
+        ]
+      ],
+      "gaps": [
+        133,
+        133
+      ]
+    },
+    {
+      "actor": "shadow-serpent",
+      "variant": "r2",
+      "recommended": false,
+      "intent": "Shadow Fang",
+      "clip": "attack",
+      "file": "raw/shadow-serpent-r2-shadow-fang.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Head draws back above the coil and pitches left into a short bite.",
+      "seedLayoutIndices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          156,
+          71,
+          357,
+          498
+        ],
+        [
+          156,
+          70,
+          365,
+          498
+        ],
+        [
+          156,
+          69,
+          374,
+          498
+        ],
+        [
+          156,
+          68,
+          382,
+          498
+        ],
+        [
+          124,
+          77,
+          357,
+          498
+        ],
+        [
+          133,
+          75,
+          357,
+          498
+        ],
+        [
+          148,
+          72,
+          357,
+          498
+        ],
+        [
+          156,
+          71,
+          357,
+          498
+        ]
+      ],
+      "gaps": [
+        311,
+        303,
+        294,
+        254,
+        288,
+        303,
+        311
+      ]
+    },
+    {
+      "actor": "shadow-serpent",
+      "variant": "r2",
+      "recommended": false,
+      "intent": "Venom Spit",
+      "clip": "skill",
+      "file": "raw/shadow-serpent-r2-venom-spit.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Lifts the throat, flicks its jaw open, then recoils with its coil planted.",
+      "seedLayoutIndices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          156,
+          71,
+          357,
+          498
+        ],
+        [
+          156,
+          68,
+          363,
+          498
+        ],
+        [
+          156,
+          64,
+          369,
+          498
+        ],
+        [
+          156,
+          61,
+          375,
+          498
+        ],
+        [
+          138,
+          67,
+          358,
+          498
+        ],
+        [
+          143,
+          68,
+          358,
+          498
+        ],
+        [
+          153,
+          69,
+          357,
+          498
+        ],
+        [
+          156,
+          71,
+          357,
+          498
+        ]
+      ],
+      "gaps": [
+        311,
+        305,
+        299,
+        275,
+        297,
+        307,
+        311
+      ]
+    },
+    {
+      "actor": "shadow-serpent",
+      "variant": "r2",
+      "recommended": false,
+      "intent": "Coil Gathering",
+      "clip": "skill",
+      "file": "raw/shadow-serpent-r2-coil-gathering.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Tucks its head and draws the outer loop in around the lower neck.",
+      "seedLayoutIndices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          156,
+          71,
+          357,
+          498
+        ],
+        [
+          156,
+          77,
+          363,
+          498
+        ],
+        [
+          156,
+          83,
+          369,
+          498
+        ],
+        [
+          156,
+          90,
+          375,
+          498
+        ],
+        [
+          156,
+          98,
+          383,
+          498
+        ],
+        [
+          156,
+          90,
+          376,
+          498
+        ],
+        [
+          156,
+          86,
+          372,
+          498
+        ],
+        [
+          156,
+          71,
+          357,
+          498
+        ]
+      ],
+      "gaps": [
+        311,
+        305,
+        299,
+        293,
+        285,
+        292,
+        296
+      ]
+    },
+    {
+      "actor": "shadow-serpent",
+      "variant": "r2",
+      "recommended": false,
+      "intent": "Crushing Coil",
+      "clip": "skill",
+      "file": "raw/shadow-serpent-r2-crushing-coil.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Rears up, then drives down hard as the outer coil squeezes inward.",
+      "seedLayoutIndices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          156,
+          71,
+          357,
+          498
+        ],
+        [
+          156,
+          66,
+          362,
+          498
+        ],
+        [
+          156,
+          60,
+          367,
+          498
+        ],
+        [
+          156,
+          54,
+          372,
+          498
+        ],
+        [
+          143,
+          100,
+          357,
+          498
+        ],
+        [
+          148,
+          92,
+          357,
+          498
+        ],
+        [
+          155,
+          80,
+          357,
+          498
+        ],
+        [
+          156,
+          71,
+          357,
+          498
+        ]
+      ],
+      "gaps": [
+        311,
+        306,
+        301,
+        283,
+        303,
+        310,
+        311
+      ]
+    },
+    {
+      "actor": "shadow-serpent",
+      "variant": "r2",
+      "recommended": false,
+      "intent": "hit",
+      "clip": "hit",
+      "file": "raw/shadow-serpent-r2-hit.png",
+      "frames": 2,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "recoil",
+        "settle"
+      ],
+      "gesture": "Recoils right, then catches its balance.",
+      "seedLayoutIndices": [
+        17,
+        18
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          156,
+          85,
+          390,
+          498
+        ],
+        [
+          156,
+          75,
+          367,
+          498
+        ]
+      ],
+      "gaps": [
+        278
+      ]
+    },
+    {
+      "actor": "shadow-serpent",
+      "variant": "r2",
+      "recommended": false,
+      "intent": "down",
+      "clip": "down",
+      "file": "raw/shadow-serpent-r2-down.png",
+      "frames": 3,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "buckle",
+        "drop",
+        "hold"
+      ],
+      "gesture": "Settles into its down hold.",
+      "seedLayoutIndices": [
+        19,
+        20,
+        21
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          156,
+          97,
+          357,
+          498
+        ],
+        [
+          156,
+          129,
+          357,
+          498
+        ],
+        [
+          156,
+          152,
+          357,
+          498
+        ]
+      ],
+      "gaps": [
+        311,
+        311
+      ]
+    },
+    {
+      "actor": "weeping-siren",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "Tide Lash",
+      "clip": "attack",
+      "file": "raw/weeping-siren-r1-tide-lash.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Pulls the spill of hair back, then whips it past the shoulder as a hand leads.",
+      "seedLayoutIndices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          80,
+          100,
+          432,
+          499
+        ],
+        [
+          80,
+          101,
+          434,
+          499
+        ],
+        [
+          81,
+          103,
+          435,
+          499
+        ],
+        [
+          82,
+          104,
+          436,
+          499
+        ],
+        [
+          76,
+          101,
+          422,
+          499
+        ],
+        [
+          77,
+          101,
+          426,
+          499
+        ],
+        [
+          78,
+          100,
+          430,
+          499
+        ],
+        [
+          80,
+          100,
+          432,
+          499
+        ]
+      ],
+      "gaps": [
+        160,
+        159,
+        159,
+        152,
+        167,
+        164,
+        162
+      ]
+    },
+    {
+      "actor": "weeping-siren",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "Weeping Song",
+      "clip": "skill",
+      "file": "raw/weeping-siren-r1-weeping-song.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Bows into her chest, then lifts her chin and opens her shoulders into the note.",
+      "seedLayoutIndices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          80,
+          100,
+          432,
+          499
+        ],
+        [
+          80,
+          103,
+          433,
+          499
+        ],
+        [
+          80,
+          107,
+          433,
+          499
+        ],
+        [
+          80,
+          112,
+          433,
+          499
+        ],
+        [
+          80,
+          88,
+          435,
+          499
+        ],
+        [
+          80,
+          91,
+          434,
+          499
+        ],
+        [
+          80,
+          96,
+          433,
+          499
+        ],
+        [
+          80,
+          100,
+          432,
+          499
+        ]
+      ],
+      "gaps": [
+        160,
+        159,
+        159,
+        159,
+        157,
+        158,
+        159
+      ]
+    },
+    {
+      "actor": "weeping-siren",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "Drowning Call",
+      "clip": "skill",
+      "file": "raw/weeping-siren-r1-drowning-call.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Gathers one hand high and then beckons left and down.",
+      "seedLayoutIndices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          80,
+          100,
+          432,
+          499
+        ],
+        [
+          81,
+          97,
+          432,
+          499
+        ],
+        [
+          83,
+          94,
+          432,
+          499
+        ],
+        [
+          85,
+          90,
+          432,
+          499
+        ],
+        [
+          77,
+          110,
+          428,
+          499
+        ],
+        [
+          78,
+          107,
+          430,
+          499
+        ],
+        [
+          79,
+          103,
+          431,
+          499
+        ],
+        [
+          80,
+          100,
+          432,
+          499
+        ]
+      ],
+      "gaps": [
+        161,
+        163,
+        165,
+        157,
+        162,
+        161,
+        161
+      ]
+    },
+    {
+      "actor": "weeping-siren",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "hit",
+      "clip": "hit",
+      "file": "raw/weeping-siren-r1-hit.png",
+      "frames": 2,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "recoil",
+        "settle"
+      ],
+      "gesture": "Recoils right, then catches its balance.",
+      "seedLayoutIndices": [
+        17,
+        18
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          80,
+          107,
+          435,
+          499
+        ],
+        [
+          80,
+          102,
+          433,
+          499
+        ]
+      ],
+      "gaps": [
+        157
+      ]
+    },
+    {
+      "actor": "weeping-siren",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "down",
+      "clip": "down",
+      "file": "raw/weeping-siren-r1-down.png",
+      "frames": 3,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "buckle",
+        "drop",
+        "hold"
+      ],
+      "gesture": "Settles into its down hold.",
+      "seedLayoutIndices": [
+        19,
+        20,
+        21
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          80,
+          117,
+          433,
+          499
+        ],
+        [
+          80,
+          138,
+          434,
+          499
+        ],
+        [
+          80,
+          153,
+          435,
+          499
+        ]
+      ],
+      "gaps": [
+        159,
+        158
+      ]
+    },
+    {
+      "actor": "weeping-siren",
+      "variant": "r2",
+      "recommended": false,
+      "intent": "Tide Lash",
+      "clip": "attack",
+      "file": "raw/weeping-siren-r2-tide-lash.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Pulls the spill of hair back, then whips it past the shoulder as a hand leads.",
+      "seedLayoutIndices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          88,
+          59,
+          425,
+          487
+        ],
+        [
+          88,
+          61,
+          428,
+          487
+        ],
+        [
+          89,
+          63,
+          430,
+          487
+        ],
+        [
+          90,
+          65,
+          432,
+          487
+        ],
+        [
+          78,
+          58,
+          415,
+          487
+        ],
+        [
+          81,
+          58,
+          418,
+          487
+        ],
+        [
+          85,
+          59,
+          422,
+          487
+        ],
+        [
+          88,
+          59,
+          425,
+          487
+        ]
+      ],
+      "gaps": [
+        175,
+        173,
+        172,
+        158,
+        178,
+        179,
+        178
+      ]
+    },
+    {
+      "actor": "weeping-siren",
+      "variant": "r2",
+      "recommended": false,
+      "intent": "Weeping Song",
+      "clip": "skill",
+      "file": "raw/weeping-siren-r2-weeping-song.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Bows into her chest, then lifts her chin and opens her shoulders into the note.",
+      "seedLayoutIndices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          88,
+          59,
+          425,
+          487
+        ],
+        [
+          88,
+          62,
+          424,
+          487
+        ],
+        [
+          89,
+          65,
+          424,
+          487
+        ],
+        [
+          90,
+          68,
+          423,
+          487
+        ],
+        [
+          79,
+          51,
+          425,
+          487
+        ],
+        [
+          81,
+          53,
+          425,
+          487
+        ],
+        [
+          85,
+          56,
+          425,
+          487
+        ],
+        [
+          88,
+          59,
+          425,
+          487
+        ]
+      ],
+      "gaps": [
+        175,
+        177,
+        178,
+        168,
+        168,
+        172,
+        175
+      ]
+    },
+    {
+      "actor": "weeping-siren",
+      "variant": "r2",
+      "recommended": false,
+      "intent": "Drowning Call",
+      "clip": "skill",
+      "file": "raw/weeping-siren-r2-drowning-call.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Gathers one hand high and then beckons left and down.",
+      "seedLayoutIndices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          88,
+          59,
+          425,
+          487
+        ],
+        [
+          88,
+          56,
+          427,
+          487
+        ],
+        [
+          89,
+          54,
+          429,
+          487
+        ],
+        [
+          89,
+          51,
+          431,
+          487
+        ],
+        [
+          82,
+          66,
+          423,
+          487
+        ],
+        [
+          85,
+          64,
+          424,
+          487
+        ],
+        [
+          87,
+          61,
+          424,
+          487
+        ],
+        [
+          88,
+          59,
+          425,
+          487
+        ]
+      ],
+      "gaps": [
+        175,
+        174,
+        172,
+        163,
+        174,
+        175,
+        176
+      ]
+    },
+    {
+      "actor": "weeping-siren",
+      "variant": "r2",
+      "recommended": false,
+      "intent": "hit",
+      "clip": "hit",
+      "file": "raw/weeping-siren-r2-hit.png",
+      "frames": 2,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "recoil",
+        "settle"
+      ],
+      "gesture": "Recoils right, then catches its balance.",
+      "seedLayoutIndices": [
+        17,
+        18
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          99,
+          68,
+          442,
+          487
+        ],
+        [
+          91,
+          61,
+          430,
+          487
+        ]
+      ],
+      "gaps": [
+        161
+      ]
+    },
+    {
+      "actor": "weeping-siren",
+      "variant": "r2",
+      "recommended": false,
+      "intent": "down",
+      "clip": "down",
+      "file": "raw/weeping-siren-r2-down.png",
+      "frames": 3,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "buckle",
+        "drop",
+        "hold"
+      ],
+      "gesture": "Settles into its down hold.",
+      "seedLayoutIndices": [
+        19,
+        20,
+        21
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          88,
+          75,
+          423,
+          487
+        ],
+        [
+          88,
+          94,
+          420,
+          487
+        ],
+        [
+          88,
+          108,
+          418,
+          487
+        ]
+      ],
+      "gaps": [
+        177,
+        180
+      ]
+    },
+    {
+      "actor": "mirror-shade",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "Mirror Strike",
+      "clip": "attack",
+      "file": "raw/mirror-shade-r1-mirror-strike.png",
+      "frames": 8,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "ready",
+        "windup",
+        "windup",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "settle",
+        "ready"
+      ],
+      "gesture": "Draws the blade high, cuts down-left, then rolls wrist back into guard.",
+      "seedLayoutIndices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "seedLayoutOnly": true,
+      "frameAlphaBounds": [
+        [
+          58,
+          111,
+          455,
+          500
+        ],
+        [
+          62,
+          110,
+          459,
+          500
+        ],
+        [
+          66,
+          109,
+          462,
+          500
+        ],
+        [
+          71,
+          108,
+          465,
+          500
+        ],
+        [
+          42,
+          114,
+          455,
+          500
+        ],
+        [
+          46,
+          113,
+          456,
+          500
+        ],
+        [
+          53,
+          112,
+          456,
+          500
+        ],
+        [
+          58,
+          111,
+          455,
+          500
+        ]
+      ],
+      "gaps": [
+        119,
+        119,
+        121,
+        89,
+        103,
+        109,
+        114
+      ]
+    },
+    {
+      "actor": "mirror-shade",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "hit",
+      "clip": "hit",
+      "file": "raw/mirror-shade-r1-hit.png",
+      "frames": 2,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "recoil",
+        "settle"
+      ],
+      "gesture": "Recoils right, then catches its balance.",
+      "seedLayoutIndices": [
+        17,
+        18
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          72,
+          116,
+          462,
+          500
+        ],
+        [
+          62,
+          112,
+          458,
+          500
+        ]
+      ],
+      "gaps": [
+        112
+      ]
+    },
+    {
+      "actor": "mirror-shade",
+      "variant": "r1",
+      "recommended": true,
+      "intent": "down",
+      "clip": "down",
+      "file": "raw/mirror-shade-r1-down.png",
+      "frames": 3,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "groundY": 497,
+      "facing": "left",
+      "phaseOrder": [
+        "buckle",
+        "drop",
+        "hold"
+      ],
+      "gesture": "Settles into its down hold.",
+      "seedLayoutIndices": [
+        19,
+        20,
+        21
+      ],
+      "seedLayoutOnly": false,
+      "frameAlphaBounds": [
+        [
+          52,
+          134,
+          454,
+          500
+        ],
+        [
+          45,
+          162,
+          452,
+          500
+        ],
+        [
+          42,
+          183,
+          451,
+          500
+        ]
+      ],
+      "gaps": [
+        103,
+        102
+      ]
+    }
+  ]
+}

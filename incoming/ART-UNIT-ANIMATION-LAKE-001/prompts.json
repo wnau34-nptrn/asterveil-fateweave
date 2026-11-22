@@ -1,0 +1,20 @@
+{
+  "generator": "ImageGen with transparent_background=true; shared-anchor articulated pose tracks render one complete strip per intent",
+  "jobs": [
+    {
+      "inputReference": "Six stand-in seed crops on a contact sheet, layout and style only",
+      "source": "roster.png",
+      "prompt": "Create an original fantasy tactical RPG enemy character design reference for Asterveil Fateweave, a single sheet of exactly eight isolated, evenly spaced, completely separate silhouettes, two rows of four, on genuine transparent RGBA. Attached art is for STYLE, framing and sole geometry only, use NONE of its characters or props. Painterly anime JRPG chibi cutouts with broad dark outlines, detailed faceted shading and silvery light from upper left. Every head clearly faces LEFT in 3/4. Use deep midnight lake #14304A, mineral blue #6FB8D8 and silver #DCEBFF, a trace of #8E6CD0. Top row: low pearl teal tide jelly slime with brows and left mouth; narrow levitating mist wisp made of gray-blue wisps, masklike dark core; armored stone crab with great two claws and stacked gray shale; long dark river serpent with a silver face coiled on a low slate. Bottom row: tall serpentine naga rising vertically from a narrow curled body of water; sad moonlit mermaid seated on a small slate rock, long waterlike hair and visible fish tail; alternate tall hovering mermaid with a sinuous water tail; shadowy original generic masculine swordsman with a featureless navy mask, water-creased short cloak and one curved silver sword. No text, scenery, outlines of slots, ground shadows, or effects. Clear transparent gutters. Distinct readable silhouettes at 100px. This is a design reference for consistent articulated game sprite work.",
+      "sourceSha256": "a392e287a507dead2fa0201d71afb7b61bba088b2b85436f37f9bee33b159fa3"
+    },
+    {
+      "inputReference": "roster.png, upper-right serpent",
+      "source": "serpent-r2.png",
+      "prompt": "Single ORIGINAL game sprite on real transparent RGBA, the Shadow Serpent R2 for Asterveil Fateweave. A tall dark aquatic NAGA-SERPENT, a dragon-like SNAKE ONLY, with a scaled sinuous neck and angular silver-blue serpent snout, two swept back aqua webbed fins from the skull, an icy thin left-facing eye, a tall S-curve upper half erupting from its own narrow turquoise liquid serpent lower body with a small circular attached water base. NO HUMAN TORSO, NO HAIR, NO ARMS OR HANDS, NO MERMAID, NO LEGS. This is the taller fins-up alternate of the coiled snake at top right in reference, retain its reptilian head, its detailed painted facets and stylized fantasy tactics game shading. Three-quarter facing LEFT, silver moonlight from upper left, midnight blue #14304A, muted mineral ice #6FB8D8, silver #DCEBFF, very subtle violet #8E6CD0. Dark confident shape, clear facial planes. Pose is alert, nostril and lower hinged jaw visible. Tight neatly bounded integral base of water, no flying droplets, no scenery, no separate effects, no text, no labels. Center in square with excellent fully transparent outer clearance. One full body character only.",
+      "sourceSha256": "773f9253f89ec9703dcf83e7e8b405c42b312f70b23ff61e55a27c6dfb4b1416"
+    }
+  ],
+  "stripRecipe": "motion.py",
+  "globalArtDirection": "Original enemy bodies, left-facing. Moonlit navy/blue/silver, fine violet accents. Shared 512px logical cells and y=497 virtual ground. Physical motions stay within the cells. No projectiles, large glows or text.",
+  "sourceNote": "The cleaned, registered textures needed to reproduce all outputs are tracked as seeds/*-ready.png. The full-size ImageGen originals are retained under sources/."
+}
