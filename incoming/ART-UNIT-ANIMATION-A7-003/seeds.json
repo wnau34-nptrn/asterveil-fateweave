@@ -1,0 +1,22 @@
+[
+  {
+    "character": "odran",
+    "runtimeId": "thiran",
+    "file": "seeds/odran.png",
+    "sha256": "ca7a30b361eb8e7fd8764cacfd7e56b7cd3f13d3a701586b0b7ee54a92a61ccf",
+    "sourceBranch": "art/art-char-redesign-002",
+    "sourcePR": 120,
+    "soleY": 496,
+    "logicalGroundY": 497
+  },
+  {
+    "character": "isolde",
+    "runtimeId": "wila",
+    "file": "seeds/isolde.png",
+    "sha256": "e6d80253147ac8b0cd52edae6c211417fb30779b89b2524963ee724f12b530ba",
+    "sourceBranch": "art/art-char-redesign-002",
+    "sourcePR": 120,
+    "soleY": 496,
+    "logicalGroundY": 497
+  }
+]

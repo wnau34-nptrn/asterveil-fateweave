@@ -1,0 +1,46 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "isolde-block": [
+   {
+    "frame": 0,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 2,
+    "height": 442,
+    "scale": 0.977,
+    "inliers": 75,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 371,
+    "scale": 0.955,
+    "inliers": 114,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 460,
+    "scale": 1.0,
+    "inliers": 2659,
+    "idle": true,
+    "status": "idle"
+   }
+  ]
+ }
+}
