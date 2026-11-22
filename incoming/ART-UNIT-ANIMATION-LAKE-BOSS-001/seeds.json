@@ -1,0 +1,34 @@
+{
+  "baseCommit": "72c3d0584c0b98c8267314b7d89461a5ac589e4f",
+  "standIn": {
+    "art": "foe_sentinel",
+    "atlas": "public/assets/art/units_foes.webp",
+    "atlasSha256": "dcf79e09f2b0b813aa03894bd65222ae3afb2df875e84870d1dba968c49a1895",
+    "cellZeroBased": 8,
+    "crop": [
+      0,
+      2048,
+      512,
+      2560
+    ],
+    "file": "seeds/sentinel-cell8.png",
+    "rgbaSha256": "e74fab2ebcbf620c577902ab7d5481d993449ebc522569a543e9697350ecdcdc",
+    "atlasSoleY": 497
+  },
+  "idle": {
+    "file": "seeds/water-spirit-idle.png",
+    "source": "sources/water-spirit-idle.png",
+    "facing": "left",
+    "cell": [
+      1024,
+      1024
+    ],
+    "origin": [
+      512,
+      896
+    ],
+    "sourceScale": 0.40097799511002447,
+    "heightReferencePx": 492,
+    "rgbaSha256": "6a5fb59de1ddf11f9e1ffd1de33c1d871a8f8de8afef6ef64e60d1dee554d255"
+  }
+}

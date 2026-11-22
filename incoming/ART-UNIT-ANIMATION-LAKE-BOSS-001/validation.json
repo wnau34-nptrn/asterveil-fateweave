@@ -1,0 +1,789 @@
+{
+  "baseCommit": "72c3d0584c0b98c8267314b7d89461a5ac589e4f",
+  "files": {
+    "NOTES.md": {
+      "sha256": "f1c957d8db11ba5255cdfc6f3079f277c8aae8fcd0127e7f976c29795dd709e4",
+      "bytes": 10267
+    },
+    "build_handoff.py": {
+      "sha256": "d4daeafffbefd3d20246692f395c9e1992bfbdda72bfe65b4089e7d3778b3954",
+      "bytes": 17287
+    },
+    "layers.json": {
+      "sha256": "dbb7451ba50bd15564d1dd0d33df0d0992f97452760bf4b8c0949ad3ccda5ba6",
+      "bytes": 6542
+    },
+    "preview-390.png": {
+      "sha256": "1aed718ecb6116eb1de030e1fc42e1ffbbe34c3bf673c61e93ec8f7b2a84e8e7",
+      "bytes": 678028,
+      "size": [
+        390,
+        3135
+      ],
+      "mode": "RGB"
+    },
+    "prompts.json": {
+      "sha256": "af5be177779ef2ffa28c66982ca05e5cf198225ab4b1d17cefcb54cf0a298f92",
+      "bytes": 19167
+    },
+    "raw/down-r1.png": {
+      "sha256": "5768c9e3ea33794874cc5c8db6cf7079b82c9c966b598c48ca87c437ca39780a",
+      "bytes": 625455,
+      "size": [
+        3232,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "raw/great-wave-r1.png": {
+      "sha256": "befc700f214648be385ee498ff2b3aae1215cee2739975f43485b21441c10578",
+      "bytes": 1168940,
+      "size": [
+        4336,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "raw/hit-r1.png": {
+      "sha256": "9bce7a3e694ece02431b84fa3b2b17fe5568dcd12fac56612e2154052249b514",
+      "bytes": 642071,
+      "size": [
+        2128,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "raw/reflection-r1.png": {
+      "sha256": "430dce99eaccadd6bf4db4054efee4d5aaef7c6f89771adfbbb40531fae89a58",
+      "bytes": 1164130,
+      "size": [
+        4336,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "raw/reflection-r2.png": {
+      "sha256": "59fece8e1c3563050a4907b0a31899db35e92970a383835239384b8c6a1171f2",
+      "bytes": 1223036,
+      "size": [
+        4336,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "raw/surging-wave-r1.png": {
+      "sha256": "c147d66a64e03601bafc7849c4391680fd619e12ed102f7555f91afbbcf8d9b5",
+      "bytes": 999717,
+      "size": [
+        4336,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "raw/tide-lash-r1.png": {
+      "sha256": "09033eb51e73ad425de7d59ed572cf4dfb35a83a9486ea617aabd7d4601aa809",
+      "bytes": 1178628,
+      "size": [
+        4336,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "raw/tide-lash-r2.png": {
+      "sha256": "315f7a273da4a2b133032baf8438bead8843f419ed802103642c145dc896b569",
+      "bytes": 1214517,
+      "size": [
+        4336,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "raw/undertow-r1.png": {
+      "sha256": "88de2fc1c13027ae7fda0efd2d3509d76a194a134040ba14baf3ed320d2f1f3f",
+      "bytes": 1024957,
+      "size": [
+        4336,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "raw/undertow-r2.png": {
+      "sha256": "6e68a0f3484b3d2be109b1b43d083378b0db0d13c06724a7cc6c36f4ecb65022",
+      "bytes": 1161381,
+      "size": [
+        4336,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "raw/water-veil-r1.png": {
+      "sha256": "c6fb0c9cd504c1b7e55a70a94155dc16e3436ad8548d9d59432f106c94155d41",
+      "bytes": 1222378,
+      "size": [
+        4336,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/sentinel-cell8.png": {
+      "sha256": "33329874d21ddd767790ac55d23b43cfb07a7272dc6f46985c1021adb64f5c2b",
+      "bytes": 492946,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds/water-spirit-idle.png": {
+      "sha256": "4561281449e8da1b2a5009710b856d58027a2db3f43f4886cc4d491d3d8e48a3",
+      "bytes": 324590,
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA"
+    },
+    "seeds.json": {
+      "sha256": "efb3d13c7dce7ec8dd026ab37816e93c2015146e1d6bf5aa3b55ef87fdc09a1b",
+      "bytes": 855
+    },
+    "source-layout.json": {
+      "sha256": "31b47a22b480abe8cdba34ffedb5e321269eb77b8ff6483697310e33e50831e4",
+      "bytes": 5083
+    },
+    "sources/down-r1.png": {
+      "sha256": "b39b4c264c14d200a3150d5d9311bf6f51085bbc3aea321f15c5d4a1b2904912",
+      "bytes": 1573780,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "sources/great-wave-r1.png": {
+      "sha256": "aafc871bbb14c4ce41d331ace42c1223499572f89781be54db39b13ac84bbdb5",
+      "bytes": 2158368,
+      "size": [
+        2164,
+        727
+      ],
+      "mode": "RGBA"
+    },
+    "sources/hit-r1.png": {
+      "sha256": "2e6cff78971de7d6461de7f0b8add577b3f83b461aa0a463308580408d7626bb",
+      "bytes": 1831308,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA"
+    },
+    "sources/reflection-r1.png": {
+      "sha256": "5de7c231fc987f6ff4ea0b880a4b6eb56092810f82437c5424a2f06034a1ce35",
+      "bytes": 2322037,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "sources/reflection-r2.png": {
+      "sha256": "a59cf5c7848ecb77b89fa4c5c3156d9e44c8c8a7a4d395d7fae8d59f3bf082de",
+      "bytes": 2611433,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "sources/surging-wave-r1.png": {
+      "sha256": "e19204b3df9db203fb00813aaedb52c58a87ed719d76be51d1c7aec0b71711c0",
+      "bytes": 1896040,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "sources/tide-lash-r1.png": {
+      "sha256": "a5bde727e2750e60aae4eff607f52d17dd8c62718e078f42eada9029450f4dc5",
+      "bytes": 2278094,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "sources/tide-lash-r2.png": {
+      "sha256": "d399e0e5938cb1e13707e6fa495a370854f93f2ca28b9d7d221e5545b9dcc02d",
+      "bytes": 2285415,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "sources/undertow-r1.png": {
+      "sha256": "99daee462552ddc9afcef581b6052a3d319713700ddc5dea88c135856779c459",
+      "bytes": 2488300,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "sources/undertow-r2.png": {
+      "sha256": "e6246188fa3529478bf8ba3abf455f18c6ec57cc34edb00ac967f12562f660fc",
+      "bytes": 2353459,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "sources/vfx.png": {
+      "sha256": "2c822284462ac85b8b153dcf069f96f220a029665ed18efddf3ccec6728d1aa2",
+      "bytes": 1746103,
+      "size": [
+        1086,
+        1448
+      ],
+      "mode": "RGBA"
+    },
+    "sources/water-spirit-idle.png": {
+      "sha256": "2a898e8030b195e95983c305cb9c91c7255e8135d2c29425eb1a3970bb761202",
+      "bytes": 1737012,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "sources/water-veil-r1.png": {
+      "sha256": "be88ab90061ad87c139424c52a691f8cef770697a0423864b2cef175c8ee75e3",
+      "bytes": 2719875,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA"
+    },
+    "storyboard-390.png": {
+      "sha256": "8e37f0aab6590cb2f6356e320f53a00179ee4398ede6fcd7a282cfb94c616218",
+      "bytes": 2974411,
+      "size": [
+        390,
+        4578
+      ],
+      "mode": "RGB"
+    },
+    "strips.json": {
+      "sha256": "4f96254536aab620058c19ac806db779b7b6c18f5d04571481864f2b0dea0bc0",
+      "bytes": 20783
+    },
+    "vfx/great-wave-peak.png": {
+      "sha256": "56561258428eba6c49f29f63dcb3dca31a527f813f84cc54beb6acbeb4df0944",
+      "bytes": 24936,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "vfx/great-wave-prepare.png": {
+      "sha256": "e789700012cf0a3c703f83d471aa5ebb7ced7f550b4fead6a76cdcdba7c18745",
+      "bytes": 16208,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "vfx/great-wave-settle.png": {
+      "sha256": "860b62678cd7f8431426a3b5e310b16d84b5a0fd4854493c8865a590054a07c8",
+      "bytes": 14997,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "vfx/reflection-peak.png": {
+      "sha256": "08b7d16e7705ca6b1eb1b46e0066244cf372b46642abc610e274ff3397ffdd30",
+      "bytes": 37408,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "vfx/reflection-prepare.png": {
+      "sha256": "740ac745dbe2be857e1c9606703ef4814fa259453affb060d9d29ddaee2eba3d",
+      "bytes": 16355,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "vfx/reflection-settle.png": {
+      "sha256": "d399e0c312013aa34d20fd5b351338b398f707a7b3fc046e9b0ee70da6d8532e",
+      "bytes": 13815,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "vfx/surging-wave-peak.png": {
+      "sha256": "a5d791d56a8e7dcc6aafe62d2584bb89346224c32a5f7d22109b8ea708743745",
+      "bytes": 85349,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "vfx/surging-wave-prepare.png": {
+      "sha256": "7047df8a6bd348abdc6ba481e4d3df54789adbddc2e7c412be7fdd15763d82f2",
+      "bytes": 35919,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "vfx/surging-wave-settle.png": {
+      "sha256": "aee090b85e18a4c59db915fbced6edd00a936c39e6f846c5cce20e804cdfabe1",
+      "bytes": 31860,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "vfx/water-veil-peak.png": {
+      "sha256": "348f16c0618e163d83e65fd5541039afa9e2f21710884c7786fd422026fa9f6e",
+      "bytes": 52689,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "vfx/water-veil-prepare.png": {
+      "sha256": "c9ff5899f52cca44c3f9c09f66e6cd16d14352c4eb7b051ac061f279bd88b96a",
+      "bytes": 29398,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "vfx/water-veil-settle.png": {
+      "sha256": "478ff870c10458ae1d99ac01682f87430e0fa6627fc6de83bec6b34e04263813",
+      "bytes": 16786,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    }
+  },
+  "storyboardSafety": {
+    "water-veil/prepare": {
+      "maskedPixels": 78,
+      "protectedOverlapPixels": 0
+    },
+    "water-veil/peak": {
+      "maskedPixels": 774,
+      "protectedOverlapPixels": 0
+    },
+    "water-veil/settle": {
+      "maskedPixels": 0,
+      "protectedOverlapPixels": 0
+    },
+    "surging-wave/prepare": {
+      "maskedPixels": 34,
+      "protectedOverlapPixels": 0
+    },
+    "surging-wave/peak": {
+      "maskedPixels": 676,
+      "protectedOverlapPixels": 0
+    },
+    "surging-wave/settle": {
+      "maskedPixels": 24,
+      "protectedOverlapPixels": 0
+    },
+    "great-wave/prepare": {
+      "maskedPixels": 101,
+      "protectedOverlapPixels": 0
+    },
+    "great-wave/peak": {
+      "maskedPixels": 324,
+      "protectedOverlapPixels": 0
+    },
+    "great-wave/settle": {
+      "maskedPixels": 269,
+      "protectedOverlapPixels": 0
+    },
+    "reflection/prepare": {
+      "maskedPixels": 0,
+      "protectedOverlapPixels": 0
+    },
+    "reflection/peak": {
+      "maskedPixels": 59,
+      "protectedOverlapPixels": 0
+    },
+    "reflection/settle": {
+      "maskedPixels": 23,
+      "protectedOverlapPixels": 0
+    }
+  },
+  "anatomy": {
+    "tolerance": 0.12,
+    "minInliers": 12,
+    "report": {
+      "water-spirit": [
+        {
+          "frame": 0,
+          "height": 252,
+          "scale": 1.0,
+          "inliers": 891,
+          "idle": true,
+          "status": "idle",
+          "pose": "idle"
+        },
+        {
+          "frame": 1,
+          "height": 249,
+          "scale": 1.005,
+          "inliers": 205,
+          "status": "ok",
+          "pose": "tide-lash-r1/1"
+        },
+        {
+          "frame": 2,
+          "height": 249,
+          "scale": 0.997,
+          "inliers": 142,
+          "status": "ok",
+          "pose": "tide-lash-r1/2"
+        },
+        {
+          "frame": 3,
+          "height": 246,
+          "scale": 0.996,
+          "inliers": 114,
+          "status": "ok",
+          "pose": "tide-lash-r1/3"
+        },
+        {
+          "frame": 4,
+          "height": 247,
+          "scale": 0.952,
+          "inliers": 184,
+          "status": "ok",
+          "pose": "tide-lash-r1/4"
+        },
+        {
+          "frame": 5,
+          "height": 250,
+          "scale": 0.985,
+          "inliers": 363,
+          "status": "ok",
+          "pose": "tide-lash-r2/1"
+        },
+        {
+          "frame": 6,
+          "height": 250,
+          "scale": 0.983,
+          "inliers": 288,
+          "status": "ok",
+          "pose": "tide-lash-r2/2"
+        },
+        {
+          "frame": 7,
+          "height": 250,
+          "scale": 0.981,
+          "inliers": 254,
+          "status": "ok",
+          "pose": "tide-lash-r2/3"
+        },
+        {
+          "frame": 8,
+          "height": 250,
+          "scale": 0.987,
+          "inliers": 303,
+          "status": "ok",
+          "pose": "tide-lash-r2/4"
+        },
+        {
+          "frame": 9,
+          "height": 250,
+          "scale": 1.003,
+          "inliers": 200,
+          "status": "ok",
+          "pose": "water-veil-r1/1"
+        },
+        {
+          "frame": 10,
+          "height": 250,
+          "scale": 0.962,
+          "inliers": 168,
+          "status": "ok",
+          "pose": "water-veil-r1/2"
+        },
+        {
+          "frame": 11,
+          "height": 250,
+          "scale": 0.955,
+          "inliers": 130,
+          "status": "ok",
+          "pose": "water-veil-r1/3"
+        },
+        {
+          "frame": 12,
+          "height": 250,
+          "scale": 0.962,
+          "inliers": 212,
+          "status": "ok",
+          "pose": "water-veil-r1/4"
+        },
+        {
+          "frame": 13,
+          "height": 179,
+          "scale": 1.036,
+          "inliers": 67,
+          "status": "ok",
+          "pose": "surging-wave-r1/1"
+        },
+        {
+          "frame": 14,
+          "height": 241,
+          "scale": 1.093,
+          "inliers": 16,
+          "status": "ok",
+          "pose": "surging-wave-r1/2"
+        },
+        {
+          "frame": 15,
+          "height": 174,
+          "scale": 1.058,
+          "inliers": 69,
+          "status": "ok",
+          "pose": "surging-wave-r1/3"
+        },
+        {
+          "frame": 16,
+          "height": 170,
+          "scale": 1.038,
+          "inliers": 77,
+          "status": "ok",
+          "pose": "surging-wave-r1/4"
+        },
+        {
+          "frame": 17,
+          "height": 179,
+          "scale": 0.995,
+          "inliers": 94,
+          "status": "ok",
+          "pose": "undertow-r1/1"
+        },
+        {
+          "frame": 18,
+          "height": 177,
+          "scale": 0.999,
+          "inliers": 88,
+          "status": "ok",
+          "pose": "undertow-r1/2"
+        },
+        {
+          "frame": 19,
+          "height": 202,
+          "scale": 0.977,
+          "inliers": 89,
+          "status": "ok",
+          "pose": "undertow-r1/3"
+        },
+        {
+          "frame": 20,
+          "height": 199,
+          "scale": 0.988,
+          "inliers": 84,
+          "status": "ok",
+          "pose": "undertow-r1/4"
+        },
+        {
+          "frame": 21,
+          "height": 223,
+          "scale": 1.001,
+          "inliers": 87,
+          "status": "ok",
+          "pose": "undertow-r2/1"
+        },
+        {
+          "frame": 22,
+          "height": 223,
+          "scale": 1.067,
+          "inliers": 88,
+          "status": "ok",
+          "pose": "undertow-r2/2"
+        },
+        {
+          "frame": 23,
+          "height": 230,
+          "scale": 1.036,
+          "inliers": 123,
+          "status": "ok",
+          "pose": "undertow-r2/3"
+        },
+        {
+          "frame": 24,
+          "height": 236,
+          "scale": 1.003,
+          "inliers": 150,
+          "status": "ok",
+          "pose": "undertow-r2/4"
+        },
+        {
+          "frame": 25,
+          "height": 248,
+          "scale": 1.02,
+          "inliers": 158,
+          "status": "ok",
+          "pose": "great-wave-r1/1"
+        },
+        {
+          "frame": 26,
+          "height": 249,
+          "scale": 1.027,
+          "inliers": 60,
+          "status": "ok",
+          "pose": "great-wave-r1/2"
+        },
+        {
+          "frame": 27,
+          "height": 247,
+          "scale": 0.991,
+          "inliers": 135,
+          "status": "ok",
+          "pose": "great-wave-r1/3"
+        },
+        {
+          "frame": 28,
+          "height": 248,
+          "scale": 1.01,
+          "inliers": 111,
+          "status": "ok",
+          "pose": "great-wave-r1/4"
+        },
+        {
+          "frame": 29,
+          "height": 249,
+          "scale": 0.965,
+          "inliers": 176,
+          "status": "ok",
+          "pose": "reflection-r1/1"
+        },
+        {
+          "frame": 30,
+          "height": 245,
+          "scale": 0.967,
+          "inliers": 118,
+          "status": "ok",
+          "pose": "reflection-r1/2"
+        },
+        {
+          "frame": 31,
+          "height": 250,
+          "scale": 0.914,
+          "inliers": 159,
+          "status": "ok",
+          "pose": "reflection-r1/3"
+        },
+        {
+          "frame": 32,
+          "height": 249,
+          "scale": 1.003,
+          "inliers": 194,
+          "status": "ok",
+          "pose": "reflection-r1/4"
+        },
+        {
+          "frame": 33,
+          "height": 251,
+          "scale": 0.96,
+          "inliers": 216,
+          "status": "ok",
+          "pose": "reflection-r2/1"
+        },
+        {
+          "frame": 34,
+          "height": 250,
+          "scale": 0.945,
+          "inliers": 165,
+          "status": "ok",
+          "pose": "reflection-r2/2"
+        },
+        {
+          "frame": 35,
+          "height": 251,
+          "scale": 0.975,
+          "inliers": 246,
+          "status": "ok",
+          "pose": "reflection-r2/3"
+        },
+        {
+          "frame": 36,
+          "height": 250,
+          "scale": 0.974,
+          "inliers": 245,
+          "status": "ok",
+          "pose": "reflection-r2/4"
+        },
+        {
+          "frame": 37,
+          "height": 247,
+          "scale": 1.046,
+          "inliers": 61,
+          "status": "ok",
+          "pose": "hit-r1/1"
+        },
+        {
+          "frame": 38,
+          "height": 251,
+          "scale": 0.978,
+          "inliers": 264,
+          "status": "ok",
+          "pose": "hit-r1/2"
+        },
+        {
+          "frame": 39,
+          "height": 209,
+          "scale": 1.038,
+          "inliers": 113,
+          "status": "ok",
+          "pose": "down-r1/1"
+        },
+        {
+          "frame": 40,
+          "height": 162,
+          "scale": 1.019,
+          "inliers": 117,
+          "status": "ok",
+          "pose": "down-r1/2"
+        },
+        {
+          "frame": 41,
+          "height": 113,
+          "scale": 1.083,
+          "inliers": 59,
+          "status": "ok",
+          "pose": "down-r1/3"
+        }
+      ]
+    },
+    "exitCode": 0
+  }
+}

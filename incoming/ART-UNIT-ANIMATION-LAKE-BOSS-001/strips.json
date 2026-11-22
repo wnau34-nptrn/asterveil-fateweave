@@ -1,0 +1,1362 @@
+{
+  "cellSize": [
+    1024,
+    1024
+  ],
+  "gutterPx": 80,
+  "soleOrigin": 0.875,
+  "idleIndex": 0,
+  "clips": {
+    "tide-lash-r1": {
+      "intentOrReaction": "Tide Lash",
+      "recommended": false,
+      "source": "sources/tide-lash-r1.png",
+      "raw": "raw/tide-lash-r1.png",
+      "facing": "left",
+      "frameCount": 4,
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          370,
+          405,
+          716,
+          898
+        ],
+        [
+          373,
+          405,
+          681,
+          898
+        ],
+        [
+          368,
+          411,
+          719,
+          898
+        ],
+        [
+          334,
+          408,
+          743,
+          898
+        ]
+      ],
+      "alpha64Bounds": [
+        [
+          372,
+          407,
+          713,
+          896
+        ],
+        [
+          375,
+          407,
+          678,
+          896
+        ],
+        [
+          371,
+          414,
+          717,
+          896
+        ],
+        [
+          336,
+          410,
+          741,
+          896
+        ]
+      ],
+      "sourcePoseWindowsAndAnchors": [
+        [
+          0,
+          539,
+          240,
+          699
+        ],
+        [
+          539,
+          1022,
+          750,
+          698
+        ],
+        [
+          1022,
+          1565,
+          1259,
+          698
+        ],
+        [
+          1565,
+          2172,
+          1831,
+          698
+        ]
+      ],
+      "sourceSharedScale": 0.72,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ],
+      "previewOrder": [
+        "idle",
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "idle"
+      ]
+    },
+    "tide-lash-r2": {
+      "intentOrReaction": "Tide Lash",
+      "recommended": true,
+      "source": "sources/tide-lash-r2.png",
+      "raw": "raw/tide-lash-r2.png",
+      "facing": "left",
+      "frameCount": 4,
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          362,
+          404,
+          727,
+          899
+        ],
+        [
+          361,
+          404,
+          726,
+          899
+        ],
+        [
+          330,
+          404,
+          727,
+          899
+        ],
+        [
+          346,
+          404,
+          727,
+          899
+        ]
+      ],
+      "alpha64Bounds": [
+        [
+          364,
+          406,
+          725,
+          896
+        ],
+        [
+          364,
+          406,
+          723,
+          896
+        ],
+        [
+          332,
+          406,
+          724,
+          896
+        ],
+        [
+          349,
+          407,
+          725,
+          896
+        ]
+      ],
+      "sourcePoseWindowsAndAnchors": [
+        [
+          0,
+          559,
+          244,
+          686
+        ],
+        [
+          559,
+          1080,
+          787,
+          686
+        ],
+        [
+          1080,
+          1635,
+          1331,
+          686
+        ],
+        [
+          1635,
+          2172,
+          1873,
+          686
+        ]
+      ],
+      "sourceSharedScale": 0.735,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ],
+      "previewOrder": [
+        "idle",
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "idle"
+      ],
+      "suggestedClipIndices": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "water-veil-r1": {
+      "intentOrReaction": "Water Veil",
+      "recommended": true,
+      "source": "sources/water-veil-r1.png",
+      "raw": "raw/water-veil-r1.png",
+      "facing": "left",
+      "frameCount": 4,
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          373,
+          405,
+          716,
+          899
+        ],
+        [
+          373,
+          404,
+          717,
+          899
+        ],
+        [
+          373,
+          404,
+          718,
+          899
+        ],
+        [
+          372,
+          404,
+          717,
+          899
+        ]
+      ],
+      "alpha64Bounds": [
+        [
+          375,
+          407,
+          714,
+          896
+        ],
+        [
+          376,
+          407,
+          714,
+          896
+        ],
+        [
+          376,
+          407,
+          715,
+          896
+        ],
+        [
+          375,
+          407,
+          715,
+          896
+        ]
+      ],
+      "sourcePoseWindowsAndAnchors": [
+        [
+          0,
+          559,
+          242,
+          695
+        ],
+        [
+          559,
+          1102,
+          785,
+          695
+        ],
+        [
+          1102,
+          1645,
+          1328,
+          695
+        ],
+        [
+          1645,
+          2172,
+          1872,
+          695
+        ]
+      ],
+      "sourceSharedScale": 0.722,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ],
+      "previewOrder": [
+        "idle",
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "idle"
+      ],
+      "suggestedClipIndices": [
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    "surging-wave-r1": {
+      "intentOrReaction": "Surging Wave",
+      "recommended": true,
+      "source": "sources/surging-wave-r1.png",
+      "raw": "raw/surging-wave-r1.png",
+      "facing": "left",
+      "frameCount": 4,
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          334,
+          547,
+          689,
+          899
+        ],
+        [
+          337,
+          422,
+          683,
+          899
+        ],
+        [
+          307,
+          557,
+          700,
+          899
+        ],
+        [
+          323,
+          564,
+          690,
+          899
+        ]
+      ],
+      "alpha64Bounds": [
+        [
+          337,
+          550,
+          687,
+          896
+        ],
+        [
+          339,
+          425,
+          680,
+          896
+        ],
+        [
+          309,
+          559,
+          697,
+          896
+        ],
+        [
+          325,
+          567,
+          687,
+          896
+        ]
+      ],
+      "sourcePoseWindowsAndAnchors": [
+        [
+          0,
+          551,
+          285,
+          675
+        ],
+        [
+          551,
+          1056,
+          814,
+          675
+        ],
+        [
+          1056,
+          1621,
+          1346,
+          675
+        ],
+        [
+          1621,
+          2172,
+          1896,
+          675
+        ]
+      ],
+      "sourceSharedScale": 0.73,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ],
+      "previewOrder": [
+        "idle",
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "idle"
+      ],
+      "suggestedClipIndices": [
+        9,
+        10,
+        11,
+        12
+      ]
+    },
+    "undertow-r1": {
+      "intentOrReaction": "Undertow",
+      "recommended": true,
+      "source": "sources/undertow-r1.png",
+      "raw": "raw/undertow-r1.png",
+      "facing": "left",
+      "frameCount": 4,
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          314,
+          546,
+          691,
+          899
+        ],
+        [
+          303,
+          548,
+          681,
+          898
+        ],
+        [
+          321,
+          501,
+          700,
+          899
+        ],
+        [
+          333,
+          505,
+          692,
+          899
+        ]
+      ],
+      "alpha64Bounds": [
+        [
+          316,
+          549,
+          687,
+          896
+        ],
+        [
+          306,
+          550,
+          679,
+          896
+        ],
+        [
+          324,
+          503,
+          698,
+          897
+        ],
+        [
+          336,
+          507,
+          690,
+          896
+        ]
+      ],
+      "sourcePoseWindowsAndAnchors": [
+        [
+          0,
+          540,
+          284,
+          634
+        ],
+        [
+          540,
+          1084,
+          838,
+          635
+        ],
+        [
+          1084,
+          1642,
+          1359,
+          634
+        ],
+        [
+          1642,
+          2172,
+          1911,
+          635
+        ]
+      ],
+      "sourceSharedScale": 0.73,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ],
+      "previewOrder": [
+        "idle",
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "idle"
+      ],
+      "suggestedClipIndices": [
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    "undertow-r2": {
+      "intentOrReaction": "Undertow",
+      "recommended": false,
+      "source": "sources/undertow-r2.png",
+      "raw": "raw/undertow-r2.png",
+      "facing": "left",
+      "frameCount": 4,
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          342,
+          457,
+          689,
+          899
+        ],
+        [
+          311,
+          459,
+          694,
+          899
+        ],
+        [
+          330,
+          443,
+          691,
+          898
+        ],
+        [
+          351,
+          431,
+          695,
+          898
+        ]
+      ],
+      "alpha64Bounds": [
+        [
+          344,
+          460,
+          686,
+          896
+        ],
+        [
+          313,
+          462,
+          691,
+          896
+        ],
+        [
+          332,
+          446,
+          688,
+          896
+        ],
+        [
+          353,
+          433,
+          693,
+          896
+        ]
+      ],
+      "sourcePoseWindowsAndAnchors": [
+        [
+          0,
+          533,
+          281,
+          678
+        ],
+        [
+          533,
+          1089,
+          819,
+          678
+        ],
+        [
+          1089,
+          1638,
+          1360,
+          677
+        ],
+        [
+          1638,
+          2172,
+          1892,
+          677
+        ]
+      ],
+      "sourceSharedScale": 0.735,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ],
+      "previewOrder": [
+        "idle",
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "idle"
+      ]
+    },
+    "great-wave-r1": {
+      "intentOrReaction": "Great Wave",
+      "recommended": true,
+      "source": "sources/great-wave-r1.png",
+      "raw": "raw/great-wave-r1.png",
+      "facing": "left",
+      "frameCount": 4,
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          326,
+          406,
+          704,
+          899
+        ],
+        [
+          351,
+          405,
+          718,
+          898
+        ],
+        [
+          330,
+          409,
+          718,
+          899
+        ],
+        [
+          333,
+          409,
+          723,
+          899
+        ]
+      ],
+      "alpha64Bounds": [
+        [
+          329,
+          409,
+          701,
+          896
+        ],
+        [
+          353,
+          408,
+          715,
+          896
+        ],
+        [
+          333,
+          412,
+          715,
+          896
+        ],
+        [
+          335,
+          411,
+          720,
+          896
+        ]
+      ],
+      "sourcePoseWindowsAndAnchors": [
+        [
+          0,
+          549,
+          271,
+          690
+        ],
+        [
+          549,
+          1070,
+          786,
+          689
+        ],
+        [
+          1070,
+          1610,
+          1323,
+          690
+        ],
+        [
+          1610,
+          2164,
+          1862,
+          691
+        ]
+      ],
+      "sourceSharedScale": 0.74,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ],
+      "previewOrder": [
+        "idle",
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "idle"
+      ],
+      "suggestedClipIndices": [
+        17,
+        18,
+        19,
+        20
+      ]
+    },
+    "reflection-r1": {
+      "intentOrReaction": "Reflection",
+      "recommended": true,
+      "source": "sources/reflection-r1.png",
+      "raw": "raw/reflection-r1.png",
+      "facing": "left",
+      "frameCount": 4,
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          361,
+          405,
+          702,
+          898
+        ],
+        [
+          314,
+          412,
+          704,
+          898
+        ],
+        [
+          334,
+          404,
+          708,
+          899
+        ],
+        [
+          338,
+          404,
+          698,
+          898
+        ]
+      ],
+      "alpha64Bounds": [
+        [
+          363,
+          408,
+          700,
+          895
+        ],
+        [
+          317,
+          414,
+          702,
+          895
+        ],
+        [
+          336,
+          406,
+          706,
+          896
+        ],
+        [
+          341,
+          406,
+          696,
+          896
+        ]
+      ],
+      "sourcePoseWindowsAndAnchors": [
+        [
+          0,
+          531,
+          267,
+          684
+        ],
+        [
+          531,
+          1083,
+          806,
+          684
+        ],
+        [
+          1083,
+          1627,
+          1341,
+          685
+        ],
+        [
+          1627,
+          2172,
+          1883,
+          684
+        ]
+      ],
+      "sourceSharedScale": 0.735,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ],
+      "previewOrder": [
+        "idle",
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "idle"
+      ],
+      "suggestedClipIndices": [
+        21,
+        22,
+        23,
+        24
+      ]
+    },
+    "reflection-r2": {
+      "intentOrReaction": "Reflection",
+      "recommended": false,
+      "source": "sources/reflection-r2.png",
+      "raw": "raw/reflection-r2.png",
+      "facing": "left",
+      "frameCount": 4,
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          371,
+          403,
+          722,
+          898
+        ],
+        [
+          370,
+          403,
+          719,
+          898
+        ],
+        [
+          360,
+          403,
+          724,
+          898
+        ],
+        [
+          346,
+          403,
+          726,
+          898
+        ]
+      ],
+      "alpha64Bounds": [
+        [
+          373,
+          406,
+          720,
+          896
+        ],
+        [
+          372,
+          406,
+          716,
+          896
+        ],
+        [
+          363,
+          405,
+          721,
+          896
+        ],
+        [
+          348,
+          405,
+          724,
+          896
+        ]
+      ],
+      "sourcePoseWindowsAndAnchors": [
+        [
+          0,
+          558,
+          251,
+          688
+        ],
+        [
+          558,
+          1076,
+          773,
+          688
+        ],
+        [
+          1076,
+          1606,
+          1305,
+          688
+        ],
+        [
+          1606,
+          2172,
+          1846,
+          688
+        ]
+      ],
+      "sourceSharedScale": 0.744,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ],
+      "previewOrder": [
+        "idle",
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through",
+        "idle"
+      ]
+    },
+    "hit-r1": {
+      "intentOrReaction": "hit",
+      "recommended": true,
+      "source": "sources/hit-r1.png",
+      "raw": "raw/hit-r1.png",
+      "facing": "left",
+      "frameCount": 2,
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          347,
+          411,
+          747,
+          899
+        ],
+        [
+          364,
+          403,
+          742,
+          899
+        ]
+      ],
+      "alpha64Bounds": [
+        [
+          349,
+          414,
+          745,
+          897
+        ],
+        [
+          367,
+          406,
+          739,
+          896
+        ]
+      ],
+      "sourcePoseWindowsAndAnchors": [
+        [
+          0,
+          936,
+          466,
+          874
+        ],
+        [
+          936,
+          1774,
+          1253,
+          875
+        ]
+      ],
+      "sourceSharedScale": 0.568,
+      "frameOrder": [
+        "recoil",
+        "partial recovery"
+      ],
+      "suggestedClipIndices": [
+        25,
+        26
+      ]
+    },
+    "down-r1": {
+      "intentOrReaction": "down",
+      "recommended": true,
+      "source": "sources/down-r1.png",
+      "raw": "raw/down-r1.png",
+      "facing": "left",
+      "frameCount": 3,
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          346,
+          488,
+          686,
+          898
+        ],
+        [
+          312,
+          579,
+          726,
+          898
+        ],
+        [
+          329,
+          677,
+          751,
+          898
+        ]
+      ],
+      "alpha64Bounds": [
+        [
+          348,
+          490,
+          684,
+          896
+        ],
+        [
+          315,
+          581,
+          723,
+          896
+        ],
+        [
+          332,
+          679,
+          749,
+          895
+        ]
+      ],
+      "sourcePoseWindowsAndAnchors": [
+        [
+          0,
+          703,
+          369,
+          690
+        ],
+        [
+          703,
+          1451,
+          1078,
+          685
+        ],
+        [
+          1451,
+          2172,
+          1777,
+          686
+        ]
+      ],
+      "sourceSharedScale": 0.625,
+      "frameOrder": [
+        "buckle",
+        "kneel",
+        "collapsed hold"
+      ],
+      "suggestedClipIndices": [
+        27,
+        28,
+        29
+      ]
+    }
+  }
+}
