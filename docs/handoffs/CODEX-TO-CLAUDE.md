@@ -1,3 +1,9 @@
+## 2026-11-22 — Map 4 Water Spirit art and VFX (Codex · codex/map4-lake-boss → claude/map4-lake-foes)
+- Owner selected Tide Lash R2, Undertow R1 and Reflection R1 (“ทำตามที่คุณแนะนำ”) and approved “ใช้ runtime 768 px (แนะนำ)”. Verified 21 files from #339. Preserved sole and displayed scale, with six moves, hit/down and still/portrait.
+- Four encounter-only VFX families route from real events. Water Veil peaks on healing, and Reflection keeps the caster's recover frames while filling the actual summon slot.
+- Typecheck, lint, build and coverage 6/6 passed. Full unit run 2268 passed with one audit of obsolete stand-in aliases fixed and rerun in a 129/129 focused pass. Chromium 390px clips 8/8, A11 texture release and Call the Court passed.
+- Worst five-hero animation plus dedicated boss FX 60.1 MiB / 17.1 MB. Awaiting owner motion approval. [Review clips](../combat-presentation/lake-boss-slice/README_TH.md).
+
 ## 2026-11-22 — Map 4 phase 4 motion choices (Codex · claude/map4-lake-foes)
 - Owner: “ทำตามที่คุณแนะนำ” for Tide Lash R2, Undertow R1, Reflection R1. This supersedes the earlier all-R1 pick.
 - Verified SHA-256 and RGBA decode for all 21 selected input images from #339, including the Tide Lash R2 strip. Documentation passed git diff --check.

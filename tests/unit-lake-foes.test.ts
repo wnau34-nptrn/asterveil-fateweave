@@ -39,7 +39,7 @@ describe('lake foes (phase 2)', () => {
   it('ships the foes3 still and portrait sheets, and the lake sets that use only these foes are no stand-ins', () => {
     for (const f of ['units_foes3', 'portraits_foes3', 'portraits_foes3_half']) expect(existsSync(`public/assets/art/${f}.webp`)).toBe(true);
     for (const id of ['lake-slimes', 'lake-mist', 'crab-wall', 'isle-host', 'pavilion-mist']) { expect(encounterById(id)).toBeDefined(); expect(LAKE_STANDINS.has(id)).toBe(false); }
-    expect([...LAKE_STANDINS].sort()).toEqual(['water-spirit']);
+    expect([...LAKE_STANDINS]).toEqual([]);
   });
 });
 

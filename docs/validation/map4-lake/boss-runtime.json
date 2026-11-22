@@ -1,0 +1,28 @@
+{
+  "sourceCell": 1024,
+  "runtimeCell": 768,
+  "soleOrigin": 0.875,
+  "selectedStrips": [
+    "tide-lash-r2",
+    "water-veil-r1",
+    "surging-wave-r1",
+    "undertow-r1",
+    "great-wave-r1",
+    "reflection-r1",
+    "hit-r1",
+    "down-r1"
+  ],
+  "atlas": {
+    "image": "waterspirit_lake.d59088dd98f5.webp",
+    "atlas": "waterspirit_lake.60855a921cf0.json",
+    "width": 1712,
+    "height": 1860,
+    "frames": 30,
+    "decodedBytes": 12737280,
+    "downloadBytes": 3591631
+  },
+  "stillRevisions": {
+    "units_foes3": "7d39b63a",
+    "portraits_foes3": "f814eafe"
+  }
+}

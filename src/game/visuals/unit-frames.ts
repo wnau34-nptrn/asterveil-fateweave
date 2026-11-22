@@ -1,5 +1,5 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
-import { lakeEliteDisplayRatios } from './assets';
+import { lakeBossDisplayRatio, lakeEliteDisplayRatios } from './assets';
 import atlasManifest from './unit-atlases.json';
 export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare' | 'arc' | 'communion' | 'lastlight' | 'partner' | 'circle' | 'closing' | 'echo' | 'move1' | 'move2' | 'move3' | 'move4' | 'move5' | 'move6' | 'move7' | 'mark' | 'parry' | 'gather' | 'release' | 'stored' | 'knot' | 'toll' | 'weave' | 'deflect' | 'dial' | 'read';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
@@ -141,8 +141,8 @@ export const unitRegistry = {
   // seed / bob up / bob down) and its down frames keep the painted fade. Hit 17..18 and down 19..21 use the shared layout; 21 is the held collapse.
   foe_golem: { sheet: 'golem', displayRatio: 2, intents: { 'Crystal Fist': 'attack', 'Stone Fist': 'attack', 'Veil Quake': 'skill' } },
   foe_rift_channeler: { sheet: 'channeler', displayRatio: 2, intents: { 'Rift Beam': 'attack', 'Rift Bolt': 'attack' } },
-  foe_rift_wisp: { sheet: 'wisp', displayRatio: 2, intents: { 'Star Flame': 'attack', 'Mist Needle': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 }, corpseAlpha: 1 },
-  foe_shard_crawler: { sheet: 'crawler', displayRatio: 2, intents: { 'Crystal Stab': 'attack', Pincer: 'attack' } },
+  foe_rift_wisp: { sheet: 'wisp', displayRatio: 2, intents: { 'Star Flame': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 }, corpseAlpha: 1 },
+  foe_shard_crawler: { sheet: 'crawler', displayRatio: 2, intents: { 'Crystal Stab': 'attack' } },
   // Map 4 lake foes (ART-UNIT-ANIMATION-LAKE-001, shared layout): the slime spits (skill 9..16), the wisp, crab and shade strike
   // (attack 1..8); hit 17..18, down 19..21; the wisp hovers on 22..24. Slots without a strip alias the ready seed and are never drawn.
   foe_tide_slime: { sheet: 'tideslime', displayRatio: 2, intents: { 'Water Spit': 'skill' } },
@@ -169,11 +169,13 @@ export const unitRegistry = {
     clips: { move1: bossMove(1), move2: bossMove(5) }, reactions: { hit: [9, 10], down: [11, 12, 13] } },
   foe_sentinel: { sheet: 'sentinel', displayRatio: 2, soleOrigin: BOSS_SOLE, downFrame: 33,
     intents: { 'Rift Cataclysm': 'move1', 'Raking Slash': 'move2', 'Crushing Blow': 'move3', 'Rift Bolt': 'move4', 'Rift Wave': 'move4',
-      'Rift Gathering': 'move5', 'Rift Awakening': 'move6', 'Call the Rift': 'move7',
-      // Map 4 stand-in (the Water Spirit wears the sentinel body until its own art arrives).
-      'Surging Wave': 'move1', 'Undertow': 'move3', 'Tide Lash': 'move4', 'Great Wave': 'move4', 'Water Veil': 'move5', Reflection: 'move7' },
+      'Rift Gathering': 'move5', 'Rift Awakening': 'move6', 'Call the Rift': 'move7' },
     clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21), move7: bossMove(25) },
     reactions: { hit: [29, 30], down: [31, 32, 33] } },
+  foe_water_spirit: { sheet: 'waterspirit', displayRatio: lakeBossDisplayRatio, soleOrigin: BOSS_SOLE, own: true, downFrame: 29,
+    intents: { 'Tide Lash': 'move1', 'Water Veil': 'move2', 'Surging Wave': 'move3', Undertow: 'move4', 'Great Wave': 'move5', Reflection: 'move6' },
+    clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21) },
+    reactions: { hit: [25, 26], down: [27, 28, 29] } },
   // WB-A (World Boss Kragmor, ART-UNIT-ANIMATION-WB-A-001): same boss layout, one strip per move in the order of the encounter's
   // intents; Fault Awakening is the 70% phase gesture. The atlas faces left and is never mirrored at runtime.
   foe_kragmor: { sheet: 'kragmor', displayRatio: 2, soleOrigin: BOSS_SOLE, downFrame: 29,

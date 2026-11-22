@@ -103,14 +103,17 @@ function heroPoint(module: VfxModule, action: ActionId): string {
     default: return 'เส้นจากผู้กระทำถึงผู้รับจริง';
   }
 }
-function foeTarget(intent: Pick<IntentDefinition, 'targetSlot' | 'all' | 'charge'> & { phase?: boolean; summon?: boolean }): string {
+function foeTarget(intent: Pick<IntentDefinition, 'targetSlot' | 'all' | 'charge' | 'mend'> & { phase?: boolean; summon?: boolean }): string {
   if (intent.phase) return intent.summon ? 'ตัวเอง + กำลังเสริมที่ปรากฏจริง' : 'ตัวเอง (เปลี่ยนช่วง)';
+  if (intent.mend) return 'ตัวเอง (ฟื้น HP)';
   if (intent.charge) return 'ตัวเอง (รวมพลัง ไม่มี damage)';
   if (intent.all) return 'ฮีโร่ทุกคนที่ยืนอยู่';
   return `ฮีโร่ช่อง ${intent.targetSlot + 1} (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)`;
 }
 function foePoint(module: VfxModule, name: string, route?: string): string {
   if (module === 'foe-signature-fx') return isFoeSignatureMove(name) && isGroundMove(name) ? 'เท้าศัตรู → พื้นใต้ผู้รับจริง' : 'มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)';
+  if (module === 'boss-signature-fx' && name === 'Water Veil') return 'ตัวบอสเมื่อได้ HP คืนจริง';
+  if (module === 'boss-signature-fx' && (name === 'Surging Wave' || name === 'Great Wave')) return 'พื้นใต้ผู้รับผลจริง';
   if (module === 'boss-signature-fx') return route === 'charge' ? 'ตัวบอส + ค้างจนปล่อยท่า' : route === 'caster' ? 'ตัวบอส' : route === 'summon' ? 'ตำแหน่งตัวที่ถูกเรียกจริง' : route === 'all' ? 'ฮีโร่ที่โดนจริงทุกคน' : 'ผู้รับ damage จริง';
   if (module === 'blade-fx') return 'ตัวผู้รับ damage จริง (ชุดดาบร่วม)';
   return 'เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)';
@@ -144,7 +147,7 @@ export interface AtlasInfo { image: string; atlas: string; frames: number; decod
 export interface IdentityCoverage { identity: string; side: 'hero' | 'enemy'; name: string; sheet?: string; atlas?: AtlasInfo; parked?: string; still?: string; reactions: ReactionCoverage }
 
 // Enemy moves an identity really performs: announced intents plus generated phase turns, from every catalog encounter.
-interface FoeMove { name: string; kind: IntentDefinition['kind']; charge?: boolean; all?: boolean; targetSlot: number; phase?: boolean; summon?: boolean; encounters: Set<string> }
+interface FoeMove { name: string; kind: IntentDefinition['kind']; charge?: boolean; all?: boolean; mend?: number; targetSlot: number; phase?: boolean; summon?: boolean; encounters: Set<string> }
 function foeMoves(list: readonly EncounterDefinition[]): Map<string, { name: string; moves: Map<string, FoeMove> }> {
   const out = new Map<string, { name: string; moves: Map<string, FoeMove> }>();
   for (const data of list) {
@@ -156,7 +159,7 @@ function foeMoves(list: readonly EncounterDefinition[]): Map<string, { name: str
       const key = m.name, prior = entry.moves.get(key);
       if (prior) { prior.encounters.add(data.id); prior.all ||= m.all; prior.charge ||= m.charge; } else entry.moves.set(key, { ...m, encounters: new Set([data.id]) });
     };
-    for (const i of data.intents) add(i.sourceId, { name: i.name, kind: i.kind, charge: i.charge, all: i.all, targetSlot: i.targetSlot });
+    for (const i of data.intents) add(i.sourceId, { name: i.name, kind: i.kind, charge: i.charge, all: i.all, mend: i.mend, targetSlot: i.targetSlot });
     for (const p of data.phases ?? []) add(p.sourceId, { name: p.name, kind: 'energy', targetSlot: 0, phase: true, summon: !!(p.summon?.length || p.hardSummon?.length) });
   }
   return out;

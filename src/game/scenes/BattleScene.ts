@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { REWORK_ATLAS, reworkCues, reworkMarks, reworkContact } from '../visuals/rework-fx';
 import { unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals/basic-attack-fx';
-import { BOSS_ATLAS, bossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, holdPlacement, usesBossSignature, type BossPoint } from '../visuals/boss-signature-fx';
+import { BOSS_ATLAS, LAKE_BOSS_ATLAS, bossAtlasFor, bossAtlasUrls, lakeBossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, greatWaveScales, holdPlacement, isLakeBossMove, sealedWaterVeil, usesBossSignature, usesLakeBossSignature, type BossPoint } from '../visuals/boss-signature-fx';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
 import { ALL_SHEETS, allBattleAtlases, atlasesForActions, encounterAtlases, encounterSheets, sheetKey, sheetsForArt, type AtlasRequest } from '../visuals/battle-assets';
 import { unitFrameView } from '../visuals/unit-frame-view';
@@ -26,7 +26,7 @@ import { COMMAND_ATLAS, commandCues, commandPrepare, commandContact, isCommandSk
 import { ALCHEMY_ATLAS, alchemyCues, alchemyEvents, alchemyPrepare, alchemyContact, alchemyHealingCues, isAlchemySkill, type AlchemySkill } from '../visuals/alchemy-fx';
 import { EARTH_ATLAS, earthCues, earthPrepare, earthContact, earthHealingCues, earthHealingEvents, isEarthSkill, type EarthSkill } from '../visuals/earth-fx';
 import { FOE_SLOT_INDEX, fieldSlots, slotPlan, standSlotId, type FieldSlot } from '../visuals/field-layout';
-import { actorArt, actorFootOrigins, artCellSize, staticActorGeometry, staticDisplayRatio, artOf, artUrl, fieldFigureRise, figureRise, lakeEliteRightReach, mirroredArt, unitsUrl } from '../visuals/assets';
+import { actorArt, actorFootOrigins, artCellSize, staticActorGeometry, staticDisplayRatio, artOf, artUrl, fieldFigureRise, figureRise, lakeBossStillBounds, lakeEliteRightReach, mirroredArt, unitsUrl } from '../visuals/assets';
 
 // The unit's own sprite in its body container. Song/shadow floor layers and boss holds also live in the body (some
 // inserted before the sprite), so never take simply the first image.
@@ -193,6 +193,7 @@ export class BattleScene extends Phaser.Scene {
     const data = this.encounter;
     return [
       [BOSS_ATLAS, bossAtlasUrls(), usesBossSignature(data)],
+      [LAKE_BOSS_ATLAS, lakeBossAtlasUrls(), usesLakeBossSignature(data)],
       [FOE_SIGNATURE_ATLAS, foeSignatureAtlasUrls(), data.intents.some(i => isFoeSignatureMove(i.name))],
       [SAINT_DANCE_ATLAS, saintDanceAtlasUrls(), data.heroes.some(h => h.actions.some(a => isSdFx(a)))],
     ];
@@ -269,10 +270,15 @@ export class BattleScene extends Phaser.Scene {
     }
   }
   // Rendered landmarks for the boss-signature family: chest, feet and the facing side.
+  private summonSlots = new Map<string, FieldSlot>();
   bossAnchor(id: string): BossPoint | undefined {
     const box = this.figureBox(id), slot = this.actorPanels.get(id); if (!box || !slot) return;
     return { x: (box.left + box.right) / 2, y: box.top + (box.bottom - box.top) * .5, feetY: box.bottom, size: slot.size, side: this.encounter.heroes.some(h => h.id === id) ? 1 : -1 };
   }
+  private lakeBossAnchor = (id: string): BossPoint | undefined => {
+    const slot = this.summonSlots.get(id);
+    return this.bossAnchor(id) ?? (slot && { x: slot.x, y: slot.y - slot.size / 2, feetY: slot.y, size: slot.size, side: -1 });
+  };
   // A missed resize notification would leave the canvas stretched against the DOM targets;
   // re-measure the arena twice a second while the battle renders.
   update(time: number, delta: number): void {
@@ -301,16 +307,24 @@ export class BattleScene extends Phaser.Scene {
     const previous = this.view?.state;
     this.view = view;
     if (!this.ready) return;
-    // A summon puts a new foe on the field mid-presentation: redraw so it appears in its empty slot.
-    const present = view.state.enemies.filter(e => !e.absent).map(e => e.id);
-    // ...and a shove or its end moves two foes between rows.
+    const summoned = view.state.enemies.filter(e => !e.absent && !this.bodies.has(e.id));
+    // A shove or its end moves two foes between rows.
     const swaps = (s?: BattleState) => s?.enemies.map(e => e.shoved ? `${e.id}>${e.shoved.partnerId ?? ''}` : '').join(',');
-    // Perf R6: a repaint asked for while the field is quiet and would draw exactly what it shows (same bodies, same
-    // alive/down set, same acting pair, same size) only refreshes the bodies; choosing a hero, skill or target no
-    // longer rebuilds every sprite, tween and texture binding.
+    // Perf R6: choosing a hero, skill or target no longer rebuilds an identical quiet field.
     const same = repaint && this.fieldIdle() && this.paintKey(view) === this.paintedKey;
-    if ((repaint && !same) || present.some(id => !this.bodies.has(id)) || swaps(previous) !== swaps(view.state)) this.paint();
-    else this.syncBodies(previous, view);
+    if ((repaint && !same) || summoned.some(e => !this.summonSlots.has(e.id)) || swaps(previous) !== swaps(view.state)) {
+      this.paint();
+      return;
+    }
+    // Fill an already reserved cell at contact while the caster's animation and VFX are active.
+    for (const foe of summoned) {
+      const slot = this.summonSlots.get(foe.id)!;
+      this.summonSlots.delete(foe.id);
+      this.actorPanels.set(foe.id, slot);
+      this.actor(foe.id, slot, foe.hp, true);
+    }
+    this.syncBodies(previous, view);
+    if (summoned.length) { this.layer?.sort('depth'); this.onLayout(); }
   }
   private paintedKey = '';
   private paintKey(view: SceneView): string {
@@ -377,10 +391,14 @@ export class BattleScene extends Phaser.Scene {
       this.actorPanels.set(hero.id, slot);
       this.actor(hero.id, slot, this.view.state.heroes[i]!.hp, false);
     }
+    this.summonSlots.clear();
     for (const [i, enemy] of this.encounter.enemies.entries()) {
-      // Reserves not yet summoned are off the field.
-      if (this.view.state.enemies[i]!.absent) continue;
-      const slot = slots[FOE_SLOT_INDEX[at(enemy.id)]!]!;
+      const index = FOE_SLOT_INDEX[at(enemy.id)]!;
+      const slot = slots[index]!;
+      if (this.view.state.enemies[i]!.absent) {
+        if (plan.used.includes(index)) this.summonSlots.set(enemy.id, slot);
+        continue;
+      }
       this.actorPanels.set(enemy.id, slot);
       this.actor(enemy.id, slot, this.view.state.enemies[i]!.hp, true);
     }
@@ -633,9 +651,11 @@ export class BattleScene extends Phaser.Scene {
     const sprite = bodySprite(body) as Phaser.GameObjects.Image | undefined;
     if (!sprite || !slot) return;
     const frame = sprite.frame, w = frame.realWidth, h = frame.realHeight;
-    const still = sprite.texture.key === 'battle-worldboss' ? staticActorGeometry(artOf(this.encounter, id))?.bounds : undefined;
+    const art = artOf(this.encounter, id);
+    const still = sprite.texture.key === 'battle-worldboss' ? staticActorGeometry(art)?.bounds
+      : sprite.texture.key === 'battle-foes3' ? lakeBossStillBounds(art) : undefined;
     const trim = frame.trimmed ? (frame as unknown as { data: { spriteSourceSize: { x: number; y: number; w: number; h: number } } }).data.spriteSourceSize : still;
-    const art = artOf(this.encounter, id), top = trim ? trim.y : (1 - figureRise(art) - (1 - (actorFootOrigins[art] ?? 1))) * h;
+    const top = trim ? trim.y : (1 - figureRise(art) - (1 - (actorFootOrigins[art] ?? 1))) * h;
     const box = trim ? [trim.x, trim.y, trim.x + trim.w, trim.y + trim.h] : [w * .22, top, w * .78, h * sprite.originY];
     const m = sprite.getWorldTransformMatrix(), xs: number[] = [], ys: number[] = [];
     for (const [u, v] of [[box[0]!, box[1]!], [box[2]!, box[1]!], [box[0]!, box[3]!], [box[2]!, box[3]!]] as const) {
@@ -744,7 +764,11 @@ export class BattleScene extends Phaser.Scene {
       for (const cue of defenseCues(turn,this.encounter)) defenseCast(this.fx(cue.targetId),cue,this.defensePoint,contactMs);
       return;
     }
-    if (turn.side === 'enemy' && this.textures.exists(BOSS_ATLAS) && bossPrepare(this.fx(turn.actorId), turn, id => this.bossAnchor(id), contactMs)) return;
+    if (turn.side === 'enemy' && this.textures.exists(bossAtlasFor(turn.intent?.name))) {
+      const lake = isLakeBossMove(turn.intent?.name);
+      const ctx = lake ? this.projectileFx(turn.actorId) : this.fx(turn.actorId);
+      if (bossPrepare(ctx, turn, lake ? this.lakeBossAnchor : id => this.bossAnchor(id), contactMs)) return;
+    }
     if (turn.side === 'hero' && turn.action === 'backstab' && this.textures.exists(REWORK_ATLAS) && reworkCues(turn).some(c => c.kind === 'blade_storm')) return;
     if ((turn.side === 'hero' && isBladeSkill(turn.action)) || (turn.side === 'enemy' && turn.intent?.kind === 'physical')) {
       const start = this.anchor(turn.actorId);
@@ -791,7 +815,7 @@ export class BattleScene extends Phaser.Scene {
     // Sanctuary at 1 HP can prevent HP loss without absorbing a barrier point.
     const savedWithoutDamage = (event:BattleEvent) => event.type==='damage'&&!event.amount&&!event.absorbed&&events.some(e=>e.type==='sanctuary'&&e.targetId===event.targetId);
     const paintedBasic:BasicCue[] = basicCues(turn,this.encounter), basicEvents = new Set(paintedBasic.map(c=>c.event));
-    const paintedBoss = this.textures.exists(BOSS_ATLAS) ? bossCues(turn) : [], bossEvents = new Set(paintedBoss.flatMap(c=>c.event?[c.event]:[]));
+    const paintedBoss = this.textures.exists(bossAtlasFor(turn.intent?.name)) ? bossCues(turn) : [], bossEvents = new Set(paintedBoss.flatMap(c=>c.event?[c.event]:[]));
     // Veil Quake is physical but painted by the foe-signature layers, never by the generic blade slash.
     const foeReady=this.textures.exists(FOE_SIGNATURE_ATLAS)&&turn.side==='enemy'&&isFoeSignatureMove(turn.intent?.name);
     const paintedFoe=foeReady?foeSignatureCues(turn):[];
@@ -864,8 +888,17 @@ export class BattleScene extends Phaser.Scene {
     for(const cue of paintedProjectiles)projectileContact(this.projectileFx(cue.targetId),cue,id=>this.projectileAnchor(id),life);
     for(const image of [...(this.effects?.list??[])])if(image.getData('basicPrepare')){this.tweens.killTweensOf(image);image.destroy();}
     for(const cue of paintedBasic)basicContact(this.fx(cue.targetId),cue,id=>this.projectileAnchor(id),life);
-    for(const image of [...(this.effects?.list??[])])if(image.getData('bossPrepare')){this.tweens.killTweensOf(image);image.destroy();}
-    for(const cue of paintedBoss)bossContact(this.fx(cue.id),cue,id=>this.bossAnchor(id),life);
+    for (const layer of [this.healingLayer, this.effects]) for (const image of [...(layer?.list ?? [])]) {
+      if (image.getData('bossPrepare')) { this.tweens.killTweensOf(image); image.destroy(); }
+    }
+    if (turn.intent?.name === 'Water Veil' && this.textures.exists(LAKE_BOSS_ATLAS)) {
+      sealedWaterVeil(this.projectileFx(turn.actorId), turn, this.lakeBossAnchor, life);
+    }
+    const waveScales = greatWaveScales(paintedBoss, this.lakeBossAnchor);
+    for (const cue of paintedBoss) {
+      if (isLakeBossMove(cue.move)) bossContact(this.projectileFx(cue.id), cue, this.lakeBossAnchor, life, waveScales.get(cue.id));
+      else bossContact(this.fx(cue.id), cue, id => this.bossAnchor(id), life);
+    }
     for (const cue of paintedHealing) healingContact(this.healingFx(cue.targetId), cue, id => this.healingAnchor(id), life);
     for (const cue of paintedDefense) defenseContact(this.fx(cue.targetId),cue,this.defensePoint,life);
     for (const event of events) {

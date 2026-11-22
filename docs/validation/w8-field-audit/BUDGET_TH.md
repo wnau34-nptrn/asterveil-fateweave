@@ -3,10 +3,10 @@
 > สร้างโดย `tests/encounter-budget.test.ts` (`npm run coverage:presentation`) จาก `unit-atlases.json`, content และไฟล์ใน `public/assets/fx`; เทสต์ล้มเมื่อรายงานไม่ตรงหรือสนามใดเกิน 64 MiB
 
 - ฮีโร่ที่ atlas หนักสุด 5 คน (กรณีแย่สุด): `lyra`, `lalin`, `seren`, `brann`, `lio`
-- สนามแย่สุด (ทีม 5 ตาม OD-05): `water-spirit` 50.5 MiB decoded / 14.65 MB download (งบ ≤64 MiB / ~12 MB)
+- สนามแย่สุด (ทีม 5 ตาม OD-05): `water-spirit` 59.0 MiB decoded / 16.84 MB download (งบ ≤64 MiB / ~12 MB)
 - VFX หลักที่โหลดทุก battle (6 atlas): 24.9 MiB decoded / 4.75 MB — นอกงบ animation แต่วัดแยกตาม §7
 - VFX ตามสกิล (7 atlas รวม 49.4 MiB decoded / 6.14 MB): โหลดเฉพาะเมื่อทีมมีสกิลของตระกูลนั้น (perf audit R1) ไม่โหลดตอนเปิดเกมอีกแล้ว
-- VFX โหลดเฉพาะ encounter ที่ใช้: boss 13.2 MiB · foe signature 6.4 MiB · saint/dance 6.7 MiB (ปล่อยเมื่อ encounter ถัดไปไม่ใช้)
+- VFX โหลดเฉพาะ encounter ที่ใช้: boss 13.2 MiB · lake boss 1.1 MiB · foe signature 6.4 MiB · saint/dance 6.7 MiB (ปล่อยเมื่อ encounter ถัดไปไม่ใช้)
 
 | encounter | ศัตรู (สำรอง) | atlas ศัตรู | ทีม 4: decoded / download | ทีม 5: decoded / download | boss VFX |
 | --- | --- | --- | --- | --- | --- |
@@ -44,7 +44,7 @@
 | `pavilion-mist` | 4 (0) | tideslime, mistwisp, stonecrab | 39.3 MiB / 11.35 MB | 43.6 MiB / 12.80 MB | — |
 | `elite-shadow-serpent` | 2 (0) | mistwisp, shadowserpent | 44.0 MiB / 13.16 MB | 48.3 MiB / 14.60 MB | โหลด |
 | `elite-weeping-siren` | 2 (0) | stonecrab, weepingsiren | 43.9 MiB / 13.16 MB | 48.2 MiB / 14.61 MB | — |
-| `water-spirit` | 4 (1) | mistwisp, stonecrab, mirrorshade, sentinel | 46.2 MiB / 13.21 MB | 50.5 MiB / 14.65 MB | โหลด |
+| `water-spirit` | 4 (1) | mistwisp, stonecrab, mirrorshade, waterspirit | 54.7 MiB / 15.39 MB | 59.0 MiB / 16.84 MB | ทะเลสาบ |
 | `wb-kragmor` | 3 (0) | wisp, crawler, kragmor | 31.5 MiB / 10.02 MB | 35.8 MiB / 11.47 MB | โหลด |
 | `wb-valdrakk` | 3 (0) | wisp, valdrakk | 29.8 MiB / 9.66 MB | 34.1 MiB / 11.11 MB | โหลด |
 | `wb-morvane` | 4 (0) | wisp, crawler, morvane | 32.7 MiB / 9.97 MB | 37.0 MiB / 11.42 MB | โหลด |
