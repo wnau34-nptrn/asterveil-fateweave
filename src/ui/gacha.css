@@ -67,5 +67,14 @@
 @keyframes gacha-stage-out { to { opacity: 0; visibility: hidden; } }
 /* OD-59 first fate weave inside the starter dialog: the stage plays over the card, then the card stays. */
 .gacha-fate .gacha-cards { grid-template-columns: minmax(0, 150px); justify-content: center; }
-#lobby-view .lobby-boards .lobby-gacha { flex: 0 0 92px; }
-#lobby-view .lobby-gacha[style*="--banner"]::before { background-position: center 30%; opacity: .7; }
+/* OD-59: the cabinet's compact tile at the end of the camp's top row (quest board and World Boss keep their width). */
+#lobby-view .lobby-boards .lobby-gacha { position: relative; isolation: isolate; overflow: visible; flex: 0 0 64px; min-width: 0; display: grid; justify-items: center; align-content: center; gap: 1px;
+  padding: 4px 2px; border: 0; border-left: 2px solid #e8cd8aaa; border-radius: 2px 12px 12px 2px; color: var(--text); text-shadow: 0 1px 4px #07101e;
+  background: linear-gradient(180deg, #09182bcc, #09182b66), var(--banner) center 32% / cover no-repeat; }
+#lobby-view .lobby-gacha img { width: 24px; height: 24px; }
+#lobby-view .lobby-gacha b { font-size: 12px; color: #ffe4a5; line-height: 1.1; }
+#lobby-view .lobby-gacha small { font-size: 10px; color: #edf0f4; line-height: 1.1; }
+#lobby-view .lobby-gacha .trip-badge { position: absolute; top: -6px; right: -4px; font-style: normal; background: #ead093; color: #102036; border-radius: 12px; min-width: 18px; padding: 0 4px; font-size: 11px; text-shadow: none; }
+#draft-content .gacha-fate + .event-scene { margin-top: 8px; }
+#draft-content .gacha-fate ~ .camp-note { margin: 4px 0 12px; }
+#draft-content .gacha-fate ~ #draft-0 { width: 100%; min-height: 48px; }

@@ -35,7 +35,7 @@ import { boardReady, questBoardBody, questTabs, type QuestTab } from './quest-bo
 import { weekOf } from '../core/world/board';
 import { trioLive } from '../core/world/world-boss';
 import { worldBossBanner, worldBossPage, type WbCraft, type WbTab } from './world-boss-panel';
-import { gachaBannerUrl, gachaPage, type GachaState, type GachaView } from './gacha-panel';
+import { gachaBannerUrl, gachaPage, gachaTicketUrl, type GachaState, type GachaView } from './gacha-panel';
 import type { WorldBossStatus } from '../platform/server-client';
 import { sweepReasonText, sweepText, campLines, skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
 
@@ -339,8 +339,8 @@ export class LobbyUI {
   private gachaBanner(p: Profile): string {
     if (!this.open('gacha')) return '';
     const t = p.gacha?.tickets ?? 0;
-    return `<button id="lobby-gacha" data-lobby="gacha" class="lobby-wboss lobby-gacha" style="--banner:url(${gachaBannerUrl()})" aria-controls="lobby-sheet" aria-expanded="${this.sheet === 'gacha'}">
-      <span class="wb-banner-text"><b>ทอชะตา</b><small>ตั๋ว ${t}</small></span>${t >= 10 ? '<small class="trip-badge" aria-label="ตั๋วพอสุ่มสิบครั้ง">10</small>' : ''}</button>`;
+    return `<button id="lobby-gacha" data-lobby="gacha" class="lobby-gacha" style="--banner:url(${gachaBannerUrl()})" aria-controls="lobby-sheet" aria-expanded="${this.sheet === 'gacha'}" aria-label="ทอชะตา ตั๋ว ${t} ใบ${t >= 10 ? ' พอสุ่มสิบครั้ง' : ''}">
+      <img src="${gachaTicketUrl()}" alt="" width="24" height="24"><b>ทอชะตา</b><small>ตั๋ว ${t}</small>${t >= 10 ? '<i class="trip-badge" aria-hidden="true">10</i>' : ''}</button>`;
   }
   private wbWeek(): number { return weekOf(this.view!.day); }
   private trioWeek(): boolean { return trioLive(this.maps[0]!.worldBoss, this.wbWeek()); }

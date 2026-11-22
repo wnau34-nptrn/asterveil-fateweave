@@ -35,6 +35,7 @@ function stage(inner: string, run = false): string {
   return `<div class="gacha-stage"${run ? ' data-run="true"' : ''} style="background-image:url(${url('key-art')})" aria-hidden="true">${layer('idle', A.loom_crystal[0]!, A.loom_crystal[1]!)}${layer('sparkles', 120, 260)}${layer('sparkles', 290, 400, 'animation-delay:-900ms')}${inner}</div>`;
 }
 export const gachaBannerUrl = (): string => url('key-art');
+export const gachaTicketUrl = (): string => url('fate-ticket');
 const tIcon = `<img class="gacha-icon" src="${url('fate-ticket')}" alt="" width="20" height="20">`, pIcon = `<img class="gacha-icon" src="${url('exchange-knot')}" alt="" width="20" height="20">`;
 
 // P10 free-ticket cabinet (docs/design/GACHA_P10_SPEC_TH.md, OD-58). DOM-native, built only from the committed profile:
