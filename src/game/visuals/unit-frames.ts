@@ -136,6 +136,12 @@ export const unitRegistry = {
   foe_rift_channeler: { sheet: 'channeler', displayRatio: 2, intents: { 'Rift Beam': 'attack', 'Rift Bolt': 'attack' } },
   foe_rift_wisp: { sheet: 'wisp', displayRatio: 2, intents: { 'Star Flame': 'attack', 'Mist Needle': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 }, corpseAlpha: 1 },
   foe_shard_crawler: { sheet: 'crawler', displayRatio: 2, intents: { 'Crystal Stab': 'attack', Pincer: 'attack' } },
+  // Map 4 lake foes (ART-UNIT-ANIMATION-LAKE-001, shared layout): the slime spits (skill 9..16), the wisp, crab and shade strike
+  // (attack 1..8); hit 17..18, down 19..21; the wisp hovers on 22..24. Slots without a strip alias the ready seed and are never drawn.
+  foe_tide_slime: { sheet: 'tideslime', displayRatio: 2, intents: { 'Water Spit': 'skill' } },
+  foe_mist_wisp: { sheet: 'mistwisp', displayRatio: 2, intents: { 'Mist Needle': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 } },
+  foe_stone_crab: { sheet: 'stonecrab', displayRatio: 2, intents: { Pincer: 'attack' } },
+  foe_mirror_shade: { sheet: 'mirrorshade', displayRatio: 2, intents: { 'Mirror Strike': 'attack' } },
   // A9: boss strips are one per move (`move1`.. in the order of each atlas, see docs/combat-presentation/unit-a9-slice). Phase turns
   // carry the phase name (Thorn Rage, Call the Rift, Rift Awakening, Call the Hunt) and play their own gesture. The Matriarch
   // atlas already faces left (owner decision); it is never mirrored at runtime.

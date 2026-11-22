@@ -358,5 +358,41 @@
     "frames": 30,
     "decodedBytes": 7266304,
     "downloadBytes": 1850434
+  },
+  "tideslime": {
+    "image": "tideslime_lake.06940885c1e4.webp",
+    "atlas": "tideslime_lake.ac253824651a.json",
+    "width": 768,
+    "height": 1463,
+    "frames": 22,
+    "decodedBytes": 4494336,
+    "downloadBytes": 1132094
+  },
+  "mistwisp": {
+    "image": "mistwisp_lake.aac2200dcb53.webp",
+    "atlas": "mistwisp_lake.4eaad162eb60.json",
+    "width": 512,
+    "height": 2487,
+    "frames": 25,
+    "decodedBytes": 5093376,
+    "downloadBytes": 1155181
+  },
+  "stonecrab": {
+    "image": "stonecrab_lake.addc4c99b932.webp",
+    "atlas": "stonecrab_lake.bdf6f1928f3e.json",
+    "width": 512,
+    "height": 3599,
+    "frames": 22,
+    "decodedBytes": 7370752,
+    "downloadBytes": 1666784
+  },
+  "mirrorshade": {
+    "image": "mirrorshade_lake.ffa558dfa1ef.webp",
+    "atlas": "mirrorshade_lake.60a9e26ef7da.json",
+    "width": 1280,
+    "height": 1550,
+    "frames": 22,
+    "decodedBytes": 7936000,
+    "downloadBytes": 1580108
   }
 }

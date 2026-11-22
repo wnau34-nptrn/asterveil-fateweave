@@ -398,7 +398,7 @@ export const eliteWeepingSiren: EncounterDefinition = at80({
 // Surging Wave on the front slot (unstoppable: Guard/taunt/barriers soften it) and tide lashes. At 50% it calls a
 // reflection — a shade of the party (weak hits) — and its waves reach everyone. A stone crab and a mist wisp guard it.
 const spiritGuard = foes(13, [['f2', S.stoneCrab], ['b3', S.mistWisp]]);
-const mirrorShade = { id: 'b2', row: 'back', reserve: true, speed: 100, name: 'Mirror Shade', displayName: 'เงาสะท้อน', maxHp: 70, color: 0x5a6b8c, art: 'foe_hunter' } as const;
+const mirrorShade = { id: 'b2', row: 'back', reserve: true, speed: 100, name: 'Mirror Shade', displayName: 'เงาสะท้อน', maxHp: 70, color: 0x5a6b8c, art: 'foe_mirror_shade' } as const;
 export const waterSpirit: EncounterDefinition = at80({
   ...veilSiege, heroes: fiveHeroes, id: 'water-spirit', version: 1, level: 13, name: 'ศึกภูตธารา',
   phases: [{ sourceId: 'f1', below: 50, summon: ['b2'], name: 'Reflection' }],
@@ -420,8 +420,8 @@ export const waterSpirit: EncounterDefinition = at80({
   ],
 });
 
-// Map 4 sets wear older foes' bodies as stand-ins; the per-body audits (tests/unit-a*.test.ts) skip them until the lake art arrives.
-export const LAKE_STANDINS: ReadonlySet<string> = new Set(['lake-slimes', 'lake-mist', 'crab-wall', 'isle-host', 'pavilion-mist', 'elite-shadow-serpent', 'elite-weeping-siren', 'water-spirit']);
+// Map 4 sets with a foe still wearing an older body as a stand-in (serpent, siren, Water Spirit: phases 3–4); the per-body audits skip them.
+export const LAKE_STANDINS: ReadonlySet<string> = new Set(['elite-shadow-serpent', 'elite-weeping-siren', 'water-spirit']);
 
 // World Bosses (balanced on written slots, P11-05) drop the assassin aims their court kinds carry (enemy aim B, owner 2026-11-19).
 function noAims(e: EncounterDefinition): EncounterDefinition {

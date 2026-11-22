@@ -528,16 +528,16 @@
    "foes": 3,
    "reserves": 0,
    "foeSheets": [
-    "ember",
-    "crawler"
+    "tideslime",
+    "stonecrab"
    ],
    "four": {
-    "decoded": 26781648,
-    "download": 8103203
+    "decoded": 36122576,
+    "download": 10194585
    },
    "five": {
-    "decoded": 31285896,
-    "download": 9549120
+    "decoded": 40626824,
+    "download": 11640502
    },
    "bossFx": false
   },
@@ -546,17 +546,17 @@
    "foes": 3,
    "reserves": 0,
    "foeSheets": [
-    "ember",
-    "wisp",
-    "crawler"
+    "tideslime",
+    "mistwisp",
+    "stonecrab"
    ],
    "four": {
-    "decoded": 28149712,
-    "download": 8439378
+    "decoded": 41215952,
+    "download": 11349766
    },
    "five": {
-    "decoded": 32653960,
-    "download": 9885295
+    "decoded": 45720200,
+    "download": 12795683
    },
    "bossFx": false
   },
@@ -565,16 +565,16 @@
    "foes": 3,
    "reserves": 0,
    "foeSheets": [
-    "wisp",
-    "crawler"
+    "mistwisp",
+    "stonecrab"
    ],
    "four": {
-    "decoded": 26985424,
-    "download": 8118651
+    "decoded": 36721616,
+    "download": 10217672
    },
    "five": {
-    "decoded": 31489672,
-    "download": 9564568
+    "decoded": 41225864,
+    "download": 11663589
    },
    "bossFx": false
   },
@@ -583,17 +583,17 @@
    "foes": 4,
    "reserves": 0,
    "foeSheets": [
-    "ember",
-    "wisp",
-    "crawler"
+    "tideslime",
+    "mistwisp",
+    "stonecrab"
    ],
    "four": {
-    "decoded": 28149712,
-    "download": 8439378
+    "decoded": 41215952,
+    "download": 11349766
    },
    "five": {
-    "decoded": 32653960,
-    "download": 9885295
+    "decoded": 45720200,
+    "download": 12795683
    },
    "bossFx": false
   },
@@ -602,17 +602,17 @@
    "foes": 4,
    "reserves": 0,
    "foeSheets": [
-    "ember",
-    "wisp",
-    "crawler"
+    "tideslime",
+    "mistwisp",
+    "stonecrab"
    ],
    "four": {
-    "decoded": 28149712,
-    "download": 8439378
+    "decoded": 41215952,
+    "download": 11349766
    },
    "five": {
-    "decoded": 32653960,
-    "download": 9885295
+    "decoded": 45720200,
+    "download": 12795683
    },
    "bossFx": false
   },
@@ -622,15 +622,15 @@
    "reserves": 0,
    "foeSheets": [
     "tusker",
-    "wisp"
+    "mistwisp"
    ],
    "four": {
-    "decoded": 29900752,
-    "download": 8936805
+    "decoded": 33626064,
+    "download": 9755811
    },
    "five": {
-    "decoded": 34405000,
-    "download": 10382722
+    "decoded": 38130312,
+    "download": 11201728
    },
    "bossFx": true
   },
@@ -640,15 +640,15 @@
    "reserves": 0,
    "foeSheets": [
     "riftweaver",
-    "crawler"
+    "stonecrab"
    ],
    "four": {
-    "decoded": 29497296,
-    "download": 8930900
+    "decoded": 35508176,
+    "download": 10210915
    },
    "five": {
-    "decoded": 34001544,
-    "download": 10376817
+    "decoded": 40012424,
+    "download": 11656832
    },
    "bossFx": false
   },
@@ -657,18 +657,18 @@
    "foes": 4,
    "reserves": 1,
    "foeSheets": [
-    "hunter",
-    "wisp",
-    "crawler",
+    "mistwisp",
+    "stonecrab",
+    "mirrorshade",
     "sentinel"
    ],
    "four": {
-    "decoded": 34890704,
-    "download": 10459419
+    "decoded": 48483280,
+    "download": 13207134
    },
    "five": {
-    "decoded": 39394952,
-    "download": 11905336
+    "decoded": 52987528,
+    "download": 14653051
    },
    "bossFx": true
   },

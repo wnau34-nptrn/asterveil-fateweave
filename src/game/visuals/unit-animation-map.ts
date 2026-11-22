@@ -24,7 +24,7 @@ const basicPoses: Readonly<Record<string, UnitPose>> = {
 const enemyPoses: Readonly<Record<string, UnitPose>> = {
   raider: 'slash', brute: 'smash', foe_tusker: 'charge', foe_sprite: 'cast', foe_stalker: 'pounce', foe_mycon: 'cast', foe_golem: 'smash', foe_riftweaver: 'cast',
   foe_matriarch: 'slash', foe_juggernaut: 'charge', foe_sentinel: 'smash', foe_kragmor: 'smash', foe_valdrakk: 'slash', foe_morvane: 'slash', foe_hunter: 'slash', foe_captain: 'smash', foe_dew_slime: 'pounce', foe_ember_slime: 'cast', foe_ruin_bat: 'pounce',
-  foe_vargoth_guard: 'smash', foe_thorn_beetle: 'pounce', foe_spore_puff: 'cast', foe_rift_channeler: 'cast', foe_rift_wisp: 'cast', foe_shard_crawler: 'thrust',
+  foe_vargoth_guard: 'smash', foe_thorn_beetle: 'pounce', foe_spore_puff: 'cast', foe_rift_channeler: 'cast', foe_rift_wisp: 'cast', foe_shard_crawler: 'thrust', foe_tide_slime: 'cast', foe_mist_wisp: 'cast', foe_stone_crab: 'thrust', foe_mirror_shade: 'slash',
 };
 export function unitPose(turn: TurnStage, data: EncounterDefinition): UnitPose | undefined {
   if (turn.events.some(e => e.type === 'cancel')) return;

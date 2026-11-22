@@ -1,7 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {mkdirSync,writeFileSync} from 'node:fs';
 test.skip(process.env.UNIT_A4_CLIPS!=='1','separate real-clock capture only');
-const sheetOf={foe_dew_slime:'dew',foe_ember_slime:'ember',foe_ruin_bat:'bat'} as const;
+const sheetOf={foe_dew_slime:'dew',foe_ember_slime:'ember',foe_ruin_bat:'bat',foe_tide_slime:'tideslime',foe_mist_wisp:'mistwisp',foe_stone_crab:'stonecrab',foe_mirror_shade:'mirrorshade'} as const;
 type Foe=keyof typeof sheetOf;
 interface Clip{hero:'mira'|'toma';skill:string;foe:Foe;scenario:string;mode:string;preroll?:number}
 const cases:Clip[]=[
@@ -19,6 +19,8 @@ const cases:Clip[]=[
  {hero:'mira',skill:'attack',foe:'foe_ruin_bat',scenario:'enemy-down',mode:'normal'},
  {hero:'toma',skill:'attack',foe:'foe_dew_slime',scenario:'enemy-down',mode:'normal'},
  {hero:'toma',skill:'attack',foe:'foe_ember_slime',scenario:'enemy-down',mode:'normal'},
+ // Map 4 lake foes (ART-UNIT-ANIMATION-LAKE-001): the real intent hits the Knight; enemy-down plays the painted collapse.
+ ...(['foe_tide_slime','foe_mist_wisp','foe_stone_crab','foe_mirror_shade'] as Foe[]).flatMap(foe=>[{hero:'mira' as const,skill:'attack',foe,scenario:'normal',mode:'normal'},{hero:'mira' as const,skill:'attack',foe,scenario:'enemy-down',mode:'normal'}]),
 ];
 for(const {hero,skill,foe,scenario,mode,preroll} of cases)test(`unit A4 clip ${hero}-${skill}-${foe}-${scenario}-${mode}${preroll?'-hover':''}`,async({browser},info)=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:mode==='osreduce'?'reduce':'no-preference'});
