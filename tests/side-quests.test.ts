@@ -13,7 +13,7 @@ const dirs: Record<Direction, Point> = { up: { x: 0, y: -1 }, down: { x: 0, y: 1
 
 describe('side quest content', () => {
   it('every camp NPC has exactly one quest with a reward; herbs sit on plain floor away from other pieces', () => {
-    expect(map.sideQuests.map(q => q.npc).sort()).toEqual(['broker', 'herbalist', 'keeper', 'scout', 'smith', 'trainer']);
+    expect(map.sideQuests.filter(q => !q.map).map(q => q.npc).sort()).toEqual(['broker', 'herbalist', 'keeper', 'scout', 'smith', 'trainer']);
     for (const q of map.sideQuests) expect(Object.keys(q.reward).length).toBeGreaterThan(0);
     const taken = [...map.chests, ...map.elites, ...map.events, ...map.puzzles.secrets, ...map.puzzles.runes.flatMap(r => [...r.stones, r.door]),
       ...map.puzzles.levers.flatMap(l => [...l.levers, l.door]), ...map.puzzles.boulders.flatMap(b => [b.at, b.pit])];

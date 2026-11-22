@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { campaignReport, simulateCampaign, type CampaignReport } from './sim/balance-sim';
+import { CAMPAIGN_MAPS, campaignReport, simulateCampaign, type CampaignReport } from './sim/balance-sim';
 import before from './fixtures/c12-campaign-before.json';
 import { MAPS } from '../src/content/world/maps';
 
@@ -20,7 +20,7 @@ describe('campaign simulation (A10)', () => {
   const advisor = cs.filter(c => c.style === 'advisor');
   it('the advisor clears every map in order and reaches hard mode', () => {
     for (const c of advisor) {
-      expect(MAPS.every(m => c.profile.cleared.includes(m.id)), `${c.seed} ${c.policy}`).toBe(true);
+      expect(CAMPAIGN_MAPS.every(m => c.profile.cleared.includes(m.id)), `${c.seed} ${c.policy}`).toBe(true);
       expect(c.expeditions.some(e => e.hard), `${c.seed} ${c.policy}`).toBe(true);
     }
   });

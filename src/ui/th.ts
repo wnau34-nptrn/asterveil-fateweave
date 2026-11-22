@@ -552,11 +552,16 @@ export const npcText: Record<'smith' | 'broker' | 'trainer' | 'keeper' | 'herbal
 // ---- Rift seal (3B): objective lines with live progress. ----
 export function questLine(o: QuestObjective, state: ExpeditionState): string {
   if (o.kind === 'chests') return `เปิดกล่องสมบัติ ${o.count} กล่อง (${Math.min(o.count, state.openedChests.length)}/${o.count})`;
-  if (o.kind === 'elite') return 'ชนะยักษ์หินแห่งรอยแผล (มินิบอส)';
+  if (o.kind === 'lanterns') return `จุดโคมจันทร์ ${o.count} ดวงบนเกาะ (${Math.min(o.count, state.lanterns?.length ?? 0)}/${o.count})`;
+  if (o.kind === 'elite') return questEliteText[o.target] ?? 'ชนะยักษ์หินแห่งรอยแผล (มินิบอส)';
+  if (o.kind === 'chest') return questChestText[o.target] ?? 'เปิดกล่องสมบัติ';
   return questEventText[o.target] ?? 'ชำระรอยแยกเล็กในรอยแผล';
 }
+const questEliteText: Record<string, string> = { 'lake-serpent': 'ชนะอสรพิษเงาที่สะพานใหญ่' };
+const questChestText: Record<string, string> = { 'lake-oar': 'หาไม้พายในกล่องบนเกาะ' };
 // P05-02: event objectives of the optional story quests (map 2) and the rift seal (map 3).
 const questEventText: Record<string, string> = {
+  'lake-shrine': 'ทำพิธีรำลึกที่ศาลเจ้าริมน้ำ', 'lake-ferryman': 'ช่วยคนพายเรือแก่ที่ท่าเรือ',
   'scar-rift': 'ชำระรอยแยกเล็กในรอยแผล',
   'forest-traveller': 'ตัดสินใจเรื่องนักเดินทางบาดเจ็บกลางป่า (ช่วยหรือชี้ทางก็ได้)',
   'forest-shrine': 'ตัดสินใจที่ศาลเก่ากลางป่า (สวดหรือถวายก็ได้)',
@@ -598,6 +603,7 @@ export const eventText: Record<MapEventKind, { name: string; scene: string; icon
   traveller: { name: 'นักเดินทางบาดเจ็บ', scene: 'นักเดินทางคนหนึ่งบาดเจ็บนั่งพิงต้นไม้ ขอยาสักขวด', icon: 'talk' },
   rift: { name: 'รอยแยกเล็ก', scene: 'รอยแยกเล็ก ๆ กำลังสั่น มีบางอย่างกำลังจะคลานออกมา', icon: 'boss' },
   abandoned: { name: 'ค่ายร้าง', scene: 'ค่ายพักที่ใครสักคนทิ้งไว้ กองไฟยังอุ่น ของบางอย่างยังวางอยู่', icon: 'camp' },
+  reflection: { name: 'ภาพสะท้อน', scene: 'ผิวน้ำนิ่งสนิท เงาในน้ำไม่ใช่เงาของท่าน แต่เป็นภาพจากวันที่จำไม่ได้', icon: 'star' },
 };
 export function choiceText(choice: EventChoice, r: EventRules): { label: string; help: string } {
   switch (choice) {
@@ -613,11 +619,13 @@ export function choiceText(choice: EventChoice, r: EventRules): { label: string;
     case 'shelter': return { label: 'พักที่นี่', help: `คนที่ยืนอยู่ฟื้นเลือด ${r.abandoned.healPercent}% แต่ศัตรูในโซนจะตื่นตัวเต็มที่` };
     case 'search': return { label: 'ค้นของ', help: `ได้ฝุ่นดาว ${r.abandoned.searchDust} แต่มีโอกาส ${r.abandoned.searchFightPercent}% ที่ต้องสู้ก่อน (ไม่มีอุปกรณ์ดรอป)` };
     case 'pass': return { label: 'เดินผ่าน', help: 'ไม่ได้อะไร ไม่เสียอะไร' };
+    case 'gaze': return { label: 'มองต่อ', help: `ได้บันทึกความทรงจำลงสมุดค่าย แต่ทุกคนที่พามาเหนื่อย +${r.reflection.fatigue}` };
+    case 'away': return { label: 'เบือนหน้า', help: 'ไม่ได้อะไร ไม่เสียอะไร' };
   }
 }
 export const eventChoices: Record<MapEventKind, readonly EventChoice[]> = {
   bandits: ['fight', 'sneak'], shrine: ['pray', 'offer'], merchant: ['buy-salve', 'buy-tonic', 'buy-repel'], traveller: ['help', 'guide'], rift: ['fight'],
-  abandoned: ['shelter', 'search', 'pass'],
+  abandoned: ['shelter', 'search', 'pass'], reflection: ['gaze', 'away'],
 };
 export const eventReasonText: Record<string, string> = { ore: 'แร่ดาวไม่พอ', salve: 'ไม่มียาฟื้นแผล', carry: 'พกเต็มแล้ว', busy: 'ทำตอนนี้ไม่ได้', choice: 'ทำไม่ได้' };
 // ---- Camp side quests (3D): each NPC's request and its reward, in Thai. ----

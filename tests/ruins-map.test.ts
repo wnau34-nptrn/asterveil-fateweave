@@ -34,7 +34,7 @@ function fight(state: ExpeditionState): ExpeditionState {
 
 describe('map 1: ซากชายแดน', () => {
   it('comes first in the campaign, then the frontier; it is small, with one camp and a boss on the only way to the goal', () => {
-    expect(MAPS.map(m => m.id)).toEqual([map.id, forestMap.id, chapterOne.id]); expect(map.chapter).toBe(1);
+    expect(MAPS.map(m => m.id)).toEqual([map.id, forestMap.id, chapterOne.id, 'moon-lake']); expect(map.chapter).toBe(1);
     expect(map.rows.length * map.rows[0]!.length).toBeLessThanOrEqual(14 * 12);
     expect(map.rows.every(r => r.length === map.rows[0]!.length)).toBe(true);
     const [goal] = findTiles(map, 'goal'); expect(findTiles(map, 'camp')).toHaveLength(1);

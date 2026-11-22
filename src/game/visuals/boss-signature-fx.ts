@@ -18,6 +18,8 @@ export const bossMoves: Readonly<Record<string, Route>> = {
   'Titan Gathering': 'charge', 'Mountain Fall': 'single', 'Rift Quake': 'all', 'Fault Awakening': 'caster',
   'Wing Gust': 'single', 'Wing Gathering': 'charge', 'Worldshard Dive': 'all', 'Sky Rend': 'caster',
   'Severing Bolt': 'single', 'Fate Lash': 'single', 'Call the Court': 'summon', 'Shadow Tide': 'all', 'Severed Crown': 'caster',
+  // Map 4 stand-ins: placed like the warden's families and painted with their art (`paintedAs`) until the lake art arrives.
+  'Water Veil': 'caster', 'Surging Wave': 'single', 'Great Wave': 'all', Reflection: 'summon', 'Coil Gathering': 'charge', 'Crushing Coil': 'single',
 };
 // Moves whose layers are placed by the anchor recorded for each beat in boss-signature-art.json (the older families keep
 // their original placement below, unchanged).
@@ -25,8 +27,10 @@ const anchored = new Set(['Titan Gathering', 'Mountain Fall', 'Rift Quake', 'Fau
   'Sky Rend', 'Severing Bolt', 'Fate Lash', 'Call the Court', 'Shadow Tide', 'Severed Crown']);
 export const slug = (name: string): string => name.toLowerCase().replace(/ /g, '-');
 type Frame = keyof typeof art;
+export const paintedAs: Readonly<Record<string, string>> = { 'Water Veil': 'Rift Awakening', 'Surging Wave': 'Rift Cataclysm', 'Great Wave': 'Rift Wave', Reflection: 'Call the Rift',
+  'Coil Gathering': 'Rift Gathering', 'Crushing Coil': 'Horn Charge' };
 const frame = (name: string, beat: 'prepare' | 'peak' | 'settle'): Frame | undefined => {
-  const key = `${slug(name)}_${beat}`; return Object.hasOwn(art, key) ? key as Frame : undefined;
+  const key = `${slug(paintedAs[name] ?? name)}_${beat}`; return Object.hasOwn(art, key) ? key as Frame : undefined;
 };
 // A move this module paints on the given turn (an enemy turn, not cancelled).
 export function bossMove(turn: TurnStage): string | undefined {

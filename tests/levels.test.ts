@@ -5,7 +5,7 @@ import { resolveCommand, withLevel } from '../src/core/battle/engine';
 import { loadGame, parseGame, saveGame } from '../src/core/save/expedition-save';
 import { newProfile, settle } from '../src/core/world/profile';
 import type { ExpeditionState } from '../src/core/world/types';
-import { campLevel, levelOf, battleData, battleState, expPercent, expToNext, finishBattle, memberDef, monsterLevelAt, move, newExpedition, recordBattle, tileAt } from '../src/core/world/world';
+import { campLevel, capLevel, levelOf, battleData, battleState, expPercent, expToNext, finishBattle, memberDef, monsterLevelAt, move, newExpedition, recordBattle, tileAt } from '../src/core/world/world';
 import { battleLesson } from '../src/ui/tutorial';
 import { xpAt } from './fixtures/camp-level';
 
@@ -81,7 +81,7 @@ describe('member levels and EXP', () => {
     const at = (level: number) => memberDef(lookup, map, { members: { guardian: { stars: 1, shards: 0 } }, campXp: xpAt(level) }, 'guardian')!;
     expect(at(10).maxHp).toBe(Math.round(at(1).maxHp * (100 + 9 * map.progression.levelStatPercent) / 100));
     expect(expToNext(map, 1)).toBe(65); expect(expToNext(map, 9)).toBe(425);
-    s.campXp = xpAt(map.progression.levelCap) + 5; expect(levelOf(map, s)).toBe(10);
+    s.campXp = xpAt(capLevel(map)) + 5; expect(levelOf(map, s)).toBe(10);
     expect(campLevel(map, 1e6)).toBe(map.progression.levelCap); expect(xpAt(2)).toBe(65); expect(xpAt(10)).toBe(2205);
   });
   it('the camp level is kept in the profile whatever the outcome, handed back without adding', () => {
@@ -105,7 +105,7 @@ describe('save v7', () => {
     expect(parseGame(v6, map, lookup).profile.members.guardian).toEqual({ stars: 1, shards: 0 });
   });
   it.each([
-    ['a level above the cap', { level: 11, exp: 0 }],
+    ['a level above the cap', { level: 31, exp: 0 }],
     ['EXP beyond the next level', { level: 2, exp: 140 }],
   ])('rejects %s', (_, bad) => {
     const profile = newProfile(map, 4); profile.members.guardian = { stars: 1, shards: 0, ...bad };

@@ -6,7 +6,7 @@ import type { Lane, GuideDefinition, GuideKind, LobbyFeature, Commander, ShopIte
 import { rollItem, salvageValue } from './equipment';
 import { addTomes, dismissTomes, emptyTomes, firstClearTomes, tomeCount } from './tomes';
 import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, SET_IDS } from './types';
-import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, questComplete, recommendedLane, rollPercent, reserveCap, rosterIds, type EncounterLookup } from './world';
+import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, questComplete, storyDone, recommendedLane, rollPercent, reserveCap, rosterIds, type EncounterLookup } from './world';
 import { laneReason, withLane } from './formation';
 import { dropFromPresets } from './presets';
 import { settleBoard } from './board';
@@ -318,6 +318,8 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   run.hunt=startHunt(profile);if(map.bossCharm)run.bossLoot=startBossPlan(profile,map);
   if (hard) run.hard = true;
   if (day !== undefined) run.day = day;
+  // Map 4: the ferryman's boat, once his story has paid, sails on every later run of that map.
+  if (map.story?.boat && profile.storyQuests?.includes(map.id)) run.boat = true;
   // Story recruits not yet in the company (owner 2026-10-23). Before the prologue they come along as guests in free
   // party slots and fight it with the team, with any prologue-only guests (world.ts `recruit` parts them after the win).
   // Past the prologue each waits for its own point (`arrivals`), a roster slot kept for it; the prologue's own recruit
@@ -407,7 +409,7 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   }
   // 3D: side quests count what this run did (herbs are lost on a wipe), capped at each target.
   for (const q of map.sideQuests) {
-    const now = profile.quests[q.id] ?? { progress: 0, claimed: false }; if (now.claimed) continue;
+    const now = profile.quests[q.id] ?? { progress: 0, claimed: false }; if (now.claimed || (q.map && q.map !== run.mapId)) continue;
     const add = sideQuestGain(q.kind, run, outcome, map);
     if (add) profile.quests[q.id] = { ...now, progress: Math.min(q.target, now.progress + add) };
   }
@@ -434,9 +436,11 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   const events = Object.keys(run.choices ?? {});
   if (events.length) profile.choices = { ...profile.choices, ...run.choices };
   // P05-02: an optional quest done on a run that came home pays once per company.
-  const story = outcome !== 'wiped' && map.quest.optional && !profile.storyQuests?.includes(map.id) && questComplete(run, map) ? map.id : undefined;
+  const story = outcome !== 'wiped' && !profile.storyQuests?.includes(map.id) && (map.quest.optional ? questComplete(run, map) : storyDone(run, map)) ? map.id : undefined;
+  // Map 4: lost notes and gazed memories join the camp journal whatever the outcome (story pages, nothing to farm).
+  for (const id of run.notes ?? []) if (!profile.notes?.includes(id)) (profile.notes ??= []).push(id);
   if (story) {
-    const r = map.quest.optional!.reward; (profile.storyQuests ??= []).push(story);
+    const r = (map.quest.optional ?? map.story)!.reward; (profile.storyQuests ??= []).push(story);
     profile.bank.ore += r.ore ?? 0; profile.bank.gold += r.gold ?? 0; profile.bank.shard += r.shard ?? 0; profile.bank.dust += r.dust ?? 0;
     for (const id of POTION_IDS) profile.potions[id] += r.potions?.[id] ?? 0;
   }

@@ -1,6 +1,6 @@
 import {describe,it,expect} from 'vitest';
 import {foeArts,foeIntents,sheetOf,unitA8Fixture} from './fixtures/unit-a8';
-import {encounters} from '../src/content/encounters/catalog';
+import {encounters,LAKE_STANDINS } from '../src/content/encounters/catalog';
 import {unitClip,unitSample,unitRelease,unitDisplayRatio,unitIdleFrame,unitKey,unitRegistry} from '../src/game/visuals/unit-frames';
 import {unitPose,unitReactions} from '../src/game/visuals/unit-animation-map';
 import manifest from '../src/game/visuals/unit-atlases.json';
@@ -13,7 +13,7 @@ const contactOf={attack:5,skill:13} as const;
 describe('A8 Golem / Channeler / Wisp / Crawler actual content, clips and layout',()=>{
  it('audits every intent of the four identities in every encounter against the mapping',()=>{
   const found:Record<string,Set<string>>={};
-  for(const data of encounters)for(const e of data.enemies.filter(e=>(foeArts as readonly string[]).includes(e.art??''))){
+  for(const data of encounters.filter(d=>!LAKE_STANDINS.has(d.id)))for(const e of data.enemies.filter(e=>(foeArts as readonly string[]).includes(e.art??''))){
    for(const intent of data.intents.filter(i=>i.sourceId===e.id)){
     (found[e.art!]??=new Set()).add(intent.name);
     expect(unitClip(e.art!,undefined,intent.name),`${e.art} ${intent.name} in ${data.id}`).toBe(clipOf[intent.name]);
@@ -21,7 +21,7 @@ describe('A8 Golem / Channeler / Wisp / Crawler actual content, clips and layout
   }
   for(const art of foeArts)expect([...found[art]!].sort()).toEqual([...foeIntents[art]].sort());
   // The registry maps exactly these names, nothing invented.
-  for(const art of foeArts)expect(Object.keys(unitRegistry[art].intents).sort()).toEqual([...foeIntents[art]].sort());
+  const lake=new Set(encounters.filter(d=>LAKE_STANDINS.has(d.id)).flatMap(d=>[...d.intents.map(i=>i.name),...(d.phases??[]).map(p=>p.name)]));for(const art of foeArts)expect(Object.keys(unitRegistry[art].intents).filter(n=>!lake.has(n)||[...(foeIntents[art])].includes(n)).sort()).toEqual([...foeIntents[art]].sort());
  });
  it('serves Crystal Fist and Stone Fist with one punch and Veil Quake with its own slam',()=>{
   expect(unitClip('foe_golem',undefined,'Crystal Fist')).toBe(unitClip('foe_golem',undefined,'Stone Fist'));

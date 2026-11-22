@@ -363,7 +363,7 @@ function hexTicks(state: BattleState, data: EncounterDefinition, events: BattleE
 // Only an announced normal single-target move may be bent: whole-party moves, charges, phase turns and unstoppable
 // signature moves are locked. A bent move keeps its power, kind and attacker and lands on another foe; it never reaches an
 // ally, never chains and never cancels the move. SPD and the queue never change.
-export const lockedMove = (intent: Intent | IntentDefinition | null | undefined): boolean => !intent || !!intent.special || !!intent.all || !!intent.charge || !!intent.unstoppable || !!intent.summon;
+export const lockedMove = (intent: Intent | IntentDefinition | null | undefined): boolean => !intent || !!intent.special || !!intent.all || !!intent.charge || !!intent.unstoppable || !!intent.summon || !!intent.mend;
 // Seer rework (owner 2026-11-06 "เห็นด้วย", save v51): a foe's "big move" is a move marked charge, all or unstoppable, or the
 // top damage of its current cycle when that cycle has at least two different damages. A phase turn is never one.
 export function bigMove(state: BattleState, data: EncounterDefinition, enemyId: string, intent: Intent | IntentDefinition | null | undefined): boolean {
@@ -928,6 +928,11 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
         if (by && intent.kind === 'energy' && hasCap(data, by, 'sigilreflect') && living(state, by)) strikeBack(state, data, by, enemy, Math.floor(intent.damage * capAmount(data, by, 'sigilreflect') / 100), events, 'The seal reflects the move.');
       } else if (intent.charge) events.push({ type: 'charge', sourceId: actorId, targetId: intent.targetId, text: 'Gathering power.' });
       else if (intent.summon) summonMove(state, data, enemy, intent.summon, events);
+      else if (intent.mend) {
+        // Map 4: the foe mends itself (no target, never above its max HP).
+        const max = data.enemies.find(e => e.id === enemy.id)!.maxHp; const amount = Math.min(max - enemy.hp, Math.ceil(max * intent.mend / 100 / (1 + (enemy.mended ?? 0))));
+        if (amount > 0) { enemy.hp += amount; enemy.mended = (enemy.mended ?? 0) + 1; events.push({ type: 'heal', sourceId: actorId, targetId: actorId, amount, text: 'The water mends.' }); }
+      }
       // A whole-party move strikes every standing hero; Guard cannot cover it.
       else if (intent.all) { for (const h of state.heroes.filter(x => x.hp > 0)) if (h.hp > 0) strike(h, null); }
       else if (enemy.deflect && enemy.deflect.until >= state.round && !lockedMove(intent) && state.enemies.some(e => e.id === enemy.deflect!.recipientId && e.hp > 0)) {

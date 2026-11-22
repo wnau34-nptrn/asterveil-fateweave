@@ -2,6 +2,13 @@
 
 These owner-scoped rules still apply. They were moved here verbatim so CLAUDE.md stays short. Before changing a system, read its section here.
 
+## Map 4 ทะเลสาบเงาจันทร์ — owner OD-60 2026-11-22 (save v68, draft numbers)
+
+- Tide (`core/world/tide.ts`): low/high turns every `tide.period` (8) steps of `steps + tideWait`; shallow `~` walkable at low tide, deep `=` by boat only (the ferryman story's reward, `run.boat` fixed at departure); a party on foot still in shallow water when the tide comes in is washed back to `run.shore` (event `washed`). Camps can `waitTide` (adds the steps left; no step taken). A filled boulder pit is a dry causeway. Levers stand on shallow tiles (pulled at low tide).
+- Content `content/world/chapter-lake.ts`: seal 2 of 3 (serpent elite / 3 moon lanterns / shrine rite), side `story` (ferryman event + `lake-oar` chest, one run home → reward once + boat), lost `notes` and `reflection` events (gaze = journal page `memory:<event>` + fatigue) settle into `Profile.notes` whatever the outcome, Kael's lake-only side quest (`SideQuestDefinition.map`), camp-specific recruits (`recruits[].camp`: Lio camp 1, Cerise camp 2; owned = OD-22 duplicate).
+- Camp level cap `capLevel(map, clears)` = 10 + 3 per first clear past the second, ≤30; a run keeps `clears` from departure. Tree points still stop at `treePointLevel` 10.
+- Battle: intent `mend` (Water Veil) restores `mend`% of the foe's max HP divided by 1 + mends already landed (`EnemyState.mended`), cancellable by Bash/Sigil by kind, locked from Seer bending. Lake foes wear older bodies (`LAKE_STANDINS`) until ART brief `docs/handoffs/CODEX-ART-MAP4-LAKE-TH.md` lands. Balance: `tests/lake-sim.test.ts` → `docs/validation/map4-lake/`.
+
 ## Boss bark and chip shift — P05 2026-11-14 (draft, encounter versions only)
 
 OD-09 answer/penalty without a new rule: the Briar Lord (`elite-briar-lord` v11: forest boss and the map 3 gate) and the rift warden (`rift-warden` v21) carry the existing `veilguard` trait on normal mode (`catalog.ts` `barkRules` = `progression.hardTraits` numbers, 25%): hits are cut until a Mark (Aira, prologue recruit — every company), acid or a dispel opens it; status text comes from `battle-status.ts` as in hard mode, which still sets its own traits. Unanswered chip of their helpers moved into the bosses' announced moves (`softened`): warden wisps 70%; tusk-chief sprite −25% with chief charges +25% (`elite-tusk-chief` v8); briar stalker −20% with the lord's moves ~+10%. Sim yardstick and numbers: `docs/validation/p05-2026-11-14/README_TH.md`; probes `tests/probe/p05-*.test.ts` (bench of captured boss states, `BENCH_IN`/`BENCH_CAPTURE`).

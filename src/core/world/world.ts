@@ -3,8 +3,9 @@ import { clampRun, RUN_CAP } from './caps';
 import {huntedReward} from './targeted-loot';
 import { replay, withLevel, withParty, withStrength } from '../battle/engine';
 import { boulderAt, leverPuzzleAt, openPit, passableWall, runePuzzleAt, secretAt } from './puzzles';
+import { lowTide, stepsToTurn, sweptBack, tideBlock, waterAt } from './tide';
 import type { EnemyDefinition, EnemyTrait, BattleEntry, BattleState, Command, EncounterDefinition, HeroDefinition, HeroTalents, ActionId, PassiveId } from '../battle/types';
-import type { RecruitPoint, ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot } from './types';
+import type { RecruitPoint, ActiveBattle, BattleKind, ChestDefinition, Company, Direction, ExpGain, ExpeditionState, LootTable, MapDefinition, MemberProgress, Point, PotionId, Resources, Talents, Tile, WorldEvent, WorldResult, ZoneDefinition, Gear, Item, EliteDefinition, EventChoice, MapEventDefinition, MapEventKind, GearSlot, QuestObjective } from './types';
 import { affixPool, gearTotals } from './equipment';
 import { effectiveTalents, isBigTree, memberTalentReason, treeClears } from './talents';
 import { battleTomes, chestTomes } from './tomes';
@@ -88,7 +89,7 @@ function tire(state: ExpeditionState, map: MapDefinition): void {
 // boss fight starts). There a waiting recruit steps back in (a free party slot, else the reserve) at full HP. Both are
 // settled into the company.
 export function recruit(state: ExpeditionState, map: MapDefinition, at: RecruitPoint, lookup?: EncounterLookup): string[] {
-  const ids = (map.recruits ?? []).filter(r => r.at === at).map(r => r.hero);
+  const ids = (map.recruits ?? []).filter(r => r.at === at && (!r.camp || (r.camp.x === state.position.x && r.camp.y === state.position.y))).map(r => r.hero);
   const arriving = ids.filter(id => state.arrivals?.includes(id));
   if (arriving.length && !lookup) throw new Error('A recruit arrives: the encounter lookup is needed');
   for (const id of arriving) {
@@ -217,16 +218,22 @@ export const expToNext = (map: Pick<MapDefinition, 'progression'>, level: number
 export const levelXp = (map: Pick<MapDefinition, 'progression'>, level: number): number => (level - 1) * map.progression.nextBase + map.progression.nextPerLevel * level * (level - 1) / 2;
 // Victories stop adding EXP at the cap. A save moved from per-member levels (v43) may keep the EXP a capped member had
 // towards the next level, so the camp's EXP can sit up to one level's worth above the cap without raising it.
-export const capXp = (map: Pick<MapDefinition, 'progression'>): number => levelXp(map, map.progression.levelCap);
-export const maxCampXp = (map: Pick<MapDefinition, 'progression'>): number => capXp(map) + expToNext(map, map.progression.levelCap) - 1;
+// OD-60 (save v68): the cap a camp has reached rises `capPerClear` levels for each map it has first-cleared past the first
+// `capFreeClears` (10 → 13 after map 3, … up to `levelCap`); a run keeps the cap it set out with (`ExpeditionState.clears`).
+export const capLevel = (map: Pick<MapDefinition, 'progression'>, clears = 0): number => {
+  const r = map.progression; return Math.min(r.levelCap, r.capBase + r.capPerClear * Math.max(0, clears - r.capFreeClears));
+};
+export const capXp = (map: Pick<MapDefinition, 'progression'>, clears = 0): number => levelXp(map, capLevel(map, clears));
+// The most camp EXP any save may hold: the highest cap plus one level's worth (see above).
+export const maxCampXp = (map: Pick<MapDefinition, 'progression'>): number => levelXp(map, map.progression.levelCap) + expToNext(map, map.progression.levelCap) - 1;
 export function campLevel(map: Pick<MapDefinition, 'progression'>, xp: number): number {
   let level = 1; while (level < map.progression.levelCap && xp >= levelXp(map, level + 1)) level++;
   return level;
 }
 export const levelOf = (map: Pick<MapDefinition, 'progression'>, party: Pick<Party, 'campXp'>): number => campLevel(map, party.campXp);
 // The camp's progress within its level (`need` 0 at the cap).
-export function campProgress(map: Pick<MapDefinition, 'progression'>, xp: number): { level: number; exp: number; need: number } {
-  const level = campLevel(map, xp); const max = level >= map.progression.levelCap;
+export function campProgress(map: Pick<MapDefinition, 'progression'>, xp: number, clears = 0): { level: number; exp: number; need: number } {
+  const level = campLevel(map, xp); const max = level >= capLevel(map, clears);
   return { level, exp: max ? 0 : xp - levelXp(map, level), need: max ? 0 : expToNext(map, level) };
 }
 // Monster level of a floor tile: the zone's low end at its southern (entrance) rows, rising to the high end in the north.
@@ -289,10 +296,16 @@ export function startPrologue(initial: ExpeditionState, map: MapDefinition): Wor
 export const optionalElite = (map: MapDefinition, source?: string): boolean => map.elites.some(e => e.id === source && !e.forced && !e.mini);
 export const miniBoss = (map: MapDefinition, source?: string): boolean => map.elites.some(e => e.id === source && e.mini);
 // The rift seal (3B): which objectives this run has done, and whether enough are done to face the boss.
+export const objectiveDone = (state: ExpeditionState, o: QuestObjective): boolean =>
+  o.kind === 'chests' ? state.openedChests.length >= o.count : o.kind === 'lanterns' ? (state.lanterns?.length ?? 0) >= o.count
+    : o.kind === 'elite' ? state.elitesDefeated.includes(o.target) : o.kind === 'chest' ? state.openedChests.includes(o.target) : state.eventsDone.includes(o.target);
 export function questDone(state: ExpeditionState, map: MapDefinition): string[] {
-  return map.quest.objectives.filter(o => o.kind === 'chests' ? state.openedChests.length >= o.count
-    : o.kind === 'elite' ? state.elitesDefeated.includes(o.target) : state.eventsDone.includes(o.target)).map(o => o.id);
+  return map.quest.objectives.filter(o => objectiveDone(state, o)).map(o => o.id);
 }
+// Map 4 (save v68): the side story beside the seal; every objective in one run that comes home (profile `settle`).
+export const storyDone = (state: ExpeditionState, map: MapDefinition): boolean => !!map.story && map.story.objectives.every(o => objectiveDone(state, o));
+// A gazed reflection's journal page id.
+export const memoryNote = (eventId: string): string => `memory:${eventId}`;
 export const questComplete = (state: ExpeditionState, map: MapDefinition): boolean => questDone(state, map).length >= map.quest.need;
 // P05-02: an optional quest (maps 1–2) never seals the boss.
 export const bossSealed = (state: ExpeditionState, map: MapDefinition): boolean => !map.quest.optional && !state.bossDefeated && !questComplete(state, map);
@@ -316,6 +329,8 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   if (tile.kind === 'wall' && !passableWall(initial, map, target)) return { state: initial, event: { type: 'blocked', reason: 'wall' } };
   if (!initial.roster.deployed.some(id => initial.hp[id]! > 0)) return { state: initial, event: { type: 'blocked', reason: 'party' } };
   if (openPit(initial, map, target)) return { state: initial, event: { type: 'blocked', reason: 'pit' } };
+  // Map 4: water by the tide (tide.ts).
+  const wet = tideBlock(initial, map, target); if (wet) return { state: initial, event: { type: 'blocked', reason: wet } };
   const state = structuredClone(initial);
   // A boulder in the way is pushed one tile in the walking direction: onto plain floor, or into its pit, which it fills.
   const boulder = boulderAt(state, map, target); let pushed: WorldEvent | undefined;
@@ -323,7 +338,7 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
     const next = { x: target.x + offsets[dir].x, y: target.y + offsets[dir].y }; const into = tileAt(map, next);
     const pit = boulder.pit.x === next.x && boulder.pit.y === next.y;
     const free = into?.kind === 'floor' && !boulderAt(state, map, next) && !openPit(state, map, next) && !eliteAt(map, next) && !eventAt(map, next) && !chestAt(map, next)
-      && !runePuzzleAt(map, next) && !leverPuzzleAt(map, next);
+      && !runePuzzleAt(map, next) && !leverPuzzleAt(map, next) && !waterAt(map, next, state.solved);
     if (!pit && !free) return { state: initial, event: { type: 'blocked', reason: 'stone' } };
     if (pit) { state.solved.push(boulder.id); delete state.boulders[boulder.id]; } else state.boulders[boulder.id] = next;
     pushed = { type: 'pushed', puzzleId: boulder.id, filled: pit };
@@ -344,13 +359,27 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
     state.battle = startBattle(state, 'elite', elite.encounterId, elite.level !== undefined ? elite.level + (state.respawns[elite.id] ?? 0) : undefined, elite.id, elite.percent);
     return { state, event: { type: 'encounter', kind: 'elite', encounterId: elite.encounterId, chance: 100 } };
   }
+  // Map 4: stepping into shallow water remembers the dry tile left behind; the incoming tide sweeps a party on foot back there.
+  if (map.tide) {
+    if (!waterAt(map, target, state.solved)) delete state.shore;
+    else if (!waterAt(map, state.position, state.solved)) state.shore = { ...state.position };
+  }
   state.position = target; state.steps++; reveal(state, map);
   if (lookup) trailRegen(state, map, lookup);
+  if (map.tide && state.shore && sweptBack(state, map)) {
+    const to = state.shore; state.position = { ...to }; delete state.shore; reveal(state, map);
+    return { state, event: { type: 'washed', to: { ...to } } };
+  }
   // 3C: puzzle tiles answer instead of rolling an encounter on that step.
   if (pushed) return { state, event: pushed };
   // 3D: a glowing herb is picked up (once per run) instead of rolling an encounter.
   const herb = map.herbs.find(h => h.x === target.x && h.y === target.y);
   if (herb && !state.herbs.includes(herb.id)) { state.herbs.push(herb.id); return { state, event: { type: 'herb', herbId: herb.id } }; }
+  // Map 4: a moon lantern is lit and a lost note picked up (once per run each).
+  const lantern = map.lanterns?.find(l => l.x === target.x && l.y === target.y);
+  if (lantern && !state.lanterns?.includes(lantern.id)) { (state.lanterns ??= []).push(lantern.id); return { state, event: { type: 'lantern', lanternId: lantern.id, lit: state.lanterns.length } }; }
+  const note = map.notes?.find(n => n.x === target.x && n.y === target.y);
+  if (note && !state.notes?.includes(note.id)) { (state.notes ??= []).push(note.id); return { state, event: { type: 'note', noteId: note.id } }; }
   const secret = secretAt(map, target);
   if (secret && !state.secrets.includes(secret.id)) { state.secrets.push(secret.id); return { state, event: { type: 'secret', secretId: secret.id } }; }
   const runes = runePuzzleAt(map, target);
@@ -407,6 +436,13 @@ export const atCamp = (state: ExpeditionState, map: MapDefinition): boolean =>
 export const atMuster = (state: ExpeditionState, map: MapDefinition): boolean =>
   !state.battle && !state.completed && ['camp', 'start'].includes(tileAt(map, state.position)?.kind ?? '');
 export function canRest(state: ExpeditionState, map: MapDefinition): boolean { return atCamp(state, map) && state.restReady; }
+// Map 4: at a camp the party may wait for the water to turn (adds the steps left to the tide count; no step is taken).
+export const canWaitTide = (state: ExpeditionState, map: MapDefinition): boolean => !!map.tide && atCamp(state, map) && !state.draft;
+export function waitTide(initial: ExpeditionState, map: MapDefinition): WorldResult {
+  if (!canWaitTide(initial, map)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
+  const state = structuredClone(initial); state.tideWait = (state.tideWait ?? 0) + stepsToTurn(state, map);
+  return { state, event: { type: 'waited', low: lowTide(state, map) } };
+}
 const percentOf = (max: number, percent: number) => Math.max(1, Math.ceil(max * percent / 100));
 // A rest heals standing members by a share of max HP; the fallen need an ember each.
 export function rest(initial: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): WorldResult {
@@ -577,7 +613,7 @@ function battleLoot(state: ExpeditionState, map: MapDefinition, kind: BattleKind
 // The choices each event kind offers (P05-02: the traveller can be pointed the way; the abandoned camp has three).
 export const EVENT_CHOICES: Readonly<Record<MapEventKind, readonly EventChoice[]>> = {
   bandits: ['fight', 'sneak'], shrine: ['pray', 'offer'], merchant: ['buy-salve', 'buy-tonic', 'buy-repel'], traveller: ['help', 'guide'], rift: ['fight'],
-  abandoned: ['shelter', 'search', 'pass'],
+  abandoned: ['shelter', 'search', 'pass'], reflection: ['gaze', 'away'],
 };
 // Event choices (3A). Valid only while standing on the unfinished event and outside battle. Fights start a battle
 // that finishes the event on victory; other choices finish it at once (the merchant stays open for more trades).
@@ -629,6 +665,11 @@ export function chooseEvent(initial: ExpeditionState, map: MapDefinition, lookup
   if (choice === 'help') { state.potions.salve--; state.resources.ore += r.traveller.ore; state.resources.shard += r.traveller.shard; }
   if (choice === 'guide') state.resources.ore += r.travellerGuide.ore;
   if (choice === 'search') state.dust += r.abandoned.searchDust;
+  // Map 4: a gazed memory joins the camp journal; remembering tires everyone brought.
+  if (choice === 'gaze') {
+    const page = memoryNote(ev.id); if (!state.notes?.includes(page)) (state.notes ??= []).push(page);
+    for (const id of rosterIds(state)) setFatigue(state, id, fatigueOf(state, id) + r.reflection.fatigue);
+  }
   if (choice === 'shelter') {
     for (const id of rosterIds(state)) {
       const max = memberDef(lookup, map, state, id)!.maxHp; if (!state.hp[id]) continue;
@@ -756,8 +797,9 @@ function gainExp(state: ExpeditionState, map: MapDefinition, lookup: EncounterLo
   const start = levelOf(map, state); const percent = expPercent(start, level);
   // OD-54 (owner 2026-11-19, R1): the prologue win always reaches camp Lv2, so a new company has its first tree point to
   // learn right after the prologue (docs/design/TUTORIAL_FLOW_TH.md).
-  const earned = state.campXp >= capXp(map) ? 0 : Math.min(Math.round(base * percent / 100), capXp(map) - state.campXp);
-  const gained = kind === 'tutorial' ? Math.max(earned, Math.min(capXp(map), levelXp(map, 2)) - state.campXp) : earned;
+  const cap = capXp(map, state.clears);
+  const earned = state.campXp >= cap ? 0 : Math.min(Math.round(base * percent / 100), cap - state.campXp);
+  const gained = kind === 'tutorial' ? Math.max(earned, Math.min(cap, levelXp(map, 2)) - state.campXp) : earned;
   const before = Object.fromEntries(rosterIds(state).map(id => [id, memberDef(lookup, map, state, id)!.maxHp]));
   state.campXp += gained;
   const lv = levelOf(map, state);

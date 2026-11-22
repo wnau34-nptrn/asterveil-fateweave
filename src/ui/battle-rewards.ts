@@ -19,7 +19,7 @@ export function showBattleRewards(root: HTMLElement, map: MapDefinition, reward:
   dialog.className = 'battle-rewards';
   dialog.setAttribute('aria-labelledby', 'rewards-title');
   // P01: use the existing shared progression and resolved gain; this panel never grants EXP.
-  const previous = campProgress(map, before.campXp), current = campProgress(map, after.campXp);
+  const previous = campProgress(map, before.campXp, before.clears), current = campProgress(map, after.campXp, after.clears);
   const gain = event.exp, capped = current.need === 0, leveled = (gain?.levelsUp ?? 0) > 0;
   const percent = capped ? 100 : current.exp / current.need * 100;
   const from = leveled ? 0 : previous.need ? previous.exp / previous.need * 100 : 100;

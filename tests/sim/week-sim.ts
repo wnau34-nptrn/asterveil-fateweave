@@ -3,7 +3,9 @@
 // map 3; it may also sweep (best reward first) and claim every quest-board reward it can, exactly as the UI offers.
 // A login-only day sweeps and claims without a run. Income is kept apart by source so the board and sweep can be
 // compared with real play. Nothing here changes rules; it only measures them.
-import { MAPS } from '../../src/content/world/maps';
+import { MAPS as ALL_MAPS } from '../../src/content/world/maps';
+// Frozen on maps 1–3 (their baselines predate map 4, whose own simulation is tests/lake-sim.test.ts).
+const MAPS = ALL_MAPS.filter(m => m.chapter <= 3);
 import { boardBook, boardClaimReason, claimBoard } from '../../src/core/world/board';
 import { sweep, sweepReason, sweepBook } from '../../src/core/world/sweep';
 import { tomeCount } from '../../src/core/world/tomes';

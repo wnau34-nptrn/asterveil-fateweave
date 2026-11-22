@@ -49,7 +49,7 @@ describe('P09 weekly universal shards: content', () => {
   it('keeps the weekly sweep+board value inside the P04-06 budget', () => {
     // P04-06 (before shards): weekly tasks 180 ore / 90 gold; map-3 sweep 30 ore / 15 gold; 2 supplies a day.
     const before = 180 + 2 * 90 + 14 * (30 + 2 * 15);
-    const map3 = MAPS[MAPS.length - 1]!; const sweeps = gameRules.sweep.daily * 7;
+    const map3 = MAPS.find(m => m.id === 'veil-frontier')!; const sweeps = gameRules.sweep.daily * 7;
     // P11-04: the World Boss's weekly value (attempts + personal + shared milestones) is inside the same budget.
     const wb = gameRules.worldBoss; const boss = wb.attempts * value(wb.attemptReward) + [...wb.personal, ...wb.shared].reduce((n, m) => n + value(m.reward), 0);
     const after = rules.weekly.reduce((n, o) => n + value(o.reward), 0) + sweeps * value(map3.sweepReward!.normal) + boss;
@@ -86,7 +86,7 @@ describe('P09 weekly universal shards: claims (offline rules)', () => {
   });
 
   it('the sweep pays no shards', () => {
-    const p = base({ sweep: { day: D, supply: 6, used: {}, count: 0 } }); const map3 = MAPS[MAPS.length - 1]!;
+    const p = base({ sweep: { day: D, supply: 6, used: {}, count: 0 } }); const map3 = MAPS.find(m => m.id === 'veil-frontier')!;
     expect(sweep(p, map3, false, D, 0).profile.bank.shard).toBe(7);
   });
 });

@@ -5,7 +5,9 @@
 // - traversal: the real map (rush route, advisor, carried HP, camps, boss) from that camp level, `seeds` seeds;
 // - role probe: the map's elites and boss played by the advisor, counting what the subject itself deals, heals,
 //   shields and absorbs, and whether it falls.
-import { MAPS } from '../../src/content/world/maps';
+import { MAPS as ALL_MAPS } from '../../src/content/world/maps';
+// Frozen on maps 1–3 (their baselines predate map 4, whose own simulation is tests/lake-sim.test.ts).
+const MAPS = ALL_MAPS.filter(m => m.chapter <= 3);
 import { encounterById as lookup } from '../../src/content/encounters/catalog';
 import { beginBattle, resolveCommand, withLevel, withParty } from '../../src/core/battle/engine';
 import type { HeroDefinition } from '../../src/core/battle/types';
@@ -23,9 +25,9 @@ export interface LowStarRow { id: string; role: string; stage: string; stars: nu
 
 // Camp level a map is played at: the boss level (capped); hard is played at the cap after all three clears.
 export function stages(): Stage[] {
-  const out: Stage[] = MAPS.map((m, i) => ({ map: m, hard: false, level: Math.min(m.progression.levelCap, m.bossLevel ?? 1), clears: i, label: m.id }));
+  const out: Stage[] = MAPS.map((m, i) => ({ map: m, hard: false, level: Math.min(m.progression.capBase, m.bossLevel ?? 1), clears: i, label: m.id }));
   const last = MAPS[MAPS.length - 1]!;
-  out.push({ map: last, hard: true, level: last.progression.levelCap, clears: MAPS.length, label: `${last.id} (hard)` });
+  out.push({ map: last, hard: true, level: last.progression.capBase, clears: MAPS.length, label: `${last.id} (hard)` });
   return out;
 }
 // First legal build per branch at this camp level and clear count (same walk as character-sim, with the clear points).

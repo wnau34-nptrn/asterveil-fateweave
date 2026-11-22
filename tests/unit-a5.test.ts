@@ -3,7 +3,7 @@ import {garranActions,brannActions,foeArts,foeIntents,unitA5Fixture} from './fix
 import {heroes} from '../src/content/heroes/team';
 import {mercenaries} from '../src/content/heroes/mercenaries';
 import {talentTrees} from '../src/content/heroes/talents';
-import {encounters} from '../src/content/encounters/catalog';
+import {encounters,LAKE_STANDINS } from '../src/content/encounters/catalog';
 import {unitClip,unitSample,unitDisplayRatio,unitIdleFrame,unitRegistry} from '../src/game/visuals/unit-frames';
 import {unitPose,unitReactions} from '../src/game/visuals/unit-animation-map';
 import manifest from '../src/game/visuals/unit-atlases.json';
@@ -25,7 +25,7 @@ describe('A5 Garran / Brann / Mossback Tusker / Briar Stalker / Thorn Beetle act
  });
  it('audits every encounter using the three foes and each of their intents',()=>{
   const found:Record<string,Set<string>>={};
-  for(const data of encounters)for(const e of data.enemies.filter(e=>(foeArts as readonly string[]).includes(e.art??''))){
+  for(const data of encounters.filter(d=>!LAKE_STANDINS.has(d.id)))for(const e of data.enemies.filter(e=>(foeArts as readonly string[]).includes(e.art??''))){
    for(const intent of data.intents.filter(i=>i.sourceId===e.id)){(found[e.art!]??=new Set()).add(intent.name);expect(unitClip(e.art!,undefined,intent.name)).toBe(foeClip[intent.name as keyof typeof foeClip]);}
   }
   for(const art of foeArts)expect([...found[art]!].sort()).toEqual([...foeIntents[art]].sort());

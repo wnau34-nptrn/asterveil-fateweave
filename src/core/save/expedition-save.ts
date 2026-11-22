@@ -4,7 +4,8 @@ import { entryReason, MAGIC_DAMAGE_SKILLS, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { presetNameReason } from '../world/presets';
 import { LEGACY_RESERVE, PARTY_SLOTS, PRESET_SLOTS, RESERVE_SLOTS, type TeamPreset, type GachaBook, type GachaEntry, type GachaGrant, type GachaResult, type ActiveBattle, type CampMigration, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
-import { EVENT_CHOICES, campLevel, draftOffers, skillChoices, battleState, expToNext, findTiles, levelXp, maxCampXp, type Party, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
+import { waterAt } from '../world/tide';
+import { EVENT_CHOICES, memoryNote, campLevel, draftOffers, skillChoices, battleState, expToNext, findTiles, levelXp, maxCampXp, type Party, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
 import { boulderAt, openPit, passableWall } from '../world/puzzles';
 import { boardOfferCount, commanderReason, defaultCamp, newProfile, reserveSlots, settle, talentsValid } from '../world/profile';
@@ -169,7 +170,10 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // unchanged (missing = no tickets yet).
 // v67 (OD-59): the starter picks are the first fate weave (one fixed offer: a support, then an attacker) and map 1's
 // first clear pays 10 gacha tickets. A v66 run still waiting on its starter picks keeps the three-offer choice.
-export const SAVE_VERSION = 67;
+// v68 (map 4, OD-60): the camp level cap rises with first clears (camp EXP up to the Lv30 cap); a lake run may carry the
+// tide fields `tideWait`/`shore`/`boat`, lit `lanterns` and picked-up `notes`; the profile may carry the camp journal
+// `notes`; `storyQuests`/`last.story` may name a map with a side story. Optional, so a v67 save loads unchanged.
+export const SAVE_VERSION = 68;
 // Trees refunded by older migrations were legal under star points (at most ★5 = 4 extra).
 const LEGACY_STAR_POINTS = 4;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
@@ -514,6 +518,24 @@ function puzzleState(s: Record<string, unknown>, map: MapDefinition): Pick<Exped
   }
   return { runes, solved, levers, boulders, secrets };
 }
+// v68 map 4: tide, lanterns and notes, only on a map that has them.
+export const journalIds = (maps: readonly MapDefinition[]): string[] =>
+  maps.flatMap(m => [...(m.notes ?? []).map(n => n.id), ...m.events.filter(e => e.kind === 'reflection').map(e => memoryNote(e.id))]);
+function tideState(s: Record<string, unknown>, map: MapDefinition): Pick<ExpeditionState, 'tideWait' | 'shore' | 'boat' | 'lanterns' | 'notes'> {
+  const out: Pick<ExpeditionState, 'tideWait' | 'shore' | 'boat' | 'lanterns' | 'notes'> = {};
+  if ((s.tideWait !== undefined || s.shore !== undefined || s.boat !== undefined) && !map.tide) throw new Error('Invalid run');
+  if (s.tideWait !== undefined) { if (!isInt(s.tideWait, 1, 999999)) throw new Error('Invalid run'); out.tideWait = s.tideWait; }
+  if (s.boat !== undefined) { if (s.boat !== true || !map.story?.boat) throw new Error('Invalid run'); out.boat = true; }
+  if (s.shore !== undefined) {
+    const p = point(s.shore, map); const t = tileAt(map, p);
+    const solved = Array.isArray(s.solved) ? s.solved as string[] : [];
+    if (!t || t.kind === 'wall' || waterAt(map, p, solved) || !waterAt(map, point(s.position, map, true), solved)) throw new Error('Invalid run');
+    out.shore = p;
+  }
+  if (s.lanterns !== undefined) { const l = idList(s.lanterns, (map.lanterns ?? []).map(x => x.id)); if (!l.length) throw new Error('Invalid run'); out.lanterns = l; }
+  if (s.notes !== undefined) { const n = idList(s.notes, journalIds([map])); if (!n.length) throw new Error('Invalid run'); out.notes = n; }
+  return out;
+}
 function spareOf(v: unknown, map: MapDefinition, lookup: EncounterLookup): Item[] {
   if (!Array.isArray(v) || v.length > 99) throw new Error('Invalid spare');
   return v.map(i => itemOf(i, map, lookup));
@@ -678,6 +700,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     dust: isInt(s.dust, 0, RUN_CAP.dust) ? s.dust : badRun(),
     ...puzzleState(s, map), herbs: idList(s.herbs, map.herbs.map(h => h.id)),
     visited: idList(s.visited, findTiles(map, 'camp').map(c => `${c.x},${c.y}`)), respawns: respawnsOf(s.respawns, map),
+    ...tideState(s, map),
   };
   // Standing on a wall is only possible in an opened doorway or a secret passage; never inside a boulder or an open pit.
   if (tileAt(map, state.position)?.kind === 'wall' && !passableWall(state, map, state.position)) throw new Error('Invalid position');
@@ -758,7 +781,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
     const allEvents = maps.flatMap(m => m.events.map(e => e.id));
     const events = l.events === undefined ? undefined : Array.isArray(l.events) && l.events.every(id => typeof id === 'string') && new Set(l.events).size === l.events.length
       ? (l.events as string[]).filter(id => allEvents.includes(id)) : badProfile();
-    if (l.story !== undefined && (typeof l.story !== 'string' || !maps.some(m => m.id === l.story && m.quest.optional))) throw new Error('Invalid result');
+    if (l.story !== undefined && (typeof l.story !== 'string' || !maps.some(m => m.id === l.story && (m.quest.optional || m.story)))) throw new Error('Invalid result');
     last = { outcome: l.outcome as RunOutcome, ore: l.ore, gold: l.gold as number, shard: l.shard, steps: l.steps, wins: l.wins, items: l.items, salvaged: l.salvaged, ...(l.tomes !== undefined ? { tomes: l.tomes as number } : {}),
       ...(events?.length ? { events } : {}), ...(l.story !== undefined ? { story: l.story as string } : {}) };
   }
@@ -787,7 +810,9 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const treeReset = p.treeReset === undefined ? undefined : idList(p.treeReset, company as string[]);
   // P05-02 (v61): story flags and paid optional quests (known optional-quest maps only, no repeats).
   const choices = p.choices === undefined ? undefined : choicesOf(p.choices, maps.flatMap(m => m.events), true);
-  const storyQuests = p.storyQuests === undefined ? undefined : idList(p.storyQuests, maps.filter(m => m.quest.optional).map(m => m.id));
+  const storyQuests = p.storyQuests === undefined ? undefined : idList(p.storyQuests, maps.filter(m => m.quest.optional || m.story).map(m => m.id));
+  // v68: the camp journal (lost notes and gazed memories of every map, no repeats).
+  const notes = p.notes === undefined ? undefined : idList(p.notes, journalIds(maps));
   if (clearedHard?.some(id => !cleared.includes(id))) throw new Error('Invalid profile');
   const sweep = p.sweep === undefined ? undefined : sweepOf(p.sweep, map, maps, cleared);
   const board = p.board === undefined ? undefined : boardOf(p.board, map, maps);
@@ -801,7 +826,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (party.reserve.length > slots) throw new Error('Invalid party');
   return {...(presets ? { presets } : {}),...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(boardFeatured ? { boardFeatured: [...boardFeatured as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     ...(storyShards ? { storyShards } : {}), ...(treeReset?.length ? { treeReset } : {}),
-    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}), ...(sweep ? { sweep } : {}), ...(board ? { board } : {}), ...(worldBoss ? { worldBoss } : {}), ...(bossShards ? { bossShards } : {}), ...(gacha ? { gacha } : {}),
+    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}), ...(notes?.length ? { notes } : {}), ...(sweep ? { sweep } : {}), ...(board ? { board } : {}), ...(worldBoss ? { worldBoss } : {}), ...(bossShards ? { bossShards } : {}), ...(gacha ? { gacha } : {}),
     bank: { ore: bank.ore as number, gold: bank.gold as number, shard: bank.shard as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, POTION_CAP), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -1019,7 +1044,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
   if (version < 60 && version >= 5) { const p = obj(envelope.profile ?? {}); migrateTreePoints(envelope, map, maps.length ? maps : [map], version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps).length : undefined); }
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

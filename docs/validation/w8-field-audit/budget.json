@@ -524,6 +524,155 @@
    "bossFx": true
   },
   {
+   "id": "lake-slimes",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "ember",
+    "crawler"
+   ],
+   "four": {
+    "decoded": 26781648,
+    "download": 8103203
+   },
+   "five": {
+    "decoded": 31285896,
+    "download": 9549120
+   },
+   "bossFx": false
+  },
+  {
+   "id": "lake-mist",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "ember",
+    "wisp",
+    "crawler"
+   ],
+   "four": {
+    "decoded": 28149712,
+    "download": 8439378
+   },
+   "five": {
+    "decoded": 32653960,
+    "download": 9885295
+   },
+   "bossFx": false
+  },
+  {
+   "id": "crab-wall",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "wisp",
+    "crawler"
+   ],
+   "four": {
+    "decoded": 26985424,
+    "download": 8118651
+   },
+   "five": {
+    "decoded": 31489672,
+    "download": 9564568
+   },
+   "bossFx": false
+  },
+  {
+   "id": "isle-host",
+   "foes": 4,
+   "reserves": 0,
+   "foeSheets": [
+    "ember",
+    "wisp",
+    "crawler"
+   ],
+   "four": {
+    "decoded": 28149712,
+    "download": 8439378
+   },
+   "five": {
+    "decoded": 32653960,
+    "download": 9885295
+   },
+   "bossFx": false
+  },
+  {
+   "id": "pavilion-mist",
+   "foes": 4,
+   "reserves": 0,
+   "foeSheets": [
+    "ember",
+    "wisp",
+    "crawler"
+   ],
+   "four": {
+    "decoded": 28149712,
+    "download": 8439378
+   },
+   "five": {
+    "decoded": 32653960,
+    "download": 9885295
+   },
+   "bossFx": false
+  },
+  {
+   "id": "elite-shadow-serpent",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "tusker",
+    "wisp"
+   ],
+   "four": {
+    "decoded": 29900752,
+    "download": 8936805
+   },
+   "five": {
+    "decoded": 34405000,
+    "download": 10382722
+   },
+   "bossFx": true
+  },
+  {
+   "id": "elite-weeping-siren",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "riftweaver",
+    "crawler"
+   ],
+   "four": {
+    "decoded": 29497296,
+    "download": 8930900
+   },
+   "five": {
+    "decoded": 34001544,
+    "download": 10376817
+   },
+   "bossFx": false
+  },
+  {
+   "id": "water-spirit",
+   "foes": 4,
+   "reserves": 1,
+   "foeSheets": [
+    "hunter",
+    "wisp",
+    "crawler",
+    "sentinel"
+   ],
+   "four": {
+    "decoded": 34890704,
+    "download": 10459419
+   },
+   "five": {
+    "decoded": 39394952,
+    "download": 11905336
+   },
+   "bossFx": true
+  },
+  {
    "id": "wb-kragmor",
    "foes": 3,
    "reserves": 0,

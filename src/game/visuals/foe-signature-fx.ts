@@ -17,6 +17,8 @@ export const foeSignatureMoves={
   'Rune Lash':'rune-lash','Rift Needle':'rift-needle','Shard Burst':'shard-burst','Rift Bolt':'rift-bolt-foe','Veil Quake':'veil-quake',
   // W8: the Channeler's species move Rift Beam (not drawn in the package) shares its own Rift Bolt painting: same gesture, same caster.
   'Rift Beam':'rift-bolt-foe',
+  // Map 4 stand-ins (recoloured bodies reuse their kind's painting until the lake art arrives).
+  'Water Spit':'ember-spark','Mist Needle':'star-flame','Tide Lash':'rune-lash','Drowning Call':'rift-needle','Venom Spit':'spore-hex','Weeping Song':'rune-lash',
 } as const;
 export type FoeSignatureMove=keyof typeof foeSignatureMoves;
 export const isFoeSignatureMove=(name:string|undefined):name is FoeSignatureMove=>!!name&&Object.prototype.hasOwnProperty.call(foeSignatureMoves,name);

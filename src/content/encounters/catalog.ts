@@ -350,6 +350,79 @@ export const wbMorvane: EncounterDefinition = {
   ],
 };
 
+// ---- Map 4 ทะเลสาบเงาจันทร์ (2026-11-22, draft numbers; docs/design/CHAPTER1_MAPS_TH.md §3) ----
+// The siren and the spirit are written at 80% of their sketch (HP and moves) so the reference party's advisor wins them from
+// 60% HP; the map's strength (`bossPercent`, elite `percent`, levels) sets how hard they are on the lake (tests/lake-sim.test.ts).
+const at80 = (e: EncounterDefinition): EncounterDefinition => ({ ...e, enemies: e.enemies.map(f => ({ ...f, maxHp: Math.round(f.maxHp * 0.8) })),
+  intents: e.intents.map(i => ({ ...i, damage: Math.round(i.damage * 0.8) })) });
+// Random sets at the lake's reference level 11 (random battles take the tile's level). Shore → isles → moon pavilion.
+export const lakeSlimes: EncounterDefinition = { ...veilSiege, id: 'lake-slimes', version: 1, level: 11, name: 'สไลม์ริมน้ำ',
+  ...foes(11, [['f1', S.stoneCrab], ['b1', S.tideSlime], ['b2', S.tideSlime]]) };
+export const lakeMist: EncounterDefinition = { ...veilSiege, id: 'lake-mist', version: 1, level: 11, name: 'หมอกเหนือน้ำ',
+  ...foes(11, [['f1', S.stoneCrab], ['b1', S.mistWisp], ['b2', S.tideSlime]]) };
+export const crabWall: EncounterDefinition = { ...veilSiege, id: 'crab-wall', version: 1, level: 11, name: 'แนวปูเกราะหิน',
+  ...foes(11, [['f1', S.stoneCrab], ['f2', S.stoneCrab], ['b1', S.mistWisp]]) };
+export const isleHost: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes, id: 'isle-host', version: 1, level: 11, name: 'ฝูงเกาะกลางน้ำ',
+  ...fifth(foes(11, [['f1', S.stoneCrab], ['f2', S.stoneCrab], ['b1', S.mistWisp], ['b2', S.tideSlime]])) };
+export const pavilionMist: EncounterDefinition = { ...veilSiege, heroes: fiveHeroes, id: 'pavilion-mist', version: 1, level: 11, name: 'หมอกศาลาจันทร์',
+  ...fifth(foes(11, [['f1', S.stoneCrab], ['b1', S.mistWisp], ['b2', S.mistWisp], ['b3', S.tideSlime]])) };
+// Forced elite on the great bridge: the Shadow Serpent coils (a breakable charge: Bash/Sigil that cancels it staggers the
+// crushing coil that follows; otherwise Guard, a taunt or barriers answer it). A mist wisp hangs behind it.
+const serpentWisp = foes(12, [['b2', S.mistWisp]]);
+export const eliteShadowSerpent: EncounterDefinition = {
+  ...veilSiege, id: 'elite-shadow-serpent', version: 1, level: 12, name: 'อสรพิษเงา',
+  rules: barkRules,
+  enemies: [...serpentWisp.enemies,
+    { id: 'f1', row: 'front', large: true, boss: true, speed: 95, name: 'Shadow Serpent', displayName: 'อสรพิษเงา', maxHp: 260, color: 0x3b4f7a, art: 'foe_tusker', traits: ['veilguard'] }],
+  intents: [...softened(serpentWisp.intents, ['b2'], 80),
+    { sourceId: 'f1', targetSlot: 1, name: 'Shadow Fang', damage: 26, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 3, name: 'Venom Spit', damage: 24, kind: 'energy' },
+    { sourceId: 'f1', targetSlot: 0, name: 'Coil Gathering', damage: 0, kind: 'physical', charge: true, breakable: true },
+    { sourceId: 'f1', targetSlot: 0, name: 'Crushing Coil', damage: 44, kind: 'physical', unstoppable: true },
+    { sourceId: 'f1', targetSlot: 2, name: 'Venom Spit', damage: 24, kind: 'energy' },
+  ],
+};
+// Optional elite on the small isle: the Weeping Siren sings at the whole party (healing answers it) behind a stone crab.
+const sirenCrab = foes(12, [['f1', S.stoneCrab]]);
+export const eliteWeepingSiren: EncounterDefinition = at80({
+  ...veilSiege, id: 'elite-weeping-siren', version: 1, level: 12, name: 'นางเงือกร้องไห้',
+  enemies: [...sirenCrab.enemies,
+    { id: 'b1', row: 'back', large: true, speed: 105, name: 'Weeping Siren', displayName: 'นางเงือกร้องไห้', maxHp: 170, color: 0x7fb0d8, art: 'foe_riftweaver' }],
+  intents: [...sirenCrab.intents,
+    { sourceId: 'b1', targetSlot: 2, name: 'Tide Lash', damage: 24, kind: 'energy' },
+    { sourceId: 'b1', targetSlot: 0, name: 'Weeping Song', damage: 15, kind: 'energy', all: true },
+    { sourceId: 'b1', targetSlot: 3, name: 'Drowning Call', damage: 28, kind: 'energy' },
+  ],
+});
+// Map 4 boss (OD-09/10): the Water Spirit announces Water Veil (mends 10% of its HP; a Sigil cancels it, or out-damage it),
+// Surging Wave on the front slot (unstoppable: Guard/taunt/barriers soften it) and tide lashes. At 50% it calls a
+// reflection — a shade of the party (weak hits) — and its waves reach everyone. A stone crab and a mist wisp guard it.
+const spiritGuard = foes(13, [['f2', S.stoneCrab], ['b3', S.mistWisp]]);
+const mirrorShade = { id: 'b2', row: 'back', reserve: true, speed: 100, name: 'Mirror Shade', displayName: 'เงาสะท้อน', maxHp: 70, color: 0x5a6b8c, art: 'foe_hunter' } as const;
+export const waterSpirit: EncounterDefinition = at80({
+  ...veilSiege, heroes: fiveHeroes, id: 'water-spirit', version: 1, level: 13, name: 'ศึกภูตธารา',
+  phases: [{ sourceId: 'f1', below: 50, summon: ['b2'], name: 'Reflection' }],
+  rules: barkRules,
+  enemies: [...spiritGuard.enemies, mirrorShade,
+    { id: 'f1', row: 'front', large: true, boss: true, speed: 85, name: 'Water Spirit', displayName: 'ภูตธารา', maxHp: 420, color: 0x6fc6e0, art: 'foe_sentinel', traits: ['veilguard'] }],
+  intents: [...softened(spiritGuard.intents, ['f2', 'b3'], 75),
+    { sourceId: 'b2', targetSlot: 1, name: 'Mirror Strike', damage: 12, kind: 'physical' },
+    { sourceId: 'b2', targetSlot: 3, name: 'Mirror Strike', damage: 12, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 2, name: 'Tide Lash', damage: 26, kind: 'energy' },
+    { sourceId: 'f1', targetSlot: 0, name: 'Water Veil', damage: 0, kind: 'energy', mend: 10 },
+    { sourceId: 'f1', targetSlot: 0, name: 'Surging Wave', damage: 42, kind: 'physical', unstoppable: true },
+    { sourceId: 'f1', targetSlot: 3, name: 'Tide Lash', damage: 24, kind: 'energy' },
+    { sourceId: 'f1', targetSlot: 1, name: 'Undertow', damage: 28, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 0, name: 'Water Veil', damage: 0, kind: 'energy', mend: 12, phase: 1 },
+    { sourceId: 'f1', targetSlot: 0, name: 'Great Wave', damage: 20, kind: 'energy', all: true, phase: 1 },
+    { sourceId: 'f1', targetSlot: 0, name: 'Surging Wave', damage: 46, kind: 'physical', unstoppable: true, phase: 1 },
+    { sourceId: 'f1', targetSlot: 2, name: 'Tide Lash', damage: 28, kind: 'energy', phase: 1 },
+  ],
+});
+
+// Map 4 sets wear older foes' bodies as stand-ins; the per-body audits (tests/unit-a*.test.ts) skip them until the lake art arrives.
+export const LAKE_STANDINS: ReadonlySet<string> = new Set(['lake-slimes', 'lake-mist', 'crab-wall', 'isle-host', 'pavilion-mist', 'elite-shadow-serpent', 'elite-weeping-siren', 'water-spirit']);
+
 // World Bosses (balanced on written slots, P11-05) drop the assassin aims their court kinds carry (enemy aim B, owner 2026-11-19).
 function noAims(e: EncounterDefinition): EncounterDefinition {
   return e.intents.some(m => m.aim) ? { ...e, intents: e.intents.map(m => m.aim ? Object.fromEntries(Object.entries(m).filter(([k]) => k !== 'aim')) as typeof m : m) } : e;
@@ -369,14 +442,15 @@ function withAims(e: EncounterDefinition): EncounterDefinition {
   const intents = e.intents.map(m => {
     const foe = e.enemies.find(f => f.id === m.sourceId); const key = `${m.sourceId}:${m.phase ?? 0}`;
     const i = seen.get(key) ?? 0; seen.set(key, i + 1);
-    if (m.aim || !foe || m.all || m.charge || m.special || m.summon) return m;
+    if (m.aim || !foe || m.all || m.charge || m.special || m.summon || m.mend) return m;
     if (foe.boss) return i % 3 === 2 ? { ...m, aim: 'weakest' as const } : m;
     return foe.row === 'front' ? { ...m, aim: 'pack' as const } : m;
   });
   return intents.some(m => m.aim) ? { ...e, version: e.version + 1, intents } : e;
 }
 export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatrol, riftWhelp, thicketAmbush, shadowStalker, veilSiege, rearAmbush, crystalStampede, riftWarden, eliteTuskChief, eliteBriarLord, miniVeilGolem, vanguardCaptain,
-  slimePair, batSwarm, slimeNest, tuskerBats, beetleSpore, beetleWall, stalkerSpore, forestSwarm, channelerWisps, crawlerPack, riftHost, thornHost, riftLegion, worldBossWarden].map(withAims);
+  slimePair, batSwarm, slimeNest, tuskerBats, beetleSpore, beetleWall, stalkerSpore, forestSwarm, channelerWisps, crawlerPack, riftHost, thornHost, riftLegion, worldBossWarden,
+  lakeSlimes, lakeMist, crabWall, isleHost, pavilionMist, eliteShadowSerpent, eliteWeepingSiren, waterSpirit].map(withAims);
 // P11-05 step 2: the catalog lookup also knows the World Boss trio (world rules, saves and replays name them). They stay out of
 // `encounters` (the rule tests walk it and assert the advisor wins from full HP, which a World Boss never allows by design).
 // `presentedEncounters` is what the presentation coverage and the texture-budget audit walk: `encounters` plus every trio boss

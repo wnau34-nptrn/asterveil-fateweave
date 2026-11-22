@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { encounterById, encounters, WORLD_BOSS_HP } from '../src/content/encounters/catalog';
+import { encounterById, encounters, WORLD_BOSS_HP, LAKE_STANDINS } from '../src/content/encounters/catalog';
 import { WORLD_BOSS_TRIO, wbKragmor, wbMorvane, wbValdrakk } from '../src/content/encounters/world-boss-trio';
 import { rosterP03 } from '../src/content/heroes/roster-p03';
 import { gameRules } from '../src/content/world/rules';
@@ -39,7 +39,8 @@ describe('World Boss trio v1 content', () => {
     expect(wbMorvane.enemies.find(e => e.id === 'f1')!.court).toEqual({ percent: 10, by: ['f2', 'f3', 'b2'] });
   });
   it('no existing encounter uses the new fields, so their rules are unchanged without a version bump', () => {
-    for (const d of encounters.filter(e => !WORLD_BOSS_TRIO.includes(e))) {
+    // Map 4's serpent uses a breakable charge in a new encounter (version 1), so no older rule changed.
+    for (const d of encounters.filter(e => !WORLD_BOSS_TRIO.includes(e) && !LAKE_STANDINS.has(e.id))) {
       expect(d.intents.some(i => i.breakable || i.summon)).toBe(false);
       expect(d.enemies.some(e => e.court)).toBe(false);
     }

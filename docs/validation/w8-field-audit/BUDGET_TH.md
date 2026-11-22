@@ -37,6 +37,14 @@
 | `thorn-host` | 5 (0) | stalker, beetle, sporepuff | 28.9 MiB / 9.02 MB | 33.2 MiB / 10.47 MB | — |
 | `rift-legion` | 5 (0) | wisp, crawler | 25.7 MiB / 8.12 MB | 30.0 MiB / 9.56 MB | — |
 | `world-boss-warden` | 5 (2) | wisp, crawler, sentinel | 29.4 MiB / 9.53 MB | 33.7 MiB / 10.97 MB | โหลด |
+| `lake-slimes` | 3 (0) | ember, crawler | 25.5 MiB / 8.10 MB | 29.8 MiB / 9.55 MB | — |
+| `lake-mist` | 3 (0) | ember, wisp, crawler | 26.8 MiB / 8.44 MB | 31.1 MiB / 9.89 MB | — |
+| `crab-wall` | 3 (0) | wisp, crawler | 25.7 MiB / 8.12 MB | 30.0 MiB / 9.56 MB | — |
+| `isle-host` | 4 (0) | ember, wisp, crawler | 26.8 MiB / 8.44 MB | 31.1 MiB / 9.89 MB | — |
+| `pavilion-mist` | 4 (0) | ember, wisp, crawler | 26.8 MiB / 8.44 MB | 31.1 MiB / 9.89 MB | — |
+| `elite-shadow-serpent` | 2 (0) | tusker, wisp | 28.5 MiB / 8.94 MB | 32.8 MiB / 10.38 MB | โหลด |
+| `elite-weeping-siren` | 2 (0) | riftweaver, crawler | 28.1 MiB / 8.93 MB | 32.4 MiB / 10.38 MB | — |
+| `water-spirit` | 4 (1) | hunter, wisp, crawler, sentinel | 33.3 MiB / 10.46 MB | 37.6 MiB / 11.91 MB | โหลด |
 | `wb-kragmor` | 3 (0) | wisp, crawler, kragmor | 31.5 MiB / 10.02 MB | 35.8 MiB / 11.47 MB | โหลด |
 | `wb-valdrakk` | 3 (0) | wisp, valdrakk | 29.8 MiB / 9.66 MB | 34.1 MiB / 11.11 MB | โหลด |
 | `wb-morvane` | 4 (0) | wisp, crawler, morvane | 32.7 MiB / 9.97 MB | 37.0 MiB / 11.42 MB | โหลด |
