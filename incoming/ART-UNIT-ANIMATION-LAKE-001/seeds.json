@@ -1,0 +1,304 @@
+{
+  "base": "72c3d0584c0b98c8267314b7d89461a5ac589e4f",
+  "seeds": {
+    "tide-slime": {
+      "oldArtKey": "foe_ember_slime",
+      "atlas": "public/assets/art/units_foes2.webp",
+      "atlasSha256": "68f8c9303fe924aa33070a9404154fb79416fb2d491b608af79c80f7a8aa2136",
+      "cell": 1,
+      "box": [
+        512,
+        0,
+        1024,
+        512
+      ],
+      "facing": "left",
+      "groundY": 497,
+      "alphaBounds": [
+        81,
+        227,
+        431,
+        497
+      ],
+      "seed": "seeds/tide-slime-standin.png",
+      "seedSha256": "6f8d629bc57567c929acbfcde8d9b38e5fdd9c75b8f64eb0467acb4288faac65",
+      "variants": {
+        "r1": {
+          "seed": "seeds/tide-slime-r1-ready.png",
+          "sourceBox": [
+            0,
+            85,
+            455,
+            376
+          ],
+          "sha256": "1ee1c0a0cbf1ceb0c7e78bd8c882b60a13031d1d71fdda5ee8b33a6ac77ac7a8",
+          "alphaBounds": [
+            83,
+            253,
+            429,
+            497
+          ],
+          "groundY": 497,
+          "displaySize390": 91,
+          "facing": "left",
+          "recommended": true
+        }
+      }
+    },
+    "mist-wisp": {
+      "oldArtKey": "foe_rift_wisp",
+      "atlas": "public/assets/art/units_foes2.webp",
+      "atlasSha256": "68f8c9303fe924aa33070a9404154fb79416fb2d491b608af79c80f7a8aa2136",
+      "cell": 7,
+      "box": [
+        512,
+        1536,
+        1024,
+        2048
+      ],
+      "facing": "left",
+      "groundY": 497,
+      "alphaBounds": [
+        120,
+        127,
+        391,
+        497
+      ],
+      "seed": "seeds/mist-wisp-standin.png",
+      "seedSha256": "07b557ce48094e14b2560764de67b4a889074f56355633b981c6cc2a235e12f5",
+      "variants": {
+        "r1": {
+          "seed": "seeds/mist-wisp-r1-ready.png",
+          "sourceBox": [
+            450,
+            0,
+            840,
+            385
+          ],
+          "sha256": "cdac6b95526e61483398e7d5d3fc63f62907f6e526acdf65be3c5f24d2dd4bdd",
+          "alphaBounds": [
+            137,
+            129,
+            376,
+            478
+          ],
+          "groundY": 497,
+          "displaySize390": 92,
+          "facing": "left",
+          "recommended": true
+        }
+      }
+    },
+    "stone-crab": {
+      "oldArtKey": "foe_shard_crawler",
+      "atlas": "public/assets/art/units_foes2.webp",
+      "atlasSha256": "68f8c9303fe924aa33070a9404154fb79416fb2d491b608af79c80f7a8aa2136",
+      "cell": 8,
+      "box": [
+        0,
+        2048,
+        512,
+        2560
+      ],
+      "facing": "left",
+      "groundY": 497,
+      "alphaBounds": [
+        26,
+        191,
+        486,
+        497
+      ],
+      "seed": "seeds/stone-crab-standin.png",
+      "seedSha256": "f7bbdc902e877564d3910e363e323df0e2304da1700f66e2eddbb541fb4999bb",
+      "variants": {
+        "r1": {
+          "seed": "seeds/stone-crab-r1-ready.png",
+          "sourceBox": [
+            855,
+            39,
+            1320,
+            378
+          ],
+          "sha256": "25fdf37a511aceda8286c3da20e6da4cbae7fc719b57f95af339f62a96863339",
+          "alphaBounds": [
+            50,
+            201,
+            462,
+            497
+          ],
+          "groundY": 497,
+          "displaySize390": 105,
+          "facing": "left",
+          "recommended": true
+        }
+      }
+    },
+    "shadow-serpent": {
+      "oldArtKey": "foe_tusker",
+      "atlas": "public/assets/art/units_foes.webp",
+      "atlasSha256": "dcf79e09f2b0b813aa03894bd65222ae3afb2df875e84870d1dba968c49a1895",
+      "cell": 0,
+      "box": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "facing": "left",
+      "groundY": 497,
+      "alphaBounds": [
+        19,
+        57,
+        493,
+        497
+      ],
+      "seed": "seeds/shadow-serpent-standin.png",
+      "seedSha256": "6250b3090add0524145b32d525f8a816856f0bddb3551ec5bac937403c27d5b3",
+      "variants": {
+        "r1": {
+          "seed": "seeds/shadow-serpent-r1-ready.png",
+          "sourceBox": [
+            1332,
+            0,
+            1774,
+            382
+          ],
+          "sha256": "7bab55d56043fef879c692062943184ef6a040ae5669e911c76a59a06efa75fe",
+          "alphaBounds": [
+            69,
+            141,
+            442,
+            497
+          ],
+          "groundY": 497,
+          "displaySize390": 124,
+          "facing": "left",
+          "recommended": true
+        },
+        "r2": {
+          "seed": "seeds/shadow-serpent-r2-ready.png",
+          "sourceBox": null,
+          "sha256": "229723c6e71d60343983a4eabc89a9980e2e8b9cfd1ba1af744375df04c2a1b1",
+          "alphaBounds": [
+            157,
+            72,
+            355,
+            497
+          ],
+          "groundY": 497,
+          "displaySize390": 124,
+          "facing": "left",
+          "recommended": false
+        }
+      }
+    },
+    "weeping-siren": {
+      "oldArtKey": "foe_riftweaver",
+      "atlas": "public/assets/art/units_foes.webp",
+      "atlasSha256": "dcf79e09f2b0b813aa03894bd65222ae3afb2df875e84870d1dba968c49a1895",
+      "cell": 5,
+      "box": [
+        512,
+        1024,
+        1024,
+        1536
+      ],
+      "facing": "left",
+      "groundY": 497,
+      "alphaBounds": [
+        96,
+        37,
+        416,
+        497
+      ],
+      "seed": "seeds/weeping-siren-standin.png",
+      "seedSha256": "0e0155dbc0eea4de749dbacb299978ce686b3852a6f2b52393016c0d0853e229",
+      "variants": {
+        "r1": {
+          "seed": "seeds/weeping-siren-r1-ready.png",
+          "sourceBox": [
+            431,
+            402,
+            855,
+            887
+          ],
+          "sha256": "a83b437a0e1613d69014d0d612901475e33d070a349a5c0e9bf6bd0435c7c6ea",
+          "alphaBounds": [
+            83,
+            102,
+            429,
+            497
+          ],
+          "groundY": 497,
+          "displaySize390": 120,
+          "facing": "left",
+          "recommended": true
+        },
+        "r2": {
+          "seed": "seeds/weeping-siren-r2-ready.png",
+          "sourceBox": [
+            880,
+            385,
+            1313,
+            887
+          ],
+          "sha256": "9777d8a7c89fafee336128d4392845f27bdfe1b54b25da4a6490152b3148248b",
+          "alphaBounds": [
+            90,
+            62,
+            422,
+            484
+          ],
+          "groundY": 497,
+          "displaySize390": 120,
+          "facing": "left",
+          "recommended": false
+        }
+      }
+    },
+    "mirror-shade": {
+      "oldArtKey": "foe_hunter",
+      "atlas": "public/assets/art/units_foes.webp",
+      "atlasSha256": "dcf79e09f2b0b813aa03894bd65222ae3afb2df875e84870d1dba968c49a1895",
+      "cell": 9,
+      "box": [
+        512,
+        2048,
+        1024,
+        2560
+      ],
+      "facing": "left",
+      "groundY": 497,
+      "alphaBounds": [
+        36,
+        35,
+        481,
+        488
+      ],
+      "seed": "seeds/mirror-shade-standin.png",
+      "seedSha256": "03db198fd87d6b99cdede8f76722e200f9d021b88ebfa0818b585f3f288b07f4",
+      "variants": {
+        "r1": {
+          "seed": "seeds/mirror-shade-r1-ready.png",
+          "sourceBox": [
+            1314,
+            409,
+            1774,
+            887
+          ],
+          "sha256": "6fce2ed47318e017465a62b298bcc413a287f910ac9e6e2bd0ef6a28fd7fb640",
+          "alphaBounds": [
+            61,
+            113,
+            452,
+            497
+          ],
+          "groundY": 497,
+          "displaySize390": 102,
+          "facing": "left",
+          "recommended": true
+        }
+      }
+    }
+  }
+}
