@@ -1,0 +1,656 @@
+{
+  "tileSize": 128,
+  "blendBandPx": 12,
+  "runtimeTilePx": 60,
+  "sameFamilyBoundaries": {
+    "shore": {
+      "orderedPairs": 16,
+      "checks": 32,
+      "maxChannelDelta": 0
+    },
+    "isle": {
+      "orderedPairs": 16,
+      "checks": 32,
+      "maxChannelDelta": 0
+    },
+    "pavilion": {
+      "orderedPairs": 16,
+      "checks": 32,
+      "maxChannelDelta": 0
+    },
+    "sanctum": {
+      "orderedPairs": 16,
+      "checks": 32,
+      "maxChannelDelta": 0
+    },
+    "lake_wall_top": {
+      "orderedPairs": 1,
+      "checks": 2,
+      "maxChannelDelta": 0
+    },
+    "lake_wall_face": {
+      "orderedPairs": 1,
+      "checks": 2,
+      "maxChannelDelta": 0
+    },
+    "lake_wall_inner": {
+      "orderedPairs": 1,
+      "checks": 2,
+      "maxChannelDelta": 0
+    },
+    "shallow_low": {
+      "orderedPairs": 4,
+      "checks": 8,
+      "maxChannelDelta": 0
+    },
+    "shallow_high": {
+      "orderedPairs": 4,
+      "checks": 8,
+      "maxChannelDelta": 0
+    },
+    "deep": {
+      "orderedPairs": 4,
+      "checks": 8,
+      "maxChannelDelta": 0
+    },
+    "causeway": {
+      "orderedPairs": 1,
+      "checks": 2,
+      "maxChannelDelta": 0
+    }
+  },
+  "waterToFloorBoundaries": {
+    "shallow_low/shore": {
+      "checks": 32,
+      "maxChannelDelta": 0,
+      "waterBeyondBandUnchanged": true
+    },
+    "shallow_low/isle": {
+      "checks": 32,
+      "maxChannelDelta": 0,
+      "waterBeyondBandUnchanged": true
+    },
+    "shallow_low/pavilion": {
+      "checks": 32,
+      "maxChannelDelta": 0,
+      "waterBeyondBandUnchanged": true
+    },
+    "shallow_low/sanctum": {
+      "checks": 32,
+      "maxChannelDelta": 0,
+      "waterBeyondBandUnchanged": true
+    },
+    "shallow_high/shore": {
+      "checks": 32,
+      "maxChannelDelta": 0,
+      "waterBeyondBandUnchanged": true
+    },
+    "shallow_high/isle": {
+      "checks": 32,
+      "maxChannelDelta": 0,
+      "waterBeyondBandUnchanged": true
+    },
+    "shallow_high/pavilion": {
+      "checks": 32,
+      "maxChannelDelta": 0,
+      "waterBeyondBandUnchanged": true
+    },
+    "shallow_high/sanctum": {
+      "checks": 32,
+      "maxChannelDelta": 0,
+      "waterBeyondBandUnchanged": true
+    },
+    "deep/shore": {
+      "checks": 32,
+      "maxChannelDelta": 0,
+      "waterBeyondBandUnchanged": true
+    },
+    "deep/isle": {
+      "checks": 32,
+      "maxChannelDelta": 0,
+      "waterBeyondBandUnchanged": true
+    },
+    "deep/pavilion": {
+      "checks": 32,
+      "maxChannelDelta": 0,
+      "waterBeyondBandUnchanged": true
+    },
+    "deep/sanctum": {
+      "checks": 32,
+      "maxChannelDelta": 0,
+      "waterBeyondBandUnchanged": true
+    }
+  },
+  "tiles": {
+    "shore_0": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 81.66,
+      "meanLumaAt60px": 81.66
+    },
+    "shore_1": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 81.05,
+      "meanLumaAt60px": 81.06
+    },
+    "shore_2": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 81.24,
+      "meanLumaAt60px": 81.25
+    },
+    "shore_3": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 81.48,
+      "meanLumaAt60px": 81.5
+    },
+    "isle_0": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 109.96,
+      "meanLumaAt60px": 109.96
+    },
+    "isle_1": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 109.69,
+      "meanLumaAt60px": 109.68
+    },
+    "isle_2": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 109.11,
+      "meanLumaAt60px": 109.12
+    },
+    "isle_3": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 109.77,
+      "meanLumaAt60px": 109.77
+    },
+    "pavilion_0": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 125.89,
+      "meanLumaAt60px": 125.89
+    },
+    "pavilion_1": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 126.84,
+      "meanLumaAt60px": 126.83
+    },
+    "pavilion_2": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 127.27,
+      "meanLumaAt60px": 127.27
+    },
+    "pavilion_3": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 124.74,
+      "meanLumaAt60px": 124.73
+    },
+    "sanctum_0": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 122.91,
+      "meanLumaAt60px": 122.9
+    },
+    "sanctum_1": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 123.41,
+      "meanLumaAt60px": 123.41
+    },
+    "sanctum_2": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 122.53,
+      "meanLumaAt60px": 122.52
+    },
+    "sanctum_3": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 122.91,
+      "meanLumaAt60px": 122.91
+    },
+    "lake_wall_top": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 76.78,
+      "meanLumaAt60px": 76.78
+    },
+    "lake_wall_face": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 64.62,
+      "meanLumaAt60px": 64.61
+    },
+    "lake_wall_inner": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 51.0,
+      "meanLumaAt60px": 50.98
+    },
+    "shallow_low_0": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 167.42,
+      "meanLumaAt60px": 167.42
+    },
+    "shallow_low_1": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 168.72,
+      "meanLumaAt60px": 168.72
+    },
+    "shallow_high_0": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 119.51,
+      "meanLumaAt60px": 119.5
+    },
+    "shallow_high_1": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 121.25,
+      "meanLumaAt60px": 121.23
+    },
+    "deep_0": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 49.59,
+      "meanLumaAt60px": 49.6
+    },
+    "deep_1": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 50.1,
+      "meanLumaAt60px": 50.1
+    },
+    "causeway": {
+      "opaque": true,
+      "oppositeEdgesExact": true,
+      "meanLuma": 120.9,
+      "meanLumaAt60px": 120.89
+    }
+  },
+  "decor": {
+    "moon_lantern_off": {
+      "bbox": [
+        30,
+        19,
+        98,
+        124
+      ],
+      "footY": 124,
+      "transparentPadding": true
+    },
+    "moon_lantern_on": {
+      "bbox": [
+        30,
+        19,
+        98,
+        124
+      ],
+      "footY": 124,
+      "transparentPadding": true
+    },
+    "moored_skiff": {
+      "bbox": [
+        10,
+        22,
+        118,
+        124
+      ],
+      "footY": 124,
+      "transparentPadding": true
+    },
+    "weathered_dock_post": {
+      "bbox": [
+        47,
+        36,
+        81,
+        124
+      ],
+      "footY": 124,
+      "transparentPadding": true
+    },
+    "lakeside_shrine": {
+      "bbox": [
+        16,
+        10,
+        112,
+        124
+      ],
+      "footY": 124,
+      "transparentPadding": true
+    },
+    "merchant_raft": {
+      "bbox": [
+        8,
+        27,
+        120,
+        124
+      ],
+      "footY": 124,
+      "transparentPadding": true
+    },
+    "reed_clump": {
+      "bbox": [
+        11,
+        18,
+        116,
+        124
+      ],
+      "footY": 124,
+      "transparentPadding": true
+    },
+    "rune_reflection_stone": {
+      "bbox": [
+        13,
+        49,
+        115,
+        124
+      ],
+      "footY": 124,
+      "transparentPadding": true
+    },
+    "oar_pile": {
+      "bbox": [
+        19,
+        28,
+        108,
+        124
+      ],
+      "footY": 124,
+      "transparentPadding": true
+    }
+  },
+  "tideLumaAt60px": {
+    "shallow_low": [
+      167.42,
+      168.72
+    ],
+    "shallow_high": [
+      119.5,
+      121.23
+    ],
+    "deep": [
+      49.6,
+      50.1
+    ]
+  },
+  "lanternStatesShareAlpha": true,
+  "tiles_lake": {
+    "size": [
+      768,
+      640
+    ],
+    "frames": 26,
+    "lossless": true
+  },
+  "decor_lake": {
+    "size": [
+      384,
+      384
+    ],
+    "frames": 9,
+    "lossless": true
+  },
+  "bg_lake": {
+    "size": [
+      1536,
+      1024
+    ],
+    "lossless": true,
+    "mode": "RGB",
+    "opaque": true,
+    "scenicWaterlineY": 422,
+    "frameHorizonY": 460.8,
+    "terraceStartY": 448
+  },
+  "mapPreview": {
+    "size": [
+      390,
+      844
+    ],
+    "center": [
+      10.5,
+      12
+    ],
+    "grid": [
+      21,
+      30
+    ],
+    "tilePx": 60,
+    "mapRevision": "72c3d0584c0b98c8267314b7d89461a5ac589e4f"
+  },
+  "battlePreview": {
+    "390x844": {
+      "view": [
+        390,
+        844
+      ],
+      "field": [
+        6,
+        152,
+        378,
+        454
+      ],
+      "backdrop": [
+        -581.482,
+        -191.309,
+        1552.964,
+        1035.309
+      ],
+      "horizon": 274.58000000000004,
+      "terraceStart": 261.639,
+      "soles": [
+        273.667,
+        422.333,
+        571.0
+      ],
+      "actors": [
+        5,
+        5
+      ]
+    },
+    "1366x768": {
+      "view": [
+        480,
+        768
+      ],
+      "field": [
+        6,
+        152,
+        468,
+        378
+      ],
+      "backdrop": [
+        -460.827,
+        -166.436,
+        1401.655,
+        934.436
+      ],
+      "horizon": 254.06,
+      "terraceStart": 242.38,
+      "soles": [
+        248.333,
+        371.667,
+        495.0
+      ],
+      "actors": [
+        5,
+        5
+      ]
+    }
+  },
+  "webpBytes": 1625920,
+  "runtimeBytes": 1629459,
+  "files": {
+    "NOTES.md": {
+      "bytes": 7995,
+      "sha256": "be3749eb0a7d0a464e106aa1e6435f27f527c79339585a124ef9c47ffde916a9"
+    },
+    "bg_lake.webp": {
+      "bytes": 1299688,
+      "sha256": "c563bfda46bf7e0faeec05ff3a7a557165f797fd9c7f2163ca10359691387f5d",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    "decor_lake.json": {
+      "bytes": 1546,
+      "sha256": "ab9c3f55e8819fde13f61a1aceb89a118d701934b1d11f3a6bc70c632965aba4"
+    },
+    "decor_lake.png": {
+      "bytes": 135710,
+      "sha256": "100b937c50e5b2479a6bdc3b675f9607df6230c2b7fad7d7b31f1da3d412f1b4",
+      "size": [
+        384,
+        384
+      ],
+      "mode": "RGBA"
+    },
+    "decor_lake.webp": {
+      "bytes": 96236,
+      "sha256": "ea1b81b6b6ffe3f0d0e276de76370096534b8ff4b7c7e6025433c6c7d92d925a",
+      "size": [
+        384,
+        384
+      ],
+      "mode": "RGBA"
+    },
+    "package_assets.py": {
+      "bytes": 23641,
+      "sha256": "78bd78aaf990a86ece9309eeee11c53e05929858bbf58b7efdfa0c91ad4e61f3"
+    },
+    "preview_battle_1366x768.png": {
+      "bytes": 365486,
+      "sha256": "8fa7a0f90b12445ed998b5e222e8b7812aefc7ffa701b4ee7ca0dbad073bda19",
+      "size": [
+        1366,
+        768
+      ],
+      "mode": "RGB"
+    },
+    "preview_battle_390x844.png": {
+      "bytes": 281414,
+      "sha256": "b055083dc43402a76550eef5a44586869b601af8f6342520624d8e66535fb42e",
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "preview_map_high_390x844.png": {
+      "bytes": 198284,
+      "sha256": "e726411b6065f4f29655eccadb9c784eff344ebf3c606c127d6086c0491255f2",
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "preview_map_low_390x844.png": {
+      "bytes": 208368,
+      "sha256": "8649973e4fad7cacb92e75ef821ef633b089eb9681eeadaf1e929f95386b4c5c",
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "preview_map_overview.png": {
+      "bytes": 289041,
+      "sha256": "397a80cb7c5cd2c32c9097face67a468e3cbffb1e21af385fe1c7774b5bd4e6b",
+      "size": [
+        1188,
+        840
+      ],
+      "mode": "RGB"
+    },
+    "prompts.json": {
+      "bytes": 6439,
+      "sha256": "42a8904aa2f8dcb4120230f14981864880d0c91913eeab26c3fba48db19846a6"
+    },
+    "seam_review.png": {
+      "bytes": 502216,
+      "sha256": "375255d02714c8ed2e6bc4cc4b26932ff1c5fcfd036cfe0a99b05537dc19b4b2",
+      "size": [
+        1024,
+        712
+      ],
+      "mode": "RGB"
+    },
+    "seeds.json": {
+      "bytes": 564,
+      "sha256": "66b8a349372756507c379a07aeaae73b3d179aa221429b91cc6afc7d3e657f26"
+    },
+    "sources/bg_lake_concept.png": {
+      "bytes": 2051282,
+      "sha256": "be6f2d6f8c510e643664c8bb08412451c6372812b69d8cdedf3e9da3b5e4cbe1",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    "sources/bg_lake_generated.png": {
+      "bytes": 1915385,
+      "sha256": "ee65c8f52bb3f579afd3f7eca37c441e6ca1e887c056a2d4cb4490ba0886ab95",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    "sources/decor_lake_generated.png": {
+      "bytes": 1645883,
+      "sha256": "cb68363bea59cd1862d33a544d460d5eb29c54c96a5bd4f16d0a3be52a918709",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA"
+    },
+    "sources/map_rows.json": {
+      "bytes": 996,
+      "sha256": "41da68136fa35fb8f174e014fa57e81606d21803e973fdcf951096f64b03debe"
+    },
+    "sources/paint_tiles.py": {
+      "bytes": 8759,
+      "sha256": "dc38b2287aefaa0cc21eabc12dd1c8620270994acf815fe2d7fc2c79e409172d"
+    },
+    "tiles_lake.json": {
+      "bytes": 1993,
+      "sha256": "dbbc26128a88ba0633516aa8e22082635c124e1538da28f1be7572fb7e596a24"
+    },
+    "tiles_lake.png": {
+      "bytes": 350190,
+      "sha256": "5d893459aa2c3ded7972bd82894e6eb1b481b8a15c0e25cb6fc94e6e559fc991",
+      "size": [
+        768,
+        640
+      ],
+      "mode": "RGBA"
+    },
+    "tiles_lake.webp": {
+      "bytes": 229996,
+      "sha256": "739d497a2402580b8c73039f83f9a4994f2f0d743dc52ff4f4e28638c5f80357",
+      "size": [
+        768,
+        640
+      ],
+      "mode": "RGBA"
+    }
+  },
+  "manifestVerification": "The manifest itself is compared byte-for-byte with the original after fetch."
+}
