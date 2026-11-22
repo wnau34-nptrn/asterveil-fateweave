@@ -35,7 +35,7 @@ import { boardReady, questBoardBody, questTabs, type QuestTab } from './quest-bo
 import { weekOf } from '../core/world/board';
 import { trioLive } from '../core/world/world-boss';
 import { worldBossBanner, worldBossPage, type WbCraft, type WbTab } from './world-boss-panel';
-import { gachaPage, type GachaState, type GachaView } from './gacha-panel';
+import { gachaBannerUrl, gachaPage, gachaTicketUrl, type GachaState, type GachaView } from './gacha-panel';
 import type { WorldBossStatus } from '../platform/server-client';
 import { sweepReasonText, sweepText, campLines, skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
 
@@ -51,7 +51,7 @@ export interface LobbyHost { archive(id: string, archived: boolean): void; autoE
 // `board`: the hiring board from the seed-free client view (`core/command/client-view.ts`), never worked out here.
 // `day` (P05-05): the device's calendar day, for the sweep supplies and the day's sweeps.
 export interface LobbyView { profile: Profile; board: readonly HireSlot[]; message: string; saved: boolean; day: number; cheer?: string; npcCheer?: NpcId; worldBoss?: WorldBossStatus | null; online?: boolean }
-type Sheet = 'team' | 'hire' | 'tree' | 'gear' | 'forge' | 'brew' | 'hunt' | 'maps' | 'board' | 'wboss';
+type Sheet = 'team' | 'hire' | 'tree' | 'gear' | 'forge' | 'brew' | 'hunt' | 'maps' | 'board' | 'wboss' | 'gacha';
 // Each camp NPC stands at a fixed spot along the back of the camp (x %, left half faces right) and runs one service.
 // `px`: the spot on portrait phones, where the camp is wider than the screen (3×) and pans sideways: the staff
 // stand in the side areas and the team stays around the fire in the middle.
@@ -117,7 +117,7 @@ export class LobbyUI {
   // The broker's sheet shows the hiring board or the market (4A).
   private market = false;
   // P10 cabinet: the third hiring tab, its step, and the serial the shown result must pass (set when a pull is sent).
-  private gacha = false; private gachaState: GachaState = { view: 'home', count: 10, skip: false }; private gachaAwait?: number;
+  private gachaState: GachaState = { view: 'home', count: 10, skip: false }; private gachaAwait?: number;
   // P05-06: the quest board's open tab.
   private questTab: QuestTab = 'daily';
   private npcOpen = false;
@@ -200,7 +200,7 @@ export class LobbyUI {
         case 'hire-preview': this.preview = Number(b.dataset.index); this.draw(); this.root.querySelector('.lobby-content')?.scrollTo(0, 0); this.focus('#hire-preview-back'); break;
         case 'hire-preview-back': { const i = this.preview; this.preview = undefined; this.draw(); this.focus(`#hire-open-${i}`); break; }
         case 'hire-lane': this.lane = b.dataset.lane as 'all' | 'front' | 'back'; this.draw(); this.focus(`#hire-lane-${this.lane}`); break;
-        case 'hire-tab': this.market = b.dataset.tab === 'market'; this.gacha = b.dataset.tab === 'gacha'; this.gachaState = { ...this.gachaState, view: 'home' }; this.preview = undefined; this.draw(); this.focus(`#hire-tab-${b.dataset.tab}`); break;
+        case 'hire-tab': this.market = b.dataset.tab === 'market'; this.preview = undefined; this.draw(); this.focus(`#hire-tab-${b.dataset.tab}`); break;
         case 'gacha-view': { const view = b.dataset.view as GachaView; this.gachaState = { ...this.gachaState, view }; this.draw(); this.focus(view === 'home' ? '#gacha-title' : `#gacha-${view === 'rates' ? 'rates' : view === 'exchange' ? 'exchange' : 'history'}-title`); break; }
         case 'gacha-ask': this.gachaState = { ...this.gachaState, view: 'confirm', count: Number(b.dataset.count) }; this.draw(); this.focus('#gacha-confirm-title'); break;
         case 'gacha-pick': this.gachaState = { ...this.gachaState, pick: b.dataset.hero! }; this.draw(); this.focus(`#gacha-pick-${b.dataset.hero}`); break;
@@ -234,6 +234,8 @@ export class LobbyUI {
         }
         case 'claim': { const q = b.dataset.quest!; this.host.claim(q); this.focus(`#quest-claim-${q}`); break; }
         case 'quest-tab': this.questTab = b.dataset.tab as QuestTab; this.draw(); this.focus(`#quest-tab-${this.questTab}`); break;
+        // OD-59: the cabinet has its own camp banner and sheet (it opens after map 1, before the hiring board).
+        case 'gacha': this.forgeStorageReturn = false; this.huntUI.cancel(); this.preview = undefined; this.confirmDismiss = false; this.sheet = 'gacha'; this.gachaState = { ...this.gachaState, view: 'home' }; this.draw(); this.focus('#lobby-sheet-title'); break;
         case 'wboss': this.forgeStorageReturn = false; this.huntUI.cancel(); this.preview = undefined; this.confirmDismiss = false; this.sheet = 'wboss'; this.host.worldBossStatus(); this.draw(); this.focus('#lobby-sheet-title'); break;
         case 'wb-tab': this.wbTab = b.dataset.tab as WbTab; this.wbCraft = undefined; if (this.wbTab !== 'bosses') this.host.worldBossStatus(); this.draw(); this.focus(`#wb-tab-${this.wbTab}`); break;
         case 'wb-pick': {
@@ -330,8 +332,15 @@ export class LobbyUI {
   }
   // The quest board and the World Boss card share one top row, half and half, both translucent (owner 2026-11-16).
   private topBoards(p: Profile): string {
-    const quest = this.questEntry(p), boss = worldBossBanner(p, this.maps, this.view!.day, this.view!.worldBoss, this.sheet === 'wboss');
-    return quest || boss ? `<div class="lobby-boards">${quest}${boss}</div>` : '';
+    const quest = this.questEntry(p), boss = worldBossBanner(p, this.maps, this.view!.day, this.view!.worldBoss, this.sheet === 'wboss'), fate = this.gachaBanner(p);
+    return quest || boss || fate ? `<div class="lobby-boards">${quest}${boss}${fate}</div>` : '';
+  }
+  // OD-59: the fate-weave cabinet beside the quest board and the World Boss (tickets on the badge once a 10-pull is ready).
+  private gachaBanner(p: Profile): string {
+    if (!this.open('gacha')) return '';
+    const t = p.gacha?.tickets ?? 0;
+    return `<button id="lobby-gacha" data-lobby="gacha" class="lobby-gacha" style="--banner:url(${gachaBannerUrl()})" aria-controls="lobby-sheet" aria-expanded="${this.sheet === 'gacha'}" aria-label="ทอชะตา ตั๋ว ${t} ใบ${t >= 10 ? ' พอสุ่มสิบครั้ง' : ''}">
+      <img src="${gachaTicketUrl()}" alt="" width="24" height="24"><b>ทอชะตา</b><small>ตั๋ว ${t}</small>${t >= 10 ? '<i class="trip-badge" aria-hidden="true">10</i>' : ''}</button>`;
   }
   private wbWeek(): number { return weekOf(this.view!.day); }
   private trioWeek(): boolean { return trioLive(this.maps[0]!.worldBoss, this.wbWeek()); }
@@ -485,9 +494,9 @@ export class LobbyUI {
       ${last ? `<p class="lobby-result glass-capsule ${toast}" data-outcome="${last.outcome}" role="status">${icon(last.outcome === 'wiped' ? 'danger' : last.outcome === 'complete' ? 'star' : 'camp')}<span><b>${outcomeText[last.outcome]}</b> · เดิน ${last.steps} ก้าว ชนะ ${last.wins} ศึก · ได้แร่ดาว ${last.ore}${last.gold ? ` เหรียญทอง ${last.gold}` : ''}${last.shard ? ` เศษกลาง ${last.shard}` : ''}${last.outcome === 'wiped' ? ' (เก็บได้ครึ่งเดียว)' : ''}${last.items ? ` · อุปกรณ์ ${last.items} ชิ้น` : ''}${last.salvaged ? ` (คลังเต็ม แยกชิ้นอัตโนมัติ ${last.salvaged})` : ''}${this.campLines(p)}</span></p>`
         : this.view!.message ? `<p class="lobby-result glass-capsule ${toast}" role="status"><span>${this.view!.message}</span></p>` : ''}
       ${this.sheet ? `<section id="lobby-sheet" class="lobby-sheet" role="dialog" aria-modal="false" aria-labelledby="lobby-sheet-title">
-        <div class="lobby-sheet-head">${this.sheet==='forge'&&forgeBody&&this.forgeUI.taskNavigation?`<button id="forge-open-tasks" data-forge="tasks" class="round-glass" aria-label="เลือกงานโรงตีเหล็ก">${icon('left')}</button>`:''}${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="${this.forgeStorageReturn?'กลับไปสร้างอาวุธ':'กลับไปจัดทีม'}">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title" tabindex="-1">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ผังสกิล` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : this.sheet === 'board' ? `${icon('flag')} กระดานเควสต์ <small>รับได้ ${this.readyAll(p)}</small>` : this.sheet === 'wboss' ? `${icon('flag')} บอสโลก` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
+        <div class="lobby-sheet-head">${this.sheet==='forge'&&forgeBody&&this.forgeUI.taskNavigation?`<button id="forge-open-tasks" data-forge="tasks" class="round-glass" aria-label="เลือกงานโรงตีเหล็ก">${icon('left')}</button>`:''}${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="${this.forgeStorageReturn?'กลับไปสร้างอาวุธ':'กลับไปจัดทีม'}">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title" tabindex="-1">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ผังสกิล` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : this.sheet === 'board' ? `${icon('flag')} กระดานเควสต์ <small>รับได้ ${this.readyAll(p)}</small>` : this.sheet === 'wboss' ? `${icon('flag')} บอสโลก` : this.sheet === 'gacha' ? `${icon('reroll')} ทอชะตา` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
-        <div class="lobby-content">${this.sheet==='forge'||this.sheet==='board'||this.sheet==='wboss'||this.sheet==='team'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p, 'hire'):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcFold(p, this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'board' ? this.questBoard(p) : this.sheet === 'wboss' ? worldBossPage(p, this.maps, this.view!.day, this.view!.worldBoss, !!this.view!.online, { tab: this.wbTab, pick: this.wbPick, ...(this.wbCraft ? { craft: this.wbCraft } : {}) }) : this.board(p)}</div>${this.sheet==='team'&&!this.locked('team')?this.presetSaveBar(p):''}</section>` : ''}
+        <div class="lobby-content">${this.sheet==='forge'||this.sheet==='board'||this.sheet==='wboss'||this.sheet==='gacha'||this.sheet==='team'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p, 'hire'):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcFold(p, this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'board' ? this.questBoard(p) : this.sheet === 'gacha' ? gachaPage(p, this.maps, this.map, this.gachaState) : this.sheet === 'wboss' ? worldBossPage(p, this.maps, this.view!.day, this.view!.worldBoss, !!this.view!.online, { tab: this.wbTab, pick: this.wbPick, ...(this.wbCraft ? { craft: this.wbCraft } : {}) }) : this.board(p)}</div>${this.sheet==='team'&&!this.locked('team')?this.presetSaveBar(p):''}</section>` : ''}
       <footer class="lobby-bottom">
         ${this.guideCard(p)}
         <section class="lobby-trip" aria-label="การเดินทาง"><div class="trip-head"><div><b>${this.openMaps().at(-1)?.name ?? this.map.name}</b><span class="trip-team" data-ready="${ready}">${ready ? 'ทีมพร้อม' : 'ทีมยังไม่พร้อม'} · ลงสนาม ${p.party.deployed.length} · สำรอง ${p.party.reserve.length}</span></div><div class="trip-actions">${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary" aria-label="เลือกแผนที่">${icon('map')}</button>` : ''}</div></div>
@@ -651,10 +660,7 @@ export class LobbyUI {
     return `<button id="lobby-tree-open" data-lobby="tree" class="secondary tree-toggle">${icon('starFilled')}<span>ผังสกิล</span><small>${free > 0 ? `แต้มว่าง ${free}` : `ใช้ ${spent}/${points} แต้ม`}</small></button>`;
   }
   private board(p: Profile): string {
-    const gacha = this.gacha && this.open('gacha'); const current = gacha ? 'gacha' : this.market ? 'market' : 'board';
-    const names = { board: ['gold', 'ป้ายจ้าง'], market: ['pack', 'ตลาด'], gacha: ['reroll', 'ทอชะตา'] } as const;
-    const tabs = `<div class="hire-tabs" role="tablist">${(this.open('gacha') ? ['board', 'market', 'gacha'] as const : ['board', 'market'] as const).map(t => `<button id="hire-tab-${t}" role="tab" data-lobby="hire-tab" data-tab="${t}" aria-selected="${t === current}" class="${t === current ? 'active' : ''}">${icon(names[t][0])}<span>${names[t][1]}${t === 'gacha' && (p.gacha?.tickets ?? 0) >= 10 ? ' <small class="trip-badge" aria-label="ตั๋วพอสุ่มสิบครั้ง">!</small>' : ''}</span></button>`).join('')}</div>`;
-    if (gacha) return tabs + gachaPage(p, this.maps, this.map, this.gachaState);
+    const tabs = `<div class="hire-tabs" role="tablist">${(['board', 'market'] as const).map(t => `<button id="hire-tab-${t}" role="tab" data-lobby="hire-tab" data-tab="${t}" aria-selected="${(t === 'market') === this.market}" class="${(t === 'market') === this.market ? 'active' : ''}">${icon(t === 'market' ? 'pack' : 'gold')}<span>${t === 'market' ? 'ตลาด' : 'ป้ายจ้าง'}</span></button>`).join('')}</div>`;
     if (this.market) return tabs + this.marketList(p);
     if (this.preview !== undefined && this.offers[this.preview]) return this.hirePreview(p, this.preview);
     const why: Record<string, string> = { taken: 'จ้างแล้ว', gold: 'เหรียญทองไม่พอ', maxed: 'ดาวเต็มแล้ว' };
@@ -695,7 +701,7 @@ export class LobbyUI {
   // Lobby systems by chapter (A3). A locked sheet still opens, showing which map opens it.
   private open(feature: LobbyFeature): boolean { const p = this.view?.profile; return !p || featureOpen(p, this.maps, feature); }
   private locked(sheet: Sheet | null): LobbyFeature | undefined {
-    const feature: Partial<Record<Sheet, LobbyFeature>> = { team: 'team', hire: 'hire', gear: 'gear', forge: 'forge', brew: 'brew', hunt: 'hunt', tree: 'tree', board: 'quests', wboss: 'quests' };
+    const feature: Partial<Record<Sheet, LobbyFeature>> = { team: 'team', hire: 'hire', gear: 'gear', forge: 'forge', brew: 'brew', hunt: 'hunt', tree: 'tree', board: 'quests', wboss: 'quests', gacha: 'gacha' };
     const f = sheet ? feature[sheet] : undefined; return f && !this.open(f) ? f : undefined;
   }
   private lockedPanel(feature: LobbyFeature): string {

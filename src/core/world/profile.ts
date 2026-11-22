@@ -422,6 +422,10 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   if (tomeCount(tomes) || core) { addTomes(profile.tomes ??= emptyTomes(), tomes); clampTomes(profile.tomes); if (core) profile.riftCore = Math.min(RIFT_CORE_CAP, (profile.riftCore ?? 0) + core); }
   // P04-02 (OD-17): universal shards for each map's first normal clear (hard pays its own below).
   if (outcome === 'complete' && !run.hard && !profile.cleared.includes(run.mapId)) profile.bank.shard += map.progression.firstClearShards;
+  // OD-59: map 1's first clear pays one 10-pull of free tickets (settling cannot be refused: filled to the ceiling).
+  if (outcome === 'complete' && !run.hard && !profile.cleared.includes(run.mapId) && map.firstClearTickets) {
+    const g = (profile.gacha ??= { tickets: 0, points: 0, serial: 0, history: [] }); g.tickets = Math.min(map.gacha.ticketCap, g.tickets + map.firstClearTickets);
+  }
   if (outcome === 'complete' && !profile.cleared.includes(run.mapId)) profile.cleared.push(run.mapId);
   if (outcome === 'complete' && run.hard && !profile.clearedHard?.includes(run.mapId)) {
     (profile.clearedHard ??= []).push(run.mapId); const r = map.progression.hardFirstClear; profile.bank.gold += r.gold; profile.bank.shard += r.shard;

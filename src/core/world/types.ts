@@ -50,7 +50,11 @@ export interface MapDefinition {
   recruits?: readonly { hero: string; at: RecruitPoint }[]; firstCompany: readonly string[];
   // Starter recruitment (owner 2026-10-23): after a new company's prologue, `picks` free picks, each one of
   // `company.offers` mercenaries from `pool`; while the team has no `support` member, every offer includes one.
-  draft?: { pool: readonly string[]; support: readonly string[]; picks: number };
+  // `fate` (OD-59, save v67): the starter picks are the first fate weave instead of a choice: one fixed offer each, a
+  // support first, then an attacker (random among `pool` by the run seed; free, outside the gacha rates and wallet).
+  draft?: { pool: readonly string[]; support: readonly string[]; picks: number; fate?: boolean };
+  // OD-59: free gacha tickets paid once, on this map's first normal clear (missing = none).
+  firstClearTickets?: number;
   // Heroes who fight this map's prologue as guests but join on a later map (they part ways after it).
   prologueGuests?: readonly string[];
   // Lobby systems open by chapter (master plan A3): the chapter number whose map must be cleared first.
@@ -606,7 +610,8 @@ export interface ExpeditionState {
   arrivals?: string[];
   // Starter recruitment in progress (save v38, `MapDefinition.draft`): picks left and the current offers (always
   // `draftOffers` of this state). The party cannot move on until every pick is made.
-  draft?: { left: number; offers: string[] };
+  // `legacy` (OD-59): a run saved before v67 keeps the three-offer choice until its starter picks are done.
+  draft?: { left: number; offers: string[]; legacy?: true };
   // The camp's EXP during this run (P01, save v44): set from the profile on departure, raised once per victory and
   // handed back to the profile when the run settles. Every roster member fights at its level.
   campXp: number;

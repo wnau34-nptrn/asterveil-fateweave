@@ -19,7 +19,7 @@ async function open(page: Page, tickets: number, points = 0): Promise<void> {
   const raw = JSON.stringify({ version: SAVE_VERSION, profile: p, run: null }); parseGame(raw, chapterOne, encounterById, MAPS);
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('p10')) { localStorage.setItem(key, raw); sessionStorage.setItem('p10', '1'); } }, { key, raw });
   await page.setViewportSize({ width: 390, height: 844 }); await page.goto('./'); await page.locator('#continue').click();
-  await page.locator('#lobby-tab-hire').click(); await page.locator('#hire-tab-gacha').click();
+  await page.locator('#lobby-gacha').click();
 }
 const saved = (page: Page) => page.evaluate(k => JSON.parse(localStorage.getItem(k)!) as { version: number; profile: { gacha?: { tickets: number; points: number; serial: number; history: { results: unknown[] }[] }; company: string[] } }, key);
 
@@ -30,7 +30,7 @@ test('pull ten: confirm first, results from the committed entry, survives a relo
   await open(page, 12, 3);
   await expect(page.locator('#gacha-tickets')).toContainText('12'); await expect(page.locator('#gacha-points')).toContainText('3');
   await expect(page.locator('.gacha-lede')).toContainText('7.5%');
-  for (const id of ['#hire-tab-gacha', '#gacha-pull-1', '#gacha-pull-10', '#gacha-open-exchange', '#gacha-open-rates', '#gacha-open-history'])
+  for (const id of ['#gacha-pull-1', '#gacha-pull-10', '#gacha-open-exchange', '#gacha-open-rates', '#gacha-open-history'])
     expect(Math.round((await page.locator(id).boundingBox())!.height)).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: `${shots}/cabinet-390.png` });
   await page.locator('#gacha-pull-10').click();
@@ -47,7 +47,7 @@ test('pull ten: confirm first, results from the committed entry, survives a relo
   await page.locator('#gacha-skip').click(); await expect(page.locator('#gacha-back')).toBeFocused();
   await page.reload(); await page.locator('#continue').click();
   expect((await saved(page)).profile.gacha).toEqual(after.profile.gacha);
-  await page.locator('#lobby-tab-hire').click(); await page.locator('#hire-tab-gacha').click();
+  await page.locator('#lobby-gacha').click();
   await expect(page.locator('#gacha-tickets')).toContainText('2');
   await expect(page.locator('#gacha-pull-10')).toHaveAttribute('data-blocked', 'true');
   await page.locator('#gacha-pull-10').click(); await expect(page.locator('#gacha-confirm')).toBeDisabled();

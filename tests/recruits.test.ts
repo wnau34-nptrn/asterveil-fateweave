@@ -59,26 +59,36 @@ describe('story recruits and the starter recruitment', () => {
     expect(s.recruited).toEqual(['tracer']); expect(s.guests).toBeUndefined(); expect(s.arrivals).toEqual(["weaver"]);
     expect(s.roster.deployed).toEqual(['guardian', 'tracer']); expect(s.members.healer).toBeUndefined(); expect(s.hp.weaver).toBeUndefined();
     expect(s.hp).toEqual({ guardian: memberDef(lookup, map, s, 'guardian')!.maxHp, tracer: memberDef(lookup, map, s, 'tracer')!.maxHp });
-    expect(s.draft).toMatchObject({ left: 2 }); expect(s.draft!.offers).toHaveLength(3);
-    expect(s.draft!.offers.some(id => supports.includes(id))).toBe(true); expect(s.draft!.offers).toEqual(draftOffers(s, map));
+    // OD-59: the first fate weave: one fixed offer each, a support first, then an attacker.
+    expect(s.draft).toMatchObject({ left: 2 }); expect(s.draft!.offers).toHaveLength(1);
+    expect(supports).toContain(s.draft!.offers[0]); expect(s.draft!.offers).toEqual(draftOffers(s, map));
     expect(move(s, map, 'up', lookup).event).toEqual({ type: 'blocked', reason: 'busy' });
+    expect(draftPick(s, map, 1, lookup).event.type).toBe('blocked');
     const first = s.draft!.offers[0]!; const r = draftPick(s, map, 0, lookup); expect(r.event).toEqual({ type: 'drafted', heroId: first }); s = r.state;
-    expect(s.draft!.left).toBe(1); expect(s.draft!.offers).not.toContain(first);
-    s = draftPick(s, map, 2, lookup).state; expect(s.draft).toBeUndefined();
+    expect(s.draft!.left).toBe(1); expect(s.draft!.offers).toHaveLength(1); expect(supports).not.toContain(s.draft!.offers[0]);
+    s = draftPick(s, map, 0, lookup).state; expect(s.draft).toBeUndefined();
     expect(s.roster.deployed).toHaveLength(4); expect(s.roster.deployed.slice(0, 2)).toEqual(['guardian', 'tracer']);
-    const picked = s.roster.deployed.slice(2); expect(picked.some(id => supports.includes(id))).toBe(true);
+    const picked = s.roster.deployed.slice(2); expect(picked.filter(id => supports.includes(id))).toHaveLength(1);
     expect(s.recruited).toEqual(['tracer', ...picked]); for (const id of picked) expect(s.hp[id]).toBe(memberDef(lookup, map, s, id)!.maxHp);
     expect(draftPick(s, map, 0, lookup).event.type).toBe('blocked');
   });
-  it('every company that has not picked a support yet is offered one; offers differ between companies', () => {
-    const seen = new Set<string>();
+  it('every company gets one support and one attacker; all four pairs happen across companies', () => {
+    const pairs = new Set<string>();
     for (let seed = 1; seed <= 40; seed++) {
-      let s = fight(startPrologue(depart(fresh(), map, lookup, seed).run, map).state); seen.add(s.draft!.offers.join());
-      expect(s.draft!.offers.some(id => supports.includes(id))).toBe(true);
-      const plain = s.draft!.offers.findIndex(id => !supports.includes(id)); if (plain < 0) continue;
-      s = draftPick(s, map, plain, lookup).state; expect(s.draft!.offers.some(id => supports.includes(id))).toBe(true);
+      let s = fight(startPrologue(depart(fresh(), map, lookup, seed).run, map).state);
+      const a = s.draft!.offers[0]!; s = draftPick(s, map, 0, lookup).state; const b = s.draft!.offers[0]!;
+      expect(supports).toContain(a); expect(supports).not.toContain(b); expect(map.draft!.pool).toContain(b); pairs.add(`${a}+${b}`);
     }
-    expect(seen.size).toBeGreaterThan(4);
+    expect(pairs.size).toBe(4);
+  });
+  it('a v66 run still waiting on its picks keeps the three-offer choice until both are made', () => {
+    const s = won(); const legacy = draftOffers(s, map, true); expect(legacy).toHaveLength(3);
+    const old = { ...s, draft: { left: 2, offers: legacy } };
+    const back = parseGame(JSON.stringify({ version: 66, profile: fresh(), run: old }), chapterOne, lookup, MAPS).run!;
+    expect(back.draft).toEqual({ left: 2, offers: legacy, legacy: true });
+    let raw = ''; saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, { profile: fresh(), run: back });
+    expect(parseGame(raw, chapterOne, lookup, MAPS).run!.draft).toEqual(back.draft);
+    const next = draftPick(back, map, 1, lookup).state; expect(next.draft!.offers).toEqual(draftOffers(next, map, true)); expect(next.draft!.legacy).toBe(true);
   });
   it('Aira comes back as the boss fight starts; settling adds everyone to the company; Seren joins on map 2', () => {
     let s = won(); s = draftPick(draftPick(s, map, 0, lookup).state, map, 0, lookup).state; const picked = s.roster.deployed.slice(2);
@@ -103,7 +113,7 @@ describe('story recruits and the starter recruitment', () => {
   it('saves v38 runs with arrivals and a pending recruitment; rejects forged offers; an older map 1 run settles home', () => {
     const s = won(); const profile = fresh(); let raw = '';
     saveGame({ getItem: () => null, setItem: (_k, v) => { raw = v; } }, { profile, run: s });
-    expect(JSON.parse(raw).version).toBe(66); expect(parseGame(raw, chapterOne, lookup, MAPS).run).toEqual(s);
+    expect(JSON.parse(raw).version).toBe(67); expect(parseGame(raw, chapterOne, lookup, MAPS).run).toEqual(s);
     for (const forge of [(r: Record<string, unknown>) => { r.arrivals = { tracer: 1 }; }, (r: Record<string, unknown>) => { r.arrivals = { healer: 1 }; },
       (r: Record<string, unknown>) => { (r.draft as { offers: string[] }).offers = ['brann', 'sefa', 'garran']; }, (r: Record<string, unknown>) => { (r.draft as { left: number }).left = 3; }]) {
       const bad = JSON.parse(raw); forge(bad.run); expect(() => parseGame(JSON.stringify(bad), chapterOne, lookup, MAPS)).toThrow();

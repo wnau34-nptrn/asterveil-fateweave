@@ -98,8 +98,15 @@ describe('OD-54 stage C: camp lessons follow the NPC cards and newly opened syst
   it('shows a system once, only when the map that opens it was the last one cleared', () => {
     const after1 = claimedAll({ ...fresh(), cleared: [MAPS[0]!.id] });
     expect(lobbyLesson(after1, MAPS, ['home'])).toMatchObject({ id: 'open:quests', target: '#lobby-board' });
-    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests'])).toMatchObject({ id: 'open:team' });
-    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:team'])?.id).toBe('farm');
+    // OD-59: after map 1 the World Boss and the fate-weave cabinet open too, each pointed at once, in this order.
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests'])).toMatchObject({ id: 'open:wboss', target: '#lobby-wboss' });
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss'])).toMatchObject({ id: 'open:gacha', target: '#lobby-gacha' });
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss', 'open:gacha'])).toMatchObject({ id: 'open:team' });
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:team'])?.id).toBe('farm');
+    // The ticket pointer: after a first pull, once 10 tickets are waiting again.
+    const pulled = { ...after1, gacha: { tickets: 10, points: 10, serial: 1, history: [] } }, all: LessonId[] = ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:team'];
+    expect(lobbyLesson(pulled, MAPS, all)).toMatchObject({ id: 'tickets', target: '#lobby-gacha' });
+    expect(lobbyLesson({ ...pulled, gacha: { ...pulled.gacha, tickets: 9 } }, MAPS, all)?.id).toBe('farm');
     const after2 = { ...after1, cleared: MAPS.slice(0, 2).map(m => m.id) };
     expect(lobbyLesson(after2, MAPS, ['home'])?.id).toBe('open:market');
     // A company far ahead does not get every earlier system at once.
@@ -109,7 +116,7 @@ describe('OD-54 stage C: camp lessons follow the NPC cards and newly opened syst
   });
 
   it('farming lessons: replay pointer last, sweep row in the maps sheet, hunt and boss targets in the hunt sheet', () => {
-    const m1 = MAPS[0]!, after1 = claimedAll({ ...fresh(), cleared: [m1.id] }), done: LessonId[] = ['home', 'open:quests', 'open:team'];
+    const m1 = MAPS[0]!, after1 = claimedAll({ ...fresh(), cleared: [m1.id] }), done: LessonId[] = ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:team'];
     // The replay pointer waits for the camp's own lessons, then points at the maps button.
     expect(lobbyLesson(after1, MAPS, ['home'])?.id).toBe('open:quests');
     expect(lobbyLesson(after1, MAPS, done)).toMatchObject({ id: 'farm', target: '#lobby-maps' });

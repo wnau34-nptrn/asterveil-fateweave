@@ -34,6 +34,8 @@ function timeline(e: GachaEntry): { html: string; end: number } {
 function stage(inner: string, run = false): string {
   return `<div class="gacha-stage"${run ? ' data-run="true"' : ''} style="background-image:url(${url('key-art')})" aria-hidden="true">${layer('idle', A.loom_crystal[0]!, A.loom_crystal[1]!)}${layer('sparkles', 120, 260)}${layer('sparkles', 290, 400, 'animation-delay:-900ms')}${inner}</div>`;
 }
+export const gachaBannerUrl = (): string => url('key-art');
+export const gachaTicketUrl = (): string => url('fate-ticket');
 const tIcon = `<img class="gacha-icon" src="${url('fate-ticket')}" alt="" width="20" height="20">`, pIcon = `<img class="gacha-icon" src="${url('exchange-knot')}" alt="" width="20" height="20">`;
 
 // P10 free-ticket cabinet (docs/design/GACHA_P10_SPEC_TH.md, OD-58). DOM-native, built only from the committed profile:
@@ -121,6 +123,14 @@ function history(p: Profile, map: MapDefinition): string {
   const row = (e: GachaEntry) => `<li><b>#${e.serial} ${e.kind === 'pull' ? `สุ่ม ${e.results.length}` : 'แลกแต้ม'}</b><small>${e.kind === 'pull' ? `ตั๋ว −${e.tickets} · แต้ม +${e.points}` : `แต้ม −${e.points}`} · ตู้รุ่น ${e.config}</small><span>${e.results.map(r => `${name(r.heroId)} ${r.full ? 'ตัวเต็ม' : `เศษ×${r.qty}`}`).join(' · ')}</span></li>`;
   return `<section class="gacha-history" aria-labelledby="gacha-history-title"><h3 id="gacha-history-title" tabindex="-1">ประวัติ ${rows.length ? `· ${rows.length} รายการล่าสุด` : ''}</h3>
     ${rows.length ? `<ol class="gacha-history-list">${rows.map(row).join('')}</ol>` : '<p class="camp-note">ยังไม่เคยสุ่ม</p>'}<p class="camp-note">เก็บ ${map.gacha.historyKeep} รายการล่าสุดในเซฟ (ออนไลน์: server เก็บครบทุกรายการ)</p>${back()}</section>`;
+}
+// OD-59: the first fate weave (the starter picks after the prologue): one guaranteed character, shown with the cabinet's
+// reveal on the stage (outside the published rates; no ticket, no point). `role` names what is guaranteed.
+export function fateWeave(heroId: string, map: MapDefinition, role: string): string {
+  const result: GachaResult = { heroId, full: true, qty: 0, grant: 'joined' };
+  const run = timeline({ serial: 0, kind: 'pull', config: map.gacha.version, tickets: 0, points: 0, results: [result] });
+  return `<section class="gacha-result gacha-fate" data-skip="false" style="--t0:${run.end}ms" aria-label="ทอชะตาครั้งแรก ได้${name(heroId)} (${role})">${stage(run.html, true)}
+    <ol class="gacha-cards" role="list">${resultCard(result, map, 0)}</ol></section>`;
 }
 export function gachaPage(p: Profile, maps: readonly MapDefinition[], map: MapDefinition, s: GachaState): string {
   switch (s.view) {

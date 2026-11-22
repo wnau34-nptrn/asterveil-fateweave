@@ -8,7 +8,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - Save **v66** (P10 gacha wallet; v65 trio; v64 World Boss; v63 board). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, team presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
 - **P10 gacha (OD-58, [spec](docs/design/GACHA_P10_SPEC_TH.md))**: rules/server merged via #328/#329; tickets from daily patrol 1, weekly tasks 2 each, trio p-2/p-4 2+2, trio 50% shared 1 each (≤24/week = 96/28 d); 7.5% full copy over 15, else 1–2 shards; 80 points exchange; opens after MAP2; journal `GET /v1/gacha/history`. UI #330 (ART-UI-GACHA-003 R1 stage/VFX/cards) **owner-approved 2026-11-21 “อนุมัติ”** (screens + clip in `docs/validation/p10-gacha-2026-11-21/`). No sales (G07 out of scope).
 - Perf R1–R11 merged; image-blank B1–B6 done (B4 blurred placeholders, B5 lossy map atlases: owner approved 2026-11-21, PR #325, [validation](docs/validation/image-blank-b4-b5-2026-11-21/README_TH.md)); re-measure on a real phone.
-- Unlock pacing #202: quests/team after MAP1; hire/market/hunt/gacha after MAP2; advanced services/hard after MAP3.
+- **OD-59 (2026-11-22, save v67)**: the starter picks are the first fate weave (one guaranteed support, then one attacker; free); the cabinet is a camp tile opening after MAP1, whose first clear pays 10 tickets once; lessons point at the World Boss and the cabinet. A new game resets the lessons on the device (#332).
+- Unlock pacing #202: quests/team/World Boss/gacha after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3.
 - Art delegation: record agent picks as agent decisions, never owner visual approval.
 
 ## Owner rules in force

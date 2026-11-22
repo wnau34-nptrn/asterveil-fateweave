@@ -9,7 +9,7 @@ import { canOpenChest, fatigueOf, findTiles, levelOf, rosterIds } from '../core/
 // read the committed state only and never act for the player, except the one-time calming draught the player taps for.
 // Stage C (owner 2026-11-19): `card:<guide>` points at the system an NPC card asks for, `claim:<guide>` at its claim
 // button once done, `open:<feature>` at a camp system the moment its map is cleared.
-export type LessonId = 'levelup' | 'wear' | 'tree' | 'lanes' | 'walk' | 'chest' | 'lowhp' | 'fatigue' | 'calm' | 'elite' | 'boss' | 'battle' | 'home' | 'farm' | 'sweeppick' | 'sweep' | 'hunt' | 'bosstarget'
+export type LessonId = 'levelup' | 'wear' | 'tree' | 'lanes' | 'walk' | 'chest' | 'lowhp' | 'fatigue' | 'calm' | 'elite' | 'boss' | 'battle' | 'home' | 'farm' | 'sweeppick' | 'sweep' | 'hunt' | 'bosstarget' | 'tickets'
   | `card:${string}` | `claim:${string}` | `open:${string}`;
 export interface Lesson { id: LessonId; target: string; title: string; text: string; action?: 'calm' }
 export interface LessonPrefs { seen: LessonId[]; off: boolean }
@@ -59,7 +59,7 @@ export function battleLessonTip(profile: Profile, kind: string, seen: readonly L
 const FEATURE_TARGET: Record<LobbyFeature, string> = {
   gear: '#lobby-tab-gear', tree: '#lobby-tab-team', team: '#lobby-tab-team', tomes: '#lobby-tab-team', forge: '#lobby-tab-forge', level: '#lobby-tab-forge',
   fuse: '#lobby-tab-forge', craft: '#lobby-tab-forge', transfer: '#lobby-tab-forge', bossCharm: '#lobby-tab-hunt', brew: '#lobby-tab-brew',
-  hire: '#lobby-tab-hire', market: '#lobby-tab-hire', hunt: '#lobby-tab-hunt', quests: '#lobby-board', hard: '#lobby-maps', gacha: '#lobby-tab-hire',
+  hire: '#lobby-tab-hire', market: '#lobby-tab-hire', hunt: '#lobby-tab-hunt', quests: '#lobby-board', hard: '#lobby-maps', gacha: '#lobby-gacha',
 };
 const CARD_TEXT: Record<GuideKind, string> = {
   wear: 'เปิดอุปกรณ์ แล้วสวมของ 1 ชิ้นให้สมาชิก', talent: 'เปิดทีม → ตัวละคร → สกิลกิ่ง แล้วลงแต้ม 1 แต้ม', calm: 'กดรับยาฟื้นความเหนื่อยในการ์ดนี้',
@@ -67,12 +67,16 @@ const CARD_TEXT: Record<GuideKind, string> = {
   hire: 'เปิดนายหน้า แล้วจ้างทหารรับจ้าง 1 คน', reserve: 'เปิดทีม แล้วจัดตัวสำรองอย่างน้อย 1 คน (ตัวสำรองหายเหนื่อยศึกละ 1)',
 };
 // Systems that get their own pointer when they open (the ones without an NPC card), in the order they unlock.
-const OPENED: readonly [LobbyFeature, string, string][] = [
-  ['quests', 'กระดานภารกิจเปิดแล้ว', 'งานรายวัน/รายสัปดาห์ให้แร่ ทอง และเศษดาว ทำได้ระหว่างเดินทาง'],
+// `key` names the lesson (`open:<key>`) and defaults to the feature; `target` defaults to the feature's control.
+type Opened = readonly [LobbyFeature, string, string, { key?: string; target?: string }?];
+const OPENED: readonly Opened[] = [
+  ['quests', 'กระดานภารกิจเปิดแล้ว', 'งานรายวัน/รายสัปดาห์ให้แร่ ทอง เศษดาว และตั๋วทอชะตา ทำได้ระหว่างเดินทาง'],
+  // OD-59: the World Boss opens with the quest board; the cabinet opens after map 1 with 10 tickets from its first clear.
+  ['quests', 'บอสโลกเปิดแล้ว', 'สู้ได้ 5 ครั้งต่อสัปดาห์ เลือกบอสตัวไหนก็ได้ ทุกครั้งได้แร่ ทอง และเศษบอสไว้สร้างของประจำบอส ครบ 2 และ 4 ครั้งได้ตั๋วทอชะตา', { key: 'wboss', target: '#lobby-wboss' }],
+  ['gacha', 'แท่นทอชะตาเปิดแล้ว', 'จบแผนที่ 1 ได้ตั๋ว 10 ใบ ลองสุ่มสิบครั้งได้เลย · ได้ตัวเต็มหรือเศษ ทุกครั้งได้ 1 แต้ม ครบ 80 แลกตัวที่เลือกได้ · ดูอัตราทั้งหมดในตู้'],
   ['team', 'จัดทีมเปิดแล้ว', 'ลงสนามได้ 5 คน และมีตัวสำรอง จัดแนวหน้า/หลังและบันทึกชุดทีมได้'],
   ['market', 'ตลาดเปิดแล้ว', 'ที่นายหน้ามีแท็บตลาด ซื้อเศษดาว สัญญา กล่องอุปกรณ์ และยาไล่ศัตรูด้วยทอง'],
   ['hunt', 'ล่าของเปิดแล้ว', 'เลือกชุดหรือช่องที่อยากได้ แผนที่จะดรอปของแบบนั้นบ่อยขึ้น'],
-  ['gacha', 'แท่นทอชะตาเปิดแล้ว', 'ที่นายหน้ามีแท็บทอชะตา ใช้ตั๋วฟรีจากงานรายวัน/สัปดาห์และบอสโลกสุ่มตัวหรือเศษ'],
   ['tomes', 'ตำราสกิลเปิดแล้ว', 'ใช้ตำราที่ได้จากบอส/อีลีทอัป Lv สกิลในหน้าตัวละคร'],
   ['fuse', 'หลอมรวมเปิดแล้ว', 'ที่ช่างตีเหล็ก หลอมของซ้ำเพื่อเพิ่มระดับ สร้างอาวุธ และย้าย affix ได้'],
   ['bossCharm', 'เป้าหมายบอสเปิดแล้ว', 'ที่แท็บล่าของ เลือกอุปกรณ์ที่อยากได้จากผู้คุมรอยแยกได้แล้ว'],
@@ -109,11 +113,14 @@ export function lobbyLesson(profile: Profile, maps: readonly MapDefinition[], se
     else { const id: LessonId = `card:${g.id}`; if (!seen.includes(id)) return { id, target: g.kind === 'calm' ? '#guide-claim' : FEATURE_TARGET[g.feature], title: 'งานแนะนำ', text: CARD_TEXT[g.kind] }; }
   }
   // Only the systems the latest cleared map just opened (a company far ahead does not get them all at once).
-  for (const [feature, title, text] of OPENED) {
-    const id: LessonId = `open:${feature}`, at = featureMap(maps, feature);
+  for (const [feature, title, text, more] of OPENED) {
+    const id = `open:${more?.key ?? feature}` as LessonId, at = featureMap(maps, feature);
     if (seen.includes(id) || !featureOpen(profile, maps, feature) || !at || profile.cleared.length !== at.chapter) continue;
-    return { id, target: FEATURE_TARGET[feature], title, text };
+    return { id, target: more?.target ?? FEATURE_TARGET[feature], title, text };
   }
+  // OD-59: once the cabinet was introduced, the first time tickets for a 10-pull are waiting again.
+  if (featureOpen(profile, maps, 'gacha') && seen.includes('open:gacha') && (profile.gacha?.serial ?? 0) > 0 && (profile.gacha?.tickets ?? 0) >= 10 && !seen.includes('tickets'))
+    return { id: 'tickets', target: '#lobby-gacha', title: 'ตั๋วพอสุ่มสิบครั้งแล้ว', text: 'ตั๋วจากงานรายวัน/สัปดาห์และบอสโลกสะสมครบ 10 ใบ แตะทอชะตาเพื่อสุ่ม แต้มที่ได้สะสมไปแลกตัวที่อยากได้' };
   // Last: any cleared map can be played again (and the sweep row is in the same sheet).
   if (profile.cleared.length > 0 && !seen.includes('farm')) {
     const hard = featureMap(maps, 'hard'), hardOpen = featureOpen(profile, maps, 'hard');
