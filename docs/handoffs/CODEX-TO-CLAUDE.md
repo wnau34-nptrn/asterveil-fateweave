@@ -1,3 +1,10 @@
+## 2026-11-22 — Map 4 ทะเลสาบเงาจันทร์: tide, content, save v68 + screens (Opus; claude/map4-moonlake PR #336, claude/map4-lake-ui PR #337)
+- Owner: §5 of CHAPTER1_MAPS answered “ตามแนะนำทั้ง 4 ข้อ ทำต่อได้” → OD-60 (story recruits maps 4–8, camp cap +3 per clear, other systems separate, one map at a time).
+- #336: `core/world/tide.ts` (8-step tide from steps + camp waits; shallow at low tide, deep by boat, washed back), `content/world/chapter-lake.ts` (3 puzzles, seal 2/3, ferryman story + boat, reflections + notes → `Profile.notes`, Kael lake job, Lio/Cerise camp recruits), `mend` intent (Water Veil, diminishing), serpent/siren/spirit, `capLevel`, save v68. Map gated out of `main.ts` until #337.
+- #337: tide chip, water tiles, `waitTide` command, camp wait, lanterns/notes, goals/story, journal, lake texts; removes the gate. **Waits for owner approval of the 390px screens + clip.**
+- Tests: npm test 2239, lint, build, Chromium lake-map.spec (4). Sim: casual first try 75% rush / 98% explorer, blind boss 0–33% ([validation](../validation/map4-lake/README_TH.md)).
+- Open: C12 campaign gate fails identically on the base commit (220 < 226, pre-existing, not re-baselined); lake sweep/contract = map 3 values until the P04 economy pass; Codex brief `CODEX-ART-MAP4-LAKE-TH.md` not yet sent; real devices.
+
 ## 2026-11-22 — OD-59 first fate weave + cabinet after map 1; lessons on a new game (Opus; claude/fate-first PR #333, claude/lessons-new-game PR #332)
 - Owner: gacha after the prologue instead of the starter choice → recommendation → “เห็นด้วย ดำเนินการได้”; screens “อนุมัติ”. Also reported lessons vanishing after a restart (#332: `LessonGuide.restart()` on a new company; "off" kept).
 - `map.draft.fate`: one offer each, support then attacker (run seed); save v67, v66 runs mid-pick keep three offers (`draft.legacy`). `unlocks.gacha = 1`, camp tile `#lobby-gacha`, `firstClearTickets: 10` on map 1. Lessons: quests → World Boss → cabinet → team after map 1; `tickets` pointer later.

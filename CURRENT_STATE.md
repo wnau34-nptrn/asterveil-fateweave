@@ -1,35 +1,30 @@
-# Current state — updated 2026-11-21 (P10 free-ticket gacha)
+# Current state — updated 2026-11-22 (map 4 ทะเลสาบเงาจันทร์)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml` (runs the Chromium suite before deploy).
-- Save **v66** (P10 gacha wallet; v65 trio; v64 World Boss; v63 board). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, team presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
-- **P10 gacha (OD-58, [spec](docs/design/GACHA_P10_SPEC_TH.md))**: rules/server merged via #328/#329; tickets from daily patrol 1, weekly tasks 2 each, trio p-2/p-4 2+2, trio 50% shared 1 each (≤24/week = 96/28 d); 7.5% full copy over 15, else 1–2 shards; 80 points exchange; opens after MAP2; journal `GET /v1/gacha/history`. UI #330 (ART-UI-GACHA-003 R1 stage/VFX/cards) **owner-approved 2026-11-21 “อนุมัติ”** (screens + clip in `docs/validation/p10-gacha-2026-11-21/`). No sales (G07 out of scope).
-- Perf R1–R11 merged; image-blank B1–B6 done (B4 blurred placeholders, B5 lossy map atlases: owner approved 2026-11-21, PR #325, [validation](docs/validation/image-blank-b4-b5-2026-11-21/README_TH.md)); re-measure on a real phone.
-- **OD-59 (2026-11-22, save v67)**: the starter picks are the first fate weave (one guaranteed support, then one attacker; free); the cabinet is a camp tile opening after MAP1, whose first clear pays 10 tickets once; lessons point at the World Boss and the cabinet. A new game resets the lessons on the device (#332).
-- Unlock pacing #202: quests/team/World Boss/gacha after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3.
+- Save **v68** (map 4 tide/notes/journal, camp cap; v67 first fate weave; v66 gacha). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
+- Maps: 1 ซากชายแดน, 2 เส้นทางป่าทึบ, 3 แนวรอยแยก, **4 ทะเลสาบเงาจันทร์** (concepts for 4–10: [CHAPTER1_MAPS_TH](docs/design/CHAPTER1_MAPS_TH.md)).
+- **Map 4 (OD-60)**: rules/content/save PR #336; screens PR #337 (**awaiting owner approval** of 390px screens + clip in `docs/validation/map4-lake/`). Tide every 8 steps (`core/world/tide.ts`), seal 2 of 3, ferryman story → boat, reflections/notes → camp journal, Lio camp 1 / Cerise camp 2, boss ภูตธารา (Water Veil `mend`). Art is a recolour stand-in; Codex brief `docs/handoffs/CODEX-ART-MAP4-LAKE-TH.md` (tileset+backdrop, foes, boss+VFX) not yet sent.
+- Camp level cap = 10 + 3 per first clear past map 2 (≤30); tree points still stop at Lv10.
+- P10 gacha (OD-58) live; cabinet after MAP1 with 10 first-clear tickets (OD-59). Unlock pacing #202.
 - Art delegation: record agent picks as agent decisions, never owner visual approval.
 
 ## Owner rules in force
 
-- 2026-11-18 “ไม่ต้องสนใจเส้นตายทดสอบภาพนอกอะไรนั่น”: external-test dates, E2–E4 and `LEGACY_IMPORT` are not gates. [Checklist](docs/design/EXTERNAL_TEST_CHECKLIST_TH.md) stays for reference.
-- 2026-11-21: trio move names stay English (Thai naming task dropped).
-- World Boss trio replaces the Warden from week 2969 = Mon 23 Nov 2026 06:00 Bangkok (OD-52); confirm three bars on `/v1/worldboss` after the switch.
-- Enemy aim OD-53, lessons OD-54, chat/friends OD-55/56, deploy grace OD-57 (3 h, `[no-grace]`).
-
-## Owner decisions since P10
-
-- 2026-11-22 “ยืนยันตามแนะนำ ดำเนินการขั้นต่อไปได้”: shard units (duplicate 10, unlock 50, 1–2 shards per pull) and D24 (a device wallet never becomes online rights) confirmed (OD-58).
+- 2026-11-18: external-test dates, E2–E4 and `LEGACY_IMPORT` are not gates.
+- 2026-11-21: trio move names stay English.
+- World Boss trio from week 2969 (OD-52); enemy aim OD-53, lessons OD-54, chat/friends OD-55/56, deploy grace OD-57 (3 h, `[no-grace]`).
+- OD-60 (2026-11-22 “ตามแนะนำทั้ง 4 ข้อ ทำต่อได้”): recruits by story on maps 4–8 (Cerise/Kael/Wynne/Corin/Astrid; Lio/Brann/Toma/Sefa scenes, duplicate if owned), cap +3 per map, other planned systems are separate tasks, maps one at a time.
 
 ## Open items
 
-- Gacha staging load (20 accounts pulling at once, retries + racing requests) passed 2026-11-22 ([validation](docs/validation/p10-gacha-2026-11-21/README_TH.md)). Never point `LOAD_URL` at the dev API.
-- Gacha art: #212 references (key art, Saturn ring) not integrated; brief Codex with `fateweave-codex-art-brief` if the owner wants them.
-- P09: inactive-guest cleanup, old-token reuse detection. P04-05/06 numbers; P04-05 catch-up EXP recheck with P06.
-- Map 3 Briar Lord first-try gate; no real Safari/iPhone/Android or human usability validation. Pending intake #262, #169; #55/#53 wait systems.
+- `npm run sim`: the C12 campaign gate (casual explorer 220 < 226) already failed on the base commit before map 4; needs its own look (re-measure or fix the cause, not a silent re-baseline).
+- Lake sweep/contract pay map 3's values until a P04 economy pass; P04-05/06 numbers.
+- Map 3 Briar Lord first-try gate; no real Safari/iPhone/Android or human usability validation. Pending intake #262, #169.
 
 ## Opening prompt for next chat
 
-Owner picks the next task (P04 economy/shards numbers or a new map per OD-13 order). P10 leftovers, only if asked: points icon readability at 24px (Codex brief), a clip of a single-pull full-character reveal, real-device check.
+If the owner approved #337: merge it, then send the Codex brief `docs/handoffs/CODEX-ART-MAP4-LAKE-TH.md` (task 1 first) and start **map 5 เหมืองผลึกร้าง (Lv13–16)** per CHAPTER1_MAPS_TH §3/§6 and OD-60: darkness + lantern mechanic (deterministic) in `core/world` + tests, 3 puzzles, seal 2 of 3, boss ยักษ์ผลึก (reflects magic, telegraphed per OD-09/10), 2 elites, side story, 2 lost notes, a camp job, Kael (Ronin) joins and Brann's scene (duplicate if owned); sim via `npm run sim` (casual first try ~70–80%, blind attacks lose the boss); stand-in art + Codex brief; PRs: rules+content+save → screens (390px + clip for owner approval). Also look at the pre-existing C12 campaign gate failure.
