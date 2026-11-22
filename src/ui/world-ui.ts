@@ -20,7 +20,7 @@ import { PARTY_SLOTS, POTION_IDS, type Lane, type TeamPreset } from '../core/wor
 import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
 import { heroArt, portrait, starRow } from './portraits';
-import { fateWeave } from './gacha-panel';
+import { fateRevealMs, fateWeave } from './gacha-panel';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { questLine, rewardText, storyQuestText, sideQuestText, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
 import { tomeCount } from '../core/world/tomes';
@@ -192,6 +192,7 @@ export class WorldUI {
           } break;
           case 'event-close': dialog('#event-dialog').close(); break;
           case 'draft-pick': if (!this.view?.locked) this.host.draft(Number(button.dataset.index)); break;
+          case 'fate-pull': this.fatePulled = button.dataset.key; this.openDraft(); break;
           case 'event-choice': if (!this.view?.locked) { const choice = button.dataset.choice as EventChoice; this.host.chooseEvent(choice); this.root.querySelector<HTMLElement>(`#event-${choice}`)?.focus(); } break;
           case 'info': this.renderInfo(); dialog('#world-info').showModal(); break;
           case 'info-close': dialog('#world-info').close(); break;
@@ -227,6 +228,8 @@ export class WorldUI {
     else if (pendingEvent(s, this.map)) this.openEvent();
   }
   // Starter recruitment (owner 2026-10-23): a modal choice that cannot be dismissed; each pick joins the party at once.
+  // The first fate weave this dialog has revealed (`<pick>:<hero>`), so a redraw keeps the card shown.
+  private fatePulled: string | undefined;
   openDraft(): void {
     const dialog = this.root.querySelector<HTMLDialogElement>('#draft-dialog')!; const s = this.view?.state; if (!s?.draft) return;
     const n = this.map.draft!.picks - s.draft.left + 1;
@@ -234,12 +237,15 @@ export class WorldUI {
     if (this.map.draft!.fate && !s.draft.legacy && s.draft.offers.length === 1) {
       const id = s.draft.offers[0]!, t = heroText[id]!, support = this.map.draft!.support.includes(id), role = support ? 'สายสนับสนุน' : 'สายโจมตี';
       this.root.querySelector('#draft-title')!.innerHTML = `${icon('reroll')} ทอชะตาครั้งแรก ${n}/${this.map.draft!.picks}`;
-      this.root.querySelector('#draft-content')!.innerHTML = `${fateWeave(id, this.map, role)}
-        <p class="event-scene">${n === 1 ? 'แท่นทอชะตาเลือกเพื่อนร่วมทางให้ — ครั้งแรกได้<b>สายสนับสนุน</b>แน่นอน ครั้งต่อไปได้<b>สายโจมตี</b>แน่นอน · ฟรี ไม่ใช้ตั๋ว ไม่นับในอัตราของตู้' : 'ครั้งนี้ได้<b>สายโจมตี</b>แน่นอน · ฟรี ไม่ใช้ตั๋ว'}</p>
-        <p class="camp-note">${t.name} · ${t.role} · ${role} · จบแผนที่นี้แล้วแท่นทอชะตาที่ค่ายจะเปิด พร้อมตั๋ว 10 ใบ</p>
-        <button id="draft-0" data-world="draft-pick" data-index="0" class="primary" aria-label="รับ${t.name}เข้าทีม">รับ${t.name}เข้าทีม</button>`;
+      // Owner 2026-11-22: the player presses to weave (the offer is already fixed; the press only plays the reveal).
+      const key = `${n}:${id}`, pulled = this.fatePulled === key;
+      this.root.querySelector('#draft-content')!.innerHTML = `${fateWeave(id, this.map, role, pulled)}
+        <p class="event-scene">${n === 1 ? 'แท่นทอชะตาจะเลือกเพื่อนร่วมทางให้ — ครั้งนี้ได้<b>สายสนับสนุน</b>แน่นอน ครั้งต่อไปได้<b>สายโจมตี</b>แน่นอน · ฟรี ไม่ใช้ตั๋ว ไม่นับในอัตราของตู้' : 'ครั้งนี้ได้<b>สายโจมตี</b>แน่นอน · ฟรี ไม่ใช้ตั๋ว'}</p>
+        ${pulled ? `<div class="fate-after" style="--t0:${fateRevealMs(this.map)}ms"><p class="camp-note">${t.name} · ${t.role} · ${role} · จบแผนที่นี้แล้วแท่นทอชะตาที่ค่ายจะเปิด พร้อมตั๋ว 10 ใบ</p>
+        <button id="draft-0" data-world="draft-pick" data-index="0" class="primary" aria-label="รับ${t.name}เข้าทีม">รับ${t.name}เข้าทีม</button></div>`
+        : `<button id="draft-pull" data-world="fate-pull" data-key="${key}" class="primary">${icon('reroll')} ทอชะตา</button>`}`;
       if (!dialog.open) dialog.showModal();
-      this.root.querySelector<HTMLElement>('#draft-0')?.focus();
+      this.root.querySelector<HTMLElement>(pulled ? '#draft-0' : '#draft-pull')?.focus();
       return;
     }
     this.root.querySelector('#draft-title')!.innerHTML = `${icon('gold')} รับสมัครทหารรับจ้าง`;

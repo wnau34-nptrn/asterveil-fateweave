@@ -126,11 +126,20 @@ function history(p: Profile, map: MapDefinition): string {
 }
 // OD-59: the first fate weave (the starter picks after the prologue): one guaranteed character, shown with the cabinet's
 // reveal on the stage (outside the published rates; no ticket, no point). `role` names what is guaranteed.
-export function fateWeave(heroId: string, map: MapDefinition, role: string): string {
+// Owner 2026-11-22: the player presses to weave; before that the loom only idles (`pulled` false). The result was fixed
+// when the run offered it, so the press changes the presentation only. The stage keeps its full height in the dialog and
+// the card opens on the loom at the reward centre (nothing overflows or is cut off).
+// How long the first fate weave's reveal runs (ms), so the dialog can hold the name and the accept button until then.
+export function fateRevealMs(map: MapDefinition): number {
+  return timeline({ serial: 0, kind: 'pull', config: map.gacha.version, tickets: 0, points: 0, results: [{ heroId: map.gacha.pool[0]!, full: true, qty: 0, grant: 'joined' }] }).end;
+}
+export function fateWeave(heroId: string, map: MapDefinition, role: string, pulled: boolean): string {
+  if (!pulled) return `<section class="gacha-fate" data-pulled="false" aria-label="ทอชะตาครั้งแรก (${role} แน่นอน)">${stage('')}</section>`;
   const result: GachaResult = { heroId, full: true, qty: 0, grant: 'joined' };
   const run = timeline({ serial: 0, kind: 'pull', config: map.gacha.version, tickets: 0, points: 0, results: [result] });
-  return `<section class="gacha-result gacha-fate" data-skip="false" style="--t0:${run.end}ms" aria-label="ทอชะตาครั้งแรก ได้${name(heroId)} (${role})">${stage(run.html, true)}
-    <ol class="gacha-cards" role="list">${resultCard(result, map, 0)}</ol></section>`;
+  const A = art.anchors.reward_center;
+  return `<section class="gacha-fate" data-pulled="true" style="--t0:${run.end}ms" aria-label="ทอชะตาครั้งแรก ได้${name(heroId)} (${role})">${stage(run.html, true)}
+    <ol class="gacha-cards gacha-fate-card" role="list" style="${at(A[0]!, A[1]!, 150)}">${resultCard(result, map, 0)}</ol></section>`;
 }
 export function gachaPage(p: Profile, maps: readonly MapDefinition[], map: MapDefinition, s: GachaState): string {
   switch (s.view) {

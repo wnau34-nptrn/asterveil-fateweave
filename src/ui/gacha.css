@@ -66,7 +66,6 @@
 .gacha-result > .gacha-stage { position: absolute; top: 0; left: 0; right: 0; z-index: 2; pointer-events: none; animation: gacha-stage-out 320ms ease-in var(--t0) both; }
 @keyframes gacha-stage-out { to { opacity: 0; visibility: hidden; } }
 /* OD-59 first fate weave inside the starter dialog: the stage plays over the card, then the card stays. */
-.gacha-fate .gacha-cards { grid-template-columns: minmax(0, 150px); justify-content: center; }
 /* OD-59: the cabinet's compact tile at the end of the camp's top row (quest board and World Boss keep their width). */
 #lobby-view .lobby-boards .lobby-gacha { position: relative; isolation: isolate; overflow: visible; flex: 0 0 64px; min-width: 0; display: grid; justify-items: center; align-content: center; gap: 1px;
   padding: 4px 2px; border: 0; border-left: 2px solid #e8cd8aaa; border-radius: 2px 12px 12px 2px; color: var(--text); text-shadow: 0 1px 4px #07101e;
@@ -76,5 +75,17 @@
 #lobby-view .lobby-gacha small { font-size: 10px; color: #edf0f4; line-height: 1.1; }
 #lobby-view .lobby-gacha .trip-badge { position: absolute; top: -6px; right: -4px; font-style: normal; background: #ead093; color: #102036; border-radius: 12px; min-width: 18px; padding: 0 4px; font-size: 11px; text-shadow: none; }
 #draft-content .gacha-fate + .event-scene { margin-top: 8px; }
-#draft-content .gacha-fate ~ .camp-note { margin: 4px 0 12px; }
-#draft-content .gacha-fate ~ #draft-0 { width: 100%; min-height: 48px; }
+#draft-content .fate-after .camp-note { margin: 4px 0 12px; }
+#draft-content .fate-after #draft-0 { width: 100%; min-height: 48px; }
+
+/* Owner 2026-11-22: the first fate weave keeps the stage in the flow (full height, nothing cut off); the card opens on
+   the loom at the reward centre after the timeline, and stays there. */
+.gacha-fate { position: relative; }
+.gacha-fate > .gacha-stage { position: relative; animation: none; }
+.gacha-fate-card { position: absolute; left: var(--x); top: var(--y); width: var(--w); translate: -50% -50%; z-index: 3; display: block; margin: 0; }
+.gacha-fate-card .gacha-card { animation-delay: var(--t0); background: #0d1c2ef0; }
+@media (prefers-reduced-motion: reduce) { .gacha-fate-card .gacha-card { animation: none; } }
+#draft-content .gacha-fate ~ #draft-pull { width: 100%; min-height: 48px; }
+/* The name and the accept button wait for the card (the reveal is the point of pressing). */
+.fate-after { animation: gacha-reveal .3s ease-out var(--t0) both; }
+@media (prefers-reduced-motion: reduce) { .fate-after { animation: none; } }
