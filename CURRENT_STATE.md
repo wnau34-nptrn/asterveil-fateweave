@@ -18,17 +18,17 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - World Boss trio replaces the Warden from week 2969 = Mon 23 Nov 2026 06:00 Bangkok (OD-52); confirm three bars on `/v1/worldboss` after the switch.
 - Enemy aim OD-53, lessons OD-54, chat/friends OD-55/56, deploy grace OD-57 (3 h, `[no-grace]`).
 
-## Waiting for the owner
+## Owner decisions since P10
 
-1. Confirm D24 (a device wallet never becomes online rights; import starts it empty) and the shard-unit mapping (duplicate 10, unlock 50, 1–2 live shards per pull; spec §3).
+- 2026-11-22 “ยืนยันตามแนะนำ ดำเนินการขั้นต่อไปได้”: shard units (duplicate 10, unlock 50, 1–2 shards per pull) and D24 (a device wallet never becomes online rights) confirmed (OD-58).
 
 ## Open items
 
-- Staging load test with concurrent pulls (workflow `Cloudflare staging load test`, ref = game branch; never point `LOAD_URL` at the dev API).
+- Gacha staging load (20 accounts pulling at once, retries + racing requests) passed 2026-11-22 ([validation](docs/validation/p10-gacha-2026-11-21/README_TH.md)). Never point `LOAD_URL` at the dev API.
 - Gacha art: #212 references (key art, Saturn ring) not integrated; brief Codex with `fateweave-codex-art-brief` if the owner wants them.
 - P09: inactive-guest cleanup, old-token reuse detection. P04-05/06 numbers; P04-05 catch-up EXP recheck with P06.
 - Map 3 Briar Lord first-try gate; no real Safari/iPhone/Android or human usability validation. Pending intake #262, #169; #55/#53 wait systems.
 
 ## Opening prompt for next chat
 
-P10 follow-up (Sonnet unless rules change): run the staging load test with concurrent `gachaPull` added to `tests/server-load.test.ts`, and apply any owner changes to D24/shard units (bump `gacha.version` if outcomes change). Otherwise the owner picks the next task.
+Owner picks the next task (P04 economy/shards numbers or a new map per OD-13 order). P10 leftovers, only if asked: points icon readability at 24px (Codex brief), a clip of a single-pull full-character reveal, real-device check.
