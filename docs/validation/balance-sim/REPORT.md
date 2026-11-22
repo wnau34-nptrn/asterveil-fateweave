@@ -34,6 +34,7 @@ Bank after the last expedition (average): ore 382, gold 120, seal 18, dust 12; b
 | keeper | secrets 6 | 0% | – |
 | herbalist | herbs 6 | 0% | – |
 | scout | puzzles 6 | 0% | – |
+| scout | puzzles 3 | 0% | – |
 
 ### Explorer (every chest, herb, puzzle, secret and optional elite), advisor battles · 24 companies × 6 expeditions
 
@@ -69,6 +70,7 @@ Bank after the last expedition (average): ore 699, gold 331, seal 44, dust 33; b
 | keeper | secrets 6 | 100% | 3.2 |
 | herbalist | herbs 6 | 100% | 3.2 |
 | scout | puzzles 6 | 100% | 3.1 |
+| scout | puzzles 3 | 0% | – |
 
 ### Rush (rift seal only), casual battles (advice on ~70% of turns) · 24 companies × 6 expeditions
 
@@ -102,6 +104,7 @@ Bank after the last expedition (average): ore 283, gold 139, seal 17, dust 13; b
 | keeper | secrets 6 | 0% | – |
 | herbalist | herbs 6 | 0% | – |
 | scout | puzzles 6 | 0% | – |
+| scout | puzzles 3 | 0% | – |
 
 ### Explorer (every chest, herb, puzzle, secret and optional elite), casual battles (advice on ~70% of turns) · 24 companies × 6 expeditions
 
@@ -137,6 +140,7 @@ Bank after the last expedition (average): ore 707, gold 325, seal 42, dust 20; b
 | keeper | secrets 6 | 100% | 4.3 |
 | herbalist | herbs 6 | 100% | 5.4 |
 | scout | puzzles 6 | 100% | 4.0 |
+| scout | puzzles 3 | 0% | – |
 
 ### Explorer (every chest, herb, puzzle, secret and optional elite), blind basic attacks · 24 companies × 6 expeditions
 
@@ -167,3 +171,4 @@ Bank after the last expedition (average): ore 103, gold 28, seal 2, dust 0; bag 
 | keeper | secrets 6 | 71% | – |
 | herbalist | herbs 6 | 0% | – |
 | scout | puzzles 6 | 0% | – |
+| scout | puzzles 3 | 0% | – |
