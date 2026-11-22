@@ -1,0 +1,394 @@
+{
+  "size": [
+    256,
+    256
+  ],
+  "coordinates": "256px canvas, x/y from top left",
+  "source": "sources/vfx.png",
+  "effects": {
+    "water-veil": {
+      "name": "Water Veil",
+      "anchor": "boss centre",
+      "pivot": [
+        128,
+        133
+      ],
+      "ms": [
+        200,
+        180,
+        220
+      ],
+      "canvasPx": [
+        144,
+        156,
+        130
+      ],
+      "windows": [
+        [
+          0,
+          110,
+          325,
+          370
+        ],
+        [
+          333,
+          12,
+          735,
+          369
+        ],
+        [
+          750,
+          143,
+          1086,
+          364
+        ]
+      ],
+      "paintWidth": [
+        202,
+        216,
+        184
+      ],
+      "bottom": 201,
+      "layers": [
+        {
+          "beat": "prepare",
+          "file": "vfx/water-veil-prepare.png",
+          "bounds": [
+            27,
+            52,
+            229,
+            201
+          ],
+          "sourceCrop": [
+            0,
+            110,
+            325,
+            370
+          ]
+        },
+        {
+          "beat": "peak",
+          "file": "vfx/water-veil-peak.png",
+          "bounds": [
+            20,
+            8,
+            236,
+            201
+          ],
+          "sourceCrop": [
+            333,
+            12,
+            735,
+            369
+          ]
+        },
+        {
+          "beat": "settle",
+          "file": "vfx/water-veil-settle.png",
+          "bounds": [
+            36,
+            85,
+            220,
+            201
+          ],
+          "sourceCrop": [
+            750,
+            143,
+            1086,
+            364
+          ]
+        }
+      ]
+    },
+    "surging-wave": {
+      "name": "Surging Wave",
+      "anchor": "affected target feet",
+      "pivot": [
+        167,
+        211
+      ],
+      "ms": [
+        170,
+        120,
+        220
+      ],
+      "canvasPx": [
+        74,
+        94,
+        76
+      ],
+      "windows": [
+        [
+          0,
+          521,
+          313,
+          750
+        ],
+        [
+          321,
+          384,
+          734,
+          749
+        ],
+        [
+          741,
+          575,
+          1086,
+          747
+        ]
+      ],
+      "paintWidth": [
+        172,
+        222,
+        205
+      ],
+      "bottom": 218,
+      "layers": [
+        {
+          "beat": "prepare",
+          "file": "vfx/surging-wave-prepare.png",
+          "bounds": [
+            42,
+            102,
+            214,
+            218
+          ],
+          "sourceCrop": [
+            0,
+            521,
+            313,
+            750
+          ]
+        },
+        {
+          "beat": "peak",
+          "file": "vfx/surging-wave-peak.png",
+          "bounds": [
+            17,
+            27,
+            239,
+            218
+          ],
+          "sourceCrop": [
+            321,
+            384,
+            734,
+            749
+          ]
+        },
+        {
+          "beat": "settle",
+          "file": "vfx/surging-wave-settle.png",
+          "bounds": [
+            25,
+            126,
+            230,
+            218
+          ],
+          "sourceCrop": [
+            741,
+            575,
+            1086,
+            747
+          ]
+        }
+      ]
+    },
+    "great-wave": {
+      "name": "Great Wave",
+      "anchor": "hero side, local copies at the affected feet",
+      "pivot": [
+        128,
+        211
+      ],
+      "ms": [
+        140,
+        210,
+        220
+      ],
+      "canvasPx": [
+        93,
+        104,
+        94
+      ],
+      "windows": [
+        [
+          0,
+          947,
+          270,
+          1041
+        ],
+        [
+          267,
+          837,
+          797,
+          1043
+        ],
+        [
+          792,
+          939,
+          1086,
+          1044
+        ]
+      ],
+      "paintWidth": [
+        192,
+        232,
+        219
+      ],
+      "bottom": 218,
+      "cascadeScale": [
+        1.0,
+        0.91,
+        0.8,
+        0.7,
+        0.6
+      ],
+      "cascadeStepMs": 42,
+      "layers": [
+        {
+          "beat": "prepare",
+          "file": "vfx/great-wave-prepare.png",
+          "bounds": [
+            32,
+            169,
+            224,
+            218
+          ],
+          "sourceCrop": [
+            0,
+            947,
+            270,
+            1041
+          ]
+        },
+        {
+          "beat": "peak",
+          "file": "vfx/great-wave-peak.png",
+          "bounds": [
+            12,
+            145,
+            244,
+            218
+          ],
+          "sourceCrop": [
+            267,
+            837,
+            797,
+            1043
+          ]
+        },
+        {
+          "beat": "settle",
+          "file": "vfx/great-wave-settle.png",
+          "bounds": [
+            18,
+            171,
+            237,
+            218
+          ],
+          "sourceCrop": [
+            792,
+            939,
+            1086,
+            1044
+          ]
+        }
+      ]
+    },
+    "reflection": {
+      "name": "Reflection",
+      "anchor": "Mirror Shade summon slot b2 at the feet",
+      "pivot": [
+        128,
+        214
+      ],
+      "ms": [
+        170,
+        180,
+        240
+      ],
+      "canvasPx": [
+        67,
+        80,
+        73
+      ],
+      "windows": [
+        [
+          5,
+          1275,
+          316,
+          1402
+        ],
+        [
+          323,
+          1068,
+          742,
+          1420
+        ],
+        [
+          731,
+          1275,
+          1080,
+          1402
+        ]
+      ],
+      "paintWidth": [
+        187,
+        214,
+        201
+      ],
+      "bottom": 220,
+      "layers": [
+        {
+          "beat": "prepare",
+          "file": "vfx/reflection-prepare.png",
+          "bounds": [
+            34,
+            177,
+            221,
+            220
+          ],
+          "sourceCrop": [
+            5,
+            1275,
+            316,
+            1402
+          ]
+        },
+        {
+          "beat": "peak",
+          "file": "vfx/reflection-peak.png",
+          "bounds": [
+            21,
+            52,
+            235,
+            220
+          ],
+          "sourceCrop": [
+            323,
+            1068,
+            742,
+            1420
+          ]
+        },
+        {
+          "beat": "settle",
+          "file": "vfx/reflection-settle.png",
+          "bounds": [
+            27,
+            172,
+            228,
+            220
+          ],
+          "sourceCrop": [
+            731,
+            1275,
+            1080,
+            1402
+          ]
+        }
+      ]
+    }
+  }
+}
