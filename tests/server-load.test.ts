@@ -148,9 +148,10 @@ function table(): string {
 // is sent twice at once with one request id (a lost answer retried: same answer, one charge), and once more under a
 // second request id with the same sequence number (another device racing: refused 409 stale, nothing charged). The wallet
 // must end at 0 tickets with one point per pull, and the server journal must hold exactly those pulls, in order.
-async function gachaRun(p: Player): Promise<{ tickets: number; pulls: number; retriesSame: number; racesRefused: number; journal: number; points: number; left: number }> {
+async function gachaRun(p: Player): Promise<{ tickets: number; pulls: number; retriesSame: number; racesRefused: number; journal: number; points: number; left: number; notes: string[] }> {
   const wallet = async () => (await call('state', '/v1/state', { headers: p.headers() })).json?.view?.profile?.gacha ?? { tickets: 0, points: 0, serial: 0 };
-  const start = await wallet(); let pulls = 0, retriesSame = 0, racesRefused = 0;
+  const start = await wallet(); let pulls = 0, retriesSame = 0, racesRefused = 0; const notes: string[] = [];
+  const brief = (r: { status: number; json: Body | null; text: string }) => `${r.status}:${r.json?.status ?? r.json?.error ?? r.text.slice(0, 40)}`;
   for (let i = 0; i < start.tickets; i++) {
     const command = { kind: 'gachaPull', count: 1, config: gameRules.gacha.version };
     const env = JSON.stringify({ requestId: `load${hex(14)}`, seq: p.seq + 1, command });
@@ -159,14 +160,14 @@ async function gachaRun(p: Player): Promise<{ tickets: number; pulls: number; re
     const [x, y] = await Promise.all([send(env), send(env)]);
     const ok = [x, y].find(r => r.status === 200 && r.json?.status === 'applied');
     if (!ok) break;
-    if (x.text === y.text) retriesSame++;
+    if (x.text === y.text) retriesSame++; else notes.push(`pull ${i + 1} pair ${brief(x)} / ${brief(y)}`);
     p.seq++; pulls++;
     const late = await send(race);
-    if (late.status === 409) racesRefused++;
+    if (late.status === 409) racesRefused++; else notes.push(`pull ${i + 1} race ${brief(late)}`);
   }
   const end = await wallet();
   const hist = await call('gachaHistory', '/v1/gacha/history?limit=50', { headers: p.headers() });
-  return { tickets: start.tickets, pulls, retriesSame, racesRefused, journal: hist.json?.entries?.length ?? -1, points: end.points - start.points, left: end.tickets };
+  return { tickets: start.tickets, pulls, retriesSame, racesRefused, journal: hist.json?.entries?.length ?? -1, points: end.points - start.points, left: end.tickets, notes };
 }
 
 describe.runIf(!!base)('P12 staging load: WorldBoss and Chat objects', () => {
@@ -206,7 +207,7 @@ describe.runIf(!!base)('P12 staging load: WorldBoss and Chat objects', () => {
     expect(boss.every(b => b.retriesSame === b.attempts)).toBe(true);
     for (const g of gacha) {
       expect(g.tickets).toBe(gameRules.worldBoss.trio.personal.reduce((t, m) => t + (m.reward.tickets ?? 0), 0));
-      expect([g.pulls, g.retriesSame, g.racesRefused, g.journal, g.points, g.left]).toEqual([g.tickets, g.tickets, g.tickets, g.tickets, g.tickets, 0]);
+      expect([g.pulls, g.retriesSame, g.racesRefused, g.journal, g.points, g.left], g.notes.join(' · ')).toEqual([g.tickets, g.tickets, g.tickets, g.tickets, g.tickets, 0]);
     }
     expect(chat.sent.length).toBeGreaterThan(0);
     expect(chat.sent.filter(t => !chat.seen.has(t))).toEqual([]);
