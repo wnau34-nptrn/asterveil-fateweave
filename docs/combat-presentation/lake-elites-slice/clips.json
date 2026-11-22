@@ -1,0 +1,56 @@
+{
+  "weeping-siren-tide-lash-390.webp": {
+    "frames": 43,
+    "durationMs": 2143,
+    "clickMs": 326,
+    "sha256": "88dc970562233f1a9e8379172cbf9b881dcd34cc88a9cd3c2f3c12f48dd02695"
+  },
+  "shadow-serpent-crushing-coil-390.webp": {
+    "frames": 50,
+    "durationMs": 2421,
+    "clickMs": 301,
+    "sha256": "ca1634f1a05a56122baacb451fd36d7a656c6b495300267c0b3f38c0d485a059"
+  },
+  "weeping-siren-down-390.webp": {
+    "frames": 44,
+    "durationMs": 1910,
+    "clickMs": 307,
+    "sha256": "9708eca996fd9f2b07679fc710b677feb7b89e00b00b83e7f5e41e5a96a71631"
+  },
+  "weeping-siren-weeping-song-390.webp": {
+    "frames": 41,
+    "durationMs": 2117,
+    "clickMs": 271,
+    "sha256": "fa402e1a173c7c9b6a99c6e66ed0612990b5a4b0fe7368f8db2518f7d53c8a82"
+  },
+  "shadow-serpent-down-390.webp": {
+    "frames": 40,
+    "durationMs": 1802,
+    "clickMs": 275,
+    "sha256": "195fd8a81969ba1aa0b12d7fe4683d3510151bbe1b56c5c1feb4c227212e0da7"
+  },
+  "shadow-serpent-coil-gathering-390.webp": {
+    "frames": 52,
+    "durationMs": 2738,
+    "clickMs": 240,
+    "sha256": "4a96a35e6dc2b2eecf2d077c8acdeacf2f462521942ace216345f9a5ea2b7b6d"
+  },
+  "shadow-serpent-shadow-fang-390.webp": {
+    "frames": 15,
+    "durationMs": 2050,
+    "clickMs": 115,
+    "sha256": "d50eef3faadfc39c06327474f742ff9c1901d9d7b2ed8b311107a8a14a70e7f2"
+  },
+  "weeping-siren-drowning-call-390.webp": {
+    "frames": 48,
+    "durationMs": 2407,
+    "clickMs": 294,
+    "sha256": "900734a8d8791dd1cc020fb69f6696ac56c0a84280ee6d3633b7871751a245eb"
+  },
+  "shadow-serpent-venom-spit-390.webp": {
+    "frames": 45,
+    "durationMs": 2418,
+    "clickMs": 216,
+    "sha256": "d3b2fb93fef9ccf99cc5207fcaeec6a1d975f44df64e6c05728292b32305d3f8"
+  }
+}

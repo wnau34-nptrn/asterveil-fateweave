@@ -29,6 +29,7 @@ export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number 
   foe_vargoth_guard: { sheet: 'foes2', frame: 3 }, foe_thorn_beetle: { sheet: 'foes2', frame: 4 }, foe_spore_puff: { sheet: 'foes2', frame: 5 },
   foe_rift_channeler: { sheet: 'foes2', frame: 6 }, foe_rift_wisp: { sheet: 'foes2', frame: 7 }, foe_shard_crawler: { sheet: 'foes2', frame: 8 },
   // Map 4 lake foes (ART-UNIT-ANIMATION-LAKE-001): `units_foes3`/`portraits_foes3`, 2 columns × 5 rows (phase 3 and 4 append).
+  foe_shadow_serpent: { sheet: 'foes3', frame: 4 }, foe_weeping_siren: { sheet: 'foes3', frame: 5 },
   foe_tide_slime: { sheet: 'foes3', frame: 0 }, foe_mist_wisp: { sheet: 'foes3', frame: 1 }, foe_stone_crab: { sheet: 'foes3', frame: 2 }, foe_mirror_shade: { sheet: 'foes3', frame: 3 },
 };
 // Enemy ids are field slots (`f1`/`f2` front, `b1`/`b2` back); `art` picks the illustration (`raider`/`brute` are the
@@ -53,6 +54,7 @@ export const actorFootOrigins: Readonly<Record<string, number>> = {
 // sits just above it (owner 2026-10-22). Re-measure when an atlas changes.
 const figureTops: Readonly<Record<string, number>> = {
   guardian: 19, tracer: 17, weaver: 0, healer: 0, raider: 0, brute: 0, garran: 37, mira: 37, toma: 37, sefa: 37, brann: 37, lio: 37, metta: 37, thiran: 37, lalin: 37, wila: 37, kael: 31, wynne: 37, astrid: 46, foe_tusker: 57, foe_sprite: 197, foe_stalker: 57, foe_mycon: 37, foe_golem: 17, foe_riftweaver: 37, foe_matriarch: 17, foe_juggernaut: 40, foe_sentinel: 5, foe_hunter: 35, foe_captain: 37, foe_dew_slime: 182, foe_ember_slime: 227, foe_ruin_bat: 218, foe_vargoth_guard: 133, foe_thorn_beetle: 191, foe_spore_puff: 107, foe_rift_channeler: 68, foe_rift_wisp: 127, foe_shard_crawler: 191,
+  foe_shadow_serpent: 141, foe_weeping_siren: 102,
   foe_tide_slime: 250, foe_mist_wisp: 127, foe_stone_crab: 198, foe_mirror_shade: 111,
 };
 // How far the painted figure rises above its feet, as a fraction of the drawn size.
@@ -61,7 +63,10 @@ export const figureRise = (art: string): number => staticActorGeometry(art) ? wo
 type ArtName = 'units' | 'portraits' | 'ruins' | 'units_mercs' | 'portraits_mercs' | 'units_foes' | 'portraits_foes' | 'units_foes2' | 'portraits_foes2' | 'units_foes3' | 'portraits_foes3' | 'units_worldboss' | 'portraits_worldboss';
 // Bump a sheet's revision (SHA256 prefix) when its pixels change so browsers fetch the corrected art. `units` 2026-11-04:
 // pieces of Eira/Lyra/Seren that crossed into a neighbouring 512px cell were cleared (they showed in Seren's sheet).
-const ART_REV: Partial<Record<ArtName, string>> = { units: '6263840f', units_worldboss: worldBossStills.unitsRevision, portraits_worldboss: worldBossStills.portraitsRevision };
+const ART_REV: Partial<Record<ArtName, string>> = {
+  units: '6263840f', units_foes3: '8513fdc6', portraits_foes3: 'c80ced67',
+  units_worldboss: worldBossStills.unitsRevision, portraits_worldboss: worldBossStills.portraitsRevision,
+};
 export const artUrl = (name: ArtName): string => `${import.meta.env.BASE_URL}assets/art/${name}.webp${ART_REV[name] ? `?v=${ART_REV[name]}` : ''}`;
 export const unitsUrl = (sheet: ArtSheet): string => artUrl(sheet === 'units' ? 'units' : `units_${sheet}`);
 export const portraitsUrl = (sheet: ArtSheet): string => artUrl(sheet === 'units' ? 'portraits' : `portraits_${sheet}`);

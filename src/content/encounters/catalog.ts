@@ -373,7 +373,7 @@ export const eliteShadowSerpent: EncounterDefinition = {
   ...veilSiege, id: 'elite-shadow-serpent', version: 1, level: 12, name: 'อสรพิษเงา',
   rules: barkRules,
   enemies: [...serpentWisp.enemies,
-    { id: 'f1', row: 'front', large: true, boss: true, speed: 95, name: 'Shadow Serpent', displayName: 'อสรพิษเงา', maxHp: 260, color: 0x3b4f7a, art: 'foe_tusker', traits: ['veilguard'] }],
+    { id: 'f1', row: 'front', large: true, boss: true, speed: 95, name: 'Shadow Serpent', displayName: 'อสรพิษเงา', maxHp: 260, color: 0x3b4f7a, art: 'foe_shadow_serpent', traits: ['veilguard'] }],
   intents: [...softened(serpentWisp.intents, ['b2'], 80),
     { sourceId: 'f1', targetSlot: 1, name: 'Shadow Fang', damage: 26, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 3, name: 'Venom Spit', damage: 24, kind: 'energy' },
@@ -387,7 +387,7 @@ const sirenCrab = foes(12, [['f1', S.stoneCrab]]);
 export const eliteWeepingSiren: EncounterDefinition = at80({
   ...veilSiege, id: 'elite-weeping-siren', version: 1, level: 12, name: 'นางเงือกร้องไห้',
   enemies: [...sirenCrab.enemies,
-    { id: 'b1', row: 'back', large: true, speed: 105, name: 'Weeping Siren', displayName: 'นางเงือกร้องไห้', maxHp: 170, color: 0x7fb0d8, art: 'foe_riftweaver' }],
+    { id: 'b1', row: 'back', large: true, speed: 105, name: 'Weeping Siren', displayName: 'นางเงือกร้องไห้', maxHp: 170, color: 0x7fb0d8, art: 'foe_weeping_siren' }],
   intents: [...sirenCrab.intents,
     { sourceId: 'b1', targetSlot: 2, name: 'Tide Lash', damage: 24, kind: 'energy' },
     { sourceId: 'b1', targetSlot: 0, name: 'Weeping Song', damage: 15, kind: 'energy', all: true },
@@ -420,8 +420,8 @@ export const waterSpirit: EncounterDefinition = at80({
   ],
 });
 
-// Map 4 sets with a foe still wearing an older body as a stand-in (serpent, siren, Water Spirit: phases 3–4); the per-body audits skip them.
-export const LAKE_STANDINS: ReadonlySet<string> = new Set(['elite-shadow-serpent', 'elite-weeping-siren', 'water-spirit']);
+// Map 4 sets with a foe still wearing an older body as a stand-in (Water Spirit: phase 4); the per-body audits skip them.
+export const LAKE_STANDINS: ReadonlySet<string> = new Set(['water-spirit']);
 
 // World Bosses (balanced on written slots, P11-05) drop the assassin aims their court kinds carry (enemy aim B, owner 2026-11-19).
 function noAims(e: EncounterDefinition): EncounterDefinition {

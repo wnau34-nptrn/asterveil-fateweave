@@ -1,9 +1,10 @@
 import {test,expect} from '@playwright/test';
 import {mkdirSync,writeFileSync} from 'node:fs';
+import {lakeEliteIntents,plainLakeFoeArts,type LakeEliteArt} from '../fixtures/unit-a4';
 test.skip(process.env.UNIT_A4_CLIPS!=='1','separate real-clock capture only');
-const sheetOf={foe_dew_slime:'dew',foe_ember_slime:'ember',foe_ruin_bat:'bat',foe_tide_slime:'tideslime',foe_mist_wisp:'mistwisp',foe_stone_crab:'stonecrab',foe_mirror_shade:'mirrorshade'} as const;
+const sheetOf={foe_dew_slime:'dew',foe_ember_slime:'ember',foe_ruin_bat:'bat',foe_tide_slime:'tideslime',foe_mist_wisp:'mistwisp',foe_stone_crab:'stonecrab',foe_mirror_shade:'mirrorshade',foe_shadow_serpent:'shadowserpent',foe_weeping_siren:'weepingsiren'} as const;
 type Foe=keyof typeof sheetOf;
-interface Clip{hero:'mira'|'toma';skill:string;foe:Foe;scenario:string;mode:string;preroll?:number}
+interface Clip{hero:'mira'|'toma';skill:string;foe:Foe;scenario:string;mode:string;preroll?:number;intent?:string}
 const cases:Clip[]=[
  ...['normal','fast','reduced','osreduce'].map(mode=>({hero:'mira' as const,skill:'attack',foe:'foe_dew_slime' as Foe,scenario:'normal',mode})),
  {hero:'mira',skill:'volley',foe:'foe_ember_slime',scenario:'normal',mode:'normal'},
@@ -20,16 +21,23 @@ const cases:Clip[]=[
  {hero:'toma',skill:'attack',foe:'foe_dew_slime',scenario:'enemy-down',mode:'normal'},
  {hero:'toma',skill:'attack',foe:'foe_ember_slime',scenario:'enemy-down',mode:'normal'},
  // Map 4 lake foes (ART-UNIT-ANIMATION-LAKE-001): the real intent hits the Knight; enemy-down plays the painted collapse.
- ...(['foe_tide_slime','foe_mist_wisp','foe_stone_crab','foe_mirror_shade'] as Foe[]).flatMap(foe=>[{hero:'mira' as const,skill:'attack',foe,scenario:'normal',mode:'normal'},{hero:'mira' as const,skill:'attack',foe,scenario:'enemy-down',mode:'normal'}]),
+ ...plainLakeFoeArts.flatMap(foe=>[{hero:'mira' as const,skill:'attack',foe,scenario:'normal',mode:'normal'},{hero:'mira' as const,skill:'attack',foe,scenario:'enemy-down',mode:'normal'}]),
+ ...(Object.keys(lakeEliteIntents) as LakeEliteArt[]).flatMap(foe=>[
+  ...lakeEliteIntents[foe].map(intent=>({hero:'mira' as const,skill:'attack',foe,scenario:'normal',mode:'normal',intent})),
+  {hero:'mira' as const,skill:'attack',foe,scenario:'enemy-down',mode:'normal'},
+ ]),
 ];
-for(const {hero,skill,foe,scenario,mode,preroll} of cases)test(`unit A4 clip ${hero}-${skill}-${foe}-${scenario}-${mode}${preroll?'-hover':''}`,async({browser},info)=>{
+for(const {hero,skill,foe,scenario,mode,preroll,intent} of cases){
+ const name=`${hero}-${skill}-${foe}-${scenario}-${mode}${preroll?'-hover':''}${intent?'-'+intent.toLowerCase().replaceAll(' ','-'):''}`;
+ test(`unit A4 clip ${name}`,async({browser},info)=>{
  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:mode==='osreduce'?'reduce':'no-preference'});
  try{
  const page=await ctx.newPage(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto(`tests/browser/fixtures/unit-a4.html?hero=${hero}&foe=${foe}&skill=${skill}&scenario=${scenario}&speed=${mode==='fast'?'fast':'normal'}&intensity=${mode==='reduced'?'reduced':'standard'}`);
+ await page.goto(`tests/browser/fixtures/unit-a4.html?hero=${hero}&foe=${foe}&skill=${skill}&scenario=${scenario}&speed=${mode==='fast'?'fast':'normal'}&intensity=${mode==='reduced'?'reduced':'standard'}${intent?`&intent=${encodeURIComponent(intent)}`:''}`);
  if(await page.locator('#start').count())await expect(page.locator('#start')).toBeEnabled();
- await expect.poll(()=>page.evaluate(h=>window.unitA4QA.frames()[h]?.[0]?.texture,hero),{timeout:15000}).toBe(`unit-pilot-${hero}`);
- await expect.poll(()=>page.evaluate(()=>window.unitA4QA.frames().f1?.[0]?.texture),{timeout:15000}).toBe(`unit-pilot-${sheetOf[foe]}`);
+ await expect.poll(()=>page.evaluate(h=>window.unitA4QA?.frames()[h]?.[0]?.texture,hero),{timeout:15000}).toBe(`unit-pilot-${hero}`);
+ await expect.poll(()=>page.evaluate(()=>window.unitA4QA?.frames().f1?.[0]?.texture),{timeout:15000}).toBe(`unit-pilot-${sheetOf[foe]}`);
+ if(intent || foe in lakeEliteIntents)await expect(page.locator('#battle-view')).toHaveAttribute('data-scene','lake');
  if(await page.locator('#start').count())await page.locator('#start').click();await page.locator(`#action-${skill}`).click();await page.evaluate(()=>document.fonts.ready.then(()=>undefined));
  await page.evaluate(()=>document.addEventListener('pointerdown',()=>{document.documentElement.dataset.unitA4Click=String(Date.now()/1000);},{capture:true,once:true}));
  const dir=info.outputPath('frames');mkdirSync(dir,{recursive:true});const cdp=await ctx.newCDPSession(page),stamps:string[]=[];
@@ -40,7 +48,9 @@ for(const {hero,skill,foe,scenario,mode,preroll} of cases)test(`unit A4 clip ${h
  await expect(page.locator('#skip-turn')).toBeHidden();await page.waitForTimeout(300);await cdp.send('Page.stopScreencast');
  const actual=await page.evaluate(()=>window.unitA4QA.state());expect(actual).toEqual(await page.evaluate(()=>window.unitA4QA.expected()));
  expect(await page.evaluate(()=>localStorage.getItem('unit-a4-committed'))).toBe(committed);expect(actual.commands).toHaveLength(1);expect(stamps.length).toBeGreaterThan(6);
- writeFileSync(info.outputPath('name.txt'),`${hero}-${skill}-${foe}-${scenario}-${mode}${preroll?'-hover':''}`);writeFileSync(info.outputPath('stamps.txt'),`click ${click}\n${stamps.join('\n')}`);writeFileSync(info.outputPath('timing.json'),JSON.stringify(await page.evaluate(()=>window.unitA4QA.impacts),null,2));
+ if(intent)expect(await page.evaluate(()=>window.unitA4QA.turns().find(turn=>turn.side==='enemy')?.intent?.name)).toBe(intent);
+ writeFileSync(info.outputPath('name.txt'),name);writeFileSync(info.outputPath('stamps.txt'),`click ${click}\n${stamps.join('\n')}`);writeFileSync(info.outputPath('timing.json'),JSON.stringify(await page.evaluate(()=>window.unitA4QA.impacts),null,2));
  writeFileSync(info.outputPath('final-state.json'),JSON.stringify(actual,null,2));expect(errors).toEqual([]);
  }finally{await ctx.close();}
-});
+ });
+}

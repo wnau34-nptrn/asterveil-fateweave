@@ -2,13 +2,14 @@
 """Runtime build for ART-UNIT-ANIMATION-LAKE-001 foes (map 4, phase 2): tide-slime, mist-wisp, stone-crab, mirror-shade.
 
 Input: an extracted Codex package dir (incoming/ART-UNIT-ANIMATION-LAKE-001: seeds/, raw/, strips.json). Pass its path as the
-only argument; every input's SHA-256 is checked against the package validation.json first. Output (lossless, no resizing):
+first argument; every input's SHA-256 is checked against the package validation.json first. Output (lossless, no resizing):
   - the shared 22-frame body layout (25 with an idle loop) packed per `scripts/pack-unit-atlases.py` into public/assets/units
     and registered in src/game/visuals/unit-atlases.json. Frame 0 is the shipped ready seed; layout slots the package has no
     strip for (the other attack/skill clip of that foe) alias frame 0, so they cost nothing and are never drawn;
   - the still sheet units_foes3.webp (2 columns, 512 px cells, frames 0-3) and the portrait sheet portraits_foes3.webp, a
     square crop of each seed's figure (the package ships no portrait art; the owner has not asked for a painted bust yet).
-Usage: python3 -I scripts/build-lake-foes.py <package dir>
+Phase 3 appends the R1 elites to frames 4 and 5 and gives each move its own frame range.
+Usage: python3 -I scripts/build-lake-foes.py <package dir> [--elites]
 Requires Pillow and NumPy.
 """
 import hashlib, io, json, sys
@@ -21,6 +22,14 @@ UNITS = ROOT / 'public/assets/units'
 ART = ROOT / 'public/assets/art'
 pkg = Path(sys.argv[1])
 ACTORS = {'tide-slime': ('tideslime', 22), 'mist-wisp': ('mistwisp', 25), 'stone-crab': ('stonecrab', 22), 'mirror-shade': ('mirrorshade', 22)}
+elite_layouts = {
+    'shadow-serpent': {'Shadow Fang': 1, 'Venom Spit': 9, 'Coil Gathering': 22, 'Crushing Coil': 30, 'hit': 17, 'down': 19},
+    'weeping-siren': {'Tide Lash': 1, 'Weeping Song': 9, 'Drowning Call': 22, 'hit': 17, 'down': 19},
+}
+elites = sys.argv[2:] == ['--elites']
+assert not sys.argv[2:] or elites, 'Expected --elites'
+if elites:
+    ACTORS = {'shadow-serpent': ('shadowserpent', 38), 'weeping-siren': ('weepingsiren', 30)}
 sha = lambda b: hashlib.sha256(b).hexdigest()
 
 validation = json.loads((pkg / 'validation.json').read_text())
@@ -48,19 +57,31 @@ for actor, (key, total) in ACTORS.items():
     seed = Image.open(checked(pkg / f'seeds/{actor}-r1-ready.png')).convert('RGBA'); assert seed.size == (512, 512); seeds[actor] = seed
     logical = {0: seed}
     for s in (s for s in strips if s['actor'] == actor and s['variant'] == 'r1'):
-        for idx, cell in zip(s['seedLayoutIndices'], cells(pkg / s['file'], s['frames'])):
+        indices = s['seedLayoutIndices']
+        if elites:
+            start = elite_layouts[actor][s['intent']]
+            indices = range(start, start + s['frames'])
+        for idx, cell in zip(indices, cells(pkg / s['file'], s['frames']), strict=True):
             assert idx not in logical, (actor, idx); logical[idx] = cell
-    for i in range(total): logical.setdefault(i, seed)
+    if elites:
+        assert set(logical) == set(range(total)), (actor, sorted(logical))
+    else:
+        for i in range(total): logical.setdefault(i, seed)
     unique, ids, boxes = {}, {}, {}
     for i in range(total):
         cell = logical[i]; box = cell.getchannel('A').getbbox(); assert box, (actor, i)
         ident = sha(cell.tobytes()); ids[str(i)] = ident; boxes[str(i)] = box
         unique.setdefault(ident, cell.crop(box))
     candidates = []
-    for width in [512, 768, 1024, 1280, 1536, 2048]:
+    widths = range(512, 2049) if elites else [512, 768, 1024, 1280, 1536, 2048]
+    for width in widths:
         plan = pack(unique, width)
         if plan and plan[1] <= 4096: candidates.append((width * plan[1], width, plan))
-    _, width, (positions, height) = min(candidates)
+    if elites:
+        # Prefer the smallest maximum dimension to fit more GPUs without scaling the art.
+        _, width, (positions, height) = min(candidates, key=lambda c: (max(c[1], c[2][1]), c[0]))
+    else:
+        _, width, (positions, height) = min(candidates)
     atlas = Image.new('RGBA', (width, height))
     for ident, tile in unique.items(): atlas.paste(tile, positions[ident])
     buf = io.BytesIO(); atlas.save(buf, format='WEBP', lossless=True, exact=True, method=6); image_bytes = buf.getvalue()
@@ -85,14 +106,25 @@ for actor, (key, total) in ACTORS.items():
     report[key] = {**manifest[key], 'uniqueFrames': len(unique)}
 (ROOT / 'src/game/visuals/unit-atlases.json').write_text(json.dumps(manifest, indent=2) + '\n')
 
-# Still + portrait sheets (frames 0-3 of the foes3 grid; later lake foes append).
-units = Image.new('RGBA', (1024, 2560)); portraits = Image.new('RGBA', (1024, 2560))
-for n, (actor, seed) in enumerate(seeds.items()):
-    x, y = (n % 2) * 512, (n // 2) * 512; units.alpha_composite(seed, (x, y))
+# Replace only the cells for this phase, preserving art from the other phases.
+def open_sheet(name):
+    path = ART / f'{name}.webp'
+    if elites or path.exists():
+        return Image.open(path).convert('RGBA')
+    return Image.new('RGBA', (1024, 2560))
+
+units = open_sheet('units_foes3')
+portraits = open_sheet('portraits_foes3')
+for n, seed in enumerate(seeds.values(), start=4 if elites else 0):
+    x, y = (n % 2) * 512, (n // 2) * 512
+    units.paste((0, 0, 0, 0), (x, y, x + 512, y + 512))
+    units.alpha_composite(seed, (x, y))
+    portraits.paste((0, 0, 0, 0), (x, y, x + 512, y + 512))
     l, t, r, b = seed.getchannel('A').getbbox(); side = int(max(r - l, b - t) * 1.1); cx, cy = (l + r) // 2, (t + b) // 2
     crop = seed.crop((cx - side // 2, cy - side // 2, cx - side // 2 + side, cy - side // 2 + side)).resize((480, 480), Image.LANCZOS)
     portraits.alpha_composite(crop, (x + 16, y + 16))
 for name, im in (('units_foes3', units), ('portraits_foes3', portraits)):
     buf = io.BytesIO(); im.save(buf, 'WEBP', lossless=True, exact=True, method=6); (ART / f'{name}.webp').write_bytes(buf.getvalue()); report[name] = {'bytes': len(buf.getvalue()), 'sha8': sha(buf.getvalue())[:8]}
-out = ROOT / 'docs/validation/map4-lake'; (out / 'foes-runtime.json').write_text(json.dumps(report, indent=2) + '\n')
+out = ROOT / 'docs/validation/map4-lake'
+(out / ('elites-runtime.json' if elites else 'foes-runtime.json')).write_text(json.dumps(report, indent=2) + '\n')
 print(json.dumps(report, indent=2))
