@@ -12,8 +12,14 @@ import art from './gacha-art.json';
 // cut straight to the cards.
 type ArtKey = keyof typeof art.files;
 const url = (k: ArtKey) => `${import.meta.env.BASE_URL}assets/gacha/${art.files[k].file}`;
-const TOP = 90, H = 500;
-const at = (x: number, y: number, w: number) => `--x:${(x / 390 * 100).toFixed(2)}%;--y:${((y - TOP) / H * 100).toFixed(2)}%;--w:${(w / 390 * 100).toFixed(2)}%`;
+// The window of the 390×844 layout a stage shows: the cabinet sheet y 150–700 (loom to the characters' feet, owner
+// 2026-11-22: legs were cut at 590), the first fate weave the whole layout (it fills its dialog). Anchors are percentages
+// of the window, so one set of layers.json numbers serves both.
+type Win = { top: number; h: number };
+const CABINET: Win = { top: 150, h: 550 }, FULL: Win = { top: 0, h: 844 };
+let win = CABINET;
+const inWindow = <T,>(w: Win, f: () => T): T => { const prev = win; win = w; try { return f(); } finally { win = prev; } };
+const at = (x: number, y: number, w: number) => `--x:${(x / 390 * 100).toFixed(2)}%;--y:${((y - win.top) / win.h * 100).toFixed(2)}%;--w:${(w / 390 * 100).toFixed(2)}%`;
 function layer(k: Exclude<ArtKey, 'key-art'>, x: number, y: number, extra = ''): string {
   const f = art.files[k] as { cell: number[]; frames?: number; pivot: number[]; width_390: number };
   // The pivot of the cell sits on the anchor; the cell is drawn `width_390` wide.
@@ -32,7 +38,9 @@ function timeline(e: GachaEntry): { html: string; end: number } {
   return { html: parts.join(''), end: t };
 }
 function stage(inner: string, run = false): string {
-  return `<div class="gacha-stage"${run ? ' data-run="true"' : ''} style="background-image:url(${url('key-art')})" aria-hidden="true">${layer('idle', A.loom_crystal[0]!, A.loom_crystal[1]!)}${layer('sparkles', 120, 260)}${layer('sparkles', 290, 400, 'animation-delay:-900ms')}${inner}</div>`;
+  // Background: full width; the vertical position shows exactly the window (offset = top / (844 − h) of the overflow).
+  const y = win.h >= 844 ? 0 : win.top / (844 - win.h) * 100;
+  return `<div class="gacha-stage"${run ? ' data-run="true"' : ''} style="background-image:url(${url('key-art')});aspect-ratio:390/${win.h};background-position:center ${y.toFixed(2)}%" aria-hidden="true">${layer('idle', A.loom_crystal[0]!, A.loom_crystal[1]!)}${layer('sparkles', 120, 260)}${layer('sparkles', 290, 400, 'animation-delay:-900ms')}${inner}</div>`;
 }
 export const gachaBannerUrl = (): string => url('key-art');
 export const gachaTicketUrl = (): string => url('fate-ticket');
@@ -133,13 +141,17 @@ function history(p: Profile, map: MapDefinition): string {
 export function fateRevealMs(map: MapDefinition): number {
   return timeline({ serial: 0, kind: 'pull', config: map.gacha.version, tickets: 0, points: 0, results: [{ heroId: map.gacha.pool[0]!, full: true, qty: 0, grant: 'joined' }] }).end;
 }
-export function fateWeave(heroId: string, map: MapDefinition, role: string, pulled: boolean): string {
-  if (!pulled) return `<section class="gacha-fate" data-pulled="false" aria-label="ทอชะตาครั้งแรก (${role} แน่นอน)">${stage('')}</section>`;
+export function fateWeave(heroId: string, map: MapDefinition, role: string, pulled: boolean, after = ''): string {
+  return inWindow(FULL, () => fateWeaveIn(heroId, map, role, pulled, after));
+}
+function fateWeaveIn(heroId: string, map: MapDefinition, role: string, pulled: boolean, after: string): string {
+  if (!pulled) return `<section class="gacha-fate" data-pulled="false" aria-label="ทอชะตาครั้งแรก (${role} แน่นอน)">${stage('')}<div class="fate-panel">${after}</div></section>`;
   const result: GachaResult = { heroId, full: true, qty: 0, grant: 'joined' };
   const run = timeline({ serial: 0, kind: 'pull', config: map.gacha.version, tickets: 0, points: 0, results: [result] });
   const A = art.anchors.reward_center;
-  return `<section class="gacha-fate" data-pulled="true" style="--t0:${run.end}ms" aria-label="ทอชะตาครั้งแรก ได้${name(heroId)} (${role})">${stage(run.html, true)}
-    <ol class="gacha-cards gacha-fate-card" role="list" style="${at(A[0]!, A[1]!, 150)}">${resultCard(result, map, 0)}</ol></section>`;
+  const card = `<ol class="gacha-cards gacha-fate-card" role="list" style="${at(A[0]!, A[1]!, 150)}">${resultCard(result, map, 0)}</ol>`;
+  return `<section class="gacha-fate" data-pulled="true" style="--t0:${run.end}ms" aria-label="ทอชะตาครั้งแรก ได้${name(heroId)} (${role})">${stage(run.html + card, true)}
+    <div class="fate-panel">${after}</div></section>`;
 }
 export function gachaPage(p: Profile, maps: readonly MapDefinition[], map: MapDefinition, s: GachaState): string {
   switch (s.view) {
