@@ -1,3 +1,8 @@
+## 2026-11-22 — Map 4 phase 3 motion approval (Codex · #344 → claude/map4-lake-foes)
+- Owner: “อนุมัติ” on the revised 390px Shadow Serpent and Weeping Siren R1 clips. Approved presentation source: `52f2fd0`.
+- Same source as the size review below. Approval documentation checked with git diff --check. Merge subject to quality and validate checks. The PR records the merge commit.
+- Phase 4 waits for the owner’s Tide Lash, Undertow and Reflection R1/R2 choices.
+
 ## 2026-11-22 — Map 4 phase 3 elite size review (Codex · #344 → claude/map4-lake-foes)
 - The owner asked to compare the new enemies with existing foes. At the same slot size, standing art is now +1.6% vs Tusker for Shadow Serpent and −1.1% vs Rift Weaver for Weeping Siren. Still and animated figures share the same scale.
 - The field fits each elite’s painted right edge. The Siren review clips show her in her real back-row slot. Replaced all nine 390px clips, with 9/9 Chromium captures. Typecheck, lint, build, presentation coverage 6/6 and npm test (2262 passed, 24 skipped) passed. [Review clips](../combat-presentation/lake-elites-slice/README_TH.md).
