@@ -14,10 +14,11 @@
 - tide-slime, mist-wisp, stone-crab, mirror-shade: build_assets.py (สเกลต่อ strip, sole 497), pack atlas, `unit-atlases.json`, `unit-frames.ts`, `unit-animation-map.ts`, เปลี่ยน `art` ใน `species.ts` และถอดออกจาก `LAKE_STANDINS` เฉพาะที่เสร็จ
 - เทสต์แบบ `tests/unit-a4.test.ts` · คลิป 390px (Pillow → animated WebP)
 
-## เฟส 3 — อีลิท 2 ตัว (อสรพิษเงา, นางเงือกร้องไห้) · ✅ เจ้าของอนุมัติ motion แล้ว (PR #344)
+## เฟส 3 — อีลิท 2 ตัว (อสรพิษเงา, นางเงือกร้องไห้) · ✅ merge แล้วใน PR #344 หลังเจ้าของอนุมัติ motion
 - เจ้าของเลือก R1 ทั้งคู่แล้ว (2026-11-22: "เฟส 3 เลือก R1 ตามที่แนะนำ") · สาขา `codex/map4-lake-elites` ฐาน `claude/map4-lake-foes` · แยก strip ตาม intent · งบ decoded ของทั้งสอง encounter ผ่านเกณฑ์ 64 MiB · [คลิป 390px](../combat-presentation/lake-elites-slice/README_TH.md)
 
 ## เฟส 4 — บอสภูตธารา + VFX · Opus หรือ Sonnet (เลือกสำคัญที่สุด)
+- เจ้าของเลือก “R1 ทั้งสามท่า” สำหรับ Tide Lash, Undertow และ Reflection (2026-11-22)
 - strip 6 ท่า + hit/down (cell 1024, sole 0.875), `boss-signature-fx` แทน `paintedAs`, VFX 4 ชุด (Water Veil/Surging Wave/Great Wave/Reflection) ผูกกับ event จริง ไม่บังตัวเลขดาเมจ, ม่านน้ำต้องต่างจากโล่ฮีโร่
 - เมื่อเสร็จ: ว่าง `LAKE_STANDINS` แล้วรัน `coverage:presentation`, `tests/encounter-budget.test.ts` · คลิป 390px ให้เจ้าของอนุมัติ motion
 

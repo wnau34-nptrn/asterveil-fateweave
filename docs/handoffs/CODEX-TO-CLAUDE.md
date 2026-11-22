@@ -1,7 +1,7 @@
 ## 2026-11-22 — Map 4 phase 3 motion approval (Codex · #344 → claude/map4-lake-foes)
 - Owner: “อนุมัติ” on the revised 390px Shadow Serpent and Weeping Siren R1 clips. Approved presentation source: `52f2fd0`.
-- Same source as the size review below. Approval documentation checked with git diff --check. Merge subject to quality and validate checks. The PR records the merge commit.
-- Phase 4 waits for the owner’s Tide Lash, Undertow and Reflection R1/R2 choices.
+- Same source as the size review below. Approval documentation checked with git diff --check. Quality and validate passed. Merge commit `fe213ea`.
+- Phase 4 owner choice: “R1 ทั้งสามท่า” for Tide Lash, Undertow and Reflection. Intake source SHA-256 matched for 21 selected body/VFX files from #339.
 
 ## 2026-11-22 — Map 4 phase 3 elite size review (Codex · #344 → claude/map4-lake-foes)
 - The owner asked to compare the new enemies with existing foes. At the same slot size, standing art is now +1.6% vs Tusker for Shadow Serpent and −1.1% vs Rift Weaver for Weeping Siren. Still and animated figures share the same scale.
