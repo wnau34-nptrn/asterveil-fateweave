@@ -66,7 +66,6 @@
 .gacha-result > .gacha-stage { position: absolute; top: 0; left: 0; right: 0; z-index: 2; pointer-events: none; animation: gacha-stage-out 320ms ease-in var(--t0) both; }
 @keyframes gacha-stage-out { to { opacity: 0; visibility: hidden; } }
 /* OD-59 first fate weave inside the starter dialog: the stage plays over the card, then the card stays. */
-.gacha-fate .gacha-cards { grid-template-columns: minmax(0, 150px); justify-content: center; }
 /* OD-59: the cabinet's compact tile at the end of the camp's top row (quest board and World Boss keep their width). */
 #lobby-view .lobby-boards .lobby-gacha { position: relative; isolation: isolate; overflow: visible; flex: 0 0 64px; min-width: 0; display: grid; justify-items: center; align-content: center; gap: 1px;
   padding: 4px 2px; border: 0; border-left: 2px solid #e8cd8aaa; border-radius: 2px 12px 12px 2px; color: var(--text); text-shadow: 0 1px 4px #07101e;
@@ -75,6 +74,49 @@
 #lobby-view .lobby-gacha b { font-size: 12px; color: #ffe4a5; line-height: 1.1; }
 #lobby-view .lobby-gacha small { font-size: 10px; color: #edf0f4; line-height: 1.1; }
 #lobby-view .lobby-gacha .trip-badge { position: absolute; top: -6px; right: -4px; font-style: normal; background: #ead093; color: #102036; border-radius: 12px; min-width: 18px; padding: 0 4px; font-size: 11px; text-shadow: none; }
-#draft-content .gacha-fate + .event-scene { margin-top: 8px; }
-#draft-content .gacha-fate ~ .camp-note { margin: 4px 0 12px; }
-#draft-content .gacha-fate ~ #draft-0 { width: 100%; min-height: 48px; }
+
+
+/* Owner 2026-11-22: the first fate weave keeps the stage in the flow (full height, nothing cut off); the card opens on
+   the loom at the reward centre after the timeline, and stays there. */
+
+.gacha-fate-card { position: absolute; left: var(--x); top: var(--y); width: var(--w); translate: -50% -50%; z-index: 3; display: block; margin: 0; }
+.gacha-fate-card .gacha-card { animation-delay: var(--t0); background: #0d1c2ef0; }
+@media (prefers-reduced-motion: reduce) { .gacha-fate-card .gacha-card { animation: none; } }
+
+/* The name and the accept button wait for the card (the reveal is the point of pressing). */
+.fate-after { animation: gacha-reveal .3s ease-out var(--t0) both; }
+@media (prefers-reduced-motion: reduce) { .fate-after { animation: none; } }
+
+/* Owner 2026-11-22 ("ไม่เห็นขาของตัวในภาพ แล้วด้านล่างก็เป็นหน้าว่างๆ"): the first fate weave fills its dialog with the
+   whole key art (bottom-aligned: the floor and the characters' feet always show; extra height crops the sky) and the
+   text and buttons sit on a dark gradient over the floor. */
+#draft-dialog:has(.gacha-fate) .info-content { padding: 0; overflow: hidden; display: flex; flex: 1 1 auto; min-height: 0; }
+#draft-dialog[open]:has(.gacha-fate) { display: flex; flex-direction: column; }
+.gacha-fate { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
+.gacha-fate > .gacha-stage { position: relative; flex: none; width: 100%; border: 0; border-radius: 0; animation: none; }
+.fate-panel { position: absolute; left: 0; right: 0; bottom: 0; z-index: 4; display: grid; gap: 8px; padding: 40px 16px max(16px, env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, transparent, #08121fd9 34%, #08121ff2); }
+.fate-panel .event-scene { margin: 0; text-shadow: 0 1px 4px #000; }
+.fate-panel .camp-note { margin: 0 0 4px; }
+.fate-panel button.primary { width: 100%; min-height: 48px; }
+
+/* Owner 2026-11-22: the cabinet fits one 390×844 screen; wallet, title, rate line and points bar sit on the art. */
+.gacha-shrine { gap: 8px; padding-bottom: 0; }
+.gacha-hero { position: relative; }
+.gacha-hud { position: absolute; top: 8px; left: 8px; right: 8px; display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; z-index: 5; }
+.gacha-hud .gacha-wallet .ui-pill { background: #08121fcc; }
+.gacha-caption { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; display: grid; gap: 4px; padding: 28px 12px 10px; border-radius: 0 0 18px 18px;
+  background: linear-gradient(180deg, transparent, #08121fd0 45%); }
+.gacha-caption h3 { margin: 0; text-shadow: 0 1px 4px #000; }
+.gacha-caption .gacha-lede { margin: 0; font-size: .82rem; text-shadow: 0 1px 3px #000; }
+.gacha-info { position: relative; }
+.gacha-info > summary { list-style: none; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; cursor: pointer;
+  background: #08121fd9; border: 1px solid var(--gold-edge); color: #ffe4a5; font: 700 20px var(--font-heading); }
+.gacha-info > summary::-webkit-details-marker { display: none; }
+.gacha-info-body { position: absolute; right: 0; top: 50px; width: min(320px, calc(100vw - 48px)); z-index: 20; display: grid; gap: 6px; padding: 12px 14px;
+  border-radius: 14px; border: 1px solid var(--gold-edge); background: #0b1729f7; box-shadow: 0 8px 24px #000a; color: var(--text); font-size: .82rem; line-height: 1.5; }
+.gacha-info-body p { margin: 0; }
+.gacha-links button { min-height: 44px; }
+.fate-line { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.fate-line .gacha-info-body { top: auto; bottom: 50px; }
+.fate-after { display: grid; gap: 8px; }
