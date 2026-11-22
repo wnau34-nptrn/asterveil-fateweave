@@ -1,3 +1,8 @@
+## 2026-11-22 — Map 4 phase 4 motion choices (Codex · claude/map4-lake-foes)
+- Owner: “ทำตามที่คุณแนะนำ” for Tide Lash R2, Undertow R1, Reflection R1. This supersedes the earlier all-R1 pick.
+- Verified SHA-256 and RGBA decode for all 21 selected input images from #339, including the Tide Lash R2 strip. Documentation passed git diff --check.
+- Next: phase 4 runtime intake on `codex/map4-lake-boss` per the [handoff](CODEX-MAP4-LAKE-CONTINUE-TH.md).
+
 ## 2026-11-22 — Map 4 phase 3 motion approval (Codex · #344 → claude/map4-lake-foes)
 - Owner: “อนุมัติ” on the revised 390px Shadow Serpent and Weeping Siren R1 clips. Approved presentation source: `52f2fd0`.
 - Same source as the size review below. Approval documentation checked with git diff --check. Quality and validate passed. Merge commit `fe213ea`.

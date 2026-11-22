@@ -11,7 +11,7 @@
 | เฟส 1 ภาพแผนที่ | **เสร็จ** เจ้าของอนุมัติ ("อนุมัติ") merge แล้ว PR #342 → `claude/map4-lake-ui` |
 | เฟส 2 ศัตรูธรรมดา 4 ตัว | PR #343 (`claude/map4-lake-foes`) **รอเจ้าของอนุมัติ motion** — คลิป `docs/combat-presentation/lake-foes-slice/` ถ้าเจ้าของอนุมัติด้วยคำพูด ให้บันทึกคำพูดใน handoff แล้ว merge หลัง CI ผ่าน |
 | เฟส 3 อสรพิษเงา + นางเงือกร้องไห้ | merge แล้วใน PR #344 (`fe213ea`) · เจ้าของเลือก **R1 ทั้งคู่** และอนุมัติ motion (2026-11-22 “อนุมัติ”) จาก [คลิป 390px](../combat-presentation/lake-elites-slice/README_TH.md) |
-| เฟส 4 บอสภูตธารา + VFX 4 ชุด | ยังไม่นำเข้า · เจ้าของเลือก **R1 ทั้งสามท่า** Tide Lash / Undertow / Reflection (2026-11-22 “R1 ทั้งสามท่า”) |
+| เฟส 4 บอสภูตธารา + VFX 4 ชุด | ยังไม่นำเข้า · เจ้าของเลือก **Tide Lash R2, Undertow R1, Reflection R1** (2026-11-22 “ทำตามที่คุณแนะนำ”) |
 
 ## กติกา (ย่อจาก CLAUDE.md — อ่านไฟล์เต็มก่อนเริ่ม)
 
@@ -33,7 +33,7 @@
 ## เฟส 4 — บอสภูตธารา + VFX
 
 - แตกเฟส 4 จาก `claude/map4-lake-foes` หลัง merge #344 เพื่อให้ทั้งสองอีลิทอยู่ในฐานเดียวกัน
-- ใช้ R1 ของ Tide Lash, Undertow และ Reflection ตามคำเลือกของเจ้าของ · ตรวจ SHA-256 ของ seed, strips R1 และ VFX รวม 21 ไฟล์จาก #339 แล้ว
+- ใช้ Tide Lash R2, Undertow R1, Reflection R1 ตามคำเลือกของเจ้าของ · SHA-256 และการ decode RGBA ของ seed, strips และ VFX ที่เลือก รวม 21 ไฟล์จาก #339 ผ่านแล้ว
 - strip 1024 ต่อเซลล์ sole 0.875 (`BOSS_SOLE`) layout `bossMove(base)`: ท่าละ 4 เฟรม + hit 2 + down 3 แบบ `foe_sentinel` · art key `foe_water_spirit` (foes3 frame 6 ถ้าใช้เซลล์ 512 สำหรับภาพนิ่ง ให้ย่อจาก seed อย่างเดียว ห้ามวาดใหม่)
 - VFX 4 ชุด (Water Veil / Surging Wave / Great Wave / Reflection, 256×256 สามจังหวะ) เข้า `boss-signature-fx` แทน `paintedAs` ชั่วคราว · ผูกกับ event จริง ไม่บังตัวเลขดาเมจและป้าย HP · ม่านน้ำต้องต่างจากโล่ฮีโร่
 - เสร็จแล้ว `LAKE_STANDINS` ว่าง → รัน `coverage:presentation`, `tests/encounter-budget.test.ts` · คลิป 390px ให้เจ้าของอนุมัติ motion
