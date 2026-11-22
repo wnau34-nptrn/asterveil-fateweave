@@ -164,6 +164,8 @@ async function gachaRun(p: Player): Promise<{ tickets: number; pulls: number; re
     p.seq++; pulls++;
     const late = await send(race);
     if (late.status === 409) racesRefused++; else notes.push(`pull ${i + 1} race ${brief(late)}`);
+    // Three commands per pull; a second apart stays under the account's 10 commands a second (a faster client gets 429).
+    await sleep(1000);
   }
   const end = await wallet();
   const hist = await call('gachaHistory', '/v1/gacha/history?limit=50', { headers: p.headers() });
