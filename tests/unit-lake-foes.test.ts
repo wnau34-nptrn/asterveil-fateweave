@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
 import atlasManifest from '../src/game/visuals/unit-atlases.json';
-import { actorArt } from '../src/game/visuals/assets';
-import { sequence, unitDefinition, unitIdleFrame } from '../src/game/visuals/unit-frames';
-import { encounterById, LAKE_STANDINS } from '../src/content/encounters/catalog';
-import { lakeFoeArts, lakeFoeIntents, unitA4Fixture } from './fixtures/unit-a4';
+import { actorArt, fieldFigureRise, lakeEliteRightReach, staticDisplayRatio } from '../src/game/visuals/assets';
+import { sequence, unitClip, unitDefinition, unitDisplayRatio, unitDownFrame, unitIdleFrame } from '../src/game/visuals/unit-frames';
+import { eliteShadowSerpent, eliteWeepingSiren, encounterById, LAKE_STANDINS } from '../src/content/encounters/catalog';
+import { lakeEliteIntents, plainLakeFoeArts, lakeFoeIntents, unitA4Fixture } from './fixtures/unit-a4';
 
 // ART-UNIT-ANIMATION-LAKE-001 (map 4 phase 2): tide slime, mist wisp, stone crab, mirror shade on the shared 22-frame layout.
 const sheets = { foe_tide_slime: 'tideslime', foe_mist_wisp: 'mistwisp', foe_stone_crab: 'stonecrab', foe_mirror_shade: 'mirrorshade' } as const;
 const clips = { foe_tide_slime: 'skill', foe_mist_wisp: 'attack', foe_stone_crab: 'attack', foe_mirror_shade: 'attack' } as const;
 describe('lake foes (phase 2)', () => {
-  for (const art of lakeFoeArts) describe(art, () => {
+  for (const art of plainLakeFoeArts) describe(art, () => {
     const m = (atlasManifest as Record<string, { image: string; atlas: string; width: number; height: number; frames: number; decodedBytes: number; downloadBytes: number }>)[sheets[art]]!;
     it('has a lossless atlas whose frames follow the shared layout', () => {
       expect(m.frames).toBe(art === 'foe_mist_wisp' ? 25 : 22);
@@ -39,6 +39,64 @@ describe('lake foes (phase 2)', () => {
   it('ships the foes3 still and portrait sheets, and the lake sets that use only these foes are no stand-ins', () => {
     for (const f of ['units_foes3', 'portraits_foes3', 'portraits_foes3_half']) expect(existsSync(`public/assets/art/${f}.webp`)).toBe(true);
     for (const id of ['lake-slimes', 'lake-mist', 'crab-wall', 'isle-host', 'pavilion-mist']) { expect(encounterById(id)).toBeDefined(); expect(LAKE_STANDINS.has(id)).toBe(false); }
-    expect([...LAKE_STANDINS].sort()).toEqual(['elite-shadow-serpent', 'elite-weeping-siren', 'water-spirit']);
+    expect([...LAKE_STANDINS].sort()).toEqual(['water-spirit']);
+  });
+});
+
+describe('lake elites (phase 3)', () => {
+  const elites = [
+    { art: 'foe_shadow_serpent', sheet: 'shadowserpent', encounter: eliteShadowSerpent, reference: 'foe_tusker', still: 4, starts: [1, 9, 22, 30], count: 38 },
+    { art: 'foe_weeping_siren', sheet: 'weepingsiren', encounter: eliteWeepingSiren, reference: 'foe_riftweaver', still: 5, starts: [1, 9, 22], count: 30 },
+  ] as const;
+  for (const { art, sheet, encounter, reference, still, starts, count } of elites) describe(art, () => {
+    it('uses a separate strip for every encounter intent', () => {
+      const actor = encounter.enemies.find(enemy => enemy.art === art)!;
+      const names = [...new Set(encounter.intents.filter(intent => intent.sourceId === actor.id).map(intent => intent.name))];
+      expect(names).toEqual([...lakeEliteIntents[art]]);
+      expect(starts).toHaveLength(names.length);
+      for (const [index, start] of starts.entries()) {
+        const name = names[index]!;
+        const clip = unitClip(art, undefined, name);
+        expect(sequence('cast', 'prepare', clip, art)).toEqual([start, start + 1, start + 2, start + 3]);
+        expect(sequence('cast', 'recover', clip, art)).toEqual([start + 4, start + 5, start + 6, start + 7]);
+        const fixture = unitA4Fixture('mira', 'attack', 'normal', art, name);
+        expect(fixture.result.turns.find(turn => turn.side === 'enemy')?.intent?.name).toBe(name);
+      }
+      expect(sequence('cast', 'prepare', 'move7', art)).toBeUndefined();
+    });
+
+    it('matches the standing height of its original reference and keeps the same fallback scale', () => {
+      const standingHeight = (identity: string) => {
+        const atlas = atlasManifest[unitDefinition(identity)!.sheet].atlas;
+        const { frames } = JSON.parse(readFileSync(`public/assets/units/${atlas}`, 'utf8'));
+        const idle = frames['0'];
+        return idle.spriteSourceSize.h / idle.sourceSize.h * unitDisplayRatio(identity);
+      };
+      expect(Math.abs(standingHeight(art) - standingHeight(reference))).toBeLessThan(0.04);
+      expect(staticDisplayRatio(art)).toBe(unitDisplayRatio(art));
+      expect(Math.abs(fieldFigureRise(art) - standingHeight(art))).toBeLessThan(0.02);
+      const { frames } = JSON.parse(readFileSync(`public/assets/units/${atlasManifest[sheet].atlas}`, 'utf8'));
+      for (const frame of Object.values(frames) as { spriteSourceSize: { x: number; w: number } }[]) {
+        const reach = ((frame.spriteSourceSize.x + frame.spriteSourceSize.w) / 512 - 0.5) * unitDisplayRatio(art);
+        expect(reach).toBeLessThan(lakeEliteRightReach.get(art)!);
+      }
+    });
+
+    it('ships lossless 512px cells, a still/portrait cell, and hit/down frames', () => {
+      expect(actorArt[art]).toEqual({ sheet: 'foes3', frame: still });
+      expect(unitDefinition(art)?.sheet).toBe(sheet);
+      expect(unitDownFrame(art)).toBe(21);
+      expect(sequence('hit', 'reaction', undefined, art)).toEqual([17, 18]);
+      expect(sequence('down', 'reaction', undefined, art)).toEqual([19, 20, 21]);
+      const m = atlasManifest[sheet];
+      expect(m.frames).toBe(count);
+      expect(m.decodedBytes).toBe(m.width * m.height * 4);
+      const atlas = JSON.parse(readFileSync(`public/assets/units/${m.atlas}`, 'utf8'));
+      expect(Object.keys(atlas.frames)).toEqual(Array.from({ length: count }, (_, i) => String(i)));
+      for (const frame of Object.values(atlas.frames) as { sourceSize: { w: number; h: number } }[]) {
+        expect(frame.sourceSize).toEqual({ w: 512, h: 512 });
+      }
+      expect(readFileSync(`public/assets/units/${m.image}`).subarray(12, 16).toString('ascii')).toBe('VP8L');
+    });
   });
 });

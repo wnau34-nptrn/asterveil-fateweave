@@ -1,9 +1,9 @@
 {
  "counts": {
-  "identities": 46,
+  "identities": 48,
   "heroes": 17,
-  "enemies": 29,
-  "atlases": 44,
+  "enemies": 31,
+  "atlases": 46,
   "parked": 2,
   "actionIds": 91,
   "heroRows": 119,
@@ -671,6 +671,25 @@
    }
   },
   {
+   "identity": "foe_shadow_serpent",
+   "side": "enemy",
+   "name": "อสรพิษเงา",
+   "sheet": "shadowserpent",
+   "atlas": {
+    "image": "shadowserpent_lake.5de97021e69b.webp",
+    "atlas": "shadowserpent_lake.5424072abe96.json",
+    "frames": 38,
+    "decodedBytes": 16740304,
+    "downloadBytes": 4607310
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
    "identity": "foe_shard_crawler",
    "side": "enemy",
    "name": "แมงมุมเศษผลึก",
@@ -856,6 +875,25 @@
    "reactions": {
     "hit": "sprite 17,18",
     "block": "sprite 22,23",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_weeping_siren",
+   "side": "enemy",
+   "name": "นางเงือกร้องไห้",
+   "sheet": "weepingsiren",
+   "atlas": {
+    "image": "weepingsiren_lake.f1e2dda0775f.webp",
+    "atlas": "weepingsiren_lake.589ef404155c.json",
+    "frames": 30,
+    "decodedBytes": 14372820,
+    "downloadBytes": 4100192
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
     "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
     "down": "sprite 19,20,21 · ค้าง 21"
    }
@@ -5766,111 +5804,6 @@
    ]
   },
   {
-   "identity": "foe_riftweaver",
-   "side": "enemy",
-   "move": "Tide Lash",
-   "name": "Tide Lash",
-   "kind": "energy",
-   "body": {
-    "kind": "sprite",
-    "clip": "attack",
-    "frames": {
-     "prepare": [
-      1,
-      2,
-      3,
-      4
-     ],
-     "recover": [
-      5,
-      6,
-      7,
-      8
-     ]
-    },
-    "pose": "cast"
-   },
-   "vfx": {
-    "module": "foe-signature-fx",
-    "kind": "painted"
-   },
-   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
-   "encounters": [
-    "elite-weeping-siren"
-   ]
-  },
-  {
-   "identity": "foe_riftweaver",
-   "side": "enemy",
-   "move": "Weeping Song",
-   "name": "Weeping Song",
-   "kind": "energy",
-   "body": {
-    "kind": "sprite",
-    "clip": "skill",
-    "frames": {
-     "prepare": [
-      9,
-      10,
-      11,
-      12
-     ],
-     "recover": [
-      13,
-      14,
-      15,
-      16
-     ]
-    },
-    "pose": "cast"
-   },
-   "vfx": {
-    "module": "foe-signature-fx",
-    "kind": "painted"
-   },
-   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
-   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
-   "encounters": [
-    "elite-weeping-siren"
-   ]
-  },
-  {
-   "identity": "foe_riftweaver",
-   "side": "enemy",
-   "move": "Drowning Call",
-   "name": "Drowning Call",
-   "kind": "energy",
-   "body": {
-    "kind": "sprite",
-    "clip": "skill",
-    "frames": {
-     "prepare": [
-      9,
-      10,
-      11,
-      12
-     ],
-     "recover": [
-      13,
-      14,
-      15,
-      16
-     ]
-    },
-    "pose": "cast"
-   },
-   "vfx": {
-    "module": "foe-signature-fx",
-    "kind": "painted"
-   },
-   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
-   "encounters": [
-    "elite-weeping-siren"
-   ]
-  },
-  {
    "identity": "foe_ruin_bat",
    "side": "enemy",
    "move": "Nip",
@@ -6382,6 +6315,147 @@
    ]
   },
   {
+   "identity": "foe_shadow_serpent",
+   "side": "enemy",
+   "move": "Shadow Fang",
+   "name": "Shadow Fang",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "elite-shadow-serpent"
+   ]
+  },
+  {
+   "identity": "foe_shadow_serpent",
+   "side": "enemy",
+   "move": "Venom Spit",
+   "name": "Venom Spit",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "elite-shadow-serpent"
+   ]
+  },
+  {
+   "identity": "foe_shadow_serpent",
+   "side": "enemy",
+   "move": "Coil Gathering",
+   "name": "Coil Gathering",
+   "kind": "physical/charge",
+   "body": {
+    "kind": "sprite",
+    "clip": "move3",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง (รวมพลัง ไม่มี damage)",
+   "point": "ตัวบอส + ค้างจนปล่อยท่า",
+   "encounters": [
+    "elite-shadow-serpent"
+   ]
+  },
+  {
+   "identity": "foe_shadow_serpent",
+   "side": "enemy",
+   "move": "Crushing Coil",
+   "name": "Crushing Coil",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move4",
+    "frames": {
+     "prepare": [
+      30,
+      31,
+      32,
+      33
+     ],
+     "recover": [
+      34,
+      35,
+      36,
+      37
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ผู้รับ damage จริง",
+   "encounters": [
+    "elite-shadow-serpent"
+   ]
+  },
+  {
    "identity": "foe_shard_crawler",
    "side": "enemy",
    "move": "Crystal Stab",
@@ -6733,147 +6807,6 @@
    ]
   },
   {
-   "identity": "foe_tusker",
-   "side": "enemy",
-   "move": "Shadow Fang",
-   "name": "Shadow Fang",
-   "kind": "physical",
-   "body": {
-    "kind": "sprite",
-    "clip": "attack",
-    "frames": {
-     "prepare": [
-      1,
-      2,
-      3,
-      4
-     ],
-     "recover": [
-      5,
-      6,
-      7,
-      8
-     ]
-    },
-    "pose": "weapon"
-   },
-   "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
-   },
-   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
-   "encounters": [
-    "elite-shadow-serpent"
-   ]
-  },
-  {
-   "identity": "foe_tusker",
-   "side": "enemy",
-   "move": "Venom Spit",
-   "name": "Venom Spit",
-   "kind": "energy",
-   "body": {
-    "kind": "sprite",
-    "clip": "skill",
-    "frames": {
-     "prepare": [
-      9,
-      10,
-      11,
-      12
-     ],
-     "recover": [
-      13,
-      14,
-      15,
-      16
-     ]
-    },
-    "pose": "cast"
-   },
-   "vfx": {
-    "module": "foe-signature-fx",
-    "kind": "painted"
-   },
-   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
-   "encounters": [
-    "elite-shadow-serpent"
-   ]
-  },
-  {
-   "identity": "foe_tusker",
-   "side": "enemy",
-   "move": "Coil Gathering",
-   "name": "Coil Gathering",
-   "kind": "physical/charge",
-   "body": {
-    "kind": "sprite",
-    "clip": "skill",
-    "frames": {
-     "prepare": [
-      9,
-      10,
-      11,
-      12
-     ],
-     "recover": [
-      13,
-      14,
-      15,
-      16
-     ]
-    },
-    "pose": "cast"
-   },
-   "vfx": {
-    "module": "boss-signature-fx",
-    "kind": "painted"
-   },
-   "target": "ตัวเอง (รวมพลัง ไม่มี damage)",
-   "point": "ตัวบอส + ค้างจนปล่อยท่า",
-   "encounters": [
-    "elite-shadow-serpent"
-   ]
-  },
-  {
-   "identity": "foe_tusker",
-   "side": "enemy",
-   "move": "Crushing Coil",
-   "name": "Crushing Coil",
-   "kind": "physical",
-   "body": {
-    "kind": "sprite",
-    "clip": "skill",
-    "frames": {
-     "prepare": [
-      9,
-      10,
-      11,
-      12
-     ],
-     "recover": [
-      13,
-      14,
-      15,
-      16
-     ]
-    },
-    "pose": "weapon"
-   },
-   "vfx": {
-    "module": "boss-signature-fx",
-    "kind": "painted"
-   },
-   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "ผู้รับ damage จริง",
-   "encounters": [
-    "elite-shadow-serpent"
-   ]
-  },
-  {
    "identity": "foe_valdrakk",
    "side": "enemy",
    "move": "Shard Talon",
@@ -7180,6 +7113,111 @@
    "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
    "encounters": [
     "vanguard-captain"
+   ]
+  },
+  {
+   "identity": "foe_weeping_siren",
+   "side": "enemy",
+   "move": "Tide Lash",
+   "name": "Tide Lash",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "elite-weeping-siren"
+   ]
+  },
+  {
+   "identity": "foe_weeping_siren",
+   "side": "enemy",
+   "move": "Weeping Song",
+   "name": "Weeping Song",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "elite-weeping-siren"
+   ]
+  },
+  {
+   "identity": "foe_weeping_siren",
+   "side": "enemy",
+   "move": "Drowning Call",
+   "name": "Drowning Call",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move3",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "elite-weeping-siren"
    ]
   },
   {

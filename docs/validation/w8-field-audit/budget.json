@@ -621,16 +621,16 @@
    "foes": 2,
    "reserves": 0,
    "foeSheets": [
-    "tusker",
-    "mistwisp"
+    "mistwisp",
+    "shadowserpent"
    ],
    "four": {
-    "decoded": 33626064,
-    "download": 9755811
+    "decoded": 46091168,
+    "download": 13158198
    },
    "five": {
-    "decoded": 38130312,
-    "download": 11201728
+    "decoded": 50595416,
+    "download": 14604115
    },
    "bossFx": true
   },
@@ -639,16 +639,16 @@
    "foes": 2,
    "reserves": 0,
    "foeSheets": [
-    "riftweaver",
-    "stonecrab"
+    "stonecrab",
+    "weepingsiren"
    ],
    "four": {
-    "decoded": 35508176,
-    "download": 10210915
+    "decoded": 46001060,
+    "download": 13162683
    },
    "five": {
-    "decoded": 40012424,
-    "download": 11656832
+    "decoded": 50505308,
+    "download": 14608600
    },
    "bossFx": false
   },

@@ -1,4 +1,5 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
+import { lakeEliteDisplayRatios } from './assets';
 import atlasManifest from './unit-atlases.json';
 export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare' | 'arc' | 'communion' | 'lastlight' | 'partner' | 'circle' | 'closing' | 'echo' | 'move1' | 'move2' | 'move3' | 'move4' | 'move5' | 'move6' | 'move7' | 'mark' | 'parry' | 'gather' | 'release' | 'stored' | 'knot' | 'toll' | 'weave' | 'deflect' | 'dial' | 'read';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
@@ -46,6 +47,12 @@ export const CORPSE_ALPHA = .28;
 // A9 boss strips: frame 0 is the exact seed, each move adds [wind-up, anticipation, contact, follow-through] from `base`; the
 // strip's own ready/recover frames are the seed. Prepare ends on the anticipation, contact is the first recover frame.
 const bossMove = (base: number): FrameRange => ({ prepare: [0, base, base + 1], recover: [base + 2, base + 3, 0] });
+// The lake elite strips share phase boundaries, with contact at the fifth frame.
+const lakeEliteMove = (start: number): FrameRange => ({
+  prepare: [start, start + 1, start + 2, start + 3],
+  recover: [start + 4, start + 5, start + 6, start + 7],
+});
+const lakeEliteReactions = { hit: [17, 18], down: [19, 20, 21] } as const;
 const BOSS_SOLE = 896 / 1024;
 export const unitRegistry = {
   // AV02: finisher (overhead cut) and sweep (wide cut) use the slash clip, lunge the thrust clip; the parry riposte is the
@@ -142,6 +149,14 @@ export const unitRegistry = {
   foe_mist_wisp: { sheet: 'mistwisp', displayRatio: 2, intents: { 'Mist Needle': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 } },
   foe_stone_crab: { sheet: 'stonecrab', displayRatio: 2, intents: { Pincer: 'attack' } },
   foe_mirror_shade: { sheet: 'mirrorshade', displayRatio: 2, intents: { 'Mirror Strike': 'attack' } },
+  foe_shadow_serpent: { sheet: 'shadowserpent', displayRatio: lakeEliteDisplayRatios.foe_shadow_serpent!, own: true, downFrame: 21, soleOrigin: 497 / 512,
+    intents: { 'Shadow Fang': 'attack', 'Venom Spit': 'skill', 'Coil Gathering': 'move3', 'Crushing Coil': 'move4' },
+    clips: { attack: lakeEliteMove(1), skill: lakeEliteMove(9), move3: lakeEliteMove(22), move4: lakeEliteMove(30) },
+    reactions: lakeEliteReactions },
+  foe_weeping_siren: { sheet: 'weepingsiren', displayRatio: lakeEliteDisplayRatios.foe_weeping_siren!, own: true, downFrame: 21, soleOrigin: 497 / 512,
+    intents: { 'Tide Lash': 'attack', 'Weeping Song': 'skill', 'Drowning Call': 'move3' },
+    clips: { attack: lakeEliteMove(1), skill: lakeEliteMove(9), move3: lakeEliteMove(22) },
+    reactions: lakeEliteReactions },
   // A9: boss strips are one per move (`move1`.. in the order of each atlas, see docs/combat-presentation/unit-a9-slice). Phase turns
   // carry the phase name (Thorn Rage, Call the Rift, Rift Awakening, Call the Hunt) and play their own gesture. The Matriarch
   // atlas already faces left (owner decision); it is never mirrored at runtime.

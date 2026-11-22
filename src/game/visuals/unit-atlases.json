@@ -394,5 +394,23 @@
     "frames": 22,
     "decodedBytes": 7936000,
     "downloadBytes": 1580108
+  },
+  "shadowserpent": {
+    "image": "shadowserpent_lake.5de97021e69b.webp",
+    "atlas": "shadowserpent_lake.5424072abe96.json",
+    "width": 1918,
+    "height": 2182,
+    "frames": 38,
+    "decodedBytes": 16740304,
+    "downloadBytes": 4607310
+  },
+  "weepingsiren": {
+    "image": "weepingsiren_lake.f1e2dda0775f.webp",
+    "atlas": "weepingsiren_lake.589ef404155c.json",
+    "width": 1785,
+    "height": 2013,
+    "frames": 30,
+    "decodedBytes": 14372820,
+    "downloadBytes": 4100192
   }
 }

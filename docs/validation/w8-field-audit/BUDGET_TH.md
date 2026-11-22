@@ -42,8 +42,8 @@
 | `crab-wall` | 3 (0) | mistwisp, stonecrab | 35.0 MiB / 10.22 MB | 39.3 MiB / 11.66 MB | — |
 | `isle-host` | 4 (0) | tideslime, mistwisp, stonecrab | 39.3 MiB / 11.35 MB | 43.6 MiB / 12.80 MB | — |
 | `pavilion-mist` | 4 (0) | tideslime, mistwisp, stonecrab | 39.3 MiB / 11.35 MB | 43.6 MiB / 12.80 MB | — |
-| `elite-shadow-serpent` | 2 (0) | tusker, mistwisp | 32.1 MiB / 9.76 MB | 36.4 MiB / 11.20 MB | โหลด |
-| `elite-weeping-siren` | 2 (0) | riftweaver, stonecrab | 33.9 MiB / 10.21 MB | 38.2 MiB / 11.66 MB | — |
+| `elite-shadow-serpent` | 2 (0) | mistwisp, shadowserpent | 44.0 MiB / 13.16 MB | 48.3 MiB / 14.60 MB | โหลด |
+| `elite-weeping-siren` | 2 (0) | stonecrab, weepingsiren | 43.9 MiB / 13.16 MB | 48.2 MiB / 14.61 MB | — |
 | `water-spirit` | 4 (1) | mistwisp, stonecrab, mirrorshade, sentinel | 46.2 MiB / 13.21 MB | 50.5 MiB / 14.65 MB | โหลด |
 | `wb-kragmor` | 3 (0) | wisp, crawler, kragmor | 31.5 MiB / 10.02 MB | 35.8 MiB / 11.47 MB | โหลด |
 | `wb-valdrakk` | 3 (0) | wisp, valdrakk | 29.8 MiB / 9.66 MB | 34.1 MiB / 11.11 MB | โหลด |
