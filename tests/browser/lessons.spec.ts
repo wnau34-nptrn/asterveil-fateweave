@@ -113,7 +113,7 @@ const clearedCamp = (n: number): Profile => {
   p.guides = Object.fromEntries(MAPS[0]!.guides.map(g => [g.id, 'claimed' as const])); return p;
 };
 test('camp after the first clear: replay pointer at the maps button, then the sweep row in the maps sheet', async ({ page }, info) => {
-  await openCamp(page, clearedCamp(1), ['home', 'open:quests', 'open:team']);
+  await openCamp(page, clearedCamp(1), ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:team']);
   await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'farm'); expect(await ringOver(page, '#lobby-maps')).toBe(true);
   await page.locator('#lobby-maps').click();
   await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'sweeppick'); expect(await ringOver(page, `#map-node-${ruinsMap.id}`)).toBe(true);
@@ -137,4 +137,16 @@ test('camp after map 3: the hunt target, then the boss target, point inside the 
   expect(await ringOver(page, '#boss-target')).toBe(true);
   await page.screenshot({ path: info.outputPath('lesson-boss-target-390.png') });
   await page.locator('#lesson-ok').click(); await expect(page.locator('#lesson-layer')).toBeHidden();
+});
+
+// OD-59: after map 1 the camp points at the World Boss banner, then at the new fate-weave banner (10 tickets waiting).
+test('camp after map 1 introduces the World Boss and the fate-weave cabinet on their banners', async ({ page }, info) => {
+  const p = clearedCamp(1); p.gacha = { tickets: 10, points: 0, serial: 0, history: [] };
+  await openCamp(page, p, ['home', 'open:quests']);
+  await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'open:wboss'); expect(await ringOver(page, '#lobby-wboss')).toBe(true);
+  await page.locator('#lesson-ok').click();
+  await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'open:gacha'); expect(await ringOver(page, '#lobby-gacha')).toBe(true);
+  await expect(page.locator('#lobby-gacha')).toContainText('ตั๋ว 10');
+  await page.screenshot({ path: info.outputPath('lesson-gacha-390.png') });
+  await page.locator('#lobby-gacha').click(); await expect(page.locator('#gacha-title')).toBeVisible();
 });

@@ -120,7 +120,7 @@ describe('P11-04 World Boss rules (offline and server alike)', () => {
 
   it('save v65 keeps the book; a v63 save loads unchanged; a broken book is refused', () => {
     const p = attempts(base(), 2); const game: Game = { profile: p, run: null };
-    const raw = currentSave(game); expect(JSON.parse(raw).version).toBe(SAVE_VERSION); expect(SAVE_VERSION).toBe(66);
+    const raw = currentSave(game); expect(JSON.parse(raw).version).toBe(SAVE_VERSION); expect(SAVE_VERSION).toBe(67);
     expect(parseGame(raw, home, lookup, MAPS).profile.worldBoss).toEqual(p.worldBoss);
     const v63: Profile = { ...p }; delete v63.worldBoss;
     expect(parseGame(JSON.stringify({ version: 63, profile: v63, run: null }), home, lookup, MAPS).profile.worldBoss).toBeUndefined();

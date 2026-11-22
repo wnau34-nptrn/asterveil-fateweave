@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { claimBoard } from '../src/core/world/board';
 import { emptyGacha, exchangeReason, gachaDraw, gachaExchange, gachaOutcome, gachaPull, gachaRates, pullReason } from '../src/core/world/gacha';
-import { hire, newProfile, settle } from '../src/core/world/profile';
+import { depart, hire, newProfile, settle } from '../src/core/world/profile';
 import { parseGame, SAVE_VERSION, type Game } from '../src/core/save/expedition-save';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { MAPS as maps } from '../src/content/world/maps';
@@ -48,8 +48,8 @@ describe('P10 gacha config', () => {
 });
 
 describe('P10 pull', () => {
-  it('refuses before MAP2, on another config, a wrong count or too few tickets — and changes nothing', () => {
-    const closed = open(); closed.cleared = [home.id];
+  it('refuses before MAP1 (OD-59), on another config, a wrong count or too few tickets — and changes nothing', () => {
+    const closed = open(); closed.cleared = [];
     expect(pullReason(closed, maps, home, 1, G.version)).toBe('locked');
     expect(pullReason(open(), maps, home, 1, G.version + 1)).toBe('config');
     expect(pullReason(open(), maps, home, 5, G.version)).toBe('count');
@@ -153,3 +153,16 @@ describe('P10 save v66', () => {
     expect(parseGame(JSON.stringify(env), home, lookup, maps).profile.gacha).toBeUndefined();
   });
 });
+
+describe('OD-59 map 1 first clear', () => {
+  it('pays 10 tickets once, on the first normal clear of map 1 only', () => {
+    const m1 = maps[0]!; expect(m1.firstClearTickets).toBe(10); expect(maps.slice(1).every(m => !m.firstClearTickets)).toBe(true);
+    const p = { ...newProfile(m1, 7, m1.firstCompany), tutorialDone: true };
+    const first = settle(p, depart(p, m1, lookup, 3).run, 'complete', m1);
+    expect(first.gacha?.tickets).toBe(10); expect(first.cleared).toContain(m1.id);
+    expect(settle(first, depart(first, m1, lookup, 4).run, 'complete', m1).gacha?.tickets).toBe(10);
+    expect(settle(p, depart(p, m1, lookup, 3).run, 'withdrawn', m1).gacha).toBeUndefined();
+    expect(featureOpenAfter(first)).toBe(true);
+  });
+});
+const featureOpenAfter = (p: Profile) => pullReason({ ...p, gacha: { ...p.gacha!, tickets: 10 } }, maps, home, 10, G.version) === '';

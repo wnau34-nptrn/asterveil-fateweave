@@ -45,7 +45,7 @@ export const ruinsMap: MapDefinition = {
   // Aira comes back as the boss fight starts, Seren on map 2. A new company first recruits two mercenaries (a
   // support among them: Lio or Toma) so each company plays different heroes.
   recruits: [{ hero: 'tracer', at: 'prologue' }, { hero: 'weaver', at: 'boss' }],
-  draft: { pool: ['lio', 'brann', 'sefa', 'toma'], support: ['lio', 'toma'], picks: 2 }, prologueGuests: ['healer'],
+  draft: { pool: ['lio', 'brann', 'sefa', 'toma'], support: ['lio', 'toma'], picks: 2, fate: true }, firstClearTickets: 10, prologueGuests: ['healer'],
   chests: [
     { id: 'ruins-west', x: 2, y: 6, tier: 'common' }, { id: 'ruins-east', x: 12, y: 7, tier: 'common' },
     { id: 'ruins-tower', x: 4, y: 3, tier: 'rare' },

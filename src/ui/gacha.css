@@ -65,3 +65,7 @@
 .gacha-result { position: relative; }
 .gacha-result > .gacha-stage { position: absolute; top: 0; left: 0; right: 0; z-index: 2; pointer-events: none; animation: gacha-stage-out 320ms ease-in var(--t0) both; }
 @keyframes gacha-stage-out { to { opacity: 0; visibility: hidden; } }
+/* OD-59 first fate weave inside the starter dialog: the stage plays over the card, then the card stays. */
+.gacha-fate .gacha-cards { grid-template-columns: minmax(0, 150px); justify-content: center; }
+#lobby-view .lobby-boards .lobby-gacha { flex: 0 0 92px; }
+#lobby-view .lobby-gacha[style*="--banner"]::before { background-position: center 30%; opacity: .7; }

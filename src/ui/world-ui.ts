@@ -20,6 +20,7 @@ import { PARTY_SLOTS, POTION_IDS, type Lane, type TeamPreset } from '../core/wor
 import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
 import { heroArt, portrait, starRow } from './portraits';
+import { fateWeave } from './gacha-panel';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { questLine, rewardText, storyQuestText, sideQuestText, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
 import { tomeCount } from '../core/world/tomes';
@@ -229,6 +230,19 @@ export class WorldUI {
   openDraft(): void {
     const dialog = this.root.querySelector<HTMLDialogElement>('#draft-dialog')!; const s = this.view?.state; if (!s?.draft) return;
     const n = this.map.draft!.picks - s.draft.left + 1;
+    // OD-59 (owner 2026-11-22): the first fate weave replaces the choice — one guaranteed support, then one attacker.
+    if (this.map.draft!.fate && !s.draft.legacy && s.draft.offers.length === 1) {
+      const id = s.draft.offers[0]!, t = heroText[id]!, support = this.map.draft!.support.includes(id), role = support ? 'สายสนับสนุน' : 'สายโจมตี';
+      this.root.querySelector('#draft-title')!.innerHTML = `${icon('reroll')} ทอชะตาครั้งแรก ${n}/${this.map.draft!.picks}`;
+      this.root.querySelector('#draft-content')!.innerHTML = `${fateWeave(id, this.map, role)}
+        <p class="event-scene">${n === 1 ? 'แท่นทอชะตาเลือกเพื่อนร่วมทางให้ — ครั้งแรกได้<b>สายสนับสนุน</b>แน่นอน ครั้งต่อไปได้<b>สายโจมตี</b>แน่นอน · ฟรี ไม่ใช้ตั๋ว ไม่นับในอัตราของตู้' : 'ครั้งนี้ได้<b>สายโจมตี</b>แน่นอน · ฟรี ไม่ใช้ตั๋ว'}</p>
+        <p class="camp-note">${t.name} · ${t.role} · ${role} · จบแผนที่นี้แล้วแท่นทอชะตาที่ค่ายจะเปิด พร้อมตั๋ว 10 ใบ</p>
+        <button id="draft-0" data-world="draft-pick" data-index="0" class="primary" aria-label="รับ${t.name}เข้าทีม">รับ${t.name}เข้าทีม</button>`;
+      if (!dialog.open) dialog.showModal();
+      this.root.querySelector<HTMLElement>('#draft-0')?.focus();
+      return;
+    }
+    this.root.querySelector('#draft-title')!.innerHTML = `${icon('gold')} รับสมัครทหารรับจ้าง`;
     const cards = s.draft.offers.map((id, i) => { const h = this.heroes.find(x => x.id === id)!; const t = heroText[id]!;
       return `<li><div class="hire-open">${heroArt(id)}<span>${starRow(1, this.map.company.maxStars)}<b>${t.name}</b><small>${t.role} · ${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'} · ${t.help}</small><small class="hire-status">HP ${h.maxHp} · SPD ${h.speed}</small></span></div>
         <button id="draft-${i}" data-world="draft-pick" data-index="${i}" class="secondary" aria-label="รับ${t.name}เข้าทีม">รับเข้าทีม</button></li>`; }).join('');

@@ -167,7 +167,9 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // v66 (P10): the profile may carry the free-ticket gacha wallet `gacha` (tickets, points, serial, shards kept for
 // characters not yet owned, recent history); board and trio rewards may pay tickets. Optional, so a v65 save loads
 // unchanged (missing = no tickets yet).
-export const SAVE_VERSION = 66;
+// v67 (OD-59): the starter picks are the first fate weave (one fixed offer: a support, then an attacker) and map 1's
+// first clear pays 10 gacha tickets. A v66 run still waiting on its starter picks keeps the three-offer choice.
+export const SAVE_VERSION = 67;
 // Trees refunded by older migrations were legal under star points (at most ★5 = 4 extra).
 const LEGACY_STAR_POINTS = 4;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
@@ -651,7 +653,9 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (guests && recruited && guests.some(id => recruited.includes(id))) throw new Error('Invalid run');
   // v38: a starter recruitment in progress; its offers must be the ones this state deals.
   const d = s.draft === undefined ? undefined : obj(s.draft);
-  if (d && (!map.draft || Object.keys(d).length !== 2 || !isInt(d.left, 1, map.draft.picks) || battle)) throw new Error('Invalid run');
+  // OD-59 (v67): a draft saved before v67, or one marked `legacy`, keeps the three-offer choice.
+  const legacyDraft = !!d && (version < 67 || d.legacy === true);
+  if (d && (!map.draft || Object.keys(d).length !== (d.legacy === undefined ? 2 : 3) || (d.legacy !== undefined && d.legacy !== true) || !isInt(d.left, 1, map.draft.picks) || battle)) throw new Error('Invalid run');
   const state: ExpeditionState = {
     ...(guests ? { guests } : {}), ...(recruited ? { recruited } : {}), ...(arrivals ? { arrivals } : {}), ...(s.hard === true ? { hard: true as const } : {}),
     ...(runTomes ? { tomes: runTomes } : {}), ...(s.riftCore !== undefined ? { riftCore: s.riftCore as number } : {}), ...(s.tomeWins !== undefined ? { tomeWins: s.tomeWins as number } : {}),
@@ -680,7 +684,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
   if (boulderAt(state, map, state.position) || openPit(state, map, state.position)) throw new Error('Invalid position');
   if (state.camp && tileAt(map, state.camp)?.kind !== 'camp') throw new Error('Invalid camp');
   if (d) {
-    state.draft = { left: d.left as number, offers: [] }; state.draft.offers = draftOffers(state, map);
+    state.draft = { left: d.left as number, offers: [], ...(legacyDraft ? { legacy: true as const } : {}) }; state.draft.offers = draftOffers(state, map, legacyDraft);
     if (JSON.stringify(state.draft.offers) !== JSON.stringify(d.offers) || !state.draft.offers.length) throw new Error('Invalid run');
   }
   // v34 commands that no longer replay against the four-slot encounters restart the battle from its entry.
@@ -1015,7 +1019,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
   if (version < 60 && version >= 5) { const p = obj(envelope.profile ?? {}); migrateTreePoints(envelope, map, maps.length ? maps : [map], version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps).length : undefined); }
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

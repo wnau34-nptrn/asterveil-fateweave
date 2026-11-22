@@ -3,10 +3,10 @@ import { describe, expect, it } from 'vitest';
 import { ruinsMap } from '../src/content/world/chapter-ruins';
 import { simulateCampaign } from './sim/balance-sim';
 
-// Starter recruitment (owner 2026-10-23): every pair a new company can recruit after the prologue (a support among
-// them) must clear map 1 with the advisor. Rush and explorer companies, a few seeds per pair.
+// Starter recruitment: every pair a new company can get after the prologue must clear map 1 with the advisor. Rush and
+// explorer companies, a few seeds per pair. OD-59 (first fate weave): exactly one support and one attacker.
 const { pool, support } = ruinsMap.draft!;
-const pairs = pool.flatMap((a, i) => pool.slice(i + 1).map(b => [a, b])).filter(p => p.some(id => support.includes(id)));
+const pairs = pool.flatMap((a, i) => pool.slice(i + 1).map(b => [a, b])).filter(p => p.filter(id => support.includes(id)).length === 1);
 const seeds = process.env.SIM_REPORT === '1' ? [11, 23, 37, 41, 59, 61] : [11, 23];
 describe('starter pairs on map 1', () => {
   const rows = pairs.map(pair => {

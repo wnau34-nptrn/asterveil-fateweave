@@ -116,10 +116,17 @@ function disband(state: ExpeditionState, map: MapDefinition): void {
 }
 // Starter recruitment (owner 2026-10-23): the offers for the next pick, fixed by the seed and the picks made so far (no
 // encounter rolls are used). While nobody in the team is a `support` mercenary, one of them replaces the last offer.
-export function draftOffers(state: ExpeditionState, map: MapDefinition): string[] {
+// `legacy` (save < v67): the three-offer choice that runs saved before the first fate weave still use.
+export function draftOffers(state: ExpeditionState, map: MapDefinition, legacy = false): string[] {
   const d = map.draft; if (!d) return [];
   const taken = rosterIds(state); const left = d.pool.filter(id => !taken.includes(id));
   const salt = (state.seed ^ Math.imul(taken.length + 1, 0x2545f491)) >>> 0; const offers: string[] = [];
+  if (d.fate && !legacy) {
+    // OD-59: one offer: a support while the party has none from the pool, then an attacker.
+    const support = left.filter(id => d.support.includes(id)), attack = left.filter(id => !d.support.includes(id));
+    const from = !taken.some(id => d.support.includes(id)) && support.length ? support : attack.length ? attack : left;
+    return from.length ? [from[rollPercent(salt, 0) % from.length]!] : [];
+  }
   for (let i = 0; offers.length < Math.min(map.company.offers, left.length); i++) {
     const rest = left.filter(id => !offers.includes(id)); offers.push(rest[(rollPercent(salt, i) * 7919 + i) % rest.length]!);
   }
@@ -138,7 +145,7 @@ export function draftPick(initial: ExpeditionState, map: MapDefinition, index: n
   state.members[id] = { stars: 1, shards: 0 };
   if (lookup) state.hp[id] = memberDef(lookup, map, state, id)!.maxHp;
   state.recruited = [...state.recruited ?? [], id];
-  if (--draft.left > 0) draft.offers = draftOffers(state, map); else delete state.draft;
+  if (--draft.left > 0) draft.offers = draftOffers(state, map, !!draft.legacy); else delete state.draft;
   return { state, event: { type: 'drafted', heroId: id } };
 }
 // Each star above ★1 adds `starStatPercent` to max HP, Attack and skill power. SPD never

@@ -257,7 +257,7 @@ describe('P11-05 trio item powers in the resolver (preview equals the result)', 
 describe('P11-05 save v65', () => {
   it('keeps the trio book and boss shards; refuses broken books and shards', () => {
     const p = fight(fight(base(), 'kragmor'), 'morvane'); const game: Game = { profile: p, run: null };
-    const raw = currentSave(game); expect(JSON.parse(raw).version).toBe(SAVE_VERSION); expect(SAVE_VERSION).toBe(66);
+    const raw = currentSave(game); expect(JSON.parse(raw).version).toBe(SAVE_VERSION); expect(SAVE_VERSION).toBe(67);
     // Trio tallies are valid only on rules that schedule the trio for that week.
     expect(() => parseGame(raw, home, lookup, MAPS)).toThrow();
     const back = parseGame(raw, liveHome, lookup, LIVE).profile;
