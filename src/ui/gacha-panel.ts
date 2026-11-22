@@ -12,11 +12,11 @@ import art from './gacha-art.json';
 // cut straight to the cards.
 type ArtKey = keyof typeof art.files;
 const url = (k: ArtKey) => `${import.meta.env.BASE_URL}assets/gacha/${art.files[k].file}`;
-// The window of the 390×844 layout a stage shows: the cabinet sheet y 150–700 (loom to the characters' feet, owner
+// The window of the 390×844 layout a stage shows: the cabinet sheet y 90–700 (crystal spire to the characters' feet, owner
 // 2026-11-22: legs were cut at 590), the first fate weave the whole layout (it fills its dialog). Anchors are percentages
 // of the window, so one set of layers.json numbers serves both.
 type Win = { top: number; h: number };
-const CABINET: Win = { top: 150, h: 550 }, FULL: Win = { top: 0, h: 844 };
+const CABINET: Win = { top: 90, h: 610 }, FULL: Win = { top: 0, h: 844 };
 let win = CABINET;
 const inWindow = <T,>(w: Win, f: () => T): T => { const prev = win; win = w; try { return f(); } finally { win = prev; } };
 const at = (x: number, y: number, w: number) => `--x:${(x / 390 * 100).toFixed(2)}%;--y:${((y - win.top) / win.h * 100).toFixed(2)}%;--w:${(w / 390 * 100).toFixed(2)}%`;
@@ -59,8 +59,8 @@ export const gachaReasonText: Record<string, string> = {
   tickets: 'ตั๋วไม่พอ', points: 'แต้มไม่พอ', full: 'คลังเศษเต็ม', unknown: 'ตัวนี้ไม่อยู่ในตู้',
 };
 const grantText = (r: GachaResult, map: MapDefinition): string => ({
-  joined: 'ตัวใหม่ · เข้าค่าย ★1', duplicate: `ตัวซ้ำ → เศษ +${r.qty}`, universal: `ดาวเต็ม → เศษกลาง +${r.qty}`,
-  shards: `เศษ +${r.qty}`, stored: `เก็บเศษ +${r.qty} (ครบ ${map.gacha.unlockShards} เข้าค่าย)`, unlocked: `เศษครบ ${map.gacha.unlockShards} · เข้าค่าย ★1`,
+  joined: 'ตัวใหม่ ★1', duplicate: `ซ้ำ → เศษ +${r.qty}`, universal: `เศษกลาง +${r.qty}`,
+  shards: `เศษ +${r.qty}`, stored: `เก็บไว้ +${r.qty}`, unlocked: `ครบ ${map.gacha.unlockShards} เข้าค่าย`,
 } satisfies Record<GachaGrant, string>)[r.grant];
 const name = (id: string) => heroText[id]?.name ?? id;
 const wallet = (p: Profile, map: MapDefinition) => {
@@ -70,19 +70,25 @@ const wallet = (p: Profile, map: MapDefinition) => {
 };
 const back = (to: GachaView = 'home', label = 'กลับหน้าตู้') => `<button id="gacha-back" data-lobby="gacha-view" data-view="${to}" class="secondary">${icon('left')}<span>${label}</span></button>`;
 
+// Owner 2026-11-22: "ปรับตัวหนังสือคำอธิบายให้กระชับ … เอาไปใส่ เครื่องหมาย ! … หน้ากาชา ไม่ต้องเลื่อนขึ้นลง": the wallet,
+// the title, one short rate line and the points bar sit on the art; the long text lives behind the ! button.
+export const infoButton = (id: string, label: string, body: string): string =>
+  `<details class="gacha-info" id="${id}"><summary aria-label="${label}">!</summary><div class="gacha-info-body">${body}</div></details>`;
 function home(p: Profile, maps: readonly MapDefinition[], map: MapDefinition): string {
   const g = map.gacha; const { full, shards } = gachaRates(g); const pts = p.gacha?.points ?? 0;
   const pull = (n: number) => { const why = pullReason(p, maps, map, n, g.version);
-    return `<button id="gacha-pull-${n}" data-lobby="gacha-ask" data-count="${n}" class="${n === 10 ? 'primary' : 'secondary'} gacha-pull"${why ? ' data-blocked="true"' : ''}>${icon('reroll')}<span>สุ่ม ${n} ครั้ง<small>ใช้ตั๋ว ${n * g.ticketCost}${why ? ` · ${gachaReasonText[why] ?? why}` : ''}</small></span></button>`; };
+    return `<button id="gacha-pull-${n}" data-lobby="gacha-ask" data-count="${n}" class="${n === 10 ? 'primary' : 'secondary'} gacha-pull"${why ? ' data-blocked="true"' : ''}>${icon('reroll')}<span>สุ่ม ${n} ครั้ง<small>${why ? gachaReasonText[why] ?? why : `ตั๋ว ${n * g.ticketCost}`}</small></span></button>`; };
   const pending = Object.entries(p.gacha?.pending ?? {});
-  return `<section class="gacha-shrine" aria-labelledby="gacha-title">${stage('')}
-    <h3 id="gacha-title">แท่นทอชะตา</h3><p class="gacha-lede">ทุกครั้ง: ตัวเต็ม ${pct(full)} (สุ่มเท่ากัน ${g.pool.length} คน) · นอกนั้นเศษเฉพาะตัว ${shards.map(s => `${s.qty} ชิ้น ${pct(s.chance)}`).join(' / ')} · ไม่มีการันตีในสิบครั้ง</p>
-    ${wallet(p, map)}<div class="gacha-pulls">${pull(1)}${pull(10)}</div>
-    <div class="gacha-points-bar" role="progressbar" aria-label="แต้มแลกตัวที่เลือก" aria-valuemin="0" aria-valuemax="${g.exchangePoints}" aria-valuenow="${Math.min(pts, g.exchangePoints)}"><i style="width:${Math.min(100, pts / g.exchangePoints * 100)}%"></i></div>
-    <p class="camp-note">สุ่ม 1 ครั้ง = 1 แต้ม ไม่หมดอายุ · ครบ ${g.exchangePoints} แต้มแลกตัวที่เลือกได้ 1 ตัว</p>
-    <div class="gacha-links"><button id="gacha-open-exchange" data-lobby="gacha-view" data-view="exchange" class="secondary">${pIcon}<span>แลกแต้ม</span></button><button id="gacha-open-rates" data-lobby="gacha-view" data-view="rates" class="secondary">${icon('info')}<span>อัตราทั้งหมด</span></button><button id="gacha-open-history" data-lobby="gacha-view" data-view="history" class="secondary">${icon('flag')}<span>ประวัติ</span></button></div>
-    ${pending.length ? `<p class="camp-note gacha-pending">เศษรอเข้าค่าย: ${pending.map(([id, n]) => `${name(id)} ${n}/${g.unlockShards}`).join(' · ')}</p>` : ''}
-    <p class="camp-note">ตั๋วฟรีจากงานรายวัน งานรายสัปดาห์ และบอสโลก · ไม่มีการขาย · ทุกคนยังได้จากเนื้อเรื่องและป้ายจ้างเหมือนเดิม</p></section>`;
+  const info = infoButton('gacha-info', 'วิธีใช้แท่นทอชะตา', `<p><b>อัตรา:</b> ตัวเต็ม ${pct(full)} สุ่มเท่ากัน ${g.pool.length} คน นอกนั้นเศษเฉพาะตัว ${shards.map(s => `${s.qty} ชิ้น ${pct(s.chance)}`).join(' / ')} · ไม่มีการันตีในสิบครั้ง (ดูทุกตัวที่ "อัตรา")</p>
+    <p><b>แต้ม:</b> สุ่ม 1 ครั้ง = 1 แต้ม ไม่หมดอายุ ครบ ${g.exchangePoints} แลกตัวที่เลือกได้ 1 ตัว</p>
+    <p><b>ตัวซ้ำ/เศษ:</b> ตัวซ้ำ = เศษตัวนั้น ${map.company.shardsPerDuplicate} · ดาวเต็มได้เศษกลางแทน · เศษของตัวที่ยังไม่มีครบ ${g.unlockShards} เข้าค่าย ★1${pending.length ? ` (ตอนนี้: ${pending.map(([id, n]) => `${name(id)} ${n}/${g.unlockShards}`).join(' · ')})` : ''}</p>
+    <p><b>ตั๋ว:</b> ฟรีจากงานรายวัน/รายสัปดาห์และบอสโลก ไม่มีการขาย · ทุกคนยังได้จากเนื้อเรื่องและป้ายจ้าง</p>`);
+  return `<section class="gacha-shrine" aria-labelledby="gacha-title"><div class="gacha-hero">${stage('')}
+    <div class="gacha-hud">${wallet(p, map)}${info}</div>
+    <div class="gacha-caption"><h3 id="gacha-title" tabindex="-1">แท่นทอชะตา</h3><p class="gacha-lede">ตัวเต็ม ${pct(full)} · แต้ม ${pts}/${g.exchangePoints} แลกตัวที่เลือก</p>
+    <div class="gacha-points-bar" role="progressbar" aria-label="แต้มแลกตัวที่เลือก" aria-valuemin="0" aria-valuemax="${g.exchangePoints}" aria-valuenow="${Math.min(pts, g.exchangePoints)}"><i style="width:${Math.min(100, pts / g.exchangePoints * 100)}%"></i></div></div></div>
+    <div class="gacha-pulls">${pull(1)}${pull(10)}</div>
+    <div class="gacha-links"><button id="gacha-open-exchange" data-lobby="gacha-view" data-view="exchange" class="secondary">${pIcon}<span>แลกแต้ม</span></button><button id="gacha-open-rates" data-lobby="gacha-view" data-view="rates" class="secondary">${icon('info')}<span>อัตรา</span></button><button id="gacha-open-history" data-lobby="gacha-view" data-view="history" class="secondary">${icon('flag')}<span>ประวัติ</span></button></div></section>`;
 }
 function confirm(p: Profile, maps: readonly MapDefinition[], map: MapDefinition, count: number): string {
   const g = map.gacha; const why = pullReason(p, maps, map, count, g.version); const t = p.gacha?.tickets ?? 0, pts = p.gacha?.points ?? 0;

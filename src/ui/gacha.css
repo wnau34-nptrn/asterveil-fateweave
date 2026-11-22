@@ -99,3 +99,24 @@
 .fate-panel .event-scene { margin: 0; text-shadow: 0 1px 4px #000; }
 .fate-panel .camp-note { margin: 0 0 4px; }
 .fate-panel button.primary { width: 100%; min-height: 48px; }
+
+/* Owner 2026-11-22: the cabinet fits one 390×844 screen; wallet, title, rate line and points bar sit on the art. */
+.gacha-shrine { gap: 8px; padding-bottom: 0; }
+.gacha-hero { position: relative; }
+.gacha-hud { position: absolute; top: 8px; left: 8px; right: 8px; display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; z-index: 5; }
+.gacha-hud .gacha-wallet .ui-pill { background: #08121fcc; }
+.gacha-caption { position: absolute; left: 0; right: 0; bottom: 0; z-index: 5; display: grid; gap: 4px; padding: 28px 12px 10px; border-radius: 0 0 18px 18px;
+  background: linear-gradient(180deg, transparent, #08121fd0 45%); }
+.gacha-caption h3 { margin: 0; text-shadow: 0 1px 4px #000; }
+.gacha-caption .gacha-lede { margin: 0; font-size: .82rem; text-shadow: 0 1px 3px #000; }
+.gacha-info { position: relative; }
+.gacha-info > summary { list-style: none; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; cursor: pointer;
+  background: #08121fd9; border: 1px solid var(--gold-edge); color: #ffe4a5; font: 700 20px var(--font-heading); }
+.gacha-info > summary::-webkit-details-marker { display: none; }
+.gacha-info-body { position: absolute; right: 0; top: 50px; width: min(320px, calc(100vw - 48px)); z-index: 20; display: grid; gap: 6px; padding: 12px 14px;
+  border-radius: 14px; border: 1px solid var(--gold-edge); background: #0b1729f7; box-shadow: 0 8px 24px #000a; color: var(--text); font-size: .82rem; line-height: 1.5; }
+.gacha-info-body p { margin: 0; }
+.gacha-links button { min-height: 44px; }
+.fate-line { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.fate-line .gacha-info-body { top: auto; bottom: 50px; }
+.fate-after { display: grid; gap: 8px; }
