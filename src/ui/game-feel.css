@@ -305,6 +305,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 /* One painting per map (ART-WORLD-BATTLE-BG-001), same 1536×1024 frame and horizon. */
 #battle-view[data-scene="forest"] { --bd-img: url('/assets/art/battle_forest.webp'); }
 #battle-view[data-scene="riftline"] { --bd-img: url('/assets/art/battle_riftline.webp'); }
+#battle-view[data-scene="lake"] { --bd-img: url('/assets/art/battle_lake.webp'); }
 #battle-view .battle-layout { border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
 #battle-view .arena, #battle-view .battle-board { background: transparent; }
 #battle-view .masthead { background: transparent; }
@@ -664,6 +665,9 @@ html, body { background: #0a1422; }
 .puzzle-door.open, .secret-wall.found {
   background: url('/assets/world/puzzle.webp') calc(var(--px) * var(--t) * -1) calc(var(--py) * var(--t) * -1) / calc(var(--t) * 5) calc(var(--t) * 4) no-repeat,
     url('/assets/world/tileset.webp?v=6ced91a5') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 9) no-repeat; }
+#map-grid[data-art="lake"] .puzzle-door.open, #map-grid[data-art="lake"] .secret-wall.found {
+  background: url('/assets/world/puzzle.webp') calc(var(--px) * var(--t) * -1) calc(var(--py) * var(--t) * -1) / calc(var(--t) * 5) calc(var(--t) * 4) no-repeat,
+    url('/assets/world/lake_tiles.webp?v=739d497a') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 5) no-repeat; }
 .puzzle-door.open { --px: 3; --py: 2; } .secret-wall.found { --px: 0; --py: 3; }
 /* The rune door shows the stone order in its three sockets. */
 .door-glyph { position: absolute; top: 8%; left: calc(29% + var(--n) * 14.5%); width: calc(var(--t) * .14); height: calc(var(--t) * .14);

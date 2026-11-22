@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { encounterById } from '../src/content/encounters/catalog';
 import { chapterOne as map } from '../src/content/world/chapter1';
 import { findTiles, newExpedition, tileAt } from '../src/core/world/world';
-import { cellHash, decorAt, floorFrame, fogFills, fogLayers, landmarkAt, tileSizeFor, tileset } from '../src/game/visuals/world-art';
+import { cellHash, decorAt, floorFrame, fogFills, fogLayers, landmarkAt, lakeHighFrame, tileFrame, tileSizeFor, tileset } from '../src/game/visuals/world-art';
+import { MAPS } from '../src/content/world/maps';
+import { battleBackdropUrl, battleSceneOf } from '../src/ui/screen-images';
 import { riftBackdropFrame } from '../src/game/visuals/rift-backdrop';
 
 describe('world art selection', () => {
@@ -69,5 +71,26 @@ describe('battle backdrop framing', () => {
       expect(f.x + f.w).toBeGreaterThanOrEqual(view.w - 1e-6); expect(f.y + f.h).toBeGreaterThanOrEqual(view.h - 1e-6);
       expect(f.w / f.h).toBeCloseTo(1.5, 5);
     }
+  });
+});
+
+// ART-WORLD-LAKE-001: map 4 uses its own tile/decor atlases; every cell resolves in them, water follows the tide chars.
+describe('lake world art', () => {
+  const lake = MAPS.find(m => m.id === 'moon-lake')!;
+  it('maps every lake cell to a lake-atlas frame and keeps props off water', () => {
+    let deep = 0, shallow = 0;
+    for (let y = 0; y < lake.rows.length; y++) for (let x = 0; x < lake.rows[0]!.length; x++) {
+      const name = floorFrame(lake, { x, y }); expect(tileFrame(lake, name), name).toBeDefined();
+      const ch = lake.rows[y]![x]!;
+      if (lake.tide!.deep.includes(ch)) { deep++; expect(name).toMatch(/^deep_/); }
+      if (lake.tide!.shallow.includes(ch)) { shallow++; expect(name).toMatch(/^shallow_low_/); expect(tileFrame(lake, lakeHighFrame(lake, { x, y }))).toBeDefined(); }
+      const prop = decorAt(lake, { x, y });
+      if (prop) { expect(lake.tide!.shallow.includes(ch) || lake.tide!.deep.includes(ch)).toBe(false); expect(['moored_skiff', 'weathered_dock_post', 'reed_clump', 'oar_pile']).toContain(prop.name); }
+    }
+    expect(deep).toBeGreaterThan(0); expect(shallow).toBeGreaterThan(0);
+    expect(tileFrame(lake, 'causeway')).toBeDefined();
+  });
+  it('picks the lake battle painting for the lake only', () => {
+    expect(battleSceneOf('moon-lake')).toBe('lake'); expect(battleBackdropUrl('lake')).toMatch(/battle_lake\.webp$/);
   });
 });

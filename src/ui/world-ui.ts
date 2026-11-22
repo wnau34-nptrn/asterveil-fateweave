@@ -22,7 +22,7 @@ import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
 import { heroArt, portrait, starRow } from './portraits';
 import { fateWeave } from './gacha-panel';
-import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
+import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileFrame, lakeHighFrame, isLakeArt, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { questLine, rewardText, storyQuestText, mapQuestText, sideQuestText, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
 import { tomeCount } from '../core/world/tomes';
 import { icon, lineIcon } from './icons';
@@ -88,7 +88,7 @@ export class WorldUI {
     this.width = map.rows[0]!.length;
     root.innerHTML = `
       <section class="map-view" id="map-viewport" aria-label="แผนที่ ใช้ปุ่มลูกศรหรือแตะช่องที่ไฮไลต์เพื่อเดินทีละช่อง">
-        <div class="map-grid" id="map-grid" aria-hidden="true" style="--cols:${this.width};--rows:${map.rows.length}">
+        <div class="map-grid" id="map-grid" data-art="${isLakeArt(map) ? 'lake' : 'base'}" aria-hidden="true" style="--cols:${this.width};--rows:${map.rows.length}">
           <div class="floor-layer">${this.floorCells()}</div>
           <div class="sprite-layer" id="sprite-layer">${this.staticSprites()}<div class="party-token" id="party-token"><span class="token-portrait">${portrait('guardian')}</span></div></div>
           <div class="fog-layer" id="fog-layer"></div>
@@ -313,19 +313,24 @@ export class WorldUI {
     if (map.id === this.map.id) return;
     this.map = map; this.eliteArt = eliteArt; this.width = map.rows[0]!.length; this.previous = undefined;
     const grid = this.root.querySelector<HTMLElement>('#map-grid')!;
-    grid.style.setProperty('--cols', String(this.width)); grid.style.setProperty('--rows', String(map.rows.length));
+    grid.style.setProperty('--cols', String(this.width)); grid.dataset.art = isLakeArt(map) ? 'lake' : 'base'; grid.style.setProperty('--rows', String(map.rows.length));
     grid.querySelector('.floor-layer')!.innerHTML = this.floorCells();
     const token = this.root.querySelector('#party-token')!;
     const sprites = this.root.querySelector('#sprite-layer')!; sprites.innerHTML = this.staticSprites(); sprites.append(token);
     this.root.querySelector('#fog-layer')!.innerHTML = ''; this.fogCells = []; setHtml(this.root.querySelector('#hint-layer')!, '');
     this.root.querySelector('#map-name')!.textContent = map.name;
   }
+  // Lake water tiles carry their high-tide and causeway frames; the CSS swaps by `data-tide` and `.causeway` (the base frame is low tide).
+  private waterVars(x: number, y: number): string {
+    const h = tileFrame(this.map, lakeHighFrame(this.map, { x, y })); const c = tileFrame(this.map, 'causeway');
+    return `;--hx:${h.x / SOURCE_TILE};--hy:${h.y / SOURCE_TILE};--cx:${c.x / SOURCE_TILE};--cy:${c.y / SOURCE_TILE}`;
+  }
   private floorCells(): string {
     let html = '';
     for (let y = 0; y < this.map.rows.length; y++) for (let x = 0; x < this.width; x++) {
-      const frame = tileset[floorFrame(this.map, { x, y })]!;
+      const frame = tileFrame(this.map, floorFrame(this.map, { x, y }));
       const water = waterAt(this.map, { x, y });
-      html += `<div class="tile t-${tileAt(this.map, { x, y })!.kind}${water ? ` water ${water}` : ''}"${water ? ` data-cell="${x},${y}"` : ''} style="--x:${x};--y:${y};--fx:${frame.x / SOURCE_TILE};--fy:${frame.y / SOURCE_TILE}"></div>`;
+      html += `<div class="tile t-${tileAt(this.map, { x, y })!.kind}${water ? ` water ${water}` : ''}"${water ? ` data-cell="${x},${y}"` : ''} style="--x:${x};--y:${y};--fx:${frame.x / SOURCE_TILE};--fy:${frame.y / SOURCE_TILE}${water ? this.waterVars(x, y) : ''}"></div>`;
     }
     return html;
   }
@@ -351,7 +356,7 @@ export class WorldUI {
   // 3C puzzle pieces, built once; renderPuzzles() updates them from the committed state.
   private puzzleSprites(x: number, y: number): string {
     const P = this.map.puzzles; const at = (q: Point) => q.x === x && q.y === y; const pos = `style="--x:${x};--y:${y};z-index:${y * 3 + 1}"`;
-    const opening = () => { const f = tileset[openingFrame(this.map, { x, y })]!; return `--fx:${f.x / SOURCE_TILE};--fy:${f.y / SOURCE_TILE}`; };
+    const opening = () => { const f = tileFrame(this.map, openingFrame(this.map, { x, y })); return `--fx:${f.x / SOURCE_TILE};--fy:${f.y / SOURCE_TILE}`; };
     let html = '';
     for (const r of P.runes) {
       const i = r.stones.findIndex(at);

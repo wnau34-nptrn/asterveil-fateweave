@@ -31,7 +31,7 @@ const morvaneHintsKey = 'asterveil.fateweave.morvane-hints.v1';
 
 // The expedition owns persistence: every commit is handed to the session before playback.
 export interface BattleSession {
-  kind: BattleKind | 'worldBoss'; roundLimit?: number; scene?: 'ruins' | 'forest' | 'riftline'; data: EncounterDefinition; entry: BattleEntry; commands: readonly Command[];
+  kind: BattleKind | 'worldBoss'; roundLimit?: number; scene?: 'ruins' | 'forest' | 'riftline' | 'lake'; data: EncounterDefinition; entry: BattleEntry; commands: readonly Command[];
   commit(state: BattleState): boolean;
   leaveLabel(outcome: Outcome): string;
   leave(): void;

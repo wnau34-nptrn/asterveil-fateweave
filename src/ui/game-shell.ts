@@ -299,7 +299,7 @@ export class GameShell {
     if (w.trigger) { w.trigger.classList.remove('is-loading'); w.trigger.removeAttribute('aria-busy'); }
   }
   private teamIds(): string[] { const s = this.state; return s ? [...s.roster.deployed, ...s.roster.reserve] : this.game?.profile.party.deployed ?? []; }
-  private worldMain(): string[] { return worldImages().main; }
+  private worldMain(): string[] { return worldImages([], this.map.id).main; }
   private battleScene(): BattleBackdrop { return battleSceneOf(this.map.id); }
   private battleMain(scene: BattleBackdrop = this.battleScene()): string[] { return [battleBackdropUrl(scene)]; }
   // B6: a save that stopped mid-battle starts the encounter's atlases and unit sheets from the title (the scene may still
@@ -312,7 +312,7 @@ export class GameShell {
   // B2 from the title: what "continue" opens first, then where the run leads (the camp after it).
   private prefetchFromTitle(): void {
     const g = this.game, s = g?.run; if (!g) return;
-    const camp = campImages(g.profile), world = worldImages(this.teamIds());
+    const camp = campImages(g.profile), world = worldImages(this.teamIds(), this.map.id);
     // B6 waits until the player has stayed on the title a moment: building the big battle textures blocks the main thread
     // for seconds on slow phones, and a quick tap on Continue must never feel stuck (it then loads as before).
     if (s?.battle) { prefetchImagesIdle(this.battleMain()); setTimeout(() => { if (this.root.dataset.view === 'title' && !this.switching) this.prefetchSavedBattle(); }, SAVED_BATTLE_PREFETCH_DELAY_MS); }
@@ -681,7 +681,7 @@ export class GameShell {
     this.lobby.render({ profile: this.game!.profile, board: this.server ? this.board : clientView(this.game!, { home: this.home, lookup: this.lookup }).hireBoard, message: this.lobbyMessage, day: this.today(), worldBoss: this.wbStatus, online: !!this.server, cheer: this.lobbyCheer, saved: this.saved && (!!this.storage || !!this.server), ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
     this.npcCheer = undefined;
     // Arriving in the camp opens on the fire; later redraws keep where the player panned to.
-    if (entering) { this.lobby.centreScene(); const w = worldImages(this.game!.profile.party.deployed); prefetchImagesIdle([...w.main, ...w.extra]); }
+    if (entering) { this.lobby.centreScene(); const w = worldImages(this.game!.profile.party.deployed, this.map.id); prefetchImagesIdle([...w.main, ...w.extra]); }
   }
   private guide(id: string, skip: boolean): void {
     if (!this.game || this.game.run) return;
