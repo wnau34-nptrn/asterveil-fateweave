@@ -1,3 +1,8 @@
+## 2026-11-22 — OD-59 first fate weave + cabinet after map 1; lessons on a new game (Opus; claude/fate-first PR #333, claude/lessons-new-game PR #332)
+- Owner: gacha after the prologue instead of the starter choice → recommendation → “เห็นด้วย ดำเนินการได้”; screens “อนุมัติ”. Also reported lessons vanishing after a restart (#332: `LessonGuide.restart()` on a new company; "off" kept).
+- `map.draft.fate`: one offer each, support then attacker (run seed); save v67, v66 runs mid-pick keep three offers (`draft.legacy`). `unlocks.gacha = 1`, camp tile `#lobby-gacha`, `firstClearTickets: 10` on map 1. Lessons: quests → World Boss → cabinet → team after map 1; `tickets` pointer later.
+- Tests: npm test 2160, lint, build, Playwright world/lessons/gacha; sim STARTERS all four pairs 100% first clear. [Validation](../validation/od59-fate-first-2026-11-22/README_TH.md). Open: real devices.
+
 ## 2026-11-22 — P10 follow-up: owner confirmation + staging load with concurrent pulls (Opus; claude/p10-gacha-load → game branch)
 - Owner: “ยืนยันตามแนะนำ ดำเนินการขั้นต่อไปได้” → shard units (dup 10 / unlock 50 / 1–2 shards) and D24 confirmed in OD-58 and the spec.
 - `tests/server-load.test.ts`: each account spends its trio tickets (2+2) with a same-id retry and a racing request per pull; asserts one charge, 409 for the race, journal = pulls, wallet 0. Staging run 44970708223 (`trio=now`, 4×5 accounts) passed; first run showed 429 for a 12-command burst (limit working), test now paces 1 pull/s. [Validation](../validation/p10-gacha-2026-11-21/README_TH.md).

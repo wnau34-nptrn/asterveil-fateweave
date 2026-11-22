@@ -12,6 +12,6 @@
 
 `SIM_REPORT=1 npx vitest run tests/starter-sim.test.ts`: ทั้ง 4 คู่ที่ออกได้ (ลิโอ/โทมะ × แบรนน์/เซฟา) ผ่านแผนที่ 1 เที่ยวแรก 100% ไม่ล้มทีม ([STARTERS.md](../balance-sim/STARTERS.md))
 
-## ภาพ/คลิป (Chromium ไม่ใช่มือถือจริง) — รออนุมัติจากเจ้าของ
+## ภาพ/คลิป (Chromium ไม่ใช่มือถือจริง) — เจ้าของอนุมัติ 2026-11-22: “อนุมัติ”
 
 [ทอชะตาครั้งแรก 1/2](fate-1-390.png) · [2/2](fate-2-390.png) · [ค่ายหลังแผนที่ 1 + คำแนะนำ](camp-gacha-lesson-390.png) · คลิป [fate-first-390.webm](fate-first-390.webm)
