@@ -1,3 +1,8 @@
+## 2026-11-22 — P10 follow-up: owner confirmation + staging load with concurrent pulls (Opus; claude/p10-gacha-load → game branch)
+- Owner: “ยืนยันตามแนะนำ ดำเนินการขั้นต่อไปได้” → shard units (dup 10 / unlock 50 / 1–2 shards) and D24 confirmed in OD-58 and the spec.
+- `tests/server-load.test.ts`: each account spends its trio tickets (2+2) with a same-id retry and a racing request per pull; asserts one charge, 409 for the race, journal = pulls, wallet 0. Staging run 44970708223 (`trio=now`, 4×5 accounts) passed; first run showed 429 for a 12-command burst (limit working), test now paces 1 pull/s. [Validation](../validation/p10-gacha-2026-11-21/README_TH.md).
+- Tests: typecheck, eslint; staging workflow pass. Open: points icon at 24px, single-pull full reveal clip, real devices.
+
 ## 2026-11-21 — P10 free-ticket gacha: spec, rules, server, 390px cabinet (Opus; claude/p10-gacha-* → game branch, PRs #327–#330)
 - Owner: “ทำระบบกาชาก่อน”; 80-point exchange, 7.5% full over 15, else 1–2 shards, 96 tickets/28 days from existing sources, no sales → OD-58 + [spec](../design/GACHA_P10_SPEC_TH.md) (#327 merged).
 - #328 core: `core/world/gacha.ts` (one seed per pull, 10 = 10×1, grants joined/duplicate/universal/shards/stored/unlocked), commands `gachaPull`/`gachaExchange` (config version checked), `rules.ts` `gacha` v1 + tickets on board/trio (24/week), opens after MAP2, save v66. Shard units mapped to P04-02 (dup 10, unlock 50).
