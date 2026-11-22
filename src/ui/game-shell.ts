@@ -607,6 +607,8 @@ export class GameShell {
     this.exec({ kind: 'createCommander', commander: c, replace: this.replacing }, result => {
       if (isRejected(result)) return;
       this.game = result.game; this.replacing = false;
+      // A fresh company (not yet through the prologue) sees the lessons again, even on a device that played before.
+      if (!result.game.profile.tutorialDone) this.lessons.restart();
       this.lobbyMessage = `ยินดีต้อนรับ ผู้บัญชาการ${result.game.profile.commander!.name} · เลือกทีมแล้วออกเดินทางได้เลย`;
       this.persist();
       // A company that has never fought starts with the prologue: depart at once and meet Vargoth's vanguard.

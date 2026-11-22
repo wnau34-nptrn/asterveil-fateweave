@@ -138,3 +138,17 @@ test('camp after map 3: the hunt target, then the boss target, point inside the 
   await page.screenshot({ path: info.outputPath('lesson-boss-target-390.png') });
   await page.locator('#lesson-ok').click(); await expect(page.locator('#lesson-layer')).toBeHidden();
 });
+
+// Owner 2026-11-22: starting a new game on a device that played before used to keep every lesson marked as seen.
+for (const off of [false, true]) test(`a new game on the same device starts the lessons again${off ? ', keeping lessons turned off' : ''}`, async ({ page }) => {
+  const raw = JSON.stringify({ version: 65, profile: profile(), run: null }); parseGame(raw, ruinsMap, encounterById, MAPS);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(({ key, raw, lessonKey, off }) => {
+    if (sessionStorage.getItem('lessons-seeded')) return;
+    localStorage.setItem(key, raw); localStorage.setItem(lessonKey, JSON.stringify({ seen: ['home', 'battle', 'farm', 'map-level'], off })); sessionStorage.setItem('lessons-seeded', '1');
+  }, { key, raw, lessonKey, off });
+  await page.goto('./'); await page.locator('#title-setup-toggle').click();
+  await page.locator('#new-game').click(); await page.locator('#new-game').click(); // confirm replacing the save
+  await page.locator('#commander-name').fill('ใหม่'); await page.locator('#commander-create').click();
+  await expect.poll(() => page.evaluate(k => JSON.parse(localStorage.getItem(k)!) as { seen: string[]; off: boolean }, lessonKey)).toEqual({ seen: [], off });
+});

@@ -158,6 +158,9 @@ export class LessonGuide {
   get seen(): readonly LessonId[] { return this.prefs.seen; }
   get off(): boolean { return this.prefs.off; }
   setOff(off: boolean): void { this.prefs.off = off; if (!off) this.prefs.seen = []; savePrefs(this.prefs); if (off) this.show(undefined); }
+  // A new company on this device (owner 2026-11-22: a restart lost every lesson): the lessons start again from the
+  // first one. The player's own "turn all lessons off" choice is kept; Setup turns them back on.
+  restart(): void { this.prefs.seen = []; savePrefs(this.prefs); this.show(undefined); }
   markSeen(id: LessonId): void { if (!this.prefs.seen.includes(id)) this.prefs.seen.push(id); savePrefs(this.prefs); this.show(undefined); }
   show(lesson: Lesson | undefined): void {
     if (this.prefs.off) lesson = undefined;
