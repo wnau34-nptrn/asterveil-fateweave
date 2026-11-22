@@ -1,0 +1,52 @@
+{
+  "tiles": {
+    "shore": [
+      41,
+      42,
+      43,
+      44
+    ],
+    "isle": [
+      52,
+      53,
+      54,
+      55
+    ],
+    "pavilion": [
+      62,
+      63,
+      64,
+      65
+    ],
+    "sanctum": [
+      72,
+      73,
+      74,
+      75
+    ],
+    "lake_wall_top": [
+      85
+    ],
+    "lake_wall_face": [
+      91
+    ],
+    "lake_wall_inner": [
+      94
+    ],
+    "shallow_low": [
+      102,
+      119
+    ],
+    "shallow_high": [
+      134,
+      151
+    ],
+    "deep": [
+      167,
+      176
+    ],
+    "causeway": [
+      189
+    ]
+  }
+}

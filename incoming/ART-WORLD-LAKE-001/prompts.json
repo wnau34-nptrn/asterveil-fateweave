@@ -1,0 +1,35 @@
+{
+  "task": "ART-WORLD-LAKE-001",
+  "artwork": "Original artwork for Asterveil · Fateweave",
+  "tone": "Still silver moonlight from the upper left, melancholy and calm. Top-down ground surfaces, three-quarter decor and a separate horizontal battle camera.",
+  "seedFile": "seeds.json",
+  "tools": {
+    "tiles": "Deterministic Pillow/numpy material painting (sources/paint_tiles.py)",
+    "decor": "Built-in image generation, transparent PNG",
+    "battle": "Built-in image generation and edit, opaque PNG"
+  },
+  "tiles": {
+    "shore": "Wet planks with moonlit upper edges, varied grain, staggered fasteners and narrow cracks; wrap the seams on each side.",
+    "isle": "Low uneven slate and cool muted moss, large readable shapes kept flush with the ground.",
+    "pavilion": "Finer blue-gray dressed paving and cool upper-left edge highlights, suitable for a broad ceremonial court.",
+    "sanctum": "Larger blue-slate slabs with narrow silver inlays and cooler joints, marking the enclosed sanctum.",
+    "lake_wall": "Rock rim, tilted south-facing relief and dark interior mass for the same selector as forest map walls.",
+    "shallow_low": "Exposed light wet sandbar with a winding clear edge, distinct flat foothold stones, pale foam and turquoise margins.",
+    "shallow_high": "Continuous submerged cyan water with short, fine horizontal ripples; no silhouettes suggesting exposed footing.",
+    "deep": "Dark navy water with understated silver streaks, no exposed footing or bright foam.",
+    "causeway": "Three low fitted slabs with broad moonlit faces, surrounded by a sliver of water."
+  },
+  "decor": "Original hand-painted fantasy tactics game sprite sheet, square, precisely nine separate isometric three-quarter top-down props in an invisible evenly spaced 3x3 grid. True transparent background everywhere around props and between them, no checkerboard, no ground scene; each stays wholly inside its own cell with ample margin. All nine have light from upper left, beautiful chunky silhouettes and polished painterly material texture, moonlit lake silver-blue and muted worn wood palette, medium value so they read over dark water. Row 1 left: unlit ancient slate moon lantern, squat stone pillar and small peaked roof with a spherical dark glass chamber; row 1 center: the same ancient slate moon lantern physically identical but its pearl light is turned on, a small white-silver light held inside chamber, restrained bloom; row 1 right: small empty weathered wooden skiff, diagonal bow up-right, mooring rope tied at its bow. Row 2 left: a single aged dock post with split top, rope loop around its middle; row 2 center: a petite lakeside shrine with carved stone base and gracefully swept ceramic roof; row 2 right: a rectangular lashed timber merchant raft, with canopy and two small bundles. Row 3 left: graceful green-blue clump of lake reeds with dark seed heads; row 3 center: low broad rough slate monolith with a small pale crescent moon motif reflected on its wet face, subtle mauve cracks, no letters; row 3 right: small crossed pile of visibly wooden paddles resting together. No shadows outside the props, no tiles, no border, no characters, no text, no letters, no logos, no watermarks. Crisp and separated.",
+  "battle": [
+    {
+      "source": "sources/bg_lake_concept.png",
+      "prompt": "Create one original 1536x1024 landscape (3:2) digitally hand-painted RPG battle backdrop for a quiet melancholic moonlit mountain lake, no creatures/people or UI, no writing, logos or watermarks. Full silver moon clearly visible around x=43%, y=19%, light comes from upper left. A small striking East Asian-inspired moon pavilion with layered swept slate roofs and dark posts stands on piers far out over the still lake; keep it around x=57%, between y=32% and y=46%, to survive an extremely narrow vertical center crop. Refined stylized videogame environment painting, rich but clean brush shapes, luminous blue atmospheric mountains, calm dark indigo water and thin bands of silver moonlight. Establish distant horizon exactly 45% down image. At y=57%, the lake meets a single broad continuous weathered stone terrace that completely fills the lower 43% of the image edge to edge. Stone is softly moonlit slate blue, dark desaturated and low-contrast, long shallow perspective seams, fully flat open stage with nothing raised. No props, ledges, rails, breaks, gaps or obstacles in the foreground. Keep the floor subdued and usable for combatants and UI to be composited separately. Keep center strong, silhouette readable and restrained sheer silver glow, no horror, no giant crystals, only a small hint of lavender in distant hues. Do not frame image with borders. View horizontally across the lake with a tiny downward pitch."
+    },
+    {
+      "source": "sources/bg_lake_generated.png",
+      "reference": "sources/bg_lake_concept.png",
+      "prompt": "Edit this original moon lake landscape for a very specific RPG battle layout. Keep the magnificent silver full moon, night-blue painterly mist and clouds, the water's beautiful silver reflections and small elegant Chinese-style moon pavilion on piers on the right near the center. Recompose to push the landscape into the upper part of the image and significantly extend the clear flat continuous dark slate floor up. Hard composition requirement: the farthest visible edge of the continuous tiled stone floor is at approximately y=43% of the image height and fills the entire width from there to the bottom. This is required so the feet of all the game characters land on solid ground. To achieve that, move the distant cloud and mountain horizon to around y=35%, pavilion's foundation to y=35%, and concentrate the visibly reflective dark silver-blue water in the band y=34% to y=43%, enough for a lovely lit reflection of the moon and pavilion. Natural visually shallow perspective view across a flat open plaza. The stone terrace spans the complete image edge to edge, no balustrade or wall, no raised objects, no openings or breaks or obstacles. Use very subtle, low-contrast stone textures and perspective seams; darken and break up any strong bright patches on the floor. Full moon remains around x=43%, y=14%. Roof stays within x=52%–64%. No text or marks, no characters, no UI. Landscape 3:2."
+    }
+  ],
+  "imageGenerationSeeds": "The image generation tool did not expose seeds. Raw outputs are included as reproducible pack inputs."
+}
