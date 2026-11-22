@@ -4,6 +4,8 @@ import tilesetFrames from '../../content/world/tileset.json';
 import decorFrames from '../../content/world/decor.json';
 import chestFrames from '../../content/world/chests.json';
 import itemFrames from '../../content/world/items.json';
+import lakeTileFrames from '../../content/world/lake-tiles.json';
+import lakeDecorFrames from '../../content/world/lake-decor.json';
 
 // Pure art selection for the DOM map (ART-UI-WORLD-001). Choices depend only on
 // tile coordinates and committed state, so a frame never changes between renders.
@@ -17,6 +19,16 @@ export const itemFrame = (id: 'ore' | 'ember' | 'seal'): Frame => itemFrames[`it
 // B5 (2026-11-21): the two big map atlases ship lossy (built from assets-master/world by scripts/build-lossy-world.py);
 // the revision (first 8 hex of the shipped file's SHA-256) goes into the URL so browsers and the service worker refetch.
 // world.css / game-feel.css name the same URLs (tests/world-art-rev.test.ts keeps all three in step).
+// Map 4 (ART-WORLD-LAKE-001): its own 6×5 tile atlas and 3×3 decor atlas, so the shared ones stay untouched. The map shows
+// them through `#map-grid[data-art="lake"]`; revisions are the first 8 hex of each shipped file's SHA-256.
+export const LAKE_REV = { tiles: '739d497a', decor: 'ea1b81b6' } as const;
+export const lakeUrl = (kind: 'tiles' | 'decor'): string => `${import.meta.env.BASE_URL}assets/world/lake_${kind}.webp?v=${LAKE_REV[kind]}`;
+const lakeTiles: Readonly<Record<string, Frame>> = lakeTileFrames;
+const lakeDecor: Readonly<Record<string, Frame & { zone: string }>> = lakeDecorFrames;
+export const isLakeArt = (map: MapDefinition): boolean => map.id === 'moon-lake';
+/** The frame table a map's floor names belong to. */
+export const tileFrame = (map: MapDefinition, name: string): Frame => (isLakeArt(map) ? lakeTiles : tileset)[name]!;
+// WORLD_REV:
 export const WORLD_REV: Readonly<Record<string, string>> = { tileset: '6ced91a5', decor: 'e9278e34' };
 export const worldArtUrl = (name: string): string => `${import.meta.env.BASE_URL}assets/world/${name}.webp${WORLD_REV[name] ? `?v=${WORLD_REV[name]}` : ''}`;
 
@@ -35,8 +47,18 @@ const floorZone: Record<string, string> = { meadow: 'meadow', thicket: 'thicket'
 // (coarse 4×4-cell blocks so the two never checker) and its own cliff walls; camp and exit keep the shared art.
 const forestTrail = (map: MapDefinition, zoneId: string): boolean => map.id === 'deep-forest' && zoneId === 'thicket';
 const grovePocket = (p: Point): boolean => cellHash(p.x >> 2, p.y >> 2, 3) % 3 === 0;
+// Lake floors: shallow water shows its low-tide frame (the DOM fades in `lakeHighFrame` at high tide), deep water its own.
+export function lakeHighFrame(_map: MapDefinition, p: Point): string { return `shallow_high_${cellHash(p.x, p.y) % 2}`; }
+function lakeFloor(map: MapDefinition, p: Point, zoneId: string): string {
+  const ch = map.rows[p.y]![p.x]!;
+  if (map.tide?.deep.includes(ch)) return `deep_${cellHash(p.x, p.y) % 2}`;
+  if (map.tide?.shallow.includes(ch)) return `shallow_low_${cellHash(p.x, p.y) % 2}`;
+  return `${lakeZone[zoneId] ?? 'sanctum'}_${cellHash(p.x, p.y) % 4}`;
+}
+const lakeZone: Record<string, string> = { shore: 'shore', isle: 'isle', pavilion: 'pavilion', sanctum: 'sanctum' };
 export function floorFrame(map: MapDefinition, p: Point): string {
   const tile = tileAt(map, p)!;
+  if (isLakeArt(map)) return tile.kind === 'wall' ? `lake_${wallFace(map, p)}` : tile.kind === 'camp' ? `shore_${cellHash(p.x, p.y) % 4}` : lakeFloor(map, p, tile.zoneId);
   if (tile.kind === 'wall') {
     return map.id === 'deep-forest' ? `forest_${wallFace(map, p)}` : wallFace(map, p);
   }
@@ -81,6 +103,13 @@ export function decorAt(map: MapDefinition, p: Point): (Frame & { name: string }
   for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
     const near = tileAt(map, { x: p.x + dx, y: p.y + dy })?.kind;
     if (near && near !== 'floor' && near !== 'wall') return undefined;
+  }
+  if (isLakeArt(map)) {
+    // Lake props sit on dry shore and isle ground only (never water, never a puzzle cell); lanterns, the shrine and the raft are placed by the map.
+    if (!['shore', 'isle'].includes(tile.zoneId) || map.tide?.shallow.includes(map.rows[p.y]![p.x]!)) return undefined;
+    const lakeOptions = Object.entries(lakeDecor).filter(([n, f]) => f.zone === tile.zoneId && ['moored_skiff', 'weathered_dock_post', 'reed_clump', 'oar_pile'].includes(n));
+    const [n, f] = lakeOptions[cellHash(p.x, p.y, 11) % lakeOptions.length]!;
+    return { name: n, ...f };
   }
   const zone = forestTrail(map, tile.zoneId) ? 'forest' : tile.zoneId;
   const options = Object.entries(decor).filter(([, f]) => f.zone === zone);
