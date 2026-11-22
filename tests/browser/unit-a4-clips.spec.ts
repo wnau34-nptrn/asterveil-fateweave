@@ -36,8 +36,14 @@ for(const {hero,skill,foe,scenario,mode,preroll,intent} of cases){
  await page.goto(`tests/browser/fixtures/unit-a4.html?hero=${hero}&foe=${foe}&skill=${skill}&scenario=${scenario}&speed=${mode==='fast'?'fast':'normal'}&intensity=${mode==='reduced'?'reduced':'standard'}${intent?`&intent=${encodeURIComponent(intent)}`:''}`);
  if(await page.locator('#start').count())await expect(page.locator('#start')).toBeEnabled();
  await expect.poll(()=>page.evaluate(h=>window.unitA4QA?.frames()[h]?.[0]?.texture,hero),{timeout:15000}).toBe(`unit-pilot-${hero}`);
- await expect.poll(()=>page.evaluate(()=>window.unitA4QA?.frames().f1?.[0]?.texture),{timeout:15000}).toBe(`unit-pilot-${sheetOf[foe]}`);
- if(intent || foe in lakeEliteIntents)await expect(page.locator('#battle-view')).toHaveAttribute('data-scene','lake');
+ const foeSlot=foe==='foe_weeping_siren'?'b1':'f1';
+ await expect.poll(()=>page.evaluate(id=>window.unitA4QA?.frames()[id]?.[0]?.texture,foeSlot),{timeout:15000}).toBe(`unit-pilot-${sheetOf[foe]}`);
+ if(foe in lakeEliteIntents){
+  await expect(page.locator('#battle-view')).toHaveAttribute('data-scene','lake');
+  const bounds=await page.evaluate(id=>window.unitA4QA.foeBounds(id),foeSlot);
+  expect(bounds?.left).toBeGreaterThanOrEqual(0);
+  expect(bounds?.right).toBeLessThanOrEqual(390);
+ }
  if(await page.locator('#start').count())await page.locator('#start').click();await page.locator(`#action-${skill}`).click();await page.evaluate(()=>document.fonts.ready.then(()=>undefined));
  await page.evaluate(()=>document.addEventListener('pointerdown',()=>{document.documentElement.dataset.unitA4Click=String(Date.now()/1000);},{capture:true,once:true}));
  const dir=info.outputPath('frames');mkdirSync(dir,{recursive:true});const cdp=await ctx.newCDPSession(page),stamps:string[]=[];

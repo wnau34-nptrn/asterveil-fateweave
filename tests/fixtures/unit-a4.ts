@@ -28,14 +28,15 @@ export function unitA4Fixture(hero:'mira'|'toma',action:ActionId='attack',scenar
  if(!intent)throw new Error('Missing real intent '+art+': '+intentName);
  const base=thicketAmbush.heroes,merc=mercenaries.find(m=>m.id===hero)!;
  const actions=hero==='mira'?[...miraActions]:[...tomaActions];
+ const foeSlot=art in lakeEliteIntents?foe.id:'f1';
  const data:EncounterDefinition={...structuredClone(thicketAmbush),
   heroes:[{...merc,speed:200,actions,lane:'front'},{...base.find(h=>h.id==='guardian')!,speed:60,actions:['attack','guard']},{...base.find(h=>h.id==='weaver')!,speed:50,actions:['attack','ward']}],
-  enemies:[{...foe,reserve:false,id:'f1',row:'front',maxHp:scenario==='enemy-down'?1:foe.maxHp,speed:110}],
-  intents:[{...intent,sourceId:'f1',targetSlot:scenario==='hurt'||scenario==='down'?0:1}]};
+  enemies:[{...foe,reserve:false,id:foeSlot,row:foeSlot==='b1'?'back':'front',maxHp:scenario==='enemy-down'?1:foe.maxHp,speed:110}],
+  intents:[{...intent,sourceId:foeSlot,targetSlot:scenario==='hurt'||scenario==='down'?0:1}]};
  const entry={hp:Object.fromEntries(data.heroes.map(h=>[h.id,scenario==='down'&&h.id===hero?1:h.maxHp]))};
  const state=beginBattle(data,entry,true).state;
  const options=targetOptions(state,data,hero,action);
- const targetId=(options.find(t=>t.valid&&t.id==='f1')??options.find(t=>t.valid&&t.id==='enemies')??options.find(t=>t.valid&&t.id==='guardian')??options.find(t=>t.valid)!).id;
+ const targetId=(options.find(t=>t.valid&&t.id===foeSlot)??options.find(t=>t.valid&&t.id==='enemies')??options.find(t=>t.valid&&t.id==='guardian')??options.find(t=>t.valid)!).id;
  const command:Command={beat:state.beat,heroId:hero,action,targetId};const result=resolveCommand(state,data,command,true);
  return {data,entry,prelude:[] as Command[],state,command,result};
 }

@@ -1,56 +1,56 @@
 {
   "weeping-siren-tide-lash-390.webp": {
-    "frames": 43,
-    "durationMs": 2143,
-    "clickMs": 326,
-    "sha256": "88dc970562233f1a9e8379172cbf9b881dcd34cc88a9cd3c2f3c12f48dd02695"
+    "frames": 69,
+    "durationMs": 2766,
+    "clickMs": 264,
+    "sha256": "6649578e95db9c0f094ced70611ff0e0ddf4be86694ec30b73a1110a3b6b7493"
   },
   "shadow-serpent-crushing-coil-390.webp": {
     "frames": 50,
-    "durationMs": 2421,
-    "clickMs": 301,
-    "sha256": "ca1634f1a05a56122baacb451fd36d7a656c6b495300267c0b3f38c0d485a059"
+    "durationMs": 2108,
+    "clickMs": 272,
+    "sha256": "10e9591c763ef4e742ba05215e48ada04bea8254135c523746b7dc17f06ff27e"
   },
   "weeping-siren-down-390.webp": {
-    "frames": 44,
-    "durationMs": 1910,
-    "clickMs": 307,
-    "sha256": "9708eca996fd9f2b07679fc710b677feb7b89e00b00b83e7f5e41e5a96a71631"
+    "frames": 40,
+    "durationMs": 1730,
+    "clickMs": 206,
+    "sha256": "33d9e9fc81e656918523dfae90e891a6b24e7f5f5096a379c16c98a7676b1796"
   },
   "weeping-siren-weeping-song-390.webp": {
-    "frames": 41,
-    "durationMs": 2117,
-    "clickMs": 271,
-    "sha256": "fa402e1a173c7c9b6a99c6e66ed0612990b5a4b0fe7368f8db2518f7d53c8a82"
+    "frames": 63,
+    "durationMs": 2716,
+    "clickMs": 205,
+    "sha256": "1848d913ab9e8afb93cbdbe9181cef1d2b3227f4481af5ea80d587b4836de259"
   },
   "shadow-serpent-down-390.webp": {
     "frames": 40,
-    "durationMs": 1802,
-    "clickMs": 275,
-    "sha256": "195fd8a81969ba1aa0b12d7fe4683d3510151bbe1b56c5c1feb4c227212e0da7"
+    "durationMs": 1911,
+    "clickMs": 266,
+    "sha256": "5fe4f723bf156428a6147701d36181c28c3ca24628173aae22265d2f868675a3"
   },
   "shadow-serpent-coil-gathering-390.webp": {
-    "frames": 52,
-    "durationMs": 2738,
-    "clickMs": 240,
-    "sha256": "4a96a35e6dc2b2eecf2d077c8acdeacf2f462521942ace216345f9a5ea2b7b6d"
+    "frames": 45,
+    "durationMs": 2183,
+    "clickMs": 360,
+    "sha256": "470ec08fb96f191b7d4b9c0842bd3c6dbf32a50f5a7090bc4e08b11799334e36"
   },
   "shadow-serpent-shadow-fang-390.webp": {
-    "frames": 15,
-    "durationMs": 2050,
-    "clickMs": 115,
-    "sha256": "d50eef3faadfc39c06327474f742ff9c1901d9d7b2ed8b311107a8a14a70e7f2"
+    "frames": 27,
+    "durationMs": 2221,
+    "clickMs": 50,
+    "sha256": "c6f409f1370c32174c172371e2a66ff4f0d8e3c076c722fff492c131eb8ef5d9"
   },
   "weeping-siren-drowning-call-390.webp": {
-    "frames": 48,
-    "durationMs": 2407,
-    "clickMs": 294,
-    "sha256": "900734a8d8791dd1cc020fb69f6696ac56c0a84280ee6d3633b7871751a245eb"
+    "frames": 70,
+    "durationMs": 2876,
+    "clickMs": 315,
+    "sha256": "623ae72d75a0c93f64f1c48d9653f0170d68bcbb77f18864141359f59ede81ca"
   },
   "shadow-serpent-venom-spit-390.webp": {
-    "frames": 45,
-    "durationMs": 2418,
-    "clickMs": 216,
-    "sha256": "d3b2fb93fef9ccf99cc5207fcaeec6a1d975f44df64e6c05728292b32305d3f8"
+    "frames": 82,
+    "durationMs": 2490,
+    "clickMs": 366,
+    "sha256": "1fc4799f7ae87028ad286891bda76fdb29de7d74a60657aeca81dc6a3ce8cf2b"
   }
 }

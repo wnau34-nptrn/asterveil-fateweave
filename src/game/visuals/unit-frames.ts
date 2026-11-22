@@ -1,4 +1,5 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
+import { lakeEliteDisplayRatios } from './assets';
 import atlasManifest from './unit-atlases.json';
 export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare' | 'arc' | 'communion' | 'lastlight' | 'partner' | 'circle' | 'closing' | 'echo' | 'move1' | 'move2' | 'move3' | 'move4' | 'move5' | 'move6' | 'move7' | 'mark' | 'parry' | 'gather' | 'release' | 'stored' | 'knot' | 'toll' | 'weave' | 'deflect' | 'dial' | 'read';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
@@ -148,11 +149,11 @@ export const unitRegistry = {
   foe_mist_wisp: { sheet: 'mistwisp', displayRatio: 2, intents: { 'Mist Needle': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 } },
   foe_stone_crab: { sheet: 'stonecrab', displayRatio: 2, intents: { Pincer: 'attack' } },
   foe_mirror_shade: { sheet: 'mirrorshade', displayRatio: 2, intents: { 'Mirror Strike': 'attack' } },
-  foe_shadow_serpent: { sheet: 'shadowserpent', displayRatio: 2, own: true, downFrame: 21, soleOrigin: 497 / 512,
+  foe_shadow_serpent: { sheet: 'shadowserpent', displayRatio: lakeEliteDisplayRatios.foe_shadow_serpent!, own: true, downFrame: 21, soleOrigin: 497 / 512,
     intents: { 'Shadow Fang': 'attack', 'Venom Spit': 'skill', 'Coil Gathering': 'move3', 'Crushing Coil': 'move4' },
     clips: { attack: lakeEliteMove(1), skill: lakeEliteMove(9), move3: lakeEliteMove(22), move4: lakeEliteMove(30) },
     reactions: lakeEliteReactions },
-  foe_weeping_siren: { sheet: 'weepingsiren', displayRatio: 2, own: true, downFrame: 21, soleOrigin: 497 / 512,
+  foe_weeping_siren: { sheet: 'weepingsiren', displayRatio: lakeEliteDisplayRatios.foe_weeping_siren!, own: true, downFrame: 21, soleOrigin: 497 / 512,
     intents: { 'Tide Lash': 'attack', 'Weeping Song': 'skill', 'Drowning Call': 'move3' },
     clips: { attack: lakeEliteMove(1), skill: lakeEliteMove(9), move3: lakeEliteMove(22) },
     reactions: lakeEliteReactions },

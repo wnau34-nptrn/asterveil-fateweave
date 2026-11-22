@@ -11,7 +11,13 @@ export type ArtSheet = 'units' | 'mercs' | 'foes' | 'foes2' | 'foes3' | 'worldbo
 export const sheetRows: Readonly<Record<ArtSheet, number>> = { units: 3, mercs: 7, foes: 6, foes2: 5, foes3: 5, worldboss: 2 };
 export const artCellSize = (sheet: ArtSheet): number => sheet === 'worldboss' ? worldBossStills.cellSize : 512;
 export const staticActorGeometry = (art: string) => worldBossStills.actors[art as keyof typeof worldBossStills.actors];
-export const staticDisplayRatio = (art: string): number => staticActorGeometry(art) ? worldBossStills.displayRatio : 1;
+// The lake elite artwork fills more of its source cell than the older, half-scale animation art.
+export const lakeEliteDisplayRatios: Readonly<Record<string, number>> = Object.freeze({
+  foe_shadow_serpent: 1.25,
+  foe_weeping_siren: 1.15,
+});
+export const staticDisplayRatio = (art: string): number =>
+  lakeEliteDisplayRatios[art] ?? (staticActorGeometry(art) ? worldBossStills.displayRatio : 1);
 export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number }>> = {
   guardian: { sheet: 'units', frame: 0 }, tracer: { sheet: 'units', frame: 1 }, weaver: { sheet: 'units', frame: 2 },
   healer: { sheet: 'units', frame: 3 }, raider: { sheet: 'units', frame: 4 }, brute: { sheet: 'units', frame: 5 },
@@ -60,6 +66,13 @@ const figureTops: Readonly<Record<string, number>> = {
 // How far the painted figure rises above its feet, as a fraction of the drawn size.
 // Keep trio field/HP geometry identical when replacing the borrowed still. Caption bounds use actual alpha.
 export const figureRise = (art: string): number => staticActorGeometry(art) ? worldBossStills.layoutRise : (actorFootOrigins[art] ?? 1) - (figureTops[art] ?? 0) / 512;
+// The lake elite fallback and animated frames share an identical source cell and scale.
+export const fieldFigureRise = (art: string): number => figureRise(art) * (lakeEliteDisplayRatios[art] ?? 1);
+// Rightmost painted reach across the lake elite strips, with breathing room for poses.
+export const lakeEliteRightReach: ReadonlyMap<string, number> = new Map([
+  ['foe_shadow_serpent', .48],
+  ['foe_weeping_siren', .42],
+]);
 type ArtName = 'units' | 'portraits' | 'ruins' | 'units_mercs' | 'portraits_mercs' | 'units_foes' | 'portraits_foes' | 'units_foes2' | 'portraits_foes2' | 'units_foes3' | 'portraits_foes3' | 'units_worldboss' | 'portraits_worldboss';
 // Bump a sheet's revision (SHA256 prefix) when its pixels change so browsers fetch the corrected art. `units` 2026-11-04:
 // pieces of Eira/Lyra/Seren that crossed into a neighbouring 512px cell were cleared (they showed in Seren's sheet).

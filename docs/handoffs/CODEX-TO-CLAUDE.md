@@ -1,3 +1,8 @@
+## 2026-11-22 — Map 4 phase 3 elite size review (Codex · #344 → claude/map4-lake-foes)
+- The owner asked to compare the new enemies with existing foes. At the same slot size, standing art is now +1.6% vs Tusker for Shadow Serpent and −1.1% vs Rift Weaver for Weeping Siren. Still and animated figures share the same scale.
+- The field fits each elite’s painted right edge. The Siren review clips show her in her real back-row slot. Replaced all nine 390px clips, with 9/9 Chromium captures. Typecheck, lint, build, presentation coverage 6/6 and npm test (2262 passed, 24 skipped) passed. [Review clips](../combat-presentation/lake-elites-slice/README_TH.md).
+- Pending: owner motion approval for #344. Phase 4 still waits for the owner’s R1/R2 selections.
+
 ## 2026-11-22 — Map 4 lake art phase 3 (Codex · codex/map4-lake-elites → claude/map4-lake-foes)
 - Owner selected R1 for both elites (“เฟส 3 เลือก R1 ตามที่แนะนำ”). Imported the Shadow Serpent and Weeping Siren from art PR #340. Each of the 7 encounter intents has its own lossless strip. Added hit/down and still/portrait cells 4–5. Water Spirit is the remaining stand-in.
 - Verified source hashes and reconstructed frame pixels. Coverage: 48 identities. Elite encounter textures pass 64 MiB (48.3 / 48.2 MiB). Chromium 390px captures passed 9/9. [Clips and evidence](../combat-presentation/lake-elites-slice/README_TH.md).

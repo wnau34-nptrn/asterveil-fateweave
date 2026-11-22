@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
 import atlasManifest from '../src/game/visuals/unit-atlases.json';
-import { actorArt } from '../src/game/visuals/assets';
-import { sequence, unitClip, unitDefinition, unitDownFrame, unitIdleFrame } from '../src/game/visuals/unit-frames';
+import { actorArt, fieldFigureRise, lakeEliteRightReach, staticDisplayRatio } from '../src/game/visuals/assets';
+import { sequence, unitClip, unitDefinition, unitDisplayRatio, unitDownFrame, unitIdleFrame } from '../src/game/visuals/unit-frames';
 import { eliteShadowSerpent, eliteWeepingSiren, encounterById, LAKE_STANDINS } from '../src/content/encounters/catalog';
 import { lakeEliteIntents, plainLakeFoeArts, lakeFoeIntents, unitA4Fixture } from './fixtures/unit-a4';
 
@@ -45,10 +45,10 @@ describe('lake foes (phase 2)', () => {
 
 describe('lake elites (phase 3)', () => {
   const elites = [
-    { art: 'foe_shadow_serpent', sheet: 'shadowserpent', encounter: eliteShadowSerpent, still: 4, starts: [1, 9, 22, 30], count: 38 },
-    { art: 'foe_weeping_siren', sheet: 'weepingsiren', encounter: eliteWeepingSiren, still: 5, starts: [1, 9, 22], count: 30 },
+    { art: 'foe_shadow_serpent', sheet: 'shadowserpent', encounter: eliteShadowSerpent, reference: 'foe_tusker', still: 4, starts: [1, 9, 22, 30], count: 38 },
+    { art: 'foe_weeping_siren', sheet: 'weepingsiren', encounter: eliteWeepingSiren, reference: 'foe_riftweaver', still: 5, starts: [1, 9, 22], count: 30 },
   ] as const;
-  for (const { art, sheet, encounter, still, starts, count } of elites) describe(art, () => {
+  for (const { art, sheet, encounter, reference, still, starts, count } of elites) describe(art, () => {
     it('uses a separate strip for every encounter intent', () => {
       const actor = encounter.enemies.find(enemy => enemy.art === art)!;
       const names = [...new Set(encounter.intents.filter(intent => intent.sourceId === actor.id).map(intent => intent.name))];
@@ -63,6 +63,23 @@ describe('lake elites (phase 3)', () => {
         expect(fixture.result.turns.find(turn => turn.side === 'enemy')?.intent?.name).toBe(name);
       }
       expect(sequence('cast', 'prepare', 'move7', art)).toBeUndefined();
+    });
+
+    it('matches the standing height of its original reference and keeps the same fallback scale', () => {
+      const standingHeight = (identity: string) => {
+        const atlas = atlasManifest[unitDefinition(identity)!.sheet].atlas;
+        const { frames } = JSON.parse(readFileSync(`public/assets/units/${atlas}`, 'utf8'));
+        const idle = frames['0'];
+        return idle.spriteSourceSize.h / idle.sourceSize.h * unitDisplayRatio(identity);
+      };
+      expect(Math.abs(standingHeight(art) - standingHeight(reference))).toBeLessThan(0.04);
+      expect(staticDisplayRatio(art)).toBe(unitDisplayRatio(art));
+      expect(Math.abs(fieldFigureRise(art) - standingHeight(art))).toBeLessThan(0.02);
+      const { frames } = JSON.parse(readFileSync(`public/assets/units/${atlasManifest[sheet].atlas}`, 'utf8'));
+      for (const frame of Object.values(frames) as { spriteSourceSize: { x: number; w: number } }[]) {
+        const reach = ((frame.spriteSourceSize.x + frame.spriteSourceSize.w) / 512 - 0.5) * unitDisplayRatio(art);
+        expect(reach).toBeLessThan(lakeEliteRightReach.get(art)!);
+      }
     });
 
     it('ships lossless 512px cells, a still/portrait cell, and hit/down frames', () => {

@@ -30,7 +30,7 @@ export const partner = (slot: number): number => slot % 2 ? slot - 1 : slot + 1;
 // Rise is measured from each illustration's painted top to its sole. Reserve all encounter
 // cells (including phase summons), so deaths/summons never move surviving units.
 // `centre`: slots drawn at the exact centre of the foes' half (a boss with nobody behind it, owner 2026-11-20).
-export interface SlotLayout { large: ReadonlySet<number>; rows: ReadonlyMap<number, Row>; trio: ReadonlySet<HeroColumn | FoeColumn>; rise?: ReadonlyMap<number, number>; used?: readonly number[]; centre?: ReadonlySet<number> }
+export interface SlotLayout { large: ReadonlySet<number>; rows: ReadonlyMap<number, Row>; trio: ReadonlySet<HeroColumn | FoeColumn>; rise?: ReadonlyMap<number, number>; rightReach?: ReadonlyMap<number, number>; used?: readonly number[]; centre?: ReadonlySet<number> }
 const none: SlotLayout = { large: new Set(), rows: new Map(), trio: new Set() };
 
 /** Straight HP tracks and counters need their own clear band. Fit the largest base size first while
@@ -46,17 +46,19 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
   let status = 13;
   const cap = Math.floor(Math.min(140, width * UNIT_WIDTH) * UNIT_SCALE);
   const backMiddle = used.some(other => columnOf(other) === 3 && rowOf(other) === 1);
-  const xOf = (id: number, base: number): number => {
-    const x = width * COLUMNS[columnOf(id)]!;
+  const sizeOf = (id: number, base: number, scale: number) => base * (layout.large.has(id) ? scale : 1);
+  const xOf = (id: number, base: number, scale: number): number => {
+    let x = width * COLUMNS[columnOf(id)]!;
     // A boss with nobody behind it stands at the exact centre of the foes' half (owner 2026-11-20). Another large
     // front-middle foe may borrow the empty back-middle cell, keeping clear of the opposing front hero. Never borrow a
     // cell occupied by a reserve or shove.
-    if (layout.centre?.has(id)) return width * (COLUMNS[2] + COLUMNS[3]) / 2;
-    if (layout.large.has(id) && columnOf(id) === 2 && rowOf(id) === 1 && !backMiddle) return x + Math.min(base * .33, width * .09);
-    return x;
+    if (layout.centre?.has(id)) x = width * (COLUMNS[2] + COLUMNS[3]) / 2;
+    else if (layout.large.has(id) && columnOf(id) === 2 && rowOf(id) === 1 && !backMiddle) x += Math.min(base * .33, width * .09);
+    // Preserve the tactical slot and keep wide artwork clear of the edge.
+    const reach = layout.rightReach?.get(id);
+    return reach === undefined ? x : Math.min(x, width - edge - sizeOf(id, base, scale) * reach);
   };
   const cellOf = (base: number) => Math.min(width * .24, Math.max(72, base * .78));
-  const sizeOf = (id: number, base: number, scale: number) => base * (layout.large.has(id) ? scale : 1);
   // Height a figure needs above its row line (a large figure also keeps 12px for its crown/marker).
   const riseOf = (id: number, base: number, scale: number) => sizeOf(id, base, scale) * (layout.rise?.get(id) ?? 1) * 1.022 + (layout.large.has(id) ? 12 : 0);
   // Owner 2026-11-20: a large figure only takes extra height where something stands above it. A figure must clear the
@@ -66,8 +68,8 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
   // figure, so one large foe shrank every figure on the field.
   const hero = (id: number) => columnOf(id) < 2;
   const over = (upper: number, lower: number, base: number, scale: number): boolean => {
-    const cell = cellOf(base), ux = xOf(upper, base), us = sizeOf(upper, base, scale), px = Math.max(0, Math.min(width - cell, ux - cell / 2));
-    const lx = xOf(lower, base), ls = sizeOf(lower, base, scale), narrow = hero(upper) !== hero(lower) && layout.large.has(lower);
+    const cell = cellOf(base), ux = xOf(upper, base, scale), us = sizeOf(upper, base, scale), px = Math.max(0, Math.min(width - cell, ux - cell / 2));
+    const lx = xOf(lower, base, scale), ls = sizeOf(lower, base, scale), narrow = hero(upper) !== hero(lower) && layout.large.has(lower);
     const half = narrow ? ls * .375 : ls * .5, l = lx - half, r = lx + half;
     const bar = Math.min(cell, 72), track = narrow ? [px + (cell - bar) / 2, px + (cell + bar) / 2] : [px, px + cell];
     return (l < track[1]! && r > track[0]!) || (l < ux + us * .375 && r > ux - us * .375);
@@ -110,7 +112,7 @@ export function fieldSlots(width: number, height: number, layout: SlotLayout = n
   }
   const cellWidth = cellOf(base);
   return SLOT_IDS.map(id => {
-    const size = sizeOf(id, base, scale), y = rows[rowOf(id)]!, x = xOf(id, base);
+    const size = sizeOf(id, base, scale), y = rows[rowOf(id)]!, x = xOf(id, base, scale);
     const rise = layout.rise?.get(id) ?? 1;
     return {
       x, y, size, compact: base < 70, tiny: base < 44, side: false, iconSize: 12, statusBand: status, maxIcons: status ? Math.max(1, Math.min(4, Math.floor((Math.min(cellWidth, 72) + 2) / 14))) : 1,

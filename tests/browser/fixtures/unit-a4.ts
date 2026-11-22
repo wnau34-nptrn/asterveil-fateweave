@@ -43,7 +43,7 @@ const qa={reactionTiming:()=>{
  },impacts,turns:()=>fixture.result.turns,otherEncounter:()=>{
  const data={...fixture.data,heroes:fixture.data.heroes.filter(h=>h.id===hero).map(h=>({...h,id:'sefa'})),enemies:fixture.data.enemies.map(e=>({...e,art:'foe_golem'}))};
  ui.open({kind:'random',data,entry:{hp:{sefa:46}},commands:[],commit:()=>true,leaveLabel:()=>'',leave:()=>{}});
- },target:()=>fixture.command.targetId==='enemies'?`enemies-f1`:fixture.command.targetId,
+ },foeBounds:(id: string)=>scene.figureBox(id),target:()=>fixture.command.targetId==='enemies'?`enemies-${fixture.data.enemies[0]!.id}`:fixture.command.targetId,
  expected:()=>fixture.result.state,state:()=>ui.state,load,
  frames:()=>{
  const bodies=(scene as unknown as {bodies:Map<string,Phaser.GameObjects.Container>}).bodies;
