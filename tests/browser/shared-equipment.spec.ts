@@ -34,7 +34,21 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     else{await page.locator('[data-world=pack-close]').click(); await page.locator('#world-team').click();await page.locator('#map-team-guardian').click();await page.locator('#map-team-character-overview').click();}
     await expect(id('character-tab-overview')).toHaveAttribute('aria-selected','true');
     if(camp){await id('character-member-mira').click();await expect(id('character-title')).toContainText('มิร่า');await expect(panel.locator('.character-summary')).toContainText('ในค่าย');await id('character-member-guardian').click();expect(await saved()).toBe(original);}
-    await id('character-tab-gear').click();await panel.locator('.gear-extra-filters summary').click();await id('gear-filter-set').selectOption('none');await expect(panel.locator('.gear-bag li')).toHaveCount(2);
+    await id('character-tab-gear').click();
+    const slots=panel.locator('.doll-slot');
+    const slotSizes=()=>slots.evaluateAll(buttons=>buttons.map(button=>{
+      const {width,height}=button.getBoundingClientRect();
+      return {width,height};
+    }));
+    await expect(slots).toHaveCount(GEAR_SLOTS.length);
+    const weaponSlot=slots.filter({hasText:'อาวุธ'});
+    await expect(weaponSlot).not.toHaveAttribute('data-rarity');
+    const initialSlotSizes=await slotSizes();
+    for(const {height} of initialSlotSizes){
+      expect(height).toBeGreaterThanOrEqual(44);
+      expect(height).toBeLessThanOrEqual(60);
+    }
+    await panel.locator('.gear-extra-filters summary').click();await id('gear-filter-set').selectOption('none');await expect(panel.locator('.gear-bag li')).toHaveCount(2);
     await id('gear-filter-set').selectOption('wind');await expect(panel.locator('.gear-bag li')).toHaveCount(6);
     await panel.locator('.auto-settings summary').click();await id('auto-goal').selectOption('attack');await id('auto-set').selectOption('wind');
     await id('auto-preview').click();await expect(id('comparison-title')).toBeVisible();await expect(panel.locator('.auto-summary')).toContainText('สายลมเร็ว');expect(await saved()).toBe(original);
@@ -44,6 +58,8 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     if(touch){await page.setViewportSize({width:844,height:390});await expect(page.locator('#orientation-gate')).toBeVisible();await id('comparison-equip').dispatchEvent('click');expect(await saved()).toBe(original);await page.setViewportSize({width,height});await expect(page.locator('#orientation-gate')).not.toBeVisible();await expect(id('comparison-title')).toBeVisible();}
     await page.keyboard.press('Escape');await expect(id('auto-preview')).toBeFocused();expect(await saved()).toBe(original);
     await id('auto-preview').click();await id('comparison-equip').click();
+    await expect(weaponSlot).toHaveAttribute('data-rarity', /\d/);
+    expect(await slotSizes()).toEqual(initialSlotSizes);
     const applied=parseGame(await saved(),map,lookup),member=(camp?applied.profile.members:applied.run!.members).guardian!;
     expect(setCounts(member.gear).wind).toBeGreaterThanOrEqual(4);expect(member.gear!.weapon!.hero).toBe('guardian');
     if(!camp){expect(applied.run!.hp.guardian).toBe(11);expect(applied.run!.steps).toBe(game.run!.steps);expect(applied.run!.rolls).toBe(game.run!.rolls);}

@@ -11,6 +11,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - Camp level cap = 10 + 3 per first clear past map 2 (≤30); tree points still stop at Lv10.
 - P10 gacha (OD-58) live; cabinet after MAP1 with 10 first-clear tickets (OD-59). Unlock pacing #202.
 - Art delegation: record agent picks as agent decisions, never owner visual approval.
+- Character equipment slots use the same compact layout before and after equipping, in both camp and map character sheets.
 
 ## Owner rules in force
 

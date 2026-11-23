@@ -1,3 +1,7 @@
+## 2026-11-23 — Compact character equipment slots (Codex · `codex/compact-equipment-slots`)
+- Owner requested smaller slots that keep their size after equipping. The character equipment tab now gives empty icons and worn-item art the same grid row, with a 28–30px art area.
+- Regression coverage measures all six slots before and after auto-equipping in camp and on the map at 320px, 390px and desktop widths. Lint, typecheck and build passed. iOS Safari remains unverified.
+
 ## 2026-11-23 — Finish the Moon Lake stack (Codex · #336 → game branch)
 - Owner: “อนุมัติ” for the four ordinary foes' motion and the Map 4 screens. #343 merged as `39c081f`; #337 merged as `966ea02`; semi-chibi boss #345 was `9afb8e1`. [390px review](../validation/map4-lake/README_TH.md).
 - Reconciled the latest first-fate/cabinet UI with the lake tile and quest imports. Preserved the owner-approved C12 starter-pair baseline. The two branches used OD-60 for separate decisions; the C12 decision is catalogued as OD-61, and Map 4 keeps OD-60.
