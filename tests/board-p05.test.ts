@@ -144,9 +144,9 @@ describe('P05-06 claims', () => {
 
 describe('save v63', () => {
   it('round-trips the board book and the run day; a v62 save loads without them', () => {
-    expect(SAVE_VERSION).toBe(68);
+    expect(SAVE_VERSION).toBe(69);
     const p = claim(played(base(), { wins: 3, steps: 10 }), 'daily', 'd-patrol', DAY);
-    const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(68);
+    const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(69);
     expect(parseGame(raw, home, lookup, MAPS)).toEqual({ profile: p, run: null });
     const away = depart(p, home, lookup, 9, undefined, DAY + 1); const mid = parseGame(write(away), home, lookup, MAPS);
     expect(mid.run!.day).toBe(DAY + 1); expect(mid.profile.board).toEqual(p.board);

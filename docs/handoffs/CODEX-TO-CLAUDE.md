@@ -1,3 +1,8 @@
+## 2026-11-23 — Crystal Mine campaign, save and boss (Codex · `codex/map5-crystal-mine-design`)
+- Owner authorized Codex to take over Claude's work. Activated Map 5 after the lake with save v69, the Crystal Giant, temporary presentation and mine interactions. v68 lake and an active v69 boss both resume in tests.
+- Vitest 2,303 passed and 24 skipped. Lint, typecheck, build and presentation audits passed. Chromium mine and lake passed 8/8 at 390px. [Mine validation and reports](../validation/map5-mine/README_TH.md).
+- Four seeds per OD-59 pair/style/route: 64/64 first mine clears. Some explorer basic-only groups and stress-test round counts still miss draft targets. Expand tuning and compare silhouettes at 390px before locking balance and art.
+
 ## 2026-11-23 — Crystal Mine world commands (Codex · `codex/map5-crystal-mine-design`)
 - Connected light, both puzzles, worker delivery and the 2-of-3 seal to game commands. Brann and Kael now have recruitment triggers and a one-time settlement payout. All three routes reach a completed run with test encounters. [Design and tests](../design/MAP5_CRYSTAL_MINE_DRAFT_TH.md#กระดานต้นแบบ).
 - Full Vitest started during edits and reported 2,288 passed with one failure in the opened-wall visibility regression. The final mine, lake and command suites passed all 109 tests after the wall fix. Lint, typecheck and build passed.

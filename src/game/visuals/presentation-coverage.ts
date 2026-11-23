@@ -1,6 +1,6 @@
 import type { ActionId, EncounterDefinition, IntentDefinition } from '../../core/battle/types';
 import { targetKind } from '../../core/battle/engine';
-import { presentedEncounters } from '../../content/encounters/catalog';
+import { MINE_ENCOUNTER_IDS, MINE_STANDIN_MOVES, presentedEncounters } from '../../content/encounters/catalog';
 import { veilSiege } from '../../content/encounters/veil-siege';
 import { heroes } from '../../content/heroes/team';
 import { mercenaries } from '../../content/heroes/mercenaries';
@@ -160,6 +160,7 @@ function foeMoves(list: readonly EncounterDefinition[]): Map<string, { name: str
       if (prior) { prior.encounters.add(data.id); prior.all ||= m.all; prior.charge ||= m.charge; } else entry.moves.set(key, { ...m, encounters: new Set([data.id]) });
     };
     for (const i of data.intents) add(i.sourceId, { name: i.name, kind: i.kind, charge: i.charge, all: i.all, mend: i.mend, targetSlot: i.targetSlot });
+    for (const foe of data.enemies) if (foe.crystalArmor) add(foe.id, { name: foe.crystalArmor.name, kind: 'energy', targetSlot: 0 });
     for (const p of data.phases ?? []) add(p.sourceId, { name: p.name, kind: 'energy', targetSlot: 0, phase: true, summon: !!(p.summon?.length || p.hardSummon?.length) });
   }
   return out;
@@ -205,7 +206,7 @@ export function presentationCoverage(list: readonly EncounterDefinition[] = pres
       const pose = m.phase || m.charge ? 'cast' : m.name === 'Shadow Knife' ? 'throw' : m.kind === 'energy' ? 'cast' : 'weapon';
       rows.push({ identity: art, side: 'enemy', move: m.phase ? `phase:${m.name}` : m.name, name: m.name, kind: m.phase ? 'phase' : m.charge ? `${m.kind}/charge` : m.kind,
         body: body(art, pose, undefined, m.name),
-        vfx: { module, kind: vfxKind(module, shared), ...(shared ? { note: 'ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)' } : module === 'generic-code' ? { note: 'ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด' } : {}) },
+        vfx: { module, kind: vfxKind(module, shared), ...(shared ? { note: 'ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)' } : module === 'generic-code' ? { note: MINE_STANDIN_MOVES.has(m.name) && [...m.encounters].every(id => MINE_ENCOUNTER_IDS.has(id)) ? 'การแสดงชั่วคราวก่อนทำภาพเหมือง' : 'ท่าพลังงานทั่วไป: เส้น+แกนวาดด้วยโค้ด' } : {}) },
         target: foeTarget(m), point: foePoint(module, m.name, bossMoves[m.name]), encounters: [...m.encounters].sort() });
     }
   }

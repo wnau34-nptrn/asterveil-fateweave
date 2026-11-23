@@ -1,3 +1,4 @@
+import type { MineAction } from '../../src/core/world/mine';
 import { collectOverflow, protectedItem, recycleSelection } from '../../src/core/world/storage';
 // Phase 4E: whole-map balance simulation. A scripted player runs a company through several expeditions using only
 // the pure rules (world, profile, battle). Battles are played by the teaching advisor (`battleLesson`), so results
@@ -19,7 +20,7 @@ import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Lane, Poin
 import { GEAR_SLOTS, PARTY_SLOTS } from '../../src/core/world/types';
 import {
   atCamp, atMuster, levelOf, levelXp, monsterLevelAt, battleData, battleState, canOpenChest, canRest, canRevive, eliteAt, eventAt, finishBattle, findTiles, memberDef, move, openChest,
-  newExpedition, draftPick, questDone, heroDef, loadoutActions, pendingEvent, bossSealed, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, fatigueOf, fatigueStep, fatigueCut, chooseEvent, eventChoiceReason, potionReason,
+  newExpedition, draftPick, questDone, heroDef, interactMine, loadoutActions, pendingEvent, bossSealed, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, fatigueOf, fatigueStep, fatigueCut, chooseEvent, eventChoiceReason, potionReason,
 } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 
@@ -52,7 +53,7 @@ const dirs: Record<Direction, Point> = { up: { x: 0, y: -1 }, down: { x: 0, y: 1
 const same = (a: Point, b: Point) => a.x === b.x && a.y === b.y;
 const key = (p: Point) => `${p.x},${p.y}`;
 
-interface Task { id: string; at: Point; done: (s: ExpeditionState) => boolean; ready?: (s: ExpeditionState) => boolean; then?: Direction }
+interface Task { id: string; at: Point; done: (s: ExpeditionState) => boolean; ready?: (s: ExpeditionState) => boolean; then?: Direction; mine?: MineAction }
 
 // What the scripted player wants to do on this map. The rush player does only the rift seal; the explorer
 // also takes every chest, herb, puzzle, secret and optional elite it can reach.
@@ -66,7 +67,24 @@ function tasks(policy: Policy): Task[] {
     if (o.kind === 'elite') { const e = map.elites.find(x => x.id === o.target)!; if (!e.forced) list.push({ id: e.id, at: e, done: s => s.elitesDefeated.includes(e.id) }); }
     if (o.kind === 'event') { const e = map.events.find(x => x.id === o.target)!; list.push({ id: e.id, at: e, done: s => s.eventsDone.includes(e.id) }); }
   }
-  for (const l of map.lanterns ?? []) list.push({ id: l.id, at: l, done: s => !!s.lanterns?.includes(l.id) });
+  for (const l of map.lanterns ?? []) list.push({ id: l.id, at: l, done: s => !!s.lanterns?.includes(l.id), ...(map.mine ? { mine: 'light-lantern' as const } : {}) });
+  if (map.mine) {
+    const mine = map.mine;
+    for (const w of mine.workers) list.push({ id: w.id, at: w, mine: 'invite-worker',
+      done: s => !!s.mine?.rescue.following.includes(w.id) || !!s.mine?.rescue.rescued.includes(w.id) });
+    list.push({ id: 'mine-rescue-return', at: mine.rescueCamp,
+      done: s => (s.mine?.rescue.rescued.length ?? 0) === mine.workers.length,
+      ready: s => (s.mine?.rescue.rescued.length ?? 0) + (s.mine?.rescue.following.length ?? 0) === mine.workers.length });
+    if (policy === 'explorer') {
+      mine.cart.switches.forEach((sw, i) => list.push({ id: `mine-switch-${i}`, at: sw.lever,
+        mine: 'switch-track', done: s => s.solved.includes(mine.cart.id) || s.mine?.cart[i] === 'main' }));
+      list.push({ id: mine.cart.id, at: mine.cart.start, mine: 'push-cart', ready: s => !!s.mine?.cart.every(value => value === 'main'),
+        done: s => s.solved.includes(mine.cart.id) });
+      const dirs = ['right', 'down', 'right'];
+      mine.beam.crystals.forEach((at, i) => list.push({ id: `mine-mirror-${i}`, at, mine: 'turn-crystal',
+        done: s => s.solved.includes(mine.beam.id) || s.mine?.beam[i] === dirs[i] }));
+    }
+  }
   if (policy === 'rush') return list;
   for (const n of map.notes ?? []) list.push({ id: n.id, at: n, done: s => !!s.notes?.includes(n.id) });
   for (const c of map.chests) list.push({ id: c.id, at: c, done: s => s.openedChests.includes(c.id) });
@@ -149,17 +167,23 @@ const hpPercent = (s: ExpeditionState, ids = s.roster.deployed) => {
 
 // Plays a battle to the end in the given style (no world effects).
 // `salt` varies the casual player's turn rolls for battle benches (0 = the campaign's own rolls).
-export function playOut(s: ExpeditionState, style: Style, salt = 0): { bs: BattleState; low: number } {
+export function playOut(s: ExpeditionState, style: Style, salt = 0, addsFirst = false): { bs: BattleState; low: number } {
   const data = battleData(s, map, lookup)!; let bs = battleState(s, map, lookup)!;
   const max = data.heroes.reduce((a, h) => a + h.maxHp, 0); const now = () => bs.heroes.reduce((a, h) => a + h.hp, 0) / max * 100; let low = now();
   for (let guard = 0; bs.outcome === 'active' && guard < 400; guard++) {
     const follow = style === 'advisor' || (style === 'casual' && rollPercent((s.seed ^ 0x9e3779b9 ^ salt) >>> 0, s.rolls * 997 + bs.commands.length) < 70);
     const l = follow ? battleLesson(bs, data) : undefined;
     if (l) { bs = resolveCommand(bs, data, { beat: bs.beat, heroId: l.heroId, action: l.action, targetId: l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}), ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }).state; low = Math.min(low, now()); continue; }
-    const hero = currentHeroId(bs, data)!; const t = targetOptions(bs, data, hero, 'attack').find(o => o.valid)!;
+    const hero = currentHeroId(bs, data)!; const options = targetOptions(bs, data, hero, 'attack').filter(o => o.valid);
+    const t = (addsFirst ? options.find(o => !data.enemies.find(enemy => enemy.id === o.id)?.boss) : undefined) ?? options[0]!;
     bs = resolveCommand(bs, data, { beat: bs.beat, heroId: hero, action: 'attack', targetId: t.id }).state; low = Math.min(low, now());
   }
   return { bs, low };
+}
+export function playMapBattle(m: MapDefinition, s: ExpeditionState, style: Style, addsFirst = false): BattleState {
+  const previous = map;
+  try { map = m; return playOut(s, style, 0, addsFirst).bs; }
+  finally { map = previous; }
 }
 // A10 checks on the same elite and boss fights, without world effects: blind basic attacks, and (bosses) the same
 // party two levels lower. Counted under `<label>:attack` and `<label>:under2`.
@@ -167,6 +191,7 @@ function shadows(s: ExpeditionState, label: string, report: ExpeditionReport): v
   const add = (key: string, won: boolean) => { const st = (report.battles[key] ??= { fought: 0, won: 0, hpAfter: 0, low: 0 }); st.fought++; if (won) st.won++; };
   add(`${label}:attack`, playOut(s, 'attack').bs.outcome === 'victory');
   if (label !== 'boss') return;
+  if (map.mine) add('boss:attack-adds', playOut(s, 'attack', 0, true).bs.outcome === 'victory');
   // Same HP share of the lower max HP.
   const low = structuredClone(s); low.campXp = levelXp(map, Math.max(1, levelOf(map, s) - 2));
   for (const id of Object.keys(low.battle!.entry)) low.battle!.entry[id] = Math.floor(s.battle!.entry[id]! * memberDef(lookup, map, low, id)!.maxHp / memberDef(lookup, map, s, id)!.maxHp);
@@ -249,7 +274,14 @@ function runExpedition(start: ExpeditionState, policy: Policy, style: Style, rep
     const standing = rosterIds(s).filter(id => s.hp[id]! > 0).length;
     // Too weak to go on and nothing left to heal with: walk home and withdraw.
     const spent = !s.restReady && hpPercent(s) < 35 && s.potions.tonic === 0 && s.potions.salve === 0;
-    const pending = plan.filter(t => !t.done(s) && !skipped.has(t.id) && (t.ready?.(s) ?? true));
+    const pending = map.mine && policy === 'rush' && !bossSealed(s, map) ? []
+      : plan.filter(t => !t.done(s) && !skipped.has(t.id) && (t.ready?.(s) ?? true));
+    const interaction = pending.find(t => t.mine && same(t.at, s.position));
+    if (interaction) {
+      const result = interactMine(s, map, interaction.mine!, lookup);
+      if (result.event.type === 'blocked') skipped.add(interaction.id); else s = result.state;
+      continue;
+    }
     // On a push spot: push the boulder.
     const push = pending.find(t => t.then && same(t.at, s.position));
     if (push) { const r = move(s, map, push.then!); if (r.event.type === 'blocked') skipped.add(push.id); else s = r.state; if (s.battle) { const f = fight(s, report, style); s = f.state; if (f.wiped) return { state: s, outcome: 'wiped' }; } continue; }

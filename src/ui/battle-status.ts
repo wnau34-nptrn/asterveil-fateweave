@@ -61,6 +61,7 @@ export function unitStatuses(s: BattleState, d: EncounterDefinition, id: string)
     if (s.solace?.targetId === id && alive(s.solace.heroId)) add('solace', 'heal', 'แสงปลอบประโลม', `ลดความเสียหาย ${capAmount(d, s.solace.heroId, 'solace')}% · จาก${name(s.solace.heroId)}`, untilTurn(s.solace.heroId));
   }
   if (enemy) {
+    if (enemy.crystalArmor) add('crystal-armor', 'ward', 'เกราะสะท้อนเวท', `ทุบอีก ${enemy.crystalArmor.hits} ครั้ง หรือใช้ท่าทุบหนัก`, `หมดหลังเทิร์นบอสรอบ ${enemy.crystalArmor.until}`);
     // Hard-mode traits (A9): always on for this foe.
     const t = d.rules.traits; const traits = d.enemies.find(e => e.id === id)?.traits ?? [];
     if (t && traits.includes('thorns')) add('thorns', 'pierce', 'หนาม', `ตีโดนแล้วผู้ตีเสียเลือด ${t.thornsPercent}% ของความเสียหาย (ไม่ต่ำกว่า 1)`, 'ตลอดศึก');
@@ -106,6 +107,7 @@ export function foeProfile(s: BattleState, d: EncounterDefinition, id: string): 
     { label: 'HP', value: `${Math.max(0, foe.hp)} / ${def.maxHp}` },
     { label: 'SPD', value: String(def.speed) },
     { label: 'ตำแหน่ง', value: `${row === 'front' ? 'แถวหน้า' : 'แถวหลัง'}${moved ? ' (ถูกผลักชั่วคราว)' : ''}${def.boss ? ' · บอส' : def.large ? ' · ตัวใหญ่' : ''}` },
+    ...(foe.crystalArmor && def.crystalArmor ? [{ label: 'เกราะผลึก', value: `สะท้อนเวท ${def.crystalArmor.reflect}% · ทุบอีก ${foe.crystalArmor.hits} ครั้งหรือรอเทิร์นบอสรอบ ${foe.crystalArmor.until}` }] : []),
     ...(def.boss ? [{ label: 'ทนการควบคุม', value: 'ถูกขัดแล้ว 2 รอบถัดไปขัดซ้ำไม่ได้' }] : []),
     // Boss phases: the next threshold and what it brings; after the last one, the current phase.
     ...(() => {

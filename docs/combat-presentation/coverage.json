@@ -7,13 +7,13 @@
   "parked": 2,
   "actionIds": 91,
   "heroRows": 119,
-  "intents": 72,
-  "foeRows": 83,
+  "intents": 84,
+  "foeRows": 95,
   "spriteRows": 188,
-  "proceduralRows": 14,
+  "proceduralRows": 26,
   "paintedRows": 138,
-  "sharedRows": 60,
-  "codeRows": 4
+  "sharedRows": 65,
+  "codeRows": 11
  },
  "identities": [
   {
@@ -4677,6 +4677,7 @@
    "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
    "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
    "encounters": [
+    "crystal-giant",
     "crystal-stampede"
    ]
   },
@@ -4749,6 +4750,117 @@
    "point": "เท้าศัตรู → พื้นใต้ผู้รับจริง",
    "encounters": [
     "mini-veil-golem"
+   ]
+  },
+  {
+   "identity": "foe_golem",
+   "side": "enemy",
+   "move": "Ore Fist",
+   "name": "Ore Fist",
+   "kind": "physical",
+   "body": {
+    "kind": "procedural",
+    "pose": "weapon",
+    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "mine-tunnel-patrol",
+    "mine-yard-patrol"
+   ]
+  },
+  {
+   "identity": "foe_golem",
+   "side": "enemy",
+   "move": "Shard Beam",
+   "name": "Shard Beam",
+   "kind": "energy",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "crystal-giant"
+   ]
+  },
+  {
+   "identity": "foe_golem",
+   "side": "enemy",
+   "move": "Crystal Collapse",
+   "name": "Crystal Collapse",
+   "kind": "energy",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
+   },
+   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "crystal-giant"
+   ]
+  },
+  {
+   "identity": "foe_golem",
+   "side": "enemy",
+   "move": "Crystal Armor",
+   "name": "Crystal Armor",
+   "kind": "energy",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "crystal-giant"
+   ]
+  },
+  {
+   "identity": "foe_golem",
+   "side": "enemy",
+   "move": "phase:Crystal Split",
+   "name": "Crystal Split",
+   "kind": "phase",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
+   },
+   "target": "ตัวเอง + กำลังเสริมที่ปรากฏจริง",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "crystal-giant"
    ]
   },
   {
@@ -5861,6 +5973,30 @@
    ]
   },
   {
+   "identity": "foe_ruin_bat",
+   "side": "enemy",
+   "move": "Crystal Cry",
+   "name": "Crystal Cry",
+   "kind": "energy",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "elite-crystal-eater",
+    "mine-tunnel-patrol",
+    "mine-yard-patrol"
+   ]
+  },
+  {
    "identity": "foe_sentinel",
    "side": "enemy",
    "move": "Crushing Blow",
@@ -6318,6 +6454,28 @@
    ]
   },
   {
+   "identity": "foe_shard_crawler",
+   "side": "enemy",
+   "move": "Shard Prick",
+   "name": "Shard Prick",
+   "kind": "physical",
+   "body": {
+    "kind": "procedural",
+    "pose": "weapon",
+    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "crystal-giant"
+   ]
+  },
+  {
    "identity": "foe_spore_puff",
    "side": "enemy",
    "move": "Spore Dust",
@@ -6627,6 +6785,50 @@
    ]
   },
   {
+   "identity": "foe_tusker",
+   "side": "enemy",
+   "move": "Crystal Bite",
+   "name": "Crystal Bite",
+   "kind": "physical",
+   "body": {
+    "kind": "procedural",
+    "pose": "weapon",
+    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "elite-crystal-eater"
+   ]
+  },
+  {
+   "identity": "foe_tusker",
+   "side": "enemy",
+   "move": "Shard Eruption",
+   "name": "Shard Eruption",
+   "kind": "energy",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
+   },
+   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "elite-crystal-eater"
+   ]
+  },
+  {
    "identity": "foe_valdrakk",
    "side": "enemy",
    "move": "Shard Talon",
@@ -6933,6 +7135,73 @@
    "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
    "encounters": [
     "vanguard-captain"
+   ]
+  },
+  {
+   "identity": "foe_vargoth_guard",
+   "side": "enemy",
+   "move": "Pick Swing",
+   "name": "Pick Swing",
+   "kind": "physical",
+   "body": {
+    "kind": "procedural",
+    "pose": "weapon",
+    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "elite-mine-overseer",
+    "mine-yard-patrol"
+   ]
+  },
+  {
+   "identity": "foe_vargoth_guard",
+   "side": "enemy",
+   "move": "Overseer Hammer",
+   "name": "Overseer Hammer",
+   "kind": "physical",
+   "body": {
+    "kind": "procedural",
+    "pose": "weapon",
+    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "elite-mine-overseer"
+   ]
+  },
+  {
+   "identity": "foe_vargoth_guard",
+   "side": "enemy",
+   "move": "Crystal Spark",
+   "name": "Crystal Spark",
+   "kind": "energy",
+   "body": {
+    "kind": "procedural",
+    "pose": "cast",
+    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "elite-mine-overseer"
    ]
   },
   {

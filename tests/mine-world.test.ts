@@ -28,11 +28,11 @@ const map: MapDefinition = {
   elites: [{ ...overseer, id: 'mine-overseer', forced: true, encounterId: testEncounter }],
   bossEncounterId: testEncounter,
 };
-const ctx: CommandContext = { home: MAPS[0]!, maps: [...MAPS, map], lookup, seeds: sequenceSeeds([7]) };
+const ctx: CommandContext = { home: MAPS[0]!, maps: [...MAPS.filter(entry => entry.id !== map.id), map], lookup, seeds: sequenceSeeds([7]) };
 const directions: readonly [Direction, number, number][] = [['up', 0, -1], ['right', 1, 0], ['down', 0, 1], ['left', -1, 0]];
 const key = ({ x, y }: Point) => `${x},${y}`;
 const baseProfile = (ids = ['guardian', 'tracer', 'weaver', 'healer']): Profile => ({
-  ...newProfile(map, 7, ids), tutorialDone: true, cleared: MAPS.map(entry => entry.id),
+  ...newProfile(map, 7, ids), tutorialDone: true, cleared: MAPS.filter(entry => entry.chapter < map.chapter).map(entry => entry.id),
 });
 
 function run(profile = baseProfile()): Game {

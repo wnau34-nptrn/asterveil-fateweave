@@ -72,6 +72,19 @@ export function minePressureStep(initial: ExpeditionState, map: MapDefinition, t
   return Math.round(step * mine.darkPressurePercent / 100);
 }
 
+export function mineActionAt(state: ExpeditionState, map: MapDefinition, position = state.position): MineAction | undefined {
+  const mine = map.mine;
+  if (!mine) return;
+  if (map.lanterns?.some(site => same(site, position) && !state.lanterns?.includes(site.id))) return 'light-lantern';
+  if (mine.crystals.some(site => same(site, position))) return 'charge-crystal';
+  if (mine.workers.some(site => same(site, position) && !state.mine?.rescue.following.includes(site.id) && !state.mine?.rescue.rescued.includes(site.id))) return 'invite-worker';
+  if (!state.solved.includes(mine.cart.id)) {
+    if (mine.cart.switches.some(site => same(site.lever, position))) return 'switch-track';
+    if (same(mine.cart.start, position)) return 'push-cart';
+  }
+  if (!state.solved.includes(mine.beam.id) && mine.beam.crystals.some(site => same(site, position))) return 'turn-crystal';
+}
+
 // Validate an explicit map interaction before changing the run. Movement and UI share the same puzzle traces.
 export function applyMineAction(state: ExpeditionState, map: MapDefinition, mine: MineDefinition, action: MineAction): boolean {
   const { position } = state;

@@ -712,6 +712,101 @@
    "lakeBossFx": true
   },
   {
+   "id": "mine-yard-patrol",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "vargoth",
+    "bat",
+    "golem"
+   ],
+   "four": {
+    "decoded": 33989584,
+    "download": 10288976
+   },
+   "five": {
+    "decoded": 38493832,
+    "download": 11734893
+   },
+   "bossFx": false,
+   "lakeBossFx": false
+  },
+  {
+   "id": "mine-tunnel-patrol",
+   "foes": 3,
+   "reserves": 0,
+   "foeSheets": [
+    "bat",
+    "golem"
+   ],
+   "four": {
+    "decoded": 29685712,
+    "download": 8903225
+   },
+   "five": {
+    "decoded": 34189960,
+    "download": 10349142
+   },
+   "bossFx": false,
+   "lakeBossFx": false
+  },
+  {
+   "id": "elite-mine-overseer",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "vargoth"
+   ],
+   "four": {
+    "decoded": 28561360,
+    "download": 8781458
+   },
+   "five": {
+    "decoded": 33065608,
+    "download": 10227375
+   },
+   "bossFx": false,
+   "lakeBossFx": false
+  },
+  {
+   "id": "elite-crystal-eater",
+   "foes": 2,
+   "reserves": 0,
+   "foeSheets": [
+    "tusker",
+    "bat"
+   ],
+   "four": {
+    "decoded": 30504912,
+    "download": 9030841
+   },
+   "five": {
+    "decoded": 35009160,
+    "download": 10476758
+   },
+   "bossFx": false,
+   "lakeBossFx": false
+  },
+  {
+   "id": "crystal-giant",
+   "foes": 3,
+   "reserves": 2,
+   "foeSheets": [
+    "golem",
+    "crawler"
+   ],
+   "four": {
+    "decoded": 29073360,
+    "download": 8859783
+   },
+   "five": {
+    "decoded": 33577608,
+    "download": 10305700
+   },
+   "bossFx": false,
+   "lakeBossFx": false
+  },
+  {
    "id": "wb-kragmor",
    "foes": 3,
    "reserves": 0,

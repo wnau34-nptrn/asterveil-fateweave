@@ -1,3 +1,5 @@
+import { traceMineBeam, traceMinecart } from '../world/mine-puzzles';
+import { mineCrystalDuration } from '../world/mine-light';
 import {bossPlanValid,startBossPlan} from '../world/boss-equipment';
 import {storageCap} from '../world/storage';
 import { entryReason, MAGIC_DAMAGE_SKILLS, withParty } from '../battle/engine';
@@ -173,7 +175,8 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // v68 (map 4, OD-60): the camp level cap rises with first clears (camp EXP up to the Lv30 cap); a lake run may carry the
 // tide fields `tideWait`/`shore`/`boat`, lit `lanterns` and picked-up `notes`; the profile may carry the camp journal
 // `notes`; `storyQuests`/`last.story` may name a map with a side story. Optional, so a v67 save loads unchanged.
-export const SAVE_VERSION = 68;
+// v69 (map 5): mine interactions and recruitment progress, with no changes to older maps.
+export const SAVE_VERSION = 69;
 // Trees refunded by older migrations were legal under star points (at most ★5 = 4 extra).
 const LEGACY_STAR_POINTS = 4;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
@@ -501,7 +504,8 @@ function staleRun(s: Record<string, unknown>, map: MapDefinition, lookup: Encoun
 // 3C puzzle state, validated against the map's puzzles.
 function puzzleState(s: Record<string, unknown>, map: MapDefinition): Pick<ExpeditionState, 'runes' | 'solved' | 'levers' | 'boulders' | 'secrets'> {
   const P = map.puzzles;
-  const solved = idList(s.solved, [...P.runes, ...P.levers, ...P.boulders].map(x => x.id));
+  const minePuzzles = map.mine ? [map.mine.cart.id, map.mine.beam.id] : [];
+  const solved = idList(s.solved, [...P.runes, ...P.levers, ...P.boulders].map(x => x.id).concat(minePuzzles));
   const secrets = idList(s.secrets, P.secrets.map(x => x.id));
   const levers = idList(s.levers, P.levers.flatMap(l => l.levers.map((_, i) => `${l.id}:${i}`)));
   const runesRaw = obj(s.runes); const runes: Record<string, number> = {};
@@ -535,6 +539,35 @@ function tideState(s: Record<string, unknown>, map: MapDefinition): Pick<Expedit
   if (s.lanterns !== undefined) { const l = idList(s.lanterns, (map.lanterns ?? []).map(x => x.id)); if (!l.length) throw new Error('Invalid run'); out.lanterns = l; }
   if (s.notes !== undefined) { const n = idList(s.notes, journalIds([map])); if (!n.length) throw new Error('Invalid run'); out.notes = n; }
   return out;
+}
+function mineState(s: Record<string, unknown>, version: number, map: MapDefinition): Pick<ExpeditionState, 'mine'> {
+  if (map.mine && version < 69) throw new Error('Invalid mine save version');
+  if (s.mine === undefined) {
+    if (map.mine && Array.isArray(s.solved) && (s.solved.includes(map.mine.cart.id) || s.solved.includes(map.mine.beam.id))) throw new Error('Missing mine puzzle state');
+    return {};
+  }
+  if (!map.mine) throw new Error('Invalid mine progress');
+  const m = obj(s.mine);
+  const r = obj(m.rescue);
+  const ids = map.mine.workers.map(w => w.id);
+  const following = idList(r.following, ids);
+  const rescued = idList(r.rescued, ids);
+  if (following.some(id => rescued.includes(id))) throw new Error('Invalid mine rescue');
+  const cart = m.cart;
+  const beam = m.beam;
+  if (!Array.isArray(cart) || cart.length !== 3 || !cart.every(v => v === 'main' || v === 'siding')
+    || !Array.isArray(beam) || beam.length !== 3 || !beam.every(v => ['up', 'right', 'down', 'left'].includes(v))) throw new Error('Invalid mine controls');
+  const controls = { cart: [...cart] as NonNullable<ExpeditionState['mine']>['cart'], beam: [...beam] as NonNullable<ExpeditionState['mine']>['beam'] };
+  const solved = Array.isArray(s.solved) ? s.solved : [];
+  if ((solved.includes(map.mine.cart.id) && !traceMinecart(map.mine.cart, controls.cart).opensWall)
+    || (solved.includes(map.mine.beam.id) !== traceMineBeam(map.mine.beam, map.rows, controls.beam).opensDoor)) throw new Error('Invalid mine puzzle state');
+  const stories = idList(m.stories, (map.recruits ?? []).map(recruit => recruit.hero));
+  const steps = s.steps as number;
+  const expiration = m.crystalExpiresAt;
+  if (expiration !== undefined && !isInt(expiration, mineCrystalDuration, steps + mineCrystalDuration)) throw new Error('Invalid mine light');
+  return { mine: { rescue: { following, rescued }, ...controls, stories,
+    ...(expiration === undefined ? {} : { crystalExpiresAt: expiration as number }),
+  } };
 }
 function spareOf(v: unknown, map: MapDefinition, lookup: EncounterLookup): Item[] {
   if (!Array.isArray(v) || v.length > 99) throw new Error('Invalid spare');
@@ -700,7 +733,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     dust: isInt(s.dust, 0, RUN_CAP.dust) ? s.dust : badRun(),
     ...puzzleState(s, map), herbs: idList(s.herbs, map.herbs.map(h => h.id)),
     visited: idList(s.visited, findTiles(map, 'camp').map(c => `${c.x},${c.y}`)), respawns: respawnsOf(s.respawns, map),
-    ...tideState(s, map),
+    ...tideState(s, map), ...mineState(s, version, map),
   };
   // Standing on a wall is only possible in an opened doorway or a secret passage; never inside a boulder or an open pit.
   if (tileAt(map, state.position)?.kind === 'wall' && !passableWall(state, map, state.position)) throw new Error('Invalid position');
@@ -1044,7 +1077,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
   if (version < 60 && version >= 5) { const p = obj(envelope.profile ?? {}); migrateTreePoints(envelope, map, maps.length ? maps : [map], version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps).length : undefined); }
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

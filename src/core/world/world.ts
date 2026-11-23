@@ -50,17 +50,22 @@ export function encounterChance(state: ExpeditionState, map: MapDefinition, p: P
   const zone = state.repel > 0 ? undefined : rollingZone(map, p);
   return zone ? Math.min(zone.cap, zone.base + state.pressure) : 0;
 }
+export function visibleMineCells(state: ExpeditionState, map: MapDefinition): ReadonlySet<number> | undefined {
+  const mine = map.mine;
+  if (!mine) return;
+  const darkAt = (point: Point): boolean => mine.darkZones.includes(tileAt(map, point)?.zoneId ?? '');
+  const { x, y } = state.position;
+  // An opened wall still uses the light of its passage.
+  const dark = tileAt(map, state.position)?.kind === 'wall'
+    ? Object.values(offsets).some(offset => darkAt({ x: x + offset.x, y: y + offset.y }))
+    : darkAt(state.position);
+  return mineVisibility(state, map, mine, dark);
+}
 export function reveal(state: ExpeditionState, map: MapDefinition): void {
   const width = map.rows[0]!.length; const cells = [...state.revealed]; const r = map.revealRadius;
-  const mine = map.mine;
-  if (mine) {
-    const darkAt = (point: Point): boolean => mine.darkZones.includes(tileAt(map, point)?.zoneId ?? '');
-    const { x, y } = state.position;
-    // An opened wall still uses the light of its passage.
-    const dark = tileAt(map, state.position)?.kind === 'wall'
-      ? Object.values(offsets).some(offset => darkAt({ x: x + offset.x, y: y + offset.y }))
-      : darkAt(state.position);
-    for (const index of mineVisibility(state, map, mine, dark)) cells[index] = '1';
+  const visible = visibleMineCells(state, map);
+  if (visible) {
+    for (const index of visible) cells[index] = '1';
     state.revealed = cells.join('');
     return;
   }
@@ -900,6 +905,9 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
       loot.gold += gold; loot.shard += shard; state.resources.gold += gold; state.resources.shard += shard;
     }
     const items = dropItems(state, map, kind, data.level ?? 1, source);
+    const surrenderedOre = data.enemies.reduce((total, foe) => total + (result.enemies.some(enemy => enemy.id === foe.id && enemy.surrendered) ? foe.surrenderOre ?? 0 : 0), 0);
+    loot.ore += surrenderedOre;
+    state.resources.ore += surrenderedOre;
     // Skill tomes on maps that drop them (no rolls, so loot and items are unchanged).
     const tomes = battleTomes(state, map, kind, state.roster.deployed);
     // P02 (OD-11, A6c): standing reserve members patch themselves up after a win; then fatigue moves on.

@@ -1,3 +1,7 @@
+import { traceMineBeam } from '../core/world/mine-puzzles';
+import { mineActionAt, type MineAction } from '../core/world/mine';
+import { mineCrystalStepsLeft } from '../core/world/mine-light';
+import { mineActionText } from './th';
 import { savePlace } from './save-place';
 import { replayClass, setHtml } from './dom-cheap';
 import {bossGuide} from './boss-equipment';
@@ -16,7 +20,7 @@ import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/batt
 import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId, Profile } from '../core/world/types';
 import { matchesPreset, runPresetPlan } from '../core/world/presets';
 import { lowTide, stepsToTurn, waterAt } from '../core/world/tide';
-import { canWaitTide, objectiveDone, canManage, fatigueCut, fatigueOf, reserveCap, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, bossSealed, questDone, encounterChance, eventChoiceReason, isRevealed, levelOf, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
+import { canWaitTide, objectiveDone, canManage, fatigueCut, fatigueOf, reserveCap, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, bossSealed, questDone, encounterChance, eventChoiceReason, isRevealed, levelOf, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, visibleMineCells, wounded, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, POTION_IDS, type Lane, type TeamPreset } from '../core/world/types';
 import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
@@ -30,7 +34,7 @@ import { gearArt, potionArt } from './equip-art';
 import { fatigueDot } from './fatigue';
 import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
 
-export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; waitTide(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; preset(slot: number): void; lane(id: string, lane: Lane, other?: string): void; withdraw(): void; openChest(): void;
+export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; waitTide(): void; mine(action: MineAction): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; preset(slot: number): void; lane(id: string, lane: Lane, other?: string): void; withdraw(): void; openChest(): void;
   talent(heroId: string, node: TalentNode): void; loadout(heroId: string, actions: ActionId[]): void; autoEquip(plan: AutoEquipmentPlan): void;
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void; draft(index: number): void;
   wear(heroId: string, from: BagList, index: number): void; takeOff(heroId: string, slot: GearSlot): void }
@@ -93,6 +97,7 @@ export class WorldUI {
           <div class="sprite-layer" id="sprite-layer">${this.staticSprites()}<div class="party-token" id="party-token"><span class="token-portrait">${portrait('guardian')}</span></div></div>
           <div class="fog-layer" id="fog-layer"></div>
           <div class="hint-layer" id="hint-layer"></div>
+          <div id="mine-beam-layer" aria-hidden="true"></div>
         </div>
         <div class="map-vignette"></div>
         <div class="world-motes" aria-hidden="true">${Array.from({ length: 6 }, (_, i) => `<i style="left:${12 + i * 15}%;top:${22 + (i * 37) % 60}%;animation-delay:${i * -700}ms"></i>`).join('')}</div>
@@ -229,6 +234,7 @@ export class WorldUI {
     }
     else if (canOpenChest(s, this.map)) this.host.openChest();
     else if (pendingEvent(s, this.map)) this.openEvent();
+    else { const action = mineActionAt(s, this.map); if (action) this.host.mine(action); }
   }
   // Starter recruitment (owner 2026-10-23): a modal choice that cannot be dismissed; each pick joins the party at once.
   // The first fate weave this dialog has revealed (`<pick>:<hero>`), so a redraw keeps the card shown.
@@ -327,6 +333,7 @@ export class WorldUI {
     const token = this.root.querySelector('#party-token')!;
     const sprites = this.root.querySelector('#sprite-layer')!; sprites.innerHTML = this.staticSprites(); sprites.append(token);
     this.root.querySelector('#fog-layer')!.innerHTML = ''; this.fogCells = []; setHtml(this.root.querySelector('#hint-layer')!, '');
+    setHtml(this.root.querySelector('#mine-beam-layer')!, '');
     this.root.querySelector('#map-name')!.textContent = map.name;
   }
   // Lake water tiles carry their high-tide and causeway frames; the CSS swaps by `data-tide` and `.causeway` (the base frame is low tide).
@@ -357,6 +364,13 @@ export class WorldUI {
       const event = this.map.events.find(e => e.x === x && e.y === y);
       if (event) html += `<span class="event-mark sprite" data-cell="${x},${y}" data-event="${event.id}" data-kind="${event.kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"><b class="map-prop"></b><i>!</i></span>`;
       html += this.puzzleSprites(x, y);
+      const mine = this.map.mine;
+      if (mine) {
+        const at = (p: Point) => p.x === x && p.y === y;
+        const mark = mine.workers.some(at) ? 'คน' : mine.crystals.some(at) ? 'แสง' : mine.cart.switches.some(sw => at(sw.lever)) ? 'ราง'
+          : at(mine.cart.start) ? 'รถ' : mine.beam.crystals.some(at) ? 'ผลึก' : '';
+        if (mark) html += `<span class="sprite mine-marker" data-cell="${x},${y}" aria-hidden="true" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${mark}</span>`;
+      }
       if (['camp', 'start', 'goal', 'boss'].includes(kind)) html += `<span class="landmark sprite" data-cell="${x},${y}" data-kind="${kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${kind === 'boss' ? '<span class="boss-unit"></span>' : ''}</span>`;
     }
     return html;
@@ -381,6 +395,9 @@ export class WorldUI {
       if (at(b.pit)) html += `<span class="pit sprite" data-cell="${x},${y}" data-pit="${b.id}" ${pos}></span>`;
       if (at(b.at)) html += `<span class="boulder sprite" data-cell="${x},${y}" data-boulder="${b.id}" ${pos}></span>`;
     }
+    const mine = this.map.mine;
+    const mineDoor = mine && (at(mine.cart.wall) ? mine.cart.id : at(mine.beam.door) ? mine.beam.id : undefined);
+    if (mineDoor) html += `<span class="puzzle-door sprite" data-cell="${x},${y}" data-door="${mineDoor}" data-kind="levers" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}"></span>`;
     const sec = P.secrets.find(at);
     if (sec) html += `<span class="secret-wall sprite" data-cell="${x},${y}" data-secret="${sec.id}" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}"></span>`;
     // 3D: a glowing herb for the herbalist's side quest (picked once per run).
@@ -428,6 +445,7 @@ export class WorldUI {
     this.root.querySelector<HTMLElement>('#zone-name')!.title = this.root.querySelector('#zone-name')!.textContent ?? '';
     const zoneKey = tile.kind === 'camp' ? 'camp' : tile.zoneId; if (this.root.dataset.zone !== zoneKey) this.root.dataset.zone = zoneKey;
     this.renderTide(s);
+    this.renderMineBeam(s);
     this.renderDanger(encounterChance(s, this.map), prev?.chance);
     this.renderParty(s);
     const all = goals(s, this.map); const done = all.filter(g => g.done).length; const next = all.find(g => !g.done);
@@ -449,7 +467,7 @@ export class WorldUI {
     if (this.root.querySelector<HTMLDialogElement>('#team-dialog')!.open) this.renderTeam();
     this.characters?.refresh();
     if (this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.open) { if (atMuster(s, this.map) && !view.locked) this.renderCamp(); else this.root.querySelector<HTMLDialogElement>('#camp-dialog')!.close(); }
-    if (!prev || prev.revealed !== s.revealed) this.renderFog(s);
+    if (this.map.mine || !prev || prev.revealed !== s.revealed) this.renderFog(s);
     this.renderSprites(s, prev);
     this.renderPuzzles(s);
     this.renderHints(s, view.locked);
@@ -462,15 +480,16 @@ export class WorldUI {
   private renderAction(s: ExpeditionState, locked: boolean): void {
     const camp = atCamp(s, this.map); const entrance = !camp && atMuster(s, this.map); const chest = !camp && !entrance && canOpenChest(s, this.map);
     const ev = !camp && !entrance && !chest ? pendingEvent(s, this.map) : undefined;
-    const available = !locked && (camp || entrance || chest || !!ev);
+    const mineAction = !camp && !entrance && !chest && !ev ? mineActionAt(s, this.map) : undefined;
+    const available = !locked && (camp || entrance || chest || !!ev || !!mineAction);
     const fallen = rosterIds(s).filter(id => s.hp[id] === 0).length;
     const action = this.root.querySelector<HTMLButtonElement>('#rest')!;
     action.disabled = !available; action.classList.toggle('available', available);
-    action.dataset.context = camp ? 'camp' : entrance ? 'entrance' : chest ? 'chest' : ev ? 'event' : 'none';
-    const label = camp ? 'พัก' : entrance ? 'ทางออก' : chest ? 'เปิด' : ev ? 'ดู' : 'โต้ตอบ';
+    action.dataset.context = camp ? 'camp' : entrance ? 'entrance' : chest ? 'chest' : ev ? 'event' : mineAction ? 'mine' : 'none';
+    const label = camp ? 'พัก' : entrance ? 'ทางออก' : chest ? 'เปิด' : ev ? 'ดู' : mineAction ? mineActionText[mineAction].label : 'โต้ตอบ';
     setHtml(action, `${icon(camp ? 'rest' : entrance ? 'flag' : chest ? 'chest' : 'talk')}<span>${label}</span>${available ? '<i class="context-dot"></i>' : ''}`);
-    const caption = camp ? (canRest(s, this.map) ? 'พักฟื้นหรือชุบคนที่ล้ม' : fallen ? 'ชุบคนที่ล้มด้วยถ่าน' : `ไฟแคมป์ติดอีก ${this.map.camp.relightWins - (s.restWins ?? 0)} ศึก`) : entrance ? 'จัดทีมหรือถอนตัวกลับค่าย' : chest ? 'เปิดกล่องสมบัติ' : ev ? eventText[ev.kind].name : 'ยืนบนแคมป์หรือกล่องสมบัติ';
-    action.setAttribute('aria-label', camp ? `แคมป์ · เปิดหน้าต่างพักและชุบ · ${caption}` : entrance ? `ทางเข้าด่าน · ${caption}` : chest ? 'เปิดกล่องสมบัติ' : ev ? `${eventText[ev.kind].name} · เปิดหน้าต่างตัวเลือก` : 'โต้ตอบ · ยังไม่มีจุดให้โต้ตอบ ยืนบนแคมป์หรือกล่องสมบัติ');
+    const caption = camp ? (canRest(s, this.map) ? 'พักฟื้นหรือชุบคนที่ล้ม' : fallen ? 'ชุบคนที่ล้มด้วยถ่าน' : `ไฟแคมป์ติดอีก ${this.map.camp.relightWins - (s.restWins ?? 0)} ศึก`) : entrance ? 'จัดทีมหรือถอนตัวกลับค่าย' : chest ? 'เปิดกล่องสมบัติ' : ev ? eventText[ev.kind].name : mineAction ? mineActionText[mineAction].help : 'ยืนบนแคมป์หรือกล่องสมบัติ';
+    action.setAttribute('aria-label', camp ? `แคมป์ · เปิดหน้าต่างพักและชุบ · ${caption}` : entrance ? `ทางเข้าด่าน · ${caption}` : chest ? 'เปิดกล่องสมบัติ' : ev ? `${eventText[ev.kind].name} · เปิดหน้าต่างตัวเลือก` : mineAction ? caption : 'โต้ตอบ · ยังไม่มีจุดให้โต้ตอบ ยืนบนแคมป์หรือกล่องสมบัติ');
     this.root.querySelector('#action-caption')!.textContent = caption;
   }
 
@@ -536,11 +555,34 @@ export class WorldUI {
   // Map 4: the water level for the board (root `data-tide`, drives the water tiles) and the HUD chip with the steps left.
   private renderTide(s: ExpeditionState): void {
     const chip = this.root.querySelector<HTMLElement>('#tide-chip')!;
-    if (!this.map.tide) { delete this.root.dataset.tide; chip.hidden = true; return; }
+    const before = this.root.querySelector(this.map.mine ? '#world-party' : '#world-info-button')!;
+    if (chip.parentElement !== before.parentElement) before.before(chip);
+    if (!this.map.mine) delete chip.dataset.mine;
+    if (!this.map.tide) {
+      delete this.root.dataset.tide;
+      if (!this.map.mine) { chip.hidden = true; return; }
+      chip.hidden = false;
+      chip.dataset.mine = '';
+      const left = mineCrystalStepsLeft({ steps: s.steps, crystalExpiresAt: s.mine?.crystalExpiresAt });
+      const following = s.mine?.rescue.following.length ?? 0;
+      const text = left ? `แสงพกพา ${left} ก้าว` : `ตะเกียง ${s.lanterns?.length ?? 0}/${this.map.lanterns?.length ?? 0}`;
+      const escort = following ? ` · คนงานตามมา ${following} คน` : '';
+      setHtml(chip, `${icon('star')}<b>${text}</b><span>${escort}</span>`);
+      chip.setAttribute('aria-label', text + escort);
+      return;
+    }
     const low = lowTide(s, this.map); const left = stepsToTurn(s, this.map); this.root.dataset.tide = low ? 'low' : 'high';
     chip.hidden = false; chip.dataset.tide = low ? 'low' : 'high';
     setHtml(chip, `${icon('rest')}<b>${low ? 'น้ำลง' : 'น้ำขึ้น'}</b><span>${low ? 'ขึ้น' : 'ลง'}ใน ${left} ก้าว${s.boat ? ' · มีเรือ' : ''}</span>`);
     chip.setAttribute('aria-label', `${low ? 'น้ำลง ช่องน้ำตื้นเดินได้' : 'น้ำขึ้น ช่องน้ำตื้นท่วม'} · อีก ${left} ก้าวน้ำจะ${low ? 'ขึ้น' : 'ลง'}${s.boat ? ' · มีเรือข้ามน้ำได้ทุกช่วง' : ''}`);
+  }
+  private renderMineBeam(s: ExpeditionState): void {
+    const mine = this.map.mine;
+    if (!mine) return;
+    const layer = this.root.querySelector('#mine-beam-layer')!;
+    const trace = traceMineBeam(mine.beam, this.map.rows, s.mine?.beam ?? ['up', 'up', 'up']);
+    setHtml(layer, trace.tiles.filter(at => isRevealed(s, this.map, at)).map(({ x, y }) =>
+      `<i class="mine-beam-cell" style="--x:${x};--y:${y}"></i>`).join(''));
   }
   private renderCamp(): void {
     const s = this.view?.state; if (!s) return;
@@ -642,18 +684,24 @@ export class WorldUI {
   private fogCells: (HTMLElement | undefined)[] = [];
   private renderFog(s: ExpeditionState): void {
     const layer = this.root.querySelector('#fog-layer')!;
+    const mine = this.map.mine;
+    const local = visibleMineCells(s, this.map);
     for (let y = 0; y < this.map.rows.length; y++) for (let x = 0; x < this.width; x++) {
       const i = y * this.width + x, layers = fogLayers(this.map, s, { x, y });
-      const art = layers.map(l => `url(${worldArtUrl(l)})`).join(',');
+      const dim = !!(mine && local && !local.has(i) && mine.darkZones.includes(tileAt(this.map, { x, y })!.zoneId) && !layers.length);
+      const art = dim ? 'linear-gradient(#0d101cc9,#0d101cc9)' : layers.map(l => `url(${worldArtUrl(l)})`).join(',');
       let cell = this.fogCells[i];
-      if (!layers.length) { if (cell) { cell.remove(); this.fogCells[i] = undefined; } continue; }
+      if (!layers.length && !dim) { if (cell) { cell.remove(); this.fogCells[i] = undefined; } continue; }
       if (cell && cell.dataset.art === art) continue;
       if (!cell) { cell = document.createElement('div'); cell.style.setProperty('--x', String(x)); cell.style.setProperty('--y', String(y)); this.fogCells[i] = cell; layer.append(cell); }
-      cell.className = `fog-cell${layers[0]!.startsWith('fog_tile') ? ' opaque' : ''}`;
+      cell.className = `fog-cell${layers[0]?.startsWith('fog_tile') ? ' opaque' : ''}`;
       cell.dataset.art = art; cell.style.backgroundImage = art;
     }
     this.root.querySelectorAll<HTMLElement>('.sprite[data-cell]').forEach(el => {
-      const [x, y] = el.dataset.cell!.split(',').map(Number); el.hidden = !isRevealed(s, this.map, { x: x!, y: y! });
+      const [x, y] = el.dataset.cell!.split(',').map(Number); const at = { x: x!, y: y! };
+      const dark = mine?.darkZones.includes(tileAt(this.map, at)?.zoneId ?? '');
+      el.hidden = !isRevealed(s, this.map, at) || !!(dark && local && !local.has(at.y * this.width + at.x));
+      if (el.classList.contains('mine-marker') && !mineActionAt(s, this.map, at)) el.hidden = true;
     });
   }
 
@@ -765,7 +813,7 @@ export class WorldUI {
     const story = this.map.quest.optional && storyQuestText[this.map.id] ? `<h3 class="seal-title story-title">${icon('star')} ${storyQuestText[this.map.id]!.name} · ไม่บังคับ</h3><p class="map-quest-note">${storyQuestText[this.map.id]!.ask} · รางวัลครั้งเดียว ${rewardText(this.map.quest.optional.reward)}${this.view?.storyDone ? ' (รับแล้ว)' : ''}</p><ul class="goal-list seal-list story-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>` : '';
     // Map 4: a side story beside the seal (every objective in one run that comes home).
     const side = this.map.story && storyQuestText[this.map.id] ? `<h3 class="seal-title story-title">${icon('star')} ${storyQuestText[this.map.id]!.name} · ไม่บังคับ</h3><p class="map-quest-note">${storyQuestText[this.map.id]!.ask} · รางวัลครั้งเดียว ${rewardText(this.map.story.reward)}${this.view?.storyDone ? ' (รับแล้ว)' : ''}</p><ul class="goal-list seal-list story-list">${this.map.story.objectives.map(o => `<li id="story-${o.id}" class="${objectiveDone(s, o) ? 'done' : ''}">${icon(objectiveDone(s, o) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>` : '';
-    const seal = !this.map.quest.need || this.map.quest.optional ? story : `<h3 class="seal-title">${icon('boss')} ${this.map.tide ? 'ผนึกศาลาจันทร์' : 'ผนึกรอยแยก'} · ทำให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนท้า${this.map.tide ? this.map.bossName : 'ผู้คุม'}</h3><ul class="goal-list seal-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>`;
+    const seal = !this.map.quest.need || this.map.quest.optional ? story : `<h3 class="seal-title">${icon('boss')} ${this.map.mine ? 'ผนึกโพรงผลึก' : this.map.tide ? 'ผนึกศาลาจันทร์' : 'ผนึกรอยแยก'} · ทำให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนท้า${this.map.tide || this.map.mine ? this.map.bossName : 'ผู้คุม'}</h3><ul class="goal-list seal-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>`;
     this.root.querySelector('#world-goals-content')!.innerHTML = `<ul class="goal-list">${goals(s, this.map).map(g => `<li class="${g.done ? 'done' : ''}">${icon(g.done ? 'check' : 'circle')}<span>${g.label}</span></li>`).join('')}</ul>${seal}${side}<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>`;
     this.renderQuests();
   }

@@ -1,3 +1,4 @@
+import type { MineAction } from '../core/world/mine';
 import {bossNames,bossDescription} from './boss-equipment';
 import type { ActionId, PassiveId, BattleEvent, BattleState, EncounterDefinition, Intent, IntentAim, TalentCap, TalentRule } from '../core/battle/types';
 import { TOME_LINES, TOME_SIZES, type BoardKind, type ContractKind, type SweepReward, type TomeBag, type TomeLine, type TomeSize } from '../core/world/types';
@@ -40,7 +41,7 @@ export function actorName(id: string | undefined, data: EncounterDefinition): st
 }
 // Who an announced enemy turn affects, in words: a phase change, a charge, the whole party or one hero.
 export function intentTargetThai(intent: Intent, data: EncounterDefinition, recipient = intent.targetId): string {
-  return intent.special === 'phase' ? 'เปลี่ยนช่วงการต่อสู้' : intent.charge ? 'รวบรวมพลัง' : intent.all ? 'ทั้งทีม' : actorName(recipient, data);
+  return intent.raiseCrystalArmor ? 'ตัวเอง' : intent.special === 'phase' ? 'เปลี่ยนช่วงการต่อสู้' : intent.charge ? 'รวบรวมพลัง' : intent.all ? 'ทั้งทีม' : actorName(recipient, data);
 }
 // Seer delay (save v51): the stand-in move names the big move pushed to next round; that move then reads as delayed once.
 export function intentDelayThai(intent: Intent): string {
@@ -51,6 +52,8 @@ export const aimThai: Record<IntentAim, string> = { weakest: 'เล็ง HP �
 export const aimNoteThai: Record<IntentAim, string> = { weakest: 'เลือกคนที่ HP เหลือ % ต่ำสุด', support: 'เลือกสายสนับสนุน/ฮีลก่อน', pack: 'ตีตามเป้าของศัตรูตัวแรกในกลุ่ม' };
 // The rule line under an announced enemy turn.
 export function intentRuleThai(intent: Intent): string {
+  if (intent.raiseCrystalArmor) return 'กางเกราะสะท้อนเวท · ทุบให้แตกหรือรอให้หมด';
+  if (intent.crystalCollapse) return 'โดนทั้งทีม · ใช้โล่หรือตั้งรับ · ขัดจังหวะไม่ได้';
   if (intent.special === 'phase') return 'ไม่โจมตีเทิร์นนี้ · เรียกพวก/เปลี่ยนท่า · ขัดจังหวะไม่ได้';
   // P11-05: a staggered move (a breakable charge was cancelled), a summon, the breakable charge and the court bonus.
   if (intent.special === 'stagger') return 'เสียหลัก · ไม่มีดาเมจรอบนี้';
@@ -65,7 +68,7 @@ export const phaseThai = (name: string): string => intentName({ name } as Intent
 export function intentName(intent: Intent): string {
   return ({ 'Raking Slash': 'ฟันกวาด', 'Rift Bolt': 'ลำแสงรอยแยก', 'Crushing Blow': 'ทุบหนัก', 'Shadow Knife': 'มีดเงา', 'Rift Fury': 'โทสะรอยแยก', 'War Cry': 'คำรามศึก',
     'Seed Spark': 'ประกายเมล็ด', 'Tusk Charge': 'พุ่งงา', 'Thorn Pounce': 'ตะครุบหนาม', 'Spore Hex': 'คำสาปสปอร์', 'Thorn Bloom': 'หนามผลิบาน',
-    'Briar Lash': 'แส้หนาม', 'Rune Lash': 'แส้อักขระ', 'Ribbon Snare': 'ริบบิ้นรัด', 'Crystal Fist': 'หมัดผลึก', 'Horn Charge': 'พุ่งเขา', 'Shard Burst': 'ผลึกระเบิด',
+    'Briar Lash': 'แส้หนาม', 'Rune Lash': 'แส้อักขระ', 'Ribbon Snare': 'ริบบิ้นรัด', 'Crystal Fist': 'หมัดผลึก', 'Crystal Armor': 'เกราะผลึก', 'Crystal Collapse': 'ผลึกถล่ม', 'Crystal Split': 'แตกเป็นผลึกย่อย', 'Shard Beam': 'ลำแสงผลึก', 'Shard Prick': 'ผลึกแทง', 'Horn Charge': 'พุ่งเขา', 'Shard Burst': 'ผลึกระเบิด',
     'Jelly Bounce': 'กระเด้งชน', 'Ember Spark': 'ประกายถ่าน', 'Nip': 'งับ', 'Shield Smash': 'ทุบโล่', 'Mace Swing': 'ฟาดกระบอง', 'Thorn Bite': 'กัดหนาม',
     'Spore Dust': 'ฝุ่นสปอร์', 'Call the Hunt': 'เรียกพวกล่า', 'Call the Rift': 'เรียกวิญญาณรอยแยก', 'Rift Awakening': 'รอยแยกตื่น', 'Thorn Rage': 'โทสะพงหนาม', 'Gather Thorns': 'รวบรวมหนาม', 'Thorn Tempest': 'พายุหนามคลั่ง', 'Rift Gathering': 'รวบรวมพลังรอยแยก', 'Rift Cataclysm': 'มหันตภัยรอยแยก', 'Rift Wave': 'คลื่นรอยแยกกวาด', 'Thorn Storm': 'พายุหนาม', 'Rift Beam': 'คลื่นรอยแยก', 'Star Flame': 'เปลวดาว', 'Crystal Stab': 'แทงขาผลึก' } as Record<string, string>)[intent.name] ?? intent.name;
 }
@@ -415,6 +418,11 @@ export function reasonThai(reason: string): string {
 }
 export function eventThai(event: BattleEvent, after: BattleState, data: EncounterDefinition): string {
   const target = actorName(event.targetId, data); const source = actorName(event.sourceId, data);
+  if (event.text === 'Crystal armor reflects magic.') return `เกราะสะท้อนเวทใส่${target} · เสียเลือด ${event.amount ?? 0}${event.absorbed ? ` (โล่รับ ${event.absorbed})` : ''}`;
+  if (event.text === 'Crystal armor breaks.') return 'เกราะผลึกแตกแล้ว';
+  if (event.text === 'Crystal armor expires.') return 'เกราะผลึกหมดเวลา';
+  if (event.text === 'Crystal armor rises.') return 'ยักษ์กางเกราะสะท้อนเวท';
+  if (event.text === 'The worker surrenders.') return 'คนงานวางอาวุธและยอมแพ้';
   switch (event.type) {
     case 'cooldown': return `${target} · ${event.action ? data.skills[event.action].name : 'สกิล'} พร้อมเร็วขึ้น ${event.amount ?? 0} รอบ (ไม่เพิ่มเทิร์น)`;
     case 'deflect': return event.text === 'Fate is bent.' ? `${source}เบนท่าถัดไปของ${target}ไปลงศัตรูอีกตัว` : `ท่าของ${target}ถูกเบนออกจากฝ่ายเรา`;
@@ -560,7 +568,7 @@ export function questLine(o: QuestObjective, state: ExpeditionState): string {
   return questEventText[o.target] ?? 'ชำระรอยแยกเล็กในรอยแผล';
 }
 const questEliteText: Record<string, string> = { 'lake-serpent': 'ชนะอสรพิษเงาที่สะพานใหญ่', 'mine-overseer': 'ชนะหัวหน้าคุมเหมือง' };
-const questChestText: Record<string, string> = { 'lake-oar': 'หาไม้พายในกล่องบนเกาะ' };
+const questChestText: Record<string, string> = { 'lake-oar': 'หาไม้พายในกล่องบนเกาะ', 'mine-ledger-yard': 'หน้าสมุดบัญชีที่ลานคนงาน', 'mine-ledger-workers': 'หน้าสมุดบัญชีที่ทางคนงาน', 'mine-ledger-vault': 'หน้าสมุดบัญชีหลังประตูผลึก' };
 // P05-02: event objectives of the optional story quests (map 2) and the rift seal (map 3).
 const questEventText: Record<string, string> = {
   'lake-shrine': 'ทำพิธีรำลึกที่ศาลเจ้าริมน้ำ', 'lake-ferryman': 'ช่วยคนพายเรือแก่ที่ท่าเรือ',
@@ -570,6 +578,7 @@ const questEventText: Record<string, string> = {
 };
 // P05-02: optional story quests of maps 1–2, by map id (the objectives come from the map's `quest`).
 export const storyQuestText: Record<string, { name: string; ask: string; done: string }> = {
+  'crystal-mine': { name: 'สมุดบัญชีเหมือง', ask: 'หาสมุดบัญชีทั้ง 3 หน้าแล้วนำกลับไปให้ลุงบอร์ก', done: 'นำสมุดบัญชีกลับมาถึงค่ายแล้ว' },
   'moon-lake': { name: 'เรือของคนพายเรือ', ask: 'คนพายเรือแก่ที่ท่าเรือร้างทำไม้พายหายไปบนเกาะกลางน้ำ ช่วยเขา หาไม้พายในกล่องบนเกาะ แล้วกลับค่ายในรอบเดียว · ได้เรือเล็กข้ามน้ำได้ทุกช่วงในรอบต่อ ๆ ไป', done: 'คาเอล: คนพายเรือฝากเรือเล็กไว้ให้ค่ายเรา ข้ามทะเลสาบได้ไม่ต้องรอน้ำลงแล้ว' },
   'ruined-border': { name: 'รอยธงของคนที่หนี', ask: 'ทหารที่หนีไปซ่อนธงประจำกองไว้ในกล่องสามใบทั่วซากป้อม เปิดให้ครบในรอบเดียวแล้วกลับค่าย', done: 'มิมี่: ธงของคนที่หนีกลับมาครบแล้ว ข้าเก็บเข้าคลังให้' },
   'deep-forest': { name: 'ด้ายที่ป่าฝืน', ask: 'ป่าบิดเบี้ยวเพราะรอยแยก ตัดสินใจเรื่องนักเดินทางและศาลเก่าให้ครบในรอบเดียวแล้วกลับค่าย', done: 'คาเอล: ป่าสงบลงหน่อยแล้ว คนเดินทางเริ่มกลับมาใช้เส้นทางนั้น' },
@@ -602,6 +611,8 @@ export function campLines(profile: Pick<Profile, 'last' | 'choices'>, events: re
 // Map 4 (save v68): the camp journal's pages (lost notes and gazed memories), keyed by note id. Draft text from the approved
 // chapter-1 lore (docs/LORE_CHAPTER1_TH.md, act 2): the lake shows the commander's past; the other child is Vargoth.
 export const journalText: Record<string, { title: string; body: string }> = {
+  'mine-dig-order': { title: 'คำสั่งขุดของวาร์กอธ', body: '“ส่งผลึกทั้งหมดไปคลังอาวุธ เพิ่มกะขุดทั้งคืน” ด้านล่างมีรายชื่อคนงานที่ถูกย้ายลงไปในอุโมงค์ลึก' },
+  'mine-child-drawing': { title: 'ภาพวาดเด็กคนงาน', body: 'เด็กวาดคนงานจับมือกันเดินตามตะเกียงห้าดวงกลับขึ้นลาน ที่มุมกระดาษมีรอยมือเล็กข้างรอยมือใหญ่' },
   'note-weaver-book': { title: 'สมุดทอด้ายของเด็กชาย', body: 'ลายมือเด็กเขียนว่า “วันนี้ทอด้ายสีเงินได้ยาวกว่าเพื่อน เขาบอกว่าวันหนึ่งจะทอสะพานข้ามทะเลสาบให้ได้” หน้าสุดท้ายมีด้ายสองเส้นผูกติดกันไว้ เส้นหนึ่งขาดครึ่ง' },
   'note-keeper-letter': { title: 'จดหมายถึงผู้ดูแลทะเลสาบ', body: '“ท่านผู้ดูแล เด็กสองคนนั้นมานั่งริมน้ำทุกคืนจันทร์เต็มดวง ขอท่านช่วยดูแลพวกเขาด้วย” ลายเซ็นเลือนจนอ่านไม่ออก มีคราบน้ำตาหยดลงกลางกระดาษ' },
   'memory:shore-reflection': { title: 'ความทรงจำ · ริมท่าเรือ', body: 'ในน้ำท่านเห็นเด็กสองคนนั่งทอด้ายใต้แสงจันทร์ คนหนึ่งคือตัวท่านเอง อีกคนหันมายิ้ม ดวงตาสีเดียวกับวาร์กอธ' },
@@ -702,3 +713,12 @@ export function heroStatLine(h: HeroDefinition, hp?: number): string {
   return [`เลือด ${hp !== undefined ? `${hp}/` : ''}${h.maxHp}`, `พลังโจมตี ${h.attack}`, `พลังเวท +${h.skillBonus ?? 0}%`, `SPD ${h.speed}`,
     ...(h.armour ? [`เกราะ ${h.armour}%`] : []), ...(h.resist ? [`ต้านพลังงาน ${h.resist}%`] : []), ...(h.leech ? [`ดูดเลือด ${h.leech}%`] : [])].join(' · ');
 }
+
+export const mineActionText: Record<MineAction, { label: string; help: string; done: string }> = {
+  'light-lantern': { label: 'จุดไฟ', help: 'จุดตะเกียงติดผนัง', done: 'จุดตะเกียงแล้ว' },
+  'charge-crystal': { label: 'เติมแสง', help: 'เติมแสงจากผลึกเรืองแสง', done: 'ได้แสงพกพา 12 ก้าว' },
+  'invite-worker': { label: 'ช่วย', help: 'ชวนคนงานกลับแคมป์ลานคนงาน', done: 'คนงานเดินตามแล้ว · พากลับแคมป์ที่ลานคนงาน' },
+  'switch-track': { label: 'สับราง', help: 'สับคันโยกระหว่างรางหลักกับรางข้าง', done: 'สับคันโยกแล้ว' },
+  'push-cart': { label: 'ผลักรถ', help: 'ผลักรถแร่ไปตามรางที่ตั้งไว้', done: 'ผลักรถแร่แล้ว' },
+  'turn-crystal': { label: 'หมุนผลึก', help: 'หมุนผลึกเพื่อส่งแสงถึงประตู', done: 'หมุนผลึกแล้ว' },
+};

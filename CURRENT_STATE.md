@@ -1,12 +1,12 @@
-# Current state — updated 2026-11-23 (Map 5 world commands)
+# Current state — updated 2026-11-23 (Map 5 rules and validation)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml` (runs the Chromium suite before deploy).
-- Save **v68** (map 4 tide/notes/journal, camp cap; v67 first fate weave; v66 gacha). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
-- Maps: 1 ซากชายแดน, 2 เส้นทางป่าทึบ, 3 แนวรอยแยก, **4 ทะเลสาบเงาจันทร์** (concepts for 4–10: [CHAPTER1_MAPS_TH](docs/design/CHAPTER1_MAPS_TH.md)).
+- Save **v69 on the mine branch** (mine progress; v68 map 4 tide/notes/journal, camp cap; v67 first fate weave; v66 gacha). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
+- Maps: 1 ซากชายแดน, 2 เส้นทางป่าทึบ, 3 แนวรอยแยก, 4 ทะเลสาบเงาจันทร์, **5 เหมืองผลึกร้าง** (work branch; concepts for 4–10: [CHAPTER1_MAPS_TH](docs/design/CHAPTER1_MAPS_TH.md)).
 - **Map 4 (OD-60)**: rules/content/save #336, UI #337 and art #342–#345. Owner approved the four ordinary foes and the map screens 2026-11-23 (“อนุมัติ”). Tide every 8 steps, seal 2 of 3, ferryman → boat, reflections/notes → journal, Lio camp 1 / Cerise camp 2, semi-chibi Water Spirit with six 768px moves and event-driven VFX. [390px review](docs/validation/map4-lake/README_TH.md).
 - Camp level cap = 10 + 3 per first clear past map 2 (≤30); tree points still stop at Lv10.
 - P10 gacha (OD-58) live; cabinet after MAP1 with 10 first-clear tickets (OD-59). Unlock pacing #202.
@@ -29,11 +29,11 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Map 5 design confirmed (“ทำตามที่คุณแนะนำ”). Board and world commands on `codex/map5-crystal-mine-design` clear all three mine seal routes in tests with fixture encounters. Saves, final encounters, campaign registration and simulation are next. [Design and command checks](docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md).
+- Map 5 design confirmed (“ทำตามที่คุณแนะนำ”). The mine unlocks after the lake on `codex/map5-crystal-mine-design`. Save v69, the Crystal Giant and exploration controls use the real campaign. Expanded balance validation and dedicated art remain. [Mine validation](docs/validation/map5-mine/README_TH.md).
 
 - Lake sweep/contract pay map 3's values until a P04 economy pass; P04-05/06 numbers.
 - Map 3 Briar Lord first-try gate; no real Safari/iPhone/Android or human usability validation. Pending intake #262, #169.
 
 ## Opening prompt for next chat
 
-Finish Map 5 save validation and encounters using the [Crystal Mine exploration rules](docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md) and Claude handoff. Register and simulate the mine before building the map screen and art.
+Review the [Map 5 validation](docs/validation/map5-mine/README_TH.md) and expand balance sampling before locking numbers. Follow OD-60 with 390px silhouette and motion review using the Crystal Giant, stone golem and Water Spirit.

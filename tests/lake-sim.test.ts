@@ -12,7 +12,7 @@ const full = process.env.SIM_REPORT === '1';
 const seedsOf = (n: number) => Array.from({ length: n }, (_, i) => 1001 + i * 37);
 const styles: Style[] = full ? ['advisor', 'casual'] : ['advisor'];
 const policies: Policy[] = ['rush', 'explorer'];
-const cs: CampaignReport[] = styles.flatMap(style => (full ? seedsOf(style === 'casual' ? 48 : 12) : [1001]).flatMap(seed => policies.map(policy => simulateCampaign(seed, policy, style, 0, 0, 12, undefined, MAPS))));
+const cs: CampaignReport[] = styles.flatMap(style => (full ? seedsOf(style === 'casual' ? 48 : 12) : [1001]).flatMap(seed => policies.map(policy => simulateCampaign(seed, policy, style, 0, 0, 12, undefined, MAPS.filter(map => map.chapter <= lakeMap.chapter)))));
 const lake = (c: CampaignReport): CampaignExpedition[] => c.expeditions.filter(e => e.mapId === lakeMap.id && !e.hard);
 const pct = (n: number, d: number) => d ? Math.round(n / d * 100) : 0;
 describe('map 4 simulation', () => {

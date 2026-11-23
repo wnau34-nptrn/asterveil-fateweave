@@ -155,7 +155,7 @@ describe('map 4: camp level cap (OD-60) and the Water Veil', () => {
 
 describe('map 4: save v68', () => {
   it('keeps the tide, lanterns, notes and journal; refuses them where they do not belong; a v67 save loads unchanged', () => {
-    expect(SAVE_VERSION).toBe(68);
+    expect(SAVE_VERSION).toBe(69);
     const profile: Profile = { ...newProfile(map, 3, company), tutorialDone: true, notes: ['note-keeper-letter'], storyQuests: [map.id] };
     const s: ExpeditionState = { ...depart(profile, map, lookup, 4).run, position: { x: 6, y: 12 }, shore: { x: 5, y: 12 }, steps: 1, tideWait: 8, lanterns: ['lantern-islet'], notes: ['note-weaver-book'] };
     const game = { profile, run: s }; const raw = currentSave(game);

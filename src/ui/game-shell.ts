@@ -1,3 +1,5 @@
+import type { MineAction } from '../core/world/mine';
+import { mineActionText } from './th';
 import { showBattleRewards, type BattleRewards } from './battle-rewards';
 import { gachaReasonText } from './gacha-panel';
 import { battleMemo } from '../core/command/battle-memo';
@@ -106,10 +108,10 @@ export class GameShell {
       this.lobbyMessage = this.migrationNote;
       this.persist();
     }
-    for (const id of this.game?.run?.recruited ?? []) this.recruitSeen.add(`${this.game!.run!.mapId}:${id}`);
+    this.markRecruits();
     this.world = new WorldUI(views.world, this.map, heroCatalog(lookup, map), {
       travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.step({ kind: 'swapMembers', a, b }, r => this.roster(r)), lane: (id, lane, other) => this.step({ kind: 'setLane', heroId: id, lane, ...(other !== undefined ? { other } : {}) }, r => this.roster(r)), moveMember: id => this.step({ kind: 'moveMember', heroId: id }, r => this.roster(r)), preset: slot => this.step({ kind: 'runPreset', slot }, r => this.roster(r)),
-      withdraw: () => this.withdraw(), waitTide: () => this.waitTide(), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
+      withdraw: () => this.withdraw(), waitTide: () => this.waitTide(), mine: action => this.interactMine(action), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
       chooseEvent: choice => this.chooseEvent(choice), draft: index => this.draft(index),
       talent: (id, node) => {
         if (!this.state || this.locked) return;
@@ -853,12 +855,15 @@ export class GameShell {
   }
   // Story recruits: play each newly joined guest once per session (a reload shows the ones already joined as seen).
   private recruitSeen = new Set<string>();
-  private markRecruits(): void { for (const id of this.state?.recruited ?? []) this.recruitSeen.add(`${this.state!.mapId}:${id}`); }
+  private reachedRecruits(): readonly string[] {
+    return this.state?.mine?.stories.filter(id => !this.game?.profile.storyShards?.includes(id)) ?? this.state?.recruited ?? [];
+  }
+  private markRecruits(): void { for (const id of this.reachedRecruits()) this.recruitSeen.add(`${this.state!.mapId}:${id}`); }
   private playRecruits(then: () => void): void {
-    const fresh = (this.state?.recruited ?? []).filter(id => !this.recruitSeen.has(`${this.state!.mapId}:${id}`));
+    const fresh = this.reachedRecruits().filter(id => !this.recruitSeen.has(`${this.state!.mapId}:${id}`));
     if (!fresh.length) { then(); return; }
     this.markRecruits();
-    this.story.play(recruitStory(fresh, this.game?.profile.commander?.name || 'ผู้บัญชาการ'), 'ไปต่อ', then);
+    this.story.play(recruitStory(fresh, this.game?.profile.commander?.name || 'ผู้บัญชาการ', this.map.mine ? this.game?.profile.company ?? [] : undefined), 'ไปต่อ', then);
   }
   private move(dir: Direction): void {
     if (!this.state || this.locked) return;
@@ -993,6 +998,26 @@ export class GameShell {
       this.renderWorld();
     });
   }
+  private interactMine(action: MineAction): void {
+    const before = this.state; if (!before || this.locked) return;
+    this.step({ kind: 'mine', action }, result => {
+      if (result.event.type !== 'mine') return;
+      this.state = result.state; this.persist();
+      const mine = this.map.mine!;
+      const at = result.state.position;
+      const matches = (point: Point) => point.x === at.x && point.y === at.y;
+      const opened = result.state.solved.some(id => !before.solved.includes(id));
+      const state = result.state.mine;
+      const setting = action === 'switch-track' ? state?.cart[mine.cart.switches.findIndex(sw => matches(sw.lever))] : undefined;
+      const direction = action === 'turn-crystal' ? state?.beam[mine.beam.crystals.findIndex(matches)] : undefined;
+      this.message = (opened ? 'เปิดทางแล้ว' : action === 'push-cart' ? 'รถแร่ติดปลายราง · กลับมาผลักใหม่ได้'
+        : setting ? `คันโยกชี้ไปทาง${setting === 'main' ? 'รางหลัก' : 'รางข้าง'}`
+        : direction ? `ลำแสงชี้${{ up: 'เหนือ', right: 'ตะวันออก', down: 'ใต้', left: 'ตะวันตก' }[direction]}`
+        : mineActionText[action].done) + this.sealNote(before, result.state);
+      this.renderWorld();
+      this.playRecruits(() => {});
+    });
+  }
   // Map 4: wait at a camp for the water to turn.
   private waitTide(): void {
     if (!this.state || this.locked) return;
@@ -1011,6 +1036,7 @@ export class GameShell {
       this.state = result.state; this.persist(); sfx.play('door');
       this.message = tileAt(this.map, to)?.kind === 'start' ? 'วาร์ปกลับทางเข้าด่านแล้ว' : 'วาร์ปถึงแคมป์แล้ว';
       this.renderWorld();
+      if (this.map.mine) this.playRecruits(() => {});
     });
   }
   private revive(heroId: string): void {

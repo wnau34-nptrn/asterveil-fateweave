@@ -2,10 +2,11 @@
 
 These owner-scoped rules still apply. They were moved here verbatim so CLAUDE.md stays short. Before changing a system, read its section here.
 
-## Map 5 เหมืองผลึกร้าง — OD-60 exploration on the design branch
+## Map 5 เหมืองผลึกร้าง — OD-60 (save v69, draft balance)
 
 - `chapter-mine.ts` supplies the board and exploration definition. The `mine` game command validates tile interactions. Movement shares the existing door, camp, encounter pressure and seal paths.
-- `ExpeditionState.mine` tracks portable light expiry, cart and beam settings, workers following or rescued, and reached recruit scenes. It needs save validation before campaign registration. See the [design and command tests](MAP5_CRYSTAL_MINE_DRAFT_TH.md#กระดานต้นแบบ).
+- `ExpeditionState.mine` tracks portable light expiry, cart and beam settings, workers following or rescued, and reached recruit scenes. The save parser validates mine-only progress and solved puzzle IDs. The mine unlocks after the lake.
+- The Crystal Giant raises timed armour on round 1. It reflects direct magic once per action. Physical actions crack it; heavy hits break it. Its every-third-round collapse is an all-party hit with per-target mitigation. The below-half split summons reserves immediately, with turns starting in the following round. [Validation](../validation/map5-mine/README_TH.md).
 
 ## Map 4 ทะเลสาบเงาจันทร์ — owner OD-60 2026-11-22 (save v68, draft numbers)
 
