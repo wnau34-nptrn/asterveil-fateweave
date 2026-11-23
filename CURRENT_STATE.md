@@ -1,15 +1,15 @@
-# Current state — updated 2026-11-21 (P10 free-ticket gacha)
+# Current state — updated 2026-11-23 (map 4 ทะเลสาบเงาจันทร์)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml` (runs the Chromium suite before deploy).
-- Save **v66** (P10 gacha wallet; v65 trio; v64 World Boss; v63 board). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, team presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
-- **P10 gacha (OD-58, [spec](docs/design/GACHA_P10_SPEC_TH.md))**: rules/server merged via #328/#329; tickets from daily patrol 1, weekly tasks 2 each, trio p-2/p-4 2+2, trio 50% shared 1 each (≤24/week = 96/28 d); 7.5% full copy over 15, else 1–2 shards; 80 points exchange; opens after MAP2; journal `GET /v1/gacha/history`. UI #330 (ART-UI-GACHA-003 R1 stage/VFX/cards) **owner-approved 2026-11-21 “อนุมัติ”** (screens + clip in `docs/validation/p10-gacha-2026-11-21/`). No sales (G07 out of scope).
-- Perf R1–R11 merged; image-blank B1–B6 done (B4 blurred placeholders, B5 lossy map atlases: owner approved 2026-11-21, PR #325, [validation](docs/validation/image-blank-b4-b5-2026-11-21/README_TH.md)); re-measure on a real phone.
-- **OD-59 (2026-11-22, save v67)**: the starter picks are the first fate weave (one guaranteed support, then one attacker; free); the cabinet is a camp tile opening after MAP1, whose first clear pays 10 tickets once; lessons point at the World Boss and the cabinet. A new game resets the lessons on the device (#332).
-- Unlock pacing #202: quests/team/World Boss/gacha after MAP1; hire/market/hunt after MAP2; advanced services/hard after MAP3.
+- Save **v68** (map 4 tide/notes/journal, camp cap; v67 first fate weave; v66 gacha). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
+- Maps: 1 ซากชายแดน, 2 เส้นทางป่าทึบ, 3 แนวรอยแยก, **4 ทะเลสาบเงาจันทร์** (concepts for 4–10: [CHAPTER1_MAPS_TH](docs/design/CHAPTER1_MAPS_TH.md)).
+- **Map 4 (OD-60)**: rules/content/save #336, UI #337 and art #342–#345. Owner approved the four ordinary foes and the map screens 2026-11-23 (“อนุมัติ”). Tide every 8 steps, seal 2 of 3, ferryman → boat, reflections/notes → journal, Lio camp 1 / Cerise camp 2, semi-chibi Water Spirit with six 768px moves and event-driven VFX. [390px review](docs/validation/map4-lake/README_TH.md).
+- Camp level cap = 10 + 3 per first clear past map 2 (≤30); tree points still stop at Lv10.
+- P10 gacha (OD-58) live; cabinet after MAP1 with 10 first-clear tickets (OD-59). Unlock pacing #202.
 - Art delegation: record agent picks as agent decisions, never owner visual approval.
 
 ## Owner rules in force
@@ -19,18 +19,18 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - World Boss trio replaces the Warden from week 2969 = Mon 23 Nov 2026 06:00 Bangkok (OD-52); confirm three bars on `/v1/worldboss` after the switch.
 - Enemy aim OD-53, lessons OD-54, chat/friends OD-55/56, deploy grace OD-57 (3 h, `[no-grace]`).
 
+- OD-60 (2026-11-22 “ตามแนะนำทั้ง 4 ข้อ ทำต่อได้”): recruits by story on maps 4–8 (Cerise/Kael/Wynne/Corin/Astrid; Lio/Brann/Toma/Sefa scenes, duplicate if owned), cap +3 per map, other planned systems are separate tasks, maps one at a time.
+
 ## Owner decisions since P10
 
-- 2026-11-22 “ทำตามที่คุณแนะนำ” (OD-60): the C12 campaign gate failure (explorer/casual 229→220) is the OD-59 starter pairs (#333), not a bug; that group alone re-baselined ([evidence](docs/validation/c12-gate-od59-2026-11-22/README_TH.md)). Balance note: Toma-first pairs clear the forest first try 23–30/48 (casual).
+- 2026-11-22 “ทำตามที่คุณแนะนำ” (OD-61): the C12 campaign gate failure (explorer/casual 229→220) is the OD-59 starter pairs (#333), not a bug; that group alone re-baselined ([evidence](docs/validation/c12-gate-od59-2026-11-22/README_TH.md)). Balance note: Toma-first pairs clear the forest first try 23–30/48 (casual).
 - 2026-11-22 “ยืนยันตามแนะนำ ดำเนินการขั้นต่อไปได้”: shard units (duplicate 10, unlock 50, 1–2 shards per pull) and D24 (a device wallet never becomes online rights) confirmed (OD-58).
 
 ## Open items
 
-- Gacha staging load (20 accounts pulling at once, retries + racing requests) passed 2026-11-22 ([validation](docs/validation/p10-gacha-2026-11-21/README_TH.md)). Never point `LOAD_URL` at the dev API.
-- Gacha art: #212 references (key art, Saturn ring) not integrated; brief Codex with `fateweave-codex-art-brief` if the owner wants them.
-- P09: inactive-guest cleanup, old-token reuse detection. P04-05/06 numbers; P04-05 catch-up EXP recheck with P06.
-- Map 3 Briar Lord first-try gate; no real Safari/iPhone/Android or human usability validation. Pending intake #262, #169; #55/#53 wait systems.
+- Lake sweep/contract pay map 3's values until a P04 economy pass; P04-05/06 numbers.
+- Map 3 Briar Lord first-try gate; no real Safari/iPhone/Android or human usability validation. Pending intake #262, #169.
 
 ## Opening prompt for next chat
 
-Owner picks the next task (P04 economy/shards numbers or a new map per OD-13 order). P10 leftovers, only if asked: points icon readability at 24px (Codex brief), a clip of a single-pull full-character reveal, real-device check.
+Start the Map 5 (Lv13–16, abandoned crystal mine) design pass under OD-60. Read [Chapter 1 map concepts](docs/design/CHAPTER1_MAPS_TH.md) and Map 4's validation first. Confirm the mine, lantern and Crystal Giant brief before expanding into art or implementation.

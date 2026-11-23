@@ -47,7 +47,8 @@ describe('P05-05 sweep content', () => {
   });
   it('a whole day of supplies pays less than one quick manual clear of each map (measured 2026-11-15)', () => {
     // Quick (rush) completed runs carried home about 46/45/144 ore and 20/21/75 gold on maps 1/2/3.
-    const quick = [{ ore: 46, gold: 20 }, { ore: 45, gold: 21 }, { ore: 144, gold: 75 }];
+    // Map 4 (2026-11-22, tests/lake-sim.test.ts rush advisor first clears): 274–390 ore and 135–210 gold; the low end is kept.
+    const quick = [{ ore: 46, gold: 20 }, { ore: 45, gold: 21 }, { ore: 144, gold: 75 }, { ore: 274, gold: 135 }];
     MAPS.forEach((m, i) => { const r = m.sweepReward!.normal; expect(r.ore * 2).toBeLessThanOrEqual(quick[i]!.ore); expect(r.gold * 2).toBeLessThanOrEqual(quick[i]!.gold); });
     const best = [...MAPS].sort((a, b) => b.sweepReward!.normal.ore - a.sweepReward!.normal.ore).slice(0, 2).reduce((n, m) => n + m.sweepReward!.normal.ore * m.sweep.perMapDaily, 0);
     expect(best).toBeLessThanOrEqual(quick[1]!.ore + quick[2]!.ore);
@@ -137,8 +138,8 @@ describe('P05-05 sweep command', () => {
 describe('save v62', () => {
   const swept = (): Profile => ok(ok(base({ choices: { 'forest-shrine': 'pray' }, storyQuests: [ruinsMap.id] })), forestMap);
   it('round-trips the sweep book beside the v61 story state, and a v61 save loads without one', () => {
-    expect(SAVE_VERSION).toBe(67);
-    const p = swept(); const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(67);
+    expect(SAVE_VERSION).toBe(68);
+    const p = swept(); const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(68);
     const back = parseGame(raw, home, lookup, MAPS); expect(back).toEqual({ profile: p, run: null });
     expect(back.profile.choices).toEqual({ 'forest-shrine': 'pray' }); expect(back.profile.storyQuests).toEqual([ruinsMap.id]);
     const old = base({ choices: { 'forest-shrine': 'pray' } });

@@ -22,7 +22,7 @@ const statIcons: Record<string, Parameters<typeof icon>[0]> = { hp: 'stat-hp', a
 // ART-UI-MODERN-001 overview: the hero in a lit ring with level and stars, an EXP bar, role chips, then stat chips
 // (each opens its explanation).
 export function characterOverview(s: CharacterState, map: MapDefinition, h: HeroDefinition, template?: EncounterDefinition, starLink=false): string {
-  const m = s.members[h.id]!, camp = campProgress(map, s.campXp), level = camp.level, max = !camp.need, need = max ? 1 : camp.need, exp = max ? 1 : camp.exp;
+  const m = s.members[h.id]!, camp = campProgress(map, s.campXp, s.clears), level = camp.level, max = !camp.need, need = max ? 1 : camp.need, exp = max ? 1 : camp.exp;
   return `<div class="overview-hero"><div class="hero-ring">${heroArt(h.id)}<span class="hero-badge">Lv${level} ${starRow(m.stars, map.company.maxStars)}</span></div>
     <div class="exp-row"><span>${max ? 'เลเวลค่ายสูงสุด' : `เลเวลค่าย · EXP ${exp}/${need}`}</span>${m.wound ? `<span class="down">บาดแผล −${m.wound}% เลือดสูงสุด</span>` : ''}</div><div class="ui-meter" role="presentation"><i style="width:${Math.round(exp / need * 100)}%"></i></div>
     <div class="role-chips"><span class="ui-pill">${icon(h.lane === 'front' ? 'stat-armour' : 'stat-luck')}${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</span><span class="ui-pill">${heroText[h.id]!.role}</span></div></div>

@@ -1,0 +1,50 @@
+{
+  "down-390.webp": {
+    "frames": 38,
+    "durationMs": 1929,
+    "clickMs": 326,
+    "sha256": "570fcaacc666f5226d24d5752a8d62abe748ac7232ba552cade2447476972fd2"
+  },
+  "great-wave-390.webp": {
+    "frames": 26,
+    "durationMs": 2557,
+    "clickMs": 387,
+    "sha256": "bc963103a17581e7b9e311051ebc96b439e05c003af9d3bc3ea4bb7b237d216d"
+  },
+  "reflection-390.webp": {
+    "frames": 26,
+    "durationMs": 2384,
+    "clickMs": 485,
+    "sha256": "d5306e320a807095acfeb3689f8f448d5464ba98c661f32b866a14243fce537f"
+  },
+  "surging-wave-390.webp": {
+    "frames": 55,
+    "durationMs": 2511,
+    "clickMs": 286,
+    "sha256": "3394b62690cf5ad4f1e89551b44d3265ea4e8d0314270b950e4bcc01239a152e"
+  },
+  "tide-lash-390.webp": {
+    "frames": 29,
+    "durationMs": 2454,
+    "clickMs": 306,
+    "sha256": "7c5ab42db43119b49529a26328897f89f11fd518650f317d792898c1f26cac14"
+  },
+  "undertow-390.webp": {
+    "frames": 64,
+    "durationMs": 2825,
+    "clickMs": 234,
+    "sha256": "e82a32cb7fa1de212988a4a82bcf99abb8be5ae7cd09440e4ea90219227e2ffa"
+  },
+  "water-veil-390.webp": {
+    "frames": 36,
+    "durationMs": 2122,
+    "clickMs": 289,
+    "sha256": "ac05b5223334cb180afa4ad779b3ba1d2bc646273162ea283265e27362374076"
+  },
+  "water-veil-sealed-390.webp": {
+    "frames": 50,
+    "durationMs": 2377,
+    "clickMs": 228,
+    "sha256": "774a4297b0c0a080a443d229a5197f4aebd64d9a2b0e164dcdd8bea45603d54c"
+  }
+}

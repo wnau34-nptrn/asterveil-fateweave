@@ -1,0 +1,110 @@
+{
+ "moon_lantern_off": {
+  "x": 0,
+  "y": 0,
+  "w": 128,
+  "h": 128,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "footY": 124,
+  "zone": "isle"
+ },
+ "moon_lantern_on": {
+  "x": 128,
+  "y": 0,
+  "w": 128,
+  "h": 128,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "footY": 124,
+  "zone": "isle"
+ },
+ "moored_skiff": {
+  "x": 256,
+  "y": 0,
+  "w": 128,
+  "h": 128,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "footY": 124,
+  "zone": "shore"
+ },
+ "weathered_dock_post": {
+  "x": 0,
+  "y": 128,
+  "w": 128,
+  "h": 128,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "footY": 124,
+  "zone": "shore"
+ },
+ "lakeside_shrine": {
+  "x": 128,
+  "y": 128,
+  "w": 128,
+  "h": 128,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "footY": 124,
+  "zone": "isle"
+ },
+ "merchant_raft": {
+  "x": 256,
+  "y": 128,
+  "w": 128,
+  "h": 128,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "footY": 124,
+  "zone": "isle"
+ },
+ "reed_clump": {
+  "x": 0,
+  "y": 256,
+  "w": 128,
+  "h": 128,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "footY": 124,
+  "zone": "isle"
+ },
+ "rune_reflection_stone": {
+  "x": 128,
+  "y": 256,
+  "w": 128,
+  "h": 128,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "footY": 124,
+  "zone": "shore"
+ },
+ "oar_pile": {
+  "x": 256,
+  "y": 256,
+  "w": 128,
+  "h": 128,
+  "anchor": {
+   "x": 0.5,
+   "y": 1
+  },
+  "footY": 124,
+  "zone": "shore"
+ }
+}

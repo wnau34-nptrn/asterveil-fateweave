@@ -24,6 +24,7 @@ test('a cleared map is swept three times a day, normal and hard together, and th
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('p05')) { localStorage.setItem(key, raw); sessionStorage.setItem('p05', '1'); } }, { key, raw });
   await page.setViewportSize({ width: 390, height: 844 }); await page.goto('./'); await page.locator('#continue').click();
   await page.locator('[data-lobby=maps]').first().click();
+  await page.locator('#map-node-veil-frontier').click();
   const row = page.locator('#map-sweep-row-veil-frontier'), go = page.locator('#map-sweep-veil-frontier'), hard = page.locator('#map-sweep-hard-veil-frontier');
   await expect(row).toContainText('เสบียง 6/6'); await expect(row).toContainText('วันนี้เหลือ 3/3'); await expect(row).toContainText('แร่ดาว 24');
   for (const b of [go, hard]) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
@@ -40,5 +41,6 @@ test('a cleared map is swept three times a day, normal and hard together, and th
   await page.locator('#map-node-deep-forest').click(); await expect(page.locator('#map-sweep-deep-forest')).toBeEnabled();
   await expect(page.locator('#map-sweep-hard-deep-forest')).toHaveCount(0);
   await page.reload(); await page.locator('#continue').click(); await page.locator('[data-lobby=maps]').first().click();
+  await page.locator('#map-node-veil-frontier').click();
   await expect(page.locator('#map-sweep-veil-frontier')).toBeDisabled(); await expect(page.locator('#map-sweep-row-veil-frontier')).toContainText('เสบียง 3/6');
 });

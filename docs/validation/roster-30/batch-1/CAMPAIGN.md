@@ -9,12 +9,12 @@ C12 selective deployed-duplicate policy, paired against the same policy on base 
 | ซากชายแดน #1 | 12 | 100% | 0% | 3.2 | 3.0/3.0 | 1.0 | 1.0 | 20 | 0 | 0 |
 | เส้นทางป่าทึบ #1 | 12 | 100% | 0% | 3.2 | 5.0/5.0 | 1.0 | 1.0 | 22 | 0 | 6 |
 | แนวรอยแยก #1 | 12 | 92% | 8% | 12.8 | 9.0/9.0 | 1.2 | 1.1 | 72 | 7 | 14 |
-| แนวรอยแยก #2 | 12 | 100% | 0% | 12.8 | 10.0/10.0 | 1.8 | 1.4 | 77 | 21 | 18 |
-| แนวรอยแยก #3 | 12 | 100% | 0% | 12.4 | 10.0/10.0 | 2.4 | 1.6 | 75 | 32 | 18 |
-| แนวรอยแยก #4 | 12 | 100% | 0% | 12.3 | 10.0/10.0 | 2.7 | 1.8 | 75 | 21 | 22 |
-| แนวรอยแยก (ยาก) #1 | 12 | 100% | 0% | 12.6 | 10.0/10.0 | 2.9 | 2.1 | 107 | 34 | 24 |
-| แนวรอยแยก (ยาก) #2 | 12 | 100% | 0% | 12.7 | 10.0/10.0 | 3.3 | 2.3 | 76 | 59 | 26 |
-| แนวรอยแยก #5 | 1 | 100% | 0% | 11.0 | 10.0/10.0 | 2.8 | 1.9 | 67 | 33 | 21 |
+| แนวรอยแยก #2 | 12 | 100% | 0% | 12.8 | 11.3/11.3 | 1.8 | 1.4 | 77 | 21 | 18 |
+| แนวรอยแยก #3 | 12 | 100% | 0% | 12.4 | 12.9/12.9 | 2.4 | 1.6 | 75 | 32 | 18 |
+| แนวรอยแยก #4 | 12 | 100% | 0% | 12.3 | 13.0/13.0 | 2.7 | 1.8 | 75 | 23 | 22 |
+| แนวรอยแยก (ยาก) #1 | 12 | 100% | 0% | 12.6 | 13.0/13.0 | 2.9 | 2.1 | 107 | 31 | 24 |
+| แนวรอยแยก (ยาก) #2 | 12 | 100% | 0% | 12.7 | 13.0/13.0 | 3.3 | 2.3 | 76 | 59 | 26 |
+| แนวรอยแยก #5 | 1 | 100% | 0% | 11.0 | 13.0/13.0 | 2.8 | 1.9 | 67 | 33 | 21 |
 
 | Map | Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |
 |---|---|---|---|---|---|
@@ -30,7 +30,7 @@ C12 selective deployed-duplicate policy, paired against the same policy on base 
 | เส้นทางป่าทึบ | elite-forced:attack | 12 | 33% | – | – |
 | เส้นทางป่าทึบ | random | 14 | 100% | 71 | 71 |
 | แนวรอยแยก | boss | 49 | 98% | 87 | 95 |
-| แนวรอยแยก | boss:attack | 49 | 63% | – | – |
+| แนวรอยแยก | boss:attack | 49 | 67% | – | – |
 | แนวรอยแยก | boss:under2 | 49 | 98% | – | – |
 | แนวรอยแยก | elite-forced | 49 | 100% | 94 | 100 |
 | แนวรอยแยก | elite-forced:attack | 49 | 82% | – | – |
@@ -38,19 +38,19 @@ C12 selective deployed-duplicate policy, paired against the same policy on base 
 | แนวรอยแยก | mini | 49 | 100% | 89 | 93 |
 | แนวรอยแยก | mini:attack | 49 | 73% | – | – |
 | แนวรอยแยก | random | 421 | 100% | 93 | 96 |
-| แนวรอยแยก (ยาก) | boss | 24 | 100% | 81 | 93 |
-| แนวรอยแยก (ยาก) | boss:attack | 24 | 8% | – | – |
+| แนวรอยแยก (ยาก) | boss | 24 | 100% | 82 | 93 |
+| แนวรอยแยก (ยาก) | boss:attack | 24 | 13% | – | – |
 | แนวรอยแยก (ยาก) | boss:under2 | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | elite-forced | 24 | 100% | 95 | 100 |
 | แนวรอยแยก (ยาก) | elite-forced:attack | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | event-rift | 24 | 100% | 99 | 100 |
-| แนวรอยแยก (ยาก) | mini | 24 | 100% | 95 | 99 |
+| แนวรอยแยก (ยาก) | mini | 24 | 100% | 95 | 98 |
 | แนวรอยแยก (ยาก) | mini:attack | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | random | 207 | 100% | 97 | 99 |
 
-First boss attempt won: ซากชายแดน 100% (party Lv 3.0, boss Lv 3) · เส้นทางป่าทึบ 100% (party Lv 5.0, boss Lv 6) · แนวรอยแยก 92% (party Lv 9.0, boss Lv 11).
+First boss attempt won: ซากชายแดน 100% (party Lv 3.0, boss Lv 3) · เส้นทางป่าทึบ 100% (party Lv 5.0, boss Lv 6) · แนวรอยแยก 92% (party Lv 9.0, boss Lv 11) · ทะเลสาบเงาจันทร์ – (party Lv 0.0, boss Lv 14).
 
-Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after 1 / 2 / 3 clears): 1.8 / 2.4 / 2.7. First skill at Lv5 departs on: แนวรอยแยก (ยาก) #2 ×12. Gold on skill levels: 33% of the gold gained.
+Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after 1 / 2 / 3 clears): 0.0 / 0.0 / 0.0. First skill at Lv5 departs on: แนวรอยแยก (ยาก) #2 ×12. Gold on skill levels: 33% of the gold gained.
 
 ### Explorer (everything on the map), advisor battles · 12 companies
 
@@ -59,11 +59,11 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | ซากชายแดน #1 | 12 | 100% | 0% | 7.5 | 3.0/3.0 | 1.0 | 1.0 | 51 | 0 | 0 |
 | เส้นทางป่าทึบ #1 | 12 | 92% | 8% | 16.4 | 6.0/6.0 | 1.0 | 1.0 | 99 | 0 | 11 |
 | แนวรอยแยก #1 | 12 | 100% | 0% | 36.8 | 10.0/10.0 | 1.6 | 1.4 | 274 | 21 | 29 |
-| แนวรอยแยก #2 | 12 | 100% | 0% | 37.1 | 10.0/10.0 | 2.8 | 1.9 | 275 | 68 | 29 |
-| แนวรอยแยก #3 | 12 | 100% | 0% | 36.3 | 10.0/10.0 | 3.3 | 2.4 | 270 | 63 | 30 |
-| แนวรอยแยก #4 | 12 | 100% | 0% | 35.7 | 10.0/10.0 | 3.4 | 2.7 | 266 | 51 | 36 |
-| แนวรอยแยก (ยาก) #1 | 12 | 100% | 0% | 37.4 | 10.0/10.0 | 3.6 | 3.1 | 302 | 55 | 41 |
-| แนวรอยแยก (ยาก) #2 | 12 | 100% | 0% | 36.3 | 10.0/10.0 | 3.8 | 3.4 | 269 | 66 | 53 |
+| แนวรอยแยก #2 | 12 | 100% | 0% | 37.1 | 13.0/13.0 | 2.8 | 1.9 | 275 | 68 | 29 |
+| แนวรอยแยก #3 | 12 | 100% | 0% | 36.3 | 13.0/13.0 | 3.3 | 2.4 | 270 | 63 | 30 |
+| แนวรอยแยก #4 | 12 | 100% | 0% | 35.7 | 13.0/13.0 | 3.4 | 2.7 | 266 | 52 | 36 |
+| แนวรอยแยก (ยาก) #1 | 12 | 100% | 0% | 37.4 | 13.0/13.0 | 3.6 | 3.1 | 302 | 55 | 42 |
+| แนวรอยแยก (ยาก) #2 | 12 | 100% | 0% | 36.3 | 13.0/13.0 | 3.8 | 3.4 | 269 | 66 | 54 |
 | เส้นทางป่าทึบ #2 | 1 | 100% | 0% | 17.0 | 8.0/8.0 | 1.0 | 1.0 | 113 | 0 | 15 |
 
 | Map | Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |
@@ -91,11 +91,11 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก | elite-optional:attack | 48 | 100% | – | – |
 | แนวรอยแยก | event-bandits | 96 | 100% | 97 | 100 |
 | แนวรอยแยก | event-rift | 48 | 100% | 98 | 100 |
-| แนวรอยแยก | mini | 48 | 100% | 96 | 99 |
+| แนวรอยแยก | mini | 48 | 100% | 95 | 99 |
 | แนวรอยแยก | mini:attack | 48 | 83% | – | – |
 | แนวรอยแยก | random | 1414 | 100% | 98 | 100 |
-| แนวรอยแยก (ยาก) | boss | 24 | 100% | 77 | 85 |
-| แนวรอยแยก (ยาก) | boss:attack | 24 | 8% | – | – |
+| แนวรอยแยก (ยาก) | boss | 24 | 100% | 82 | 90 |
+| แนวรอยแยก (ยาก) | boss:attack | 24 | 17% | – | – |
 | แนวรอยแยก (ยาก) | boss:under2 | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | elite-forced | 24 | 100% | 96 | 100 |
 | แนวรอยแยก (ยาก) | elite-forced:attack | 24 | 100% | – | – |
@@ -107,9 +107,9 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก (ยาก) | mini:attack | 24 | 100% | – | – |
 | แนวรอยแยก (ยาก) | random | 717 | 100% | 98 | 99 |
 
-First boss attempt won: ซากชายแดน 100% (party Lv 3.0, boss Lv 3) · เส้นทางป่าทึบ 100% (party Lv 6.2, boss Lv 6) · แนวรอยแยก 100% (party Lv 10.0, boss Lv 11).
+First boss attempt won: ซากชายแดน 100% (party Lv 3.0, boss Lv 3) · เส้นทางป่าทึบ 100% (party Lv 6.2, boss Lv 6) · แนวรอยแยก 100% (party Lv 10.0, boss Lv 11) · ทะเลสาบเงาจันทร์ – (party Lv 0.0, boss Lv 14).
 
-Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after 1 / 2 / 3 clears): 2.8 / 3.3 / 3.4. First skill at Lv5 departs on: แนวรอยแยก (ยาก) #2 ×12. Gold on skill levels: 18% of the gold gained.
+Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after 1 / 2 / 3 clears): 0.0 / 0.0 / 0.0. First skill at Lv5 departs on: แนวรอยแยก (ยาก) #2 ×12. Gold on skill levels: 18% of the gold gained.
 
 ### Rush (objectives only), casual battles (advice on ~70% of turns) · 48 companies
 
@@ -118,12 +118,12 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | ซากชายแดน #1 | 48 | 100% | 0% | 3.3 | 3.0/3.0 | 1.0 | 1.0 | 21 | 0 | 0 |
 | เส้นทางป่าทึบ #1 | 48 | 94% | 0% | 3.0 | 5.0/5.0 | 1.0 | 1.0 | 21 | 0 | 6 |
 | แนวรอยแยก #1 | 48 | 79% | 13% | 12.1 | 8.7/8.7 | 1.2 | 1.1 | 67 | 5 | 14 |
-| แนวรอยแยก #2 | 48 | 100% | 0% | 12.5 | 10.0/10.0 | 1.7 | 1.4 | 76 | 21 | 18 |
-| แนวรอยแยก #3 | 48 | 100% | 0% | 12.4 | 10.0/10.0 | 2.4 | 1.6 | 75 | 34 | 18 |
-| แนวรอยแยก #4 | 48 | 100% | 0% | 12.4 | 10.0/10.0 | 2.6 | 1.8 | 75 | 23 | 21 |
-| แนวรอยแยก (ยาก) #1 | 48 | 98% | 2% | 12.4 | 10.0/10.0 | 2.9 | 2.1 | 103 | 32 | 24 |
-| แนวรอยแยก (ยาก) #2 | 48 | 100% | 0% | 12.2 | 10.0/10.0 | 3.2 | 2.4 | 76 | 59 | 26 |
-| แนวรอยแยก #5 | 10 | 100% | 0% | 12.9 | 10.0/10.0 | 2.8 | 1.9 | 77 | 30 | 21 |
+| แนวรอยแยก #2 | 48 | 100% | 0% | 12.5 | 11.1/11.1 | 1.7 | 1.4 | 76 | 21 | 18 |
+| แนวรอยแยก #3 | 48 | 100% | 0% | 12.4 | 12.8/12.8 | 2.4 | 1.6 | 75 | 34 | 18 |
+| แนวรอยแยก #4 | 48 | 100% | 0% | 12.4 | 13.0/13.0 | 2.6 | 1.8 | 75 | 23 | 21 |
+| แนวรอยแยก (ยาก) #1 | 48 | 100% | 0% | 12.4 | 13.0/13.0 | 2.9 | 2.1 | 105 | 31 | 24 |
+| แนวรอยแยก (ยาก) #2 | 48 | 100% | 0% | 12.2 | 13.0/13.0 | 3.2 | 2.4 | 75 | 61 | 26 |
+| แนวรอยแยก #5 | 10 | 100% | 0% | 12.9 | 13.0/13.0 | 2.8 | 1.9 | 77 | 32 | 21 |
 | เส้นทางป่าทึบ #2 | 3 | 100% | 0% | 3.3 | 5.3/5.3 | 1.0 | 1.0 | 22 | 0 | 9 |
 
 | Map | Battle | Fought | Won | Lowest party HP% during (avg) | HP% after a win |
@@ -139,8 +139,8 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | เส้นทางป่าทึบ | elite-forced | 51 | 100% | 64 | 68 |
 | เส้นทางป่าทึบ | elite-forced:attack | 51 | 31% | – | – |
 | เส้นทางป่าทึบ | random | 56 | 100% | 75 | 76 |
-| แนวรอยแยก | boss | 195 | 99% | 82 | 92 |
-| แนวรอยแยก | boss:attack | 195 | 69% | – | – |
+| แนวรอยแยก | boss | 195 | 99% | 82 | 91 |
+| แนวรอยแยก | boss:attack | 195 | 71% | – | – |
 | แนวรอยแยก | boss:under2 | 195 | 100% | – | – |
 | แนวรอยแยก | elite-forced | 202 | 100% | 88 | 96 |
 | แนวรอยแยก | elite-forced:attack | 202 | 83% | – | – |
@@ -148,19 +148,19 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก | mini | 199 | 98% | 83 | 91 |
 | แนวรอยแยก | mini:attack | 199 | 75% | – | – |
 | แนวรอยแยก | random | 1723 | 99% | 91 | 95 |
-| แนวรอยแยก (ยาก) | boss | 97 | 98% | 72 | 84 |
-| แนวรอยแยก (ยาก) | boss:attack | 97 | 9% | – | – |
-| แนวรอยแยก (ยาก) | boss:under2 | 97 | 100% | – | – |
-| แนวรอยแยก (ยาก) | elite-forced | 96 | 100% | 91 | 99 |
+| แนวรอยแยก (ยาก) | boss | 96 | 100% | 74 | 83 |
+| แนวรอยแยก (ยาก) | boss:attack | 96 | 18% | – | – |
+| แนวรอยแยก (ยาก) | boss:under2 | 96 | 100% | – | – |
+| แนวรอยแยก (ยาก) | elite-forced | 96 | 100% | 92 | 99 |
 | แนวรอยแยก (ยาก) | elite-forced:attack | 96 | 100% | – | – |
 | แนวรอยแยก (ยาก) | event-rift | 96 | 100% | 98 | 100 |
-| แนวรอยแยก (ยาก) | mini | 96 | 100% | 90 | 95 |
+| แนวรอยแยก (ยาก) | mini | 96 | 100% | 90 | 96 |
 | แนวรอยแยก (ยาก) | mini:attack | 96 | 100% | – | – |
-| แนวรอยแยก (ยาก) | random | 796 | 100% | 95 | 98 |
+| แนวรอยแยก (ยาก) | random | 796 | 100% | 95 | 99 |
 
-First boss attempt won: ซากชายแดน 100% (party Lv 3.0, boss Lv 3) · เส้นทางป่าทึบ 98% (party Lv 5.0, boss Lv 6) · แนวรอยแยก 96% (party Lv 9.1, boss Lv 11).
+First boss attempt won: ซากชายแดน 100% (party Lv 3.0, boss Lv 3) · เส้นทางป่าทึบ 98% (party Lv 5.0, boss Lv 6) · แนวรอยแยก 96% (party Lv 9.1, boss Lv 11) · ทะเลสาบเงาจันทร์ – (party Lv 0.0, boss Lv 14).
 
-Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after 1 / 2 / 3 clears): 1.7 / 2.4 / 2.6. First skill at Lv5 departs on: แนวรอยแยก (ยาก) #2 ×47, never ×1. Gold on skill levels: 34% of the gold gained.
+Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after 1 / 2 / 3 clears): 0.0 / 0.0 / 0.0. First skill at Lv5 departs on: แนวรอยแยก (ยาก) #2 ×48. Gold on skill levels: 34% of the gold gained.
 
 ### Explorer (everything on the map), casual battles (advice on ~70% of turns) · 48 companies
 
@@ -169,11 +169,11 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | ซากชายแดน #1 | 48 | 94% | 6% | 7.6 | 2.9/2.9 | 1.0 | 1.0 | 50 | 0 | 0 |
 | เส้นทางป่าทึบ #1 | 48 | 65% | 31% | 14.8 | 5.5/5.5 | 1.0 | 1.0 | 81 | 0 | 8 |
 | แนวรอยแยก #1 | 48 | 100% | 0% | 37.1 | 10.0/10.0 | 1.7 | 1.4 | 274 | 23 | 29 |
-| แนวรอยแยก #2 | 48 | 100% | 0% | 37.0 | 10.0/10.0 | 2.9 | 1.9 | 274 | 67 | 29 |
-| แนวรอยแยก #3 | 48 | 100% | 0% | 37.2 | 10.0/10.0 | 3.3 | 2.4 | 274 | 62 | 30 |
-| แนวรอยแยก #4 | 48 | 100% | 0% | 37.9 | 10.0/10.0 | 3.5 | 2.8 | 278 | 58 | 34 |
-| แนวรอยแยก (ยาก) #1 | 48 | 100% | 0% | 36.3 | 10.0/10.0 | 3.6 | 3.1 | 300 | 54 | 41 |
-| แนวรอยแยก (ยาก) #2 | 48 | 100% | 0% | 37.2 | 10.0/10.0 | 3.8 | 3.4 | 274 | 62 | 53 |
+| แนวรอยแยก #2 | 48 | 100% | 0% | 37.0 | 13.0/13.0 | 2.9 | 1.9 | 274 | 67 | 29 |
+| แนวรอยแยก #3 | 48 | 100% | 0% | 37.2 | 13.0/13.0 | 3.3 | 2.4 | 274 | 61 | 31 |
+| แนวรอยแยก #4 | 48 | 100% | 0% | 37.9 | 13.0/13.0 | 3.5 | 2.8 | 278 | 57 | 34 |
+| แนวรอยแยก (ยาก) #1 | 48 | 100% | 0% | 36.3 | 13.0/13.0 | 3.6 | 3.1 | 300 | 55 | 41 |
+| แนวรอยแยก (ยาก) #2 | 48 | 100% | 0% | 37.2 | 13.0/13.0 | 3.8 | 3.4 | 274 | 61 | 54 |
 | เส้นทางป่าทึบ #2 | 17 | 88% | 12% | 17.8 | 7.1/7.1 | 1.0 | 1.0 | 104 | 0 | 13 |
 | เส้นทางป่าทึบ #3 | 2 | 100% | 0% | 20.0 | 7.5/7.5 | 1.0 | 1.0 | 115 | 0 | 15 |
 | ซากชายแดน #2 | 3 | 100% | 0% | 6.3 | 3.0/3.0 | 1.0 | 1.0 | 46 | 0 | 0 |
@@ -195,7 +195,7 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | เส้นทางป่าทึบ | event-abandoned | 18 | 100% | 92 | 92 |
 | เส้นทางป่าทึบ | random | 886 | 99% | 76 | 78 |
 | แนวรอยแยก | boss | 192 | 100% | 86 | 92 |
-| แนวรอยแยก | boss:attack | 192 | 84% | – | – |
+| แนวรอยแยก | boss:attack | 192 | 85% | – | – |
 | แนวรอยแยก | boss:under2 | 192 | 100% | – | – |
 | แนวรอยแยก | elite-forced | 192 | 100% | 92 | 99 |
 | แนวรอยแยก | elite-forced:attack | 192 | 92% | – | – |
@@ -203,22 +203,22 @@ Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after
 | แนวรอยแยก | elite-optional:attack | 192 | 100% | – | – |
 | แนวรอยแยก | event-bandits | 384 | 100% | 95 | 98 |
 | แนวรอยแยก | event-rift | 192 | 100% | 97 | 99 |
-| แนวรอยแยก | mini | 192 | 100% | 89 | 94 |
+| แนวรอยแยก | mini | 192 | 100% | 89 | 95 |
 | แนวรอยแยก | mini:attack | 192 | 84% | – | – |
 | แนวรอยแยก | random | 5820 | 100% | 96 | 99 |
-| แนวรอยแยก (ยาก) | boss | 96 | 100% | 71 | 79 |
-| แนวรอยแยก (ยาก) | boss:attack | 96 | 10% | – | – |
+| แนวรอยแยก (ยาก) | boss | 96 | 100% | 73 | 81 |
+| แนวรอยแยก (ยาก) | boss:attack | 96 | 20% | – | – |
 | แนวรอยแยก (ยาก) | boss:under2 | 96 | 100% | – | – |
 | แนวรอยแยก (ยาก) | elite-forced | 96 | 100% | 93 | 100 |
 | แนวรอยแยก (ยาก) | elite-forced:attack | 96 | 100% | – | – |
-| แนวรอยแยก (ยาก) | elite-optional | 96 | 100% | 93 | 99 |
+| แนวรอยแยก (ยาก) | elite-optional | 96 | 100% | 94 | 99 |
 | แนวรอยแยก (ยาก) | elite-optional:attack | 96 | 100% | – | – |
 | แนวรอยแยก (ยาก) | event-bandits | 192 | 100% | 96 | 99 |
 | แนวรอยแยก (ยาก) | event-rift | 96 | 100% | 98 | 100 |
-| แนวรอยแยก (ยาก) | mini | 96 | 100% | 91 | 97 |
+| แนวรอยแยก (ยาก) | mini | 96 | 100% | 92 | 97 |
 | แนวรอยแยก (ยาก) | mini:attack | 96 | 100% | – | – |
 | แนวรอยแยก (ยาก) | random | 2857 | 100% | 97 | 99 |
 
-First boss attempt won: ซากชายแดน 94% (party Lv 2.9, boss Lv 3) · เส้นทางป่าทึบ 96% (party Lv 6.4, boss Lv 6) · แนวรอยแยก 100% (party Lv 10.0, boss Lv 11).
+First boss attempt won: ซากชายแดน 94% (party Lv 2.9, boss Lv 3) · เส้นทางป่าทึบ 96% (party Lv 6.4, boss Lv 6) · แนวรอยแยก 100% (party Lv 10.0, boss Lv 11) · ทะเลสาบเงาจันทร์ – (party Lv 0.0, boss Lv 14).
 
-Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after 1 / 2 / 3 clears): 2.9 / 3.3 / 3.5. First skill at Lv5 departs on: แนวรอยแยก (ยาก) #2 ×48. Gold on skill levels: 18% of the gold gained.
+Best equipped skill per member when departing veil-frontier run 2 / 3 / 4 (after 1 / 2 / 3 clears): 0.0 / 0.0 / 0.0. First skill at Lv5 departs on: แนวรอยแยก (ยาก) #2 ×48. Gold on skill levels: 17% of the gold gained.

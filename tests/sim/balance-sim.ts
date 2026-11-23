@@ -13,12 +13,13 @@ import { buy, buyReason, chooseLoadout, refreshBoard, refreshReason, claimQuest,
 import { enhance, enhanceCost, enhanceReason, smelt, smeltReason } from '../../src/core/world/forge';
 import { salvageValue } from '../../src/core/world/equipment';
 import { boulderAt, openPit, passableWall, runePuzzleAt } from '../../src/core/world/puzzles';
+import { lowTideAt, tideBlock, tideClock, waterAt } from '../../src/core/world/tide';
 import type { ActionId, BattleState } from '../../src/core/battle/types';
 import type { BattleKind, Direction, ExpeditionState, GearSlot, Item, Lane, Point, Profile, MemberProgress, RunOutcome } from '../../src/core/world/types';
 import { GEAR_SLOTS, PARTY_SLOTS } from '../../src/core/world/types';
 import {
   atCamp, atMuster, levelOf, levelXp, monsterLevelAt, battleData, battleState, canOpenChest, canRest, canRevive, eliteAt, eventAt, finishBattle, findTiles, memberDef, move, openChest,
-  newExpedition, draftPick, heroDef, loadoutActions, pendingEvent, bossSealed, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, fatigueOf, fatigueStep, fatigueCut, chooseEvent, eventChoiceReason, potionReason,
+  newExpedition, draftPick, questDone, heroDef, loadoutActions, pendingEvent, bossSealed, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, fatigueOf, fatigueStep, fatigueCut, chooseEvent, eventChoiceReason, potionReason,
 } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
 
@@ -60,7 +61,14 @@ function tasks(policy: Policy): Task[] {
   const list: Task[] = [];
   if (golem) list.push({ id: golem.id, at: golem, done: s => s.elitesDefeated.includes(golem.id) });
   if (rift) list.push({ id: rift.id, at: rift, done: s => s.eventsDone.includes(rift.id) });
+  // Map 4: the seal's elite and event objectives (the rush player's route) and its moon lanterns.
+  if (map.tide) for (const o of map.quest.objectives) {
+    if (o.kind === 'elite') { const e = map.elites.find(x => x.id === o.target)!; if (!e.forced) list.push({ id: e.id, at: e, done: s => s.elitesDefeated.includes(e.id) }); }
+    if (o.kind === 'event') { const e = map.events.find(x => x.id === o.target)!; list.push({ id: e.id, at: e, done: s => s.eventsDone.includes(e.id) }); }
+  }
+  for (const l of map.lanterns ?? []) list.push({ id: l.id, at: l, done: s => !!s.lanterns?.includes(l.id) });
   if (policy === 'rush') return list;
+  for (const n of map.notes ?? []) list.push({ id: n.id, at: n, done: s => !!s.notes?.includes(n.id) });
   for (const c of map.chests) list.push({ id: c.id, at: c, done: s => s.openedChests.includes(c.id) });
   for (const h of map.herbs) list.push({ id: h.id, at: h, done: s => s.herbs.includes(h.id) });
   for (const e of map.elites.filter(e => !e.forced && !e.mini)) list.push({ id: e.id, at: e, done: s => s.elitesDefeated.includes(e.id) || !!s.respawns[e.id] });
@@ -98,6 +106,34 @@ function search(s: ExpeditionState, policy: Policy, goals: Set<string>): Map<str
     }
   }
   return prev;
+}
+// Map 4: the same search over (tile, tide count), so water is entered only when it can be walked and never where the
+// incoming tide would sweep the party back. Returns the first step and length to each goal reached.
+function tideRoutes(s: ExpeditionState, policy: Policy, goals: Set<string>): Map<string, { dir: Direction; length: number }> {
+  const period = map.tide!.period * 2; const start = tideClock(s);
+  const node = (p: Point, c: number) => `${p.x},${p.y},${c % period}`;
+  const first = new Map<string, { dir: Direction; length: number }>(); const seen = new Set([node(s.position, start)]);
+  const queue: { p: Point; c: number; dir?: Direction; length: number }[] = [{ p: s.position, c: start, length: 0 }];
+  for (let i = 0; i < queue.length; i++) {
+    const { p, c, dir, length } = queue[i]!;
+    if (length && goals.has(key(p))) continue;
+    for (const [d, o] of Object.entries(dirs) as [Direction, Point][]) {
+      const n = { x: p.x + o.x, y: p.y + o.y }; const t = tileAt(map, n); const k = key(n);
+      if (!t || seen.has(node(n, c + 1))) continue;
+      if (t.kind === 'wall' && !passableWall(s, map, n)) continue;
+      if (t.kind === 'wall' && policy === 'rush' && map.puzzles.secrets.some(x => same(x, n)) && !s.secrets.some(id => map.puzzles.secrets.find(x => x.id === id && same(x, n)))) continue;
+      if (openPit(s, map, n) || boulderAt(s, map, n)) continue;
+      if (tideBlock(s, map, n, c) || (!s.boat && waterAt(map, n, s.solved) === 'shallow' && !lowTideAt(map, c + 1))) continue;
+      const elite = eliteAt(map, n);
+      const avoid = (t.kind === 'boss' && !s.bossDefeated) || (elite && !elite.forced && !s.elitesDefeated.includes(elite.id))
+        || (eventAt(map, n)?.kind !== 'merchant' && pendingEvent(s, map, n)) || runePuzzleAt(map, n);
+      if (avoid && !goals.has(k)) continue;
+      seen.add(node(n, c + 1)); const step = { dir: dir ?? d, length: length + 1 };
+      if (!first.has(k)) first.set(k, step);
+      queue.push({ p: n, c: c + 1, ...step });
+    }
+  }
+  return first;
 }
 function firstStep(prev: Map<string, [string, Direction]>, from: Point, to: Point): { dir: Direction; length: number } | undefined {
   let cur = key(to); let length = 0; let dir: Direction | undefined;
@@ -199,6 +235,7 @@ function chooseFor(s: ExpeditionState): ExpeditionState {
   const ok = (c: Parameters<typeof chooseEvent>[3]) => !eventChoiceReason(s, map, c);
   const pick = ev.kind === 'rift' ? 'fight' : ev.kind === 'bandits' ? (hpPercent(s) >= 60 ? 'fight' : 'sneak')
     : ev.kind === 'shrine' ? (ok('offer') ? 'offer' : hpPercent(s) < 50 ? 'pray' : undefined)
+    : ev.kind === 'reflection' ? (s.roster.deployed.every(id => fatigueStep(map, fatigueOf(s, id) + map.eventRules.reflection.fatigue) === 0) ? 'gaze' : 'away')
     : ev.kind === 'traveller' ? (ok('help') ? 'help' : 'guide') : ev.kind === 'abandoned' ? (hpPercent(s) >= 60 ? 'search' : 'shelter') : ok('buy-salve') && s.resources.ore >= 40 ? 'buy-salve' : undefined;
   return pick && ok(pick) ? chooseEvent(s, map, lookup, pick).state : s;
 }
@@ -220,8 +257,9 @@ function runExpedition(start: ExpeditionState, policy: Policy, style: Style, rep
     if (leaving && atMuster(s, map)) return { state: s, outcome: 'withdrawn' };
     // The nearest reachable target; work that cannot be reached yet (behind a closed door) waits.
     const nearest = (targets: Point[]) => {
-      const prev = search(s, policy, new Set(targets.map(key)));
-      return targets.map(t => ({ t, step: same(t, s.position) ? undefined : firstStep(prev, s.position, t) })).filter(x => x.step).sort((a, b) => a.step!.length - b.step!.length)[0];
+      const goals = new Set(targets.map(key));
+      const routes = map.tide ? tideRoutes(s, policy, goals) : undefined; const prev = routes ? undefined : search(s, policy, goals);
+      return targets.map(t => ({ t, step: same(t, s.position) ? undefined : routes ? routes.get(key(t)) : firstStep(prev!, s.position, t) })).filter(x => x.step).sort((a, b) => a.step!.length - b.step!.length)[0];
     };
     let best = leaving ? nearest(camps.filter(c => tileAt(map, c)!.kind === 'start' || same(c, s.camp ?? c)))
       : hpPercent(s) < 45 && s.restReady ? nearest(findTiles(map, 'camp')) : undefined;
@@ -356,7 +394,7 @@ export function simulateCompany(seed: number, policy: Policy, expeditions: numbe
     p = settle(p, s, r.outcome, map);
     Object.assign(report, {
       outcome: r.outcome, steps: s.steps, wins: s.wins, defeats: s.defeats, chests: s.openedChests.length, elites: s.elitesDefeated.length,
-      objectives: map.quest.objectives.filter(o => o.kind === 'chests' ? s.openedChests.length >= o.count : o.kind === 'elite' ? s.elitesDefeated.includes(o.target) : s.eventsDone.includes(o.target)).length,
+      objectives: questDone(s, map).length,
       bossBeaten: s.bossDefeated, gained: { ore: p.bank.ore - before.ore, gold: p.bank.gold - before.gold, shard: p.bank.shard - before.shard, dust: p.bank.dust - before.dust },
       level: levelOf(map, p), stars: Math.max(...p.party.deployed.map(id => p.members[id]!.stars)),
     });
@@ -373,13 +411,15 @@ export function simulateCompany(seed: number, policy: Policy, expeditions: numbe
 export interface CampaignExpedition extends ExpeditionReport { mapId: string; hard: boolean; attempt: number; skillGold: number; mainSkill: number; skillAvg: number; topSkill: number; tomes: number; levels: number[] }
 export interface CampaignReport { seed: number; policy: Policy; style: Style; expeditions: CampaignExpedition[]; profile: Profile }
 // `starters`: the two mercenaries the new company recruits after the prologue (default: an offer chosen by the seed).
-export function simulateCampaign(seed: number, policy: Policy, style: Style = 'advisor', replays = 3, hard = 2, limit = 16, starters?: readonly string[]): CampaignReport {
-  map = MAPS[0]!; checks = true; company = `${seed}:${policy}:${style}`;
+// `maps` (map 4, 2026-11-22): the maps played in order; the A10 campaign and its gate keep maps 1–3 (`CAMPAIGN_MAPS`).
+export const CAMPAIGN_MAPS = MAPS.filter(m => m.chapter <= 3);
+export function simulateCampaign(seed: number, policy: Policy, style: Style = 'advisor', replays = 3, hard = 2, limit = 16, starters?: readonly string[], maps: readonly MapDefinition[] = CAMPAIGN_MAPS): CampaignReport {
+  map = maps[0]!; checks = true; company = `${seed}:${policy}:${style}`;
   let p = createCommander(newProfile(map, seed, map.firstCompany), { name: 'จำลอง', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }).profile;
-  const out: CampaignExpedition[] = []; const last = MAPS[MAPS.length - 1]!;
+  const out: CampaignExpedition[] = []; const last = maps[maps.length - 1]!;
   let normalAfter = 0, hardRuns = 0;
   for (let index = 1; index <= limit; index++) {
-    const next = MAPS.find(m => !p.cleared.includes(m.id)); const isHard = !next && normalAfter >= replays;
+    const next = maps.find(m => !p.cleared.includes(m.id)); const isHard = !next && normalAfter >= replays;
     if (!next && normalAfter >= replays && hardRuns >= hard) break;
     map = next ?? last;
     skillGold = 0;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { encounterById, encounters, WORLD_BOSS_HP } from '../src/content/encounters/catalog';
+import { eliteShadowSerpent, encounterById, encounters, WORLD_BOSS_HP } from '../src/content/encounters/catalog';
 import { WORLD_BOSS_TRIO, wbKragmor, wbMorvane, wbValdrakk } from '../src/content/encounters/world-boss-trio';
 import { rosterP03 } from '../src/content/heroes/roster-p03';
 import { gameRules } from '../src/content/world/rules';
@@ -39,7 +39,9 @@ describe('World Boss trio v1 content', () => {
     expect(wbMorvane.enemies.find(e => e.id === 'f1')!.court).toEqual({ percent: 10, by: ['f2', 'f3', 'b2'] });
   });
   it('no existing encounter uses the new fields, so their rules are unchanged without a version bump', () => {
-    for (const d of encounters.filter(e => !WORLD_BOSS_TRIO.includes(e))) {
+    // Map 4's serpent has its own breakable charge regardless of which art it uses.
+    expect(eliteShadowSerpent.intents.filter(i => i.breakable).map(i => i.name)).toEqual(['Coil Gathering']);
+    for (const d of encounters.filter(e => !WORLD_BOSS_TRIO.includes(e) && e.id !== eliteShadowSerpent.id)) {
       expect(d.intents.some(i => i.breakable || i.summon)).toBe(false);
       expect(d.enemies.some(e => e.court)).toBe(false);
     }

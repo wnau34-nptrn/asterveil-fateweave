@@ -1,0 +1,252 @@
+{
+  "frames": {
+    "water-veil_prepare": {
+      "frame": {
+        "x": 443,
+        "y": 171,
+        "w": 202,
+        "h": 149
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 27,
+        "y": 52,
+        "w": 202,
+        "h": 149
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      }
+    },
+    "water-veil_peak": {
+      "frame": {
+        "x": 225,
+        "y": 1,
+        "w": 216,
+        "h": 193
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 20,
+        "y": 8,
+        "w": 216,
+        "h": 193
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      }
+    },
+    "water-veil_settle": {
+      "frame": {
+        "x": 659,
+        "y": 1,
+        "w": 184,
+        "h": 116
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 36,
+        "y": 85,
+        "w": 184,
+        "h": 116
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      }
+    },
+    "surging-wave_prepare": {
+      "frame": {
+        "x": 659,
+        "y": 119,
+        "w": 172,
+        "h": 116
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 42,
+        "y": 102,
+        "w": 172,
+        "h": 116
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      }
+    },
+    "surging-wave_peak": {
+      "frame": {
+        "x": 1,
+        "y": 1,
+        "w": 222,
+        "h": 191
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 17,
+        "y": 27,
+        "w": 222,
+        "h": 191
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      }
+    },
+    "surging-wave_settle": {
+      "frame": {
+        "x": 1,
+        "y": 194,
+        "w": 205,
+        "h": 92
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 25,
+        "y": 126,
+        "w": 205,
+        "h": 92
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      }
+    },
+    "great-wave_prepare": {
+      "frame": {
+        "x": 647,
+        "y": 287,
+        "w": 192,
+        "h": 49
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 32,
+        "y": 169,
+        "w": 192,
+        "h": 49
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      }
+    },
+    "great-wave_peak": {
+      "frame": {
+        "x": 208,
+        "y": 196,
+        "w": 232,
+        "h": 73
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 145,
+        "w": 232,
+        "h": 73
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      }
+    },
+    "great-wave_settle": {
+      "frame": {
+        "x": 208,
+        "y": 271,
+        "w": 219,
+        "h": 47
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 18,
+        "y": 171,
+        "w": 219,
+        "h": 47
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      }
+    },
+    "reflection_prepare": {
+      "frame": {
+        "x": 1,
+        "y": 288,
+        "w": 187,
+        "h": 43
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 177,
+        "w": 187,
+        "h": 43
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      }
+    },
+    "reflection_peak": {
+      "frame": {
+        "x": 443,
+        "y": 1,
+        "w": 214,
+        "h": 168
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 21,
+        "y": 52,
+        "w": 214,
+        "h": 168
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      }
+    },
+    "reflection_settle": {
+      "frame": {
+        "x": 647,
+        "y": 237,
+        "w": 201,
+        "h": 48
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 27,
+        "y": 172,
+        "w": 201,
+        "h": 48
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      }
+    }
+  },
+  "meta": {
+    "image": "lake_boss_fx.webp",
+    "size": {
+      "w": 850,
+      "h": 337
+    },
+    "scale": "1"
+  }
+}

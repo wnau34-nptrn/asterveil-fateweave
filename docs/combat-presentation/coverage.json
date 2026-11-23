@@ -1,18 +1,18 @@
 {
  "counts": {
-  "identities": 42,
+  "identities": 49,
   "heroes": 17,
-  "enemies": 25,
-  "atlases": 40,
+  "enemies": 32,
+  "atlases": 47,
   "parked": 2,
   "actionIds": 91,
   "heroRows": 119,
-  "intents": 56,
-  "foeRows": 66,
-  "spriteRows": 171,
+  "intents": 72,
+  "foeRows": 83,
+  "spriteRows": 188,
   "proceduralRows": 14,
-  "paintedRows": 125,
-  "sharedRows": 56,
+  "paintedRows": 138,
+  "sharedRows": 60,
   "codeRows": 4
  },
  "identities": [
@@ -500,6 +500,44 @@
    }
   },
   {
+   "identity": "foe_mirror_shade",
+   "side": "enemy",
+   "name": "เงาสะท้อน",
+   "sheet": "mirrorshade",
+   "atlas": {
+    "image": "mirrorshade_lake.ffa558dfa1ef.webp",
+    "atlas": "mirrorshade_lake.60a9e26ef7da.json",
+    "frames": 22,
+    "decodedBytes": 7936000,
+    "downloadBytes": 1580108
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_mist_wisp",
+   "side": "enemy",
+   "name": "ภูตหมอกน้ำ",
+   "sheet": "mistwisp",
+   "atlas": {
+    "image": "mistwisp_lake.aac2200dcb53.webp",
+    "atlas": "mistwisp_lake.4eaad162eb60.json",
+    "frames": 25,
+    "decodedBytes": 5093376,
+    "downloadBytes": 1155181
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
    "identity": "foe_morvane",
    "side": "enemy",
    "name": "มอร์เวน",
@@ -633,6 +671,25 @@
    }
   },
   {
+   "identity": "foe_shadow_serpent",
+   "side": "enemy",
+   "name": "อสรพิษเงา",
+   "sheet": "shadowserpent",
+   "atlas": {
+    "image": "shadowserpent_lake.5de97021e69b.webp",
+    "atlas": "shadowserpent_lake.5424072abe96.json",
+    "frames": 38,
+    "decodedBytes": 16740304,
+    "downloadBytes": 4607310
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
    "identity": "foe_shard_crawler",
    "side": "enemy",
    "name": "แมงมุมเศษผลึก",
@@ -709,6 +766,25 @@
    }
   },
   {
+   "identity": "foe_stone_crab",
+   "side": "enemy",
+   "name": "ปูเกราะหิน",
+   "sheet": "stonecrab",
+   "atlas": {
+    "image": "stonecrab_lake.addc4c99b932.webp",
+    "atlas": "stonecrab_lake.bdf6f1928f3e.json",
+    "frames": 22,
+    "decodedBytes": 7370752,
+    "downloadBytes": 1666784
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
    "identity": "foe_thorn_beetle",
    "side": "enemy",
    "name": "ด้วงหนาม",
@@ -719,6 +795,25 @@
     "frames": 22,
     "decodedBytes": 1863680,
     "downloadBytes": 475744
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_tide_slime",
+   "side": "enemy",
+   "name": "สไลม์น้ำ",
+   "sheet": "tideslime",
+   "atlas": {
+    "image": "tideslime_lake.06940885c1e4.webp",
+    "atlas": "tideslime_lake.ac253824651a.json",
+    "frames": 22,
+    "decodedBytes": 4494336,
+    "downloadBytes": 1132094
    },
    "reactions": {
     "hit": "sprite 17,18",
@@ -780,6 +875,44 @@
    "reactions": {
     "hit": "sprite 17,18",
     "block": "sprite 22,23",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "name": "ภูตธารา",
+   "sheet": "waterspirit",
+   "atlas": {
+    "image": "waterspirit_lake.28b27a9332d8.webp",
+    "atlas": "waterspirit_lake.26d81051e26e.json",
+    "frames": 30,
+    "decodedBytes": 15570912,
+    "downloadBytes": 4377097
+   },
+   "reactions": {
+    "hit": "sprite 25,26",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 27,28,29 · ค้าง 29"
+   }
+  },
+  {
+   "identity": "foe_weeping_siren",
+   "side": "enemy",
+   "name": "นางเงือกร้องไห้",
+   "sheet": "weepingsiren",
+   "atlas": {
+    "image": "weepingsiren_lake.f1e2dda0775f.webp",
+    "atlas": "weepingsiren_lake.589ef404155c.json",
+    "frames": 30,
+    "decodedBytes": 14372820,
+    "downloadBytes": 4100192
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
     "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
     "down": "sprite 19,20,21 · ค้าง 21"
    }
@@ -5160,6 +5293,82 @@
    ]
   },
   {
+   "identity": "foe_mirror_shade",
+   "side": "enemy",
+   "move": "Mirror Strike",
+   "name": "Mirror Strike",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "water-spirit"
+   ]
+  },
+  {
+   "identity": "foe_mist_wisp",
+   "side": "enemy",
+   "move": "Mist Needle",
+   "name": "Mist Needle",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "crab-wall",
+    "elite-shadow-serpent",
+    "isle-host",
+    "lake-mist",
+    "pavilion-mist",
+    "water-spirit"
+   ]
+  },
+  {
    "identity": "foe_morvane",
    "side": "enemy",
    "move": "Six-Hand Rend",
@@ -5926,6 +6135,147 @@
    ]
   },
   {
+   "identity": "foe_shadow_serpent",
+   "side": "enemy",
+   "move": "Shadow Fang",
+   "name": "Shadow Fang",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "elite-shadow-serpent"
+   ]
+  },
+  {
+   "identity": "foe_shadow_serpent",
+   "side": "enemy",
+   "move": "Venom Spit",
+   "name": "Venom Spit",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "elite-shadow-serpent"
+   ]
+  },
+  {
+   "identity": "foe_shadow_serpent",
+   "side": "enemy",
+   "move": "Coil Gathering",
+   "name": "Coil Gathering",
+   "kind": "physical/charge",
+   "body": {
+    "kind": "sprite",
+    "clip": "move3",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง (รวมพลัง ไม่มี damage)",
+   "point": "ตัวบอส + ค้างจนปล่อยท่า",
+   "encounters": [
+    "elite-shadow-serpent"
+   ]
+  },
+  {
+   "identity": "foe_shadow_serpent",
+   "side": "enemy",
+   "move": "Crushing Coil",
+   "name": "Crushing Coil",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move4",
+    "frames": {
+     "prepare": [
+      30,
+      31,
+      32,
+      33
+     ],
+     "recover": [
+      34,
+      35,
+      36,
+      37
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ผู้รับ damage จริง",
+   "encounters": [
+    "elite-shadow-serpent"
+   ]
+  },
+  {
    "identity": "foe_shard_crawler",
    "side": "enemy",
    "move": "Crystal Stab",
@@ -6084,6 +6434,48 @@
    ]
   },
   {
+   "identity": "foe_stone_crab",
+   "side": "enemy",
+   "move": "Pincer",
+   "name": "Pincer",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "crab-wall",
+    "elite-weeping-siren",
+    "isle-host",
+    "lake-mist",
+    "lake-slimes",
+    "pavilion-mist",
+    "water-spirit"
+   ]
+  },
+  {
    "identity": "foe_thorn_beetle",
    "side": "enemy",
    "move": "Thorn Bite",
@@ -6121,6 +6513,44 @@
     "forest-swarm",
     "thicket-ambush",
     "thorn-host"
+   ]
+  },
+  {
+   "identity": "foe_tide_slime",
+   "side": "enemy",
+   "move": "Water Spit",
+   "name": "Water Spit",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "isle-host",
+    "lake-mist",
+    "lake-slimes",
+    "pavilion-mist"
    ]
   },
   {
@@ -6503,6 +6933,310 @@
    "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
    "encounters": [
     "vanguard-captain"
+   ]
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "move": "Tide Lash",
+   "name": "Tide Lash",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move1",
+    "frames": {
+     "prepare": [
+      0,
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "water-spirit"
+   ]
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "move": "Water Veil",
+   "name": "Water Veil",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move2",
+    "frames": {
+     "prepare": [
+      0,
+      5,
+      6
+     ],
+     "recover": [
+      7,
+      8,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง (ฟื้น HP)",
+   "point": "ตัวบอสเมื่อได้ HP คืนจริง",
+   "encounters": [
+    "water-spirit"
+   ]
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "move": "Surging Wave",
+   "name": "Surging Wave",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move3",
+    "frames": {
+     "prepare": [
+      0,
+      9,
+      10
+     ],
+     "recover": [
+      11,
+      12,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "พื้นใต้ผู้รับผลจริง",
+   "encounters": [
+    "water-spirit"
+   ]
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "move": "Undertow",
+   "name": "Undertow",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move4",
+    "frames": {
+     "prepare": [
+      0,
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "water-spirit"
+   ]
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "move": "Great Wave",
+   "name": "Great Wave",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move5",
+    "frames": {
+     "prepare": [
+      0,
+      17,
+      18
+     ],
+     "recover": [
+      19,
+      20,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
+   "point": "พื้นใต้ผู้รับผลจริง",
+   "encounters": [
+    "water-spirit"
+   ]
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "move": "phase:Reflection",
+   "name": "Reflection",
+   "kind": "phase",
+   "body": {
+    "kind": "sprite",
+    "clip": "move6",
+    "frames": {
+     "prepare": [
+      0,
+      21,
+      22
+     ],
+     "recover": [
+      23,
+      24,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง + กำลังเสริมที่ปรากฏจริง",
+   "point": "ตำแหน่งตัวที่ถูกเรียกจริง",
+   "encounters": [
+    "water-spirit"
+   ]
+  },
+  {
+   "identity": "foe_weeping_siren",
+   "side": "enemy",
+   "move": "Tide Lash",
+   "name": "Tide Lash",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "elite-weeping-siren"
+   ]
+  },
+  {
+   "identity": "foe_weeping_siren",
+   "side": "enemy",
+   "move": "Weeping Song",
+   "name": "Weeping Song",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "elite-weeping-siren"
+   ]
+  },
+  {
+   "identity": "foe_weeping_siren",
+   "side": "enemy",
+   "move": "Drowning Call",
+   "name": "Drowning Call",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move3",
+    "frames": {
+     "prepare": [
+      22,
+      23,
+      24,
+      25
+     ],
+     "recover": [
+      26,
+      27,
+      28,
+      29
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "elite-weeping-siren"
    ]
   },
   {

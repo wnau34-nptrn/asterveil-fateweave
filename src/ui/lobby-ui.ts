@@ -1,3 +1,4 @@
+import { journalIds } from '../core/save/expedition-save';
 import { savePlace } from './save-place';
 import { trackLqip } from './lqip';
 import {HuntPanel} from './loot-guide';
@@ -37,7 +38,7 @@ import { trioLive } from '../core/world/world-boss';
 import { worldBossBanner, worldBossPage, type WbCraft, type WbTab } from './world-boss-panel';
 import { gachaBannerUrl, gachaPage, gachaTicketUrl, type GachaState, type GachaView } from './gacha-panel';
 import type { WorldBossStatus } from '../platform/server-client';
-import { sweepReasonText, sweepText, campLines, skillDescription, heroText, npcText, rewardText, shopText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
+import { sweepReasonText, sweepText, campLines, skillDescription, heroText, npcText, rewardText, shopText, journalText, mapQuestText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
 
 import { heroArt, portrait, starRow } from './portraits';
 
@@ -349,7 +350,7 @@ export class LobbyUI {
     const state = (r: typeof rows[number]) => r.st.claimed ? 2 : r.reason ? 1 : 0;
     const sorted = [...rows].sort((a, b) => state(a) - state(b));
     const card = ({ q, st, reason }: typeof rows[number]) => {
-      const t = sideQuestText[q.kind], who = npcText[q.npc as NpcId];
+      const t = mapQuestText[q.id] ?? sideQuestText[q.kind], who = npcText[q.npc as NpcId];
       const status=st.claimed?'รับรางวัลแล้ว':reason==='full'?'คลังเต็ม':reason?'กำลังดำเนินการ':'รับรางวัลได้';
       const claim=st.claimed?'':`<button id="quest-claim-${q.id}" data-lobby="claim" data-quest="${q.id}" class="primary"${reason?' disabled':''}>${reason==='full'?'รางวัลเกินเพดานคลัง · ใช้ทรัพยากรก่อน':reason?`สะสมจากการเดินทาง (${st.progress}/${q.target})`:'รับรางวัล'}</button>`;
       return `<section class="side-quest" id="quest-${q.id}" data-state="${st.claimed?'claimed':reason?'open':'ready'}" aria-label="เควสต์ ${t.name}"><details class="quest-detail"><summary><span class="side-quest-head">${icon('flag')}<b>${t.name}</b><small>${Math.min(st.progress,q.target)}/${q.target}</small></span><span class="quest-row-status">${status}<small>ดูรายละเอียด</small></span></summary><div class="quest-detail-body"><p class="side-quest-from">จาก ${who.name} · ${who.role}</p><p class="side-quest-ask">${t.ask(q.target)}</p><p class="side-quest-reward">รางวัล: ${rewardText(q.reward)}</p>${reason?claim:''}</div></details>${!reason?claim:''}</section>`;
@@ -357,7 +358,13 @@ export class LobbyUI {
     const open = sorted.filter(r => state(r) < 2), done = sorted.filter(r => state(r) === 2);
     const tabs = questTabs(this.questTab, this.boardCounts(p));
     if (this.questTab !== 'camp') return `${tabs}${questBoardBody(p, this.maps, this.view!.day, this.questTab)}`;
-    return `${tabs}<div class="quest-board"><p class="camp-note">งานจาก NPC ในค่าย รับรางวัลได้ครั้งเดียว · ความคืบหน้าจากรอบเดินทางที่จบแล้ว · แตะเควสต์เพื่อดูรายละเอียด</p>${open.map(card).join('')}${done.length ? `<details class="quest-done-list"><summary>รับรางวัลแล้ว ${done.length} งาน</summary>${done.map(card).join('')}</details>` : ''}</div>`;
+    return `${tabs}<div class="quest-board"><p class="camp-note">งานจาก NPC ในค่าย รับรางวัลได้ครั้งเดียว · ความคืบหน้าจากรอบเดินทางที่จบแล้ว · แตะเควสต์เพื่อดูรายละเอียด</p>${open.map(card).join('')}${done.length ? `<details class="quest-done-list"><summary>รับรางวัลแล้ว ${done.length} งาน</summary>${done.map(card).join('')}</details>` : ''}</div>${this.journal(p)}`;
+  }
+  // Map 4 (save v68): the camp journal — lost notes and gazed memories in the order found; the rest stay unknown.
+  private journal(p: Profile): string {
+    const all = journalIds(this.maps); if (!all.length) return '';
+    const found = (p.notes ?? []).filter(id => journalText[id]);
+    return `<section class="journal" aria-labelledby="journal-title"><h3 id="journal-title">${icon('pack')} สมุดบันทึกค่าย <small>${found.length}/${all.length}</small></h3>${found.length ? `<ul class="journal-list">${found.map(id => `<li id="journal-${id.replace(':', '-')}"><details><summary>${journalText[id]!.title}</summary><p>${journalText[id]!.body}</p></details></li>`).join('')}</ul>` : '<p class="camp-note">ยังไม่มีบันทึก · ตามหาบันทึกที่หล่นไว้และภาพสะท้อนในทะเลสาบเงาจันทร์</p>'}</section>`;
   }
   // The scene and the NPC tap targets pan together (portrait phones); the HUD stays put above them.
   private build(): void {

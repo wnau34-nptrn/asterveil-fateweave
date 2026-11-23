@@ -132,7 +132,10 @@ export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?:
 export type IntentAim = 'weakest' | 'support' | 'pack';
 export const SUPPORT_ROLES: readonly string[] = ['Priest', 'Saint', 'Bard', 'Dancer', 'Alchemist', 'Seer'];
 export interface IntentDefinition { sourceId: string; targetSlot: number; name: string; damage: number; kind: 'physical' | 'energy'; unstoppable?: boolean;
-  aim?: IntentAim; phase?: number; all?: boolean; charge?: boolean; special?: 'phase' | 'stagger'; breakable?: boolean; summon?: readonly EnemySlot[] }
+  aim?: IntentAim; phase?: number; all?: boolean; charge?: boolean; special?: 'phase' | 'stagger'; breakable?: boolean; summon?: readonly EnemySlot[];
+  // Map 4 (Water Veil): a no-damage move that restores this percent of the foe's own max HP, less each time one lands
+  // (`EnemyState.mended`), so a fight always ends; Bash/Sigil (by its kind) cancel it.
+  mend?: number }
 // A boss phase: once the boss's HP falls to `below` percent, its next turn summons the `summon` reserves (if any) and
 // switches its moves to that phase's cycle. `hardSummon` reserves join only in hard mode (world `hardEncounter`).
 export interface BossPhase { sourceId: EnemySlot; below: number; summon?: readonly EnemySlot[]; hardSummon?: readonly EnemySlot[]; name: string }
@@ -206,6 +209,8 @@ export interface EnemyState { id: string; hp: number; markedUntil: number; absen
   // Scout poison (save v56): `stacks` bite each round end up to round `until`.
   venom?: { heroId: string; stacks: number; until: number };
   weaken?: number; dispelledUntil?: number; delayedAlso?: number; drawnBy?: { heroId: string; round: number };
+  // Map 4 Water Veil: how many of this foe's mends have landed (each heals less: `mend` / (1 + mended)); missing = none.
+  mended?: number;
   // P03 Hexer curses: stacks (1–3) per hexer, ticking as each round up to `until` ends (a pull ticks one at once). `threaded`: hexers whose first-thread
   // bonus (Wynne p1) this foe has already received.
   hexes?: { heroId: string; stacks: number; until: number }[]; threaded?: string[];

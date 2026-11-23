@@ -3,7 +3,7 @@ import {miraActions,tomaActions,foeArts,foeIntents,unitA4Fixture} from './fixtur
 import {heroes} from '../src/content/heroes/team';
 import {mercenaries} from '../src/content/heroes/mercenaries';
 import {talentTrees} from '../src/content/heroes/talents';
-import {encounters} from '../src/content/encounters/catalog';
+import {encounters,LAKE_STANDINS } from '../src/content/encounters/catalog';
 import {unitClip,unitSample,unitRelease,unitDisplayRatio,unitIdleFrame,unitRegistry} from '../src/game/visuals/unit-frames';
 import {unitPose,unitReactions} from '../src/game/visuals/unit-animation-map';
 import {UnitAnimation} from '../src/game/visuals/unit-animation';
@@ -25,7 +25,7 @@ describe('A4 Mira / Toma / Dew Slime / Ember Slime / Ruin Bat actual content, cl
  });
  it('audits every encounter using the three foes and each of their intents',()=>{
   const found:Record<string,Set<string>>={};
-  for(const data of encounters)for(const e of data.enemies.filter(e=>(foeArts as readonly string[]).includes(e.art??''))){
+  for(const data of encounters.filter(d=>!LAKE_STANDINS.has(d.id)))for(const e of data.enemies.filter(e=>(foeArts as readonly string[]).includes(e.art??''))){
    for(const intent of data.intents.filter(i=>i.sourceId===e.id)){(found[e.art!]??=new Set()).add(intent.name);expect(unitClip(e.art!,undefined,intent.name)).toBeDefined();}
   }
   for(const art of foeArts)expect([...found[art]!]).toEqual([foeIntents[art]]);
@@ -79,8 +79,8 @@ describe('A4 Mira / Toma / Dew Slime / Ember Slime / Ruin Bat actual content, cl
   expect(unitDisplayRatio('mira')*.42).toBeCloseTo(1);expect(unitDisplayRatio('toma')*.42).toBeCloseTo(1);
   for(const art of foeArts)expect(unitDisplayRatio(art)).toBe(2);
  });
- it('loops only the bat and (A8) wisp hovers, from the documented hover frames',()=>{
-  expect(Object.entries(unitRegistry).filter(([,d])=>'idleLoop' in d).map(([id])=>id)).toEqual(['foe_ruin_bat','foe_rift_wisp']);
+ it('loops only the bat and the (A8, lake) wisp hovers, from the documented hover frames',()=>{
+  expect(Object.entries(unitRegistry).filter(([,d])=>'idleLoop' in d).map(([id])=>id)).toEqual(['foe_ruin_bat','foe_rift_wisp','foe_mist_wisp']);
   const seen=[0,150,300,450,600,750].map(t=>unitIdleFrame('foe_ruin_bat',t));expect(seen).toEqual([22,23,24,25,22,23]);
   expect(unitIdleFrame('mira',500)).toBeUndefined();expect(unitIdleFrame('foe_ruin_bat',-100)).toBe(22);
  });

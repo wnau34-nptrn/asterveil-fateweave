@@ -28,6 +28,7 @@ test('the quest board counts by itself, keeps a catch-up day and pays each task 
   await page.setViewportSize({ width: 390, height: 844 }); await page.goto('./'); await page.locator('#continue').click();
   // Two sweeps finish today's patrol (its sweep option); nothing else on the board moves.
   await page.locator('[data-lobby=maps]').first().click();
+  await page.locator('#map-node-veil-frontier').click();
   await page.locator('#map-sweep-veil-frontier').click(); await page.locator('#map-sweep-veil-frontier').click();
   await page.locator('[data-lobby="close"]').click();
   await page.locator('#lobby-board').click();

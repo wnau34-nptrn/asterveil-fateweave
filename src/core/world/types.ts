@@ -47,7 +47,8 @@ export interface MapDefinition {
   bossName: string; goalName: string;
   // Story recruits (master plan A2, owner 2026-10-23): heroes not yet in the company fight the prologue as guests, then
   // part ways and join one at a time: at the prologue win, on reaching a camp, or as the boss fight starts. `firstCompany`: a new company's only member.
-  recruits?: readonly { hero: string; at: RecruitPoint }[]; firstCompany: readonly string[];
+  // `camp` (map 4): a camp recruit who joins only at that camp (missing = the first camp reached).
+  recruits?: readonly { hero: string; at: RecruitPoint; camp?: Point }[]; firstCompany: readonly string[];
   // Starter recruitment (owner 2026-10-23): after a new company's prologue, `picks` free picks, each one of
   // `company.offers` mercenaries from `pool`; while the team has no `support` member, every offer includes one.
   // `fate` (OD-59, save v67): the starter picks are the first fate weave instead of a choice: one fixed offer each, a
@@ -104,6 +105,13 @@ export interface MapDefinition {
   // P10 free-ticket gacha (shared by every map; docs/design/GACHA_P10_SPEC_TH.md).
   gacha: GachaRules;
   herbs: readonly (Point & { id: string })[];
+  // Map 4 (save v68): the tide (`tide.ts`), moon lanterns (stepped on once per run; a seal objective), lost notes
+  // (stepped on once per run; they come home into the camp journal whatever the outcome) and a side story that runs
+  // beside the seal (done in one run that comes home: pays `reward` once, like an optional quest; missing = none).
+  tide?: TideDefinition;
+  lanterns?: readonly (Point & { id: string })[];
+  notes?: readonly (Point & { id: string })[];
+  story?: { objectives: readonly QuestObjective[]; reward: SideQuestDefinition['reward']; boat?: true };
   events: readonly MapEventDefinition[];
   eventRules: EventRules;
   // Passive talent tree per hero id (2D-1b).
@@ -177,7 +185,14 @@ export interface EquipmentRules {
 // `forced`: the elite stands on a one-tile gate with no way around (checked by tests); otherwise it can be bypassed.
 // `mini` (3B): a mini-boss; it pays the `miniBoss` reward instead of the elite one.
 // Quest objectives read the run's own state: a beaten elite, a finished event, or a number of opened chests.
-export type QuestObjective = { id: string; kind: 'elite' | 'event'; target: string } | { id: string; kind: 'chests'; count: number };
+// Map 4 (save v68): `chest` = that one chest opened; `lanterns` = that many moon lanterns lit.
+export type QuestObjective = { id: string; kind: 'elite' | 'event' | 'chest'; target: string } | { id: string; kind: 'chests'; count: number } | { id: string; kind: 'lanterns'; count: number };
+// Map 4 tide (save v68, docs/design/CHAPTER1_MAPS_TH.md §3): the water level turns every `period` steps of the run
+// (low first), counted from the run's steps plus the waits taken at camps, so it never depends on a clock or a roll.
+// Shallow tiles (`shallow` characters of `rows`) can be walked only at low tide; deep ones (`deep`) only by boat. A boat
+// (the map's side story, once done) also crosses shallow water at high tide. A party without a boat still standing in
+// shallow water when the tide comes in is swept back to the last dry tile it left.
+export interface TideDefinition { period: number; shallow: string; deep: string }
 // 3C puzzles. Runes: step on the stones in order to open `door`. Levers: pull every lever to open `door`.
 // Boulder: push it (walk into it) along the floor into `pit`, which fills and becomes floor. Secrets: walls you can walk through.
 export type RuneGlyph = 'star' | 'moon' | 'sun';
@@ -189,8 +204,9 @@ export interface PuzzleDefinitions {
 }
 // 3D side quests count what finished runs did. Rewards add to the bank and the home potion stock.
 export type SideQuestKind = 'wins' | 'elites' | 'secrets' | 'puzzles' | 'rareChests' | 'herbs';
+// `map` (map 4): only runs on that map count (missing = any map).
 export interface SideQuestDefinition {
-  id: string; npc: string; kind: SideQuestKind; target: number;
+  id: string; npc: string; kind: SideQuestKind; target: number; map?: string;
   reward: { ore?: number; gold?: number; shard?: number; dust?: number; potions?: Partial<Record<PotionId, number>> };
 }
 // Guided tasks (master plan A4): one per camp NPC and lobby system, shown once the system opens. Done is read from the
@@ -205,10 +221,12 @@ export interface QuestDefinition { need: number; objectives: readonly QuestObjec
 // `percent` (A10): this elite's foes fight with that percent of their HP and move damage (missing = 100).
 export interface EliteDefinition { id: string; x: number; y: number; encounterId: string; forced: boolean; mini?: boolean; level?: number; percent?: number }
 // P05-02: `abandoned` — an abandoned camp (rest with pressure, search for dust with a fight risk, or walk past).
-export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift' | 'abandoned';
+// Map 4 (save v68): `reflection` — the lake shows a memory: gaze (a journal page, every brought member +`reflection.fatigue`
+// fatigue) or look away (nothing).
+export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift' | 'abandoned' | 'reflection';
 export interface MapEventDefinition { id: string; x: number; y: number; kind: MapEventKind }
 // P05-02: `guide` (traveller: point the way, no salve), `shelter`/`search`/`pass` (abandoned camp).
-export type EventChoice = 'fight' | 'sneak' | 'pray' | 'offer' | 'buy-salve' | 'buy-tonic' | 'buy-repel' | 'help' | 'guide' | 'shelter' | 'search' | 'pass';
+export type EventChoice = 'fight' | 'sneak' | 'pray' | 'offer' | 'buy-salve' | 'buy-tonic' | 'buy-repel' | 'help' | 'guide' | 'shelter' | 'search' | 'pass' | 'gaze' | 'away';
 export interface EventRules {
   // Bandits: a battle from the zone pool one level above the tile; the win always drops an item. Sneaking fills pressure.
   banditLevelBonus: number;
@@ -221,6 +239,8 @@ export interface EventRules {
   // P05-02 (draft): abandoned camp. `shelter` heals standing members `healPercent`% and fills the zone pressure; `search`
   // finds `searchDust` veil dust, but at `searchFightPercent`% a zone battle comes first (no item; the dust after the win).
   abandoned: { healPercent: number; searchDust: number; searchFightPercent: number };
+  // Map 4 (draft): gazing into a reflection tires every brought member by `fatigue` points.
+  reflection: { fatigue: number };
   // Rift: an energy battle at the tile's level; the win brings veil dust home.
   riftEncounterId: string; riftDust: number;
   // Elites: EXP multiplier and the drop's rarity weights.
@@ -286,7 +306,9 @@ export type Talents = Partial<Record<TalentNode, number>>;
 // Levels and EXP (2D-1, draft numbers). Each level adds `levelStatPercent` to max HP, Attack and skill
 // power; monsters gain `monsterLevelPercent` HP/damage per level. EXP per foe's worth of HP (`expFoeHp` at Lv1) = expBase + expPerLevel × L.
 export interface ProgressionRules {
-  levelCap: number; levelStatPercent: number; monsterLevelPercent: number;
+  // `levelCap` is the highest camp level; OD-60 (save v68): the level a run may reach is `capBase`, raised `capPerClear`
+  // for each map first-cleared past the first `capFreeClears` (`capLevel` in world.ts).
+  levelCap: number; capBase: number; capPerClear: number; capFreeClears: number; levelStatPercent: number; monsterLevelPercent: number;
   expBase: number; expPerLevel: number; expFoeHp: number; summonExpPercent: number; bossExpMultiplier: number;
   // EXP to go from level L to L+1 = nextBase + nextPerLevel × L.
   nextBase: number; nextPerLevel: number;
@@ -494,6 +516,8 @@ export interface Profile {
   // P05-02 (save v61): the latest choice made at each map event across runs (story flags for camp lines; missing = none)
   // and the maps whose optional quest has paid its reward (missing = none).
   choices?: Record<string, EventChoice>; storyQuests?: string[];
+  // Map 4 (save v68): the camp journal's lost notes and memories, in the order found (missing = none).
+  notes?: string[];
   // P05-05 (save v62): supplies, the day's sweeps and the sweep serial (missing = never swept).
   sweep?: SweepBook;
   // P05-06 (save v63): the quest board's open periods (missing = nothing counted yet).
@@ -623,6 +647,10 @@ export interface ExpeditionState {
   // P05-02 (save v61): contract counters. `choices` logs the choice made at each event this run (a later choice at the
   // same event replaces it); `downed` counts every time a brought member fell (missing = none).
   choices?: Record<string, EventChoice>; downed?: number;
+  // Map 4 (save v68, tide maps only): `tideWait` = steps the camps' waits added to the tide count; `shore` = the dry tile
+  // the party left when it stepped into shallow water (while it stands there); `boat` = the side story's boat, fixed at
+  // departure. `lanterns` lit and `notes` (lost notes and gazed memories) picked up this run. Missing = none.
+  tideWait?: number; shore?: Point; boat?: true; lanterns?: string[]; notes?: string[];
   // P05-06 (save v63): the device's calendar day the run set out on; its board progress counts there (missing = none).
   day?: number;
   // Hard mode (A9, save v33): set on departure, never changed during the run.
@@ -661,7 +689,11 @@ export interface ExpeditionState {
 export type WorldEvent =
   | { type: 'talent'; heroId: string }
   | { type: 'moved'; chance: number }
-  | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' | 'sealed' | 'stone' | 'pit' }
+  | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' | 'sealed' | 'stone' | 'pit' | 'tide' | 'deep' }
+  | { type: 'washed'; to: Point }
+  | { type: 'waited'; low: boolean }
+  | { type: 'lantern'; lanternId: string; lit: number }
+  | { type: 'note'; noteId: string }
   | { type: 'roster'; heroId?: string; lane?: Lane; preset?: number; absent?: string[] }
   | { type: 'equipped'; heroId: string }
   | { type: 'encounter'; kind: BattleKind; encounterId: string; chance: number }

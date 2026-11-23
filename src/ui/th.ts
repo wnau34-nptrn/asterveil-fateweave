@@ -552,17 +552,23 @@ export const npcText: Record<'smith' | 'broker' | 'trainer' | 'keeper' | 'herbal
 // ---- Rift seal (3B): objective lines with live progress. ----
 export function questLine(o: QuestObjective, state: ExpeditionState): string {
   if (o.kind === 'chests') return `เปิดกล่องสมบัติ ${o.count} กล่อง (${Math.min(o.count, state.openedChests.length)}/${o.count})`;
-  if (o.kind === 'elite') return 'ชนะยักษ์หินแห่งรอยแผล (มินิบอส)';
+  if (o.kind === 'lanterns') return `จุดโคมจันทร์ ${o.count} ดวงบนเกาะ (${Math.min(o.count, state.lanterns?.length ?? 0)}/${o.count})`;
+  if (o.kind === 'elite') return questEliteText[o.target] ?? 'ชนะยักษ์หินแห่งรอยแผล (มินิบอส)';
+  if (o.kind === 'chest') return questChestText[o.target] ?? 'เปิดกล่องสมบัติ';
   return questEventText[o.target] ?? 'ชำระรอยแยกเล็กในรอยแผล';
 }
+const questEliteText: Record<string, string> = { 'lake-serpent': 'ชนะอสรพิษเงาที่สะพานใหญ่' };
+const questChestText: Record<string, string> = { 'lake-oar': 'หาไม้พายในกล่องบนเกาะ' };
 // P05-02: event objectives of the optional story quests (map 2) and the rift seal (map 3).
 const questEventText: Record<string, string> = {
+  'lake-shrine': 'ทำพิธีรำลึกที่ศาลเจ้าริมน้ำ', 'lake-ferryman': 'ช่วยคนพายเรือแก่ที่ท่าเรือ',
   'scar-rift': 'ชำระรอยแยกเล็กในรอยแผล',
   'forest-traveller': 'ตัดสินใจเรื่องนักเดินทางบาดเจ็บกลางป่า (ช่วยหรือชี้ทางก็ได้)',
   'forest-shrine': 'ตัดสินใจที่ศาลเก่ากลางป่า (สวดหรือถวายก็ได้)',
 };
 // P05-02: optional story quests of maps 1–2, by map id (the objectives come from the map's `quest`).
 export const storyQuestText: Record<string, { name: string; ask: string; done: string }> = {
+  'moon-lake': { name: 'เรือของคนพายเรือ', ask: 'คนพายเรือแก่ที่ท่าเรือร้างทำไม้พายหายไปบนเกาะกลางน้ำ ช่วยเขา หาไม้พายในกล่องบนเกาะ แล้วกลับค่ายในรอบเดียว · ได้เรือเล็กข้ามน้ำได้ทุกช่วงในรอบต่อ ๆ ไป', done: 'คาเอล: คนพายเรือฝากเรือเล็กไว้ให้ค่ายเรา ข้ามทะเลสาบได้ไม่ต้องรอน้ำลงแล้ว' },
   'ruined-border': { name: 'รอยธงของคนที่หนี', ask: 'ทหารที่หนีไปซ่อนธงประจำกองไว้ในกล่องสามใบทั่วซากป้อม เปิดให้ครบในรอบเดียวแล้วกลับค่าย', done: 'มิมี่: ธงของคนที่หนีกลับมาครบแล้ว ข้าเก็บเข้าคลังให้' },
   'deep-forest': { name: 'ด้ายที่ป่าฝืน', ask: 'ป่าบิดเบี้ยวเพราะรอยแยก ตัดสินใจเรื่องนักเดินทางและศาลเก่าให้ครบในรอบเดียวแล้วกลับค่าย', done: 'คาเอล: ป่าสงบลงหน่อยแล้ว คนเดินทางเริ่มกลับมาใช้เส้นทางนั้น' },
 };
@@ -591,6 +597,14 @@ export function campLines(profile: Pick<Profile, 'last' | 'choices'>, events: re
   return out.slice(0, 3);
 }
 // ---- Map events (3A): live Thai text for each event and choice; numbers come from the rules. ----
+// Map 4 (save v68): the camp journal's pages (lost notes and gazed memories), keyed by note id. Draft text from the approved
+// chapter-1 lore (docs/LORE_CHAPTER1_TH.md, act 2): the lake shows the commander's past; the other child is Vargoth.
+export const journalText: Record<string, { title: string; body: string }> = {
+  'note-weaver-book': { title: 'สมุดทอด้ายของเด็กชาย', body: 'ลายมือเด็กเขียนว่า “วันนี้ทอด้ายสีเงินได้ยาวกว่าเพื่อน เขาบอกว่าวันหนึ่งจะทอสะพานข้ามทะเลสาบให้ได้” หน้าสุดท้ายมีด้ายสองเส้นผูกติดกันไว้ เส้นหนึ่งขาดครึ่ง' },
+  'note-keeper-letter': { title: 'จดหมายถึงผู้ดูแลทะเลสาบ', body: '“ท่านผู้ดูแล เด็กสองคนนั้นมานั่งริมน้ำทุกคืนจันทร์เต็มดวง ขอท่านช่วยดูแลพวกเขาด้วย” ลายเซ็นเลือนจนอ่านไม่ออก มีคราบน้ำตาหยดลงกลางกระดาษ' },
+  'memory:shore-reflection': { title: 'ความทรงจำ · ริมท่าเรือ', body: 'ในน้ำท่านเห็นเด็กสองคนนั่งทอด้ายใต้แสงจันทร์ คนหนึ่งคือตัวท่านเอง อีกคนหันมายิ้ม ดวงตาสีเดียวกับวาร์กอธ' },
+  'memory:east-reflection': { title: 'ความทรงจำ · ฝั่งตะวันออก', body: 'เด็กคนนั้นยื่นด้ายเส้นหนึ่งให้ท่าน “ถ้าวันหนึ่งเราแยกทางกัน ด้ายนี้จะพาข้ากลับมาหาเจ้า” แล้วผิวน้ำก็สั่นจนภาพหายไป' },
+};
 export const eventText: Record<MapEventKind, { name: string; scene: string; icon: IconName }> = {
   bandits: { name: 'ด่านโจร', scene: 'กลุ่มโจรตั้งด่านขวางทาง พวกมันเฝ้าของที่ปล้นมา', icon: 'danger' },
   shrine: { name: 'ศาลเก่า', scene: 'ศาลหินเรืองแสงจาง ๆ พลังของมันรักษาได้แต่ต้องแลกกับบางอย่าง', icon: 'star' },
@@ -598,6 +612,7 @@ export const eventText: Record<MapEventKind, { name: string; scene: string; icon
   traveller: { name: 'นักเดินทางบาดเจ็บ', scene: 'นักเดินทางคนหนึ่งบาดเจ็บนั่งพิงต้นไม้ ขอยาสักขวด', icon: 'talk' },
   rift: { name: 'รอยแยกเล็ก', scene: 'รอยแยกเล็ก ๆ กำลังสั่น มีบางอย่างกำลังจะคลานออกมา', icon: 'boss' },
   abandoned: { name: 'ค่ายร้าง', scene: 'ค่ายพักที่ใครสักคนทิ้งไว้ กองไฟยังอุ่น ของบางอย่างยังวางอยู่', icon: 'camp' },
+  reflection: { name: 'ภาพสะท้อน', scene: 'ผิวน้ำนิ่งสนิท เงาในน้ำไม่ใช่เงาของท่าน แต่เป็นภาพจากวันที่จำไม่ได้', icon: 'star' },
 };
 export function choiceText(choice: EventChoice, r: EventRules): { label: string; help: string } {
   switch (choice) {
@@ -613,14 +628,20 @@ export function choiceText(choice: EventChoice, r: EventRules): { label: string;
     case 'shelter': return { label: 'พักที่นี่', help: `คนที่ยืนอยู่ฟื้นเลือด ${r.abandoned.healPercent}% แต่ศัตรูในโซนจะตื่นตัวเต็มที่` };
     case 'search': return { label: 'ค้นของ', help: `ได้ฝุ่นดาว ${r.abandoned.searchDust} แต่มีโอกาส ${r.abandoned.searchFightPercent}% ที่ต้องสู้ก่อน (ไม่มีอุปกรณ์ดรอป)` };
     case 'pass': return { label: 'เดินผ่าน', help: 'ไม่ได้อะไร ไม่เสียอะไร' };
+    case 'gaze': return { label: 'มองต่อ', help: `ได้บันทึกความทรงจำลงสมุดค่าย แต่ทุกคนที่พามาเหนื่อย +${r.reflection.fatigue}` };
+    case 'away': return { label: 'เบือนหน้า', help: 'ไม่ได้อะไร ไม่เสียอะไร' };
   }
 }
 export const eventChoices: Record<MapEventKind, readonly EventChoice[]> = {
   bandits: ['fight', 'sneak'], shrine: ['pray', 'offer'], merchant: ['buy-salve', 'buy-tonic', 'buy-repel'], traveller: ['help', 'guide'], rift: ['fight'],
-  abandoned: ['shelter', 'search', 'pass'],
+  abandoned: ['shelter', 'search', 'pass'], reflection: ['gaze', 'away'],
 };
 export const eventReasonText: Record<string, string> = { ore: 'แร่ดาวไม่พอ', salve: 'ไม่มียาฟื้นแผล', carry: 'พกเต็มแล้ว', busy: 'ทำตอนนี้ไม่ได้', choice: 'ทำไม่ได้' };
 // ---- Camp side quests (3D): each NPC's request and its reward, in Thai. ----
+// Map 4: a camp job counted on one map only (`SideQuestDefinition.map`) has its own name and ask.
+export const mapQuestText: Record<string, { name: string; ask: (n: number) => string }> = {
+  'scout-lake': { name: 'ปริศนาแห่งทะเลสาบ', ask: n => `ไขปริศนาในทะเลสาบเงาจันทร์ให้ครบ ${n} อย่าง (หินรูนเงาสะท้อน ประตูน้ำ ก้อนหินลงน้ำ) นับเฉพาะรอบที่ไปทะเลสาบ` },
+};
 export const sideQuestText: Record<SideQuestKind, { name: string; ask: (n: number) => string }> = {
   rareChests: { name: 'แร่จากกล่องหายาก', ask: n => `เปิดกล่องสมบัติหายาก ${n} กล่อง แล้วเล่าให้ข้าฟังว่าข้างในมีอะไร` },
   wins: { name: 'ผลงานให้ลูกค้าดู', ask: n => `ชนะการต่อสู้ให้ได้ ${n} ครั้ง ข้าจะเอาไปโฆษณาให้ทหารรับจ้างอยากมาร่วม` },

@@ -19,6 +19,8 @@ export const gameRules: GameRules = {
     { id: 'keeper-hidden', npc: 'keeper', kind: 'secrets', target: 6, reward: { gold: 20, dust: 15 } },
     { id: 'herbalist-glow', npc: 'herbalist', kind: 'herbs', target: 6, reward: { potions: { salve: 2, tonic: 2 } } },
     { id: 'scout-puzzles', npc: 'scout', kind: 'puzzles', target: 6, reward: { ore: 40, shard: 10 } },
+    // Map 4 (OD-60): Kael asks for the lake's three puzzles (runes, water gate, causeway), counted on lake runs only.
+    { id: 'scout-lake', npc: 'scout', kind: 'puzzles', target: 3, map: 'moon-lake', reward: { ore: 40, dust: 15, shard: 10 } },
   ],
   // P05-05 (prototype, draft numbers): one supply per sweep, 3 sweeps per map per day shared by normal and hard. P04-06
   // farm budget (docs/validation/p04-06-2026-11-15): 2 supplies a day kept up to 6 (was 6/18). Each map's rewards are its own `sweepReward`.
@@ -126,7 +128,7 @@ export const gameRules: GameRules = {
     starCosts: [{ shards: 10, ore: 15 }, { shards: 20, ore: 30 }, { shards: 30, ore: 45 }, { shards: 40, ore: 70 }], shardsPerDuplicate: 10,
   },
   // Draft 2D-1 numbers: a first full run ends near level 9; farming low levels is tapered (world `expPercent`).
-  progression: { levelCap: 10, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, expFoeHp: 95, summonExpPercent: 25, bossExpMultiplier: 3, nextBase: 20, nextPerLevel: 45, hardLevels: 5, hardFirstClear: { gold: 30, shard: 20 }, firstClearShards: 10,
+  progression: { levelCap: 30, capBase: 10, capPerClear: 3, capFreeClears: 2, levelStatPercent: 3, monsterLevelPercent: 7, expBase: 6, expPerLevel: 2, expFoeHp: 95, summonExpPercent: 25, bossExpMultiplier: 3, nextBase: 20, nextPerLevel: 45, hardLevels: 5, hardFirstClear: { gold: 30, shard: 20 }, firstClearShards: 10,
     hardTraits: { thornsPercent: 20, veilguardPercent: 25, enrageBelow: 50, enragePercent: 30, bossMovePercent: 130, bossLevels: 8 }, treeTiers: [1, 5, 10, 15], treePointLevel: 10, treePointsPerClear: 1, loadoutSize: 3,
     // Skill tomes (docs/design/SKILL_TOMES_TH.md, owner-approved 2026-10-22, draft numbers).
     skillLevels: { max: 5, costs: [{ size: 'small', tomes: 2, gold: 5 }, { size: 'small', tomes: 4, gold: 8 }, { size: 'medium', tomes: 2, gold: 15 }, { size: 'large', tomes: 1, gold: 30, core: 1 }],
@@ -136,7 +138,7 @@ export const gameRules: GameRules = {
   eventRules: {
     banditLevelBonus: 1, prayHeal: 25, prayWound: 5, maxWound: 20, offerOre: 10, offerShard: 3,
     merchant: { salve: 8, tonic: 14, repel: 10, calm: 10 }, traveller: { ore: 10, shard: 3 }, travellerGuide: { ore: 4 },
-    abandoned: { healPercent: 20, searchDust: 8, searchFightPercent: 40 },
+    abandoned: { healPercent: 20, searchDust: 8, searchFightPercent: 40 }, reflection: { fatigue: 1 },
     riftEncounterId: 'scout-patrol', riftDust: 12,
     eliteExp: 2, eliteRarityWeights: [0, 0, 60, 30, 10],
     optionalElite: { exp: 3, rarityWeights: [0, 0, 20, 50, 30], gold: 12, shard: 3 },

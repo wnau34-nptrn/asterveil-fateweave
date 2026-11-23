@@ -21,6 +21,12 @@ export const foeSetup:Record<FoeSignatureMove,Pick<EnemyDefinition,'id'|'row'|'n
  'Rift Bolt':{id:'f1',row:'front',large:true,name:'Rift Channeler',displayName:'อสูรส่งพลัง',art:'foe_rift_channeler',color:0x9785f2,kind:'energy'},
  'Rift Beam':{id:'f1',row:'front',large:true,name:'Rift Channeler',displayName:'อสูรส่งพลัง',art:'foe_rift_channeler',color:0x8a5cd6,kind:'energy'},
  'Veil Quake':{id:'f1',row:'front',large:true,name:'Veil Golem',displayName:'ยักษ์หินรอยแยก',art:'foe_golem',color:0x7d8a96,kind:'physical'},
+ 'Water Spit':{id:'b1',row:'back',name:'Tide Slime',displayName:'สไลม์น้ำ',art:'foe_ember_slime',color:0x6fb8e8,kind:'energy'},
+ 'Mist Needle':{id:'b1',row:'back',name:'Mist Wisp',displayName:'ภูตหมอกน้ำ',art:'foe_rift_wisp',color:0x9fd6e6,kind:'energy'},
+ 'Tide Lash':{id:'b1',row:'back',name:'Weeping Siren',displayName:'นางเงือกร้องไห้',art:'foe_riftweaver',color:0x7fb0d8,kind:'energy'},
+ 'Drowning Call':{id:'b1',row:'back',name:'Weeping Siren',displayName:'นางเงือกร้องไห้',art:'foe_riftweaver',color:0x7fb0d8,kind:'energy'},
+ 'Weeping Song':{id:'b1',row:'back',name:'Weeping Siren',displayName:'นางเงือกร้องไห้',art:'foe_riftweaver',color:0x7fb0d8,kind:'energy'},
+ 'Venom Spit':{id:'f1',row:'front',large:true,name:'Shadow Serpent',displayName:'อสรพิษเงา',art:'foe_tusker',color:0x3b4f7a,kind:'energy'},
 };
 export type FoeScenario='hit'|'guard'|'blocked'|'dodge'|'all';
 const pool=[...heroes,...mercenaries];

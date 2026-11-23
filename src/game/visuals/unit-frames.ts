@@ -1,4 +1,5 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
+import { lakeBossDisplayRatio, lakeFoeDisplayRatios } from './assets';
 import atlasManifest from './unit-atlases.json';
 export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare' | 'arc' | 'communion' | 'lastlight' | 'partner' | 'circle' | 'closing' | 'echo' | 'move1' | 'move2' | 'move3' | 'move4' | 'move5' | 'move6' | 'move7' | 'mark' | 'parry' | 'gather' | 'release' | 'stored' | 'knot' | 'toll' | 'weave' | 'deflect' | 'dial' | 'read';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
@@ -46,6 +47,12 @@ export const CORPSE_ALPHA = .28;
 // A9 boss strips: frame 0 is the exact seed, each move adds [wind-up, anticipation, contact, follow-through] from `base`; the
 // strip's own ready/recover frames are the seed. Prepare ends on the anticipation, contact is the first recover frame.
 const bossMove = (base: number): FrameRange => ({ prepare: [0, base, base + 1], recover: [base + 2, base + 3, 0] });
+// The lake elite strips share phase boundaries, with contact at the fifth frame.
+const lakeEliteMove = (start: number): FrameRange => ({
+  prepare: [start, start + 1, start + 2, start + 3],
+  recover: [start + 4, start + 5, start + 6, start + 7],
+});
+const lakeEliteReactions = { hit: [17, 18], down: [19, 20, 21] } as const;
 const BOSS_SOLE = 896 / 1024;
 export const unitRegistry = {
   // AV02: finisher (overhead cut) and sweep (wide cut) use the slash clip, lunge the thrust clip; the parry riposte is the
@@ -55,7 +62,7 @@ export const unitRegistry = {
   tracer: { sheet: 'lyra', displayRatio: 2, actions: { attack: 'attack', execute: 'skill', finisher: 'attack', sweep: 'attack', lunge: 'skill', mark: 'mark', parry: 'parry' },
     clips: { attack: { prepare: [1, 2, 3], recover: [5, 4, 6, 7, 8] }, mark: { prepare: [23, 24, 25], recover: [26, 27, 28, 29] },
       parry: { prepare: [31, 32, 33], recover: [34, 35, 36, 37] } }, reactions: { counter: [12, 13, 14] } },
-  foe_hunter: { sheet: 'hunter', displayRatio: 2, intents: { 'Raking Slash': 'attack', 'Shadow Knife': 'skill' } },
+  foe_hunter: { sheet: 'hunter', displayRatio: 2, intents: { 'Raking Slash': 'attack', 'Shadow Knife': 'skill', 'Mirror Strike': 'attack' } },
   weaver: { sheet: 'eira', displayRatio: 1 / .42, actions: { attack: 'attack', bolt: 'attack', storm: 'attack', dispel: 'attack', ward: 'skill', sigil: 'skill', aegis: 'skill' } },
   foe_sprite: { sheet: 'sprite', displayRatio: 2, intents: { 'Seed Spark': 'attack' } },
   guardian: { sheet: 'aegis', displayRatio: 1 / .36, actions: { attack: 'attack', bash: 'bash', guard: 'skill', rally: 'skill', challenge: 'skill', bulwark: 'skill', rouse: 'skill' },
@@ -76,7 +83,7 @@ export const unitRegistry = {
     // AV03/AV04: only the basic attack paints a thrown flask; its hand opens (5) as the flask leaves.
     reactions: { block: [22, 23] }, release: { attack: { frame: 5, at: RELEASE_AT, point: [.39, -.52] } } },
   foe_dew_slime: { sheet: 'dew', displayRatio: 2, intents: { 'Jelly Bounce': 'attack' } },
-  foe_ember_slime: { sheet: 'ember', displayRatio: 2, intents: { 'Ember Spark': 'skill' } },
+  foe_ember_slime: { sheet: 'ember', displayRatio: 2, intents: { 'Ember Spark': 'skill', 'Water Spit': 'skill' } },
   // A5: Garran thrusts for attack/pierce/halt (and, since save v50, the pinning spear and the charge) and holds a low spear
   // guard for brace/spearwall; the shout clip stays in the sheet, unused.
   // Brann swings for attack, slams for slam/quake/tremor, plants the hammer to taunt and braces for the stone skills.
@@ -84,7 +91,7 @@ export const unitRegistry = {
     // AV02: the riposte catches on the guard (30) and drives the spear (5, 6) in the same reaction window.
     reactions: { block: [30, 31], counter: [30, 5, 6] } },
   brann: { sheet: 'brann', displayRatio: 1 / .37, actions: { attack: 'attack', slam: 'skill', quake: 'skill', tremor: 'skill', taunt: 'taunt', stonearmor: 'brace', guardstone: 'brace' }, reactions: { block: [38, 39] } },
-  foe_tusker: { sheet: 'tusker', displayRatio: 2, intents: { 'Tusk Charge': 'attack', Stampede: 'skill' } },
+  foe_tusker: { sheet: 'tusker', displayRatio: 2, intents: { 'Tusk Charge': 'attack', Stampede: 'skill', 'Shadow Fang': 'attack', 'Venom Spit': 'skill', 'Coil Gathering': 'skill', 'Crushing Coil': 'skill' } },
   foe_stalker: { sheet: 'stalker', displayRatio: 2, intents: { 'Thorn Pounce': 'attack' } },
   foe_thorn_beetle: { sheet: 'beetle', displayRatio: 2, intents: { 'Thorn Bite': 'attack' } },
   // A6: Sefa's double slash serves attack/ambush, the long low stab backstab/disarm; evade and decoy share the backstep.
@@ -121,7 +128,7 @@ export const unitRegistry = {
     clips: { attack: { prepare: [1, 2], recover: [3, 4, 5, 6] }, deflect: { prepare: [7, 8], recover: [9, 10, 11, 12] }, dial: { prepare: [13, 14], recover: [15, 16, 17, 18] }, read: { prepare: [19, 20], recover: [21, 22, 23, 24] } },
     reactions: { hit: [25, 26, 27], block: [28, 29, 30], down: [31, 32, 33, 34] } },
   // Isolde (wila): same, redesigned still + procedural motion until A7-003.
-  foe_riftweaver: { sheet: 'riftweaver', displayRatio: 2, intents: { 'Rune Lash': 'attack', 'Rift Needle': 'skill', 'Ribbon Snare': 'snare' } },
+  foe_riftweaver: { sheet: 'riftweaver', displayRatio: 2, intents: { 'Rune Lash': 'attack', 'Rift Needle': 'skill', 'Ribbon Snare': 'snare', 'Tide Lash': 'attack', 'Weeping Song': 'skill', 'Drowning Call': 'skill' } },
   foe_spore_puff: { sheet: 'sporepuff', displayRatio: 2, intents: { 'Spore Dust': 'attack' } },
   // A10 (original cast, sheet `units`): Raking Slash / Crushing Blow are the cut and the claw hammer (clip attack), Shadow Knife
   // (free-hand throw) and Rift Bolt (paired palms) the skill clip. The Raider atlas is already mirrored to face left; a packed
@@ -136,6 +143,20 @@ export const unitRegistry = {
   foe_rift_channeler: { sheet: 'channeler', displayRatio: 2, intents: { 'Rift Beam': 'attack', 'Rift Bolt': 'attack' } },
   foe_rift_wisp: { sheet: 'wisp', displayRatio: 2, intents: { 'Star Flame': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 }, corpseAlpha: 1 },
   foe_shard_crawler: { sheet: 'crawler', displayRatio: 2, intents: { 'Crystal Stab': 'attack' } },
+  // Map 4 lake foes (ART-UNIT-ANIMATION-LAKE-001, shared layout): the slime spits (skill 9..16), the wisp, crab and shade strike
+  // (attack 1..8); hit 17..18, down 19..21; the wisp hovers on 22..24. Slots without a strip alias the ready seed and are never drawn.
+  foe_tide_slime: { sheet: 'tideslime', displayRatio: 2, intents: { 'Water Spit': 'skill' } },
+  foe_mist_wisp: { sheet: 'mistwisp', displayRatio: lakeFoeDisplayRatios.foe_mist_wisp!, soleOrigin: 497 / 512, intents: { 'Mist Needle': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 } },
+  foe_stone_crab: { sheet: 'stonecrab', displayRatio: lakeFoeDisplayRatios.foe_stone_crab!, soleOrigin: 497 / 512, intents: { Pincer: 'attack' } },
+  foe_mirror_shade: { sheet: 'mirrorshade', displayRatio: lakeFoeDisplayRatios.foe_mirror_shade!, soleOrigin: 497 / 512, intents: { 'Mirror Strike': 'attack' } },
+  foe_shadow_serpent: { sheet: 'shadowserpent', displayRatio: lakeFoeDisplayRatios.foe_shadow_serpent!, own: true, downFrame: 21, soleOrigin: 497 / 512,
+    intents: { 'Shadow Fang': 'attack', 'Venom Spit': 'skill', 'Coil Gathering': 'move3', 'Crushing Coil': 'move4' },
+    clips: { attack: lakeEliteMove(1), skill: lakeEliteMove(9), move3: lakeEliteMove(22), move4: lakeEliteMove(30) },
+    reactions: lakeEliteReactions },
+  foe_weeping_siren: { sheet: 'weepingsiren', displayRatio: lakeFoeDisplayRatios.foe_weeping_siren!, own: true, downFrame: 21, soleOrigin: 497 / 512,
+    intents: { 'Tide Lash': 'attack', 'Weeping Song': 'skill', 'Drowning Call': 'move3' },
+    clips: { attack: lakeEliteMove(1), skill: lakeEliteMove(9), move3: lakeEliteMove(22) },
+    reactions: lakeEliteReactions },
   // A9: boss strips are one per move (`move1`.. in the order of each atlas, see docs/combat-presentation/unit-a9-slice). Phase turns
   // carry the phase name (Thorn Rage, Call the Rift, Rift Awakening, Call the Hunt) and play their own gesture. The Matriarch
   // atlas already faces left (owner decision); it is never mirrored at runtime.
@@ -151,6 +172,10 @@ export const unitRegistry = {
       'Rift Gathering': 'move5', 'Rift Awakening': 'move6', 'Call the Rift': 'move7' },
     clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21), move7: bossMove(25) },
     reactions: { hit: [29, 30], down: [31, 32, 33] } },
+  foe_water_spirit: { sheet: 'waterspirit', displayRatio: lakeBossDisplayRatio, soleOrigin: BOSS_SOLE, own: true, downFrame: 29,
+    intents: { 'Tide Lash': 'move1', 'Water Veil': 'move2', 'Surging Wave': 'move3', Undertow: 'move4', 'Great Wave': 'move5', Reflection: 'move6' },
+    clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21) },
+    reactions: { hit: [25, 26], down: [27, 28, 29] } },
   // WB-A (World Boss Kragmor, ART-UNIT-ANIMATION-WB-A-001): same boss layout, one strip per move in the order of the encounter's
   // intents; Fault Awakening is the 70% phase gesture. The atlas faces left and is never mirrored at runtime.
   foe_kragmor: { sheet: 'kragmor', displayRatio: 2, soleOrigin: BOSS_SOLE, downFrame: 29,

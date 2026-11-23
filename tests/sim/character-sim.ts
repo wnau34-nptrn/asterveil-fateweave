@@ -1,4 +1,6 @@
-import { MAPS } from '../../src/content/world/maps';
+import { MAPS as ALL_MAPS } from '../../src/content/world/maps';
+// Frozen on maps 1–3 (their baselines predate map 4, whose own simulation is tests/lake-sim.test.ts).
+const MAPS = ALL_MAPS.filter(m => m.chapter <= 3);
 import { encounterById as lookup } from '../../src/content/encounters/catalog';
 import { beginBattle, resolveCommand, withLevel, withParty } from '../../src/core/battle/engine';
 import type { HeroDefinition } from '../../src/core/battle/types';
@@ -43,7 +45,7 @@ function squad(catalog: readonly HeroDefinition[], subject: HeroDefinition): Her
 export function characterSim(seeds: readonly number[]): CharacterRow[] {
   const rows: CharacterRow[] = [];
   for (const [mapIndex, m] of MAPS.entries()) {
-    const catalog = heroCatalog(lookup, m), level = Math.min(m.progression.levelCap, m.bossLevel ?? 1);
+    const catalog = heroCatalog(lookup, m), level = Math.min(m.progression.capBase, m.bossLevel ?? 1);
     for (const subject of catalog) {
       const team = squad(catalog, subject), builds = candidates(m, subject, level);
       const members: Record<string, MemberProgress> = Object.fromEntries(team.map(h => [h.id, { stars: 1, shards: 0, level, exp: 0, gear: gearFor(h.id, 'main', level) }]));

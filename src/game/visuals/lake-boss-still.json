@@ -1,0 +1,13 @@
+{
+  "soleOrigin": 0.875,
+  "bounds": {
+    "x": 182,
+    "y": 198,
+    "w": 193,
+    "h": 250
+  },
+  "revisions": {
+    "units_foes3": "8df89e4e",
+    "portraits_foes3": "ae2efc7c"
+  }
+}

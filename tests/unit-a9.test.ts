@@ -1,6 +1,6 @@
 import {describe,it,expect} from 'vitest';
 import {bossArts,bossMoves,phaseNames,sheetOf,unitA9Fixture,type BossArt} from './fixtures/unit-a9';
-import {encounters} from '../src/content/encounters/catalog';
+import {encounters,LAKE_STANDINS } from '../src/content/encounters/catalog';
 import {unitClip,unitSample,unitDisplayRatio,unitDownFrame,unitSoleOrigin,unitIdleFrame,unitKey,unitRegistry,unitSheets} from '../src/game/visuals/unit-frames';
 import {unitPose,unitReactions} from '../src/game/visuals/unit-animation-map';
 import {mirroredArt} from '../src/game/visuals/assets';
@@ -18,12 +18,12 @@ const layout={foe_matriarch:{frames:26,hit:21,down:23},foe_juggernaut:{frames:14
 describe('A9 boss bodies: actual intents, phases, clips and layout',()=>{
  it('maps every real intent and phase name of the four bosses across all encounters',()=>{
   const found:Record<string,Set<string>>={};
-  for(const data of encounters)for(const e of data.enemies.filter(e=>(bossArts as readonly string[]).includes(e.art??''))){
+  for(const data of encounters.filter(d=>!LAKE_STANDINS.has(d.id)))for(const e of data.enemies.filter(e=>(bossArts as readonly string[]).includes(e.art??''))){
    const names=[...data.intents.filter(i=>i.sourceId===e.id).map(i=>i.name),...(data.phases??[]).filter(p=>p.sourceId===e.id).map(p=>p.name)];
    for(const name of names){(found[e.art!]??=new Set()).add(name);expect(unitClip(e.art!,undefined,name),`${e.art} ${name}`).toBe(clipOf[e.art as BossArt][name]);}
   }
   for(const art of bossArts)expect([...found[art]!].sort()).toEqual([...bossMoves[art]].sort());
-  for(const art of bossArts)expect(Object.keys(unitRegistry[art].intents).sort()).toEqual([...bossMoves[art]].sort());
+  const lake=new Set(encounters.filter(d=>LAKE_STANDINS.has(d.id)).flatMap(d=>[...d.intents.map(i=>i.name),...(d.phases??[]).map(p=>p.name)]));for(const art of bossArts)expect(Object.keys(unitRegistry[art].intents).filter(n=>!lake.has(n)||[...(bossMoves[art])].includes(n)).sort()).toEqual([...bossMoves[art]].sort());
  });
  for(const art of bossArts)for(const name of bossMoves[art])it(`plays the real ${name} turn of ${art} once, ending on the seed`,()=>{
   const f=unitA9Fixture(art,name),turn=f.result.turns.find(t=>t.side==='enemy')!;
