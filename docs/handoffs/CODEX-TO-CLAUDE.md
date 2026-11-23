@@ -1,7 +1,7 @@
 ## 2026-11-23 — Finish the Moon Lake stack (Codex · #336 → game branch)
 - Owner: “อนุมัติ” for the four ordinary foes' motion and the Map 4 screens. #343 merged as `39c081f`; #337 merged as `966ea02`; semi-chibi boss #345 was `9afb8e1`. [390px review](../validation/map4-lake/README_TH.md).
 - Reconciled the latest first-fate/cabinet UI with the lake tile and quest imports. Preserved the owner-approved C12 starter-pair baseline. The two branches used OD-60 for separate decisions; the C12 decision is catalogued as OD-61, and Map 4 keeps OD-60.
-- Chromium: 12 lake-map/boss cases, 8 ordinary-foe captures, and 8 checks on the combined branch (lake, prologue and cabinet). Typecheck, lint and presentation coverage 6/6 passed.
+- Chromium: 12 lake-map/boss cases, 8 ordinary-foe captures, and 8 checks on the combined branch (lake, prologue and cabinet). Typecheck, lint and presentation coverage 6/6 passed. The quest-board and sweep browser tests now explicitly select map 3 after the selector gained map 4; the production replay passed 6/6.
 
 ## 2026-11-23 — Integrate the Water Spirit semi-chibi motion (Codex · #345 → claude/map4-lake-foes)
 - Owner: “อนุมัติ” on the eight 390px motion previews from art PR #346. Integrated the 30-frame body, matching fallback still and HUD portrait into phase 4 with the existing six move timings and VFX.
