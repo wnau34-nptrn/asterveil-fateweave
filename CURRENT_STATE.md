@@ -29,11 +29,11 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Map 5 design draft on `codex/map5-crystal-mine-design` awaits owner decisions on the mine overseer, puzzle and recruit flow, and the Crystal Giant. [Draft and simulation targets](docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md).
+- Map 5 design confirmed 2026-11-23 (“ทำตามที่คุณแนะนำ”); rules, content and simulation are next. [Confirmed design and simulation targets](docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md).
 
 - Lake sweep/contract pay map 3's values until a P04 economy pass; P04-05/06 numbers.
 - Map 3 Briar Lord first-try gate; no real Safari/iPhone/Android or human usability validation. Pending intake #262, #169.
 
 ## Opening prompt for next chat
 
-Review the owner’s Map 5 decisions against the [Crystal Mine draft](docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md). Once confirmed, prepare the rules, content and simulation pass under OD-60.
+Continue the Map 5 rules, content and simulation pass from the [confirmed Crystal Mine design](docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md) under OD-60. Start with the engine and save questions in the Claude handoff.
