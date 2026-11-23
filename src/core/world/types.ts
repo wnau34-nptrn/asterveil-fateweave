@@ -1,3 +1,4 @@
+import type { MineAction, MineDefinition, MineProgress } from './mine';
 import type { ActionId, BossPower, CharmPower, Command, TrioPower, GearSpecial, HeroDefinition, Outcome, PassiveId, TalentCap, TalentRule } from '../battle/types';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
@@ -109,6 +110,7 @@ export interface MapDefinition {
   // (stepped on once per run; they come home into the camp journal whatever the outcome) and a side story that runs
   // beside the seal (done in one run that comes home: pays `reward` once, like an optional quest; missing = none).
   tide?: TideDefinition;
+  mine?: MineDefinition;
   lanterns?: readonly (Point & { id: string })[];
   notes?: readonly (Point & { id: string })[];
   story?: { objectives: readonly QuestObjective[]; reward: SideQuestDefinition['reward']; boat?: true };
@@ -186,7 +188,7 @@ export interface EquipmentRules {
 // `mini` (3B): a mini-boss; it pays the `miniBoss` reward instead of the elite one.
 // Quest objectives read the run's own state: a beaten elite, a finished event, or a number of opened chests.
 // Map 4 (save v68): `chest` = that one chest opened; `lanterns` = that many moon lanterns lit.
-export type QuestObjective = { id: string; kind: 'elite' | 'event' | 'chest'; target: string } | { id: string; kind: 'chests'; count: number } | { id: string; kind: 'lanterns'; count: number };
+export type QuestObjective = { id: string; kind: 'elite' | 'event' | 'chest'; target: string } | { id: string; kind: 'chests'; count: number } | { id: string; kind: 'lanterns'; count: number } | { id: string; kind: 'rescued'; count: number };
 // Map 4 tide (save v68, docs/design/CHAPTER1_MAPS_TH.md §3): the water level turns every `period` steps of the run
 // (low first), counted from the run's steps plus the waits taken at camps, so it never depends on a clock or a roll.
 // Shallow tiles (`shallow` characters of `rows`) can be walked only at low tide; deep ones (`deep`) only by boat. A boat
@@ -619,7 +621,7 @@ export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `lanes`: the formation fixed when the battle started (save v36; missing = every hero in its class lane).
 // `percent` (A10): the map strength stored at the start (foe HP and move damage; missing = 100).
 export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; percent?: number; source?: string; lanes?: Record<string, Lane> }
-export type RecruitPoint = 'prologue' | 'camp' | 'boss';
+export type RecruitPoint = 'prologue' | 'camp' | 'boss' | 'first-objective';
 export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm' | 'hard' | 'tomes' | 'gacha';
 export interface ExpeditionState {
   // Skill tomes (save v37, maps with `MapDefinition.tomes`): `tomes`/`riftCore` are this
@@ -650,6 +652,7 @@ export interface ExpeditionState {
   // Map 4 (save v68, tide maps only): `tideWait` = steps the camps' waits added to the tide count; `shore` = the dry tile
   // the party left when it stepped into shallow water (while it stands there); `boat` = the side story's boat, fixed at
   // departure. `lanterns` lit and `notes` (lost notes and gazed memories) picked up this run. Missing = none.
+  mine?: MineProgress;
   tideWait?: number; shore?: Point; boat?: true; lanterns?: string[]; notes?: string[];
   // P05-06 (save v63): the device's calendar day the run set out on; its board progress counts there (missing = none).
   day?: number;
@@ -692,6 +695,7 @@ export type WorldEvent =
   | { type: 'blocked'; reason: 'wall' | 'edge' | 'busy' | 'party' | 'sealed' | 'stone' | 'pit' | 'tide' | 'deep' }
   | { type: 'washed'; to: Point }
   | { type: 'waited'; low: boolean }
+  | { type: 'mine'; action: MineAction }
   | { type: 'lantern'; lanternId: string; lit: number }
   | { type: 'note'; noteId: string }
   | { type: 'roster'; heroId?: string; lane?: Lane; preset?: number; absent?: string[] }

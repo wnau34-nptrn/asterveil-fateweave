@@ -2,6 +2,11 @@
 
 These owner-scoped rules still apply. They were moved here verbatim so CLAUDE.md stays short. Before changing a system, read its section here.
 
+## Map 5 เหมืองผลึกร้าง — OD-60 exploration on the design branch
+
+- `chapter-mine.ts` supplies the board and exploration definition. The `mine` game command validates tile interactions. Movement shares the existing door, camp, encounter pressure and seal paths.
+- `ExpeditionState.mine` tracks portable light expiry, cart and beam settings, workers following or rescued, and reached recruit scenes. It needs save validation before campaign registration. See the [design and command tests](MAP5_CRYSTAL_MINE_DRAFT_TH.md#กระดานต้นแบบ).
+
 ## Map 4 ทะเลสาบเงาจันทร์ — owner OD-60 2026-11-22 (save v68, draft numbers)
 
 - Tide (`core/world/tide.ts`): low/high turns every `tide.period` (8) steps of `steps + tideWait`; shallow `~` walkable at low tide, deep `=` by boat only (the ferryman story's reward, `run.boat` fixed at departure); a party on foot still in shallow water when the tide comes in is washed back to `run.shore` (event `washed`). Camps can `waitTide` (adds the steps left; no step taken). A filled boulder pit is a dry causeway. Levers stand on shallow tiles (pulled at low tide).

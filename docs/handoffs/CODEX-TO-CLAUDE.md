@@ -1,3 +1,8 @@
+## 2026-11-23 — Crystal Mine world commands (Codex · `codex/map5-crystal-mine-design`)
+- Connected light, both puzzles, worker delivery and the 2-of-3 seal to game commands. Brann and Kael now have recruitment triggers and a one-time settlement payout. All three routes reach a completed run with test encounters. [Design and tests](../design/MAP5_CRYSTAL_MINE_DRAFT_TH.md#กระดานต้นแบบ).
+- Full Vitest started during edits and reported 2,288 passed with one failure in the opened-wall visibility regression. The final mine, lake and command suites passed all 109 tests after the wall fix. Lint, typecheck and build passed.
+- The campaign entry awaits save validation and real encounters. The Claude handoff lists the new fields and checks before registration, balancing and UI integration.
+
 ## 2026-11-23 — Crystal Mine board prototype (Codex · `codex/map5-crystal-mine-design`)
 - Built the 25×25 board, minecart and beam traces, wall-aware light and worker escort. The focused mine and lake suites passed 25 tests. Lint, typecheck and build passed. [Board and test scope](../design/MAP5_CRYSTAL_MINE_DRAFT_TH.md#กระดานต้นแบบ).
 - Full Vitest: 2,279 passed and one existing VFX asset check failed because its intake files were outside the sparse checkout. Restored the tracked files and reran the affected VFX and mine suites (32 passed).

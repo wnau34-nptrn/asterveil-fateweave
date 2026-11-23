@@ -38,10 +38,15 @@ export function mineCrystalStepsLeft(light: Pick<MineLight, 'steps' | 'crystalEx
   return Math.max(0, (light.crystalExpiresAt ?? light.steps) - light.steps);
 }
 
-export function mineVisibleCells(rows: readonly string[], light: MineLight, openWalls: readonly Point[] = []): ReadonlySet<number> {
+export function mineLanternCells(rows: readonly string[], lanterns: readonly Point[], openWalls: readonly Point[]): Set<number> {
   const visible = new Set<number>();
-  const radius = mineCrystalStepsLeft(light) > 0 ? crystalRadius : darkRadius;
+  for (const lantern of lanterns) visibleFrom(rows, lantern, lanternRadius, openWalls, visible);
+  return visible;
+}
+
+export function mineVisibleCells(rows: readonly string[], light: MineLight, openWalls: readonly Point[] = [], ambientRadius?: number): ReadonlySet<number> {
+  const visible = mineLanternCells(rows, light.litLanterns, openWalls);
+  const radius = ambientRadius ?? (mineCrystalStepsLeft(light) > 0 ? crystalRadius : darkRadius);
   visibleFrom(rows, light.position, radius, openWalls, visible);
-  for (const lantern of light.litLanterns) visibleFrom(rows, lantern, lanternRadius, openWalls, visible);
   return visible;
 }

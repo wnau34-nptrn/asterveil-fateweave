@@ -1,3 +1,4 @@
+import type { CartSwitch } from '../../core/world/mine-puzzles';
 import type { MapDefinition, Point, PuzzleDefinitions } from '../../core/world/types';
 
 // Map 5 topology. See docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md for the rules and integration plan.
@@ -69,12 +70,6 @@ export const mineSites = {
   ],
 } as const;
 
-interface CartSwitch {
-  readonly at: Point;
-  readonly lever: Point;
-  readonly sidingEnd: Point;
-}
-
 export const minecart = {
   id: 'mine-cart',
   start: { x: 20, y: 17 },
@@ -84,7 +79,7 @@ export const minecart = {
     { at: { x: 20, y: 16 }, lever: { x: 19, y: 16 }, sidingEnd: { x: 22, y: 16 } },
     { at: { x: 20, y: 15 }, lever: { x: 21, y: 15 }, sidingEnd: { x: 18, y: 15 } },
     { at: { x: 20, y: 14 }, lever: { x: 19, y: 14 }, sidingEnd: { x: 22, y: 14 } },
-  ] as const satisfies readonly [CartSwitch, CartSwitch, CartSwitch],
+  ] as const satisfies readonly (CartSwitch & { readonly lever: Point })[],
 } as const;
 
 export const mineBeam = {
@@ -93,3 +88,23 @@ export const mineBeam = {
   door: { x: 22, y: 5 },
   crystals: [{ x: 17, y: 3 }, { x: 20, y: 3 }, { x: 20, y: 5 }],
 } as const;
+
+// Exploration content is independent of encounter tuning and can be composed with the final encounter data.
+export const mineExploration = {
+  ...mineLayout,
+  id: 'crystal-mine',
+  chapter: 5,
+  name: 'เหมืองผลึกร้าง',
+  bossName: 'ยักษ์ผลึก',
+  goalName: 'โพรงผลึกยักษ์',
+  mine: { darkZones: ['mine-tunnels'], crystals: mineSites.glowCrystals, workers: mineSites.workers, rescueCamp: mineSites.yardCamp, cart: minecart, beam: mineBeam },
+  lanterns: mineSites.lanterns,
+  notes: mineSites.notes,
+  puzzles: { secrets: mineSites.secrets, runes: [], levers: [], boulders: [] },
+  recruits: [{ hero: 'brann', at: 'camp', camp: mineSites.yardCamp }, { hero: 'kael', at: 'first-objective' }],
+  quest: { need: 2, objectives: [
+    { id: 'overseer', kind: 'elite', target: 'mine-overseer' },
+    { id: 'lanterns', kind: 'lanterns', count: mineSites.lanterns.length },
+    { id: 'workers', kind: 'rescued', count: mineSites.workers.length },
+  ] },
+} as const satisfies Pick<MapDefinition, 'rows' | 'floorZones' | 'specialZones' | 'id' | 'chapter' | 'name' | 'bossName' | 'goalName' | 'mine' | 'lanterns' | 'notes' | 'puzzles' | 'recruits' | 'quest'>;

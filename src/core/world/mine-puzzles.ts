@@ -4,10 +4,15 @@ type Three<T> = readonly [T, T, T];
 
 const same = (a: Point, b: Point): boolean => a.x === b.x && a.y === b.y;
 
-interface CartPuzzle {
+export interface CartSwitch {
+  readonly at: Point;
+  readonly sidingEnd: Point;
+}
+
+export interface CartPuzzle<Switch extends CartSwitch = CartSwitch> {
   readonly start: Point;
   readonly wall: Point;
-  readonly switches: Three<{ readonly at: Point; readonly sidingEnd: Point }>;
+  readonly switches: Three<Switch>;
 }
 
 // The preview lists turns and the destination. Selecting a siding ends the trip there; a new push starts over.
@@ -24,7 +29,7 @@ const offsets: Record<Direction, Point> = {
   up: { x: 0, y: -1 }, right: { x: 1, y: 0 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 },
 };
 
-interface BeamPuzzle {
+export interface BeamPuzzle {
   readonly source: Point;
   readonly door: Point;
   readonly crystals: Three<Point>;

@@ -552,12 +552,14 @@ export const npcText: Record<'smith' | 'broker' | 'trainer' | 'keeper' | 'herbal
 // ---- Rift seal (3B): objective lines with live progress. ----
 export function questLine(o: QuestObjective, state: ExpeditionState): string {
   if (o.kind === 'chests') return `เปิดกล่องสมบัติ ${o.count} กล่อง (${Math.min(o.count, state.openedChests.length)}/${o.count})`;
+  if (o.kind === 'rescued') return `พาคนงานกลับค่าย ${o.count} คน (${Math.min(o.count, state.mine?.rescue.rescued.length ?? 0)}/${o.count})`;
+  if (o.kind === 'lanterns' && state.mapId === 'crystal-mine') return `จุดตะเกียง ${o.count} ดวง (${Math.min(o.count, state.lanterns?.length ?? 0)}/${o.count})`;
   if (o.kind === 'lanterns') return `จุดโคมจันทร์ ${o.count} ดวงบนเกาะ (${Math.min(o.count, state.lanterns?.length ?? 0)}/${o.count})`;
   if (o.kind === 'elite') return questEliteText[o.target] ?? 'ชนะยักษ์หินแห่งรอยแผล (มินิบอส)';
   if (o.kind === 'chest') return questChestText[o.target] ?? 'เปิดกล่องสมบัติ';
   return questEventText[o.target] ?? 'ชำระรอยแยกเล็กในรอยแผล';
 }
-const questEliteText: Record<string, string> = { 'lake-serpent': 'ชนะอสรพิษเงาที่สะพานใหญ่' };
+const questEliteText: Record<string, string> = { 'lake-serpent': 'ชนะอสรพิษเงาที่สะพานใหญ่', 'mine-overseer': 'ชนะหัวหน้าคุมเหมือง' };
 const questChestText: Record<string, string> = { 'lake-oar': 'หาไม้พายในกล่องบนเกาะ' };
 // P05-02: event objectives of the optional story quests (map 2) and the rift seal (map 3).
 const questEventText: Record<string, string> = {

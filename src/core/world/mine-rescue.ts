@@ -1,10 +1,10 @@
 import type { Point } from './types';
 
-interface WorkerSite extends Point {
+export interface WorkerSite extends Point {
   readonly id: string;
 }
 
-interface MineRescue {
+export interface MineRescue {
   readonly following: readonly string[];
   readonly rescued: readonly string[];
 }
