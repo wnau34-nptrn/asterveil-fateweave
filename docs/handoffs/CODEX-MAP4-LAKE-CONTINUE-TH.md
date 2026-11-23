@@ -11,7 +11,7 @@
 | เฟส 1 ภาพแผนที่ | **เสร็จ** เจ้าของอนุมัติ ("อนุมัติ") merge แล้ว PR #342 → `claude/map4-lake-ui` |
 | เฟส 2 ศัตรูธรรมดา 4 ตัว | PR #343 (`claude/map4-lake-foes`) **รอเจ้าของอนุมัติ motion** — คลิป `docs/combat-presentation/lake-foes-slice/` ถ้าเจ้าของอนุมัติด้วยคำพูด ให้บันทึกคำพูดใน handoff แล้ว merge หลัง CI ผ่าน |
 | เฟส 3 อสรพิษเงา + นางเงือกร้องไห้ | merge แล้วใน PR #344 (`fe213ea`) · เจ้าของเลือก **R1 ทั้งคู่** และอนุมัติ motion (2026-11-22 “อนุมัติ”) จาก [คลิป 390px](../combat-presentation/lake-elites-slice/README_TH.md) |
-| เฟส 4 บอสภูตธารา + VFX 4 ชุด | นำเข้าแล้วบน `codex/map4-lake-boss` · รออนุมัติ motion จาก [คลิป 390px](../combat-presentation/lake-boss-slice/README_TH.md) · เจ้าของเลือก **Tide Lash R2, Undertow R1, Reflection R1** (2026-11-22 “ทำตามที่คุณแนะนำ”) |
+| เฟส 4 บอสภูตธารา + VFX 4 ชุด | นำเข้าร่างกึ่ง chibi ใน PR #345 → `claude/map4-lake-foes` · เจ้าของอนุมัติ motion 2026-11-23 (“อนุมัติ”) · [คลิป 390px](../combat-presentation/lake-boss-slice/README_TH.md) · เจ้าของเลือก **Tide Lash R2, Undertow R1, Reflection R1** (2026-11-22 “ทำตามที่คุณแนะนำ”) |
 
 ## กติกา (ย่อจาก CLAUDE.md — อ่านไฟล์เต็มก่อนเริ่ม)
 

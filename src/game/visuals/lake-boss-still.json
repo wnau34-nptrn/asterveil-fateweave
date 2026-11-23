@@ -1,13 +1,13 @@
 {
   "soleOrigin": 0.875,
   "bounds": {
-    "x": 184,
-    "y": 202,
-    "w": 190,
-    "h": 246
+    "x": 182,
+    "y": 198,
+    "w": 193,
+    "h": 250
   },
   "revisions": {
-    "units_foes3": "7d39b63a",
-    "portraits_foes3": "f814eafe"
+    "units_foes3": "8df89e4e",
+    "portraits_foes3": "ae2efc7c"
   }
 }

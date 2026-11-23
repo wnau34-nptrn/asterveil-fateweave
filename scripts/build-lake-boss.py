@@ -1,22 +1,26 @@
 #!/usr/bin/env python3
-"""Import the approved Moon Lake boss artwork from ART-UNIT-ANIMATION-LAKE-BOSS-001.
+"""Import the approved Moon Lake boss artwork.
 
-Usage: python3 -I scripts/build-lake-boss.py <package-dir>
+Usage: python3 -I scripts/build-lake-boss.py <package-dir> [--body-only]
 The 256px VFX layers keep their shipped pixels and pivots. The owner-approved 768px
 body keeps the source framing and sole at 7/8. All runtime files are packed losslessly.
 """
+import argparse
 import hashlib
 import io
 import json
 from pathlib import Path
 import runpy
-import sys
 
 import numpy as np
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGE = Path(sys.argv[1])
+PARSER = argparse.ArgumentParser(description=__doc__)
+PARSER.add_argument('package', type=Path)
+PARSER.add_argument('--body-only', action='store_true')
+ARGS = PARSER.parse_args()
+PACKAGE = ARGS.package
 VALIDATION = json.loads((PACKAGE / 'validation.json').read_text())['files']
 PACKING = runpy.run_path(str(ROOT / 'scripts/repack-atlas-lossless.py'))
 SHIPPED_ANCHORS = {
@@ -41,13 +45,27 @@ def checked_image(name):
     return image
 
 
-def pack(images, image_name, max_side=2048):
-    """Trim and pack without changing alpha, visible RGB or the frame's original origin."""
-    boxes = {name: image.getchannel('A').getbbox() for name, image in images.items()}
-    assert all(boxes.values())
-    tiles = {name: images[name].crop(box) for name, box in boxes.items()}
-    sizes = {name: tile.size for name, tile in tiles.items()}
-    widest = max(w for w, _ in sizes.values()) + PACKING['PAD']
+def shelf_layout(sizes, shelves, padding):
+    names = [str(index) for row in shelves for index in row]
+    assert len(names) == len(sizes) and set(names) == set(sizes)
+    positions = {}
+    width, y = 0, 0
+    for row in shelves:
+        x, row_height = 0, 0
+        for index in row:
+            name = str(index)
+            w, h = sizes[name]
+            positions[name] = (x, y)
+            x += w + padding
+            row_height = max(row_height, h + padding)
+        width = max(width, x)
+        y += row_height
+    return width, y, positions
+
+
+def automatic_layout(sizes, max_side):
+    padding = PACKING['PAD']
+    widest = max(w for w, _ in sizes.values()) + padding
     best = None
     for width in range(widest, max_side + 1, 8):
         for order in PACKING['ORDERS']:
@@ -55,8 +73,21 @@ def pack(images, image_name, max_side=2048):
             key = (width * height, max(width, height), width)
             if height <= max_side and (best is None or key < best[0]):
                 best = (key, width, height, positions)
-    assert best is not None, f'No {max_side}px packing for {image_name}'
-    _, width, height, positions = best
+    assert best is not None, f'No {max_side}px packing for these frames'
+    return best[1:]
+
+
+def pack(images, image_name, max_side=2048, shelves=None):
+    """Trim and pack without changing alpha, visible RGB or the frame's original origin."""
+    boxes = {name: image.getchannel('A').getbbox() for name, image in images.items()}
+    assert all(boxes.values())
+    tiles = {name: images[name].crop(box) for name, box in boxes.items()}
+    sizes = {name: tile.size for name, tile in tiles.items()}
+    if shelves is None:
+        width, height, positions = automatic_layout(sizes, max_side)
+    else:
+        width, height, positions = shelf_layout(sizes, shelves, PACKING['PAD'])
+    assert width <= max_side and height <= max_side, image_name
     texture = Image.new('RGBA', (width, height))
     frames = {}
     for name, tile in tiles.items():
@@ -134,7 +165,18 @@ def build_body():
             original.append(strip.crop((x, y, x + w, y + h)))
     frames = {str(i): frame.resize((BODY_SIZE, BODY_SIZE), Image.Resampling.LANCZOS) for i, frame in enumerate(original)}
     assert len(frames) == 30
-    packed, atlas = pack(frames, 'waterspirit')
+    packing_path = PACKAGE / 'packing.json'
+    if packing_path.is_file():
+        packing = json.loads(packing_path.read_text())
+        assert packing['runtimeCell'] == BODY_SIZE and packing['padding'] == PACKING['PAD']
+        assert packing['maxSide'] == PACKING['MAX_SIDE']
+        packed, atlas = pack(frames, 'waterspirit', max_side=packing['maxSide'], shelves=packing['shelves'])
+        # The packer may drop redundant padding at the right edge of the artist's proof.
+        assert atlas['meta']['size']['w'] <= packing['size']['w']
+        assert atlas['meta']['size']['h'] == packing['size']['h']
+    else:
+        packing = None
+        packed, atlas = pack(frames, 'waterspirit')
     image_name = f'waterspirit_lake.{sha(packed)[:12]}.webp'
     atlas['meta']['image'] = image_name
     layout = (json.dumps(atlas, separators=(',', ':'), sort_keys=True) + '\n').encode()
@@ -158,9 +200,15 @@ def build_body():
     # Append frame 6, keeping the first six lake stills and portraits pixel-identical.
     still = seed.resize((512, 512), Image.Resampling.LANCZOS)
     l, t, r, b = seed.getchannel('A').getbbox()
-    centre = ((l + r) // 2, (t + b) // 2)
-    radius = round(max(r - l, b - t) * .55)
-    portrait = seed.crop((centre[0] - radius, centre[1] - radius, centre[0] + radius, centre[1] + radius))
+    if packing is None:
+        centre = ((l + r) // 2, (t + b) // 2)
+        radius = round(max(r - l, b - t) * .55)
+        portrait = seed.crop((centre[0] - radius, centre[1] - radius, centre[0] + radius, centre[1] + radius))
+    else:
+        # Frame the crescent and face of the semi-chibi seed for the small HUD icons.
+        side = round((b - t) * .66)
+        left, top = l - round(side * .19), t - round(side * .075)
+        portrait = seed.crop((left, top, left + side, top + side))
     portrait = portrait.resize((480, 480), Image.Resampling.LANCZOS)
     art_dir = ROOT / 'public/assets/art'
     revisions = {}
@@ -188,4 +236,5 @@ def build_body():
 
 if __name__ == '__main__':
     build_body()
-    build_vfx()
+    if not ARGS.body_only:
+        build_vfx()

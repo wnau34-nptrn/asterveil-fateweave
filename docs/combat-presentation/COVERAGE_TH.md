@@ -61,7 +61,7 @@
 | `foe_tusker` | หมูป่าหลังตะไคร่ | ศัตรู | 22 · 4.08 MiB · 1.20 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_valdrakk` | วัลดรัค | ศัตรู | 30 · 5.39 MiB · 1.93 MB | sprite 25,26 | procedural (tint/lift) | sprite 27,28,29 · ค้าง 29 | — |
 | `foe_vargoth_guard` | องครักษ์อสูร | ศัตรู | 32 · 4.10 MiB · 1.39 MB | sprite 17,18 | sprite 22,23 | sprite 19,20,21 · ค้าง 21 | — |
-| `foe_water_spirit` | ภูตธารา | ศัตรู | 30 · 12.15 MiB · 3.59 MB | sprite 25,26 | procedural (tint/lift) | sprite 27,28,29 · ค้าง 29 | — |
+| `foe_water_spirit` | ภูตธารา | ศัตรู | 30 · 14.85 MiB · 4.38 MB | sprite 25,26 | procedural (tint/lift) | sprite 27,28,29 · ค้าง 29 | — |
 | `foe_weeping_siren` | นางเงือกร้องไห้ | ศัตรู | 30 · 13.71 MiB · 4.10 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `raider` | นักจู่โจม | ศัตรู | 24 · 3.72 MiB · 1.14 MB | sprite 17,18 | sprite 22,23 | sprite 19,20,21 · ค้าง 21 | — |
 

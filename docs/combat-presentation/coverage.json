@@ -885,11 +885,11 @@
    "name": "ภูตธารา",
    "sheet": "waterspirit",
    "atlas": {
-    "image": "waterspirit_lake.d59088dd98f5.webp",
-    "atlas": "waterspirit_lake.60855a921cf0.json",
+    "image": "waterspirit_lake.28b27a9332d8.webp",
+    "atlas": "waterspirit_lake.26d81051e26e.json",
     "frames": 30,
-    "decodedBytes": 12737280,
-    "downloadBytes": 3591631
+    "decodedBytes": 15570912,
+    "downloadBytes": 4377097
    },
    "reactions": {
     "hit": "sprite 25,26",
