@@ -105,7 +105,7 @@ const platesOnTop = () => {
 };
 const qa = { record, platesOnTop, samples: () => samples, atlasReady: () => scene.textures?.exists(atlas),
   lakeBodyReady: () => scene.textures?.exists(unitKey(fixture.data.enemies.find(e => e.boss)!.art!)!),
-  lakeBossBox: () => scene.figureBox('f1'), impacts, painted, plates, state: () => ui.state,
+  lakeBossBox: (id = 'f1') => scene.figureBox(id), impacts, painted, plates, state: () => ui.state,
   turns: () => fixture.result.turns, turn: () => fixture.turn, cues: () => bossCues(fixture.turn), command: () => fixture.command, prelude: () => fixture.prelude,
   expected: () => fixture.result.state, holdsAfter: () => chargeHolds(fixture.result.state, fixture.data),
   anchor: (id: string) => scene.bossAnchor(id)!,

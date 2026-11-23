@@ -1,3 +1,8 @@
+## 2026-11-23 — Scale the Water Spirit’s attendants (Codex · #345 → claude/map4-lake-foes)
+- Owner flagged that the attendants looked larger than the boss. Mist Wisp, Stone Crab and Mirror Shade now match the painted scale of Rift Wisp, Shard Crawler and Vargoth Hunter respectively. Still and animated frames share scale and sole. Reflection keeps its shade clear of the right field edge.
+- Replaced all eight 390px clips. Chromium checks compare painted bounds with the boss and verify the summoned shade is inside the viewport. Typecheck, lint, build, presentation coverage and npm test (2270 passed, 24 skipped) passed. [Updated clips](../combat-presentation/lake-boss-slice/README_TH.md).
+- Pending owner motion approval for #345.
+
 ## 2026-11-22 — Map 4 Water Spirit art and VFX (Codex · codex/map4-lake-boss → claude/map4-lake-foes)
 - Owner selected Tide Lash R2, Undertow R1 and Reflection R1 (“ทำตามที่คุณแนะนำ”) and approved “ใช้ runtime 768 px (แนะนำ)”. Verified 21 files from #339. Preserved sole and displayed scale, with six moves, hit/down and still/portrait.
 - Four encounter-only VFX families route from real events. Water Veil peaks on healing, and Reflection keeps the caster's recover frames while filling the actual summon slot.

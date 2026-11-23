@@ -4,7 +4,7 @@ import { waterSpirit, riftWarden } from '../src/content/encounters/catalog';
 import { readFileSync } from 'node:fs';
 import atlasManifest from '../src/game/visuals/unit-atlases.json';
 import { actorArt, actorFootOrigins, staticDisplayRatio } from '../src/game/visuals/assets';
-import { sequence, unitClip, unitDisplayRatio, unitDownFrame, unitSoleOrigin } from '../src/game/visuals/unit-frames';
+import { sequence, unitClip, unitDefinition, unitDisplayRatio, unitDownFrame, unitSoleOrigin } from '../src/game/visuals/unit-frames';
 import { lakeBossFixture, lakeBossMoves } from './fixtures/lake-boss';
 
 describe('Water Spirit VFX responds to real resolution', () => {
@@ -75,4 +75,26 @@ describe('Water Spirit body intake', () => {
     expect(unitDownFrame(art)).toBe(29);
     expect(lakeBossFixture('Tide Lash', 'down').result.state.enemies.find(e => e.id === 'f1')?.hp).toBe(0);
   });
+});
+
+it('sizes the Water Spirit’s attendants against their original equivalents', () => {
+  const references = [
+    ['foe_mist_wisp', 'foe_rift_wisp', 'h'],
+    ['foe_stone_crab', 'foe_shard_crawler', 'w'],
+    ['foe_mirror_shade', 'foe_hunter', 'h'],
+  ] as const;
+  const dimension = (identity: string, axis: 'w' | 'h') => {
+    const atlas = atlasManifest[unitDefinition(identity)!.sheet].atlas;
+    const { frames } = JSON.parse(readFileSync(`public/assets/units/${atlas}`, 'utf8'));
+    const idle = frames['0'];
+    return idle.spriteSourceSize[axis] / idle.sourceSize[axis] * unitDisplayRatio(identity);
+  };
+  const boss = waterSpirit.enemies.find(e => e.boss)!;
+  expect(boss.large).toBe(true);
+  for (const [art, reference, axis] of references) {
+    expect(waterSpirit.enemies.find(e => e.art === art)?.large).toBeFalsy();
+    expect(Math.abs(dimension(art, axis) - dimension(reference, axis))).toBeLessThan(.025);
+    expect(staticDisplayRatio(art)).toBe(unitDisplayRatio(art));
+    expect(actorFootOrigins[art]).toBe(unitSoleOrigin(art));
+  }
 });

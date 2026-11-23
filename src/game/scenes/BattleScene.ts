@@ -26,7 +26,7 @@ import { COMMAND_ATLAS, commandCues, commandPrepare, commandContact, isCommandSk
 import { ALCHEMY_ATLAS, alchemyCues, alchemyEvents, alchemyPrepare, alchemyContact, alchemyHealingCues, isAlchemySkill, type AlchemySkill } from '../visuals/alchemy-fx';
 import { EARTH_ATLAS, earthCues, earthPrepare, earthContact, earthHealingCues, earthHealingEvents, isEarthSkill, type EarthSkill } from '../visuals/earth-fx';
 import { FOE_SLOT_INDEX, fieldSlots, slotPlan, standSlotId, type FieldSlot } from '../visuals/field-layout';
-import { actorArt, actorFootOrigins, artCellSize, staticActorGeometry, staticDisplayRatio, artOf, artUrl, fieldFigureRise, figureRise, lakeBossStillBounds, lakeEliteRightReach, mirroredArt, unitsUrl } from '../visuals/assets';
+import { actorArt, actorFootOrigins, artCellSize, staticActorGeometry, staticDisplayRatio, artOf, artUrl, fieldFigureRise, figureRise, lakeBossStillBounds, lakeFoeRightReach, mirroredArt, unitsUrl } from '../visuals/assets';
 
 // The unit's own sprite in its body container. Song/shadow floor layers and boss holds also live in the body (some
 // inserted before the sprite), so never take simply the first image.
@@ -382,7 +382,7 @@ export class BattleScene extends Phaser.Scene {
       .concat(this.encounter.enemies.map(e => [FOE_SLOT_INDEX[at(e.id)]!, fieldFigureRise(artOf(this.encounter, e.id))] as const)));
     const rightReach = new Map<number, number>();
     for (const e of this.encounter.enemies) {
-      const reach = lakeEliteRightReach.get(e.art ?? e.id);
+      const reach = lakeFoeRightReach.get(e.art ?? e.id);
       if (reach !== undefined) rightReach.set(FOE_SLOT_INDEX[at(e.id)]!, reach);
     }
     const slots = fieldSlots(w, h, { ...plan, rise, rightReach }), heroSlots = plan.heroSlots;

@@ -1,5 +1,5 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
-import { lakeBossDisplayRatio, lakeEliteDisplayRatios } from './assets';
+import { lakeBossDisplayRatio, lakeFoeDisplayRatios } from './assets';
 import atlasManifest from './unit-atlases.json';
 export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare' | 'arc' | 'communion' | 'lastlight' | 'partner' | 'circle' | 'closing' | 'echo' | 'move1' | 'move2' | 'move3' | 'move4' | 'move5' | 'move6' | 'move7' | 'mark' | 'parry' | 'gather' | 'release' | 'stored' | 'knot' | 'toll' | 'weave' | 'deflect' | 'dial' | 'read';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
@@ -146,14 +146,14 @@ export const unitRegistry = {
   // Map 4 lake foes (ART-UNIT-ANIMATION-LAKE-001, shared layout): the slime spits (skill 9..16), the wisp, crab and shade strike
   // (attack 1..8); hit 17..18, down 19..21; the wisp hovers on 22..24. Slots without a strip alias the ready seed and are never drawn.
   foe_tide_slime: { sheet: 'tideslime', displayRatio: 2, intents: { 'Water Spit': 'skill' } },
-  foe_mist_wisp: { sheet: 'mistwisp', displayRatio: 2, intents: { 'Mist Needle': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 } },
-  foe_stone_crab: { sheet: 'stonecrab', displayRatio: 2, intents: { Pincer: 'attack' } },
-  foe_mirror_shade: { sheet: 'mirrorshade', displayRatio: 2, intents: { 'Mirror Strike': 'attack' } },
-  foe_shadow_serpent: { sheet: 'shadowserpent', displayRatio: lakeEliteDisplayRatios.foe_shadow_serpent!, own: true, downFrame: 21, soleOrigin: 497 / 512,
+  foe_mist_wisp: { sheet: 'mistwisp', displayRatio: lakeFoeDisplayRatios.foe_mist_wisp!, soleOrigin: 497 / 512, intents: { 'Mist Needle': 'attack' }, idleLoop: { frames: [22, 23, 24], frameMs: 160 } },
+  foe_stone_crab: { sheet: 'stonecrab', displayRatio: lakeFoeDisplayRatios.foe_stone_crab!, soleOrigin: 497 / 512, intents: { Pincer: 'attack' } },
+  foe_mirror_shade: { sheet: 'mirrorshade', displayRatio: lakeFoeDisplayRatios.foe_mirror_shade!, soleOrigin: 497 / 512, intents: { 'Mirror Strike': 'attack' } },
+  foe_shadow_serpent: { sheet: 'shadowserpent', displayRatio: lakeFoeDisplayRatios.foe_shadow_serpent!, own: true, downFrame: 21, soleOrigin: 497 / 512,
     intents: { 'Shadow Fang': 'attack', 'Venom Spit': 'skill', 'Coil Gathering': 'move3', 'Crushing Coil': 'move4' },
     clips: { attack: lakeEliteMove(1), skill: lakeEliteMove(9), move3: lakeEliteMove(22), move4: lakeEliteMove(30) },
     reactions: lakeEliteReactions },
-  foe_weeping_siren: { sheet: 'weepingsiren', displayRatio: lakeEliteDisplayRatios.foe_weeping_siren!, own: true, downFrame: 21, soleOrigin: 497 / 512,
+  foe_weeping_siren: { sheet: 'weepingsiren', displayRatio: lakeFoeDisplayRatios.foe_weeping_siren!, own: true, downFrame: 21, soleOrigin: 497 / 512,
     intents: { 'Tide Lash': 'attack', 'Weeping Song': 'skill', 'Drowning Call': 'move3' },
     clips: { attack: lakeEliteMove(1), skill: lakeEliteMove(9), move3: lakeEliteMove(22) },
     reactions: lakeEliteReactions },

@@ -25,6 +25,12 @@ for (const { move, scenario, bodyFrame, peaks } of cases) {
       const bounds = await page.evaluate(() => window.wbVfxQA.lakeBossBox());
       expect(bounds?.left).toBeGreaterThanOrEqual(0);
       expect(bounds?.right).toBeLessThanOrEqual(390);
+      const attendants = await page.evaluate(() => ['b3', 'f2'].map(id => window.wbVfxQA.lakeBossBox(id)));
+      for (const box of attendants) {
+        expect(box).toBeDefined();
+        expect(box!.bottom - box!.top).toBeLessThan(bounds!.bottom - bounds!.top);
+        expect(box!.right - box!.left).toBeLessThan(bounds!.right - bounds!.left);
+      }
       if (await page.locator('#start').isVisible()) await page.locator('#start').click();
       await page.locator(`#action-${await page.evaluate(() => window.wbVfxQA.action())}`).click();
       await page.evaluate(() => document.fonts.ready.then(() => {
@@ -58,6 +64,12 @@ for (const { move, scenario, bodyFrame, peaks } of cases) {
       if (peaks || scenario === 'sealed') expect(samples.some(s => s.frames.includes(`${slug}_prepare`))).toBe(true);
       if (peaks) expect(samples.some(s => s.frames.includes(`${slug}_settle`))).toBe(true);
       if (bodyFrame) expect(samples.some(s => s.bodyFrames?.includes(bodyFrame))).toBe(true);
+      if (move === 'Reflection') {
+        const shade = await page.evaluate(() => window.wbVfxQA.lakeBossBox('b2'));
+        expect(shade).toBeDefined();
+        expect(shade!.right).toBeLessThanOrEqual(390);
+        expect(shade!.bottom - shade!.top).toBeLessThan(bounds!.bottom - bounds!.top);
+      }
       if (scenario !== 'down') {
         expect(await page.evaluate(() => window.wbVfxQA.impacts.find(t => t.actorId === 'f1')?.intent)).toBe(move);
       }
