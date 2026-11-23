@@ -6,12 +6,12 @@
 
 | งาน | สถานะ |
 |---|---|
-| #336 กฎ/เนื้อหา/เซฟ v68 (`claude/map4-moonlake`) · #337 หน้าจอ (`claude/map4-lake-ui`) | เปิดอยู่ รอเจ้าของอนุมัติหน้าจอ แล้วค่อย merge เข้าสาขาเกม |
+| #336 กฎ/เนื้อหา/เซฟ v68 (`claude/map4-moonlake`) · #337 หน้าจอ (`claude/map4-lake-ui`) | เจ้าของอนุมัติหน้าจอ 2026-11-23 (“อนุมัติ”) · รวม #337 แล้ว (`966ea02`) · #336 รวมชุดทะเลสาบเข้าสาขาเกม |
 | Codex PR #338 / #340 / #339 (ภาพแผนที่ / ศัตรู / บอส+VFX) | **ผ่านการตรวจรับแล้ว** ห้าม merge ใช้เป็นแหล่งไฟล์ (`git archive origin/art/<branch> incoming/<ID>`) |
 | เฟส 1 ภาพแผนที่ | **เสร็จ** เจ้าของอนุมัติ ("อนุมัติ") merge แล้ว PR #342 → `claude/map4-lake-ui` |
-| เฟส 2 ศัตรูธรรมดา 4 ตัว | PR #343 (`claude/map4-lake-foes`) **รอเจ้าของอนุมัติ motion** — คลิป `docs/combat-presentation/lake-foes-slice/` ถ้าเจ้าของอนุมัติด้วยคำพูด ให้บันทึกคำพูดใน handoff แล้ว merge หลัง CI ผ่าน |
+| เฟส 2 ศัตรูธรรมดา 4 ตัว | PR #343 merge เข้า `claude/map4-lake-ui` (`39c081f`) · เจ้าของอนุมัติ motion 2026-11-23 (“อนุมัติ”) · [คลิป 390px](../combat-presentation/lake-foes-slice/README_TH.md) |
 | เฟส 3 อสรพิษเงา + นางเงือกร้องไห้ | merge แล้วใน PR #344 (`fe213ea`) · เจ้าของเลือก **R1 ทั้งคู่** และอนุมัติ motion (2026-11-22 “อนุมัติ”) จาก [คลิป 390px](../combat-presentation/lake-elites-slice/README_TH.md) |
-| เฟส 4 บอสภูตธารา + VFX 4 ชุด | นำเข้าร่างกึ่ง chibi ใน PR #345 → `claude/map4-lake-foes` · เจ้าของอนุมัติ motion 2026-11-23 (“อนุมัติ”) · [คลิป 390px](../combat-presentation/lake-boss-slice/README_TH.md) · เจ้าของเลือก **Tide Lash R2, Undertow R1, Reflection R1** (2026-11-22 “ทำตามที่คุณแนะนำ”) |
+| เฟส 4 บอสภูตธารา + VFX 4 ชุด | รวมร่างกึ่ง chibi ใน PR #345 (`9afb8e1`) → `claude/map4-lake-foes` · เจ้าของอนุมัติ motion 2026-11-23 (“อนุมัติ”) · [คลิป 390px](../combat-presentation/lake-boss-slice/README_TH.md) · เจ้าของเลือก **Tide Lash R2, Undertow R1, Reflection R1** (2026-11-22 “ทำตามที่คุณแนะนำ”) |
 
 ## กติกา (ย่อจาก CLAUDE.md — อ่านไฟล์เต็มก่อนเริ่ม)
 
@@ -40,7 +40,7 @@
 
 ## งานเสริม (ทำเมื่อเจ้าของสั่งเท่านั้น)
 
-- พอร์เทรตวาดจริงของศัตรูทะเลสาบ (ตอนนี้เป็นภาพครอปจาก seed) · ภาพศาลเจ้าริมน้ำ/แพพ่อค้าใน decor_lake ยังไม่ได้ต่อกับ event ของแผนที่ · คลิปน้ำขึ้นน้ำลง `docs/validation/map4-lake/lake-tide-clip.webp` ยังเป็นของชั่วคราว
+- พอร์เทรตวาดจริงของศัตรูทะเลสาบ (ตอนนี้เป็นภาพครอปจาก seed) · ภาพศาลเจ้าริมน้ำ/แพพ่อค้าใน decor_lake ยังไม่ได้ต่อกับ event ของแผนที่
 
 ## จบแต่ละเฟส
 

@@ -1,3 +1,8 @@
+## 2026-11-23 — Finish the Moon Lake stack (Codex · #336 → game branch)
+- Owner: “อนุมัติ” for the four ordinary foes' motion and the Map 4 screens. #343 merged as `39c081f`; #337 merged as `966ea02`; semi-chibi boss #345 was `9afb8e1`. [390px review](../validation/map4-lake/README_TH.md).
+- Reconciled the latest first-fate/cabinet UI with the lake tile and quest imports. Preserved the owner-approved C12 starter-pair baseline. The two branches used OD-60 for separate decisions; the C12 decision is catalogued as OD-61, and Map 4 keeps OD-60.
+- Chromium: 12 lake-map/boss cases, 8 ordinary-foe captures, and 8 checks on the combined branch (lake, prologue and cabinet). Typecheck, lint and presentation coverage 6/6 passed.
+
 ## 2026-11-23 — Integrate the Water Spirit semi-chibi motion (Codex · #345 → claude/map4-lake-foes)
 - Owner: “อนุมัติ” on the eight 390px motion previews from art PR #346. Integrated the 30-frame body, matching fallback still and HUD portrait into phase 4 with the existing six move timings and VFX.
 - 768px cells losslessly packed in 1972×1974. Worst five-hero field including the lake-only VFX uses 62.8/64 MiB. Presentation coverage 6/6 and Chromium lake-boss captures 8/8 passed. Animated and fallback bounds agree within 1px at 390px. [Updated clips and budget](../combat-presentation/lake-boss-slice/README_TH.md).
@@ -70,6 +75,11 @@
 - #337: tide chip, water tiles, `waitTide` command, camp wait, lanterns/notes, goals/story, journal, lake texts; removes the gate. **Waits for owner approval of the 390px screens + clip.**
 - Tests: npm test 2239, lint, build, Chromium lake-map.spec (4). Sim: casual first try 75% rush / 98% explorer, blind boss 0–33% ([validation](../validation/map4-lake/README_TH.md)).
 - Open: C12 campaign gate fails identically on the base commit (220 < 226, pre-existing, not re-baselined); lake sweep/contract = map 3 values until the P04 economy pass; Codex brief `CODEX-ART-MAP4-LAKE-TH.md` not yet sent; real devices.
+
+## 2026-11-22 — C12 campaign gate: OD-59 starter pairs re-baselined (OD-61) (Opus; claude/eloquent-albattani-jrtn3t → game branch)
+- `npm run sim` failed the C12 gate (explorer/casual 220 < 226) since #333. Per-commit probes: #313–#332 = 229, #333 = 220; gacha P10 has no sim effect. Tip code with the old pairs = 229 seed for seed, so only the starter mix moved it (no lio+toma; support first; the test seeds give Toma 29/48).
+- Owner: “ทำตามที่คุณแนะนำ” → that group re-baselined in `tests/fixtures/c12-campaign-before.json` (ซากชายแดน #1 94%, ป่าทึบ #1 65%); other 15 cells unchanged. CAMPAIGN.md refreshed.
+- Tests: typecheck, lint, `npm test` 2160 passed, `npm run sim` 29/29 (C12 gate included). [Validation](../validation/c12-gate-od59-2026-11-22/README_TH.md). Open: Toma-first pairs weak at the forest first try (casual 23–30/48), only if the owner wants a balance pass.
 
 ## 2026-11-22 — OD-59 first fate weave + cabinet after map 1; lessons on a new game (Opus; claude/fate-first PR #333, claude/lessons-new-game PR #332)
 - Owner: gacha after the prologue instead of the starter choice → recommendation → “เห็นด้วย ดำเนินการได้”; screens “อนุมัติ”. Also reported lessons vanishing after a restart (#332: `LessonGuide.restart()` on a new company; "off" kept).
@@ -175,36 +185,4 @@
 - Owner (390px screenshot): “ปรับลดความยาวของหลอดเลือดลงให้เหมาะสม และปรับขนาดตัวเลขของเลือดให้เล็กลง”. `.field-health` max width 72 → 50px; overlaid counter 9/8/7 → 7.5/6.5/6px by length (`battle-ui.ts`). Presentation only; no rule/save change.
 - Tests: battle-hud, status, combat specs (55, Chromium 390px incl. 9999/9999 fit + centring), full Vitest 2082, typecheck, lint, build. Shot `docs/validation/field-hp-compact-2026-11-20/battle-390.png`. Not owner-viewed; no real device.
 
-## 2026-11-19 — OD-56 friends + private 1:1 chat (Opus; claude/friends-dm-od56 → game branch)
-- Owner: “เพิ่มระบบเพื่อน และ chat 1:1”. Followed CHAT_CHANNELS_TH.md §2. D1 migration 0007 (`friend_codes`, `friend_requests`, `friends` two rows/pair with per-side refs, `friend_blocks`); `server/friends.ts`; Worker `/v1/friends*`; pure rules `core/chat/friends.ts`. Devices see handles + opaque 16-hex refs only; unknown/blocked/deleting/full-inbox codes all answer 404 `friend_code_unavailable`.
-- `dm` channel open: Worker derives `dm:<a>:<b>` from the auth account + a mutual, unblocked friend's ref (403 `not_friends`). `Chat` object: per-kind pace (dm 2 s/20 min/200 h), retention per channel (world 500, dm 200), read markers → unread, report checks channel + stores 5-message context, admin sees reported dm rows only. Purge: friend rows both sides (D1) + every dm room of the account (DO).
-- UI: chat dialog “เพื่อน” tab (`ui/friends-panel.ts`), conversation view, camp chat badge; polls only while the tab is open (10 s list / 4 s room). Flag `FRIENDS=off` → 403 `friends_off`. No save, rule or reward change.
-- Tests: friends-od56 unit/route (18), chat-p11 updated, full Vitest 2082, typecheck, lint, build; Chromium 390px chat-p11 + friends-od56 (two contexts through the real Worker). Shots `docs/validation/friends-od56-2026-11-19/`. Not owner-viewed; no real device.
-- Open (assumed, see [FRIENDS_TH.md](../design/FRIENDS_TH.md) §5): block does not hide world chat; cap 50; 1:1 stays on for the external test unless `FRIENDS=off`.
-
-## 2026-11-19 — Chat feed on the camp, hidden-camp list, 1:1/guild channels prepared (Sonnet; claude/chat-overlay-mute-report → game branch)
-- Owner: “เริ่มทำตามข้อเสนอได้เลย ค่าเริ่มต้นปิด เพิ่ม ระบบ mute/report / ระบบ Chat 1:1 / Chat Guild เตรียมไว้” (OD-55). `ChatPanel`: translucent `#chat-feed` (3 lines, 45 s, off by default, localStorage `asterveil.fateweave.chatfeed.v1`), toggles on the camp/chat window/Setup, polls every 10 s only while on + camp shown + dialog closed. Report and admin mute already existed; added the hidden-camps list with unhide (device only).
-- Channels prepared, closed: `core/chat/channels.ts` registry + id format; `ChatHost.read/post` take a channel; Worker takes a channel *kind* (`dm`/`guild` → 403 `chat_channel_closed`, unknown → 400); dialog tabs show the two as “เร็ว ๆ นี้”. No save, rule or reward change; world chat behaviour unchanged.
-- Design/questions [CHAT_CHANNELS_TH.md](../design/CHAT_CHANNELS_TH.md). Tests: chat-p11 unit (4 new), chat-p11.spec (1 new at 390px), full Vitest 2064, typecheck, lint. Not owner-viewed; no real device. Open: friend system before 1:1, guild system before guild chat, server-side block.
-
-## 2026-11-19 — OD-54 farming lessons (Sonnet; claude/lessons-farming → game branch)
-- Owner: “ทำทั้ง 4 ข้อเลย”. Four camp lessons in `lobbyLesson(profile, maps, seen, sheet?, picked?)`: `farm` (replay, ring on `#lobby-maps`, last in the camp queue), `sweeppick`→`sweep` (maps sheet: pick a cleared map, then `#map-sweep-row-<id>`; cost/daily limit/cap read from `MapDefinition.sweep`), `hunt` (`#hunt-target`, hunt sheet), `open:bossCharm`→`bosstarget` (hunt tab, then `#boss-target`).
-- LobbyUI gains `openSheet`, `pickedMap` and `onDraw` so GameShell refreshes lessons when a sheet draws; `LessonGuide.place` scrolls a target inside `.lobby-content` into view. Camp sheets are inline (not `<dialog>`), so the layer is not hidden. No rule, reward or save change.
-- Tests: tutorial-flow (10, one new + `open:quests/team` expectation now reaches `farm`), lessons.spec (6 at 390px, 2 new). Shots `docs/validation/lessons-farming-2026-11-19/`. Design §8 in TUTORIAL_FLOW_TH.md. Not owner-viewed yet.
-
-## 2026-11-19 — OD-54 stage C + Setup lessons toggle (Opus; claude/lessons-stage-c → game branch)
-- Owner: “ทำช่วง C ต่อเลย และเพิ่มปุ่มเปิดคำแนะนำใน Setup”. `lobbyLesson(profile, maps, seen)`: first camp visit, then `card:<guide>` (ring on the camp menu the card needs) and `claim:<guide>` (claim button once done), then `open:<feature>` for quests/team, market/hunt/tomes, fuse/hard only when the map that opens them was the last cleared. No new rewards or rules.
-- Tapping the highlighted control completes its lesson (no bubble over the opened sheet). Title Setup → ความช่วยเหลือ: `#lessons-toggle` (off hides all; on again resets `seen`).
-- Tests: tutorial-flow (9), lessons.spec (4 at 390px incl. camp card + Setup), full Vitest, lint, build.
-
-## 2026-11-19 — OD-54 lessons after the prologue (Opus; claude/tutorial-flow → game branch; [PR #304](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/304))
-- Owner: design first, then “R1 R2 เอา คงเกราะอก ช่วง B ครบ รางวัลเดิม แจกยา”. Design [TUTORIAL_FLOW_TH.md](../design/TUTORIAL_FLOW_TH.md). Rules: prologue win reaches camp Lv2 (`gainExp`), `unlocks.gear/tree = 0`, one-time `guide-calm` (calming draught) via new run command `claimRunGuide` or the camp card; no save bump (guide ids already validated).
-- UI `src/ui/lessons.ts` + GameShell `updateLessons`: one ring+bubble lesson at a time on the real control (map order levelup→wear→tree→lanes→walk→chest→lowhp→fatigue→calm→elite→boss, first-battle `#intent` tip, first camp). Seen/off per device (localStorage); automated browsers start off unless a test saves a preference (`tests/browser/lessons.spec.ts` does).
-- Tests: `tests/tutorial-flow.test.ts` (7), lessons.spec (3 at 390px), full Vitest 2057, `npm run sim` 29/29 (first clears unchanged); system-unlock-pacing updated for the MAP 0 wear card. Open: stage C (NPC cards pointing at controls), owner look at the 390px bubbles.
-
-## 2026-11-19 — Enemy aim OD-53: pack foes, smart bosses, assassins (Opus; claude/enemy-aim-proposal → game branch)
-- Owner asked what decides an enemy's target, then for a proposal with simulation, then “ทำ D + C +B ตามที่แนะนำเลย” (OD-53). Resolver: optional `IntentDefinition.aim` (`weakest`/`support`/`pack`), picked when announced and frozen at the foe's turn; front-first, taunt/challenge/tremor/guardstone still win.
-- Content (`catalog.ts` `withAims`, `species.ts` `assassin`): C non-boss front-row foes `pack`; D bosses `weakest` every third move per phase (every second lost advisor 60%-HP fights); B Ember Slime + Spore Puff energy moves `support` (map-3 Rift Wisp dropped for the same reason). World Bosses, the tutorial first-clash and the reference veil-siege (scripted by combat/status specs) keep slots. Changed encounters +1 version. UI tags the rule on announced moves and in foe notes.
-- Proposal + 7-variant probe: [ENEMY_AIM_PROPOSAL_TH.md](../design/ENEMY_AIM_PROPOSAL_TH.md), `tests/probe/enemy-aim.test.ts`. Tests: `tests/enemy-aim.test.ts`, full Vitest 2049, `npm run sim` 29/29 with the campaign gate; casual explorer map-2 first clear 88% → 79% (gate accepts by group). Not owner-playtested.
-
-[รายการก่อนหน้านี้](archive/2026-11-22/CODEX-TO-CLAUDE.md)
+[รายการก่อนหน้านี้](archive/2026-11-23/CODEX-TO-CLAUDE.md)

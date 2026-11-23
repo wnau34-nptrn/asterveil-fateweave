@@ -5,4 +5,4 @@
 - สร้างใหม่: `python3 -I scripts/build-lake-foes.py <incoming/ART-UNIT-ANIMATION-LAKE-001>` (ตรวจ SHA-256 ของ input, lossless, ตรวจพิกเซลหลังประกอบ) · คลิป: `UNIT_A4_CLIPS=1 npx playwright test tests/browser/unit-a4-clips.spec.ts -g "foe_tide_slime|foe_mist_wisp|foe_stone_crab|foe_mirror_shade"`
 - ภาพนิ่ง `units_foes3.webp` ตัดจาก seed ตรงๆ; **พอร์เทรต `portraits_foes3` เป็นการครอปสี่เหลี่ยมจากตัว seed** (Codex ไม่ได้ส่งภาพพอร์เทรต) ถ้าเจ้าของต้องการภาพวาดใบหน้าให้ขอ Codex เป็นงานแยก
 - งบ: ปูและเงาสะท้อน 7.0 / 7.6 MiB decoded (เกินแนวทาง 6 MiB ต่อ atlas เหมือน lyra/morvane; รวมต่อ encounter ผ่านเกณฑ์ ≤ 64 MiB ใน `docs/validation/w8-field-audit`)
-- รออนุมัติ motion ของเจ้าของด้วยคำพูด (ยังไม่มี)
+- เจ้าของตอบ “อนุมัติ” เมื่อ 2026-11-23 และรวม PR #343 แล้ว จับคลิปซ้ำที่ 390×844 จากสาขารวมที่มีสเกลลูกน้องล่าสุด

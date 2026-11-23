@@ -144,15 +144,18 @@ test('a new ค่ายทหารรับจ้าง: the Knight fights the
   await page.locator('#story-next').click();
   // The starter recruitment is the first fate weave (OD-59): one guaranteed support, then one attacker; Escape cannot
   // skip it, each pick has its scene.
-  const draft = page.locator('#draft-dialog'); await expect(draft).toBeVisible(); await expect(draft.locator('.gacha-fate .gacha-card')).toHaveCount(1);
+  const draft = page.locator('#draft-dialog'); await expect(draft).toBeVisible(); await expect(draft.locator('.gacha-fate')).toHaveCount(1);
   await expect(page.locator('#draft-title')).toContainText('ทอชะตาครั้งแรก 1/2'); await expect(draft).toContainText('สายสนับสนุน');
   let run = await saved(page); expect(run.recruited).toEqual(['tracer']); expect(run.guests).toBeUndefined();
   expect(run.arrivals).toEqual(['weaver']); expect(run.roster.deployed).toEqual(['guardian', 'tracer']); expect(run.draft!.left).toBe(2);
   await page.keyboard.press('Escape'); await expect(draft).toBeVisible();
+  // The player presses to weave; the card shows only then (the offer was fixed already).
+  await expect(draft.locator('.gacha-fate-card')).toHaveCount(0); await page.locator('#draft-pull').click(); await expect(draft.locator('.gacha-fate-card')).toHaveCount(1);
   const first = run.draft!.offers[0]!; expect(ruinsMap.draft!.support).toContain(first);
   await page.locator('#draft-0').click(); await expect(draft).toBeHidden();
   await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', first); await page.locator('#story-next').click(); await page.locator('#story-next').click();
   await expect(draft).toBeVisible(); run = await saved(page); const second = run.draft!.offers[0]!; expect(ruinsMap.draft!.support).not.toContain(second);
+  await page.locator('#draft-pull').click();
   await expect(page.locator('#draft-title')).toContainText('ทอชะตาครั้งแรก 2/2');
   await page.locator('#draft-0').click(); await expect(page.locator('#story-view')).toHaveAttribute('data-speaker', second);
   await page.locator('#story-next').click(); await page.locator('#story-next').click(); await expect(page.locator('#world-view')).toBeVisible(); await expect(draft).toBeHidden();
