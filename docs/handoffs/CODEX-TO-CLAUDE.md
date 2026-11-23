@@ -1,3 +1,7 @@
+## 2026-11-23 — Full-slot equipment art (Codex · `codex/full-slot-equipment-art`)
+- Owner approved integrating mockup v5. Equipped art uses the full slot with an opaque rarity-tinted background. Empty slots show 32 px icons and faint slot labels. Equipped slots retain their accessible names.
+- Lint, typecheck and Pages build passed locally. The shared Chromium regression checks fill, label visibility and stable slot size at 320 px, 390 px and desktop. Physical iOS Safari remains unverified.
+
 ## 2026-11-23 — Compact character equipment slots (Codex · `codex/compact-equipment-slots`)
 - Owner requested smaller slots that keep their size after equipping. The character equipment tab now gives empty icons and worn-item art the same grid row, with a 28–30px art area.
 - Regression coverage measures all six slots before and after auto-equipping in camp and on the map at 320px, 390px and desktop widths. Lint, typecheck and build passed. iOS Safari remains unverified.

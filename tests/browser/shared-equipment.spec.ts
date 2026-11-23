@@ -41,8 +41,11 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
       return {width,height};
     }));
     await expect(slots).toHaveCount(GEAR_SLOTS.length);
-    const weaponSlot=slots.filter({hasText:'อาวุธ'});
+    const weaponSlot=panel.locator('.doll-slot[data-slot=weapon]');
+    const weaponLabel=weaponSlot.locator('b');
     await expect(weaponSlot).not.toHaveAttribute('data-rarity');
+    await expect(weaponLabel).toBeVisible();
+    await expect(weaponSlot.locator(':scope > .icon')).toHaveCSS('width','32px');
     const initialSlotSizes=await slotSizes();
     for(const {height} of initialSlotSizes){
       expect(height).toBeGreaterThanOrEqual(44);
@@ -59,6 +62,11 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     await page.keyboard.press('Escape');await expect(id('auto-preview')).toBeFocused();expect(await saved()).toBe(original);
     await id('auto-preview').click();await id('comparison-equip').click();
     await expect(weaponSlot).toHaveAttribute('data-rarity', /\d/);
+    await expect(weaponLabel).toBeHidden();
+    expect(await weaponSlot.evaluate(button=>{
+      const art=button.querySelector<HTMLElement>('.gear-art');
+      return art?.offsetWidth===button.clientWidth&&art.offsetHeight===button.clientHeight;
+    })).toBe(true);
     expect(await slotSizes()).toEqual(initialSlotSizes);
     const applied=parseGame(await saved(),map,lookup),member=(camp?applied.profile.members:applied.run!.members).guardian!;
     expect(setCounts(member.gear).wind).toBeGreaterThanOrEqual(4);expect(member.gear!.weapon!.hero).toBe('guardian');

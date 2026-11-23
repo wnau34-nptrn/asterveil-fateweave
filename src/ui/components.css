@@ -42,13 +42,28 @@
 .doll-hero { position: relative; display: grid; place-items: center; min-height: 0; }
 .doll-hero::before { content: ''; position: absolute; inset: 8% 4%; border-radius: 50%; background: radial-gradient(circle, #23435a 0, transparent 70%); }
 .doll-hero .hero-art { position: relative; width: min(100%, 220px); }
-.character-content .doll-slot { --slot-art-size: 30px; width: 66px; min-height: 52px; display: grid; grid-template: var(--slot-art-size) auto / 1fr; align-content: center; justify-items: center; gap: 2px; padding: 4px; text-align: center; border-radius: 12px; background: linear-gradient(145deg, #22364b, #0d1c2e); }
-.character-content .doll-slot > :is(.gear-art, .icon) { grid-row: 1; width: var(--slot-art-size); height: var(--slot-art-size); }
-.character-content .doll-slot > .icon { padding: 4px; color: var(--text-muted, #bbcadb); }
-.character-content .doll-slot b { grid-row: 2; line-height: 1.25; font-size: 11px; font-weight: 600; }
+.character-content .doll-slot {
+  position: relative; width: 66px; height: 57px; min-height: 0; display: grid; grid-template: 1fr / 1fr;
+  place-items: center; padding: 0; overflow: hidden; text-align: center; border-radius: 12px;
+  background: linear-gradient(145deg, #22364b, #0d1c2e);
+}
+.character-content .doll-slot > .icon {
+  grid-row: 1; width: 32px; height: 32px; color: var(--text-muted, #bbcadb); transform: translateY(-3px);
+}
+.character-content .doll-slot > b {
+  position: absolute; inset: auto 0 3px; font-size: 11px; line-height: 1; font-weight: 600; color: #9bb4ce75;
+}
+.character-content .doll-slot[data-rarity] > b { visibility: hidden; }
+.character-content .doll-slot > .gear-art {
+  position: absolute; grid-row: auto; inset: 0; width: auto; height: auto; border-width: 1px; border-radius: inherit;
+  background: radial-gradient(ellipse at 50% 40%, color-mix(in srgb, var(--rarity, #b9c8d8) 24%, #111e2d), #0b1522 78%);
+}
+.character-content .doll-slot > .gear-art .equip-sprite {
+  inset: 0 auto; justify-self: center; height: 100%; aspect-ratio: 1; transform: scale(1.14);
+}
 .character-content .doll-slot[aria-pressed=true] { border-color: var(--veil-cyan, #74d4ef); background: #183c50; box-shadow: 0 0 12px #74d4ef55; }
 .doll-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 8px 0; }
-@container game (max-width: 360px) { .character-content .doll-slot { --slot-art-size: 28px; width: 58px; } }
+@container game (max-width: 360px) { .character-content .doll-slot { width: 58px; height: 55px; } }
 
 /* Filter chips (A7: chips instead of dropdowns). */
 .ui-chip { min-height: 44px; padding: 0 14px; border-radius: 99px; border: 1px solid #e8f5ff33; background: #102137; color: var(--text); font: 600 13px var(--font-display, Kanit), sans-serif; }
