@@ -1,4 +1,4 @@
-# Current state — updated 2026-11-23 (Map 5 design review)
+# Current state — updated 2026-11-23 (Map 5 board prototype)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
@@ -29,11 +29,11 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Map 5 design confirmed 2026-11-23 (“ทำตามที่คุณแนะนำ”); rules, content and simulation are next. [Confirmed design and simulation targets](docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md).
+- Map 5 design confirmed (“ทำตามที่คุณแนะนำ”). The 25×25 board and pure mine helpers are on `codex/map5-crystal-mine-design`; campaign wiring, saves, encounters and simulation are next. [Design and prototype](docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md).
 
 - Lake sweep/contract pay map 3's values until a P04 economy pass; P04-05/06 numbers.
 - Map 3 Briar Lord first-try gate; no real Safari/iPhone/Android or human usability validation. Pending intake #262, #169.
 
 ## Opening prompt for next chat
 
-Continue the Map 5 rules, content and simulation pass from the [confirmed Crystal Mine design](docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md) under OD-60. Start with the engine and save questions in the Claude handoff.
+Integrate the [Crystal Mine board](docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md) under OD-60. Use the engine, save and simulation notes in the Claude handoff before registering the mine in the campaign.

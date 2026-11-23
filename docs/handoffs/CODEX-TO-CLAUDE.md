@@ -1,3 +1,8 @@
+## 2026-11-23 — Crystal Mine board prototype (Codex · `codex/map5-crystal-mine-design`)
+- Built the 25×25 board, minecart and beam traces, wall-aware light and worker escort. The focused mine and lake suites passed 25 tests. Lint, typecheck and build passed. [Board and test scope](../design/MAP5_CRYSTAL_MINE_DRAFT_TH.md#กระดานต้นแบบ).
+- Full Vitest: 2,279 passed and one existing VFX asset check failed because its intake files were outside the sparse checkout. Restored the tracked files and reran the affected VFX and mine suites (32 passed).
+- The approved mine layout is ready for world command wiring. Follow the Claude handoff for v68 compatibility, recruit triggers, the Crystal Giant and the campaign simulation before activating Map 5.
+
 ## 2026-11-23 — Map 5 owner decisions (Codex · `codex/map5-crystal-mine-design`)
 - Owner replied “ทำตามที่คุณแนะนำ” to the three design choices. Recorded the decision under OD-60 and reconciled the Chapter 1 map description. [Confirmed design](../design/MAP5_CRYSTAL_MINE_DRAFT_TH.md).
 - Checked document consistency, relative links and Git whitespace. The next work is rules, content and simulation. Numeric targets await results.
