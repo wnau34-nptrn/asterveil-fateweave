@@ -1,3 +1,8 @@
+## 2026-11-23 — Map 5 Crystal Mine design (Codex · `codex/map5-crystal-mine-design`)
+- Drafted the three mine zones, lanterns, minecart and light puzzles, 2-of-3 seal, Brann/Kael story and Crystal Giant encounter for owner review. [Design, simulation targets and 390px review plan](../design/MAP5_CRYSTAL_MINE_DRAFT_TH.md).
+- Branch base `827756f` includes #336 at `24a1f3c`. Reviewed the draft and checked Markdown whitespace with Git.
+- Open owner decisions: overseer bypass, puzzle and recruit flow, and armour and shard behaviour. Simulation, art and implementation follow that review.
+
 ## 2026-11-23 — Full-slot equipment art (Codex · `codex/full-slot-equipment-art`)
 - Owner approved integrating mockup v5. Equipped art uses the full slot with an opaque rarity-tinted background. Empty slots show 32 px icons and faint slot labels. Equipped slots retain their accessible names.
 - Lint, typecheck and Pages build passed locally. The shared Chromium regression checks fill, label visibility and stable slot size at 320 px, 390 px and desktop. Physical iOS Safari remains unverified.

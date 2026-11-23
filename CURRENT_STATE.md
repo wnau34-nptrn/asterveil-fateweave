@@ -1,4 +1,4 @@
-# Current state — updated 2026-11-23 (map 4 ทะเลสาบเงาจันทร์)
+# Current state — updated 2026-11-23 (Map 5 design review)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
@@ -29,9 +29,11 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
+- Map 5 design draft on `codex/map5-crystal-mine-design` awaits owner decisions on the mine overseer, puzzle and recruit flow, and the Crystal Giant. [Draft and simulation targets](docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md).
+
 - Lake sweep/contract pay map 3's values until a P04 economy pass; P04-05/06 numbers.
 - Map 3 Briar Lord first-try gate; no real Safari/iPhone/Android or human usability validation. Pending intake #262, #169.
 
 ## Opening prompt for next chat
 
-Start the Map 5 (Lv13–16, abandoned crystal mine) design pass under OD-60. Read [Chapter 1 map concepts](docs/design/CHAPTER1_MAPS_TH.md) and Map 4's validation first. Confirm the mine, lantern and Crystal Giant brief before expanding into art or implementation.
+Review the owner’s Map 5 decisions against the [Crystal Mine draft](docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md). Once confirmed, prepare the rules, content and simulation pass under OD-60.
