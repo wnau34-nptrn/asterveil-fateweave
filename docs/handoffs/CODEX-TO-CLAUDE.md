@@ -1,3 +1,28 @@
+## 2026-11-23 — Integrate the Water Spirit semi-chibi motion (Codex · #345 → claude/map4-lake-foes)
+- Owner: “อนุมัติ” on the eight 390px motion previews from art PR #346. Integrated the 30-frame body, matching fallback still and HUD portrait into phase 4 with the existing six move timings and VFX.
+- 768px cells losslessly packed in 1972×1974. Worst five-hero field including the lake-only VFX uses 62.8/64 MiB. Presentation coverage 6/6 and Chromium lake-boss captures 8/8 passed. Animated and fallback bounds agree within 1px at 390px. [Updated clips and budget](../combat-presentation/lake-boss-slice/README_TH.md).
+- Phase 2 ordinary-foe motion and map 4 screen approvals are tracked separately.
+
+## 2026-11-23 — Water Spirit semi-chibi motion (Codex · art PR #346)
+- Owner approved the 390px standing preview and requested new animation (“อนุมัติ ต้องทำ animation ใหม่”). [Art and eight runtime preview clips](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/c2ed3c8c93e2890609379df14d2f81d7efae0633/incoming/ART-UNIT-ANIMATION-LAKE-BOSS-CHIBI-002/NOTES.md) cover the six existing moves, idle, hit and down.
+- 29/29 moving frames pass the head-scale audit. The 768px body packs losslessly at 1979×1974 with the documented shelf layout. Chromium preview passed eight 390×844 resolver/VFX scenarios.
+- Pending owner review of the new motion. Claude intake target is #345; use the documented shelf layout and derive fallback/portrait from the approved seed. The existing runtime motion is still in #345.
+
+## 2026-11-23 — Water Spirit semi-chibi concept (Codex · #345)
+- Owner feedback “ดีกว่าเดิมเยอะเลย” followed by “บันทึกใน github ด้วย”. Saved the [standing concept and original PNG](../../incoming/ART-MAP4-WATER-SPIRIT-CHIBI-001/README_TH.md) as the preferred art reference.
+- Verified the PNG decodes as RGBA with transparency, matches the delivered source byte for byte, and documented its SHA-256. Scope is concept archival. Runtime motion approval remains pending for #345.
+
+## 2026-11-23 — Scale the Water Spirit’s attendants (Codex · #345 → claude/map4-lake-foes)
+- Owner flagged that the attendants looked larger than the boss. Mist Wisp, Stone Crab and Mirror Shade now match the painted scale of Rift Wisp, Shard Crawler and Vargoth Hunter respectively. Still and animated frames share scale and sole. Reflection keeps its shade clear of the right field edge.
+- Replaced all eight 390px clips. Chromium checks compare painted bounds with the boss and verify the summoned shade is inside the viewport. Typecheck, lint, build, presentation coverage and npm test (2270 passed, 24 skipped) passed. [Updated clips](../combat-presentation/lake-boss-slice/README_TH.md).
+- Pending owner motion approval for #345.
+
+## 2026-11-22 — Map 4 Water Spirit art and VFX (Codex · codex/map4-lake-boss → claude/map4-lake-foes)
+- Owner selected Tide Lash R2, Undertow R1 and Reflection R1 (“ทำตามที่คุณแนะนำ”) and approved “ใช้ runtime 768 px (แนะนำ)”. Verified 21 files from #339. Preserved sole and displayed scale, with six moves, hit/down and still/portrait.
+- Four encounter-only VFX families route from real events. Water Veil peaks on healing, and Reflection keeps the caster's recover frames while filling the actual summon slot.
+- Typecheck, lint, build and coverage 6/6 passed. Full unit run 2268 passed with one audit of obsolete stand-in aliases fixed and rerun in a 129/129 focused pass. Chromium 390px clips 8/8, A11 texture release and Call the Court passed.
+- Worst five-hero animation plus dedicated boss FX 60.1 MiB / 17.1 MB. Awaiting owner motion approval. [Review clips](../combat-presentation/lake-boss-slice/README_TH.md).
+
 ## 2026-11-22 — Map 4 phase 4 motion choices (Codex · claude/map4-lake-foes)
 - Owner: “ทำตามที่คุณแนะนำ” for Tide Lash R2, Undertow R1, Reflection R1. This supersedes the earlier all-R1 pick.
 - Verified SHA-256 and RGBA decode for all 21 selected input images from #339, including the Tide Lash R2 strip. Documentation passed git diff --check.

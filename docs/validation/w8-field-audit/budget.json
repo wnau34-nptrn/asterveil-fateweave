@@ -21,6 +21,10 @@
    "decoded": 13861288,
    "download": 2744677
   },
+  "lake": {
+   "decoded": 1145800,
+   "download": 291501
+  },
   "foe": {
    "decoded": 6733392,
    "download": 1836177
@@ -47,7 +51,8 @@
     "decoded": 37145224,
     "download": 11158789
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "scout-patrol",
@@ -64,7 +69,8 @@
     "decoded": 30013064,
     "download": 9199608
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "rift-whelp",
@@ -81,7 +87,8 @@
     "decoded": 33036936,
     "download": 10046547
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "thicket-ambush",
@@ -100,7 +107,8 @@
     "decoded": 36593288,
     "download": 11564135
    },
-   "bossFx": true
+   "bossFx": true,
+   "lakeBossFx": false
   },
   {
    "id": "shadow-stalker",
@@ -117,7 +125,8 @@
     "decoded": 31317640,
     "download": 9537546
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "veil-siege",
@@ -135,7 +144,8 @@
     "decoded": 37043848,
     "download": 11425920
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "rear-ambush",
@@ -153,7 +163,8 @@
     "decoded": 34771592,
     "download": 10537920
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "crystal-stampede",
@@ -171,7 +182,8 @@
     "decoded": 36530824,
     "download": 11344714
    },
-   "bossFx": true
+   "bossFx": true,
+   "lakeBossFx": false
   },
   {
    "id": "rift-warden",
@@ -190,7 +202,8 @@
     "decoded": 35315336,
     "download": 10973922
    },
-   "bossFx": true
+   "bossFx": true,
+   "lakeBossFx": false
   },
   {
    "id": "elite-tusk-chief",
@@ -209,7 +222,8 @@
     "decoded": 35947144,
     "download": 10860656
    },
-   "bossFx": true
+   "bossFx": true,
+   "lakeBossFx": false
   },
   {
    "id": "elite-briar-lord",
@@ -228,7 +242,8 @@
     "decoded": 36509320,
     "download": 11413966
    },
-   "bossFx": true
+   "bossFx": true,
+   "lakeBossFx": false
   },
   {
    "id": "mini-veil-golem",
@@ -246,7 +261,8 @@
     "decoded": 36097672,
     "download": 11067355
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "vanguard-captain",
@@ -265,7 +281,8 @@
     "decoded": 41943688,
     "download": 12494866
    },
-   "bossFx": true
+   "bossFx": true,
+   "lakeBossFx": false
   },
   {
    "id": "slime-pair",
@@ -283,7 +300,8 @@
     "decoded": 31342216,
     "download": 9519818
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "bat-swarm",
@@ -301,7 +319,8 @@
     "decoded": 32150152,
     "download": 9629302
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "slime-nest",
@@ -320,7 +339,8 @@
     "decoded": 33314440,
     "download": 9950029
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "tusker-bats",
@@ -338,7 +358,8 @@
     "decoded": 35009160,
     "download": 10476758
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "beetle-spore",
@@ -356,7 +377,8 @@
     "decoded": 32284296,
     "download": 9773493
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "beetle-wall",
@@ -374,7 +396,8 @@
     "decoded": 32284296,
     "download": 9773493
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "stalker-spore",
@@ -392,7 +415,8 @@
     "decoded": 32976520,
     "download": 9993671
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "forest-swarm",
@@ -410,7 +434,8 @@
     "decoded": 32284296,
     "download": 9773493
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "channeler-wisps",
@@ -428,7 +453,8 @@
     "decoded": 32259720,
     "download": 9725671
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "crawler-pack",
@@ -446,7 +472,8 @@
     "decoded": 31489672,
     "download": 9564568
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "rift-host",
@@ -465,7 +492,8 @@
     "decoded": 33619592,
     "download": 10112440
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "thorn-host",
@@ -484,7 +512,8 @@
     "decoded": 34840200,
     "download": 10469415
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "rift-legion",
@@ -502,7 +531,8 @@
     "decoded": 31489672,
     "download": 9564568
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "world-boss-warden",
@@ -521,7 +551,8 @@
     "decoded": 35315336,
     "download": 10973922
    },
-   "bossFx": true
+   "bossFx": true,
+   "lakeBossFx": false
   },
   {
    "id": "lake-slimes",
@@ -539,7 +570,8 @@
     "decoded": 40626824,
     "download": 11640502
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "lake-mist",
@@ -558,7 +590,8 @@
     "decoded": 45720200,
     "download": 12795683
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "crab-wall",
@@ -576,7 +609,8 @@
     "decoded": 41225864,
     "download": 11663589
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "isle-host",
@@ -595,7 +629,8 @@
     "decoded": 45720200,
     "download": 12795683
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "pavilion-mist",
@@ -614,7 +649,8 @@
     "decoded": 45720200,
     "download": 12795683
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "elite-shadow-serpent",
@@ -632,7 +668,8 @@
     "decoded": 50595416,
     "download": 14604115
    },
-   "bossFx": true
+   "bossFx": true,
+   "lakeBossFx": false
   },
   {
    "id": "elite-weeping-siren",
@@ -650,7 +687,8 @@
     "decoded": 50505308,
     "download": 14608600
    },
-   "bossFx": false
+   "bossFx": false,
+   "lakeBossFx": false
   },
   {
    "id": "water-spirit",
@@ -660,17 +698,18 @@
     "mistwisp",
     "stonecrab",
     "mirrorshade",
-    "sentinel"
+    "waterspirit"
    ],
    "four": {
-    "decoded": 48483280,
-    "download": 13207134
+    "decoded": 60228528,
+    "download": 16174877
    },
    "five": {
-    "decoded": 52987528,
-    "download": 14653051
+    "decoded": 64732776,
+    "download": 17620794
    },
-   "bossFx": true
+   "bossFx": false,
+   "lakeBossFx": true
   },
   {
    "id": "wb-kragmor",
@@ -689,7 +728,8 @@
     "decoded": 37556872,
     "download": 11468495
    },
-   "bossFx": true
+   "bossFx": true,
+   "lakeBossFx": false
   },
   {
    "id": "wb-valdrakk",
@@ -707,7 +747,8 @@
     "decoded": 35780232,
     "download": 11109577
    },
-   "bossFx": true
+   "bossFx": true,
+   "lakeBossFx": false
   },
   {
    "id": "wb-morvane",
@@ -726,7 +767,8 @@
     "decoded": 38755976,
     "download": 11415002
    },
-   "bossFx": true
+   "bossFx": true,
+   "lakeBossFx": false
   }
  ]
 }

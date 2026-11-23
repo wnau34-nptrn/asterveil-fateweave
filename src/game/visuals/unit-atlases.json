@@ -412,5 +412,14 @@
     "frames": 30,
     "decodedBytes": 14372820,
     "downloadBytes": 4100192
+  },
+  "waterspirit": {
+    "image": "waterspirit_lake.28b27a9332d8.webp",
+    "atlas": "waterspirit_lake.26d81051e26e.json",
+    "width": 1972,
+    "height": 1974,
+    "frames": 30,
+    "decodedBytes": 15570912,
+    "downloadBytes": 4377097
   }
 }

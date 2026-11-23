@@ -4,7 +4,7 @@
 
 ## สรุป
 
-- identities 48 (ฝ่ายเรา 17 · ศัตรู 31) · มี atlas 46 · พักตาม OD-14 2 (โอดราน `thiran` / อิโซลด์ `wila`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่งรออนิเมชัน 0
+- identities 49 (ฝ่ายเรา 17 · ศัตรู 32) · มี atlas 47 · พักตาม OD-14 2 (โอดราน `thiran` / อิโซลด์ `wila`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่งรออนิเมชัน 0
 - ActionId ฝ่ายเรา 91 รายการ (119 แถว ตัวละคร×ท่า รวมท่าจากต้นไม้) · ชื่อท่าศัตรู/phase 72 ชื่อ (83 แถว identity×ท่า)
 - ท่าร่างกาย: sprite 188 · procedural 14 (ตัวที่พักตาม OD-14 และภาพนิ่ง P03 ที่รออนิเมชัน CODEX-A12)
 - VFX: วาดเฉพาะ 138 · ชุดร่วมโดยตั้งใจ 60 · วาดด้วยโค้ดโดยตั้งใจ 4
@@ -61,6 +61,7 @@
 | `foe_tusker` | หมูป่าหลังตะไคร่ | ศัตรู | 22 · 4.08 MiB · 1.20 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_valdrakk` | วัลดรัค | ศัตรู | 30 · 5.39 MiB · 1.93 MB | sprite 25,26 | procedural (tint/lift) | sprite 27,28,29 · ค้าง 29 | — |
 | `foe_vargoth_guard` | องครักษ์อสูร | ศัตรู | 32 · 4.10 MiB · 1.39 MB | sprite 17,18 | sprite 22,23 | sprite 19,20,21 · ค้าง 21 | — |
+| `foe_water_spirit` | ภูตธารา | ศัตรู | 30 · 14.85 MiB · 4.38 MB | sprite 25,26 | procedural (tint/lift) | sprite 27,28,29 · ค้าง 29 | — |
 | `foe_weeping_siren` | นางเงือกร้องไห้ | ศัตรู | 30 · 13.71 MiB · 4.10 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `raider` | นักจู่โจม | ศัตรู | 24 · 3.72 MiB · 1.14 MB | sprite 17,18 | sprite 22,23 | sprite 19,20,21 · ค้าง 21 | — |
 
@@ -244,12 +245,6 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_sentinel` | Rift Wave (energy) | sprite `move4` 0,13,14 → 15,16,0 | วาด `boss-signature-fx` | ฮีโร่ทุกคนที่ยืนอยู่ | ฮีโร่ที่โดนจริงทุกคน | rift-warden, world-boss-warden |
 | `foe_sentinel` | Call the Rift (phase) | sprite `move7` 0,25,26 → 27,28,0 | วาด `boss-signature-fx` | ตัวเอง + กำลังเสริมที่ปรากฏจริง | ตำแหน่งตัวที่ถูกเรียกจริง | rift-warden, world-boss-warden |
 | `foe_sentinel` | Rift Awakening (phase) | sprite `move6` 0,21,22 → 23,24,0 | วาด `boss-signature-fx` | ตัวเอง (เปลี่ยนช่วง) | ตัวบอส | rift-warden, world-boss-warden |
-| `foe_sentinel` | Tide Lash (energy) | sprite `move4` 0,13,14 → 15,16,0 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | water-spirit |
-| `foe_sentinel` | Water Veil (energy) | sprite `move5` 0,17,18 → 19,20,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวบอส | water-spirit |
-| `foe_sentinel` | Surging Wave (physical) | sprite `move1` 0,1,2 → 3,4,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | water-spirit |
-| `foe_sentinel` | Undertow (physical) | sprite `move3` 0,9,10 → 11,12,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | water-spirit |
-| `foe_sentinel` | Great Wave (energy) | sprite `move4` 0,13,14 → 15,16,0 | วาด `boss-signature-fx` | ฮีโร่ทุกคนที่ยืนอยู่ | ฮีโร่ที่โดนจริงทุกคน | water-spirit |
-| `foe_sentinel` | Reflection (phase) | sprite `move7` 0,25,26 → 27,28,0 | วาด `boss-signature-fx` | ตัวเอง + กำลังเสริมที่ปรากฏจริง | ตำแหน่งตัวที่ถูกเรียกจริง | water-spirit |
 | `foe_shadow_serpent` | Shadow Fang (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | elite-shadow-serpent |
 | `foe_shadow_serpent` | Venom Spit (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `foe-signature-fx` | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | elite-shadow-serpent |
 | `foe_shadow_serpent` | Coil Gathering (physical/charge) | sprite `move3` 22,23,24,25 → 26,27,28,29 | วาด `boss-signature-fx` | ตัวเอง (รวมพลัง ไม่มี damage) | ตัวบอส + ค้างจนปล่อยท่า | elite-shadow-serpent |
@@ -272,6 +267,12 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_vargoth_guard` | Crushing Blow (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | first-clash |
 | `foe_vargoth_guard` | Shield Smash (physical) | sprite `bash` 24,25,26,27 → 28,29,30,31 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | vanguard-captain |
 | `foe_vargoth_guard` | Mace Swing (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | vanguard-captain |
+| `foe_water_spirit` | Tide Lash (energy) | sprite `move1` 0,1,2 → 3,4,0 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | water-spirit |
+| `foe_water_spirit` | Water Veil (energy) | sprite `move2` 0,5,6 → 7,8,0 | วาด `boss-signature-fx` | ตัวเอง (ฟื้น HP) | ตัวบอสเมื่อได้ HP คืนจริง | water-spirit |
+| `foe_water_spirit` | Surging Wave (physical) | sprite `move3` 0,9,10 → 11,12,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | พื้นใต้ผู้รับผลจริง | water-spirit |
+| `foe_water_spirit` | Undertow (physical) | sprite `move4` 0,13,14 → 15,16,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | water-spirit |
+| `foe_water_spirit` | Great Wave (energy) | sprite `move5` 0,17,18 → 19,20,0 | วาด `boss-signature-fx` | ฮีโร่ทุกคนที่ยืนอยู่ | พื้นใต้ผู้รับผลจริง | water-spirit |
+| `foe_water_spirit` | Reflection (phase) | sprite `move6` 0,21,22 → 23,24,0 | วาด `boss-signature-fx` | ตัวเอง + กำลังเสริมที่ปรากฏจริง | ตำแหน่งตัวที่ถูกเรียกจริง | water-spirit |
 | `foe_weeping_siren` | Tide Lash (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | elite-weeping-siren |
 | `foe_weeping_siren` | Weeping Song (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `foe-signature-fx` | ฮีโร่ทุกคนที่ยืนอยู่ | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | elite-weeping-siren |
 | `foe_weeping_siren` | Drowning Call (energy) | sprite `move3` 22,23,24,25 → 26,27,28,29 | วาด `foe-signature-fx` | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | elite-weeping-siren |

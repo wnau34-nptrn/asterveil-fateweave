@@ -404,7 +404,7 @@ export const waterSpirit: EncounterDefinition = at80({
   phases: [{ sourceId: 'f1', below: 50, summon: ['b2'], name: 'Reflection' }],
   rules: barkRules,
   enemies: [...spiritGuard.enemies, mirrorShade,
-    { id: 'f1', row: 'front', large: true, boss: true, speed: 85, name: 'Water Spirit', displayName: 'ภูตธารา', maxHp: 420, color: 0x6fc6e0, art: 'foe_sentinel', traits: ['veilguard'] }],
+    { id: 'f1', row: 'front', large: true, boss: true, speed: 85, name: 'Water Spirit', displayName: 'ภูตธารา', maxHp: 420, color: 0x6fc6e0, art: 'foe_water_spirit', traits: ['veilguard'] }],
   intents: [...softened(spiritGuard.intents, ['f2', 'b3'], 75),
     { sourceId: 'b2', targetSlot: 1, name: 'Mirror Strike', damage: 12, kind: 'physical' },
     { sourceId: 'b2', targetSlot: 3, name: 'Mirror Strike', damage: 12, kind: 'physical' },
@@ -420,8 +420,8 @@ export const waterSpirit: EncounterDefinition = at80({
   ],
 });
 
-// Map 4 sets with a foe still wearing an older body as a stand-in (Water Spirit: phase 4); the per-body audits skip them.
-export const LAKE_STANDINS: ReadonlySet<string> = new Set(['water-spirit']);
+// Map 4 encounters still awaiting dedicated body art. The per-body audits skip any stand-ins.
+export const LAKE_STANDINS: ReadonlySet<string> = new Set();
 
 // World Bosses (balanced on written slots, P11-05) drop the assassin aims their court kinds carry (enemy aim B, owner 2026-11-19).
 function noAims(e: EncounterDefinition): EncounterDefinition {

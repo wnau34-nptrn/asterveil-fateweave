@@ -1,3 +1,4 @@
+import lakeBossStill from './lake-boss-still.json';
 import worldBossStills from './world-boss-stills.json';
 import portraitsHalf from './portraits-half.json';
 import type { EncounterDefinition } from '../../core/battle/types';
@@ -11,13 +12,20 @@ export type ArtSheet = 'units' | 'mercs' | 'foes' | 'foes2' | 'foes3' | 'worldbo
 export const sheetRows: Readonly<Record<ArtSheet, number>> = { units: 3, mercs: 7, foes: 6, foes2: 5, foes3: 5, worldboss: 2 };
 export const artCellSize = (sheet: ArtSheet): number => sheet === 'worldboss' ? worldBossStills.cellSize : 512;
 export const staticActorGeometry = (art: string) => worldBossStills.actors[art as keyof typeof worldBossStills.actors];
-// The lake elite artwork fills more of its source cell than the older, half-scale animation art.
-export const lakeEliteDisplayRatios: Readonly<Record<string, number>> = Object.freeze({
+// These lake source cells are fuller than the older art. Match the painted size of their field counterparts.
+export const lakeFoeDisplayRatios: Readonly<Record<string, number>> = Object.freeze({
+  foe_mist_wisp: 1.06,
+  foe_stone_crab: 1.11,
+  foe_mirror_shade: 1.19,
   foe_shadow_serpent: 1.25,
   foe_weeping_siren: 1.15,
 });
-export const staticDisplayRatio = (art: string): number =>
-  lakeEliteDisplayRatios[art] ?? (staticActorGeometry(art) ? worldBossStills.displayRatio : 1);
+export const lakeBossDisplayRatio = 2;
+export const lakeBossStillBounds = (art: string) => art === 'foe_water_spirit' ? lakeBossStill.bounds : undefined;
+export const staticDisplayRatio = (art: string): number => {
+  if (art === 'foe_water_spirit') return lakeBossDisplayRatio;
+  return lakeFoeDisplayRatios[art] ?? (staticActorGeometry(art) ? worldBossStills.displayRatio : 1);
+};
 export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number }>> = {
   guardian: { sheet: 'units', frame: 0 }, tracer: { sheet: 'units', frame: 1 }, weaver: { sheet: 'units', frame: 2 },
   healer: { sheet: 'units', frame: 3 }, raider: { sheet: 'units', frame: 4 }, brute: { sheet: 'units', frame: 5 },
@@ -35,6 +43,7 @@ export const actorArt: Readonly<Record<string, { sheet: ArtSheet; frame: number 
   foe_vargoth_guard: { sheet: 'foes2', frame: 3 }, foe_thorn_beetle: { sheet: 'foes2', frame: 4 }, foe_spore_puff: { sheet: 'foes2', frame: 5 },
   foe_rift_channeler: { sheet: 'foes2', frame: 6 }, foe_rift_wisp: { sheet: 'foes2', frame: 7 }, foe_shard_crawler: { sheet: 'foes2', frame: 8 },
   // Map 4 lake foes (ART-UNIT-ANIMATION-LAKE-001): `units_foes3`/`portraits_foes3`, 2 columns × 5 rows (phase 3 and 4 append).
+  foe_water_spirit: { sheet: 'foes3', frame: 6 },
   foe_shadow_serpent: { sheet: 'foes3', frame: 4 }, foe_weeping_siren: { sheet: 'foes3', frame: 5 },
   foe_tide_slime: { sheet: 'foes3', frame: 0 }, foe_mist_wisp: { sheet: 'foes3', frame: 1 }, foe_stone_crab: { sheet: 'foes3', frame: 2 }, foe_mirror_shade: { sheet: 'foes3', frame: 3 },
 };
@@ -55,21 +64,24 @@ const deliveredSoles = 497 / 512;
 export const actorFootOrigins: Readonly<Record<string, number>> = {
   raider: 493 / 512, brute: 496 / 512,
   ...Object.fromEntries(Object.entries(actorArt).filter(([, a]) => a.sheet !== 'units').map(([id, a]) => [id, a.sheet === 'worldboss' ? worldBossStills.soleOrigin : deliveredSoles])),
+  foe_water_spirit: lakeBossStill.soleOrigin,
 };
 // Top row of each frame's painted figure (alpha > 40) in its 512 px cell, measured from the atlases: a field HP panel
 // sits just above it (owner 2026-10-22). Re-measure when an atlas changes.
 const figureTops: Readonly<Record<string, number>> = {
   guardian: 19, tracer: 17, weaver: 0, healer: 0, raider: 0, brute: 0, garran: 37, mira: 37, toma: 37, sefa: 37, brann: 37, lio: 37, metta: 37, thiran: 37, lalin: 37, wila: 37, kael: 31, wynne: 37, astrid: 46, foe_tusker: 57, foe_sprite: 197, foe_stalker: 57, foe_mycon: 37, foe_golem: 17, foe_riftweaver: 37, foe_matriarch: 17, foe_juggernaut: 40, foe_sentinel: 5, foe_hunter: 35, foe_captain: 37, foe_dew_slime: 182, foe_ember_slime: 227, foe_ruin_bat: 218, foe_vargoth_guard: 133, foe_thorn_beetle: 191, foe_spore_puff: 107, foe_rift_channeler: 68, foe_rift_wisp: 127, foe_shard_crawler: 191,
+  foe_water_spirit: lakeBossStill.bounds.y,
   foe_shadow_serpent: 141, foe_weeping_siren: 102,
   foe_tide_slime: 250, foe_mist_wisp: 127, foe_stone_crab: 198, foe_mirror_shade: 111,
 };
 // How far the painted figure rises above its feet, as a fraction of the drawn size.
 // Keep trio field/HP geometry identical when replacing the borrowed still. Caption bounds use actual alpha.
 export const figureRise = (art: string): number => staticActorGeometry(art) ? worldBossStills.layoutRise : (actorFootOrigins[art] ?? 1) - (figureTops[art] ?? 0) / 512;
-// The lake elite fallback and animated frames share an identical source cell and scale.
-export const fieldFigureRise = (art: string): number => figureRise(art) * (lakeEliteDisplayRatios[art] ?? 1);
-// Rightmost painted reach across the lake elite strips, with breathing room for poses.
-export const lakeEliteRightReach: ReadonlyMap<string, number> = new Map([
+// The lake foe fallback and animated frames share an identical source cell and scale.
+export const fieldFigureRise = (art: string): number => figureRise(art) * (art === 'foe_water_spirit' ? lakeBossDisplayRatio : lakeFoeDisplayRatios[art] ?? 1);
+// Rightmost painted reach across the lake foe strips, with breathing room for poses.
+export const lakeFoeRightReach: ReadonlyMap<string, number> = new Map([
+  ['foe_mirror_shade', .50],
   ['foe_shadow_serpent', .48],
   ['foe_weeping_siren', .42],
 ]);
@@ -77,7 +89,7 @@ type ArtName = 'units' | 'portraits' | 'ruins' | 'units_mercs' | 'portraits_merc
 // Bump a sheet's revision (SHA256 prefix) when its pixels change so browsers fetch the corrected art. `units` 2026-11-04:
 // pieces of Eira/Lyra/Seren that crossed into a neighbouring 512px cell were cleared (they showed in Seren's sheet).
 const ART_REV: Partial<Record<ArtName, string>> = {
-  units: '6263840f', units_foes3: '8513fdc6', portraits_foes3: 'c80ced67',
+  units: '6263840f', units_foes3: lakeBossStill.revisions.units_foes3, portraits_foes3: lakeBossStill.revisions.portraits_foes3,
   units_worldboss: worldBossStills.unitsRevision, portraits_worldboss: worldBossStills.portraitsRevision,
 };
 export const artUrl = (name: ArtName): string => `${import.meta.env.BASE_URL}assets/art/${name}.webp${ART_REV[name] ? `?v=${ART_REV[name]}` : ''}`;

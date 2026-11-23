@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
 import atlasManifest from '../src/game/visuals/unit-atlases.json';
-import { actorArt, fieldFigureRise, lakeEliteRightReach, staticDisplayRatio } from '../src/game/visuals/assets';
+import { actorArt, fieldFigureRise, lakeFoeRightReach, staticDisplayRatio } from '../src/game/visuals/assets';
 import { sequence, unitClip, unitDefinition, unitDisplayRatio, unitDownFrame, unitIdleFrame } from '../src/game/visuals/unit-frames';
 import { eliteShadowSerpent, eliteWeepingSiren, encounterById, LAKE_STANDINS } from '../src/content/encounters/catalog';
 import { lakeEliteIntents, plainLakeFoeArts, lakeFoeIntents, unitA4Fixture } from './fixtures/unit-a4';
@@ -39,7 +39,7 @@ describe('lake foes (phase 2)', () => {
   it('ships the foes3 still and portrait sheets, and the lake sets that use only these foes are no stand-ins', () => {
     for (const f of ['units_foes3', 'portraits_foes3', 'portraits_foes3_half']) expect(existsSync(`public/assets/art/${f}.webp`)).toBe(true);
     for (const id of ['lake-slimes', 'lake-mist', 'crab-wall', 'isle-host', 'pavilion-mist']) { expect(encounterById(id)).toBeDefined(); expect(LAKE_STANDINS.has(id)).toBe(false); }
-    expect([...LAKE_STANDINS].sort()).toEqual(['water-spirit']);
+    expect([...LAKE_STANDINS]).toEqual([]);
   });
 });
 
@@ -78,7 +78,7 @@ describe('lake elites (phase 3)', () => {
       const { frames } = JSON.parse(readFileSync(`public/assets/units/${atlasManifest[sheet].atlas}`, 'utf8'));
       for (const frame of Object.values(frames) as { spriteSourceSize: { x: number; w: number } }[]) {
         const reach = ((frame.spriteSourceSize.x + frame.spriteSourceSize.w) / 512 - 0.5) * unitDisplayRatio(art);
-        expect(reach).toBeLessThan(lakeEliteRightReach.get(art)!);
+        expect(reach).toBeLessThan(lakeFoeRightReach.get(art)!);
       }
     });
 

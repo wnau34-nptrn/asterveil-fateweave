@@ -1,9 +1,9 @@
 {
  "counts": {
-  "identities": 48,
+  "identities": 49,
   "heroes": 17,
-  "enemies": 31,
-  "atlases": 46,
+  "enemies": 32,
+  "atlases": 47,
   "parked": 2,
   "actionIds": 91,
   "heroRows": 119,
@@ -877,6 +877,25 @@
     "block": "sprite 22,23",
     "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
     "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "name": "ภูตธารา",
+   "sheet": "waterspirit",
+   "atlas": {
+    "image": "waterspirit_lake.28b27a9332d8.webp",
+    "atlas": "waterspirit_lake.26d81051e26e.json",
+    "frames": 30,
+    "decodedBytes": 15570912,
+    "downloadBytes": 4377097
+   },
+   "reactions": {
+    "hit": "sprite 25,26",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 27,28,29 · ค้าง 29"
    }
   },
   {
@@ -6116,205 +6135,6 @@
    ]
   },
   {
-   "identity": "foe_sentinel",
-   "side": "enemy",
-   "move": "Tide Lash",
-   "name": "Tide Lash",
-   "kind": "energy",
-   "body": {
-    "kind": "sprite",
-    "clip": "move4",
-    "frames": {
-     "prepare": [
-      0,
-      13,
-      14
-     ],
-     "recover": [
-      15,
-      16,
-      0
-     ]
-    },
-    "pose": "cast"
-   },
-   "vfx": {
-    "module": "foe-signature-fx",
-    "kind": "painted"
-   },
-   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
-   "encounters": [
-    "water-spirit"
-   ]
-  },
-  {
-   "identity": "foe_sentinel",
-   "side": "enemy",
-   "move": "Water Veil",
-   "name": "Water Veil",
-   "kind": "energy",
-   "body": {
-    "kind": "sprite",
-    "clip": "move5",
-    "frames": {
-     "prepare": [
-      0,
-      17,
-      18
-     ],
-     "recover": [
-      19,
-      20,
-      0
-     ]
-    },
-    "pose": "cast"
-   },
-   "vfx": {
-    "module": "boss-signature-fx",
-    "kind": "painted"
-   },
-   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "ตัวบอส",
-   "encounters": [
-    "water-spirit"
-   ]
-  },
-  {
-   "identity": "foe_sentinel",
-   "side": "enemy",
-   "move": "Surging Wave",
-   "name": "Surging Wave",
-   "kind": "physical",
-   "body": {
-    "kind": "sprite",
-    "clip": "move1",
-    "frames": {
-     "prepare": [
-      0,
-      1,
-      2
-     ],
-     "recover": [
-      3,
-      4,
-      0
-     ]
-    },
-    "pose": "weapon"
-   },
-   "vfx": {
-    "module": "boss-signature-fx",
-    "kind": "painted"
-   },
-   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "ผู้รับ damage จริง",
-   "encounters": [
-    "water-spirit"
-   ]
-  },
-  {
-   "identity": "foe_sentinel",
-   "side": "enemy",
-   "move": "Undertow",
-   "name": "Undertow",
-   "kind": "physical",
-   "body": {
-    "kind": "sprite",
-    "clip": "move3",
-    "frames": {
-     "prepare": [
-      0,
-      9,
-      10
-     ],
-     "recover": [
-      11,
-      12,
-      0
-     ]
-    },
-    "pose": "weapon"
-   },
-   "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
-   },
-   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
-   "encounters": [
-    "water-spirit"
-   ]
-  },
-  {
-   "identity": "foe_sentinel",
-   "side": "enemy",
-   "move": "Great Wave",
-   "name": "Great Wave",
-   "kind": "energy",
-   "body": {
-    "kind": "sprite",
-    "clip": "move4",
-    "frames": {
-     "prepare": [
-      0,
-      13,
-      14
-     ],
-     "recover": [
-      15,
-      16,
-      0
-     ]
-    },
-    "pose": "cast"
-   },
-   "vfx": {
-    "module": "boss-signature-fx",
-    "kind": "painted"
-   },
-   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
-   "point": "ฮีโร่ที่โดนจริงทุกคน",
-   "encounters": [
-    "water-spirit"
-   ]
-  },
-  {
-   "identity": "foe_sentinel",
-   "side": "enemy",
-   "move": "phase:Reflection",
-   "name": "Reflection",
-   "kind": "phase",
-   "body": {
-    "kind": "sprite",
-    "clip": "move7",
-    "frames": {
-     "prepare": [
-      0,
-      25,
-      26
-     ],
-     "recover": [
-      27,
-      28,
-      0
-     ]
-    },
-    "pose": "cast"
-   },
-   "vfx": {
-    "module": "boss-signature-fx",
-    "kind": "painted"
-   },
-   "target": "ตัวเอง + กำลังเสริมที่ปรากฏจริง",
-   "point": "ตำแหน่งตัวที่ถูกเรียกจริง",
-   "encounters": [
-    "water-spirit"
-   ]
-  },
-  {
    "identity": "foe_shadow_serpent",
    "side": "enemy",
    "move": "Shadow Fang",
@@ -7113,6 +6933,205 @@
    "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
    "encounters": [
     "vanguard-captain"
+   ]
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "move": "Tide Lash",
+   "name": "Tide Lash",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move1",
+    "frames": {
+     "prepare": [
+      0,
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "foe-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว)",
+   "encounters": [
+    "water-spirit"
+   ]
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "move": "Water Veil",
+   "name": "Water Veil",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move2",
+    "frames": {
+     "prepare": [
+      0,
+      5,
+      6
+     ],
+     "recover": [
+      7,
+      8,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง (ฟื้น HP)",
+   "point": "ตัวบอสเมื่อได้ HP คืนจริง",
+   "encounters": [
+    "water-spirit"
+   ]
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "move": "Surging Wave",
+   "name": "Surging Wave",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move3",
+    "frames": {
+     "prepare": [
+      0,
+      9,
+      10
+     ],
+     "recover": [
+      11,
+      12,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "พื้นใต้ผู้รับผลจริง",
+   "encounters": [
+    "water-spirit"
+   ]
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "move": "Undertow",
+   "name": "Undertow",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move4",
+    "frames": {
+     "prepare": [
+      0,
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "water-spirit"
+   ]
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "move": "Great Wave",
+   "name": "Great Wave",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move5",
+    "frames": {
+     "prepare": [
+      0,
+      17,
+      18
+     ],
+     "recover": [
+      19,
+      20,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
+   "point": "พื้นใต้ผู้รับผลจริง",
+   "encounters": [
+    "water-spirit"
+   ]
+  },
+  {
+   "identity": "foe_water_spirit",
+   "side": "enemy",
+   "move": "phase:Reflection",
+   "name": "Reflection",
+   "kind": "phase",
+   "body": {
+    "kind": "sprite",
+    "clip": "move6",
+    "frames": {
+     "prepare": [
+      0,
+      21,
+      22
+     ],
+     "recover": [
+      23,
+      24,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "boss-signature-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง + กำลังเสริมที่ปรากฏจริง",
+   "point": "ตำแหน่งตัวที่ถูกเรียกจริง",
+   "encounters": [
+    "water-spirit"
    ]
   },
   {
