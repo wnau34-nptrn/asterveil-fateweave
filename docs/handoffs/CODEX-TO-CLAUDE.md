@@ -1,3 +1,7 @@
+## 2026-11-23 — Water Spirit semi-chibi concept (Codex · #345)
+- Owner feedback “ดีกว่าเดิมเยอะเลย” followed by “บันทึกใน github ด้วย”. Saved the [standing concept and original PNG](../../incoming/ART-MAP4-WATER-SPIRIT-CHIBI-001/README_TH.md) as the preferred art reference.
+- Verified the PNG decodes as RGBA with transparency, matches the delivered source byte for byte, and documented its SHA-256. Scope is concept archival. Runtime motion approval remains pending for #345.
+
 ## 2026-11-23 — Scale the Water Spirit’s attendants (Codex · #345 → claude/map4-lake-foes)
 - Owner flagged that the attendants looked larger than the boss. Mist Wisp, Stone Crab and Mirror Shade now match the painted scale of Rift Wisp, Shard Crawler and Vargoth Hunter respectively. Still and animated frames share scale and sole. Reflection keeps its shade clear of the right field edge.
 - Replaced all eight 390px clips. Chromium checks compare painted bounds with the boss and verify the summoned shade is inside the viewport. Typecheck, lint, build, presentation coverage and npm test (2270 passed, 24 skipped) passed. [Updated clips](../combat-presentation/lake-boss-slice/README_TH.md).
