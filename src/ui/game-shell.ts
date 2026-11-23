@@ -20,6 +20,7 @@ import type { BattleState, Outcome } from '../core/battle/types';
 import { clearLegacySaves, expeditionKey, loadGame, parseGame, saveGame, type Game } from '../core/save/expedition-save';
 import { type createCommander, featureOpen } from '../core/world/profile';
 import type { Point, Direction, EventChoice, ExpeditionState, MapDefinition, PotionId, Profile, ProfileEvent, ProfileResult, ShopItemId, WorldEvent, WorldResult } from '../core/world/types';
+import { stepsToTurn } from '../core/world/tide';
 import { tileAt, questDone, battleData, heroCatalog, memberDef, type EncounterLookup } from '../core/world/world';
 import { LessonGuide, battleLessonTip, lobbyLesson, worldLesson } from './lessons';
 import { Music, type Track } from '../platform/music';
@@ -29,7 +30,7 @@ import { browserStorage } from '../platform/browser-storage';
 import type { BattleUI } from './battle-ui';
 import { leaderArt, type NpcId } from '../game/visuals/assets';
 import { partyLine } from '../core/world/tomes';
-import { boardTaskName, contractText, sweepText, choiceText, eventText, heroText, itemLines, itemName, lootThai, potionText, rewardText, shopText, tomeLineText, tomeSizeText, tomeThai } from './th';
+import { boardTaskName, contractText, sweepText, choiceText, eventText, heroText, journalText, itemLines, itemName, lootThai, potionText, rewardText, shopText, tomeLineText, tomeSizeText, tomeThai } from './th';
 import { laneName } from './formation-grid';
 import { findItem } from '../core/world/forge';
 import { CommanderUI } from './commander-ui';
@@ -108,7 +109,7 @@ export class GameShell {
     for (const id of this.game?.run?.recruited ?? []) this.recruitSeen.add(`${this.game!.run!.mapId}:${id}`);
     this.world = new WorldUI(views.world, this.map, heroCatalog(lookup, map), {
       travel: to => this.travelTo(to), move: dir => this.move(dir), rest: () => this.rest(), revive: id => this.revive(id), swap: (a, b) => this.step({ kind: 'swapMembers', a, b }, r => this.roster(r)), lane: (id, lane, other) => this.step({ kind: 'setLane', heroId: id, lane, ...(other !== undefined ? { other } : {}) }, r => this.roster(r)), moveMember: id => this.step({ kind: 'moveMember', heroId: id }, r => this.roster(r)), preset: slot => this.step({ kind: 'runPreset', slot }, r => this.roster(r)),
-      withdraw: () => this.withdraw(), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
+      withdraw: () => this.withdraw(), waitTide: () => this.waitTide(), openChest: () => this.openChest(), usePotion: (potion, id) => this.drink(potion, id),
       chooseEvent: choice => this.chooseEvent(choice), draft: index => this.draft(index),
       talent: (id, node) => {
         if (!this.state || this.locked) return;
@@ -298,7 +299,7 @@ export class GameShell {
     if (w.trigger) { w.trigger.classList.remove('is-loading'); w.trigger.removeAttribute('aria-busy'); }
   }
   private teamIds(): string[] { const s = this.state; return s ? [...s.roster.deployed, ...s.roster.reserve] : this.game?.profile.party.deployed ?? []; }
-  private worldMain(): string[] { return worldImages().main; }
+  private worldMain(): string[] { return worldImages([], this.map.id).main; }
   private battleScene(): BattleBackdrop { return battleSceneOf(this.map.id); }
   private battleMain(scene: BattleBackdrop = this.battleScene()): string[] { return [battleBackdropUrl(scene)]; }
   // B6: a save that stopped mid-battle starts the encounter's atlases and unit sheets from the title (the scene may still
@@ -311,7 +312,7 @@ export class GameShell {
   // B2 from the title: what "continue" opens first, then where the run leads (the camp after it).
   private prefetchFromTitle(): void {
     const g = this.game, s = g?.run; if (!g) return;
-    const camp = campImages(g.profile), world = worldImages(this.teamIds());
+    const camp = campImages(g.profile), world = worldImages(this.teamIds(), this.map.id);
     // B6 waits until the player has stayed on the title a moment: building the big battle textures blocks the main thread
     // for seconds on slow phones, and a quick tap on Continue must never feel stuck (it then loads as before).
     if (s?.battle) { prefetchImagesIdle(this.battleMain()); setTimeout(() => { if (this.root.dataset.view === 'title' && !this.switching) this.prefetchSavedBattle(); }, SAVED_BATTLE_PREFETCH_DELAY_MS); }
@@ -680,7 +681,7 @@ export class GameShell {
     this.lobby.render({ profile: this.game!.profile, board: this.server ? this.board : clientView(this.game!, { home: this.home, lookup: this.lookup }).hireBoard, message: this.lobbyMessage, day: this.today(), worldBoss: this.wbStatus, online: !!this.server, cheer: this.lobbyCheer, saved: this.saved && (!!this.storage || !!this.server), ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
     this.npcCheer = undefined;
     // Arriving in the camp opens on the fire; later redraws keep where the player panned to.
-    if (entering) { this.lobby.centreScene(); const w = worldImages(this.game!.profile.party.deployed); prefetchImagesIdle([...w.main, ...w.extra]); }
+    if (entering) { this.lobby.centreScene(); const w = worldImages(this.game!.profile.party.deployed, this.map.id); prefetchImagesIdle([...w.main, ...w.extra]); }
   }
   private guide(id: string, skip: boolean): void {
     if (!this.game || this.game.run) return;
@@ -759,6 +760,9 @@ export class GameShell {
     this.game = out.game;
     this.persist(); this.banner = undefined; this.locked = false; this.lobbyMessage = ''; this.lobbyCheer = '';
     this.message = 'แตะช่องที่ไฮไลต์หรือใช้ลูกศรเพื่อเดิน';
+    // Map 4: the tide lesson on every lake departure until the lake is first cleared (the HUD chip keeps the count).
+    const lake = this.maps.find(m => m.id === out.game.run!.mapId);
+    if (lake?.tide && !out.game.profile.cleared.includes(lake.id)) this.message = `น้ำขึ้น–น้ำลงทุก ${lake.tide.period} ก้าว (ดูป้ายน้ำมุมขวาบน) · น้ำลงเดินลุยช่องน้ำตื้นได้ น้ำขึ้นท่วม · อยู่ในน้ำตอนน้ำขึ้นจะถูกพัดกลับฝั่ง · รอน้ำได้ที่แคมป์`;
     // First expedition (lore): the prologue plays, then Vargoth's vanguard attacks before the first step (same command).
     const prologueFight = out.events.some(e => e.type === 'encounter');
     if (prologueFight) this.locked = true;
@@ -912,6 +916,7 @@ export class GameShell {
     if (result.event.type === 'blocked' && this.state.draft) { this.world.openDraft(); return; }
     if (result.event.type === 'blocked') {
       this.message = result.event.reason === 'wall' ? 'ทางนี้ไปต่อไม่ได้' : result.event.reason === 'party' ? 'ทีมที่ลงสนามล้มหมด · สลับตัวสำรองในกระเป๋า หรือชุบที่แคมป์ก่อนออกเดินทาง'
+        : result.event.reason === 'tide' ? `น้ำขึ้นอยู่ · ช่องน้ำตื้นท่วม รออีก ${stepsToTurn(this.state, this.map)} ก้าวน้ำจะลง หรือรอที่แคมป์` : result.event.reason === 'deep' ? 'น้ำลึก · ต้องมีเรือจึงข้ามได้'
         : result.event.reason === 'stone' ? 'หินขยับไปทางนั้นไม่ได้' : result.event.reason === 'pit' ? 'หลุมลึกขวางทาง · ต้องหาอะไรมาถม'
         : result.event.reason === 'sealed' ? `${this.map.bossName}ยังถูกผนึก · ทำเป้าหมายให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อน (ตอนนี้ ${questDone(this.state, this.map).length}/${this.map.quest.need}) ดูได้ที่ช่องเป้าหมาย` : this.message;
       sfx.play('bump'); this.renderWorld(); return;
@@ -988,6 +993,16 @@ export class GameShell {
       this.renderWorld();
     });
   }
+  // Map 4: wait at a camp for the water to turn.
+  private waitTide(): void {
+    if (!this.state || this.locked) return;
+    this.step({ kind: 'waitTide' }, result => {
+      if (result.event.type !== 'waited') return;
+      this.state = result.state; this.persist(); sfx.play('rest');
+      this.message = result.event.low ? 'รอจนน้ำลงแล้ว · ช่องน้ำตื้นเดินลุยได้' : 'รอจนน้ำขึ้นแล้ว · ช่องน้ำตื้นท่วม เดินไม่ได้ (เรือข้ามได้)';
+      this.renderWorld();
+    });
+  }
   // 4B: free travel between reached camps and the entrance.
   private travelTo(to: Point): void {
     if (!this.state || this.locked) return;
@@ -1051,8 +1066,12 @@ export class GameShell {
       case 'encounter': return event.kind === 'boss' ? `${this.map.bossName}ขวาง${this.map.goalName}ไว้!` : event.kind === 'elite' ? (this.eliteMini() ? 'มินิบอสยักษ์หินลุกขึ้นขวาง · ชนะแล้วนับเป็นเป้าหมายผนึกรอยแยก' : this.eliteForced() ? 'อีลิทเฝ้าด่านขวางทางไว้ · ต้องชนะถึงจะผ่าน' : `ท้าสู้อีลิท · ชนะได้ EXP ×${this.map.eventRules.optionalElite.exp} เหรียญทอง +${this.map.eventRules.optionalElite.gold} เศษกลาง +${this.map.eventRules.optionalElite.shard} และอุปกรณ์ชั้นดี`) : 'พบศัตรู!';
       case 'event': return eventText[this.map.events.find(e => e.id === event.eventId)!.kind].name;
       // 3C puzzles and secrets.
-      case 'rune': return event.solved ? 'หินรูนเรืองแสงครบ · ประตูหินเปิดออกแล้ว' : event.reset ? 'หินรูนดับลง · ลำดับผิด ดูสัญลักษณ์บนประตูหิน' : `หินรูนเรืองแสง ${event.step}/3`;
-      case 'lever': return event.solved ? 'ดึงคันโยกครบ · ประตูคลังเปิดออกแล้ว' : `ดึงคันโยกแล้ว ${event.pulled}/2 · อีกอันอยู่อีกฝั่ง`;
+      case 'rune': { const n = this.map.puzzles.runes.find(r => r.id === event.puzzleId)?.stones.length ?? 3;
+        return event.solved ? 'หินรูนเรืองแสงครบ · ประตูหินเปิดออกแล้ว' : event.reset ? `หินรูนดับลง · ลำดับผิด ${this.map.tide ? 'ดูลำดับจากเงาในน้ำ (กลับซ้าย–ขวา)' : 'ดูสัญลักษณ์บนประตูหิน'}` : `หินรูนเรืองแสง ${event.step}/${n}`; }
+      case 'lever': return event.solved ? (this.map.tide ? 'ดึงคันโยกครบ · ประตูน้ำเปิด ทางลัดไปศาลาจันทร์' : 'ดึงคันโยกครบ · ประตูคลังเปิดออกแล้ว') : `ดึงคันโยกแล้ว ${event.pulled}/2 · อีกอันอยู่อีกฝั่ง${this.map.tide ? ' (อยู่ในน้ำตื้น ดึงได้ตอนน้ำลง)' : ''}`;
+      case 'washed': return 'น้ำขึ้นแล้ว! กระแสน้ำพัดทีมกลับขึ้นฝั่ง · นับก้าวให้ข้ามทันก่อนน้ำขึ้น';
+      case 'lantern': return `จุดโคมจันทร์แล้ว (${event.lit}/${this.map.lanterns?.length ?? 3})`;
+      case 'note': return `พบบันทึกที่หล่นไว้ · ${journalText[event.noteId]?.title ?? ''} (อ่านได้ที่สมุดบันทึกในค่าย)`;
       case 'pushed': return event.filled ? 'ผลักหินลงหลุมแล้ว · ทางข้างหน้าเปิด' : 'ผลักหินไปหนึ่งช่อง';
       case 'secret': return 'กำแพงร้าวนี้เดินทะลุได้ · พบทางลับ!';
       case 'herb': return `เก็บสมุนไพรเรืองแสงแล้ว (${this.game?.run?.herbs.length ?? 0}/${this.map.herbs.length}) · กลับถึงแคมป์แล้วไปส่งเฟิร์นนะ`;

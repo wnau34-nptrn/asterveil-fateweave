@@ -48,10 +48,7 @@ const game = new Phaser.Game({
 });
 // P09-02c: server play only when switched on (`?server=<api url>`, remembered; `?server=off` returns to local play).
 const api = serverSwitch(location.search, browserStorage(), import.meta.env.VITE_FATEWEAVE_API ?? '');
-// Map 4 (OD-60): its rules, content and server support ship first; it joins the map list with its screens once the owner
-// approves them (tide counter, water tiles, journal). Until then the playable campaign stays maps 1–3.
-const PLAYABLE = MAPS.filter(m => m.id !== 'moon-lake');
-const shell = new GameShell(app, chapterOne, encounterById, ui, views, PLAYABLE, api ? new ServerClient(api, __CONTENT_VERSION__, browserStorage()) : undefined);
+const shell = new GameShell(app, chapterOne, encounterById, ui, views, MAPS, api ? new ServerClient(api, __CONTENT_VERSION__, browserStorage()) : undefined);
 // A newer publish while this page stays open: ask the player to refresh (owner 2026-11-20); never reloads by itself.
 const updateBanner = new UpdateBanner(app);
 watchForUpdate({ running: __BUILD_ID__, base: import.meta.env.BASE_URL, onNew: build => updateBanner.show(build) });

@@ -1,6 +1,6 @@
 // Dev-only QA entry. Real UI, scene, playback and replayable resolver commands.
 import Phaser from 'phaser';
-import { unitA4Fixture, foeArts } from '../../fixtures/unit-a4';
+import { unitA4Fixture, foeArts, lakeFoeArts } from '../../fixtures/unit-a4';
 import type { ActionId } from '../../../src/core/battle/types';
 import { BattleScene } from '../../../src/game/scenes/BattleScene';
 import { BattleUI } from '../../../src/ui/battle-ui';
@@ -17,8 +17,9 @@ import '../../../src/ui/components.css';
 
 const params=new URLSearchParams(location.search);
 const hero=(params.get('hero')??'mira') as 'mira'|'toma';
-const foe=(params.get('foe')??'foe_dew_slime') as (typeof foeArts)[number];
-const fixture=unitA4Fixture(hero,(params.get('skill')??'attack') as ActionId,params.get('scenario')??'normal',foe);
+const foe=(params.get('foe')??'foe_dew_slime') as (typeof foeArts)[number] | (typeof lakeFoeArts)[number];
+const sceneBackdrop=lakeFoeArts.some(art=>art===foe)?'lake':undefined;
+const fixture=unitA4Fixture(hero,(params.get('skill')??'attack') as ActionId,params.get('scenario')??'normal',foe,params.get('intent')??undefined);
 localStorage.setItem('asterveil.fateweave.presentation.v1',JSON.stringify({speed:params.get('speed')??'normal',intensity:params.get('intensity')??'standard'}));
 localStorage.setItem('asterveil.fateweave.tutorial.v1','off');
 fitViewport();
@@ -31,7 +32,7 @@ ui.attach(scene);
 scene.setBattleVisible(true);
 new Phaser.Game({type:Phaser.AUTO,parent:'game',transparent:true,scale:{mode:Phaser.Scale.NONE,width:320,height:240},scene:[scene],fps:{target:60},audio:{noAudio:true}});
 let opened=false;
-const load=()=>{ui.open({kind:'random',data:fixture.data,entry:fixture.entry,commands:opened?ui.state.commands:(JSON.parse(localStorage.getItem('unit-a4-committed')??'null') as {commands:typeof fixture.prelude}|null)?.commands??fixture.prelude,
+const load=()=>{ui.open({kind:'random',scene:sceneBackdrop,data:fixture.data,entry:fixture.entry,commands:opened?ui.state.commands:(JSON.parse(localStorage.getItem('unit-a4-committed')??'null') as {commands:typeof fixture.prelude}|null)?.commands??fixture.prelude,
  commit:s=>{localStorage.setItem('unit-a4-committed',JSON.stringify(s));return true;},leaveLabel:()=>'',leave:()=>{}});opened=true;};
 load();
 new ResizeObserver(()=>scene.refreshLayout()).observe(document.querySelector('#game')!);
@@ -42,7 +43,7 @@ const qa={reactionTiming:()=>{
  },impacts,turns:()=>fixture.result.turns,otherEncounter:()=>{
  const data={...fixture.data,heroes:fixture.data.heroes.filter(h=>h.id===hero).map(h=>({...h,id:'sefa'})),enemies:fixture.data.enemies.map(e=>({...e,art:'foe_golem'}))};
  ui.open({kind:'random',data,entry:{hp:{sefa:46}},commands:[],commit:()=>true,leaveLabel:()=>'',leave:()=>{}});
- },target:()=>fixture.command.targetId==='enemies'?`enemies-f1`:fixture.command.targetId,
+ },foeBounds:(id: string)=>scene.figureBox(id),target:()=>fixture.command.targetId==='enemies'?`enemies-${fixture.data.enemies[0]!.id}`:fixture.command.targetId,
  expected:()=>fixture.result.state,state:()=>ui.state,load,
  frames:()=>{
  const bodies=(scene as unknown as {bodies:Map<string,Phaser.GameObjects.Container>}).bodies;

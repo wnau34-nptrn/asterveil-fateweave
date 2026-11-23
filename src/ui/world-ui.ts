@@ -15,21 +15,22 @@ import type { ActionId, EncounterDefinition, HeroDefinition } from '../core/batt
 
 import type { Direction, EventChoice, ExpeditionState, GearSlot, MapDefinition, Point, PotionId, Profile } from '../core/world/types';
 import { matchesPreset, runPresetPlan } from '../core/world/presets';
-import { canManage, fatigueCut, fatigueOf, reserveCap, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, bossSealed, questDone, encounterChance, eventChoiceReason, isRevealed, levelOf, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
+import { lowTide, stepsToTurn, waterAt } from '../core/world/tide';
+import { canWaitTide, objectiveDone, canManage, fatigueCut, fatigueOf, reserveCap, wear, type BagList, travelTargets, atCamp, atMuster, canOpenChest, canRest, canRevive, chestAt, eliteBlocks, bossSealed, questDone, encounterChance, eventChoiceReason, isRevealed, levelOf, monsterLevelAt, pendingEvent, rosterIds, starred, tileAt, wounded, zoneOf } from '../core/world/world';
 import { PARTY_SLOTS, POTION_IDS, type Lane, type TeamPreset } from '../core/world/types';
 import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
 import { heroArt, portrait, starRow } from './portraits';
 import { fateWeave } from './gacha-panel';
-import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileset, worldArtUrl, type Landmark } from '../game/visuals/world-art';
-import { questLine, rewardText, storyQuestText, sideQuestText, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
+import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileFrame, lakeHighFrame, isLakeArt, worldArtUrl, type Landmark } from '../game/visuals/world-art';
+import { questLine, rewardText, storyQuestText, mapQuestText, sideQuestText, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
 import { tomeCount } from '../core/world/tomes';
 import { icon, lineIcon } from './icons';
 import { gearArt, potionArt } from './equip-art';
 import { fatigueDot } from './fatigue';
 import { boulderPosition, doorOpen, openPit, secretAt } from '../core/world/puzzles';
 
-export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; preset(slot: number): void; lane(id: string, lane: Lane, other?: string): void; withdraw(): void; openChest(): void;
+export interface WorldHost { travel(to: Point): void; move(dir: Direction): void; rest(): void; waitTide(): void; revive(heroId: string): void; swap(a: string, b: string): void; moveMember(id: string): void; preset(slot: number): void; lane(id: string, lane: Lane, other?: string): void; withdraw(): void; openChest(): void;
   talent(heroId: string, node: TalentNode): void; loadout(heroId: string, actions: ActionId[]): void; autoEquip(plan: AutoEquipmentPlan): void;
   usePotion(potion: PotionId, heroId?: string): void; chooseEvent(choice: EventChoice): void; draft(index: number): void;
   wear(heroId: string, from: BagList, index: number): void; takeOff(heroId: string, slot: GearSlot): void }
@@ -56,7 +57,7 @@ const goals = (s: ExpeditionState, map: MapDefinition) => {
   const seal = questDone(s, map).length; const need = map.quest.optional ? 0 : map.quest.need;
   return [
     { done: s.tutorialDone, label: 'ขับไล่กองหน้าของวาร์กอธ' }, { done: !!s.camp, label: 'ไปถึงแคมป์' },
-    ...(need ? [{ done: seal >= need || s.bossDefeated, label: `ทำลายผนึกรอยแยก ${Math.min(seal, need)}/${need}` }] : []),
+    ...(need ? [{ done: seal >= need || s.bossDefeated, label: `${map.tide ? "ทำลายผนึกศาลาจันทร์" : "ทำลายผนึกรอยแยก"} ${Math.min(seal, need)}/${need}` }] : []),
     { done: s.bossDefeated, label: `ชนะ${map.bossName}` }, { done: s.completed, label: `ไปถึง${map.goalName}` },
   ];
 };
@@ -87,7 +88,7 @@ export class WorldUI {
     this.width = map.rows[0]!.length;
     root.innerHTML = `
       <section class="map-view" id="map-viewport" aria-label="แผนที่ ใช้ปุ่มลูกศรหรือแตะช่องที่ไฮไลต์เพื่อเดินทีละช่อง">
-        <div class="map-grid" id="map-grid" aria-hidden="true" style="--cols:${this.width};--rows:${map.rows.length}">
+        <div class="map-grid" id="map-grid" data-art="${isLakeArt(map) ? 'lake' : 'base'}" aria-hidden="true" style="--cols:${this.width};--rows:${map.rows.length}">
           <div class="floor-layer">${this.floorCells()}</div>
           <div class="sprite-layer" id="sprite-layer">${this.staticSprites()}<div class="party-token" id="party-token"><span class="token-portrait">${portrait('guardian')}</span></div></div>
           <div class="fog-layer" id="fog-layer"></div>
@@ -102,6 +103,7 @@ export class WorldUI {
         <div class="hud-heading"><div class="hud-location glass-capsule"><span class="location-mark">${icon('map')}</span><div><p class="eyebrow" id="map-name">${map.name}</p><h1 id="zone-name"></h1></div></div>
         <div class="hud-top-right">
           <div id="danger-chip" class="hud-danger glass-capsule" role="status" aria-live="polite"></div>
+          <div id="tide-chip" class="hud-tide glass-capsule" role="status" hidden></div>
           <button id="world-info-button" data-world="info" class="hud-info round-glass" aria-haspopup="dialog" aria-controls="world-info" aria-label="ข้อมูลการเดินทางและวิธีเล่น">${icon('info')}</button>
         </div>
         </div>
@@ -172,6 +174,7 @@ export class WorldUI {
           case 'preset': if (!this.view?.locked) { const slot = Number(button.dataset.slot); this.picked = undefined; this.lanePick = undefined; this.host.preset(slot); this.root.querySelector<HTMLElement>(`#${this.teamPrefix()}-preset-${slot}`)?.focus(); } break;
           case 'team-pick': this.pickMember(button.dataset.hero, button.dataset.side as 'deployed' | 'reserve'); break;
           case 'lane-pick': case 'lane-cell': this.pickLane(button.dataset.hero, button.dataset.lane as Lane); break;
+          case 'wait-tide': if (!this.view?.locked) this.host.waitTide(); break;
           case 'withdraw': if (this.view?.locked) break;
             if (!this.confirmWithdraw) { this.confirmWithdraw = true; this.renderCamp(); this.root.querySelector<HTMLElement>('#withdraw')?.focus(); break; }
             this.confirmWithdraw = false; dialog('#camp-dialog').close(); this.host.withdraw(); break;
@@ -310,18 +313,24 @@ export class WorldUI {
     if (map.id === this.map.id) return;
     this.map = map; this.eliteArt = eliteArt; this.width = map.rows[0]!.length; this.previous = undefined;
     const grid = this.root.querySelector<HTMLElement>('#map-grid')!;
-    grid.style.setProperty('--cols', String(this.width)); grid.style.setProperty('--rows', String(map.rows.length));
+    grid.style.setProperty('--cols', String(this.width)); grid.dataset.art = isLakeArt(map) ? 'lake' : 'base'; grid.style.setProperty('--rows', String(map.rows.length));
     grid.querySelector('.floor-layer')!.innerHTML = this.floorCells();
     const token = this.root.querySelector('#party-token')!;
     const sprites = this.root.querySelector('#sprite-layer')!; sprites.innerHTML = this.staticSprites(); sprites.append(token);
     this.root.querySelector('#fog-layer')!.innerHTML = ''; this.fogCells = []; setHtml(this.root.querySelector('#hint-layer')!, '');
     this.root.querySelector('#map-name')!.textContent = map.name;
   }
+  // Lake water tiles carry their high-tide and causeway frames; the CSS swaps by `data-tide` and `.causeway` (the base frame is low tide).
+  private waterVars(x: number, y: number): string {
+    const h = tileFrame(this.map, lakeHighFrame(this.map, { x, y })); const c = tileFrame(this.map, 'causeway');
+    return `;--hx:${h.x / SOURCE_TILE};--hy:${h.y / SOURCE_TILE};--cx:${c.x / SOURCE_TILE};--cy:${c.y / SOURCE_TILE}`;
+  }
   private floorCells(): string {
     let html = '';
     for (let y = 0; y < this.map.rows.length; y++) for (let x = 0; x < this.width; x++) {
-      const frame = tileset[floorFrame(this.map, { x, y })]!;
-      html += `<div class="tile t-${tileAt(this.map, { x, y })!.kind}" style="--x:${x};--y:${y};--fx:${frame.x / SOURCE_TILE};--fy:${frame.y / SOURCE_TILE}"></div>`;
+      const frame = tileFrame(this.map, floorFrame(this.map, { x, y }));
+      const water = waterAt(this.map, { x, y });
+      html += `<div class="tile t-${tileAt(this.map, { x, y })!.kind}${water ? ` water ${water}` : ''}"${water ? ` data-cell="${x},${y}"` : ''} style="--x:${x};--y:${y};--fx:${frame.x / SOURCE_TILE};--fy:${frame.y / SOURCE_TILE}${water ? this.waterVars(x, y) : ''}"></div>`;
     }
     return html;
   }
@@ -347,12 +356,12 @@ export class WorldUI {
   // 3C puzzle pieces, built once; renderPuzzles() updates them from the committed state.
   private puzzleSprites(x: number, y: number): string {
     const P = this.map.puzzles; const at = (q: Point) => q.x === x && q.y === y; const pos = `style="--x:${x};--y:${y};z-index:${y * 3 + 1}"`;
-    const opening = () => { const f = tileset[openingFrame(this.map, { x, y })]!; return `--fx:${f.x / SOURCE_TILE};--fy:${f.y / SOURCE_TILE}`; };
+    const opening = () => { const f = tileFrame(this.map, openingFrame(this.map, { x, y })); return `--fx:${f.x / SOURCE_TILE};--fy:${f.y / SOURCE_TILE}`; };
     let html = '';
     for (const r of P.runes) {
       const i = r.stones.findIndex(at);
       if (i >= 0) html += `<span class="rune-stone sprite" data-cell="${x},${y}" data-rune="${r.id}" data-index="${i}" data-glyph="${r.stones[i]!.glyph}" aria-hidden="true" ${pos}></span>`;
-      if (at(r.door)) html += `<span class="puzzle-door sprite" data-cell="${x},${y}" data-door="${r.id}" data-kind="runes" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}">${r.stones.map((s, n) => `<i class="door-glyph" data-glyph="${s.glyph}" style="--n:${n}"></i>`).join('')}</span>`;
+      if (at(r.door)) html += `<span class="puzzle-door sprite" data-cell="${x},${y}" data-door="${r.id}" data-kind="runes" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}">${(this.map.tide ? [...r.stones].reverse() : r.stones).map((s, n) => `<i class="door-glyph${this.map.tide ? ' mirrored' : ''}" data-glyph="${s.glyph}" style="--n:${n}"></i>`).join('')}</span>`;
     }
     for (const l of P.levers) {
       const i = l.levers.findIndex(at);
@@ -366,6 +375,11 @@ export class WorldUI {
     const sec = P.secrets.find(at);
     if (sec) html += `<span class="secret-wall sprite" data-cell="${x},${y}" data-secret="${sec.id}" style="--x:${x};--y:${y};z-index:${y * 3 + 1};${opening()}"></span>`;
     // 3D: a glowing herb for the herbalist's side quest (picked once per run).
+    // Map 4: moon lanterns (lit once per run) and lost notes (picked up once per run).
+    const lantern = this.map.lanterns?.find(at);
+    if (lantern) html += `<span class="lantern sprite" data-cell="${x},${y}" data-lantern="${lantern.id}" ${pos}><i></i></span>`;
+    const note = this.map.notes?.find(at);
+    if (note) html += `<span class="lost-note sprite" data-cell="${x},${y}" data-note="${note.id}" ${pos}><i></i></span>`;
     const herb = this.map.herbs.find(at);
     if (herb) html += `<span class="herb sprite" data-cell="${x},${y}" data-herb="${herb.id}" ${pos}><i class="map-prop herb-glow"></i><b class="map-prop"></b></span>`;
     return html;
@@ -384,6 +398,10 @@ export class WorldUI {
     });
     this.root.querySelectorAll<HTMLElement>('.secret-wall').forEach(el => el.classList.toggle('found', s.secrets.includes(el.dataset.secret!)));
     this.root.querySelectorAll<HTMLElement>('.herb').forEach(el => el.classList.toggle('picked', s.herbs.includes(el.dataset.herb!)));
+    this.root.querySelectorAll<HTMLElement>('.lantern').forEach(el => el.classList.toggle('lit', !!s.lanterns?.includes(el.dataset.lantern!)));
+    this.root.querySelectorAll<HTMLElement>('.lost-note').forEach(el => el.classList.toggle('picked', !!s.notes?.includes(el.dataset.note!)));
+    // A sunk boulder's channel tile is a dry causeway: no water drawn over it.
+    this.root.querySelectorAll<HTMLElement>('.tile.water').forEach(el => { const [x, y] = el.dataset.cell!.split(',').map(Number); el.classList.toggle('causeway', !waterAt(this.map, { x: x!, y: y! }, s.solved)); });
   }
 
   render(view: WorldView): void {
@@ -400,6 +418,7 @@ export class WorldUI {
     setHtml(this.root.querySelector('#zone-name')!, `<span class="zone-title">${tile.kind === 'camp' ? 'แคมป์พักแรม' : zone?.name ?? ''}</span>${level !== undefined ? ` <span class="zone-level${danger ? ' danger' : ''}">Lv${level}${danger ? ' · อันตราย' : ''}</span>` : ''}`);
     this.root.querySelector<HTMLElement>('#zone-name')!.title = this.root.querySelector('#zone-name')!.textContent ?? '';
     const zoneKey = tile.kind === 'camp' ? 'camp' : tile.zoneId; if (this.root.dataset.zone !== zoneKey) this.root.dataset.zone = zoneKey;
+    this.renderTide(s);
     this.renderDanger(encounterChance(s, this.map), prev?.chance);
     this.renderParty(s);
     const all = goals(s, this.map); const done = all.filter(g => g.done).length; const next = all.find(g => !g.done);
@@ -505,6 +524,15 @@ export class WorldUI {
   // Member stats as they fight: the catalog entry scaled by the member's stars.
   private hero(id: string, s = this.view?.state): HeroDefinition { const base = this.heroes.find(h => h.id === id)!; return s ? wounded(starred(base, this.stars(s, id), this.map, levelOf(this.map, s), s.members[id]?.talents, s.members[id]?.gear, s.members[id]), s.members[id]?.wound) : base; }
   private starRow(n: number): string { return starRow(n, this.map.company.maxStars); }
+  // Map 4: the water level for the board (root `data-tide`, drives the water tiles) and the HUD chip with the steps left.
+  private renderTide(s: ExpeditionState): void {
+    const chip = this.root.querySelector<HTMLElement>('#tide-chip')!;
+    if (!this.map.tide) { delete this.root.dataset.tide; chip.hidden = true; return; }
+    const low = lowTide(s, this.map); const left = stepsToTurn(s, this.map); this.root.dataset.tide = low ? 'low' : 'high';
+    chip.hidden = false; chip.dataset.tide = low ? 'low' : 'high';
+    setHtml(chip, `${icon('rest')}<b>${low ? 'น้ำลง' : 'น้ำขึ้น'}</b><span>${low ? 'ขึ้น' : 'ลง'}ใน ${left} ก้าว${s.boat ? ' · มีเรือ' : ''}</span>`);
+    chip.setAttribute('aria-label', `${low ? 'น้ำลง ช่องน้ำตื้นเดินได้' : 'น้ำขึ้น ช่องน้ำตื้นท่วม'} · อีก ${left} ก้าวน้ำจะ${low ? 'ขึ้น' : 'ลง'}${s.boat ? ' · มีเรือข้ามน้ำได้ทุกช่วง' : ''}`);
+  }
   private renderCamp(): void {
     const s = this.view?.state; if (!s) return;
     const tab = (id: WorldUI['campTab'], label: string) => `<button id="camp-tab-${id}" data-world="camp-tab" data-tab="${id}" role="tab" aria-selected="${this.campTab === id}" class="${this.campTab === id ? 'active' : ''}">${label}</button>`;
@@ -523,6 +551,7 @@ export class WorldUI {
   }
   private campCare(s: ExpeditionState): string {
     const ready = canRest(s, this.map); const embers = s.resources.ember;
+    const tide = this.map.tide && canWaitTide(s, this.map) ? `<section class="camp-section tide-section"><h3>${icon('rest')} รอน้ำ</h3><p>ตอนนี้${lowTide(s, this.map) ? 'น้ำลง' : 'น้ำขึ้น'} · รอที่แคมป์จนน้ำ${lowTide(s, this.map) ? 'ขึ้น' : 'ลง'} (อีก ${stepsToTurn(s, this.map)} ก้าว) โดยไม่ต้องเดิน ไม่เสียอะไร</p><button id="wait-tide" data-world="wait-tide" class="secondary">${icon('rest')} รอให้น้ำ${lowTide(s, this.map) ? 'ขึ้น' : 'ลง'}</button></section>` : '';
     const fallen = rosterIds(s).filter(id => s.hp[id] === 0).map(id => this.hero(id));
     const reviveHp = (max: number) => Math.max(1, Math.ceil(max * this.map.camp.reviveHpPercent / 100));
     return `
@@ -532,7 +561,7 @@ export class WorldUI {
       <section class="camp-section"><h3>${icon('ember')} ชุบชีวิต <span class="camp-embers">ถ่านคืนชีพ ${embers}</span></h3>
         ${fallen.length ? `<ul class="revive-list">${fallen.map(h => { const ok = canRevive(s, this.map, h.id); return `<li>${portrait(h.id)}<span><b>${heroText[h.id]!.name}</b><small>ฟื้นด้วยเลือด ${reviveHp(h.maxHp)}/${h.maxHp}</small></span><button id="camp-revive-${h.id}" data-world="camp-revive" data-hero="${h.id}" class="secondary"${ok ? '' : ' disabled'} aria-label="ชุบ${heroText[h.id]!.name} ใช้ถ่านคืนชีพ 1">${ok ? 'ชุบ · ใช้ 1' : 'ไม่มีถ่าน'}</button></li>`; }).join('')}</ul>`
           : '<p>ไม่มีใครล้ม</p>'}
-        <p class="camp-note">ชุบได้ครั้งละ 1 คน ต่อถ่านคืนชีพ 1 ก้อน หาได้จากศึกและกล่องสมบัติ</p></section>`;
+        <p class="camp-note">ชุบได้ครั้งละ 1 คน ต่อถ่านคืนชีพ 1 ก้อน หาได้จากศึกและกล่องสมบัติ</p></section>${tide}`;
   }
   // Team presets on the map (owner 2026-11-06): saved at the camp, applied here outside battle among the members brought.
   private presetRow(s: ExpeditionState, prefix: string): string {
@@ -725,8 +754,10 @@ export class WorldUI {
     const sealed = questDone(s, this.map);
     // P05-02: an optional story quest (maps 1–2) shows its objectives and reward but seals nothing.
     const story = this.map.quest.optional && storyQuestText[this.map.id] ? `<h3 class="seal-title story-title">${icon('star')} ${storyQuestText[this.map.id]!.name} · ไม่บังคับ</h3><p class="map-quest-note">${storyQuestText[this.map.id]!.ask} · รางวัลครั้งเดียว ${rewardText(this.map.quest.optional.reward)}${this.view?.storyDone ? ' (รับแล้ว)' : ''}</p><ul class="goal-list seal-list story-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>` : '';
-    const seal = !this.map.quest.need || this.map.quest.optional ? story : `<h3 class="seal-title">${icon('boss')} ผนึกรอยแยก · ทำให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนท้าผู้คุม</h3><ul class="goal-list seal-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>`;
-    this.root.querySelector('#world-goals-content')!.innerHTML = `<ul class="goal-list">${goals(s, this.map).map(g => `<li class="${g.done ? 'done' : ''}">${icon(g.done ? 'check' : 'circle')}<span>${g.label}</span></li>`).join('')}</ul>${seal}<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>`;
+    // Map 4: a side story beside the seal (every objective in one run that comes home).
+    const side = this.map.story && storyQuestText[this.map.id] ? `<h3 class="seal-title story-title">${icon('star')} ${storyQuestText[this.map.id]!.name} · ไม่บังคับ</h3><p class="map-quest-note">${storyQuestText[this.map.id]!.ask} · รางวัลครั้งเดียว ${rewardText(this.map.story.reward)}${this.view?.storyDone ? ' (รับแล้ว)' : ''}</p><ul class="goal-list seal-list story-list">${this.map.story.objectives.map(o => `<li id="story-${o.id}" class="${objectiveDone(s, o) ? 'done' : ''}">${icon(objectiveDone(s, o) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>` : '';
+    const seal = !this.map.quest.need || this.map.quest.optional ? story : `<h3 class="seal-title">${icon('boss')} ${this.map.tide ? 'ผนึกศาลาจันทร์' : 'ผนึกรอยแยก'} · ทำให้ครบ ${this.map.quest.need} จาก ${this.map.quest.objectives.length} ก่อนท้า${this.map.tide ? this.map.bossName : 'ผู้คุม'}</h3><ul class="goal-list seal-list">${this.map.quest.objectives.map(o => `<li id="quest-${o.id}" class="${sealed.includes(o.id) ? 'done' : ''}">${icon(sealed.includes(o.id) ? 'check' : 'circle')}<span>${questLine(o, s)}</span></li>`).join('')}</ul>`;
+    this.root.querySelector('#world-goals-content')!.innerHTML = `<ul class="goal-list">${goals(s, this.map).map(g => `<li class="${g.done ? 'done' : ''}">${icon(g.done ? 'check' : 'circle')}<span>${g.label}</span></li>`).join('')}</ul>${seal}${side}<p class="world-stats">เดินแล้ว ${s.steps} ก้าว · ชนะ ${s.wins} ศึก · แพ้ ${s.defeats} ครั้ง</p>`;
     this.renderQuests();
   }
 
@@ -741,7 +772,7 @@ export class WorldUI {
     const order = ({ q, st }: typeof rows[number]) => st.claimed ? 2 : st.progress >= q.target ? 0 : 1;
     rows.sort((a, b) => order(a) - order(b));
     const card = ({ q, st }: typeof rows[number]) => {
-      const text = sideQuestText[q.kind], progress = Math.min(st.progress, q.target);
+      const text = mapQuestText[q.id] ?? sideQuestText[q.kind], progress = Math.min(st.progress, q.target);
       const status = st.claimed ? 'รับรางวัลแล้ว' : progress >= q.target ? 'ครบแล้ว · รับรางวัลที่ค่าย' : 'กำลังดำเนินการ';
       const task = { rareChests: `เปิดกล่องสมบัติหายาก ${q.target} กล่อง`, wins: `ชนะการต่อสู้ ${q.target} ครั้ง`, elites: `ปราบศัตรูหัวหน้า ${q.target} ตัว`, secrets: `ค้นหาทางลับ ${q.target} แห่ง`, herbs: `เก็บสมุนไพรเรืองแสง ${q.target} ต้น`, puzzles: `ไขกลไกโบราณ ${q.target} อย่าง` }[q.kind];
       return `<li class="map-quest" data-state="${st.claimed ? 'claimed' : progress >= q.target ? 'complete' : 'active'}"><div class="map-quest-heading"><h3>${text.name}</h3><span>${progress}/${q.target}</span></div><p>${task}</p><progress value="${progress}" max="${q.target}" aria-label="${text.name}">${progress}/${q.target}</progress><small>${status}</small></li>`;

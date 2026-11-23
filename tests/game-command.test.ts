@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { chapterOne as home } from '../src/content/world/chapter1';
 import { MAPS as maps } from '../src/content/world/maps';
+import { lakeMap } from '../src/content/world/chapter-lake';
 import { resolveCommand, currentActorId } from '../src/core/battle/engine';
 import type { Command } from '../src/core/battle/types';
 import { applyCommand, COMMAND_KINDS, isRejected, parseCommand, type CommandContext, type CommandKind, type GameCommand } from '../src/core/command/game-command';
@@ -28,7 +29,7 @@ import { raiseSkill, tradeTomes } from '../src/core/world/tomes';
 import type { Commander, Direction, ExpeditionState, Lane, Point, Profile, ProfileResult, WorldResult } from '../src/core/world/types';
 import {
   battleData, battleState, chooseEvent, chooseRunLoadout, draftOffers, draftPick, findTiles, finishBattle, learnRunTalent, move, moveMember, openChest,
-  recordBattle, recommendedLane, rest, revive, setLane, startPrologue, swapMembers, takeOff, tileAt, travel, usePotion, wear,
+  recordBattle, recommendedLane, rest, revive, setLane, startPrologue, swapMembers, takeOff, tileAt, travel, usePotion, wear, waitTide, newExpedition,
 } from '../src/core/world/world';
 
 // P09-02a: `applyCommand` must give exactly what the shell's direct calls gave (docs/design/p09/COMMAND_LAYER_TH.md).
@@ -149,6 +150,9 @@ const CASES: Record<CommandKind, Case> = {
   move: { game: () => runGame(), cmd: { kind: 'move', dir: openDir() }, direct: g => move(R(g), home, openDir(), lookup) },
   travel: { game: () => runGame({ visited: [key(campTile)] }), cmd: { kind: 'travel', to: campTile }, direct: g => travel(R(g), home, campTile) },
   rest: { game: () => hurt(atCamp({ restReady: true })), cmd: { kind: 'rest' }, direct: g => rest(R(g), home, lookup) },
+  // Map 4: a lake run at its first camp waits for the water to turn.
+  waitTide: { game: () => { const g = campGame(); const run = newExpedition(lakeMap, lookup, 5, { roster: g.profile.party, members: g.profile.members, campXp: g.profile.campXp }, true);
+    return { ...g, run: { ...run, position: findTiles(lakeMap, 'camp')[0]!, steps: 3 } }; }, cmd: { kind: 'waitTide' }, direct: g => waitTide(R(g), lakeMap) },
   revive: { game: () => { const g = atCamp(); const id = g.run!.roster.deployed[1]!; return { ...g, run: { ...g.run!, hp: { ...g.run!.hp, [id]: 0 }, resources: { ...g.run!.resources, ember: 1 } } }; },
     cmd: { kind: 'revive', heroId: 'tracer' }, direct: g => revive(R(g), home, lookup, 'tracer') },
   swapMembers: { game: withReserve, cmd: { kind: 'swapMembers', a: 'guardian', b: 'healer' }, direct: g => swapMembers(R(g), 'guardian', 'healer') },

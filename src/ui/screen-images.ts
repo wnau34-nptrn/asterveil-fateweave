@@ -3,7 +3,7 @@
 // URLs must match the ones the screens use exactly (CSS `url('/assets/…')` is rewritten to the same BASE_URL path).
 import type { Profile } from '../core/world/types';
 import { actorArt, artUrl, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, npcBustsUrl, npcStationsUrl, portraitsHalfUrl } from '../game/visuals/assets';
-import { fogFills, worldArtUrl } from '../game/visuals/world-art';
+import { fogFills, lakeUrl, worldArtUrl } from '../game/visuals/world-art';
 
 export interface ScreenImages { main: string[]; extra: string[] }
 const base = (): string => import.meta.env.BASE_URL;
@@ -23,16 +23,16 @@ export function campImages(profile: Pick<Profile, 'party' | 'company'>): ScreenI
 const fogLayersAll = [...fogFills, ...['n', 's', 'e', 'w'].map(d => `fog_edge_${d}`), ...['ne', 'nw', 'se', 'sw'].flatMap(d => [`fog_inner_${d}`, `fog_corner_${d}`])];
 const landmarks = ['landmark_camp', 'landmark_start', 'landmark_gate', 'landmark_gate_open', 'boss_pedestal', 'landmark_boss_cleared'];
 /** Map: floor tiles, props, fog and landmarks (shared by every map); the team's portraits are fetched ahead only. */
-export function worldImages(team: readonly string[] = []): ScreenImages {
+export function worldImages(team: readonly string[] = [], mapId?: string): ScreenImages {
   return {
-    main: ['tileset', 'decor', 'map_props', 'token_frame', ...fogFills, ...landmarks].map(worldArtUrl),
+    main: ['tileset', 'decor', 'map_props', 'token_frame', ...fogFills, ...landmarks].map(worldArtUrl).concat(mapId === 'moon-lake' ? [lakeUrl('tiles'), lakeUrl('decor')] : []),
     extra: uniq([...fogLayersAll.filter(l => !(fogFills as readonly string[]).includes(l)), 'step_hint', 'step_dust', 'puzzle', 'chests', 'items'].map(worldArtUrl).concat(teamPortraits(team))),
   };
 }
 
-export type BattleBackdrop = 'ruins' | 'forest' | 'riftline';
+export type BattleBackdrop = 'ruins' | 'forest' | 'riftline' | 'lake';
 /** The battle painting behind the whole battle view (`#battle-view[data-scene]` in game-feel.css). */
 export function battleBackdropUrl(scene: BattleBackdrop): string {
   return scene === 'ruins' ? artUrl('ruins') : `${base()}assets/art/battle_${scene}.webp`;
 }
-export const battleSceneOf = (mapId: string): BattleBackdrop => mapId === 'deep-forest' ? 'forest' : mapId === 'veil-frontier' ? 'riftline' : 'ruins';
+export const battleSceneOf = (mapId: string): BattleBackdrop => mapId === 'deep-forest' ? 'forest' : mapId === 'veil-frontier' ? 'riftline' : mapId === 'moon-lake' ? 'lake' : 'ruins';
