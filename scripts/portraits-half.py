@@ -12,7 +12,7 @@ from PIL import Image
 root = pathlib.Path(__file__).resolve().parent.parent
 art = root / 'public/assets/art'
 revs = {}
-for name in ['portraits', 'portraits_mercs', 'portraits_foes', 'portraits_foes2']:
+for name in ['portraits', 'portraits_mercs', 'portraits_foes', 'portraits_foes2', 'portraits_foes3']:
     src = art / f'{name}.webp'
     lossless = src.read_bytes()[12:16] == b'VP8L'
     im = Image.open(src).convert('RGBA')

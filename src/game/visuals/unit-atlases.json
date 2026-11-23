@@ -358,5 +358,68 @@
     "frames": 30,
     "decodedBytes": 7266304,
     "downloadBytes": 1850434
+  },
+  "tideslime": {
+    "image": "tideslime_lake.06940885c1e4.webp",
+    "atlas": "tideslime_lake.ac253824651a.json",
+    "width": 768,
+    "height": 1463,
+    "frames": 22,
+    "decodedBytes": 4494336,
+    "downloadBytes": 1132094
+  },
+  "mistwisp": {
+    "image": "mistwisp_lake.aac2200dcb53.webp",
+    "atlas": "mistwisp_lake.4eaad162eb60.json",
+    "width": 512,
+    "height": 2487,
+    "frames": 25,
+    "decodedBytes": 5093376,
+    "downloadBytes": 1155181
+  },
+  "stonecrab": {
+    "image": "stonecrab_lake.addc4c99b932.webp",
+    "atlas": "stonecrab_lake.bdf6f1928f3e.json",
+    "width": 512,
+    "height": 3599,
+    "frames": 22,
+    "decodedBytes": 7370752,
+    "downloadBytes": 1666784
+  },
+  "mirrorshade": {
+    "image": "mirrorshade_lake.ffa558dfa1ef.webp",
+    "atlas": "mirrorshade_lake.60a9e26ef7da.json",
+    "width": 1280,
+    "height": 1550,
+    "frames": 22,
+    "decodedBytes": 7936000,
+    "downloadBytes": 1580108
+  },
+  "shadowserpent": {
+    "image": "shadowserpent_lake.5de97021e69b.webp",
+    "atlas": "shadowserpent_lake.5424072abe96.json",
+    "width": 1918,
+    "height": 2182,
+    "frames": 38,
+    "decodedBytes": 16740304,
+    "downloadBytes": 4607310
+  },
+  "weepingsiren": {
+    "image": "weepingsiren_lake.f1e2dda0775f.webp",
+    "atlas": "weepingsiren_lake.589ef404155c.json",
+    "width": 1785,
+    "height": 2013,
+    "frames": 30,
+    "decodedBytes": 14372820,
+    "downloadBytes": 4100192
+  },
+  "waterspirit": {
+    "image": "waterspirit_lake.28b27a9332d8.webp",
+    "atlas": "waterspirit_lake.26d81051e26e.json",
+    "width": 1972,
+    "height": 1974,
+    "frames": 30,
+    "decodedBytes": 15570912,
+    "downloadBytes": 4377097
   }
 }

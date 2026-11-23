@@ -3,7 +3,7 @@ import {stageTiming} from '../../src/ui/battle-playback';
 import {miraActions,tomaActions,foeArts,foeIntents} from '../fixtures/unit-a4';
 test.skip(process.env.PLAYWRIGHT_PAGES==='true','source fixture explicitly checked in CI');
 const saved=(page:Page)=>page.evaluate(()=>localStorage.getItem('unit-a4-committed'));
-const sheetOf={foe_dew_slime:'dew',foe_ember_slime:'ember',foe_ruin_bat:'bat'} as const;
+const sheetOf={foe_dew_slime:'dew',foe_ember_slime:'ember',foe_ruin_bat:'bat',foe_tide_slime:'tideslime',foe_mist_wisp:'mistwisp',foe_stone_crab:'stonecrab',foe_mirror_shade:'mirrorshade'} as const;
 const contactOf=(clip:string)=>clip==='disengage'?26:clip==='skill'?13:5;
 const clipOf={mira:{attack:'attack',hinder:'attack',weakshot:'attack',pin:'attack',track:'attack',volley:'skill',disengage:'disengage'},toma:{attack:'attack',acid:'attack',bomb:'attack',smoke:'attack',haste:'skill',fury:'skill',catalyst:'skill'}} as const;
 async function ready(page:Page,query:string,hero='mira',foe='foe_dew_slime'){

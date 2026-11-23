@@ -1,0 +1,98 @@
+{
+  "water-veil_prepare": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      133
+    ],
+    "width": 144
+  },
+  "water-veil_peak": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      133
+    ],
+    "width": 156
+  },
+  "water-veil_settle": {
+    "anchor": "caster.chest",
+    "pivot": [
+      128,
+      133
+    ],
+    "width": 130
+  },
+  "surging-wave_prepare": {
+    "anchor": "target.feet",
+    "pivot": [
+      167,
+      211
+    ],
+    "width": 74
+  },
+  "surging-wave_peak": {
+    "anchor": "target.feet",
+    "pivot": [
+      167,
+      211
+    ],
+    "width": 94
+  },
+  "surging-wave_settle": {
+    "anchor": "target.feet",
+    "pivot": [
+      167,
+      211
+    ],
+    "width": 76
+  },
+  "great-wave_prepare": {
+    "anchor": "whole_hero_side.actual_target_feet",
+    "pivot": [
+      128,
+      211
+    ],
+    "width": 93
+  },
+  "great-wave_peak": {
+    "anchor": "whole_hero_side.actual_target_feet",
+    "pivot": [
+      128,
+      211
+    ],
+    "width": 104
+  },
+  "great-wave_settle": {
+    "anchor": "whole_hero_side.actual_target_feet",
+    "pivot": [
+      128,
+      211
+    ],
+    "width": 94
+  },
+  "reflection_prepare": {
+    "anchor": "summoned_slot.feet",
+    "pivot": [
+      128,
+      214
+    ],
+    "width": 67
+  },
+  "reflection_peak": {
+    "anchor": "summoned_slot.feet",
+    "pivot": [
+      128,
+      214
+    ],
+    "width": 80
+  },
+  "reflection_settle": {
+    "anchor": "summoned_slot.feet",
+    "pivot": [
+      128,
+      214
+    ],
+    "width": 73
+  }
+}

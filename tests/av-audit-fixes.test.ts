@@ -5,6 +5,7 @@ import type { BattleState, EncounterDefinition, TurnStage } from '../src/core/ba
 import { basicCues, basicWeapon } from '../src/game/visuals/basic-attack-fx';
 import { bossCues, bossMoves, chargeHolds, paintedAs } from '../src/game/visuals/boss-signature-fx';
 import art from '../src/game/visuals/boss-signature-art.json';
+import lakeArt from '../src/game/visuals/lake-boss-art.json';
 import { hitLift } from '../src/game/visuals/combat-effects';
 import { unitReactions } from '../src/game/visuals/unit-animation-map';
 import { unitClip, unitRelease, unitSample } from '../src/game/visuals/unit-frames';
@@ -101,7 +102,7 @@ describe('AV07 boss signature and charge holds', () => {
     for (const move of Object.keys(bossMoves)) {
       expect(names.has(move), move).toBe(true);
       // Map 4 stand-ins borrow an older move's three beats (`paintedAs`) until their own art arrives.
-      for (const beat of ['prepare', 'peak', 'settle']) expect(Object.keys(art)).toContain(`${(paintedAs[move] ?? move).toLowerCase().replace(/ /g, '-')}_${beat}`);
+      for (const beat of ['prepare', 'peak', 'settle']) expect(Object.keys({ ...art, ...lakeArt })).toContain(`${(paintedAs[move] ?? move).toLowerCase().replace(/ /g, '-')}_${beat}`);
     }
   });
   it('the Warden holds a charge only between a performed Rift Gathering and its Cataclysm, then clears', () => {

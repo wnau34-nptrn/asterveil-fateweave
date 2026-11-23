@@ -43,12 +43,12 @@ export const SPECIES = {
     moves: [move('Star Flame', 7, 'energy', 3), move('Star Flame', 7, 'energy', 2), move('Star Flame', 8, 'energy', 0)] },
   shardCrawler: { name: 'Shard Crawler', displayName: 'แมงมุมเศษผลึก', row: 'front', art: 'foe_shard_crawler', color: 0x7d5fc0, hp: 60, speed: 85,
     moves: [move('Crystal Stab', 10, 'physical', 0), move('Crystal Stab', 10, 'physical', 1), move('Crystal Stab', 11, 'physical', 0)] },
-  // Map 4 ทะเลสาบเงาจันทร์ (2026-11-22, draft): recoloured stand-ins until the lake art arrives (CHAPTER1_MAPS_TH.md §3).
-  tideSlime: { name: 'Tide Slime', displayName: 'สไลม์น้ำ', row: 'back', assassin: true, art: 'foe_ember_slime', color: 0x6fb8e8, hp: 34, speed: 90,
+  // Map 4 ทะเลสาบเงาจันทร์ (2026-11-22, draft): painted by ART-UNIT-ANIMATION-LAKE-001 (CHAPTER1_MAPS_TH.md §3).
+  tideSlime: { name: 'Tide Slime', displayName: 'สไลม์น้ำ', row: 'back', assassin: true, art: 'foe_tide_slime', color: 0x6fb8e8, hp: 34, speed: 90,
     moves: [move('Water Spit', 8, 'energy', 2), move('Water Spit', 8, 'energy', 3), move('Water Spit', 9, 'energy', 0)] },
-  mistWisp: { name: 'Mist Wisp', displayName: 'ภูตหมอกน้ำ', row: 'back', art: 'foe_rift_wisp', color: 0x9fd6e6, hp: 36, speed: 115,
+  mistWisp: { name: 'Mist Wisp', displayName: 'ภูตหมอกน้ำ', row: 'back', art: 'foe_mist_wisp', color: 0x9fd6e6, hp: 36, speed: 115,
     moves: [move('Mist Needle', 8, 'energy', 3), move('Mist Needle', 8, 'energy', 2), move('Mist Needle', 9, 'energy', 3)] },
-  stoneCrab: { name: 'Stone Crab', displayName: 'ปูเกราะหิน', row: 'front', art: 'foe_shard_crawler', color: 0x7f8f9a, hp: 72, speed: 65,
+  stoneCrab: { name: 'Stone Crab', displayName: 'ปูเกราะหิน', row: 'front', art: 'foe_stone_crab', color: 0x7f8f9a, hp: 72, speed: 65,
     moves: [move('Pincer', 10, 'physical', 0), move('Pincer', 11, 'physical', 1), move('Pincer', 10, 'physical', 0)] },
 } as const satisfies Record<string, Species>;
 

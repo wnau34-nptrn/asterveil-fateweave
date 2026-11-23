@@ -373,7 +373,7 @@ export const eliteShadowSerpent: EncounterDefinition = {
   ...veilSiege, id: 'elite-shadow-serpent', version: 1, level: 12, name: 'อสรพิษเงา',
   rules: barkRules,
   enemies: [...serpentWisp.enemies,
-    { id: 'f1', row: 'front', large: true, boss: true, speed: 95, name: 'Shadow Serpent', displayName: 'อสรพิษเงา', maxHp: 260, color: 0x3b4f7a, art: 'foe_tusker', traits: ['veilguard'] }],
+    { id: 'f1', row: 'front', large: true, boss: true, speed: 95, name: 'Shadow Serpent', displayName: 'อสรพิษเงา', maxHp: 260, color: 0x3b4f7a, art: 'foe_shadow_serpent', traits: ['veilguard'] }],
   intents: [...softened(serpentWisp.intents, ['b2'], 80),
     { sourceId: 'f1', targetSlot: 1, name: 'Shadow Fang', damage: 26, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 3, name: 'Venom Spit', damage: 24, kind: 'energy' },
@@ -387,7 +387,7 @@ const sirenCrab = foes(12, [['f1', S.stoneCrab]]);
 export const eliteWeepingSiren: EncounterDefinition = at80({
   ...veilSiege, id: 'elite-weeping-siren', version: 1, level: 12, name: 'นางเงือกร้องไห้',
   enemies: [...sirenCrab.enemies,
-    { id: 'b1', row: 'back', large: true, speed: 105, name: 'Weeping Siren', displayName: 'นางเงือกร้องไห้', maxHp: 170, color: 0x7fb0d8, art: 'foe_riftweaver' }],
+    { id: 'b1', row: 'back', large: true, speed: 105, name: 'Weeping Siren', displayName: 'นางเงือกร้องไห้', maxHp: 170, color: 0x7fb0d8, art: 'foe_weeping_siren' }],
   intents: [...sirenCrab.intents,
     { sourceId: 'b1', targetSlot: 2, name: 'Tide Lash', damage: 24, kind: 'energy' },
     { sourceId: 'b1', targetSlot: 0, name: 'Weeping Song', damage: 15, kind: 'energy', all: true },
@@ -398,13 +398,13 @@ export const eliteWeepingSiren: EncounterDefinition = at80({
 // Surging Wave on the front slot (unstoppable: Guard/taunt/barriers soften it) and tide lashes. At 50% it calls a
 // reflection — a shade of the party (weak hits) — and its waves reach everyone. A stone crab and a mist wisp guard it.
 const spiritGuard = foes(13, [['f2', S.stoneCrab], ['b3', S.mistWisp]]);
-const mirrorShade = { id: 'b2', row: 'back', reserve: true, speed: 100, name: 'Mirror Shade', displayName: 'เงาสะท้อน', maxHp: 70, color: 0x5a6b8c, art: 'foe_hunter' } as const;
+const mirrorShade = { id: 'b2', row: 'back', reserve: true, speed: 100, name: 'Mirror Shade', displayName: 'เงาสะท้อน', maxHp: 70, color: 0x5a6b8c, art: 'foe_mirror_shade' } as const;
 export const waterSpirit: EncounterDefinition = at80({
   ...veilSiege, heroes: fiveHeroes, id: 'water-spirit', version: 1, level: 13, name: 'ศึกภูตธารา',
   phases: [{ sourceId: 'f1', below: 50, summon: ['b2'], name: 'Reflection' }],
   rules: barkRules,
   enemies: [...spiritGuard.enemies, mirrorShade,
-    { id: 'f1', row: 'front', large: true, boss: true, speed: 85, name: 'Water Spirit', displayName: 'ภูตธารา', maxHp: 420, color: 0x6fc6e0, art: 'foe_sentinel', traits: ['veilguard'] }],
+    { id: 'f1', row: 'front', large: true, boss: true, speed: 85, name: 'Water Spirit', displayName: 'ภูตธารา', maxHp: 420, color: 0x6fc6e0, art: 'foe_water_spirit', traits: ['veilguard'] }],
   intents: [...softened(spiritGuard.intents, ['f2', 'b3'], 75),
     { sourceId: 'b2', targetSlot: 1, name: 'Mirror Strike', damage: 12, kind: 'physical' },
     { sourceId: 'b2', targetSlot: 3, name: 'Mirror Strike', damage: 12, kind: 'physical' },
@@ -420,8 +420,8 @@ export const waterSpirit: EncounterDefinition = at80({
   ],
 });
 
-// Map 4 sets wear older foes' bodies as stand-ins; the per-body audits (tests/unit-a*.test.ts) skip them until the lake art arrives.
-export const LAKE_STANDINS: ReadonlySet<string> = new Set(['lake-slimes', 'lake-mist', 'crab-wall', 'isle-host', 'pavilion-mist', 'elite-shadow-serpent', 'elite-weeping-siren', 'water-spirit']);
+// Map 4 encounters still awaiting dedicated body art. The per-body audits skip any stand-ins.
+export const LAKE_STANDINS: ReadonlySet<string> = new Set();
 
 // World Bosses (balanced on written slots, P11-05) drop the assassin aims their court kinds carry (enemy aim B, owner 2026-11-19).
 function noAims(e: EncounterDefinition): EncounterDefinition {

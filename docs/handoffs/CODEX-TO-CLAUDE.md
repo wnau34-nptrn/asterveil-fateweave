@@ -1,3 +1,55 @@
+## 2026-11-23 — Integrate the Water Spirit semi-chibi motion (Codex · #345 → claude/map4-lake-foes)
+- Owner: “อนุมัติ” on the eight 390px motion previews from art PR #346. Integrated the 30-frame body, matching fallback still and HUD portrait into phase 4 with the existing six move timings and VFX.
+- 768px cells losslessly packed in 1972×1974. Worst five-hero field including the lake-only VFX uses 62.8/64 MiB. Presentation coverage 6/6 and Chromium lake-boss captures 8/8 passed. Animated and fallback bounds agree within 1px at 390px. [Updated clips and budget](../combat-presentation/lake-boss-slice/README_TH.md).
+- Phase 2 ordinary-foe motion and map 4 screen approvals are tracked separately.
+
+## 2026-11-23 — Water Spirit semi-chibi motion (Codex · art PR #346)
+- Owner approved the 390px standing preview and requested new animation (“อนุมัติ ต้องทำ animation ใหม่”). [Art and eight runtime preview clips](https://github.com/wnau34-nptrn/asterveil-fateweave/blob/c2ed3c8c93e2890609379df14d2f81d7efae0633/incoming/ART-UNIT-ANIMATION-LAKE-BOSS-CHIBI-002/NOTES.md) cover the six existing moves, idle, hit and down.
+- 29/29 moving frames pass the head-scale audit. The 768px body packs losslessly at 1979×1974 with the documented shelf layout. Chromium preview passed eight 390×844 resolver/VFX scenarios.
+- Pending owner review of the new motion. Claude intake target is #345; use the documented shelf layout and derive fallback/portrait from the approved seed. The existing runtime motion is still in #345.
+
+## 2026-11-23 — Water Spirit semi-chibi concept (Codex · #345)
+- Owner feedback “ดีกว่าเดิมเยอะเลย” followed by “บันทึกใน github ด้วย”. Saved the [standing concept and original PNG](../../incoming/ART-MAP4-WATER-SPIRIT-CHIBI-001/README_TH.md) as the preferred art reference.
+- Verified the PNG decodes as RGBA with transparency, matches the delivered source byte for byte, and documented its SHA-256. Scope is concept archival. Runtime motion approval remains pending for #345.
+
+## 2026-11-23 — Scale the Water Spirit’s attendants (Codex · #345 → claude/map4-lake-foes)
+- Owner flagged that the attendants looked larger than the boss. Mist Wisp, Stone Crab and Mirror Shade now match the painted scale of Rift Wisp, Shard Crawler and Vargoth Hunter respectively. Still and animated frames share scale and sole. Reflection keeps its shade clear of the right field edge.
+- Replaced all eight 390px clips. Chromium checks compare painted bounds with the boss and verify the summoned shade is inside the viewport. Typecheck, lint, build, presentation coverage and npm test (2270 passed, 24 skipped) passed. [Updated clips](../combat-presentation/lake-boss-slice/README_TH.md).
+- Pending owner motion approval for #345.
+
+## 2026-11-22 — Map 4 Water Spirit art and VFX (Codex · codex/map4-lake-boss → claude/map4-lake-foes)
+- Owner selected Tide Lash R2, Undertow R1 and Reflection R1 (“ทำตามที่คุณแนะนำ”) and approved “ใช้ runtime 768 px (แนะนำ)”. Verified 21 files from #339. Preserved sole and displayed scale, with six moves, hit/down and still/portrait.
+- Four encounter-only VFX families route from real events. Water Veil peaks on healing, and Reflection keeps the caster's recover frames while filling the actual summon slot.
+- Typecheck, lint, build and coverage 6/6 passed. Full unit run 2268 passed with one audit of obsolete stand-in aliases fixed and rerun in a 129/129 focused pass. Chromium 390px clips 8/8, A11 texture release and Call the Court passed.
+- Worst five-hero animation plus dedicated boss FX 60.1 MiB / 17.1 MB. Awaiting owner motion approval. [Review clips](../combat-presentation/lake-boss-slice/README_TH.md).
+
+## 2026-11-22 — Map 4 phase 4 motion choices (Codex · claude/map4-lake-foes)
+- Owner: “ทำตามที่คุณแนะนำ” for Tide Lash R2, Undertow R1, Reflection R1. This supersedes the earlier all-R1 pick.
+- Verified SHA-256 and RGBA decode for all 21 selected input images from #339, including the Tide Lash R2 strip. Documentation passed git diff --check.
+- Next: phase 4 runtime intake on `codex/map4-lake-boss` per the [handoff](CODEX-MAP4-LAKE-CONTINUE-TH.md).
+
+## 2026-11-22 — Map 4 phase 3 motion approval (Codex · #344 → claude/map4-lake-foes)
+- Owner: “อนุมัติ” on the revised 390px Shadow Serpent and Weeping Siren R1 clips. Approved presentation source: `52f2fd0`.
+- Same source as the size review below. Approval documentation checked with git diff --check. Quality and validate passed. Merge commit `fe213ea`.
+- Phase 4 owner choice: “R1 ทั้งสามท่า” for Tide Lash, Undertow and Reflection. Intake source SHA-256 matched for 21 selected body/VFX files from #339.
+
+## 2026-11-22 — Map 4 phase 3 elite size review (Codex · #344 → claude/map4-lake-foes)
+- The owner asked to compare the new enemies with existing foes. At the same slot size, standing art is now +1.6% vs Tusker for Shadow Serpent and −1.1% vs Rift Weaver for Weeping Siren. Still and animated figures share the same scale.
+- The field fits each elite’s painted right edge. The Siren review clips show her in her real back-row slot. Replaced all nine 390px clips, with 9/9 Chromium captures. Typecheck, lint, build, presentation coverage 6/6 and npm test (2262 passed, 24 skipped) passed. [Review clips](../combat-presentation/lake-elites-slice/README_TH.md).
+- Pending: owner motion approval for #344. Phase 4 still waits for the owner’s R1/R2 selections.
+
+## 2026-11-22 — Map 4 lake art phase 3 (Codex · codex/map4-lake-elites → claude/map4-lake-foes)
+- Owner selected R1 for both elites (“เฟส 3 เลือก R1 ตามที่แนะนำ”). Imported the Shadow Serpent and Weeping Siren from art PR #340. Each of the 7 encounter intents has its own lossless strip. Added hit/down and still/portrait cells 4–5. Water Spirit is the remaining stand-in.
+- Verified source hashes and reconstructed frame pixels. Coverage: 48 identities. Elite encounter textures pass 64 MiB (48.3 / 48.2 MiB). Chromium 390px captures passed 9/9. [Clips and evidence](../combat-presentation/lake-elites-slice/README_TH.md).
+- Checks: typecheck, lint, build, presentation coverage 6/6, full unit run 2258 passed with two failures corrected and verified in a 73/73 focused rerun. The World Boss rules test now checks Coil Gathering by encounter rather than art status.
+- Phase 3 awaits the owner’s motion approval and PR CI before merge. Phase 4 waits for the owner’s R1/R2 picks for Tide Lash, Undertow and Reflection.
+
+## 2026-11-22 — Map 4 lake art phase 2: tide slime, mist wisp, stone crab, mirror shade (Sonnet; claude/map4-lake-foes, based on #337)
+- Imports ART-UNIT-ANIMATION-LAKE-001 R1 (Codex #340, checked) for the four plain foes: `scripts/build-lake-foes.py` (hash-checked inputs, lossless pack, pixel-exact rebuild) → 4 atlases + new still/portrait sheet `foes3`; `assets.ts` (`foes3`, actorArt, figureTops), `unit-frames.ts` / `unit-animation-map.ts` (shared layout; wisp hovers 22–24), species + mirror shade art keys, `LAKE_STANDINS` now only serpent, siren, Water Spirit. No rules/save/number changes.
+- Tests: typecheck, eslint, npm test, coverage:presentation (identities 42→46), new tests/unit-lake-foes.test.ts, A4 hover test lists the lake wisp; real 390px clips in `docs/combat-presentation/lake-foes-slice/` (README_TH.md).
+- Notes: portraits are square crops of the seeds (no painted bust from Codex); crab/shade atlases 7.0/7.6 MiB decoded (> 6 MiB guideline, encounter totals pass). Owner motion approval pending.
+- Next: phase 3 (serpent + siren, owner chose R1), phase 4 (boss + VFX).
+
 ## 2026-11-22 — Map 4 lake art phase 1: world tiles, decor, battle scene imported (Sonnet; claude/map4-lake-art, based on #337)
 - Owner: "ดำเนินการเฟส 1 ได้ ส่วนเฟส 3 เลือก R1 ตามที่แนะนำ" → phase 3 uses R1 (serpent coiled on stone, siren sitting on a rock). Plan: `MAP4-LAKE-ART-IMPORT-PHASES-TH.md`.
 - ART-WORLD-LAKE-001 (Codex PR #338, files copied as shipped, lossless): `lake_tiles.webp` 6x5, `lake_decor.webp` 3x3, `battle_lake.webp`; frames in `src/content/world/lake-{tiles,decor}.json`. `world-art.ts` (`isLakeArt`, `tileFrame`, `lakeHighFrame`, lake `floorFrame`/`decorAt`), `world-ui.ts` (`#map-grid[data-art=lake]`, water tiles carry high-tide + causeway frames), `world.css` (low-tide frame + high-tide frame fading in on `data-tide`, painted lanterns from the decor atlas), `screen-images.ts` + `game-feel.css` (`lake` battle scene, preload), LQIP regenerated. Rules/saves/numbers unchanged.
@@ -155,55 +207,4 @@
 - Content (`catalog.ts` `withAims`, `species.ts` `assassin`): C non-boss front-row foes `pack`; D bosses `weakest` every third move per phase (every second lost advisor 60%-HP fights); B Ember Slime + Spore Puff energy moves `support` (map-3 Rift Wisp dropped for the same reason). World Bosses, the tutorial first-clash and the reference veil-siege (scripted by combat/status specs) keep slots. Changed encounters +1 version. UI tags the rule on announced moves and in foe notes.
 - Proposal + 7-variant probe: [ENEMY_AIM_PROPOSAL_TH.md](../design/ENEMY_AIM_PROPOSAL_TH.md), `tests/probe/enemy-aim.test.ts`. Tests: `tests/enemy-aim.test.ts`, full Vitest 2049, `npm run sim` 29/29 with the campaign gate; casual explorer map-2 first clear 88% → 79% (gate accepts by group). Not owner-playtested.
 
-## 2026-11-18 — Battle HUD: status icons under HP, glass inspector, top-row spacing (Opus; claude/battle-hud-status-spacing → game branch)
-- Owner request with a 390px battle screenshot: (1) buff/debuff icons move from beside the field HP track to a band under it; (2) the unit inspector (กำลังดู) becomes glass like the turn strip; (3) the top row comes down so its gap to the middle row matches the middle→bottom gap.
-- `field-layout.ts`: each row reserves a 13px status band (dropped on fields too short for 44px figures, where icons stay beside the track), up to 4 icons per unit; each side's top row drops to its own middle row, held up by another side's large figure only where its painted middle ¾ reaches under the track. Presentation only: no rules/save/content change.
-- Tests: field-layout unit test (rule updated + new spacing test), full Vitest (2041), typecheck, lint, build, Chromium status/battle-hud/team-five specs (23). Shot: `docs/validation/battle-hud-2026-11-18/battle-390.png`. Not yet approved by the owner visually.
-
-## 2026-11-18 — P11-05 trio go-live, OD-52 (Opus; claude/p11-05-trio-go-live → game branch; [PR #301](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/301))
-- Owner: “ไม่ต้องสนใจเส้นตายทดสอบภาพนอกอะไรนั่น” + “ทำข้อ 1 เลย” → OD-52 replaces OD-51's Warden-until-test part. `trio.from = 2969` (Mon 23 Nov 06:00 Bangkok, first reset after release); week 2968 stays the Warden's.
-- No number changes: the sim (29 passed) and the probe on the shipped rules match the coach evidence (400 HP, half-coach 20 accounts: Morvane 50% in 98% of weeks, killed in 47–48%). Save v65 and encounter versions are unchanged; the content version changes, and dev API + Pages deploy together on push.
-- `cloudflare-load.yml` gains a `trio=now` input (staging copy only). The run on the PR branch with 4×5 accounts on three bars passed: 100 attempts, identical retries, no 429/5xx, worst 0.78 s. [Validation](../validation/p11-05-go-live/README_TH.md).
-- P11-04 Warden tests moved earlier on the calendar. A new server test covers the shipped switch (Warden attempts ÷ 3 per bar). Tests: typecheck, lint, the full Vitest suite (2040), build, coverage, Chromium world-boss-trio-ui + world-boss-p11 (3).
-- Open: real-player coach uptake; first real switch on the dev API on 23 Nov. Older handoff entries moved to archive/2026-11-18.
-
-## 2026-11-18 — Compact title and Setup (Codex; fix/compact-title-setup → game branch; [PR #300 and merge commit](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/300))
-- Owner approved implementation of the portrait mockups. The current artwork stays full-bleed with one bottom HUD action and top-right Setup. Reuses game audio prefs, account/recovery, feedback, privacy, and restart confirmation.
-- A pending local-save import remains the primary action, and save details move into Setup. Blocking save/connection messages stay discoverable. #234 remains separate.
-- Tests cover responsive frame, sound persistence, Escape and focus, account/feedback/import flows, and restart without save loss on cancellation. Playwright Chromium used because Browser plugin unavailable. See PR checks.
-
-## 2026-11-18 — World Boss pre-fight guides (Codex; fix/world-boss-prefight-guide → game branch; [PR #299 and merge commit](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/299))
-- Owner asked for all three bosses to show tactics before battle. The Fight tab displays one guide below the current selection and scrolls it into view while preserving selection focus. The Bosses tab shares the same advice.
-- Kragmor explains the armour and Mountain Fall, Valdrakk explains Bash on Wing Gathering and a fallback for Dive, and Morvane explains the court and the damage-credit requirement. Confirmed Bash targets physical charge and Sigil targets energy.
-- Regression coverage checks the three selections at 390px, the guide/Start association and unchanged attempt count. Warden stays for 14 Dec per OD-51. Checks linked in the PR.
-
-## 2026-11-18 — Morvane coaching (Codex; fix/morvane-advisor → game branch; [PR #298 and merge commit](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/298))
-- Owner asked to implement the recommendations after #297. Add the optional Morvane battle coach and damage-credit guidance. The coach favors boss damage while preserving the general advisor's defensive and area skills.
-- Actual commands through the resolver and attempt validation. All 10 map-1 recruitment profiles scored and reached round 8. The original starter fixture went 36 → 123 damage. [Evidence and reproduction](../validation/p11-05-morvane-coach/README_TH.md).
-- At 400 HP/attempt and 50% coach adoption, 20 modeled accounts reach 50% in 98% of weeks and kill in 47–48%. Adoption is unmeasured. Warden stays per OD-51. No rules, boss numbers, save format or scheduling change.
-- Checks are linked in the PR. Browser coverage includes 390px Morvane hint toggle, ordinary and tutorial combat, and the Warden path.
-
-## 2026-11-18 — P11-05 step 6 (Codex; chore/p1105-step6-balance → game branch; [PR #297 and merge commit](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/297))
-- Resolver and server replay probe compared nine field teams, four bosses, basic attacks, advisor and boss-specific responses. [Results and reproduction](../validation/p11-05-step6/README_TH.md).
-- OD-51: activation gate did not pass. Morvane starter adds-first scores 0; advisor-based shared kill rate at 10–20 accounts is 3–17%. The court HP trial helps survival and the pressure route helps damage. Balance questions are in “ฝากถึง Claude”.
-- Warden stays, `trio.from` unset. Candidate week 2971 is 7 Dec 06:00 Bangkok. No trio staging run. Content hash `5278f631cd330bde`; the direct live API version read was blocked by the proxy.
-- Local typecheck, lint, build, coverage 6/6 and probe + trio rules/world/server 41/41 passed. Chromium Warden spec fixes the local clock to the prerelease boundary. Full release checks in PR #297. No runtime or approved asset changes.
-
-## 2026-11-18 — Asset intake audit (Codex; codex/asset-intake-audit → game branch)
-- Owner asked whether anything failed to enter the game. Read-only runtime audit of game c0e6319 (#295): no missing authorized trio artwork/routes; 19 file hashes, VFX lossless receipts and seven revision layers match.
-- Body/banner/emblem/item/stills/portraits/VFX are integrated via game PRs although original art PRs remain open. #292 stays unmerged. Trio is still gated by unset `trio.from`; step6 remains a separate task.
-- Real pending intake: #262 Warden banner, #169 continent, #234 compact title; #55/#53 await systems, #122 parked. #165 poses and #133 UX have separate game implementations. [Audit/scope](../validation/intake-audit/README_TH.md).
-- Checks: WB/coverage61, equip122 and Chromium390px24 passed; revision verify48 files + seven layers and lossless81 canvases passed. Direct live HTTP blocked by environment proxy; do not infer a game failure from that. No new visual/motion approval claimed.
-- Docs only; no art/runtime/rules/save/balance/timing or Thai move-name change. No additional imports or merges of old art PRs.
-
-## 2026-11-17 — World Boss own stills/portraits (Codex; PR #295; codex/wb-stills-portraits → game branch; squash commit: see PR)
-- Owner: “ชื่อท่าภาษาไทยไม่เอา”, “ดำเนินการเรื่องที่ยังค้างได้เลย”. Finish existing-art hookup only; no Thai move names, balance or scheduling changes.
-- Derived fallback stills from approved ready frames and cropped original seed portraits for Kragmor/Valdrakk/Morvane; removed Warden placeholder mapping. Separate 256px-cell lossless sheets, real alpha and reproducible provenance; original incoming/animation/VFX preserved.
-- Preserved field layout, sole, fallback→atlas scale and VFX anchors; source trim owns caption bounds. New Chromium390px loading/failure tests6/6, prior unit-loading3/3, unit2038/23 skipped, typecheck/lint/build, coverage6/6 passed. [Evidence/limits](../validation/wb-stills-portraits/README_TH.md).
-- Codex inspected six real-game stills; this is agent visual judgment, not owner direct viewing or continuous motion approval. PR merge requires quality+browser; existing Pages workflow publishes afterward, no Pages polling. #292 remains unmerged.
-- Next: P11-05 step6 simulation/probe in a separate task, not part of this presentation change.
-
-## 2026-11-17 — WB VFX owner acceptance / game intake (Codex; PR #294 → feature/fateweave-initial-prototype)
-- Owner: “อนุมัติ นำเข้าเกมได้”, following delegated review. #294 carries the #292 intake dependency plus #293’s7 clarity layers into the game; #292 itself is not merged. No unrelated work or Rise Beyond changes.
-- Local checks already passed: unit2038/23 skipped, browser WB18/18, fast/reduced6/6, typecheck/lint/build, coverage6/6, lossless81-frame audit. Merge is gated on PR quality + browser CI; the existing Pages workflow handles publication afterward (do not wait/poll Pages).
-- Owner acceptance is recorded; frame-based review limits remain explicit. [Evidence/receipt](../validation/wb-vfx-revision/README_TH.md). Rules/save/catalog/balance/timing remain unchanged.
+[รายการก่อนหน้านี้](archive/2026-11-22/CODEX-TO-CLAUDE.md)

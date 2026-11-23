@@ -1,12 +1,20 @@
 import type { BattleEvent, BattleState, EncounterDefinition, IntentDefinition, TurnStage } from '../../core/battle/types';
 import { enemyIntent, nextIntentOf, phaseMoves } from '../../core/battle/engine';
 import type { FxContext } from './bolt-fx';
-import art from './boss-signature-art.json';
+import legacyArt from './boss-signature-art.json';
+import lakeArt from './lake-boss-art.json';
+
+const art = { ...legacyArt, ...lakeArt };
 
 // Boss signature VFX and persistent charge telegraphs (AV07; ART-VFX-BOSS-SIGNATURE-001, one final design per move).
 // Every cue is chosen from resolver state/events: a charge or phase never paints damage, an all-party move paints only the
 // heroes it really struck, War Cry stays the Captain's offensive shout and Horn Charge/Stampede add no waiting turn.
 export const BOSS_ATLAS = 'boss-signature-fx';
+export const LAKE_BOSS_ATLAS = 'lake-boss-fx';
+export const lakeBossAtlasUrls = (): [string, string] => [`${import.meta.env.BASE_URL}assets/fx/lake_boss_fx.webp`, `${import.meta.env.BASE_URL}assets/fx/lake_boss_fx.json`];
+const lakeMoves = new Set(['Water Veil', 'Surging Wave', 'Great Wave', 'Reflection']);
+export const isLakeBossMove = (move: string | undefined): boolean => !!move && lakeMoves.has(move);
+export const bossAtlasFor = (move: string | undefined): string => isLakeBossMove(move) ? LAKE_BOSS_ATLAS : BOSS_ATLAS;
 export const bossAtlasUrls = (): [string, string] => [`${import.meta.env.BASE_URL}assets/fx/boss_signature_fx.webp`, `${import.meta.env.BASE_URL}assets/fx/boss_signature_fx.json`];
 type Route = 'charge' | 'single' | 'all' | 'caster' | 'summon';
 // Move (intent or phase name) → how it is placed. Names are the content's real intent/phase names.
@@ -18,17 +26,16 @@ export const bossMoves: Readonly<Record<string, Route>> = {
   'Titan Gathering': 'charge', 'Mountain Fall': 'single', 'Rift Quake': 'all', 'Fault Awakening': 'caster',
   'Wing Gust': 'single', 'Wing Gathering': 'charge', 'Worldshard Dive': 'all', 'Sky Rend': 'caster',
   'Severing Bolt': 'single', 'Fate Lash': 'single', 'Call the Court': 'summon', 'Shadow Tide': 'all', 'Severed Crown': 'caster',
-  // Map 4 stand-ins: placed like the warden's families and painted with their art (`paintedAs`) until the lake art arrives.
+  // Map 4 Water Spirit and Shadow Serpent.
   'Water Veil': 'caster', 'Surging Wave': 'single', 'Great Wave': 'all', Reflection: 'summon', 'Coil Gathering': 'charge', 'Crushing Coil': 'single',
 };
 // Moves whose layers are placed by the anchor recorded for each beat in boss-signature-art.json (the older families keep
 // their original placement below, unchanged).
 const anchored = new Set(['Titan Gathering', 'Mountain Fall', 'Rift Quake', 'Fault Awakening', 'Wing Gust', 'Wing Gathering', 'Worldshard Dive',
-  'Sky Rend', 'Severing Bolt', 'Fate Lash', 'Call the Court', 'Shadow Tide', 'Severed Crown']);
+  'Sky Rend', 'Severing Bolt', 'Fate Lash', 'Call the Court', 'Shadow Tide', 'Severed Crown', ...lakeMoves]);
 export const slug = (name: string): string => name.toLowerCase().replace(/ /g, '-');
 type Frame = keyof typeof art;
-export const paintedAs: Readonly<Record<string, string>> = { 'Water Veil': 'Rift Awakening', 'Surging Wave': 'Rift Cataclysm', 'Great Wave': 'Rift Wave', Reflection: 'Call the Rift',
-  'Coil Gathering': 'Rift Gathering', 'Crushing Coil': 'Horn Charge' };
+export const paintedAs: Readonly<Record<string, string>> = { 'Coil Gathering': 'Rift Gathering', 'Crushing Coil': 'Horn Charge' };
 const frame = (name: string, beat: 'prepare' | 'peak' | 'settle'): Frame | undefined => {
   const key = `${slug(paintedAs[name] ?? name)}_${beat}`; return Object.hasOwn(art, key) ? key as Frame : undefined;
 };
@@ -37,8 +44,11 @@ export function bossMove(turn: TurnStage): string | undefined {
   if (turn.side !== 'enemy' || !turn.intent || turn.events.some(e => e.type === 'cancel')) return;
   return Object.hasOwn(bossMoves, turn.intent.name) ? turn.intent.name : undefined;
 }
+const encounterHasMove = (data: EncounterDefinition, match: (move: string) => boolean): boolean =>
+  data.intents.some(i => match(i.name)) || !!data.phases?.some(p => match(p.name));
 export const usesBossSignature = (data: EncounterDefinition): boolean =>
-  data.intents.some(i => Object.hasOwn(bossMoves, i.name)) || !!data.phases?.some(p => Object.hasOwn(bossMoves, p.name));
+  encounterHasMove(data, move => Object.hasOwn(bossMoves, move) && !isLakeBossMove(move));
+export const usesLakeBossSignature = (data: EncounterDefinition): boolean => encounterHasMove(data, isLakeBossMove);
 
 // ---- Persistent waiting-turn telegraph ----
 // Held between a performed charge and its release. `unstoppable` (rigid toothed brackets) when the announced release is
@@ -72,6 +82,10 @@ export interface BossCue { move: string; beat: 'peak'; at: 'caster' | 'target' |
 export function bossCues(turn: TurnStage): BossCue[] {
   const move = bossMove(turn); if (!move) return [];
   const route = bossMoves[move]!, actor = turn.actorId;
+  if (move === 'Water Veil') {
+    const mend = turn.events.find(e => e.type === 'heal' && e.sourceId === actor && e.targetId === actor && (e.amount ?? 0) > 0);
+    return mend ? [{ move, beat: 'peak', at: 'caster', id: actor, event: mend, outcome: 'none' }] : [];
+  }
   if (route === 'charge') return turn.events.some(e => e.type === 'charge' && e.sourceId === actor) ? [{ move, beat: 'peak', at: 'caster', id: actor, outcome: 'none' }] : [];
   if (route === 'caster' || route === 'summon') {
     const phased = turn.events.some(e => e.type === 'phase' && e.sourceId === actor);
@@ -92,9 +106,10 @@ export type BossLookup = (id: string) => BossPoint | undefined;
 const NORMAL = 0;
 // Display width at a 390px field (Codex's suggested widths), scaled with the slot like the other painted families.
 const width = (ctx: FxContext, name: Frame) => art[name].width * fieldScale(ctx);
-function paint(ctx: FxContext, name: Frame, x: number, y: number): Phaser.GameObjects.Image {
-  const img = ctx.scene.add.image(x, y, BOSS_ATLAS, name), pivot = art[name].pivot;
-  img.setOrigin(pivot[0]! / 256, pivot[1]! / 256).setScale(width(ctx, name) / 256).setBlendMode(NORMAL);
+function paint(ctx: FxContext, name: Frame, x: number, y: number, size = 1): Phaser.GameObjects.Image {
+  const atlas = Object.hasOwn(lakeArt, name) ? LAKE_BOSS_ATLAS : BOSS_ATLAS;
+  const img = ctx.scene.add.image(x, y, atlas, name), pivot = art[name].pivot;
+  img.setOrigin(pivot[0]! / 256, pivot[1]! / 256).setScale(width(ctx, name) * size / 256).setBlendMode(NORMAL);
   img.setData('bossFrame', name); ctx.add(img); return img;
 }
 // Feet moves (Stampede) stand on the ground; everything else on the chest, the caster's just forward of it.
@@ -113,17 +128,38 @@ export function anchorPoint(p: BossPoint, anchor: string, scale = 1, offset: rea
     case 'caster.upper_back': return at(-p.size * .2, -h * .3);
     case 'caster.lower_hands': return at(p.size * .22, h * .08);
     case 'caster.upper_hands_safe': return at(p.size * .34, -h * .12);
-    case 'caster.feet': case 'target.feet': case 'whole_hero_side.actual_target_feet': return { x: at(0, 0).x, y: p.feetY + (offset[1] ?? 0) * scale };
+    case 'caster.feet': case 'target.feet': case 'whole_hero_side.actual_target_feet': case 'summoned_slot.feet': return { x: at(0, 0).x, y: p.feetY + (offset[1] ?? 0) * scale };
     default: return at(0, 0); // caster.chest, target.chest, whole_hero_side.actual_target_chests, summoned_slot.chest
   }
 }
 const fieldScale = (ctx: FxContext) => ctx.scale / (111 / 96);
 const spot = (ctx: FxContext, p: BossPoint, move: string, caster: boolean, name: Frame) => anchored.has(move)
   ? anchorPoint(p, art[name].anchor, fieldScale(ctx), (art[name] as { offset?: number[] }).offset) : legacySpot(p, move, caster);
+const greatWaveWidths = [1, .91, .8, .7, .6] as const;
+export function greatWaveScales(cues: readonly BossCue[], lookup: BossLookup): ReadonlyMap<string, number> {
+  return new Map(cues.filter(cue => cue.move === 'Great Wave').map(cue => ({ id: cue.id, x: lookup(cue.id)?.x ?? 0 }))
+    .sort((a, b) => b.x - a.x).map(({ id }, i) => [id, greatWaveWidths[i] ?? .6]));
+}
 export function bossPrepare(ctx: FxContext, turn: TurnStage, lookup: BossLookup, contactMs: number): boolean {
   const move = bossMove(turn), name = move && frame(move, 'prepare'), at = lookup(turn.actorId);
   if (!move || !name || !at) return false;
   if (ctx.reduced) return true;
+  if (isLakeBossMove(move)) {
+    const cues = bossCues(turn);
+    const scales = greatWaveScales(cues, lookup);
+    const veil = move === 'Water Veil';
+    const targets = veil ? [turn.actorId] : cues.map(cue => cue.id);
+    for (const id of targets) {
+      const target = lookup(id);
+      if (!target) continue;
+      const targetFx = { ...ctx, scale: Math.max(.7, Math.min(1.25, target.size / 96)) };
+      const p = spot(targetFx, target, move, veil, name);
+      const img = paint(targetFx, name, p.x, p.y, scales.get(id)).setAlpha(.2);
+      img.setData('bossPrepare', true);
+      ctx.scene.tweens.add({ targets: img, alpha: ctx.quiet ? .6 : .92, duration: Math.max(1, contactMs) });
+    }
+    return true;
+  }
   // A summon move gathers at each slot that really returns when that slot is drawn; a slot still empty (a fallen court
   // foe is not drawn until it returns) gathers at the caster's forward chest instead. Nothing returns: no cue.
   const summon = art[name].anchor === 'summoned_slot.chest' && bossMoves[move] === 'summon';
@@ -137,7 +173,19 @@ export function bossPrepare(ctx: FxContext, turn: TurnStage, lookup: BossLookup,
   }
   return true;
 }
-export function bossContact(ctx: FxContext, cue: BossCue, lookup: BossLookup, life: number): void {
+// A sealed turn resolves immediately. Show the interrupted gather during that same stage.
+export function sealedWaterVeil(ctx: FxContext, turn: TurnStage, lookup: BossLookup, life: number): void {
+  if (ctx.reduced || turn.side !== 'enemy' || turn.intent?.name !== 'Water Veil'
+    || !turn.events.some(e => e.type === 'cancel' && e.sourceId === turn.actorId)) return;
+  const target = lookup(turn.actorId);
+  if (!target) return;
+  const name = 'water-veil_prepare';
+  const p = spot(ctx, target, 'Water Veil', true, name);
+  const image = paint(ctx, name, p.x, p.y).setAlpha(ctx.quiet ? .65 : .85);
+  ctx.scene.tweens.add({ targets: image, alpha: 0, duration: Math.min(life, 210), onComplete: () => image.destroy() });
+}
+
+export function bossContact(ctx: FxContext, cue: BossCue, lookup: BossLookup, life: number, size = 1): void {
   const peak = frame(cue.move, 'peak'), settle = frame(cue.move, 'settle');
   // War Cry's cone leaves the Captain's forward chest (its pivot is the cone's emission edge); the wisps settle on the target.
   const warCry = cue.move === 'War Cry', caster = cue.at === 'caster' || warCry;
@@ -147,9 +195,9 @@ export function bossContact(ctx: FxContext, cue: BossCue, lookup: BossLookup, li
   const base = spot(ctx, source, cue.move, caster && cue.at !== 'summoned', peak), opacity = ctx.reduced ? .8 : ctx.quiet ? .7 : 1;
   const tint = (img: Phaser.GameObjects.Image) => { if (blocked) img.setTint(0x8addf5); return img; };
   // A dodged hit shows only the passing settle wisps beside the body, never the impact.
-  const first = dodged ? undefined : tint(paint(ctx, peak, base.x, base.y).setAlpha(opacity));
+  const first = dodged ? undefined : tint(paint(ctx, peak, base.x, base.y, size).setAlpha(opacity));
   const end = warCry ? spot(ctx, target, cue.move, false, settle) : anchored.has(cue.move) ? spot(ctx, source, cue.move, caster && cue.at !== 'summoned', settle) : base;
-  const last = tint(paint(ctx, settle, end.x, end.y + (dodged ? target.size * .25 : 0)).setAlpha(0));
+  const last = tint(paint(ctx, settle, end.x, end.y + (dodged ? target.size * .25 : 0), size).setAlpha(0));
   if (ctx.reduced) { last.setAlpha(first ? 0 : opacity * .7); return; }
   const duration = Math.max(1, Math.min(life, 520));
   ctx.scene.tweens.addCounter({ from: 0, to: 1, duration, onUpdate: tw => {

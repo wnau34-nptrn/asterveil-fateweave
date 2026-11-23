@@ -8,7 +8,7 @@ import { encounterById } from '../../../src/content/encounters/catalog';
 import { heroes } from '../../../src/content/heroes/team';
 import { mercenaries } from '../../../src/content/heroes/mercenaries';
 import { encounterUnitSheets } from '../../../src/game/visuals/optional-unit-assets';
-import { usesBossSignature } from '../../../src/game/visuals/boss-signature-fx';
+import { LAKE_BOSS_ATLAS, usesBossSignature, usesLakeBossSignature } from '../../../src/game/visuals/boss-signature-fx';
 import { isFoeSignatureMove } from '../../../src/game/visuals/foe-signature-fx';
 import { isSdSkill } from '../../../src/game/visuals/saint-dance-fx';
 import type { EncounterDefinition } from '../../../src/core/battle/types';
@@ -45,13 +45,13 @@ const open = (id: string) => {
 };
 open(current.id);
 new ResizeObserver(() => scene.refreshLayout()).observe(document.querySelector('#game')!);
-const OPTIONAL_FX = ['boss-signature-fx', 'foe-signature-fx', 'saint-dance-fx'];
+const OPTIONAL_FX = ['boss-signature-fx', LAKE_BOSS_ATLAS, 'foe-signature-fx', 'saint-dance-fx'];
 const qa = {
   open,
   expectedSheets: () => encounterUnitSheets(current).map(s => `unit-pilot-${s}`).sort(),
   cached: () => scene.textures.getTextureKeys().filter(k => k.startsWith('unit-pilot-')).sort(),
   // Same rule as BattleScene.encounterFx.
-  expectedFx: () => [usesBossSignature(current) && 'boss-signature-fx', current.intents.some(i => isFoeSignatureMove(i.name)) && 'foe-signature-fx',
+  expectedFx: () => [usesBossSignature(current) && 'boss-signature-fx', usesLakeBossSignature(current) && LAKE_BOSS_ATLAS, current.intents.some(i => isFoeSignatureMove(i.name)) && 'foe-signature-fx',
     current.heroes.some(h => h.actions.some(a => isSdSkill(a))) && 'saint-dance-fx'].filter((k): k is string => !!k).sort(),
   optionalFx: () => scene.textures.getTextureKeys().filter(k => OPTIONAL_FX.includes(k)).sort(),
   // Decoded RGBA bytes of every texture the scene holds (all sources), by group.
