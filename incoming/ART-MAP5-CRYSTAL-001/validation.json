@@ -1,0 +1,182 @@
+{
+  "reference_commit": "9d9bc4307b8e35633a7f9df9a94741d7df41a7a9",
+  "scope": "concept-review",
+  "visual_approval": "pending",
+  "files": {
+    "NOTES.md": {
+      "sha256": "7a36f35eb81a8f31605419406afc1a8c738904b6b06b9519fe6c3e00cf0a1e72"
+    },
+    "concepts/fragment.png": {
+      "sha256": "8eb51ee5551105cdbfa53a5e3d9a5ab0fabbb2a9f3233b6e4f2a560f2b1e4097",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "alpha_bbox_gt_40": [
+        56,
+        131,
+        456,
+        497
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "anchor": [
+        256,
+        497
+      ]
+    },
+    "concepts/giant-r1.png": {
+      "sha256": "706cb911ccf17776d12a8306ab2524ef2f55065972f272b76f5da6496d2394ed",
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "alpha_bbox_gt_40": [
+        75,
+        100,
+        693,
+        672
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "anchor": [
+        384,
+        672
+      ]
+    },
+    "concepts/giant-r2.png": {
+      "sha256": "92c96e62dde40446f62b76171edb837e7ae5906aba58dc2b10d6063fb7fe65d0",
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "alpha_bbox_gt_40": [
+        102,
+        100,
+        666,
+        672
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "anchor": [
+        384,
+        672
+      ]
+    },
+    "concepts/original-triptych.png": {
+      "sha256": "0668cb7d5e35f97a0a5402edba5731aead24e770b84d322db7d536029479a667",
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "alpha_bbox_gt_40": [
+        74,
+        29,
+        2039,
+        693
+      ],
+      "alpha_range": [
+        0,
+        255
+      ]
+    },
+    "evidence/mine-battle-v69-390.png": {
+      "sha256": "554ae8aaa8ba6b088a085aada1244003ba136b14cb10b376a4011b8bc0a817b2",
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "evidence/mine-light-390.png": {
+      "sha256": "8bd974af330765f3444dcb0b79088a78f0a479ce7eb89c9576317b7331ae0ad4",
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "evidence/mine-seal-390.png": {
+      "sha256": "d013a5ef7f330ae9c8292dde44f2772283c2e36683cadc50fa2e8e0ea56945bc",
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "review/field-r1-125-390.png": {
+      "sha256": "5d14dfb63baebf3393ccb1c66988678a78b0440cd048bf066a43a9f5853e13d5",
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "review/field-r1-132-390.png": {
+      "sha256": "59d61faa8ef6b7abc6c704185d9d217ca7b4473846222cb5c41c97d68904a3cb",
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "review/field-r1-140-390.png": {
+      "sha256": "93460d19d2e0e2195ecd886b705c3f0874840ab7ce7f6375385807637e1d3f76",
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "review/field-r2-132-390.png": {
+      "sha256": "33ea06a1c168cf19bd6fbb3c5009411c14ce757da04be216dc25b0bf607e1d8c",
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "review/scale-390.png": {
+      "sha256": "e8d86452f077af8fec47890d36d908c4bb1be46b0b3e7f625e7b700d13bfbf19",
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "review/storyboard-armor-390.png": {
+      "sha256": "fda0e373061e05edb05851d29a23d6ed51bca4ed9517cb8db98b9f2d84d71adf",
+      "size": [
+        390,
+        3357
+      ],
+      "mode": "RGB"
+    },
+    "review/storyboard-collapse-390.png": {
+      "sha256": "d1cbcccf9f4a1b435dcb91c41a080d073c761c036f6511c3632ce3041e057ee2",
+      "size": [
+        390,
+        1185
+      ],
+      "mode": "RGB"
+    },
+    "review/storyboard-split-390.png": {
+      "sha256": "987f678bef13a307e454d290177a5fb345c2af7f8b05e39968b3a76b9914bdf7",
+      "size": [
+        390,
+        2271
+      ],
+      "mode": "RGB"
+    }
+  }
+}
