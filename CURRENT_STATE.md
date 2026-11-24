@@ -29,6 +29,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
+- Game Feel draft: จังหวะเสียง Duelist/Execute และแยกเสียงโล่รับเต็ม รอตรวจคลิปพร้อมเสียง. [ผลตรวจ](docs/validation/steel-contact-2026-11-24/README_TH.md).
+
 - Game Feel: shared atlas merged in #351 (`411b9e1`), saving 1.89 MiB on cold Chromium runs. [ผลวัด atlas](docs/validation/shared-units-atlas-2026-11-24/README_TH.md).
 - Mobile performance still needs on-device measurements for walking, fog, and battle entry. [ผลตรวจท่าคืนตัว](docs/validation/recovery-continuity-2026-11-24/README_TH.md).
 

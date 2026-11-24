@@ -959,7 +959,7 @@ export class BattleScene extends Phaser.Scene {
       const projectileStatus=paintedProjectiles.length>0&&turn.side==='hero'&&event.sourceId===turn.actorId&&(event.type==='delay'||event.type==='pin');
       const earthStatus=paintedEarth.length>0&&event.sourceId===turn.actorId&&['interrupt','sigil','resist'].includes(event.type);
       const sealStatus=paintedSeal.length>0&&event.sourceId===turn.actorId&&['sigil','dispel'].includes(event.type);
-      if (ward || blade || parry || defense || projectile || projectileStatus || earth || earthStatus || alchemy || sealStatus) { /* painted layers above are the whole contact cue */ } else if (shield) {
+      if (execute || ward || blade || parry || defense || projectile || projectileStatus || earth || earthStatus || alchemy || sealStatus) { /* painted layers above are the whole contact cue */ } else if (shield) {
         const g = this.add.graphics().lineStyle(3,color,.95).fillStyle(color,.12);
         const points = [{x:p.x-22,y:p.y-24},{x:p.x+22,y:p.y-24},{x:p.x+19,y:p.y+8},{x:p.x,y:p.y+26},{x:p.x-19,y:p.y+8}];
         const polygon = points.map(point => new Phaser.Math.Vector2(point.x, point.y));
@@ -982,7 +982,7 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     // The denser blade art must not cover the authoritative damage/outcome captions.
-    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || paintedBasic.length || paintedBoss.length || paintedEarth.length || paintedAlchemy.length || paintedSeal.length || paintedCommand.length || paintedFoe.length || !!paintedSong || !!paintedSd || turn.action === 'parry') {
+    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || paintedBasic.length || paintedBoss.length || paintedEarth.length || paintedAlchemy.length || paintedSeal.length || paintedCommand.length || paintedFoe.length || !!paintedSong || !!paintedSd || turn.action === 'parry' || turn.action === 'execute') {
       for (const child of [...(this.effects?.list ?? [])]) {
         if (child instanceof Phaser.GameObjects.Text) this.effects?.bringToTop(child);
       }

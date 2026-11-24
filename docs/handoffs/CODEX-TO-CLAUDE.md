@@ -1,3 +1,10 @@
+## 2026-11-24 — จังหวะภาพและเสียงปะทะ (Codex · `codex/fateweave-steel-contact`)
+
+- เจ้าของอนุมัติให้ทำแพตช์และคลิปเทียบ. สาขาฐาน `b39ed8d`. รอตรวจคลิปใน Draft PR.
+- วางเสียงเหวี่ยง Duelist/Execute ใกล้ contact เดิม. แยกเสียงรับโล่เต็มและลดภาพ Execute ซ้อน/ประกายโดนเมื่อหลบ. เวลาเทิร์นและเซฟใช้ระบบเดิม.
+- Typecheck, lint, Pages build, Playwright 24 กรณีผ่าน. Unit 2270 ผ่าน, 24 ข้าม, boss-balance ผ่านเมื่อรันแยก.
+- [ผลตรวจและข้อจำกัด](../validation/steel-contact-2026-11-24/README_TH.md). การฟังบนมือถือจริงยังไม่ยืนยัน.
+
 ## 2026-11-24 — Game Feel: ท่าคืนตัวหลัง contact
 
 - สาขา `codex/fateweave-recovery-continuity` · PR #350. เจ้าของอนุมัติให้นำเข้าเกมและรวมฐานล่าสุดที่มี #351 ก่อนตรวจ CI.

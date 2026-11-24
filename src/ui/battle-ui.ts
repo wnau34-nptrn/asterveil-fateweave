@@ -442,11 +442,14 @@ export class BattleUI {
     this.fieldInspectedActorId = turn.side === 'hero' && enemyTarget ? enemyTarget.id : turn.actorId;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const timing = stageTiming(turn, reduced, this.combatPrefs.speed === 'fast', this.session?.kind === 'boss');
+    const duelistStrike = turn.side === 'hero' && (turn.action === 'execute' ||
+      turn.action === 'attack' && this.data.heroes.find(hero => hero.id === turn.actorId)?.role === 'Duelist');
     this.scene?.configureEffects(this.combatPrefs, reduced);
     this.render();
     let stopPrepare = () => {};
     this.playback.start([
-      { at: 0, run: () => {
+      // Leave the full swing envelope (120 ms plus its release) before contact in either speed.
+      { at: duelistStrike ? Math.max(0, timing.contact - 145) : 0, run: () => {
         if (timing.contact && !turn.events.some(e => e.type === 'cancel')) {
           stopPrepare = sfx.play(effectFamily(turn) === 'steel' ? 'swing' : 'charge'); this.playback.own(stopPrepare);
         }
@@ -455,7 +458,7 @@ export class BattleUI {
         if (this.presentation !== playback) return;
         stopPrepare();
         playback.frame = turn.after!; playback.revealed = true;
-        this.render(false); this.scene?.play(turn, timing.end - timing.contact); this.stageSound(turn);
+        this.render(false); this.scene?.play(turn, timing.end - timing.contact); this.stageSound(turn, duelistStrike);
       } },
       { at: Math.min(timing.end - 40, timing.contact + (this.combatPrefs.speed === 'fast' ? 140 : 220)), run: () => {
         if (turn.events.some(e => e.type === 'down')) this.playback.own(sfx.play('down'));
@@ -472,8 +475,8 @@ export class BattleUI {
   }
 
   // Placeholder synth sounds for one actor turn (platform/sfx.ts), from its events.
-  private stageSound(turn: TurnStage): void {
-    for (const name of contactSounds(turn)) this.playback.own(sfx.play(name));
+  private stageSound(turn: TurnStage, duelistStrike: boolean): void {
+    for (const name of contactSounds(turn, duelistStrike)) this.playback.own(sfx.play(name));
   }
   private renderCombatSettings(): void {
     this.set('combat-settings', `<h3>ภาพการต่อสู้</h3><p>ค่าที่เปลี่ยนใช้ตั้งแต่เทิร์นถัดไป · ไม่เปลี่ยนผลต่อสู้</p><button data-ui="combat-speed" id="combat-speed" class="quiet" aria-pressed="${this.combatPrefs.speed === 'fast'}">ความเร็ว: ${this.combatPrefs.speed === 'fast' ? 'เร็ว' : 'ปกติ'}</button><button data-ui="combat-intensity" id="combat-intensity" class="quiet" aria-pressed="${this.combatPrefs.intensity === 'reduced'}">เอฟเฟกต์: ${this.combatPrefs.intensity === 'reduced' ? 'ลด' : 'มาตรฐาน'}</button><p>เมื่ออุปกรณ์ตั้งค่าลดการเคลื่อนไหว จะแสดงผลทันทีโดยไม่เคลื่อนภาพ</p>`);

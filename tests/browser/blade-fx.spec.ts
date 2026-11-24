@@ -6,6 +6,14 @@ const skills = ['attack', 'finisher', 'lunge', 'sweep', 'ambush', 'parry', 'pier
 // This isolated source fixture is not a shipped game/debug entry. CI runs it against Vite
 // before the separate production Pages suite, which covers the actual shipped application.
 test.skip(process.env.PLAYWRIGHT_PAGES === 'true', 'source fixture has its own dev-server CI gate');
+test('reduced-motion Execute dodge does not paint a contact star', async ({ page }) => {
+  await page.goto('tests/browser/fixtures/blade.html?skill=execute');
+  await expect(page.locator('#start')).toBeEnabled();
+  await page.locator('#start').click();
+  expect(await page.evaluate(() => window.bladeQA.renderReducedExecuteContact('hit'))).toContain('static_impact');
+  const frames = await page.evaluate(() => window.bladeQA.renderReducedExecuteContact('dodge'));
+  expect(frames).toEqual([]);
+});
 for (const skill of skills) test(`blade ${skill} resolved contact and cleanup at 390px`, async ({ browser }, info) => {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'no-preference' });
   const page = await ctx.newPage(), errors: string[] = []; page.on('pageerror', e => errors.push(e.message));

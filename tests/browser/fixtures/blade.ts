@@ -7,6 +7,7 @@ import { BattleScene } from '../../../src/game/scenes/BattleScene';
 import { BattleUI } from '../../../src/ui/battle-ui';
 import { fitViewport } from '../../../src/platform/viewport';
 import { BLADE_ATLAS, bladeCues } from '../../../src/game/visuals/blade-fx';
+import { EXECUTE_ATLAS } from '../../../src/game/visuals/exec-ward-fx';
 import { beginBattle, currentHeroId, resolveCommand, targetOptions } from '../../../src/core/battle/engine';
 import type { ActionId, Command, EncounterDefinition, TurnStage } from '../../../src/core/battle/types';
 import '../../../src/ui/styles.css';
@@ -67,12 +68,12 @@ function stage(outcome: string): TurnStage {
   }
   return outcome === 'hit' && skill !== 'parry' ? result.turns[0]! : result.turns.find(t => t.side === 'enemy' && (outcome !== 'guarded' || t.actorId === 'f1') && (skill !== 'parry' || t.events.some(e => e.type === 'counter')))!;
 }
-function painted() {
+function painted(atlas = BLADE_ATLAS) {
   const images: { frame: string; alpha: number; width: number; height: number; rotation: number; x: number; y: number }[] = [];
   const visit = (items: Phaser.GameObjects.GameObject[]) => {
     for (const item of items) {
       if (item instanceof Phaser.GameObjects.Container) visit(item.list);
-      if (item instanceof Phaser.GameObjects.Image && item.texture.key === BLADE_ATLAS) images.push({ frame: item.frame.name, alpha: item.alpha, width: item.displayWidth, height: item.displayHeight, rotation: item.rotation, x: item.x, y: item.y });
+      if (item instanceof Phaser.GameObjects.Image && item.texture.key === atlas) images.push({ frame: item.frame.name, alpha: item.alpha, width: item.displayWidth, height: item.displayHeight, rotation: item.rotation, x: item.x, y: item.y });
     }
   };
   visit(scene.children.getChildren()); return images;
@@ -82,6 +83,16 @@ const preludeHp = (() => { if (!prelude.length) return null; let st = beginBattl
 const qa = {
   before: () => preludeHp,
   impacts,
+  // Incoming hero misses are not available in this encounter. Inject one
+  // presentation-only event to exercise the Execute renderer under OS reduce.
+  renderReducedExecuteContact: (outcome: 'hit' | 'dodge') => {
+    const turn = stage('hit');
+    scene.stopEffects();
+    scene.configureEffects({ speed: 'normal', intensity: 'standard' }, true);
+    scene.play(outcome === 'hit' ? turn : { ...turn, after: turn.before, state: turn.before!,
+      events: [{ type: 'dodge', sourceId: turn.actorId, targetId: turn.targetId, amount: 0, text: '' }] }, 550);
+    return painted(EXECUTE_ATLAS).map(image => image.frame);
+  },
   renderOutcome: (outcome: string) => {
     const turn = stage(outcome), cue = bladeCues(turn)[0];
     const slot = scene.actorPanels.get(cue?.event.targetId ?? '');
