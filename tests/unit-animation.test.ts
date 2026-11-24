@@ -64,6 +64,20 @@ describe('unit pose routing', () => {
 });
 
 describe('unit animation lifecycle', () => {
+  it('recovers from the last drawn pose when the contact cue arrives between frames', () => {
+    const animation = new UnitAnimation(), body = new Body(), initial = snapshot(body);
+    animation.bind('hero', body, 96, () => {});
+    animation.begin('hero', 'thrust', 1, 100);
+    animation.update(50);
+    const beforeContact = body.x;
+
+    animation.contact('hero', 300);
+    animation.update(16);
+    expect(body.x).toBeLessThan(beforeContact);
+    expect(body.x).toBeGreaterThan(initial[0]!);
+    animation.update(224);
+    expect(snapshot(body)).toEqual(initial);
+  });
   for (const fast of [false, true]) it(`holds until contact, recovers and preserves trace at speed fast=${fast}`, () => {
     const before = JSON.stringify(turn), animation = new UnitAnimation(), body = new Body(), initial = snapshot(body), idle: boolean[] = [];
     animation.bind('tracer', body, 96, paused => idle.push(paused));

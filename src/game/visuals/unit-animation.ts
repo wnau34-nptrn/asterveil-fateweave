@@ -11,6 +11,9 @@ export interface UnitBody {
 interface Binding { body: UnitBody; x: number; y: number; rotation: number; sx: number; sy: number; size: number; frames?: UnitFrames; idle(paused: boolean): void }
 interface Motion { pose: UnitPose | Reaction; direction: number; elapsed: number; duration: number; phase: 'prepare' | 'recover' | 'reaction'; clip?: UnitClip; entry?: { x: number; y: number; rotation: number; sx: number; sy: number } }
 const smooth = (p: number): number => p * p * (3 - 2 * p);
+const poseOffset = ({ body, x, y, rotation, sx, sy }: Binding) => ({
+  x: body.x - x, y: body.y - y, rotation: body.rotation - rotation, sx: body.scaleX - sx, sy: body.scaleY - sy,
+});
 export class UnitAnimation {
   private bindings = new Map<string, Binding>();
   private motions = new Map<string, Motion>();
@@ -29,7 +32,16 @@ export class UnitAnimation {
       const rig = this.bindings.get(id)!;
       this.restore(rig); rig.idle(false); this.motions.delete(id); return;
     }
-    if (motion) { motion.phase = 'recover'; motion.elapsed = 0; motion.entry = undefined; motion.duration = Math.min(motion.clip ? 260 : 240, remainingMs); this.bindings.get(id)?.frames?.show(motion.pose, 'recover', 0, motion.clip, motion.duration); }
+    if (motion) {
+      const rig = this.bindings.get(id)!;
+      // The UI cue can arrive between renders. Recover from the last drawn
+      // transform while still showing the authored contact frame on the cue.
+      motion.entry = poseOffset(rig);
+      motion.phase = 'recover';
+      motion.elapsed = 0;
+      motion.duration = Math.min(motion.clip ? 260 : 240, remainingMs);
+      rig.frames?.show(motion.pose, 'recover', 0, motion.clip, motion.duration);
+    }
   }
   react(id: string, pose: Reaction, direction: number, remainingMs: number): void {
     this.start(id, { pose, direction, elapsed: 0, duration: Math.min(pose === 'down' ? 320 : 200, remainingMs), phase: 'reaction' });
@@ -37,7 +49,7 @@ export class UnitAnimation {
   private start(id: string, motion: Motion): void {
     const rig = this.bindings.get(id);
     if (!rig || motion.duration <= 0) return;
-    motion.entry = { x: rig.body.x - rig.x, y: rig.body.y - rig.y, rotation: rig.body.rotation - rig.rotation, sx: rig.body.scaleX - rig.sx, sy: rig.body.scaleY - rig.sy };
+    motion.entry = poseOffset(rig);
     this.restore(rig); rig.idle(true);
     // An interrupted lunge starts its reaction where it was hit, rather than teleporting home.
     rig.body.setPosition(rig.x + motion.entry.x, rig.y + motion.entry.y);
@@ -67,7 +79,7 @@ export class UnitAnimation {
       motion.elapsed += Math.max(0, delta);
       const p = Math.min(1, motion.elapsed / motion.duration);
       // Prepare holds at the contact pose if render time reaches the cue first.
-      const weight = motion.phase === 'prepare' ? smooth(p) : motion.phase === 'recover' ? 1 - smooth(p) : Math.sin(p * Math.PI);
+      const weight = motion.phase === 'prepare' ? smooth(p) : motion.phase === 'reaction' ? Math.sin(p * Math.PI) : 0;
       const d = motion.direction || 1, scale = Math.min(1.25, rig.size / 96);
       let x = 0, y = 0, angle = 0, squash = 0;
       switch (motion.pose) {
@@ -90,7 +102,8 @@ export class UnitAnimation {
       }
       const framed = rig.frames?.show(motion.pose, motion.phase, p, motion.clip, motion.duration);
       if (framed) { angle = 0; squash = 0; if (motion.phase === 'reaction') { x = 0; y = 0; } }
-      const carry = 1 - smooth(Math.min(1, motion.elapsed / Math.min(80, motion.duration)));
+      const carryProgress = motion.phase === 'recover' ? p : Math.min(1, motion.elapsed / Math.min(80, motion.duration));
+      const carry = 1 - smooth(carryProgress);
       rig.body.setPosition(rig.x + x * d * weight * scale + (motion.entry?.x ?? 0) * carry, rig.y + y * weight * scale + (motion.entry?.y ?? 0) * carry);
       rig.body.setRotation(rig.rotation + angle * d * weight + (motion.entry?.rotation ?? 0) * carry);
       rig.body.setScale(rig.sx * (1 + squash * weight) + (motion.entry?.sx ?? 0) * carry, rig.sy * (1 - squash * weight) + (motion.entry?.sy ?? 0) * carry);

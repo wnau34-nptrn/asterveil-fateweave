@@ -1,3 +1,10 @@
+## 2026-11-24 — Game Feel: ท่าคืนตัวหลัง contact
+
+- สาขา `codex/fateweave-recovery-continuity` จาก `827756f` · ยังไม่มี merge commit.
+- ต่อท่าคืนตัวจาก transform ที่วาดล่าสุด ลดจังหวะกระโดดหลัง impact เมื่อ cue มาก่อนเฟรมถัดไป. เวลา cue และข้อมูล authoritative ใช้เส้นทางเดิม.
+- Typecheck, lint, production Pages build, unit เจาะจง 28 กรณี และ Chromium 21 กรณีผ่าน. ชุด unit รวมผ่าน 2269 กรณี ข้าม 24 กรณี และรันทวน 2 กรณีที่ติด fixture/timeout แล้วผ่าน.
+- ดู [ผลวัดและข้อจำกัด](../validation/recovery-continuity-2026-11-24/README_TH.md). ไม่มีการอนุมัติภาพใหม่. PR ถัดไปตรวจการโหลด `units.webp` ซ้ำ.
+
 ## 2026-11-23 — Full-slot equipment art (Codex · `codex/full-slot-equipment-art`)
 - Owner approved integrating mockup v5. Equipped art uses the full slot with an opaque rarity-tinted background. Empty slots show 32 px icons and faint slot labels. Equipped slots retain their accessible names.
 - Lint, typecheck and Pages build passed locally. The shared Chromium regression checks fill, label visibility and stable slot size at 320 px, 390 px and desktop. Physical iOS Safari remains unverified.
