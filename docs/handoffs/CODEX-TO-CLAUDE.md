@@ -1,3 +1,10 @@
+## 2026-11-24 — Atlas บอสใช้ URL เดียว (Codex · `codex/fateweave-shared-units-atlas`)
+
+- เจ้าของอนุมัติให้ทำ PR แยก. ภาพบนแท่นบอสใช้ `unitsUrl('units')` เหมือน Phaser. ไม่มี merge commit.
+- Chromium 390px: cold download 2 → 1 ประหยัด 1.89 MiB ทุกรอบจากสามคู่. Warm download 0 ทั้งก่อนและหลัง.
+- Typecheck, lint, production Pages build, Playwright เดิน/เข้าศึก และการเก็บภาพ/คลิป 390px กับ desktop ผ่าน. Unit 2269 ผ่าน 24 ข้าม และเทสต์ boss-balance ที่ชน timeout ผ่านเมื่อรันแยก.
+- [ผลวัดและข้อจำกัด](../validation/shared-units-atlas-2026-11-24/README_TH.md)
+
 ## 2026-11-23 — Full-slot equipment art (Codex · `codex/full-slot-equipment-art`)
 - Owner approved integrating mockup v5. Equipped art uses the full slot with an opaque rarity-tinted background. Empty slots show 32 px icons and faint slot labels. Equipped slots retain their accessible names.
 - Lint, typecheck and Pages build passed locally. The shared Chromium regression checks fill, label visibility and stable slot size at 320 px, 390 px and desktop. Physical iOS Safari remains unverified.

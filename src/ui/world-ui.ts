@@ -22,6 +22,7 @@ import { formation } from '../core/world/formation';
 import { formationGrid, formationTap, laneName } from './formation-grid';
 import { heroArt, portrait, starRow } from './portraits';
 import { fateRevealMs, fateWeave, infoButton } from './gacha-panel';
+import { unitsUrl } from '../game/visuals/assets';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileFrame, lakeHighFrame, isLakeArt, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { questLine, rewardText, storyQuestText, mapQuestText, sideQuestText, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
 import { tomeCount } from '../core/world/tomes';
@@ -357,7 +358,10 @@ export class WorldUI {
       const event = this.map.events.find(e => e.x === x && e.y === y);
       if (event) html += `<span class="event-mark sprite" data-cell="${x},${y}" data-event="${event.id}" data-kind="${event.kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"><b class="map-prop"></b><i>!</i></span>`;
       html += this.puzzleSprites(x, y);
-      if (['camp', 'start', 'goal', 'boss'].includes(kind)) html += `<span class="landmark sprite" data-cell="${x},${y}" data-kind="${kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${kind === 'boss' ? '<span class="boss-unit"></span>' : ''}</span>`;
+      if (['camp', 'start', 'goal', 'boss'].includes(kind)) {
+        const boss = kind === 'boss' ? `<span class="boss-unit" style="background-image:url('${unitsUrl('units')}')"></span>` : '';
+        html += `<span class="landmark sprite" data-cell="${x},${y}" data-kind="${kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${boss}</span>`;
+      }
     }
     return html;
   }

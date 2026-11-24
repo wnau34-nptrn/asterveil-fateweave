@@ -785,11 +785,18 @@ test('losing every brought member fails the expedition: back to the lobby with h
 });
 
 test('the boss blocks the gate; after its defeat the goal completes the expedition', async ({ page }, info) => {
+  await page.addInitScript(() => performance.setResourceTimingBufferSize(2000));
   const [boss] = findTiles(map, 'boss');
   // The rift seal (3B) is broken: two of its objectives are done.
   const issues = await open(page, base({ position: { x: boss!.x, y: boss!.y + 1 }, bossDefeated: false, elitesDefeated: ['scar-golem'], eventsDone: ['scar-rift'] }));
+  const bossArt = page.locator('#world-view .boss-unit');
+  await expect(bossArt).toBeVisible();
+  await expect(bossArt).toHaveCSS('background-image', /\/assets\/art\/units\.webp\?v=[a-f0-9]+/);
   await page.locator('#move-up').click();
   await expect(page.locator('#encounter-kind')).toContainText('บอส');
+  await expect(page.locator('#start')).toBeEnabled();
+  await expect.poll(() => page.evaluate(() => [...new Set(performance.getEntriesByType('resource')
+    .map(entry => entry.name).filter(url => /\/assets\/art\/units\.webp(\?|$)/.test(url)))])).toHaveLength(1);
   expect((await saved(page)).battle?.kind).toBe('boss');
   await page.reload(); await page.locator('#continue').click(); await expect(page.locator('#encounter-title')).toContainText('ผู้คุมรอยแยก');
   await page.evaluate(k => { const s = JSON.parse(localStorage.getItem(k)!); s.run.battle = null; s.run.bossDefeated = true; localStorage.setItem(k, JSON.stringify(s)); }, key);
