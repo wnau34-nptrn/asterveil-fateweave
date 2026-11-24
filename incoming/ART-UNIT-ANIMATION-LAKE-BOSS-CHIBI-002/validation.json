@@ -1,0 +1,197 @@
+{
+  "frameTotal": 30,
+  "files": {
+    "sources/approved-idle.png": {
+      "sha256": "dff1d64c0002bfe247f7b4277d8a3b1b07818f5cab05c2730874ec5c2528433f",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "sources/down-r1.png": {
+      "sha256": "c35f0fa100f38ab7a4e66e5985a72ce4724ec0b2318941634a39a403e6a4ca4e",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    "sources/great-wave-r1.png": {
+      "sha256": "d6277a4c25cf693059fd8243f8326c90d544345bd5e6fcc17c940eaba0eda6e3",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    "sources/hit-r1.png": {
+      "sha256": "f0c446cb6ee320d3ce6d1dc2c6e9f65b61b142b784e8b49a20ce6e2921775ca7",
+      "size": [
+        1959,
+        803
+      ]
+    },
+    "sources/reflection-r1.png": {
+      "sha256": "39b5f2fe436b1c2efbbfb277f5ddc42aa2626dd50db695bd95b27451e4dda651",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    "sources/surging-wave-r1.png": {
+      "sha256": "6bf1baa2e724e7d7d21be3d7b14fd7d718feacb069664d279b69071ce5819505",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    "sources/tide-lash-r2.png": {
+      "sha256": "d1a7bc3efdca2f9ccd0ba92127bd0e4397cf4480d37ab541d1c95507257c2ef8",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    "sources/undertow-r1.png": {
+      "sha256": "71b7cd22bc1b2b8524e33e3be87039d3fce95381cc7c2c860d802ca0a545291d",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    "sources/water-veil-r1.png": {
+      "sha256": "4e3c84355eb6067f62ade7ee87a3dd8fda27442d4103689f76407307138fa217",
+      "size": [
+        2172,
+        724
+      ]
+    },
+    "raw/down-r1.png": {
+      "sha256": "23ca7f89e0acb8c0ba311827a7dd83e6a31b54115ce7dba4e2eeb0dd71a93424",
+      "size": [
+        3232,
+        1024
+      ]
+    },
+    "raw/great-wave-r1.png": {
+      "sha256": "f56a35e226c8e4e913e459adb824434f8e3a3eb8004095cd234fd94319ddb166",
+      "size": [
+        4336,
+        1024
+      ]
+    },
+    "raw/hit-r1.png": {
+      "sha256": "7f5fc8e8880899ecd0e8b2d41241a3465d752653fe6e67d45d96fb69d5efb92d",
+      "size": [
+        2128,
+        1024
+      ]
+    },
+    "raw/reflection-r1.png": {
+      "sha256": "d4dcce704f2ad9ae5a2262e0aafa820cb73d0a9af01545d0f66671d1791a192b",
+      "size": [
+        4336,
+        1024
+      ]
+    },
+    "raw/surging-wave-r1.png": {
+      "sha256": "4b1fc28d0087602d6e9933e967f5e58da9cd9889193e5d76b3a4bd2b8cf497e1",
+      "size": [
+        4336,
+        1024
+      ]
+    },
+    "raw/tide-lash-r2.png": {
+      "sha256": "1d9452706f7e8578ac3a80d32500b98776b3f0c418a086524ff57db8cb89e6b0",
+      "size": [
+        4336,
+        1024
+      ]
+    },
+    "raw/undertow-r1.png": {
+      "sha256": "93f7550433dece8fa6038fc7b6223ef76780ee145e24ea8d086c66b67e7205a1",
+      "size": [
+        4336,
+        1024
+      ]
+    },
+    "raw/water-veil-r1.png": {
+      "sha256": "8350863067fd23224d1f04266b68d4a29bc11719746053ac80bdc8c4c075c115",
+      "size": [
+        4336,
+        1024
+      ]
+    },
+    "seeds/water-spirit-idle.png": {
+      "sha256": "db2d9c07ed7665aa9f70bacd18db0eac2eec4db925b88cc64c90abb11e429258",
+      "size": [
+        1024,
+        1024
+      ]
+    }
+  },
+  "reviewClips": {
+    "review-390/down.webp": {
+      "sha256": "1ec750892365765763ce15742321f638b284ead5aa410fcef2810828ef89887c",
+      "size": [
+        390,
+        844
+      ],
+      "frames": 35
+    },
+    "review-390/great-wave.webp": {
+      "sha256": "a1b039e36ea2f7cc7f9cabeead7b0f9ded4c751e130439ef0e6861d0f90d8315",
+      "size": [
+        390,
+        844
+      ],
+      "frames": 56
+    },
+    "review-390/reflection.webp": {
+      "sha256": "255f3ed2884fcd8fc1beed25b2fdad51280a7d6185f74dea496844b070d4b5e3",
+      "size": [
+        390,
+        844
+      ],
+      "frames": 59
+    },
+    "review-390/surging-wave.webp": {
+      "sha256": "ca2aa21b5f2801ae1840a414caeae816af105a038605f837c5989a5d6facb381",
+      "size": [
+        390,
+        844
+      ],
+      "frames": 60
+    },
+    "review-390/tide-lash.webp": {
+      "sha256": "c6fdbd70266777f88bad4ebc33f0eeb37329da3049ad2752cb6e97c7594bd8d1",
+      "size": [
+        390,
+        844
+      ],
+      "frames": 50
+    },
+    "review-390/undertow.webp": {
+      "sha256": "b45a60b9452b2daaed5765b27b4934d4ff9812fe2ff1b301bac65c559195deb4",
+      "size": [
+        390,
+        844
+      ],
+      "frames": 60
+    },
+    "review-390/water-veil-sealed.webp": {
+      "sha256": "14ab8ce3ffcca0a046e2b2dd07eb00eaf668b88f0c673347c60be1656db88b2f",
+      "size": [
+        390,
+        844
+      ],
+      "frames": 43
+    },
+    "review-390/water-veil.webp": {
+      "sha256": "d46a315bb8ac7bb440a3b380871b5062fe1d961943703de4db4b5255950468d1",
+      "size": [
+        390,
+        844
+      ],
+      "frames": 56
+    }
+  }
+}

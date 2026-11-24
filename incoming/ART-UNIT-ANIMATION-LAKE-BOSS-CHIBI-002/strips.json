@@ -1,0 +1,500 @@
+{
+  "cellSize": [
+    1024,
+    1024
+  ],
+  "gutterPx": 80,
+  "soleOrigin": 0.875,
+  "idleIndex": 0,
+  "clips": {
+    "tide-lash-r2": {
+      "intentOrReaction": "Tide Lash",
+      "facing": "left",
+      "frameCount": 4,
+      "source": "sources/tide-lash-r2.png",
+      "raw": "raw/tide-lash-r2.png",
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          376,
+          396,
+          739,
+          896
+        ],
+        [
+          376,
+          397,
+          739,
+          896
+        ],
+        [
+          301,
+          396,
+          739,
+          896
+        ],
+        [
+          350,
+          396,
+          741,
+          896
+        ]
+      ],
+      "sourceSharedScale": 0.91912,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ]
+    },
+    "water-veil-r1": {
+      "intentOrReaction": "Water Veil",
+      "facing": "left",
+      "frameCount": 4,
+      "source": "sources/water-veil-r1.png",
+      "raw": "raw/water-veil-r1.png",
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          362,
+          382,
+          751,
+          896
+        ],
+        [
+          364,
+          381,
+          751,
+          896
+        ],
+        [
+          363,
+          381,
+          751,
+          896
+        ],
+        [
+          362,
+          381,
+          751,
+          896
+        ]
+      ],
+      "sourceSharedScale": 0.96987,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ]
+    },
+    "surging-wave-r1": {
+      "intentOrReaction": "Surging Wave",
+      "facing": "left",
+      "frameCount": 4,
+      "source": "sources/surging-wave-r1.png",
+      "raw": "raw/surging-wave-r1.png",
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          345,
+          409,
+          755,
+          896
+        ],
+        [
+          362,
+          320,
+          747,
+          896
+        ],
+        [
+          308,
+          436,
+          736,
+          896
+        ],
+        [
+          342,
+          410,
+          759,
+          896
+        ]
+      ],
+      "sourceSharedScale": 1.11628,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ]
+    },
+    "undertow-r1": {
+      "intentOrReaction": "Undertow",
+      "facing": "left",
+      "frameCount": 4,
+      "source": "sources/undertow-r1.png",
+      "raw": "raw/undertow-r1.png",
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          340,
+          417,
+          795,
+          896
+        ],
+        [
+          292,
+          417,
+          789,
+          896
+        ],
+        [
+          307,
+          370,
+          781,
+          896
+        ],
+        [
+          332,
+          358,
+          782,
+          896
+        ]
+      ],
+      "sourceSharedScale": 1.08682,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ]
+    },
+    "great-wave-r1": {
+      "intentOrReaction": "Great Wave",
+      "facing": "left",
+      "frameCount": 4,
+      "source": "sources/great-wave-r1.png",
+      "raw": "raw/great-wave-r1.png",
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          358,
+          393,
+          755,
+          896
+        ],
+        [
+          360,
+          394,
+          755,
+          896
+        ],
+        [
+          358,
+          398,
+          756,
+          896
+        ],
+        [
+          360,
+          400,
+          753,
+          896
+        ]
+      ],
+      "sourceSharedScale": 0.90498,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ]
+    },
+    "reflection-r1": {
+      "intentOrReaction": "Reflection",
+      "facing": "left",
+      "frameCount": 4,
+      "source": "sources/reflection-r1.png",
+      "raw": "raw/reflection-r1.png",
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ],
+        [
+          3312,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          366,
+          396,
+          749,
+          896
+        ],
+        [
+          364,
+          396,
+          749,
+          896
+        ],
+        [
+          322,
+          396,
+          745,
+          896
+        ],
+        [
+          365,
+          396,
+          749,
+          896
+        ]
+      ],
+      "sourceSharedScale": 0.90253,
+      "frameOrder": [
+        "wind-up",
+        "anticipation",
+        "contact",
+        "follow-through"
+      ]
+    },
+    "hit-r1": {
+      "intentOrReaction": "Hit",
+      "facing": "left",
+      "frameCount": 2,
+      "source": "sources/hit-r1.png",
+      "raw": "raw/hit-r1.png",
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          358,
+          384,
+          792,
+          896
+        ],
+        [
+          356,
+          378,
+          759,
+          896
+        ]
+      ],
+      "sourceSharedScale": 0.74154,
+      "frameOrder": [
+        "recoil",
+        "recover"
+      ]
+    },
+    "down-r1": {
+      "intentOrReaction": "Down",
+      "facing": "left",
+      "frameCount": 3,
+      "source": "sources/down-r1.png",
+      "raw": "raw/down-r1.png",
+      "cells": [
+        [
+          0,
+          0,
+          1024,
+          1024
+        ],
+        [
+          1104,
+          0,
+          1024,
+          1024
+        ],
+        [
+          2208,
+          0,
+          1024,
+          1024
+        ]
+      ],
+      "bounds": [
+        [
+          352,
+          406,
+          765,
+          896
+        ],
+        [
+          324,
+          518,
+          776,
+          896
+        ],
+        [
+          307,
+          646,
+          773,
+          896
+        ]
+      ],
+      "sourceSharedScale": 0.8277,
+      "frameOrder": [
+        "buckle",
+        "kneel",
+        "down-hold"
+      ]
+    }
+  }
+}

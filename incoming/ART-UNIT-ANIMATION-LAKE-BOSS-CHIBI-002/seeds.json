@@ -1,0 +1,12 @@
+{
+  "seed": "seeds/water-spirit-idle.png",
+  "approvedSource": "sources/approved-idle.png",
+  "sourceCommit": "4726ed12b5c8f4e32ae7dda7a536a0ed8310cfff",
+  "facing": "left",
+  "logicalCell": [
+    1024,
+    1024
+  ],
+  "soleOrigin": 0.875,
+  "poseReferences": "PR #339, same R1/R2 choices as PR #345"
+}

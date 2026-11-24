@@ -1,0 +1,179 @@
+{
+  "tide-lash-r2": {
+    "label": "Tide Lash",
+    "cuts": [
+      0,
+      543,
+      1086,
+      1629,
+      2172
+    ],
+    "centres": [
+      557,
+      557,
+      520,
+      545
+    ],
+    "scaleFrames": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "targetHeight": 500
+  },
+  "water-veil-r1": {
+    "label": "Water Veil",
+    "cuts": [
+      0,
+      543,
+      1086,
+      1629,
+      2172
+    ],
+    "centres": [
+      557,
+      557,
+      557,
+      557
+    ],
+    "scaleFrames": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "targetHeight": 515
+  },
+  "surging-wave-r1": {
+    "label": "Surging Wave",
+    "cuts": [
+      0,
+      543,
+      1086,
+      1629,
+      2172
+    ],
+    "centres": [
+      550,
+      555,
+      522,
+      550
+    ],
+    "scaleFrames": [
+      1
+    ],
+    "targetHeight": 576
+  },
+  "undertow-r1": {
+    "label": "Undertow",
+    "cuts": [
+      0,
+      543,
+      1086,
+      1629,
+      2172
+    ],
+    "centres": [
+      568,
+      541,
+      544,
+      557
+    ],
+    "scaleFrames": [
+      2,
+      3
+    ],
+    "targetHeight": 532
+  },
+  "great-wave-r1": {
+    "label": "Great Wave",
+    "cuts": [
+      0,
+      543,
+      1086,
+      1629,
+      2172
+    ],
+    "centres": [
+      557,
+      557,
+      557,
+      557
+    ],
+    "scaleFrames": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "targetHeight": 500
+  },
+  "reflection-r1": {
+    "label": "Reflection",
+    "cuts": [
+      0,
+      543,
+      1086,
+      1629,
+      2172
+    ],
+    "centres": [
+      557,
+      557,
+      534,
+      557
+    ],
+    "scaleFrames": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "targetHeight": 500
+  },
+  "hit-r1": {
+    "label": "Hit",
+    "cuts": [
+      0,
+      980,
+      1959
+    ],
+    "centres": [
+      575,
+      557
+    ],
+    "scaleFrames": [
+      0,
+      1
+    ],
+    "targetHeight": 515,
+    "frameOrder": [
+      "recoil",
+      "recover"
+    ]
+  },
+  "down-r1": {
+    "label": "Down",
+    "cuts": [
+      0,
+      724,
+      1448,
+      2172
+    ],
+    "centres": [
+      558,
+      550,
+      540
+    ],
+    "scaleFrames": [
+      0
+    ],
+    "targetHeight": 490,
+    "frameOrder": [
+      "buckle",
+      "kneel",
+      "down-hold"
+    ]
+  }
+}
