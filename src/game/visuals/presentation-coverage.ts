@@ -18,6 +18,7 @@ import { isEarthSkill } from './earth-fx';
 import { isHealingSkill } from './healing-fx';
 import { isDefenseSkill } from './defense-fx';
 import { isBladeSkill } from './blade-fx';
+import { basicWeaponForRole } from './basic-attack-fx';
 import { isFoeSignatureMove, isGroundMove } from './foe-signature-fx';
 import { bossMoves } from './boss-signature-fx';
 import defenseArt from './defense-art.json';
@@ -55,7 +56,7 @@ export const vfxKind = (module: VfxModule, shared: boolean): 'painted' | 'shared
 export function heroVfx(action: ActionId, role: string): VfxModule {
   if (action === 'backstab') return 'rework-fx';
   if (isProjectileSkill(action)) return 'projectile-fx';
-  if (action === 'attack' && (role === 'Archer' || role === 'Alchemist')) return 'basic-attack-fx';
+  if (action === 'attack' && basicWeaponForRole(role)) return 'basic-attack-fx';
   if (isCommandSkill(action)) return 'command-fx';
   if (isSongSkill(action)) return 'song-shadow-fx';
   if (isSdFx(action)) return 'saint-dance-fx';
@@ -85,7 +86,7 @@ function heroPoint(module: VfxModule, action: ActionId): string {
   switch (module) {
     case 'rework-fx': return 'กลางตัวผู้รับ Blade storm. damage จริงทีละ hit; settle ที่เท้าผู้รับจริง (หยุดตามจำนวน event)';
     case 'projectile-fx': return 'ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว)';
-    case 'basic-attack-fx': return 'ออกจากจุดปล่อย → ขอบหน้าผู้รับ damage จริง';
+    case 'basic-attack-fx': return 'ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย';
     case 'command-fx': return action === 'challenge' ? 'โล่ผู้ร่าย → ศัตรูที่ถูกท้าจริง 1 ตัว' : action === 'warcry' ? 'อกผู้ร่าย (buff) + เป้าที่ถูกสวนจริงต่อ event' : 'อก/ค้อนผู้ร่าย (stance ตัวเอง)';
     case 'song-shadow-fx': return action === 'evade' ? 'เท้าผู้ร่าย' : action === 'decoy' ? 'ข้างพันธมิตรที่ถูกคุ้มจริง' : action === 'solo' ? 'หลังพันธมิตรที่ได้ Solo จริง'
       : action === 'note' ? 'ผู้รับ damage จริง' : action === 'dread' ? 'ฝั่งศัตรูที่ยืนอยู่ (ไม่ใช่ฮิต)' : action === 'finale' ? 'ศัตรูที่โดนจริง / พันธมิตรที่ได้ heal-โล่จริง' : 'ผู้ร่าย → พันธมิตรที่ยืนอยู่';
@@ -187,7 +188,7 @@ export function presentationCoverage(list: readonly EncounterDefinition[] = pres
       const shared = module === 'blade-fx' && action === 'attack' || (martialSkills as readonly string[]).includes(action) || [...hexSkills, ...seerTurnSkills, ...seerStrikeSkills].some(a => a === action);
       rows.push({ identity: hero.id, side: 'hero', move: action, name: skills[action]?.name ?? action,
         body: body(hero.id, action === 'attack' ? 'role basic' : actionPoses[action], action),
-        vfx: { module, kind: vfxKind(module, shared), ...(shared ? { note: module === 'arcane-seal-fx' ? ((hexSkills as readonly string[]).includes(action) ? 'ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04)' : 'ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04)') : module === 'saint-dance-fx' ? 'ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)' : 'ฟันร่วมตามสีอาชีพ (ตั้งใจ)' } : module === 'basic-attack-fx' ? { note: 'ลูกธนู/ขวดวาดด้วยโค้ด (AV03 ตั้งใจ ไม่ใช้ภาพสกิล)' } : {}) },
+        vfx: { module, kind: vfxKind(module, shared), ...(shared ? { note: module === 'arcane-seal-fx' ? ((hexSkills as readonly string[]).includes(action) ? 'ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04)' : 'ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04)') : module === 'saint-dance-fx' ? 'ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04)' : 'ฟันร่วมตามสีอาชีพ (ตั้งใจ)' } : module === 'basic-attack-fx' ? { note: 'เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย' } : {}) },
         target: heroTargets[targetKind(action)]!, point: heroPoint(module, action) });
       const supplemental: Partial<Record<ActionId,string>> = {
         knives:'เคลือบพิษที่มือจาก venom บนผู้ร่าย', disarm:'burst/splash เฉพาะ damage ของพิษจริง (ไม่แทน hit แรก)',

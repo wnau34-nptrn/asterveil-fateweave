@@ -735,7 +735,7 @@ export class BattleScene extends Phaser.Scene {
       for(const cue of projectileCues(turn)){const key=cue.sourceId+cue.skill,own=cue.kind==='cast'&&cue.sourceId===turn.actorId&&release;projectilePrepare(this.projectileFx(cue.sourceId),cue,launch,contactMs,!seen.has(key),own?release.at:undefined);seen.add(key);}
       if(turn.side==='hero'&&isProjectileSkill(turn.action))return;
     }
-    // AV03: archers and alchemists loose/throw their basic attack instead of the shared sword cut.
+    // Basic attacks with a weapon-specific cue replace the shared sword cut.
     const basics=basicCues(turn,this.encounter);
     if(basics.length){for(const cue of basics)basicPrepare(this.fx(turn.actorId),cue,launch,contactMs,release?.at??.55);return;}
     // Foe signature moves (AV06): painted gather + travel to the real recipient; a cancelled turn paints nothing.

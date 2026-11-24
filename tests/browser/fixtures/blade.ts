@@ -21,7 +21,8 @@ import '../../../src/ui/components.css';
 
 const params = new URLSearchParams(location.search), skill = (params.get('skill') ?? 'attack') as ActionId;
 const role = ['pierce', 'halt'].includes(skill) ? 'Spear' : ['ambush', 'backstab', 'disarm'].includes(skill) ? 'Scout' : 'Duelist';
-const actor = [...heroes, ...mercenaries].find(h => h.role === role)!;
+const roster = [...heroes, ...mercenaries];
+const actor = roster.find(h => h.id === params.get('hero')) ?? roster.find(h => h.role === role)!;
 const data: EncounterDefinition = { ...structuredClone(veilSiege), heroes: [{ ...actor, speed: 200, maxHp: 500, actions: [...new Set<ActionId>(['attack', skill, 'ward', ...(skill === 'disarm' ? ['knives' as const] : [])])] }, ...heroes.filter(h => h.id !== actor.id).slice(0, 3).map(h => ({ ...h, speed: 50 }))],
   enemies: veilSiege.enemies.map(e => ({ ...e, speed: 100, maxHp: 500 })),
   intents: veilSiege.enemies.map(e => ({ sourceId: e.id, targetSlot: skill === 'backstab' ? 1 : 0, name: 'Raking Slash', damage: 12, kind: 'physical' as const })) };

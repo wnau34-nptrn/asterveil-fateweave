@@ -31,11 +31,11 @@ describe('AV03 basic attacks follow the weapon', () => {
       expect(hits.length).toBe(1);
     }
   });
-  it('never changes other classes, skills or enemy turns', () => {
+  it('keeps blade users, skills and enemy turns on their own routes', () => {
     const f = unitA4Fixture('mira', 'hinder');
     expect(basicCues(f.result.turns[0]!, f.data)).toEqual([]);
-    const lyra = unitA5Fixture('garran', 'attack');
-    expect(basicCues(lyra.result.turns[0]!, lyra.data)).toEqual([]);
+    const spear = unitA5Fixture('garran', 'attack');
+    expect(basicCues(spear.result.turns[0]!, spear.data)).toEqual([]);
     for (const t of f.result.turns.filter(t => t.side === 'enemy')) expect(basicCues(t, f.data)).toEqual([]);
   });
 });

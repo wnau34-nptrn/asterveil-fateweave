@@ -12,8 +12,8 @@
   "spriteRows": 188,
   "proceduralRows": 14,
   "paintedRows": 138,
-  "sharedRows": 60,
-  "codeRows": 4
+  "sharedRows": 49,
+  "codeRows": 15
  },
  "identities": [
   {
@@ -1397,12 +1397,12 @@
     "pose": "role basic"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ตัวผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "weaver",
@@ -1617,12 +1617,12 @@
     "pose": "role basic"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ตัวผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "healer",
@@ -1837,10 +1837,10 @@
    "vfx": {
     "module": "basic-attack-fx",
     "kind": "code",
-    "note": "ลูกธนู/ขวดวาดด้วยโค้ด (AV03 ตั้งใจ ไม่ใช้ภาพสกิล)"
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ออกจากจุดปล่อย → ขอบหน้าผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "mira",
@@ -2055,10 +2055,10 @@
    "vfx": {
     "module": "basic-attack-fx",
     "kind": "code",
-    "note": "ลูกธนู/ขวดวาดด้วยโค้ด (AV03 ตั้งใจ ไม่ใช้ภาพสกิล)"
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ออกจากจุดปล่อย → ขอบหน้าผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "toma",
@@ -2492,12 +2492,12 @@
     "pose": "role basic"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ตัวผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "brann",
@@ -2710,12 +2710,12 @@
     "pose": "role basic"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ตัวผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "lio",
@@ -3144,12 +3144,12 @@
     "pose": "role basic"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ตัวผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "metta",
@@ -3336,12 +3336,12 @@
     "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ตัวผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "thiran",
@@ -3468,12 +3468,12 @@
     "pose": "role basic"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ตัวผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "lalin",
@@ -3660,12 +3660,12 @@
     "reason": "OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ตัวผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "wila",
@@ -3792,12 +3792,12 @@
     "pose": "role basic"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ตัวผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "kael",
@@ -4002,12 +4002,12 @@
     "pose": "role basic"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ตัวผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "wynne",
@@ -4212,12 +4212,12 @@
     "pose": "role basic"
    },
    "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ฟันร่วมตามสีอาชีพ (ตั้งใจ)"
+    "module": "basic-attack-fx",
+    "kind": "code",
+    "note": "เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย"
    },
    "target": "ศัตรู 1 ตัว (ตรวจซ้ำตอน commit)",
-   "point": "ตัวผู้รับ damage จริง"
+   "point": "ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย"
   },
   {
    "identity": "astrid",
