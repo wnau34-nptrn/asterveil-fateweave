@@ -5,7 +5,7 @@ import type { StoragePort } from '../core/save/expedition-save';
 // under the same name. Sounds start only after the first user gesture and never affect game state.
 export type SfxName =
   | 'click' | 'open' | 'close' | 'step' | 'bump' | 'encounter' | 'chest' | 'chestRare' | 'rest' | 'rune' | 'runeReset' | 'lever' | 'push' | 'door' | 'secret' | 'herb'
-  | 'swing' | 'charge' | 'hit' | 'zap' | 'crit' | 'guard' | 'barrier' | 'heal' | 'buff' | 'debuff' | 'miss' | 'down' | 'cancel' | 'victory' | 'defeat'
+  | 'swing' | 'charge' | 'hit' | 'zap' | 'crit' | 'guard' | 'barrier' | 'steelBlock' | 'heal' | 'buff' | 'debuff' | 'miss' | 'down' | 'cancel' | 'victory' | 'defeat'
   | 'coin' | 'upgrade' | 'anvil' | 'clang' | 'claim' | 'potion';
 const prefKey = 'asterveil.fateweave.sfx.v1';
 export interface SfxPrefs { muted: boolean; volume: number }
@@ -38,6 +38,8 @@ const recipes: Record<SfxName, { tones?: Tone[]; noise?: Noise[] }> = {
   crit: { noise: [{ dur: .16, freq: 1800, q: 1, gain: .35, type: 'bandpass' }], tones: [{ type: 'square', freq: 1320, dur: .08, gain: .06 }, { type: 'sine', freq: 160, to: 50, dur: .18, gain: .22 }] },
   guard: { tones: [{ type: 'square', freq: 620, dur: .14, gain: .06 }, { type: 'square', freq: 930, dur: .14, gain: .05 }], noise: [{ dur: .05, freq: 3000, q: 2, gain: .12, type: 'bandpass' }] },
   barrier: { tones: [{ type: 'sine', freq: 440, to: 880, dur: .3, gain: .1 }, { type: 'sine', freq: 660, to: 1320, at: .05, dur: .3, gain: .06 }] },
+  steelBlock: { tones: [{ type: 'triangle', freq: 980, to: 770, dur: .085, gain: .11, attack: .004 }],
+    noise: [{ dur: .05, freq: 3100, q: 2, gain: .13, type: 'bandpass' }] },
   heal: { tones: [{ type: 'sine', freq: 523, dur: .15, gain: .1 }, { type: 'sine', freq: 659, at: .1, dur: .15, gain: .1 }, { type: 'sine', freq: 784, at: .2, dur: .3, gain: .1 }] },
   buff: { tones: [{ type: 'triangle', freq: 392, to: 784, dur: .25, gain: .1 }] },
   debuff: { tones: [{ type: 'triangle', freq: 600, to: 250, dur: .25, gain: .1 }] },

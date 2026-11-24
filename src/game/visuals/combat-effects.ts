@@ -73,11 +73,15 @@ export function effectCaption(event: BattleEvent): string {
   }
 }
 // At most two simultaneous recipes; one main impact, one secondary mechanic.
-export function contactSounds(turn: TurnStage): SfxName[] {
+export function contactSounds(turn: TurnStage, duelistStrike = false): SfxName[] {
   const has = (type: BattleEvent['type']) => turn.events.some(e => e.type === type);
   if (has('cancel')) return ['cancel'];
-  const hit = turn.events.find(e => e.type === 'damage');
-  const primary: SfxName | undefined = hit ? !hit.amount && hit.absorbed ? 'barrier' : ['execute','finisher','backstab'].includes(turn.action ?? '') ? 'crit' : effectFamily(turn) === 'arcane' ? 'zap' : 'hit' : has('dodge') || has('evade') ? 'miss' : undefined;
+  const hit = turn.events.find(e => e.type === 'damage' && (!duelistStrike || e.sourceId === turn.actorId));
+  const family = effectFamily(turn);
+  const block = hit && !hit.amount && hit.absorbed;
+  const primary: SfxName | undefined = block ? family === 'steel' ? 'steelBlock' : 'barrier'
+    : hit ? ['execute','finisher','backstab'].includes(turn.action ?? '') ? 'crit' : family === 'arcane' ? 'zap' : 'hit'
+    : has('dodge') || has('evade') ? 'miss' : undefined;
   const support: SfxName | undefined = has('guard') || has('brace') || has('taunt') || has('counter') ? 'guard' : has('barrier') || has('sanctuary') || has('sigil') ? 'barrier' : has('heal') ? 'heal' : has('mark') || has('corrode') || has('delay') || has('interrupt') ? 'debuff' : has('haste') || has('song') || has('rally') || has('stand') || has('finale') ? 'buff' : undefined;
   return [...new Set([primary, support].filter(s => s !== undefined))];
 }

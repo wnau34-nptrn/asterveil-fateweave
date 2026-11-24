@@ -40,16 +40,25 @@ export function executeCast(ctx: FxContext, from: Point, to: Point, contactMs: n
 // resonance only on a genuinely marked target, then sparse flecks falling. `dodged` shows passing flecks only.
 export function executeImpact(ctx: FxContext, at: Point, life: number, outcome: 'hit' | 'blocked' | 'dodged', marked: boolean): void {
   const { scale: s, quiet, reduced } = ctx, k = life / 552;
-  if (reduced) { const img = sprite(ctx, EXECUTE_ATLAS, at.x, at.y, 'contact_star', 62 * s).setFrame('static_impact').setAlpha(.5); if (outcome === 'blocked') img.setTint(PEARL); return; }
+  if (reduced) {
+    if (outcome === 'dodged') return;
+    const img = sprite(ctx, EXECUTE_ATLAS, at.x, at.y, 'contact_star', 62 * s).setFrame('static_impact').setAlpha(.5);
+    if (outcome === 'blocked') img.setTint(PEARL);
+    return;
+  }
   const flecks = () => { const f = sprite(ctx, EXECUTE_ATLAS, at.x, at.y + 6 * s, 'falling_spark', 92 * s); f.setAlpha(outcome === 'dodged' ? .6 : 1); play(ctx, f, 'falling_spark', 4, 232 * k, 120 * k, 1); };
   if (outcome === 'dodged') { flecks(); return; }
   const blocked = outcome === 'blocked', size = (blocked ? .75 : 1) * s;
   // A dark under-layer keeps the rose light readable on violet foes.
-  const shade = ctx.scene.add.graphics({ x: at.x, y: at.y }); shade.fillStyle(ROSE_INK, .22).fillCircle(0, 0, 26 * size); ctx.add(shade, 200 * k);
+  if (!blocked) {
+    const shade = ctx.scene.add.graphics({ x: at.x, y: at.y });
+    shade.fillStyle(ROSE_INK, .22).fillCircle(0, 0, 26 * size);
+    ctx.add(shade, 200 * k);
+  }
   const star = sprite(ctx, EXECUTE_ATLAS, at.x, at.y, 'contact_star', 92 * size); if (blocked) star.setTint(PEARL);
   play(ctx, star, 'contact_star', 4, 120 * k, 0, 1);
   if (marked && !blocked && !ctx.quiet) { const pulse = sprite(ctx, EXECUTE_ATLAS, at.x, at.y - 34 * s, 'rose_mark_pulse', 46 * s); play(ctx, pulse, 'rose_mark_pulse', 4, 152 * k, 0, 1); }
-  if (!quiet) flecks();
+  if (!quiet && !blocked) flecks();
 }
 
 // Before contact: threads weave at the barrier recipient, then the curved veil closes around them; ends at `contactMs`.

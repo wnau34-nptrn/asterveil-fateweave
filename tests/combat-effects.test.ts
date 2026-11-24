@@ -22,10 +22,14 @@ describe('truthful combat presentation', () => {
   it('separates shield absorption from HP damage, counter damage and misses', () => {
     const blocked: BattleEvent = {type:'damage',amount:0,absorbed:12,text:'',targetId:'guardian'};
     expect(effectCaption(blocked)).toBe('โล่รับ 12');
-    expect(contactSounds({...turn,events:[blocked]})).toEqual(['barrier']);
+    expect(contactSounds({...turn,events:[blocked]})).toEqual(['steelBlock']);
+    expect(contactSounds({...turn,action:'bolt',events:[blocked]})).toEqual(['barrier']);
+    expect(contactSounds({...turn,action:'ward',events:[{type:'barrier',amount:12,text:''}]})).toEqual(['barrier']);
     expect(effectCaption({...blocked,amount:4})).toBe('−4 · โล่รับ 12');
     expect(effectCaption({type:'counter',amount:6,text:''})).toBe('สวนกลับ −6');
     expect(contactSounds({...turn,events:[{type:'dodge',text:''}]})).toEqual(['miss']);
+    // A secondary tick from another actor must not turn a missed Duelist swing into a hit.
+    expect(contactSounds({...turn,events:[{type:'damage',sourceId:'weaver',amount:4,text:''},{type:'dodge',sourceId:turn.actorId,text:''}]}, true)).toEqual(['miss']);
   });
   it('limits mixed damage/support to two recipes and canceled actions never hit', () => {
     expect(contactSounds({...turn,events:[...turn.events,{type:'heal',amount:3,text:''},{type:'barrier',amount:6,text:''},{type:'interrupt',text:''}]})).toEqual(['crit','barrier']);
