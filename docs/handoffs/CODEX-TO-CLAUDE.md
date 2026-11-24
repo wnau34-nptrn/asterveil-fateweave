@@ -1,9 +1,16 @@
 ## 2026-11-24 — Game Feel: ท่าคืนตัวหลัง contact
 
-- สาขา `codex/fateweave-recovery-continuity` จาก `827756f` · ยังไม่มี merge commit.
+- สาขา `codex/fateweave-recovery-continuity` · PR #350. เจ้าของอนุมัติให้นำเข้าเกมและรวมฐานล่าสุดที่มี #351 ก่อนตรวจ CI.
 - ต่อท่าคืนตัวจาก transform ที่วาดล่าสุด ลดจังหวะกระโดดหลัง impact เมื่อ cue มาก่อนเฟรมถัดไป. เวลา cue และข้อมูล authoritative ใช้เส้นทางเดิม.
 - Typecheck, lint, production Pages build, unit เจาะจง 28 กรณี และ Chromium 21 กรณีผ่าน. ชุด unit รวมผ่าน 2269 กรณี ข้าม 24 กรณี และรันทวน 2 กรณีที่ติด fixture/timeout แล้วผ่าน.
-- ดู [ผลวัดและข้อจำกัด](../validation/recovery-continuity-2026-11-24/README_TH.md). ไม่มีการอนุมัติภาพใหม่. PR ถัดไปตรวจการโหลด `units.webp` ซ้ำ.
+- ดู [ผลวัดและข้อจำกัด](../validation/recovery-continuity-2026-11-24/README_TH.md). ไม่มีการอนุมัติภาพใหม่. งานถัดไปตรวจความหน่วงบนมือถือจริง.
+
+## 2026-11-24 — Atlas บอสใช้ URL เดียว (Codex · `codex/fateweave-shared-units-atlas`)
+
+- เจ้าของอนุมัติให้ทำ PR แยก. ภาพบนแท่นบอสใช้ `unitsUrl('units')` เหมือน Phaser. รวม #351 ที่ `411b9e1`.
+- Chromium 390px: cold download 2 → 1 ประหยัด 1.89 MiB ทุกรอบจากสามคู่. Warm download 0 ทั้งก่อนและหลัง.
+- Typecheck, lint, production Pages build, Playwright เดิน/เข้าศึก และการเก็บภาพ/คลิป 390px กับ desktop ผ่าน. Unit 2269 ผ่าน 24 ข้าม และเทสต์ boss-balance ที่ชน timeout ผ่านเมื่อรันแยก.
+- [ผลวัดและข้อจำกัด](../validation/shared-units-atlas-2026-11-24/README_TH.md)
 
 ## 2026-11-23 — Full-slot equipment art (Codex · `codex/full-slot-equipment-art`)
 - Owner approved integrating mockup v5. Equipped art uses the full slot with an opaque rarity-tinted background. Empty slots show 32 px icons and faint slot labels. Equipped slots retain their accessible names.
