@@ -13,7 +13,8 @@ import type { HoldKind } from './boss-signature-fx';
 // breakable = a ring with visible gaps; normal = smooth dashed rings. Reduced motion / reduced intensity keep every layer
 // still (no spin, pulse or motes) and dimmer.
 
-export interface AuraPalette { core: number; rim: number }
+// `strength` (default 1) scales every layer's opacity and glow for bosses whose own art is already saturated.
+export interface AuraPalette { core: number; rim: number; strength?: number }
 // Colour by the move family the hold shows (its frame name), so each boss reads as its own power.
 const palettes: readonly [RegExp, AuraPalette][] = [
   [/^(gather-thorns|thorn-)/, { core: 0x46e8b0, rim: 0xc8ffe6 }],
@@ -28,6 +29,14 @@ const palettes: readonly [RegExp, AuraPalette][] = [
 ];
 const fallback: AuraPalette = { core: 0xb99cff, rim: 0xf1e8ff };
 export const auraPalette = (frame: string): AuraPalette => palettes.find(([re]) => re.test(frame))?.[1] ?? fallback;
+// Per-boss overrides by unit art (owner 2026-11-25: Kragmor/Valdrakk “เข้มเกินไป และสีไม่เข้า”). Both are violet crystal
+// bodies with a cyan core, so their aura follows the body's violet and the core's cyan at a lower strength, for both the
+// ambient and the charge aura.
+const artPalettes: Readonly<Record<string, AuraPalette>> = {
+  foe_kragmor: { core: 0x8a5cff, rim: 0xc9f2ff, strength: .55 },
+  foe_valdrakk: { core: 0x9a6cff, rim: 0xbff4ff, strength: .55 },
+};
+export const artPalette = (art: string | undefined): AuraPalette | undefined => art ? artPalettes[art] : undefined;
 // A boss's own colour between charges: the first of its moves with a family colour (move names slugged like frames).
 export const bossPalette = (moves: readonly string[]): AuraPalette => {
   for (const move of moves) { const hit = palettes.find(([re]) => re.test(move.toLowerCase().replace(/ /g, '-'))); if (hit) return hit[1]; }
@@ -79,7 +88,7 @@ export function paintBossAura(scene: Phaser.Scene, body: Phaser.GameObjects.Cont
   const { core, rim } = o.palette, strong = o.kind === 'unstoppable';
   const w = Math.max(40, o.right - o.left), h = Math.max(40, o.feet - o.top), cx = (o.left + o.right) / 2;
   const objects: Phaser.GameObjects.GameObject[] = [], tweens: Phaser.Tweens.Tween[] = [];
-  const dim = o.calm ? .7 : 1;
+  const k = o.palette.strength ?? 1, dim = (o.calm ? .7 : 1) * k;
   const under = (obj: Phaser.GameObjects.GameObject) => { body.addAt(obj, 1); objects.push(obj); return obj; }; // above the contact shadow, below the sprite
 
   // 1. Ground sigil.
@@ -92,7 +101,7 @@ export function paintBossAura(scene: Phaser.Scene, body: Phaser.GameObjects.Cont
   under(column);
 
   // 2. Glow on the boss's own sprite(s).
-  const glows = addGlows(scene, sprites, core, strong ? 8 : 6);
+  const glows = addGlows(scene, sprites, core, (strong ? 8 : 6) * k);
 
   // 3. Rising motes (not in calm mode).
   let motes: Phaser.GameObjects.Particles.ParticleEmitter | undefined;
@@ -100,7 +109,7 @@ export function paintBossAura(scene: Phaser.Scene, body: Phaser.GameObjects.Cont
     motes = scene.add.particles(cx, o.feet, moteTexture(scene), {
       x: { min: -w * .55, max: w * .55 }, y: { min: -4, max: 4 },
       speedY: { min: strong ? -70 : -45, max: strong ? -35 : -20 }, speedX: { min: -6, max: 6 },
-      scale: { start: strong ? 1.3 : 1.05, end: 0 }, alpha: { start: .95, end: 0 }, lifespan: { min: 900, max: 1500 },
+      scale: { start: strong ? 1.3 : 1.05, end: 0 }, alpha: { start: .95 * k, end: 0 }, lifespan: { min: 900, max: 1500 },
       frequency: strong ? 28 : 40, quantity: 1, tint: [core, rim], blendMode: Phaser.BlendModes.ADD,
     });
     body.add(motes); objects.push(motes);
@@ -110,20 +119,20 @@ export function paintBossAura(scene: Phaser.Scene, body: Phaser.GameObjects.Cont
   if (o.emblem) {
     const bloom = scene.add.circle(o.emblem.x, o.emblem.y, w * .32, core, .28 * dim).setBlendMode(Phaser.BlendModes.ADD);
     body.addAt(bloom, Math.max(0, body.getIndex(o.emblem))); objects.push(bloom);
-    if (!o.calm) tweens.push(scene.tweens.add({ targets: bloom, scale: { from: .85, to: 1.2 }, alpha: { from: .35, to: .15 }, duration: strong ? 520 : 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+    if (!o.calm) tweens.push(scene.tweens.add({ targets: bloom, scale: { from: .85, to: 1.2 }, alpha: { from: .35 * k, to: .15 * k }, duration: strong ? 520 : 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
   }
 
   // 5. A shockwave ring that leaves the feet and fades, once per pulse (not in calm mode).
   if (!o.calm) {
     const wave = scene.add.ellipse(cx, o.feet, w * .6, w * .16).setStrokeStyle(strong ? 4 : 3, rim, .9).setBlendMode(Phaser.BlendModes.ADD);
     under(wave); body.moveAbove(wave as Phaser.GameObjects.GameObject, outer.holder as Phaser.GameObjects.GameObject);
-    tweens.push(scene.tweens.add({ targets: wave, scale: { from: .5, to: 1.9 }, alpha: { from: 1, to: 0 }, duration: strong ? 900 : 1400, repeat: -1, ease: 'Cubic.Out' }));
+    tweens.push(scene.tweens.add({ targets: wave, scale: { from: .5, to: 1.9 }, alpha: { from: k, to: 0 }, duration: strong ? 900 : 1400, repeat: -1, ease: 'Cubic.Out' }));
   }
   if (!o.calm) {
     tweens.push(scene.tweens.add({ targets: outer.spin, rotation: Math.PI * 2, duration: strong ? 5200 : 9000, repeat: -1 }));
     tweens.push(scene.tweens.add({ targets: inner.spin, rotation: -Math.PI * 2, duration: strong ? 3800 : 6500, repeat: -1 }));
-    tweens.push(scene.tweens.add({ targets: [pool, column], alpha: { from: (strong ? .42 : .32), to: .14 }, duration: strong ? 600 : 1100, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
-    for (const { glow } of glows) tweens.push(scene.tweens.add({ targets: glow, outerStrength: { from: strong ? 5 : 3.5, to: strong ? 11 : 8.5 }, duration: strong ? 600 : 1100, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+    tweens.push(scene.tweens.add({ targets: [pool, column], alpha: { from: (strong ? .42 : .32) * k, to: .14 * k }, duration: strong ? 600 : 1100, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+    for (const { glow } of glows) tweens.push(scene.tweens.add({ targets: glow, outerStrength: { from: (strong ? 5 : 3.5) * k, to: (strong ? 11 : 8.5) * k }, duration: strong ? 600 : 1100, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
   }
 
   return disposer(objects, tweens, glows);
@@ -139,23 +148,23 @@ function addGlows(scene: Phaser.Scene, sprites: Phaser.GameObjects.Image[], colo
 // column, shockwave or emblem bloom, so the charge aura still reads as a clear step up.
 function paintAmbient(scene: Phaser.Scene, body: Phaser.GameObjects.Container, sprites: Phaser.GameObjects.Image[], o: AuraOptions): BossAura {
   const { core, rim } = o.palette, w = Math.max(40, o.right - o.left), cx = (o.left + o.right) / 2;
-  const objects: Phaser.GameObjects.GameObject[] = [], tweens: Phaser.Tweens.Tween[] = [], dim = o.calm ? .7 : 1;
+  const objects: Phaser.GameObjects.GameObject[] = [], tweens: Phaser.Tweens.Tween[] = [], k = o.palette.strength ?? 1, dim = (o.calm ? .7 : 1) * k;
   const under = (obj: Phaser.GameObjects.GameObject) => { body.addAt(obj, 1); objects.push(obj); return obj; };
   const pool = scene.add.ellipse(cx, o.feet, w * 1.15, w * .3, core, .22 * dim).setBlendMode(Phaser.BlendModes.ADD);
   const band = ring(scene, w * .55, w * .14, 'normal', rim, .45 * dim, 2);
   band.holder.setPosition(cx, o.feet);
   under(band.holder); under(pool);
-  const glows = addGlows(scene, sprites, core, 2.5);
+  const glows = addGlows(scene, sprites, core, 2.5 * k);
   if (!o.calm) {
     const motes = scene.add.particles(cx, o.feet, moteTexture(scene), {
       x: { min: -w * .45, max: w * .45 }, y: { min: -4, max: 4 }, speedY: { min: -30, max: -14 }, speedX: { min: -4, max: 4 },
-      scale: { start: .7, end: 0 }, alpha: { start: .7, end: 0 }, lifespan: { min: 1200, max: 1800 }, frequency: 260, quantity: 1,
+      scale: { start: .7, end: 0 }, alpha: { start: .7 * k, end: 0 }, lifespan: { min: 1200, max: 1800 }, frequency: 260, quantity: 1,
       tint: [core, rim], blendMode: Phaser.BlendModes.ADD,
     });
     body.add(motes); objects.push(motes);
     tweens.push(scene.tweens.add({ targets: band.spin, rotation: Math.PI * 2, duration: 16000, repeat: -1 }));
-    tweens.push(scene.tweens.add({ targets: pool, alpha: { from: .24, to: .1 }, duration: 1800, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
-    for (const { glow } of glows) tweens.push(scene.tweens.add({ targets: glow, outerStrength: { from: 1.5, to: 3.5 }, duration: 1800, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+    tweens.push(scene.tweens.add({ targets: pool, alpha: { from: .24 * k, to: .1 * k }, duration: 1800, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+    for (const { glow } of glows) tweens.push(scene.tweens.add({ targets: glow, outerStrength: { from: 1.5 * k, to: 3.5 * k }, duration: 1800, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
   }
   return disposer(objects, tweens, glows);
 }

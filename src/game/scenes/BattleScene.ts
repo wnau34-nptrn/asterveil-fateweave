@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { REWORK_ATLAS, reworkCues, reworkMarks, reworkContact } from '../visuals/rework-fx';
 import { unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals/basic-attack-fx';
-import { auraPalette, bossPalette, paintBossAura, type BossAura } from '../visuals/boss-aura';
+import { artPalette, auraPalette, bossPalette, paintBossAura, type BossAura } from '../visuals/boss-aura';
 import { BOSS_ATLAS, LAKE_BOSS_ATLAS, bossAtlasFor, bossAtlasUrls, lakeBossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, greatWaveScales, holdPlacement, isLakeBossMove, sealedWaterVeil, usesBossSignature, usesLakeBossSignature, type BossPoint, type ChargeHold } from '../visuals/boss-signature-fx';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
 import { ALL_SHEETS, allBattleAtlases, atlasesForActions, encounterAtlases, encounterSheets, sheetKey, sheetsForArt, type AtlasRequest } from '../visuals/battle-assets';
@@ -240,7 +240,7 @@ export class BattleScene extends Phaser.Scene {
       const sprites = body.list.filter((c): c is Phaser.GameObjects.Image => c instanceof Phaser.GameObjects.Image && /^(unit-pilot-|battle-)/.test(c.texture.key));
       const moves = [...this.encounter.intents.filter(i => i.sourceId === foe.id).map(i => i.name), ...(this.encounter.phases ?? []).filter(p => p.sourceId === foe.id).map(p => p.name)];
       this.auras.set(foe.id, paintBossAura(this, body, sprites, {
-        level: hold && emblem ? 'charge' : 'ambient', palette: hold ? auraPalette(hold.frame) : bossPalette(moves), kind: hold?.kind ?? 'normal',
+        level: hold && emblem ? 'charge' : 'ambient', palette: artPalette(foe.art) ?? (hold ? auraPalette(hold.frame) : bossPalette(moves)), kind: hold?.kind ?? 'normal',
         left: box.left - body.x, right: box.right - body.x, top: box.top - body.y, feet: box.bottom - body.y,
         emblem: emblem as Phaser.GameObjects.Image | undefined, calm: this.quiet || this.reducedMotion }));
       this.auraKeys.set(foe.id, key);
