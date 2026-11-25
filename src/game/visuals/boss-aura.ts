@@ -6,7 +6,7 @@ import type { HoldKind } from './boss-signature-fx';
 // (`chargeHolds`) that is swapped for the full charge aura, painted with the hold emblem. Both are drawn only from the
 // shown state and never change rules or timing. Charge layers, back to front:
 //   1. a ground sigil under the feet: a soft additive pool plus two counter-rotating rune rings;
-//   2. a pulsing halo on the boss's own sprite (fill-tinted additive copies that follow its frame);
+//   2. the body aura: the boss's own silhouette in its colour, a steady outline plus rising, fading copies (`addGlows`);
 //   3. motes rising from the sigil past the body;
 //   4. an additive bloom behind the hold emblem.
 // The release kind keys shape and strength, not colour alone: unstoppable = toothed rings, brighter glow, faster motes;
@@ -30,13 +30,12 @@ const palettes: readonly [RegExp, AuraPalette][] = [
 ];
 const fallback: AuraPalette = { core: 0xb99cff, rim: 0xf1e8ff };
 export const auraPalette = (frame: string): AuraPalette => palettes.find(([re]) => re.test(frame))?.[1] ?? fallback;
-// Per-boss overrides by unit art (owner 2026-11-25: Kragmor/Valdrakk “เข้มเกินไป และสีไม่เข้า”). Both are violet crystal
-// bodies with a cyan core, so their aura follows the body's violet and the core's cyan at a lower strength, for both the
-// ambient and the charge aura.
+// Per-boss colours by unit art (owner 2026-11-25: Kragmor/Valdrakk “สีไม่เข้า”): both are violet crystal bodies, so
+// their aura follows the body's violet. Their earlier reduced strength was lifted back to the others' (owner 2026-11-25
+// “บอสตัวที่เคยสั่งให้ปรับลด ให้เอากลับมาเท่าตัวอื่น”); `strength` stays available for later tuning.
 const artPalettes: Readonly<Record<string, AuraPalette>> = {
-  // Owner 2026-11-25 “เพิ่มช่วงชาร์จให้แรงขึ้นอีกนิด”: the charge sits between the old full strength and the ambient.
-  foe_kragmor: { core: 0x8a5cff, rim: 0xc9f2ff, strength: .55, chargeStrength: .8 },
-  foe_valdrakk: { core: 0x9a6cff, rim: 0xbff4ff, strength: .55, chargeStrength: .8 },
+  foe_kragmor: { core: 0x8a5cff, rim: 0xc9b8ff },
+  foe_valdrakk: { core: 0x9a6cff, rim: 0xd2c2ff },
 };
 export const artPalette = (art: string | undefined): AuraPalette | undefined => art ? artPalettes[art] : undefined;
 // A boss's own colour between charges: the first of its moves with a family colour (move names slugged like frames).
@@ -88,7 +87,7 @@ function ring(scene: Phaser.Scene, rx: number, ry: number, kind: HoldKind, color
 export function paintBossAura(scene: Phaser.Scene, body: Phaser.GameObjects.Container, sprites: Phaser.GameObjects.Image[], o: AuraOptions): BossAura {
   if (o.level === 'ambient') return paintAmbient(scene, body, sprites, o);
   const { core, rim } = o.palette, strong = o.kind === 'unstoppable';
-  const w = Math.max(40, o.right - o.left), h = Math.max(40, o.feet - o.top), cx = (o.left + o.right) / 2;
+  const w = Math.max(40, o.right - o.left), cx = (o.left + o.right) / 2;
   const objects: Phaser.GameObjects.GameObject[] = [], tweens: Phaser.Tweens.Tween[] = [];
   const k = o.palette.chargeStrength ?? o.palette.strength ?? 1, dim = (o.calm ? .7 : 1) * k;
   const under = (obj: Phaser.GameObjects.GameObject) => { body.addAt(obj, 1); objects.push(obj); return obj; }; // above the contact shadow, below the sprite
@@ -100,8 +99,7 @@ export function paintBossAura(scene: Phaser.Scene, body: Phaser.GameObjects.Cont
   under(outer.holder); under(inner.holder); under(pool);
 
   // 2. Glow on the boss's own sprite(s).
-  const glows = addGlows(scene, sprites, core, (strong ? 8 : 6) * k,
-    { rim, core, w, h, cx, feet: o.feet, level: strong ? 'unstoppable' : 'charge', k, calm: o.calm });
+  const glows = addGlows(scene, sprites, core, (strong ? 8 : 6) * k, strong ? 'unstoppable' : 'charge', o.calm);
 
   // 3. Rising motes (not in calm mode).
   let motes: Phaser.GameObjects.Particles.ParticleEmitter | undefined;
@@ -110,7 +108,7 @@ export function paintBossAura(scene: Phaser.Scene, body: Phaser.GameObjects.Cont
       x: { min: -w * .55, max: w * .55 }, y: { min: -16, max: -9 },
       speedY: { min: strong ? -70 : -45, max: strong ? -35 : -20 }, speedX: { min: -6, max: 6 },
       scale: { start: strong ? 1.3 : 1.05, end: 0 }, alpha: { start: .95 * k, end: 0 }, lifespan: { min: 900, max: 1500 },
-      frequency: strong ? 28 : 40, quantity: 1, tint: [core, rim], blendMode: Phaser.BlendModes.ADD,
+      frequency: strong ? 28 : 40, quantity: 1, tint: core, blendMode: Phaser.BlendModes.ADD,
     });
     body.add(motes); objects.push(motes);
   }
@@ -138,85 +136,49 @@ export function paintBossAura(scene: Phaser.Scene, body: Phaser.GameObjects.Cont
   return disposer(objects, tweens, glows);
 }
 
-// The body glow is a halo, not a Glow filter: two fill-tinted additive copies of the boss's sprite, a little larger and
-// behind it, that copy its frame, flip and pose every frame. A Glow filter re-rendered the large boss sprite through an
-// extra pass each frame and slowed software-rendered Chromium (the battle HUD browser suite) by ~9x; the halo costs two
-// quads. `outerStrength` keeps the filter's scale (≈1.5–11) so the tuned strengths and their tweens are unchanged.
-const HALO_LAYERS: readonly [number, number][] = [[1.06, .22], [1.14, .12]]; // [scale, alpha per unit of strength]
+// The body aura is made of the boss's own silhouette, never free particles (owner 2026-11-25: “ไม่เอาเปรวสีขาว เอาเปรวเป็น
+// สีของตัวเอง แล้วไม่พุ่งแบบไร้ทิศทาง ต้องยังเป็นรูปทรงตามตัวบอสอยู่”): fill-tinted copies of its sprite in its own colour,
+// drawn behind it and copying its frame, flip and pose every frame. One steady layer hugs the outline; staggered "tongue"
+// layers swell upward from the sole (taller than wider), drift up and fade, so the aura flickers like rising energy while
+// keeping the boss's shape. Normal blending keeps the colour from washing out to white. (A Glow filter was tried first:
+// it re-rendered the large sprite through an extra pass every frame and slowed software-rendered Chromium ~9x.)
+// `outerStrength` is the intensity (≈1.5–11, the tuned scale of the earlier filter) the tweens breathe.
 type Glow = { outerStrength: number; dispose(): void };
-// Flickering energy flames (owner 2026-11-25: “ไม่เอาเป็นสีทื่อๆ … มีวูบวาบๆ พริ้วไหว”): short-lived flame tongues born
-// inside the body's outline behind it, licking up past its edges and top, white-hot at birth and fading to the boss's
-// colour. Denser, taller and faster while charging. Calm mode (reduced motion/intensity) has no flames.
-export interface FlameSpec { rim: number; core: number; w: number; h: number; cx: number; feet: number; level: 'ambient' | 'charge' | 'unstoppable'; k: number; calm: boolean }
-const FLAME = 'boss-aura-flame-v2';
-function flameTexture(scene: Phaser.Scene): string {
-  if (scene.textures.exists(FLAME)) return FLAME;
-  // A soft teardrop in the top half of a 32×192 texture: broad and bright at the base, tapering to a point at the top.
-  // The base's lowest pixel is the texture's centre (a particle's origin), so a tongue only ever rises from where it is
-  // born and never hangs below it (owner 2026-11-25: “เฟรมออร่าไม่ควรมีต่ำกว่าเท้าของบอส”).
-  const g = scene.make.graphics({}, false);
-  for (let i = 0; i < 24; i++) {
-    const t = i / 23, y = 96 - 12 - t * 78, rx = 13 * Math.pow(1 - t, .7) + 1, ry = 10 * (1 - t * .6) + 2;
-    g.fillStyle(0xffffff, .2 + .14 * (1 - t)); g.fillEllipse(16, y, rx * 2, ry * 2);
-  }
-  g.generateTexture(FLAME, 32, 192); g.destroy();
-  return FLAME;
-}
-const flameLevels = {
-  ambient: { frequency: 32, quantity: 1, speed: [-110, -60], life: [320, 560], sx: [1, .3], sy: [1.05, .5], alpha: .6 },
-  charge: { frequency: 16, quantity: 2, speed: [-190, -100], life: [360, 680], sx: [1.35, .35], sy: [1.45, .6], alpha: .5 },
-  unstoppable: { frequency: 12, quantity: 2, speed: [-240, -130], life: [380, 720], sx: [1.5, .4], sy: [1.7, .7], alpha: .58 },
-} as const;
-const FEET_CLEARANCE = 6; // px above the sole line
-function addFlames(scene: Phaser.Scene, holder: Phaser.GameObjects.Container, f: FlameSpec): void {
-  if (f.calm) return;
-  const l = flameLevels[f.level];
-  // Born on a band around the body's outline (82–102% of its half-size), so the tongues show at its edges and top
-  // instead of being hidden behind the figure.
-  const cy = f.feet - f.h * .48, rx = f.w * .5, ry = f.h * .5;
-  const ring: Phaser.Types.GameObjects.Particles.RandomZoneSource = { getRandomPoint: (point: Phaser.Types.Math.Vector2Like) => {
-    const a = Math.random() * Math.PI * 2, r = .82 + .2 * Math.random();
-    point.x = f.cx + Math.cos(a) * rx * r; point.y = cy + Math.sin(a) * ry * r;
-    // Never born at or below the feet: a point in the bottom band is mirrored to the upper half.
-    if (point.y > f.feet - FEET_CLEARANCE) point.y = 2 * cy - point.y;
-    return point;
-  } } as Phaser.Types.GameObjects.Particles.RandomZoneSource;
-  const flames = scene.add.particles(0, 0, flameTexture(scene), {
-    emitZone: { type: 'random', source: ring },
-    speedY: { min: l.speed[0], max: l.speed[1] }, speedX: { min: -14, max: 14 }, accelerationY: -50,
-    scaleX: { start: l.sx[0], end: l.sx[1] }, scaleY: { start: l.sy[0], end: l.sy[1] }, rotate: { min: -7, max: 7 },
-    alpha: { start: l.alpha * (.5 + .5 * f.k), end: 0, ease: 'Quad.In' }, lifespan: { min: l.life[0], max: l.life[1] },
-    frequency: l.frequency, quantity: l.quantity, color: [f.rim, f.core, f.core], colorEase: 'Sine.Out', blendMode: Phaser.BlendModes.ADD,
-  });
-  holder.addAt(flames, 0);
-}
-// The halo lives in its own container directly behind the boss's body in the field layer, never inside the body: code
+export type AuraBeat = 'ambient' | 'charge' | 'unstoppable';
+const beats: Readonly<Record<AuraBeat, { period: number; grow: readonly [number, number]; rise: number; tongues: number }>> = {
+  ambient: { period: 1600, grow: [.07, .13], rise: 4, tongues: 3 },
+  charge: { period: 900, grow: [.11, .2], rise: 8, tongues: 4 },
+  unstoppable: { period: 650, grow: [.13, .25], rise: 10, tongues: 4 },
+};
+const HUG = 1.045; // the steady layer's scale
+// The aura sits in its own container directly behind the boss's body in the field layer, never inside the body: code
 // and test fixtures find a unit's sprite as the first unit image in its body (`bodySprite`).
-function addGlows(scene: Phaser.Scene, sprites: Phaser.GameObjects.Image[], color: number, strength: number, flames?: FlameSpec): Glow[] {
-  return sprites.slice(0, 1).map((sprite, n) => {
-    const body = sprite.parentContainer, layer = body?.parentContainer;
-    const layers = HALO_LAYERS.map(([size]) => ({ size, halo: scene.add.image(0, 0, sprite.texture.key, sprite.frame.name).setTint(color)
-      .setTintMode(Phaser.TintModes.FILL).setBlendMode(Phaser.BlendModes.ADD) }));
-    const holder = scene.add.container(0, 0, layers.map(l => l.halo));
+function addGlows(scene: Phaser.Scene, sprites: Phaser.GameObjects.Image[], color: number, strength: number, beat: AuraBeat, calm: boolean): Glow[] {
+  return sprites.slice(0, 1).map(sprite => {
+    const body = sprite.parentContainer, layer = body?.parentContainer, spec = beats[beat];
+    const copy = () => scene.add.image(0, 0, sprite.texture.key, sprite.frame.name).setTint(color).setTintMode(Phaser.TintModes.FILL);
+    const hug = copy(), tongues = Array.from({ length: calm ? 0 : spec.tongues }, copy);
+    const holder = scene.add.container(0, 0, [...tongues, hug]);
     if (layer && body) layer.addAt(holder, Math.max(0, layer.getIndex(body)));
-    if (flames && n === 0) addFlames(scene, holder, flames); // once per boss, not for the hidden crossfade frame
-    const calm = flames?.calm ?? true;
     const glow: Glow = { outerStrength: strength, dispose: () => { scene.events.off('postupdate', sync); holder.destroy(); } };
+    const place = (img: Phaser.GameObjects.Image, sx: number, sy: number, dy: number, alpha: number) => {
+      if (img.texture.key !== sprite.texture.key || img.frame.name !== sprite.frame.name) img.setTexture(sprite.texture.key, sprite.frame.name);
+      img.setOrigin(sprite.originX, sprite.originY).setPosition(sprite.x, sprite.y + dy).setRotation(sprite.rotation).setFlipX(sprite.flipX)
+        .setScale(sprite.scaleX * sx, sprite.scaleY * sy).setVisible(sprite.visible).setAlpha(Math.max(0, Math.min(.85, alpha)));
+    };
     // After the scene's update (unit animation picks the frame there), before rendering.
     function sync(): void {
       if (!sprite.active || !body?.active) { holder.setVisible(false); return; }
-      // The field layer sorts by depth: sit just under the body's depth so a re-sort keeps the halo directly behind it.
+      // The field layer sorts by depth: sit just under the body's depth so a re-sort keeps the aura directly behind it.
       if (holder.depth !== body.depth - .01) holder.setDepth(body.depth - .01);
       if (layer && layer.getIndex(holder) !== layer.getIndex(body) - 1) layer.moveBelow(holder, body);
       holder.setPosition(body.x, body.y).setScale(body.scaleX, body.scaleY).setRotation(body.rotation).setAlpha(body.alpha).setVisible(body.visible);
-      // The halo wavers: two slow incommensurate waves plus a little per-frame flicker (still in calm mode).
-      const t = scene.time.now, waver = calm ? 1 : .78 + .14 * Math.sin(t * .011) * Math.sin(t * .017 + 1.3) + .08 * Math.random();
-      const swell = calm ? 1 : 1 + .012 * Math.sin(t * .009);
-      layers.forEach(({ halo, size }, i) => {
-        if (halo.texture.key !== sprite.texture.key || halo.frame.name !== sprite.frame.name) halo.setTexture(sprite.texture.key, sprite.frame.name);
-        halo.setOrigin(sprite.originX, sprite.originY).setPosition(sprite.x, sprite.y).setRotation(sprite.rotation).setFlipX(sprite.flipX)
-          .setScale(sprite.scaleX * size * swell, sprite.scaleY * size * swell).setVisible(sprite.visible)
-          .setAlpha(Math.min(.65, sprite.alpha * glow.outerStrength * HALO_LAYERS[i]![1] * waver));
+      const f = glow.outerStrength / 8, t = scene.time.now;
+      place(hug, HUG, HUG, 0, sprite.alpha * .5 * f * (calm ? 1 : .9 + .1 * Math.sin(t * .013)));
+      tongues.forEach((img, i) => {
+        const phase = ((t / spec.period + i / tongues.length) % 1 + 1) % 1, flicker = .85 + .15 * Math.random();
+        place(img, HUG + spec.grow[0] * phase, HUG + spec.grow[1] * phase, -spec.rise * phase,
+          sprite.alpha * .55 * f * Math.sin(Math.PI * phase) * (1 - phase * .35) * flicker);
       });
     }
     sync(); scene.events.on('postupdate', sync);
@@ -234,13 +196,12 @@ function paintAmbient(scene: Phaser.Scene, body: Phaser.GameObjects.Container, s
   const band = ring(scene, w * .55, w * .14, 'normal', rim, .45 * dim, 2);
   band.holder.setPosition(cx, o.feet);
   under(band.holder); under(pool);
-  const h = Math.max(40, o.feet - o.top);
-  const glows = addGlows(scene, sprites, core, 2.5 * k, { rim, core, w, h, cx, feet: o.feet, level: 'ambient', k, calm: o.calm });
+  const glows = addGlows(scene, sprites, core, 2.5 * k, 'ambient', o.calm);
   if (!o.calm) {
     const motes = scene.add.particles(cx, o.feet, moteTexture(scene), {
       x: { min: -w * .45, max: w * .45 }, y: { min: -16, max: -9 }, speedY: { min: -30, max: -14 }, speedX: { min: -4, max: 4 },
       scale: { start: .7, end: 0 }, alpha: { start: .7 * k, end: 0 }, lifespan: { min: 1200, max: 1800 }, frequency: 260, quantity: 1,
-      tint: [core, rim], blendMode: Phaser.BlendModes.ADD,
+      tint: core, blendMode: Phaser.BlendModes.ADD,
     });
     body.add(motes); objects.push(motes);
     tweens.push(scene.tweens.add({ targets: band.spin, rotation: Math.PI * 2, duration: 16000, repeat: -1 }));
