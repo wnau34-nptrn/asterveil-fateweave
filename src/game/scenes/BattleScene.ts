@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { REWORK_ATLAS, reworkCues, reworkMarks, reworkContact } from '../visuals/rework-fx';
 import { unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals/basic-attack-fx';
+import { paintBossAura, type BossAura } from '../visuals/boss-aura';
 import { BOSS_ATLAS, LAKE_BOSS_ATLAS, bossAtlasFor, bossAtlasUrls, lakeBossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, greatWaveScales, holdPlacement, isLakeBossMove, sealedWaterVeil, usesBossSignature, usesLakeBossSignature, type BossPoint } from '../visuals/boss-signature-fx';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
 import { ALL_SHEETS, allBattleAtlases, atlasesForActions, encounterAtlases, encounterSheets, sheetKey, sheetsForArt, type AtlasRequest } from '../visuals/battle-assets';
@@ -219,11 +220,14 @@ export class BattleScene extends Phaser.Scene {
   // AV07: persistent charge telegraphs, one per boss holding a charged release. Derived from the state shown, so a
   // repaint, reload or resize restores it; release, interruption, down, phase replacement or leaving the field clear it.
   private holds = new Map<string, Phaser.GameObjects.GameObject>();
+  // The aura painted with each hold (ground sigil, body glow, motes); disposed with its hold.
+  private auras = new Map<string, BossAura>();
+  private dropAura(id: string): void { this.auras.get(id)?.dispose(); this.auras.delete(id); }
   private paintHolds(): void {
     const view = this.view; if (!view) return;
     this.paintReworkMarks(view.state);
     const wanted = new Map(chargeHolds(view.state, this.encounter, this.resolvedActor).map(h => [h.enemyId, h]));
-    for (const [id, item] of this.holds) if (wanted.get(id)?.frame !== item.getData('holdFrame') || !item.active) { this.tweens.killTweensOf(item); item.destroy(); this.holds.delete(id); }
+    for (const [id, item] of this.holds) if (wanted.get(id)?.frame !== item.getData('holdFrame') || !item.active) { this.tweens.killTweensOf(item); item.destroy(); this.holds.delete(id); this.dropAura(id); }
     for (const [id, hold] of wanted) {
       if (this.holds.has(id)) continue;
       const body = this.bodies.get(id), box = this.figureBox(id), slot = this.actorPanels.get(id);
@@ -254,6 +258,10 @@ export class BattleScene extends Phaser.Scene {
       }
       item.setData('holdFrame', hold.frame).setData('holdKind', hold.kind);
       body.add(item); this.holds.set(id, item);
+      const sprites = body.list.filter((c): c is Phaser.GameObjects.Image => c instanceof Phaser.GameObjects.Image && /^(unit-pilot-|battle-)/.test(c.texture.key));
+      this.dropAura(id);
+      this.auras.set(id, paintBossAura(this, body, sprites, { frame: hold.frame, kind: hold.kind, left: box.left - body.x, right: box.right - body.x, top: box.top - body.y,
+        feet: box.bottom - body.y, emblem: item, calm: this.quiet || this.reducedMotion }));
       // Normal and breakable holds breathe gently; unstoppable brackets stay rigid. Reduced motion and quiet keep all still.
       if (hold.kind !== 'unstoppable' && !this.quiet && !this.reducedMotion) this.idle.push(this.tweens.add({ targets: item, alpha: { from: 1, to: .85 }, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
     }
@@ -406,7 +414,7 @@ export class BattleScene extends Phaser.Scene {
       this.actorPanels.set(enemy.id, slot);
       this.actor(enemy.id, slot, this.view.state.enemies[i]!.hp, true);
     }
-    this.holds.clear(); this.paintHolds();
+    this.holds.clear(); for (const id of [...this.auras.keys()]) this.dropAura(id); this.paintHolds();
     this.layer.sort('depth'); this.onLayout();
   }
   private actor(id: string, slot: FieldSlot, hp: number, enemy: boolean): void {
