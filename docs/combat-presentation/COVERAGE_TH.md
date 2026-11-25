@@ -7,7 +7,7 @@
 - identities 49 (ฝ่ายเรา 17 · ศัตรู 32) · มี atlas 47 · พักตาม OD-14 2 (โอดราน `thiran` / อิโซลด์ `wila`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่งรออนิเมชัน 0
 - ActionId ฝ่ายเรา 91 รายการ (119 แถว ตัวละคร×ท่า รวมท่าจากต้นไม้) · ชื่อท่าศัตรู/phase 72 ชื่อ (83 แถว identity×ท่า)
 - ท่าร่างกาย: sprite 188 · procedural 14 (ตัวที่พักตาม OD-14 และภาพนิ่ง P03 ที่รออนิเมชัน CODEX-A12)
-- VFX: วาดเฉพาะ 138 · ชุดร่วมโดยตั้งใจ 60 · วาดด้วยโค้ดโดยตั้งใจ 4
+- VFX: วาดเฉพาะ 138 · ชุดร่วมโดยตั้งใจ 49 · วาดด้วยโค้ดโดยตั้งใจ 15
 
 ความหมาย: **sprite** = เฟรม atlas (prepare → recover; contact = เฟรม recover แรก, เวลา contact/end มาจาก UI ไม่ใช่ FPS ภาพ) · **procedural** = ภาพนิ่ง + การเคลื่อนไหวด้วยโค้ด · **วาด** = painted atlas ของท่านั้น · **ชุดร่วม** = painted atlas ร่วมตระกูลโดยตั้งใจ · **โค้ด** = วาดด้วย Graphics ตั้งใจ (ไม่มีภาพเฉพาะ) · จุดเกิดผลทุกแถวอ่านจาก event จริงของ resolver
 
@@ -85,28 +85,28 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `tracer` | `finisher` ปลิดชีพ | sprite `attack` 1,2,3 → 5,4,6,7,8 | วาด `blade-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
 | `tracer` | `parry` ปัดดาบ | sprite `parry` 31,32,33 → 34,35,36,37 | วาด `blade-fx` | ตัวเอง | ผู้ร่าย (stance) + ผู้รับ counter จริง |
 | `tracer` | `sweep` ฟันกวาด | sprite `attack` 1,2,3 → 5,4,6,7,8 | วาด `blade-fx` | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | ตัวผู้รับ damage จริง |
-| `weaver` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `weaver` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `weaver` | `bolt` ศรเวท | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `bolt-fx` — เสริม rework-fx: มวลพลังเวทที่มือเมื่อ arcane +1 จริง; คงภาพหลักเดิม | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ไม้เท้า → ตัวผู้รับจริง |
 | `weaver` | `ward` โล่เวท | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `exec-ward-fx` | พันธมิตร 1 คน | ผู้รับ barrier จริง |
 | `weaver` | `storm` พายุเวท | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `arcane-seal-fx` | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | กลางตัว → เท้าศัตรูที่โดนจริงทุกตัว |
 | `weaver` | `aegis` เกราะผลึก | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `defense-fx` | ทั้งทีม | ผู้รับจริง — ขา/พื้น |
 | `weaver` | `sigil` ตรึงเวท | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `arcane-seal-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | เท้าศัตรูจริง |
 | `weaver` | `dispel` ปลดพลังเวท | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `arcane-seal-fx` — เสริม rework-fx: ปล่อยพลังที่มือเฉพาะ arcane −N จริง; คงภาพหลักเดิม | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวเป้าจริง |
-| `healer` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `healer` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `healer` | `heal` รักษา | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `healing-fx` | พันธมิตร 1 คน | ฐานเท้าผู้รับ heal/barrier จริง (รวม upkeep) |
 | `healer` | `prayer` พรฟื้นฟู | sprite `prayer` 22,23,24,25 → 26,27,28,29 | วาด `healing-fx` | ทั้งทีม | ฐานเท้าผู้รับ heal/barrier จริง (รวม upkeep) |
 | `healer` | `revive` ฟื้นคืน | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `healing-fx` | พันธมิตร 1 คน | ฐานเท้าผู้รับ heal/barrier จริง (รวม upkeep) |
 | `healer` | `sanctuary` พรคุ้มภัย | sprite `sanctuary` 30,31,32,33 → 34,35,36,37 | วาด `defense-fx` | พันธมิตร 1 คน | ผู้รับจริง — ตัว |
 | `healer` | `halo` วงแสงคุ้มกัน | sprite `prayer` 22,23,24,25 → 26,27,28,29 | วาด `defense-fx` | ตัวเอง | ผู้รับจริง — ตัว |
 | `healer` | `bless` พรต่อเนื่อง | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `healing-fx` | พันธมิตร 1 คน | ฐานเท้าผู้รับ heal/barrier จริง (รวม upkeep) |
-| `mira` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | โค้ด `basic-attack-fx` — ลูกธนู/ขวดวาดด้วยโค้ด (AV03 ตั้งใจ ไม่ใช้ภาพสกิล) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ออกจากจุดปล่อย → ขอบหน้าผู้รับ damage จริง |
+| `mira` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `mira` | `hinder` ยิงสกัด | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `projectile-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว) |
 | `mira` | `volley` ห่าธนู | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `projectile-fx` | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว) |
 | `mira` | `weakshot` ศรจุดอ่อน | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `projectile-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว) |
 | `mira` | `pin` ศรตรึงแถว | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `projectile-fx` | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว) |
 | `mira` | `disengage` ยิงถอยหลัง | sprite `disengage` 22,23,24,25 → 26,27,28,29 | วาด `projectile-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว) |
 | `mira` | `track` ศรตามรอย | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `projectile-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว) |
-| `toma` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | โค้ด `basic-attack-fx` — ลูกธนู/ขวดวาดด้วยโค้ด (AV03 ตั้งใจ ไม่ใช้ภาพสกิล) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ออกจากจุดปล่อย → ขอบหน้าผู้รับ damage จริง |
+| `toma` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `toma` | `acid` ขวดกรด | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `alchemy-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ผู้รับ event จริง (ศัตรู: ตัว, พันธมิตร: ตัว) รวม chain ของ catalyst |
 | `toma` | `haste` ยาเร่ง | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `alchemy-fx` | พันธมิตร 1 คน | ผู้รับ event จริง (ศัตรู: ตัว, พันธมิตร: ตัว) รวม chain ของ catalyst |
 | `toma` | `bomb` ขวดระเบิด | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `alchemy-fx` | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | ผู้รับ event จริง (ศัตรู: ตัว, พันธมิตร: ตัว) รวม chain ของ catalyst |
@@ -120,14 +120,14 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `sefa` | `decoy` เงาคุ้มกัน | sprite `evade` 30,31,32,33 → 34,35,36,37 | วาด `song-shadow-fx` | พันธมิตร 1 คน | ข้างพันธมิตรที่ถูกคุ้มจริง |
 | `sefa` | `knives` เคลือบพิษ | sprite `knives` 22,23,24,25 → 26,27,28,29 | วาด `projectile-fx` — เสริม rework-fx: เคลือบพิษที่มือจาก venom บนผู้ร่าย; คงภาพหลักเดิม | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | ออกจากจุดปล่อยบนเฟรมร่างกาย → อกผู้รับ damage/dodge จริง (หลบ = เลยตัว) |
 | `sefa` | `disarm` ระเบิดพิษ | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `blade-fx` — เสริม rework-fx: burst/splash เฉพาะ damage ของพิษจริง (ไม่แทน hit แรก); คงภาพหลักเดิม | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
-| `brann` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `brann` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `brann` | `taunt` ยั่วยุ | sprite `taunt` 22,23,24,25 → 26,27,28,29 | วาด `command-fx` | ตัวเอง | อก/ค้อนผู้ร่าย (stance ตัวเอง) |
 | `brann` | `slam` ทุบค้อนรูน | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `earth-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | พื้นใต้ศัตรูที่โดนจริง (+ heal จริงแยก) |
 | `brann` | `stonearmor` เกราะหิน | sprite `brace` 30,31,32,33 → 34,35,36,37 | วาด `defense-fx` | ตัวเอง | ผู้ร่าย — ขา/พื้น |
 | `brann` | `quake` ทุบปฐพี | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `earth-fx` | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | พื้นใต้ศัตรูที่โดนจริง (+ heal จริงแยก) |
 | `brann` | `guardstone` ศิลาดึง | sprite `brace` 30,31,32,33 → 34,35,36,37 | วาด `defense-fx` | พันธมิตร 1 คน | ผู้รับจริง — ตัว |
 | `brann` | `tremor` ปฐพีสั่น | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `earth-fx` | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | พื้นใต้ศัตรูที่โดนจริง (+ heal จริงแยก) |
-| `lio` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `lio` | `attack` โจมตี | sprite `attack` 1,2,3,4 → 5,6,7,8 | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `lio` | `valor` เพลงกล้า | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `song-shadow-fx` | ตัวเอง | ผู้ร่าย → พันธมิตรที่ยืนอยู่ |
 | `lio` | `mend` เพลงฟื้น | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `healing-fx` | ตัวเอง | ฐานเท้าผู้รับ heal/barrier จริง (รวม upkeep) |
 | `lio` | `dread` เพลงสะท้าน | sprite `dread` 22,23,24,25 → 26,27,28,29 | วาด `song-shadow-fx` | ตัวเอง | ฝั่งศัตรูที่ยืนอยู่ (ไม่ใช่ฮิต) |
@@ -141,49 +141,49 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `garran` | `halt` ผลักระยะทวน | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `blade-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
 | `garran` | `hold` ปักทวนตรึง | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `blade-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
 | `garran` | `warcry` พุ่งหอก | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `blade-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
-| `metta` | `attack` โจมตี | sprite `attack` 1,2 → 3,4,5,6 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `metta` | `attack` โจมตี | sprite `attack` 1,2 → 3,4,5,6 | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `metta` | `saintstrike` หมัดเมตตา | sprite `attack` 1,2 → 3,4,5,6 | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
 | `metta` | `communion` แบ่งแรงใจ | sprite `communion` 13,14 → 15,16,17,18 | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
 | `metta` | `saintarc` กวาดคุ้มชีพ | sprite `arc` 7,8 → 9,10,11,12 | วาด `saint-dance-fx` | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
 | `metta` | `vowstrike` หมัดสัตย์ | sprite `attack` 1,2 → 3,4,5,6 | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
 | `metta` | `sharewound` แบ่งบาดแผล | sprite `communion` 13,14 → 15,16,17,18 | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
 | `metta` | `lastlight` แสงสุดท้าย | sprite `lastlight` 19,20,21 → 22,23,24 | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
-| `thiran` | `attack` โจมตี | procedural (role basic) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `thiran` | `attack` โจมตี | procedural (role basic) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `thiran` | `saintstrike` หมัดเมตตา | procedural (punch) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
 | `thiran` | `communion` แบ่งแรงใจ | procedural (cast) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
 | `thiran` | `saintarc` กวาดคุ้มชีพ | procedural (punch) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
 | `thiran` | `vowstrike` หมัดสัตย์ | procedural (punch) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
 | `thiran` | `sharewound` แบ่งบาดแผล | procedural (cast) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
 | `thiran` | `lastlight` แสงสุดท้าย | procedural (cast) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง + เส้นถึงพันธมิตรที่ได้ heal จริง |
-| `lalin` | `attack` โจมตี | sprite `attack` 13,14 → 15,16,17,18 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `lalin` | `attack` โจมตี | sprite `attack` 13,14 → 15,16,17,18 | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `lalin` | `cadence` คืนจังหวะ | sprite `partner` 1,2,3 → 4,5,6 | วาด `saint-dance-fx` | พันธมิตร 1 คน | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `lalin` | `duet` รำประสาน | sprite `partner` 1,2,3 → 4,5,6 | วาด `saint-dance-fx` | พันธมิตร 1 คน | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `lalin` | `rounddance` รำวง | sprite `circle` 19,20 → 21,22,23,24 | วาด `saint-dance-fx` | ทั้งทีม | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `lalin` | `deepbeat` ย้ำจังหวะ | sprite `circle` 19,20 → 21,22,23,24 | วาด `saint-dance-fx` | ทั้งทีม | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `lalin` | `echofoot` ก้าวสะท้อน | sprite `echo` 25,26,27 → 28,29,30 | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง (เส้นเดียว) |
 | `lalin` | `closingstep` ก้าวปิดท้าย | sprite `closing` 7,8,9 → 10,11,12 | วาด `saint-dance-fx` | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
-| `wila` | `attack` โจมตี | procedural (role basic) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `wila` | `attack` โจมตี | procedural (role basic) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `wila` | `cadence` คืนจังหวะ | procedural (dance) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | พันธมิตร 1 คน | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `wila` | `duet` รำประสาน | procedural (dance) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | พันธมิตร 1 คน | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `wila` | `rounddance` รำวง | procedural (dance) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | ทั้งทีม | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `wila` | `deepbeat` ย้ำจังหวะ | procedural (dance) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | ทั้งทีม | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
 | `wila` | `echofoot` ก้าวสะท้อน | procedural (dance) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริง (เส้นเดียว) |
 | `wila` | `closingstep` ก้าวปิดท้าย | procedural (dance) — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง) | วาด `saint-dance-fx` | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | พันธมิตรที่ได้ cooldown จริงเท่านั้น |
-| `kael` | `attack` โจมตี | sprite `attack` 1,2 → 3,4,5,6 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `kael` | `attack` โจมตี | sprite `attack` 1,2 → 3,4,5,6 | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `kael` | `gatherfist` หมัดรวมปราณ | sprite `gather` 7,8 → 9,10,11,12 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
 | `kael` | `releasefist` ปล่อยปราณ | sprite `release` 13,14 → 15,16,17,18 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
 | `kael` | `flowfist` หมัดสายน้ำ | sprite `gather` 7,8 → 9,10,11,12 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
 | `kael` | `circlefist` หมัดวงกลม | sprite `circle` 19,20 → 21,22,23,24 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
 | `kael` | `storedfist` หมัดเก็บแรง | sprite `stored` 25,26 → 27,28,29,30 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) · เสริม rework-fx: clash เฉพาะ event ปะทะจริง; คงภาพหลักเดิม | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
 | `kael` | `perfectfist` หมัดสมบูรณ์ | sprite `release` 13,14 → 15,16,17,18 | ชุดร่วม `saint-dance-fx` — ภาพหมัดนักบุญรบร่วม จนกว่าจะมี VFX นักมวย (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ศัตรูที่โดนจริงเท่านั้น (ไม่มี heal จึงไม่มีเส้น) |
-| `wynne` | `attack` โจมตี | sprite `attack` 1,2 → 3,4,5,6 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `wynne` | `attack` โจมตี | sprite `attack` 1,2 → 3,4,5,6 | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `wynne` | `threadhex` ด้ายสาป | sprite `knot` 7,8 → 9,10,11,12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex หรือถูกดึงด้ายจริง (event hex/damage Thread pulled) |
 | `wynne` | `lifetoll` ดึงด้าย | sprite `toll` 13,14 → 15,16,17,18 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex หรือถูกดึงด้ายจริง (event hex/damage Thread pulled) |
 | `wynne` | `wovenhex` สาปถักทอ | sprite `weave` 19,20 → 21,22,23,24 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | กลางตัวศัตรูที่ได้ hex หรือถูกดึงด้ายจริง (event hex/damage Thread pulled) |
 | `wynne` | `tollring` วงด้ายดึง | sprite `weave` 19,20 → 21,22,23,24 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรูหลายตัว ไม่เลือกเป้า (แถว/ขอบเขตตามคำอธิบายสกิล) | กลางตัวศัตรูที่ได้ hex หรือถูกดึงด้ายจริง (event hex/damage Thread pulled) |
 | `wynne` | `longthread` ด้ายยาว | sprite `knot` 7,8 → 9,10,11,12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex หรือถูกดึงด้ายจริง (event hex/damage Thread pulled) |
 | `wynne` | `knothex` ปมสาป | sprite `knot` 7,8 → 9,10,11,12 | ชุดร่วม `arcane-seal-fx` — ภาพตราของผนึกเวทย้อมแดง จนกว่าจะมี VFX นักสาป (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ได้ hex หรือถูกดึงด้ายจริง (event hex/damage Thread pulled) |
-| `astrid` | `attack` โจมตี | sprite `attack` 1,2 → 3,4,5,6 | ชุดร่วม `blade-fx` — ฟันร่วมตามสีอาชีพ (ตั้งใจ) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ตัวผู้รับ damage จริง |
+| `astrid` | `attack` โจมตี | sprite `attack` 1,2 → 3,4,5,6 | โค้ด `basic-attack-fx` — เอฟเฟกต์โจมตีปกติวาดตามอาวุธหรือท่าร่างกาย | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | ขอบหน้าผู้รับ damage/dodge จริง · ท่าระยะไกลเริ่มจากจุดปล่อย |
 | `astrid` | `deflectfate` เบนชะตา | sprite `deflect` 7,8 → 9,10,11,12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ท่าถูกเบน/เลื่อนจริง (event deflect/dial) + จุดระเบิดที่ damage จริง |
 | `astrid` | `turncycle` เลื่อนท่าใหญ่ | sprite `dial` 13,14 → 15,16,17,18 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวศัตรูที่ท่าถูกเบน/เลื่อนจริง (event deflect/dial) + จุดระเบิดที่ damage จริง |
 | `astrid` | `crossing` ทางแยกชะตา | sprite `deflect` 7,8 → 9,10,11,12 | ชุดร่วม `arcane-seal-fx` — ภาพตรา/สลายเวทของผนึกเวทย้อมฟ้า จนกว่าจะมี VFX โหราจารย์ (Claude ตัดสินใจ 2026-11-04) | ศัตรู 1 ตัว (ตรวจซ้ำตอน commit) | กลางตัวผู้รับ damage จริง |
@@ -282,4 +282,4 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 ## งานค้างที่รู้อยู่แล้ว (สร้างจากตาราง)
 
 - ท่าร่างกาย procedural 14 แถว: `thiran`, `wila` — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง)
-- VFX วาดด้วยโค้ดโดยตั้งใจ 4 แถว: `mira` โจมตี, `toma` โจมตี, `foe_hunter` Shadow Knife, `raider` Shadow Knife
+- VFX วาดด้วยโค้ดโดยตั้งใจ 15 แถว: `weaver` โจมตี, `healer` โจมตี, `mira` โจมตี, `toma` โจมตี, `brann` โจมตี, `lio` โจมตี, `metta` โจมตี, `thiran` โจมตี, `lalin` โจมตี, `wila` โจมตี, `kael` โจมตี, `wynne` โจมตี, `astrid` โจมตี, `foe_hunter` Shadow Knife, `raider` Shadow Knife

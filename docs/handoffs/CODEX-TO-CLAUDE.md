@@ -1,3 +1,10 @@
+## 2026-11-24 — Combat audio and hit effects across the player roster
+
+- Draft PR #353 on `3b746ac`. Covers 15 recruitable heroes plus Odran and Isolde in legacy saves. The owner requested full roster coverage.
+- Typecheck, lint, Pages build, 54 focused Vitest cases, and 42 dev / 5 production Playwright cases passed.
+- Basic attacks route through existing effect hooks by weapon and role. Skill audio follows the existing pose, release timing and result events. Save and turn resolution are unchanged.
+- See the [validation report](../validation/roster-contact-2026-11-24/README_TH.md) for test scope and capture limits.
+
 ## 2026-11-24 — จังหวะภาพและเสียงปะทะ (Codex · `codex/fateweave-steel-contact`)
 
 - เจ้าของอนุมัติให้ทำแพตช์และคลิปเทียบ. สาขาฐาน `b39ed8d`. รอตรวจคลิปใน Draft PR.
