@@ -814,6 +814,24 @@ test('the boss blocks the gate; after its defeat the goal completes the expediti
   expect(issues).toEqual([]);
 });
 
+test('a landmark that changes art grows in place: its ground anchor never leaves the tile', async ({ page }) => {
+  const [boss] = findTiles(map, 'boss');
+  const issues = await open(page, base({ position: { x: boss!.x, y: boss!.y + 1 }, bossDefeated: true, elitesDefeated: ['scar-golem'], eventsDone: ['scar-rift'] }));
+  const pedestal = page.locator('#world-view .landmark[data-kind="boss"]');
+  await expect(pedestal).toBeVisible(); await page.emulateMedia({ reducedMotion: 'no-preference' });
+  // The gate-open replay used to swap the sprite's translate(-50%, -100%) for a bare scale, pushing the pedestal a tile
+  // right and two down for the whole animation before it snapped back.
+  const samples = await pedestal.evaluate(async el => {
+    const anchor = () => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.bottom]; };
+    const rest = anchor(); el.classList.add('lv-gate-open'); const playing = el.getAnimations().length; const during: number[][] = [];
+    for (let i = 0; i < 6; i++) { await new Promise(r => setTimeout(r, 80)); during.push(anchor()); }
+    return { rest, during, playing };
+  });
+  expect(samples.playing).toBe(1);
+  for (const [x, y] of samples.during) { expect(Math.abs(x! - samples.rest[0]!)).toBeLessThan(1); expect(Math.abs(y! - samples.rest[1]!)).toBeLessThan(1); }
+  expect(issues).toEqual([]);
+});
+
 test('a forced elite holds its one-tile gate: stepping in forces the fight and the gate opens once it falls', async ({ page }, info) => {
   const elite = map.elites.find(e => e.forced)!;
   const issues = await open(page, base({ position: { x: elite.x, y: elite.y + 1 } }));

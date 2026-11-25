@@ -1,3 +1,9 @@
+## 2026-11-25 — แท่นบนแผนที่ไม่กระโดดตอนเปลี่ยนภาพ (Claude · `claude/friendly-heisenberg-xapns5`)
+
+- เจ้าของรายงานว่าหลังชนะบอส แท่นวาร์ปสีม่วงขยับออกแล้วเด้งกลับที่เดิม สาเหตุคือ keyframe `gate-open` ใช้ `transform: scale()` ซึ่งทับ `translate(-50%, -100%)` ของ `.sprite` ตลอด 640ms (เลื่อนขวา 1 ช่อง ลง 2 ช่อง แล้วกลับตอนจบ)
+- แก้ให้ keyframe ใช้ property `scale` และให้ `.landmark.lv-gate-open` ใช้ `transform-origin: 0 0` แท่นจึงขยายจากจุดตั้งบนพื้น ใช้กับ landmark ทุกชนิด (ประตูและแท่นบอส) ไม่แก้กฎ เซฟ หรือเวลาเล่น
+- เพิ่ม Playwright `a landmark that changes art grows in place` ใน `tests/browser/world.spec.ts` (ล้มกับโค้ดเดิม เลื่อน 74px; ผ่านหลังแก้) typecheck, lint, Vitest world 69 กรณีผ่าน
+
 ## 2026-11-25 — ตำแหน่งชาร์จ, Aura และมงกุฎของบอส (Claude · `claude/lucid-mendel-11prf7`)
 
 - เจ้าของรายงานว่าสกิลของเจ้าป่าหนามไม่ตรงตำแหน่งที่ยืน ตอนนี้ hold ของบอสชุดเก่าอยู่บนตัวแล้ว และ hold ของอสรพิษเงาใช้เฟรมที่ถูกต้อง (เดิมขึ้นกรงเล็บของมอร์เวน)
