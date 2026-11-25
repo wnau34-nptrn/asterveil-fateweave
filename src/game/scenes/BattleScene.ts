@@ -34,6 +34,8 @@ const bodySprite = (body: Phaser.GameObjects.Container | undefined): Phaser.Game
   body?.list.find((c): c is Phaser.GameObjects.Image => c instanceof Phaser.GameObjects.Image && /^(unit-pilot-|battle-)/.test(c.texture.key));
 // Device pixels per CSS pixel for the canvas buffer (capped: 3x covers current phones).
 export const pixelRatio = (): number => Math.min(3, Math.max(1, window.devicePixelRatio || 1));
+// A held charge sits this share of the figure width forward (toward the other side) of the body centre: on the body.
+export const HOLD_FORWARD = .12;
 
 export interface ActorTarget { x: number; y: number; width: number; height: number }
 export interface SceneView { state: BattleState; heroId: string; targetId: string | null; phase?: 'hero' | 'enemy'; activeActorId?: string; activeTargetId?: string }
@@ -226,10 +228,12 @@ export class BattleScene extends Phaser.Scene {
       if (this.holds.has(id)) continue;
       const body = this.bodies.get(id), box = this.figureBox(id), slot = this.actorPanels.get(id);
       if (!body || !box || !slot) continue;
-      // Just forward (hero side) of the rendered lower chest, never over the face or the name/HP labels. The World Boss
-      // trio's holds use their layer anchor instead (Mountain Fall: forward chest; Wing Gathering: shoulder core).
+      // On the rendered lower chest, a little toward the heroes, never over the face or the name/HP labels. It stays inside
+      // the figure's box (the old forward-edge spot left most of it beside the Briar Lord/Shadow Serpent, off the body).
+      // The World Boss trio's holds use their layer anchor instead (Mountain Fall: forward chest; Wing Gathering: shoulder core).
       const scale = Phaser.Math.Clamp(slot.size / 96, .7, 1.25), at = this.bossAnchor(id), placed = at && holdPlacement(at, hold, scale);
-      const x = placed ? placed.x - body.x : box.left - body.x + (box.right - box.left) * .18 - slot.size * .12;
+      const facing = this.encounter.heroes.some(h => h.id === id) ? 1 : -1;
+      const x = placed ? placed.x - body.x : (box.left + box.right) / 2 - body.x + facing * (box.right - box.left) * HOLD_FORWARD;
       const y = placed ? placed.y - body.y : box.top - body.y + (box.bottom - box.top) * .55;
       const width = placed?.width ?? 90 * scale / (111 / 96);
       let item: Phaser.GameObjects.Image | Phaser.GameObjects.Graphics;

@@ -1,3 +1,10 @@
+## 2026-11-25 — ตำแหน่งสัญลักษณ์ชาร์จของบอส (Claude · `claude/lucid-mendel-11prf7`)
+
+- เจ้าของรายงานว่าสัญลักษณ์สกิลของเจ้าป่าหนามไม่ตรงตำแหน่งที่บอสยืน
+- hold ของบอสชุดเก่าอยู่ที่ขอบหน้าของกรอบ (`rx 0.04`) จึงย้ายมาไว้บนอกล่างของตัว (`rx≈0.39`)
+- hold ของอสรพิษเงาขอเฟรมที่ไม่มีใน atlas จึงแสดงกรงเล็บของมอร์เวน ตอนนี้ใช้ `paintedAs` และมี unit test ตรวจเฟรมของ hold ทุกตัว
+- ไม่ได้แก้กฎ เซฟ หรือเวลาเล่น Typecheck, lint และ Vitest ผ่าน วัดผลด้วย Playwright ใน fixture ที่ใช้ BattleScene จริง ดู [ผลตรวจ](../validation/boss-hold-placement-2026-11-25/README_TH.md)
+
 ## 2026-11-24 — Combat audio and hit effects across the player roster
 
 - Draft PR #353 on `3b746ac`. Covers 15 recruitable heroes plus Odran and Isolde in legacy saves. The owner requested full roster coverage.

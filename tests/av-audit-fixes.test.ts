@@ -3,7 +3,7 @@ import { eliteBriarLord, encounters, presentedEncounters, riftWarden, vanguardCa
 import { createBattle, currentHeroId, resolveCommand, targetOptions } from '../src/core/battle/engine';
 import type { BattleState, EncounterDefinition, TurnStage } from '../src/core/battle/types';
 import { basicCues, basicWeapon } from '../src/game/visuals/basic-attack-fx';
-import { bossCues, bossMoves, chargeHolds, paintedAs } from '../src/game/visuals/boss-signature-fx';
+import { bossCues, bossMoves, chargeHolds, holdFrame, paintedAs } from '../src/game/visuals/boss-signature-fx';
 import art from '../src/game/visuals/boss-signature-art.json';
 import lakeArt from '../src/game/visuals/lake-boss-art.json';
 import { hitLift } from '../src/game/visuals/combat-effects';
@@ -104,6 +104,18 @@ describe('AV07 boss signature and charge holds', () => {
       // Map 4 stand-ins borrow an older move's three beats (`paintedAs`) until their own art arrives.
       for (const beat of ['prepare', 'peak', 'settle']) expect(Object.keys({ ...art, ...lakeArt })).toContain(`${(paintedAs[move] ?? move).toLowerCase().replace(/ /g, '-')}_${beat}`);
     }
+  });
+  it('every possible hold names a frame the atlas really has (a missing one fell back to another boss\'s art)', () => {
+    // A hold shows the release's frame when it is unstoppable, else the charge's (chargeHolds). Check both for every charge.
+    for (const d of presentedEncounters) for (const foe of d.enemies) {
+      const moves = d.intents.filter(i => i.sourceId === foe.id);
+      for (const [i, move] of moves.entries()) if (move.charge) {
+        const next = moves.slice(i + 1).find(m => (m.phase ?? 0) === (move.phase ?? 0));
+        for (const name of [move.name, next?.name].filter((n): n is string => !!n)) expect(Object.keys({ ...art, ...lakeArt }), `${d.id} ${name}`).toContain(holdFrame(name));
+      }
+    }
+    expect(holdFrame('Crushing Coil')).toBe('horn-charge_prepare');
+    expect(holdFrame('Gather Thorns')).toBe('gather-thorns_prepare');
   });
   it('the Warden holds a charge only between a performed Rift Gathering and its Cataclysm, then clears', () => {
     const d = riftWarden; let state = createBattle(d);
