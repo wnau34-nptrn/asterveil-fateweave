@@ -1,3 +1,11 @@
+## 2026-11-25 — ตำแหน่งชาร์จ, Aura และมงกุฎของบอส (Claude · `claude/lucid-mendel-11prf7`)
+
+- เจ้าของรายงานว่าสกิลของเจ้าป่าหนามไม่ตรงตำแหน่งที่ยืน ตอนนี้ hold ของบอสชุดเก่าอยู่บนตัวแล้ว และ hold ของอสรพิษเงาใช้เฟรมที่ถูกต้อง (เดิมขึ้นกรงเล็บของมอร์เวน)
+- Aura ของบอส (`src/game/visuals/boss-aura.ts`) มี Aura เบาตลอดศึก และแรงขึ้นตอนชาร์จ ทำจากเงาตัวบอสในสีของบอสเอง วูบวาบลอยขึ้นตามรูปทรง วงเวทบนพื้นและละอองแสงไม่ลงต่ำกว่าเท้า คราก์มอร์และวัลดรัคใช้สีม่วง ความแรงเท่าบอสตัวอื่น
+- ลองใช้ Glow filter แล้ว แต่ทำให้ software Chromium ช้าราว 9 เท่า จนชุด battle-hud ล้ม 3 กรณี จึงเปลี่ยนเป็นเงาตัวบอสแบบ fill tint ที่ซ้อนอยู่หลังตัว
+- มงกุฎบอสวางเหนือภาพตัวจริง (`BattleScene.crownSpot`) จากเดิมที่จมในปีกวัลดรัคและหัวมอร์เวน และเยื้องจากหัวภูตธารา
+- เจ้าของพูดว่า “นำเข้าเกมได้เลย” (2026-11-25) งานนี้แก้เฉพาะภาพ ไม่แก้กฎ เซฟ หรือเวลาเล่น ผลตรวจอยู่ที่ [ผลตรวจ](../validation/boss-hold-placement-2026-11-25/README_TH.md)
+
 ## 2026-11-24 — Combat audio and hit effects across the player roster
 
 - Draft PR #353 on `3b746ac`. Covers 15 recruitable heroes plus Odran and Isolde in legacy saves. The owner requested full roster coverage.

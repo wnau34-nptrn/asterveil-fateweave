@@ -51,6 +51,9 @@ export const usesBossSignature = (data: EncounterDefinition): boolean =>
 export const usesLakeBossSignature = (data: EncounterDefinition): boolean => encounterHasMove(data, isLakeBossMove);
 
 // ---- Persistent waiting-turn telegraph ----
+// The atlas frame a hold shows: a stand-in move (`paintedAs`, e.g. the Shadow Serpent's Coil Gathering/Crushing Coil) borrows
+// its painted move's prepare frame, so the hold never asks the atlas for a frame it does not have.
+export const holdFrame = (move: string): string => `${slug(paintedAs[move] ?? move)}_prepare`;
 // Held between a performed charge and its release. `unstoppable` (rigid toothed brackets) when the announced release is
 // unstoppable; `breakable` (a cracked shell with a jagged gap: Bash/Sigil can still break it, P11-05 R1) when the charge
 // itself is breakable and the release is not unstoppable; `normal` (open breathing curves) otherwise. It never marks the
@@ -72,7 +75,7 @@ export function chargeHolds(state: BattleState, data: EncounterDefinition, acted
     // The charge must have been the boss's previous turn in this cycle, performed (not sealed/interrupted) this phase.
     if (!charge?.charge || moves.length < 2 || next.round - 1 <= (foe.phaseRound ?? 0) || foe.interruptedRound === next.round - 1) return [];
     const kind: HoldKind = next.unstoppable ? 'unstoppable' : charge.breakable ? 'breakable' : 'normal';
-    return [{ enemyId: foe.id, charge: charge.name, release: next.name, kind, frame: `${slug(kind === 'unstoppable' ? next.name : charge.name)}_prepare` }];
+    return [{ enemyId: foe.id, charge: charge.name, release: next.name, kind, frame: holdFrame(kind === 'unstoppable' ? next.name : charge.name) }];
   });
 }
 
