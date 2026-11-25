@@ -1,9 +1,10 @@
 import Phaser from 'phaser';
 import type { HoldKind } from './boss-signature-fx';
 
-// Boss charge aura (owner request 2026-11-25: "อยากให้ทำ Aura ของบอสให้ดูอลังการกว่านี้").
-// Painted around a boss while it holds a charged release (`chargeHolds`), in addition to the hold emblem. It is drawn only
-// from the shown state, never changes rules or timing, and is destroyed with the hold. Layers, back to front:
+// Boss aura (owner 2026-11-25: "อยากให้ทำ Aura ของบอสให้ดูอลังการกว่านี้", then "ทำ Aura เบาๆ ตลอดศึก แล้วแรงขึ้นตอนชาร์จ").
+// Every standing boss wears a light ambient aura all battle (`paintAmbient`). While it holds a charged release
+// (`chargeHolds`) that is swapped for the full charge aura, painted with the hold emblem. Both are drawn only from the
+// shown state and never change rules or timing. Charge layers, back to front:
 //   1. a ground sigil under the feet: a soft additive pool plus two counter-rotating rune rings;
 //   2. a pulsing outer glow on the boss's own sprite (Phaser 4 Glow filter, WebGL only);
 //   3. motes rising from the sigil past the body;
@@ -19,12 +20,24 @@ const palettes: readonly [RegExp, AuraPalette][] = [
   [/^rift-/, { core: 0xa77bff, rim: 0xeadcff }],
   [/^(horn-charge|crushing-coil|coil-)/, { core: 0xc35cff, rim: 0xf3d6ff }],
   [/^mountain-fall|^titan-/, { core: 0xffa34d, rim: 0xffe7c2 }],
-  [/^wing-|^worldshard-/, { core: 0x59dcff, rim: 0xd9f8ff }],
+  [/^wing-|^worldshard-|^sky-rend|^shard-talon/, { core: 0x59dcff, rim: 0xd9f8ff }],
+  [/^(water-veil|surging-wave|great-wave|reflection)/, { core: 0x5fd4ff, rim: 0xdcf6ff }],
+  [/^(severing-bolt|fate-lash|shadow-tide|severed-crown|call-the-court)/, { core: 0xff5fcf, rim: 0xffd9f3 }],
+  [/^(war-cry|call-the-hunt)/, { core: 0xff7a45, rim: 0xffe0cc }],
+  [/^(stone-fist|rift-quake|fault-awakening)/, { core: 0xffa34d, rim: 0xffe7c2 }],
 ];
-export const auraPalette = (frame: string): AuraPalette => palettes.find(([re]) => re.test(frame))?.[1] ?? { core: 0xb99cff, rim: 0xf1e8ff };
+const fallback: AuraPalette = { core: 0xb99cff, rim: 0xf1e8ff };
+export const auraPalette = (frame: string): AuraPalette => palettes.find(([re]) => re.test(frame))?.[1] ?? fallback;
+// A boss's own colour between charges: the first of its moves with a family colour (move names slugged like frames).
+export const bossPalette = (moves: readonly string[]): AuraPalette => {
+  for (const move of moves) { const hit = palettes.find(([re]) => re.test(move.toLowerCase().replace(/ /g, '-'))); if (hit) return hit[1]; }
+  return fallback;
+};
 
+// `ambient`: the light aura every standing boss wears all battle. `charge`: the full aura while it holds a charged release.
+export type AuraLevel = 'ambient' | 'charge';
 export interface AuraOptions {
-  frame: string; kind: HoldKind;
+  level: AuraLevel; palette: AuraPalette; kind: HoldKind;
   // Body-local landmarks (CSS px): figure box edges and the feet line.
   left: number; right: number; top: number; feet: number;
   emblem?: Phaser.GameObjects.Image | Phaser.GameObjects.Graphics;
@@ -62,7 +75,8 @@ function ring(scene: Phaser.Scene, rx: number, ry: number, kind: HoldKind, color
 }
 
 export function paintBossAura(scene: Phaser.Scene, body: Phaser.GameObjects.Container, sprites: Phaser.GameObjects.Image[], o: AuraOptions): BossAura {
-  const { core, rim } = auraPalette(o.frame), strong = o.kind === 'unstoppable';
+  if (o.level === 'ambient') return paintAmbient(scene, body, sprites, o);
+  const { core, rim } = o.palette, strong = o.kind === 'unstoppable';
   const w = Math.max(40, o.right - o.left), h = Math.max(40, o.feet - o.top), cx = (o.left + o.right) / 2;
   const objects: Phaser.GameObjects.GameObject[] = [], tweens: Phaser.Tweens.Tween[] = [];
   const dim = o.calm ? .7 : 1;
@@ -78,13 +92,7 @@ export function paintBossAura(scene: Phaser.Scene, body: Phaser.GameObjects.Cont
   under(column);
 
   // 2. Glow on the boss's own sprite(s).
-  const glows: { sprite: Phaser.GameObjects.Image; glow: Phaser.Filters.Glow }[] = [];
-  for (const sprite of sprites) {
-    if (!(scene.renderer instanceof Phaser.Renderer.WebGL.WebGLRenderer)) break;
-    sprite.enableFilters();
-    const glow = sprite.filters!.internal.addGlow(core, strong ? 8 : 6, 0, 1, false, 12, 14);
-    glows.push({ sprite, glow });
-  }
+  const glows = addGlows(scene, sprites, core, strong ? 8 : 6);
 
   // 3. Rising motes (not in calm mode).
   let motes: Phaser.GameObjects.Particles.ParticleEmitter | undefined;
@@ -118,6 +126,41 @@ export function paintBossAura(scene: Phaser.Scene, body: Phaser.GameObjects.Cont
     for (const { glow } of glows) tweens.push(scene.tweens.add({ targets: glow, outerStrength: { from: strong ? 5 : 3.5, to: strong ? 11 : 8.5 }, duration: strong ? 600 : 1100, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
   }
 
+  return disposer(objects, tweens, glows);
+}
+
+type Glow = { sprite: Phaser.GameObjects.Image; glow: Phaser.Filters.Glow };
+function addGlows(scene: Phaser.Scene, sprites: Phaser.GameObjects.Image[], color: number, strength: number): Glow[] {
+  if (!(scene.renderer instanceof Phaser.Renderer.WebGL.WebGLRenderer)) return [];
+  return sprites.map(sprite => { sprite.enableFilters(); return { sprite, glow: sprite.filters!.internal.addGlow(color, strength, 0, 1, false, 12, 14) }; });
+}
+
+// The light, always-on layer: a faint ground pool, one slow rune ring, a soft breathing outline and sparse motes. No
+// column, shockwave or emblem bloom, so the charge aura still reads as a clear step up.
+function paintAmbient(scene: Phaser.Scene, body: Phaser.GameObjects.Container, sprites: Phaser.GameObjects.Image[], o: AuraOptions): BossAura {
+  const { core, rim } = o.palette, w = Math.max(40, o.right - o.left), cx = (o.left + o.right) / 2;
+  const objects: Phaser.GameObjects.GameObject[] = [], tweens: Phaser.Tweens.Tween[] = [], dim = o.calm ? .7 : 1;
+  const under = (obj: Phaser.GameObjects.GameObject) => { body.addAt(obj, 1); objects.push(obj); return obj; };
+  const pool = scene.add.ellipse(cx, o.feet, w * 1.15, w * .3, core, .22 * dim).setBlendMode(Phaser.BlendModes.ADD);
+  const band = ring(scene, w * .55, w * .14, 'normal', rim, .45 * dim, 2);
+  band.holder.setPosition(cx, o.feet);
+  under(band.holder); under(pool);
+  const glows = addGlows(scene, sprites, core, 2.5);
+  if (!o.calm) {
+    const motes = scene.add.particles(cx, o.feet, moteTexture(scene), {
+      x: { min: -w * .45, max: w * .45 }, y: { min: -4, max: 4 }, speedY: { min: -30, max: -14 }, speedX: { min: -4, max: 4 },
+      scale: { start: .7, end: 0 }, alpha: { start: .7, end: 0 }, lifespan: { min: 1200, max: 1800 }, frequency: 260, quantity: 1,
+      tint: [core, rim], blendMode: Phaser.BlendModes.ADD,
+    });
+    body.add(motes); objects.push(motes);
+    tweens.push(scene.tweens.add({ targets: band.spin, rotation: Math.PI * 2, duration: 16000, repeat: -1 }));
+    tweens.push(scene.tweens.add({ targets: pool, alpha: { from: .24, to: .1 }, duration: 1800, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+    for (const { glow } of glows) tweens.push(scene.tweens.add({ targets: glow, outerStrength: { from: 1.5, to: 3.5 }, duration: 1800, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+  }
+  return disposer(objects, tweens, glows);
+}
+
+function disposer(objects: Phaser.GameObjects.GameObject[], tweens: Phaser.Tweens.Tween[], glows: Glow[]): BossAura {
   return {
     objects,
     dispose() {

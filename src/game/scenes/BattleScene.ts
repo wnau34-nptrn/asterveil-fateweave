@@ -2,8 +2,8 @@ import Phaser from 'phaser';
 import { REWORK_ATLAS, reworkCues, reworkMarks, reworkContact } from '../visuals/rework-fx';
 import { unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals/basic-attack-fx';
-import { paintBossAura, type BossAura } from '../visuals/boss-aura';
-import { BOSS_ATLAS, LAKE_BOSS_ATLAS, bossAtlasFor, bossAtlasUrls, lakeBossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, greatWaveScales, holdPlacement, isLakeBossMove, sealedWaterVeil, usesBossSignature, usesLakeBossSignature, type BossPoint } from '../visuals/boss-signature-fx';
+import { auraPalette, bossPalette, paintBossAura, type BossAura } from '../visuals/boss-aura';
+import { BOSS_ATLAS, LAKE_BOSS_ATLAS, bossAtlasFor, bossAtlasUrls, lakeBossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, greatWaveScales, holdPlacement, isLakeBossMove, sealedWaterVeil, usesBossSignature, usesLakeBossSignature, type BossPoint, type ChargeHold } from '../visuals/boss-signature-fx';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
 import { ALL_SHEETS, allBattleAtlases, atlasesForActions, encounterAtlases, encounterSheets, sheetKey, sheetsForArt, type AtlasRequest } from '../visuals/battle-assets';
 import { unitFrameView } from '../visuals/unit-frame-view';
@@ -223,11 +223,36 @@ export class BattleScene extends Phaser.Scene {
   // The aura painted with each hold (ground sigil, body glow, motes); disposed with its hold.
   private auras = new Map<string, BossAura>();
   private dropAura(id: string): void { this.auras.get(id)?.dispose(); this.auras.delete(id); }
+  // Light aura on every standing boss; the full aura while it holds a charge (owner 2026-11-25). Repainted only when the
+  // level or charge changes, so the loops keep running between stages.
+  private paintAuras(state: BattleState, wanted: ReadonlyMap<string, ChargeHold>): void {
+    const live = new Set<string>();
+    for (const foe of this.encounter.enemies) {
+      const now = state.enemies.find(e => e.id === foe.id);
+      if (!foe.boss || !now || now.absent || now.hp <= 0) continue;
+      const body = this.bodies.get(foe.id), box = this.figureBox(foe.id), hold = wanted.get(foe.id), emblem = this.holds.get(foe.id);
+      if (!body || !box) continue;
+      live.add(foe.id);
+      const key = hold && emblem ? `charge:${hold.frame}:${hold.kind}` : 'ambient';
+      const current = this.auras.get(foe.id);
+      if (current && current.objects.every(o => o.active) && this.auraKeys.get(foe.id) === key) continue;
+      this.dropAura(foe.id);
+      const sprites = body.list.filter((c): c is Phaser.GameObjects.Image => c instanceof Phaser.GameObjects.Image && /^(unit-pilot-|battle-)/.test(c.texture.key));
+      const moves = [...this.encounter.intents.filter(i => i.sourceId === foe.id).map(i => i.name), ...(this.encounter.phases ?? []).filter(p => p.sourceId === foe.id).map(p => p.name)];
+      this.auras.set(foe.id, paintBossAura(this, body, sprites, {
+        level: hold && emblem ? 'charge' : 'ambient', palette: hold ? auraPalette(hold.frame) : bossPalette(moves), kind: hold?.kind ?? 'normal',
+        left: box.left - body.x, right: box.right - body.x, top: box.top - body.y, feet: box.bottom - body.y,
+        emblem: emblem as Phaser.GameObjects.Image | undefined, calm: this.quiet || this.reducedMotion }));
+      this.auraKeys.set(foe.id, key);
+    }
+    for (const id of [...this.auras.keys()]) if (!live.has(id)) { this.dropAura(id); this.auraKeys.delete(id); }
+  }
+  private auraKeys = new Map<string, string>();
   private paintHolds(): void {
     const view = this.view; if (!view) return;
     this.paintReworkMarks(view.state);
     const wanted = new Map(chargeHolds(view.state, this.encounter, this.resolvedActor).map(h => [h.enemyId, h]));
-    for (const [id, item] of this.holds) if (wanted.get(id)?.frame !== item.getData('holdFrame') || !item.active) { this.tweens.killTweensOf(item); item.destroy(); this.holds.delete(id); this.dropAura(id); }
+    for (const [id, item] of this.holds) if (wanted.get(id)?.frame !== item.getData('holdFrame') || !item.active) { this.tweens.killTweensOf(item); item.destroy(); this.holds.delete(id); }
     for (const [id, hold] of wanted) {
       if (this.holds.has(id)) continue;
       const body = this.bodies.get(id), box = this.figureBox(id), slot = this.actorPanels.get(id);
@@ -258,13 +283,10 @@ export class BattleScene extends Phaser.Scene {
       }
       item.setData('holdFrame', hold.frame).setData('holdKind', hold.kind);
       body.add(item); this.holds.set(id, item);
-      const sprites = body.list.filter((c): c is Phaser.GameObjects.Image => c instanceof Phaser.GameObjects.Image && /^(unit-pilot-|battle-)/.test(c.texture.key));
-      this.dropAura(id);
-      this.auras.set(id, paintBossAura(this, body, sprites, { frame: hold.frame, kind: hold.kind, left: box.left - body.x, right: box.right - body.x, top: box.top - body.y,
-        feet: box.bottom - body.y, emblem: item, calm: this.quiet || this.reducedMotion }));
       // Normal and breakable holds breathe gently; unstoppable brackets stay rigid. Reduced motion and quiet keep all still.
       if (hold.kind !== 'unstoppable' && !this.quiet && !this.reducedMotion) this.idle.push(this.tweens.add({ targets: item, alpha: { from: 1, to: .85 }, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
     }
+    this.paintAuras(view.state, wanted);
   }
   private reworkEmblems = new Set<Phaser.GameObjects.Image>();
   private paintReworkMarks(state: BattleState): void {
