@@ -107,7 +107,7 @@ export function paintBossAura(scene: Phaser.Scene, body: Phaser.GameObjects.Cont
   let motes: Phaser.GameObjects.Particles.ParticleEmitter | undefined;
   if (!o.calm) {
     motes = scene.add.particles(cx, o.feet, moteTexture(scene), {
-      x: { min: -w * .55, max: w * .55 }, y: { min: -4, max: 4 },
+      x: { min: -w * .55, max: w * .55 }, y: { min: -16, max: -9 },
       speedY: { min: strong ? -70 : -45, max: strong ? -35 : -20 }, speedX: { min: -6, max: 6 },
       scale: { start: strong ? 1.3 : 1.05, end: 0 }, alpha: { start: .95 * k, end: 0 }, lifespan: { min: 900, max: 1500 },
       frequency: strong ? 28 : 40, quantity: 1, tint: [core, rim], blendMode: Phaser.BlendModes.ADD,
@@ -148,16 +148,18 @@ type Glow = { outerStrength: number; dispose(): void };
 // inside the body's outline behind it, licking up past its edges and top, white-hot at birth and fading to the boss's
 // colour. Denser, taller and faster while charging. Calm mode (reduced motion/intensity) has no flames.
 export interface FlameSpec { rim: number; core: number; w: number; h: number; cx: number; feet: number; level: 'ambient' | 'charge' | 'unstoppable'; k: number; calm: boolean }
-const FLAME = 'boss-aura-flame';
+const FLAME = 'boss-aura-flame-v2';
 function flameTexture(scene: Phaser.Scene): string {
   if (scene.textures.exists(FLAME)) return FLAME;
-  // A soft teardrop, 32×96: broad and bright at the base, tapering to a point at the top.
+  // A soft teardrop in the top half of a 32×192 texture: broad and bright at the base, tapering to a point at the top.
+  // The base's lowest pixel is the texture's centre (a particle's origin), so a tongue only ever rises from where it is
+  // born and never hangs below it (owner 2026-11-25: “เฟรมออร่าไม่ควรมีต่ำกว่าเท้าของบอส”).
   const g = scene.make.graphics({}, false);
   for (let i = 0; i < 24; i++) {
-    const t = i / 23, y = 90 - t * 80, rx = 13 * Math.pow(1 - t, .7) + 1, ry = 10 * (1 - t * .6) + 2;
+    const t = i / 23, y = 96 - 12 - t * 78, rx = 13 * Math.pow(1 - t, .7) + 1, ry = 10 * (1 - t * .6) + 2;
     g.fillStyle(0xffffff, .2 + .14 * (1 - t)); g.fillEllipse(16, y, rx * 2, ry * 2);
   }
-  g.generateTexture(FLAME, 32, 96); g.destroy();
+  g.generateTexture(FLAME, 32, 192); g.destroy();
   return FLAME;
 }
 const flameLevels = {
@@ -165,6 +167,7 @@ const flameLevels = {
   charge: { frequency: 16, quantity: 2, speed: [-190, -100], life: [360, 680], sx: [1.35, .35], sy: [1.45, .6], alpha: .5 },
   unstoppable: { frequency: 12, quantity: 2, speed: [-240, -130], life: [380, 720], sx: [1.5, .4], sy: [1.7, .7], alpha: .58 },
 } as const;
+const FEET_CLEARANCE = 6; // px above the sole line
 function addFlames(scene: Phaser.Scene, holder: Phaser.GameObjects.Container, f: FlameSpec): void {
   if (f.calm) return;
   const l = flameLevels[f.level];
@@ -173,7 +176,10 @@ function addFlames(scene: Phaser.Scene, holder: Phaser.GameObjects.Container, f:
   const cy = f.feet - f.h * .48, rx = f.w * .5, ry = f.h * .5;
   const ring: Phaser.Types.GameObjects.Particles.RandomZoneSource = { getRandomPoint: (point: Phaser.Types.Math.Vector2Like) => {
     const a = Math.random() * Math.PI * 2, r = .82 + .2 * Math.random();
-    point.x = f.cx + Math.cos(a) * rx * r; point.y = cy + Math.sin(a) * ry * r; return point;
+    point.x = f.cx + Math.cos(a) * rx * r; point.y = cy + Math.sin(a) * ry * r;
+    // Never born at or below the feet: a point in the bottom band is mirrored to the upper half.
+    if (point.y > f.feet - FEET_CLEARANCE) point.y = 2 * cy - point.y;
+    return point;
   } } as Phaser.Types.GameObjects.Particles.RandomZoneSource;
   const flames = scene.add.particles(0, 0, flameTexture(scene), {
     emitZone: { type: 'random', source: ring },
@@ -232,7 +238,7 @@ function paintAmbient(scene: Phaser.Scene, body: Phaser.GameObjects.Container, s
   const glows = addGlows(scene, sprites, core, 2.5 * k, { rim, core, w, h, cx, feet: o.feet, level: 'ambient', k, calm: o.calm });
   if (!o.calm) {
     const motes = scene.add.particles(cx, o.feet, moteTexture(scene), {
-      x: { min: -w * .45, max: w * .45 }, y: { min: -4, max: 4 }, speedY: { min: -30, max: -14 }, speedX: { min: -4, max: 4 },
+      x: { min: -w * .45, max: w * .45 }, y: { min: -16, max: -9 }, speedY: { min: -30, max: -14 }, speedX: { min: -4, max: 4 },
       scale: { start: .7, end: 0 }, alpha: { start: .7 * k, end: 0 }, lifespan: { min: 1200, max: 1800 }, frequency: 260, quantity: 1,
       tint: [core, rim], blendMode: Phaser.BlendModes.ADD,
     });
