@@ -37,6 +37,7 @@ const bodySprite = (body: Phaser.GameObjects.Container | undefined): Phaser.Game
 export const pixelRatio = (): number => Math.min(3, Math.max(1, window.devicePixelRatio || 1));
 // A held charge sits this share of the figure width forward (toward the other side) of the body centre: on the body.
 export const HOLD_FORWARD = .12;
+const CROWN_HEIGHT = 12;
 
 export interface ActorTarget { x: number; y: number; width: number; height: number }
 export interface SceneView { state: BattleState; heroId: string; targetId: string | null; phase?: 'hero' | 'enemy'; activeActorId?: string; activeTargetId?: string }
@@ -437,8 +438,22 @@ export class BattleScene extends Phaser.Scene {
       this.actor(enemy.id, slot, this.view.state.enemies[i]!.hp, true);
     }
     this.holds.clear(); for (const id of [...this.auras.keys()]) this.dropAura(id); this.paintHolds();
+    this.measureCrowns();
     this.layer.sort('depth'); this.onLayout();
   }
+  // Boss crown spots (CSS px, canvas space): centred over the rendered figure, just above its top. Measured on the resting
+  // pose when the field is laid out (the art's own height varies a lot: Valdrakk's wings and Morvane's crest rise far
+  // above the layout box the crown used before, which left it inside the body).
+  private crowns = new Map<string, { x: number; y: number }>();
+  private measureCrowns(): void {
+    this.crowns.clear();
+    for (const foe of this.encounter.enemies) {
+      if (!foe.boss) continue;
+      const box = this.figureBox(foe.id); if (!box) continue;
+      this.crowns.set(foe.id, { x: (box.left + box.right) / 2, y: Math.max(CROWN_HEIGHT, box.top - 2) });
+    }
+  }
+  crownSpot(id: string): { x: number; y: number } | undefined { return this.crowns.get(id); }
   private actor(id: string, slot: FieldSlot, hp: number, enemy: boolean): void {
     const { x, y, size } = slot;
     this.positions.set(id, { x, y });
