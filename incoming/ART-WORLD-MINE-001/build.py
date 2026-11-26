@@ -137,25 +137,37 @@ def map_previews(tiles, rails):
 
 
 def fight(bg):
-    for width, height, band in ((390, 844, 372), (1366, 768, 480)):
-        preview = Image.new('RGB', (width, height), '#181b22')
-        # Match the battle's horizon while slicing the art to the visible field.
-        field = ImageOps.fit(bg, (width, band), Image.Resampling.LANCZOS, centering=(.5, .45))
-        hero = [(0.15, .44), (.15, .64), (.2, .84), (.35, .55), (.37, .78)]
-        foe = [(.83, .44), (.85, .64), (.88, .86), (.65, .57), (.69, .82)]
+    for width, height in ((390, 844), (1366, 768)):
+        frame_w = min(width, 480)
+        field_w = frame_w - 12
+        field_h = 477 if width == 390 else 430
+        field_top = 170 if width == 390 else 130
+        field_left = 6
+        ax = field_left + field_w / 2
+        ay = field_top + field_h * .27
+        scale = max(field_w / 1536, field_h / 768, ax / 768, (frame_w - ax) / 768,
+                    ay / (1024 * .45), (height - ay) / (1024 * .55))
+        left, top = ax - 768 * scale, ay - 1024 * .45 * scale
+        field = bg.transform((frame_w, height), Image.Transform.AFFINE,
+                             (1 / scale, 0, -left / scale, 0, 1 / scale, -top / scale),
+                             Image.Resampling.BICUBIC)
+        hero = [(.115, .215), (.345, .215), (.115, .65), (.125, .91), (.35, .91)]
+        foe = [(.68, .65), (.84, .215), (.61, .215), (.88, .91), (.65, .91)]
         for side, slots in enumerate((hero, foe)):
             for number, (x, y) in enumerate(slots):
                 actor_file = SOURCE / f'actor-{side}-{number}.png'
                 figure = Image.open(actor_file).convert('RGBA')
                 figure = figure.crop(figure.getbbox())
-                scale = (0.17 if side == 0 else .20) * band / figure.height
-                figure = figure.resize((round(figure.width * scale), round(figure.height * scale)), Image.Resampling.LANCZOS)
-                px, py = round(x * width), round(y * band)
+                actor_height = (78 if side == 0 else (100, 43, 68, 79, 62)[number]) * frame_w / 390
+                ratio = actor_height / figure.height
+                figure = figure.resize((round(figure.width * ratio), round(actor_height)), Image.Resampling.LANCZOS)
+                px, py = round(field_left + x * field_w), round(field_top + y * field_h)
                 draw = ImageDraw.Draw(field)
                 draw.ellipse((px - 15, py - 3, px + 15, py + 3), fill='#303034')
                 field.paste(figure, (px - figure.width // 2, py - figure.height), figure)
                 draw.rectangle((px - 15, py + 5, px + 15, py + 7), fill='#9d7854' if side else '#799e69')
-        preview.paste(field, (0, (height - band) // 2))
+        preview = Image.new('RGB', (width, height), '#181b22')
+        preview.paste(field, ((width - frame_w) // 2, 0))
         preview.save(PREVIEW / f'battle-{width}.png')
 
 

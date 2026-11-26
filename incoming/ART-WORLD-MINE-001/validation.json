@@ -2,16 +2,16 @@
   "runtimeBytes": 1607054,
   "files": {
     "NOTES.md": {
-      "sha256": "548bb3004d1c596c7c84b81433aed8e8bdf38368f7e88fdaa4fdef289abfc971",
-      "bytes": 1609
+      "sha256": "0fba7240c69eea18dcc540c36ec19f974a493565fabb5838ab8a6163620c18fe",
+      "bytes": 1663
     },
     "build.py": {
-      "sha256": "553ec94388009ac1856948b0e6d6e7577bc449ab58d34e8319d2e6850e57e45a",
-      "bytes": 9305
+      "sha256": "ca14a8ebab24071b52c7995f68d3a26133ebbff3a9bc0d497d9e548fcc4f05df",
+      "bytes": 9911
     },
     "preview/battle-1366.png": {
-      "sha256": "8a04f74d722f6bba77b9262f675d9d56746a06a3dbdbaa2067e62e9b5c05a826",
-      "bytes": 919927,
+      "sha256": "e69c3cd953f80aa609ebddbdd93c7b51650dad66f70b9d80b3b0c30f575b2d38",
+      "bytes": 592384,
       "size": [
         1366,
         768
@@ -19,8 +19,8 @@
       "mode": "RGB"
     },
     "preview/battle-390.png": {
-      "sha256": "39d065b566de5cbc91816030c3d5083d63777a73b4a59abd0ea609015a84a134",
-      "bytes": 250287,
+      "sha256": "30b7f01d0f35a1b24dee1b0b84666a5a492d699f8e7a3a2684ec8b07ffe02e2f",
+      "bytes": 481787,
       "size": [
         390,
         844
