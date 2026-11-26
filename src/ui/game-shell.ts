@@ -150,7 +150,7 @@ export class GameShell {
       equip: (id, uid) => camp({ kind: 'equip', heroId: id, uid }), unequip: (id, slot) => camp({ kind: 'unequip', heroId: id, slot }),
       autoEquip: plan => camp({ kind: 'autoEquipCamp', plan }),
       transfer:(uid,index,donor,sourceIndex)=>camp({ kind: 'transferAffix', uid, index, donor, sourceIndex }),
-      craft:(hero,level)=>camp({ kind: 'craftWeapon', heroId: hero, level }),
+      craft:(hero,level,crystal)=>camp({ kind: 'craftWeapon', heroId: hero, level, ...(crystal ? { crystal: true } : {}) }),
       bossTarget:target=>camp({ kind: 'bossTarget', target }),
       huntTarget:target=>camp({ kind: 'huntTarget', ...has('target', target) }),
       collect:ids=>camp({ kind: 'collectOverflow', ids: [...ids] }), recycleStored:(source,ids)=>camp({ kind: 'recycleStored', source, ids: [...ids] }),expandStorage:()=>camp({ kind: 'expandStorage' }),
@@ -979,7 +979,11 @@ export class GameShell {
         sneak: 'ลอบผ่านไปได้ · ศัตรูในโซนตื่นตัวเต็มที่', pray: `ศาลประทานพร${healed ? ` · ${healed}` : ''} · เลือดสูงสุดลด ${this.map.eventRules.prayWound}%`,
         offer: `ถวายแร่ ${this.map.eventRules.offerOre} · ได้เศษกลาง ${this.map.eventRules.offerShard}`, help: `ช่วยนักเดินทาง · ได้แร่ดาว ${this.map.eventRules.traveller.ore} และเศษกลาง ${this.map.eventRules.traveller.shard}`,
         guide: `ชี้ทางให้นักเดินทาง · ได้แร่ดาว ${this.map.eventRules.travellerGuide.ore}`,
-        shelter: `พักในค่ายร้าง${healed ? ` · ${healed}` : ''} · ศัตรูในโซนตื่นตัวเต็มที่`, search: `ค้นค่ายร้าง · ได้ฝุ่นดาว ${this.map.eventRules.abandoned.searchDust}`, pass: 'เดินผ่านค่ายร้างไป',
+        shelter: `พักในค่ายร้าง${healed ? ` · ${healed}` : ''} · ศัตรูในโซนตื่นตัวเต็มที่`, search: `ค้นค่ายร้าง · ได้ฝุ่นดาว ${this.map.eventRules.abandoned.searchDust}`, pass: ev.kind === 'abandoned' ? 'เดินผ่านค่ายร้างไป' : 'เดินผ่านไป',
+        free: `ขุดคนงานออกมาได้ · ได้แร่ดาว ${this.map.eventRules.trapped.ore} และเศษกลาง ${this.map.eventRules.trapped.shard} · ทุกคนเหนื่อย +${this.map.eventRules.trapped.fatigue}`,
+        rummage: done.potion ? `ค้นรถแร่ · ได้${potionText[done.potion].name} 1 ขวด` : `ค้นรถแร่ · พกยาเต็มแล้ว ได้แร่ดาว ${this.map.eventRules.cart.ore}`,
+        dig: `ขุดสายแร่ · ได้แร่ดาว ${this.map.eventRules.vein.ore} · ภัยคุกคามเพิ่ม`,
+        'sell-ore': `ขายแร่ ${this.map.eventRules.oreTrade.ore} · ได้ทอง ${this.map.eventRules.oreTrade.gold} (${result.state.sold ?? 0}/${this.map.eventRules.oreTrade.limit})`,
       };
       this.message = `${eventText[ev.kind].name} · ${detail[choice] ?? `${choiceText(choice, this.map.eventRules).label} แล้ว`}`;
       if (choice === 'pray' || choice === 'shelter') this.effect = 'rest'; else if (choice !== 'sneak' && choice !== 'pass') this.effect = 'loot';

@@ -2,11 +2,12 @@
 
 These owner-scoped rules still apply. They were moved here verbatim so CLAUDE.md stays short. Before changing a system, read its section here.
 
-## Map 5 เหมืองผลึกร้าง — OD-60 (save v69, draft balance)
+## Map 5 เหมืองผลึกร้าง — OD-60 (save v70, draft balance)
 
 - `chapter-mine.ts` supplies the board and exploration definition. The `mine` game command validates tile interactions. Movement shares the existing door, camp, encounter pressure and seal paths.
 - `ExpeditionState.mine` tracks portable light expiry, cart and beam settings, workers following or rescued, and reached recruit scenes. The save parser validates mine-only progress and solved puzzle IDs. The mine unlocks after the lake.
 - The Crystal Giant raises timed armour on round 1. It reflects direct magic once per action. Physical actions crack it; heavy hits break it. Its every-third-round collapse is an all-party hit with per-target mitigation. The below-half split summons reserves immediately, with turns starting in the following round. [Validation](../validation/map5-mine/README_TH.md).
+- Side events (save v70, mine map v2) use the shared event path (`EVENT_CHOICES`, `chooseEvent`, `EventRules`): `trapped` (free = ore + shards, every brought member +fatigue / pass), `cart` (rummage = one seeded random potion that still fits, else ore / pass), `vein` (dig = ore, zone pressure +N up to the cap / pass) and `ore-merchant` (sell ore for gold up to `oreTrade.limit` a run, counted in `ExpeditionState.sold`, plus the potion menu; stays open like `merchant`, see `shopEvent`). The ledger story (3 chest pages) pays ore once and, through `Profile.storyQuests`, unlocks `forge.crystal`: the fixed crafted weapon one rarity up with a `barrier` affix (`craftWeapon(..., crystal)`). Bork's job `smith-mine-crystals` counts elites on mine runs (×3). The two mine notes go to the camp journal like the lake notes.
 
 ## Map 4 ทะเลสาบเงาจันทร์ — owner OD-60 2026-11-22 (save v68, draft numbers)
 

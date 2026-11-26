@@ -21,6 +21,8 @@ export const gameRules: GameRules = {
     { id: 'scout-puzzles', npc: 'scout', kind: 'puzzles', target: 6, reward: { ore: 40, shard: 10 } },
     // Map 4 (OD-60): Kael asks for the lake's three puzzles (runes, water gate, causeway), counted on lake runs only.
     { id: 'scout-lake', npc: 'scout', kind: 'puzzles', target: 3, map: 'moon-lake', reward: { ore: 40, dust: 15, shard: 10 } },
+    // Map 5 (OD-60, draft): Uncle Bork asks for crystals from the mine's elites, three beaten elites over mine runs.
+    { id: 'smith-mine-crystals', npc: 'smith', kind: 'elites', target: 3, map: 'crystal-mine', reward: { ore: 40, dust: 15, shard: 10 } },
   ],
   // P05-05 (prototype, draft numbers): one supply per sweep, 3 sweeps per map per day shared by normal and hard. P04-06
   // farm budget (docs/validation/p04-06-2026-11-15): 2 supplies a day kept up to 6 (was 6/18). Each map's rewards are its own `sweepReward`.
@@ -139,6 +141,9 @@ export const gameRules: GameRules = {
     banditLevelBonus: 1, prayHeal: 25, prayWound: 5, maxWound: 20, offerOre: 10, offerShard: 3,
     merchant: { salve: 8, tonic: 14, repel: 10, calm: 10 }, traveller: { ore: 10, shard: 3 }, travellerGuide: { ore: 4 },
     abandoned: { healPercent: 20, searchDust: 8, searchFightPercent: 40 }, reflection: { fatigue: 1 },
+    // Map 5 side events (drafts): a dug-out worker pays about a traveller's salve price in fatigue; a vein pays a common
+    // chest's ore for four steps' worth of tunnel threat; the merchant pays slightly under the zones' 2:1 ore-to-gold loot.
+    trapped: { fatigue: 1, ore: 10, shard: 4 }, cart: { ore: 8 }, vein: { ore: 15, pressure: 12 }, oreTrade: { ore: 10, gold: 4, limit: 3 },
     riftEncounterId: 'scout-patrol', riftDust: 12,
     eliteExp: 2, eliteRarityWeights: [0, 0, 60, 30, 10],
     optionalElite: { exp: 3, rarityWeights: [0, 0, 20, 50, 30], gold: 12, shard: 3 },
@@ -181,7 +186,7 @@ export const gameRules: GameRules = {
     // Forge (2D-4, draft numbers): caps +5/+10/+15/+20/+25, +6% base stats per level.
     hunt: {weaponBiasPercent:70,pityDrops:12},
     storage: {step:30,costs:[200,400,800]},
-    forge: { transfer:{ore:12,dust:3,shard:10}, craft:{ore:18,dust:4,orePerLevel:6,dustPerLevel:1}, itemLevel: {baseCap:3,orePerLevel:4,dustPerLevel:1,unlocks:[{elite:'gate-meadow',cap:6},{elite:'gate-thicket',cap:9},{elite:'scar-golem',cap:10}],clears:[{map:'veil-frontier',cap:10}]}, plusCap: [5, 10, 15, 20, 25], plusPercent: 6, ore: 3, orePerPlus: 1, dustPerPlus: 0.5, fuseCount: 3, rerollShards: 10, salvageDustPerPlus: 1, smeltOre: 8, smeltCap: 30 },
+    forge: { transfer:{ore:12,dust:3,shard:10}, craft:{ore:18,dust:4,orePerLevel:6,dustPerLevel:1}, crystal:{story:'crystal-mine',rarity:2,affix:'barrier',ore:12,dust:4}, itemLevel: {baseCap:3,orePerLevel:4,dustPerLevel:1,unlocks:[{elite:'gate-meadow',cap:6},{elite:'gate-thicket',cap:9},{elite:'scar-golem',cap:10}],clears:[{map:'veil-frontier',cap:10}]}, plusCap: [5, 10, 15, 20, 25], plusPercent: 6, ore: 3, orePerPlus: 1, dustPerPlus: 0.5, fuseCount: 3, rerollShards: 10, salvageDustPerPlus: 1, smeltOre: 8, smeltCap: 30 },
     sets: {
       dawn: { two: [{ stat: 'hp', value: 10 }], four: { kind: 'barrier', amount: 12 } },
       wind: { two: [{ stat: 'speed', value: 3 }], four: { kind: 'firstStrike', amount: 0 } },

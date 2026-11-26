@@ -1,7 +1,7 @@
 import { bankFits, TOME_CAP } from './caps';
 import { addTickets, ticketsFit } from './gacha';
 import { emptyTomes, partyLine } from './tomes';
-import { rosterIds } from './world';
+import { rosterIds, shopEvent } from './world';
 import type {
   BoardBook, BoardKind, BoardObjective, BoardRules, BoardSet, BoardTab, ExpeditionState, MapDefinition, Profile, ProfileResult,
   RunOutcome, SweepReward,
@@ -67,7 +67,7 @@ export function addBoard(book: BoardBook, rules: BoardRules, add: Partial<Record
 // The contracts a settled run fulfilled (only a completed run counts; nothing is lost when one fails, OD-37).
 export function contractsMet(run: ExpeditionState, outcome: RunOutcome, map: MapDefinition): string[] {
   const rules = map.board; const c = map.contract; if (outcome !== 'complete' || !c) return [];
-  const calm = map.events.filter(e => e.kind !== 'rift' && e.kind !== 'merchant');
+  const calm = map.events.filter(e => e.kind !== 'rift' && !shopEvent(e.kind));
   const own = rosterIds(run).filter(id => !run.guests?.includes(id) && !run.recruited?.includes(id));
   const met: Record<string, boolean> = {
     swift: run.steps <= c.swiftSteps,

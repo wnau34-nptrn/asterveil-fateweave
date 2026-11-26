@@ -578,7 +578,7 @@ const questEventText: Record<string, string> = {
 };
 // P05-02: optional story quests of maps 1–2, by map id (the objectives come from the map's `quest`).
 export const storyQuestText: Record<string, { name: string; ask: string; done: string }> = {
-  'crystal-mine': { name: 'สมุดบัญชีเหมือง', ask: 'หาสมุดบัญชีทั้ง 3 หน้าแล้วนำกลับไปให้ลุงบอร์ก', done: 'นำสมุดบัญชีกลับมาถึงค่ายแล้ว' },
+  'crystal-mine': { name: 'สมุดบัญชีเหมือง', ask: 'หาสมุดบัญชีทั้ง 3 หน้าแล้วนำกลับไปให้ลุงบอร์ก', done: 'ลุงบอร์ก: สมุดบัญชีครบแล้ว ข้าจำสูตรตีอาวุธผลึกได้ ไปสั่งได้ที่เตาตีเหล็ก' },
   'moon-lake': { name: 'เรือของคนพายเรือ', ask: 'คนพายเรือแก่ที่ท่าเรือร้างทำไม้พายหายไปบนเกาะกลางน้ำ ช่วยเขา หาไม้พายในกล่องบนเกาะ แล้วกลับค่ายในรอบเดียว · ได้เรือเล็กข้ามน้ำได้ทุกช่วงในรอบต่อ ๆ ไป', done: 'คาเอล: คนพายเรือฝากเรือเล็กไว้ให้ค่ายเรา ข้ามทะเลสาบได้ไม่ต้องรอน้ำลงแล้ว' },
   'ruined-border': { name: 'รอยธงของคนที่หนี', ask: 'ทหารที่หนีไปซ่อนธงประจำกองไว้ในกล่องสามใบทั่วซากป้อม เปิดให้ครบในรอบเดียวแล้วกลับค่าย', done: 'มิมี่: ธงของคนที่หนีกลับมาครบแล้ว ข้าเก็บเข้าคลังให้' },
   'deep-forest': { name: 'ด้ายที่ป่าฝืน', ask: 'ป่าบิดเบี้ยวเพราะรอยแยก ตัดสินใจเรื่องนักเดินทางและศาลเก่าให้ครบในรอบเดียวแล้วกลับค่าย', done: 'คาเอล: ป่าสงบลงหน่อยแล้ว คนเดินทางเริ่มกลับมาใช้เส้นทางนั้น' },
@@ -596,6 +596,11 @@ const campLineText: Record<string, string> = {
   'abandoned:shelter': 'ลุงบอร์ก: ค่ายร้างยังพอให้พักได้ แต่กองไฟของมันเรียกอะไรมาด้วย',
   'abandoned:search': 'มิมี่: ฝุ่นดาวจากค่ายร้าง ข้าเก็บเข้าคลังแล้ว',
   'abandoned:pass': 'คาเอล: ค่ายร้างยังรออยู่ที่เดิม ไม่มีใครแตะ',
+  'trapped:free': 'แบรนน์: คนงานที่ท่านขุดออกมาฝากขอบคุณ เขาบอกว่าจะกลับไปเล่าให้ครอบครัวฟัง',
+  'cart:rummage': 'มิมี่: ของจากรถแร่เก่ายังใช้ได้ ข้าจดเข้าบัญชีแล้ว',
+  'vein:dig': 'ลุงบอร์ก: แร่จากสายสดเนื้อดีจริง แต่ข้าได้ยินว่าเสียงค้อนปลุกอะไรในอุโมงค์ด้วย',
+  'ore-merchant:sell-ore': 'พีโน่: พ่อค้าแร่ให้ราคาไม่เลว ทองเข้าคลังแล้ว',
+  'ore-merchant:buy': 'พีโน่: พ่อค้าแร่ฝากบอกว่ายังตั้งตาชั่งรออยู่ที่ปากเหมือง',
 };
 // Short camp lines for the latest return: the story quest that paid, then each event chosen at (at most three).
 export function campLines(profile: Pick<Profile, 'last' | 'choices'>, events: readonly MapEventDefinition[]): string[] {
@@ -626,6 +631,10 @@ export const eventText: Record<MapEventKind, { name: string; scene: string; icon
   rift: { name: 'รอยแยกเล็ก', scene: 'รอยแยกเล็ก ๆ กำลังสั่น มีบางอย่างกำลังจะคลานออกมา', icon: 'boss' },
   abandoned: { name: 'ค่ายร้าง', scene: 'ค่ายพักที่ใครสักคนทิ้งไว้ กองไฟยังอุ่น ของบางอย่างยังวางอยู่', icon: 'camp' },
   reflection: { name: 'ภาพสะท้อน', scene: 'ผิวน้ำนิ่งสนิท เงาในน้ำไม่ใช่เงาของท่าน แต่เป็นภาพจากวันที่จำไม่ได้', icon: 'star' },
+  trapped: { name: 'คนงานติดอยู่', scene: 'หินถล่มทับทางแคบ เสียงคนงานเคาะเรียกอยู่หลังกองหิน ต้องช่วยกันขุดนานพอสมควร', icon: 'talk' },
+  cart: { name: 'รถแร่ทิ้งไว้', scene: 'รถแร่คันหนึ่งค้างอยู่บนรางเก่า ผ้าใบคลุมของใช้ที่คนงานไม่ได้ขนออกไป', icon: 'pack' },
+  vein: { name: 'สายแร่สด', scene: 'ผนังอุโมงค์แตกเผยสายแร่ที่ยังเรืองแสง ขุดได้ แต่เสียงค้อนจะดังไปทั่วอุโมงค์', icon: 'ore' },
+  'ore-merchant': { name: 'พ่อค้าแร่', scene: 'พ่อค้าแร่ตั้งตาชั่งไว้ที่ปากเหมือง รับซื้อแร่เป็นทองและมียาขายด้วย', icon: 'pack' },
 };
 export function choiceText(choice: EventChoice, r: EventRules): { label: string; help: string } {
   switch (choice) {
@@ -643,16 +652,22 @@ export function choiceText(choice: EventChoice, r: EventRules): { label: string;
     case 'pass': return { label: 'เดินผ่าน', help: 'ไม่ได้อะไร ไม่เสียอะไร' };
     case 'gaze': return { label: 'มองต่อ', help: `ได้บันทึกความทรงจำลงสมุดค่าย แต่ทุกคนที่พามาเหนื่อย +${r.reflection.fatigue}` };
     case 'away': return { label: 'เบือนหน้า', help: 'ไม่ได้อะไร ไม่เสียอะไร' };
+    case 'free': return { label: 'ช่วยขุดออก', help: `ได้แร่ดาว ${r.trapped.ore} และเศษกลาง ${r.trapped.shard} แต่ทุกคนที่พามาเหนื่อย +${r.trapped.fatigue}` };
+    case 'rummage': return { label: 'ค้นรถแร่', help: `ได้ยาสุ่ม 1 ขวดที่ยังพกได้ (ฟื้นแผล ฟื้นหมู่ หรือไล่อสูร) ถ้าพกเต็มทุกชนิดได้แร่ดาว ${r.cart.ore} แทน` };
+    case 'dig': return { label: 'ขุดแร่', help: `ได้แร่ดาว ${r.vein.ore} แต่ภัยคุกคามในโซนเพิ่ม ${r.vein.pressure}%` };
+    case 'sell-ore': return { label: `ขายแร่ ${r.oreTrade.ore} · ได้ทอง ${r.oreTrade.gold}`, help: `ขายได้ ${r.oreTrade.limit} ครั้งต่อการเดินทาง` };
   }
 }
 export const eventChoices: Record<MapEventKind, readonly EventChoice[]> = {
   bandits: ['fight', 'sneak'], shrine: ['pray', 'offer'], merchant: ['buy-salve', 'buy-tonic', 'buy-repel'], traveller: ['help', 'guide'], rift: ['fight'],
   abandoned: ['shelter', 'search', 'pass'], reflection: ['gaze', 'away'],
+  trapped: ['free', 'pass'], cart: ['rummage', 'pass'], vein: ['dig', 'pass'], 'ore-merchant': ['sell-ore', 'buy-salve', 'buy-tonic', 'buy-repel'],
 };
-export const eventReasonText: Record<string, string> = { ore: 'แร่ดาวไม่พอ', salve: 'ไม่มียาฟื้นแผล', carry: 'พกเต็มแล้ว', busy: 'ทำตอนนี้ไม่ได้', choice: 'ทำไม่ได้' };
+export const eventReasonText: Record<string, string> = { sold: 'ขายครบแล้ว', ore: 'แร่ดาวไม่พอ', salve: 'ไม่มียาฟื้นแผล', carry: 'พกเต็มแล้ว', busy: 'ทำตอนนี้ไม่ได้', choice: 'ทำไม่ได้' };
 // ---- Camp side quests (3D): each NPC's request and its reward, in Thai. ----
 // Map 4: a camp job counted on one map only (`SideQuestDefinition.map`) has its own name and ask.
 export const mapQuestText: Record<string, { name: string; ask: (n: number) => string }> = {
+  'smith-mine-crystals': { name: 'ผลึกจากอีลิทเหมือง', ask: n => `ชนะอีลิทในเหมืองผลึกร้าง ${n} ครั้ง (หัวหน้าคุมเหมืองหรือตัวกินผลึก) แล้วนำผลึกกลับมาให้ลุงบอร์ก นับเฉพาะรอบที่ไปเหมือง` },
   'scout-lake': { name: 'ปริศนาแห่งทะเลสาบ', ask: n => `ไขปริศนาในทะเลสาบเงาจันทร์ให้ครบ ${n} อย่าง (หินรูนเงาสะท้อน ประตูน้ำ ก้อนหินลงน้ำ) นับเฉพาะรอบที่ไปทะเลสาบ` },
 };
 export const sideQuestText: Record<SideQuestKind, { name: string; ask: (n: number) => string }> = {

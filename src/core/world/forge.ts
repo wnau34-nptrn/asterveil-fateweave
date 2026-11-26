@@ -1,4 +1,4 @@
-import type { Item, MapDefinition, Profile, ProfileResult } from './types';
+import type { GearStat, Item, MapDefinition, Profile, ProfileResult } from './types';
 import { affixPool, enhancementInvestment, GEAR_SPECIALS, RARITIES, rollQuality } from './equipment';
 import { storageCap } from './storage';
 import { bankFits } from './caps';
@@ -136,25 +136,32 @@ export function raiseItemLevel(initial:Profile,map:MapDefinition,uid:number,targ
 }
 
 // Fixed starter weapon: no RNG, set or paid-development credit. Higher-tier/set rewards remain farmed.
-export function weaponBlueprint(map:MapDefinition,hero:string,level:number,uid=0):Item {
-  return {uid,slot:'weapon',hero,rarity:1,level,affixes:[map.equipment.supportHeroes.includes(hero)?'support':'attack'],q:{main:100,affixes:[100]}};
+// Map 5: the crystal recipe (unlocked by the mine ledger story) makes the same weapon one rarity up with a fixed second affix.
+export const crystalRecipe = (p: Pick<Profile, 'storyQuests'>, map: MapDefinition): boolean => {
+  const c = map.equipment.forge.crystal; return !!c && !!p.storyQuests?.includes(c.story);
+};
+export function weaponBlueprint(map:MapDefinition,hero:string,level:number,uid=0,crystal=false):Item {
+  const main:GearStat=map.equipment.supportHeroes.includes(hero)?'support':'attack',c=crystal?map.equipment.forge.crystal:undefined;
+  return {uid,slot:'weapon',hero,rarity:c?.rarity??1,level,affixes:c?[main,c.affix]:[main],q:{main:100,affixes:c?[100,100]:[100]}};
 }
-export function weaponCraftCost(map:MapDefinition,level:number):{ore:number;dust:number}|undefined {
-  if(!Number.isInteger(level)||level<1||level>99)return;const c=map.equipment.forge.craft;
-  return {ore:c.ore+c.orePerLevel*(level-1),dust:c.dust+c.dustPerLevel*(level-1)};
+export function weaponCraftCost(map:MapDefinition,level:number,crystal=false):{ore:number;dust:number}|undefined {
+  if(!Number.isInteger(level)||level<1||level>99)return;const c=map.equipment.forge.craft,x=crystal?map.equipment.forge.crystal:undefined;
+  if(crystal&&!x)return;
+  return {ore:c.ore+c.orePerLevel*(level-1)+(x?.ore??0),dust:c.dust+c.dustPerLevel*(level-1)+(x?.dust??0)};
 }
-export function weaponCraftReason(p:Profile,map:MapDefinition,hero:string,level:number):string {
+export function weaponCraftReason(p:Profile,map:MapDefinition,hero:string,level:number,crystal=false):string {
   if(!p.company.includes(hero))return 'unknown';
-  const cost=weaponCraftCost(map,level);if(!cost||level>itemLevelCap(p,map))return 'level';
+  if(crystal&&!crystalRecipe(p,map))return 'recipe';
+  const cost=weaponCraftCost(map,level,crystal);if(!cost||level>itemLevelCap(p,map))return 'level';
   if(p.overflow?.length)return 'pending';
   if(p.items.length>=storageCap(p,map))return 'bag';
   if(p.bank.ore<cost.ore)return 'ore';if(p.bank.dust<cost.dust)return 'dust';
   if(!Number.isSafeInteger(p.nextItem+1))return 'full';return '';
 }
-export function craftWeapon(initial:Profile,map:MapDefinition,hero:string,level:number):ProfileResult {
-  const reason=weaponCraftReason(initial,map,hero,level);if(reason)return blocked(initial,reason);
-  const profile=structuredClone(initial),cost=weaponCraftCost(map,level)!,uid=profile.nextItem++;
-  profile.items.push(weaponBlueprint(map,hero,level,uid));profile.bank.ore-=cost.ore;profile.bank.dust-=cost.dust;
+export function craftWeapon(initial:Profile,map:MapDefinition,hero:string,level:number,crystal=false):ProfileResult {
+  const reason=weaponCraftReason(initial,map,hero,level,crystal);if(reason)return blocked(initial,reason);
+  const profile=structuredClone(initial),cost=weaponCraftCost(map,level,crystal)!,uid=profile.nextItem++;
+  profile.items.push(weaponBlueprint(map,hero,level,uid,crystal));profile.bank.ore-=cost.ore;profile.bank.dust-=cost.dust;
   return {profile,event:{type:'forged',uid,action:'craft'}};
 }
 
