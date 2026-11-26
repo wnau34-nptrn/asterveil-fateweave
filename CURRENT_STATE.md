@@ -1,4 +1,4 @@
-# Current state — updated 2026-11-26 (Map 5 balance at 48 seeds)
+# Current state — updated 2026-11-26 (Map 5 art in game; giant 4b delivered)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
@@ -29,7 +29,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Map 5 (design approved, “ทำตามที่คุณแนะนำ”): unlocks after the lake; save v69; Crystal Giant tuned at 48 seeds 2026-11-26 (`crystal-giant` v2: casual rush 78%, basic-only ≤22%). PR #356. Giant R1 at 1.32×; motion sample 4a approved (“อนุมัติ 4a”). Art ([brief](docs/handoffs/CODEX-ART-MAP5-MINE-TH.md)): props #358, the five semi-chibi foes #360, floors/rails/battle backdrop #357 in game; giant 4b (#359) pending. Side events remain. [Mine validation](docs/validation/map5-mine/README_TH.md).
+- Map 5 (design approved, “ทำตามที่คุณแนะนำ”): unlocks after the lake; save v69; Crystal Giant tuned at 48 seeds 2026-11-26 (`crystal-giant` v2: casual rush 78%, basic-only ≤22%). PR #356. Giant R1 at 1.32×; motion sample 4a approved (“อนุมัติ 4a”). Art ([brief](docs/handoffs/CODEX-ART-MAP5-MINE-TH.md)): props #358, the five semi-chibi foes #360, floors/rails/battle backdrop #357 in game; giant 4b delivered on `art/art-unit-animation-mine-boss-001` (`77a6e4ba`, PR #359 draft into `claude/friendly-heisenberg-xapns5`), not yet reviewed or imported. Side events remain. [Mine validation](docs/validation/map5-mine/README_TH.md).
 - 2026-11-25: boss charge holds sit on the body. Bosses wear a silhouette aura in their own colour: light all battle, stronger while charging. Boss crowns sit above the rendered figure. The owner said “นำเข้าเกมได้เลย”. Mobile frame rate is not measured yet. [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
 - Game Feel [Draft PR #353](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/353): เสียงและภาพโจมตีตามอาวุธครบ 15 ตัวและตัวละครเซฟเก่า 2 ตัว. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
 - Game Feel #352 รวมแล้ว (`3b746ac`): จังหวะเสียง Duelist/Execute และเสียงโล่รับเต็ม. [ผลตรวจ](docs/validation/steel-contact-2026-11-24/README_TH.md).
@@ -42,4 +42,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-Import Codex's Map 5 art as it arrives ([brief](docs/handoffs/CODEX-ART-MAP5-MINE-TH.md): tiles, props, foes, then the R1 Crystal Giant motion sample 4a for owner approval before 4b) with the `fateweave-art-intake` skill; capture 390px with `tests/browser/mine-clips.spec.ts`. Read [the Map 5 validation](docs/validation/map5-mine/README_TH.md) first.
+Review and import Codex's Crystal Giant 4b (ART-UNIT-ANIMATION-MINE-BOSS-001, branch `art/art-unit-animation-mine-boss-001` at `77a6e4ba`, PR #359 draft based on `claude/friendly-heisenberg-xapns5`; retarget it to `feature/fateweave-initial-prototype`). Brief: [CODEX-ART-MAP5-MINE-TH](docs/handoffs/CODEX-ART-MAP5-MINE-TH.md) (4a approved, 4b in round 2; the giant stays R1 at 1.32×, exempt from semi-chibi). Check hashes and every frame against R1, run `scripts/unit-anatomy-audit.py`, then wire the giant and fragment bodies (768 px cell, feet 672/768 like the Water Spirit) and the armour/reflect/collapse/split VFX from real resolver events, rerun `npm run coverage:presentation`, capture the giant fight at 390px with `CLIPS=1 npx playwright test tests/browser/mine-clips.spec.ts -g Giant`, and ask the owner to approve the motion before merging.
