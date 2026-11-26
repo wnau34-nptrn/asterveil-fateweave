@@ -289,7 +289,7 @@ export class WorldUI {
       return `<li><div><b>${t.label}</b>${help ? `<small>${help}</small>` : ''}</div><button id="event-${choice}" data-world="event-choice" data-choice="${choice}" class="${choice === 'fight' ? 'primary' : 'secondary'}"${reason ? ' disabled' : ''}>${reason ? eventReasonText[reason] ?? '' : t.label}</button></li>`;
     }).join('');
     this.root.querySelector('#event-content')!.innerHTML = `<p class="event-scene">${text.scene}</p><ul class="event-choices">${rows}</ul>
-      <p class="world-stats">${ev.kind === 'merchant' ? `มีแร่ดาว ${s.resources.ore} · พ่อค้ารอตรงนี้ตลอดรอบ` : 'ปิดหน้าต่างเพื่อเดินต่อ กลับมาตัดสินใจทีหลังได้'}</p>`;
+      <p class="world-stats">${ev.kind === 'ore-merchant' ? `มีแร่ดาว ${s.resources.ore} · ทอง ${s.resources.gold} · ขายแล้ว ${s.sold ?? 0}/${r.oreTrade.limit} · พ่อค้ารอตรงนี้ตลอดรอบ` : ev.kind === 'merchant' ? `มีแร่ดาว ${s.resources.ore} · พ่อค้ารอตรงนี้ตลอดรอบ` : 'ปิดหน้าต่างเพื่อเดินต่อ กลับมาตัดสินใจทีหลังได้'}</p>`;
   }
   // Tap a member, then a member or an empty slot on the other side to swap or move.
   private pickMember(id: string | undefined, side: 'deployed' | 'reserve'): void {

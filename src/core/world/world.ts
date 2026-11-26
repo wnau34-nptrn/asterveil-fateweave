@@ -664,7 +664,10 @@ function battleLoot(state: ExpeditionState, map: MapDefinition, kind: BattleKind
 export const EVENT_CHOICES: Readonly<Record<MapEventKind, readonly EventChoice[]>> = {
   bandits: ['fight', 'sneak'], shrine: ['pray', 'offer'], merchant: ['buy-salve', 'buy-tonic', 'buy-repel'], traveller: ['help', 'guide'], rift: ['fight'],
   abandoned: ['shelter', 'search', 'pass'], reflection: ['gaze', 'away'],
+  trapped: ['free', 'pass'], cart: ['rummage', 'pass'], vein: ['dig', 'pass'], 'ore-merchant': ['sell-ore', 'buy-salve', 'buy-tonic', 'buy-repel'],
 };
+// Merchants stay open for more trades; every other event finishes with its choice.
+export const shopEvent = (kind: MapEventKind | undefined): boolean => kind === 'merchant' || kind === 'ore-merchant';
 // Event choices (3A). Valid only while standing on the unfinished event and outside battle. Fights start a battle
 // that finishes the event on victory; other choices finish it at once (the merchant stays open for more trades).
 export function eventChoiceReason(state: ExpeditionState, map: MapDefinition, choice: EventChoice): string {
@@ -673,6 +676,7 @@ export function eventChoiceReason(state: ExpeditionState, map: MapDefinition, ch
   if (!EVENT_CHOICES[ev.kind].includes(choice)) return 'choice';
   if (choice === 'offer' && state.resources.ore < r.offerOre) return 'ore';
   if (choice === 'help' && state.potions.salve < 1) return 'salve';
+  if (choice === 'sell-ore') { if ((state.sold ?? 0) >= r.oreTrade.limit) return 'sold'; if (state.resources.ore < r.oreTrade.ore) return 'ore'; }
   if (choice.startsWith('buy-')) {
     const potion = choice.slice(4) as PotionId;
     if (state.potions[potion] >= map.potions.carry) return 'carry';
@@ -728,9 +732,22 @@ export function chooseEvent(initial: ExpeditionState, map: MapDefinition, lookup
     state.pressure = zone?.cap ?? state.pressure;
   }
   if (choice.startsWith('buy-')) { const potion = choice.slice(4) as PotionId; state.resources.ore -= r.merchant[potion]; state.potions[potion]++; }
-  if (ev.kind !== 'merchant') state.eventsDone.push(ev.id);
+  // Map 5: dig the worker out (everyone tires), rummage the cart (one random potion that still fits, else ore), mine the
+  // vein (the zone's threat rises up to its cap) or sell ore to the ore merchant.
+  let found: PotionId | undefined;
+  if (choice === 'free') {
+    state.resources.ore += r.trapped.ore; state.resources.shard += r.trapped.shard;
+    for (const id of rosterIds(state)) setFatigue(state, id, fatigueOf(state, id) + r.trapped.fatigue);
+  }
+  if (choice === 'rummage') {
+    const fits = (['salve', 'tonic', 'repel'] as const).filter(p => state.potions[p] < map.potions.carry);
+    if (fits.length) { found = fits[rollPercent(state.seed, state.rolls++) % fits.length]!; state.potions[found]++; } else state.resources.ore += r.cart.ore;
+  }
+  if (choice === 'dig') { state.resources.ore += r.vein.ore; state.pressure = Math.min(zone?.cap ?? state.pressure, state.pressure + r.vein.pressure); }
+  if (choice === 'sell-ore') { state.resources.ore -= r.oreTrade.ore; state.resources.gold += r.oreTrade.gold; state.sold = (state.sold ?? 0) + 1; }
+  if (!shopEvent(ev.kind)) state.eventsDone.push(ev.id);
   clampRun(state);
-  return { state, event: { type: 'eventDone', eventId: ev.id, choice, ...(Object.keys(heal).length ? { heal } : {}) } };
+  return { state, event: { type: 'eventDone', eventId: ev.id, choice, ...(Object.keys(heal).length ? { heal } : {}), ...(found ? { potion: found } : {}) } };
 }
 // Map stats from gear (stats design 2026-10-17): every `regenSteps` steps each standing brought member heals its
 // Trail regen; the deployed members' Luck adds to the battle drop chance, capped.

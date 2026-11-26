@@ -1,6 +1,6 @@
 import { gameRules } from './rules';
 import type { CartSwitch } from '../../core/world/mine-puzzles';
-import type { MapDefinition, Point, PuzzleDefinitions } from '../../core/world/types';
+import type { MapDefinition, MapEventDefinition, Point, PuzzleDefinitions } from '../../core/world/types';
 
 // Map 5 topology. See docs/design/MAP5_CRYSTAL_MINE_DRAFT_TH.md for the rules and integration plan.
 export const mineLayout = {
@@ -65,6 +65,14 @@ export const mineSites = {
     { id: 'mine-ledger-workers', x: 16, y: 9 },
     { id: 'mine-ledger-vault', x: 23, y: 5 },
   ],
+  // Side events (OD-60 §5): the trapped worker in the west tunnels, the ore cart left in the workers' yard, a fresh vein on
+  // the east tunnel row, and the ore merchant at the yard's edge.
+  events: [
+    { id: 'mine-ore-merchant', kind: 'ore-merchant', x: 19, y: 21 },
+    { id: 'mine-ore-cart', kind: 'cart', x: 5, y: 23 },
+    { id: 'mine-trapped-worker', kind: 'trapped', x: 6, y: 13 },
+    { id: 'mine-fresh-vein', kind: 'vein', x: 18, y: 13 },
+  ] as const satisfies readonly MapEventDefinition[],
   notes: [
     { id: 'mine-dig-order', x: 8, y: 10 },
     { id: 'mine-child-drawing', x: 20, y: 10 },
@@ -113,7 +121,8 @@ export const mineExploration = {
 export const mineMap: MapDefinition = {
   ...gameRules,
   ...mineExploration,
-  version: 1,
+  // v2: the side events (a run saved on v1 is settled home as withdrawn).
+  version: 2,
   summary: 'จุดตะเกียงตามอุโมงค์ พาคนงานกลับลาน แล้วฝ่าผนึกไปหยุดยักษ์ผลึก',
   mine: { ...mineExploration.mine, darkPressurePercent: 125 },
   revealRadius: 3,
@@ -132,7 +141,7 @@ export const mineMap: MapDefinition = {
   chests: mineSites.ledgerPages.map((page, index) => ({ ...page, tier: index === 2 ? 'rare' : 'common' })),
   story: { objectives: mineSites.ledgerPages.map(page => ({ id: page.id, kind: 'chest', target: page.id })), reward: { ore: 20 } },
   herbs: [],
-  events: [{ id: 'mine-ore-merchant', kind: 'merchant', x: 19, y: 21 }],
+  events: mineSites.events,
   elites: [
     { ...mineSites.overseer, id: 'mine-overseer', forced: true, encounterId: 'elite-mine-overseer', level: 14 },
     { ...mineSites.crystalEater, id: 'mine-crystal-eater', forced: false, encounterId: 'elite-crystal-eater', level: 15 },

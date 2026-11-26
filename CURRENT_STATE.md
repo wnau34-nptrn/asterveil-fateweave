@@ -1,11 +1,11 @@
-# Current state — updated 2026-11-26 (Crystal Giant 4b imported)
+# Current state — updated 2026-11-26 (Map 5 side events)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml` (runs the Chromium suite before deploy).
-- Save **v69** (mine progress; v68 map 4 tide/notes/journal, camp cap; v67 first fate weave; v66 gacha). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
+- Save **v70** (mine ore-merchant counter; v69 mine progress; v68 map 4 tide/notes/journal, camp cap; v67 first fate weave; v66 gacha). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
 - Maps: 1 ซากชายแดน, 2 เส้นทางป่าทึบ, 3 แนวรอยแยก, 4 ทะเลสาบเงาจันทร์, **5 เหมืองผลึกร้าง** (concepts for 4–10: [CHAPTER1_MAPS_TH](docs/design/CHAPTER1_MAPS_TH.md)).
 - **Map 4 (OD-60)**: rules/content/save #336, UI #337 and art #342–#345. Owner approved the four ordinary foes and the map screens 2026-11-23 (“อนุมัติ”). Tide every 8 steps, seal 2 of 3, ferryman → boat, reflections/notes → journal, Lio camp 1 / Cerise camp 2, semi-chibi Water Spirit with six 768px moves and event-driven VFX. [390px review](docs/validation/map4-lake/README_TH.md).
 - Camp level cap = 10 + 3 per first clear past map 2 (≤30); tree points still stop at Lv10.
@@ -29,7 +29,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Map 5 (OD-60, #356): save v69; giant tuned at 48 seeds (`crystal-giant` v2). Art in game: props, five semi-chibi foes, floors/rails/battle scene (#361–#363). Giant R1 1.32×, 4a approved; 4b (`77a6e4ba`, #359) imported on `claude/mine-boss-4b-intake` with event-driven armour/reflect/collapse/split VFX, owner approved the motion 2026-11-26 (“อนุมัติ”), merged in #365 ([390px review](docs/combat-presentation/mine-boss-slice/README_TH.md)); Shard Beam keeps a code-drawn line. Side events remain. [Brief](docs/handoffs/CODEX-ART-MAP5-MINE-TH.md) · [validation](docs/validation/map5-mine/README_TH.md). Game Feel #351/#352 notes moved to `docs/handoffs/archive/2026-11-26/`.
+- Map 5 (OD-60): complete in game. Save v70, mine map v2, giant tuned at 48 seeds (`crystal-giant` v2); art #357–#363, giant 4b motion approved (“อนุมัติ”, #365). Side events #366: trapped worker, ore cart, fresh vein, ore merchant (ore→gold ×3), ledger → crystal weapon recipe, Bork's elite job ×3. Event markers borrow old props (no Codex brief yet); numbers are drafts. [Validation](docs/validation/map5-mine/README_TH.md).
 - 2026-11-25: boss charge holds sit on the body. Bosses wear a silhouette aura in their own colour: light all battle, stronger while charging. Boss crowns sit above the rendered figure. The owner said “นำเข้าเกมได้เลย”. Mobile frame rate is not measured yet. [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
 - Game Feel [Draft PR #353](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/353): เสียงและภาพโจมตีตามอาวุธครบ 15 ตัวและตัวละครเซฟเก่า 2 ตัว. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
 
@@ -40,4 +40,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-The owner picks the next task. Candidate next work: Map 5 side events (see [the Map 5 validation](docs/validation/map5-mine/README_TH.md)).
+The owner picks the next task. Candidates: Map 6 บึงหมอกพิษ (OD-60 order: rules + content + sim → screens → Codex art; concept in [CHAPTER1_MAPS_TH §6](docs/design/CHAPTER1_MAPS_TH.md)), or a Codex brief for the Map 5 event markers (trapped worker, ore cart, fresh vein, ore merchant).

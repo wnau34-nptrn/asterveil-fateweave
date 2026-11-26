@@ -6,7 +6,7 @@ import { salvageReason } from '../core/world/profile';
 import type { EncounterDefinition, HeroDefinition } from '../core/battle/types';
 import { enhancementInvestment, itemStats, salvageValue, affixPool, GEAR_SPECIALS, RARITIES } from '../core/world/equipment';
 import { bankFits } from '../core/world/caps';
-import { transferCandidate, transferReason, weaponBlueprint, weaponCraftCost, weaponCraftReason, enhancementCostTo, findItem, fuseMaterials, fuseReason, fusionRefund, itemLevelCap, itemLevelCost, raiseItemLevel, rerollReason, smeltLeft, smeltReason } from '../core/world/forge';
+import { crystalRecipe, transferCandidate, transferReason, weaponBlueprint, weaponCraftCost, weaponCraftReason, enhancementCostTo, findItem, fuseMaterials, fuseReason, fusionRefund, itemLevelCap, itemLevelCost, raiseItemLevel, rerollReason, smeltLeft, smeltReason } from '../core/world/forge';
 import type { LobbyFeature, Gear, Item, MapDefinition, Profile } from '../core/world/types';
 import { levelOf, starred } from '../core/world/world';
 import { filteredEquipment, gearFilters, newGearFilters, changeGearFilter } from './gear-inventory';
@@ -15,14 +15,14 @@ import { gearArt } from './equip-art';
 import { heroText, itemLines, itemName, rarityText, slotText, statName, specialText, setText } from './th';
 
 interface ForgeHost {
-  transfer(uid:number,index:number,donor:number,sourceIndex:number):void; craft(hero:string,level:number):void; quest?():string; enhance(uid:number,target:number):void; fuse(uid:number,donors:number[]):void; level(uid:number,target:number):void; reroll(uid:number,index:number):void;
+  transfer(uid:number,index:number,donor:number,sourceIndex:number):void; craft(hero:string,level:number,crystal?:boolean):void; quest?():string; enhance(uid:number,target:number):void; fuse(uid:number,donors:number[]):void; level(uid:number,target:number):void; reroll(uid:number,index:number):void;
   salvage(uids:number[]):void; lock(uid:number):void; smelt(dust:number):void;
 }
 type Tab='develop'|'craft'|'recycle'|'smelt';
 type Mode='enhance'|'level'|'fuse'|'reroll'|'transfer';
 type DevelopmentMode=Mode;
 type Service='craft'|'recycle'|'smelt';
-interface ServiceOrder { tab:Service; before:Profile; fingerprint:string; uid:number; hero:string; level:number; amount:number; }
+interface ServiceOrder { tab:Service; before:Profile; fingerprint:string; uid:number; hero:string; level:number; amount:number; crystal?:boolean; }
 const tabs:Record<Tab,string>={develop:'พัฒนา',craft:'สร้างอาวุธ',recycle:'รีไซเคิล',smelt:'หลอมแร่'};
 const modes:Record<Mode,string>={enhance:'ตีบวก',level:'เพิ่ม Lv',fuse:'หลอมสี',reroll:'ปรับค่า',transfer:'ถ่ายโอน'};
 const forgeTasks:readonly {id:Mode|'craft'|'recycle'|'smelt';tab:Tab;mode?:Mode;label:string;description:string;glyph:Parameters<typeof icon>[0];feature?:LobbyFeature}[]=[
@@ -39,7 +39,7 @@ const forgeTasks:readonly {id:Mode|'craft'|'recycle'|'smelt';tab:Tab;mode?:Mode;
 // Random crafts expose possible outcomes, never invoke the RNG to produce a readonly forecast.
 export class ForgeWorkbench {
   private tab:Tab='develop'; private mode:Mode='enhance'; private uid:number|undefined;
-  private donors:number[]|undefined; private craftHero='';private craftLevel=1;private donorUid=0;private sourceIndex=0;
+  private donors:number[]|undefined; private craftHero='';private craftLevel=1;private craftCrystal=false;private donorUid=0;private sourceIndex=0;
   private picker=true; private target=0; private index=0; private owner='all'; private hero='';
   private impactOpen=false; private filtersOpen=false;
   private filters=newGearFilters(); private source:Profile|undefined; private review=false;
@@ -100,7 +100,7 @@ export class ForgeWorkbench {
     this.serviceSuccess={...order,after:p,resultUid,persisted};this.servicePending=undefined;this.readyScroll=0;this.staleReview=false;
   }
   private serviceOrder(p:Profile):ServiceOrder {
-    return {tab:this.tab as Service,before:p,fingerprint:JSON.stringify(p),uid:this.uid??0,hero:this.craftHero,level:this.craftLevel,amount:this.target===5?5:1};
+    return {tab:this.tab as Service,before:p,fingerprint:JSON.stringify(p),uid:this.uid??0,hero:this.craftHero,level:this.craftLevel,amount:this.target===5?5:1,...(this.craftCrystal?{crystal:true}:{})};
   }
   get selected():number|undefined{return this.uid;}
   click(b:HTMLButtonElement,p:Profile):string|undefined {
@@ -138,11 +138,11 @@ export class ForgeWorkbench {
       this.review=false;
       if(this.tab!=='develop'){
         const order=this.serviceReview;this.serviceReview=undefined;
-        if(!order||order.fingerprint!==JSON.stringify(p)||order.tab!==this.tab||order.uid!==(this.uid??0)||order.hero!==this.craftHero||order.level!==this.craftLevel||order.amount!==(this.target===5?5:1)){this.staleReview=true;return this.reviewFocus;}
+        if(!order||order.fingerprint!==JSON.stringify(p)||order.tab!==this.tab||order.uid!==(this.uid??0)||order.hero!==this.craftHero||order.level!==this.craftLevel||!!order.crystal!==this.craftCrystal||order.amount!==(this.target===5?5:1)){this.staleReview=true;return this.reviewFocus;}
         const reason=order.tab==='craft'?weaponCraftReason(p,this.map,order.hero,order.level):order.tab==='recycle'?salvageReason(p,this.map,[order.uid]):this.smeltCapacityReason(p,order.amount)||smeltReason(p,this.map,order.amount);
         if(reason){this.staleReview=true;return this.reviewFocus;}
         this.servicePending=order;
-        if(order.tab==='craft')this.host.craft(order.hero,order.level);
+        if(order.tab==='craft'){if(order.crystal)this.host.craft(order.hero,order.level,true);else this.host.craft(order.hero,order.level);}
         else if(order.tab==='recycle')this.host.salvage([order.uid]);
         else this.host.smelt(order.amount);
         return 'forge-success';
@@ -187,6 +187,7 @@ export class ForgeWorkbench {
     else if(c.id==='forge-transfer-source')this.sourceIndex=Number(c.value);
     else if(c.id==='forge-craft-hero')this.craftHero=c.value;
     else if(c.id==='forge-craft-level')this.craftLevel=Number(c.value);
+    else if(c.id==='forge-craft-recipe')this.craftCrystal=c.value==='crystal';
     return c.id;
   }
   // Lobby systems by chapter (A3): `open` says which forge modes and tabs are open yet.
@@ -373,12 +374,13 @@ export class ForgeWorkbench {
     if(tab==='craft'){
       if(!p.company.includes(this.craftHero))this.craftHero=p.company[0]!;
       const cap=itemLevelCap(p,this.map);if(this.craftLevel>cap||this.craftLevel<1)this.craftLevel=1;
-      const hero=receipt?.hero??this.craftHero,level=receipt?.level??this.craftLevel;
-      const item=receipt?p.items.find(i=>i.uid===receipt.resultUid)!:weaponBlueprint(this.map,hero,level);
-      used=weaponCraftCost(this.map,level)!;
-      const reason=weaponCraftReason(p,this.map,hero,level),reasons:Record<string,string>={unknown:'ไม่พบอาชีพนี้',level:'Lv เกินเพดานที่ปลดล็อก',pending:'จัดการของรอรับในกระเป๋าก่อน',bag:'คลังเต็ม · จัดของหรือขยายคลังก่อน',full:'ไม่สามารถเพิ่มอุปกรณ์ได้'};
+      if(!crystalRecipe(p,this.map))this.craftCrystal=false;
+      const hero=receipt?.hero??this.craftHero,level=receipt?.level??this.craftLevel,crystal=receipt?!!receipt.crystal:this.craftCrystal;
+      const item=receipt?p.items.find(i=>i.uid===receipt.resultUid)!:weaponBlueprint(this.map,hero,level,0,crystal);
+      used=weaponCraftCost(this.map,level,crystal)!;
+      const reason=weaponCraftReason(p,this.map,hero,level,crystal),reasons:Record<string,string>={recipe:'ยังไม่ได้สูตรอาวุธผลึก',unknown:'ไม่พบอาชีพนี้',level:'Lv เกินเพดานที่ปลดล็อก',pending:'จัดการของรอรับในกระเป๋าก่อน',bag:'คลังเต็ม · จัดของหรือขยายคลังก่อน',full:'ไม่สามารถเพิ่มอุปกรณ์ได้'};
       if(!receipt){if(reasons[reason])blockers.push(reasons[reason]!);blockers.push(...this.shortages(p,used));}
-      const selectors=this.review||receipt?`<p class="forge-order">สูตรที่เลือก · ${heroText[hero]!.role} · ${heroText[hero]!.name} · Lv${level} · 1 ชิ้น</p>`:`<div class="forge-craft-selectors"><label class="forge-label">อาชีพที่มีในค่าย<select id="forge-craft-hero">${p.company.map(id=>`<option value="${id}"${id===hero?' selected':''}>${heroText[id]!.role} · ${heroText[id]!.name}</option>`).join('')}</select></label><label class="forge-label">Lv อาวุธ · เพดาน ${cap}<select id="forge-craft-level">${Array.from({length:cap},(_,n)=>n+1).map(n=>`<option value="${n}"${n===level?' selected':''}>Lv${n}</option>`).join('')}</select></label></div>`;
+      const selectors=this.review||receipt?`<p class="forge-order">สูตรที่เลือก · ${crystal?'อาวุธผลึก · ':''}${heroText[hero]!.role} · ${heroText[hero]!.name} · Lv${level} · 1 ชิ้น</p>`:`<div class="forge-craft-selectors">${crystalRecipe(p,this.map)?`<label class="forge-label">สูตร<select id="forge-craft-recipe"><option value="plain"${crystal?'':' selected'}>อาวุธพื้นฐาน</option><option value="crystal"${crystal?' selected':''}>อาวุธผลึก</option></select></label>`:''}<label class="forge-label">อาชีพที่มีในค่าย<select id="forge-craft-hero">${p.company.map(id=>`<option value="${id}"${id===hero?' selected':''}>${heroText[id]!.role} · ${heroText[id]!.name}</option>`).join('')}</select></label><label class="forge-label">Lv อาวุธ · เพดาน ${cap}<select id="forge-craft-level">${Array.from({length:cap},(_,n)=>n+1).map(n=>`<option value="${n}"${n===level?' selected':''}>Lv${n}</option>`).join('')}</select></label></div>`;
       const member=source.members[hero]!;
       content=`${selectors}<div class="forge-item-head" data-rarity="${item.rarity}"><div class="forge-art-tile">${gearArt(item)}</div><div><small>${receipt?(receipt.persisted?'อาวุธที่บันทึกจริง':'อาวุธในรอบนี้ · ยังไม่บันทึก'):'ผลที่รับประกัน · ไม่สุ่ม'}</small><b>${receipt?'#'+item.uid+' ':''}${itemName(item)}</b><small>Lv${item.level} · ${rarityText[item.rarity]} · คุณภาพ ${item.q?.main??100}%</small><small>ไม่มีเซ็ต · ได้รับ 1 ชิ้นเข้าคลัง · ไม่สวมให้อัตโนมัติ</small></div></div><p class="forge-order">คลัง ${p.items.length}/${storageCap(p,this.map)} ชิ้น · ของรอรับ ${p.overflow?.length??0} ชิ้น</p>${!receipt&&(reason==='pending'||reason==='bag')?'<button id="forge-manage-storage" data-lobby="forge-storage" class="secondary">จัดการคลัง / ของรอรับ</button>':''}<details class="forge-secondary-details"${this.detailsOpen?' open':''}><summary>ค่าสถานะ ผลต่อผู้สวม และการคืนทุน</summary><ul>${itemLines(this.map.equipment,item).map(line=>`<li>${line}</li>`).join('')}</ul>${this.heroImpact(source,hero,member.gear??{},{...member.gear,weapon:item},'เทียบกับอาวุธที่สวมอยู่ตอนนี้ · ยังไม่ได้สวม')}<p>ค่าผลิตไม่ใช่ทุนพัฒนา: รีไซเคิลคืนเฉพาะมูลค่าพื้นฐาน แร่ ${this.map.equipment.salvage[item.rarity]!.ore} · ฝุ่น ${this.map.equipment.salvage[item.rarity]!.dust} และทุนตีบวก/เพิ่ม Lv ที่จ่ายภายหลังจริง</p><p>การสร้างไม่นับความคืบหน้ารับประกันฟาร์ม</p></details>`;
     }else if(tab==='recycle'){

@@ -8,18 +8,18 @@ Campaign maps 1–5 in order with no post-clear replays, 48 seeds per starter pa
 | advisor | rush | lio + sefa | 48/48 | 48/48 | 48/49 | 0/49 | 0/49 |
 | advisor | rush | toma + brann | 48/48 | 48/48 | 48/48 | 0/48 | 0/48 |
 | advisor | rush | toma + sefa | 48/48 | 48/48 | 48/50 | 0/50 | 0/50 |
-| advisor | explorer | lio + brann | 48/48 | 48/48 | 48/50 | 10/50 | 0/50 |
-| advisor | explorer | lio + sefa | 48/48 | 48/48 | 48/53 | 13/53 | 1/53 |
-| advisor | explorer | toma + brann | 48/48 | 48/48 | 48/49 | 8/49 | 6/49 |
-| advisor | explorer | toma + sefa | 48/48 | 48/48 | 48/48 | 1/48 | 1/48 |
+| advisor | explorer | lio + brann | 48/48 | 48/48 | 48/53 | 14/53 | 3/53 |
+| advisor | explorer | lio + sefa | 48/48 | 47/48 | 47/54 | 15/54 | 2/54 |
+| advisor | explorer | toma + brann | 48/48 | 48/48 | 48/48 | 6/48 | 2/48 |
+| advisor | explorer | toma + sefa | 48/48 | 48/48 | 48/49 | 2/49 | 1/49 |
 | casual | rush | lio + brann | 48/48 | 37/48 | 37/70 | 0/70 | 0/70 |
 | casual | rush | lio + sefa | 48/48 | 36/48 | 36/68 | 0/68 | 0/68 |
 | casual | rush | toma + brann | 48/48 | 42/48 | 43/61 | 0/61 | 0/61 |
 | casual | rush | toma + sefa | 48/48 | 35/48 | 36/67 | 2/67 | 0/67 |
-| casual | explorer | lio + brann | 48/48 | 48/48 | 48/58 | 13/58 | 4/58 |
-| casual | explorer | lio + sefa | 48/48 | 48/48 | 48/59 | 16/59 | 4/59 |
-| casual | explorer | toma + brann | 48/48 | 48/48 | 48/54 | 10/54 | 9/54 |
-| casual | explorer | toma + sefa | 48/48 | 47/48 | 47/52 | 9/52 | 6/52 |
+| casual | explorer | lio + brann | 48/48 | 48/48 | 48/55 | 15/55 | 4/55 |
+| casual | explorer | lio + sefa | 48/48 | 47/48 | 47/59 | 15/59 | 6/59 |
+| casual | explorer | toma + brann | 48/48 | 47/48 | 47/56 | 7/56 | 5/56 |
+| casual | explorer | toma + sefa | 48/48 | 48/48 | 48/57 | 12/57 | 5/57 |
 
 ## Boss entry stress test
 
