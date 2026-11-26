@@ -47,7 +47,7 @@ export function atlasesForActions(actions: Iterable<string>): AtlasRequest[] {
 }
 export function encounterAtlases(data: EncounterDefinition): AtlasRequest[] { return atlasesForActions(data.heroes.flatMap(h => h.actions)); }
 
-export const ALL_SHEETS: readonly ArtSheet[] = ['units', 'mercs', 'foes', 'foes2', 'foes3', 'worldboss'];
+export const ALL_SHEETS: readonly ArtSheet[] = ['units', 'mercs', 'foes', 'foes2', 'foes3', 'foes4', 'worldboss'];
 export const sheetKey = (sheet: ArtSheet): string => `battle-${sheet}`;
 /** The still unit sheets an encounter draws from (heroes, foes and reserves a phase can summon). */
 export function sheetsForArt(art: Iterable<string>): ArtSheet[] {

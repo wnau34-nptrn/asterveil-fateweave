@@ -1,0 +1,65 @@
+{
+  "crystalbat": {
+    "image": "crystalbat_mine.ccade50e7322.webp",
+    "atlas": "crystalbat_mine.1d37b90d0894.json",
+    "width": 1536,
+    "height": 1587,
+    "frames": 26,
+    "decodedBytes": 9750528,
+    "downloadBytes": 2210622,
+    "uniqueFrames": 17,
+    "top": 111
+  },
+  "oregolem": {
+    "image": "oregolem_mine.83848e7b1a8e.webp",
+    "atlas": "oregolem_mine.a0dcceb6a9fd.json",
+    "width": 1664,
+    "height": 1562,
+    "frames": 22,
+    "decodedBytes": 10396672,
+    "downloadBytes": 2632317,
+    "uniqueFrames": 14,
+    "top": 142
+  },
+  "possessedworker": {
+    "image": "possessedworker_mine.d5d830dbc50a.webp",
+    "atlas": "possessedworker_mine.ede9dd8c9d7d.json",
+    "width": 1600,
+    "height": 1527,
+    "frames": 22,
+    "decodedBytes": 9772800,
+    "downloadBytes": 2182865,
+    "uniqueFrames": 14,
+    "top": 152
+  },
+  "mineoverseer": {
+    "image": "mineoverseer_mine.ad55d2b09bbe.webp",
+    "atlas": "mineoverseer_mine.cbf4c1f36320.json",
+    "width": 2048,
+    "height": 2070,
+    "frames": 22,
+    "decodedBytes": 16957440,
+    "downloadBytes": 4276807,
+    "uniqueFrames": 22,
+    "top": 95
+  },
+  "crystaleater": {
+    "image": "crystaleater_mine.4098bab40c32.webp",
+    "atlas": "crystaleater_mine.de29c24fd72d.json",
+    "width": 1792,
+    "height": 1986,
+    "frames": 22,
+    "decodedBytes": 14235648,
+    "downloadBytes": 3884825,
+    "uniqueFrames": 22,
+    "top": 167
+  },
+  "units_foes4": {
+    "bytes": 875530,
+    "sha8": "ca0a2f23"
+  },
+  "portraits_foes4": {
+    "bytes": 1033378,
+    "sha8": "de267a17"
+  }
+}

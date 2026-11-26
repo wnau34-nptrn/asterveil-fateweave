@@ -4,9 +4,9 @@
 
 ## สรุป
 
-- identities 49 (ฝ่ายเรา 17 · ศัตรู 32) · มี atlas 47 · พักตาม OD-14 2 (โอดราน `thiran` / อิโซลด์ `wila`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่งรออนิเมชัน 0
+- identities 54 (ฝ่ายเรา 17 · ศัตรู 37) · มี atlas 52 · พักตาม OD-14 2 (โอดราน `thiran` / อิโซลด์ `wila`: ภาพนิ่งใหม่ + procedural ไม่มี atlas) · ภาพนิ่งรออนิเมชัน 0
 - ActionId ฝ่ายเรา 91 รายการ (119 แถว ตัวละคร×ท่า รวมท่าจากต้นไม้) · ชื่อท่าศัตรู/phase 84 ชื่อ (95 แถว identity×ท่า)
-- ท่าร่างกาย: sprite 188 · procedural 26 (ตัวที่พักตาม OD-14 และภาพนิ่ง P03 ที่รออนิเมชัน CODEX-A12)
+- ท่าร่างกาย: sprite 195 · procedural 19 (ตัวที่พักตาม OD-14 และภาพนิ่ง P03 ที่รออนิเมชัน CODEX-A12)
 - VFX: วาดเฉพาะ 138 · ชุดร่วมโดยตั้งใจ 54 · วาดด้วยโค้ดโดยตั้งใจ 22
 
 ความหมาย: **sprite** = เฟรม atlas (prepare → recover; contact = เฟรม recover แรก, เวลา contact/end มาจาก UI ไม่ใช่ FPS ภาพ) · **procedural** = ภาพนิ่ง + การเคลื่อนไหวด้วยโค้ด · **วาด** = painted atlas ของท่านั้น · **ชุดร่วม** = painted atlas ร่วมตระกูลโดยตั้งใจ · **โค้ด** = วาดด้วย Graphics ตั้งใจ (ไม่มีภาพเฉพาะ) · จุดเกิดผลทุกแถวอ่านจาก event จริงของ resolver
@@ -34,6 +34,8 @@
 | `astrid` | Astrid | เรา | 35 · 2.68 MiB · 0.97 MB | sprite 25,26,27 | sprite 28,29,30 | sprite 31,32,33,34 · ค้าง 34 | — |
 | `brute` | อสูรรอยแยก | ศัตรู | 24 · 4.18 MiB · 1.44 MB | sprite 17,18 | sprite 22,23 | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_captain` | หัวหน้ากองหน้า | ศัตรู | 18 · 4.58 MiB · 1.34 MB | sprite 13,14 | procedural (tint/lift) | sprite 15,16,17 · ค้าง 17 | — |
+| `foe_crystal_bat` | ค้างคาวผลึก | ศัตรู | 26 · 9.30 MiB · 2.21 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
+| `foe_crystal_eater` | ตัวกินผลึก | ศัตรู | 22 · 13.58 MiB · 3.88 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_dew_slime` | สไลม์น้ำค้าง | ศัตรู | 22 · 1.35 MiB · 0.36 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_ember_slime` | สไลม์ถ่านไฟ | ศัตรู | 22 · 1.11 MiB · 0.32 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_golem` | โกเลมเศษผลึก | ศัตรู | 22 · 3.30 MiB · 1.08 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
@@ -41,10 +43,13 @@
 | `foe_juggernaut` | ด้วงเกราะผลึก | ศัตรู | 14 · 4.11 MiB · 1.43 MB | sprite 9,10 | procedural (tint/lift) | sprite 11,12,13 · ค้าง 13 | — |
 | `foe_kragmor` | คราก์มอร์ | ศัตรู | 30 · 5.79 MiB · 1.90 MB | sprite 25,26 | procedural (tint/lift) | sprite 27,28,29 · ค้าง 29 | — |
 | `foe_matriarch` | ราชินีหนาม | ศัตรู | 26 · 3.37 MiB · 1.42 MB | sprite 21,22 | procedural (tint/lift) | sprite 23,24,25 · ค้าง 25 | — |
+| `foe_mine_overseer` | หัวหน้าคุมเหมือง | ศัตรู | 22 · 16.17 MiB · 4.28 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_mirror_shade` | เงาสะท้อน | ศัตรู | 22 · 7.57 MiB · 1.58 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_mist_wisp` | ภูตหมอกน้ำ | ศัตรู | 25 · 4.86 MiB · 1.16 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_morvane` | มอร์เวน | ศัตรู | 30 · 6.93 MiB · 1.85 MB | sprite 25,26 | procedural (tint/lift) | sprite 27,28,29 · ค้าง 29 | — |
 | `foe_mycon` | เห็ดหมอผีกลวง | ศัตรู | 22 · 2.32 MiB · 0.83 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
+| `foe_ore_golem` | โกเลมแร่ | ศัตรู | 22 · 9.92 MiB · 2.63 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
+| `foe_possessed_worker` | คนงานถูกสิง | ศัตรู | 22 · 9.32 MiB · 2.18 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_rift_channeler` | อสูรส่งพลัง | ศัตรู | 22 · 2.03 MiB · 0.55 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_rift_wisp` | วิญญาณรอยแยก | ศัตรู | 25 · 1.30 MiB · 0.34 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `foe_riftweaver` | ผู้ทอรอยแยก | ศัตรู | 30 · 3.70 MiB · 1.15 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
@@ -200,12 +205,14 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_captain` | Crushing Blow (physical) | sprite `move2` 0,5,6 → 7,8,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | vanguard-captain |
 | `foe_captain` | War Cry (energy) | sprite `move1` 0,1,2 → 3,4,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | vanguard-captain |
 | `foe_captain` | Call the Hunt (phase) | sprite `move3` 0,9,10 → 11,12,0 | วาด `boss-signature-fx` | ตัวเอง + กำลังเสริมที่ปรากฏจริง | ตำแหน่งตัวที่ถูกเรียกจริง | vanguard-captain |
+| `foe_crystal_bat` | Crystal Cry (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | โค้ด `generic-code` — การแสดงชั่วคราวก่อนทำภาพเหมือง | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | elite-crystal-eater, mine-tunnel-patrol, mine-yard-patrol |
+| `foe_crystal_eater` | Crystal Bite (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | elite-crystal-eater |
+| `foe_crystal_eater` | Shard Eruption (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | โค้ด `generic-code` — การแสดงชั่วคราวก่อนทำภาพเหมือง | ฮีโร่ทุกคนที่ยืนอยู่ | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | elite-crystal-eater |
 | `foe_dew_slime` | Jelly Bounce (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | bat-swarm, slime-nest, slime-pair |
 | `foe_ember_slime` | Ember Spark (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | slime-nest, slime-pair |
 | `foe_golem` | Crystal Fist (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | crystal-giant, crystal-stampede |
 | `foe_golem` | Stone Fist (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | mini-veil-golem |
 | `foe_golem` | Veil Quake (physical) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `foe-signature-fx` | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | เท้าศัตรู → พื้นใต้ผู้รับจริง | mini-veil-golem |
-| `foe_golem` | Ore Fist (physical) | procedural (weapon) — ไม่มี clip สำหรับท่านี้ใน registry | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | mine-tunnel-patrol, mine-yard-patrol |
 | `foe_golem` | Shard Beam (energy) | procedural (cast) — ไม่มี clip สำหรับท่านี้ใน registry | โค้ด `generic-code` — การแสดงชั่วคราวก่อนทำภาพเหมือง | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | crystal-giant |
 | `foe_golem` | Crystal Collapse (energy) | procedural (cast) — ไม่มี clip สำหรับท่านี้ใน registry | โค้ด `generic-code` — การแสดงชั่วคราวก่อนทำภาพเหมือง | ฮีโร่ทุกคนที่ยืนอยู่ | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | crystal-giant |
 | `foe_golem` | Crystal Armor (energy) | procedural (cast) — ไม่มี clip สำหรับท่านี้ใน registry | โค้ด `generic-code` — การแสดงชั่วคราวก่อนทำภาพเหมือง | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | crystal-giant |
@@ -226,6 +233,8 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_matriarch` | Gather Thorns (energy/charge) | sprite `move3` 0,9,10 → 11,12,0 | วาด `boss-signature-fx` | ตัวเอง (รวมพลัง ไม่มี damage) | ตัวบอส + ค้างจนปล่อยท่า | elite-briar-lord |
 | `foe_matriarch` | Thorn Tempest (energy) | sprite `move1` 0,1,2 → 3,4,0 | วาด `boss-signature-fx` | ฮีโร่ทุกคนที่ยืนอยู่ | ฮีโร่ที่โดนจริงทุกคน | elite-briar-lord |
 | `foe_matriarch` | Thorn Rage (phase) | sprite `move5` 0,17,18 → 19,20,0 | วาด `boss-signature-fx` | ตัวเอง + กำลังเสริมที่ปรากฏจริง | ตัวบอส | elite-briar-lord |
+| `foe_mine_overseer` | Overseer Hammer (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | elite-mine-overseer |
+| `foe_mine_overseer` | Crystal Spark (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | โค้ด `generic-code` — การแสดงชั่วคราวก่อนทำภาพเหมือง | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | elite-mine-overseer |
 | `foe_mirror_shade` | Mirror Strike (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | water-spirit |
 | `foe_mist_wisp` | Mist Needle (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `foe-signature-fx` | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | crab-wall, elite-shadow-serpent, isle-host, lake-mist, pavilion-mist, water-spirit |
 | `foe_morvane` | Six-Hand Rend (physical) | sprite `move1` 0,1,2 → 3,4,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | wb-morvane |
@@ -235,6 +244,8 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_morvane` | Shadow Tide (energy) | sprite `move5` 0,17,18 → 19,20,0 | วาด `boss-signature-fx` | ฮีโร่ทุกคนที่ยืนอยู่ | ฮีโร่ที่โดนจริงทุกคน | wb-morvane |
 | `foe_morvane` | Severed Crown (phase) | sprite `move6` 0,21,22 → 23,24,0 | วาด `boss-signature-fx` | ตัวเอง (เปลี่ยนช่วง) | ตัวบอส | wb-morvane |
 | `foe_mycon` | Spore Hex (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `foe-signature-fx` | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | thicket-ambush |
+| `foe_ore_golem` | Ore Fist (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | mine-tunnel-patrol, mine-yard-patrol |
+| `foe_possessed_worker` | Pick Swing (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | elite-mine-overseer, mine-yard-patrol |
 | `foe_rift_channeler` | Rift Bolt (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | rear-ambush |
 | `foe_rift_channeler` | Rift Beam (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | channeler-wisps, rift-host |
 | `foe_rift_wisp` | Star Flame (energy) | sprite `attack` 1,2,3,4 → 5,6,7,8 | วาด `foe-signature-fx` | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | channeler-wisps, crawler-pack, rift-host, rift-legion, rift-warden, wb-kragmor, wb-morvane, wb-valdrakk, world-boss-warden |
@@ -242,7 +253,6 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_riftweaver` | Ribbon Snare (physical) | sprite `snare` 22,23,24,25 → 26,27,28,29 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | rear-ambush |
 | `foe_riftweaver` | Rift Needle (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | mini-veil-golem |
 | `foe_ruin_bat` | Nip (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | bat-swarm, slime-nest, tusker-bats |
-| `foe_ruin_bat` | Crystal Cry (energy) | procedural (cast) — ไม่มี clip สำหรับท่านี้ใน registry | โค้ด `generic-code` — การแสดงชั่วคราวก่อนทำภาพเหมือง | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | elite-crystal-eater, mine-tunnel-patrol, mine-yard-patrol |
 | `foe_sentinel` | Crushing Blow (physical) | sprite `move3` 0,9,10 → 11,12,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | rift-warden, world-boss-warden |
 | `foe_sentinel` | Rift Bolt (energy) | sprite `move4` 0,13,14 → 15,16,0 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | rift-warden, world-boss-warden |
 | `foe_sentinel` | Raking Slash (physical) | sprite `move2` 0,5,6 → 7,8,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | rift-warden, world-boss-warden |
@@ -265,8 +275,6 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_tide_slime` | Water Spit (energy) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | isle-host, lake-mist, lake-slimes, pavilion-mist |
 | `foe_tusker` | Tusk Charge (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | elite-tusk-chief, rift-whelp, tusker-bats |
 | `foe_tusker` | Stampede (physical) | sprite `skill` 9,10,11,12 → 13,14,15,16 | วาด `boss-signature-fx` | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | elite-tusk-chief |
-| `foe_tusker` | Crystal Bite (physical) | procedural (weapon) — ไม่มี clip สำหรับท่านี้ใน registry | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | elite-crystal-eater |
-| `foe_tusker` | Shard Eruption (energy) | procedural (cast) — ไม่มี clip สำหรับท่านี้ใน registry | โค้ด `generic-code` — การแสดงชั่วคราวก่อนทำภาพเหมือง | ฮีโร่ทุกคนที่ยืนอยู่ | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | elite-crystal-eater |
 | `foe_valdrakk` | Shard Talon (physical) | sprite `move1` 0,1,2 → 3,4,0 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | wb-valdrakk |
 | `foe_valdrakk` | Wing Gust (energy) | sprite `move2` 0,5,6 → 7,8,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ผู้รับ damage จริง | wb-valdrakk |
 | `foe_valdrakk` | Wing Gathering (physical/charge) | sprite `move3` 0,9,10 → 11,12,0 | วาด `boss-signature-fx` | ตัวเอง (รวมพลัง ไม่มี damage) | ตัวบอส + ค้างจนปล่อยท่า | wb-valdrakk |
@@ -276,9 +284,6 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 | `foe_vargoth_guard` | Crushing Blow (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | first-clash |
 | `foe_vargoth_guard` | Shield Smash (physical) | sprite `bash` 24,25,26,27 → 28,29,30,31 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | vanguard-captain |
 | `foe_vargoth_guard` | Mace Swing (physical) | sprite `attack` 1,2,3,4 → 5,6,7,8 | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | vanguard-captain |
-| `foe_vargoth_guard` | Pick Swing (physical) | procedural (weapon) — ไม่มี clip สำหรับท่านี้ใน registry | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | elite-mine-overseer, mine-yard-patrol |
-| `foe_vargoth_guard` | Overseer Hammer (physical) | procedural (weapon) — ไม่มี clip สำหรับท่านี้ใน registry | ชุดร่วม `blade-fx` — ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ) | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | ตัวผู้รับ damage จริง (ชุดดาบร่วม) | elite-mine-overseer |
-| `foe_vargoth_guard` | Crystal Spark (energy) | procedural (cast) — ไม่มี clip สำหรับท่านี้ใน registry | โค้ด `generic-code` — การแสดงชั่วคราวก่อนทำภาพเหมือง | ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด) | elite-mine-overseer |
 | `foe_water_spirit` | Tide Lash (energy) | sprite `move1` 0,1,2 → 3,4,0 | วาด `foe-signature-fx` | ฮีโร่ช่อง 3 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | มือหน้าศัตรู → อกผู้รับ damage จริง (หลบ = เลยตัว) | water-spirit |
 | `foe_water_spirit` | Water Veil (energy) | sprite `move2` 0,5,6 → 7,8,0 | วาด `boss-signature-fx` | ตัวเอง (ฟื้น HP) | ตัวบอสเมื่อได้ HP คืนจริง | water-spirit |
 | `foe_water_spirit` | Surging Wave (physical) | sprite `move3` 0,9,10 → 11,12,0 | วาด `boss-signature-fx` | ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ) | พื้นใต้ผู้รับผลจริง | water-spirit |
@@ -293,5 +298,5 @@ dodge ทุกตัว = procedural (เลื่อนหลบ) ไม่ม
 
 ## งานค้างที่รู้อยู่แล้ว (สร้างจากตาราง)
 
-- ท่าร่างกาย procedural 26 แถว: `thiran`, `wila`, `foe_golem`, `foe_ruin_bat`, `foe_shard_crawler`, `foe_tusker`, `foe_vargoth_guard` — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง); ไม่มี clip สำหรับท่านี้ใน registry
-- VFX วาดด้วยโค้ดโดยตั้งใจ 22 แถว: `weaver` โจมตี, `healer` โจมตี, `mira` โจมตี, `toma` โจมตี, `brann` โจมตี, `lio` โจมตี, `metta` โจมตี, `thiran` โจมตี, `lalin` โจมตี, `wila` โจมตี, `kael` โจมตี, `wynne` โจมตี, `astrid` โจมตี, `foe_golem` Shard Beam, `foe_golem` Crystal Collapse, `foe_golem` Crystal Armor, `foe_golem` Crystal Split, `foe_hunter` Shadow Knife, `foe_ruin_bat` Crystal Cry, `foe_tusker` Shard Eruption, `foe_vargoth_guard` Crystal Spark, `raider` Shadow Knife
+- ท่าร่างกาย procedural 19 แถว: `thiran`, `wila`, `foe_golem`, `foe_shard_crawler` — OD-14 พัก: ภาพนิ่งใหม่ (PR #120) + procedural; atlas รอ A7-003 (PR #122 ค้าง); ไม่มี clip สำหรับท่านี้ใน registry
+- VFX วาดด้วยโค้ดโดยตั้งใจ 22 แถว: `weaver` โจมตี, `healer` โจมตี, `mira` โจมตี, `toma` โจมตี, `brann` โจมตี, `lio` โจมตี, `metta` โจมตี, `thiran` โจมตี, `lalin` โจมตี, `wila` โจมตี, `kael` โจมตี, `wynne` โจมตี, `astrid` โจมตี, `foe_crystal_bat` Crystal Cry, `foe_crystal_eater` Shard Eruption, `foe_golem` Shard Beam, `foe_golem` Crystal Collapse, `foe_golem` Crystal Armor, `foe_golem` Crystal Split, `foe_hunter` Shadow Knife, `foe_mine_overseer` Crystal Spark, `raider` Shadow Knife

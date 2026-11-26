@@ -420,12 +420,12 @@ export const waterSpirit: EncounterDefinition = at80({
   ],
 });
 
-// Map 5 mechanics use existing bodies until its art pass.
-const mineBat = { ...S.ruinBat, name: 'Crystal Bat', displayName: 'ค้างคาวผลึก', hp: 28,
+// Map 5 foes wear their semi-chibi bodies (ART-UNIT-ANIMATION-MINE-001); the giant and its fragments keep stand-ins until the boss art lands.
+const mineBat = { ...S.ruinBat, name: 'Crystal Bat', displayName: 'ค้างคาวผลึก', art: 'foe_crystal_bat', hp: 28,
   moves: [{ name: 'Crystal Cry', damage: 7, kind: 'energy', slot: 3 }] } as const;
-const oreGolem = { ...S.stoneCrab, name: 'Ore Golem', displayName: 'โกเลมแร่', art: 'foe_golem', hp: 72, large: true,
+const oreGolem = { ...S.stoneCrab, name: 'Ore Golem', displayName: 'โกเลมแร่', art: 'foe_ore_golem', hp: 72, large: true,
   moves: [{ name: 'Ore Fist', damage: 10, kind: 'physical', slot: 0 }] } as const;
-const mineWorker = { ...S.vargothGuard, name: 'Possessed Worker', displayName: 'คนงานถูกสิง', hp: 35, large: false,
+const mineWorker = { ...S.vargothGuard, name: 'Possessed Worker', displayName: 'คนงานถูกสิง', art: 'foe_possessed_worker', hp: 35, large: false,
   moves: [{ name: 'Pick Swing', damage: 6, kind: 'physical', slot: 0 }] } as const;
 const mineShard = { ...S.shardCrawler, name: 'Crystal Fragment', displayName: 'ผลึกย่อย', art: 'foe_shard_crawler', hp: 29,
   moves: [{ name: 'Shard Prick', damage: 22, kind: 'physical', slot: 1 }] } as const;
@@ -436,7 +436,7 @@ export const mineTunnelEncounter: EncounterDefinition = { ...veilSiege, id: 'min
   ...foes(14, [['f1', oreGolem], ['b1', mineBat], ['b2', mineBat]]) };
 export const eliteMineOverseer: EncounterDefinition = {
   ...veilSiege, id: 'elite-mine-overseer', version: 1, level: 14, name: 'หัวหน้าคุมเหมือง',
-  enemies: [{ id: 'f1', row: 'front', large: true, speed: 80, name: 'Mine Overseer', displayName: 'หัวหน้าคุมเหมือง', maxHp: 440, color: 0x99857c, art: 'foe_vargoth_guard' },
+  enemies: [{ id: 'f1', row: 'front', large: true, speed: 80, name: 'Mine Overseer', displayName: 'หัวหน้าคุมเหมือง', maxHp: 440, color: 0x99857c, art: 'foe_mine_overseer' },
     ...foes(14, [['f2', mineWorker, { surrenderOre: 4 }]]).enemies],
   intents: [{ sourceId: 'f1', targetSlot: 0, name: 'Overseer Hammer', damage: 40, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 3, name: 'Crystal Spark', damage: 32, kind: 'energy' },
@@ -444,7 +444,7 @@ export const eliteMineOverseer: EncounterDefinition = {
 };
 export const eliteCrystalEater: EncounterDefinition = {
   ...veilSiege, id: 'elite-crystal-eater', version: 1, level: 15, name: 'ตัวกินผลึก',
-  enemies: [{ id: 'f1', row: 'front', large: true, speed: 88, name: 'Crystal Eater', displayName: 'ตัวกินผลึก', maxHp: 520, color: 0xa778c9, art: 'foe_tusker' }, ...foes(15, [['b2', mineBat]]).enemies],
+  enemies: [{ id: 'f1', row: 'front', large: true, speed: 88, name: 'Crystal Eater', displayName: 'ตัวกินผลึก', maxHp: 520, color: 0xa778c9, art: 'foe_crystal_eater' }, ...foes(15, [['b2', mineBat]]).enemies],
   intents: [{ sourceId: 'f1', targetSlot: 0, name: 'Crystal Bite', damage: 46, kind: 'physical' },
     { sourceId: 'f1', targetSlot: 0, name: 'Shard Eruption', damage: 28, kind: 'energy', all: true }, ...foes(15, [['b2', mineBat]]).intents],
 };

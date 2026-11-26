@@ -716,17 +716,17 @@
    "foes": 3,
    "reserves": 0,
    "foeSheets": [
-    "vargoth",
-    "bat",
-    "golem"
+    "crystalbat",
+    "oregolem",
+    "possessedworker"
    ],
    "four": {
-    "decoded": 33989584,
-    "download": 10288976
+    "decoded": 54177488,
+    "download": 14421511
    },
    "five": {
-    "decoded": 38493832,
-    "download": 11734893
+    "decoded": 58681736,
+    "download": 15867428
    },
    "bossFx": false,
    "lakeBossFx": false
@@ -736,16 +736,16 @@
    "foes": 3,
    "reserves": 0,
    "foeSheets": [
-    "bat",
-    "golem"
+    "crystalbat",
+    "oregolem"
    ],
    "four": {
-    "decoded": 29685712,
-    "download": 8903225
+    "decoded": 44404688,
+    "download": 12238646
    },
    "five": {
-    "decoded": 34189960,
-    "download": 10349142
+    "decoded": 48908936,
+    "download": 13684563
    },
    "bossFx": false,
    "lakeBossFx": false
@@ -755,15 +755,16 @@
    "foes": 2,
    "reserves": 0,
    "foeSheets": [
-    "vargoth"
+    "possessedworker",
+    "mineoverseer"
    ],
    "four": {
-    "decoded": 28561360,
-    "download": 8781458
+    "decoded": 50987728,
+    "download": 13855379
    },
    "five": {
-    "decoded": 33065608,
-    "download": 10227375
+    "decoded": 55491976,
+    "download": 15301296
    },
    "bossFx": false,
    "lakeBossFx": false
@@ -773,16 +774,16 @@
    "foes": 2,
    "reserves": 0,
    "foeSheets": [
-    "tusker",
-    "bat"
+    "crystalbat",
+    "crystaleater"
    ],
    "four": {
-    "decoded": 30504912,
-    "download": 9030841
+    "decoded": 48243664,
+    "download": 13491154
    },
    "five": {
-    "decoded": 35009160,
-    "download": 10476758
+    "decoded": 52747912,
+    "download": 14937071
    },
    "bossFx": false,
    "lakeBossFx": false

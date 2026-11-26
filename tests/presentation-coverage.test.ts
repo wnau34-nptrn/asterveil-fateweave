@@ -43,7 +43,7 @@ function markdown(c: PresentationCoverage): string {
 describe('W8 presentation coverage', () => {
   const c = presentationCoverage();
   it('counts every identity in the game and every ActionId', () => {
-    expect(c.counts.identities).toBe(49);
+    expect(c.counts.identities).toBe(54); // +5 Map 5 mine foes (ART-UNIT-ANIMATION-MINE-001)
     expect(c.counts.heroes).toBe(17);
     expect(c.counts.actionIds).toBe(Object.keys(veilSiege.skills).length);
     expect(unusedRegistry(c)).toEqual([]);

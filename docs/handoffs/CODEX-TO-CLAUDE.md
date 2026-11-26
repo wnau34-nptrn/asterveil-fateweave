@@ -1,3 +1,9 @@
+## 2026-11-26 — นำเข้าศัตรูเหมือง semi-chibi 5 ตัว (Claude · `claude/friendly-heisenberg-xapns5`)
+
+- เจ้าของสั่ง “นำเข้าศัตรูเหมือง 5 ตัวเลย” (หัวหน้าคุมเหมือง R2, ตัวกินผลึก R1) และบันทึกกติกาถาวร “สไตล์ภาพต้องเป็น semi chibi” ใน `CLAUDE.md`
+- `scripts/build-mine-foes.py` → atlas lossless 5 ชุด + `units_foes4`/`portraits_foes4` อัตราแสดงผล 0.75–1.1 ตามภาพตัวอย่าง ไม่ใช่ 2 [slice](../combat-presentation/mine-foes-slice/README_TH.md)
+- ทุกสนามเหมือง ≤56 MiB decoded (งบ 64) Vitest ผ่าน, coverage ใหม่ (54 identities), คลิป 390px 3 สนาม · พื้น #357 รอบ 4 และยักษ์ 4b (#359) ยังรอ Codex
+
 ## 2026-11-26 — ตรวจภาพเหมืองรอบแรกและนำเข้าของบนแผนที่ (Claude · `claude/friendly-heisenberg-xapns5`)
 
 - PR #356 (เหมือง เซฟ v69) รวมแล้ว เจ้าของเลือกยักษ์ R1 และ “ทำตามที่คุณแนะนำ อนุมัติ 4a” Codex ส่ง #357–#360 ไฟล์ตรง SHA-256 ครบ
