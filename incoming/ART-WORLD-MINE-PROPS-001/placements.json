@@ -1,0 +1,216 @@
+{
+  "puzzles": {
+    "lantern_off": [
+      [
+        9,
+        20
+      ],
+      [
+        7,
+        17
+      ],
+      [
+        13,
+        14
+      ],
+      [
+        16,
+        10
+      ],
+      [
+        21,
+        8
+      ]
+    ],
+    "glow_crystal": [
+      [
+        12,
+        17
+      ],
+      [
+        13,
+        13
+      ]
+    ],
+    "lever_main": [
+      [
+        19,
+        16
+      ],
+      [
+        21,
+        15
+      ],
+      [
+        19,
+        14
+      ]
+    ],
+    "ore_cart": [
+      [
+        20,
+        17
+      ]
+    ],
+    "cracked_wall_closed": [
+      [
+        20,
+        11
+      ]
+    ],
+    "beam_e": [
+      [
+        14,
+        3
+      ]
+    ],
+    "beam_n": [
+      [
+        17,
+        3
+      ]
+    ],
+    "beam_s": [
+      [
+        20,
+        3
+      ]
+    ],
+    "beam_w": [
+      [
+        20,
+        5
+      ]
+    ],
+    "evidence_closed": [
+      [
+        22,
+        5
+      ]
+    ],
+    "handprint_closed": [
+      [
+        16,
+        11
+      ],
+      [
+        4,
+        15
+      ]
+    ],
+    "worker_wait": [
+      [
+        6,
+        20
+      ],
+      [
+        15,
+        14
+      ],
+      [
+        17,
+        9
+      ]
+    ],
+    "ledger": [
+      [
+        4,
+        21
+      ],
+      [
+        16,
+        9
+      ],
+      [
+        23,
+        5
+      ]
+    ],
+    "dig_order": [
+      [
+        8,
+        10
+      ]
+    ],
+    "child_drawing": [
+      [
+        20,
+        10
+      ]
+    ]
+  },
+  "decorOnWall": {
+    "timber": [
+      [
+        11,
+        13
+      ],
+      [
+        22,
+        7
+      ]
+    ],
+    "ore_heap": [
+      [
+        5,
+        17
+      ]
+    ],
+    "tools": [
+      [
+        8,
+        24
+      ]
+    ],
+    "cask": [
+      [
+        14,
+        24
+      ]
+    ],
+    "crystal_cluster_tall": [
+      [
+        23,
+        7
+      ]
+    ],
+    "crystal_cluster_low": [
+      [
+        16,
+        2
+      ]
+    ]
+  },
+  "stateRows": [
+    [
+      "lantern_off",
+      "lantern_on"
+    ],
+    [
+      "lever_main",
+      "lever_siding"
+    ],
+    [
+      "cracked_wall_closed",
+      "cracked_wall_open"
+    ],
+    [
+      "evidence_closed",
+      "evidence_open"
+    ],
+    [
+      "handprint_closed",
+      "handprint_open"
+    ],
+    [
+      "worker_wait",
+      "worker_follow"
+    ],
+    [
+      "beam_n",
+      "beam_s",
+      "beam_e",
+      "beam_w"
+    ]
+  ]
+}

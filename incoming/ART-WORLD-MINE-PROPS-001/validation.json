@@ -1,0 +1,231 @@
+{
+  "propCount": 27,
+  "tileSize": 128,
+  "footY": 124,
+  "previewSize": [
+    390,
+    844
+  ],
+  "files": {
+    "NOTES.md": {
+      "sha256": "a322c4ae79b7d16e480f6debd14773cf5d3d3416c8c3f554d6ead0b8ee258bf1",
+      "bytes": 1373
+    },
+    "build.py": {
+      "sha256": "f51f390a03fe5bac203eb147fc1404c29d6e8f2c91199ea41c20dae0095e74ee",
+      "bytes": 7350
+    },
+    "manifest.py": {
+      "sha256": "f19ab12ade9a3351785f7f8f4b488d4c14efbd80e3f86c38f6943ef3479fdb67",
+      "bytes": 1060
+    },
+    "placements.json": {
+      "sha256": "38c995136ee91602620f53a6573eb3f21d8db2c8ac907da732b2344465bbd6c6",
+      "bytes": 2387
+    },
+    "preview/map-1-dark.png": {
+      "sha256": "5adb57fbd98e7e704e187c785ba684f06e00e08b71aea93ca4fa0364b4c22db2",
+      "bytes": 199427,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/map-1-lit.png": {
+      "sha256": "354029c73cc79315c87ef4f6178a3aa35b5ca94c7b5ebc108530f4eab04bf4a6",
+      "bytes": 257687,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/map-2-dark.png": {
+      "sha256": "e46fbe9338bc4f5bedc417b3759476fe88932e06b926b0121b8cc3ded0bb578c",
+      "bytes": 182160,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/map-2-lit.png": {
+      "sha256": "9635377d5d1480b8a6362848058a685e1c1f0df8867638dce3bf502c446e6da7",
+      "bytes": 223795,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/map-3-dark.png": {
+      "sha256": "64169cdac5fb94273d52730c04731a75e07c17e0f7f27a0172247c8d434272df",
+      "bytes": 210043,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/map-3-lit.png": {
+      "sha256": "7ee34f4679903ee9c05fa83f08c404b063672df44c28593e18696880326936a7",
+      "bytes": 267085,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/map-4-dark.png": {
+      "sha256": "a7d8c3b5b9c8abdfe56460109f603196a8bf9515ac244a578c835f1e455a15e4",
+      "bytes": 230522,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/map-4-lit.png": {
+      "sha256": "151a73adec9b58d94686d4045e88099c1660774a8fd633c86fa882dc2f6a0b1d",
+      "bytes": 305944,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/map-5-dark.png": {
+      "sha256": "dbc727c1e8aee470e697f3e1b51643b124dbbd338e950860f0d81af7630f7e43",
+      "bytes": 206724,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/map-5-lit.png": {
+      "sha256": "5acebe507dfc7fb9969a8e8bde55732ccd6f5df7878505ace46cba58afbd12c6",
+      "bytes": 275008,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/map-6-dark.png": {
+      "sha256": "7ace8772e36a344fa847bdbd158ad2b748d29435bfda6069e45383146e55883f",
+      "bytes": 191487,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/map-6-lit.png": {
+      "sha256": "160dfe78c8bc1c6c7a5ac811d500b46530c21e6f4b72787e51f0fecad4b987b8",
+      "bytes": 250390,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/states-60px.png": {
+      "sha256": "68bd615d547134f990a7d0d400a58f1ca3d1ebf655644c18e777d6c82ba62ae5",
+      "bytes": 58786,
+      "size": [
+        390,
+        532
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "prompts.json": {
+      "sha256": "edede28126b6fe49049a59233a2778557ea4f89960d129cfbc05b341afbe6ff4",
+      "bytes": 1164
+    },
+    "runtime/decor_mine.json": {
+      "sha256": "d2a78ec82b93ae3a455ed3ff52801c75dadff89bcc4dc840d4b4842a4c810dcb",
+      "bytes": 2504
+    },
+    "runtime/decor_mine.webp": {
+      "sha256": "ef9dc30091b2403d38c59160305f13ad45928beee5f439bd2268be96e57c7fac",
+      "bytes": 330722,
+      "size": [
+        768,
+        640
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds.json": {
+      "sha256": "13d39963352115f8a77b3b06bf5b68183e4ad75b376a932780a213bc9196571d",
+      "bytes": 138
+    },
+    "sources/extras.png": {
+      "sha256": "b2cb8b63dbb62c0b1a87a80e0d5d64359fd90615f4c40e545876f5156a460207",
+      "bytes": 1365044,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/layout.json": {
+      "sha256": "90db00ac8d7102ede50f940fa446c8b9684a5da08d16d0f340290af65227b7b4",
+      "bytes": 778
+    },
+    "sources/props.png": {
+      "sha256": "0404619e318405cfb5378dab0fb71f7ee09339eb70f11f0dfcef6de3fa20d2ad",
+      "bytes": 1905080,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/rails_mine.json": {
+      "sha256": "ecee75b8b5508bf9054d88656ae962da024d6fb13f18aa795a71ffc7e3350e26",
+      "bytes": 473
+    },
+    "sources/rails_mine.webp": {
+      "sha256": "cb254ce26f26c6c6ef5999cef43c31385e50116db7c407484866586011f58dbc",
+      "bytes": 930,
+      "size": [
+        384,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/tiles_mine.json": {
+      "sha256": "4c752a5ce9752f16e491905276bc015a501942c6ebc0973b0e5d511c380a4f0c",
+      "bytes": 1137
+    },
+    "sources/tiles_mine.webp": {
+      "sha256": "aec6058acc4e1dbd9a17f418148c9aa41b0c523fe71912e4aecb43ea278f1ae7",
+      "bytes": 231266,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    }
+  }
+}
