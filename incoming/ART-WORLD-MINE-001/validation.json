@@ -1,54 +1,54 @@
 {
-  "runtimeBytes": 1624968,
+  "runtimeBytes": 1582450,
   "lightness": {
     "space": "CIELAB L* (sRGB, D65)",
     "tiles": {
-      "yard_0": 49.07,
-      "yard_1": 49.18,
-      "yard_2": 48.93,
-      "yard_3": 48.94,
-      "tunnel_0": 45.15,
-      "tunnel_1": 45.04,
-      "tunnel_2": 44.95,
-      "tunnel_3": 45.05,
-      "cavern_0": 39.1,
-      "cavern_1": 39.21,
-      "cavern_2": 39.16,
-      "cavern_3": 38.93,
-      "mine_wall_top": 20.88,
-      "mine_wall_face": 17.25,
-      "mine_wall_inner": 13.05
+      "yard_0": 45.51,
+      "yard_1": 43.64,
+      "yard_2": 44.72,
+      "yard_3": 44.43,
+      "tunnel_0": 45.23,
+      "tunnel_1": 44.41,
+      "tunnel_2": 45.0,
+      "tunnel_3": 46.02,
+      "cavern_0": 37.76,
+      "cavern_1": 37.07,
+      "cavern_2": 36.81,
+      "cavern_3": 37.44,
+      "mine_wall_top": 20.89,
+      "mine_wall_face": 17.24,
+      "mine_wall_inner": 13.06
     },
     "zones": {
       "yard": {
-        "mean": 49.03,
-        "meanDeltaToWallTop": 28.15,
-        "minimumTileDeltaToWallTop": 28.05
+        "mean": 44.57,
+        "meanDeltaToWallTop": 23.68,
+        "minimumTileDeltaToWallTop": 22.75
       },
       "tunnel": {
-        "mean": 45.05,
-        "meanDeltaToWallTop": 24.17,
-        "minimumTileDeltaToWallTop": 24.07
+        "mean": 45.17,
+        "meanDeltaToWallTop": 24.28,
+        "minimumTileDeltaToWallTop": 23.52
       },
       "cavern": {
-        "mean": 39.1,
-        "meanDeltaToWallTop": 18.22,
-        "minimumTileDeltaToWallTop": 18.05
+        "mean": 37.27,
+        "meanDeltaToWallTop": 16.38,
+        "minimumTileDeltaToWallTop": 15.92
       }
     }
   },
   "files": {
     "NOTES.md": {
-      "sha256": "a51ba9f90b4cbbff333e0f7099c035467c069ca951358648e9e2787698aab8f2",
-      "bytes": 4994
+      "sha256": "123ee654c6a882916cc81914c477d4446eb5121b18c061a8e4aa6cac2c2d9df1",
+      "bytes": 7413
     },
     "build.py": {
-      "sha256": "37ef4d40b0fc5568f7513ee7d4019099182386dd6a2ca4903eeb2709389dcaad",
-      "bytes": 8246
+      "sha256": "f63a5039aa31cce84f32027f275c0f182302a14c6d87cc8e7531eb9be2ad2ad3",
+      "bytes": 8658
     },
     "finish_terrain.py": {
-      "sha256": "355af9d8800c7a73806121fd75711fad64a473505503312a910fe2b4646ed0fa",
-      "bytes": 3835
+      "sha256": "f2455471adfadc1387240a6b468d13b9d78f194480e0db691eb0c22e866b19d0",
+      "bytes": 5971
     },
     "map_visibility.py": {
       "sha256": "cdf8a70be36f5fb8db121351fbfbdb9e0d23b0b852a7644f7cd1a0459233814c",
@@ -73,8 +73,8 @@
       "mode": "RGB"
     },
     "preview/lake-comparison-60px.png": {
-      "sha256": "5dfd8adaba479f0cead6962b37f4587ca8ba0ba5f237e861e9a615b2e297302f",
-      "bytes": 155058,
+      "sha256": "df69b94d33948309c9d469014f715634f75be75cdddb7cc7409776befec70dbe",
+      "bytes": 150902,
       "size": [
         516,
         268
@@ -82,8 +82,8 @@
       "mode": "RGB"
     },
     "preview/map-1-lit.png": {
-      "sha256": "99afa3fca9d192738de480cea2b37cdb7d6f1013368963224d57642cd4513b63",
-      "bytes": 252789,
+      "sha256": "641ea9b7a9733a60aa6647bd98a83fb4f7c8eb564f7d02693e257d5709f19201",
+      "bytes": 252299,
       "size": [
         390,
         844
@@ -91,8 +91,8 @@
       "mode": "RGB"
     },
     "preview/map-2-dark.png": {
-      "sha256": "dd0c6282f986bce66a2486f1ebec3dd118c804a23d75bf0018107c58e66df149",
-      "bytes": 289277,
+      "sha256": "c008bf16d3e74162827f8ed6aa8a33595b95cbc16dd416a3470248524a2cfe5b",
+      "bytes": 282872,
       "size": [
         390,
         844
@@ -100,8 +100,8 @@
       "mode": "RGB"
     },
     "preview/map-2-lit.png": {
-      "sha256": "559d25945280f7a05171bc942f08cdc3d39e6cc0faaa18fa1891fffd427756d1",
-      "bytes": 350214,
+      "sha256": "969ee9945bdc7942ae00323579a67ed6cbb65f311086432bd371c25b188474d9",
+      "bytes": 350330,
       "size": [
         390,
         844
@@ -109,17 +109,26 @@
       "mode": "RGB"
     },
     "preview/map-3-lit.png": {
-      "sha256": "e13827e85eec01350439b75c47fe990a81cb645b53da314b4eca84867c190302",
-      "bytes": 291406,
+      "sha256": "a1d7e4e3fdd99a52caf610574878889ef390fc78b11ca00443dd05a969865143",
+      "bytes": 284980,
       "size": [
         390,
         844
       ],
       "mode": "RGB"
     },
+    "preview/round3-vs-round4-60px.png": {
+      "sha256": "431982344a1e83c88780f7b4200f474d83db52bdfd6b41eaf676727dc47e2ef2",
+      "bytes": 157546,
+      "size": [
+        516,
+        268
+      ],
+      "mode": "RGB"
+    },
     "preview/seams-cavern-4x4-60px.png": {
-      "sha256": "6688667e53398890ab29ddb63b0ac0d3100b8378f595f5fb1d76cd2202dd4737",
-      "bytes": 27179,
+      "sha256": "3cff8e69bac032b976f151ed0f94b0629fa3581d052528f8e9a28d67e974e89d",
+      "bytes": 25265,
       "size": [
         240,
         240
@@ -127,8 +136,8 @@
       "mode": "RGB"
     },
     "preview/seams-cavern-6x6-60px.png": {
-      "sha256": "a0803c3e9145559a03e418f86ada85dbb9d8ed8522722f2cd8583a0deb34062d",
-      "bytes": 110418,
+      "sha256": "e3ec70b4ce84c073c9b5accbc1f6188c729855588e627a6d959041fa371b6575",
+      "bytes": 100538,
       "size": [
         360,
         360
@@ -136,8 +145,8 @@
       "mode": "RGB"
     },
     "preview/seams-tunnel-4x4-60px.png": {
-      "sha256": "7c01bccd2ac29565182e7280880bda9cd7f4833e8dd8007b9556389edcd02667",
-      "bytes": 25763,
+      "sha256": "eeb0514bc5365d4f95f931f6c3f317edab202ced1772a8014153ce434f9c2db6",
+      "bytes": 25177,
       "size": [
         240,
         240
@@ -145,8 +154,8 @@
       "mode": "RGB"
     },
     "preview/seams-tunnel-6x6-60px.png": {
-      "sha256": "b739e2c001749f9d73a7b36cc43ba5436c7888b0c9ddc3185508a9521c3957e3",
-      "bytes": 104724,
+      "sha256": "dc458ff47b312af3d97a74ef4a1279dfc1f33e29fef72b4957ebb7e09da69eb0",
+      "bytes": 107553,
       "size": [
         360,
         360
@@ -154,8 +163,8 @@
       "mode": "RGB"
     },
     "preview/seams-wall-6x3-60px.png": {
-      "sha256": "48eb846a733a3927e2f468cdcbda8e1b1f0be2bc36962e502e433425d8042254",
-      "bytes": 36344,
+      "sha256": "1caa33fdc45780e0ec937ea040ca449f4fa682cc68a85af910f39af78146b0c9",
+      "bytes": 27406,
       "size": [
         360,
         180
@@ -163,8 +172,8 @@
       "mode": "RGB"
     },
     "preview/seams-yard-4x4-60px.png": {
-      "sha256": "bd4131b9f07a2f9bcf259d4b8ce5d145347e697ded2e1c0b3f4ee49b6fa6e467",
-      "bytes": 23097,
+      "sha256": "2ad0a5f7957c5473e8511997f9e615c499d794f583f4569f8cd12805be8cbaef",
+      "bytes": 21842,
       "size": [
         240,
         240
@@ -172,8 +181,8 @@
       "mode": "RGB"
     },
     "preview/seams-yard-6x6-60px.png": {
-      "sha256": "c2aec2ed31f858af2b00463be276791b3a693bd2e3137b527df4d5a15bc16335",
-      "bytes": 95787,
+      "sha256": "8b7254b1a4f22f6b886395abdb8860e093978040eba09dd77340bd52e4ae2d91",
+      "bytes": 92171,
       "size": [
         360,
         360
@@ -181,8 +190,8 @@
       "mode": "RGB"
     },
     "prompts.json": {
-      "sha256": "1f7a167495441b75ff37eb780272b01a12d7da88d4b1d457555d1686fca03587",
-      "bytes": 6364
+      "sha256": "a82a199362e7ddf8e47a5c41001f3155b2e1c7977b4b2718b46cb876a8bd2e4a",
+      "bytes": 12604
     },
     "runtime/bg_mine.webp": {
       "sha256": "f68cbd0105abacbf5622a4f0286f0ab55a868502f36cb951316793d2cf7eb288",
@@ -211,8 +220,8 @@
       "bytes": 1137
     },
     "runtime/tiles_mine.webp": {
-      "sha256": "143cb34884f44dcb4f36d0ff726e2b896a3177c903418339ec1cfc0a084a9526",
-      "bytes": 249196,
+      "sha256": "dae0df6a0891d509e89e2da38854065622ff96dfce80f4b6e42ffe5589d5a5c1",
+      "bytes": 206678,
       "size": [
         512,
         512
@@ -220,8 +229,8 @@
       "mode": "RGBA"
     },
     "seeds.json": {
-      "sha256": "a274f405834ef8f1c53ed5902a07eb008d8fb276b237e2ad203f8c74732caf3c",
-      "bytes": 1268
+      "sha256": "a41b740c3dcf3d779b1feb2e1dccaa7075a3dae0d6d5eae866f3b98e9f0bd83e",
+      "bytes": 1647
     },
     "sources/actor-0-0.png": {
       "sha256": "fe83e4869940fc433b9c963f4ac4ff604cb38d5ed15c781c203db2b34fad4a99",
@@ -344,6 +353,15 @@
       ],
       "mode": "RGB"
     },
+    "sources/round3/tiles_mine.webp": {
+      "sha256": "143cb34884f44dcb4f36d0ff726e2b896a3177c903418339ec1cfc0a084a9526",
+      "bytes": 249196,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
     "sources/round3/tunnel.png": {
       "sha256": "620333ce37d0a048d428d35998ed8e0d144a4be6f4810a75c9e828f12f4b6607",
       "bytes": 2501167,
@@ -365,6 +383,42 @@
     "sources/round3/yard.png": {
       "sha256": "1b30ed32af599e86052f92781904d1cc7bb19ffdda161dcf0aed065aef2fca78",
       "bytes": 2303811,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB"
+    },
+    "sources/round4/cavern.png": {
+      "sha256": "1cb35352ac81ea9acf6bb5e30d407a81c2568c3df16ca9ad309a6bfde688cd13",
+      "bytes": 1891832,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB"
+    },
+    "sources/round4/tunnel.png": {
+      "sha256": "b49d34310a124040bcaeb8c05e1e7904fca1e8fba179e15d3a5c0bad7f89a9cf",
+      "bytes": 2105442,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB"
+    },
+    "sources/round4/wall_face.png": {
+      "sha256": "c60a9d15c09a0f8a9dc8c1a09bc038cb744fc537a4a4a898557cc9a0535b74cd",
+      "bytes": 1781266,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGB"
+    },
+    "sources/round4/yard.png": {
+      "sha256": "3b16ff4c0c42fe0b4aedaf496f7deaeed2b2f37ceafb6d8acec931d1f364d88e",
+      "bytes": 1859414,
       "size": [
         1254,
         1254

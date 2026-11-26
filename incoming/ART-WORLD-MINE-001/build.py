@@ -1,4 +1,4 @@
-"""Rebuild the round 3 mine terrain atlas and terrain previews."""
+"""Rebuild the round 4 mine terrain atlas and terrain previews."""
 import argparse
 import hashlib
 import json
@@ -40,6 +40,7 @@ def validate_terrain(tiles):
     wall_names = ('mine_wall_top', 'mine_wall_face', 'mine_wall_inner')
     top, face, inner = (lightness[name] for name in wall_names)
     assert inner < face < top
+    assert all(42 <= lightness[f'yard_{i}'] <= 48 for i in range(4))
     zones = {}
     for zone in ('yard', 'tunnel', 'cavern'):
         names = [f'{zone}_{i}' for i in range(4)]
@@ -94,29 +95,33 @@ def seam_previews(tiles):
     for y, row in enumerate([
         ('inner', 'inner', 'inner', 'inner', 'inner', 'inner'),
         ('top', 'top', 'inner', 'top', 'face', 'top'),
-        ('face', 'face', 'top', 'face', 'inner', 'face'),
+        ('face', 'face', 'face', 'face', 'face', 'face'),
     ]):
         for x, name in enumerate(row):
             wall.paste(small[f'mine_wall_{name}'], (x * 60, y * 60))
     wall.save(PREVIEW / 'seams-wall-6x3-60px.png')
 
 
-def lake_comparison(tiles, lake):
+def comparison_sheet(left, right, name):
     panel = Image.new('RGB', (516, 268), '#181b24')
     draw = ImageDraw.Draw(panel)
-    draw.text((8, 7), 'Crystal mine', fill='white')
-    draw.text((268, 7), 'Moon lake', fill='white')
-    groups = [
-        ([f'yard_{i}' for i in range(4)], [f'shore_{i}' for i in range(4)]),
-        ([f'tunnel_{i}' for i in range(4)], [f'isle_{i}' for i in range(4)]),
-        ([f'cavern_{i}' for i in range(4)], [f'pavilion_{i}' for i in range(4)]),
-        ([f'mine_wall_{k}' for k in ('top', 'face', 'inner')], [f'lake_wall_{k}' for k in ('top', 'face', 'inner')]),
-    ]
-    for y, columns in enumerate(groups):
-        for material, names, left in zip((tiles, lake), columns, (8, 268), strict=True):
-            for x, name in enumerate(names):
-                panel.paste(material[name].resize((60, 60), Image.Resampling.LANCZOS), (left + x * 60, 20 + y * 60))
-    panel.save(PREVIEW / 'lake-comparison-60px.png')
+    for (title, tiles, groups), x in zip((left, right), (8, 268), strict=True):
+        draw.text((x, 7), title, fill='white')
+        for row, group in enumerate(groups):
+            for column, tile in enumerate(group):
+                image = tiles[tile].resize((60, 60), Image.Resampling.LANCZOS)
+                panel.paste(image, (x + column * 60, 20 + row * 60))
+    panel.save(PREVIEW / name)
+
+
+def comparisons(tiles, lake, previous):
+    mine_names = [[f'{zone}_{i}' for i in range(4)] for zone in ('yard', 'tunnel', 'cavern')]
+    mine_names.append([f'mine_wall_{part}' for part in ('top', 'face', 'inner')])
+    lake_names = [[f'{zone}_{i}' for i in range(4)] for zone in ('shore', 'isle', 'pavilion')]
+    lake_names.append([f'lake_wall_{part}' for part in ('top', 'face', 'inner')])
+    current = ('Crystal mine · Round 4', tiles, mine_names)
+    comparison_sheet(current, ('Moon lake', lake, lake_names), 'lake-comparison-60px.png')
+    comparison_sheet(('Crystal mine · Round 3', previous, mine_names), current, 'round3-vs-round4-60px.png')
 
 
 def map_previews(tiles, rails):
@@ -155,7 +160,8 @@ def main():
     parser.add_argument('--lake-frames', type=Path, default=repo / 'src/content/world/lake-tiles.json')
     args = parser.parse_args()
     PREVIEW.mkdir(exist_ok=True)
-    save_terrain(make_terrain(SOURCE / 'round3'))
+    previous = load_atlas(SOURCE / 'round3/tiles_mine.webp', OUT / 'tiles_mine.json')
+    save_terrain(make_terrain(SOURCE / 'round4', previous))
     tiles = load_atlas(OUT / 'tiles_mine.webp', OUT / 'tiles_mine.json')
     rails = load_atlas(OUT / 'rails_mine.webp', OUT / 'rails_mine.json')
     lightness = validate_terrain(tiles)
@@ -163,7 +169,7 @@ def main():
     assert runtime_bytes < 2_500_000, runtime_bytes
     map_previews(tiles, rails)
     seam_previews(tiles)
-    lake_comparison(tiles, load_atlas(args.lake_atlas, args.lake_frames))
+    comparisons(tiles, load_atlas(args.lake_atlas, args.lake_frames), previous)
     files = {}
     for file in sorted(ROOT.rglob('*')):
         if file.is_file() and file.name != 'validation.json' and '__pycache__' not in file.parts:

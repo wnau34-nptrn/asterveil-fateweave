@@ -73,5 +73,16 @@
       "public/assets/world/lake_tiles.webp"
     ],
     "mixedPreviewRandomSeed": 357
+  },
+  "terrainRev4": {
+    "paintings": {
+      "yard": "sources/round4/yard.png",
+      "tunnel": "sources/round4/tunnel.png",
+      "cavern": "sources/round4/cavern.png",
+      "wall_face": "sources/round4/wall_face.png"
+    },
+    "round3Atlas": "sources/round3/tiles_mine.webp",
+    "styleReference": "public/assets/world/lake_tiles.webp",
+    "mixedPreviewRandomSeed": 357
   }
 }
