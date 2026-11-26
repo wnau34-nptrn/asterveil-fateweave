@@ -1,0 +1,1074 @@
+{
+  "phase": "4b",
+  "logicalCell": 768,
+  "footY": 672,
+  "bodyFrames": 26,
+  "fragmentFrames": 10,
+  "effects": [
+    "armor-lift",
+    "armor-cracks",
+    "armor-break",
+    "armor-fade",
+    "split-release",
+    "reflect",
+    "collapse"
+  ],
+  "files": {
+    "NOTES.md": {
+      "sha256": "5ee8cc8093b47ff2a184e2a42246c8aa4682c8fd3ede89ebe4c2e5787e9d0ffb",
+      "bytes": 4823
+    },
+    "anatomy-fragment.json": {
+      "sha256": "028e764d1ada3b9700a89647ad159c9782c15cebecc0d110dfb6bc5a847c397c",
+      "bytes": 1142
+    },
+    "anatomy.json": {
+      "sha256": "9e8918f967b89d8afc6d19ff6be253bd52b010b7244a050844c4aefe8438057a",
+      "bytes": 2822
+    },
+    "armor.png": {
+      "sha256": "ce8a011d76c7d151f9c5b0c7f52ce1cd53f4e90ea35c31cf35c9e4281d0ff6fb",
+      "bytes": 1834312,
+      "size": [
+        3072,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "beam.png": {
+      "sha256": "9c199b1d4a2d1bb001878413cf49fe6ca55afa245bfe94ddec43b95fbcd49d05",
+      "bytes": 2027312,
+      "size": [
+        3072,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "build.py": {
+      "sha256": "8467c4ed12416e9aa372255df1d8a3e87ef97af194458b4a1bbc7c2c7d622d78",
+      "bytes": 16315
+    },
+    "collapse.png": {
+      "sha256": "3587267af19927b7ca5de4e44d5f32d0944db58029d567b623bfff5d22a68902",
+      "bytes": 1973194,
+      "size": [
+        3072,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "crystal-fist.png": {
+      "sha256": "5c18b1856284ce47ca19bf1a08ac96278a5db8f330e928a9e3ff7bc51af78381",
+      "bytes": 1754124,
+      "size": [
+        3072,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "down.png": {
+      "sha256": "911764ddb9e63f5cb9e22380ab7cec4564eb02647ed7106d64dc7af1005389e4",
+      "bytes": 1284405,
+      "size": [
+        2304,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frag-down.png": {
+      "sha256": "34806b60e44fd69e80fbc923ea2ae0021becd06559d3f74709bab477032feb1e",
+      "bytes": 485703,
+      "size": [
+        1536,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frag-hit.png": {
+      "sha256": "218c45a44f420574688b3fa6db67d27a518cc49b3d6ac05ce3a40810530c776e",
+      "bytes": 417376,
+      "size": [
+        1024,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "fragment-idle.png": {
+      "sha256": "8eb51ee5551105cdbfa53a5e3d9a5ab0fabbb2a9f3233b6e4f2a560f2b1e4097",
+      "bytes": 221260,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/000.png": {
+      "sha256": "706cb911ccf17776d12a8306ab2524ef2f55065972f272b76f5da6496d2394ed",
+      "bytes": 566724,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/001.png": {
+      "sha256": "4abcdaa309606e649d9b1ad479d2d8e4ab1d7368d71f9da6f3997a8f68af475a",
+      "bytes": 432496,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/002.png": {
+      "sha256": "8c55ba037e7bae8786ba9e5969d9c9a01651594848709d58065aaeaf4214fa63",
+      "bytes": 459218,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/003.png": {
+      "sha256": "456a8a23b970df5a4f58ee98933894f3955d9c949ec05060be1b694291e69ed1",
+      "bytes": 455901,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/004.png": {
+      "sha256": "c478aff9b15da99e2c9d405272749b91f6141c1bb4ef0479350ea7f46e0534f3",
+      "bytes": 403524,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/005.png": {
+      "sha256": "5167d8237c30103f0c46db500d04354df1dbe367fc8deebd90cb02f2b41537d7",
+      "bytes": 483063,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/006.png": {
+      "sha256": "92a25c85187ec5e7405827405df0f30ff26c04817b0c1f40d76c0128b60c4686",
+      "bytes": 480748,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/007.png": {
+      "sha256": "c0e5065b9f2e53e60b93b1347281c19bc5154a7a42c3eb28c239dfd88634f552",
+      "bytes": 560559,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/008.png": {
+      "sha256": "a2e6f9fb1845f1041e23458d687d3f7a87afcb0a4f62078834304a082222a051",
+      "bytes": 505575,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/009.png": {
+      "sha256": "282be20ba21824bbb76e93c5979e468e9be778e31a1d05b57850cf1988d3e0cc",
+      "bytes": 478425,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/010.png": {
+      "sha256": "3ae4a69dcfdb453bdcfb5d0b24b50b7aed29918309ca6606da7a7c437a3f6525",
+      "bytes": 484431,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/011.png": {
+      "sha256": "b809fd8d58c7ad19473f1484c2d0a20f49892d0bffe0d91bbefc064f3170cc80",
+      "bytes": 483346,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/012.png": {
+      "sha256": "8c438b489bbd20160d8e4cd110eb0680589d03fefaab9a37f36410b888c3aeae",
+      "bytes": 525779,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/013.png": {
+      "sha256": "c94ff50da7091e99ff04e3672b6db584fe57c23c8eae0c5ef5f520139a62e1dc",
+      "bytes": 417353,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/014.png": {
+      "sha256": "8da808891265be13fc8b9765b78a4f67bc3bc731d33e5efd1f0359f8e4cb8b74",
+      "bytes": 500310,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/015.png": {
+      "sha256": "4c29a11c743d5f06e6d155cf388812c9b5f2a7b67620004af1d132fefdcdcb52",
+      "bytes": 456069,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/016.png": {
+      "sha256": "862a7d22fc67499ba9106ebe5f0cf8bf982fb833cb2ca56aad77c1176659a329",
+      "bytes": 461377,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/017.png": {
+      "sha256": "23b917e16047f2a54339c767b1091a38d1c74ca98138fc1474bee9d6b3cf7a27",
+      "bytes": 477362,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/018.png": {
+      "sha256": "8c230ff560cdb122b4b062cf60fcf114394fce5ff8392e616fa9ff4bf8828e0e",
+      "bytes": 448451,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/019.png": {
+      "sha256": "8f4b095d37a3260c78dfdf89fcbec176ebe6664a65bde8e25552d8711eb1c835",
+      "bytes": 504470,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/020.png": {
+      "sha256": "d4604566a50035418d5189cf2d943b337b81650e7559260dbde1e71d3832dd2d",
+      "bytes": 504421,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/021.png": {
+      "sha256": "113338377958a5e0e0d97d663d218e4fb19ea7fb2c2ec4b44b3cd582f4cd916a",
+      "bytes": 459354,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/022.png": {
+      "sha256": "d86e8022162e1ff36e8dd100aa5084b172ae3c1caa930b675924230eefd3c239",
+      "bytes": 522358,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/023.png": {
+      "sha256": "0c2c35af9cf323366355a70e577c5f971a7d50b56d5312041b9b6b2619d40f7e",
+      "bytes": 468834,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/024.png": {
+      "sha256": "f6c90265f2f7cad7f869d3842fa931691587e41a8f3b990ceff82b64c58a03db",
+      "bytes": 427898,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/025.png": {
+      "sha256": "b17a25ae0763a48f9be80973a5b9f5fe7f29ed25187d1c90b5ef2a3bf1125fdb",
+      "bytes": 390020,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/fragment/000.png": {
+      "sha256": "8eb51ee5551105cdbfa53a5e3d9a5ab0fabbb2a9f3233b6e4f2a560f2b1e4097",
+      "bytes": 221260,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/fragment/001.png": {
+      "sha256": "88695b2e8813c3b7610fb45c7977e66cf96b8e9d19692f2a9268f721d9905cf1",
+      "bytes": 206727,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/fragment/002.png": {
+      "sha256": "67580a7accb7ff9b1b076e078aa85514ee6e286a568981773f55d3a04e6b6345",
+      "bytes": 245159,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/fragment/003.png": {
+      "sha256": "b1d31debcd406902aa8db636aafc1d16133c0999a8e1b5728d22aae0903c152f",
+      "bytes": 241523,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/fragment/004.png": {
+      "sha256": "026dd12dff55d052322e39af5c9f53a262e0035efce5cc65565457aa0c26e858",
+      "bytes": 233240,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/fragment/005.png": {
+      "sha256": "e3afbc4210c57445a8de17ef17f783c7a35060a22df88a25e3b27a17e62af4c7",
+      "bytes": 207789,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/fragment/006.png": {
+      "sha256": "bbbb2789d68a1cf3411f2a57b684c50cb6e36e39870f1a7c712ca2a9156649b7",
+      "bytes": 210748,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/fragment/007.png": {
+      "sha256": "3965f2bd7af0e1e1968df1b2e000fa8fd98512ff1251807d16a821b2dee24580",
+      "bytes": 177783,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/fragment/008.png": {
+      "sha256": "4e693a9dc0caff9c85ddd0dfb7c399bbc2ef1a39b87be706ab901cbb206e9d3a",
+      "bytes": 161173,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/fragment/009.png": {
+      "sha256": "d4b3d6722b7760051f9b638bf89ee6cfaa90176380f03d8cc0e6df7797c07638",
+      "bytes": 147437,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "hit.png": {
+      "sha256": "5eb37d3aae9234c9e7985db58743e3d7ac127682ecbb0926078cf0cccf12d79f",
+      "bytes": 978982,
+      "size": [
+        1536,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "manifest.py": {
+      "sha256": "f19ab12ade9a3351785f7f8f4b488d4c14efbd80e3f86c38f6943ef3479fdb67",
+      "bytes": 1060
+    },
+    "pose-scale.json": {
+      "sha256": "93d369d7f645ea5376bf178fc4d7f3dfe2378fc4089d49263fba8b08131f15ee",
+      "bytes": 85
+    },
+    "preview/armor-390.gif": {
+      "sha256": "fa28a2b2884f14aee39ac8a5c2d0a61be25ddbc49593c60204762f790bca7328",
+      "bytes": 1476488,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 6
+    },
+    "preview/armor-break-390.png": {
+      "sha256": "3a03cc9b7aba46c35fa3662a8a76bbbf845eb74faba842a899f6788008d88b24",
+      "bytes": 477619,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/armor-crack-1-390.png": {
+      "sha256": "4b467c6b64fbea06ebb2fa05f5c829502f06440a3cf55a31efc9c28a47959ac3",
+      "bytes": 475331,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/armor-lift-390.png": {
+      "sha256": "7d32cfa5666beb756f96b7853a6f1aee8cfbb811030b3928e74752a1a5613108",
+      "bytes": 474629,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/beam-390.gif": {
+      "sha256": "14580dfc111f2d1bed47b9a9b301a73dbda4d024c4b04a869ed385404583d8b3",
+      "bytes": 1481549,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 6
+    },
+    "preview/collapse-390.gif": {
+      "sha256": "754d650716726c96918caf94396d4404944efc4c50bffd34023674784ea47be0",
+      "bytes": 1476934,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 6
+    },
+    "preview/crystal-fist-390.gif": {
+      "sha256": "4f1999cd291f7f447220c8248bb84cb0b62bd46b2bcbb41b707db7dbc54b5dc7",
+      "bytes": 1476475,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 6
+    },
+    "preview/down-390.gif": {
+      "sha256": "c2e9293815f86da6cfd2de8047f7bf1730ed3383fbddb10599667358a0e4ee72",
+      "bytes": 1224792,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 5
+    },
+    "preview/field-390.png": {
+      "sha256": "916d9f32325da9dba6b40a8ec27f66d350af0747af5863d24479fcf2a820acc3",
+      "bytes": 478336,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/frag-down-390.gif": {
+      "sha256": "d1742f734ce02e363d40c20a98a6a40f536e6f568c9ace74e26631fa8896c7d9",
+      "bytes": 1234568,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 5
+    },
+    "preview/frag-hit-390.gif": {
+      "sha256": "6396533c5db38460fe926e039d434dda5b520e32e6727bdf6396e46abc6ab396",
+      "bytes": 987233,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 4
+    },
+    "preview/hit-390.gif": {
+      "sha256": "60c597298f30eef4c4fec2cdcc7c8b875997cadb9a30371b049a2983b57c2364",
+      "bytes": 986656,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 4
+    },
+    "preview/prick-390.gif": {
+      "sha256": "95c867fec23eb16285085f8db571782c5a8b00736c8e2fea63e58c5622565cf3",
+      "bytes": 1481128,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 6
+    },
+    "preview/scale-390.png": {
+      "sha256": "41ad7d6d48c7205f15437ef2fbf8e0bcfbc19d572f0afce1efa934cb871733cc",
+      "bytes": 107379,
+      "size": [
+        390,
+        615
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/split-390.gif": {
+      "sha256": "608aa5d194544638c9f3b52388a7e18c1e36f89ae0bb0503738a7b4fec37f2b7",
+      "bytes": 1479195,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 6
+    },
+    "preview/split-release-390.png": {
+      "sha256": "d0114e05697bde80b6f765e57eb4df62fe08aa8a4d65c926deeaf96c9ef199c1",
+      "bytes": 478916,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/vfx-storyboard-390.png": {
+      "sha256": "f4fe5ce11750918be65cbe323626c0923b6a2d727da7d78517a85e7cd78ebbf3",
+      "bytes": 2913671,
+      "size": [
+        390,
+        5022
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "prick.png": {
+      "sha256": "f70f796ad535a172bd2a532da46c0338871e3106ceb16be693d7eefb0a7708f7",
+      "bytes": 923252,
+      "size": [
+        2048,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "prompts.json": {
+      "sha256": "14a99348ab1c0eb9dfa6e4bef8afe566f89617f13d8ac23439f22f7109c2fb6a",
+      "bytes": 9421
+    },
+    "raw/armor.png": {
+      "sha256": "3e7ffc33fe465ff0716bb27070455fb228b237a8f9508213ed5a993be28d2fba",
+      "bytes": 1388531,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/beam.png": {
+      "sha256": "ddc70cee655610eb0dde300ba8ca65793f681f48e057ac696eca6011dd1c892a",
+      "bytes": 2716655,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/collapse.png": {
+      "sha256": "a8cf5ff6fc5b6afb11d2f11626a5a7a87ca715ede7a05d9116053088ca8e8d8d",
+      "bytes": 1489333,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/crystal-fist.png": {
+      "sha256": "ac94f217b0d935f4cfabcff7d446e91e051507e54a29df04847085f82ec02250",
+      "bytes": 1572310,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/down.png": {
+      "sha256": "e924b0bd455fce7ca876fe9423c4c442e3b1d454ad63b18fe726cdb9c3ed25cf",
+      "bytes": 1615135,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/fist.png": {
+      "sha256": "d51b3f7cc0a88d40674cc9e8e82ec3dbd114d8b5ac888c86a4992c4c82dfad27",
+      "bytes": 1427070,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/frag_down.png": {
+      "sha256": "97d0dd9acc643cf6de349d8a1678fc1a6e3b125a233b221a28272accb6cf4e88",
+      "bytes": 2246153,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/frag_hit.png": {
+      "sha256": "915aaf9040203bf74b3b3afb13d7bc2861f58fc0e843280cf199aa2ce5da4b71",
+      "bytes": 1088370,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/hit.png": {
+      "sha256": "19f1f27658de7b29bf9a4028a93c0ececda007b1fafe1a6ae508529924e12dbf",
+      "bytes": 1434777,
+      "size": [
+        1919,
+        820
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/prick.png": {
+      "sha256": "50a52fee02cb0571bdceca65535896fcc1077ab9218f327f7385e091a6e24410",
+      "bytes": 1194730,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/split.png": {
+      "sha256": "fa60910ef789eb2fb78e7bde4c54514df76873b9220814712b12e4771faf6cfd",
+      "bytes": 1654373,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/fragment.png": {
+      "sha256": "8eb51ee5551105cdbfa53a5e3d9a5ab0fabbb2a9f3233b6e4f2a560f2b1e4097",
+      "bytes": 221260,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/giant-r1.png": {
+      "sha256": "706cb911ccf17776d12a8306ab2524ef2f55065972f272b76f5da6496d2394ed",
+      "bytes": 566724,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds.json": {
+      "sha256": "0df0e94f818ec6f3239d923bd8c52d1be1ebb745c47eec6675f9b59b2d4afbc8",
+      "bytes": 218
+    },
+    "sources/actor-0-0.png": {
+      "sha256": "fe83e4869940fc433b9c963f4ac4ff604cb38d5ed15c781c203db2b34fad4a99",
+      "bytes": 420368,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/actor-0-1.png": {
+      "sha256": "ac433c681e297ce32caa91c089d71bcadcdf21bbcd6d24e6e852932dce2ca532",
+      "bytes": 434146,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/actor-0-2.png": {
+      "sha256": "7098d60dad55b22573ff988ce85dc010421a894ba707b585dfbf7e618d6ea6e8",
+      "bytes": 521462,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/actor-0-3.png": {
+      "sha256": "a52544f6618007abf7bd6b0749c31e208b8ec1ed68f151fab153c865b22a3550",
+      "bytes": 482846,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/actor-0-4.png": {
+      "sha256": "e6760e48b0403e13318830df87fd5891d50c9e57a972c5e9e8f3f6d729298a47",
+      "bytes": 389693,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/approved-scale.png": {
+      "sha256": "e8d86452f077af8fec47890d36d908c4bb1be46b0b3e7f625e7b700d13bfbf19",
+      "bytes": 178407,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "sources/bg_mine.webp": {
+      "sha256": "f68cbd0105abacbf5622a4f0286f0ab55a868502f36cb951316793d2cf7eb288",
+      "bytes": 1373248,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "sources/stone-golem.png": {
+      "sha256": "586c27c584320b188ce19b5d040291375dc047db1896f00eebf2fe016352c49c",
+      "bytes": 422016,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/water-spirit.png": {
+      "sha256": "1d3ac9e3f5cf013630ef32a31197edea685405a436ce4f533841e86da9775a76",
+      "bytes": 98799,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "split.png": {
+      "sha256": "028935acdfb7894f5e6df407f64196610a6e0e6d8cc3dab3f3654538f8480806",
+      "bytes": 1927049,
+      "size": [
+        3072,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips.json": {
+      "sha256": "15086f5cdfbfc58b9954011fa46e8877b97b0cc2aa06ac23e76c57ac0a9fe23f",
+      "bytes": 6380
+    },
+    "vfx/armor-break.png": {
+      "sha256": "b03b2a4ad2e18022d9ec954d9329e09f9fd9ba5eb8afef660c1ca4061903eaf1",
+      "bytes": 12872,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/armor-crack-1.png": {
+      "sha256": "8631ed5db5f5621c8977ccadf87f3c2903a661c315bc827cc3192130ac93daf6",
+      "bytes": 19301,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/armor-crack-2.png": {
+      "sha256": "16ae22afbca47f4eb176cefca9af47049f997d6b8b5a0daab8de7f25cab799c5",
+      "bytes": 19611,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/armor-crack-3.png": {
+      "sha256": "9a5fcc1035518e566318ebf1cb8a8958d8bafdb1844294802456abffcd657215",
+      "bytes": 20093,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/armor-fade-0.png": {
+      "sha256": "65ffcb4d02384d6ad389cf04e14ec47873a555a1e58779cbad5ca2aaf520531f",
+      "bytes": 16811,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/armor-fade-1.png": {
+      "sha256": "8debdbc2c3241b07c0e2928a0a9cc993d87bad103465b8a7495e174e02a68cfb",
+      "bytes": 16521,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/armor-fade-2.png": {
+      "sha256": "63c213efa69ab3548f658ece17dc6e271259183bf97d9e752594e9273521d837",
+      "bytes": 16033,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/armor-lift.png": {
+      "sha256": "7526a9f87d6f8f0fd141a5c532e02eb30c4c30ae11532df9d85907eac22670ca",
+      "bytes": 16763,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/collapse-0.png": {
+      "sha256": "797119d6fc3fa5b824b20a6bd6d10500a483d442f2a4a99ea03d6b1b633b9963",
+      "bytes": 2475,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/collapse-1.png": {
+      "sha256": "66e267963ce8be8a1a361fdc9bc16907d86f0f680fabf90f1d1a102fcd184862",
+      "bytes": 5077,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/collapse-2.png": {
+      "sha256": "9382d2746df619880c14462c005d57115e9d49822555a5216d845d3655455b50",
+      "bytes": 9835,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/collapse-reduced.png": {
+      "sha256": "9382d2746df619880c14462c005d57115e9d49822555a5216d845d3655455b50",
+      "bytes": 9835,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/reflect-0.png": {
+      "sha256": "346710ab361631b218cc69346927a41f885b5e64c8335041f14b7fedb54c79bb",
+      "bytes": 2237,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/reflect-1.png": {
+      "sha256": "00d6f4dcb7aad39bff4d613f40bac2fed1cd5c3ce93c945e82174bbc8fcd5f34",
+      "bytes": 4849,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/reflect-2.png": {
+      "sha256": "6eaf67b6df97d3f3e2fed977d9eaf3b98938d79402e499af39a4164fd79e9b13",
+      "bytes": 2717,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/split-release.png": {
+      "sha256": "3570253c895145d42018352eddddadd0b09e0950a04f2cebc5a03f1c19f28378",
+      "bytes": 8440,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    }
+  }
+}

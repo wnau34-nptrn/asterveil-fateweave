@@ -1,0 +1,346 @@
+{
+  "giant": {
+    "logicalCell": 768,
+    "footY": 672,
+    "facing": "left",
+    "idle": "frames/000.png",
+    "frames": 26,
+    "strips": [
+      {
+        "move": "Crystal Fist",
+        "path": "crystal-fist.png",
+        "source": "raw/fist.png",
+        "firstFrame": 1,
+        "count": 4,
+        "beats": [
+          "windup",
+          "brace",
+          "impact",
+          "follow-through"
+        ],
+        "durationMs": [
+          130,
+          120,
+          95,
+          235
+        ],
+        "returnToIdle": true
+      },
+      {
+        "move": "Shard Beam",
+        "path": "beam.png",
+        "source": "raw/beam.png",
+        "firstFrame": 5,
+        "count": 4,
+        "beats": [
+          "windup",
+          "brace",
+          "impact",
+          "follow-through"
+        ],
+        "durationMs": [
+          130,
+          120,
+          95,
+          235
+        ],
+        "returnToIdle": true
+      },
+      {
+        "move": "Crystal Collapse",
+        "path": "collapse.png",
+        "source": "raw/collapse.png",
+        "firstFrame": 9,
+        "count": 4,
+        "beats": [
+          "windup",
+          "brace",
+          "impact",
+          "follow-through"
+        ],
+        "durationMs": [
+          130,
+          120,
+          95,
+          235
+        ],
+        "returnToIdle": true
+      },
+      {
+        "move": "Crystal Armor",
+        "path": "armor.png",
+        "source": "raw/armor.png",
+        "firstFrame": 13,
+        "count": 4,
+        "beats": [
+          "windup",
+          "brace",
+          "impact",
+          "follow-through"
+        ],
+        "durationMs": [
+          130,
+          120,
+          95,
+          235
+        ],
+        "returnToIdle": true
+      },
+      {
+        "move": "Crystal Split",
+        "path": "split.png",
+        "source": "raw/split.png",
+        "firstFrame": 17,
+        "count": 4,
+        "beats": [
+          "windup",
+          "brace",
+          "impact",
+          "follow-through"
+        ],
+        "durationMs": [
+          130,
+          120,
+          95,
+          235
+        ],
+        "returnToIdle": true
+      },
+      {
+        "move": "Hit",
+        "path": "hit.png",
+        "source": "raw/hit.png",
+        "firstFrame": 21,
+        "count": 2,
+        "beats": [
+          "recoil",
+          "settle"
+        ],
+        "durationMs": [
+          95,
+          150
+        ],
+        "returnToIdle": false
+      },
+      {
+        "move": "Down",
+        "path": "down.png",
+        "source": "raw/down.png",
+        "firstFrame": 23,
+        "count": 3,
+        "beats": [
+          "buckle",
+          "fall",
+          "rest"
+        ],
+        "durationMs": [
+          140,
+          180,
+          500
+        ],
+        "returnToIdle": false
+      }
+    ],
+    "heightVsStoneGolem": 1.32
+  },
+  "fragment": {
+    "logicalCell": 512,
+    "footY": 497,
+    "facing": "left",
+    "idle": "frames/fragment/000.png",
+    "frames": 10,
+    "strips": [
+      {
+        "move": "Shard Prick",
+        "path": "prick.png",
+        "source": "raw/prick.png",
+        "firstFrame": 1,
+        "count": 4,
+        "beats": [
+          "windup",
+          "brace",
+          "impact",
+          "follow-through"
+        ],
+        "durationMs": [
+          130,
+          120,
+          95,
+          235
+        ],
+        "returnToIdle": true
+      },
+      {
+        "move": "Hit",
+        "path": "frag-hit.png",
+        "source": "raw/frag_hit.png",
+        "firstFrame": 5,
+        "count": 2,
+        "beats": [
+          "recoil",
+          "settle"
+        ],
+        "durationMs": [
+          95,
+          150
+        ],
+        "returnToIdle": false
+      },
+      {
+        "move": "Down",
+        "path": "frag-down.png",
+        "source": "raw/frag_down.png",
+        "firstFrame": 7,
+        "count": 3,
+        "beats": [
+          "buckle",
+          "fall",
+          "rest"
+        ],
+        "durationMs": [
+          140,
+          180,
+          500
+        ],
+        "returnToIdle": false
+      }
+    ]
+  },
+  "effects": [
+    {
+      "name": "armor-lift",
+      "frames": [
+        "vfx/armor-lift.png"
+      ],
+      "cell": 256,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "anchorRole": "boss-center",
+      "durationMs": [
+        180
+      ]
+    },
+    {
+      "name": "armor-cracks",
+      "frames": [
+        "vfx/armor-crack-1.png",
+        "vfx/armor-crack-2.png",
+        "vfx/armor-crack-3.png"
+      ],
+      "cell": 256,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "anchorRole": "boss-center",
+      "durationMs": [
+        140,
+        140,
+        140
+      ]
+    },
+    {
+      "name": "armor-break",
+      "frames": [
+        "vfx/armor-break.png"
+      ],
+      "cell": 256,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "anchorRole": "boss-center",
+      "durationMs": [
+        220
+      ]
+    },
+    {
+      "name": "armor-fade",
+      "frames": [
+        "vfx/armor-fade-0.png",
+        "vfx/armor-fade-1.png",
+        "vfx/armor-fade-2.png"
+      ],
+      "cell": 256,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "anchorRole": "boss-center",
+      "durationMs": [
+        110,
+        130,
+        160
+      ]
+    },
+    {
+      "name": "split-release",
+      "frames": [
+        "vfx/split-release.png"
+      ],
+      "cell": 256,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "anchorRole": "boss-center",
+      "durationMs": [
+        170
+      ]
+    },
+    {
+      "name": "reflect",
+      "frames": [
+        "vfx/reflect-0.png",
+        "vfx/reflect-1.png",
+        "vfx/reflect-2.png"
+      ],
+      "cell": 256,
+      "anchor": [
+        0.16,
+        0.5
+      ],
+      "anchorRole": "caster-center",
+      "durationMs": [
+        100,
+        130,
+        150
+      ],
+      "sourceUv": [
+        0.86,
+        0.48
+      ]
+    },
+    {
+      "name": "collapse",
+      "frames": [
+        "vfx/collapse-0.png",
+        "vfx/collapse-1.png",
+        "vfx/collapse-2.png"
+      ],
+      "cell": 256,
+      "anchor": [
+        0.5,
+        0.83
+      ],
+      "anchorRole": "target-feet",
+      "durationMs": [
+        270,
+        135,
+        180
+      ]
+    }
+  ],
+  "reducedMotion": {
+    "collapse": {
+      "file": "vfx/collapse-reduced.png",
+      "anchor": [
+        0.5,
+        0.83
+      ],
+      "holdMs": 220
+    }
+  }
+}
