@@ -1,46 +1,82 @@
-"""Rebuild the mine's lossless atlas, rail layer and layout previews."""
+"""Rebuild the round 3 mine terrain atlas and terrain previews."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image, ImageDraw
 
 from map_visibility import darkened_map, visible_from
-from paint_terrain import make_terrain
+from finish_terrain import TILE, make_terrain, mean_lightness
 
 ROOT = Path(__file__).resolve().parent
 SOURCE = ROOT / 'sources'
 OUT = ROOT / 'runtime'
 PREVIEW = ROOT / 'preview'
-TILE = 128
 ROWS = json.loads((SOURCE / 'layout.json').read_text())
 
 
-def save_atlas(name, entries, columns):
-    atlas = Image.new('RGBA', (columns * TILE, (len(entries) + columns - 1) // columns * TILE))
-    frames = {}
-    for i, (key, image) in enumerate(entries.items()):
-        x, y = i % columns * TILE, i // columns * TILE
-        atlas.paste(image, (x, y))
-        frames[key] = {'x': x, 'y': y, 'w': TILE, 'h': TILE}
-    atlas.save(OUT / f'{name}.webp', lossless=True)
-    (OUT / f'{name}.json').write_text(json.dumps(frames, indent=2) + '\n')
+def load_atlas(image_path, frame_path):
+    atlas = Image.open(image_path).convert('RGBA')
+    frames = json.loads(frame_path.read_text())
+    return {name: atlas.crop((f['x'], f['y'], f['x'] + f['w'], f['y'] + f['h'])) for name, f in frames.items()}
 
 
-def terrain():
-    tiles = make_terrain()
+def save_terrain(tiles):
+    frames = json.loads((OUT / 'tiles_mine.json').read_text())
+    assert set(frames) == set(tiles)
+    atlas = Image.new('RGBA', (4 * TILE, 4 * TILE))
+    for name, frame in frames.items():
+        assert tiles[name].size == (frame['w'], frame['h']) == (TILE, TILE)
+        atlas.paste(tiles[name], (frame['x'], frame['y']))
+    atlas.save(OUT / 'tiles_mine.webp', lossless=True, method=6)
+
+
+def validate_terrain(tiles):
+    arrays = {name: np.asarray(tile) for name, tile in tiles.items()}
+    assert all(np.all(a[..., 3] == 255) for a in arrays.values())
+    lightness = {name: mean_lightness(pixels) for name, pixels in arrays.items()}
+    wall_names = ('mine_wall_top', 'mine_wall_face', 'mine_wall_inner')
+    top, face, inner = (lightness[name] for name in wall_names)
+    assert inner < face < top
+    zones = {}
     for zone in ('yard', 'tunnel', 'cavern'):
-        for a in range(4):
-            for b in range(4):
-                first = np.array(tiles[f'{zone}_{a}'])
-                second = np.array(tiles[f'{zone}_{b}'])
-                assert np.array_equal(first[:, -1], second[:, 0])
-                assert np.array_equal(first[-1], second[0])
-    for name in ('top', 'face', 'inner'):
-        wall = np.asarray(tiles[f'mine_wall_{name}'])
-        assert np.array_equal(wall[:, -1], wall[:, 0]), name
-    return tiles
+        names = [f'{zone}_{i}' for i in range(4)]
+        mean = np.mean([lightness[name] for name in names])
+        minimum = min(lightness[name] for name in names)
+        assert minimum - top >= 15, (zone, minimum - top)
+        zones[zone] = {'mean': round(mean, 2), 'meanDeltaToWallTop': round(mean - top, 2),
+                       'minimumTileDeltaToWallTop': round(minimum - top, 2)}
+        for a in names:
+            for b in names:
+                assert np.array_equal(arrays[a][:, -1], arrays[b][:, 0]), (a, b, 'horizontal')
+                assert np.array_equal(arrays[a][-1], arrays[b][0]), (a, b, 'vertical')
+    for a in wall_names:
+        for b in wall_names:
+            assert np.array_equal(arrays[a][:, -1], arrays[b][:, 0]), (a, b, 'wall horizontal')
+    return {'space': 'CIELAB L* (sRGB, D65)', 'tiles': {k: round(v, 2) for k, v in lightness.items()},
+            'zones': zones}
+
+
+def cell_hash(x, y):
+    # The game's unsigned 32-bit cellHash with the default salt.
+    mask = 0xffffffff
+    h = ((x + 1) * 0x27d4eb2d ^ (y + 1) * 0x165667b1 ^ 0x9e3779b9) & mask
+    h = ((h ^ (h >> 15)) * 0x85ebca6b) & mask
+    return h ^ (h >> 13)
+
+
+def walkable(x, y):
+    return 0 <= y < len(ROWS) and 0 <= x < len(ROWS[y]) and ROWS[y][x] != '#'
+
+
+def wall_frame(x, y):
+    if walkable(x, y + 1):
+        return 'mine_wall_face'
+    if any(walkable(x + dx, y + dy) for dy in (-1, 0, 1) for dx in (-1, 0, 1)):
+        return 'mine_wall_top'
+    return 'mine_wall_inner'
 
 
 def seam_previews(tiles):
@@ -55,41 +91,32 @@ def seam_previews(tiles):
                     board.paste(small[f'{zone}_{i}'], (x * 60, y * 60))
             board.save(PREVIEW / f'seams-{zone}-{side}x{side}-60px.png')
     wall = Image.new('RGB', (360, 180))
-    for y, name in enumerate(('inner', 'top', 'face')):
-        for x in range(6):
+    for y, row in enumerate([
+        ('inner', 'inner', 'inner', 'inner', 'inner', 'inner'),
+        ('top', 'top', 'inner', 'top', 'face', 'top'),
+        ('face', 'face', 'top', 'face', 'inner', 'face'),
+    ]):
+        for x, name in enumerate(row):
             wall.paste(small[f'mine_wall_{name}'], (x * 60, y * 60))
     wall.save(PREVIEW / 'seams-wall-6x3-60px.png')
 
 
-def tracks():
-    entries = {}
-    for name in ('ns', 'junction_w', 'junction_e', 'ew', 'end_stop'):
-        tile = Image.new('RGBA', (TILE, TILE))
-        draw = ImageDraw.Draw(tile)
-        if name in ('ew', 'end_stop'):
-            for x in range(8, 125 if name == 'ew' else 65, 23):
-                draw.rounded_rectangle((x, 37, x + 9, 90), 2, fill='#59412e', outline='#392d29', width=2)
-            for y in (47, 79):
-                draw.line((0, y + 2, 127 if name == 'ew' else 72, y + 2), fill='#343437', width=6)
-                draw.line((0, y, 127 if name == 'ew' else 72, y), fill='#92908b', width=3)
-            if name == 'end_stop':
-                draw.rounded_rectangle((65, 34, 83, 92), 3, fill='#745439', outline='#352b25', width=3)
-        else:
-            for y in range(8, 125, 23):
-                draw.rounded_rectangle((37, y, 90, y + 9), 2, fill='#59412e', outline='#392d29', width=2)
-            for x in (47, 79):
-                draw.line((x + 2, 0, x + 2, 127), fill='#343437', width=6)
-                draw.line((x, 0, x, 127), fill='#92908b', width=3)
-            if name.startswith('junction'):
-                end = 0 if name.endswith('w') else 127
-                draw.line([(64, 103), (64, 78), ((end + 64) // 2, 63), (end, 63)], fill='#59412e', width=50)
-                for y in (47, 79):
-                    points = [(47 + y - 47, 107), (45 + y - 47, 83), ((end + 64) // 2, y), (end, y)]
-                    draw.line([(x, y + 2) for x, y in points], fill='#343437', width=6)
-                    draw.line(points, fill='#92908b', width=3)
-        entries[f'rail_{name}'] = tile
-    entries['rail_end_stop_w'] = ImageOps.mirror(entries['rail_end_stop'])
-    return entries
+def lake_comparison(tiles, lake):
+    panel = Image.new('RGB', (516, 268), '#181b24')
+    draw = ImageDraw.Draw(panel)
+    draw.text((8, 7), 'Crystal mine', fill='white')
+    draw.text((268, 7), 'Moon lake', fill='white')
+    groups = [
+        ([f'yard_{i}' for i in range(4)], [f'shore_{i}' for i in range(4)]),
+        ([f'tunnel_{i}' for i in range(4)], [f'isle_{i}' for i in range(4)]),
+        ([f'cavern_{i}' for i in range(4)], [f'pavilion_{i}' for i in range(4)]),
+        ([f'mine_wall_{k}' for k in ('top', 'face', 'inner')], [f'lake_wall_{k}' for k in ('top', 'face', 'inner')]),
+    ]
+    for y, columns in enumerate(groups):
+        for material, names, left in zip((tiles, lake), columns, (8, 268), strict=True):
+            for x, name in enumerate(names):
+                panel.paste(material[name].resize((60, 60), Image.Resampling.LANCZOS), (left + x * 60, 20 + y * 60))
+    panel.save(PREVIEW / 'lake-comparison-60px.png')
 
 
 def map_previews(tiles, rails):
@@ -102,15 +129,10 @@ def map_previews(tiles, rails):
     for y, row in enumerate(ROWS):
         for x, cell in enumerate(row):
             if cell == '#':
-                if y < 24 and ROWS[y + 1][x] != '#':
-                    key = 'mine_wall_face'
-                elif y and ROWS[y - 1][x] != '#':
-                    key = 'mine_wall_top'
-                else:
-                    key = 'mine_wall_inner'
+                key = wall_frame(x, y)
             else:
                 zone = {',': 'tunnel', ':': 'cavern', 'B': 'cavern', 'G': 'cavern'}.get(cell, 'cavern' if y < 7 else 'yard')
-                key = f'{zone}_{(x * 31337 ^ y * 6971 ^ x * y * 991) % 4}'
+                key = f'{zone}_{cell_hash(x, y) % 4}'
             xy = (x * 60, y * 60)
             grid.paste(tiles[key].resize((60, 60), Image.Resampling.LANCZOS), xy)
             if (x, y) in rail_sites:
@@ -126,55 +148,22 @@ def map_previews(tiles, rails):
             dark.crop((left, top, left + 390, top + 844)).save(PREVIEW / 'map-2-dark.png')
 
 
-def fight(bg):
-    for width, height in ((390, 844), (1366, 768)):
-        frame_w = min(width, 480)
-        field_w = frame_w - 12
-        field_h = 477 if width == 390 else 430
-        field_top = 170 if width == 390 else 130
-        field_left = 6
-        ax = field_left + field_w / 2
-        ay = field_top + field_h * .27
-        scale = max(field_w / 1536, field_h / 768, ax / 768, (frame_w - ax) / 768,
-                    ay / (1024 * .45), (height - ay) / (1024 * .55))
-        left, top = ax - 768 * scale, ay - 1024 * .45 * scale
-        field = bg.transform((frame_w, height), Image.Transform.AFFINE,
-                             (1 / scale, 0, -left / scale, 0, 1 / scale, -top / scale),
-                             Image.Resampling.BICUBIC)
-        hero = [(.115, .215), (.345, .215), (.115, .65), (.125, .91), (.35, .91)]
-        foe = [(.68, .65), (.84, .215), (.61, .215), (.88, .91), (.65, .91)]
-        for side, slots in enumerate((hero, foe)):
-            for number, (x, y) in enumerate(slots):
-                actor_file = SOURCE / f'actor-{side}-{number}.png'
-                figure = Image.open(actor_file).convert('RGBA')
-                figure = figure.crop(figure.getbbox())
-                actor_height = (78 if side == 0 else (100, 43, 68, 79, 62)[number]) * frame_w / 390
-                ratio = actor_height / figure.height
-                figure = figure.resize((round(figure.width * ratio), round(actor_height)), Image.Resampling.LANCZOS)
-                px, py = round(field_left + x * field_w), round(field_top + y * field_h)
-                draw = ImageDraw.Draw(field)
-                draw.ellipse((px - 15, py - 3, px + 15, py + 3), fill='#303034')
-                field.paste(figure, (px - figure.width // 2, py - figure.height), figure)
-                draw.rectangle((px - 15, py + 5, px + 15, py + 7), fill='#9d7854' if side else '#799e69')
-        preview = Image.new('RGB', (width, height), '#181b22')
-        preview.paste(field, ((width - frame_w) // 2, 0))
-        preview.save(PREVIEW / f'battle-{width}.png')
-
-
 def main():
-    OUT.mkdir(exist_ok=True)
+    parser = argparse.ArgumentParser(description=__doc__)
+    repo = ROOT.parents[1]
+    parser.add_argument('--lake-atlas', type=Path, default=repo / 'public/assets/world/lake_tiles.webp')
+    parser.add_argument('--lake-frames', type=Path, default=repo / 'src/content/world/lake-tiles.json')
+    args = parser.parse_args()
     PREVIEW.mkdir(exist_ok=True)
-    tiles, rails = terrain(), tracks()
-    save_atlas('tiles_mine', tiles, 4)
-    save_atlas('rails_mine', rails, 3)
-    bg = Image.open(SOURCE / 'bg.png').convert('RGB')
-    assert bg.size == (1536, 1024), bg.size
-    bg.save(OUT / 'bg_mine.webp', lossless=True, method=6)
+    save_terrain(make_terrain(SOURCE / 'round3'))
+    tiles = load_atlas(OUT / 'tiles_mine.webp', OUT / 'tiles_mine.json')
+    rails = load_atlas(OUT / 'rails_mine.webp', OUT / 'rails_mine.json')
+    lightness = validate_terrain(tiles)
     runtime_bytes = sum(p.stat().st_size for p in OUT.iterdir())
     assert runtime_bytes < 2_500_000, runtime_bytes
     map_previews(tiles, rails)
     seam_previews(tiles)
-    fight(bg)
+    lake_comparison(tiles, load_atlas(args.lake_atlas, args.lake_frames))
     files = {}
     for file in sorted(ROOT.rglob('*')):
         if file.is_file() and file.name != 'validation.json' and '__pycache__' not in file.parts:
@@ -185,7 +174,7 @@ def main():
                     item['size'] = image.size
                     item['mode'] = image.mode
             files[str(file.relative_to(ROOT))] = item
-    (ROOT / 'validation.json').write_text(json.dumps({'runtimeBytes': runtime_bytes, 'files': files}, indent=2) + '\n')
+    (ROOT / 'validation.json').write_text(json.dumps({'runtimeBytes': runtime_bytes, 'lightness': lightness, 'files': files}, indent=2) + '\n')
 
 
 if __name__ == '__main__':

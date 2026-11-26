@@ -60,5 +60,18 @@
       "cavern": 380
     },
     "mixedPreview": 357
+  },
+  "terrainRev3": {
+    "paintings": {
+      "yard": "sources/round3/yard.png",
+      "tunnel": "sources/round3/tunnel.png",
+      "cavern": "sources/round3/cavern.png",
+      "walls": "sources/round3/walls.png"
+    },
+    "styleReferences": [
+      "public/assets/world/tileset.webp",
+      "public/assets/world/lake_tiles.webp"
+    ],
+    "mixedPreviewRandomSeed": 357
   }
 }
