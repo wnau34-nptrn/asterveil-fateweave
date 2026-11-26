@@ -1,3 +1,8 @@
+## 2026-11-26 — UX audit P2-2 ส่วนที่ 1 ฉากสั่นแบบ trauma (Claude · `claude/gallant-edison-a7kkl3`, ยังไม่ merge)
+
+- เจ้าของสั่ง “ทำ P2-2 ส่วนที่ 1 ต่อได้เลย”: `impact-shake.ts` trauma² + คลื่น sine แทนค่าสุ่ม, โดนซ้อนบวก trauma; ไม่มี hit-stop (ส่วนที่ 2 รอเจ้าของตัดสินเรื่องจังหวะ)
+- vitest 4 + Playwright 3 ใหม่ผ่าน · [ผลตรวจและคลิป](../validation/impact-shake-2026-11-26/README_TH.md) · รอเจ้าของดูคลิปก่อน merge
+
 ## 2026-11-26 — UX audit P2-1 staged reveal เข้าค่าย (Claude · `claude/gallant-edison-a7kkl3`)
 
 - เจ้าของสั่ง “ทำ P2-1 staged reveal ต่อได้เลย”: `hud-reveal.ts` HUD ค่ายตามฉากมา 100 ms (220 ms) เฉพาะตอนเข้าค่าย

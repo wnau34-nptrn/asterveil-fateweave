@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { REWORK_ATLAS, reworkCues, reworkMarks, reworkContact } from '../visuals/rework-fx';
 import { unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
+import { SHAKE, addTrauma, shakeMs, shakeOffset } from '../visuals/impact-shake';
 import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals/basic-attack-fx';
 import { artPalette, auraPalette, bossPalette, paintBossAura, type BossAura } from '../visuals/boss-aura';
 import { BOSS_ATLAS, LAKE_BOSS_ATLAS, bossAtlasFor, bossAtlasUrls, lakeBossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, greatWaveScales, holdPlacement, isLakeBossMove, sealedWaterVeil, usesBossSignature, usesLakeBossSignature, type BossPoint, type ChargeHold } from '../visuals/boss-signature-fx';
@@ -62,7 +63,7 @@ export class BattleScene extends Phaser.Scene {
   private viewH = 0;
   private dpr = 1;
   private fitting = false;
-  private shaking: Phaser.Tweens.Tween | undefined;
+  private shaking: Phaser.Tweens.Tween | undefined; private trauma = 0;
   private effectTimers = new Set<Phaser.Time.TimerEvent>();
   private root: Phaser.GameObjects.Container | undefined;
   private nextSizeCheck = 0;
@@ -536,14 +537,16 @@ export class BattleScene extends Phaser.Scene {
   }
   // Impact shake moves the field layer, never the camera: the camera carries the
   // devicePixelRatio zoom, and a camera shake left the art offset from the DOM targets.
-  private shake(duration: number, strength: number): void {
+  // P2-2: trauma-based (impact-shake.ts) — a new hit adds to what is left instead of restarting the shake.
+  private shake(amount: number): void {
     const layer = this.layer; if (!layer) return;
+    const trauma = addTrauma(this.shaking ? this.trauma : 0, amount);
     if (this.shaking) this.shaking.stop();
-    layer.setPosition(0, 0);
+    layer.setPosition(0, 0); this.trauma = trauma;
     this.shaking = this.tweens.addCounter({
-      from: 1, to: 0, duration,
-      onUpdate: tween => { if (layer.active) { const k = tween.getValue()! * strength; layer.setPosition((Math.random() * 2 - 1) * k, (Math.random() * 2 - 1) * k); } },
-      onComplete: () => { if (layer.active) layer.setPosition(0, 0); },
+      from: trauma, to: 0, duration: shakeMs(trauma),
+      onUpdate: tween => { this.trauma = tween.getValue()!; if (layer.active) { const o = shakeOffset(this.trauma, this.time.now / 1000); layer.setPosition(o.x, o.y); } },
+      onComplete: () => { this.trauma = 0; if (layer.active) layer.setPosition(0, 0); },
       onStop: () => { if (layer.active) layer.setPosition(0, 0); },
     });
   }
@@ -552,7 +555,7 @@ export class BattleScene extends Phaser.Scene {
     this.unitAnimation.settle();
     for (const timer of this.effectTimers) timer.remove(false);
     this.effectTimers.clear();
-    if (this.shaking) { this.shaking.stop(); this.shaking = undefined; }
+    if (this.shaking) { this.shaking.stop(); this.shaking = undefined; } this.trauma = 0;
     for (const id of this.falling) this.bodies.get(id)?.setAlpha(this.corpseAlpha(id));
     this.falling.clear(); this.placed = []; this.resolvedActor = undefined;
     for (const [id, body] of this.bodies) {
@@ -936,7 +939,7 @@ export class BattleScene extends Phaser.Scene {
     };
     const landed = events.some(e => (e.type === 'damage' || e.type === 'counter') && (e.amount ?? 0) > 0);
     if (landed && hold) {
-      this.shake(140, events.some(e => e.type === 'down') ? 4 : 2.5);
+      this.shake(events.some(e => e.type === 'down') ? SHAKE.heavy : SHAKE.light);
     }
     for(const image of [...(this.healingLayer?.list??[])])if(projectileEvents.has(image.getData('projectileEvent') as BattleEvent)){this.tweens.killTweensOf(image);image.destroy();}
     for(const image of [...(this.healingLayer?.list??[])])if(image.getData('earthPrepare')){this.tweens.killTweensOf(image);image.destroy();}
