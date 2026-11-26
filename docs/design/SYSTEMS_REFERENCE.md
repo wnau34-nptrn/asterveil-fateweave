@@ -2,6 +2,13 @@
 
 These owner-scoped rules still apply. They were moved here verbatim so CLAUDE.md stays short. Before changing a system, read its section here.
 
+## Auto battle — OD-62 2026-11-26 (draft numbers, no save change)
+
+- Random battles and World Boss attempts (`BattleSession.kind` `'random'`/`'worldBoss'`, owner “ให้บอสโลก มี Auto ด้วย”): masthead AUTO toggle beside ⓘ; map bosses, elites, events and the first battle never show it. Supersedes the older "no AUTO" notes in UI_DESIGN and art handoffs.
+- `core/battle/auto.ts` (pure, deterministic): scores each legal command of the turn owner from that hero's own resolver stage only (damage, kills, non-wasted heals, barriers, revives, a little for statuses); never reads announced moves or later turns, so it does not guard/ward for a big hit, interrupt, delay or bend moves on purpose. `AUTO_LAPSE` (30%; `AUTO_LAPSE_WORLD_BOSS` 50% in World Boss attempts) turns from a hash of encounter/beat/hero are a plain basic attack. Moves needing a second choice (`deflectfate`) are left to the player.
+- Commands go through `resolveCommand` + `session.commit` like a tap (saved each turn, replay/server unchanged). Auto waits 0.5 s (0.25 fast), never during presentation, dialogs, hidden tab, other views or rotation guidance. Start is still pressed by the player.
+- Device settings `asterveil.fateweave.auto-battle.v1` (ⓘ → settings): on/off, stop HP none/30/50/70% (default 50), skills switched off (basic attack always on). Stops when a hero standing at (re)start falls or one not already under the line drops under it; the note sits at the top of the field; tapping AUTO resumes. Sim style `auto` and report: `docs/validation/auto-battle/`.
+
 ## Map 5 เหมืองผลึกร้าง — OD-60 (save v70, draft balance)
 
 - `chapter-mine.ts` supplies the board and exploration definition. The `mine` game command validates tile interactions. Movement shares the existing door, camp, encounter pressure and seal paths.

@@ -20,6 +20,7 @@ import { infoTabs, selectInfoTab } from './info-tabs';
 import { foeProfile, unitStatuses } from './battle-status';
 import { wbDamage } from '../core/world/world-boss';
 import { battleLesson } from './tutorial';
+import { AUTO_LAPSE, AUTO_LAPSE_WORLD_BOSS, AUTO_STOP_CHOICES, autoCommand, autoSettingsKey, autoStopReason, autoWatch, readAutoSettings, type AutoWatch } from '../core/battle/auto';
 import { morvaneAdvice, morvaneLesson } from './world-boss-advice';
 import { bossCrown, fieldHealthPath, healthColors, healthRatio, healthTone } from './battle-health';
 import { heroVoice } from './story-ui';
@@ -72,10 +73,17 @@ export class BattleUI {
   private session: BattleSession | undefined;
   private data: EncounterDefinition;
   private turnTitle = '';
+  // Auto battle (owner 2026-11-26): random battles only. Settings live on the device; `autoHeld` = stopped for this battle.
+  private auto = readAutoSettings(null);
+  private autoTimer: ReturnType<typeof setTimeout> | undefined;
+  private autoWatch: AutoWatch | undefined;
+  private autoHeld = false;
+  private autoNote = '';
 
   constructor(private readonly root: HTMLElement, data: EncounterDefinition) {
     this.data = data;
     try { this.combatPrefs = readCombatPrefs(this.storage?.getItem(combatPrefsKey) ?? null); } catch { /* Defaults work without storage. */ }
+    try { this.auto = readAutoSettings(this.storage?.getItem(autoSettingsKey) ?? null); } catch { /* Auto battle starts off without storage. */ }
     try {
       this.tutorialHintsEnabled = this.storage?.getItem(tutorialKey) !== 'off';
       this.morvaneHintsEnabled = this.storage?.getItem(morvaneHintsKey) !== 'off';
@@ -86,7 +94,7 @@ export class BattleUI {
     root.innerHTML = `
       <header class="masthead">
         <div class="encounter-heading"><p class="eyebrow" id="encounter-kind">การต่อสู้</p><h1 id="encounter-title"></h1></div>
-        <div id="beat-status"></div><button id="battle-info" aria-haspopup="dialog" aria-controls="game-info" data-ui="info" class="quiet" aria-label="สถานะยูนิต ข้อมูลการต่อสู้และตั้งค่าเสียง">ⓘ</button>
+        <div id="beat-status"></div><button id="battle-auto" data-ui="auto-toggle" class="quiet auto-toggle" aria-pressed="false" hidden>AUTO</button><button id="battle-info" aria-haspopup="dialog" aria-controls="game-info" data-ui="info" class="quiet" aria-label="สถานะยูนิต ข้อมูลการต่อสู้และตั้งค่าเสียง">ⓘ</button>
       </header>
       <main>
         <section id="turn-phase" class="turn-phase" role="status" aria-live="polite" aria-label="เทิร์นการต่อสู้"></section>
@@ -95,7 +103,7 @@ export class BattleUI {
         <div class="battle-layout">
           <section class="battle-board" aria-label="สถานการณ์การต่อสู้">
             <section class="arena" aria-label="สนามต่อสู้ แตะเป้าหมายเพื่อใช้สกิล">
-              <div id="game"></div><div id="field-statuses" aria-label="บัฟและดีบัฟในสนาม"></div><div id="field-targets" aria-label="แตะตัวละครในสนามเพื่อใช้สกิล"></div><div id="field-banner" role="status" aria-live="polite" hidden></div>
+              <div id="game"></div><div id="field-statuses" aria-label="บัฟและดีบัฟในสนาม"></div><div id="field-targets" aria-label="แตะตัวละครในสนามเพื่อใช้สกิล"></div><div id="field-banner" role="status" aria-live="polite" hidden></div><p id="auto-status" class="auto-status" role="status" aria-live="polite" hidden></p>
               <div class="formation-labels" aria-hidden="true"><span class="back-label">แนวหลัง</span><span class="front-label">แนวหน้า</span></div>
               <div id="start-screen"></div>
             </section>
@@ -115,7 +123,7 @@ export class BattleUI {
 
         </div></details></div>
         <footer><span>เจ้าของเทิร์น → เลือกสกิล → แตะเป้าหมายในสนาม</span><span id="save-status"></span></footer>
-      </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div>${infoTabs('battle', true, true)}<div class="info-content"><section id="battle-panel-status" role="tabpanel" aria-labelledby="battle-tab-status"><p class="status-help">เลือกยูนิตเพื่อดูบัฟและดีบัฟ · ตรวจดูได้โดยไม่ใช้เทิร์น</p><p id="status-frame" class="status-frame"></p><div id="status-units" class="status-units" role="group" aria-label="เลือกยูนิตที่ต้องการตรวจสถานะ"></div><section id="status-details" aria-live="polite" aria-atomic="true"></section></section><section id="battle-panel-settings" role="tabpanel" aria-labelledby="battle-tab-settings" hidden><section class="battle-sound" aria-labelledby="battle-sound-title"><h3 id="battle-sound-title">เพลงและเสียงเอฟเฟกต์</h3><div id="battle-sfx-controls"></div></section><section id="combat-settings" class="tutorial-settings" aria-label="ตั้งค่าภาพการต่อสู้"></section><section id="tutorial-settings" class="tutorial-settings" aria-label="ตั้งค่าคำใบ้สอนเล่น"></section></section><section id="battle-panel-guide" role="tabpanel" aria-labelledby="battle-tab-guide" hidden><section id="info-skill"></section><div id="info-host"></div></section><section id="battle-panel-history" role="tabpanel" aria-labelledby="battle-tab-history" hidden><h3>บันทึกการต่อสู้</h3><ol id="event-log" role="log" aria-live="polite"></ol></section></div></dialog>
+      </main><dialog id="game-info" aria-labelledby="info-title"><div class="info-header"><h2 id="info-title">ข้อมูลการต่อสู้</h2><button data-ui="info-close" class="quiet" aria-label="ปิดข้อมูล">✕</button></div>${infoTabs('battle', true, true)}<div class="info-content"><section id="battle-panel-status" role="tabpanel" aria-labelledby="battle-tab-status"><p class="status-help">เลือกยูนิตเพื่อดูบัฟและดีบัฟ · ตรวจดูได้โดยไม่ใช้เทิร์น</p><p id="status-frame" class="status-frame"></p><div id="status-units" class="status-units" role="group" aria-label="เลือกยูนิตที่ต้องการตรวจสถานะ"></div><section id="status-details" aria-live="polite" aria-atomic="true"></section></section><section id="battle-panel-settings" role="tabpanel" aria-labelledby="battle-tab-settings" hidden><section class="battle-sound" aria-labelledby="battle-sound-title"><h3 id="battle-sound-title">เพลงและเสียงเอฟเฟกต์</h3><div id="battle-sfx-controls"></div></section><section id="auto-settings" class="tutorial-settings auto-settings" aria-label="ตั้งค่าต่อสู้อัตโนมัติ"></section><section id="combat-settings" class="tutorial-settings" aria-label="ตั้งค่าภาพการต่อสู้"></section><section id="tutorial-settings" class="tutorial-settings" aria-label="ตั้งค่าคำใบ้สอนเล่น"></section></section><section id="battle-panel-guide" role="tabpanel" aria-labelledby="battle-tab-guide" hidden><section id="info-skill"></section><div id="info-host"></div></section><section id="battle-panel-history" role="tabpanel" aria-labelledby="battle-tab-history" hidden><h3>บันทึกการต่อสู้</h3><ol id="event-log" role="log" aria-live="polite"></ol></section></div></dialog>
 
       <section id="skill-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="skill-title" aria-describedby="skill-copy skill-availability" tabindex="-1"><div class="skill-popover-heading"><h2 id="skill-title"></h2><button data-ui="skill-close" class="quiet" aria-label="ปิดคำอธิบายสกิล">✕</button></div><p id="skill-copy"></p><p id="skill-availability"></p><small>อ่านแล้วแตะเป้าหมายในสนามเพื่อใช้สกิล</small></section>
       <dialog id="cooldown-choice" aria-labelledby="cooldown-choice-title"><h2 id="cooldown-choice-title"></h2><p id="cooldown-choice-copy"></p><div id="cooldown-choice-options" class="cooldown-choices"></div><button data-ui="cooldown-cancel" class="quiet">ยกเลิก · ยังไม่ใช้เทิร์น</button></dialog>`;
@@ -161,6 +169,9 @@ export class BattleUI {
           this.renderCombatSettings(); this.root.querySelector<HTMLElement>(`#${button.id}`)?.focus({ preventScroll: true }); break;
         }
         case 'coach-toggle': this.setHints(!this.hintsEnabled); break;
+        case 'auto-toggle': this.toggleAuto(); break;
+        case 'auto-stop': if (value !== undefined) { this.auto.stopHp = Number(value); this.autoWatch = undefined; this.saveAuto(); this.root.querySelector<HTMLElement>(`#auto-stop-${value}`)?.focus({ preventScroll: true }); } break;
+        case 'auto-skill': if (value) { const off = this.auto.off.includes(value as ActionId); this.auto.off = off ? this.auto.off.filter(a => a !== value) : [...this.auto.off, value as ActionId]; this.saveAuto(); this.root.querySelector<HTMLElement>(`#auto-skill-${value}`)?.focus({ preventScroll: true }); } break;
       }
     });
     const choiceDialog = root.querySelector<HTMLDialogElement>('#cooldown-choice')!;
@@ -198,6 +209,7 @@ export class BattleUI {
     new ResizeObserver(() => { this.positionSkill(); this.placeBackdrop(); }).observe(root);
     document.addEventListener('visibilitychange', () => {
       if (document.hidden && this.busy) this.finishPresentation(false);
+      if (!document.hidden) this.queueAuto();
     });
     window.addEventListener('resize', () => { if (this.busy) this.finishPresentation(false); });
     window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', event => {
@@ -224,7 +236,8 @@ export class BattleUI {
     this.inspectedActorId = this.heroId; this.fieldInspectedActorId = this.heroId;
     this.messages = [this.started ? 'กลับมาต่อสู้จากจังหวะที่บันทึกไว้' : `${kindLabel[session.kind]} · ${session.data.name}`];
     this.saved = true;
-    this.render(); this.scene?.refreshLayout();
+    this.autoHeld = false; this.autoWatch = undefined; this.autoNote = '';
+    this.render(); this.scene?.refreshLayout(); this.queueAuto();
   }
   private get coachingMorvane(): boolean { return this.session?.kind === 'worldBoss' && this.data.id === 'wb-morvane'; }
   private get canCoach(): boolean { return this.session?.kind === 'tutorial' || this.coachingMorvane; }
@@ -422,7 +435,7 @@ export class BattleUI {
         ...turn.events.map(event => eventThai(event, turn.after!, this.data)));
       return this.messages.length;
     });
-    if (!result.turns.length) { this.busy = false; this.heroId = currentHeroId(this.state, this.data) ?? this.heroId; this.fieldInspectedActorId = this.heroId; this.render(); return; }
+    if (!result.turns.length) { this.busy = false; this.heroId = currentHeroId(this.state, this.data) ?? this.heroId; this.fieldInspectedActorId = this.heroId; this.render(); this.queueAuto(); return; }
     this.busy = true;
     const first = result.turns[0]!;
     this.presentation = { phase: first.side, index: 0, resolution: result, frame: first.before!, logEnds, revealed: false, logStart };
@@ -491,6 +504,60 @@ export class BattleUI {
     this.fieldInspectedActorId = nextHero ?? this.fieldInspectedActorId;
     this.action = 'attack'; this.targeting = true; this.render();
     if (this.live() && !document.hidden && !this.root.closest('[inert]') && !this.root.querySelector('dialog[open]')) this.root.querySelector<HTMLElement>('#action-attack')?.focus({ preventScroll: true });
+    this.queueAuto();
+  }
+
+  // Random battles and World Boss attempts (owner 2026-11-26 “ให้บอสโลก มี Auto ด้วย”).
+  private get autoAllowed(): boolean { return this.session?.kind === 'random' || this.session?.kind === 'worldBoss'; }
+  private get autoRunning(): boolean { return this.autoAllowed && this.auto.on && !this.autoHeld; }
+  private saveAuto(): void {
+    try { this.storage?.setItem(autoSettingsKey, JSON.stringify(this.auto)); } catch { /* The choice still applies to this session. */ }
+    this.renderAuto();
+  }
+  private toggleAuto(): void {
+    if (!this.autoAllowed) return;
+    if (this.autoRunning) { this.auto.on = false; this.autoNote = ''; }
+    // Turning it on (or back on after a stop) watches the party from now: heroes already under the line stop it only by falling.
+    else { this.auto.on = true; this.autoHeld = false; this.autoNote = ''; this.autoWatch = autoWatch(this.state, this.data, this.auto.stopHp); }
+    this.saveAuto(); this.queueAuto();
+    this.root.querySelector<HTMLElement>('#battle-auto')?.focus({ preventScroll: true });
+  }
+  // One auto command after a short look at the turn owner. It waits while anything covers the battle (a dialog, another
+  // view, a hidden tab, rotation guidance) and never runs during presentation; the command goes through the same commit.
+  private queueAuto(): void {
+    if (this.autoTimer !== undefined) { clearTimeout(this.autoTimer); this.autoTimer = undefined; }
+    if (!this.autoRunning || !this.session || !this.live()) return;
+    this.autoTimer = setTimeout(() => { this.autoTimer = undefined; this.autoStep(); }, this.combatPrefs.speed === 'fast' ? 250 : 500);
+  }
+  private autoStep(): void {
+    if (!this.autoRunning || !this.session || !this.live()) return;
+    const covered = !this.started || this.busy || !this.scene?.fieldReady || document.hidden || this.root.classList.contains('view-off') || !!this.root.closest('[inert]')
+      || !!this.root.querySelector('dialog[open]') || document.documentElement.dataset.orientationBlocked === 'true';
+    if (covered) { this.queueAuto(); return; }
+    this.autoWatch ??= autoWatch(this.state, this.data, this.auto.stopHp);
+    const stop = autoStopReason(this.state, this.data, this.auto.stopHp, this.autoWatch);
+    const command = stop ? undefined : autoCommand(this.state, this.data, this.auto.off, this.session.kind === 'worldBoss' ? AUTO_LAPSE_WORLD_BOSS : AUTO_LAPSE);
+    if (!command) {
+      this.autoHeld = true;
+      this.autoNote = stop ? `ออโต้หยุด · ${actorName(stop.heroId, this.data)} ${stop.reason === 'down' ? 'ล้ม' : `เลือดต่ำกว่า ${this.auto.stopHp}%`} · สั่งเองต่อ หรือแตะ AUTO` : 'ออโต้หยุด · ไม่มีคำสั่งที่ใช้ได้ · สั่งเองต่อ';
+      this.messages.push(this.autoNote); this.render(); return;
+    }
+    this.heroId = command.heroId; this.action = command.action; this.targeting = true;
+    this.present(resolveCommand(this.state, this.data, command, true));
+  }
+  private renderAuto(): void {
+    const button = this.root.querySelector<HTMLButtonElement>('#battle-auto')!;
+    button.hidden = !this.autoAllowed;
+    button.setAttribute('aria-pressed', String(this.autoRunning));
+    button.setAttribute('aria-label', this.autoRunning ? 'ต่อสู้อัตโนมัติอยู่ · แตะเพื่อหยุด' : 'เริ่มต่อสู้อัตโนมัติ');
+    const status = this.root.querySelector<HTMLElement>('#auto-status')!;
+    const note = this.autoAllowed && this.autoHeld && this.live() ? this.autoNote : '';
+    status.hidden = !note; if (status.textContent !== note) status.textContent = note;
+    const skills = [...new Set(this.data.heroes.flatMap(h => h.actions))].filter(a => a !== 'attack');
+    const users = (a: ActionId) => this.data.heroes.filter(h => h.actions.includes(a)).map(h => actorName(h.id, this.data)).join(', ');
+    this.set('auto-settings', `<strong>ต่อสู้อัตโนมัติ (AUTO)</strong><p>ใช้ได้ในการต่อสู้สุ่มและบอสโลก · เลือกสกิลจากผลของเทิร์นนี้ ไม่อ่านท่าที่ศัตรูประกาศ ไม่ตั้งรับหรือขัดจังหวะให้ และบางเทิร์นแค่โจมตีพื้นฐาน · หยุดเองเมื่อฮีโร่ล้ม</p>`
+      + `<p>หยุดเมื่อเลือดฮีโร่ต่ำกว่า</p><div class="auto-choices" role="group" aria-label="หยุดออโต้เมื่อเลือดต่ำกว่า">${AUTO_STOP_CHOICES.map(v => `<button id="auto-stop-${v}" data-ui="auto-stop" data-value="${v}" class="quiet" aria-pressed="${this.auto.stopHp === v}">${v ? `${v}%` : 'ไม่หยุด'}</button>`).join('')}</div>`
+      + (skills.length ? `<p>สกิลที่ออโต้ใช้ได้ (โจมตีพื้นฐานใช้ได้เสมอ)</p><div class="auto-choices" role="group" aria-label="สกิลที่ออโต้ใช้ได้">${skills.map(a => { const on = !this.auto.off.includes(a); return `<button id="auto-skill-${a}" data-ui="auto-skill" data-value="${a}" class="quiet" aria-pressed="${on}" aria-label="${escapeHtml(`${this.data.skills[a].name} · ${users(a)} · ${on ? 'ออโต้ใช้ได้' : 'ออโต้ไม่ใช้'}`)}">${escapeHtml(this.data.skills[a].name)}<small>${on ? 'ใช้' : 'ไม่ใช้'}</small></button>`; }).join('')}</div>` : ''));
   }
 
   // Perf R6: rewrite a HUD part only when its markup changed (most renders change one or two of ~25 parts).
@@ -713,7 +780,7 @@ export class BattleUI {
     this.set('info-skill', `<h3>${d.skills[this.action].name} · ${heroText[this.heroId]!.name}</h3><p>${skillDescription(this.action, this.heroId, d)}</p>`);
     this.root.querySelector<HTMLElement>('#tutorial-settings')!.hidden = !this.canCoach;
     this.set('tutorial-settings', `<strong>${this.coachingMorvane ? 'คำแนะนำ Morvane' : 'คำแนะนำศึกแรก'}</strong><p>${this.coachingMorvane ? morvaneAdvice : 'อ่านแผนศัตรู · ตั้งรับ · ติดตราแล้วตีเป้าเดิม · ขัดจังหวะ · รักษา'}</p><button id="coach-toggle" data-ui="coach-toggle" class="quiet" aria-pressed="${this.hintsEnabled}">${this.hintsEnabled ? 'ปิดคำแนะนำ' : 'เปิดคำแนะนำ'}</button>`);
-    this.renderCombatSettings(); this.renderStatuses();
+    this.renderCombatSettings(); this.renderAuto(); this.renderStatuses();
     this.renderPhase(); this.renderSituation(); this.renderSelectedHero(); this.renderParty(disabled); this.renderCommands(disabled);
     this.set('rules', `<h3>ลงสนาม ${d.heroes.length} คน · ศัตรูเล็งตามหมายเลขช่อง</h3><p>รวมฮีโร่และศัตรูเรียง SPD มากไปน้อยเมื่อเริ่มรอบ คนละ 1 ครั้งต่อรอบ ข้ามตัวที่ล้ม SPD เท่ากันใช้ลำดับรายชื่อฮีโร่ก่อน ตามด้วยศัตรู</p><p>แนวหน้าที่ยังยืนอยู่รับการโจมตีกายภาพก่อน พลังงานโจมตีแนวหลังได้ เมื่อแนวหน้าล้มหมด กายภาพจะถึงแนวหลัง ท่าของศัตรูเล็งหมายเลขช่องในทีม ใครยืนช่องนั้นคือเป้า แผนโจมตีเป็นการคาดการณ์ตามคนที่ยังยืนอยู่ เมื่อถึงเทิร์นศัตรูจึงกำหนดเป้าหมายจริง</p>${d.heroes.map(hero => `<h3>${heroText[hero.id]!.name} · ${heroText[hero.id]!.role} · SPD ${hero.speed} · ${hero.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</h3><dl>${hero.actions.map(action => `<dt>${d.skills[action].name} (${d.skills[action].english})</dt><dd>${skillDescription(action, hero.id, d)}</dd>`).join('')}</dl>`).join('')}<p>แต่ละตัวลงมือ 1 ครั้งต่อรอบ สกิลคูลดาวน์ 2 รอบที่ใช้ในรอบ 1 จะพร้อมในรอบ 3 พรฟื้นฟูคูลดาวน์ 3 รอบ ${d.enemies.map(e => `${actorName(e.id, d)} SPD ${e.speed}`).join(' · ')} การรักษาไม่ชุบชีวิต โล่เวทไม่ซ้อนกัน เป้าหมายเสริมคือชนะโดยรักษาทีมครบ ${d.heroes.length} คน</p>`);
     const p = this.presentation;

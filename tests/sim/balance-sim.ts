@@ -23,11 +23,14 @@ import {
   newExpedition, draftPick, questDone, heroDef, interactMine, loadoutActions, pendingEvent, bossSealed, rollPercent, recordBattle, rest, revive, rosterIds, startPrologue, swapMembers, tileAt, usePotion, fatigueOf, fatigueStep, fatigueCut, chooseEvent, eventChoiceReason, potionReason,
 } from '../../src/core/world/world';
 import { battleLesson } from '../../src/ui/tutorial';
+import { autoCommand } from '../../src/core/battle/auto';
 
 export type Policy = 'rush' | 'explorer';
 // How battles are played: the teaching advisor (reads every intent: an upper bound), a casual player who follows
 // the advice on about 70% of turns and otherwise attacks, or blind basic attacks on the first valid target (a lower bound).
-export type Style = 'advisor' | 'casual' | 'attack';
+export type Style = 'advisor' | 'casual' | 'attack' | 'auto';
+// `auto`: random battles are played by auto battle (src/core/battle/auto.ts, played to the end with no HP stop), every
+// other battle by the advisor (auto battle runs only in random battles).
 // `low`: the party's lowest HP% at any point of the battle (summed over battles fought).
 export interface BattleStat { fought: number; won: number; hpAfter: number; low: number; rounds?: number }
 export interface ExpeditionReport {
@@ -171,7 +174,8 @@ export function playOut(s: ExpeditionState, style: Style, salt = 0, addsFirst = 
   const data = battleData(s, map, lookup)!; let bs = battleState(s, map, lookup)!;
   const max = data.heroes.reduce((a, h) => a + h.maxHp, 0); const now = () => bs.heroes.reduce((a, h) => a + h.hp, 0) / max * 100; let low = now();
   for (let guard = 0; bs.outcome === 'active' && guard < 400; guard++) {
-    const follow = style === 'advisor' || (style === 'casual' && rollPercent((s.seed ^ 0x9e3779b9 ^ salt) >>> 0, s.rolls * 997 + bs.commands.length) < 70);
+    if (style === 'auto' && s.battle?.kind === 'random') { const c = autoCommand(bs, data); if (c) { bs = resolveCommand(bs, data, c).state; low = Math.min(low, now()); continue; } }
+    const follow = style === 'advisor' || style === 'auto' || (style === 'casual' && rollPercent((s.seed ^ 0x9e3779b9 ^ salt) >>> 0, s.rolls * 997 + bs.commands.length) < 70);
     const l = follow ? battleLesson(bs, data) : undefined;
     if (l) { bs = resolveCommand(bs, data, { beat: bs.beat, heroId: l.heroId, action: l.action, targetId: l.targetId,...(l.recipientId?{recipientId:l.recipientId}:{}), ...("cooldownAction" in l ? { cooldownAction: l.cooldownAction } : {}), ...("cooldownTargetId" in l ? { cooldownTargetId: l.cooldownTargetId } : {}) }).state; low = Math.min(low, now()); continue; }
     const hero = currentHeroId(bs, data)!; const options = targetOptions(bs, data, hero, 'attack').filter(o => o.valid);
