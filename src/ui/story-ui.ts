@@ -46,9 +46,13 @@ const recruitLines: Readonly<Record<string, string>> = {
   garran: 'ข้าการ์แรน เฝ้าเส้นทางนี้มาคนเดียวตั้งแต่หน่วยของข้าถูกป่ากลืน… ถ้าท่านจะฝ่าไป ทวนของข้าขอไปด้วย',
   healer: 'ข้าพาผู้บาดเจ็บถึงที่ปลอดภัยแล้ว… ท่านผ่านป่ามาถึงเจ้าป่าหนามได้จริง เซเรนขอสู้เคียงข้างและเดินทางไปกับท่าน',
 };
-export const recruitStory = (heroes: readonly string[], commander: string): readonly StoryPanel[] => heroes.flatMap(id => [
-  { speaker: id as Speaker, text: recruitLines[id] ?? `${heroText[id]?.name ?? ''} ขอเข้าร่วมทางไปกับท่าน`, scene: 'retreat' as const },
-  { speaker: 'narrator' as const, text: `${heroText[id]?.role ?? ''} ${heroText[id]?.name ?? ''} เข้าร่วมทีมของผู้บัญชาการ ${commander} แล้ว`, scene: 'retreat' as const },
+const mineLines: Record<string, string> = {
+  brann: 'ข้าเคยคุมคนงานที่นี่ ก่อนวาร์กอธสั่งให้ขุดผลึกไปทำอาวุธ เห็นรอยมือบนผนังไหม คนงานใช้มันบอกทางกลับลาน',
+  kael: 'พวกมันส่งคนมาปิดทางออก ข้าใช้หมัดถ่วงเวลาให้คนงานหนี ข้าจะไปกับท่าน คนที่ยังติดอยู่ต้องได้ออกจากที่นี่',
+};
+export const recruitStory = (heroes: readonly string[], commander: string, mineCompany?: readonly string[]): readonly StoryPanel[] => heroes.flatMap(id => [
+  { speaker: id as Speaker, text: (mineCompany ? mineLines[id] : undefined) ?? recruitLines[id] ?? `${heroText[id]?.name ?? ''} ขอเข้าร่วมทางไปกับท่าน`, scene: 'retreat' as const },
+  { speaker: 'narrator' as const, text: mineCompany?.includes(id) ? `พบ ${heroText[id]?.name ?? ''} ในเหมือง · รับเศษชะตาเมื่อกลับค่าย` : `${heroText[id]?.role ?? ''} ${heroText[id]?.name ?? ''} เข้าร่วมทีมของผู้บัญชาการ ${commander} แล้ว`, scene: 'retreat' as const },
 ]);
 
 export class StoryUI {

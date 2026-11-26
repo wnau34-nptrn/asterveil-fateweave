@@ -1,12 +1,12 @@
-# Current state — updated 2026-11-23 (map 4 ทะเลสาบเงาจันทร์)
+# Current state — updated 2026-11-26 (Map 5 balance at 48 seeds)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
 ## Game
 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml` (runs the Chromium suite before deploy).
-- Save **v68** (map 4 tide/notes/journal, camp cap; v67 first fate weave; v66 gacha). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
-- Maps: 1 ซากชายแดน, 2 เส้นทางป่าทึบ, 3 แนวรอยแยก, **4 ทะเลสาบเงาจันทร์** (concepts for 4–10: [CHAPTER1_MAPS_TH](docs/design/CHAPTER1_MAPS_TH.md)).
+- Save **v69 on the mine branch** (mine progress; v68 map 4 tide/notes/journal, camp cap; v67 first fate weave; v66 gacha). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
+- Maps: 1 ซากชายแดน, 2 เส้นทางป่าทึบ, 3 แนวรอยแยก, 4 ทะเลสาบเงาจันทร์, **5 เหมืองผลึกร้าง** (work branch; concepts for 4–10: [CHAPTER1_MAPS_TH](docs/design/CHAPTER1_MAPS_TH.md)).
 - **Map 4 (OD-60)**: rules/content/save #336, UI #337 and art #342–#345. Owner approved the four ordinary foes and the map screens 2026-11-23 (“อนุมัติ”). Tide every 8 steps, seal 2 of 3, ferryman → boat, reflections/notes → journal, Lio camp 1 / Cerise camp 2, semi-chibi Water Spirit with six 768px moves and event-driven VFX. [390px review](docs/validation/map4-lake/README_TH.md).
 - Camp level cap = 10 + 3 per first clear past map 2 (≤30); tree points still stop at Lv10.
 - P10 gacha (OD-58) live; cabinet after MAP1 with 10 first-clear tickets (OD-59). Unlock pacing #202.
@@ -29,6 +29,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
+- Map 5 (design approved, “ทำตามที่คุณแนะนำ”): unlocks after the lake; save v69; Crystal Giant tuned at 48 seeds 2026-11-26 (`crystal-giant` v2: casual rush 78%, basic-only ≤22%). PR #356. Giant R1 at 1.32× picked 2026-11-26; Codex art brief [CODEX-ART-MAP5-MINE-TH](docs/handoffs/CODEX-ART-MAP5-MINE-TH.md). Side events remain. [Mine validation](docs/validation/map5-mine/README_TH.md).
 - 2026-11-25: boss charge holds sit on the body. Bosses wear a silhouette aura in their own colour: light all battle, stronger while charging. Boss crowns sit above the rendered figure. The owner said “นำเข้าเกมได้เลย”. Mobile frame rate is not measured yet. [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
 - Game Feel [Draft PR #353](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/353): เสียงและภาพโจมตีตามอาวุธครบ 15 ตัวและตัวละครเซฟเก่า 2 ตัว. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
 - Game Feel #352 รวมแล้ว (`3b746ac`): จังหวะเสียง Duelist/Execute และเสียงโล่รับเต็ม. [ผลตรวจ](docs/validation/steel-contact-2026-11-24/README_TH.md).
@@ -41,4 +42,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-Start the Map 5 (Lv13–16, abandoned crystal mine) design pass under OD-60. Read [Chapter 1 map concepts](docs/design/CHAPTER1_MAPS_TH.md) and Map 4's validation first. Confirm the mine, lantern and Crystal Giant brief before expanding into art or implementation.
+Import Codex's Map 5 art as it arrives ([brief](docs/handoffs/CODEX-ART-MAP5-MINE-TH.md): tiles, props, foes, then the R1 Crystal Giant motion sample 4a for owner approval before 4b) with the `fateweave-art-intake` skill; capture 390px with `tests/browser/mine-clips.spec.ts`. Read [the Map 5 validation](docs/validation/map5-mine/README_TH.md) first.

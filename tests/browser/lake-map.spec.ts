@@ -78,7 +78,7 @@ test('the camp journal lists found pages', async ({ page }) => {
   const p = company({ notes: ['note-keeper-letter', 'memory:shore-reflection'] });
   await open(page, currentSave({ profile: p, run: null }), false);
   await page.locator('#lobby-board').click(); await page.locator('#quest-tab-camp').click();
-  await expect(page.locator('#journal-title')).toContainText('2/4');
+  await expect(page.locator('#journal-title')).toContainText('2/6');
   await page.locator('#journal-note-keeper-letter summary').click();
   await expect(page.locator('#journal-note-keeper-letter')).toContainText('ผู้ดูแล');
   await shot(page, 'lake-journal');

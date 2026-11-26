@@ -420,6 +420,60 @@ export const waterSpirit: EncounterDefinition = at80({
   ],
 });
 
+// Map 5 mechanics use existing bodies until its art pass.
+const mineBat = { ...S.ruinBat, name: 'Crystal Bat', displayName: 'ค้างคาวผลึก', hp: 28,
+  moves: [{ name: 'Crystal Cry', damage: 7, kind: 'energy', slot: 3 }] } as const;
+const oreGolem = { ...S.stoneCrab, name: 'Ore Golem', displayName: 'โกเลมแร่', art: 'foe_golem', hp: 72, large: true,
+  moves: [{ name: 'Ore Fist', damage: 10, kind: 'physical', slot: 0 }] } as const;
+const mineWorker = { ...S.vargothGuard, name: 'Possessed Worker', displayName: 'คนงานถูกสิง', hp: 35, large: false,
+  moves: [{ name: 'Pick Swing', damage: 6, kind: 'physical', slot: 0 }] } as const;
+const mineShard = { ...S.shardCrawler, name: 'Crystal Fragment', displayName: 'ผลึกย่อย', art: 'foe_shard_crawler', hp: 29,
+  moves: [{ name: 'Shard Prick', damage: 22, kind: 'physical', slot: 1 }] } as const;
+
+export const mineYardEncounter: EncounterDefinition = { ...veilSiege, id: 'mine-yard-patrol', version: 1, level: 13, name: 'กองเฝ้าลานคนงาน',
+  ...foes(13, [['f1', oreGolem], ['b1', mineBat], ['f2', mineWorker, { surrenderOre: 4 }]]) };
+export const mineTunnelEncounter: EncounterDefinition = { ...veilSiege, id: 'mine-tunnel-patrol', version: 1, level: 14, name: 'ฝูงอุโมงค์แร่',
+  ...foes(14, [['f1', oreGolem], ['b1', mineBat], ['b2', mineBat]]) };
+export const eliteMineOverseer: EncounterDefinition = {
+  ...veilSiege, id: 'elite-mine-overseer', version: 1, level: 14, name: 'หัวหน้าคุมเหมือง',
+  enemies: [{ id: 'f1', row: 'front', large: true, speed: 80, name: 'Mine Overseer', displayName: 'หัวหน้าคุมเหมือง', maxHp: 440, color: 0x99857c, art: 'foe_vargoth_guard' },
+    ...foes(14, [['f2', mineWorker, { surrenderOre: 4 }]]).enemies],
+  intents: [{ sourceId: 'f1', targetSlot: 0, name: 'Overseer Hammer', damage: 40, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 3, name: 'Crystal Spark', damage: 32, kind: 'energy' },
+    ...foes(14, [['f2', mineWorker, { surrenderOre: 4 }]]).intents],
+};
+export const eliteCrystalEater: EncounterDefinition = {
+  ...veilSiege, id: 'elite-crystal-eater', version: 1, level: 15, name: 'ตัวกินผลึก',
+  enemies: [{ id: 'f1', row: 'front', large: true, speed: 88, name: 'Crystal Eater', displayName: 'ตัวกินผลึก', maxHp: 520, color: 0xa778c9, art: 'foe_tusker' }, ...foes(15, [['b2', mineBat]]).enemies],
+  intents: [{ sourceId: 'f1', targetSlot: 0, name: 'Crystal Bite', damage: 46, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 0, name: 'Shard Eruption', damage: 28, kind: 'energy', all: true }, ...foes(15, [['b2', mineBat]]).intents],
+};
+const giantFragments = foes(16, [['f2', mineShard, { reserve: true }], ['f3', mineShard, { reserve: true }]]);
+export const crystalGiant: EncounterDefinition = {
+  ...veilSiege, heroes: fiveHeroes, id: 'crystal-giant', version: 2, level: 16, name: 'ศึกยักษ์ผลึก',
+  phases: [{ sourceId: 'f1', below: 50, summon: ['f2', 'f3'], immediate: true, name: 'Crystal Split' }],
+  enemies: [
+    { id: 'f1', row: 'front', boss: true, large: true, speed: 86, name: 'Crystal Giant', displayName: 'ยักษ์ผลึก',
+      maxHp: 580, color: 0x9c82d5, art: 'foe_golem', crystalArmor: { name: 'Crystal Armor', reflect: 35, cap: 15, hits: 3, turns: 2 } },
+    ...giantFragments.enemies,
+  ],
+  intents: [
+    { sourceId: 'f1', targetSlot: 0, name: 'Crystal Fist', damage: 225, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 3, name: 'Shard Beam', damage: 205, kind: 'energy' },
+    { sourceId: 'f1', targetSlot: 0, name: 'Crystal Collapse', damage: 68, kind: 'energy', all: true, unstoppable: true, crystalCollapse: true },
+    ...giantFragments.intents,
+  ],
+};
+
+// The mine is balanced on levelled campaign parties. Keep the legacy unscaled encounter fixtures and assets
+// under their existing contracts; the mine still ships through lookup and the presentation/budget audit.
+const rawMineEncounters = [mineYardEncounter, mineTunnelEncounter, eliteMineOverseer, eliteCrystalEater, crystalGiant];
+export const MINE_ENCOUNTER_IDS: ReadonlySet<string> = new Set(rawMineEncounters.map(encounter => encounter.id));
+export const MINE_STANDIN_MOVES: ReadonlySet<string> = new Set([
+  ...rawMineEncounters.flatMap(e => [...e.intents.map(i => i.name), ...e.phases?.map(p => p.name) ?? [],
+    ...e.enemies.flatMap(foe => foe.crystalArmor ? [foe.crystalArmor.name] : [])]),
+]);
+
 // Map 4 encounters still awaiting dedicated body art. The per-body audits skip any stand-ins.
 export const LAKE_STANDINS: ReadonlySet<string> = new Set();
 
@@ -456,6 +510,7 @@ export const encounters: readonly EncounterDefinition[] = [firstClash, scoutPatr
 // `presentedEncounters` is what the presentation coverage and the texture-budget audit walk: `encounters` plus every trio boss
 // whose moves have body clips (Kragmor with WB-A, step 5; Valdrakk/Morvane join with WB-B/WB-C). They are fought from
 // `WorldBossTrioRules.from` (week 2969, OD-52).
-export const presentedEncounters: readonly EncounterDefinition[] = [...encounters, wbKragmor, wbValdrakk, wbMorvane];
-const lookupList: readonly EncounterDefinition[] = [...encounters, ...WORLD_BOSS_TRIO];
+export const mineEncounters: readonly EncounterDefinition[] = rawMineEncounters.map(withAims);
+export const presentedEncounters: readonly EncounterDefinition[] = [...encounters, ...mineEncounters, wbKragmor, wbValdrakk, wbMorvane];
+const lookupList: readonly EncounterDefinition[] = [...encounters, ...mineEncounters, ...WORLD_BOSS_TRIO];
 export const encounterById = (id: string): EncounterDefinition | undefined => lookupList.find(e => e.id === id);

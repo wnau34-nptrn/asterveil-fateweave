@@ -363,7 +363,7 @@ function hexTicks(state: BattleState, data: EncounterDefinition, events: BattleE
 // Only an announced normal single-target move may be bent: whole-party moves, charges, phase turns and unstoppable
 // signature moves are locked. A bent move keeps its power, kind and attacker and lands on another foe; it never reaches an
 // ally, never chains and never cancels the move. SPD and the queue never change.
-export const lockedMove = (intent: Intent | IntentDefinition | null | undefined): boolean => !intent || !!intent.special || !!intent.all || !!intent.charge || !!intent.unstoppable || !!intent.summon || !!intent.mend;
+export const lockedMove = (intent: Intent | IntentDefinition | null | undefined): boolean => !intent || !!intent.special || !!intent.all || !!intent.charge || !!intent.unstoppable || !!intent.summon || !!intent.mend || !!intent.raiseCrystalArmor;
 // Seer rework (owner 2026-11-06 "เห็นด้วย", save v51): a foe's "big move" is a move marked charge, all or unstoppable, or the
 // top damage of its current cycle when that cycle has at least two different damages. A phase turn is never one.
 export function bigMove(state: BattleState, data: EncounterDefinition, enemyId: string, intent: Intent | IntentDefinition | null | undefined): boolean {
@@ -494,7 +494,9 @@ function taunted(state: BattleState, data: EncounterDefinition, enemyId: string,
 export function pendingPhase(state: BattleState, data: EncounterDefinition, id: string): BossPhase | undefined {
   const foe = state.enemies.find(e => e.id === id); const def = data.enemies.find(e => e.id === id);
   const next = data.phases?.filter(p => p.sourceId === id)[foe?.phase ?? 0];
-  return foe && def && next && foe.hp > 0 && foe.hp * 100 <= def.maxHp * next.below ? next : undefined;
+  if (!foe || !def || !next || foe.hp <= 0) return;
+  const threshold = def.maxHp * next.below;
+  if (next.immediate ? foe.hp * 100 < threshold : foe.hp * 100 <= threshold) return next;
 }
 // The move cycle a foe uses now: its current phase's moves (a phase without moves of its own keeps the latest earlier
 // cycle). The cycle counts from the round after the phase began.
@@ -518,10 +520,16 @@ export function enemyIntent(state: BattleState, data: EncounterDefinition, id: s
   // A reached phase takes the boss's next turn: it summons and changes its moves instead of attacking. It cannot be
   // cancelled; it names no real target (the first standing hero only keeps the intent shape).
   const phase = pendingPhase(state, data, id);
-  if (phase) return alive[0] ? { sourceId: id, targetSlot: 0, name: phase.name, damage: 0, kind: 'energy', unstoppable: true, special: 'phase', targetId: alive[0].id, beat: state.beat, round } : null;
+  if (phase && !phase.immediate) return alive[0] ? { sourceId: id, targetSlot: 0, name: phase.name, damage: 0, kind: 'energy', unstoppable: true, special: 'phase', targetId: alive[0].id, beat: state.beat, round } : null;
   // Each phase's moves cycle from the round after the phase began (the opening cycle from round 1).
   const moves = phaseMoves(state, data, id);
-  const base = moves[cycleIndex(state, data, id, round)];
+  const armor = round === 1 ? data.enemies.find(e => e.id === id)?.crystalArmor : undefined;
+  const base: IntentDefinition | undefined = armor
+    ? { sourceId: id, targetSlot: 0, name: armor.name, damage: 0, kind: 'energy', unstoppable: true, raiseCrystalArmor: true }
+    : moves.some(move => move.crystalCollapse)
+      ? round % 3 === 0 ? moves.find(move => move.crystalCollapse)
+        : moves.filter(move => !move.crystalCollapse)[(round - 1 - Math.floor((round - 1) / 3)) % (moves.length - 1)]
+      : moves[cycleIndex(state, data, id, round)];
   if (!base) return null;
   // P11-05 R1: after its breakable charge was cancelled, the move that would follow is staggered (no damage, no target).
   if (foe.staggerRound === round) return alive[0] ? { sourceId: id, targetSlot: 0, name: 'Staggered', damage: 0, kind: base.kind, special: 'stagger', staggeredMove: base.name, targetId: alive[0].id, beat: state.beat, round } : null;
@@ -579,7 +587,22 @@ function settled(state: BattleState, data: EncounterDefinition, events: BattleEv
   const bosses = data.phases?.length ? data.enemies.filter(e => e.boss) : [];
   if (state.enemies.every(e => e.hp <= 0) || (bosses.length && bosses.every(b => state.enemies.find(e => e.id === b.id)!.hp <= 0))) state.outcome = 'victory';
   else if (state.heroes.every(h => h.hp <= 0)) state.outcome = 'defeat';
-  if (state.outcome === 'active') return false;
+  if (state.outcome === 'active') {
+    if (data.enemies.some(e => e.surrenderOre)) {
+      const survivors = state.enemies.filter(e => e.hp > 0);
+      if (survivors.length && survivors.every(e => data.enemies.find(def => def.id === e.id)?.surrenderOre)) {
+        for (const enemy of survivors) {
+          enemy.surrendered = true;
+          events.push({ type: 'buff', sourceId: enemy.id, targetId: enemy.id, text: 'The worker surrenders.' });
+        }
+        state.outcome = 'victory';
+      }
+    }
+    if (state.outcome === 'active') {
+      beginImmediatePhases(state, data, events);
+      return false;
+    }
+  }
   state.intent = null; state.guard = null; state.counter = null; state.taunt = null; state.song = null; state.rally = null; state.sanctuary = null; state.solace = null;
   if (state.challenge) state.challenge = null; if (state.bulwark) state.bulwark = null; if (state.charge) state.charge = null;
   if (state.parry) state.parry = null; if (state.halo) state.halo = null; if (state.prayerEcho) state.prayerEcho = null; if (state.tracking) delete state.tracking;
@@ -802,13 +825,20 @@ function spearFury(state: BattleState, data: EncounterDefinition, heroId: string
 // next round) and its moves switch to the new phase's cycle.
 function beginPhase(state: BattleState, data: EncounterDefinition, enemy: EnemyState, events: BattleEvent[]): void {
   const phase = pendingPhase(state, data, enemy.id); if (!phase) return;
-  enemy.phase = (enemy.phase ?? 0) + 1; enemy.phaseRound = state.round; delete enemy.cycleLag; delete enemy.postpone; delete enemy.deflect; delete enemy.staggerRound;
+  enemy.phase = (enemy.phase ?? 0) + 1;
+  if (!phase.immediate) {
+    enemy.phaseRound = state.round; delete enemy.cycleLag; delete enemy.postpone; delete enemy.deflect; delete enemy.staggerRound;
+  }
   events.push({ type: 'phase', sourceId: enemy.id, targetId: enemy.id, text: phase.name });
   for (const slot of phase.summon ?? []) {
     const minion = state.enemies.find(e => e.id === slot); const def = data.enemies.find(e => e.id === slot);
     if (!roomFor(state, data, def)) continue;
-    if (minion?.absent && def) { delete minion.absent; minion.hp = def.maxHp; events.push({ type: 'summon', sourceId: enemy.id, targetId: slot, text: 'Reinforcements.' }); }
+    if (minion?.absent && def) { delete minion.absent; minion.hp = def.maxHp; if (phase.immediate) minion.summonedRound = state.round; events.push({ type: 'summon', sourceId: enemy.id, targetId: slot, text: 'Reinforcements.' }); }
   }
+}
+function beginImmediatePhases(state: BattleState, data: EncounterDefinition, events: BattleEvent[]): void {
+  if (!data.phases?.some(p => p.immediate) || state.heroes.every(h => h.hp <= 0)) return;
+  for (const enemy of state.enemies) if (pendingPhase(state, data, enemy.id)?.immediate) beginPhase(state, data, enemy, events);
 }
 // P02: a full field (five standing, or three in that row) leaves a summoned foe waiting; it never replaces anyone.
 function roomFor(state: BattleState, data: EncounterDefinition, def: EncounterDefinition['enemies'][number] | undefined): boolean {
@@ -927,6 +957,11 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
         const by = enemy.interruptedBy;
         if (by && intent.kind === 'energy' && hasCap(data, by, 'sigilreflect') && living(state, by)) strikeBack(state, data, by, enemy, Math.floor(intent.damage * capAmount(data, by, 'sigilreflect') / 100), events, 'The seal reflects the move.');
       } else if (intent.charge) events.push({ type: 'charge', sourceId: actorId, targetId: intent.targetId, text: 'Gathering power.' });
+      else if (intent.raiseCrystalArmor) {
+        const armor = data.enemies.find(e => e.id === actorId)!.crystalArmor!;
+        enemy.crystalArmor = { until: state.round + armor.turns, hits: armor.hits };
+        events.push({ type: 'buff', sourceId: actorId, targetId: actorId, text: 'Crystal armor rises.' });
+      }
       else if (intent.summon) summonMove(state, data, enemy, intent.summon, events);
       else if (intent.mend) {
         // Map 4: the foe mends itself (no target, never above its max HP).
@@ -934,7 +969,11 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
         if (amount > 0) { enemy.hp += amount; enemy.mended = (enemy.mended ?? 0) + 1; events.push({ type: 'heal', sourceId: actorId, targetId: actorId, amount, text: 'The water mends.' }); }
       }
       // A whole-party move strikes every standing hero; Guard cannot cover it.
-      else if (intent.all) { for (const h of state.heroes.filter(x => x.hp > 0)) if (h.hp > 0) strike(h, null); }
+      else if (intent.all) {
+        for (const h of state.heroes.filter(x => x.hp > 0)) {
+          if (h.hp > 0) strike(h, intent.crystalCollapse && g?.sourceId === actorId && g.targetId === h.id && living(state, g.heroId) ? g : null);
+        }
+      }
       else if (enemy.deflect && enemy.deflect.until >= state.round && !lockedMove(intent) && state.enemies.some(e => e.id === enemy.deflect!.recipientId && e.hp > 0)) {
         // A Seer's deflection: the same move (its enrage/weaken included) lands on the chosen foe, never on a hero.
         const bent = enemy.deflect; const recipient = state.enemies.find(e => e.id === bent.recipientId)!; delete enemy.deflect;
@@ -955,10 +994,15 @@ function automaticTurns(state: BattleState, data: EncounterDefinition, turns: Tu
       }
       delete enemy.drawnBy;
     }
+    if (enemy.crystalArmor && state.round >= enemy.crystalArmor.until) {
+      delete enemy.crystalArmor;
+      events.push({ type: 'dispel', sourceId: enemy.id, targetId: enemy.id, text: 'Crystal armor expires.' });
+    }
     delete enemy.interruptedRound; delete enemy.interruptedBy; delete enemy.weaken; delete enemy.clash;
     if (enemy.staggerRound !== undefined && enemy.staggerRound <= state.round) delete enemy.staggerRound;
     // A shoved foe (and its partner) return to their rows once its own next turn ends.
     if (enemy.shoved) { const partner = enemy.shoved.partnerId; delete enemy.shoved; events.push({ type: 'shove', targetId: enemy.id, text: 'Back in its row.' }); if (partner) events.push({ type: 'shove', targetId: partner, text: 'Back in its row.' }); }
+    beginImmediatePhases(state, data, events);
     const frame = structuredClone(state); const beat = state.beat; const round = state.round;
     finishOrAdvance(state, data, events);
     if (state.outcome !== 'active') { frame.outcome = state.outcome; frame.intent = null; }
@@ -1092,7 +1136,7 @@ export function targetOptions(state: BattleState, data: EncounterDefinition, her
   if (['guard', 'ward', 'heal', 'sanctuary'].includes(action)) return data.heroes.map(h => {
     const actor = state.heroes.find(s => s.id === h.id)!;
     const reason = unavailable || (actor.hp <= 0 ? 'This hero is down.' : action === 'sanctuary' && actor.sanctum ? 'This ally already has a sanctuary.' :
-      action === 'guard' && state.intent?.targetId !== h.id ? 'Guard must protect the announced target.' :
+      action === 'guard' && !state.intent?.crystalCollapse && state.intent?.targetId !== h.id ? 'Guard must protect the announced target.' :
       action === 'heal' && actor.hp >= h.maxHp && overflowBarrier(data, heroId, actor) <= 0 ? 'This ally is at full health.' :
       action === 'ward' && actor.barrier >= skillPower(data, heroId, 'ward') ? 'This ally already has this barrier.' : '');
     return { id: h.id, name: h.name, valid: !reason, reason };
@@ -1118,12 +1162,16 @@ export function validateCommand(state: BattleState, data: EncounterDefinition, c
   const target = targetOptions(state, data, command.heroId, command.action).find(t => t.id === command.targetId);
   return target?.valid ? '' : target?.reason || 'Invalid target.';
 }
+const crystalMagic: ReadonlySet<ActionId> = new Set(['bolt', 'storm', 'dispel', 'sigil', 'starneedle', 'crossing', 'readorbit', 'note', 'saintarc', 'saintstrike', 'communion', 'sharewound', 'vowstrike', 'lastlight', 'finale']);
+const crystalBreakers: ReadonlySet<ActionId> = new Set(['bash', 'slam', 'quake', 'tremor', 'releasefist', 'perfectfist']);
+
 export function resolveCommand(initial: BattleState, data: EncounterDefinition, command: Command, presentation = false): Resolution {
   const invalid = validateCommand(initial, data, command); if (invalid) throw new Error(invalid);
   const state = structuredClone(initial); const events: BattleEvent[] = []; const turns: TurnStage[] = [];
   const hero = data.heroes.find(h => h.id === command.heroId)!; const actor = state.heroes.find(h => h.id === hero.id)!;
   const base = data.skills[command.action]; const enemy = state.enemies.find(e => e.id === command.targetId);
   const skill = { ...base, power: skillPower(data, hero.id, command.action), cooldown: skillCooldown(data, hero.id, command.action) };
+  const crystalHits = new Map<EnemyState, number>();
   let directDamage = 0;
   let cooldownAdjustment = 0;
   const chiBefore = actor.chi ?? 0;
@@ -1147,6 +1195,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
     const solo = (actor.solo?.round ?? 0) >= state.round && state.song?.action === 'valor' && living(state, state.song.heroId) ? songPower(data, state.song.heroId, 'valor') * (SOLO_TIMES - 1) : 0;
     const spite = power > 0 ? grudge : 0; if (spite) grudge = 0;
     const amount = Math.min(foe.hp, tired(data, hero.id, veiled(state, data, foe, raised + boss + solo + spite + hitBonus(state, data, foe.id) + talentHitBonus(state, data, hero.id, foe)))); foe.hp -= amount; directDamage += amount;
+    if (amount > 0 && foe.crystalArmor) crystalHits.set(foe, (crystalHits.get(foe) ?? 0) + amount);
     events.push({ type: 'damage', sourceId: hero.id, targetId: foe.id, amount, text });
     if (!foe.hp) { events.push({ type: 'down', targetId: foe.id, text: 'Enemy falls.' }); chainReaction(state, data, foe, events); reap(state, data, hero.id, foe, events); }
     // A coated blade (save v56) poisons each foe it lands on, one stack a hit.
@@ -1741,6 +1790,24 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
       if (hasCap(data, hero.id, 'longprayer')) state.prayerEcho = { heroId: hero.id, round: state.round + 1, amount: Math.floor(skill.power / 2) };
       break;
   }
+  for (const [foe, amount] of crystalHits) {
+    const armor = data.enemies.find(e => e.id === foe.id)?.crystalArmor;
+    if (!armor || !foe.crystalArmor) continue;
+    if (crystalMagic.has(command.action)) {
+      const reflected = Math.min(Math.floor(amount * armor.reflect / 100), Math.floor(hero.maxHp * armor.cap / 100));
+      if (reflected <= 0 || actor.hp <= 0) continue;
+      const absorbed = Math.min(actor.barrier, reflected);
+      actor.barrier -= absorbed;
+      if (!actor.barrier) { delete actor.reflect; delete actor.shard; }
+      const lost = Math.min(actor.hp, reflected - absorbed);
+      actor.hp -= lost;
+      events.push({ type: 'damage', sourceId: foe.id, targetId: actor.id, amount: lost, absorbed, text: 'Crystal armor reflects magic.' });
+      if (!actor.hp) { actor.fell = true; events.push({ type: 'down', targetId: actor.id, text: 'Hero falls.' }); }
+    } else if (foe.hp > 0 && (crystalBreakers.has(command.action) || --foe.crystalArmor.hits <= 0)) {
+      delete foe.crystalArmor;
+      events.push({ type: 'dispel', sourceId: hero.id, targetId: foe.id, text: 'Crystal armor breaks.' });
+    }
+  }
   // Saint converts only HP removed by its direct command, once, before outcome/turn advancement.
   // No conversion from equipment retaliation, leech, overkill or another actor's damage.
   if (hero.role === 'Saint' && directDamage > 0 && actor.hp > 0) {
@@ -1825,6 +1892,7 @@ export function resolveCommand(initial: BattleState, data: EncounterDefinition, 
   // Scout silent end (capstone): a backstab that downs a foe readies her ambush again.
   if (command.action === 'backstab' && hasCap(data, hero.id, 'silentend') && downed) delete actor.cooldowns.ambush;
   state.commands.push({ ...command });
+  beginImmediatePhases(state, data, events);
   const frame = structuredClone(state); finishOrAdvance(state, data, events);
   if (state.outcome !== 'active') { frame.outcome = state.outcome; frame.intent = null; }
   turns.push({ actorId: hero.id, side: 'hero', beat: initial.beat, round: initial.round, action: command.action, targetId: command.targetId, intent: initial.intent, state: frame, events, ...(presentation ? {before: structuredClone(initial), after: structuredClone(state)} : {}) });

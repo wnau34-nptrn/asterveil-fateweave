@@ -359,7 +359,14 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   // bag (finds) or back to the company's spare items (own items).
   // P04-02 (OD-22): a story recruit the company already had (hired or picked before its story point) pays one duplicate
   // instead, once per character (`storyShards`), when the map is completed.
-  if (outcome === 'complete') for (const { hero: id } of map.recruits ?? []) {
+  if (map.mine) {
+    for (const { hero: id } of map.recruits ?? []) {
+      if (!run.mine?.stories.includes(id) || profile.storyShards?.includes(id)) continue;
+      if (!profile.members[id]) joinCompany(profile, map, id);
+      else if (!run.recruited?.includes(id)) addDuplicate(profile, map, id);
+      (profile.storyShards ??= []).push(id);
+    }
+  } else if (outcome === 'complete') for (const { hero: id } of map.recruits ?? []) {
     if (run.recruited?.includes(id) || profile.storyShards?.includes(id)) { if (run.recruited?.includes(id)) (profile.storyShards ??= []).push(id); continue; }
     if (profile.members[id]) { addDuplicate(profile, map, id); (profile.storyShards ??= []).push(id); }
   }

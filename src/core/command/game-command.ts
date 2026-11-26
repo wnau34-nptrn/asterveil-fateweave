@@ -1,3 +1,4 @@
+import { MINE_ACTIONS, type MineAction } from '../world/mine';
 import type { ActionId, CharmPower, Command } from '../battle/types';
 import type { Game } from '../save/expedition-save';
 import { applyCampEquipment, applyRunEquipment, type AutoEquipmentPlan } from '../world/auto-equipment';
@@ -24,7 +25,7 @@ import {
   type TomeSize, type WorldEvent, type WorldResult,
 } from '../world/types';
 import {
-  battleState, chooseEvent, chooseRunLoadout, draftPick, finishBattle, learnRunTalent, move, moveMember, openChest, recordBattle, waitTide,
+  battleState, chooseEvent, chooseRunLoadout, draftPick, finishBattle, interactMine, learnRunTalent, move, moveMember, openChest, recordBattle, waitTide,
   rest, revive, setLane, startPrologue, swapMembers, takeOff, travel, usePotion, wear, type BagList, type BattleReplay, type EncounterLookup,
 } from '../world/world';
 import type { SeedSource } from './seed-source';
@@ -96,6 +97,7 @@ export type CampCommand =
 // Map (expedition) commands: only while an expedition is running.
 export type RunCommand =
   | { kind: 'move'; dir: Direction }
+  | { kind: 'mine'; action: MineAction }
   | { kind: 'travel'; to: Point }
   | { kind: 'rest' }
   | { kind: 'waitTide' }
@@ -157,7 +159,7 @@ const SPECS: Record<CommandKind, Spec> = {
   worldBoss: { attempt: 'int', commands: 'commands', day: opt('int'), boss: opt(WB_BOSSES) }, claimWorldBoss: { id: 'str', week: 'int', day: opt('int') },
   gachaPull: { count: 'int', config: 'int' }, gachaExchange: { heroId: 'str', config: 'int' },
   depart: { mapId: opt('str'), hard: 'bool', day: opt('int') },
-  move: { dir: DIRECTIONS }, travel: { to: 'point' }, rest: {}, waitTide: {}, revive: { heroId: 'str' }, swapMembers: { a: 'str', b: 'str' },
+  move: { dir: DIRECTIONS }, mine: { action: MINE_ACTIONS }, travel: { to: 'point' }, rest: {}, waitTide: {}, revive: { heroId: 'str' }, swapMembers: { a: 'str', b: 'str' },
   setLane: { heroId: 'str', lane: LANES, other: opt('str') }, moveMember: { heroId: 'str' }, runPreset: { slot: 'int' }, withdraw: {}, openChest: {},
   usePotion: { potion: POTION_IDS, heroId: opt('str') }, claimRunGuide: { id: 'str' }, chooseEvent: { choice: EVENT_CHOICES }, draftPick: { index: 'int' },
   learnRunTalent: { heroId: 'str', node: 'str' }, chooseRunLoadout: { heroId: 'str', actions: 'strs' },
@@ -311,7 +313,8 @@ function applyRunCommand(game: Game | null, cmd: RunCommand, ctx: CommandContext
       if (result.event.type === 'goal') return settled(game.profile, result.state, 'complete', map, [result.event]);
       return onRun(game, result);
     }
-    case 'travel': return onRun(game, travel(run, map, cmd.to), 'travelled');
+    case 'mine': return onRun(game, interactMine(run, map, cmd.action, lookup), 'mine');
+    case 'travel': return onRun(game, travel(run, map, cmd.to, lookup), 'travelled');
     case 'rest': return onRun(game, rest(run, map, lookup), 'rested');
     // Map 4: wait at a camp for the water to turn.
     case 'waitTide': return onRun(game, waitTide(run, map), 'waited');

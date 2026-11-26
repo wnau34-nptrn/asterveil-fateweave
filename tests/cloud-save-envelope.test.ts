@@ -20,14 +20,14 @@ const localSave = (): string => {
   return s.data.get(expeditionKey)!;
 };
 const upload = (payload: string, patch: Partial<CloudSaveUpload> = {}): CloudSaveUpload => ({
-  format: CLOUD_FORMAT, requestId: 'req_0123456789abcdef', baseRevision: 0, saveVersion: 68, payload, payloadBytes: utf8Bytes(payload), payloadSha256: sha(payload), ...patch,
+  format: CLOUD_FORMAT, requestId: 'req_0123456789abcdef', baseRevision: 0, saveVersion: 69, payload, payloadBytes: utf8Bytes(payload), payloadSha256: sha(payload), ...patch,
 });
-const v58 = (n: number): boolean => n === 68;
+const currentVersion = (n: number): boolean => n === 69;
 
 describe('cloud save envelope checks', () => {
   it('accepts the exact local save string, and the same payload still passes replay validation', () => {
     const raw = localSave(); const u = upload(raw);
-    expect(checkUpload(u, sha(raw), v58)).toEqual({ ok: true, upload: u });
+    expect(checkUpload(u, sha(raw), currentVersion)).toEqual({ ok: true, upload: u });
     expect(parseGame(u.payload, map, lookup).run).not.toBeNull();
   });
 
@@ -42,21 +42,21 @@ describe('cloud save envelope checks', () => {
       [upload(raw, { format: 2 as typeof CLOUD_FORMAT }), 'format'],
       [upload(raw, { requestId: 'short' }), 'requestId'],
       [upload(raw, { baseRevision: -1 }), 'baseRevision'],
-      [upload(raw, { saveVersion: 69 }), 'saveVersion'],
+      [upload(raw, { saveVersion: 70 }), 'saveVersion'],
       [upload(raw, { payloadBytes: utf8Bytes(raw) + 1 }), 'bytes'],
       [upload(raw, { payloadSha256: 'ABC' }), 'digestFormat'],
       [upload(raw, { payloadSha256: sha(raw + ' ') }), 'digestMismatch'],
     ];
-    for (const [u, issue] of cases) expect(checkUpload(u, d, v58)).toEqual({ ok: false, issue });
-    const notJson = '{"version":58'; expect(checkUpload(upload(notJson), sha(notJson), v58)).toEqual({ ok: false, issue: 'payloadJson' });
-    const other = JSON.stringify({ version: 57 }); expect(checkUpload(upload(other), sha(other), v58)).toEqual({ ok: false, issue: 'payloadVersion' });
+    for (const [u, issue] of cases) expect(checkUpload(u, d, currentVersion)).toEqual({ ok: false, issue });
+    const notJson = '{"version":58'; expect(checkUpload(upload(notJson), sha(notJson), currentVersion)).toEqual({ ok: false, issue: 'payloadJson' });
+    const other = JSON.stringify({ version: 57 }); expect(checkUpload(upload(other), sha(other), currentVersion)).toEqual({ ok: false, issue: 'payloadVersion' });
   });
 
   it('refuses payloads over the size ceiling before hashing or parsing them', () => {
     const big = 'x'.repeat(MAX_PAYLOAD_BYTES + 1);
-    expect(checkUpload(upload(big), sha(big), v58)).toEqual({ ok: false, issue: 'tooLarge' });
+    expect(checkUpload(upload(big), sha(big), currentVersion)).toEqual({ ok: false, issue: 'tooLarge' });
     const thai = 'ก'.repeat(Math.floor(MAX_PAYLOAD_BYTES / 3) + 1); // fits in UTF-16 length, not in bytes
-    expect(checkUpload(upload(thai), sha(thai), v58)).toEqual({ ok: false, issue: 'tooLarge' });
+    expect(checkUpload(upload(thai), sha(thai), currentVersion)).toEqual({ ok: false, issue: 'tooLarge' });
   });
 
   it('fact for the trust boundary: an edited bank at the ceiling still passes local replay validation', () => {
@@ -82,7 +82,7 @@ describe('server upload decision (compare-and-swap on revision)', () => {
     expect(decideUpload(head, [], { ...u, requestId: 'req_another_device_01', baseRevision: 2 })).toEqual({ kind: 'unchanged', revision: 5 });
   });
   it('never lets an older save format overwrite a newer one', () => {
-    expect(decideUpload({ revision: 2, saveVersion: 69, payloadSha256: sha('n') }, [], { ...u, baseRevision: 2 })).toEqual({ kind: 'downgrade', saveVersion: 69 });
+    expect(decideUpload({ revision: 2, saveVersion: 69, payloadSha256: sha('n') }, [], { ...u, saveVersion: 68, baseRevision: 2 })).toEqual({ kind: 'downgrade', saveVersion: 69 });
   });
 });
 

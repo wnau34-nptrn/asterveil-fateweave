@@ -1,3 +1,4 @@
+import { MINE_ENCOUNTER_IDS, MINE_STANDIN_MOVES } from '../src/content/encounters/catalog';
 import { describe, expect, it, vi } from 'vitest';
 vi.mock('phaser', () => ({ default: {} }));
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -14,6 +15,8 @@ const bodyLabel = (r: CoverageRow) => r.body.kind === 'sprite'
   ? `sprite \`${r.body.clip}\` ${r.body.frames!.prepare.join(',')} → ${r.body.frames!.recover.join(',')}`
   : `procedural (${r.body.pose}) — ${r.body.reason}`;
 const cell = (s: string) => s.replace(/\|/g, '\\|');
+const mineStandIn = (r: CoverageRow) => r.side === 'enemy' && MINE_STANDIN_MOVES.has(r.name)
+  && !!r.encounters?.length && r.encounters.every(id => MINE_ENCOUNTER_IDS.has(id));
 function markdown(c: PresentationCoverage): string {
   const n = c.counts, out: string[] = [];
   out.push('# ตารางครอบคลุมท่าร่างกายและ VFX (W8) — สร้างจากโค้ด', '',
@@ -50,6 +53,7 @@ describe('W8 presentation coverage', () => {
   it('every non-parked move has sprite frames that exist in its atlas', () => {
     for (const r of c.rows) {
       if (PARKED[r.identity] || STILL_ONLY[r.identity]) { expect(r.body.kind).toBe('procedural'); continue; }
+      if (mineStandIn(r) && r.body.kind === 'procedural') continue;
       expect(r.body.kind, `${r.identity} ${r.move}`).toBe('sprite');
       const frames = c.identities.find(i => i.identity === r.identity)!.atlas!.frames;
       for (const f of [...r.body.frames!.prepare, ...r.body.frames!.recover]) expect(f, `${r.identity} ${r.move}`).toBeLessThan(frames);
@@ -62,7 +66,7 @@ describe('W8 presentation coverage', () => {
   it('no move falls back to an unexplained route', () => {
     // Code-drawn on purpose: the weapon-specific basic attacks and Shadow Knife's thrown energy blade. The World Boss trio's energy
     // moves and phases are painted since ART-VFX-WB-TRIO-001 (P11-05 step 5); no code-drawn exception remains for them.
-    for (const r of c.rows.filter(r => r.vfx.kind === 'code')) expect(r.move === 'attack' || r.move === 'Shadow Knife', `${r.identity} ${r.move}`).toBe(true);
+    for (const r of c.rows.filter(r => r.vfx.kind === 'code')) expect(r.move === 'attack' || r.move === 'Shadow Knife' || mineStandIn(r), `${r.identity} ${r.move}`).toBe(true);
     for (const r of c.rows.filter(r => ['foe_kragmor', 'foe_valdrakk', 'foe_morvane'].includes(r.identity) && r.vfx.kind !== 'shared')) expect(r.vfx.module, `${r.identity} ${r.move}`).toBe('boss-signature-fx');
     // Shared on purpose: hero basic cuts by class palette and physical foe moves on the blade family.
     // P03: Wynne's curses share the Mark painting; Kael's fists share the Saint strike paintings until a Martial family exists.

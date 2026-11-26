@@ -1,3 +1,33 @@
+## 2026-11-26 — จูนยักษ์ผลึกด้วยการจำลอง 48 seed (Claude · `claude/friendly-heisenberg-xapns5`)
+
+- รวมสาขาเกมเข้างานเหมืองของ Codex (ชนกันที่ `world-ui.ts` จุดเดียว) เจ้าของสั่ง “ทำตามที่คุณแนะนำ เริ่มข้อ 1” คือขยายการจำลองและจูนก่อนเปิด PR
+- 48 seed ค่าเดิม: casual สายรีบผ่าน 96% ศึกยาว 10–12 รอบ ค่าใหม่ HP 580, Fist 225, Beam 205, ถล่ม 68, ผลึกย่อย 59/45 (`crystal-giant` v2): casual สายรีบ 78% สายสำรวจ 99% advisor ≥99% โจมตีปกติชนะ ≤22% ชุดทีม 9–10/10 ตัวเลขยังเป็นร่าง
+- เพิ่ม `tests/mine-tune.test.ts` (ข้ามโดยค่าเริ่มต้น) และ `resume` ใน `simulateCampaign` เพื่อเล่นเฉพาะเหมืองซ้ำจากแคมเปญที่เก็บไว้ ผลตรงกับการรันเต็ม
+- Vitest 2306 ผ่าน, typecheck, lint, presentation coverage ผ่าน ยังไม่เปิด PR และยังไม่มีคลิป 390px ให้เจ้าของดู [ผลตรวจ](../validation/map5-mine/README_TH.md)
+
+## 2026-11-23 — Crystal Mine campaign, save and boss (Codex · `codex/map5-crystal-mine-design`)
+- Owner authorized Codex to take over Claude's work. Activated Map 5 after the lake with save v69, the Crystal Giant, temporary presentation and mine interactions. v68 lake and an active v69 boss both resume in tests.
+- Vitest 2,303 passed and 24 skipped. Lint, typecheck, build and presentation audits passed. Chromium mine and lake passed 8/8 at 390px. [Mine validation and reports](../validation/map5-mine/README_TH.md).
+- Four seeds per OD-59 pair/style/route: 64/64 first mine clears. Some explorer basic-only groups and stress-test round counts still miss draft targets. Expand tuning and compare silhouettes at 390px before locking balance and art.
+
+## 2026-11-23 — Crystal Mine world commands (Codex · `codex/map5-crystal-mine-design`)
+- Connected light, both puzzles, worker delivery and the 2-of-3 seal to game commands. Brann and Kael now have recruitment triggers and a one-time settlement payout. All three routes reach a completed run with test encounters. [Design and tests](../design/MAP5_CRYSTAL_MINE_DRAFT_TH.md#กระดานต้นแบบ).
+- Full Vitest started during edits and reported 2,288 passed with one failure in the opened-wall visibility regression. The final mine, lake and command suites passed all 109 tests after the wall fix. Lint, typecheck and build passed.
+- The campaign entry awaits save validation and real encounters. The Claude handoff lists the new fields and checks before registration, balancing and UI integration.
+
+## 2026-11-23 — Crystal Mine board prototype (Codex · `codex/map5-crystal-mine-design`)
+- Built the 25×25 board, minecart and beam traces, wall-aware light and worker escort. The focused mine and lake suites passed 25 tests. Lint, typecheck and build passed. [Board and test scope](../design/MAP5_CRYSTAL_MINE_DRAFT_TH.md#กระดานต้นแบบ).
+- Full Vitest: 2,279 passed and one existing VFX asset check failed because its intake files were outside the sparse checkout. Restored the tracked files and reran the affected VFX and mine suites (32 passed).
+- The approved mine layout is ready for world command wiring. Follow the Claude handoff for v68 compatibility, recruit triggers, the Crystal Giant and the campaign simulation before activating Map 5.
+
+## 2026-11-23 — Map 5 owner decisions (Codex · `codex/map5-crystal-mine-design`)
+- Owner replied “ทำตามที่คุณแนะนำ” to the three design choices. Recorded the decision under OD-60 and reconciled the Chapter 1 map description. [Confirmed design](../design/MAP5_CRYSTAL_MINE_DRAFT_TH.md).
+- Checked document consistency, relative links and Git whitespace. The next work is rules, content and simulation. Numeric targets await results.
+
+## 2026-11-23 — Map 5 Crystal Mine design (Codex · `codex/map5-crystal-mine-design`)
+- Drafted the three mine zones, lanterns, minecart and light puzzles, 2-of-3 seal, Brann/Kael story and Crystal Giant encounter for owner review. [Design, simulation targets and 390px review plan](../design/MAP5_CRYSTAL_MINE_DRAFT_TH.md).
+- Branch base `827756f` includes #336 at `24a1f3c`. Reviewed the draft and checked Markdown whitespace with Git.
+- Open owner decisions: overseer bypass, puzzle and recruit flow, and armour and shard behaviour. Simulation, art and implementation follow that review.
 ## 2026-11-25 — แท่นบนแผนที่ไม่กระโดดตอนเปลี่ยนภาพ (Claude · `claude/friendly-heisenberg-xapns5`)
 
 - เจ้าของรายงานว่าหลังชนะบอส แท่นวาร์ปสีม่วงขยับออกแล้วเด้งกลับที่เดิม สาเหตุคือ keyframe `gate-open` ใช้ `transform: scale()` ซึ่งทับ `translate(-50%, -100%)` ของ `.sprite` ตลอด 640ms (เลื่อนขวา 1 ช่อง ลง 2 ช่อง แล้วกลับตอนจบ)

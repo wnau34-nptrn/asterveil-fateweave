@@ -28,7 +28,7 @@ import { chooseHuntTarget } from '../src/core/world/targeted-loot';
 import { raiseSkill, tradeTomes } from '../src/core/world/tomes';
 import type { Commander, Direction, ExpeditionState, Lane, Point, Profile, ProfileResult, WorldResult } from '../src/core/world/types';
 import {
-  battleData, battleState, chooseEvent, chooseRunLoadout, draftOffers, draftPick, findTiles, finishBattle, learnRunTalent, move, moveMember, openChest,
+  battleData, battleState, chooseEvent, chooseRunLoadout, draftOffers, draftPick, findTiles, finishBattle, interactMine, learnRunTalent, move, moveMember, openChest,
   recordBattle, recommendedLane, rest, revive, setLane, startPrologue, swapMembers, takeOff, tileAt, travel, usePotion, wear, waitTide, newExpedition,
 } from '../src/core/world/world';
 
@@ -148,6 +148,7 @@ const CASES: Record<CommandKind, Case> = {
   gachaExchange: { game: gachaGame, cmd: { kind: 'gachaExchange', heroId: 'kael', config: home.gacha.version }, direct: g => gachaExchange(P(g), maps, home, 'kael', home.gacha.version) },
   depart: { game: campGame, cmd: { kind: 'depart', mapId: home.id, hard: false }, seeds: [7], direct: g => { const out = depart(P(g), home, lookup, 7); return { game: { profile: { ...out.profile, last: null }, run: out.run } }; } },
   move: { game: () => runGame(), cmd: { kind: 'move', dir: openDir() }, direct: g => move(R(g), home, openDir(), lookup) },
+  mine: { game: runGame, cmd: { kind: 'mine', action: 'light-lantern' }, direct: g => interactMine(R(g), home, 'light-lantern', lookup) },
   travel: { game: () => runGame({ visited: [key(campTile)] }), cmd: { kind: 'travel', to: campTile }, direct: g => travel(R(g), home, campTile) },
   rest: { game: () => hurt(atCamp({ restReady: true })), cmd: { kind: 'rest' }, direct: g => rest(R(g), home, lookup) },
   // Map 4: a lake run at its first camp waits for the water to turn.
@@ -178,7 +179,7 @@ const CASES: Record<CommandKind, Case> = {
 };
 // Fixtures that end in a refusal (equality is then checked on the reason); every other kind must make a real change.
 // OD-54: gear opens after the prologue, so a company with no map cleared already has a guide to skip.
-const REFUSED: CommandKind[] = ['worldBoss', 'claimWorldBoss', 'transferAffix', 'fuse', 'raiseItemLevel', 'claimQuest'];
+const REFUSED: CommandKind[] = ['mine', 'worldBoss', 'claimWorldBoss', 'transferAffix', 'fuse', 'raiseItemLevel', 'claimQuest'];
 
 // What the shell stored after a direct call (or the refusal it ignored).
 function expected(g: Game, direct: ReturnType<Direct>): { game: Game } | { rejected: string } {

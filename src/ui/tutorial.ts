@@ -26,8 +26,26 @@ export function battleLesson(state:BattleState,data:EncounterDefinition):Lesson|
  const focus=(list:typeof living)=>list.find(e=>e.markedUntil>state.round)??[...list].sort((a,b)=>rank(a)-rank(b)||a.hp-b.hp)[0];
  const pick=(action:ActionId)=>focus(reach(action))??focus(reach('attack'))??living[0]!;
  const attack=()=>make('attack',pick('attack').id,'โจมตีพื้นฐาน','แตะศัตรูในสนาม');
+ // Prepare for the mine's announced party-wide hit with skills this hero actually carries.
+ if (state.intent?.crystalCollapse) {
+  const allies = state.heroes.filter(h => h.hp > 0).sort((a, b) => a.hp + a.barrier - b.hp - b.barrier);
+  const defensive = (['aegis', 'rally', 'halo', 'bulwark'] as const).map(action => make(action, heroId, 'เตรียมรับผลึกถล่ม', 'ลดผลกระทบต่อทั้งทีม')).find(Boolean);
+  if (defensive && (allies.length >= 3 || allies.some(h => h.hp <= state.intent!.damage))) return defensive;
+  const weakest = allies[0];
+  if (weakest && weakest.hp + weakest.barrier <= state.intent.damage * 1.4) {
+   const answer = make('ward', weakest.id, 'กันผลึกถล่ม', 'เพิ่มโล่ก่อนผลึกตก') ?? make('guard', weakest.id, 'กันผลึกถล่ม', 'ลดความเสียหายแก่เป้าที่เลือก');
+   if (answer) return answer;
+  }
+ }
+ const crystal = living.find(e => e.crystalArmor);
+ if (crystal) {
+  const breaker = (['bash', 'slam', 'quake', 'tremor'] as const).map(action => make(action,
+   action === 'quake' || action === 'tremor' ? (targetOptions(state, data, heroId, action).find(option => option.valid)?.id ?? crystal.id) : crystal.id,
+   'ทุบเกราะผลึก', 'ทำให้เกราะสะท้อนเวทแตก')).find(Boolean);
+  if (breaker) return breaker;
+ }
  // A phase change or a charge-up deals no damage now: nothing to guard, ward or dodge this turn.
- const intent=state.intent&&!state.intent.special&&!state.intent.charge?state.intent:null;
+ const intent=state.intent&&!state.intent.special&&!state.intent.charge&&!state.intent.raiseCrystalArmor?state.intent:null;
  // Release A tree skills (docs/design/SKILL_TREES_ALL_TH.md) are suggested only when the hero has them equipped (`make` checks).
  const row=(id:string)=>data.enemies.find(d=>d.id===id)?.row;
  const lane=(id:string)=>data.heroes.find(h=>h.id===id)?.lane;

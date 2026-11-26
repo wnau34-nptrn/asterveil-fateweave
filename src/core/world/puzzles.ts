@@ -7,6 +7,10 @@ export const leverPuzzleAt = (map: MapDefinition, p: Point) => map.puzzles.lever
 export const secretAt = (map: MapDefinition, p: Point) => map.puzzles.secrets.find(s => same(s, p));
 // A puzzle door is a wall until its puzzle is solved.
 export function doorAt(map: MapDefinition, p: Point): { id: string } | undefined {
+  if (map.mine) {
+    if (same(map.mine.cart.wall, p)) return map.mine.cart;
+    if (same(map.mine.beam.door, p)) return map.mine.beam;
+  }
   return map.puzzles.runes.find(r => same(r.door, p)) ?? map.puzzles.levers.find(l => same(l.door, p));
 }
 export const doorOpen = (state: ExpeditionState, map: MapDefinition, p: Point): boolean => { const d = doorAt(map, p); return !!d && state.solved.includes(d.id); };

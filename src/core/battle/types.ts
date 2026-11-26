@@ -113,8 +113,9 @@ export type EnemySlot = 'f1' | 'f2' | 'b1' | 'b2' | 'f3' | 'b3';
 // before enrage/weaken; the intent carries the total as `court`).
 // `leader` (owner 2026-11-20): a boss fought without boss mechanics (a boss encounter reused as an elite gate) still stands
 // where a boss stands (`foeLineRows`).
+export interface CrystalArmor { reflect: number; cap: number; hits: number; turns: number; name: string }
 export interface EnemyDefinition { id: EnemySlot; row: 'front' | 'back'; large?: boolean; boss?: boolean; leader?: boolean; reserve?: boolean; name: string; displayName?: string; maxHp: number; speed: number; color: number; art?: string; traits?: readonly EnemyTrait[];
-  court?: { percent: number; by: readonly EnemySlot[] } }
+  court?: { percent: number; by: readonly EnemySlot[] }; crystalArmor?: CrystalArmor; surrenderOre?: number }
 // Enemy moves aim at a party slot (0-4 in deployment order), not a named hero, so any
 // mercenary in that slot is the target. The resolved hero id is stored on Intent.
 // `unstoppable` (boss signature moves, owner 2026-10-22): Bash and Sigil cannot cancel it; Guard, Ward and taunts still answer it.
@@ -135,10 +136,10 @@ export interface IntentDefinition { sourceId: string; targetSlot: number; name: 
   aim?: IntentAim; phase?: number; all?: boolean; charge?: boolean; special?: 'phase' | 'stagger'; breakable?: boolean; summon?: readonly EnemySlot[];
   // Map 4 (Water Veil): a no-damage move that restores this percent of the foe's own max HP, less each time one lands
   // (`EnemyState.mended`), so a fight always ends; Bash/Sigil (by its kind) cancel it.
-  mend?: number }
+  mend?: number; raiseCrystalArmor?: true; crystalCollapse?: true }
 // A boss phase: once the boss's HP falls to `below` percent, its next turn summons the `summon` reserves (if any) and
 // switches its moves to that phase's cycle. `hardSummon` reserves join only in hard mode (world `hardEncounter`).
-export interface BossPhase { sourceId: EnemySlot; below: number; summon?: readonly EnemySlot[]; hardSummon?: readonly EnemySlot[]; name: string }
+export interface BossPhase { sourceId: EnemySlot; below: number; summon?: readonly EnemySlot[]; hardSummon?: readonly EnemySlot[]; name: string; immediate?: true }
 export interface EncounterDefinition {
   id: string; version: number; name: string;
   // Monster level (2D-1): the content numbers are this level's; `withLevel` rescales a copy.
@@ -211,6 +212,8 @@ export interface EnemyState { id: string; hp: number; markedUntil: number; absen
   weaken?: number; dispelledUntil?: number; delayedAlso?: number; drawnBy?: { heroId: string; round: number };
   // Map 4 Water Veil: how many of this foe's mends have landed (each heals less: `mend` / (1 + mended)); missing = none.
   mended?: number;
+  crystalArmor?: { until: number; hits: number };
+  surrendered?: true;
   // P03 Hexer curses: stacks (1–3) per hexer, ticking as each round up to `until` ends (a pull ticks one at once). `threaded`: hexers whose first-thread
   // bonus (Wynne p1) this foe has already received.
   hexes?: { heroId: string; stacks: number; until: number }[]; threaded?: string[];

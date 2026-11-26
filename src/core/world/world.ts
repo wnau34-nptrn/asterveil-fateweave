@@ -1,3 +1,4 @@
+import { applyMineAction, deliverMineWorkers, type MineAction, minePressureStep, mineVisibility, recordMineStory } from './mine';
 import {bossReward} from './boss-equipment';
 import { clampRun, RUN_CAP } from './caps';
 import {huntedReward} from './targeted-loot';
@@ -49,8 +50,25 @@ export function encounterChance(state: ExpeditionState, map: MapDefinition, p: P
   const zone = state.repel > 0 ? undefined : rollingZone(map, p);
   return zone ? Math.min(zone.cap, zone.base + state.pressure) : 0;
 }
+export function visibleMineCells(state: ExpeditionState, map: MapDefinition): ReadonlySet<number> | undefined {
+  const mine = map.mine;
+  if (!mine) return;
+  const darkAt = (point: Point): boolean => mine.darkZones.includes(tileAt(map, point)?.zoneId ?? '');
+  const { x, y } = state.position;
+  // An opened wall still uses the light of its passage.
+  const dark = tileAt(map, state.position)?.kind === 'wall'
+    ? Object.values(offsets).some(offset => darkAt({ x: x + offset.x, y: y + offset.y }))
+    : darkAt(state.position);
+  return mineVisibility(state, map, mine, dark);
+}
 export function reveal(state: ExpeditionState, map: MapDefinition): void {
   const width = map.rows[0]!.length; const cells = [...state.revealed]; const r = map.revealRadius;
+  const visible = visibleMineCells(state, map);
+  if (visible) {
+    for (const index of visible) cells[index] = '1';
+    state.revealed = cells.join('');
+    return;
+  }
   for (let y = state.position.y - r; y <= state.position.y + r; y++) for (let x = state.position.x - r; x <= state.position.x + r; x++) {
     if (y >= 0 && y < map.rows.length && x >= 0 && x < width) cells[y * width + x] = '1';
   }
@@ -90,6 +108,7 @@ function tire(state: ExpeditionState, map: MapDefinition): void {
 // settled into the company.
 export function recruit(state: ExpeditionState, map: MapDefinition, at: RecruitPoint, lookup?: EncounterLookup): string[] {
   const ids = (map.recruits ?? []).filter(r => r.at === at && (!r.camp || (r.camp.x === state.position.x && r.camp.y === state.position.y))).map(r => r.hero);
+  if (map.mine) for (const id of ids) recordMineStory(state, id);
   const arriving = ids.filter(id => state.arrivals?.includes(id));
   if (arriving.length && !lookup) throw new Error('A recruit arrives: the encounter lookup is needed');
   for (const id of arriving) {
@@ -298,6 +317,7 @@ export const miniBoss = (map: MapDefinition, source?: string): boolean => map.el
 // The rift seal (3B): which objectives this run has done, and whether enough are done to face the boss.
 export const objectiveDone = (state: ExpeditionState, o: QuestObjective): boolean =>
   o.kind === 'chests' ? state.openedChests.length >= o.count : o.kind === 'lanterns' ? (state.lanterns?.length ?? 0) >= o.count
+    : o.kind === 'rescued' ? (state.mine?.rescue.rescued.length ?? 0) >= o.count
     : o.kind === 'elite' ? state.elitesDefeated.includes(o.target) : o.kind === 'chest' ? state.openedChests.includes(o.target) : state.eventsDone.includes(o.target);
 export function questDone(state: ExpeditionState, map: MapDefinition): string[] {
   return map.quest.objectives.filter(o => objectiveDone(state, o)).map(o => o.id);
@@ -316,6 +336,27 @@ export const eventAt = (map: MapDefinition, p: Point): MapEventDefinition | unde
 // An unbeaten elite blocks its tile; an unfinished event is waiting on its tile.
 export const eliteBlocks = (state: ExpeditionState, map: MapDefinition, p: Point): EliteDefinition | undefined => { const e = eliteAt(map, p); return e && !state.elitesDefeated.includes(e.id) ? e : undefined; };
 export const pendingEvent = (state: ExpeditionState, map: MapDefinition, p: Point = state.position): MapEventDefinition | undefined => { const e = eventAt(map, p); return e && !state.eventsDone.includes(e.id) ? e : undefined; };
+
+function checkMineObjective(state: ExpeditionState, map: MapDefinition, lookup?: EncounterLookup): void {
+  const waits = map.recruits?.some(recruit => recruit.at === 'first-objective' && !state.mine?.stories.includes(recruit.hero));
+  if (map.mine && waits && questDone(state, map).length) recruit(state, map, 'first-objective', lookup);
+}
+
+function reachMineCamp(state: ExpeditionState, map: MapDefinition, lookup?: EncounterLookup): void {
+  if (!map.mine) return;
+  deliverMineWorkers(state, map.mine);
+  checkMineObjective(state, map, lookup);
+}
+
+export function interactMine(initial: ExpeditionState, map: MapDefinition, action: MineAction, lookup?: EncounterLookup): WorldResult {
+  const blocked = (): WorldResult => ({ state: initial, event: { type: 'blocked', reason: 'busy' } });
+  if (!map.mine || initial.battle || initial.completed || initial.draft || !initial.roster.deployed.some(id => initial.hp[id]! > 0)) return blocked();
+  const state = structuredClone(initial);
+  if (!applyMineAction(state, map, map.mine, action)) return blocked();
+  checkMineObjective(state, map, lookup);
+  reveal(state, map);
+  return { state, event: { type: 'mine', action } };
+}
 
 // `lookup` lets gear Trail regen heal on the step (stats design); without it the step heals nobody.
 export function move(initial: ExpeditionState, map: MapDefinition, dir: Direction, lookup?: EncounterLookup): WorldResult {
@@ -377,11 +418,15 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
   if (herb && !state.herbs.includes(herb.id)) { state.herbs.push(herb.id); return { state, event: { type: 'herb', herbId: herb.id } }; }
   // Map 4: a moon lantern is lit and a lost note picked up (once per run each).
   const lantern = map.lanterns?.find(l => l.x === target.x && l.y === target.y);
-  if (lantern && !state.lanterns?.includes(lantern.id)) { (state.lanterns ??= []).push(lantern.id); return { state, event: { type: 'lantern', lanternId: lantern.id, lit: state.lanterns.length } }; }
+  if (!map.mine && lantern && !state.lanterns?.includes(lantern.id)) { (state.lanterns ??= []).push(lantern.id); return { state, event: { type: 'lantern', lanternId: lantern.id, lit: state.lanterns.length } }; }
   const note = map.notes?.find(n => n.x === target.x && n.y === target.y);
   if (note && !state.notes?.includes(note.id)) { (state.notes ??= []).push(note.id); return { state, event: { type: 'note', noteId: note.id } }; }
   const secret = secretAt(map, target);
-  if (secret && !state.secrets.includes(secret.id)) { state.secrets.push(secret.id); return { state, event: { type: 'secret', secretId: secret.id } }; }
+  if (secret && !state.secrets.includes(secret.id)) {
+    state.secrets.push(secret.id);
+    if (map.mine) reveal(state, map);
+    return { state, event: { type: 'secret', secretId: secret.id } };
+  }
   const runes = runePuzzleAt(map, target);
   if (runes && !state.solved.includes(runes.id)) {
     // The right stone advances the sequence; a wrong one resets it (and counts as the first stone if it is the first).
@@ -402,7 +447,12 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
     }
   }
   // Reaching a camp makes it the defeat return point, whether or not the party rests.
-  if (tile.kind === 'camp') { state.camp = { ...target }; if (!state.visited.includes(key(target))) state.visited.push(key(target)); recruit(state, map, 'camp', lookup); }
+  if (tile.kind === 'camp') {
+    state.camp = { ...target };
+    if (!state.visited.includes(key(target))) state.visited.push(key(target));
+    recruit(state, map, 'camp', lookup);
+    reachMineCamp(state, map, lookup);
+  }
   if (tile.kind === 'goal') { state.completed = true; return { state, event: { type: 'goal' } }; }
   // An event tile asks for a choice instead of rolling an encounter.
   const waiting = pendingEvent(state, map, target);
@@ -425,7 +475,7 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
     state.battle = startBattle(state, kind, encounterId, kind === 'random' ? monsterLevelAt(map, target) : undefined);
     return { state, event: { type: 'encounter', kind, encounterId, chance } };
   }
-  state.pressure = Math.min(zone.cap, state.pressure + zone.step);
+  state.pressure = Math.min(zone.cap, state.pressure + minePressureStep(initial, map, target, zone.id, zone.step));
   return { state, event: { type: 'moved', chance } };
 }
 
@@ -855,6 +905,9 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
       loot.gold += gold; loot.shard += shard; state.resources.gold += gold; state.resources.shard += shard;
     }
     const items = dropItems(state, map, kind, data.level ?? 1, source);
+    const surrenderedOre = data.enemies.reduce((total, foe) => total + (result.enemies.some(enemy => enemy.id === foe.id && enemy.surrendered) ? foe.surrenderOre ?? 0 : 0), 0);
+    loot.ore += surrenderedOre;
+    state.resources.ore += surrenderedOre;
     // Skill tomes on maps that drop them (no rolls, so loot and items are unchanged).
     const tomes = battleTomes(state, map, kind, state.roster.deployed);
     // P02 (OD-11, A6c): standing reserve members patch themselves up after a win; then fatigue moves on.
@@ -863,6 +916,7 @@ export function finishBattle(initial: ExpeditionState, map: MapDefinition, looku
       tire(state, map);
     }
     clampRun(state);
+    checkMineObjective(state, map, lookup);
     return { state, event: { type: 'victory', kind, encounterId, loot, exp, ...(items[0] ? { item: items[0] } : {}), ...(items.length > 1 ? { items } : {}), ...(dust ? { dust } : {}), ...tomes } };
   }
   state.defeats++;
@@ -887,11 +941,14 @@ export function travelTargets(state: ExpeditionState, map: MapDefinition): Point
   if (!atMuster(state, map)) return [];
   return [startOf(map), ...findTiles(map, 'camp').filter(c => state.visited.includes(key(c)))].filter(p => p.x !== state.position.x || p.y !== state.position.y);
 }
-export function travel(initial: ExpeditionState, map: MapDefinition, to: Point): WorldResult {
+export function travel(initial: ExpeditionState, map: MapDefinition, to: Point, lookup?: EncounterLookup): WorldResult {
   if (!travelTargets(initial, map).some(p => p.x === to.x && p.y === to.y)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial);
   state.position = { ...to }; state.pressure = 0;
-  if (tileAt(map, to)?.kind === 'camp') state.camp = { ...to };
+  if (tileAt(map, to)?.kind === 'camp') {
+    state.camp = { ...to };
+    reachMineCamp(state, map, lookup);
+  }
   reveal(state, map);
   return { state, event: { type: 'travelled', to: { ...to } } };
 }
