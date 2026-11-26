@@ -31,11 +31,11 @@ The same boss fights the auto company met (normal mode), replayed with auto batt
 
 ## World Boss damage
 
-Each auto company's camp team after map 5 fights every World Boss for 8 rounds. Advice = Morvane's coach for Morvane, the teaching advisor for the others. Average damage to the boss; auto battle is offered in World Boss attempts.
+Each auto company's camp team after map 5 fights every World Boss for 8 rounds. Advice = Morvane's coach for Morvane, the teaching advisor for the others. Average damage to the boss; auto battle is offered in World Boss attempts and makes plain attacks on 50% of its turns there (30% elsewhere).
 
 | Boss | Teams | Advice | Auto | Auto / advice | Basic attacks only |
 |---|---|---|---|---|---|
-| world-boss-warden | 12 | 714 | 748 | 105% | 512 |
-| wb-kragmor | 12 | 789 | 780 | 99% | 514 |
-| wb-valdrakk | 12 | 854 | 974 | 114% | 710 |
-| wb-morvane | 12 | 820 | 662 | 81% | 349 |
+| world-boss-warden | 12 | 714 | 732 | 103% | 512 |
+| wb-kragmor | 12 | 789 | 724 | 92% | 514 |
+| wb-valdrakk | 12 | 854 | 900 | 105% | 710 |
+| wb-morvane | 12 | 820 | 625 | 76% | 349 |

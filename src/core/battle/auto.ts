@@ -42,23 +42,26 @@ export function autoScore(state: BattleState, data: EncounterDefinition, command
 // On about `AUTO_LAPSE`% of turns auto battle only makes a basic attack, like a player who is not paying attention
 // (the simulation's casual player follows the advice on ~70% of turns). The roll comes from the battle itself (its
 // encounter, beat and hero), so the same turn always gets the same answer and replays never change.
-export const AUTO_LAPSE = 30;
-export function lapse(state: BattleState, heroId: string): boolean {
+// World Boss attempts use `AUTO_LAPSE_WORLD_BOSS` (owner 2026-11-26 “เพิ่มเป็น 50% เฉพาะบอสโลก”): a damage race where a
+// plain auto otherwise matches the teaching advice.
+export const AUTO_LAPSE = 30, AUTO_LAPSE_WORLD_BOSS = 50;
+export function lapse(state: BattleState, heroId: string, percent = AUTO_LAPSE): boolean {
   let h = 2166136261;
   for (const ch of `${state.encounterId}:${state.beat}:${heroId}`) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
-  return ((h >>> 0) % 100) < AUTO_LAPSE;
+  return ((h >>> 0) % 100) < percent;
 }
 
 // The command auto battle gives the current hero, or undefined when it has none (the player takes over).
 // `off`: skills the player switched off for auto battle; the basic attack is always allowed.
-export function autoCommand(state: BattleState, data: EncounterDefinition, off: readonly ActionId[] = []): Command | undefined {
+// `lapsePercent`: share of plain-attack turns (`AUTO_LAPSE`, or `AUTO_LAPSE_WORLD_BOSS` in World Boss attempts).
+export function autoCommand(state: BattleState, data: EncounterDefinition, off: readonly ActionId[] = [], lapsePercent = AUTO_LAPSE): Command | undefined {
   if (state.outcome !== 'active') return;
   const heroId = currentHeroId(state, data); if (!heroId) return;
   const hero = data.heroes.find(h => h.id === heroId); if (!hero) return;
   let best: { command: Command; score: number } | undefined;
   for (const action of hero.actions) {
     if (action !== 'attack' && off.includes(action)) continue;
-    if (lapse(state, heroId) && action !== 'attack') continue;
+    if (lapse(state, heroId, lapsePercent) && action !== 'attack') continue;
     for (const target of targetOptions(state, data, heroId, action)) {
       if (!target.valid) continue;
       const command: Command = { beat: state.beat, heroId, action, targetId: target.id };

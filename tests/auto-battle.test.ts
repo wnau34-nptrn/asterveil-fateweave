@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { autoCommand, autoScore, autoStopReason, autoWatch, readAutoSettings } from '../src/core/battle/auto';
+import { AUTO_LAPSE, AUTO_LAPSE_WORLD_BOSS, autoCommand, autoScore, autoStopReason, autoWatch, lapse, readAutoSettings } from '../src/core/battle/auto';
 import { createBattle, currentHeroId, replay, resolveCommand, validateCommand } from '../src/core/battle/engine';
 import type { BattleState, EncounterDefinition } from '../src/core/battle/types';
 import { veilSiege } from '../src/content/encounters/veil-siege';
@@ -78,5 +78,16 @@ describe('auto battle settings', () => {
     expect(readAutoSettings('{oops')).toEqual({ on: false, stopHp: 50, off: [] });
     expect(readAutoSettings(JSON.stringify({ on: true, stopHp: 33, off: ['bolt', 'attack', 'bolt', 4] }))).toEqual({ on: true, stopHp: 50, off: ['bolt'] });
     expect(readAutoSettings(JSON.stringify({ on: true, stopHp: 0, off: [] })).stopHp).toBe(0);
+  });
+});
+
+describe('auto battle lapse', () => {
+  it('the World Boss share of plain attacks is higher, and a higher share only ever adds plain-attack turns', () => {
+    const s = createBattle(data); let low = 0, high = 0;
+    for (let beat = 0; beat < 400; beat++) for (const h of data.heroes) {
+      const st = { ...s, beat }; const a = lapse(st, h.id, AUTO_LAPSE), b = lapse(st, h.id, AUTO_LAPSE_WORLD_BOSS);
+      if (a) { low++; expect(b).toBe(true); } if (b) high++;
+    }
+    expect(AUTO_LAPSE_WORLD_BOSS).toBe(50); expect(high).toBeGreaterThan(low);
   });
 });

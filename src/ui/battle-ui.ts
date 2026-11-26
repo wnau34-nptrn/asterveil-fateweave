@@ -20,7 +20,7 @@ import { infoTabs, selectInfoTab } from './info-tabs';
 import { foeProfile, unitStatuses } from './battle-status';
 import { wbDamage } from '../core/world/world-boss';
 import { battleLesson } from './tutorial';
-import { AUTO_STOP_CHOICES, autoCommand, autoSettingsKey, autoStopReason, autoWatch, readAutoSettings, type AutoWatch } from '../core/battle/auto';
+import { AUTO_LAPSE, AUTO_LAPSE_WORLD_BOSS, AUTO_STOP_CHOICES, autoCommand, autoSettingsKey, autoStopReason, autoWatch, readAutoSettings, type AutoWatch } from '../core/battle/auto';
 import { morvaneAdvice, morvaneLesson } from './world-boss-advice';
 import { bossCrown, fieldHealthPath, healthColors, healthRatio, healthTone } from './battle-health';
 import { heroVoice } from './story-ui';
@@ -535,7 +535,7 @@ export class BattleUI {
     if (covered) { this.queueAuto(); return; }
     this.autoWatch ??= autoWatch(this.state, this.data, this.auto.stopHp);
     const stop = autoStopReason(this.state, this.data, this.auto.stopHp, this.autoWatch);
-    const command = stop ? undefined : autoCommand(this.state, this.data, this.auto.off);
+    const command = stop ? undefined : autoCommand(this.state, this.data, this.auto.off, this.session.kind === 'worldBoss' ? AUTO_LAPSE_WORLD_BOSS : AUTO_LAPSE);
     if (!command) {
       this.autoHeld = true;
       this.autoNote = stop ? `ออโต้หยุด · ${actorName(stop.heroId, this.data)} ${stop.reason === 'down' ? 'ล้ม' : `เลือดต่ำกว่า ${this.auto.stopHp}%`} · สั่งเองต่อ หรือแตะ AUTO` : 'ออโต้หยุด · ไม่มีคำสั่งที่ใช้ได้ · สั่งเองต่อ';

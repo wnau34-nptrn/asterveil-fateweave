@@ -4,7 +4,7 @@ import { captured, setCapture, simulateCampaign, type CampaignReport, type Style
 import { MAPS } from '../src/content/world/maps';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
 import { battleData, battleState } from '../src/core/world/world';
-import { autoCommand } from '../src/core/battle/auto';
+import { AUTO_LAPSE_WORLD_BOSS, autoCommand } from '../src/core/battle/auto';
 import { createBattle, currentHeroId, resolveCommand, targetOptions } from '../src/core/battle/engine';
 import type { BattleState, Command, EncounterDefinition } from '../src/core/battle/types';
 import { chapterOne } from '../src/content/world/chapter1';
@@ -45,7 +45,7 @@ const wb: Record<string, Record<'advice' | 'auto' | 'attack', number[]>> = {};
 for (const c of runs.auto) for (const b of wbBosses) {
   const data = wbEncounter(c.profile, chapterOne, lookup, b.boss as never); if (!data) continue;
   const advice = fromLesson(data.id === 'wb-morvane' ? morvaneLesson : battleLesson);
-  for (const [name, pick] of [['advice', advice], ['auto', (s: BattleState, d: EncounterDefinition) => autoCommand(s, d)], ['attack', attackOnly]] as const) {
+  for (const [name, pick] of [['advice', advice], ['auto', (s: BattleState, d: EncounterDefinition) => autoCommand(s, d, [], AUTO_LAPSE_WORLD_BOSS)], ['attack', attackOnly]] as const) {
     let bs = createBattle(data);
     for (let i = 0; bs.outcome === 'active' && bs.round <= chapterOne.worldBoss.maxRounds && i < 400; i++) { const cmd = pick(bs, data) ?? attackOnly(bs, data); if (!cmd) break; bs = resolveCommand(bs, data, cmd).state; }
     ((wb[data.id] ??= { advice: [], auto: [], attack: [] })[name]).push(wbDamage(bs, data));
@@ -84,7 +84,7 @@ describe('auto battle simulation', () => {
     lines.push('', '## Bosses with auto battle making every move', '', 'The same boss fights the auto company met (normal mode), replayed with auto battle on every turn. In the game auto battle is not offered in boss battles; this only shows where reading the moves matters.', '', '| Map | Fights | Auto won |', '|---|---|---|');
     for (const m of maps) { const b = bosses[m.id]; if (b) lines.push(`| ${m.name} | ${b.fought} | ${pct(b.won, b.fought)}% |`); }
     const mean = (xs: number[]) => xs.length ? Math.round(xs.reduce((a, b) => a + b, 0) / xs.length) : 0;
-    lines.push('', '## World Boss damage', '', `Each auto company's camp team after map 5 fights every World Boss for ${chapterOne.worldBoss.maxRounds} rounds. Advice = Morvane's coach for Morvane, the teaching advisor for the others. Average damage to the boss; auto battle is offered in World Boss attempts.`, '', '| Boss | Teams | Advice | Auto | Auto / advice | Basic attacks only |', '|---|---|---|---|---|---|');
+    lines.push('', '## World Boss damage', '', `Each auto company's camp team after map 5 fights every World Boss for ${chapterOne.worldBoss.maxRounds} rounds. Advice = Morvane's coach for Morvane, the teaching advisor for the others. Average damage to the boss; auto battle is offered in World Boss attempts and makes plain attacks on ${AUTO_LAPSE_WORLD_BOSS}% of its turns there (30% elsewhere).`, '', '| Boss | Teams | Advice | Auto | Auto / advice | Basic attacks only |', '|---|---|---|---|---|---|');
     for (const [id, r] of Object.entries(wb)) lines.push(`| ${id} | ${r.auto.length} | ${mean(r.advice)} | ${mean(r.auto)} | ${pct(mean(r.auto), mean(r.advice))}% | ${mean(r.attack)} |`);
     mkdirSync('docs/validation/auto-battle', { recursive: true });
     writeFileSync('docs/validation/auto-battle/SIM.md', lines.join('\n') + '\n');
