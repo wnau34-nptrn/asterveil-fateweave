@@ -1,0 +1,88 @@
+{
+  "terrainSeed": "sources/materials.png",
+  "backdropSeed": "sources/bg.png",
+  "referenceRevision": "60215cfe1c5fe8618c7e5f86e501f7e180b64df9",
+  "runtimePreviewActors": [
+    [
+      "units",
+      0
+    ],
+    [
+      "units",
+      1
+    ],
+    [
+      "units",
+      2
+    ],
+    [
+      "units",
+      3
+    ],
+    [
+      "units_mercs",
+      5
+    ],
+    [
+      "units_foes",
+      4
+    ],
+    [
+      "units_foes2",
+      2
+    ],
+    [
+      "units_foes2",
+      3
+    ],
+    [
+      "units_foes",
+      7
+    ],
+    [
+      "units_foes",
+      0
+    ]
+  ],
+  "numericImageGenSeeds": null,
+  "terrainRev2": {
+    "geometry": {
+      "yard": 201,
+      "tunnel": 212,
+      "cavern": 235,
+      "wallTop": 109,
+      "wallFace": 92,
+      "wallInner": 163
+    },
+    "detailBase": {
+      "yard": 300,
+      "tunnel": 340,
+      "cavern": 380
+    },
+    "mixedPreview": 357
+  },
+  "terrainRev3": {
+    "paintings": {
+      "yard": "sources/round3/yard.png",
+      "tunnel": "sources/round3/tunnel.png",
+      "cavern": "sources/round3/cavern.png",
+      "walls": "sources/round3/walls.png"
+    },
+    "styleReferences": [
+      "public/assets/world/tileset.webp",
+      "public/assets/world/lake_tiles.webp"
+    ],
+    "mixedPreviewRandomSeed": 357
+  },
+  "terrainRev4": {
+    "paintings": {
+      "yard": "sources/round4/yard.png",
+      "tunnel": "sources/round4/tunnel.png",
+      "cavern": "sources/round4/cavern.png",
+      "wall_face": "sources/round4/wall_face.png"
+    },
+    "round3Atlas": "sources/round3/tiles_mine.webp",
+    "styleReference": "public/assets/world/lake_tiles.webp",
+    "mixedPreviewRandomSeed": 357
+  }
+}
