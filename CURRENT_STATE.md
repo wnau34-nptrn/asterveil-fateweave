@@ -29,7 +29,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Map 5 design confirmed (“ทำตามที่คุณแนะนำ”). The mine unlocks after the lake; save v69, the Crystal Giant and exploration controls use the real campaign. Work branch `claude/friendly-heisenberg-xapns5` (Codex's `codex/map5-crystal-mine-design` merged with the game branch), not yet in the game. 2026-11-26 balance at 48 seeds: giant HP 580, Fist 225, Beam 205, Collapse 68, fragments 59/45 (`crystal-giant` v2); casual rush first clear 78%, basic-only boss wins ≤22%, every bench party 9–10/10. Dedicated art and the side events remain. [Mine validation](docs/validation/map5-mine/README_TH.md).
+- Map 5 (design approved, “ทำตามที่คุณแนะนำ”): unlocks after the lake; save v69; Crystal Giant tuned at 48 seeds 2026-11-26 (`crystal-giant` v2: casual rush 78%, basic-only ≤22%). PR #356 from `claude/friendly-heisenberg-xapns5`. Dedicated art and side events remain. [Mine validation](docs/validation/map5-mine/README_TH.md).
 - 2026-11-25: boss charge holds sit on the body. Bosses wear a silhouette aura in their own colour: light all battle, stronger while charging. Boss crowns sit above the rendered figure. The owner said “นำเข้าเกมได้เลย”. Mobile frame rate is not measured yet. [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
 - Game Feel [Draft PR #353](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/353): เสียงและภาพโจมตีตามอาวุธครบ 15 ตัวและตัวละครเซฟเก่า 2 ตัว. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
 - Game Feel #352 รวมแล้ว (`3b746ac`): จังหวะเสียง Duelist/Execute และเสียงโล่รับเต็ม. [ผลตรวจ](docs/validation/steel-contact-2026-11-24/README_TH.md).
