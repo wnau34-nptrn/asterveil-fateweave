@@ -1,4 +1,5 @@
 import { storageCap } from '../core/world/storage';
+import { forgeTaskStatus } from './forge-task-status';
 import { icon } from './icons';
 import { preloadForgeStrike } from './forge-strike';
 import { equipmentEffects } from './character-view';
@@ -216,7 +217,9 @@ export class ForgeWorkbench {
     const selected=chosen?`<section class="forge-launcher-item" aria-label="อุปกรณ์ที่เลือก">${gearArt(chosen.item)}<div><small>ชิ้นที่เลือกไว้สำหรับงานพัฒนา</small><b>${itemName(chosen.item)}</b><small>Lv${chosen.item.level} · +${chosen.item.plus??0} · ${chosen.owner?`สวมอยู่: ${heroText[chosen.owner]!.name}`:'ในคลัง'}</small></div></section>`:'';
     return `<section class="forge-workbench forge-launcher" data-task-launcher="true"><div id="forge-body" role="region" aria-label="งานโรงตีเหล็ก"><p class="forge-launcher-copy">เลือกสิ่งที่ต้องการทำ · การเปิดดูยังไม่ใช้ทรัพยากร</p>${selected}${bank}<div class="forge-task-grid">${forgeTasks.map(task=>{
       const enabled=!task.feature||open(task.feature),id=task.mode?'forge-mode-'+task.mode:'forge-tab-'+task.tab;
-      return `<button id="${id}" data-forge="task" data-task="${task.id}" class="forge-task-card" data-primary="${task.id==='enhance'||task.id==='level'}"${enabled?'':' disabled'}>${icon(task.glyph)}<span><b>${task.label}</b><small>${task.description}</small>${enabled?'':'<small>ยังไม่ปลดล็อก</small>'}</span></button>`;
+      // UX audit P1-5: a state chip from the forge's own rule checks (can do now / what is missing / nothing to work on).
+      const state=enabled?forgeTaskStatus(p,this.map,task.id):{state:'locked',text:'ยังไม่ปลดล็อก'};
+      return `<button id="${id}" data-forge="task" data-task="${task.id}" class="forge-task-card" data-primary="${task.id==='enhance'||task.id==='level'}"${state?` data-state="${state.state}"`:''}${enabled?'':' disabled'}>${icon(task.glyph)}<span><b>${task.label}</b><small>${task.description}</small>${state?`<small class="forge-task-state">${state.text}</small>`:''}</span></button>`;
     }).join('')}</div>${this.host.quest?`<details class="forge-quests"><summary>งานของช่างตีเหล็ก</summary>${this.host.quest()}</details>`:''}</div>${this.frameTrim()}</section>`;
   }
   private items(p:Profile):string {

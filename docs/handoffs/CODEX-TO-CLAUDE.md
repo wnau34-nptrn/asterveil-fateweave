@@ -1,3 +1,8 @@
+## 2026-11-26 — UX audit P1-5 หน้าเลือกงานช่าง (Claude · `claude/gallant-edison-a7kkl3`)
+
+- เจ้าของสั่ง “ทำ P1-5 หน้าเลือกงานช่างต่อได้เลย”: ป้ายสถานะจาก rule เดิม (`forge-task-status.ts`), ตีบวก/เพิ่มเลเวลเป็นการ์ดเต็มความกว้าง
+- vitest 4 + Playwright ใหม่ 2 + ชุด forge เดิม 49 ผ่าน · [ผลตรวจ](../validation/ux-forge-launcher-2026-11-26/README_TH.md)
+
 ## 2026-11-26 — ภาพตัวเต็มทุกแท็บ + สีประจำคลาส (Claude · `claude/gallant-edison-a7kkl3`)
 
 - เจ้าของ: “ภาพตัวละครใช้แบบตัวเต็มทุกแท็บ ใช้สีประจำคลาส” · `heroStage()`/`classTone()` ใน `portraits.ts`, `--class-tone` บน dialog ตัวละคร
