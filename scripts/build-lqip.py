@@ -10,7 +10,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCES = [
     'assets/title/title_party.webp',
     'assets/lobby/lobby_bg.webp',
-    'assets/art/ruins.webp', 'assets/art/battle_forest.webp', 'assets/art/battle_riftline.webp', 'assets/art/battle_lake.webp',
+    'assets/art/ruins.webp', 'assets/art/battle_forest.webp', 'assets/art/battle_riftline.webp', 'assets/art/battle_lake.webp', 'assets/art/battle_mine.webp',
     'assets/story/story_awaken.webp', 'assets/story/story_rift.webp', 'assets/story/story_retreat.webp',
 ]
 WIDTH = 32

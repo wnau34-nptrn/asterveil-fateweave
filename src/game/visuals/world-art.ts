@@ -7,6 +7,8 @@ import itemFrames from '../../content/world/items.json';
 import lakeTileFrames from '../../content/world/lake-tiles.json';
 import lakeDecorFrames from '../../content/world/lake-decor.json';
 import mineDecorFrames from '../../content/world/mine-decor.json';
+import mineTileFrames from '../../content/world/mine-tiles.json';
+import mineRailFrames from '../../content/world/mine-rails.json';
 
 // Pure art selection for the DOM map (ART-UI-WORLD-001). Choices depend only on
 // tile coordinates and committed state, so a frame never changes between renders.
@@ -29,14 +31,18 @@ const lakeDecor: Readonly<Record<string, Frame & { zone: string }>> = lakeDecorF
 export const isLakeArt = (map: MapDefinition): boolean => map.id === 'moon-lake';
 // Map 5 (ART-WORLD-MINE-PROPS-001): a 6×5 prop atlas (128 px cells, foot at 124) for lanterns, puzzle pieces, workers and
 // mine clutter. The map shows it through `#map-grid[data-art="mine"]`; the revision is the first 8 hex of the file's SHA-256.
-export const MINE_REV = { decor: 'ef9dc300' } as const;
+export const MINE_REV = { decor: 'ef9dc300', tiles: 'dae0df6a', rails: '10a542fd' } as const;
 export const mineDecorUrl = (): string => `${import.meta.env.BASE_URL}assets/world/mine_decor.webp?v=${MINE_REV.decor}`;
 export const mineDecor: Readonly<Record<string, Frame>> = mineDecorFrames;
+// ART-WORLD-MINE-001: a 4×4 floor/wall atlas (yard, tunnel, cavern ×4, mine_wall_top/face/inner) and a 3×2 rail overlay atlas.
+export const mineTiles: Readonly<Record<string, Frame>> = mineTileFrames;
+export const mineRails: Readonly<Record<string, Frame>> = mineRailFrames;
+export const mineArtUrl = (kind: 'tiles' | 'rails'): string => `${import.meta.env.BASE_URL}assets/world/mine_${kind}.webp?v=${MINE_REV[kind]}`;
 export const isMineArt = (map: MapDefinition): boolean => !!map.mine;
 /** The `data-art` skin of the map grid. */
 export const mapArt = (map: MapDefinition): 'lake' | 'mine' | 'base' => isLakeArt(map) ? 'lake' : isMineArt(map) ? 'mine' : 'base';
 /** The frame table a map's floor names belong to. */
-export const tileFrame = (map: MapDefinition, name: string): Frame => (isLakeArt(map) ? lakeTiles : tileset)[name]!;
+export const tileFrame = (map: MapDefinition, name: string): Frame => (isLakeArt(map) ? lakeTiles : isMineArt(map) ? mineTiles : tileset)[name]!;
 // WORLD_REV:
 export const WORLD_REV: Readonly<Record<string, string>> = { tileset: '6ced91a5', decor: 'e9278e34' };
 export const worldArtUrl = (name: string): string => `${import.meta.env.BASE_URL}assets/world/${name}.webp${WORLD_REV[name] ? `?v=${WORLD_REV[name]}` : ''}`;
@@ -65,9 +71,23 @@ function lakeFloor(map: MapDefinition, p: Point, zoneId: string): string {
   return `${lakeZone[zoneId] ?? 'sanctum'}_${cellHash(p.x, p.y) % 4}`;
 }
 const lakeZone: Record<string, string> = { shore: 'shore', isle: 'isle', pavilion: 'pavilion', sanctum: 'sanctum' };
+// Mine floors by zone; camps sit on the yard ground.
+const mineZone: Record<string, string> = { 'mine-yard': 'yard', 'mine-tunnels': 'tunnel', 'mine-cavern': 'cavern' };
+/** The rail overlay of a mine cell: the main line from the cart to the cracked wall, a junction at each switch, its siding and the buffer stop. */
+export function railAt(map: MapDefinition, p: Point): string | undefined {
+  const cart = map.mine?.cart; if (!cart) return undefined;
+  for (const sw of cart.switches) {
+    const east = sw.sidingEnd.x > sw.at.x;
+    if (p.x === sw.at.x && p.y === sw.at.y) return east ? 'rail_junction_e' : 'rail_junction_w';
+    if (p.y === sw.at.y && p.x === sw.sidingEnd.x) return east ? 'rail_end_stop' : 'rail_end_stop_w';
+    if (p.y === sw.at.y && (east ? p.x > sw.at.x && p.x < sw.sidingEnd.x : p.x < sw.at.x && p.x > sw.sidingEnd.x)) return 'rail_ew';
+  }
+  return p.x === cart.start.x && p.y >= cart.wall.y && p.y <= cart.start.y ? 'rail_ns' : undefined;
+}
 export function floorFrame(map: MapDefinition, p: Point): string {
   const tile = tileAt(map, p)!;
   if (isLakeArt(map)) return tile.kind === 'wall' ? `lake_${wallFace(map, p)}` : tile.kind === 'camp' ? `shore_${cellHash(p.x, p.y) % 4}` : lakeFloor(map, p, tile.zoneId);
+  if (isMineArt(map)) return tile.kind === 'wall' ? `mine_${wallFace(map, p)}` : `${mineZone[tile.zoneId] ?? 'yard'}_${cellHash(p.x, p.y) % 4}`;
   if (tile.kind === 'wall') {
     return map.id === 'deep-forest' ? `forest_${wallFace(map, p)}` : wallFace(map, p);
   }

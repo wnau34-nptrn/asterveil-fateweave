@@ -600,6 +600,10 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .lost-note.picked { display: none; }
 @media (prefers-reduced-motion: reduce) { .tile.water::after { transition: none; } }
 
+/* ---- Map 5 floors (ART-WORLD-MINE-001): a 4×4 atlas of 128 px cells; rails are a 3×2 overlay atlas drawn on the floor ---- */
+#map-grid[data-art="mine"] .tile { background: url('/assets/world/mine_tiles.webp?v=dae0df6a') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 4) no-repeat; }
+.rail { position: absolute; left: calc(var(--x) * var(--t)); top: calc(var(--y) * var(--t)); width: var(--t); height: var(--t); pointer-events: none;
+  background: url('/assets/world/mine_rails.webp?v=10a542fd') calc(var(--rx) * var(--t) * -1) calc(var(--ry) * var(--t) * -1) / calc(var(--t) * 3) calc(var(--t) * 2) no-repeat; }
 /* ---- Map 5 props (ART-WORLD-MINE-PROPS-001): a 6×5 atlas of 128 px cells, foot at 124; --mx/--my pick the frame ---- */
 .mine-prop { width: var(--t); height: var(--t); pointer-events: none; background: url('/assets/world/mine_decor.webp?v=ef9dc300') calc(var(--mx) * var(--t) * -1) calc(var(--my) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 5) no-repeat; }
 .mine-prop.gone { display: none; }
@@ -613,7 +617,7 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 #map-grid[data-art="mine"] .decor { background: url('/assets/world/mine_decor.webp?v=ef9dc300') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 5) no-repeat; }
 /* Cracked wall (cart), evidence door (beam) and handprint passages: shut on the wall tile, open over the walkable floor. */
 #map-grid[data-art="mine"] .puzzle-door, #map-grid[data-art="mine"] .secret-wall { background: url('/assets/world/mine_decor.webp?v=ef9dc300') calc(var(--mx) * var(--t) * -1) calc(var(--my) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 5) no-repeat; }
-#map-grid[data-art="mine"] .puzzle-door.open, #map-grid[data-art="mine"] .secret-wall.found { background: url('/assets/world/mine_decor.webp?v=ef9dc300') calc(var(--mx) * var(--t) * -1) calc(var(--my) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 5) no-repeat, url('/assets/world/tileset.webp?v=6ced91a5') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 9) no-repeat; }
+#map-grid[data-art="mine"] .puzzle-door.open, #map-grid[data-art="mine"] .secret-wall.found { background: url('/assets/world/mine_decor.webp?v=ef9dc300') calc(var(--mx) * var(--t) * -1) calc(var(--my) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 5) no-repeat, url('/assets/world/mine_tiles.webp?v=dae0df6a') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 4) no-repeat; }
 #map-grid[data-art="mine"] .puzzle-door[data-door="mine-cart"] { --mx: 0; --my: 1; }
 #map-grid[data-art="mine"] .puzzle-door[data-door="mine-cart"].open { --mx: 1; }
 #map-grid[data-art="mine"] .puzzle-door[data-door="mine-beam"] { --mx: 0; --my: 2; }

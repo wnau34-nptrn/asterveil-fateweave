@@ -27,7 +27,7 @@ import { formationGrid, formationTap, laneName } from './formation-grid';
 import { heroArt, portrait, starRow } from './portraits';
 import { fateRevealMs, fateWeave, infoButton } from './gacha-panel';
 import { unitsUrl } from '../game/visuals/assets';
-import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileFrame, lakeHighFrame, mapArt, mineDecor, worldArtUrl, type Landmark } from '../game/visuals/world-art';
+import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileFrame, lakeHighFrame, mapArt, mineDecor, mineRails, railAt, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { questLine, rewardText, storyQuestText, mapQuestText, sideQuestText, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
 import { tomeCount } from '../core/world/tomes';
 import { icon, lineIcon } from './icons';
@@ -352,6 +352,8 @@ export class WorldUI {
       const frame = tileFrame(this.map, floorFrame(this.map, { x, y }));
       const water = waterAt(this.map, { x, y });
       html += `<div class="tile t-${tileAt(this.map, { x, y })!.kind}${water ? ` water ${water}` : ''}"${water ? ` data-cell="${x},${y}"` : ''} style="--x:${x};--y:${y};--fx:${frame.x / SOURCE_TILE};--fy:${frame.y / SOURCE_TILE}${water ? this.waterVars(x, y) : ''}"></div>`;
+      const rail = railAt(this.map, { x, y });
+      if (rail) { const r = mineRails[rail]!; html += `<div class="rail" style="--x:${x};--y:${y};--rx:${r.x / SOURCE_TILE};--ry:${r.y / SOURCE_TILE}"></div>`; }
     }
     return html;
   }
