@@ -1,13 +1,17 @@
 {
-  "runtimeBytes": 1607054,
+  "runtimeBytes": 1609628,
   "files": {
     "NOTES.md": {
-      "sha256": "0fba7240c69eea18dcc540c36ec19f974a493565fabb5838ab8a6163620c18fe",
-      "bytes": 1663
+      "sha256": "4aa8951202049ef295bdcac2776695d3de977da0b303276c92b0e382ec7aa4aa",
+      "bytes": 1834
     },
     "build.py": {
-      "sha256": "ca14a8ebab24071b52c7995f68d3a26133ebbff3a9bc0d497d9e548fcc4f05df",
-      "bytes": 9911
+      "sha256": "e42787e1fce44586c7d2b473bd3918f7886679239916cf5c1ceaaa9c95f434c6",
+      "bytes": 9977
+    },
+    "map_visibility.py": {
+      "sha256": "cdf8a70be36f5fb8db121351fbfbdb9e0d23b0b852a7644f7cd1a0459233814c",
+      "bytes": 1012
     },
     "preview/battle-1366.png": {
       "sha256": "e69c3cd953f80aa609ebddbdd93c7b51650dad66f70b9d80b3b0c30f575b2d38",
@@ -28,8 +32,8 @@
       "mode": "RGB"
     },
     "preview/map-1-lit.png": {
-      "sha256": "f82cdf3a6cfd3c11e120f43a97df1c7a03a2598aa6f2d5932494413269347be9",
-      "bytes": 203232,
+      "sha256": "9365af3f8aca8d504c7e035de97e84c906003ae4ae2357b4ef9b9e34dca9020b",
+      "bytes": 205301,
       "size": [
         390,
         844
@@ -37,8 +41,8 @@
       "mode": "RGB"
     },
     "preview/map-2-dark.png": {
-      "sha256": "5ba3c9d02417f55ee71394b2bee7cff331969c3f21f6ec60ff3394279394c7eb",
-      "bytes": 221788,
+      "sha256": "897650d335f1a8cb92d825d7e7ffe5fdfa2b60b5d2d420203850531411363f77",
+      "bytes": 245122,
       "size": [
         390,
         844
@@ -46,8 +50,8 @@
       "mode": "RGB"
     },
     "preview/map-2-lit.png": {
-      "sha256": "6416172cd0ded31aeffee9f0a19fe687b15346541866799d1bc628ec37088759",
-      "bytes": 300419,
+      "sha256": "d187b839bfd9fb9504090471995334c4fba94e45b23fe806383543929b91bee6",
+      "bytes": 300907,
       "size": [
         390,
         844
@@ -81,8 +85,8 @@
       "bytes": 473
     },
     "runtime/rails_mine.webp": {
-      "sha256": "cb254ce26f26c6c6ef5999cef43c31385e50116db7c407484866586011f58dbc",
-      "bytes": 930,
+      "sha256": "10a542fdd43cc43cfb349fc9871e9dc84d7b2c9d28595e8a481a06c430735825",
+      "bytes": 914,
       "size": [
         384,
         256
@@ -94,8 +98,8 @@
       "bytes": 1137
     },
     "runtime/tiles_mine.webp": {
-      "sha256": "aec6058acc4e1dbd9a17f418148c9aa41b0c523fe71912e4aecb43ea278f1ae7",
-      "bytes": 231266,
+      "sha256": "57705e4008d5104d959ba7048b7fc1fc43c13172e5ba578f6e8e877c9b0b593c",
+      "bytes": 233856,
       "size": [
         512,
         512

@@ -7,6 +7,8 @@ import re
 import numpy as np
 from PIL import Image, ImageDraw, ImageOps
 
+from map_visibility import darkened_map, visible_from
+
 ROOT = Path(__file__).resolve().parent
 SOURCE = ROOT / 'sources'
 OUT = ROOT / 'runtime'
@@ -38,6 +40,8 @@ def terrain():
     for i, zone in enumerate(('yard', 'tunnel', 'cavern', 'wall')):
         left, top = i % 2 * (w // 2), i // 2 * (h // 2)
         panel = art.crop((left + 12, top + 12, left + w // 2 - 12, top + h // 2 - 12))
+        if zone == 'yard':
+            panel = panel.crop((147, 123, w // 2 - 142, h // 2 - 112))
         variants = ('mine_wall_top', 'mine_wall_face', 'mine_wall_inner') if zone == 'wall' else [f'{zone}_{j}' for j in range(4)]
         for j, key in enumerate(variants):
             base = np.array(color_sets[i], dtype=float)
@@ -75,7 +79,7 @@ def tracks():
         tile = Image.new('RGBA', (TILE, TILE))
         draw = ImageDraw.Draw(tile)
         if name in ('ew', 'end_stop'):
-            for x in range(8, 125, 23):
+            for x in range(8, 125 if name == 'ew' else 65, 23):
                 draw.rounded_rectangle((x, 37, x + 9, 90), 2, fill='#59412e', outline='#392d29', width=2)
             for y in (47, 79):
                 draw.line((0, y + 2, 127 if name == 'ew' else 72, y + 2), fill='#343437', width=6)
@@ -129,11 +133,9 @@ def map_previews(tiles, rails):
         viewport = grid.crop((left, top, left + 390, top + 844)).convert('RGB')
         viewport.save(PREVIEW / f'map-{i + 1}-lit.png')
         if i == 1:
-            y, x = np.indices((844, 390))
-            distance = np.hypot(x - (cx * 60 + 30 - left), y - (cy * 60 + 30 - top))
-            factor = 1 - np.clip((distance - 39) / 47, 0, 1) * .66
-            dark = Image.fromarray((np.asarray(viewport) * factor[..., None]).astype('uint8'))
-            dark.save(PREVIEW / 'map-2-dark.png')
+            seen = visible_from(ROWS, (cx, cy), 1)
+            dark = darkened_map(grid, ROWS, seen)
+            dark.crop((left, top, left + 390, top + 844)).save(PREVIEW / 'map-2-dark.png')
 
 
 def fight(bg):
@@ -186,7 +188,7 @@ def main():
     fight(bg)
     files = {}
     for file in sorted(ROOT.rglob('*')):
-        if file.is_file() and file.name != 'validation.json':
+        if file.is_file() and file.name != 'validation.json' and '__pycache__' not in file.parts:
             item = {'sha256': hashlib.sha256(file.read_bytes()).hexdigest(), 'bytes': file.stat().st_size}
             if file.suffix in ('.png', '.webp'):
                 with Image.open(file) as image:
