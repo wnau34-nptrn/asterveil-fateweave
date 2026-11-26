@@ -1,3 +1,8 @@
+## 2026-11-26 — ภาพตัวเต็มทุกแท็บ + สีประจำคลาส (Claude · `claude/gallant-edison-a7kkl3`)
+
+- เจ้าของ: “ภาพตัวละครใช้แบบตัวเต็มทุกแท็บ ใช้สีประจำคลาส” · `heroStage()`/`classTone()` ใน `portraits.ts`, `--class-tone` บน dialog ตัวละคร
+- vitest `class-tone` + Playwright `ux-hero-stage` ใหม่ และชุดหน้าตัวละครเดิม 51 เคสผ่าน · [ผลตรวจ](../validation/ux-hero-stage-2026-11-26/README_TH.md)
+
 ## 2026-11-26 — UX audit S2–S4 transition (Claude · `claude/gallant-edison-a7kkl3`)
 
 - เจ้าของสั่ง “เริ่ม S2–S4 ต่อได้เลย”: เปลี่ยนตัว/แท็บมีอนิเมชันเข้าตามทิศ (`character-panel.ts` `cue`), ปิด dialog/sheet ทิ้งสำเนา inert ที่จางหาย (`dialog-leave.ts`, `lobby-ui.ts`), token `--swap-ms`/`--tab-ms`/`--sheet-exit-ms`

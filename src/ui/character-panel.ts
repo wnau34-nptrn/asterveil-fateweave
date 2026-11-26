@@ -15,7 +15,7 @@ import type { CharacterState } from './character-metrics';
 import { changeGearFilter, filteredEquipment, gearEmpty, gearFilters, newGearFilters, type GearFilters } from './gear-inventory';
 import { gearArt } from './equip-art';
 import { icon } from './icons';
-import { heroArt, portrait } from './portraits';
+import { classTone, heroArt, heroStage, portrait } from './portraits';
 import { heroStatLine, heroText, itemLines, itemName, itemOwner, rarityText, setText, slotIcon, slotText, wornSets } from './th';
 
 // Stats an item card compares, in display order: hero field, Thai name, unit.
@@ -233,12 +233,15 @@ export class CharacterPanel {
     const picker=this.dialog.querySelector<HTMLElement>(`#${this.id('character-members')}`)!,left=picker.scrollLeft;
     picker.innerHTML=this.ids(model.ids.map(c=>{const member=model.state.members[c]!,free=talentPoints(this.map,levelOf(this.map,model.state),treeClears(model.state))-talentsSpent(member.talents);return `<button id="character-member-${c}" data-world="character-member" data-hero="${c}" class="tree-member" aria-pressed="${c===id}" aria-label="${heroText[c]!.name} · แต้มเหลือ ${free}">${portrait(c)}<small>${heroText[c]!.name}</small>${free?`<i>+${free}</i>`:''}</button>`;}).join(''));picker.scrollLeft=left;
     this.dialog.style.setProperty('--character-tab-count',String(this.visibleTabs().length));
+    this.dialog.style.setProperty('--class-tone',classTone(h,this.heroes,this.map.company.parked));
     this.dialog.querySelector(`#${this.id('character-tabs')}`)!.innerHTML=this.ids(this.visibleTabs().map(tab=>`<button id="character-tab-${tab}" data-world="character-tab" data-tab="${tab}" role="tab" aria-controls="character-content" aria-selected="${tab===this.tab}" tabindex="${tab===this.tab?0:-1}">${icon(characterTabIcons[tab as CharacterTab])}<span>${characterTabs[tab]}</span></button>`).join(''));
     const position=model.state.roster.deployed.includes(id)?`ตัวหลักช่อง ${model.state.roster.deployed.indexOf(id)+1}`:model.state.roster.reserve.includes(id)?'สำรอง':'ในค่าย';
     // A deployed member shows the lane it stands in (formation); others their class lane.
     const lane=formation(model.state.roster,c=>this.heroes.find(v=>v.id===c)?.lane??'front')[id]??h.lane;
     if(!skillCatalogue(this.map,base,h).includes(this.selectedSkill))this.selectedSkill=h.actions.find(a=>a!=='attack')??'attack';
     let html=this.tab==='skills'?'':`<p class="character-summary">${heroText[id]!.role} · ${lane==='front'?'แนวหน้า':'แนวหลัง'} · ${position} · ${model.camp?'ค่ายหลัก · เลือดพร้อมออกเดินทาง':'HP'} ${model.state.hp[id]??0}/${h.maxHp}</p>`;
+    // Owner 2026-11-26: the full-body figure on every tab (overview draws its own stage, the gear tab its paper doll).
+    if(this.tab==='skills'||this.tab==='talents'||this.tab==='develop')html+=heroStage(id);
     html+=this.tab==='overview'?characterOverview(model.state,this.map,h,this.template,!!model.starProfile):this.tab==='develop'?this.develop(model):this.tab==='talents'?talentsView(model,this.map,this.template,h,base,this.node):this.tab==='skills'?skillsView(model,this.map,this.template,h,base,this.selectedSkill,this.skillSection):this.gear(model,h);
     let dock='';if(this.skillReview.active&&model.skillProfile){const page=this.skillReview.render(model.skillProfile);html=page.body;dock=page.dock;}
     this.dialog.toggleAttribute('data-skill-review',this.skillReview.active);

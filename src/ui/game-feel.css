@@ -981,7 +981,7 @@ button.is-loading::before { content: ''; position: absolute; top: 50%; right: 14
   /* S2: another member — the whole page slides in from the side of the list it came from. */
   #app .character-content[data-enter=swap-next] { --enter-dx: 18px; animation: content-from-right var(--swap-ms) var(--ease-out) backwards; }
   #app .character-content[data-enter=swap-prev] { --enter-dx: 18px; animation: content-from-left var(--swap-ms) var(--ease-out) backwards; }
-  .character-content[data-enter^=swap] :is(.overview-hero, .doll-hero) { animation: hero-arrive calc(var(--swap-ms) + 60ms) var(--ease-out) backwards; }
+  .character-content[data-enter^=swap] :is(.hero-stage, .doll-hero .hero-art) { animation: hero-arrive calc(var(--swap-ms) + 60ms) var(--ease-out) backwards; }
   /* S3: another tab — a smaller slide, and the chosen tab glows once. */
   #app .character-content[data-enter=tab-next] { --enter-dx: 8px; animation: content-from-right var(--tab-ms) var(--ease-out) backwards; }
   #app .character-content[data-enter=tab-prev] { --enter-dx: 8px; animation: content-from-left var(--tab-ms) var(--ease-out) backwards; }
