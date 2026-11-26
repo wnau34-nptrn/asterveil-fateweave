@@ -26,6 +26,7 @@ ART-UI-MODERN-001 (`incoming/ART-UI-MODERN-001/`) is the approved UI direction, 
 
 ## Art, animation and VFX pipeline
 
+- Art style (owner 2026-11-26 “บันทึกไว้ด้วยว่าสไตล์ภาพต้องเป็น semi chibi”): characters, enemies and bosses are semi-chibi — big head, short thick limbs, clean outlines, saturated cel shading (in-game references: `foe_mirror_shade`, `foe_hunter`, `foe_ruin_bat`, `foe_water_spirit`). Every art brief and review applies it; existing art is redrawn only when the owner asks (2026-11-26: the five Map 5 foes; the approved Crystal Giant R1 stays).
 - Codex makes art (into `incoming/` only); Claude integrates it in-game. Plan and wave history: `docs/design/ANIMATION_VFX_COMPLETION_PLAN_TH.md`.
 - Owner artwork selection and motion approval are required per batch. Engineering and passing tests are not visual approval: show the owner real 390px clips before expanding effects, and record approvals as the owner's own words (never inferred from tests).
 - Presentation work keeps rules/save/content/balance/playback timing unchanged and routes VFX from actual events (truthful outcomes).
