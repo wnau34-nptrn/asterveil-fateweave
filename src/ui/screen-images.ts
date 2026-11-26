@@ -3,7 +3,7 @@
 // URLs must match the ones the screens use exactly (CSS `url('/assets/…')` is rewritten to the same BASE_URL path).
 import type { Profile } from '../core/world/types';
 import { actorArt, artUrl, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, npcBustsUrl, npcStationsUrl, portraitsHalfUrl } from '../game/visuals/assets';
-import { fogFills, lakeUrl, worldArtUrl } from '../game/visuals/world-art';
+import { fogFills, lakeUrl, mineDecorUrl, worldArtUrl } from '../game/visuals/world-art';
 
 export interface ScreenImages { main: string[]; extra: string[] }
 const base = (): string => import.meta.env.BASE_URL;
@@ -25,7 +25,7 @@ const landmarks = ['landmark_camp', 'landmark_start', 'landmark_gate', 'landmark
 /** Map: floor tiles, props, fog and landmarks (shared by every map); the team's portraits are fetched ahead only. */
 export function worldImages(team: readonly string[] = [], mapId?: string): ScreenImages {
   return {
-    main: ['tileset', 'decor', 'map_props', 'token_frame', ...fogFills, ...landmarks].map(worldArtUrl).concat(mapId === 'moon-lake' ? [lakeUrl('tiles'), lakeUrl('decor')] : []),
+    main: ['tileset', 'decor', 'map_props', 'token_frame', ...fogFills, ...landmarks].map(worldArtUrl).concat(mapId === 'moon-lake' ? [lakeUrl('tiles'), lakeUrl('decor')] : mapId === 'crystal-mine' ? [mineDecorUrl()] : []),
     extra: uniq([...fogLayersAll.filter(l => !(fogFills as readonly string[]).includes(l)), 'step_hint', 'step_dust', 'puzzle', 'chests', 'items'].map(worldArtUrl).concat(teamPortraits(team))),
   };
 }

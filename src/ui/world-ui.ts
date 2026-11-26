@@ -27,7 +27,7 @@ import { formationGrid, formationTap, laneName } from './formation-grid';
 import { heroArt, portrait, starRow } from './portraits';
 import { fateRevealMs, fateWeave, infoButton } from './gacha-panel';
 import { unitsUrl } from '../game/visuals/assets';
-import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileFrame, lakeHighFrame, isLakeArt, worldArtUrl, type Landmark } from '../game/visuals/world-art';
+import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileFrame, lakeHighFrame, mapArt, mineDecor, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { questLine, rewardText, storyQuestText, mapQuestText, sideQuestText, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
 import { tomeCount } from '../core/world/tomes';
 import { icon, lineIcon } from './icons';
@@ -70,6 +70,10 @@ const goals = (s: ExpeditionState, map: MapDefinition) => {
 // Full-screen DOM renderer for the pure expedition state (Luminous Veil R2).
 // It owns no rules: every input is forwarded to the host, which commits and
 // saves before the view updates. Animations only decorate committed state.
+// Rescued workers wait beside the yard camp (offsets from the rescue camp); the beam crystals face by state.
+const RESCUED_SLOTS: readonly Point[] = [{ x: -1, y: 1 }, { x: 1, y: 1 }, { x: -2, y: 1 }];
+const BEAM_FRAME: Record<string, string> = { up: 'beam_n', down: 'beam_s', right: 'beam_e', left: 'beam_w' };
+
 export class WorldUI {
   private view: WorldView | undefined;
   private previous: { position: Point; chance: number; revealed: string; boss: boolean; done: boolean } | undefined;
@@ -93,7 +97,7 @@ export class WorldUI {
     this.width = map.rows[0]!.length;
     root.innerHTML = `
       <section class="map-view" id="map-viewport" aria-label="แผนที่ ใช้ปุ่มลูกศรหรือแตะช่องที่ไฮไลต์เพื่อเดินทีละช่อง">
-        <div class="map-grid" id="map-grid" data-art="${isLakeArt(map) ? 'lake' : 'base'}" aria-hidden="true" style="--cols:${this.width};--rows:${map.rows.length}">
+        <div class="map-grid" id="map-grid" data-art="${mapArt(map)}" aria-hidden="true" style="--cols:${this.width};--rows:${map.rows.length}">
           <div class="floor-layer">${this.floorCells()}</div>
           <div class="sprite-layer" id="sprite-layer">${this.staticSprites()}<div class="party-token" id="party-token"><span class="token-portrait">${portrait('guardian')}</span></div></div>
           <div class="fog-layer" id="fog-layer"></div>
@@ -329,7 +333,7 @@ export class WorldUI {
     if (map.id === this.map.id) return;
     this.map = map; this.eliteArt = eliteArt; this.width = map.rows[0]!.length; this.previous = undefined;
     const grid = this.root.querySelector<HTMLElement>('#map-grid')!;
-    grid.style.setProperty('--cols', String(this.width)); grid.dataset.art = isLakeArt(map) ? 'lake' : 'base'; grid.style.setProperty('--rows', String(map.rows.length));
+    grid.style.setProperty('--cols', String(this.width)); grid.dataset.art = mapArt(map); grid.style.setProperty('--rows', String(map.rows.length));
     grid.querySelector('.floor-layer')!.innerHTML = this.floorCells();
     const token = this.root.querySelector('#party-token')!;
     const sprites = this.root.querySelector('#sprite-layer')!; sprites.innerHTML = this.staticSprites(); sprites.append(token);
@@ -365,12 +369,17 @@ export class WorldUI {
       const event = this.map.events.find(e => e.x === x && e.y === y);
       if (event) html += `<span class="event-mark sprite" data-cell="${x},${y}" data-event="${event.id}" data-kind="${event.kind}" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"><b class="map-prop"></b><i>!</i></span>`;
       html += this.puzzleSprites(x, y);
+      // Map 5 interactions (ART-WORLD-MINE-PROPS-001): one painted prop per site; renderPuzzles() picks its frame from state.
       const mine = this.map.mine;
       if (mine) {
         const at = (p: Point) => p.x === x && p.y === y;
-        const mark = mine.workers.some(at) ? 'คน' : mine.crystals.some(at) ? 'แสง' : mine.cart.switches.some(sw => at(sw.lever)) ? 'ราง'
-          : at(mine.cart.start) ? 'รถ' : mine.beam.crystals.some(at) ? 'ผลึก' : '';
-        if (mark) html += `<span class="sprite mine-marker" data-cell="${x},${y}" aria-hidden="true" style="--x:${x};--y:${y};z-index:${y * 3 + 1}">${mark}</span>`;
+        const prop = (kind: string, index = 0) => { html += `<span class="sprite mine-prop" data-cell="${x},${y}" data-mine="${kind}" data-index="${index}" aria-hidden="true" style="--x:${x};--y:${y};z-index:${y * 3 + 1}"></span>`; };
+        mine.workers.forEach((w, i) => { if (at(w)) prop('worker', i); });
+        RESCUED_SLOTS.forEach((d, i) => { if (i < mine.workers.length && at({ x: mine.rescueCamp.x + d.x, y: mine.rescueCamp.y + d.y })) prop('rescued', i); });
+        if (mine.crystals.some(at)) prop('crystal');
+        mine.cart.switches.forEach((sw, i) => { if (at(sw.lever)) prop('lever', i); });
+        if (at(mine.cart.start)) prop('cart');
+        mine.beam.crystals.forEach((c, i) => { if (at(c)) prop('beam', i); });
       }
       if (['camp', 'start', 'goal', 'boss'].includes(kind)) {
         const boss = kind === 'boss' ? `<span class="boss-unit" style="background-image:url('${unitsUrl('units')}')"></span>` : '';
@@ -430,6 +439,16 @@ export class WorldUI {
     this.root.querySelectorAll<HTMLElement>('.herb').forEach(el => el.classList.toggle('picked', s.herbs.includes(el.dataset.herb!)));
     this.root.querySelectorAll<HTMLElement>('.lantern').forEach(el => el.classList.toggle('lit', !!s.lanterns?.includes(el.dataset.lantern!)));
     this.root.querySelectorAll<HTMLElement>('.lost-note').forEach(el => el.classList.toggle('picked', !!s.notes?.includes(el.dataset.note!)));
+    const mine = this.map.mine;
+    if (mine) this.root.querySelectorAll<HTMLElement>('.mine-prop').forEach(el => {
+      const i = Number(el.dataset.index); const worker = mine.workers[i]?.id ?? ''; const rescue = s.mine?.rescue;
+      const frame = { worker: rescue?.following.includes(worker) || rescue?.rescued.includes(worker) ? '' : 'worker_wait',
+        rescued: rescue?.rescued.includes(worker) ? 'worker_follow' : '', crystal: 'glow_crystal',
+        lever: (s.mine?.cart[i] ?? 'siding') === 'main' || s.solved.includes(mine.cart.id) ? 'lever_main' : 'lever_siding',
+        cart: s.solved.includes(mine.cart.id) ? '' : 'ore_cart', beam: BEAM_FRAME[s.mine?.beam[i] ?? 'up'] }[el.dataset.mine!] ?? '';
+      el.classList.toggle('gone', !frame); if (!frame) return;
+      const f = mineDecor[frame]!; el.style.setProperty('--mx', String(f.x / SOURCE_TILE)); el.style.setProperty('--my', String(f.y / SOURCE_TILE));
+    });
     // A sunk boulder's channel tile is a dry causeway: no water drawn over it.
     this.root.querySelectorAll<HTMLElement>('.tile.water').forEach(el => { const [x, y] = el.dataset.cell!.split(',').map(Number); el.classList.toggle('causeway', !waterAt(this.map, { x: x!, y: y! }, s.solved)); });
   }
@@ -705,7 +724,6 @@ export class WorldUI {
       const [x, y] = el.dataset.cell!.split(',').map(Number); const at = { x: x!, y: y! };
       const dark = mine?.darkZones.includes(tileAt(this.map, at)?.zoneId ?? '');
       el.hidden = !isRevealed(s, this.map, at) || !!(dark && local && !local.has(at.y * this.width + at.x));
-      if (el.classList.contains('mine-marker') && !mineActionAt(s, this.map, at)) el.hidden = true;
     });
   }
 

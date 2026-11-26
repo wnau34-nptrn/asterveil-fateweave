@@ -145,3 +145,21 @@ test('battle: the Crystal Giant with five heroes, played by the advice', async (
   await page.waitForTimeout(4000);
   await stop();
 });
+
+test('world: mine props in place (cart junction, rescued workers, beam room)', async ({ page }, info) => {
+  const shots: [string, (run: ReturnType<typeof expedition>['run']) => void][] = [
+    ['08-props-cart', run => { run.position = { x: 20, y: 15 }; run.mine = { crystalExpiresAt: run.steps + 12, cart: ['main', 'siding', 'main'], beam: ['up', 'up', 'up'], rescue: { following: [], rescued: [] }, stories: [] }; }],
+    ['09-props-yard', run => { run.position = { x: 10, y: 20 }; run.mine = { cart: ['siding', 'siding', 'siding'], beam: ['up', 'up', 'up'], rescue: { following: [], rescued: ['mine-worker-junction', 'mine-worker-tunnel'] }, stories: [] }; }],
+    ['10-props-beam', run => { run.position = { x: 19, y: 4 }; run.mine = { cart: ['siding', 'siding', 'siding'], beam: ['right', 'down', 'left'], rescue: { following: [], rescued: [] }, stories: [] }; }],
+  ];
+  for (const [name, set] of shots) {
+    // A fresh tab per shot: the seed script runs once per tab (sessionStorage).
+    const tab = await page.context().newPage();
+    const game = expedition(); set(game.run); game.run.repel = mineMap.potions.repelSteps;
+    await launch(tab, currentSave(game));
+    await expect(tab.locator('#world-view')).toBeVisible();
+    await tab.waitForTimeout(900);
+    await tab.screenshot({ path: info.outputPath(`${name}.png`) });
+    await tab.close();
+  }
+});

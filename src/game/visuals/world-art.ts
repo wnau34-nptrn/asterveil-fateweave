@@ -6,6 +6,7 @@ import chestFrames from '../../content/world/chests.json';
 import itemFrames from '../../content/world/items.json';
 import lakeTileFrames from '../../content/world/lake-tiles.json';
 import lakeDecorFrames from '../../content/world/lake-decor.json';
+import mineDecorFrames from '../../content/world/mine-decor.json';
 
 // Pure art selection for the DOM map (ART-UI-WORLD-001). Choices depend only on
 // tile coordinates and committed state, so a frame never changes between renders.
@@ -26,6 +27,14 @@ export const lakeUrl = (kind: 'tiles' | 'decor'): string => `${import.meta.env.B
 const lakeTiles: Readonly<Record<string, Frame>> = lakeTileFrames;
 const lakeDecor: Readonly<Record<string, Frame & { zone: string }>> = lakeDecorFrames;
 export const isLakeArt = (map: MapDefinition): boolean => map.id === 'moon-lake';
+// Map 5 (ART-WORLD-MINE-PROPS-001): a 6×5 prop atlas (128 px cells, foot at 124) for lanterns, puzzle pieces, workers and
+// mine clutter. The map shows it through `#map-grid[data-art="mine"]`; the revision is the first 8 hex of the file's SHA-256.
+export const MINE_REV = { decor: 'ef9dc300' } as const;
+export const mineDecorUrl = (): string => `${import.meta.env.BASE_URL}assets/world/mine_decor.webp?v=${MINE_REV.decor}`;
+export const mineDecor: Readonly<Record<string, Frame>> = mineDecorFrames;
+export const isMineArt = (map: MapDefinition): boolean => !!map.mine;
+/** The `data-art` skin of the map grid. */
+export const mapArt = (map: MapDefinition): 'lake' | 'mine' | 'base' => isLakeArt(map) ? 'lake' : isMineArt(map) ? 'mine' : 'base';
 /** The frame table a map's floor names belong to. */
 export const tileFrame = (map: MapDefinition, name: string): Frame => (isLakeArt(map) ? lakeTiles : tileset)[name]!;
 // WORLD_REV:
@@ -110,6 +119,17 @@ export function decorAt(map: MapDefinition, p: Point): (Frame & { name: string }
     const lakeOptions = Object.entries(lakeDecor).filter(([n, f]) => f.zone === tile.zoneId && ['moored_skiff', 'weathered_dock_post', 'reed_clump', 'oar_pile'].includes(n));
     const [n, f] = lakeOptions[cellHash(p.x, p.y, 11) % lakeOptions.length]!;
     return { name: n, ...f };
+  }
+  if (isMineArt(map)) {
+    // Mine clutter: ore, tools and casks in the yard and tunnels, crystal clusters in the cavern; never next to a mine interaction.
+    const m = map.mine!;
+    const busy = [...m.workers, ...m.crystals, ...m.beam.crystals, m.beam.source, m.cart.start, m.cart.wall, m.beam.door,
+      ...m.cart.switches.flatMap(sw => [sw.at, sw.lever, sw.sidingEnd]), ...(map.lanterns ?? []), ...(map.notes ?? []),
+      ...Array.from({ length: m.cart.start.y - m.cart.wall.y + 1 }, (_, i) => ({ x: m.cart.start.x, y: m.cart.wall.y + i }))];
+    if (busy.some(q => Math.abs(q.x - p.x) + Math.abs(q.y - p.y) <= 1)) return undefined;
+    const names = tile.zoneId === 'mine-cavern' ? ['crystal_cluster_tall', 'crystal_cluster_low'] : ['ore_heap', 'tools', 'cask', 'crystal_cluster_low'];
+    const name = names[cellHash(p.x, p.y, 11) % names.length]!;
+    return { name, ...mineDecor[name]! };
   }
   const zone = forestTrail(map, tile.zoneId) ? 'forest' : tile.zoneId;
   const options = Object.entries(decor).filter(([, f]) => f.zone === zone);
