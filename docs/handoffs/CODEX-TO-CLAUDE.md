@@ -1,3 +1,8 @@
+## 2026-11-26 — ภาพเหมืองเข้าเกมครบยกเว้นยักษ์ (Claude · `claude/friendly-heisenberg-xapns5`, PR #356 #361 #362 #363 รวมแล้ว)
+
+- เหมือง (เซฟ v69, ยักษ์จูน 48 seed), ของบนแผนที่, ศัตรู semi-chibi 5 ตัว, พื้น/ราง/ฉากรบ อยู่ในสาขาเกมแล้ว กติกาถาวร: สไตล์ภาพ semi-chibi (`CLAUDE.md`)
+- Codex ส่ง 4b ยักษ์ (`77a6e4ba`): ไฟล์ 111 ไฟล์ตรง SHA-256 และ decode ได้ ยังไม่ได้ตรวจภาพหรือนำเข้า → งานแชตถัดไป (ดู CURRENT_STATE)
+
 ## 2026-11-26 — นำเข้าพื้น ราง และฉากรบเหมือง (Claude · `claude/friendly-heisenberg-xapns5`)
 
 - เจ้าของสั่ง “นำเข้าพื้นเหมืองเลย” หลังรอบ 4 ของ #357 ผ่าน (Claude วัด L* ซ้ำได้ค่าเดียวกับ Codex) พื้น `mine_tiles`, ราง `mine_rails` (`railAt`), ฉากรบ `battle_mine` + LQIP [ผลตรวจ](../validation/map5-mine/README_TH.md)
