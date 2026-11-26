@@ -1,0 +1,352 @@
+{
+  "phase": "4a only",
+  "logicalCell": 768,
+  "footY": 672,
+  "bodyFrames": 5,
+  "effects": [
+    "armor-lift",
+    "armor-crack-1",
+    "armor-break",
+    "split-release"
+  ],
+  "files": {
+    "NOTES.md": {
+      "sha256": "3967480c401c0455c22d0b151be738b2a4d5aacbd5d6517bfc0502d32e4a3f3b",
+      "bytes": 2192
+    },
+    "anatomy.json": {
+      "sha256": "49dfc7d6260f656d0c481d6fbe57d74678d133fbd1e9bcbbf78bf7d5c192528c",
+      "bytes": 615
+    },
+    "build.py": {
+      "sha256": "e9cb241d1c4e024d2ea70ac1d2f54fb6bb43946a59a61852f5aadd1f28330f64",
+      "bytes": 9104
+    },
+    "crystal-fist.png": {
+      "sha256": "155d0b46d9df69e9bd8b1698ea5fe58905350948867b21fe5f497b273610c909",
+      "bytes": 1815235,
+      "size": [
+        3072,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "fragment-idle.png": {
+      "sha256": "8eb51ee5551105cdbfa53a5e3d9a5ab0fabbb2a9f3233b6e4f2a560f2b1e4097",
+      "bytes": 221260,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/000.png": {
+      "sha256": "706cb911ccf17776d12a8306ab2524ef2f55065972f272b76f5da6496d2394ed",
+      "bytes": 566724,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/001.png": {
+      "sha256": "c35113f8b2adec62f3579cb725e2e21df868e8102de91f1614e8daf5980940ac",
+      "bytes": 469891,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/002.png": {
+      "sha256": "fba0ea32e1c9735586cb1445a2c1c5409a706c2c8979b645cb3b166265c5e260",
+      "bytes": 422527,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/003.png": {
+      "sha256": "5382dcd80e1386b41da35c85ffffcaafd294c32edc05270ee8151a337bc4db45",
+      "bytes": 469111,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/004.png": {
+      "sha256": "3cf5295780858e2bc8c3ba8b033f2f77fba73a0cb3c79bc060da691fb1ec49e2",
+      "bytes": 458598,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "manifest.py": {
+      "sha256": "f19ab12ade9a3351785f7f8f4b488d4c14efbd80e3f86c38f6943ef3479fdb67",
+      "bytes": 1060
+    },
+    "preview/armor-break-390.png": {
+      "sha256": "d95c2abd840d8640b800d2dcd9f47851df2d139eba6e356d23d1f82e2238af66",
+      "bytes": 477637,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/armor-crack-1-390.png": {
+      "sha256": "898c06de43a8891293fc6f5c844e2d87917b5b0b3faf18675dc305bc659a188a",
+      "bytes": 475195,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/armor-lift-390.png": {
+      "sha256": "7989ba27abb024a1d03598bc453534f05a4cd2aa85188095af4b60f01e1b618e",
+      "bytes": 474515,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/crystal-fist-390.gif": {
+      "sha256": "53cd7292ee47db23299f7ed955a020c0eb459250ac0e71414c81d667fc8087a8",
+      "bytes": 1231988,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 5
+    },
+    "preview/field-390.png": {
+      "sha256": "af01377a137392b895f37c1480ce082cbe4168f6b04e704f6d6a335518556647",
+      "bytes": 478227,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/scale-390.png": {
+      "sha256": "41ad7d6d48c7205f15437ef2fbf8e0bcfbc19d572f0afce1efa934cb871733cc",
+      "bytes": 107379,
+      "size": [
+        390,
+        615
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/split-release-390.png": {
+      "sha256": "78abf0333b3d85bb2c27ce2cddff7d679260ec2a6345b5cc61de4dfcf03869ba",
+      "bytes": 478870,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/vfx-storyboard-390.png": {
+      "sha256": "876ab55aad2e9535279fe094bd11339b49f0c5a9be080be3462bcecc58de2830",
+      "bytes": 688308,
+      "size": [
+        390,
+        1115
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "prompts.json": {
+      "sha256": "d6e60fcaa00254b65cf6cb8c44d8e0ff2dc6d318ec2f083d3c7cf9b79921bf35",
+      "bytes": 1233
+    },
+    "raw/crystal-fist.png": {
+      "sha256": "ac94f217b0d935f4cfabcff7d446e91e051507e54a29df04847085f82ec02250",
+      "bytes": 1572310,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/fragment.png": {
+      "sha256": "8eb51ee5551105cdbfa53a5e3d9a5ab0fabbb2a9f3233b6e4f2a560f2b1e4097",
+      "bytes": 221260,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/giant-r1.png": {
+      "sha256": "706cb911ccf17776d12a8306ab2524ef2f55065972f272b76f5da6496d2394ed",
+      "bytes": 566724,
+      "size": [
+        768,
+        768
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds.json": {
+      "sha256": "0df0e94f818ec6f3239d923bd8c52d1be1ebb745c47eec6675f9b59b2d4afbc8",
+      "bytes": 218
+    },
+    "sources/actor-0-0.png": {
+      "sha256": "fe83e4869940fc433b9c963f4ac4ff604cb38d5ed15c781c203db2b34fad4a99",
+      "bytes": 420368,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/actor-0-1.png": {
+      "sha256": "ac433c681e297ce32caa91c089d71bcadcdf21bbcd6d24e6e852932dce2ca532",
+      "bytes": 434146,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/actor-0-2.png": {
+      "sha256": "7098d60dad55b22573ff988ce85dc010421a894ba707b585dfbf7e618d6ea6e8",
+      "bytes": 521462,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/actor-0-3.png": {
+      "sha256": "a52544f6618007abf7bd6b0749c31e208b8ec1ed68f151fab153c865b22a3550",
+      "bytes": 482846,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/actor-0-4.png": {
+      "sha256": "e6760e48b0403e13318830df87fd5891d50c9e57a972c5e9e8f3f6d729298a47",
+      "bytes": 389693,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/approved-scale.png": {
+      "sha256": "e8d86452f077af8fec47890d36d908c4bb1be46b0b3e7f625e7b700d13bfbf19",
+      "bytes": 178407,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "sources/bg_mine.webp": {
+      "sha256": "f68cbd0105abacbf5622a4f0286f0ab55a868502f36cb951316793d2cf7eb288",
+      "bytes": 1373248,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "sources/stone-golem.png": {
+      "sha256": "586c27c584320b188ce19b5d040291375dc047db1896f00eebf2fe016352c49c",
+      "bytes": 422016,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/water-spirit.png": {
+      "sha256": "1d3ac9e3f5cf013630ef32a31197edea685405a436ce4f533841e86da9775a76",
+      "bytes": 98799,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips.json": {
+      "sha256": "94e57d95dda3d5f4855d0f5fb2fc208539713f22e085644981e31a6ad993f538",
+      "bytes": 1185
+    },
+    "vfx/armor-break.png": {
+      "sha256": "b03b2a4ad2e18022d9ec954d9329e09f9fd9ba5eb8afef660c1ca4061903eaf1",
+      "bytes": 12872,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/armor-crack-1.png": {
+      "sha256": "8631ed5db5f5621c8977ccadf87f3c2903a661c315bc827cc3192130ac93daf6",
+      "bytes": 19301,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/armor-lift.png": {
+      "sha256": "7526a9f87d6f8f0fd141a5c532e02eb30c4c30ae11532df9d85907eac22670ca",
+      "bytes": 16763,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "vfx/split-release.png": {
+      "sha256": "3570253c895145d42018352eddddadd0b09e0950a04f2cebc5a03f1c19f28378",
+      "bytes": 8440,
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    }
+  }
+}

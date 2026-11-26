@@ -1,0 +1,71 @@
+{
+  "giant": {
+    "logicalCell": 768,
+    "footY": 672,
+    "idle": "frames/000.png",
+    "heightVsStoneGolem": 1.32,
+    "strips": [
+      {
+        "move": "Crystal Fist",
+        "path": "crystal-fist.png",
+        "firstFrame": 1,
+        "count": 4,
+        "beats": [
+          "windup",
+          "brace",
+          "impact",
+          "follow-through"
+        ],
+        "durationMs": [
+          130,
+          120,
+          95,
+          235
+        ]
+      }
+    ]
+  },
+  "fragment": {
+    "logicalCell": 512,
+    "footY": 497,
+    "idle": "fragment-idle.png"
+  },
+  "effects": [
+    {
+      "file": "vfx/armor-lift.png",
+      "cell": 256,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "suggestedMs": 180
+    },
+    {
+      "file": "vfx/armor-crack-1.png",
+      "cell": 256,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "suggestedMs": 140
+    },
+    {
+      "file": "vfx/armor-break.png",
+      "cell": 256,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "suggestedMs": 220
+    },
+    {
+      "file": "vfx/split-release.png",
+      "cell": 256,
+      "anchor": [
+        0.5,
+        0.5
+      ],
+      "suggestedMs": 170
+    }
+  ]
+}
