@@ -1,4 +1,4 @@
-# Current state — updated 2026-11-26 (Map 5 balance at 48 seeds)
+# Current state — updated 2026-11-26 (Crystal Giant 4b imported)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
@@ -29,12 +29,10 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Map 5 (design approved, “ทำตามที่คุณแนะนำ”): unlocks after the lake; save v69; Crystal Giant tuned at 48 seeds 2026-11-26 (`crystal-giant` v2: casual rush 78%, basic-only ≤22%). PR #356. Giant R1 at 1.32×; motion sample 4a approved (“อนุมัติ 4a”). Art ([brief](docs/handoffs/CODEX-ART-MAP5-MINE-TH.md)): props #358, the five semi-chibi foes #360, floors/rails/battle backdrop #357 in game; giant 4b (#359) pending. Side events remain. [Mine validation](docs/validation/map5-mine/README_TH.md).
+- Map 5 (design approved, “ทำตามที่คุณแนะนำ”): unlocks after the lake; save v69; Crystal Giant tuned at 48 seeds 2026-11-26 (`crystal-giant` v2: casual rush 78%, basic-only ≤22%). PR #356. Giant R1 at 1.32×; motion sample 4a approved (“อนุมัติ 4a”). Art ([brief](docs/handoffs/CODEX-ART-MAP5-MINE-TH.md)): props #358, the five semi-chibi foes #360, floors/rails/battle backdrop #357 in game; giant 4b (#359) imported on `claude/mine-boss-4b-intake` with event-driven armour/reflect/collapse/split VFX, **awaiting the owner's motion approval** ([390px review](docs/combat-presentation/mine-boss-slice/README_TH.md)). Shard Beam keeps a code-drawn line. Side events remain. [Mine validation](docs/validation/map5-mine/README_TH.md).
 - 2026-11-25: boss charge holds sit on the body. Bosses wear a silhouette aura in their own colour: light all battle, stronger while charging. Boss crowns sit above the rendered figure. The owner said “นำเข้าเกมได้เลย”. Mobile frame rate is not measured yet. [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
 - Game Feel [Draft PR #353](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/353): เสียงและภาพโจมตีตามอาวุธครบ 15 ตัวและตัวละครเซฟเก่า 2 ตัว. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
-- Game Feel #352 รวมแล้ว (`3b746ac`): จังหวะเสียง Duelist/Execute และเสียงโล่รับเต็ม. [ผลตรวจ](docs/validation/steel-contact-2026-11-24/README_TH.md).
 
-- Game Feel: shared atlas merged in #351 (`411b9e1`), saving 1.89 MiB on cold Chromium runs. [ผลวัด atlas](docs/validation/shared-units-atlas-2026-11-24/README_TH.md).
 - Mobile performance still needs on-device measurements for walking, fog, and battle entry. [ผลตรวจท่าคืนตัว](docs/validation/recovery-continuity-2026-11-24/README_TH.md).
 
 - Lake sweep/contract pay map 3's values until a P04 economy pass; P04-05/06 numbers.
@@ -42,4 +40,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-Import Codex's Map 5 art as it arrives ([brief](docs/handoffs/CODEX-ART-MAP5-MINE-TH.md): tiles, props, foes, then the R1 Crystal Giant motion sample 4a for owner approval before 4b) with the `fateweave-art-intake` skill; capture 390px with `tests/browser/mine-clips.spec.ts`. Read [the Map 5 validation](docs/validation/map5-mine/README_TH.md) first.
+The owner picks the next task. If the Crystal Giant 4b PR (`claude/mine-boss-4b-intake`) is still open, apply the owner's motion feedback from [the 390px review](docs/combat-presentation/mine-boss-slice/README_TH.md) and merge once they approve in their own words. Candidate next work: Map 5 side events (see [the Map 5 validation](docs/validation/map5-mine/README_TH.md)).

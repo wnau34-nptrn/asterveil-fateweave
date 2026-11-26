@@ -19,6 +19,9 @@ export const usesMineBossFx = (data: EncounterDefinition): boolean => data.enemi
 // a 223 px cell at 390 px).
 export const ARMOR_RISE = (672 - 386) / 768;
 export const ARMOR_WIDTH = .86;
+// Collapse layers at a hero's feet (a 96 px slot). Codex's 66×82 storyboard size left the falling crystal ~10 px tall in game,
+// hidden behind the hero and the damage number; the same aspect at 2.3× reads at 390 px.
+const COLLAPSE = [150, 186] as const;
 // The armour frame the foe's current state shows: whole while no counted hit has landed, then one crack level per hit.
 export function armorFrame(state: BattleState, data: EncounterDefinition, id: string): Frame | undefined {
   const foe = state.enemies.find(e => e.id === id), def = data.enemies.find(e => e.id === id)?.crystalArmor;
@@ -103,7 +106,7 @@ export function minePrepare(ctx: (id: string) => FxContext, turn: TurnStage, dat
   }
   if (turn.intent!.crystalCollapse) {
     for (const cue of mineCues(turn, data)) if (cue.kind === 'collapse') {
-      const p = at.point(cue.id), c = ctx(cue.id); if (p) show(paint(c, 'collapse-0', p.x, p.feetY, 66 * c.scale, 82 * c.scale), 1);
+      const p = at.point(cue.id), c = ctx(cue.id); if (p) show(paint(c, 'collapse-0', p.x, p.feetY, COLLAPSE[0] * c.scale, COLLAPSE[1] * c.scale), 1);
     }
   }
   return true;
@@ -113,7 +116,7 @@ export function mineContact(ctx: (id: string) => FxContext, cues: readonly MineC
     const fx = ctx(cue.id);
     if (cue.kind === 'collapse') {
       const p = at.point(cue.id); if (!p) continue;
-      const w = 66 * fx.scale, h = 82 * fx.scale;
+      const w = COLLAPSE[0] * fx.scale, h = COLLAPSE[1] * fx.scale;
       sequence(fx, ['collapse-1', 'collapse-2'], name => paint(fx, name, p.x, p.feetY, w, h), life, 'collapse-reduced');
       continue;
     }
@@ -121,7 +124,7 @@ export function mineContact(ctx: (id: string) => FxContext, cues: readonly MineC
       const b = at.body(cue.id), c = at.point(cue.casterId); if (!b || !c) continue;
       const from = armorAt(b), su = art['reflect-0'].sourceUv[0]!, u = art['reflect-0'].anchor[0]!;
       const dx = from.x - c.x, dy = from.y - c.y, span = Math.hypot(dx, dy);
-      const w = span / (su - u), h = 112 * fx.scale * .78;
+      const w = span / (su - u), h = 112 * fx.scale * 1.3;
       sequence(fx, ['reflect-0', 'reflect-1', 'reflect-2'], name => paint(fx, name, c.x, c.y, w, h).setRotation(Math.atan2(dy, dx)), life);
       continue;
     }
