@@ -1,0 +1,158 @@
+{
+  "armor-lift": {
+    "effect": "armor-lift",
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "role": "boss-center",
+    "ms": 180
+  },
+  "armor-crack-1": {
+    "effect": "armor-cracks",
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "role": "boss-center",
+    "ms": 140
+  },
+  "armor-crack-2": {
+    "effect": "armor-cracks",
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "role": "boss-center",
+    "ms": 140
+  },
+  "armor-crack-3": {
+    "effect": "armor-cracks",
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "role": "boss-center",
+    "ms": 140
+  },
+  "armor-break": {
+    "effect": "armor-break",
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "role": "boss-center",
+    "ms": 220
+  },
+  "armor-fade-0": {
+    "effect": "armor-fade",
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "role": "boss-center",
+    "ms": 110
+  },
+  "armor-fade-1": {
+    "effect": "armor-fade",
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "role": "boss-center",
+    "ms": 130
+  },
+  "armor-fade-2": {
+    "effect": "armor-fade",
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "role": "boss-center",
+    "ms": 160
+  },
+  "split-release": {
+    "effect": "split-release",
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "role": "boss-center",
+    "ms": 170
+  },
+  "reflect-0": {
+    "effect": "reflect",
+    "anchor": [
+      0.16,
+      0.5
+    ],
+    "role": "caster-center",
+    "ms": 100,
+    "sourceUv": [
+      0.86,
+      0.48
+    ]
+  },
+  "reflect-1": {
+    "effect": "reflect",
+    "anchor": [
+      0.16,
+      0.5
+    ],
+    "role": "caster-center",
+    "ms": 130,
+    "sourceUv": [
+      0.86,
+      0.48
+    ]
+  },
+  "reflect-2": {
+    "effect": "reflect",
+    "anchor": [
+      0.16,
+      0.5
+    ],
+    "role": "caster-center",
+    "ms": 150,
+    "sourceUv": [
+      0.86,
+      0.48
+    ]
+  },
+  "collapse-0": {
+    "effect": "collapse",
+    "anchor": [
+      0.5,
+      0.83
+    ],
+    "role": "target-feet",
+    "ms": 270
+  },
+  "collapse-1": {
+    "effect": "collapse",
+    "anchor": [
+      0.5,
+      0.83
+    ],
+    "role": "target-feet",
+    "ms": 135
+  },
+  "collapse-2": {
+    "effect": "collapse",
+    "anchor": [
+      0.5,
+      0.83
+    ],
+    "role": "target-feet",
+    "ms": 180
+  },
+  "collapse-reduced": {
+    "effect": "collapse",
+    "anchor": [
+      0.5,
+      0.83
+    ],
+    "role": "target-feet",
+    "ms": 0
+  }
+}

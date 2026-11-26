@@ -21,6 +21,7 @@ import { isBladeSkill } from './blade-fx';
 import { basicWeaponForRole } from './basic-attack-fx';
 import { isFoeSignatureMove, isGroundMove } from './foe-signature-fx';
 import { bossMoves } from './boss-signature-fx';
+import { isMineBossMove } from './mine-boss-fx';
 import defenseArt from './defense-art.json';
 
 // W8 presentation coverage (docs/combat-presentation/COVERAGE_TH.md): every visual identity × every ActionId/intent it can
@@ -47,7 +48,7 @@ export function heroActions(id: string): ActionId[] {
 
 export type VfxModule = 'projectile-fx' | 'basic-attack-fx' | 'command-fx' | 'song-shadow-fx' | 'saint-dance-fx' | 'arcane-seal-fx'
   | 'alchemy-fx' | 'earth-fx' | 'healing-fx' | 'defense-fx' | 'blade-fx' | 'exec-ward-fx' | 'bolt-fx'
-  | 'foe-signature-fx' | 'boss-signature-fx' | 'rework-fx' | 'generic-code';
+  | 'foe-signature-fx' | 'boss-signature-fx' | 'mine-boss-fx' | 'rework-fx' | 'generic-code';
 // Painted (own atlas) vs intentionally shared/code-drawn.
 export const vfxKind = (module: VfxModule, shared: boolean): 'painted' | 'shared' | 'code' =>
   module === 'generic-code' || module === 'basic-attack-fx' ? 'code' : shared ? 'shared' : 'painted';
@@ -74,6 +75,7 @@ export function heroVfx(action: ActionId, role: string): VfxModule {
 export function foeVfx(name: string, kind: IntentDefinition['kind']): VfxModule {
   if (isFoeSignatureMove(name)) return 'foe-signature-fx';
   if (Object.hasOwn(bossMoves, name)) return 'boss-signature-fx';
+  if (isMineBossMove(name)) return 'mine-boss-fx';
   if (kind === 'physical') return 'blade-fx';
   return 'generic-code';
 }
@@ -116,6 +118,8 @@ function foePoint(module: VfxModule, name: string, route?: string): string {
   if (module === 'boss-signature-fx' && name === 'Water Veil') return 'ตัวบอสเมื่อได้ HP คืนจริง';
   if (module === 'boss-signature-fx' && (name === 'Surging Wave' || name === 'Great Wave')) return 'พื้นใต้ผู้รับผลจริง';
   if (module === 'boss-signature-fx') return route === 'charge' ? 'ตัวบอส + ค้างจนปล่อยท่า' : route === 'caster' ? 'ตัวบอส' : route === 'summon' ? 'ตำแหน่งตัวที่ถูกเรียกจริง' : route === 'all' ? 'ฮีโร่ที่โดนจริงทุกคน' : 'ผู้รับ damage จริง';
+  if (module === 'mine-boss-fx') return name === 'Crystal Collapse' ? 'สามเหลี่ยมเตือน → ผลึกตกที่เท้าฮีโร่ที่โดนจริง (reduced: ภาพกระแทกนิ่ง)'
+    : name === 'Crystal Armor' ? 'เกราะบนตัวยักษ์ตาม state จริง: ร้าวตามครั้งที่นับ, แตก/หมดเวลาตาม event, สะท้อนกลับผู้ร่ายที่โดนจริง' : 'ผลึกหลุดจากไหล่เมื่อเข้าช่วงจริง';
   if (module === 'blade-fx') return 'ตัวผู้รับ damage จริง (ชุดดาบร่วม)';
   return 'เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)';
 }

@@ -5,6 +5,7 @@ import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals
 import { artPalette, auraPalette, bossPalette, paintBossAura, type BossAura } from '../visuals/boss-aura';
 import { BOSS_ATLAS, LAKE_BOSS_ATLAS, bossAtlasFor, bossAtlasUrls, lakeBossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, greatWaveScales, holdPlacement, isLakeBossMove, sealedWaterVeil, usesBossSignature, usesLakeBossSignature, type BossPoint, type ChargeHold } from '../visuals/boss-signature-fx';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
+import { MINE_BOSS_ATLAS, armorFrame, mineBossAtlasUrls, mineContact, mineCues, minePrepare, usesMineBossFx, ARMOR_RISE, ARMOR_WIDTH, type MineLookup } from '../visuals/mine-boss-fx';
 import { ALL_SHEETS, allBattleAtlases, atlasesForActions, encounterAtlases, encounterSheets, sheetKey, sheetsForArt, type AtlasRequest } from '../visuals/battle-assets';
 import { unitFrameView } from '../visuals/unit-frame-view';
 import { UnitAnimation } from '../visuals/unit-animation';
@@ -198,6 +199,7 @@ export class BattleScene extends Phaser.Scene {
     return [
       [BOSS_ATLAS, bossAtlasUrls(), usesBossSignature(data)],
       [LAKE_BOSS_ATLAS, lakeBossAtlasUrls(), usesLakeBossSignature(data)],
+      [MINE_BOSS_ATLAS, mineBossAtlasUrls(), usesMineBossFx(data)],
       [FOE_SIGNATURE_ATLAS, foeSignatureAtlasUrls(), data.intents.some(i => isFoeSignatureMove(i.name))],
       [SAINT_DANCE_ATLAS, saintDanceAtlasUrls(), data.heroes.some(h => h.actions.some(a => isSdFx(a)))],
     ];
@@ -249,9 +251,28 @@ export class BattleScene extends Phaser.Scene {
     for (const id of [...this.auras.keys()]) if (!live.has(id)) { this.dropAura(id); this.auraKeys.delete(id); }
   }
   private auraKeys = new Map<string, string>();
+  // Map 5: the Crystal Giant's armour, shown from state while the foe really has `crystalArmor` (crack level = counted hits).
+  // It rides in the body container over the figure; the rise, cracks, break and expiry are one-shot cues at contact.
+  private armors = new Map<string, Phaser.GameObjects.Image>();
+  private paintArmors(state: BattleState): void {
+    const ready = this.textures.exists(MINE_BOSS_ATLAS);
+    for (const foe of this.encounter.enemies) {
+      const frame = ready ? armorFrame(state, this.encounter, foe.id) : undefined, item = this.armors.get(foe.id), body = this.bodies.get(foe.id), slot = this.actorPanels.get(foe.id);
+      if (item && (!item.active || item.getData('mineFrame') !== frame || item.parentContainer !== body)) { item.destroy(); this.armors.delete(foe.id); }
+      if (!frame || !body || !slot || this.armors.has(foe.id)) continue;
+      const drawn = slot.size * unitDisplayRatio(artOf(this.encounter, foe.id));
+      const image = this.add.image(0, -drawn * ARMOR_RISE, MINE_BOSS_ATLAS, frame).setScale(drawn * ARMOR_WIDTH / 256).setAlpha(.9);
+      image.setData('mineFrame', frame); body.add(image); this.armors.set(foe.id, image);
+    }
+  }
+  private mineLookup: MineLookup = {
+    body: id => { const p = this.positions.get(id), slot = this.actorPanels.get(id); return p && slot ? { x: p.x, feetY: p.y, drawn: slot.size * unitDisplayRatio(artOf(this.encounter, id)) } : undefined; },
+    point: id => { const a = this.anchor(id), p = this.positions.get(id); return a && p ? { x: a.x, y: a.y, feetY: p.y } : undefined; },
+  };
   private paintHolds(): void {
     const view = this.view; if (!view) return;
     this.paintReworkMarks(view.state);
+    this.paintArmors(view.state);
     const wanted = new Map(chargeHolds(view.state, this.encounter, this.resolvedActor).map(h => [h.enemyId, h]));
     for (const [id, item] of this.holds) if (wanted.get(id)?.frame !== item.getData('holdFrame') || !item.active) { this.tweens.killTweensOf(item); item.destroy(); this.holds.delete(id); }
     for (const [id, hold] of wanted) {
@@ -437,7 +458,7 @@ export class BattleScene extends Phaser.Scene {
       this.actorPanels.set(enemy.id, slot);
       this.actor(enemy.id, slot, this.view.state.enemies[i]!.hp, true);
     }
-    this.holds.clear(); for (const id of [...this.auras.keys()]) this.dropAura(id); this.paintHolds();
+    this.holds.clear(); this.armors.clear(); for (const id of [...this.auras.keys()]) this.dropAura(id); this.paintHolds();
     this.measureCrowns();
     this.layer.sort('depth'); this.onLayout();
   }
@@ -813,6 +834,7 @@ export class BattleScene extends Phaser.Scene {
       for (const cue of defenseCues(turn,this.encounter)) defenseCast(this.fx(cue.targetId),cue,this.defensePoint,contactMs);
       return;
     }
+    if (this.textures.exists(MINE_BOSS_ATLAS) && minePrepare(id => this.fx(id), turn, this.encounter, this.mineLookup, contactMs)) return;
     if (turn.side === 'enemy' && this.textures.exists(bossAtlasFor(turn.intent?.name))) {
       const lake = isLakeBossMove(turn.intent?.name);
       const ctx = lake ? this.projectileFx(turn.actorId) : this.fx(turn.actorId);
@@ -947,6 +969,15 @@ export class BattleScene extends Phaser.Scene {
     for (const cue of paintedBoss) {
       if (isLakeBossMove(cue.move)) bossContact(this.projectileFx(cue.id), cue, this.lakeBossAnchor, life, waveScales.get(cue.id));
       else bossContact(this.fx(cue.id), cue, id => this.bossAnchor(id), life);
+    }
+    if (this.textures.exists(MINE_BOSS_ATLAS)) {
+      const cues = mineCues(turn, this.encounter);
+      mineContact(id => this.fx(id), cues, this.mineLookup, life);
+      // Crystal Split is an immediate phase on the turn that drops the giant below half (usually a hero's): after its hit
+      // reaction the giant plays its own split gesture, timed inside this stage.
+      if (!this.quiet && !this.reducedMotion) for (const cue of cues) if (cue.kind === 'split' && cue.id !== turn.actorId && remainingMs > 520) {
+        this.later(200, () => { this.unitAnimation.begin(cue.id, 'cast', -1, 160, 'move5'); this.later(160, () => this.unitAnimation.contact(cue.id, remainingMs - 380)); });
+      }
     }
     for (const cue of paintedHealing) healingContact(this.healingFx(cue.targetId), cue, id => this.healingAnchor(id), life);
     for (const cue of paintedDefense) defenseContact(this.fx(cue.targetId),cue,this.defensePoint,life);

@@ -179,6 +179,15 @@ export const unitRegistry = {
       'Rift Gathering': 'move5', 'Rift Awakening': 'move6', 'Call the Rift': 'move7' },
     clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21), move7: bossMove(25) },
     reactions: { hit: [29, 30], down: [31, 32, 33] } },
+  // Map 5 Crystal Giant (ART-UNIT-ANIMATION-MINE-BOSS-001 4b, owner R1): boss layout at a 448 px runtime cell (Codex 768, soles 7/8);
+  // Crystal Armor and the 50% Crystal Split phase have their own gestures. The fragment (256 px runtime cell, soles 497/512)
+  // pricks on 1..4, hit 5..6, down 7..9. Both atlases face left and are never mirrored.
+  foe_crystal_giant: { sheet: 'crystalgiant', displayRatio: mineFoeDisplayRatios.foe_crystal_giant!, soleOrigin: BOSS_SOLE, own: true, downFrame: 25,
+    intents: { 'Crystal Fist': 'move1', 'Shard Beam': 'move2', 'Crystal Collapse': 'move3', 'Crystal Armor': 'move4', 'Crystal Split': 'move5' },
+    clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17) },
+    reactions: { hit: [21, 22], down: [23, 24, 25] } },
+  foe_crystal_fragment: { sheet: 'crystalfragment', displayRatio: mineFoeDisplayRatios.foe_crystal_fragment!, soleOrigin: 497 / 512, own: true, downFrame: 9,
+    intents: { 'Shard Prick': 'move1' }, clips: { move1: bossMove(1) }, reactions: { hit: [5, 6], down: [7, 8, 9] } },
   foe_water_spirit: { sheet: 'waterspirit', displayRatio: lakeBossDisplayRatio, soleOrigin: BOSS_SOLE, own: true, downFrame: 29,
     intents: { 'Tide Lash': 'move1', 'Water Veil': 'move2', 'Surging Wave': 'move3', Undertow: 'move4', 'Great Wave': 'move5', Reflection: 'move6' },
     clips: { move1: bossMove(1), move2: bossMove(5), move3: bossMove(9), move4: bossMove(13), move5: bossMove(17), move6: bossMove(21) },

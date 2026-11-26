@@ -1,0 +1,53 @@
+{
+  "crystalgiant": {
+    "image": "crystalgiant_mine.786603c4027b.webp",
+    "atlas": "crystalgiant_mine.e416f1b16f26.json",
+    "width": 2015,
+    "height": 1681,
+    "frames": 26,
+    "decodedBytes": 13548860,
+    "downloadBytes": 3670713,
+    "sourceCell": 768,
+    "runtimeCell": 448,
+    "soleOrigin": 0.875,
+    "uniqueFrames": 26,
+    "top": 0.12946428571428573
+  },
+  "crystalfragment": {
+    "image": "crystalfragment_mine.510721ba0e1a.webp",
+    "atlas": "crystalfragment_mine.9dee6e016204.json",
+    "width": 414,
+    "height": 931,
+    "frames": 10,
+    "decodedBytes": 1541736,
+    "downloadBytes": 455523,
+    "sourceCell": 512,
+    "runtimeCell": 256,
+    "soleOrigin": 0.970703125,
+    "uniqueFrames": 10,
+    "top": 0.25390625
+  },
+  "units_foes4": {
+    "bytes": 1243196,
+    "sha8": "0090da3a"
+  },
+  "portraits_foes4": {
+    "bytes": 1541426,
+    "sha8": "0156d8f8"
+  },
+  "mine_boss_fx": {
+    "width": 456,
+    "height": 788,
+    "bytes": 120636,
+    "reducedMotion": {
+      "collapse": {
+        "file": "vfx/collapse-reduced.png",
+        "anchor": [
+          0.5,
+          0.83
+        ],
+        "holdMs": 220
+      }
+    }
+  }
+}
