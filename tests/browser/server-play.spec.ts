@@ -4,6 +4,7 @@ import { SESSION_HEADER } from '../../src/server/account-object';
 import { CONTENT_HEADER, handle } from '../../src/server/api';
 import { openTitleSetup } from './fixtures/title-setup';
 import { currentSave } from '../fixtures/current-save';
+import { SAVE_VERSION } from '../../src/core/save/expedition-save';
 import { withGoogle } from '../fixtures/google-fake';
 import { battleTurns, grantAdmin, server, storedGame, type Server } from '../fixtures/server-fakes';
 
@@ -300,7 +301,7 @@ test('server play import (D11): the title offers the local save once and the ser
   await page.screenshot({ path: info.outputPath('server-import-offer-390.png') });
   await page.locator('#import-save').click();
   await expect(page.locator('#continue')).toBeVisible();
-  await expect(page.locator('.title-server-note')).toContainText('นำเข้าเซฟเดิม (v68) แล้ว');
+  await expect(page.locator('.title-server-note')).toContainText(`นำเข้าเซฟเดิม (v${SAVE_VERSION}) แล้ว`);
   await expect(page.locator('#import-save')).toHaveCount(0);
   await page.screenshot({ path: info.outputPath('server-import-done-390.png') });
   // The local save stays as it was; the account now plays on the server.
