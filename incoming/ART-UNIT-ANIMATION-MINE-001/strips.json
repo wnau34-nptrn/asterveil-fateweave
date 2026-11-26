@@ -1,0 +1,192 @@
+{
+  "logicalCell": 512,
+  "feet": 497,
+  "facing": "left",
+  "units": {
+    "bat": {
+      "directory": "frames/bat",
+      "frames": 26,
+      "footY": 497,
+      "airborneOffset": 108,
+      "strips": [
+        {
+          "move": "Crystal Cry",
+          "firstFrame": 1,
+          "count": 8,
+          "source": "raw/bat-attack.png",
+          "strip": "strips/bat/attack.png"
+        },
+        {
+          "move": null,
+          "firstFrame": 9,
+          "count": 8,
+          "fallbackFrame": 0
+        },
+        {
+          "move": "hit",
+          "firstFrame": 17,
+          "count": 2,
+          "source": "raw/bat-reactions.png",
+          "strip": "strips/bat/hit.png"
+        },
+        {
+          "move": "down",
+          "firstFrame": 19,
+          "count": 3,
+          "source": "raw/bat-reactions.png",
+          "strip": "strips/bat/down.png"
+        },
+        {
+          "move": "Idle flight",
+          "firstFrame": 22,
+          "count": 4,
+          "source": "raw/bat-reactions.png",
+          "strip": "strips/bat/hover.png"
+        }
+      ]
+    },
+    "golem": {
+      "directory": "frames/golem",
+      "frames": 22,
+      "footY": 497,
+      "airborneOffset": 0,
+      "strips": [
+        {
+          "move": "Ore Fist",
+          "firstFrame": 1,
+          "count": 8,
+          "source": "raw/golem-attack.png",
+          "strip": "strips/golem/attack.png"
+        },
+        {
+          "move": null,
+          "firstFrame": 9,
+          "count": 8,
+          "fallbackFrame": 0
+        },
+        {
+          "move": "hit",
+          "firstFrame": 17,
+          "count": 2,
+          "source": "raw/golem-reactions.png",
+          "strip": "strips/golem/hit.png"
+        },
+        {
+          "move": "down",
+          "firstFrame": 19,
+          "count": 3,
+          "source": "raw/golem-reactions.png",
+          "strip": "strips/golem/down.png"
+        }
+      ]
+    },
+    "worker": {
+      "directory": "frames/worker",
+      "frames": 22,
+      "footY": 497,
+      "airborneOffset": 0,
+      "strips": [
+        {
+          "move": "Pick Swing",
+          "firstFrame": 1,
+          "count": 8,
+          "source": "raw/worker-attack.png",
+          "strip": "strips/worker/attack.png"
+        },
+        {
+          "move": null,
+          "firstFrame": 9,
+          "count": 8,
+          "fallbackFrame": 0
+        },
+        {
+          "move": "hit",
+          "firstFrame": 17,
+          "count": 2,
+          "source": "raw/worker-reactions.png",
+          "strip": "strips/worker/hit.png"
+        },
+        {
+          "move": "Surrender",
+          "firstFrame": 19,
+          "count": 3,
+          "source": "raw/worker-reactions.png",
+          "strip": "strips/worker/down.png"
+        }
+      ]
+    },
+    "overseer": {
+      "directory": "frames/overseer",
+      "frames": 22,
+      "footY": 497,
+      "airborneOffset": 0,
+      "strips": [
+        {
+          "move": "Overseer Hammer",
+          "firstFrame": 1,
+          "count": 8,
+          "source": "raw/overseer-attack.png",
+          "strip": "strips/overseer/attack.png"
+        },
+        {
+          "move": "Crystal Spark",
+          "firstFrame": 9,
+          "count": 8,
+          "source": "raw/overseer-skill.png",
+          "strip": "strips/overseer/skill.png"
+        },
+        {
+          "move": "hit",
+          "firstFrame": 17,
+          "count": 2,
+          "source": "raw/overseer-reactions.png",
+          "strip": "strips/overseer/hit.png"
+        },
+        {
+          "move": "down",
+          "firstFrame": 19,
+          "count": 3,
+          "source": "raw/overseer-reactions.png",
+          "strip": "strips/overseer/down.png"
+        }
+      ],
+      "idleSource": "seeds/overseer-r2.png"
+    },
+    "eater": {
+      "directory": "frames/eater",
+      "frames": 22,
+      "footY": 497,
+      "airborneOffset": 0,
+      "strips": [
+        {
+          "move": "Crystal Bite",
+          "firstFrame": 1,
+          "count": 8,
+          "source": "raw/eater-attack.png",
+          "strip": "strips/eater/attack.png"
+        },
+        {
+          "move": "Shard Eruption",
+          "firstFrame": 9,
+          "count": 8,
+          "source": "raw/eater-skill.png",
+          "strip": "strips/eater/skill.png"
+        },
+        {
+          "move": "hit",
+          "firstFrame": 17,
+          "count": 2,
+          "source": "raw/eater-reactions.png",
+          "strip": "strips/eater/hit.png"
+        },
+        {
+          "move": "down",
+          "firstFrame": 19,
+          "count": 3,
+          "source": "raw/eater-reactions.png",
+          "strip": "strips/eater/down.png"
+        }
+      ]
+    }
+  }
+}
