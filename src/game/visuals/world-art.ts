@@ -144,7 +144,7 @@ export function decorAt(map: MapDefinition, p: Point): (Frame & { name: string }
     // Mine clutter: ore, tools and casks in the yard and tunnels, crystal clusters in the cavern; never next to a mine interaction.
     const m = map.mine!;
     const busy = [...m.workers, ...m.crystals, ...m.beam.crystals, m.beam.source, m.cart.start, m.cart.wall, m.beam.door,
-      ...m.cart.switches.flatMap(sw => [sw.at, sw.lever, sw.sidingEnd]), ...(map.lanterns ?? []), ...(map.notes ?? []),
+      ...m.cart.switches.flatMap(sw => [sw.at, sw.lever, sw.sidingEnd]), ...(map.lanterns ?? []), ...(map.notes ?? []), ...map.events,
       ...Array.from({ length: m.cart.start.y - m.cart.wall.y + 1 }, (_, i) => ({ x: m.cart.start.x, y: m.cart.wall.y + i }))];
     if (busy.some(q => Math.abs(q.x - p.x) + Math.abs(q.y - p.y) <= 1)) return undefined;
     const names = tile.zoneId === 'mine-cavern' ? ['crystal_cluster_tall', 'crystal_cluster_low'] : ['ore_heap', 'tools', 'cask', 'crystal_cluster_low'];

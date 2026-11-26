@@ -225,10 +225,15 @@ export interface EliteDefinition { id: string; x: number; y: number; encounterId
 // P05-02: `abandoned` — an abandoned camp (rest with pressure, search for dust with a fight risk, or walk past).
 // Map 4 (save v68): `reflection` — the lake shows a memory: gaze (a journal page, every brought member +`reflection.fatigue`
 // fatigue) or look away (nothing).
-export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift' | 'abandoned' | 'reflection';
+// Map 5 (save v70): `trapped` — a worker under fallen rock: dig them out (every brought member +`trapped.fatigue` fatigue, pays
+// ore and shards) or pass; `cart` — an abandoned ore cart: rummage for one random potion (ore when the bag is full) or pass;
+// `vein` — a fresh ore vein: mine it for ore while the zone's threat rises by `vein.pressure`, or pass; `ore-merchant` — an
+// ore merchant: trades `oreTrade.ore` ore for `oreTrade.gold` gold up to `oreTrade.limit` times a run, and sells potions.
+export type MapEventKind = 'bandits' | 'shrine' | 'merchant' | 'traveller' | 'rift' | 'abandoned' | 'reflection' | 'trapped' | 'cart' | 'vein' | 'ore-merchant';
 export interface MapEventDefinition { id: string; x: number; y: number; kind: MapEventKind }
 // P05-02: `guide` (traveller: point the way, no salve), `shelter`/`search`/`pass` (abandoned camp).
-export type EventChoice = 'fight' | 'sneak' | 'pray' | 'offer' | 'buy-salve' | 'buy-tonic' | 'buy-repel' | 'help' | 'guide' | 'shelter' | 'search' | 'pass' | 'gaze' | 'away';
+export type EventChoice = 'fight' | 'sneak' | 'pray' | 'offer' | 'buy-salve' | 'buy-tonic' | 'buy-repel' | 'help' | 'guide' | 'shelter' | 'search' | 'pass' | 'gaze' | 'away' | 'free' | 'rummage' | 'dig' | 'sell-ore';
+export const EVENT_CHOICE_IDS: readonly EventChoice[] = ['fight', 'sneak', 'pray', 'offer', 'buy-salve', 'buy-tonic', 'buy-repel', 'help', 'guide', 'shelter', 'search', 'pass', 'gaze', 'away', 'free', 'rummage', 'dig', 'sell-ore'];
 export interface EventRules {
   // Bandits: a battle from the zone pool one level above the tile; the win always drops an item. Sneaking fills pressure.
   banditLevelBonus: number;
@@ -243,6 +248,11 @@ export interface EventRules {
   abandoned: { healPercent: number; searchDust: number; searchFightPercent: number };
   // Map 4 (draft): gazing into a reflection tires every brought member by `fatigue` points.
   reflection: { fatigue: number };
+  // Map 5 (drafts until the P04 economy pass): the trapped worker, the ore cart's fallback ore, the fresh vein and the ore merchant.
+  trapped: { fatigue: number; ore: number; shard: number };
+  cart: { ore: number };
+  vein: { ore: number; pressure: number };
+  oreTrade: { ore: number; gold: number; limit: number };
   // Rift: an energy battle at the tile's level; the win brings veil dust home.
   riftEncounterId: string; riftDust: number;
   // Elites: EXP multiplier and the drop's rarity weights.
@@ -274,6 +284,9 @@ export interface PotionRules {
 export interface ForgeRules {
   transfer:{ore:number;dust:number;shard:number};
   craft: {ore:number;dust:number;orePerLevel:number;dustPerLevel:number};
+  // Map 5 side story: once the company has finished `story` (Profile.storyQuests), the craft tab also makes a crystal weapon:
+  // the same fixed weapon at `rarity` with `affix` added, for the plain cost plus `ore`/`dust` (draft numbers).
+  crystal?: {story:string;rarity:number;affix:GearStat;ore:number;dust:number};
   itemLevel: {baseCap:number; orePerLevel:number; dustPerLevel:number; unlocks:readonly {elite:string;cap:number}[];
     // Completing a map (normal difficulty) raises the cap; other maps leave it alone (chapters, 2026-10-21).
     clears:readonly {map:string;cap:number}[]};
@@ -653,6 +666,8 @@ export interface ExpeditionState {
   // the party left when it stepped into shallow water (while it stands there); `boat` = the side story's boat, fixed at
   // departure. `lanterns` lit and `notes` (lost notes and gazed memories) picked up this run. Missing = none.
   mine?: MineProgress;
+  // Map 5 (save v70): ore sold to the ore merchant this run (missing = none).
+  sold?: number;
   tideWait?: number; shore?: Point; boat?: true; lanterns?: string[]; notes?: string[];
   // P05-06 (save v63): the device's calendar day the run set out on; its board progress counts there (missing = none).
   day?: number;
@@ -707,7 +722,7 @@ export type WorldEvent =
   | { type: 'chest'; chestId: string; loot: Resources; potion?: PotionId; tomes?: TomeBag }
   | { type: 'potion'; potion: PotionId; heal?: Record<string, number> }
   | { type: 'event'; eventId: string }
-  | { type: 'eventDone'; eventId: string; choice: EventChoice; heal?: Record<string, number> }
+  | { type: 'eventDone'; eventId: string; choice: EventChoice; heal?: Record<string, number>; potion?: PotionId }
   | { type: 'rune'; puzzleId: string; step: number; solved: boolean; reset: boolean }
   | { type: 'lever'; puzzleId: string; pulled: number; solved: boolean }
   | { type: 'pushed'; puzzleId: string; filled: boolean }

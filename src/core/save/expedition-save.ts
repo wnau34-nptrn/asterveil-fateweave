@@ -176,7 +176,9 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // tide fields `tideWait`/`shore`/`boat`, lit `lanterns` and picked-up `notes`; the profile may carry the camp journal
 // `notes`; `storyQuests`/`last.story` may name a map with a side story. Optional, so a v67 save loads unchanged.
 // v69 (map 5): mine interactions and recruitment progress, with no changes to older maps.
-export const SAVE_VERSION = 69;
+// v70 (map 5 side events): a run on a map with an ore merchant may carry `sold` (trades made, 1..limit); event choices may
+// name the trapped worker, ore cart, fresh vein and ore merchant. Optional, so a v69 save loads unchanged.
+export const SAVE_VERSION = 70;
 // Trees refunded by older migrations were legal under star points (at most ★5 = 4 extra).
 const LEGACY_STAR_POINTS = 4;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
@@ -717,6 +719,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     ...(s.bossLoot===undefined?{}:{bossLoot:bossPlanOf(s.bossLoot,map)}),
     ...(reserveSlots !== undefined ? { reserveSlots } : {}), ...(fatigue ? { fatigue } : {}), ...(clears ? { clears } : {}),
     ...(s.choices !== undefined ? { choices: choicesOf(s.choices, map.events, false) } : {}),
+    ...(s.sold !== undefined ? { sold: isInt(s.sold, 1, map.eventRules.oreTrade.limit) && map.events.some(e => e.kind === 'ore-merchant') ? s.sold : badRun() } : {}),
     ...(s.downed !== undefined ? { downed: isInt(s.downed, 1, RUN_CAP.downed) ? s.downed : badRun() } : {}),
     ...(s.day !== undefined ? { day: isInt(s.day, 0, MAX_BOARD_DAY) ? s.day : badRun() } : {}),
     ...(s.hunt===undefined?{}:{hunt:huntPlan(s.hunt,map,lookup)}),
@@ -1077,7 +1080,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
   if (version < 60 && version >= 5) { const p = obj(envelope.profile ?? {}); migrateTreePoints(envelope, map, maps.length ? maps : [map], version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps).length : undefined); }
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {

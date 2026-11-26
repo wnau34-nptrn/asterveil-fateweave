@@ -44,7 +44,7 @@ import { heroArt, portrait, starRow } from './portraits';
 
 export interface LobbyHost { archive(id: string, archived: boolean): void; autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; preset(action: 'apply' | 'save' | 'rename' | 'clear', slot: number, name?: string): void; place(id: string, group: Group, other?: string, lane?:Lane): void; lane(id: string, lane: Lane, other?: string): void; talent(id: string, node: TalentNode): void; loadout(id: string, actions: ActionId[]): void; resetTalents(id: string): void;
   skillLevel(id: string, action: ActionId): void; tomeTrade(line: TomeLine, size: TomeSize, to?: TomeLine): void;
-  transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number):void;
+  transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number,crystal?:boolean):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
   equip(id: string, uid: number): void; unequip(id: string, slot: GearSlot): void; salvage(uids: number[]): void; guide(id: string, skip: boolean): void;
   enhance(uid: number, target: number): void; lock(uid:number):void; fuse(uid: number, donors:number[]): void; level(uid:number,target:number):void; reroll(uid: number, index: number): void; brew(potion: PotionId): void; claim(questId: string): void; claimBoard(tab: BoardTab, id: string, period: number): void; depart(mapId?: string, hard?: boolean): void; sweep(mapId: string, hard: boolean): void; startWorldBoss(boss?: WbBossId): void; claimWorldBoss(id: string, week: number): void; craftBossItem(boss: WbBossId, affixes: GearStat[], set?: SetId): void; worldBossStatus(): void; gachaPull(count: number): void; gachaExchange(heroId: string): void; home(): void }
@@ -364,7 +364,7 @@ export class LobbyUI {
   private journal(p: Profile): string {
     const all = journalIds(this.maps); if (!all.length) return '';
     const found = (p.notes ?? []).filter(id => journalText[id]);
-    return `<section class="journal" aria-labelledby="journal-title"><h3 id="journal-title">${icon('pack')} สมุดบันทึกค่าย <small>${found.length}/${all.length}</small></h3>${found.length ? `<ul class="journal-list">${found.map(id => `<li id="journal-${id.replace(':', '-')}"><details><summary>${journalText[id]!.title}</summary><p>${journalText[id]!.body}</p></details></li>`).join('')}</ul>` : '<p class="camp-note">ยังไม่มีบันทึก · ตามหาบันทึกที่หล่นไว้และภาพสะท้อนในทะเลสาบเงาจันทร์</p>'}</section>`;
+    return `<section class="journal" aria-labelledby="journal-title"><h3 id="journal-title">${icon('pack')} สมุดบันทึกค่าย <small>${found.length}/${all.length}</small></h3>${found.length ? `<ul class="journal-list">${found.map(id => `<li id="journal-${id.replace(':', '-')}"><details><summary>${journalText[id]!.title}</summary><p>${journalText[id]!.body}</p></details></li>`).join('')}</ul>` : '<p class="camp-note">ยังไม่มีบันทึก · ตามหาบันทึกที่หล่นไว้และภาพสะท้อนในทะเลสาบเงาจันทร์ และบันทึกในเหมืองผลึกร้าง</p>'}</section>`;
   }
   // The scene and the NPC tap targets pan together (portrait phones); the HUD stays put above them.
   private build(): void {

@@ -19,7 +19,7 @@ import { gachaExchange, gachaPull, pullReason } from '../world/gacha';
 import { claimWorldBoss, craftBossItem, worldBossAttempt, type WorldBossShared } from '../world/world-boss';
 import { raiseSkill, tradeTomes } from '../world/tomes';
 import {
-  GEAR_SLOTS, POTION_IDS, SET_IDS, SHOP_ITEMS, TOME_LINES, TOME_SIZES, WB_BOSSES, type GearStat, type SetId, type WbBossId,
+  EVENT_CHOICE_IDS, GEAR_SLOTS, POTION_IDS, SET_IDS, SHOP_ITEMS, TOME_LINES, TOME_SIZES, WB_BOSSES, type GearStat, type SetId, type WbBossId,
   type BoardTab, type Commander, type Direction, type EventChoice, type ExpeditionState, type GearSlot, type Lane, type MapDefinition, type Point,
   type PotionId, type Profile, type ProfileEvent, type ProfileResult, type RunOutcome, type ShopItemId, type TalentNode, type TomeLine,
   type TomeSize, type WorldEvent, type WorldResult,
@@ -58,7 +58,7 @@ export type CampCommand =
   | { kind: 'unequip'; heroId: string; slot: GearSlot }
   | { kind: 'autoEquipCamp'; plan: AutoEquipmentPlan }
   | { kind: 'transferAffix'; uid: number; index: number; donor: number; sourceIndex: number }
-  | { kind: 'craftWeapon'; heroId: string; level: number }
+  | { kind: 'craftWeapon'; heroId: string; level: number; crystal?: boolean }
   // P11-05: a World Boss trio item from that boss's shards: the two chosen affixes and an optional set.
   | { kind: 'craftBossItem'; boss: WbBossId; affixes: GearStat[]; set?: SetId }
   | { kind: 'bossTarget'; target: CharmPower }
@@ -142,7 +142,6 @@ type Field = 'int' | 'str' | 'bool' | 'ints' | 'strs' | 'point' | 'object' | 'co
 type Spec = Record<string, Field | { optional: Field }>;
 const opt = (f: Field) => ({ optional: f });
 const DIRECTIONS = ['up', 'down', 'left', 'right'] as const, LANES = ['front', 'back'] as const, GROUPS = ['deployed', 'reserve', 'bench'] as const;
-const EVENT_CHOICES = ['fight', 'sneak', 'pray', 'offer', 'buy-salve', 'buy-tonic', 'buy-repel', 'help', 'guide', 'shelter', 'search', 'pass'] as const;
 const SPECS: Record<CommandKind, Spec> = {
   createCommander: { commander: 'object', replace: 'bool' }, hire: { index: 'int' }, refreshBoard: {}, buy: { item: SHOP_ITEMS, heroId: opt('str') },
   smelt: { dust: 'int' }, upgrade: { heroId: 'str' }, setArchived: { heroId: 'str', archived: 'bool' }, dismiss: { heroId: 'str' },
@@ -151,7 +150,7 @@ const SPECS: Record<CommandKind, Spec> = {
   tradeTomes: { line: TOME_LINES, size: TOME_SIZES, to: opt(TOME_LINES) }, learnTalent: { heroId: 'str', node: 'str' },
   chooseLoadout: { heroId: 'str', actions: 'strs' }, resetTalents: { heroId: 'str' }, claimGuide: { id: 'str', skip: 'bool' },
   equip: { heroId: 'str', uid: 'int' }, unequip: { heroId: 'str', slot: GEAR_SLOTS }, autoEquipCamp: { plan: 'object' },
-  transferAffix: { uid: 'int', index: 'int', donor: 'int', sourceIndex: 'int' }, craftWeapon: { heroId: 'str', level: 'int' }, craftBossItem: { boss: WB_BOSSES, affixes: 'strs', set: opt(SET_IDS) },
+  transferAffix: { uid: 'int', index: 'int', donor: 'int', sourceIndex: 'int' }, craftWeapon: { heroId: 'str', level: 'int', crystal: opt('bool') }, craftBossItem: { boss: WB_BOSSES, affixes: 'strs', set: opt(SET_IDS) },
   bossTarget: { target: BOSS_POWERS }, huntTarget: { target: opt('str') }, collectOverflow: { ids: 'ints' },
   recycleStored: { source: ['bag', 'overflow'], ids: 'ints' }, expandStorage: {}, salvage: { uids: 'ints' }, enhance: { uid: 'int', target: 'int' },
   lockEquipment: { uid: 'int' }, fuse: { uid: 'int', donors: opt('ints') }, raiseItemLevel: { uid: 'int', target: 'int' }, reroll: { uid: 'int', index: 'int' },
@@ -161,7 +160,7 @@ const SPECS: Record<CommandKind, Spec> = {
   depart: { mapId: opt('str'), hard: 'bool', day: opt('int') },
   move: { dir: DIRECTIONS }, mine: { action: MINE_ACTIONS }, travel: { to: 'point' }, rest: {}, waitTide: {}, revive: { heroId: 'str' }, swapMembers: { a: 'str', b: 'str' },
   setLane: { heroId: 'str', lane: LANES, other: opt('str') }, moveMember: { heroId: 'str' }, runPreset: { slot: 'int' }, withdraw: {}, openChest: {},
-  usePotion: { potion: POTION_IDS, heroId: opt('str') }, claimRunGuide: { id: 'str' }, chooseEvent: { choice: EVENT_CHOICES }, draftPick: { index: 'int' },
+  usePotion: { potion: POTION_IDS, heroId: opt('str') }, claimRunGuide: { id: 'str' }, chooseEvent: { choice: EVENT_CHOICE_IDS }, draftPick: { index: 'int' },
   learnRunTalent: { heroId: 'str', node: 'str' }, chooseRunLoadout: { heroId: 'str', actions: 'strs' },
   wear: { heroId: 'str', from: ['found', 'spare'], index: 'int' }, takeOff: { heroId: 'str', slot: GEAR_SLOTS }, autoEquipRun: { plan: 'object' },
   battle: { commands: 'commands' },
@@ -264,7 +263,7 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
     case 'unequip': return camp(unequip(p, map, cmd.heroId, cmd.slot));
     case 'autoEquipCamp': return camp(applyCampEquipment(p, cmd.plan));
     case 'transferAffix': return camp(transferAffix(p, map, cmd.uid, cmd.index, cmd.donor, cmd.sourceIndex));
-    case 'craftWeapon': return camp(craftWeapon(p, map, cmd.heroId, cmd.level));
+    case 'craftWeapon': return camp(craftWeapon(p, map, cmd.heroId, cmd.level, cmd.crystal === true));
     case 'craftBossItem': return camp(craftBossItem(p, maps, cmd.boss, cmd.affixes, cmd.set));
     case 'bossTarget': return camp(chooseBossTarget(p, map, cmd.target));
     case 'huntTarget': return camp(chooseHuntTarget(p, cmd.target));

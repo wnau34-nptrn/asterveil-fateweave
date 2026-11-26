@@ -261,7 +261,11 @@ function chooseFor(s: ExpeditionState): ExpeditionState {
   const pick = ev.kind === 'rift' ? 'fight' : ev.kind === 'bandits' ? (hpPercent(s) >= 60 ? 'fight' : 'sneak')
     : ev.kind === 'shrine' ? (ok('offer') ? 'offer' : hpPercent(s) < 50 ? 'pray' : undefined)
     : ev.kind === 'reflection' ? (s.roster.deployed.every(id => fatigueStep(map, fatigueOf(s, id) + map.eventRules.reflection.fatigue) === 0) ? 'gaze' : 'away')
-    : ev.kind === 'traveller' ? (ok('help') ? 'help' : 'guide') : ev.kind === 'abandoned' ? (hpPercent(s) >= 60 ? 'search' : 'shelter') : ok('buy-salve') && s.resources.ore >= 40 ? 'buy-salve' : undefined;
+    : ev.kind === 'traveller' ? (ok('help') ? 'help' : 'guide') : ev.kind === 'abandoned' ? (hpPercent(s) >= 60 ? 'search' : 'shelter')
+    // Map 5: dig a worker out while nobody would tire a step; always rummage a cart; mine a vein while healthy.
+    : ev.kind === 'trapped' ? (s.roster.deployed.every(id => fatigueStep(map, fatigueOf(s, id) + map.eventRules.trapped.fatigue) === 0) ? 'free' : 'pass')
+    : ev.kind === 'cart' ? 'rummage' : ev.kind === 'vein' ? (hpPercent(s) >= 60 ? 'dig' : 'pass')
+    : ok('buy-salve') && s.resources.ore >= 40 ? 'buy-salve' : undefined;
   return pick && ok(pick) ? chooseEvent(s, map, lookup, pick).state : s;
 }
 
