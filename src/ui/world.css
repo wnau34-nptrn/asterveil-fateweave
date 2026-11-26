@@ -600,17 +600,26 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .lost-note.picked { display: none; }
 @media (prefers-reduced-motion: reduce) { .tile.water::after { transition: none; } }
 
-.mine-marker {
-  width: var(--t);
-  display: grid;
-  place-items: center;
-  color: #f3e6ff;
-  font-size: 0.65rem;
-  font-weight: 600;
-  text-shadow: 0 1px 3px #141226, 0 0 4px #141226;
-  pointer-events: none;
-}
-.mine-marker[hidden] { display: none; }
+/* ---- Map 5 props (ART-WORLD-MINE-PROPS-001): a 6×5 atlas of 128 px cells, foot at 124; --mx/--my pick the frame ---- */
+.mine-prop { width: var(--t); height: var(--t); pointer-events: none; background: url('/assets/world/mine_decor.webp?v=ef9dc300') calc(var(--mx) * var(--t) * -1) calc(var(--my) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 5) no-repeat; }
+.mine-prop.gone { display: none; }
+.mine-prop[data-mine=crystal] { filter: drop-shadow(0 0 calc(var(--t) * .12) #8cf0c8aa); }
+#map-grid[data-art="mine"] .lantern { --mx: 0; --my: 0; background: url('/assets/world/mine_decor.webp?v=ef9dc300') calc(var(--mx) * var(--t) * -1) calc(var(--my) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 5) no-repeat; }
+#map-grid[data-art="mine"] .lantern.lit { --mx: 1; filter: drop-shadow(0 0 calc(var(--t) * .18) #ffc870); }
+#map-grid[data-art="mine"] .lost-note i { display: none; }
+#map-grid[data-art="mine"] .lost-note { background: url('/assets/world/mine_decor.webp?v=ef9dc300') calc(var(--mx) * var(--t) * -1) calc(var(--my) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 5) no-repeat; }
+#map-grid[data-art="mine"] .lost-note[data-note="mine-dig-order"] { --mx: 1; --my: 3; }
+#map-grid[data-art="mine"] .lost-note[data-note="mine-child-drawing"] { --mx: 0; --my: 4; }
+#map-grid[data-art="mine"] .decor { background: url('/assets/world/mine_decor.webp?v=ef9dc300') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 5) no-repeat; }
+/* Cracked wall (cart), evidence door (beam) and handprint passages: shut on the wall tile, open over the walkable floor. */
+#map-grid[data-art="mine"] .puzzle-door, #map-grid[data-art="mine"] .secret-wall { background: url('/assets/world/mine_decor.webp?v=ef9dc300') calc(var(--mx) * var(--t) * -1) calc(var(--my) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 5) no-repeat; }
+#map-grid[data-art="mine"] .puzzle-door.open, #map-grid[data-art="mine"] .secret-wall.found { background: url('/assets/world/mine_decor.webp?v=ef9dc300') calc(var(--mx) * var(--t) * -1) calc(var(--my) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 5) no-repeat, url('/assets/world/tileset.webp?v=6ced91a5') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 4) calc(var(--t) * 9) no-repeat; }
+#map-grid[data-art="mine"] .puzzle-door[data-door="mine-cart"] { --mx: 0; --my: 1; }
+#map-grid[data-art="mine"] .puzzle-door[data-door="mine-cart"].open { --mx: 1; }
+#map-grid[data-art="mine"] .puzzle-door[data-door="mine-beam"] { --mx: 0; --my: 2; }
+#map-grid[data-art="mine"] .puzzle-door[data-door="mine-beam"].open { --mx: 1; }
+#map-grid[data-art="mine"] .secret-wall { --mx: 2; --my: 2; }
+#map-grid[data-art="mine"] .secret-wall.found { --mx: 3; }
 
 .hud-summary > .hud-tide[data-mine] {
   justify-self: end;
