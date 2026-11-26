@@ -12,7 +12,7 @@ import { battleData, battleState, capXp, reveal } from '../../src/core/world/wor
 import { battleLesson } from '../../src/ui/tutorial';
 import { currentSave } from '../fixtures/current-save';
 import { captured, hooks, setCapture, simulateCampaign } from '../sim/balance-sim';
-import type { Profile } from '../../src/core/world/types';
+import type { ExpeditionState, Profile } from '../../src/core/world/types';
 
 const ids = ['guardian', 'tracer', 'weaver', 'healer', 'lio'];
 const key = 'asterveil.fateweave.expedition.v1';
@@ -106,26 +106,28 @@ async function screencast(page: Page, dir: string): Promise<() => Promise<void>>
   return async () => { await cdp.send('Page.stopScreencast'); writeFileSync(`${dir}/times.json`, JSON.stringify(times)); };
 }
 
-test('battle: the Crystal Giant with five heroes, played by the advice', async ({ page }, info) => {
-  test.setTimeout(600_000);
-  // A real campaign party at the giant's door (advisor rush, Lio + Brann, seed 1001), as the balance sample sees it.
+// A real campaign party at the giant's door (advisor rush, Lio + Brann, seed 1001), as the balance sample sees it.
+function campaignEntry(): { profile: Profile; run: ExpeditionState } {
   let profile: Profile | undefined; hooks.depart = (p, mapId) => { if (mapId === mineMap.id && !profile) profile = structuredClone(p); };
   setCapture(true); simulateCampaign(1001, 'rush', 'advisor', 0, 0, 16, ['lio', 'brann'], MAPS); delete hooks.depart;
   const entry = captured.find(c => c.mapId === mineMap.id && c.label === 'boss')!.state; setCapture(false);
-  const game = { profile: profile!, run: entry };
-  // The advised line, with any choice that needs a second pick replaced by a plain attack.
+  return { profile: profile!, run: entry };
+}
+// Plays up to `max` advised commands through the real battle UI while the screencast records; a choice that needs a second
+// pick is replaced by a plain attack.
+async function playAdvised(page: Page, game: { profile: Profile; run: ExpeditionState }, dir: string, max = 80): Promise<void> {
   const data = battleData(game.run, mineMap, encounterById)!; let bs = battleState(game.run, mineMap, encounterById)!;
   const plan: Command[] = [];
-  while (bs.outcome === 'active' && plan.length < 80) {
+  while (bs.outcome === 'active' && plan.length < max) {
     const l = battleLesson(bs, data); const hero = currentHeroId(bs, data)!;
     const c: Command = l && !l.recipientId && !l.cooldownAction ? { beat: bs.beat, heroId: l.heroId, action: l.action, targetId: l.targetId }
       : { beat: bs.beat, heroId: hero, action: 'attack', targetId: targetOptions(bs, data, hero, 'attack').find(o => o.valid)!.id };
     plan.push(c); bs = resolveCommand(bs, data, c).state;
   }
-  console.log('PLAN', bs.outcome, bs.round, plan.length);
+  console.log('PLAN', game.run.battle?.encounterId, bs.outcome, bs.round, plan.length);
   await launch(page, currentSave(game));
   await expect(page.locator('#battle-view')).toBeVisible();
-  const stop = await screencast(page, info.outputPath('frames'));
+  const stop = await screencast(page, dir);
   await page.waitForTimeout(1200);
   await page.locator('#start').click();
   await page.waitForTimeout(800);
@@ -144,7 +146,28 @@ test('battle: the Crystal Giant with five heroes, played by the advice', async (
   }
   await page.waitForTimeout(4000);
   await stop();
+}
+
+test('battle: the Crystal Giant with five heroes, played by the advice', async ({ page }, info) => {
+  test.setTimeout(600_000);
+  await playAdvised(page, campaignEntry(), info.outputPath('frames'));
 });
+
+// The same party meets each mine foe set (ART-UNIT-ANIMATION-MINE-001): the yard patrol (bat, ore golem, possessed worker),
+// the overseer's gate and the crystal eater's den. Six advised commands each, recorded for the motion review.
+for (const [id, kind, source] of [['mine-yard-patrol', 'random', undefined], ['elite-mine-overseer', 'elite', 'mine-overseer'], ['elite-crystal-eater', 'elite', 'mine-crystal-eater']] as const) {
+  test(`battle: mine foes in ${id}`, async ({ page }, info) => {
+    test.setTimeout(300_000);
+    const game = campaignEntry();
+    const battle = { ...game.run.battle!, kind, encounterId: id }; delete battle.source;
+    game.run.battle = source ? { ...battle, source } : battle;
+    // The sampled run already beat its elites: this one meets the elite again where it stands.
+    const elite = mineMap.elites.find(e => e.id === source);
+    if (elite) { game.run.elitesDefeated = game.run.elitesDefeated.filter(e => e !== elite.id); game.run.position = { x: elite.x, y: elite.y }; }
+    await playAdvised(page, game, info.outputPath('frames'), 6);
+    await page.screenshot({ path: info.outputPath(`${id}.png`) });
+  });
+}
 
 test('world: mine props in place (cart junction, rescued workers, beam room)', async ({ page }, info) => {
   const shots: [string, (run: ReturnType<typeof expedition>['run']) => void][] = [

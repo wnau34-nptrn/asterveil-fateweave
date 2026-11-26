@@ -1,0 +1,163 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "overseer": [
+   {
+    "frame": 0,
+    "height": 402,
+    "scale": 1.0,
+    "inliers": 1856,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 414,
+    "scale": 0.991,
+    "inliers": 117,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 397,
+    "scale": 0.954,
+    "inliers": 117,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 401,
+    "scale": 0.987,
+    "inliers": 88,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 462,
+    "scale": 0.976,
+    "inliers": 48,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 403,
+    "scale": 0.972,
+    "inliers": 112,
+    "status": "ok"
+   },
+   {
+    "frame": 6,
+    "height": 381,
+    "scale": 0.994,
+    "inliers": 70,
+    "status": "ok"
+   },
+   {
+    "frame": 7,
+    "height": 402,
+    "scale": 0.996,
+    "inliers": 129,
+    "status": "ok"
+   },
+   {
+    "frame": 8,
+    "height": 418,
+    "scale": 0.962,
+    "inliers": 154,
+    "status": "ok"
+   },
+   {
+    "frame": 9,
+    "height": 418,
+    "scale": 0.958,
+    "inliers": 235,
+    "status": "ok"
+   },
+   {
+    "frame": 10,
+    "height": 418,
+    "scale": 0.95,
+    "inliers": 178,
+    "status": "ok"
+   },
+   {
+    "frame": 11,
+    "height": 418,
+    "scale": 0.961,
+    "inliers": 232,
+    "status": "ok"
+   },
+   {
+    "frame": 12,
+    "height": 418,
+    "scale": 0.966,
+    "inliers": 218,
+    "status": "ok"
+   },
+   {
+    "frame": 13,
+    "height": 427,
+    "scale": 0.975,
+    "inliers": 210,
+    "status": "ok"
+   },
+   {
+    "frame": 14,
+    "height": 435,
+    "scale": 0.933,
+    "inliers": 136,
+    "status": "ok"
+   },
+   {
+    "frame": 15,
+    "height": 418,
+    "scale": 0.958,
+    "inliers": 201,
+    "status": "ok"
+   },
+   {
+    "frame": 16,
+    "height": 418,
+    "scale": 0.959,
+    "inliers": 216,
+    "status": "ok"
+   },
+   {
+    "frame": 17,
+    "height": 427,
+    "scale": 0.946,
+    "inliers": 253,
+    "status": "ok"
+   },
+   {
+    "frame": 18,
+    "height": 447,
+    "scale": 0.938,
+    "inliers": 106,
+    "status": "ok"
+   },
+   {
+    "frame": 19,
+    "height": 393,
+    "scale": 0.968,
+    "inliers": 144,
+    "status": "ok"
+   },
+   {
+    "frame": 20,
+    "height": 350,
+    "scale": 0.922,
+    "inliers": 117,
+    "status": "ok"
+   },
+   {
+    "frame": 21,
+    "height": 321,
+    "scale": 0.907,
+    "inliers": 67,
+    "status": "ok"
+   }
+  ]
+ }
+}

@@ -1,0 +1,1881 @@
+{
+  "logicalCell": 512,
+  "unitCount": 5,
+  "celsByUnit": {
+    "bat": 26,
+    "golem": 22,
+    "worker": 22,
+    "overseer": 22,
+    "eater": 22
+  },
+  "files": {
+    "NOTES.md": {
+      "sha256": "f32e902f24367fd839ba6e67d5b1b340e1cb18401b1b61ff5e6faa9bed07eddc",
+      "bytes": 4551
+    },
+    "anatomy/bat.json": {
+      "sha256": "9ebc83a34c4352cbd12377b9bfa088634ec9b78b037aff238c88b68293f7417c",
+      "bytes": 2978
+    },
+    "anatomy/eater.json": {
+      "sha256": "76dcaa138f3c6dd405987d697c510bcbe88d2d3737c89a3e46564a13420cdaae",
+      "bytes": 2398
+    },
+    "anatomy/golem.json": {
+      "sha256": "640d15a9ccfce04d25d5e59b68d8fbce97f218fe40befb119c049e4548db8c54",
+      "bytes": 2558
+    },
+    "anatomy/overseer.json": {
+      "sha256": "739a880fa47a6a65a9114e1a5a97b22a21bc3e20832c30988034ddd18f852536",
+      "bytes": 2414
+    },
+    "anatomy/worker.json": {
+      "sha256": "eb358704d0627b65adf1a3d89dc4bbb8c57614922f4c13068a8a5b9932734071",
+      "bytes": 2558
+    },
+    "build.py": {
+      "sha256": "e3b9879fa5a7748db5772dd046478656d582e7b10373f10563174a6d80120ba1",
+      "bytes": 13434
+    },
+    "frames/bat/000.png": {
+      "sha256": "30dca5a6198dbca427924c1af282f850e34f5476485a50dbb34405a5c0c29114",
+      "bytes": 182496,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/001.png": {
+      "sha256": "bf2c21b60f29d06de2ed9cb045e7daf9d26f33b096b76fbb82510fe7c0f7c68c",
+      "bytes": 149034,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/002.png": {
+      "sha256": "0828701b09f638ee06562fef7373e6f7f3852278e44e08cc72f30ae30d0f3e82",
+      "bytes": 163345,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/003.png": {
+      "sha256": "86aba19893e15a8298a2c9a4857fd21603827905b04a034f86e579b72d0ba9a4",
+      "bytes": 187692,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/004.png": {
+      "sha256": "dac9ba751a5d980cfca00cedd8a68945f12a78bad2dc90a79869a92849423639",
+      "bytes": 214034,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/005.png": {
+      "sha256": "4c544f8e861e2870a1587d9bc6aceb6f2a0e48c0d0bd7a7d902ef1893b457170",
+      "bytes": 204669,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/006.png": {
+      "sha256": "763f3434cb9021b29b5f322d72451650e4fb3e2e9dc32804317748c9a2fc86ce",
+      "bytes": 193402,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/007.png": {
+      "sha256": "179e9102ca6a4a2bd7285b54b424c1cab14a698e8f5c6c7553c75168a9449a0a",
+      "bytes": 197429,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/008.png": {
+      "sha256": "b44a50c18f51e3f1990d1fc65e5c0bddefb37bf4f79763d93e48ce2d8ff2e1d7",
+      "bytes": 195638,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/009.png": {
+      "sha256": "30dca5a6198dbca427924c1af282f850e34f5476485a50dbb34405a5c0c29114",
+      "bytes": 182496,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/010.png": {
+      "sha256": "30dca5a6198dbca427924c1af282f850e34f5476485a50dbb34405a5c0c29114",
+      "bytes": 182496,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/011.png": {
+      "sha256": "30dca5a6198dbca427924c1af282f850e34f5476485a50dbb34405a5c0c29114",
+      "bytes": 182496,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/012.png": {
+      "sha256": "30dca5a6198dbca427924c1af282f850e34f5476485a50dbb34405a5c0c29114",
+      "bytes": 182496,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/013.png": {
+      "sha256": "30dca5a6198dbca427924c1af282f850e34f5476485a50dbb34405a5c0c29114",
+      "bytes": 182496,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/014.png": {
+      "sha256": "30dca5a6198dbca427924c1af282f850e34f5476485a50dbb34405a5c0c29114",
+      "bytes": 182496,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/015.png": {
+      "sha256": "30dca5a6198dbca427924c1af282f850e34f5476485a50dbb34405a5c0c29114",
+      "bytes": 182496,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/016.png": {
+      "sha256": "30dca5a6198dbca427924c1af282f850e34f5476485a50dbb34405a5c0c29114",
+      "bytes": 182496,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/017.png": {
+      "sha256": "a8a9cf122f9ff3ceaa83774f447baec25573e79ef2d3bf905957ecd8152ed515",
+      "bytes": 177536,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/018.png": {
+      "sha256": "21a67a145f30a8d8d105928377d47904726e89211631b06e3274add035a5b9ca",
+      "bytes": 176122,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/019.png": {
+      "sha256": "1ad381983e74f204b77d1a0a3dcbb6cf10409dcfd021aeb8f3ca0a381fed1a1c",
+      "bytes": 170708,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/020.png": {
+      "sha256": "231b25256d2afe77f8b290530c1d69dd9d91bbd29ddcb6478c1262a932b45165",
+      "bytes": 186411,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/021.png": {
+      "sha256": "6de308dee2d2d985c6a1671ffc6a17ed9499b14f87b7c65be4b22a210c4aa1ff",
+      "bytes": 157794,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/022.png": {
+      "sha256": "30dca5a6198dbca427924c1af282f850e34f5476485a50dbb34405a5c0c29114",
+      "bytes": 182496,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/023.png": {
+      "sha256": "ee1a15d3a1625decfce7dd2e4fbbe818a6ef911024d66a5b49280aaab53bdaa3",
+      "bytes": 177406,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/024.png": {
+      "sha256": "f96124cd157f96dc6d42cd1f7e4bc11cbc8de7c0404eb5df49e157ffab38c870",
+      "bytes": 199025,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/bat/025.png": {
+      "sha256": "62afaadd8fc5410088c922cb25397c4faf8cc4dad38c42deb13ffc37583cd974",
+      "bytes": 187051,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/000.png": {
+      "sha256": "2ec487e8f6f86f5b0120e471c2635d68991351f6930c07a15b93a7f582370378",
+      "bytes": 249378,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/001.png": {
+      "sha256": "0a540bb7d5a7110ae91d2625ff6984837070af1a51edb74608ad8e71d2cb274b",
+      "bytes": 250838,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/002.png": {
+      "sha256": "96d1fad86302e8128f0e1d6c7a5d1a139995c15e0ecd8cf2cb7a15c213afd696",
+      "bytes": 236480,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/003.png": {
+      "sha256": "9127ab82a2de4a104e7768cb6032cf5299b41e8536c140e4659a4a0c7446c9ea",
+      "bytes": 258491,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/004.png": {
+      "sha256": "5f6a8e6b5537627f81334034caa526095252250d1e7a567179c2c95d0140e719",
+      "bytes": 265960,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/005.png": {
+      "sha256": "fdad24b4b404185ec3ec509ae76df9ae4dba09bc86f5acf62877300f426eeac9",
+      "bytes": 234084,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/006.png": {
+      "sha256": "0a8b479a7822c3d1ac751e786d8f506259a5a131b81227d6006418c0120fc22c",
+      "bytes": 241477,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/007.png": {
+      "sha256": "614a254b213a9e76a383e837ff47642afe76f88d5d6bf806b2554bcf8015b522",
+      "bytes": 245898,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/008.png": {
+      "sha256": "7a2b6f8916e2703f2460907a5bf98e09f89f35d8b72005f4bf636d51747ef220",
+      "bytes": 251000,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/009.png": {
+      "sha256": "7b857ccab61b6cf8fdf3b037d28f4d2b31b8cd1d1ea9f8786de3b040c88edb81",
+      "bytes": 249460,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/010.png": {
+      "sha256": "1c6cceaf6e8d21ddb345c6bf61d52861cbc04c6b8dac9cc71574c60abbc3c37f",
+      "bytes": 232742,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/011.png": {
+      "sha256": "a26e227ff6adb9d7733fdec402c1e3243661df78d60af630795abc1d9786e7a3",
+      "bytes": 218491,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/012.png": {
+      "sha256": "2d53d1f53f001e2daf536228ec7b5ed72b6f06f3082a3d5068ee2ce731177255",
+      "bytes": 218308,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/013.png": {
+      "sha256": "33568db17132e7069bb48c258c8890458b926229940f2ab1af40d91a3fb4ef9c",
+      "bytes": 205591,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/014.png": {
+      "sha256": "41fe4c9fbbffabcf47face86eb4a784d28fdd11643f907a86306642abb7997de",
+      "bytes": 259489,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/015.png": {
+      "sha256": "9af0558c4343151f3946af3ddafbefbe75e3501812af0cd8e6b535ab64cc3553",
+      "bytes": 249303,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/016.png": {
+      "sha256": "8a5b7eb31844752f9e70dcc26a45e6618a7ffab365a94dfa5b09060bb1691082",
+      "bytes": 249227,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/017.png": {
+      "sha256": "474b5cee81e74871658571f9bedb609fc37c6c64ba01926ae692b456c8acabb8",
+      "bytes": 241861,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/018.png": {
+      "sha256": "08df0b221d53a3a1bd34a9e53a8c4d5d50b2d1eb5b3c3d7efaea141ac0c043b4",
+      "bytes": 266505,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/019.png": {
+      "sha256": "665ce01b25484d62b2b3b4e8975dd44367cf6f83a896cca3513927868709d9f9",
+      "bytes": 271733,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/020.png": {
+      "sha256": "eed2d3270f10b42c814366edb183c90c075a9caa463f41d7408b1711f90b388c",
+      "bytes": 215346,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/eater/021.png": {
+      "sha256": "3748ef91b616387695eca1c28cf68cbeb2fb97f75c150ca9c1d26338ea4d4d2c",
+      "bytes": 225079,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/000.png": {
+      "sha256": "01715f2b844b025e73b0310b2ae5ebcf8c3645d1f47d321e711bdd33bd04527e",
+      "bytes": 267458,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/001.png": {
+      "sha256": "2270b5fd3a596f91db6f134ac2ba4719ca519dfca02195190fd4dc9990e15139",
+      "bytes": 241340,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/002.png": {
+      "sha256": "2ce1ace153b9e07e1dbe443992c9f834d592525b9d28de90e41f1a64418ec19e",
+      "bytes": 267899,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/003.png": {
+      "sha256": "b5fbf39ab9138a698bd89afe772b766a14b3b2d2183ecdb80b1272d1aac48b36",
+      "bytes": 286278,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/004.png": {
+      "sha256": "81f2f77373e0499d00358792f402bc252a5b6d594bfd82fb4941dfffb6812c53",
+      "bytes": 262027,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/005.png": {
+      "sha256": "eda451259e62588219c3c4f76e0d5cf41e732f02beff3950241f19cdefe4c259",
+      "bytes": 267314,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/006.png": {
+      "sha256": "fd9c6de388915140e6b50d5bea7cad222cc1fd0db4bd244afb7a81cde7051edc",
+      "bytes": 287459,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/007.png": {
+      "sha256": "aceb1cd0bf3bef6ce3d13e407e956d5e3e8293cf7d81bbdace4c224d85130d05",
+      "bytes": 278405,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/008.png": {
+      "sha256": "3ddb28f4f1a3587a98acb3b23ea9615307490614b53bfe81cc0471113e89fbdd",
+      "bytes": 269669,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/009.png": {
+      "sha256": "01715f2b844b025e73b0310b2ae5ebcf8c3645d1f47d321e711bdd33bd04527e",
+      "bytes": 267458,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/010.png": {
+      "sha256": "01715f2b844b025e73b0310b2ae5ebcf8c3645d1f47d321e711bdd33bd04527e",
+      "bytes": 267458,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/011.png": {
+      "sha256": "01715f2b844b025e73b0310b2ae5ebcf8c3645d1f47d321e711bdd33bd04527e",
+      "bytes": 267458,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/012.png": {
+      "sha256": "01715f2b844b025e73b0310b2ae5ebcf8c3645d1f47d321e711bdd33bd04527e",
+      "bytes": 267458,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/013.png": {
+      "sha256": "01715f2b844b025e73b0310b2ae5ebcf8c3645d1f47d321e711bdd33bd04527e",
+      "bytes": 267458,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/014.png": {
+      "sha256": "01715f2b844b025e73b0310b2ae5ebcf8c3645d1f47d321e711bdd33bd04527e",
+      "bytes": 267458,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/015.png": {
+      "sha256": "01715f2b844b025e73b0310b2ae5ebcf8c3645d1f47d321e711bdd33bd04527e",
+      "bytes": 267458,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/016.png": {
+      "sha256": "01715f2b844b025e73b0310b2ae5ebcf8c3645d1f47d321e711bdd33bd04527e",
+      "bytes": 267458,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/017.png": {
+      "sha256": "5a0707da56645de5949eed86c292f4503edd15fa944474df6784e272ac8076ce",
+      "bytes": 282366,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/018.png": {
+      "sha256": "73deb081b68380744b897809c2425fb6d6b3f363055bf250815b9ae97631fbe7",
+      "bytes": 269827,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/019.png": {
+      "sha256": "f96a5640a9d6fc5e77e5c34d1c1075ad18f3e24bd0f9bdda28a3825cc9d84a60",
+      "bytes": 231253,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/020.png": {
+      "sha256": "724a81a4d046a5969213ab2b4256de8e829b0b93d9956c37ddb91fa7d512f37a",
+      "bytes": 207786,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/golem/021.png": {
+      "sha256": "bd2361b40b2f622dfc5bdfeb334b71cac0f7a5e99132d03bd46fe8bbfb8d7be2",
+      "bytes": 202773,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/000.png": {
+      "sha256": "19084a177237608d3c37ed0c05630ec8d66680bcf886ea23e55e086d42a33adc",
+      "bytes": 273420,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/001.png": {
+      "sha256": "057c7d4fe81aa738a49953a8ac12e26f90e5799b0d5a4ac1ce86407cf7a314ba",
+      "bytes": 254926,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/002.png": {
+      "sha256": "4cf39f27281fa7a89efade28c568d1a874697fdb5e26686ae316735220b31828",
+      "bytes": 263043,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/003.png": {
+      "sha256": "b3c18f9d19aac96f0fd34c56bf55ede7f4ce8f2d7c9773b929f54ee508b04e68",
+      "bytes": 253409,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/004.png": {
+      "sha256": "6e992f56eadb20150be6959ad1517a6d7f72f038f3c18b0b8b783e99b931ff49",
+      "bytes": 280424,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/005.png": {
+      "sha256": "9caff16a82fc4b44c1d74c24fe56784611750859d6a7e2b3168450435b45475f",
+      "bytes": 269608,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/006.png": {
+      "sha256": "0bdd8d33f853400da61f34c78c7678109405c7cd73e7dd0c1ac5123bbbf94409",
+      "bytes": 257761,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/007.png": {
+      "sha256": "e202eae38b38ec245cef66ee3b7d7fa5d5c0997cfccb8ea5f50a2546360c522b",
+      "bytes": 263851,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/008.png": {
+      "sha256": "ea0bad0da267b800924664a9763368edd13b57007a6dda8490f274426c37793a",
+      "bytes": 268506,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/009.png": {
+      "sha256": "a56c5f5e969090d1fe1cea8ffc5cdd18047c4f7740812b7c34ff9aa68c929cf6",
+      "bytes": 266206,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/010.png": {
+      "sha256": "34b322acd785d82032451143b313c17c6fd28aa1c51d0c2cca4a34a6cb3aa709",
+      "bytes": 259291,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/011.png": {
+      "sha256": "d27a0240553fe6245f27cc3e9fe24f55709dcd589672f845a59545d81ef5a460",
+      "bytes": 256779,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/012.png": {
+      "sha256": "3c741c9ba5715da47a767d48043d0603a03ec22919065f94ffe54b533aeefbe9",
+      "bytes": 254741,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/013.png": {
+      "sha256": "98c2f88ab7ed087b321fea29664c7a3436068611caf322f0aaac8b90d16141b1",
+      "bytes": 262948,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/014.png": {
+      "sha256": "78afb4f74d40e2435217f2112026a319732f45866a942c72733d2968f0e0c2c8",
+      "bytes": 284578,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/015.png": {
+      "sha256": "95da8308a40581e5a570b193ed03a30006a286328eda99e7472e41655e2055ca",
+      "bytes": 259955,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/016.png": {
+      "sha256": "6a9720b3409c649b39cce625eebfe83671795d88fd5f9b3d46e1bd470196fc15",
+      "bytes": 259425,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/017.png": {
+      "sha256": "9d741387249b20d5309b59b976bfb8d1e5c0d879b34639ec9cc4e7dcc3c4a238",
+      "bytes": 257766,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/018.png": {
+      "sha256": "e51bd89e5ddf355681941cf7b0ee6112f64295d60bf364dd7f8e8c8f241300f1",
+      "bytes": 278714,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/019.png": {
+      "sha256": "a9942182a182378e937a88bcfcb29bac8b420a39d98f97ebf4aae2d4c2c09955",
+      "bytes": 251827,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/020.png": {
+      "sha256": "b86c61cad502468903a2639fa7b80d9f6f91270eac338b4c64f838461620fd52",
+      "bytes": 222005,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/overseer/021.png": {
+      "sha256": "c36fc8986c1dac4bb5c12693118148a4588801b6ddea742e6958b3b16694918c",
+      "bytes": 204007,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/000.png": {
+      "sha256": "3ec71b62adec512dd1429564cb882d4958e3e2440b5611ca9498a6720997ba04",
+      "bytes": 223627,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/001.png": {
+      "sha256": "f404cb7da56b59dc6a62c8265c1a3b524da2cdbcad077ea8c727d969aa5cf2df",
+      "bytes": 235971,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/002.png": {
+      "sha256": "9fb5fa9555e9786fd295c36561069b40cedce890bcae3229a051ed01e09e96a2",
+      "bytes": 215765,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/003.png": {
+      "sha256": "d78863a4069744780728130f2c04dfa1b7a6bd626968b0fdf3f272bbbb47685a",
+      "bytes": 192106,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/004.png": {
+      "sha256": "bdc5965f0545e8b4650f24ef593cfb242f0aacea2575ec8cc1d776c60a743f8a",
+      "bytes": 224845,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/005.png": {
+      "sha256": "bf356967a37288cd5dfde608235929c07442755781225d9f88cfa38212e868c9",
+      "bytes": 197931,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/006.png": {
+      "sha256": "06b445f934747dfa6b1c70c02b232414cbf87d0fa9f36825107ff30006a195a7",
+      "bytes": 220360,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/007.png": {
+      "sha256": "724ba3b1304e7502de6c2a4d8ff666a8b0bef85a28a58f652406a304c703a5fe",
+      "bytes": 225640,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/008.png": {
+      "sha256": "d3b051bbb466f1b260c547d56b32d1ba21a83d2d583ae576a925a9e05f2e8315",
+      "bytes": 227550,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/009.png": {
+      "sha256": "3ec71b62adec512dd1429564cb882d4958e3e2440b5611ca9498a6720997ba04",
+      "bytes": 223627,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/010.png": {
+      "sha256": "3ec71b62adec512dd1429564cb882d4958e3e2440b5611ca9498a6720997ba04",
+      "bytes": 223627,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/011.png": {
+      "sha256": "3ec71b62adec512dd1429564cb882d4958e3e2440b5611ca9498a6720997ba04",
+      "bytes": 223627,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/012.png": {
+      "sha256": "3ec71b62adec512dd1429564cb882d4958e3e2440b5611ca9498a6720997ba04",
+      "bytes": 223627,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/013.png": {
+      "sha256": "3ec71b62adec512dd1429564cb882d4958e3e2440b5611ca9498a6720997ba04",
+      "bytes": 223627,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/014.png": {
+      "sha256": "3ec71b62adec512dd1429564cb882d4958e3e2440b5611ca9498a6720997ba04",
+      "bytes": 223627,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/015.png": {
+      "sha256": "3ec71b62adec512dd1429564cb882d4958e3e2440b5611ca9498a6720997ba04",
+      "bytes": 223627,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/016.png": {
+      "sha256": "3ec71b62adec512dd1429564cb882d4958e3e2440b5611ca9498a6720997ba04",
+      "bytes": 223627,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/017.png": {
+      "sha256": "eb575e070038200b399304d455d30210778928e32d0cf990eff92c24b2451f51",
+      "bytes": 252060,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/018.png": {
+      "sha256": "d6e13d404b41d6aedf027512b516272a4738251847adcb91dce0c0902fa889de",
+      "bytes": 231686,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/019.png": {
+      "sha256": "3715b5696bc125285de08f0a9505a1e5e00c67d4ba5c0abe1a09626b793e83c7",
+      "bytes": 184567,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/020.png": {
+      "sha256": "029e4469df4576aee04d4532a3436c24a2cc5a901a0bcd8ca4ca50716b9ddf75",
+      "bytes": 211946,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "frames/worker/021.png": {
+      "sha256": "4ced99d018f5a09a9b62de51aa7b2d53b946bcd15cdf8a4be22f4378edaec611",
+      "bytes": 239413,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "manifest.py": {
+      "sha256": "f19ab12ade9a3351785f7f8f4b488d4c14efbd80e3f86c38f6943ef3479fdb67",
+      "bytes": 1060
+    },
+    "pose-scale.json": {
+      "sha256": "f3c3cb5487e3a221d81a7f43537fce1eae4649727e24ff2a842ba6cce49d52ca",
+      "bytes": 1385
+    },
+    "preview/bat-390.gif": {
+      "sha256": "91dabb14b2e4115755a878d2ca482b831dc18dae6a825418c75a3fcea4fecb2b",
+      "bytes": 3601584,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 15
+    },
+    "preview/bat-hover-390.gif": {
+      "sha256": "c5ecce620db625450b9595c4178eb5dad90c2ba8ddc32c8e4937d5a7ace518be",
+      "bytes": 961326,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 4
+    },
+    "preview/bat-poses-390.png": {
+      "sha256": "278d8c9af308d725854b47db6c413395774a34c0d659644c270142fdd1adf208",
+      "bytes": 65210,
+      "size": [
+        390,
+        224
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/eater-390.gif": {
+      "sha256": "2621de0c7f2f96cefded38b56b3f2e9e9b946197769f2de84a462808504a0d1e",
+      "bytes": 3605965,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 15
+    },
+    "preview/eater-poses-390.png": {
+      "sha256": "f77e9f89f7b1d70eed30f77f5c620d5814e736a04d7c5b71af706466ff5874e9",
+      "bytes": 79860,
+      "size": [
+        390,
+        224
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/eater-skill-390.gif": {
+      "sha256": "aa20418fd032046be1f0720e6dfb8ea1c887617bd089fea5012060cbbc108ff2",
+      "bytes": 2166442,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 9
+    },
+    "preview/elite-variants-390.png": {
+      "sha256": "bce2e05b758b76fed04b3cd8d790e20868f370ccd6875f1c5c5d56429ea4d663",
+      "bytes": 62463,
+      "size": [
+        390,
+        235
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/field-00-390.png": {
+      "sha256": "43204590908afea4dba503873513625dccad2c3eee7fc2eab44397c99a071156",
+      "bytes": 489248,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/field-05-390.png": {
+      "sha256": "399f0db4dc5adca5f22ad2dd198449982593fa197e412a6280d631b913399e11",
+      "bytes": 488277,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/field-13-390.png": {
+      "sha256": "ece97f0bbbce36e86c5fee21a7f9806f80c0766e7a5d792c2dd0f39fbdffed21",
+      "bytes": 488072,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/field-18-390.png": {
+      "sha256": "676d1a6b347c7d7865c2dd5ba2c2ed82e44718a72cfcd01d9576f8e56a92da76",
+      "bytes": 489329,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/field-21-390.png": {
+      "sha256": "f67d39e7f33ddc1ffcc117d3036069ce1cd4d7d25eb4b90ba62a6281d46375e6",
+      "bytes": 484490,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/golem-390.gif": {
+      "sha256": "d37e049e1adf7ede0e64aa52618922d7a88ce51eae0d25672174fd8cfbd835e0",
+      "bytes": 3581751,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 15
+    },
+    "preview/golem-poses-390.png": {
+      "sha256": "ed734cc44a9df6c42ce5f23497d3092fad090be0c08286c35047e7b4a975ed86",
+      "bytes": 83921,
+      "size": [
+        390,
+        224
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/overseer-390.gif": {
+      "sha256": "fbf422b8d10a0042a5b6575da5a10aff844d608b4cc12cc79a739ce34cf61134",
+      "bytes": 3614753,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 15
+    },
+    "preview/overseer-poses-390.png": {
+      "sha256": "ab36aab9da6956a9b46c3acb78cb286b819495817b6c1f2a64cfc95cc7d5d229",
+      "bytes": 82576,
+      "size": [
+        390,
+        224
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "preview/overseer-skill-390.gif": {
+      "sha256": "369b772c8f93d4d033204c876dc70eea9d8e9b24335da49f5b8f31b94fa64283",
+      "bytes": 2171525,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 9
+    },
+    "preview/worker-390.gif": {
+      "sha256": "0bb5b45a08fae51139bff0b5cfe6243c27b0a7b9d4b14ffe48d49b9e3519dd5c",
+      "bytes": 3610402,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB",
+      "frames": 15
+    },
+    "preview/worker-poses-390.png": {
+      "sha256": "20eb1f9caeb3ff063d56c2a2671f0eb765facd36213097c54c471ef66549b7e5",
+      "bytes": 71538,
+      "size": [
+        390,
+        224
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "prompts.json": {
+      "sha256": "a3563cacfa68b885a5930de762058aed9fa2dffa38f7791831ee315c1b38975c",
+      "bytes": 16726
+    },
+    "raw/bat-attack.png": {
+      "sha256": "725084a44b439fbcbd44e3d6b2630fb2696513aad4ecf57dc0ca84d648bdcf52",
+      "bytes": 1326817,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/bat-reactions.png": {
+      "sha256": "8d52b97416699502bfbf61bbc1aa4f022e4f8d93ce4fa392db1e86e5f56ccdfa",
+      "bytes": 1253404,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/eater-attack.png": {
+      "sha256": "ecf8524b85224673bafa561d49311ec619fc8ff616c28031ff8945ce10eb0ae7",
+      "bytes": 1759231,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/eater-reactions.png": {
+      "sha256": "38c281bfc01feaf2d6200143dc9bb9b3539399bfa452b0fa5a4a79563b7f743d",
+      "bytes": 1066023,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/eater-skill.png": {
+      "sha256": "a875aa5f60d8e0d1ca0fa9af2e2bd4686a4c362b999f693e98e4cfc0688c8a28",
+      "bytes": 1697206,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/golem-attack.png": {
+      "sha256": "d268f291dedca29b3ec805ff90abce2208f1cc89df448f16b938566dfe8e14fc",
+      "bytes": 1590619,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/golem-reactions.png": {
+      "sha256": "76f7e7de52e5f086745ff80029f9c8dbe64a28c536e237b96b31f10d3864cd90",
+      "bytes": 1026000,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/overseer-attack.png": {
+      "sha256": "aab32f4abb4959926ea925363cc9f240c4146c41ef8d57c35d13b20448fbad44",
+      "bytes": 1995772,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/overseer-reactions.png": {
+      "sha256": "cc1d5fce15f52be38db875e3300cd7745d86a5a8090f77fc0fbee119a0241481",
+      "bytes": 1598589,
+      "size": [
+        2172,
+        724
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/overseer-skill.png": {
+      "sha256": "4572ca0b290b87b62371c6f21ee1f7c6d7a979d922bfa4cb92a9c657197e3ce3",
+      "bytes": 2059302,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/seed-lineup.png": {
+      "sha256": "7eb8acd73677052a52bfa3121073985fc3764fadfd0fac0d29fd18b28d668760",
+      "bytes": 1574020,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/variants-r2.png": {
+      "sha256": "9ea07f4d4df677522927263c3c95e3ea1b5b48c70486ecd70adde3d502bd5ae8",
+      "bytes": 1877281,
+      "size": [
+        1920,
+        819
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/worker-attack.png": {
+      "sha256": "92123afd78a2e09657accba3a3ee693a9da4bb78f26564feff4ff921333b3d1f",
+      "bytes": 1485943,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "raw/worker-reactions.png": {
+      "sha256": "653de9d685556d531402b35b792930e763757ae9bc7c201089be1d6d338615c5",
+      "bytes": 1340010,
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/bat.png": {
+      "sha256": "fdcdf4ff666c942fbc07c2eb8ddf3a000dea1c07e66858fb987fb8b59d8cde14",
+      "bytes": 236713,
+      "size": [
+        526,
+        370
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/eater-r2.png": {
+      "sha256": "72bc8973a7e60270303eb01578aaff6b9129aafc64ea5f71e1b4c3b6ffed27c3",
+      "bytes": 989254,
+      "size": [
+        1013,
+        775
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/eater.png": {
+      "sha256": "90423489869d5b00823aa28f4b81f8fc3d41ae117466daa9a04bc4e6918c0869",
+      "bytes": 340742,
+      "size": [
+        535,
+        439
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/foe_golem.png": {
+      "sha256": "586c27c584320b188ce19b5d040291375dc047db1896f00eebf2fe016352c49c",
+      "bytes": 422016,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/foe_ruin_bat.png": {
+      "sha256": "f03bb401f0d9d6f7caf7ba07706068e7c1abeb9c69ff8d566ed6c2fe0e1e24bb",
+      "bytes": 149405,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/foe_tusker.png": {
+      "sha256": "f0b69b79a75d3a4c4222ea8be5efa310ba53292a8f410a50497250796fcb2277",
+      "bytes": 364956,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/foe_vargoth_guard.png": {
+      "sha256": "339097d85f17681bb2bf3d3e8f972f282a67042c04fe81995fae18292c90cf78",
+      "bytes": 308581,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/golem.png": {
+      "sha256": "476e1f1b7582d35ac04c66e3c7f48040fb2f6b2a8fdd64529083ec070fff4dce",
+      "bytes": 351831,
+      "size": [
+        523,
+        457
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/overseer-r2.png": {
+      "sha256": "fb0e4784316ccbe7464065886616aab3e5aadfdbbf04b60ba8af2f1b673e7afe",
+      "bytes": 871581,
+      "size": [
+        759,
+        772
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/overseer.png": {
+      "sha256": "86d273323534deb0717439400f61c51730c01376a24eaed9df576810338baf43",
+      "bytes": 400714,
+      "size": [
+        541,
+        493
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds/worker.png": {
+      "sha256": "2a3879922d8cf2d891d895f3e9bf9cc1ee96bdd1e7dc75d397fb5df3df53f345",
+      "bytes": 268262,
+      "size": [
+        485,
+        426
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "seeds.json": {
+      "sha256": "26c1fe29719773c3ee6233caa25dd6bc8792b8c040fbbcf35fb204c3503a7822",
+      "bytes": 877
+    },
+    "sources/actor-0-0.png": {
+      "sha256": "fe83e4869940fc433b9c963f4ac4ff604cb38d5ed15c781c203db2b34fad4a99",
+      "bytes": 420368,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/actor-0-1.png": {
+      "sha256": "ac433c681e297ce32caa91c089d71bcadcdf21bbcd6d24e6e852932dce2ca532",
+      "bytes": 434146,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/actor-0-2.png": {
+      "sha256": "7098d60dad55b22573ff988ce85dc010421a894ba707b585dfbf7e618d6ea6e8",
+      "bytes": 521462,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/actor-0-3.png": {
+      "sha256": "a52544f6618007abf7bd6b0749c31e208b8ec1ed68f151fab153c865b22a3550",
+      "bytes": 482846,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/actor-0-4.png": {
+      "sha256": "e6760e48b0403e13318830df87fd5891d50c9e57a972c5e9e8f3f6d729298a47",
+      "bytes": 389693,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "sources/bg_mine.webp": {
+      "sha256": "f68cbd0105abacbf5622a4f0286f0ab55a868502f36cb951316793d2cf7eb288",
+      "bytes": 1373248,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "frames": 1
+    },
+    "strips/bat/attack.png": {
+      "sha256": "bd7da598685398272db2d670da110756864177d84d7e9249dcb6e4bd67d08de5",
+      "bytes": 1500865,
+      "size": [
+        4096,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/bat/down.png": {
+      "sha256": "c105749620e4e29759feab10b85df701d13af7980c0b87272dd071c2f0499a26",
+      "bytes": 518570,
+      "size": [
+        1536,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/bat/hit.png": {
+      "sha256": "bed36900661eedceefc506ae3e32a059af587a56ea88b87d170ab776494dbdb2",
+      "bytes": 353046,
+      "size": [
+        1024,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/bat/hover.png": {
+      "sha256": "6d7b7875e906dc557b8cea29af73616620caf7410ac94363b8253d5f0f87de5f",
+      "bytes": 745497,
+      "size": [
+        2048,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/eater/attack.png": {
+      "sha256": "8e91a34c48ef90d8f45ebe519145b149e19c9199c1a1199c1d055b3bd58d54c1",
+      "bytes": 1971806,
+      "size": [
+        4096,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/eater/down.png": {
+      "sha256": "b2449e8b262187d70fcaf64d5d55cded23b1d70b0042c0f1b3484eef87f533b2",
+      "bytes": 709997,
+      "size": [
+        1536,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/eater/hit.png": {
+      "sha256": "11a9db032d1bbf2913f5227f6125f46076a6d8e7e348371c689aa002dde57cae",
+      "bytes": 507906,
+      "size": [
+        1024,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/eater/skill.png": {
+      "sha256": "32a1f88a6a48c832e16a2b30a0ffeb086c1863d326fa57a211381562a782c99f",
+      "bytes": 1870738,
+      "size": [
+        4096,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/golem/attack.png": {
+      "sha256": "bfa5ec19f5e16b5ad67061b379ad95be880202eb5654cdd85a98a6f8ddca9b71",
+      "bytes": 2151085,
+      "size": [
+        4096,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/golem/down.png": {
+      "sha256": "46bf3430c15a7bf3e121af9a13804b4bd0236aeef4dd4b580b840660c3b5b3d8",
+      "bytes": 639802,
+      "size": [
+        1536,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/golem/hit.png": {
+      "sha256": "67ab84dcdcff7054e2bc8047a714a8a1052622a1b2cfdbb27e9de671034ba8f8",
+      "bytes": 551005,
+      "size": [
+        1024,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/overseer/attack.png": {
+      "sha256": "8a5b4ae61cb83e8656e22358273cb12eeebf4814c0d1cf2e2fe5814b18c7f864",
+      "bytes": 2103525,
+      "size": [
+        4096,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/overseer/down.png": {
+      "sha256": "43a416268f74a9649724bd32c488eb9848ca852b190c89a65beafe30a4e0e026",
+      "bytes": 676187,
+      "size": [
+        1536,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/overseer/hit.png": {
+      "sha256": "4b95a1dbebe426d184b8c5bc6e54c7da6a217808b03cfca802d90f6f1d87358e",
+      "bytes": 535333,
+      "size": [
+        1024,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/overseer/skill.png": {
+      "sha256": "5eb813d666ed4644e52855865f5c2b5e919fb7f324340689fc093ff8aef4539f",
+      "bytes": 2089535,
+      "size": [
+        4096,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/worker/attack.png": {
+      "sha256": "4a890a4fbd86d4e38b11584ce88d0c8028e1bd3e4c4e37fdd970edb874a72072",
+      "bytes": 1730567,
+      "size": [
+        4096,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/worker/down.png": {
+      "sha256": "03448c04a9598d50aacba9a9b93d73d077ded5fdbc31173ca8577c3b4c823fce",
+      "bytes": 634424,
+      "size": [
+        1536,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips/worker/hit.png": {
+      "sha256": "bb8092032d23a04cdb75e71ac906ae1b9a79284164cafc774bd261a6dd90e1cf",
+      "bytes": 482510,
+      "size": [
+        1024,
+        512
+      ],
+      "mode": "RGBA",
+      "frames": 1
+    },
+    "strips.json": {
+      "sha256": "1722849029bb5cb5f597263801266c95f320ffbe8cd229c0e958801d793a5c3a",
+      "bytes": 4662
+    }
+  }
+}

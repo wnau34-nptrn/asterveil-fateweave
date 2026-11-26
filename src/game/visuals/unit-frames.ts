@@ -1,5 +1,5 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
-import { lakeBossDisplayRatio, lakeFoeDisplayRatios } from './assets';
+import { lakeBossDisplayRatio, lakeFoeDisplayRatios, mineFoeDisplayRatios } from './assets';
 import atlasManifest from './unit-atlases.json';
 export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare' | 'arc' | 'communion' | 'lastlight' | 'partner' | 'circle' | 'closing' | 'echo' | 'move1' | 'move2' | 'move3' | 'move4' | 'move5' | 'move6' | 'move7' | 'mark' | 'parry' | 'gather' | 'release' | 'stored' | 'knot' | 'toll' | 'weave' | 'deflect' | 'dial' | 'read';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
@@ -136,6 +136,13 @@ export const unitRegistry = {
   raider: { sheet: 'raider', displayRatio: 2, intents: { 'Raking Slash': 'attack', 'Shadow Knife': 'skill' }, reactions: { block: [22, 23] } },
   brute: { sheet: 'brute', displayRatio: 2, intents: { 'Crushing Blow': 'attack', 'Rift Bolt': 'skill' }, reactions: { block: [22, 23] } },
   foe_ruin_bat: { sheet: 'bat', displayRatio: 2, intents: { Nip: 'attack' }, idleLoop: { frames: [22, 23, 24, 25], frameMs: 150 } },
+  // Map 5 mine foes (ART-UNIT-ANIMATION-MINE-001, semi-chibi, shared layout): attack 1..8, skill 9..16, hit 17..18, down 19..21
+  // (the possessed worker kneels and drops its tool there); the bat hovers on 22..25. Slots without a strip alias the ready frame.
+  foe_crystal_bat: { sheet: 'crystalbat', displayRatio: mineFoeDisplayRatios.foe_crystal_bat!, soleOrigin: 497 / 512, intents: { 'Crystal Cry': 'attack' }, idleLoop: { frames: [22, 23, 24, 25], frameMs: 150 } },
+  foe_ore_golem: { sheet: 'oregolem', displayRatio: mineFoeDisplayRatios.foe_ore_golem!, soleOrigin: 497 / 512, intents: { 'Ore Fist': 'attack' } },
+  foe_possessed_worker: { sheet: 'possessedworker', displayRatio: mineFoeDisplayRatios.foe_possessed_worker!, soleOrigin: 497 / 512, intents: { 'Pick Swing': 'attack' } },
+  foe_mine_overseer: { sheet: 'mineoverseer', displayRatio: mineFoeDisplayRatios.foe_mine_overseer!, soleOrigin: 497 / 512, intents: { 'Overseer Hammer': 'attack', 'Crystal Spark': 'skill' } },
+  foe_crystal_eater: { sheet: 'crystaleater', displayRatio: mineFoeDisplayRatios.foe_crystal_eater!, soleOrigin: 497 / 512, intents: { 'Crystal Bite': 'attack', 'Shard Eruption': 'skill' } },
   // A8: the golem punches for both Crystal Fist and Stone Fist (attack) and slams overhead for Veil Quake (skill); the Channeler's
   // palms release for Rift Beam and the older Rift Bolt name; Star Flame and Crystal Stab have one gesture each. The wisp hovers (idleLoop 22..24,
   // seed / bob up / bob down) and its down frames keep the painted fade. Hit 17..18 and down 19..21 use the shared layout; 21 is the held collapse.

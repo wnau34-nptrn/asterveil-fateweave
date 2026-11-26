@@ -1,16 +1,16 @@
 {
  "counts": {
-  "identities": 49,
+  "identities": 54,
   "heroes": 17,
-  "enemies": 32,
-  "atlases": 47,
+  "enemies": 37,
+  "atlases": 52,
   "parked": 2,
   "actionIds": 91,
   "heroRows": 119,
   "intents": 84,
   "foeRows": 95,
-  "spriteRows": 188,
-  "proceduralRows": 26,
+  "spriteRows": 195,
+  "proceduralRows": 19,
   "paintedRows": 138,
   "sharedRows": 54,
   "codeRows": 22
@@ -367,6 +367,44 @@
    }
   },
   {
+   "identity": "foe_crystal_bat",
+   "side": "enemy",
+   "name": "ค้างคาวผลึก",
+   "sheet": "crystalbat",
+   "atlas": {
+    "image": "crystalbat_mine.ccade50e7322.webp",
+    "atlas": "crystalbat_mine.1d37b90d0894.json",
+    "frames": 26,
+    "decodedBytes": 9750528,
+    "downloadBytes": 2210622
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_crystal_eater",
+   "side": "enemy",
+   "name": "ตัวกินผลึก",
+   "sheet": "crystaleater",
+   "atlas": {
+    "image": "crystaleater_mine.4098bab40c32.webp",
+    "atlas": "crystaleater_mine.de29c24fd72d.json",
+    "frames": 22,
+    "decodedBytes": 14235648,
+    "downloadBytes": 3884825
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
    "identity": "foe_dew_slime",
    "side": "enemy",
    "name": "สไลม์น้ำค้าง",
@@ -500,6 +538,25 @@
    }
   },
   {
+   "identity": "foe_mine_overseer",
+   "side": "enemy",
+   "name": "หัวหน้าคุมเหมือง",
+   "sheet": "mineoverseer",
+   "atlas": {
+    "image": "mineoverseer_mine.ad55d2b09bbe.webp",
+    "atlas": "mineoverseer_mine.cbf4c1f36320.json",
+    "frames": 22,
+    "decodedBytes": 16957440,
+    "downloadBytes": 4276807
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
    "identity": "foe_mirror_shade",
    "side": "enemy",
    "name": "เงาสะท้อน",
@@ -567,6 +624,44 @@
     "frames": 22,
     "decodedBytes": 2435072,
     "downloadBytes": 826472
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_ore_golem",
+   "side": "enemy",
+   "name": "โกเลมแร่",
+   "sheet": "oregolem",
+   "atlas": {
+    "image": "oregolem_mine.83848e7b1a8e.webp",
+    "atlas": "oregolem_mine.a0dcceb6a9fd.json",
+    "frames": 22,
+    "decodedBytes": 10396672,
+    "downloadBytes": 2632317
+   },
+   "reactions": {
+    "hit": "sprite 17,18",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_possessed_worker",
+   "side": "enemy",
+   "name": "คนงานถูกสิง",
+   "sheet": "possessedworker",
+   "atlas": {
+    "image": "possessedworker_mine.d5d830dbc50a.webp",
+    "atlas": "possessedworker_mine.ede9dd8c9d7d.json",
+    "frames": 22,
+    "decodedBytes": 9772800,
+    "downloadBytes": 2182865
    },
    "reactions": {
     "hit": "sprite 17,18",
@@ -4571,6 +4666,116 @@
    ]
   },
   {
+   "identity": "foe_crystal_bat",
+   "side": "enemy",
+   "move": "Crystal Cry",
+   "name": "Crystal Cry",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "elite-crystal-eater",
+    "mine-tunnel-patrol",
+    "mine-yard-patrol"
+   ]
+  },
+  {
+   "identity": "foe_crystal_eater",
+   "side": "enemy",
+   "move": "Crystal Bite",
+   "name": "Crystal Bite",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "elite-crystal-eater"
+   ]
+  },
+  {
+   "identity": "foe_crystal_eater",
+   "side": "enemy",
+   "move": "Shard Eruption",
+   "name": "Shard Eruption",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
+   },
+   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "elite-crystal-eater"
+   ]
+  },
+  {
    "identity": "foe_dew_slime",
    "side": "enemy",
    "move": "Jelly Bounce",
@@ -4750,29 +4955,6 @@
    "point": "เท้าศัตรู → พื้นใต้ผู้รับจริง",
    "encounters": [
     "mini-veil-golem"
-   ]
-  },
-  {
-   "identity": "foe_golem",
-   "side": "enemy",
-   "move": "Ore Fist",
-   "name": "Ore Fist",
-   "kind": "physical",
-   "body": {
-    "kind": "procedural",
-    "pose": "weapon",
-    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
-   },
-   "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
-   },
-   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
-   "encounters": [
-    "mine-tunnel-patrol",
-    "mine-yard-patrol"
    ]
   },
   {
@@ -5405,6 +5587,78 @@
    ]
   },
   {
+   "identity": "foe_mine_overseer",
+   "side": "enemy",
+   "move": "Overseer Hammer",
+   "name": "Overseer Hammer",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "elite-mine-overseer"
+   ]
+  },
+  {
+   "identity": "foe_mine_overseer",
+   "side": "enemy",
+   "move": "Crystal Spark",
+   "name": "Crystal Spark",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "skill",
+    "frames": {
+     "prepare": [
+      9,
+      10,
+      11,
+      12
+     ],
+     "recover": [
+      13,
+      14,
+      15,
+      16
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "elite-mine-overseer"
+   ]
+  },
+  {
    "identity": "foe_mirror_shade",
    "side": "enemy",
    "move": "Mirror Strike",
@@ -5715,6 +5969,80 @@
    ]
   },
   {
+   "identity": "foe_ore_golem",
+   "side": "enemy",
+   "move": "Ore Fist",
+   "name": "Ore Fist",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "mine-tunnel-patrol",
+    "mine-yard-patrol"
+   ]
+  },
+  {
+   "identity": "foe_possessed_worker",
+   "side": "enemy",
+   "move": "Pick Swing",
+   "name": "Pick Swing",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "attack",
+    "frames": {
+     "prepare": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "recover": [
+      5,
+      6,
+      7,
+      8
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "elite-mine-overseer",
+    "mine-yard-patrol"
+   ]
+  },
+  {
    "identity": "foe_rift_channeler",
    "side": "enemy",
    "move": "Rift Bolt",
@@ -5970,30 +6298,6 @@
     "bat-swarm",
     "slime-nest",
     "tusker-bats"
-   ]
-  },
-  {
-   "identity": "foe_ruin_bat",
-   "side": "enemy",
-   "move": "Crystal Cry",
-   "name": "Crystal Cry",
-   "kind": "energy",
-   "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
-   },
-   "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
-   },
-   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
-   "encounters": [
-    "elite-crystal-eater",
-    "mine-tunnel-patrol",
-    "mine-yard-patrol"
    ]
   },
   {
@@ -6785,50 +7089,6 @@
    ]
   },
   {
-   "identity": "foe_tusker",
-   "side": "enemy",
-   "move": "Crystal Bite",
-   "name": "Crystal Bite",
-   "kind": "physical",
-   "body": {
-    "kind": "procedural",
-    "pose": "weapon",
-    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
-   },
-   "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
-   },
-   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
-   "encounters": [
-    "elite-crystal-eater"
-   ]
-  },
-  {
-   "identity": "foe_tusker",
-   "side": "enemy",
-   "move": "Shard Eruption",
-   "name": "Shard Eruption",
-   "kind": "energy",
-   "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
-   },
-   "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
-   },
-   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
-   "encounters": [
-    "elite-crystal-eater"
-   ]
-  },
-  {
    "identity": "foe_valdrakk",
    "side": "enemy",
    "move": "Shard Talon",
@@ -7135,73 +7395,6 @@
    "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
    "encounters": [
     "vanguard-captain"
-   ]
-  },
-  {
-   "identity": "foe_vargoth_guard",
-   "side": "enemy",
-   "move": "Pick Swing",
-   "name": "Pick Swing",
-   "kind": "physical",
-   "body": {
-    "kind": "procedural",
-    "pose": "weapon",
-    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
-   },
-   "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
-   },
-   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
-   "encounters": [
-    "elite-mine-overseer",
-    "mine-yard-patrol"
-   ]
-  },
-  {
-   "identity": "foe_vargoth_guard",
-   "side": "enemy",
-   "move": "Overseer Hammer",
-   "name": "Overseer Hammer",
-   "kind": "physical",
-   "body": {
-    "kind": "procedural",
-    "pose": "weapon",
-    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
-   },
-   "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
-   },
-   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
-   "encounters": [
-    "elite-mine-overseer"
-   ]
-  },
-  {
-   "identity": "foe_vargoth_guard",
-   "side": "enemy",
-   "move": "Crystal Spark",
-   "name": "Crystal Spark",
-   "kind": "energy",
-   "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
-   },
-   "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
-   },
-   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
-   "encounters": [
-    "elite-mine-overseer"
    ]
   },
   {

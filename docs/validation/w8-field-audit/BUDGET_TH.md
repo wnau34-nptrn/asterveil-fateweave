@@ -45,10 +45,10 @@
 | `elite-shadow-serpent` | 2 (0) | mistwisp, shadowserpent | 44.0 MiB / 13.16 MB | 48.3 MiB / 14.60 MB | โหลด |
 | `elite-weeping-siren` | 2 (0) | stonecrab, weepingsiren | 43.9 MiB / 13.16 MB | 48.2 MiB / 14.61 MB | — |
 | `water-spirit` | 4 (1) | mistwisp, stonecrab, mirrorshade, waterspirit | 57.4 MiB / 16.17 MB | 61.7 MiB / 17.62 MB | ทะเลสาบ |
-| `mine-yard-patrol` | 3 (0) | vargoth, bat, golem | 32.4 MiB / 10.29 MB | 36.7 MiB / 11.73 MB | — |
-| `mine-tunnel-patrol` | 3 (0) | bat, golem | 28.3 MiB / 8.90 MB | 32.6 MiB / 10.35 MB | — |
-| `elite-mine-overseer` | 2 (0) | vargoth | 27.2 MiB / 8.78 MB | 31.5 MiB / 10.23 MB | — |
-| `elite-crystal-eater` | 2 (0) | tusker, bat | 29.1 MiB / 9.03 MB | 33.4 MiB / 10.48 MB | — |
+| `mine-yard-patrol` | 3 (0) | crystalbat, oregolem, possessedworker | 51.7 MiB / 14.42 MB | 56.0 MiB / 15.87 MB | — |
+| `mine-tunnel-patrol` | 3 (0) | crystalbat, oregolem | 42.3 MiB / 12.24 MB | 46.6 MiB / 13.68 MB | — |
+| `elite-mine-overseer` | 2 (0) | possessedworker, mineoverseer | 48.6 MiB / 13.86 MB | 52.9 MiB / 15.30 MB | — |
+| `elite-crystal-eater` | 2 (0) | crystalbat, crystaleater | 46.0 MiB / 13.49 MB | 50.3 MiB / 14.94 MB | — |
 | `crystal-giant` | 3 (2) | golem, crawler | 27.7 MiB / 8.86 MB | 32.0 MiB / 10.31 MB | — |
 | `wb-kragmor` | 3 (0) | wisp, crawler, kragmor | 31.5 MiB / 10.02 MB | 35.8 MiB / 11.47 MB | โหลด |
 | `wb-valdrakk` | 3 (0) | wisp, valdrakk | 29.8 MiB / 9.66 MB | 34.1 MiB / 11.11 MB | โหลด |
