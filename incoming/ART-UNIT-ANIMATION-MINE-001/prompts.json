@@ -1,0 +1,11 @@
+{
+  "imageSeed": "Five isolated original left-facing 3/4 RPG enemies: a flying slate bat with dark lavender wings and emerald body, stout copper-ore golem, hunched worker with pickaxe and emerald growths, R1 leather-overseer with mining hammer and waist lantern, R1 massive quadruped with broad jaws and emerald back spines. Textured dark fantasy, cool slate, top-left lighting, true alpha, wide gutters, no letters or ground shadows.",
+  "animationTemplate": "Sprite sheet edit with the attached exact reference character. Preserve the reference character material, silhouette, face and proportions, same camera and size, facing LEFT in 3/4 view throughout, aligned feet apart from legitimate fall, same weapon throughout if present. True alpha, no floor, no text, panel lines, shadows, effects or trails. For attacks and skills, exactly eight isolated whole-body cels on a 4 × 2 grid, in the order of ready, anticipation, windup, brace, contact, follow-through, recovery and nearly idle. For reactions, five isolated cels in one row.",
+  "moves": {
+    "bat": ["Crystal Cry: flap and open mouth in a cry", "Hover: four-frame wingbeat"],
+    "golem": ["Ore Fist: backswing, punch and guard"],
+    "worker": ["Pick Swing: raise, strike and retract the pick", "Surrender: kneel and lower the pickaxe"],
+    "overseer": ["Overseer Hammer: overhead strike and recoil", "Crystal Spark: prepare and thrust the hammer without effects"],
+    "eater": ["Crystal Bite: open jaw, lunge and snap", "Shard Eruption: brace then arch the crystal-covered back"]
+  }
+}

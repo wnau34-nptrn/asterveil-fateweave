@@ -1,0 +1,18 @@
+{
+  "artRevision": "60215cfe1c5fe8618c7e5f86e501f7e180b64df9",
+  "inGameReference": {
+    "bat": "seeds/foe_ruin_bat.png",
+    "golem": "seeds/foe_golem.png",
+    "worker": "seeds/foe_vargoth_guard.png",
+    "overseer": "seeds/foe_vargoth_guard.png",
+    "eater": "seeds/foe_tusker.png"
+  },
+  "designSeeds": {
+    "bat": "seeds/bat.png",
+    "golem": "seeds/golem.png",
+    "worker": "seeds/worker.png",
+    "overseer": "seeds/overseer.png",
+    "eater": "seeds/eater.png"
+  },
+  "numericImageGenSeeds": null
+}

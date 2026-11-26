@@ -1,0 +1,163 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "overseer": [
+   {
+    "frame": 0,
+    "height": 440,
+    "scale": 1.0,
+    "inliers": 1528,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 455,
+    "scale": 1.003,
+    "inliers": 108,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 430,
+    "scale": 1.104,
+    "inliers": 26,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 437,
+    "scale": 1.026,
+    "inliers": 19,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 487,
+    "scale": 0.996,
+    "inliers": 43,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 377,
+    "scale": 1.069,
+    "inliers": 14,
+    "status": "ok"
+   },
+   {
+    "frame": 6,
+    "height": 381,
+    "scale": 1.139,
+    "inliers": 8,
+    "status": "not-measured"
+   },
+   {
+    "frame": 7,
+    "height": 415,
+    "scale": 1.091,
+    "inliers": 23,
+    "status": "ok"
+   },
+   {
+    "frame": 8,
+    "height": 455,
+    "scale": 0.956,
+    "inliers": 85,
+    "status": "ok"
+   },
+   {
+    "frame": 9,
+    "height": 455,
+    "scale": 0.99,
+    "inliers": 267,
+    "status": "ok"
+   },
+   {
+    "frame": 10,
+    "height": 445,
+    "scale": 1.014,
+    "inliers": 70,
+    "status": "ok"
+   },
+   {
+    "frame": 11,
+    "height": 432,
+    "scale": 1.078,
+    "inliers": 32,
+    "status": "ok"
+   },
+   {
+    "frame": 12,
+    "height": 443,
+    "scale": 1.102,
+    "inliers": 33,
+    "status": "ok"
+   },
+   {
+    "frame": 13,
+    "height": 423,
+    "scale": 1.047,
+    "inliers": 37,
+    "status": "ok"
+   },
+   {
+    "frame": 14,
+    "height": 424,
+    "scale": 1.071,
+    "inliers": 24,
+    "status": "ok"
+   },
+   {
+    "frame": 15,
+    "height": 437,
+    "scale": 1.109,
+    "inliers": 27,
+    "status": "ok"
+   },
+   {
+    "frame": 16,
+    "height": 450,
+    "scale": 0.987,
+    "inliers": 150,
+    "status": "ok"
+   },
+   {
+    "frame": 17,
+    "height": 448,
+    "scale": 1.035,
+    "inliers": 63,
+    "status": "ok"
+   },
+   {
+    "frame": 18,
+    "height": 432,
+    "scale": 1.073,
+    "inliers": 99,
+    "status": "ok"
+   },
+   {
+    "frame": 19,
+    "height": 375,
+    "scale": 1.018,
+    "inliers": 15,
+    "status": "ok"
+   },
+   {
+    "frame": 20,
+    "height": 277,
+    "scale": 1.121,
+    "inliers": 10,
+    "status": "not-measured"
+   },
+   {
+    "frame": 21,
+    "height": 182,
+    "scale": 0.742,
+    "inliers": 4,
+    "status": "not-measured"
+   }
+  ]
+ }
+}
