@@ -3,7 +3,7 @@
 - PR #359 (`77a6e4ba`) ไฟล์ตรง SHA-256 ครบ `scripts/build-mine-boss.py` แพ็กยักษ์ 26 เฟรม (cell 448 เท้า 7/8, อัตรา 1.67 = 1.32× โกเลมหิน) ผลึกย่อย 10 เฟรม และ VFX 16 ชั้น lossless · ภาพนิ่ง/พอร์เทรต foes4 ช่อง 5–6
 - `src/game/visuals/mine-boss-fx.ts`: เกราะจาก state (ร้าวตามครั้งที่นับ), แตก/หมดเวลา/สะท้อน/ถล่ม/แยกผลึกจาก event จริง; ยักษ์เล่นท่า Split หลังท่าโดนตีเพราะ phase เกิดทันที · ขยายภาพถล่ม 2.3× เพราะขนาด storyboard มองไม่เห็นในเกม
 - Vitest ทั้งชุดผ่าน (+`tests/mine-boss-fx.test.ts`), `npm run coverage:presentation` (56 identities), anatomy audit ผ่าน, คลิป 390px 30 คำสั่ง [README](../combat-presentation/mine-boss-slice/README_TH.md)
-- PR #364 (docs) merged · รอเจ้าของอนุมัติ motion ก่อน merge PR นี้ · Shard Beam ยังเป็นเส้นวาดด้วยโค้ด
+- PR #364 (docs) merged · เจ้าของอนุมัติ motion “อนุมัติ” (2026-11-26) แล้ว merge #365 · Shard Beam ยังเป็นเส้นวาดด้วยโค้ด
 
 ## 2026-11-26 — ภาพเหมืองเข้าเกมครบยกเว้นยักษ์ (Claude · `claude/friendly-heisenberg-xapns5`, PR #356 #361 #362 #363 รวมแล้ว)
 
