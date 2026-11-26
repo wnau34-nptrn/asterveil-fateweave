@@ -131,7 +131,13 @@ def scene(cell, effect=None, fragments=False):
     allies = [(47, 272), (136, 272), (49, 491), (53, 614), (139, 614)]
     for i, (x, y) in enumerate(allies):
         actor(stage, Image.open(SOURCES / f'actor-0-{i}.png'), x, y, 78)
-    actor(stage, cell, 283, 487, round(126 * (672 - cell.getbbox()[1]) / 572 * 1.32))
+    # Draw all cels from the same logical pivot, including the extended fist.
+    giant_scale = round(126 * 1.32) / 572
+    logical_size = round(CELL * giant_scale)
+    displayed = cell.resize((logical_size, logical_size), Image.Resampling.LANCZOS)
+    draw = ImageDraw.Draw(stage)
+    draw.ellipse((264, 482, 302, 491), fill='#272629')
+    stage.paste(displayed, (283 - logical_size // 2, 487 - round(BASELINE * giant_scale)), displayed)
     if fragments:
         for x, y in [(239, 605), (239, 272)]:
             actor(stage, Image.open(ROOT / 'fragment-idle.png'), x, y, 36)

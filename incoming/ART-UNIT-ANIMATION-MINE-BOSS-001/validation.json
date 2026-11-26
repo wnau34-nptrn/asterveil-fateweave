@@ -19,8 +19,8 @@
       "bytes": 615
     },
     "build.py": {
-      "sha256": "e9cb241d1c4e024d2ea70ac1d2f54fb6bb43946a59a61852f5aadd1f28330f64",
-      "bytes": 9104
+      "sha256": "a856fce3998a8de3d94c81f3e2ea856ad171468e91feee63c68011f719e82274",
+      "bytes": 9457
     },
     "crystal-fist.png": {
       "sha256": "155d0b46d9df69e9bd8b1698ea5fe58905350948867b21fe5f497b273610c909",
@@ -97,8 +97,8 @@
       "bytes": 1060
     },
     "preview/armor-break-390.png": {
-      "sha256": "d95c2abd840d8640b800d2dcd9f47851df2d139eba6e356d23d1f82e2238af66",
-      "bytes": 477637,
+      "sha256": "3a03cc9b7aba46c35fa3662a8a76bbbf845eb74faba842a899f6788008d88b24",
+      "bytes": 477619,
       "size": [
         390,
         844
@@ -107,8 +107,8 @@
       "frames": 1
     },
     "preview/armor-crack-1-390.png": {
-      "sha256": "898c06de43a8891293fc6f5c844e2d87917b5b0b3faf18675dc305bc659a188a",
-      "bytes": 475195,
+      "sha256": "4b467c6b64fbea06ebb2fa05f5c829502f06440a3cf55a31efc9c28a47959ac3",
+      "bytes": 475331,
       "size": [
         390,
         844
@@ -117,8 +117,8 @@
       "frames": 1
     },
     "preview/armor-lift-390.png": {
-      "sha256": "7989ba27abb024a1d03598bc453534f05a4cd2aa85188095af4b60f01e1b618e",
-      "bytes": 474515,
+      "sha256": "7d32cfa5666beb756f96b7853a6f1aee8cfbb811030b3928e74752a1a5613108",
+      "bytes": 474629,
       "size": [
         390,
         844
@@ -127,8 +127,8 @@
       "frames": 1
     },
     "preview/crystal-fist-390.gif": {
-      "sha256": "53cd7292ee47db23299f7ed955a020c0eb459250ac0e71414c81d667fc8087a8",
-      "bytes": 1231988,
+      "sha256": "6d75045567455c3e7f7ca67fcba104fda8160334c0f626c6bfcee4edccb249b5",
+      "bytes": 1231182,
       "size": [
         390,
         844
@@ -137,8 +137,8 @@
       "frames": 5
     },
     "preview/field-390.png": {
-      "sha256": "af01377a137392b895f37c1480ce082cbe4168f6b04e704f6d6a335518556647",
-      "bytes": 478227,
+      "sha256": "916d9f32325da9dba6b40a8ec27f66d350af0747af5863d24479fcf2a820acc3",
+      "bytes": 478336,
       "size": [
         390,
         844
@@ -157,8 +157,8 @@
       "frames": 1
     },
     "preview/split-release-390.png": {
-      "sha256": "78abf0333b3d85bb2c27ce2cddff7d679260ec2a6345b5cc61de4dfcf03869ba",
-      "bytes": 478870,
+      "sha256": "d0114e05697bde80b6f765e57eb4df62fe08aa8a4d65c926deeaf96c9ef199c1",
+      "bytes": 478916,
       "size": [
         390,
         844
@@ -167,8 +167,8 @@
       "frames": 1
     },
     "preview/vfx-storyboard-390.png": {
-      "sha256": "876ab55aad2e9535279fe094bd11339b49f0c5a9be080be3462bcecc58de2830",
-      "bytes": 688308,
+      "sha256": "2f37ae6eb5529eaefd5b59a8dcd81813aad956b54080ce4cea5c0379aeda1470",
+      "bytes": 688536,
       "size": [
         390,
         1115
