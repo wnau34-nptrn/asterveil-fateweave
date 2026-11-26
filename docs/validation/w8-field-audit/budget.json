@@ -793,16 +793,16 @@
    "foes": 3,
    "reserves": 2,
    "foeSheets": [
-    "golem",
-    "crawler"
+    "crystalgiant",
+    "crystalfragment"
    ],
    "four": {
-    "decoded": 29073360,
-    "download": 8859783
+    "decoded": 39348084,
+    "download": 11521943
    },
    "five": {
-    "decoded": 33577608,
-    "download": 10305700
+    "decoded": 43852332,
+    "download": 12967860
    },
    "bossFx": false,
    "lakeBossFx": false

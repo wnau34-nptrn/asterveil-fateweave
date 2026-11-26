@@ -466,5 +466,23 @@
     "frames": 22,
     "decodedBytes": 14235648,
     "downloadBytes": 3884825
+  },
+  "crystalgiant": {
+    "image": "crystalgiant_mine.786603c4027b.webp",
+    "atlas": "crystalgiant_mine.e416f1b16f26.json",
+    "width": 2015,
+    "height": 1681,
+    "frames": 26,
+    "decodedBytes": 13548860,
+    "downloadBytes": 3670713
+  },
+  "crystalfragment": {
+    "image": "crystalfragment_mine.510721ba0e1a.webp",
+    "atlas": "crystalfragment_mine.9dee6e016204.json",
+    "width": 414,
+    "height": 931,
+    "frames": 10,
+    "decodedBytes": 1541736,
+    "downloadBytes": 455523
   }
 }

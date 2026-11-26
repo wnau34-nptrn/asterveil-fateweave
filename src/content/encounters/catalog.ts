@@ -420,14 +420,14 @@ export const waterSpirit: EncounterDefinition = at80({
   ],
 });
 
-// Map 5 foes wear their semi-chibi bodies (ART-UNIT-ANIMATION-MINE-001); the giant and its fragments keep stand-ins until the boss art lands.
+// Map 5 foes wear their semi-chibi bodies (ART-UNIT-ANIMATION-MINE-001); the R1 Crystal Giant and its fragments theirs (ART-UNIT-ANIMATION-MINE-BOSS-001).
 const mineBat = { ...S.ruinBat, name: 'Crystal Bat', displayName: 'ค้างคาวผลึก', art: 'foe_crystal_bat', hp: 28,
   moves: [{ name: 'Crystal Cry', damage: 7, kind: 'energy', slot: 3 }] } as const;
 const oreGolem = { ...S.stoneCrab, name: 'Ore Golem', displayName: 'โกเลมแร่', art: 'foe_ore_golem', hp: 72, large: true,
   moves: [{ name: 'Ore Fist', damage: 10, kind: 'physical', slot: 0 }] } as const;
 const mineWorker = { ...S.vargothGuard, name: 'Possessed Worker', displayName: 'คนงานถูกสิง', art: 'foe_possessed_worker', hp: 35, large: false,
   moves: [{ name: 'Pick Swing', damage: 6, kind: 'physical', slot: 0 }] } as const;
-const mineShard = { ...S.shardCrawler, name: 'Crystal Fragment', displayName: 'ผลึกย่อย', art: 'foe_shard_crawler', hp: 29,
+const mineShard = { ...S.shardCrawler, name: 'Crystal Fragment', displayName: 'ผลึกย่อย', art: 'foe_crystal_fragment', hp: 29,
   moves: [{ name: 'Shard Prick', damage: 22, kind: 'physical', slot: 1 }] } as const;
 
 export const mineYardEncounter: EncounterDefinition = { ...veilSiege, id: 'mine-yard-patrol', version: 1, level: 13, name: 'กองเฝ้าลานคนงาน',
@@ -454,7 +454,7 @@ export const crystalGiant: EncounterDefinition = {
   phases: [{ sourceId: 'f1', below: 50, summon: ['f2', 'f3'], immediate: true, name: 'Crystal Split' }],
   enemies: [
     { id: 'f1', row: 'front', boss: true, large: true, speed: 86, name: 'Crystal Giant', displayName: 'ยักษ์ผลึก',
-      maxHp: 580, color: 0x9c82d5, art: 'foe_golem', crystalArmor: { name: 'Crystal Armor', reflect: 35, cap: 15, hits: 3, turns: 2 } },
+      maxHp: 580, color: 0x9c82d5, art: 'foe_crystal_giant', crystalArmor: { name: 'Crystal Armor', reflect: 35, cap: 15, hits: 3, turns: 2 } },
     ...giantFragments.enemies,
   ],
   intents: [

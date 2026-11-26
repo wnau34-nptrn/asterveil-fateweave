@@ -1,0 +1,332 @@
+{
+ "frames": {
+  "armor-lift": {
+   "frame": {
+    "x": 233,
+    "y": 162,
+    "w": 221,
+    "h": 159
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 18,
+    "y": 66,
+    "w": 221,
+    "h": 159
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "armor-crack-1": {
+   "frame": {
+    "x": 233,
+    "y": 1,
+    "w": 221,
+    "h": 159
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 18,
+    "y": 66,
+    "w": 221,
+    "h": 159
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "armor-crack-2": {
+   "frame": {
+    "x": 1,
+    "y": 189,
+    "w": 221,
+    "h": 159
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 18,
+    "y": 66,
+    "w": 221,
+    "h": 159
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "armor-crack-3": {
+   "frame": {
+    "x": 1,
+    "y": 350,
+    "w": 221,
+    "h": 159
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 18,
+    "y": 66,
+    "w": 221,
+    "h": 159
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "armor-break": {
+   "frame": {
+    "x": 1,
+    "y": 1,
+    "w": 230,
+    "h": 186
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 12,
+    "y": 55,
+    "w": 230,
+    "h": 186
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "armor-fade-0": {
+   "frame": {
+    "x": 224,
+    "y": 323,
+    "w": 221,
+    "h": 159
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 18,
+    "y": 66,
+    "w": 221,
+    "h": 159
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "armor-fade-1": {
+   "frame": {
+    "x": 224,
+    "y": 484,
+    "w": 220,
+    "h": 158
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 18,
+    "y": 66,
+    "w": 220,
+    "h": 158
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "armor-fade-2": {
+   "frame": {
+    "x": 1,
+    "y": 511,
+    "w": 217,
+    "h": 155
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 20,
+    "y": 68,
+    "w": 217,
+    "h": 155
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "split-release": {
+   "frame": {
+    "x": 220,
+    "y": 644,
+    "w": 220,
+    "h": 79
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 15,
+    "y": 35,
+    "w": 220,
+    "h": 79
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "reflect-0": {
+   "frame": {
+    "x": 271,
+    "y": 752,
+    "w": 101,
+    "h": 22
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 122,
+    "y": 111,
+    "w": 101,
+    "h": 22
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "reflect-1": {
+   "frame": {
+    "x": 185,
+    "y": 725,
+    "w": 186,
+    "h": 25
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 38,
+    "y": 113,
+    "w": 186,
+    "h": 25
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "reflect-2": {
+   "frame": {
+    "x": 1,
+    "y": 763,
+    "w": 99,
+    "h": 21
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 38,
+    "y": 116,
+    "w": 99,
+    "h": 21
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "collapse-0": {
+   "frame": {
+    "x": 185,
+    "y": 752,
+    "w": 84,
+    "h": 31
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 86,
+    "y": 189,
+    "w": 84,
+    "h": 31
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "collapse-1": {
+   "frame": {
+    "x": 119,
+    "y": 668,
+    "w": 64,
+    "h": 119
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 95,
+    "y": 14,
+    "w": 64,
+    "h": 119
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "collapse-2": {
+   "frame": {
+    "x": 1,
+    "y": 668,
+    "w": 116,
+    "h": 93
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 71,
+    "y": 142,
+    "w": 116,
+    "h": 93
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  },
+  "collapse-reduced": {
+   "frame": {
+    "x": 1,
+    "y": 668,
+    "w": 116,
+    "h": 93
+   },
+   "rotated": false,
+   "trimmed": true,
+   "spriteSourceSize": {
+    "x": 71,
+    "y": 142,
+    "w": 116,
+    "h": 93
+   },
+   "sourceSize": {
+    "w": 256,
+    "h": 256
+   }
+  }
+ },
+ "meta": {
+  "image": "mine_boss_fx.webp",
+  "size": {
+   "w": 456,
+   "h": 788
+  },
+  "scale": "1"
+ }
+}
