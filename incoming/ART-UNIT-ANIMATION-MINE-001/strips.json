@@ -149,7 +149,8 @@
           "source": "raw/overseer-reactions.png",
           "strip": "strips/overseer/down.png"
         }
-      ]
+      ],
+      "idleSource": "seeds/overseer-r2.png"
     },
     "eater": {
       "directory": "frames/eater",

@@ -1,4 +1,5 @@
-"""Build the Mine R2 body cells, packed strips and review images."""
+"""Build the mine body cells, packed strips and review images."""
+import argparse
 import json
 import subprocess
 import sys
@@ -71,7 +72,7 @@ def recover_alpha(image):
     return Image.fromarray(rgba)
 
 
-def poses_from_sheet(path, count):
+def poses_from_sheet(path, count, columns=4, rows=2):
     image = Image.open(path).convert('RGBA')
     if np.mean(np.asarray(image.getchannel('A')) < 45) < .10:
         image = recover_alpha(image)
@@ -83,9 +84,9 @@ def poses_from_sheet(path, count):
         if stats[label, 4] < 100:
             break
         x, y = centers[label]
-        col = min(3, int(x * 4 / image.width))
-        row = min(1, int(y * 2 / image.height))
-        slots.setdefault(row * 4 + col, []).append(label)
+        col = min(columns - 1, int(x * columns / image.width))
+        row = min(rows - 1, int(y * rows / image.height))
+        slots.setdefault(row * columns + col, []).append(label)
     poses = []
     for index in range(count):
         components = slots.get(index, [])
@@ -144,7 +145,8 @@ def action_cells(poses, idle_height, name, key, lift, corrections):
 
 def make_unit(name, profile, corrections):
     first, second, height, lift = profile
-    seed = isolate(Image.open(ROOT / 'seeds' / f'{name}.png'))
+    design = json.loads((ROOT / 'seeds.json').read_text())['designSeeds'][name]
+    seed = isolate(Image.open(ROOT / design))
     idle = cel(seed, min(height / seed.height, 478 / seed.width), FLOOR - lift)
     stage = FRAMES / name
     stage.mkdir(exist_ok=True)
@@ -157,7 +159,8 @@ def make_unit(name, profile, corrections):
         source = RAW / f'{name}-{key}.png'
         slots = REACTION_SLOTS.get(name, tuple(range(count))) if key == 'reactions' else tuple(range(count))
         source_count = 8 if name == 'bat' and key == 'reactions' else max(slots) + 1
-        poses = poses_from_sheet(source, source_count)
+        grid = (5, 1) if name == 'overseer' and key == 'reactions' else (4, 2)
+        poses = poses_from_sheet(source, source_count, *grid)
         action = action_cells([poses[index] for index in slots], idle.getbbox()[3] - idle.getbbox()[1],
                               name, key, lift, corrections)
         frame_table[start:start + count] = action
@@ -181,8 +184,11 @@ def make_unit(name, profile, corrections):
         descriptors.append({'move': None, 'firstFrame': 9, 'count': 8, 'fallbackFrame': 0})
     for index, frame in enumerate(frame_table):
         frame.save(stage / f'{index:03d}.png')
-    return frame_table, {'directory': str(stage.relative_to(ROOT)), 'frames': len(frame_table), 'footY': FLOOR,
-                         'airborneOffset': lift, 'strips': sorted(descriptors, key=lambda item: item['firstFrame'])}
+    info = {'directory': str(stage.relative_to(ROOT)), 'frames': len(frame_table), 'footY': FLOOR,
+            'airborneOffset': lift, 'strips': sorted(descriptors, key=lambda item: item['firstFrame'])}
+    if name == 'overseer':
+        info['idleSource'] = design
+    return frame_table, info
 
 
 def field():
@@ -203,29 +209,33 @@ def display(stage, image, x, y, frame_px, foot_y):
     draw.rectangle((x - 19, y + 7, x + 19, y + 10), fill='#78cdb3')
 
 
-def preview(cels):
+def preview(cels, changed):
     slots = [(333, 272, 94), (250, 488, 105), (328, 613, 103), (306, 398, 109), (236, 615, 103)]
     base = field()
     for i, (x, y) in enumerate([(47, 272), (136, 272), (49, 491), (53, 614), (139, 614)]):
         display(base, Image.open(ROOT / 'sources' / f'actor-0-{i}.png'), x, y, 90, 497)
-    for k in (0, 5, 18, 21):
+    for k in (0, 5, 13, 18, 21):
         panel = base.copy()
         for (x, y, size), poses in zip(slots, cels.values()):
             display(panel, poses[k], x, y, size, FLOOR)
         panel.save(PREVIEW / f'field-{k:02d}-390.png')
     variants = Image.new('RGB', (390, 235), '#363943')
     for row, unit in enumerate(('overseer', 'eater')):
-        variant = isolate(Image.open(ROOT / 'seeds' / f'{unit}-r2.png'))
+        alternate_name = 'overseer.png' if unit == 'overseer' else 'eater-r2.png'
+        variant = isolate(Image.open(ROOT / 'seeds' / alternate_name))
         original = cels[unit][0]
         height = original.getbbox()[3] - original.getbbox()[1]
         alternate = cel(variant, min(height / variant.height, 478 / variant.width), FLOOR)
-        for col, frame in enumerate((original, alternate)):
+        concepts = (alternate, original) if unit == 'overseer' else (original, alternate)
+        for col, frame in enumerate(concepts):
             sprite = frame.resize((115, 115), Image.Resampling.LANCZOS)
             variants.paste(sprite, (40 + col * 195, row * 116), sprite)
     variants.save(PREVIEW / 'elite-variants-390.png')
-    for unit, poses in cels.items():
+    for unit in changed:
+        poses = cels[unit]
         panel = Image.new('RGB', (390, 224), '#44464a')
-        for i, pose_index in enumerate([0, 3, 5, 7, 17, 19, 20, 21]):
+        review_indices = (0, 4, 6, 13, 17, 19, 20, 21) if unit == 'overseer' else (0, 3, 5, 7, 17, 19, 20, 21)
+        for i, pose_index in enumerate(review_indices):
             img = poses[pose_index].resize((96, 96), Image.Resampling.LANCZOS)
             panel.paste(img, (i % 4 * 97, i // 4 * 112), img)
         panel.save(PREVIEW / f'{unit}-poses-390.png')
@@ -249,19 +259,27 @@ def preview(cels):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--overseer-only', action='store_true', help='Reuse the four approved units as shipped.')
+    parser.add_argument('--audit-script', default=ROOT.parents[1] / 'scripts' / 'unit-anatomy-audit.py')
+    args = parser.parse_args()
     for directory in (FRAMES, STRIPS, PREVIEW):
         directory.mkdir(exist_ok=True)
     corrections = json.loads((ROOT / 'pose-scale.json').read_text())
-    cels, meta = {}, {}
+    cels = {}
+    meta = json.loads((ROOT / 'strips.json').read_text())['units'] if args.overseer_only else {}
+    changed = ('overseer',) if args.overseer_only else UNITS
     for name, design in UNITS.items():
-        cels[name], meta[name] = make_unit(name, design, corrections)
-    preview(cels)
+        if name in changed:
+            cels[name], meta[name] = make_unit(name, design, corrections)
+        else:
+            cels[name] = [Image.open(path).convert('RGBA') for path in sorted((FRAMES / name).glob('*.png'))]
+    preview(cels, changed)
     write_metadata('strips.json', {'logicalCell': CELL, 'feet': FLOOR, 'facing': 'left', 'units': meta})
     audit_dir = ROOT / 'anatomy'
     audit_dir.mkdir(exist_ok=True)
-    audit_script = ROOT.parents[1] / 'scripts' / 'unit-anatomy-audit.py'
-    for unit in cels:
-        subprocess.run([sys.executable, str(audit_script), '--cells', str(FRAMES / unit),
+    for unit in changed:
+        subprocess.run([sys.executable, str(args.audit_script), '--cells', str(FRAMES / unit),
                         '--json', str(audit_dir / f'{unit}.json')], check=True)
     manifest(logicalCell=CELL, unitCount=len(cels), celsByUnit={name: len(value) for name, value in cels.items()})
 

@@ -11,7 +11,7 @@
     "bat": "seeds/bat.png",
     "golem": "seeds/golem.png",
     "worker": "seeds/worker.png",
-    "overseer": "seeds/overseer.png",
+    "overseer": "seeds/overseer-r2.png",
     "eater": "seeds/eater.png"
   },
   "numericImageGenSeeds": null,
@@ -25,7 +25,7 @@
     "foe_water_spirit"
   ],
   "designAlternates": {
-    "overseer": "seeds/overseer-r2.png",
+    "overseer": "seeds/overseer.png",
     "eater": "seeds/eater-r2.png"
   },
   "lineupSource": "raw/seed-lineup.png",
