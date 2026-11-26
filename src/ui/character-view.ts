@@ -7,7 +7,7 @@ import { TOME_LINES, TOME_SIZES, type TomeBag, type TomeLine, type TomeSize } fr
 import { campProgress, levelOf, skillChoices } from '../core/world/world';
 import { isBigTree, memberTalentReason, talentPoints, talentsSpent, treeClears } from '../core/world/talents';
 import { icon, lineIcon } from './icons';
-import { heroArt, starRow } from './portraits';
+import { heroStage, starRow } from './portraits';
 import { tomeLineText, tomeSizeText, heroText, itemLines, itemName, itemOwner, passiveText, rarityText, setText, skillDescription, specialText, bigBranches, talentBranches, talentHelp, wornSets, slotIcon, slotText, gearStatName, statText } from './th';
 import { statLines } from '../core/world/equipment';
 import { markedSkillExample, characterSkillMetric, characterStats, type CharacterState } from './character-metrics';
@@ -23,7 +23,7 @@ const statIcons: Record<string, Parameters<typeof icon>[0]> = { hp: 'stat-hp', a
 // (each opens its explanation).
 export function characterOverview(s: CharacterState, map: MapDefinition, h: HeroDefinition, template?: EncounterDefinition, starLink=false): string {
   const m = s.members[h.id]!, camp = campProgress(map, s.campXp, s.clears), level = camp.level, max = !camp.need, need = max ? 1 : camp.need, exp = max ? 1 : camp.exp;
-  return `<div class="overview-hero"><div class="hero-ring">${heroArt(h.id)}<span class="hero-badge">Lv${level} ${starRow(m.stars, map.company.maxStars)}</span></div>
+  return `<div class="overview-hero">${heroStage(h.id)}<span class="hero-badge">Lv${level} ${starRow(m.stars, map.company.maxStars)}</span>
     <div class="exp-row"><span>${max ? 'เลเวลค่ายสูงสุด' : `เลเวลค่าย · EXP ${exp}/${need}`}</span>${m.wound ? `<span class="down">บาดแผล −${m.wound}% เลือดสูงสุด</span>` : ''}</div><div class="ui-meter" role="presentation"><i style="width:${Math.round(exp / need * 100)}%"></i></div>
     <div class="role-chips"><span class="ui-pill">${icon(h.lane === 'front' ? 'stat-armour' : 'stat-luck')}${h.lane === 'front' ? 'แนวหน้า' : 'แนวหลัง'}</span><span class="ui-pill">${heroText[h.id]!.role}</span></div></div>
     ${starLink?`<button id="character-star-shortcut" data-world="character-star-open" class="secondary">${icon('starBadge')}อัปดาว · ★${m.stars} / ${map.company.maxStars}</button>`:''}<p class="hero-help">${heroText[h.id]!.help}</p>${template ? `<div class="character-stat-list">${characterStats(s, map, h, template).map(v => `<details class="character-stat" id="character-stat-${v.id}"><summary><span>${statIcons[v.id] ? icon(statIcons[v.id]!) : ''}${v.name}</span><strong>${v.value}${v.unit}</strong></summary><p>${v.help}</p></details>`).join('')}</div><p class="camp-note">รวมเลเวล ดาว ความถนัด อุปกรณ์ และบาดแผล · แตะค่าเพื่ออ่านความหมาย</p>` : ''}`;

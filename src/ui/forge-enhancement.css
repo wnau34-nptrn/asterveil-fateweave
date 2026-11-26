@@ -214,3 +214,11 @@
 .forge-service-page.forge-text-large .forge-service-ledger td { min-width: 0; text-align: left; }
 .forge-service-page.forge-text-large .forge-service-ledger td::before { content: attr(data-label); display: block; font-size: .75rem; color: var(--text-muted); }
 .forge-service-page[data-receipt=true][data-persisted=false] .forge-success { border-color: var(--danger-coral); background: #452933; }
+
+/* UX audit P1-5: the two everyday tasks lead as wide cards; every card carries a state chip read from the forge rules. */
+.forge-launcher .forge-task-card[data-primary=true] { grid-column: 1 / -1; min-height: 88px; align-items: center; }
+.forge-launcher .forge-task-card[data-primary=true] > .icon { flex-basis: 32px; width: 32px; height: 32px; }
+.forge-launcher .forge-task-card .forge-task-state { display: inline-flex; width: fit-content; margin-top: 6px; padding: 1px 8px; border-radius: 99px; border: 1px solid #e8f5ff33; font-size: .75rem; line-height: 1.25rem; color: var(--text-muted); background: #0c1828; }
+.forge-launcher .forge-task-card[data-state=ready] .forge-task-state { color: #c9f2d6; border-color: #6fbf7399; background: #12301f; }
+.forge-launcher .forge-task-card[data-state=blocked] .forge-task-state { color: #ffd9a0; border-color: #e8b45a88; background: #2e2412; }
+.forge-launcher .forge-task-card[data-state=ready] { border-color: #6fbf73aa; }

@@ -8,6 +8,7 @@ import { MAPS } from './content/world/maps';
 import { BattleScene } from './game/scenes/BattleScene';
 import { BattleUI } from './ui/battle-ui';
 import { GameShell } from './ui/game-shell';
+import { installDialogLeave } from './ui/dialog-leave';
 import { fitViewport } from './platform/viewport';
 import { browserStorage } from './platform/browser-storage';
 import { ServerClient, serverSwitch } from './platform/server-client';
@@ -48,6 +49,7 @@ const game = new Phaser.Game({
 });
 // P09-02c: server play only when switched on (`?server=<api url>`, remembered; `?server=off` returns to local play).
 const api = serverSwitch(location.search, browserStorage(), import.meta.env.VITE_FATEWEAVE_API ?? '');
+installDialogLeave(document);
 const shell = new GameShell(app, chapterOne, encounterById, ui, views, MAPS, api ? new ServerClient(api, __CONTENT_VERSION__, browserStorage()) : undefined);
 // A newer publish while this page stays open: ask the player to refresh (owner 2026-11-20); never reloads by itself.
 const updateBanner = new UpdateBanner(app);

@@ -25,6 +25,16 @@ export function stageTiming(turn: TurnStage, reduced: boolean, fast = false, bos
   return { contact: reduced || canceled ? 0 : Math.round(end * (attack ? .35 : .4)), end };
 }
 
+// UX audit P2-2 part 2 (owner 2026-11-26 “ทำ P2-2 ส่วนที่ 2 hit-stop ต่อได้เลย”): a heavy landed hit — a foe or hero
+// goes down, or an action is interrupted — holds the contact frame for about 45–60 ms; the stage end moves by HIT_STOP_MS.
+// Presentation only (the turn is already resolved and saved). None under reduced motion, “effects: reduced” or a cancel.
+export const HIT_STOP_MS = 45;   // plus up to one frame for the resume to apply: ≈45–61 ms held at 60 fps
+export function hitStopMs(turn: TurnStage, reduced: boolean, quiet: boolean): number {
+  if (reduced || quiet || turn.events.some(e => e.type === 'cancel')) return 0;
+  const landed = turn.events.some(e => (e.type === 'damage' || e.type === 'counter') && (e.amount ?? 0) > 0);
+  return landed && turn.events.some(e => e.type === 'down' || e.type === 'interrupt') ? HIT_STOP_MS : 0;
+}
+
 export interface PlaybackCue { at: number; run(): void }
 // One owner for every pending UI cue and every playing stage sound.
 export class BattlePlayback {

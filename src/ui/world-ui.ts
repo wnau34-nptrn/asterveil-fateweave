@@ -10,7 +10,7 @@ import { infoTabs } from './info-tabs';
 import type { CharacterTab } from './character-view';
 import { CharacterPanel, type CharacterModel } from './character-panel';
 import { applyRunEquipment, runEquipment, type AutoEquipmentPlan } from '../core/world/auto-equipment';
-import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gearFilterControls } from './gear-inventory';
+import { newGearFilters, changeGearFilter, filteredEquipment, gearEmpty, gearFilters as gearFilterControls } from './gear-inventory';
 import { talentPoints, talentsSpent, treeClears } from '../core/world/talents';
 import { PRESET_SLOTS } from '../core/world/types';
 import type { TalentNode } from '../core/world/types';
@@ -196,7 +196,7 @@ export class WorldUI {
           case 'inventory-character': this.openCharacter(button.dataset.hero!,'gear',button,button.dataset.key);break;
           case 'bag-member': this.openCharacter(button.dataset.hero!, 'gear', button); break;
           case 'bag-gear-of': this.openCharacter(button.dataset.hero!, 'gear', button); break;
-          case 'pack-close': dialog('#pack-dialog').close(); break;
+          case 'pack-close': case 'pack-explore': dialog('#pack-dialog').close(); break;
           case 'potion': if (!this.view?.locked) {
             const potion = button.dataset.potion as PotionId;
             // A salve first asks who drinks it.
@@ -568,7 +568,7 @@ export class WorldUI {
     const all=runEquipment(s),entries=filteredEquipment(all,this.inventoryFilters),pick=all.find(e=>e.key===this.inventoryPick);
     const picker=pick?'<section class="inventory-pick"><h3>เลือกผู้สวมใส่: '+itemName(pick.item)+'</h3><div class="tree-members">'+rosterIds(s).map(id=>'<button id="inventory-hero-'+id+'" data-world="inventory-character" data-hero="'+id+'" data-key="'+pick.key+'" class="tree-member"'+(pick.item.slot==='weapon'&&pick.item.hero!==id?' disabled':'')+'>'+portrait(id)+'<small>'+heroText[id]!.name+'</small></button>').join('')+'</div></section>':'';
     const rows=entries.map(e=>'<li data-rarity="'+e.item.rarity+'" data-item-key="'+e.key+'">'+gearArt(e.item)+'<div><b>'+itemName(e.item)+' Lv'+e.item.level+'</b><small>'+itemLines(this.map.equipment,e.item).join(' · ')+'</small><small>'+e.label+' · '+itemOwner(e.item)+'</small></div><button id="inventory-'+e.key.replace(':','-')+'" data-world="inventory-pick" data-key="'+e.key+'" class="secondary">ดู/เปรียบเทียบ</button></li>').join('');
-    return '<div role="tabpanel"><h3>เปิดหน้าตัวละคร</h3><div class="tree-members">'+rosterIds(s).map(id=>'<button id="bag-member-'+id+'" data-world="character-open" data-hero="'+id+'" data-tab="gear" class="tree-member">'+portrait(id)+'<small>'+heroText[id]!.name+'</small></button>').join('')+'</div>'+picker+'<h3>อุปกรณ์ในกระเป๋า · '+entries.length+'/'+all.length+' ชิ้น</h3>'+gearFilterControls(this.inventoryFilters,'pack-')+(rows?'<ul class="pack-gear inventory-gear">'+rows+'</ul>':'<p class="camp-note">ไม่พบอุปกรณ์ตามตัวกรอง</p>')+'<p class="camp-note">เลือกชิ้นแล้วเลือกตัวละคร เพื่อเปรียบเทียบในหน้าตัวละครเดียวกัน</p></div>';
+    return '<div role="tabpanel"><h3>เปิดหน้าตัวละคร</h3><div class="tree-members">'+rosterIds(s).map(id=>'<button id="bag-member-'+id+'" data-world="character-open" data-hero="'+id+'" data-tab="gear" class="tree-member">'+portrait(id)+'<small>'+heroText[id]!.name+'</small></button>').join('')+'</div>'+picker+'<h3>อุปกรณ์ในกระเป๋า · '+entries.length+'/'+all.length+' ชิ้น</h3>'+gearFilterControls(this.inventoryFilters,'pack-')+(rows?'<ul class="pack-gear inventory-gear">'+rows+'</ul>':gearEmpty(all.length,this.inventoryFilters,'pack-',{action:'<button id="pack-empty-explore" type="button" data-world="pack-explore" class="secondary">'+icon('map')+'สำรวจต่อ</button>'}))+'<p class="camp-note">เลือกชิ้นแล้วเลือกตัวละคร เพื่อเปรียบเทียบในหน้าตัวละครเดียวกัน</p></div>';
   }
   private heroDetail(_s: ExpeditionState, id: string, prefix = 'bag'): string {
     return '<div class="bag-detail character-links"><h3>'+heroText[id]!.name+'</h3>'+Object.entries({overview:'ดูตัวละคร',gear:'อุปกรณ์',skills:'สกิล',talents:'ผังสกิล'}).map(([tab,label])=>'<button id="'+(tab==='gear'?prefix+'-gear-of':prefix+'-character-'+tab)+'" data-world="character-open" data-hero="'+id+'" data-tab="'+tab+'" class="secondary">'+label+'</button>').join('')+'</div>';
