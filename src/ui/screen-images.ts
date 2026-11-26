@@ -3,7 +3,7 @@
 // URLs must match the ones the screens use exactly (CSS `url('/assets/…')` is rewritten to the same BASE_URL path).
 import type { Profile } from '../core/world/types';
 import { actorArt, artUrl, lobbyArt, lobbyPose, NPC_IDS, npcAtlasUrl, npcBustsUrl, npcStationsUrl, portraitsHalfUrl } from '../game/visuals/assets';
-import { fogFills, lakeUrl, mineDecorUrl, worldArtUrl } from '../game/visuals/world-art';
+import { fogFills, lakeUrl, mineArtUrl, mineDecorUrl, worldArtUrl } from '../game/visuals/world-art';
 
 export interface ScreenImages { main: string[]; extra: string[] }
 const base = (): string => import.meta.env.BASE_URL;
@@ -25,14 +25,14 @@ const landmarks = ['landmark_camp', 'landmark_start', 'landmark_gate', 'landmark
 /** Map: floor tiles, props, fog and landmarks (shared by every map); the team's portraits are fetched ahead only. */
 export function worldImages(team: readonly string[] = [], mapId?: string): ScreenImages {
   return {
-    main: ['tileset', 'decor', 'map_props', 'token_frame', ...fogFills, ...landmarks].map(worldArtUrl).concat(mapId === 'moon-lake' ? [lakeUrl('tiles'), lakeUrl('decor')] : mapId === 'crystal-mine' ? [mineDecorUrl()] : []),
+    main: ['tileset', 'decor', 'map_props', 'token_frame', ...fogFills, ...landmarks].map(worldArtUrl).concat(mapId === 'moon-lake' ? [lakeUrl('tiles'), lakeUrl('decor')] : mapId === 'crystal-mine' ? [mineDecorUrl(), mineArtUrl('tiles'), mineArtUrl('rails')] : []),
     extra: uniq([...fogLayersAll.filter(l => !(fogFills as readonly string[]).includes(l)), 'step_hint', 'step_dust', 'puzzle', 'chests', 'items'].map(worldArtUrl).concat(teamPortraits(team))),
   };
 }
 
-export type BattleBackdrop = 'ruins' | 'forest' | 'riftline' | 'lake';
+export type BattleBackdrop = 'ruins' | 'forest' | 'riftline' | 'lake' | 'mine';
 /** The battle painting behind the whole battle view (`#battle-view[data-scene]` in game-feel.css). */
 export function battleBackdropUrl(scene: BattleBackdrop): string {
   return scene === 'ruins' ? artUrl('ruins') : `${base()}assets/art/battle_${scene}.webp`;
 }
-export const battleSceneOf = (mapId: string): BattleBackdrop => mapId === 'deep-forest' ? 'forest' : mapId === 'veil-frontier' ? 'riftline' : mapId === 'moon-lake' ? 'lake' : 'ruins';
+export const battleSceneOf = (mapId: string): BattleBackdrop => mapId === 'deep-forest' ? 'forest' : mapId === 'veil-frontier' ? 'riftline' : mapId === 'moon-lake' ? 'lake' : mapId === 'crystal-mine' ? 'mine' : 'ruins';

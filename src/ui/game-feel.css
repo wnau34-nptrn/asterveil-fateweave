@@ -306,6 +306,7 @@ button:active:not(:disabled) { transform: scale(.97); }
 #battle-view[data-scene="forest"] { --bd-img: url('/assets/art/battle_forest.webp'); }
 #battle-view[data-scene="riftline"] { --bd-img: url('/assets/art/battle_riftline.webp'); }
 #battle-view[data-scene="lake"] { --bd-img: url('/assets/art/battle_lake.webp'); }
+#battle-view[data-scene="mine"] { --bd-img: url('/assets/art/battle_mine.webp'); }
 #battle-view .battle-layout { border: 0; border-radius: 0; background: transparent; box-shadow: none; overflow: visible; }
 #battle-view .arena, #battle-view .battle-board { background: transparent; }
 #battle-view .masthead { background: transparent; }

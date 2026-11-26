@@ -1,3 +1,8 @@
+## 2026-11-26 — นำเข้าพื้น ราง และฉากรบเหมือง (Claude · `claude/friendly-heisenberg-xapns5`)
+
+- เจ้าของสั่ง “นำเข้าพื้นเหมืองเลย” หลังรอบ 4 ของ #357 ผ่าน (Claude วัด L* ซ้ำได้ค่าเดียวกับ Codex) พื้น `mine_tiles`, ราง `mine_rails` (`railAt`), ฉากรบ `battle_mine` + LQIP [ผลตรวจ](../validation/map5-mine/README_TH.md)
+- Vitest และ `tests/mine-art.test.ts` ผ่าน, Chromium 390px แผนที่และศึก · เหลือยักษ์ 4b (#359)
+
 ## 2026-11-26 — นำเข้าศัตรูเหมือง semi-chibi 5 ตัว (Claude · `claude/friendly-heisenberg-xapns5`)
 
 - เจ้าของสั่ง “นำเข้าศัตรูเหมือง 5 ตัวเลย” (หัวหน้าคุมเหมือง R2, ตัวกินผลึก R1) และบันทึกกติกาถาวร “สไตล์ภาพต้องเป็น semi chibi” ใน `CLAUDE.md`
