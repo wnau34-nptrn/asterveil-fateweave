@@ -1,0 +1,222 @@
+{
+  "runtimeBytes": 1607054,
+  "files": {
+    "NOTES.md": {
+      "sha256": "548bb3004d1c596c7c84b81433aed8e8bdf38368f7e88fdaa4fdef289abfc971",
+      "bytes": 1609
+    },
+    "build.py": {
+      "sha256": "553ec94388009ac1856948b0e6d6e7577bc449ab58d34e8319d2e6850e57e45a",
+      "bytes": 9305
+    },
+    "preview/battle-1366.png": {
+      "sha256": "8a04f74d722f6bba77b9262f675d9d56746a06a3dbdbaa2067e62e9b5c05a826",
+      "bytes": 919927,
+      "size": [
+        1366,
+        768
+      ],
+      "mode": "RGB"
+    },
+    "preview/battle-390.png": {
+      "sha256": "39d065b566de5cbc91816030c3d5083d63777a73b4a59abd0ea609015a84a134",
+      "bytes": 250287,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "preview/map-1-lit.png": {
+      "sha256": "f82cdf3a6cfd3c11e120f43a97df1c7a03a2598aa6f2d5932494413269347be9",
+      "bytes": 203232,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "preview/map-2-dark.png": {
+      "sha256": "5ba3c9d02417f55ee71394b2bee7cff331969c3f21f6ec60ff3394279394c7eb",
+      "bytes": 221788,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "preview/map-2-lit.png": {
+      "sha256": "6416172cd0ded31aeffee9f0a19fe687b15346541866799d1bc628ec37088759",
+      "bytes": 300419,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "preview/map-3-lit.png": {
+      "sha256": "32c79c63f3c63a2f6890994d01bb0ba2e21d4d0f0326b3154c9291dc78ab67db",
+      "bytes": 220992,
+      "size": [
+        390,
+        844
+      ],
+      "mode": "RGB"
+    },
+    "prompts.json": {
+      "sha256": "ee2ea7416537f927703bc6f87158c843bc1402281e51dcdd63dc4b5e7d65e0c4",
+      "bytes": 1703
+    },
+    "runtime/bg_mine.webp": {
+      "sha256": "f68cbd0105abacbf5622a4f0286f0ab55a868502f36cb951316793d2cf7eb288",
+      "bytes": 1373248,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    "runtime/rails_mine.json": {
+      "sha256": "ecee75b8b5508bf9054d88656ae962da024d6fb13f18aa795a71ffc7e3350e26",
+      "bytes": 473
+    },
+    "runtime/rails_mine.webp": {
+      "sha256": "cb254ce26f26c6c6ef5999cef43c31385e50116db7c407484866586011f58dbc",
+      "bytes": 930,
+      "size": [
+        384,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    "runtime/tiles_mine.json": {
+      "sha256": "4c752a5ce9752f16e491905276bc015a501942c6ebc0973b0e5d511c380a4f0c",
+      "bytes": 1137
+    },
+    "runtime/tiles_mine.webp": {
+      "sha256": "aec6058acc4e1dbd9a17f418148c9aa41b0c523fe71912e4aecb43ea278f1ae7",
+      "bytes": 231266,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "seeds.json": {
+      "sha256": "e60d3e280acf6cb84e41b9920c5dd35380e2eaeaefec109ea91d4429310eb744",
+      "bytes": 605
+    },
+    "sources/actor-0-0.png": {
+      "sha256": "fe83e4869940fc433b9c963f4ac4ff604cb38d5ed15c781c203db2b34fad4a99",
+      "bytes": 420368,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "sources/actor-0-1.png": {
+      "sha256": "ac433c681e297ce32caa91c089d71bcadcdf21bbcd6d24e6e852932dce2ca532",
+      "bytes": 434146,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "sources/actor-0-2.png": {
+      "sha256": "7098d60dad55b22573ff988ce85dc010421a894ba707b585dfbf7e618d6ea6e8",
+      "bytes": 521462,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "sources/actor-0-3.png": {
+      "sha256": "a52544f6618007abf7bd6b0749c31e208b8ec1ed68f151fab153c865b22a3550",
+      "bytes": 482846,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "sources/actor-0-4.png": {
+      "sha256": "e6760e48b0403e13318830df87fd5891d50c9e57a972c5e9e8f3f6d729298a47",
+      "bytes": 389693,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "sources/actor-1-0.png": {
+      "sha256": "586c27c584320b188ce19b5d040291375dc047db1896f00eebf2fe016352c49c",
+      "bytes": 422016,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "sources/actor-1-1.png": {
+      "sha256": "f03bb401f0d9d6f7caf7ba07706068e7c1abeb9c69ff8d566ed6c2fe0e1e24bb",
+      "bytes": 149405,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "sources/actor-1-2.png": {
+      "sha256": "339097d85f17681bb2bf3d3e8f972f282a67042c04fe81995fae18292c90cf78",
+      "bytes": 308581,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "sources/actor-1-3.png": {
+      "sha256": "4886380e37d38d5fb89f4dfc916a0d30f075553b5b11baf5cb75df2ddc6b1d53",
+      "bytes": 442852,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "sources/actor-1-4.png": {
+      "sha256": "f0b69b79a75d3a4c4222ea8be5efa310ba53292a8f410a50497250796fcb2277",
+      "bytes": 364956,
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    "sources/bg.png": {
+      "sha256": "cae383447ce73ee73589ada9145d33b7a15115f2b02c6a6fe5ab124197c800c6",
+      "bytes": 2075299,
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB"
+    },
+    "sources/layout.json": {
+      "sha256": "90db00ac8d7102ede50f940fa446c8b9684a5da08d16d0f340290af65227b7b4",
+      "bytes": 778
+    },
+    "sources/materials.png": {
+      "sha256": "dd19c965f4e91d7888d75501f338bf30ef91bfb2f4ad20f36eeef18d7a685927",
+      "bytes": 3219200,
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB"
+    }
+  }
+}

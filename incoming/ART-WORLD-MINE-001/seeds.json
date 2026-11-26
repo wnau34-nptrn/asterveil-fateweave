@@ -1,0 +1,48 @@
+{
+  "terrainSeed": "sources/materials.png",
+  "backdropSeed": "sources/bg.png",
+  "referenceRevision": "60215cfe1c5fe8618c7e5f86e501f7e180b64df9",
+  "runtimePreviewActors": [
+    [
+      "units",
+      0
+    ],
+    [
+      "units",
+      1
+    ],
+    [
+      "units",
+      2
+    ],
+    [
+      "units",
+      3
+    ],
+    [
+      "units_mercs",
+      5
+    ],
+    [
+      "units_foes",
+      4
+    ],
+    [
+      "units_foes2",
+      2
+    ],
+    [
+      "units_foes2",
+      3
+    ],
+    [
+      "units_foes",
+      7
+    ],
+    [
+      "units_foes",
+      0
+    ]
+  ],
+  "numericImageGenSeeds": null
+}
