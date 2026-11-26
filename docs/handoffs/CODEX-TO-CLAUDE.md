@@ -1,3 +1,8 @@
+## 2026-11-26 — UX audit P2-1 staged reveal เข้าค่าย (Claude · `claude/gallant-edison-a7kkl3`)
+
+- เจ้าของสั่ง “ทำ P2-1 staged reveal ต่อได้เลย”: `hud-reveal.ts` HUD ค่ายตามฉากมา 100 ms (220 ms) เฉพาะตอนเข้าค่าย
+- Playwright ใหม่ 2 + ชุด camp เดิมผ่าน · [ผลตรวจ](../validation/ux-hud-reveal-2026-11-26/README_TH.md)
+
 ## 2026-11-26 — UX audit P1-5 หน้าเลือกงานช่าง (Claude · `claude/gallant-edison-a7kkl3`)
 
 - เจ้าของสั่ง “ทำ P1-5 หน้าเลือกงานช่างต่อได้เลย”: ป้ายสถานะจาก rule เดิม (`forge-task-status.ts`), ตีบวก/เพิ่มเลเวลเป็นการ์ดเต็มความกว้าง

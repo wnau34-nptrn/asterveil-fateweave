@@ -44,6 +44,7 @@ import { icon, type IconName } from './icons';
 import { SCREEN_IMAGE_CAP_MS, imagesReady, prefetchImagesIdle, whenImagesReady } from './image-ready';
 import { trackLqip } from './lqip';
 import { battleBackdropUrl, battleSceneOf, campImages, worldImages, type BattleBackdrop } from './screen-images';
+import { revealHud } from './hud-reveal';
 import { lobbyArt } from '../game/visuals/assets';
 // B6: how long the title stays up before a mid-battle save starts building its battle textures (draft).
 const SAVED_BATTLE_PREFETCH_DELAY_MS = 2500;
@@ -683,7 +684,7 @@ export class GameShell {
     this.lobby.render({ profile: this.game!.profile, board: this.server ? this.board : clientView(this.game!, { home: this.home, lookup: this.lookup }).hireBoard, message: this.lobbyMessage, day: this.today(), worldBoss: this.wbStatus, online: !!this.server, cheer: this.lobbyCheer, saved: this.saved && (!!this.storage || !!this.server), ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
     this.npcCheer = undefined;
     // Arriving in the camp opens on the fire; later redraws keep where the player panned to.
-    if (entering) { this.lobby.centreScene(); const w = worldImages(this.game!.profile.party.deployed, this.map.id); prefetchImagesIdle([...w.main, ...w.extra]); }
+    if (entering) { revealHud(this.views.lobby); this.lobby.centreScene(); const w = worldImages(this.game!.profile.party.deployed, this.map.id); prefetchImagesIdle([...w.main, ...w.extra]); }
   }
   private guide(id: string, skip: boolean): void {
     if (!this.game || this.game.run) return;
