@@ -57,6 +57,7 @@
   --camp-ms:900ms; --fire-ms:480ms; --flash-ms:280ms; --shard-delay-ms:120ms; --gate-ms:640ms; --boss-ms:540ms;
   --grass-ms:3200ms; --water-ms:2400ms; --rift-ms:2200ms;
   --motes-ms:4200ms; --sheet-ms:180ms; --reduced-fade-ms:100ms;
+  --swap-ms:200ms; --tab-ms:150ms; --sheet-exit-ms:140ms;
   --ease-out:cubic-bezier(.2,.7,.2,1); --ease-soft:cubic-bezier(.4,0,.2,1);
 }
 @keyframes veil-hop {0%{transform:translateY(0) scale(1.04,.96)}50%{transform:translateY(-6px) scale(.98,1.02)}100%{transform:translateY(0) scale(1)}}

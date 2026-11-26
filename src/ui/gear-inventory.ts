@@ -25,3 +25,13 @@ export function changeGearFilter(f: GearFilters,control: HTMLInputElement|HTMLSe
   else if(field==='source'&&['all','found','owned'].includes(control.value))f.source=control.value as GearFilters['source'];
   else if(field==='sort'&&['rarity','level','set'].includes(control.value))f.sort=control.value as GearFilters['sort'];
 }
+// UX audit S5 (docs/UX_GAMEFEEL_AUDIT.md P1-4): an empty list says why it is empty and offers a way on.
+// Nothing owned → where gear comes from (+ the caller's action); filters hide everything → clear them; only the chosen slot is empty → show every slot.
+export function gearFiltered(f: GearFilters): boolean { return (f.kind ?? 'all') !== 'all' || f.set !== 'all' || f.slot !== 'all' || f.rarity !== 'all' || f.source !== 'all' || f.compatible; }
+export function gearEmpty(total: number, f: GearFilters, prefix: string, opts: { action?: string; slotAction?: string } = {}): string {
+  const box = (kind: string, title: string, note: string, action = '') => `<div class="gear-empty" data-empty="${kind}">${icon(kind === 'none' ? 'gearBody' : 'act-filter')}<p><b>${title}</b><small>${note}</small></p>${action}</div>`;
+  if (!total) return box('none', 'ยังไม่มีอุปกรณ์', 'ได้จากศัตรู หีบ และรางวัลระหว่างออกเดินทาง', opts.action);
+  const onlySlot = f.slot !== 'all' && !gearFiltered({ ...f, slot: 'all' });
+  if (onlySlot && opts.slotAction) return box('slot', `ยังไม่มีอุปกรณ์ช่อง${slotText[f.slot as GearSlot]}`, `มีอุปกรณ์ช่องอื่น ${total} ชิ้น`, opts.slotAction);
+  return box('filter', 'ไม่พบอุปกรณ์ตามตัวกรอง', `มีอุปกรณ์ ${total} ชิ้น แต่ไม่ตรงตัวกรองที่เลือก`, `<button id="${prefix}gear-empty-reset" type="button" data-gear-reset class="secondary">ล้างตัวกรอง</button>`);
+}

@@ -1,3 +1,41 @@
+## 2026-11-26 — UX audit P2-2 ส่วนที่ 2 hit-stop (Claude · `claude/gallant-edison-a7kkl3`, ยังไม่ merge)
+
+- เจ้าของสั่ง “ทำ P2-2 ส่วนที่ 2 hit-stop ต่อได้เลย”: `hitStopMs()` 45 ms เฉพาะโดนจริง + ล้ม/ขัดจังหวะ, ฉากหยุดหลังวาดเฟรมที่โดน, เวลาจบเทิร์นเลื่อนเท่ากัน
+- vitest ทั้งชุด 2359 + Playwright ใหม่และชุดต่อสู้ 95 ผ่าน · [ผลตรวจและคลิป](../validation/hit-stop-2026-11-26/README_TH.md) · รอเจ้าของดูคลิปก่อน merge
+
+## 2026-11-26 — UX audit P2-2 ส่วนที่ 1 ฉากสั่นแบบ trauma (Claude · `claude/gallant-edison-a7kkl3`, ยังไม่ merge)
+
+- เจ้าของสั่ง “ทำ P2-2 ส่วนที่ 1 ต่อได้เลย”: `impact-shake.ts` trauma² + คลื่น sine แทนค่าสุ่ม, โดนซ้อนบวก trauma; ไม่มี hit-stop (ส่วนที่ 2 รอเจ้าของตัดสินเรื่องจังหวะ)
+- vitest 4 + Playwright 3 ใหม่ผ่าน · [ผลตรวจและคลิป](../validation/impact-shake-2026-11-26/README_TH.md) · รอเจ้าของดูคลิปก่อน merge
+
+## 2026-11-26 — UX audit P2-1 staged reveal เข้าค่าย (Claude · `claude/gallant-edison-a7kkl3`)
+
+- เจ้าของสั่ง “ทำ P2-1 staged reveal ต่อได้เลย”: `hud-reveal.ts` HUD ค่ายตามฉากมา 100 ms (220 ms) เฉพาะตอนเข้าค่าย
+- Playwright ใหม่ 2 + ชุด camp เดิมผ่าน · [ผลตรวจ](../validation/ux-hud-reveal-2026-11-26/README_TH.md)
+
+## 2026-11-26 — UX audit P1-5 หน้าเลือกงานช่าง (Claude · `claude/gallant-edison-a7kkl3`)
+
+- เจ้าของสั่ง “ทำ P1-5 หน้าเลือกงานช่างต่อได้เลย”: ป้ายสถานะจาก rule เดิม (`forge-task-status.ts`), ตีบวก/เพิ่มเลเวลเป็นการ์ดเต็มความกว้าง
+- vitest 4 + Playwright ใหม่ 2 + ชุด forge เดิม 49 ผ่าน · [ผลตรวจ](../validation/ux-forge-launcher-2026-11-26/README_TH.md)
+
+## 2026-11-26 — ภาพตัวเต็มทุกแท็บ + สีประจำคลาส (Claude · `claude/gallant-edison-a7kkl3`)
+
+- เจ้าของ: “ภาพตัวละครใช้แบบตัวเต็มทุกแท็บ ใช้สีประจำคลาส” · `heroStage()`/`classTone()` ใน `portraits.ts`, `--class-tone` บน dialog ตัวละคร
+- vitest `class-tone` + Playwright `ux-hero-stage` ใหม่ และชุดหน้าตัวละครเดิม 51 เคสผ่าน · [ผลตรวจ](../validation/ux-hero-stage-2026-11-26/README_TH.md)
+
+## 2026-11-26 — UX audit S2–S4 transition (Claude · `claude/gallant-edison-a7kkl3`)
+
+- เจ้าของสั่ง “เริ่ม S2–S4 ต่อได้เลย”: เปลี่ยนตัว/แท็บมีอนิเมชันเข้าตามทิศ (`character-panel.ts` `cue`), ปิด dialog/sheet ทิ้งสำเนา inert ที่จางหาย (`dialog-leave.ts`, `lobby-ui.ts`), token `--swap-ms`/`--tab-ms`/`--sheet-exit-ms`
+- Playwright ใหม่ 3 เคส + ชุดหน้าตัวละคร/ค่ายผ่าน · [ผลตรวจและคลิป 390px](../validation/ux-audit-s2-s4-2026-11-26/README_TH.md)
+- รอเจ้าของดูคลิปก่อน merge · ยังไม่ทำ: ภาพตัวละครแบบเดียวทุกแท็บ และสีประจำคลาส (คำถาม §9)
+
+## 2026-11-26 — UX audit + Sprint 1 S1/S5 (Claude · `claude/gallant-edison-a7kkl3`)
+
+- Audit เทียบคลิป reference (หลักการเท่านั้น): [docs/UX_GAMEFEEL_AUDIT.md](../UX_GAMEFEEL_AUDIT.md) · เจ้าของ “อนุมัติแผน เริ่ม S1 และ S5 ได้เลย”
+- S1: แถวบนค่ายไม่ตัดคำ/ไม่ล้นที่ 320–480px, ปุ่มสุ่มกาชา sticky อยู่ในจอที่ 360×640 · S5: `gearEmpty()` empty state พร้อมปุ่มไปต่อ 3 จุด
+- typecheck/lint/vitest/build ผ่าน, Playwright ใหม่ 8 + ชุดเกี่ยวข้อง 66 ผ่าน · [ผลตรวจ](../validation/ux-audit-s1-s5-2026-11-26/README_TH.md)
+- ถัดไป: S2–S4 (transition เปลี่ยนตัว/แท็บ, exit sheet) ต้องส่งคลิป 390px ให้เจ้าของก่อน merge
+
 ## 2026-11-26 — เหตุการณ์ข้างทางแผนที่ 5 (Claude · `claude/mine-side-events` · PR #366)
 
 - เจ้าของสั่ง “ทำเหตุการณ์ข้างทางของแผนที่ 5”: คนงานติดอยู่ (ขุด/ผ่าน), รถแร่ทิ้งไว้ (ยาสุ่มตาม seed), สายแร่สด (แร่แลกภัยคุกคาม), พ่อค้าแร่ (แร่→ทอง 3 ครั้ง/เที่ยว + ยา) ผ่าน `chooseEvent` เดิม

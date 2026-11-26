@@ -125,3 +125,24 @@
 #lobby-view .wb-chip[aria-pressed=true] { border-color:#ffd36e; background:#3a3015; color:#ffe4a5; }
 #lobby-view .wb-sheet > button { min-height:48px; }
 .intent-tag { color:#ffd36e; }
+/* UX audit S1 (docs/UX_GAMEFEEL_AUDIT.md P0-1): the top-row titles stay on one line and never break a Thai word.
+   Narrow frames drop the chevrons and tighten padding before the text shrinks; ellipsis is the last resort. */
+#lobby-view .lobby-boards .lobby-quest-entry, #lobby-view .lobby-boards .lobby-wboss { padding-top:7px; padding-bottom:7px; }
+#lobby-view .lobby-boards .lobby-quest-entry strong { white-space:nowrap; min-width:0; }
+#lobby-view .lobby-quest-entry .quest-title { min-width:0; overflow:hidden; text-overflow:ellipsis; word-break:keep-all; }
+#lobby-view .lobby-wboss .wb-banner-text { min-width:0; }
+#lobby-view .lobby-wboss .wb-banner-text b, #lobby-view .lobby-wboss .wb-banner-text small { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; word-break:keep-all; }
+@container game (max-width:440px) {
+  #lobby-view .lobby-boards .lobby-quest-entry, #lobby-view .lobby-boards .lobby-wboss { padding-left:10px; padding-right:8px; }
+  #lobby-view .lobby-boards .lobby-quest-entry strong > .icon:last-child, #lobby-view .lobby-boards .lobby-wboss > .icon:last-child { display:none; }
+}
+@container game (max-width:380px) {
+  #lobby-view .lobby-boards { gap:6px; }
+  #lobby-view .lobby-boards .lobby-quest-entry, #lobby-view .lobby-boards .lobby-wboss { padding-left:8px; padding-right:6px; gap:2px; }
+  #lobby-view .lobby-boards .lobby-quest-entry strong { font-size:14px; gap:4px; }
+  #lobby-view .lobby-boards .lobby-quest-entry > span, #lobby-view .lobby-wboss .wb-banner-text small { font-size:10px; }
+}
+@container game (max-width:340px) {
+  #lobby-view .lobby-boards .lobby-quest-entry strong { font-size:13px; }
+  #lobby-view .lobby-boards .lobby-quest-entry strong > .icon:first-child { display:none; }
+}

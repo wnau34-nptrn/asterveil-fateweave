@@ -4,7 +4,7 @@ import { BEAT_MAX, deflectReason, chiOf, releasePower, skillCooldown, actionReas
 import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, Outcome, Resolution, TargetOption, TurnStage } from '../core/battle/types';
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
 import { sfx } from '../platform/sfx';
-import { BattlePlayback, stageTiming } from './battle-playback';
+import { BattlePlayback, stageTiming, hitStopMs } from './battle-playback';
 import { combatPrefsKey, readCombatPrefs, contactSounds, effectFamily, prepareSound } from '../game/visuals/combat-effects';
 import type { BattleKind } from '../core/world/types';
 import { browserStorage } from '../platform/browser-storage';
@@ -442,6 +442,7 @@ export class BattleUI {
     this.fieldInspectedActorId = turn.side === 'hero' && enemyTarget ? enemyTarget.id : turn.actorId;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const timing = stageTiming(turn, reduced, this.combatPrefs.speed === 'fast', this.session?.kind === 'boss');
+    const stop = hitStopMs(turn, reduced, this.combatPrefs.intensity === 'reduced');
     const lead = prepareSound(turn, this.data, timing.contact);
     this.scene?.configureEffects(this.combatPrefs, reduced);
     this.render();
@@ -456,12 +457,12 @@ export class BattleUI {
         if (this.presentation !== playback) return;
         stopPrepare();
         playback.frame = turn.after!; playback.revealed = true;
-        this.render(false); this.scene?.play(turn, timing.end - timing.contact); this.stageSound(turn);
+        this.render(false); this.scene?.play(turn, timing.end - timing.contact, stop); this.stageSound(turn);
       } },
-      { at: Math.min(timing.end - 40, timing.contact + (this.combatPrefs.speed === 'fast' ? 140 : 220)), run: () => {
+      { at: stop + Math.min(timing.end - 40, timing.contact + (this.combatPrefs.speed === 'fast' ? 140 : 220)), run: () => {
         if (turn.events.some(e => e.type === 'down')) this.playback.own(sfx.play('down'));
       } },
-      { at: timing.end, run: () => {
+      { at: timing.end + stop, run: () => {
         if (this.presentation !== playback) return;
         this.scene?.stopEffects();
         if (++playback.index < playback.resolution.turns.length) this.showStage();

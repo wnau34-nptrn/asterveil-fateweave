@@ -16,10 +16,8 @@
 .character-tabs [aria-selected=true] { background: #183c50; border-color: var(--veil-cyan, #74d4ef); color: var(--focus, #a3edff); }
 @container game (max-width: 360px) { .character-tabs button .icon { display: inline-block; width: 18px; height: 18px; } }
 
-/* Overview: the hero in a lit ring, EXP, role chips, then a two-column grid of stat chips. */
+/* Overview: the hero on its class-lit stage, EXP, role chips, then a two-column grid of stat chips. */
 .overview-hero { display: grid; justify-items: center; gap: 8px; padding-top: 4px; }
-.hero-ring { position: relative; width: min(190px, 52cqw); aspect-ratio: 1; border-radius: 50%; border: 2px solid #74d4ef99; background: radial-gradient(circle at 50% 40%, #23435a, #0d1c2e 70%); box-shadow: 0 0 24px #74d4ef33, inset 0 0 30px #08121f; }
-.hero-ring .hero-art { position: absolute; left: 4%; top: 4%; width: 92%; height: 92%; aspect-ratio: auto; border-radius: 50%; }
 .hero-badge { position: absolute; left: 50%; bottom: -12px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border: 1px solid #74d4ef66; border-radius: 99px; background: #08121fee; font: 600 15px var(--font-display, Kanit), sans-serif; white-space: nowrap; }
 .hero-badge .star-row .icon { width: 14px; height: 14px; }
 .exp-row { width: 100%; display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; font-size: 12px; color: var(--text-muted, #bbcadb); }
@@ -489,3 +487,26 @@
 .lesson-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .lesson-actions button { min-height: 44px; padding: 0 14px; }
 .lesson-actions .text-button { margin-left: auto; background: transparent; border: 0; color: #b9c8d8; font-size: 12px; text-decoration: underline; }
+
+/* UX audit S5: empty gear lists explain themselves and offer one next step (gear-inventory.ts gearEmpty). */
+.gear-empty { display: grid; grid-template-columns: 36px minmax(0, 1fr); align-items: center; gap: 6px 10px; margin: 8px 0; padding: 12px; border: 1px dashed var(--gold-edge, #e8cd8a66); border-radius: 12px; background: #09182b80; }
+.gear-empty > .icon { width: 30px; height: 30px; opacity: .8; color: var(--gold-light, #f2d596); }
+.gear-empty p { margin: 0; display: grid; gap: 2px; min-width: 0; }
+.gear-empty b { font-size: 14px; color: var(--text); word-break: keep-all; }
+.gear-empty small { font-size: 12px; color: var(--muted, #c9d2df); line-height: 1.45; }
+.gear-empty > button { grid-column: 1 / -1; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.gear-empty > button .icon { width: 18px; height: 18px; }
+
+/* Owner 2026-11-26 (UX audit §9): every character tab shows the full-body figure, lit in the class colour
+   (`--class-tone`, set by character-panel.ts from the class's battle colour). One stage size on overview, skills,
+   tree and development; the gear tab keeps its paper doll with the same light. */
+.character-dialog { --class-tone: #74d4ef; }
+.hero-stage { position: relative; display: grid; place-items: center; height: clamp(140px, 22cqh, 190px); margin: 2px auto 4px; width: 100%; isolation: isolate; }
+.hero-stage::before { content: ''; position: absolute; z-index: -1; inset: 0 10% 0; border-radius: 50%;
+  background: radial-gradient(ellipse 60% 56% at 50% 54%, color-mix(in srgb, var(--class-tone) 80%, transparent), color-mix(in srgb, var(--class-tone) 30%, transparent) 52%, transparent 74%); }
+.hero-stage::after { content: ''; position: absolute; z-index: -1; left: 30%; right: 30%; bottom: 3%; height: 9%; border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--class-tone) 45%, #000a), transparent); }
+.hero-stage .hero-art { height: 100%; width: auto; aspect-ratio: 1; }
+.overview-hero .hero-badge { position: static; transform: none; margin-top: -10px; border-color: color-mix(in srgb, var(--class-tone) 60%, transparent); }
+.character-dialog .doll-hero::before { background: radial-gradient(circle, color-mix(in srgb, var(--class-tone) 75%, transparent) 0, color-mix(in srgb, var(--class-tone) 28%, transparent) 50%, transparent 74%); }
+.character-dialog .info-header { box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--class-tone) 55%, transparent); }
