@@ -15,7 +15,8 @@ async function camp(browser: Browser, reducedMotion: 'reduce' | 'no-preference')
   for (const id of ['mira', 'toma', 'sefa']) if (!p.company.includes(id)) { p.company.push(id); p.members[id] = { stars: 1, shards: 0 }; }
   const raw = JSON.stringify({ version: SAVE_VERSION, profile: p, run: null }); parseGame(raw, map, lookup);
   await page.addInitScript(({ key, raw }) => { if (!sessionStorage.getItem('ux-s2-s4')) { localStorage.setItem(key, raw); sessionStorage.setItem('ux-s2-s4', '1'); } }, { key, raw });
-  await page.goto('./'); await page.locator('#continue').click(); await expect(page.locator('#lobby-depart')).toBeVisible();
+  // The camp waits up to 1.8 s for its images; slow CI runners need more than the default 5 s to arrive.
+  await page.goto('./'); await page.locator('#continue').click({ timeout: 15_000 }); await expect(page.locator('#lobby-depart')).toBeVisible({ timeout: 15_000 });
   return page;
 }
 const running = (page: Page, sel: string) => page.locator(sel).evaluate(e => e.getAnimations({ subtree: true }).filter(a => a.playState === 'running').map(a => (a as CSSAnimation).animationName));
