@@ -5,7 +5,7 @@ import type { ActionId, BattleEntry, BattleState, Command, EncounterDefinition, 
 import { gameBounds, shortcutBlocked } from '../platform/keyboard';
 import { sfx } from '../platform/sfx';
 import { BattlePlayback, stageTiming } from './battle-playback';
-import { combatPrefsKey, readCombatPrefs, contactSounds, effectFamily } from '../game/visuals/combat-effects';
+import { combatPrefsKey, readCombatPrefs, contactSounds, effectFamily, prepareSound } from '../game/visuals/combat-effects';
 import type { BattleKind } from '../core/world/types';
 import { browserStorage } from '../platform/browser-storage';
 import type { BattleScene } from '../game/scenes/BattleScene';
@@ -442,13 +442,14 @@ export class BattleUI {
     this.fieldInspectedActorId = turn.side === 'hero' && enemyTarget ? enemyTarget.id : turn.actorId;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const timing = stageTiming(turn, reduced, this.combatPrefs.speed === 'fast', this.session?.kind === 'boss');
+    const lead = prepareSound(turn, this.data, timing.contact);
     this.scene?.configureEffects(this.combatPrefs, reduced);
     this.render();
     let stopPrepare = () => {};
     this.playback.start([
-      { at: 0, run: () => {
-        if (timing.contact && !turn.events.some(e => e.type === 'cancel')) {
-          stopPrepare = sfx.play(effectFamily(turn) === 'steel' ? 'swing' : 'charge'); this.playback.own(stopPrepare);
+      { at: lead?.at ?? 0, run: () => {
+        if (lead) {
+          stopPrepare = sfx.play(lead.name); this.playback.own(stopPrepare);
         }
       } },
       { at: timing.contact, run: () => {
@@ -473,7 +474,7 @@ export class BattleUI {
 
   // Placeholder synth sounds for one actor turn (platform/sfx.ts), from its events.
   private stageSound(turn: TurnStage): void {
-    for (const name of contactSounds(turn)) this.playback.own(sfx.play(name));
+    for (const name of contactSounds(turn, this.data)) this.playback.own(sfx.play(name));
   }
   private renderCombatSettings(): void {
     this.set('combat-settings', `<h3>ภาพการต่อสู้</h3><p>ค่าที่เปลี่ยนใช้ตั้งแต่เทิร์นถัดไป · ไม่เปลี่ยนผลต่อสู้</p><button data-ui="combat-speed" id="combat-speed" class="quiet" aria-pressed="${this.combatPrefs.speed === 'fast'}">ความเร็ว: ${this.combatPrefs.speed === 'fast' ? 'เร็ว' : 'ปกติ'}</button><button data-ui="combat-intensity" id="combat-intensity" class="quiet" aria-pressed="${this.combatPrefs.intensity === 'reduced'}">เอฟเฟกต์: ${this.combatPrefs.intensity === 'reduced' ? 'ลด' : 'มาตรฐาน'}</button><p>เมื่ออุปกรณ์ตั้งค่าลดการเคลื่อนไหว จะแสดงผลทันทีโดยไม่เคลื่อนภาพ</p>`);
@@ -661,7 +662,9 @@ export class BattleUI {
       const enemy = d.enemies.some(e => e.id === a.id), boss = 'boss' in a && a.boss;
       const label = `${actorName(a.id, d)} · ${rows.map(r => `${r.kind === 'buff' ? 'บัฟ' : 'ดีบัฟ'} ${r.name}: ${r.duration}`).join(' · ')} · รายละเอียดที่ปุ่มข้อมูล แท็บสถานะ`;
       const tone = healthTone(actor.hp, a.maxHp), ratio = healthRatio(actor.hp, a.maxHp), hpText = `${actor.hp}/${a.maxHp}`;
-      const crown = boss ? `<span class="field-boss-crown" data-boss-crown="${a.id}" style="left:${slot.x - 10}px;top:${slot.body.y - 12}px">${bossCrown}</span>` : '';
+      // The crown's bottom sits on the rendered figure's top (BattleScene.crownSpot); the layout box is the fallback.
+      const crownAt = boss ? this.scene!.crownSpot(a.id) : undefined;
+      const crown = boss ? `<span class="field-boss-crown" data-boss-crown="${a.id}" style="left:${(crownAt?.x ?? slot.x) - 10}px;top:${(crownAt?.y ?? slot.body.y) - 12}px">${bossCrown}</span>` : '';
       return `${crown}<div class="field-unit-info ${rows.length ? 'has-status' : ''} ${slot.statusBand ? 'status-below' : ''} ${enemy ? 'enemy' : 'ally'}" data-field-unit="${a.id}" data-hp-tone="${tone}" style="left:${position.x}px;top:${position.y}px;width:${position.width}px;height:${position.height + slot.statusBand}px;--field-icon:${slot.iconSize}px;opacity:${actor.hp > 0 ? 1 : .4}"><span class="field-health" role="img" aria-label="${escapeHtml(actorName(a.id, d))} HP ${actor.hp}/${a.maxHp}"><span class="field-hp-value" style="font-size:${hpText.length > 9 ? 6 : hpText.length > 7 ? 6.5 : 7.5}px">${hpText}</span><svg class="field-hp-bar" viewBox="0 0 72 14" preserveAspectRatio="none" aria-hidden="true"><path class="hp-bar-track" d="${fieldHealthPath}"/><path class="hp-bar-fill" d="${fieldHealthPath}" pathLength="100" stroke-dasharray="${ratio * 100} 100" style="stroke:${healthColors[tone]};opacity:${ratio > 0 ? 1 : 0}"/></svg></span>${rows.length ? `<span class="field-statuses" data-status-actor="${a.id}" role="img" aria-label="${escapeHtml(label)}">${rows.slice(0, slot.maxIcons).map(r => `<span class="field-status ${r.kind}" data-status="${r.id}" aria-hidden="true">${icon(r.icon)}</span>`).join('')}${rows.length > slot.maxIcons ? `<span class="field-status-more" aria-hidden="true">+${rows.length - slot.maxIcons}</span>` : ''}</span>` : ''}</div>`;
     }).join(''));
   }

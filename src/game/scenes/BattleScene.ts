@@ -2,7 +2,8 @@ import Phaser from 'phaser';
 import { REWORK_ATLAS, reworkCues, reworkMarks, reworkContact } from '../visuals/rework-fx';
 import { unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals/basic-attack-fx';
-import { BOSS_ATLAS, LAKE_BOSS_ATLAS, bossAtlasFor, bossAtlasUrls, lakeBossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, greatWaveScales, holdPlacement, isLakeBossMove, sealedWaterVeil, usesBossSignature, usesLakeBossSignature, type BossPoint } from '../visuals/boss-signature-fx';
+import { artPalette, auraPalette, bossPalette, paintBossAura, type BossAura } from '../visuals/boss-aura';
+import { BOSS_ATLAS, LAKE_BOSS_ATLAS, bossAtlasFor, bossAtlasUrls, lakeBossAtlasUrls, bossCues, bossPrepare, bossContact, chargeHolds, greatWaveScales, holdPlacement, isLakeBossMove, sealedWaterVeil, usesBossSignature, usesLakeBossSignature, type BossPoint, type ChargeHold } from '../visuals/boss-signature-fx';
 import { OptionalUnitAssets } from '../visuals/optional-unit-assets';
 import { ALL_SHEETS, allBattleAtlases, atlasesForActions, encounterAtlases, encounterSheets, sheetKey, sheetsForArt, type AtlasRequest } from '../visuals/battle-assets';
 import { unitFrameView } from '../visuals/unit-frame-view';
@@ -34,6 +35,9 @@ const bodySprite = (body: Phaser.GameObjects.Container | undefined): Phaser.Game
   body?.list.find((c): c is Phaser.GameObjects.Image => c instanceof Phaser.GameObjects.Image && /^(unit-pilot-|battle-)/.test(c.texture.key));
 // Device pixels per CSS pixel for the canvas buffer (capped: 3x covers current phones).
 export const pixelRatio = (): number => Math.min(3, Math.max(1, window.devicePixelRatio || 1));
+// A held charge sits this share of the figure width forward (toward the other side) of the body centre: on the body.
+export const HOLD_FORWARD = .12;
+const CROWN_HEIGHT = 12;
 
 export interface ActorTarget { x: number; y: number; width: number; height: number }
 export interface SceneView { state: BattleState; heroId: string; targetId: string | null; phase?: 'hero' | 'enemy'; activeActorId?: string; activeTargetId?: string }
@@ -217,6 +221,34 @@ export class BattleScene extends Phaser.Scene {
   // AV07: persistent charge telegraphs, one per boss holding a charged release. Derived from the state shown, so a
   // repaint, reload or resize restores it; release, interruption, down, phase replacement or leaving the field clear it.
   private holds = new Map<string, Phaser.GameObjects.GameObject>();
+  // The aura painted with each hold (ground sigil, body glow, motes); disposed with its hold.
+  private auras = new Map<string, BossAura>();
+  private dropAura(id: string): void { this.auras.get(id)?.dispose(); this.auras.delete(id); }
+  // Light aura on every standing boss; the full aura while it holds a charge (owner 2026-11-25). Repainted only when the
+  // level or charge changes, so the loops keep running between stages.
+  private paintAuras(state: BattleState, wanted: ReadonlyMap<string, ChargeHold>): void {
+    const live = new Set<string>();
+    for (const foe of this.encounter.enemies) {
+      const now = state.enemies.find(e => e.id === foe.id);
+      if (!foe.boss || !now || now.absent || now.hp <= 0) continue;
+      const body = this.bodies.get(foe.id), box = this.figureBox(foe.id), hold = wanted.get(foe.id), emblem = this.holds.get(foe.id);
+      if (!body || !box) continue;
+      live.add(foe.id);
+      const key = hold && emblem ? `charge:${hold.frame}:${hold.kind}` : 'ambient';
+      const current = this.auras.get(foe.id);
+      if (current && current.objects.every(o => o.active) && this.auraKeys.get(foe.id) === key) continue;
+      this.dropAura(foe.id);
+      const sprites = body.list.filter((c): c is Phaser.GameObjects.Image => c instanceof Phaser.GameObjects.Image && /^(unit-pilot-|battle-)/.test(c.texture.key));
+      const moves = [...this.encounter.intents.filter(i => i.sourceId === foe.id).map(i => i.name), ...(this.encounter.phases ?? []).filter(p => p.sourceId === foe.id).map(p => p.name)];
+      this.auras.set(foe.id, paintBossAura(this, body, sprites, {
+        level: hold && emblem ? 'charge' : 'ambient', palette: artPalette(foe.art) ?? (hold ? auraPalette(hold.frame) : bossPalette(moves)), kind: hold?.kind ?? 'normal',
+        left: box.left - body.x, right: box.right - body.x, top: box.top - body.y, feet: box.bottom - body.y,
+        emblem: emblem as Phaser.GameObjects.Image | undefined, calm: this.quiet || this.reducedMotion }));
+      this.auraKeys.set(foe.id, key);
+    }
+    for (const id of [...this.auras.keys()]) if (!live.has(id)) { this.dropAura(id); this.auraKeys.delete(id); }
+  }
+  private auraKeys = new Map<string, string>();
   private paintHolds(): void {
     const view = this.view; if (!view) return;
     this.paintReworkMarks(view.state);
@@ -226,10 +258,12 @@ export class BattleScene extends Phaser.Scene {
       if (this.holds.has(id)) continue;
       const body = this.bodies.get(id), box = this.figureBox(id), slot = this.actorPanels.get(id);
       if (!body || !box || !slot) continue;
-      // Just forward (hero side) of the rendered lower chest, never over the face or the name/HP labels. The World Boss
-      // trio's holds use their layer anchor instead (Mountain Fall: forward chest; Wing Gathering: shoulder core).
+      // On the rendered lower chest, a little toward the heroes, never over the face or the name/HP labels. It stays inside
+      // the figure's box (the old forward-edge spot left most of it beside the Briar Lord/Shadow Serpent, off the body).
+      // The World Boss trio's holds use their layer anchor instead (Mountain Fall: forward chest; Wing Gathering: shoulder core).
       const scale = Phaser.Math.Clamp(slot.size / 96, .7, 1.25), at = this.bossAnchor(id), placed = at && holdPlacement(at, hold, scale);
-      const x = placed ? placed.x - body.x : box.left - body.x + (box.right - box.left) * .18 - slot.size * .12;
+      const facing = this.encounter.heroes.some(h => h.id === id) ? 1 : -1;
+      const x = placed ? placed.x - body.x : (box.left + box.right) / 2 - body.x + facing * (box.right - box.left) * HOLD_FORWARD;
       const y = placed ? placed.y - body.y : box.top - body.y + (box.bottom - box.top) * .55;
       const width = placed?.width ?? 90 * scale / (111 / 96);
       let item: Phaser.GameObjects.Image | Phaser.GameObjects.Graphics;
@@ -253,6 +287,7 @@ export class BattleScene extends Phaser.Scene {
       // Normal and breakable holds breathe gently; unstoppable brackets stay rigid. Reduced motion and quiet keep all still.
       if (hold.kind !== 'unstoppable' && !this.quiet && !this.reducedMotion) this.idle.push(this.tweens.add({ targets: item, alpha: { from: 1, to: .85 }, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
     }
+    this.paintAuras(view.state, wanted);
   }
   private reworkEmblems = new Set<Phaser.GameObjects.Image>();
   private paintReworkMarks(state: BattleState): void {
@@ -402,9 +437,23 @@ export class BattleScene extends Phaser.Scene {
       this.actorPanels.set(enemy.id, slot);
       this.actor(enemy.id, slot, this.view.state.enemies[i]!.hp, true);
     }
-    this.holds.clear(); this.paintHolds();
+    this.holds.clear(); for (const id of [...this.auras.keys()]) this.dropAura(id); this.paintHolds();
+    this.measureCrowns();
     this.layer.sort('depth'); this.onLayout();
   }
+  // Boss crown spots (CSS px, canvas space): centred over the rendered figure, just above its top. Measured on the resting
+  // pose when the field is laid out (the art's own height varies a lot: Valdrakk's wings and Morvane's crest rise far
+  // above the layout box the crown used before, which left it inside the body).
+  private crowns = new Map<string, { x: number; y: number }>();
+  private measureCrowns(): void {
+    this.crowns.clear();
+    for (const foe of this.encounter.enemies) {
+      if (!foe.boss) continue;
+      const box = this.figureBox(foe.id); if (!box) continue;
+      this.crowns.set(foe.id, { x: (box.left + box.right) / 2, y: Math.max(CROWN_HEIGHT, box.top - 2) });
+    }
+  }
+  crownSpot(id: string): { x: number; y: number } | undefined { return this.crowns.get(id); }
   private actor(id: string, slot: FieldSlot, hp: number, enemy: boolean): void {
     const { x, y, size } = slot;
     this.positions.set(id, { x, y });
@@ -735,7 +784,7 @@ export class BattleScene extends Phaser.Scene {
       for(const cue of projectileCues(turn)){const key=cue.sourceId+cue.skill,own=cue.kind==='cast'&&cue.sourceId===turn.actorId&&release;projectilePrepare(this.projectileFx(cue.sourceId),cue,launch,contactMs,!seen.has(key),own?release.at:undefined);seen.add(key);}
       if(turn.side==='hero'&&isProjectileSkill(turn.action))return;
     }
-    // AV03: archers and alchemists loose/throw their basic attack instead of the shared sword cut.
+    // Basic attacks with a weapon-specific cue replace the shared sword cut.
     const basics=basicCues(turn,this.encounter);
     if(basics.length){for(const cue of basics)basicPrepare(this.fx(turn.actorId),cue,launch,contactMs,release?.at??.55);return;}
     // Foe signature moves (AV06): painted gather + travel to the real recipient; a cancelled turn paints nothing.
@@ -959,7 +1008,7 @@ export class BattleScene extends Phaser.Scene {
       const projectileStatus=paintedProjectiles.length>0&&turn.side==='hero'&&event.sourceId===turn.actorId&&(event.type==='delay'||event.type==='pin');
       const earthStatus=paintedEarth.length>0&&event.sourceId===turn.actorId&&['interrupt','sigil','resist'].includes(event.type);
       const sealStatus=paintedSeal.length>0&&event.sourceId===turn.actorId&&['sigil','dispel'].includes(event.type);
-      if (ward || blade || parry || defense || projectile || projectileStatus || earth || earthStatus || alchemy || sealStatus) { /* painted layers above are the whole contact cue */ } else if (shield) {
+      if (execute || ward || blade || parry || defense || projectile || projectileStatus || earth || earthStatus || alchemy || sealStatus) { /* painted layers above are the whole contact cue */ } else if (shield) {
         const g = this.add.graphics().lineStyle(3,color,.95).fillStyle(color,.12);
         const points = [{x:p.x-22,y:p.y-24},{x:p.x+22,y:p.y-24},{x:p.x+19,y:p.y+8},{x:p.x,y:p.y+26},{x:p.x-19,y:p.y+8}];
         const polygon = points.map(point => new Phaser.Math.Vector2(point.x, point.y));
@@ -982,7 +1031,7 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     // The denser blade art must not cover the authoritative damage/outcome captions.
-    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || paintedBasic.length || paintedBoss.length || paintedEarth.length || paintedAlchemy.length || paintedSeal.length || paintedCommand.length || paintedFoe.length || !!paintedSong || !!paintedSd || turn.action === 'parry') {
+    if (paintedBlades.length || paintedDefense.length || paintedHealing.length || paintedProjectiles.length || paintedBasic.length || paintedBoss.length || paintedEarth.length || paintedAlchemy.length || paintedSeal.length || paintedCommand.length || paintedFoe.length || !!paintedSong || !!paintedSd || turn.action === 'parry' || turn.action === 'execute') {
       for (const child of [...(this.effects?.list ?? [])]) {
         if (child instanceof Phaser.GameObjects.Text) this.effects?.bringToTop(child);
       }

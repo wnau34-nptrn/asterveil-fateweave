@@ -785,11 +785,18 @@ test('losing every brought member fails the expedition: back to the lobby with h
 });
 
 test('the boss blocks the gate; after its defeat the goal completes the expedition', async ({ page }, info) => {
+  await page.addInitScript(() => performance.setResourceTimingBufferSize(2000));
   const [boss] = findTiles(map, 'boss');
   // The rift seal (3B) is broken: two of its objectives are done.
   const issues = await open(page, base({ position: { x: boss!.x, y: boss!.y + 1 }, bossDefeated: false, elitesDefeated: ['scar-golem'], eventsDone: ['scar-rift'] }));
+  const bossArt = page.locator('#world-view .boss-unit');
+  await expect(bossArt).toBeVisible();
+  await expect(bossArt).toHaveCSS('background-image', /\/assets\/art\/units\.webp\?v=[a-f0-9]+/);
   await page.locator('#move-up').click();
   await expect(page.locator('#encounter-kind')).toContainText('บอส');
+  await expect(page.locator('#start')).toBeEnabled();
+  await expect.poll(() => page.evaluate(() => [...new Set(performance.getEntriesByType('resource')
+    .map(entry => entry.name).filter(url => /\/assets\/art\/units\.webp(\?|$)/.test(url)))])).toHaveLength(1);
   expect((await saved(page)).battle?.kind).toBe('boss');
   await page.reload(); await page.locator('#continue').click(); await expect(page.locator('#encounter-title')).toContainText('ผู้คุมรอยแยก');
   await page.evaluate(k => { const s = JSON.parse(localStorage.getItem(k)!); s.run.battle = null; s.run.bossDefeated = true; localStorage.setItem(k, JSON.stringify(s)); }, key);
@@ -804,6 +811,24 @@ test('the boss blocks the gate; after its defeat the goal completes the expediti
   await expect(page.locator('#lobby-view')).toBeVisible(); await expect(page.locator('.lobby-result')).toContainText('สำเร็จการเดินทาง');
   expect(await saved(page)).toBeNull(); expect((await savedProfile(page)).completes).toBe(1);
   await reachable(page, '#lobby-depart'); await page.screenshot({ path: info.outputPath('expedition-complete.png') });
+  expect(issues).toEqual([]);
+});
+
+test('a landmark that changes art grows in place: its ground anchor never leaves the tile', async ({ page }) => {
+  const [boss] = findTiles(map, 'boss');
+  const issues = await open(page, base({ position: { x: boss!.x, y: boss!.y + 1 }, bossDefeated: true, elitesDefeated: ['scar-golem'], eventsDone: ['scar-rift'] }));
+  const pedestal = page.locator('#world-view .landmark[data-kind="boss"]');
+  await expect(pedestal).toBeVisible(); await page.emulateMedia({ reducedMotion: 'no-preference' });
+  // The gate-open replay used to swap the sprite's translate(-50%, -100%) for a bare scale, pushing the pedestal a tile
+  // right and two down for the whole animation before it snapped back.
+  const samples = await pedestal.evaluate(async el => {
+    const anchor = () => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.bottom]; };
+    const rest = anchor(); el.classList.add('lv-gate-open'); const playing = el.getAnimations().length; const during: number[][] = [];
+    for (let i = 0; i < 6; i++) { await new Promise(r => setTimeout(r, 80)); during.push(anchor()); }
+    return { rest, during, playing };
+  });
+  expect(samples.playing).toBe(1);
+  for (const [x, y] of samples.during) { expect(Math.abs(x! - samples.rest[0]!)).toBeLessThan(1); expect(Math.abs(y! - samples.rest[1]!)).toBeLessThan(1); }
   expect(issues).toEqual([]);
 });
 

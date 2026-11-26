@@ -7,6 +7,7 @@ import { BattleScene } from '../../../src/game/scenes/BattleScene';
 import { BattleUI } from '../../../src/ui/battle-ui';
 import { fitViewport } from '../../../src/platform/viewport';
 import { BLADE_ATLAS, bladeCues } from '../../../src/game/visuals/blade-fx';
+import { EXECUTE_ATLAS } from '../../../src/game/visuals/exec-ward-fx';
 import { beginBattle, currentHeroId, resolveCommand, targetOptions } from '../../../src/core/battle/engine';
 import type { ActionId, Command, EncounterDefinition, TurnStage } from '../../../src/core/battle/types';
 import '../../../src/ui/styles.css';
@@ -20,7 +21,8 @@ import '../../../src/ui/components.css';
 
 const params = new URLSearchParams(location.search), skill = (params.get('skill') ?? 'attack') as ActionId;
 const role = ['pierce', 'halt'].includes(skill) ? 'Spear' : ['ambush', 'backstab', 'disarm'].includes(skill) ? 'Scout' : 'Duelist';
-const actor = [...heroes, ...mercenaries].find(h => h.role === role)!;
+const roster = [...heroes, ...mercenaries];
+const actor = roster.find(h => h.id === params.get('hero')) ?? roster.find(h => h.role === role)!;
 const data: EncounterDefinition = { ...structuredClone(veilSiege), heroes: [{ ...actor, speed: 200, maxHp: 500, actions: [...new Set<ActionId>(['attack', skill, 'ward', ...(skill === 'disarm' ? ['knives' as const] : [])])] }, ...heroes.filter(h => h.id !== actor.id).slice(0, 3).map(h => ({ ...h, speed: 50 }))],
   enemies: veilSiege.enemies.map(e => ({ ...e, speed: 100, maxHp: 500 })),
   intents: veilSiege.enemies.map(e => ({ sourceId: e.id, targetSlot: skill === 'backstab' ? 1 : 0, name: 'Raking Slash', damage: 12, kind: 'physical' as const })) };
@@ -67,12 +69,12 @@ function stage(outcome: string): TurnStage {
   }
   return outcome === 'hit' && skill !== 'parry' ? result.turns[0]! : result.turns.find(t => t.side === 'enemy' && (outcome !== 'guarded' || t.actorId === 'f1') && (skill !== 'parry' || t.events.some(e => e.type === 'counter')))!;
 }
-function painted() {
+function painted(atlas = BLADE_ATLAS) {
   const images: { frame: string; alpha: number; width: number; height: number; rotation: number; x: number; y: number }[] = [];
   const visit = (items: Phaser.GameObjects.GameObject[]) => {
     for (const item of items) {
       if (item instanceof Phaser.GameObjects.Container) visit(item.list);
-      if (item instanceof Phaser.GameObjects.Image && item.texture.key === BLADE_ATLAS) images.push({ frame: item.frame.name, alpha: item.alpha, width: item.displayWidth, height: item.displayHeight, rotation: item.rotation, x: item.x, y: item.y });
+      if (item instanceof Phaser.GameObjects.Image && item.texture.key === atlas) images.push({ frame: item.frame.name, alpha: item.alpha, width: item.displayWidth, height: item.displayHeight, rotation: item.rotation, x: item.x, y: item.y });
     }
   };
   visit(scene.children.getChildren()); return images;
@@ -82,6 +84,16 @@ const preludeHp = (() => { if (!prelude.length) return null; let st = beginBattl
 const qa = {
   before: () => preludeHp,
   impacts,
+  // Incoming hero misses are not available in this encounter. Inject one
+  // presentation-only event to exercise the Execute renderer under OS reduce.
+  renderReducedExecuteContact: (outcome: 'hit' | 'dodge') => {
+    const turn = stage('hit');
+    scene.stopEffects();
+    scene.configureEffects({ speed: 'normal', intensity: 'standard' }, true);
+    scene.play(outcome === 'hit' ? turn : { ...turn, after: turn.before, state: turn.before!,
+      events: [{ type: 'dodge', sourceId: turn.actorId, targetId: turn.targetId, amount: 0, text: '' }] }, 550);
+    return painted(EXECUTE_ATLAS).map(image => image.frame);
+  },
   renderOutcome: (outcome: string) => {
     const turn = stage(outcome), cue = bladeCues(turn)[0];
     const slot = scene.actorPanels.get(cue?.event.targetId ?? '');

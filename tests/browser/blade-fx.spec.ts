@@ -1,11 +1,60 @@
 import { test, expect } from '@playwright/test';
 import { stageTiming } from '../../src/ui/battle-playback';
+import { encounterById } from '../../src/content/encounters/catalog';
+import { chapterOne } from '../../src/content/world/chapter1';
+import { heroCatalog } from '../../src/core/world/world';
 
 // Reworked backstab/disarm are covered by vfx-rework.spec.ts; retain legacy art assertions for these skills.
 const skills = ['attack', 'finisher', 'lunge', 'sweep', 'ambush', 'parry', 'pierce', 'halt'];
 // This isolated source fixture is not a shipped game/debug entry. CI runs it against Vite
 // before the separate production Pages suite, which covers the actual shipped application.
 test.skip(process.env.PLAYWRIGHT_PAGES === 'true', 'source fixture has its own dev-server CI gate');
+test.describe('roster contact at 390px', () => {
+  test.use({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'no-preference' });
+  for (const hero of heroCatalog(encounterById, chapterOne)) test(`roster contact · ${hero.name}`, async ({ page }, info) => {
+    await page.clock.install({ time: new Date('2026-11-24T00:00:00Z') });
+    await page.goto(`tests/browser/fixtures/blade.html?hero=${hero.id}`);
+    await expect(page.locator('#start')).toBeEnabled({ timeout: 15_000 });
+    await page.locator('#start').tap();
+    await page.clock.pauseAt(new Date('2026-11-24T01:00:00Z'));
+    const turn = await page.evaluate(() => window.bladeQA.stage('hit'));
+    const target = page.locator('[data-field-unit=f1] .field-hp-value');
+    // A second recipe can play on the same cue, e.g. Kael gains Chi with the impact.
+    await page.evaluate(() => {
+      const sounds: string[] = [];
+      new MutationObserver(records => {
+        for (const { oldValue } of records) if (oldValue) sounds.push(oldValue);
+        const latest = document.documentElement.dataset.sfx;
+        if (latest) sounds.push(latest);
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-sfx'], attributeOldValue: true });
+      Object.assign(window, { rosterSounds: sounds });
+    });
+    await page.locator('#action-attack').tap();
+    await page.locator('#target-f1').tap();
+    const saved = await page.evaluate(() => localStorage.getItem('blade-committed'));
+    expect(saved).toBeTruthy();
+    const { contact, end } = stageTiming(turn, false);
+    await page.clock.runFor(contact - 1);
+    await expect(target).toHaveText('500/500');
+    await page.clock.runFor(51);
+    await expect(target).toHaveText(`${turn.after!.enemies.find(e => e.id === 'f1')!.hp}/500`);
+    const sound = ['Mage', 'Priest', 'Hexer', 'Seer'].includes(hero.role) ? 'zap'
+      : ['Bard', 'Dancer'].includes(hero.role) ? 'rhythmHit'
+      : ['Warden', 'Saint', 'Martial'].includes(hero.role) ? 'bluntHit' : 'hit';
+    expect(await page.evaluate(() => (window as Window & { rosterSounds?: string[] }).rosterSounds)).toContain(sound);
+    await page.screenshot({ path: info.outputPath('impact.png'), scale: 'css' });
+    await page.clock.runFor(end);
+    expect(await page.evaluate(() => localStorage.getItem('blade-committed'))).toBe(saved);
+  });
+});
+test('reduced-motion Execute dodge does not paint a contact star', async ({ page }) => {
+  await page.goto('tests/browser/fixtures/blade.html?skill=execute');
+  await expect(page.locator('#start')).toBeEnabled();
+  await page.locator('#start').click();
+  expect(await page.evaluate(() => window.bladeQA.renderReducedExecuteContact('hit'))).toContain('static_impact');
+  const frames = await page.evaluate(() => window.bladeQA.renderReducedExecuteContact('dodge'));
+  expect(frames).toEqual([]);
+});
 for (const skill of skills) test(`blade ${skill} resolved contact and cleanup at 390px`, async ({ browser }, info) => {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'no-preference' });
   const page = await ctx.newPage(), errors: string[] = []; page.on('pageerror', e => errors.push(e.message));

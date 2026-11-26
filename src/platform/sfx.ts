@@ -5,7 +5,7 @@ import type { StoragePort } from '../core/save/expedition-save';
 // under the same name. Sounds start only after the first user gesture and never affect game state.
 export type SfxName =
   | 'click' | 'open' | 'close' | 'step' | 'bump' | 'encounter' | 'chest' | 'chestRare' | 'rest' | 'rune' | 'runeReset' | 'lever' | 'push' | 'door' | 'secret' | 'herb'
-  | 'swing' | 'charge' | 'hit' | 'zap' | 'crit' | 'guard' | 'barrier' | 'heal' | 'buff' | 'debuff' | 'miss' | 'down' | 'cancel' | 'victory' | 'defeat'
+  | 'swing' | 'charge' | 'arrowRelease' | 'flaskRelease' | 'orbRelease' | 'rhythmLead' | 'hit' | 'bluntHit' | 'rhythmHit' | 'zap' | 'crit' | 'guard' | 'barrier' | 'steelBlock' | 'heal' | 'buff' | 'debuff' | 'miss' | 'down' | 'cancel' | 'victory' | 'defeat'
   | 'coin' | 'upgrade' | 'anvil' | 'clang' | 'claim' | 'potion';
 const prefKey = 'asterveil.fateweave.sfx.v1';
 export interface SfxPrefs { muted: boolean; volume: number }
@@ -16,6 +16,10 @@ interface Noise { at?: number; dur: number; freq: number; q?: number; gain?: num
 const recipes: Record<SfxName, { tones?: Tone[]; noise?: Noise[] }> = {
   swing: { noise: [{ dur: .12, freq: 800, to: 2400, q: .6, gain: .08, type: 'bandpass' }] },
   charge: { tones: [{ type: 'sine', freq: 330, to: 880, dur: .18, gain: .045, attack: .04 }] },
+  arrowRelease: { noise: [{ dur: .06, freq: 2900, to: 1300, q: 1.5, gain: .08, type: 'bandpass' }] },
+  flaskRelease: { tones: [{ type: 'triangle', freq: 620, to: 410, dur: .065, gain: .06 }] },
+  orbRelease: { tones: [{ type: 'sine', freq: 480, to: 860, dur: .07, gain: .07 }] },
+  rhythmLead: { tones: [{ type: 'triangle', freq: 494, dur: .085, gain: .07 }] },
   click: { tones: [{ type: 'triangle', freq: 1400, dur: .04, gain: .12 }] },
   open: { tones: [{ type: 'sine', freq: 520, to: 780, dur: .12, gain: .14 }] },
   close: { tones: [{ type: 'sine', freq: 700, to: 440, dur: .1, gain: .12 }] },
@@ -34,10 +38,14 @@ const recipes: Record<SfxName, { tones?: Tone[]; noise?: Noise[] }> = {
   secret: { tones: [{ type: 'sine', freq: 523, dur: .12, gain: .1 }, { type: 'sine', freq: 659, at: .1, dur: .12, gain: .1 }, { type: 'sine', freq: 1047, at: .2, dur: .3, gain: .1 }] },
   herb: { tones: [{ type: 'sine', freq: 1175, dur: .12, gain: .08 }, { type: 'sine', freq: 1568, at: .08, dur: .2, gain: .08 }] },
   hit: { noise: [{ dur: .12, freq: 1200, q: .9, gain: .35, type: 'bandpass' }], tones: [{ type: 'sine', freq: 140, to: 60, dur: .12, gain: .2 }] },
+  bluntHit: { noise: [{ dur: .075, freq: 790, q: .85, gain: .22, type: 'bandpass' }], tones: [{ freq: 165, to: 75, dur: .12, gain: .22, attack: .005 }] },
+  rhythmHit: { tones: [{ type: 'triangle', freq: 659, dur: .11, gain: .11 }, { type: 'sine', freq: 988, dur: .09, gain: .055 }] },
   zap: { tones: [{ type: 'sawtooth', freq: 1400, to: 300, dur: .22, gain: .09 }, { type: 'sine', freq: 2200, to: 600, dur: .2, gain: .05 }] },
   crit: { noise: [{ dur: .16, freq: 1800, q: 1, gain: .35, type: 'bandpass' }], tones: [{ type: 'square', freq: 1320, dur: .08, gain: .06 }, { type: 'sine', freq: 160, to: 50, dur: .18, gain: .22 }] },
   guard: { tones: [{ type: 'square', freq: 620, dur: .14, gain: .06 }, { type: 'square', freq: 930, dur: .14, gain: .05 }], noise: [{ dur: .05, freq: 3000, q: 2, gain: .12, type: 'bandpass' }] },
   barrier: { tones: [{ type: 'sine', freq: 440, to: 880, dur: .3, gain: .1 }, { type: 'sine', freq: 660, to: 1320, at: .05, dur: .3, gain: .06 }] },
+  steelBlock: { tones: [{ type: 'triangle', freq: 980, to: 770, dur: .085, gain: .11, attack: .004 }],
+    noise: [{ dur: .05, freq: 3100, q: 2, gain: .13, type: 'bandpass' }] },
   heal: { tones: [{ type: 'sine', freq: 523, dur: .15, gain: .1 }, { type: 'sine', freq: 659, at: .1, dur: .15, gain: .1 }, { type: 'sine', freq: 784, at: .2, dur: .3, gain: .1 }] },
   buff: { tones: [{ type: 'triangle', freq: 392, to: 784, dur: .25, gain: .1 }] },
   debuff: { tones: [{ type: 'triangle', freq: 600, to: 250, dur: .25, gain: .1 }] },

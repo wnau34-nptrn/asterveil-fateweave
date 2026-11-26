@@ -30,6 +30,12 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 ## Open items
 
 - Map 5 design confirmed (“ทำตามที่คุณแนะนำ”). The mine unlocks after the lake on `codex/map5-crystal-mine-design`. Save v69, the Crystal Giant and exploration controls use the real campaign. Expanded balance validation and dedicated art remain. [Mine validation](docs/validation/map5-mine/README_TH.md).
+- 2026-11-25: boss charge holds sit on the body. Bosses wear a silhouette aura in their own colour: light all battle, stronger while charging. Boss crowns sit above the rendered figure. The owner said “นำเข้าเกมได้เลย”. Mobile frame rate is not measured yet. [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
+- Game Feel [Draft PR #353](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/353): เสียงและภาพโจมตีตามอาวุธครบ 15 ตัวและตัวละครเซฟเก่า 2 ตัว. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
+- Game Feel #352 รวมแล้ว (`3b746ac`): จังหวะเสียง Duelist/Execute และเสียงโล่รับเต็ม. [ผลตรวจ](docs/validation/steel-contact-2026-11-24/README_TH.md).
+
+- Game Feel: shared atlas merged in #351 (`411b9e1`), saving 1.89 MiB on cold Chromium runs. [ผลวัด atlas](docs/validation/shared-units-atlas-2026-11-24/README_TH.md).
+- Mobile performance still needs on-device measurements for walking, fog, and battle entry. [ผลตรวจท่าคืนตัว](docs/validation/recovery-continuity-2026-11-24/README_TH.md).
 
 - Lake sweep/contract pay map 3's values until a P04 economy pass; P04-05/06 numbers.
 - Map 3 Briar Lord first-try gate; no real Safari/iPhone/Android or human usability validation. Pending intake #262, #169.

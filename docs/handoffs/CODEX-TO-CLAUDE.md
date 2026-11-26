@@ -21,6 +21,47 @@
 - Drafted the three mine zones, lanterns, minecart and light puzzles, 2-of-3 seal, Brann/Kael story and Crystal Giant encounter for owner review. [Design, simulation targets and 390px review plan](../design/MAP5_CRYSTAL_MINE_DRAFT_TH.md).
 - Branch base `827756f` includes #336 at `24a1f3c`. Reviewed the draft and checked Markdown whitespace with Git.
 - Open owner decisions: overseer bypass, puzzle and recruit flow, and armour and shard behaviour. Simulation, art and implementation follow that review.
+## 2026-11-25 — แท่นบนแผนที่ไม่กระโดดตอนเปลี่ยนภาพ (Claude · `claude/friendly-heisenberg-xapns5`)
+
+- เจ้าของรายงานว่าหลังชนะบอส แท่นวาร์ปสีม่วงขยับออกแล้วเด้งกลับที่เดิม สาเหตุคือ keyframe `gate-open` ใช้ `transform: scale()` ซึ่งทับ `translate(-50%, -100%)` ของ `.sprite` ตลอด 640ms (เลื่อนขวา 1 ช่อง ลง 2 ช่อง แล้วกลับตอนจบ)
+- แก้ให้ keyframe ใช้ property `scale` และให้ `.landmark.lv-gate-open` ใช้ `transform-origin: 0 0` แท่นจึงขยายจากจุดตั้งบนพื้น ใช้กับ landmark ทุกชนิด (ประตูและแท่นบอส) ไม่แก้กฎ เซฟ หรือเวลาเล่น
+- เพิ่ม Playwright `a landmark that changes art grows in place` ใน `tests/browser/world.spec.ts` (ล้มกับโค้ดเดิม เลื่อน 74px; ผ่านหลังแก้) typecheck, lint, Vitest world 69 กรณีผ่าน
+
+## 2026-11-25 — ตำแหน่งชาร์จ, Aura และมงกุฎของบอส (Claude · `claude/lucid-mendel-11prf7`)
+
+- เจ้าของรายงานว่าสกิลของเจ้าป่าหนามไม่ตรงตำแหน่งที่ยืน ตอนนี้ hold ของบอสชุดเก่าอยู่บนตัวแล้ว และ hold ของอสรพิษเงาใช้เฟรมที่ถูกต้อง (เดิมขึ้นกรงเล็บของมอร์เวน)
+- Aura ของบอส (`src/game/visuals/boss-aura.ts`) มี Aura เบาตลอดศึก และแรงขึ้นตอนชาร์จ ทำจากเงาตัวบอสในสีของบอสเอง วูบวาบลอยขึ้นตามรูปทรง วงเวทบนพื้นและละอองแสงไม่ลงต่ำกว่าเท้า คราก์มอร์และวัลดรัคใช้สีม่วง ความแรงเท่าบอสตัวอื่น
+- ลองใช้ Glow filter แล้ว แต่ทำให้ software Chromium ช้าราว 9 เท่า จนชุด battle-hud ล้ม 3 กรณี จึงเปลี่ยนเป็นเงาตัวบอสแบบ fill tint ที่ซ้อนอยู่หลังตัว
+- มงกุฎบอสวางเหนือภาพตัวจริง (`BattleScene.crownSpot`) จากเดิมที่จมในปีกวัลดรัคและหัวมอร์เวน และเยื้องจากหัวภูตธารา
+- เจ้าของพูดว่า “นำเข้าเกมได้เลย” (2026-11-25) งานนี้แก้เฉพาะภาพ ไม่แก้กฎ เซฟ หรือเวลาเล่น ผลตรวจอยู่ที่ [ผลตรวจ](../validation/boss-hold-placement-2026-11-25/README_TH.md)
+
+## 2026-11-24 — Combat audio and hit effects across the player roster
+
+- Draft PR #353 on `3b746ac`. Covers 15 recruitable heroes plus Odran and Isolde in legacy saves. The owner requested full roster coverage.
+- Typecheck, lint, Pages build, 54 focused Vitest cases, and 42 dev / 5 production Playwright cases passed.
+- Basic attacks route through existing effect hooks by weapon and role. Skill audio follows the existing pose, release timing and result events. Save and turn resolution are unchanged.
+- See the [validation report](../validation/roster-contact-2026-11-24/README_TH.md) for test scope and capture limits.
+
+## 2026-11-24 — จังหวะภาพและเสียงปะทะ (Codex · `codex/fateweave-steel-contact`)
+
+- เจ้าของอนุมัติให้ทำแพตช์และคลิปเทียบ. สาขาฐาน `b39ed8d`. รอตรวจคลิปใน Draft PR.
+- วางเสียงเหวี่ยง Duelist/Execute ใกล้ contact เดิม. แยกเสียงรับโล่เต็มและลดภาพ Execute ซ้อน/ประกายโดนเมื่อหลบ. เวลาเทิร์นและเซฟใช้ระบบเดิม.
+- Typecheck, lint, Pages build, Playwright 24 กรณีผ่าน. Unit 2270 ผ่าน, 24 ข้าม, boss-balance ผ่านเมื่อรันแยก.
+- [ผลตรวจและข้อจำกัด](../validation/steel-contact-2026-11-24/README_TH.md). การฟังบนมือถือจริงยังไม่ยืนยัน.
+
+## 2026-11-24 — Game Feel: ท่าคืนตัวหลัง contact
+
+- สาขา `codex/fateweave-recovery-continuity` · PR #350. เจ้าของอนุมัติให้นำเข้าเกมและรวมฐานล่าสุดที่มี #351 ก่อนตรวจ CI.
+- ต่อท่าคืนตัวจาก transform ที่วาดล่าสุด ลดจังหวะกระโดดหลัง impact เมื่อ cue มาก่อนเฟรมถัดไป. เวลา cue และข้อมูล authoritative ใช้เส้นทางเดิม.
+- Typecheck, lint, production Pages build, unit เจาะจง 28 กรณี และ Chromium 21 กรณีผ่าน. ชุด unit รวมผ่าน 2269 กรณี ข้าม 24 กรณี และรันทวน 2 กรณีที่ติด fixture/timeout แล้วผ่าน.
+- ดู [ผลวัดและข้อจำกัด](../validation/recovery-continuity-2026-11-24/README_TH.md). ไม่มีการอนุมัติภาพใหม่. งานถัดไปตรวจความหน่วงบนมือถือจริง.
+
+## 2026-11-24 — Atlas บอสใช้ URL เดียว (Codex · `codex/fateweave-shared-units-atlas`)
+
+- เจ้าของอนุมัติให้ทำ PR แยก. ภาพบนแท่นบอสใช้ `unitsUrl('units')` เหมือน Phaser. รวม #351 ที่ `411b9e1`.
+- Chromium 390px: cold download 2 → 1 ประหยัด 1.89 MiB ทุกรอบจากสามคู่. Warm download 0 ทั้งก่อนและหลัง.
+- Typecheck, lint, production Pages build, Playwright เดิน/เข้าศึก และการเก็บภาพ/คลิป 390px กับ desktop ผ่าน. Unit 2269 ผ่าน 24 ข้าม และเทสต์ boss-balance ที่ชน timeout ผ่านเมื่อรันแยก.
+- [ผลวัดและข้อจำกัด](../validation/shared-units-atlas-2026-11-24/README_TH.md)
 
 ## 2026-11-23 — Full-slot equipment art (Codex · `codex/full-slot-equipment-art`)
 - Owner approved integrating mockup v5. Equipped art uses the full slot with an opaque rarity-tinted background. Empty slots show 32 px icons and faint slot labels. Equipped slots retain their accessible names.

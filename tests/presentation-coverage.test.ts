@@ -64,7 +64,7 @@ describe('W8 presentation coverage', () => {
     }
   });
   it('no move falls back to an unexplained route', () => {
-    // Code-drawn on purpose: the basic arrow/flask (AV03) and Shadow Knife's thrown energy blade. The World Boss trio's energy
+    // Code-drawn on purpose: the weapon-specific basic attacks and Shadow Knife's thrown energy blade. The World Boss trio's energy
     // moves and phases are painted since ART-VFX-WB-TRIO-001 (P11-05 step 5); no code-drawn exception remains for them.
     for (const r of c.rows.filter(r => r.vfx.kind === 'code')) expect(r.move === 'attack' || r.move === 'Shadow Knife' || mineStandIn(r), `${r.identity} ${r.move}`).toBe(true);
     for (const r of c.rows.filter(r => ['foe_kragmor', 'foe_valdrakk', 'foe_morvane'].includes(r.identity) && r.vfx.kind !== 'shared')) expect(r.vfx.module, `${r.identity} ${r.move}`).toBe('boss-signature-fx');

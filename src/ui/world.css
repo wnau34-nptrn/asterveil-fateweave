@@ -58,8 +58,10 @@ h1, h2, h3, .primary, .secondary { font-family: var(--font-heading); font-weight
 .sprite { position: absolute; left: calc((var(--x) + .5) * var(--t)); top: calc((var(--y) + 1) * var(--t)); transform: translate(-50%, -100%); pointer-events: none; }
 .decor { width: var(--t); height: var(--t); background: url('/assets/world/decor.webp?v=e9278e34') calc(var(--fx) * var(--t) * -1) calc(var(--fy) * var(--t) * -1) / calc(var(--t) * 6) calc(var(--t) * 6) no-repeat; }
 .landmark { width: calc(var(--t) * 2); height: calc(var(--t) * 2); background: center bottom / 100% 100% no-repeat; }
+/* gate-open animates `scale`, which applies before the sprite translate; origin 0 0 is the ground anchor, so the landmark grows in place. */
+.landmark.lv-gate-open { transform-origin: 0 0; }
 .boss-unit { display: none; position: absolute; left: 50%; bottom: 22%; width: calc(var(--t) * 1.7); height: calc(var(--t) * 1.7); transform: translateX(-50%);
-  background: url('/assets/art/units.webp') 100% 100% / 200% 300% no-repeat; filter: drop-shadow(0 6px 8px #08121fb0); }
+  background: 100% 100% / 200% 300% no-repeat; filter: drop-shadow(0 6px 8px #08121fb0); }
 .landmark.has-boss .boss-unit { display: block; }
 .party-token { position: absolute; left: calc((var(--x) + .5) * var(--t)); top: calc((var(--y) + 1) * var(--t)); width: calc(var(--t) * 1.3); height: calc(var(--t) * 1.3);
   transform: translate(-50%, -92%); pointer-events: none;
