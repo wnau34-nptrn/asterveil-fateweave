@@ -427,8 +427,8 @@ const oreGolem = { ...S.stoneCrab, name: 'Ore Golem', displayName: 'โกเล
   moves: [{ name: 'Ore Fist', damage: 10, kind: 'physical', slot: 0 }] } as const;
 const mineWorker = { ...S.vargothGuard, name: 'Possessed Worker', displayName: 'คนงานถูกสิง', hp: 35, large: false,
   moves: [{ name: 'Pick Swing', damage: 6, kind: 'physical', slot: 0 }] } as const;
-const mineShard = { ...S.shardCrawler, name: 'Crystal Fragment', displayName: 'ผลึกย่อย', art: 'foe_shard_crawler', hp: 40,
-  moves: [{ name: 'Shard Prick', damage: 13, kind: 'physical', slot: 1 }] } as const;
+const mineShard = { ...S.shardCrawler, name: 'Crystal Fragment', displayName: 'ผลึกย่อย', art: 'foe_shard_crawler', hp: 29,
+  moves: [{ name: 'Shard Prick', damage: 22, kind: 'physical', slot: 1 }] } as const;
 
 export const mineYardEncounter: EncounterDefinition = { ...veilSiege, id: 'mine-yard-patrol', version: 1, level: 13, name: 'กองเฝ้าลานคนงาน',
   ...foes(13, [['f1', oreGolem], ['b1', mineBat], ['f2', mineWorker, { surrenderOre: 4 }]]) };
@@ -450,17 +450,17 @@ export const eliteCrystalEater: EncounterDefinition = {
 };
 const giantFragments = foes(16, [['f2', mineShard, { reserve: true }], ['f3', mineShard, { reserve: true }]]);
 export const crystalGiant: EncounterDefinition = {
-  ...veilSiege, heroes: fiveHeroes, id: 'crystal-giant', version: 1, level: 16, name: 'ศึกยักษ์ผลึก',
+  ...veilSiege, heroes: fiveHeroes, id: 'crystal-giant', version: 2, level: 16, name: 'ศึกยักษ์ผลึก',
   phases: [{ sourceId: 'f1', below: 50, summon: ['f2', 'f3'], immediate: true, name: 'Crystal Split' }],
   enemies: [
     { id: 'f1', row: 'front', boss: true, large: true, speed: 86, name: 'Crystal Giant', displayName: 'ยักษ์ผลึก',
-      maxHp: 826, color: 0x9c82d5, art: 'foe_golem', crystalArmor: { name: 'Crystal Armor', reflect: 35, cap: 15, hits: 3, turns: 2 } },
+      maxHp: 580, color: 0x9c82d5, art: 'foe_golem', crystalArmor: { name: 'Crystal Armor', reflect: 35, cap: 15, hits: 3, turns: 2 } },
     ...giantFragments.enemies,
   ],
   intents: [
-    { sourceId: 'f1', targetSlot: 0, name: 'Crystal Fist', damage: 91, kind: 'physical' },
-    { sourceId: 'f1', targetSlot: 3, name: 'Shard Beam', damage: 69, kind: 'energy' },
-    { sourceId: 'f1', targetSlot: 0, name: 'Crystal Collapse', damage: 63, kind: 'energy', all: true, unstoppable: true, crystalCollapse: true },
+    { sourceId: 'f1', targetSlot: 0, name: 'Crystal Fist', damage: 225, kind: 'physical' },
+    { sourceId: 'f1', targetSlot: 3, name: 'Shard Beam', damage: 205, kind: 'energy' },
+    { sourceId: 'f1', targetSlot: 0, name: 'Crystal Collapse', damage: 68, kind: 'energy', all: true, unstoppable: true, crystalCollapse: true },
     ...giantFragments.intents,
   ],
 };

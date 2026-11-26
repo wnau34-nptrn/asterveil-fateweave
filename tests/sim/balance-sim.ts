@@ -29,7 +29,7 @@ export type Policy = 'rush' | 'explorer';
 // the advice on about 70% of turns and otherwise attacks, or blind basic attacks on the first valid target (a lower bound).
 export type Style = 'advisor' | 'casual' | 'attack';
 // `low`: the party's lowest HP% at any point of the battle (summed over battles fought).
-export interface BattleStat { fought: number; won: number; hpAfter: number; low: number }
+export interface BattleStat { fought: number; won: number; hpAfter: number; low: number; rounds?: number }
 export interface ExpeditionReport {
   index: number; outcome: RunOutcome; steps: number; wins: number; defeats: number; lowestHp: number;
   battles: Partial<Record<string, BattleStat>>;
@@ -206,7 +206,7 @@ function fight(s: ExpeditionState, report: ExpeditionReport, style: Style): { st
   const { bs, low } = playOut(s, style); const before = hpPercent(s);
   const r = finishBattle(recordBattle(s, map, lookup, bs.commands), map, lookup);
   const st = (report.battles[label] ??= { fought: 0, won: 0, hpAfter: 0, low: 0 }); st.fought++; st.low += low;
-  if (r.event.type === 'victory') { st.won++; st.hpAfter += hpPercent(r.state); report.lowestHp = Math.min(report.lowestHp, hpPercent(r.state)); }
+  if (r.event.type === 'victory') { st.won++; st.hpAfter += hpPercent(r.state); st.rounds = (st.rounds ?? 0) + bs.round; report.lowestHp = Math.min(report.lowestHp, hpPercent(r.state)); }
   else report.lowestHp = 0;
   hooks.battle?.(r.state, label, r.event.type === 'victory', before, map.id, company);
   return { state: r.state, wiped: r.event.type === 'defeat' && !!r.event.wiped };
@@ -445,12 +445,14 @@ export interface CampaignReport { seed: number; policy: Policy; style: Style; ex
 // `starters`: the two mercenaries the new company recruits after the prologue (default: an offer chosen by the seed).
 // `maps` (map 4, 2026-11-22): the maps played in order; the A10 campaign and its gate keep maps 1–3 (`CAMPAIGN_MAPS`).
 export const CAMPAIGN_MAPS = MAPS.filter(m => m.chapter <= 3);
-export function simulateCampaign(seed: number, policy: Policy, style: Style = 'advisor', replays = 3, hard = 2, limit = 16, starters?: readonly string[], maps: readonly MapDefinition[] = CAMPAIGN_MAPS): CampaignReport {
+// `resume` continues a campaign from a stored report (its profile and expeditions), so a tuning pass can replay only
+// the last map: expeditions before it do not depend on that map's numbers.
+export function simulateCampaign(seed: number, policy: Policy, style: Style = 'advisor', replays = 3, hard = 2, limit = 16, starters?: readonly string[], maps: readonly MapDefinition[] = CAMPAIGN_MAPS, resume?: CampaignReport): CampaignReport {
   map = maps[0]!; checks = true; company = `${seed}:${policy}:${style}`;
-  let p = createCommander(newProfile(map, seed, map.firstCompany), { name: 'จำลอง', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }).profile;
-  const out: CampaignExpedition[] = []; const last = maps[maps.length - 1]!;
+  let p = resume ? structuredClone(resume.profile) : createCommander(newProfile(map, seed, map.firstCompany), { name: 'จำลอง', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }).profile;
+  const out: CampaignExpedition[] = resume ? [...resume.expeditions] : []; const last = maps[maps.length - 1]!;
   let normalAfter = 0, hardRuns = 0;
-  for (let index = 1; index <= limit; index++) {
+  for (let index = out.length + 1; index <= limit; index++) {
     const next = maps.find(m => !p.cleared.includes(m.id)); const isHard = !next && normalAfter >= replays;
     if (!next && normalAfter >= replays && hardRuns >= hard) break;
     map = next ?? last;

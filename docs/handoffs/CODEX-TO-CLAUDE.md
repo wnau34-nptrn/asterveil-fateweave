@@ -1,3 +1,10 @@
+## 2026-11-26 — จูนยักษ์ผลึกด้วยการจำลอง 48 seed (Claude · `claude/friendly-heisenberg-xapns5`)
+
+- รวมสาขาเกมเข้างานเหมืองของ Codex (ชนกันที่ `world-ui.ts` จุดเดียว) เจ้าของสั่ง “ทำตามที่คุณแนะนำ เริ่มข้อ 1” คือขยายการจำลองและจูนก่อนเปิด PR
+- 48 seed ค่าเดิม: casual สายรีบผ่าน 96% ศึกยาว 10–12 รอบ ค่าใหม่ HP 580, Fist 225, Beam 205, ถล่ม 68, ผลึกย่อย 59/45 (`crystal-giant` v2): casual สายรีบ 78% สายสำรวจ 99% advisor ≥99% โจมตีปกติชนะ ≤22% ชุดทีม 9–10/10 ตัวเลขยังเป็นร่าง
+- เพิ่ม `tests/mine-tune.test.ts` (ข้ามโดยค่าเริ่มต้น) และ `resume` ใน `simulateCampaign` เพื่อเล่นเฉพาะเหมืองซ้ำจากแคมเปญที่เก็บไว้ ผลตรงกับการรันเต็ม
+- Vitest 2306 ผ่าน, typecheck, lint, presentation coverage ผ่าน ยังไม่เปิด PR และยังไม่มีคลิป 390px ให้เจ้าของดู [ผลตรวจ](../validation/map5-mine/README_TH.md)
+
 ## 2026-11-23 — Crystal Mine campaign, save and boss (Codex · `codex/map5-crystal-mine-design`)
 - Owner authorized Codex to take over Claude's work. Activated Map 5 after the lake with save v69, the Crystal Giant, temporary presentation and mine interactions. v68 lake and an active v69 boss both resume in tests.
 - Vitest 2,303 passed and 24 skipped. Lint, typecheck, build and presentation audits passed. Chromium mine and lake passed 8/8 at 390px. [Mine validation and reports](../validation/map5-mine/README_TH.md).

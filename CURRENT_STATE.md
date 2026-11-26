@@ -1,4 +1,4 @@
-# Current state — updated 2026-11-23 (Map 5 rules and validation)
+# Current state — updated 2026-11-26 (Map 5 balance at 48 seeds)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
@@ -29,7 +29,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Map 5 design confirmed (“ทำตามที่คุณแนะนำ”). The mine unlocks after the lake on `codex/map5-crystal-mine-design`. Save v69, the Crystal Giant and exploration controls use the real campaign. Expanded balance validation and dedicated art remain. [Mine validation](docs/validation/map5-mine/README_TH.md).
+- Map 5 design confirmed (“ทำตามที่คุณแนะนำ”). The mine unlocks after the lake; save v69, the Crystal Giant and exploration controls use the real campaign. Work branch `claude/friendly-heisenberg-xapns5` (Codex's `codex/map5-crystal-mine-design` merged with the game branch), not yet in the game. 2026-11-26 balance at 48 seeds: giant HP 580, Fist 225, Beam 205, Collapse 68, fragments 59/45 (`crystal-giant` v2); casual rush first clear 78%, basic-only boss wins ≤22%, every bench party 9–10/10. Dedicated art and the side events remain. [Mine validation](docs/validation/map5-mine/README_TH.md).
 - 2026-11-25: boss charge holds sit on the body. Bosses wear a silhouette aura in their own colour: light all battle, stronger while charging. Boss crowns sit above the rendered figure. The owner said “นำเข้าเกมได้เลย”. Mobile frame rate is not measured yet. [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
 - Game Feel [Draft PR #353](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/353): เสียงและภาพโจมตีตามอาวุธครบ 15 ตัวและตัวละครเซฟเก่า 2 ตัว. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
 - Game Feel #352 รวมแล้ว (`3b746ac`): จังหวะเสียง Duelist/Execute และเสียงโล่รับเต็ม. [ผลตรวจ](docs/validation/steel-contact-2026-11-24/README_TH.md).
@@ -42,4 +42,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-Review the [Map 5 validation](docs/validation/map5-mine/README_TH.md) and expand balance sampling before locking numbers. Follow OD-60 with 390px silhouette and motion review using the Crystal Giant, stone golem and Water Spirit.
+Open the Map 5 PR from `claude/friendly-heisenberg-xapns5` into `feature/fateweave-initial-prototype` (save v69, tuned Crystal Giant). Capture 390px clips of dark → lantern → portable light, the cart and beam puzzles, the 2/3 seal and the Crystal Giant (armour, collapse, fragments) with five heroes for the owner, then merge after quality + browser pass. Read [the Map 5 validation](docs/validation/map5-mine/README_TH.md) first.
