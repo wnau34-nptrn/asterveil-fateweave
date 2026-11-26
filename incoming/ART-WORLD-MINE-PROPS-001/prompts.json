@@ -1,0 +1,5 @@
+{
+  "generator": "ImageGen",
+  "props": "Exact 5 columns by 5 rows equally spaced sprite sheet of original top-down 3/4 dark fantasy painted RPG abandoned crystal mine props, clean truly transparent background, no shadows or halos outside objects, no labels, no letters, no gridlines, ample clear cell padding. Rows: off and lit steel lantern, emerald pedestal, vertical and tilted lever; full mine cart, cracked wall, open wall, north and south pointing prisms; east and west pointing prisms, closed and open mine door, handprint slab; opened handprint slab, crouching and standing unpossessed miner, blank ledger, desk with paper; child drawing, timber strut, ore heap, digging tools, cask. Warm rust wood, slate and emerald, crisp silhouette at 60px.",
+  "extras": "Single horizontal row of exactly three separate painted isometric RPG mine props. First: weathered parchment with a childlike crayon sun, mountains and little stick figure doodle, no lettering. Second: small upright emerald crystal cluster on slate. Third: a short, wide asymmetrical emerald crystal cluster. Dark fantasy, top-left light, true alpha, wide transparent gutters, no background."
+}
