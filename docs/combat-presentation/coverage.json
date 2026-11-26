@@ -1,19 +1,19 @@
 {
  "counts": {
-  "identities": 54,
+  "identities": 56,
   "heroes": 17,
-  "enemies": 37,
-  "atlases": 52,
+  "enemies": 39,
+  "atlases": 54,
   "parked": 2,
   "actionIds": 91,
   "heroRows": 119,
   "intents": 84,
-  "foeRows": 95,
-  "spriteRows": 195,
-  "proceduralRows": 19,
-  "paintedRows": 138,
-  "sharedRows": 54,
-  "codeRows": 22
+  "foeRows": 96,
+  "spriteRows": 201,
+  "proceduralRows": 14,
+  "paintedRows": 141,
+  "sharedRows": 55,
+  "codeRows": 19
  },
  "identities": [
   {
@@ -402,6 +402,44 @@
     "block": "procedural (tint/lift)",
     "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
     "down": "sprite 19,20,21 · ค้าง 21"
+   }
+  },
+  {
+   "identity": "foe_crystal_fragment",
+   "side": "enemy",
+   "name": "ผลึกย่อย",
+   "sheet": "crystalfragment",
+   "atlas": {
+    "image": "crystalfragment_mine.510721ba0e1a.webp",
+    "atlas": "crystalfragment_mine.9dee6e016204.json",
+    "frames": 10,
+    "decodedBytes": 1541736,
+    "downloadBytes": 455523
+   },
+   "reactions": {
+    "hit": "sprite 5,6",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 7,8,9 · ค้าง 9"
+   }
+  },
+  {
+   "identity": "foe_crystal_giant",
+   "side": "enemy",
+   "name": "ยักษ์ผลึก",
+   "sheet": "crystalgiant",
+   "atlas": {
+    "image": "crystalgiant_mine.786603c4027b.webp",
+    "atlas": "crystalgiant_mine.e416f1b16f26.json",
+    "frames": 26,
+    "decodedBytes": 13548860,
+    "downloadBytes": 3670713
+   },
+   "reactions": {
+    "hit": "sprite 21,22",
+    "block": "procedural (tint/lift)",
+    "dodge": "procedural (เลื่อนหลบ ไม่มีเฟรมเฉพาะ)",
+    "down": "sprite 23,24,25 · ค้าง 25"
    }
   },
   {
@@ -4776,6 +4814,207 @@
    ]
   },
   {
+   "identity": "foe_crystal_fragment",
+   "side": "enemy",
+   "move": "Shard Prick",
+   "name": "Shard Prick",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move1",
+    "frames": {
+     "prepare": [
+      0,
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "crystal-giant"
+   ]
+  },
+  {
+   "identity": "foe_crystal_giant",
+   "side": "enemy",
+   "move": "Crystal Fist",
+   "name": "Crystal Fist",
+   "kind": "physical",
+   "body": {
+    "kind": "sprite",
+    "clip": "move1",
+    "frames": {
+     "prepare": [
+      0,
+      1,
+      2
+     ],
+     "recover": [
+      3,
+      4,
+      0
+     ]
+    },
+    "pose": "weapon"
+   },
+   "vfx": {
+    "module": "blade-fx",
+    "kind": "shared",
+    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
+   "encounters": [
+    "crystal-giant"
+   ]
+  },
+  {
+   "identity": "foe_crystal_giant",
+   "side": "enemy",
+   "move": "Shard Beam",
+   "name": "Shard Beam",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move2",
+    "frames": {
+     "prepare": [
+      0,
+      5,
+      6
+     ],
+     "recover": [
+      7,
+      8,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "generic-code",
+    "kind": "code",
+    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
+   },
+   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
+   "encounters": [
+    "crystal-giant"
+   ]
+  },
+  {
+   "identity": "foe_crystal_giant",
+   "side": "enemy",
+   "move": "Crystal Collapse",
+   "name": "Crystal Collapse",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move3",
+    "frames": {
+     "prepare": [
+      0,
+      9,
+      10
+     ],
+     "recover": [
+      11,
+      12,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "mine-boss-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
+   "point": "สามเหลี่ยมเตือน → ผลึกตกที่เท้าฮีโร่ที่โดนจริง (reduced: ภาพกระแทกนิ่ง)",
+   "encounters": [
+    "crystal-giant"
+   ]
+  },
+  {
+   "identity": "foe_crystal_giant",
+   "side": "enemy",
+   "move": "Crystal Armor",
+   "name": "Crystal Armor",
+   "kind": "energy",
+   "body": {
+    "kind": "sprite",
+    "clip": "move4",
+    "frames": {
+     "prepare": [
+      0,
+      13,
+      14
+     ],
+     "recover": [
+      15,
+      16,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "mine-boss-fx",
+    "kind": "painted"
+   },
+   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
+   "point": "เกราะบนตัวยักษ์ตาม state จริง: ร้าวตามครั้งที่นับ, แตก/หมดเวลาตาม event, สะท้อนกลับผู้ร่ายที่โดนจริง",
+   "encounters": [
+    "crystal-giant"
+   ]
+  },
+  {
+   "identity": "foe_crystal_giant",
+   "side": "enemy",
+   "move": "phase:Crystal Split",
+   "name": "Crystal Split",
+   "kind": "phase",
+   "body": {
+    "kind": "sprite",
+    "clip": "move5",
+    "frames": {
+     "prepare": [
+      0,
+      17,
+      18
+     ],
+     "recover": [
+      19,
+      20,
+      0
+     ]
+    },
+    "pose": "cast"
+   },
+   "vfx": {
+    "module": "mine-boss-fx",
+    "kind": "painted"
+   },
+   "target": "ตัวเอง + กำลังเสริมที่ปรากฏจริง",
+   "point": "ผลึกหลุดจากไหล่เมื่อเข้าช่วงจริง",
+   "encounters": [
+    "crystal-giant"
+   ]
+  },
+  {
    "identity": "foe_dew_slime",
    "side": "enemy",
    "move": "Jelly Bounce",
@@ -4882,7 +5121,6 @@
    "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
    "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
    "encounters": [
-    "crystal-giant",
     "crystal-stampede"
    ]
   },
@@ -4955,94 +5193,6 @@
    "point": "เท้าศัตรู → พื้นใต้ผู้รับจริง",
    "encounters": [
     "mini-veil-golem"
-   ]
-  },
-  {
-   "identity": "foe_golem",
-   "side": "enemy",
-   "move": "Shard Beam",
-   "name": "Shard Beam",
-   "kind": "energy",
-   "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
-   },
-   "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
-   },
-   "target": "ฮีโร่ช่อง 4 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
-   "encounters": [
-    "crystal-giant"
-   ]
-  },
-  {
-   "identity": "foe_golem",
-   "side": "enemy",
-   "move": "Crystal Collapse",
-   "name": "Crystal Collapse",
-   "kind": "energy",
-   "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
-   },
-   "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
-   },
-   "target": "ฮีโร่ทุกคนที่ยืนอยู่",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
-   "encounters": [
-    "crystal-giant"
-   ]
-  },
-  {
-   "identity": "foe_golem",
-   "side": "enemy",
-   "move": "Crystal Armor",
-   "name": "Crystal Armor",
-   "kind": "energy",
-   "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
-   },
-   "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
-   },
-   "target": "ฮีโร่ช่อง 1 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
-   "encounters": [
-    "crystal-giant"
-   ]
-  },
-  {
-   "identity": "foe_golem",
-   "side": "enemy",
-   "move": "phase:Crystal Split",
-   "name": "Crystal Split",
-   "kind": "phase",
-   "body": {
-    "kind": "procedural",
-    "pose": "cast",
-    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
-   },
-   "vfx": {
-    "module": "generic-code",
-    "kind": "code",
-    "note": "การแสดงชั่วคราวก่อนทำภาพเหมือง"
-   },
-   "target": "ตัวเอง + กำลังเสริมที่ปรากฏจริง",
-   "point": "เส้น+แกนพลังงานถึงผู้รับจริง (วาดด้วยโค้ด)",
-   "encounters": [
-    "crystal-giant"
    ]
   },
   {
@@ -6755,28 +6905,6 @@
     "wb-kragmor",
     "wb-morvane",
     "world-boss-warden"
-   ]
-  },
-  {
-   "identity": "foe_shard_crawler",
-   "side": "enemy",
-   "move": "Shard Prick",
-   "name": "Shard Prick",
-   "kind": "physical",
-   "body": {
-    "kind": "procedural",
-    "pose": "weapon",
-    "reason": "ไม่มี clip สำหรับท่านี้ใน registry"
-   },
-   "vfx": {
-    "module": "blade-fx",
-    "kind": "shared",
-    "note": "ชุดดาบร่วมของท่ากายภาพศัตรู (ตั้งใจ)"
-   },
-   "target": "ฮีโร่ช่อง 2 (freeze ตอนเริ่มเทิร์น; Guard/Taunt เปลี่ยนผู้รับ)",
-   "point": "ตัวผู้รับ damage จริง (ชุดดาบร่วม)",
-   "encounters": [
-    "crystal-giant"
    ]
   },
   {

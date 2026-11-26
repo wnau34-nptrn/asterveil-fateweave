@@ -43,10 +43,10 @@ describe('mine foes', () => {
     expect([0, 150, 300, 450, 600].map(t => unitIdleFrame('foe_crystal_bat', t))).toEqual([22, 23, 24, 25, 22]);
     for (const a of ['foe_ore_golem', 'foe_possessed_worker', 'foe_mine_overseer', 'foe_crystal_eater']) expect(unitIdleFrame(a, 100)).toBeUndefined();
   });
-  it('every mine foe but the giant and its fragments wears its own body', () => {
+  it('every mine foe wears its own body (the giant and its fragments since MINE-BOSS-001)', () => {
     const arts = new Set(mineEncounters.flatMap(e => e.enemies.map(enemy => enemy.art)));
     for (const art of Object.keys(foes)) expect(arts.has(art)).toBe(true);
-    expect([...arts].filter((a): a is string => !!a && !(a in foes)).sort()).toEqual(['foe_golem', 'foe_shard_crawler']);
+    expect([...arts].filter((a): a is string => !!a && !(a in foes)).sort()).toEqual(['foe_crystal_fragment', 'foe_crystal_giant']);
   });
   it('ships the still, portrait and half-portrait sheets with revisions', () => {
     for (const name of ['units_foes4', 'portraits_foes4', 'portraits_foes4_half']) expect(existsSync(`public/assets/art/${name}.webp`)).toBe(true);

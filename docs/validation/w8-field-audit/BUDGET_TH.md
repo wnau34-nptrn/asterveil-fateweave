@@ -49,7 +49,7 @@
 | `mine-tunnel-patrol` | 3 (0) | crystalbat, oregolem | 42.3 MiB / 12.24 MB | 46.6 MiB / 13.68 MB | — |
 | `elite-mine-overseer` | 2 (0) | possessedworker, mineoverseer | 48.6 MiB / 13.86 MB | 52.9 MiB / 15.30 MB | — |
 | `elite-crystal-eater` | 2 (0) | crystalbat, crystaleater | 46.0 MiB / 13.49 MB | 50.3 MiB / 14.94 MB | — |
-| `crystal-giant` | 3 (2) | golem, crawler | 27.7 MiB / 8.86 MB | 32.0 MiB / 10.31 MB | — |
+| `crystal-giant` | 3 (2) | crystalgiant, crystalfragment | 37.5 MiB / 11.52 MB | 41.8 MiB / 12.97 MB | — |
 | `wb-kragmor` | 3 (0) | wisp, crawler, kragmor | 31.5 MiB / 10.02 MB | 35.8 MiB / 11.47 MB | โหลด |
 | `wb-valdrakk` | 3 (0) | wisp, valdrakk | 29.8 MiB / 9.66 MB | 34.1 MiB / 11.11 MB | โหลด |
 | `wb-morvane` | 4 (0) | wisp, crawler, morvane | 32.7 MiB / 9.97 MB | 37.0 MiB / 11.42 MB | โหลด |
