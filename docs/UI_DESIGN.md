@@ -116,6 +116,8 @@ Compared the generated concept with final actual browser screenshots using `view
 
 Above-the-fold copy review: brand, four real names/classes, formation, true enemy/hero HP, actual skills/powers and current beat are retained. The prototype's skill aliases, dummy readiness dots and Battle 1/1 are replaced with authoritative content as declared above. Functional selection/help/readiness labels are part of the implementation inventory. No currencies, item counts, AUTO, Ultimate or reward claims were added. Portrait phones now reserve fixed space for commands plus targets on their field characters while allowing the arena to use remaining viewport height. Optional information opens in a reading dialog. These are intentional adaptations to the actual game and responsive constraints, rather than unresolved rendering defects.
 
+> 2026-11-26 (OD-62): the "no AUTO" notes above are superseded — random battles have an AUTO toggle beside ⓘ with device settings in ⓘ → settings ([details](validation/auto-battle/README_TH.md)).
+
 ## Explicit sequential turns — 2026-10-13
 
 Each beat presents a cyan hero stage followed by a pink enemy stage, one second each. The sticky Thai phase banner shows actor, action, recipient and the stage’s actual result. Active actor cards/timeline and field rings share the phase color; non-participants dim, and normal-motion actors make a short lunge with damage/restoration feedback. Reduced motion keeps static labels and highlights. Interrupted or defeated attackers show a gold canceled response with no enemy lunge/damage.

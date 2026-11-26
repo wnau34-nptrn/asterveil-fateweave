@@ -79,3 +79,15 @@
 .turn-icon { position: relative; }
 .turn-icon .dmg-kind { position: absolute; right: -4px; bottom: -4px; width: 14px; height: 14px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--kind); background: var(--kind-bg); color: var(--kind); pointer-events: none; }
 .turn-icon .dmg-kind svg { width: 9px; height: 9px; }
+/* Auto battle (owner 2026-11-26): masthead toggle beside ⓘ (random battles only), a stop note over the field floor and
+   the device settings in ⓘ → settings. */
+#battle-auto { flex: 0 0 auto; min-width: 52px; height: 44px; padding: 0 8px; border-radius: 999px; background: var(--control-glass); border: 1px solid var(--hud-edge); color: var(--text); font: 600 12px/1 var(--font-heading); letter-spacing: .03em; }
+#battle-auto[hidden] { display: none; }
+#battle-auto[aria-pressed="true"] { background: linear-gradient(180deg, #f2d596, #c9a25a); border-color: var(--gold-light); color: #1d1608; box-shadow: 0 0 14px #f2d59666; }
+#auto-status { position: absolute; z-index: 5; left: 50%; top: 6px; transform: translateX(-50%); width: max-content; max-width: calc(100% - 24px); margin: 0; padding: 7px 14px; border-radius: 12px; background: #141a2ef2; border: 1px solid var(--gold-light); color: var(--gold-light); font-size: 12px; line-height: 1.4; text-align: center; text-wrap: balance; pointer-events: none; }
+#auto-status[hidden] { display: none; }
+.auto-choices { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.auto-choices button { min-height: 44px; min-width: 56px; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+.auto-choices button small { font-size: 10px; color: var(--muted); }
+.auto-choices button[aria-pressed="true"] { border-color: var(--gold-light); color: var(--gold-light); }
+.auto-choices button[aria-pressed="false"] small { color: #ff9a8a; }

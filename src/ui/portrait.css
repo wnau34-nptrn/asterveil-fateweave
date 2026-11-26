@@ -412,3 +412,5 @@ body { display: grid; place-items: center; background: radial-gradient(ellipse a
 .inspector-status.debuff { color: #ffccd7; border-color: #fa849e; background: #4a1d30f5; }
 .inspector-status.more { color: #f3e8c7; border-color: #bdaa7c; background: #17263af5; font-size: 8px; font-weight: 600; }
 .inspector-hp { flex-shrink: 0; white-space: nowrap; }
+/* Auto battle: the skip button moves left of the AUTO toggle so both stay reachable while a turn plays. */
+#battle-view:has(#battle-auto:not([hidden])) #skip-turn { right: 110px; }

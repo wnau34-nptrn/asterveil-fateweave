@@ -1,4 +1,4 @@
-# Current state — updated 2026-11-26 (Map 5 side events)
+# Current state — updated 2026-11-26 (auto battle)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
@@ -28,6 +28,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - 2026-11-22 “ยืนยันตามแนะนำ ดำเนินการขั้นต่อไปได้”: shard units (duplicate 10, unlock 50, 1–2 shards per pull) and D24 (a device wallet never becomes online rights) confirmed (OD-58).
 
 ## Open items
+
+- Auto battle (OD-62, 2026-11-26): AUTO toggle in random battles only, one plain AI (no move reading, ~30% plain attacks), device settings for stop HP and skills switched off. Numbers are drafts (`AUTO_LAPSE`); sim shows random battles ≈ advisor, bosses weaker. [Validation](docs/validation/auto-battle/README_TH.md).
 
 - Map 5 (OD-60): complete in game. Save v70, mine map v2, giant tuned at 48 seeds (`crystal-giant` v2); art #357–#363, giant 4b motion approved (“อนุมัติ”, #365). Side events #366: trapped worker, ore cart, fresh vein, ore merchant (ore→gold ×3), ledger → crystal weapon recipe, Bork's elite job ×3. Event markers borrow old props (no Codex brief yet); numbers are drafts. [Validation](docs/validation/map5-mine/README_TH.md).
 - 2026-11-25: boss charge holds sit on the body. Bosses wear a silhouette aura in their own colour: light all battle, stronger while charging. Boss crowns sit above the rendered figure. The owner said “นำเข้าเกมได้เลย”. Mobile frame rate is not measured yet. [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
