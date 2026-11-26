@@ -1,3 +1,9 @@
+## 2026-11-26 — UX audit S2–S4 transition (Claude · `claude/gallant-edison-a7kkl3`)
+
+- เจ้าของสั่ง “เริ่ม S2–S4 ต่อได้เลย”: เปลี่ยนตัว/แท็บมีอนิเมชันเข้าตามทิศ (`character-panel.ts` `cue`), ปิด dialog/sheet ทิ้งสำเนา inert ที่จางหาย (`dialog-leave.ts`, `lobby-ui.ts`), token `--swap-ms`/`--tab-ms`/`--sheet-exit-ms`
+- Playwright ใหม่ 3 เคส + ชุดหน้าตัวละคร/ค่ายผ่าน · [ผลตรวจและคลิป 390px](../validation/ux-audit-s2-s4-2026-11-26/README_TH.md)
+- รอเจ้าของดูคลิปก่อน merge · ยังไม่ทำ: ภาพตัวละครแบบเดียวทุกแท็บ และสีประจำคลาส (คำถาม §9)
+
 ## 2026-11-26 — UX audit + Sprint 1 S1/S5 (Claude · `claude/gallant-edison-a7kkl3`)
 
 - Audit เทียบคลิป reference (หลักการเท่านั้น): [docs/UX_GAMEFEEL_AUDIT.md](../UX_GAMEFEEL_AUDIT.md) · เจ้าของ “อนุมัติแผน เริ่ม S1 และ S5 ได้เลย”

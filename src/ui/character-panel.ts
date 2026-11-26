@@ -81,7 +81,7 @@ export class CharacterPanel {
       const tab=(e.target as HTMLElement).closest('.character-tabs [role=tab]');
       if(!tab||!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
       e.preventDefault();e.stopPropagation();const keys=this.visibleTabs(),i=keys.indexOf(this.tab);
-      this.tab=keys[e.key==='Home'?0:e.key==='End'?keys.length-1:(i+(e.key==='ArrowRight'?1:-1)+keys.length)%keys.length]!;if(this.tab==='skills')this.skillSection='details';this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));
+      const next=keys[e.key==='Home'?0:e.key==='End'?keys.length-1:(i+(e.key==='ArrowRight'?1:-1)+keys.length)%keys.length]!;this.cue('tab',i,keys.indexOf(next));this.tab=next;if(this.tab==='skills')this.skillSection='details';this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));
     });
     this.dialog.addEventListener('cancel',e=>{if(this.usable()&&this.skillReview.active){e.preventDefault();this.backSkillReview();return;}if(this.usable()&&this.starOpen){e.preventDefault();this.backStar();return;}if(this.usable()&&(this.single||this.plan)){e.preventDefault();this.cancelTrial();}});
     root.ownerDocument.addEventListener('keydown',e=>{if(this.host.navigationVisible&&e.key==='Escape'&&!e.defaultPrevented&&!e.repeat&&this.usable()&&!this.dialog.contains(e.target as Node)){e.preventDefault();if(this.dialog.dispatchEvent(new Event('cancel',{cancelable:true})))this.dialog.close();}});
@@ -109,6 +109,9 @@ export class CharacterPanel {
   private show():void{if(this.host.navigationVisible){this.host.navigationVisible(true);this.dialog.show();}else this.dialog.showModal();}
 
   private id(id:string):string{return `${this.prefix}${id}`;}
+  // UX audit S2/S3: the next render plays a short entrance on the content (swap = another member, tab = another tab), its direction from the list order.
+  private enter='';
+  private cue(kind:'swap'|'tab',from:number,to:number):void{this.enter=from===to||from<0?'':`${kind}-${to>from?'next':'prev'}`;}
   private ids(html:string):string{return this.prefix?html.replace(/\bid="([^"]+)"/g,(_s,id:string)=>`id="${this.id(id)}"`).replace(/\b(aria-controls|aria-labelledby)="([^"]+)"/g,(_s,k:string,ids:string)=>`${k}="${ids.split(' ').map(id=>this.id(id)).join(' ')}"`):html;}
   private content():HTMLElement{return this.dialog.querySelector<HTMLElement>(`#${this.id('character-content')}`)!;}
   private focus(id:string):void{this.dialog.querySelector<HTMLElement>(`#${id}`)?.focus({preventScroll:false});}
@@ -189,8 +192,8 @@ export class CharacterPanel {
     if(action==='skill-section'&&model.camp){this.skillScroll[this.skillSection]=this.content().scrollTop;this.skillSection=b.dataset.section as SkillSection;this.skillReview.clear();this.render();this.content().scrollTop=this.skillScroll[this.skillSection]??0;this.focus(this.id('skills-'+this.skillSection));return;}
     if(action==='skill-to-node'){this.skillNodeReturn={skill:this.selectedSkill,scroll:this.content().scrollTop,focus:b.id};this.tab='talents';this.node=b.dataset.node!;this.skillReview.clear();this.render();this.dialog.querySelector(`#${this.id('character-talent-'+this.node)}`)?.scrollIntoView({block:'center'});this.focus(this.id('character-talent-'+this.node));this.showTalentDetail(this.id('character-talent-'+this.node));return;}
     if(action==='character-close'){this.dialog.close();return;}
-    if(action==='character-tab'){const tab=b.dataset.tab as CharacterTab;if(!this.visibleTabs().includes(tab))return;this.tab=tab;if(tab==='skills')this.skillSection='details';this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));return;}
-    if(action==='character-member'){this.rememberVisit();this.heroId=b.dataset.hero!;this.filters.slot='all';this.picked='';this.node='';this.skillNodeReturn=undefined;this.skillScroll={};this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-member-${this.heroId}`));return;}
+    if(action==='character-tab'){const tab=b.dataset.tab as CharacterTab,tabs=this.visibleTabs();if(!tabs.includes(tab))return;this.cue('tab',tabs.indexOf(this.tab),tabs.indexOf(tab));this.tab=tab;if(tab==='skills')this.skillSection='details';this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));return;}
+    if(action==='character-member'){this.rememberVisit();const ids=model.ids;this.cue('swap',ids.indexOf(this.heroId),ids.indexOf(b.dataset.hero!));this.heroId=b.dataset.hero!;this.filters.slot='all';this.picked='';this.node='';this.skillNodeReturn=undefined;this.skillScroll={};this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-member-${this.heroId}`));return;}
     if(action==='comparison-back'){this.cancelTrial();return;}
     if(!model.available||this.source!==model.source)return;
     if(action==='talent-pick'){this.node=b.dataset.node!;const def=this.map.talents[this.heroId]?.find(n=>n.id===this.node);if(def&&'unlock'in def.effect)this.selectedSkill=def.effect.unlock;else if(def?.choice&&skillCatalogue(this.map,this.heroes.find(h=>h.id===this.heroId)!,this.hero(model)).includes(def.choice as ActionId))this.selectedSkill=def.choice as ActionId;this.showTalentDetail(b.id);}
@@ -249,6 +252,8 @@ export class CharacterPanel {
     const tome=this.content().querySelector<HTMLDetailsElement>('.tome-trade');if(tome)this.tomeExpanded=tome.open;
     const was=this.content().querySelector<HTMLDetailsElement>('.gear-extra-filters'),wasAuto=this.content().querySelector<HTMLDetailsElement>('.auto-settings');if(was)this.filtersExpanded=was.open;if(wasAuto)this.autoExpanded=wasAuto.open;
     this.content().setAttribute('aria-labelledby',this.id(`character-tab-${this.tab}`));this.content().innerHTML=this.ids(html);
+    // Any render settles a running entrance; only a cued one replays it (the reflow restarts the CSS animation).
+    const content=this.content();content.removeAttribute('data-enter');if(this.enter&&this.open){void content.offsetWidth;content.setAttribute('data-enter',this.enter);}this.enter='';
     const detail=this.talentDialog.querySelector<HTMLElement>('.talent-detail-content')!;detail.replaceChildren();
     if(this.tab==='talents'){
       const card=this.content().querySelector<HTMLElement>('.node-card'),link=this.content().querySelector<HTMLElement>('[data-world=skill-from-node]');

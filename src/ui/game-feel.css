@@ -967,3 +967,31 @@ button.is-loading::before { content: ''; position: absolute; top: 50%; right: 14
 .journal-list summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; }
 .journal-list p { margin: 4px 0 8px; line-height: 1.55; }
 .door-glyph.mirrored { transform: scaleX(-1); opacity: .85; }
+
+/* ---------- UX audit S2–S4 (docs/UX_GAMEFEEL_AUDIT.md P1-1..P1-3) ----------
+   Presentation only and off under reduced motion. Entrances are short, restart on every cue (never stack)
+   and never block input: the content is interactive from the first frame. */
+@keyframes content-from-right { from { opacity: 0; transform: translateX(var(--enter-dx, 16px)); } to { opacity: 1; transform: none; } }
+@keyframes content-from-left { from { opacity: 0; transform: translateX(calc(var(--enter-dx, 16px) * -1)); } to { opacity: 1; transform: none; } }
+@keyframes hero-arrive { 0% { transform: scale(.94); filter: brightness(1.25); } 60% { transform: scale(1.02); } 100% { transform: none; filter: none; } }
+@keyframes tab-pick { 0% { box-shadow: 0 0 0 0 #f2d59600; } 40% { box-shadow: 0 0 0 3px #f2d5964d, 0 0 14px #f2d59655; } 100% { box-shadow: 0 0 0 0 #f2d59600; } }
+@keyframes sheet-leave-down { to { opacity: 0; transform: translateY(16px); } }
+@keyframes sheet-leave-right { to { opacity: 0; transform: translateX(16px); } }
+@media (prefers-reduced-motion: no-preference) {
+  /* S2: another member — the whole page slides in from the side of the list it came from. */
+  #app .character-content[data-enter=swap-next] { --enter-dx: 18px; animation: content-from-right var(--swap-ms) var(--ease-out) backwards; }
+  #app .character-content[data-enter=swap-prev] { --enter-dx: 18px; animation: content-from-left var(--swap-ms) var(--ease-out) backwards; }
+  .character-content[data-enter^=swap] :is(.overview-hero, .doll-hero) { animation: hero-arrive calc(var(--swap-ms) + 60ms) var(--ease-out) backwards; }
+  /* S3: another tab — a smaller slide, and the chosen tab glows once. */
+  #app .character-content[data-enter=tab-next] { --enter-dx: 8px; animation: content-from-right var(--tab-ms) var(--ease-out) backwards; }
+  #app .character-content[data-enter=tab-prev] { --enter-dx: 8px; animation: content-from-left var(--tab-ms) var(--ease-out) backwards; }
+  .character-dialog:has(.character-content[data-enter^=tab]) .character-tabs [aria-selected=true] { animation: tab-pick calc(var(--tab-ms) * 2) var(--ease-out) backwards; }
+  /* S4: a closed world dialog leaves an inert copy (dialog-leave.ts) that sinks and fades, shorter than the entrance. */
+  .world-dialog.dialog-leaving[open] { animation: sheet-leave-down var(--sheet-exit-ms) ease-in both; pointer-events: none; }
+  /* S4: the camp sheet is redrawn away at once, so lobby-ui.ts leaves a detached, inert copy that fades out. */
+  .lobby-sheet.lobby-sheet-leaving { animation: sheet-leave-right var(--sheet-exit-ms) ease-in both; pointer-events: none; }
+}
+@container game (max-width: 760px) and (orientation: portrait) {
+  .lobby-sheet.lobby-sheet-leaving { animation-name: sheet-leave-down; }
+}
+@media (prefers-reduced-motion: reduce) { .lobby-sheet.lobby-sheet-leaving, .world-dialog.dialog-leaving { display: none; } }

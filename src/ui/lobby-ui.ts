@@ -397,15 +397,30 @@ export class LobbyUI {
   forgeRerolled(p:Profile,uid:number):void{this.forgeUI.rerolled(p,uid);}
   forgeTransferred(p:Profile,uid:number):void{this.forgeUI.transferred(p,uid);}
   forgeServiced(p:Profile,tab:'craft'|'recycle'|'smelt',eventValue:number,persisted:boolean):void{this.forgeUI.serviced(p,tab,eventValue,persisted);}
+  // UX audit S4: draw() removes the sheet at once, so a detached copy (no ids, inert, ignores taps) fades out where it stood.
+  // Focus, the next tap and any new sheet work immediately; reduced motion skips the copy (CSS hides it too).
+  private leavingSheet(): (() => void) | undefined {
+    const sheet=this.root.querySelector<HTMLElement>('#lobby-sheet'),parent=sheet?.offsetParent as HTMLElement|null|undefined;
+    if(!sheet||!parent||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return undefined;
+    const r=sheet.getBoundingClientRect(),place=parent.classList[0],copy=sheet.cloneNode(true) as HTMLElement,scroll=sheet.querySelector('.lobby-content')?.scrollTop??0;
+    copy.removeAttribute('id');copy.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));copy.removeAttribute('role');copy.removeAttribute('aria-labelledby');
+    copy.classList.add('lobby-sheet-leaving');copy.inert=true;copy.setAttribute('aria-hidden','true');
+    return () => {
+      const host=(place&&this.root.querySelector<HTMLElement>(`.${CSS.escape(place)}`))||this.root,at=host.getBoundingClientRect();
+      Object.assign(copy.style,{left:`${r.left-at.left}px`,top:`${r.top-at.top}px`,width:`${r.width}px`,height:`${r.height}px`,right:'auto',bottom:'auto',margin:'0'});
+      host.append(copy);const content=copy.querySelector('.lobby-content');if(content)content.scrollTop=scroll;
+      const done=()=>copy.remove();copy.addEventListener('animationend',done,{once:true});setTimeout(done,400);
+    };
+  }
   private closeSheet(): void {
     this.teamNpc=false;
     if(this.sheet==='gear'&&this.forgeStorageReturn){this.storageUI.reset();this.forgeStorageReturn=false;this.sheet='forge';this.draw();this.focus(this.root.querySelector('#forge-manage-storage')?'#forge-manage-storage':'#forge-craft');return;}
     this.preview=undefined;const was=this.sheet,origin=was==='forge'?this.forgeOrigin:undefined;
     this.huntUI.cancel();this.forgeUI.cancelReview();this.storageUI.reset();this.sheet=origin?.sheet??null;this.picked=origin?.picked;this.confirmDismiss=false;
-    this.forgeOrigin=undefined;const resume=was==='forge'&&this.forgeReturn;this.forgeReturn=undefined;this.draw();
+    this.forgeOrigin=undefined;const resume=was==='forge'&&this.forgeReturn;this.forgeReturn=undefined;const leaving=this.sheet?undefined:this.leavingSheet();this.draw();leaving?.();
     if(resume&&this.characters.resumeFromForge())return;
     if(origin){const content=this.root.querySelector('.lobby-content');if(content)content.scrollTop=origin.scroll;(this.root.querySelector<HTMLElement>(`#${origin.focus}`)??this.root.querySelector<HTMLElement>('#lobby-sheet-title'))?.focus({preventScroll:true});}
-    else if(was)this.focus(was==='board'?'#lobby-board':was==='maps'?'#lobby-maps':`#lobby-tab-${was}`);
+    else if(was)this.focus(was==='board'?'#lobby-board':was==='maps'?'#lobby-maps':was==='gacha'?'#lobby-gacha':was==='wboss'?'#lobby-wboss':`#lobby-tab-${was}`);
   }
   render(view: LobbyView): void {
     const cheer = view.npcCheer && view !== this.view ? view.npcCheer : undefined;
