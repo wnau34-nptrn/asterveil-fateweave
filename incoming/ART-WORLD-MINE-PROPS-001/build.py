@@ -5,6 +5,7 @@ import numpy as np
 from PIL import Image
 
 from manifest import ROOT, manifest, write_metadata
+from map_visibility import darkened_map, visible_from
 
 SOURCE = ROOT / 'sources'
 OUT = ROOT / 'runtime'
@@ -98,9 +99,10 @@ def input_atlas(name):
     return {k: source.crop((f['x'], f['y'], f['x'] + f['w'], f['y'] + f['h'])) for k, f in frames.items()}
 
 
-def map_grid(entries, lit):
+def map_grid(entries, lit, origin=None):
     terrain, rails = input_atlas('tiles_mine'), input_atlas('rails_mine')
     rows = json.loads((SOURCE / 'layout.json').read_text())
+    seen = visible_from(rows, origin, 1) if origin else None
     paths = {(20, y): 'rail_ns' for y in range(11, 18)}
     paths.update({(20, 14): 'rail_junction_e', (20, 15): 'rail_junction_w', (20, 16): 'rail_junction_e'})
     paths.update({(21, 14): 'rail_ew', (22, 14): 'rail_end_stop', (19, 15): 'rail_ew',
@@ -125,24 +127,19 @@ def map_grid(entries, lit):
             at = (x * 60, y * 60)
             grid.paste(small[key], at)
             for overlay in (paths.get((x, y)), positions.get((x, y))):
-                if overlay:
+                if overlay and (overlay in rails or seen is None or cell != ',' or (x, y) in seen):
                     grid.alpha_composite(small[overlay], at)
-    return grid.convert('RGB')
+    return darkened_map(grid, rows, seen) if seen is not None else grid.convert('RGB')
 
 
 def previews(entries):
     for lit in (True, False):
-        grid = map_grid(entries, lit)
         cams = [(7, 19), (12, 18), (17, 14), (21, 13), (5, 13), (21, 6)]
         for i, (cx, cy) in enumerate(cams):
             left = np.clip(cx * 60 + 30 - 195, 0, 1110)
             top = np.clip(cy * 60 + 30 - 422, 0, 656)
+            grid = map_grid(entries, lit, None if lit else (cx, cy))
             frame = grid.crop((left, top, left + 390, top + 844))
-            if not lit:
-                y, x = np.indices((844, 390))
-                radius = np.hypot(x + left - cx * 60 - 30, y + top - cy * 60 - 30)
-                mask = 1 - .66 * np.clip((radius - 40) / 48, 0, 1)
-                frame = Image.fromarray((np.asarray(frame) * mask[..., None]).astype('uint8'))
             frame.save(PREVIEW / f'map-{i + 1}-{"lit" if lit else "dark"}.png')
     board = Image.new('RGBA', (390, len(PAIRS) * 76), '#3e4248')
     for i, group in enumerate(PAIRS):

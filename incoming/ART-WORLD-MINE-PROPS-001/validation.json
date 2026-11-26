@@ -8,24 +8,28 @@
   ],
   "files": {
     "NOTES.md": {
-      "sha256": "a322c4ae79b7d16e480f6debd14773cf5d3d3416c8c3f554d6ead0b8ee258bf1",
-      "bytes": 1373
+      "sha256": "97c87bc2b58f8cd503db459afad4900d06e47b7d7a8dda7b949afc9dc22e383b",
+      "bytes": 1542
     },
     "build.py": {
-      "sha256": "f51f390a03fe5bac203eb147fc1404c29d6e8f2c91199ea41c20dae0095e74ee",
-      "bytes": 7350
+      "sha256": "86bdaedab4b7af2d3cfc01d23b4b4266b4093f0fc24f0843470284175341f766",
+      "bytes": 7322
     },
     "manifest.py": {
       "sha256": "f19ab12ade9a3351785f7f8f4b488d4c14efbd80e3f86c38f6943ef3479fdb67",
       "bytes": 1060
+    },
+    "map_visibility.py": {
+      "sha256": "cdf8a70be36f5fb8db121351fbfbdb9e0d23b0b852a7644f7cd1a0459233814c",
+      "bytes": 1012
     },
     "placements.json": {
       "sha256": "38c995136ee91602620f53a6573eb3f21d8db2c8ac907da732b2344465bbd6c6",
       "bytes": 2387
     },
     "preview/map-1-dark.png": {
-      "sha256": "5adb57fbd98e7e704e187c785ba684f06e00e08b71aea93ca4fa0364b4c22db2",
-      "bytes": 199427,
+      "sha256": "e2f903805d0608546c4b4c46813df36821a7ff77c793a3b646f9f7ac268597c5",
+      "bytes": 221433,
       "size": [
         390,
         844
@@ -34,8 +38,8 @@
       "frames": 1
     },
     "preview/map-1-lit.png": {
-      "sha256": "354029c73cc79315c87ef4f6178a3aa35b5ca94c7b5ebc108530f4eab04bf4a6",
-      "bytes": 257687,
+      "sha256": "79c81f45efb3df4e2c83b753e79642a3cac2b5562f35c5efcab52e8afca1cc72",
+      "bytes": 260460,
       "size": [
         390,
         844
@@ -44,8 +48,8 @@
       "frames": 1
     },
     "preview/map-2-dark.png": {
-      "sha256": "e46fbe9338bc4f5bedc417b3759476fe88932e06b926b0121b8cc3ded0bb578c",
-      "bytes": 182160,
+      "sha256": "4be4186a0770f8084b71df63df34ed66cd8c0952ade30621e5c4cc16abb9dc34",
+      "bytes": 185891,
       "size": [
         390,
         844
@@ -54,8 +58,8 @@
       "frames": 1
     },
     "preview/map-2-lit.png": {
-      "sha256": "9635377d5d1480b8a6362848058a685e1c1f0df8867638dce3bf502c446e6da7",
-      "bytes": 223795,
+      "sha256": "7ab564c2be3099ae0fe24b23cf7e5fbacb8dae43b2a23bba7ce2da1f9b6b151c",
+      "bytes": 226054,
       "size": [
         390,
         844
@@ -64,8 +68,8 @@
       "frames": 1
     },
     "preview/map-3-dark.png": {
-      "sha256": "64169cdac5fb94273d52730c04731a75e07c17e0f7f27a0172247c8d434272df",
-      "bytes": 210043,
+      "sha256": "377ff13f9feeadf89e1f9b6e90af65cf0a96c2daf9231a4b66ca4411a11bcf4c",
+      "bytes": 204085,
       "size": [
         390,
         844
@@ -74,8 +78,8 @@
       "frames": 1
     },
     "preview/map-3-lit.png": {
-      "sha256": "7ee34f4679903ee9c05fa83f08c404b063672df44c28593e18696880326936a7",
-      "bytes": 267085,
+      "sha256": "eb1b8ac15a776a18197fa403c52e3d4703c81e633177de3a46ba8e6c5d9fb41c",
+      "bytes": 268038,
       "size": [
         390,
         844
@@ -84,8 +88,8 @@
       "frames": 1
     },
     "preview/map-4-dark.png": {
-      "sha256": "a7d8c3b5b9c8abdfe56460109f603196a8bf9515ac244a578c835f1e455a15e4",
-      "bytes": 230522,
+      "sha256": "21280dcdc212f2341b2cd5d499a0acdc833bf6b261d26080e46918aa3372d248",
+      "bytes": 238504,
       "size": [
         390,
         844
@@ -94,8 +98,8 @@
       "frames": 1
     },
     "preview/map-4-lit.png": {
-      "sha256": "151a73adec9b58d94686d4045e88099c1660774a8fd633c86fa882dc2f6a0b1d",
-      "bytes": 305944,
+      "sha256": "25a5d4a52b5308537de06e1f630739f003eedae31328b9f672e11697c3623936",
+      "bytes": 305670,
       "size": [
         390,
         844
@@ -104,8 +108,8 @@
       "frames": 1
     },
     "preview/map-5-dark.png": {
-      "sha256": "dbc727c1e8aee470e697f3e1b51643b124dbbd338e950860f0d81af7630f7e43",
-      "bytes": 206724,
+      "sha256": "e239ce2fc073fb62f4e5c143257a94aba07627a4b4f87f394fad4c2f931e0f56",
+      "bytes": 232816,
       "size": [
         390,
         844
@@ -114,8 +118,8 @@
       "frames": 1
     },
     "preview/map-5-lit.png": {
-      "sha256": "5acebe507dfc7fb9969a8e8bde55732ccd6f5df7878505ace46cba58afbd12c6",
-      "bytes": 275008,
+      "sha256": "4975b4bf5d315a5e46c608e50a259fa99aa7e37674845add2cc92e8c6bbf0639",
+      "bytes": 276110,
       "size": [
         390,
         844
@@ -124,8 +128,8 @@
       "frames": 1
     },
     "preview/map-6-dark.png": {
-      "sha256": "7ace8772e36a344fa847bdbd158ad2b748d29435bfda6069e45383146e55883f",
-      "bytes": 191487,
+      "sha256": "16591d5c4301dd83cbae944f0ef14b56b27b98eea939730af6cb53c11dd366fc",
+      "bytes": 217556,
       "size": [
         390,
         844
@@ -204,8 +208,8 @@
       "bytes": 473
     },
     "sources/rails_mine.webp": {
-      "sha256": "cb254ce26f26c6c6ef5999cef43c31385e50116db7c407484866586011f58dbc",
-      "bytes": 930,
+      "sha256": "10a542fdd43cc43cfb349fc9871e9dc84d7b2c9d28595e8a481a06c430735825",
+      "bytes": 914,
       "size": [
         384,
         256
@@ -218,8 +222,8 @@
       "bytes": 1137
     },
     "sources/tiles_mine.webp": {
-      "sha256": "aec6058acc4e1dbd9a17f418148c9aa41b0c523fe71912e4aecb43ea278f1ae7",
-      "bytes": 231266,
+      "sha256": "57705e4008d5104d959ba7048b7fc1fc43c13172e5ba578f6e8e877c9b0b593c",
+      "bytes": 233856,
       "size": [
         512,
         512
