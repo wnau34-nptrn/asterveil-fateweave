@@ -40,7 +40,7 @@
           "move": "Idle flight",
           "firstFrame": 22,
           "count": 4,
-          "source": "raw/bat-hover.png",
+          "source": "raw/bat-reactions.png",
           "strip": "strips/bat/hover.png"
         }
       ]

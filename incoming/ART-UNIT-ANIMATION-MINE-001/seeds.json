@@ -14,5 +14,20 @@
     "overseer": "seeds/overseer.png",
     "eater": "seeds/eater.png"
   },
-  "numericImageGenSeeds": null
+  "numericImageGenSeeds": null,
+  "styleRound": 2,
+  "styleReferences": [
+    "foe_mirror_shade",
+    "foe_hunter",
+    "foe_ruin_bat",
+    "foe_dew_slime",
+    "foe_tide_slime",
+    "foe_water_spirit"
+  ],
+  "designAlternates": {
+    "overseer": "seeds/overseer-r2.png",
+    "eater": "seeds/eater-r2.png"
+  },
+  "lineupSource": "raw/seed-lineup.png",
+  "alternatesSource": "raw/variants-r2.png"
 }
