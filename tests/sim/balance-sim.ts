@@ -47,7 +47,7 @@ export const captured: { company: string; mapId: string; label: string; hard: bo
 export const setCapture = (on: boolean) => { capture = on; captured.length = 0; };
 export const useMap = (m: MapDefinition) => { map = m; };
 // Tuning probes: called after every battle and expedition of a campaign (unset in normal runs).
-export const hooks: { battle?: (s: ExpeditionState, label: string, won: boolean, before: number, mapId: string, company: string) => void; run?: (s: ExpeditionState, outcome: RunOutcome, mapId: string, company: string) => void } = {};
+export const hooks: { depart?: (p: Profile, mapId: string) => void; battle?: (s: ExpeditionState, label: string, won: boolean, before: number, mapId: string, company: string) => void; run?: (s: ExpeditionState, outcome: RunOutcome, mapId: string, company: string) => void } = {};
 
 const dirs: Record<Direction, Point> = { up: { x: 0, y: -1 }, down: { x: 0, y: 1 }, left: { x: -1, y: 0 }, right: { x: 1, y: 0 } };
 const same = (a: Point, b: Point) => a.x === b.x && a.y === b.y;
@@ -461,7 +461,7 @@ export function simulateCampaign(seed: number, policy: Policy, style: Style = 'a
     const attempt = out.filter(e => e.mapId === map.id && e.hard === isHard).length + 1;
     // Skill levels the party departs with (raised in this lobby).
     const lv = p.party.deployed.map(id => equipped(p, id).map(a => skillLevelOf(p.members[id], a)));
-    const d = depart(p, map, lookup, (seed * 7919 + index * 104729) >>> 0, isHard ? { maps: MAPS } : undefined); p = d.profile; let s = d.run;
+    const d = depart(p, map, lookup, (seed * 7919 + index * 104729) >>> 0, isHard ? { maps: MAPS } : undefined); p = d.profile; let s = d.run; hooks.depart?.(p, map.id);
     const report: CampaignExpedition = { index, outcome: 'withdrawn', steps: 0, wins: 0, defeats: 0, lowestHp: 100, battles: {}, gained: { ore: 0, gold: 0, shard: 0, dust: 0 },
       items: [0, 0, 0, 0, 0], chests: 0, elites: 0, objectives: 0, bossBeaten: false, level: 0, stars: 0, company: p.company.length, claimed: shop.claimed,
       mapId: map.id, hard: isHard, attempt, skillGold, mainSkill: 0, skillAvg: 0, topSkill: 1, tomes: 0, levels: [] };
