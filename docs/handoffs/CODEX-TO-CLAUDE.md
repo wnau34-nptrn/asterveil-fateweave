@@ -4,6 +4,10 @@
 - `src/game/visuals/mine-boss-fx.ts`: เกราะจาก state (ร้าวตามครั้งที่นับ), แตก/หมดเวลา/สะท้อน/ถล่ม/แยกผลึกจาก event จริง; ยักษ์เล่นท่า Split หลังท่าโดนตีเพราะ phase เกิดทันที · ขยายภาพถล่ม 2.3× เพราะขนาด storyboard มองไม่เห็นในเกม
 - Vitest ทั้งชุดผ่าน (+`tests/mine-boss-fx.test.ts`), `npm run coverage:presentation` (56 identities), anatomy audit ผ่าน, คลิป 390px 30 คำสั่ง [README](../combat-presentation/mine-boss-slice/README_TH.md)
 - PR #364 (docs) merged · รอเจ้าของอนุมัติ motion ก่อน merge PR นี้ · Shard Beam ยังเป็นเส้นวาดด้วยโค้ด
+## 2026-11-26 — ภาพเหมืองเข้าเกมครบยกเว้นยักษ์ (Claude · `claude/friendly-heisenberg-xapns5`, PR #356 #361 #362 #363 รวมแล้ว)
+
+- เหมือง (เซฟ v69, ยักษ์จูน 48 seed), ของบนแผนที่, ศัตรู semi-chibi 5 ตัว, พื้น/ราง/ฉากรบ อยู่ในสาขาเกมแล้ว กติกาถาวร: สไตล์ภาพ semi-chibi (`CLAUDE.md`)
+- Codex ส่ง 4b ยักษ์ (`77a6e4ba`): ไฟล์ 111 ไฟล์ตรง SHA-256 และ decode ได้ ยังไม่ได้ตรวจภาพหรือนำเข้า → งานแชตถัดไป (ดู CURRENT_STATE)
 
 ## 2026-11-26 — นำเข้าพื้น ราง และฉากรบเหมือง (Claude · `claude/friendly-heisenberg-xapns5`)
 
