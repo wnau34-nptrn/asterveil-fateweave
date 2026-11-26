@@ -10,7 +10,7 @@ import { CampPresetDialog } from './camp-preset-dialog';
 import { CharacterPanel, type CharacterModel } from './character-panel';
 import { type CharacterTab } from './character-view';
 import { applyCampEquipment, campEquipment, type AutoEquipmentPlan } from '../core/world/auto-equipment';
-import { newGearFilters, changeGearFilter, filteredEquipment, gearFilters as gearFilterControls } from './gear-inventory';
+import { newGearFilters, changeGearFilter, filteredEquipment, gearEmpty, gearFilters as gearFilterControls } from './gear-inventory';
 import { shortcutBlocked } from '../platform/keyboard';
 import type { CharmPower as BossPower, ActionId, HeroDefinition } from '../core/battle/types';
 import { withParty } from '../core/battle/engine';
@@ -329,7 +329,7 @@ export class LobbyUI {
   private questEntry(p:Profile):string {
     if(!this.open('quests'))return '';
     const ready=this.readyAll(p),active=this.map.sideQuests.filter(q=>!p.quests[q.id]?.claimed).length;
-    return `<button id="lobby-board" data-lobby="board" class="lobby-quest-entry" aria-controls="lobby-sheet" aria-expanded="${this.sheet==='board'}"><strong>${icon('flag')} กระดานเควสต์ ${ready?`<small class="trip-badge">${ready}</small>`:''}${icon('right')}</strong><span>${ready?`มีรางวัลให้รับ ${ready} งาน`:`งานรายวัน รายสัปดาห์ สัญญาจ้าง และงานค่าย ${active} งาน · แตะเพื่อดู`}</span></button>`;
+    return `<button id="lobby-board" data-lobby="board" class="lobby-quest-entry" aria-controls="lobby-sheet" aria-expanded="${this.sheet==='board'}"><strong>${icon('flag')}<span class="quest-title">กระดานเควสต์</span>${ready?`<small class="trip-badge">${ready}</small>`:''}${icon('right')}</strong><span>${ready?`มีรางวัลให้รับ ${ready} งาน`:`งานรายวัน รายสัปดาห์ สัญญาจ้าง และงานค่าย ${active} งาน · แตะเพื่อดู`}</span></button>`;
   }
   // The quest board and the World Boss card share one top row, half and half, both translucent (owner 2026-11-16).
   private topBoards(p: Profile): string {
@@ -648,7 +648,7 @@ export class LobbyUI {
     const pending=this.storageUI.source==='overflow';
     const rows=entries.map(e=>{const i=e.item,v=salvageValue(this.map,i),confirm=this.confirmSalvage===i.uid;return `<li data-rarity="${i.rarity}" data-item-key="${e.key}">${gearArt(i)}<div><b>${itemName(i)} Lv${i.level}${i.locked?' · 🔒':''}</b><small>${itemLines(this.map.equipment,i).join(' · ')}</small><small>${itemOwner(i)}</small></div><span class="gear-actions">${this.storageUI.row(i)}${pending?`<small>เก็บเข้าคลังก่อนสวมใส่/พัฒนา</small>`:`<button id="equip-${i.uid}" data-lobby="inventory-pick" data-key="${e.key}" class="secondary">ดู/เปรียบเทียบ</button><button id="forge-open-${i.uid}" data-lobby="forge-open" data-uid="${i.uid}" class="secondary">พัฒนา</button><button id="lock-${i.uid}" data-lobby="lock" data-uid="${i.uid}" class="secondary" aria-pressed="${!!i.locked}">${i.locked?'ปลดล็อก':'ล็อก'}</button><button id="salvage-${i.uid}" data-lobby="salvage" data-uid="${i.uid}" class="${confirm?'danger-button':'secondary'}"${i.locked?' disabled':''} aria-label="แยกชิ้น ได้แร่ ${v.ore} ผง ${v.dust}">${confirm?'ยืนยันแยก':'แยก'}</button>`}${confirm?`<small>รวมคืน แร่ ${v.ore} · ฝุ่น ${v.dust} · ชิ้นนี้จะหายไป</small>`:''}</span></li>`;}).join('');
     const commons=entries.filter(e=>e.item.rarity===0&&!e.item.locked&&!e.item.plus&&!e.item.investment&&!e.item.levelInvestment).length;
-    return manage.head+manage.actions+'<details class="storage-characters"><summary>เปิดหน้าตัวละคร</summary>'+this.memberPicker(p,id,'gear',()=> '')+'</details>'+picker+'<h3>คลัง '+entries.length+'/'+(pending?(p.overflow?.length??0):p.items.length)+' ชิ้น</h3>'+gearFilterControls(this.inventoryFilters,'camp-inventory-')+(rows?'<ul class="gear-bag inventory-gear">'+rows+'</ul>':'<p class="camp-note">ไม่พบอุปกรณ์ตามตัวกรอง</p>')+(!pending&&commons?'<button id="salvage-common" data-storage="common" class="secondary">ตรวจแยกธรรมดาที่แสดง ('+commons+' ชิ้น)</button>':'');
+    return manage.head+manage.actions+'<details class="storage-characters"><summary>เปิดหน้าตัวละคร</summary>'+this.memberPicker(p,id,'gear',()=> '')+'</details>'+picker+'<h3>คลัง '+entries.length+'/'+(pending?(p.overflow?.length??0):p.items.length)+' ชิ้น</h3>'+gearFilterControls(this.inventoryFilters,'camp-inventory-')+(rows?'<ul class="gear-bag inventory-gear">'+rows+'</ul>':gearEmpty(all.length,this.inventoryFilters,'camp-inventory-',{action:pending?'':'<button id="camp-inventory-empty-maps" type="button" data-lobby="maps" class="secondary">'+icon('map')+'เลือกแผนที่</button>'}))+(!pending&&commons?'<button id="salvage-common" data-storage="common" class="secondary">ตรวจแยกธรรมดาที่แสดง ('+commons+' ชิ้น)</button>':'');
   }
   // Map potions (2D-5): brew for ore and veil dust; each departure packs up to `carry` of each.
   private brewing(p: Profile): string {

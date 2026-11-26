@@ -1,3 +1,10 @@
+## 2026-11-26 — UX audit + Sprint 1 S1/S5 (Claude · `claude/gallant-edison-a7kkl3`)
+
+- Audit เทียบคลิป reference (หลักการเท่านั้น): [docs/UX_GAMEFEEL_AUDIT.md](../UX_GAMEFEEL_AUDIT.md) · เจ้าของ “อนุมัติแผน เริ่ม S1 และ S5 ได้เลย”
+- S1: แถวบนค่ายไม่ตัดคำ/ไม่ล้นที่ 320–480px, ปุ่มสุ่มกาชา sticky อยู่ในจอที่ 360×640 · S5: `gearEmpty()` empty state พร้อมปุ่มไปต่อ 3 จุด
+- typecheck/lint/vitest/build ผ่าน, Playwright ใหม่ 8 + ชุดเกี่ยวข้อง 66 ผ่าน · [ผลตรวจ](../validation/ux-audit-s1-s5-2026-11-26/README_TH.md)
+- ถัดไป: S2–S4 (transition เปลี่ยนตัว/แท็บ, exit sheet) ต้องส่งคลิป 390px ให้เจ้าของก่อน merge
+
 ## 2026-11-26 — นำเข้ายักษ์ผลึก R1 ชุดเต็ม 4b (Claude · `claude/mine-boss-4b-intake`)
 
 - PR #359 (`77a6e4ba`) ไฟล์ตรง SHA-256 ครบ `scripts/build-mine-boss.py` แพ็กยักษ์ 26 เฟรม (cell 448 เท้า 7/8, อัตรา 1.67 = 1.32× โกเลมหิน) ผลึกย่อย 10 เฟรม และ VFX 16 ชั้น lossless · ภาพนิ่ง/พอร์เทรต foes4 ช่อง 5–6
