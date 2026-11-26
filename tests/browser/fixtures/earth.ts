@@ -57,6 +57,8 @@ const qa={impacts,painted,rings:()=>{
   const x=prepare?.10:skill==='bash'?-.31:skill==='slam'?-.30:0,y=prepare?-.98:skill==='bash'?-.80:skill==='slam'?-.62:.04;
   const point=m.transformPoint(x*sprite.width/framed,y*sprite.height/framed);return {x:point.x/ratio,y:point.y/ratio};
  },
+ hitStop:(i:number,ms:number)=>{const turn=fixture.turns[i]!;scene.stopEffects();play(turn,450,ms);},
+ paused:()=>scene.scene.isPaused(),
  field:()=>{const l=(scene as unknown as {layer?:Phaser.GameObjects.Container}).layer;return l?{x:l.x,y:l.y}:undefined;},
  nudge:(id:string)=>{const body=(scene as unknown as {bodies:Map<string,Phaser.GameObjects.Container>}).bodies.get(id)!;body.setRotation(.08);},
  behindUnits:()=>{const root=scene.children.getChildren().find(c=>c instanceof Phaser.GameObjects.Container) as Phaser.GameObjects.Container;

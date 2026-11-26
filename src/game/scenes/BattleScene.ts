@@ -63,7 +63,7 @@ export class BattleScene extends Phaser.Scene {
   private viewH = 0;
   private dpr = 1;
   private fitting = false;
-  private shaking: Phaser.Tweens.Tween | undefined; private trauma = 0;
+  private shaking: Phaser.Tweens.Tween | undefined; private trauma = 0; private hitStopToken = 0;
   private effectTimers = new Set<Phaser.Time.TimerEvent>();
   private root: Phaser.GameObjects.Container | undefined;
   private nextSizeCheck = 0;
@@ -550,8 +550,20 @@ export class BattleScene extends Phaser.Scene {
       onStop: () => { if (layer.active) layer.setPosition(0, 0); },
     });
   }
+  // P2-2 part 2: hold the contact frame. The pause waits for one update so every new tween and pose has painted its
+  // first frame; tweens, timers and unit motion then resume where they were (the paused span is not counted).
+  private hitStop(ms: number): void {
+    const token = ++this.hitStopToken; if (ms <= 0) return;
+    this.events.once('postupdate', () => {
+      if (token !== this.hitStopToken || !this.stageActive || this.scene.isPaused()) return;
+      // The pause applies on the next scene-manager step; the hold is timed from when it actually starts.
+      this.events.once('pause', () => setTimeout(() => { if (token === this.hitStopToken && this.scene.isPaused()) this.scene.resume(); }, ms));
+      this.scene.pause();
+    });
+  }
   stopEffects(): void {
     this.stageActive = false;
+    this.hitStopToken++; if (this.scene?.isPaused()) this.scene.resume();
     this.unitAnimation.settle();
     for (const timer of this.effectTimers) timer.remove(false);
     this.effectTimers.clear();
@@ -880,9 +892,10 @@ export class BattleScene extends Phaser.Scene {
       this.tweens.add({ targets: bolt, x: end.x, y: end.y, duration: contactMs, ease: 'Quad.In', onComplete: () => bolt.destroy() });
     }
   }
-  play(turn: TurnStage, remainingMs = 650): void {
+  play(turn: TurnStage, remainingMs = 650, hitStopMs = 0): void {
     this.stageActive = true;
     if (!this.ready) return;
+    this.hitStop(hitStopMs);
     this.resolvedActor = turn.actorId; this.paintHolds();
     this.paintReworkMarks(turn.after ?? turn.state);
     const events = turn.events, life = Math.max(100, remainingMs - 20), family = effectFamily(turn);
