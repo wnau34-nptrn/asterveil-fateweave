@@ -44,5 +44,21 @@
       0
     ]
   ],
-  "numericImageGenSeeds": null
+  "numericImageGenSeeds": null,
+  "terrainRev2": {
+    "geometry": {
+      "yard": 201,
+      "tunnel": 212,
+      "cavern": 235,
+      "wallTop": 109,
+      "wallFace": 92,
+      "wallInner": 163
+    },
+    "detailBase": {
+      "yard": 300,
+      "tunnel": 340,
+      "cavern": 380
+    },
+    "mixedPreview": 357
+  }
 }

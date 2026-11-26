@@ -2,12 +2,12 @@
 import hashlib
 import json
 from pathlib import Path
-import re
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageOps
 
 from map_visibility import darkened_map, visible_from
+from paint_terrain import make_terrain
 
 ROOT = Path(__file__).resolve().parent
 SOURCE = ROOT / 'sources'
@@ -29,40 +29,7 @@ def save_atlas(name, entries, columns):
 
 
 def terrain():
-    art = Image.open(SOURCE / 'materials.png').convert('RGB')
-    w, h = art.size
-    color_sets = [(91, 80, 66), (86, 89, 93), (64, 78, 77), (44, 48, 55)]
-    tiles = {}
-    yy, xx = np.indices((TILE, TILE))
-    edge = np.minimum.reduce([xx, yy, TILE - 1 - xx, TILE - 1 - yy])
-    mask = np.clip(edge / 19, 0, 1)[..., None]
-    mask = mask * mask * (3 - 2 * mask)
-    for i, zone in enumerate(('yard', 'tunnel', 'cavern', 'wall')):
-        left, top = i % 2 * (w // 2), i // 2 * (h // 2)
-        panel = art.crop((left + 12, top + 12, left + w // 2 - 12, top + h // 2 - 12))
-        if zone == 'yard':
-            panel = panel.crop((147, 123, w // 2 - 142, h // 2 - 112))
-        variants = ('mine_wall_top', 'mine_wall_face', 'mine_wall_inner') if zone == 'wall' else [f'{zone}_{j}' for j in range(4)]
-        for j, key in enumerate(variants):
-            base = np.array(color_sets[i], dtype=float)
-            if key == 'mine_wall_inner':
-                base -= 8
-            if key == 'mine_wall_face':
-                crop = panel.resize((TILE, TILE), Image.Resampling.LANCZOS)
-                weight = .85
-            else:
-                pw, ph = panel.size
-                dx, dy = j % 2 * pw // 3, j // 2 * ph // 3
-                crop = panel.crop((dx, dy, dx + pw * 2 // 3, dy + ph * 2 // 3)).resize((TILE, TILE), Image.Resampling.LANCZOS)
-                weight = .62 if zone != 'wall' else .34
-            array = np.array(crop, dtype=float)
-            detail = np.clip((array - np.median(array, axis=(0, 1))) * weight, -40, 48)
-            if key == 'mine_wall_top':
-                detail += np.where(yy[..., None] < 64, 7, 0)
-            if key == 'mine_wall_face':
-                detail += np.where(yy[..., None] > 76, -9, 0)
-            pixels = np.clip(base + mask * detail, 0, 255).astype('uint8')
-            tiles[key] = Image.fromarray(pixels).convert('RGBA')
+    tiles = make_terrain()
     for zone in ('yard', 'tunnel', 'cavern'):
         for a in range(4):
             for b in range(4):
@@ -70,7 +37,28 @@ def terrain():
                 second = np.array(tiles[f'{zone}_{b}'])
                 assert np.array_equal(first[:, -1], second[:, 0])
                 assert np.array_equal(first[-1], second[0])
+    for name in ('top', 'face', 'inner'):
+        wall = np.asarray(tiles[f'mine_wall_{name}'])
+        assert np.array_equal(wall[:, -1], wall[:, 0]), name
     return tiles
+
+
+def seam_previews(tiles):
+    rng = np.random.default_rng(357)
+    small = {key: im.resize((60, 60), Image.Resampling.LANCZOS) for key, im in tiles.items()}
+    for zone in ('yard', 'tunnel', 'cavern'):
+        for side in (4, 6):
+            board = Image.new('RGB', (side * 60, side * 60))
+            indices = np.zeros((side, side), dtype=int) if side == 4 else rng.integers(0, 4, (side, side))
+            for y, row in enumerate(indices):
+                for x, i in enumerate(row):
+                    board.paste(small[f'{zone}_{i}'], (x * 60, y * 60))
+            board.save(PREVIEW / f'seams-{zone}-{side}x{side}-60px.png')
+    wall = Image.new('RGB', (360, 180))
+    for y, name in enumerate(('inner', 'top', 'face')):
+        for x in range(6):
+            wall.paste(small[f'mine_wall_{name}'], (x * 60, y * 60))
+    wall.save(PREVIEW / 'seams-wall-6x3-60px.png')
 
 
 def tracks():
@@ -185,6 +173,7 @@ def main():
     runtime_bytes = sum(p.stat().st_size for p in OUT.iterdir())
     assert runtime_bytes < 2_500_000, runtime_bytes
     map_previews(tiles, rails)
+    seam_previews(tiles)
     fight(bg)
     files = {}
     for file in sorted(ROOT.rglob('*')):
