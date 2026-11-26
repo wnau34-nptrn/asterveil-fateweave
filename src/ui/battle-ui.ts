@@ -506,7 +506,8 @@ export class BattleUI {
     this.queueAuto();
   }
 
-  private get autoAllowed(): boolean { return this.session?.kind === 'random'; }
+  // Random battles and World Boss attempts (owner 2026-11-26 “ให้บอสโลก มี Auto ด้วย”).
+  private get autoAllowed(): boolean { return this.session?.kind === 'random' || this.session?.kind === 'worldBoss'; }
   private get autoRunning(): boolean { return this.autoAllowed && this.auto.on && !this.autoHeld; }
   private saveAuto(): void {
     try { this.storage?.setItem(autoSettingsKey, JSON.stringify(this.auto)); } catch { /* The choice still applies to this session. */ }
@@ -553,7 +554,7 @@ export class BattleUI {
     status.hidden = !note; if (status.textContent !== note) status.textContent = note;
     const skills = [...new Set(this.data.heroes.flatMap(h => h.actions))].filter(a => a !== 'attack');
     const users = (a: ActionId) => this.data.heroes.filter(h => h.actions.includes(a)).map(h => actorName(h.id, this.data)).join(', ');
-    this.set('auto-settings', `<strong>ต่อสู้อัตโนมัติ (AUTO)</strong><p>ใช้ได้เฉพาะการต่อสู้สุ่ม · เลือกสกิลจากผลของเทิร์นนี้ ไม่อ่านท่าที่ศัตรูประกาศ ไม่ตั้งรับหรือขัดจังหวะให้ และบางเทิร์นแค่โจมตีพื้นฐาน · หยุดเองเมื่อฮีโร่ล้ม</p>`
+    this.set('auto-settings', `<strong>ต่อสู้อัตโนมัติ (AUTO)</strong><p>ใช้ได้ในการต่อสู้สุ่มและบอสโลก · เลือกสกิลจากผลของเทิร์นนี้ ไม่อ่านท่าที่ศัตรูประกาศ ไม่ตั้งรับหรือขัดจังหวะให้ และบางเทิร์นแค่โจมตีพื้นฐาน · หยุดเองเมื่อฮีโร่ล้ม</p>`
       + `<p>หยุดเมื่อเลือดฮีโร่ต่ำกว่า</p><div class="auto-choices" role="group" aria-label="หยุดออโต้เมื่อเลือดต่ำกว่า">${AUTO_STOP_CHOICES.map(v => `<button id="auto-stop-${v}" data-ui="auto-stop" data-value="${v}" class="quiet" aria-pressed="${this.auto.stopHp === v}">${v ? `${v}%` : 'ไม่หยุด'}</button>`).join('')}</div>`
       + (skills.length ? `<p>สกิลที่ออโต้ใช้ได้ (โจมตีพื้นฐานใช้ได้เสมอ)</p><div class="auto-choices" role="group" aria-label="สกิลที่ออโต้ใช้ได้">${skills.map(a => { const on = !this.auto.off.includes(a); return `<button id="auto-skill-${a}" data-ui="auto-skill" data-value="${a}" class="quiet" aria-pressed="${on}" aria-label="${escapeHtml(`${this.data.skills[a].name} · ${users(a)} · ${on ? 'ออโต้ใช้ได้' : 'ออโต้ไม่ใช้'}`)}">${escapeHtml(this.data.skills[a].name)}<small>${on ? 'ใช้' : 'ไม่ใช้'}</small></button>`; }).join('')}</div>` : ''));
   }

@@ -6,6 +6,7 @@ import type { BattleKind } from '../../src/core/world/types';
 import { MAPS } from '../../src/content/world/maps';
 import { parseGame } from '../../src/core/save/expedition-save';
 import { currentSave } from '../fixtures/current-save';
+import { xpAt } from '../fixtures/camp-level';
 
 // Auto battle (owner 2026-11-26): the AUTO toggle shows only in random battles, plays the battle through the normal commit
 // (every turn saved), and its device settings (stop HP, skills switched off) live in ⓘ → settings.
@@ -57,7 +58,7 @@ test('AUTO settings: stop HP and skills switched off are kept on the device', as
   await page.screenshot({ path: info.outputPath('auto-settings-390.png') });
 });
 
-test('AUTO is not offered outside random battles', async ({ page }) => {
+test('AUTO is not offered in other battles (here the first battle)', async ({ page }) => {
   await openBattle(page, 'tutorial', { on: true, stopHp: 50, off: [] });
   if (await page.locator('#start').isVisible()) await page.locator('#start').click();
   await expect(page.locator('#battle-auto')).toBeHidden();
@@ -76,5 +77,29 @@ test('AUTO hands the battle back when a hero drops under the chosen HP, and resu
   await page.screenshot({ path: info.outputPath('auto-stopped-390.png') });
   await auto.click(); await expect(status).toBeHidden(); await expect(auto).toHaveAttribute('aria-pressed', 'true');
   await expect.poll(async () => (await saved(page)).run?.battle?.commands.length ?? 0, { timeout: 20000 }).toBeGreaterThan(held);
+  expect(errors).toEqual([]);
+});
+
+test('AUTO plays a World Boss attempt to its end and the attempt is recorded once', async ({ page }) => {
+  test.setTimeout(240_000);
+  await page.clock.setFixedTime(new Date('2026-11-23T05:59:59+07:00'));
+  const p = newProfile(map, 17, ['guardian', 'tracer', 'weaver', 'healer']); p.tutorialDone = true;
+  p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; p.campXp = xpAt(10); p.cleared = MAPS.map(m => m.id);
+  p.bank = { ore: 100, gold: 100, shard: 0, dust: 0 };
+  const raw = JSON.stringify({ version: 64, profile: p, run: null });
+  await page.addInitScript(({ key, raw, autoKey }) => {
+    if (sessionStorage.getItem('auto-wb')) return;
+    localStorage.setItem(key, raw); localStorage.setItem(autoKey, JSON.stringify({ on: false, stopHp: 0, off: [] })); sessionStorage.setItem('auto-wb', '1');
+  }, { key, raw, autoKey });
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  await page.setViewportSize({ width: 390, height: 844 }); await page.goto('./'); await page.locator('#continue').click();
+  await page.locator('#lobby-wboss').click(); await page.locator('#wb-start').click();
+  await expect(page.locator('#start')).toBeEnabled({ timeout: 20_000 }); await page.locator('#start').click();
+  const auto = page.locator('#battle-auto'); await expect(auto).toBeVisible(); await auto.click();
+  await expect(auto).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#leave-battle')).toBeVisible({ timeout: 180_000 });
+  await expect(page.locator('.wb-damage')).toContainText('ดาเมจที่ลงกับบอส');
+  const profile = parseGame(await page.evaluate(k => localStorage.getItem(k)!, key), map, lookup, MAPS).profile;
+  expect(profile.worldBoss!.weeks.at(-1)!.attempts).toBe(1);
   expect(errors).toEqual([]);
 });
