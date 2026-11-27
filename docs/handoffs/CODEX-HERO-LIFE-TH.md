@@ -19,7 +19,7 @@
 
 | รายการ | ข้อเท็จจริง | ที่มา |
 |---|---|---|
-| seed | ภาพ 512×512 RGBA หันขวา พื้นรองเท้า y496 จุดยึด (0.5, 497/512) ตามตารางด้านล่าง ตรวจ SHA-256 แล้ว | `incoming/*/seeds/…` |
+| seed | ภาพ 512×512 RGBA หันขวา ตรวจ SHA-256 แล้ว **แก้ 2026-11-27:** ภาพเต็มกรอบ รองเท้าถึงแถว 511 ทั้งสี่ตัว และขอบบนอยู่ที่แถว 0–20 (ไอรา/เซเรนชนขอบบน) ไม่มีที่ว่างเหนือหัว ข้อเดิม “y496” ผิด | `incoming/*/seeds/…` |
 | ขนาดในเกม | ตัวละครสูงราว 111 px บนจอ 390 px (บันทึกตรวจ A12 R2) รายละเอียดเล็กกว่า ~5 px อ่านไม่ออก | `docs/handoffs/CODEX-A12-NEW-CLASSES-TH.md` |
 | ท่าหายใจตอนนี้ | `HeroLife` ยืด scaleY 2.2% / หด scaleX 0.8% รอบละ ~3.6 วิ (ช้าลงเมื่อเลือด <30%) ตัวที่มี `idleLoop` จะข้ามท่านี้เองทันที (#376) | `src/game/visuals/hero-life.ts` |
 | ท่าชนะตอนนี้ | โค้ดวาดประกายเหนือหัวทีละคน ตัวไม่ขยับ ถ้าตัวไหนมี `victory: { frames, frameMs }` ใน registry จะเล่นเฟรมนั้นแล้วกลับเฟรม 0 (Claude จะปรับให้ค้างเฟรมสุดท้ายตอนนำเข้า) | `BattleScene.finish()`, `unit-frames.ts` |
@@ -113,6 +113,60 @@ ACCEPTANCE: (1) identity, proportions, weapon and props match the seed in every 
 NOT YOURS: atlas packing, the texture budget, registry, code, tests and in-game clips — Claude does these. Artwork selection (R1/R2) and motion approval are the owner's decisions; offline checks and CI are not approval.
 
 RETURN: incoming/ART-UNIT-ANIMATION-LIFE-001/
+```
+
+## รอบแก้ R3 — ท่าชนะอย่างเดียว (หลัง PR #377)
+
+Claude ตรวจ PR #377 แล้วพบว่า (ตรงกับ NOTES ของ Codex) idle วาดใหม่ทั้งตัวทุกเฟรมจนวนลูปกระตุก ท่าชนะตัวเล็กลง อาวุธล้นกรอบ หมวกไอราถูกตัด และคทาเปลี่ยนสี ([ผลตรวจ](../validation/hero-life-2026-11-27/README_TH.md)) Claude แนะนำและเจ้าของขอ prompt แก้ไข: **ตัด idle** (ใช้หายใจจากโค้ดใน #376) ทำเฉพาะท่าชนะบนกรอบที่ใหญ่ขึ้น
+
+```text
+CODEX FIX ROUND — ART-UNIT-ANIMATION-LIFE-001 R3 (art only, victory poses only)
+Asterveil · Fateweave: redo the one-shot victory pose for Aegis (Knight), Lyra (Duelist), Eira (Mage), Seren (Priest)
+
+Read AGENTS.md, CLAUDE.md, docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md and docs/handoffs/CODEX-HERO-LIFE-TH.md (section "รอบแก้ R3") first. Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (NOT main). Continue on your branch art/art-unit-animation-life-001 and its PR #377. Add files only under incoming/ART-UNIT-ANIMATION-LIFE-001/r3/; leave the earlier files untouched as reference. Do not change src/, tests/, public/, .github/ or any other incoming folder. Do not merge.
+
+WHAT CHANGED SINCE YOUR FIRST DELIVERY (thank you for the honest NOTES — they were right):
+1. IDLE LOOPS ARE CANCELLED. Do not draw or redraw any idle frames. Regenerated idle frames changed pose, sword angle and outline every frame, so the loop jittered; the game keeps its code breath instead.
+2. The brief's ground fact was wrong: all four seeds fill the 512×512 square, soles reach row 511 and the tops reach rows 0–20, so there was no room above the head. R3 uses a larger canvas (below).
+3. Owner feedback on script-driven motion was "it looks silly". The victory must look natural and understated: a proud, happy pose, never comic. NO JUMPS: soles stay on the ground line in every frame (heels may lift).
+
+SEEDS: the same four files as before (copy them from your seeds/ folder; same SHA-256). Do NOT give the generator any other cast member as image input. Original art only.
+
+CANVAS (new): every frame is 768×768 RGBA. Frame 1 = the seed pasted UNSCALED with its top-left corner at (128, 256), so the seed's soles sit on row 767 and there are 256 px above the head and 128 px on each side for raised weapons, staff tops, hat tips and capes. Ground line = row 767 in every frame. Nothing may touch the canvas edge except the soles on the bottom row; nothing cropped.
+
+SAME SIZE, SAME LOOK (the main failure last time): every frame is drawn at exactly the seed's scale — head width and body height within ±3% of the seed (measure them and list the numbers in NOTES.md). Keep exactly the seed's face, hair, costume colours, weapon, shield and staff: same shapes and SAME COLOURS (Eira's staff stays exactly as in the seed; Lyra's greatsword, Aegis's sword and shield, Seren's golden staff unchanged). No new props, no lost details.
+
+VICTORY (6 frames, plays once when a battle is won, then HOLDS frame 6 for several seconds):
+1. exactly the seed (pasted, not regenerated).
+2. small anticipation (knees bend slightly, weapon lowered a little).
+3. rising into the pose.
+4. peak of the pose (the most readable frame).
+5. small settle.
+6. held pose: stable, balanced, eyes open, both soles on row 767.
+Per character:
+- Aegis (Knight): plants the shield beside him on the ground and raises the sword straight up with a firm grip, chin up. Held = sword raised, shield planted.
+- Lyra (Duelist): swings the greatsword in one smooth half-arc at her side and rests it on her shoulder, confident grin. Held = blade on shoulder, other hand on hip.
+- Eira (Mage): raises the staff high on her toes (no jump) with a happy closed-eye smile, free hand touching the hat brim. Held = staff raised, hand on brim, eyes open.
+- Seren (Priest): stands the staff upright, places the free hand over the heart, bows the head slightly, then looks up with a gentle smile. Held = hand on heart, staff upright.
+Deliver one version per character (R3). Add an R3b only if R3 fails the gates below, and mark the recommended one.
+
+GENERATION: one continuous strip per character in a single edit request with the seed attached as the model; transparent background and wide clear gutters. Then cut, scale to the seed's measured size and place each frame on the 768×768 canvas with the soles on row 767. Body only: no VFX, glows, sparkles, motion lines, shadows, ground or text (Claude adds sparkles in code).
+
+QUALITY GATES before delivery (do not deliver a failing strip as final; regenerate it or list it as missing):
+- scale: head width and figure height of frames 2–6 within ±3% of the seed (table in NOTES.md);
+- python3 scripts/unit-anatomy-audit.py --cells on each strip against its seed: median head scale <= 1.15, every measured frame <= 1.20;
+- colour: a side-by-side of the seed and frame 6 at full size for each character, checked by eye for any colour or prop change;
+- edges: no opaque pixel on rows 0–3 or columns 0–3 / 764–767 in any frame;
+- ground: lowest opaque row = 767 in every frame;
+- readability: frame 6 of all four side by side, scaled so the seed body is 111 px tall (in-game size on a 390 px phone).
+
+DELIVERABLES under r3/: cells/<character>-victory/000.png (seed on the 768 canvas) + 001…005 (frames 2–6), raw/ (untouched generator strips), <character>-victory-r3-preview-390.png (all frames next to the seed at in-game size), allies-victory-held-390.png (the four held frames side by side at 111 px), audits/, prompts.json (exact prompts, references, generation ids; no base64), strips.json (frames, canvas 768×768, ground row 767, seed offset (128,256), runtime use: one-shot then hold frame 6), validation.json (SHA-256 and size of every file), NOTES.md (measurements, what passed, what was not checked, recommended version per character).
+
+DELIVERY CHECK: push with normal git, fetch the branch back, compare SHA-256 with validation.json and fully decode every PNG with Pillow; report in PR #377.
+
+NOT YOURS: atlas packing, texture budget, registry, code, tests and in-game clips (Claude). Picking versions and approving motion are the owner's decisions; offline checks are not approval.
+
+RETURN: incoming/ART-UNIT-ANIMATION-LIFE-001/r3/
 ```
 
 ## ชุด 2 (หลังเจ้าของอนุมัติชุด 1)
