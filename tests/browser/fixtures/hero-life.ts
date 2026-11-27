@@ -22,9 +22,9 @@ import '../../../src/ui/components.css';
 const end = new URLSearchParams(location.search).get('end');
 const pool: HeroDefinition[] = [...heroes, ...mercenaries, ...rosterBatch1];
 const pick = (id: string) => pool.find(h => h.id === id)!;
-// `?cast=cheer`: the three heroes with drawn victory cheers (Aegis, Eira, Seren) plus two without.
+// `?cast=cheer`: four heroes with drawn victory cheers (Aegis, Eira, Seren, Lyra) plus one without.
 const cheerCast = new URLSearchParams(location.search).get('cast') === 'cheer';
-const cast = end === 'defeat' ? ['guardian'] : cheerCast ? ['guardian', 'weaver', 'healer', 'lalin', 'lio'] : ['guardian', 'weaver', 'lalin', 'mira', 'lio'];
+const cast = end === 'defeat' ? ['guardian'] : cheerCast ? ['guardian', 'weaver', 'healer', 'tracer', 'lalin'] : ['guardian', 'weaver', 'lalin', 'mira', 'lio'];
 const data: EncounterDefinition = { ...structuredClone(veilSiege), id: 'hero-life-qa', level: 4,
   heroes: cast.map((id, i) => ({ ...pick(id), maxHp: 100, speed: 200 - i * 10, ...(id === 'lalin' ? { gear: { barrier: 20 } } : {}) })),
   enemies: [{ id: 'f1', row: 'front', name: 'ด้วงหนาม', art: 'foe_thorn_beetle', maxHp: end === 'victory' ? 1 : 500, speed: end === 'defeat' ? 250 : 50, color: 0x77ff77 }],

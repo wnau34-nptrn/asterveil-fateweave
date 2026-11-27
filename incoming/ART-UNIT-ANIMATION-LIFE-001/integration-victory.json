@@ -1,5 +1,5 @@
 {
-  "checkedFiles": 92,
+  "checkedFiles": 119,
   "heroes": {
     "aegis": {
       "mapping": {
@@ -227,6 +227,82 @@
         "frames": 5,
         "decodedBytes": 635208,
         "downloadBytes": 237320
+      }
+    },
+    "lyra": {
+      "mapping": {
+        "scale": 0.497,
+        "offset": [
+          129,
+          241
+        ],
+        "alphaError": 1.003
+      },
+      "added": [
+        {
+          "frame": 1,
+          "from": "r4-lyra/cells/lyra-victory-r4/001.png",
+          "bbox": [
+            117,
+            242,
+            367,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 2,
+          "from": "r4-lyra/cells/lyra-victory-r4/002.png",
+          "bbox": [
+            131,
+            120,
+            320,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 3,
+          "from": "r4-lyra/cells/lyra-victory-r4/003.png",
+          "bbox": [
+            89,
+            230,
+            334,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 4,
+          "from": "r4-lyra/cells/lyra-victory-r4/004.png",
+          "bbox": [
+            84,
+            234,
+            330,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 5,
+          "from": "r4-lyra/cells/lyra-victory-r4/005.png",
+          "bbox": [
+            76,
+            234,
+            328,
+            496
+          ],
+          "sole": 496
+        }
+      ],
+      "atlas": {
+        "image": "lyra_victory.563b77378c22.webp",
+        "atlas": "lyra_victory.c811e32ac601.json",
+        "width": 258,
+        "height": 1441,
+        "frames": 5,
+        "decodedBytes": 1487112,
+        "downloadBytes": 402530
       }
     }
   }

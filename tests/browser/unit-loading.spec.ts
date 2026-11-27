@@ -6,9 +6,9 @@ import {encounterById} from '../../src/content/encounters/catalog';
 import {newExpedition} from '../../src/core/world/world';
 import {newProfile} from '../../src/core/world/profile';
 import manifest from '../../src/game/visuals/unit-atlases.json' with { type: 'json' };
-// 6 animation sheets for first-clash plus the optional drawn victory cheers of Aegis, Eira and Seren (LIFE-001 R3,
-// 2026-11-27): also background downloads that never gate Start, and never retried after a failure.
-const OPTIONAL_WEBP=6+3;
+// 6 animation sheets for first-clash plus the optional drawn victory cheers of Aegis, Eira, Seren (LIFE-001 R3) and Lyra
+// (R4 trial, 2026-11-27): also background downloads that never gate Start, and never retried after a failure.
+const OPTIONAL_WEBP=6+4;
 const key='asterveil.fateweave.expedition.v1';
 async function seed(page:Page,id:string){
  const world=newExpedition(chapterOne,encounterById,1234);world.tutorialDone=true;
