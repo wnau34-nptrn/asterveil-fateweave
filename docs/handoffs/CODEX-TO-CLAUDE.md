@@ -1,9 +1,9 @@
-## 2026-11-27 — ฮีโร่มีชีวิตชีวาในฉากต่อสู้ ข้อ 1/2/3/6 (Claude · `claude/hero-life-code`)
+## 2026-11-27 — ฮีโร่มีชีวิตชีวาในฉากต่อสู้ แบบเบา (Claude · `claude/hero-life-code`, PR #376)
 
-- เจ้าของสั่ง “เปิด session ใหม่ ทำ ข้อ 1, 2, 3 และ 6 ได้เลย”: ท่ายืนตามอาชีพ 15 แบบ, เลือด <30% หายใจถี่/ไหล่ตก, แสงโล่บางๆ, เจ้าของเทิร์นก้าวออก/เอนตามฝั่งเป้าของสกิล, ชนะกระโดดทีละคน+ประกายจากโค้ด, แพ้ทรุดตัว งานภาพอย่างเดียว ตัวเลขร่าง
-- โค้ด: `src/game/visuals/hero-life.ts` (คำนวณต่อเฟรม ไม่มี tween วน) + `BattleScene` (`applyLife`, `finish`, `lifeProbe`) + `battle-ui` (`readyId/lean`, เรียก `finish` จาก outcome จริง) · ตัวที่มี `idleLoop`/`victory` ในภาพข้ามท่าโค้ดได้ (ART-UNIT-ANIMATION-LIFE-001)
-- เทสต์: typecheck, lint, vitest ทั้งชุด, build, Chromium `hero-life` 3/3 + battle/auto/hit-stop/shake 63 ผ่าน · [ผลตรวจและคลิป 390px](../validation/hero-life-2026-11-27/README_TH.md)
-- เปิดค้าง: เจ้าของต้องดูคลิปและอนุมัติท่าก่อน merge · ยังไม่วัดบนมือถือจริง
+- เจ้าของสั่ง “ทำ ข้อ 1, 2, 3 และ 6” → ดูคลิปรอบแรกแล้ว “มันตลกอ่ะ” → “เก็บข้อ 3 ไว้ เอาเข้าเกมได้”, “ทำตามที่คุณแนะนำ”: ตัดท่าตามอาชีพ/โยก/ลอย/เอน/กระโดด เหลือหายใจแบบเดิม (ช้าลงเมื่อเลือด <30%), แสงโล่, วงแสงทองที่เท้าเจ้าของเทิร์น, ประกายตอนชนะ, ทรุดตอนแพ้ ท่าจริงให้ Codex วาด (ART-UNIT-ANIMATION-LIFE-001)
+- โค้ด: `src/game/visuals/hero-life.ts` (ต่อเฟรม ไม่มี tween วน) + `BattleScene` (`applyLife`, `finish`, `lifeProbe`) + `battle-ui` (`readyId`, `finish` จาก outcome จริง) · `idleLoop`/`victory` ในภาพแทนโค้ดได้
+- เทสต์: typecheck, lint, vitest, build, Chromium `hero-life` 3/3 + battle/auto · [ผลตรวจและคลิป 390px](../validation/hero-life-2026-11-27/README_TH.md)
+- เปิดค้าง: ยังไม่วัดบนมือถือจริง · ส่ง brief ให้ Codex วาดท่ายืน/ท่าชนะ
 
 ## 2026-11-27 — เครื่องหมายเหตุการณ์ในอุโมงค์มืดเห็นง่ายขึ้น (Claude · `claude/mine-event-beacons`)
 

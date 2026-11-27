@@ -7,7 +7,6 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 test.skip(!process.env.FX_CLIPS, 'owner clip capture only');
 const cases = [
   { name: 'idle-turn-owner', query: '' },
-  { name: 'skill-lean', query: '' },
   { name: 'victory', query: '?end=victory' },
   { name: 'defeat', query: '?end=defeat' },
 ];
@@ -26,12 +25,8 @@ for (const { name, query } of cases) test(`hero life clip ${name}`, async ({ bro
     await page.waitForTimeout(1200);
     if (name === 'idle-turn-owner') {
       await page.waitForTimeout(4500);
-      // Aegis acts; the turn passes to the next hero and the others relax.
+      // Aegis acts; the light at the feet passes to the next hero.
       await page.locator('#target-f1').click(); await page.waitForTimeout(4500);
-    } else if (name === 'skill-lean') {
-      await page.locator('#action-bash').click(); await page.waitForTimeout(2200);
-      await page.locator('#action-guard').click(); await page.waitForTimeout(2200);
-      await page.locator('#action-attack').click(); await page.waitForTimeout(1600);
     } else if (name === 'victory') {
       await page.locator('#target-f1').click(); await page.waitForTimeout(4500);
     } else await page.waitForTimeout(5000);

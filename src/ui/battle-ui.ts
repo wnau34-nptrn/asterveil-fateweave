@@ -789,10 +789,9 @@ export class BattleUI {
     const shownMessages = p ? this.messages.slice(0, p.revealed ? p.logEnds[p.index] : p.index ? p.logEnds[p.index - 1] : p.logStart) : this.messages;
     this.set('event-log', shownMessages.slice(-30).map(message => `<li>${escapeHtml(message)}</li>`).join(''));
     this.set('save-status', savePlace() === 'server' ? 'บันทึกบนเซิร์ฟเวอร์ทุกเทิร์น' : this.saved && this.storage ? 'บันทึกบนเครื่องนี้อัตโนมัติ' : 'เล่นได้ แต่บันทึกบนเครื่องนี้ไม่ได้');
-    // Hero life: the turn owner stands ready while the player (or AUTO) chooses; a chosen skill leans toward its side.
+    // Hero life: a light at the turn owner's feet while the player (or AUTO) chooses.
     const readyId = !this.presentation && !this.busy && this.started && this.live(s) ? currentHeroId(s, d) : undefined;
-    const kind = targetKind(this.action), lean = readyId && this.action !== 'attack' ? kind === 'enemy' || kind === 'enemies' ? 'foe' : kind === 'self' ? 'self' : 'ally' : undefined;
-    this.scene?.sync({ state: this.displayState, heroId: this.heroId, targetId: null, phase: this.presentation?.phase, activeActorId: this.actingActor, activeTargetId: this.actingTarget, readyId, lean }, repaint);
+    this.scene?.sync({ state: this.displayState, heroId: this.heroId, targetId: null, phase: this.presentation?.phase, activeActorId: this.actingActor, activeTargetId: this.actingTarget, readyId }, repaint);
     this.renderFieldTargets();
     this.renderFieldStatuses();
     this.renderFieldBanner();
