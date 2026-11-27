@@ -1,6 +1,6 @@
 # ART-UNIT-ANIMATION-LIFE-001 / 002 — ท่ายืนวนลูปและท่าชนะของฮีโร่ฝั่งเรา
 
-เขียนโดย Claude 2026-11-27 ตามคำสั่งเจ้าของ “ข้อ 8–10 ส่ง brief ให้ Codex และขอ prompt เพื่อเปิด chat ให้ codex” · สถานะ: **เขียน prompt แล้ว** Codex ยังไม่ได้สร้างภาพ
+เขียนโดย Claude 2026-11-27 ตามคำสั่งเจ้าของ “ข้อ 8–10 ส่ง brief ให้ Codex และขอ prompt เพื่อเปิด chat ให้ codex” · ปรับหลัง PR #376 (เจ้าของ “มันตลกอ่ะ ให้ codex ช่วยทำเรื่อง animation ดีมั้ย” → “เก็บข้อ 3 ไว้ เอาเข้าเกมได้”): ท่าจากโค้ดที่ยืด/โยก/กระโดดภาพนิ่งดูเป็นตุ๊กตายาง ท่าจริงจึงต้องมาจากภาพวาด และต้องเป็นธรรมชาติ ไม่โอเวอร์ · สถานะ: **prompt พร้อมส่ง** Codex ยังไม่ได้สร้างภาพ
 
 ## ขอบเขต
 
@@ -21,7 +21,8 @@
 |---|---|---|
 | seed | ภาพ 512×512 RGBA หันขวา พื้นรองเท้า y496 จุดยึด (0.5, 497/512) ตามตารางด้านล่าง ตรวจ SHA-256 แล้ว | `incoming/*/seeds/…` |
 | ขนาดในเกม | ตัวละครสูงราว 111 px บนจอ 390 px (บันทึกตรวจ A12 R2) รายละเอียดเล็กกว่า ~5 px อ่านไม่ออก | `docs/handoffs/CODEX-A12-NEW-CLASSES-TH.md` |
-| ท่าหายใจเดิม | โค้ดยืด scaleY 1.022 / scaleX .992 รอบละ 1.5–2.1 วินาที ถ้ามี idle loop จากภาพ Claude จะปิดท่าหายใจด้วยโค้ดของตัวนั้นตอนนำเข้า | `src/game/scenes/BattleScene.ts` (`liven`) |
+| ท่าหายใจตอนนี้ | `HeroLife` ยืด scaleY 2.2% / หด scaleX 0.8% รอบละ ~3.6 วิ (ช้าลงเมื่อเลือด <30%) ตัวที่มี `idleLoop` จะข้ามท่านี้เองทันที (#376) | `src/game/visuals/hero-life.ts` |
+| ท่าชนะตอนนี้ | โค้ดวาดประกายเหนือหัวทีละคน ตัวไม่ขยับ ถ้าตัวไหนมี `victory: { frames, frameMs }` ใน registry จะเล่นเฟรมนั้นแล้วกลับเฟรม 0 (Claude จะปรับให้ค้างเฟรมสุดท้ายตอนนำเข้า) | `BattleScene.finish()`, `unit-frames.ts` |
 | idle loop ที่มีอยู่ | ศัตรูลอยตัวใช้ `idleLoop: { frames, frameMs }` เฟรม 0 = seed และเป็น fallback เมื่อลดการเคลื่อนไหว | `src/game/visuals/unit-frames.ts` |
 | งบภาพ | ตัวทั่วไปไม่เกิน ~1.5 MB ดาวน์โหลด / 6 MiB decoded ต่อ art ตอนนี้ไลรา 2.27 MB / 8.5 MiB เกินแล้ว ส่วนตัวอื่น 0.6–2.2 MB งานนี้เพิ่มราว 10 เฟรมต่อตัว | `docs/design/UNIT_ANIMATION_ROLLOUT_TH.md` §7, `src/game/visuals/unit-atlases.json` |
 
@@ -60,7 +61,7 @@ Asterveil · Fateweave: a looping idle and a one-shot victory pose for four alli
 
 Read AGENTS.md, CLAUDE.md, docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md and docs/handoffs/CODEX-HERO-LIFE-TH.md first. Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (NOT main). Create branch art/art-unit-animation-life-001. Add files only under incoming/ART-UNIT-ANIMATION-LIFE-001/. Do not change src/, tests/, public/, .github/, existing art or any earlier incoming folder. Open a PR into the base branch; do not merge it.
 
-GOAL: today every ally stands as one still frame while a script gently stretches it, so all four "breathe" the same way and the battle ends with no reaction from them. Draw (1) a calm 4-frame idle loop and (2) a 6-frame victory pose for each of the four. Art only; Claude wires them into the game. Do not change rules, saves, text or timing.
+GOAL: today every ally stands as one still frame while a script gently stretches it, so all four "breathe" the same way, and at a win only code sparkles appear. The owner tried script-driven sway, lean and hop on the still frames and found them silly (a flat picture stretching like rubber), so real motion must come from drawn frames and must look natural and understated, never cartoonishly exaggerated. Draw (1) a calm 4-frame idle loop and (2) a 6-frame victory pose for each of the four. Art only; Claude wires them into the game. Do not change rules, saves, text or timing.
 
 SEEDS (on the game branch; verify the hashes and copy byte-for-byte into seeds/):
 - Aegis: incoming/ART-UNIT-ANIMATION-A2-001/aegis-seed.png  sha256 starts 0e888a0d889c61f2
@@ -88,15 +89,16 @@ MOVE 2 — victory (6 frames, plays once at the end of a won battle, then HOLDS 
 3. rising into the pose.
 4. peak of the pose (the most readable frame).
 5. small settle.
-6. held victory pose, stable enough to hold for several seconds (eyes open, balanced, both feet on the ground line unless stated).
+6. held victory pose, stable enough to hold for several seconds (eyes open, balanced, both feet on the ground line).
+No jumps or leaps: soles stay on the ground line in every victory frame (heels may lift). Keep the gesture modest and believable: a proud, happy pose, not a comic one.
 Per character (keep it in character; use only what the seed already holds; no new props):
 - Aegis (Knight): plants the shield at the side and raises the sword straight up, chin up; held pose = sword raised, shield planted.
 - Lyra (Duelist): spins the greatsword once at the side and rests it on the shoulder with a confident grin; held pose = blade on shoulder, other hand on hip.
-- Eira (Mage): lifts the staff high with a little hop (feet may leave the ground only in frames 3–4) and smiles with eyes closed; held pose = staff raised, the free hand holding the hat brim.
+- Eira (Mage): lifts the staff high on her toes (no jump) and smiles with eyes closed; held pose = staff raised, the free hand holding the hat brim.
 - Seren (Priest): lowers the staff, places the free hand over the heart and bows the head slightly, then looks up with a gentle smile; held pose = hand on heart, staff upright.
 Supply an R2 for any victory that does not read at 111 px on the first try, and mark the recommended one.
 
-GENERATION: one whole continuous strip per move in a single edit request (never frame by frame), the seed attached as the model, transparent background, wide clear gutters between figures. One shared scale per character across both strips, equal to the seed; feet on the same ground line except the frames allowed above. Body only: no VFX, glows, sparkles, confetti, motion lines, speed lines, shadows, ground or text baked in (Claude adds any sparkle in code). Leave room for raised weapons, staff tops, hat tips and capes; never crop them.
+GENERATION: one whole continuous strip per move in a single edit request (never frame by frame), the seed attached as the model, transparent background, wide clear gutters between figures. One shared scale per character across both strips, equal to the seed; soles on the same ground line in every frame. Body only: no VFX, glows, sparkles, confetti, motion lines, speed lines, shadows, ground or text baked in (Claude adds any sparkle in code). Leave room for raised weapons, staff tops, hat tips and capes; never crop them.
 
 CELL LAYOUT (same as A12): cell 640×512 with the logical 512×512 at x64, cell anchor (320,497); frame 1 of each strip and the held victory frame 6 aligned to the seed's ground line.
 
