@@ -92,10 +92,10 @@ test('drawn cheers play once from the real victory and hold their last frame; re
       await expect.poll(async () => (await life(page)).finale, { timeout: 8000 }).toBe('victory');
       if (reducedMotion === 'reduce') {
         await page.waitForTimeout(1500);
-        for (const id of ['guardian', 'weaver', 'healer']) expect((await life(page)).heroes[id]!.texture, id).toMatch(/^unit-pilot-/);
+        for (const id of ['guardian', 'weaver', 'healer', 'tracer']) expect((await life(page)).heroes[id]!.texture, id).toMatch(/^unit-pilot-/);
         continue;
       }
-      for (const [id, sheet] of [['guardian', 'aegis'], ['weaver', 'eira'], ['healer', 'seren']] as const)
+      for (const [id, sheet] of [['guardian', 'aegis'], ['weaver', 'eira'], ['healer', 'seren'], ['tracer', 'lyra']] as const)
         await expect.poll(async () => { const h = (await life(page)).heroes[id]!; return `${h.texture}#${h.frame}`; }, { timeout: 5000 }).toBe(`unit-victory-${sheet}#5`);
       await page.waitForTimeout(800);
       expect((await life(page)).heroes.guardian!.frame).toBe('5');          // held, not reset to the idle

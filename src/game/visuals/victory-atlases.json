@@ -25,5 +25,14 @@
     "frames": 5,
     "decodedBytes": 635208,
     "downloadBytes": 237320
+  },
+  "lyra": {
+    "image": "lyra_victory.563b77378c22.webp",
+    "atlas": "lyra_victory.c811e32ac601.json",
+    "width": 258,
+    "height": 1441,
+    "frames": 5,
+    "decodedBytes": 1487112,
+    "downloadBytes": 402530
   }
 }

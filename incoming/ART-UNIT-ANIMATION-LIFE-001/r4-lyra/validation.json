@@ -1,0 +1,113 @@
+{
+  "algorithm": "SHA-256",
+  "files": {
+    "NOTES.md": {
+      "sha256": "fd43835bde8cc42b37d13b51a9813ebe5903f80f835a786f87a9840a862e60ec",
+      "bytes": 5641
+    },
+    "allies-victory-held-390.png": {
+      "sha256": "29c0e7c466cb94193630de36210e8c32866eb0e650932dc4c472967dfe231b60",
+      "bytes": 105797
+    },
+    "audits/lyra-victory-r4.json": {
+      "sha256": "f640ef37537878fe4a0e4d773f6740191f5f8dd55c3250b58fdad15a2fa376f1",
+      "bytes": 740
+    },
+    "audits/lyra-victory-r4.txt": {
+      "sha256": "a18f0b208877fe35a04c1c1540e0acf107144610fa4afa96e4453431bbd1c8a4",
+      "bytes": 79
+    },
+    "audits/lyra-victory-r4b.json": {
+      "sha256": "49116f4f3847d46adf7dfe43c101c86819f106ee25625e227a473ac1ec1d982a",
+      "bytes": 729
+    },
+    "audits/lyra-victory-r4b.txt": {
+      "sha256": "469b10c535ee32bb56cef4a2ebcbd5bea8503108c3f11e906fa8b626e8d45bb2",
+      "bytes": 69
+    },
+    "cells/lyra-victory-r4/000.png": {
+      "sha256": "cf8d0d2bea428cd3de801a12c85322e07df7787448597cf23d4a056a1621a8f4",
+      "bytes": 440655
+    },
+    "cells/lyra-victory-r4/001.png": {
+      "sha256": "8317bd2f08b29676a47fd4f3d346ef03bf2d1e0a74d6e22021e0560e21f084c7",
+      "bytes": 367754
+    },
+    "cells/lyra-victory-r4/002.png": {
+      "sha256": "36953ce82802ee2485b8c59daeb2738eecbb51b793f163e1fe1076e438506744",
+      "bytes": 332850
+    },
+    "cells/lyra-victory-r4/003.png": {
+      "sha256": "12f912d66eac204d1ea83d05f752241df8ec77a19121cc4904d0ab60f70166c9",
+      "bytes": 382207
+    },
+    "cells/lyra-victory-r4/004.png": {
+      "sha256": "6488c72fe0aba58260f4c942cb5062da1cd4d1447ebe66b71054eae7246d70ad",
+      "bytes": 377956
+    },
+    "cells/lyra-victory-r4/005.png": {
+      "sha256": "0ae4610a92f2b4db10298336ebd3cd8e3cc63780fa60370e043fe8c50842643f",
+      "bytes": 389091
+    },
+    "cells/lyra-victory-r4b/000.png": {
+      "sha256": "cf8d0d2bea428cd3de801a12c85322e07df7787448597cf23d4a056a1621a8f4",
+      "bytes": 440655
+    },
+    "cells/lyra-victory-r4b/001.png": {
+      "sha256": "b8e33b89ff1ef34a252fab59bdd63654b05d879fd45d5823ea6d30419290fc5c",
+      "bytes": 344257
+    },
+    "cells/lyra-victory-r4b/002.png": {
+      "sha256": "eec01839386b1a1eb306ed15b47f0d66af1aaafdbfc6caa215e06351ea01650c",
+      "bytes": 436650
+    },
+    "cells/lyra-victory-r4b/003.png": {
+      "sha256": "08a14e70250f6dd13336de8eb2a1374dd59bd7c643496e7f9e12fa281dc57d65",
+      "bytes": 388349
+    },
+    "cells/lyra-victory-r4b/004.png": {
+      "sha256": "7f5ca0c21ff487e914595cdc467e758bc6dceebf9a29eda9370d70fe0078e3bb",
+      "bytes": 390529
+    },
+    "cells/lyra-victory-r4b/005.png": {
+      "sha256": "0876d9128490429557845b18baa30ac89bbd44c1d4911c7fd1cce968de6fddf3",
+      "bytes": 380298
+    },
+    "lyra-victory-r4-preview-390.png": {
+      "sha256": "4283b258be3259291d2358f82aa319472cfa45ab9c6c4b8a4f8743e6b878d03c",
+      "bytes": 174802
+    },
+    "lyra-victory-r4-seed-vs-held.png": {
+      "sha256": "e45824d9058a83ea689ec258885d104205df7cfcb40b486818942ce59385fb91",
+      "bytes": 1325403
+    },
+    "lyra-victory-r4b-preview-390.png": {
+      "sha256": "37a00b7022801b80c7afac90e5059d1522b4fced28ba22817b4ff0c93eb1e821",
+      "bytes": 182440
+    },
+    "lyra-victory-r4b-seed-vs-held.png": {
+      "sha256": "9ebdd2a3d1b013500f39e075f8affdb20785e70ff9e2800ad9764630b49e4bff",
+      "bytes": 1312687
+    },
+    "prompts.json": {
+      "sha256": "c7b8ca9574acfb80ba74ca8e60655d76ebd0912847ba8f4556255021124fdd96",
+      "bytes": 4178
+    },
+    "raw/lyra-victory-r4.png": {
+      "sha256": "32e82b435a84b223002fb7371168dee802a1c7bb6712f4fa6ade9ac4a6508350",
+      "bytes": 1570115
+    },
+    "raw/lyra-victory-r4b.png": {
+      "sha256": "ba6b24485dd3419154ea583b84a6d7516824e9392ef3778c21833bcf1b2f00a5",
+      "bytes": 2783819
+    },
+    "seeds/lyra-seed.png": {
+      "sha256": "a0d462ce8c0469fab74e267b14e7dc73fd43fc53330a648704d63ac8a086ad3e",
+      "bytes": 434095
+    },
+    "strips.json": {
+      "sha256": "93bab9167a6141e90a4829d9ab5a470fe1049929dc0341ca6571b801deca9f97",
+      "bytes": 10993
+    }
+  }
+}
