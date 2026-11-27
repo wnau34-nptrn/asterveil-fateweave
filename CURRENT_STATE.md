@@ -31,7 +31,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 - Auto battle (OD-62, 2026-11-26): AUTO toggle in random battles and World Boss attempts, one plain AI (no move reading, ~30% plain attacks), device settings for stop HP and skills switched off. Numbers are drafts (`AUTO_LAPSE`); sim: random battles ≈ advisor; World Boss (50% plain attacks there) 76–105% of the teaching advice damage. [Validation](docs/validation/auto-battle/README_TH.md).
 
-- Map 5 (OD-60): complete in game. Save v70, mine map v2, giant tuned at 48 seeds (`crystal-giant` v2); art #357–#363, giant 4b motion approved (“อนุมัติ”, #365). Side events #366: trapped worker, ore cart, fresh vein, ore merchant (ore→gold ×3), ledger → crystal weapon recipe, Bork's elite job ×3. Event markers use Codex's ART-MAP5-EVENTS-001 (#371, trapped worker R1 chosen by the owner, atlas `mine_events.webp`); owner approved the look 2026-11-27 (“อนุมัติ นำเข้าเกมได้”); numbers are drafts. [Validation](docs/validation/map5-mine/README_TH.md).
+- Map 5 (OD-60): complete in game. Save v70, mine map v2, giant tuned at 48 seeds (`crystal-giant` v2); art #357–#363, giant 4b motion approved (“อนุมัติ”, #365). Side events #366: trapped worker, ore cart, fresh vein, ore merchant (ore→gold ×3), ledger → crystal weapon recipe, Bork's elite job ×3. Event markers: Codex ART-MAP5-EVENTS-001 (#371, worker R1, `mine_events.webp`), owner approved 2026-11-27; numbers are drafts. [Validation](docs/validation/map5-mine/README_TH.md).
 - 2026-11-25: boss charge holds sit on the body. Bosses wear a silhouette aura in their own colour: light all battle, stronger while charging. Boss crowns sit above the rendered figure. The owner said “นำเข้าเกมได้เลย”. Mobile frame rate is not measured yet. [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
 - Game Feel [Draft PR #353](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/353): เสียงและภาพโจมตีตามอาวุธครบ 15 ตัวและตัวละครเซฟเก่า 2 ตัว. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
 
@@ -42,4 +42,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-The owner picks the next task. Candidates: Map 6 บึงหมอกพิษ (OD-60 order: rules + content + sim → screens → Codex art; concept in [CHAPTER1_MAPS_TH §6](docs/design/CHAPTER1_MAPS_TH.md)), or make the worker/vein markers easier to see in the dark tunnels (they are hidden by the 1-tile darkness and the D-pad; needs an owner decision).
+The owner picks the next task. Candidates: Map 6 บึงหมอกพิษ (OD-60 order: rules + content + sim → screens → Codex art; concept in [CHAPTER1_MAPS_TH §6](docs/design/CHAPTER1_MAPS_TH.md)), or another owner-picked task. Dark mine tunnels: pending events glow within 3 steps (draft range; [screens](docs/validation/map5-mine/event-markers-2026-11-27/02-dark-beacons-390.webp)).

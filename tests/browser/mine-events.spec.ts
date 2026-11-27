@@ -102,3 +102,22 @@ test("camp: Uncle Bork's mine job shows its progress", async ({ page }) => {
   const job = page.getByText('ผลึกจากอีลิทเหมือง'); await job.scrollIntoViewIfNeeded(); await expect(job).toBeVisible();
   await shot(page, 'mine-bork-job');
 });
+
+// Dark tunnels hide events until the team is adjacent, so a pending event glows through the dark within three steps.
+test('dark tunnels: a pending event shows a beacon within three steps and steps its hint aside when adjacent', async ({ page }) => {
+  const ev = mineMap.events.find(e => e.kind === 'vein')!;
+  const game = depart(company(), mineMap, encounterById, 11); game.run.position = { x: ev.x - 4, y: ev.y }; game.run.repel = mineMap.potions.repelSteps;
+  await launch(page, game);
+  await expect(page.locator('.event-beacon')).toHaveCount(0);
+  await page.locator('#move-right').click();
+  await expect(page.locator('.event-beacon[data-kind=vein]')).toHaveCount(1);
+  const stepTo = async (x: number): Promise<void> => {
+    await page.locator('#move-right').click();
+    await expect.poll(async () => (await saved(page)).run?.position.x, { timeout: 8000 }).toBe(x);
+  };
+  await stepTo(ev.x - 2); await stepTo(ev.x - 1);
+  await expect(page.locator('.step-hint.on-event')).toHaveCount(1);
+  await page.locator('#move-right').click();
+  await expect(page.locator('#event-dialog')).toBeVisible();
+  await expect(page.locator('.event-beacon')).toHaveCount(0);
+});
