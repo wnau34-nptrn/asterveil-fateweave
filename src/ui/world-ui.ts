@@ -71,6 +71,8 @@ const goals = (s: ExpeditionState, map: MapDefinition) => {
 // It owns no rules: every input is forwarded to the host, which commits and
 // saves before the view updates. Animations only decorate committed state.
 // Rescued workers wait beside the yard camp (offsets from the rescue camp); the beam crystals face by state.
+/** How many steps away a pending event in a dark mine zone shows its glowing "!" through the dark. */
+const BEACON_RANGE = 3;
 const RESCUED_SLOTS: readonly Point[] = [{ x: -1, y: 1 }, { x: 1, y: 1 }, { x: -2, y: 1 }];
 const BEAM_FRAME: Record<string, string> = { up: 'beam_n', down: 'beam_s', right: 'beam_e', left: 'beam_w' };
 
@@ -101,6 +103,7 @@ export class WorldUI {
           <div class="floor-layer">${this.floorCells()}</div>
           <div class="sprite-layer" id="sprite-layer">${this.staticSprites()}<div class="party-token" id="party-token"><span class="token-portrait">${portrait('guardian')}</span></div></div>
           <div class="fog-layer" id="fog-layer"></div>
+          <div class="beacon-layer" id="beacon-layer" aria-hidden="true"></div>
           <div class="hint-layer" id="hint-layer"></div>
           <div id="mine-beam-layer" aria-hidden="true"></div>
         </div>
@@ -338,6 +341,7 @@ export class WorldUI {
     const token = this.root.querySelector('#party-token')!;
     const sprites = this.root.querySelector('#sprite-layer')!; sprites.innerHTML = this.staticSprites(); sprites.append(token);
     this.root.querySelector('#fog-layer')!.innerHTML = ''; this.fogCells = []; setHtml(this.root.querySelector('#hint-layer')!, '');
+    setHtml(this.root.querySelector('#beacon-layer')!, '');
     setHtml(this.root.querySelector('#mine-beam-layer')!, '');
     this.root.querySelector('#map-name')!.textContent = map.name;
   }
@@ -725,8 +729,21 @@ export class WorldUI {
     this.root.querySelectorAll<HTMLElement>('.sprite[data-cell]').forEach(el => {
       const [x, y] = el.dataset.cell!.split(',').map(Number); const at = { x: x!, y: y! };
       const dark = mine?.darkZones.includes(tileAt(this.map, at)?.zoneId ?? '');
+      el.classList.toggle('in-dark', !!dark);
       el.hidden = !isRevealed(s, this.map, at) || !!(dark && local && !local.has(at.y * this.width + at.x));
     });
+    this.renderBeacons(s, local);
+  }
+
+  // Dark mine tunnels hide an event until the team is next to it and dim its own bubble, so a pending event within BEACON_RANGE
+  // steps shows a glowing "!" above the dark (the worker knocks, the vein glows). Presentation only: it changes no rule and reveals no cell.
+  private renderBeacons(s: ExpeditionState, local: ReadonlySet<number> | undefined): void {
+    const mine = this.map.mine;
+    const html = !mine || !local ? '' : this.map.events.filter(e => !s.eventsDone.includes(e.id)
+      && mine.darkZones.includes(tileAt(this.map, e)?.zoneId ?? '')
+      && (d => d >= 1 && d <= BEACON_RANGE)(Math.abs(e.x - s.position.x) + Math.abs(e.y - s.position.y)))
+      .map(e => `<span class="event-beacon" data-kind="${e.kind}" style="--x:${e.x};--y:${e.y}"><i>!</i></span>`).join('');
+    setHtml(this.root.querySelector('#beacon-layer')!, html);
   }
 
   private renderSprites(s: ExpeditionState, prev: WorldUI['previous']): void {
@@ -775,7 +792,8 @@ export class WorldUI {
       // Opened doors and found secret passages get a hint; an open pit does not, and unfound secrets stay secret.
       if (!t || (t.kind === 'wall' && !doorOpen(s, this.map, p) && !(secretAt(this.map, p) && s.secrets.some(id => id === secretAt(this.map, p)!.id))) || openPit(s, this.map, p)) return '';
       const sealed = t.kind === 'boss' && bossSealed(s, this.map);
-      return `<span class="step-hint${sealed ? ' sealed' : (t.kind === 'boss' && !s.bossDefeated) || eliteBlocks(s, this.map, p) ? ' boss' : ''}" data-dir="${dir}" style="--x:${p.x};--y:${p.y}"><i>${icon(dir)}</i></span>`;
+      const onEvent = this.map.events.some(e => e.x === p.x && e.y === p.y && !s.eventsDone.includes(e.id));
+      return `<span class="step-hint${onEvent ? ' on-event' : ''}${sealed ? ' sealed' : (t.kind === 'boss' && !s.bossDefeated) || eliteBlocks(s, this.map, p) ? ' boss' : ''}" data-dir="${dir}" style="--x:${p.x};--y:${p.y}"><i>${icon(dir)}</i></span>`;
     }).join(''));
   }
 

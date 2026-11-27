@@ -993,3 +993,17 @@ button.is-loading::before { content: ''; position: absolute; top: 50%; right: 14
   .lobby-sheet.lobby-sheet-leaving { animation-name: sheet-leave-down; }
 }
 @media (prefers-reduced-motion: reduce) { .lobby-sheet.lobby-sheet-leaving, .world-dialog.dialog-leaving { display: none; } }
+
+/* Dark mine tunnels: a pending event glows through the dark within a few steps, and the step hint over it steps aside so the
+   marker stays readable (the hint keeps its 44 px target; only its backdrop fades and the arrow moves to the corner). */
+.event-beacon { position: absolute; left: calc((var(--x) + .5) * var(--t)); top: calc((var(--y) + .5) * var(--t)); width: var(--t); height: var(--t); transform: translate(-50%, -50%); pointer-events: none; display: grid; place-items: center; }
+.event-beacon::before { content: ''; position: absolute; inset: 14%; border-radius: 50%; background: radial-gradient(circle, #ffd98a99 0, #ffd98a40 45%, transparent 72%); }
+.event-beacon[data-kind=vein]::before { background: radial-gradient(circle, #7ff0b8aa 0, #7ff0b840 45%, transparent 72%); }
+.event-beacon i { position: relative; width: calc(var(--t) * .34); height: calc(var(--t) * .34); display: grid; place-items: center; border-radius: 50%; font: 700 calc(var(--t) * .24)/1 var(--font-heading, sans-serif); font-style: normal; color: #2b1d05;
+  background: radial-gradient(circle at 40% 35%, #fff3c9, #ffcf6b 55%, #b9791c); box-shadow: 0 0 calc(var(--t) * .2) #ffd98a; }
+.event-beacon[data-kind=vein] i { background: radial-gradient(circle at 40% 35%, #dffcf4, #7fe3d0 55%, #2f8f80); color: #06301f; box-shadow: 0 0 calc(var(--t) * .2) #7ff0b8; }
+@media (prefers-reduced-motion: no-preference) { .event-beacon { animation: beacon-pulse 1.8s ease-in-out infinite; } }
+@keyframes beacon-pulse { 50% { opacity: .55; } }
+.event-mark.in-dark i { display: none; }
+.step-hint.on-event::before { opacity: .35; }
+.step-hint.on-event i { position: absolute; right: 2px; bottom: 2px; width: calc(var(--t) * .26); height: calc(var(--t) * .26); padding: 2px; border-radius: 50%; background: #0b1626d9; }

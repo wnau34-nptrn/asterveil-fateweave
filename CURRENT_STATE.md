@@ -42,4 +42,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-The owner picks the next task. Candidates: Map 6 บึงหมอกพิษ (OD-60 order: rules + content + sim → screens → Codex art; concept in [CHAPTER1_MAPS_TH §6](docs/design/CHAPTER1_MAPS_TH.md)), or make the worker/vein markers easier to see in the dark tunnels (they are hidden by the 1-tile darkness and the D-pad; needs an owner decision).
+The owner picks the next task. Candidates: Map 6 บึงหมอกพิษ (OD-60 order: rules + content + sim → screens → Codex art; concept in [CHAPTER1_MAPS_TH §6](docs/design/CHAPTER1_MAPS_TH.md)), or another owner-picked task. Dark tunnels: a pending event shows a glowing "!" within 3 steps and its step hint steps aside (2026-11-27, owner request; [screens](docs/validation/map5-mine/event-markers-2026-11-27/02-dark-beacons-390.webp)); the 3-step range is a draft.
