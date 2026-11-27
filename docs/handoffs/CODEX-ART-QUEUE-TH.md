@@ -36,6 +36,7 @@
 | 31 | ART-UI-POTION-CALM-001 ภาพวาดยาฟื้นความเหนื่อย `calm` (แทนไอคอนเส้น P02) | P02 UI | เขียน prompt แล้ว 2026-11-04 — `docs/handoffs/CODEX-ART-POTION-CALM-TH.md` (ตรวจคลังภาพ 2026-11-04: ภาพเดียวที่เกมขาดจริง) |
 | 33 | ART-CHAR-CLASS-NEW-003 แก้สัดส่วนเคล (หัวจริงเล็ก ~105–115px เพราะวัดจากยอดมวยผม) | ก่อน A12 ส่วนเคล | เขียน prompt แล้ว 2026-11-04 — `docs/handoffs/CODEX-KAEL-SCALE-FIX-TH.md` |
 | 32 | ART-UNIT-ANIMATION-A12-001 ชุดท่าต่อสู้ เคล/วินน์/แอสทริด (22 แถบ, seed = ART-CHAR-CLASS-NEW-002) | P03 อาชีพใหม่ | เขียน prompt แล้ว 2026-11-04 — `docs/handoffs/CODEX-A12-NEW-CLASSES-TH.md`; ภาพนิ่ง seed ยังรอเจ้าของยืนยัน |
+| 34 | ART-MAP5-EVENTS-001 เครื่องหมายเหตุการณ์ข้างทางแผนที่ 5 เหมืองผลึกร้าง 4 ชิ้น (คนงานติดอยู่, รถแร่ทิ้งไว้, สายแร่สด, พ่อค้าแร่) | OD-60 แผนที่ 5 | เขียน brief แล้ว 2026-11-27 ยังไม่ส่ง Codex — ตอนนี้ยืมภาพ `map_props.webp` (PR #366) |
 
 **งานภาพที่เกมยังขาด (ตรวจ 2026-10-22) — เจ้าของอนุมัติให้สั่งทั้งหมด ได้เป็นข้อ 13–19 แล้ว:**
 - ศัตรูที่ยังไม่มีภาพ (ตอนนี้ใช้ภาพสำรอง): องครักษ์อสูร (ศึกแรก), อสูรส่งพลัง (ศึกเงาล่าแนวหลัง)
@@ -939,3 +940,63 @@ NOT YOURS: atlas packing, code routing, tests and in-game clips — Claude does 
 
 RETURN: incoming/ART-VFX-REWORK-001/
 ```
+
+## 34. ART-MAP5-EVENTS-001 — เครื่องหมายเหตุการณ์ข้างทางของแผนที่ 5 เหมืองผลึกร้าง (4 ชิ้น)
+
+ที่มา: เจ้าของสั่ง 2026-11-27 “brief ภาพสำหรับเครื่องหมายเหตุการณ์ในแผนที่ 5” PR #366 ทำเหตุการณ์ข้างทางครบ 4 อย่างแล้ว แต่เครื่องหมายบนแผนที่ยืมภาพจาก `public/assets/world/map_props.webp` (เซลล์เดิมของพ่อค้าเร่ ผู้เดินทาง ซากค่าย ฯลฯ) แล้วย้อมสีด้วย CSS เท่านั้น Claude เลือกยืมเอง ยังไม่ใช่การอนุมัติภาพจากเจ้าของ
+
+**ตรวจจากของจริงแล้ว (2026-11-27)**
+
+| รายการ | ข้อเท็จจริง | ที่มา |
+|---|---|---|
+| เหตุการณ์ | `mine-trapped-worker` kind `trapped` (6,13) อุโมงค์ตะวันตก · `mine-ore-cart` kind `cart` (5,23) ลานคนงาน · `mine-fresh-vein` kind `vein` (18,13) อุโมงค์ตะวันออก · `mine-ore-merchant` kind `ore-merchant` (19,21) ขอบลาน | `src/content/world/chapter-mine.ts` บรรทัด 68–75 |
+| ฉากและทางเลือก | คนงาน: “หินถล่มทับทางแคบ เสียงคนงานเคาะเรียกอยู่หลังกองหิน” · ช่วยขุดออก/เดินผ่าน · รถแร่: “รถแร่คันหนึ่งค้างอยู่บนรางเก่า ผ้าใบคลุมของใช้ที่คนงานไม่ได้ขนออกไป” · สายแร่: “ผนังอุโมงค์แตกเผยสายแร่ที่ยังเรืองแสง” · พ่อค้า: “ตั้งตาชั่งไว้ที่ปากเหมือง รับซื้อแร่เป็นทองและมียาขายด้วย” | `src/ui/th.ts` `eventText` บรรทัด 634–637 |
+| วิธีวาดตอนนี้ | `<span class="event-mark sprite" data-kind=…><b class="map-prop"></b><i>!</i></span>` ช่องละ `--t` = **48 CSS px** (ทั้งที่ 390px และบนเดสก์ท็อป) พื้นหลัง `map_props.webp` 512×256 = 4×2 เซลล์ ยืม: คนงาน=ผู้เดินทาง (0,1) ย้อมซีเปีย · รถแร่=ซากค่าย (1,0) ย้อมซีเปีย · สายแร่=ศาล (2,0) หมุนเฉดสีเขียวน้ำเงิน · พ่อค้าแร่=รถพ่อค้าเร่ (3,0) | `src/ui/world-ui.ts:371–372`, `src/ui/game-feel.css:555–574,659` |
+| เครื่องหมาย “!” | วงกลมเล็กกว้าง 30% ของช่อง อยู่กลางบน ตั้งแต่ 2% ถึง 32% ของความสูงช่อง เด้งขึ้นลงเมื่อไม่ลดการเคลื่อนไหว (`event-bob`) พ่อค้าแร่ใช้สีเขียวมิ้นต์ — ภาพต้องไม่ให้จุดสำคัญ (หน้า/มือ/ตาชั่ง) อยู่ใต้วงนี้ | `game-feel.css:568–574` |
+| จบเหตุการณ์ | `.event-mark.done { display: none }` — เหตุการณ์ที่จบแล้วซ่อนทั้งอัน **พ่อค้าแร่ไม่หายและพ่อค้ารอตลอดรอบ** จึงไม่ต้องมีเฟรม “จบแล้ว” | `world-ui.ts:742–744` |
+| รูปแบบพร็อพเหมืองที่เป็นแบบอย่าง | `mine_decor.webp` 768×640 = 6×5 เซลล์ **128 px** จุดยึดกลางล่าง `footY` 124 จาก 128 (`anchor [0.5,1]`) แสดงที่ 48 CSS px สร้างด้วย ImageGen แล้ว `build.py` จัดแอตลาส ไฟล์ตรวจ 60 px/ช่อง | `incoming/ART-WORLD-MINE-PROPS-001/` (`NOTES.md`, `prompts.json`, `runtime/decor_mine.json`), `src/game/visuals/world-art.ts:32–40` |
+| ของที่มีอยู่แล้ว ห้ามซ้ำ | `ore_cart` (รถแร่เต็มแร่เขียว บนราง ใช้กับปริศนารถแร่) · `glow_crystal` และผลึกเขียวชุด extras (กลุ่มผลึกตั้งตรงบนหินชนวน) · คนงานไม่ถูกสิง 2 ท่า (นั่งยอง และยืนถือตะเกียง: เสื้อกั๊กน้ำตาล ผ้าพันคอแดง ผมน้ำตาล สัดส่วนจริง) · ลังเก็บ/ถังไม้/จอบพลั่ว/กองแร่ | `mine_decor.webp` (ตรวจด้วยตา) |
+| NPC ที่ห้ามหน้าตาชน | ลุงบอร์ก (หัวล้านหนวดแดงส้ม แว่นกอกเกิลบนหัว กันเปื้อนน้ำตาล) · พีโน่ (หมวกปีกเหลืองขนนกขาว เสื้อคลุมม่วง) · ครูฮัลดา (ผมเงินถักเปียยาว เคราขาว กั๊กแดง) · มิมี่ (ผมมวย แว่นกลม เสื้อน้ำเงิน) · เฟิร์น (ผมชมพูหยิก ผ้าคาดผม) · คาเอล (ฮู้ดขาว นกฮูก) และตัวละครรับสมัครบนแผนที่ (แบรนน์, เคล) | `public/assets/lobby/npc/npc_busts.webp`, `units_mercs.webp`, `portraits_mercs.webp` |
+| สี/แสงของแผนที่ 5 ที่อนุมัติแล้ว | พื้นลานสว่างโทนครีมทองมีลายฟิลิกรีทอง ส่วนอุโมงค์เป็นหินชนวนมืด มีความมืดรัศมี 1 ช่อง โค้ดลงสีชั้นมืดทับพร็อพ ผลึก/แสงเป็นเขียวมรกต ไม้สีสนิม หินชนวนเทาน้ำเงิน แสงจากบนซ้าย | `docs/validation/map5-mine/README_TH.md` (#357–#363), `incoming/ART-WORLD-MINE-001/preview/map-5-lit.png`, `map-5-dark.png`, ภาพ `props-2026-11-26/09-props-yard.webp` |
+
+**สิ่งที่ Claude ตัดสินใจเอง (ถ้าเจ้าของไม่ตอบ ใช้ตามนี้)**
+1. คนงานติดอยู่และพ่อค้าแร่เป็นตัวคน → วาดแบบ **semi-chibi** ตามกติกาเจ้าของ 2026-11-26 ส่วนรถแร่และสายแร่เป็นพร็อพ คงลายเส้นพร็อพเหมืองเดิม (วาดสีแบบภาพวาด เส้นขอบชัด สีสนิม/ชนวน/มรกต) คนงานไม่ถูกสิง 2 ท่าในลานยังเป็นสัดส่วนจริง ถ้าเจ้าของไม่ชอบความต่าง จะสั่งวาดใหม่ภายหลัง
+2. รูปแบบไฟล์: แอตลาสเดียว `mine_events.webp` 512×128 (4 เซลล์ × 1 แถว) เซลล์ 128 px จุดยึดกลางล่าง footY 124 เหมือน `mine_decor` Claude เป็นผู้ต่อเข้าเกมด้วย CSS ต่อ `data-kind` (ในโซนเหมือง) และเพิ่มเข้า preload ของแผนที่ 5 ภาพนิ่งเท่านั้น ไม่มีแอนิเมชัน (โค้ดเด้ง “!” และอาจเพิ่มแสงวูบของสายแร่เอง)
+3. ไม่มีเฟรม “จบแล้ว” (เหตุผลในตาราง) และไม่มีเงาใต้เท้า (เกมไม่วาดเงาให้พร็อพ แต่ภาพที่มีเงาบางเบาติดตัววัตถุได้เหมือน `mine_decor` ห้ามมีเงาลอยหรือวงแหวน)
+
+**สิ่งที่เจ้าของต้องเลือกภายหลัง:** แบบคนงานติดอยู่ R1 หรือ R2 (Codex ทำ 2 แบบ แนะนำ 1) · อนุมัติภาพรวม 4 ชิ้นบนแผนที่จริง 390px หลัง Claude นำเข้า (การผ่านเทสต์ไม่ใช่การอนุมัติ)
+
+```text
+CODEX HANDOFF — ART-MAP5-EVENTS-001
+
+Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (NOT main). Create branch art/art-map5-events-001. Add files only under incoming/ART-MAP5-EVENTS-001/. Do not change src/, tests/, public/, .github/ or any existing art. Open a PR into the base branch; do not merge it.
+
+GOAL: four dedicated map markers for the side events of Map 5, the abandoned crystal mine. Today they borrow other props from public/assets/world/map_props.webp, tinted by CSS. Art only; Claude wires them into the game. Do not change rules, saves, text or timing.
+
+READ FIRST: docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md; docs/handoffs/ART-PLACEMENT-RULES.md; incoming/ART-WORLD-MINE-PROPS-001/ (NOTES.md, prompts.json, build.py, runtime/decor_mine.json: the exact format and build approach to repeat); docs/validation/map5-mine/README_TH.md; incoming/ART-WORLD-MINE-001/preview/map-5-lit.png and map-5-dark.png; public/assets/world/mine_decor.webp, mine_tiles.webp, map_props.webp (current borrowed look); public/assets/lobby/npc/npc_busts.webp (people you must not resemble).
+
+STYLE: original art only; never copy Asterveil: Rise Beyond. Characters are SEMI-CHIBI (owner rule 2026-11-26): big head, short thick limbs, clean outlines, saturated cel shading — in-game references foe_mirror_shade, foe_hunter, foe_ruin_bat, foe_water_spirit (public/assets/art/units_foes*.webp). Props keep the painted look of mine_decor.webp: crisp silhouette, warm rust wood, slate blue-grey stone, emerald crystal light, light from top-left, strong dark outline so each reads on both the pale cream-gold lit yard floor and the dark slate tunnel floor.
+
+THE FOUR MARKERS (each a single static image, facing the player: 3/4 top-down view like mine_decor, the person turned slightly toward the viewer):
+1. trapped — kind `trapped`, west tunnel. Scene: rockfall has blocked a narrow passage; a worker knocks for help from behind the rocks. Draw a heap of fallen slate chunks and a splintered timber with a dark gap; a semi-chibi worker is half visible in the gap: a yellow-orange hard cap with a small lamp, round dusty face, grey-green overalls, one hand raised and knocking on a rock. R1: head and one raised hand visible. R2: head, both hands pressed against the rocks, a few fallen pebbles. Not a corpse, no blood, no gore. Must NOT resemble the existing miners (brown vest, red scarf, brown hair, lantern) or any camp NPC.
+2. cart — kind `cart`, workers' yard. Scene: an old ore cart left behind, canvas tarp over the belongings the workers did not carry out. Draw a small wooden cart with iron rims, slightly tilted with one wheel off its track, a dusty tan-grey canvas tarp tied with rope over a lumpy load, one corner lifted to show a potion bottle neck and a rope coil. It must differ clearly from the existing ore_cart (full of green ore, on rails): no ore heap, no rails, tarp is the main shape, no emerald.
+3. vein — kind `vein`, east tunnel. Scene: a cracked tunnel wall exposing a fresh glowing crystal vein. Draw a single chunk of slate wall (about one tile, flat back, broken edge at the front) with a bright emerald seam running diagonally through it, a few small bright shards at the crack and loose rubble. It is a wall fragment with a vein, NOT a free-standing crystal cluster: do not repeat glow_crystal or the extras clusters. Also deliver a separate optional soft emerald glow layer (vein_glow, 128×128, additive-friendly, no hard edge) so the game can pulse it.
+4. ore-merchant — kind `ore-merchant`, yard edge. Scene: an ore merchant has set up scales at the mine mouth, buying ore for gold and selling potions. Draw a semi-chibi merchant standing behind a small wooden counter: big round head, short stout body, wide-brimmed flat brown hat with a brass badge, burgundy waistcoat, rolled sleeves. No spectacles (Mimi), no goggles, no feathers, no beard, no pink hair, no hood. On the counter: a brass balance scale, a small crate of green ore, a leather coin pouch, two potion bottles (red, blue). No teal canopy (the roaming merchant cart already uses one). Friendly, one hand resting on the scale.
+People to avoid resembling: Bork (bald, red-orange moustache, goggles, brown apron), Pino (yellow feathered hat, purple coat), Halda (long silver braid, white beard, red vest), Mimi (hair bun, round glasses, blue), Fern (pink curls, headband), Kael (white hood, owl), existing yard miners (brown vest, red scarf).
+
+READABILITY AT DISPLAY SIZE: shown at 48 CSS px per tile (2× device pixels = 96 px) over a 390 px wide phone screen. A small round "!" bubble (about 14 px, tile x-centre, top 2–32% of the cell) bobs over the top of every marker. Keep faces, hands, the scale and the vein seam BELOW y = 44 of 128; the top 40 px may hold rock tops, hat brims, tarp peaks or timber only. Silhouette must read at 48 px. Check by exporting each image at 48 px and 96 px.
+
+FORMAT (repeat mine_decor): straight-alpha PNG sources, final cells 128×128, anchor bottom-centre (0.5, 1), footY = 124 of 128, object width at most 112 px (≥8 px clear each side), top clear of the cell edge by ≥3 px, one common scale (the four should feel the same size as a tile prop; people about the height of the existing standing miner in mine_decor, not larger). Real alpha, no painted checkerboard, no ground slab or floor tile, no cast shadow, no ring, no text or letters of any kind. Generate each image on its own at ≥512 px, then downscale with Lanczos into the cell; do not draw in a 4-up sheet in one call (the earlier sheets cut props). Atlas: mine_events.webp 512×128, cells in order trapped (0), cart (1), vein (2), ore-merchant (3), lossless WebP; the vein_glow layer is a separate 128×128 file.
+
+DELIVER under incoming/ART-MAP5-EVENTS-001/: source/ (byte-identical generator outputs, one per call), trapped_R1.png, trapped_R2.png, cart.png, vein.png, vein_glow.png, ore_merchant.png (128×128 each), runtime/mine_events.webp + runtime/mine_events.json (frames, anchor [0.5,1], footY 124; use the R1 trapped worker in the atlas and say so), preview/ (a) markers-48.png: the four at 48 px on a pale yard floor tile and on a dark tunnel floor tile, with the "!" bubble drawn on top at the right size, (b) markers-390.png: the four placed on a 390 px wide crop of map-5-lit.png at the real tile positions (6,13), (5,23), (18,13), (19,21) at 48 px per tile, (c) compare.png: old borrowed marker vs new, side by side, (d) people-compare.png: the two new people beside the existing yard miner and the six camp NPCs, to show they differ), prompts.json (every prompt used), seeds.json (reference crops used; ImageGen reports no numeric seed — say so), validation.json (SHA-256 of every file, dimensions, alpha coverage, bbox, footY per image), NOTES.md (what each shows, which variant of the worker you recommend and why, assumptions), build.py (reproducible, builds the atlas and previews from the sources).
+
+DELIVERY CHECK: push with normal git (no API upload of images; PR #90 was once cut at ~768 KB), fetch the branch back, compare SHA-256 of every file with validation.json, and fully decode every PNG and the WebP with Pillow. Report results in the PR.
+
+ACCEPTANCE: (1) each marker is recognisable from its scene without reading text; (2) semi-chibi people have big heads, short thick limbs, clean outlines, cel shading; (3) the cart is clearly not ore_cart and the vein is clearly not a free-standing crystal; (4) no resemblance to the listed NPCs or existing miners; (5) all four read on both floors at 48 px; (6) nothing important sits under the "!" bubble; (7) true alpha, correct cell size, footY 124, no cut edges; (8) files, hashes and previews match the list above.
+
+NOT YOURS: atlas wiring, CSS, preload, tests, in-game clips and the screenshots on the real map — Claude does these. Artwork selection (R1 or R2) and approval are the owner's decisions; technical checks and CI are not approval.
+
+RETURN: incoming/ART-MAP5-EVENTS-001/
+```
+
+**หลัง Codex ส่ง (Claude ทำ ใช้ skill `fateweave-art-intake`):** ตรวจแฮช/alpha/footY → แพ็ก `public/assets/world/mine_events.webp` + rev ใน `world-art.ts` + preload ใน `screen-images.ts` → CSS ต่อ `data-kind` (แทนเซลล์ยืมและ filter) → รัน `npm run coverage:presentation` และสเปกเหมือง → ภาพ 390px ให้เจ้าของเลือกแบบ/อนุมัติ
