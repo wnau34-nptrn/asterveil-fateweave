@@ -1,0 +1,134 @@
+{
+  "mira": [
+    {
+      "version": "R1",
+      "prompt": "Edit the attached original Mira game sprite into ONE continuous horizontal 6-frame production animation strip, exactly six distinct full-body sprites forming one row, aligned feet, with wide fully transparent gutters and generous clearance on all sides, actual transparent RGBA. Keep her character design identical to the seed: same green embroidered hood and cape, copper braid and hair, facial structure and green eyes, same boots and leather outfit, quiver and arrows, and precisely the same brown recurved bow and its string. Preserve palette, material render, edge finish, three-quarter facing right, head width, figure height, both boot positions and original bow length. Retain the exact seed proportions; do not zoom or change camera. All six poses have soles on the same ground line with no jump. 1 replicate the exact seed pose. 2 small anticipation shifting her weight while both boots remain planted. 3 lift the bow with her left hand and make a right fist at her side. 4 proud peak, bow held overhead with visibly complete ends and string, bright natural smile and eyes open. 5 slight settle of hood and braid while lowering elbow only subtly. 6 stable held victory, bow still raised overhead in left hand and right fist at side, both soles planted, bright smile, eyes open. Render identically sized bodies in every slot, full unobstructed silhouette, bow intact and not crossing into another slot. No new shapes, props, effects, shines, motion lines, shadow, backdrop, floor, text or borders. Production sprite with clean genuine alpha, no drawn checkerboard, no matte.",
+      "reference": "seeds/mira-seed.png",
+      "generation_id": "exec-37f02c0a-1fa7-40c8-8773-8633f41664fa",
+      "transparent_background": true,
+      "file": "raw/mira-victory-r1.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "version": "R2",
+      "prompt": "Edit the attached original portrait sprite of mira into ONE horizontal production animation strip with exactly six evenly spaced full-body sprites, in reading order and in a single row. Real transparent RGBA, generous transparent margins and gutters, all elements fit within their own slot. Use only the given character. Match the original polished fantasy chibi sprite render, exact face, head width, body height, hair silhouette, costume details and colors, original props and true prop dimensions. Preserve camera, facing and perspective. Exactly two arms and two hands including any overlaps. Same body scale and sole height in all six drawings, no jump. The poses read in order: 1 same as the seed; 2 small preparation; 3 rising action; 4 peak; 5 small settle; 6 balanced held victory, eyes open, feet on the sole line. Choreography: Lift her left-hand bow overhead diagonally, right fist by hip, natural bright smile. At peak and held, both ends of the bow should sit visibly above the hood. Uncurl the right hand from the braid for the action. Exactly two hands throughout: one attached to each arm, no hand on braid once the right fist moves to hip. Preserve all original props and their proportions, no extra props. Clean antialiased transparent edges, no matte, no background, no floor, no shadows, no added effects, no motion lines, no text.",
+      "reference": "seeds/mira-seed.png",
+      "generation_id": "exec-e4b54d52-e0bb-45da-a499-f141cdcd0237",
+      "transparent_background": true,
+      "file": "raw/mira-victory-r2.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    }
+  ],
+  "toma": [
+    {
+      "version": "R1",
+      "prompt": "Edit the attached original portrait sprite of toma into ONE horizontal production animation strip with exactly six evenly spaced full-body sprites, in reading order and in a single row. Real transparent RGBA, generous transparent margins and gutters, all elements fit within their own slot. Use only the given character. Match the original polished fantasy chibi sprite render, exact face, head width, body height, hair silhouette, costume details and colors, original props and true prop dimensions. Preserve camera, facing and perspective. Exactly two arms and two hands including any overlaps. Same body scale and sole height in all six drawings, no jump. The poses read in order: 1 same as the seed; 2 small preparation; 3 rising action; 4 peak; 5 small settle; 6 balanced held victory, eyes open, feet on the sole line. Choreography: Lift the same flask to eye level with its original contained glow and no splash, while the free hand pushes existing goggles onto forehead. End holding flask at eye height, goggles on forehead, open eyes and grin. Preserve all original props and their proportions, no extra props. Clean antialiased transparent edges, no matte, no background, no floor, no shadows, no added effects, no motion lines, no text.",
+      "reference": "seeds/toma-seed.png",
+      "generation_id": "exec-6c512bf2-92f0-4376-8dfb-46fce4731a39",
+      "transparent_background": true,
+      "file": "raw/toma-victory-r1.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "version": "R2",
+      "prompt": "undefined The output must have invisible background with zero alpha everywhere outside each silhouette, including wide gutters. The hand physically moves the existing over-hair goggles slightly higher above the brow while the small round prescription glasses remain on his face. End with flask lifted slightly above the starting position.",
+      "reference": "seeds/toma-seed.png",
+      "generation_id": "exec-3292da4a-d64c-475e-8fe8-3c764f192141",
+      "transparent_background": true,
+      "file": "raw/toma-victory-r2.png",
+      "raw_size": [
+        1254,
+        1254
+      ]
+    }
+  ],
+  "garran": [
+    {
+      "version": "R1",
+      "prompt": "Edit the attached original portrait sprite of garran into ONE horizontal production animation strip with exactly six evenly spaced full-body sprites, in reading order and in a single row. Real transparent RGBA, generous transparent margins and gutters, all elements fit within their own slot. Use only the given character. Match the original polished fantasy chibi sprite render, exact face, head width, body height, hair silhouette, costume details and colors, original props and true prop dimensions. Preserve camera, facing and perspective. Exactly two arms and two hands including any overlaps. Same body scale and sole height in all six drawings, no jump. The poses read in order: 1 same as the seed; 2 small preparation; 3 rising action; 4 peak; 5 small settle; 6 balanced held victory, eyes open, feet on the sole line. Choreography: Set spear butt on the level floor beside his boot, straighten the spear shaft from its seed angle, keep the same shield on the same arm, chin up and proud grin. End holding spear vertically beside foot with shield at his side. Preserve all original props and their proportions, no extra props. Clean antialiased transparent edges, no matte, no background, no floor, no shadows, no added effects, no motion lines, no text.",
+      "reference": "seeds/garran-seed.png",
+      "generation_id": "exec-f1320c23-f6c5-48e3-a728-c14507d27229",
+      "transparent_background": true,
+      "file": "raw/garran-victory-r1.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "version": "R2",
+      "prompt": "undefined Keep the speartip-to-butt distance, even when upright, shorter than the character from crown to soles, approximately 95% of body height. Use the same steel tip, shaft, tapered metal butt, blue ribbon and original visible oval shield.",
+      "reference": "seeds/garran-seed.png",
+      "generation_id": "exec-c6f9a138-96d7-4541-b15c-341723374d9f",
+      "transparent_background": true,
+      "file": "raw/garran-victory-r2.png",
+      "raw_size": [
+        1254,
+        1254
+      ]
+    }
+  ],
+  "brann": [
+    {
+      "version": "R1",
+      "prompt": "Edit the attached original portrait sprite of brann into ONE horizontal production animation strip with exactly six evenly spaced full-body sprites, in reading order and in a single row. Real transparent RGBA, generous transparent margins and gutters, all elements fit within their own slot. Use only the given character. Match the original polished fantasy chibi sprite render, exact face, head width, body height, hair silhouette, costume details and colors, original props and true prop dimensions. Preserve camera, facing and perspective. Exactly two arms and two hands including any overlaps. Same body scale and sole height in all six drawings, no jump. The poses read in order: 1 same as the seed; 2 small preparation; 3 rising action; 4 peak; 5 small settle; 6 balanced held victory, eyes open, feet on the sole line. Choreography: Move the original hammer head down until it rests on the level floor and rest both hands on the top of the original handle. Laugh at peak and settle. End leaning slightly on hammer, with open eyes and a broad smile. Preserve all original props and their proportions, no extra props. Clean antialiased transparent edges, no matte, no background, no floor, no shadows, no added effects, no motion lines, no text.",
+      "reference": "seeds/brann-seed.png",
+      "generation_id": "exec-16078108-7424-4c97-b81f-430d91c07b5b",
+      "transparent_background": true,
+      "file": "raw/brann-victory-r1.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "version": "R2",
+      "prompt": "Edit the attached original portrait sprite of brann into ONE horizontal production animation strip with exactly six evenly spaced full-body sprites, in reading order and in a single row. Real transparent RGBA, generous transparent margins and gutters, all elements fit within their own slot. Use only the given character. Match the original polished fantasy chibi sprite render, exact face, head width, body height, hair silhouette, costume details and colors, original props and true prop dimensions. Preserve camera, facing and perspective. Exactly two arms and two hands including any overlaps. Same body scale and sole height in all six drawings, no jump. The poses read in order: 1 same as the seed; 2 small preparation; 3 rising action; 4 peak; 5 small settle; 6 balanced held victory, eyes open, feet on the sole line. Choreography: Move the original hammer head down until it rests on the level floor and rest both hands on the top of the original handle. Laugh at peak and settle. End leaning slightly on hammer, with open eyes and a broad smile. Preserve all original props and their proportions, no extra props. Clean antialiased transparent edges, no matte, no background, no floor, no shadows, no added effects, no motion lines, no text. Render all six frames, no close-up. Grounded hammer stands outboard beside his near boot, leaving both boots and hammer head fully visible. Keep the entire unmistakable large broad double-faced geometric hammer identical to the seed. From pommel to outer hammer face its original length is greater than half of Brann's full figure height, nearly 95% along its long shaft axis and outline. It rotates down into position and must never shrink. A realistic two-handed rest on the high pommel, no oversized expressions.",
+      "reference": "seeds/brann-seed.png",
+      "generation_id": "exec-cc0d5fa1-6210-4dd0-b6c3-c8b4d03cd7cf",
+      "transparent_background": true,
+      "file": "raw/brann-victory-r2.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    }
+  ],
+  "sefa": [
+    {
+      "version": "R1",
+      "prompt": "Edit the attached original portrait sprite of sefa into ONE horizontal production animation strip with exactly six evenly spaced full-body sprites, in reading order and in a single row. Real transparent RGBA, generous transparent margins and gutters, all elements fit within their own slot. Use only the given character. Match the original polished fantasy chibi sprite render, exact face, head width, body height, hair silhouette, costume details and colors, original props and true prop dimensions. Preserve camera, facing and perspective. Exactly two arms and two hands including any overlaps. Same body scale and sole height in all six drawings, no jump. The poses read in order: 1 same as the seed; 2 small preparation; 3 rising action; 4 peak; 5 small settle; 6 balanced held victory, eyes open, feet on the sole line. Choreography: Make one short dagger flip on the rising action, then hold both existing daggers in a reverse grip crossed neatly in front of the chest, with a cool smirk while the original scarf settles. End with crossed daggers, eyes open. Preserve all original props and their proportions, no extra props. Clean antialiased transparent edges, no matte, no background, no floor, no shadows, no added effects, no motion lines, no text.",
+      "reference": "seeds/sefa-seed.png",
+      "generation_id": "exec-20778c69-9070-480f-aa85-f2b8bdc65139",
+      "transparent_background": true,
+      "file": "raw/sefa-victory-r1.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    }
+  ],
+  "lio": [
+    {
+      "version": "R1",
+      "prompt": "Edit the attached original portrait sprite of lio into ONE horizontal production animation strip with exactly six evenly spaced full-body sprites, in reading order and in a single row. Real transparent RGBA, generous transparent margins and gutters, all elements fit within their own slot. Use only the given character. Match the original polished fantasy chibi sprite render, exact face, head width, body height, hair silhouette, costume details and colors, original props and true prop dimensions. Preserve camera, facing and perspective. Exactly two arms and two hands including any overlaps. Same body scale and sole height in all six drawings, no jump. The poses read in order: 1 same as the seed; 2 small preparation; 3 rising action; 4 peak; 5 small settle; 6 balanced held victory, eyes open, feet on the sole line. Choreography: Strum a final chord, then lift the original lute neck with a small flourish, smiling with eyes closed in frames 3 and 4 only. End with the lute held up, open eyes and a smile. Add no music notes. Preserve all original props and their proportions, no extra props. Clean antialiased transparent edges, no matte, no background, no floor, no shadows, no added effects, no motion lines, no text.",
+      "reference": "seeds/lio-seed.png",
+      "generation_id": "exec-787076d0-bd9f-40d5-913d-585c49b717e4",
+      "transparent_background": true,
+      "file": "raw/lio-victory-r1.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    }
+  ]
+}

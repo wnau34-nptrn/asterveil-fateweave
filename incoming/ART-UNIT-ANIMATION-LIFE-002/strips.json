@@ -1,0 +1,201 @@
+{
+  "mira": {
+    "status": "missing",
+    "expected_frames": 6,
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 751,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6",
+    "reason": "R1 introduced a third hand. R2 corrects the hand, but the exact frame 1 has alpha ≥ 128 at y=752 below the required y=751."
+  },
+  "toma": {
+    "status": "missing",
+    "expected_frames": 6,
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 752,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6",
+    "reason": "R1 background alpha never falls below 180. R2 produced one square illustration."
+  },
+  "garran": {
+    "status": "missing",
+    "expected_frames": 6,
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 752,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6",
+    "reason": "R1 changes the spear length as it is planted (about 480–490 px after scaling to the body, versus about 436 px for the seed). R2 produced one square illustration."
+  },
+  "brann": {
+    "status": "missing",
+    "expected_frames": 6,
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 752,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6",
+    "reason": "R1 and R2 substantially shorten the hammer from head to pommel in the planted poses."
+  },
+  "sefa": {
+    "status": "missing",
+    "expected_frames": 6,
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 751,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6",
+    "reason": "R1 shows the requested crossing. The exact frame 1 has alpha ≥ 128 at y=752 below the required y=751."
+  },
+  "lio": {
+    "status": "candidate",
+    "expected_frames": 6,
+    "frames": [
+      "cells/lio-victory/000.png",
+      "cells/lio-victory/001.png",
+      "cells/lio-victory/002.png",
+      "cells/lio-victory/003.png",
+      "cells/lio-victory/004.png",
+      "cells/lio-victory/005.png"
+    ],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 752,
+    "recommended_version": "R1",
+    "runtime_use": "one-shot, then hold frame 6",
+    "placement": [
+      {
+        "index": 0,
+        "scale": 1,
+        "offset": [
+          128,
+          256
+        ],
+        "figure_height": 459
+      },
+      {
+        "index": 1,
+        "scale": 1.1984334203655354,
+        "offset": [
+          164,
+          95
+        ],
+        "raw_slot": [
+          360,
+          0,
+          720,
+          724
+        ],
+        "figure_height": 453,
+        "sole_adjustment": "Far boot extended 3–4 px below y=725 to match near boot at y=752."
+      },
+      {
+        "index": 2,
+        "scale": 1.1984334203655354,
+        "offset": [
+          162,
+          95
+        ],
+        "raw_slot": [
+          720,
+          0,
+          1085,
+          724
+        ],
+        "figure_height": 453,
+        "sole_adjustment": "Far boot extended 3–4 px below y=725 to match near boot at y=752."
+      },
+      {
+        "index": 3,
+        "scale": 1.1953125,
+        "offset": [
+          164,
+          97
+        ],
+        "raw_slot": [
+          1085,
+          0,
+          1445,
+          724
+        ],
+        "figure_height": 453,
+        "sole_adjustment": "Far boot extended 3–4 px below y=725 to match near boot at y=752."
+      },
+      {
+        "index": 4,
+        "scale": 1.1984334203655354,
+        "offset": [
+          161,
+          95
+        ],
+        "raw_slot": [
+          1445,
+          0,
+          1807,
+          724
+        ],
+        "figure_height": 454,
+        "sole_adjustment": "Far boot extended 3–4 px below y=725 to match near boot at y=752."
+      },
+      {
+        "index": 5,
+        "scale": 1.204724409448819,
+        "offset": [
+          163,
+          92
+        ],
+        "raw_slot": [
+          1807,
+          0,
+          2172,
+          724
+        ],
+        "figure_height": 453,
+        "sole_adjustment": "Far boot extended 3–4 px below y=725 to match near boot at y=752."
+      }
+    ]
+  }
+}
