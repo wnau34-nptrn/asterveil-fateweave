@@ -15,7 +15,7 @@
 
 | identity | ชื่อ | ฝั่ง | atlas (เฟรม · decoded · download) | hit | block | down | counter |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `guardian` | Aegis | เรา | 39 · 3.99 MiB · 1.45 MB | sprite 17,18 | sprite 30,31 | sprite 19,20,21 · ค้าง 21 | sprite 30,5,7 |
+| `guardian` | Aegis | เรา | 39 · 3.99 MiB · 1.47 MB | sprite 17,18 | sprite 30,31 | sprite 19,20,21 · ค้าง 21 | sprite 30,5,7 |
 | `tracer` | Lyra | เรา | 38 · 8.15 MiB · 2.27 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | sprite 12,13,14 |
 | `weaver` | Eira | เรา | 22 · 3.88 MiB · 1.38 MB | sprite 17,18 | procedural (tint/lift) | sprite 19,20,21 · ค้าง 21 | — |
 | `healer` | Seren | เรา | 40 · 4.68 MiB · 1.46 MB | sprite 17,18 | sprite 38,39 | sprite 19,20,21 · ค้าง 21 | — |

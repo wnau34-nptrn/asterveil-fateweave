@@ -15,7 +15,8 @@ ROOT = pathlib.Path(sys.argv[1]).resolve(); WRITE = '--write' in sys.argv
 PKG = ROOT / 'incoming/ART-UNIT-ANIMATION-LIFE-001'
 spec = importlib.util.spec_from_file_location('bv', PKG / 'build_victory.py'); sys.argv = sys.argv[:2]
 bv = importlib.util.module_from_spec(spec); spec.loader.exec_module(bv)
-W1 = PKG / 'w1-aegis-idle'
+# Owner 2026-11-27 “ท่ายืนเอกิส W1 ให้ขยับแรงขึ้น”: W1b (stronger warp) replaces W1 in the trial.
+W1 = PKG / 'w1b-aegis-idle'
 
 
 def main():
@@ -57,7 +58,7 @@ def main():
     if WRITE:
         (base / entry['image']).unlink(); (base / entry['atlas']).unlink(); (base / image_name).write_bytes(webp); (base / json_name).write_bytes(raw)
         manifest['aegis'] = {**entry, **after}; manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
-        (PKG / 'integration-idle-w1.json').write_text(json.dumps(report, indent=2) + '\n')
+        (PKG / 'integration-idle-w1b.json').write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report, indent=1))
 
 
