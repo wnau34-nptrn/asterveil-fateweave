@@ -1,0 +1,1726 @@
+[
+  {
+    "identity": "aegis",
+    "move": "idle",
+    "revision": "R1",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "cell_anchor": [
+      320,
+      497
+    ],
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "ground_y": 497,
+    "shared_character_scale": 1,
+    "raw_to_seed_resolution_scale": 0.9312888282499989,
+    "scale_basis": "SIFT upper-body correspondence in first raw frame",
+    "raw_file": "raw/aegis-idle.png",
+    "file": "spaced/aegis-idle.png",
+    "cells": "cells/aegis-idle",
+    "transforms": [
+      {
+        "frame": 0,
+        "source_box": [
+          7,
+          84,
+          489,
+          623
+        ],
+        "phase": "seed",
+        "offset": [
+          64,
+          0
+        ],
+        "seed_lock": true
+      },
+      {
+        "frame": 1,
+        "source_box": [
+          550,
+          75,
+          1034,
+          623
+        ],
+        "phase": "inhale",
+        "offset": [
+          92,
+          -12
+        ],
+        "uniform_raw_scale": 0.9312888282499989,
+        "overflow_left_top_right_bottom": [
+          0,
+          12,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          1087,
+          65,
+          1583,
+          623
+        ],
+        "phase": "apex",
+        "offset": [
+          89,
+          -22
+        ],
+        "uniform_raw_scale": 0.9312888282499989,
+        "overflow_left_top_right_bottom": [
+          0,
+          22,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1636,
+          84,
+          2121,
+          624
+        ],
+        "phase": "exhale",
+        "offset": [
+          92,
+          -4
+        ],
+        "uniform_raw_scale": 0.9312888282499989,
+        "overflow_left_top_right_bottom": [
+          0,
+          4,
+          0,
+          0
+        ]
+      }
+    ],
+    "median": 1.01,
+    "maximum_measured": 1.056,
+    "audit_exit": 0,
+    "brief_numeric_gate": "pass",
+    "not_measured": [],
+    "status": "missing-final-review-only",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "proposed_runtime_use": {
+      "idleLoop": {
+        "frames": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "frameMs": 300
+      }
+    }
+  },
+  {
+    "identity": "aegis",
+    "move": "victory",
+    "revision": "R1",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "cell_anchor": [
+      320,
+      497
+    ],
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "ground_y": 497,
+    "shared_character_scale": 1,
+    "raw_to_seed_resolution_scale": 1.2650410502217573,
+    "scale_basis": "SIFT upper-body correspondence in first raw frame",
+    "raw_file": "raw/aegis-victory.png",
+    "file": "spaced/aegis-victory.png",
+    "cells": "cells/aegis-victory",
+    "transforms": [
+      {
+        "frame": 0,
+        "source_box": [
+          28,
+          219,
+          344,
+          576
+        ],
+        "phase": "seed",
+        "offset": [
+          64,
+          0
+        ],
+        "seed_lock": true
+      },
+      {
+        "frame": 1,
+        "source_box": [
+          376,
+          239,
+          701,
+          576
+        ],
+        "phase": "anticipation",
+        "offset": [
+          97,
+          73
+        ],
+        "uniform_raw_scale": 1.2650410502217573,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          742,
+          212,
+          1045,
+          576
+        ],
+        "phase": "rise",
+        "offset": [
+          108,
+          38
+        ],
+        "uniform_raw_scale": 1.2650410502217573,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1095,
+          102,
+          1397,
+          576
+        ],
+        "phase": "peak",
+        "offset": [
+          95,
+          -101
+        ],
+        "uniform_raw_scale": 1.2650410502217573,
+        "overflow_left_top_right_bottom": [
+          0,
+          101,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1450,
+          128,
+          1747,
+          576
+        ],
+        "phase": "settle",
+        "offset": [
+          106,
+          -68
+        ],
+        "uniform_raw_scale": 1.2650410502217573,
+        "overflow_left_top_right_bottom": [
+          0,
+          68,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1817,
+          122,
+          2116,
+          576
+        ],
+        "phase": "hold",
+        "offset": [
+          111,
+          -75
+        ],
+        "uniform_raw_scale": 1.2650410502217573,
+        "overflow_left_top_right_bottom": [
+          0,
+          75,
+          0,
+          0
+        ]
+      }
+    ],
+    "median": 0.966,
+    "maximum_measured": 0.995,
+    "audit_exit": 1,
+    "brief_numeric_gate": "pass",
+    "not_measured": [],
+    "status": "missing-final-review-only",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "proposed_runtime_use": {
+      "one_shot": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "hold": 5
+    }
+  },
+  {
+    "identity": "lyra",
+    "move": "idle",
+    "revision": "R1",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "cell_anchor": [
+      320,
+      497
+    ],
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "ground_y": 497,
+    "shared_character_scale": 1,
+    "raw_to_seed_resolution_scale": 1.0463930032180973,
+    "scale_basis": "SIFT upper-body correspondence in first raw frame",
+    "raw_file": "raw/lyra-idle.png",
+    "file": "spaced/lyra-idle.png",
+    "cells": "cells/lyra-idle",
+    "transforms": [
+      {
+        "frame": 0,
+        "source_box": [
+          35,
+          128,
+          505,
+          602
+        ],
+        "phase": "seed",
+        "offset": [
+          64,
+          0
+        ],
+        "seed_lock": true
+      },
+      {
+        "frame": 1,
+        "source_box": [
+          579,
+          120,
+          1048,
+          602
+        ],
+        "phase": "inhale",
+        "offset": [
+          59,
+          -5
+        ],
+        "uniform_raw_scale": 1.0463930032180973,
+        "overflow_left_top_right_bottom": [
+          0,
+          5,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          1122,
+          110,
+          1591,
+          602
+        ],
+        "phase": "apex",
+        "offset": [
+          62,
+          -16
+        ],
+        "uniform_raw_scale": 1.0463930032180973,
+        "overflow_left_top_right_bottom": [
+          0,
+          16,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1664,
+          127,
+          2135,
+          602
+        ],
+        "phase": "exhale",
+        "offset": [
+          50,
+          2
+        ],
+        "uniform_raw_scale": 1.0463930032180973,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "median": 0.996,
+    "maximum_measured": 0.997,
+    "audit_exit": 0,
+    "brief_numeric_gate": "pass",
+    "not_measured": [],
+    "status": "missing-final-review-only",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "proposed_runtime_use": {
+      "idleLoop": {
+        "frames": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "frameMs": 300
+      }
+    }
+  },
+  {
+    "identity": "lyra",
+    "move": "victory",
+    "revision": "R1",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "cell_anchor": [
+      320,
+      497
+    ],
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "ground_y": 497,
+    "shared_character_scale": 1,
+    "raw_to_seed_resolution_scale": 1.3232667748412232,
+    "scale_basis": "SIFT upper-body correspondence in first raw frame",
+    "raw_file": "raw/lyra-victory.png",
+    "file": "spaced/lyra-victory.png",
+    "cells": "cells/lyra-victory",
+    "transforms": [
+      {
+        "frame": 0,
+        "source_box": [
+          18,
+          166,
+          351,
+          552
+        ],
+        "phase": "seed",
+        "offset": [
+          64,
+          0
+        ],
+        "seed_lock": true
+      },
+      {
+        "frame": 1,
+        "source_box": [
+          372,
+          201,
+          699,
+          551
+        ],
+        "phase": "anticipation",
+        "offset": [
+          68,
+          35
+        ],
+        "uniform_raw_scale": 1.3232667748412232,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          735,
+          174,
+          1086,
+          550
+        ],
+        "phase": "rise",
+        "offset": [
+          94,
+          1
+        ],
+        "uniform_raw_scale": 1.3232667748412232,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1095,
+          123,
+          1409,
+          550
+        ],
+        "phase": "peak",
+        "offset": [
+          82,
+          -67
+        ],
+        "uniform_raw_scale": 1.3232667748412232,
+        "overflow_left_top_right_bottom": [
+          0,
+          67,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1472,
+          168,
+          1791,
+          550
+        ],
+        "phase": "settle",
+        "offset": [
+          94,
+          -7
+        ],
+        "uniform_raw_scale": 1.3232667748412232,
+        "overflow_left_top_right_bottom": [
+          0,
+          7,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1834,
+          166,
+          2150,
+          550
+        ],
+        "phase": "hold",
+        "offset": [
+          84,
+          -10
+        ],
+        "uniform_raw_scale": 1.3232667748412232,
+        "overflow_left_top_right_bottom": [
+          0,
+          10,
+          0,
+          0
+        ]
+      }
+    ],
+    "median": 1.018,
+    "maximum_measured": 1.053,
+    "audit_exit": 0,
+    "brief_numeric_gate": "pass",
+    "not_measured": [],
+    "status": "missing-final-review-only",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "proposed_runtime_use": {
+      "one_shot": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "hold": 5
+    }
+  },
+  {
+    "identity": "eira",
+    "move": "idle",
+    "revision": "R1",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "cell_anchor": [
+      320,
+      497
+    ],
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "ground_y": 497,
+    "shared_character_scale": 1,
+    "raw_to_seed_resolution_scale": 1.0676991630037207,
+    "scale_basis": "SIFT upper-body correspondence in first raw frame",
+    "raw_file": "raw/eira-idle.png",
+    "file": "spaced/eira-idle.png",
+    "cells": "cells/eira-idle",
+    "transforms": [
+      {
+        "frame": 0,
+        "source_box": [
+          39,
+          100,
+          509,
+          588
+        ],
+        "phase": "seed",
+        "offset": [
+          64,
+          0
+        ],
+        "seed_lock": true
+      },
+      {
+        "frame": 1,
+        "source_box": [
+          578,
+          94,
+          1052,
+          588
+        ],
+        "phase": "inhale",
+        "offset": [
+          84,
+          -29
+        ],
+        "uniform_raw_scale": 1.0676991630037207,
+        "overflow_left_top_right_bottom": [
+          0,
+          29,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          1122,
+          83,
+          1597,
+          588
+        ],
+        "phase": "apex",
+        "offset": [
+          90,
+          -41
+        ],
+        "uniform_raw_scale": 1.0676991630037207,
+        "overflow_left_top_right_bottom": [
+          0,
+          41,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1669,
+          101,
+          2141,
+          588
+        ],
+        "phase": "exhale",
+        "offset": [
+          89,
+          -22
+        ],
+        "uniform_raw_scale": 1.0676991630037207,
+        "overflow_left_top_right_bottom": [
+          0,
+          22,
+          0,
+          0
+        ]
+      }
+    ],
+    "median": 0.985,
+    "maximum_measured": 1.002,
+    "audit_exit": 0,
+    "brief_numeric_gate": "pass",
+    "not_measured": [],
+    "status": "missing-final-review-only",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "proposed_runtime_use": {
+      "idleLoop": {
+        "frames": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "frameMs": 300
+      }
+    }
+  },
+  {
+    "identity": "eira",
+    "move": "victory",
+    "revision": "R1",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "cell_anchor": [
+      320,
+      497
+    ],
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "ground_y": 497,
+    "shared_character_scale": 1,
+    "raw_to_seed_resolution_scale": 1.4891323129740408,
+    "scale_basis": "SIFT upper-body correspondence in first raw frame",
+    "raw_file": "raw/eira-victory.png",
+    "file": "spaced/eira-victory.png",
+    "cells": "cells/eira-victory",
+    "transforms": [
+      {
+        "frame": 0,
+        "source_box": [
+          22,
+          191,
+          355,
+          551
+        ],
+        "phase": "seed",
+        "offset": [
+          64,
+          0
+        ],
+        "seed_lock": true
+      },
+      {
+        "frame": 1,
+        "source_box": [
+          382,
+          220,
+          710,
+          551
+        ],
+        "phase": "anticipation",
+        "offset": [
+          104,
+          7
+        ],
+        "uniform_raw_scale": 1.4891323129740408,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          737,
+          185,
+          1072,
+          534
+        ],
+        "phase": "rise",
+        "offset": [
+          107,
+          -29
+        ],
+        "uniform_raw_scale": 1.4891323129740408,
+        "overflow_left_top_right_bottom": [
+          0,
+          29,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1084,
+          92,
+          1431,
+          503
+        ],
+        "phase": "peak",
+        "offset": [
+          62,
+          -129
+        ],
+        "uniform_raw_scale": 1.4891323129740408,
+        "overflow_left_top_right_bottom": [
+          0,
+          129,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1447,
+          150,
+          1785,
+          550
+        ],
+        "phase": "settle",
+        "offset": [
+          83,
+          -97
+        ],
+        "uniform_raw_scale": 1.4891323129740408,
+        "overflow_left_top_right_bottom": [
+          0,
+          97,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1817,
+          151,
+          2155,
+          550
+        ],
+        "phase": "hold",
+        "offset": [
+          92,
+          -96
+        ],
+        "uniform_raw_scale": 1.4891323129740408,
+        "overflow_left_top_right_bottom": [
+          0,
+          96,
+          0,
+          0
+        ]
+      }
+    ],
+    "median": 1.005,
+    "maximum_measured": 1.013,
+    "audit_exit": 0,
+    "brief_numeric_gate": "pass",
+    "not_measured": [],
+    "status": "missing-final-review-only",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "proposed_runtime_use": {
+      "one_shot": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "hold": 5
+    }
+  },
+  {
+    "identity": "seren",
+    "move": "idle",
+    "revision": "R1",
+    "frame_count": 4,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "cell_anchor": [
+      320,
+      497
+    ],
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "ground_y": 497,
+    "shared_character_scale": 1,
+    "raw_to_seed_resolution_scale": 0.9963106707379763,
+    "scale_basis": "SIFT upper-body correspondence in first raw frame",
+    "raw_file": "raw/seren-idle.png",
+    "file": "spaced/seren-idle.png",
+    "cells": "cells/seren-idle",
+    "transforms": [
+      {
+        "frame": 0,
+        "source_box": [
+          28,
+          87,
+          523,
+          633
+        ],
+        "phase": "seed",
+        "offset": [
+          64,
+          0
+        ],
+        "seed_lock": true
+      },
+      {
+        "frame": 1,
+        "source_box": [
+          569,
+          87,
+          1067,
+          633
+        ],
+        "phase": "inhale",
+        "offset": [
+          40,
+          -46
+        ],
+        "uniform_raw_scale": 0.9963106707379763,
+        "overflow_left_top_right_bottom": [
+          0,
+          46,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          1109,
+          82,
+          1609,
+          633
+        ],
+        "phase": "apex",
+        "offset": [
+          53,
+          -51
+        ],
+        "uniform_raw_scale": 0.9963106707379763,
+        "overflow_left_top_right_bottom": [
+          0,
+          51,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1652,
+          87,
+          2154,
+          633
+        ],
+        "phase": "exhale",
+        "offset": [
+          58,
+          -46
+        ],
+        "uniform_raw_scale": 0.9963106707379763,
+        "overflow_left_top_right_bottom": [
+          0,
+          46,
+          0,
+          0
+        ]
+      }
+    ],
+    "median": 0.968,
+    "maximum_measured": 0.997,
+    "audit_exit": 0,
+    "brief_numeric_gate": "pass",
+    "not_measured": [],
+    "status": "missing-final-review-only",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "proposed_runtime_use": {
+      "idleLoop": {
+        "frames": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "frameMs": 300
+      }
+    }
+  },
+  {
+    "identity": "seren",
+    "move": "victory",
+    "revision": "R1",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "cell_anchor": [
+      320,
+      497
+    ],
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "ground_y": 497,
+    "shared_character_scale": 1,
+    "raw_to_seed_resolution_scale": 1.236838804371388,
+    "scale_basis": "SIFT upper-body correspondence in first raw frame",
+    "raw_file": "raw/seren-victory.png",
+    "file": "spaced/seren-victory.png",
+    "cells": "cells/seren-victory",
+    "transforms": [
+      {
+        "frame": 0,
+        "source_box": [
+          15,
+          165,
+          378,
+          588
+        ],
+        "phase": "seed",
+        "offset": [
+          64,
+          0
+        ],
+        "seed_lock": true
+      },
+      {
+        "frame": 1,
+        "source_box": [
+          382,
+          193,
+          724,
+          587
+        ],
+        "phase": "anticipation",
+        "offset": [
+          126,
+          11
+        ],
+        "uniform_raw_scale": 1.236838804371388,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          729,
+          183,
+          1077,
+          588
+        ],
+        "phase": "rise",
+        "offset": [
+          128,
+          -1
+        ],
+        "uniform_raw_scale": 1.236838804371388,
+        "overflow_left_top_right_bottom": [
+          0,
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1078,
+          210,
+          1428,
+          587
+        ],
+        "phase": "peak",
+        "offset": [
+          133,
+          32
+        ],
+        "uniform_raw_scale": 1.236838804371388,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1453,
+          182,
+          1793,
+          588
+        ],
+        "phase": "settle",
+        "offset": [
+          125,
+          -3
+        ],
+        "uniform_raw_scale": 1.236838804371388,
+        "overflow_left_top_right_bottom": [
+          0,
+          3,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1828,
+          173,
+          2158,
+          588
+        ],
+        "phase": "hold",
+        "offset": [
+          122,
+          -14
+        ],
+        "uniform_raw_scale": 1.236838804371388,
+        "overflow_left_top_right_bottom": [
+          0,
+          14,
+          0,
+          0
+        ]
+      }
+    ],
+    "median": 1.025,
+    "maximum_measured": 1.054,
+    "audit_exit": 0,
+    "brief_numeric_gate": "pass",
+    "not_measured": [],
+    "status": "missing-final-review-only",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "proposed_runtime_use": {
+      "one_shot": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "hold": 5
+    }
+  },
+  {
+    "identity": "aegis",
+    "move": "victory",
+    "revision": "R2",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "cell_anchor": [
+      320,
+      497
+    ],
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "ground_y": 497,
+    "shared_character_scale": 1,
+    "raw_to_seed_resolution_scale": 1.2346936602495746,
+    "scale_basis": "SIFT upper-body correspondence in first raw frame",
+    "raw_file": "raw/aegis-victory-r2.png",
+    "file": "spaced/aegis-victory-r2.png",
+    "cells": "cells/aegis-victory-r2",
+    "transforms": [
+      {
+        "frame": 0,
+        "source_box": [
+          13,
+          163,
+          353,
+          559
+        ],
+        "phase": "seed",
+        "offset": [
+          64,
+          0
+        ],
+        "seed_lock": true
+      },
+      {
+        "frame": 1,
+        "source_box": [
+          370,
+          177,
+          710,
+          559
+        ],
+        "phase": "anticipation",
+        "offset": [
+          103,
+          28
+        ],
+        "uniform_raw_scale": 1.2346936602495746,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          740,
+          163,
+          1068,
+          559
+        ],
+        "phase": "rise",
+        "offset": [
+          107,
+          11
+        ],
+        "uniform_raw_scale": 1.2346936602495746,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1105,
+          161,
+          1428,
+          559
+        ],
+        "phase": "peak",
+        "offset": [
+          112,
+          8
+        ],
+        "uniform_raw_scale": 1.2346936602495746,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1470,
+          164,
+          1787,
+          559
+        ],
+        "phase": "settle",
+        "offset": [
+          115,
+          12
+        ],
+        "uniform_raw_scale": 1.2346936602495746,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1831,
+          162,
+          2145,
+          559
+        ],
+        "phase": "hold",
+        "offset": [
+          110,
+          9
+        ],
+        "uniform_raw_scale": 1.2346936602495746,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "median": 1.027,
+    "maximum_measured": 1.032,
+    "audit_exit": 0,
+    "brief_numeric_gate": "pass",
+    "not_measured": [],
+    "status": "missing-final-review-only",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "proposed_runtime_use": {
+      "one_shot": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "hold": 5
+    }
+  },
+  {
+    "identity": "lyra",
+    "move": "victory",
+    "revision": "R2",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "cell_anchor": [
+      320,
+      497
+    ],
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "ground_y": 497,
+    "shared_character_scale": 1,
+    "raw_to_seed_resolution_scale": 1.4115991733790274,
+    "scale_basis": "SIFT upper-body correspondence in first raw frame",
+    "raw_file": "raw/lyra-victory-r2.png",
+    "file": "spaced/lyra-victory-r2.png",
+    "cells": "cells/lyra-victory-r2",
+    "transforms": [
+      {
+        "frame": 0,
+        "source_box": [
+          11,
+          197,
+          316,
+          559
+        ],
+        "phase": "seed",
+        "offset": [
+          64,
+          0
+        ],
+        "seed_lock": true
+      },
+      {
+        "frame": 1,
+        "source_box": [
+          384,
+          211,
+          662,
+          559
+        ],
+        "phase": "anticipation",
+        "offset": [
+          86,
+          9
+        ],
+        "uniform_raw_scale": 1.4115991733790274,
+        "overflow_left_top_right_bottom": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          677,
+          202,
+          1057,
+          559
+        ],
+        "phase": "rise",
+        "offset": [
+          -40,
+          -4
+        ],
+        "uniform_raw_scale": 1.4115991733790274,
+        "overflow_left_top_right_bottom": [
+          40,
+          4,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1105,
+          131,
+          1431,
+          558
+        ],
+        "phase": "peak",
+        "offset": [
+          38,
+          -104
+        ],
+        "uniform_raw_scale": 1.4115991733790274,
+        "overflow_left_top_right_bottom": [
+          0,
+          104,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1462,
+          198,
+          1790,
+          559
+        ],
+        "phase": "settle",
+        "offset": [
+          27,
+          -10
+        ],
+        "uniform_raw_scale": 1.4115991733790274,
+        "overflow_left_top_right_bottom": [
+          0,
+          10,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1822,
+          198,
+          2142,
+          559
+        ],
+        "phase": "hold",
+        "offset": [
+          37,
+          -10
+        ],
+        "uniform_raw_scale": 1.4115991733790274,
+        "overflow_left_top_right_bottom": [
+          0,
+          10,
+          0,
+          0
+        ]
+      }
+    ],
+    "median": 1.01,
+    "maximum_measured": 1.03,
+    "audit_exit": 0,
+    "brief_numeric_gate": "pass",
+    "not_measured": [],
+    "status": "missing-final-review-only",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "proposed_runtime_use": {
+      "one_shot": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "hold": 5
+    }
+  },
+  {
+    "identity": "eira",
+    "move": "victory",
+    "revision": "R2",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "cell_size": [
+      640,
+      512
+    ],
+    "logical_source_size": [
+      512,
+      512
+    ],
+    "logical_x_offset": 64,
+    "cell_anchor": [
+      320,
+      497
+    ],
+    "pivot": [
+      0.5,
+      0.970703125
+    ],
+    "ground_y": 497,
+    "shared_character_scale": 1,
+    "raw_to_seed_resolution_scale": 1.4092050310485986,
+    "scale_basis": "SIFT upper-body correspondence in first raw frame",
+    "raw_file": "raw/eira-victory-r2.png",
+    "file": "spaced/eira-victory-r2.png",
+    "cells": "cells/eira-victory-r2",
+    "transforms": [
+      {
+        "frame": 0,
+        "source_box": [
+          22,
+          168,
+          355,
+          568
+        ],
+        "phase": "seed",
+        "offset": [
+          64,
+          0
+        ],
+        "seed_lock": true
+      },
+      {
+        "frame": 1,
+        "source_box": [
+          368,
+          194,
+          720,
+          570
+        ],
+        "phase": "anticipation",
+        "offset": [
+          110,
+          -30
+        ],
+        "uniform_raw_scale": 1.4092050310485986,
+        "overflow_left_top_right_bottom": [
+          0,
+          30,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 2,
+        "source_box": [
+          730,
+          163,
+          1075,
+          541
+        ],
+        "phase": "rise",
+        "offset": [
+          115,
+          -42
+        ],
+        "uniform_raw_scale": 1.4092050310485986,
+        "overflow_left_top_right_bottom": [
+          0,
+          42,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 3,
+        "source_box": [
+          1083,
+          139,
+          1428,
+          498
+        ],
+        "phase": "peak",
+        "offset": [
+          99,
+          -22
+        ],
+        "uniform_raw_scale": 1.4092050310485986,
+        "overflow_left_top_right_bottom": [
+          0,
+          22,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 4,
+        "source_box": [
+          1446,
+          162,
+          1782,
+          568
+        ],
+        "phase": "settle",
+        "offset": [
+          105,
+          -74
+        ],
+        "uniform_raw_scale": 1.4092050310485986,
+        "overflow_left_top_right_bottom": [
+          0,
+          74,
+          0,
+          0
+        ]
+      },
+      {
+        "frame": 5,
+        "source_box": [
+          1796,
+          122,
+          2146,
+          569
+        ],
+        "phase": "hold",
+        "offset": [
+          97,
+          -130
+        ],
+        "uniform_raw_scale": 1.4092050310485986,
+        "overflow_left_top_right_bottom": [
+          0,
+          130,
+          0,
+          0
+        ]
+      }
+    ],
+    "median": 0.989,
+    "maximum_measured": 1.044,
+    "audit_exit": 0,
+    "brief_numeric_gate": "pass",
+    "not_measured": [],
+    "status": "missing-final-review-only",
+    "owner_artwork_selection": "pending",
+    "owner_motion_approval": "pending",
+    "proposed_runtime_use": {
+      "one_shot": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "hold": 5
+    }
+  }
+]

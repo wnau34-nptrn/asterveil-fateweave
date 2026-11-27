@@ -1,0 +1,58 @@
+{
+  "aegis": {
+    "source": "incoming/ART-UNIT-ANIMATION-A2-001/aegis-seed.png",
+    "source_commit": "4210631678f5d6a16afb27e1b858ca4213449ac6",
+    "file": "seeds/aegis-seed.png",
+    "sha256": "0e888a0d889c61f2e4005361d43121e13478944cd3438a9ed6ca3578ee0dbaff",
+    "brief_sha256_prefix": "0e888a0d889c61f2",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "brief_sole_y": 496,
+    "observed_bottom_foreground_y": 511
+  },
+  "lyra": {
+    "source": "incoming/ART-UNIT-ANIMATION-LYRA-002/seeds/lyra-seed.png",
+    "source_commit": "4210631678f5d6a16afb27e1b858ca4213449ac6",
+    "file": "seeds/lyra-seed.png",
+    "sha256": "a0d462ce8c0469fab74e267b14e7dc73fd43fc53330a648704d63ac8a086ad3e",
+    "brief_sha256_prefix": "a0d462ce8c0469fa",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "brief_sole_y": 496,
+    "observed_bottom_foreground_y": 511
+  },
+  "eira": {
+    "source": "incoming/ART-UNIT-ANIMATION-A1-001/eira-seed.png",
+    "source_commit": "4210631678f5d6a16afb27e1b858ca4213449ac6",
+    "file": "seeds/eira-seed.png",
+    "sha256": "89ae5c46336cefb82325e170ad1c0abffc2848fe18d2cc86073b935467864b4b",
+    "brief_sha256_prefix": "89ae5c46336cefb8",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "brief_sole_y": 496,
+    "observed_bottom_foreground_y": 511
+  },
+  "seren": {
+    "source": "incoming/ART-UNIT-ANIMATION-A3-001/seeds/seren-seed.png",
+    "source_commit": "4210631678f5d6a16afb27e1b858ca4213449ac6",
+    "file": "seeds/seren-seed.png",
+    "sha256": "0298b7eeffbdaee5937847c7071e654286d2c2631a5f6d7bbea1598db72a6c0d",
+    "brief_sha256_prefix": "0298b7eeffbdaee5",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "brief_sole_y": 496,
+    "observed_bottom_foreground_y": 511
+  }
+}

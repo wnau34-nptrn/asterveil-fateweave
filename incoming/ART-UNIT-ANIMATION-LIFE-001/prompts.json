@@ -1,0 +1,90 @@
+[
+  {
+    "strip": "aegis-idle",
+    "prompt": "Edit the attached Aegis seed into one continuous horizontal sprite strip of exactly four evenly spaced full-body figures with wide clear transparent gutters, no grid or markings. Semi-chibi game sprite; precisely match seed face, blond hair, saturated blue and gold armor, sword, shield, cape and head-to-body ratio. All face right. Same scale and fixed boot positions and sole line. Frame 1 exact seed; frame 2 inhale, chest and shoulders rise 4 pixels relative to 512px, head follows a little; frame 3 breath apex and slightly furthest drift of blue cape edge and blond fringe; frame 4 partly exhaled, close to but distinct from frame 1. Sword point and shield stay at the seed positions. True alpha. No VFX, sparkles, ground, shadows, other elements, text or crop. Deliver one whole strip.",
+    "reference": "seeds/aegis-seed.png",
+    "generation_id": "exec-6b0fd949-94fe-4488-9eb0-07795e340e31",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "strip": "aegis-victory",
+    "prompt": "Edit the attached Aegis seed into one continuous horizontal sprite strip of exactly 6 distinct evenly spaced full-body figures, left to right, with broad clear transparent vertical gutters and generous margins. Never overlap slots. Same semi-chibi character all frames, facing right. Keep exactly the seed's face, hair, colors, costume, weapons, props, head size and short thick limbs at the same overall scale. Keep both boots position and sole line fixed except explicit hops. Retain clean outlines and saturated cel shading. Frame 1 exactly the seed. Frame 2 small anticipation dip, knees bend and weapon lowered. Frame 3 rising into pose. Frame 4 most readable peak. Frame 5 small settle. Frame 6 stable held pose, balanced, eyes open, feet on ground line. Plants shield at his side and raises his sword straight up, chin up. Final hold: sword raised, shield planted. Angle the raised arm from a low shoulder to fit blade tip with ample headroom. True alpha; no shadows, ground, text, motion lines, sparks, glows, confetti or effects. Entire bodies, weapon tips, hat, cape and hair visible without cropping. One wide horizontal strip, no grid.",
+    "reference": "seeds/aegis-seed.png",
+    "generation_id": "exec-eafaa8b9-4c03-4770-989d-195dd0a8c907",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "strip": "lyra-idle",
+    "prompt": "Edit the attached Lyra seed into one continuous horizontal sprite strip of exactly 4 distinct evenly spaced full-body figures, left to right, with broad clear transparent vertical gutters and generous margins. Never overlap slots. Same semi-chibi character all frames, facing right. Keep exactly the seed's face, hair, colors, costume, weapons, props, head size and short thick limbs at the same overall scale. Keep both boots position and sole line fixed except explicit hops. Retain clean outlines and saturated cel shading. Frame 1 exactly the seed. Frame 2 inhale, chest and shoulders rise slightly (4–6 px relative to the 512px reference), head follows a little, loose parts begin to drift. Frame 3 top of breath, loose parts furthest drift. Frame 4 partly exhaled, close to but distinct from frame 1, to loop seamlessly. Calm, only secondary motion and breathing. A subtly restless breath with weight on front foot and the red scarf and cape tails fluttering more than the others; greatsword stays held. True alpha; no shadows, ground, text, motion lines, sparks, glows, confetti or effects. Entire bodies, weapon tips, hat, cape and hair visible without cropping. One wide horizontal strip, no grid.",
+    "reference": "seeds/lyra-seed.png",
+    "generation_id": "exec-c6a75e49-38d6-4ca4-bb54-65d524e5675f",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "strip": "lyra-victory",
+    "prompt": "Edit the attached Lyra seed into one continuous horizontal sprite strip of exactly 6 distinct evenly spaced full-body figures, left to right, with broad clear transparent vertical gutters and generous margins. Never overlap slots. Same semi-chibi character all frames, facing right. Keep exactly the seed's face, hair, colors, costume, weapons, props, head size and short thick limbs at the same overall scale. Keep both boots position and sole line fixed except explicit hops. Retain clean outlines and saturated cel shading. Frame 1 exactly the seed. Frame 2 small anticipation dip, knees bend and weapon lowered. Frame 3 rising into pose. Frame 4 most readable peak. Frame 5 small settle. Frame 6 stable held pose, balanced, eyes open, feet on ground line. Spin the greatsword once at her side, demonstrating the rotation with distinct intermediates; then rest it on shoulder with a confident grin. Final hold blade on shoulder, other hand on hip. True alpha; no shadows, ground, text, motion lines, sparks, glows, confetti or effects. Entire bodies, weapon tips, hat, cape and hair visible without cropping. One wide horizontal strip, no grid.",
+    "reference": "seeds/lyra-seed.png",
+    "generation_id": "exec-4c3b5de4-3ee9-4a9f-ac70-d4cda0bd11bf",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "strip": "eira-idle",
+    "prompt": "Edit the attached Eira seed into one continuous horizontal sprite strip of exactly 4 distinct evenly spaced full-body figures, left to right, with broad clear transparent vertical gutters and generous margins. Never overlap slots. Same semi-chibi character all frames, facing right. Keep exactly the seed's face, hair, colors, costume, weapons, props, head size and short thick limbs at the same overall scale. Keep both boots position and sole line fixed except explicit hops. Retain clean outlines and saturated cel shading. Frame 1 exactly the seed. Frame 2 inhale, chest and shoulders rise slightly (4–6 px relative to the 512px reference), head follows a little, loose parts begin to drift. Frame 3 top of breath, loose parts furthest drift. Frame 4 partly exhaled, close to but distinct from frame 1, to loop seamlessly. Calm, only secondary motion and breathing. Soft breath, long silver hair and wide hat brim drift; purple staff gem may tilt a few degrees with hand. True alpha; no shadows, ground, text, motion lines, sparks, glows, confetti or effects. Entire bodies, weapon tips, hat, cape and hair visible without cropping. One wide horizontal strip, no grid.",
+    "reference": "seeds/eira-seed.png",
+    "generation_id": "exec-db7d4b2a-c8ea-4b50-914e-3392f8f6d57a",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "strip": "eira-victory",
+    "prompt": "Edit the attached Eira seed into one continuous horizontal sprite strip of exactly 6 distinct evenly spaced full-body figures, left to right, with broad clear transparent vertical gutters and generous margins. Never overlap slots. Same semi-chibi character all frames, facing right. Keep exactly the seed's face, hair, colors, costume, weapons, props, head size and short thick limbs at the same overall scale. Keep both boots position and sole line fixed except explicit hops. Retain clean outlines and saturated cel shading. Frame 1 exactly the seed. Frame 2 small anticipation dip, knees bend and weapon lowered. Frame 3 rising into pose. Frame 4 most readable peak. Frame 5 small settle. Frame 6 stable held pose, balanced, eyes open, feet on ground line. Raises staff high with a little hop, smiling with eyes closed at peak. Feet may lift only in frames 3–4. Final hold: eyes open, raised staff and free hand holding hat brim. True alpha; no shadows, ground, text, motion lines, sparks, glows, confetti or effects. Entire bodies, weapon tips, hat, cape and hair visible without cropping. One wide horizontal strip, no grid.",
+    "reference": "seeds/eira-seed.png",
+    "generation_id": "exec-e9997c3e-97a2-48cd-8cc5-6d1967ff37da",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "strip": "seren-idle",
+    "prompt": "Edit the attached Seren seed into one continuous horizontal sprite strip of exactly 4 distinct evenly spaced full-body figures, left to right, with broad clear transparent vertical gutters and generous margins. Never overlap slots. Same semi-chibi character all frames, facing right. Keep exactly the seed's face, hair, colors, costume, weapons, props, head size and short thick limbs at the same overall scale. Keep both boots position and sole line fixed except explicit hops. Retain clean outlines and saturated cel shading. Frame 1 exactly the seed. Frame 2 inhale, chest and shoulders rise slightly (4–6 px relative to the 512px reference), head follows a little, loose parts begin to drift. Frame 3 top of breath, loose parts furthest drift. Frame 4 partly exhaled, close to but distinct from frame 1, to loop seamlessly. Calm, only secondary motion and breathing. Serene breath, green mantle and white robe hems sway; laurel and golden staff remain steady. True alpha; no shadows, ground, text, motion lines, sparks, glows, confetti or effects. Entire bodies, weapon tips, hat, cape and hair visible without cropping. One wide horizontal strip, no grid.",
+    "reference": "seeds/seren-seed.png",
+    "generation_id": "exec-5bf6db20-9292-4690-9084-bfb14b9df6ca",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "strip": "seren-victory",
+    "prompt": "Edit the attached Seren seed into one continuous horizontal sprite strip of exactly 6 distinct evenly spaced full-body figures, left to right, with broad clear transparent vertical gutters and generous margins. Never overlap slots. Same semi-chibi character all frames, facing right. Keep exactly the seed's face, hair, colors, costume, weapons, props, head size and short thick limbs at the same overall scale. Keep both boots position and sole line fixed except explicit hops. Retain clean outlines and saturated cel shading. Frame 1 exactly the seed. Frame 2 small anticipation dip, knees bend and weapon lowered. Frame 3 rising into pose. Frame 4 most readable peak. Frame 5 small settle. Frame 6 stable held pose, balanced, eyes open, feet on ground line. Lowers the staff, places free hand over heart and bows head slightly, then looks up with gentle smile. Final hold hand on heart, staff upright. True alpha; no shadows, ground, text, motion lines, sparks, glows, confetti or effects. Entire bodies, weapon tips, hat, cape and hair visible without cropping. One wide horizontal strip, no grid.",
+    "reference": "seeds/seren-seed.png",
+    "generation_id": "exec-b204c5f8-5a04-4be4-9482-ec0c0d2f4907",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "strip": "aegis-victory-r2",
+    "prompt": "Using only the attached Aegis seed, draw a single horizontal sprite strip of exactly six isolated evenly spaced full-body frames in one row, wide clear transparent gutters. Preserve the original right-facing blue/gold semi-chibi knight, exact head and body proportions, sword and shield design, blond hair face cape and feet. Keep the same fixed foot stance throughout. 1 seed ready, 2 bend his knees slightly and lower sword, 3 bring sword upright in front, 4 proud peak with sword vertical and chin raised, 5 settle his shoulders, 6 hold eyes open sword vertical immediately beside him, shield planted at the other side with bottom tip actually reaching the soles. IMPORTANT use a low hilt, at waist/belt height through frames 3–6 with elbow bent and fist beside waist, so the vertical sword tip is no higher than blond fringe and never exceeds height of hair crown. This is a low-held vertical victory salute, not a sword held overhead. Full sword length and width stay identical to reference; keep head-to-body scale and provide blank margin above every pose. No cropped edges, props missing, settings, text, grids, sparkles, ground, shadows or effects; true alpha.",
+    "reference": "seeds/aegis-seed.png",
+    "generation_id": "exec-dc891018-ce9f-4342-b7be-c684f7f6ac12",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "strip": "lyra-victory-r2",
+    "prompt": "Make one continuous right-facing horizontal 2D sprite strip with exactly six isolated full-body poses with wide transparent gutters and blank margins, using the attached seed alone. Preserve the semi-chibi face, hairstyle, costume, palette, equipment, body/head dimensions, orientation and pose proportions exactly. Same apparent scale and steady feet, except for the explicit hop if any. At 111 pixels tall her single sword spin must read as one large rotation. With one hand on the familiar greatsword and stable feet, slot 1 blade up right as in seed; slot 2 anticipation dips the blade down across her front (tip about 5 o'clock on the viewer's clock); slot 3 tip sweeps to screen-left, below shoulder (8–9 o'clock), with clear blade separated from red scarf; slot 4 the blade sweeps over her shoulder (11–12 o'clock), proudly rising. Slot 5 blade rotates backward with tip clearly extending behind the shoulder; slot 6 hold the blade resting along the shoulder and free hand on hip with confident grin, eyes open. Use only the seed sword. Single row, six distinct figures, true alpha, no poster, shadows, ground, text, motion lines, sparkles or extra objects. No cropping.",
+    "reference": "seeds/lyra-seed.png",
+    "generation_id": "exec-5219200f-504c-4315-a9d3-2997a9a6ffce",
+    "tool": "imagegen",
+    "transparent_background": true
+  },
+  {
+    "strip": "eira-victory-r2",
+    "prompt": "Make one continuous right-facing horizontal 2D sprite strip with exactly six isolated full-body poses with wide transparent gutters and blank margins, using the attached seed alone. Preserve the semi-chibi face, hairstyle, costume, palette, equipment, body/head dimensions, orientation and pose proportions exactly. Same apparent scale and steady feet, except for the explicit hop if any. Slot 1 seed ready; slot 2 compact knee dip and staff lowered; slot 3 hops lightly with staff going up and feet hovering; slot 4 small airborne peak, eyes closed smiling and staff held raised with an open silhouette; slot 5 land, free hand rises; slot 6 eyes open, both boots down, free hand on brim, purple staff held high and stable. Keep purple staff head near the hat's top using a diagonally raised staff and a hand around the upper middle of the shaft. Bend the knees back in the air to convey the hop without raising the hat significantly. No purple glow outside the staff gem, no effects. Hat, every part of the existing staff and boots must be fully visible and within the same vertical envelope at shared scale. Single row, six distinct figures, true alpha, no poster, shadows, ground, text, motion lines, sparkles or extra objects. No cropping.",
+    "reference": "seeds/eira-seed.png",
+    "generation_id": "exec-2bba5283-91c1-46d2-93f4-73f1dce2f623",
+    "tool": "imagegen",
+    "transparent_background": true
+  }
+]
