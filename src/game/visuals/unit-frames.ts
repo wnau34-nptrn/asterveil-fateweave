@@ -18,6 +18,8 @@ interface UnitDefinition {
   intents?: Readonly<Record<string, UnitClip>>;
   // Looping hover frames and the per-frame time; the static idle (frame 0) remains the fallback.
   idleLoop?: { frames: readonly number[]; frameMs: number };
+  // A drawn victory cheer (ART-UNIT-ANIMATION-LIFE-001). When present it replaces the code hop at the end of a won battle.
+  victory?: { frames: readonly number[]; frameMs: number };
   // Body alpha once downed while its frames are drawn. A collapse painted as fading out (A8 Rift Wisp) is already its
   // corpse emphasis and must not be dimmed a second time. The static seed fallback always uses CORPSE_ALPHA.
   corpseAlpha?: number;

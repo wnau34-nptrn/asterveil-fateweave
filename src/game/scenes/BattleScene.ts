@@ -10,6 +10,7 @@ import { MINE_BOSS_ATLAS, armorFrame, mineBossAtlasUrls, mineContact, mineCues, 
 import { ALL_SHEETS, allBattleAtlases, atlasesForActions, encounterAtlases, encounterSheets, sheetKey, sheetsForArt, type AtlasRequest } from '../visuals/battle-assets';
 import { unitFrameView } from '../visuals/unit-frame-view';
 import { UnitAnimation } from '../visuals/unit-animation';
+import { HeroLife, LOW_HP } from '../visuals/hero-life';
 import { unitPose, unitReactions } from '../visuals/unit-animation-map';
 import type { BattleEvent, BattleState, EncounterDefinition, TurnStage } from '../../core/battle/types';
 import { effectFamily, effectCaption, hitLift, type CombatPrefs } from '../visuals/combat-effects';
@@ -42,7 +43,9 @@ export const HOLD_FORWARD = .12;
 const CROWN_HEIGHT = 12;
 
 export interface ActorTarget { x: number; y: number; width: number; height: number }
-export interface SceneView { state: BattleState; heroId: string; targetId: string | null; phase?: 'hero' | 'enemy'; activeActorId?: string; activeTargetId?: string }
+// readyId: the hero whose command the player (or AUTO) is choosing, no playback running: a still light at its feet.
+export interface SceneView { state: BattleState; heroId: string; targetId: string | null; phase?: 'hero' | 'enemy'; activeActorId?: string; activeTargetId?: string; readyId?: string }
+export type Finale = 'victory' | 'defeat';
 export class BattleScene extends Phaser.Scene {
   private view: SceneView | undefined;
   private layer: Phaser.GameObjects.Container | undefined;
@@ -70,6 +73,14 @@ export class BattleScene extends Phaser.Scene {
   // Idle life (breathing, auras, motes) is rebuilt with each paint and never touches state.
   private idle: Phaser.Tweens.Tween[] = [];
   private readonly unitAnimation = new UnitAnimation();
+  // Hero life (items 1–3): per-class standing rhythm, low-HP slump, barrier glow and the turn owner's posture.
+  private readonly heroLife = new HeroLife();
+  private barrierGlow = new Map<string, Phaser.GameObjects.Graphics>();
+  private readyRing = new Map<string, Phaser.GameObjects.Graphics>();
+  private lifeClock = 0;
+  // Item 6: the battle-end cheer or collapse, played once from the real outcome. A defeat slump survives repaints.
+  private finale: Finale | undefined;
+  private finaleLayer: Phaser.GameObjects.Container | undefined;
   private readonly optionalUnits = new OptionalUnitAssets();
   private optionalDirty = false;
   private stageActive = false;
@@ -341,6 +352,12 @@ export class BattleScene extends Phaser.Scene {
   update(time: number, delta: number): void {
     if (this.battleVisible && this.optionalRequest) { this.optionalRequest = false; this.requestOptionalUnits(); }
     this.unitAnimation.update(delta);
+    this.heroLife.update(delta);
+    if (this.barrierGlow.size) {
+      this.lifeClock += delta;
+      const pulse = .55 + .25 * Math.sin(this.lifeClock / 1400 * Math.PI * 2);
+      for (const glow of this.barrierGlow.values()) if (glow.visible) glow.setAlpha(pulse);
+    }
     for (const image of this.songFloor) (image.getData('songFollow') as (() => void) | undefined)?.();
     for (const image of [...(this.healingLayer?.list ?? []), ...(this.effects?.list ?? []), ]) {
       const follow = image.getData('healingFollow') as (() => void) | undefined;
@@ -371,8 +388,10 @@ export class BattleScene extends Phaser.Scene {
     const same = repaint && this.fieldIdle() && this.paintKey(view) === this.paintedKey;
     if ((repaint && !same) || summoned.some(e => !this.summonSlots.has(e.id)) || swaps(previous) !== swaps(view.state)) {
       this.paint();
+      this.applyLife();
       return;
     }
+    this.applyLife();
     // Fill an already reserved cell at contact while the caster's animation and VFX are active.
     for (const foe of summoned) {
       const slot = this.summonSlots.get(foe.id)!;
@@ -410,7 +429,10 @@ export class BattleScene extends Phaser.Scene {
   private paint(): void {
     if (!this.view) return;
     this.optionalDirty = false; this.paintedKey = this.paintKey(this.view);
-    this.stopEffects(); this.unitAnimation.clear(); this.bodies.clear();
+    this.stopEffects(); this.unitAnimation.clear(); this.heroLife.clear(); this.bodies.clear();
+    for (const child of this.finaleLayer?.list ?? []) this.tweens.killTweensOf(child);
+    this.barrierGlow.clear(); this.readyRing.clear(); this.finaleLayer = undefined;
+    if (this.view.state.outcome === 'active') this.finale = undefined;
     for (const t of this.idle) t.remove(); this.idle = [];
     // The camera only carries the pixel-ratio zoom; clear any effect so art and DOM targets share one origin.
     // The camera stays at its defaults; the root container alone carries the pixel-ratio scale,
@@ -461,6 +483,7 @@ export class BattleScene extends Phaser.Scene {
     }
     this.holds.clear(); this.armors.clear(); for (const id of [...this.auras.keys()]) this.dropAura(id); this.paintHolds();
     this.measureCrowns();
+    if (this.finale === 'defeat') this.slump(false);
     this.layer.sort('depth'); this.onLayout();
   }
   // Boss crown spots (CSS px, canvas space): centred over the rendered figure, just above its top. Measured on the resting
@@ -507,10 +530,26 @@ export class BattleScene extends Phaser.Scene {
     const idleStart = this.idle.length;
     if (hp > 0) this.liven(id, body, sprite, size, enemy, id === this.view!.activeActorId);
     const idleTweens = this.idle.slice(idleStart);
+    const hero = enemy ? undefined : this.encounter.heroes.find(h => h.id === id);
+    if (hero && hp > 0) {
+      // Barrier glow sits behind the sprite, above the contact shadow; shown only while the shown state has a barrier.
+      const glow = this.add.graphics().setBlendMode(Phaser.BlendModes.ADD).setVisible(false);
+      glow.fillStyle(0x8fe3ff, .10).fillEllipse(0, -size * .44, size * .62, size * .92);
+      glow.lineStyle(1.5, 0xa8ecff, .55).strokeEllipse(0, -size * .44, size * .62, size * .92);
+      glow.lineStyle(2, 0xa8ecff, .45).strokeEllipse(0, 0, size * .66, size * .14);
+      body.addAt(glow, 1); this.barrierGlow.set(id, glow);
+      // The turn owner's light: a still gold ring at the feet (no body motion).
+      const ring = this.add.graphics().setBlendMode(Phaser.BlendModes.ADD).setVisible(false);
+      ring.fillStyle(0xffd36b, .16).fillEllipse(0, 0, size * .7, size * .16);
+      ring.lineStyle(2, 0xffe29a, .8).strokeEllipse(0, 0, size * .7, size * .16);
+      body.addAt(ring, 1); this.readyRing.set(id, ring);
+      this.heroLife.bind(id, sprite, !unitDefinition(key)?.idleLoop);
+    }
     this.unitAnimation.bind(id, body, size, paused => {
+      this.heroLife.pause(id, paused || !alive());
       for (const tween of idleTweens) { if (paused || !alive()) tween.pause(); else tween.resume(); }
     }, nextFrame ? unitFrameView(key, sprite, nextFrame, alive, () => {
-      nextFrame.setPosition(sprite.x, sprite.y).setScale(sprite.scaleX, sprite.scaleY).setFlipX(sprite.flipX);
+      nextFrame.setPosition(sprite.x, sprite.y).setScale(sprite.scaleX, sprite.scaleY).setRotation(sprite.rotation).setFlipX(sprite.flipX);
       nextFrame.setTint(sprite.tintTopLeft).setTintMode(sprite.tintMode);
     }) : undefined);
     const hitWidth = Math.max(44, Math.min(72, size * .7));
@@ -525,7 +564,8 @@ export class BattleScene extends Phaser.Scene {
     if (this.quiet || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const phase = [...id].reduce((a, c) => a + c.charCodeAt(0), 0) % 1000;
     const sx = sprite.scaleX, sy = sprite.scaleY;
-    this.idle.push(this.tweens.add({ targets: sprite, scaleY: sy * 1.022, scaleX: sx * .992, duration: 1500 + phase % 600, delay: phase, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
+    // Heroes breathe through HeroLife (per class, per frame); foes keep the shared breath.
+    if (enemy) this.idle.push(this.tweens.add({ targets: sprite, scaleY: sy * 1.022, scaleX: sx * .992, duration: 1500 + phase % 600, delay: phase, yoyo: true, repeat: -1, ease: 'Sine.InOut' }));
     // Rift motes: a few sparks drifting up through each foe.
     const motes = enemy ? 4 : active ? 3 : 0;
     for (let i = 0; i < motes; i++) {
@@ -592,6 +632,77 @@ export class BattleScene extends Phaser.Scene {
     if (reducedMotion || prefs.intensity === 'reduced') this.unitAnimation.settle();
     this.unitAnimation.setLoops(!(reducedMotion || prefs.intensity === 'reduced'));
     this.quiet = prefs.intensity === 'reduced'; this.reducedMotion = reducedMotion;
+    this.applyLife();
+  }
+  private get lifeOn(): boolean { return !this.quiet && !this.reducedMotion && !window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  // Project the shown state into hero life: alive, low HP, barrier and turn owner. Never reads ahead of playback.
+  private applyLife(): void {
+    const view = this.view; if (!view) return;
+    const on = this.lifeOn; this.heroLife.setEnabled(on);
+    const s = view.state;
+    for (const [i, def] of this.encounter.heroes.entries()) {
+      const hero = s.heroes[i]; if (!hero) continue;
+      const alive = hero.hp > 0;
+      this.heroLife.set(def.id, { alive, low: alive && hero.hp < def.maxHp * LOW_HP });
+      this.barrierGlow.get(def.id)?.setVisible(on && alive && hero.barrier > 0);
+      this.readyRing.get(def.id)?.setVisible(on && alive && def.id === view.readyId);
+    }
+  }
+  /** QA: hero life as the scene applies it (enabled, weights, glow, ready ring, sprite transform, finale sparkles). */
+  lifeProbe(): { enabled: boolean; finale?: Finale; sparkles: { alpha: number; x: number; y: number; visible: boolean }[]; heroes: Record<string, { low: number; on: number; glow: boolean; ring: boolean; rotation: number; x: number; y: number; sx: number; sy: number; bodyY: number }> } {
+    const heroes: ReturnType<BattleScene['lifeProbe']>['heroes'] = {};
+    for (const def of this.encounter.heroes) {
+      const w = this.heroLife.weights(def.id), body = this.bodies.get(def.id), sprite = bodySprite(body); if (!w || !sprite || !body) continue;
+      heroes[def.id] = { ...w, glow: !!this.barrierGlow.get(def.id)?.visible, ring: !!this.readyRing.get(def.id)?.visible,
+        rotation: sprite.rotation, x: sprite.x, y: sprite.y, sx: sprite.scaleX, sy: sprite.scaleY, bodyY: body.y - (this.positions.get(def.id)?.y ?? body.y) };
+    }
+    const sparkles = (this.finaleLayer?.list ?? []).map(g => { const o = g as Phaser.GameObjects.Star; return { alpha: o.alpha, x: o.x, y: o.y, visible: o.visible }; });
+    return { enabled: this.heroLife.active && this.lifeOn, finale: this.finale, sparkles, heroes };
+  }
+  /** Item 6: the end-of-battle cheer (code-drawn sparkles over each standing hero, one by one; no hop, owner 2026-11-27) or
+   *  collapse (heroes sink). Drawn `victory` frames, when a unit has them, play as its cheer. */
+  finish(outcome: Finale): void {
+    this.finale = outcome;
+    if (!this.ready || !this.lifeOn) return;
+    if (outcome === 'defeat') { this.slump(true); return; }
+    this.finaleLayer?.destroy();
+    this.finaleLayer = this.add.container(0, 0).setDepth(this.viewH + 2); this.layer?.add(this.finaleLayer);
+    const standing = this.encounter.heroes.filter((_, i) => (this.view?.state.heroes[i]?.hp ?? 0) > 0)
+      .sort((a, b) => (this.positions.get(a.id)?.x ?? 0) - (this.positions.get(b.id)?.x ?? 0));
+    for (const [n, hero] of standing.entries()) {
+      const body = this.bodies.get(hero.id), at = this.positions.get(hero.id), slot = this.actorPanels.get(hero.id);
+      if (!body || !at || !slot) continue;
+      const delay = 120 + n * 170;
+      const cheer = unitDefinition(artOf(this.encounter, hero.id))?.victory, sprite = bodySprite(body);
+      if (cheer && sprite?.texture.key.startsWith('unit-pilot-')) {
+        // Drawn cheer frames replace the code hop.
+        this.tweens.addCounter({ from: 0, to: cheer.frames.length, delay, duration: cheer.frames.length * cheer.frameMs,
+          onUpdate: t => { if (sprite.active) sprite.setFrame(cheer.frames[Math.min(cheer.frames.length - 1, Math.floor(t.getValue()!))]!); },
+          onComplete: () => { if (sprite.active) sprite.setFrame(0); } });
+      }
+      this.sparkle(at.x, at.y - slot.size * .9, slot.size, delay);
+    }
+  }
+  private sparkle(x: number, y: number, size: number, delay: number): void {
+    const layer = this.finaleLayer; if (!layer) return;
+    const colors = [0xfff1c4, 0xffd36b, 0xbfefff];
+    for (let i = 0; i < 8; i++) {
+      const r = 4 + (i % 3) * 1.5, g = this.add.star(0, 0, 4, r * .45, r * 2, colors[i % 3]!).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0);
+      const a = -Math.PI / 2 + (i - 3.5) * .4, d = size * (.32 + (i % 2) * .16);
+      g.setPosition(x, y); layer.add(g);
+      this.tweens.add({ targets: g, x: x + Math.cos(a) * d, y: y + Math.sin(a) * d, angle: 90, alpha: { from: 1, to: 0 }, delay: delay + i * 30, duration: 720, ease: 'Quad.Out', onComplete: () => g.destroy() });
+    }
+  }
+  // Defeat: every hero sinks a little lower and slumps. `animate` false re-applies the end pose after a repaint.
+  private slump(animate: boolean): void {
+    if (!this.lifeOn) return;
+    for (const [n, hero] of this.encounter.heroes.entries()) {
+      const body = this.bodies.get(hero.id), at = this.positions.get(hero.id), slot = this.actorPanels.get(hero.id);
+      if (!body || !at || !slot) continue;
+      const end = { y: at.y + 4 * Math.min(1.25, Math.max(.7, slot.size / 96)), scaleY: .95, alpha: body.alpha * .85 };
+      if (animate) this.tweens.add({ targets: body, ...end, delay: 80 + n * 110, duration: 650, ease: 'Sine.Out' });
+      else body.setPosition(at.x, end.y).setScale(1, end.scaleY).setAlpha(end.alpha);
+    }
   }
   private anchor(id: string | undefined): { x: number; y: number } | undefined {
     const slot = this.actorPanels.get(id ?? '');
