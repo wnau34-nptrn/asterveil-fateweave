@@ -1,0 +1,169 @@
+{
+  "generator": "ImageGen",
+  "numeric_seed": null,
+  "seed_note": "ImageGen does not report a numeric seed. The source directory preserves the byte-identical output of each call.",
+  "reference_commit": "2aed12045ed4b2efed40c8d3b7908187b12f5392",
+  "bbox_format": "[left, top, right, bottom), in source pixels",
+  "generator_reference": {
+    "path": "public/assets/world/mine_decor.webp",
+    "crop": [
+      0,
+      0,
+      768,
+      640
+    ],
+    "use": "Full atlas supplied visually for materials and palette"
+  },
+  "review_references": {
+    "public/assets/world/mine_decor.webp": {
+      "ore_cart": [
+        640,
+        0,
+        768,
+        128
+      ],
+      "worker_follow": [
+        640,
+        256,
+        768,
+        384
+      ],
+      "glow_crystal": [
+        256,
+        0,
+        384,
+        128
+      ]
+    },
+    "public/assets/world/map_props.webp": {
+      "trapped": [
+        0,
+        128,
+        128,
+        256
+      ],
+      "cart": [
+        128,
+        0,
+        256,
+        128
+      ],
+      "vein": [
+        256,
+        0,
+        384,
+        128
+      ],
+      "ore-merchant": [
+        384,
+        0,
+        512,
+        128
+      ]
+    },
+    "public/assets/lobby/npc/npc_busts.webp": {
+      "Bork": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "Pino": [
+        256,
+        0,
+        512,
+        256
+      ],
+      "Halda": [
+        512,
+        0,
+        768,
+        256
+      ],
+      "Mimi": [
+        0,
+        256,
+        256,
+        512
+      ],
+      "Fern": [
+        256,
+        256,
+        512,
+        512
+      ],
+      "Kael": [
+        512,
+        256,
+        768,
+        512
+      ]
+    },
+    "public/assets/art/units_foes.webp": {
+      "foe_hunter": [
+        512,
+        2048,
+        1024,
+        2560
+      ]
+    },
+    "public/assets/art/units_foes2.webp": {
+      "foe_ruin_bat": [
+        0,
+        512,
+        512,
+        1024
+      ]
+    },
+    "public/assets/art/units_foes3.webp": {
+      "foe_mirror_shade": [
+        512,
+        512,
+        1024,
+        1024
+      ],
+      "foe_water_spirit": [
+        0,
+        1536,
+        512,
+        2048
+      ]
+    },
+    "public/assets/world/mine_tiles.webp": {
+      "yard_0": [
+        0,
+        0,
+        128,
+        128
+      ],
+      "tunnel_1": [
+        128,
+        128,
+        256,
+        256
+      ]
+    },
+    "incoming/ART-WORLD-MINE-PROPS-001/preview/map-5-lit.png": [
+      0,
+      0,
+      390,
+      844
+    ],
+    "incoming/ART-WORLD-MINE-PROPS-001/preview/map-5-dark.png": [
+      0,
+      0,
+      390,
+      844
+    ]
+  },
+  "edit_reference": {
+    "path": "source/ore_merchant_first.png",
+    "crop": [
+      0,
+      0,
+      1254,
+      1254
+    ],
+    "use": "Input to flatten the hat crown for ore_merchant.png"
+  }
+}
