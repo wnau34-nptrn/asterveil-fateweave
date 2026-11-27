@@ -25,6 +25,8 @@ PICKS = {  # sheet -> (seed, chosen review cells)
     'seren': ('seeds/seren-seed.png', 'r3/review/cells/seren-victory-r3'),
     # Owner 2026-11-27 “ไลรา R4: เอาเข้าเกมแบบทดลองเลย” (trial).
     'lyra': ('seeds/lyra-seed.png', 'r4-lyra/cells/lyra-victory-r4'),
+    # LIFE-002 (Codex PR #384): only Lio R1 met every gate. Paths are relative to incoming/ART-UNIT-ANIMATION-LIFE-001.
+    'lio': ('../ART-UNIT-ANIMATION-LIFE-002/seeds/lio-seed.png', '../ART-UNIT-ANIMATION-LIFE-002/cells/lio-victory'),
 }
 SEED_AT = (128, 256)
 
@@ -49,6 +51,17 @@ def verify_package(folder='r3'):
         checked += 1
     assert checked > 0, 'validation.json lists no files'
     return checked
+
+
+def verify_package2():
+    """LIFE-002 delivery: every file named by its validation.json matches (SHA-256, size)."""
+    root = PKG.parent / 'ART-UNIT-ANIMATION-LIFE-002'
+    v = json.loads((root / 'validation.json').read_text()); n = 0
+    for rel, meta in v['files'].items():
+        data = (root / rel).read_bytes()
+        assert hashlib.sha256(data).hexdigest() == meta['sha256'] and len(data) == meta['size'], f'LIFE-002 mismatch: {rel}'
+        n += 1
+    return n
 
 
 def premul_resize(img, size):
@@ -90,7 +103,7 @@ def mapping(seed, frame0):
 
 
 def main():
-    report = {'checkedFiles': verify_package() + verify_package('r4-lyra'), 'heroes': {}}
+    report = {'checkedFiles': verify_package() + verify_package('r4-lyra') + verify_package2(), 'heroes': {}}
     manifest_path = ROOT / 'src/game/visuals/unit-atlases.json'; manifest = json.loads(manifest_path.read_text())
     victory = {}
     base = ROOT / 'public/assets/units'

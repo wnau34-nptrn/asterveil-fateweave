@@ -1,5 +1,5 @@
 {
-  "checkedFiles": 119,
+  "checkedFiles": 169,
   "heroes": {
     "aegis": {
       "mapping": {
@@ -303,6 +303,82 @@
         "frames": 5,
         "decodedBytes": 1487112,
         "downloadBytes": 402530
+      }
+    },
+    "lio": {
+      "mapping": {
+        "scale": 0.42204,
+        "offset": [
+          146,
+          287
+        ],
+        "alphaError": 0.637
+      },
+      "added": [
+        {
+          "frame": 1,
+          "from": "../ART-UNIT-ANIMATION-LIFE-002/cells/lio-victory/001.png",
+          "bbox": [
+            168,
+            304,
+            340,
+            497
+          ],
+          "sole": 497
+        },
+        {
+          "frame": 2,
+          "from": "../ART-UNIT-ANIMATION-LIFE-002/cells/lio-victory/002.png",
+          "bbox": [
+            168,
+            304,
+            339,
+            497
+          ],
+          "sole": 497
+        },
+        {
+          "frame": 3,
+          "from": "../ART-UNIT-ANIMATION-LIFE-002/cells/lio-victory/003.png",
+          "bbox": [
+            168,
+            305,
+            340,
+            497
+          ],
+          "sole": 497
+        },
+        {
+          "frame": 4,
+          "from": "../ART-UNIT-ANIMATION-LIFE-002/cells/lio-victory/004.png",
+          "bbox": [
+            167,
+            304,
+            340,
+            497
+          ],
+          "sole": 497
+        },
+        {
+          "frame": 5,
+          "from": "../ART-UNIT-ANIMATION-LIFE-002/cells/lio-victory/005.png",
+          "bbox": [
+            168,
+            304,
+            339,
+            497
+          ],
+          "sole": 497
+        }
+      ],
+      "atlas": {
+        "image": "lio_victory.66bcd39ecdbb.webp",
+        "atlas": "lio_victory.52264b864259.json",
+        "width": 891,
+        "height": 199,
+        "frames": 5,
+        "decodedBytes": 709236,
+        "downloadBytes": 252774
       }
     }
   }

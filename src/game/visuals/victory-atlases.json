@@ -34,5 +34,14 @@
     "frames": 5,
     "decodedBytes": 1487112,
     "downloadBytes": 402530
+  },
+  "lio": {
+    "image": "lio_victory.66bcd39ecdbb.webp",
+    "atlas": "lio_victory.52264b864259.json",
+    "width": 891,
+    "height": 199,
+    "frames": 5,
+    "decodedBytes": 709236,
+    "downloadBytes": 252774
   }
 }

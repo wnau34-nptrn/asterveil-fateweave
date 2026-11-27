@@ -82,6 +82,20 @@ test('victory sparkles without a hop and defeat slumps, from the real battle out
   } finally { await ctx.close(); }
 });
 
+test('Lio plays the LIFE-002 cheer once and holds it; heroes without one keep the idle', async ({ browser }) => {
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'no-preference' });
+  const page = await ctx.newPage();
+  try {
+    await open(page, '?end=victory&cast=lio');
+    await page.locator('#target-f1').click();
+    await expect.poll(async () => (await life(page)).finale, { timeout: 8000 }).toBe('victory');
+    await expect.poll(async () => { const h = (await life(page)).heroes.lio!; return `${h.texture}#${h.frame}`; }, { timeout: 5000 }).toBe('unit-victory-lio#5');
+    await page.waitForTimeout(800);
+    expect((await life(page)).heroes.lio!.frame).toBe('5');
+    expect((await life(page)).heroes.mira!.texture).toMatch(/^unit-pilot-/);
+  } finally { await ctx.close(); }
+});
+
 test('drawn cheers play once from the real victory and hold their last frame; reduced motion keeps the idle', async ({ browser }) => {
   for (const reducedMotion of ['no-preference', 'reduce'] as const) {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion });
