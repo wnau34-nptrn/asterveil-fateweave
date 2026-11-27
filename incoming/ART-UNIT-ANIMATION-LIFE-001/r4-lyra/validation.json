@@ -2,8 +2,8 @@
   "algorithm": "SHA-256",
   "files": {
     "NOTES.md": {
-      "sha256": "be1279dd379b3557f785126deb4e533a906631cffdc1acf02e3d34891f988473",
-      "bytes": 5607
+      "sha256": "fd43835bde8cc42b37d13b51a9813ebe5903f80f835a786f87a9840a862e60ec",
+      "bytes": 5641
     },
     "allies-victory-held-390.png": {
       "sha256": "29c0e7c466cb94193630de36210e8c32866eb0e650932dc4c472967dfe231b60",
