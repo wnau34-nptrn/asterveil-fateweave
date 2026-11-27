@@ -1,0 +1,105 @@
+{
+  "attempt": "Fix 2",
+  "anatomy": {
+    "tolerance": 0.12,
+    "minInliers": 12,
+    "report": {
+      "corin": [
+        {
+          "frame": 0,
+          "height": 460,
+          "scale": 1.0,
+          "inliers": 1939,
+          "idle": true,
+          "status": "idle"
+        },
+        {
+          "frame": 1,
+          "height": 460,
+          "scale": 0.96,
+          "inliers": 100,
+          "status": "ok"
+        },
+        {
+          "frame": 2,
+          "height": 460,
+          "scale": 0.929,
+          "inliers": 157,
+          "status": "ok"
+        },
+        {
+          "frame": 3,
+          "height": 466,
+          "scale": 0.974,
+          "inliers": 65,
+          "status": "ok"
+        },
+        {
+          "frame": 4,
+          "height": 461,
+          "scale": 0.933,
+          "inliers": 155,
+          "status": "ok"
+        },
+        {
+          "frame": 5,
+          "height": 461,
+          "scale": 0.947,
+          "inliers": 170,
+          "status": "ok"
+        }
+      ]
+    }
+  },
+  "measurements": [
+    {
+      "frame": 1,
+      "ground_row": 751,
+      "edge_margin": 16,
+      "head_width_px": 217,
+      "body_height_px": 459,
+      "prop_length_px": 126
+    },
+    {
+      "frame": 2,
+      "ground_row": 751,
+      "edge_margin": 16,
+      "head_width_px": 205,
+      "body_height_px": 459,
+      "prop_length_px": 135
+    },
+    {
+      "frame": 3,
+      "ground_row": 751,
+      "edge_margin": 16,
+      "head_width_px": 201,
+      "body_height_px": 459,
+      "prop_length_px": 125
+    },
+    {
+      "frame": 4,
+      "ground_row": 751,
+      "edge_margin": 16,
+      "head_width_px": 205,
+      "body_height_px": 459,
+      "prop_length_px": 129
+    },
+    {
+      "frame": 5,
+      "ground_row": 751,
+      "edge_margin": 16,
+      "head_width_px": 200,
+      "body_height_px": 459,
+      "prop_length_px": 118
+    },
+    {
+      "frame": 6,
+      "ground_row": 751,
+      "edge_margin": 16,
+      "head_width_px": 199,
+      "body_height_px": 459,
+      "prop_length_px": 118
+    }
+  ],
+  "prop_method": "First visible pearl to the lower tip of the tassel."
+}

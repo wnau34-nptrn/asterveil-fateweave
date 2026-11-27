@@ -1,0 +1,62 @@
+{
+  "mira": {
+    "source": "incoming/ART-UNIT-ANIMATION-A4-001/heroes/seeds/mira-seed.png",
+    "file": "seeds/mira-seed.png",
+    "sha256": "c0dfe376ceb6d507e915322c26a2f353b0c48e1c89a4ccadc1a67178d3d1451a",
+    "ground_row": 752
+  },
+  "toma": {
+    "source": "incoming/ART-UNIT-ANIMATION-A4-001/heroes/seeds/toma-seed.png",
+    "file": "seeds/toma-seed.png",
+    "sha256": "39edb773bacfd7a2e5335b8a204ad2157b8007b1b8655883860b8ccbd82cdc8e",
+    "ground_row": 752
+  },
+  "garran": {
+    "source": "incoming/ART-UNIT-ANIMATION-A5-001/heroes/seeds/garran-seed.png",
+    "file": "seeds/garran-seed.png",
+    "sha256": "653fb5efb1f4b1bc4529300a9686f80577361c9f73ba294b301fe90e1b25107b",
+    "ground_row": 752
+  },
+  "brann": {
+    "source": "incoming/ART-UNIT-ANIMATION-A5-001/heroes/seeds/brann-seed.png",
+    "file": "seeds/brann-seed.png",
+    "sha256": "35f1aeb0f99c4d86d2b2427592ae846657d4cf413c5c217e063eaf3067bb29de",
+    "ground_row": 752
+  },
+  "sefa": {
+    "source": "incoming/ART-UNIT-ANIMATION-A6-001/heroes/seeds/sefa-seed.png",
+    "file": "seeds/sefa-seed.png",
+    "sha256": "6cb511ce3ac8badd15e28fafecd44f8f940a718eff6a4c15adccc10a241584bc",
+    "ground_row": 752
+  },
+  "corin": {
+    "source": "incoming/ART-UNIT-ANIMATION-A7-001/saints/metta/seeds/metta.png",
+    "file": "seeds/corin-seed.png",
+    "sha256": "62126d7f84767d640e41a96515df67774fd153221fc43ad16c75e410f6b26fd2",
+    "ground_row": 751
+  },
+  "cerise": {
+    "source": "incoming/ART-UNIT-ANIMATION-A7-002/seeds/lalin.png",
+    "file": "seeds/cerise-seed.png",
+    "sha256": "3fc6f8259ca286dc11d2952c05a19518896d9cb56ea4a361d4c11c9fffccbeb6",
+    "ground_row": 750
+  },
+  "kael": {
+    "source": "incoming/ART-UNIT-ANIMATION-A12-001/seeds/kael.png",
+    "file": "seeds/kael-seed.png",
+    "sha256": "5d9f344d4d44cad32c169e74780c2ff10bed401fd9f9dd43ea27f4c2171dde1c",
+    "ground_row": 752
+  },
+  "wynne": {
+    "source": "incoming/ART-UNIT-ANIMATION-A12-001/seeds/wynne.png",
+    "file": "seeds/wynne-seed.png",
+    "sha256": "b2888ab61fcb39fc5e4fc508c0a6695efae1c74224c5460d32f724a24fa091e6",
+    "ground_row": 752
+  },
+  "astrid": {
+    "source": "incoming/ART-UNIT-ANIMATION-A12-001/seeds/astrid.png",
+    "file": "seeds/astrid-seed.png",
+    "sha256": "a2d2ac7833818ff62cc877ecd0e90e87f24d8f56365f57e6c32d9321b36f1b29",
+    "ground_row": 752
+  }
+}
