@@ -31,8 +31,10 @@ const lakeDecor: Readonly<Record<string, Frame & { zone: string }>> = lakeDecorF
 export const isLakeArt = (map: MapDefinition): boolean => map.id === 'moon-lake';
 // Map 5 (ART-WORLD-MINE-PROPS-001): a 6×5 prop atlas (128 px cells, foot at 124) for lanterns, puzzle pieces, workers and
 // mine clutter. The map shows it through `#map-grid[data-art="mine"]`; the revision is the first 8 hex of the file's SHA-256.
-export const MINE_REV = { decor: 'ef9dc300', tiles: 'dae0df6a', rails: '10a542fd' } as const;
+export const MINE_REV = { decor: 'ef9dc300', tiles: 'dae0df6a', rails: '10a542fd', events: '1576a9be' } as const;
 export const mineDecorUrl = (): string => `${import.meta.env.BASE_URL}assets/world/mine_decor.webp?v=${MINE_REV.decor}`;
+// ART-MAP5-EVENTS-001: the four side-event markers (trapped, cart, vein, ore-merchant) as a 4×1 atlas of 128 px cells, foot at 124.
+export const mineEventsUrl = (): string => `${import.meta.env.BASE_URL}assets/world/mine_events.webp?v=${MINE_REV.events}`;
 export const mineDecor: Readonly<Record<string, Frame>> = mineDecorFrames;
 // ART-WORLD-MINE-001: a 4×4 floor/wall atlas (yard, tunnel, cavern ×4, mine_wall_top/face/inner) and a 3×2 rail overlay atlas.
 export const mineTiles: Readonly<Record<string, Frame>> = mineTileFrames;

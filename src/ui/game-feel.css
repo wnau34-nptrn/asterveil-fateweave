@@ -558,11 +558,9 @@ html, body { background: #0a1422; }
 .event-mark[data-kind=traveller] { --px: 0; --py: 1; } .event-mark[data-kind=rift] { --px: 1; --py: 1; }
 /* P05-02: the abandoned camp borrows the broken-camp prop, faded, until it has its own painting (Claude art pick). */
 .event-mark[data-kind=abandoned] { --px: 1; --py: 0; } .event-mark[data-kind=abandoned] .map-prop { filter: grayscale(.7) sepia(.35) brightness(.85); }
-/* Map 5 side events borrow existing props until Codex paints their own (agent pick, not owner approval). */
-.event-mark[data-kind=trapped] { --px: 0; --py: 1; } .event-mark[data-kind=trapped] .map-prop { filter: sepia(.5) brightness(.8); }
-.event-mark[data-kind=cart] { --px: 1; --py: 0; } .event-mark[data-kind=cart] .map-prop { filter: sepia(.6) brightness(.9); }
-.event-mark[data-kind=vein] { --px: 2; --py: 0; } .event-mark[data-kind=vein] .map-prop { filter: hue-rotate(150deg) saturate(1.4); }
-.event-mark[data-kind=ore-merchant] { --px: 3; --py: 0; }
+/* Map 5 side events (ART-MAP5-EVENTS-001, trapped worker R1): a 4×1 atlas of 128 px cells; --ex picks the cell. */
+.event-mark[data-kind=trapped] .map-prop, .event-mark[data-kind=cart] .map-prop, .event-mark[data-kind=vein] .map-prop, .event-mark[data-kind=ore-merchant] .map-prop { background: url('/assets/world/mine_events.webp?v=1576a9be') calc(var(--ex) * var(--t) * -1) 0 / calc(var(--t) * 4) var(--t) no-repeat; }
+.event-mark[data-kind=trapped] { --ex: 0; } .event-mark[data-kind=cart] { --ex: 1; } .event-mark[data-kind=vein] { --ex: 2; } .event-mark[data-kind=ore-merchant] { --ex: 3; }
 .event-mark[data-kind=ore-merchant] i { background: radial-gradient(circle at 40% 35%, #dffcf4, #7fe3d0 55%, #2f8f80); }
 /* The "!" badge floats in the clear top fifth of the painted prop. */
 .event-mark i { position: absolute; left: 50%; top: 2%; width: calc(var(--t) * .3); height: calc(var(--t) * .3); display: grid; place-items: center; transform: translateX(-50%); border-radius: 50%;

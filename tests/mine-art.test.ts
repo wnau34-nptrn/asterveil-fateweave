@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { mineMap } from '../src/content/world/chapter-mine';
-import { MINE_REV, decorAt, floorFrame, mapArt, mineArtUrl, mineDecor, mineDecorUrl, mineRails, mineTiles, railAt, tileFrame } from '../src/game/visuals/world-art';
+import { MINE_REV, decorAt, floorFrame, mapArt, mineArtUrl, mineDecor, mineDecorUrl, mineEventsUrl, mineRails, mineTiles, railAt, tileFrame } from '../src/game/visuals/world-art';
 import { battleBackdropUrl, battleSceneOf } from '../src/ui/screen-images';
 
 // ART-WORLD-MINE-PROPS-001: the prop atlas ships lossless, its URL revision follows the bytes, and CSS names the same file.
@@ -67,5 +67,26 @@ describe('mine prop art', () => {
   });
   it('fights in the mine in front of the crystal cavern painting', () => {
     expect(battleSceneOf('crystal-mine')).toBe('mine'); expect(battleBackdropUrl('mine')).toMatch(/battle_mine\.webp$/);
+  });
+});
+
+// ART-MAP5-EVENTS-001: the side-event markers ship as a lossless 4×1 atlas; every Map 5 event kind has its own cell.
+describe('mine event markers', () => {
+  const file = readFileSync('public/assets/world/mine_events.webp');
+  it('ships lossless 512×128 with a revision that matches the file and the CSS', () => {
+    expect(file.toString('ascii', 12, 16)).toBe('VP8L');
+    expect(createHash('sha256').update(file).digest('hex').slice(0, 8)).toBe(MINE_REV.events);
+    expect(mineEventsUrl()).toContain(`?v=${MINE_REV.events}`);
+    const bits = file.readUInt32LE(21); expect([(bits & 0x3fff) + 1, ((bits >> 14) & 0x3fff) + 1]).toEqual([512, 128]);
+    const css = readFileSync('src/ui/game-feel.css', 'utf8');
+    const urls = [...css.matchAll(/\/assets\/world\/mine_events\.webp\?v=(\w+)/g)];
+    expect(urls.length).toBeGreaterThan(0);
+    for (const m of urls) expect(m[1]).toBe(MINE_REV.events);
+  });
+  it('gives every mine event kind its own cell', () => {
+    const css = readFileSync('src/ui/game-feel.css', 'utf8');
+    const cells = new Set<string>();
+    for (const e of mineMap.events) { const m = new RegExp(`event-mark\\[data-kind=${e.kind}\\] \\{ --ex: (\\d);`).exec(css); expect(m, e.kind).not.toBeNull(); cells.add(m![1]!); }
+    expect(cells.size).toBe(mineMap.events.length);
   });
 });

@@ -1,3 +1,10 @@
+## 2026-11-27 — นำเข้าเครื่องหมายเหตุการณ์แผนที่ 5 (Claude · `claude/map5-event-markers`)
+
+- Codex ส่ง ART-MAP5-EVENTS-001 (#371) เจ้าของสั่ง “นำเข้าเกมเลย ใช้ R1” ตรวจ SHA-256 23 ไฟล์ตรง และ decode ผ่าน
+- `public/assets/world/mine_events.webp` (512×128 lossless, rev ใน `MINE_REV.events`), `mineEventsUrl()` + preload แผนที่ 5, CSS `--ex` ต่อ `data-kind` แทนเซลล์ยืมและ filter ชั้น `vein_glow` ยังไม่ใช้
+- เทสต์: `tests/mine-art.test.ts` 8 ผ่าน (เพิ่ม 2: ไฟล์/rev/CSS และเซลล์ไม่ซ้ำ), typecheck, lint, Chromium `mine-events` 6/6; ภาพ [390px](../validation/map5-mine/event-markers-2026-11-27/01-markers-390.webp) (อุโมงค์ถูกความมืดรัศมี 1 ช่องบัง เห็นชัดที่รถแร่และพ่อค้า)
+- เปิดค้าง: เจ้าของยังไม่อนุมัติภาพบนแผนที่จริง · PR #371 ของ Codex ยังเปิดอยู่ (ไม่ได้ merge incoming)
+
 ## 2026-11-27 — brief ภาพเครื่องหมายเหตุการณ์แผนที่ 5 (Claude · `claude/map5-event-art-brief`)
 
 - เจ้าของสั่ง “brief ภาพสำหรับเครื่องหมายเหตุการณ์ในแผนที่ 5” เอกสารอย่างเดียว ไม่แตะโค้ดและไม่สร้างภาพ
