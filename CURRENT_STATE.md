@@ -28,13 +28,13 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Hero life: code breath/barrier/turn light/sparkles/slump in game (#376). Drawn victory cheers (ART-UNIT-ANIMATION-LIFE-001 R3, Codex PR #377): Aegis R3, Eira R3b, Seren R3 imported as small optional `<sheet>_victory` atlases on `claude/hero-victory-r3` — owner approved the clip 2026-11-27 (“อนุมัติ”); Lyra R4 prompt sent; Aegis idle-by-warp pilot (W1) pending from Codex. [Validation](docs/validation/hero-life-2026-11-27/README_TH.md), [brief](docs/handoffs/CODEX-HERO-LIFE-TH.md).
-- Auto battle (OD-62, 2026-11-26): AUTO toggle in random battles and World Boss attempts, one plain AI (no move reading, ~30% plain attacks), device settings for stop HP and skills switched off. Numbers are drafts (`AUTO_LAPSE`); sim: random battles ≈ advisor; World Boss (50% plain attacks there) 76–105% of the teaching advice damage. [Validation](docs/validation/auto-battle/README_TH.md).
+- Hero life: code breath/barrier/turn light/sparkles/slump (#376). Drawn victory cheers (LIFE-001): Aegis R3, Eira R3b, Seren R3 (#380) and Lyra R4 (#382), owner “อนุมัติ” 2026-11-27; small optional `<sheet>_victory` atlases. Aegis idle loop warped from the seed (W1b, #381, owner “อนุมัติ”); Lyra/Eira/Seren idle by the same tool next. LIFE-002 (victory for the other 11; Odran/Isolde parked) prompt sent to Codex. [Validation](docs/validation/hero-life-2026-11-27/README_TH.md), [brief](docs/handoffs/CODEX-HERO-LIFE-TH.md).
+- Auto battle (OD-62): random battles + World Boss, device stop-HP/skill settings; numbers draft. [Validation](docs/validation/auto-battle/README_TH.md).
 
-- Map 5 (OD-60): complete in game. Save v70, mine map v2, giant tuned at 48 seeds (`crystal-giant` v2); art #357–#363, giant 4b motion approved (“อนุมัติ”, #365). Side events #366: trapped worker, ore cart, fresh vein, ore merchant (ore→gold ×3), ledger → crystal weapon recipe, Bork's elite job ×3. Event markers: Codex ART-MAP5-EVENTS-001 (#371, worker R1, `mine_events.webp`), owner approved 2026-11-27; numbers are drafts. [Validation](docs/validation/map5-mine/README_TH.md).
+- Map 5 (OD-60): complete in game (save v70, giant tuned, art #357–#371, side events #366; owner approved). [Validation](docs/validation/map5-mine/README_TH.md).
 - 2026-11-25: boss holds on the body, silhouette aura, crowns above the figure (“นำเข้าเกมได้เลย”). [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
-- Game Feel [Draft PR #353](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/353): เสียงและภาพโจมตีตามอาวุธครบ 15 ตัวและตัวละครเซฟเก่า 2 ตัว. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
 
+- Game Feel Draft PR #353 (weapon-matched contact sound/visuals, 15 roles) still open. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
 - Mobile performance still needs on-device measurements for walking, fog, and battle entry. [ผลตรวจท่าคืนตัว](docs/validation/recovery-continuity-2026-11-24/README_TH.md).
 
 - Lake sweep/contract pay map 3's values until a P04 economy pass; P04-05/06 numbers.
@@ -42,4 +42,4 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-The owner picks the next task. Candidates: Map 6 บึงหมอกพิษ (OD-60 order: rules + content + sim → screens → Codex art; concept in [CHAPTER1_MAPS_TH §6](docs/design/CHAPTER1_MAPS_TH.md)), or another owner-picked task. Dark mine tunnels: pending events glow within 3 steps (draft range; [screens](docs/validation/map5-mine/event-markers-2026-11-27/02-dark-beacons-390.webp)).
+Hero life art (owner 2026-11-27): (1) merge PR #381 (Aegis W1b idle, owner “อนุมัติ”) once its CI is green. (2) Review Codex PR #384 ART-UNIT-ANIMATION-LIFE-002 (victory for 11 allies; Odran/Isolde parked): only Lio R1 passed; Mira R2, Sefa R1 and Cerise failed only the frame-1 ground check because the brief's sole rule (20+ px) differs from Codex's check (any alpha ≥128) — frame 1 is the untouched seed, so judge them by eye. Import the passing ones with `incoming/ART-UNIT-ANIMATION-LIFE-001/build_victory.py`'s method (optional `<sheet>_victory` atlases; update `unit-victory`/`unit-loading` tests), clip at 390px, wait for the owner's approval before merging. (3) Write the Codex fix prompt for the rest (clarify ground = seed's own lowest opaque row; keep props/scale gates) and the W1b-style warp idle prompt for Lyra, Eira and Seren (`w1b-aegis-idle/tools/warp_idle.py`). Read [the validation](docs/validation/hero-life-2026-11-27/README_TH.md) and [brief](docs/handoffs/CODEX-HERO-LIFE-TH.md) first.

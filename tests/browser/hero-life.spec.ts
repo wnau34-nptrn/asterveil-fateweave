@@ -103,3 +103,19 @@ test('drawn cheers play once from the real victory and hold their last frame; re
     } finally { await ctx.close(); }
   }
 });
+
+test('Aegis W1 idle loop plays its warped frames (code breath steps aside) and stays on frame 0 under reduced motion', async ({ browser }) => {
+  for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion });
+    const page = await ctx.newPage();
+    try {
+      await open(page);
+      await expect.poll(async () => (await life(page)).heroes.guardian?.texture).toBe('unit-pilot-aegis');
+      const seen = new Set<string>(), scales = new Set<number>();
+      for (let i = 0; i < 12; i++) { const g = (await life(page)).heroes.guardian!; seen.add(g.frame); scales.add(g.sy); await page.waitForTimeout(250); }
+      if (reducedMotion === 'reduce') expect([...seen]).toEqual(['0']);
+      else { expect(seen.size).toBeGreaterThan(3); for (const f of seen) expect(['0', '32', '33', '34', '35', '36', '37', '38']).toContain(f); }
+      expect(scales.size).toBe(1);   // no code breath on top of the drawn loop
+    } finally { await ctx.close(); }
+  }
+});

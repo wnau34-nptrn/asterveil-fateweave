@@ -442,7 +442,7 @@ export class BattleScene extends Phaser.Scene {
     this.stopEffects(); this.unitAnimation.clear(); this.heroLife.clear(); this.bodies.clear();
     for (const child of this.finaleLayer?.list ?? []) this.tweens.killTweensOf(child);
     this.barrierGlow.clear(); this.readyRing.clear(); this.finaleLayer = undefined;
-    if (this.view.state.outcome === 'active') this.finale = undefined;
+    if (this.view.state.outcome === 'active') { this.finale = undefined; this.unitAnimation.setLoops(!(this.reducedMotion || this.quiet)); }
     for (const t of this.idle) t.remove(); this.idle = [];
     // The camera only carries the pixel-ratio zoom; clear any effect so art and DOM targets share one origin.
     // The camera stays at its defaults; the root container alone carries the pixel-ratio scale,
@@ -680,6 +680,8 @@ export class BattleScene extends Phaser.Scene {
     this.finale = outcome;
     if (!this.ready || !this.lifeOn) return;
     if (outcome === 'defeat') { this.slump(true); return; }
+    // Drawn idle loops stop (back on the idle frame) before any cheer takes over its sprite; the next battle restores them.
+    this.unitAnimation.setLoops(false);
     this.finaleLayer?.destroy();
     this.finaleLayer = this.add.container(0, 0).setDepth(this.viewH + 2); this.layer?.add(this.finaleLayer);
     const standing = this.encounter.heroes.filter((_, i) => (this.view?.state.heroes[i]?.hp ?? 0) > 0)

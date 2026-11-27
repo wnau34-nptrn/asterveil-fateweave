@@ -1,0 +1,121 @@
+{
+  "algorithm": "SHA-256",
+  "files": {
+    "NOTES.md": {
+      "sha256": "c37731371db88c8d00343e6856e6d8e2375acccc6ca073087d1e332a7df7ddfe",
+      "bytes": 3395
+    },
+    "audits/anatomy.json": {
+      "sha256": "1054e1f70a08f1b69135d83ec34847c6f3950939d6145a8c96e10216339a03d2",
+      "bytes": 932
+    },
+    "audits/anatomy.txt": {
+      "sha256": "ed348cddaf91bc9b6943cd8ff2b2c36cf1e3c84720f2b44eef4d98c4458d42f1",
+      "bytes": 59
+    },
+    "diff/000.png": {
+      "sha256": "77e4dfeddc2767d2f375b6e3286c0d73c77f603907336e7f3463379024b8cd08",
+      "bytes": 333269
+    },
+    "diff/001.png": {
+      "sha256": "64d8e7a3989554edb5751ac12cda0ca3150133b4a47d76b84aa34662f0cd10f9",
+      "bytes": 340319
+    },
+    "diff/002.png": {
+      "sha256": "e28bf08bf841ca93859d9ba7d3051aa396a0e503b6d2e432d1167475c6584ea6",
+      "bytes": 339632
+    },
+    "diff/003.png": {
+      "sha256": "e1b4a95e49cb608cbf713cac33ba69944bd6cf6d7f42ca46a027bc457f3147f3",
+      "bytes": 338740
+    },
+    "diff/004.png": {
+      "sha256": "c733eb31a2e6cf38f18be575c62abffb84f56f0c68fc3ea5a9454156152e26ea",
+      "bytes": 330285
+    },
+    "diff/005.png": {
+      "sha256": "4b85aff583ac6c8499a6de33f07e36a4b5a29cf8846faf47163fbc5df3ce5301",
+      "bytes": 336298
+    },
+    "diff/006.png": {
+      "sha256": "387d768ca7839c52c0230d0a3e4c25b7df0810c8558f3953a4d70b1fd13076f2",
+      "bytes": 336527
+    },
+    "diff/007.png": {
+      "sha256": "bd7db69f6f3a9c3f8538fa77936761113fe84aff9df333aa26163fbe482c0dd0",
+      "bytes": 339245
+    },
+    "frames/000.png": {
+      "sha256": "0e888a0d889c61f2e4005361d43121e13478944cd3438a9ed6ca3578ee0dbaff",
+      "bytes": 420757
+    },
+    "frames/001.png": {
+      "sha256": "1bfb429ac4b306295c03a9f02072bb01b92faa07d6096dcbf4c028cd84f09dc2",
+      "bytes": 420563
+    },
+    "frames/002.png": {
+      "sha256": "b3ff5f0c78dd78eaff5722ec81a5f8bdfa133f68c74034c827f39b4204d69eed",
+      "bytes": 422102
+    },
+    "frames/003.png": {
+      "sha256": "47196081e72276215abaf38c84db4ba1e06a62bc8c16eb8aeada2d8b42553972",
+      "bytes": 421384
+    },
+    "frames/004.png": {
+      "sha256": "85c837f5a4069849977b9d5d34b63b320d12762d7303a130a5ab66a527fca6a2",
+      "bytes": 420094
+    },
+    "frames/005.png": {
+      "sha256": "3a6c9fc65b0528af0b6b231eeee36db17a7e029ef68e9d4427961c5ccb5af975",
+      "bytes": 420078
+    },
+    "frames/006.png": {
+      "sha256": "478bca1adc581490e1ce57346675eb979249549b01c6a9bf806823f3076511f8",
+      "bytes": 420507
+    },
+    "frames/007.png": {
+      "sha256": "c241b9f57301283cf6dc3491c03d1adbd4ecf10adbdbcd83fc7992bfd211ab16",
+      "bytes": 420725
+    },
+    "idle-aegis-111px.webp": {
+      "sha256": "08f24fa18d33e0cfc1518da28eca390f81be388ef412af29970c8de79f4a8a66",
+      "bytes": 171936
+    },
+    "idle-aegis-200ms.webp": {
+      "sha256": "5bd51e4186cb80c8926afcd2c17039c0801482f09162e9f6d2d0d64ac93471bf",
+      "bytes": 2296084
+    },
+    "idle-aegis-400ms.webp": {
+      "sha256": "1d6ebc009bf213ca7e6fc365ec01da23d489d93db3a6a33999b78ea1a0627098",
+      "bytes": 2296084
+    },
+    "idle-aegis-w1-vs-w1b-111px.webp": {
+      "sha256": "a4dad8c2c66f28e013862dff553d87990b0b6f154916ed77a06ed22727fa42c9",
+      "bytes": 101554
+    },
+    "masks/breath.png": {
+      "sha256": "5b44b66bc69128d6e63d48b5cb61f134033f253f1907476e32865979f7c1aa78",
+      "bytes": 3224
+    },
+    "masks/cape.png": {
+      "sha256": "92757b13ddc0613a0b23aa45492506053fcfdc13fef39c31b4ce601b78931be2",
+      "bytes": 7615
+    },
+    "masks/cloth.png": {
+      "sha256": "f5c6ca5684863c51defb5cb7e408d41c7f0f7c8a1c4c1989603a68f89be3be09",
+      "bytes": 2336
+    },
+    "masks/hair.png": {
+      "sha256": "caa6d0de50bc97394098b3d946982313950667eaccf40dd0142bd0ecffa7701e",
+      "bytes": 3698
+    },
+    "strips.json": {
+      "sha256": "0146961a51738f290f978bc6d88a66aee0d034d745f2a6ff7cf7e61c23bf5711",
+      "bytes": 1675
+    },
+    "tools/warp_idle.py": {
+      "sha256": "d65de2aabe2df33860ce8be0af54a841747e77afdeca20af0aeda62124007594",
+      "bytes": 8179
+    }
+  }
+}
