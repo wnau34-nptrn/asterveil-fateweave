@@ -1,0 +1,66 @@
+[
+  {
+    "character": "aegis",
+    "revision": "R3",
+    "prompt": "Make ONE continuous wide horizontal transparent game sprite strip showing six full-body aegis sprites, slots in one row left-to-right, equally spaced with broad completely transparent gutters. Use ONLY the attached seed as exact character model. It is original saturated cel-shaded semi-chibi anime artwork with short limbs and large head. Keep face and hair, exact outlines, palette, costume details, equipment shapes and their exact colors and dimensions; only change articulation. Same scale in all six slots: head width and hat-excluding body height must match slot 1 within 3%, no camera movement, same orientation facing right. Keep both feet grounded on exactly the same horizontal baseline, no jump. Small understated and natural victory rather than exaggeration. Slot 1 exact seed ready pose. 2 bends knees and lowers sword slightly; 3 plants the blue and gold shield beside his boot so the shield tip touches the ground, starts raising blue-bladed sword; 4 sword clearly straight up, off to one side of his face, chin up; 5 shoulders settle; 6 steady eyes-open hold with sword raised vertically and shield planted beside him. Keep shield and sword identical in colors, shape and size, do not recolor blue blade. Leave 50% extra transparent height above the original head for any raised gear rather than resizing the character or cropping. All weapons and capes wholly visible. True transparency, body only, no floor, shadows, effects, extra sparkles/glows, text or marks. Use isolated silhouettes and full-height margin.",
+    "reference": "../seeds/aegis-seed.png",
+    "generation_id": "exec-ed720ecb-3195-4c3d-ac56-bc710f931848",
+    "transparent_background": true
+  },
+  {
+    "character": "aegis",
+    "revision": "R3B",
+    "prompt": "Edit ONLY the attached aegis seed into ONE row of exactly six separated transparent full-body sprite poses. This is a production animation of the exact same saturated cel-shaded semi-chibi model, at identical large head width and identical body height throughout, fixed camera and feet. Preserve all identity, costume, head, hair, face, palette and real equipment. Start seed pose, then slight anticipated knee dip, rise into victory, clear natural peak, small settle, eyes-open steady held pose. Use the same full wide silhouette of blond hair and face with every lock fixed. Do not narrow the head in front-facing frames. Keep the right facing three-quarter head turn exactly the seed through all slots. At the peak and final pose, put the original blue and gold shield tip on the ground beside his boot and hold the long original blue sword vertical with hand above shoulder, away from the face, chin just slightly up. Grounded entire time. Preserve dimensions and hues of equipment. Generous top margin for every raised item; clear empty gutters; exact same apparent character scale in every slot. No effects, glow, text, grid, cropped items, floor or shadows. True alpha throughout background.",
+    "reference": "../seeds/aegis-seed.png",
+    "generation_id": "exec-df9bd9f5-6874-46ec-8e56-9e45b88ae5d8",
+    "transparent_background": true
+  },
+  {
+    "character": "lyra",
+    "revision": "R3",
+    "prompt": "Make ONE continuous wide horizontal transparent game sprite strip showing six full-body lyra sprites, slots in one row left-to-right, equally spaced with broad completely transparent gutters. Use ONLY the attached seed as exact character model. It is original saturated cel-shaded semi-chibi anime artwork with short limbs and large head. Keep face and hair, exact outlines, palette, costume details, equipment shapes and their exact colors and dimensions; only change articulation. Same scale in all six slots: head width and hat-excluding body height must match slot 1 within 3%, no camera movement, same orientation facing right. Keep both feet grounded on exactly the same horizontal baseline, no jump. Small understated and natural victory rather than exaggeration. Slot 1 exact seed ready pose. 2 slight knee bend and lowers the greatsword toward the lower right; 3 sweeps the same sword in a half arc beside her; 4 raises blade in the arc near her shoulder; 5 rests it across her shoulder; 6 eyes open, confident understated grin, blade settled on one shoulder and free hand on hip. Retain exactly the large red-centered silver blade, gold guard and original red scarf and cape. Leave 50% extra transparent height above the original head for any raised gear rather than resizing the character or cropping. All weapons and capes wholly visible. True transparency, body only, no floor, shadows, effects, extra sparkles/glows, text or marks. Use isolated silhouettes and full-height margin.",
+    "reference": "../seeds/lyra-seed.png",
+    "generation_id": "exec-a2d40a0a-528d-41fc-863d-06d54a68770b",
+    "transparent_background": true
+  },
+  {
+    "character": "lyra",
+    "revision": "R3B",
+    "prompt": "Edit only the attached seed into a single wide horizontal 6-frame sprite strip with exactly six isolated full-body figures. Every pixel outside the character, sword and costume must be clear real zero alpha. No gray or white halo, outline backing, keyline or haze around any sprite; no scenery, shadow, floor, sparks, glow or text. Large transparent gaps between figures. Keep red hair and eyes, red scarf, red and gold dark armor, and original silver greatsword with central red inlay and gold hilt exactly the same shape, dimensions and colors as the seed. Exactly the same head width, hair silhouette, camera and body height across all frames. Keep both feet on exactly the same baseline. Facing right. Slot 1 in the seed pose. Slot 2 a small knee dip, sword low. Slot 3 swing the sword in one smooth half-arc at her side. Slot 4 swing apex, natural and proud, sword up to side. Slot 5 ease sword onto her shoulder. Slot 6 hold sword on shoulder with other hand on hip, eyes open and confidently smiling. Room above and around each entire prop, nothing cut off. Natural restrained semi-chibi victory sprite, no effects. The attached image is the only model.",
+    "reference": "../seeds/lyra-seed.png",
+    "generation_id": "exec-761e68f8-5cdb-401b-8607-5d0f2e395717",
+    "transparent_background": true
+  },
+  {
+    "character": "eira",
+    "revision": "R3",
+    "prompt": "Make ONE continuous wide horizontal transparent game sprite strip showing six full-body eira sprites, slots in one row left-to-right, equally spaced with broad completely transparent gutters. Use ONLY the attached seed as exact character model. It is original saturated cel-shaded semi-chibi anime artwork with short limbs and large head. Keep face and hair, exact outlines, palette, costume details, equipment shapes and their exact colors and dimensions; only change articulation. Same scale in all six slots: head width and hat-excluding body height must match slot 1 within 3%, no camera movement, same orientation facing right. Keep both feet grounded on exactly the same horizontal baseline, no jump. Small understated and natural victory rather than exaggeration. Slot 1 exact seed ready pose. 2 slight knee bend and lowers her purple-gem golden staff; 3 raises staff, free hand moves to hat brim; 4 staff raised above her, heels lift gently but toes remain planted, happy closed-eye smile and free hand touches the brim; 5 heels settle; 6 both soles down, eyes open, hand holding brim, staff held raised. Keep the exact purple original gemstone settings silhouette and golden staff shaft. No jumps, no floating, no new light or glow. Leave 50% extra transparent height above the original head for any raised gear rather than resizing the character or cropping. All weapons and capes wholly visible. True transparency, body only, no floor, shadows, effects, extra sparkles/glows, text or marks. Use isolated silhouettes and full-height margin.",
+    "reference": "../seeds/eira-seed.png",
+    "generation_id": "exec-6434e58b-bc6b-4706-8a14-67ece64f3ac9",
+    "transparent_background": true
+  },
+  {
+    "character": "eira",
+    "revision": "R3B",
+    "prompt": "Edit ONLY the attached Eira original seed into a single horizontal broad row with exactly six whole sprites occupying six distinct slots separated by wide zero-alpha gutters. Copy the seed's large face and head width, right-facing camera, silver hair and exact purple-and-gold witch costume, original purple gem with gold settings, shaft and dangling ornaments. Keep head width and body height locked across frames, keep body broad and do not make long thin legs. No new props. Both ankles stay at their starting horizontal positions and both toes on the exact baseline throughout, with heels lifting just a bit in slot 4, never airborne. Slot 1 seed; 2 subtle knee dip with staff lowered; 3 raises staff and touches broad hat brim with free hand; 4 peak with purple staff high, eyes closed in soft smile, toes on the ground; 5 settle on heels; 6 eyes open, stable balanced soles both planted, original staff held high, free hand visibly resting on brim. Natural, subtle and proud. Same apparent scale across all six. Generous blank area above raised staff and around capes; no cropping. Actual transparent alpha, no backing, smudges, glow beyond the original gem, sparkles, floor, shadow, or text.",
+    "reference": "../seeds/eira-seed.png",
+    "generation_id": "exec-9f31d6e2-a970-467f-ae8c-796862ff9f7c",
+    "transparent_background": true
+  },
+  {
+    "character": "seren",
+    "revision": "R3",
+    "prompt": "Make ONE continuous wide horizontal transparent game sprite strip showing six full-body seren sprites, slots in one row left-to-right, equally spaced with broad completely transparent gutters. Use ONLY the attached seed as exact character model. It is original saturated cel-shaded semi-chibi anime artwork with short limbs and large head. Keep face and hair, exact outlines, palette, costume details, equipment shapes and their exact colors and dimensions; only change articulation. Same scale in all six slots: head width and hat-excluding body height must match slot 1 within 3%, no camera movement, same orientation facing right. Keep both feet grounded on exactly the same horizontal baseline, no jump. Small understated and natural victory rather than exaggeration. Slot 1 exact seed ready pose. 2 slight knee bend, staff lowers slightly; 3 firmly stands original golden staff with green gem upright and brings free hand over the heart; 4 bows head slightly, hand clearly across chest; 5 looks up slowly; 6 natural gentle eyes-open smile, hand over heart, identical golden green-gem staff upright. Preserve the original cloak and laurel without changes. Leave 50% extra transparent height above the original head for any raised gear rather than resizing the character or cropping. All weapons and capes wholly visible. True transparency, body only, no floor, shadows, effects, extra sparkles/glows, text or marks. Use isolated silhouettes and full-height margin.",
+    "reference": "../seeds/seren-seed.png",
+    "generation_id": "exec-4d9fc615-9932-4b71-9a47-042398cfc25b",
+    "transparent_background": true
+  },
+  {
+    "character": "seren",
+    "revision": "R3B",
+    "prompt": "Edit ONLY the attached seren seed into ONE row of exactly six separated transparent full-body sprite poses. This is a production animation of the exact same saturated cel-shaded semi-chibi model, at identical large head width and identical body height throughout, fixed camera and feet. Preserve all identity, costume, head, hair, face, palette and real equipment. Start seed pose, then slight anticipated knee dip, rise into victory, clear natural peak, small settle, eyes-open steady held pose. Keep the head and existing laurel as a locked shape and scale in all slots, with exactly the same pose orientation and width as reference. Slight head bow only at peak, no extra curls or head resizing. Stable stance. Keep the same large emerald gold staff upright in final pose. Final hand over heart, eyes open. Render actual zero alpha transparent background with no textured gray or white haze. Grounded entire time. Preserve dimensions and hues of equipment. Generous top margin for every raised item; clear empty gutters; exact same apparent character scale in every slot. No effects, glow, text, grid, cropped items, floor or shadows. True alpha throughout background.",
+    "reference": "../seeds/seren-seed.png",
+    "generation_id": "exec-9a1b7920-8b17-4803-adba-b157a1bb9296",
+    "transparent_background": true
+  }
+]

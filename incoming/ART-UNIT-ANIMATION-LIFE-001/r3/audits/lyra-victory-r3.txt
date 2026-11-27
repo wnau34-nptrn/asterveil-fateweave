@@ -1,0 +1,1 @@
+lyra-victory-r3: median head scale 0.973; drift []; not measured []
