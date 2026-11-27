@@ -91,7 +91,7 @@ MOVE 2 — victory (6 frames, plays once at the end of a won battle, then HOLDS 
 6. held victory pose, stable enough to hold for several seconds (eyes open, balanced, both feet on the ground line unless stated).
 Per character (keep it in character; use only what the seed already holds; no new props):
 - Aegis (Knight): plants the shield at the side and raises the sword straight up, chin up; held pose = sword raised, shield planted.
-- Lyra (Duelist): spins the greatsword once at her side and rests it on the shoulder with a confident grin; held pose = blade on shoulder, other hand on hip.
+- Lyra (Duelist): spins the greatsword once at the side and rests it on the shoulder with a confident grin; held pose = blade on shoulder, other hand on hip.
 - Eira (Mage): lifts the staff high with a little hop (feet may leave the ground only in frames 3–4) and smiles with eyes closed; held pose = staff raised, the free hand holding the hat brim.
 - Seren (Priest): lowers the staff, places the free hand over the heart and bows the head slightly, then looks up with a gentle smile; held pose = hand on heart, staff upright.
 Supply an R2 for any victory that does not read at 111 px on the first try, and mark the recommended one.
