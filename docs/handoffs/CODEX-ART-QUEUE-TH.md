@@ -1000,3 +1000,7 @@ RETURN: incoming/ART-MAP5-EVENTS-001/
 ```
 
 **หลัง Codex ส่ง (Claude ทำ ใช้ skill `fateweave-art-intake`):** ตรวจแฮช/alpha/footY → แพ็ก `public/assets/world/mine_events.webp` + rev ใน `world-art.ts` + preload ใน `screen-images.ts` → CSS ต่อ `data-kind` (แทนเซลล์ยืมและ filter) → รัน `npm run coverage:presentation` และสเปกเหมือง → ภาพ 390px ให้เจ้าของเลือกแบบ/อนุมัติ
+
+## 35. ART-UNIT-ANIMATION-LIFE-001 / 002 — ท่ายืนวนลูปและท่าชนะของฮีโร่ฝั่งเรา
+
+ที่มา: เจ้าของสั่ง 2026-11-27 “ข้อ 8–10 ส่ง brief ให้ Codex” ทำข้อ 8 (idle loop 4 เฟรม) และข้อ 10 (ท่าชนะ 6 เฟรม) ส่วนข้อ 9 (เฟรมรับดาเมจ) ไม่ต้องทำ เพราะฮีโร่ทั้ง 15 ตัวมีครบแล้ว ชุด 1 นำร่องคือเอกิส ไลรา ไอรา เซเรน ส่งได้ทันที ชุด 2 (อีก 11 ตัว) ทำหลังเจ้าของอนุมัติ motion ชุด 1 ข้อเท็จจริงที่ตรวจแล้ว ตาราง seed และกล่อง prompt อยู่ใน [CODEX-HERO-LIFE-TH.md](CODEX-HERO-LIFE-TH.md)
