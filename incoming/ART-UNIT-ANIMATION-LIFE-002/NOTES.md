@@ -11,6 +11,16 @@ Generated from the hash-verified source sprites. Raw files are generator output 
 - **Sefa · missing**. R1 shows the requested crossing. The exact frame 1 has alpha ≥ 128 at y=752 below the required y=751.
 - **Lio · R1**. Passed frame canvas, edge margin, original seed pixels, ground, reviewed clean alpha on dark and bright, visual head width and body height, prop size where applicable, and the anatomy audit.
 
+## Batch B
+
+- **Corin · missing**. R1 narrows the head and changes the prayer strand. R2 preserves the medium-wide stance and passes the anatomy audit (median 1.003), but part of the strand disappears behind the open palm in frame 3. The visible first-pearl-to-tassel span is about 111 px versus 126 px in the seed, so the prop gate could not be verified.
+- **Cerise · missing**. R1 turns to a full back view at peak. The exact frame 1 has alpha ≥ 128 at y=750 below the required y=749.
+- **Kael · missing**. R1 narrows the head after height normalization (about 193 px versus 212 px in the seed; anatomy scale median 0.914). R2 has a gray matte covering the background and gaps.
+- **Wynne · missing**. R1 shrinks the doll after height normalization (about 113 px versus 125 px). R2 makes the doll too large in the lift frame (about 135 px crown-to-toe versus 125 px). R2 anatomy median is 0.974.
+- **Astrid · missing**. R1 drops an astrolabe pendant. R2 restores it, but the head is about 203–206 px at comparable figure height versus about 216 px in the seed. R2 anatomy median is 0.954.
+
+Batch B has no recommended held pose. The review sheet under audits/ shows rejected held frames at a common body scale for comparison. The Batch B anatomy reports describe Corin R2, Kael R1, Wynne R2 and Astrid R2. The anatomy script measures landmark scale and cannot replace the separate silhouette-width and prop checks.
+
 ## Lio measurements
 
 | Frame | Head width (px) | Figure height (px) | Prop span (px) | Anatomy scale |

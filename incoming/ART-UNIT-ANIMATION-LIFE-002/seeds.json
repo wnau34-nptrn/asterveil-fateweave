@@ -52,5 +52,50 @@
     "ground_row": 752,
     "bottom_alpha_ge_128": 496,
     "bottom_alpha_gt_0": 496
+  },
+  "corin": {
+    "file": "seeds/corin-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A7-001/saints/metta/seeds/metta.png",
+    "sha256": "62126d7f84767d640e41a96515df67774fd153221fc43ad16c75e410f6b26fd2",
+    "sole_row": 495,
+    "ground_row": 751,
+    "bottom_alpha_ge_128": 495,
+    "bottom_alpha_gt_0": 496
+  },
+  "cerise": {
+    "file": "seeds/cerise-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A7-002/seeds/lalin.png",
+    "sha256": "3fc6f8259ca286dc11d2952c05a19518896d9cb56ea4a361d4c11c9fffccbeb6",
+    "sole_row": 493,
+    "ground_row": 749,
+    "bottom_alpha_ge_128": 494,
+    "bottom_alpha_gt_0": 496
+  },
+  "kael": {
+    "file": "seeds/kael-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A12-001/seeds/kael.png",
+    "sha256": "5d9f344d4d44cad32c169e74780c2ff10bed401fd9f9dd43ea27f4c2171dde1c",
+    "sole_row": 496,
+    "ground_row": 752,
+    "bottom_alpha_ge_128": 496,
+    "bottom_alpha_gt_0": 496
+  },
+  "wynne": {
+    "file": "seeds/wynne-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A12-001/seeds/wynne.png",
+    "sha256": "b2888ab61fcb39fc5e4fc508c0a6695efae1c74224c5460d32f724a24fa091e6",
+    "sole_row": 496,
+    "ground_row": 752,
+    "bottom_alpha_ge_128": 496,
+    "bottom_alpha_gt_0": 496
+  },
+  "astrid": {
+    "file": "seeds/astrid-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A12-001/seeds/astrid.png",
+    "sha256": "a2d2ac7833818ff62cc877ecd0e90e87f24d8f56365f57e6c32d9321b36f1b29",
+    "sole_row": 496,
+    "ground_row": 752,
+    "bottom_alpha_ge_128": 496,
+    "bottom_alpha_gt_0": 496
   }
 }

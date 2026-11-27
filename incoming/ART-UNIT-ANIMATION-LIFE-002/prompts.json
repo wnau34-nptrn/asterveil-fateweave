@@ -130,5 +130,123 @@
         724
       ]
     }
+  ],
+  "corin": [
+    {
+      "version": "R1",
+      "prompt": "Edit the attached original corin game sprite into ONE very wide horizontal production animation sprite strip, one row of exactly SIX distinct full-body sequential poses. Real zero alpha transparent backdrop and wide gutters. Each complete silhouette stays in its slot. Match the exact polished fantasy chibi style, face, head width, body height, facing, camera, hairstyle, costume colors and shapes, and original props at their original length. Render equal size characters. Both feet remain at the original ground line. Exactly two arms and two hands. Frames in order: 1 copy idle seed pose; 2 small anticipation; 3 rising action; 4 peak; 5 settle; 6 balanced hold, grounded, eyes open. Action: Small preparation. Bring his closed fist into his open palm in a martial salute while the exact original prayer beads hang visibly. Give one shallow bow at peak. Finish upright with fist in palm, calm open-eyed smile. No new objects or equipment. No effects, text, scenery, ground, motion lines, glow, shadows or lines on backdrop. Clean antialiased edges with no pale matte.",
+      "reference": "seeds/corin-seed.png",
+      "generation_id": "exec-3d38bbb4-55a2-45e0-86c4-312a48c6ee23",
+      "transparent_background": true,
+      "file": "raw/corin-victory-r1.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "version": "R2",
+      "prompt": "Edit the attached original corin game sprite into ONE very wide horizontal production animation sprite strip, one row of exactly SIX distinct full-body sequential poses. Real zero alpha transparent backdrop and wide gutters. Each complete silhouette stays in its slot. Match the exact polished fantasy chibi style, face, head width, body height, facing, camera, hairstyle, costume colors and shapes, and original props at their original length. Render equal size characters. Both feet remain at the original ground line. Exactly two arms and two hands. Frames in order: 1 copy idle seed pose; 2 small anticipation; 3 rising action; 4 peak; 5 settle; 6 balanced hold, grounded, eyes open. Action: Small preparation. Bring his closed fist into his open palm in a martial salute while the exact original prayer beads hang visibly. Give one shallow bow at peak. Finish upright with fist in palm, calm open-eyed smile. No new objects or equipment. No effects, text, scenery, ground, motion lines, glow, shadows or lines on backdrop. Clean antialiased edges with no pale matte. Maintain the exact wide stance of the seed and head width relative to height. Keep the hanging prayer strand the same length from first held pearl to tip of the off-white tassel in every drawing. Zero-alpha backdrop and gutters, no ambient shading in the transparent space.",
+      "reference": "seeds/corin-seed.png",
+      "generation_id": "exec-53a086c2-e1f3-44d7-bb77-d6581ba316ec",
+      "transparent_background": true,
+      "file": "raw/corin-victory-r2.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    }
+  ],
+  "cerise": [
+    {
+      "version": "R1",
+      "prompt": "Edit the attached original cerise game sprite into ONE very wide horizontal production animation sprite strip, one row of exactly SIX distinct full-body sequential poses. Real zero alpha transparent backdrop and wide gutters. Each complete silhouette stays in its slot. Match the exact polished fantasy chibi style, face, head width, body height, facing, camera, hairstyle, costume colors and shapes, and original props at their original length. Render equal size characters. Both feet remain at the original ground line. Exactly two arms and two hands. Frames in order: 1 copy idle seed pose; 2 small anticipation; 3 rising action; 4 peak; 5 settle; 6 balanced hold, grounded, eyes open. Action: Gently turn one quarter turn and back, opening the two exact original fans wide on either side. Ribbons settle. Finish facing original right, both fans open with one toe pointed at the sole line, eyes open. No new objects or equipment. No effects, text, scenery, ground, motion lines, glow, shadows or lines on backdrop. Clean antialiased edges with no pale matte.",
+      "reference": "seeds/cerise-seed.png",
+      "generation_id": "exec-ca787280-954b-43da-b79c-2dc48655b9f2",
+      "transparent_background": true,
+      "file": "raw/cerise-victory-r1.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    }
+  ],
+  "kael": [
+    {
+      "version": "R1",
+      "prompt": "Edit the attached original kael game sprite into ONE very wide horizontal production animation sprite strip, one row of exactly SIX distinct full-body sequential poses. Real zero alpha transparent backdrop and wide gutters. Each complete silhouette stays in its slot. Match the exact polished fantasy chibi style, face, head width, body height, facing, camera, hairstyle, costume colors and shapes, and original props at their original length. Render equal size characters. Both feet remain at the original ground line. Exactly two arms and two hands. Frames in order: 1 copy idle seed pose; 2 small anticipation; 3 rising action; 4 peak; 5 settle; 6 balanced hold, grounded, eyes open. Action: Exhale from the stance, then raise one closed fist upward in a proud grin, other hand at his sash. Finish eyes open, fist raised. No new objects or equipment. No effects, text, scenery, ground, motion lines, glow, shadows or lines on backdrop. Clean antialiased edges with no pale matte.",
+      "reference": "seeds/kael-seed.png",
+      "generation_id": "exec-9c443e38-a1be-4fa7-a256-ecea41b21455",
+      "transparent_background": true,
+      "file": "raw/kael-victory-r1.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "version": "R2",
+      "prompt": "Edit the attached original kael game sprite into ONE very wide horizontal production animation sprite strip, one row of exactly SIX distinct full-body sequential poses. Real zero alpha transparent backdrop and wide gutters. Each complete silhouette stays in its slot. Match the exact polished fantasy chibi style, face, head width, body height, facing, camera, hairstyle, costume colors and shapes, and original props at their original length. Render equal size characters. Both feet remain at the original ground line. Exactly two arms and two hands. Frames in order: 1 copy idle seed pose; 2 small anticipation; 3 rising action; 4 peak; 5 settle; 6 balanced hold, grounded, eyes open. Action: Exhale from the stance, then raise one closed fist upward in a proud grin, other hand at his sash. Finish eyes open, fist raised. No new objects or equipment. No effects, text, scenery, ground, motion lines, glow, shadows or lines on backdrop. Clean antialiased edges with no pale matte. Maintain the unusually wide planted stance exactly as in the seed, preserving seed widths of head, shoulders, thighs, and distance between the two feet. Show full-body, do not make the head narrower, do not narrow the pants or stance. Fist ends raised to about temple height, clear of the head silhouette.",
+      "reference": "seeds/kael-seed.png",
+      "generation_id": "exec-c76fe782-129d-4f38-8d72-0e32f4887662",
+      "transparent_background": true,
+      "file": "raw/kael-victory-r2.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    }
+  ],
+  "wynne": [
+    {
+      "version": "R1",
+      "prompt": "Edit the attached original wynne game sprite into ONE very wide horizontal production animation sprite strip, one row of exactly SIX distinct full-body sequential poses. Real zero alpha transparent backdrop and wide gutters. Each complete silhouette stays in its slot. Match the exact polished fantasy chibi style, face, head width, body height, facing, camera, hairstyle, costume colors and shapes, and original props at their original length. Render equal size characters. Both feet remain at the original ground line. Exactly two arms and two hands. Frames in order: 1 copy idle seed pose; 2 small anticipation; 3 rising action; 4 peak; 5 settle; 6 balanced hold, grounded, eyes open. Action: Gather the same charm doll and hug it close to her cheek. Talismans sway a little. Finish with the doll held at the cheek, shy smile, eyes open. No new objects or equipment. No effects, text, scenery, ground, motion lines, glow, shadows or lines on backdrop. Clean antialiased edges with no pale matte.",
+      "reference": "seeds/wynne-seed.png",
+      "generation_id": "exec-92e99c19-5a08-4535-a8cf-6550ff7731ea",
+      "transparent_background": true,
+      "file": "raw/wynne-victory-r1.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "version": "R2",
+      "prompt": "Edit the attached original wynne game sprite into ONE very wide horizontal production animation sprite strip, one row of exactly SIX distinct full-body sequential poses. Real zero alpha transparent backdrop and wide gutters. Each complete silhouette stays in its slot. Match the exact polished fantasy chibi style, face, head width, body height, facing, camera, hairstyle, costume colors and shapes, and original props at their original length. Render equal size characters. Both feet remain at the original ground line. Exactly two arms and two hands. Frames in order: 1 copy idle seed pose; 2 small anticipation; 3 rising action; 4 peak; 5 settle; 6 balanced hold, grounded, eyes open. Action: Gather the same charm doll and hug it close to her cheek. Talismans sway a little. Finish with the doll held at the cheek, shy smile, eyes open. No new objects or equipment. No effects, text, scenery, ground, motion lines, glow, shadows or lines on backdrop. Clean antialiased edges with no pale matte. Keep the sewn doll exactly as large as in the seed relative to figure height. From crown seam to toes it is about 27% of her total figure height. Both dangling legs remain visible below her hands in every pose. Same black button eye, stitch pattern, and seam.",
+      "reference": "seeds/wynne-seed.png",
+      "generation_id": "exec-37360685-1259-4762-9017-f9c5cdd763be",
+      "transparent_background": true,
+      "file": "raw/wynne-victory-r2.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    }
+  ],
+  "astrid": [
+    {
+      "version": "R1",
+      "prompt": "Edit the attached original astrid game sprite into ONE very wide horizontal production animation sprite strip, one row of exactly SIX distinct full-body sequential poses. Real zero alpha transparent backdrop and wide gutters. Each complete silhouette stays in its slot. Match the exact polished fantasy chibi style, face, head width, body height, facing, camera, hairstyle, costume colors and shapes, and original props at their original length. Render equal size characters. Both feet remain at the original ground line. Exactly two arms and two hands. Frames in order: 1 copy idle seed pose; 2 small anticipation; 3 rising action; 4 peak; 5 settle; 6 balanced hold, grounded, eyes open. Action: Raise the exact original astrolabe ring in one hand at shoulder height. Calm smile with eyes closed only in frames 3 and 4. Finish eyes open with a gentle smile and the ring held aloft. No new objects or equipment. No effects, text, scenery, ground, motion lines, glow, shadows or lines on backdrop. Clean antialiased edges with no pale matte.",
+      "reference": "seeds/astrid-seed.png",
+      "generation_id": "exec-b5cbfdfa-ea47-4ae1-84ad-6f523681b4e5",
+      "transparent_background": true,
+      "file": "raw/astrid-victory-r1.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    },
+    {
+      "version": "R2",
+      "prompt": "Edit the attached original astrid game sprite into ONE very wide horizontal production animation sprite strip, one row of exactly SIX distinct full-body sequential poses. Real zero alpha transparent backdrop and wide gutters. Each complete silhouette stays in its slot. Match the exact polished fantasy chibi style, face, head width, body height, facing, camera, hairstyle, costume colors and shapes, and original props at their original length. Render equal size characters. Both feet remain at the original ground line. Exactly two arms and two hands. Frames in order: 1 copy idle seed pose; 2 small anticipation; 3 rising action; 4 peak; 5 settle; 6 balanced hold, grounded, eyes open. Action: Raise the exact original astrolabe ring in one hand at shoulder height. Calm smile with eyes closed only in frames 3 and 4. Finish eyes open with a gentle smile and the ring held aloft. No new objects or equipment. No effects, text, scenery, ground, motion lines, glow, shadows or lines on backdrop. Clean antialiased edges with no pale matte. Copy the full original astrolabe with both separate dangling gold diamond pendants, ring structure and star design. Keep the same head width including the left curl and ring diameter as in seed at equal body height. End with the center of ring at her shoulder line.",
+      "reference": "seeds/astrid-seed.png",
+      "generation_id": "exec-cfa6a1e1-5ae3-4975-b613-c5682c2e562a",
+      "transparent_background": true,
+      "file": "raw/astrid-victory-r2.png",
+      "raw_size": [
+        2172,
+        724
+      ]
+    }
   ]
 }
