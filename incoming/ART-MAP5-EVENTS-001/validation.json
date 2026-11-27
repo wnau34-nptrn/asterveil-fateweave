@@ -1,0 +1,292 @@
+{
+  "algorithm": "SHA-256",
+  "footY": 124,
+  "files": {
+    "NOTES.md": {
+      "sha256": "32e65a4b5fca5ed90668bbf6810cb810175062a5b38d3a40f25421c70499a05b"
+    },
+    "build.py": {
+      "sha256": "69066e87c9b989561f6681bd7d13b73970c466e4effa16c1125aded6d7a8c4ab"
+    },
+    "cart.png": {
+      "sha256": "a261549ebe55918b8e3bd716fcf1494073356208012f178afb4408eb267d298a",
+      "dimensions": [
+        128,
+        128
+      ],
+      "bbox": [
+        8,
+        16,
+        120,
+        124
+      ],
+      "alpha_coverage": 0.56378174,
+      "footY": 124
+    },
+    "ore_merchant.png": {
+      "sha256": "89d58d94c8115682763ff0c1ea1ee551eb55ca8e2458116a2d68341af3d4d7c2",
+      "dimensions": [
+        128,
+        128
+      ],
+      "bbox": [
+        22,
+        36,
+        106,
+        124
+      ],
+      "alpha_coverage": 0.36132812,
+      "footY": 124
+    },
+    "preview/compare.png": {
+      "sha256": "78994111543f82dd34a760962e789221fd9a3e286ae25ac85cc24c1c3daf0ed0",
+      "dimensions": [
+        338,
+        466
+      ],
+      "bbox": [
+        0,
+        0,
+        338,
+        466
+      ],
+      "alpha_coverage": 1.0,
+      "footY": null
+    },
+    "preview/markers-390.png": {
+      "sha256": "71b57990468eaeee34719c2a23a3ccb6c2b74a02de4f4ef836c6394b9a7f55f2",
+      "dimensions": [
+        390,
+        786
+      ],
+      "bbox": [
+        0,
+        0,
+        390,
+        786
+      ],
+      "alpha_coverage": 1.0,
+      "footY": null
+    },
+    "preview/markers-48.png": {
+      "sha256": "b4fba20e8cfc44a976e4c834d612bd82ca22265fb6e54be5d72fedee16685c67",
+      "dimensions": [
+        232,
+        120
+      ],
+      "bbox": [
+        0,
+        0,
+        232,
+        120
+      ],
+      "alpha_coverage": 1.0,
+      "footY": null
+    },
+    "preview/markers-96.png": {
+      "sha256": "284c9f125748dca0bc24078f2abfc73fd266f5bae1e178976f8646c921a9e0f6",
+      "dimensions": [
+        424,
+        216
+      ],
+      "bbox": [
+        0,
+        0,
+        424,
+        216
+      ],
+      "alpha_coverage": 1.0,
+      "footY": null
+    },
+    "preview/people-compare.png": {
+      "sha256": "2632225030e7025e035a739fdf550680b40d674a9b223abaacf22313cb576066",
+      "dimensions": [
+        576,
+        456
+      ],
+      "bbox": [
+        0,
+        0,
+        576,
+        456
+      ],
+      "alpha_coverage": 1.0,
+      "footY": null
+    },
+    "prompts.json": {
+      "sha256": "1795c407a1eb0c8bea091958d7a563e97bdf6243477cde0268b88d3c34d8dd74"
+    },
+    "runtime/mine_events.json": {
+      "sha256": "28441252a06db71a20b91d9df7c01292da168c690b03cd9c9bb0b2c7ca7b3ee1"
+    },
+    "runtime/mine_events.webp": {
+      "sha256": "1576a9be5f53f8615e8c28733f7ac35d9a62ef676c340e54ad0a9075626b3e05",
+      "dimensions": [
+        512,
+        128
+      ],
+      "bbox": [
+        8,
+        16,
+        490,
+        124
+      ],
+      "alpha_coverage": 0.5682373,
+      "footY": 124
+    },
+    "seeds.json": {
+      "sha256": "f1e749b62ebf23ba624a0743f98f5e4ef5e68e95b6ac26e4aef1b8afe506f864"
+    },
+    "source/cart.png": {
+      "sha256": "e4ca27386a1a49e01b98a729da6e7761d74d0c85f0bca7493addfe3813a21e4a",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        0,
+        17,
+        1242,
+        1254
+      ],
+      "alpha_coverage": 0.39363034,
+      "footY": null
+    },
+    "source/ore_merchant.png": {
+      "sha256": "386ef6e10ba62ef72dcecbdfe1ba9e3ad929cda624760efc2b74a2809c2c6791",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        0,
+        17,
+        1250,
+        1254
+      ],
+      "alpha_coverage": 0.40240417,
+      "footY": null
+    },
+    "source/ore_merchant_first.png": {
+      "sha256": "b6fd1e6397e2260af28e4b17185b9dd0fd2cf28df676fbde26c0d02639cb666b",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        0,
+        0,
+        1240,
+        1254
+      ],
+      "alpha_coverage": 0.4552685,
+      "footY": null
+    },
+    "source/trapped_R1.png": {
+      "sha256": "223f2cd0bc8868b0033745cf29267bfe0df6f136b76ee43cfd737a49f60de974",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        0,
+        20,
+        1224,
+        1238
+      ],
+      "alpha_coverage": 0.4564316,
+      "footY": null
+    },
+    "source/trapped_R2.png": {
+      "sha256": "91f500bbf614431b75009828d5847169379310845eb910664fb25c554de0b949",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        0,
+        17,
+        1253,
+        1254
+      ],
+      "alpha_coverage": 0.62598282,
+      "footY": null
+    },
+    "source/vein.png": {
+      "sha256": "b4e3868d023d4a1c3fff9527a52a298b7870988b25a60bc08838381cde6eb9de",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        0,
+        17,
+        1236,
+        1254
+      ],
+      "alpha_coverage": 0.48092738,
+      "footY": null
+    },
+    "trapped_R1.png": {
+      "sha256": "95668b71e340c88300e0e23919486669dec8266a6fe8062d9d15b4e8dd1b5125",
+      "dimensions": [
+        128,
+        128
+      ],
+      "bbox": [
+        8,
+        16,
+        119,
+        124
+      ],
+      "alpha_coverage": 0.66723633,
+      "footY": 124
+    },
+    "trapped_R2.png": {
+      "sha256": "bbb91d7734df1dca8af1fb69efeff7bdb2478d8583be1d7c0446418b96358082",
+      "dimensions": [
+        128,
+        128
+      ],
+      "bbox": [
+        10,
+        16,
+        117,
+        124
+      ],
+      "alpha_coverage": 0.59234619,
+      "footY": 124
+    },
+    "vein.png": {
+      "sha256": "931b3ba0cc117825e40c9a6393bcace150ff1165b3e21e89e3d135626967c9fb",
+      "dimensions": [
+        128,
+        128
+      ],
+      "bbox": [
+        9,
+        16,
+        118,
+        124
+      ],
+      "alpha_coverage": 0.68060303,
+      "footY": 124
+    },
+    "vein_glow.png": {
+      "sha256": "9ae4c119ad43a562f15f6c9e915487eed9425ee488cc003f30d2c9bac5624187",
+      "dimensions": [
+        128,
+        128
+      ],
+      "bbox": [
+        6,
+        31,
+        122,
+        124
+      ],
+      "alpha_coverage": 0.51757812,
+      "footY": null
+    }
+  },
+  "self_exclusion": "validation.json is excluded from its own digest list."
+}
