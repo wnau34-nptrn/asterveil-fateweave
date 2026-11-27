@@ -1,0 +1,37 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "aegis-idle": [
+   {
+    "frame": 0,
+    "height": 497,
+    "scale": 1.0,
+    "inliers": 2003,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 498,
+    "scale": 0.986,
+    "inliers": 242,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 498,
+    "scale": 1.01,
+    "inliers": 286,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 499,
+    "scale": 1.056,
+    "inliers": 277,
+    "status": "ok"
+   }
+  ]
+ }
+}

@@ -1,0 +1,1 @@
+seren-idle: median head scale 0.968; drift []; not measured []

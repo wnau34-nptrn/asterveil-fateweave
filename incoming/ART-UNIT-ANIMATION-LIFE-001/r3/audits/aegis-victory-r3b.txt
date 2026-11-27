@@ -1,0 +1,1 @@
+aegis-victory-r3b: median head scale 1.027; drift []; not measured []

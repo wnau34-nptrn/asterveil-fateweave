@@ -1,0 +1,1 @@
+lyra-idle: median head scale 0.996; drift []; not measured []

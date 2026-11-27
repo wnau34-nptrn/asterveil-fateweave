@@ -1,0 +1,80 @@
+{
+  "character": "aegis",
+  "move": "idle",
+  "seed_sha256": "0e888a0d889c61f2e4005361d43121e13478944cd3438a9ed6ca3578ee0dbaff",
+  "frame_size": [
+    512,
+    512
+  ],
+  "frameMs": 400,
+  "loop": true,
+  "frames": [
+    {
+      "file": "frames/000.png",
+      "phase": 0.0,
+      "changed_pixels": 0,
+      "outside_mask_changed_pixels": 0
+    },
+    {
+      "file": "frames/001.png",
+      "phase": 0.125,
+      "changed_pixels": 21436,
+      "outside_mask_changed_pixels": 0
+    },
+    {
+      "file": "frames/002.png",
+      "phase": 0.25,
+      "changed_pixels": 18662,
+      "outside_mask_changed_pixels": 0
+    },
+    {
+      "file": "frames/003.png",
+      "phase": 0.375,
+      "changed_pixels": 22841,
+      "outside_mask_changed_pixels": 0
+    },
+    {
+      "file": "frames/004.png",
+      "phase": 0.5,
+      "changed_pixels": 12701,
+      "outside_mask_changed_pixels": 0
+    },
+    {
+      "file": "frames/005.png",
+      "phase": 0.625,
+      "changed_pixels": 23046,
+      "outside_mask_changed_pixels": 0
+    },
+    {
+      "file": "frames/006.png",
+      "phase": 0.75,
+      "changed_pixels": 22935,
+      "outside_mask_changed_pixels": 0
+    },
+    {
+      "file": "frames/007.png",
+      "phase": 0.875,
+      "changed_pixels": 21768,
+      "outside_mask_changed_pixels": 0
+    }
+  ],
+  "phase_lags": {
+    "hair": 0.125,
+    "cape": 0.25,
+    "cloth": 0.25
+  },
+  "displacement_limits_px": {
+    "breath_chest_shoulders": 3,
+    "breath_head": 2,
+    "hair": 3,
+    "cape": 4,
+    "cloth": 4
+  },
+  "measured_max_displacement_px": {
+    "breath_chest_shoulders": 3.0,
+    "breath_head": 2.0,
+    "hair": 2.6401,
+    "cape": 3.6,
+    "cloth": 3.2
+  }
+}

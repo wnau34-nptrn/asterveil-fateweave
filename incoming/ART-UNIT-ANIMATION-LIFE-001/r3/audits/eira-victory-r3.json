@@ -1,0 +1,51 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "eira-victory-r3": [
+   {
+    "frame": 0,
+    "height": 512,
+    "scale": 1.0,
+    "inliers": 2496,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 539,
+    "scale": 1.114,
+    "inliers": 95,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 532,
+    "scale": 1.1,
+    "inliers": 67,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 612,
+    "scale": 1.015,
+    "inliers": 41,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 600,
+    "scale": 1.026,
+    "inliers": 37,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 608,
+    "scale": 1.064,
+    "inliers": 55,
+    "status": "ok"
+   }
+  ]
+ }
+}
