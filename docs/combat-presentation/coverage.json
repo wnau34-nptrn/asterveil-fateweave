@@ -22,11 +22,11 @@
    "name": "Aegis",
    "sheet": "aegis",
    "atlas": {
-    "image": "aegis_a2.2b9070aaeacc.webp",
-    "atlas": "aegis_a2.9136d3bfc15c.json",
-    "frames": 32,
-    "decodedBytes": 3578880,
-    "downloadBytes": 1172543
+    "image": "aegis_a2.10774c266410.webp",
+    "atlas": "aegis_a2.0be39d083e27.json",
+    "frames": 39,
+    "decodedBytes": 4182360,
+    "downloadBytes": 1470302
    },
    "reactions": {
     "hit": "sprite 17,18",

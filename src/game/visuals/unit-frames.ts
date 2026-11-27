@@ -71,7 +71,9 @@ export const unitRegistry = {
   foe_hunter: { sheet: 'hunter', displayRatio: 2, intents: { 'Raking Slash': 'attack', 'Shadow Knife': 'skill', 'Mirror Strike': 'attack' } },
   weaver: { sheet: 'eira', displayRatio: 1 / .42, victory: { frames: [1, 2, 3, 4, 5], frameMs: 140 }, actions: { attack: 'attack', bolt: 'attack', storm: 'attack', dispel: 'attack', ward: 'skill', sigil: 'skill', aegis: 'skill' } },
   foe_sprite: { sheet: 'sprite', displayRatio: 2, intents: { 'Seed Spark': 'attack' } },
-  guardian: { sheet: 'aegis', displayRatio: 1 / .36, victory: { frames: [1, 2, 3, 4, 5], frameMs: 140 }, actions: { attack: 'attack', bash: 'bash', guard: 'skill', rally: 'skill', challenge: 'skill', bulwark: 'skill', rouse: 'skill' },
+  // W1 trial (owner 2026-11-27 “ดำเนินการได้”): idle loop warped from the seed (hair, cape, cloth, shoulders; face, sword,
+  // shield and feet byte-identical), 32..38 after the shipped idle. Its own loop replaces the code breath for Aegis.
+  guardian: { sheet: 'aegis', displayRatio: 1 / .36, idleLoop: { frames: [0, 32, 33, 34, 35, 36, 37, 38], frameMs: 400 }, victory: { frames: [1, 2, 3, 4, 5], frameMs: 140 }, actions: { attack: 'attack', bash: 'bash', guard: 'skill', rally: 'skill', challenge: 'skill', bulwark: 'skill', rouse: 'skill' },
     reactions: { block: [30, 31], counter: [30, 5, 7] } },
   foe_vargoth_guard: { sheet: 'vargoth', displayRatio: 2, intents: { 'Crushing Blow': 'attack', 'Shield Smash': 'bash', 'Mace Swing': 'attack', 'Rift Bolt': 'skill' },
     clips: { bash: { prepare: [24, 25, 26, 27], recover: [28, 29, 30, 31] } }, reactions: { block: [22, 23] } },

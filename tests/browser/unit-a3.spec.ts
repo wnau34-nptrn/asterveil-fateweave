@@ -77,7 +77,8 @@ for(const scenario of ['hurt','down','enemy-down','revive'])test(`A3 resolver-ow
  await expect(page.locator('#skip-turn')).toBeHidden();
  // Down keeps the collapsed last frame; revive/hurt return to the seed pose.
  const id=scenario==='down'?'healer':scenario==='enemy-down'?'b1':scenario==='revive'?'guardian':'healer';
- await expect.poll(()=>page.evaluate(i=>window.unitA3QA.frames()[i]![0]!.frame,id)).toBe(scenario==='down'||scenario==='enemy-down'?'21':'0');
+ // A revived Aegis rests on its idle or one of its W1 idle-loop frames (2026-11-27 trial).
+ await expect.poll(async()=>{const f=await page.evaluate(i=>window.unitA3QA.frames()[i]![0]!.frame,id);return scenario==='down'||scenario==='enemy-down'?f==='21':id==='guardian'?['0','32','33','34','35','36','37','38'].includes(f):f==='0';}).toBe(true);
  expect(await page.evaluate(()=>window.unitA3QA.state())).toEqual(await page.evaluate(()=>window.unitA3QA.expected()));
  await page.screenshot({path:info.outputPath(`${scenario}-390.png`)});
  }finally{await ctx.close();}

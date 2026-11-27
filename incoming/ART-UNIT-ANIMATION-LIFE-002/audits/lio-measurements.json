@@ -1,0 +1,111 @@
+{
+  "figure_method": "Visible crown to lowest sole, excluding held prop",
+  "head_method": "Manual outer edges of the main head silhouette, excluding isolated wisps, measured on a grid",
+  "prop_method": "lute, lower bout to carved headstock excluding tassel",
+  "prop_endpoints": [
+    [
+      [
+        237,
+        362
+      ],
+      [
+        469,
+        241
+      ]
+    ],
+    [
+      [
+        229,
+        377
+      ],
+      [
+        442,
+        239
+      ]
+    ],
+    [
+      [
+        233,
+        365
+      ],
+      [
+        442,
+        227
+      ]
+    ],
+    [
+      [
+        234,
+        348
+      ],
+      [
+        437,
+        170
+      ]
+    ],
+    [
+      [
+        226,
+        340
+      ],
+      [
+        441,
+        177
+      ]
+    ],
+    [
+      [
+        235,
+        344
+      ],
+      [
+        440,
+        171
+      ]
+    ]
+  ],
+  "rows": [
+    {
+      "index": 0,
+      "head_width": 229,
+      "figure_height": 459,
+      "prop_length": 261.7,
+      "anatomy_scale": 1.0
+    },
+    {
+      "index": 1,
+      "head_width": 230,
+      "figure_height": 453,
+      "prop_length": 253.8,
+      "anatomy_scale": 0.982
+    },
+    {
+      "index": 2,
+      "head_width": 228,
+      "figure_height": 453,
+      "prop_length": 250.4,
+      "anatomy_scale": 0.987
+    },
+    {
+      "index": 3,
+      "head_width": 228,
+      "figure_height": 453,
+      "prop_length": 270.0,
+      "anatomy_scale": 0.981
+    },
+    {
+      "index": 4,
+      "head_width": 229,
+      "figure_height": 454,
+      "prop_length": 269.8,
+      "anatomy_scale": 0.971
+    },
+    {
+      "index": 5,
+      "head_width": 230,
+      "figure_height": 453,
+      "prop_length": 268.2,
+      "anatomy_scale": 0.968
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "kael": [
+   {
+    "frame": 0,
+    "height": 466,
+    "scale": 1.0,
+    "inliers": 815,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 465,
+    "scale": 0.928,
+    "inliers": 136,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 464,
+    "scale": 0.886,
+    "inliers": 129,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 462,
+    "scale": 0.898,
+    "inliers": 72,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 465,
+    "scale": 0.914,
+    "inliers": 130,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 465,
+    "scale": 0.929,
+    "inliers": 134,
+    "status": "ok"
+   }
+  ]
+ }
+}

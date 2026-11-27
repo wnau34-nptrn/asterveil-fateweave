@@ -1,0 +1,205 @@
+{
+  "excluded_self": "validation.json",
+  "files": {
+    "NOTES.md": {
+      "sha256": "d9d1d074440e0f2391abfc1efbd3317172554b8cc78f60b2878b2292bd98d24b",
+      "size": 3324
+    },
+    "audits/astrid-anatomy.json": {
+      "sha256": "f983c32ea6bfbaa374bc61dfe63fd2ca6ea70fd92ad29c74506e613d31faabf2",
+      "size": 724
+    },
+    "audits/batch-b-withheld-held-390.png": {
+      "sha256": "ab05d480466116fc3d9c7ee2d77253e30ed946fd34b671d0748df72e03616d18",
+      "size": 63599
+    },
+    "audits/corin-anatomy.json": {
+      "sha256": "4371486cd19f15438b095100b9266265d1613af2e25d4e8bef5ce525156fd547",
+      "size": 723
+    },
+    "audits/kael-anatomy.json": {
+      "sha256": "adbbdf74808a33d2a159e0c8eefc81ad53852fa932b0b9d3b72696da3930b889",
+      "size": 721
+    },
+    "audits/lio-anatomy.json": {
+      "sha256": "ae9c7611fbde376597254a85efc1e123be77228f3b1b0e17a13c01f6d2bb95c9",
+      "size": 720
+    },
+    "audits/lio-measurements.json": {
+      "sha256": "3aca83598158eb26650ae17e54783c2aa8f9915c22318a5487afcd92e9395927",
+      "size": 1724
+    },
+    "audits/wynne-anatomy.json": {
+      "sha256": "be8d9437018bdc21f81fda6144db1dbfa8369ea5e751cda034c7a655e8ede50d",
+      "size": 723
+    },
+    "batch-a-held-390.png": {
+      "sha256": "6e3063cda5148dfdb6dc6419b1ad8f59fb6891135575fabe2f9c0b28f6d7c80d",
+      "size": 20492
+    },
+    "cells/lio-victory/000.png": {
+      "sha256": "230f603f349f757eb6e677eaf12ee8e2bab4252b5e55e789c183181d620d1960",
+      "size": 395437
+    },
+    "cells/lio-victory/001.png": {
+      "sha256": "b107d752b8fb072ef29a27915064ecaf64a27faed337f2cd89a143f6f246da73",
+      "size": 324855
+    },
+    "cells/lio-victory/002.png": {
+      "sha256": "91c9988c26aca90a4d778925deee83d1120bb649a27b1247cc2dab4a92ac10a4",
+      "size": 324565
+    },
+    "cells/lio-victory/003.png": {
+      "sha256": "0a0e663496b5167a1f6c1cf5e0561b3f73789ed0e43a73f5acd4d4ad78bf90a9",
+      "size": 326062
+    },
+    "cells/lio-victory/004.png": {
+      "sha256": "928637fd8275416b24780eebe7f84ec2e034c8435991aea19d3c86379a81d404",
+      "size": 326198
+    },
+    "cells/lio-victory/005.png": {
+      "sha256": "494ea7955a1e1374d054f06fd3df4e68b6a911004ab27f3a6088d7c0d2614cc0",
+      "size": 327328
+    },
+    "lio-victory-preview-390.png": {
+      "sha256": "7b9a4968c1a7047c82e12acb84e1517f50842bb8c139cbab1b74a8114f2fa04d",
+      "size": 223777
+    },
+    "lio-victory-seed-vs-held.png": {
+      "sha256": "635640db6424647055904e824eee169224a898d4ff9b427e75b55a1e1447a507",
+      "size": 555930
+    },
+    "prompts.json": {
+      "sha256": "cc8fccc884be728393fd6f1c106227a57384e9b2734a55e6f1212294621f1608",
+      "size": 27777
+    },
+    "raw/astrid-victory-r1.png": {
+      "sha256": "dbe5ace1484ace2c0a711b8b06d55a5a66be157f90dd30965b264b52e469d762",
+      "size": 1837696
+    },
+    "raw/astrid-victory-r2.png": {
+      "sha256": "be13afe0ba32a94e6aa50954820881b413f9035fb7435258a544274dfb2e3987",
+      "size": 1914253
+    },
+    "raw/brann-victory-r1.png": {
+      "sha256": "ab98ef52cf8abd4b329b37f7fc3022f98eea85efa7fb120fcf88fd0b7f0d0480",
+      "size": 1754599
+    },
+    "raw/brann-victory-r2.png": {
+      "sha256": "fff42a72727a61a83edfa5f73f6214d9a61b743b6592536b33ff50d838dc63c7",
+      "size": 1817073
+    },
+    "raw/cerise-victory-r1.png": {
+      "sha256": "e42e63b2f9347d8083470660911ec812ed31716e4c5f35e9a3fb77e38a61c5e9",
+      "size": 1755226
+    },
+    "raw/corin-victory-r1.png": {
+      "sha256": "16b9bb43ff5bd1402e0362ed19ad262bdc9027a572b48fafc76baa460b6d5b15",
+      "size": 2841276
+    },
+    "raw/corin-victory-r2.png": {
+      "sha256": "1fd4430af328509a0572c0809d66df08e2166cb555bbb29305e63a3531c103df",
+      "size": 1604359
+    },
+    "raw/garran-victory-r1.png": {
+      "sha256": "7a0a7f1f9a805aacb0773c7167889abdbffee15613987fec8fbe6f4d2c27b68f",
+      "size": 1641289
+    },
+    "raw/garran-victory-r2.png": {
+      "sha256": "fdd4add9dda8567b08ccbd5b418118e416f259fa4b9c00c72f848752fa65a81c",
+      "size": 1503994
+    },
+    "raw/kael-victory-r1.png": {
+      "sha256": "ada4e2cdde126fed00adaa1bb6286c16e9910c03a1fcfe604cf6f26d62b9c485",
+      "size": 1647986
+    },
+    "raw/kael-victory-r2.png": {
+      "sha256": "3d5a766533920bdc2c4a2ecd05d773337954fed965e130cffa71e5ea6c8a03f9",
+      "size": 2890195
+    },
+    "raw/lio-victory-r1.png": {
+      "sha256": "460b7d350f381cc768caedeb76e04296f89d2bdeca96204d909fce27826868cd",
+      "size": 1567487
+    },
+    "raw/mira-victory-r1.png": {
+      "sha256": "7d3e3194032df2f6abdb671899ae298e0a665850c200d58dfac4eaa55e9232a0",
+      "size": 1860331
+    },
+    "raw/mira-victory-r2.png": {
+      "sha256": "ca858f8f5352045c3126521c6b70e9152ff9fe10a7281e0dcf7a7a5f1cf06105",
+      "size": 1739533
+    },
+    "raw/sefa-victory-r1.png": {
+      "sha256": "baeb2c36daa005a1ae3372aba822513c213bef05ff72f96264a5d73ea54c6815",
+      "size": 1276626
+    },
+    "raw/toma-victory-r1.png": {
+      "sha256": "e9fa883a0f5d8dd6929aa9d34cc6bea4719f179d0420ee363742ae2f6e660bfa",
+      "size": 2648664
+    },
+    "raw/toma-victory-r2.png": {
+      "sha256": "e161937b356b831d50d7295847ad1a0fcbb035c979d78479095b94d3949ce4f0",
+      "size": 1381316
+    },
+    "raw/wynne-victory-r1.png": {
+      "sha256": "5a198a76c8940e9acab98362b14c3e7f52594988d8718110e68b70d7f3211344",
+      "size": 2505665
+    },
+    "raw/wynne-victory-r2.png": {
+      "sha256": "87c2930bd40a4a077a1720425c7bafe90a6bd37f90e37c292aac72b8b4089d4b",
+      "size": 2403000
+    },
+    "seeds/astrid-seed.png": {
+      "sha256": "a2d2ac7833818ff62cc877ecd0e90e87f24d8f56365f57e6c32d9321b36f1b29",
+      "size": 276250
+    },
+    "seeds/brann-seed.png": {
+      "sha256": "35f1aeb0f99c4d86d2b2427592ae846657d4cf413c5c217e063eaf3067bb29de",
+      "size": 427361
+    },
+    "seeds/cerise-seed.png": {
+      "sha256": "3fc6f8259ca286dc11d2952c05a19518896d9cb56ea4a361d4c11c9fffccbeb6",
+      "size": 388422
+    },
+    "seeds/corin-seed.png": {
+      "sha256": "62126d7f84767d640e41a96515df67774fd153221fc43ad16c75e410f6b26fd2",
+      "size": 297149
+    },
+    "seeds/garran-seed.png": {
+      "sha256": "653fb5efb1f4b1bc4529300a9686f80577361c9f73ba294b301fe90e1b25107b",
+      "size": 325402
+    },
+    "seeds/kael-seed.png": {
+      "sha256": "5d9f344d4d44cad32c169e74780c2ff10bed401fd9f9dd43ea27f4c2171dde1c",
+      "size": 234094
+    },
+    "seeds/lio-seed.png": {
+      "sha256": "e6760e48b0403e13318830df87fd5891d50c9e57a972c5e9e8f3f6d729298a47",
+      "size": 389693
+    },
+    "seeds/mira-seed.png": {
+      "sha256": "c0dfe376ceb6d507e915322c26a2f353b0c48e1c89a4ccadc1a67178d3d1451a",
+      "size": 330533
+    },
+    "seeds/sefa-seed.png": {
+      "sha256": "6cb511ce3ac8badd15e28fafecd44f8f940a718eff6a4c15adccc10a241584bc",
+      "size": 295164
+    },
+    "seeds/toma-seed.png": {
+      "sha256": "39edb773bacfd7a2e5335b8a204ad2157b8007b1b8655883860b8ccbd82cdc8e",
+      "size": 264267
+    },
+    "seeds/wynne-seed.png": {
+      "sha256": "b2888ab61fcb39fc5e4fc508c0a6695efae1c74224c5460d32f724a24fa091e6",
+      "size": 287571
+    },
+    "seeds.json": {
+      "sha256": "c22e312477fde8bdaf45f398ea1793938c18a0082d6b0e408dc0ceee390d8991",
+      "size": 3480
+    },
+    "strips.json": {
+      "sha256": "a6ef978dd9758e0d21f8e088472bf07bab41329bc048c304c733888ba25373b9",
+      "size": 6963
+    }
+  }
+}

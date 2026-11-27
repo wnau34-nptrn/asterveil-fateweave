@@ -2,6 +2,8 @@ import {test,expect,type Page} from '@playwright/test';
 import {stageTiming} from '../../src/ui/battle-playback';
 import {aegisActions} from '../fixtures/unit-a2';
 test.skip(process.env.PLAYWRIGHT_PAGES==='true','source fixture explicitly checked in CI');
+// At rest Aegis shows the idle or one of its W1 idle-loop frames (2026-11-27 trial).
+const AEGIS_REST=['0','32','33','34','35','36','37','38'];
 const saved=(page:Page)=>page.evaluate(()=>localStorage.getItem('unit-a2-committed'));
 async function ready(page:Page,query:string){
  await page.goto(`tests/browser/fixtures/unit-a2.html?${query}`);
@@ -39,7 +41,7 @@ for(const [speed,intensity,motion] of [['fast','standard','no-preference'],['nor
  await page.locator('#action-attack').click();await page.locator('#target-f1').click();const committed=await saved(page);
  await expect(page.locator('#skip-turn')).toBeHidden();expect(await saved(page)).toBe(committed);
  expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
- expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('0');
+ expect(AEGIS_REST).toContain(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame));
  }finally{await ctx.close();}
 });
 for(const change of ['skip','resize','reload','hidden'] as const)test(`A2 ${change} preserves committed command`,async({browser})=>{
@@ -59,7 +61,7 @@ for(const scenario of ['revive','enemy-down'])test(`A2 resolver-owned ${scenario
  if(scenario==='revive')expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('21');
  await page.locator(`#action-${scenario==='revive'?'revive':'attack'}`).click();await page.locator(`#target-${await page.evaluate(()=>window.unitA2QA.target())}`).click();
  await expect(page.locator('#skip-turn')).toBeHidden();
- await expect.poll(()=>page.evaluate(s=>window.unitA2QA.frames()[s==='revive'?'guardian':'f1']![0]!.frame,scenario)).toBe(scenario==='revive'?'0':'21');
+ await expect.poll(async()=>{const f=await page.evaluate(s=>window.unitA2QA.frames()[s==='revive'?'guardian':'f1']![0]!.frame,scenario);return scenario==='revive'?AEGIS_REST.includes(f):f==='21';}).toBe(true);
  expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
  await page.screenshot({path:info.outputPath(`${scenario}-390.png`)});
  }finally{await ctx.close();}
@@ -157,7 +159,7 @@ test('A2 actual guardcounter braces then ripostes inside the existing reaction w
   expect(tail.remaining).toBeGreaterThanOrEqual(0);expect(tail.remaining).toBeLessThanOrEqual(1000/60+1);
   await page.clock.runFor(Math.ceil(tail.remaining)+17);
  }
- expect(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame)).toBe('0');
+ expect(AEGIS_REST).toContain(await page.evaluate(()=>window.unitA2QA.frames().guardian![0]!.frame));
  await page.clock.runFor(3000);expect(await saved(page)).toBe(committed);expect(await page.evaluate(()=>window.unitA2QA.state())).toEqual(await page.evaluate(()=>window.unitA2QA.expected()));
  }finally{await ctx.close();}
 });
