@@ -1,4 +1,4 @@
-# Current state — updated 2026-11-27 (Map 5 event art brief)
+# Current state — updated 2026-11-27 (hero life in battle, code only)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
@@ -7,11 +7,10 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - Working branch `feature/fateweave-initial-prototype` (not `main`); Pages https://wnau34-nptrn.github.io/asterveil-fateweave/ via `pages.yml` (runs the Chromium suite before deploy).
 - Save **v70** (mine ore-merchant counter; v69 mine progress; v68 map 4 tide/notes/journal, camp cap; v67 first fate weave; v66 gacha). Phaser/TypeScript/Vite, 1–5 field units, camp Lv/EXP, reserve 3→4→5, carry≤10, fatigue, presets. 15 classes×1 active character; thiran/wila parked. P09 server authority + ledger (`?server=off` for local).
 - Maps: 1 ซากชายแดน, 2 เส้นทางป่าทึบ, 3 แนวรอยแยก, 4 ทะเลสาบเงาจันทร์, **5 เหมืองผลึกร้าง** (concepts for 4–10: [CHAPTER1_MAPS_TH](docs/design/CHAPTER1_MAPS_TH.md)).
-- **Map 4 (OD-60)**: rules/content/save #336, UI #337 and art #342–#345. Owner approved the four ordinary foes and the map screens 2026-11-23 (“อนุมัติ”). Tide every 8 steps, seal 2 of 3, ferryman → boat, reflections/notes → journal, Lio camp 1 / Cerise camp 2, semi-chibi Water Spirit with six 768px moves and event-driven VFX. [390px review](docs/validation/map4-lake/README_TH.md).
+- **Map 4 (OD-60)**: in game (#336–#345), owner approved 2026-11-23. [390px review](docs/validation/map4-lake/README_TH.md).
 - Camp level cap = 10 + 3 per first clear past map 2 (≤30); tree points still stop at Lv10.
 - P10 gacha (OD-58) live; cabinet after MAP1 with 10 first-clear tickets (OD-59). Unlock pacing #202.
 - Art delegation: record agent picks as agent decisions, never owner visual approval.
-- Character equipment slots keep their compact size. Empty slots show a large icon and faint slot name. Equipped art fills the slot and covers the name in camp and map character sheets.
 
 ## Owner rules in force
 
@@ -29,10 +28,11 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
+- Hero life (owner 2026-11-27 items 1/2/3/6, code only, PR from `claude/hero-life-code`): per-class standing rhythm, low-HP (<30%) slump, barrier glow, turn-owner step/lean, victory hop + sparkles, defeat slump; off under reduced motion/quiet. **Waiting for owner clip approval before merge.** Art follow-up ART-UNIT-ANIMATION-LIFE-001 (`idleLoop`/`victory` frames replace the code motion per unit). [Clips](docs/validation/hero-life-2026-11-27/README_TH.md).
 - Auto battle (OD-62, 2026-11-26): AUTO toggle in random battles and World Boss attempts, one plain AI (no move reading, ~30% plain attacks), device settings for stop HP and skills switched off. Numbers are drafts (`AUTO_LAPSE`); sim: random battles ≈ advisor; World Boss (50% plain attacks there) 76–105% of the teaching advice damage. [Validation](docs/validation/auto-battle/README_TH.md).
 
 - Map 5 (OD-60): complete in game. Save v70, mine map v2, giant tuned at 48 seeds (`crystal-giant` v2); art #357–#363, giant 4b motion approved (“อนุมัติ”, #365). Side events #366: trapped worker, ore cart, fresh vein, ore merchant (ore→gold ×3), ledger → crystal weapon recipe, Bork's elite job ×3. Event markers: Codex ART-MAP5-EVENTS-001 (#371, worker R1, `mine_events.webp`), owner approved 2026-11-27; numbers are drafts. [Validation](docs/validation/map5-mine/README_TH.md).
-- 2026-11-25: boss charge holds sit on the body. Bosses wear a silhouette aura in their own colour: light all battle, stronger while charging. Boss crowns sit above the rendered figure. The owner said “นำเข้าเกมได้เลย”. Mobile frame rate is not measured yet. [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
+- 2026-11-25: boss holds on the body, silhouette aura, crowns above the figure (“นำเข้าเกมได้เลย”). [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
 - Game Feel [Draft PR #353](https://github.com/wnau34-nptrn/asterveil-fateweave/pull/353): เสียงและภาพโจมตีตามอาวุธครบ 15 ตัวและตัวละครเซฟเก่า 2 ตัว. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
 
 - Mobile performance still needs on-device measurements for walking, fog, and battle entry. [ผลตรวจท่าคืนตัว](docs/validation/recovery-continuity-2026-11-24/README_TH.md).
