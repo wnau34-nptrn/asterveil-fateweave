@@ -209,6 +209,38 @@ NOT YOURS: atlas packing, registry, code, tests, in-game clips (Claude). Motion 
 RETURN: incoming/ART-UNIT-ANIMATION-LIFE-001/w1-aegis-idle/
 ```
 
+## เอกิส W1b — ท่ายืนแบบดัดภาพ ขยับแรงขึ้น
+
+เจ้าของ 2026-11-27 ดูคลิป W1 ในเกม (PR #381) แล้ว: “ท่ายืนเอกิส W1 ให้ขยับแรงขึ้น” — ในเกมเอกิสถูกย่อ ~36% การขยับ 3–4px บน seed จึงเหลือ ~1px บนจอ
+
+```text
+CODEX FIX ROUND — ART-UNIT-ANIMATION-LIFE-001 W1b (art only): Aegis idle loop, stronger motion
+Asterveil · Fateweave
+
+Read AGENTS.md, CLAUDE.md and docs/handoffs/CODEX-HERO-LIFE-TH.md (sections "นำร่องท่ายืนวนลูปแบบดัดภาพ" and "เอกิส W1b") first. Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (NOT main). Continue on your branch art/art-unit-animation-life-001 and PR #377. Add files only under incoming/ART-UNIT-ANIMATION-LIFE-001/w1b-aegis-idle/. Leave w1-aegis-idle/ and every earlier file untouched. Do not change src/, tests/, public/, .github/ or other folders. Do not merge.
+
+STATUS: thank you for W1 — it was clean (0 changed pixels outside the masks, seamless loop) and Claude put it in the game for review (PR #381). The owner watched it and asked for STRONGER motion. In battle Aegis is drawn at about 36% of the seed, so 3–4 px in the seed becomes about 1 px on a 390 px phone and the loop is hard to see.
+
+WHAT TO CHANGE (same method, same tool, same 8 frames × 400 ms, frame 1 = the seed byte-for-byte):
+- Double the motion: chest + shoulders up to 6 px, head up to 4 px, hair strands up to 6 px (lag 1/8 cycle), cape edge up to 8 px and cloth tails up to 8 px sideways (lag 1/4 cycle).
+- Hair: widen the hair mask so the whole fringe and the side locks move, not only the tips (keep the face, eyes and eyebrows outside it).
+- Cape: let the lower cape and its hem sway as a whole curtain from the shoulders down (largest at the hem, zero at the shoulder seam), not only the edge.
+- Everything else unchanged: face, eyes, armour plates, sword, shield, hands, legs, feet, soles and ground line stay byte-identical (0 changed pixels outside the masks in every frame); nothing moves past the 512×512 edges; frame 8 → frame 1 seamless by construction.
+- At the larger amplitude, watch for stretching artefacts: no tearing, doubled outlines, smeared dark outline, holes or transparent gaps where the cape meets the body. If any appear, reduce that part only and say so with the measured value.
+
+Commit the updated tool as w1b-aegis-idle/tools/warp_idle.py (or the same tool with new limits as arguments, with the exact command line in NOTES.md).
+
+QUALITY GATES (same as W1): pixel diff outside masks = 0; measured max displacement per part listed against the new limits; python3 scripts/unit-anatomy-audit.py --cells on the 8 frames (median <= 1.15, every frame <= 1.20); outline check at 100% and at 111 px tall; loop preview watched at 400 ms and 200 ms per frame.
+
+DELIVERABLES under w1b-aegis-idle/: frames/000.png … 007.png, masks/, tools/, idle-aegis-400ms.webp, idle-aegis-111px.webp, a side-by-side preview of W1 vs W1b at 111 px (webp loop), diff/, strips.json, validation.json, NOTES.md.
+
+DELIVERY CHECK: push with normal git, fetch back, compare SHA-256 with validation.json and decode every PNG with Pillow; report in PR #377.
+
+NOT YOURS: atlas, registry, code, tests, in-game clips (Claude). Motion approval is the owner's.
+
+RETURN: incoming/ART-UNIT-ANIMATION-LIFE-001/w1b-aegis-idle/
+```
+
 ## ชุด 2 (หลังเจ้าของอนุมัติชุด 1)
 
 ใช้กล่องเดียวกัน เปลี่ยน ID เป็น `ART-UNIT-ANIMATION-LIFE-002` branch `art/art-unit-animation-life-002` แทนรายการ seed ด้วยตาราง 11 ตัวด้านบน และให้ Claude เขียนลักษณะท่ายืนและท่าชนะรายตัวจาก seed จริงก่อนส่ง (ยังไม่ได้เปิดดู seed ทั้ง 11 ตัว จึงยังไม่เขียนรายละเอียดรายตัวไว้ตรงนี้)
