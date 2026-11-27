@@ -1,0 +1,1586 @@
+[
+  {
+    "character": "aegis",
+    "revision": "R3",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "canvas": [
+      768,
+      768
+    ],
+    "ground_row": 767,
+    "seed_offset": [
+      128,
+      256
+    ],
+    "seed_sha256": "0e888a0d889c61f2e4005361d43121e13478944cd3438a9ed6ca3578ee0dbaff",
+    "seed": "../seeds/aegis-seed.png",
+    "raw": "raw/aegis-victory-r3.png",
+    "cells": "review/cells/aegis-victory-r3",
+    "runtime_use": {
+      "type": "one-shot",
+      "hold_frame": 6
+    },
+    "frames": [
+      {
+        "frame": 1,
+        "head_width_px": 191,
+        "body_height_px": 493,
+        "head_delta_pct": 0,
+        "body_delta_pct": 0,
+        "offset": [
+          128,
+          256
+        ],
+        "uniform_scale": 1,
+        "seed_lock": true,
+        "alpha_bbox": [
+          128,
+          271,
+          640,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 2,
+        "head_width_px": 198.9,
+        "body_height_px": 472.7,
+        "head_delta_pct": 4.14,
+        "body_delta_pct": -4.12,
+        "offset": [
+          120,
+          297
+        ],
+        "source_box": [
+          372,
+          255,
+          708,
+          621
+        ],
+        "uniform_scale": 1.291426,
+        "raw_head_width_px": 154,
+        "raw_body_height_px": 366,
+        "alpha_bbox": [
+          120,
+          297,
+          554,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 3,
+        "head_width_px": 197.6,
+        "body_height_px": 475.9,
+        "head_delta_pct": 3.46,
+        "body_delta_pct": -3.47,
+        "offset": [
+          136,
+          293
+        ],
+        "source_box": [
+          752,
+          242,
+          1066,
+          621
+        ],
+        "uniform_scale": 1.258872,
+        "raw_head_width_px": 157,
+        "raw_body_height_px": 378,
+        "alpha_bbox": [
+          136,
+          293,
+          531,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 4,
+        "head_width_px": 179.8,
+        "body_height_px": 521.8,
+        "head_delta_pct": -5.86,
+        "body_delta_pct": 5.84,
+        "offset": [
+          116,
+          100
+        ],
+        "source_box": [
+          1111,
+          129,
+          1429,
+          621
+        ],
+        "uniform_scale": 1.36242,
+        "raw_head_width_px": 132,
+        "raw_body_height_px": 383,
+        "alpha_bbox": [
+          116,
+          101,
+          549,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 5,
+        "head_width_px": 182.2,
+        "body_height_px": 515.7,
+        "head_delta_pct": -4.61,
+        "body_delta_pct": 4.6,
+        "offset": [
+          123,
+          142
+        ],
+        "source_box": [
+          1476,
+          152,
+          1791,
+          621
+        ],
+        "uniform_scale": 1.339607,
+        "raw_head_width_px": 136,
+        "raw_body_height_px": 385,
+        "alpha_bbox": [
+          123,
+          142,
+          544,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 6,
+        "head_width_px": 184.3,
+        "body_height_px": 510.4,
+        "head_delta_pct": -3.51,
+        "body_delta_pct": 3.53,
+        "offset": [
+          127,
+          150
+        ],
+        "source_box": [
+          1840,
+          153,
+          2153,
+          621
+        ],
+        "uniform_scale": 1.325661,
+        "raw_head_width_px": 139,
+        "raw_body_height_px": 385,
+        "alpha_bbox": [
+          127,
+          150,
+          542,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      }
+    ],
+    "anatomy_audit": "audits/aegis-victory-r3.json",
+    "audit_exit": 0,
+    "head_scale_median": 1.036,
+    "head_scale_max": 1.062,
+    "not_measured": [],
+    "scale_pass": false,
+    "edges_and_ground_pass": true,
+    "anatomy_numeric_pass": true,
+    "visual_pass": false,
+    "visual_observations": "ท่าชูดาบและปักโล่อ่านชัด โล่ใกล้ระดับพื้น หัวแคบลงช่วงชูดาบ และปลายรองเท้าสองข้างไม่เสมอกันในเฟรมค้าง",
+    "recommended_for_review": true,
+    "status": "missing-final-review-only"
+  },
+  {
+    "character": "aegis",
+    "revision": "R3B",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "canvas": [
+      768,
+      768
+    ],
+    "ground_row": 767,
+    "seed_offset": [
+      128,
+      256
+    ],
+    "seed_sha256": "0e888a0d889c61f2e4005361d43121e13478944cd3438a9ed6ca3578ee0dbaff",
+    "seed": "../seeds/aegis-seed.png",
+    "raw": "raw/aegis-victory-r3b.png",
+    "cells": "review/cells/aegis-victory-r3b",
+    "runtime_use": {
+      "type": "one-shot",
+      "hold_frame": 6
+    },
+    "frames": [
+      {
+        "frame": 1,
+        "head_width_px": 191,
+        "body_height_px": 493,
+        "head_delta_pct": 0,
+        "body_delta_pct": 0,
+        "offset": [
+          128,
+          256
+        ],
+        "uniform_scale": 1,
+        "seed_lock": true,
+        "alpha_bbox": [
+          128,
+          271,
+          640,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 2,
+        "head_width_px": 199.9,
+        "body_height_px": 470.0,
+        "head_delta_pct": 4.66,
+        "body_delta_pct": -4.67,
+        "offset": [
+          163,
+          298
+        ],
+        "source_box": [
+          379,
+          207,
+          727,
+          610
+        ],
+        "uniform_scale": 1.169109,
+        "raw_head_width_px": 171,
+        "raw_body_height_px": 402,
+        "alpha_bbox": [
+          163,
+          298,
+          570,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 3,
+        "head_width_px": 191.9,
+        "body_height_px": 490.6,
+        "head_delta_pct": 0.47,
+        "body_delta_pct": -0.49,
+        "offset": [
+          159,
+          277
+        ],
+        "source_box": [
+          744,
+          177,
+          1066,
+          610
+        ],
+        "uniform_scale": 1.135664,
+        "raw_head_width_px": 169,
+        "raw_body_height_px": 432,
+        "alpha_bbox": [
+          159,
+          277,
+          525,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 4,
+        "head_width_px": 188.4,
+        "body_height_px": 499.7,
+        "head_delta_pct": -1.36,
+        "body_delta_pct": 1.36,
+        "offset": [
+          138,
+          173
+        ],
+        "source_box": [
+          1097,
+          91,
+          1432,
+          611
+        ],
+        "uniform_scale": 1.148771,
+        "raw_head_width_px": 164,
+        "raw_body_height_px": 435,
+        "alpha_bbox": [
+          138,
+          173,
+          523,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 5,
+        "head_width_px": 192.0,
+        "body_height_px": 490.4,
+        "head_delta_pct": 0.52,
+        "body_delta_pct": -0.53,
+        "offset": [
+          138,
+          188
+        ],
+        "source_box": [
+          1462,
+          109,
+          1796,
+          611
+        ],
+        "uniform_scale": 1.156637,
+        "raw_head_width_px": 166,
+        "raw_body_height_px": 424,
+        "alpha_bbox": [
+          138,
+          188,
+          524,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 6,
+        "head_width_px": 191.2,
+        "body_height_px": 492.5,
+        "head_delta_pct": 0.1,
+        "body_delta_pct": -0.1,
+        "offset": [
+          138,
+          187
+        ],
+        "source_box": [
+          1824,
+          108,
+          2157,
+          611
+        ],
+        "uniform_scale": 1.158787,
+        "raw_head_width_px": 165,
+        "raw_body_height_px": 425,
+        "alpha_bbox": [
+          138,
+          187,
+          524,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      }
+    ],
+    "anatomy_audit": "audits/aegis-victory-r3b.json",
+    "audit_exit": 0,
+    "head_scale_median": 1.027,
+    "head_scale_max": 1.05,
+    "not_measured": [],
+    "scale_pass": false,
+    "edges_and_ground_pass": true,
+    "anatomy_numeric_pass": true,
+    "visual_pass": false,
+    "visual_observations": "ดาบและโล่เปลี่ยนรูปทรงรายละเอียดช่วงปลาย ด้ามดาบยกห่างจากหน้า แต่ปลายโล่แตะก่อนพื้นรองเท้า",
+    "recommended_for_review": false,
+    "status": "missing-final-review-only"
+  },
+  {
+    "character": "lyra",
+    "revision": "R3",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "canvas": [
+      768,
+      768
+    ],
+    "ground_row": 767,
+    "seed_offset": [
+      128,
+      256
+    ],
+    "seed_sha256": "a0d462ce8c0469fab74e267b14e7dc73fd43fc53330a648704d63ac8a086ad3e",
+    "seed": "../seeds/lyra-seed.png",
+    "raw": "raw/lyra-victory-r3.png",
+    "cells": "review/cells/lyra-victory-r3",
+    "runtime_use": {
+      "type": "one-shot",
+      "hold_frame": 6
+    },
+    "frames": [
+      {
+        "frame": 1,
+        "head_width_px": 239,
+        "body_height_px": 494,
+        "head_delta_pct": 0,
+        "body_delta_pct": 0,
+        "offset": [
+          128,
+          256
+        ],
+        "uniform_scale": 1,
+        "seed_lock": true,
+        "alpha_bbox": [
+          128,
+          271,
+          640,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 2,
+        "head_width_px": 246.6,
+        "body_height_px": 478.3,
+        "head_delta_pct": 3.18,
+        "body_delta_pct": -3.18,
+        "offset": [
+          114,
+          290
+        ],
+        "source_box": [
+          377,
+          240,
+          682,
+          591
+        ],
+        "uniform_scale": 1.362538,
+        "raw_head_width_px": 181,
+        "raw_body_height_px": 351,
+        "alpha_bbox": [
+          114,
+          290,
+          530,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 3,
+        "head_width_px": 243.3,
+        "body_height_px": 485.2,
+        "head_delta_pct": 1.8,
+        "body_delta_pct": -1.78,
+        "offset": [
+          137,
+          281
+        ],
+        "source_box": [
+          728,
+          236,
+          1083,
+          592
+        ],
+        "uniform_scale": 1.366687,
+        "raw_head_width_px": 178,
+        "raw_body_height_px": 355,
+        "alpha_bbox": [
+          137,
+          281,
+          622,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 4,
+        "head_width_px": 244.9,
+        "body_height_px": 481.7,
+        "head_delta_pct": 2.47,
+        "body_delta_pct": -2.49,
+        "offset": [
+          154,
+          285
+        ],
+        "source_box": [
+          1103,
+          234,
+          1407,
+          591
+        ],
+        "uniform_scale": 1.353207,
+        "raw_head_width_px": 181,
+        "raw_body_height_px": 356,
+        "alpha_bbox": [
+          154,
+          285,
+          565,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 5,
+        "head_width_px": 243.6,
+        "body_height_px": 484.5,
+        "head_delta_pct": 1.92,
+        "body_delta_pct": -1.92,
+        "offset": [
+          143,
+          282
+        ],
+        "source_box": [
+          1455,
+          229,
+          1769,
+          592
+        ],
+        "uniform_scale": 1.33842,
+        "raw_head_width_px": 182,
+        "raw_body_height_px": 362,
+        "alpha_bbox": [
+          143,
+          282,
+          563,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 6,
+        "head_width_px": 238.6,
+        "body_height_px": 494.9,
+        "head_delta_pct": -0.17,
+        "body_delta_pct": 0.18,
+        "offset": [
+          134,
+          272
+        ],
+        "source_box": [
+          1825,
+          229,
+          2141,
+          591
+        ],
+        "uniform_scale": 1.370987,
+        "raw_head_width_px": 174,
+        "raw_body_height_px": 361,
+        "alpha_bbox": [
+          134,
+          272,
+          567,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      }
+    ],
+    "anatomy_audit": "audits/lyra-victory-r3.json",
+    "audit_exit": 0,
+    "head_scale_median": 0.973,
+    "head_scale_max": 0.983,
+    "not_measured": [],
+    "scale_pass": false,
+    "edges_and_ground_pass": true,
+    "anatomy_numeric_pass": true,
+    "visual_pass": false,
+    "visual_observations": "เห็นพื้นเทาหลงเหลือรอบดาบ ผม และผ้าคลุม รวมถึงมีเศษภาพด้านขวาในเฟรม 2",
+    "recommended_for_review": false,
+    "status": "missing-final-review-only"
+  },
+  {
+    "character": "lyra",
+    "revision": "R3B",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "canvas": [
+      768,
+      768
+    ],
+    "ground_row": 767,
+    "seed_offset": [
+      128,
+      256
+    ],
+    "seed_sha256": "a0d462ce8c0469fab74e267b14e7dc73fd43fc53330a648704d63ac8a086ad3e",
+    "seed": "../seeds/lyra-seed.png",
+    "raw": "raw/lyra-victory-r3b.png",
+    "cells": "review/cells/lyra-victory-r3b",
+    "runtime_use": {
+      "type": "one-shot",
+      "hold_frame": 6
+    },
+    "frames": [
+      {
+        "frame": 1,
+        "head_width_px": 239,
+        "body_height_px": 494,
+        "head_delta_pct": 0,
+        "body_delta_pct": 0,
+        "offset": [
+          128,
+          256
+        ],
+        "uniform_scale": 1,
+        "seed_lock": true,
+        "alpha_bbox": [
+          128,
+          271,
+          640,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 2,
+        "head_width_px": 241.6,
+        "body_height_px": 488.7,
+        "head_delta_pct": 1.09,
+        "body_delta_pct": -1.07,
+        "offset": [
+          104,
+          281
+        ],
+        "source_box": [
+          363,
+          184,
+          670,
+          535
+        ],
+        "uniform_scale": 1.396305,
+        "raw_head_width_px": 173,
+        "raw_body_height_px": 350,
+        "alpha_bbox": [
+          105,
+          281,
+          533,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 3,
+        "head_width_px": 236.7,
+        "body_height_px": 498.7,
+        "head_delta_pct": -0.96,
+        "body_delta_pct": 0.95,
+        "offset": [
+          120,
+          270
+        ],
+        "source_box": [
+          705,
+          178,
+          1073,
+          535
+        ],
+        "uniform_scale": 1.400795,
+        "raw_head_width_px": 169,
+        "raw_body_height_px": 356,
+        "alpha_bbox": [
+          120,
+          270,
+          635,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 4,
+        "head_width_px": 228.4,
+        "body_height_px": 516.0,
+        "head_delta_pct": -4.44,
+        "body_delta_pct": 4.45,
+        "offset": [
+          134,
+          240
+        ],
+        "source_box": [
+          1086,
+          159,
+          1397,
+          535
+        ],
+        "uniform_scale": 1.409726,
+        "raw_head_width_px": 162,
+        "raw_body_height_px": 366,
+        "alpha_bbox": [
+          135,
+          240,
+          572,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 5,
+        "head_width_px": 232.1,
+        "body_height_px": 508.3,
+        "head_delta_pct": -2.89,
+        "body_delta_pct": 2.89,
+        "offset": [
+          112,
+          260
+        ],
+        "source_box": [
+          1441,
+          166,
+          1754,
+          535
+        ],
+        "uniform_scale": 1.381341,
+        "raw_head_width_px": 168,
+        "raw_body_height_px": 368,
+        "alpha_bbox": [
+          113,
+          260,
+          542,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 6,
+        "head_width_px": 231.4,
+        "body_height_px": 509.7,
+        "head_delta_pct": -3.18,
+        "body_delta_pct": 3.18,
+        "offset": [
+          126,
+          259
+        ],
+        "source_box": [
+          1820,
+          164,
+          2129,
+          535
+        ],
+        "uniform_scale": 1.377489,
+        "raw_head_width_px": 168,
+        "raw_body_height_px": 370,
+        "alpha_bbox": [
+          126,
+          259,
+          552,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      }
+    ],
+    "anatomy_audit": "audits/lyra-victory-r3b.json",
+    "audit_exit": 0,
+    "head_scale_median": 1.006,
+    "head_scale_max": 1.038,
+    "not_measured": [],
+    "scale_pass": false,
+    "edges_and_ground_pass": true,
+    "anatomy_numeric_pass": true,
+    "visual_pass": false,
+    "visual_observations": "ขอบโปร่งใสสะอาดขึ้น ดาบกวาดและพาดบ่าอ่านออก มืออีกข้างอยู่ที่สะโพก แต่ใบดาบช่วงค้างดูสั้นลง และรองเท้าทั้งสองไม่เสมอกันที่เส้นพื้น",
+    "recommended_for_review": true,
+    "status": "missing-final-review-only"
+  },
+  {
+    "character": "eira",
+    "revision": "R3",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "canvas": [
+      768,
+      768
+    ],
+    "ground_row": 767,
+    "seed_offset": [
+      128,
+      256
+    ],
+    "seed_sha256": "89ae5c46336cefb82325e170ad1c0abffc2848fe18d2cc86073b935467864b4b",
+    "seed": "../seeds/eira-seed.png",
+    "raw": "raw/eira-victory-r3.png",
+    "cells": "review/cells/eira-victory-r3",
+    "runtime_use": {
+      "type": "one-shot",
+      "hold_frame": 6
+    },
+    "frames": [
+      {
+        "frame": 1,
+        "head_width_px": 193,
+        "body_height_px": 398,
+        "head_delta_pct": 0,
+        "body_delta_pct": 0,
+        "offset": [
+          128,
+          256
+        ],
+        "uniform_scale": 1,
+        "seed_lock": true,
+        "alpha_bbox": [
+          128,
+          256,
+          640,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 2,
+        "head_width_px": 183.4,
+        "body_height_px": 417.9,
+        "head_delta_pct": -4.97,
+        "body_delta_pct": 5.0,
+        "offset": [
+          156,
+          229
+        ],
+        "source_box": [
+          374,
+          255,
+          716,
+          615
+        ],
+        "uniform_scale": 1.503062,
+        "raw_head_width_px": 122,
+        "raw_body_height_px": 278,
+        "alpha_bbox": [
+          156,
+          229,
+          670,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 3,
+        "head_width_px": 185.6,
+        "body_height_px": 413.3,
+        "head_delta_pct": -3.83,
+        "body_delta_pct": 3.84,
+        "offset": [
+          169,
+          235
+        ],
+        "source_box": [
+          738,
+          246,
+          1076,
+          614
+        ],
+        "uniform_scale": 1.450018,
+        "raw_head_width_px": 128,
+        "raw_body_height_px": 285,
+        "alpha_bbox": [
+          169,
+          236,
+          659,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 4,
+        "head_width_px": 176.8,
+        "body_height_px": 431.3,
+        "head_delta_pct": -8.39,
+        "body_delta_pct": 8.37,
+        "offset": [
+          228,
+          155
+        ],
+        "source_box": [
+          1098,
+          187,
+          1430,
+          614
+        ],
+        "uniform_scale": 1.437737,
+        "raw_head_width_px": 123,
+        "raw_body_height_px": 300,
+        "alpha_bbox": [
+          228,
+          156,
+          705,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 5,
+        "head_width_px": 182.2,
+        "body_height_px": 420.3,
+        "head_delta_pct": -5.6,
+        "body_delta_pct": 5.6,
+        "offset": [
+          168,
+          168
+        ],
+        "source_box": [
+          1465,
+          205,
+          1793,
+          614
+        ],
+        "uniform_scale": 1.469421,
+        "raw_head_width_px": 124,
+        "raw_body_height_px": 286,
+        "alpha_bbox": [
+          168,
+          168,
+          650,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 6,
+        "head_width_px": 183.1,
+        "body_height_px": 418.4,
+        "head_delta_pct": -5.13,
+        "body_delta_pct": 5.13,
+        "offset": [
+          162,
+          160
+        ],
+        "source_box": [
+          1829,
+          205,
+          2160,
+          614
+        ],
+        "uniform_scale": 1.488831,
+        "raw_head_width_px": 123,
+        "raw_body_height_px": 281,
+        "alpha_bbox": [
+          162,
+          160,
+          655,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      }
+    ],
+    "anatomy_audit": "audits/eira-victory-r3.json",
+    "audit_exit": 0,
+    "head_scale_median": 1.064,
+    "head_scale_max": 1.114,
+    "not_measured": [],
+    "scale_pass": false,
+    "edges_and_ground_pass": true,
+    "anatomy_numeric_pass": true,
+    "visual_pass": false,
+    "visual_observations": "มือแตะปีกหมวกและคทาชูอ่านออก คทาสีม่วงทองยังเห็นชัด แต่ท่ายืดเท้าและแนวพื้นของรองเท้าทั้งสองยังไม่ตรงแบบ และช่วงค้างเปลี่ยนสัดส่วนจาก seed",
+    "recommended_for_review": false,
+    "status": "missing-final-review-only"
+  },
+  {
+    "character": "eira",
+    "revision": "R3B",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "canvas": [
+      768,
+      768
+    ],
+    "ground_row": 767,
+    "seed_offset": [
+      128,
+      256
+    ],
+    "seed_sha256": "89ae5c46336cefb82325e170ad1c0abffc2848fe18d2cc86073b935467864b4b",
+    "seed": "../seeds/eira-seed.png",
+    "raw": "raw/eira-victory-r3b.png",
+    "cells": "review/cells/eira-victory-r3b",
+    "runtime_use": {
+      "type": "one-shot",
+      "hold_frame": 6
+    },
+    "frames": [
+      {
+        "frame": 1,
+        "head_width_px": 193,
+        "body_height_px": 398,
+        "head_delta_pct": 0,
+        "body_delta_pct": 0,
+        "offset": [
+          128,
+          256
+        ],
+        "uniform_scale": 1,
+        "seed_lock": true,
+        "alpha_bbox": [
+          128,
+          256,
+          640,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 2,
+        "head_width_px": 195.2,
+        "body_height_px": 393.5,
+        "head_delta_pct": 1.14,
+        "body_delta_pct": -1.13,
+        "offset": [
+          152,
+          259
+        ],
+        "source_box": [
+          375,
+          259,
+          715,
+          593
+        ],
+        "uniform_scale": 1.536987,
+        "raw_head_width_px": 127,
+        "raw_body_height_px": 256,
+        "alpha_bbox": [
+          152,
+          259,
+          675,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 3,
+        "head_width_px": 185.3,
+        "body_height_px": 413.9,
+        "head_delta_pct": -3.99,
+        "body_delta_pct": 3.99,
+        "offset": [
+          149,
+          244
+        ],
+        "source_box": [
+          739,
+          251,
+          1074,
+          592
+        ],
+        "uniform_scale": 1.544248,
+        "raw_head_width_px": 120,
+        "raw_body_height_px": 268,
+        "alpha_bbox": [
+          149,
+          245,
+          666,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 4,
+        "head_width_px": 180.4,
+        "body_height_px": 424.0,
+        "head_delta_pct": -6.53,
+        "body_delta_pct": 6.53,
+        "offset": [
+          216,
+          173
+        ],
+        "source_box": [
+          1098,
+          194,
+          1428,
+          592
+        ],
+        "uniform_scale": 1.503415,
+        "raw_head_width_px": 120,
+        "raw_body_height_px": 282,
+        "alpha_bbox": [
+          216,
+          173,
+          712,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 5,
+        "head_width_px": 181.7,
+        "body_height_px": 421.4,
+        "head_delta_pct": -5.85,
+        "body_delta_pct": 5.88,
+        "offset": [
+          148,
+          195
+        ],
+        "source_box": [
+          1457,
+          215,
+          1793,
+          592
+        ],
+        "uniform_scale": 1.526662,
+        "raw_head_width_px": 119,
+        "raw_body_height_px": 276,
+        "alpha_bbox": [
+          148,
+          195,
+          661,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 6,
+        "head_width_px": 184.0,
+        "body_height_px": 416.6,
+        "head_delta_pct": -4.66,
+        "body_delta_pct": 4.67,
+        "offset": [
+          149,
+          198
+        ],
+        "source_box": [
+          1825,
+          215,
+          2164,
+          591
+        ],
+        "uniform_scale": 1.520467,
+        "raw_head_width_px": 121,
+        "raw_body_height_px": 274,
+        "alpha_bbox": [
+          149,
+          198,
+          664,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      }
+    ],
+    "anatomy_audit": "audits/eira-victory-r3b.json",
+    "audit_exit": 0,
+    "head_scale_median": 1.046,
+    "head_scale_max": 1.06,
+    "not_measured": [],
+    "scale_pass": false,
+    "edges_and_ground_pass": true,
+    "anatomy_numeric_pass": true,
+    "visual_pass": false,
+    "visual_observations": "ท่าค้างอ่านชัดขึ้นและสีทองม่วงอยู่ในโทนเดิม แต่ความกว้างหัวเทียบความสูงร่างลดลงในช่วงชูคทา และตัวคทาไม่ได้ตรงกับลายเดิมทุกจุด",
+    "recommended_for_review": true,
+    "status": "missing-final-review-only"
+  },
+  {
+    "character": "seren",
+    "revision": "R3",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "canvas": [
+      768,
+      768
+    ],
+    "ground_row": 767,
+    "seed_offset": [
+      128,
+      256
+    ],
+    "seed_sha256": "0298b7eeffbdaee5937847c7071e654286d2c2631a5f6d7bbea1598db72a6c0d",
+    "seed": "../seeds/seren-seed.png",
+    "raw": "raw/seren-victory-r3.png",
+    "cells": "review/cells/seren-victory-r3",
+    "runtime_use": {
+      "type": "one-shot",
+      "hold_frame": 6
+    },
+    "frames": [
+      {
+        "frame": 1,
+        "head_width_px": 210,
+        "body_height_px": 496,
+        "head_delta_pct": 0,
+        "body_delta_pct": 0,
+        "offset": [
+          128,
+          256
+        ],
+        "uniform_scale": 1,
+        "seed_lock": true,
+        "alpha_bbox": [
+          128,
+          256,
+          639,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 2,
+        "head_width_px": 215.0,
+        "body_height_px": 484.3,
+        "head_delta_pct": 2.38,
+        "body_delta_pct": -2.36,
+        "offset": [
+          164,
+          266
+        ],
+        "source_box": [
+          373,
+          285,
+          705,
+          663
+        ],
+        "uniform_scale": 1.326862,
+        "raw_head_width_px": 162,
+        "raw_body_height_px": 365,
+        "alpha_bbox": [
+          164,
+          266,
+          605,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 3,
+        "head_width_px": 201.7,
+        "body_height_px": 515.6,
+        "head_delta_pct": -3.95,
+        "body_delta_pct": 3.95,
+        "offset": [
+          177,
+          227
+        ],
+        "source_box": [
+          745,
+          258,
+          1064,
+          663
+        ],
+        "uniform_scale": 1.335761,
+        "raw_head_width_px": 151,
+        "raw_body_height_px": 386,
+        "alpha_bbox": [
+          177,
+          227,
+          603,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 4,
+        "head_width_px": 210.3,
+        "body_height_px": 495.4,
+        "head_delta_pct": 0.14,
+        "body_delta_pct": -0.12,
+        "offset": [
+          182,
+          240
+        ],
+        "source_box": [
+          1109,
+          261,
+          1427,
+          663
+        ],
+        "uniform_scale": 1.314073,
+        "raw_head_width_px": 160,
+        "raw_body_height_px": 377,
+        "alpha_bbox": [
+          182,
+          240,
+          600,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 5,
+        "head_width_px": 204.3,
+        "body_height_px": 509.4,
+        "head_delta_pct": -2.71,
+        "body_delta_pct": 2.7,
+        "offset": [
+          183,
+          232
+        ],
+        "source_box": [
+          1474,
+          259,
+          1789,
+          663
+        ],
+        "uniform_scale": 1.326676,
+        "raw_head_width_px": 154,
+        "raw_body_height_px": 384,
+        "alpha_bbox": [
+          183,
+          232,
+          601,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 6,
+        "head_width_px": 204.7,
+        "body_height_px": 508.5,
+        "head_delta_pct": -2.52,
+        "body_delta_pct": 2.52,
+        "offset": [
+          184,
+          236
+        ],
+        "source_box": [
+          1836,
+          260,
+          2153,
+          663
+        ],
+        "uniform_scale": 1.320738,
+        "raw_head_width_px": 155,
+        "raw_body_height_px": 385,
+        "alpha_bbox": [
+          184,
+          236,
+          603,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      }
+    ],
+    "anatomy_audit": "audits/seren-victory-r3.json",
+    "audit_exit": 0,
+    "head_scale_median": 0.963,
+    "head_scale_max": 1.045,
+    "not_measured": [],
+    "scale_pass": false,
+    "edges_and_ground_pass": true,
+    "anatomy_numeric_pass": true,
+    "visual_pass": false,
+    "visual_observations": "ท่าทาบอกและก้มอ่านชัด ตาค้างเปิด คทาเปลี่ยนจากแนวเดิมเป็นตั้งตรง มีขอบเทาอ่อนบางจุดและรองเท้าสองข้างไม่เสมอกันในเฟรมค้าง",
+    "recommended_for_review": true,
+    "status": "missing-final-review-only"
+  },
+  {
+    "character": "seren",
+    "revision": "R3B",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "canvas": [
+      768,
+      768
+    ],
+    "ground_row": 767,
+    "seed_offset": [
+      128,
+      256
+    ],
+    "seed_sha256": "0298b7eeffbdaee5937847c7071e654286d2c2631a5f6d7bbea1598db72a6c0d",
+    "seed": "../seeds/seren-seed.png",
+    "raw": "raw/seren-victory-r3b.png",
+    "cells": "review/cells/seren-victory-r3b",
+    "runtime_use": {
+      "type": "one-shot",
+      "hold_frame": 6
+    },
+    "frames": [
+      {
+        "frame": 1,
+        "head_width_px": 210,
+        "body_height_px": 496,
+        "head_delta_pct": 0,
+        "body_delta_pct": 0,
+        "offset": [
+          128,
+          256
+        ],
+        "uniform_scale": 1,
+        "seed_lock": true,
+        "alpha_bbox": [
+          128,
+          256,
+          639,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 2,
+        "head_width_px": 213.3,
+        "body_height_px": 488.3,
+        "head_delta_pct": 1.57,
+        "body_delta_pct": -1.55,
+        "offset": [
+          171,
+          263
+        ],
+        "source_box": [
+          360,
+          195,
+          724,
+          645
+        ],
+        "uniform_scale": 1.122474,
+        "raw_head_width_px": 190,
+        "raw_body_height_px": 435,
+        "alpha_bbox": [
+          171,
+          263,
+          580,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 3,
+        "head_width_px": 205.5,
+        "body_height_px": 506.6,
+        "head_delta_pct": -2.14,
+        "body_delta_pct": 2.14,
+        "offset": [
+          178,
+          220
+        ],
+        "source_box": [
+          724,
+          146,
+          1083,
+          645
+        ],
+        "uniform_scale": 1.098954,
+        "raw_head_width_px": 187,
+        "raw_body_height_px": 461,
+        "alpha_bbox": [
+          178,
+          220,
+          573,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 4,
+        "head_width_px": 206.0,
+        "body_height_px": 505.5,
+        "head_delta_pct": -1.9,
+        "body_delta_pct": 1.92,
+        "offset": [
+          192,
+          244
+        ],
+        "source_box": [
+          1083,
+          146,
+          1440,
+          645
+        ],
+        "uniform_scale": 1.050922,
+        "raw_head_width_px": 196,
+        "raw_body_height_px": 481,
+        "alpha_bbox": [
+          192,
+          244,
+          567,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 5,
+        "head_width_px": 206.1,
+        "body_height_px": 505.2,
+        "head_delta_pct": -1.86,
+        "body_delta_pct": 1.85,
+        "offset": [
+          182,
+          238
+        ],
+        "source_box": [
+          1440,
+          172,
+          1802,
+          645
+        ],
+        "uniform_scale": 1.120157,
+        "raw_head_width_px": 184,
+        "raw_body_height_px": 451,
+        "alpha_bbox": [
+          182,
+          238,
+          587,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 6,
+        "head_width_px": 206.3,
+        "body_height_px": 504.7,
+        "head_delta_pct": -1.76,
+        "body_delta_pct": 1.75,
+        "offset": [
+          188,
+          242
+        ],
+        "source_box": [
+          1802,
+          171,
+          2172,
+          645
+        ],
+        "uniform_scale": 1.10923,
+        "raw_head_width_px": 186,
+        "raw_body_height_px": 455,
+        "alpha_bbox": [
+          188,
+          242,
+          598,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "edge_and_ground_pass": true
+      }
+    ],
+    "anatomy_audit": "audits/seren-victory-r3b.json",
+    "audit_exit": 0,
+    "head_scale_median": 0.977,
+    "head_scale_max": 1.03,
+    "not_measured": [],
+    "scale_pass": true,
+    "edges_and_ground_pass": true,
+    "anatomy_numeric_pass": true,
+    "visual_pass": false,
+    "visual_observations": "มีเศษยอดคทาจากช่องข้างเคียง และความต่างของท่าก้มระหว่างเฟรม 3–5 อ่านยาก",
+    "recommended_for_review": false,
+    "status": "missing-final-review-only"
+  }
+]

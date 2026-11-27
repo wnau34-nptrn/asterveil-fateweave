@@ -7,7 +7,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 test.skip(!process.env.FX_CLIPS, 'owner clip capture only');
 const cases = [
   { name: 'idle-turn-owner', query: '' },
-  { name: 'victory', query: '?end=victory' },
+  { name: 'victory', query: '?end=victory&cast=cheer' },
   { name: 'defeat', query: '?end=defeat' },
 ];
 for (const { name, query } of cases) test(`hero life clip ${name}`, async ({ browser }, info) => {

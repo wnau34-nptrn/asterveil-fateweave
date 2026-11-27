@@ -22,7 +22,9 @@ import '../../../src/ui/components.css';
 const end = new URLSearchParams(location.search).get('end');
 const pool: HeroDefinition[] = [...heroes, ...mercenaries, ...rosterBatch1];
 const pick = (id: string) => pool.find(h => h.id === id)!;
-const cast = end === 'defeat' ? ['guardian'] : ['guardian', 'weaver', 'lalin', 'mira', 'lio'];
+// `?cast=cheer`: the three heroes with drawn victory cheers (Aegis, Eira, Seren) plus two without.
+const cheerCast = new URLSearchParams(location.search).get('cast') === 'cheer';
+const cast = end === 'defeat' ? ['guardian'] : cheerCast ? ['guardian', 'weaver', 'healer', 'lalin', 'lio'] : ['guardian', 'weaver', 'lalin', 'mira', 'lio'];
 const data: EncounterDefinition = { ...structuredClone(veilSiege), id: 'hero-life-qa', level: 4,
   heroes: cast.map((id, i) => ({ ...pick(id), maxHp: 100, speed: 200 - i * 10, ...(id === 'lalin' ? { gear: { barrier: 20 } } : {}) })),
   enemies: [{ id: 'f1', row: 'front', name: 'ด้วงหนาม', art: 'foe_thorn_beetle', maxHp: end === 'victory' ? 1 : 500, speed: end === 'defeat' ? 250 : 50, color: 0x77ff77 }],
@@ -34,6 +36,8 @@ fitViewport();
 const ui = new BattleUI(document.querySelector('#battle-view')!, data);
 const scene = new BattleScene(data, id => ui.choose(id, 'canvas'), () => ui.sceneReady(), () => ui.fieldLayoutChanged());
 ui.attach(scene);
+// The real game marks the battle visible, which fetches the framed unit atlases (and the optional cheer atlases).
+scene.setBattleVisible(true);
 new Phaser.Game({ type: Phaser.AUTO, parent: 'game', transparent: true, scale: { mode: Phaser.Scale.NONE, width: 320, height: 240 }, scene: [scene], audio: { noAudio: true } });
 const entry = { hp: Object.fromEntries(data.heroes.map(h => [h.id, end === 'defeat' ? 1 : h.id === 'weaver' ? 25 : 100])) };
 ui.open({ kind: 'random', data, entry, commands: [], commit: () => true, leaveLabel: () => '', leave: () => {} });

@@ -81,3 +81,25 @@ test('victory sparkles without a hop and defeat slumps, from the real battle out
     await expect.poll(async () => (await life(page)).finale, { timeout: 8000 }).toBe('defeat');
   } finally { await ctx.close(); }
 });
+
+test('drawn cheers play once from the real victory and hold their last frame; reduced motion keeps the idle', async ({ browser }) => {
+  for (const reducedMotion of ['no-preference', 'reduce'] as const) {
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion });
+    const page = await ctx.newPage();
+    try {
+      await open(page, '?end=victory&cast=cheer');
+      await page.locator('#target-f1').click();
+      await expect.poll(async () => (await life(page)).finale, { timeout: 8000 }).toBe('victory');
+      if (reducedMotion === 'reduce') {
+        await page.waitForTimeout(1500);
+        for (const id of ['guardian', 'weaver', 'healer']) expect((await life(page)).heroes[id]!.texture, id).toMatch(/^unit-pilot-/);
+        continue;
+      }
+      for (const [id, sheet] of [['guardian', 'aegis'], ['weaver', 'eira'], ['healer', 'seren']] as const)
+        await expect.poll(async () => { const h = (await life(page)).heroes[id]!; return `${h.texture}#${h.frame}`; }, { timeout: 5000 }).toBe(`unit-victory-${sheet}#5`);
+      await page.waitForTimeout(800);
+      expect((await life(page)).heroes.guardian!.frame).toBe('5');          // held, not reset to the idle
+      expect((await life(page)).heroes.lalin!.texture).toMatch(/^unit-pilot-/);   // no drawn cheer: idle + sparkles
+    } finally { await ctx.close(); }
+  }
+});

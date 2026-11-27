@@ -1,0 +1,481 @@
+{
+  "algorithm": "SHA-256",
+  "files": {
+    "NOTES.md": {
+      "sha256": "982d9721c3a26520aa4cb1d967f3db484914f6e42bb5a13383945e1073a82714",
+      "bytes": 6275
+    },
+    "aegis-preview-390.png": {
+      "sha256": "4e38464165a5bf8562acb00fc8acfa1653a85aed03c199cdd7a745eb5bb993a1",
+      "bytes": 405679
+    },
+    "allies-preview-390.png": {
+      "sha256": "8adce1b7b217d410d02ee9cd1aabf5f5be60864dea55395c778a82fd1f240700",
+      "bytes": 94631
+    },
+    "audits/aegis-idle.json": {
+      "sha256": "8d000e903631c37a8d037f2b8f1016882d3bc396383750f0f52296cacdb1dd6d",
+      "bytes": 518
+    },
+    "audits/aegis-idle.txt": {
+      "sha256": "31bcdfdf2c15d517efd941080b2891cf9a1d2f9f59e7601b3df1afce9da12d1a",
+      "bytes": 63
+    },
+    "audits/aegis-victory-r2.json": {
+      "sha256": "0e8b1dd0ca168ab74539a5eaa037b55c48361785f2b64ee87d1c89b6fe672647",
+      "bytes": 732
+    },
+    "audits/aegis-victory-r2.txt": {
+      "sha256": "1c12c5702ed6204dd0c5efdd5a253a9322abd71a94354512e7219f10a9e0a227",
+      "bytes": 69
+    },
+    "audits/aegis-victory.json": {
+      "sha256": "7d87aa10af84fab46d1061f2710e161d105e5e0dfdafb067e1eeb0a16d386818",
+      "bytes": 732
+    },
+    "audits/aegis-victory.txt": {
+      "sha256": "2bba7fcd32297c3fd94b23ac0d1c13c5d434d533751d21b81d290972466c9527",
+      "bytes": 87
+    },
+    "audits/eira-idle.json": {
+      "sha256": "4d4bd9e1874ce6cb43d3167f18699d8fe85ed1242324b66bf95c872228a16383",
+      "bytes": 518
+    },
+    "audits/eira-idle.txt": {
+      "sha256": "8e533f5e455b8fd00ec0f0693697a3fa3355757fa4e4f16983519e696d2b2586",
+      "bytes": 62
+    },
+    "audits/eira-victory-r2.json": {
+      "sha256": "fc4ac6d00dd3653a7f1ba3ccdd51a6f6fea3ca5388863f4d843cfe87077c381b",
+      "bytes": 729
+    },
+    "audits/eira-victory-r2.txt": {
+      "sha256": "447d3989b47dd6a76693b464d6d52b1146925ddffba24a2a1ecba1e2f5aad728",
+      "bytes": 68
+    },
+    "audits/eira-victory.json": {
+      "sha256": "ea4d1e152c9e925daedf5b420ecdbabdd984f34e5c2b5824de04304a83d15841",
+      "bytes": 726
+    },
+    "audits/eira-victory.txt": {
+      "sha256": "54b004125d7ba68ba7a7e51e20772089351c178946d620a6ef22905ba6381cf5",
+      "bytes": 65
+    },
+    "audits/lyra-idle.json": {
+      "sha256": "357f6694e9a938e248d6121df9c7e48664175357823f9978e5102ca2dcbecc41",
+      "bytes": 517
+    },
+    "audits/lyra-idle.txt": {
+      "sha256": "778cba0206ff4707782b009c10e711e9485d803be26e11a06df171b51c0bd6be",
+      "bytes": 62
+    },
+    "audits/lyra-victory-r2.json": {
+      "sha256": "b02caa8efeac9cc973be6b382ca860e88b1a6693ded955ba8409198a28f5b3de",
+      "bytes": 727
+    },
+    "audits/lyra-victory-r2.txt": {
+      "sha256": "10994a49e227763d057b2e1d85460ab64cf62191ba8ee76d26074b0dfeec1b82",
+      "bytes": 68
+    },
+    "audits/lyra-victory.json": {
+      "sha256": "05d29ba6cc395ca3d409ced64be53b75b07e22b9e5257ee2c44e0d6f73b797a2",
+      "bytes": 726
+    },
+    "audits/lyra-victory.txt": {
+      "sha256": "85714e9ddeb62ff157e26e3b2b17b734c3bed80235db6c36848a37812675331c",
+      "bytes": 65
+    },
+    "audits/seren-idle.json": {
+      "sha256": "3856b1a47ce845493fbde856e2a2e8119f823bb2635ea1986ced6373da3baa95",
+      "bytes": 519
+    },
+    "audits/seren-idle.txt": {
+      "sha256": "fb62731f5da8f6880109e823b8cd7fb7104d23313a372ff3c77e484549937d10",
+      "bytes": 63
+    },
+    "audits/seren-victory.json": {
+      "sha256": "0b9b8d056c06ddd2b063bbddf5ed2859f5def0643914542c7a0a33400ce79e7b",
+      "bytes": 732
+    },
+    "audits/seren-victory.txt": {
+      "sha256": "63474d313fad4d243bef82c6626dd0a00ae8c7ab5763551768194698b453fcb7",
+      "bytes": 66
+    },
+    "cells/aegis-idle/000.png": {
+      "sha256": "1c73bbdf0abe7ec3d6871d53a1a5a55d890e170db4a3b29773ce2a348df8c407",
+      "bytes": 423423
+    },
+    "cells/aegis-idle/001.png": {
+      "sha256": "d6c028992f6f9201b24f57072c4bf653840d624f8985f2e4806905a49c304b5c",
+      "bytes": 389764
+    },
+    "cells/aegis-idle/002.png": {
+      "sha256": "be74ce82d86d174814c58db8fbc9fb565be5d62b6efd20a89bf33cc722c300b1",
+      "bytes": 397186
+    },
+    "cells/aegis-idle/003.png": {
+      "sha256": "87b9581a89f6c5c36352271992ebd8387d1e9dc44c90c2c5695578ec32fbd8f1",
+      "bytes": 386003
+    },
+    "cells/aegis-victory/000.png": {
+      "sha256": "1c73bbdf0abe7ec3d6871d53a1a5a55d890e170db4a3b29773ce2a348df8c407",
+      "bytes": 423423
+    },
+    "cells/aegis-victory/001.png": {
+      "sha256": "13d577c83fbe684919d28ca61d71401ff726bea7f0966da3ed37442c3cfe65db",
+      "bytes": 288833
+    },
+    "cells/aegis-victory/002.png": {
+      "sha256": "6bd6502642e80b3287d9c130947438e1a1a249421e54788652ac988cb58701c7",
+      "bytes": 299110
+    },
+    "cells/aegis-victory/003.png": {
+      "sha256": "d9be6d7dfbe7721dddf33486277a46fda43194707555f00b9b0d7270494e116b",
+      "bytes": 298941
+    },
+    "cells/aegis-victory/004.png": {
+      "sha256": "05bb79f2053c8dbf07c793da8651f8e01703e579ad8a3dd46e5ca82ae34db7d5",
+      "bytes": 303135
+    },
+    "cells/aegis-victory/005.png": {
+      "sha256": "bc55bf17b77cade80649db9fc8ce65dd83e3d53d95a0d5cc365fdb934a5973a4",
+      "bytes": 307235
+    },
+    "cells/aegis-victory-r2/000.png": {
+      "sha256": "1c73bbdf0abe7ec3d6871d53a1a5a55d890e170db4a3b29773ce2a348df8c407",
+      "bytes": 423423
+    },
+    "cells/aegis-victory-r2/001.png": {
+      "sha256": "87ddd4d672436fce1e765d175118391e51d893ebcc16da5166a475314980df6b",
+      "bytes": 335775
+    },
+    "cells/aegis-victory-r2/002.png": {
+      "sha256": "d1db50ce6ad7b82277e1f99fc5600b99dc3985c74d542a4c73cfc124e324165c",
+      "bytes": 326793
+    },
+    "cells/aegis-victory-r2/003.png": {
+      "sha256": "ffc03ba13676267515b54dce176f191720f687a0d7642dc6c5b16d4db8402a26",
+      "bytes": 322041
+    },
+    "cells/aegis-victory-r2/004.png": {
+      "sha256": "3a13c4f20899de33def9960c037416ba7da68e91e2117af6369b6323e634904e",
+      "bytes": 321802
+    },
+    "cells/aegis-victory-r2/005.png": {
+      "sha256": "0c463d29643285236665e607a699c5a834bd82abccafc69ee457fb7a03a4a03c",
+      "bytes": 321908
+    },
+    "cells/eira-idle/000.png": {
+      "sha256": "9084b39423ff05cb03168ff1858e7ccc4de44c6bd5da26fd7fc2288904d557d7",
+      "bytes": 525612
+    },
+    "cells/eira-idle/001.png": {
+      "sha256": "6fa381d1b0e675b77c510979b19c9431273e0c463099c78bc79b82490d67ada3",
+      "bytes": 475266
+    },
+    "cells/eira-idle/002.png": {
+      "sha256": "88783a5417308ccd7a4fe6cfb06e9e031897becf8dfe558edb78d12e0f46be8c",
+      "bytes": 476977
+    },
+    "cells/eira-idle/003.png": {
+      "sha256": "50d484bb3473e0781fcc1d160f1c6941b57a44fed04e675c0b7850ccd0d44bb1",
+      "bytes": 473231
+    },
+    "cells/eira-victory/000.png": {
+      "sha256": "9084b39423ff05cb03168ff1858e7ccc4de44c6bd5da26fd7fc2288904d557d7",
+      "bytes": 525612
+    },
+    "cells/eira-victory/001.png": {
+      "sha256": "20510e034d1c9b2a3a16a789dfc2455f0fece280dd9ae5e0e253ae5dfc08f2fa",
+      "bytes": 423590
+    },
+    "cells/eira-victory/002.png": {
+      "sha256": "113b0109a6408e3764b0fb60f4a9c07802e3f3e70651bf805b0c7bfc8577e84d",
+      "bytes": 441120
+    },
+    "cells/eira-victory/003.png": {
+      "sha256": "0c6f5ca0538073544037b66436d02b16dd82ce0e6f94fff79df28c33ca73f669",
+      "bytes": 438069
+    },
+    "cells/eira-victory/004.png": {
+      "sha256": "06e95545fa131fb2fe6ecbab96c724fb99f173b235b472184b35470ffd65632b",
+      "bytes": 439347
+    },
+    "cells/eira-victory/005.png": {
+      "sha256": "6e9609d4b7631448428e68f296cc8f3e0e2e517edb7508c3ba8be833abd5d4b4",
+      "bytes": 437538
+    },
+    "cells/eira-victory-r2/000.png": {
+      "sha256": "9084b39423ff05cb03168ff1858e7ccc4de44c6bd5da26fd7fc2288904d557d7",
+      "bytes": 525612
+    },
+    "cells/eira-victory-r2/001.png": {
+      "sha256": "04d82c73008fe9a4c38af4508f6730b748f95c914a6f0199ba1207a00419ca47",
+      "bytes": 441614
+    },
+    "cells/eira-victory-r2/002.png": {
+      "sha256": "381cdbdb3d5d1ba0ecfdd474dcf5f16d67ec7271663684021c86831703f11292",
+      "bytes": 432381
+    },
+    "cells/eira-victory-r2/003.png": {
+      "sha256": "b35dc187ee0852624d48619382d2fc56a93b4de460c52d3a193f1f267e66ef0c",
+      "bytes": 448962
+    },
+    "cells/eira-victory-r2/004.png": {
+      "sha256": "34ac065e3ed3303cc9ecd849350d3fc5435b3126e67b209865936fae4125db88",
+      "bytes": 437637
+    },
+    "cells/eira-victory-r2/005.png": {
+      "sha256": "87ab482bc6f54d01d50d276cdd53d7ca8c40121a2f48ed17afe27e37ff00342c",
+      "bytes": 433015
+    },
+    "cells/lyra-idle/000.png": {
+      "sha256": "993931aef5a81abd86bd7caf8eb1e74ceade4386cee4191c7ecf047697ebfa76",
+      "bytes": 436692
+    },
+    "cells/lyra-idle/001.png": {
+      "sha256": "bf73037ac830f9b4f1716848d7d313aceea7559262ad36ce629ed687bb9d6ef9",
+      "bytes": 389424
+    },
+    "cells/lyra-idle/002.png": {
+      "sha256": "bc23986a3109c8e48492857f956e1f490bc11423fe2aebd4fd3183f203b2b32c",
+      "bytes": 389935
+    },
+    "cells/lyra-idle/003.png": {
+      "sha256": "f5e096aea0663aaa9d8ddd6fe153f260f6586d8e2f451781e024864d4d0958ec",
+      "bytes": 388777
+    },
+    "cells/lyra-victory/000.png": {
+      "sha256": "993931aef5a81abd86bd7caf8eb1e74ceade4386cee4191c7ecf047697ebfa76",
+      "bytes": 436692
+    },
+    "cells/lyra-victory/001.png": {
+      "sha256": "8bee39b4209736c04625a048bc993ce48c4ab72be55444b85189e1d63f85f213",
+      "bytes": 318132
+    },
+    "cells/lyra-victory/002.png": {
+      "sha256": "321998d0123633efffca4095db824c3ee57ca63c047ac59988ebddd600565378",
+      "bytes": 322469
+    },
+    "cells/lyra-victory/003.png": {
+      "sha256": "41b78a1707822dfe71bee1ded400b478eba6c49e7536160b4b39ab74b573c718",
+      "bytes": 344566
+    },
+    "cells/lyra-victory/004.png": {
+      "sha256": "5a789b833821fce358c8bc9ee9fb55cfa02b8d36a62d8c18f25198e902e2e0e6",
+      "bytes": 342138
+    },
+    "cells/lyra-victory/005.png": {
+      "sha256": "31015285d11c198c2630106b23a47e9b1f332df0d1fa90c0f4c56a175ba7c162",
+      "bytes": 345420
+    },
+    "cells/lyra-victory-r2/000.png": {
+      "sha256": "993931aef5a81abd86bd7caf8eb1e74ceade4386cee4191c7ecf047697ebfa76",
+      "bytes": 436692
+    },
+    "cells/lyra-victory-r2/001.png": {
+      "sha256": "cd97d7a5f9a40db79adb9c0919eeaf2692a5a9574054eda156ca3361f0428a76",
+      "bytes": 320518
+    },
+    "cells/lyra-victory-r2/002.png": {
+      "sha256": "9710555cf0f49e94e06aef6553b8d4ed3e06c9238f2468827ed6ff0b6885861b",
+      "bytes": 336881
+    },
+    "cells/lyra-victory-r2/003.png": {
+      "sha256": "e2675be125e80c054d9d5c2939719df9c8f8781eb263a9d710e07a7431c58690",
+      "bytes": 353658
+    },
+    "cells/lyra-victory-r2/004.png": {
+      "sha256": "7c5704936d74ca51931446b49c6c06e58a651d08164f43cf6661117986062691",
+      "bytes": 341046
+    },
+    "cells/lyra-victory-r2/005.png": {
+      "sha256": "133ddd04e152dc41812b1111534985e6ea5cb720903e7310efc20d6272ef2495",
+      "bytes": 349022
+    },
+    "cells/seren-idle/000.png": {
+      "sha256": "18d32f148ebacaeaf114848f3a4da9c172f3752d7386c3c94aa30c6cfe12d1e4",
+      "bytes": 504413
+    },
+    "cells/seren-idle/001.png": {
+      "sha256": "17872f296cc7f52e6e2ed3ded81c86b15db931cf9845a2918d826e58a155c49f",
+      "bytes": 437283
+    },
+    "cells/seren-idle/002.png": {
+      "sha256": "f45ae46becdd0c07440f8306b56d1fb99a603541ccd7f7da4e2b6aa1014095a2",
+      "bytes": 429949
+    },
+    "cells/seren-idle/003.png": {
+      "sha256": "15bed684f129eaab68a31f828c26d7d63f73dbde0bf457b28b73f0a8ce86e0cb",
+      "bytes": 436588
+    },
+    "cells/seren-victory/000.png": {
+      "sha256": "18d32f148ebacaeaf114848f3a4da9c172f3752d7386c3c94aa30c6cfe12d1e4",
+      "bytes": 504413
+    },
+    "cells/seren-victory/001.png": {
+      "sha256": "bd754fbc57e300c079be1a017f5aff4db5895ce94474635329630260c693ab7f",
+      "bytes": 333691
+    },
+    "cells/seren-victory/002.png": {
+      "sha256": "015884b2ada8cc1fc42a4a92b384e40d5b7c936acc63662e3a33bd5f9561028e",
+      "bytes": 317441
+    },
+    "cells/seren-victory/003.png": {
+      "sha256": "e604c31bb198f6b18d981ba4a099f018833cb27ec0e30f3ef26abc0f167f4fff",
+      "bytes": 297832
+    },
+    "cells/seren-victory/004.png": {
+      "sha256": "fb9806f90a22b8ae953005cfdf8cf19b9b6ca735618fcc94675901d3c11708a9",
+      "bytes": 329969
+    },
+    "cells/seren-victory/005.png": {
+      "sha256": "55db980f0e10a775ef440687e789f27460a8675b564ae5c06cb82c39c7a4f056",
+      "bytes": 345582
+    },
+    "eira-preview-390.png": {
+      "sha256": "3871787a442d3fd4a095815e78b5df88712cfcf3891f2eb79e65d1d20da158bf",
+      "bytes": 515005
+    },
+    "idle-aegis.webp": {
+      "sha256": "c537a1be67aab045ddbc7a04fc1ea8c7eb1b3175457085baae811125de6a55ae",
+      "bytes": 93312
+    },
+    "idle-eira.webp": {
+      "sha256": "04bda05a65bb5d643b957f6f009763e3351b1f29e87d4c44b371f095e659bff7",
+      "bytes": 112704
+    },
+    "idle-lyra.webp": {
+      "sha256": "90b07cd183d3c6e68a5421c081f2db4862e1ace0ba6bc1be0866abc1e0053f34",
+      "bytes": 96196
+    },
+    "idle-seren.webp": {
+      "sha256": "c2a128732624dfe51ddd5033d3014a2cacca4bce21e8c6bfb16021d983e6b352",
+      "bytes": 100746
+    },
+    "lyra-preview-390.png": {
+      "sha256": "17a90ea8699d53104168e92c884b86a4e19ba35da1218dcd50af9fc2a7740b01",
+      "bytes": 420110
+    },
+    "prompts.json": {
+      "sha256": "f153a9e814fac5a93391b44354e972c77641c92d05356aa080d0443663eddda2",
+      "bytes": 14898
+    },
+    "raw/aegis-idle.png": {
+      "sha256": "ac9fabbe5549aa9292c9a96f003506cbb310f48edf48336f1dadf3a47aa76d20",
+      "bytes": 1876645
+    },
+    "raw/aegis-victory-r2.png": {
+      "sha256": "35aac324633165f0925ab29c9e26647aa022c155d666e577db498448b8bef348",
+      "bytes": 1522612
+    },
+    "raw/aegis-victory.png": {
+      "sha256": "a3939a4bac2cfe367575d3da03fc97ba7e069740c20d64b71b0d0a1e3cb83b46",
+      "bytes": 1347844
+    },
+    "raw/eira-idle.png": {
+      "sha256": "18b291c867172a62552db2b05e5d79b45ef06724dd52476994275677d14670a0",
+      "bytes": 1912238
+    },
+    "raw/eira-victory-r2.png": {
+      "sha256": "7a8b3400f02eb59ec075f5c7e7ea561b56496654e3cc52a85eba28b8c4c27e72",
+      "bytes": 1872406
+    },
+    "raw/eira-victory.png": {
+      "sha256": "6a0875e1fbf8dac8b992fa4b94f9846c5109b36babaea639481849088d201725",
+      "bytes": 1770495
+    },
+    "raw/lyra-idle.png": {
+      "sha256": "7cb4eed0ad74fbbf8a1de5583d8e877cc928820defcbeb9627d513461110dc6a",
+      "bytes": 1593367
+    },
+    "raw/lyra-victory-r2.png": {
+      "sha256": "f58c654ad1e5d70ebdeea7f6a24fe69058f24677054920d492fa42d129e6ee93",
+      "bytes": 1547217
+    },
+    "raw/lyra-victory.png": {
+      "sha256": "fe6df3e5b0fec2ec2429ec39ca891b1ec34c283151400a21ae3f9de72f9b744f",
+      "bytes": 1445220
+    },
+    "raw/seren-idle.png": {
+      "sha256": "23fae9b93112e6836dabd458e25279014cf7dd4afaf7e9133cdcf45e151b2d42",
+      "bytes": 2233182
+    },
+    "raw/seren-victory.png": {
+      "sha256": "ff9ec40e7a7e55ba6c8b7b99e5d8fda41aef297f4bbb997f0e9365975239d620",
+      "bytes": 1568545
+    },
+    "seeds/aegis-seed.png": {
+      "sha256": "0e888a0d889c61f2e4005361d43121e13478944cd3438a9ed6ca3578ee0dbaff",
+      "bytes": 420757
+    },
+    "seeds/eira-seed.png": {
+      "sha256": "89ae5c46336cefb82325e170ad1c0abffc2848fe18d2cc86073b935467864b4b",
+      "bytes": 521897
+    },
+    "seeds/lyra-seed.png": {
+      "sha256": "a0d462ce8c0469fab74e267b14e7dc73fd43fc53330a648704d63ac8a086ad3e",
+      "bytes": 434095
+    },
+    "seeds/seren-seed.png": {
+      "sha256": "0298b7eeffbdaee5937847c7071e654286d2c2631a5f6d7bbea1598db72a6c0d",
+      "bytes": 501349
+    },
+    "seeds.json": {
+      "sha256": "a5ad12ac58fb710af457742a9dfc493323440d2e0511d84c8d434b4a73025de5",
+      "bytes": 1779
+    },
+    "seren-preview-390.png": {
+      "sha256": "c20ee3e817d187ad00ce77735b93de57089162afe8c053f94925a683b2170f31",
+      "bytes": 275624
+    },
+    "spaced/aegis-idle.png": {
+      "sha256": "4482f71efce11cd292557de9e9356611f04af50e417228f73a27ada4b3ee66bb",
+      "bytes": 1598766
+    },
+    "spaced/aegis-victory-r2.png": {
+      "sha256": "4822f6a6abbe3cda542618c8cf6b64c603b85d647197cc0efc39407dea9f290a",
+      "bytes": 2050549
+    },
+    "spaced/aegis-victory.png": {
+      "sha256": "1613a65ccb0a172f1ee47eaa972f189598b85fd8cea820c9b0d2b815b423a626",
+      "bytes": 1922019
+    },
+    "spaced/eira-idle.png": {
+      "sha256": "7d1ef126afd9d138260235334b1cf544b438ad7853e8e385ceadf427b9fb9a8e",
+      "bytes": 1955231
+    },
+    "spaced/eira-victory-r2.png": {
+      "sha256": "db42b86ed159a12095dbf39c40bc4a32e4dfaf17e4baa9fa5e377bf1f88d5cf0",
+      "bytes": 2727092
+    },
+    "spaced/eira-victory.png": {
+      "sha256": "2e1b29d79374e3b143a438c565d242c189c4a51c56e1e0b7c1bd6c4467459c34",
+      "bytes": 2713618
+    },
+    "spaced/lyra-idle.png": {
+      "sha256": "026f9b9f9ac2517cd7f6a3904165de0452a63b85943b849d8ac034c21786ec10",
+      "bytes": 1606440
+    },
+    "spaced/lyra-victory-r2.png": {
+      "sha256": "b81cf5991046df5e0c2f62f08ed54dbbdb86e5c8db00b53f73af9217ad8e74c7",
+      "bytes": 2136795
+    },
+    "spaced/lyra-victory.png": {
+      "sha256": "41801ae0f808959fa388bb9c33e21895d3bd53e4c53b9f366e2961505d48a9ce",
+      "bytes": 2111162
+    },
+    "spaced/seren-idle.png": {
+      "sha256": "0c3f1dbbc4e9b05cdac9e2228728d34a6b33c451c3a2fa899103dc404102d634",
+      "bytes": 1814188
+    },
+    "spaced/seren-victory.png": {
+      "sha256": "33446c01e9b9742422842e1bfc67923076bcbdf383ca7f6b3c503891fb67fd43",
+      "bytes": 2133600
+    },
+    "strips.json": {
+      "sha256": "1b827c0a918d5b305333d16ff9f041211f27aee3c19d443ebf90e171e9548de4",
+      "bytes": 32230
+    }
+  }
+}

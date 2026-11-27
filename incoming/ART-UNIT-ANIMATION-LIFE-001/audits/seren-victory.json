@@ -1,0 +1,51 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "seren-victory": [
+   {
+    "frame": 0,
+    "height": 512,
+    "scale": 1.0,
+    "inliers": 3679,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 487,
+    "scale": 1.009,
+    "inliers": 176,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 500,
+    "scale": 1.044,
+    "inliers": 111,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 466,
+    "scale": 1.054,
+    "inliers": 102,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 499,
+    "scale": 1.025,
+    "inliers": 168,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 499,
+    "scale": 1.009,
+    "inliers": 149,
+    "status": "ok"
+   }
+  ]
+ }
+}

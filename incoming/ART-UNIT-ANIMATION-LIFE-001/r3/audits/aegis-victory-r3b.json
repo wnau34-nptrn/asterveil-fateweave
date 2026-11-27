@@ -1,0 +1,51 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "aegis-victory-r3b": [
+   {
+    "frame": 0,
+    "height": 497,
+    "scale": 1.0,
+    "inliers": 2001,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 470,
+    "scale": 1.05,
+    "inliers": 173,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 491,
+    "scale": 1.019,
+    "inliers": 77,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 595,
+    "scale": 1.04,
+    "inliers": 48,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 580,
+    "scale": 1.027,
+    "inliers": 73,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 581,
+    "scale": 0.995,
+    "inliers": 84,
+    "status": "ok"
+   }
+  ]
+ }
+}

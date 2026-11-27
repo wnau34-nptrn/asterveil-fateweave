@@ -1,0 +1,233 @@
+{
+  "checkedFiles": 92,
+  "heroes": {
+    "aegis": {
+      "mapping": {
+        "scale": 0.35973,
+        "offset": [
+          164,
+          312
+        ],
+        "alphaError": 0.0
+      },
+      "added": [
+        {
+          "frame": 1,
+          "from": "r3/review/cells/aegis-victory-r3/001.png",
+          "bbox": [
+            161,
+            327,
+            317,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 2,
+          "from": "r3/review/cells/aegis-victory-r3/002.png",
+          "bbox": [
+            167,
+            325,
+            309,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 3,
+          "from": "r3/review/cells/aegis-victory-r3/003.png",
+          "bbox": [
+            160,
+            257,
+            315,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 4,
+          "from": "r3/review/cells/aegis-victory-r3/004.png",
+          "bbox": [
+            162,
+            271,
+            313,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 5,
+          "from": "r3/review/cells/aegis-victory-r3/005.png",
+          "bbox": [
+            164,
+            274,
+            312,
+            496
+          ],
+          "sole": 496
+        }
+      ],
+      "atlas": {
+        "image": "aegis_victory.f83b062eb9e0.webp",
+        "atlas": "aegis_victory.8446e2c1d83c.json",
+        "width": 162,
+        "height": 1047,
+        "frames": 5,
+        "decodedBytes": 678456,
+        "downloadBytes": 213933
+      }
+    },
+    "eira": {
+      "mapping": {
+        "scale": 0.4198,
+        "offset": [
+          148,
+          281
+        ],
+        "alphaError": 0.0
+      },
+      "added": [
+        {
+          "frame": 1,
+          "from": "r3/review/cells/eira-victory-r3b/001.png",
+          "bbox": [
+            158,
+            283,
+            376,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 2,
+          "from": "r3/review/cells/eira-victory-r3b/002.png",
+          "bbox": [
+            157,
+            277,
+            373,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 3,
+          "from": "r3/review/cells/eira-victory-r3b/003.png",
+          "bbox": [
+            185,
+            247,
+            392,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 4,
+          "from": "r3/review/cells/eira-victory-r3b/004.png",
+          "bbox": [
+            157,
+            256,
+            370,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 5,
+          "from": "r3/review/cells/eira-victory-r3b/005.png",
+          "bbox": [
+            157,
+            257,
+            372,
+            496
+          ],
+          "sole": 496
+        }
+      ],
+      "atlas": {
+        "image": "eira_victory.c38c0f3cdb76.webp",
+        "atlas": "eira_victory.28913f87adca.json",
+        "width": 223,
+        "height": 1179,
+        "frames": 5,
+        "decodedBytes": 1051668,
+        "downloadBytes": 406292
+      }
+    },
+    "seren": {
+      "mapping": {
+        "scale": 0.35877,
+        "offset": [
+          183,
+          312
+        ],
+        "alphaError": 0.926
+      },
+      "added": [
+        {
+          "frame": 1,
+          "from": "r3/review/cells/seren-victory-r3/001.png",
+          "bbox": [
+            196,
+            315,
+            355,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 2,
+          "from": "r3/review/cells/seren-victory-r3/002.png",
+          "bbox": [
+            200,
+            301,
+            354,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 3,
+          "from": "r3/review/cells/seren-victory-r3/003.png",
+          "bbox": [
+            202,
+            306,
+            353,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 4,
+          "from": "r3/review/cells/seren-victory-r3/004.png",
+          "bbox": [
+            202,
+            303,
+            353,
+            496
+          ],
+          "sole": 496
+        },
+        {
+          "frame": 5,
+          "from": "r3/review/cells/seren-victory-r3/005.png",
+          "bbox": [
+            203,
+            304,
+            354,
+            496
+          ],
+          "sole": 496
+        }
+      ],
+      "atlas": {
+        "image": "seren_victory.e8424d92ea76.webp",
+        "atlas": "seren_victory.883589221d65.json",
+        "width": 798,
+        "height": 199,
+        "frames": 5,
+        "decodedBytes": 635208,
+        "downloadBytes": 237320
+      }
+    }
+  }
+}

@@ -1,0 +1,1 @@
+aegis-victory: median head scale 0.966; drift [(3, 0.864), (4, 0.87)]; not measured []

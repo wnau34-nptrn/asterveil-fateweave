@@ -1,0 +1,1 @@
+seren-victory-r3b: median head scale 0.977; drift []; not measured []

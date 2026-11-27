@@ -1,0 +1,51 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "lyra-victory-r2": [
+   {
+    "frame": 0,
+    "height": 497,
+    "scale": 1.0,
+    "inliers": 1993,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 491,
+    "scale": 0.979,
+    "inliers": 49,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 500,
+    "scale": 1.001,
+    "inliers": 34,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 499,
+    "scale": 1.018,
+    "inliers": 34,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 500,
+    "scale": 1.01,
+    "inliers": 35,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 500,
+    "scale": 1.03,
+    "inliers": 46,
+    "status": "ok"
+   }
+  ]
+ }
+}

@@ -1,0 +1,373 @@
+{
+  "algorithm": "SHA-256",
+  "files": {
+    "NOTES.md": {
+      "bytes": 10341,
+      "sha256": "4dd41431213e62daca3b0dbbe26a1476fb2217e4ed1e633e7045533993bedd85"
+    },
+    "aegis-victory-r3-preview-390.png": {
+      "bytes": 170686,
+      "sha256": "4a91e5d48901fc5d7ed562d35ea50b86c9c6c246f7ce2fdfb96ab1c9104e731f"
+    },
+    "aegis-victory-r3-seed-vs-held.png": {
+      "bytes": 625649,
+      "sha256": "f223c5efd5988546f5402534a4015e8ff57d86a179ddb6416e8e8215b13c0326"
+    },
+    "aegis-victory-r3b-preview-390.png": {
+      "bytes": 166203,
+      "sha256": "7ca50576d7bcd1471621fb8fce62036998202d7047061210d8cb571b26ccafb7"
+    },
+    "aegis-victory-r3b-seed-vs-held.png": {
+      "bytes": 616793,
+      "sha256": "fe0fee0b59ea7abcef1b9adff8c26ae202b5a103f591a61d0bbfcff612dc2220"
+    },
+    "allies-victory-held-390.png": {
+      "bytes": 102813,
+      "sha256": "0eca571262a5fda0066451b1e36c787999a0e573bd6073b4d4ccb2172d38f1b8"
+    },
+    "audits/aegis-victory-r3.json": {
+      "bytes": 730,
+      "sha256": "3daabf59337b4d559240c5eb532ad50badcd760ad483f884fd4436324f87729b"
+    },
+    "audits/aegis-victory-r3.txt": {
+      "bytes": 69,
+      "sha256": "b5b1d844cc85243688e6433a9e4152b8a8e8aad52a8b2b064b569bbe6b369c55"
+    },
+    "audits/aegis-victory-r3b.json": {
+      "bytes": 730,
+      "sha256": "22abadfdbc37d05a7ddf2f0e17b98a7f1cc0d0770c3eb51595c8b17ae1351a66"
+    },
+    "audits/aegis-victory-r3b.txt": {
+      "bytes": 70,
+      "sha256": "81c54ffab8fa577c6f405a7e7262ff8ab307512d708a9f8da2e0b8961365d958"
+    },
+    "audits/eira-victory-r3.json": {
+      "bytes": 727,
+      "sha256": "3984aa70ee4c1a241d159e2eec95fce3367cb635b4541a04c0a56e5f900fd739"
+    },
+    "audits/eira-victory-r3.txt": {
+      "bytes": 68,
+      "sha256": "0542e3357c1d8b031d416212ac2c3354a4df5035b9aa51e66de0ff11e420aa4d"
+    },
+    "audits/eira-victory-r3b.json": {
+      "bytes": 729,
+      "sha256": "f36d36b988299fcd0f6a4d8ec97d0afce68e6a9a91563eb3e563edbffa99c1a9"
+    },
+    "audits/eira-victory-r3b.txt": {
+      "bytes": 69,
+      "sha256": "ebc7e6682a8e5759729e4e3e602621d7cfcffc2e7ada6c9b07c139bbbaee954a"
+    },
+    "audits/lyra-victory-r3.json": {
+      "bytes": 729,
+      "sha256": "e860eba9f4d36fdd0eb01b56609e227c46efbf4b70ad7e663dbd78b16d5e2ff4"
+    },
+    "audits/lyra-victory-r3.txt": {
+      "bytes": 68,
+      "sha256": "2959d8589a862b97a517d60fc030028e91b2ed7d9c400b25f1e54d307b44a692"
+    },
+    "audits/lyra-victory-r3b.json": {
+      "bytes": 729,
+      "sha256": "abb01f0084e5395371d79c4d8057951aca96f3b2011d71314dc1a35a113b90d7"
+    },
+    "audits/lyra-victory-r3b.txt": {
+      "bytes": 69,
+      "sha256": "a53b4ee730a3a59d4b6c7d04ebf58383fae05a1c6f8b02af1ac2f396e812c974"
+    },
+    "audits/seren-victory-r3.json": {
+      "bytes": 730,
+      "sha256": "b79a626dda546fb399409d8ecb9cd9517f0705aa813882c866fb45f5a712cd0f"
+    },
+    "audits/seren-victory-r3.txt": {
+      "bytes": 69,
+      "sha256": "348cde28d162ea09d79e73667984d036d807b15eeddd1bf68f2747c650da6947"
+    },
+    "audits/seren-victory-r3b.json": {
+      "bytes": 734,
+      "sha256": "42cbf85c6a372e2e86b7eac09ed5b0111c8580eab6f70eaa0fa6588c6fa72516"
+    },
+    "audits/seren-victory-r3b.txt": {
+      "bytes": 70,
+      "sha256": "21dced2976ee906c09dccc37a000dbb85098f56acfc3e7e14aab2ab2c9a62b1b"
+    },
+    "eira-victory-r3-preview-390.png": {
+      "bytes": 314531,
+      "sha256": "4b637d23bd70640a5cc567909acf7336ac00e727e034cdfc10e821a32f664794"
+    },
+    "eira-victory-r3-seed-vs-held.png": {
+      "bytes": 815927,
+      "sha256": "a886a6bc75af6d53d615b80032ab9f7ebb611d4ff6ad63fcf57b19ad7c829740"
+    },
+    "eira-victory-r3b-preview-390.png": {
+      "bytes": 316742,
+      "sha256": "35ca968852bfad2395ade8f8e83a3370bc6c48ca8c31ef1bebf1091206e5852a"
+    },
+    "eira-victory-r3b-seed-vs-held.png": {
+      "bytes": 816065,
+      "sha256": "8acd0a81707c903497d4004c1b8146d605a8383485e05ad829371e6c076230ed"
+    },
+    "lyra-victory-r3-preview-390.png": {
+      "bytes": 177227,
+      "sha256": "c398fa41a83cb2455532f141cad527d6ff80b17f1d6838bcc87ecd0d1e520cc7"
+    },
+    "lyra-victory-r3-seed-vs-held.png": {
+      "bytes": 641855,
+      "sha256": "b1f26ac25636d826b86b4a5a6f126265f9751e914d13538253266c2b743265f7"
+    },
+    "lyra-victory-r3b-preview-390.png": {
+      "bytes": 171166,
+      "sha256": "ccc9f99c697a55c2e55f00a9be53ec44c3e959294dc420d34de04d7305490b98"
+    },
+    "lyra-victory-r3b-seed-vs-held.png": {
+      "bytes": 605820,
+      "sha256": "320c05d1300bc5e4256d6c4345af5e9923e7250263d2301661df938d9a87db3d"
+    },
+    "prompts.json": {
+      "bytes": 12528,
+      "sha256": "04c7938704e32c6cae641ea5be4ee8970829798ce8afa0a0dac95846dca0005f"
+    },
+    "raw/aegis-victory-r3.png": {
+      "bytes": 1438787,
+      "sha256": "5b160e1ba4d5c5b04a53ac4db15b1fcb057a4da09dd31b5258e7428847dc2cc3"
+    },
+    "raw/aegis-victory-r3b.png": {
+      "bytes": 1701146,
+      "sha256": "44126a5db1bdb4dbbd4d759c832b0fa4c0cf0dd5b3ca7de154646d6c9567791f"
+    },
+    "raw/eira-victory-r3.png": {
+      "bytes": 1711641,
+      "sha256": "cc928146eacc3c53d0bbd9c7bb22a4aaabfafdd1fc693c467eef46b29bda54c8"
+    },
+    "raw/eira-victory-r3b.png": {
+      "bytes": 1825627,
+      "sha256": "303a27d5377a488e19b168cab98f80481fd84f9f661be28868cccda425f6d0a4"
+    },
+    "raw/lyra-victory-r3.png": {
+      "bytes": 2784237,
+      "sha256": "607bf791af9bc7076434162185e195ed3589132dd017d78e016c6ccba7816b56"
+    },
+    "raw/lyra-victory-r3b.png": {
+      "bytes": 1373508,
+      "sha256": "a333e9b89977ded7e7c6c946a5482698a3d24acda59109891c7bfde1fc6c0895"
+    },
+    "raw/seren-victory-r3.png": {
+      "bytes": 2940721,
+      "sha256": "bfc8c729b5dd2a2729f62b05c29c096091989b3eca09a350028689546736dfce"
+    },
+    "raw/seren-victory-r3b.png": {
+      "bytes": 2186650,
+      "sha256": "74b9b27ba22874c1377963e55f77d3825a3f03450e75acb402746c46a274a490"
+    },
+    "review/cells/aegis-victory-r3/000.png": {
+      "bytes": 427300,
+      "sha256": "5cc77462da75dd6f05c6069b5721ebfd015d6c40e133cd9ac5b2c2b437700c69"
+    },
+    "review/cells/aegis-victory-r3/001.png": {
+      "bytes": 332016,
+      "sha256": "e4ab0a8e71ba1e3e14cd1fb7be4053714b1c787d1bc963c7d5f30be1c9eccfb9"
+    },
+    "review/cells/aegis-victory-r3/002.png": {
+      "bytes": 309451,
+      "sha256": "5e365c0e4b0f314d8df3e7cab408bda8f3f52f0bb176563773d960109640e382"
+    },
+    "review/cells/aegis-victory-r3/003.png": {
+      "bytes": 369074,
+      "sha256": "2ffee122aa1a1bf8f90bf62b862e70b4da6d54b8494fab3aa17996247cafca43"
+    },
+    "review/cells/aegis-victory-r3/004.png": {
+      "bytes": 355150,
+      "sha256": "f2f7ddc38937b27ed1bb039257d23939dea10808ffef7a8adb0d9b8b1ca49d61"
+    },
+    "review/cells/aegis-victory-r3/005.png": {
+      "bytes": 346926,
+      "sha256": "8aa6fe5ef959ac91ef3a2b58d69eeecda39e250cae561579ab9d4415134718a8"
+    },
+    "review/cells/aegis-victory-r3b/000.png": {
+      "bytes": 427300,
+      "sha256": "5cc77462da75dd6f05c6069b5721ebfd015d6c40e133cd9ac5b2c2b437700c69"
+    },
+    "review/cells/aegis-victory-r3b/001.png": {
+      "bytes": 330836,
+      "sha256": "7bf162e2e0a3620a8a172fb9579196bbf7e4539149dd936779ac97e3ee9088c3"
+    },
+    "review/cells/aegis-victory-r3b/002.png": {
+      "bytes": 320438,
+      "sha256": "3547dd43d7af1c774024fc0b278268617d727bb787d6aa1dc7ea3f01201e5c97"
+    },
+    "review/cells/aegis-victory-r3b/003.png": {
+      "bytes": 340314,
+      "sha256": "18b8a45f15d3246ef23da872a4f0856443b8e9d9cea3f629178bf8ffaf5e60ec"
+    },
+    "review/cells/aegis-victory-r3b/004.png": {
+      "bytes": 336332,
+      "sha256": "e2c375578c7341b4485796d63c2f9ab7704c9e6becb89d28dddac32bbbebacad"
+    },
+    "review/cells/aegis-victory-r3b/005.png": {
+      "bytes": 335884,
+      "sha256": "bd72bef577de6385185bf55522585b333ef1e9f4ab6f6f30caa30103d5111a6d"
+    },
+    "review/cells/eira-victory-r3/000.png": {
+      "bytes": 530036,
+      "sha256": "e55272df05651191a2d7d43c5df40f561e2fd05882e5f975b76afb6a42f5f89e"
+    },
+    "review/cells/eira-victory-r3/001.png": {
+      "bytes": 478343,
+      "sha256": "20c2791cf5bb6500070794177aedf38560ddf1df274ff392df56f4f55831fd8e"
+    },
+    "review/cells/eira-victory-r3/002.png": {
+      "bytes": 461182,
+      "sha256": "2ff91388bf98322b1532fd4d667cbcc0a12ac4bebbeba5748f43627b97869b89"
+    },
+    "review/cells/eira-victory-r3/003.png": {
+      "bytes": 466213,
+      "sha256": "fb18d89944e683b8c0bdeacefbdd2e8ad68790f7d9623356318c0635509adec6"
+    },
+    "review/cells/eira-victory-r3/004.png": {
+      "bytes": 476814,
+      "sha256": "b77901c84c1a33bafdd0592d92bfe8c20f21956da4c5fb9284867b7a2f3a4668"
+    },
+    "review/cells/eira-victory-r3/005.png": {
+      "bytes": 491356,
+      "sha256": "86c7898f4d1352b762574e0b647d1a490c991318c16e4204f9a7e7c230c4a3c4"
+    },
+    "review/cells/eira-victory-r3b/000.png": {
+      "bytes": 530036,
+      "sha256": "e55272df05651191a2d7d43c5df40f561e2fd05882e5f975b76afb6a42f5f89e"
+    },
+    "review/cells/eira-victory-r3b/001.png": {
+      "bytes": 478166,
+      "sha256": "295d73d8ad4e6170746182b617350f55fdca3523f35d55b28e720ebec5782862"
+    },
+    "review/cells/eira-victory-r3b/002.png": {
+      "bytes": 498969,
+      "sha256": "865fbef6a985766840bb11cae457bf26d51dd2a606ee8348eac70ccf93d1eec5"
+    },
+    "review/cells/eira-victory-r3b/003.png": {
+      "bytes": 484552,
+      "sha256": "ac9dd7e12b9c00bddb21efac7c6167c86f42c5f658ba061c24b92eb8180d2cd7"
+    },
+    "review/cells/eira-victory-r3b/004.png": {
+      "bytes": 494464,
+      "sha256": "0879bd1d7b98c6acea4f54cf89f56c6a895ed9a04683da8f4173125a8aa47c32"
+    },
+    "review/cells/eira-victory-r3b/005.png": {
+      "bytes": 493694,
+      "sha256": "05d9fedbd3cf8bfbc7b29228288033784792a1e6557450952e136c37d07813d2"
+    },
+    "review/cells/lyra-victory-r3/000.png": {
+      "bytes": 440655,
+      "sha256": "cf8d0d2bea428cd3de801a12c85322e07df7787448597cf23d4a056a1621a8f4"
+    },
+    "review/cells/lyra-victory-r3/001.png": {
+      "bytes": 345145,
+      "sha256": "4bc39f4f7a8de303c5a0594472c31454f3455801296d733418dffb13e9a44a2c"
+    },
+    "review/cells/lyra-victory-r3/002.png": {
+      "bytes": 363202,
+      "sha256": "73031e86967762458bcc435726d51317782b9dec177c066a798c6dcb0e798ef3"
+    },
+    "review/cells/lyra-victory-r3/003.png": {
+      "bytes": 359507,
+      "sha256": "0ac38dabe09be25a6126ecc39fc3450a51bac0eb62fc84eefbbccd6b84ae91ef"
+    },
+    "review/cells/lyra-victory-r3/004.png": {
+      "bytes": 359033,
+      "sha256": "d44063743c5741f53fdcdc7ea05947f9b2e4456764b819d60234c24fc3756d77"
+    },
+    "review/cells/lyra-victory-r3/005.png": {
+      "bytes": 370351,
+      "sha256": "caf2954d0752e2e308fc731cd5123cf7fef775ce70d503234f733fc6fb08b178"
+    },
+    "review/cells/lyra-victory-r3b/000.png": {
+      "bytes": 440655,
+      "sha256": "cf8d0d2bea428cd3de801a12c85322e07df7787448597cf23d4a056a1621a8f4"
+    },
+    "review/cells/lyra-victory-r3b/001.png": {
+      "bytes": 324512,
+      "sha256": "042adf3893cf3d8ba23d2db7729684aab9f1ae4d90bf1cd6bd501b3c91a50add"
+    },
+    "review/cells/lyra-victory-r3b/002.png": {
+      "bytes": 347239,
+      "sha256": "79fa413608ad6ef99e4bb1e876a8d41dbe3276f972727a7f72819324ff2f6e03"
+    },
+    "review/cells/lyra-victory-r3b/003.png": {
+      "bytes": 355426,
+      "sha256": "3f1f5f137e409a8bfc52dbb4ba728b8e699b17f5ea73f8659e53ad710baa1b7c"
+    },
+    "review/cells/lyra-victory-r3b/004.png": {
+      "bytes": 335547,
+      "sha256": "b9de2fb8a03ff8424dbda9888c90429e783338d86c5526782fa35cc3fba8b76c"
+    },
+    "review/cells/lyra-victory-r3b/005.png": {
+      "bytes": 337280,
+      "sha256": "19fe3ad3143f609fdf69871d1664b18671d6f91756eab6693a060cbdc66c4dc6"
+    },
+    "review/cells/seren-victory-r3/000.png": {
+      "bytes": 508788,
+      "sha256": "c18807da6780a63a38d39b438902db2f6b7416893010c495cae7aab590cbc2f9"
+    },
+    "review/cells/seren-victory-r3/001.png": {
+      "bytes": 391921,
+      "sha256": "db5f488c372b076063014cf0740854aa84ca215873751273241e4107ec171c96"
+    },
+    "review/cells/seren-victory-r3/002.png": {
+      "bytes": 399805,
+      "sha256": "0bfc2f01e81235437471aa70ffa6ef6372701d502244a0bdb527288247d17770"
+    },
+    "review/cells/seren-victory-r3/003.png": {
+      "bytes": 383527,
+      "sha256": "33ef195a02de5d10edfe4b340103a569461a5fb4377c233b367e8a3067e6ddb6"
+    },
+    "review/cells/seren-victory-r3/004.png": {
+      "bytes": 390703,
+      "sha256": "82fe6394437017f4c0f8c93850a2bfa70f5b8f300ec074880b4a618cdae3d5a9"
+    },
+    "review/cells/seren-victory-r3/005.png": {
+      "bytes": 391063,
+      "sha256": "14446b82fd6e5cba0ff845592989bd7122a0e9236d0838a38b4c44296e475c48"
+    },
+    "review/cells/seren-victory-r3b/000.png": {
+      "bytes": 508788,
+      "sha256": "c18807da6780a63a38d39b438902db2f6b7416893010c495cae7aab590cbc2f9"
+    },
+    "review/cells/seren-victory-r3b/001.png": {
+      "bytes": 397984,
+      "sha256": "5d85464358fb9faaeb5ba761bee2dff46744da25194d1d3f8765fc101872d80d"
+    },
+    "review/cells/seren-victory-r3b/002.png": {
+      "bytes": 398512,
+      "sha256": "1cfab488a41f80bb4da1c2e06ede5bf3b095c1924a8285a4f426eac94d192cae"
+    },
+    "review/cells/seren-victory-r3b/003.png": {
+      "bytes": 371367,
+      "sha256": "c9726e0d591899cd7a19a7e0a62dc0a5e97bdacd3918ed7bf98c9d9d353acaae"
+    },
+    "review/cells/seren-victory-r3b/004.png": {
+      "bytes": 399097,
+      "sha256": "c3a4ef49b4a4f6a6f45ac557978f25874b2cee3346834cbd0937b38f52648e67"
+    },
+    "review/cells/seren-victory-r3b/005.png": {
+      "bytes": 385889,
+      "sha256": "377046c87dfd4b404f7fc9bd28ff3e824302829be574cd2383ef7bfabc1af4c2"
+    },
+    "seren-victory-r3-preview-390.png": {
+      "bytes": 189247,
+      "sha256": "63d8c2d2ad81dcc180420cc3b15982bd894f0875668a3cc60cea7613e374db5c"
+    },
+    "seren-victory-r3-seed-vs-held.png": {
+      "bytes": 717128,
+      "sha256": "1f84dd37d21ba40e6fdb2c2d318ae815aaae2bd39ce71fd3b2c0cb7580c1f00f"
+    },
+    "seren-victory-r3b-preview-390.png": {
+      "bytes": 184941,
+      "sha256": "c17ca3922b5dca1f6a873ffd27e66f544d651ca96d9d0aca1d57e04ef55e9dcf"
+    },
+    "seren-victory-r3b-seed-vs-held.png": {
+      "bytes": 713577,
+      "sha256": "301098b821b5d0d87ad936590f6f6cf9500ba44caa48a895b672585eed0ecd3d"
+    },
+    "strips.json": {
+      "bytes": 37022,
+      "sha256": "d7c9a36be6b0b13c6baaf7faf6f5e4d75243a863d8e366169804d83f22dd8a5b"
+    }
+  }
+}
