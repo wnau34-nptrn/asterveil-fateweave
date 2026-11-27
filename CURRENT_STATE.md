@@ -34,6 +34,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - Map 5 (OD-60): complete in game (save v70, giant tuned, art #357–#371, side events #366; owner approved). [Validation](docs/validation/map5-mine/README_TH.md).
 - 2026-11-25: boss holds on the body, silhouette aura, crowns above the figure (“นำเข้าเกมได้เลย”). [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
 
+- Game Feel Draft PR #353 (weapon-matched contact sound/visuals, 15 roles) still open. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
 - Mobile performance still needs on-device measurements for walking, fog, and battle entry. [ผลตรวจท่าคืนตัว](docs/validation/recovery-continuity-2026-11-24/README_TH.md).
 
 - Lake sweep/contract pay map 3's values until a P04 economy pass; P04-05/06 numbers.
