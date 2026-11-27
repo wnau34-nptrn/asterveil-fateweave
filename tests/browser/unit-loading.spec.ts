@@ -6,6 +6,9 @@ import {encounterById} from '../../src/content/encounters/catalog';
 import {newExpedition} from '../../src/core/world/world';
 import {newProfile} from '../../src/core/world/profile';
 import manifest from '../../src/game/visuals/unit-atlases.json' with { type: 'json' };
+// 6 animation sheets for first-clash plus the optional drawn victory cheers of Aegis, Eira and Seren (LIFE-001 R3,
+// 2026-11-27): also background downloads that never gate Start, and never retried after a failure.
+const OPTIONAL_WEBP=6+3;
 const key='asterveil.fateweave.expedition.v1';
 async function seed(page:Page,id:string){
  const world=newExpedition(chapterOne,encounterById,1234);world.tutorialDone=true;
@@ -18,7 +21,7 @@ test('slow optional animation downloads do not gate Start or the first committed
  await page.route('**/assets/units/*.webp',async route=>{requests++;await held;await route.continue();});
  try{
   await seed(page,firstClash.id);await page.goto('./',{waitUntil:'domcontentloaded'});await page.locator('#continue').click();
-  await expect(page.locator('#start')).toBeEnabled();await expect.poll(()=>requests).toBe(6);
+  await expect(page.locator('#start')).toBeEnabled();await expect.poll(()=>requests).toBe(OPTIONAL_WEBP);
   await page.locator('#start').click();await page.locator('#action-attack').click();await page.locator('#target-f1').click();
   expect(await count(page)).toBe(1);
   await page.locator('#skip-turn').click();await expect(page.locator('#action-bolt')).toBeEnabled();
@@ -33,7 +36,7 @@ test('optional animation failures retain playable original-art fallback without 
  await seed(page,firstClash.id);await page.goto('./');await page.locator('#continue').click();await expect(page.locator('#start')).toBeEnabled();
  await page.locator('#start').click();await page.locator('#target-f1').click();await page.locator('#skip-turn').click();
  await expect(page.locator('#action-bolt')).toBeEnabled();expect(await count(page)).toBe(1);
- await expect.poll(()=>requests).toBe(6);expect(errors).toEqual([]);
+ await expect.poll(()=>requests).toBe(OPTIONAL_WEBP);expect(errors).toEqual([]);
 });
 test('title loads no battle art and an encounter without Hunter never downloads Hunter',async({page})=>{
  const names:string[]=[],battle:string[]=[];page.on('request',r=>{if(r.url().includes('/assets/units/'))names.push(r.url());if(/\/assets\/(fx|art)\//.test(r.url()))battle.push(r.url());});
