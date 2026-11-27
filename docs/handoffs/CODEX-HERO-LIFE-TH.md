@@ -117,7 +117,7 @@ RETURN: incoming/ART-UNIT-ANIMATION-LIFE-001/
 
 ## รอบแก้ R3 — ท่าชนะอย่างเดียว (หลัง PR #377)
 
-Claude ตรวจ PR #377 แล้วพบว่า (ตรงกับ NOTES ของ Codex) idle วาดใหม่ทั้งตัวทุกเฟรมจนวนลูปกระตุก ท่าชนะตัวเล็กลง อาวุธล้นกรอบ หมวกไอราถูกตัด และคทาเปลี่ยนสี ([ผลตรวจ](../validation/hero-life-2026-11-27/README_TH.md)) Claude แนะนำและเจ้าของขอ prompt แก้ไข: **ตัด idle** (ใช้หายใจจากโค้ดใน #376) ทำเฉพาะท่าชนะบนกรอบที่ใหญ่ขึ้น
+Claude ตรวจ PR #377 แล้วพบว่า (ตรงกับ NOTES ของ Codex) idle วาดใหม่ทั้งตัวทุกเฟรมจนวนลูปกระตุก ท่าชนะตัวเล็กลง อาวุธล้นกรอบ หมวกไอราถูกตัด และคทาเปลี่ยนสี ([ผลตรวจ](../validation/hero-life-2026-11-27/README_TH.md)) Claude แนะนำและเจ้าของขอ prompt แก้ไข: **ตัด idle แบบสร้างภาพใหม่** (ใช้หายใจจากโค้ดใน #376) ทำเฉพาะท่าชนะบนกรอบที่ใหญ่ขึ้น ส่วน idle ไปทำแบบดัดภาพในหัวข้อถัดไป
 
 ```text
 CODEX FIX ROUND — ART-UNIT-ANIMATION-LIFE-001 R3 (art only, victory poses only)
@@ -167,6 +167,46 @@ DELIVERY CHECK: push with normal git, fetch the branch back, compare SHA-256 wit
 NOT YOURS: atlas packing, texture budget, registry, code, tests and in-game clips (Claude). Picking versions and approving motion are the owner's decisions; offline checks are not approval.
 
 RETURN: incoming/ART-UNIT-ANIMATION-LIFE-001/r3/
+```
+
+## นำร่องท่ายืนวนลูปแบบดัดภาพ — เอกิส (ART-UNIT-ANIMATION-LIFE-001 W1)
+
+เจ้าของ 2026-11-27: “ท่ายืนวนลูปน่าสนใจนะ” → Claude เสนอให้ดัดภาพ seed เดิมด้วยสคริปต์แทนการสร้างใหม่ (หน้า อาวุธ เท้า สี คงพิกเซลเดิม) นำร่องเอกิสตัวเดียว → “เอาตามที่คุณแนะนำ” ส่งแยกจาก R3 ได้
+
+```text
+CODEX PILOT — ART-UNIT-ANIMATION-LIFE-001 W1 (art only): Aegis idle loop by warping the seed (no image generation)
+Asterveil · Fateweave
+
+Read AGENTS.md, CLAUDE.md and docs/handoffs/CODEX-HERO-LIFE-TH.md (section "นำร่องท่ายืนวนลูปแบบดัดภาพ") first. Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (NOT main). Continue on your branch art/art-unit-animation-life-001 and PR #377. Add files only under incoming/ART-UNIT-ANIMATION-LIFE-001/w1-aegis-idle/. Do not change src/, tests/, public/, .github/ or other folders. Do not merge. This is independent of the R3 victory round; either may be delivered first.
+
+WHY: your generated idle frames redrew the whole knight every frame, so the sword angle, outline and stance changed and the loop jittered. The owner still likes the idea of a drawn idle loop. This pilot makes it by DEFORMING THE SEED ITSELF with a script, so every frame keeps the seed's exact pixels except a few soft-moving parts.
+
+INPUT: only incoming/ART-UNIT-ANIMATION-A2-001/aegis-seed.png (512×512 RGBA, sha256 starts 0e888a0d889c61f2; the figure fills the square, soles on row 511, right edge touching column 511). NO image generator, NO repainting, NO new pixels invented beyond what a smooth warp of the seed produces. Write the tool in Python (Pillow + numpy; scipy or OpenCV allowed) and commit it as w1-aegis-idle/tools/warp_idle.py so the frames can be rebuilt exactly.
+
+METHOD:
+1. Paint soft masks (feathered, 6–12 px falloff) over the seed for: (a) chest + shoulders + head (one rigid-ish group), (b) the blond hair fringe and loose strands, (c) the cape's free edge and tips, (d) any cloth tails / tabards. Save each mask as masks/<part>.png (8-bit, same 512×512).
+2. Everything outside the masks stays byte-identical to the seed in every frame: face details, eyes, armour plates, sword, shield, hands, legs, feet, soles and the ground line. Check this with a pixel diff (report the count of changed pixels outside the masks = must be 0).
+3. Deform only inside the masks with a smooth displacement field (e.g. thin-plate / moving-least-squares / sine displacement blended by the mask) driven by one breath phase:
+   - (a) chest/shoulders/head rise by up to 3 px at the top of the breath and come back; the head follows by up to 2 px; NO scaling of the whole figure.
+   - (b) hair strands drift up to 3 px, slightly behind the breath phase (lag ~1/8 of the cycle).
+   - (c)/(d) cape and cloth tips sway up to 4 px sideways, lag ~1/4 of the cycle.
+   Use bilinear or better sampling and premultiplied alpha so edges stay clean; no halos, no smearing of the dark outline, no holes. Nothing may move past the 512×512 edges (keep the right edge and the soles exactly where they are).
+4. FRAMES: 8 frames over one full breath (phase 0, 1/8 … 7/8), frame 1 = the seed exactly (byte-identical). Proposed runtime: 400 ms per frame = 3.2 s per breath, looping 1→8→1 (phase 7/8 → 0 must be seamless by construction).
+
+QUALITY GATES (do not deliver a failing set as final):
+- pixel diff outside masks = 0 in every frame; frame 1 byte-identical to the seed;
+- max displacement per part within the limits above (report measured values);
+- outline check: no visible doubling, tearing or halo at 100% and at 111 px tall (in-game size on a 390 px phone);
+- python3 scripts/unit-anatomy-audit.py --cells on the 8 frames against the seed: median head scale <= 1.15, every frame <= 1.20 (it should read ~1.00);
+- loop preview watched at 400 ms per frame and at 200 ms per frame: calm, no jump between frame 8 and frame 1.
+
+DELIVERABLES under w1-aegis-idle/: frames/000.png … 007.png (512×512, 000 = seed), masks/, tools/warp_idle.py (+ the exact command line), idle-aegis-400ms.webp and idle-aegis-111px.webp (in-game size), diff/ (per-frame heatmap of changed pixels over the seed), strips.json (frames, frameMs 400, loop, phase per frame, displacement limits), validation.json (SHA-256 and size of every file), NOTES.md (method, measured values, what was and was not checked).
+
+DELIVERY CHECK: push with normal git, fetch back, compare SHA-256 with validation.json, decode every PNG with Pillow; report in PR #377.
+
+NOT YOURS: atlas packing, registry, code, tests, in-game clips (Claude). Motion approval is the owner's; offline checks are not approval. If Aegis is approved, the same tool will be reused for Lyra, Eira and Seren.
+
+RETURN: incoming/ART-UNIT-ANIMATION-LIFE-001/w1-aegis-idle/
 ```
 
 ## ชุด 2 (หลังเจ้าของอนุมัติชุด 1)
