@@ -8,6 +8,7 @@ test.skip(!process.env.FX_CLIPS, 'owner clip capture only');
 const cases = [
   { name: 'idle-turn-owner', query: '' },
   { name: 'victory', query: '?end=victory&cast=cheer' },
+  { name: 'victory-lio', query: '?end=victory&cast=lio' },
   { name: 'defeat', query: '?end=defeat' },
 ];
 for (const { name, query } of cases) test(`hero life clip ${name}`, async ({ browser }, info) => {
@@ -27,7 +28,7 @@ for (const { name, query } of cases) test(`hero life clip ${name}`, async ({ bro
       await page.waitForTimeout(4500);
       // Aegis acts; the light at the feet passes to the next hero.
       await page.locator('#target-f1').click(); await page.waitForTimeout(4500);
-    } else if (name === 'victory') {
+    } else if (name === 'victory' || name === 'victory-lio') {
       await page.locator('#target-f1').click(); await page.waitForTimeout(4500);
     } else await page.waitForTimeout(5000);
     await cdp.send('Page.stopScreencast'); writeFileSync(info.outputPath('stamps.txt'), stamps.join('\n'));

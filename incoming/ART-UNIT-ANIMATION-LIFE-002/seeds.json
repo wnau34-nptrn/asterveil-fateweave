@@ -1,0 +1,101 @@
+{
+  "mira": {
+    "file": "seeds/mira-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A4-001/heroes/seeds/mira-seed.png",
+    "sha256": "c0dfe376ceb6d507e915322c26a2f353b0c48e1c89a4ccadc1a67178d3d1451a",
+    "sole_row": 495,
+    "ground_row": 751,
+    "bottom_alpha_ge_128": 496,
+    "bottom_alpha_gt_0": 496
+  },
+  "toma": {
+    "file": "seeds/toma-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A4-001/heroes/seeds/toma-seed.png",
+    "sha256": "39edb773bacfd7a2e5335b8a204ad2157b8007b1b8655883860b8ccbd82cdc8e",
+    "sole_row": 496,
+    "ground_row": 752,
+    "bottom_alpha_ge_128": 496,
+    "bottom_alpha_gt_0": 496
+  },
+  "garran": {
+    "file": "seeds/garran-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A5-001/heroes/seeds/garran-seed.png",
+    "sha256": "653fb5efb1f4b1bc4529300a9686f80577361c9f73ba294b301fe90e1b25107b",
+    "sole_row": 496,
+    "ground_row": 752,
+    "bottom_alpha_ge_128": 496,
+    "bottom_alpha_gt_0": 496
+  },
+  "brann": {
+    "file": "seeds/brann-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A5-001/heroes/seeds/brann-seed.png",
+    "sha256": "35f1aeb0f99c4d86d2b2427592ae846657d4cf413c5c217e063eaf3067bb29de",
+    "sole_row": 496,
+    "ground_row": 752,
+    "bottom_alpha_ge_128": 496,
+    "bottom_alpha_gt_0": 496
+  },
+  "sefa": {
+    "file": "seeds/sefa-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A6-001/heroes/seeds/sefa-seed.png",
+    "sha256": "6cb511ce3ac8badd15e28fafecd44f8f940a718eff6a4c15adccc10a241584bc",
+    "sole_row": 495,
+    "ground_row": 751,
+    "bottom_alpha_ge_128": 496,
+    "bottom_alpha_gt_0": 496
+  },
+  "lio": {
+    "file": "seeds/lio-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A6-001/heroes/seeds/lio-seed.png",
+    "sha256": "e6760e48b0403e13318830df87fd5891d50c9e57a972c5e9e8f3f6d729298a47",
+    "sole_row": 496,
+    "ground_row": 752,
+    "bottom_alpha_ge_128": 496,
+    "bottom_alpha_gt_0": 496
+  },
+  "corin": {
+    "file": "seeds/corin-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A7-001/saints/metta/seeds/metta.png",
+    "sha256": "62126d7f84767d640e41a96515df67774fd153221fc43ad16c75e410f6b26fd2",
+    "sole_row": 495,
+    "ground_row": 751,
+    "bottom_alpha_ge_128": 495,
+    "bottom_alpha_gt_0": 496
+  },
+  "cerise": {
+    "file": "seeds/cerise-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A7-002/seeds/lalin.png",
+    "sha256": "3fc6f8259ca286dc11d2952c05a19518896d9cb56ea4a361d4c11c9fffccbeb6",
+    "sole_row": 493,
+    "ground_row": 749,
+    "bottom_alpha_ge_128": 494,
+    "bottom_alpha_gt_0": 496
+  },
+  "kael": {
+    "file": "seeds/kael-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A12-001/seeds/kael.png",
+    "sha256": "5d9f344d4d44cad32c169e74780c2ff10bed401fd9f9dd43ea27f4c2171dde1c",
+    "sole_row": 496,
+    "ground_row": 752,
+    "bottom_alpha_ge_128": 496,
+    "bottom_alpha_gt_0": 496
+  },
+  "wynne": {
+    "file": "seeds/wynne-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A12-001/seeds/wynne.png",
+    "sha256": "b2888ab61fcb39fc5e4fc508c0a6695efae1c74224c5460d32f724a24fa091e6",
+    "sole_row": 496,
+    "ground_row": 752,
+    "bottom_alpha_ge_128": 496,
+    "bottom_alpha_gt_0": 496
+  },
+  "astrid": {
+    "file": "seeds/astrid-seed.png",
+    "source": "incoming/ART-UNIT-ANIMATION-A12-001/seeds/astrid.png",
+    "sha256": "a2d2ac7833818ff62cc877ecd0e90e87f24d8f56365f57e6c32d9321b36f1b29",
+    "sole_row": 496,
+    "ground_row": 752,
+    "bottom_alpha_ge_128": 496,
+    "bottom_alpha_gt_0": 496
+  }
+}

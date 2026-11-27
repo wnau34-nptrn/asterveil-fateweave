@@ -1,0 +1,51 @@
+{
+ "tolerance": 0.12,
+ "minInliers": 12,
+ "report": {
+  "astrid": [
+   {
+    "frame": 0,
+    "height": 451,
+    "scale": 1.0,
+    "inliers": 2527,
+    "idle": true,
+    "status": "idle"
+   },
+   {
+    "frame": 1,
+    "height": 453,
+    "scale": 0.953,
+    "inliers": 207,
+    "status": "ok"
+   },
+   {
+    "frame": 2,
+    "height": 454,
+    "scale": 0.96,
+    "inliers": 157,
+    "status": "ok"
+   },
+   {
+    "frame": 3,
+    "height": 454,
+    "scale": 0.954,
+    "inliers": 107,
+    "status": "ok"
+   },
+   {
+    "frame": 4,
+    "height": 453,
+    "scale": 0.948,
+    "inliers": 187,
+    "status": "ok"
+   },
+   {
+    "frame": 5,
+    "height": 453,
+    "scale": 0.964,
+    "inliers": 236,
+    "status": "ok"
+   }
+  ]
+ }
+}

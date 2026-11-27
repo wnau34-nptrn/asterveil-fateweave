@@ -106,7 +106,7 @@ export const unitRegistry = {
   // Lio strums for attack/note, plays the sustained song for valor/mend/solo; dread and finale have their own gestures.
   sefa: { sheet: 'sefa', displayRatio: 1 / .42, actions: { attack: 'attack', ambush: 'attack', backstab: 'skill', disarm: 'skill', knives: 'knives', evade: 'evade', decoy: 'evade' },
     reactions: { block: [38, 39] }, release: { knives: { frame: 26, at: RELEASE_AT, point: [.52, -.45] } } },
-  lio: { sheet: 'lio', displayRatio: 1 / .42, actions: { attack: 'attack', note: 'attack', valor: 'skill', mend: 'skill', solo: 'skill', dread: 'dread', finale: 'finale' }, reactions: { block: [38, 39] } },
+  lio: { sheet: 'lio', displayRatio: 1 / .42, victory: { frames: [1, 2, 3, 4, 5], frameMs: 140 }, actions: { attack: 'attack', note: 'attack', valor: 'skill', mend: 'skill', solo: 'skill', dread: 'dread', finale: 'finale' }, reactions: { block: [38, 39] } },
   // A7 (assumed owner pick = Codex recommendation; docs/combat-presentation/unit-a7-slice/README_TH.md). Every strip is six slots with
   // slot 0 = seed idle; contact = first recover frame. Strips failing the anatomy gate are absent and keep the procedural body.
   metta: { sheet: 'metta', displayRatio: 1 / .42, own: true, downFrame: 34,
