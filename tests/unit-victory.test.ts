@@ -7,7 +7,7 @@ import { unitRegistry, victoryAtlasUrls, victorySheets } from '../src/game/visua
 describe('drawn victory cheers', () => {
   const entries = victory as Record<string, { image: string; atlas: string; frames: number; decodedBytes: number; downloadBytes: number }>;
   it('ships one small atlas per picked hero, kept off the main unit atlases', () => {
-    expect(victorySheets().sort()).toEqual(['aegis', 'eira', 'seren']);
+    expect(victorySheets().sort()).toEqual(['aegis', 'eira', 'lyra', 'seren']);
     for (const [sheet, entry] of Object.entries(entries)) {
       expect(existsSync(`public/assets/units/${entry.image}`), sheet).toBe(true);
       expect(entry.downloadBytes, sheet).toBeLessThanOrEqual(500_000);

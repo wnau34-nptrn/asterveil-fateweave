@@ -23,6 +23,8 @@ PICKS = {  # sheet -> (seed, chosen review cells)
     'aegis': ('seeds/aegis-seed.png', 'r3/review/cells/aegis-victory-r3'),
     'eira': ('seeds/eira-seed.png', 'r3/review/cells/eira-victory-r3b'),
     'seren': ('seeds/seren-seed.png', 'r3/review/cells/seren-victory-r3'),
+    # Owner 2026-11-27 “ไลรา R4: เอาเข้าเกมแบบทดลองเลย” (trial).
+    'lyra': ('seeds/lyra-seed.png', 'r4-lyra/cells/lyra-victory-r4'),
 }
 SEED_AT = (128, 256)
 
@@ -30,15 +32,15 @@ spec = importlib.util.spec_from_file_location('repack', ROOT / 'scripts/repack-a
 repack_mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(repack_mod)
 
 
-def verify_package():
-    """Every delivered r3 file matches r3/validation.json (SHA-256 and size)."""
-    v = json.loads((PKG / 'r3/validation.json').read_text())
+def verify_package(folder='r3'):
+    """Every delivered file of a round matches its validation.json (SHA-256 and size)."""
+    v = json.loads((PKG / folder / 'validation.json').read_text())
     entries = v.get('files', v) if isinstance(v, dict) else v
     items = entries.items() if isinstance(entries, dict) else [(e.get('path'), e) for e in entries]
     checked = 0
     for rel, meta in items:
         if not rel or not isinstance(meta, dict) or 'sha256' not in meta: continue
-        p = PKG / 'r3' / rel
+        p = PKG / folder / rel
         if not p.exists(): p = PKG / rel
         data = p.read_bytes()
         assert hashlib.sha256(data).hexdigest() == meta['sha256'], f'sha256 mismatch: {rel}'
@@ -88,7 +90,7 @@ def mapping(seed, frame0):
 
 
 def main():
-    report = {'checkedFiles': verify_package(), 'heroes': {}}
+    report = {'checkedFiles': verify_package() + verify_package('r4-lyra'), 'heroes': {}}
     manifest_path = ROOT / 'src/game/visuals/unit-atlases.json'; manifest = json.loads(manifest_path.read_text())
     victory = {}
     base = ROOT / 'public/assets/units'

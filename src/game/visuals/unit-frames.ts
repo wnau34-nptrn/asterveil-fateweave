@@ -64,7 +64,8 @@ export const unitRegistry = {
   // thrust (12 → 13). LYRA-002 (PR #114): Mark points the blade at chest height (22..29), the parry stance takes a bent-knee
   // diagonal guard (30..37); each holds its contact pose (25 = 26, 33 = 34) and ends on the shipped idle.
   // Lyra's lowered blade is follow-through, not windup. Never reverse the cut before contact.
-  tracer: { sheet: 'lyra', displayRatio: 2, actions: { attack: 'attack', execute: 'skill', finisher: 'attack', sweep: 'attack', lunge: 'skill', mark: 'mark', parry: 'parry' },
+  // LIFE-001 R4 victory, trial (owner 2026-11-27 “ไลรา R4: เอาเข้าเกมแบบทดลองเลย”).
+  tracer: { sheet: 'lyra', displayRatio: 2, victory: { frames: [1, 2, 3, 4, 5], frameMs: 140 }, actions: { attack: 'attack', execute: 'skill', finisher: 'attack', sweep: 'attack', lunge: 'skill', mark: 'mark', parry: 'parry' },
     clips: { attack: { prepare: [1, 2, 3], recover: [5, 4, 6, 7, 8] }, mark: { prepare: [23, 24, 25], recover: [26, 27, 28, 29] },
       parry: { prepare: [31, 32, 33], recover: [34, 35, 36, 37] } }, reactions: { counter: [12, 13, 14] } },
   foe_hunter: { sheet: 'hunter', displayRatio: 2, intents: { 'Raking Slash': 'attack', 'Shadow Knife': 'skill', 'Mirror Strike': 'attack' } },
