@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { REWORK_ATLAS, reworkCues, reworkMarks, reworkContact } from '../visuals/rework-fx';
-import { unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
+import { unitDownFrame, unitSoleOrigin, unitKey, unitDisplayRatio, unitAtlasUrls, victoryAtlasUrls, victoryKey, victorySheets, unitClip, unitDefinition, unitRelease, CORPSE_ALPHA, type Release, type UnitClip, type UnitSheet } from '../visuals/unit-frames';
 import { SHAKE, addTrauma, shakeMs, shakeOffset } from '../visuals/impact-shake';
 import { basicCues, basicPrepare, basicContact, type BasicCue } from '../visuals/basic-attack-fx';
 import { artPalette, auraPalette, bossPalette, paintBossAura, type BossAura } from '../visuals/boss-aura';
@@ -35,7 +35,7 @@ import { actorArt, actorFootOrigins, artCellSize, staticActorGeometry, staticDis
 // The unit's own sprite in its body container. Song/shadow floor layers and boss holds also live in the body (some
 // inserted before the sprite), so never take simply the first image.
 const bodySprite = (body: Phaser.GameObjects.Container | undefined): Phaser.GameObjects.Image | undefined =>
-  body?.list.find((c): c is Phaser.GameObjects.Image => c instanceof Phaser.GameObjects.Image && /^(unit-pilot-|battle-)/.test(c.texture.key));
+  body?.list.find((c): c is Phaser.GameObjects.Image => c instanceof Phaser.GameObjects.Image && /^(unit-pilot-|unit-victory-|battle-)/.test(c.texture.key));
 // Device pixels per CSS pixel for the canvas buffer (capped: 3x covers current phones).
 export const pixelRatio = (): number => Math.min(3, Math.max(1, window.devicePixelRatio || 1));
 // A held charge sits this share of the figure width forward (toward the other side) of the body centre: on the body.
@@ -196,6 +196,12 @@ export class BattleScene extends Phaser.Scene {
   private requestOptionalUnits(): void {
     const names = this.optionalUnits.request(this.hasOptionalUnit);
     for (const name of names) this.load.atlas(`unit-pilot-${name}`, ...unitAtlasUrls(name));
+    // Drawn victory cheers: optional, fetched alongside, never part of the field-ready gate.
+    let cheers = false;
+    for (const sheet of this.victoryNeeded()) {
+      const urls = victoryAtlasUrls(sheet), key = victoryKey(sheet);
+      if (urls && !this.textures.exists(key) && !this.queuedAssets.has(key)) { this.load.atlas(key, ...urls); this.queuedAssets.add(key); cheers = true; }
+    }
     // AV07: the boss-signature atlas is only fetched for encounters that use those moves; until then the code-drawn
     // telegraph and the older generic cues stand in.
     // Foe-signature and Saint/Dance layers are fetched the same way: only for encounters whose foes or heroes use them,
@@ -203,7 +209,11 @@ export class BattleScene extends Phaser.Scene {
     let fetching = false;
     for (const [key, urls, used] of this.encounterFx()) if (used && !this.textures.exists(key)) { this.load.atlas(key, ...urls); fetching = true; }
     if (this.queueAssets(this.missingAssets())) fetching = true;
-    if ((names.length || fetching) && !this.load.isLoading()) this.load.start();
+    if ((names.length || fetching || cheers) && !this.load.isLoading()) this.load.start();
+  }
+  private victoryNeeded(): UnitSheet[] {
+    const have = new Set(victorySheets());
+    return [...new Set(this.encounter.heroes.map(h => unitDefinition(artOf(this.encounter, h.id))?.sheet as UnitSheet | undefined))].filter((s): s is UnitSheet => !!s && have.has(s));
   }
   // Encounter-only VFX atlases and whether the current encounter uses them (W8: released like unit sheets when unused).
   private encounterFx(): [string, [string, string], boolean][] {
@@ -443,6 +453,8 @@ export class BattleScene extends Phaser.Scene {
     this.layer?.destroy();
     // Old bodies are gone; release only optional textures absent from the new encounter.
     for (const name of this.optionalUnits.unused(this.hasOptionalUnit)) this.textures.remove(`unit-pilot-${name}`);
+    const cheers = new Set(this.victoryNeeded());
+    for (const sheet of victorySheets()) if (!cheers.has(sheet) && this.textures.exists(victoryKey(sheet))) { this.textures.remove(victoryKey(sheet)); this.queuedAssets.delete(victoryKey(sheet)); }
     // W8 (A11): the same for encounter-only VFX atlases, so a run of different encounters never accumulates them.
     // Holds live inside the destroyed bodies; effects were stopped by setEncounter.
     if (!this.load.isLoading()) for (const [key, , used] of this.encounterFx()) if (!used && this.textures.exists(key)) {
@@ -484,6 +496,8 @@ export class BattleScene extends Phaser.Scene {
     this.holds.clear(); this.armors.clear(); for (const id of [...this.auras.keys()]) this.dropAura(id); this.paintHolds();
     this.measureCrowns();
     if (this.finale === 'defeat') this.slump(false);
+    // Every repaint (including the background one when optional art arrives) re-applies the shown state to hero life.
+    this.applyLife();
     this.layer.sort('depth'); this.onLayout();
   }
   // Boss crown spots (CSS px, canvas space): centred over the rendered figure, just above its top. Measured on the resting
@@ -649,15 +663,16 @@ export class BattleScene extends Phaser.Scene {
     }
   }
   /** QA: hero life as the scene applies it (enabled, weights, glow, ready ring, sprite transform, finale sparkles). */
-  lifeProbe(): { enabled: boolean; finale?: Finale; sparkles: { alpha: number; x: number; y: number; visible: boolean }[]; heroes: Record<string, { low: number; on: number; glow: boolean; ring: boolean; rotation: number; x: number; y: number; sx: number; sy: number; bodyY: number }> } {
+  lifeProbe(): { enabled: boolean; finale?: Finale; cheers: string[]; sparkles: { alpha: number; x: number; y: number; visible: boolean }[]; heroes: Record<string, { low: number; on: number; glow: boolean; ring: boolean; rotation: number; x: number; y: number; sx: number; sy: number; bodyY: number; texture: string; frame: string }> } {
     const heroes: ReturnType<BattleScene['lifeProbe']>['heroes'] = {};
     for (const def of this.encounter.heroes) {
       const w = this.heroLife.weights(def.id), body = this.bodies.get(def.id), sprite = bodySprite(body); if (!w || !sprite || !body) continue;
       heroes[def.id] = { ...w, glow: !!this.barrierGlow.get(def.id)?.visible, ring: !!this.readyRing.get(def.id)?.visible,
-        rotation: sprite.rotation, x: sprite.x, y: sprite.y, sx: sprite.scaleX, sy: sprite.scaleY, bodyY: body.y - (this.positions.get(def.id)?.y ?? body.y) };
+        rotation: sprite.rotation, x: sprite.x, y: sprite.y, sx: sprite.scaleX, sy: sprite.scaleY, bodyY: body.y - (this.positions.get(def.id)?.y ?? body.y),
+        texture: sprite.texture.key, frame: String(sprite.frame.name) };
     }
     const sparkles = (this.finaleLayer?.list ?? []).map(g => { const o = g as Phaser.GameObjects.Star; return { alpha: o.alpha, x: o.x, y: o.y, visible: o.visible }; });
-    return { enabled: this.heroLife.active && this.lifeOn, finale: this.finale, sparkles, heroes };
+    return { enabled: this.heroLife.active && this.lifeOn, finale: this.finale, cheers: victorySheets().filter(v => this.textures.exists(victoryKey(v))), sparkles, heroes };
   }
   /** Item 6: the end-of-battle cheer (code-drawn sparkles over each standing hero, one by one; no hop, owner 2026-11-27) or
    *  collapse (heroes sink). Drawn `victory` frames, when a unit has them, play as its cheer. */
@@ -673,12 +688,13 @@ export class BattleScene extends Phaser.Scene {
       const body = this.bodies.get(hero.id), at = this.positions.get(hero.id), slot = this.actorPanels.get(hero.id);
       if (!body || !at || !slot) continue;
       const delay = 120 + n * 170;
-      const cheer = unitDefinition(artOf(this.encounter, hero.id))?.victory, sprite = bodySprite(body);
-      if (cheer && sprite?.texture.key.startsWith('unit-pilot-')) {
-        // Drawn cheer frames replace the code hop.
-        this.tweens.addCounter({ from: 0, to: cheer.frames.length, delay, duration: cheer.frames.length * cheer.frameMs,
-          onUpdate: t => { if (sprite.active) sprite.setFrame(cheer.frames[Math.min(cheer.frames.length - 1, Math.floor(t.getValue()!))]!); },
-          onComplete: () => { if (sprite.active) sprite.setFrame(0); } });
+      const definition = unitDefinition(artOf(this.encounter, hero.id)), cheer = definition?.victory, sprite = bodySprite(body);
+      const key = definition && victoryKey(definition.sheet as UnitSheet);
+      if (cheer && key && sprite?.texture.key.startsWith('unit-pilot-') && this.textures.exists(key)) {
+        // Drawn cheer: played once from the idle, then held on its last frame until the field is repainted. The cheer cells
+        // share the idle's 512 source size, so the sprite keeps its display size and sole origin.
+        this.tweens.addCounter({ from: 0, to: cheer.frames.length - .001, delay, duration: cheer.frames.length * cheer.frameMs,
+          onUpdate: t => { if (sprite.active) sprite.setTexture(key, String(cheer.frames[Math.floor(t.getValue()!)])); } });
       }
       this.sparkle(at.x, at.y - slot.size * .9, slot.size, delay);
     }

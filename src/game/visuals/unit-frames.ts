@@ -1,6 +1,7 @@
 import type { Reaction, UnitPose } from './unit-animation-map';
 import { lakeBossDisplayRatio, lakeFoeDisplayRatios, mineFoeDisplayRatios } from './assets';
 import atlasManifest from './unit-atlases.json';
+import victoryManifest from './victory-atlases.json';
 export type UnitClip = 'attack' | 'skill' | 'bash' | 'prayer' | 'sanctuary' | 'disengage' | 'stance' | 'taunt' | 'brace' | 'knives' | 'evade' | 'dread' | 'finale' | 'snare' | 'arc' | 'communion' | 'lastlight' | 'partner' | 'circle' | 'closing' | 'echo' | 'move1' | 'move2' | 'move3' | 'move4' | 'move5' | 'move6' | 'move7' | 'mark' | 'parry' | 'gather' | 'release' | 'stored' | 'knot' | 'toll' | 'weave' | 'deflect' | 'dial' | 'read';
 export type FramePhase = 'prepare' | 'recover' | 'reaction';
 export interface UnitFrames {
@@ -18,7 +19,9 @@ interface UnitDefinition {
   intents?: Readonly<Record<string, UnitClip>>;
   // Looping hover frames and the per-frame time; the static idle (frame 0) remains the fallback.
   idleLoop?: { frames: readonly number[]; frameMs: number };
-  // A drawn victory cheer (ART-UNIT-ANIMATION-LIFE-001). When present it replaces the code hop at the end of a won battle.
+  // A drawn victory cheer (ART-UNIT-ANIMATION-LIFE-001 R3, owner picks 2026-11-27): frames of the separate optional atlas
+  // `<sheet>_victory` (victory-atlases.json), mapped onto the idle's own scale and sole line (build_victory.py). Played
+  // once from the idle when a battle is won, then held on its last frame. Missing atlas = the code sparkles alone.
   victory?: { frames: readonly number[]; frameMs: number };
   // Body alpha once downed while its frames are drawn. A collapse painted as fading out (A8 Rift Wisp) is already its
   // corpse emphasis and must not be dimmed a second time. The static seed fallback always uses CORPSE_ALPHA.
@@ -65,14 +68,14 @@ export const unitRegistry = {
     clips: { attack: { prepare: [1, 2, 3], recover: [5, 4, 6, 7, 8] }, mark: { prepare: [23, 24, 25], recover: [26, 27, 28, 29] },
       parry: { prepare: [31, 32, 33], recover: [34, 35, 36, 37] } }, reactions: { counter: [12, 13, 14] } },
   foe_hunter: { sheet: 'hunter', displayRatio: 2, intents: { 'Raking Slash': 'attack', 'Shadow Knife': 'skill', 'Mirror Strike': 'attack' } },
-  weaver: { sheet: 'eira', displayRatio: 1 / .42, actions: { attack: 'attack', bolt: 'attack', storm: 'attack', dispel: 'attack', ward: 'skill', sigil: 'skill', aegis: 'skill' } },
+  weaver: { sheet: 'eira', displayRatio: 1 / .42, victory: { frames: [1, 2, 3, 4, 5], frameMs: 140 }, actions: { attack: 'attack', bolt: 'attack', storm: 'attack', dispel: 'attack', ward: 'skill', sigil: 'skill', aegis: 'skill' } },
   foe_sprite: { sheet: 'sprite', displayRatio: 2, intents: { 'Seed Spark': 'attack' } },
-  guardian: { sheet: 'aegis', displayRatio: 1 / .36, actions: { attack: 'attack', bash: 'bash', guard: 'skill', rally: 'skill', challenge: 'skill', bulwark: 'skill', rouse: 'skill' },
+  guardian: { sheet: 'aegis', displayRatio: 1 / .36, victory: { frames: [1, 2, 3, 4, 5], frameMs: 140 }, actions: { attack: 'attack', bash: 'bash', guard: 'skill', rally: 'skill', challenge: 'skill', bulwark: 'skill', rouse: 'skill' },
     reactions: { block: [30, 31], counter: [30, 5, 7] } },
   foe_vargoth_guard: { sheet: 'vargoth', displayRatio: 2, intents: { 'Crushing Blow': 'attack', 'Shield Smash': 'bash', 'Mace Swing': 'attack', 'Rift Bolt': 'skill' },
     clips: { bash: { prepare: [24, 25, 26, 27], recover: [28, 29, 30, 31] } }, reactions: { block: [22, 23] } },
   // A3: heal/revive/bless share the heal gesture, prayer/halo the prayer gesture. No new gesture for passives.
-  healer: { sheet: 'seren', displayRatio: 1 / .36, actions: { attack: 'attack', heal: 'skill', revive: 'skill', bless: 'skill', prayer: 'prayer', halo: 'prayer', sanctuary: 'sanctuary' }, reactions: { block: [38, 39] } },
+  healer: { sheet: 'seren', displayRatio: 1 / .36, victory: { frames: [1, 2, 3, 4, 5], frameMs: 140 }, actions: { attack: 'attack', heal: 'skill', revive: 'skill', bless: 'skill', prayer: 'prayer', halo: 'prayer', sanctuary: 'sanctuary' }, reactions: { block: [38, 39] } },
   foe_mycon: { sheet: 'mycon', displayRatio: 2, intents: { 'Spore Hex': 'skill' } },
   // A4: hinder/pin/track/weakshot share the single-arrow gesture; volley and disengage have their own. Toma throws
   // overhand for flasks and underhand for tonics. No new gesture for passives.
@@ -230,6 +233,13 @@ export const unitDownFrame = (art: string): number => { const d = unitDefinition
 export const unitSoleOrigin = (art: string): number => unitDefinition(art)?.soleOrigin ?? 496 / 512;
 export const unitDisplayRatio = (art: string): number => unitDefinition(art)?.displayRatio ?? 1;
 export const unitUrl = (name: UnitSheet): string => `${import.meta.env.BASE_URL}assets/units/${atlasManifest[name].image}`;
+// Optional cheer atlases: fetched in the background for heroes that have one, never part of the field-ready gate.
+export const victoryKey = (sheet: UnitSheet): string => `unit-victory-${sheet}`;
+export const victorySheets = (): UnitSheet[] => Object.keys(victoryManifest) as UnitSheet[];
+export const victoryAtlasUrls = (sheet: UnitSheet): [string, string] | undefined => {
+  const entry = (victoryManifest as Record<string, { image: string; atlas: string }>)[sheet];
+  return entry && [`${import.meta.env.BASE_URL}assets/units/${entry.image}`, `${import.meta.env.BASE_URL}assets/units/${entry.atlas}`];
+};
 export const unitAtlasUrls = (name: UnitSheet): [string, string] => [unitUrl(name), `${import.meta.env.BASE_URL}assets/units/${atlasManifest[name].atlas}`];
 export function unitClip(art: string, action: string | undefined, intent: string | undefined): UnitClip | undefined {
   const definition = unitDefinition(art);

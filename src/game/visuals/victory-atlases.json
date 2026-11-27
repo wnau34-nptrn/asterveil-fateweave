@@ -1,0 +1,29 @@
+{
+  "aegis": {
+    "image": "aegis_victory.f83b062eb9e0.webp",
+    "atlas": "aegis_victory.8446e2c1d83c.json",
+    "width": 162,
+    "height": 1047,
+    "frames": 5,
+    "decodedBytes": 678456,
+    "downloadBytes": 213933
+  },
+  "eira": {
+    "image": "eira_victory.c38c0f3cdb76.webp",
+    "atlas": "eira_victory.28913f87adca.json",
+    "width": 223,
+    "height": 1179,
+    "frames": 5,
+    "decodedBytes": 1051668,
+    "downloadBytes": 406292
+  },
+  "seren": {
+    "image": "seren_victory.e8424d92ea76.webp",
+    "atlas": "seren_victory.883589221d65.json",
+    "width": 798,
+    "height": 199,
+    "frames": 5,
+    "decodedBytes": 635208,
+    "downloadBytes": 237320
+  }
+}
