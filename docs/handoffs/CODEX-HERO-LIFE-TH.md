@@ -209,6 +209,69 @@ NOT YOURS: atlas packing, registry, code, tests, in-game clips (Claude). Motion 
 RETURN: incoming/ART-UNIT-ANIMATION-LIFE-001/w1-aegis-idle/
 ```
 
+## ชุด 2 — ท่าชนะของ 11 ตัวที่เหลือ (ART-UNIT-ANIMATION-LIFE-002)
+
+เจ้าของ 2026-11-27 “ขอ Prompt สำหรับท่าดีใจของตัวอื่นที่เหลือ ยกเว้นตัวที่ยังพักไว้นะ” · ไม่รวม Odran `thiran` / Isolde `wila` (พักไว้ OD-14) · Claude เปิดดู seed ทั้ง 11 ตัวแล้ว: ต่างจากสี่ตัวแรก seed ชุดนี้มีที่ว่างเหนือหัว (ขอบบน 32–47, พื้นรองเท้า 493–496) ใช้กรอบ 768 เดียวกับ R3 เพื่อเผื่อพื้นที่ยกอาวุธ บทเรียนจาก R3/R4: ขนาดตัวต้อง ±3%, ความยาวอาวุธ ±5%, สีและของที่ถือตรง seed, ไม่กระโดด, ขอบสะอาด
+
+```text
+CODEX HANDOFF — ART-UNIT-ANIMATION-LIFE-002 (art only): one-shot victory poses for the remaining 11 allies
+Asterveil · Fateweave
+
+Read AGENTS.md, CLAUDE.md, docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md and docs/handoffs/CODEX-HERO-LIFE-TH.md (sections "รอบแก้ R3", "ไลรา R4" and "ชุด 2 — ท่าชนะของ 11 ตัวที่เหลือ") first. Repository wnau34-nptrn/asterveil-fateweave, base branch feature/fateweave-initial-prototype (NOT main). Create branch art/art-unit-animation-life-002. Add files only under incoming/ART-UNIT-ANIMATION-LIFE-002/. Do not change src/, tests/, public/, .github/, existing art or any earlier incoming folder. Open a PR into the base branch; do not merge it.
+
+CONTEXT: the owner approved the in-game victory poses of Aegis R3, Eira R3b and Seren R3 (thank you — R3 worked). Lyra R4 is in review. Now the same one-shot victory pose for the other 11 allies. Odran and Isolde are parked: do NOT draw them. No idle loops in this task.
+
+WORK IN TWO BATCHES (push and report each in the PR):
+- Batch A: Mira, Toma, Garran, Brann, Sefa, Lio.
+- Batch B: Corin, Cerise, Kael, Wynne, Astrid.
+
+SEEDS (on the game branch; verify the hash prefix and copy byte-for-byte into seeds/):
+- Mira (Archer): incoming/ART-UNIT-ANIMATION-A4-001/heroes/seeds/mira-seed.png  c0dfe376ceb6d507  sole row 495
+- Toma (Alchemist): incoming/ART-UNIT-ANIMATION-A4-001/heroes/seeds/toma-seed.png  39edb773bacfd7a2  sole 496
+- Garran (Spear): incoming/ART-UNIT-ANIMATION-A5-001/heroes/seeds/garran-seed.png  653fb5efb1f4b1bc  sole 496
+- Brann (Warden): incoming/ART-UNIT-ANIMATION-A5-001/heroes/seeds/brann-seed.png  35f1aeb0f99c4d86  sole 496
+- Sefa (Scout): incoming/ART-UNIT-ANIMATION-A6-001/heroes/seeds/sefa-seed.png  6cb511ce3ac8badd  sole 495
+- Lio (Bard): incoming/ART-UNIT-ANIMATION-A6-001/heroes/seeds/lio-seed.png  e6760e48b0403e13  sole 496
+- Corin (Saint): incoming/ART-UNIT-ANIMATION-A7-001/saints/metta/seeds/metta.png  62126d7f84767d64  sole 495
+- Cerise (Dancer): incoming/ART-UNIT-ANIMATION-A7-002/seeds/lalin.png  3fc6f8259ca286dc  sole 493
+- Kael (Martial): incoming/ART-UNIT-ANIMATION-A12-001/seeds/kael.png  5d9f344d4d44cad3  sole 496
+- Wynne (Hexer): incoming/ART-UNIT-ANIMATION-A12-001/seeds/wynne.png  b2888ab61fcb39fc  sole 496
+- Astrid (Seer): incoming/ART-UNIT-ANIMATION-A12-001/seeds/astrid.png  a2d2ac7833818ff6  sole 496
+(sole row = lowest row with 20+ opaque pixels at alpha >= 128.) Do NOT give the generator any other cast member as image input. Original art only.
+
+CANVAS (same as R3): every frame 768×768 RGBA; frame 1 = the seed pasted UNSCALED at (128, 256); ground line = the seed's sole row + 256 (e.g. 752 for sole 496) in every frame; nothing touches the canvas edges.
+
+SAME SIZE, SAME LOOK (the gates R3/R4 taught us): head width and figure height within ±3% of the seed in frames 2–6 (measure and list); held weapons/props within ±5% of their seed length; same face, hair, costume colours and props, same shapes and SAME COLOURS; no new props. NO JUMPS: soles on the ground line in every frame (heels may lift). Natural and understated: a proud, happy pose, never comic. Body only: no VFX, glows, sparkles, music notes beyond what the seed already shows, motion lines, shadows, ground or text (Claude adds sparkles in code). Clean transparent edges (no grey/white matte), checked on dark and bright backgrounds.
+
+VICTORY (6 frames, plays once when a battle is won, then HOLDS frame 6 for several seconds):
+1. exactly the seed (pasted, not regenerated). 2. small anticipation. 3. rising into the pose. 4. peak (most readable). 5. small settle. 6. held pose: stable, balanced, eyes open unless stated, both soles on the ground line.
+Per character (use only what the seed holds):
+- Mira (Archer): lifts the bow high in her left hand, right fist at her side, bright smile; hood and braid settle. Held = bow raised overhead.
+- Toma (Alchemist): raises the glowing flask to eye level, pushes his goggles up with the other hand and grins. Held = flask raised, goggles on forehead. No liquid splash.
+- Garran (Spear): plants the spear butt beside his foot, shield on his arm, chin up with a proud grin. Held = spear upright, shield at his side.
+- Brann (Warden): sets the hammer head on the ground and rests both hands on the handle, a hearty laugh (eyes closed allowed in frames 3–5). Held = leaning on the hammer, eyes open, broad smile.
+- Sefa (Scout): one quick flip of a dagger, then both daggers in reverse grip crossed in front of the chest, a cool smirk; scarf settles. Held = daggers crossed.
+- Lio (Bard): strums a final chord and lifts the lute neck up with a flourish, eyes closed smile in frames 3–4. Held = lute held up, eyes open, smile.
+- Corin (Saint): presses his fist into his open palm in a martial salute and bows slightly, prayer beads hanging. Held = fist-in-palm salute, upright, calm smile.
+- Cerise (Dancer): a small quarter turn and back (no full spin), ending with both fans open wide at her sides, one toe pointed; ribbons settle. Held = fans open at both sides, facing right.
+- Kael (Martial): exhales from his stance, then raises one fist upward with a grin, other hand at his sash. Held = fist raised.
+- Wynne (Hexer): hugs the charm-doll she holds close to her cheek, talismans sway, a shy smile. Held = doll hugged at cheek.
+- Astrid (Seer): raises the astrolabe ring in one hand at shoulder height, closes her eyes in a calm smile in frames 3–4. Held = astrolabe raised, eyes open, gentle smile.
+Supply an R2 only for a character that fails a gate; mark the recommended version.
+
+GENERATION: one continuous strip per character in a single edit request, seed attached as the model; transparent background, wide gutters. Then cut, scale each frame back to the seed's measured size and place it on the 768 canvas with the soles on the ground line.
+
+QUALITY GATES (do not deliver a failing strip as final; regenerate or list it as missing): scale table (±3%); prop length table (±5%); python3 scripts/unit-anatomy-audit.py --cells against the seed (median <= 1.15, every measured frame <= 1.20); edges (no opaque pixel on rows 0–3 or columns 0–3 / 764–767); lowest opaque row = the character's ground line in every frame; seed-vs-held side by side at full size; held frames of each batch side by side at 111 px tall (in-game size on a 390 px phone).
+
+DELIVERABLES under incoming/ART-UNIT-ANIMATION-LIFE-002/: seeds/ + seeds.json, raw/, cells/<character>-victory/000.png … 005.png, <character>-victory-preview-390.png, <character>-victory-seed-vs-held.png, batch-a-held-390.png and batch-b-held-390.png, audits/, prompts.json (exact prompts, references, generation ids; no base64), strips.json (per character: frames, canvas 768, seed offset (128,256), ground row, scale/offset per frame, recommended version, runtime use one-shot then hold frame 6), validation.json (SHA-256 and size of every file), NOTES.md (measurements, what passed, what was not checked).
+
+DELIVERY CHECK: push with normal git (no API upload of images), fetch back, compare SHA-256 with validation.json, fully decode every PNG with Pillow; report in the PR per batch.
+
+NOT YOURS: atlas packing, budget, registry, code, tests and in-game clips (Claude). Picking versions and approving motion are the owner's decisions; offline checks are not approval.
+
+RETURN: incoming/ART-UNIT-ANIMATION-LIFE-002/
+```
+
 ## ชุด 2 (หลังเจ้าของอนุมัติชุด 1)
 
 ใช้กล่องเดียวกัน เปลี่ยน ID เป็น `ART-UNIT-ANIMATION-LIFE-002` branch `art/art-unit-animation-life-002` แทนรายการ seed ด้วยตาราง 11 ตัวด้านบน และให้ Claude เขียนลักษณะท่ายืนและท่าชนะรายตัวจาก seed จริงก่อนส่ง (ยังไม่ได้เปิดดู seed ทั้ง 11 ตัว จึงยังไม่เขียนรายละเอียดรายตัวไว้ตรงนี้)
