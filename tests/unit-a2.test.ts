@@ -56,7 +56,7 @@ describe('A2 actual content, clips and lifecycle',()=>{
  });
  it('keeps shared scale/pivot, lossless reconstruction and per-art budgets',()=>{
   for(const name of ['aegis','vargoth'] as const){const m=manifest[name],a=JSON.parse(readFileSync('public/assets/units/'+m.atlas,'utf8'));
-   expect(m.decodedBytes).toBe(m.width*m.height*4);expect(m.decodedBytes).toBeLessThanOrEqual(6*1024*1024);expect(m.downloadBytes).toBeLessThanOrEqual(1_500_000);expect(Object.keys(a.frames)).toHaveLength(32);
+   expect(m.decodedBytes).toBe(m.width*m.height*4);expect(m.decodedBytes).toBeLessThanOrEqual(6*1024*1024);expect(m.downloadBytes).toBeLessThanOrEqual(1_500_000);expect(Object.keys(a.frames)).toHaveLength(name==='aegis'?39:32);   // aegis: 32 + W1 idle loop 32..38 (2026-11-27)
    for(const i of [1,8,9,16,...(name==='aegis'?[22,29]:[24,31])])expect(a.frames[i]).toEqual(a.frames[0]);
   }
   expect(unitDisplayRatio('guardian')*.36).toBeCloseTo(1);expect(unitDisplayRatio('foe_vargoth_guard')).toBe(2);
