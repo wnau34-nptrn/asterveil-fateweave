@@ -1,0 +1,98 @@
+{
+  "character": "lyra",
+  "game_seed_scale": 0.497,
+  "amplitude_scale": 0.72,
+  "move": "idle",
+  "seed_sha256": "a0d462ce8c0469fab74e267b14e7dc73fd43fc53330a648704d63ac8a086ad3e",
+  "frame_size": [
+    512,
+    512
+  ],
+  "frameMs": 400,
+  "loop": true,
+  "frames": [
+    {
+      "file": "frames/000.png",
+      "phase": 0.0,
+      "changed_pixels": 0,
+      "outside_mask_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "minimum_inverse_jacobian": 1.0
+    },
+    {
+      "file": "frames/001.png",
+      "phase": 0.125,
+      "changed_pixels": 87042,
+      "outside_mask_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "minimum_inverse_jacobian": 0.48689
+    },
+    {
+      "file": "frames/002.png",
+      "phase": 0.25,
+      "changed_pixels": 63786,
+      "outside_mask_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "minimum_inverse_jacobian": 0.274353
+    },
+    {
+      "file": "frames/003.png",
+      "phase": 0.375,
+      "changed_pixels": 88662,
+      "outside_mask_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "minimum_inverse_jacobian": 0.48689
+    },
+    {
+      "file": "frames/004.png",
+      "phase": 0.5,
+      "changed_pixels": 32658,
+      "outside_mask_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "minimum_inverse_jacobian": 0.542588
+    },
+    {
+      "file": "frames/005.png",
+      "phase": 0.625,
+      "changed_pixels": 89729,
+      "outside_mask_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "minimum_inverse_jacobian": 0.493584
+    },
+    {
+      "file": "frames/006.png",
+      "phase": 0.75,
+      "changed_pixels": 90896,
+      "outside_mask_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "minimum_inverse_jacobian": 0.432856
+    },
+    {
+      "file": "frames/007.png",
+      "phase": 0.875,
+      "changed_pixels": 88282,
+      "outside_mask_changed_pixels": 0,
+      "protected_changed_pixels": 0,
+      "minimum_inverse_jacobian": 0.638195
+    }
+  ],
+  "phase_lags": {
+    "hair": 0.125,
+    "cape": 0.25,
+    "cloth": 0.25
+  },
+  "displacement_limits_px": {
+    "breath_chest_shoulders": 4.32,
+    "breath_head": 2.88,
+    "hair": 4.32,
+    "cape": 5.76,
+    "cloth": 5.76
+  },
+  "measured_max_displacement_px": {
+    "breath_chest_shoulders": 4.32,
+    "breath_head": 0.0,
+    "hair": 3.8017,
+    "cape": 4.32,
+    "cloth": 3.6
+  }
+}

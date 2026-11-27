@@ -1,0 +1,182 @@
+{
+  "character": "seren",
+  "seed_sha256": "0298b7eeffbdaee5937847c7071e654286d2c2631a5f6d7bbea1598db72a6c0d",
+  "anatomy_audit": {
+    "frames_measured": 8,
+    "median_head_scale": 1.0,
+    "max_head_scale": 1.0,
+    "frames": [
+      {
+        "frame": 0,
+        "height": 512,
+        "scale": 1.0,
+        "inliers": 3655,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 1,
+        "height": 512,
+        "scale": 1.0,
+        "inliers": 3188,
+        "status": "ok"
+      },
+      {
+        "frame": 2,
+        "height": 512,
+        "scale": 0.999,
+        "inliers": 3529,
+        "status": "ok"
+      },
+      {
+        "frame": 3,
+        "height": 512,
+        "scale": 1.0,
+        "inliers": 3145,
+        "status": "ok"
+      },
+      {
+        "frame": 4,
+        "height": 512,
+        "scale": 1.0,
+        "inliers": 2824,
+        "status": "ok"
+      },
+      {
+        "frame": 5,
+        "height": 512,
+        "scale": 1.0,
+        "inliers": 2834,
+        "status": "ok"
+      },
+      {
+        "frame": 6,
+        "height": 512,
+        "scale": 0.999,
+        "inliers": 2981,
+        "status": "ok"
+      },
+      {
+        "frame": 7,
+        "height": 512,
+        "scale": 1.0,
+        "inliers": 3335,
+        "status": "ok"
+      }
+    ]
+  },
+  "files": {
+    "NOTES.md": {
+      "bytes": 3316,
+      "sha256": "85858de022eaca2ac70c61e0c07608006b24b5d24f806e8e919a97abcc06f397"
+    },
+    "diff/000.png": {
+      "bytes": 388447,
+      "sha256": "e9ba620c5272c358c803dedd59e6c4ff5637e34f7b19377583d164d8b0ae5d2c"
+    },
+    "diff/001.png": {
+      "bytes": 378623,
+      "sha256": "e422b11f2615701a6e46b1ea1f3fd0c5a71dc41127e6d92d50b83d35b804a296"
+    },
+    "diff/002.png": {
+      "bytes": 371410,
+      "sha256": "d0f46c4bd901f17de991a12d9d4b52e0388a1075cdc168db4edaa15f0fb1e8cc"
+    },
+    "diff/003.png": {
+      "bytes": 374871,
+      "sha256": "6dbf758b51372eb453bc6bb017dce831a714cb95f6a672423f2b7a9cd2ab988a"
+    },
+    "diff/004.png": {
+      "bytes": 381958,
+      "sha256": "f65b5ba8501c91f215e15c57c4007720ddd379e31d6fa0df639c0a4336bee9c1"
+    },
+    "diff/005.png": {
+      "bytes": 373696,
+      "sha256": "8cca0b3dae6a1aa42a574e8bd8df25baccda4d1fc41e4d78a74afff8d312d9ee"
+    },
+    "diff/006.png": {
+      "bytes": 370582,
+      "sha256": "9cdd1617800e9dfadd531ae4241bac9c0c9c7fe911e596dd763530e354d692b5"
+    },
+    "diff/007.png": {
+      "bytes": 378483,
+      "sha256": "db33dd4b93207d21430cc85ea8650307a807e47fb1cd5398f90bb07eebb25049"
+    },
+    "frames/000.png": {
+      "bytes": 501349,
+      "sha256": "0298b7eeffbdaee5937847c7071e654286d2c2631a5f6d7bbea1598db72a6c0d"
+    },
+    "frames/001.png": {
+      "bytes": 499705,
+      "sha256": "497174b595ff566ba0f8e724f0cbe694a9b23f34a65709fa4b0cd79ee3e24a41"
+    },
+    "frames/002.png": {
+      "bytes": 502832,
+      "sha256": "8d1e1002d414971629276ff931fd2bc624dafc0f39d87d2611d040900b2a8991"
+    },
+    "frames/003.png": {
+      "bytes": 501349,
+      "sha256": "8124a684b38bca317ed9b91ed78aa1e1fa6bda2b0d71cbeba1c4177fa226bfac"
+    },
+    "frames/004.png": {
+      "bytes": 501233,
+      "sha256": "a3d4dbb95c7998b3557a9c57b4dedbbd786abde2554bd70745ee8fa5bfaac18d"
+    },
+    "frames/005.png": {
+      "bytes": 500617,
+      "sha256": "f3ea23fb6b9f8095f0a6aea15686906c5176f7e6b556d0d6dc8686f88fc86b2a"
+    },
+    "frames/006.png": {
+      "bytes": 502587,
+      "sha256": "e9873ea582bd697e65d92957bb7c15e56b0a3895b047b3f00a5ce53f31448aa9"
+    },
+    "frames/007.png": {
+      "bytes": 500582,
+      "sha256": "ae7aab1ca24af0cba96797354921712d71b14aec027a3ae19980c8cdacca15fe"
+    },
+    "idle-111px.webp": {
+      "bytes": 202404,
+      "sha256": "b9685c5e8e0a227ec05c1908d09ee993cab6d97db1964b134f01d69e761d5226"
+    },
+    "idle-200ms.webp": {
+      "bytes": 2754164,
+      "sha256": "0610f5dbbe3adec011934e9af4793c3798aef0304afd17afdce7b7b284916c34"
+    },
+    "idle-400ms.webp": {
+      "bytes": 2754164,
+      "sha256": "82df407436c7edd39d961e417aea5352da6f10e8e2a1cf57cf492382eda0d951"
+    },
+    "masks/breath_chest_shoulders.png": {
+      "bytes": 3725,
+      "sha256": "b839db4e6aeb68c04dfc2b70cc7713eff90e2a8df737dd903405b6cade1048aa"
+    },
+    "masks/breath_head.png": {
+      "bytes": 334,
+      "sha256": "ef2a4c8949cdab1ef24e678bdb88cc276b1fd75e62066e47011c2ce53996efe6"
+    },
+    "masks/cape.png": {
+      "bytes": 8141,
+      "sha256": "c77d37f545c2ee1f41c6336637d3d5ac1eb24c316a40a2805554ddfcf0835e86"
+    },
+    "masks/cloth.png": {
+      "bytes": 8414,
+      "sha256": "3776eb582d12b4231dcf672e2c75852a0f9846592072d8f466d74ef3f2749723"
+    },
+    "masks/hair.png": {
+      "bytes": 4136,
+      "sha256": "34fcad270413ab33045cffd4bb2d4d09a87c0c3bd2865ad5040979ff6dfe5fe9"
+    },
+    "masks/protected.png": {
+      "bytes": 3912,
+      "sha256": "ccfb8c87b9c1434bc9dedd6b0cd0cbdaeffe89d26b9cbcd0614b8b477d92ed19"
+    },
+    "strips.json": {
+      "bytes": 2380,
+      "sha256": "53ce33b596844e653ce5b0ad701833c6e7bd8c1c43bde3ed98c3687a063394a4"
+    },
+    "tools/warp_idle.py": {
+      "bytes": 12468,
+      "sha256": "f8dad7c35d4f66f45e5c0a1d245ea5f6542e656607e5fe738da8b75559bf2f74"
+    }
+  }
+}

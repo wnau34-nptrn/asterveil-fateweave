@@ -1,0 +1,196 @@
+{
+  "character": "lyra",
+  "seed_sha256": "a0d462ce8c0469fab74e267b14e7dc73fd43fc53330a648704d63ac8a086ad3e",
+  "anatomy_audit": {
+    "frames_measured": 8,
+    "median_head_scale": 1.0,
+    "max_head_scale": 1.001,
+    "frames": [
+      {
+        "frame": 0,
+        "height": 497,
+        "scale": 1.0,
+        "inliers": 1990,
+        "idle": true,
+        "status": "idle"
+      },
+      {
+        "frame": 1,
+        "height": 497,
+        "scale": 1.001,
+        "inliers": 1267,
+        "status": "ok"
+      },
+      {
+        "frame": 2,
+        "height": 497,
+        "scale": 1.0,
+        "inliers": 1821,
+        "status": "ok"
+      },
+      {
+        "frame": 3,
+        "height": 497,
+        "scale": 1.0,
+        "inliers": 1216,
+        "status": "ok"
+      },
+      {
+        "frame": 4,
+        "height": 498,
+        "scale": 1.0,
+        "inliers": 1120,
+        "status": "ok"
+      },
+      {
+        "frame": 5,
+        "height": 498,
+        "scale": 0.999,
+        "inliers": 1038,
+        "status": "ok"
+      },
+      {
+        "frame": 6,
+        "height": 498,
+        "scale": 0.999,
+        "inliers": 1133,
+        "status": "ok"
+      },
+      {
+        "frame": 7,
+        "height": 497,
+        "scale": 0.999,
+        "inliers": 1240,
+        "status": "ok"
+      }
+    ]
+  },
+  "files": {
+    "NOTES.md": {
+      "bytes": 4021,
+      "sha256": "1adef67ea02130327c81afd44ba09aa49df8ba4a71208565435138b6f846b900"
+    },
+    "diff/000.png": {
+      "bytes": 331972,
+      "sha256": "48240ed338f3935f6fee04a16d8b6fb8e85b1c6f1531fa897afe07480c4258b4"
+    },
+    "diff/001.png": {
+      "bytes": 337161,
+      "sha256": "e96358a2250201a392b4e16e9ab95010f8ba94dac684fe01f6f33258009c0b27"
+    },
+    "diff/002.png": {
+      "bytes": 333710,
+      "sha256": "c49a32fd1fde224219a4abc1826dd4633fdce2f51f8e0df429abcf20856e865d"
+    },
+    "diff/003.png": {
+      "bytes": 335843,
+      "sha256": "e042a9104f2a9ead6598f9efbf30426b891be8dcc62bd7f8092d276afa25655a"
+    },
+    "diff/004.png": {
+      "bytes": 328116,
+      "sha256": "2fa826aa62c54243294aaad18629faedcf284f88f31cdf6981bf3551e84c147c"
+    },
+    "diff/005.png": {
+      "bytes": 332977,
+      "sha256": "e3ae20d353ebb2b808b3426fead45fe535dce94e82721236927128a3034c0164"
+    },
+    "diff/006.png": {
+      "bytes": 330583,
+      "sha256": "527f5b65c5a6eee1f6917f9102272dcf95bccad679be88bf96e5e7071b093d7d"
+    },
+    "diff/007.png": {
+      "bytes": 337084,
+      "sha256": "2fc239eadbcc476a90f3cd98e6e3ca8cfffed40977354963b4b7f441784e2f97"
+    },
+    "frames/000.png": {
+      "bytes": 434095,
+      "sha256": "a0d462ce8c0469fab74e267b14e7dc73fd43fc53330a648704d63ac8a086ad3e"
+    },
+    "frames/001.png": {
+      "bytes": 433668,
+      "sha256": "a907b5e26beb5f14346a4486ac35b7b49b38463ed2d926a0449b23dfb07412b5"
+    },
+    "frames/002.png": {
+      "bytes": 435538,
+      "sha256": "fab71f74a49405c03f64552b1473c4d94a290a9ecaec2f3555899a0b8ff4ef6f"
+    },
+    "frames/003.png": {
+      "bytes": 433493,
+      "sha256": "bfd29c9143eb3207034410cd68d884d1c926e1298d97ebad11ab9208b9cb6126"
+    },
+    "frames/004.png": {
+      "bytes": 432782,
+      "sha256": "a9d1fe32f6896e3ec591a9cc2f9a295cf526ecf33d6fb8959d99d2ee179ea08c"
+    },
+    "frames/005.png": {
+      "bytes": 434041,
+      "sha256": "175fcc712b4986bd34c74b10d34ed03036244f3dafbe7fa4b9c04416e82f6301"
+    },
+    "frames/006.png": {
+      "bytes": 434657,
+      "sha256": "9b863ea2f696edfeeee0e2c3088f25e9a40bfb09b2430bbf638967c06f78cb59"
+    },
+    "frames/007.png": {
+      "bytes": 433600,
+      "sha256": "889fe731a64bc694f1b9c24a17468de218b8e1f42cd0a14f5bf9f7a7e6e932f5"
+    },
+    "idle-111px.webp": {
+      "bytes": 179066,
+      "sha256": "f9acfe4a4be6f0d94980c09ef556f586cb09221a80345ff1cbbfb366c2c50640"
+    },
+    "idle-200ms.webp": {
+      "bytes": 2428414,
+      "sha256": "a0513155a417b4348813cad4f04cfd221b14b3a28afb52c91dff4f1991db1c12"
+    },
+    "idle-400ms.webp": {
+      "bytes": 2428414,
+      "sha256": "06eeaa86640079459fc78f7c15b671f2088ed8f0c131533eecb6ff32e1c240d3"
+    },
+    "masks/breath_chest_shoulders.png": {
+      "bytes": 2404,
+      "sha256": "5ce7900ed72862926ec4d9fdc343e8ea54f54c16c56089023ade18eb4e0cff51"
+    },
+    "masks/breath_head.png": {
+      "bytes": 334,
+      "sha256": "ef2a4c8949cdab1ef24e678bdb88cc276b1fd75e62066e47011c2ce53996efe6"
+    },
+    "masks/cape.png": {
+      "bytes": 6929,
+      "sha256": "9c69afb3870f1447a45d00bb442c77c3b5303b9a671d1020c10fa3878b8d5f3b"
+    },
+    "masks/cloth.png": {
+      "bytes": 6405,
+      "sha256": "db732e368c4d416d15d94e986e1f725cffa656d92c4c53b4eec7a106697d2bc3"
+    },
+    "masks/hair.png": {
+      "bytes": 5139,
+      "sha256": "fd77405320faf97fbffe0e4652dd700b98d42eda0ea97a9ffdd8c2ca612b2589"
+    },
+    "masks/protected.png": {
+      "bytes": 3363,
+      "sha256": "381277d9a355ce6181d7c98b0a8368b3748acdf70adb542b640f97f0315c4896"
+    },
+    "strips.json": {
+      "bytes": 2387,
+      "sha256": "6bd4b564e7db101bc436aebba7f3759f96bfb3574f4495222ee1fcda2304e956"
+    },
+    "tools/compare_allies.py": {
+      "bytes": 1856,
+      "sha256": "af41e3bcac1987c9d622313463efb5ddb626c878d20a510ecef3d3e065b44a96"
+    },
+    "tools/verify_delivery.py": {
+      "bytes": 3624,
+      "sha256": "13efd6eee379ece4dc8447300fa06c76140df1ef68db95e7c6f770aeae382b42"
+    },
+    "tools/warp_idle.py": {
+      "bytes": 11756,
+      "sha256": "648d34ae4a1ca83d152e69dae10e6ef65af298b36fcb99f6f9f72e669a8f798f"
+    }
+  },
+  "shared_files": {
+    "../allies-idle-111px.webp": {
+      "bytes": 478030,
+      "sha256": "720a13c8e00c11dcce8814dbfc635e424ae0fdd74c91801d752ef3a522d58daa"
+    }
+  }
+}
