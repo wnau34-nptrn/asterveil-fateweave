@@ -1,0 +1,486 @@
+[
+  {
+    "character": "lyra",
+    "revision": "R4",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "canvas": [
+      768,
+      768
+    ],
+    "ground_row": 767,
+    "seed_offset": [
+      128,
+      256
+    ],
+    "seed_sha256": "a0d462ce8c0469fab74e267b14e7dc73fd43fc53330a648704d63ac8a086ad3e",
+    "seed": "seeds/lyra-seed.png",
+    "raw": "raw/lyra-victory-r4.png",
+    "cells": "cells/lyra-victory-r4",
+    "runtime_use": {
+      "type": "one-shot",
+      "hold_frame": 6
+    },
+    "frames": [
+      {
+        "frame": 1,
+        "head_width_px": 242,
+        "body_height_px": 495,
+        "head_delta_pct": 0,
+        "body_delta_pct": 0,
+        "offset": [
+          128,
+          256
+        ],
+        "uniform_scale": 1,
+        "seed_lock": true,
+        "alpha_bbox": [
+          128,
+          271,
+          640,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "left_sole_row": 767,
+        "right_sole_row": 762,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 2,
+        "head_width_px": 233.92,
+        "body_height_px": 511.65,
+        "head_delta_pct": -3.34,
+        "body_delta_pct": 3.36,
+        "offset": [
+          104,
+          257
+        ],
+        "source_box": [
+          328,
+          273,
+          700,
+          652
+        ],
+        "scale_xy_from_raster_rounding": [
+          1.3521505376344085,
+          1.353562005277045
+        ],
+        "alpha_bbox": [
+          104,
+          257,
+          607,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "left_sole_row": 767,
+        "right_sole_row": 764,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 3,
+        "head_width_px": 191.0,
+        "body_height_px": 464.89,
+        "head_delta_pct": -21.07,
+        "body_delta_pct": -6.08,
+        "offset": [
+          131,
+          12
+        ],
+        "source_box": [
+          700,
+          21,
+          1018,
+          652
+        ],
+        "scale_xy_from_raster_rounding": [
+          1.20125786163522,
+          1.2012678288431062
+        ],
+        "alpha_bbox": [
+          131,
+          12,
+          513,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "left_sole_row": 767,
+        "right_sole_row": 765,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 4,
+        "head_width_px": 221.51,
+        "body_height_px": 537.0,
+        "head_delta_pct": -8.47,
+        "body_delta_pct": 8.48,
+        "offset": [
+          47,
+          233
+        ],
+        "source_box": [
+          1018,
+          254,
+          1383,
+          652
+        ],
+        "scale_xy_from_raster_rounding": [
+          1.3506849315068492,
+          1.349246231155779
+        ],
+        "alpha_bbox": [
+          47,
+          233,
+          540,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "left_sole_row": 767,
+        "right_sole_row": 764,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 5,
+        "head_width_px": 225.6,
+        "body_height_px": 529.0,
+        "head_delta_pct": -6.78,
+        "body_delta_pct": 6.87,
+        "offset": [
+          37,
+          241
+        ],
+        "source_box": [
+          1388,
+          253,
+          1761,
+          652
+        ],
+        "scale_xy_from_raster_rounding": [
+          1.3270777479892761,
+          1.3258145363408522
+        ],
+        "alpha_bbox": [
+          37,
+          241,
+          532,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "left_sole_row": 767,
+        "right_sole_row": 764,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 6,
+        "head_width_px": 225.19,
+        "body_height_px": 529.67,
+        "head_delta_pct": -6.95,
+        "body_delta_pct": 7.0,
+        "offset": [
+          21,
+          239
+        ],
+        "source_box": [
+          1761,
+          253,
+          2143,
+          652
+        ],
+        "scale_xy_from_raster_rounding": [
+          1.3324607329842932,
+          1.330827067669173
+        ],
+        "alpha_bbox": [
+          21,
+          239,
+          530,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "left_sole_row": 767,
+        "right_sole_row": 764,
+        "edge_and_ground_pass": true
+      }
+    ],
+    "anatomy_audit": "audits/lyra-victory-r4.json",
+    "audit_exit": 1,
+    "head_scale_median": 0.9684999999999999,
+    "head_scale_max": 1.006,
+    "not_measured": [
+      6
+    ],
+    "scale_pass": false,
+    "edges_and_ground_pass": true,
+    "anatomy_numeric_pass": true,
+    "blade": {
+      "seed_hilt": [
+        339,
+        266
+      ],
+      "seed_tip": [
+        499,
+        42
+      ],
+      "seed_length_px": 275.27,
+      "held_raw_hilt": [
+        294,
+        111
+      ],
+      "held_raw_tip": [
+        4,
+        36
+      ],
+      "held_length_px": 399.1,
+      "held_delta_pct": 44.98,
+      "held_vector_px": [
+        -386.41,
+        -99.81
+      ],
+      "gate_pass": false
+    },
+    "visual_pass": false,
+    "visual_observations": "ท่าพาดดาบเฉียงขึ้นด้านหลังและมือเท้าสะโพกอ่านออก ขอบเฟรมค้างสะอาดกว่ารุ่น b แต่ใบดาบยาวเกิน และปลายเฟรม 2 ชนขอบช่อง raw เศษปลายดาบที่ติดช่องเฟรม 3 ถูกตัดออกตอนแยกเฟรม",
+    "recommended_for_review": true,
+    "status": "missing-final-review-only"
+  },
+  {
+    "character": "lyra",
+    "revision": "R4B",
+    "frame_count": 6,
+    "frame_order": "left-to-right",
+    "canvas": [
+      768,
+      768
+    ],
+    "ground_row": 767,
+    "seed_offset": [
+      128,
+      256
+    ],
+    "seed_sha256": "a0d462ce8c0469fab74e267b14e7dc73fd43fc53330a648704d63ac8a086ad3e",
+    "seed": "seeds/lyra-seed.png",
+    "raw": "raw/lyra-victory-r4b.png",
+    "cells": "cells/lyra-victory-r4b",
+    "runtime_use": {
+      "type": "one-shot",
+      "hold_frame": 6
+    },
+    "frames": [
+      {
+        "frame": 1,
+        "head_width_px": 242,
+        "body_height_px": 495,
+        "head_delta_pct": 0,
+        "body_delta_pct": 0,
+        "offset": [
+          128,
+          256
+        ],
+        "uniform_scale": 1,
+        "seed_lock": true,
+        "alpha_bbox": [
+          128,
+          271,
+          640,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "left_sole_row": 767,
+        "right_sole_row": 762,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 2,
+        "head_width_px": 228.26,
+        "body_height_px": 522.45,
+        "head_delta_pct": -5.68,
+        "body_delta_pct": 5.55,
+        "offset": [
+          142,
+          242
+        ],
+        "source_box": [
+          381,
+          193,
+          693,
+          638
+        ],
+        "scale_xy_from_raster_rounding": [
+          1.1826923076923077,
+          1.1820224719101124
+        ],
+        "alpha_bbox": [
+          142,
+          242,
+          511,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "left_sole_row": 767,
+        "right_sole_row": 762,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 3,
+        "head_width_px": 210.7,
+        "body_height_px": 559.07,
+        "head_delta_pct": -12.93,
+        "body_delta_pct": 12.94,
+        "offset": [
+          133,
+          13
+        ],
+        "source_box": [
+          742,
+          35,
+          1050,
+          640
+        ],
+        "scale_xy_from_raster_rounding": [
+          1.2467532467532467,
+          1.2479338842975207
+        ],
+        "alpha_bbox": [
+          133,
+          13,
+          517,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "left_sole_row": 767,
+        "right_sole_row": 757,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 4,
+        "head_width_px": 219.57,
+        "body_height_px": 540.68,
+        "head_delta_pct": -9.27,
+        "body_delta_pct": 9.23,
+        "offset": [
+          118,
+          220
+        ],
+        "source_box": [
+          1094,
+          194,
+          1417,
+          643
+        ],
+        "scale_xy_from_raster_rounding": [
+          1.2198142414860682,
+          1.2204899777282852
+        ],
+        "alpha_bbox": [
+          118,
+          220,
+          512,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "left_sole_row": 767,
+        "right_sole_row": 756,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 5,
+        "head_width_px": 220.49,
+        "body_height_px": 539.12,
+        "head_delta_pct": -8.89,
+        "body_delta_pct": 8.91,
+        "offset": [
+          120,
+          224
+        ],
+        "source_box": [
+          1456,
+          195,
+          1786,
+          641
+        ],
+        "scale_xy_from_raster_rounding": [
+          1.2181818181818183,
+          1.2197309417040358
+        ],
+        "alpha_bbox": [
+          120,
+          224,
+          522,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "left_sole_row": 767,
+        "right_sole_row": 757,
+        "edge_and_ground_pass": true
+      },
+      {
+        "frame": 6,
+        "head_width_px": 222.92,
+        "body_height_px": 534.19,
+        "head_delta_pct": -7.88,
+        "body_delta_pct": 7.92,
+        "offset": [
+          125,
+          229
+        ],
+        "source_box": [
+          1819,
+          194,
+          2141,
+          642
+        ],
+        "scale_xy_from_raster_rounding": [
+          1.204968944099379,
+          1.203125
+        ],
+        "alpha_bbox": [
+          125,
+          229,
+          513,
+          768
+        ],
+        "lowest_opaque_row": 767,
+        "left_sole_row": 767,
+        "right_sole_row": 756,
+        "edge_and_ground_pass": true
+      }
+    ],
+    "anatomy_audit": "audits/lyra-victory-r4b.json",
+    "audit_exit": 0,
+    "head_scale_median": 0.945,
+    "head_scale_max": 0.952,
+    "not_measured": [],
+    "scale_pass": false,
+    "edges_and_ground_pass": true,
+    "anatomy_numeric_pass": true,
+    "blade": {
+      "seed_hilt": [
+        339,
+        266
+      ],
+      "seed_tip": [
+        499,
+        42
+      ],
+      "seed_length_px": 275.27,
+      "held_raw_hilt": [
+        136,
+        134
+      ],
+      "held_raw_tip": [
+        2,
+        38
+      ],
+      "held_length_px": 198.52,
+      "held_delta_pct": -27.88,
+      "held_vector_px": [
+        -161.47,
+        -115.5
+      ],
+      "gate_pass": false
+    },
+    "visual_pass": false,
+    "visual_observations": "ดาบหันเฉียงขึ้นด้านหลังชัด แต่สั้นกว่า seed และมีขอบเทาติดดาบ ผม และผ้าคลุม",
+    "recommended_for_review": false,
+    "status": "missing-final-review-only"
+  }
+]
