@@ -1,0 +1,162 @@
+{
+  "mira": {
+    "status": "missing",
+    "reason": "Ground, seed lock, margins and anatomy pass (median 0.953). At matched height, frame 3 shortens the bow and frames 4–6 narrow the hood and hair silhouette. The adjusted ground rule alone does not clear these gates.",
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 752,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6"
+  },
+  "toma": {
+    "status": "missing",
+    "reason": "Both redraws yield six transparent figures. Fix 2 still narrows the head at matched height and shortens the flask in frame 3.",
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 752,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6"
+  },
+  "garran": {
+    "status": "missing",
+    "reason": "The second redraw gets closer to the spear length but exceeds +5% in the held frame and narrows the head. One uniform scale cannot bring the head, figure and spear into tolerance.",
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 752,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6"
+  },
+  "brann": {
+    "status": "missing",
+    "reason": "Both redraws show visible background matte. Fix 2 has alpha ≥189 across the full image. The strip could not cleanly be cut into transparent cells.",
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 752,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6"
+  },
+  "sefa": {
+    "status": "missing",
+    "reason": "Ground, seed lock, margins and anatomy pass (median 0.982). The visible blade spans shorten during the flip and cross. The far sole also remains above the line in the held pose.",
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 752,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6"
+  },
+  "corin": {
+    "status": "missing",
+    "reason": "Fix 2 retains more of the visible strand, but the head is narrower than allowed and the bead span changes within the salute.",
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 751,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6"
+  },
+  "cerise": {
+    "status": "missing",
+    "reason": "Both redraws keep Cerise’s face visible. Fix 2 narrows her head in the peak and reduces the open fan spans there.",
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 750,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6"
+  },
+  "kael": {
+    "status": "missing",
+    "reason": "Fix 1 has a gray matte. Fix 2 is transparent but keeps a substantially narrower head at the seed’s height. Increasing one uniform scale enough for the head would exceed the allowed figure height.",
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 752,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6"
+  },
+  "wynne": {
+    "status": "missing",
+    "reason": "Fix 1 ends with the doll below the cheek. Fix 2 holds the hug, but narrows the head silhouette and shortens the doll.",
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 752,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6"
+  },
+  "astrid": {
+    "status": "missing",
+    "reason": "Fix 2 retains both pendants and improves head size. The astrolabe is still smaller than the seed and the held ring drops to nearly the seed position.",
+    "frames": [],
+    "canvas": [
+      768,
+      768
+    ],
+    "seed_offset": [
+      128,
+      256
+    ],
+    "ground_row": 752,
+    "recommended_version": null,
+    "runtime_use": "one-shot, then hold frame 6"
+  }
+}

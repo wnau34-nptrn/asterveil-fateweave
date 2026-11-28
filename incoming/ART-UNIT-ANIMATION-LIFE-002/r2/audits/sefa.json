@@ -1,0 +1,123 @@
+{
+  "attempt": "Sefa R1, reused",
+  "anatomy": {
+    "tolerance": 0.12,
+    "minInliers": 12,
+    "report": {
+      "sefa": [
+        {
+          "frame": 0,
+          "height": 460,
+          "scale": 1.0,
+          "inliers": 2566,
+          "idle": true,
+          "status": "idle"
+        },
+        {
+          "frame": 1,
+          "height": 466,
+          "scale": 1.018,
+          "inliers": 57,
+          "status": "ok"
+        },
+        {
+          "frame": 2,
+          "height": 468,
+          "scale": 0.982,
+          "inliers": 75,
+          "status": "ok"
+        },
+        {
+          "frame": 3,
+          "height": 467,
+          "scale": 0.978,
+          "inliers": 92,
+          "status": "ok"
+        },
+        {
+          "frame": 4,
+          "height": 467,
+          "scale": 0.995,
+          "inliers": 80,
+          "status": "ok"
+        },
+        {
+          "frame": 5,
+          "height": 467,
+          "scale": 0.976,
+          "inliers": 94,
+          "status": "ok"
+        }
+      ]
+    }
+  },
+  "measurements": [
+    {
+      "frame": 1,
+      "ground_row": 752,
+      "edge_margin": 15,
+      "head_width_px": 181,
+      "body_height_px": 463,
+      "prop_length_px": [
+        104,
+        94
+      ]
+    },
+    {
+      "frame": 2,
+      "ground_row": 752,
+      "edge_margin": 15,
+      "head_width_px": 183,
+      "body_height_px": 462,
+      "prop_length_px": [
+        94,
+        85
+      ]
+    },
+    {
+      "frame": 3,
+      "ground_row": 752,
+      "edge_margin": 15,
+      "head_width_px": 178,
+      "body_height_px": 463,
+      "prop_length_px": [
+        87,
+        92
+      ]
+    },
+    {
+      "frame": 4,
+      "ground_row": 752,
+      "edge_margin": 15,
+      "head_width_px": 174,
+      "body_height_px": 463,
+      "prop_length_px": [
+        85,
+        92
+      ]
+    },
+    {
+      "frame": 5,
+      "ground_row": 752,
+      "edge_margin": 15,
+      "head_width_px": 177,
+      "body_height_px": 463,
+      "prop_length_px": [
+        91,
+        96
+      ]
+    },
+    {
+      "frame": 6,
+      "ground_row": 752,
+      "edge_margin": 15,
+      "head_width_px": 175,
+      "body_height_px": 463,
+      "prop_length_px": [
+        90,
+        95
+      ]
+    }
+  ],
+  "prop_method": "Each visible blade tip to guard, in hand order. Handles are partly covered in the seed and several generated frames."
+}

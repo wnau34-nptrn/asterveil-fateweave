@@ -1,0 +1,160 @@
+{
+  "mira": [
+    {
+      "version": "R2",
+      "prompt": "Edit the attached original portrait sprite of mira into ONE horizontal production animation strip with exactly six evenly spaced full-body sprites, in reading order and in a single row. Real transparent RGBA, generous transparent margins and gutters, all elements fit within their own slot. Use only the given character. Match the original polished fantasy chibi sprite render, exact face, head width, body height, hair silhouette, costume details and colors, original props and true prop dimensions. Preserve camera, facing and perspective. Exactly two arms and two hands including any overlaps. Same body scale and sole height in all six drawings, no jump. The poses read in order: 1 same as the seed; 2 small preparation; 3 rising action; 4 peak; 5 small settle; 6 balanced held victory, eyes open, feet on the sole line. Choreography: Lift her left-hand bow overhead diagonally, right fist by hip, natural bright smile. At peak and held, both ends of the bow should sit visibly above the hood. Uncurl the right hand from the braid for the action. Exactly two hands throughout: one attached to each arm, no hand on braid once the right fist moves to hip. Preserve all original props and their proportions, no extra props. Clean antialiased transparent edges, no matte, no background, no floor, no shadows, no added effects, no motion lines, no text.",
+      "reference": "seeds/mira-seed.png",
+      "generation_id": "exec-e4b54d52-e0bb-45da-a499-f141cdcd0237",
+      "transparent_background": true,
+      "file": "raw/mira-victory-r2.png",
+      "raw_size": [
+        2172,
+        724
+      ],
+      "reused": true
+    }
+  ],
+  "toma": [
+    {
+      "file": "raw/toma-victory-fix-1.png",
+      "prompt": "Using only this attached toma sprite as the character model, render a very wide 3:1 transparent RGBA production sprite strip, exactly SIX equally spaced complete full-body figures in one horizontal row. Generous completely transparent gaps between all six silhouettes. Match the exact seed artwork, proportions, face, costumes, colors, footwear, props, hair and perspective. Keep body and head equally sized and both feet at a common sole level throughout. Frame 1 seed stance, 2 subtle anticipation, 3 rising, 4 readable peak, 5 subtle settle, 6 stable held victory with face visible and eyes open. The goggles already sit above separate round eyeglasses. Lift the goggles a little by the rim and raise the same golden flask to eye height, with both props complete. Exactly six full figures, no cropping or overlapping. Actual zero alpha backdrop and gutters, clean edges. No added light, effects, floor, shadow, lettering, lines, or background.",
+      "generation_id": "exec-9aa7c534-9a86-415f-871c-f9bb50441982",
+      "reference": "seeds/toma-seed.png",
+      "transparent_background": true
+    },
+    {
+      "file": "raw/toma-victory-fix-2.png",
+      "prompt": "Edit attached original toma as one ultra-wide six-frame animation strip on truly transparent RGBA. Six distinct full body sprites side by side in one row, generous transparent gutters, no cropping. 1 seed stance, 2 anticipation, 3 rising, 4 peak, 5 settle, 6 grounded eyes-open hold. Keep exact seed appearance, colors, camera and body silhouette ratio. The hair silhouette is 43% as wide as the figure is tall and matches in all six slots. The original round flask has a long neck, bottom-to-stopper length 28% of total figure height. Same glasses and goggles. He raises this flask a little from the original position, touches the rim of the existing goggles with free hand, then holds a quiet grin. Same costume, props and their same exact dimensions in every panel. No ground, no shadow, no new effects, no matte, no text.",
+      "generation_id": "exec-d61650d5-0040-477b-9260-1120f5eabc2d",
+      "reference": "seeds/toma-seed.png",
+      "transparent_background": true
+    }
+  ],
+  "garran": [
+    {
+      "file": "raw/garran-victory-fix-1.png",
+      "prompt": "Using only this attached garran sprite as the character model, render a very wide 3:1 transparent RGBA production sprite strip, exactly SIX equally spaced complete full-body figures in one horizontal row. Generous completely transparent gaps between all six silhouettes. Match the exact seed artwork, proportions, face, costumes, colors, footwear, props, hair and perspective. Keep body and head equally sized and both feet at a common sole level throughout. Frame 1 seed stance, 2 subtle anticipation, 3 rising, 4 readable peak, 5 subtle settle, 6 stable held victory with face visible and eyes open. The spear must remain 436 pixels tip to butt when the body is scaled to seed height. Its target length is 100% of the crown-to-sole body height. Plant it vertically beside the boot, keep the original oval shield. Exactly six full figures, no cropping or overlapping. Actual zero alpha backdrop and gutters, clean edges. No added light, effects, floor, shadow, lettering, lines, or background.",
+      "generation_id": "exec-b3264e4f-55f2-4010-a521-ee3c1d219ba4",
+      "reference": "seeds/garran-seed.png",
+      "transparent_background": true
+    },
+    {
+      "file": "raw/garran-victory-fix-2.png",
+      "prompt": "One VERY WIDE horizontal sprite strip, exactly six sequential full-body sprites on real transparent alpha with wide transparent gaps. Match the supplied exact semi-chibi Garran. His head, including the spiky hair, is 46% as wide as his figure is tall, and this ratio absolutely never changes. Preserve same original 436px spear from tip to butt relative to 435px figure, and exact oval shield. Animate from slightly diagonal spear in anticipation, to planting the spear butt next to his boot in frames 3–4, chest proud chin raised at peak, then settle and hold an understated smile, eyes open and spear upright. Preserve footprint, silhouette proportions, hair, facial structure, gear, and colors. Both feet planted. Nothing else in image, no shadows, matte, or added effects.",
+      "generation_id": "exec-69b758b2-e1dd-4cc3-8371-cb7c93810058",
+      "reference": "seeds/garran-seed.png",
+      "transparent_background": true
+    }
+  ],
+  "brann": [
+    {
+      "file": "raw/brann-victory-fix-1.png",
+      "prompt": "Using only this attached brann sprite as the character model, render a very wide 3:1 transparent RGBA production sprite strip, exactly SIX equally spaced complete full-body figures in one horizontal row. Generous completely transparent gaps between all six silhouettes. Match the exact seed artwork, proportions, face, costumes, colors, footwear, props, hair and perspective. Keep body and head equally sized and both feet at a common sole level throughout. Frame 1 seed stance, 2 subtle anticipation, 3 rising, 4 readable peak, 5 subtle settle, 6 stable held victory with face visible and eyes open. Keep the full-size original double-faced hammer and full-length handle. The pommel when planted should rise almost to the crown because head-to-pommel length is about the full body height. Rest both hands on the pommel, eyes open in held pose. Exactly six full figures, no cropping or overlapping. Actual zero alpha backdrop and gutters, clean edges. No added light, effects, floor, shadow, lettering, lines, or background.",
+      "generation_id": "exec-b0b7080e-b0dc-4c96-a1a0-2d00e7caa455",
+      "reference": "seeds/brann-seed.png",
+      "transparent_background": true
+    },
+    {
+      "file": "raw/brann-victory-fix-2.png",
+      "prompt": "Transparent PNG animation strip, six full body sprites SIX IN A SINGLE HORIZONTAL ROW separated by genuinely transparent space. Make it extremely wide so all fit uncropped. Use attached character exactly (same face, head width and body size, same outfit, same wide footprint and props). The six victory poses read neutral, anticipate, rise, peak, settle, hold. Both soles remain on a common level. Cheery smile as Brann plants the original broad hammer head on the ground beside one boot and rests both hands on the far end of the full-length handle, with a natural eyes-open held expression. Its original head-to-pommel length stays as long as his figure height, leaving the pommel near his head in the held pose. Keep animation sprites visually consistent, no scenery, matte, effects, shadows, borders or labels.",
+      "generation_id": "exec-69792593-692f-4e15-ac8f-a07de14cc9e1",
+      "reference": "seeds/brann-seed.png",
+      "transparent_background": true
+    }
+  ],
+  "sefa": [
+    {
+      "version": "R1",
+      "prompt": "Edit the attached original portrait sprite of sefa into ONE horizontal production animation strip with exactly six evenly spaced full-body sprites, in reading order and in a single row. Real transparent RGBA, generous transparent margins and gutters, all elements fit within their own slot. Use only the given character. Match the original polished fantasy chibi sprite render, exact face, head width, body height, hair silhouette, costume details and colors, original props and true prop dimensions. Preserve camera, facing and perspective. Exactly two arms and two hands including any overlaps. Same body scale and sole height in all six drawings, no jump. The poses read in order: 1 same as the seed; 2 small preparation; 3 rising action; 4 peak; 5 small settle; 6 balanced held victory, eyes open, feet on the sole line. Choreography: Make one short dagger flip on the rising action, then hold both existing daggers in a reverse grip crossed neatly in front of the chest, with a cool smirk while the original scarf settles. End with crossed daggers, eyes open. Preserve all original props and their proportions, no extra props. Clean antialiased transparent edges, no matte, no background, no floor, no shadows, no added effects, no motion lines, no text.",
+      "reference": "seeds/sefa-seed.png",
+      "generation_id": "exec-20778c69-9070-480f-aa85-f2b8bdc65139",
+      "transparent_background": true,
+      "file": "raw/sefa-victory-r1.png",
+      "raw_size": [
+        2172,
+        724
+      ],
+      "reused": true
+    }
+  ],
+  "corin": [
+    {
+      "file": "raw/corin-victory-fix-1.png",
+      "prompt": "Using only this attached corin sprite as the character model, render a very wide 3:1 transparent RGBA production sprite strip, exactly SIX equally spaced complete full-body figures in one horizontal row. Generous completely transparent gaps between all six silhouettes. Match the exact seed artwork, proportions, face, costumes, colors, footwear, props, hair and perspective. Keep body and head equally sized and both feet at a common sole level throughout. Frame 1 seed stance, 2 subtle anticipation, 3 rising, 4 readable peak, 5 subtle settle, 6 stable held victory with face visible and eyes open. Fist in palm martial salute, subtle bow. Keep the full bead strand hanging visibly in front from its first pearl down to the exact original tassel; never hide it behind a hand. Exactly six full figures, no cropping or overlapping. Actual zero alpha backdrop and gutters, clean edges. No added light, effects, floor, shadow, lettering, lines, or background.",
+      "generation_id": "exec-9a57d34a-8b9a-4778-ae7d-651184bd8e49",
+      "reference": "seeds/corin-seed.png",
+      "transparent_background": true
+    },
+    {
+      "file": "raw/corin-victory-fix-2.png",
+      "prompt": "Edit attached original corin as one ultra-wide six-frame animation strip on truly transparent RGBA. Six distinct full body sprites side by side in one row, generous transparent gutters, no cropping. 1 seed stance, 2 anticipation, 3 rising, 4 peak, 5 settle, 6 grounded eyes-open hold. Keep exact seed appearance, colors, camera and body silhouette ratio. Preserve the original broad head including hair at 47% of body height at all times. Martial salute with palm gently over fist in front of chest, slight bow at peak with head still near the same angle, then upright. Keep full visible beaded strand first pearl to end of tassel, about 28% of body height, entirely unobstructed below the hands. Same costume, props and their same exact dimensions in every panel. No ground, no shadow, no new effects, no matte, no text.",
+      "generation_id": "exec-f30053ee-70ad-40a1-a994-a4de6c9209c7",
+      "reference": "seeds/corin-seed.png",
+      "transparent_background": true
+    }
+  ],
+  "cerise": [
+    {
+      "file": "raw/cerise-victory-fix-1.png",
+      "prompt": "Using only this attached cerise sprite as the character model, render a very wide 3:1 transparent RGBA production sprite strip, exactly SIX equally spaced complete full-body figures in one horizontal row. Generous completely transparent gaps between all six silhouettes. Match the exact seed artwork, proportions, face, costumes, colors, footwear, props, hair and perspective. Keep body and head equally sized and both feet at a common sole level throughout. Frame 1 seed stance, 2 subtle anticipation, 3 rising, 4 readable peak, 5 subtle settle, 6 stable held victory with face visible and eyes open. Eyes and face visible in all six frames, no rear view. Turn only 25 degrees toward camera at peak then finish rightward with both original fans open to the sides, one pointed toe. Exactly six full figures, no cropping or overlapping. Actual zero alpha backdrop and gutters, clean edges. No added light, effects, floor, shadow, lettering, lines, or background.",
+      "generation_id": "exec-7f228513-bc48-4e1e-b031-99ecbdd7e413",
+      "reference": "seeds/cerise-seed.png",
+      "transparent_background": true
+    },
+    {
+      "file": "raw/cerise-victory-fix-2.png",
+      "prompt": "Edit attached original cerise as one ultra-wide six-frame animation strip on truly transparent RGBA. Six distinct full body sprites side by side in one row, generous transparent gutters, no cropping. 1 seed stance, 2 anticipation, 3 rising, 4 peak, 5 settle, 6 grounded eyes-open hold. Keep exact seed appearance, colors, camera and body silhouette ratio. At peak use a subtle 15-degree torso turn only, with head fixed in width, angle, position and facial identity. Her head including hair width is 40% of full figure height. Preserve both fan spans and crimped shape as in original. Right-facing, both fans open out to sides, one toe pointed on the ground in held pose. Same costume, props and their same exact dimensions in every panel. No ground, no shadow, no new effects, no matte, no text.",
+      "generation_id": "exec-c385fbbe-38e0-4b15-abbb-d00d135a69a9",
+      "reference": "seeds/cerise-seed.png",
+      "transparent_background": true
+    }
+  ],
+  "kael": [
+    {
+      "file": "raw/kael-victory-fix-1.png",
+      "prompt": "Using only this attached kael sprite as the character model, render a very wide 3:1 transparent RGBA production sprite strip, exactly SIX equally spaced complete full-body figures in one horizontal row. Generous completely transparent gaps between all six silhouettes. Match the exact seed artwork, proportions, face, costumes, colors, footwear, props, hair and perspective. Keep body and head equally sized and both feet at a common sole level throughout. Frame 1 seed stance, 2 subtle anticipation, 3 rising, 4 readable peak, 5 subtle settle, 6 stable held victory with face visible and eyes open. Exhale then raise fist near temple, other hand on sash. Preserve the exact broad width of head, hair, body and spread stance. Keep the same head-width to figure-height ratio throughout. Exactly six full figures, no cropping or overlapping. Actual zero alpha backdrop and gutters, clean edges. No added light, effects, floor, shadow, lettering, lines, or background.",
+      "generation_id": "exec-c4d6b221-5db1-44c0-8f02-61ee55aba118",
+      "reference": "seeds/kael-seed.png",
+      "transparent_background": true
+    },
+    {
+      "file": "raw/kael-victory-fix-2.png",
+      "prompt": "Transparent PNG animation strip, six full body sprites SIX IN A SINGLE HORIZONTAL ROW separated by genuinely transparent space. Make it extremely wide so all fit uncropped. Use attached character exactly (same face, head width and body size, same outfit, same wide footprint and props). The six victory poses read neutral, anticipate, rise, peak, settle, hold. Both soles remain on a common level. Kael exhales then raises one fist up by his head while the other hand rests at his sash, smiling. His head-to-figure width ratio, stance and colors are identical to the attached seed. Keep animation sprites visually consistent, no scenery, matte, effects, shadows, borders or labels.",
+      "generation_id": "exec-61480f47-55f3-42e7-b67a-b27b40b4a040",
+      "reference": "seeds/kael-seed.png",
+      "transparent_background": true
+    }
+  ],
+  "wynne": [
+    {
+      "file": "raw/wynne-victory-fix-1.png",
+      "prompt": "Using only this attached wynne sprite as the character model, render a very wide 3:1 transparent RGBA production sprite strip, exactly SIX equally spaced complete full-body figures in one horizontal row. Generous completely transparent gaps between all six silhouettes. Match the exact seed artwork, proportions, face, costumes, colors, footwear, props, hair and perspective. Keep body and head equally sized and both feet at a common sole level throughout. Frame 1 seed stance, 2 subtle anticipation, 3 rising, 4 readable peak, 5 subtle settle, 6 stable held victory with face visible and eyes open. Hug the original doll to cheek. In every frame preserve its exact size and all details, doll head-to-toe about 27% of crown-to-sole height. Both doll legs visible; preserve talismans. Exactly six full figures, no cropping or overlapping. Actual zero alpha backdrop and gutters, clean edges. No added light, effects, floor, shadow, lettering, lines, or background.",
+      "generation_id": "exec-f6b1eef0-cea3-4b47-ba53-44ced72d0616",
+      "reference": "seeds/wynne-seed.png",
+      "transparent_background": true
+    },
+    {
+      "file": "raw/wynne-victory-fix-2.png",
+      "prompt": "Make an ultra-wide fully transparent game animation sprite strip. Cut nothing: six complete evenly spaced separate sprites in one horizontal row with real clear alpha gaps. Match attached original Wynne: exact face, costume, talismans, colors, original doll, large head broad as in the seed. Preserve doll crown-to-toe size at 27 percent of figure height in every pose, and keep its button eye, seams and two legs. During small anticipation bring the doll upward, pose 3 the doll brushes cheek, pose 4 a shy happy cheek hug, pose 5 slight settle, pose 6 final held pose keeps the doll against the cheek with open eyes and a shy smile. Both soles fixed with no jump. Exact seed height and head width throughout. Body only, no shadows or effects, no text, no scenery.",
+      "generation_id": "exec-9da77114-fb1e-4b3a-a061-0712f3f27661",
+      "reference": "seeds/wynne-seed.png",
+      "transparent_background": true
+    }
+  ],
+  "astrid": [
+    {
+      "file": "raw/astrid-victory-fix-1.png",
+      "prompt": "Using only this attached astrid sprite as the character model, render a very wide 3:1 transparent RGBA production sprite strip, exactly SIX equally spaced complete full-body figures in one horizontal row. Generous completely transparent gaps between all six silhouettes. Match the exact seed artwork, proportions, face, costumes, colors, footwear, props, hair and perspective. Keep body and head equally sized and both feet at a common sole level throughout. Frame 1 seed stance, 2 subtle anticipation, 3 rising, 4 readable peak, 5 subtle settle, 6 stable held victory with face visible and eyes open. Raise original ring to shoulder, close eyes frames 3 and 4 only, open for hold. Preserve exact head width relative to height and all separate dangling gold diamond pendants. Exactly six full figures, no cropping or overlapping. Actual zero alpha backdrop and gutters, clean edges. No added light, effects, floor, shadow, lettering, lines, or background.",
+      "generation_id": "exec-fdc8b082-7863-458f-8224-408612548950",
+      "reference": "seeds/astrid-seed.png",
+      "transparent_background": true
+    },
+    {
+      "file": "raw/astrid-victory-fix-2.png",
+      "prompt": "Create one horizontal ultra-wide transparent RGBA sprite strip of six equally spaced full-body cells, separated by real clear alpha. This is the exact seed character: her oversized head including all hair is 48% as wide as she is tall, and must stay that wide through every drawing. Her head does not tilt or change angle. Preserve original haircut, splayed outer hair silhouette, costume, colours, and the complete astrolabe with both separate hanging pendants. She raises the astrolabe to shoulder height, eyes closed in poses three and four, then settles and reopens eyes still holding it comfortably raised in pose six. First pose idle, second anticipation, third rise, fourth peak, fifth settle, sixth hold. Both feet stay anchored. No added effects, backdrop, shadow, text or floor.",
+      "generation_id": "exec-9a854cf6-d431-4274-abff-bb5ef228f332",
+      "reference": "seeds/astrid-seed.png",
+      "transparent_background": true
+    }
+  ]
+}

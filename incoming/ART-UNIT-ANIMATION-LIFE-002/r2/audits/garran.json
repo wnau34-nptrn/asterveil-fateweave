@@ -1,0 +1,105 @@
+{
+  "attempt": "Fix 2",
+  "anatomy": {
+    "tolerance": 0.12,
+    "minInliers": 12,
+    "report": {
+      "garran": [
+        {
+          "frame": 0,
+          "height": 460,
+          "scale": 1.0,
+          "inliers": 1659,
+          "idle": true,
+          "status": "idle"
+        },
+        {
+          "frame": 1,
+          "height": 441,
+          "scale": 0.999,
+          "inliers": 76,
+          "status": "ok"
+        },
+        {
+          "frame": 2,
+          "height": 464,
+          "scale": 0.974,
+          "inliers": 75,
+          "status": "ok"
+        },
+        {
+          "frame": 3,
+          "height": 469,
+          "scale": 0.958,
+          "inliers": 28,
+          "status": "ok"
+        },
+        {
+          "frame": 4,
+          "height": 475,
+          "scale": 0.979,
+          "inliers": 61,
+          "status": "ok"
+        },
+        {
+          "frame": 5,
+          "height": 474,
+          "scale": 0.975,
+          "inliers": 56,
+          "status": "ok"
+        }
+      ]
+    }
+  },
+  "measurements": [
+    {
+      "frame": 1,
+      "ground_row": 752,
+      "edge_margin": 15,
+      "head_width_px": 201,
+      "body_height_px": 434,
+      "prop_length_px": 436
+    },
+    {
+      "frame": 2,
+      "ground_row": 752,
+      "edge_margin": 15,
+      "head_width_px": 188,
+      "body_height_px": 434,
+      "prop_length_px": 445
+    },
+    {
+      "frame": 3,
+      "ground_row": 752,
+      "edge_margin": 15,
+      "head_width_px": 185,
+      "body_height_px": 434,
+      "prop_length_px": 452
+    },
+    {
+      "frame": 4,
+      "ground_row": 752,
+      "edge_margin": 15,
+      "head_width_px": 173,
+      "body_height_px": 434,
+      "prop_length_px": 456
+    },
+    {
+      "frame": 5,
+      "ground_row": 752,
+      "edge_margin": 15,
+      "head_width_px": 181,
+      "body_height_px": 434,
+      "prop_length_px": 460
+    },
+    {
+      "frame": 6,
+      "ground_row": 752,
+      "edge_margin": 15,
+      "head_width_px": 181,
+      "body_height_px": 434,
+      "prop_length_px": 461
+    }
+  ],
+  "prop_method": "Straight tip-to-butt span."
+}

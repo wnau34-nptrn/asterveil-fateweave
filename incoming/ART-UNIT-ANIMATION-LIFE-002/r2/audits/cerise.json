@@ -1,0 +1,123 @@
+{
+  "attempt": "Fix 2",
+  "anatomy": {
+    "tolerance": 0.12,
+    "minInliers": 12,
+    "report": {
+      "cerise": [
+        {
+          "frame": 0,
+          "height": 460,
+          "scale": 1.0,
+          "inliers": 3093,
+          "idle": true,
+          "status": "idle"
+        },
+        {
+          "frame": 1,
+          "height": 462,
+          "scale": 1.022,
+          "inliers": 94,
+          "status": "ok"
+        },
+        {
+          "frame": 2,
+          "height": 462,
+          "scale": 0.928,
+          "inliers": 122,
+          "status": "ok"
+        },
+        {
+          "frame": 3,
+          "height": 461,
+          "scale": 0.84,
+          "inliers": 97,
+          "status": "drift"
+        },
+        {
+          "frame": 4,
+          "height": 461,
+          "scale": 0.923,
+          "inliers": 90,
+          "status": "ok"
+        },
+        {
+          "frame": 5,
+          "height": 462,
+          "scale": 0.965,
+          "inliers": 146,
+          "status": "ok"
+        }
+      ]
+    }
+  },
+  "measurements": [
+    {
+      "frame": 1,
+      "ground_row": 750,
+      "edge_margin": 17,
+      "head_width_px": 180,
+      "body_height_px": 458,
+      "prop_length_px": [
+        147,
+        132
+      ]
+    },
+    {
+      "frame": 2,
+      "ground_row": 750,
+      "edge_margin": 17,
+      "head_width_px": 179,
+      "body_height_px": 458,
+      "prop_length_px": [
+        153,
+        135
+      ]
+    },
+    {
+      "frame": 3,
+      "ground_row": 750,
+      "edge_margin": 17,
+      "head_width_px": 178,
+      "body_height_px": 458,
+      "prop_length_px": [
+        148,
+        128
+      ]
+    },
+    {
+      "frame": 4,
+      "ground_row": 750,
+      "edge_margin": 17,
+      "head_width_px": 150,
+      "body_height_px": 458,
+      "prop_length_px": [
+        128,
+        123
+      ]
+    },
+    {
+      "frame": 5,
+      "ground_row": 750,
+      "edge_margin": 17,
+      "head_width_px": 167,
+      "body_height_px": 458,
+      "prop_length_px": [
+        147,
+        129
+      ]
+    },
+    {
+      "frame": 6,
+      "ground_row": 750,
+      "edge_margin": 17,
+      "head_width_px": 172,
+      "body_height_px": 458,
+      "prop_length_px": [
+        146,
+        129
+      ]
+    }
+  ],
+  "prop_method": "Maximum visible open fan span along the outer edges, excluding tassels, in raised-hand then side-hand order."
+}
