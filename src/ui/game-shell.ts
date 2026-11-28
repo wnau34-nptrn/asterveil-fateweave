@@ -159,6 +159,7 @@ export class GameShell {
       enhance: (uid,target) => camp({ kind: 'enhance', uid, target }), lock: uid=>camp({ kind: 'lockEquipment', uid }), fuse: (uid,donors) => camp({ kind: 'fuse', uid, ...has('donors', donors ? [...donors] : undefined) }), level:(uid,target)=>camp({ kind: 'raiseItemLevel', uid, target }),
       reroll: (uid, i) => camp({ kind: 'reroll', uid, index: i }), brew: potion => camp({ kind: 'brew', potion }), claim: id => camp({ kind: 'claimQuest', questId: id }), claimBoard: (tab, id, period) => camp({ kind: 'claimBoard', tab, id, period, day: this.today() }),
       depart: (id, hard) => this.depart(id, hard), startWorldBoss: boss => this.startWorldBoss(boss), craftBossItem: (boss, affixes, set) => camp({ kind: 'craftBossItem', boss, affixes, ...(set ? { set } : {}) }), claimWorldBoss: (id, week) => this.claimWorldBoss(id, week), worldBossStatus: () => this.refreshWorldBoss(), worldBossBoard: rank => this.refreshWorldBossBoard(rank),
+      hatchEgg: pet => camp({ kind: 'hatchEgg', pet }), choosePet: pet => camp({ kind: 'choosePet', ...(pet ? { pet } : {}) }),
       gachaPull: count => this.gachaCommand({ kind: 'gachaPull', count, config: this.home.gacha.version }), gachaExchange: heroId => this.gachaCommand({ kind: 'gachaExchange', heroId, config: this.home.gacha.version }),
       sweep: (id, hard) => this.campCommand({ kind: 'sweep', mapId: id, hard, day: this.today(), serial: this.game?.profile.sweep?.count ?? 0 }), home: () => this.showTitle(),
     }, maps);
@@ -728,6 +729,8 @@ export class GameShell {
       : e.type === 'boardClaimed' ? `ได้รับรางวัล${e.tab === 'contract' ? `สัญญาจ้าง${contractText[this.map.board.contracts.find(c => c.id === e.id)!.kind].name}` : boardTaskName[e.id] ?? 'เควสต์'} · ${sweepText(e.reward, partyLine(this.map, result.profile.party.deployed))}`
       : e.type === 'wbClaimed' ? `ได้รับรางวัลส่วนรวมบอสโลก · ${sweepText(e.reward, partyLine(this.map, result.profile.party.deployed))}`
       : e.type === 'gacha' ? `${e.entry.kind === 'pull' ? `ทอชะตา ${e.entry.results.length} ครั้ง` : 'แลกแต้ม'} · ${e.entry.results.filter(r => r.full).map(r => `${name(r.heroId)} ตัวเต็ม`).join(' ') || 'ได้เศษ'} · ตั๋วเหลือ ${result.profile.gacha?.tickets ?? 0} แต้ม ${result.profile.gacha?.points ?? 0}`
+      : e.type === 'hatched' ? `ไข่ฟักเป็น${this.map.pets.kinds.find(k => k.id === e.kind)?.name ?? ''}แล้ว${result.profile.pets?.chosen === e.kind ? ' · พาไปเดินทางครั้งหน้า' : ''}`
+      : e.type === 'petChosen' ? (e.kind ? `พา${this.map.pets.kinds.find(k => k.id === e.kind)?.name ?? ''}ไปเดินทางครั้งหน้า` : 'เดินทางโดยไม่พาสัตว์')
       : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : e.type === 'party' && e.heroId && e.lane ? `จัดแผนแล้ว · ${name(e.heroId)}ยืน${laneName(e.lane)}` : e.type === 'party' && e.auto ? this.autoTeamText(result.profile, !!e.changed) : e.type === 'party' && e.presetAction ? this.presetText(result.profile, e.preset!, e.presetAction, e.left) : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     // The camp NPC whose service just succeeded cheers once.
