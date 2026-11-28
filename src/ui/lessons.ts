@@ -62,7 +62,7 @@ export function battleLessonTip(profile: Profile, kind: string, seen: readonly L
 const FEATURE_TARGET: Record<LobbyFeature, string> = {
   gear: '#lobby-tab-gear', tree: '#lobby-tab-team', team: '#lobby-tab-team', tomes: '#lobby-tab-team', forge: '#lobby-tab-forge', level: '#lobby-tab-forge',
   fuse: '#lobby-tab-forge', craft: '#lobby-tab-forge', transfer: '#lobby-tab-forge', bossCharm: '#lobby-tab-hunt', brew: '#lobby-tab-brew',
-  hire: '#lobby-tab-hire', market: '#lobby-tab-hire', hunt: '#lobby-tab-hunt', quests: '#lobby-board', hard: '#lobby-maps', gacha: '#lobby-gacha', auto: '#lobby-depart',
+  hire: '#lobby-tab-hire', market: '#lobby-tab-hire', hunt: '#lobby-tab-hunt', quests: '#lobby-board', hard: '#lobby-maps', gacha: '#lobby-gacha', auto: '#lobby-depart', worldBoss: '#lobby-wboss',
 };
 const CARD_TEXT: Record<GuideKind, string> = {
   wear: 'เปิดอุปกรณ์ แล้วสวมของ 1 ชิ้นให้สมาชิก', talent: 'เปิดทีม → ตัวละคร → สกิลกิ่ง แล้วลงแต้ม 1 แต้ม', calm: 'กดรับยาฟื้นความเหนื่อยในการ์ดนี้',
@@ -74,15 +74,16 @@ const CARD_TEXT: Record<GuideKind, string> = {
 type Opened = readonly [LobbyFeature, string, string, { key?: string; target?: string }?];
 const OPENED: readonly Opened[] = [
   ['quests', 'กระดานภารกิจเปิดแล้ว', 'งานรายวัน/รายสัปดาห์ให้แร่ ทอง เศษดาว และตั๋วทอชะตา ทำได้ระหว่างเดินทาง'],
-  // OD-59: the World Boss opens with the quest board; the cabinet opens after map 1 with 10 tickets from its first clear.
-  ['quests', 'บอสโลกเปิดแล้ว', 'สู้ได้ 5 ครั้งต่อสัปดาห์ เลือกบอสตัวไหนก็ได้ ทุกครั้งได้แร่ ทอง และเศษบอสไว้สร้างของประจำบอส ครบ 2 และ 4 ครั้งได้ตั๋วทอชะตา', { key: 'wboss', target: '#lobby-wboss' }],
+  // OD-59: the cabinet opens after map 1 with 10 tickets from its first clear.
   ['gacha', 'แท่นทอชะตาเปิดแล้ว', 'จบแผนที่ 1 ได้ตั๋ว 10 ใบ ลองสุ่มสิบครั้งได้เลย · ได้ตัวเต็มหรือเศษ ทุกครั้งได้ 1 แต้ม ครบ 80 แลกตัวที่เลือกได้ · ดูอัตราทั้งหมดในตู้'],
   // Owner 2026-11-28: AUTO opens with map 2 (after map 1); its button is taught in the first ordinary battle after that.
-  ['auto', 'ต่อสู้อัตโนมัติเปิดแล้ว', 'ตั้งแต่แผนที่ 2 การต่อสู้ทั่วไปและบอสโลกมีปุ่ม AUTO ให้ทีมเลือกท่าเอง จะสอนวิธีใช้ในการต่อสู้ครั้งถัดไป'],
+  ['auto', 'ต่อสู้อัตโนมัติเปิดแล้ว', 'ตั้งแต่แผนที่ 2 การต่อสู้ทั่วไปมีปุ่ม AUTO ให้ทีมเลือกท่าเอง (บอสโลกด้วยเมื่อเปิดหลังแผนที่ 3) จะสอนวิธีใช้ในการต่อสู้ครั้งถัดไป'],
   ['team', 'จัดทีมเปิดแล้ว', 'ลงสนามได้ 5 คน และมีตัวสำรอง จัดแนวหน้า/หลังและบันทึกชุดทีมได้'],
   ['market', 'ตลาดเปิดแล้ว', 'ที่นายหน้ามีแท็บตลาด ซื้อเศษดาว สัญญา กล่องอุปกรณ์ และยาไล่ศัตรูด้วยทอง'],
   ['hunt', 'ล่าของเปิดแล้ว', 'เลือกชุดหรือช่องที่อยากได้ แผนที่จะดรอปของแบบนั้นบ่อยขึ้น'],
   ['tomes', 'ตำราสกิลเปิดแล้ว', 'ใช้ตำราที่ได้จากบอส/อีลีทอัป Lv สกิลในหน้าตัวละคร'],
+  // Owner 2026-11-28: the World Boss opens after map 3 (was with the quest board after map 1).
+  ['worldBoss', 'บอสโลกเปิดแล้ว', 'สู้ได้ 5 ครั้งต่อสัปดาห์ เลือกบอสตัวไหนก็ได้ ทุกครั้งได้แร่ ทอง และเศษบอสไว้สร้างของประจำบอส ครบ 2 และ 4 ครั้งได้ตั๋วทอชะตา · ดูอันดับดาเมจประจำสัปดาห์ได้ในหน้าบอสโลก', { key: 'wboss', target: '#lobby-wboss' }],
   ['fuse', 'หลอมรวมเปิดแล้ว', 'ที่ช่างตีเหล็ก หลอมของซ้ำเพื่อเพิ่มระดับ สร้างอาวุธ และย้าย affix ได้'],
   ['bossCharm', 'เป้าหมายบอสเปิดแล้ว', 'ที่แท็บล่าของ เลือกอุปกรณ์ที่อยากได้จากผู้คุมรอยแยกได้แล้ว'],
   ['hard', 'โหมดยากเปิดแล้ว', 'เลือกแผนที่ที่ผ่านแล้วแบบยาก มอนสเตอร์แรงขึ้น รางวัลครั้งแรกดีกว่า'],

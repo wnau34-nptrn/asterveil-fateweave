@@ -146,3 +146,15 @@
   #lobby-view .lobby-boards .lobby-quest-entry strong { font-size:13px; }
   #lobby-view .lobby-boards .lobby-quest-entry strong > .icon:first-child { display:none; }
 }
+/* World Boss leaderboard (owner 2026-11-28): the rank tab's picks, the top list and the player's own rank. */
+#lobby-view .wb-rank-picks { display:flex; flex-wrap:wrap; gap:6px; margin:6px 0; }
+#lobby-view .wb-rank-picks .ui-chip { min-height:44px; }
+#lobby-view .wb-rank-list { list-style:none; margin:8px 0; padding:0; display:grid; gap:4px; }
+#lobby-view .wb-rank-row { display:grid; grid-template-columns:36px minmax(0,1fr) auto; gap:10px; align-items:center; min-height:44px; padding:6px 10px; border-radius:12px; background:#0d1c2ecc; border:1px solid #e8f5ff1f; }
+#lobby-view .wb-rank-row.you { border-color:#ffd27a; background:#3a2c1066; }
+#lobby-view .wb-rank-no { font:700 16px var(--font-heading, Kanit), sans-serif; text-align:center; color:var(--text-muted, #b9c8d8); }
+#lobby-view .wb-rank-no[data-top="1"] { color:#ffd27a; } #lobby-view .wb-rank-no[data-top="2"] { color:#d8e4ef; } #lobby-view .wb-rank-no[data-top="3"] { color:#e3a46f; }
+#lobby-view .wb-rank-name { min-width:0; overflow-wrap:anywhere; } #lobby-view .wb-rank-name small { color:#ffe2a3; }
+#lobby-view .wb-rank-dmg { display:grid; justify-items:end; font:600 15px var(--font-heading, Kanit), sans-serif; }
+#lobby-view .wb-rank-dmg small { font:400 11px var(--font-body, 'Noto Sans Thai'), sans-serif; color:var(--text-muted, #b9c8d8); }
+#lobby-view .wb-rank-you { margin:8px 0; padding:10px; border-radius:12px; border:1px solid #ffd27a; background:#3a2c1066; }

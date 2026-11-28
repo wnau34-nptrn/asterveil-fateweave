@@ -74,6 +74,10 @@ export interface SharedBoss { week: number; hp: number; left: number; accounts: 
 // P11-05: every bar of the week (`boss`: a trio boss or `warden`); `current`/`last` stay the warden's bar.
 export interface SharedBar extends SharedBoss { boss: 'warden' | 'kragmor' | 'valdrakk' | 'morvane'; attempts: number }
 export interface WorldBossStatus { week: number; current: SharedBoss | null; last: SharedBoss | null; bars?: SharedBar[]; lastBars?: SharedBar[] }
+// World Boss leaderboard (owner 2026-11-28): `GET /v1/worldboss/board?boss=&last=1`; handles only, `you` = this account.
+export type WbBoardBoss = 'all' | SharedBar['boss'];
+export interface WbBoardRow { rank: number; handle: string; total: number; attempts: number; best: number; you: boolean }
+export interface WbBoard { week: number; boss: WbBoardBoss; players: number; rows: WbBoardRow[]; you: { rank: number; total: number; attempts: number; best: number } | null }
 // P11 chat (docs/design/CHAT_P11_TH.md).
 export interface ChatMessage { id: number; handle: string; text: string; at: number; mine: boolean }
 export interface ChatRead { messages: ChatMessage[]; hidden: number[]; last: number; muted: number | null; write: string | null }
@@ -245,6 +249,13 @@ export class ServerClient {
     if (!token) return null;
     const r = await this.request('/v1/worldboss', { method: 'GET', headers: this.headers(token, false) });
     return r?.status === 200 ? await r.json() as WorldBossStatus : null;
+  }
+  // The week's leaderboard (`null`: offline or the server has none).
+  async worldBossBoard(boss: WbBoardBoss, last: boolean): Promise<WbBoard | null> {
+    const token = this.memoryToken ?? this.token();
+    if (!token) return null;
+    const r = await this.request(`/v1/worldboss/board?boss=${boss}${last ? '&last=1' : ''}`, { method: 'GET', headers: this.headers(token, false) });
+    return r?.status === 200 ? await r.json() as WbBoard : null;
   }
 
   // ---- P09-02d account ----
