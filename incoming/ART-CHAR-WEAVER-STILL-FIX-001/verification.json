@@ -1,0 +1,49 @@
+{
+  "bounds": [
+    16,
+    35,
+    488,
+    497
+  ],
+  "alphaBounds": [
+    15,
+    30,
+    489,
+    498
+  ],
+  "bytesBefore": 1984922,
+  "bytesAfter": 1916288,
+  "sha256": "379221f7dfa3e65b6e1cca019020ed8320c10029c099898e4a48fd2e5b3ac171",
+  "frames": [
+    {
+      "frame": 0,
+      "before": "6a175776bcb4460f65e4b2a65b63e41637103282edb7e4fc28cce9b78e2f4750",
+      "after": "6a175776bcb4460f65e4b2a65b63e41637103282edb7e4fc28cce9b78e2f4750"
+    },
+    {
+      "frame": 1,
+      "before": "c3a9e21e3c46a5fd4447693ba285dbbfc53bff257bf7363defe54cabd1593fda",
+      "after": "c3a9e21e3c46a5fd4447693ba285dbbfc53bff257bf7363defe54cabd1593fda"
+    },
+    {
+      "frame": 2,
+      "before": "f161538f247a9fa1ea881aef12c610165d640bffd6cc85564c4276fb655b524c",
+      "after": "c1fde7fafae3359c63bbb40c6a540933e9d7ad280ca5ddaf86a1ef5cc132bf6a"
+    },
+    {
+      "frame": 3,
+      "before": "150351fb76bd2fc9c6109c61b1a524286fd5d67b2997c9cb15f5d0704c422c29",
+      "after": "150351fb76bd2fc9c6109c61b1a524286fd5d67b2997c9cb15f5d0704c422c29"
+    },
+    {
+      "frame": 4,
+      "before": "4b61b4f155c4751853f32557b0c41b5a6160cdd124003857e5ac6c99f9a7c386",
+      "after": "4b61b4f155c4751853f32557b0c41b5a6160cdd124003857e5ac6c99f9a7c386"
+    },
+    {
+      "frame": 5,
+      "before": "18385f2db58406a35a2186af695b5ac0202985937b6a530073d288ea09460992",
+      "after": "18385f2db58406a35a2186af695b5ac0202985937b6a530073d288ea09460992"
+    }
+  ]
+}

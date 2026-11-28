@@ -28,6 +28,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
+- ภาพนิ่งไอรา: พร้อมให้ Claude นำเข้าจาก `codex/weaver-still-fix-intake` · [ชุดภาพและผลตรวจ](incoming/ART-CHAR-WEAVER-STILL-FIX-001/NOTES.md)
+
 - Pets OD-63 (2026-11-28 “ตามคำแนะนำ”): plan [PET_SYSTEM_ANALYSIS_TH](docs/design/PET_SYSTEM_ANALYSIS_TH.md) approved; food bought with gold. **PET-1 done** (eggs from map 4/5 first clears, `hatchEgg`/`choosePet`, `run.pet`, ledger, save v71; [SYSTEMS_REFERENCE §Pets](docs/design/SYSTEMS_REFERENCE.md)). **PET-2 done** (six map blessings `core/world/pet-blessings.ts`, no save change, [sim](docs/validation/pets/PET2_SIM.md)). Owner approved ART-PET-002 (PR #55) 2026-11-28 “อนุมัติภาพสัตว์ทั้ง 6 ตัว”. Next PET-3.
 - Hero life: code breath/barrier/turn light/sparkles/slump (#376). Drawn victory cheers (LIFE-001): Aegis R3, Eira R3b, Seren R3 (#380) and Lyra R4 (#382), owner “อนุมัติ” 2026-11-27; small optional `<sheet>_victory` atlases. Aegis idle loop warped from the seed (W1b, #381, owner “อนุมัติ”); Lyra/Eira/Seren idle by the same tool next. LIFE-002 (victory for the other 11; Odran/Isolde parked) prompt sent to Codex. [Validation](docs/validation/hero-life-2026-11-27/README_TH.md), [brief](docs/handoffs/CODEX-HERO-LIFE-TH.md).
 - Auto battle (OD-62): random battles + World Boss, device stop-HP/skill settings; numbers draft. [Validation](docs/validation/auto-battle/README_TH.md).
