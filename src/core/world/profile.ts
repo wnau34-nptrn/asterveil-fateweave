@@ -7,7 +7,7 @@ import type { Lane, GuideDefinition, GuideKind, LobbyFeature, Commander, ShopIte
 import { rollItem, salvageValue } from './equipment';
 import { addTomes, dismissTomes, emptyTomes, firstClearTomes, tomeCount } from './tomes';
 import { GEAR_SLOTS, PARTY_SLOTS, POTION_IDS, SET_IDS } from './types';
-import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, questComplete, storyDone, recommendedLane, rollPercent, reserveCap, rosterIds, type EncounterLookup } from './world';
+import { draftPick, heroCatalog, levelOf, loadoutReason, memberDef, newExpedition, questComplete, reveal, storyDone, recommendedLane, rollPercent, reserveCap, rosterIds, type EncounterLookup } from './world';
 import { laneReason, withLane } from './formation';
 import { dropFromPresets } from './presets';
 import { settleBoard } from './board';
@@ -320,7 +320,8 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   if (hard) run.hard = true;
   if (day !== undefined) run.day = day;
   // PET-1: the chosen pet comes along at its current level and stays for the whole expedition.
-  const pet = runPet(profile); if (pet) run.pet = pet;
+  // PET-2: its farsight opens the starting fog too.
+  const pet = runPet(profile); if (pet) { run.pet = pet; reveal(run, map); }
   // Map 4: the ferryman's boat, once his story has paid, sails on every later run of that map.
   if (map.story?.boat && profile.storyQuests?.includes(map.id)) run.boat = true;
   // Story recruits not yet in the company (owner 2026-10-23). Before the prologue they come along as guests in free

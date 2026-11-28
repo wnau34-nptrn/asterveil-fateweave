@@ -75,6 +75,8 @@ export const gameRules: GameRules = {
       { id: 'gate_starveil_slime', name: 'สไลม์ผ้าคลุมดาว', blessing: { kind: 'renewal', at1: 2, at6: 3 }, assist: { kind: 'groupHeal', at1: 2, at10: 4 } },
     ],
     maxLevel: 10, firstClearEggs: ['moon-lake', 'crystal-mine'], eggShards: 10, eggCap: 9, shardCap: 999,
+    // PET-2: map blessings use `at6` from this pet level; renewal heals every `renewalSteps` steps.
+    blessingLevel: 6, renewalSteps: 10,
   },
   gacha: {
     version: 1,

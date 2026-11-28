@@ -2,6 +2,7 @@ import { mineCrystalDuration, mineCrystalStepsLeft, mineLanternCells, mineVisibl
 import { traceMineBeam, traceMinecart, type BeamPuzzle, type CartPuzzle, type CartSwitch } from './mine-puzzles';
 import { escortMineWorkers, inviteMineWorker, type MineRescue, type WorkerSite } from './mine-rescue';
 import type { Direction, ExpeditionState, MapDefinition, Point } from './types';
+import { sightRadius } from './pet-blessings';
 
 export interface MineDefinition {
   readonly darkZones: readonly string[];
@@ -59,7 +60,7 @@ export function mineVisibility(state: ExpeditionState, map: MapDefinition, mine:
   return mineVisibleCells(map.rows, {
     position: state.position, steps: state.steps, litLanterns: litLanterns(state, map),
     ...(expires === undefined ? {} : { crystalExpiresAt: expires }),
-  }, openedWalls(state, map, mine), dark ? undefined : map.revealRadius);
+  }, openedWalls(state, map, mine), dark ? undefined : sightRadius(state, map));
 }
 
 export function minePressureStep(initial: ExpeditionState, map: MapDefinition, target: Point, zone: string, step: number): number {
