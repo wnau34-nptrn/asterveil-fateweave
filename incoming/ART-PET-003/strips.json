@@ -1,0 +1,594 @@
+{
+  "coordinates": "All rectangles are in atlas pixels. footY is local. Center X is half the cell width.",
+  "hatch": {
+    "provisional": "egg.webp",
+    "alternate": "egg_r2.webp",
+    "wobbleMs": 1400,
+    "rattles": 3,
+    "burstMs": 300,
+    "petPose": "happy"
+  },
+  "walk": {
+    "facing": "right",
+    "mirrorForLeft": true,
+    "loop": [
+      "walk_a",
+      "walk_b",
+      "walk_c",
+      "walk_d"
+    ],
+    "rows": [
+      "meadow_fox",
+      "thicket_piglet",
+      "rift_crystal_moth",
+      "fort_gargoyle_pup",
+      "forest_lantern_owl",
+      "gate_starveil_slime"
+    ],
+    "virtualBaselineRows": [
+      "rift_crystal_moth",
+      "gate_starveil_slime"
+    ]
+  },
+  "atlases": {
+    "egg.webp": {
+      "dimensions": [
+        1792,
+        512
+      ],
+      "frames": {
+        "egg_idle": {
+          "x": 0,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_wobble_l": {
+          "x": 256,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_wobble_r": {
+          "x": 512,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_crack_1": {
+          "x": 768,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_crack_2": {
+          "x": 1024,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_crack_3": {
+          "x": 1280,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_open": {
+          "x": 1536,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_fragment_1": {
+          "x": 0,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "egg_fragment_2": {
+          "x": 128,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "egg_fragment_3": {
+          "x": 256,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "egg_fragment_4": {
+          "x": 384,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "egg_fragment_5": {
+          "x": 512,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "egg_fragment_6": {
+          "x": 640,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "egg_flash_1": {
+          "x": 768,
+          "y": 256,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_flash_2": {
+          "x": 1024,
+          "y": 256,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_flash_3": {
+          "x": 1280,
+          "y": 256,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        }
+      }
+    },
+    "egg_r2.webp": {
+      "dimensions": [
+        1792,
+        512
+      ],
+      "frames": {
+        "egg_idle": {
+          "x": 0,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_wobble_l": {
+          "x": 256,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_wobble_r": {
+          "x": 512,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_crack_1": {
+          "x": 768,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_crack_2": {
+          "x": 1024,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_crack_3": {
+          "x": 1280,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_open": {
+          "x": 1536,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_fragment_1": {
+          "x": 0,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "egg_fragment_2": {
+          "x": 128,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "egg_fragment_3": {
+          "x": 256,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "egg_fragment_4": {
+          "x": 384,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "egg_fragment_5": {
+          "x": 512,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "egg_fragment_6": {
+          "x": 640,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "egg_flash_1": {
+          "x": 768,
+          "y": 256,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_flash_2": {
+          "x": 1024,
+          "y": 256,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_flash_3": {
+          "x": 1280,
+          "y": 256,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        }
+      }
+    },
+    "pets_walk.webp": {
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "frames": {
+        "meadow_fox_walk_a": {
+          "x": 0,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "meadow_fox_walk_b": {
+          "x": 256,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "meadow_fox_walk_c": {
+          "x": 512,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "meadow_fox_walk_d": {
+          "x": 768,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "thicket_piglet_walk_a": {
+          "x": 0,
+          "y": 256,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "thicket_piglet_walk_b": {
+          "x": 256,
+          "y": 256,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "thicket_piglet_walk_c": {
+          "x": 512,
+          "y": 256,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "thicket_piglet_walk_d": {
+          "x": 768,
+          "y": 256,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "rift_crystal_moth_walk_a": {
+          "x": 0,
+          "y": 512,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "rift_crystal_moth_walk_b": {
+          "x": 256,
+          "y": 512,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "rift_crystal_moth_walk_c": {
+          "x": 512,
+          "y": 512,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "rift_crystal_moth_walk_d": {
+          "x": 768,
+          "y": 512,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "fort_gargoyle_pup_walk_a": {
+          "x": 0,
+          "y": 768,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "fort_gargoyle_pup_walk_b": {
+          "x": 256,
+          "y": 768,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "fort_gargoyle_pup_walk_c": {
+          "x": 512,
+          "y": 768,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "fort_gargoyle_pup_walk_d": {
+          "x": 768,
+          "y": 768,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "forest_lantern_owl_walk_a": {
+          "x": 0,
+          "y": 1024,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "forest_lantern_owl_walk_b": {
+          "x": 256,
+          "y": 1024,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "forest_lantern_owl_walk_c": {
+          "x": 512,
+          "y": 1024,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "forest_lantern_owl_walk_d": {
+          "x": 768,
+          "y": 1024,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "gate_starveil_slime_walk_a": {
+          "x": 0,
+          "y": 1280,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "gate_starveil_slime_walk_b": {
+          "x": 256,
+          "y": 1280,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "gate_starveil_slime_walk_c": {
+          "x": 512,
+          "y": 1280,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "gate_starveil_slime_walk_d": {
+          "x": 768,
+          "y": 1280,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        }
+      }
+    },
+    "pet_den.webp": {
+      "dimensions": [
+        512,
+        256
+      ],
+      "frames": {
+        "den_empty": {
+          "x": 0,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "den_egg_waiting": {
+          "x": 256,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        }
+      }
+    },
+    "pet_blessing_icons.webp": {
+      "dimensions": [
+        768,
+        128
+      ],
+      "frames": {
+        "luck": {
+          "x": 0,
+          "y": 0,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "forage": {
+          "x": 128,
+          "y": 0,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "farsight": {
+          "x": 256,
+          "y": 0,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "ward": {
+          "x": 384,
+          "y": 0,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "lantern": {
+          "x": 512,
+          "y": 0,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "renewal": {
+          "x": 640,
+          "y": 0,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        }
+      }
+    },
+    "prop_seeds.webp": {
+      "dimensions": [
+        768,
+        512
+      ],
+      "frames": {
+        "egg_r1": {
+          "x": 0,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "egg_r2": {
+          "x": 256,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "den_empty": {
+          "x": 512,
+          "y": 0,
+          "w": 256,
+          "h": 256,
+          "footY": 240
+        },
+        "luck": {
+          "x": 0,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "forage": {
+          "x": 128,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "farsight": {
+          "x": 256,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "ward": {
+          "x": 384,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "lantern": {
+          "x": 512,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        },
+        "renewal": {
+          "x": 640,
+          "y": 256,
+          "w": 128,
+          "h": 128,
+          "footY": 64
+        }
+      }
+    }
+  }
+}

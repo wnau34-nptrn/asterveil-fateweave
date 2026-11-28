@@ -1,0 +1,1545 @@
+{
+  "hashAlgorithm": "SHA-256",
+  "selfDigest": "Compare the manifest byte-for-byte across checkouts",
+  "files": {
+    "NOTES.md": {
+      "sha256": "6c707b7e6be29dda2b686fa3d17122cc59977e3c289a8900009b6ae37ae1d096",
+      "bytes": 4187
+    },
+    "assemble.py": {
+      "sha256": "7f74d79f7db8ee93cc9335f16d60e77140e4e80bc298f4be7f20e91625d7742a",
+      "bytes": 26524
+    },
+    "egg.webp": {
+      "sha256": "3d28ff6a3dab27709e1c5075c3b367ec0bf318ff2d6371af4e0165c51afc42ea",
+      "bytes": 153614,
+      "dimensions": [
+        1792,
+        512
+      ],
+      "mode": "RGBA",
+      "decodedFrames": 1,
+      "transparentCorners": true,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "frames": {
+        "egg_idle": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            67,
+            89,
+            188,
+            241
+          ],
+          "solidBounds": [
+            67,
+            89,
+            187,
+            241
+          ]
+        },
+        "egg_wobble_l": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            58,
+            89,
+            180,
+            242
+          ],
+          "solidBounds": [
+            59,
+            90,
+            179,
+            241
+          ]
+        },
+        "egg_wobble_r": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            75,
+            90,
+            197,
+            242
+          ],
+          "solidBounds": [
+            76,
+            91,
+            196,
+            241
+          ]
+        },
+        "egg_crack_1": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            67,
+            89,
+            188,
+            241
+          ],
+          "solidBounds": [
+            67,
+            89,
+            187,
+            241
+          ]
+        },
+        "egg_crack_2": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            67,
+            89,
+            188,
+            241
+          ],
+          "solidBounds": [
+            67,
+            89,
+            187,
+            241
+          ]
+        },
+        "egg_crack_3": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            67,
+            89,
+            188,
+            241
+          ],
+          "solidBounds": [
+            67,
+            89,
+            187,
+            241
+          ]
+        },
+        "egg_open": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            65,
+            51,
+            189,
+            241
+          ],
+          "solidBounds": [
+            66,
+            52,
+            189,
+            241
+          ]
+        },
+        "egg_fragment_1": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            42,
+            45,
+            88,
+            91
+          ],
+          "solidBounds": [
+            43,
+            46,
+            87,
+            89
+          ]
+        },
+        "egg_fragment_2": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            42,
+            45,
+            86,
+            94
+          ],
+          "solidBounds": [
+            43,
+            46,
+            85,
+            93
+          ]
+        },
+        "egg_fragment_3": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            37,
+            43,
+            90,
+            86
+          ],
+          "solidBounds": [
+            38,
+            43,
+            89,
+            85
+          ]
+        },
+        "egg_fragment_4": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            35,
+            37,
+            92,
+            85
+          ],
+          "solidBounds": [
+            35,
+            39,
+            91,
+            84
+          ]
+        },
+        "egg_fragment_5": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            46,
+            43,
+            82,
+            79
+          ],
+          "solidBounds": [
+            47,
+            44,
+            80,
+            78
+          ]
+        },
+        "egg_fragment_6": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            34,
+            45,
+            94,
+            83
+          ],
+          "solidBounds": [
+            34,
+            45,
+            92,
+            82
+          ]
+        },
+        "egg_flash_1": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            90,
+            93,
+            168,
+            201
+          ],
+          "solidBounds": [
+            91,
+            95,
+            167,
+            199
+          ]
+        },
+        "egg_flash_2": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            73,
+            73,
+            184,
+            224
+          ],
+          "solidBounds": [
+            74,
+            74,
+            183,
+            222
+          ]
+        },
+        "egg_flash_3": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            180
+          ],
+          "alphaBounds": [
+            58,
+            46,
+            203,
+            237
+          ],
+          "solidBounds": [
+            59,
+            48,
+            201,
+            233
+          ]
+        }
+      }
+    },
+    "egg_r2.webp": {
+      "sha256": "87ee779ef8d20d4f46bc780cea0c1d29ed5fe7a72cf9b77867b1dadcff152cc5",
+      "bytes": 142452,
+      "dimensions": [
+        1792,
+        512
+      ],
+      "mode": "RGBA",
+      "decodedFrames": 1,
+      "transparentCorners": true,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "frames": {
+        "egg_idle": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            67,
+            89,
+            189,
+            241
+          ],
+          "solidBounds": [
+            68,
+            90,
+            188,
+            241
+          ]
+        },
+        "egg_wobble_l": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            58,
+            89,
+            181,
+            242
+          ],
+          "solidBounds": [
+            59,
+            90,
+            180,
+            241
+          ]
+        },
+        "egg_wobble_r": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            75,
+            90,
+            198,
+            242
+          ],
+          "solidBounds": [
+            76,
+            91,
+            197,
+            241
+          ]
+        },
+        "egg_crack_1": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            67,
+            89,
+            189,
+            241
+          ],
+          "solidBounds": [
+            68,
+            90,
+            188,
+            241
+          ]
+        },
+        "egg_crack_2": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            67,
+            89,
+            189,
+            241
+          ],
+          "solidBounds": [
+            68,
+            90,
+            188,
+            241
+          ]
+        },
+        "egg_crack_3": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            67,
+            89,
+            189,
+            241
+          ],
+          "solidBounds": [
+            68,
+            90,
+            188,
+            241
+          ]
+        },
+        "egg_open": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            66,
+            51,
+            189,
+            241
+          ],
+          "solidBounds": [
+            67,
+            52,
+            189,
+            241
+          ]
+        },
+        "egg_fragment_1": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            42,
+            45,
+            88,
+            91
+          ],
+          "solidBounds": [
+            43,
+            46,
+            87,
+            89
+          ]
+        },
+        "egg_fragment_2": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            42,
+            45,
+            86,
+            94
+          ],
+          "solidBounds": [
+            43,
+            46,
+            85,
+            93
+          ]
+        },
+        "egg_fragment_3": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            37,
+            43,
+            90,
+            86
+          ],
+          "solidBounds": [
+            38,
+            43,
+            89,
+            85
+          ]
+        },
+        "egg_fragment_4": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            35,
+            37,
+            92,
+            85
+          ],
+          "solidBounds": [
+            35,
+            39,
+            91,
+            84
+          ]
+        },
+        "egg_fragment_5": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            46,
+            43,
+            82,
+            79
+          ],
+          "solidBounds": [
+            47,
+            44,
+            80,
+            78
+          ]
+        },
+        "egg_fragment_6": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            34,
+            45,
+            94,
+            83
+          ],
+          "solidBounds": [
+            34,
+            45,
+            92,
+            82
+          ]
+        },
+        "egg_flash_1": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            90,
+            93,
+            168,
+            201
+          ],
+          "solidBounds": [
+            91,
+            95,
+            167,
+            199
+          ]
+        },
+        "egg_flash_2": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            73,
+            73,
+            184,
+            224
+          ],
+          "solidBounds": [
+            74,
+            74,
+            183,
+            222
+          ]
+        },
+        "egg_flash_3": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            180
+          ],
+          "alphaBounds": [
+            58,
+            46,
+            203,
+            237
+          ],
+          "solidBounds": [
+            59,
+            48,
+            201,
+            233
+          ]
+        }
+      }
+    },
+    "motion_390.webp": {
+      "sha256": "d648515a3cf39c5241a50bd5eea175b888fa5ee64d38abedf7c0be3a806a3100",
+      "bytes": 585548,
+      "dimensions": [
+        390,
+        487
+      ],
+      "mode": "RGBA",
+      "decodedFrames": 32,
+      "transparentCorners": false,
+      "alphaExtrema": [
+        255,
+        255
+      ]
+    },
+    "pet_blessing_icons.webp": {
+      "sha256": "a0c7dcaca7814279f5200f310f4f23ea44d73796a2f3d7641d56de04a59f4ddd",
+      "bytes": 88136,
+      "dimensions": [
+        768,
+        128
+      ],
+      "mode": "RGBA",
+      "decodedFrames": 1,
+      "transparentCorners": true,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "frames": {
+        "luck": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            12,
+            9,
+            115,
+            119
+          ],
+          "solidBounds": [
+            12,
+            9,
+            115,
+            119
+          ]
+        },
+        "forage": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            11,
+            9,
+            117,
+            119
+          ],
+          "solidBounds": [
+            11,
+            9,
+            117,
+            119
+          ]
+        },
+        "farsight": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            9,
+            21,
+            119,
+            107
+          ],
+          "solidBounds": [
+            9,
+            21,
+            119,
+            107
+          ]
+        },
+        "ward": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            14,
+            9,
+            113,
+            119
+          ],
+          "solidBounds": [
+            14,
+            9,
+            113,
+            119
+          ]
+        },
+        "lantern": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            25,
+            9,
+            102,
+            119
+          ],
+          "solidBounds": [
+            25,
+            9,
+            102,
+            119
+          ]
+        },
+        "renewal": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            15,
+            9,
+            112,
+            119
+          ],
+          "solidBounds": [
+            15,
+            9,
+            112,
+            119
+          ]
+        }
+      }
+    },
+    "pet_den.webp": {
+      "sha256": "353b08ef1c7b09fd9393da48fab0fb0a0bde2d87e40af1ef4ba28913b98f6a21",
+      "bytes": 61290,
+      "dimensions": [
+        512,
+        256
+      ],
+      "mode": "RGBA",
+      "decodedFrames": 1,
+      "transparentCorners": true,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "frames": {
+        "den_empty": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            16,
+            108,
+            240,
+            241
+          ],
+          "solidBounds": [
+            16,
+            108,
+            240,
+            241
+          ]
+        },
+        "den_egg_waiting": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            16,
+            108,
+            240,
+            241
+          ],
+          "solidBounds": [
+            16,
+            108,
+            240,
+            241
+          ]
+        }
+      }
+    },
+    "pets_walk.webp": {
+      "sha256": "fe816f876ee07c34d89a7e6e339d41c6de78ee72c0d94c84b9860fb916e25595",
+      "bytes": 1123578,
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "decodedFrames": 1,
+      "transparentCorners": true,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "frames": {
+        "meadow_fox_walk_a": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            22,
+            60,
+            234,
+            241
+          ],
+          "solidBounds": [
+            23,
+            60,
+            234,
+            241
+          ]
+        },
+        "meadow_fox_walk_b": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            22,
+            64,
+            234,
+            241
+          ],
+          "solidBounds": [
+            23,
+            64,
+            234,
+            240
+          ]
+        },
+        "meadow_fox_walk_c": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            22,
+            60,
+            234,
+            241
+          ],
+          "solidBounds": [
+            23,
+            60,
+            234,
+            241
+          ]
+        },
+        "meadow_fox_walk_d": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            22,
+            63,
+            234,
+            241
+          ],
+          "solidBounds": [
+            23,
+            63,
+            234,
+            240
+          ]
+        },
+        "thicket_piglet_walk_a": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            20,
+            62,
+            235,
+            241
+          ],
+          "solidBounds": [
+            21,
+            62,
+            235,
+            240
+          ]
+        },
+        "thicket_piglet_walk_b": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            20,
+            71,
+            235,
+            241
+          ],
+          "solidBounds": [
+            21,
+            71,
+            235,
+            240
+          ]
+        },
+        "thicket_piglet_walk_c": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            20,
+            62,
+            235,
+            241
+          ],
+          "solidBounds": [
+            21,
+            62,
+            235,
+            240
+          ]
+        },
+        "thicket_piglet_walk_d": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            20,
+            62,
+            235,
+            241
+          ],
+          "solidBounds": [
+            21,
+            62,
+            235,
+            240
+          ]
+        },
+        "rift_crystal_moth_walk_a": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            11,
+            84,
+            242,
+            235
+          ],
+          "solidBounds": [
+            12,
+            85,
+            241,
+            234
+          ]
+        },
+        "rift_crystal_moth_walk_b": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            28,
+            64,
+            228,
+            236
+          ],
+          "solidBounds": [
+            29,
+            65,
+            227,
+            236
+          ]
+        },
+        "rift_crystal_moth_walk_c": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            37,
+            45,
+            223,
+            241
+          ],
+          "solidBounds": [
+            38,
+            46,
+            222,
+            241
+          ]
+        },
+        "rift_crystal_moth_walk_d": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            29,
+            63,
+            229,
+            237
+          ],
+          "solidBounds": [
+            30,
+            64,
+            228,
+            237
+          ]
+        },
+        "fort_gargoyle_pup_walk_a": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            33,
+            85,
+            224,
+            241
+          ],
+          "solidBounds": [
+            33,
+            86,
+            223,
+            241
+          ]
+        },
+        "fort_gargoyle_pup_walk_b": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            33,
+            90,
+            223,
+            241
+          ],
+          "solidBounds": [
+            33,
+            91,
+            223,
+            240
+          ]
+        },
+        "fort_gargoyle_pup_walk_c": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            33,
+            85,
+            223,
+            241
+          ],
+          "solidBounds": [
+            33,
+            86,
+            223,
+            241
+          ]
+        },
+        "fort_gargoyle_pup_walk_d": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            33,
+            88,
+            223,
+            241
+          ],
+          "solidBounds": [
+            33,
+            89,
+            223,
+            241
+          ]
+        },
+        "forest_lantern_owl_walk_a": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            49,
+            85,
+            211,
+            241
+          ],
+          "solidBounds": [
+            50,
+            85,
+            210,
+            240
+          ]
+        },
+        "forest_lantern_owl_walk_b": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            49,
+            88,
+            208,
+            241
+          ],
+          "solidBounds": [
+            50,
+            88,
+            207,
+            240
+          ]
+        },
+        "forest_lantern_owl_walk_c": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            47,
+            84,
+            204,
+            241
+          ],
+          "solidBounds": [
+            49,
+            84,
+            203,
+            240
+          ]
+        },
+        "forest_lantern_owl_walk_d": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            49,
+            90,
+            207,
+            241
+          ],
+          "solidBounds": [
+            50,
+            90,
+            206,
+            240
+          ]
+        },
+        "gate_starveil_slime_walk_a": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            16,
+            86,
+            240,
+            241
+          ],
+          "solidBounds": [
+            17,
+            86,
+            239,
+            241
+          ]
+        },
+        "gate_starveil_slime_walk_b": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            25,
+            50,
+            231,
+            237
+          ],
+          "solidBounds": [
+            26,
+            51,
+            230,
+            236
+          ]
+        },
+        "gate_starveil_slime_walk_c": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            20,
+            56,
+            236,
+            223
+          ],
+          "solidBounds": [
+            21,
+            57,
+            236,
+            223
+          ]
+        },
+        "gate_starveil_slime_walk_d": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            22,
+            57,
+            234,
+            235
+          ],
+          "solidBounds": [
+            23,
+            57,
+            233,
+            234
+          ]
+        }
+      }
+    },
+    "preview_390.png": {
+      "sha256": "e0d474306ca425fb56e43d201fb62bed73a4bd79abe2093f6c8ed40ca3ddf3d1",
+      "bytes": 176743,
+      "dimensions": [
+        390,
+        849
+      ],
+      "mode": "RGB",
+      "decodedFrames": 1,
+      "transparentCorners": false,
+      "alphaExtrema": [
+        255,
+        255
+      ]
+    },
+    "prompts.json": {
+      "sha256": "1fd7a24f76a6de8d347ea8cced1fb3eab69cb2879352353b76888e2cbd114a3e",
+      "bytes": 4076
+    },
+    "prop_seeds.webp": {
+      "sha256": "dd5a89e74761e0d4c7378cfd817d3ab444b0b24569484b6d795e4ce1a4af1212",
+      "bytes": 190856,
+      "dimensions": [
+        768,
+        512
+      ],
+      "mode": "RGBA",
+      "decodedFrames": 1,
+      "transparentCorners": true,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "frames": {
+        "egg_r1": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            67,
+            89,
+            188,
+            241
+          ],
+          "solidBounds": [
+            67,
+            89,
+            187,
+            241
+          ]
+        },
+        "egg_r2": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            67,
+            89,
+            189,
+            241
+          ],
+          "solidBounds": [
+            68,
+            90,
+            188,
+            241
+          ]
+        },
+        "den_empty": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            16,
+            108,
+            240,
+            241
+          ],
+          "solidBounds": [
+            16,
+            108,
+            240,
+            241
+          ]
+        },
+        "luck": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            12,
+            9,
+            115,
+            119
+          ],
+          "solidBounds": [
+            12,
+            9,
+            115,
+            119
+          ]
+        },
+        "forage": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            11,
+            9,
+            117,
+            119
+          ],
+          "solidBounds": [
+            11,
+            9,
+            117,
+            119
+          ]
+        },
+        "farsight": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            9,
+            21,
+            119,
+            107
+          ],
+          "solidBounds": [
+            9,
+            21,
+            119,
+            107
+          ]
+        },
+        "ward": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            14,
+            9,
+            113,
+            119
+          ],
+          "solidBounds": [
+            14,
+            9,
+            113,
+            119
+          ]
+        },
+        "lantern": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            25,
+            9,
+            102,
+            119
+          ],
+          "solidBounds": [
+            25,
+            9,
+            102,
+            119
+          ]
+        },
+        "renewal": {
+          "transparentCorners": true,
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "alphaBounds": [
+            15,
+            9,
+            112,
+            119
+          ],
+          "solidBounds": [
+            15,
+            9,
+            112,
+            119
+          ]
+        }
+      }
+    },
+    "seeds.json": {
+      "sha256": "2401b3252d99e3f44143b3f9cd8cacedb4b96fb9d07fdf00b4108488fa92bd77",
+      "bytes": 2403
+    },
+    "strips.json": {
+      "sha256": "f0cf65b09c05feb2af52ec25a94734513cb29078e86e423af80ac44bce6e53c4",
+      "bytes": 11679
+    }
+  }
+}
