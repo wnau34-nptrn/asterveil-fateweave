@@ -42,6 +42,8 @@ export const autoGoalText: Record<AutoGoal,string> = {recommended:'แนะน�
 export class CharacterPanel {
   private readonly dialog: HTMLDialogElement;
   private readonly talentDialog:HTMLDialogElement; private talentReturn={focus:'',scroll:0};
+  // Owner 2026-11-28: a bag tile opens its item card in a popup instead of a card far below the grid.
+  private readonly gearDialog:HTMLDialogElement; private gearPopup=false; private gearReturn={focus:'',scroll:0};
   private readonly stars:StarUpgrade; private starOpen=false; private starReturn:{focus:string;scroll:number;tab:CharacterTab}={focus:'',scroll:0,tab:'develop'};
   private readonly skillReview:SkillReview; private selectedSkill:ActionId='guard'; private skillSection:SkillSection='details'; private skillReturn={focus:'',scroll:0}; private skillNodeReturn:{skill:ActionId;scroll:number;focus:string}|undefined; private tomeExpanded=false; private skillScroll:Partial<Record<SkillSection,number>>={};
   private navigationClose=false;
@@ -62,6 +64,11 @@ export class CharacterPanel {
     this.talentDialog.addEventListener('cancel',e=>{e.preventDefault();e.stopPropagation();this.closeTalentDetail();});
     this.talentDialog.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();this.closeTalentDetail();}});
     this.talentDialog.addEventListener('click',e=>{if(e.target!==this.talentDialog)return;const r=this.talentDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)this.closeTalentDetail();});
+    this.gearDialog=document.createElement('dialog');this.gearDialog.id=this.id('gear-detail-dialog');this.gearDialog.className='world-dialog talent-detail-dialog gear-detail-dialog';this.gearDialog.setAttribute('aria-labelledby',this.id('gear-detail-title'));
+    this.gearDialog.innerHTML=this.ids(`<div class="info-header"><h2 id="gear-detail-title">รายละเอียดอุปกรณ์</h2><button id="gear-detail-close" data-world="gear-detail-close" class="quiet" aria-label="ปิดรายละเอียดอุปกรณ์">${icon('close')}</button></div><div class="info-content gear-detail-content"></div>`);this.dialog.append(this.gearDialog);
+    this.gearDialog.addEventListener('cancel',e=>{e.preventDefault();e.stopPropagation();this.closeGearDetail();});
+    this.gearDialog.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();this.closeGearDetail();}});
+    this.gearDialog.addEventListener('click',e=>{if(e.target!==this.gearDialog)return;const r=this.gearDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)this.closeGearDetail();});
     this.dialog.addEventListener('click',e=>{e.stopPropagation();const b=(e.target as HTMLElement).closest<HTMLButtonElement>('button');if(!b||b.disabled||!this.usable())return;if(e.detail>1&&(b.dataset.world?.startsWith('star-')||b.dataset.world?.startsWith('skill-review-')||b.dataset.world==='character-loadout'||b.dataset.world==='character-reset'||b.dataset.world==='character-talent')){e.preventDefault();this.focus(this.id(b.dataset.world?.startsWith('star-')?'star-status':'skill-review-status'));return;}this.click(b);});
     this.dialog.addEventListener('pointerdown',e=>this.slotDragStart(e));
     this.dialog.addEventListener('mousedown',e=>{if(e.detail>1&&(e.target as HTMLElement).closest<HTMLButtonElement>('button')?.matches('[data-world^=star-],[data-world=skill-level],[data-world=tome-trade],[data-world=skill-review-confirm],[data-world=character-loadout],[data-world=character-reset],[data-world=character-talent]'))e.preventDefault();});
@@ -86,7 +93,7 @@ export class CharacterPanel {
     this.dialog.addEventListener('cancel',e=>{if(this.usable()&&this.skillReview.active){e.preventDefault();this.backSkillReview();return;}if(this.usable()&&this.starOpen){e.preventDefault();this.backStar();return;}if(this.usable()&&(this.single||this.plan)){e.preventDefault();this.cancelTrial();}});
     root.ownerDocument.addEventListener('keydown',e=>{if(this.host.navigationVisible&&e.key==='Escape'&&!e.defaultPrevented&&!e.repeat&&this.usable()&&!this.dialog.contains(e.target as Node)){e.preventDefault();if(this.dialog.dispatchEvent(new Event('cancel',{cancelable:true})))this.dialog.close();}});
     this.dialog.addEventListener('close',()=>{
-      if(this.dialog.open)return;this.talentDialog.close();
+      if(this.dialog.open)return;this.talentDialog.close();this.gearPopup=false;this.gearDialog.close();
       if(!this.navigationClose)this.rememberVisit();this.host.navigationVisible?.(false);this.discard();this.content().innerHTML='';if(this.navigationClose)return;if(this.root.hidden||this.root.closest('[inert]'))return;
       if(this.forgeReturn)return;
       if(this.back.dialog){this.host.restore?.(this.back.dialog);const from=this.root.querySelector<HTMLDialogElement>(`#${this.back.dialog}`);if(from&&!from.open)from.showModal();from?.querySelector('.info-content')?.scrollTo(0,this.back.scroll);}
@@ -103,9 +110,10 @@ export class CharacterPanel {
     if(!this.open||!visit)return;
     this.skillSection=visit.section;this.selectedSkill=visit.skill;this.node=visit.node;this.render();this.content().scrollTop=visit.scroll;this.focus(this.id(`character-tab-${this.tab}`));
   }
-  closeForNavigation():void{this.talentDialog.close();this.rememberVisit();this.navigationClose=true;this.discard();this.dialog.close();this.host.navigationVisible?.(false);}
+  closeForNavigation():void{this.talentDialog.close();this.gearPopup=false;this.gearDialog.close();this.rememberVisit();this.navigationClose=true;this.discard();this.dialog.close();this.host.navigationVisible?.(false);}
   private closeTalentDetail():void {this.talentDialog.close();this.content().scrollTop=this.talentReturn.scroll;this.dialog.querySelector<HTMLElement>('#'+this.talentReturn.focus)?.focus({preventScroll:true});}
   private showTalentDetail(focus:string):void {this.talentReturn={focus,scroll:this.content().scrollTop};this.render();this.talentDialog.showModal();this.talentDialog.querySelector<HTMLElement>('[data-world=talent-detail-close]')?.focus({preventScroll:true});}
+  private closeGearDetail(restore=true):void {const was=this.gearDialog.open;this.gearPopup=false;this.gearDialog.close();if(!was||!restore)return;this.content().scrollTop=this.gearReturn.scroll;this.dialog.querySelector<HTMLElement>('#'+this.gearReturn.focus)?.focus({preventScroll:true});}
   private show():void{if(this.host.navigationVisible){this.host.navigationVisible(true);this.dialog.show();}else this.dialog.showModal();}
 
   private id(id:string):string{return `${this.prefix}${id}`;}
@@ -173,6 +181,9 @@ export class CharacterPanel {
   private click(b:HTMLButtonElement):void{
     const model=this.host.model();if(!model)return;const action=b.dataset.world;
     if(this.talentDialog.open&&!this.talentDialog.contains(b))return;
+    if(this.gearDialog.open&&!this.gearDialog.contains(b))return;
+    if(action==='gear-detail-close'){this.closeGearDetail();return;}
+    if(this.gearDialog.contains(b)&&['bag-wear','bag-compare','character-forge'].includes(action??''))this.closeGearDetail(false);
     if(this.skillReview.active&&!['skill-review-confirm','skill-review-back','character-close'].includes(action??''))return;
     if(b.hasAttribute('data-gear-reset')){Object.assign(this.filters,newGearFilters());this.render();this.focus(this.id('gear-filter-set'));return;}
     if(action==='character-forge'&&model.camp&&this.host.forge){this.forgeReturn={focus:b.id||this.id('character-tab-gear'),scroll:this.content().scrollTop};this.dialog.close();this.host.forge(this.heroId,Number(b.dataset.uid));return;}
@@ -206,7 +217,7 @@ export class CharacterPanel {
     else if((action==='skill-level'||action==='tome-trade')&&b.getAttribute('aria-disabled')!=='true'&&model.skillProfile){this.skillReturn={focus:b.id,scroll:this.content().scrollTop};this.skillReview.start(model.skillProfile,action==='skill-level'?{kind:'level',id:this.heroId,action:b.dataset.level as ActionId}:{kind:'trade',line:b.dataset.line as TomeLine,size:b.dataset.size as TomeSize,...b.dataset.to?{to:b.dataset.to as TomeLine}:{}});this.render();this.content().scrollTop=0;this.focus(this.id('skill-review-status'));}
     else if(action==='character-reset'){if(b.dataset.confirm!=='true'){b.dataset.confirm='true';b.textContent='ยืนยันคืนแต้มทั้งหมดและคืนชุดสกิลเริ่มต้น';return;}this.host.reset?.(this.heroId);this.focus(this.id('character-tab-talents'));}
     else if(action==='bag-slot'){const slot=b.dataset.slot as GearSlot;this.filters.slot=this.filters.slot===slot?'all':slot;this.render();this.focus(this.id(`bag-slot-${slot}`));}
-    else if(action==='bag-pick'){this.picked=b.dataset.key!;this.render();this.focus(b.id);}
+    else if(action==='bag-pick'){this.picked=b.dataset.key!;this.gearReturn={focus:b.id,scroll:this.content().scrollTop};this.gearPopup=true;this.render();if(this.gearPopup){this.gearDialog.showModal();this.gearDialog.querySelector<HTMLElement>('[data-world=gear-detail-close]')?.focus({preventScroll:true});}}
     else if(action==='gear-chip'){const chip=b.dataset.chip;if(chip==='all')Object.assign(this.filters,{...newGearFilters(),slot:this.filters.slot});else if(chip==='compatible')this.filters.compatible=!this.filters.compatible;else if(chip==='found')this.filters.source=this.filters.source==='found'?'all':'found';else if(chip==='boss')this.filters.kind=this.filters.kind==='boss'?'all':'boss';this.render();this.focus(b.id);}
     else if(action==='bag-wear'){const slot=model.entries.find(e=>e.key===b.dataset.key)?.item.slot;this.host.wear(this.heroId,b.dataset.key!);if(slot)this.focus(this.id(`bag-slot-${slot}`));}
     else if(action==='bag-takeoff'&&this.filters.slot!=='all'){this.host.takeOff(this.heroId,this.filters.slot);this.focus(this.id(`bag-slot-${this.filters.slot}`));}
@@ -223,7 +234,7 @@ export class CharacterPanel {
   }
   private cancelTrial():void{
     const key=this.single?.key,wasAuto=!!this.plan;this.discard();this.render();
-    this.focus(this.id(wasAuto?'auto-preview':key?`compare-${key.replace(':','-')}`:'character-tab-gear'));
+    this.focus(this.id(wasAuto?'auto-preview':key&&this.dialog.querySelector('#'+this.id(`pick-${key.replace(':','-')}`))?`pick-${key.replace(':','-')}`:'character-tab-gear'));
   }
   private render():void{
     const model=this.host.model();if(!model||!model.ids.includes(this.heroId))return;
@@ -262,9 +273,12 @@ export class CharacterPanel {
       const card=this.content().querySelector<HTMLElement>('.node-card'),link=this.content().querySelector<HTMLElement>('[data-world=skill-from-node]');
       if(card){const points=this.content().querySelector('.talent-points')?.cloneNode(true) as HTMLElement|undefined;if(points){points.classList.remove('talent-points');points.classList.add('talent-detail-points');detail.append(points);}detail.append(card);if(link)detail.append(link);}
     }else this.talentDialog.close();
+    const gearDetail=this.gearDialog.querySelector<HTMLElement>('.gear-detail-content')!;gearDetail.replaceChildren();
+    const picked=this.gearPopup&&this.tab==='gear'?this.content().querySelector<HTMLElement>('.item-card.picked-card'):null;
+    if(picked)gearDetail.append(picked);else if(this.gearPopup||this.gearDialog.open){this.gearPopup=false;this.gearDialog.close();}
     const auto=this.content().querySelector<HTMLDetailsElement>('.auto-settings'),extra=this.content().querySelector<HTMLDetailsElement>('.gear-extra-filters');if(auto)auto.open=this.autoExpanded;if(extra)extra.open=this.filtersExpanded;
     const trade=this.content().querySelector<HTMLDetailsElement>('.tome-trade');if(trade)trade.open=this.tomeExpanded;
-    this.content().scrollTop=scroll;if(this.open&&focus&&(!this.talentDialog.open||this.talentDialog.querySelector('#'+focus)))this.focus(focus);if(this.open&&this.focusAfterStar){this.focus(this.id(this.focusAfterStar));this.focusAfterStar='';}
+    this.content().scrollTop=scroll;if(this.open&&focus&&(!this.talentDialog.open||this.talentDialog.querySelector('#'+focus))&&(!this.gearDialog.open||this.gearDialog.querySelector('#'+focus)))this.focus(focus);if(this.open&&this.focusAfterStar){this.focus(this.id(this.focusAfterStar));this.focusAfterStar='';}
   }
   private develop(model:CharacterModel):string {
     const m=model.state.members[this.heroId]!,level=levelOf(this.map,model.state);
@@ -278,8 +292,8 @@ export class CharacterPanel {
     const slotButton=(sl:GearSlot)=>{const it=m.gear?.[sl];return `<button id="bag-slot-${sl}" data-world="bag-slot" data-slot="${sl}" class="gear-slot doll-slot" ${it?`data-rarity="${it.rarity}"`:''} aria-pressed="${slot===sl}" aria-label="${slotText[sl]}: ${it?`${itemName(it)} Lv${it.level}`:'ว่าง'}">${it?gearArt(it):icon(slotIcon[sl])}<b>${slotText[sl]}</b><small class="sr-only">${it?`${itemName(it)} Lv${it.level}`:'ว่าง'}</small></button>`;};
     const slots=`<div class="doll-col">${(['weapon','body','boots'] as const).map(slotButton).join('')}</div><div class="doll-hero">${heroArt(this.heroId)}</div><div class="doll-col">${(['head','gloves','charm'] as const).map(slotButton).join('')}</div>`;
     const dollStats=`<div class="doll-stats"><span class="ui-pill">${icon('stat-hp')}${model.state.hp[this.heroId]??0}/${h.maxHp}</span><span class="ui-pill">${icon('stat-attack')}${h.attack}</span><span class="ui-pill">${icon('stat-support')}${h.skillBonus??0}%</span><span class="ui-pill">${icon('stat-speed')}${h.speed}</span></div>`;
-    // Bag (ART-UI-MODERN-001 board 01): a five-column grid of tiles; the picked tile opens one item card with ▲▼ against what is worn.
-    const pick=entries.find(e=>e.key===this.picked)??entries[0],own=(e:EquipmentEntry)=>e.item.slot!=='weapon'||e.item.hero===this.heroId;
+    // Bag (ART-UI-MODERN-001 board 01): a five-column grid of tiles; the picked tile opens its item card (▲▼ against what is worn) in a popup.
+    const pick=this.gearPopup?entries.find(e=>e.key===this.picked):undefined,own=(e:EquipmentEntry)=>e.item.slot!=='weapon'||e.item.hero===this.heroId;
     const tiles=entries.map(e=>`<li data-rarity="${e.item.rarity}" data-item-key="${e.key}"><button id="pick-${e.key.replace(':','-')}" data-world="bag-pick" data-key="${e.key}" class="bag-tile${own(e)?'':' foreign'}" aria-pressed="${e===pick}">${gearArt(e.item)}<b class="tile-lv">Lv${e.item.level}</b>${e.item.plus?`<i class="tile-plus">+${e.item.plus}</i>`:''}${own(e)?'':icon('act-lock')}<span class="sr-only">${itemName(e.item)} · ${itemLines(this.map.equipment,e.item).join(' · ')} · ${e.label} · ${itemOwner(e.item)}</span></button></li>`).join('');
     const chip=(id:string,label:string,on:boolean)=>`<button id="gear-chip-${id}" data-world="gear-chip" data-chip="${id}" class="ui-chip" aria-pressed="${on}">${label}</button>`;
     const plain=this.filters.set==='all'&&this.filters.rarity==='all'&&this.filters.source==='all'&&!this.filters.compatible&&(this.filters.kind??'all')==='all';
@@ -295,7 +309,7 @@ export class CharacterPanel {
     const it=e.item,locked=it.slot==='weapon'&&it.hero!==this.heroId,key=e.key.replace(':','-'),worn=model.state.members[this.heroId]!.gear?.[it.slot];
     const trial=locked?undefined:this.host.preview(this.heroId,e.key),after=trial&&this.hero(trial);
     const deltas=after?statDeltas.map(([k,name,unit])=>{const a=h[k]??0,b=after[k]??0;return b===a?'':`<span class="item-delta">${icon(`stat-${k==='maxHp'?'hp':k==='skillBonus'?'support':k==='speed'?'speed':k}` as Parameters<typeof icon>[0])}<b>${b}${unit}</b><em class="${b>a?'up':'down'}" aria-label="${name} ${b>a?'เพิ่ม':'ลด'} ${Math.abs(b-a)}${unit}">${b>a?'▲':'▼'} ${Math.abs(b-a)}${unit}</em></span>`;}).join(''):'';
-    return `<section class="item-card" data-rarity="${it.rarity}" aria-label="ไอเท็มที่เลือก"><div class="item-card-head">${gearArt(it)}<div><small data-rarity="${it.rarity}">${rarityText[it.rarity]} · ${slotText[it.slot]}${it.set?` · ชุด${setText[it.set]}`:''}</small><b>${itemName(it)}</b><small>Lv${it.level}${it.plus?` +${it.plus}`:''} · ${itemOwner(it)} · ${e.label}</small></div>${it.locked?`<span class="item-lock" aria-label="ล็อกอยู่">${icon('act-lock')}</span>`:''}</div>
+    return `<section class="item-card picked-card" data-rarity="${it.rarity}" aria-label="ไอเท็มที่เลือก"><div class="item-card-head">${gearArt(it)}<div><small data-rarity="${it.rarity}">${rarityText[it.rarity]} · ${slotText[it.slot]}${it.set?` · ชุด${setText[it.set]}`:''}</small><b>${itemName(it)}</b><small>Lv${it.level}${it.plus?` +${it.plus}`:''} · ${itemOwner(it)} · ${e.label}</small></div>${it.locked?`<span class="item-lock" aria-label="ล็อกอยู่">${icon('act-lock')}</span>`:''}</div>
       ${locked?'':`<div class="item-deltas">${deltas||'<span class="item-delta same">ค่าต่อสู้เท่าเดิม</span>'}<small>${worn?'เทียบที่สวม':'ช่องว่าง'}</small></div>`}<small class="item-lines">${itemLines(this.map.equipment,it).join(' · ')}</small>
       <div class="item-card-actions"><button id="wear-${key}" data-world="bag-wear" data-key="${e.key}" class="primary"${locked||!model.available?' disabled':''}>${locked?'คนอื่นใช้':`${icon('act-confirm')}สวมใส่`}</button><button id="compare-${key}" data-world="bag-compare" data-key="${e.key}" class="secondary"${locked?' disabled':''}>${icon('act-compare')}รายละเอียด</button>${model.camp?`<button data-world="character-forge" data-uid="${it.uid}" class="secondary">${icon('tab-forge')}พัฒนา</button>`:''}</div></section>`;
   }

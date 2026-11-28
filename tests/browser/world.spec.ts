@@ -1077,8 +1077,8 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   await expect(page.locator('#bag-tab-items')).toHaveAttribute('aria-selected', 'true');
   for (const sel of ['#bag-tab-items', '#bag-tab-gear', '[data-world=pack-close]']) await reachable(page, sel);
   await page.locator('#bag-tab-gear').click(); await page.locator('#bag-member-guardian').click();
-  // The bag is a tile grid (A7): picking a tile shows its card with the wear action.
-  await page.locator('#pick-found-1').click(); await expect(page.locator('#wear-found-1')).toBeDisabled(); await expect(page.locator('#wear-found-1')).toContainText('คนอื่นใช้');
+  // The bag is a tile grid (A7): picking a tile opens its card in a popup with the wear action.
+  await page.locator('#pick-found-1').click(); await expect(page.locator('#wear-found-1')).toBeDisabled(); await expect(page.locator('#wear-found-1')).toContainText('คนอื่นใช้'); await page.keyboard.press('Escape');
   await page.locator('#pick-found-0').click(); await page.locator('#wear-found-0').click();
   await expect.poll(async () => (await saved(page)).members.guardian?.gear?.body?.rarity).toBe(3);
   expect((await saved(page)).found).toEqual([bow]);
@@ -1088,6 +1088,7 @@ test('map bag (2026-10-17): wear a find away from camp, take it off, read a memb
   await page.locator('#bag-slot-body').click(); await page.locator('#bag-takeoff').click();
   await expect.poll(async () => (await saved(page)).found.length).toBe(2); expect((await saved(page)).members.guardian?.gear).toBeUndefined();
   await closeTalentDetails(page);await page.locator('#character-member-tracer').click(); await page.locator('#bag-slot-weapon').click();
+  await expect(page.locator('.gear-bag [data-world=bag-pick]')).toHaveCount(1); await page.locator('.gear-bag [data-world=bag-pick]').click();
   await expect(page.locator('[data-world=bag-wear]')).toHaveCount(1);
   await page.locator('[data-world=bag-wear][data-key^="found:"]').first().click();
   await expect.poll(async () => (await saved(page)).members.tracer?.gear?.weapon?.hero).toBe('tracer');
@@ -1253,7 +1254,7 @@ test('lobby equipment: its own sheet; equip, class weapons, swap, unequip, salva
   await expect(page.locator('#camp-character-dialog')).toBeVisible(); await expect(page.locator('#camp-character-tab-gear')).toHaveAttribute('aria-selected','true');
   await expect(page.locator('.gear-slot')).toHaveCount(6); await expect(page.locator('.gear-bag li')).toHaveCount(4);
   // Another class's weapon cannot be worn.
-  await page.locator('#camp-pick-owned-3').click(); await expect(page.locator('#camp-wear-owned-3')).toBeDisabled(); await expect(page.locator('#camp-wear-owned-3')).toContainText('คนอื่นใช้');
+  await page.locator('#camp-pick-owned-3').click(); await expect(page.locator('#camp-wear-owned-3')).toBeDisabled(); await expect(page.locator('#camp-wear-owned-3')).toContainText('คนอื่นใช้'); await page.keyboard.press('Escape');
   await page.locator('#camp-bag-slot-body').click(); await expect(page.locator('.gear-bag li')).toHaveCount(2);
   await page.locator('#camp-pick-owned-1').click(); await page.locator('#camp-wear-owned-1').click();
   await expect(page.locator('#camp-bag-slot-body')).toContainText('เกราะหายาก Lv5'); await expect(page.locator('.gear-bag li')).toHaveCount(1);

@@ -58,7 +58,8 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await closeTalentDetails(page);await page.locator('#character-member-guardian').click(); await page.screenshot({path:info.outputPath('character-talents.png')});
     await closeTalentDetails(page);await page.locator('#character-tab-skills').click(); await closeTalentDetails(page);await page.locator('#character-tab-skills').click(); await page.locator('#skill-selection').selectOption('challenge'); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ท้าดวล'); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ยืนหยัด');
     await page.screenshot({path:info.outputPath('character-skills.png')});
-    await closeTalentDetails(page);await page.locator('#character-tab-gear').click(); await page.locator('#pick-found-1').click(); await expect(page.locator('#wear-found-1')).toBeDisabled();
+    await closeTalentDetails(page);await page.locator('#character-tab-gear').click(); await page.locator('#pick-found-1').click(); await expect(page.locator('#gear-detail-dialog')).toBeVisible(); await expect(page.locator('#wear-found-1')).toBeDisabled(); await page.screenshot({path:info.outputPath('character-gear-popup.png')}); await page.keyboard.press('Escape');
+    await expect(page.locator('#gear-detail-dialog')).toBeHidden(); await expect(page.locator('#pick-found-1')).toBeFocused();
     await page.locator('#pick-found-0').click(); await page.locator('#wear-found-0').click();
     let current = parseGame(await saved(page),map,encounterById).run!;
     expect(current.members.guardian!.gear!.body!.rarity).toBe(3); expect(current.spare[0]!.uid).toBe(1); expect(current.hp.guardian).toBe(11);

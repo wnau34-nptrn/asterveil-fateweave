@@ -91,7 +91,7 @@
 .bag-tile:focus-visible { outline: 2px solid var(--gold-light, #f2d596); outline-offset: 2px; }
 
 /* Item card: the picked bag piece or the worn piece of the selected doll slot. */
-.character-content .item-card { display: grid; gap: 10px; margin: 8px 0; padding: 12px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); font-size: 13px; }
+.character-content .item-card, .gear-detail-content .item-card { display: grid; gap: 10px; margin: 8px 0; padding: 12px; border: 1px solid #e8f5ff26; border-radius: 16px; background: linear-gradient(160deg, #182b40, #0c1a2b); font-size: 13px; }
 .item-card-head { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
 .item-card-head .gear-art { --art: 64px; }
 .item-card-head > div { display: grid; gap: 1px; min-width: 0; }
@@ -109,7 +109,7 @@
 .item-delta.same { font-weight: 400; font-size: 12px; color: var(--text-muted, #bbcadb); }
 .item-card .item-lines { font-size: 12px; line-height: 1.5; color: var(--text-muted, #bbcadb); }
 .item-card-actions { display: flex; gap: 8px; }
-.character-content .item-card-actions button { flex: 1; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.character-content .item-card-actions button, .gear-detail-content .item-card-actions button { flex: 1; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
 .worn-card { border-color: #74d4ef55; }
 
 /* Item detail / comparison (board 02). */

@@ -53,8 +53,8 @@ for (const [width,height] of [[390,844],[320,568]] as const) {
     await closeTalentDetails(page);await page.locator('#character-tab-gear').click(); await shot('gear', true);
     await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0));
     const pick = page.locator('#pick-found-0');
-    if (await pick.count()) { await pick.click(); await to('.item-card:not(.worn-card)', 120); await shot('gear-picked'); await page.locator('#bag-slot-weapon').click(); await to('.worn-card', 120); await shot('gear-worn'); await page.locator('#bag-slot-weapon').click(); await page.locator('#gear-chips, .gear-extra-filters summary').first().click(); await to('.gear-chips', 8); await shot('gear-filters'); await page.locator('.gear-extra-filters summary').click(); }
-    await page.locator('#compare-found-0').click(); await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0)); await shot('compare', true);
+    if (await pick.count()) { await pick.click(); await to('.item-card:not(.worn-card)', 120); await shot('gear-picked'); await page.keyboard.press('Escape'); await page.locator('#bag-slot-weapon').click(); await to('.worn-card', 120); await shot('gear-worn'); await page.locator('#bag-slot-weapon').click(); await page.locator('#gear-chips, .gear-extra-filters summary').first().click(); await to('.gear-chips', 8); await shot('gear-filters'); await page.locator('.gear-extra-filters summary').click(); }
+    await page.locator('#pick-found-0').click(); await page.locator('#compare-found-0').click(); await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0)); await shot('compare', true);
     await to('.compare-card', 8); await shot('compare-mid');
     await page.locator('#comparison-back').click();
     await page.locator('.auto-settings summary').click(); await page.locator('#auto-preview').click(); await page.locator('#character-content').evaluate(el => el.scrollTo(0, 0)); await shot('auto');
