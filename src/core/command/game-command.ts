@@ -19,9 +19,10 @@ import { claimBoard, weekOf } from '../world/board';
 import { gachaExchange, gachaPull, pullReason } from '../world/gacha';
 import { claimWorldBoss, craftBossItem, worldBossAttempt, type WorldBossShared } from '../world/world-boss';
 import { raiseSkill, tradeTomes } from '../world/tomes';
+import { choosePet, hatchEgg } from '../world/pets';
 import {
-  EVENT_CHOICE_IDS, GEAR_SLOTS, POTION_IDS, SET_IDS, SHOP_ITEMS, TOME_LINES, TOME_SIZES, WB_BOSSES, type GearStat, type SetId, type WbBossId,
-  type BoardTab, type Commander, type Direction, type EventChoice, type ExpeditionState, type GearSlot, type Lane, type MapDefinition, type Point,
+  EVENT_CHOICE_IDS, GEAR_SLOTS, PET_IDS, POTION_IDS, SET_IDS, SHOP_ITEMS, TOME_LINES, TOME_SIZES, WB_BOSSES, type GearStat, type SetId, type WbBossId,
+  type BoardTab, type Commander, type Direction, type EventChoice, type ExpeditionState, type GearSlot, type Lane, type MapDefinition, type PetKind, type Point,
   type PotionId, type Profile, type ProfileEvent, type ProfileResult, type RunOutcome, type ShopItemId, type TalentNode, type TomeLine,
   type TomeSize, type WorldEvent, type WorldResult,
 } from '../world/types';
@@ -93,6 +94,9 @@ export type CampCommand =
   // `version` the player saw (another version is refused, so nothing is drawn under rules the player did not confirm).
   | { kind: 'gachaPull'; count: number; config: number }
   | { kind: 'gachaExchange'; heroId: string; config: number }
+  // PET-1 (OD-63): hatch a choice egg into the named kind, and choose the pet for the next expedition (missing = none).
+  | { kind: 'hatchEgg'; pet: PetKind }
+  | { kind: 'choosePet'; pet?: PetKind }
   // `day` (P05-06): the device's calendar day, for the run's quest-board progress (missing = the run counts nowhere;
   // online the server's day is used and a device day is refused).
   | { kind: 'depart'; mapId?: string; hard: boolean; day?: number };
@@ -159,6 +163,7 @@ const SPECS: Record<CommandKind, Spec> = {
   brew: { potion: POTION_IDS }, claimQuest: { questId: 'str' }, sweep: { mapId: 'str', hard: 'bool', day: opt('int'), serial: 'int' }, claimBoard: { tab: ['daily', 'weekly', 'contract'], id: 'str', period: 'int', day: opt('int') },
   worldBoss: { attempt: 'int', commands: 'commands', day: opt('int'), boss: opt(WB_BOSSES) }, claimWorldBoss: { id: 'str', week: 'int', day: opt('int') },
   gachaPull: { count: 'int', config: 'int' }, gachaExchange: { heroId: 'str', config: 'int' },
+  hatchEgg: { pet: PET_IDS }, choosePet: { pet: opt(PET_IDS) },
   depart: { mapId: opt('str'), hard: 'bool', day: opt('int') },
   move: { dir: DIRECTIONS }, mine: { action: MINE_ACTIONS }, travel: { to: 'point' }, rest: {}, waitTide: {}, revive: { heroId: 'str' }, swapMembers: { a: 'str', b: 'str' },
   setLane: { heroId: 'str', lane: LANES, other: opt('str') }, moveMember: { heroId: 'str' }, runPreset: { slot: 'int' }, withdraw: {}, openChest: {},
@@ -220,8 +225,11 @@ function onRun(game: Game, result: WorldResult, expect?: WorldEvent['type']): Co
   return { game: { profile: game.profile, run: result.state }, events: [e] };
 }
 // Settling the run into the profile happens in the same write that clears it.
+// A choice egg the settling paid (PET-1) is reported as its own event, so the server's ledger records it.
 function settled(profile: Profile, run: ExpeditionState, outcome: RunOutcome, map: MapDefinition, events: CommandEvent[]): CommandResult {
-  return { game: { profile: settle(profile, run, outcome, map), run: null }, events: [...events, { type: 'settled', outcome, run }] };
+  const home = settle(profile, run, outcome, map);
+  const eggs: CommandEvent[] = (home.pets?.from ?? []).filter(id => !profile.pets?.from.includes(id)).map(mapId => ({ type: 'petEgg', mapId }));
+  return { game: { profile: home, run: null }, events: [...events, ...eggs, { type: 'settled', outcome, run }] };
 }
 const sameCommand = (a: Command, b: Command) => COMMAND_KEYS.every(k => a[k] === b[k]);
 
@@ -288,6 +296,8 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
     // The seed is drawn only for a pull the rules accept, so a refused pull uses none (the log replays the same draws).
     case 'gachaPull': { const why = pullReason(p, maps, map, cmd.count, cmd.config); return why ? reject(why) : camp(gachaPull(p, maps, map, cmd.count, cmd.config, ctx.seeds.next()), 'gacha'); }
     case 'gachaExchange': return camp(gachaExchange(p, maps, map, cmd.heroId, cmd.config), 'gacha');
+    case 'hatchEgg': return camp(hatchEgg(p, maps, map, cmd.pet), 'hatched');
+    case 'choosePet': return camp(choosePet(p, maps, cmd.pet), 'petChosen');
     case 'depart': {
       if (departureBlocked(p)) return reject('storage');
       // The prologue always starts on the first map; otherwise the named open map (default: the furthest open one).

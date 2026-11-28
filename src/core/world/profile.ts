@@ -2,6 +2,7 @@ import {startBossPlan} from './boss-equipment';
 import {startHunt} from './targeted-loot';
 import {storageCap,departureBlocked} from './storage';
 import { memberTalentReason, talentPoints, talentsSpent, treeClears } from './talents';
+import { runPet, settlePetEgg } from './pets';
 import type { Lane, GuideDefinition, GuideKind, LobbyFeature, Commander, ShopItemId, SideQuestKind, ExpeditionState, Gear, GearSlot, Item, MapDefinition, PotionId, Potions, Profile, ProfileResult, RunOutcome, TalentNode } from './types';
 import { rollItem, salvageValue } from './equipment';
 import { addTomes, dismissTomes, emptyTomes, firstClearTomes, tomeCount } from './tomes';
@@ -318,6 +319,8 @@ export function depart(initial: Profile, map: MapDefinition, lookup: EncounterLo
   run.hunt=startHunt(profile);if(map.bossCharm)run.bossLoot=startBossPlan(profile,map);
   if (hard) run.hard = true;
   if (day !== undefined) run.day = day;
+  // PET-1: the chosen pet comes along at its current level and stays for the whole expedition.
+  const pet = runPet(profile); if (pet) run.pet = pet;
   // Map 4: the ferryman's boat, once his story has paid, sails on every later run of that map.
   if (map.story?.boat && profile.storyQuests?.includes(map.id)) run.boat = true;
   // Story recruits not yet in the company (owner 2026-10-23). Before the prologue they come along as guests in free
@@ -435,6 +438,8 @@ export function settle(initial: Profile, settled: ExpeditionState, outcome: RunO
   if (outcome === 'complete' && !run.hard && !profile.cleared.includes(run.mapId) && map.firstClearTickets) {
     const g = (profile.gacha ??= { tickets: 0, points: 0, serial: 0, history: [] }); g.tickets = Math.min(map.gacha.ticketCap, g.tickets + map.firstClearTickets);
   }
+  // PET-1 (OD-63): an egg map's first normal clear pays one choice egg.
+  settlePetEgg(profile, run, outcome, map);
   if (outcome === 'complete' && !profile.cleared.includes(run.mapId)) profile.cleared.push(run.mapId);
   if (outcome === 'complete' && run.hard && !profile.clearedHard?.includes(run.mapId)) {
     (profile.clearedHard ??= []).push(run.mapId); const r = map.progression.hardFirstClear; profile.bank.gold += r.gold; profile.bank.shard += r.shard;

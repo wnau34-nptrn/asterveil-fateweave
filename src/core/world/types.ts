@@ -105,6 +105,8 @@ export interface MapDefinition {
   worldBoss: WorldBossRules;
   // P10 free-ticket gacha (shared by every map; docs/design/GACHA_P10_SPEC_TH.md).
   gacha: GachaRules;
+  // PET-1 (OD-63, save v71): the six pets, their eggs and levels (shared by every map, `content/world/rules.ts`).
+  pets: PetRules;
   herbs: readonly (Point & { id: string })[];
   // Map 4 (save v68): the tide (`tide.ts`), moon lanterns (stepped on once per run; a seal objective), lost notes
   // (stepped on once per run; they come home into the camp journal whatever the outcome) and a side story that runs
@@ -433,6 +435,24 @@ export interface MapTomes { boss: { medium: number; small: number }; first: { la
 // Mercenary company rules (draft numbers). starCosts[i] upgrades ★(i+1) → ★(i+2).
 // 4A camp market: each item has a gold price and a limit per return home. The gear box rolls a rare-or-better
 // piece at the company's highest level; the contract adds one duplicate to a chosen member.
+// ---- PET-1 pets (OD-63, docs/design/PET_SYSTEM_ANALYSIS_TH.md §5; ids from ART-PET-002; numbers are drafts) ----
+// One pet per expedition, never in the SPD queue, no HP, not a target. Each has one map blessing (PET-2) and one
+// deterministic end-of-round assist (PET-4); PET-1 only hatches and chooses them.
+export const PET_IDS = ['meadow_fox', 'thicket_piglet', 'rift_crystal_moth', 'fort_gargoyle_pup', 'forest_lantern_owl', 'gate_starveil_slime'] as const;
+export type PetKind = (typeof PET_IDS)[number];
+export type PetBlessing = 'luck' | 'forage' | 'farsight' | 'ward' | 'lantern' | 'renewal';
+export type PetAssist = 'markStrike' | 'heal' | 'expose' | 'shield' | 'hasten' | 'groupHeal';
+// `assist.at1`/`at10`: the assist's value at Lv1 and Lv10 (§5.2b); `blessing.at1`/`at6`: the blessing's two steps.
+export interface PetDefinition { id: PetKind; name: string; blessing: { kind: PetBlessing; at1: number; at6: number }; assist: { kind: PetAssist; at1: number; at10: number } }
+// `firstClearEggs`: maps whose first normal clear pays one choice egg (in map order). `eggShards` egg shards hatch like
+// one egg. `eggCap`/`shardCap` bound the stored counts.
+export interface PetRules { kinds: readonly PetDefinition[]; maxLevel: number; firstClearEggs: readonly string[]; eggShards: number; eggCap: number; shardCap: number }
+// `exp`: food toward the next level (below `level`; 0 at the top level).
+export interface PetProgress { kind: PetKind; level: number; exp: number }
+// `owned` in hatch order (one of each kind); `chosen` goes on the next expedition; `from` the maps whose first clear has
+// paid its egg (each once, the server's receipt `pet:egg:<map>`).
+export interface PetBook { eggs: number; shards: number; owned: PetProgress[]; chosen?: PetKind; from: string[] }
+export interface RunPet { kind: PetKind; level: number }
 export const SHOP_ITEMS = ['shard', 'contract', 'gearbox', 'repel'] as const;
 export type ShopItemId = typeof SHOP_ITEMS[number];
 export interface ShopRules {
@@ -543,6 +563,8 @@ export interface Profile {
   bossShards?: Partial<Record<WbBossId, number>>;
   // P10 (save v66): the free-ticket gacha wallet, counters and recent history (missing = never earned a ticket).
   gacha?: GachaBook;
+  // PET-1 (OD-63, save v71): eggs, egg shards, hatched pets and the one chosen for the next expedition (missing = none).
+  pets?: PetBook;
   // P04-02 (OD-22): story recruits already compensated (or met through the story), each at most once. Missing = none.
   storyShards?: string[];
   // `items` kept in the bag and `salvaged` because the bag was full (2D-2).
@@ -584,6 +606,11 @@ export type ProfileEvent =
   // `boss`/`shards` (P11-05): the trio boss fought and the boss shards each part paid (missing = the warden).
   | { type: 'wbAttempt'; week: number; attempt: number; damage: number; rounds: number; outcome: Outcome; reward: SweepReward; milestones: { id: string; reward: SweepReward; shards?: number }[]; boss?: WbBossId; shards?: number }
   | { type: 'gacha'; entry: GachaEntry }
+  // PET-1: a pet hatched from a choice egg (`shards`: paid with egg shards instead of a whole egg), the pet chosen for
+  // the next expedition (missing = none) and a choice egg paid by a map's first clear (only from settling a run).
+  | { type: 'hatched'; kind: PetKind; shards?: true }
+  | { type: 'petChosen'; kind?: PetKind }
+  | { type: 'petEgg'; mapId: string }
   | { type: 'wbClaimed'; week: number; id: string; reward: SweepReward; boss?: WbBossId; shards?: number }
   | { type: 'bossCrafted'; uid: number; boss: WbBossId }
   | { type: 'bought'; item: ShopItemId; heroId?: string; uid?: number }
@@ -635,7 +662,7 @@ export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `percent` (A10): the map strength stored at the start (foe HP and move damage; missing = 100).
 export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; percent?: number; source?: string; lanes?: Record<string, Lane> }
 export type RecruitPoint = 'prologue' | 'camp' | 'boss' | 'first-objective';
-export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm' | 'hard' | 'tomes' | 'gacha' | 'auto' | 'worldBoss';
+export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm' | 'hard' | 'tomes' | 'gacha' | 'auto' | 'worldBoss' | 'pets';
 export interface ExpeditionState {
   // Skill tomes (save v37, maps with `MapDefinition.tomes`): `tomes`/`riftCore` are this
   // run's finds (added to the profile when it settles) and `tomeWins` counts its ordinary wins toward the next tome.
@@ -668,6 +695,8 @@ export interface ExpeditionState {
   mine?: MineProgress;
   // Map 5 (save v70): ore sold to the ore merchant this run (missing = none).
   sold?: number;
+  // PET-1 (save v71): the pet brought along, fixed at departure for the whole expedition (missing = none).
+  pet?: RunPet;
   tideWait?: number; shore?: Point; boat?: true; lanterns?: string[]; notes?: string[];
   // P05-06 (save v63): the device's calendar day the run set out on; its board progress counts there (missing = none).
   day?: number;

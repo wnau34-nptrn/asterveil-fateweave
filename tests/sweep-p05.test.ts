@@ -138,12 +138,12 @@ describe('P05-05 sweep command', () => {
 describe('save v62', () => {
   const swept = (): Profile => ok(ok(base({ choices: { 'forest-shrine': 'pray' }, storyQuests: [ruinsMap.id] })), forestMap);
   it('round-trips the sweep book beside the v61 story state, and a v61 save loads without one', () => {
-    expect(SAVE_VERSION).toBe(70);
-    const p = swept(); const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(70);
+    expect(SAVE_VERSION).toBe(71);
+    const p = swept(); const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(71);
     const back = parseGame(raw, home, lookup, MAPS); expect(back).toEqual({ profile: p, run: null });
     expect(back.profile.choices).toEqual({ 'forest-shrine': 'pray' }); expect(back.profile.storyQuests).toEqual([ruinsMap.id]);
     const old = base({ choices: { 'forest-shrine': 'pray' } });
-    expect(parseGame(JSON.stringify({ version: 61, profile: old, run: null }), home, lookup, MAPS)).toEqual({ profile: old, run: null });
+    expect(parseGame(JSON.stringify({ version: 61, profile: old, run: null }), home, lookup, MAPS)).toEqual({ profile: { ...old, pets: { eggs: 2, shards: 0, owned: [], from: ['moon-lake', 'crystal-mine'] } }, run: null }); // v71: eggs of cleared maps 4/5
     // A run in progress keeps the book too.
     const away = depart(p, home, lookup, 9); const mid = write({ profile: away.profile, run: away.run });
     expect(parseGame(mid, home, lookup, MAPS).profile.sweep).toEqual(p.sweep);

@@ -144,13 +144,13 @@ describe('P05-06 claims', () => {
 
 describe('save v63', () => {
   it('round-trips the board book and the run day; a v62 save loads without them', () => {
-    expect(SAVE_VERSION).toBe(70);
+    expect(SAVE_VERSION).toBe(71);
     const p = claim(played(base(), { wins: 3, steps: 10 }), 'daily', 'd-patrol', DAY);
-    const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(70);
+    const raw = write({ profile: p, run: null }); expect(JSON.parse(raw).version).toBe(71);
     expect(parseGame(raw, home, lookup, MAPS)).toEqual({ profile: p, run: null });
     const away = depart(p, home, lookup, 9, undefined, DAY + 1); const mid = parseGame(write(away), home, lookup, MAPS);
     expect(mid.run!.day).toBe(DAY + 1); expect(mid.profile.board).toEqual(p.board);
-    const old = base(); expect(parseGame(JSON.stringify({ version: 62, profile: old, run: null }), home, lookup, MAPS)).toEqual({ profile: old, run: null });
+    const old = base(); expect(parseGame(JSON.stringify({ version: 62, profile: old, run: null }), home, lookup, MAPS)).toEqual({ profile: { ...old, pets: { eggs: 2, shards: 0, owned: [], from: ['moon-lake', 'crystal-mine'] } }, run: null }); // v71: eggs of cleared maps 4/5
   });
   it('rejects a book outside the rules', () => {
     const p = claim(played(base(), { wins: 3, steps: 10 }), 'daily', 'd-patrol', DAY); const b = p.board!;

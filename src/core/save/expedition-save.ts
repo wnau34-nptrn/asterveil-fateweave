@@ -5,7 +5,7 @@ import {storageCap} from '../world/storage';
 import { entryReason, MAGIC_DAMAGE_SKILLS, withParty } from '../battle/engine';
 import type { ActionId, Command } from '../battle/types';
 import { presetNameReason } from '../world/presets';
-import { LEGACY_RESERVE, PARTY_SLOTS, PRESET_SLOTS, RESERVE_SLOTS, type TeamPreset, type GachaBook, type GachaEntry, type GachaGrant, type GachaResult, type ActiveBattle, type CampMigration, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
+import { LEGACY_RESERVE, PARTY_SLOTS, PRESET_SLOTS, RESERVE_SLOTS, type TeamPreset, type GachaBook, type PetBook, type PetKind, type PetProgress, type RunPet, type GachaEntry, type GachaGrant, type GachaResult, type ActiveBattle, type CampMigration, type ExpeditionState, type MapDefinition, type Point, type Profile, type Lane, type Roster, type RunOutcome } from '../world/types';
 import { waterAt } from '../world/tide';
 import { EVENT_CHOICES, memoryNote, campLevel, draftOffers, skillChoices, battleState, expToNext, findTiles, levelXp, maxCampXp, type Party, newExpedition, finishBattle, fullParty, heroCatalog, heroDef, memberDef, rosterIds, tileAt, type EncounterLookup } from '../world/world';
 import { affixPool, itemValid } from '../world/equipment';
@@ -178,7 +178,10 @@ const REWORKED_V55: readonly ActionId[] = ['disengage', 'track', 'aegis', 'dispe
 // v69 (map 5): mine interactions and recruitment progress, with no changes to older maps.
 // v70 (map 5 side events): a run on a map with an ore merchant may carry `sold` (trades made, 1..limit); event choices may
 // name the trapped worker, ore cart, fresh vein and ore merchant. Optional, so a v69 save loads unchanged.
-export const SAVE_VERSION = 70;
+// v71 (PET-1, OD-63): the profile may carry the pet book `pets` (choice eggs, egg shards, hatched pets with level and
+// food, the pet chosen for the next run and the maps whose first clear paid an egg) and a run the pet it brought (`pet`,
+// fixed at departure). A v70 save that already cleared an egg map (map 4, map 5) gets those eggs from its history.
+export const SAVE_VERSION = 71;
 // Trees refunded by older migrations were legal under star points (at most ★5 = 4 extra).
 const LEGACY_STAR_POINTS = 4;
 const REWORKED_V58: readonly ActionId[] = ['evade'];
@@ -437,6 +440,32 @@ function worldBossOf(v: unknown, map: MapDefinition): WorldBossBook {
   });
   if (weeks.length === 2 && weeks[0]!.week !== weeks[1]!.week - 1) bad();
   return { weeks };
+}
+// PET-1 (v71): eggs and shards within their caps, one entry per hatched kind (level 1..max, food below the level, none
+// at the top), a chosen pet that is hatched and egg maps (no repeats) the company has cleared.
+function petsOf(v: unknown, map: MapDefinition, cleared: readonly string[]): PetBook {
+  const g = obj(v); const r = map.pets; const bad = (): never => { throw new Error('Invalid pets'); };
+  if (Object.keys(g).some(k => !['eggs', 'shards', 'owned', 'chosen', 'from'].includes(k))) bad();
+  if (!isInt(g.eggs, 0, r.eggCap) || !isInt(g.shards, 0, r.shardCap) || !Array.isArray(g.owned) || g.owned.length > r.kinds.length) bad();
+  const owned = (g.owned as unknown[]).map((x): PetProgress => {
+    const o = obj(x);
+    if (Object.keys(o).length !== 3 || !r.kinds.some(k => k.id === o.kind) || !isInt(o.level, 1, r.maxLevel)
+      || !isInt(o.exp, 0, (o.level as number) >= r.maxLevel ? 0 : (o.level as number) - 1)) bad();
+    return { kind: o.kind as PetKind, level: o.level as number, exp: o.exp as number };
+  });
+  if (new Set(owned.map(p => p.kind)).size !== owned.length) bad();
+  if (g.chosen !== undefined && !owned.some(p => p.kind === g.chosen)) bad();
+  const from = idList(g.from, r.firstClearEggs.filter(id => cleared.includes(id)));
+  return { eggs: g.eggs as number, shards: g.shards as number, owned, ...(g.chosen !== undefined ? { chosen: g.chosen as PetKind } : {}), from };
+}
+function migratedPets(cleared: readonly string[], map: MapDefinition): PetBook | undefined {
+  const from = map.pets.firstClearEggs.filter(id => cleared.includes(id));
+  return from.length ? { eggs: Math.min(map.pets.eggCap, from.length), shards: 0, owned: [], from } : undefined;
+}
+function runPetOf(v: unknown, map: MapDefinition): RunPet {
+  const o = obj(v);
+  if (Object.keys(o).length !== 2 || !map.pets.kinds.some(k => k.id === o.kind) || !isInt(o.level, 1, map.pets.maxLevel)) throw new Error('Invalid run');
+  return { kind: o.kind as PetKind, level: o.level as number };
 }
 // P10 (v66): the gacha wallet. Pending shards belong to cabinet characters the company does not own, below the unlock
 // amount; history entries are the newest `historyKeep` in serial order, each shaped as its kind makes it.
@@ -719,6 +748,7 @@ function parseRun(v: unknown, version: number, map: MapDefinition, lookup: Encou
     ...(s.bossLoot===undefined?{}:{bossLoot:bossPlanOf(s.bossLoot,map)}),
     ...(reserveSlots !== undefined ? { reserveSlots } : {}), ...(fatigue ? { fatigue } : {}), ...(clears ? { clears } : {}),
     ...(s.choices !== undefined ? { choices: choicesOf(s.choices, map.events, false) } : {}),
+    ...(s.pet !== undefined ? { pet: runPetOf(s.pet, map) } : {}),
     ...(s.sold !== undefined ? { sold: isInt(s.sold, 1, map.eventRules.oreTrade.limit) && map.events.some(e => e.kind === 'ore-merchant') ? s.sold : badRun() } : {}),
     ...(s.downed !== undefined ? { downed: isInt(s.downed, 1, RUN_CAP.downed) ? s.downed : badRun() } : {}),
     ...(s.day !== undefined ? { day: isInt(s.day, 0, MAX_BOARD_DAY) ? s.day : badRun() } : {}),
@@ -855,6 +885,8 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   const worldBoss = p.worldBoss === undefined ? undefined : worldBossOf(p.worldBoss, map);
   const bossShards = p.bossShards === undefined ? undefined : bossShardsOf(p.bossShards, map);
   const gacha = p.gacha === undefined ? undefined : gachaOf(p.gacha, map, company as string[]);
+  // v71 (PET-1): the pet book; an older save gets the eggs its first clears of egg maps would have paid.
+  const pets = p.pets === undefined ? (version < 71 ? migratedPets(cleared, map) : undefined) : petsOf(p.pets, map, cleared);
   // v44 → v45 (P02): the fifth field slot is filled from the reserve, and a reserve above the chapter's slots steps into
   // the field first (there is always room: four deployed at most before v45). Nobody leaves the team.
   const slots = reserveSlots({ cleared, ...(veteran ? { veteran: true as const } : {}) }, map);
@@ -862,7 +894,7 @@ function parseProfile(v: unknown, version: number, map: MapDefinition, lookup: E
   if (party.reserve.length > slots) throw new Error('Invalid party');
   return {...(presets ? { presets } : {}),...(archived ? { archived } : {}),campXp,...(boardPool ? { boardPool: [...boardPool as string[]] } : {}),...(boardFeatured ? { boardFeatured: [...boardFeatured as string[]] } : {}),...(tomes ? { tomes } : {}),...(riftCore !== undefined ? { riftCore } : {}),...(clearedHard ? { clearedHard } : {}),...(guides ? { guides } : {}),...(veteran ? { veteran: true as const } : {}),bossLoot,hunt,overflow,storageTier:p.storageTier as number, forgeLevel:p.forgeLevel as number, seed: p.seed, returns: p.returns, tutorialDone: p.tutorialDone, commander, company: [...company as string[]], members, party, cleared,
     ...(storyShards ? { storyShards } : {}), ...(treeReset?.length ? { treeReset } : {}),
-    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}), ...(notes?.length ? { notes } : {}), ...(sweep ? { sweep } : {}), ...(board ? { board } : {}), ...(worldBoss ? { worldBoss } : {}), ...(bossShards ? { bossShards } : {}), ...(gacha ? { gacha } : {}),
+    ...(choices && Object.keys(choices).length ? { choices } : {}), ...(storyQuests?.length ? { storyQuests } : {}), ...(notes?.length ? { notes } : {}), ...(sweep ? { sweep } : {}), ...(board ? { board } : {}), ...(worldBoss ? { worldBoss } : {}), ...(bossShards ? { bossShards } : {}), ...(gacha ? { gacha } : {}), ...(pets ? { pets } : {}),
     bank: { ore: bank.ore as number, gold: bank.gold as number, shard: bank.shard as number, dust: bank.dust as number }, items, nextItem: p.nextItem as number, forge: p.forge as number, potions: potionsOf(p.potions, POTION_CAP), quests, shop, refreshes: p.refreshes as number, smelted: p.smelted as number, taken: [...p.taken as number[]], expeditions: p.expeditions, completes: p.completes, last };
 }
 // Optional elite returns (4C): known optional elites only, 1..99 each.
@@ -1080,7 +1112,7 @@ export function parseGame(raw: string, map: MapDefinition, lookup: EncounterLook
   if (version < 42) refundAuditTrees(envelope, maps.length ? maps : [map]);
   const legacy = version < 44 ? migrateCampLevels(envelope, map) : undefined;
   if (version < 60 && version >= 5) { const p = obj(envelope.profile ?? {}); migrateTreePoints(envelope, map, maps.length ? maps : [map], version < 28 ? legacyCleared(p.tutorialDone === true, (p.completes as number) > 0, map, maps).length : undefined); }
-  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, SAVE_VERSION].includes(version)) throw new Error('Unsupported save version');
   const summary = (game: Game): Game => legacy ? { ...game, migrated: { from: version, level: campLevel(map, game.profile.campXp), campXp: game.profile.campXp, ...(legacy.best ? { best: legacy.best } : {}), ...(legacy.battle ? { battle: true } : {}) } } : game;
   const runMap = (v: unknown): MapDefinition => maps.find(m => m.id === obj(v).mapId) ?? map;
   if (version < 5) {
