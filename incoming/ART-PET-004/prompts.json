@@ -1,0 +1,36 @@
+{
+  "method": "Art direction implemented directly in assemble.py",
+  "shared": "Paint compact, saturated effects for a semi-chibi battle. Use the ART-PET-002 assist palettes, tapered brushwork, local light spill and separate flecks. Work on true transparent cells with a clear perimeter and open space around faces and HP labels. Prepare foreshadows the motif, peak tells the full story on its own, and fade disperses the same material.",
+  "rows": {
+    "meadow_fox": {
+      "prepare": "Gather a cream-gold hook and a few sparks at the foe's torso.",
+      "peak": "Snap a bright crescent across the foe's centre with two short claw marks and a warm contact glint.",
+      "fade": "Break the crescent into two thin brush remnants and falling gold flecks."
+    },
+    "thicket_piglet": {
+      "prepare": "Gather two moss leaves and a thin green curl around one hero.",
+      "peak": "Spiral veined chartreuse moss leaves up around the hero with soft pale-green heal glints.",
+      "fade": "Lift the outside leaves away and let the lower spiral thin out."
+    },
+    "rift_crystal_moth": {
+      "prepare": "Gather lilac dust above the foe with small floating crystal fragments.",
+      "peak": "Settle the dust into an open lilac reticle with a faceted central crystal. Keep the cue above the foe and away from the body.",
+      "fade": "Leave a dimmer, smaller crystal and broken reticle arcs with drifting dust."
+    },
+    "fort_gargoyle_pup": {
+      "prepare": "Draw separated slate fragments toward the hero along a champagne arc.",
+      "peak": "Assemble three faceted slate plates into a small flanking shield with a bright champagne bevel.",
+      "fade": "Separate the plates and leave a dim rim and a few chips."
+    },
+    "forest_lantern_owl": {
+      "prepare": "Kindle a small amber lantern and gather two gold feather streaks by the hero.",
+      "peak": "Pulse a bright amber lantern between two rising trails and three tapered feather streaks.",
+      "fade": "Lift dim gold feathers up and outward as the lantern shrinks."
+    },
+    "gate_starveil_slime": {
+      "prepare": "Gather two mint drops above a fine pale-lilac sweep.",
+      "peak": "Scatter five mint droplets and lilac veil sparkles in one gentle hero-sized burst.",
+      "fade": "Let three drops spread out and fall as the veil softens."
+    }
+  }
+}

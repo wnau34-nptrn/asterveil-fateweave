@@ -1,0 +1,16 @@
+{
+  "method": "Original, hand-authored Pillow brush geometry. Python Random seeds control pigment grain and glint variations.",
+  "paletteReference": {
+    "atlas": "incoming/ART-PET-002/pets.webp",
+    "frameColumn": "assist",
+    "cellSize": 256
+  },
+  "rows": {
+    "meadow_fox": {"prepare": 40101, "peak": 40102, "fade": 40103},
+    "thicket_piglet": {"prepare": 40201, "peak": 40202, "fade": 40203},
+    "rift_crystal_moth": {"prepare": 40301, "peak": 40302, "fade": 40303},
+    "fort_gargoyle_pup": {"prepare": 40401, "peak": 40402, "fade": 40403},
+    "forest_lantern_owl": {"prepare": 40501, "peak": 40502, "fade": 40503},
+    "gate_starveil_slime": {"prepare": 40601, "peak": 40602, "fade": 40603}
+  }
+}
