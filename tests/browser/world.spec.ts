@@ -1182,7 +1182,7 @@ test('lobby member panel shows the ★3 skill a migrated company keeps and the t
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator('#lobby-tab-team').click(); await page.locator('#lobby-member-tracer').click();
   await page.locator('#lobby-skills-open').click();await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click();await page.locator('.skill-passives summary').click();
-  await expect(page.locator('#camp-character-dialog .character-skills [data-skill=finisher]')).toContainText('ปลิดชีพ');
+  await expect(page.locator('#camp-character-dialog .character-skills li[data-skill=finisher]')).toContainText('ปลิดชีพ');
   await expect(page.locator('#camp-character-dialog .character-passive')).toContainText('ตาเหยี่ยว');
   await expect(page.locator('#camp-character-dialog .character-passive')).toContainText('ยังล็อก · ปลดที่โหนด สายตาคม ชั้น 4');
   await page.screenshot({ path: info.outputPath('lobby-unlocks.png') });

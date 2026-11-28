@@ -65,7 +65,7 @@ test('C12: personal branch inspection spends only on the explicit learn action a
   await page.locator('.personal-tree').scrollIntoViewIfNeeded();
   await page.screenshot({ path: info.outputPath('c12-character-390.png') });
   await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click();
-  await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click();await expect(page.locator('.character-skills [data-skill=communion]')).toContainText('เลือด');
+  await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click();await expect(page.locator('.character-skills li[data-skill=communion]')).toContainText('เลือด');
   expect(errors).toEqual([]);
 });
 

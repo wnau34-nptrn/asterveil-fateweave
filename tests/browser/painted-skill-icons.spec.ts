@@ -45,7 +45,7 @@ test('C1 painted skills appear in all six camp sheets and their trees at 390px',
     await page.locator(`#camp-character-member-${id}`).click();
     await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-character-tab-skills').click();
     for (const skill of skills) {
-      const art = page.locator(`.character-skills [data-skill=${skill}] > .skill-art`);
+      const art = page.locator(`.character-skills li[data-skill=${skill}] .skill-card-head > .skill-art`);
       await expect(art).toHaveCount(1);
       await expect(art).toHaveCSS('background-size', `600% ${atlas.rows * 100}%`);
       const index = atlas.order.indexOf(skill); expect(index).toBeGreaterThanOrEqual(34);

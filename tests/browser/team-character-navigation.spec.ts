@@ -33,7 +33,7 @@ for(const [width,height] of [[390,650],[390,844],[320,568],[1366,768]] as const)
     await page.locator('#camp-character-tab-talents').click();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();await expect(page.locator('#lobby-tab-characters')).toBeFocused();
     await page.locator('#lobby-tab-characters').click();await expect(page.locator('#camp-character-tab-talents')).toHaveAttribute('aria-selected','true');
     await page.locator('#camp-character-tab-skills').click();await expect(page.locator('#camp-skill-card-guard')).toHaveAttribute('data-selected','true');
-    await page.locator('#camp-skill-card-guard .skill-level-fold summary').click();await page.locator('#camp-skill-up-guard').scrollIntoViewIfNeeded();const detailScroll=await page.locator('#camp-character-content').evaluate(el=>el.scrollTop);if(height===650)expect(detailScroll).toBeGreaterThan(0);
+    await page.locator('#camp-skill-card-guard .skill-level-fold > summary').click();await page.locator('#camp-skill-up-guard').scrollIntoViewIfNeeded();const detailScroll=await page.locator('#camp-character-content').evaluate(el=>el.scrollTop);if(height===650)expect(detailScroll).toBeGreaterThan(0);
     await page.locator('#camp-skill-up-guard').click();await expect(page.locator('#camp-skill-review-confirm')).toBeVisible();
     await dialog.locator('[data-world=character-close]').click();await expect(dialog).not.toBeVisible();await page.locator('#lobby-tab-forge').click();await expect(page.locator('.forge-launcher')).toBeVisible();expect(await saved(page)).toBe(before);
     await page.locator('#lobby-sheet [data-lobby=close]').click();await page.locator('#lobby-tab-team').click();await page.locator('#lobby-tab-characters').click();await expect(page.locator('#camp-character-tab-skills')).toHaveAttribute('aria-selected','true');await expect(page.locator('#camp-skill-review-confirm')).toHaveCount(0);expect(await page.locator('#camp-character-content').evaluate(el=>el.scrollTop)).toBeCloseTo(detailScroll,0);
@@ -46,7 +46,7 @@ test('team scroll/filter and navigation remain usable with large text and safe-a
   await page.evaluate(()=>{document.documentElement.style.fontSize='200%';document.querySelector<HTMLElement>('#app')!.style.setProperty('--safe-top','59px');document.querySelector<HTMLElement>('.lobby-bottom')!.style.bottom='34px';});
   await page.locator('#lobby-tab-characters').click();await page.locator('#camp-character-tab-skills').click();
   const dialog=page.locator('#camp-character-dialog');await expect.poll(async()=>{const d=await dialog.boundingBox(),f=await page.locator('#app').boundingBox();return d!.y+d!.height<=f!.y+f!.height+0.5;}).toBe(true);
-  await page.locator('#camp-skill-card-guard .skill-level-fold summary').click();await page.locator('#camp-skill-up-guard').click();await expect(page.locator('#camp-skill-review-confirm')).toBeInViewport();
+  await page.locator('#camp-skill-card-guard .skill-level-fold > summary').click();await page.locator('#camp-skill-up-guard').click();await expect(page.locator('#camp-skill-review-confirm')).toBeInViewport();
   if(capture)await page.screenshot({path:info.outputPath('review-hud-large-text.png')});
   await page.keyboard.press('Escape');await expect(page.locator('#camp-skill-up-guard')).toBeFocused();await page.keyboard.press('Escape');await expect(dialog).not.toBeVisible();
 });

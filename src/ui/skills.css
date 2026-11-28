@@ -52,7 +52,7 @@
 .skills-section .skill-passives {border-top:1px solid #384d60;margin:10px 0}
 .skill-review-page .star-ledger td {overflow-wrap:anywhere}
 .skills-section .skill-level-preview summary {min-height:44px;display:flex;align-items:center;font-size:13px;color:#ffe2a3;cursor:pointer}
-.skills-section #skill-to-node {width:100%;min-height:44px;white-space:normal}
+.skills-section .skill-node-link-old {width:100%;min-height:44px;white-space:normal}
 .skill-review-page h3 {font-size:1.125rem}
 .skill-review-subject {font-size:1rem}
 .skill-review-page .star-ledger {font-size:.8125rem;font-variant-numeric:tabular-nums}
@@ -108,3 +108,4 @@
 .skills-equipped .replace-target small {font-size:11px;color:#ffe2a3}
 .skills-replace-note {margin:6px 0 4px} #app .skills-equipped.replacing>button {min-height:44px;width:100%}
 .skills-section .skill-cards>li.skill-card>small {margin-left:0} .skill-card details>summary {padding-left:0}
+.skills-section .skill-node-link {justify-self:start;min-height:44px;padding:4px 0;font-size:13px;display:inline-flex;align-items:center;gap:6px;color:#a9deed}
