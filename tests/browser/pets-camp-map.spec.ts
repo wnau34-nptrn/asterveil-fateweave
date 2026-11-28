@@ -28,6 +28,7 @@ test('camp den: hatch an egg, the first pet is chosen, another can be chosen, no
   const den = page.locator('#pet-den'); await expect(den).toBeVisible();
   expect((await den.boundingBox())!.width).toBeGreaterThanOrEqual(44);
   await expect(den.locator('.den-badge')).toHaveText('1');
+  await den.scrollIntoViewIfNeeded(); await page.waitForTimeout(400); // the den stands in the right-hand side area of the camp
   await page.screenshot({ path: `${shots}/camp-den-390.png` });
   await den.click();
   await expect(page.locator('#lobby-sheet-title')).toBeFocused(); await expect(page.locator('.pet-card')).toHaveCount(6);

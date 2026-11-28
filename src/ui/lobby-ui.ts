@@ -66,8 +66,9 @@ const npcSpots: Readonly<Record<NpcId, { x: number; px: number; sheet: Sheet }>>
   smith: { x: 7, px: 4.5, sheet: 'forge' }, keeper: { x: 21, px: 15.5, sheet: 'gear' }, trainer: { x: 35, px: 26.5, sheet: 'tree' },
   broker: { x: 65, px: 73.5, sheet: 'hire' }, herbalist: { x: 79, px: 84.5, sheet: 'brew' }, scout: { x: 93, px: 95.5, sheet: 'team' },
 };
-// PET-3: the pet den stands by the fire, between the trainer and the broker.
-const petDenSpot = { x: 57, px: 53.5 };
+// PET-3: the pet den stands with the staff on the right side of the camp, between the broker and the herbalist (the middle of the
+// camp, around the fire, belongs to the team; a basket there covered the firepit).
+const petDenSpot = { x: 72, px: 79 };
 const npcOfSheet = (sheet: Sheet | null): NpcId | undefined => NPC_IDS.find(id => npcSpots[id].sheet === sheet);
 const outcomeText = { complete: 'สำเร็จการเดินทาง', withdrawn: 'ถอนตัวกลับค่าย', wiped: 'ทีมล้มหมด · การเดินทางล้มเหลว' } as const;
 const groupName: Record<Group, string> = { deployed: 'ลงสนาม', reserve: 'สำรอง', bench: 'ในค่าย' };

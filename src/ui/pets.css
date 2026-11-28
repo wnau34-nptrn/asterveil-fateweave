@@ -12,8 +12,8 @@
   z-index: 3; pointer-events: auto; min-width: 44px; min-height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer;
   display: grid; place-items: start center; align-content: start; border-radius: 16px; }
 #lobby-view .pet-den:focus-visible { outline: 2px solid var(--gold-light, #f2d596); outline-offset: -6px; }
-/* On portrait phones it rests in front of the fire, in front of the team's feet (the team stands in the middle screen). */
-@container game (max-width: 760px) and (orientation: portrait) { #lobby-view .pet-den { left: var(--npx); bottom: calc(var(--ground) - 1cqh); width: 72px; } }
+/* On portrait phones it stands at the staff's row, like the NPCs, in the right-hand side area of the 3-screen camp. */
+@container game (max-width: 760px) and (orientation: portrait) { #lobby-view .pet-den { left: var(--npx); width: calc(var(--unit) * .8); bottom: calc(var(--ground) + 8cqh); } }
 .pet-den .pet-sprite { --pet-size: 64px; filter: drop-shadow(0 4px 6px #08121fb0); }
 .pet-den .den-badge { position: absolute; top: -6px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: var(--gold-light, #f2d596); color: #1a1208; font: 700 12px/20px inherit; text-align: center; }
 .pet-den .den-label { margin-top: -4px; white-space: nowrap; font-size: 11px; line-height: 16px; padding: 1px 8px; border-radius: 9px; background: #0c1a2ccc; color: #e8f1ff; }
@@ -133,7 +133,7 @@
   animation: pet-walk .36s steps(1) infinite; }
 .pet-follower.walking .follow-idle { display: none; } .pet-follower.walking .follow-walk { display: block; }
 @keyframes pet-walk { 0% { background-position-x: 0; } 25% { background-position-x: calc(var(--pet-size) * -1); } 50% { background-position-x: calc(var(--pet-size) * -2); } 75% { background-position-x: calc(var(--pet-size) * -3); } }
-#lobby-view .pet-den::before { content: ''; position: absolute; left: 50%; bottom: -14%; width: 150%; aspect-ratio: 1; transform: translateX(-50%); pointer-events: none;
+#lobby-view .pet-den::before { content: ''; position: absolute; left: 50%; bottom: -14%; width: 108%; aspect-ratio: 1; transform: translateX(-50%); pointer-events: none;
   background: var(--dsheet) 0 0 / 200% 100% no-repeat; filter: drop-shadow(0 4px 5px #08121f99); }
 #lobby-view .pet-den[data-egg="true"]::before { background-position: 100% 0; }
 #lobby-view .pet-den .pet-sprite, #lobby-view .pet-den .den-badge, #lobby-view .pet-den .den-label { position: relative; z-index: 1; }
