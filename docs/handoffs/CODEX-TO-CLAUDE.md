@@ -1,3 +1,8 @@
+## 2026-11-28 — บอสโลกเปิดหลังแผนที่ 3 + อันดับดาเมจ (Claude · `claude/exciting-keller-y9xau2`)
+
+- เจ้าของ “บอสโลกเปิดหลัง Map 3 และเพิ่ม Leader board”: feature `worldBoss` (`unlocks.worldBoss: 3`, กติกา+เซิร์ฟเวอร์ตรวจ) · แท็บ “อันดับ” (ดาเมจรวมรายสัปดาห์, รายบอส, สัปดาห์ก่อน, top 20 + อันดับของคุณ, ชื่อ `ค่าย-XXXXX` แบบแชท) · `GET /v1/worldboss/board` อ่าน `hits` เดิม ไม่มี migration · [รายละเอียด](../validation/world-boss-board-2026-11-28/README_TH.md)
+- เทสต์: vitest 2385, typecheck, lint, build, Chromium บอสโลก/บทสอน/server-play/อันดับ ผ่าน · ยังไม่ได้ลองบน staging
+
 ## 2026-11-28 — AUTO ปลดล็อกที่แผนที่ 2 + บทสอนใช้ (Claude · `claude/exciting-keller-y9xau2`)
 
 - เจ้าของ “ระบบ auto battle เปิดใช้ได้ map 2 และเพิ่มระบบสอบใช้ให้ด้วย” (ตีความ “สอบใช้” = สอนใช้): `LobbyFeature` เพิ่ม `auto` (`unlocks.auto: 1`) · `BattleSession.auto` จาก `featureOpen` ปุ่มแสดงเมื่อปลดล็อกเท่านั้น · บทสอน `open:auto` ในค่าย + `auto` ในศึกทั่วไป/บอสโลกครั้งแรก ([รายละเอียด](../validation/auto-battle/README_TH.md))
