@@ -32,6 +32,8 @@ const morvaneHintsKey = 'asterveil.fateweave.morvane-hints.v1';
 
 // The expedition owns persistence: every commit is handed to the session before playback.
 export interface BattleSession {
+  // `auto`: the AUTO button is unlocked for this company (owner 2026-11-28: opens with map 2); still only random battles and the World Boss.
+  auto?: boolean;
   kind: BattleKind | 'worldBoss'; roundLimit?: number; scene?: 'ruins' | 'forest' | 'riftline' | 'lake' | 'mine'; data: EncounterDefinition; entry: BattleEntry; commands: readonly Command[];
   commit(state: BattleState): boolean;
   leaveLabel(outcome: Outcome): string;
@@ -510,7 +512,7 @@ export class BattleUI {
   }
 
   // Random battles and World Boss attempts (owner 2026-11-26 “ให้บอสโลก มี Auto ด้วย”).
-  private get autoAllowed(): boolean { return this.session?.kind === 'random' || this.session?.kind === 'worldBoss'; }
+  private get autoAllowed(): boolean { return !!this.session?.auto && (this.session.kind === 'random' || this.session.kind === 'worldBoss'); }
   private get autoRunning(): boolean { return this.autoAllowed && this.auto.on && !this.autoHeld; }
   private saveAuto(): void {
     try { this.storage?.setItem(autoSettingsKey, JSON.stringify(this.auto)); } catch { /* The choice still applies to this session. */ }

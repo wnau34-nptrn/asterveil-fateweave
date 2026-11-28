@@ -635,7 +635,7 @@ export type BattleKind = 'tutorial' | 'random' | 'boss' | 'elite' | 'event';
 // `percent` (A10): the map strength stored at the start (foe HP and move damage; missing = 100).
 export interface ActiveBattle { kind: BattleKind; encounterId: string; entry: Record<string, number>; commands: Command[]; level?: number; percent?: number; source?: string; lanes?: Record<string, Lane> }
 export type RecruitPoint = 'prologue' | 'camp' | 'boss' | 'first-objective';
-export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm' | 'hard' | 'tomes' | 'gacha';
+export type LobbyFeature = 'tree' | 'forge' | 'brew' | 'gear' | 'level' | 'quests' | 'hire' | 'team' | 'market' | 'fuse' | 'craft' | 'hunt' | 'transfer' | 'bossCharm' | 'hard' | 'tomes' | 'gacha' | 'auto';
 export interface ExpeditionState {
   // Skill tomes (save v37, maps with `MapDefinition.tomes`): `tomes`/`riftCore` are this
   // run's finds (added to the profile when it settles) and `tomeWins` counts its ordinary wins toward the next tome.

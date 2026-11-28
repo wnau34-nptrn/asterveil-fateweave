@@ -10,22 +10,24 @@ import { xpAt } from '../fixtures/camp-level';
 
 // Auto battle (owner 2026-11-26): the AUTO toggle shows only in random battles, plays the battle through the normal commit
 // (every turn saved), and its device settings (stop HP, skills switched off) live in ⓘ → settings.
-const key = 'asterveil.fateweave.expedition.v1', autoKey = 'asterveil.fateweave.auto-battle.v1';
-function battleSave(kind: BattleKind, share = 100): string {
-  const p = newProfile(map, 17); p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; p.tutorialDone = true;
+const key = 'asterveil.fateweave.expedition.v1', autoKey = 'asterveil.fateweave.auto-battle.v1', lessonKey = 'asterveil.fateweave.lessons.v1';
+// AUTO opens with map 2 (owner 2026-11-28): `cleared` false keeps the company on its first map, where AUTO is still locked.
+function battleSave(kind: BattleKind, share = 100, cleared = true): string {
+  const p = newProfile(map, 17); p.commander = { name: 'อารี', crest: 'star', color: 'gold', camp: 'ค่ายอารี' }; p.tutorialDone = true; if (cleared) p.cleared = [MAPS[0]!.id];
   for (const m of Object.values(p.members)) m.stars = 5;
   const game = depart(p, map, lookup, 77), run = game.run;
   run.battle = { kind, encounterId: map.tutorialEncounterId, entry: Object.fromEntries(Object.entries(run.hp).map(([id, hp]) => [id, Math.ceil(hp * share / 100)])), commands: [] };
   return currentSave(game);
 }
-async function openBattle(page: Page, kind: BattleKind, auto?: object, share = 100): Promise<string[]> {
+async function openBattle(page: Page, kind: BattleKind, auto?: object, share = 100, opts: { cleared?: boolean; lesson?: boolean } = {}): Promise<string[]> {
   await page.setViewportSize({ width: 390, height: 844 });
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-  await page.addInitScript(({ key, raw, autoKey, auto }) => {
+  await page.addInitScript(({ key, raw, autoKey, auto, lessonKey, seen }) => {
     if (sessionStorage.getItem('auto-seed')) return;
+    localStorage.setItem(lessonKey, JSON.stringify({ seen, off: false }));
     localStorage.setItem(key, raw); if (auto) localStorage.setItem(autoKey, JSON.stringify(auto)); else localStorage.removeItem(autoKey);
     sessionStorage.setItem('auto-seed', '1');
-  }, { key, raw: battleSave(kind, share), autoKey, auto });
+  }, { key, raw: battleSave(kind, share, opts.cleared ?? true), autoKey, auto, lessonKey, seen: opts.lesson ? ['battle'] : ['battle', 'auto'] });
   await page.goto('./?server=off'); await page.locator('#continue').click({ timeout: 15_000 });
   await page.locator('#battle-view').waitFor({ state: 'visible', timeout: 8000 });
   return errors;
@@ -56,6 +58,26 @@ test('AUTO settings: stop HP and skills switched off are kept on the device', as
   expect(JSON.parse((await page.evaluate(k => localStorage.getItem(k), autoKey))!)).toEqual({ on: false, stopHp: 30, off: [action] });
   for (const b of await panel.locator('button').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('auto-settings-390.png') });
+});
+
+test('AUTO stays locked on map 1, then a one-time lesson points at it in the first random battle after map 1', async ({ page }, info) => {
+  const errors = await openBattle(page, 'random', undefined, 100, { cleared: false });
+  await expect(page.locator('#battle-auto')).toBeHidden(); await expect(page.locator('.lesson-bubble[data-lesson-id=auto]')).toHaveCount(0);
+  await page.evaluate(() => sessionStorage.clear()); await page.context().clearCookies();
+  const next = await page.context().newPage(); next.on('pageerror', e => errors.push(e.message));
+  await next.setViewportSize({ width: 390, height: 844 });
+  await next.addInitScript(({ key, raw, lessonKey }) => { if (sessionStorage.getItem('auto-seed2')) return; localStorage.setItem(key, raw); localStorage.setItem(lessonKey, JSON.stringify({ seen: ['battle'], off: false })); sessionStorage.setItem('auto-seed2', '1'); }, { key, raw: battleSave('random'), lessonKey });
+  await next.goto('./?server=off'); await next.locator('#continue').click({ timeout: 15_000 }); await next.locator('#battle-view').waitFor({ state: 'visible', timeout: 8000 });
+  const auto = next.locator('#battle-auto'), bubble = next.locator('.lesson-bubble[data-lesson-id=auto]');
+  await expect(auto).toBeVisible(); await expect(bubble).toBeVisible(); await expect(bubble).toContainText('AUTO');
+  const ring = (await next.locator('.lesson-ring').boundingBox())!, box = (await auto.boundingBox())!;
+  expect(ring.x).toBeLessThanOrEqual(box.x); expect(ring.x + ring.width).toBeGreaterThanOrEqual(box.x + box.width);
+  await next.screenshot({ path: info.outputPath('auto-lesson-390.png') });
+  // Tapping AUTO itself completes the lesson; it never shows again on this device.
+  if (await next.locator('#start').isVisible()) await next.locator('#start').click();
+  await auto.click(); await expect(bubble).toHaveCount(0);
+  expect(await next.evaluate(k => JSON.parse(localStorage.getItem(k)!).seen, lessonKey)).toContain('auto');
+  expect(errors).toEqual([]);
 });
 
 test('AUTO is not offered in other battles (here the first battle)', async ({ page }) => {
