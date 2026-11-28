@@ -28,7 +28,7 @@ import { heroArt, portrait, starRow } from './portraits';
 import { fateRevealMs, fateWeave, infoButton } from './gacha-panel';
 import { unitsUrl } from '../game/visuals/assets';
 import { petBlessing, petSightings } from '../core/world/pet-blessings';
-import { petPortrait, petSprite } from './pet-art';
+import { blessingIcon, petFollowerSprite } from './pet-art';
 import { petBlessingText } from './pet-panel';
 import { SOURCE_TILE, openingFrame, chestFrame, decorAt, itemFrame, floorFrame, fogLayers, landmarkAt, tileSizeFor, tileFrame, lakeHighFrame, mapArt, mineDecor, mineRails, railAt, worldArtUrl, type Landmark } from '../game/visuals/world-art';
 import { questLine, rewardText, storyQuestText, mapQuestText, sideQuestText, choiceText, eventChoices, eventReasonText, eventText, heroText, itemLines, itemName, itemOwner, potionText, resourceOrder, resourceText, tomeThai } from './th';
@@ -792,6 +792,13 @@ export class WorldUI {
   // PET-3: the pet the run brought (fixed at departure) trails the leader by one tile (look only), the HUD chip names its
   // blessing, and the lantern's sightings (`petSightings`, a pure view) mark unopened chests / unfinished events in the fog.
   private petTile: Point | undefined;
+  private petWalkTimer = 0;
+  // The walk loop plays while the leader steps (a chain of hops keeps it going) and stops a moment after the last one.
+  private petWalk(el: HTMLElement): void {
+    el.classList.add('walking'); window.clearTimeout(this.petWalkTimer);
+    const hop = parseFloat(getComputedStyle(this.root).getPropertyValue('--hop-ms')) || 180;
+    this.petWalkTimer = window.setTimeout(() => el.classList.remove('walking'), hop + 220);
+  }
   private renderPet(s: ExpeditionState, prev: typeof this.previous): void {
     const el = this.root.querySelector<HTMLElement>('#pet-follower')!; const chip = this.root.querySelector<HTMLElement>('#pet-chip')!;
     const layer = this.root.querySelector<HTMLElement>('#sighting-layer')!;
@@ -804,10 +811,11 @@ export class WorldUI {
     el.classList.remove('hidden'); el.classList.toggle('instant', moved && !hop); el.classList.toggle('stacked', stacked);
     el.classList.toggle('face-left', s.position.x < tile.x || (stacked && el.classList.contains('face-left')));
     el.style.setProperty('--x', String(tile.x)); el.style.setProperty('--y', String(tile.y)); el.style.zIndex = String(tile.y * 3 + 1);
-    if (el.dataset.pet !== pet.kind) { el.dataset.pet = pet.kind; el.innerHTML = petSprite(pet.kind, 'idle'); }
+    if (hop && !this.reduced.matches) this.petWalk(el);
+    if (el.dataset.pet !== pet.kind) { el.dataset.pet = pet.kind; el.innerHTML = petFollowerSprite(pet.kind); }
     const b = petBlessingText(def.blessing.kind, petBlessing(s, this.map, def.blessing.kind));
     chip.hidden = false; chip.setAttribute('aria-label', `สัตว์เลี้ยง ${def.name} เลเวล ${pet.level} · พา${b.name}: ${b.text}`);
-    setHtml(chip, `${petPortrait(pet.kind)}<span>${b.name}</span>`);
+    setHtml(chip, `${blessingIcon(def.blessing.kind)}<span>${b.name}</span>`);
     const seen = petSightings(s, this.map);
     const at = (id: string, kind: 'chest' | 'event') => { const p = kind === 'chest' ? this.map.chests.find(c => c.id === id) : this.map.events.find(e => e.id === id); return p ? `<span class="pet-sighting" data-kind="${kind}" style="--x:${p.x};--y:${p.y}"></span>` : ''; };
     setHtml(layer, seen.chests.map(id => at(id, 'chest')).join('') + seen.events.map(id => at(id, 'event')).join(''));

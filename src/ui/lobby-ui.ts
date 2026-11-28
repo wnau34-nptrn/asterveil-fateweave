@@ -37,7 +37,7 @@ import { weekOf } from '../core/world/board';
 import { trioLive } from '../core/world/world-boss';
 import { worldBossBanner, worldBossPage, type WbCraft, type WbRank, type WbTab } from './world-boss-panel';
 import { petPage, petBlessingText } from './pet-panel';
-import { petSprite } from './pet-art';
+import { petSprite, PET_DEN_URL, PET_EGG_URL } from './pet-art';
 import { gachaBannerUrl, gachaPage, gachaTicketUrl, type GachaState, type GachaView } from './gacha-panel';
 import type { WbBoard, WorldBossStatus } from '../platform/server-client';
 import { sweepReasonText, sweepText, campLines, skillDescription, heroText, npcText, rewardText, shopText, journalText, mapQuestText, sideQuestText, itemLines, itemName, itemOwner, passiveText, potionText, resourceText } from './th';
@@ -66,8 +66,9 @@ const npcSpots: Readonly<Record<NpcId, { x: number; px: number; sheet: Sheet }>>
   smith: { x: 7, px: 4.5, sheet: 'forge' }, keeper: { x: 21, px: 15.5, sheet: 'gear' }, trainer: { x: 35, px: 26.5, sheet: 'tree' },
   broker: { x: 65, px: 73.5, sheet: 'hire' }, herbalist: { x: 79, px: 84.5, sheet: 'brew' }, scout: { x: 93, px: 95.5, sheet: 'team' },
 };
-// PET-3: the pet den stands by the fire, between the trainer and the broker.
-const petDenSpot = { x: 57, px: 53.5 };
+// PET-3: the pet den stands with the staff on the right side of the camp, between the broker and the herbalist (the middle of the
+// camp, around the fire, belongs to the team; a basket there covered the firepit).
+const petDenSpot = { x: 72, px: 79 };
 const npcOfSheet = (sheet: Sheet | null): NpcId | undefined => NPC_IDS.find(id => npcSpots[id].sheet === sheet);
 const outcomeText = { complete: 'สำเร็จการเดินทาง', withdrawn: 'ถอนตัวกลับค่าย', wiped: 'ทีมล้มหมด · การเดินทางล้มเหลว' } as const;
 const groupName: Record<Group, string> = { deployed: 'ลงสนาม', reserve: 'สำรอง', bench: 'ในค่าย' };
@@ -763,7 +764,7 @@ export class LobbyUI {
     const b = petBlessingText(def.blessing.kind, level >= this.map.pets.blessingLevel ? def.blessing.at6 : def.blessing.at1);
     const done = show.played || this.reduced(); show.played = true;
     return `<div class="pet-hatch${done ? ' done' : ''}" role="dialog" aria-modal="true" aria-labelledby="pet-hatch-title">
-      <div class="hatch-stage" aria-hidden="true"><span class="hatch-glow"></span><span class="hatch-egg"></span>${Array.from({ length: 7 }, (_, i) => `<i class="hatch-shell" style="--a:${i * 51 - 150}deg;--d:${70 + (i % 3) * 18}px"></i>`).join('')}<span class="hatch-flash"></span><span class="hatch-pet">${petSprite(show.kind, 'happy')}</span></div>
+      <div class="hatch-stage" aria-hidden="true" style="--esheet:url(${PET_EGG_URL})"><span class="hatch-glow"></span><span class="hatch-egg"></span>${Array.from({ length: 6 }, (_, i) => `<i class="hatch-shell" style="--s:${i};--a:${i * 60 - 150}deg;--d:${60 + (i % 3) * 22}px"></i>`).join('')}<span class="hatch-flash"></span><span class="hatch-pet">${petSprite(show.kind, 'happy')}</span></div>
       <div class="hatch-text"><h2 id="pet-hatch-title">ไข่ฟักเป็น${def.name}!</h2><p><b>พร${b.name}</b> · ${b.text}</p><button id="pet-hatch-ok" data-lobby="pet-hatch-ok" class="primary">ตกลง</button></div></div>`;
   }
   // PET-3: the den shows the chosen pet resting; unlocked after map 4. A dot counts the eggs waiting to hatch.
@@ -771,9 +772,9 @@ export class LobbyUI {
     const den = this.root.querySelector<HTMLElement>('#pet-den'); if (!den) return;
     const open = this.open('pets'); den.hidden = !open; if (!open) return;
     const book = p.pets; const chosen = book?.chosen; const eggs = book?.eggs ?? 0;
-    const html = `${petSprite(chosen ?? 'meadow_fox', 'happy')}${eggs ? `<i class="den-badge" aria-hidden="true">${eggs}</i>` : ''}<span class="den-label">${chosen ? this.map.pets.kinds.find(k => k.id === chosen)?.name ?? '' : 'รังสัตว์'}</span>`;
+    const html = `${chosen ? petSprite(chosen, 'happy') : ''}${eggs ? `<i class="den-badge" aria-hidden="true">${eggs}</i>` : ''}<span class="den-label">${chosen ? this.map.pets.kinds.find(k => k.id === chosen)?.name ?? '' : 'รังสัตว์'}</span>`;
     if (den.dataset.drawn !== html) { den.innerHTML = html; den.dataset.drawn = html; }
-    den.classList.toggle('no-pet', !chosen);
+    den.classList.toggle('no-pet', !chosen); den.dataset.egg = String(eggs > 0); den.style.setProperty('--dsheet', `url(${PET_DEN_URL})`);
     den.setAttribute('aria-label', `รังสัตว์เลี้ยง${chosen ? ` · พา${this.map.pets.kinds.find(k => k.id === chosen)?.name}` : ' · ยังไม่ได้เลือกสัตว์'}${eggs ? ` · มีไข่ ${eggs} ใบรอฟัก` : ''}`);
   }
   // Lobby systems by chapter (A3). A locked sheet still opens, showing which map opens it.
