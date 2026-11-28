@@ -9,7 +9,7 @@ import { canOpenChest, fatigueOf, findTiles, levelOf, rosterIds } from '../core/
 // read the committed state only and never act for the player, except the one-time calming draught the player taps for.
 // Stage C (owner 2026-11-19): `card:<guide>` points at the system an NPC card asks for, `claim:<guide>` at its claim
 // button once done, `open:<feature>` at a camp system the moment its map is cleared.
-export type LessonId = 'levelup' | 'wear' | 'tree' | 'lanes' | 'walk' | 'chest' | 'lowhp' | 'fatigue' | 'calm' | 'elite' | 'boss' | 'battle' | 'home' | 'farm' | 'sweeppick' | 'sweep' | 'hunt' | 'bosstarget' | 'tickets'
+export type LessonId = 'levelup' | 'wear' | 'tree' | 'lanes' | 'walk' | 'chest' | 'lowhp' | 'fatigue' | 'calm' | 'elite' | 'boss' | 'battle' | 'home' | 'farm' | 'sweeppick' | 'sweep' | 'hunt' | 'bosstarget' | 'tickets' | 'auto'
   | `card:${string}` | `claim:${string}` | `open:${string}`;
 export interface Lesson { id: LessonId; target: string; title: string; text: string; action?: 'calm' }
 export interface LessonPrefs { seen: LessonId[]; off: boolean }
@@ -50,7 +50,10 @@ export function worldLesson(profile: Profile, run: ExpeditionState, map: MapDefi
 }
 
 // The first battle after the prologue: where the enemy's next move and its target are shown.
-export function battleLessonTip(profile: Profile, kind: string, seen: readonly LessonId[]): Lesson | undefined {
+export function battleLessonTip(profile: Profile, kind: string, seen: readonly LessonId[], maps: readonly MapDefinition[] = []): Lesson | undefined {
+  // AUTO (owner 2026-11-28 “ระบบ auto battle เปิดใช้ได้ map 2 และเพิ่มระบบสอนใช้”): once open, the next ordinary battle points at it.
+  if (!profile.veteran && (kind === 'random' || kind === 'worldBoss') && !seen.includes('auto') && maps.length > 0 && featureOpen(profile, maps, 'auto')) return { id: 'auto', target: '#battle-auto', title: 'ต่อสู้อัตโนมัติ',
+    text: 'กดเริ่มการต่อสู้ แล้วแตะ AUTO ทีมจะเลือกท่าให้เอง แตะอีกครั้งเพื่อหยุด · หยุดเองเมื่อมีคนล้มหรือเลือดต่ำกว่าเกณฑ์ (เริ่มต้น 50%) · ปิดสกิลบางท่าหรือเปลี่ยนเกณฑ์ได้ที่ ⓘ → ตั้งค่า · บอสแผนที่และอีลีทต้องสู้เอง' };
   if (!learning(profile) || kind === 'tutorial' || seen.includes('battle')) return undefined;
   return { id: 'battle', target: '#intent', title: 'อ่านท่าศัตรู', text: 'แถบนี้บอกว่าศัตรูตัวถัดไปจะใช้ท่าอะไร เล็งใคร แรงเท่าไร แตะ ⓘ มุมขวาบนเพื่อดูรายละเอียด' };
 }
@@ -59,7 +62,7 @@ export function battleLessonTip(profile: Profile, kind: string, seen: readonly L
 const FEATURE_TARGET: Record<LobbyFeature, string> = {
   gear: '#lobby-tab-gear', tree: '#lobby-tab-team', team: '#lobby-tab-team', tomes: '#lobby-tab-team', forge: '#lobby-tab-forge', level: '#lobby-tab-forge',
   fuse: '#lobby-tab-forge', craft: '#lobby-tab-forge', transfer: '#lobby-tab-forge', bossCharm: '#lobby-tab-hunt', brew: '#lobby-tab-brew',
-  hire: '#lobby-tab-hire', market: '#lobby-tab-hire', hunt: '#lobby-tab-hunt', quests: '#lobby-board', hard: '#lobby-maps', gacha: '#lobby-gacha',
+  hire: '#lobby-tab-hire', market: '#lobby-tab-hire', hunt: '#lobby-tab-hunt', quests: '#lobby-board', hard: '#lobby-maps', gacha: '#lobby-gacha', auto: '#lobby-depart',
 };
 const CARD_TEXT: Record<GuideKind, string> = {
   wear: 'เปิดอุปกรณ์ แล้วสวมของ 1 ชิ้นให้สมาชิก', talent: 'เปิดทีม → ตัวละคร → สกิลกิ่ง แล้วลงแต้ม 1 แต้ม', calm: 'กดรับยาฟื้นความเหนื่อยในการ์ดนี้',
@@ -74,6 +77,8 @@ const OPENED: readonly Opened[] = [
   // OD-59: the World Boss opens with the quest board; the cabinet opens after map 1 with 10 tickets from its first clear.
   ['quests', 'บอสโลกเปิดแล้ว', 'สู้ได้ 5 ครั้งต่อสัปดาห์ เลือกบอสตัวไหนก็ได้ ทุกครั้งได้แร่ ทอง และเศษบอสไว้สร้างของประจำบอส ครบ 2 และ 4 ครั้งได้ตั๋วทอชะตา', { key: 'wboss', target: '#lobby-wboss' }],
   ['gacha', 'แท่นทอชะตาเปิดแล้ว', 'จบแผนที่ 1 ได้ตั๋ว 10 ใบ ลองสุ่มสิบครั้งได้เลย · ได้ตัวเต็มหรือเศษ ทุกครั้งได้ 1 แต้ม ครบ 80 แลกตัวที่เลือกได้ · ดูอัตราทั้งหมดในตู้'],
+  // Owner 2026-11-28: AUTO opens with map 2 (after map 1); its button is taught in the first ordinary battle after that.
+  ['auto', 'ต่อสู้อัตโนมัติเปิดแล้ว', 'ตั้งแต่แผนที่ 2 การต่อสู้ทั่วไปและบอสโลกมีปุ่ม AUTO ให้ทีมเลือกท่าเอง จะสอนวิธีใช้ในการต่อสู้ครั้งถัดไป'],
   ['team', 'จัดทีมเปิดแล้ว', 'ลงสนามได้ 5 คน และมีตัวสำรอง จัดแนวหน้า/หลังและบันทึกชุดทีมได้'],
   ['market', 'ตลาดเปิดแล้ว', 'ที่นายหน้ามีแท็บตลาด ซื้อเศษดาว สัญญา กล่องอุปกรณ์ และยาไล่ศัตรูด้วยทอง'],
   ['hunt', 'ล่าของเปิดแล้ว', 'เลือกชุดหรือช่องที่อยากได้ แผนที่จะดรอปของแบบนั้นบ่อยขึ้น'],

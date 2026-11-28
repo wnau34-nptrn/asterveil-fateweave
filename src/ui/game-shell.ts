@@ -266,7 +266,7 @@ export class GameShell {
     if (!g || !['world', 'lobby', 'battle'].includes(view ?? '')) { this.lessons.show(undefined); return; }
     if (view === 'world' && g.run) this.lessons.show(worldLesson(g.profile, g.run, this.map, this.maps, this.lessons.seen, id => memberDef(this.lookup, this.map, g.run!, id)?.maxHp ?? 1));
     else if (view === 'lobby' && !g.run) this.lessons.show(lobbyLesson(g.profile, this.maps, this.lessons.seen, this.lobby.openSheet, this.lobby.pickedMap));
-    else if (view === 'battle' && g.run?.battle) this.lessons.show(battleLessonTip(g.profile, g.run.battle.kind, this.lessons.seen));
+    else if (view === 'battle' && g.run?.battle) this.lessons.show(battleLessonTip(g.profile, g.run.battle.kind, this.lessons.seen, this.maps));
     else this.lessons.show(undefined);
   }
   private lessonToggle(): string {
@@ -645,7 +645,7 @@ export class GameShell {
     if (!this.wbRun) return;
     this.show('battle');
     this.battle.open({
-      kind: 'worldBoss', roundLimit: this.home.worldBoss.maxRounds, scene: 'riftline', data, entry: { hp: {} }, commands: [],
+      kind: 'worldBoss', auto: featureOpen(this.game!.profile, this.maps, 'auto'), roundLimit: this.home.worldBoss.maxRounds, scene: 'riftline', data, entry: { hp: {} }, commands: [],
       commit: state => this.commitWorldBoss(state),
       leaveLabel: () => 'กลับค่าย →', leave: () => this.leaveWorldBoss(),
     });
@@ -1115,7 +1115,7 @@ export class GameShell {
     const s = this.state!; const b = s.battle!; const data = battleData(s, this.map, this.lookup)!;
     this.show('battle');
     this.battle.open({
-      kind: b.kind, scene: this.battleScene(), data, entry: { hp: b.entry }, commands: b.commands,
+      kind: b.kind, auto: !!this.game && featureOpen(this.game.profile, this.maps, 'auto'), scene: this.battleScene(), data, entry: { hp: b.entry }, commands: b.commands,
       commit: (state: BattleState) => this.commitBattle(state),
       leaveLabel: (outcome: Outcome) => outcome === 'victory' ? (b.kind === 'boss' ? `ไปยัง${this.map.goalName} →` : 'กลับสู่แผนที่ →') : b.kind === 'tutorial' ? 'ลองศึกแรกอีกครั้ง ↻' : !this.state ? 'ทีมล้มหมด · กลับค่าย →' : this.state.camp ? 'กลับแคมป์ →' : 'กลับทางเข้าด่าน →',
       leave: () => this.leaveBattle(),

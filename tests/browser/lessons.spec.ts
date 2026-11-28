@@ -113,7 +113,7 @@ const clearedCamp = (n: number): Profile => {
   p.guides = Object.fromEntries(MAPS[0]!.guides.map(g => [g.id, 'claimed' as const])); return p;
 };
 test('camp after the first clear: replay pointer at the maps button, then the sweep row in the maps sheet', async ({ page }, info) => {
-  await openCamp(page, clearedCamp(1), ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:team']);
+  await openCamp(page, clearedCamp(1), ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:auto', 'open:team']);
   await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'farm'); expect(await ringOver(page, '#lobby-maps')).toBe(true);
   await page.locator('#lobby-maps').click();
   await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'sweeppick'); expect(await ringOver(page, `#map-node-${ruinsMap.id}`)).toBe(true);

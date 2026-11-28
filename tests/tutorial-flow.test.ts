@@ -81,6 +81,14 @@ describe('OD-54 lessons on the map (ui/lessons.ts)', () => {
     expect(battleLessonTip(fresh(), 'random', [])?.target).toBe('#intent');
     expect(battleLessonTip(fresh(), 'tutorial', [])).toBeUndefined();
     expect(battleLessonTip(fresh(), 'random', ['battle'])).toBeUndefined();
+    // AUTO: locked on map 1, then taught once in a random battle or the World Boss (never in a boss/elite fight).
+    expect(battleLessonTip(fresh(), 'random', ['battle'], MAPS)).toBeUndefined();
+    const map2 = { ...fresh(), cleared: [MAPS[0]!.id] };
+    expect(battleLessonTip(map2, 'random', [], MAPS)).toMatchObject({ id: 'auto', target: '#battle-auto' });
+    expect(battleLessonTip(map2, 'worldBoss', [], MAPS)?.id).toBe('auto');
+    expect(battleLessonTip(map2, 'boss', [], MAPS)).toBeUndefined();
+    expect(battleLessonTip(map2, 'random', ['auto'], MAPS)).toBeUndefined();
+    expect(featureOpen(fresh(), MAPS, 'auto')).toBe(false); expect(featureOpen(map2, MAPS, 'auto')).toBe(true); expect(featureOpen({ ...fresh(), veteran: true }, MAPS, 'auto')).toBe(true);
     expect(lobbyLesson(fresh(), MAPS, [])?.id).toBe('home'); expect(lobbyLesson({ ...fresh(), veteran: true }, MAPS, [])).toBeUndefined();
   });
 });
@@ -101,10 +109,12 @@ describe('OD-54 stage C: camp lessons follow the NPC cards and newly opened syst
     // OD-59: after map 1 the World Boss and the fate-weave cabinet open too, each pointed at once, in this order.
     expect(lobbyLesson(after1, MAPS, ['home', 'open:quests'])).toMatchObject({ id: 'open:wboss', target: '#lobby-wboss' });
     expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss'])).toMatchObject({ id: 'open:gacha', target: '#lobby-gacha' });
-    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss', 'open:gacha'])).toMatchObject({ id: 'open:team' });
-    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:team'])?.id).toBe('farm');
+    // Owner 2026-11-28: AUTO opens with map 2 (after map 1); the camp says so, the next ordinary battle teaches the button.
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss', 'open:gacha'])).toMatchObject({ id: 'open:auto', target: '#lobby-depart' });
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:auto'])).toMatchObject({ id: 'open:team' });
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:auto', 'open:team'])?.id).toBe('farm');
     // The ticket pointer: after a first pull, once 10 tickets are waiting again.
-    const pulled = { ...after1, gacha: { tickets: 10, points: 10, serial: 1, history: [] } }, all: LessonId[] = ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:team'];
+    const pulled = { ...after1, gacha: { tickets: 10, points: 10, serial: 1, history: [] } }, all: LessonId[] = ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:auto', 'open:team'];
     expect(lobbyLesson(pulled, MAPS, all)).toMatchObject({ id: 'tickets', target: '#lobby-gacha' });
     expect(lobbyLesson({ ...pulled, gacha: { ...pulled.gacha, tickets: 9 } }, MAPS, all)?.id).toBe('farm');
     const after2 = { ...after1, cleared: MAPS.slice(0, 2).map(m => m.id) };
@@ -116,7 +126,7 @@ describe('OD-54 stage C: camp lessons follow the NPC cards and newly opened syst
   });
 
   it('farming lessons: replay pointer last, sweep row in the maps sheet, hunt and boss targets in the hunt sheet', () => {
-    const m1 = MAPS[0]!, after1 = claimedAll({ ...fresh(), cleared: [m1.id] }), done: LessonId[] = ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:team'];
+    const m1 = MAPS[0]!, after1 = claimedAll({ ...fresh(), cleared: [m1.id] }), done: LessonId[] = ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:auto', 'open:team'];
     // The replay pointer waits for the camp's own lessons, then points at the maps button.
     expect(lobbyLesson(after1, MAPS, ['home'])?.id).toBe('open:quests');
     expect(lobbyLesson(after1, MAPS, done)).toMatchObject({ id: 'farm', target: '#lobby-maps' });

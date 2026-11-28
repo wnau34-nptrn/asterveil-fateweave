@@ -110,7 +110,7 @@ export const gameRules: GameRules = {
   // Advanced services stay at MAP 3 explicitly: adding maps must not silently move existing rights to 5/7/9.
   // Revisit the historical A3 future-chapter table only with a new owner-approved progression task.
   // OD-54 (owner 2026-11-19, R2): gear and the skill tree open right after the prologue (0 = no map to clear first).
-  unlocks: { tree: 0, forge: 1, brew: 1, gear: 0, level: 2, quests: 1, hire: 2, team: 1, market: 2, fuse: 3, craft: 3, hunt: 2, transfer: 3, bossCharm: 3, hard: 3, tomes: 2, gacha: 1 },
+  unlocks: { tree: 0, forge: 1, brew: 1, gear: 0, level: 2, quests: 1, hire: 2, team: 1, market: 2, fuse: 3, craft: 3, hunt: 2, transfer: 3, bossCharm: 3, hard: 3, tomes: 2, gacha: 1, auto: 1 },
   // Phase 4A (draft): the camp market, paid in gold coins, and paid hiring-board refreshes (2 per return).
   shop: {
     items: { shard: { price: 60, limit: 1 }, contract: { price: 150, limit: 1 }, gearbox: { price: 120, limit: 1 }, repel: { price: 30, limit: 2 } },
