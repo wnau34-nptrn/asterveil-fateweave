@@ -44,7 +44,7 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     await expect(page.locator('#character-talent-c1s')).toHaveAttribute('data-state','full'); await expect(page.locator('#character-talent-learn')).toHaveAttribute('aria-disabled','true');
     await closeTalentDetails(page);await page.locator('#character-talent-b1').click(); await page.locator('#character-talent-learn').focus(); await page.keyboard.down('Enter'); await page.keyboard.down('Enter'); await page.keyboard.up('Enter');
     expect(parseGame(await saved(page),map,encounterById).run!.members.guardian!.talents).toEqual({c1s:1,b1:1});
-    await closeTalentDetails(page);await page.locator('#character-tab-skills').click(); await page.locator('#skill-selection').selectOption('rally'); await expect(page.locator('#character-loadout-rally')).toHaveAttribute('aria-pressed','true'); await page.locator('#skill-selection').selectOption('bash');
+    await closeTalentDetails(page);await page.locator('#character-tab-skills').click(); await expect(page.locator('#character-loadout-rally')).toHaveAttribute('aria-pressed','true');
     await page.locator('#character-loadout-bash').click();
     expect(parseGame(await saved(page),map,encounterById).run!.members.guardian!.loadout).toEqual(['guard','rally']); await closeTalentDetails(page);await page.locator('#character-tab-talents').click();
     await page.locator('#move-left').dispatchEvent('click'); await page.keyboard.press('w'); await page.keyboard.press('b'); await page.keyboard.press('i');
@@ -56,7 +56,7 @@ for (const [width,height,touch] of [[320,568,true], [390,844,true], [1366,768,fa
     // P01: Seren shares the camp level (Lv6), so she has points to spend like everyone else.
     await closeTalentDetails(page);await page.locator('#character-member-healer').click(); await closeTalentDetails(page);await page.locator('#character-talent-a1').click(); await expect(page.locator('#character-talent-learn')).toHaveAttribute('aria-disabled','false');
     await closeTalentDetails(page);await page.locator('#character-member-guardian').click(); await page.screenshot({path:info.outputPath('character-talents.png')});
-    await closeTalentDetails(page);await page.locator('#character-tab-skills').click(); await closeTalentDetails(page);await page.locator('#character-tab-skills').click(); await page.locator('#skill-selection').selectOption('challenge'); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ท้าดวล'); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ยืนหยัด');
+    await closeTalentDetails(page);await page.locator('#character-tab-skills').click(); await closeTalentDetails(page);await page.locator('#character-tab-skills').click(); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ท้าดวล'); await expect(page.locator('#character-content')).toContainText('ปลดที่โหนด ยืนหยัด');
     await page.screenshot({path:info.outputPath('character-skills.png')});
     await closeTalentDetails(page);await page.locator('#character-tab-gear').click(); await page.locator('#pick-found-1').click(); await expect(page.locator('#gear-detail-dialog')).toBeVisible(); await expect(page.locator('#wear-found-1')).toBeDisabled(); await page.screenshot({path:info.outputPath('character-gear-popup.png')}); await page.keyboard.press('Escape');
     await expect(page.locator('#gear-detail-dialog')).toBeHidden(); await expect(page.locator('#pick-found-1')).toBeFocused();

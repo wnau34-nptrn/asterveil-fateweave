@@ -1,3 +1,9 @@
+## 2026-11-28 — หน้าสกิลแสดงทุกสกิลเป็นการ์ด ติดตั้งด้านขวา (Claude · `claude/exciting-keller-y9xau2`)
+
+- เจ้าของ “อยากให้เป็นสกิลทุกสกิลที่สามารถใช้ได้พร้อมรายละเอียด… กดติดตั้งด้านขวา” → เสนอแล้วตอบ “ตามแนะนำ”: เอาตัวเลือกสกิล (select) ออก ทุกสกิลเป็นการ์ด (`skillCard` ใน `character-view.ts`, `skillsView`) ปุ่มติดตั้ง/ถอดด้านขวา, ล็อกพับไว้ท้าย (ปุ่ม “ไปโหนด”), เพิ่ม Lv พับในการ์ด (จำสถานะพับ), ช่องเต็มแล้วกดติดตั้ง → เลือกช่องที่จะแทน (Esc/ยกเลิกได้), แตะช่องด้านบนเลื่อนไปการ์ด
+- ไม่แตะ rules/save · คำสั่ง loadout เดิม (`host.loadout`)
+- เทสต์: tsc, eslint, vitest, build, Chromium `unified-skills`, `team-character-navigation`, `painted-skill-icons`, `character`, `equipment-comparison`, `magic-power`, `roster-batch1`, `skill-audit`, `boss-equipment`, `tree-shots`, `ui-shots`, `lessons`, `world` (ส่วนสกิล) ผ่าน; selector ในเทสต์ปรับจาก select เป็นการ์ด
+
 ## 2026-11-28 — กดอุปกรณ์ในกระเป๋าแล้วเปิด popup รายละเอียด (Claude · `claude/exciting-keller-y9xau2`)
 
 - เจ้าของ “แก้ไขให้กดอุปกรณ์แล้วรายละเอียด popup แสดงขึ้นมา แก้ไขที่เดิมต้องเลื่อนลงไปดูด้านล่าง”: ช่องในกระเป๋าแท็บอุปกรณ์ (`character-panel.ts`) เปิดการ์ดไอเท็มใน `<dialog>` ซ้อน `#gear-detail-dialog` แบบเดียวกับ popup รายละเอียดสกิล แทนการ์ดใต้ตาราง (ไม่แสดงการ์ดของชิ้นแรกค้างไว้แล้ว)

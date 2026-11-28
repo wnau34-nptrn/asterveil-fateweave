@@ -1181,8 +1181,8 @@ test('lobby member panel shows the ★3 skill a migrated company keeps and the t
   await seed(page, null, profile);
   await page.goto('./'); await page.locator('#continue').click();
   await page.locator('#lobby-tab-team').click(); await page.locator('#lobby-member-tracer').click();
-  await page.locator('#lobby-skills-open').click();await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click();await page.locator('#camp-skill-selection').selectOption('finisher');await page.locator('.skill-passives summary').click();
-  await expect(page.locator('#camp-character-dialog .character-skills [data-skill=finisher]')).toContainText('ปลิดชีพ');
+  await page.locator('#lobby-skills-open').click();await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click();await page.locator('.skill-passives summary').click();
+  await expect(page.locator('#camp-character-dialog .character-skills li[data-skill=finisher]')).toContainText('ปลิดชีพ');
   await expect(page.locator('#camp-character-dialog .character-passive')).toContainText('ตาเหยี่ยว');
   await expect(page.locator('#camp-character-dialog .character-passive')).toContainText('ยังล็อก · ปลดที่โหนด สายตาคม ชั้น 4');
   await page.screenshot({ path: info.outputPath('lobby-unlocks.png') });
@@ -1212,12 +1212,12 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   await closeTalentDetails(page);await page.locator('#camp-character-talent-b1').click(); await learn.click({ force: true }); await expect(page.locator('#camp-character-talent-b1')).toContainText('0/2'); await expect(learn).toHaveAttribute('aria-disabled', 'true');
   await expect(page.locator('#camp-character-talent-b1')).toHaveAttribute('aria-label', /แต้มไม่พอ/);
   // The new rally is in the battle loadout; switch to its own skill tab before changing the loadout.
-  await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-skill-selection').selectOption('rally');
-  await expect(page.locator('#camp-character-loadout-rally')).toHaveAttribute('aria-pressed', 'true'); await page.locator('#camp-skill-selection').selectOption('bash'); await page.locator('#camp-character-loadout-bash').click();
+  await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click();
+  await expect(page.locator('#camp-character-loadout-rally')).toHaveAttribute('aria-pressed', 'true'); await page.locator('#camp-character-loadout-bash').click();
   await expect(page.locator('#camp-character-loadout-bash')).toHaveAttribute('aria-pressed', 'false');
-  for (const b of await page.locator('#camp-character-dialog .skills-slots button, #camp-character-dialog .skills-selection-row>button').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  for (const b of await page.locator('#camp-character-dialog .skills-slots button, #camp-character-dialog .skill-card-action button').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await closeTalentDetails(page);await page.locator('#camp-character-tab-talents').click();
-  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn:visible, #camp-character-dialog .skills-slots button, #camp-character-dialog .skills-selection-row>button, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn:visible, #camp-character-dialog .skills-slots button, #camp-character-dialog .skill-card-action button, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('lobby-talents.png') });
   // Another member's tree from the picker.
   // P01: Lyra shares the camp level, so she has points of her own to spend.

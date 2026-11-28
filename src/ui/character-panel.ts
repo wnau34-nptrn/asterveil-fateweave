@@ -45,7 +45,7 @@ export class CharacterPanel {
   // Owner 2026-11-28: a bag tile opens its item card in a popup instead of a card far below the grid.
   private readonly gearDialog:HTMLDialogElement; private gearPopup=false; private gearReturn={focus:'',scroll:0};
   private readonly stars:StarUpgrade; private starOpen=false; private starReturn:{focus:string;scroll:number;tab:CharacterTab}={focus:'',scroll:0,tab:'develop'};
-  private readonly skillReview:SkillReview; private selectedSkill:ActionId='guard'; private skillSection:SkillSection='details'; private skillReturn={focus:'',scroll:0}; private skillNodeReturn:{skill:ActionId;scroll:number;focus:string}|undefined; private tomeExpanded=false; private skillScroll:Partial<Record<SkillSection,number>>={};
+  private readonly skillReview:SkillReview; private selectedSkill:ActionId='guard'; private skillSection:SkillSection='details'; private skillReturn={focus:'',scroll:0}; private skillNodeReturn:{skill:ActionId;scroll:number;focus:string}|undefined; private tomeExpanded=false; private skillScroll:Partial<Record<SkillSection,number>>={}; private replacing:ActionId|undefined; private lockedOpen=false; private readonly levelOpen=new Set<ActionId>();
   private navigationClose=false;
   private readonly visits=new Map<string,{tab:CharacterTab;section:SkillSection;skill:ActionId;scroll:number;node:string}>();
   private heroId=''; private tab:CharacterTab='overview'; private source:object|undefined;
@@ -78,7 +78,7 @@ export class CharacterPanel {
       else if(c.id===this.id('auto-goal')&&AUTO_GOALS.includes(c.value as AutoGoal)){this.goal=c.value as AutoGoal;}
       else if(c.id===this.id('auto-set'))this.preferred=SET_IDS.includes(c.value as SetId)?c.value as SetId:undefined;
     });
-    this.dialog.addEventListener('toggle',e=>{const details=e.target as HTMLDetailsElement;if(details.matches('.tome-trade'))this.tomeExpanded=details.open;if(details.matches('.auto-settings'))this.autoExpanded=details.open;if(details.matches('.gear-extra-filters'))this.filtersExpanded=details.open;},true);
+    this.dialog.addEventListener('toggle',e=>{const details=e.target as HTMLDetailsElement;if(details.matches('.tome-trade'))this.tomeExpanded=details.open;if(details.matches('.auto-settings'))this.autoExpanded=details.open;if(details.matches('.gear-extra-filters'))this.filtersExpanded=details.open;if(details.matches('.skills-locked'))this.lockedOpen=details.open;if(details.matches('.skill-level-fold'))this.rememberLevelFold(details);},true);
     this.dialog.addEventListener('keydown',e=>{
       if(!this.usable())return;
       if(this.host.navigationVisible&&e.key==='Escape'){e.preventDefault();e.stopPropagation();if(this.dialog.dispatchEvent(new Event('cancel',{cancelable:true})))this.dialog.close();return;}
@@ -90,7 +90,7 @@ export class CharacterPanel {
       e.preventDefault();e.stopPropagation();const keys=this.visibleTabs(),i=keys.indexOf(this.tab);
       const next=keys[e.key==='Home'?0:e.key==='End'?keys.length-1:(i+(e.key==='ArrowRight'?1:-1)+keys.length)%keys.length]!;this.cue('tab',i,keys.indexOf(next));this.tab=next;if(this.tab==='skills')this.skillSection='details';this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));
     });
-    this.dialog.addEventListener('cancel',e=>{if(this.usable()&&this.skillReview.active){e.preventDefault();this.backSkillReview();return;}if(this.usable()&&this.starOpen){e.preventDefault();this.backStar();return;}if(this.usable()&&(this.single||this.plan)){e.preventDefault();this.cancelTrial();}});
+    this.dialog.addEventListener('cancel',e=>{if(this.usable()&&this.replacing&&this.tab==='skills'){e.preventDefault();this.cancelReplace();return;}if(this.usable()&&this.skillReview.active){e.preventDefault();this.backSkillReview();return;}if(this.usable()&&this.starOpen){e.preventDefault();this.backStar();return;}if(this.usable()&&(this.single||this.plan)){e.preventDefault();this.cancelTrial();}});
     root.ownerDocument.addEventListener('keydown',e=>{if(this.host.navigationVisible&&e.key==='Escape'&&!e.defaultPrevented&&!e.repeat&&this.usable()&&!this.dialog.contains(e.target as Node)){e.preventDefault();if(this.dialog.dispatchEvent(new Event('cancel',{cancelable:true})))this.dialog.close();}});
     this.dialog.addEventListener('close',()=>{
       if(this.dialog.open)return;this.talentDialog.close();this.gearPopup=false;this.gearDialog.close();
@@ -199,12 +199,13 @@ export class CharacterPanel {
     if(action==='skill-review-back'){this.backSkillReview();return;}
     if(action==='skill-review-confirm'){if(model.available&&model.camp&&model.skillProfile)this.skillReview.confirm(model.skillProfile,c=>{if(c.kind==='level')this.host.skillLevel?.(c.id,c.action);else this.host.tomeTrade?.(c.line,c.size,c.to);});this.render();this.content().scrollTop=0;this.focus(this.id('skill-review-status'));return;}
     if(action==='talent-detail-close'){this.closeTalentDetail();return;}
-    if(action==='skill-select'||action==='skill-from-node'){this.talentDialog.close();if(b.dataset.skill)this.selectedSkill=b.dataset.skill as ActionId;this.tab='skills';const back=action==='skill-from-node'&&this.skillNodeReturn?.skill===this.selectedSkill?this.skillNodeReturn:undefined;this.skillNodeReturn=undefined;this.skillSection='details';this.skillReview.clear();const keep=this.content().scrollTop;this.render();this.content().scrollTop=action==='skill-select'?keep:back?.scroll??0;if(action==='skill-select'){this.dialog.querySelector<HTMLElement>('#'+b.id)?.focus({preventScroll:true});}else this.focus(back?.focus??this.id('skill-selection'));return;}
+    if(action==='skill-select'||action==='skill-from-node'){this.talentDialog.close();if(b.dataset.skill)this.selectedSkill=b.dataset.skill as ActionId;this.tab='skills';const back=action==='skill-from-node'&&this.skillNodeReturn?.skill===this.selectedSkill?this.skillNodeReturn:undefined;this.skillNodeReturn=undefined;this.skillSection='details';this.skillReview.clear();const keep=this.content().scrollTop;this.render();this.content().scrollTop=action==='skill-select'?keep:back?.scroll??0;if(action==='skill-select'){this.dialog.querySelector<HTMLElement>('#'+b.id)?.focus({preventScroll:true});this.dialog.querySelector('#'+this.id('skill-card-'+this.selectedSkill))?.scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}else this.focus(back?.focus??this.id('skill-selection'));return;}
     if(action==='skill-section'&&model.camp){this.skillScroll[this.skillSection]=this.content().scrollTop;this.skillSection=b.dataset.section as SkillSection;this.skillReview.clear();this.render();this.content().scrollTop=this.skillScroll[this.skillSection]??0;this.focus(this.id('skills-'+this.skillSection));return;}
-    if(action==='skill-to-node'){this.skillNodeReturn={skill:this.selectedSkill,scroll:this.content().scrollTop,focus:b.id};this.tab='talents';this.node=b.dataset.node!;this.skillReview.clear();this.render();this.dialog.querySelector(`#${this.id('character-talent-'+this.node)}`)?.scrollIntoView({block:'center'});this.focus(this.id('character-talent-'+this.node));this.showTalentDetail(this.id('character-talent-'+this.node));return;}
+    if(action==='skill-to-node'){if(b.dataset.skill)this.selectedSkill=b.dataset.skill as ActionId;this.replacing=undefined;this.skillNodeReturn={skill:this.selectedSkill,scroll:this.content().scrollTop,focus:b.id};this.tab='talents';this.node=b.dataset.node!;this.skillReview.clear();this.render();this.dialog.querySelector(`#${this.id('character-talent-'+this.node)}`)?.scrollIntoView({block:'center'});this.focus(this.id('character-talent-'+this.node));this.showTalentDetail(this.id('character-talent-'+this.node));return;}
     if(action==='character-close'){this.dialog.close();return;}
+    if(action==='skill-replace-cancel'){this.cancelReplace();return;}
     if(action==='character-tab'){const tab=b.dataset.tab as CharacterTab,tabs=this.visibleTabs();if(!tabs.includes(tab))return;this.cue('tab',tabs.indexOf(this.tab),tabs.indexOf(tab));this.tab=tab;if(tab==='skills')this.skillSection='details';this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-tab-${this.tab}`));return;}
-    if(action==='character-member'){this.rememberVisit();const ids=model.ids;this.cue('swap',ids.indexOf(this.heroId),ids.indexOf(b.dataset.hero!));this.heroId=b.dataset.hero!;this.filters.slot='all';this.picked='';this.node='';this.skillNodeReturn=undefined;this.skillScroll={};this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-member-${this.heroId}`));return;}
+    if(action==='character-member'){this.rememberVisit();const ids=model.ids;this.cue('swap',ids.indexOf(this.heroId),ids.indexOf(b.dataset.hero!));this.heroId=b.dataset.hero!;this.replacing=undefined;this.levelOpen.clear();this.filters.slot='all';this.picked='';this.node='';this.skillNodeReturn=undefined;this.skillScroll={};this.discard();this.render();this.content().scrollTop=0;this.focus(this.id(`character-member-${this.heroId}`));return;}
     if(action==='comparison-back'){this.cancelTrial();return;}
     if(!model.available||this.source!==model.source)return;
     if(action==='talent-pick'){this.node=b.dataset.node!;const def=this.map.talents[this.heroId]?.find(n=>n.id===this.node);if(def&&'unlock'in def.effect)this.selectedSkill=def.effect.unlock;else if(def?.choice&&skillCatalogue(this.map,this.heroes.find(h=>h.id===this.heroId)!,this.hero(model)).includes(def.choice as ActionId))this.selectedSkill=def.choice as ActionId;this.showTalentDetail(b.id);}
@@ -214,7 +215,12 @@ export class CharacterPanel {
       const skill=b.dataset.skill as ActionId,now:ActionId[]=this.hero(model).actions.filter(a=>a!=='attack');
       const next=now.includes(skill)?now.filter(a=>a!==skill):[...now,skill];
       if(next.length&&next.length<=this.map.progression.loadoutSize)this.host.loadout?.(this.heroId,next);this.focus(this.id(`character-loadout-${skill}`));}
-    else if((action==='skill-level'||action==='tome-trade')&&b.getAttribute('aria-disabled')!=='true'&&model.skillProfile){this.skillReturn={focus:b.id,scroll:this.content().scrollTop};this.skillReview.start(model.skillProfile,action==='skill-level'?{kind:'level',id:this.heroId,action:b.dataset.level as ActionId}:{kind:'trade',line:b.dataset.line as TomeLine,size:b.dataset.size as TomeSize,...b.dataset.to?{to:b.dataset.to as TomeLine}:{}});this.render();this.content().scrollTop=0;this.focus(this.id('skill-review-status'));}
+    else if((action==='skill-level'||action==='tome-trade')&&b.getAttribute('aria-disabled')!=='true'&&model.skillProfile){if(action==='skill-level')this.selectedSkill=b.dataset.level as ActionId;this.skillReturn={focus:b.id,scroll:this.content().scrollTop};this.skillReview.start(model.skillProfile,action==='skill-level'?{kind:'level',id:this.heroId,action:b.dataset.level as ActionId}:{kind:'trade',line:b.dataset.line as TomeLine,size:b.dataset.size as TomeSize,...b.dataset.to?{to:b.dataset.to as TomeLine}:{}});this.render();this.content().scrollTop=0;this.focus(this.id('skill-review-status'));}
+    else if(action==='skill-replace-start'&&b.getAttribute('aria-disabled')!=='true'){this.replacing=b.dataset.skill as ActionId;this.render();this.focus(this.id(`skill-select-${this.hero(model).actions.find(a=>a!=='attack')}`));}
+    else if(action==='skill-replace'&&this.replacing){
+      // Swap the picked slot for the skill waiting to be installed; the slot keeps its battle order.
+      const add=this.replacing,next=this.hero(model).actions.filter(a=>a!=='attack').map(a=>a===b.dataset.skill?add:a);this.replacing=undefined;
+      if(new Set(next).size===next.length)this.host.loadout?.(this.heroId,next);this.render();this.focus(this.id(`skill-select-${add}`));}
     else if(action==='character-reset'){if(b.dataset.confirm!=='true'){b.dataset.confirm='true';b.textContent='ยืนยันคืนแต้มทั้งหมดและคืนชุดสกิลเริ่มต้น';return;}this.host.reset?.(this.heroId);this.focus(this.id('character-tab-talents'));}
     else if(action==='bag-slot'){const slot=b.dataset.slot as GearSlot;this.filters.slot=this.filters.slot===slot?'all':slot;this.render();this.focus(this.id(`bag-slot-${slot}`));}
     else if(action==='bag-pick'){this.picked=b.dataset.key!;this.gearReturn={focus:b.id,scroll:this.content().scrollTop};this.gearPopup=true;this.render();if(this.gearPopup){this.gearDialog.showModal();this.gearDialog.querySelector<HTMLElement>('[data-world=gear-detail-close]')?.focus({preventScroll:true});}}
@@ -232,6 +238,8 @@ export class CharacterPanel {
       this.render();this.focus(this.id(`bag-slot-${plan?.choices[0]?.slot??single?.item.slot??'weapon'}`));
     }
   }
+  private rememberLevelFold(d:HTMLDetailsElement):void{const a=d.closest<HTMLElement>('[data-skill]')?.dataset.skill as ActionId|undefined;if(a){if(d.open)this.levelOpen.add(a);else this.levelOpen.delete(a);}}
+  private cancelReplace():void{const a=this.replacing;this.replacing=undefined;this.render();if(a)this.focus(this.id(`character-loadout-${a}`));}
   private cancelTrial():void{
     const key=this.single?.key,wasAuto=!!this.plan;this.discard();this.render();
     this.focus(this.id(wasAuto?'auto-preview':key&&this.dialog.querySelector('#'+this.id(`pick-${key.replace(':','-')}`))?`pick-${key.replace(':','-')}`:'character-tab-gear'));
@@ -239,6 +247,7 @@ export class CharacterPanel {
   private render():void{
     const model=this.host.model();if(!model||!model.ids.includes(this.heroId))return;
     if(this.source!==model.source){this.single=undefined;this.plan=undefined;this.source=model.source;}
+    if(this.tab!=='skills'||this.skillSection!=='details')this.replacing=undefined;
     const id=this.heroId,h=this.hero(model),m=model.state.members[id]!,base=this.heroes.find(v=>v.id===id)!,focus=this.dialog.contains(document.activeElement)?(document.activeElement as HTMLElement).id:'',scroll=this.content().scrollTop;
     this.dialog.querySelector(`#${this.id('character-title')}`)!.textContent=`${heroText[id]!.name} · Lv${levelOf(this.map,model.state)} · ★${m.stars}`;
     const picker=this.dialog.querySelector<HTMLElement>(`#${this.id('character-members')}`)!,left=picker.scrollLeft;
@@ -253,7 +262,7 @@ export class CharacterPanel {
     let html=this.tab==='skills'?'':`<p class="character-summary">${heroText[id]!.role} · ${lane==='front'?'แนวหน้า':'แนวหลัง'} · ${position} · ${model.camp?'ค่ายหลัก · เลือดพร้อมออกเดินทาง':'HP'} ${model.state.hp[id]??0}/${h.maxHp}</p>`;
     // Owner 2026-11-26: the full-body figure on every tab (overview draws its own stage, the gear tab its paper doll).
     if(this.tab==='skills'||this.tab==='talents'||this.tab==='develop')html+=heroStage(id);
-    html+=this.tab==='overview'?characterOverview(model.state,this.map,h,this.template,!!model.starProfile):this.tab==='develop'?this.develop(model):this.tab==='talents'?talentsView(model,this.map,this.template,h,base,this.node):this.tab==='skills'?skillsView(model,this.map,this.template,h,base,this.selectedSkill,this.skillSection):this.gear(model,h);
+    html+=this.tab==='overview'?characterOverview(model.state,this.map,h,this.template,!!model.starProfile):this.tab==='develop'?this.develop(model):this.tab==='talents'?talentsView(model,this.map,this.template,h,base,this.node):this.tab==='skills'?skillsView(model,this.map,this.template,h,base,this.selectedSkill,this.skillSection,this.replacing,this.lockedOpen,this.levelOpen):this.gear(model,h);
     let dock='';if(this.skillReview.active&&model.skillProfile){const page=this.skillReview.render(model.skillProfile);html=page.body;dock=page.dock;}
     this.dialog.toggleAttribute('data-skill-review',this.skillReview.active);
     if(this.starOpen&&this.tab==='develop'){
@@ -264,8 +273,9 @@ export class CharacterPanel {
     this.dialog.toggleAttribute('data-star-review',this.starOpen&&this.stars.reviewing);
     // Read folded panels before replacing them: a camp re-render can land before their async toggle event.
     const tome=this.content().querySelector<HTMLDetailsElement>('.tome-trade');if(tome)this.tomeExpanded=tome.open;
+    if(this.content().dataset.hero===id)this.content().querySelectorAll<HTMLDetailsElement>('.skill-level-fold').forEach(d=>this.rememberLevelFold(d));const locked=this.content().querySelector<HTMLDetailsElement>('.skills-locked');if(locked)this.lockedOpen=locked.open;
     const was=this.content().querySelector<HTMLDetailsElement>('.gear-extra-filters'),wasAuto=this.content().querySelector<HTMLDetailsElement>('.auto-settings');if(was)this.filtersExpanded=was.open;if(wasAuto)this.autoExpanded=wasAuto.open;
-    this.content().setAttribute('aria-labelledby',this.id(`character-tab-${this.tab}`));this.content().innerHTML=this.ids(html);
+    this.content().setAttribute('aria-labelledby',this.id(`character-tab-${this.tab}`));this.content().innerHTML=this.ids(html);this.content().dataset.hero=id;
     // Any render settles a running entrance; only a cued one replays it (the reflow restarts the CSS animation).
     const content=this.content();content.removeAttribute('data-enter');if(this.enter&&this.open){void content.offsetWidth;content.setAttribute('data-enter',this.enter);}this.enter='';
     const detail=this.talentDialog.querySelector<HTMLElement>('.talent-detail-content')!;detail.replaceChildren();

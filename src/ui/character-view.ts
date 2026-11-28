@@ -68,6 +68,23 @@ export function tomeSection(map: MapDefinition, id: string, tomes: SkillTomeView
   return `<h3>${lineIcon('tab-skills')} ตำราศึกของค่าย</h3><ul class="tome-bag">${bag}</ul><p class="camp-note">แก่นรอยแยก ${tomes.core} · เหรียญทอง ${tomes.gold} · ${heroText[id]!.name}ใช้ตำรา${tomeLineText[line]}</p>
     <details class="tome-trade"><summary>แลกตำราที่ครูฝึก</summary><div class="tome-trade-list">${ups}${swaps}</div><p class="camp-note">แลกขึ้นในสายเดียวกัน หรือเปลี่ยนสาย ${r.swap} เล่ม → 1 เล่มขนาดเดิม · แลกกลับไม่ได้</p></details>`;
 }
+// Skill page list (owner 2026-11-28): one card per skill with its numbers, a folded description and
+// level-up, and the install action on the right — no picker. `action` is the right-hand control.
+export function skillCard(h: HeroDefinition, base: HeroDefinition, a: ActionId, template: EncounterDefinition, map: MapDefinition, member: MemberProgress, tomes: SkillTomeView | undefined, action: string, selected: boolean, levelOpen = false, foot = '', canLevel = true): string {
+  const data = withParty(template, [h]), tree = isBigTree(map.talents[h.id]) ? treeSkillState(map, h, base, member, data) : undefined;
+  const metric = characterSkillMetric(a, h, template), marked = h.gear?.boss?.power === 'focus' ? markedSkillExample(a, h, template) : undefined, cd = skillCooldown(data, h.id, a);
+  const note = a === 'attack' ? 'ใช้ได้เสมอ · ไม่กินช่อง' : tree ? tree.note(a, cd).replace(' (เลือกในแท็บความถนัด)', '') : h.actions.includes(a) ? cd ? `คูลดาวน์ ${cd} รอบ` : 'ใช้ได้ทุกเทิร์น' : 'ยังล็อก · ปลดที่ ★3';
+  const level = a === 'attack' || !canLevel ? '' : `<details class="skill-level-fold"${levelOpen ? ' open' : ''}><summary>เพิ่ม Lv · Lv${skillLevelOf(member, a)}/${map.progression.skillLevels.max}</summary>${skillLevelRow(h, a, template, map, member, tomes?.open ? tomes : undefined)}</details>`;
+  return `<li id="skill-card-${a}" class="skill-card" data-skill="${a}"${selected ? ' data-selected="true"' : ''}><div class="skill-card-head">${icon(a)}<div><b>${data.skills[a].name}${a === 'attack' ? '' : ` <small>Lv${skillLevelOf(member, a)}</small>`}</b><small>${note}</small></div><div class="skill-card-action">${action}</div></div>
+    <p class="skill-metric">${metric.label}${metric.value === undefined ? '' : ` <strong>${metric.value}</strong>`} · ${metric.target}${metric.secondary ? `<br>${metric.secondary.label} <strong>${metric.secondary.value}</strong>` : ''}</p><small>${metric.scaling}</small>
+    <details class="skill-description"><summary>อ่านเงื่อนไขท่า</summary><p>${skillDescription(a, h.id, data)}</p></details>${level}${marked === undefined ? '' : `<p class="boss-skill-example">ตัวอย่างศัตรูติดตรา ยังไม่ลงมือและเล็งเพื่อน รอบแรก สิทธิ์พร้อม: ดาเมจเป้าหมายหลัก ${marked} · ไม่มีสถานะอื่น ไม่ใช่ดาเมจรับประกัน</p>`}${foot}</li>`;
+}
+// The class passive (folded) and boss-gear power shown once under the skill list.
+export function skillExtras(h: HeroDefinition, base: HeroDefinition, stars: number, template: EncounterDefinition, map: MapDefinition, member: MemberProgress): string {
+  const data = withParty(template, [h]), tree = isBigTree(map.talents[h.id]) ? treeSkillState(map, h, base, member, data) : undefined, unlock = tree ? undefined : base.unlocks;
+  const passive = unlock ? `<div class="character-passive"><strong>${passiveText[unlock.passive].name}</strong><p>${stars >= 5 ? 'ปลดล็อกแล้ว' : 'ยังล็อก · ปลดที่ ★5'}</p><p>${passiveText[unlock.passive].help(data)}</p></div>` : tree?.passive ?? '';
+  return `${h.gear?.boss ? `<h3>พลังอุปกรณ์บอส</h3><ul class="boss-power-list">${heroBossEffect(h)}</ul>` : ''}${passive ? `<details class="skill-passives"><summary>พาสซีฟประจำอาชีพ</summary>${passive}</details>` : ''}`;
+}
 export function characterSkills(h: HeroDefinition, base: HeroDefinition, stars: number, template: EncounterDefinition, map?: MapDefinition, member?: MemberProgress, tomes?: SkillTomeView, selected?:ActionId): string {
   const data = withParty(template, [h]), tree = map && member && isBigTree(map.talents[h.id]) ? treeSkillState(map, h, base, member, data) : undefined;
   const unlock = tree ? undefined : base.unlocks;

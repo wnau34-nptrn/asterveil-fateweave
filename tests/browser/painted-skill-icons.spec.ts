@@ -45,13 +45,13 @@ test('C1 painted skills appear in all six camp sheets and their trees at 390px',
     await page.locator(`#camp-character-member-${id}`).click();
     await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-character-tab-skills').click();
     for (const skill of skills) {
-      await page.locator('#camp-skill-selection').selectOption(skill);
-      const art = page.locator(`.character-skills [data-skill=${skill}] > .skill-art`);
+      const art = page.locator(`.character-skills li[data-skill=${skill}] .skill-card-head > .skill-art`);
       await expect(art).toHaveCount(1);
       await expect(art).toHaveCSS('background-size', `600% ${atlas.rows * 100}%`);
       const index = atlas.order.indexOf(skill); expect(index).toBeGreaterThanOrEqual(34);
       await expect(art).toHaveCSS('--sx', `${index % atlas.cols / (atlas.cols - 1) * 100}%`);
       await expect(art).toHaveCSS('--sy', `${Math.floor(index / atlas.cols) / (atlas.rows - 1) * 100}%`);
+      if (!await art.isVisible()) await page.locator('.skills-locked:not([open]) > summary').click();
       await art.scrollIntoViewIfNeeded(); await expect(art).toBeVisible();
     }
     await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-character-tab-talents').click();

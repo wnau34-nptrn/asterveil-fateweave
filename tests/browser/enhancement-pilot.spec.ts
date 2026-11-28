@@ -62,7 +62,7 @@ test('baseline star and skill routes remain readonly before selecting a command'
   await page.goto('./');await page.locator('#continue').click();const initial=await page.evaluate(k=>localStorage.getItem(k),key);
   await page.locator('#lobby-tab-team').click();await page.locator('#lobby-member-guardian').click();await expect(page.locator('#lobby-upgrade')).toBeEnabled();
   await page.screenshot({path:'/tmp/uxd-01/baseline/star-route-390.png'});
-  await page.locator('#lobby-character-open').click();await page.locator('#camp-character-tab-skills').click();await expect(page.locator('.character-skills')).toBeVisible();
+  await page.locator('#lobby-character-open').click();await page.locator('#camp-character-tab-skills').click();await expect(page.locator('.character-skills').first()).toBeVisible();
   await page.screenshot({path:'/tmp/uxd-01/baseline/skill-route-390.png'});
   await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-character-tab-talents').click();await expect(page.locator('.talent-tree')).toBeVisible();await expect(page.locator('.skills-slots')).toHaveCount(0);
   expect(await page.evaluate(k=>localStorage.getItem(k),key)).toBe(initial);await context.close();
