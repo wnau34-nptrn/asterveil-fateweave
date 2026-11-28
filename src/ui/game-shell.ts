@@ -143,7 +143,7 @@ export class GameShell {
       archive: (id, archived) => camp({ kind: 'setArchived', heroId: id, archived }),
       dismiss: id => camp({ kind: 'dismiss', heroId: id }), place: (id, group, other, lane) => camp({ kind: 'placeMember', heroId: id, group, ...has('other', other), ...has('lane', lane) }),
       lane: (id, lane, other) => camp({ kind: 'setPartyLane', heroId: id, lane, ...has('other', other) }),
-      preset: (action, slot, name) => camp({ kind: 'preset', action, slot, ...has('name', name) }),
+      preset: (action, slot, name) => camp({ kind: 'preset', action, slot, ...has('name', name) }), autoTeam: () => camp({ kind: 'autoTeam' }),
       skillLevel: (id, action) => camp({ kind: 'raiseSkill', heroId: id, action }),
       tomeTrade: (line, size, to) => camp({ kind: 'tradeTomes', line, size, ...has('to', to) }),
       talent: (id, node) => camp({ kind: 'learnTalent', heroId: id, node }), loadout: (id, actions) => camp({ kind: 'chooseLoadout', heroId: id, actions: [...actions] }), resetTalents: id => camp({ kind: 'resetTalents', heroId: id }),
@@ -703,6 +703,11 @@ export class GameShell {
       this.lobbyMessage = skip ? 'ข้ามงานแนะนำแล้ว' : 'รับรางวัลงานแนะนำแล้ว'; this.showLobby();
     });
   }
+  // Auto team (owner 2026-11-28): who now plays, or that the team already matched.
+  private autoTeamText(p: Profile, changed: boolean): string {
+    const names = (ids: readonly string[]) => ids.map(id => heroText[id]?.name ?? id).join(' ');
+    return changed ? `จัดทีมอัตโนมัติแล้ว · ตัวจริง ${names(p.party.deployed)}${p.party.reserve.length ? ` · สำรอง ${names(p.party.reserve)}` : ''}` : 'ทีมตอนนี้ตรงกับที่จัดอัตโนมัติอยู่แล้ว';
+  }
   private presetText(p: Profile, slot: number, action: 'apply' | 'save' | 'rename' | 'clear', left?: string[]): string {
     const name = p.presets?.[slot]?.name ?? `ชุด ${slot + 1}`;
     return action === 'apply' ? `ใช้ชุดทีม “${name}” แล้ว${left?.length ? ` · สำรองเต็ม ${left.map(id => heroText[id]?.name ?? id).join(' ')} รออยู่ในค่าย` : ''}`
@@ -723,7 +728,7 @@ export class GameShell {
       : e.type === 'boardClaimed' ? `ได้รับรางวัล${e.tab === 'contract' ? `สัญญาจ้าง${contractText[this.map.board.contracts.find(c => c.id === e.id)!.kind].name}` : boardTaskName[e.id] ?? 'เควสต์'} · ${sweepText(e.reward, partyLine(this.map, result.profile.party.deployed))}`
       : e.type === 'wbClaimed' ? `ได้รับรางวัลส่วนรวมบอสโลก · ${sweepText(e.reward, partyLine(this.map, result.profile.party.deployed))}`
       : e.type === 'gacha' ? `${e.entry.kind === 'pull' ? `ทอชะตา ${e.entry.results.length} ครั้ง` : 'แลกแต้ม'} · ${e.entry.results.filter(r => r.full).map(r => `${name(r.heroId)} ตัวเต็ม`).join(' ') || 'ได้เศษ'} · ตั๋วเหลือ ${result.profile.gacha?.tickets ?? 0} แต้ม ${result.profile.gacha?.points ?? 0}`
-      : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : e.type === 'party' && e.heroId && e.lane ? `จัดแผนแล้ว · ${name(e.heroId)}ยืน${laneName(e.lane)}` : e.type === 'party' && e.presetAction ? this.presetText(result.profile, e.preset!, e.presetAction, e.left) : 'จัดทีมแล้ว';
+      : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : e.type === 'party' && e.heroId && e.lane ? `จัดแผนแล้ว · ${name(e.heroId)}ยืน${laneName(e.lane)}` : e.type === 'party' && e.auto ? this.autoTeamText(result.profile, !!e.changed) : e.type === 'party' && e.presetAction ? this.presetText(result.profile, e.preset!, e.presetAction, e.left) : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     // The camp NPC whose service just succeeded cheers once.
     sfx.play(({ hired: 'coin', upgraded: 'upgrade', dismissed: 'close', talent: 'buff', equipped: 'guard', salvaged: 'anvil', forged: 'anvil', smelted: 'anvil', brewed: 'potion', claimed: 'claim', bought: 'coin', refreshed: 'coin', swept: 'claim', boardClaimed: 'claim', wbClaimed: 'claim' } as Partial<Record<string, SfxName>>)[e.type] ?? 'click');

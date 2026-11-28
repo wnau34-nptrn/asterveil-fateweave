@@ -1,3 +1,4 @@
+import { autoTeam } from '../world/auto-team';
 import { MINE_ACTIONS, type MineAction } from '../world/mine';
 import type { ActionId, CharmPower, Command } from '../battle/types';
 import type { Game } from '../save/expedition-save';
@@ -48,6 +49,7 @@ export type CampCommand =
   | { kind: 'placeMember'; heroId: string; group: Group; other?: string; lane?: Lane }
   | { kind: 'setPartyLane'; heroId: string; lane: Lane; other?: string }
   | { kind: 'preset'; action: 'apply' | 'save' | 'rename' | 'clear'; slot: number; name?: string }
+  | { kind: 'autoTeam' }
   | { kind: 'raiseSkill'; heroId: string; action: ActionId }
   | { kind: 'tradeTomes'; line: TomeLine; size: TomeSize; to?: TomeLine }
   | { kind: 'learnTalent'; heroId: string; node: TalentNode }
@@ -146,7 +148,7 @@ const SPECS: Record<CommandKind, Spec> = {
   createCommander: { commander: 'object', replace: 'bool' }, hire: { index: 'int' }, refreshBoard: {}, buy: { item: SHOP_ITEMS, heroId: opt('str') },
   smelt: { dust: 'int' }, upgrade: { heroId: 'str' }, setArchived: { heroId: 'str', archived: 'bool' }, dismiss: { heroId: 'str' },
   placeMember: { heroId: 'str', group: GROUPS, other: opt('str'), lane: opt(LANES) }, setPartyLane: { heroId: 'str', lane: LANES, other: opt('str') },
-  preset: { action: ['apply', 'save', 'rename', 'clear'], slot: 'int', name: opt('str') }, raiseSkill: { heroId: 'str', action: 'str' },
+  preset: { action: ['apply', 'save', 'rename', 'clear'], slot: 'int', name: opt('str') }, autoTeam: {}, raiseSkill: { heroId: 'str', action: 'str' },
   tradeTomes: { line: TOME_LINES, size: TOME_SIZES, to: opt(TOME_LINES) }, learnTalent: { heroId: 'str', node: 'str' },
   chooseLoadout: { heroId: 'str', actions: 'strs' }, resetTalents: { heroId: 'str' }, claimGuide: { id: 'str', skip: 'bool' },
   equip: { heroId: 'str', uid: 'int' }, unequip: { heroId: 'str', slot: GEAR_SLOTS }, autoEquipCamp: { plan: 'object' },
@@ -251,6 +253,7 @@ function applyCampCommand(game: Game | null, cmd: CampCommand, ctx: CommandConte
     case 'dismiss': return camp(dismiss(p, map, cmd.heroId));
     case 'placeMember': return camp(placeCampMember(p, map, lookup, cmd.heroId, cmd.group, cmd.other, cmd.lane));
     case 'setPartyLane': return camp(setPartyLane(p, map, lookup, cmd.heroId, cmd.lane, cmd.other));
+    case 'autoTeam': return camp(autoTeam(p, map, lookup));
     case 'preset': return camp(cmd.action === 'apply' ? applyPreset(p, map, cmd.slot) : cmd.action === 'save' ? savePreset(p, map, lookup, cmd.slot, cmd.name)
       : cmd.action === 'rename' ? renamePreset(p, cmd.slot, cmd.name ?? '') : clearPreset(p, cmd.slot));
     case 'raiseSkill': return camp(raiseSkill(p, maps, map, lookup, cmd.heroId, cmd.action));

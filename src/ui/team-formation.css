@@ -41,3 +41,8 @@
 #lobby-view .preset-dialog-head { flex:none; }
 #lobby-view .preset-dialog-content { min-height:0; overflow:auto; }
 #lobby-view .camp-preset-dialog footer { display:block; flex:none; margin:0; }
+/* Auto team (owner 2026-11-28): one button above the formation fills the field and the reserve. */
+#lobby-view .team-auto-bar { display:grid; gap:4px; margin:4px 0 10px; }
+#lobby-view .team-auto-bar button { min-height:48px; width:100%; display:inline-flex; align-items:center; justify-content:center; gap:6px; }
+#lobby-view .team-auto-bar small { font-size:12px; line-height:1.5; color:var(--text-muted, #b9c8d8); }
+#lobby-view .team-auto-note { margin:2px 0 0; padding:8px 10px; border-radius:10px; border:1px solid #74d4ef66; background:#0d2a3acc; font-size:13px; }
