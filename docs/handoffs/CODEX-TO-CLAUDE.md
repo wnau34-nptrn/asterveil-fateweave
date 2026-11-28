@@ -1,3 +1,10 @@
+## 2026-11-28 — PET-3 สัตว์เลี้ยงในค่ายและบนแผนที่ (Claude · `feature/pet-3-camp-map-art`)
+
+- OD-63: นำ ART-PET-002 (PR #55, เจ้าของอนุมัติภาพ 2026-11-28) เข้า `public/assets/pets/` (lossless ไม่แก้) · `ui/pet-art.ts` CSS sprite · รังสัตว์ `#pet-den` ในค่าย + หน้า `ui/pet-panel.ts` (ฟักไข่/เลือกพา/ไม่พา ผ่าน `hatchEgg`/`choosePet` เดิม) · แผนที่: สัตว์ตามหลังผู้นำ 1 ช่อง (ภาพเท่านั้น), ชิปพรใน HUD, จุดตะเกียง `petSightings` ในหมอก
+- ไม่เปลี่ยนกฎ/เซฟ (v71) · `setMap` เก็บ `#pet-follower` ไว้ข้ามแผนที่
+- เทสต์: `tests/browser/pets-camp-map.spec.ts` 2 ผ่าน, vitest ทั้งชุด 2421 ผ่าน, typecheck, lint · คลิป 390px (`PET_CLIPS=1`, เฟรมจริง + ffmpeg เพราะ Playwright เข้ารหัสวิดีโอไม่ได้ในคอนเทนเนอร์) → [ผลตรวจ](../validation/pets/pet3/README_TH.md)
+- ยังเปิด: เจ้าของต้องดูคลิป motion; การ์ดไกด์ค่ายบังรังชั่วคราว; ท่า `assist` ยังไม่ใช้ (PET-4/5); อัปเลเวล (PET-6)
+
 ## 2026-11-28 — PET-2 พรแผนที่ของสัตว์เลี้ยง 6 อย่าง (Claude · `claude/pet-2-blessings`)
 
 - OD-63: `core/world/pet-blessings.ts` (pure) + จุดต่อใน `world.ts`/`mine.ts`/`profile.ts` · โชค (หีบธรรมดา→หายาก 5/10%, สุ่ม 1 ครั้งจาก stream ของ run เฉพาะเมื่อพาตัวนี้) · หาของ (+แร่ 1/2 ทุกหีบ + ค้นค่ายร้าง) · มองไกล (รัศมีหมอก +1 รวมจุดออกเดินทางและเหมืองส่วนสว่าง) · เฝ้ายาม (โอกาสศึกสุ่ม −10/15% ของตัวเอง ปัดลง; อีลิท/บอส/เหตุการณ์ไม่โดน) · ไฟนำทาง (`petSightings` หีบ/เหตุการณ์ในหมอกระยะ ขอบหมอก+2/3 — ฟังก์ชันให้ UI, ไม่เซฟ) · ฟื้นฟู (ทุก 10 ก้าว HP 2/3%) · Lv1/Lv6 จาก `gameRules.pets` (`blessingLevel` 6, `renewalSteps` 10)

@@ -1,0 +1,52 @@
+/* PET-3 (OD-63): pet sprites, the camp pet den and the pet page. Sprite sheet 4 cols × 6 rows of 256 px frames. */
+.pet-sprite { --pet-size: 64px; display: block; width: var(--pet-size); height: var(--pet-size); flex: none; pointer-events: none;
+  background: var(--sheet) calc(var(--c) * var(--pet-size) * -1) calc(var(--r) * var(--pet-size) * -1) / calc(var(--pet-size) * 4) calc(var(--pet-size) * 6) no-repeat; }
+.pet-sprite[data-pose="idle"] { animation: pet-blink 2.8s steps(1) infinite; }
+@keyframes pet-blink { 0%, 86% { background-position-x: 0; } 90%, 100% { background-position-x: calc(var(--pet-size) * -1); } }
+.pet-portrait { --pet-p: 56px; display: block; width: var(--pet-p); height: var(--pet-p); flex: none; border-radius: 50%; box-shadow: inset 0 0 0 2px #ffffff40;
+  background: var(--sheet) calc(var(--pc) * var(--pet-p) * -1) calc(var(--pr) * var(--pet-p) * -1) / calc(var(--pet-p) * 3) calc(var(--pet-p) * 2) no-repeat; }
+
+/* Camp: the den is its own hotspot (not an `.npc-hit`: the six staff keep that class) placed with the same spot variables
+   as the staff; it shows the chosen pet resting beside the fire. */
+#lobby-view .pet-den { position: absolute; left: var(--nx); bottom: calc(var(--ground) + 21cqh); width: calc(var(--unit) * .5); aspect-ratio: 1; transform: translate(-50%, 3.1%);
+  z-index: 3; pointer-events: auto; min-width: 44px; min-height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer;
+  display: grid; place-items: start center; align-content: start; border-radius: 16px; }
+#lobby-view .pet-den:focus-visible { outline: 2px solid var(--gold-light, #f2d596); outline-offset: -6px; }
+/* On portrait phones it rests in front of the fire, in front of the team's feet (the team stands in the middle screen). */
+@container game (max-width: 760px) and (orientation: portrait) { #lobby-view .pet-den { left: var(--npx); bottom: calc(var(--ground) - 1cqh); width: 72px; } }
+.pet-den .pet-sprite { --pet-size: 64px; filter: drop-shadow(0 4px 6px #08121fb0); }
+.pet-den .den-badge { position: absolute; top: -6px; right: -4px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px; background: var(--gold-light, #f2d596); color: #1a1208; font: 700 12px/20px inherit; text-align: center; }
+.pet-den .den-label { margin-top: -4px; white-space: nowrap; font-size: 11px; line-height: 16px; padding: 1px 8px; border-radius: 9px; background: #0c1a2ccc; color: #e8f1ff; }
+.pet-den.no-pet .pet-sprite { opacity: .6; filter: grayscale(.6) drop-shadow(0 4px 6px #08121fb0); }
+
+/* The pet page */
+.pet-page { display: grid; gap: 10px; }
+.pet-page .pet-eggs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.pet-card { display: grid; grid-template-columns: 56px 1fr; gap: 4px 10px; align-items: center; padding: 10px; border-radius: 14px; background: #10233a99; border: 1px solid #ffffff1f; }
+.pet-card[data-chosen="true"] { border-color: var(--accent, #f0b45a); box-shadow: 0 0 0 1px var(--accent, #f0b45a) inset; }
+.pet-card[data-owned="false"] .pet-portrait { filter: grayscale(1) brightness(.6); }
+.pet-card h3 { margin: 0; font-size: 15px; display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.pet-card p { margin: 0; font-size: 13px; opacity: .9; }
+.pet-card .pet-actions { grid-column: 1 / -1; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.pet-card .pet-actions button { min-height: 44px; }
+.pet-card .pet-why { font-size: 12px; opacity: .75; }
+
+/* Map: the follower stands one tile behind the leader; blessing chip in the HUD; lantern sightings in the fog. */
+.pet-follower { position: absolute; left: calc((var(--x) + .5) * var(--t)); top: calc((var(--y) + 1) * var(--t)); transform: translate(-50%, -100%); pointer-events: none;
+  transition: left var(--hop-ms) var(--ease-out), top var(--hop-ms) var(--ease-out); }
+.pet-follower.instant { transition: none; }
+.pet-follower .pet-sprite { --pet-size: calc(var(--t) * .8); transform: translateY(6%); }
+.pet-follower.hidden { display: none; }
+.pet-follower.stacked { transform: translate(calc(-50% - var(--t) * .4), -100%); }
+.pet-follower.face-left .pet-sprite { transform: translateY(6%) scaleX(-1); }
+.hud-pet { display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 0 8px 0 4px; font-size: 12px; }
+.hud-pet .pet-portrait { --pet-p: 24px; }
+.hud-pet[hidden] { display: none; }
+.pet-sighting { position: absolute; left: calc((var(--x) + .5) * var(--t)); top: calc((var(--y) + .5) * var(--t)); width: calc(var(--t) * .5); height: calc(var(--t) * .5); transform: translate(-50%, -50%);
+  border-radius: 50%; background: radial-gradient(circle, #ffe9a8 0 25%, #ffd36b66 55%, transparent 72%); pointer-events: none; animation: pet-glimmer 2.2s ease-in-out infinite; }
+.pet-sighting[data-kind="event"] { background: radial-gradient(circle, #cfe9ff 0 25%, #7fc6ff66 55%, transparent 72%); }
+@keyframes pet-glimmer { 0%, 100% { opacity: .55; scale: .9; } 50% { opacity: 1; scale: 1.1; } }
+@media (prefers-reduced-motion: reduce) {
+  .pet-sprite[data-pose="idle"], .pet-sighting { animation: none; }
+  .pet-follower { transition: none; }
+}
