@@ -1215,9 +1215,9 @@ test('lobby talent tree: its own sheet; spend points level by level, gates show,
   await closeTalentDetails(page);await page.locator('#camp-character-tab-skills').click();
   await expect(page.locator('#camp-character-loadout-rally')).toHaveAttribute('aria-pressed', 'true'); await page.locator('#camp-character-loadout-bash').click();
   await expect(page.locator('#camp-character-loadout-bash')).toHaveAttribute('aria-pressed', 'false');
-  for (const b of await page.locator('#camp-character-dialog .skills-slots button, #camp-character-dialog .skills-selection-row>button').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  for (const b of await page.locator('#camp-character-dialog .skills-slots button, #camp-character-dialog .skill-card-action button').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await closeTalentDetails(page);await page.locator('#camp-character-tab-talents').click();
-  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn:visible, #camp-character-dialog .skills-slots button, #camp-character-dialog .skills-selection-row>button, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+  for (const b of await page.locator('#camp-character-dialog .talent-node, #camp-character-talent-learn:visible, #camp-character-dialog .skills-slots button, #camp-character-dialog .skill-card-action button, #camp-character-reset, #camp-character-dialog .tree-member').all()) expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(44);
   await page.screenshot({ path: info.outputPath('lobby-talents.png') });
   // Another member's tree from the picker.
   // P01: Lyra shares the camp level, so she has points of her own to spend.

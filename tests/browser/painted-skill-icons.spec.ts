@@ -51,6 +51,7 @@ test('C1 painted skills appear in all six camp sheets and their trees at 390px',
       const index = atlas.order.indexOf(skill); expect(index).toBeGreaterThanOrEqual(34);
       await expect(art).toHaveCSS('--sx', `${index % atlas.cols / (atlas.cols - 1) * 100}%`);
       await expect(art).toHaveCSS('--sy', `${Math.floor(index / atlas.cols) / (atlas.rows - 1) * 100}%`);
+      if (!await art.isVisible()) await page.locator('.skills-locked:not([open]) > summary').click();
       await art.scrollIntoViewIfNeeded(); await expect(art).toBeVisible();
     }
     await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-character-tab-skills').click(); await page.locator('#camp-character-tab-talents').click();
