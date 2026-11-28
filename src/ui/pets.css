@@ -51,30 +51,72 @@
   .pet-follower { transition: none; }
 }
 
-/* PET-3b: hatch animation (code-drawn egg). Timeline: wobble 0–1.3 s, crack/burst 1.3–1.7 s, the pet pops out 1.5 s, text 2.1 s. */
-.pet-hatch { position: absolute; inset: 0; z-index: 60; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 24px 16px; text-align: center;
+/* PET-3b/3c: hatch sequence from ART-PET-003 (R1 gold egg, owner choice 2026-11-28). egg.webp: row 1 idle, wobble_l, wobble_r,
+   crack_1–3, open (256 px cells); row 2 six 128 px shards, then three 256 px flash beats. Timeline: wobble 0–1.4 s, cracks
+   1.4–1.76 s, open 1.88 s with shards and flash, the pet pops out 1.9 s, text 2.5 s. */
+.pet-hatch { position: absolute; inset: 0; z-index: 60; display: grid; place-content: center; justify-items: center; gap: 10px; padding: 24px 16px; text-align: center;
   background: radial-gradient(ellipse at 50% 42%, #1c2f4afa, #060d18 75%); }
-.hatch-stage { position: relative; width: 220px; height: 220px; display: grid; place-items: center; }
-.hatch-glow { position: absolute; inset: 10%; border-radius: 50%; background: radial-gradient(circle, #ffe9a899, transparent 68%); animation: hatch-glow 2.4s ease-out both; }
-.hatch-egg { position: relative; width: 104px; height: 132px; border-radius: 50% 50% 48% 48% / 62% 62% 38% 38%; transform-origin: 50% 92%;
-  background: radial-gradient(ellipse 28% 20% at 34% 26%, #fffbe8cc, transparent 70%), radial-gradient(circle at 70% 62%, #8fd3c455 0 12%, transparent 13%), radial-gradient(circle at 30% 70%, #c9a2f055 0 9%, transparent 10%), linear-gradient(162deg, #f6e8c0, #d9b66e 58%, #a97f3a);
-  box-shadow: inset -9px -12px 20px #6b4a1a66, 0 12px 26px #000a; animation: egg-wobble 1.4s ease-in-out both, egg-burst .3s ease-in 1.4s forwards; }
-.hatch-egg::after { content: ''; position: absolute; inset: 0; background: #3a260c; opacity: 0; clip-path: polygon(46% 18%, 54% 30%, 44% 40%, 56% 52%, 45% 62%, 52% 74%, 50% 76%, 42% 62%, 53% 52%, 41% 40%, 51% 30%, 43% 20%);
-  animation: egg-crack 1.4s linear both; }
-.hatch-shell { position: absolute; left: 50%; top: 52%; width: 26px; height: 20px; margin: -10px 0 0 -13px; background: linear-gradient(160deg, #f6e8c0, #b88b42); border-radius: 60% 40% 55% 45%; opacity: 0;
-  animation: shell-fly .8s ease-out 1.4s both; }
-.hatch-flash { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, #fff 0, #fff8d6aa 35%, transparent 70%); opacity: 0; animation: hatch-flash .5s ease-out 1.38s both; }
-.hatch-pet { position: absolute; inset: 0; display: grid; place-items: end center; padding-bottom: 6%; opacity: 0; animation: pet-pop .6s cubic-bezier(.2, 1.5, .4, 1) 1.5s both; }
-.hatch-pet .pet-sprite { --pet-size: 150px; filter: drop-shadow(0 8px 10px #000a); }
-.hatch-text { display: grid; gap: 8px; justify-items: center; max-width: 320px; animation: hatch-text .5s ease-out 2.1s both; }
+.hatch-stage { --e: 300px; position: relative; width: var(--e); height: var(--e); display: grid; place-items: center; }
+.hatch-glow { position: absolute; inset: 8%; border-radius: 50%; background: radial-gradient(circle, #ffe9a899, transparent 68%); animation: hatch-glow 2.6s ease-out both; }
+.hatch-egg { position: absolute; inset: 0; background: var(--esheet) 0 0 / calc(var(--e) * 7) calc(var(--e) * 2) no-repeat; filter: drop-shadow(0 10px 14px #000a);
+  animation: egg-frames 2s steps(1) both, egg-gone .12s linear 1.92s forwards; }
+.hatch-shell { position: absolute; left: 50%; top: 52%; width: calc(var(--e) * .5); height: calc(var(--e) * .5); margin: calc(var(--e) * -.25) 0 0 calc(var(--e) * -.25); opacity: 0;
+  background: var(--esheet) calc(var(--e) * -.5 * var(--s)) calc(var(--e) * -1) / calc(var(--e) * 7) calc(var(--e) * 2) no-repeat;
+  animation: shell-fly .8s ease-out 1.88s both; }
+.hatch-flash { position: absolute; inset: 0; opacity: 0; background: var(--esheet) calc(var(--e) * -3) calc(var(--e) * -1) / calc(var(--e) * 7) calc(var(--e) * 2) no-repeat; animation: hatch-flash .36s steps(1) 1.86s both; }
+.hatch-pet { position: absolute; inset: 0; display: grid; place-items: end center; padding-bottom: 4%; opacity: 0; animation: pet-pop .6s cubic-bezier(.2, 1.5, .4, 1) 1.9s both; }
+.hatch-pet .pet-sprite { --pet-size: 230px; filter: drop-shadow(0 8px 10px #000a); }
+.hatch-text { display: grid; gap: 8px; justify-items: center; max-width: 320px; animation: hatch-text .5s ease-out 2.5s both; }
 .hatch-text h2 { margin: 0; font-size: 20px; } .hatch-text p { margin: 0; font-size: 14px; opacity: .92; }
 .hatch-text button { min-width: 140px; min-height: 48px; }
-@keyframes egg-wobble { 0%, 100% { rotate: 0deg; scale: 1; } 12% { rotate: -6deg; } 24% { rotate: 7deg; } 36% { rotate: -9deg; scale: 1.03; } 48% { rotate: 10deg; } 60% { rotate: -12deg; scale: 1.06; } 72% { rotate: 13deg; } 84% { rotate: -9deg; scale: 1.08; } }
-@keyframes egg-crack { 0%, 35% { opacity: 0; } 60%, 100% { opacity: .55; } }
-@keyframes egg-burst { to { scale: 1.35; opacity: 0; } }
-@keyframes shell-fly { 0% { opacity: 1; transform: rotate(var(--a)) translateY(0); } 100% { opacity: 0; transform: rotate(var(--a)) translateY(calc(var(--d) * -1.6)) rotate(260deg); } }
-@keyframes hatch-flash { 0% { opacity: 0; scale: .5; } 35% { opacity: 1; } 100% { opacity: 0; scale: 1.5; } }
-@keyframes hatch-glow { 0% { opacity: 0; } 60% { opacity: .9; } 100% { opacity: .55; } }
+@keyframes egg-frames {
+  0% { background-position-x: calc(var(--e) * -0); }
+  4% { background-position-x: calc(var(--e) * -1); }
+  6% { background-position-x: calc(var(--e) * -0); }
+  10% { background-position-x: calc(var(--e) * -2); }
+  12% { background-position-x: calc(var(--e) * -0); }
+  16% { background-position-x: calc(var(--e) * -1); }
+  18% { background-position-x: calc(var(--e) * -0); }
+  21% { background-position-x: calc(var(--e) * -2); }
+  23% { background-position-x: calc(var(--e) * -0); }
+  26% { background-position-x: calc(var(--e) * -1); }
+  28% { background-position-x: calc(var(--e) * -0); }
+  30% { background-position-x: calc(var(--e) * -2); }
+  32% { background-position-x: calc(var(--e) * -0); }
+  34% { background-position-x: calc(var(--e) * -1); }
+  36% { background-position-x: calc(var(--e) * -0); }
+  38% { background-position-x: calc(var(--e) * -2); }
+  40% { background-position-x: calc(var(--e) * -0); }
+  42% { background-position-x: calc(var(--e) * -1); }
+  44% { background-position-x: calc(var(--e) * -0); }
+  45% { background-position-x: calc(var(--e) * -2); }
+  47% { background-position-x: calc(var(--e) * -0); }
+  48% { background-position-x: calc(var(--e) * -1); }
+  50% { background-position-x: calc(var(--e) * -0); }
+  51% { background-position-x: calc(var(--e) * -2); }
+  53% { background-position-x: calc(var(--e) * -0); }
+  54% { background-position-x: calc(var(--e) * -1); }
+  56% { background-position-x: calc(var(--e) * -0); }
+  57% { background-position-x: calc(var(--e) * -2); }
+  59% { background-position-x: calc(var(--e) * -0); }
+  60% { background-position-x: calc(var(--e) * -1); }
+  62% { background-position-x: calc(var(--e) * -0); }
+  63% { background-position-x: calc(var(--e) * -2); }
+  65% { background-position-x: calc(var(--e) * -0); }
+  66% { background-position-x: calc(var(--e) * -1); }
+  68% { background-position-x: calc(var(--e) * -0); }
+  69% { background-position-x: calc(var(--e) * -2); }
+  70% { background-position-x: calc(var(--e) * -3); }
+  71% { background-position-x: calc(var(--e) * -0); }
+  78% { background-position-x: calc(var(--e) * -4); }
+  86% { background-position-x: calc(var(--e) * -5); }
+  94% { background-position-x: calc(var(--e) * -6); }
+  100% { background-position-x: calc(var(--e) * -6); }
+}
+@keyframes egg-gone { to { opacity: 0; } }
+@keyframes shell-fly { 0% { opacity: 1; transform: rotate(var(--a)) translateY(0); } 100% { opacity: 0; transform: rotate(var(--a)) translateY(calc(var(--d) * -1.8)) rotate(240deg); } }
+@keyframes hatch-flash { 0% { opacity: 1; background-position-x: calc(var(--e) * -3); } 33% { background-position-x: calc(var(--e) * -4); } 66% { background-position-x: calc(var(--e) * -5); } 100% { opacity: 0; background-position-x: calc(var(--e) * -5); } }
+@keyframes hatch-glow { 0% { opacity: 0; } 70% { opacity: .9; } 100% { opacity: .55; } }
 @keyframes pet-pop { 0% { opacity: 0; scale: .25; translate: 0 18px; } 100% { opacity: 1; scale: 1; translate: 0 0; } }
 @keyframes hatch-text { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: 0 0; } }
 /* End state: shown when it has already played, and under reduced motion. */
@@ -85,3 +127,18 @@
   .hatch-egg, .hatch-shell, .hatch-flash { display: none; }
   .hatch-glow, .hatch-pet, .hatch-text { animation: none; opacity: 1; } .hatch-glow { opacity: .55; }
 }
+
+/* PET-3c: walk loop on the map (ART-PET-003 pets_walk.webp, 4 frames, mirrored by `.face-left`), the den basket, blessing icons. */
+.pet-follower .follow-walk { display: none; background: var(--wsheet) 0 calc(var(--r) * var(--pet-size) * -1) / calc(var(--pet-size) * 4) calc(var(--pet-size) * 6) no-repeat;
+  animation: pet-walk .36s steps(1) infinite; }
+.pet-follower.walking .follow-idle { display: none; } .pet-follower.walking .follow-walk { display: block; }
+@keyframes pet-walk { 0% { background-position-x: 0; } 25% { background-position-x: calc(var(--pet-size) * -1); } 50% { background-position-x: calc(var(--pet-size) * -2); } 75% { background-position-x: calc(var(--pet-size) * -3); } }
+#lobby-view .pet-den::before { content: ''; position: absolute; left: 50%; bottom: -14%; width: 150%; aspect-ratio: 1; transform: translateX(-50%); pointer-events: none;
+  background: var(--dsheet) 0 0 / 200% 100% no-repeat; filter: drop-shadow(0 4px 5px #08121f99); }
+#lobby-view .pet-den[data-egg="true"]::before { background-position: 100% 0; }
+#lobby-view .pet-den .pet-sprite, #lobby-view .pet-den .den-badge, #lobby-view .pet-den .den-label { position: relative; z-index: 1; }
+#lobby-view .pet-den .den-badge { position: absolute; }
+.blessing-icon { --bs: 20px; display: inline-block; width: var(--bs); height: var(--bs); margin-right: 4px; vertical-align: -4px; flex: none;
+  background: var(--isheet) calc(var(--bi) * var(--bs) * -1) 0 / calc(var(--bs) * 6) var(--bs) no-repeat; }
+.hud-pet .blessing-icon { --bs: 24px; margin-right: 0; vertical-align: middle; }
+@media (prefers-reduced-motion: reduce) { .pet-follower .follow-walk { animation: none; } }

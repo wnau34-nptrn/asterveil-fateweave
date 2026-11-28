@@ -1,3 +1,9 @@
+## 2026-11-28 — PET-3c นำภาพ ART-PET-003 เข้าเกม (Claude · `feature/pet-3c-art-intake`)
+
+- เจ้าของเลือก **R1** (PR #399 ของ Codex; ตรวจ SHA-256/Pillow ผ่าน ไม่แตะนอก `incoming/`) · คัดลอก 4 atlas เข้า `public/assets/pets/` · แอนิเมชันฟักใช้ไข่จริง, ท่าเดินบนแผนที่ (`.walking` ตามก้าว), ตะกร้ารัง (ว่าง/มีไข่), ไอคอนพร (`pet-art.ts`) · ไม่เปลี่ยนกฎ/เซฟ
+- #398 (ART-PET-004 เอฟเฟกต์ท่าช่วย) ยังไม่นำเข้า — รอ PET-4/5 · ท่าเดินจิ้งจอก/ลูกการ์กอยล์ขยับน้อย (เจ้าของตัดสิน)
+- เทสต์: `tests/browser/pets-camp-map.spec.ts` 4 ผ่าน, lint, typecheck · คลิป → [ผลตรวจ](../validation/pets/pet3/README_TH.md) · ยังเปิด: เจ้าของดู motion; #399 ปิดได้หลัง PR นี้ merge
+
 ## 2026-11-28 — PET-3b แอนิเมชันฟักไข่ (Claude · `feature/pet-3b-hatch-animation`)
 
 - เจ้าของขอ “อยากให้มี animation ฟักไข่”: overlay `.pet-hatch` ใน `lobby-ui.ts` (`hatchOverlay`) + CSS ใน `pets.css` · ไข่วาดด้วยโค้ด (สั่น→ร้าว→แตก+แฟลช→สัตว์เด้งออก) · ลดการเคลื่อนไหว/วาดซ้ำ = ผลสุดท้าย · เสียง `claim` เมื่อฟัก · ไม่เปลี่ยนกฎ/เซฟ

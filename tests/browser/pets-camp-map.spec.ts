@@ -85,4 +85,16 @@ test.describe('with motion', () => {
     await page.locator('#pet-hatch-ok').click(); await expect(page.locator('.pet-hatch')).toHaveCount(0);
     await expect(page.locator('#pet-rift_crystal_moth')).toHaveAttribute('data-chosen', 'true');
   });
+  test('map: the walk loop plays while the leader steps and the pet rests after', async ({ page }) => {
+    test.setTimeout(120_000);
+    await open(page, { eggs: 0, shards: 0, owned: [{ kind: 'meadow_fox', level: 1, exp: 0 }], chosen: 'meadow_fox', from: ['moon-lake'] });
+    await page.locator('#lobby-depart').click();
+    const follower = page.locator('#pet-follower'); await expect(follower).toBeVisible(); await expect(follower).not.toHaveClass(/walking/);
+    for (const key of ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp']) {
+      await page.keyboard.press(key); await page.waitForTimeout(120);
+      if (await follower.evaluate(el => el.classList.contains('walking'))) { await expect(follower.locator('.follow-walk')).toBeVisible(); break; }
+    }
+    await expect(follower).toHaveClass(/walking/); await expect(follower).not.toHaveClass(/walking/, { timeout: 2000 });
+    await expect(follower.locator('.follow-idle')).toBeVisible();
+  });
 });

@@ -1,7 +1,7 @@
 import { hatchReason } from '../core/world/pets';
 import { petBlessing } from '../core/world/pet-blessings';
 import type { MapDefinition, PetBlessing, PetDefinition, PetKind, Profile } from '../core/world/types';
-import { petPortrait } from './pet-art';
+import { blessingIcon, petPortrait } from './pet-art';
 
 // PET-3: the camp pet page (hatch an egg, choose the pet for the next expedition). Level-up with food is PET-6, battle
 // assists PET-4/5. Pure: every number comes from `map.pets` and the profile; the commands run in the rules.
@@ -34,6 +34,6 @@ function card(profile: Profile, maps: readonly MapDefinition[], map: MapDefiniti
     ? `<button class="${chosen ? 'primary' : 'secondary'}" data-lobby="pet-choose" data-pet="${def.id}"${chosen ? ' disabled' : ''} aria-pressed="${chosen}">${chosen ? 'พาไปเดินทาง' : 'เลือกพาไป'}</button>`
     : `<button class="primary" data-lobby="pet-hatch" data-pet="${def.id}"${reason ? ' disabled' : ''}>ฟักไข่เป็น${def.name}</button>${reason ? `<span class="pet-why">${hatchWhy[reason] ?? ''}</span>` : ''}`;
   return `<section id="pet-${def.id}" class="pet-card" data-owned="${!!own}" data-chosen="${chosen}">${petPortrait(def.id as PetKind)}
-    <div><h3>${def.name}${own ? `<small>Lv${own.level}</small>` : ''}</h3><p><b>พร${now.name}</b> · ${now.text}</p>${level >= map.pets.blessingLevel ? '' : `<p class="pet-why">เลเวล ${map.pets.blessingLevel} ขึ้นไป: ${later.text}</p>`}</div>
+    <div><h3>${def.name}${own ? `<small>Lv${own.level}</small>` : ''}</h3><p>${blessingIcon(def.blessing.kind)}<b>พร${now.name}</b> · ${now.text}</p>${level >= map.pets.blessingLevel ? '' : `<p class="pet-why">เลเวล ${map.pets.blessingLevel} ขึ้นไป: ${later.text}</p>`}</div>
     <div class="pet-actions">${act}</div></section>`;
 }

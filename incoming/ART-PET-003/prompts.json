@@ -1,0 +1,21 @@
+{
+  "references": [
+    "incoming/ART-PET-002/pets.webp",
+    "incoming/ART-PET-002/pets.json",
+    "incoming/ART-UI-PROGRESS-001/pet_egg.png",
+    "public/assets/lobby/lobby_bg.webp",
+    "public/assets/world/tileset.webp",
+    "docs/handoffs/ART-PLACEMENT-RULES.md",
+    "docs/handoffs/ANIMATION_PROMPT_QUALITY_TH.md"
+  ],
+  "generated": {
+    "tool": "Built-in ImageGen using a composite of repository-only style references",
+    "props": "Produce a professional original fantasy RPG prop sprite sheet, truly transparent background, 3 equal widely separated columns x 1 row, wide panorama canvas. Exact three objects from left to right. (1) A single upright species-neutral hatch egg, plump and gently asymmetric, warm amber gold shell with scattered opaque mint green and lilac tiny speckles and a faint fine looping diamond thread motif, sunny butter highlights and toasted ochre shadow. (2) A single upright neutral cream hatch egg of closely matching scale and oval silhouette, ivory/cream shell, fine dusty teal interlacing thread tracery and one tiny gold star stamped into the front. No speckles on egg 2. (3) A low, wide, open oval woven amber willow basket pet bed with a dark blue-green thick cushion, stitched golden piping, a tiny tied teal ribbon at the front, and small attached unlit dark antique bronze lantern at right. Basket is EMPTY, no eggs, no pet. The camera is 3/4 with the viewer looking sufficiently down into bed to see the full cushion and back rim, matching the camp backdrop in the reference. Saturated semi-chibi painted cel shading with rich shaped color masses, crisp thin brown contours, restrained handpainted texture, top-left light. Match only style and palette of input art, assets must be original, don't reproduce the reference egg. Shapes and accents readable at 40 pixels. Full object silhouettes, no ground, no cast shadows, no back wall, no frame grid, no rectangular outlines, no labels or text, no characters, no glow haze. Real transparent canvas. Leave generous horizontal and vertical empty gutters between objects. Sprite atlas style, not poster art.",
+    "blessings": "Create six original small fantasy RPG pet blessing glyph sprites, exactly six separate items, true alpha background, regular 3-column by 2-row layout with distinct generous blank gutters. Row 1 left to right: mint four-leaf clover for luck, single amber oak acorn for forage, wide open teal eye for farsight. Row 2 left to right: navy shield with a single cream paw pad motif for ward, antique gold lit lantern for lantern, a single emerald leaf with a warm mint vein for renewal. Dark clean outline, big simplified shapes with saturated semi-chibi cel shading, top-left highlight, subtle painterly edges and chunky details that read at 24 pixels. Use reference only as style reference, no pets, text, tiles, background, square outlines, shadows, haze, extra props, captions or sparkles. Each icon isolated with equally sized apparent silhouettes and ample transparent space. Original art for Asterveil Fateweave."
+  },
+  "assemblyBriefs": {
+    "hatch": "Use the same neutral egg painting for the full strip. Keep the shell pivot at x=128, y=240 with progressive branching cracks that leave the shell silhouette intact. Open along a jagged rim and lift the cap. Paint soft light inside the shell. Preserve each family’s paint and colors on six distinct fragments and three compact flash beats.",
+    "walk": "Animate one four-phase cycle per approved idle_a seed. Preserve right-facing silhouettes, scale, face, near/far limb overlap, palette, head size and all accessories. Anchor at x=128, y=240 with no root movement. Lead and opposing feet extend on A and C and pass on B and D. The moth flaps and hovers, the owl waddles and swings its lantern, and the slime squashes and stretches through a hop. Preview the D to A seam at 48 pixels.",
+    "den": "Keep the empty bed and lantern art registered. In the occupied state, nest the gold speckled choice egg in the cushion. Preserve the transparent silhouette and shared x=128, y=240 anchor."
+  }
+}
