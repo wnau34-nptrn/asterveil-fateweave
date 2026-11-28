@@ -1,4 +1,4 @@
-# Current state — updated 2026-11-28 (PET-1 pet eggs, save v71)
+# Current state — updated 2026-11-28 (PET-2 pet map blessings, save v71)
 
 Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` and `docs/handoffs/archive/`.
 
@@ -28,7 +28,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
-- Pets OD-63 (2026-11-28 “ตามคำแนะนำ”): plan [PET_SYSTEM_ANALYSIS_TH](docs/design/PET_SYSTEM_ANALYSIS_TH.md) approved; food bought with gold. **PET-1 done** (eggs from map 4/5 first clears, `hatchEgg`/`choosePet`, `run.pet`, ledger, save v71; no effect or UI yet, [SYSTEMS_REFERENCE §Pets](docs/design/SYSTEMS_REFERENCE.md)). Next PET-2.
+- Pets OD-63 (2026-11-28 “ตามคำแนะนำ”): plan [PET_SYSTEM_ANALYSIS_TH](docs/design/PET_SYSTEM_ANALYSIS_TH.md) approved; food bought with gold. **PET-1 done** (eggs from map 4/5 first clears, `hatchEgg`/`choosePet`, `run.pet`, ledger, save v71; [SYSTEMS_REFERENCE §Pets](docs/design/SYSTEMS_REFERENCE.md)). **PET-2 done** (six map blessings `core/world/pet-blessings.ts`, no save change, [sim](docs/validation/pets/PET2_SIM.md)). Owner approved ART-PET-002 (PR #55) 2026-11-28 “อนุมัติภาพสัตว์ทั้ง 6 ตัว”. Next PET-3.
 - Hero life: code breath/barrier/turn light/sparkles/slump (#376). Drawn victory cheers (LIFE-001): Aegis R3, Eira R3b, Seren R3 (#380) and Lyra R4 (#382), owner “อนุมัติ” 2026-11-27; small optional `<sheet>_victory` atlases. Aegis idle loop warped from the seed (W1b, #381, owner “อนุมัติ”); Lyra/Eira/Seren idle by the same tool next. LIFE-002 (victory for the other 11; Odran/Isolde parked) prompt sent to Codex. [Validation](docs/validation/hero-life-2026-11-27/README_TH.md), [brief](docs/handoffs/CODEX-HERO-LIFE-TH.md).
 - Auto battle (OD-62): random battles + World Boss, device stop-HP/skill settings; numbers draft. [Validation](docs/validation/auto-battle/README_TH.md).
 
@@ -42,6 +42,6 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-PET-2 (OD-63, owner 2026-11-28 “ตามคำแนะนำ”): read CLAUDE.md, CURRENT_STATE.md, `docs/design/PET_SYSTEM_ANALYSIS_TH.md` §5.1–§5.2b and §7, `docs/design/SYSTEMS_REFERENCE.md` §Pets and the `fateweave-rules-and-sim` skill. Implement only PET-2: the six map blessings of `run.pet` in `core/world` (luck: better chest tier; forage: extra ore from chests/search; farsight: fog reveal radius +1; ward: random-encounter chance down, never elites/bosses/forced fights; lantern: chests/events visible in fog at range 2/3; renewal: team HP every 10 steps), Lv1 and Lv6 steps from `gameRules.pets`, deterministic and seeded only from the run's existing rolls, replay-safe; bump the affected `MapDefinition.version`s/save only if the rules require it. Map sim for each blessing vs no pet; meaningful vitest; typecheck, lint, test, build; PR into `feature/fateweave-initial-prototype`, merge when quality + browser pass. No battle assists, food or UI (PET-3…6). Report to the owner in Thai.
+PET-3 (OD-63, Sonnet): read CLAUDE.md, CURRENT_STATE.md, `docs/design/PET_SYSTEM_ANALYSIS_TH.md` §5.5 and §7, `docs/design/SYSTEMS_REFERENCE.md` §Pets and the `fateweave-art-intake` skill. The owner approved all six ART-PET-002 pets (PR #55, 2026-11-28 “อนุมัติภาพสัตว์ทั้ง 6 ตัว”; motion still needs the owner's review of 390px clips). Intake the pet art from PR #55's `incoming/ART-PET-002/` (lossless atlas), a camp pet-den hotspot + one DOM page (hatch egg, choose pet; level-up stays PET-6), the pet following the leader on the map, the blessing icon in the map HUD and lantern sightings (`petSightings`) as fog markers; no rule/save changes. 390px clips for the owner; PR into `feature/fateweave-initial-prototype`, merge when quality + browser pass. Report in Thai.
 
 (Previous next task, still open: hero life art — merge PR #381, review Codex PR #384 LIFE-002, write the fix + Lyra/Eira/Seren warp-idle prompts; see the hero-life validation README.)

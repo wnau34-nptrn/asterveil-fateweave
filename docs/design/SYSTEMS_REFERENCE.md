@@ -2,12 +2,13 @@
 
 These owner-scoped rules still apply. They were moved here verbatim so CLAUDE.md stays short. Before changing a system, read its section here.
 
-## Pets — OD-63 2026-11-28 (PET-1 done: eggs/hatch/choose, save v71; no effect yet)
+## Pets — OD-63 2026-11-28 (PET-1 eggs/hatch/choose, save v71; PET-2 map blessings)
 
 - Plan and draft numbers: [PET_SYSTEM_ANALYSIS_TH](PET_SYSTEM_ANALYSIS_TH.md) §5–§7. Content `gameRules.pets` (`content/world/rules.ts`): six kinds `PET_IDS` (ART-PET-002 ids), each one map blessing + one end-of-round assist (values at Lv1/Lv6 and Lv1/Lv10, used from PET-2/PET-4), `maxLevel` 10, `firstClearEggs` `moon-lake`, `crystal-mine` (maps 6–9 join as built), `eggShards` 10.
 - Rules `core/world/pets.ts` (pure): `hatchEgg` (feature `pets`, `unlocks.pets: 4` = after map 4; one of each kind; a whole egg before shards; the first pet hatched is chosen), `choosePet` (a hatched kind or none), `runPet` (departure copies the chosen pet's kind + level into `run.pet`, fixed for the expedition: camp commands are refused on the map), `settlePetEgg` (a completed normal run on an egg map pays one choice egg once, `pets.from`).
 - Commands `hatchEgg { pet }` / `choosePet { pet? }` (`game-command.ts`, shape-checked ids); settling that pays an egg adds a `petEgg` event before `settled`. Server ledger kind `pet`: receipts `pet:egg:<map>` and `pet:hatch:<kind>` (empty reward).
-- Save v71: `profile.pets` {eggs, shards, owned [{kind, level, exp < level}], chosen?, from ⊆ cleared egg maps}, `run.pet` {kind, level}; a ≤v70 save gets eggs from its cleared egg maps (map 4 → 1, map 5 → 1 more). No UI, blessings, assists or food yet (PET-2…6).
+- Save v71: `profile.pets` {eggs, shards, owned [{kind, level, exp < level}], chosen?, from ⊆ cleared egg maps}, `run.pet` {kind, level}; a ≤v70 save gets eggs from its cleared egg maps (map 4 → 1, map 5 → 1 more). No UI, assists or food yet (PET-3…6).
+- PET-2 map blessings `core/world/pet-blessings.ts` (pure; value = `at1` below `pets.blessingLevel` 6, else `at6`; no save or map-version change, a run without that pet keeps every roll): **luck** a common chest opens as rare at its % (one extra roll from the run stream, chest event `lucky`); **forage** +ore on every chest (`forage` in the event, included in `loot`) and on the abandoned camp's search; **farsight** fog radius `sightRadius` = `revealRadius`+1 (also the mine's lit tiles and the departure fog; dark tunnels keep their light); **ward** random-encounter chance −10/15% of itself, floored, in `encounterChance` (elites, bosses, events never roll it); **lantern** `petSightings` lists unopened chests/unfinished events still in fog within `sightRadius`+2/3 (a view for the UI, floor stays dark, nothing saved); **renewal** every `pets.renewalSteps` 10 steps standing brought members heal 2/3% max HP (`move`). Sim `tests/pet-sim.test.ts` → [PET2_SIM](../validation/pets/PET2_SIM.md).
 
 ## Auto battle — OD-62 2026-11-26 (draft numbers, no save change)
 

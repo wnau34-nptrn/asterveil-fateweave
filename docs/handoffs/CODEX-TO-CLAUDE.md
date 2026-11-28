@@ -1,3 +1,11 @@
+## 2026-11-28 — PET-2 พรแผนที่ของสัตว์เลี้ยง 6 อย่าง (Claude · `claude/pet-2-blessings`)
+
+- OD-63: `core/world/pet-blessings.ts` (pure) + จุดต่อใน `world.ts`/`mine.ts`/`profile.ts` · โชค (หีบธรรมดา→หายาก 5/10%, สุ่ม 1 ครั้งจาก stream ของ run เฉพาะเมื่อพาตัวนี้) · หาของ (+แร่ 1/2 ทุกหีบ + ค้นค่ายร้าง) · มองไกล (รัศมีหมอก +1 รวมจุดออกเดินทางและเหมืองส่วนสว่าง) · เฝ้ายาม (โอกาสศึกสุ่ม −10/15% ของตัวเอง ปัดลง; อีลิท/บอส/เหตุการณ์ไม่โดน) · ไฟนำทาง (`petSightings` หีบ/เหตุการณ์ในหมอกระยะ ขอบหมอก+2/3 — ฟังก์ชันให้ UI, ไม่เซฟ) · ฟื้นฟู (ทุก 10 ก้าว HP 2/3%) · Lv1/Lv6 จาก `gameRules.pets` (`blessingLevel` 6, `renewalSteps` 10)
+- ไม่ bump เซฟ/`MapDefinition.version`: state ถูกเซฟตรง (ไม่ replay การเดิน), run ที่ไม่มีสัตว์ใช้ roll เดิมทุกตัว (เทสต์ยืนยัน)
+- เทสต์: `tests/pet-blessings.test.ts` 10 · sim `tests/pet-sim.test.ts` (ใน `npm run sim`) → [PET2_SIM](../validation/pets/PET2_SIM.md) · vitest ทั้งชุด 2421 ผ่าน, typecheck, lint, build
+- เจ้าของ 2026-11-28 “อนุมัติภาพสัตว์ทั้ง 6 ตัว” (ART-PET-002, PR #55; ท่าทางยังต้องดูคลิป 390px)
+- ยังเปิด: ไม่มี UI (PET-3), ท่าศึก (PET-4); sim ฝั่งผู้เล่นสคริปต์ไม่อ่านหมอก ⇒ มองไกล/ไฟนำทางวัดได้แค่หมอกที่เปิด; ฟื้นฟูไม่เห็นผลเพราะทีม replay HP เต็มแทบตลอด
+
 ## 2026-11-28 — PET-1 ไข่/ฟัก/เลือกสัตว์เลี้ยง, เซฟ v71 (Claude · `claude/pet-1-eggs`)
 
 - OD-63 “ตามคำแนะนำ”: เนื้อหา 6 ตัว (`gameRules.pets`, id จาก ART-PET-002, ตัวเลขร่าง §5.2b) · `core/world/pets.ts` hatch/choose/runPet/settlePetEgg · `unlocks.pets: 4` · ไข่เลือกได้จากผ่านแมพ 4 (และ 5) ครั้งแรกใน `settle` · คำสั่ง `hatchEgg`/`choosePet` + event `petEgg` · ledger `pet:egg:<map>`/`pet:hatch:<kind>` · เซฟ v71 (`profile.pets`, `run.pet` ล็อกตลอดการเดินทาง; เซฟ ≤v70 ได้ไข่ตามประวัติผ่านแมพ 4/5)

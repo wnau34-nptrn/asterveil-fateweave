@@ -446,7 +446,8 @@ export type PetAssist = 'markStrike' | 'heal' | 'expose' | 'shield' | 'hasten' |
 export interface PetDefinition { id: PetKind; name: string; blessing: { kind: PetBlessing; at1: number; at6: number }; assist: { kind: PetAssist; at1: number; at10: number } }
 // `firstClearEggs`: maps whose first normal clear pays one choice egg (in map order). `eggShards` egg shards hatch like
 // one egg. `eggCap`/`shardCap` bound the stored counts.
-export interface PetRules { kinds: readonly PetDefinition[]; maxLevel: number; firstClearEggs: readonly string[]; eggShards: number; eggCap: number; shardCap: number }
+// `blessingLevel`: the pet level whose map blessing uses `at6` (PET-2); `renewalSteps`: steps between renewal heals.
+export interface PetRules { kinds: readonly PetDefinition[]; maxLevel: number; firstClearEggs: readonly string[]; eggShards: number; eggCap: number; shardCap: number; blessingLevel: number; renewalSteps: number }
 // `exp`: food toward the next level (below `level`; 0 at the top level).
 export interface PetProgress { kind: PetKind; level: number; exp: number }
 // `owned` in hatch order (one of each kind); `chosen` goes on the next expedition; `from` the maps whose first clear has
@@ -748,7 +749,8 @@ export type WorldEvent =
   | { type: 'goal' }
   | { type: 'rested'; respawned?: string[] }
   | { type: 'revived'; heroId: string }
-  | { type: 'chest'; chestId: string; loot: Resources; potion?: PotionId; tomes?: TomeBag }
+  // PET-2: `lucky` = the luck blessing opened a common chest as rare; `forage` = the ore the forage blessing added to `loot`.
+  | { type: 'chest'; chestId: string; loot: Resources; potion?: PotionId; tomes?: TomeBag; lucky?: true; forage?: number }
   | { type: 'potion'; potion: PotionId; heal?: Record<string, number> }
   | { type: 'event'; eventId: string }
   | { type: 'eventDone'; eventId: string; choice: EventChoice; heal?: Record<string, number>; potion?: PotionId }

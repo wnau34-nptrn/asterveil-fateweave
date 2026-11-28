@@ -13,6 +13,7 @@ import { battleTomes, chestTomes } from './tomes';
 import type { TalentNode } from './types';
 import { LEGACY_RESERVE, PARTY_SLOTS, POTION_IDS, SET_IDS, type Lane, type Roster } from './types';
 import { formation, laneReason, placed, withLane } from './formation';
+import { luckyTier, petBlessing, sightRadius, wardedChance } from './pet-blessings';
 
 // Pure expedition rules: no DOM, Phaser, clocks or Math.random. Every roll is
 // derived from (seed, rolls) so a reload can never re-roll an outcome.
@@ -47,8 +48,9 @@ function rollingZone(map: MapDefinition, p: Point): ZoneDefinition | undefined {
 }
 export function encounterChance(state: ExpeditionState, map: MapDefinition, p: Point = state.position): number {
   // A repel potion stops random encounters while it lasts.
+  // PET-2: the ward blessing lowers it (random encounters only).
   const zone = state.repel > 0 ? undefined : rollingZone(map, p);
-  return zone ? Math.min(zone.cap, zone.base + state.pressure) : 0;
+  return zone ? wardedChance(state, map, Math.min(zone.cap, zone.base + state.pressure)) : 0;
 }
 export function visibleMineCells(state: ExpeditionState, map: MapDefinition): ReadonlySet<number> | undefined {
   const mine = map.mine;
@@ -62,7 +64,7 @@ export function visibleMineCells(state: ExpeditionState, map: MapDefinition): Re
   return mineVisibility(state, map, mine, dark);
 }
 export function reveal(state: ExpeditionState, map: MapDefinition): void {
-  const width = map.rows[0]!.length; const cells = [...state.revealed]; const r = map.revealRadius;
+  const width = map.rows[0]!.length; const cells = [...state.revealed]; const r = sightRadius(state, map);
   const visible = visibleMineCells(state, map);
   if (visible) {
     for (const index of visible) cells[index] = '1';
@@ -406,7 +408,7 @@ export function move(initial: ExpeditionState, map: MapDefinition, dir: Directio
     else if (!waterAt(map, state.position, state.solved)) state.shore = { ...state.position };
   }
   state.position = target; state.steps++; reveal(state, map);
-  if (lookup) trailRegen(state, map, lookup);
+  if (lookup) { trailRegen(state, map, lookup); petRenewal(state, map, lookup); }
   if (map.tide && state.shore && sweptBack(state, map)) {
     const to = state.shore; state.position = { ...to }; delete state.shore; reveal(state, map);
     return { state, event: { type: 'washed', to: { ...to } } };
@@ -619,16 +621,20 @@ export function openChest(initial: ExpeditionState, map: MapDefinition): WorldRe
   if (!canOpenChest(initial, map)) return { state: initial, event: { type: 'blocked', reason: 'busy' } };
   const state = structuredClone(initial); const chest = chestAt(map, state.position)!;
   state.openedChests.push(chest.id);
-  const loot = rollLoot(state, map.loot.chest[chest.tier]);
+  // PET-2 luck: a common chest may open as rare (its loot, potion and tome tables); forage adds ore.
+  const tier = luckyTier(state, map, chest.tier, s => rollPercent(s.seed, s.rolls++));
+  const loot = rollLoot(state, map.loot.chest[tier]);
+  const forage = petBlessing(state, map, 'forage');
+  if (forage) { loot.ore += forage; state.resources.ore += forage; clampRun(state); }
   // Chests may also hold one potion (2D-5) when the party can still carry it.
-  const table = map.potions.chest[chest.tier]; let potion: PotionId | undefined;
+  const table = map.potions.chest[tier]; let potion: PotionId | undefined;
   if (rollPercent(state.seed, state.rolls++) < table.chance) {
     const total = POTION_IDS.reduce((sum, id) => sum + table.weights[id], 0); let pick = rollPercent(state.seed, state.rolls++) % total;
     const id = POTION_IDS.find(p => (pick -= table.weights[p]) < 0)!;
     if (state.potions[id] < map.potions.carry) { state.potions[id]++; potion = id; }
   }
-  const tomes = chestTomes(state, map, chest.tier);
-  return { state, event: { type: 'chest', chestId: chest.id, loot, ...(potion ? { potion } : {}), ...(tomes ? { tomes } : {}) } };
+  const tomes = chestTomes(state, map, tier);
+  return { state, event: { type: 'chest', chestId: chest.id, loot, ...(potion ? { potion } : {}), ...(tomes ? { tomes } : {}), ...(tier !== chest.tier ? { lucky: true as const } : {}), ...(forage ? { forage } : {}) } };
 }
 // ---- Map potions (2D-5): used outside battle only ----
 export function potionReason(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup, potion: PotionId, targetId?: string): string {
@@ -718,7 +724,8 @@ export function chooseEvent(initial: ExpeditionState, map: MapDefinition, lookup
   if (choice === 'offer') { state.resources.ore -= r.offerOre; state.resources.shard += r.offerShard; }
   if (choice === 'help') { state.potions.salve--; state.resources.ore += r.traveller.ore; state.resources.shard += r.traveller.shard; }
   if (choice === 'guide') state.resources.ore += r.travellerGuide.ore;
-  if (choice === 'search') state.dust += r.abandoned.searchDust;
+  // PET-2 forage: searching also finds the blessing's ore.
+  if (choice === 'search') { state.dust += r.abandoned.searchDust; state.resources.ore += petBlessing(state, map, 'forage'); }
   // Map 4: a gazed memory joins the camp journal; remembering tires everyone brought.
   if (choice === 'gaze') {
     const page = memoryNote(ev.id); if (!state.notes?.includes(page)) (state.notes ??= []).push(page);
@@ -756,6 +763,14 @@ function trailRegen(state: ExpeditionState, map: MapDefinition, lookup: Encounte
   for (const id of rosterIds(state)) {
     const regen = gearTotals(map, state.members[id]?.gear).regen; const hp = state.hp[id] ?? 0;
     if (regen && hp > 0) state.hp[id] = Math.min(memberDef(lookup, map, state, id)!.maxHp, hp + regen);
+  }
+}
+// PET-2 renewal: every `renewalSteps` steps each standing brought member heals the blessing's percent of max HP.
+function petRenewal(state: ExpeditionState, map: MapDefinition, lookup: EncounterLookup): void {
+  const percent = petBlessing(state, map, 'renewal'); if (!percent || state.steps % map.pets.renewalSteps) return;
+  for (const id of rosterIds(state)) {
+    const hp = state.hp[id] ?? 0; if (hp <= 0) continue;
+    const max = memberDef(lookup, map, state, id)!.maxHp; state.hp[id] = Math.min(max, hp + percentOf(max, percent));
   }
 }
 export const partyLuck = (state: Pick<ExpeditionState,'members'|'roster'>, map: MapDefinition): number =>
