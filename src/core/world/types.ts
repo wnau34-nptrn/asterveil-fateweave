@@ -560,7 +560,7 @@ export type ProfileEvent =
   | {type:'storageCollected';count:number}
   | {type:'storageExpanded'}
   | { type: 'blocked'; reason: string }
-  | { type: 'party'; heroId?: string; lane?: Lane; preset?: number; presetAction?: 'apply' | 'save' | 'rename' | 'clear'; left?: string[] }
+  | { type: 'party'; heroId?: string; lane?: Lane; preset?: number; presetAction?: 'apply' | 'save' | 'rename' | 'clear'; left?: string[]; auto?: true; changed?: boolean }
   | { type: 'archived'; heroId: string; archived: boolean }
   | { type: 'commander' }
   | { type: 'guide'; id: string; skipped: boolean }

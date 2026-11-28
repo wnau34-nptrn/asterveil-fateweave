@@ -1,3 +1,8 @@
+## 2026-11-28 — ปุ่มจัดทีมอัตโนมัติ (Claude · `claude/exciting-keller-y9xau2`)
+
+- เจ้าของ “เพิ่มปุ่มจัดทีมอัตโนมัติ ที่หน้าจัดทีม กดปุ่มเดียวจัดทีมให้ทั้งตัวจริงและสำรอง”: คำสั่ง `autoTeam` (`core/world/auto-team.ts`) ตัวจริง 5 (คนรักษา+แทงก์ก่อน, แนวละ ≤3) + สำรองเต็ม จากค่าความแข็งปัจจุบัน ไม่ดึงคลังสมาชิก · [รายละเอียด](../validation/auto-team-2026-11-28/README_TH.md)
+- เทสต์: vitest 2392, typecheck, lint, build, Chromium `auto-team` 390/320 + team/roster/lessons ผ่าน
+
 ## 2026-11-28 — บอสโลกเปิดหลังแผนที่ 3 + อันดับดาเมจ (Claude · `claude/exciting-keller-y9xau2`)
 
 - เจ้าของ “บอสโลกเปิดหลัง Map 3 และเพิ่ม Leader board”: feature `worldBoss` (`unlocks.worldBoss: 3`, กติกา+เซิร์ฟเวอร์ตรวจ) · แท็บ “อันดับ” (ดาเมจรวมรายสัปดาห์, รายบอส, สัปดาห์ก่อน, top 20 + อันดับของคุณ, ชื่อ `ค่าย-XXXXX` แบบแชท) · แต่ละแถวมีทีม (เลเวลค่าย + ฮีโร่/ดาว ของครั้งที่ดาเมจสูงสุด, คอลัมน์ `team` ใหม่ใน `hits`/`wb_hits`) · `GET /v1/worldboss/board` · [รายละเอียด](../validation/world-boss-board-2026-11-28/README_TH.md)

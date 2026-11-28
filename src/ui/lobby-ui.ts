@@ -18,7 +18,7 @@ import { hardReason, reserveSlots, activeGuides, guideDone, featureMap, featureO
 import { isBigTree } from '../core/world/talents';
 import { salvageValue } from '../core/world/equipment';
 import { campPresetPlan, matchesPreset, presetOf, presetSlots } from '../core/world/presets';
-import { PARTY_SLOTS, POTION_IDS, SHOP_ITEMS, type GearStat, type SetId, type WbBossId, type BoardTab, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type ProfileEvent, type TalentNode } from '../core/world/types';
+import { LANE_SLOTS, PARTY_SLOTS, POTION_IDS, SHOP_ITEMS, type GearStat, type SetId, type WbBossId, type BoardTab, type GearSlot, type GuideKind, type Lane, type LobbyFeature, type ShopItemId, type MapDefinition, type PotionId, type Profile, type ProfileEvent, type TalentNode } from '../core/world/types';
 import { levelOf, recommendedLane, starred, type EncounterLookup } from '../core/world/world';
 import { emptyTomes, raiseSkill, tradeTomes, levelableSkills, skillLevelReason, tradeReason } from '../core/world/tomes';
 import type { TomeLine, TomeSize } from '../core/world/types';
@@ -42,7 +42,7 @@ import { sweepReasonText, sweepText, campLines, skillDescription, heroText, npcT
 
 import { heroArt, portrait, starRow } from './portraits';
 
-export interface LobbyHost { archive(id: string, archived: boolean): void; autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; preset(action: 'apply' | 'save' | 'rename' | 'clear', slot: number, name?: string): void; place(id: string, group: Group, other?: string, lane?:Lane): void; lane(id: string, lane: Lane, other?: string): void; talent(id: string, node: TalentNode): void; loadout(id: string, actions: ActionId[]): void; resetTalents(id: string): void;
+export interface LobbyHost { archive(id: string, archived: boolean): void; autoTeam?(): void; autoEquip(plan: AutoEquipmentPlan): void; hire(index: number): void; refresh(): void; buy(item: ShopItemId, heroId?: string): void; smelt(dust: number): void; upgrade(id: string): void; dismiss(id: string): void; preset(action: 'apply' | 'save' | 'rename' | 'clear', slot: number, name?: string): void; place(id: string, group: Group, other?: string, lane?:Lane): void; lane(id: string, lane: Lane, other?: string): void; talent(id: string, node: TalentNode): void; loadout(id: string, actions: ActionId[]): void; resetTalents(id: string): void;
   skillLevel(id: string, action: ActionId): void; tomeTrade(line: TomeLine, size: TomeSize, to?: TomeLine): void;
   transfer(uid:number,index:number,donor:number,sourceIndex:number):void; huntTarget(target?:string):void; bossTarget(target:BossPower):void; craft(hero:string,level:number,crystal?:boolean):void;
   collect(ids:number[]):void; recycleStored(source:StorageSource,ids:number[]):void; expandStorage():void;
@@ -114,6 +114,8 @@ export class LobbyUI {
   private confirmSalvage: number | undefined;
   private sceneDrawn = '';
   private picked: string | undefined;
+  // The camp toast sits behind an open sheet: after the auto-team tap its result shows in the button's own bar instead.
+  private autoAsked = false;
   // The member picked in the formation grid (separate from the team-card pick).
   private readonly presets:CampPresetDialog;
   private confirmDismiss = false;
@@ -165,6 +167,7 @@ export class LobbyUI {
       const b = el.closest<HTMLButtonElement>('button[data-lobby]');
       if (!b || b.disabled) return;
       const id = b.dataset.hero;
+      this.autoAsked = b.dataset.lobby === 'auto-team';
       switch (b.dataset.lobby) {
         case 'npc': { this.forgeStorageReturn=false;const npc = b.dataset.npc as NpcId; const sheet = npcSpots[npc].sheet;this.teamNpc=sheet==='team';
           if(sheet==='tree'&&!this.open('tree')){this.sheet='tree';this.draw();this.act(npc,'greet',1400);this.focus(`#npc-${npc}`);break;}
@@ -186,6 +189,8 @@ export class LobbyUI {
         }
         case 'close': this.closeSheet(); break;
         case 'pick': this.pick(id, b.dataset.group as Group); break;
+        // Auto team (owner 2026-11-28): one tap fills the field and the reserve (core/world/auto-team.ts).
+        case 'auto-team': this.picked = undefined; this.confirmDismiss = false; this.host.autoTeam?.(); this.focus('#team-auto'); break;
         case 'quick-place': if (this.picked) { const target = this.picked; this.picked = undefined; this.confirmDismiss = false; this.host.place(target, b.dataset.group as Group); this.focus(`#lobby-member-${target}`); } break;
         case 'preset-open': this.presets.openFor();break;
         case 'preset': {const slot=Number(b.dataset.slot),p=this.view!.profile;this.picked=undefined;
@@ -626,7 +631,8 @@ export class LobbyUI {
     const empty = this.benchFilter === 'archived' ? 'ยังไม่มีใครอยู่ในคลังสมาชิก' : all.length ? 'ไม่พบสมาชิกตามตัวกรอง' : 'ทุกคนอยู่ในทีมที่จะพาไปแล้ว';
     const pickedGroup = this.picked && groupOf(p, this.picked);
     const panel = this.picked ? `${this.memberPanel(p, this.picked)}<p class="camp-note picked-hint" id="lobby-hint">เลือก${heroText[this.picked]!.name}แล้ว · ใช้ปุ่มด้านบน หรือแตะคน/ช่องว่างบนแผนและในกลุ่มอื่นเพื่อสลับ แตะซ้ำเพื่อยกเลิก</p>` : '';
-    return `${formationGrid({prefix:'lobby',attr:'lobby',deployed:p.party.deployed,lanes:this.lanes(p),recommended:recommendedLane(this.lookup,this.map),picked:this.picked,externalPick:!!this.picked&&groupOf(p,this.picked)!=='deployed',memberIds:true,detail:id=>`<small class="field-stat">Lv${levelOf(this.map,p)} · HP ${this.hero(id).maxHp}</small>`})}
+    const auto = `<section class="team-auto-bar" aria-labelledby="team-auto"><button id="team-auto" data-lobby="auto-team" class="primary">${icon('act-confirm')}จัดทีมอัตโนมัติ</button><small>เลือกตัวจริง ${PARTY_SLOTS} และสำรอง ${reserveSlots(p, this.map)} จากคนที่แข็งที่สุด (ดาว เลเวล สกิล อุปกรณ์) · ให้มีคนรักษาและแทงก์ในสนามถ้ามี · แนวละไม่เกิน ${LANE_SLOTS} · ไม่ดึงคนในคลังสมาชิก</small>${this.autoAsked && this.view?.message ? `<p class="team-auto-note" role="status">${this.view.message}</p>` : ''}</section>`;
+    return `${auto}${formationGrid({prefix:'lobby',attr:'lobby',deployed:p.party.deployed,lanes:this.lanes(p),recommended:recommendedLane(this.lookup,this.map),picked:this.picked,externalPick:!!this.picked&&groupOf(p,this.picked)!=='deployed',memberIds:true,detail:id=>`<small class="field-stat">Lv${levelOf(this.map,p)} · HP ${this.hero(id).maxHp}</small>`})}
       ${pickedGroup==='deployed'?panel:''}${this.presetBar(p)}${this.teamNpc?this.npcFold(p,'team'):''}
       <h3>${icon('camp')} สำรอง <span class="camp-embers">${p.party.reserve.length}/${reserveSlots(p, this.map)} · พาเข้าด่าน ยังไม่ลงสนาม</span></h3><div class="team-grid">${row(p.party.reserve, 'reserve', reserveSlots(p, this.map))}</div>
       ${pickedGroup==='reserve'?panel:''}
