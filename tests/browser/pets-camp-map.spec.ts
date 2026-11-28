@@ -33,6 +33,11 @@ test('camp den: hatch an egg, the first pet is chosen, another can be chosen, no
   await expect(page.locator('#lobby-sheet-title')).toBeFocused(); await expect(page.locator('.pet-card')).toHaveCount(6);
   await page.screenshot({ path: `${shots}/pet-page-eggs-390.png` });
   await page.locator('[data-lobby="pet-hatch"][data-pet="meadow_fox"]').click();
+  // Reduced motion (the suite default): the hatch overlay shows its end state at once; the button closes it.
+  await expect(page.locator('.pet-hatch.done')).toBeVisible(); await expect(page.locator('.hatch-egg')).toBeHidden();
+  await expect(page.locator('.hatch-pet .pet-sprite')).toBeVisible(); await expect(page.locator('#pet-hatch-ok')).toBeFocused();
+  await page.screenshot({ path: `${shots}/hatch-reduced-390.png` });
+  await page.locator('#pet-hatch-ok').click(); await expect(page.locator('.pet-hatch')).toHaveCount(0);
   const book = (await saved(page)).profile.pets!;
   expect(book.owned.map(o => o.kind)).toEqual(['meadow_fox']); expect(book.chosen).toBe('meadow_fox'); expect(book.eggs).toBe(0);
   await expect(page.locator('#pet-meadow_fox')).toHaveAttribute('data-chosen', 'true');
@@ -61,4 +66,23 @@ test('map: the pet follows one tile behind, the blessing chip shows, the lantern
   }
   console.log('sightings', await page.locator('.pet-sighting').count());
   await page.screenshot({ path: `${shots}/map-owl-390.png` });
+});
+
+test.describe('with motion', () => {
+  test.use({ reducedMotion: 'no-preference' });
+  test('hatch animation: egg wobbles, bursts, the pet pops out; skipping works; a redraw does not replay it', async ({ page }) => {
+    test.setTimeout(120_000);
+    await open(page, { eggs: 1, shards: 0, owned: [], from: ['moon-lake'] });
+    await page.locator('#pet-den').click();
+    await page.locator('[data-lobby="pet-hatch"][data-pet="rift_crystal_moth"]').click();
+    await expect(page.locator('.pet-hatch:not(.done)')).toBeVisible(); await expect(page.locator('.hatch-egg')).toBeVisible();
+    await expect(page.locator('#pet-hatch-ok')).toBeFocused();
+    expect((await page.locator('#pet-hatch-ok').boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    await page.waitForTimeout(700); await page.screenshot({ path: `${shots}/hatch-1-wobble-390.png` });
+    await page.waitForTimeout(900); await page.screenshot({ path: `${shots}/hatch-2-burst-390.png` });
+    await page.waitForTimeout(1800); await page.screenshot({ path: `${shots}/hatch-3-reveal-390.png` });
+    await expect(page.locator('.hatch-text h2')).toContainText('ผีเสื้อคริสตัล');
+    await page.locator('#pet-hatch-ok').click(); await expect(page.locator('.pet-hatch')).toHaveCount(0);
+    await expect(page.locator('#pet-rift_crystal_moth')).toHaveAttribute('data-chosen', 'true');
+  });
 });

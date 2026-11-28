@@ -40,7 +40,8 @@ test('clip: camp den and hatching', async ({ page }) => {
   test.setTimeout(120_000); begin('camp-den-hatch');
   await open(page, { eggs: 1, shards: 0, owned: [], from: ['moon-lake'] });
   await rec(page, 1500); await page.locator('#pet-den').click(); await rec(page, 1500);
-  await page.locator('[data-lobby="pet-hatch"][data-pet="gate_starveil_slime"]').click(); await rec(page, 1500);
+  await page.locator('[data-lobby="pet-hatch"][data-pet="gate_starveil_slime"]').click(); await rec(page, 3800);
+  await page.locator('#pet-hatch-ok').click(); await rec(page, 800);
   await page.locator('[data-lobby="close"]').click(); await rec(page, 2500);
   finish('camp-den-hatch');
 });

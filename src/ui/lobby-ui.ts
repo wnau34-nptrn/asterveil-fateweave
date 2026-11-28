@@ -36,7 +36,7 @@ import { boardReady, questBoardBody, questTabs, type QuestTab } from './quest-bo
 import { weekOf } from '../core/world/board';
 import { trioLive } from '../core/world/world-boss';
 import { worldBossBanner, worldBossPage, type WbCraft, type WbRank, type WbTab } from './world-boss-panel';
-import { petPage } from './pet-panel';
+import { petPage, petBlessingText } from './pet-panel';
 import { petSprite } from './pet-art';
 import { gachaBannerUrl, gachaPage, gachaTicketUrl, type GachaState, type GachaView } from './gacha-panel';
 import type { WbBoard, WorldBossStatus } from '../platform/server-client';
@@ -254,7 +254,8 @@ export class LobbyUI {
         case 'gacha': this.forgeStorageReturn = false; this.huntUI.cancel(); this.preview = undefined; this.confirmDismiss = false; this.sheet = 'gacha'; this.gachaState = { ...this.gachaState, view: 'home' }; this.draw(); this.focus('#lobby-sheet-title'); break;
         // PET-3: the pet den hotspot opens the pet page (hatch an egg, choose the pet to bring).
         case 'pets': this.forgeStorageReturn = false; this.huntUI.cancel(); this.preview = undefined; this.confirmDismiss = false; this.sheet = 'pets'; this.draw(); this.focus('#lobby-sheet-title'); break;
-        case 'pet-hatch': this.host.hatchEgg(b.dataset.pet as PetKind); this.focus(`#pet-${b.dataset.pet}`); break;
+        case 'pet-hatch': this.hatchPending = b.dataset.pet as PetKind; this.host.hatchEgg(b.dataset.pet as PetKind); this.focus(`#pet-${b.dataset.pet}`); break;
+        case 'pet-hatch-ok': { const kind = this.hatchShow?.kind; this.hatchShow = undefined; this.draw(); this.focus(kind ? `#pet-${kind}` : '#lobby-sheet-title'); break; }
         case 'pet-choose': this.host.choosePet((b.dataset.pet || undefined) as PetKind | undefined); this.focus(b.dataset.pet ? `#pet-${b.dataset.pet}` : '#lobby-sheet-title'); break;
         case 'wboss': this.forgeStorageReturn = false; this.huntUI.cancel(); this.preview = undefined; this.confirmDismiss = false; this.sheet = 'wboss'; this.host.worldBossStatus(); this.draw(); this.focus('#lobby-sheet-title'); break;
         case 'wb-tab': this.wbTab = b.dataset.tab as WbTab; this.wbCraft = undefined; if (this.wbTab !== 'bosses') this.host.worldBossStatus(); if (this.wbTab === 'rank') this.host.worldBossBoard?.(this.wbRank); this.draw(); this.focus(`#wb-tab-${this.wbTab}`); break;
@@ -545,6 +546,7 @@ export class LobbyUI {
         <div class="lobby-sheet-head">${this.sheet==='forge'&&forgeBody&&this.forgeUI.taskNavigation?`<button id="forge-open-tasks" data-forge="tasks" class="round-glass" aria-label="เลือกงานโรงตีเหล็ก">${icon('left')}</button>`:''}${this.sheet === 'tree' || this.sheet === 'gear' ? `<button id="lobby-sub-back" data-lobby="sub-back" class="round-glass" aria-label="${this.forgeStorageReturn?'กลับไปสร้างอาวุธ':'กลับไปจัดทีม'}">${icon('left')}</button>` : ''}<h2 id="lobby-sheet-title" tabindex="-1">${this.sheet === 'team' ? `${icon('flag')} จัดทีม <small>ถือครอง ${p.company.length}/${this.catalogSize(p)}</small>` : this.sheet === 'tree' ? `${icon('starFilled')} ผังสกิล` : this.sheet === 'gear' ? `${icon('gearBody')} อุปกรณ์ <small>คลัง ${p.items.length}/${storageCap(p,this.map)}</small>` : this.sheet === 'forge' ? `${icon('forge')} ${this.forgeUI.heading}` : this.sheet === 'hunt'?`${icon('goal')} แผนฟาร์ม`:this.sheet === 'brew' ? `${icon('brew')} นักปรุงยา` : this.sheet === 'maps' ? `${icon('map')} เลือกแผนที่` : this.sheet === 'board' ? `${icon('flag')} กระดานเควสต์ <small>รับได้ ${this.readyAll(p)}</small>` : this.sheet === 'wboss' ? `${icon('flag')} บอสโลก` : this.sheet === 'gacha' ? `${icon('reroll')} ทอชะตา` : this.sheet === 'pets' ? `${icon('star')} รังสัตว์เลี้ยง` : `${icon('gold')} ป้ายจ้างทหารรับจ้าง`}</h2>
           <button data-lobby="close" class="round-glass" aria-label="ปิด">${icon('close')}</button></div>
         <div class="lobby-content">${this.sheet==='forge'||this.sheet==='board'||this.sheet==='wboss'||this.sheet==='gacha'||this.sheet==='team'?'':this.sheet==='hire'&&!this.market&&this.preview===undefined?this.npcFold(p, 'hire'):this.sheet==='gear'?`<details class="storage-keeper"><summary>มิมี่ · งานผู้ดูแลคลัง</summary>${this.npcLine(this.sheet)}</details>`:this.npcFold(p, this.sheet as Sheet | null)}${this.locked(this.sheet) ? this.lockedPanel(this.locked(this.sheet)!) : this.sheet==='hunt'?this.huntUI.render(p,this.map,this.open('bossCharm')):this.sheet === 'team' ? this.team(p) : this.sheet === 'gear' && this.picked ? this.gear(p, this.picked) : this.sheet === 'forge' ? forgeBody : this.sheet === 'brew' ? this.brewing(p) : this.sheet === 'maps' ? this.mapList(p) : this.sheet === 'board' ? this.questBoard(p) : this.sheet === 'gacha' ? gachaPage(p, this.maps, this.map, this.gachaState) : this.sheet === 'pets' ? petPage(p, this.maps, this.map) : this.sheet === 'wboss' ? worldBossPage(p, this.maps, this.view!.day, this.view!.worldBoss, !!this.view!.online, { tab: this.wbTab, pick: this.wbPick, rank: this.wbRank, ...(this.rankBoard() !== undefined ? { board: this.rankBoard() } : {}), ...(this.wbCraft ? { craft: this.wbCraft } : {}) }) : this.board(p)}</div>${this.sheet==='team'&&!this.locked('team')?this.presetSaveBar(p):''}</section>` : ''}
+      ${this.hatchOverlay()}
       <footer class="lobby-bottom">
         ${this.guideCard(p)}
         <section class="lobby-trip" aria-label="การเดินทาง"><div class="trip-head"><div><b>${this.openMaps().at(-1)?.name ?? this.map.name}</b><span class="trip-team" data-ready="${ready}">${ready ? 'ทีมพร้อม' : 'ทีมยังไม่พร้อม'} · ลงสนาม ${p.party.deployed.length} · สำรอง ${p.party.reserve.length}</span></div><div class="trip-actions">${this.openMaps().length > 1 ? `<button id="lobby-maps" data-lobby="maps" class="secondary" aria-label="เลือกแผนที่">${icon('map')}</button>` : ''}</div></div>
@@ -746,6 +748,23 @@ export class LobbyUI {
     const npc = npcText[g.npc as NpcId]; const done = guideDone(p, g.kind);
     return `<section class="lobby-guide glass-capsule" id="guide-${g.id}" data-done="${done}" aria-label="งานแนะนำ"><p>${icon('flag')}<span><b>${npc?.name ?? ''} · งานแนะนำ</b>${guideText[g.kind]} · รางวัล ${rewardText(g.reward)}</span></p>
       <div><button id="guide-claim" data-lobby="guide" data-guide="${g.id}" class="primary"${done ? '' : ' disabled'}>${done ? 'รับรางวัล' : 'ยังไม่เสร็จ'}</button><button id="guide-skip" data-lobby="guide" data-guide="${g.id}" data-skip="true" class="secondary">ข้าม</button></div></section>`;
+  }
+  // PET-3b: hatching plays a code-drawn egg (wobble → crack → burst → the pet pops out). Presentation only: it starts
+  // when the profile really owns the pet just asked for, plays once (a later redraw shows the end state) and is skipped
+  // by tapping the button; reduced motion shows the end state at once.
+  private hatchPending: PetKind | undefined;
+  private hatchShow: { kind: PetKind; played: boolean } | undefined;
+  private hatchOverlay(): string {
+    const p = this.view?.profile;
+    if (this.hatchPending && p?.pets?.owned.some(o => o.kind === this.hatchPending)) { this.hatchShow = { kind: this.hatchPending, played: false }; this.hatchPending = undefined; setTimeout(() => this.focus('#pet-hatch-ok'), 0); }
+    const show = this.hatchShow; if (!show || !p) return '';
+    const def = this.map.pets.kinds.find(k => k.id === show.kind); if (!def) return '';
+    const level = p.pets?.owned.find(o => o.kind === show.kind)?.level ?? 1;
+    const b = petBlessingText(def.blessing.kind, level >= this.map.pets.blessingLevel ? def.blessing.at6 : def.blessing.at1);
+    const done = show.played || this.reduced(); show.played = true;
+    return `<div class="pet-hatch${done ? ' done' : ''}" role="dialog" aria-modal="true" aria-labelledby="pet-hatch-title">
+      <div class="hatch-stage" aria-hidden="true"><span class="hatch-glow"></span><span class="hatch-egg"></span>${Array.from({ length: 7 }, (_, i) => `<i class="hatch-shell" style="--a:${i * 51 - 150}deg;--d:${70 + (i % 3) * 18}px"></i>`).join('')}<span class="hatch-flash"></span><span class="hatch-pet">${petSprite(show.kind, 'happy')}</span></div>
+      <div class="hatch-text"><h2 id="pet-hatch-title">ไข่ฟักเป็น${def.name}!</h2><p><b>พร${b.name}</b> · ${b.text}</p><button id="pet-hatch-ok" data-lobby="pet-hatch-ok" class="primary">ตกลง</button></div></div>`;
   }
   // PET-3: the den shows the chosen pet resting; unlocked after map 4. A dot counts the eggs waiting to hatch.
   private drawDen(p: Profile): void {
