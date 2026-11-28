@@ -28,6 +28,7 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Open items
 
+- Pets OD-63 (2026-11-28 “ตามคำแนะนำ”): plan [PET_SYSTEM_ANALYSIS_TH](docs/design/PET_SYSTEM_ANALYSIS_TH.md) approved; food bought with gold; next PET-1.
 - Hero life: code breath/barrier/turn light/sparkles/slump (#376). Drawn victory cheers (LIFE-001): Aegis R3, Eira R3b, Seren R3 (#380) and Lyra R4 (#382), owner “อนุมัติ” 2026-11-27; small optional `<sheet>_victory` atlases. Aegis idle loop warped from the seed (W1b, #381, owner “อนุมัติ”); Lyra/Eira/Seren idle by the same tool next. LIFE-002 (victory for the other 11; Odran/Isolde parked) prompt sent to Codex. [Validation](docs/validation/hero-life-2026-11-27/README_TH.md), [brief](docs/handoffs/CODEX-HERO-LIFE-TH.md).
 - Auto battle (OD-62): random battles + World Boss, device stop-HP/skill settings; numbers draft. [Validation](docs/validation/auto-battle/README_TH.md).
 
@@ -42,4 +43,6 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Opening prompt for next chat
 
-Hero life art (owner 2026-11-27): (1) merge PR #381 (Aegis W1b idle, owner “อนุมัติ”) once its CI is green. (2) Review Codex PR #384 ART-UNIT-ANIMATION-LIFE-002 (victory for 11 allies; Odran/Isolde parked): only Lio R1 passed; Mira R2, Sefa R1 and Cerise failed only the frame-1 ground check because the brief's sole rule (20+ px) differs from Codex's check (any alpha ≥128) — frame 1 is the untouched seed, so judge them by eye. Import the passing ones with `incoming/ART-UNIT-ANIMATION-LIFE-001/build_victory.py`'s method (optional `<sheet>_victory` atlases; update `unit-victory`/`unit-loading` tests), clip at 390px, wait for the owner's approval before merging. (3) Write the Codex fix prompt for the rest (clarify ground = seed's own lowest opaque row; keep props/scale gates) and the W1b-style warp idle prompt for Lyra, Eira and Seren (`w1b-aegis-idle/tools/warp_idle.py`). Read [the validation](docs/validation/hero-life-2026-11-27/README_TH.md) and [brief](docs/handoffs/CODEX-HERO-LIFE-TH.md) first.
+PET-1 (OD-63, owner 2026-11-28 “ตามคำแนะนำ”): read `docs/design/PET_SYSTEM_ANALYSIS_TH.md` §5–§7 and the `fateweave-rules-and-sim` skill. Implement only PET-1: content for the six pets (ids from ART-PET-002), save v71 (`profile.pets` kind/level/exp, choice eggs + egg shards, `run.pet` locked per expedition) with migration granting eggs from first boss wins already in the save (map 4 → choice egg, map 5 → one more), camp commands `hatchEgg`/`choosePet` in `game-command.ts` (server-checked, ledger), `unlocks.pets: 4`, choice egg from the map-4 boss first clear in `settle`. No map perks, battle assists, food or UI yet (PET-2…6). Meaningful vitest for migration/commands/replay; typecheck, lint, test, build; PR into `feature/fateweave-initial-prototype`, merge when quality + browser pass.
+
+(Previous next task, still open: hero life art — merge PR #381, review Codex PR #384 LIFE-002, write the fix + Lyra/Eira/Seren warp-idle prompts; see the hero-life validation README.)
