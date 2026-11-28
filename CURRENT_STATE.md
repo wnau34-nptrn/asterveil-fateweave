@@ -23,8 +23,8 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 
 ## Owner decisions since P10
 
-- 2026-11-22 “ทำตามที่คุณแนะนำ” (OD-61): the C12 campaign gate failure (explorer/casual 229→220) is the OD-59 starter pairs (#333), not a bug; that group alone re-baselined ([evidence](docs/validation/c12-gate-od59-2026-11-22/README_TH.md)). Balance note: Toma-first pairs clear the forest first try 23–30/48 (casual).
-- 2026-11-22 “ยืนยันตามแนะนำ ดำเนินการขั้นต่อไปได้”: shard units (duplicate 10, unlock 50, 1–2 shards per pull) and D24 (a device wallet never becomes online rights) confirmed (OD-58).
+- OD-61 (C12 gate re-baseline) and OD-58 shard units/D24: moved verbatim to [archive/2026-11-28](docs/handoffs/archive/2026-11-28/CURRENT_STATE-moved.md).
+
 
 ## Open items
 
@@ -33,7 +33,6 @@ Keep this file short; dated history lives in `docs/handoffs/CODEX-TO-CLAUDE.md` 
 - Auto battle (OD-62): random battles + World Boss, device stop-HP/skill settings; numbers draft. [Validation](docs/validation/auto-battle/README_TH.md).
 
 - Map 5 (OD-60): complete in game (save v70, giant tuned, art #357–#371, side events #366; owner approved). [Validation](docs/validation/map5-mine/README_TH.md).
-- 2026-11-25: boss holds on the body, silhouette aura, crowns above the figure (“นำเข้าเกมได้เลย”). [Check](docs/validation/boss-hold-placement-2026-11-25/README_TH.md).
 
 - Game Feel Draft PR #353 (weapon-matched contact sound/visuals, 15 roles) still open. [ผลตรวจ](docs/validation/roster-contact-2026-11-24/README_TH.md).
 - Mobile performance still needs on-device measurements for walking, fog, and battle entry. [ผลตรวจท่าคืนตัว](docs/validation/recovery-continuity-2026-11-24/README_TH.md).
