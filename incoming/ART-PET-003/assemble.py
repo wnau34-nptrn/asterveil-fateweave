@@ -186,9 +186,11 @@ def crack(egg, paths, shade, sheen):
         xyz = [(x * 3, y * 3) for x, y in points]
         draw.line([(x, y + 4) for x, y in xyz], fill=sheen, width=7, joint="curve")
         draw.line(xyz, fill=shade, width=7, joint="curve")
-    surface = masked(ink.resize(egg.size, R.LANCZOS), egg.getchannel("A"))
+    alpha = egg.getchannel("A")
+    surface = masked(ink.resize(egg.size, R.LANCZOS), alpha)
     frame = egg.copy()
     frame.alpha_composite(surface)
+    frame.putalpha(alpha)
     return frame
 
 
@@ -515,6 +517,12 @@ def audit(output, frame_sets):
             grounded_walk = filename == "pets_walk.webp" and not name.startswith(("rift_", "gate_"))
             if grounded_walk and box[3] != SOLE + 1:
                 raise ValueError(f"{name}: sole y is {box[3] - 1}, expected {SOLE}")
+        if filename in ("egg.webp", "egg_r2.webp"):
+            shell = crop(atlas, frames["egg_idle"]).getchannel("A").tobytes()
+            for stage in range(1, 4):
+                fracture = crop(atlas, frames[f"egg_crack_{stage}"]).getchannel("A").tobytes()
+                if fracture != shell:
+                    raise ValueError(f"{filename}: crack stage {stage} changes silhouette alpha")
         files[filename]["frames"] = checks
     return {"hashAlgorithm": "SHA-256", "selfDigest": "Compare the manifest byte-for-byte across checkouts",
             "files": files}

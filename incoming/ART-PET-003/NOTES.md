@@ -29,6 +29,6 @@
 - `pet_blessing_icons.webp` is 768×128, six 128 px cells. Center the icons at (64, 64).
 - `prop_seeds.webp` holds normalized original ImageGen props with coverage cleanup. The walk uses `idle_a` pixels from the approved ART-PET-002 atlas and continuous local deformations, with one reproducible four-phase cycle per pet. Crack stages and shards re-use the same shell pixels to preserve markings. `prompts.json` records the generation prompts and animation brief.
 
-Run `python incoming/ART-PET-003/assemble.py` from the base checkout to rebuild with the included prop seeds and repository references. The reference build used Pillow 12.3.0 and NumPy 2.3.5. Run the same script with `--verify` to compare file hashes and decode every image and browser review frame with Pillow. Bitmap dimensions, transparent corners and alpha extrema are in `validation.json`. Its own bytes are checked independently across checkouts.
+Run `python incoming/ART-PET-003/assemble.py` from the base checkout to rebuild with the included prop seeds and repository references. The reference build used Pillow 12.3.0 and NumPy 2.3.5. Run the same script with `--verify` to compare file hashes and decode every image and animated review frame with Pillow. Bitmap dimensions, transparent corners and alpha extrema are in `validation.json`. Its own bytes are checked independently across checkouts.
 
 The 390 px review uses static placements and sample playback. Owner visual acceptance is still required for the egg choice and motion.
