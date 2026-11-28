@@ -1,3 +1,11 @@
+## 2026-11-28 — ส่งให้ Claude นำเข้าภาพนิ่งไอรา (Codex · `codex/weaver-still-fix-intake`)
+
+- เจ้าของขอส่งชุดภาพนี้ให้ Claude นำเข้าเกม ใช้ commit จาก branch นี้กับ `feature/fateweave-initial-prototype` ตรวจสอบการเปลี่ยนแปลงบน branch เกมปัจจุบันก่อนนำเข้า
+- [ไฟล์ภาพ ต้นฉบับ พรอมต์ และผลตรวจ](../../incoming/ART-CHAR-WEAVER-STILL-FIX-001/NOTES.md) · ชุดนี้มี `units.webp` เฟรม 2 ที่ประกอบแล้ว รวมถึง `figureTops.weaver = 35` และ revision `379221f7` ใน `src/game/visuals/assets.ts`
+- เทียบ SHA-256 ของ RGBA รายเซลล์แล้วเฟรม 0, 1, 3, 4, 5 ตรงกันทุกพิกเซล ใช้เฉพาะภาพนิ่งของไอรา เก็บ `portraits.webp` กับ atlas ท่าศึกตาม branch เกม
+- Build, typecheck, lint, เทสต์ภาพ/งบ asset 27 และ Chromium 13 ผ่าน ตรวจผังสกิลที่ 390×844, 390×650, 650×900 รวมถึงป้ายจ้าง ตุ๊กตาอุปกรณ์ และแถบ HP ตอนใช้ภาพนิ่งสำรอง · Vitest ชุดเต็มหมดเวลา 180 วินาทีที่ `boss-balance.test.ts` หนึ่งรายการ (ผ่าน 2,420)
+- สถานะ: พร้อมให้ Claude นำเข้า branch เกม
+
 ## 2026-11-28 — PET-2 พรแผนที่ของสัตว์เลี้ยง 6 อย่าง (Claude · `claude/pet-2-blessings`)
 
 - OD-63: `core/world/pet-blessings.ts` (pure) + จุดต่อใน `world.ts`/`mine.ts`/`profile.ts` · โชค (หีบธรรมดา→หายาก 5/10%, สุ่ม 1 ครั้งจาก stream ของ run เฉพาะเมื่อพาตัวนี้) · หาของ (+แร่ 1/2 ทุกหีบ + ค้นค่ายร้าง) · มองไกล (รัศมีหมอก +1 รวมจุดออกเดินทางและเหมืองส่วนสว่าง) · เฝ้ายาม (โอกาสศึกสุ่ม −10/15% ของตัวเอง ปัดลง; อีลิท/บอส/เหตุการณ์ไม่โดน) · ไฟนำทาง (`petSightings` หีบ/เหตุการณ์ในหมอกระยะ ขอบหมอก+2/3 — ฟังก์ชันให้ UI, ไม่เซฟ) · ฟื้นฟู (ทุก 10 ก้าว HP 2/3%) · Lv1/Lv6 จาก `gameRules.pets` (`blessingLevel` 6, `renewalSteps` 10)

@@ -83,7 +83,7 @@ export const actorFootOrigins: Readonly<Record<string, number>> = {
 // Top row of each frame's painted figure (alpha > 40) in its 512 px cell, measured from the atlases: a field HP panel
 // sits just above it (owner 2026-10-22). Re-measure when an atlas changes.
 const figureTops: Readonly<Record<string, number>> = {
-  guardian: 19, tracer: 17, weaver: 0, healer: 0, raider: 0, brute: 0, garran: 37, mira: 37, toma: 37, sefa: 37, brann: 37, lio: 37, metta: 37, thiran: 37, lalin: 37, wila: 37, kael: 31, wynne: 37, astrid: 46, foe_tusker: 57, foe_sprite: 197, foe_stalker: 57, foe_mycon: 37, foe_golem: 17, foe_riftweaver: 37, foe_matriarch: 17, foe_juggernaut: 40, foe_sentinel: 5, foe_hunter: 35, foe_captain: 37, foe_dew_slime: 182, foe_ember_slime: 227, foe_ruin_bat: 218, foe_vargoth_guard: 133, foe_thorn_beetle: 191, foe_spore_puff: 107, foe_rift_channeler: 68, foe_rift_wisp: 127, foe_shard_crawler: 191,
+  guardian: 19, tracer: 17, weaver: 35, healer: 0, raider: 0, brute: 0, garran: 37, mira: 37, toma: 37, sefa: 37, brann: 37, lio: 37, metta: 37, thiran: 37, lalin: 37, wila: 37, kael: 31, wynne: 37, astrid: 46, foe_tusker: 57, foe_sprite: 197, foe_stalker: 57, foe_mycon: 37, foe_golem: 17, foe_riftweaver: 37, foe_matriarch: 17, foe_juggernaut: 40, foe_sentinel: 5, foe_hunter: 35, foe_captain: 37, foe_dew_slime: 182, foe_ember_slime: 227, foe_ruin_bat: 218, foe_vargoth_guard: 133, foe_thorn_beetle: 191, foe_spore_puff: 107, foe_rift_channeler: 68, foe_rift_wisp: 127, foe_shard_crawler: 191,
   foe_crystal_bat: 111, foe_ore_golem: 142, foe_possessed_worker: 152, foe_mine_overseer: 95, foe_crystal_eater: 167, foe_crystal_giant: 67, foe_crystal_fragment: 131,
   foe_water_spirit: lakeBossStill.bounds.y,
   foe_shadow_serpent: 141, foe_weeping_siren: 102,
@@ -104,7 +104,7 @@ type ArtName = 'units' | 'portraits' | 'ruins' | 'units_mercs' | 'portraits_merc
 // Bump a sheet's revision (SHA256 prefix) when its pixels change so browsers fetch the corrected art. `units` 2026-11-04:
 // pieces of Eira/Lyra/Seren that crossed into a neighbouring 512px cell were cleared (they showed in Seren's sheet).
 const ART_REV: Partial<Record<ArtName, string>> = {
-  units: '6263840f', units_foes3: lakeBossStill.revisions.units_foes3, portraits_foes3: lakeBossStill.revisions.portraits_foes3,
+  units: '379221f7', units_foes3: lakeBossStill.revisions.units_foes3, portraits_foes3: lakeBossStill.revisions.portraits_foes3,
   units_foes4: '0090da3a', portraits_foes4: '0156d8f8',
   units_worldboss: worldBossStills.unitsRevision, portraits_worldboss: worldBossStills.portraitsRevision,
 };
