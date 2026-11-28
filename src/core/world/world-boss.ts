@@ -106,7 +106,8 @@ function attemptOf(profile: Profile, maps: readonly MapDefinition[], lookup: Enc
   { reason: string; play?: WorldBossPlay; reward?: SweepReward; shards?: number; milestones?: Milestone[] } {
   const map = maps[0]; if (!map) return { reason: 'locked' };
   const rules = map.worldBoss;
-  if (!featureOpen(profile, maps, 'quests')) return { reason: 'locked' };
+  // Owner 2026-11-28: the World Boss opens after map 3 (was with the quest board after map 1).
+  if (!featureOpen(profile, maps, 'worldBoss')) return { reason: 'locked' };
   if (!validWeek(week)) return { reason: 'day' };
   if (week < newest(profile)) return { reason: 'expired' };
   if (trioLive(rules, week) ? !isWbBoss(boss) : boss !== undefined) return { reason: 'boss' };
@@ -202,7 +203,7 @@ function sharedOf(map: MapDefinition, id: string): { boss?: WbBossId; reward: Sw
 export function wbClaimReason(profile: Profile, maps: readonly MapDefinition[], id: string, claimWeek: number, week: number, shared?: WorldBossShared): string {
   const map = maps[0]; if (!map) return 'unknown';
   const m = sharedOf(map, id); if (!m) return 'unknown';
-  if (!featureOpen(profile, maps, 'quests')) return 'locked';
+  if (!featureOpen(profile, maps, 'worldBoss')) return 'locked';
   if (!validWeek(week) || !Number.isInteger(claimWeek)) return 'day';
   if (!shared) return 'offline';
   if (week < newest(profile) || (claimWeek !== week && claimWeek !== week - 1) || shared.week !== claimWeek || shared.boss !== m.boss) return 'expired';

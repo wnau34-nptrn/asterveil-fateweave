@@ -95,8 +95,8 @@ describe('P11-05 trio attempts and milestones', () => {
     for (const b of WB_BOSSES) expect(wbAttemptReason(p, LIVE, lookup, W, 6, turns(p, b), b)).toBe('used');
   });
 
-  it('the Morvane coach leads the starter team to a completed, credited attempt', () => {
-    const p = { ...newProfile(liveHome, 7), tutorialDone: true, cleared: [liveHome.id] };
+  it('the Morvane coach leads the starter team (map 3 cleared: the World Boss opens there) to a completed, credited attempt', () => {
+    const p = { ...newProfile(liveHome, 7), tutorialDone: true, cleared: LIVE.slice(0, 3).map(m => m.id) };
     const data = wbEncounter(p, liveHome, lookup, 'morvane')!;
     let state = beginBattle(data).state;
     while (state.outcome === 'active' && state.round <= rules.maxRounds) {

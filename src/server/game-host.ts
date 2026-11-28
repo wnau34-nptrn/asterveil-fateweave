@@ -130,7 +130,7 @@ export class GameHost {
         this.store.commit({ game: next, book: { lastSeq: out.book.lastSeq, recent } }, {
           seq, requestId: request.requestId, command: request.command, seeds: seeds.used,
           status: reply.status, contentVersion: this.contentVersion, at, day, ...(refused ? { refused } : {}), ...(claim ? { boss: claim } : {}),
-        }, snapshot, refused ? [] : rows, !refused && reply.status === 'applied' ? hitsOf(reply.events) : []);
+        }, snapshot, refused ? [] : rows, !refused && reply.status === 'applied' ? hitsOf(reply.events, next?.profile, this.ctx.home) : []);
         const telemetry = reply.status === 'applied' ? telemetryOf(game, next, reply.events) : [];
         return { status: 200, body: reply, replayed: false, telemetry };
       }
@@ -226,7 +226,7 @@ export function memoryStore(): HostStore & { state: HostState | null; log: LogEn
       s.state = structuredClone(state); s.log.push(structuredClone(entry)); if (snapshot) s.snapshots.push(structuredClone(snapshot));
       s.rows.push(...structuredClone([...ledger])); s.hits.push(...hits.map(h => ({ ...h, sent: false })));
     },
-    pendingHits: () => s.hits.filter(h => !h.sent).map(h => ({ id: h.id, week: h.week, damage: h.damage, ...(h.boss ? { boss: h.boss } : {}) })),
+    pendingHits: () => s.hits.filter(h => !h.sent).map(h => ({ id: h.id, week: h.week, damage: h.damage, ...(h.boss ? { boss: h.boss } : {}), ...(h.team ? { team: h.team } : {}) })),
     markHits: (ids: readonly string[]) => { for (const h of s.hits) if (ids.includes(h.id)) h.sent = true; },
     hasReceipt: (receipt: string) => s.rows.some(r => r.receipt === receipt),
     ledger: () => structuredClone(s.rows),

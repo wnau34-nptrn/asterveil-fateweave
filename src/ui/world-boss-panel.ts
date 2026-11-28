@@ -6,10 +6,11 @@ import { affixPool } from '../core/world/equipment';
 import { featureMap, featureOpen } from '../core/world/profile';
 import { partyLine } from '../core/world/tomes';
 import { SET_IDS, WB_BOSSES, type GearStat, type MapDefinition, type Profile, type SetId, type SweepReward, type WbBossId } from '../core/world/types';
-import type { SharedBar, SharedBoss, WorldBossStatus } from '../platform/server-client';
+import type { SharedBar, SharedBoss, WbBoard, WbBoardBoss, WorldBossStatus } from '../platform/server-client';
 import { bossDescription, bossNames } from './boss-equipment';
 import { icon } from './icons';
-import { setText, slotText, statName, sweepText } from './th';
+import { heroText, setText, slotText, statName, sweepText } from './th';
+import { portrait } from './portraits';
 
 // P11-04 part 2 + P11-05 step 4: the World Boss page of the camp (docs/design/WORLD_BOSS_TRIO_P11_05_TH.md §6) and its camp
 // banner. Pure views of the profile's World Boss book and, in server play, of the shared bars the server reports
@@ -34,11 +35,14 @@ export const craftReasonText: Record<string, string> = {
 };
 
 // Page state kept by the camp view (the open tab, the picked boss, the craft sheet).
-export type WbTab = 'fight' | 'rewards' | 'craft' | 'bosses';
-export const WB_TABS: readonly WbTab[] = ['fight', 'rewards', 'craft', 'bosses'];
-const tabName: Record<WbTab, string> = { fight: 'ต่อสู้', rewards: 'รางวัล', craft: 'สร้างของ', bosses: 'บอส' };
+export type WbTab = 'fight' | 'rewards' | 'rank' | 'craft' | 'bosses';
+export const WB_TABS: readonly WbTab[] = ['fight', 'rewards', 'rank', 'craft', 'bosses'];
+const tabName: Record<WbTab, string> = { fight: 'ต่อสู้', rewards: 'รางวัล', rank: 'อันดับ', craft: 'สร้างของ', bosses: 'บอส' };
+// Leaderboard (owner 2026-11-28 “เพิ่ม Leader board”): which bar and week the rank tab shows; `board` is what the server
+// last answered for it (`undefined` while loading, `null` offline or unavailable).
+export interface WbRank { boss: WbBoardBoss; last: boolean }
 export interface WbCraft { boss: WbBossId; affixes: GearStat[]; set?: SetId }
-export interface WbPageState { tab: WbTab; pick: WbBossId; craft?: WbCraft }
+export interface WbPageState { tab: WbTab; pick: WbBossId; craft?: WbCraft; rank?: WbRank; board?: WbBoard | null }
 
 // Names; the painted emblems and banners come from ART-UI-WORLDBOSS-TRIO-001 (world-boss-art.ts).
 export const wbBossText: Record<WbBossId, { name: string; title: string; tag: string; gist: string; answer: string; ignore: string; moves: string }> = {
@@ -108,7 +112,7 @@ const medallion = (boss: WbBossId): string => `<span class="wb-medal" data-boss=
 
 // ---- camp banner (above the bottom nav) ----
 export function worldBossBanner(p: Profile, maps: readonly MapDefinition[], day: number, status: WorldBossStatus | null | undefined, expanded: boolean): string {
-  const home = maps[0]; if (!home || !featureOpen(p, maps, 'quests')) return '';
+  const home = maps[0]; if (!home || !featureOpen(p, maps, 'worldBoss')) return '';
   const week = wbWeekOf(day); const w = wbBook(p, week).weeks.at(-1)!; const ready = worldBossReady(p, maps, day, status); const trio = trioLive(home.worldBoss, week);
   const left = Math.max(1, weekEnd(week) - day + 1);
   return `<button id="lobby-wboss" data-lobby="wboss" class="lobby-wboss" data-trio="${trio}"${trio ? ` style="--banner:url(${wbArtUrl('banner_trio')})"` : ''} aria-controls="lobby-sheet" aria-expanded="${expanded}">${trio ? '' : `<span class="wb-medals" aria-hidden="true"><span class="wb-medal" data-boss="warden">ผ</span></span>`}
@@ -200,8 +204,31 @@ function bossesTab(): string {
 export function worldBossTabs(tab: WbTab, ready: number): string {
   return `<div class="hire-tabs quest-tabs wb-tabs" role="tablist">${WB_TABS.map(t => `<button id="wb-tab-${t}" role="tab" data-lobby="wb-tab" data-tab="${t}" aria-selected="${t === tab}" class="${t === tab ? 'active' : ''}"><span>${tabName[t]}</span>${t === 'rewards' && ready ? `<small class="trip-badge">${ready}</small>` : ''}</button>`).join('')}</div>`;
 }
-// The body of the World Boss page: the four tabs and the open one.
+// The rank tab: the week's top camps by damage dealt (anonymous camp handles, the same as chat), the player's own row
+// highlighted, and their rank below when it is past the list. Picks: every boss or one bar, this week or last.
+function rankTab(maps: readonly MapDefinition[], day: number, online: boolean, v: WbPageState): string {
+  if (!online) return '<p class="camp-note wb-rank-note">อันดับต้องเชื่อมต่อเซิร์ฟเวอร์ · เล่นออฟไลน์ดูไม่ได้</p>';
+  const rank = v.rank ?? { boss: 'all', last: false }, home = maps[0];
+  const bosses: WbBoardBoss[] = home && trioLive(home.worldBoss, wbWeekOf(day) - (rank.last ? 1 : 0)) ? ['all', ...WB_BOSSES] : ['all'];
+  const name = (b: WbBoardBoss) => b === 'all' ? 'รวมทุกบอส' : b === 'warden' ? 'ผู้คุมรอยแยก' : wbBossText[b].name;
+  const chip = (id: string, label: string, on: boolean, data: string) => `<button id="wb-rank-${id}" data-lobby="wb-rank" ${data} class="ui-chip" aria-pressed="${on}">${label}</button>`;
+  const picks = `<div class="wb-rank-picks" role="group" aria-label="เลือกอันดับ">${chip('week', 'สัปดาห์นี้', !rank.last, 'data-last="0"')}${chip('last', 'สัปดาห์ก่อน', rank.last, 'data-last="1"')}</div>`
+    + (bosses.length > 1 ? `<div class="wb-rank-picks" role="group" aria-label="เลือกบอส">${bosses.map(b => chip(`boss-${b}`, name(b), rank.boss === b, `data-boss="${b}"`)).join('')}</div>` : '');
+  const board = v.board;
+  if (board === undefined) return `${picks}<p class="camp-note wb-rank-note" role="status">กำลังโหลดอันดับ…</p>`;
+  if (board === null) return `${picks}<p class="camp-note wb-rank-note" role="status">โหลดอันดับไม่ได้ตอนนี้ · ลองเปิดแท็บนี้อีกครั้ง</p>`;
+  // A hero the server names that this build has no art for shows its name instead of a face.
+  const face = (id: string) => { try { return portrait(id); } catch { return `<small>${heroText[id]?.name ?? id}</small>`; } };
+  // The team of the camp's best attempt: camp level, then each fielded hero's face and stars (names for screen readers).
+  const team = (t: WbBoard['rows'][number]['team']) => t ? `<span class="wb-rank-team"><span class="wb-rank-level">Lv${t.level}</span>${t.heroes.map(([id, stars]) => `<span class="wb-rank-hero" title="${heroText[id]?.name ?? id} ★${stars}">${face(id)}<i aria-hidden="true">★${stars}</i></span>`).join('')}<span class="sr-only">ทีม: ${t.heroes.map(([id, stars]) => `${heroText[id]?.name ?? id} ★${stars}`).join(', ')}</span></span>` : '<span class="wb-rank-team"><small>ไม่มีข้อมูลทีม</small></span>';
+  const row = (r: WbBoard['rows'][number]) => `<li class="wb-rank-row${r.you ? ' you' : ''}"${r.you ? ' aria-current="true"' : ''}><b class="wb-rank-no" data-top="${r.rank <= 3 ? r.rank : 0}">${r.rank}</b><span class="wb-rank-name">${r.handle}${r.you ? ' <small>(คุณ)</small>' : ''}</span><span class="wb-rank-dmg">${n(r.total)}<small>${r.attempts} ครั้ง · สูงสุด ${n(r.best)}</small></span>${team(r.team)}</li>`;
+  const mine = board.you && !board.rows.some(r => r.you) ? `<p class="wb-rank-you">อันดับของคุณ <b>${board.you.rank.toLocaleString('th-TH')}</b> / ${board.players.toLocaleString('th-TH')} · ดาเมจ ${n(board.you.total)} (${board.you.attempts} ครั้ง)</p>` : '';
+  const none = board.you ? '' : `<p class="camp-note">${rank.last ? 'สัปดาห์ก่อนคุณไม่ได้ลงบอสนี้' : 'ยังไม่มีอันดับ · ลงบอสอย่างน้อย 1 ครั้งเพื่อติดอันดับ'}</p>`;
+  return `${picks}<p class="camp-note">ดาเมจรวมของทุกครั้งที่ลงใน${rank.last ? 'สัปดาห์ก่อน' : 'สัปดาห์นี้'} · ${name(rank.boss)} · ผู้เล่น ${board.players.toLocaleString('th-TH')} ค่าย · เท่ากันให้ค่ายที่ลงก่อนอยู่สูงกว่า · ชื่อเป็นรหัสค่ายเดียวกับแชท · ทีมคือทีมของครั้งที่ดาเมจสูงสุด (Lv = เลเวลค่าย)</p>`
+    + mine + none + (board.rows.length ? `<ol class="wb-rank-list" aria-label="อันดับดาเมจ">${board.rows.map(row).join('')}</ol>` : '<p class="camp-note">ยังไม่มีใครลงบอสนี้</p>');
+}
+// The body of the World Boss page: the tabs and the open one.
 export function worldBossPage(p: Profile, maps: readonly MapDefinition[], day: number, status: WorldBossStatus | null | undefined, online: boolean, v: WbPageState): string {
-  const body = v.tab === 'fight' ? fightTab(p, maps, day, status, online, v) : v.tab === 'rewards' ? rewardsTab(p, maps, day, status, online) : v.tab === 'craft' ? craftTab(p, maps, v) : bossesTab();
+  const body = v.tab === 'fight' ? fightTab(p, maps, day, status, online, v) : v.tab === 'rewards' ? rewardsTab(p, maps, day, status, online) : v.tab === 'rank' ? rankTab(maps, day, online, v) : v.tab === 'craft' ? craftTab(p, maps, v) : bossesTab();
   return `${worldBossTabs(v.tab, worldBossReady(p, maps, day, status))}<div class="quest-board wb-board">${body}</div>`;
 }

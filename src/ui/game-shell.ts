@@ -7,10 +7,10 @@ import { bindInfoTabs } from './info-tabs';
 import { rosterIds } from '../core/world/world';
 import { applyCommand, isRejected, type CampCommand, type CommandEvent, type CommandResult, type GameCommand, type RunCommand } from '../core/command/game-command';
 import { clientView, type HireSlot } from '../core/command/client-view';
-import type { ReportPlace, ServerClient, ServerFailure, ServerOutcome, ServerState, WorldBossStatus } from '../platform/server-client';
+import type { ReportPlace, ServerClient, ServerFailure, ServerOutcome, ServerState, WbBoard, WorldBossStatus } from '../platform/server-client';
 import { wbBook, wbEncounter, wbWeekOf } from '../core/world/world-boss';
 import type { WbBossId } from '../core/world/types';
-import { attemptReasonText, claimText, worldBossStartReason } from './world-boss-panel';
+import { attemptReasonText, claimText, worldBossStartReason, type WbRank } from './world-boss-panel';
 import { AccountPanel } from './account-panel';
 import { FeedbackPanel } from './feedback-panel';
 import { ChatPanel } from './chat-panel';
@@ -158,7 +158,7 @@ export class GameShell {
       salvage: uids => camp({ kind: 'salvage', uids: [...uids] }),
       enhance: (uid,target) => camp({ kind: 'enhance', uid, target }), lock: uid=>camp({ kind: 'lockEquipment', uid }), fuse: (uid,donors) => camp({ kind: 'fuse', uid, ...has('donors', donors ? [...donors] : undefined) }), level:(uid,target)=>camp({ kind: 'raiseItemLevel', uid, target }),
       reroll: (uid, i) => camp({ kind: 'reroll', uid, index: i }), brew: potion => camp({ kind: 'brew', potion }), claim: id => camp({ kind: 'claimQuest', questId: id }), claimBoard: (tab, id, period) => camp({ kind: 'claimBoard', tab, id, period, day: this.today() }),
-      depart: (id, hard) => this.depart(id, hard), startWorldBoss: boss => this.startWorldBoss(boss), craftBossItem: (boss, affixes, set) => camp({ kind: 'craftBossItem', boss, affixes, ...(set ? { set } : {}) }), claimWorldBoss: (id, week) => this.claimWorldBoss(id, week), worldBossStatus: () => this.refreshWorldBoss(),
+      depart: (id, hard) => this.depart(id, hard), startWorldBoss: boss => this.startWorldBoss(boss), craftBossItem: (boss, affixes, set) => camp({ kind: 'craftBossItem', boss, affixes, ...(set ? { set } : {}) }), claimWorldBoss: (id, week) => this.claimWorldBoss(id, week), worldBossStatus: () => this.refreshWorldBoss(), worldBossBoard: rank => this.refreshWorldBossBoard(rank),
       gachaPull: count => this.gachaCommand({ kind: 'gachaPull', count, config: this.home.gacha.version }), gachaExchange: heroId => this.gachaCommand({ kind: 'gachaExchange', heroId, config: this.home.gacha.version }),
       sweep: (id, hard) => this.campCommand({ kind: 'sweep', mapId: id, hard, day: this.today(), serial: this.game?.profile.sweep?.count ?? 0 }), home: () => this.showTitle(),
     }, maps);
@@ -632,6 +632,15 @@ export class GameShell {
     if (!this.server) return;
     void this.server.worldBoss().then(status => { this.wbStatus = status; if (this.root.dataset.view === 'lobby' && !this.game?.run && !this.wbRun) this.showLobby(); });
   }
+  // World Boss leaderboard (owner 2026-11-28): the rank tab's board; offline it stays `null` (the tab says so).
+  private wbBoard: { rank: WbRank; board: WbBoard | null } | undefined;
+  private refreshWorldBossBoard(rank: WbRank): void {
+    if (!this.server) { this.wbBoard = { rank, board: null }; return; }
+    void this.server.worldBossBoard(rank.boss, rank.last).then(board => {
+      this.wbBoard = { rank, board };
+      if (this.root.dataset.view === 'lobby' && !this.game?.run && !this.wbRun) this.showLobby();
+    });
+  }
   // `boss`: the trio boss picked on the World Boss page (none while the warden stands, weeks before `trio.from`).
   private startWorldBoss(boss?: WbBossId): void {
     const g = this.game; if (!g || g.run || this.wbRun || this.waiting) return;
@@ -681,7 +690,7 @@ export class GameShell {
     this.migrationNote = '';
     const entering = this.root.dataset.view !== 'lobby';
     this.show('lobby');
-    this.lobby.render({ profile: this.game!.profile, board: this.server ? this.board : clientView(this.game!, { home: this.home, lookup: this.lookup }).hireBoard, message: this.lobbyMessage, day: this.today(), worldBoss: this.wbStatus, online: !!this.server, cheer: this.lobbyCheer, saved: this.saved && (!!this.storage || !!this.server), ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
+    this.lobby.render({ profile: this.game!.profile, board: this.server ? this.board : clientView(this.game!, { home: this.home, lookup: this.lookup }).hireBoard, message: this.lobbyMessage, day: this.today(), worldBoss: this.wbStatus, ...(this.wbBoard ? { wbBoard: this.wbBoard } : {}), online: !!this.server, cheer: this.lobbyCheer, saved: this.saved && (!!this.storage || !!this.server), ...(this.npcCheer ? { npcCheer: this.npcCheer } : {}) });
     this.npcCheer = undefined;
     // Arriving in the camp opens on the fire; later redraws keep where the player panned to.
     if (entering) { revealHud(this.views.lobby); this.lobby.centreScene(); const w = worldImages(this.game!.profile.party.deployed, this.map.id); prefetchImagesIdle([...w.main, ...w.extra]); }

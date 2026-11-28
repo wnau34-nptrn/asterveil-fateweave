@@ -17,7 +17,7 @@ import { ipKey, RateLimiter, type RateGate } from './rate-limit';
 import { BOSS_HEADER, HITS_HEADER, SESSION_HEADER, TELEMETRY_HEADER } from './account-object';
 import type { PendingHit } from './ledger';
 import { MAX_COMMAND_BYTES } from './game-host';
-import { sharedOfBar, type PublicBar } from './world-boss';
+import { sharedOfBar, type Board, type PublicBar } from './world-boss';
 import { isWbBoss } from '../core/world/world-boss';
 
 // P09-02b: the Worker's front door. Routing, request size/shape limits, content-version check, guest accounts, bearer
@@ -130,7 +130,7 @@ export async function handle(request: Request, deps: ApiDeps): Promise<Response>
 }
 
 const ROUTES: Record<string, 'GET' | 'POST'> = {
-  '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/gacha/history': 'GET', '/v1/command': 'POST', '/v1/worldboss': 'GET', '/v1/verify': 'POST', '/v1/import': 'POST',
+  '/v1/guest': 'POST', '/v1/session': 'POST', '/v1/state': 'GET', '/v1/gacha/history': 'GET', '/v1/command': 'POST', '/v1/worldboss': 'GET', '/v1/worldboss/board': 'GET', '/v1/verify': 'POST', '/v1/import': 'POST',
   '/v1/account': 'GET', '/v1/link': 'POST', '/v1/signin': 'POST', '/v1/recovery-code': 'POST', '/v1/recover': 'POST', '/v1/sessions/revoke': 'POST',
   '/v1/account/delete': 'POST', '/v1/account/cancel': 'POST',
   '/v1/token/rotate': 'POST', '/v1/telemetry': 'POST', '/v1/feedback': 'POST', '/v1/admin/telemetry': 'GET', '/v1/admin/feedback': 'GET',
@@ -177,6 +177,7 @@ async function route(request: Request, path: string, deps: ApiDeps): Promise<Res
   if (!deps.limiter.allow(`${writes ? 'cmd' : 'read'}:${accountId}`, writes ? LIMITS.commandPerSecond : LIMITS.readPerSecond, 1000, now)) return limited(1);
   const game = deps.game(accountId);
   if (path === '/v1/worldboss') return worldBossRoute(deps);
+  if (path === '/v1/worldboss/board') return worldBossBoardRoute(request, accountId, deps);
   const session = request.headers.get(SESSION_HEADER) ?? '';
   if (!SESSION.test(session)) return error('session_required', 400);
   const sessionHeaders = { [SESSION_HEADER]: session };
@@ -228,7 +229,7 @@ async function deliverHits(deps: ApiDeps, accountId: string, game: AccountGame, 
   out.headers.delete(HITS_HEADER);
   if (!deps.boss) return out;
   try {
-    const hits = (JSON.parse(raw) as PendingHit[]).map(h => ({ id: `${accountId}:${h.id}`, week: h.week, account: accountId, damage: h.damage, ...(h.boss ? { boss: h.boss } : {}) }));
+    const hits = (JSON.parse(raw) as PendingHit[]).map(h => ({ id: `${accountId}:${h.id}`, week: h.week, account: accountId, damage: h.damage, ...(h.boss ? { boss: h.boss } : {}), ...(h.team ? { team: h.team } : {}) }));
     const r = await deps.boss.fetch(new Request('https://boss/contribute', { method: 'POST', body: JSON.stringify({ hits }), headers: { 'Content-Type': 'application/json' } }));
     if (r.ok) {
       const { taken } = await r.json() as { taken: string[] };
@@ -249,6 +250,19 @@ async function worldBossRoute(deps: ApiDeps): Promise<Response> {
   const res = await deps.boss.fetch(new Request(`https://boss/status?week=${current.week - 1}`));
   const last = res.ok ? await res.json() as { status: PublicBar | null; bars: PublicBar[] } : { status: null, bars: [] };
   return json({ week: current.week, current: current.status, last: last.status, bars: current.bars, lastBars: last.bars });
+}
+
+// Leaderboard (owner 2026-11-28 “เพิ่ม Leader board”): `?boss=all|warden|kragmor|valdrakk|morvane&last=1`. The top
+// rows carry the same anonymous camp handle as chat (never an account id); `you` is the caller's own rank, if it hit.
+async function worldBossBoardRoute(request: Request, accountId: string, deps: ApiDeps): Promise<Response> {
+  if (!deps.boss) return error('world_boss_unavailable', 503);
+  const q = new URL(request.url).searchParams, boss = q.get('boss') ?? 'all', last = q.get('last') === '1';
+  if (!/^(all|warden|kragmor|valdrakk|morvane)$/.test(boss)) return error('invalid_request', 400);
+  const res = await deps.boss.fetch(new Request(`https://boss/board?account=${accountId}&boss=${boss}${last ? '&last=1' : ''}`)).catch(() => null);
+  if (!res?.ok) return error('world_boss_unavailable', 503);
+  const board = await res.json() as Board & { week: number };
+  const rows = await Promise.all(board.rows.map(async (r, i) => ({ rank: i + 1, handle: await chatHandle(r.account), total: r.total, attempts: r.attempts, best: r.best, you: r.account === accountId, ...(r.team ? { team: r.team } : {}) })));
+  return json({ week: board.week, boss, players: board.players, rows, you: board.you });
 }
 
 // P09-02f: the replay audit is for admins only (an account with a row in D1 `admins`, added by the owner; no secret).

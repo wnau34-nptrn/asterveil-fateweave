@@ -132,3 +132,28 @@ describe('intent labels from the resolver (P11-05)', () => {
     expect(intentRuleThai(intent({ summon: ['f2'], damage: 0 }))).toContain('เรียกลูกน้อง');
   });
 });
+
+// Leaderboard (owner 2026-11-28 “เพิ่ม Leader board”): the rank tab is a view of the server's board.
+describe('World Boss page, rank tab', () => {
+  const rows = [
+    { rank: 1, handle: 'ค่าย-AAAAA', total: 9000, attempts: 5, best: 2500, you: false },
+    { rank: 2, handle: 'ค่าย-BBBBB', total: 4200, attempts: 3, best: 1800, you: true },
+  ];
+  it('lists handles by damage, marks the player, and adds their rank when it is past the list', () => {
+    const html = worldBossPage(base(), MAPS, D, null, true, view('rank', { board: { week: W, boss: 'all', players: 2, rows, you: { rank: 2, total: 4200, attempts: 3, best: 1800 } } }));
+    expect(html).toContain('id="wb-tab-rank"');
+    expect(html).toContain('ค่าย-AAAAA'); expect(html).toMatch(/wb-rank-row you"[^>]*aria-current="true"/); expect(html).toContain('(คุณ)');
+    expect(html).not.toContain('wb-rank-you');
+    const far = worldBossPage(base(), MAPS, D, null, true, view('rank', { board: { week: W, boss: 'all', players: 40, rows: [rows[0]!], you: { rank: 31, total: 300, attempts: 1, best: 300 } } }));
+    expect(far).toContain('อันดับของคุณ <b>31</b> / 40');
+  });
+  it('says when it is loading, unavailable, offline or empty; boss picks only in trio weeks', () => {
+    expect(worldBossPage(base(), MAPS, D, null, true, view('rank'))).toContain('กำลังโหลดอันดับ');
+    expect(worldBossPage(base(), MAPS, D, null, true, view('rank', { board: null }))).toContain('โหลดอันดับไม่ได้');
+    expect(worldBossPage(base(), MAPS, D, null, false, view('rank'))).toContain('ต้องเชื่อมต่อเซิร์ฟเวอร์');
+    const empty = worldBossPage(base(), MAPS, D, null, true, view('rank', { board: { week: W, boss: 'all', players: 0, rows: [], you: null } }));
+    expect(empty).toContain('ยังไม่มีใครลงบอสนี้'); expect(empty).toContain('ลงบอสอย่างน้อย 1 ครั้ง');
+    expect(empty).not.toContain('wb-rank-boss-kragmor');
+    expect(worldBossPage(base(), TRIO, D, null, true, view('rank', { board: null }))).toContain('id="wb-rank-boss-kragmor"');
+  });
+});

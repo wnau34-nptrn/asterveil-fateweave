@@ -2,7 +2,7 @@ import { weekOf } from '../core/world/board';
 import { WB_BOSSES, type WbBossId, type WorldBossRules } from '../core/world/types';
 import { isWbBoss, MAX_WB_DAMAGE, sharedHpFor, trioLive, trioSharedHp, type WorldBossShared } from '../core/world/world-boss';
 import type { DurableStateLike } from './account-object';
-import { serverDay } from './ledger';
+import { isTeam, serverDay, type HitTeam } from './ledger';
 
 // P11-04 World Boss, part 1 (docs/design/WORLD_BOSS_P11_04_TH.md); P11-05 trio, step 3 (WORLD_BOSS_TRIO_P11_05_TH.md
 // §5). One Durable Object (name `world-boss`) keeps each week's shared HP bars and every attempt that hit them: one bar
@@ -18,7 +18,8 @@ import { serverDay } from './ledger';
 export type BarBoss = WbBossId | 'warden';
 // `accounts`: accounts that hit the bar; `attempts`: hits taken (both feed the next week's HP).
 export interface BossBar { week: number; boss: BarBoss; hp: number; left: number; accounts: number; attempts: number; opened: number }
-export interface Hit { id: string; week: number; account: string; damage: number; boss?: WbBossId }
+// `team` (leaderboard): the camp level and fielded heroes of the attempt, shown beside the camp's rank.
+export interface Hit { id: string; week: number; account: string; damage: number; boss?: WbBossId; team?: HitTeam }
 export interface BossStore {
   // The bars a week has (none before it opens).
   bars(week: number): BossBar[];
@@ -28,14 +29,21 @@ export interface BossStore {
   // Must insert the hit and update its bar (left, accounts, attempts) atomically.
   take(hit: Hit, applied: number, firstOfAccount: boolean, at: number): void;
   hasAccount(week: number, boss: BarBoss, account: string): boolean;
+  // Leaderboard (owner 2026-11-28 “เพิ่ม Leader board”): accounts of a week ranked by the damage they dealt (every
+  // attempt's own damage, not only what the bar still had), one bar or all bars; ties go to the earlier first hit.
+  board(week: number, boss: BarBoss | undefined, account: string, limit: number): Board;
 }
+// `team`: the team of the camp's best attempt in the board's scope (none for hits from before teams were kept).
+export interface BoardRow { account: string; total: number; attempts: number; best: number; team?: HitTeam }
+export interface Board { rows: BoardRow[]; you: (Omit<BoardRow, 'account'> & { rank: number }) | null; players: number }
+export const BOARD_LIMIT = 20;
 export const barOf = (h: Pick<Hit, 'boss'>): BarBoss => h.boss ?? 'warden';
 
 const HIT_ID = /^[0-9a-f]{32}:w\d{1,6}:a\d{1,2}$/;
 export const isHit = (v: unknown): v is Hit => {
   if (typeof v !== 'object' || v === null) return false;
   const h = v as Record<string, unknown>;
-  return Object.keys(h).length === ('boss' in h ? 5 : 4) && ('boss' in h ? isWbBoss(h.boss) : true)
+  return Object.keys(h).length === 4 + ('boss' in h ? 1 : 0) + ('team' in h ? 1 : 0) && ('boss' in h ? isWbBoss(h.boss) : true) && ('team' in h ? isTeam(h.team) : true)
     && typeof h.id === 'string' && HIT_ID.test(h.id) && Number.isSafeInteger(h.week) && (h.week as number) >= 0
     && typeof h.account === 'string' && h.id.startsWith(`${h.account}:w${h.week}:`) && Number.isSafeInteger(h.damage) && (h.damage as number) >= 1 && (h.damage as number) <= MAX_WB_DAMAGE;
 };
@@ -80,20 +88,35 @@ export class WorldBossHost {
     }
     return { taken, applied };
   }
+  // This week's or last week's leaderboard (`null`: a week outside the window).
+  board(week: number, boss: BarBoss | undefined, account: string, limit = BOARD_LIMIT): (Board & { week: number }) | null {
+    if (!this.ensure(week)) return null;
+    return { week, ...this.store.board(week, boss, account, limit) };
+  }
 }
-
+// The memory store's hits grouped per account like the SQL store's read.
+function aggregate(hits: readonly { account: string; damage: number; at: number; team?: HitTeam }[]): (Agg & { team?: HitTeam })[] {
+  const by = new Map<string, Agg & { team?: HitTeam }>();
+  for (const h of hits) {
+    const r = by.get(h.account) ?? { account: h.account, damage: 0, n: 0, best: 0, at: h.at };
+    if (h.damage > r.best) { r.best = h.damage; if (h.team) r.team = h.team; else delete r.team; }
+    r.damage += h.damage; r.n++; r.at = Math.min(r.at, h.at); by.set(h.account, r);
+  }
+  return [...by.values()];
+}
 export function memoryBossStore(): BossStore & { weeks: BossBar[]; hits: (Hit & { applied: number })[] } {
   const s = {
-    weeks: [] as BossBar[], hits: [] as (Hit & { applied: number })[],
+    weeks: [] as BossBar[], hits: [] as (Hit & { applied: number; at: number })[],
     bars: (week: number) => s.weeks.filter(x => x.week === week).map(b => ({ ...b })),
     open: (bars: readonly BossBar[]) => { s.weeks.push(...bars.map(b => ({ ...b }))); },
     hit: (id: string) => { const h = s.hits.find(x => x.id === id); return h ? { applied: h.applied } : null; },
-    take: (hit: Hit, applied: number, first: boolean) => {
+    take: (hit: Hit, applied: number, first: boolean, at: number) => {
       if (s.hits.some(x => x.id === hit.id)) throw new Error('hit');
       const w = s.weeks.find(x => x.week === hit.week && x.boss === barOf(hit))!; w.left -= applied; w.attempts++; if (first) w.accounts++;
-      s.hits.push({ ...hit, applied });
+      s.hits.push({ ...hit, applied, at });
     },
     hasAccount: (week: number, boss: BarBoss, account: string) => s.hits.some(x => x.week === week && barOf(x) === boss && x.account === account),
+    board: (week: number, boss: BarBoss | undefined, account: string, limit: number) => { const all = aggregate(s.hits.filter(x => x.week === week && (!boss || barOf(x) === boss))); return rankAgg(all, account, limit, a => all.find(r => r.account === a)?.team); },
   };
   return s;
 }
@@ -112,6 +135,8 @@ function migrate(state: DurableStateLike): void {
     for (const q of SCHEMA) sql.exec(q);
     const cols = new Set(sql.exec<{ name: string }>('PRAGMA table_info(hits)').toArray().map(c => c.name));
     if (!cols.has('boss')) sql.exec("ALTER TABLE hits ADD COLUMN boss TEXT NOT NULL DEFAULT 'warden'");
+    // Leaderboard (2026-11-28): the attempt's team, JSON (older hits have none).
+    if (!cols.has('team')) sql.exec('ALTER TABLE hits ADD COLUMN team TEXT');
     sql.exec('CREATE INDEX IF NOT EXISTS hits_bar_account ON hits (week, boss, account)');
     sql.exec('DROP INDEX IF EXISTS hits_week_account');
     if (sql.exec('PRAGMA table_info(weeks)').toArray().length) {
@@ -121,6 +146,15 @@ function migrate(state: DurableStateLike): void {
     }
   });
 }
+type Agg = { account: string; damage: number; n: number; best: number; at: number };
+// Ranked by total damage, then the earlier first hit, then the account id (stable).
+// `teamOf` reads the team of a listed camp's best attempt (only the rows shown are read).
+const rankAgg = (rows: readonly Agg[], account: string, limit: number, teamOf: (account: string) => HitTeam | undefined): Board => {
+  const all = [...rows].sort((a, b) => b.damage - a.damage || a.at - b.at || (a.account < b.account ? -1 : 1));
+  const i = all.findIndex(r => r.account === account), mine = all[i];
+  return { rows: all.slice(0, limit).map(r => { const team = teamOf(r.account); return { account: r.account, total: r.damage, attempts: r.n, best: r.best, ...(team ? { team } : {}) }; }), players: all.length,
+    you: mine ? { rank: i + 1, total: mine.damage, attempts: mine.n, best: mine.best } : null };
+};
 type BarRow = { week: number; boss: string; hp: number; left_hp: number; accounts: number; attempts: number; opened: number };
 export function sqlBossStore(state: DurableStateLike): BossStore {
   const { sql } = state.storage;
@@ -138,11 +172,24 @@ export function sqlBossStore(state: DurableStateLike): BossStore {
     hit(id) { const r = sql.exec<{ applied: number }>('SELECT applied FROM hits WHERE id = ?', id).toArray()[0]; return r ? { applied: r.applied } : null; },
     take(hit, applied, first, at) {
       state.storage.transactionSync(() => {
-        sql.exec('INSERT INTO hits (id, week, account, damage, applied, at, boss) VALUES (?, ?, ?, ?, ?, ?, ?)', hit.id, hit.week, hit.account, hit.damage, applied, at, barOf(hit));
+        sql.exec('INSERT INTO hits (id, week, account, damage, applied, at, boss, team) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', hit.id, hit.week, hit.account, hit.damage, applied, at, barOf(hit), hit.team ? JSON.stringify(hit.team) : null);
         sql.exec('UPDATE bars SET left_hp = left_hp - ?, accounts = accounts + ?, attempts = attempts + 1 WHERE week = ? AND boss = ?', applied, first ? 1 : 0, hit.week, barOf(hit));
       });
     },
     hasAccount(week, boss, account) { return sql.exec('SELECT 1 FROM hits WHERE week = ? AND boss = ? AND account = ? LIMIT 1', week, boss, account).toArray().length > 0; },
+    // One grouped read per account of the week (a week holds at most a few attempts per account), ranked like the memory store.
+    board(week, boss, account, limit) {
+      const rows = boss
+        ? sql.exec<Agg>('SELECT account, SUM(damage) AS damage, COUNT(*) AS n, MAX(damage) AS best, MIN(at) AS at FROM hits WHERE week = ? AND boss = ? GROUP BY account', week, boss).toArray()
+        : sql.exec<Agg>('SELECT account, SUM(damage) AS damage, COUNT(*) AS n, MAX(damage) AS best, MIN(at) AS at FROM hits WHERE week = ? GROUP BY account', week).toArray();
+      const teamOf = (a: string): HitTeam | undefined => {
+        const r = (boss ? sql.exec<{ team: string | null }>('SELECT team FROM hits WHERE week = ? AND boss = ? AND account = ? ORDER BY damage DESC, at, id LIMIT 1', week, boss, a)
+          : sql.exec<{ team: string | null }>('SELECT team FROM hits WHERE week = ? AND account = ? ORDER BY damage DESC, at, id LIMIT 1', week, a)).toArray()[0];
+        if (!r?.team) return undefined;
+        try { const t: unknown = JSON.parse(r.team); return isTeam(t) ? t : undefined; } catch { return undefined; }
+      };
+      return rankAgg(rows, account, limit, teamOf);
+    },
   };
 }
 
@@ -163,6 +210,14 @@ export async function handleBossRequest(host: WorldBossHost, request: Request): 
     if (!Number.isSafeInteger(week) || !isBarBoss(boss)) return reply({ error: 'invalid_request' }, 400);
     const bars = host.bars(week) ?? [];
     return reply({ week: host.week(), status: publicBar(bars.find(b => b.boss === boss) ?? null), bars: bars.map(b => publicBar(b)!) });
+  }
+  // `GET /board?account=&boss=&last=1`: this week's (or last week's) leaderboard; `boss` absent or `all` = every bar.
+  if (url.pathname === '/board' && request.method === 'GET') {
+    const account = url.searchParams.get('account') ?? '', boss = url.searchParams.get('boss') ?? 'all';
+    if (!/^[0-9a-f]{32}$/.test(account) || (boss !== 'all' && !isBarBoss(boss))) return reply({ error: 'invalid_request' }, 400);
+    const week = host.week() - (url.searchParams.get('last') === '1' ? 1 : 0);
+    const board = host.board(week, boss === 'all' ? undefined : boss as BarBoss, account);
+    return board ? reply(board) : reply({ error: 'invalid_request' }, 400);
   }
   if (url.pathname === '/contribute' && request.method === 'POST') {
     let body: unknown;

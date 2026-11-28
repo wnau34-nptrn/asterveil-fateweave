@@ -176,7 +176,7 @@ describe('P11-04 World Boss on the server', () => {
     const first = s.send(cmd); const reply = body(first.answer) as Extract<CommandReply, { status: 'applied' }>;
     expect(reply.status).toBe('applied'); expect(reply.receipts).toEqual([`wb:w${W}:a1`]);
     const ev = reply.events.find(e => e.type === 'wbAttempt') as unknown as { damage: number };
-    expect(s.store.pendingHits()).toEqual([{ id: `w${W}:a1`, week: W, damage: ev.damage }]);
+    expect(s.store.pendingHits()).toEqual([{ id: `w${W}:a1`, week: W, damage: ev.damage, team: expect.objectContaining({ level: expect.any(Number) }) }]);
     // A new request repeating the attempt number is refused as stale.
     expect(body(s.send(cmd).answer)).toMatchObject({ status: 'rejected', reason: 'stale' });
     // Retry after midnight of the next week: the same stored answer; no second receipt or hit.

@@ -1,5 +1,6 @@
 import type { ClientEvent } from '../core/command/client-view';
-import type { GachaEntry, SweepReward, WbBossId } from '../core/world/types';
+import type { GachaEntry, MapDefinition, Profile, SweepReward, WbBossId } from '../core/world/types';
+import { levelOf } from '../core/world/world';
 
 // P09 reward ledger (docs/design/p09/LEDGER_P09_TH.md). Online, the server owns the calendar: it stamps its own day on
 // `sweep`, `claimBoard` and `depart` (the device's day is refused) and writes each payout of a sweep or a quest-board
@@ -57,7 +58,22 @@ export function ledgerRows(events: readonly ClientEvent[], sweepCount: number, d
 // P11-04: an attempt's hit on the shared HP, waiting in the account's outbox until the World Boss object has taken it.
 // `id` is local to the account (`w<week>:a<attempt>`); the Worker prefixes the account id. `boss` (P11-05): the trio boss
 // whose bar it hits (missing: the warden).
-export interface PendingHit { id: string; week: number; damage: number; boss?: WbBossId }
-export function hitsOf(events: readonly ClientEvent[]): PendingHit[] {
-  return events.flatMap(e => e.type === 'wbAttempt' ? [{ id: `w${e.week}:a${e.attempt}`, week: e.week, damage: e.damage, ...(e.boss ? { boss: e.boss } : {}) }] : []);
+// `team` (leaderboard, owner 2026-11-28 “เห็นรายละเอียดของทีมที่ใช้ เลเวลทีม”): the camp level and the fielded heroes with
+// their stars when the attempt was fought (the World Boss fields the camp's deployed team).
+export interface HitTeam { level: number; heroes: [string, number][] }
+export interface PendingHit { id: string; week: number; damage: number; boss?: WbBossId; team?: HitTeam }
+export function teamOf(profile: Profile, home: Pick<MapDefinition, 'progression'>): HitTeam {
+  return { level: levelOf(home, profile), heroes: profile.party.deployed.map(id => [id, profile.members[id]?.stars ?? 1]) };
+}
+export const MAX_TEAM = 5;
+export const isTeam = (v: unknown): v is HitTeam => {
+  if (typeof v !== 'object' || v === null) return false;
+  const t = v as Record<string, unknown>;
+  return Object.keys(t).length === 2 && Number.isSafeInteger(t.level) && (t.level as number) >= 1 && (t.level as number) <= 999
+    && Array.isArray(t.heroes) && t.heroes.length >= 1 && t.heroes.length <= MAX_TEAM
+    && t.heroes.every(h => Array.isArray(h) && h.length === 2 && typeof h[0] === 'string' && /^[a-z]{1,24}$/.test(h[0]) && Number.isSafeInteger(h[1]) && h[1] >= 1 && h[1] <= 20);
+};
+export function hitsOf(events: readonly ClientEvent[], profile?: Profile, home?: Pick<MapDefinition, 'progression'>): PendingHit[] {
+  const team = profile && home ? teamOf(profile, home) : undefined;
+  return events.flatMap(e => e.type === 'wbAttempt' ? [{ id: `w${e.week}:a${e.attempt}`, week: e.week, damage: e.damage, ...(e.boss ? { boss: e.boss } : {}), ...(team ? { team } : {}) }] : []);
 }

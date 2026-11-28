@@ -3,7 +3,7 @@ import type { CloudSaveUpload } from '../core/cloud/cloud-save';
 import type { Game } from '../core/save/expedition-save';
 import { sha256Hex } from './accounts';
 import type { RateLimiter } from './rate-limit';
-import type { LedgerRow } from './ledger';
+import { isTeam, type HitTeam, type LedgerRow } from './ledger';
 import { isWbBoss, type WorldBossShared } from '../core/world/world-boss';
 import { OTHER_DEVICE, type GameHost, type HostState, type HostStore, type ImportRecord, type LogEntry, type Snapshot } from './game-host';
 
@@ -43,7 +43,9 @@ const SCHEMA = [
 // Columns added after a table was first made (an object created earlier gets them on its next start): the log's after
 // P09-02b; P11-05 the trio boss of a hit and the boss shards a payout recorded.
 const ADDED_COLUMNS: readonly [string, string, string][] = [['log', 'day', 'INTEGER'], ['log', 'refused', 'TEXT'], ['log', 'boss', 'TEXT'],
-  ['wb_hits', 'boss', 'TEXT'], ['reward_ledger', 'boss', 'TEXT'], ['reward_ledger', 'shards', 'INTEGER'], ['reward_ledger', 'detail', 'TEXT']];
+  ['wb_hits', 'boss', 'TEXT'], ['wb_hits', 'team', 'TEXT'], ['reward_ledger', 'boss', 'TEXT'], ['reward_ledger', 'shards', 'INTEGER'], ['reward_ledger', 'detail', 'TEXT']];
+// A stored team that is missing or no longer well-formed is left off the hit (the leaderboard then shows none).
+const parseTeam = (raw: string | null): HitTeam | undefined => { if (!raw) return undefined; try { const t: unknown = JSON.parse(raw); return isTeam(t) ? t : undefined; } catch { return undefined; } };
 const STATE_UPSERT = 'INSERT INTO state (id, game, book, updated_at) VALUES (1, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET game = excluded.game, book = excluded.book, updated_at = excluded.updated_at';
 const SNAPSHOT_UPSERT = 'INSERT INTO snapshots (seq, game, origin, at) VALUES (?, ?, ?, ?) ON CONFLICT(seq) DO UPDATE SET game = excluded.game, origin = excluded.origin, at = excluded.at';
 const gameText = (game: Game | null) => game ? JSON.stringify(game) : null;
@@ -74,7 +76,7 @@ export function sqlStore(state: DurableStateLike): HostStore {
         sql.exec(STATE_UPSERT, gameText(next.game), JSON.stringify(next.book), e.at);
         sql.exec('INSERT INTO log (seq, request_id, command, seeds, status, content_version, at, day, refused, boss) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
           e.seq, e.requestId, JSON.stringify(e.command), JSON.stringify(e.seeds), e.status, e.contentVersion, e.at, e.day ?? null, e.refused ?? null, e.boss ? JSON.stringify(e.boss) : null);
-        for (const h of hits) sql.exec('INSERT INTO wb_hits (id, week, damage, sent, at, boss) VALUES (?, ?, ?, 0, ?, ?)', h.id, h.week, h.damage, e.at, h.boss ?? null);
+        for (const h of hits) sql.exec('INSERT INTO wb_hits (id, week, damage, sent, at, boss, team) VALUES (?, ?, ?, 0, ?, ?, ?)', h.id, h.week, h.damage, e.at, h.boss ?? null, h.team ? JSON.stringify(h.team) : null);
         if (snapshot) sql.exec(SNAPSHOT_UPSERT, snapshot.seq, gameText(snapshot.game), snapshot.origin, snapshot.at);
         // A receipt that exists already fails the INSERT and rolls the whole command back.
         for (const r of ledger) sql.exec('INSERT INTO reward_ledger (receipt, seq, kind, period, ref, reward, day, at, boss, shards, detail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
@@ -83,8 +85,8 @@ export function sqlStore(state: DurableStateLike): HostStore {
       cached = copy(next);
     },
     pendingHits() {
-      return sql.exec<{ id: string; week: number; damage: number; boss: string | null }>('SELECT id, week, damage, boss FROM wb_hits WHERE sent = 0 ORDER BY at, id LIMIT 64').toArray()
-        .map(r => ({ id: r.id, week: r.week, damage: r.damage, ...(r.boss && isWbBoss(r.boss) ? { boss: r.boss } : {}) }));
+      return sql.exec<{ id: string; week: number; damage: number; boss: string | null; team: string | null }>('SELECT id, week, damage, boss, team FROM wb_hits WHERE sent = 0 ORDER BY at, id LIMIT 64').toArray()
+        .map(r => { const team = parseTeam(r.team); return { id: r.id, week: r.week, damage: r.damage, ...(r.boss && isWbBoss(r.boss) ? { boss: r.boss } : {}), ...(team ? { team } : {}) }; });
     },
     markHits(ids) { for (const id of ids) sql.exec('UPDATE wb_hits SET sent = 1 WHERE id = ?', id); },
     hasReceipt(receipt) { return sql.exec('SELECT 1 FROM reward_ledger WHERE receipt = ?', receipt).toArray().length > 0; },

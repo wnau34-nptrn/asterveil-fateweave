@@ -106,27 +106,27 @@ describe('OD-54 stage C: camp lessons follow the NPC cards and newly opened syst
   it('shows a system once, only when the map that opens it was the last one cleared', () => {
     const after1 = claimedAll({ ...fresh(), cleared: [MAPS[0]!.id] });
     expect(lobbyLesson(after1, MAPS, ['home'])).toMatchObject({ id: 'open:quests', target: '#lobby-board' });
-    // OD-59: after map 1 the World Boss and the fate-weave cabinet open too, each pointed at once, in this order.
-    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests'])).toMatchObject({ id: 'open:wboss', target: '#lobby-wboss' });
-    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss'])).toMatchObject({ id: 'open:gacha', target: '#lobby-gacha' });
+    // OD-59: after map 1 the fate-weave cabinet opens too (the World Boss waits for map 3, owner 2026-11-28).
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests'])).toMatchObject({ id: 'open:gacha', target: '#lobby-gacha' });
     // Owner 2026-11-28: AUTO opens with map 2 (after map 1); the camp says so, the next ordinary battle teaches the button.
-    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss', 'open:gacha'])).toMatchObject({ id: 'open:auto', target: '#lobby-depart' });
-    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:auto'])).toMatchObject({ id: 'open:team' });
-    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:auto', 'open:team'])?.id).toBe('farm');
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:gacha'])).toMatchObject({ id: 'open:auto', target: '#lobby-depart' });
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:gacha', 'open:auto'])).toMatchObject({ id: 'open:team' });
+    expect(lobbyLesson(after1, MAPS, ['home', 'open:quests', 'open:gacha', 'open:auto', 'open:team'])?.id).toBe('farm');
     // The ticket pointer: after a first pull, once 10 tickets are waiting again.
-    const pulled = { ...after1, gacha: { tickets: 10, points: 10, serial: 1, history: [] } }, all: LessonId[] = ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:auto', 'open:team'];
+    const pulled = { ...after1, gacha: { tickets: 10, points: 10, serial: 1, history: [] } }, all: LessonId[] = ['home', 'open:quests', 'open:gacha', 'open:auto', 'open:team'];
     expect(lobbyLesson(pulled, MAPS, all)).toMatchObject({ id: 'tickets', target: '#lobby-gacha' });
     expect(lobbyLesson({ ...pulled, gacha: { ...pulled.gacha, tickets: 9 } }, MAPS, all)?.id).toBe('farm');
     const after2 = { ...after1, cleared: MAPS.slice(0, 2).map(m => m.id) };
     expect(lobbyLesson(after2, MAPS, ['home'])?.id).toBe('open:market');
     // A company far ahead does not get every earlier system at once.
     const after3 = { ...after1, cleared: MAPS.slice(0, 3).map(m => m.id) };
-    expect(lobbyLesson(after3, MAPS, ['home'])?.id).toBe('open:fuse');
+    expect(lobbyLesson(after3, MAPS, ['home'])).toMatchObject({ id: 'open:wboss', target: '#lobby-wboss' });
+    expect(lobbyLesson(after3, MAPS, ['home', 'open:wboss'])?.id).toBe('open:fuse');
     expect(lobbyLesson({ ...after3, veteran: true }, MAPS, [])).toBeUndefined();
   });
 
   it('farming lessons: replay pointer last, sweep row in the maps sheet, hunt and boss targets in the hunt sheet', () => {
-    const m1 = MAPS[0]!, after1 = claimedAll({ ...fresh(), cleared: [m1.id] }), done: LessonId[] = ['home', 'open:quests', 'open:wboss', 'open:gacha', 'open:auto', 'open:team'];
+    const m1 = MAPS[0]!, after1 = claimedAll({ ...fresh(), cleared: [m1.id] }), done: LessonId[] = ['home', 'open:quests', 'open:gacha', 'open:auto', 'open:team'];
     // The replay pointer waits for the camp's own lessons, then points at the maps button.
     expect(lobbyLesson(after1, MAPS, ['home'])?.id).toBe('open:quests');
     expect(lobbyLesson(after1, MAPS, done)).toMatchObject({ id: 'farm', target: '#lobby-maps' });
@@ -148,7 +148,7 @@ describe('OD-54 stage C: camp lessons follow the NPC cards and newly opened syst
     const after3 = { ...after1, cleared: MAPS.slice(0, 3).map(m => m.id) };
     expect(lobbyLesson(after3, MAPS, ['home', 'hunt'], 'hunt')).toMatchObject({ id: 'bosstarget', target: '#boss-target' });
     expect(lobbyLesson(after3, MAPS, ['home', 'hunt', 'bosstarget'], 'hunt')?.id).not.toBe('bosstarget');
-    expect(lobbyLesson(after3, MAPS, ['home', 'open:fuse'], undefined)).toMatchObject({ id: 'open:bossCharm', target: '#lobby-tab-hunt' });
+    expect(lobbyLesson(after3, MAPS, ['home', 'open:wboss', 'open:fuse'], undefined)).toMatchObject({ id: 'open:bossCharm', target: '#lobby-tab-hunt' });
     // A veteran company never gets them.
     expect(lobbyLesson({ ...after3, veteran: true }, MAPS, [], 'hunt')).toBeUndefined();
   });

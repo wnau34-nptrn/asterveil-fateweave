@@ -129,7 +129,7 @@ test('camp after the first clear: replay pointer at the maps button, then the sw
 });
 
 test('camp after map 3: the hunt target, then the boss target, point inside the hunt sheet', async ({ page }, info) => {
-  await openCamp(page, clearedCamp(3), ['home', 'farm', 'sweep', 'open:fuse', 'open:bossCharm', 'open:hard']);
+  await openCamp(page, clearedCamp(3), ['home', 'farm', 'sweep', 'open:wboss', 'open:fuse', 'open:bossCharm', 'open:hard']);
   await page.locator('#lobby-tab-hunt').click();
   await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'hunt'); expect(await ringOver(page, '#hunt-target')).toBe(true);
   await page.locator('#lesson-ok').click();
@@ -139,12 +139,17 @@ test('camp after map 3: the hunt target, then the boss target, point inside the 
   await page.locator('#lesson-ok').click(); await expect(page.locator('#lesson-layer')).toBeHidden();
 });
 
-// OD-59: after map 1 the camp points at the World Boss banner, then at the new fate-weave banner (10 tickets waiting).
-test('camp after map 1 introduces the World Boss and the fate-weave cabinet on their banners', async ({ page }, info) => {
+// OD-59: after map 1 the camp points at the new fate-weave banner (10 tickets waiting); the World Boss banner waits for
+// map 3 (owner 2026-11-28) and is pointed at then.
+test('camp after map 3 introduces the World Boss on its banner', async ({ page }) => {
+  await openCamp(page, clearedCamp(3), ['home']);
+  await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'open:wboss'); expect(await ringOver(page, '#lobby-wboss')).toBe(true);
+  await expect(bubble(page)).toContainText('อันดับ');
+});
+test('camp after map 1 introduces the fate-weave cabinet on its banner (no World Boss yet)', async ({ page }, info) => {
   const p = clearedCamp(1); p.gacha = { tickets: 10, points: 0, serial: 0, history: [] };
   await openCamp(page, p, ['home', 'open:quests']);
-  await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'open:wboss'); expect(await ringOver(page, '#lobby-wboss')).toBe(true);
-  await page.locator('#lesson-ok').click();
+  await expect(page.locator('#lobby-wboss')).toHaveCount(0);
   await expect(bubble(page)).toHaveAttribute('data-lesson-id', 'open:gacha'); expect(await ringOver(page, '#lobby-gacha')).toBe(true);
   await expect(page.locator('#lobby-gacha')).toContainText('ตั๋ว 10');
   await page.screenshot({ path: info.outputPath('lesson-gacha-390.png') });
