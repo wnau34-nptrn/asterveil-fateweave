@@ -1,0 +1,277 @@
+{
+  "files": {
+    "NOTES.md": {
+      "sha256": "841036dd3971b07f7e1c9e50a759842279fdcc947ec8633a3105cc7becdd169c"
+    },
+    "assemble.py": {
+      "sha256": "76411b47f1f33a460862f5a793aa03c4e56a0f69c4b28658e1763b90921beaa9"
+    },
+    "pet_assist_fx.json": {
+      "sha256": "b5929468fc9fc48541c5272eb45c929761237d939c03635ee44aca5fbf96afc6"
+    },
+    "pet_assist_fx.webp": {
+      "sha256": "422da1d22466daf11cb48abbecc173b23fbaec54e7dff9660c1850d0f901f8c1",
+      "dimensions": [
+        768,
+        1536
+      ],
+      "mode": "RGBA",
+      "alphaExtrema": [
+        0,
+        255
+      ]
+    },
+    "prompts.json": {
+      "sha256": "6913e6ec263e166e5436422d275527257b8d7659d793c813e53a4224328b5369"
+    },
+    "seeds.json": {
+      "sha256": "1af0cc0e9c4b1f10372335ab7efed959539000df84eb725c37fc54f6764d4a5c"
+    },
+    "storyboard_390.png": {
+      "sha256": "4cb8969a7ff10684c77e423868c3aa0d87b73e17c6c86529769520cc65e14482",
+      "dimensions": [
+        390,
+        3613
+      ],
+      "mode": "RGB",
+      "alphaExtrema": null
+    }
+  },
+  "cells": {
+    "meadow_fox_prepare": {
+      "alphaExtrema": [
+        0,
+        187
+      ],
+      "alphaBounds": [
+        60,
+        103,
+        158,
+        194
+      ],
+      "radiusCssPxAtAlpha30": 38.6
+    },
+    "meadow_fox_peak": {
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBounds": [
+        43,
+        87,
+        214,
+        220
+      ],
+      "radiusCssPxAtAlpha30": 47.2
+    },
+    "meadow_fox_fade": {
+      "alphaExtrema": [
+        0,
+        130
+      ],
+      "alphaBounds": [
+        37,
+        87,
+        199,
+        208
+      ],
+      "radiusCssPxAtAlpha30": 45.0
+    },
+    "thicket_piglet_prepare": {
+      "alphaExtrema": [
+        0,
+        209
+      ],
+      "alphaBounds": [
+        46,
+        142,
+        195,
+        201
+      ],
+      "radiusCssPxAtAlpha30": 42.8
+    },
+    "thicket_piglet_peak": {
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBounds": [
+        32,
+        83,
+        223,
+        192
+      ],
+      "radiusCssPxAtAlpha30": 47.4
+    },
+    "thicket_piglet_fade": {
+      "alphaExtrema": [
+        0,
+        130
+      ],
+      "alphaBounds": [
+        37,
+        83,
+        217,
+        180
+      ],
+      "radiusCssPxAtAlpha30": 46.9
+    },
+    "rift_crystal_moth_prepare": {
+      "alphaExtrema": [
+        0,
+        209
+      ],
+      "alphaBounds": [
+        66,
+        80,
+        187,
+        135
+      ],
+      "radiusCssPxAtAlpha30": 30.6
+    },
+    "rift_crystal_moth_peak": {
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBounds": [
+        65,
+        86,
+        193,
+        160
+      ],
+      "radiusCssPxAtAlpha30": 30.1
+    },
+    "rift_crystal_moth_fade": {
+      "alphaExtrema": [
+        0,
+        130
+      ],
+      "alphaBounds": [
+        67,
+        89,
+        189,
+        158
+      ],
+      "radiusCssPxAtAlpha30": 28.2
+    },
+    "fort_gargoyle_pup_prepare": {
+      "alphaExtrema": [
+        0,
+        209
+      ],
+      "alphaBounds": [
+        38,
+        96,
+        215,
+        194
+      ],
+      "radiusCssPxAtAlpha30": 43.8
+    },
+    "fort_gargoyle_pup_peak": {
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBounds": [
+        43,
+        96,
+        215,
+        201
+      ],
+      "radiusCssPxAtAlpha30": 42.6
+    },
+    "fort_gargoyle_pup_fade": {
+      "alphaExtrema": [
+        0,
+        130
+      ],
+      "alphaBounds": [
+        36,
+        116,
+        218,
+        196
+      ],
+      "radiusCssPxAtAlpha30": 42.9
+    },
+    "forest_lantern_owl_prepare": {
+      "alphaExtrema": [
+        0,
+        209
+      ],
+      "alphaBounds": [
+        46,
+        100,
+        204,
+        187
+      ],
+      "radiusCssPxAtAlpha30": 40.7
+    },
+    "forest_lantern_owl_peak": {
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBounds": [
+        28,
+        79,
+        223,
+        195
+      ],
+      "radiusCssPxAtAlpha30": 48.2
+    },
+    "forest_lantern_owl_fade": {
+      "alphaExtrema": [
+        0,
+        130
+      ],
+      "alphaBounds": [
+        28,
+        69,
+        226,
+        180
+      ],
+      "radiusCssPxAtAlpha30": 50.2
+    },
+    "gate_starveil_slime_prepare": {
+      "alphaExtrema": [
+        0,
+        209
+      ],
+      "alphaBounds": [
+        55,
+        125,
+        201,
+        187
+      ],
+      "radiusCssPxAtAlpha30": 36.8
+    },
+    "gate_starveil_slime_peak": {
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBounds": [
+        35,
+        97,
+        219,
+        190
+      ],
+      "radiusCssPxAtAlpha30": 45.6
+    },
+    "gate_starveil_slime_fade": {
+      "alphaExtrema": [
+        0,
+        130
+      ],
+      "alphaBounds": [
+        33,
+        119,
+        223,
+        187
+      ],
+      "radiusCssPxAtAlpha30": 44.8
+    }
+  },
+  "transparentBorderPx": 20
+}

@@ -1,0 +1,182 @@
+{
+  "image": "pet_assist_fx.webp",
+  "width": 768,
+  "height": 1536,
+  "cellSize": 256,
+  "columns": [
+    "prepare",
+    "peak",
+    "fade"
+  ],
+  "reducedMotion": "peak",
+  "pivot": {
+    "x": 0.5,
+    "y": 0.5
+  },
+  "rows": [
+    {
+      "id": "meadow_fox",
+      "anchor": "target_foe_center",
+      "frames": [
+        "meadow_fox_prepare",
+        "meadow_fox_peak",
+        "meadow_fox_fade"
+      ]
+    },
+    {
+      "id": "thicket_piglet",
+      "anchor": "hero_center",
+      "frames": [
+        "thicket_piglet_prepare",
+        "thicket_piglet_peak",
+        "thicket_piglet_fade"
+      ]
+    },
+    {
+      "id": "rift_crystal_moth",
+      "anchor": "above_foe_head",
+      "frames": [
+        "rift_crystal_moth_prepare",
+        "rift_crystal_moth_peak",
+        "rift_crystal_moth_fade"
+      ]
+    },
+    {
+      "id": "fort_gargoyle_pup",
+      "anchor": "hero_center",
+      "frames": [
+        "fort_gargoyle_pup_prepare",
+        "fort_gargoyle_pup_peak",
+        "fort_gargoyle_pup_fade"
+      ]
+    },
+    {
+      "id": "forest_lantern_owl",
+      "anchor": "hero_center",
+      "frames": [
+        "forest_lantern_owl_prepare",
+        "forest_lantern_owl_peak",
+        "forest_lantern_owl_fade"
+      ]
+    },
+    {
+      "id": "gate_starveil_slime",
+      "anchor": "hero_center",
+      "frames": [
+        "gate_starveil_slime_prepare",
+        "gate_starveil_slime_peak",
+        "gate_starveil_slime_fade"
+      ]
+    }
+  ],
+  "frames": {
+    "meadow_fox_prepare": {
+      "x": 0,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    "meadow_fox_peak": {
+      "x": 256,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    "meadow_fox_fade": {
+      "x": 512,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    "thicket_piglet_prepare": {
+      "x": 0,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    },
+    "thicket_piglet_peak": {
+      "x": 256,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    },
+    "thicket_piglet_fade": {
+      "x": 512,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    },
+    "rift_crystal_moth_prepare": {
+      "x": 0,
+      "y": 512,
+      "w": 256,
+      "h": 256
+    },
+    "rift_crystal_moth_peak": {
+      "x": 256,
+      "y": 512,
+      "w": 256,
+      "h": 256
+    },
+    "rift_crystal_moth_fade": {
+      "x": 512,
+      "y": 512,
+      "w": 256,
+      "h": 256
+    },
+    "fort_gargoyle_pup_prepare": {
+      "x": 0,
+      "y": 768,
+      "w": 256,
+      "h": 256
+    },
+    "fort_gargoyle_pup_peak": {
+      "x": 256,
+      "y": 768,
+      "w": 256,
+      "h": 256
+    },
+    "fort_gargoyle_pup_fade": {
+      "x": 512,
+      "y": 768,
+      "w": 256,
+      "h": 256
+    },
+    "forest_lantern_owl_prepare": {
+      "x": 0,
+      "y": 1024,
+      "w": 256,
+      "h": 256
+    },
+    "forest_lantern_owl_peak": {
+      "x": 256,
+      "y": 1024,
+      "w": 256,
+      "h": 256
+    },
+    "forest_lantern_owl_fade": {
+      "x": 512,
+      "y": 1024,
+      "w": 256,
+      "h": 256
+    },
+    "gate_starveil_slime_prepare": {
+      "x": 0,
+      "y": 1280,
+      "w": 256,
+      "h": 256
+    },
+    "gate_starveil_slime_peak": {
+      "x": 256,
+      "y": 1280,
+      "w": 256,
+      "h": 256
+    },
+    "gate_starveil_slime_fade": {
+      "x": 512,
+      "y": 1280,
+      "w": 256,
+      "h": 256
+    }
+  }
+}
