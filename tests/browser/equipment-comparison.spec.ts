@@ -29,7 +29,7 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
     await page.screenshot({path:info.outputPath('stat-help.png')});
     await page.locator('#character-tab-skills').click();await page.locator('#character-tab-skills').click();await page.locator('#skill-selection').selectOption('bash');await expect(page.locator('.character-skills [data-skill=bash]')).toContainText('อิงพลังโจมตี');
     await page.locator('#skill-selection').selectOption('rally');await expect(page.locator('.character-skills [data-skill=rally]')).toContainText('ผลพิเศษ');
-    await page.locator('#character-tab-gear').click();await page.locator('#pick-found-1').click();await expect(page.locator('#compare-found-1')).toBeDisabled();
+    await page.locator('#character-tab-gear').click();await page.locator('#pick-found-1').click();await expect(page.locator('#compare-found-1')).toBeDisabled();await page.keyboard.press('Escape');
     await page.locator('#pick-found-0').click();await page.locator('#compare-found-0').click();await expect(page.locator('#comparison-title')).toBeVisible();
     const expected=wear(game.run,map,lookup,'guardian','found',0).state,h=memberDef(lookup, map, expected, 'guardian')!;
     await expect(page.locator('[data-stat=attack] td').nth(1)).toHaveText(String(h.attack));
@@ -46,8 +46,8 @@ for(const [width,height,touch] of [[320,568,true],[390,844,true],[1366,768,false
       await page.setViewportSize({width,height});await expect(page.locator('#orientation-gate')).not.toBeVisible();await expect(page.locator('#comparison-title')).toBeVisible();
     }
     await page.keyboard.press('w');await page.keyboard.press('b');expect(await saved()).toBe(initial);
-    await page.keyboard.press('Escape');await expect(page.locator('#comparison-title')).toHaveCount(0);await expect(page.locator('#compare-found-0')).toBeFocused();
-    await page.locator('#compare-found-0').click();await page.locator('#comparison-equip').click();
+    await page.keyboard.press('Escape');await expect(page.locator('#comparison-title')).toHaveCount(0);await expect(page.locator('#pick-found-0')).toBeFocused();
+    await page.locator('#pick-found-0').click();await page.locator('#compare-found-0').click();await page.locator('#comparison-equip').click();
     const equipped=parseGame(await saved(),map,lookup).run!;expect(equipped.hp.guardian).toBe(11);expect(equipped.members.guardian!.gear!.weapon!.level).toBe(8);
     expect(equipped.steps).toBe(game.run.steps);expect(equipped.rolls).toBe(game.run.rolls);
     await page.locator('#character-tab-overview').click();await expect(page.locator('#character-stat-attack strong')).toHaveText(String(h.attack));
