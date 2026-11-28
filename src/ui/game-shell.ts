@@ -734,7 +734,7 @@ export class GameShell {
       : e.type === 'claimed' ? `ได้รับรางวัลเควสต์ · ${rewardText(this.map.sideQuests.find(q => q.id === e.questId)!.reward)}` : e.type === 'party' && e.heroId && e.lane ? `จัดแผนแล้ว · ${name(e.heroId)}ยืน${laneName(e.lane)}` : e.type === 'party' && e.auto ? this.autoTeamText(result.profile, !!e.changed) : e.type === 'party' && e.presetAction ? this.presetText(result.profile, e.preset!, e.presetAction, e.left) : 'จัดทีมแล้ว';
     this.lobbyCheer = e.type === 'hired' || e.type === 'upgraded' ? e.heroId : '';
     // The camp NPC whose service just succeeded cheers once.
-    sfx.play(({ hired: 'coin', upgraded: 'upgrade', dismissed: 'close', talent: 'buff', equipped: 'guard', salvaged: 'anvil', forged: 'anvil', smelted: 'anvil', brewed: 'potion', claimed: 'claim', bought: 'coin', refreshed: 'coin', swept: 'claim', boardClaimed: 'claim', wbClaimed: 'claim' } as Partial<Record<string, SfxName>>)[e.type] ?? 'click');
+    sfx.play(({ hired: 'coin', upgraded: 'upgrade', dismissed: 'close', talent: 'buff', equipped: 'guard', salvaged: 'anvil', forged: 'anvil', smelted: 'anvil', brewed: 'potion', hatched: 'claim', claimed: 'claim', bought: 'coin', refreshed: 'coin', swept: 'claim', boardClaimed: 'claim', wbClaimed: 'claim' } as Partial<Record<string, SfxName>>)[e.type] ?? 'click');
     this.npcCheer = e.type === 'bought' || e.type === 'refreshed' ? 'broker' : e.type === 'claimed' ? this.map.sideQuests.find(q => q.id === e.questId)!.npc as NpcId
       : ({ hired: 'broker', talent: 'trainer', equipped: 'keeper', salvaged: 'keeper', forged: 'smith', smelted: 'smith', brewed: 'herbalist' } as Partial<Record<string, NpcId>>)[e.type];
     if(e.type==='forged'&&e.action==='enhance')this.lobby.forgeEnhanced(this.game.profile,e.uid);

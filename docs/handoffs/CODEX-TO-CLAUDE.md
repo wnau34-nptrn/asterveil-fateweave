@@ -1,3 +1,8 @@
+## 2026-11-28 — PET-3b แอนิเมชันฟักไข่ (Claude · `feature/pet-3b-hatch-animation`)
+
+- เจ้าของขอ “อยากให้มี animation ฟักไข่”: overlay `.pet-hatch` ใน `lobby-ui.ts` (`hatchOverlay`) + CSS ใน `pets.css` · ไข่วาดด้วยโค้ด (สั่น→ร้าว→แตก+แฟลช→สัตว์เด้งออก) · ลดการเคลื่อนไหว/วาดซ้ำ = ผลสุดท้าย · เสียง `claim` เมื่อฟัก · ไม่เปลี่ยนกฎ/เซฟ
+- เทสต์: `tests/browser/pets-camp-map.spec.ts` 3 ผ่าน (รวมแอนิเมชันแบบมี motion) · ภาพ/คลิป → [ผลตรวจ](../validation/pets/pet3/README_TH.md) · ยังเปิด: ภาพไข่จริงจาก Codex (ถ้าเจ้าของต้องการ), เจ้าของดู motion
+
 ## 2026-11-28 — PET-3 สัตว์เลี้ยงในค่ายและบนแผนที่ (Claude · `feature/pet-3-camp-map-art`)
 
 - OD-63: นำ ART-PET-002 (PR #55, เจ้าของอนุมัติภาพ 2026-11-28) เข้า `public/assets/pets/` (lossless ไม่แก้) · `ui/pet-art.ts` CSS sprite · รังสัตว์ `#pet-den` ในค่าย + หน้า `ui/pet-panel.ts` (ฟักไข่/เลือกพา/ไม่พา ผ่าน `hatchEgg`/`choosePet` เดิม) · แผนที่: สัตว์ตามหลังผู้นำ 1 ช่อง (ภาพเท่านั้น), ชิปพรใน HUD, จุดตะเกียง `petSightings` ในหมอก
