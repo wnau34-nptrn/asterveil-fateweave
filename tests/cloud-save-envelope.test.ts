@@ -20,9 +20,9 @@ const localSave = (): string => {
   return s.data.get(expeditionKey)!;
 };
 const upload = (payload: string, patch: Partial<CloudSaveUpload> = {}): CloudSaveUpload => ({
-  format: CLOUD_FORMAT, requestId: 'req_0123456789abcdef', baseRevision: 0, saveVersion: 70, payload, payloadBytes: utf8Bytes(payload), payloadSha256: sha(payload), ...patch,
+  format: CLOUD_FORMAT, requestId: 'req_0123456789abcdef', baseRevision: 0, saveVersion: 71, payload, payloadBytes: utf8Bytes(payload), payloadSha256: sha(payload), ...patch,
 });
-const currentVersion = (n: number): boolean => n === 70;
+const currentVersion = (n: number): boolean => n === 71;
 
 describe('cloud save envelope checks', () => {
   it('accepts the exact local save string, and the same payload still passes replay validation', () => {
@@ -42,7 +42,7 @@ describe('cloud save envelope checks', () => {
       [upload(raw, { format: 2 as typeof CLOUD_FORMAT }), 'format'],
       [upload(raw, { requestId: 'short' }), 'requestId'],
       [upload(raw, { baseRevision: -1 }), 'baseRevision'],
-      [upload(raw, { saveVersion: 71 }), 'saveVersion'],
+      [upload(raw, { saveVersion: 72 }), 'saveVersion'],
       [upload(raw, { payloadBytes: utf8Bytes(raw) + 1 }), 'bytes'],
       [upload(raw, { payloadSha256: 'ABC' }), 'digestFormat'],
       [upload(raw, { payloadSha256: sha(raw + ' ') }), 'digestMismatch'],

@@ -1,6 +1,7 @@
 import { sweep } from '../src/core/world/sweep';
 import { claimBoard } from '../src/core/world/board';
 import { gachaExchange, gachaPull } from '../src/core/world/gacha';
+import { choosePet, hatchEgg } from '../src/core/world/pets';
 import { claimWorldBoss, worldBossAttempt } from '../src/core/world/world-boss';
 import { describe, expect, it } from 'vitest';
 import { encounterById as lookup } from '../src/content/encounters/catalog';
@@ -90,6 +91,7 @@ function turns(g: Game, limit = 400): Command[] {
 }
 
 const gachaGame = (): Game => { const g = campGame(); g.profile.veteran = true; g.profile.gacha = { tickets: 10, points: 80, serial: 0, history: [] }; return g; };
+const petGame = (): Game => { const g = campGame(); g.profile.pets = { eggs: 1, shards: 0, owned: [], from: ['moon-lake'] }; return g; };
 type Direct = (g: Game) => ProfileResult | WorldResult | { game: Game } ;
 interface Case { game: () => Game; cmd: GameCommand; direct: Direct; seeds?: number[] }
 const P = (g: Game) => g.profile, R = (g: Game) => g.run!;
@@ -146,6 +148,8 @@ const CASES: Record<CommandKind, Case> = {
   craftBossItem: { game: () => campGame({ bossShards: { kragmor: 41 } }), cmd: { kind: 'craftBossItem', boss: 'kragmor', affixes: ['armour', 'regen'], set: 'dawn' }, direct: g => craftBossItem(P(g), maps, 'kragmor', ['armour', 'regen'], 'dawn') },
   claimWorldBoss: { game: campGame, cmd: { kind: 'claimWorldBoss', id: 's-50', week: 2857, day: 20000 }, direct: g => claimWorldBoss(P(g), maps, 's-50', 2857, 2857) },
   gachaPull: { game: gachaGame, cmd: { kind: 'gachaPull', count: 10, config: home.gacha.version }, seeds: [12345], direct: g => gachaPull(P(g), maps, home, 10, home.gacha.version, 12345) },
+  hatchEgg: { game: petGame, cmd: { kind: 'hatchEgg', pet: 'meadow_fox' }, direct: g => hatchEgg(P(g), maps, home, 'meadow_fox') },
+  choosePet: { game: () => { const g = petGame(); g.profile.pets!.owned.push({ kind: 'thicket_piglet', level: 1, exp: 0 }); return g; }, cmd: { kind: 'choosePet', pet: 'thicket_piglet' }, direct: g => choosePet(P(g), maps, 'thicket_piglet') },
   gachaExchange: { game: gachaGame, cmd: { kind: 'gachaExchange', heroId: 'kael', config: home.gacha.version }, direct: g => gachaExchange(P(g), maps, home, 'kael', home.gacha.version) },
   depart: { game: campGame, cmd: { kind: 'depart', mapId: home.id, hard: false }, seeds: [7], direct: g => { const out = depart(P(g), home, lookup, 7); return { game: { profile: { ...out.profile, last: null }, run: out.run } }; } },
   move: { game: () => runGame(), cmd: { kind: 'move', dir: openDir() }, direct: g => move(R(g), home, openDir(), lookup) },

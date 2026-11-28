@@ -27,8 +27,10 @@ export interface ServerClock { day: number; next: number; now: number }
 // (`wb:w<week>:kragmor:s-50`), and every trio row records the boss `shards` it paid (missing: none, the warden).
 // P10 gacha: one row per committed pull (1 or 10) or exchange, receipt `gacha:<serial>`, `ref` `pull:<count>` or
 // `exchange:<heroId>`, the reward empty and the whole entry (cost, points, every result in order) in `gacha`.
+// PET-1 (OD-63): a choice egg paid by a map's first clear, receipt `pet:egg:<map>` (`ref` the map), and a hatched pet,
+// receipt `pet:hatch:<kind>` (`ref` the kind; one of each kind per account). Both rows carry an empty reward.
 // Board and trio rows already carry the tickets they paid in `reward.tickets`.
-export interface LedgerRow { receipt: string; seq: number; kind: 'sweep' | 'board' | 'worldBoss' | 'gacha'; period: string; ref: string; reward: SweepReward; day: number; at: number; boss?: WbBossId; shards?: number; gacha?: GachaEntry }
+export interface LedgerRow { receipt: string; seq: number; kind: 'sweep' | 'board' | 'worldBoss' | 'gacha' | 'pet'; period: string; ref: string; reward: SweepReward; day: number; at: number; boss?: WbBossId; shards?: number; gacha?: GachaEntry }
 const bossPart = (boss: WbBossId | undefined, shards: number | undefined): Pick<LedgerRow, 'boss' | 'shards'> => boss ? { boss, ...(shards ? { shards } : {}) } : {};
 
 // The payouts an applied command made, read from its events. `sweepCount` is the profile's sweep count after the
@@ -48,6 +50,10 @@ export function ledgerRows(events: readonly ClientEvent[], sweepCount: number, d
     } else if (e.type === 'gacha') {
       const g = e.entry; const ref = g.kind === 'pull' ? `pull:${g.results.length}` : `exchange:${g.results[0]!.heroId}`;
       rows.push({ receipt: `gacha:${g.serial}`, seq, kind: 'gacha', period: `d${day}`, ref, reward: { ore: 0, gold: 0 }, day, at, gacha: g });
+    } else if (e.type === 'petEgg') {
+      rows.push({ receipt: `pet:egg:${e.mapId}`, seq, kind: 'pet', period: `d${day}`, ref: e.mapId, reward: { ore: 0, gold: 0 }, day, at });
+    } else if (e.type === 'hatched') {
+      rows.push({ receipt: `pet:hatch:${e.kind}`, seq, kind: 'pet', period: `d${day}`, ref: e.kind, reward: { ore: 0, gold: 0 }, day, at });
     } else if (e.type === 'wbClaimed') {
       rows.push({ receipt: `wb:w${e.week}:${e.id}`, seq, kind: 'worldBoss', period: `w${e.week}`, ref: e.id, reward: e.reward, day, at, ...bossPart(e.boss, e.shards) });
     }

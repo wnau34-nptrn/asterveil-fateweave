@@ -2,6 +2,13 @@
 
 These owner-scoped rules still apply. They were moved here verbatim so CLAUDE.md stays short. Before changing a system, read its section here.
 
+## Pets — OD-63 2026-11-28 (PET-1 done: eggs/hatch/choose, save v71; no effect yet)
+
+- Plan and draft numbers: [PET_SYSTEM_ANALYSIS_TH](PET_SYSTEM_ANALYSIS_TH.md) §5–§7. Content `gameRules.pets` (`content/world/rules.ts`): six kinds `PET_IDS` (ART-PET-002 ids), each one map blessing + one end-of-round assist (values at Lv1/Lv6 and Lv1/Lv10, used from PET-2/PET-4), `maxLevel` 10, `firstClearEggs` `moon-lake`, `crystal-mine` (maps 6–9 join as built), `eggShards` 10.
+- Rules `core/world/pets.ts` (pure): `hatchEgg` (feature `pets`, `unlocks.pets: 4` = after map 4; one of each kind; a whole egg before shards; the first pet hatched is chosen), `choosePet` (a hatched kind or none), `runPet` (departure copies the chosen pet's kind + level into `run.pet`, fixed for the expedition: camp commands are refused on the map), `settlePetEgg` (a completed normal run on an egg map pays one choice egg once, `pets.from`).
+- Commands `hatchEgg { pet }` / `choosePet { pet? }` (`game-command.ts`, shape-checked ids); settling that pays an egg adds a `petEgg` event before `settled`. Server ledger kind `pet`: receipts `pet:egg:<map>` and `pet:hatch:<kind>` (empty reward).
+- Save v71: `profile.pets` {eggs, shards, owned [{kind, level, exp < level}], chosen?, from ⊆ cleared egg maps}, `run.pet` {kind, level}; a ≤v70 save gets eggs from its cleared egg maps (map 4 → 1, map 5 → 1 more). No UI, blessings, assists or food yet (PET-2…6).
+
 ## Auto battle — OD-62 2026-11-26 (draft numbers, no save change)
 
 - Random battles and World Boss attempts (`BattleSession.kind` `'random'`/`'worldBoss'`, owner “ให้บอสโลก มี Auto ด้วย”): masthead AUTO toggle beside ⓘ; map bosses, elites, events and the first battle never show it. Supersedes the older "no AUTO" notes in UI_DESIGN and art handoffs.

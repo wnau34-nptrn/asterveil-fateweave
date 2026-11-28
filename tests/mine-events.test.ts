@@ -88,13 +88,13 @@ describe('map 5: save v70', () => {
     let s: ExpeditionState = { ...start.run, position: at('ore-merchant'), resources: { ...start.run.resources, ore: 99 } };
     s = choose(s, 'sell-ore').state; s = choose({ ...s, position: at('cart') }, 'rummage').state; s = choose({ ...s, position: at('trapped') }, 'free').state;
     const game = { profile: start.profile, run: s };
-    expect(SAVE_VERSION).toBe(70);
+    expect(SAVE_VERSION).toBe(71);
     expect(parseGame(currentSave(game), home, lookup, MAPS)).toEqual(game);
     // A stale or forged counter is refused (the run is settled home safely rather than loaded).
     expect(() => parseGame(currentSave({ ...game, run: { ...s, sold: r.oreTrade.limit + 1 } }), home, lookup, MAPS)).toThrow();
     // A v69 save still loads: its runs carry no counter.
     const v69 = JSON.stringify({ ...JSON.parse(currentSave({ profile: start.profile, run: null })), version: 69 });
-    expect(parseGame(v69, home, lookup, MAPS).profile).toEqual(start.profile);
+    expect(parseGame(v69, home, lookup, MAPS).profile).toEqual({ ...start.profile, pets: { eggs: 1, shards: 0, owned: [], from: ['moon-lake'] } }); // v71: map 4's egg
   });
   it('the server-side command check accepts every event choice (including the lake reflection) and the crystal craft flag', () => {
     for (const choice of Object.values(EVENT_CHOICES).flat()) expect(parseCommand({ kind: 'chooseEvent', choice })).toEqual({ kind: 'chooseEvent', choice });

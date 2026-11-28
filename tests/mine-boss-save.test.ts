@@ -92,7 +92,7 @@ describe('Mine save v69', () => {
     const charge = interactMine({ ...start.run, position: mineSites.glowCrystals[0], steps: 3 }, mineMap, 'charge-crystal', encounterById).state;
     const following = interactMine({ ...charge, position: { x: mineSites.workers[1].x, y: mineSites.workers[1].y }, steps: 5 }, mineMap, 'invite-worker', encounterById).state;
     const game = { profile: start.profile, run: following };
-    expect(SAVE_VERSION).toBe(70);
+    expect(SAVE_VERSION).toBe(71);
     expect(parseGame(currentSave(game), home, encounterById, MAPS)).toEqual(game);
     expect(() => parseGame(currentSave({ ...game, run: { ...following, mine: { ...following.mine!, crystalExpiresAt: 9_999 } } }), home, encounterById, MAPS)).toThrow(/mine light/);
     const corrupt = { ...following.mine!, rescue: { following: [mineSites.workers[0].id], rescued: [mineSites.workers[0].id] } };

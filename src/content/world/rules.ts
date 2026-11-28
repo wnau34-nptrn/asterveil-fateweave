@@ -6,7 +6,7 @@ import { talentTrees } from '../heroes/talents';
 // forge, potions, market, talents, event numbers and the camp NPCs' side quests. A map spreads these and adds its
 // own board, zones, encounters, loot and objectives; tests check that every map uses this exact object.
 export type GameRules = Pick<MapDefinition, 'tutorialEncounterId' | 'camp' | 'startingRoster' | 'firstCompany' | 'unlocks' | 'guides' | 'mercenaries' | 'shop' | 'company' | 'progression' | 'talents'
-  | 'eventRules' | 'potions' | 'equipment' | 'sideQuests' | 'sweep' | 'board' | 'worldBoss' | 'gacha'>;
+  | 'eventRules' | 'potions' | 'equipment' | 'sideQuests' | 'sweep' | 'board' | 'worldBoss' | 'gacha' | 'pets'>;
 export const gameRules: GameRules = {
   // The prologue's first battle (Vargoth's vanguard).
   tutorialEncounterId: 'first-clash',
@@ -62,6 +62,20 @@ export const gameRules: GameRules = {
   // boss's 50% shared milestone 1 (online) — at most 24 a week = 96 per 28 days. 7.5% a full copy, else 1 or 2 shards
   // (half each) of one of the 15 active characters, all equally likely; 80 points (1 per pull) exchange for a chosen one.
   // Parked thiran/wila are not in the pool (OD-14). Changing anything here that changes an outcome bumps `version`.
+  // PET-1 (OD-63, owner 2026-11-28 “ตามคำแนะนำ”; docs/design/PET_SYSTEM_ANALYSIS_TH.md §5.1–§5.2b, draft numbers
+  // tuned by simulation in PET-2/PET-4). Pets open after map 4 (`unlocks.pets`); its first clear pays the first choice
+  // egg, map 5 the next (maps 6–9 join this list as they are built). Not in the gacha, no rarity, no hunger.
+  pets: {
+    kinds: [
+      { id: 'meadow_fox', name: 'หมาจิ้งจอกทุ่ง', blessing: { kind: 'luck', at1: 5, at6: 10 }, assist: { kind: 'markStrike', at1: 6, at10: 10 } },
+      { id: 'thicket_piglet', name: 'หมูมอส', blessing: { kind: 'forage', at1: 1, at6: 2 }, assist: { kind: 'heal', at1: 6, at10: 10 } },
+      { id: 'rift_crystal_moth', name: 'ผีเสื้อคริสตัล', blessing: { kind: 'farsight', at1: 1, at6: 1 }, assist: { kind: 'expose', at1: 0, at10: 3 } },
+      { id: 'fort_gargoyle_pup', name: 'ลูกการ์กอยล์', blessing: { kind: 'ward', at1: 10, at6: 15 }, assist: { kind: 'shield', at1: 8, at10: 14 } },
+      { id: 'forest_lantern_owl', name: 'นกฮูกตะเกียง', blessing: { kind: 'lantern', at1: 2, at6: 3 }, assist: { kind: 'hasten', at1: 1, at10: 1 } },
+      { id: 'gate_starveil_slime', name: 'สไลม์ผ้าคลุมดาว', blessing: { kind: 'renewal', at1: 2, at6: 3 }, assist: { kind: 'groupHeal', at1: 2, at10: 4 } },
+    ],
+    maxLevel: 10, firstClearEggs: ['moon-lake', 'crystal-mine'], eggShards: 10, eggCap: 9, shardCap: 999,
+  },
   gacha: {
     version: 1,
     pool: ['guardian', 'tracer', 'weaver', 'healer', 'mira', 'toma', 'sefa', 'brann', 'lio', 'garran', 'metta', 'lalin', 'kael', 'wynne', 'astrid'],
@@ -110,7 +124,7 @@ export const gameRules: GameRules = {
   // Advanced services stay at MAP 3 explicitly: adding maps must not silently move existing rights to 5/7/9.
   // Revisit the historical A3 future-chapter table only with a new owner-approved progression task.
   // OD-54 (owner 2026-11-19, R2): gear and the skill tree open right after the prologue (0 = no map to clear first).
-  unlocks: { tree: 0, forge: 1, brew: 1, gear: 0, level: 2, quests: 1, hire: 2, team: 1, market: 2, fuse: 3, craft: 3, hunt: 2, transfer: 3, bossCharm: 3, hard: 3, tomes: 2, gacha: 1, auto: 1, worldBoss: 3 },
+  unlocks: { tree: 0, forge: 1, brew: 1, gear: 0, level: 2, quests: 1, hire: 2, team: 1, market: 2, fuse: 3, craft: 3, hunt: 2, transfer: 3, bossCharm: 3, hard: 3, tomes: 2, gacha: 1, auto: 1, worldBoss: 3, pets: 4 },
   // Phase 4A (draft): the camp market, paid in gold coins, and paid hiring-board refreshes (2 per return).
   shop: {
     items: { shard: { price: 60, limit: 1 }, contract: { price: 150, limit: 1 }, gearbox: { price: 120, limit: 1 }, repel: { price: 30, limit: 2 } },
