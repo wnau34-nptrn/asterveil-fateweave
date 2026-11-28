@@ -19,6 +19,7 @@ import { formation } from '../src/core/world/formation';
 import { craftBossItem } from '../src/core/world/world-boss';
 import { craftWeapon, enhanceTo, fuse, lockEquipment, raiseItemLevel, reroll, smelt, transferAffix } from '../src/core/world/forge';
 import { applyPreset, applyRunPreset, clearPreset, renamePreset, savePreset } from '../src/core/world/presets';
+import { autoTeam } from '../src/core/world/auto-team';
 import {
   activeGuides, brew, buy, canWithdraw, chooseLoadout, claimGuide, claimRunGuide, claimQuest, COMMANDER_COLORS, COMMANDER_CRESTS, createCommander, depart, dismiss,
   equip, hire, learnTalent, newProfile, refreshBoard, resetTalents, salvage, setArchived, setPartyLane, settle, unequip, upgrade,
@@ -106,7 +107,7 @@ const CASES: Record<CommandKind, Case> = {
   dismiss: { game: campGame, cmd: { kind: 'dismiss', heroId: 'lio' }, direct: g => dismiss(P(g), home, 'lio') },
   placeMember: { game: campGame, cmd: { kind: 'placeMember', heroId: 'lio', group: 'deployed', lane: 'back' }, direct: g => placeCampMember(P(g), home, lookup, 'lio', 'deployed', undefined, 'back') },
   setPartyLane: { game: campGame, cmd: { kind: 'setPartyLane', heroId: 'guardian', lane: flip(campProfile().party, 'guardian') }, direct: g => setPartyLane(P(g), home, lookup, 'guardian', flip(P(g).party, 'guardian')) },
-  preset: presetCase('save'),
+  preset: presetCase('save'), autoTeam: { game: campGame, cmd: { kind: 'autoTeam' }, direct: g => autoTeam(P(g), home, lookup) },
   raiseSkill: { game: () => campGame({ tomes: { bulwark: { small: 30, medium: 30, large: 30 }, blade: { small: 30, medium: 30, large: 30 }, accord: { small: 30, medium: 30, large: 30 } } }),
     cmd: { kind: 'raiseSkill', heroId: 'guardian', action: 'guard' }, direct: g => raiseSkill(P(g), maps, home, lookup, 'guardian', 'guard') },
   tradeTomes: { game: () => campGame({ tomes: { bulwark: { small: 30, medium: 0, large: 0 }, blade: { small: 0, medium: 0, large: 0 }, accord: { small: 0, medium: 0, large: 0 } } }), cmd: { kind: 'tradeTomes', line: 'bulwark', size: 'small', to: 'blade' },
