@@ -15,14 +15,15 @@ const rules = gameRules.worldBoss;
 const D = 20_773, W = weekOf(D), HOUR = 3_600_000, DAY_MS = 24 * HOUR;
 const midnight = (d: number) => d * DAY_MS - GAME_DAY_OFFSET_MINUTES * 60_000;
 const A = 'a'.repeat(32), B = 'b'.repeat(32), C = 'c'.repeat(32), E = 'e'.repeat(32);
-const hit = (acc: string, n: number, damage: number, boss?: WbBossId, week = W) => ({ id: `${acc}:w${week}:a${n}`, week, account: acc, damage, ...(boss ? { boss } : {}) });
+const hit = (acc: string, n: number, damage: number, boss?: WbBossId, week = W, team?: { level: number; heroes: [string, number][] }) => ({ id: `${acc}:w${week}:a${n}`, week, account: acc, damage, ...(boss ? { boss } : {}), ...(team ? { team } : {}) });
+const T1 = { level: 12, heroes: [['guardian', 3], ['tracer', 2]] as [string, number][] }, T2 = { level: 14, heroes: [['healer', 5]] as [string, number][] };
 
 function play(store: BossStore, clock: { t: number }) {
   const host = new WorldBossHost(store, rules, () => clock.t);
   // A deals 300 then 200 (500), B 500 in one hit later (ties with A: A hit first), C 900; E never plays.
-  host.contribute([hit(A, 1, 300)]); clock.t += 1000;
+  host.contribute([hit(A, 1, 300, undefined, W, T1)]); clock.t += 1000;
   host.contribute([hit(B, 1, 500)]); clock.t += 1000;
-  host.contribute([hit(A, 2, 200), hit(C, 1, 900)]); clock.t += 1000;
+  host.contribute([hit(A, 2, 200, undefined, W, T2), hit(C, 1, 900, undefined, W, T2)]); clock.t += 1000;
   // A resend counts once.
   host.contribute([hit(A, 1, 300)]);
   return host;
@@ -34,7 +35,7 @@ describe('World Boss leaderboard: ranking', () => {
       const clock = { t: midnight(D) + HOUR }; const host = play(make(), clock);
       const board = host.board(W, undefined, A)!;
       expect(board.rows).toEqual([
-        { account: C, total: 900, attempts: 1, best: 900 }, { account: A, total: 500, attempts: 2, best: 300 }, { account: B, total: 500, attempts: 1, best: 500 },
+        { account: C, total: 900, attempts: 1, best: 900, team: T2 }, { account: A, total: 500, attempts: 2, best: 300, team: T1 }, { account: B, total: 500, attempts: 1, best: 500 },
       ]);
       expect(board).toMatchObject({ week: W, players: 3, you: { rank: 2, total: 500, attempts: 2, best: 300 } });
       expect(host.board(W, undefined, E)!.you).toBeNull();
@@ -86,5 +87,21 @@ describe('World Boss leaderboard: /v1/worldboss/board', () => {
     expect((await call(s, '/v1/worldboss/board?boss=nobody', { headers: headers(me.token) })).status).toBe(400);
     expect(await (await call(s, '/v1/worldboss/board?last=1', { headers: headers(me.token) })).json()).toMatchObject({ week: W - 1, players: 0, rows: [], you: null });
     expect((await call(s, '/v1/worldboss/board', { headers: { [CONTENT_HEADER]: VERSION } })).status).toBe(401);
+  });
+});
+
+describe('World Boss leaderboard: teams', () => {
+  it('the object refuses a malformed team; a hit without one is still taken', () => {
+    const host = new WorldBossHost(memoryBossStore(), rules, () => midnight(D) + HOUR);
+    const bad = [{ level: 0, heroes: [['guardian', 1]] }, { level: 5, heroes: [] }, { level: 5, heroes: [['Guardian!', 1]] }, { level: 5, heroes: Array(6).fill(['guardian', 1]) }, { level: 5, heroes: [['guardian', 1]], extra: 1 }];
+    return Promise.all(bad.map(async team => expect((await handleBossRequest(host, new Request('https://boss/contribute', { method: 'POST', body: JSON.stringify({ hits: [{ ...hit(A, 1, 10), team }] }) }))).status).toBe(400)))
+      .then(async () => expect((await handleBossRequest(host, new Request('https://boss/contribute', { method: 'POST', body: JSON.stringify({ hits: [hit(A, 1, 10, undefined, W, T1)] }) }))).status).toBe(200));
+  });
+  it('an object from before teams gains the column and keeps its hits (no team)', () => {
+    const state = fakeDurableState(); const clock = { t: midnight(D) + HOUR };
+    const first = new WorldBossHost(sqlBossStore(state), rules, () => clock.t); first.contribute([hit(A, 1, 300)]);
+    state.storage.sql.exec('ALTER TABLE hits DROP COLUMN team');
+    const again = new WorldBossHost(sqlBossStore(state), rules, () => clock.t); again.contribute([hit(B, 1, 400, undefined, W, T1)]);
+    expect(again.board(W, undefined, A)!.rows).toEqual([{ account: B, total: 400, attempts: 1, best: 400, team: T1 }, { account: A, total: 300, attempts: 1, best: 300 }]);
   });
 });

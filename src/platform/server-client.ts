@@ -76,7 +76,8 @@ export interface SharedBar extends SharedBoss { boss: 'warden' | 'kragmor' | 'va
 export interface WorldBossStatus { week: number; current: SharedBoss | null; last: SharedBoss | null; bars?: SharedBar[]; lastBars?: SharedBar[] }
 // World Boss leaderboard (owner 2026-11-28): `GET /v1/worldboss/board?boss=&last=1`; handles only, `you` = this account.
 export type WbBoardBoss = 'all' | SharedBar['boss'];
-export interface WbBoardRow { rank: number; handle: string; total: number; attempts: number; best: number; you: boolean }
+// `team`: camp level and fielded heroes (id, stars) of the camp's best attempt (none for attempts before 2026-11-28).
+export interface WbBoardRow { rank: number; handle: string; total: number; attempts: number; best: number; you: boolean; team?: { level: number; heroes: [string, number][] } }
 export interface WbBoard { week: number; boss: WbBoardBoss; players: number; rows: WbBoardRow[]; you: { rank: number; total: number; attempts: number; best: number } | null }
 // P11 chat (docs/design/CHAT_P11_TH.md).
 export interface ChatMessage { id: number; handle: string; text: string; at: number; mine: boolean }

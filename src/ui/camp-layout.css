@@ -158,3 +158,9 @@
 #lobby-view .wb-rank-dmg { display:grid; justify-items:end; font:600 15px var(--font-heading, Kanit), sans-serif; }
 #lobby-view .wb-rank-dmg small { font:400 11px var(--font-body, 'Noto Sans Thai'), sans-serif; color:var(--text-muted, #b9c8d8); }
 #lobby-view .wb-rank-you { margin:8px 0; padding:10px; border-radius:12px; border:1px solid #ffd27a; background:#3a2c1066; }
+#lobby-view .wb-rank-row { grid-template-rows:auto auto; }
+#lobby-view .wb-rank-team { grid-column:2 / -1; display:flex; flex-wrap:wrap; align-items:center; gap:4px; }
+#lobby-view .wb-rank-level { font:600 12px var(--font-heading, Kanit), sans-serif; color:var(--gold-light, #ffe3a1); padding:2px 6px; border-radius:8px; background:#2a2210cc; }
+#lobby-view .wb-rank-hero { position:relative; display:inline-grid; }
+#lobby-view .wb-rank-hero .portrait { width:30px; height:30px; }
+#lobby-view .wb-rank-hero i { position:absolute; right:-2px; bottom:-3px; font:700 10px var(--font-heading, Kanit), sans-serif; font-style:normal; color:#ffd27a; text-shadow:0 1px 2px #000; }

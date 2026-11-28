@@ -229,7 +229,7 @@ async function deliverHits(deps: ApiDeps, accountId: string, game: AccountGame, 
   out.headers.delete(HITS_HEADER);
   if (!deps.boss) return out;
   try {
-    const hits = (JSON.parse(raw) as PendingHit[]).map(h => ({ id: `${accountId}:${h.id}`, week: h.week, account: accountId, damage: h.damage, ...(h.boss ? { boss: h.boss } : {}) }));
+    const hits = (JSON.parse(raw) as PendingHit[]).map(h => ({ id: `${accountId}:${h.id}`, week: h.week, account: accountId, damage: h.damage, ...(h.boss ? { boss: h.boss } : {}), ...(h.team ? { team: h.team } : {}) }));
     const r = await deps.boss.fetch(new Request('https://boss/contribute', { method: 'POST', body: JSON.stringify({ hits }), headers: { 'Content-Type': 'application/json' } }));
     if (r.ok) {
       const { taken } = await r.json() as { taken: string[] };
@@ -261,7 +261,7 @@ async function worldBossBoardRoute(request: Request, accountId: string, deps: Ap
   const res = await deps.boss.fetch(new Request(`https://boss/board?account=${accountId}&boss=${boss}${last ? '&last=1' : ''}`)).catch(() => null);
   if (!res?.ok) return error('world_boss_unavailable', 503);
   const board = await res.json() as Board & { week: number };
-  const rows = await Promise.all(board.rows.map(async (r, i) => ({ rank: i + 1, handle: await chatHandle(r.account), total: r.total, attempts: r.attempts, best: r.best, you: r.account === accountId })));
+  const rows = await Promise.all(board.rows.map(async (r, i) => ({ rank: i + 1, handle: await chatHandle(r.account), total: r.total, attempts: r.attempts, best: r.best, you: r.account === accountId, ...(r.team ? { team: r.team } : {}) })));
   return json({ week: board.week, boss, players: board.players, rows, you: board.you });
 }
 

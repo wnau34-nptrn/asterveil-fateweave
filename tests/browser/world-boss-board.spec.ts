@@ -49,13 +49,17 @@ test('rank tab: top camps by damage, the player marked, their rank past the list
   const me = [...s.objects.keys()][0]!, week = s.boss.host.week();
   // 24 other camps hit this week; the player sits 22nd (past the top 20).
   const others = Array.from({ length: 24 }, (_, i) => (i + 1).toString(16).padStart(32, '0'));
-  s.boss.host.contribute(others.map((acc, i) => ({ id: `${acc}:w${week}:a1`, week, account: acc, damage: 2400 - i * 90 })));
-  s.boss.host.contribute([{ id: `${me}:w${week}:a1`, week, account: me, damage: 2400 - 21 * 90 + 45 }]);
+  const squads: [string, number][][] = [[['guardian', 5], ['tracer', 4], ['weaver', 4], ['healer', 3], ['mira', 3]], [['tracer', 3], ['healer', 2], ['guardian', 2]]];
+  s.boss.host.contribute(others.map((acc, i) => ({ id: `${acc}:w${week}:a1`, week, account: acc, damage: 2400 - i * 90, ...(i < 23 ? { team: { level: 30 - (i >> 2), heroes: squads[i % 2]! } } : {}) })));
+  s.boss.host.contribute([{ id: `${me}:w${week}:a1`, week, account: me, damage: 2400 - 21 * 90 + 45, team: { level: 10, heroes: [['guardian', 1], ['tracer', 1], ['weaver', 1], ['healer', 1]] } }]);
   await page.locator('#lobby-wboss').click();
   await page.locator('#wb-tab-rank').click();
   const rows = page.locator('.wb-rank-row');
   await expect(rows).toHaveCount(20);
   await expect(rows.first()).toContainText('ค่าย-'); await expect(rows.first()).toContainText('2,400');
+  // Each row shows the team of the camp's best attempt: camp level and the fielded heroes' faces with stars.
+  await expect(rows.first().locator('.wb-rank-level')).toHaveText('Lv30'); await expect(rows.first().locator('.wb-rank-hero')).toHaveCount(5);
+  await expect(rows.first().locator('.wb-rank-hero').first()).toContainText('★5'); await expect(rows.first().locator('.sr-only')).toContainText('ทีม:');
   await expect(page.locator('.wb-rank-you')).toContainText('อันดับของคุณ 22 / 25');
   for (const id of ['wb-tab-rank', 'wb-rank-week', 'wb-rank-last']) expect((await page.locator(`#${id}`).boundingBox())!.height).toBeGreaterThanOrEqual(44);
   expect(await page.locator('#lobby-view').evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);

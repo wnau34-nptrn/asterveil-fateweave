@@ -9,7 +9,8 @@ import { SET_IDS, WB_BOSSES, type GearStat, type MapDefinition, type Profile, ty
 import type { SharedBar, SharedBoss, WbBoard, WbBoardBoss, WorldBossStatus } from '../platform/server-client';
 import { bossDescription, bossNames } from './boss-equipment';
 import { icon } from './icons';
-import { setText, slotText, statName, sweepText } from './th';
+import { heroText, setText, slotText, statName, sweepText } from './th';
+import { portrait } from './portraits';
 
 // P11-04 part 2 + P11-05 step 4: the World Boss page of the camp (docs/design/WORLD_BOSS_TRIO_P11_05_TH.md §6) and its camp
 // banner. Pure views of the profile's World Boss book and, in server play, of the shared bars the server reports
@@ -216,10 +217,14 @@ function rankTab(maps: readonly MapDefinition[], day: number, online: boolean, v
   const board = v.board;
   if (board === undefined) return `${picks}<p class="camp-note wb-rank-note" role="status">กำลังโหลดอันดับ…</p>`;
   if (board === null) return `${picks}<p class="camp-note wb-rank-note" role="status">โหลดอันดับไม่ได้ตอนนี้ · ลองเปิดแท็บนี้อีกครั้ง</p>`;
-  const row = (r: WbBoard['rows'][number]) => `<li class="wb-rank-row${r.you ? ' you' : ''}"${r.you ? ' aria-current="true"' : ''}><b class="wb-rank-no" data-top="${r.rank <= 3 ? r.rank : 0}">${r.rank}</b><span class="wb-rank-name">${r.handle}${r.you ? ' <small>(คุณ)</small>' : ''}</span><span class="wb-rank-dmg">${n(r.total)}<small>${r.attempts} ครั้ง</small></span></li>`;
+  // A hero the server names that this build has no art for shows its name instead of a face.
+  const face = (id: string) => { try { return portrait(id); } catch { return `<small>${heroText[id]?.name ?? id}</small>`; } };
+  // The team of the camp's best attempt: camp level, then each fielded hero's face and stars (names for screen readers).
+  const team = (t: WbBoard['rows'][number]['team']) => t ? `<span class="wb-rank-team"><span class="wb-rank-level">Lv${t.level}</span>${t.heroes.map(([id, stars]) => `<span class="wb-rank-hero" title="${heroText[id]?.name ?? id} ★${stars}">${face(id)}<i aria-hidden="true">★${stars}</i></span>`).join('')}<span class="sr-only">ทีม: ${t.heroes.map(([id, stars]) => `${heroText[id]?.name ?? id} ★${stars}`).join(', ')}</span></span>` : '<span class="wb-rank-team"><small>ไม่มีข้อมูลทีม</small></span>';
+  const row = (r: WbBoard['rows'][number]) => `<li class="wb-rank-row${r.you ? ' you' : ''}"${r.you ? ' aria-current="true"' : ''}><b class="wb-rank-no" data-top="${r.rank <= 3 ? r.rank : 0}">${r.rank}</b><span class="wb-rank-name">${r.handle}${r.you ? ' <small>(คุณ)</small>' : ''}</span><span class="wb-rank-dmg">${n(r.total)}<small>${r.attempts} ครั้ง · สูงสุด ${n(r.best)}</small></span>${team(r.team)}</li>`;
   const mine = board.you && !board.rows.some(r => r.you) ? `<p class="wb-rank-you">อันดับของคุณ <b>${board.you.rank.toLocaleString('th-TH')}</b> / ${board.players.toLocaleString('th-TH')} · ดาเมจ ${n(board.you.total)} (${board.you.attempts} ครั้ง)</p>` : '';
   const none = board.you ? '' : `<p class="camp-note">${rank.last ? 'สัปดาห์ก่อนคุณไม่ได้ลงบอสนี้' : 'ยังไม่มีอันดับ · ลงบอสอย่างน้อย 1 ครั้งเพื่อติดอันดับ'}</p>`;
-  return `${picks}<p class="camp-note">ดาเมจรวมของทุกครั้งที่ลงใน${rank.last ? 'สัปดาห์ก่อน' : 'สัปดาห์นี้'} · ${name(rank.boss)} · ผู้เล่น ${board.players.toLocaleString('th-TH')} ค่าย · เท่ากันให้ค่ายที่ลงก่อนอยู่สูงกว่า · ชื่อเป็นรหัสค่ายเดียวกับแชท</p>`
+  return `${picks}<p class="camp-note">ดาเมจรวมของทุกครั้งที่ลงใน${rank.last ? 'สัปดาห์ก่อน' : 'สัปดาห์นี้'} · ${name(rank.boss)} · ผู้เล่น ${board.players.toLocaleString('th-TH')} ค่าย · เท่ากันให้ค่ายที่ลงก่อนอยู่สูงกว่า · ชื่อเป็นรหัสค่ายเดียวกับแชท · ทีมคือทีมของครั้งที่ดาเมจสูงสุด (Lv = เลเวลค่าย)</p>`
     + mine + none + (board.rows.length ? `<ol class="wb-rank-list" aria-label="อันดับดาเมจ">${board.rows.map(row).join('')}</ol>` : '<p class="camp-note">ยังไม่มีใครลงบอสนี้</p>');
 }
 // The body of the World Boss page: the tabs and the open one.

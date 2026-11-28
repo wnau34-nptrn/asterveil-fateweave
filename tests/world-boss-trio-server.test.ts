@@ -7,6 +7,7 @@ import { canonicalJson, emptyBook, type CommandReply } from '../src/core/command
 import { SAVE_VERSION, type Game } from '../src/core/save/expedition-save';
 import { weekOf } from '../src/core/world/board';
 import { newProfile } from '../src/core/world/profile';
+import { levelOf } from '../src/core/world/world';
 import type { MapDefinition, Profile, WbBossId } from '../src/core/world/types';
 import { trioSharedHp, wbEncounter } from '../src/core/world/world-boss';
 import { HITS_HEADER, SESSION_HEADER, sqlStore } from '../src/server/account-object';
@@ -134,7 +135,8 @@ describe('P11-05 trio on the account object', () => {
     const two = send(attemptCmd(cur(), 'valdrakk')) as Applied;
     expect(two.receipts).toEqual([`wb:w${W}:a2`, `wb:w${W}:p-2`]);
     const damage = (r: Applied) => (r.events.find(e => e.type === 'wbAttempt') as unknown as { damage: number }).damage;
-    expect(store.pendingHits()).toEqual([{ id: `w${W}:a1`, week: W, damage: damage(one), boss: 'kragmor' }, { id: `w${W}:a2`, week: W, damage: damage(two), boss: 'valdrakk' }]);
+    const team = expect.objectContaining({ heroes: expect.any(Array) });
+    expect(store.pendingHits()).toEqual([{ id: `w${W}:a1`, week: W, damage: damage(one), boss: 'kragmor', team }, { id: `w${W}:a2`, week: W, damage: damage(two), boss: 'valdrakk', team }]);
     // The warden's bar or another boss's never pays a trio milestone.
     expect(send({ kind: 'claimWorldBoss', id: 'kragmor:s-50', week: W }, { week: W, hp: 1500, left: 0 })).toMatchObject({ status: 'rejected', reason: 'expired' });
     expect(send({ kind: 'claimWorldBoss', id: 'kragmor:s-50', week: W }, { week: W, hp: 1500, left: 0, boss: 'valdrakk' })).toMatchObject({ status: 'rejected', reason: 'expired' });
@@ -171,7 +173,7 @@ describe('P11-05 trio on the account object', () => {
     const h = new GameHost(store, LIVE_CTX, () => 3, VERSION, () => midnight(D) + HOUR);
     const cmd = attemptCmd(game, 'morvane');
     expect(h.command({ requestId: 'req-0000000000000001', seq: 1, command: cmd }, sha(cmd)).body).toMatchObject({ status: 'applied' });
-    expect(store.pendingHits()).toEqual([expect.objectContaining({ id: `w${W}:a1`, boss: 'morvane' })]);
+    expect(store.pendingHits()).toEqual([expect.objectContaining({ id: `w${W}:a1`, boss: 'morvane', team: expect.objectContaining({ level: expect.any(Number) }) })]);
   });
 });
 
@@ -213,6 +215,10 @@ describe('P11-05 trio through the Worker', () => {
     expect(r.status).toBe('applied');
     const dmg = (r.events.find(e => e.type === 'wbAttempt') as unknown as { damage: number }).damage;
     expect(left(await status(s, p.token))).toEqual({ kragmor: trio.hp.min, valdrakk: Math.max(0, trio.hp.min - dmg), morvane: trio.hp.min });
+    // Leaderboard (2026-11-28): the hit carried the attempt's team (camp level and fielded heroes with stars) to the board.
+    const g0 = storedGame(s, p.accountId)!;
+    const board = await (await call(s, '/v1/worldboss/board?boss=valdrakk', { headers: headers(p.token) })).json() as { rows: { you: boolean; total: number; team: unknown }[] };
+    expect(board.rows).toEqual([expect.objectContaining({ you: true, total: dmg, team: { level: levelOf(LIVE[0]!, g0.profile), heroes: g0.profile.party.deployed.map(id => [id, g0.profile.members[id]!.stars]) } })]);
     // A second account takes Valdrakk past half: the claim pays from Valdrakk's bar, not from Kragmor's.
     s.boss.host.contribute([{ id: `${'f'.repeat(32)}:w${W}:a1`, week: W, account: 'f'.repeat(32), damage: trio.hp.min, boss: 'valdrakk' }]);
     expect(await p.send({ kind: 'claimWorldBoss', id: 'kragmor:s-50', week: W })).toMatchObject({ status: 'rejected' });
